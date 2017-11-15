@@ -58,7 +58,7 @@ In summary, the normative block processing mechanism for a block is:
 - `System` calls `S.Administration.start_block(block)`; if it aborts, revert/discard `S` and the block is considered invalid.
 - for each transaction `tx` in `block.transactions`, `Nobody` calls `S[tx.destination][tx.function_name](tx.params...)`. If a transaction aborts, then the block is aborted and considered invalid.
   - Transactions can include signed statements from external actors such as fishermen, but crucially can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). Timestamp would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
-  - One set of statements that appear in the block are selected para-chain candidates. In this case it is a simple message to `S.Parachain.update_head(parachain_id: U64, head_data: bytes, egress_queue_roots: [H256, ...], balance_uploads: [[U64, U256], ...])`. The `*_precondition` function barriers ensure that externally received transactions cannot call these directly. This call ensures any DOT balances on the para-chain required as fees for the egress-queue is burned. `changed_balances` records the change of any funds owned as a result of transfer from on-parachain to parachain-on-relaychain.
+  - One set of statements that appear in the block are selected para-chain candidates. In this case it is a simple message to `S.Parachain.update_head(parachain_id: U64, head_data: bytes, egress_queue_roots: [H256, ...], balance_uploads: [ [ U64, U256 ], ... ])`. The `*_precondition` function barriers ensure that externally received transactions cannot call these directly. This call ensures any DOT balances on the para-chain required as fees for the egress-queue is burned. `changed_balances` records the change of any funds owned as a result of transfer from on-parachain to parachain-on-relaychain.
 - For each para-chain, the egress-queue messages are processed.
 - `System` calls `S.Administration.end_block(block)`; if it aborts, revert/discard `S` and the block is considered invalid.
 
@@ -121,7 +121,7 @@ header: [
     state_root: H256,
     transaction_root: H256,
     parachain_activity_bitfield: bytes,
-    logs: bytes[]
+    logs: [ bytes, ... ]
 ]
 ```
 
@@ -145,7 +145,7 @@ CandidateReceipt: [
 	collator: H160,
 	head_data: bytes,
 	balance_uploads: [ [ U64, U256 ], ... ],
-	egress_queue_roots: [ H256, ... ],	// or a sparse [[U64, H256], ...] format?
+	egress_queue_roots: [ H256, ... ],	// or a sparse [ [ U64, H256 ], ... s] format?
 	egress_fees: U256	// TODO: or a structured egress_properties from which fees can be calculated?
 ]
 ```
@@ -213,11 +213,15 @@ The specific steps to validate a para-chain candidate on state `S` are:
   - Counting `b` down from `S.Null.block_number()` until `block[b].parachain[Q].egress[candidate.parachain_index] WAS_PROCESSED`.
     - Let `b_index := S.Null.block_number() - b`
     - Assert `index_keyed_trie_root(ingress_queue[b_index]) == chain[b - 1].state.Parachain[Q].egress_root[candidate.parachain_index]` (if not true then this is an invalid para-chain candidate).
-- Let `(head_data, egress_queues, balance_uploads) := S.Parachain[candidate.parachain_index].Validate(candidate)`; if it aborts, then this is an invalid para-chain candidate.
+- Let `consolidated_ingress` equal the series of tuples `[ [message_0: bytes, source_0: u64], [message_1: bytes, source_1: u64]. ... ]` that represents all messages in all ingress queues, ordered according to the above search.
+- Let `previous_head_data := S.Parachain[candidate.parachain_index]`
+- Let `(head_data, egress_queues, balance_uploads) := S.Parachain[candidate.parachain_index].Validate(consolidated_ingress, block_data, previous_head_data)`; if it aborts, then this is an invalid para-chain candidate.
 - Ensure all limitations regarding egress queues are observed: `let egress_fees := calculate_fees(egress_queues)`, and if it aborts, then this is an invalid para-chain candidate.
 - Form candidate receipt `candidate_receipt := (candidate.parachain_index, collator, head_data, balance_uploads, to_index_keyed_trie_roots(egress_queues), egress_queues)`.
 
 # Para-chain management account
+
+The Parachain management account ("Parachain") provides 
 
 ```
 [
@@ -226,11 +230,20 @@ The specific steps to validate a para-chain candidate on state `S` are:
 ]
 ```
 
-# Authentication contract
+# Notes
 
-The authentication contract will check the validity of an ECDSA signature `(r, s, v)`.
+All incoming transactions must burn a fee.
 
-This should be a signature on the Keccak256 hash of the RLP encoding of:
+# Authentication account
+
+The Authentication account provides two services; it allows participants lookup of a `Signature`, message-hash and nonce into an account ID, creating a new account ID if necessary. Also allows you to lookup a public-key-hash into an account ID.
+
+- `authenticate(&mut self, sig: Signature, nonce: U64, message_hash: H256) -> U64`
+- `lookup(&self, key: H256) -> U64`
+
+A simple implementation would have it manage a mapping from `H256 -> [ id: U64, nonce: U64 ]`, where the key is the Keccak256 of a public key, and separately a `U64` which is the minimum unused account ID.
+
+The `authenticate` function will check the validity of an ECDSA signature `(r, s, v)`. This should be a signature on the Keccak256 hash of the RLP encoding of:
 
 ```
 [
@@ -244,3 +257,5 @@ The `v` value of the signature should be based on the standard `v_standard` (`[2
 ```
 v := v_standard - 26 + chain_id * 2
 ```
+
+If the account has not been authenticated before, then a new ID is created for it and the `nonce` set to 1. If it has, then the nonce is incremented by 1. In all cases, then the nonce of the transaction must equal the nonce of the signing account.
