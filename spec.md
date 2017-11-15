@@ -22,7 +22,7 @@ In reality almost all account indices would not represent these high accounts bu
 - Accounts 1...: The virtual account indices.
 - Account ~7: Timestamp account. Stores the current time. May be called from the unauthenticated account once per block.
 - Account ~6: Authentication account. Basic account lookup account. Stores a mapping `U64 -> H160` providing a partial public-key derivative ("address", similar to an Ethereum address) for each account index. Can be used to register new accounts (in return for some price). Registration begins at some index greater than zero (likely to be 1 + the number of genesis allocations). The current index increments with each new account registered. A nominal fee (whose value may be set by the Administration contract) is payable for each new account registered.
-- Account ~5: Para-chain management account. Stores all things to do with para-chains including para-chain balances, their validation function, queue information and current state. Is flushed at the beginning of each block in order to allow the previous block's messages to the relay chain to execute.
+- Account ~5: Para-chain management account. Stores all things to do with para-chains including total para-chain balances, relay-chain-native account balances that are transferable (per para-chain), validation function, queue information and current state. Is flushed at the beginning of each block in order to allow the previous block's messages to the relay chain to execute.
 - Account ~4: Staking account. Stores all things to do with the proof-of-stake algorithm particularly currently staked amounts as a mapping from `U64 -> [ balance: U256, nonce: U64 ]`. Informs the Consensus account of its current validator set. Hosts stake-voting.
 - Account ~3: Consensus account. Stores all things consensus and code is the relay-chain consensus logic. Requires to be informed of the current validator set and can be queried for behaviour profiles. Checks validator signatures.
 - Account ~2: Administration account. Stores and administers low-level chain parameters. Can unilaterally read and replace code/storage in all accounts, &c. Hosts and acts on stake-voting activities. Acts as entry point in block execution.
@@ -58,7 +58,7 @@ In summary, the normative block processing mechanism for a block is:
 - `System` calls `S.Administration.start_block(block)`; if it aborts, revert/discard `S` and the block is considered invalid.
 - for each transaction `tx` in `block.transactions`, `Nobody` calls `S[tx.destination][tx.function_name](tx.params...)`. If a transaction aborts, then the block is aborted and considered invalid.
   - Transactions can include signed statements from external actors such as fishermen, but crucially can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). Timestamp would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
-  - One set of statements that appear in the block are selected para-chain candidates. In this case it is a simple message to `S.Parachain.update_head(parachain_id: U64, head_data: [...], egress_queue_root: H256, changed_balances: U64 -> U256)`. The `*_precondition` function barriers ensure that externally received transactions cannot call these directly. This call ensures any DOT balances on the para-chain required as fees for the egress-queue is burned. `changed_balances` records the change of any funds owned as a result of transfer from on-parachain to parachain-on-relaychain.
+  - One set of statements that appear in the block are selected para-chain candidates. In this case it is a simple message to `S.Parachain.update_head(parachain_id: U64, head_data: bytes, egress_queue_roots: [H256, ...], balance_uploads: [[U64, U256], ...])`. The `*_precondition` function barriers ensure that externally received transactions cannot call these directly. This call ensures any DOT balances on the para-chain required as fees for the egress-queue is burned. `changed_balances` records the change of any funds owned as a result of transfer from on-parachain to parachain-on-relaychain.
 - For each para-chain, the egress-queue messages are processed.
 - `System` calls `S.Administration.end_block(block)`; if it aborts, revert/discard `S` and the block is considered invalid.
 
@@ -86,7 +86,7 @@ A block contains all information required to evaluate a relay-chain block. It in
 Block: [
     header: Header,
     transactions: Transaction[],
-    signatures: [[U256, U256, U8], ...]
+    signatures: [Signature, ...]
 ]
 ```
 
@@ -98,7 +98,11 @@ Transactions are isolatable components of extrinsic data used in blocks to descr
 Transaction: [
     destination: U64,
     function_name: bytes,
-    parameters: [...]
+    parameters: [...],
+	seal: [
+		nonce: U64,
+		signature: Signature
+	]
 ]
 ```
 
@@ -108,7 +112,7 @@ Transaction: [
 
 ## Header
 
-The header stores or crypto-graphically references all intrinsic information relating to a block.
+The header stores or cryptographically references all intrinsic information relating to a block.
 
 ```
 header: [
@@ -121,14 +125,71 @@ header: [
 ]
 ```
 
+## Candidate Para-chain block
+
+Candidate para-chain blocks are passed from collators to validators and express information concerning the latest state of the para-chain. If validated and accepted, then most of this information is duplicated onto the state of the relay chain under the Parachains contract (the exception being `block_data`).
+
+```
+Candidate: [
+	parachain_index: U64,
+	collator_signature: Signature,
+	unprocessed_ingress: [ [ [ Message, ... ], ... ], ... ],	// ordered by para-chain index and then by block number and then by message index.
+	block_data: U64
+]
+```
+
+
+```
+CandidateReceipt: [
+	parachain_index: U64,
+	collator: H160,
+	head_data: bytes,
+	balance_uploads: [ [ U64, U256 ], ... ],
+	egress_queue_roots: [ H256, ... ],	// or a sparse [[U64, H256], ...] format?
+	egress_fees: U256	// TODO: or a structured egress_properties from which fees can be calculated?
+]
+```
+
+`parachain_index` is the unique identifier for this para-chain. `egress_queue_roots` is the array of roots of the egress queues. Many/most entries may be empty if the para-chain has little outgoing communication with certain other chains. `balance_uploads` is the set of `U64` account identifiers
+
 # Transaction routing
 
 Importantly, the relay-chain validators do almost nothing regarding transaction routing. All heavy-lifting in terms of tracking egress (outgoing) queues is done by collators.
 
-For each block of each para-chain, there exists a set of outgoing messages to each other para-chain. This is index-keyed into a trie, whose root is known as the para-chain egress queue. For a para-chain `P` sending messages to para-chain `Q` as a result of the block `B` whose end-state is `S`, then we can denote `S.Parachain[P].egress_root[Q]` as the egress queue root.
+For each block of each para-chain, there exists a set of outgoing messages to each other para-chain. For para-chain `P` sending a message to para-chain `Q`, at block number `B` we can say `chain[B].parachain[P].egress[Q]` represents this queue. If, for whatever reason, `Q` does not process this queue, then the items are not somehow forwarded or copied into `chain[B + 1].parachain[P].egress[Q]` rather this is a separate queue altogether, describing the output messages resulting from `P`'s block `B + 1`. In this case, when validating a candidate for `Q` after block `B`, the egress queues from `B` will need to be managed in the validation logic.
 
+A collators role includes tracking all other para-chains' egress queues for its chain and amalgamating them into a three-dimensional array when they produce a para-chain block:
 
- Each message is simply a source para-chain, a destination para-chain and some arbitrary data:
+```
+[
+	chain_1: IngressQueues, chain_2: IngressQueues, ...
+]
+```
+
+There is no item for the para-chain itself; it is assumed that the para-chain has no need to send messages to itself.
+
+Each `IngressQueues` item contains a number of arrays of `Message`s. The number of such arrays is equal to the number of blocks that have passed since the last para-chain block was finalised (each properly finalised para-chain block necessarily flushes all other para-chain's egress queues to itself).
+
+```
+IngressQueues: [
+	earliest_block: [ Message, ... ],
+	next_earliest_block: [ Message, ... ],
+	...
+	latest_block: [ Message, ... ]
+]
+```
+
+It is permissible for any of these `[ Message, ... ]` arrays to be empty.
+
+### Specifics
+
+Each notional egress queue for a given block `chain[B].parachain[P].egress[Q]` relates to a specific set of data stored in the state. Specific for the end-state `S` of block `B`, we index-key `chain[B].parachain[P].egress[Q]` into a trie and denote the root as `S.Parachain[P].egress_root[Q]`, the egress queue root. Note again, this specifies information *only relevant to items places on the egress queue in the present block*. Notably, if `Q` did not drain the contents of the queue from the previous block, then those contents are *not* reflected in the present block's egress root. It is the job of `Q`'s collators to keep up to date with all previous blocks when processing "ingress" queues (i.e. other blocks' egress queue to it).
+
+As part of its operation, the candidate block validation function requires the unprocessed ingress queues (i.e. relevant other para-chain's egress queues) these queues are provided by the collator as part of the candidate block, *but* are validated externally to the validation function "natively" by the validator. Technically these could be validated as part of the validation function, but it would mean duplication of code between all para-chains and would inevitably be slower and require substantial additional data wrangling as the witness data concerning historical egress information were composed and passed. Requiring the validator node itself to pre-validate this information avoids this.
+
+The candidate specifies the new set of egress queue roots, and the Validation Function ensures that these are reflected by the state transition of the para-chain.
+
+Each message within each queue is simply a source para-chain, a destination para-chain and some arbitrary data:
 
 ```
 message: [
@@ -138,7 +199,7 @@ message: [
 ]
 ```
 
-The source and destination are para-chain indices; while stored in egress queues, `source` is omitted.
+The source and destination are para-chain indices.
 
 This set of messages is defined by the collator, specified in the candidate block and validated as part of the Validity Function. The set of messages must fulfil certain criteria including respecting limitations on the quantity and size of outgoing queues.
 
@@ -149,15 +210,31 @@ We name four chain parameters:
 - `routing_max_bytes`: The maximum number of bytes that all messages can occupy which may be sent from a block in total.
 - `routing_max_bytes_per_chain`: The maximum number of bytes that all messages can occupy which may be sent from a block into a single other chain in total.
 
-Part of the process of validation includes checking these four limitations have been respected by the candidate block.
+Part of the process of validation includes checking these four limitations have been respected by the candidate block. This is done at the same time as fee calculation `calculate_fees`.
 
-There is a notional queue for each non-equivalent ordered pair of para-chains. The trie root for each of these queues is stored on the relay chain. Collators prepare the egre
+### Validating & Processing
 
-[XXXX The collators, as part of their candidates, include for each (other) destination para-chain two new trie roots; one is the trie root assuming that the destination's queue was drained on this block; the other trie root is the amalgamation of the previous queue with the new queue.]
+The specific steps to validate a para-chain candidate on state `S` are:
 
-NOTE:
+- Ensure the candidate block is structurally sound. Let `candidate` be the structured data.
+- Retrieve the collator signature for the candidate and let `collator := ecrecover(candidate.collator_signature)`.
+- For each (`Q`, `Q_index`) in all para-chains where `Q != candidate.parachain_index`:
+  - Let `ingress_queue := candidate.unprocessed_ingress[Q_index]`
+  - Counting `b` down from `S.Null.block_number()` until `block[b].parachain[Q].egress[candidate.parachain_index] WAS_PROCESSED`.
+    - Let `b_index := S.Null.block_number() - b`
+    - Assert `index_keyed_trie_root(ingress_queue[b_index]) == chain[b - 1].state.Parachain[Q].egress_root[candidate.parachain_index]` (if not true then this is an invalid para-chain candidate).
+- Let `(head_data, egress_queues, balance_uploads) := S.Parachain[candidate.parachain_index].Validate(candidate)`; if it aborts, then this is an invalid para-chain candidate.
+- Ensure all limitations regarding egress queues are observed: `let egress_fees := calculate_fees(egress_queues)`, and if it aborts, then this is an invalid para-chain candidate.
+- Form candidate receipt `candidate_receipt := (candidate.parachain_index, collator, head_data, balance_uploads, to_index_keyed_trie_roots(egress_queues), egress_queues)`.
 
-With the egress queue accepted as valid,
+# Para-chain management account
+
+```
+[
+	balances: U64 -> [ U256: balance, U64: nonce ],
+
+]
+```
 
 # Authentication contract
 
