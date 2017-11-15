@@ -133,7 +133,7 @@ Candidate para-chain blocks are passed from collators to validators and express 
 Candidate: [
 	parachain_index: U64,
 	collator_signature: Signature,
-	unprocessed_ingress: [ [ [ Message, ... ], ... ], ... ],	// ordered by para-chain index and then by block number and then by message index.
+	unprocessed_ingress: [ [ [ bytes, ... ], ... ], ... ],	// ordered by para-chain index and then by block number and then by message index.
 	block_data: U64
 ]
 ```
@@ -168,18 +168,18 @@ A collators role includes tracking all other para-chains' egress queues for its 
 
 There is no item for the para-chain itself; it is assumed that the para-chain has no need to send messages to itself.
 
-Each `IngressQueues` item contains a number of arrays of `Message`s. The number of such arrays is equal to the number of blocks that have passed since the last para-chain block was finalised (each properly finalised para-chain block necessarily flushes all other para-chain's egress queues to itself).
+Each `IngressQueues` item contains a number of arrays of `bytes` messages. The number of such arrays is equal to the number of blocks that have passed since the last para-chain block was finalised (each properly finalised para-chain block necessarily flushes all other para-chain's egress queues to itself).
 
 ```
 IngressQueues: [
-	earliest_block: [ Message, ... ],
-	next_earliest_block: [ Message, ... ],
+	earliest_block: [ bytes, ... ],
+	next_earliest_block: [ bytes, ... ],
 	...
-	latest_block: [ Message, ... ]
+	latest_block: [ bytes, ... ]
 ]
 ```
 
-It is permissible for any of these `[ Message, ... ]` arrays to be empty.
+It is permissible for any of these `[ bytes, ... ]` arrays to be empty.
 
 ### Specifics
 
@@ -188,16 +188,6 @@ Each notional egress queue for a given block `chain[B].parachain[P].egress[Q]` r
 As part of its operation, the candidate block validation function requires the unprocessed ingress queues (i.e. relevant other para-chain's egress queues) these queues are provided by the collator as part of the candidate block, *but* are validated externally to the validation function "natively" by the validator. Technically these could be validated as part of the validation function, but it would mean duplication of code between all para-chains and would inevitably be slower and require substantial additional data wrangling as the witness data concerning historical egress information were composed and passed. Requiring the validator node itself to pre-validate this information avoids this.
 
 The candidate specifies the new set of egress queue roots, and the Validation Function ensures that these are reflected by the state transition of the para-chain.
-
-Each message within each queue is simply a source para-chain, a destination para-chain and some arbitrary data:
-
-```
-message: [
-	source: U64,
-	destination: U64,
-	data: bytes
-]
-```
 
 The source and destination are para-chain indices.
 
