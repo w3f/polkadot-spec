@@ -265,35 +265,35 @@ ParachainState : {
 
 These are not dependent on state. They just float around in the global environment and are inherent to the chain or node itself.
 
-- CONSTANT `chain_id() -> ChainID`
-- CONSTANT `sender() -> AccountID`
+- READ-ONLY `chain_id() -> ChainID`
+- READ-ONLY `sender() -> AccountID`
 
 ## State-based APIs
 
 ### Environment (0)
 
-- CONSTANT `block_number(self) -> BlockNumber`
-- CONSTANT `block_hash(self, BlockNumber) -> Hash`
+- READ-ONLY `block_number(self) -> BlockNumber`
+- READ-ONLY `block_hash(self, BlockNumber) -> Hash`
 
 ### Timestamp (~7)
 
-- CONSTANT `timestamp(self) -> Timestamp`
+- READ-ONLY `timestamp(self) -> Timestamp`
 - SYSTEM `set_timestamp(mut self, Timestamp)`
 
 ### Authentication (~6)
 
-- CONSTANT `validate_signature(self, tx: Transaction) -> (AccountID, TxOrder)`
-- CONSTANT `nonce(self, id: AccountID) -> TxOrder`
+- READ-ONLY `validate_signature(self, tx: Transaction) -> (AccountID, TxOrder)`
+- READ-ONLY `nonce(self, id: AccountID) -> TxOrder`
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID`
 
 ### Parachain (~5)
 
-- CONSTANT `chain_ids(self) -> [ChainID]`
-- CONSTANT `validation_function(self, chain_id: ChainID) -> Fn(consolidated_ingress: [ ( ChainID, bytes ) ], balance_downloads: [ ( AccountID, Balance ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ])`
-- CONSTANT `validate_and_calculate_fees_function(self, chain_id: ChainID) -> Fn(egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ]) -> Balance`
-- CONSTANT `balance(self, chain_id: ChainID, id: AccountID) -> Balance`
-- CONSTANT `verify_and_consolidate_queues(self, unprocessed_ingress: [ [ [ bytes ] ] ]) -> [ (chain_id: ChainID, message: bytes) ]`: `unprocessed_ingress` is dereferenced in order from outer to inner: parachain ID, block age (oldest first), message index. It aborts if the `unprocessed_ingress` contains items which do not reflect the historical parachain egress queues. It also aborts if it does not contain all items from egress queues bound for this chain that were not yet processed by this chain. Otherwise it returns all messages (the `bytes` items) passed in `unprocessed_ingress`, ordered by block age (oldest first), then by parachain ID, then by message index and paired up with the source parachain ID.
-- CONSTANT `chain_state(self, chain_id: ChainID) -> ParachainState` returns the state of the parachain `chain_id`.
+- READ-ONLY `chain_ids(self) -> [ChainID]`
+- READ-ONLY `validation_function(self, chain_id: ChainID) -> Fn(consolidated_ingress: [ ( ChainID, bytes ) ], balance_downloads: [ ( AccountID, Balance ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ])`
+- READ-ONLY `validate_and_calculate_fees_function(self, chain_id: ChainID) -> Fn(egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ]) -> Balance`
+- READ-ONLY `balance(self, chain_id: ChainID, id: AccountID) -> Balance`
+- READ-ONLY MAGIC `verify_and_consolidate_queues(self, unprocessed_ingress: [ [ [ bytes ] ] ]) -> [ (chain_id: ChainID, message: bytes) ]`: `unprocessed_ingress` is dereferenced in order from outer to inner: block age (oldest first), parachain ID, message index. It aborts if the `unprocessed_ingress` contains items which do not reflect the historical parachain egress queues. It also aborts if it does not contain all items from egress queues bound for this chain that were not yet processed by this chain. Otherwise it returns all messages (the `bytes` items) passed in `unprocessed_ingress`, ordered by block age (oldest first), then by parachain ID, then by message index and paired up with the source parachain ID.
+- READ-ONLY `chain_state(self, chain_id: ChainID) -> ParachainState` returns the state of the parachain `chain_id`.
 - USER `move_to_staking(mut self, chain_id: ChainID, value: Balance)` User-level function which moves a user-balance from this contract associated with parachain `chain_id` to the staking contract. Implemented through reducing `S.Parachain.balance` and `S.Parachain.chain_state[chain_id].balance[sender()]` and creating it on the Staking chain `S.Staking.balance[sender()]`.
 - USER `download(mut self, chain_id: ChainID, value: Balance, instruction: bytes)` Denotes a portion of the balance to be downloaded to the parachain. In reality this means reducing the user balance for the `sender()` of parachain `chain_id` by `value` and issuing an out-of-band `balance_downloads` instruction to the parachain through its next validation function. So that the parachain can be told what to do with the DOTs (e.g. whose parachain-based account should be credited) `instruction` is provided. This could reasonably encode more than just a destination address, but it is left for the parachain STF to determine what that encoding is.
 - SYSTEM `update_head(mut self, chain_id: ChainID, head_data: bytes, egress_queue_roots: [ Hash ], balance_uploads: [ ( AccountID, Balance ) ], fees: Balance)`
@@ -303,8 +303,8 @@ These are not dependent on state. They just float around in the global environme
 > CONSIDER: allowing messages between parachains to contain DOTs. for the use case of sending a bunch of DOTs from one chain to another, this would vastly simplify things (at present, you'd have to create a new secret/address, upload the DOTs to the parachain account through a parachain tx, transfer to the staking contract and then back to the new parachain (two relay chain txs), then issue a download tx (another relay chain tx)). This could be optimised to three transactions if parachains can transfer between themselves, but it's still a lot of faff for one notional operation.
 
 ### Staking (~4)
-- CONSTANT `era_length(self) -> BlockNumber`
-- CONSTANT `balance(self, AccountID) -> Balance`
+- READ-ONLY `era_length(self) -> BlockNumber`
+- READ-ONLY `balance(self, AccountID) -> Balance`
 - USER `move_to_parachain(mut self, chain_id: ChainID, value: Balance)`
 - USER `stake(mut self, minimum_era_return: Proportion)`
 - USER `unstake(mut self)`
@@ -313,7 +313,7 @@ These are not dependent on state. They just float around in the global environme
 Staking happens in batches of blocks called eras. At the end of each era, payouts are processed based upon statistics accrued by the consensus contract. An account's staking profile (i.e. parameters that determine when its balance will be used in the staking system) may be set with the `stake` and `unstake` functions. Both specifically targets the next era. Staking information is retained between eras and further calls are unnecessary if the user doesn't wish to change their profile. Each account has a staking balance associated with it (`balance`); this balance cannot be split between different staking profiles.
 
 ### Consensus (~3)
-- CONSTANT `validators(self) -> [ AccountID ]`
+- READ-ONLY `validators(self) -> [ AccountID ]`
 - SYSTEM `set_validators(self, validators: [ AccountID ])`
 - SYSTEM `flush_statistics(mut self) -> Statistics`
 
@@ -334,9 +334,9 @@ All USER transactions must burn a fee and, having done so, must not abort.
 
 The Authentication contract allows participants lookup of a `Signature`, message-hash and nonce into an `AccountID` (`H160` for now). It allows a transaction to be `authenticate`d, which mutates the state and ensures the same transactions cannot be resubmitted. It also allows a transaction to be `validate`d, which does not mutate the state (and thus does not give any replay protection except against transactions that have previously been `authenticate`d). You can also get the `order` index (ana `nonce` in Ethereum) for any account ID.
 
-- CONSTANT `validate(self, tx: Transaction) -> (id: AccountID, now: TxOrder, when: TxOrder)` returns the account `id` that signed `tx`, and the ordering of this transaction `when` versus the current order `now`. If `now == when`, then the transaction may be validly included/executed. If the signature is invalid, will abort.
+- READ-ONLY `validate(self, tx: Transaction) -> (id: AccountID, now: TxOrder, when: TxOrder)` returns the account `id` that signed `tx`, and the ordering of this transaction `when` versus the current order `now`. If `now == when`, then the transaction may be validly included/executed. If the signature is invalid, will abort.
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID` returns the account ID that signed `tx` iff the `tx` may be validly executed on the state as it is. Aborts otherwise.
-- CONSTANT `order(self, id: AccountID) -> U64` returns the current order index of account `id`.
+- READ-ONLY `order(self, id: AccountID) -> U64` returns the current order index of account `id`.
 
 The `authenticate` function will likely just call on the `validate` function. Example implementation:
 
