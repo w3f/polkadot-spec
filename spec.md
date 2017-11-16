@@ -95,14 +95,18 @@ Block: [
 Transactions are isolatable components of extrinsic data used in blocks to describe specific communications from the external world.
 
 ```
+UnsignedTransaction: [
+	destination: U64,
+	function_name: bytes,
+	parameters: [...],
+	nonce: U64
+]
+```
+
+```
 Transaction: [
-    destination: U64,
-    function_name: bytes,
-    parameters: [...],
-	seal: [
-		nonce: U64,
-		signature: Signature
-	]
+	unsigned: UnsignedTransaction,
+	signature: Signature
 ]
 ```
 
@@ -301,7 +305,7 @@ The `authenticate` function will check the validity of an ECDSA signature `(r, s
 
 ```
 [
-	transaction: Transaction,
+	transaction: UnsignedTransaction,
 	chain_id: U64
 ]
 ```
