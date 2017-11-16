@@ -21,7 +21,7 @@ In reality almost all account indices would not represent these high accounts bu
 - Account 0: Null, Nobody, Universal. Basic user-level account. Can be queried for non-sensitive universal data (like `block_number()`, `block_hash()`). Represents the unauthenticated (external transaction) origin.
 - Accounts 1...: The virtual account indices.
 - Account ~7: Timestamp account. Stores the current time. May be called from the unauthenticated account once per block.
-- Account ~6: Authentication account. Basic account lookup account. Stores a mapping `U64 -> H160` providing a partial public-key derivative ("address", similar to an Ethereum address) for each account index. Can be used to register new accounts (in return for some price). Registration begins at some index greater than zero (likely to be 1 + the number of genesis allocations). The current index increments with each new account registered. A nominal fee (whose value may be set by the Administration contract) is payable for each new account registered.
+- Account ~6: Authentication account. Basic account lookup account. Stores a mapping `U64 -> H160` providing a partial public-key derivative ("address", similar to an Ethereum address) for each account index. Automatically registers new accounts (in return for some price). Registration begins at some index greater than zero (likely to be 1 + the number of genesis allocations). The current index increments with each new account registered. Accounts should not be createable without some sort of economic activity happening.
 - Account ~5: Para-chain management account. Stores all things to do with para-chains including total para-chain balances, relay-chain-native account balances that are transferable (per para-chain), validation function, queue information and current state. Is flushed at the beginning of each block in order to allow the previous block's messages to the relay chain to execute.
 - Account ~4: Staking account. Stores all things to do with the proof-of-stake algorithm particularly currently staked amounts as a mapping from `U64 -> [ balance: U256, nonce: U64 ]`. Informs the Consensus account of its current validator set. Hosts stake-voting.
 - Account ~3: Consensus account. Stores all things consensus and code is the relay-chain consensus logic. Requires to be informed of the current validator set and can be queried for behaviour profiles. Checks validator signatures.
@@ -85,8 +85,8 @@ A block contains all information required to evaluate a relay-chain block. It in
 ```
 Block: [
     header: Header,
-    transactions: Transaction[],
-    signatures: [Signature, ...]
+    transactions: [ Transaction, ... ],
+    signatures: [ Signature, ... ]
 ]
 ```
 
@@ -213,20 +213,74 @@ The specific steps to validate a para-chain candidate on state `S` are:
   - Counting `b` down from `S.Null.block_number()` until `block[b].parachain[Q].egress[candidate.parachain_index] WAS_PROCESSED`.
     - Let `b_index := S.Null.block_number() - b`
     - Assert `index_keyed_trie_root(ingress_queue[b_index]) == chain[b - 1].state.Parachain[Q].egress_root[candidate.parachain_index]` (if not true then this is an invalid para-chain candidate).
-- Let `consolidated_ingress` equal the series of tuples `[ [message_0: bytes, source_0: u64], [message_1: bytes, source_1: u64]. ... ]` that represents all messages in all ingress queues, ordered according to the above search.
+- Let `consolidated_ingress` equal the series of tuples `[ [source_0: u64, message_0: bytes], [source_1: u64, message_1: bytes]. ... ]` that represents all messages in all ingress queues, ordered according to the above search.
 - Let `previous_head_data := S.Parachain[candidate.parachain_index]`
 - Let `(head_data, egress_queues, balance_uploads) := S.Parachain[candidate.parachain_index].Validate(consolidated_ingress, block_data, previous_head_data)`; if it aborts, then this is an invalid para-chain candidate.
 - Ensure all limitations regarding egress queues are observed: `let egress_fees := calculate_fees(egress_queues)`, and if it aborts, then this is an invalid para-chain candidate.
 - Form candidate receipt `candidate_receipt := (candidate.parachain_index, collator, head_data, balance_uploads, to_index_keyed_trie_roots(egress_queues), egress_queues)`.
 
+# Specific APIs
+
+# Environment (0)
+
+- `block_number(self) -> U64`
+- `block_hash(self, U64) -> H256`
+
+# Timestamp (~7)
+
+- `set_timestamp(mut self, U64)`
+- `timestamp(self) -> U64`
+
+# Authentication (~6)
+
+- `authenticate(mut self, sig: Signature, nonce: U64, message_hash: H256) -> U64`
+- `lookup(self, key: H256) -> U64`
+- `nonce(self, id: U64) -> U64`
+
+# Parachain (~5)
+
+- `chain_ids(self) -> [U64]`
+- `validate(self, chain_id: U64, consolidated_ingress: [ ( U64, bytes ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( U64, U256 ) ])`
+- `balance(self, id: U64) -> U256`
+- `move_to_staking(mut self, value: U256)`
+- `download(mut self, value: U256, instruction: bytes)`
+
+# Staking (~4)
+- `balance(self, U64) -> H256`
+- `move_to_parachain(mut self, value: U256)`
+- `stake(mut self, minimum_era_return: U64)`
+- `unstake(mut self)`
+- `era_length(self) -> U64`
+
+Staking happens in batches of blocks called eras. At the end of each era, payouts are processed based upon statistics accrued by the consensus contract. An account's staking profile (i.e. parameters that determine when its balance will be used in the staking system) may be set with the `stake` and `unstake` functions. Both specifically targets the next era. Staking information is retained between eras and further calls are unnecessary if the user doesn't wish to change their profile. Each account has a staking balance associated with it (`balance`); this balance cannot be split between different staking profiles.
+
+# Consensus (~3)
+- `validators(self) -> [U64]`
+- `set_validators(self, validators: [U64])`
+- `flush_statistics(mut self) -> Statistics`
+
+# Administration (~2)
+- `start_block(mut self, block: Block)`
+- `end_block(mut self, block: Block)`
+
+# System (~1)
+- `deposit_log(mut self, data: bytes)`
+
+- Account ~5: Para-chain management account. Stores all things to do with para-chains including total para-chain balances, relay-chain-native account balances that are transferable (per para-chain), validation function, queue information and current state. Is flushed at the beginning of each block in order to allow the previous block's messages to the relay chain to execute.
+- Account ~4: Staking account. Stores all things to do with the proof-of-stake algorithm particularly currently staked amounts as a mapping from `U64 -> [ balance: U256, nonce: U64 ]`. Informs the Consensus account of its current validator set. Hosts stake-voting.
+- Account ~3: Consensus account. Stores all things consensus and code is the relay-chain consensus logic. Requires to be informed of the current validator set and can be queried for behaviour profiles. Checks validator signatures.
+- Account ~2: Administration account. Stores and administers low-level chain parameters. Can unilaterally read and replace code/storage in all accounts, &c. Hosts and acts on stake-voting activities. Acts as entry point in block execution.
+- Account ~1: System. Provides low-level mutable interaction with header, in particular `deposit_log()`. Represents the system origin.
+
+#
+
 # Para-chain management account
 
-The Parachain management account ("Parachain") provides 
+The Parachain management account ("Parachain") provides
 
 ```
 [
-	balances: U64 -> [ U256: balance, U64: nonce ],
-
+	balances: U64 -> [ U256: balance ],
 ]
 ```
 
