@@ -6,27 +6,27 @@ The relay chain is a simplified proof-of-stake blockchain backed by a Web Assemb
 
 # State
 
-Its state is has similarities to Ethereum: accounts contained in it are a mapping from a `U64` account index to code (`H256`, a SHA3 of Wasm code) and storage (`H256`, a Merkle-trie root for a set of `H256` to `U8[]` mappings). All such accounts are actually known as "high accounts" since their ID is close to 2**64 and, notionally, they have a "high" privilege level.
+Its state is has similarities to Ethereum: accounts contained in it are a mapping from a `AccountID` account identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). All such accounts are actually known as "high accounts" since their ID is close to 2**64 and, notionally, they have a "high" privilege level.
 
-Notably, no balance or nonce information is stored directly in the state. Balances, in general, are unneeded since ralay-chain DOTs are not a crypto-currency per se and cannot be transferred between owners directly. Nonces, for the purposes of replay-protection are managed directly by the contracts that accept transactions.
+Notably, no balance or nonce information is stored directly in the state. Balances, in general, are unneeded since relay-chain DOTs are not a crypto-currency per se and cannot be transferred between owners directly. Nonces, for the purposes of replay-protection are managed by the specialised Authentication contract.
 
 Ownership of DOTs is managed by two accounts independent bodies of code & state): the Staking account (which manages DOTs stakes by users) and the Parachain account (which manages the DOTs owned by parachains). Transfer from the Staking to the Parachain account happens via a signed transaction being included in the relay chain. Transfer in the reverse direction is initiated directly by the Parachain account through the forwarding of a message.
 
 ```
-state := U64 -> [ code_hash: H256, storage_root: H256 ]
+state := AccountID -> ( code_hash: Hash, storage_root: Hash )
 ```
 
 In reality almost all account indices would not represent these high accounts but rather be "virtual". High accounts would each fulfil specific functions (though over time these may expanded or contracted as changes in the protocol determine). The accounts on genesis block can be listed:
 
 - Account 0: Nobody. Basic user-level account. Can be queried for non-sensitive universal data (like `block_number()`, `block_hash()`). Represents the unauthenticated (external transaction) origin.
 - Accounts 1...: The virtual account indices.
-- Account ~7: Timestamp account. Stores the current time. May be called from the unauthenticated account once per block.
-- Account ~6: Authentication account. Basic account lookup account. Stores a mapping `U64 -> H160` providing a partial public-key derivative ("address", similar to an Ethereum address) for each account index. Automatically registers new accounts (in return for some price). Registration begins at some index greater than zero (likely to be 1 + the number of genesis allocations). The current index increments with each new account registered. Accounts should not be createable without some sort of economic activity happening.
+- Account ~7: Timestamp account. Stores the current time. Changed once per block by the System account.
+- Account ~6: Authentication account. Manages checking the transaction signatures and replay protection.
 - Account ~5: Para-chain management account. Stores all things to do with parachains including total parachain balances, relay-chain-native account balances that are transferable (per parachain), validation function, queue information and current state. Is flushed at the beginning of each block in order to allow the previous block's messages to the relay chain to execute.
-- Account ~4: Staking account. Stores all things to do with the proof-of-stake algorithm particularly currently staked amounts as a mapping from `U64 -> [ balance: U256, nonce: U64 ]`. Informs the Consensus account of its current validator set. Hosts stake-voting.
+- Account ~4: Staking account. Stores all things to do with the proof-of-stake algorithm particularly currently staked amounts. Informs the Consensus account of its current validator set. Hosts stake-voting.
 - Account ~3: Consensus account. Stores all things consensus and code is the relay-chain consensus logic. Requires to be informed of the current validator set and can be queried for behaviour profiles. Checks validator signatures.
 - Account ~2: Administration account. Stores and administers low-level chain parameters. Can unilaterally read and replace code/storage in all accounts, &c. Hosts and acts on stake-voting activities. Acts as entry point in block execution.
-- Account ~1: System. Provides low-level mutable interaction with header, in particular `deposit_log()`. Represents the system origin.
+- Account ~1: System. Provides low-level mutable interaction with header, in particular `deposit_log()`. Represents the system origin, which includes all validator-accepted, unsigned transactions.
 
 For PoC-1, high accounts are likely to be built-in, though eventually they should be implemented as Wasm contracts.
 
@@ -59,7 +59,7 @@ In summary, the normative block processing mechanism for a block is:
 - As part of this:
   - for each transaction `tx` in `block.transactions`, `Nobody` calls `S[tx.destination][tx.function_name](tx.params...)`. If a transaction aborts, then the block is aborted and considered invalid.
     - Transactions can include signed statements from external actors such as fishermen, but crucially can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. Timestamp would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
-    - One set of statements that appear in the block are selected parachain candidates. In this case it is a simple message to `S.Parachain.update_head(parachain_id: U64, head_data: bytes, egress_queue_roots: [H256, ...], balance_uploads: [ [ U64, U256 ], ... ])`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned. `balance_uploads` records the change of any funds owned as a result of transfer from on-parachain to parachain-on-relaychain.
+    - One set of statements that appear in the block are selected parachain candidates. In this case it is a simple message to `S.Parachain.update_head(parachain_id: ChainID, head_data: bytes, egress_queue_roots: [ Hash ], balance_uploads: [ ( AccountID, Balance ) ])`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned. `balance_uploads` records the change of any funds owned as a result of transfer from on-parachain to parachain-on-relaychain.
 
 ### Invalid blocks
 
@@ -84,8 +84,8 @@ A block contains all information required to evaluate a relay-chain block. It in
 ```
 Block: [
     header: Header,
-    transactions: [ Transaction, ... ],
-    signatures: [ Signature, ... ]
+    transactions: [ Transaction ],
+    signatures: [ Signature ]
 ]
 ```
 
@@ -95,10 +95,10 @@ Transactions are isolatable components of extrinsic data used in blocks to descr
 
 ```
 UnsignedTransaction: [
-	destination: U64,
+	destination: AccountID,
 	function_name: bytes,
-	parameters: [...],
-	nonce: U64
+	parameters: [ ... ],
+	nonce: TxOrder
 ]
 ```
 
@@ -119,12 +119,12 @@ The header stores or cryptographically references all intrinsic information rela
 
 ```
 header: [
-    parent_hash: H256,
-    number: U64,
-    state_root: H256,
-    transaction_root: H256,
+    parent_hash: Hash,
+    number: BlockNumber,
+    state_root: Hash,
+    transaction_root: Hash,
     parachain_activity_bitfield: bytes,
-    logs: [ bytes, ... ]
+    logs: [ bytes ]
 ]
 ```
 
@@ -134,10 +134,10 @@ Candidate parachain blocks are passed from collators to validators and express i
 
 ```
 Candidate: [
-	parachain_index: U64,
+	parachain_index: ChainID,
 	collator_signature: Signature,
-	unprocessed_ingress: [ [ [ bytes, ... ], ... ], ... ],	// ordered by parachain index and then by block number and then by message index.
-	block_data: U64
+	unprocessed_ingress: [ [ [ bytes ] ] ],	// ordered by parachain index and then by block number and then by message index.
+	block_data: bytes
 ]
 ```
 
@@ -145,12 +145,12 @@ Candidate receipts are the final data actionable on the relay chain. They are si
 
 ```
 CandidateReceipt: [
-	parachain_index: U64,
-	collator: H160,
+	parachain_index: ChainID,
+	collator: AccountID,
 	head_data: bytes,
-	balance_uploads: [ [ U64, U256 ], ... ],
-	egress_queue_roots: [ H256, ... ],	// or a sparse [ [ U64, H256 ], ... s] format?
-	fees: U256
+	balance_uploads: [ ( AccountID, Balance ) ],
+	egress_queue_roots: [ Hash ],	// or a sparse [ ( ChainID, Hash ) ] format?
+	fees: Balance
 ]
 ```
 
@@ -240,8 +240,14 @@ The specific steps to validate a parachain candidate on state `S` are:
 
 ## Types
 
-- `AccountID := H160`
-- `Balance := U256`
+- `AccountID : H160`
+- `Balance : U256`
+- `ChainID : U64`
+- `Hash : H256`
+- `BlockNumber : U64`
+- `Proportion : U64`
+- `Timestamp : U64`
+- `TxOrder : U64`
 
 ### ParachainState
 
@@ -250,8 +256,8 @@ ParachainState : {
 	head_data: bytes,
 	balance: Balance,
 	user_balances: AccountID -> Balance,
-	balance_downloads: AccountID -> Balance,
-	egress_roots: [H256]
+	balance_downloads: AccountID -> ( Balance, bytes ),
+	egress_roots: [ Hash ]
 }
 ```
 
@@ -259,57 +265,56 @@ ParachainState : {
 
 These are not dependent on state. They just float around in the global environment and are inherent to the chain or node itself.
 
-- CONSTANT `chain_id() -> U64`
+- CONSTANT `chain_id() -> ChainID`
 - CONSTANT `sender() -> AccountID`
 
 ## State-based APIs
 
 ### Environment (0)
 
-- CONSTANT `block_number(self) -> U64`
-- CONSTANT `block_hash(self, U64) -> H256`
+- CONSTANT `block_number(self) -> BlockNumber`
+- CONSTANT `block_hash(self, BlockNumber) -> Hash`
 
 ### Timestamp (~7)
 
-- CONSTANT `timestamp(self) -> U64`
-- SYSTEM `set_timestamp(mut self, U64)`
+- CONSTANT `timestamp(self) -> Timestamp`
+- SYSTEM `set_timestamp(mut self, Timestamp)`
 
 ### Authentication (~6)
 
-- CONSTANT `validate_signature(self, tx: Transaction) -> (AccountID, U64)`
-- CONSTANT `nonce(self, id: AccountID) -> U64`
+- CONSTANT `validate_signature(self, tx: Transaction) -> (AccountID, TxOrder)`
+- CONSTANT `nonce(self, id: AccountID) -> TxOrder`
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID`
 
 ### Parachain (~5)
 
-- CONSTANT `chain_ids(self) -> [U64]`
-- CONSTANT `validation_function(self, chain_id: U64) -> Fn(consolidated_ingress: [ ( U64, bytes ) ], balance_downloads: [ ( U64, U256 ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( U64, U256 ) ])`
-- CONSTANT `validate_and_calculate_fees_function(self, chain_id: U64) -> Fn(egress_queues: [ [ bytes ] ], balance_uploads: [ ( U64, U256 ) ]) -> U256`
-- CONSTANT `balance(self, chain_id: U64, id: AccountID) -> U256`
-- CONSTANT `verify_and_consolidate_queues(self, unprocessed_ingress: [ [ [ bytes ] ] ]) -> [ bytes ]`: `unprocessed_ingress` is dereferenced in order from outer to inner: parachain ID, block age, message index. It aborts if the unprocessed_ingress contains items which do not reflect the historical parachain egress queues.
-- CONSTANT `chain_state(self, parachain_id: U64) -> ParachainState`
-- USER `move_to_staking(mut self, value: U256)`
-- USER `download(mut self, value: U256, instruction: bytes)`
-- SYSTEM `update_head(mut self, parachain_id: U64, head_data: bytes, egress_queue_roots: [ H256 ], balance_uploads: [ ( U64, U256 ) ], fees: U256)`
-
-
-- Let ` ` equal the series of tuples `[ [source_0: u64, message_0: bytes], [source_1: u64, message_1: bytes]. ... ]` that represents all messages in all ingress queues, ordered according to the above search.
+- CONSTANT `chain_ids(self) -> [ChainID]`
+- CONSTANT `validation_function(self, chain_id: ChainID) -> Fn(consolidated_ingress: [ ( ChainID, bytes ) ], balance_downloads: [ ( AccountID, Balance ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ])`
+- CONSTANT `validate_and_calculate_fees_function(self, chain_id: ChainID) -> Fn(egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ]) -> Balance`
+- CONSTANT `balance(self, chain_id: ChainID, id: AccountID) -> Balance`
+- CONSTANT `verify_and_consolidate_queues(self, unprocessed_ingress: [ [ [ bytes ] ] ]) -> [ (chain_id: ChainID, message: bytes) ]`: `unprocessed_ingress` is dereferenced in order from outer to inner: parachain ID, block age (oldest first), message index. It aborts if the `unprocessed_ingress` contains items which do not reflect the historical parachain egress queues. It also aborts if it does not contain all items from egress queues bound for this chain that were not yet processed by this chain. Otherwise it returns all messages (the `bytes` items) passed in `unprocessed_ingress`, ordered by block age (oldest first), then by parachain ID, then by message index and paired up with the source parachain ID.
+- CONSTANT `chain_state(self, chain_id: ChainID) -> ParachainState` returns the state of the parachain `chain_id`.
+- USER `move_to_staking(mut self, chain_id: ChainID, value: Balance)` User-level function which moves a user-balance from this contract associated with parachain `chain_id` to the staking contract. Implemented through reducing `S.Parachain.balance` and `S.Parachain.chain_state[chain_id].balance[sender()]` and creating it on the Staking chain `S.Staking.balance[sender()]`.
+- USER `download(mut self, chain_id: ChainID, value: Balance, instruction: bytes)` Denotes a portion of the balance to be downloaded to the parachain. In reality this means reducing the user balance for the `sender()` of parachain `chain_id` by `value` and issuing an out-of-band `balance_downloads` instruction to the parachain through its next validation function. So that the parachain can be told what to do with the DOTs (e.g. whose parachain-based account should be credited) `instruction` is provided. This could reasonably encode more than just a destination address, but it is left for the parachain STF to determine what that encoding is.
+- SYSTEM `update_head(mut self, chain_id: ChainID, head_data: bytes, egress_queue_roots: [ Hash ], balance_uploads: [ ( AccountID, Balance ) ], fees: Balance)`
 
 > CONSIDER: fold `balance_downloads` and `balance_uploads` into `head_data`; would simplify validation function and make it a little more abstract (though `download` and uploading would then require knowledge of `head_data`'s internals).
 
+> CONSIDER: allowing messages between parachains to contain DOTs. for the use case of sending a bunch of DOTs from one chain to another, this would vastly simplify things (at present, you'd have to create a new secret/address, upload the DOTs to the parachain account through a parachain tx, transfer to the staking contract and then back to the new parachain (two relay chain txs), then issue a download tx (another relay chain tx)). This could be optimised to three transactions if parachains can transfer between themselves, but it's still a lot of faff for one notional operation.
+
 ### Staking (~4)
-- CONSTANT `era_length(self) -> U64`
-- CONSTANT `balance(self, AccountID) -> H256`
-- USER `move_to_parachain(mut self, value: U256)`
-- USER `stake(mut self, minimum_era_return: U64)`
+- CONSTANT `era_length(self) -> BlockNumber`
+- CONSTANT `balance(self, AccountID) -> Balance`
+- USER `move_to_parachain(mut self, chain_id: ChainID, value: Balance)`
+- USER `stake(mut self, minimum_era_return: Proportion)`
 - USER `unstake(mut self)`
 - USER `complain(mut self, complaint: Complaint)`
 
 Staking happens in batches of blocks called eras. At the end of each era, payouts are processed based upon statistics accrued by the consensus contract. An account's staking profile (i.e. parameters that determine when its balance will be used in the staking system) may be set with the `stake` and `unstake` functions. Both specifically targets the next era. Staking information is retained between eras and further calls are unnecessary if the user doesn't wish to change their profile. Each account has a staking balance associated with it (`balance`); this balance cannot be split between different staking profiles.
 
 ### Consensus (~3)
-- CONSTANT `validators(self) -> [U64]`
-- SYSTEM `set_validators(self, validators: [U64])`
+- CONSTANT `validators(self) -> [ AccountID ]`
+- SYSTEM `set_validators(self, validators: [ AccountID ])`
 - SYSTEM `flush_statistics(mut self) -> Statistics`
 
 ### Administration (~2)
@@ -329,7 +334,7 @@ All USER transactions must burn a fee and, having done so, must not abort.
 
 The Authentication contract allows participants lookup of a `Signature`, message-hash and nonce into an `AccountID` (`H160` for now). It allows a transaction to be `authenticate`d, which mutates the state and ensures the same transactions cannot be resubmitted. It also allows a transaction to be `validate`d, which does not mutate the state (and thus does not give any replay protection except against transactions that have previously been `authenticate`d). You can also get the `order` index (ana `nonce` in Ethereum) for any account ID.
 
-- CONSTANT `validate(self, tx: Transaction) -> (id: AccountID, now: U64, when: U64)` returns the account `id` that signed `tx`, and the ordering of this transaction `when` versus the current order `now`. If `now == when`, then the transaction may be validly included/executed. If the signature is invalid, will abort.
+- CONSTANT `validate(self, tx: Transaction) -> (id: AccountID, now: TxOrder, when: TxOrder)` returns the account `id` that signed `tx`, and the ordering of this transaction `when` versus the current order `now`. If `now == when`, then the transaction may be validly included/executed. If the signature is invalid, will abort.
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID` returns the account ID that signed `tx` iff the `tx` may be validly executed on the state as it is. Aborts otherwise.
 - CONSTANT `order(self, id: AccountID) -> U64` returns the current order index of account `id`.
 
@@ -351,7 +356,7 @@ The `validate` function will check the validity of an ECDSA signature `(r, s, v)
 ```
 [
 	transaction: UnsignedTransaction,
-	chain_id: U64
+	chain_id: ChainID
 ]
 ```
 
