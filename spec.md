@@ -234,31 +234,32 @@ The specific steps to validate a para-chain candidate on state `S` are:
 
 # Interface Definitions
 
-# Static Constants
+## Static Constants
 
 These are not dependent on state. They just float around in the global environment and are inherent to the chain or node itself.
 
 - CONSTANT `chain_id() -> U64`
+- CONSTANT `sender() -> H160`
 
-# State-based APIs
+## State-based APIs
 
-## Environment (0)
+### Environment (0)
 
 - CONSTANT `block_number(self) -> U64`
 - CONSTANT `block_hash(self, U64) -> H256`
 
-## Timestamp (~7)
+### Timestamp (~7)
 
 - SYSTEM `set_timestamp(mut self, U64)`
 - CONSTANT `timestamp(self) -> U64`
 
-## Authentication (~6)
+### Authentication (~6)
 
 - CONSTANT `validate_signature(self, tx: Transaction) -> (AccountID, U64)`
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID`
 - CONSTANT `nonce(self, id: AccountID) -> U64`
 
-## Parachain (~5)
+### Parachain (~5)
 
 - CONSTANT `chain_ids(self) -> [U64]`
 - CONSTANT `validation_function(self, chain_id: U64) -> Fn(consolidated_ingress: [ ( U64, bytes ) ], balance_downloads: [ ( U64, U256 ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( U64, U256 ) ])`
@@ -270,7 +271,7 @@ These are not dependent on state. They just float around in the global environme
 
 > CONSIDER: fold `balance_downloads` and `balance_uploads` into `head_data`; would simplify validation function and make it a little more abstract (though `download` and uploading would then require knowledge of `head_data`'s internals).
 
-## Staking (~4)
+### Staking (~4)
 - CONSTANT `balance(self, AccountID) -> H256`
 - USER `move_to_parachain(mut self, value: U256)`
 - USER `stake(mut self, minimum_era_return: U64)`
@@ -280,15 +281,15 @@ These are not dependent on state. They just float around in the global environme
 
 Staking happens in batches of blocks called eras. At the end of each era, payouts are processed based upon statistics accrued by the consensus contract. An account's staking profile (i.e. parameters that determine when its balance will be used in the staking system) may be set with the `stake` and `unstake` functions. Both specifically targets the next era. Staking information is retained between eras and further calls are unnecessary if the user doesn't wish to change their profile. Each account has a staking balance associated with it (`balance`); this balance cannot be split between different staking profiles.
 
-## Consensus (~3)
+### Consensus (~3)
 - CONSTANT `validators(self) -> [U64]`
 - PRIVATE `set_validators(self, validators: [U64])`
 - PRIVATE `flush_statistics(mut self) -> Statistics`
 
-## Administration (~2)
+### Administration (~2)
 - PRIVATE `execute(mut self, block: Block)`
 
-## System (~1)
+### System (~1)
 - PRIVATE `deposit_log(mut self, data: bytes)`
 
 
