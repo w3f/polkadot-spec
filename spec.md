@@ -268,7 +268,7 @@ These are not dependent on state. They just float around in the global environme
 - READ-ONLY `chain_state(self, chain_id: ChainID) -> ParachainState` returns the state of the parachain `chain_id`.
 - USER `move_to_staking(mut self, chain_id: ChainID, value: Balance)` User-level function which moves a user-balance from this contract associated with parachain `chain_id` to the staking contract. Implemented through reducing `S.Parachain.balance` and `S.Parachain.chain_state[chain_id].balance[sender()]` and creating it on the Staking chain `S.Staking.balance[sender()]`.
 - USER `download(mut self, chain_id: ChainID, value: Balance, instruction: bytes)` Denotes a portion of the balance to be downloaded to the parachain. In reality this means reducing the user balance for the `sender()` of parachain `chain_id` by `value` and issuing an out-of-band `balance_downloads` instruction to the parachain through its next validation function. So that the parachain can be told what to do with the DOTs (e.g. whose parachain-based account should be credited) `instruction` is provided. This could reasonably encode more than just a destination address, but it is left for the parachain STF to determine what that encoding is.
-- SYSTEM `update_head(mut self, chain_id: ChainID, head_data: bytes, egress_queue_roots: [ Hash ], balance_uploads: [ ( AccountID, Balance ) ], fees: Balance)`
+- SYSTEM `update_heads(mut self, candidate_receipts: [ ( ChainID, CandidateReceipt ) ])`
 
 > CONSIDER: fold `balance_downloads` and `balance_uploads` into `head_data`; would simplify validation function and make it a little more abstract (though `download` and uploading would then require knowledge of `head_data`'s internals).
 
@@ -282,7 +282,7 @@ These are not dependent on state. They just float around in the global environme
 - USER `unstake(mut self)`
 - USER `complain(mut self, complaint: Complaint)`
 
-Staking happens in batches of blocks called eras. At the end of each era, payouts are processed based upon statistics accrued by the consensus contract. An account's staking profile (i.e. parameters that determine when its balance will be used in the staking system) may be set with the `stake` and `unstake` functions. Both specifically targets the next era. Staking information is retained between eras and further calls are unnecessary if the user doesn't wish to change their profile. Each account has a staking balance associated with it (`balance`); this balance cannot be split between different staking profiles.
+Staking happens in batches of blocks called eras. At the end of each era, payouts are processed based upon statistics accrued by the consensus contract and the validator set is reaffirmed or changed. An account's staking profile (i.e. parameters that determine when its balance will be used in the staking system) may be set with the `stake` and `unstake` functions. Both specifically targets the next era. Staking information is retained between eras and further calls are unnecessary if the user doesn't wish to change their profile. Each account has a staking balance associated with it (`balance`); this balance cannot be split between different staking profiles.
 
 ### Consensus (~3)
 - READ-ONLY `validators(self) -> [ AccountID ]`
@@ -308,16 +308,17 @@ All USER transactions must burn a fee and, having done so, must not abort.
 
 Relay-chain validation happens in three contexts. Firstly, when you are attempting to sync the chain; secondly when you are building a block and need to determine the validity of a candidate on a parachain that you are not assigned to; thirdly when you are attempting to validate a parachain candidate, perhaps as a fisherman, perhaps as a validator who is building a block, perhaps as a validator who is responding to a complaint.
 
-For the first context, it is enough to simply execute all transactions in the block. Validation happens implicitly through the existence of the unsigned `update_head` transactions that appear in a block signed by validators.
+For the first context, it is enough to simply execute all transactions in the block. Validation happens implicitly through the existence of the unsigned `update_heada` transaction that appear in a block signed by validators.
 
-For the second context, a little more work must be done.
+The second context is much like the first, except that `update_heads` is run manually and availability of the source block is affirmed.
 
-In all but the latter context, it is not assumed that you have any chain history. All operations can be done purely through looking at the "current" (relative to the block to the validated) chain state.
-In the latter context, it is assumed that you have been maintaining recent relay-chain history. This is due to additional validation requirements for parachains, and in particular their recent historical egress queue roots. For this context, the specific steps to validate a parachain candidate on state `S` are:
+In all contexts, it is not assumed that you have any chain history. All operations can be done purely through looking at the "current" (relative to the block to the validated) chain state.
+
+For the latter context, the specific steps to validate a parachain candidate on state `S` are:
 
 - Ensure the candidate block is structurally sound. Let `candidate` be the structured data.
 - Retrieve the collator signature for the candidate and let `collator := ecrecover(candidate.collator_signature)`. *NOTE: This is not used in validation; only in the consensus algorithm when determining a preference over possible candidates.*
-- Validate egress queues (this step can only be done with chain history):
+- Validate egress queues: *TODO: update so it uses the new array-based egress queues*
   - For each `Q` in all parachains except `candidate.parachain_index`:
     - Let `Q_index` be the iteration count of this loop, begining at 0.
     - Let `ingress_queue := candidate.unprocessed_ingress[Q_index]`
