@@ -136,10 +136,12 @@ Candidate parachain blocks are passed from collators to validators and express i
 Candidate: [
 	parachain_index: ChainID,
 	collator_signature: Signature,
-	unprocessed_ingress: [ [ [ bytes ] ] ],	// ordered by parachain index and then by block number and then by message index.
+	unprocessed_ingress: [ [ [ bytes ] ] ],
 	block_data: bytes
 ]
 ```
+
+`unprocessed_ingress` is ordered by block number (lowest first), and then by parachain index and then by message index.
 
 Candidate receipts are the final data actionable on the relay chain. They are signed and published by relevant parachain validators and shared amongst the network. They can be derived from any relay-chain synced node and the `Candidate` by running the relevant parachain validation function.
 
@@ -149,7 +151,7 @@ CandidateReceipt: [
 	collator: AccountID,
 	head_data: bytes,
 	balance_uploads: [ ( AccountID, Balance ) ],
-	egress_queue_roots: [ Hash ],	// or a sparse [ ( ChainID, Hash ) ] format?
+	egress_queue_roots: [ ( ChainID, Hash ) ],
 	fees: Balance
 ]
 ```
@@ -206,36 +208,6 @@ We name four chain parameters:
 
 Part of the process of validation includes checking these four limitations have been respected by the candidate block. This is done at the same time as fee calculation `calculate_fees`.
 
-### Validating & Processing
-
-The specific steps to validate a parachain candidate on state `S` are:
-
-- Ensure the candidate block is structurally sound. Let `candidate` be the structured data.
-- Retrieve the collator signature for the candidate and let `collator := ecrecover(candidate.collator_signature)`.
-- For each (`Q`, `Q_index`) in all parachains where `Q != candidate.parachain_index`:
-  - Let `ingress_queue := candidate.unprocessed_ingress[Q_index]`
-  - Counting `b` down from `S.Null.block_number()` until `block[b].parachain[Q].egress[candidate.parachain_index] WAS_PROCESSED`.
-    - Let `b_index := S.Null.block_number() - b`
-    - Assert `index_keyed_trie_root(ingress_queue[b_index]) == chain[b - 1].state.Parachain[Q].egress_root[candidate.parachain_index]` (if not true then this is an invalid parachain candidate).
-- Let `consolidated_ingress := S.Parachain.verify_and_consolidate_queues(candidate.unprocessed_ingress)`, and if it aborts then this is an invalid parachain candidate.
-- With `S.Parachain.chain_state[candidate.parachain_index]` as `chain`:
-- Let `previous_head_data := chain.head_data`
-- Let `balance_downloads := TAKE chain.balance_downloads`
-- Let `(head_data, egress_queues, balance_uploads) := S.Parachain.validation_function(candidate.parachain_index)(consolidated_ingress, balance_downloads, block_data, previous_head_data)`; if it aborts, then this is an invalid parachain candidate.
-- Ensure all limitations regarding egress queues and balance uploads are observed and calculate fees: `let fees := S.Parachain.validate_and_calculate_fees_function(candidate.parachain_index)(egress_queues, balance_uploads)`, and if it aborts, then this is an invalid parachain candidate.
-- If `fees > chain.balance` then this is an invalid parachain candidate.
-- Enact candidate receipt by calling `S.Parachain.update_head(candidate.parachain_index, head_data, to_index_keyed_trie_roots(egress_queues), balance_uploads, fees)`
-  - EXAMPLE IMPLEMENTATION: With `candidate_receipt as receipt`:
-    - Let `chain.head_data := head_data`
-	- Let `chain.balance -= fees`
-	- Foreach `(id, value)` In `balance_uploads` :
-	  - Let `chain.user_balances[id] += value`
-	- Let `chain.egress_roots := to_index_keyed_trie_roots(egress_queues)`
-
-#### Q&A
-
-- *How are fee-charges expected to be kept in sync with chain balance totals?* There are three instances where fees are charged for user activities: Transacting directly with the Staking contract, transacting directly with the Parachains contract and issuing some parachain-based instruction (e.g. to upload a balance into the Parachains contract or to send a message into another parachain). The first two are charged from the user's balance directly as (a very early) part of the execution of the transaction. The latter is charged directly to the parachain's balance. It is assumed that the parachain's state-transition function (STF) ensure that where necessary the user is adequately charged a fee from its parachain-local balance of DOTs; in the case of sending messages, this will appear as a necessary burn of DOT tokens for the parachain to issue an outgoing message into its egress queue. In the case of uploading DOTs, it will likely be a simple reduction in the amount of DOTs that appears in `upload_balances` compared to those burned on the parachain itself (which, were there no fees, would be equal).
-
 # Interface Definitions
 
 ## Types
@@ -265,8 +237,8 @@ ParachainState : {
 
 These are not dependent on state. They just float around in the global environment and are inherent to the chain or node itself.
 
-- READ-ONLY `chain_id() -> ChainID`
-- READ-ONLY `sender() -> AccountID`
+- `chain_id() -> ChainID`
+- `sender() -> AccountID`
 
 ## State-based APIs
 
@@ -330,6 +302,70 @@ All USER transactions must burn a fee and, having done so, must not abort.
 
 # Implementation Notes
 
+## Parachain (~3)
+
+### Validating & Processing
+
+Relay-chain validation happens in three contexts. Firstly, when you are attempting to sync the chain; secondly when you are building a block and need to determine the validity of a candidate on a parachain that you are not assigned to; thirdly when you are attempting to validate a parachain candidate, perhaps as a fisherman, perhaps as a validator who is building a block, perhaps as a validator who is responding to a complaint.
+
+For the first context, it is enough to simply execute all transactions in the block. Validation happens implicitly through the existence of the unsigned `update_head` transactions that appear in a block signed by validators.
+
+For the second context, a little more work must be done.
+
+In all but the latter context, it is not assumed that you have any chain history. All operations can be done purely through looking at the "current" (relative to the block to the validated) chain state.
+In the latter context, it is assumed that you have been maintaining recent relay-chain history. This is due to additional validation requirements for parachains, and in particular their recent historical egress queue roots. For this context, the specific steps to validate a parachain candidate on state `S` are:
+
+- Ensure the candidate block is structurally sound. Let `candidate` be the structured data.
+- Retrieve the collator signature for the candidate and let `collator := ecrecover(candidate.collator_signature)`. *NOTE: This is not used in validation; only in the consensus algorithm when determining a preference over possible candidates.*
+- Validate egress queues (this step can only be done with chain history):
+  - For each `Q` in all parachains except `candidate.parachain_index`:
+    - Let `Q_index` be the iteration count of this loop, begining at 0.
+    - Let `ingress_queue := candidate.unprocessed_ingress[Q_index]`
+    - Counting `b` down from `S.Null.block_number()` until `block[b].parachain[Q].egress[candidate.parachain_index] WAS_PROCESSED`.
+      - Let `b_index := S.Null.block_number() - b`
+      - Assert `index_keyed_trie_root(ingress_queue[b_index]) == chain[b - 1].state.Parachain[Q].egress_root[candidate.parachain_index]` (if not true then this is an invalid parachain candidate).
+- Let `consolidated_ingress := S.Parachain.verify_and_consolidate_queues(candidate.unprocessed_ingress)`, and if it aborts then this is an invalid parachain candidate.
+- With `S.Parachain.chain_state[candidate.parachain_index]` as `chain`:
+- Let `previous_head_data := chain.head_data`
+- Let `balance_downloads := TAKE chain.balance_downloads`
+- Let `validate := S.Parachain.validation_function(candidate.parachain_index)`
+- Let `(head_data, egress_queues, balance_uploads) := validate(consolidated_ingress, balance_downloads, block_data, previous_head_data)`; if it aborts, then this is an invalid parachain candidate.
+- Let `validate_and_calculate_fees := S.Parachain.validate_and_calculate_fees_function(candidate.parachain_index)`
+- Ensure all limitations regarding egress queues and balance uploads are observed and calculate fees: `let fees := validate_and_calculate_fees(egress_queues, balance_uploads)`, and if it aborts, then this is an invalid parachain candidate.
+- If `fees > chain.balance` then this is an invalid parachain candidate.
+- Let `receipt := CandidateReceipt( parachain_index, collator, head_data, to_index_keyed_trie_roots(egress_queues), balance_uploads, fees )`
+
+After all parachain candidates have been established, let `receipts` be the mapping `ChainID -> CandidateReceipt`
+- Enact candidate receipt by calling `S.Parachain.update_heads(receipts)`
+
+In the first context,
+
+### Pseudocode for `update_heads`
+
+```
+update_heads(
+	receipts: ChainID -> CandidateReceipt
+) {
+	constant routing_from: ChainID -> { ChainID } = S.calculate_routing_from();
+
+	foreach source in receipts.keys():
+		with chain as S.Parachain.chain_state[source];
+		with reciept as receipts[source];
+		foreach dest in receipts.keys():
+			if routing_from[source].contains(dest):
+				chain.egress[dest].clear();
+		chain.egress[dest].push(receipt.egress_queue_roots[dest]);
+	    chain.head_data := receipt.head_data
+		chain.balance -= receipt.fees
+		foreach (id, value) in receipt.balance_uploads:
+			chain.user_balances[id] += receipt.value
+}
+
+unrouted_queue_roots(from: ChainId, to: ChainId) -> [Root] {
+    egresses[to][from].clone()
+}
+```
+
 ## Authentication (~5)
 
 The Authentication contract allows participants lookup of a `Signature`, message-hash and nonce into an `AccountID` (`H160` for now). It allows a transaction to be `authenticate`d, which mutates the state and ensures the same transactions cannot be resubmitted. It also allows a transaction to be `validate`d, which does not mutate the state (and thus does not give any replay protection except against transactions that have previously been `authenticate`d). You can also get the `order` index (ana `nonce` in Ethereum) for any account ID.
@@ -365,3 +401,9 @@ The `v` value of the signature should be based on the standard `v_standard` (`[2
 ```
 v := v_standard - 26 + chain_id * 2
 ```
+
+
+
+#### Q&A
+
+- *How are fee-charges expected to be kept in sync with chain balance totals?* There are three instances where fees are charged for user activities: Transacting directly with the Staking contract, transacting directly with the Parachains contract and issuing some parachain-based instruction (e.g. to upload a balance into the Parachains contract or to send a message into another parachain). The first two are charged from the user's balance directly as (a very early) part of the execution of the transaction. The latter is charged directly to the parachain's balance. It is assumed that the parachain's state-transition function (STF) ensure that where necessary the user is adequately charged a fee from its parachain-local balance of DOTs; in the case of sending messages, this will appear as a necessary burn of DOT tokens for the parachain to issue an outgoing message into its egress queue. In the case of uploading DOTs, it will likely be a simple reduction in the amount of DOTs that appears in `upload_balances` compared to those burned on the parachain itself (which, were there no fees, would be equal).
