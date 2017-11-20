@@ -335,7 +335,7 @@ All USER transactions must burn a fee and, having done so, must not abort.
 
 Relay-chain validation happens in three contexts. Firstly, when you are attempting to sync the chain; secondly when you are building a block and need to determine the validity of a candidate on a parachain that you are not assigned to; thirdly when you are attempting to validate a parachain candidate, perhaps as a fisherman, perhaps as a validator who is building a block, perhaps as a validator who is responding to a complaint.
 
-For the first context, it is enough to simply execute all transactions in the block. Validation happens implicitly through the existence of the unsigned `update_heada` transaction that appear in a block signed by validators.
+For the first context, it is enough to simply execute all transactions in the block. Validation happens implicitly through the existence of the unsigned `update_heads` transaction that appear in a block signed by validators.
 
 The second context is much like the first, except that `update_heads` is run manually and availability of the source block is affirmed.
 
