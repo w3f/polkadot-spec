@@ -43,7 +43,7 @@ The transition function is mostly similar to an unmetered variant of Ethereum th
   - `CREATE` -> `deploy` (which takes a new account index and clobbers any existing code there; no init function is run).
   - `CALL` -> `call` or `call_const`
   - `RETURN` -> n/a (`return` in Wasm)
-  - `CALLDATA*` -> n/a (if coming straight from a transaction message data will be passed as bytes into the function)
+  - `CALLDATA*` -> n/a (parameters are passed into the function pre-deserialised from the transaction using the function's signature as hint)
   - `TIMESTAMP` -> n/a (there is a timestamp contract)
   - `BALANCE`/`ORIGIN`/`GASPRICE`/`EXTCODE`/`COINBASE`/`DIFFICULTY`/`GASLIMIT`/`GAS`/`CALLCODE`/`DELEGATECALL`/`SUICIDE` -> n/a
 
