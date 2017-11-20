@@ -6,7 +6,7 @@ The relay chain is a simplified proof-of-stake blockchain backed by a Web Assemb
 
 # State
 
-Its state is has similarities to Ethereum: accounts contained in it are a mapping from a `AccountID` account identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). All such accounts are actually known as "high accounts" since their ID is close to 2**64 and, notionally, they have a "high" privilege level.
+Its state has similarities to Ethereum: accounts contained in it are a mapping from a `AccountID` account identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). All such accounts are actually known as "high accounts" since their ID is close to 2**64 and, notionally, they have a "high" privilege level.
 
 Notably, no balance or nonce information is stored directly in the state. Balances, in general, are unneeded since relay-chain DOTs are not a crypto-currency per se and cannot be transferred between owners directly. Nonces, for the purposes of replay-protection are managed by the specialised Authentication contract.
 
@@ -111,7 +111,7 @@ Transaction: [
 
 - `destination` is the contract on which the function will be called.
 - `function_name` is the name of the function of the contract that will be called.
-- `message_data` are the parameters to be passed into the function; this is a rich data segment and will be interpreted according to the function's prototype. It should contain exactly the number of the elements as the function's prototype; if any of the function's prototype elements are structured in nature, then the structure of this parameters should reflect that. A more specific mapping between RLP and Wasm ABI will be provided in due course.
+- `parameters` are the parameters to be passed into the function; this is a rich data segment and will be interpreted according to the function's prototype. It should contain exactly the number of the elements as the function's prototype; if any of the function's prototype elements are structured in nature, then the structure of this parameters should reflect that. A more specific mapping between RLP and Wasm ABI will be provided in due course.
 
 ## Header
 
