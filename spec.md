@@ -6,7 +6,23 @@ The relay chain is a simplified proof-of-stake blockchain backed by a Web Assemb
 
 Practically speaking, account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into the Administration object. Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
 
-# State
+## Consensus
+
+Consensus is defined at the job of ensuring that the blockchain, and thus the collection of state-transitions from genesis to head, is agreed upon between all conformant clients and can progress consistently. It is managed in three parts:
+
+- an instant-finality mechanism that provides forward-verifiable finality on a single relay-chain block (eventually likely based on Zyzzyva/Aardvark/Abab, but likely to be PBFT for early PoCs);
+- a progressive parachain candidate determination routine that provides a decentralised means of forming eventual consensus over a set of parachain candidates that fulfil certain criteria based on signed statements from validators;
+- a simple leader-based mechanism for relay-chain transaction collation.
+
+Of the three attributes of consensus, namely consistency, availability and partition-tolerance, we are generally prepared to give up large-scale partition-tolerance of the validator set (who we can highly motivate to ensure remain online and well-connected), and get according guarantees over the consistency and availability. As such an instant-finality consensus algorithm is well-suited, such as PBFT or an optimistic derivative like Zyzzyva.
+
+To minimise overt exposure to a single malfunctioning node, we use a decentralised and progressive mechanism for determining parachain candidates that delivers eventual consistency (and possibly early consistency for a sub-optimal-but-acceptable solution).
+
+For simplicity, a leader-based mechanism for determining the set of relay-chain transactions is used.
+
+> CONSIDER: Allocating a large CDPRNG subset of validators (maybe 33% + 1) to elect transactions. The subset is ordered with a power-law distribution of transaction allocation. Those allocated greater number of transactions also take a higher priority (and effectively render moot the lower-order validators), meaning that most of the time the first few entrants is enough to get consensus of the transaction set. In the case of a malfunctioning node, the lower-order validators acting in aggregate allow important (e.g. Complaint) transactions to make their way into the block.
+
+## State
 
 Its state has similarities to Ethereum: "objects" contained in it are a mapping from an `ObjectID` identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). Objects are bland Wasm code bundles with a couple of external facilities open to them as user-functions, primarily the ability to call into other objects and to access its own storage.
 
@@ -31,7 +47,7 @@ The objects each fulfil specific functions (though over time these may expanded 
 
 For PoC-1, these objects are likely to be built-in, though eventually they should be implemented as Wasm modules and dynamically compiled/executed.
 
-## Transition Function
+## Execution Environment
 
 The transition function is mostly similar to an unmetered variant of Ethereum that removes all balance/nonce and the "open" ability to create "smart-contracts" (objects). Main points are:
 
@@ -48,7 +64,9 @@ The transition function is mostly similar to an unmetered variant of Ethereum th
   - `TIMESTAMP` -> n/a (there is a timestamp object)
   - `BALANCE`/`ORIGIN`/`GASPRICE`/`EXTCODE`/`COINBASE`/`DIFFICULTY`/`GASLIMIT`/`GAS`/`CALLCODE`/`DELEGATECALL`/`SUICIDE` -> n/a
 
-In summary, the normative block processing mechanism for a block is:
+## Block Processing
+
+In summary, the normative mechanism for processing a block is:
 
 - check the block data is valid RLP with correct item formats; let `block` be the structured data;
 - let `header := block.header`;
@@ -57,22 +75,10 @@ In summary, the normative block processing mechanism for a block is:
 - let `S` be the state at the end of the execution of block `header.parent_hash`; let `validator_set := S.Consensus.validator_set()`; ensure that `S.Consensus.check_seal(validator_set, block)` does not abort; (This will check the `signatures` segment lists the correct number of valid validator signatures with the validator set given by the Consensus object. We require `check_seal` to be stateless with any required state information passed in through `validator_set` to facilitate parallelisation.)
 - ensure `S` is mutable but that any mutations do not get committed except where explicitly noted;
 - `System` calls `S.Administration.execute_block(block)`; if it aborts, revert/discard `S` and the block is considered invalid.
-- As part of this:
-  - for each transaction `tx` in `block.transactions`, `Nobody` calls `S[tx.destination][tx.function_name](tx.params...)`. If a transaction aborts, then the block is aborted and considered invalid.
-    - Transactions can include signed statements from external actors such as fishermen, but crucially can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. Timestamp would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
-    - One set of statements that appear in the block are selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
 
 ### Invalid blocks
 
 If a block is considered invalid and should be marked so it is not processed again.
-
-## Consensus
-
-Consensus is managed in three parts:
-
-- a PBFT-like instant-finality mechanism that provides forward-verifiable finality on a single relay-chain block;
-- a progressive parachain candidate determination routine that provides a decentralised means of forming eventual consensus over a set of parachain candidates that fulfil certain criteria based on signed statements from validators;
-- a simple leader-based mechanism for relay-chain transaction collation.
 
 # Data formats
 
@@ -325,11 +331,21 @@ Staking happens in batches of blocks called eras. At the end of each era, payout
 
 # Notes
 
-All USER transactions must burn a fee and, having done so, must not abort.
+All USER transactions must burn a fee as soon as possible into their execution and, having done so, must not abort.
 
 # Implementation Notes
 
-## Parachains (3)
+## Administration (2)
+
+The Administration object contains `execute_block` which handles the entire state-transition function. Some of the functions it provides are provided through its ephemeral storage (particularly `deposit_log`, `current_user` and `set_active_parachains`).
+
+Regarding `execute_block`, rough pseudo-code is:
+  - for each transaction `tx` in `block.transactions`, `Nobody` calls `S[tx.destination][tx.function_name](tx.params...)`. If a transaction aborts, then the block is aborted and considered invalid.
+    - Transactions can include signed statements from external actors such as fishermen, but crucially can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. Timestamp would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
+    - One set of statements that appear in the block are selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
+
+
+## Parachains (5)
 
 ### Validating & Processing
 
@@ -386,7 +402,7 @@ unrouted_queue_roots(from: ChainId, to: ChainId) -> [Root] {
 }
 ```
 
-## Authentication (5)
+## Authentication (6)
 
 The Authentication object allows participants lookup of a `Signature`, message-hash and nonce into an `AccountID` (`H160` for now). It allows a transaction to be `authenticate`d, which mutates the state and ensures the same transactions cannot be resubmitted. It also allows a transaction to be `validate`d, which does not mutate the state (and thus does not give any replay protection except against transactions that have previously been `authenticate`d). You can also get the `order` index (aka `nonce` in Ethereum) for any account ID.
 
