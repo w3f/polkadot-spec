@@ -2,17 +2,17 @@ Polkadot is primarily described by the Relay chain protocol; key logic between p
 
 # Relay chain
 
-The relay chain is a simplified proof-of-stake blockchain backed by a Web Assembly (Wasm) engine. Unlike Ethereum and Bitcoin, balances are not a first-class part of the state-transition function (STF). Indeed the only aspect of the relay-chain which is first-class is the notion of an *object*. Each object is identified through an index (`ObjectID`) and has some code and storage (similar to Ethereum contract accounts) and can have that code executed through the dispatch of a named function.
+The relay chain is a simplified proof-of-stake blockchain backed by a Web Assembly (Wasm) engine. Unlike Ethereum and Bitcoin, balances are not a first-class part of the state-transition function (STF). Indeed the only aspect of the relay-chain which is first-class is the notion of an *object*. Each object is identified through an index (`ObjectID`) and has some code and storage (similar to Ethereum contract accounts). The code exports functions which can be called either from other objects or through a transaction.
 
-Account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into the "administration" object. Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
+Practically speaking, account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into the Administration object. Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
 
 # State
 
-Its state has similarities to Ethereum: "objects" contained in it are a mapping from an `ObjectID` identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings).
+Its state has similarities to Ethereum: "objects" contained in it are a mapping from an `ObjectID` identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). Objects are bland Wasm code bundles with a couple of external facilities open to them as user-functions, primarily the ability to call into other objects and to access its own storage.
 
 Notably, no balance or nonce information is stored directly in the state. Balances, in general, are unneeded since relay-chain DOTs are not a crypto-currency per se and cannot be transferred between owners directly. Nonces, for the purposes of replay-protection are managed by the specialised Authentication object.
 
-Ownership of DOTs is managed by two objects: the Staking object (which manages DOTs stakes by users) and the Parachain object (which manages the DOTs owned by parachains). Transfer between the Staking and the Parachain objects happens via a signed transaction being included in the relay chain.
+Ownership of DOTs is managed by two objects: the Staking object (which manages DOTs stakes by users) and the Parachains object (which manages the DOTs owned by parachains). Transfer between the Staking and the Parachains objects happens via a signed transaction being included in the relay chain.
 
 ```
 state := ObjectID -> ( code_hash: Hash, storage_root: Hash )
@@ -20,8 +20,8 @@ state := ObjectID -> ( code_hash: Hash, storage_root: Hash )
 
 The objects each fulfil specific functions (though over time these may expanded or contracted as changes in the protocol determine). For PoC-1, the object are:
 
-- Object 0: Nobody (aka Null). Basic user-level object. Can be queried for non-sensitive universal data (like `block_number()`, `block_hash()`). Represents the unauthenticated (external transaction) origin.
-- Object 1: System. Provides low-level mutable interaction with header, in particular `deposit_log()`. Represents the system origin, which includes all validator-accepted, unsigned transactions.
+- Object 0: Nobody. Basic user-level object. Can be queried for non-sensitive universal data (like `block_number()`, `block_hash()`). Represents the "user-level" authenticated external transaction origin.
+- Object 1: System. Provides low-level mutable interaction with header, in particular `set_digest()`. Represents the system origin, which includes all validator-accepted, unsigned transactions.
 - Object 2: Administration. Stores and administers low-level chain parameters. Can unilaterally read and replace code/storage in all objects, &c. Hosts and acts on stake-voting activities. Acts as entry point in block execution/state-transition.
 - Object 3: Consensus. Stores all things consensus and code is the relay-chain consensus logic. Requires to be informed of the current validator set and can be queried for behaviour profiles. Checks validator signatures.
 - Object 4: Staking. Stores all things to do with the proof-of-stake algorithm particularly currently staked amounts. Informs the Consensus object of its current validator set. Hosts stake-voting.
@@ -38,8 +38,8 @@ The transition function is mostly similar to an unmetered variant of Ethereum th
 - Utilisation of Wasm engine for code execution rather than EVM.
 - Transactions include a function name and call-execution "automatically" dispatches to a function within the code body.
 - Wasm intrinsics replace some of the EVM externality functions/opcodes, the rest are unneeded:
-  - `BLOCKHASH` -> n/a (provided by `Null.block_hash()`)
-  - `NUMBER` -> n/a (provided by `Null.current_number()`)
+  - `BLOCKHASH` -> n/a (provided by `Nobody.block_hash()`)
+  - `NUMBER` -> n/a (provided by `Nobody.current_number()`)
   - `LOG*` -> `System.deposit_log()`
   - `CREATE` -> `deploy` (which takes a new object index and clobbers any existing code there; no init function is run).
   - `CALL` -> `call` or `call_const`
@@ -60,7 +60,7 @@ In summary, the normative block processing mechanism for a block is:
 - As part of this:
   - for each transaction `tx` in `block.transactions`, `Nobody` calls `S[tx.destination][tx.function_name](tx.params...)`. If a transaction aborts, then the block is aborted and considered invalid.
     - Transactions can include signed statements from external actors such as fishermen, but crucially can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. Timestamp would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
-    - One set of statements that appear in the block are selected parachain candidates. In this case it is a simple message to `S.Parachain.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
+    - One set of statements that appear in the block are selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
 
 ### Invalid blocks
 
@@ -127,17 +127,27 @@ UnsignedTransaction: [
 The header stores or cryptographically references all intrinsic information relating to a block.
 
 ```
-header: [
+Header: [
     parent_hash: Hash,
     number: BlockNumber,
     state_root: Hash,
     transaction_root: Hash,
-    parachain_activity_bitfield: bytes,
-    logs: [ bytes ]
+    digest: Digest
 ]
 ```
 
-## Candidate Para-chain block
+`Digest` is a second-class item of data that contains summary information of activity that happened in the block that is useful for light-clients. For PoC-1 this is the set of logs and a bit field of active parachains. Its contents are set through the System object.
+
+```
+Digest: [
+    parachain_activity_bitfield: bytes,
+    logs: [bytes]
+]
+```
+
+The format of `Digest` should not be assumed to be an unchanging part of the core protocol. Changing it is not a trivial task (since light-clients will depend on its format), but is possible since all accesses to its internals are done by soft-coded objects.
+
+## Candidate Parachain block
 
 Candidate parachain blocks are passed from collators to validators and express information concerning the latest state of the parachain. If validated and accepted, then most of this information is duplicated onto the state of the relay chain under the Parachains object (the exception being `block_data`).
 
@@ -200,7 +210,7 @@ It is permissible for any of these `[ bytes, ... ]` arrays to be empty.
 
 ### Specifics
 
-Each notional egress queue for a given block `chain[B].parachain[P].egress[Q]` relates to a specific set of data stored in the state. Specific for the end-state `S` of block `B`, we index-key `chain[B].parachain[P].egress_queues[Q]` into a trie. For any given block, the roots of all unprocessed egress queues (at the end of the block's state transition) are stored in its state: `S.Parachain.chain_state(P).egress_queue_roots[Q]`.
+Each notional egress queue for a given block `chain[B].parachain[P].egress[Q]` relates to a specific set of data stored in the state. Specific for the end-state `S` of block `B`, we index-key `chain[B].parachain[P].egress_queues[Q]` into a trie. For any given block, the roots of all unprocessed egress queues (at the end of the block's state transition) are stored in its state: `S.Parachains.chain_state(P).egress_queue_roots[Q]`.
 
 As part of its operation, the candidate block validation function requires the unprocessed ingress queues (i.e. relevant other parachain's egress queues). These queues are provided by the collator as part of the candidate block, *but* are validated externally to the validation function "natively" by the validator. Technically these could be validated as part of the validation function, but it would mean duplication of code between all parachains and would inevitably be slower and require substantial additional data wrangling as the witness data concerning historical egress information were composed and passed. Requiring the validator node itself to pre-validate this information avoids this.
 
@@ -256,56 +266,60 @@ These are not dependent on state. They just float around in the global environme
 
 ### Environment (0)
 
-- READ-ONLY `block_number(self) -> BlockNumber`
-- READ-ONLY `block_hash(self, BlockNumber) -> Hash`
+- READONLY `block_number(self) -> BlockNumber`
+- READONLY `block_hash(self, BlockNumber) -> Hash`
 
 ### System (1)
-- SYSTEM `deposit_log(mut self, data: bytes)`
+- SYSTEM `set_digest(mut self, preserialised_rlp_digest: bytes)`
 
 ### Administration (2)
 - SYSTEM `execute(mut self, block: Block)`
-- READ-ONLY `current_user(self) -> AccountID`
+- READONLY `current_user(self) -> AccountID`
+- SYSTEM `deposit_log(mut self, data: bytes)`
+- SYSTEM `set_active_parachains(mut self, data: bytes)`
 
 ### Consensus (3)
-- READ-ONLY `validators(self) -> [ AccountID ]`
+- READONLY `validators(self) -> [ AccountID ]`
 - SYSTEM `set_validators(self, validators: [ AccountID ])`
 - SYSTEM `flush_statistics(mut self) -> Statistics`
 
 ### Staking (4)
-- READ-ONLY `era_length(self) -> BlockNumber`
-- READ-ONLY `balance(self, AccountID) -> Balance`
-- USER `move_to_parachain(mut self, chain_id: ChainID, value: Balance)`
+- READONLY `era_length(self) -> BlockNumber`
+- READONLY `balance(self, AccountID) -> Balance`
+- USER `move_to_parachain(mut self, chain_id: ChainID, value: Balance)` User-level function to move funds onto a parachain. Calls `Parachains.credit_parachain`.
+- SYSTEM `credit_staker(mut self, value: Balance)` System-level function to be called only by Parachains object when funds have left that object and are to be credited here.
 - USER `stake(mut self, minimum_era_return: Proportion)`
 - USER `unstake(mut self)`
 - USER `complain(mut self, complaint: Complaint)`
 
 Staking happens in batches of blocks called eras. At the end of each era, payouts are processed based upon statistics accrued by the Consensus object and the validator set is reaffirmed or changed. An account's staking profile (i.e. parameters that determine when its balance will be used in the staking system) may be set with the `stake` and `unstake` functions. Both specifically targets the next era. Staking information is retained between eras and further calls are unnecessary if the user doesn't wish to change their profile. Each account has a staking balance associated with it (`balance`); this balance cannot be split between different staking profiles.
 
-### Parachain (5)
+### Parachains (5)
 
-- READ-ONLY `chain_ids(self) -> [ChainID]`
-- READ-ONLY `validation_function(self, chain_id: ChainID) -> Fn(consolidated_ingress: [ ( ChainID, bytes ) ], balance_downloads: [ ( AccountID, Balance ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ])`
-- READ-ONLY `validate_and_calculate_fees_function(self, chain_id: ChainID) -> Fn(egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ]) -> Balance`
-- READ-ONLY `balance(self, chain_id: ChainID, id: AccountID) -> Balance`
-- READ-ONLY `verify_and_consolidate_queues(self, unprocessed_ingress: [ [ [ bytes ] ] ]) -> [ (chain_id: ChainID, message: bytes) ]`: `unprocessed_ingress` is dereferenced in order from outer to inner: block age (oldest first), parachain ID, message index. It aborts if the `unprocessed_ingress` contains items which do not reflect the historical parachain egress queues. It also aborts if it does not contain all items from egress queues bound for this chain that were not yet processed by this chain. Otherwise it returns all messages (the `bytes` items) passed in `unprocessed_ingress`, ordered by block age (oldest first), then by parachain ID, then by message index and paired up with the source parachain ID.
-- READ-ONLY `chain_state(self, chain_id: ChainID) -> ParachainState` returns the state of the parachain `chain_id`.
-- USER `move_to_staking(mut self, chain_id: ChainID, value: Balance)` User-level function which moves a user-balance from this object associated with parachain `chain_id` to the Staking object. Implemented through reducing `S.Parachain.balance` and `S.Parachain.chain_state[chain_id].balance[sender()]` and creating it on the Staking chain `S.Staking.balance[sender()]`.
+- READONLY `chain_ids(self) -> [ChainID]`
+- READONLY `validation_function(self, chain_id: ChainID) -> Fn(consolidated_ingress: [ ( ChainID, bytes ) ], balance_downloads: [ ( AccountID, Balance ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ])`
+- READONLY `validate_and_calculate_fees_function(self, chain_id: ChainID) -> Fn(egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ]) -> Balance`
+- READONLY `balance(self, chain_id: ChainID, id: AccountID) -> Balance`
+- READONLY `verify_and_consolidate_queues(self, unprocessed_ingress: [ [ [ bytes ] ] ]) -> [ (chain_id: ChainID, message: bytes) ]`: `unprocessed_ingress` is dereferenced in order from outer to inner: block age (oldest first), parachain ID, message index. It aborts if the `unprocessed_ingress` contains items which do not reflect the historical parachain egress queues. It also aborts if it does not contain all items from egress queues bound for this chain that were not yet processed by this chain. Otherwise it returns all messages (the `bytes` items) passed in `unprocessed_ingress`, ordered by block age (oldest first), then by parachain ID, then by message index and paired up with the source parachain ID.
+- READONLY `chain_state(self, chain_id: ChainID) -> ParachainState` returns the state of the parachain `chain_id`.
+- USER `move_to_staking(mut self, chain_id: ChainID, value: Balance)` User-level function which moves a user-balance from this object associated with parachain `chain_id` to the Staking object. Implemented through reducing `S.Parachains.balance` and `S.Parachains.chain_state[chain_id].balance[sender()]` and creating it on the Staking chain with the use of `Staking.credit_staker`.
+- SYSTEM `credit_parachain(mut self, chain_id: ChainID, value: Balance)` System-level function to be called only by Staking object when funds have left that object and are to be credited here.
 - USER `download(mut self, chain_id: ChainID, value: Balance, instruction: bytes)` Denotes a portion of the balance to be downloaded to the parachain. In reality this means reducing the user balance for the `sender()` of parachain `chain_id` by `value` and issuing an out-of-band `balance_downloads` instruction to the parachain through its next validation function. So that the parachain can be told what to do with the DOTs (e.g. whose parachain-based account should be credited) `instruction` is provided. This could reasonably encode more than just a destination address, but it is left for the parachain STF to determine what that encoding is.
 - SYSTEM `update_heads(mut self, candidate_receipts: [ ( ChainID, CandidateReceipt ) ])`
 
 > CONSIDER: fold `balance_downloads` and `balance_uploads` into `head_data`; would simplify validation function and make it a little more abstract (though `download` and uploading would then require knowledge of `head_data`'s internals).
 
-> CONSIDER: allowing messages between parachains to contain DOTs. for the use case of sending a bunch of DOTs from one chain to another, this would vastly simplify things (at present, you'd have to create a new secret/address, upload the DOTs into the relay-chain's Parachain object through a parachain tx, transfer to the staking account and then back to the new parachain (two relay chain txs), then issue a download tx (another relay chain tx)). This could be optimised to three transactions if parachains can transfer between themselves, but it's still a lot of faff for one notional operation.
+> CONSIDER: allowing messages between parachains to contain DOTs. for the use case of sending a bunch of DOTs from one chain to another, this would vastly simplify things (at present, you'd have to create a new secret/address, upload the DOTs into the relay-chain's Parachains object through a parachain tx, transfer to the staking account and then back to the new parachain (two relay chain txs), then issue a download tx (another relay chain tx)). This could be optimised to three transactions if parachains can transfer between themselves, but it's still a lot of faff for one notional operation.
 
 ### Authentication (6)
 
-- READ-ONLY `validate_signature(self, tx: Transaction) -> (AccountID, TxOrder)`
-- READ-ONLY `nonce(self, id: AccountID) -> TxOrder`
+- READONLY `validate_signature(self, tx: Transaction) -> (AccountID, TxOrder)`
+- READONLY `nonce(self, id: AccountID) -> TxOrder`
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID`
 
 ### Timestamp (7)
 
-- READ-ONLY `timestamp(self) -> Timestamp`
+- READONLY `timestamp(self) -> Timestamp`
 - SYSTEM `set_timestamp(mut self, Timestamp)`
 
 
@@ -315,7 +329,7 @@ All USER transactions must burn a fee and, having done so, must not abort.
 
 # Implementation Notes
 
-## Parachain (3)
+## Parachains (3)
 
 ### Validating & Processing
 
@@ -330,29 +344,21 @@ In all contexts, it is not assumed that you have any chain history. All operatio
 For the latter context, the specific steps to validate a parachain candidate on state `S` are:
 
 - Ensure the candidate block is structurally sound. Let `candidate` be the structured data.
-- Retrieve the collator signature for the candidate and let `collator := ecrecover(candidate.collator_signature)`. *NOTE: This is not used in validation; only in the consensus algorithm when determining a preference over possible candidates.*
-- Validate egress queues: *TODO: update so it uses the new array-based egress queues*
-  - For each `Q` in all parachains except `candidate.parachain_index`:
-    - Let `Q_index` be the iteration count of this loop, begining at 0.
-    - Let `ingress_queue := candidate.unprocessed_ingress[Q_index]`
-    - Counting `b` down from `S.Null.block_number()` until `block[b].parachain[Q].egress[candidate.parachain_index] WAS_PROCESSED`.
-      - Let `b_index := S.Null.block_number() - b`
-      - Assert `index_keyed_trie_root(ingress_queue[b_index]) == chain[b - 1].state.Parachain[Q].egress_root[candidate.parachain_index]` (if not true then this is an invalid parachain candidate).
-- Let `consolidated_ingress := S.Parachain.verify_and_consolidate_queues(candidate.unprocessed_ingress)`, and if it aborts then this is an invalid parachain candidate.
-- With `S.Parachain.chain_state[candidate.parachain_index]` as `chain`:
+- Retrieve the collator signature for the candidate and let `collator := ecrecover(candidate.collator_signature)`. *NOTE: This is not yet used in the STF; only in the consensus algorithm when determining a preference over possible candidates.*
+- Call `S.Parachains.validate_ingress(candidate)`, and if it aborts then this is an invalid parachain candidate. (This function ensures that `candidate.unprocessed_ingress` is properly reflective of all unprocessed egress queues from all other parachains, as described in the Parachains object's storage. If it is not then this is an invalid parachain candidate and the function aborts.)
+- Let `consolidated_ingress := S.Parachains.verify_and_consolidate_queues(candidate.unprocessed_ingress)`, and if it aborts then this is an invalid parachain candidate.
+- With `S.Parachains.chain_state[candidate.parachain_index]` as `chain`:
 - Let `previous_head_data := chain.head_data`
-- Let `balance_downloads := TAKE chain.balance_downloads`
-- Let `validate := S.Parachain.validation_function(candidate.parachain_index)`
+- Let `balance_downloads := TAKE chain.balance_downloads` (where `TAKE` means atomically clear the RHS and return it)
+- Let `validate := S.Parachains.validation_function(candidate.parachain_index)`
 - Let `(head_data, egress_queues, balance_uploads) := validate(consolidated_ingress, balance_downloads, block_data, previous_head_data)`; if it aborts, then this is an invalid parachain candidate.
-- Let `validate_and_calculate_fees := S.Parachain.validate_and_calculate_fees_function(candidate.parachain_index)`
-- Ensure all limitations regarding egress queues and balance uploads are observed and calculate fees: `let fees := validate_and_calculate_fees(egress_queues, balance_uploads)`, and if it aborts, then this is an invalid parachain candidate.
+- Let `validate_and_calculate_fees := S.Parachains.validate_and_calculate_fees_function(candidate.parachain_index)`
+- Ensure all limitations regarding egress queues and balance uploads are observed and calculate fees: Let `fees := validate_and_calculate_fees(egress_queues, balance_uploads)`, and if it aborts, then this is an invalid parachain candidate.
 - If `fees > chain.balance` then this is an invalid parachain candidate.
 - Let `receipt := CandidateReceipt( parachain_index, collator, head_data, to_index_keyed_trie_roots(egress_queues), balance_uploads, fees )`
 
-After all parachain candidates have been established, let `receipts` be the mapping `ChainID -> CandidateReceipt`
-- Enact candidate receipt by calling `S.Parachain.update_heads(receipts)`
-
-In the first context,
+After all parachain candidates have been established, let `receipts` be the mapping `ChainID -> CandidateReceipt` then:
+- Enact candidate receipt by calling `S.Parachains.update_heads(receipts)`
 
 ### Pseudocode for `update_heads`
 
@@ -363,7 +369,7 @@ update_heads(
 	constant routing_from: ChainID -> { ChainID } = S.calculate_routing_from();
 
 	foreach source in receipts.keys():
-		with chain as S.Parachain.chain_state[source];
+		with chain as S.Parachains.chain_state[source];
 		with reciept as receipts[source];
 		foreach dest in receipts.keys():
 			if routing_from[source].contains(dest):
@@ -384,9 +390,9 @@ unrouted_queue_roots(from: ChainId, to: ChainId) -> [Root] {
 
 The Authentication object allows participants lookup of a `Signature`, message-hash and nonce into an `AccountID` (`H160` for now). It allows a transaction to be `authenticate`d, which mutates the state and ensures the same transactions cannot be resubmitted. It also allows a transaction to be `validate`d, which does not mutate the state (and thus does not give any replay protection except against transactions that have previously been `authenticate`d). You can also get the `order` index (aka `nonce` in Ethereum) for any account ID.
 
-- READ-ONLY `validate(self, tx: Transaction) -> (id: AccountID, now: TxOrder, when: TxOrder)` returns the account `id` that signed `tx`, and the ordering of this transaction `when` versus the current order `now`. If `now == when`, then the transaction may be validly included/executed. If the signature is invalid, will abort.
+- READONLY `validate(self, tx: Transaction) -> (id: AccountID, now: TxOrder, when: TxOrder)` returns the account `id` that signed `tx`, and the ordering of this transaction `when` versus the current order `now`. If `now == when`, then the transaction may be validly included/executed. If the signature is invalid, will abort.
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID` returns the account ID that signed `tx` iff the `tx` may be validly executed on the state as it is. Aborts otherwise.
-- READ-ONLY `order(self, id: AccountID) -> U64` returns the current order index of account `id`.
+- READONLY `order(self, id: AccountID) -> U64` returns the current order index of account `id`.
 
 The `authenticate` function will likely just call on the `validate` function. Example implementation:
 
