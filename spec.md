@@ -4,6 +4,8 @@ Polkadot is primarily described by the Relay chain protocol; key logic between p
 
 The relay chain is a simplified proof-of-stake blockchain backed by a Web Assembly (Wasm) engine. Unlike Ethereum and Bitcoin, account balances are not a first-class part of the state-transition function (STF). The only aspect of the relay-chain which is first-class is the notion of an account. Each account is identified through a 160-bit identifier, has some code and storage (similar to Ethereum contract accounts) and can have that code called.
 
+> CONSIDER: Do "smart-contract" accounts and "user-accounts" ever co-exist in the same namespace? I'm thinking not, in what case, smart-contract accounts could take a much smaller (16-bit? 8-bit?) identifier and user-accounts can be left to be identified according to the smart-contracts that retain user-account balances.
+
 Account balances do exist on the relay chain but are entirely an artefact of the account's storage and code. The entire state transition is managed through a single call into the "administration" contract. Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded and can be upgraded without any kind of hard-fork necessary.
 
 # State
