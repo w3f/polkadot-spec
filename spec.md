@@ -8,17 +8,35 @@ Practically speaking, account balances do exist on the relay chain but are entir
 
 ## Consensus
 
-Consensus is defined at the job of ensuring that the blockchain, and thus the collection of state-transitions from genesis to head, is agreed upon between all conformant clients and can progress consistently. It is managed in three parts:
+Consensus is defined at the job of ensuring that the blockchain, and thus the collection of state-transitions from genesis to head, is agreed upon between all conformant clients and can progress consistently. It is separated from the rest of block-processing and forms a "hard-coded" part of the protocol, not handled by the Wasm object-execution environment. This is primarily because it would make light-client implementation extremely difficult and largely preclude multiple strategies for consensus-forming that could add substantial reliability to the network.
 
-- an instant-finality mechanism that provides forward-verifiable finality on a single relay-chain block (eventually likely based on Zyzzyva/Aardvark/Abab, but likely to be PBFT for early PoCs);
-- a progressive parachain candidate determination routine that provides a decentralised means of forming eventual consensus over a set of parachain candidates that fulfil certain criteria based on signed statements from validators;
-- a simple leader-based mechanism for relay-chain transaction collation.
+It is managed in three parts:
+
+1. an instant-finality mechanism that provides forward-verifiable finality on a single relay-chain block (eventually likely based on Zyzzyva/Aardvark/Abab, but likely to be PBFT for early PoCs);
+2. a parachain candidate determination routine that provides a means of forming consensus over a set of parachain candidates that fulfil certain criteria based on signed statements from validators;
+3. a relay-chain transaction-set collation mechanism for determining which signed, in-bound transactions are included.
 
 Of the three attributes of consensus, namely consistency, availability and partition-tolerance, we are generally prepared to give up large-scale partition-tolerance of the validator set (who we can highly motivate to ensure remain online and well-connected), and get according guarantees over the consistency and availability. As such an instant-finality consensus algorithm is well-suited, such as PBFT or an optimistic derivative like Zyzzyva.
 
-To minimise overt exposure to a single malfunctioning node, we use a decentralised and progressive mechanism for determining parachain candidates that delivers eventual consistency (and possibly early consistency for a sub-optimal-but-acceptable solution).
+Points 2 and 3 are both part of the same underlying need to determine the block that will be finalised among all validators as point 1. The only aspect of the block that need be determined (i.e. the only part of the block that is non-deterministic) is the transaction set which is included. This covers both parachain candidate selection and external transaction inclusion. (Parachain candidates are selected by means of inclusion of a specific transaction.)
 
-For simplicity, a leader-based mechanism for determining the set of relay-chain transactions is used.
+A final parachain candidate-selection algorithm will likely be distributed and progressive, giving both greater efficiency and a more graceful degradation and leading to fewer artefacts which could potentially cause security holes. For PoC-1, a much more centralised mechanism will be used relying on an elevated set of group leaders to collate and specify parachain candidates.
+
+### PoC-1 Parachain candidate selection
+
+Every block, each validator is deterministically assigned (through a CPRNG function) to a single parachain or the relay-chain. There is exactly one validator who is designated leader for each parachain and exactly one validator who is designated to the relay-chain.
+
+```
+let (v.home_chain, v.is_leader) := determine_role(v, S.Nobody.block_number())
+```
+
+`v.home_chain` may be a parachain index or `Relay`.
+
+If the validator is a leader, they will select a valid parachain block candidate (which it is presumed will be provided by the parachain collators), sign it and forward it to each other validator assigned to that parachain. Each other validator will sign and reply with an attestation that all information relating to this block is available, particularly extrinsic information such as transactions and externally-dependent information such as the egress-queue data. By signing this attestation, the validators promise to provide this information to any other validator for a minimum of `era_length` blocks.
+
+There must be a strict minimum of attestations (undetermined as yet but called `attest_min`) for the candidate to be considered safe. The set of `attest_min + 1` signatures together with the parachain candidate's hash is then rebroadcast to the validator designated to the relay chain.
+
+The validator designated to the relay chain collects transactions for the relay chain block and, on receipt of all (subject to reasonable timeout) properly signed/attested parachain candidates, constructs and rebroadcasts the final block to each validator together with all signatures. It is up to each validator to verify that all parachain candidates are properly attested. The final block's header is then hashed and used in the finalisation algorithm (essentially just PBFT).
 
 > CONSIDER: Allocating a large CDPRNG subset of validators (maybe 33% + 1) to elect transactions. The subset is ordered with a power-law distribution of transaction allocation. Those allocated greater number of transactions also take a higher priority (and effectively render moot the lower-order validators), meaning that most of the time the first few entrants is enough to get consensus of the transaction set. In the case of a malfunctioning node, the lower-order validators acting in aggregate allow important (e.g. Complaint) transactions to make their way into the block.
 
@@ -340,9 +358,21 @@ All USER transactions must burn a fee as soon as possible into their execution a
 The Administration object contains `execute_block` which handles the entire state-transition function. Some of the functions it provides are provided through its ephemeral storage (particularly `deposit_log`, `current_user` and `set_active_parachains`).
 
 Regarding `execute_block`, rough pseudo-code is:
-  - for each transaction `tx` in `block.transactions`, `Nobody` calls `S[tx.destination][tx.function_name](tx.params...)`. If a transaction aborts, then the block is aborted and considered invalid.
-    - Transactions can include signed statements from external actors such as fishermen, but crucially can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. Timestamp would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
-    - One set of statements that appear in the block are selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
+- for each transaction `tx` in `block.transactions`:
+  - if `tx.signature` exists (signed transaction):
+    - let `current_user := Authorisation.validate(tx)`. If the execution aborts, then the block is aborted and considered invalid.
+    - ensure `current_user` is returned if `Administration.current_user` is called during the execution of this transaction.
+    - let `caller := Nobody`
+  - otherwise if `tx.signature` doesn't exist (unsigned transaction):
+    - let `caller := System`
+  - call `S[tx.destination][tx.function_name](tx.params...)` from account `caller`. If the execution aborts, then the block is aborted and considered invalid.
+  - reset `current_user` to ensure `Administration.current_user` aborts if called.
+
+Note:
+
+Transactions can include signed statements from external actors such as fishermen or stakers, but can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. The transaction calling `Timestamp.set_timestamp` would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
+
+One statement that appears in the block is selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
 
 
 ## Parachains (5)
