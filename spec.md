@@ -90,9 +90,9 @@ A block contains all information required to evaluate a relay-chain block. It in
 
 ```
 Block: [
-    header: Header,
-    transactions: [ Transaction ],
-    signatures: [ Signature ]
+	header: Header,
+	transactions: [ Transaction ],
+	signatures: [ Signature ]
 ]
 ```
 
@@ -119,7 +119,7 @@ In order to describe the signature format, it is useful to define the `UnsignedT
 
 ```
 UnsignedTransaction: [
-    tx: Transaction,
+	tx: Transaction,
 	nonce: TxOrder
 ]
 ```
@@ -134,11 +134,11 @@ The header stores or cryptographically references all intrinsic information rela
 
 ```
 Header: [
-    parent_hash: Hash,
-    number: BlockNumber,
-    state_root: Hash,
-    transaction_root: Hash,
-    digest: Digest
+	parent_hash: Hash,
+	number: BlockNumber,
+	state_root: Hash,
+	transaction_root: Hash,
+	digest: Digest
 ]
 ```
 
@@ -146,8 +146,8 @@ Header: [
 
 ```
 Digest: [
-    parachain_activity_bitfield: bytes,
-    logs: [bytes]
+	parachain_activity_bitfield: bytes,
+	logs: [bytes]
 ]
 ```
 
