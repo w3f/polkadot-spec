@@ -4,11 +4,11 @@ Polkadot is primarily described by the Relay chain protocol; key logic between p
 
 The relay chain is a simplified proof-of-stake blockchain backed by a Web Assembly (Wasm) engine. Unlike Ethereum and Bitcoin, balances are not a first-class part of the state-transition function (STF). Indeed the only aspect of the relay-chain which is first-class is the notion of an *object*. Each object is identified through an index (`ObjectID`) and has some code and storage (similar to Ethereum contract accounts). The code exports functions which can be called either from other objects or through a transaction.
 
-Practically speaking, account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into the Administration object. Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
+Practically speaking, account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into the a particular object named "Administration". Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
 
 ## Consensus
 
-Consensus is defined at the job of ensuring that the blockchain, and thus the collection of state-transitions from genesis to head, is agreed upon between all conformant clients and can progress consistently. It is separated from the rest of block-processing and forms a "hard-coded" part of the protocol, not handled by the Wasm object-execution environment. This is primarily because it would make light-client implementation extremely difficult and largely preclude multiple strategies for consensus-forming that could add substantial reliability to the network.
+Consensus is defined as the job of ensuring that the blockchain, and thus the collection of state-transitions from genesis to head, is agreed upon between all conformant clients and can progress consistently. It is separated from the rest of block-processing and forms a "hard-coded" part of the protocol, not handled by the Wasm object-execution environment. This is primarily because it would make light-client implementation extremely difficult and largely preclude multiple strategies for consensus-forming that could add substantial reliability to the network.
 
 It is managed in three parts:
 
@@ -24,15 +24,51 @@ A final parachain candidate-selection algorithm will likely be distributed and p
 
 ### PoC-1 Parachain candidate selection
 
-Every block, each validator is deterministically assigned (through a CPRNG function) to a single parachain or the relay-chain. There is exactly one validator who is designated leader for each parachain and exactly one validator who is designated to the relay-chain.
+Every block, each validator is deterministically assigned (through a CSPRNG function) to a single parachain or the relay-chain. There is exactly one validator who is designated leader for each parachain and exactly one validator who is designated to the relay-chain.
 
 ```
-let (v.home_chain, v.is_leader) := determine_role(v, S.Nobody.block_number())
+let block_number := S.Nobody.block_number()
+let (v.home_chain, v.is_leader) := determine_role(v, block_number)
 ```
 
 `v.home_chain` may be a parachain index or `Relay`.
 
-If the validator is a leader, they will select a valid parachain block candidate (which it is presumed will be provided by the parachain collators), sign it and forward it to each other validator assigned to that parachain. Each other validator will sign and reply with an attestation that all information relating to this block is available, particularly extrinsic information such as transactions and externally-dependent information such as the egress-queue data. By signing this attestation, the validators promise to provide this information to any other validator for a minimum of `era_length` blocks.
+If the validator is a leader, they will select a valid parachain block candidate (which it is presumed will be provided by the parachain collators), sign it and forward it to each other validator assigned to that parachain.
+
+```
+let h := keccak256(block_number ++ 'valid' ++ v.home_chain ++ candidate)
+
+if v.is_leader:
+    do:
+        let c := find_candidate(v.home_chain)
+    loop unless is_valid(c) and all_ingress_data_known(c) then let candidate := c
+    let sig := v.sign(h)
+    let groupies := every w in validators where:
+        determine_role(w, block_number).home_chain == v.home_chain and w != v
+
+    let attests := []
+    for w in groupies
+        w.send('request_attest' ++ candidate ++ sig).on_reply(r):
+            if r == 'attest' ++ sig where recover(sig, h) == w and !attests.contains(w):
+                attests.push(w => sig)
+
+    await attests.count == attest_min:
+        let relay := w in validators where determine_role(w, block_number).home_chain == Relay
+        relay.send(h ++ sig ++ concat_values_of(attests))
+else if v.home_chain != Relay:
+    let leader := w in validators where
+        determine_role(w, block_number).home_chain == v.home_chain and v.is_leader
+    await leader.received(msg):
+        if let msg == 'request_attest' ++ candidate ++ sig:
+            if recover(sig, h) == leader and is_valid(candidate) and all_ingress_data_known(candidate):
+                let sig := v.sign(h)
+                leader.send('attest' ++ sig)
+else
+    wait for all parachain validators to send properly attested block or timeout
+    author block
+```
+
+Each other validator will sign and reply with an attestation that all information relating to this block is available, including extrinsic information such as transactions and externally-dependent information such as the egress-queue data. By signing this attestation, the validators promise to provide this information to any other validator for a minimum of `era_length` blocks.
 
 There must be a strict minimum of attestations (undetermined as yet but called `attest_min`) for the candidate to be considered safe. The set of `attest_min + 1` signatures together with the parachain candidate's hash is then rebroadcast to the validator designated to the relay chain.
 
@@ -42,7 +78,7 @@ The validator designated to the relay chain collects transactions for the relay 
 
 ## State
 
-Its state has similarities to Ethereum: "objects" contained in it are a mapping from an `ObjectID` identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). Objects are bland Wasm code bundles with a couple of external facilities open to them as user-functions, primarily the ability to call into other objects and to access its own storage.
+The state of the relay chain has similarities to Ethereum: "objects" contained in it are a mapping from an `ObjectID` identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). Objects are bland Wasm code bundles with a couple of external facilities open to them as user-functions, primarily the ability to call into other objects and to access its own storage.
 
 Notably, no balance or nonce information is stored directly in the state. Balances, in general, are unneeded since relay-chain DOTs are not a crypto-currency per se and cannot be transferred between owners directly. Nonces, for the purposes of replay-protection are managed by the specialised Authentication object.
 
