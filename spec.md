@@ -4,27 +4,29 @@ Polkadot is primarily described by the Relay chain protocol; key logic between p
 
 The relay chain is a simplified proof-of-stake blockchain backed by a Web Assembly (Wasm) engine. Unlike Ethereum and Bitcoin, balances are not a first-class part of the state-transition function (STF). Indeed the only aspect of the relay-chain which is first-class is the notion of an *object*. Each object is identified through an index (`ObjectID`) and has some code and storage (similar to Ethereum contract accounts). The code exports functions which can be called either from other objects or through a transaction.
 
-Practically speaking, account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into the Administration object. Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
+Practically speaking, account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into the a particular object named "Administration". Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
 
 ## Consensus
 
-Consensus is defined at the job of ensuring that the blockchain, and thus the collection of state-transitions from genesis to head, is agreed upon between all conformant clients and can progress consistently. It is managed in three parts:
+Consensus is defined as the job of ensuring that the blockchain, and thus the collection of state-transitions from genesis to head, is agreed upon between all conformant clients and can progress consistently. It is separated from the rest of block-processing and forms a "hard-coded" part of the protocol, not handled by the Wasm object-execution environment. This is primarily because it would make light-client implementation extremely difficult and largely preclude multiple strategies for consensus-forming that could add substantial reliability to the network.
 
-- an instant-finality mechanism that provides forward-verifiable finality on a single relay-chain block (eventually likely based on Zyzzyva/Aardvark/Abab, but likely to be PBFT for early PoCs);
-- a progressive parachain candidate determination routine that provides a decentralised means of forming eventual consensus over a set of parachain candidates that fulfil certain criteria based on signed statements from validators;
-- a simple leader-based mechanism for relay-chain transaction collation.
+It is managed in three parts:
+
+1. an instant-finality mechanism that provides forward-verifiable finality on a single relay-chain block (eventually likely based on Zyzzyva/Aardvark/Abab, but likely to be PBFT for early PoCs);
+2. a parachain candidate determination routine that provides a means of forming consensus over a set of parachain candidates that fulfil certain criteria based on signed statements from validators;
+3. a relay-chain transaction-set collation mechanism for determining which signed, in-bound transactions are included.
 
 Of the three attributes of consensus, namely consistency, availability and partition-tolerance, we are generally prepared to give up large-scale partition-tolerance of the validator set (who we can highly motivate to ensure remain online and well-connected), and get according guarantees over the consistency and availability. As such an instant-finality consensus algorithm is well-suited, such as PBFT or an optimistic derivative like Zyzzyva.
 
-To minimise overt exposure to a single malfunctioning node, we use a decentralised and progressive mechanism for determining parachain candidates that delivers eventual consistency (and possibly early consistency for a sub-optimal-but-acceptable solution).
+Points 2 and 3 are both part of the same underlying need to determine the block that will be finalised among all validators as point 1. The only aspect of the block that need be determined (i.e. the only part of the block that is non-deterministic) is the transaction set which is included. This covers both parachain candidate selection and external transaction inclusion. (Parachain candidates are selected by means of inclusion of a specific transaction.)
 
-For simplicity, a leader-based mechanism for determining the set of relay-chain transactions is used.
+A final parachain candidate-selection algorithm will likely be distributed and progressive, giving both greater efficiency and a more graceful degradation and leading to fewer artefacts which could potentially cause security holes.
 
 > CONSIDER: Allocating a large CDPRNG subset of validators (maybe 33% + 1) to elect transactions. The subset is ordered with a power-law distribution of transaction allocation. Those allocated greater number of transactions also take a higher priority (and effectively render moot the lower-order validators), meaning that most of the time the first few entrants is enough to get consensus of the transaction set. In the case of a malfunctioning node, the lower-order validators acting in aggregate allow important (e.g. Complaint) transactions to make their way into the block.
 
 ## State
 
-Its state has similarities to Ethereum: "objects" contained in it are a mapping from an `ObjectID` identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). Objects are bland Wasm code bundles with a couple of external facilities open to them as user-functions, primarily the ability to call into other objects and to access its own storage.
+The state of the relay chain has similarities to Ethereum: "objects" contained in it are a mapping from an `ObjectID` identifier to code (a SHA3 of Wasm code) and storage (a Merkle-trie root for a set of `H256` to `bytes` mappings). Objects are bland Wasm code bundles with a couple of external facilities open to them as user-functions, primarily the ability to call into other objects and to access its own storage.
 
 Notably, no balance or nonce information is stored directly in the state. Balances, in general, are unneeded since relay-chain DOTs are not a crypto-currency per se and cannot be transferred between owners directly. Nonces, for the purposes of replay-protection are managed by the specialised Authentication object.
 
@@ -34,7 +36,7 @@ Ownership of DOTs is managed by two objects: the Staking object (which manages D
 state := ObjectID -> ( code_hash: Hash, storage_root: Hash )
 ```
 
-The objects each fulfil specific functions (though over time these may expanded or contracted as changes in the protocol determine). For PoC-1, the object are:
+The objects each fulfil specific functions (though over time these may expanded or contracted as changes in the protocol determine). For PoC-1, the objects are:
 
 - Object 0: Nobody. Basic user-level object. Can be queried for non-sensitive universal data (like `block_number()`, `block_hash()`). Represents the "user-level" authenticated external transaction origin.
 - Object 1: System. Provides low-level mutable interaction with header, in particular `set_digest()`. Represents the system origin, which includes all validator-accepted, unsigned transactions.
@@ -147,7 +149,7 @@ Header: [
 ```
 Digest: [
     parachain_activity_bitfield: bytes,
-    logs: [bytes]
+    logs: [ bytes ]
 ]
 ```
 
@@ -302,7 +304,7 @@ Staking happens in batches of blocks called eras. At the end of each era, payout
 
 ### Parachains (5)
 
-- READONLY `chain_ids(self) -> [ChainID]`
+- READONLY `chain_ids(self) -> [ ChainID ]`
 - READONLY `validation_function(self, chain_id: ChainID) -> Fn(consolidated_ingress: [ ( ChainID, bytes ) ], balance_downloads: [ ( AccountID, Balance ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ])`
 - READONLY `validate_and_calculate_fees_function(self, chain_id: ChainID) -> Fn(egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ]) -> Balance`
 - READONLY `balance(self, chain_id: ChainID, id: AccountID) -> Balance`
@@ -319,7 +321,7 @@ Staking happens in batches of blocks called eras. At the end of each era, payout
 
 ### Authentication (6)
 
-- READONLY `validate_signature(self, tx: Transaction) -> (AccountID, TxOrder)`
+- READONLY `validate_signature(self, tx: Transaction) -> ( AccountID, TxOrder )`
 - READONLY `nonce(self, id: AccountID) -> TxOrder`
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID`
 
@@ -340,9 +342,21 @@ All USER transactions must burn a fee as soon as possible into their execution a
 The Administration object contains `execute_block` which handles the entire state-transition function. Some of the functions it provides are provided through its ephemeral storage (particularly `deposit_log`, `current_user` and `set_active_parachains`).
 
 Regarding `execute_block`, rough pseudo-code is:
-  - for each transaction `tx` in `block.transactions`, `Nobody` calls `S[tx.destination][tx.function_name](tx.params...)`. If a transaction aborts, then the block is aborted and considered invalid.
-    - Transactions can include signed statements from external actors such as fishermen, but crucially can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. Timestamp would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
-    - One set of statements that appear in the block are selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
+- for each transaction `tx` in `block.transactions`:
+  - if `tx.signature` exists (signed transaction):
+    - let `current_user := Authorisation.validate(tx)`. If the execution aborts, then the block is aborted and considered invalid.
+    - ensure `current_user` is returned if `Administration.current_user` is called during the execution of this transaction.
+    - let `caller := Nobody`
+  - otherwise if `tx.signature` doesn't exist (unsigned transaction):
+    - let `caller := System`
+  - call `S[tx.destination][tx.function_name](tx.params...)` from account `caller`. If the execution aborts, then the block is aborted and considered invalid.
+  - reset `current_user` to ensure `Administration.current_user` aborts if called.
+
+Note:
+
+Transactions can include signed statements from external actors such as fishermen or stakers, but can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. The transaction calling `Timestamp.set_timestamp` would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
+
+One statement that appears in the block is selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
 
 
 ## Parachains (5)
