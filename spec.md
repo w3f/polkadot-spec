@@ -22,7 +22,7 @@ Points 2 and 3 are both part of the same underlying need to determine the block 
 
 A final parachain candidate-selection algorithm will likely be distributed and progressive, giving both greater efficiency and a more graceful degradation and leading to fewer artefacts which could potentially cause security holes.
 
-> CONSIDER: Allocating a large CDPRNG subset of validators (maybe 33% + 1) to elect transactions. The subset is ordered with a power-law distribution of transaction allocation. Those allocated greater number of transactions also take a higher priority (and effectively render moot the lower-order validators), meaning that most of the time the first few entrants is enough to get consensus of the transaction set. In the case of a malfunctioning node, the lower-order validators acting in aggregate allow important (e.g. Complaint) transactions to make their way into the block.
+> CONSIDER: Allocating a large CSPRNG subset of validators (maybe 33% + 1) to elect transactions. The subset is ordered with a power-law distribution of transaction allocation. Those allocated greater number of transactions also take a higher priority (and effectively render moot the lower-order validators), meaning that most of the time the first few entrants is enough to get consensus of the transaction set. In the case of a malfunctioning node, the lower-order validators acting in aggregate allow important (e.g. Complaint) transactions to make their way into the block.
 
 ## State
 
@@ -92,9 +92,9 @@ A block contains all information required to evaluate a relay-chain block. It in
 
 ```
 Block: [
-    header: Header,
-    transactions: [ Transaction ],
-    signatures: [ Signature ]
+	header: Header,
+	transactions: [ Transaction ],
+	signatures: [ Signature ]
 ]
 ```
 
@@ -121,7 +121,7 @@ In order to describe the signature format, it is useful to define the `UnsignedT
 
 ```
 UnsignedTransaction: [
-    tx: Transaction,
+	tx: Transaction,
 	nonce: TxOrder
 ]
 ```
@@ -136,11 +136,11 @@ The header stores or cryptographically references all intrinsic information rela
 
 ```
 Header: [
-    parent_hash: Hash,
-    number: BlockNumber,
-    state_root: Hash,
-    transaction_root: Hash,
-    digest: Digest
+	parent_hash: Hash,
+	number: BlockNumber,
+	state_root: Hash,
+	transaction_root: Hash,
+	digest: Digest
 ]
 ```
 
