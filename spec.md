@@ -39,33 +39,33 @@ If the validator is a leader, they will select a valid parachain block candidate
 let h := keccak256(block_number ++ 'valid' ++ v.home_chain ++ candidate)
 
 if v.is_leader:
-    do:
-        let c := find_candidate(v.home_chain)
-    loop unless is_valid(c) and all_ingress_data_known(c) then let candidate := c
-    let sig := v.sign(h)
-    let groupies := every w in validators where:
-        determine_role(w, block_number).home_chain == v.home_chain and w != v
+	do:
+		let c := find_candidate(v.home_chain)
+	loop unless is_valid(c) and all_ingress_data_known(c) then let candidate := c
+	let sig := v.sign(h)
+	let groupies := every w in validators where:
+		determine_role(w, block_number).home_chain == v.home_chain and w != v
 
-    let attests := []
-    for w in groupies
-        w.send('request_attest' ++ candidate ++ sig).on_reply(r):
-            if r == 'attest' ++ sig where recover(sig, h) == w and !attests.contains(w):
-                attests.push(w => sig)
+	let attests := []
+	for w in groupies
+		w.send('request_attest' ++ candidate ++ sig).on_reply(r):
+			if r == 'attest' ++ sig where recover(sig, h) == w and !attests.contains(w):
+				attests.push(w => sig)
 
-    await attests.count == attest_min:
-        let relay := w in validators where determine_role(w, block_number).home_chain == Relay
-        relay.send(h ++ sig ++ concat_values_of(attests))
+	await attests.count == attest_min:
+		let relay := w in validators where determine_role(w, block_number).home_chain == Relay
+		relay.send(h ++ sig ++ concat_values_of(attests))
 else if v.home_chain != Relay:
-    let leader := w in validators where
-        determine_role(w, block_number).home_chain == v.home_chain and v.is_leader
-    await leader.received(msg):
-        if let msg == 'request_attest' ++ candidate ++ sig:
-            if recover(sig, h) == leader and is_valid(candidate) and all_ingress_data_known(candidate):
-                let sig := v.sign(h)
-                leader.send('attest' ++ sig)
+	let leader := w in validators where
+		determine_role(w, block_number).home_chain == v.home_chain and v.is_leader
+	await leader.received(msg):
+		if let msg == 'request_attest' ++ candidate ++ sig:
+			if recover(sig, h) == leader and is_valid(candidate) and all_ingress_data_known(candidate):
+				let sig := v.sign(h)
+				leader.send('attest' ++ sig)
 else
-    wait for all parachain validators to send properly attested block or timeout
-    author block
+	wait for all parachain validators to send properly attested block or timeout
+	author block
 ```
 
 Each other validator will sign and reply with an attestation that all information relating to this block is available, including extrinsic information such as transactions and externally-dependent information such as the egress-queue data. By signing this attestation, the validators promise to provide this information to any other validator for a minimum of `era_length` blocks.
@@ -396,11 +396,11 @@ The Administration object contains `execute_block` which handles the entire stat
 Regarding `execute_block`, rough pseudo-code is:
 - for each transaction `tx` in `block.transactions`:
   - if `tx.signature` exists (signed transaction):
-    - let `current_user := Authorisation.validate(tx)`. If the execution aborts, then the block is aborted and considered invalid.
-    - ensure `current_user` is returned if `Administration.current_user` is called during the execution of this transaction.
-    - let `caller := Nobody`
+	- let `current_user := Authorisation.validate(tx)`. If the execution aborts, then the block is aborted and considered invalid.
+	- ensure `current_user` is returned if `Administration.current_user` is called during the execution of this transaction.
+	- let `caller := Nobody`
   - otherwise if `tx.signature` doesn't exist (unsigned transaction):
-    - let `caller := System`
+	- let `caller := System`
   - call `S[tx.destination][tx.function_name](tx.params...)` from account `caller`. If the execution aborts, then the block is aborted and considered invalid.
   - reset `current_user` to ensure `Administration.current_user` aborts if called.
 
@@ -457,14 +457,14 @@ update_heads(
 			if routing_from[source].contains(dest):
 				chain.egress[dest].clear();
 		chain.egress[dest].push(receipt.egress_queue_roots[dest]);
-	    chain.head_data := receipt.head_data
+		chain.head_data := receipt.head_data
 		chain.balance -= receipt.fees
 		foreach (id, value) in receipt.balance_uploads:
 			chain.user_balances[id] += receipt.value
 }
 
 unrouted_queue_roots(from: ChainId, to: ChainId) -> [Root] {
-    egresses[to][from].clone()
+	egresses[to][from].clone()
 }
 ```
 
