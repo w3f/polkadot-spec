@@ -148,8 +148,8 @@ Header: [
 
 ```
 Digest: [
-    parachain_activity_bitfield: bytes,
-    logs: [ bytes ]
+	parachain_activity_bitfield: bytes,
+	logs: [ bytes ]
 ]
 ```
 
