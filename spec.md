@@ -72,7 +72,7 @@ Each other validator will sign and reply with an attestation that all informatio
 
 There must be a strict minimum of attestations (undetermined as yet but called `attest_min`) for the candidate to be considered safe. The set of `attest_min + 1` signatures together with the parachain candidate's hash is then rebroadcast to the validator designated to the relay chain.
 
-The validator designated to the relay chain collects transactions for the relay chain block and, on receipt of all (subject to reasonable timeout) properly signed/attested parachain candidates, constructs and rebroadcasts the final block to each validator together with all signatures. It is up to each validator to verify that all parachain candidates are properly attested. The final block's header is then hashed and used in the finalisation algorithm (essentially just PBFT).
+The validator designated to the relay chain collects transactions for the relay chain block and, on receipt of all (subject to reasonable timeout) properly signed/attested parachain candidates, constructs and rebroadcasts the final block to each validator together with all signatures. It is up to each validator to verify that all parachain candidates are properly attested. The final block's header is then hashed and used in the finalisation algorithm.
 
 > CONSIDER: Allocating a large CDPRNG subset of validators (maybe 33% + 1) to elect transactions. The subset is ordered with a power-law distribution of transaction allocation. Those allocated greater number of transactions also take a higher priority (and effectively render moot the lower-order validators), meaning that most of the time the first few entrants is enough to get consensus of the transaction set. In the case of a malfunctioning node, the lower-order validators acting in aggregate allow important (e.g. Complaint) transactions to make their way into the block.
 
@@ -88,7 +88,7 @@ Ownership of DOTs is managed by two objects: the Staking object (which manages D
 state := ObjectID -> ( code_hash: Hash, storage_root: Hash )
 ```
 
-The objects each fulfil specific functions (though over time these may expanded or contracted as changes in the protocol determine). For PoC-1, the object are:
+The objects each fulfil specific functions (though over time these may expanded or contracted as changes in the protocol determine). For PoC-1, the objects are:
 
 - Object 0: Nobody. Basic user-level object. Can be queried for non-sensitive universal data (like `block_number()`, `block_hash()`). Represents the "user-level" authenticated external transaction origin.
 - Object 1: System. Provides low-level mutable interaction with header, in particular `set_digest()`. Represents the system origin, which includes all validator-accepted, unsigned transactions.
@@ -201,7 +201,7 @@ Header: [
 ```
 Digest: [
     parachain_activity_bitfield: bytes,
-    logs: [bytes]
+    logs: [ bytes ]
 ]
 ```
 
@@ -356,7 +356,7 @@ Staking happens in batches of blocks called eras. At the end of each era, payout
 
 ### Parachains (5)
 
-- READONLY `chain_ids(self) -> [ChainID]`
+- READONLY `chain_ids(self) -> [ ChainID ]`
 - READONLY `validation_function(self, chain_id: ChainID) -> Fn(consolidated_ingress: [ ( ChainID, bytes ) ], balance_downloads: [ ( AccountID, Balance ) ], block_data: bytes, previous_head_data: bytes) -> (head_data: bytes, egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ])`
 - READONLY `validate_and_calculate_fees_function(self, chain_id: ChainID) -> Fn(egress_queues: [ [ bytes ] ], balance_uploads: [ ( AccountID, Balance ) ]) -> Balance`
 - READONLY `balance(self, chain_id: ChainID, id: AccountID) -> Balance`
@@ -373,7 +373,7 @@ Staking happens in batches of blocks called eras. At the end of each era, payout
 
 ### Authentication (6)
 
-- READONLY `validate_signature(self, tx: Transaction) -> (AccountID, TxOrder)`
+- READONLY `validate_signature(self, tx: Transaction) -> ( AccountID, TxOrder )`
 - READONLY `nonce(self, id: AccountID) -> TxOrder`
 - SYSTEM `authenticate(mut self, tx: Transaction) -> AccountID`
 
