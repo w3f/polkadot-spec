@@ -4,7 +4,7 @@ Polkadot is primarily described by the Relay chain protocol; key logic between p
 
 The relay chain is a simplified proof-of-stake blockchain backed by a Web Assembly (Wasm) engine. Unlike Ethereum and Bitcoin, balances are not a first-class part of the state-transition function (STF). Indeed the only aspect of the relay-chain which is first-class is the notion of an *object*. Each object is identified through an index (`ObjectID`) and has some code and storage (similar to Ethereum contract accounts). The code exports functions which can be called either from other objects or through a transaction.
 
-Practically speaking, account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into the a particular object named "Administration". Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
+Practically speaking, account balances do exist on the relay chain but are entirely an artefact of an object's storage and code. The entire state transition is managed through a single call into a particular object named "Administration". Aside from the consensus algorithm (which is "hard-coded" into the protocol for light-client practicality), all aspects of the protocol are soft-coded as the logic of these objects and can be upgraded without any kind of hard-fork.
 
 ## Consensus
 
@@ -16,9 +16,9 @@ It is managed in three parts:
 2. a parachain candidate determination routine that provides a means of forming consensus over a set of parachain candidates that fulfil certain criteria based on signed statements from validators;
 3. a relay-chain transaction-set collation mechanism for determining which signed, in-bound transactions are included.
 
-Of the three attributes of consensus, namely consistency, availability and partition-tolerance, we are generally prepared to give up large-scale partition-tolerance of the validator set (who we can highly motivate to ensure remain online and well-connected), and get according guarantees over the consistency and availability. As such an instant-finality consensus algorithm is well-suited, such as PBFT or an optimistic derivative like Zyzzyva.
+Of the three attributes of consensus, namely consistency, availability and partition-tolerance, we are generally prepared to give up large-scale partition-tolerance of the validator set (who we can highly motivate to ensure they remain online and well-connected), and get according guarantees over the consistency and availability. As such an instant-finality consensus algorithm is well-suited, such as PBFT or an optimistic derivative like Zyzzyva.
 
-Points 2 and 3 are both part of the same underlying need to determine the block that will be finalised among all validators as point 1. The only aspect of the block that need be determined (i.e. the only part of the block that is non-deterministic) is the transaction set which is included. This covers both parachain candidate selection and external transaction inclusion. (Parachain candidates are selected by means of inclusion of a specific transaction.)
+Points 2 and 3 are both part of the same underlying need to determine the block that will be finalised among all validators as point 1. The only aspect of the block that needs to be determined (i.e. the only part of the block that is non-deterministic) is the transaction set which is included. This covers both parachain candidate selection and external transaction inclusion. (Parachain candidates are selected by means of inclusion of a specific transaction.)
 
 A final parachain candidate-selection algorithm will likely be distributed and progressive, giving both greater efficiency and a more graceful degradation and leading to fewer artefacts which could potentially cause security holes.
 
@@ -36,7 +36,7 @@ Ownership of DOTs is managed by two objects: the Staking object (which manages D
 state := ObjectID -> ( code_hash: Hash, storage_root: Hash )
 ```
 
-The objects each fulfil specific functions (though over time these may expanded or contracted as changes in the protocol determine). For PoC-1, the objects are:
+The objects each fulfil specific functions (though over time these may be expanded or contracted as changes in the protocol determine). For PoC-1, the objects are:
 
 - Object 0: Nobody. Basic user-level object. Can be queried for non-sensitive universal data (like `block_number()`, `block_hash()`). Represents the "user-level" authenticated external transaction origin.
 - Object 1: System. Provides low-level mutable interaction with header, in particular `set_digest()`. Represents the system origin, which includes all validator-accepted, unsigned transactions.
@@ -117,7 +117,7 @@ SignedTransaction: [
 ]
 ```
 
-In order to describe the signature format, it is useful to define the `UnsignedTransaction` object which is a `Transaction` with a `nonce`, or index to force an order on transactions coming from the same origin as avoid replay attacks.
+In order to describe the signature format, it is useful to define the `UnsignedTransaction` object which is a `Transaction` with a `nonce`, or index to force an order on transactions coming from the same origin to avoid replay attacks.
 
 ```
 UnsignedTransaction: [
@@ -128,7 +128,7 @@ UnsignedTransaction: [
 
 - `destination` is the object index on which the function will be called.
 - `function_name` is the name of the function of the object that will be called.
-- `parameters` are the parameters to be passed into the function; this is a rich data segment and will be interpreted according to the function's prototype. It should contain exactly the number of the elements as the function's prototype; if any of the function's prototype elements are structured in nature, then the structure of this parameters should reflect that. A more specific mapping between RLP and Wasm ABI will be provided in due course.
+- `parameters` are the parameters to be passed into the function; this is a rich data segment and will be interpreted according to the function's prototype. It should contain exactly the number of the elements as the function's prototype; if any of the function's prototype elements are structured in nature, then the structure of these parameters should reflect that. A more specific mapping between RLP and Wasm ABI will be provided in due course.
 
 ## Header
 
@@ -183,7 +183,9 @@ CandidateReceipt: [
 ]
 ```
 
-`parachain_index` is the unique identifier for this parachain. `egress_queue_roots` is the array of roots of the egress queues. Many/most entries may be empty if the parachain has little outgoing communication with certain other chains. `balance_uploads` is the set of `AccountID` account identifiers and `U256` positive balance deltas that represent the balances that should be unlocked on the relay chain (since the DOTs have been made unavailable on the parachain itself).
+- `parachain_index` is the unique identifier for this parachain. 
+- `egress_queue_roots` is the array of roots of the egress queues. Many/most entries may be empty if the parachain has little outgoing communication with certain other chains. 
+- `balance_uploads` is the set of `AccountID` account identifiers and `U256` positive balance deltas that represent the balances that should be unlocked on the relay chain (since the DOTs have been made unavailable on the parachain itself).
 
 # Transaction routing
 
@@ -349,27 +351,30 @@ Regarding `execute_block`, rough pseudo-code is:
     - let `caller := Nobody`
   - otherwise if `tx.signature` doesn't exist (unsigned transaction):
     - let `caller := System`
-  - call `S[tx.destination][tx.function_name](tx.params...)` from account `caller`. If the execution aborts, then the block is aborted and considered invalid.
+  - call `S[tx.destination][tx.function_name](tx.params...)` from account `caller`, where state `S` is the end-state of the `block`. If the execution aborts, then the block is aborted and considered invalid.
   - reset `current_user` to ensure `Administration.current_user` aborts if called.
 
 Note:
 
 Transactions can include signed statements from external actors such as fishermen or stakers, but can also contain unsigned statements that simply record an "accepted" truth (or piece of extrinsic data). If a transaction is unsigned but is included as part of a block, then its sender is System. The transaction calling `Timestamp.set_timestamp` would be an example of this. When a validator signs a block as a relay-chain candidate they implicitly ratify each of the blocks statements as being valid truths.
 
-One statement that appears in the block is selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures any DOT balances on the parachain required as fees for the egress-queue is burned.
+One statement that appears in the block is selected parachain candidates. In this case it is a simple message to `S.Parachains.update_heads`. This call ensures that any DOT balances on the parachain that are required as fees for the egress-queue are burned.
 
 
 ## Parachains (5)
 
 ### Validating & Processing
 
-Relay-chain validation happens in three contexts. Firstly, when you are attempting to sync the chain; secondly when you are building a block and need to determine the validity of a candidate on a parachain that you are not assigned to; thirdly when you are attempting to validate a parachain candidate, perhaps as a fisherman, perhaps as a validator who is building a block, perhaps as a validator who is responding to a complaint.
+Relay-chain validation happens in three contexts:
+1. when you are attempting to sync the chain;
+2. when you are building a block and you need to determine the validity of a candidate on a parachain that you are not assigned to;
+3. when you are attempting to validate a parachain candidate, perhaps as a fisherman, perhaps as a validator who is building a block, perhaps as a validator who is responding to a complaint.
 
 For the first context, it is enough to simply execute all transactions in the block. Validation happens implicitly through the existence of the unsigned `update_heads` transaction that appear in a block signed by validators.
 
 The second context is much like the first, except that `update_heads` is run manually and availability of the source block is affirmed.
 
-In all contexts, it is not assumed that you have any chain history. All operations can be done purely through looking at the "current" (relative to the block to the validated) chain state.
+In all contexts, it is not assumed that you have any chain history. All operations can be done purely through looking at the "current" (relative to the block to be validated) chain state.
 
 For the latter context, the specific steps to validate a parachain candidate on state `S` are:
 
@@ -400,7 +405,7 @@ update_heads(
 
 	foreach source in receipts.keys():
 		with chain as S.Parachains.chain_state[source];
-		with reciept as receipts[source];
+		with receipt as receipts[source];
 		foreach dest in receipts.keys():
 			if routing_from[source].contains(dest):
 				chain.egress[dest].clear();
