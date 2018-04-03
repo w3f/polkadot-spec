@@ -12,7 +12,7 @@ Consensus is defined as the job of ensuring that the blockchain, and thus the co
 
 It is managed in three parts:
 
-1. an instant-finality mechanism that provides forward-verifiable finality on a single relay-chain block (eventually likely based on Zyzzyva/Aardvark/Abab, but likely to be PBFT for early PoCs);
+1. an instant-finality mechanism that provides forward-verifiable finality on a single relay-chain block (eventually likely based on Zyzzyva/Aardvark/Abab. See section below for the PBFT-based algorithm used in early PoCs);
 2. a parachain candidate determination routine that provides a means of forming consensus over a set of parachain candidates that fulfil certain criteria based on signed statements from validators;
 3. a relay-chain transaction-set collation mechanism for determining which signed, in-bound transactions are included.
 
@@ -23,6 +23,57 @@ Points 2 and 3 are both part of the same underlying need to determine the block 
 A final parachain candidate-selection algorithm will likely be distributed and progressive, giving both greater efficiency and a more graceful degradation and leading to fewer artefacts which could potentially cause security holes.
 
 > CONSIDER: Allocating a large CSPRNG subset of validators (maybe 33% + 1) to elect transactions. The subset is ordered with a power-law distribution of transaction allocation. Those allocated greater number of transactions also take a higher priority (and effectively render moot the lower-order validators), meaning that most of the time the first few entrants is enough to get consensus of the transaction set. In the case of a malfunctioning node, the lower-order validators acting in aggregate allow important (e.g. Complaint) transactions to make their way into the block.
+
+### PoC Consensus Algorithm
+
+This is a PBFT-based algorithm.  There are `n` validators altogether, with a maximum of `f` arbitrarily faulty. 
+
+We consider a weakly synchronous network, where the adversary can reorder or delay messages indefinitely, with the only stipulation being that messages eventually arrive. The communication model assumes each validator having a channel with each other validator, although in practice messages are likely to be circulated by gossip.
+
+The algorithm proceeds in rounds (starting at 0), with a primary selected using a deterministic primary selection function `Primary(round)`.
+
+The primary selection algorithm isn't fully determined, but will be similar to taking the `r`th validator mod the number of validators.
+
+The primary's job is to propose a relay chain block for inclusion. 
+We also consider a hash function H which maps proposals to their digests such that collisions have a negligible probability.
+
+```
+PROPOSE(round, Proposal)
+PREPARE(round, Digest)
+COMMIT(round, Digest)
+ADVANCE(round)
+```
+
+Definitions:
+  - threshold-prepare: a set of signed `PREPARE(r, D)` messages from at least `n - f` validators with `r` and `D` all the same.
+  - justification: a set of signed `COMMIT(r, D)` messages from at least `n - f` validators with `r` and `D` all the same.
+  - threhsold-advance: a set of signed `ADVANCE(r)` messages from at least `n - f` validators with `r` all the same.
+
+Description of the algorithm:
+  - Upon onset of round r, each validator sets a round timeout which increases exponentially with the round number. `Primary(r)` creates a proposal P and multicasts a signed `PROPOSE(r, P)`.
+  - Upon receipt of `PROPOSE(r, P)` signed by `Primary(r)`, a validator V evaluates the validity of P. If P is deemed valid, V multicasts a signed `PREPARE(r, H(P))` unless V has already broadcast a `PREPARE` message in r.
+  - Upon witnessing a threshold-prepare for `r` and `H(P)`, a validator multicasts a signed `COMMIT(r, H(P))` unless he has already broadcast `ADVANCE(r)`.
+  - Upon timeout or witnessing `f + 1` signed `ADVANCE(r)` messages, a validator multicasts a signed `ADVANCE(r)`.
+  - Upon witnessing a threshold-advance for `r`, proceed to round `r + 1`.
+  - Upon witnessing a justification for some digest `H(X)`, exit with `H(X)`.
+
+There are two additional "locking" rules:
+  - Validators may only `PROPOSE`, `PREPARE`, and `COMMIT` the proposal from the threshold-prepare with highest round witnessed, if it exists.
+  - Validators must consider any proposal from the threshold-prepare with highest round witnessed valid, if it exists.
+
+For this consensus protocol to be safe and live, we assume `n = 3f + k`, k > 0.
+
+The first rule is necessary to preserve the "safety" property: 
+
+If `f + k` good validators multicast `COMMIT(r, D)`, the `f` faulty validators can create a valid justification for `D`. Thus if another digest `D'` is finalized by the `n - f` good validators in another round, two proposals have been finalized. 
+
+However, if those `f + k` validators are locked to `D`, there is no way for the remaining `f` good validators to threshold-prepare or even commit to another digest `D'` even when combined with the `f` faulty validators, as `2f < n - f`.
+
+The second rule is necessary to preserve the "liveness" property in Polkadot:
+
+Validators in general will refuse to consider any proposal containing a candidate it has received even a single invalidity vote for as valid.
+
+If the `f` faulty validators go inactive when any good validator is locked, this will require full co-operation of the good `2f + k` validators. If the faulty validators can convince even a single validator not to accept the locked proposal (e.g. by broadcasting an `Invalid` vote for a candidate contained therein), the consensus will halt. Thus we introduce a second rule to relax the validity function somewhat in the case that a proposal has already been prepared for acceptance by the network.
 
 ## State
 
