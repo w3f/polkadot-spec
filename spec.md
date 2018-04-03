@@ -20,7 +20,59 @@ Of the three attributes of consensus, namely consistency, availability and parti
 
 Points 2 and 3 are both part of the same underlying need to determine the block that will be finalised among all validators as point 1. The only aspect of the block that needs to be determined (i.e. the only part of the block that is non-deterministic) is the transaction set which is included. This covers both parachain candidate selection and external transaction inclusion. (Parachain candidates are selected by means of inclusion of a specific transaction.)
 
-A final parachain candidate-selection algorithm will likely be distributed and progressive, giving both greater efficiency and a more graceful degradation and leading to fewer artefacts which could potentially cause security holes.
+A final parachain candidate-selection algorithm will likely be distributed and progressive, giving both greater efficiency and a more graceful degradation and leading to fewer artefacts which could potentially cause security holes. For PoC-1, a much more centralised mechanism will be used relying on an elevated set of group leaders to collate and specify parachain candidates.
+
+### PoC-1 Parachain candidate selection
+
+Every block, each validator is deterministically assigned (through a CSPRNG function) to a single parachain or the relay-chain. There is exactly one validator who is designated leader for each parachain and exactly one validator who is designated to the relay-chain.
+
+```
+let block_number := S.Nobody.block_number()
+let (v.home_chain, v.is_leader) := determine_role(v, block_number)
+```
+
+`v.home_chain` may be a parachain index or `Relay`.
+
+If the validator is a leader, they will select a valid parachain block candidate (which it is presumed will be provided by the parachain collators), sign it and forward it to each other validator assigned to that parachain.
+
+```
+let h := keccak256(block_number ++ 'valid' ++ v.home_chain ++ candidate)
+
+if v.is_leader:
+	do:
+		let c := find_candidate(v.home_chain)
+	loop unless is_valid(c) and all_ingress_data_known(c) then let candidate := c
+	let sig := v.sign(h)
+	let groupies := every w in validators where:
+		determine_role(w, block_number).home_chain == v.home_chain and w != v
+
+	let attests := []
+	for w in groupies
+		w.send('request_attest' ++ candidate ++ sig).on_reply(r):
+			if r == 'attest' ++ sig where recover(sig, h) == w and !attests.contains(w):
+				attests.push(w => sig)
+
+	await attests.count == attest_min:
+		let relay := w in validators where determine_role(w, block_number).home_chain == Relay
+		relay.send(h ++ sig ++ concat_values_of(attests))
+else if v.home_chain != Relay:
+	let leader := w in validators where
+		determine_role(w, block_number).home_chain == v.home_chain and v.is_leader
+	await leader.received(msg):
+		if let msg == 'request_attest' ++ candidate ++ sig:
+			if recover(sig, h) == leader and is_valid(candidate) and all_ingress_data_known(candidate):
+				let sig := v.sign(h)
+				leader.send('attest' ++ sig)
+else
+	wait for all parachain validators to send properly attested block or timeout
+	author block
+```
+
+Each other validator will sign and reply with an attestation that all information relating to this block is available, including extrinsic information such as transactions and externally-dependent information such as the egress-queue data. By signing this attestation, the validators promise to provide this information to any other validator for a minimum of `era_length` blocks.
+
+There must be a strict minimum of attestations (undetermined as yet but called `attest_min`) for the candidate to be considered safe. The set of `attest_min + 1` signatures together with the parachain candidate's hash is then rebroadcast to the validator designated to the relay chain.
+
+The validator designated to the relay chain collects transactions for the relay chain block and, on receipt of all (subject to reasonable timeout) properly signed/attested parachain candidates, constructs and rebroadcasts the final block to each validator together with all signatures. It is up to each validator to verify that all parachain candidates are properly attested. The final block's header is then hashed and used in the finalisation algorithm.
 
 > CONSIDER: Allocating a large CSPRNG subset of validators (maybe 33% + 1) to elect transactions. The subset is ordered with a power-law distribution of transaction allocation. Those allocated greater number of transactions also take a higher priority (and effectively render moot the lower-order validators), meaning that most of the time the first few entrants is enough to get consensus of the transaction set. In the case of a malfunctioning node, the lower-order validators acting in aggregate allow important (e.g. Complaint) transactions to make their way into the block.
 
@@ -397,11 +449,11 @@ The Administration object contains `execute_block` which handles the entire stat
 Regarding `execute_block`, rough pseudo-code is:
 - for each transaction `tx` in `block.transactions`:
   - if `tx.signature` exists (signed transaction):
-    - let `current_user := Authorisation.validate(tx)`. If the execution aborts, then the block is aborted and considered invalid.
-    - ensure `current_user` is returned if `Administration.current_user` is called during the execution of this transaction.
-    - let `caller := Nobody`
+	- let `current_user := Authorisation.validate(tx)`. If the execution aborts, then the block is aborted and considered invalid.
+	- ensure `current_user` is returned if `Administration.current_user` is called during the execution of this transaction.
+	- let `caller := Nobody`
   - otherwise if `tx.signature` doesn't exist (unsigned transaction):
-    - let `caller := System`
+	- let `caller := System`
   - call `S[tx.destination][tx.function_name](tx.params...)` from account `caller`, where state `S` is the end-state of the `block`. If the execution aborts, then the block is aborted and considered invalid.
   - reset `current_user` to ensure `Administration.current_user` aborts if called.
 
@@ -461,14 +513,14 @@ update_heads(
 			if routing_from[source].contains(dest):
 				chain.egress[dest].clear();
 		chain.egress[dest].push(receipt.egress_queue_roots[dest]);
-	    chain.head_data := receipt.head_data
+		chain.head_data := receipt.head_data
 		chain.balance -= receipt.fees
 		foreach (id, value) in receipt.balance_uploads:
 			chain.user_balances[id] += receipt.value
 }
 
 unrouted_queue_roots(from: ChainId, to: ChainId) -> [Root] {
-    egresses[to][from].clone()
+	egresses[to][from].clone()
 }
 ```
 
