@@ -240,3 +240,8 @@ TSWLatexianTemp*
 
 # generated if using elsarticle.cls
 *.spl
+
+#emacs temp files
+*~
+\#*\#
+\.\#*
