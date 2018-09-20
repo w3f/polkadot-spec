@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage[english]{babel}
+
+%%%%%%%%%% Start TeXmacs macros
+\newcommand{\tmem}[1]{{\em #1\/}}
+\newcommand{\tmsamp}[1]{\textsf{#1}}
+\newcommand{\tmstrong}[1]{\textbf{#1}}
+\newcommand{\tmtextbf}[1]{{\bfseries{#1}}}
+\newcommand{\tmtextit}[1]{{\itshape{#1}}}
+%%%%%%%%%% End TeXmacs macros
+
+\begin{document}
+
+\title{Polkadot RE}
+
+\date{September 18, 2018}
+
+\maketitle
+
+\section{Block}
+
+In Polkadot RE, a block is made of two main parts, namely the \tmtextit{block
+header} and the \tmtextit{list of extrinsics}. {\tmem{The Extrinsics}}
+represent the generalization of the concept of {\tmem{transaction}},
+containing any set of data that is external to the system and which the
+underlying chain wishes to validate and keep track of.
+
+\subsection{Block Header}
+
+The block header is designed to be minimalistic in order to boost the
+efficiency of the light clients. It contains the following elements:
+
+\begin{itemize}
+
+\item \tmtextbf{{\tmsamp{parent\_hash:}}} is the 32-byte Blake2s hash of the header
+of the parent of the block, indicated hence forth by {\tmtextbf{$H_p$}}.
+
+\item {\tmstrong{{\tmsamp{number:}}}} formally indicated as {\tmstrong{$H_i$}} is an
+integer, which represents the index of the current block in the chain. It is
+equal to the number of the ancsestor blocks. The genesis block has number 0.
+
+\item {\tmstrong{{\tmsamp{state\_root:}}}} formally indicated as {\tmstrong{$H_r$}}
+is the root of the Merkle trie whose leaves implements the storage for the
+system.
+
+\item {\tmstrong{{\tmsamp{extrinsics\_root:}}}} is the root of the Merkle trie whose
+leaves represent individual extrinsic being validated in this block. This
+element is formally referred to as {\tmstrong{$H_e$}}.
+
+\item {\tmstrong{{\tmsamp{digest:}}}} this field is used to store any chain-specific
+auxiliary data, which could help the light clients interact with the block
+without the need of accessing the full storage. Polkadot RE does not impose any limitation or specification for this field. It essentially can be a byte array of any length. This field is indicated as
+{\tmstrong{$H_d$}}
+\end{itemize}
+
+\section{Entry into Runtime}
+
+\section{API}
+
+\
+
+\end{document}
