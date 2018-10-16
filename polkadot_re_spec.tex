@@ -1,25 +1,26 @@
 \documentclass{article}
 \usepackage[english]{babel}
-\usepackage{amsmath,amssymb,graphicx}
+\usepackage{amsmath,amssymb}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
+\newcommand{\nosymbol}{}
 \newcommand{\tmem}[1]{{\em #1\/}}
 \newcommand{\tmname}[1]{\textsc{#1}}
 \newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
-y\newcommand{\tmsamp}[1]{\textsf{#1}}
+\newcommand{\tmsamp}[1]{\textsf{#1}}
 \newcommand{\tmstrong}[1]{\textbf{#1}}
 \newcommand{\tmtextbf}[1]{{\bfseries{#1}}}
 \newcommand{\tmtextit}[1]{{\itshape{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
-\newtheorem{axiom}{Axiom}
 \newtheorem{definition}{Definition}
-\newtheorem{lemma}{Lemma}
 %%%%%%%%%% End TeXmacs macros
 
 \begin{document}
 
 \title{Polkadot RE Spec}
+
+\date{October 1, 2018}
 
 \maketitle
 
@@ -31,12 +32,38 @@ y\newcommand{\tmsamp}[1]{\textsf{#1}}
 \end{definition}
 
 \begin{definition}
-  \label{def-path-graph}A {\tmstrong{Path graph}} of $n$ nodes, formally referred to as
-  {\tmstrong{$P_n$}}, is a tree a with two nodes of vertex degree 1 and the
-  other n-2 nodes of vertex degree 2. Therefore, $P_n $can be represented by
-  sequences of $(v_1, \ldots, v_n)$ where $e_i = (v_i, v_{i + 1})$ for $1
-  \leqslant i \leqslant n - 1$ is the edge which connect $v_i$ and $v_{i +
-  1}$.
+  \label{def-path-graph}A {\tmstrong{path graph}} or a {\tmstrong{path}} of
+  $n$ nodes, formally referred to as {\tmstrong{$P_n$}}, is a tree a with two
+  nodes of vertex degree 1 and the other n-2 nodes of vertex degree 2.
+  Therefore, $P_n$can be represented by sequences of $(v_1, \ldots, v_n)$
+  where $e_i = (v_i, v_{i + 1})$ for $1 \leqslant i \leqslant n - 1$ is the
+  edge which connect $v_i$ and $v_{i + 1}$.
+\end{definition}
+
+\begin{definition}
+  \label{def-radix-tree}{\tmstrong{radix r tree}} is a variant of \ a trie in
+  which:
+  \begin{itemize}
+    \item Every node has at most $r$ children where $r = 2^x$ for some $x$.
+    
+    \item Each node that is the only child of a parent which does not
+    represent a valid key is merged with its parent.
+  \end{itemize}
+\end{definition}
+
+As the result, in a radix tree, any path whose interior vertices all have only
+one child and does not represent a valid key in the data set, is compressed
+into a single edge. This improves space efficiency when the key space is
+sparse.
+
+\begin{definition}
+  The by a {\tmstrong{sequences of bytes}} or a {\tmstrong{byte array}}, $b$,
+  of length $n$, we refer to
+  \[ b \assign (b_0, b_1, ..., b_{n - 1}) \tmop{suchthat} 0 \leqslant b_i
+     \leqslant 255 \]
+  We define $\mathbb{B}_n$ to be the {\tmstrong{set of all byte arrays of
+  length $n$}}. Furthermore, we define:
+  \[ \mathbb{B} \assign \bigcup^{\infty}_{i = 0} \mathbb{B}_i \]
 \end{definition}
 
 \section{Block}
@@ -47,13 +74,13 @@ represent the generalization of the concept of {\tmem{transaction}},
 containing any set of data that is external to the system, and which the
 underlying chain wishes to validate and keep track of.
 
-\subsection{Block Header}\label{block_header}
+\subsection{Block Header}\label{block}
 
 The block header is designed to be minimalistic in order to boost the
 efficiency of the light clients. It is defined formally as follows:
 
 \begin{definition}
-  \label{def_block_header}The header of block B, $\tmop{Head} (B)$ is a
+  \label{def-block-header}The header of block B, $\tmop{Head} (B)$ is a
   5-tuple containing the following elements:
   \begin{itemize}
     \item \tmtextbf{{\tmsamp{parent\_hash:}}} is the 32-byte Blake2s hash of
@@ -61,7 +88,8 @@ efficiency of the light clients. It is defined formally as follows:
     \tmtextbf{$H_p$}.
     
     \item {\tmstrong{{\tmsamp{number:}}}} formally indicated as
-    {\tmstrong{$H_i$}} is an integer, which represents the index of the current block in the chain. It is equal to the number of the ancestor
+    {\tmstrong{$H_i$}} is an integer, which represents the index of the
+    current block in the chain. It is equal to the number of the ancestor
     blocks. The genesis block has number 0.
     
     \item {\tmstrong{{\tmsamp{state\_root:}}}} formally indicated as
@@ -81,20 +109,17 @@ efficiency of the light clients. It is defined formally as follows:
   \end{itemize}
 \end{definition}
 
-\
-
 \subsection{Justified Block Header}
 
-The Justified Block Header is provided by the consensus engine and presented to
-the Polkadot RE, in order for the block to be appended to the blockchain. It
-contains the following parts:
+The Justified Block Header is provided by the consensus engine and presented
+to the Polkadot RE, in order for the block to be appended to the blockchain.
+It contains the following parts:
 \begin{itemize}
   \item {\tmstrong{{\tmsamp{{\tmstrong{block\_header}}}}}} the complete block
-  header as defined in Section \ref{block_header} and denoted by $\tmop{Head}
-  (B)$.
+  header as defined in Section \ref{block} and denoted by $\tmop{Head} (B)$.
   
-  \item {\tmstrong{{\tmsamp{justification}}}}: as defined by the
-  consensus specification denoted by $\tmop{Just} (B)$ {\todo{link this to its
+  \item {\tmstrong{{\tmsamp{justification}}}}: as defined by the consensus
+  specification denoted by $\tmop{Just} (B)$ {\todo{link this to its
   definition from consensus}}.
   
   \item {\tmstrong{{\tmsamp{authority Ids}}}}: This is the list of the Ids of
@@ -104,10 +129,11 @@ contains the following parts:
 
 \subsection{Extrinsics}
 
-Each block also contains a list of extrinsics. Polkadot RE does not specify
-or limit the internal of each extrinsics beside the fact that each extrinsics
-is a blob of encoded data. The {\tmsamp{extrinsics\_root}} should correspond
-to the root of the Merkle trie, whose leaves are made of the block extrinsics list.
+Each block also contains a list of extrinsics. Polkadot RE does not specify or
+limit the internal of each extrinsics beside the fact that each extrinsics is
+a blob of encoded data. The {\tmsamp{extrinsics\_root}} should correspond to
+the root of the Merkle trie, whose leaves are made of the block extrinsics
+list.
 
 \section{Entry into Runtime}
 
@@ -115,9 +141,10 @@ to the root of the Merkle trie, whose leaves are made of the block extrinsics li
 
 \subsection{Block Submission and Validation}
 
-Block validation is the process, by which the client asserts that a block is fit
-to be added to the blockchain. That is to say, the block is consistent with
-the world state and transitions from the state of the system to a new valid state.
+Block validation is the process, by which the client asserts that a block is
+fit to be added to the blockchain. That is to say, the block is consistent
+with the world state and transitions from the state of the system to a new
+valid state.
 
 \
 
@@ -150,94 +177,62 @@ block:
 
 \section{State Storage and the Storage Trie}
 
-For storing the state of the system, Polkadot RE uses a hash table storage
-where the keys are used to access each data entry state. There is no
+For storing the state of the system, Polkadot RE implements a hash table
+storage where the keys are used to access each data entry state. There is no
 limitation on neither the size of the key nor the size of the data stored
-under them. \
+under them, beside the fact that thay are byte arrays.
 
 To authenticate the state of the system, the stored data is re-arranged and
-hashed in a modified {\tmem{radix 16 tree}} also know as {\tmem{base-16
-modified Merkle Patricia Tree}}, which hereafter we simply refer to as the
+hashed in a {\tmem{radix 16 tree}} also known as {\tmem{base-16 modified
+Merkle Patricia Tree}}, which hereafter we simply refer to as the
 {\tmem{{\tmstrong{Trie}},}} in order to compute the hash of the whole state
 storage consistently and efficiently at any given time.
 
-A modification is applied to the radix tree structure to improve space
-efficiency by accounting for the sparseness of the tree. Similarly,
-the modification done in storing the nodes' hash in the Merkle tree structure is meant to save space on entries storing small entries.
+Also modification has been done in storing the nodes' hash in the Merkle tree
+structure to save space on entries storing small entries.
 
 Because the Tri is used to compute the {\tmem{state root}}, $H_r$, (see
-Definition \label{def_block_header} ), used to authenticate the
-validity of the state database, Polkadot RE follows a rigorous encoding
-algorithm to represent the trie nodes to ensure that the computed hash, $H_r$,
-matches across clients.
+Definition \ref{def-block-header}), which is used to authenticate the validity
+of the state database, Polkadot RE follows a rigorous encoding algorithm to
+compute the values stored in the trie nodes to ensure that the computed Merkle
+hash, $H_r$, matches across clients.
 
 \subsection{The General Tree Structure}
 
-As the trie is a modified radix 16 tree, in this sense, each key value
-identifies a unique node in the tree. However, a node in a tree might or might not be associated with a key in the storage.
+As the trie is a radix 16 tree, in this sense, each key value identifies a
+unique node in the tree. However, a node in a tree might or might not be
+associated with a key in the storage.
 
 To identify the node corresponding to a key value, $k$, first we need to
-encode $k$ in a uniform way making sure the length of the encoded value is an
-integer multiple of 4 bits. {\todo{Check this: is probably 8bits/byte, but 4
-bit will save some space}}
-\begin{equation}
-  k_{\tmop{enc}} \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_n}) \assign
-  \tmop{KeyEncode} (k) \label{key-encode-in-trie}
-\end{equation}
-where function $\tmop{KeyEncode}$ is defined in Definition \ref{key-encode}.
-$k_{\tmop{enc}_i}$'s are 4-bit {\tmem{nibbles}}. When looking at
-$k_{\tmop{enc}}$ as a sequence of nibbles, we can walk the radix tree to reach
-the node identifying the storage value. This simplified process is shown in
-Figure \label{fig-simple-radix-tree-walk}
-\begin{equation}
-  [\tmop{Place} \tmop{Holder} \tmop{for} \tmop{simple} \tmop{radix}
-\end{equation}
-However, the Polkadot trie structure deviate from the standard radix 16 tree
-structure depicted in Figure \ref{fig-radix-16} in order to save storage space
-by adhering to Axiom \ref{ax-no-1-child}:
-
-\begin{axiom}
-  {\tmstrong{}}\label{ax-no-1-child}{\tmstrong{No one child Axiom:}} No node
-  in the Polkadot RE trie can be a parent of an only child if neither the key of
-  the parent nor the child node correspond to a value in the state
-  database. \ \ 
-\end{axiom}
-
-Lemma \ref{lem-no-path} is a special case of Axiom \ref{ax-no-1-child}, which
-states separately as the trie structure is defined separately for the situation
-according to this case.
-
-\begin{lemma}
-  \label{lem-no-path}No node $\nu$ in the Polkadot RE trie s hall be root of the
-  path graph of $P_n = (\nu = v_1, \ldots, v_n)$ such that $\tmop{Value}
-  (\tmop{key} (v_i)) = \emptyset$ for $1 \leqslant i < n$.
-\end{lemma}
-
-For a definition of the path graph see Definition \label{def-path-graph}.
-
-\
-
-To satisfy Lemma \ref{ax-no-path}, we use {\tmem{leaf nodes}} defined in
-\label{def-leaf-node} to get rid of path graphs appears in the radix 16 tree.
+encode $k$ in a uniform way:
 
 \begin{definition}
-  We replace any graph path $P_n = (v_1, \ldots, v_n)$ in the radix 16 tree
-  representing the state storage with a {\tmstrong{leaf node}} $l_{P_n}$,
-  where $\tmop{key} (l_{P_n}) = \tmop{key} (v_n)$. 
+  The for the purpose labeling the branches of the Trie key $k$ is encoded to
+  $k_{\tmop{enc}}$ using KeyEncode functions:
+  \begin{equation}
+    k_{\tmop{enc}} \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{2 n}})
+    \assign \tmop{KeyEncode} (k) \label{key-encode-in-trie}
+  \end{equation}
+  such that:
+  \[ \tmop{KeyEncode} (k) : \left\{ \begin{array}{lll}
+       \mathbb{B}^{\nosymbol} & \rightarrow & \tmop{Nibbles}_4\\
+       k \assign (b_1, \ldots, b_n) \assign & \mapsto & (b^1_1, b^2_1, b_2^1,
+       b^2_2, \ldots, b^1_n, b^2_n)\\
+       &  & \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{2 n}})
+     \end{array} \right. \]
+  where $\tmop{Nibble}_4$ is the set of all nibbles of 4-bit arrays and
+  $b^1_i$ and $b^2_i$ are 4-bit nibbles which are the the little endian
+  representation of $b_i$:
+  \[ (b^1_i, b^2_i) \assign (b_1 \tmop{mod} 16, b_2 / 16) \]
+  where mod is the remainder and / is the integer division operators.
 \end{definition}
 
-In all other cases in which the radix 16 tree structure violates Axiom
-\ref{ax-no-1-child}
-
-\begin{definition}
-  Suppose $P_n = (v_1, \ldots, v_n)$ is a subgraph of the radix 16 tree such
-  that $v_i$ for $1 \leqslant i < n$ has only one child and $\tmop{Value}
-  (\tmop{key} (v_i)) = \emptyset$, while $v_n$ has more than one child, then
-  we replace $P_n$ with an extension node $\tmop{ex}_{P_n}$, where $\tmop{key}
-  (\tmop{ex}_{P_n}) \assign \tmop{key} (v_n)$. 
-\end{definition}
+By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, can walk the radix
+tree to reach the node identifying the storage value of $k$.
 
 \subsection{Node value}
+
+\section{Parity Codec}
 
 \
 
