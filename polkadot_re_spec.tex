@@ -4,6 +4,7 @@
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
+\newcommand{\cdummy}{\cdot}
 \newcommand{\nosymbol}{}
 \newcommand{\tmem}[1]{{\em #1\/}}
 \newcommand{\tmname}[1]{\textsc{#1}}
@@ -64,6 +65,14 @@ sparse.
   We define $\mathbb{B}_n$ to be the {\tmstrong{set of all byte arrays of
   length $n$}}. Furthermore, we define:
   \[ \mathbb{B} \assign \bigcup^{\infty}_{i = 0} \mathbb{B}_i \]
+\end{definition}
+
+\begin{definition}
+  \label{defn-bit-rep}For a given byte $b$ the {\tmstrong{bitwise
+  representation}} of $b$ is defined as
+  \[ b \assign b^7 \ldots b^0 \]
+  where
+  \[ b = 2^0 b^0 + 2^1 b^1 + \cdots + 2^7 b^7 \]
 \end{definition}
 
 \section{Block}
@@ -232,7 +241,66 @@ tree to reach the node identifying the storage value of $k$.
 
 \subsection{Node value}
 
+\section{Extrinsics trie}
+
+Although the same radix-16 tree is been used to verify the consistency of the
+Extrinsics data, unlike the Storage trie, , Polkadot RE {\tmem{does not}} uses
+a Merkle tree structure to accomplish this task. Instead, it store the entire
+trie in a byte array structure and finally computes its hash as a byte array,
+as defined in Definition \ref{def-closed-form-trie}.
+
+\
+
+\begin{definition}
+  \label{def-closed-form-trie}{\tmstrong{Closed Form Trie}} {\todo{TODO:
+  Define according to substerate-submods/trie/trie-root/src/lib.rs}}
+\end{definition}
+
 \section{Parity Codec}
+
+Polkadot RE uses Parity Codec to encode byte arrays in order to provide
+canonical encoding to produce consistent hash values accross implementation.
+Including producing the Merkle hash proof for the State Storage.
+
+\
+
+\begin{definition}
+  The parity codec of a byte array $A$:
+  \[ A \assign b_1 b_2 \ldots b_n \]
+  such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{PC}}
+  (A)$ defined as follows:
+  \[ \tmop{Enc}_{\tmop{PC}} (A) \assign \left\{ \begin{array}{lll}
+       l^{}_1 b_1 b_2 \ldots b_n &  & 0 \leqslant n < 2^6\\
+       i^{}_1 i^{}_2 b_1 \ldots b_n &  & 2^6 \leqslant n < 2^{14}\\
+       j^{}_1 j^{}_2 j_3 b_1 \ldots b_n &  & 2^{14} \leqslant n < 2^{30}\\
+       k_1^{} k_2^{} \ldots k_m^{} b_1 \ldots b_n &  & 2^{14} \leqslant n
+     \end{array} \right. \]
+  in which:
+  \[ \begin{array}{|l|}
+       \hline
+       l^1_1 l_1^0 = 00\\
+       \hline
+       i^1_1 i_1^0 = 01\\
+       \hline
+       j^1_1 j_1^0 = 10\\
+       \hline
+       k^1_1 k_1^0 = 11\\
+       \hline
+     \end{array} \]
+  and n is stored in $\tmop{Enc}_{\tmop{PC}} (A)$ in little-endian format as
+  follows:
+  \[ n = \left\{ \begin{array}{lll}
+       l^7_1 \ldots l^3_1 l^2_1 &  & n < 2^6\\
+       i_2^7 \ldots i_2^0 i_1^7 \ldots i^2_1^{} &  & 2^6 \leqslant n <
+       2^{14}\\
+       j_4^7 \ldots j_4^0 j_3^7 \ldots j_1^7 \ldots j^2_1 &  & 2^{14}
+       \leqslant n < 2^{30}\\
+       k_2 + k_3 2^8 + k_4 2^{2 \cdummy 8} + \cdots + k_m 2^{(m - 2) 8} &  &
+       2^{30} \leqslant n
+     \end{array} \right. \]
+  where:
+  \[ m = l^7_1 \ldots l^3_1 l^2_1 + 4 \]
+\end{definition}
 
 \
 
