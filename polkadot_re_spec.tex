@@ -239,7 +239,55 @@ encode $k$ in a uniform way:
 By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, can walk the radix
 tree to reach the node identifying the storage value of $k$.
 
-\subsection{Node value}
+\subsection{The Merkle proof}
+
+To prove the con\,sistency of the state storage across network and its
+modifications efficiently, the Merkle hash of the storage trie need to be
+computed regirously.
+
+The Merkle hash of the trie is computed recursively. As such hash value of
+each node depends on the hash value of all its children and also on its value.
+Therefore it suffice to define how to compute the hash value of a typical node
+as a function of hash value of its children and its own value.
+
+\begin{definition}
+  Suppose node N of storage state trie has key value $k_N$, and parent key
+  value of $k_{P (N)}$, such that:
+  \[ \tmop{KeyEncode} (k_N) = (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{i -
+     1}}, k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{2 n}}) \]
+  and
+  \[ \tmop{KeyEncode} (k_{P (N)}) = (k_{\tmop{enc}_1}, \ldots,
+     k_{\tmop{enc}_{i - 1}}) \]
+  We define
+  \[ \tmop{pk}_N \assign (k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{2 n}}) \]
+  to be the {\tmstrong{the partial key}} of N.
+\end{definition}
+
+\begin{definition}
+  For a given node $N$, with partial key of $\tmop{pk}_N$ and Value $v,$ the
+  {\tmstrong{encoded representation}} of $N$, formally referred to as
+  $\tmop{Enc}_{\tmop{Node}} (N)$ is determined as fallows
+  \begin{itemize}
+    \item if $N$ is a leaf node then
+    \[ \tmop{Enc}_{\tmop{Node}} (N) : = \tmop{Enc}_{\tmop{len}} (N) | |
+       \tmop{HPE} (\tmop{pk}_N) | | \tmop{Enc}_{\tmop{PC}} (v) \]
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  For a given node $N$, the {\tmstrong{Merkle value}} of $N$, denoted by $H
+  (N)$ is defined as follows:
+  \[ \begin{array}{lll}
+       & H : \mathbb{B} \rightarrow \bigcup_{i = 0^{}}^{32} \mathbb{B}_i & \\
+       & H (N) : \left\{ \begin{array}{lll}
+         \tmop{Enc}_{\tmop{Node}} (N) & \| \tmop{Enc}_{\tmop{Node}} (N) \| <
+         32 & \\
+         \tmop{Hash} (\tmop{Enc}_{\tmop{Node}} (N)) & \|
+         \tmop{Enc}_{\tmop{Node}} (N) \| \geqslant 32 & 
+       \end{array} \right. & 
+     \end{array} \]
+  
+\end{definition}
 
 \section{Extrinsics trie}
 
@@ -256,7 +304,9 @@ as defined in Definition \ref{def-closed-form-trie}.
   Define according to substerate-submods/trie/trie-root/src/lib.rs}}
 \end{definition}
 
-\section{Parity Codec}
+\section{Auxilary Encdodings}
+
+\subsection{Parity Codec}
 
 Polkadot RE uses Parity Codec to encode byte arrays in order to provide
 canonical encoding to produce consistent hash values accross implementation.
@@ -287,8 +337,8 @@ Including producing the Merkle hash proof for the State Storage.
        k^1_1 k_1^0 = 11\\
        \hline
      \end{array} \]
-  and n is stored in $\tmop{Enc}_{\tmop{PC}} (A)$ in little-endian format as
-  follows:
+  and n is stored in $\tmop{Enc}_{\tmop{PC}} (A)$ in little-endian format in
+  base-2 as follows:
   \[ n = \left\{ \begin{array}{lll}
        l^7_1 \ldots l^3_1 l^2_1 &  & n < 2^6\\
        i_2^7 \ldots i_2^0 i_1^7 \ldots i^2_1^{} &  & 2^6 \leqslant n <
@@ -302,6 +352,46 @@ Including producing the Merkle hash proof for the State Storage.
   \[ m = l^7_1 \ldots l^3_1 l^2_1 + 4 \]
 \end{definition}
 
+\tmverbatim{}
+
+\subsection{Hex-Prefix Encoding}
+
+Practically it is more convient and efficient to store and process data which
+is stored in a byte arrray. On the other hand, radix-16 tree keys are broken
+in 4-bits nibbles. Accordingly, we need a method to canonically encode
+sequences of 4-bits nibbles into byte arrays:
+
 \
+
+\begin{definition}
+  \label{def-hpe}Suppose that $\tmop{PK} = (k_{_1}, \ldots, k_n)$ is a
+  sequence of nibbles, then
+  
+  \begin{tabular}{l}
+    $\tmop{HPE} (\tmop{PK}) \assign$\\
+    $\left\{ \begin{array}{lll}
+      \tmop{Nibbles}_4 & \rightarrow & \mathbb{B}\\
+      \tmop{PK} = (k_{_1}, \ldots, k_n) & \mapsto & \left\{ \begin{array}{l}
+        \begin{array}{ll}
+          (0, k_1 + 16 k_2, \ldots, k_{2 i - 1} + 16 k_{2 i}) & n = 2 i\\
+          (k_1, k_2 + 16 k_3, \ldots, k_{2 i} + 16 k_{2 i + 1}) & n = 2 i + 1
+        \end{array}
+      \end{array} \right.
+    \end{array} \right.$
+  \end{tabular}
+\end{definition}
+
+\begin{definition}
+  \label{def-key-len-enc}Let $N$ be a node in the storage state trie with
+  Partial Key $\tmop{PK}_N$. We define the {\tmstrong{Partial key length
+  encoding}} function formally referred to as $\tmop{Enc}_{\tmop{len}} (N)$ as
+  follows:
+  \[ \tmop{Enc}_{\tmop{len}} (N) : = \left\{ \begin{array}{lllll}
+       (1 + \| \tmop{PK}_N \|) &  & N \tmop{is} \tmop{leaf} \tmop{Node} & \& &
+       \| \tmop{PK}_N \| < 127\\
+       (128) | | (\tmop{LE} (\| \tmop{PK}_N \| - 127)) &  & N \tmop{is} a
+       \tmop{leaf} \tmop{Node} & \& & \| \tmop{PK}_N \| \geqslant 127
+     \end{array} \right. \]
+\end{definition}
 
 \end{document}
