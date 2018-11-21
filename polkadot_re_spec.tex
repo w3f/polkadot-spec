@@ -5,23 +5,26 @@
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
+\newcommand{\nobracket}{}
 \newcommand{\nosymbol}{}
 \newcommand{\tmem}[1]{{\em #1\/}}
 \newcommand{\tmname}[1]{\textsc{#1}}
 \newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\tmrsub}[1]{\ensuremath{_{\textrm{#1}}}}
 \newcommand{\tmsamp}[1]{\textsf{#1}}
 \newcommand{\tmstrong}[1]{\textbf{#1}}
 \newcommand{\tmtextbf}[1]{{\bfseries{#1}}}
 \newcommand{\tmtextit}[1]{{\itshape{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
 %%%%%%%%%% End TeXmacs macros
 
 \begin{document}
 
 \title{Polkadot RE Spec}
 
-\date{October 1, 2018}
+\date{November 1, 2018}
 
 \maketitle
 
@@ -60,12 +63,18 @@ sparse.
 \begin{definition}
   The by a {\tmstrong{sequences of bytes}} or a {\tmstrong{byte array}}, $b$,
   of length $n$, we refer to
-  \[ b \assign (b_0, b_1, ..., b_{n - 1}) \tmop{suchthat} 0 \leqslant b_i
-     \leqslant 255 \]
+  \[ b \assign (b_0, b_1, ..., b_{n - 1}) \tmop{such} \tmop{that} 0 \leqslant
+     b_i \leqslant 255 \]
   We define $\mathbb{B}_n$ to be the {\tmstrong{set of all byte arrays of
   length $n$}}. Furthermore, we define:
   \[ \mathbb{B} \assign \bigcup^{\infty}_{i = 0} \mathbb{B}_i \]
 \end{definition}
+
+\begin{notation}
+  We represent the concatination of byte arrays $a \assign (a_0, \ldots, a_n)$
+  and $b \assign (b_0, \ldots, b_m)$ by:
+  \[ a | | b \assign (a_0, \ldots, a_n, b_0, \ldots, b_m) \]
+\end{notation}
 
 \begin{definition}
   \label{defn-bit-rep}For a given byte $b$ the {\tmstrong{bitwise
@@ -264,15 +273,39 @@ as a function of hash value of its children and its own value.
 \end{definition}
 
 \begin{definition}
+  \label{def-node-prefix}For a trie node N, {\tmstrong{Node Prefix }}function
+  is a value specifying the node type as follows:
+  \[ \tmop{NodePrefix} (N) \assign \left\{ \begin{array}{lll}
+       1 &  & N \text{is a leaf node}\\
+       254 &  & N \text{is a branch node without value}\\
+       255 &  & N \text{is a branch node with value}
+     \end{array} \right. \]
+  
+\end{definition}
+
+\begin{definition}
   For a given node $N$, with partial key of $\tmop{pk}_N$ and Value $v,$ the
   {\tmstrong{encoded representation}} of $N$, formally referred to as
-  $\tmop{Enc}_{\tmop{Node}} (N)$ is determined as fallows
+  $\tmop{Enc}_{\tmop{Node}} (N)$ is determined as fallows, in case which:
   \begin{itemize}
-    \item if $N$ is a leaf node then
+    \item $N$ is a leaf node:
     \[ \tmop{Enc}_{\tmop{Node}} (N) : = \tmop{Enc}_{\tmop{len}} (N) | |
        \tmop{HPE} (\tmop{pk}_N) | | \tmop{Enc}_{\tmop{PC}} (v) \]
+    \item N is a branch node:
+    \[ \begin{array}{l}
+         \text{Enc\tmrsub{Node}\left(N\right)} \assign\\
+         \nobracket \tmop{NodePrefix} (N) | | \tmop{ChildrenBitmap} (N) \|
+         \tmop{HPE}_{\tmop{PC}} (v) | | \tmop{Enc}_{\tmop{PC}}
+         (\tmop{Enc}_{\tmop{Node}}) | |\\
+         \tmop{Enc}_{\tmop{PC}} (N_{C_1}) \ldots \tmop{Enc}_{\tmop{PC}}
+         (N_{C_n})
+       \end{array} \]
+    
   \end{itemize}
 \end{definition}
+
+Where $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes of
+$N$.
 
 \begin{definition}
   For a given node $N$, the {\tmstrong{Merkle value}} of $N$, denoted by $H
@@ -354,7 +387,7 @@ Including producing the Merkle hash proof for the State Storage.
 
 \tmverbatim{}
 
-\subsection{Hex-Prefix Encoding}
+\subsection{Hex Encoding}
 
 Practically it is more convient and efficient to store and process data which
 is stored in a byte arrray. On the other hand, radix-16 tree keys are broken
@@ -368,7 +401,7 @@ sequences of 4-bits nibbles into byte arrays:
   sequence of nibbles, then
   
   \begin{tabular}{l}
-    $\tmop{HPE} (\tmop{PK}) \assign$\\
+    $\tmop{Enc}_{\tmop{HE}} (\tmop{PK}) \assign$\\
     $\left\{ \begin{array}{lll}
       \tmop{Nibbles}_4 & \rightarrow & \mathbb{B}\\
       \tmop{PK} = (k_{_1}, \ldots, k_n) & \mapsto & \left\{ \begin{array}{l}
@@ -381,17 +414,27 @@ sequences of 4-bits nibbles into byte arrays:
   \end{tabular}
 \end{definition}
 
+\subsection{Partial Key Encoding}
+
 \begin{definition}
   \label{def-key-len-enc}Let $N$ be a node in the storage state trie with
   Partial Key $\tmop{PK}_N$. We define the {\tmstrong{Partial key length
   encoding}} function formally referred to as $\tmop{Enc}_{\tmop{len}} (N)$ as
   follows:
-  \[ \tmop{Enc}_{\tmop{len}} (N) : = \left\{ \begin{array}{lllll}
-       (1 + \| \tmop{PK}_N \|) &  & N \tmop{is} \tmop{leaf} \tmop{Node} & \& &
-       \| \tmop{PK}_N \| < 127\\
-       (128) | | (\tmop{LE} (\| \tmop{PK}_N \| - 127)) &  & N \tmop{is} a
-       \tmop{leaf} \tmop{Node} & \& & \| \tmop{PK}_N \| \geqslant 127
-     \end{array} \right. \]
+  \[ \begin{array}{ll}
+       \tmop{Enc}_{\tmop{len}} (N)  & : =\\
+       \tmop{NodePrefix} (N) & +\\
+       \left\{ \begin{array}{lllll}
+         (\| \tmop{PK}_N \|) &  & N \tmop{is} \tmop{leaf} \tmop{Node} & \& &
+         \| \tmop{PK}_N \| < 127\\
+         (127) | | (\tmop{LE} (\| \tmop{PK}_N \| - 127)) &  & N \tmop{is} a
+         \tmop{leaf} \tmop{Node} & \& & \| \tmop{PK}_N \| \geqslant 127
+       \end{array} \right. & 
+     \end{array} \]
+  where $\tmop{NodePrefix}$ function is defined in Definition
+  \ref{def-node-prefix}.
+  
+  \ 
 \end{definition}
 
 \end{document}
