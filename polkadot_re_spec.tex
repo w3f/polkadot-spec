@@ -243,9 +243,9 @@ tree to reach the node identifying the storage value of $k$.
 
 \section{Extrinsics trie}
 
-Although the same radix-16 tree is been used to verify the consistency of the
-Extrinsics data, unlike the Storage trie, , Polkadot RE {\tmem{does not}} uses
-a Merkle tree structure to accomplish this task. Instead, it store the entire
+Although the same radix-16 tree is being used to verify the consistency of the	
+Extrinsics data, unlike the Storage trie, Polkadot RE {\tmem{does not}} use
+a Merkle tree structure to accomplish this task. Instead, it stores the entire
 trie in a byte array structure and finally computes its hash as a byte array,
 as defined in Definition \ref{def-closed-form-trie}.
 
@@ -258,9 +258,8 @@ as defined in Definition \ref{def-closed-form-trie}.
 
 \section{Parity Codec}
 
-Polkadot RE uses Parity Codec to encode byte arrays in order to provide
-canonical encoding to produce consistent hash values accross implementation.
-Including producing the Merkle hash proof for the State Storage.
+Polkadot RE uses Parity Codec to encode byte arrays to provide
+canonical encoding and to produce consistent hash values across their implementation, including the Merkle hash proof for the State Storage.
 
 \
 
@@ -268,7 +267,7 @@ Including producing the Merkle hash proof for the State Storage.
   The parity codec of a byte array $A$:
   \[ A \assign b_1 b_2 \ldots b_n \]
   such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{PC}}
-  (A)$ defined as follows:
+  (A)$ and defined as follows:
   \[ \tmop{Enc}_{\tmop{PC}} (A) \assign \left\{ \begin{array}{lll}
        l^{}_1 b_1 b_2 \ldots b_n &  & 0 \leqslant n < 2^6\\
        i^{}_1 i^{}_2 b_1 \ldots b_n &  & 2^6 \leqslant n < 2^{14}\\
@@ -305,3 +304,4 @@ Including producing the Merkle hash proof for the State Storage.
 \
 
 \end{document}
+
