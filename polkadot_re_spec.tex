@@ -24,7 +24,7 @@
 
 \title{Polkadot RE Spec}
 
-\date{November 1, 2018}
+\date{November 21, 2018}
 
 \maketitle
 
@@ -63,8 +63,8 @@ sparse.
 \begin{definition}
   The by a {\tmstrong{sequences of bytes}} or a {\tmstrong{byte array}}, $b$,
   of length $n$, we refer to
-  \[ b \assign (b_0, b_1, ..., b_{n - 1}) \tmop{such} \tmop{that} 0 \leqslant
-     b_i \leqslant 255 \]
+  \[ b \assign (b_0, b_1, ..., b_{n - 1})  \text{such that } 0 \leqslant b_i
+     \leqslant 255 \]
   We define $\mathbb{B}_n$ to be the {\tmstrong{set of all byte arrays of
   length $n$}}. Furthermore, we define:
   \[ \mathbb{B} \assign \bigcup^{\infty}_{i = 0} \mathbb{B}_i \]
@@ -73,7 +73,7 @@ sparse.
 \begin{notation}
   We represent the concatination of byte arrays $a \assign (a_0, \ldots, a_n)$
   and $b \assign (b_0, \ldots, b_m)$ by:
-  \[ a | | b \assign (a_0, \ldots, a_n, b_0, \ldots, b_m) \]
+  \[ a || b \assign (a_0, \ldots, a_n, b_0, \ldots, b_m) \]
 \end{notation}
 
 \begin{definition}
@@ -250,7 +250,7 @@ tree to reach the node identifying the storage value of $k$.
 
 \subsection{The Merkle proof}
 
-To prove the con\,sistency of the state storage across network and its
+To prove the consistency of the state storage across network and its
 modifications efficiently, the Merkle hash of the storage trie need to be
 computed regirously.
 
@@ -280,27 +280,25 @@ as a function of hash value of its children and its own value.
        254 &  & N \text{is a branch node without value}\\
        255 &  & N \text{is a branch node with value}
      \end{array} \right. \]
-  
 \end{definition}
 
 \begin{definition}
-  For a given node $N$, with partial key of $\tmop{pk}_N$ and Value $v,$ the
+  For a given node $N$, with partial key of $\tmop{pk}_N$ and Value $v$, the
   {\tmstrong{encoded representation}} of $N$, formally referred to as
   $\tmop{Enc}_{\tmop{Node}} (N)$ is determined as fallows, in case which:
   \begin{itemize}
     \item $N$ is a leaf node:
-    \[ \tmop{Enc}_{\tmop{Node}} (N) : = \tmop{Enc}_{\tmop{len}} (N) | |
-       \tmop{HPE} (\tmop{pk}_N) | | \tmop{Enc}_{\tmop{PC}} (v) \]
+    \[ \tmop{Enc}_{\tmop{Node}} (N) \assign \tmop{Enc}_{\tmop{len}} (N) ||
+       \tmop{HPE} (\tmop{pk}_N) || \tmop{Enc}_{\tmop{PC}} (v) \]
     \item N is a branch node:
     \[ \begin{array}{l}
          \text{Enc\tmrsub{Node}\left(N\right)} \assign\\
-         \nobracket \tmop{NodePrefix} (N) | | \tmop{ChildrenBitmap} (N) \|
-         \tmop{HPE}_{\tmop{PC}} (v) | | \tmop{Enc}_{\tmop{PC}}
-         (\tmop{Enc}_{\tmop{Node}}) | |\\
+         \nobracket \tmop{NodePrefix} (N) || \tmop{ChildrenBitmap} (N) \|
+         \tmop{HPE}_{\tmop{PC}} (v) || \tmop{Enc}_{\tmop{PC}}
+         (\tmop{Enc}_{\tmop{Node}}) ||\\
          \tmop{Enc}_{\tmop{PC}} (N_{C_1}) \ldots \tmop{Enc}_{\tmop{PC}}
          (N_{C_n})
        \end{array} \]
-    
   \end{itemize}
 \end{definition}
 
@@ -311,22 +309,22 @@ $N$.
   For a given node $N$, the {\tmstrong{Merkle value}} of $N$, denoted by $H
   (N)$ is defined as follows:
   \[ \begin{array}{lll}
-       & H : \mathbb{B} \rightarrow \bigcup_{i = 0^{}}^{32} \mathbb{B}_i & \\
+       & H : \mathbb{B} \rightarrow \bigcup_{i = 0^{\nosymbol}}^{32}
+       \mathbb{B}_i & \\
        & H (N) : \left\{ \begin{array}{lll}
-         \tmop{Enc}_{\tmop{Node}} (N) & \| \tmop{Enc}_{\tmop{Node}} (N) \| <
-         32 & \\
+         \tmop{Enc}_{\tmop{Node}} (N) & \| \tmop{Enc}_{\tmop{Node}} (N)\|< 32
+         & \\
          \tmop{Hash} (\tmop{Enc}_{\tmop{Node}} (N)) & \|
-         \tmop{Enc}_{\tmop{Node}} (N) \| \geqslant 32 & 
+         \tmop{Enc}_{\tmop{Node}} (N)\| \geqslant 32 & 
        \end{array} \right. & 
      \end{array} \]
-  
 \end{definition}
 
 \section{Extrinsics trie}
 
-Although the same radix-16 tree is been used to verify the consistency of the
-Extrinsics data, unlike the Storage trie, , Polkadot RE {\tmem{does not}} uses
-a Merkle tree structure to accomplish this task. Instead, it store the entire
+Although the same radix-16 tree is being used to verify the consistency of the
+Extrinsics data, unlike the Storage trie, Polkadot RE {\tmem{does not}} use a
+Merkle tree structure to accomplish this task. Instead, it stores the entire
 trie in a byte array structure and finally computes its hash as a byte array,
 as defined in Definition \ref{def-closed-form-trie}.
 
@@ -337,13 +335,13 @@ as defined in Definition \ref{def-closed-form-trie}.
   Define according to substerate-submods/trie/trie-root/src/lib.rs}}
 \end{definition}
 
-\section{Auxilary Encdodings}
+\section{Auxilary Encodings}
 
 \subsection{Parity Codec}
 
-Polkadot RE uses Parity Codec to encode byte arrays in order to provide
-canonical encoding to produce consistent hash values accross implementation.
-Including producing the Merkle hash proof for the State Storage.
+Polkadot RE uses Parity Codec to encode byte arrays to provide canonical
+encoding and to produce consistent hash values across their implementation,
+including the Merkle hash proof for the State Storage.
 
 \
 
@@ -351,12 +349,15 @@ Including producing the Merkle hash proof for the State Storage.
   The parity codec of a byte array $A$:
   \[ A \assign b_1 b_2 \ldots b_n \]
   such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{PC}}
-  (A)$ defined as follows:
+  (A)$ and defined as follows:
   \[ \tmop{Enc}_{\tmop{PC}} (A) \assign \left\{ \begin{array}{lll}
-       l^{}_1 b_1 b_2 \ldots b_n &  & 0 \leqslant n < 2^6\\
-       i^{}_1 i^{}_2 b_1 \ldots b_n &  & 2^6 \leqslant n < 2^{14}\\
-       j^{}_1 j^{}_2 j_3 b_1 \ldots b_n &  & 2^{14} \leqslant n < 2^{30}\\
-       k_1^{} k_2^{} \ldots k_m^{} b_1 \ldots b_n &  & 2^{14} \leqslant n
+       l^{\nosymbol}_1 b_1 b_2 \ldots b_n &  & 0 \leqslant n < 2^6\\
+       i^{\nosymbol}_1 i^{\nosymbol}_2 b_1 \ldots b_n &  & 2^6 \leqslant n <
+       2^{14}\\
+       j^{\nosymbol}_1 j^{\nosymbol}_2 j_3 b_1 \ldots b_n &  & 2^{14}
+       \leqslant n < 2^{30}\\
+       k_1^{\nosymbol} k_2^{\nosymbol} \ldots k_m^{\nosymbol} b_1 \ldots b_n &
+       & 2^{14} \leqslant n
      \end{array} \right. \]
   in which:
   \[ \begin{array}{|l|}
@@ -374,8 +375,8 @@ Including producing the Merkle hash proof for the State Storage.
   base-2 as follows:
   \[ n = \left\{ \begin{array}{lll}
        l^7_1 \ldots l^3_1 l^2_1 &  & n < 2^6\\
-       i_2^7 \ldots i_2^0 i_1^7 \ldots i^2_1^{} &  & 2^6 \leqslant n <
-       2^{14}\\
+       i_2^7 \ldots i_2^0 i_1^7 \ldots i^2_1^{\nosymbol} &  & 2^6 \leqslant n
+       < 2^{14}\\
        j_4^7 \ldots j_4^0 j_3^7 \ldots j_1^7 \ldots j^2_1 &  & 2^{14}
        \leqslant n < 2^{30}\\
        k_2 + k_3 2^8 + k_4 2^{2 \cdummy 8} + \cdots + k_m 2^{(m - 2) 8} &  &
@@ -384,8 +385,6 @@ Including producing the Merkle hash proof for the State Storage.
   where:
   \[ m = l^7_1 \ldots l^3_1 l^2_1 + 4 \]
 \end{definition}
-
-\tmverbatim{}
 
 \subsection{Hex Encoding}
 
@@ -397,14 +396,14 @@ sequences of 4-bits nibbles into byte arrays:
 \
 
 \begin{definition}
-  \label{def-hpe}Suppose that $\tmop{PK} = (k_{_1}, \ldots, k_n)$ is a
-  sequence of nibbles, then
+  \label{def-hpe}Suppose that $\tmop{PK} = (k_1, \ldots, k_n)$ is a sequence
+  of nibbles, then
   
   \begin{tabular}{l}
     $\tmop{Enc}_{\tmop{HE}} (\tmop{PK}) \assign$\\
     $\left\{ \begin{array}{lll}
       \tmop{Nibbles}_4 & \rightarrow & \mathbb{B}\\
-      \tmop{PK} = (k_{_1}, \ldots, k_n) & \mapsto & \left\{ \begin{array}{l}
+      \tmop{PK} = (k_1, \ldots, k_n) & \mapsto & \left\{ \begin{array}{l}
         \begin{array}{ll}
           (0, k_1 + 16 k_2, \ldots, k_{2 i - 1} + 16 k_{2 i}) & n = 2 i\\
           (k_1, k_2 + 16 k_3, \ldots, k_{2 i} + 16 k_{2 i + 1}) & n = 2 i + 1
@@ -422,13 +421,13 @@ sequences of 4-bits nibbles into byte arrays:
   encoding}} function formally referred to as $\tmop{Enc}_{\tmop{len}} (N)$ as
   follows:
   \[ \begin{array}{ll}
-       \tmop{Enc}_{\tmop{len}} (N)  & : =\\
+       \tmop{Enc}_{\tmop{len}} (N) & \assign\\
        \tmop{NodePrefix} (N) & +\\
        \left\{ \begin{array}{lllll}
-         (\| \tmop{PK}_N \|) &  & N \tmop{is} \tmop{leaf} \tmop{Node} & \& &
-         \| \tmop{PK}_N \| < 127\\
-         (127) | | (\tmop{LE} (\| \tmop{PK}_N \| - 127)) &  & N \tmop{is} a
-         \tmop{leaf} \tmop{Node} & \& & \| \tmop{PK}_N \| \geqslant 127
+         (\| \tmop{PK}_N \|) &  & \tmop{NisleafNode} & \& & \| \tmop{PK}_N \|<
+         127\\
+         (127) || (\tmop{LE} (\| \tmop{PK}_N \|- 127)) &  &
+         \tmop{NisaleafNode} & \& & \| \tmop{PK}_N \| \geqslant 127
        \end{array} \right. & 
      \end{array} \]
   where $\tmop{NodePrefix}$ function is defined in Definition
