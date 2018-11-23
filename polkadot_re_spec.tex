@@ -1,7 +1,3 @@
-\documentclass{article}
-\usepackage[english]{babel}
-\usepackage{amsmath,amssymb}
-
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
@@ -50,18 +46,18 @@
   \begin{itemize}
     \item Every node has at most $r$ children where $r = 2^x$ for some $x$.
     
-    \item Each node that is the only child of a parent which does not
+    \item Each node that is the only child of a parent, which does not
     represent a valid key is merged with its parent.
   \end{itemize}
 \end{definition}
 
-As the result, in a radix tree, any path whose interior vertices all have only
+As a result, in a radix tree, any path whose interior vertices all have only
 one child and does not represent a valid key in the data set, is compressed
 into a single edge. This improves space efficiency when the key space is
 sparse.
 
 \begin{definition}
-  The by a {\tmstrong{sequences of bytes}} or a {\tmstrong{byte array}}, $b$,
+  By a {\tmstrong{sequences of bytes}} or a {\tmstrong{byte array}}, $b$,
   of length $n$, we refer to
   \[ b \assign (b_0, b_1, ..., b_{n - 1})  \text{such that } 0 \leqslant b_i
      \leqslant 255 \]
@@ -250,14 +246,14 @@ tree to reach the node identifying the storage value of $k$.
 
 \subsection{The Merkle proof}
 
-To prove the consistency of the state storage across network and its
-modifications efficiently, the Merkle hash of the storage trie need to be
-computed regirously.
+To prove the consistency of the state storage across the network and its
+modifications efficiently, the Merkle hash of the storage trie needs to be
+computed rigorously.
 
-The Merkle hash of the trie is computed recursively. As such hash value of
+The Merkle hash of the trie is computed recursively. As such, hash value of
 each node depends on the hash value of all its children and also on its value.
-Therefore it suffice to define how to compute the hash value of a typical node
-as a function of hash value of its children and its own value.
+Therefore, it suffices to define how to compute the hash value of a typical node
+as a function of the hash value of its children and its own value.
 
 \begin{definition}
   Suppose node N of storage state trie has key value $k_N$, and parent key
@@ -285,7 +281,7 @@ as a function of hash value of its children and its own value.
 \begin{definition}
   For a given node $N$, with partial key of $\tmop{pk}_N$ and Value $v$, the
   {\tmstrong{encoded representation}} of $N$, formally referred to as
-  $\tmop{Enc}_{\tmop{Node}} (N)$ is determined as fallows, in case which:
+  $\tmop{Enc}_{\tmop{Node}} (N)$ is determined as follows, in case which:
   \begin{itemize}
     \item $N$ is a leaf node:
     \[ \tmop{Enc}_{\tmop{Node}} (N) \assign \tmop{Enc}_{\tmop{len}} (N) ||
@@ -388,10 +384,10 @@ including the Merkle hash proof for the State Storage.
 
 \subsection{Hex Encoding}
 
-Practically it is more convient and efficient to store and process data which
-is stored in a byte arrray. On the other hand, radix-16 tree keys are broken
-in 4-bits nibbles. Accordingly, we need a method to canonically encode
-sequences of 4-bits nibbles into byte arrays:
+Practically it is more convenient and efficient to store and process data which
+is stored in a byte array. On the other hand, radix-16 tree keys are broken
+in 4-bits nibbles. Accordingly, we need a method to encode
+sequences of 4-bits nibbles into byte arrays canonically:
 
 \
 
@@ -418,7 +414,7 @@ sequences of 4-bits nibbles into byte arrays:
 \begin{definition}
   \label{def-key-len-enc}Let $N$ be a node in the storage state trie with
   Partial Key $\tmop{PK}_N$. We define the {\tmstrong{Partial key length
-  encoding}} function formally referred to as $\tmop{Enc}_{\tmop{len}} (N)$ as
+  encoding}} function, formally referred to as $\tmop{Enc}_{\tmop{len}} (N)$ as
   follows:
   \[ \begin{array}{ll}
        \tmop{Enc}_{\tmop{len}} (N) & \assign\\
@@ -437,3 +433,4 @@ sequences of 4-bits nibbles into byte arrays:
 \end{definition}
 
 \end{document}
+
