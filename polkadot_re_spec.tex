@@ -1,3 +1,7 @@
+\documentclass{article}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb}
+
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
@@ -11,16 +15,34 @@
 \newcommand{\tmstrong}[1]{\textbf{#1}}
 \newcommand{\tmtextbf}[1]{{\bfseries{#1}}}
 \newcommand{\tmtextit}[1]{{\itshape{#1}}}
+\newcommand{\tmtextsc}[1]{{\scshape{#1}}}
+\newcommand{\tmtextsf}[1]{{\sffamily{#1}}}
+\newcommand{\tmtexttt}[1]{{\ttfamily{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
 %%%%%%%%%% End TeXmacs macros
 
+\providecommand{\cdummy}{{\cdot}}
+\providecommand{\nobracket}{}
+\providecommand{\nosymbol}{}
+\providecommand{\tmem}[1]{\tmtextit{#1}}
+\providecommand{\tmname}[1]{\tmtextsc{#1}}
+\providecommand{\tmop}[1]{\ensuremath{\mathrm{#1}}}
+\providecommand{\tmrsub}[1]{\tmrsub{\ensuremath{\mathrm{#1}}}}
+\providecommand{\tmsamp}[1]{\tmtextsf{#1}}
+\providecommand{\tmstrong}[1]{\tmtextbf{#1}}
+\providecommand{\tmtextbf}[1]{\tmtextbf{#1}}
+\providecommand{\tmtextit}[1]{\tmtextit{#1}}
+\providecommand{\tmverbatim}[1]{\tmtexttt{#1}}
+\newtheorem{definition}{Definition}
+\newtheorem{notation}{Notation}
+
 \begin{document}
 
 \title{Polkadot RE Spec}
 
-\date{November 21, 2018}
+\date{November 23, 2018}
 
 \maketitle
 
@@ -57,8 +79,8 @@ into a single edge. This improves space efficiency when the key space is
 sparse.
 
 \begin{definition}
-  By a {\tmstrong{sequences of bytes}} or a {\tmstrong{byte array}}, $b$,
-  of length $n$, we refer to
+  By a {\tmstrong{sequences of bytes}} or a {\tmstrong{byte array}}, $b$, of
+  length $n$, we refer to
   \[ b \assign (b_0, b_1, ..., b_{n - 1})  \text{such that } 0 \leqslant b_i
      \leqslant 255 \]
   We define $\mathbb{B}_n$ to be the {\tmstrong{set of all byte arrays of
@@ -252,8 +274,8 @@ computed rigorously.
 
 The Merkle hash of the trie is computed recursively. As such, hash value of
 each node depends on the hash value of all its children and also on its value.
-Therefore, it suffices to define how to compute the hash value of a typical node
-as a function of the hash value of its children and its own value.
+Therefore, it suffices to define how to compute the hash value of a typical
+node as a function of the hash value of its children and its own value.
 
 \begin{definition}
   Suppose node N of storage state trie has key value $k_N$, and parent key
@@ -285,14 +307,14 @@ as a function of the hash value of its children and its own value.
   \begin{itemize}
     \item $N$ is a leaf node:
     \[ \tmop{Enc}_{\tmop{Node}} (N) \assign \tmop{Enc}_{\tmop{len}} (N) ||
-       \tmop{HPE} (\tmop{pk}_N) || \tmop{Enc}_{\tmop{PC}} (v) \]
+       \tmop{HPE} (\tmop{pk}_N) || \tmop{Enc}_{\tmop{SC}} (v) \]
     \item N is a branch node:
     \[ \begin{array}{l}
          \text{Enc\tmrsub{Node}\left(N\right)} \assign\\
          \nobracket \tmop{NodePrefix} (N) || \tmop{ChildrenBitmap} (N) \|
-         \tmop{HPE}_{\tmop{PC}} (v) || \tmop{Enc}_{\tmop{PC}}
+         \tmop{HPE}_{\tmop{PC}} (v) || \tmop{Enc}_{\tmop{SC}}
          (\tmop{Enc}_{\tmop{Node}}) ||\\
-         \tmop{Enc}_{\tmop{PC}} (N_{C_1}) \ldots \tmop{Enc}_{\tmop{PC}}
+         \tmop{Enc}_{\tmop{SC}} (N_{C_1}) \ldots \tmop{Enc}_{\tmop{SC}}
          (N_{C_n})
        \end{array} \]
   \end{itemize}
@@ -333,20 +355,20 @@ as defined in Definition \ref{def-closed-form-trie}.
 
 \section{Auxilary Encodings}
 
-\subsection{Parity Codec}
+\subsection{Simple Codec}
 
-Polkadot RE uses Parity Codec to encode byte arrays to provide canonical
-encoding and to produce consistent hash values across their implementation,
-including the Merkle hash proof for the State Storage.
+Polkadot RE uses{\tmem{ simple codec}} to encode byte arrays to provide
+canonical encoding and to produce consistent hash values across their
+implementation, including the Merkle hash proof for the State Storage.
 
 \
 
 \begin{definition}
-  The parity codec of a byte array $A$:
+  The {\tmstrong{simple codec}} of a byte array $A$:
   \[ A \assign b_1 b_2 \ldots b_n \]
-  such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{PC}}
+  such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{SC}}
   (A)$ and defined as follows:
-  \[ \tmop{Enc}_{\tmop{PC}} (A) \assign \left\{ \begin{array}{lll}
+  \[ \tmop{Enc}_{\tmop{SC}} (A) \assign \left\{ \begin{array}{lll}
        l^{\nosymbol}_1 b_1 b_2 \ldots b_n &  & 0 \leqslant n < 2^6\\
        i^{\nosymbol}_1 i^{\nosymbol}_2 b_1 \ldots b_n &  & 2^6 \leqslant n <
        2^{14}\\
@@ -367,7 +389,7 @@ including the Merkle hash proof for the State Storage.
        k^1_1 k_1^0 = 11\\
        \hline
      \end{array} \]
-  and n is stored in $\tmop{Enc}_{\tmop{PC}} (A)$ in little-endian format in
+  and n is stored in $\tmop{Enc}_{\tmop{SC}} (A)$ in little-endian format in
   base-2 as follows:
   \[ n = \left\{ \begin{array}{lll}
        l^7_1 \ldots l^3_1 l^2_1 &  & n < 2^6\\
@@ -384,10 +406,10 @@ including the Merkle hash proof for the State Storage.
 
 \subsection{Hex Encoding}
 
-Practically it is more convenient and efficient to store and process data which
-is stored in a byte array. On the other hand, radix-16 tree keys are broken
-in 4-bits nibbles. Accordingly, we need a method to encode
-sequences of 4-bits nibbles into byte arrays canonically:
+Practically it is more convenient and efficient to store and process data
+which is stored in a byte array. On the other hand, radix-16 tree keys are
+broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
+4-bits nibbles into byte arrays canonically:
 
 \
 
@@ -414,8 +436,8 @@ sequences of 4-bits nibbles into byte arrays canonically:
 \begin{definition}
   \label{def-key-len-enc}Let $N$ be a node in the storage state trie with
   Partial Key $\tmop{PK}_N$. We define the {\tmstrong{Partial key length
-  encoding}} function, formally referred to as $\tmop{Enc}_{\tmop{len}} (N)$ as
-  follows:
+  encoding}} function, formally referred to as $\tmop{Enc}_{\tmop{len}} (N)$
+  as follows:
   \[ \begin{array}{ll}
        \tmop{Enc}_{\tmop{len}} (N) & \assign\\
        \tmop{NodePrefix} (N) & +\\
@@ -433,4 +455,3 @@ sequences of 4-bits nibbles into byte arrays canonically:
 \end{definition}
 
 \end{document}
-
