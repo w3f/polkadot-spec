@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[english]{babel}
-\usepackage{amsmath,amssymb}
+\usepackage{amsmath,amssymb,calc,ifthen,capt-of}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
@@ -21,6 +21,20 @@
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
+\newcommand{\tmfloatcontents}{}
+\newlength{\tmfloatwidth}
+\newcommand{\tmfloat}[5]{
+  \renewcommand{\tmfloatcontents}{#4}
+  \setlength{\tmfloatwidth}{\widthof{\tmfloatcontents}+1in}
+  \ifthenelse{\equal{#2}{small}}
+    {\setlength{\tmfloatwidth}{0.45\linewidth}}
+    {\setlength{\tmfloatwidth}{\linewidth}}
+  \begin{minipage}[#1]{\tmfloatwidth}
+    \begin{center}
+      \tmfloatcontents
+      \captionof{#3}{#5}
+    \end{center}
+  \end{minipage}}
 %%%%%%%%%% End TeXmacs macros
 
 \providecommand{\cdummy}{{\cdot}}
@@ -42,7 +56,8 @@
 
 \title{Polkadot RE Spec}
 
-\date{November 23, 2018}
+\date{December 7\\
+, 2018}
 
 \maketitle
 
@@ -171,7 +186,103 @@ a blob of encoded data. The {\tmsamp{extrinsics\_root}} should correspond to
 the root of the Merkle trie, whose leaves are made of the block extrinsics
 list.
 
-\section{Entry into Runtime}
+\section{Runtime}\label{sect-entries-into-runtime}
+
+Polkadot RE expects to receive the code for the runtime of the chain as a
+compiled WebAssembly (Wasm) Blob. The current runtime is stored in the state
+database under the key represented as a byte array:
+\[ b = 3 a, 63, 6 f, 64, 65 \]
+which is the byte array of ascii representation of string ``:code'' (see
+Section \ref{sect-predef-storage-keys}). For any call to the runtime, Polkadot
+RE makes sure that it has most updated runtime as calls to runtime have the
+ability of changing the runtime code.
+
+The initial runtime code of the chain is embeded, as an extrinsics into the
+chain initialization JSON file and is submitted to Polkadot RE (see Section
+\ref{sect-genisis-block}).
+
+Subsequent calls to the runtime has the ability of calling the storage API
+(see Section \ref{sect-storage-api}) to insert a new Wasm blob into runtime
+storage slot to upgrade the runtime.
+
+\subsection{Entries into Runtime}
+
+Polkadot RE assumes that at least the following functions are implemented in
+the Runtime Wasm blob and has been exported as shown in Sinppet
+\ref{snippet-runtime-enteries} :
+
+\
+
+\tmfloat{h}{small}{table}{\begin{tabular}{l}
+  \tmverbatim{(export "version" (func \$version))}\\
+  \tmverbatim{(export "authorities" (func \$authorities))}\\
+  \tmverbatim{(export "execute\_block" (func \$execute\_block)) }
+\end{tabular}
+
+\ }{\label{snippet-runtime-enteries}Snippet to export entries into tho Wasm
+runtime module}
+
+\
+
+The following sections describe the standard based on which Polkadot RE
+communicates with each runtime entry.
+
+\subsubsection{version}
+
+This entry receives no argument, it returns the vesion data encoded in ABI
+format described in Section \ref{sect-runtime-abi} containing the following
+data:
+
+\
+
+\tmfloat{h}{small}{table}{\begin{tabular}{lll}
+  \hline
+  Name & Type & Description\\
+  \hline
+  \tmverbatim{spec\_name} & String & runtime identifier\\
+  \tmverbatim{impl\_name} & String & the name of the implementation (e.g.
+  C++)\\
+  \tmverbatim{authoring\_version} & 32-bit non-negative integer & the version
+  of the authorship interface\\
+  \tmverbatim{spec\_version} & 32-bit non-negative integer & the version of
+  the runtime specification\\
+  \tmverbatim{impl\_version} & 32-bit non-negative integer & the version of
+  the runtime implementation\\
+  \tmverbatim{apis} & ApisVec & List of supported API\\
+  \hline
+\end{tabular}}{Detail of the version data type returns from runtime
+\tmverbatim{version} function}
+
+\subsubsection{authorities}
+
+This entry is to report the set of authorities at a given block. It receives
+\tmverbatim{block\_id} as an argument, it returns an array of
+\tmverbatim{authority\_id}'s.
+
+\subsubsection{execute\_block}
+
+This entry is responsible to execute all extrinsics in the block and reporting
+back the changes into the state storage. it receives the block header and the
+block body as its arguments and it returns a triplet:
+
+\
+
+\tmfloat{h}{small}{table}{\begin{tabular}{lll}
+  \hline
+  Name & Type & Description\\
+  \hline
+  \tmverbatim{results} & Boolean & Indicating if the execution was su\\
+  \tmverbatim{storage\_changes} & {\todo{???}} & Contains all changes to the
+  state storage\\
+  \tmverbatim{change\_updat} & {\todo{???}} & \\
+  \hline
+\end{tabular}}{Detail of the data execute\_block returns after execution}
+
+\
+
+\subsection{Code Executor}
+
+
 
 \section{API}
 
@@ -203,11 +314,11 @@ block:
 
 1\quad{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$
 
-2\quad Verify $H_{p (B)} \in \tmop{Blockchain}$.
+2\tmverbatim{}\quad Verify $H_{p (B)} \in \tmop{Blockchain}$.
 
 3\quad State-Changes = Runtime.{\tmname{Execute-Block$(B)$}}
 
-4\quad{\tmname{Update-World-State}}(State-Changes)}}
+\tmverbatim{}4\quad{\tmname{Update-World-State}}(S\tmverbatim{}tate-Changes)\tmverbatim{}}}
 
 \subsection{Storage Access}
 
@@ -266,7 +377,7 @@ encode $k$ in a uniform way:
 By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, can walk the radix
 tree to reach the node identifying the storage value of $k$.
 
-\subsection{The Merkle proof}
+\subsection{The Merkle proof}\label{sect-merkl-proof}
 
 To prove the consistency of the state storage across the network and its
 modifications efficiently, the Merkle hash of the storage trie needs to be
@@ -340,24 +451,15 @@ $N$.
 
 \section{Extrinsics trie}
 
-Although the same radix-16 tree is being used to verify the consistency of the
-Extrinsics data, unlike the Storage trie, Polkadot RE {\tmem{does not}} use a
-Merkle tree structure to accomplish this task. Instead, it stores the entire
-trie in a byte array structure and finally computes its hash as a byte array,
-as defined in Definition \ref{def-closed-form-trie}.
-
-\
-
-\begin{definition}
-  \label{def-closed-form-trie}{\tmstrong{Closed Form Trie}} {\todo{TODO:
-  Define according to substerate-submods/trie/trie-root/src/lib.rs}}
-\end{definition}
+To validate Extrinsics data are stored in a block across clients, Polkadot RE
+uses the same trie structure as for the state storage described in Section
+\ref{sect-merkl-proof} to generate the Merkle proof.
 
 \section{Auxilary Encodings}
 
 \subsection{Simple Codec}
 
-Polkadot RE uses{\tmem{ simple codec}} to encode byte arrays to provide
+Polkadot RE uses{\tmem{simple codec}} to encode byte arrays to provide
 canonical encoding and to produce consistent hash values across their
 implementation, including the Merkle hash proof for the State Storage.
 
@@ -450,8 +552,16 @@ broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
      \end{array} \]
   where $\tmop{NodePrefix}$ function is defined in Definition
   \ref{def-node-prefix}.
-  
-  \ 
 \end{definition}
+
+\ \ \
+
+\subsection{ABI Encoding between Runtime and the Runtime Enviornment}
+
+\section{Genisis Block Specification}\label{sect-genisis-block}
+
+\section{Predefined Storage keys}\label{sect-predef-storage-keys}
+
+\section{Runtime upgrade}\label{sect-runtime-upgrade}
 
 \end{document}
