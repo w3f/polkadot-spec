@@ -1,6 +1,7 @@
 \documentclass{article}
 \usepackage[english]{babel}
 \usepackage{amsmath,amssymb,calc,ifthen,capt-of}
+\usepackage[margin=1.0in]{geometry}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
@@ -19,6 +20,7 @@
 \newcommand{\tmtextsf}[1]{{\sffamily{#1}}}
 \newcommand{\tmtexttt}[1]{{\ttfamily{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
+\newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
 \newcommand{\tmfloatcontents}{}
@@ -54,10 +56,9 @@
 
 \begin{document}
 
-\title{Polkadot RE Spec}
+\title{Polkadot Runtime Environment \\ {\Large Protocol Specification}}
 
-\date{December 7\\
-, 2018}
+\date{December 17, 2018}
 
 \maketitle
 
@@ -202,7 +203,7 @@ chain initialization JSON file and is submitted to Polkadot RE (see Section
 \ref{sect-genisis-block}).
 
 Subsequent calls to the runtime has the ability of calling the storage API
-(see Section \ref{sect-storage-api}) to insert a new Wasm blob into runtime
+(see Section \ref{sect-runtime-api}) to insert a new Wasm blob into runtime
 storage slot to upgrade the runtime.
 
 \subsection{Entries into Runtime}
@@ -213,14 +214,12 @@ the Runtime Wasm blob and has been exported as shown in Sinppet
 
 \
 
-\tmfloat{h}{small}{table}{\begin{tabular}{l}
+{\tmfloat{h}{small}{table}{\begin{tabular}{l}
   \tmverbatim{(export "version" (func \$version))}\\
-  \tmverbatim{(export "authorities" (func \$authorities))}\\
+  \tmverbatim{(export "auythorities" (func \$authorities))}\\
   \tmverbatim{(export "execute\_block" (func \$execute\_block)) }
-\end{tabular}
-
-\ }{\label{snippet-runtime-enteries}Snippet to export entries into tho Wasm
-runtime module}
+\end{tabular}}{\label{snippet-runtime-enteries}Snippet to export entries into
+tho Wasm runtime module}}
 
 \
 
@@ -230,12 +229,12 @@ communicates with each runtime entry.
 \subsubsection{version}
 
 This entry receives no argument, it returns the vesion data encoded in ABI
-format described in Section \ref{sect-runtime-abi} containing the following
+format described in Section \ref{sect-abi-encoding} containing the following
 data:
 
 \
 
-\tmfloat{h}{small}{table}{\begin{tabular}{lll}
+{\tmfloat{h}{small}{table}{\begin{tabular}{lll}
   \hline
   Name & Type & Description\\
   \hline
@@ -251,7 +250,7 @@ data:
   \tmverbatim{apis} & ApisVec & List of supported API\\
   \hline
 \end{tabular}}{Detail of the version data type returns from runtime
-\tmverbatim{version} function}
+\tmverbatim{version} function}}
 
 \subsubsection{authorities}
 
@@ -267,7 +266,7 @@ block body as its arguments and it returns a triplet:
 
 \
 
-\tmfloat{h}{small}{table}{\begin{tabular}{lll}
+{\tmfloat{h}{small}{table}{\begin{tabular}{lll}
   \hline
   Name & Type & Description\\
   \hline
@@ -276,15 +275,23 @@ block body as its arguments and it returns a triplet:
   state storage\\
   \tmverbatim{change\_updat} & {\todo{???}} & \\
   \hline
-\end{tabular}}{Detail of the data execute\_block returns after execution}
+\end{tabular}}{Detail of the data execute\_block returns after execution}}
 
 \
 
 \subsection{Code Executor}
 
+Polkadot RE provide a Wasm Virtual Machine (VM) to run the runtime. The Wasm
+VM exposes the Polkadot RE API to the Runtime. And execute the Runtime as a
+Wasm module.
 
+\subsection{ABI Encoding between Runtime and the Runtime
+Enviornment}\label{sect-abi-encoding}
 
-\section{API}
+All data exchanged between Polkadot RE and the runtime is encoded using SCALE
+codec described in Section \ref{sect-scale-codec}.
+
+\section{Network API}
 
 \subsection{Block Submission and Validation}
 
@@ -314,13 +321,11 @@ block:
 
 1\quad{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$
 
-2\tmverbatim{}\quad Verify $H_{p (B)} \in \tmop{Blockchain}$.
+2\quad Verify $H_{p (B)} \in \tmop{Blockchain}$.
 
-3\quad State-Changes = Runtime.{\tmname{Execute-Block$(B)$}}
+3\quad State-Changes = Runtime.{\tmname{$(B)$}}
 
-\tmverbatim{}4\quad{\tmname{Update-World-State}}(S\tmverbatim{}tate-Changes)\tmverbatim{}}}
-
-\subsection{Storage Access}
+4\quad{\tmname{Update-World-State}}(State-Changes)}}
 
 \section{State Storage and the Storage Trie}
 
@@ -420,14 +425,14 @@ node as a function of the hash value of its children and its own value.
     \[ \tmop{Enc}_{\tmop{Node}} (N) \assign \tmop{Enc}_{\tmop{len}} (N) ||
        \tmop{HPE} (\tmop{pk}_N) || \tmop{Enc}_{\tmop{SC}} (v) \]
     \item N is a branch node:
-    \[ \begin{array}{l}
-         \text{Enc\tmrsub{Node}\left(N\right)} \assign\\
+     \[ \begin{array}{l}
+          \text{Enc\tmrsub{Node}(N)} \assign \\
          \nobracket \tmop{NodePrefix} (N) || \tmop{ChildrenBitmap} (N) \|
          \tmop{HPE}_{\tmop{PC}} (v) || \tmop{Enc}_{\tmop{SC}}
          (\tmop{Enc}_{\tmop{Node}}) ||\\
          \tmop{Enc}_{\tmop{SC}} (N_{C_1}) \ldots \tmop{Enc}_{\tmop{SC}}
          (N_{C_n})
-       \end{array} \]
+        \end{array} \]
   \end{itemize}
 \end{definition}
 
@@ -455,18 +460,21 @@ To validate Extrinsics data are stored in a block across clients, Polkadot RE
 uses the same trie structure as for the state storage described in Section
 \ref{sect-merkl-proof} to generate the Merkle proof.
 
-\section{Auxilary Encodings}
-
-\subsection{Simple Codec}
-
-Polkadot RE uses{\tmem{simple codec}} to encode byte arrays to provide
-canonical encoding and to produce consistent hash values across their
-implementation, including the Merkle hash proof for the State Storage.
-
 \
 
+\section{Consensus}
+
+\section{Auxilary Encodings}
+
+\subsection{SCALE Codec}\label{sect-scale-codec}
+
+Polkadot RE uses {\tmem{Simple Concatenated Aggregate Little-Endian'' (SCALE)
+codec}} to encode byte arrays to provide canonical encoding and to produce
+consistent hash values across their implementation, including the Merkle hash
+proof for the State Storage.
+
 \begin{definition}
-  The {\tmstrong{simple codec}} of a byte array $A$:
+  The {\tmstrong{SCALE codec}} for {\tmstrong{Byte array}} $A$ such that
   \[ A \assign b_1 b_2 \ldots b_n \]
   such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{SC}}
   (A)$ and defined as follows:
@@ -506,14 +514,20 @@ implementation, including the Merkle hash proof for the State Storage.
   \[ m = l^7_1 \ldots l^3_1 l^2_1 + 4 \]
 \end{definition}
 
+\begin{definition}
+  The {\tmstrong{SCALE codec}} for {\tmstrong{Tuple}} $T$ such that:
+  \[ T \assign (A_1, \ldots, A_n) \]
+  Where $A_i$'s are values of different types is defined as:
+  \[ \tmop{Enc}_{\tmop{SC}} (T) \assign \tmop{Enc}_{\tmop{SC}} (A_1) |
+     \tmop{Enc}_{\tmop{SC}} (A_2) | \ldots | \tmop{Enc}_{\tmop{SC}} (A_n) \]
+\end{definition}
+
 \subsection{Hex Encoding}
 
 Practically it is more convenient and efficient to store and process data
 which is stored in a byte array. On the other hand, radix-16 tree keys are
 broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
 4-bits nibbles into byte arrays canonically:
-
-\
 
 \begin{definition}
   \label{def-hpe}Suppose that $\tmop{PK} = (k_1, \ldots, k_n)$ is a sequence
@@ -554,14 +568,84 @@ broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
   \ref{def-node-prefix}.
 \end{definition}
 
-\ \ \
-
-\subsection{ABI Encoding between Runtime and the Runtime Enviornment}
-
 \section{Genisis Block Specification}\label{sect-genisis-block}
 
 \section{Predefined Storage keys}\label{sect-predef-storage-keys}
 
 \section{Runtime upgrade}\label{sect-runtime-upgrade}
+
+\section{Runtime API}\label{sect-runtime-api}
+
+Runtime API is set of functions which Polkadot RE exposes to Runtime in order
+to access Storage content and other external functions. Some of the functions
+are exposed to the runtime for efficiency reason. Here is the list of the
+functions which Polkadot RE exposes to the runtime:
+\begin{itemizedot}
+  \item \tmverbatim{ext\_blake2\_256}
+  
+  \item \tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}
+  
+  \item \tmverbatim{ext\_chain\_id}
+  
+  \item \tmverbatim{ext\_child\_storage\_root}
+  
+  \item \tmverbatim{ext\_clear\_child\_storage}
+  
+  \item \tmverbatim{ext\_clear\_prefix}
+  
+  \item \tmverbatim{ext\_clear\_storage}
+  
+  \item \tmverbatim{ext\_ed25519\_verify}
+  
+  \item \tmverbatim{ext\_exists\_child\_storage}
+  
+  \item \tmverbatim{ext\_free}
+  
+  \item \tmverbatim{ext\_get\_allocated\_child\_storage}
+  
+  \item \tmverbatim{ext\_get\_allocated\_storage}
+  
+  \item \tmverbatim{ext\_get\_child\_storage\_into}
+  
+  \item \tmverbatim{ext\_get\_storage\_into}
+  
+  \item \tmverbatim{ext\_kill\_child\_storage}
+  
+  \item \tmverbatim{ext\_malloc}
+  
+  \item \tmverbatim{ext\_print\_hex}
+  
+  \item \tmverbatim{ext\_print\_num}
+  
+  \item \tmverbatim{ext\_print\_utf8}
+  
+  \item \tmverbatim{ext\_sandbox\_instance\_teardown}
+  
+  \item \tmverbatim{ext\_sandbox\_instantiate}
+  
+  \item \tmverbatim{ext\_sandbox\_invoke}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_get}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_new}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_set}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_teardown}
+  
+  \item \tmverbatim{ext\_set\_child\_storage}
+  
+  \item \tmverbatim{ext\_set\_storage}
+  
+  \item \tmverbatim{ext\_storage\_changes\_root}
+  
+  \item \tmverbatim{ext\_storage\_root}
+  
+  \item \tmverbatim{ext\_twox\_128}
+  
+  \item \tmverbatim{ext\_twox\_256}
+  
+  \item \tmverbatim{ext\_exists\_storage}
+\end{itemizedot}
 
 \end{document}
