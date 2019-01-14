@@ -1,8 +1,6 @@
 \documentclass{article}
 \usepackage[english]{babel}
 \usepackage{amsmath,amssymb,calc,ifthen,capt-of}
-\usepackage[margin=1.0in]{geometry}
-\usepackage{xcolor}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
@@ -10,6 +8,7 @@
 \newcommand{\nobracket}{}
 \newcommand{\nosymbol}{}
 \newcommand{\tmem}[1]{{\em #1\/}}
+\newcommand{\tmmathbf}[1]{\ensuremath{\boldsymbol{#1}}}
 \newcommand{\tmname}[1]{\textsc{#1}}
 \newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
 \newcommand{\tmrsub}[1]{\ensuremath{_{\textrm{#1}}}}
@@ -21,7 +20,6 @@
 \newcommand{\tmtextsf}[1]{{\sffamily{#1}}}
 \newcommand{\tmtexttt}[1]{{\ttfamily{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
-\newcommand{\todo}[1]{\textcolor{red}{#1}}
 \newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
@@ -58,9 +56,12 @@
 
 \begin{document}
 
-\title{Polkadot Runtime Environment \\ {\Large Protocol Specification}}
+\title{
+  Polkadot Runtime Environment\\
+  {\Large Protocol Specification}
+}
 
-\date{December 17, 2018}
+\date{January 14, 2018}
 
 \maketitle
 
@@ -134,8 +135,9 @@ The block header is designed to be minimalistic in order to boost the
 efficiency of the light clients. It is defined formally as follows:
 
 \begin{definition}
-  \label{def-block-header}The header of block B, $\tmop{Head} (B)$ is a
-  5-tuple containing the following elements:
+  \label{def-block-header}The {\tmstrong{header of block B}},
+  {\tmstrong{$\tmop{Head} (B)$}} is a 5-tuple containing the following
+  elements:
   \begin{itemize}
     \item \tmtextbf{{\tmsamp{parent\_hash:}}} is the 32-byte Blake2s hash of
     the header of the parent of the block indicated henceforth by
@@ -157,16 +159,25 @@ efficiency of the light clients. It is defined formally as follows:
     \item {\tmstrong{{\tmsamp{digest:}}}} this field is used to store any
     chain-specific auxiliary data, which could help the light clients interact
     with the block without the need of accessing the full storage. Polkadot RE
-    does not impose any limitation or specification for this field. Essentially,    it can be a byte array of any length. This field is indicated as
-    {\tmstrong{$H_d$}}
+    does not impose any limitation or specification for this field.
+    Essentially, it can be a byte array of any length. This field is indicated
+    as {\tmstrong{$H_d$}}
   \end{itemize}
+\end{definition}
+
+\begin{definition}
+  \label{def-block-header-hash}The {\tmstrong{Block Header Hash of Block
+  $B$}}, {\tmstrong{$H_h (b)$}}, is the hash of the header of block $B$
+  encoded by simple codec:
+  \[ H_b (b) \assign \tmop{Blake} 2 s (\tmop{Enc}_{\tmop{SC}} (\tmop{Head}
+     (B))) \]
 \end{definition}
 
 \subsection{Justified Block Header}
 
 The Justified Block Header is provided by the consensus engine and presented
-to the Polkadot RE, for the block to be appended to the blockchain.
-It contains the following parts:
+to the Polkadot RE, for the block to be appended to the blockchain. It
+contains the following parts:
 \begin{itemize}
   \item {\tmstrong{{\tmsamp{{\tmstrong{block\_header}}}}}} the complete block
   header as defined in Section \ref{block} and denoted by $\tmop{Head} (B)$.
@@ -203,9 +214,9 @@ The initial runtime code of the chain is embedded as an extrinsics into the
 chain initialization JSON file and is submitted to Polkadot RE (see Section
 \ref{sect-genisis-block}).
 
-Subsequent calls to the runtime have the ability to call the storage API
-(see Section \ref{sect-runtime-api}) to insert a new Wasm blob into runtime
-storage slot to upgrade the runtime.
+Subsequent calls to the runtime have the ability to call the storage API (see
+Section \ref{sect-runtime-api}) to insert a new Wasm blob into runtime storage
+slot to upgrade the runtime.
 
 \subsection{Entries into Runtime}
 
@@ -335,12 +346,14 @@ storage where the keys are used to access each data entry state. There is no
 limitation neither on the size of the key nor on the size of the data stored
 under them, besides the fact that they are byte arrays.
 
-To authenticate the state of the system, the stored data needs to be re-arranged and hashed in a {\tmem{radix 16 tree}} also known as {\tmem{base-16 modified
-Merkle Patricia Tree}}, which hereafter we will refer to as the
-{\tmem{{\tmstrong{Trie}},}} in order to compute the hash of the whole state
-storage consistently and efficiently at any given time.
+To authenticate the state of the system, the stored data needs to be
+re-arranged and hashed in a {\tmem{radix 16 tree}} also known as
+{\tmem{base-16 modified Merkle Patricia Tree}}, which hereafter we will refer
+to as the {\tmem{{\tmstrong{Trie}},}} in order to compute the hash of the
+whole state storage consistently and efficiently at any given time.
 
-As well, modification has been made in the storing of the the nodes' hash in the Merkle Tree structure to save space on entries storing small entries.
+As well, modification has been made in the storing of the the nodes' hash in
+the Merkle Tree structure to save space on entries storing small entries.
 
 Because the Tri is used to compute the {\tmem{state root}}, $H_r$, (see
 Definition \ref{def-block-header}), which is used to authenticate the validity
@@ -374,12 +387,12 @@ encode $k$ in a uniform way:
   where $\tmop{Nibble}_4$ is the set of all nibbles of 4-bit arrays and
   $b^1_i$ and $b^2_i$ are 4-bit nibbles, which are the little endian
   representations of $b_i$:
-  \[ (b^1_i, b^2_i) \assign (b_1 \tmop{mod} 16, b_2 / 16) \],
-  where mod is the remainder and / is the integer division operators.
+  \[ (b^1_i, b^2_i) \assign (b_1 \tmop{mod} 16, b_2 / 16) \]
+  , where mod is the remainder and / is the integer division operators.
 \end{definition}
 
-By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the radix
-tree to reach the node identifying the storage value of $k$.
+By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the
+radix tree to reach the node identifying the storage value of $k$.
 
 \subsection{The Merkle proof}\label{sect-merkl-proof}
 
@@ -424,14 +437,14 @@ node as a function of the hash value of its children and its own value.
     \[ \tmop{Enc}_{\tmop{Node}} (N) \assign \tmop{Enc}_{\tmop{len}} (N) ||
        \tmop{HPE} (\tmop{pk}_N) || \tmop{Enc}_{\tmop{SC}} (v) \]
     \item N is a branch node:
-     \[ \begin{array}{l}
-          \text{Enc\tmrsub{Node}(N)} \assign \\
+    \[ \begin{array}{l}
+         \text{Enc\tmrsub{Node}(N)} \assign\\
          \nobracket \tmop{NodePrefix} (N) || \tmop{ChildrenBitmap} (N) \|
          \tmop{HPE}_{\tmop{PC}} (v) || \tmop{Enc}_{\tmop{SC}}
          (\tmop{Enc}_{\tmop{Node}}) ||\\
          \tmop{Enc}_{\tmop{SC}} (N_{C_1}) \ldots \tmop{Enc}_{\tmop{SC}}
          (N_{C_n})
-        \end{array} \]
+       \end{array} \]
   \end{itemize}
 \end{definition}
 
@@ -455,12 +468,153 @@ $N$.
 
 \section{Extrinsics trie}
 
-To validate that Extrinsics data are stored in a block across clients, Polkadot RE uses the same trie structure as for the state storage described in Section
-\ref{sect-merkl-proof} to generate the Merkle proof.
+To validate that Extrinsics data are stored in a block across clients,
+Polkadot RE uses the same trie structure as for the state storage described in
+Section \ref{sect-merkl-proof} to generate the Merkle proof.
+
+\section{Consensus Engine}
+
+Consensus in Polkadot RE is acheived during execution of two different
+procedures. The first procedure is block production and the second is
+finality. Polkadot RE must run these procedures, if and only if it is running
+on a validator node.
+
+\subsection{Block Tree}
+
+In the course of formation of a (distributed) blockchain, it is possible that
+the chain forks into multiple sub chain in various block position. We refer to
+this structure as {\tmem{block tree:}}
+
+\begin{definition}
+  The {\tmstrong{Block Tree}} of a blockchain is the union of all different
+  versions of the blockchain observered by all the node in the system such as
+  every such block is a node in the graph and $B_1$ is connected to $B_2$ if
+  $B_1$ is parent of $B_2$.
+\end{definition}
+
+Because every block in block chain contains a reference to its parent, is easy
+to see that the block tree is actually a tree.
+
+A block tree naturally imposes a partial order relationships on the blocks as
+follows:
+
+\begin{definition}
+  We say {\tmstrong{B is descendant of $B'$}}, formally noted as {\tmstrong{$B
+  > B'$}} if $B$ is a descendent of $B'$ in the block tree.
+\end{definition}
+
+\subsection{Block Production}
+
+\subsection{Finality}
+
+Polkadot RE uses GRANDPA Finality protocol {\cite{AlSt19-Grandpa}} to finalize
+blocks. Finality is obtained by consequtive rounds of voting by validator
+nodes. Validators executes GRANDPA finality process in parallel to Block
+Production as an indepenedent service. In this section we describe the
+different functions that GRANDPA service is supposed to perform in order to
+successfully participates in block finalization process.
+
+\subsubsection{Priliminaries}
+
+\begin{definition}
+  \label{def-vote}A {\tmstrong{GRANDPA Vote }}or simply a vote
+\end{definition}
 
 \
 
-\section{Consensus}
+\subsubsection{Initiating the GRANDPA state}
+
+A validator needs to initiate it states and sync it with other validators, in
+order to be able to participate coherently in voting process. In particular,
+considering that voting is happening in different rounds and each round of
+voting is assigned a unique sequential round number $r_v$, it needs to
+determines and set its round counter $r$ in accordence of the current voting
+round $r_n$ which is currently undergoing in the network.
+
+\begin{definition}
+  A {\tmstrong{Grandpa Voter}}, $v$, is represented by a key pair
+  $(k^{\tmop{pr}}_v, k_v)$ where $k_v^{\tmop{pr}}$ represents its private key,
+  is a node running Grandpa protocol and broadcast votes to finilse blocks in
+  a Polkadot RE based chain. The {\tmstrong{set of all Grandpa voters}} is
+  indicated by $V$.
+\end{definition}
+
+\begin{definition}
+  {\tmstrong{Grandpa state}}, $\tmop{GS}$, is defined as
+  \[ \tmop{GS} \assign \{V, r\} \]
+  where:
+  
+  $\tmmathbf{V}$: is the set of voters.
+  
+  {\tmstrong{r}}: is voting round number.
+\end{definition}
+
+Now we need to define what we count as a vote for a block $B$. First a vote is
+defined as:
+
+\begin{definition}
+  A GRANDPA {\tmstrong{vote}} for block $B$ is a following pair defined as
+  \[ (H_h (B), H_i (B)) \]
+  where $H_h (B)$ and $H_i (B)$ are block hash and block numbered defined in
+  Definitions \ref{def-block-header} and \ref{def-block-header-hash}
+  respectively.
+\end{definition}
+
+\begin{definition}
+  {\tmstrong{Total direct vote for Block $B$ in round $r$}}, formally denoted
+  by $v^r_d (B)$ is equal to number votes $v$ casted in round $r$ with $v =
+  (H_h (B), H_i (B))$.
+\end{definition}
+
+\begin{definition}
+  {\tmstrong{Total vote for Block $B$ in round $r$}} is equal to sum of all
+  direct votes casted for block $B$ and all $B$'s anscestors formally defined
+  as:
+  \[ V^r (B) \assign \sum_{B' \leqslant B} V^r_d (B') \]
+\end{definition}
+
+\begin{definition}
+  Voters engage in maximum two sub-rounds of voting for each round $r$. The
+  first sub-round is called {\tmstrong{pre-vote}} and the second sub-round is
+  called {\tmstrong{pre-commit}}. Accordingly the total number of votes for
+  block during pre-vote and pre-commit sub-rounds are denoted by
+  {\tmstrong{$V^{r, \tmop{pv}} (B)$}} by {\tmstrong{$V^{r, \tmop{pc}} (B)$}}.
+  \  \ 
+\end{definition}
+
+The GRANDPA protocol dictates how an honset voter should vote in each
+sub-round which is described in \ref{alg-grandpa-round}
+
+\begin{definition}
+  The {\tmstrong{pre-voted}} block $P$ is the block with $V^{r, \tmop{pv}} (P)
+  = \tmop{Max} (V^{r, \tmop{pv}} (B) : \tmop{for} \tmop{all} B)$. Similarly
+  the {\tmstrong{precommited block }}$C$ is the block with $V^{r, \tmop{pc}}
+  (C) = \tmop{Max} (V^{r, \tmop{pc}} (B) : \tmop{for} \tmop{all} B)$.
+\end{definition}
+
+\begin{definition}
+  Let $B_{v, r}$ be the block voted by the voter $v$ in pre-vote sub-round of
+  round $r$,We say round $\tmmathbf{r}$ is {\tmstrong{complete-able}} if
+  either:
+  \[ C < B_{r, v} \]
+  or
+  \[ \{ B' |B' > B_{r, v} \tmop{and} V^{r, \tmop{pc}} (B) < 2 / 3 | V | \} \]
+  
+\end{definition}
+
+As instructed in Algortihm \ref{alg-join-leave-grandpa}, whenever the
+membership of Grandpa voters changes, $r$ is set to 0.
+
+{\algorithm{\label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
+(V)
+
+1\quad$r \leftarrow 0$
+
+2\quad{\tmname{Execute-One-Grandpa-Round}}$(r)$}}
+
+\
+
+\
 
 \section{Auxilary Encodings}
 
@@ -485,7 +639,7 @@ proof for the State Storage.
        k_1^{\nosymbol} k_2^{\nosymbol} \ldots k_m^{\nosymbol} b_1 \ldots b_n &
        & 2^{14} \leqslant n
      \end{array} \right. \]
-  in which:
+  in which:{\hspace{0.17em}}
   \[ \begin{array}{|l|}
        \hline
        l^1_1 l_1^0 = 00\\
@@ -574,10 +728,10 @@ broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
 
 \section{Runtime API}\label{sect-runtime-api}
 
-Runtime API is a set of functions, which Polkadot RE exposes to Runtime in order
-to access Storage content and other external functions. Some of the functions
-are exposed to the runtime for efficiency reasons. Here is the list of the
-functions which Polkadot RE exposes to the runtime:
+Runtime API is a set of functions, which Polkadot RE exposes to Runtime in
+order to access Storage content and other external functions. Some of the
+functions are exposed to the runtime for efficiency reasons. Here is the list
+of the functions which Polkadot RE exposes to the runtime:
 \begin{itemizedot}
   \item \tmverbatim{ext\_blake2\_256}
   
@@ -647,4 +801,3 @@ functions which Polkadot RE exposes to the runtime:
 \end{itemizedot}
 
 \end{document}
-
