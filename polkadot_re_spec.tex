@@ -343,19 +343,19 @@ block:
 
 For storing the state of the system, Polkadot RE implements a hash table
 storage where the keys are used to access each data entry state. There is no
-limitation neither on the size of the key nor on the size of the data stored
+limitation neither on the size of the key nor the size of the data stored
 under them, besides the fact that they are byte arrays.
 
-\subsection{Accessing System Storage }
+\subsection{Accessing The System Storage }
 
-Polkadot RE implements various functions to facilitate access to system
+Polkadot RE implements various functions to facilitate access to the system
 storage for the runtime. Section \ref{sect-runtime-api} lists all of those
-functions. Here we define the most essential ones which are also used by the
+functions. Here we define the essential ones which are also used by the
 Polkadot RE.
 
 \begin{definition}
-  \label{def-state-read-write}{\tmstrong{StateRead}} and
-  {\tmstrong{StateWrite}} function provide basic access to the State Storage:
+  \label{def-state-read-write} The {\tmstrong{StateRead}} and
+  {\tmstrong{StateWrite}} functions provide basic access to the State Storage:
   \[ v = \tmop{StateRead} (k) \]
   \[ \tmop{StateWrite} (k, v) \]
   where v and k are byte arrays.
@@ -367,10 +367,10 @@ re-arranged and hashed in a {\tmem{radix 16 tree}} also known as
 to as the {\tmem{{\tmstrong{Trie}},}} in order to compute the hash of the
 whole state storage consistently and efficiently at any given time.
 
-As well, modification has been made in the storing of the the nodes' hash in
+As well, a modification has been made in the storing of the nodes' hash in
 the Merkle Tree structure to save space on entries storing small entries.
 
-Because the Tri is used to compute the {\tmem{state root}}, $H_r$, (see
+Because the Trie is used to compute the {\tmem{state root}}, $H_r$, (see
 Definition \ref{def-block-header}), which is used to authenticate the validity
 of the state database, Polkadot RE follows a rigorous encoding algorithm to
 compute the values stored in the trie nodes to ensure that the computed Merkle
@@ -483,13 +483,13 @@ $N$.
 
 \section{Extrinsics trie}
 
-To validate that Extrinsics data are stored in a block across clients,
+To validate that the Extrinsics data are stored in a block across clients,
 Polkadot RE uses the same trie structure as for the state storage described in
 Section \ref{sect-merkl-proof} to generate the Merkle proof.
 
 \section{Consensus Engine}
 
-Consensus in Polkadot RE is acheived during execution of two different
+Consensus in Polkadot RE is achieved during the execution of two different
 procedures. The first procedure is block production and the second is
 finality. Polkadot RE must run these procedures, if and only if it is running
 on a validator node.
@@ -497,18 +497,17 @@ on a validator node.
 \subsection{Block Tree}
 
 In the course of formation of a (distributed) blockchain, it is possible that
-the chain forks into multiple sub chain in various block position. We refer to
-this structure as {\tmem{block tree:}}
+the chain forks into multiple sub chains in various block positions. We refer to
+this structure as a {\tmem{block tree:}}
 
 \begin{definition}
   The {\tmstrong{Block Tree}} of a blockchain is the union of all different
-  versions of the blockchain observered by all the node in the system such as
+  versions of the blockchain observed by all the nodes in the system such as
   every such block is a node in the graph and $B_1$ is connected to $B_2$ if
-  $B_1$ is parent of $B_2$.
+  $B_1$ is a parent of $B_2$.
 \end{definition}
 
-Because every block in block chain contains a reference to its parent, is easy
-to see that the block tree is actually a tree.
+Because every block in the blockchain contains a reference to its parent, it is easy to see that the block tree is actually a tree. 
 
 A block tree naturally imposes a partial order relationships on the blocks as
 follows:
@@ -522,37 +521,37 @@ follows:
 
 \subsection{Finality}
 
-Polkadot RE uses GRANDPA Finality protocol {\cite{AlSt19-Grandpa}} to finalize
-blocks. Finality is obtained by consequtive rounds of voting by validator
-nodes. Validators executes GRANDPA finality process in parallel to Block
-Production as an indepenedent service. In this section we describe the
-different functions that GRANDPA service is supposed to perform in order to
-successfully participates in block finalization process.
+Polkadot RE uses GRANDPA Finality protocol {\cite{AlSt19-Grandpai}} to finalize
+blocks. Finality is obtained by consecutive rounds of voting by validator
+nodes. Validators execute GRANDPA finality process in parallel to Block
+Production as an independent service. In this section, we describe the
+different functions that GRANDPA service is supposed to perform to
+successfully participate in the block finalization process.
 
 \subsubsection{Priliminaries}
 
 \begin{definition}
-  A {\tmstrong{Grandpa Voter}}, $v$, is represented by a key pair
+  A {\tmstrong{GRANDPA Voter}}, $v$, is represented by a key pair
   $(k^{\tmop{pr}}_v, k_v)$ where $k_v^{\tmop{pr}}$ represents its private key,
-  is a node running Grandpa protocol and broadcast votes to finilse blocks in
-  a Polkadot RE based chain. The {\tmstrong{set of all Grandpa voters}} is
+  is a node running GRANDPA protocol, and broadcasts votes to finilize blocks in
+  a Polkadot RE - based chain. The {\tmstrong{set of all GRANDPA voters}} is
   indicated by $\mathbb{V}$.
 \end{definition}
 
 \begin{definition}
-  {\tmstrong{Grandpa state}}, $\tmop{GS}$, is defined as
+  {\tmstrong{GRANDPA state}}, $\tmop{GS}$, is defined as
   \[ \tmop{GS} \assign \{\mathbb{V}, \tmop{id}_{\mathbb{V}}, r\} \]
   where:
   
   $\mathbb{V}$: is the set of voters.
   
   {\tmstrong{$\mathbb{V}_{\tmop{id}}$}}: is an incremental counter tracking
-  membership changes in V.
+  membership, which changes in V.
   
-  {\tmstrong{r}}: is voting round number.
+  {\tmstrong{r}}: is the voting round number.
 \end{definition}
 
-Now we need to define Polkadot RE count the number of votes for block $B$.
+Now we need to define how Polkadot RE counts the number of votes for block $B$.
 First a vote is defined as:
 
 \begin{definition}
@@ -565,17 +564,17 @@ First a vote is defined as:
 \end{definition}
 
 \begin{definition}
-  Voters engage in maximum two sub-rounds of voting for each round $r$. The
+  Voters engage in a maximum two sub-rounds of voting for each round $r$. The
   first sub-round is called {\tmstrong{pre-vote}} and the second sub-round is
   called {\tmstrong{pre-commit}}.
   
   By {\tmstrong{$V_v^{r, \tmop{pv}}$}} and {\tmstrong{$V_v^{r, \tmop{pc}}$}}
-  we refere to the vote casted by voter $v$ in round $r$ (for block $B$)
+  we refer to the vote casted by voter $v$ in round $r$ (for block $B$)
   during the pre-vote and the pre-commit sub-round respectively.
 \end{definition}
 
-The GRANDPA protocol dictates how an honset voter should vote in each
-sub-round which is described in Algorithm \ref{alg-grandpa-round}.
+The GRANDPA protocol dictates how an honest voter should vote in each
+sub-round, which is described in Algorithm \ref{alg-grandpa-round}.
 
 \begin{definition}
   A vote casted by voter $v$ should be broadcasted as a {\tmstrong{message
@@ -611,7 +610,7 @@ sub-round which is described in Algorithm \ref{alg-grandpa-round}.
     \begin{itemizedot}
       \item $H (B)$ does not correspond to a valid block.
       
-      \item $B$ is not a (eventual) descendent of a previously finalized
+      \item $B$ is not an (eventual) descendent of a previously finalized
       block.
       
       \item $M^{r, \tmop{stage}}_v$ does not bear a vaid signature.
@@ -625,7 +624,7 @@ sub-round which is described in Algorithm \ref{alg-grandpa-round}.
 \end{definition}
 
 \begin{definition}
-  For validator v, {\tmstrong{the set of observed direct vote for Block $B$ in
+  For validator v, {\tmstrong{the set of observed direct votes for Block $B$ in
   round $r$}}, formally denoted by $\tmop{VD}^{r, \tmop{stage}}_{\tmop{obs}
   (v)}^{}_{} (B)$ is equal to the set of valid votes $V^{r,
   \tmop{stage}}_{v_i}$ casted in round $r$ and received by v such that $V^{r,
@@ -633,14 +632,14 @@ sub-round which is described in Algorithm \ref{alg-grandpa-round}.
 \end{definition}
 
 \begin{definition}
-  We refer to {\tmstrong{the set of total vote observed by voter $v$ in
+  We refer to {\tmstrong{the set of total votes observed by voter $v$ in
   sub-round $\tmop{stage}$ of round $r$}} by {\tmstrong{$V^{r,
   \tmop{stage}}_{\tmop{obs} (v)}^{}_{}$}}.
   
   The {\tmstrong{set of all observed vote by $v$ in sub-round stage of round
   $r$for block $B$}}, {\tmstrong{$V^{r, \tmop{stage}}_{\tmop{obs} (v)} (B)$}}
   is equal to all observed direct votes casted for block $B$ and all $B$'s
-  descendent defined formally as:
+  descendents defined formally as:
   \[ V^{r, \tmop{stage}}_{\tmop{obs} (v)} (B) \assign \bigcup_{v_i \in
      \mathbb{V}, B \geqslant B'} \tmop{VD}^{r, \tmop{stage}}_{\tmop{obs} (v)}
      (B')_{}^{}_{} \]
@@ -660,7 +659,7 @@ sub-round which is described in Algorithm \ref{alg-grandpa-round}.
   \[ H_n (B^{r, \tmop{pv}}_v) = \tmop{Max} (| H_n (B) | \tmop{for} \tmop{all}
      B : | V_{\tmop{obs} (v)}^{r, \tmop{pv}} (B) | \geqslant 2 / 3 |
      \mathbb{V} |) \]
-  Similarly the {\tmstrong{pre-commited block }}$B_v^{r, \tmop{pc}}$ is the
+  Similarly, the {\tmstrong{pre-commited block }}$B_v^{r, \tmop{pc}}$ is the
   block with
   \[ H_n (B^{r, \tmop{pc}}_v) = \tmop{Max} (| H_n (B) | \tmop{for} \tmop{all}
      B : | V_{\tmop{obs} (v)}^{r, \tmop{pc}} (B) | \geqslant 2 / 3 |
@@ -680,23 +679,22 @@ sub-round which is described in Algorithm \ref{alg-grandpa-round}.
 \end{definition}
 
 \begin{definition}
-  We say round $r$ is {\tmstrong{unfinalizable,}} If for all $B' \geqslant
+  We say that round $r$ is {\tmstrong{unfinalizable,}} if for all $B' \geqslant
   B_v^{r, \tmop{pv}}$:
   \[ | V^{r, \tmop{pc}}_{\tmop{obs} (v)} | - | V^{r, \tmop{pc}}_{\tmop{obs}
      (v)_{}} (B') | \geqslant \frac{1}{3} | \mathbb{V} | \]
 \end{definition}
 
-\subsubsection{Initiating the GRANDPA state}
+\subsubsection{Initiating the GRANDPA State}
 
-A validator needs to initiate it states and sync it with other validators, in
-order to be able to participate coherently in voting process. In particular,
+A validator needs to initiate its state and sync it with other validators, to be able to participate coherently in the voting process. In particular,
 considering that voting is happening in different rounds and each round of
 voting is assigned a unique sequential round number $r_v$, it needs to
-determines and set its round counter $r$ in accordence of the current voting
-round $r_n$ which is currently undergoing in the network.
+determine and set its round counter $r$ in accordance with the current voting
+round $r_n$, which is currently undergoing in the network.
 
 As instructed in Algortihm \ref{alg-join-leave-grandpa}, whenever the
-membership of Grandpa voters ch\tmverbatim{}anges, $r$ is set to 0 and
+membership of GRANDPA voters ch\tmverbatim{}anges, $r$ is set to 0 and
 $V_{\tmop{id}}$ needs to be incremented.
 
 {\algorithm{\label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
@@ -712,14 +710,11 @@ $V_{\tmop{id}}$ needs to be incremented.
 2\quad{\tmname{Execute-One-Grandpa-Round}}$(r)$}}
 
 Each voter should run Algorithm \ref{alg-completable-round} to verify that a
-round is completable
+round is completable.
 
-\subsubsection{Voting process in round $r$}
+\subsubsection{Voting Process in Round $r$}
 
-At each round $r$, a randomly selected
-
-For each round $r$, an honest voter $v$ must participate in voting process by
-following Algorithm \ref{alg-grandpa-round}.
+For each round $r$, an honest voter $v$ must participate in the voting process by following Algorithm \ref{alg-grandpa-round}.
 
 {\algorithm{\label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$
 
@@ -811,7 +806,7 @@ V_v^{r, \tmop{pc}} | - | V_v^{r, \tmop{pc}} (B) | \leqslant 1 / 3 | \mathbb{V}
 \subsection{SCALE Codec}\label{sect-scale-codec}
 
 Polkadot RE uses {\tmem{Simple Concatenated Aggregate Little-Endian'' (SCALE)
-codec}} to encode byte arrays to provide canonical encoding and to produce
+codec}} to encode byte arrays that provide canonical encoding and to produce
 consistent hash values across their implementation, including the Merkle hash
 proof for the State Storage.
 
@@ -859,14 +854,14 @@ proof for the State Storage.
 \begin{definition}
   The {\tmstrong{SCALE codec}} for {\tmstrong{Tuple}} $T$ such that:
   \[ T \assign (A_1, \ldots, A_n) \]
-  Where $A_i$'s are values of different types is defined as:
+  Where $A_i$'s are values of different types, is defined as:
   \[ \tmop{Enc}_{\tmop{SC}} (T) \assign \tmop{Enc}_{\tmop{SC}} (A_1) |
      \tmop{Enc}_{\tmop{SC}} (A_2) | \ldots | \tmop{Enc}_{\tmop{SC}} (A_n) \]
 \end{definition}
 
 \subsection{Hex Encoding}
 
-Practically it is more convenient and efficient to store and process data
+Practically, it is more convenient and efficient to store and process data
 which is stored in a byte array. On the other hand, radix-16 tree keys are
 broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
 4-bits nibbles into byte arrays canonically:
@@ -918,10 +913,7 @@ broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
 
 \section{Runtime API}\label{sect-runtime-api}
 
-Runtime API is a set of functions, which Polkadot RE exposes to Runtime in
-order to access Storage content and other external functions. Some of the
-functions are exposed to the runtime for efficiency reasons. Here is the list
-of the functions which Polkadot RE exposes to the runtime:
+Runtime API is a set of functions, which Polkadot RE exposes to Runtime to access Storage content and other external functions. Some of the functions are exposed to the runtime for efficiency reasons. Here is the list of the functions which Polkadot RE exposes to the runtime:
 \begin{itemizedot}
   \item \tmverbatim{ext\_blake2\_256}
   
@@ -991,3 +983,4 @@ of the functions which Polkadot RE exposes to the runtime:
 \end{itemizedot}
 
 \end{document}
+
