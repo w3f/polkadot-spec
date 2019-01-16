@@ -1,6 +1,8 @@
 \documentclass{article}
 \usepackage[english]{babel}
 \usepackage{amsmath,amssymb,calc,ifthen,capt-of}
+\usepackage{color}
+\usepackage[margin=1in]{geometry}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
@@ -54,6 +56,9 @@
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
 
+\newcommand{\todo}[1]{{\color{red} TODO: {#1}}}
+\newcommand{\algorithm}[1]{\vspace{0.5cm} \noindent \textbf{Algorithm} \\#1}
+
 \begin{document}
 
 \title{
@@ -61,7 +66,7 @@
   {\Large Protocol Specification}
 }
 
-\date{January 14, 2018}
+\date{January 16, 2018}
 
 \maketitle
 
