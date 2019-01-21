@@ -1,6 +1,6 @@
 <TeXmacs|1.99.7>
 
-<style|<tuple|article|std-latex>>
+<style|<tuple|article|std-latex|/home/klaymen/doc/code/algorithmacs/algorithmacs-style.ts>>
 
 <\body>
   <\hide-preamble>
@@ -31,22 +31,16 @@
     <new-theorem|definition|Definition>
 
     <new-theorem|notation|Notation>
-
-    <assign|todo|<macro|1|<with|color|red|TODO: <arg|1>>>>
-
-    <assign|algorithm|<macro|1|<vspace|0.5cm><no-indent><with|font-series|bold|Algorithm><next-line><arg|1>>>
-
-    <assign|figure-text|<macro|Snippet>>
   </hide-preamble>
 
   <doc-data|<doc-title|Polkadot Runtime Environment<next-line><with|font-size|1.41|Protocol
-  Specification>>|<doc-date|January 16, 2018>>
+  Specification>>|<doc-date|January 21, 2019>>
 
   <section|Conventions and Definitions>
 
   <\definition>
     <strong|Runtime> is the state transition function of the decentralized
-    ledger protocol.
+    ledger protocol.<verbatim|>
   </definition>
 
   <\definition>
@@ -234,15 +228,20 @@
   in the Runtime Wasm blob and has been exported as shown in Snippet
   <reference|snippet-runtime-enteries> :
 
-  \;
+  <assign|figure-text|<macro|Snippet>>
 
-  <small-figure|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<verbatim|(export
-  "version" (func $version))>>>|<row|<cell|<verbatim|(export "authorities"
-  (func $authorities))>>>|<row|<cell|<verbatim|(export "execute_block" (func
-  $execute_block)) >>>>>>|<label|snippet-runtime-enteries>Snippet to export
-  entries into tho Wasm runtime module>
+  <\small-figure>
+    <\cpp-code>
+      (export "version" (func $version))
 
-  \;
+      (export "authorities" (func $authorities))
+
+      (export "execute_block" (func $execute_block))
+    </cpp-code>
+  </small-figure|<label|snippet-runtime-enteries>Snippet to export entries
+  into tho Wasm runtime module>
+
+  <assign|figure-text|<macro|Figure>>
 
   The following sections describe the standard based on which Polkadot RE
   communicates with each runtime entry.
@@ -255,7 +254,7 @@
 
   \;
 
-  <\with|par-mode|right>
+  <\with|par-mode|center>
     <small-table|<tabular|<tformat|<cwith|1|7|1|1|cell-halign|l>|<cwith|1|7|1|1|cell-lborder|0ln>|<cwith|1|7|2|2|cell-halign|l>|<cwith|1|7|3|3|cell-halign|l>|<cwith|1|7|3|3|cell-rborder|0ln>|<cwith|1|7|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|7|7|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|runtime
     identifier>>|<row|<cell|<verbatim|impl_name>>|<cell|String>|<cell|the
     name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|32-bit
@@ -269,7 +268,7 @@
     <verbatim|version> function>
   </with>
 
-  <subsubsection|authorities>
+  <subsubsection|authorities><label|sect-runtime-api-auth>
 
   This entry is to report the set of authorities at a given block. It
   receives <verbatim|block_id> as an argument, it returns an array of
@@ -281,15 +280,13 @@
   reporting back the changes into the state storage. It receives the block
   header and the block body as its arguments and it returns a triplet:
 
-  <\with|par-mode|right>
+  <\with|par-mode|center>
     \;
 
     <small-table|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|results>>|<cell|Boolean>|<cell|Indicating
     if the execution was su>>|<row|<cell|<verbatim|storage_changes>>|<cell|<todo|???>>|<cell|Contains
     all changes to the state storage>>|<row|<cell|<verbatim|change_updat>>|<cell|<todo|???>>|<cell|>>>>>|Detail
     of the data execute_block returns after execution>
-
-    \;
   </with>
 
   <subsection|Code Executor>
@@ -330,16 +327,16 @@
   Polkadot RE implements the following procedure to assure the validity of
   the block:
 
-  <\algorithm>
-    <name|Import-and-Validate-Block(<math|B,Just<around|(|B|)>>)>
+  <\algorithm|<name|Import-and-Validate-Block(<math|B,Just<around|(|B|)>>)>>
+    <\algorithmic>
+      1<space|1em><name|Verify-Block-Justification><math|<around|(|B,Just<around|(|B|)>|)>>
 
-    1<space|1em><name|Verify-Block-Justification><math|<around|(|B,Just<around|(|B|)>|)>>
+      2<space|1em>Verify <math|H<rsub|p<around|(|B|)>>\<in\>Blockchain>.
 
-    2<space|1em>Verify <math|H<rsub|p<around|(|B|)>>\<in\>Blockchain>.
+      3<space|1em>State-Changes = Runtime.<name|<math|<around|(|B|)>>>
 
-    3<space|1em>State-Changes = Runtime.<name|<math|<around|(|B|)>>>
-
-    4<space|1em><name|Update-World-State>(State-Changes)
+      4<space|1em><name|Update-World-State>(State-Changes)
+    </algorithmic>
   </algorithm>
 
   <section|State Storage and the Storage Trie>
@@ -559,11 +556,19 @@
 
   <\definition>
     A <strong|GRANDPA Voter>, <math|v>, is represented by a key pair
-    <math|<around|(|k<rsup|pr><rsub|v>,k<rsub|v>|)>> where
-    <math|k<rsub|v><rsup|pr>> represents its private key, is a node running
-    GRANDPA protocol, and broadcasts votes to finilize blocks in a Polkadot
-    RE - based chain. The <strong|set of all GRANDPA voters> is indicated by
-    <math|\<bbb-V\>>.
+    <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
+    <math|k<rsub|v><rsup|pr>> represents its private key which is a
+    <math|ED25519> private key, is a node running GRANDPA protocol, and
+    broadcasts votes to finilize blocks in a Polkadot RE - based chain. The
+    <strong|set of all GRANDPA voters> is indicated by <math|\<bbb-V\>>. For
+    a given block B, we have
+
+    <\equation*>
+      \<bbb-V\><rsub|B>=<verbatim|authorities><around*|(|B|)>
+    </equation*>
+
+    where <math|<math-tt|authorities>> is the entry into runtime described in
+    Section <reference|sect-runtime-api-auth>.
   </definition>
 
   <\definition>
@@ -613,6 +618,118 @@
 
   The GRANDPA protocol dictates how an honest voter should vote in each
   sub-round, which is described in Algorithm <reference|alg-grandpa-round>.
+  After defining what consititues a vote in GRANDPA, we define how GRANDPA
+  counts votes.
+
+  <\definition>
+    Voter <math|v> <strong|equivocates> if they broadcast two or more valid
+    votes to blocks not residing on the same branch of the block tree during
+    one voting sub-round. In such a situation, we say that <math|v> is an
+    <strong|equivocator> and any vote <math|V<rsub|v><rsup|r,stage><around*|(|B|)>>
+    casted by <math|v> in that round is an <strong|equivocatory vote> and
+
+    <\equation*>
+      \<cal-E\><rsup|r,stage>
+    </equation*>
+
+    \ represents the set of all equivocators voters in sub-round
+    \P<math|stage>\Q of round <math|r>. When we want to refer to the number
+    of equivocators whose equivocation has been observed by voter <math|v> we
+    refer to it by:
+
+    <\equation*>
+      \<cal-E\><rsup|r,stage><rsub|obs<around*|(|v|)>>
+    </equation*>
+
+    \ 
+  </definition>
+
+  <\definition>
+    A vote <math|V<rsub|v><rsup|r,stage>=V<around|(|B|)>> is <strong|invalid>
+    if
+
+    <\itemize>
+      <\itemize-dot>
+        <item><math|H<around|(|B|)>> does not correspond to a valid block;
+
+        <item><math|B> is not an (eventual) descendent of a previously
+        finalized block;
+
+        <item><math|M<rsup|r,stage><rsub|v>> does not bear a valid signature;
+
+        <item><math|id<rsub|\<bbb-V\>>> does not match the current
+        <math|\<bbb-V\>>;
+
+        <item>If <math|V<rsub|v><rsup|r,stage>> is an equivacatory vote.
+      </itemize-dot>
+    </itemize>
+  </definition>
+
+  <\definition>
+    For validator v, <strong|the set of observed direct votes for Block
+    <math|B> in round <math|r>>, formally denoted by
+    <math|VD<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|B|)>>
+    is equal to the union of:
+
+    <\itemize-dot>
+      <item>set of valid votes <math|V<rsup|r,stage><rsub|v<rsub|i>>> casted
+      in round <math|r> and received by v such that
+      <math|V<rsup|r,stage><rsub|v<rsub|i>>=V<around|(|B|)>>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    We refer to <strong|the set of total votes observed by voter <math|v> in
+    sub-round \P<math|stage>\Q of round <math|r>> by
+    <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>>.
+
+    The <strong|set of all observed votes by <math|v> in the sub-round stage
+    of round <math|r> for block <math|B>>,
+    <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>>> is
+    equal to all of the observed direct votes casted for block <math|B> and
+    all of the <math|B>'s descendents defined formally as:
+
+    <\equation*>
+      V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>\<assign\><big|cup><rsub|v<rsub|i>\<in\>\<bbb-V\>,B\<geqslant\>B<rprime|'>>VD<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B<rprime|'>|)><rsub|\<nosymbol\>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>
+    </equation*>
+
+    The <strong|total number of observed votes for Block <math|B> in round
+    <math|r>> is defined to be the size of that set plus the total number of
+    equivocators voters:
+
+    <\equation*>
+      #V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>=<around|\||V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>|\|>+<around*|\||\<cal-E\><rsup|r,stage><rsub|obs<around*|(|v|)>>|\|>
+    </equation*>
+  </definition>
+
+  <\definition>
+    The current <strong|pre-voted> block <math|B<rsup|r,pv><rsub|v>> is the
+    block with
+
+    <\equation*>
+      H<rsub|n><around|(|B<rsup|r,pv><rsub|v>|)>=Max<around|(|<around|\<nobracket\>|H<rsub|n><around|(|B|)>|\|>*\<forall\>B:#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>\<geqslant\>2/3<around|\||\<bbb-V\>|\|>|)>
+    </equation*>
+  </definition>
+
+  Note that for genesis block <math|Genesis> we always have
+  <math|#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>=<around*|\||\<bbb-V\>|\|>>.
+
+  <\definition>
+    We say that round <math|r> is <strong|unfinalizable,> if for all
+    <math|B<rprime|'>\<geqslant\>B<rsub|v><rsup|r,pv>>:
+
+    <\equation*>
+      <around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>-<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)><rsub|\<nosymbol\>>><around|(|B<rprime|'>|)>|\|>\<geqslant\><frac|1|3><around|\||\<bbb-V\>|\|>
+    </equation*>
+  </definition>
+
+  <subsubsection|Voting Messages Specification>
+
+  Voting is done by means of broadcasting voting messages to the network.
+  Validators inform their peers about the block finalized in round <math|r>
+  by broadcasting a finalization message (see Algorithm
+  <reference|alg-grandpa-round> for more details). These messages are
+  specified in this section.
 
   <\definition>
     A vote casted by voter <math|v> should be broadcasted as a
@@ -639,91 +756,36 @@
     \;
   </definition>
 
-  <\definition>
-    A vote <math|V<rsub|v><rsup|r,stage>=V<around|(|B|)>> is <strong|invalid>
-    if
+  The <strong|justification for block B in round <math|r>> of GRANDPA
+  protocol defined <math|J<rsup|r><around*|(|B|)>> is a vector of pairs of
+  the type:
 
-    <\itemize>
-      <\itemize-dot>
-        <item><math|H<around|(|B|)>> does not correspond to a valid block.
+  <\equation*>
+    <around*|(|V<around*|(|B<rprime|'>|)>,<around*|(|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>|)>
+  </equation*>
 
-        <item><math|B> is not an (eventual) descendent of a previously
-        finalized block.
+  in which either
 
-        <item><math|M<rsup|r,stage><rsub|v>> does not bear a vaid signature.
+  <\equation*>
+    B<rprime|'>\<gtr\>B
+  </equation*>
 
-        <item><math|id<rsub|\<bbb-V\>>> does not match the current
-        <math|\<bbb-V\>>.
+  or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
+  equivocatory vote.
 
-        <item>If voter <math|v> has broadcasted two otherwise valid votes
-        during one sub-round.
-      </itemize-dot>
-    </itemize>
-  </definition>
-
-  <\definition>
-    For validator v, <strong|the set of observed direct votes for Block
-    <math|B> in round <math|r>>, formally denoted by
-    <math|VD<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|B|)>>
-    is equal to the set of valid votes <math|V<rsup|r,stage><rsub|v<rsub|i>>>
-    casted in round <math|r> and received by v such that
-    <math|V<rsup|r,stage><rsub|v<rsub|i>>=V<around|(|B|)>>.
-  </definition>
+  In all cases <math|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
+  is the signature of voter <math|v<rsub|i>> broadcasted during the
+  pre-commit sub-round of round r.
 
   <\definition>
-    We refer to <strong|the set of total votes observed by voter <math|v> in
-    sub-round <math|stage> of round <math|r>> by
-    <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>>.
-
-    The <strong|set of all observed vote by <math|v> in sub-round stage of
-    round <math|r>for block <math|B>>, <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>>>
-    is equal to all observed direct votes casted for block <math|B> and all
-    <math|B>'s descendents defined formally as:
+    <strong|<math|GRANDPA> finalizing message for block <math|B> in round
+    <math|r>> represented as <strong|<math|M<rsub|v><rsup|r,Fin>>(B)> is a
+    message broadcasted by voter <math|v> to the network indicating that
+    voter <math|v> has finalized block <math|B> in round <math|r>. It has the
+    following structure:
 
     <\equation*>
-      V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>\<assign\><big|cup><rsub|v<rsub|i>\<in\>\<bbb-V\>,B\<geqslant\>B<rprime|'>>VD<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B<rprime|'>|)><rsub|\<nosymbol\>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>
-    </equation*>
-
-    The <strong|total observed vote for Block <math|B> in round <math|r>> is
-    defined to be the size of that set, formally:
-
-    <\equation*>
-      <around|\||V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>|\|>\<assign\><big|sum><rsub|v<rsub|i>\<in\>\<bbb-V\>,><around|\||VD<rsup|r,stage><rsub|obs<around|(|v<rsub|i>|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|B<rprime|'>|)>|\|>
-    </equation*>
-  </definition>
-
-  <\definition>
-    The current <strong|pre-voted> block <math|B<rsup|r,pv><rsub|v>> is the
-    block with
-
-    <\equation*>
-      H<rsub|n><around|(|B<rsup|r,pv><rsub|v>|)>=Max<around|(|<around|\||H<rsub|n><around|(|B|)>|\|>*forallB:<around|\||V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>|\|>\<geqslant\>2/3<around|\||\<bbb-V\>|\|>|)>
-    </equation*>
-
-    Similarly, the <strong|pre-commited block ><math|B<rsub|v><rsup|r,pc>> is
-    the block with
-
-    <\equation*>
-      H<rsub|n><around|(|B<rsup|r,pc><rsub|v>|)>=Max<around|(|<around|\||H<rsub|n><around|(|B|)>|\|>*forallB:<around|\||V<rsub|obs<around|(|v|)>><rsup|r,pc><around|(|B|)>|\|>\<geqslant\>2/3<around|\||\<bbb-V\>|\|>|)>.
-    </equation*>
-
-    Let <math|B<rprime|'>> be any block such that
-    <math|B<rprime|'>\<leqslant\>B<rsub|v><rsup|r,stage>>. We define the
-    <strong|<math|C<rsup|r,stage><rsub|v><rsup|\<nosymbol\>>>, the chosen
-    block of> <math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>
-    as follows:
-
-    <\equation*>
-      C<rsup|r,stage><rsub|v><rsup|\<nosymbol\>>:<rsub|\<nosymbol\>>=<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|B*<space|1em>suchthatH<rsub|n><around|(|B|)>=Max<around|{|H<rsub|n><around|(|B<rprime|'>|)>|}>>|<cell|if<around|\||V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B<rsup|r,pv><rsub|v>|)>|\|>\<gtr\>2/3<around|\||\<bbb-V\>|\|>>>|<row|<cell|\<phi\>>|<cell|otherwise>>>>>|\<nobracket\>><tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|>>>>>
-    </equation*>
-  </definition>
-
-  <\definition>
-    We say that round <math|r> is <strong|unfinalizable,> if for all
-    <math|B<rprime|'>\<geqslant\>B<rsub|v><rsup|r,pv>>:
-
-    <\equation*>
-      <around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>-<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)><rsub|\<nosymbol\>>><around|(|B<rprime|'>|)>|\|>\<geqslant\><frac|1|3><around|\||\<bbb-V\>|\|>
+      M<rsup|r,stage><rsub|v>\<assign\>Enc<rsub|SC><around|(|r,<around|\<nobracket\>|V<around*|(|B|)>,J<rsup|r><around*|(|B|)>|)>|\<nobracket\>>
     </equation*>
   </definition>
 
@@ -741,16 +803,21 @@
   membership of GRANDPA voters changes, <math|r> is set to 0 and
   <math|V<rsub|id>> needs to be incremented.
 
+  \;
+
   <\algorithm>
-    <label|alg-join-leave-grandpa><name|Join-Leave-Grandpa-Voters> (V)
+    <label|alg-join-leave-grandpa><name|Join-Leave-Grandpa-Voters>
+    (<math|\<cal-V\>>)
+  <|algorithm>
+    <\algorithmic>
+      1<space|1em><math|r\<leftarrow\>0>
 
-    1<space|1em><math|r\<leftarrow\>0>
+      2<space|1em><math|\<cal-V\><rsub|id>\<leftarrow\>ReadState<around|(|<rprime|'>AUTHORITY_SET_KEY<rprime|'>|)>>
 
-    2<space|1em><math|V<rsub|id>\<leftarrow\>ReadState<around|(|<rprime|'>AUTHORITY_SET_KEY<rprime|'>|)>>
+      3<space|1em><math|\<cal-V\><rsub|id>\<leftarrow\>\<cal-V\><rsub|id>+1>
 
-    3<space|1em><math|V<rsub|id>\<leftarrow\>V<rsub|id>+1>
-
-    2<space|1em><name|Execute-One-Grandpa-Round><math|<around|(|r|)>>
+      2<space|1em><name|Execute-One-Grandpa-Round><math|<around|(|r|)>>
+    </algorithmic>
   </algorithm>
 
   Each voter should run Algorithm <reference|alg-completable-round> to verify
@@ -761,94 +828,101 @@
   For each round <math|r>, an honest voter <math|v> must participate in the
   voting process by following Algorithm <reference|alg-grandpa-round>.
 
-  <\algorithm>
-    <label|alg-grandpa-round><name|Play-Grandpa-round><math|<around|(|r|)>>
+  <\algorithm|<label|alg-grandpa-round><name|Play-Grandpa-round><math|<around|(|r|)>>>
+    <\algorithmic>
+      1<space|1em><math|t<rsub|r,v>\<leftarrow\>>Time
 
-    1<space|1em><math|t<rsub|r,v>\<leftarrow\>>Time
+      2<space|1em><math|primary\<leftarrow\>><name|Derive-Primary>
 
-    2<space|1em><math|primary\<leftarrow\>><name|Derive-Primary>
+      4<space|1em><strong|if> <math|v=primary>:
 
-    4<space|1em><strong|if> <math|v=primary>:
+      5<space|2em><name|Broadcast(><left|.><math|M<rsub|v<rsub|\<nosymbol\>>><rsup|r-1,fin>>()<right|)>
 
-    5<space|2em><name|Broadcast(><left|.><math|M<rsub|v<rsub|\<nosymbol\>>><rsup|r-1,fin>>()<right|)>
+      6<space|1em><strong|else>
 
-    6<space|1em><strong|else>
+      9<space|1em><name|<space|1em>Receive-Messages>(<strong|until> Time
+      <math|\<geqslant\>t<rsub|r<rsub|,>*v>+2\<times\>T> <strong|or>
 
-    9<space|1em><name|<space|1em>Receive-Messages>(<strong|until> Time
-    <math|\<geqslant\>t<rsub|r<rsub|,>*v>+2\<times\>T> <strong|or>
-    <name|Completable>(<math|r>))
+      <space|3em> <name|Completable>(<math|r>))
 
-    10<space|2em><math|L\<leftarrow\>><name|Received-as-Final()> <strong|or>
-    <name|Best-Final-Candidate>(<math|r>-1):
+      10<space|2em><math|L\<leftarrow\>><name|Received-as-Final()>
+      <strong|or> <name|Best-Final-Candidate>(
 
-    11<space|2em><strong|if> <name|Received(<math|M<rsub|v<rsub|primary>><rsup|r,pv><around|(|B|)>>)>
-    <strong|and> <math|B<rsup|r,pv><rsub|v>\<geqslant\>B\<gtr\>L>:
+      <space|3em><math|r>-1):
 
-    12<space|1em><space|2em><math|N\<leftarrow\>B>
+      11<space|2em><strong|if> <name|Received(<math|M<rsub|v<rsub|primary>><rsup|r,pv><around|(|B|)>>)>
+      <strong|and> <math|B<rsup|r,pv><rsub|v>\<geqslant\>B\<gtr\>L>:
 
-    13<space|2em><strong|else>
+      12<space|1em><space|2em><math|N\<leftarrow\>B>
 
-    14<space|3em><math|N\<leftarrow\>B<rprime|'>:H<rsub|n><around|(|B<rprime|'>|)>=max
-    <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<gtr\>L|}>>
+      13<space|2em><strong|else>
 
-    15<space|1em><name|Broadcast>(<math|M<rsub|v><rsup|r,pv><around|(|N|)>>)
+      14<space|3em><math|N\<leftarrow\>B<rprime|'>:H<rsub|n><around|(|B<rprime|'>|)>=max
+      <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<gtr\>L|}>>
 
-    16<space|1em><name|Receive-Messages>(<strong|until>
-    <math|B<rsup|r,pv<rsub|\<nosymbol\>>><rsub|v>\<geqslant\>L> <strong|and>
-    (Time <math|\<geqslant\>t<rsub|r<rsub|,>*v>+4\<times\>T><strong|or >
+      15<space|1em><name|Broadcast>(<math|M<rsub|v><rsup|r,pv><around|(|N|)>>)
 
-    <space|2em> <name|Completable>(<math|r>)))
+      16<space|1em><name|Receive-Messages>(<strong|until>
+      <math|B<rsup|r,pv<rsub|\<nosymbol\>>><rsub|v>\<geqslant\>L>
+      <strong|and> (
 
-    12<space|1em><name|Broadcast(<math|M<rsub|v><rsup|r,pc>>(Best-Final-Candidate(<math|r>))>
+      <space|3em>Time <math|\<geqslant\>t<rsub|r<rsub|,>*v>+4\<times\>T><strong|
+      or ><name|Completable>(<math|r>)))
 
-    13<space|1em><name|Play-Grandpa-round>(<math|r+1>)
+      12<space|1em><name|Broadcast(<math|M<rsub|v><rsup|r,pc>>(Best-Final-Candidate(<math|r>))>
+
+      13<space|1em><name|Play-Grandpa-round>(<math|r+1>)
+    </algorithmic>
   </algorithm>
 
-  <\algorithm>
-    <label|alg-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)
+  <\algorithm|<label|alg-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)>
+    <\algorithmic>
+      1<space|1em><math|\<cal-C\><rsub|\<nosymbol\>>\<leftarrow\><around|{|B<rprime|'>\|B<rprime|'>\<leqslant\>B<rsub|v><rsup|r,pv>:<around|\||V<rsub|v><rsup|r,pc>|\|>-#V<rsub|v><rsup|r,pc><around|(|B<rprime|'>|)>\<leqslant\>1/3<around|\||\<bbb-V\>|\|>|}>>
 
-    1<space|1em><math|\<cal-C\><rsub|\<nosymbol\>>\<leftarrow\><around|{|B<rprime|'>\|B<rprime|'>\<leqslant\>B<rsub|v><rsup|r,vc>:<around|\||V<rsub|v><rsup|r,pc>|\|>-<around|\||V<rsub|v><rsup|r,pc><around|(|B<rprime|'>|)>|\|>\<leqslant\>1/3<around|\||\<bbb-V\>|\|>|}>>
+      2<space|1em><strong|if> <math|\<cal-C\>=\<phi\>>:
 
-    2<space|1em><strong|if> <math|\<cal-C\>=\<phi\>>:
+      3<space|2em><strong|return> <math|\<phi\>>
 
-    3<space|2em><strong|return> <math|\<phi\>>
+      4<space|1em><strong|else>
 
-    4<space|1em><strong|else>
-
-    5<space|2em><strong|return ><math|E\<in\>\<cal-C\>:H<rsub|n><around|(|E|)>\<assign\>max
-    <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<in\>\<cal-C\>|}>>
+      5<space|2em><strong|return ><math|E\<in\>\<cal-C\>:H<rsub|n><around*|(|E|)>=max
+      <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<in\>\<cal-C\>|}>>
+    </algorithmic>
   </algorithm>
 
-  <\algorithm>
-    <label|alg-completable-round><name|Completable>(<math|r>)
+  <\algorithm|<label|alg-completable-round><name|Completable>(<math|r>)>
+    <\algorithmic>
+      1<space|1em><math|E\<leftarrow\>><name|Best-Final-Candidate>(<math|r>)
 
-    1<space|1em><strong|if> <math|\<exists\>B<rprime|'>\<leqslant\>B<rsub|v><rsup|r,pv>*and<around|\||V<rsub|v><rsup|r,pc>|\|>-<around|\||V<rsub|v><rsup|r,pc><around|(|B|)>|\|>\<leqslant\>1/3<around|\||\<bbb-V\>|\|>>
+      1<space|1em><strong|if> <math|E\<neq\>\<phi\>>
 
-    2<space|2em><strong|return> <name|True>
+      2<space|2em><strong|return> <name|True>
 
-    3<space|1em><strong|elif> <math|r><strong|is> unfinalizable:
+      3<space|1em><strong|elif> <math|r> <strong|is> unfinalizable:
 
-    4<space|2em><strong|return> <name|True>
+      4<space|2em><strong|return> <name|True>
 
-    5<space|1em><strong|else>
+      5<space|1em><strong|else>
 
-    6<space|2em><strong|return> FALSE
+      6<space|2em><strong|return> <name|False>
+    </algorithmic>
   </algorithm>
 
-  <\algorithm>
-    <name|FinalizeRound>(<math|r>)
+  <\algorithm|<name|FinalizeRound>(<math|r>)>
+    <\algorithmic>
+      1<space|1em><math|L\<leftarrow\>><name|Last-Finalized-Block>
 
-    1<space|1em><math|L\<leftarrow\>><name|Last-Finalized-Block>
+      2<space|1em><math|E\<leftarrow\>><name|Best-Final-Candidate>(<math|r>)
 
-    2<space|1em><strong|if> <math|C<rsup|r,pc>\<geqslant\>L> and
-    <math|V<rsup|r-1,pc><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|L|)>\<gtr\>2/3<around|\||\<cal-V\>|\|>>
-    and <math|C<rsup|r,pv><around|(|P|)>\<neq\>\<phi\>>
+      2<space|1em><strong|if> <math|E\<geqslant\>L> <strong|and>
+      <math|V<rsup|r-1,pc><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|E|)>\<gtr\>2/3<around|\||\<cal-V\>|\|>>
 
-    3<space|2em><name|Last-Finalized-Block><math|\<leftarrow\>C<rsup|r,pc>>
+      3<space|2em><name|Last-Finalized-Block><math|\<leftarrow\>B<rsup|r,pc>>
 
-    4<space|2em><strong|if> <math|M<rsub|v><rsup|r,Fin><around|(|C<rsup|r,pc>|)>\<nin\>><name|Received-Messages>:
+      4<space|2em><strong|if> <math|M<rsub|v><rsup|r,Fin><around|(|E|)>\<nin\>><name|Received-Messages>:
 
-    5<space|3em><name|Broadcast>(<math|M<rsub|v><rsup|r,Fin><around|(|C<rsup|r,pc>|)>>)
+      5<space|3em><name|Broadcast>(<math|M<rsub|v><rsup|r,Fin><around|(|E|)>>)
+    </algorithmic>
   </algorithm>
 
   <section|Auxilary Encodings>
@@ -1020,73 +1094,86 @@
   </itemize-dot>
 </body>
 
-<initial|<\collection>
-</collection>>
+<\initial>
+  <\collection>
+    <associate|page-height|auto>
+    <associate|page-medium|papyrus>
+    <associate|page-screen-margin|true>
+    <associate|page-screen-right|5mm>
+    <associate|page-type|letter>
+    <associate|page-width|auto>
+    <associate|tex-even-side-margin|5mm>
+    <associate|tex-odd-side-margin|5mm>
+    <associate|tex-text-width|170mm>
+  </collection>
+</initial>
 
 <\references>
   <\collection>
-    <associate|alg-completable-round|<tuple|7.3.3|?>>
-    <associate|alg-grandpa-best-candidate|<tuple|7.3.3|?>>
-    <associate|alg-grandpa-round|<tuple|7.3.3|?>>
-    <associate|alg-join-leave-grandpa|<tuple|7.3.2|?>>
-    <associate|auto-1|<tuple|1|?>>
-    <associate|auto-10|<tuple|1|?>>
-    <associate|auto-11|<tuple|3.1.2|?>>
-    <associate|auto-12|<tuple|3.1.3|?>>
-    <associate|auto-13|<tuple|2|?>>
-    <associate|auto-14|<tuple|3.2|?>>
-    <associate|auto-15|<tuple|3.3|?>>
-    <associate|auto-16|<tuple|4|?>>
-    <associate|auto-17|<tuple|4.1|?>>
-    <associate|auto-18|<tuple|5|?>>
-    <associate|auto-19|<tuple|5.1|?>>
-    <associate|auto-2|<tuple|2|?>>
-    <associate|auto-20|<tuple|5.2|?>>
-    <associate|auto-21|<tuple|5.3|?>>
-    <associate|auto-22|<tuple|6|?>>
-    <associate|auto-23|<tuple|7|?>>
-    <associate|auto-24|<tuple|7.1|?>>
-    <associate|auto-25|<tuple|7.2|?>>
-    <associate|auto-26|<tuple|7.3|?>>
-    <associate|auto-27|<tuple|7.3.1|?>>
-    <associate|auto-28|<tuple|7.3.2|?>>
-    <associate|auto-29|<tuple|7.3.3|?>>
-    <associate|auto-3|<tuple|2.1|?>>
-    <associate|auto-30|<tuple|8|?>>
-    <associate|auto-31|<tuple|8.1|?>>
-    <associate|auto-32|<tuple|8.2|?>>
-    <associate|auto-33|<tuple|8.3|?>>
-    <associate|auto-34|<tuple|9|?>>
-    <associate|auto-35|<tuple|10|?>>
-    <associate|auto-36|<tuple|11|?>>
-    <associate|auto-37|<tuple|12|?>>
-    <associate|auto-4|<tuple|2.2|?>>
-    <associate|auto-5|<tuple|2.3|?>>
-    <associate|auto-6|<tuple|3|?>>
-    <associate|auto-7|<tuple|3.1|?>>
-    <associate|auto-8|<tuple|1|?>>
-    <associate|auto-9|<tuple|3.1.1|?>>
-    <associate|block|<tuple|2.1|?>>
-    <associate|def-block-header|<tuple|7|?>>
-    <associate|def-block-header-hash|<tuple|8|?>>
-    <associate|def-hpe|<tuple|29|?>>
-    <associate|def-key-len-enc|<tuple|30|?>>
-    <associate|def-node-prefix|<tuple|12|?>>
-    <associate|def-path-graph|<tuple|2|?>>
-    <associate|def-radix-tree|<tuple|3|?>>
-    <associate|def-state-read-write|<tuple|9|?>>
-    <associate|def-vote|<tuple|19|?>>
-    <associate|defn-bit-rep|<tuple|6|?>>
-    <associate|key-encode-in-trie|<tuple|1|?>>
-    <associate|sect-abi-encoding|<tuple|3.3|?>>
-    <associate|sect-entries-into-runtime|<tuple|3|?>>
-    <associate|sect-genisis-block|<tuple|9|?>>
-    <associate|sect-merkl-proof|<tuple|5.3|?>>
-    <associate|sect-predef-storage-keys|<tuple|10|?>>
-    <associate|sect-runtime-api|<tuple|12|?>>
-    <associate|sect-runtime-upgrade|<tuple|11|?>>
-    <associate|sect-scale-codec|<tuple|8.1|?>>
-    <associate|snippet-runtime-enteries|<tuple|1|?>>
+    <associate|alg-completable-round|<tuple|5|11>>
+    <associate|alg-grandpa-best-candidate|<tuple|4|10>>
+    <associate|alg-grandpa-round|<tuple|3|10>>
+    <associate|alg-join-leave-grandpa|<tuple|2|10>>
+    <associate|auto-1|<tuple|1|1>>
+    <associate|auto-10|<tuple|1|3>>
+    <associate|auto-11|<tuple|3.1.2|3>>
+    <associate|auto-12|<tuple|3.1.3|3>>
+    <associate|auto-13|<tuple|2|3>>
+    <associate|auto-14|<tuple|3.2|4>>
+    <associate|auto-15|<tuple|3.3|4>>
+    <associate|auto-16|<tuple|4|4>>
+    <associate|auto-17|<tuple|4.1|4>>
+    <associate|auto-18|<tuple|5|4>>
+    <associate|auto-19|<tuple|5.1|4>>
+    <associate|auto-2|<tuple|2|1>>
+    <associate|auto-20|<tuple|5.2|5>>
+    <associate|auto-21|<tuple|5.3|5>>
+    <associate|auto-22|<tuple|6|6>>
+    <associate|auto-23|<tuple|7|6>>
+    <associate|auto-24|<tuple|7.1|7>>
+    <associate|auto-25|<tuple|7.2|7>>
+    <associate|auto-26|<tuple|7.3|7>>
+    <associate|auto-27|<tuple|7.3.1|7>>
+    <associate|auto-28|<tuple|7.3.2|9>>
+    <associate|auto-29|<tuple|7.3.3|9>>
+    <associate|auto-3|<tuple|2.1|2>>
+    <associate|auto-30|<tuple|7.3.4|10>>
+    <associate|auto-31|<tuple|8|11>>
+    <associate|auto-32|<tuple|8.1|11>>
+    <associate|auto-33|<tuple|8.2|12>>
+    <associate|auto-34|<tuple|8.3|12>>
+    <associate|auto-35|<tuple|9|13>>
+    <associate|auto-36|<tuple|10|13>>
+    <associate|auto-37|<tuple|11|13>>
+    <associate|auto-38|<tuple|12|13>>
+    <associate|auto-4|<tuple|2.2|2>>
+    <associate|auto-5|<tuple|2.3|2>>
+    <associate|auto-6|<tuple|3|2>>
+    <associate|auto-7|<tuple|3.1|3>>
+    <associate|auto-8|<tuple|1|3>>
+    <associate|auto-9|<tuple|3.1.1|3>>
+    <associate|block|<tuple|2.1|2>>
+    <associate|def-block-header|<tuple|7|2>>
+    <associate|def-block-header-hash|<tuple|8|2>>
+    <associate|def-hpe|<tuple|31|12>>
+    <associate|def-key-len-enc|<tuple|32|12>>
+    <associate|def-node-prefix|<tuple|12|6>>
+    <associate|def-path-graph|<tuple|2|1>>
+    <associate|def-radix-tree|<tuple|3|1>>
+    <associate|def-state-read-write|<tuple|9|5>>
+    <associate|def-vote|<tuple|19|7>>
+    <associate|defn-bit-rep|<tuple|6|1>>
+    <associate|key-encode-in-trie|<tuple|1|5>>
+    <associate|sect-abi-encoding|<tuple|3.3|4>>
+    <associate|sect-entries-into-runtime|<tuple|3|2>>
+    <associate|sect-genisis-block|<tuple|9|13>>
+    <associate|sect-merkl-proof|<tuple|5.3|5>>
+    <associate|sect-predef-storage-keys|<tuple|10|13>>
+    <associate|sect-runtime-api|<tuple|12|13>>
+    <associate|sect-runtime-api-auth|<tuple|3.1.2|3>>
+    <associate|sect-runtime-upgrade|<tuple|11|13>>
+    <associate|sect-scale-codec|<tuple|8.1|11>>
+    <associate|snippet-runtime-enteries|<tuple|1|3>>
   </collection>
 </references>
 
@@ -1204,45 +1291,49 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
 
-      <with|par-left|<quote|2tab>|7.3.2<space|2spc>Initiating the GRANDPA
-      State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|7.3.2<space|2spc>Voting Messages
+      Specification <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-28>>
 
-      <with|par-left|<quote|2tab>|7.3.3<space|2spc>Voting Process in Round
-      <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|7.3.3<space|2spc>Initiating the GRANDPA
+      State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-29>>
+
+      <with|par-left|<quote|2tab>|7.3.4<space|2spc>Voting Process in Round
+      <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-30>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|8<space|2spc>Auxilary
       Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-30><vspace|0.5fn>
+      <no-break><pageref|auto-31><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|8.1<space|2spc>SCALE Codec
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-31>>
+      <no-break><pageref|auto-32>>
 
       <with|par-left|<quote|1tab>|8.2<space|2spc>Hex Encoding
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-32>>
+      <no-break><pageref|auto-33>>
 
       <with|par-left|<quote|1tab>|8.3<space|2spc>Partial Key Encoding
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-33>>
+      <no-break><pageref|auto-34>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|9<space|2spc>Genisis
       Block Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-34><vspace|0.5fn>
+      <no-break><pageref|auto-35><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|10<space|2spc>Predefined
       Storage keys> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-35><vspace|0.5fn>
+      <no-break><pageref|auto-36><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|11<space|2spc>Runtime
       upgrade> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-36><vspace|0.5fn>
+      <no-break><pageref|auto-37><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|12<space|2spc>Runtime
       API> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-37><vspace|0.5fn>
+      <no-break><pageref|auto-38><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
