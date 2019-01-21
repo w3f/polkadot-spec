@@ -1,8 +1,7 @@
 \documentclass{article}
 \usepackage[english]{babel}
-\usepackage{amsmath,amssymb,calc,ifthen,capt-of}
-\usepackage{color}
-\usepackage[margin=1in]{geometry}
+\usepackage{geometry,amsmath,amssymb,calc,ifthen,alltt,capt-of}
+\geometry{letterpaper, paperheight= auto, paperwidth= auto}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
@@ -23,6 +22,7 @@
 \newcommand{\tmtexttt}[1]{{\ttfamily{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
+\newenvironment{tmcode}[1][]{\begin{alltt} }{\end{alltt}}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
 \newcommand{\tmfloatcontents}{}
@@ -55,9 +55,8 @@
 \providecommand{\tmverbatim}[1]{\tmtexttt{#1}}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
-
-\newcommand{\todo}[1]{{\color{red} TODO: {#1}}}
-\newcommand{\algorithm}[1]{\vspace{0.5cm} \noindent \textbf{Algorithm} \\#1}
+\newcommand{\figuretext}{Snippet}
+\newcommand{\figuretext}{Figure}
 
 \begin{document}
 
@@ -66,7 +65,7 @@
   {\Large Protocol Specification}
 }
 
-\date{January 16, 2018}
+\date{January 21, 2019}
 
 \maketitle
 
@@ -74,7 +73,7 @@
 
 \begin{definition}
   {\tmstrong{Runtime}} is the state transition function of the decentralized
-  ledger protocol.
+  ledger protocol.\tmverbatim{}
 \end{definition}
 
 \begin{definition}
@@ -229,16 +228,12 @@ Polkadot RE assumes that at least the following functions are implemented in
 the Runtime Wasm blob and has been exported as shown in Snippet
 \ref{snippet-runtime-enteries} :
 
-\
-
-{\tmfloat{h}{small}{table}{\begin{tabular}{l}
-  \tmverbatim{(export "version" (func \$version))}\\
-  \tmverbatim{(export "authorities" (func \$authorities))}\\
-  \tmverbatim{(export "execute\_block" (func \$execute\_block)) }
-\end{tabular}}{\label{snippet-runtime-enteries}Snippet to export entries into
-tho Wasm runtime module}}
-
-\
+\tmfloat{h}{small}{figure}{\begin{tmcode}[cpp]
+(export "version" (func $version))
+(export "authorities" (func $authorities))
+(export "execute_block" (func $execute_block))
+\end{tmcode}}{\label{snippet-runtime-enteries}Snippet to export entries into
+tho Wasm runtime module}
 
 The following sections describe the standard based on which Polkadot RE
 communicates with each runtime entry.
@@ -251,25 +246,27 @@ data:
 
 \
 
-{\tmfloat{h}{small}{table}{\begin{tabular}{lll}
-  \hline
-  Name & Type & Description\\
-  \hline
-  \tmverbatim{spec\_name} & String & runtime identifier\\
-  \tmverbatim{impl\_name} & String & the name of the implementation (e.g.
-  C++)\\
-  \tmverbatim{authoring\_version} & 32-bit non-negative integer & the version
-  of the authorship interface\\
-  \tmverbatim{spec\_version} & 32-bit non-negative integer & the version of
-  the runtime specification\\
-  \tmverbatim{impl\_version} & 32-bit non-negative integer & the version of
-  the runtime implementation\\
-  \tmverbatim{apis} & ApisVec & List of supported API\\
-  \hline
-\end{tabular}}{Detail of the version data type returns from runtime
-\tmverbatim{version} function}}
+\begin{center}
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    \hline
+    Name & Type & Description\\
+    \hline
+    \tmverbatim{spec\_name} & String & runtime identifier\\
+    \tmverbatim{impl\_name} & String & the name of the implementation (e.g.
+    C++)\\
+    \tmverbatim{authoring\_version} & 32-bit uint & the version of the
+    authorship interface\\
+    \tmverbatim{spec\_version} & 32-bit uint & the version of the runtime
+    specification\\
+    \tmverbatim{impl\_version} & 32-bit uint & the version of the runtime
+    implementation\\
+    \tmverbatim{apis} & ApisVec & List of supported AP\\
+    \hline
+  \end{tabular}}{Detail of the version data type returns from runtime
+  \tmverbatim{version} function}
+\end{center}
 
-\subsubsection{authorities}
+\subsubsection{authorities}\label{sect-runtime-api-auth}
 
 This entry is to report the set of authorities at a given block. It receives
 \tmverbatim{block\_id} as an argument, it returns an array of
@@ -281,20 +278,20 @@ This entry is responsible to execute all extrinsics in the block and reporting
 back the changes into the state storage. It receives the block header and the
 block body as its arguments and it returns a triplet:
 
-\
-
-{\tmfloat{h}{small}{table}{\begin{tabular}{lll}
-  \hline
-  Name & Type & Description\\
-  \hline
-  \tmverbatim{results} & Boolean & Indicating if the execution was su\\
-  \tmverbatim{storage\_changes} & {\todo{???}} & Contains all changes to the
-  state storage\\
-  \tmverbatim{change\_updat} & {\todo{???}} & \\
-  \hline
-\end{tabular}}{Detail of the data execute\_block returns after execution}}
-
-\
+\begin{center}
+  \
+  
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    \hline
+    Name & Type & Description\\
+    \hline
+    \tmverbatim{results} & Boolean & Indicating if the execution was su\\
+    \tmverbatim{storage\_changes} & {\todo{???}} & Contains all changes to the
+    state storage\\
+    \tmverbatim{change\_updat} & {\todo{???}} & \\
+    \hline
+  \end{tabular}}{Detail of the data execute\_block returns after execution}
+\end{center}
 
 \subsection{Code Executor}
 
@@ -334,15 +331,15 @@ process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-{\algorithm{{\tmname{Import-and-Validate-Block($B, \tmop{Just} (B)$)}}
-
-1\quad{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$
+{\algorithm{{\tmname{Import-and-Validate-Block($B, \tmop{Just}
+(B)$)}}}{{\algorithmic{1\quad{\tmname{Verify-Block-Justification}}$(B,
+\tmop{Just} (B))$
 
 2\quad Verify $H_{p (B)} \in \tmop{Blockchain}$.
 
 3\quad State-Changes = Runtime.{\tmname{$(B)$}}
 
-4\quad{\tmname{Update-World-State}}(State-Changes)}}
+4\quad{\tmname{Update-World-State}}(State-Changes)}}}}
 
 \section{State Storage and the Storage Trie}
 
@@ -359,7 +356,7 @@ functions. Here we define the essential ones which are also used by the
 Polkadot RE.
 
 \begin{definition}
-  \label{def-state-read-write} The {\tmstrong{StateRead}} and
+  \label{def-state-read-write}The {\tmstrong{StateRead}} and
   {\tmstrong{StateWrite}} functions provide basic access to the State Storage:
   \[ v = \tmop{StateRead} (k) \]
   \[ \tmop{StateWrite} (k, v) \]
@@ -372,8 +369,8 @@ re-arranged and hashed in a {\tmem{radix 16 tree}} also known as
 to as the {\tmem{{\tmstrong{Trie}},}} in order to compute the hash of the
 whole state storage consistently and efficiently at any given time.
 
-As well, a modification has been made in the storing of the nodes' hash in
-the Merkle Tree structure to save space on entries storing small entries.
+As well, a modification has been made in the storing of the nodes' hash in the
+Merkle Tree structure to save space on entries storing small entries.
 
 Because the Trie is used to compute the {\tmem{state root}}, $H_r$, (see
 Definition \ref{def-block-header}), which is used to authenticate the validity
@@ -502,8 +499,8 @@ on a validator node.
 \subsection{Block Tree}
 
 In the course of formation of a (distributed) blockchain, it is possible that
-the chain forks into multiple sub chains in various block positions. We refer to
-this structure as a {\tmem{block tree:}}
+the chain forks into multiple sub chains in various block positions. We refer
+to this structure as a {\tmem{block tree:}}
 
 \begin{definition}
   The {\tmstrong{Block Tree}} of a blockchain is the union of all different
@@ -512,24 +509,25 @@ this structure as a {\tmem{block tree:}}
   $B_1$ is a parent of $B_2$.
 \end{definition}
 
-Because every block in the blockchain contains a reference to its parent, it is easy to see that the block tree is actually a tree. 
+Because every block in the blockchain contains a reference to its parent, it
+is easy to see that the block tree is actually a tree.
 
 A block tree naturally imposes a partial order relationships on the blocks as
 follows:
 
 \begin{definition}
   We say {\tmstrong{B is descendant of $B'$}}, formally noted as {\tmstrong{$B
-  > B'$}} if $B$ is a descendent of $B'$ in the block tree. \ 
+  > B'$}} if $B$ is a descendent of $B'$ in the block tree. 
 \end{definition}
 
 \subsection{Block Production}
 
 \subsection{Finality}
 
-Polkadot RE uses GRANDPA Finality protocol {\cite{AlSt19-Grandpai}} to finalize
-blocks. Finality is obtained by consecutive rounds of voting by validator
-nodes. Validators execute GRANDPA finality process in parallel to Block
-Production as an independent service. In this section, we describe the
+Polkadot RE uses GRANDPA Finality protocol {\cite{AlSt19-Grandpai}} to
+finalize blocks. Finality is obtained by consecutive rounds of voting by
+validator nodes. Validators execute GRANDPA finality process in parallel to
+Block Production as an independent service. In this section, we describe the
 different functions that GRANDPA service is supposed to perform to
 successfully participate in the block finalization process.
 
@@ -537,10 +535,14 @@ successfully participate in the block finalization process.
 
 \begin{definition}
   A {\tmstrong{GRANDPA Voter}}, $v$, is represented by a key pair
-  $(k^{\tmop{pr}}_v, k_v)$ where $k_v^{\tmop{pr}}$ represents its private key,
-  is a node running GRANDPA protocol, and broadcasts votes to finilize blocks in
-  a Polkadot RE - based chain. The {\tmstrong{set of all GRANDPA voters}} is
-  indicated by $\mathbb{V}$.
+  $(k^{\tmop{pr}}_v, v_{\tmop{id}})$ where $k_v^{\tmop{pr}}$ represents its
+  private key which is a $\tmop{ED} 25519$ private key, is a node running
+  GRANDPA protocol, and broadcasts votes to finilize blocks in a Polkadot RE -
+  based chain. The {\tmstrong{set of all GRANDPA voters}} is indicated by
+  $\mathbb{V}$. For a given block B, we have
+  \[ \mathbb{V}_B = \tmverbatim{\tmop{authorities}} (B) \]
+  where $\mathtt{authorities}$ is the entry into runtime described in Section
+  \ref{sect-runtime-api-auth}.
 \end{definition}
 
 \begin{definition}
@@ -556,13 +558,13 @@ successfully participate in the block finalization process.
   {\tmstrong{r}}: is the voting round number.
 \end{definition}
 
-Now we need to define how Polkadot RE counts the number of votes for block $B$.
-First a vote is defined as:
+Now we need to define how Polkadot RE counts the number of votes for block
+$B$. First a vote is defined as:
 
 \begin{definition}
   \label{def-vote}A {\tmstrong{GRANDPA vote }}or simply a vote for block $B$
   is an ordered pair defined as
-  \[ V_{} (B) \assign (H_h (B), H_i (B)) \]
+  \[ V_{\nosymbol} (B) \assign (H_h (B), H_i (B)) \]
   where $H_h (B)$ and $H_i (B)$ are block hash and block number defined in
   Definitions \ref{def-block-header} and \ref{def-block-header-hash}
   respectively.
@@ -574,26 +576,112 @@ First a vote is defined as:
   called {\tmstrong{pre-commit}}.
   
   By {\tmstrong{$V_v^{r, \tmop{pv}}$}} and {\tmstrong{$V_v^{r, \tmop{pc}}$}}
-  we refer to the vote casted by voter $v$ in round $r$ (for block $B$)
-  during the pre-vote and the pre-commit sub-round respectively.
+  we refer to the vote casted by voter $v$ in round $r$ (for block $B$) during
+  the pre-vote and the pre-commit sub-round respectively.
 \end{definition}
 
 The GRANDPA protocol dictates how an honest voter should vote in each
-sub-round, which is described in Algorithm \ref{alg-grandpa-round}.
+sub-round, which is described in Algorithm \ref{alg-grandpa-round}. After
+defining what consititues a vote in GRANDPA, we define how GRANDPA counts
+votes.
+
+\begin{definition}
+  Voter $v$ {\tmstrong{equivocates}} if they broadcast two or more valid votes
+  to blocks not residing on the same branch of the block tree during one
+  voting sub-round. In such a situation, we say that $v$ is an
+  {\tmstrong{equivocator}} and any vote $V_v^{r, \tmop{stage}} (B)$ casted by
+  $v$ in that round is an {\tmstrong{equivocatory vote}} and
+  \[ \mathcal{E}^{r, \tmop{stage}} \]
+  represents the set of all equivocators voters in sub-round
+  ``$\tmop{stage}$'' of round $r$. When we want to refer to the number of
+  equivocators whose equivocation has been observed by voter $v$ we refer to
+  it by:
+  \[ \mathcal{E}^{r, \tmop{stage}}_{\tmop{obs} (v)} \]
+  
+\end{definition}
+
+\begin{definition}
+  A vote $V_v^{r, \tmop{stage}} = V (B)$ is {\tmstrong{invalid}} if
+  \begin{itemize}
+    \begin{itemizedot}
+      \item $H (B)$ does not correspond to a valid block;
+      
+      \item $B$ is not an (eventual) descendent of a previously finalized
+      block;
+      
+      \item $M^{r, \tmop{stage}}_v$ does not bear a valid signature;
+      
+      \item $\tmop{id}_{\mathbb{V}}$ does not match the current $\mathbb{V}$;
+      
+      \item If $V_v^{r, \tmop{stage}}$ is an equivacatory vote.
+    \end{itemizedot}
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  For validator v, {\tmstrong{the set of observed direct votes for Block $B$
+  in round $r$}}, formally denoted by $\tmop{VD}^{r, \tmop{stage}}_{\tmop{obs}
+  (v)}^{\nosymbol}_{\nosymbol} (B)$ is equal to the union of:
+  \begin{itemizedot}
+    \item set of valid votes $V^{r, \tmop{stage}}_{v_i}$ casted in round $r$
+    and received by v such that $V^{r, \tmop{stage}}_{v_i} = V (B)$.
+  \end{itemizedot}
+\end{definition}
+
+\begin{definition}
+  We refer to {\tmstrong{the set of total votes observed by voter $v$ in
+  sub-round ``$\tmop{stage}$'' of round $r$}} by {\tmstrong{$V^{r,
+  \tmop{stage}}_{\tmop{obs} (v)}^{\nosymbol}_{\nosymbol}$}}.
+  
+  The {\tmstrong{set of all observed votes by $v$ in the sub-round stage of
+  round $r$ for block $B$}}, {\tmstrong{$V^{r, \tmop{stage}}_{\tmop{obs} (v)}
+  (B)$}} is equal to all of the observed direct votes casted for block $B$ and
+  all of the $B$'s descendents defined formally as:
+  \[ V^{r, \tmop{stage}}_{\tmop{obs} (v)} (B) \assign \bigcup_{v_i \in
+     \mathbb{V}, B \geqslant B'} \tmop{VD}^{r, \tmop{stage}}_{\tmop{obs} (v)}
+     (B')_{\nosymbol}^{\nosymbol}_{\nosymbol} \]
+  The {\tmstrong{total number of observed votes for Block $B$ in round $r$}}
+  is defined to be the size of that set plus the total number of equivocators
+  voters:
+  \[ \#V^{r, \tmop{stage}}_{\tmop{obs} (v)} (B) = |V^{r,
+     \tmop{stage}}_{\tmop{obs} (v)} (B) | + | \mathcal{E}^{r,
+     \tmop{stage}}_{\tmop{obs} (v)} | \]
+\end{definition}
+
+\begin{definition}
+  The current {\tmstrong{pre-voted}} block $B^{r, \tmop{pv}}_v$ is the block
+  with
+  \[ H_n (B^{r, \tmop{pv}}_v) = \tmop{Max} (H_n (B) | \forall B :
+     \#V_{\tmop{obs} (v)}^{r, \tmop{pv}} (B) \geqslant 2 / 3|\mathbb{V}|) \]
+\end{definition}
+
+Note that for genesis block $\tmop{Genesis}$ we always have $\#V_{\tmop{obs}
+(v)}^{r, \tmop{pv}} (B) = | \mathbb{V} |$.
+
+\begin{definition}
+  We say that round $r$ is {\tmstrong{unfinalizable,}} if for all $B'
+  \geqslant B_v^{r, \tmop{pv}}$:
+  \[ |V^{r, \tmop{pc}}_{\tmop{obs} (v)} | - |V^{r, \tmop{pc}}_{\tmop{obs}
+     (v)_{\nosymbol}} (B') | \geqslant \frac{1}{3} |\mathbb{V}| \]
+\end{definition}
+
+\subsubsection{Voting Messages Specification}
+
+Voting is done by means of broadcasting voting messages to the network.
+Validators inform their peers about the block finalized in round $r$ by
+broadcasting a finalization message (see Algorithm \ref{alg-grandpa-round} for
+more details). These messages are specified in this section.
 
 \begin{definition}
   A vote casted by voter $v$ should be broadcasted as a {\tmstrong{message
   $M^{r, \tmop{stage}}_v$}} to the network by voter $v$ with the following
   structure:
-  
-  
   \[ M^{r, \tmop{stage}}_v \assign \tmop{Enc}_{\tmop{SC}} (r,
      \tmop{id}_{\mathbb{V}}, \tmop{Enc}_{\tmop{SC}} (\tmop{stage}, V_v^{r,
-     \tmop{stage}} \nobracket, \tmop{Sig}_{\tmop{ED} 25519}
-     (\tmop{Enc}_{\tmop{SC}} (\tmop{stage}, V_v^{r, \tmop{stage}} \nobracket,
-     r, V_{\tmop{id}}), v_{\tmop{id}}) \]
+     \tmop{stage}}, \tmop{Sig}_{\tmop{ED} 25519} (\tmop{Enc}_{\tmop{SC}}
+     (\tmop{stage}, V_v^{r, \tmop{stage}}, r, V_{\tmop{id}}), v_{\tmop{id}})
+  \]
   Where:
-  
   \begin{center}
     \begin{tabular}{rll}
       r: & round number & 64 bit integer\\
@@ -602,142 +690,85 @@ sub-round, which is described in Algorithm \ref{alg-grandpa-round}.
       array\\
       {\rightaligned{}}$\tmop{stage}$: & 0 if it is the pre-vote sub-round & 1
       byte\\
-      & 1 if it the pre-commit sub-round  & 
+      & 1 if it the pre-commit sub-round & 
     \end{tabular}
   \end{center}
   
-  \ 
 \end{definition}
 
-\begin{definition}
-  A vote $V_v^{r, \tmop{stage}} = V (B)$ is {\tmstrong{invalid}} if
-  \begin{itemize}
-    \begin{itemizedot}
-      \item $H (B)$ does not correspond to a valid block.
-      
-      \item $B$ is not an (eventual) descendent of a previously finalized
-      block.
-      
-      \item $M^{r, \tmop{stage}}_v$ does not bear a vaid signature.
-      
-      \item $\tmop{id}_{\mathbb{V}}$ does not match the current $\mathbb{V}$.
-      
-      \item If voter $v$ has broadcasted two otherwise valid votes during one
-      sub-round.
-    \end{itemizedot}
-  \end{itemize}
-\end{definition}
+The {\tmstrong{justification for block B in round $r$}} of GRANDPA protocol
+defined $J^r (B)$ is a vector of pairs of the type:
+\[ (V (B'), (\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B'), v_{\tmop{id}})) \]
+in which either
+\[ B' > B \]
+or $V^{r, \tmop{pc}}_{v_i} (B')$ is an equivocatory vote.
+
+In all cases $\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B')$ is the signature of voter
+$v_i$ broadcasted during the pre-commit sub-round of round r.
 
 \begin{definition}
-  For validator v, {\tmstrong{the set of observed direct votes for Block $B$ in
-  round $r$}}, formally denoted by $\tmop{VD}^{r, \tmop{stage}}_{\tmop{obs}
-  (v)}^{}_{} (B)$ is equal to the set of valid votes $V^{r,
-  \tmop{stage}}_{v_i}$ casted in round $r$ and received by v such that $V^{r,
-  \tmop{stage}}_{v_i} = V (B)$.
-\end{definition}
-
-\begin{definition}
-  We refer to {\tmstrong{the set of total votes observed by voter $v$ in
-  sub-round $\tmop{stage}$ of round $r$}} by {\tmstrong{$V^{r,
-  \tmop{stage}}_{\tmop{obs} (v)}^{}_{}$}}.
-  
-  The {\tmstrong{set of all observed vote by $v$ in sub-round stage of round
-  $r$for block $B$}}, {\tmstrong{$V^{r, \tmop{stage}}_{\tmop{obs} (v)} (B)$}}
-  is equal to all observed direct votes casted for block $B$ and all $B$'s
-  descendents defined formally as:
-  \[ V^{r, \tmop{stage}}_{\tmop{obs} (v)} (B) \assign \bigcup_{v_i \in
-     \mathbb{V}, B \geqslant B'} \tmop{VD}^{r, \tmop{stage}}_{\tmop{obs} (v)}
-     (B')_{}^{}_{} \]
-  {\tmstrong{}}
-  
-  The {\tmstrong{total observed vote for Block $B$ in round $r$}} is defined
-  to be the size of that set, formally:
-  \[ | V^{r, \tmop{stage}}_{\tmop{obs} (v)} (B) | \assign \sum_{v_i \in
-     \mathbb{V},} | \tmop{VD}^{r, \tmop{stage}}_{\tmop{obs} (v_i)}^{}_{} (B')
-     | \]
-  
-\end{definition}
-
-\begin{definition}
-  The current {\tmstrong{pre-voted}} block $B^{r, \tmop{pv}}_v$ is the block
-  with
-  \[ H_n (B^{r, \tmop{pv}}_v) = \tmop{Max} (| H_n (B) | \tmop{for} \tmop{all}
-     B : | V_{\tmop{obs} (v)}^{r, \tmop{pv}} (B) | \geqslant 2 / 3 |
-     \mathbb{V} |) \]
-  Similarly, the {\tmstrong{pre-commited block }}$B_v^{r, \tmop{pc}}$ is the
-  block with
-  \[ H_n (B^{r, \tmop{pc}}_v) = \tmop{Max} (| H_n (B) | \tmop{for} \tmop{all}
-     B : | V_{\tmop{obs} (v)}^{r, \tmop{pc}} (B) | \geqslant 2 / 3 |
-     \mathbb{V} |) . \]
-  Let $B'$ be any block such that $B' \leqslant B_v^{r, \tmop{stage}}$. We
-  define the {\tmstrong{$C^{r, \tmop{stage}}_v^{}$, the chosen block of}}
-  $V^{r, \tmop{stage}}_{\tmop{obs} (v)}^{}_{}$ as follows:
-  \[ C^{r, \tmop{stage}}_v^{} :_{} = \left\{ \begin{array}{ll}
-       B \quad \tmop{such} \tmop{that} H_n (B) = \tmop{Max} \{ H_n (B') \} &
-       \tmop{if} | V_{\tmop{obs} (v)}^{r, \tmop{pv}} (B^{r, \tmop{pv}}_v) | >
-       2 / 3 | \mathbb{V} |\\
-       \phi & \tmop{otherwise}
-     \end{array} \right. \begin{array}{l}
-       
-     \end{array} \]
-  
-\end{definition}
-
-\begin{definition}
-  We say that round $r$ is {\tmstrong{unfinalizable,}} if for all $B' \geqslant
-  B_v^{r, \tmop{pv}}$:
-  \[ | V^{r, \tmop{pc}}_{\tmop{obs} (v)} | - | V^{r, \tmop{pc}}_{\tmop{obs}
-     (v)_{}} (B') | \geqslant \frac{1}{3} | \mathbb{V} | \]
+  {\tmstrong{$\tmop{GRANDPA}$ finalizing message for block $B$ in round $r$}}
+  represented as {\tmstrong{$M_v^{r, \tmop{Fin}}$(B)}} is a message
+  broadcasted by voter $v$ to the network indicating that voter $v$ has
+  finalized block $B$ in round $r$. It has the following structure:
+  \[ M^{r, \tmop{stage}}_v \assign \tmop{Enc}_{\tmop{SC}} (r, V (B), J^r (B))
+  \]
 \end{definition}
 
 \subsubsection{Initiating the GRANDPA State}
 
-A validator needs to initiate its state and sync it with other validators, to be able to participate coherently in the voting process. In particular,
+A validator needs to initiate its state and sync it with other validators, to
+be able to participate coherently in the voting process. In particular,
 considering that voting is happening in different rounds and each round of
 voting is assigned a unique sequential round number $r_v$, it needs to
 determine and set its round counter $r$ in accordance with the current voting
 round $r_n$, which is currently undergoing in the network.
 
 As instructed in Algortihm \ref{alg-join-leave-grandpa}, whenever the
-membership of GRANDPA voters ch\tmverbatim{}anges, $r$ is set to 0 and
-$V_{\tmop{id}}$ needs to be incremented.
+membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
+needs to be incremented.
+
+\
 
 {\algorithm{\label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
-(V)
+($\mathcal{V}$)}{{\algorithmic{1\quad$r \leftarrow 0$
 
-1\quad$r \leftarrow 0$
+2\quad$\mathcal{V}_{\tmop{id}} \leftarrow \tmop{ReadState} (' \tmop{AUTHORITY}
+\_ \tmop{SET} \_ \tmop{KEY}')$
 
-2\quad$V_{\tmop{id}} \leftarrow \tmop{ReadState} (' \tmop{AUTHORITY} \_
-\tmop{SET} \_ \tmop{KEY}')$
+3\quad$\mathcal{V}_{\tmop{id}} \leftarrow \mathcal{V}_{\tmop{id}} + 1$
 
-3\quad$V_{\tmop{id}} \leftarrow V_{\tmop{id}} + 1$
-
-2\quad{\tmname{Execute-One-Grandpa-Round}}$(r)$}}
+2\quad{\tmname{Execute-One-Grandpa-Round}}$(r)$}}}}
 
 Each voter should run Algorithm \ref{alg-completable-round} to verify that a
 round is completable.
 
 \subsubsection{Voting Process in Round $r$}
 
-For each round $r$, an honest voter $v$ must participate in the voting process by following Algorithm \ref{alg-grandpa-round}.
+For each round $r$, an honest voter $v$ must participate in the voting process
+by following Algorithm \ref{alg-grandpa-round}.
 
-{\algorithm{\label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$
-
-1\quad$t_{r, v} \leftarrow$Time
+{\algorithm{\label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$}{{\algorithmic{1\quad$t_{r,
+v} \leftarrow$Time
 
 2\quad$\tmop{primary} \leftarrow${\tmname{Derive-Primary}}
 
 4\quad{\tmstrong{if}} $v = \tmop{primary}$:
 
-5\qquad{\tmname{Broadcast(}}\left.$M_{v_{}}^{r - 1, \tmop{fin}}$()\right)
+5\qquad{\tmname{Broadcast(}}\left.$M_{v_{\nosymbol}}^{r - 1,
+\tmop{fin}}$()\right)
 
 6\quad{\tmstrong{else}}
 
 9\quad{\tmname{\quad Receive-Messages}}({\tmstrong{until}} Time $\geqslant
-t_{r_, v} + 2 \times T$ {\tmstrong{or}} {\tmname{Completable}}($r$))
+t_{r_, v} + 2 \times T$ {\tmstrong{or}}
+
+{\hspace{3em}} {\tmname{Completable}}($r$))
 
 10\qquad$L \leftarrow${\tmname{Received-as-Final()}} {\tmstrong{or}}
-{\tmname{Best-Final-Candidate}}($r$-1):
+{\tmname{Best-Final-Candidate}}(
+
+{\hspace{3em}}$r$-1):
 
 11\qquad{\tmstrong{if}} {\tmname{Received($M_{v_{\tmop{primary}}}^{r,
 \tmop{pv}} (B)$)}} {\tmstrong{and}} $B^{r, \tmop{pv}}_v \geqslant B > L$:
@@ -746,24 +777,23 @@ t_{r_, v} + 2 \times T$ {\tmstrong{or}} {\tmname{Completable}}($r$))
 
 13\qquad{\tmstrong{else}}
 
-14{\hspace{3em}}$N \leftarrow B' : H_n (B') = \max \{ H_n (B') : B' > L \}$
+14{\hspace{3em}}$N \leftarrow B' : H_n (B') = \max \{H_n (B') : B' > L\}$
 
 15\quad{\tmname{Broadcast}}($M_v^{r, \tmop{pv}} (N)$)
 
-16\quad{\tmname{Receive-Messages}}({\tmstrong{until}} $B^{r, \tmop{pv}_{}}_v
-\geqslant L$ {\tmstrong{ and}} (Time $\geqslant t_{r_, v} + 4 \times
-T${\tmstrong{ or }} {\tmname{Completable}}($r$)))
+16\quad{\tmname{Receive-Messages}}({\tmstrong{until}} $B^{r,
+\tmop{pv}_{\nosymbol}}_v \geqslant L$ {\tmstrong{and}} (
 
-12\quad{\tmname{Broadcast($M_v^{r,
-\tmop{pc}}$({\tmname{Best-Final-Candidate}}($r$))}}
+{\hspace{3em}}Time $\geqslant t_{r_, v} + 4 \times T${\tmstrong{ or
+}}{\tmname{Completable}}($r$)))
 
-13\quad{\tmname{Play-Grandpa-round}}($r + 1$)}}
+12\quad{\tmname{Broadcast($M_v^{r, \tmop{pc}}$(Best-Final-Candidate($r$))}}
 
-{\algorithm{\label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)
+13\quad{\tmname{Play-Grandpa-round}}($r + 1$)}}}}
 
-1\quad$\mathcal{C}_{} \leftarrow \{ B' |B' \leqslant B_v^{r, \tmop{vc}} : |
-V_v^{r, \tmop{pc}} | - | V_v^{r, \tmop{pc}} (B') | \leqslant 1 / 3 |
-\mathbb{V} | \}$
+{\algorithm{\label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)}{{\algorithmic{1\quad$\mathcal{C}_{\nosymbol}
+\leftarrow \{B' |B' \leqslant B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} |
+-\#V_v^{r, \tmop{pc}} (B') \leqslant 1 / 3|\mathbb{V}|\}$
 
 2\quad{\tmstrong{if}} $\mathcal{C}= \phi$:
 
@@ -771,42 +801,40 @@ V_v^{r, \tmop{pc}} | - | V_v^{r, \tmop{pc}} (B') | \leqslant 1 / 3 |
 
 4\quad{\tmstrong{else}}
 
-5\qquad{\tmstrong{return }}$E \in \mathcal{C}: H_n (E) \assign \max \{ H_n
-(B') : B' \in \mathcal{C} \}$}}
+5\qquad{\tmstrong{return }}$E \in \mathcal{C}: H_n (E) = \max \{H_n (B') : B'
+\in \mathcal{C}\}$}}}}
 
-{\algorithm{\label{alg-completable-round}{\tmname{Completable}}($r$)
+{\algorithm{\label{alg-completable-round}{\tmname{Completable}}($r$)}{{\algorithmic{1\quad$E
+\leftarrow${\tmname{Best-Final-Candidate}}($r$)
 
-1\quad{\tmstrong{if}} $\exists B' \leqslant B_v^{r, \tmop{pv}} \tmop{and} |
-V_v^{r, \tmop{pc}} | - | V_v^{r, \tmop{pc}} (B) | \leqslant 1 / 3 | \mathbb{V}
-|$
+1\quad{\tmstrong{if}} $E \neq \phi$
 
 2\qquad{\tmstrong{return}} {\tmname{True}}
 
-3\quad{\tmstrong{elif}} $r${\tmstrong{is}} unfinalizable:
+3\quad{\tmstrong{elif}} $r$ {\tmstrong{is}} unfinalizable:
 
 4\qquad{\tmstrong{return}} {\tmname{True}}
 
 5\quad{\tmstrong{else}}
 
-6\qquad{\tmstrong{return}} FALSE}}
+6\qquad{\tmstrong{return}} {\tmname{False}}}}}}
 
-{\algorithm{{\tmname{FinalizeRound}}($r$)
+{\algorithm{{\tmname{FinalizeRound}}($r$)}{{\algorithmic{1\quad$L
+\leftarrow${\tmname{Last-Finalized-Block}}
 
-1\quad$L \leftarrow${\tmname{Last-Finalized-Block}}
+2\quad$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)
 
-2\quad{\tmstrong{if}} $C^{r, \tmop{pc}} \geqslant L$ and $V^{r - 1,
-\tmop{pc}}_{\tmop{obs} (v)}^{}_{} (L) > 2 / 3 | \mathcal{V} |$ and $C^{r,
-\tmop{pv}} (P) \neq \phi$
+2\quad{\tmstrong{if}} $E \geqslant L$ {\tmstrong{and}} $V^{r - 1,
+\tmop{pc}}_{\tmop{obs} (v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3 |\mathcal{V}|$
 
-3\qquad{\tmname{Last-Finalized-Block}}$\leftarrow C^{r, \tmop{pc}}$
+3\qquad{\tmname{Last-Finalized-Block}}$\leftarrow B^{r, \tmop{pc}}$
 
-4\qquad{\tmstrong{if}} $M_v^{r, \tmop{Fin}} (C^{r, \tmop{pc}})
+4\qquad{\tmstrong{if}} $M_v^{r, \tmop{Fin}} (E)
 \nin${\tmname{Received-Messages}}:
 
-5{\hspace{3em}}{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (C^{r,
-\tmop{pc}})$)}}
+5{\hspace{3em}}{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (E)$)}}}}
 
-\tmverbatim{}\section{Auxilary Encodings}
+\section{Auxilary Encodings}
 
 \subsection{SCALE Codec}\label{sect-scale-codec}
 
@@ -918,7 +946,10 @@ broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
 
 \section{Runtime API}\label{sect-runtime-api}
 
-Runtime API is a set of functions, which Polkadot RE exposes to Runtime to access Storage content and other external functions. Some of the functions are exposed to the runtime for efficiency reasons. Here is the list of the functions which Polkadot RE exposes to the runtime:
+Runtime API is a set of functions, which Polkadot RE exposes to Runtime to
+access Storage content and other external functions. Some of the functions are
+exposed to the runtime for efficiency reasons. Here is the list of the
+functions which Polkadot RE exposes to the runtime:
 \begin{itemizedot}
   \item \tmverbatim{ext\_blake2\_256}
   
@@ -988,4 +1019,3 @@ Runtime API is a set of functions, which Polkadot RE exposes to Runtime to acces
 \end{itemizedot}
 
 \end{document}
-
