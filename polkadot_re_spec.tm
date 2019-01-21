@@ -34,7 +34,7 @@
   </hide-preamble>
 
   <doc-data|<doc-title|Polkadot Runtime Environment<next-line><with|font-size|1.41|Protocol
-  Specification>>|<doc-date|January 18, 2018>>
+  Specification>>|<doc-date|January 21, 2019>>
 
   <section|Conventions and Definitions>
 
@@ -268,7 +268,7 @@
     <verbatim|version> function>
   </with>
 
-  <subsubsection|authorities>
+  <subsubsection|authorities><label|sect-runtime-api-auth>
 
   This entry is to report the set of authorities at a given block. It
   receives <verbatim|block_id> as an argument, it returns an array of
@@ -556,11 +556,19 @@
 
   <\definition>
     A <strong|GRANDPA Voter>, <math|v>, is represented by a key pair
-    <math|<around|(|k<rsup|pr><rsub|v>,k<rsub|v>|)>> where
-    <math|k<rsub|v><rsup|pr>> represents its private key, is a node running
-    GRANDPA protocol, and broadcasts votes to finilize blocks in a Polkadot
-    RE - based chain. The <strong|set of all GRANDPA voters> is indicated by
-    <math|\<bbb-V\>>.
+    <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
+    <math|k<rsub|v><rsup|pr>> represents its private key which is a
+    <math|ED25519> private key, is a node running GRANDPA protocol, and
+    broadcasts votes to finilize blocks in a Polkadot RE - based chain. The
+    <strong|set of all GRANDPA voters> is indicated by <math|\<bbb-V\>>. For
+    a given block B, we have
+
+    <\equation*>
+      \<bbb-V\><rsub|B>=<verbatim|authorities><around*|(|B|)>
+    </equation*>
+
+    where <math|<math-tt|authorities>> is the entry into runtime described in
+    Section <reference|sect-runtime-api-auth>.
   </definition>
 
   <\definition>
@@ -610,14 +618,14 @@
 
   The GRANDPA protocol dictates how an honest voter should vote in each
   sub-round, which is described in Algorithm <reference|alg-grandpa-round>.
-  After defining what consititue vote in GRANDPA, we define how GRANDPA
+  After defining what consititues a vote in GRANDPA, we define how GRANDPA
   counts votes.
 
   <\definition>
     Voter <math|v> <strong|equivocates> if they broadcast two or more valid
     votes to blocks not residing on the same branch of the block tree during
-    one voting sub-round. In such a situation, we say <math|v> is an
-    <strong|equivocator> all votes <math|V<rsub|v><rsup|r,stage><around*|(|B|)>>
+    one voting sub-round. In such a situation, we say that <math|v> is an
+    <strong|equivocator> and any vote <math|V<rsub|v><rsup|r,stage><around*|(|B|)>>
     casted by <math|v> in that round is an <strong|equivocatory vote> and
 
     <\equation*>
@@ -642,15 +650,15 @@
 
     <\itemize>
       <\itemize-dot>
-        <item><math|H<around|(|B|)>> does not correspond to a valid block.
+        <item><math|H<around|(|B|)>> does not correspond to a valid block;
 
         <item><math|B> is not an (eventual) descendent of a previously
-        finalized block.
+        finalized block;
 
-        <item><math|M<rsup|r,stage><rsub|v>> does not bear a vaid signature.
+        <item><math|M<rsup|r,stage><rsub|v>> does not bear a valid signature;
 
         <item><math|id<rsub|\<bbb-V\>>> does not match the current
-        <math|\<bbb-V\>>.
+        <math|\<bbb-V\>>;
 
         <item>If <math|V<rsub|v><rsup|r,stage>> is an equivacatory vote.
       </itemize-dot>
@@ -672,20 +680,21 @@
 
   <\definition>
     We refer to <strong|the set of total votes observed by voter <math|v> in
-    sub-round <math|stage> of round <math|r>> by
+    sub-round \P<math|stage>\Q of round <math|r>> by
     <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>>.
 
-    The <strong|set of all observed vote by <math|v> in sub-round stage of
-    round <math|r>for block <math|B>>, <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>>>
-    is equal to all observed direct votes casted for block <math|B> and all
-    <math|B>'s descendents defined formally as:
+    The <strong|set of all observed votes by <math|v> in the sub-round stage
+    of round <math|r> for block <math|B>>,
+    <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>>> is
+    equal to all of the observed direct votes casted for block <math|B> and
+    all of the <math|B>'s descendents defined formally as:
 
     <\equation*>
       V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>\<assign\><big|cup><rsub|v<rsub|i>\<in\>\<bbb-V\>,B\<geqslant\>B<rprime|'>>VD<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B<rprime|'>|)><rsub|\<nosymbol\>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>
     </equation*>
 
-    The <strong|total number of observed vote for Block <math|B> in round
-    <math|r>> is defined to be the size of that set plus total number of
+    The <strong|total number of observed votes for Block <math|B> in round
+    <math|r>> is defined to be the size of that set plus the total number of
     equivocators voters:
 
     <\equation*>
@@ -702,7 +711,7 @@
     </equation*>
   </definition>
 
-  Note that for genesis block <math|Genesis> we always have have
+  Note that for genesis block <math|Genesis> we always have
   <math|#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>=<around*|\||\<bbb-V\>|\|>>.
 
   <\definition>
@@ -714,13 +723,13 @@
     </equation*>
   </definition>
 
-  <subsubsection|Voting Messages Specefication>
+  <subsubsection|Voting Messages Specification>
 
   Voting is done by means of broadcasting voting messages to the network.
-  \ Validators inform their peers about the block finalized in round <math|r>
-  by broadcasting finalization message (see Algorithm
+  Validators inform their peers about the block finalized in round <math|r>
+  by broadcasting a finalization message (see Algorithm
   <reference|alg-grandpa-round> for more details). These messages are
-  specefied in this section.
+  specified in this section.
 
   <\definition>
     A vote casted by voter <math|v> should be broadcasted as a
@@ -749,7 +758,7 @@
 
   The <strong|justification for block B in round <math|r>> of GRANDPA
   protocol defined <math|J<rsup|r><around*|(|B|)>> is a vector of pairs of
-  type:
+  the type:
 
   <\equation*>
     <around*|(|V<around*|(|B<rprime|'>|)>,<around*|(|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>|)>
@@ -761,7 +770,7 @@
     B<rprime|'>\<gtr\>B
   </equation*>
 
-  or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> has
+  or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
   equivocatory vote.
 
   In all cases <math|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
@@ -775,7 +784,9 @@
     voter <math|v> has finalized block <math|B> in round <math|r>. It has the
     following structure:
 
-    <math|M<rsup|r,stage><rsub|v>\<assign\>Enc<rsub|SC><around|(|r,<around|\<nobracket\>|V<around*|(|B|)>,J<rsup|r><around*|(|B|)>|)>|\<nobracket\>>>
+    <\equation*>
+      M<rsup|r,stage><rsub|v>\<assign\>Enc<rsub|SC><around|(|r,<around|\<nobracket\>|V<around*|(|B|)>,J<rsup|r><around*|(|B|)>|)>|\<nobracket\>>
+    </equation*>
   </definition>
 
   <subsubsection|Initiating the GRANDPA State>
@@ -791,6 +802,8 @@
   As instructed in Algortihm <reference|alg-join-leave-grandpa>, whenever the
   membership of GRANDPA voters changes, <math|r> is set to 0 and
   <math|V<rsub|id>> needs to be incremented.
+
+  \;
 
   <\algorithm>
     <label|alg-join-leave-grandpa><name|Join-Leave-Grandpa-Voters>
@@ -1111,12 +1124,12 @@
     <associate|auto-16|<tuple|4|4>>
     <associate|auto-17|<tuple|4.1|4>>
     <associate|auto-18|<tuple|5|4>>
-    <associate|auto-19|<tuple|5.1|5>>
+    <associate|auto-19|<tuple|5.1|4>>
     <associate|auto-2|<tuple|2|1>>
     <associate|auto-20|<tuple|5.2|5>>
     <associate|auto-21|<tuple|5.3|5>>
     <associate|auto-22|<tuple|6|6>>
-    <associate|auto-23|<tuple|7|7>>
+    <associate|auto-23|<tuple|7|6>>
     <associate|auto-24|<tuple|7.1|7>>
     <associate|auto-25|<tuple|7.2|7>>
     <associate|auto-26|<tuple|7.3|7>>
@@ -1148,7 +1161,7 @@
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-radix-tree|<tuple|3|1>>
     <associate|def-state-read-write|<tuple|9|5>>
-    <associate|def-vote|<tuple|19|8>>
+    <associate|def-vote|<tuple|19|7>>
     <associate|defn-bit-rep|<tuple|6|1>>
     <associate|key-encode-in-trie|<tuple|1|5>>
     <associate|sect-abi-encoding|<tuple|3.3|4>>
@@ -1157,6 +1170,7 @@
     <associate|sect-merkl-proof|<tuple|5.3|5>>
     <associate|sect-predef-storage-keys|<tuple|10|13>>
     <associate|sect-runtime-api|<tuple|12|13>>
+    <associate|sect-runtime-api-auth|<tuple|3.1.2|3>>
     <associate|sect-runtime-upgrade|<tuple|11|13>>
     <associate|sect-scale-codec|<tuple|8.1|11>>
     <associate|snippet-runtime-enteries|<tuple|1|3>>
@@ -1278,7 +1292,7 @@
       <no-break><pageref|auto-27>>
 
       <with|par-left|<quote|2tab>|7.3.2<space|2spc>Voting Messages
-      Specefication <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      Specification <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-28>>
 
       <with|par-left|<quote|2tab>|7.3.3<space|2spc>Initiating the GRANDPA
