@@ -329,13 +329,21 @@
 
   <\algorithm|<name|Import-and-Validate-Block(<math|B,Just<around|(|B|)>>)>>
     <\algorithmic>
-      1<space|1em><name|Verify-Block-Justification><math|<around|(|B,Just<around|(|B|)>|)>>
+      <\state>
+        <name|Verify-Block-Justification><math|<around|(|B,Just<around|(|B|)>|)>>
+      </state>
 
-      2<space|1em>Verify <math|H<rsub|p<around|(|B|)>>\<in\>Blockchain>.
+      <\state>
+        Verify <math|H<rsub|p<around|(|B|)>>\<in\>Blockchain>.
+      </state>
 
-      3<space|1em>State-Changes = Runtime.<name|<math|<around|(|B|)>>>
+      <\state>
+        State-Changes = Runtime.<name|<math|<around|(|B|)>>>
+      </state>
 
-      4<space|1em><name|Update-World-State>(State-Changes)
+      <\state>
+        <name|Update-World-State>(State-Changes)
+      </state>
     </algorithmic>
   </algorithm>
 
@@ -756,26 +764,28 @@
     \;
   </definition>
 
-  The <strong|justification for block B in round <math|r>> of GRANDPA
-  protocol defined <math|J<rsup|r><around*|(|B|)>> is a vector of pairs of
-  the type:
+  <\definition>
+    <label|def-grandpa-justification>The <strong|justification for block B in
+    round <math|r>> of GRANDPA protocol defined
+    <math|J<rsup|r><around*|(|B|)>> is a vector of pairs of the type:
 
-  <\equation*>
-    <around*|(|V<around*|(|B<rprime|'>|)>,<around*|(|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>|)>
-  </equation*>
+    <\equation*>
+      <around*|(|V<around*|(|B<rprime|'>|)>,<around*|(|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>|)>
+    </equation*>
 
-  in which either
+    in which either
 
-  <\equation*>
-    B<rprime|'>\<gtr\>B
-  </equation*>
+    <\equation*>
+      B<rprime|'>\<gtr\>B
+    </equation*>
 
-  or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
-  equivocatory vote.
+    or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
+    equivocatory vote.
 
-  In all cases <math|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
-  is the signature of voter <math|v<rsub|i>> broadcasted during the
-  pre-commit sub-round of round r.
+    In all cases <math|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
+    is the signature of voter <math|v<rsub|i>> broadcasted during the
+    pre-commit sub-round of round r.
+  </definition>
 
   <\definition>
     <strong|<math|GRANDPA> finalizing message for block <math|B> in round
@@ -787,6 +797,9 @@
     <\equation*>
       M<rsup|r,stage><rsub|v>\<assign\>Enc<rsub|SC><around|(|r,<around|\<nobracket\>|V<around*|(|B|)>,J<rsup|r><around*|(|B|)>|)>|\<nobracket\>>
     </equation*>
+
+    in which <math|J<rsup|r><around*|(|B|)>> in the justification defined in
+    Definition <reference|def-grandpa-justification>.
   </definition>
 
   <subsubsection|Initiating the GRANDPA State>
@@ -810,13 +823,21 @@
     (<math|\<cal-V\>>)
   <|algorithm>
     <\algorithmic>
-      1<space|1em><math|r\<leftarrow\>0>
+      <\state>
+        <math|r\<leftarrow\>0>
+      </state>
 
-      2<space|1em><math|\<cal-V\><rsub|id>\<leftarrow\>ReadState<around|(|<rprime|'>AUTHORITY_SET_KEY<rprime|'>|)>>
+      <\state>
+        <math|\<cal-V\><rsub|id>\<leftarrow\>ReadState<around|(|<rprime|'>AUTHORITY_SET_KEY<rprime|'>|)>>
+      </state>
 
-      3<space|1em><math|\<cal-V\><rsub|id>\<leftarrow\>\<cal-V\><rsub|id>+1>
+      <\state>
+        <math|\<cal-V\><rsub|id>\<leftarrow\>\<cal-V\><rsub|id>+1>
+      </state>
 
-      2<space|1em><name|Execute-One-Grandpa-Round><math|<around|(|r|)>>
+      <\state>
+        <name|Execute-One-Grandpa-Round><math|<around|(|r|)>>
+      </state>
     </algorithmic>
   </algorithm>
 
@@ -830,98 +851,191 @@
 
   <\algorithm|<label|alg-grandpa-round><name|Play-Grandpa-round><math|<around|(|r|)>>>
     <\algorithmic>
-      1<space|1em><math|t<rsub|r,v>\<leftarrow\>>Time
+      <\state>
+        <math|t<rsub|r,v>\<leftarrow\>>Time
+      </state>
 
-      2<space|1em><math|primary\<leftarrow\>><name|Derive-Primary>
+      <\state>
+        <math|primary\<leftarrow\>><name|Derive-Primary>
+      </state>
 
-      4<space|1em><strong|if> <math|v=primary>:
+      <\state>
+        <\IF>
+          <math|v=primary>
+        </IF>
+      </state>
 
-      5<space|2em><name|Broadcast(><left|.><math|M<rsub|v<rsub|\<nosymbol\>>><rsup|r-1,fin>>()<right|)>
+      <\state>
+        <name|Broadcast(><left|.><math|M<rsub|v<rsub|\<nosymbol\>>><rsup|r-1,fin>>()<right|)><END>
+      </state>
 
-      6<space|1em><strong|else>
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
+      </state>
 
-      9<space|1em><name|<space|1em>Receive-Messages>(<strong|until> Time
-      <math|\<geqslant\>t<rsub|r<rsub|,>*v>+2\<times\>T> <strong|or>
+      <\state>
+        <name|Receive-Messages>(<strong|until> Time
+        <math|\<geqslant\>t<rsub|r<rsub|,>*v>+2\<times\>T> <strong|or>
+        <name|Completable>(<math|r>))<END>
+      </state>
 
-      <space|3em> <name|Completable>(<math|r>))
+      <\state>
+        <math|L\<leftarrow\>><name|Received-as-Final()> <strong|or>
+        <name|Best-Final-Candidate>(<math|r>-1)
+      </state>
 
-      10<space|2em><math|L\<leftarrow\>><name|Received-as-Final()>
-      <strong|or> <name|Best-Final-Candidate>(
+      <\state>
+        <\IF>
+          <name|Received(<math|M<rsub|v<rsub|primary>><rsup|r,pv><around|(|B|)>>)>
+          <strong|and> <math|B<rsup|r,pv><rsub|v>\<geqslant\>B\<gtr\>L>
+        </IF>
+      </state>
 
-      <space|3em><math|r>-1):
+      <\state>
+        <math|N\<leftarrow\>B><END>
+      </state>
 
-      11<space|2em><strong|if> <name|Received(<math|M<rsub|v<rsub|primary>><rsup|r,pv><around|(|B|)>>)>
-      <strong|and> <math|B<rsup|r,pv><rsub|v>\<geqslant\>B\<gtr\>L>:
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
+      </state>
 
-      12<space|1em><space|2em><math|N\<leftarrow\>B>
+      <\state>
+        <math|N\<leftarrow\>B<rprime|'>:H<rsub|n><around|(|B<rprime|'>|)>=max
+        <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<gtr\>L|}><END>>
+      </state>
 
-      13<space|2em><strong|else>
+      <\state>
+        <name|Broadcast>(<math|M<rsub|v><rsup|r,pv><around|(|N|)>>)
+      </state>
 
-      14<space|3em><math|N\<leftarrow\>B<rprime|'>:H<rsub|n><around|(|B<rprime|'>|)>=max
-      <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<gtr\>L|}>>
+      <\state>
+        <name|Receive-Messages>(<strong|until>
+        <math|B<rsup|r,pv<rsub|\<nosymbol\>>><rsub|v>\<geqslant\>L>
+        <strong|and> (Time <math|\<geqslant\>t<rsub|r<rsub|,>*v>+4\<times\>T><strong|
+        or ><name|Completable>(<math|r>)))
+      </state>
 
-      15<space|1em><name|Broadcast>(<math|M<rsub|v><rsup|r,pv><around|(|N|)>>)
+      <\state>
+        <name|Broadcast(<math|M<rsub|v><rsup|r,pc>>(Best-Final-Candidate(<math|r>))>
+      </state>
 
-      16<space|1em><name|Receive-Messages>(<strong|until>
-      <math|B<rsup|r,pv<rsub|\<nosymbol\>>><rsub|v>\<geqslant\>L>
-      <strong|and> (
-
-      <space|3em>Time <math|\<geqslant\>t<rsub|r<rsub|,>*v>+4\<times\>T><strong|
-      or ><name|Completable>(<math|r>)))
-
-      12<space|1em><name|Broadcast(<math|M<rsub|v><rsup|r,pc>>(Best-Final-Candidate(<math|r>))>
-
-      13<space|1em><name|Play-Grandpa-round>(<math|r+1>)
+      <\state>
+        <name|Play-Grandpa-round>(<math|r+1>)
+      </state>
     </algorithmic>
   </algorithm>
 
   <\algorithm|<label|alg-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)>
     <\algorithmic>
-      1<space|1em><math|\<cal-C\><rsub|\<nosymbol\>>\<leftarrow\><around|{|B<rprime|'>\|B<rprime|'>\<leqslant\>B<rsub|v><rsup|r,pv>:<around|\||V<rsub|v><rsup|r,pc>|\|>-#V<rsub|v><rsup|r,pc><around|(|B<rprime|'>|)>\<leqslant\>1/3<around|\||\<bbb-V\>|\|>|}>>
+      <\state>
+        <math|\<cal-C\><rsub|\<nosymbol\>>\<leftarrow\><around|{|B<rprime|'>\|B<rprime|'>\<leqslant\>B<rsub|v><rsup|r,pv>:<around|\||V<rsub|v><rsup|r,pc>|\|>-#V<rsub|v><rsup|r,pc><around|(|B<rprime|'>|)>\<leqslant\>1/3<around|\||\<bbb-V\>|\|>|}>>
+      </state>
 
-      2<space|1em><strong|if> <math|\<cal-C\>=\<phi\>>:
+      <\state>
+        <\IF>
+          <math|\<cal-C\>=\<phi\>>
+        </IF>
+      </state>
 
-      3<space|2em><strong|return> <math|\<phi\>>
+      <\state>
+        <\RETURN>
+          <math|\<phi\>><END>
+        </RETURN>
+      </state>
 
-      4<space|1em><strong|else>
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
+      </state>
 
-      5<space|2em><strong|return ><math|E\<in\>\<cal-C\>:H<rsub|n><around*|(|E|)>=max
-      <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<in\>\<cal-C\>|}>>
+      <\state>
+        <\RETURN>
+          <math|E\<in\>\<cal-C\>:H<rsub|n><around*|(|E|)>=max
+          <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<in\>\<cal-C\>|}>><END>
+        </RETURN>
+      </state>
     </algorithmic>
   </algorithm>
 
   <\algorithm|<label|alg-completable-round><name|Completable>(<math|r>)>
     <\algorithmic>
-      1<space|1em><math|E\<leftarrow\>><name|Best-Final-Candidate>(<math|r>)
+      <\state>
+        <math|E\<leftarrow\>><name|Best-Final-Candidate>(<math|r>)
+      </state>
 
-      1<space|1em><strong|if> <math|E\<neq\>\<phi\>>
+      <\state>
+        <\IF>
+          <math|E\<neq\>\<phi\>>
+        </IF>
+      </state>
 
-      2<space|2em><strong|return> <name|True>
+      <\state>
+        <\RETURN>
+          <name|True><END>
+        </RETURN>
+      </state>
 
-      3<space|1em><strong|elif> <math|r> <strong|is> unfinalizable:
+      <\state>
+        <\ELSE-IF>
+          <math|r> <strong|is> unfinalizable
+        </ELSE-IF>
+      </state>
 
-      4<space|2em><strong|return> <name|True>
+      <\state>
+        <\RETURN>
+          <name|True><END>
+        </RETURN>
+      </state>
 
-      5<space|1em><strong|else>
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
+      </state>
 
-      6<space|2em><strong|return> <name|False>
+      <\state>
+        <\RETURN>
+          <name|False<END>>
+        </RETURN>
+      </state>
     </algorithmic>
   </algorithm>
 
   <\algorithm|<name|FinalizeRound>(<math|r>)>
     <\algorithmic>
-      1<space|1em><math|L\<leftarrow\>><name|Last-Finalized-Block>
+      <\state>
+        <math|L\<leftarrow\>><name|Last-Finalized-Block>
+      </state>
 
-      2<space|1em><math|E\<leftarrow\>><name|Best-Final-Candidate>(<math|r>)
+      <\state>
+        <math|E\<leftarrow\>><name|Best-Final-Candidate>(<math|r>)
+      </state>
 
-      2<space|1em><strong|if> <math|E\<geqslant\>L> <strong|and>
-      <math|V<rsup|r-1,pc><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|E|)>\<gtr\>2/3<around|\||\<cal-V\>|\|>>
+      <\state>
+        <\IF>
+          <math|E\<geqslant\>L> <strong|and>
+          <math|V<rsup|r-1,pc><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|E|)>\<gtr\>2/3<around|\||\<cal-V\>|\|>>
+        </IF>
+      </state>
 
-      3<space|2em><name|Last-Finalized-Block><math|\<leftarrow\>B<rsup|r,pc>>
+      <\state>
+        <name|Last-Finalized-Block><math|\<leftarrow\>B<rsup|r,pc>>
+      </state>
 
-      4<space|2em><strong|if> <math|M<rsub|v><rsup|r,Fin><around|(|E|)>\<nin\>><name|Received-Messages>:
+      <\state>
+        <\IF>
+          <math|M<rsub|v><rsup|r,Fin><around|(|E|)>\<nin\>><name|Received-Messages>
+        </IF>
+      </state>
 
-      5<space|3em><name|Broadcast>(<math|M<rsub|v><rsup|r,Fin><around|(|E|)>>)
+      <\state>
+        <name|Broadcast>(<math|M<rsub|v><rsup|r,Fin><around|(|E|)>>)
+      </state>
     </algorithmic>
   </algorithm>
 
@@ -1155,8 +1269,9 @@
     <associate|block|<tuple|2.1|2>>
     <associate|def-block-header|<tuple|7|2>>
     <associate|def-block-header-hash|<tuple|8|2>>
-    <associate|def-hpe|<tuple|31|12>>
-    <associate|def-key-len-enc|<tuple|32|12>>
+    <associate|def-grandpa-justification|<tuple|28|?>>
+    <associate|def-hpe|<tuple|32|12>>
+    <associate|def-key-len-enc|<tuple|33|12>>
     <associate|def-node-prefix|<tuple|12|6>>
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-radix-tree|<tuple|3|1>>

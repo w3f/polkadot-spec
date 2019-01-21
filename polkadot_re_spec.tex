@@ -332,14 +332,14 @@ Polkadot RE implements the following procedure to assure the validity of the
 block:
 
 {\algorithm{{\tmname{Import-and-Validate-Block($B, \tmop{Just}
-(B)$)}}}{{\algorithmic{1\quad{\tmname{Verify-Block-Justification}}$(B,
-\tmop{Just} (B))$
+(B)$)}}}{{\algorithmic{{\state{{\tmname{Verify-Block-Justification}}$(B,
+\tmop{Just} (B))$}}
 
-2\quad Verify $H_{p (B)} \in \tmop{Blockchain}$.
+{\state{Verify $H_{p (B)} \in \tmop{Blockchain}$.}}
 
-3\quad State-Changes = Runtime.{\tmname{$(B)$}}
+{\state{State-Changes = Runtime.{\tmname{$(B)$}}}}
 
-4\quad{\tmname{Update-World-State}}(State-Changes)}}}}
+{\state{{\tmname{Update-World-State}}(State-Changes)}}}}}}
 
 \section{State Storage and the Storage Trie}
 
@@ -696,15 +696,18 @@ more details). These messages are specified in this section.
   
 \end{definition}
 
-The {\tmstrong{justification for block B in round $r$}} of GRANDPA protocol
-defined $J^r (B)$ is a vector of pairs of the type:
-\[ (V (B'), (\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B'), v_{\tmop{id}})) \]
-in which either
-\[ B' > B \]
-or $V^{r, \tmop{pc}}_{v_i} (B')$ is an equivocatory vote.
-
-In all cases $\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B')$ is the signature of voter
-$v_i$ broadcasted during the pre-commit sub-round of round r.
+\begin{definition}
+  \label{def-grandpa-justification}The {\tmstrong{justification for block B in
+  round $r$}} of GRANDPA protocol defined $J^r (B)$ is a vector of pairs of
+  the type:
+  \[ (V (B'), (\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B'), v_{\tmop{id}})) \]
+  in which either
+  \[ B' > B \]
+  or $V^{r, \tmop{pc}}_{v_i} (B')$ is an equivocatory vote.
+  
+  In all cases $\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B')$ is the signature of
+  voter $v_i$ broadcasted during the pre-commit sub-round of round r.
+\end{definition}
 
 \begin{definition}
   {\tmstrong{$\tmop{GRANDPA}$ finalizing message for block $B$ in round $r$}}
@@ -713,6 +716,8 @@ $v_i$ broadcasted during the pre-commit sub-round of round r.
   finalized block $B$ in round $r$. It has the following structure:
   \[ M^{r, \tmop{stage}}_v \assign \tmop{Enc}_{\tmop{SC}} (r, V (B), J^r (B))
   \]
+  in which $J^r (B)$ in the justification defined in Definition
+  \ref{def-grandpa-justification}.
 \end{definition}
 
 \subsubsection{Initiating the GRANDPA State}
@@ -731,14 +736,14 @@ needs to be incremented.
 \
 
 {\algorithm{\label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
-($\mathcal{V}$)}{{\algorithmic{1\quad$r \leftarrow 0$
+($\mathcal{V}$)}{{\algorithmic{{\state{$r \leftarrow 0$}}
 
-2\quad$\mathcal{V}_{\tmop{id}} \leftarrow \tmop{ReadState} (' \tmop{AUTHORITY}
-\_ \tmop{SET} \_ \tmop{KEY}')$
+{\state{$\mathcal{V}_{\tmop{id}} \leftarrow \tmop{ReadState} ('
+\tmop{AUTHORITY} \_ \tmop{SET} \_ \tmop{KEY}')$}}
 
-3\quad$\mathcal{V}_{\tmop{id}} \leftarrow \mathcal{V}_{\tmop{id}} + 1$
+{\state{$\mathcal{V}_{\tmop{id}} \leftarrow \mathcal{V}_{\tmop{id}} + 1$}}
 
-2\quad{\tmname{Execute-One-Grandpa-Round}}$(r)$}}}}
+{\state{{\tmname{Execute-One-Grandpa-Round}}$(r)$}}}}}}
 
 Each voter should run Algorithm \ref{alg-completable-round} to verify that a
 round is completable.
@@ -748,91 +753,85 @@ round is completable.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-{\algorithm{\label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$}{{\algorithmic{1\quad$t_{r,
-v} \leftarrow$Time
+{\algorithm{\label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$}{{\algorithmic{{\state{$t_{r,
+v} \leftarrow$Time}}
 
-2\quad$\tmop{primary} \leftarrow${\tmname{Derive-Primary}}
+{\state{$\tmop{primary} \leftarrow${\tmname{Derive-Primary}}}}
 
-4\quad{\tmstrong{if}} $v = \tmop{primary}$:
+{\state{{\IF{$v = \tmop{primary}$}}}}
 
-5\qquad{\tmname{Broadcast(}}\left.$M_{v_{\nosymbol}}^{r - 1,
-\tmop{fin}}$()\right)
+{\state{{\tmname{Broadcast(}}\left.$M_{v_{\nosymbol}}^{r - 1,
+\tmop{fin}}$()\right){\END}}}
 
-6\quad{\tmstrong{else}}
+{\state{{\ELSE{\ }}}}
 
-9\quad{\tmname{\quad Receive-Messages}}({\tmstrong{until}} Time $\geqslant
-t_{r_, v} + 2 \times T$ {\tmstrong{or}}
+{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} Time $\geqslant t_{r_,
+v} + 2 \times T$ {\tmstrong{or}} {\tmname{Completable}}($r$)){\END}}}
 
-{\hspace{3em}} {\tmname{Completable}}($r$))
+{\state{$L \leftarrow${\tmname{Received-as-Final()}} {\tmstrong{or}}
+{\tmname{Best-Final-Candidate}}($r$-1)}}
 
-10\qquad$L \leftarrow${\tmname{Received-as-Final()}} {\tmstrong{or}}
-{\tmname{Best-Final-Candidate}}(
+{\state{{\IF{{\tmname{Received($M_{v_{\tmop{primary}}}^{r, \tmop{pv}} (B)$)}}
+{\tmstrong{and}} $B^{r, \tmop{pv}}_v \geqslant B > L$}}}}
 
-{\hspace{3em}}$r$-1):
+{\state{$N \leftarrow B${\END}}}
 
-11\qquad{\tmstrong{if}} {\tmname{Received($M_{v_{\tmop{primary}}}^{r,
-\tmop{pv}} (B)$)}} {\tmstrong{and}} $B^{r, \tmop{pv}}_v \geqslant B > L$:
+{\state{{\ELSE{\ }}}}
 
-12\quad\qquad$N \leftarrow B$
+{\state{$N \leftarrow B' : H_n (B') = \max \{H_n (B') : B' > L\} \END$}}
 
-13\qquad{\tmstrong{else}}
+{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{pv}} (N)$)}}
 
-14{\hspace{3em}}$N \leftarrow B' : H_n (B') = \max \{H_n (B') : B' > L\}$
+{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $B^{r,
+\tmop{pv}_{\nosymbol}}_v \geqslant L$ {\tmstrong{and}} (Time $\geqslant t_{r_,
+v} + 4 \times T${\tmstrong{ or }}{\tmname{Completable}}($r$)))}}
 
-15\quad{\tmname{Broadcast}}($M_v^{r, \tmop{pv}} (N)$)
+{\state{{\tmname{Broadcast($M_v^{r, \tmop{pc}}$(Best-Final-Candidate($r$))}}}}
 
-16\quad{\tmname{Receive-Messages}}({\tmstrong{until}} $B^{r,
-\tmop{pv}_{\nosymbol}}_v \geqslant L$ {\tmstrong{and}} (
+{\state{{\tmname{Play-Grandpa-round}}($r + 1$)}}}}}}
 
-{\hspace{3em}}Time $\geqslant t_{r_, v} + 4 \times T${\tmstrong{ or
-}}{\tmname{Completable}}($r$)))
-
-12\quad{\tmname{Broadcast($M_v^{r, \tmop{pc}}$(Best-Final-Candidate($r$))}}
-
-13\quad{\tmname{Play-Grandpa-round}}($r + 1$)}}}}
-
-{\algorithm{\label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)}{{\algorithmic{1\quad$\mathcal{C}_{\nosymbol}
+{\algorithm{\label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)}{{\algorithmic{{\state{$\mathcal{C}_{\nosymbol}
 \leftarrow \{B' |B' \leqslant B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} |
--\#V_v^{r, \tmop{pc}} (B') \leqslant 1 / 3|\mathbb{V}|\}$
+-\#V_v^{r, \tmop{pc}} (B') \leqslant 1 / 3|\mathbb{V}|\}$}}
 
-2\quad{\tmstrong{if}} $\mathcal{C}= \phi$:
+{\state{{\IF{$\mathcal{C}= \phi$}}}}
 
-3\qquad{\tmstrong{return}} $\phi$
+{\state{{\RETURN{$\phi${\END}}}}}
 
-4\quad{\tmstrong{else}}
+{\state{{\ELSE{\ }}}}
 
-5\qquad{\tmstrong{return }}$E \in \mathcal{C}: H_n (E) = \max \{H_n (B') : B'
-\in \mathcal{C}\}$}}}}
+{\state{{\RETURN{$E \in \mathcal{C}: H_n (E) = \max \{H_n (B') : B' \in
+\mathcal{C}\}${\END}}}}}}}}}
 
-{\algorithm{\label{alg-completable-round}{\tmname{Completable}}($r$)}{{\algorithmic{1\quad$E
-\leftarrow${\tmname{Best-Final-Candidate}}($r$)
+{\algorithm{\label{alg-completable-round}{\tmname{Completable}}($r$)}{{\algorithmic{{\state{$E
+\leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
 
-1\quad{\tmstrong{if}} $E \neq \phi$
+{\state{{\IF{$E \neq \phi$}}}}
 
-2\qquad{\tmstrong{return}} {\tmname{True}}
+{\state{{\RETURN{{\tmname{True}}{\END}}}}}
 
-3\quad{\tmstrong{elif}} $r$ {\tmstrong{is}} unfinalizable:
+{\state{{\ELSEIF{$r$ {\tmstrong{is}} unfinalizable}}}}
 
-4\qquad{\tmstrong{return}} {\tmname{True}}
+{\state{{\RETURN{{\tmname{True}}{\END}}}}}
 
-5\quad{\tmstrong{else}}
+{\state{{\ELSE{\ }}}}
 
-6\qquad{\tmstrong{return}} {\tmname{False}}}}}}
+{\state{{\RETURN{{\tmname{False{\END}}}}}}}}}}}
 
-{\algorithm{{\tmname{FinalizeRound}}($r$)}{{\algorithmic{1\quad$L
-\leftarrow${\tmname{Last-Finalized-Block}}
+{\algorithm{{\tmname{FinalizeRound}}($r$)}{{\algorithmic{{\state{$L
+\leftarrow${\tmname{Last-Finalized-Block}}}}
 
-2\quad$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)
+{\state{$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
 
-2\quad{\tmstrong{if}} $E \geqslant L$ {\tmstrong{and}} $V^{r - 1,
-\tmop{pc}}_{\tmop{obs} (v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3 |\mathcal{V}|$
+{\state{{\IF{$E \geqslant L$ {\tmstrong{and}} $V^{r - 1,
+\tmop{pc}}_{\tmop{obs} (v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3
+|\mathcal{V}|$}}}}
 
-3\qquad{\tmname{Last-Finalized-Block}}$\leftarrow B^{r, \tmop{pc}}$
+{\state{{\tmname{Last-Finalized-Block}}$\leftarrow B^{r, \tmop{pc}}$}}
 
-4\qquad{\tmstrong{if}} $M_v^{r, \tmop{Fin}} (E)
-\nin${\tmname{Received-Messages}}:
+{\state{{\IF{$M_v^{r, \tmop{Fin}} (E) \nin${\tmname{Received-Messages}}}}}}
 
-5{\hspace{3em}}{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (E)$)}}}}
+{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (E)$)}}}}}}
 
 \section{Auxilary Encodings}
 
