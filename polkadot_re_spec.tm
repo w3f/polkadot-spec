@@ -34,7 +34,7 @@
   </hide-preamble>
 
   <doc-data|<doc-title|Polkadot Runtime Environment<next-line><with|font-size|1.41|Protocol
-  Specification>>|<doc-date|January 21, 2019>>
+  Specification>>|<doc-date|<date|>>>
 
   <section|Conventions and Definitions>
 
@@ -722,14 +722,27 @@
   Note that for genesis block <math|Genesis> we always have
   <math|#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>=<around*|\||\<bbb-V\>|\|>>.
 
+  \;
+
+  Finally we define when a voter <math|v> see a round as completable, that is
+  when they are confident that <math|B<rsub|v><rsup|r,pv>> is an upper bound
+  for what is going to be finalised in this round. \ 
+
   <\definition>
-    We say that round <math|r> is <strong|unfinalizable,> if for all
-    <math|B<rprime|'>\<geqslant\>B<rsub|v><rsup|r,pv>>:
+    We say that round <math|r> is <strong|completable> if
+    <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>+\<cal-E\><rsup|r,pc><rsub|obs<around*|(|v|)>>\<gtr\><frac|2|3>\<bbb-V\>>
+    and for all <math|B<rprime|'>\<gtr\>B<rsub|v><rsup|r,pv>>:
 
     <\equation*>
-      <around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>-<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)><rsub|\<nosymbol\>>><around|(|B<rprime|'>|)>|\|>\<geqslant\><frac|1|3><around|\||\<bbb-V\>|\|>
+      <tabular|<tformat|<cwith|1|1|1|1|cell-valign|b>|<table|<row|<cell|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>-\<cal-E\><rsup|r,pc><rsub|obs<around*|(|v|)>>-<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)><rsub|\<nosymbol\>>><around|(|B<rprime|'>|)>|\|>\<gtr\><frac|2|3><around|\||\<bbb-V\>|\|>>>>>>
     </equation*>
   </definition>
+
+  Note that in practice we only need to check the inequality for those
+  <math|B<rprime|'>\<gtr\>B<rsub|v><rsup|r,pv>> where
+  <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)><rsub|\<nosymbol\>>><around|(|B<rprime|'>|)>|\|>\<gtr\>0>.\ 
+
+  \;
 
   <subsubsection|Voting Messages Specification>
 
@@ -795,7 +808,7 @@
     following structure:
 
     <\equation*>
-      M<rsup|r,stage><rsub|v>\<assign\>Enc<rsub|SC><around|(|r,<around|\<nobracket\>|V<around*|(|B|)>,J<rsup|r><around*|(|B|)>|)>|\<nobracket\>>
+      M<rsup|r,Fin><rsub|v><around*|(|B|)>\<assign\>Enc<rsub|SC><around|(|r,V<around*|(|B|)>,J<rsup|r><around*|(|B|)>|)>
     </equation*>
 
     in which <math|J<rsup|r><around*|(|B|)>> in the justification defined in
@@ -815,8 +828,6 @@
   As instructed in Algortihm <reference|alg-join-leave-grandpa>, whenever the
   membership of GRANDPA voters changes, <math|r> is set to 0 and
   <math|V<rsub|id>> needs to be incremented.
-
-  \;
 
   <\algorithm>
     <label|alg-join-leave-grandpa><name|Join-Leave-Grandpa-Voters>
@@ -866,24 +877,17 @@
       </state>
 
       <\state>
-        <name|Broadcast(><left|.><math|M<rsub|v<rsub|\<nosymbol\>>><rsup|r-1,fin>>()<right|)><END>
-      </state>
-
-      <\state>
-        <\ELSE>
-          \;
-        </ELSE>
+        <name|Broadcast(><left|.><math|M<rsub|v<rsub|\<nosymbol\>>><rsup|r-1,Fin>>(<name|Best-Final-Candidate>(<math|r>-1))<right|)><END>
       </state>
 
       <\state>
         <name|Receive-Messages>(<strong|until> Time
         <math|\<geqslant\>t<rsub|r<rsub|,>*v>+2\<times\>T> <strong|or>
-        <name|Completable>(<math|r>))<END>
+        <math|r> <strong|is> completable)<END>
       </state>
 
       <\state>
-        <math|L\<leftarrow\>><name|Received-as-Final()> <strong|or>
-        <name|Best-Final-Candidate>(<math|r>-1)
+        <math|L\<leftarrow\>><name|Best-Final-Candidate>(<math|r>-1)
       </state>
 
       <\state>
@@ -916,11 +920,11 @@
         <name|Receive-Messages>(<strong|until>
         <math|B<rsup|r,pv<rsub|\<nosymbol\>>><rsub|v>\<geqslant\>L>
         <strong|and> (Time <math|\<geqslant\>t<rsub|r<rsub|,>*v>+4\<times\>T><strong|
-        or ><name|Completable>(<math|r>)))
+        or ><math|r> <strong|is> completable))
       </state>
 
       <\state>
-        <name|Broadcast(<math|M<rsub|v><rsup|r,pc>>(Best-Final-Candidate(<math|r>))>
+        <name|Broadcast(<math|M<rsub|v><rsup|r,pc>>(<math|B<rsub|v><rsup|r,pv>>))>
       </state>
 
       <\state>
@@ -962,51 +966,7 @@
     </algorithmic>
   </algorithm>
 
-  <\algorithm|<label|alg-completable-round><name|Completable>(<math|r>)>
-    <\algorithmic>
-      <\state>
-        <math|E\<leftarrow\>><name|Best-Final-Candidate>(<math|r>)
-      </state>
-
-      <\state>
-        <\IF>
-          <math|E\<neq\>\<phi\>>
-        </IF>
-      </state>
-
-      <\state>
-        <\RETURN>
-          <name|True><END>
-        </RETURN>
-      </state>
-
-      <\state>
-        <\ELSE-IF>
-          <math|r> <strong|is> unfinalizable
-        </ELSE-IF>
-      </state>
-
-      <\state>
-        <\RETURN>
-          <name|True><END>
-        </RETURN>
-      </state>
-
-      <\state>
-        <\ELSE>
-          \;
-        </ELSE>
-      </state>
-
-      <\state>
-        <\RETURN>
-          <name|False<END>>
-        </RETURN>
-      </state>
-    </algorithmic>
-  </algorithm>
-
-  <\algorithm|<name|FinalizeRound>(<math|r>)>
+  <\algorithm|<name|Attempt-To-Finalize-Round>(<math|r>)>
     <\algorithmic>
       <\state>
         <math|L\<leftarrow\>><name|Last-Finalized-Block>
@@ -1035,6 +995,17 @@
 
       <\state>
         <name|Broadcast>(<math|M<rsub|v><rsup|r,Fin><around|(|E|)>>)
+      </state>
+
+      <\state>
+        <\RETURN>
+          <END><END>
+        </RETURN>
+      </state>
+
+      <\state>
+        <strong|schedule-call> <name|Attempt-To-Finalize-Round>(<math|r>)
+        <strong|when> <name|Receive-Messages>\ 
       </state>
     </algorithmic>
   </algorithm>
@@ -1249,7 +1220,7 @@
     <associate|auto-26|<tuple|7.3|7>>
     <associate|auto-27|<tuple|7.3.1|7>>
     <associate|auto-28|<tuple|7.3.2|9>>
-    <associate|auto-29|<tuple|7.3.3|9>>
+    <associate|auto-29|<tuple|7.3.3|10>>
     <associate|auto-3|<tuple|2.1|2>>
     <associate|auto-30|<tuple|7.3.4|10>>
     <associate|auto-31|<tuple|8|11>>
@@ -1269,7 +1240,7 @@
     <associate|block|<tuple|2.1|2>>
     <associate|def-block-header|<tuple|7|2>>
     <associate|def-block-header-hash|<tuple|8|2>>
-    <associate|def-grandpa-justification|<tuple|28|?>>
+    <associate|def-grandpa-justification|<tuple|28|9>>
     <associate|def-hpe|<tuple|32|12>>
     <associate|def-key-len-enc|<tuple|33|12>>
     <associate|def-node-prefix|<tuple|12|6>>

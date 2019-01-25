@@ -65,7 +65,7 @@
   {\Large Protocol Specification}
 }
 
-\date{January 21, 2019}
+\date{January 25, 2019}
 
 \maketitle
 
@@ -658,12 +658,28 @@ votes.
 Note that for genesis block $\tmop{Genesis}$ we always have $\#V_{\tmop{obs}
 (v)}^{r, \tmop{pv}} (B) = | \mathbb{V} |$.
 
+\
+
+Finally we define when a voter $v$ see a round as completable, that is when
+they are confident that $B_v^{r, \tmop{pv}}$ is an upper bound for what is
+going to be finalised in this round. \
+
 \begin{definition}
-  We say that round $r$ is {\tmstrong{unfinalizable,}} if for all $B'
-  \geqslant B_v^{r, \tmop{pv}}$:
-  \[ |V^{r, \tmop{pc}}_{\tmop{obs} (v)} | - |V^{r, \tmop{pc}}_{\tmop{obs}
-     (v)_{\nosymbol}} (B') | \geqslant \frac{1}{3} |\mathbb{V}| \]
+  We say that round $r$ is {\tmstrong{completable}} if $|V^{r,
+  \tmop{pc}}_{\tmop{obs} (v)} | +\mathcal{E}^{r, \tmop{pc}}_{\tmop{obs} (v)} >
+  \frac{2}{3} \mathbb{V}$ and for all $B' > B_v^{r, \tmop{pv}}$:
+  \[ \begin{array}{l}
+       |V^{r, \tmop{pc}}_{\tmop{obs} (v)} | -\mathcal{E}^{r,
+       \tmop{pc}}_{\tmop{obs} (v)} - |V^{r, \tmop{pc}}_{\tmop{obs}
+       (v)_{\nosymbol}} (B') | > \frac{2}{3} |\mathbb{V}|
+     \end{array} \]
 \end{definition}
+
+Note that in practice we only need to check the inequality for those $B' >
+B_v^{r, \tmop{pv}}$ where $|V^{r, \tmop{pc}}_{\tmop{obs} (v)_{\nosymbol}} (B')
+| > 0$.
+
+\
 
 \subsubsection{Voting Messages Specification}
 
@@ -714,8 +730,8 @@ more details). These messages are specified in this section.
   represented as {\tmstrong{$M_v^{r, \tmop{Fin}}$(B)}} is a message
   broadcasted by voter $v$ to the network indicating that voter $v$ has
   finalized block $B$ in round $r$. It has the following structure:
-  \[ M^{r, \tmop{stage}}_v \assign \tmop{Enc}_{\tmop{SC}} (r, V (B), J^r (B))
-  \]
+  \[ M^{r, \tmop{Fin}}_v (B) \assign \tmop{Enc}_{\tmop{SC}} (r, V (B), J^r
+     (B)) \]
   in which $J^r (B)$ in the justification defined in Definition
   \ref{def-grandpa-justification}.
 \end{definition}
@@ -732,8 +748,6 @@ round $r_n$, which is currently undergoing in the network.
 As instructed in Algortihm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
-
-\
 
 {\algorithm{\label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
 ($\mathcal{V}$)}{{\algorithmic{{\state{$r \leftarrow 0$}}
@@ -761,15 +775,12 @@ v} \leftarrow$Time}}
 {\state{{\IF{$v = \tmop{primary}$}}}}
 
 {\state{{\tmname{Broadcast(}}\left.$M_{v_{\nosymbol}}^{r - 1,
-\tmop{fin}}$()\right){\END}}}
-
-{\state{{\ELSE{\ }}}}
+\tmop{Fin}}$({\tmname{Best-Final-Candidate}}($r$-1))\right){\END}}}
 
 {\state{{\tmname{Receive-Messages}}({\tmstrong{until}} Time $\geqslant t_{r_,
-v} + 2 \times T$ {\tmstrong{or}} {\tmname{Completable}}($r$)){\END}}}
+v} + 2 \times T$ {\tmstrong{or}} $r$ {\tmstrong{is}} completable){\END}}}
 
-{\state{$L \leftarrow${\tmname{Received-as-Final()}} {\tmstrong{or}}
-{\tmname{Best-Final-Candidate}}($r$-1)}}
+{\state{$L \leftarrow${\tmname{Best-Final-Candidate}}($r$-1)}}
 
 {\state{{\IF{{\tmname{Received($M_{v_{\tmop{primary}}}^{r, \tmop{pv}} (B)$)}}
 {\tmstrong{and}} $B^{r, \tmop{pv}}_v \geqslant B > L$}}}}
@@ -784,9 +795,9 @@ v} + 2 \times T$ {\tmstrong{or}} {\tmname{Completable}}($r$)){\END}}}
 
 {\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $B^{r,
 \tmop{pv}_{\nosymbol}}_v \geqslant L$ {\tmstrong{and}} (Time $\geqslant t_{r_,
-v} + 4 \times T${\tmstrong{ or }}{\tmname{Completable}}($r$)))}}
+v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 
-{\state{{\tmname{Broadcast($M_v^{r, \tmop{pc}}$(Best-Final-Candidate($r$))}}}}
+{\state{{\tmname{Broadcast($M_v^{r, \tmop{pc}}$($B_v^{r, \tmop{pv}}$))}}}}
 
 {\state{{\tmname{Play-Grandpa-round}}($r + 1$)}}}}}}
 
@@ -803,22 +814,7 @@ v} + 4 \times T${\tmstrong{ or }}{\tmname{Completable}}($r$)))}}
 {\state{{\RETURN{$E \in \mathcal{C}: H_n (E) = \max \{H_n (B') : B' \in
 \mathcal{C}\}${\END}}}}}}}}}
 
-{\algorithm{\label{alg-completable-round}{\tmname{Completable}}($r$)}{{\algorithmic{{\state{$E
-\leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
-
-{\state{{\IF{$E \neq \phi$}}}}
-
-{\state{{\RETURN{{\tmname{True}}{\END}}}}}
-
-{\state{{\ELSEIF{$r$ {\tmstrong{is}} unfinalizable}}}}
-
-{\state{{\RETURN{{\tmname{True}}{\END}}}}}
-
-{\state{{\ELSE{\ }}}}
-
-{\state{{\RETURN{{\tmname{False{\END}}}}}}}}}}}
-
-{\algorithm{{\tmname{FinalizeRound}}($r$)}{{\algorithmic{{\state{$L
+{\algorithm{{\tmname{Attempt-To-Finalize-Round}}($r$)}{{\algorithmic{{\state{$L
 \leftarrow${\tmname{Last-Finalized-Block}}}}
 
 {\state{$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
@@ -831,7 +827,12 @@ v} + 4 \times T${\tmstrong{ or }}{\tmname{Completable}}($r$)))}}
 
 {\state{{\IF{$M_v^{r, \tmop{Fin}} (E) \nin${\tmname{Received-Messages}}}}}}
 
-{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (E)$)}}}}}}
+{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (E)$)}}
+
+{\state{{\RETURN{{\END}{\END}}}}}
+
+{\state{{\tmstrong{schedule-call}} {\tmname{Attempt-To-Finalize-Round}}($r$)
+{\tmstrong{when}} {\tmname{Receive-Messages}} }}}}}}
 
 \section{Auxilary Encodings}
 
