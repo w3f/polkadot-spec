@@ -147,9 +147,11 @@
       <strong|<math|H<rsub|r>>> is the root of the Merkle trie, whose leaves
       implement the storage for the system.
 
-      <item><strong|<samp|extrinsics_root:>> is the root of the Merkle trie,
-      whose leaves represent individual extrinsics being validated in this
-      block. This element is formally referred to as
+      <item><strong|<samp|extrinsics_root:>> is the field which is reserved
+      for the runtime to validate the integrity of the extrinsics which
+      compose the block body. For example, it can hold the root hash of the
+      Merkle trie which stores an ordered list of the extrinsics being
+      validated in this block. This element is formally referred to as
       <strong|<math|H<rsub|e>>>.
 
       <item><strong|<samp|digest:>> this field is used to store any
@@ -195,9 +197,15 @@
 
   Each block also contains a list of extrinsics. Polkadot RE does not specify
   or limit the internal of each extrinsics beside the fact that each
-  extrinsics is a blob of encoded data. The <samp|extrinsics_root> should
-  correspond to the root of the Merkle trie, whose leaves are made of the
-  block extrinsics list.
+  extrinsics is a byte array encoded using SCALE codec
+  [<reference|def-scale-codec>].\ 
+
+  The <samp|extrinsics_root> is set by the runtime and its value is opaque to
+  Polkadot RE.
+
+  <todo|is this used anywhere else beside formation of the trie:>The
+  extrinsics are keyed using SCALE codec of a 32-bit unsigned integer
+  sequential number indicating the order of each extrinsics.
 
   <section|Runtime><label|sect-entries-into-runtime>
 
@@ -226,7 +234,7 @@
 
   Polkadot RE assumes that at least the following functions are implemented
   in the Runtime Wasm blob and has been exported as shown in Snippet
-  <reference|snippet-runtime-enteries> :
+  <reference|snippet-runtime-enteries>:
 
   <assign|figure-text|<macro|Snippet>>
 
@@ -237,6 +245,10 @@
       (export "authorities" (func $authorities))
 
       (export "execute_block" (func $execute_block))
+
+      (export "validate_transaction" (func $validate_transaction))
+
+      (export "initialise_block" (func $initialise_block))
     </cpp-code>
   </small-figure|<label|snippet-runtime-enteries>Snippet to export entries
   into tho Wasm runtime module>
@@ -289,6 +301,10 @@
     of the data execute_block returns after execution>
   </with>
 
+  <subsubsection|validate_transaction><label|sect-validate-transaction>
+
+  <todo|Explain function>
+
   <subsection|Code Executor>
 
   Polkadot RE provide a Wasm Virtual Machine (VM) to run the runtime. The
@@ -301,7 +317,28 @@
   All data exchanged between Polkadot RE and the runtime is encoded using
   SCALE codec described in Section <reference|sect-scale-codec>.
 
-  <section|Network API>
+  <section|Network Interactions>
+
+  <subsection|Extrinsics Submission>
+
+  Extrinsic submission is done by sending an extrinsic network message. The
+  structure of this message is specified in Definition
+  <reference|def-extrinsic-network-message>.
+
+  Upon receiving an extrinsics message, Polkadot RE decodes the transaction
+  and calls <verbatim|validate_trasaction> runtime function defined in
+  Section <reference|sect-validate-transaction>, to check the validitiy of
+  the extrinsic. If <verbatim|validate_transaction> considers the submitted
+  extrinsics as a valid one, Polkadot RE, makes the extrinsics available for
+  the consensus engine for inclusion in future blocks.
+
+  <subsection|Network Messages>
+
+  <\definition>
+    <label|def-extrinsic-network-message><strong|Extrinsic submssion network
+    message: ><todo|<label|def-extrinsic-network-message><strong|Extrinsic
+    submssion network message definition>>
+  </definition>
 
   <subsection|Block Submission and Validation>
 
@@ -310,19 +347,13 @@
   consistent with the world state and transitions from the state of the
   system to a new valid state.
 
-  \;
-
   Blocks can be handed to the Polkadot RE both from the network stack and
   from consensus engine.
-
-  \;
 
   Both the runtime and the Polkadot RE need to work together to assure block
   validity. This can be accomplished by Polkadot RE invoking
   <verbatim|execute_block> entry into the runtime as a part of the validation
   process.
-
-  \;
 
   Polkadot RE implements the following procedure to assure the validity of
   the block:
@@ -402,7 +433,7 @@
   to encode <math|k> in a uniform way:
 
   <\definition>
-    The for the purpose labeling the branches of the Trie key <math|k> is
+    For the purpose of labeling the branches of the Trie, the key <math|k> is
     encoded to <math|k<rsub|enc>> using KeyEncode functions:
 
     <\equation>
@@ -420,8 +451,8 @@
     which are the little endian representations of <math|b<rsub|i>>:
 
     <\equation*>
-      <around|(|b<rsup|1><rsub|i>,b<rsup|2><rsub|i>|)>\<assign\><around|(|b<rsub|1>mod
-      16,b<rsub|2>/16|)>
+      <around|(|b<rsup|1><rsub|i>,b<rsup|2><rsub|i>|)>\<assign\><around|(|b<rsub|i>mod
+      16,b<rsub|i>/16|)>
     </equation*>
 
     , where mod is the remainder and / is the integer division operators.
@@ -546,7 +577,7 @@
   <\definition>
     We say <strong|B is descendant of <math|B<rprime|'>>>, formally noted as
     <strong|<math|B\<gtr\>B<rprime|'>>> if <math|B> is a descendent of
-    <math|B<rprime|'>> in the block tree.\ 
+    <math|B<rprime|'>> in the block tree.
   </definition>
 
   <subsection|Block Production>
@@ -1020,7 +1051,8 @@
   hash proof for the State Storage.
 
   <\definition>
-    The <strong|SCALE codec> for <strong|Byte array> <math|A> such that
+    <label|def-scale-codec>The <strong|SCALE codec> for <strong|Byte array>
+    <math|A> such that
 
     <\equation*>
       A\<assign\>b<rsub|1>*b<rsub|2>*\<ldots\>*b<rsub|n>
@@ -1196,7 +1228,7 @@
 <\references>
   <\collection>
     <associate|alg-completable-round|<tuple|5|11>>
-    <associate|alg-grandpa-best-candidate|<tuple|4|10>>
+    <associate|alg-grandpa-best-candidate|<tuple|4|11>>
     <associate|alg-grandpa-round|<tuple|3|10>>
     <associate|alg-join-leave-grandpa|<tuple|2|10>>
     <associate|auto-1|<tuple|1|1>>
@@ -1204,34 +1236,37 @@
     <associate|auto-11|<tuple|3.1.2|3>>
     <associate|auto-12|<tuple|3.1.3|3>>
     <associate|auto-13|<tuple|2|3>>
-    <associate|auto-14|<tuple|3.2|4>>
-    <associate|auto-15|<tuple|3.3|4>>
-    <associate|auto-16|<tuple|4|4>>
-    <associate|auto-17|<tuple|4.1|4>>
-    <associate|auto-18|<tuple|5|4>>
-    <associate|auto-19|<tuple|5.1|4>>
+    <associate|auto-14|<tuple|3.1.4|4>>
+    <associate|auto-15|<tuple|3.2|4>>
+    <associate|auto-16|<tuple|3.3|4>>
+    <associate|auto-17|<tuple|4|4>>
+    <associate|auto-18|<tuple|4.1|4>>
+    <associate|auto-19|<tuple|4.2|4>>
     <associate|auto-2|<tuple|2|1>>
-    <associate|auto-20|<tuple|5.2|5>>
-    <associate|auto-21|<tuple|5.3|5>>
-    <associate|auto-22|<tuple|6|6>>
-    <associate|auto-23|<tuple|7|6>>
-    <associate|auto-24|<tuple|7.1|7>>
-    <associate|auto-25|<tuple|7.2|7>>
-    <associate|auto-26|<tuple|7.3|7>>
-    <associate|auto-27|<tuple|7.3.1|7>>
-    <associate|auto-28|<tuple|7.3.2|9>>
-    <associate|auto-29|<tuple|7.3.3|10>>
+    <associate|auto-20|<tuple|4.3|5>>
+    <associate|auto-21|<tuple|5|5>>
+    <associate|auto-22|<tuple|5.1|6>>
+    <associate|auto-23|<tuple|5.2|7>>
+    <associate|auto-24|<tuple|5.3|7>>
+    <associate|auto-25|<tuple|6|7>>
+    <associate|auto-26|<tuple|7|7>>
+    <associate|auto-27|<tuple|7.1|7>>
+    <associate|auto-28|<tuple|7.2|9>>
+    <associate|auto-29|<tuple|7.3|10>>
     <associate|auto-3|<tuple|2.1|2>>
-    <associate|auto-30|<tuple|7.3.4|10>>
-    <associate|auto-31|<tuple|8|11>>
-    <associate|auto-32|<tuple|8.1|11>>
-    <associate|auto-33|<tuple|8.2|12>>
-    <associate|auto-34|<tuple|8.3|12>>
-    <associate|auto-35|<tuple|9|13>>
-    <associate|auto-36|<tuple|10|13>>
-    <associate|auto-37|<tuple|11|13>>
-    <associate|auto-38|<tuple|12|13>>
+    <associate|auto-30|<tuple|7.3.1|10>>
+    <associate|auto-31|<tuple|7.3.2|11>>
+    <associate|auto-32|<tuple|7.3.3|11>>
+    <associate|auto-33|<tuple|7.3.4|12>>
+    <associate|auto-34|<tuple|8|12>>
+    <associate|auto-35|<tuple|8.1|13>>
+    <associate|auto-36|<tuple|8.2|13>>
+    <associate|auto-37|<tuple|8.3|13>>
+    <associate|auto-38|<tuple|9|13>>
+    <associate|auto-39|<tuple|10|?>>
     <associate|auto-4|<tuple|2.2|2>>
+    <associate|auto-40|<tuple|11|?>>
+    <associate|auto-41|<tuple|12|?>>
     <associate|auto-5|<tuple|2.3|2>>
     <associate|auto-6|<tuple|3|2>>
     <associate|auto-7|<tuple|3.1|3>>
@@ -1240,15 +1275,18 @@
     <associate|block|<tuple|2.1|2>>
     <associate|def-block-header|<tuple|7|2>>
     <associate|def-block-header-hash|<tuple|8|2>>
-    <associate|def-grandpa-justification|<tuple|28|9>>
-    <associate|def-hpe|<tuple|32|12>>
-    <associate|def-key-len-enc|<tuple|33|12>>
-    <associate|def-node-prefix|<tuple|12|6>>
+    <associate|def-extrinsic-network-message|<tuple|9|?>>
+    <associate|def-grandpa-justification|<tuple|29|9>>
+    <associate|def-hpe|<tuple|33|12>>
+    <associate|def-key-len-enc|<tuple|34|12>>
+    <associate|def-node-prefix|<tuple|13|6>>
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-radix-tree|<tuple|3|1>>
-    <associate|def-state-read-write|<tuple|9|5>>
-    <associate|def-vote|<tuple|19|7>>
+    <associate|def-scale-codec|<tuple|31|?>>
+    <associate|def-state-read-write|<tuple|10|5>>
+    <associate|def-vote|<tuple|20|8>>
     <associate|defn-bit-rep|<tuple|6|1>>
+    <associate|defn-scale-codec|<tuple|31|?>>
     <associate|key-encode-in-trie|<tuple|1|5>>
     <associate|sect-abi-encoding|<tuple|3.3|4>>
     <associate|sect-entries-into-runtime|<tuple|3|2>>
@@ -1259,6 +1297,7 @@
     <associate|sect-runtime-api-auth|<tuple|3.1.2|3>>
     <associate|sect-runtime-upgrade|<tuple|11|13>>
     <associate|sect-scale-codec|<tuple|8.1|11>>
+    <associate|sect-validate-transaction|<tuple|3.1.4|?>>
     <associate|snippet-runtime-enteries|<tuple|1|3>>
   </collection>
 </references>
