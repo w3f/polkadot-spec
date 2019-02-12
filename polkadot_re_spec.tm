@@ -424,6 +424,23 @@
 
     <item><verbatim|ext_set_storage>
 
+    Sets the value of a specific key in the state storage.
+
+    <strong|Arguments>:
+
+    <\itemize>
+      <item><verbatim|key>: 32bit pointer pointing the buffer containing the
+      key.
+
+      <item><verbatim|key_len>: UINT32 integer specifying the key length.
+
+      <item><verbatim|value>: 32bit pointer pointing the buffer containing
+      the value to be stored under the key.
+
+      <item><verbatim|value_len>: UINT32 integer specifying the length of the
+      value buffer.
+    </itemize>
+
     <item><verbatim|ext_storage_changes_root>
 
     <item><verbatim|ext_storage_root>
@@ -1264,7 +1281,7 @@
     <math|Enc<rsub|SC><around|(|A|)>> and defined as follows:
 
     <\equation*>
-      Enc<rsub|SC><around|(|A|)>\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|l<rsup|\<nosymbol\>><rsub|1>*b<rsub|1>*b<rsub|2>*\<ldots\>*b<rsub|n>>|<cell|>|<cell|0\<leqslant\>n\<less\>2<rsup|6>>>|<row|<cell|i<rsup|\<nosymbol\>><rsub|1>*i<rsup|\<nosymbol\>><rsub|2>*b<rsub|1>*\<ldots\>*b<rsub|n>>|<cell|>|<cell|2<rsup|6>\<leqslant\>n\<less\>2<rsup|14>>>|<row|<cell|j<rsup|\<nosymbol\>><rsub|1>*j<rsup|\<nosymbol\>><rsub|2>*j<rsub|3>*b<rsub|1>*\<ldots\>*b<rsub|n>>|<cell|>|<cell|2<rsup|14>\<leqslant\>n\<less\>2<rsup|30>>>|<row|<cell|k<rsub|1><rsup|\<nosymbol\>>*k<rsub|2><rsup|\<nosymbol\>>*\<ldots\>*k<rsub|m><rsup|\<nosymbol\>>*b<rsub|1>*\<ldots\>*b<rsub|n>>|<cell|>|<cell|2<rsup|14>\<leqslant\>n>>>>>|\<nobracket\>>
+      Enc<rsub|SC><around|(|A|)>\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|l<rsup|\<nosymbol\>><rsub|1>*b<rsub|1>*b<rsub|2>*\<ldots\>*b<rsub|n>>|<cell|>|<cell|0\<leqslant\>n\<less\>2<rsup|6>>>|<row|<cell|i<rsup|\<nosymbol\>><rsub|1>*i<rsup|\<nosymbol\>><rsub|2>*b<rsub|1>*\<ldots\>*b<rsub|n>>|<cell|>|<cell|2<rsup|6>\<leqslant\>n\<less\>2<rsup|14>>>|<row|<cell|j<rsup|\<nosymbol\>><rsub|1>*j<rsup|\<nosymbol\>><rsub|2>*j<rsub|3>*b<rsub|1>*\<ldots\>*b<rsub|n>>|<cell|>|<cell|2<rsup|14>\<leqslant\>n\<less\>2<rsup|30>>>|<row|<cell|k<rsub|1><rsup|\<nosymbol\>>*k<rsub|2><rsup|\<nosymbol\>>*\<ldots\>*k<rsub|m><rsup|\<nosymbol\>>*b<rsub|1>*\<ldots\>*b<rsub|n>>|<cell|>|<cell|2<rsup|30>\<leqslant\>n>>>>>|\<nobracket\>>
     </equation*>
 
     in which:<space|0.17em>
@@ -1277,13 +1294,13 @@
     format in base-2 as follows:
 
     <\equation*>
-      n=<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|l<rsup|7><rsub|1>*\<ldots\>*l<rsup|3><rsub|1>*l<rsup|2><rsub|1>>|<cell|>|<cell|n\<less\>2<rsup|6>>>|<row|<cell|i<rsub|2><rsup|7>*\<ldots\>*i<rsub|2><rsup|0>*i<rsub|1><rsup|7>*\<ldots\>*i<rsup|2><rsub|1><rsup|\<nosymbol\>>>|<cell|>|<cell|2<rsup|6>\<leqslant\>n\<less\>2<rsup|14>>>|<row|<cell|j<rsub|4><rsup|7>*\<ldots\>*j<rsub|4><rsup|0>*j<rsub|3><rsup|7>*\<ldots\>*j<rsub|1><rsup|7>*\<ldots\>*j<rsup|2><rsub|1>>|<cell|>|<cell|2<rsup|14>\<leqslant\>n\<less\>2<rsup|30>>>|<row|<cell|k<rsub|2>+k<rsub|3>*2<rsup|8>+k<rsub|4>*2<rsup|2*\<cdummy\>*8>+\<cdots\>+k<rsub|m>*2<rsup|<around|(|m-2|)>*8>>|<cell|>|<cell|2<rsup|30>\<leqslant\>n>>>>>|\<nobracket\>>
+      <around*|\<nobracket\>|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|l<rsup|7><rsub|1>*\<ldots\>*l<rsup|3><rsub|1>*l<rsup|2><rsub|1>>|<cell|>|<cell|n\<less\>2<rsup|6>>>|<row|<cell|i<rsub|2><rsup|7>*\<ldots\>*i<rsub|2><rsup|0>*i<rsub|1><rsup|7>*\<ldots\>*i<rsup|2><rsub|1><rsup|\<nosymbol\>>>|<cell|>|<cell|2<rsup|6>\<leqslant\>n\<less\>2<rsup|14>>>|<row|<cell|j<rsub|4><rsup|7>*\<ldots\>*j<rsub|4><rsup|0>*j<rsub|3><rsup|7>*\<ldots\>*j<rsub|1><rsup|7>*\<ldots\>*j<rsup|2><rsub|1>>|<cell|>|<cell|2<rsup|14>\<leqslant\>n\<less\>2<rsup|30>>>|<row|<cell|k<rsub|2>+k<rsub|3>*2<rsup|8>+k<rsub|4>*2<rsup|2*\<cdummy\>*8>+\<cdots\>+k<rsub|m>*2<rsup|<around|(|m-2|)>*8>>|<cell|>|<cell|2<rsup|30>\<leqslant\>n>>>>>|}>\<assign\>n
     </equation*>
 
     where:
 
     <\equation*>
-      m=l<rsup|7><rsub|1>*\<ldots\>*l<rsup|3><rsub|1>*l<rsup|2><rsub|1>+4
+      k<rsup|7><rsub|1>*\<ldots\>*k<rsup|3><rsub|1>*k<rsup|2><rsub|1>:=m-4
     </equation*>
   </definition>
 
@@ -1337,7 +1354,7 @@
 
   <section|Runtime upgrade><label|sect-runtime-upgrade>
 
-  \;
+  ;
 </body>
 
 <\initial>
@@ -1356,87 +1373,87 @@
 
 <\references>
   <\collection>
-    <associate|alg-grandpa-best-candidate|<tuple|4|11>>
-    <associate|alg-grandpa-round|<tuple|3|10>>
-    <associate|alg-join-leave-grandpa|<tuple|2|10>>
+    <associate|alg-grandpa-best-candidate|<tuple|4|14>>
+    <associate|alg-grandpa-round|<tuple|3|13>>
+    <associate|alg-join-leave-grandpa|<tuple|2|13>>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|3.2.2|3>>
-    <associate|auto-11|<tuple|3.2.3|3>>
-    <associate|auto-12|<tuple|3.2.4|3>>
-    <associate|auto-13|<tuple|3.3|3>>
+    <associate|auto-10|<tuple|3.2.2|4>>
+    <associate|auto-11|<tuple|3.2.3|4>>
+    <associate|auto-12|<tuple|3.2.4|4>>
+    <associate|auto-13|<tuple|3.3|4>>
     <associate|auto-14|<tuple|1|4>>
     <associate|auto-15|<tuple|3.3.1|4>>
     <associate|auto-16|<tuple|1|4>>
-    <associate|auto-17|<tuple|3.3.2|4>>
-    <associate|auto-18|<tuple|3.3.3|4>>
-    <associate|auto-19|<tuple|2|4>>
-    <associate|auto-2|<tuple|2|1>>
+    <associate|auto-17|<tuple|3.3.2|5>>
+    <associate|auto-18|<tuple|3.3.3|5>>
+    <associate|auto-19|<tuple|2|5>>
+    <associate|auto-2|<tuple|2|2>>
     <associate|auto-20|<tuple|3.3.4|5>>
     <associate|auto-21|<tuple|3.4|5>>
-    <associate|auto-22|<tuple|3.4.1|6>>
-    <associate|auto-23|<tuple|3.4.2|7>>
-    <associate|auto-24|<tuple|3.4.3|7>>
-    <associate|auto-25|<tuple|3.4.4|7>>
-    <associate|auto-26|<tuple|3.4.5|7>>
+    <associate|auto-22|<tuple|3.4.1|5>>
+    <associate|auto-23|<tuple|3.4.2|6>>
+    <associate|auto-24|<tuple|3.4.3|6>>
+    <associate|auto-25|<tuple|3.4.4|6>>
+    <associate|auto-26|<tuple|3.4.5|6>>
     <associate|auto-27|<tuple|3.4.6|7>>
-    <associate|auto-28|<tuple|4|9>>
-    <associate|auto-29|<tuple|4.1|10>>
+    <associate|auto-28|<tuple|4|7>>
+    <associate|auto-29|<tuple|4.1|7>>
     <associate|auto-3|<tuple|2.1|2>>
-    <associate|auto-30|<tuple|4.2|10>>
-    <associate|auto-31|<tuple|4.3|11>>
-    <associate|auto-32|<tuple|5|11>>
-    <associate|auto-33|<tuple|5.1|12>>
-    <associate|auto-34|<tuple|5.2|12>>
-    <associate|auto-35|<tuple|5.3|13>>
-    <associate|auto-36|<tuple|6|13>>
-    <associate|auto-37|<tuple|6.1|13>>
-    <associate|auto-38|<tuple|6.2|13>>
-    <associate|auto-39|<tuple|6.3|?>>
+    <associate|auto-30|<tuple|4.2|7>>
+    <associate|auto-31|<tuple|4.3|7>>
+    <associate|auto-32|<tuple|5|8>>
+    <associate|auto-33|<tuple|5.1|8>>
+    <associate|auto-34|<tuple|5.2|8>>
+    <associate|auto-35|<tuple|5.3|9>>
+    <associate|auto-36|<tuple|6|10>>
+    <associate|auto-37|<tuple|6.1|10>>
+    <associate|auto-38|<tuple|6.2|10>>
+    <associate|auto-39|<tuple|6.3|10>>
     <associate|auto-4|<tuple|2.2|2>>
-    <associate|auto-40|<tuple|6.3.1|?>>
-    <associate|auto-41|<tuple|6.3.2|?>>
-    <associate|auto-42|<tuple|6.3.3|?>>
-    <associate|auto-43|<tuple|6.3.4|?>>
-    <associate|auto-44|<tuple|7|?>>
-    <associate|auto-45|<tuple|7.1|?>>
-    <associate|auto-46|<tuple|7.2|?>>
-    <associate|auto-47|<tuple|7.3|?>>
-    <associate|auto-48|<tuple|8|?>>
-    <associate|auto-49|<tuple|9|?>>
-    <associate|auto-5|<tuple|2.3|2>>
-    <associate|auto-50|<tuple|10|?>>
-    <associate|auto-6|<tuple|3|2>>
+    <associate|auto-40|<tuple|6.3.1|10>>
+    <associate|auto-41|<tuple|6.3.2|12>>
+    <associate|auto-42|<tuple|6.3.3|13>>
+    <associate|auto-43|<tuple|6.3.4|13>>
+    <associate|auto-44|<tuple|7|14>>
+    <associate|auto-45|<tuple|7.1|14>>
+    <associate|auto-46|<tuple|7.2|15>>
+    <associate|auto-47|<tuple|7.3|15>>
+    <associate|auto-48|<tuple|8|15>>
+    <associate|auto-49|<tuple|9|15>>
+    <associate|auto-5|<tuple|2.3|3>>
+    <associate|auto-50|<tuple|10|15>>
+    <associate|auto-6|<tuple|3|3>>
     <associate|auto-7|<tuple|3.1|3>>
     <associate|auto-8|<tuple|3.2|3>>
     <associate|auto-9|<tuple|3.2.1|3>>
     <associate|block|<tuple|2.1|2>>
     <associate|def-block-header|<tuple|10|2>>
     <associate|def-block-header-hash|<tuple|11|2>>
-    <associate|def-extrinsic-network-message|<tuple|12|?>>
-    <associate|def-grandpa-justification|<tuple|32|9>>
-    <associate|def-hpe|<tuple|36|12>>
-    <associate|def-key-len-enc|<tuple|37|12>>
-    <associate|def-node-prefix|<tuple|16|6>>
+    <associate|def-extrinsic-network-message|<tuple|12|7>>
+    <associate|def-grandpa-justification|<tuple|32|12>>
+    <associate|def-hpe|<tuple|36|15>>
+    <associate|def-key-len-enc|<tuple|37|15>>
+    <associate|def-node-prefix|<tuple|16|9>>
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-radix-tree|<tuple|3|1>>
-    <associate|def-scale-codec|<tuple|34|?>>
-    <associate|def-state-read-write|<tuple|13|5>>
-    <associate|def-vote|<tuple|23|8>>
+    <associate|def-scale-codec|<tuple|34|14>>
+    <associate|def-state-read-write|<tuple|13|8>>
+    <associate|def-vote|<tuple|23|11>>
     <associate|defn-bit-rep|<tuple|6|1>>
-    <associate|key-encode-in-trie|<tuple|1|5>>
-    <associate|sect-abi-encoding|<tuple|3.2.1|4>>
-    <associate|sect-entries-into-runtime|<tuple|3|2>>
-    <associate|sect-finality|<tuple|6.3|?>>
-    <associate|sect-genisis-block|<tuple|8|13>>
-    <associate|sect-merkl-proof|<tuple|5.3|5>>
-    <associate|sect-predef-storage-keys|<tuple|9|13>>
-    <associate|sect-runtime-api|<tuple|3.4|13>>
-    <associate|sect-runtime-api-auth|<tuple|3.3.2|3>>
-    <associate|sect-runtime-entries|<tuple|3.3|?>>
-    <associate|sect-runtime-upgrade|<tuple|10|13>>
-    <associate|sect-scale-codec|<tuple|7.1|11>>
-    <associate|sect-validate-transaction|<tuple|3.3.4|?>>
-    <associate|snippet-runtime-enteries|<tuple|1|3>>
+    <associate|key-encode-in-trie|<tuple|1|8>>
+    <associate|sect-abi-encoding|<tuple|3.2.1|3>>
+    <associate|sect-entries-into-runtime|<tuple|3|3>>
+    <associate|sect-finality|<tuple|6.3|10>>
+    <associate|sect-genisis-block|<tuple|8|15>>
+    <associate|sect-merkl-proof|<tuple|5.3|9>>
+    <associate|sect-predef-storage-keys|<tuple|9|15>>
+    <associate|sect-runtime-api|<tuple|3.4|5>>
+    <associate|sect-runtime-api-auth|<tuple|3.3.2|5>>
+    <associate|sect-runtime-entries|<tuple|3.3|4>>
+    <associate|sect-runtime-upgrade|<tuple|10|15>>
+    <associate|sect-scale-codec|<tuple|7.1|14>>
+    <associate|sect-validate-transaction|<tuple|3.3.4|5>>
+    <associate|snippet-runtime-enteries|<tuple|1|4>>
   </collection>
 </references>
 
