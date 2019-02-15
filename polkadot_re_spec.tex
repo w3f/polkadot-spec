@@ -65,7 +65,7 @@
   {\Large Protocol Specification}
 }
 
-\date{January 25, 2019}
+\date{February 15, 2019}
 
 \maketitle
 
@@ -78,7 +78,7 @@
 
 \begin{definition}
   \label{def-path-graph}A {\tmstrong{path graph}} or a {\tmstrong{path}} of
-  $n$ nodes, formally referred to as {\tmstrong{$P_n$}}, is a tree with two
+  $n$ nodes formally referred to as {\tmstrong{$P_n$}}, is a tree with two
   nodes of vertex degree 1 and the other n-2 nodes of vertex degree 2.
   Therefore, $P_n$ can be represented by sequences of $(v_1, \ldots, v_n)$
   where $e_i = (v_i, v_{i + 1})$ for $1 \leqslant i \leqslant n - 1$ is the
@@ -112,7 +112,7 @@ sparse.
 \end{definition}
 
 \begin{notation}
-  We represent the concatination of byte arrays $a \assign (a_0, \ldots, a_n)$
+  We represent the concatenation of byte arrays $a \assign (a_0, \ldots, a_n)$
   and $b \assign (b_0, \ldots, b_m)$ by:
   \[ a || b \assign (a_0, \ldots, a_n, b_0, \ldots, b_m) \]
 \end{notation}
@@ -123,6 +123,30 @@ sparse.
   \[ b \assign b^7 \ldots b^0 \]
   where
   \[ b = 2^0 b^0 + 2^1 b^1 + \cdots + 2^7 b^7 \]
+\end{definition}
+
+\begin{definition}
+  By \tmverbatim{}the {\tmstrong{little-endian}} representation of a
+  non-negative integer, I represented as
+  \[ I = (B_n \ldots B_0)_{256} \]
+  In two base 256, is a byte array $B = (b_0, b_1, \ldots, b_n)$ such that
+  \[ b_i \assign B_i \]
+\end{definition}
+
+\begin{definition}
+  By {\tmname{{\tmstrong{\tmverbatim{UINT32}}}}} we refer to a non-negative
+  integer stored in a byte array of length 4 using little-endian encoding
+  format.
+\end{definition}
+
+\begin{definition}
+  A {\tmstrong{blockchain}} $C$ is a directed path graph. Each node of the
+  graph is called {\tmstrong{Block}} and indicated by {\tmstrong{$B$}}. The
+  unique sink of $C$ is called {\tmstrong{Genesis Block}}, and the source is
+  called the {\tmstrong{Head}} of C. For any vertex $(B_1, B_2)$ where $B_1
+  \rightarrow B_2$ we say $B_2$ is the {\tmstrong{parent}} of $B_1$ and we
+  indicate it by
+  \[ B_2 \assign P (B_1) \]
 \end{definition}
 
 \section{Block}
@@ -156,9 +180,11 @@ efficiency of the light clients. It is defined formally as follows:
     {\tmstrong{$H_r$}} is the root of the Merkle trie, whose leaves implement
     the storage for the system.
     
-    \item {\tmstrong{{\tmsamp{extrinsics\_root:}}}} is the root of the Merkle
-    trie, whose leaves represent individual extrinsics being validated in this
-    block. This element is formally referred to as {\tmstrong{$H_e$}}.
+    \item {\tmstrong{{\tmsamp{extrinsics\_root:}}}} is the field which is
+    reserved for the runtime to validate the integrity of the extrinsics
+    composing the block body. For example, it can hold the root hash of the
+    Merkle trie which stores an ordered list of the extrinsics being validated
+    in this block. This element is formally referred to as {\tmstrong{$H_e$}}.
     
     \item {\tmstrong{{\tmsamp{digest:}}}} this field is used to store any
     chain-specific auxiliary data, which could help the light clients interact
@@ -197,22 +223,34 @@ contains the following parts:
 
 \subsection{Extrinsics}
 
-Each block also contains a list of extrinsics. Polkadot RE does not specify or
-limit the internal of each extrinsics beside the fact that each extrinsics is
-a blob of encoded data. The {\tmsamp{extrinsics\_root}} should correspond to
-the root of the Merkle trie, whose leaves are made of the block extrinsics
-list.
+Each block contains as well a list of extrinsics. Polkadot RE does not specify
+or limit the internal of each extrinsics beside the fact that each extrinsics
+is a byte array encoded using SCALE codec [\ref{def-scale-codec}].
 
-\section{Runtime}\label{sect-entries-into-runtime}
+The {\tmsamp{extrinsics\_root}} is set by the runtime, and its value is
+opaque to Polkadot RE.
+
+The extrinsics in a block are ordered using pairing each extrinsics by a
+UINT32 integer sequential number starting at 0 which is encoded using SCALE
+codec.
+
+\section{Interactions with the Runtime}\label{sect-entries-into-runtime}
+
+Runtime is the code implementing the logic of the chain. This code is
+decoupled from the Polkadot RE to make the Runtime easily upgradable without
+the need to upgrade the Polkadot RE itself. In this section, we describe the
+details upon which the Polkadot RE is interacting with the Runtime.
+
+\subsection{Loading the Runtime code \ \ }
 
 Polkadot RE expects to receive the code for the runtime of the chain as a
 compiled WebAssembly (Wasm) Blob. The current runtime is stored in the state
 database under the key represented as a byte array:
-\[ b = 3 a, 63, 6 f, 64, 65 \]
+\[ b = \text{3A,63,6F,64,65} \]
 which is the byte array of ASCII representation of string ``:code'' (see
 Section \ref{sect-predef-storage-keys}). For any call to the runtime, Polkadot
-RE makes sure that it has most updated runtime as calls to runtime have the
-ability to change the runtime code.
+RE makes sure that it has the most updated Runtime as calls to runtime have
+potentially the ability to change the runtime code.
 
 The initial runtime code of the chain is embedded as an extrinsics into the
 chain initialization JSON file and is submitted to Polkadot RE (see Section
@@ -222,16 +260,62 @@ Subsequent calls to the runtime have the ability to call the storage API (see
 Section \ref{sect-runtime-api}) to insert a new Wasm blob into runtime storage
 slot to upgrade the runtime.
 
-\subsection{Entries into Runtime}
+\subsection{Code Executor}
+
+Polkadot RE provides a Wasm Virtual Machine (VM) to run the Runtime. The Wasm
+VM exposes the Polkadot RE API to the Runtime, which, on its turn, executes a
+call to the Runtime entries stored in the Wasm module. This part of the
+Runtime environment is referred to as the {\tmem{{\tmstrong{Executor}}.}}
+
+In this section, we specify the general setup for an Executor call into the
+Runtime. In Section \ref{sect-runtime-entries} we specify the parameters and
+the return values of each Runtime entry separately.
+
+\subsubsection{ABI Encoding between Runtime and the Runtime
+Environment}\label{sect-abi-encoding}
+
+All data exchanged between Polkadot RE and the Runtime is encoded using SCALE
+codec described in Section \ref{sect-scale-codec}.
+
+\subsubsection{Access to Runtime API}
+
+When Polkadot RE calls a Runtime entry it should make sure Runtime has access
+to the all Polkadot Runtime API functions described in Appendix
+\ref{sect-runtime-api}. This can be done for example by loading another Wasm
+module alongside the runtime which imports these functions from Polkadot RE as
+host functions.
+
+\subsubsection{Sending Arguments to Runtime \ }
+
+In each invocation of a Runtime entry, the arguments which are supposed to be
+sent to the entry need to be encoded using SCALE codec into a byte array $B$.
+The Executor then needs to retrieve the memory buffer of the Runtime Wasm
+module and extend it to fit the size of the byte array. Then it needs to copy
+the byte array value in the correct offset of the extended buffer. Finally,
+when the Wasm method corresponding to the entry is called, two UINT32 integers
+are sent to the method as arguments. The first one is the offset of the byte
+array $B$ in the extended shared memory buffer, and the second one is the size
+of $B$.
+
+\subsubsection{The Return Value from a Runtime Entry}
+
+The value which is returned from the invocation represents two consecutive
+UINT32 integers in which the first one indicates the pointer to the offset of
+the result returned by the entry encoded in SCALE codec in the memory buffer.
+The second one provides the size of the blob.
+
+\subsection{Entries into Runtime}\label{sect-runtime-entries}
 
 Polkadot RE assumes that at least the following functions are implemented in
 the Runtime Wasm blob and has been exported as shown in Snippet
-\ref{snippet-runtime-enteries} :
+\ref{snippet-runtime-enteries}:
 
 \tmfloat{h}{small}{figure}{\begin{tmcode}[cpp]
 (export "version" (func $version))
 (export "authorities" (func $authorities))
 (export "execute_block" (func $execute_block))
+(export "validate_transaction" (func $validate_transaction))
+(export "initialise_block" (func $initialise_block))
 \end{tmcode}}{\label{snippet-runtime-enteries}Snippet to export entries into
 tho Wasm runtime module}
 
@@ -240,7 +324,7 @@ communicates with each runtime entry.
 
 \subsubsection{version}
 
-This entry receives no argument, it returns the vesion data encoded in ABI
+This entry receives no argument; it returns the version data encoded in ABI
 format described in Section \ref{sect-abi-encoding} containing the following
 data:
 
@@ -254,11 +338,11 @@ data:
     \tmverbatim{spec\_name} & String & runtime identifier\\
     \tmverbatim{impl\_name} & String & the name of the implementation (e.g.
     C++)\\
-    \tmverbatim{authoring\_version} & 32-bit uint & the version of the
-    authorship interface\\
-    \tmverbatim{spec\_version} & 32-bit uint & the version of the runtime
+    \tmverbatim{authoring\_version} & UINT32 & the version of the authorship
+    interface\\
+    \tmverbatim{spec\_version} & UINT32 & the version of the runtime
     specification\\
-    \tmverbatim{impl\_version} & 32-bit uint & the version of the runtime
+    \tmverbatim{impl\_version} & UINT32 & the version of the runtime
     implementation\\
     \tmverbatim{apis} & ApisVec & List of supported AP\\
     \hline
@@ -269,14 +353,14 @@ data:
 \subsubsection{authorities}\label{sect-runtime-api-auth}
 
 This entry is to report the set of authorities at a given block. It receives
-\tmverbatim{block\_id} as an argument, it returns an array of
+\tmverbatim{block\_id} as an argument; it returns an array of
 \tmverbatim{authority\_id}'s.
 
 \subsubsection{execute\_block}
 
-This entry is responsible to execute all extrinsics in the block and reporting
-back the changes into the state storage. It receives the block header and the
-block body as its arguments and it returns a triplet:
+This entry is responsible for executing all extrinsics in the block and
+reporting back the changes into the state storage. It receives the block
+header and the block body as its arguments, and it returns a triplet:
 
 \begin{center}
   \
@@ -293,19 +377,162 @@ block body as its arguments and it returns a triplet:
   \end{tabular}}{Detail of the data execute\_block returns after execution}
 \end{center}
 
-\subsection{Code Executor}
+\subsubsection{validate\_transaction}\label{sect-validate-transaction}
 
-Polkadot RE provide a Wasm Virtual Machine (VM) to run the runtime. The Wasm
-VM exposes the Polkadot RE API to the Runtime. And execute the Runtime as a
-Wasm module.
+{\todo{Explain function}}
 
-\subsection{ABI Encoding between Runtime and the Runtime
-Enviornment}\label{sect-abi-encoding}
+\subsection{Runtime API}\label{sect-runtime-api}
 
-All data exchanged between Polkadot RE and the runtime is encoded using SCALE
-codec described in Section \ref{sect-scale-codec}.
+Runtime API is a set of functions that Polkadot RE exposes to Runtime to
+access external functions needed for various reasons, such as Storage content
+access and manipulation, memory allocation and also for efficiency. The
+functios are specified in each subsequent subsection for each category of
+those functions.
 
-\section{Network API}
+\subsubsection{Storage}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_child\_storage\_root}
+  
+  \item \tmverbatim{ext\_clear\_child\_storage}
+  
+  \item \tmverbatim{ext\_clear\_prefix}
+  
+  \item \tmverbatim{ext\_clear\_storage}
+  
+  \item \tmverbatim{ext\_exists\_child\_storage}
+  
+  \item \tmverbatim{ext\_get\_allocated\_child\_storage}
+  
+  \item \tmverbatim{ext\_get\_allocated\_storage}
+  
+  \item \tmverbatim{ext\_get\_child\_storage\_into}
+  
+  \item \tmverbatim{ext\_get\_storage\_into}
+  
+  \item \tmverbatim{ext\_kill\_child\_storage}
+  
+  \item \tmverbatim{ext\_set\_child\_storage}
+  
+  \item \tmverbatim{ext\_set\_storage}
+  
+  Sets the value of a specific key in the state storage.
+  
+  {\tmstrong{Arguments}}:
+  \begin{itemize}
+    \item \tmverbatim{key}: 32bit pointer pointing the buffer containing the
+    key.
+    
+    \item \tmverbatim{key\_len}: UINT32 integer specifying the key length.
+    
+    \item \tmverbatim{value}: 32bit pointer pointing the buffer containing the
+    value to be stored under the key.
+    
+    \item \tmverbatim{value\_len}: UINT32 integer specifying the length of the
+    value buffer.
+  \end{itemize}
+  \item \tmverbatim{ext\_storage\_changes\_root}
+  
+  \item \tmverbatim{ext\_storage\_root}
+  
+  \item \tmverbatim{ext\_exists\_storage}
+\end{itemize}
+
+\subsubsection{Memory}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_malloc}
+  
+  Allocates memory of size \tmverbatim{size} in the heap and returns a 32bit
+  pointer to the allocated memory.
+  
+  {\tmstrong{Arguments:}}
+  \begin{itemize}
+    \item \tmverbatim{size:} UINT32 integer indicating the size of the buffer
+    to be allocated. 
+  \end{itemize}
+  \item \tmverbatim{ext\_free}
+  
+  Deallocates a previously allocated memory.
+  
+  {\tmstrong{Arguments:}}
+  \begin{itemize}
+    \item \tmverbatim{addr}: 32bit pointer pointing to the allocated memory.
+  \end{itemize}
+\end{itemize}
+
+\subsubsection{Input/Output}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_print\_hex}
+  
+  \item \tmverbatim{ext\_print\_num}
+  
+  \item \tmverbatim{ext\_print\_utf8}
+\end{itemize}
+
+\subsubsection{Cryptograhpic auxilary functions}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_blake2\_256}
+  
+  \item \tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}
+  
+  \item \tmverbatim{ext\_ed25519\_verify}
+  
+  \item \tmverbatim{ext\_twox\_128}
+  
+  \item \tmverbatim{ext\_twox\_256}
+  
+  \ 
+\end{itemize}
+
+\subsubsection{Sandboxing}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_sandbox\_instance\_teardown}
+  
+  \item \tmverbatim{ext\_sandbox\_instantiate}
+  
+  \item \tmverbatim{ext\_sandbox\_invoke}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_get}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_new}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_set}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_teardown}
+  
+  \ 
+\end{itemize}
+\subsubsection{Misc}
+\begin{itemizedot}
+  \item \tmverbatim{ext\_chain\_id}
+\end{itemizedot}
+
+\section{Network Interactions}
+
+\subsection{Extrinsics Submission}
+
+Extrinsic submission is made by sending an extrinsic network message. The
+structure of this message is specified in Definition
+\ref{def-extrinsic-network-message}.
+
+Upon receiving an extrinsics message, Polkadot RE decodes the transaction and
+calls \tmverbatim{validate\_trasaction} runtime function defined in Section
+\ref{sect-validate-transaction}, to check the validity of the extrinsic. If
+\tmverbatim{validate\_transaction} considers the submitted extrinsics as a
+valid one, Polkadot RE makes the extrinsics available for the consensus engine
+for inclusion in future blocks.
+
+\subsection{Network Messages}
+
+\begin{definition}
+  \label{def-extrinsic-network-message}{\tmstrong{Extrinsic submission network
+  message: }}{\todo{\label{def-extrinsic-network-message}{\tmstrong{Extrinsic
+  submission network message definition}}}}
+\end{definition}
 
 \subsection{Block Submission and Validation}
 
@@ -314,19 +541,13 @@ fit to be added to the blockchain. This means that the block is consistent
 with the world state and transitions from the state of the system to a new
 valid state.
 
-\
-
 Blocks can be handed to the Polkadot RE both from the network stack and from
-consensus engine.
+the consensus engine.
 
-\
-
-Both the runtime and the Polkadot RE need to work together to assure block
+Both the Runtime and the Polkadot RE need to work together to assure block
 validity. This can be accomplished by Polkadot RE invoking
 \tmverbatim{execute\_block} entry into the runtime as a part of the validation
 process.
-
-\
 
 Polkadot RE implements the following procedure to assure the validity of the
 block:
@@ -335,18 +556,26 @@ block:
 (B)$)}}}{{\algorithmic{{\state{{\tmname{Verify-Block-Justification}}$(B,
 \tmop{Just} (B))$}}
 
-{\state{Verify $H_{p (B)} \in \tmop{Blockchain}$.}}
+{\state{{\IF{$B$ {\tmstrong{is}} Finalized {\tmstrong{and}} $P (B)$
+{\tmstrong{is not}} Finalized}}}}
 
-{\state{State-Changes = Runtime.{\tmname{$(B)$}}}}
+{\state{{\tmname{Mark-as-Final}}$(P (B))${\END}}}
+
+{\state{Verify $H_{p (B)} \in \tmop{Blockchain}$}}
+
+{\state{State-Changes = Runtime{\tmname{$(B)$}}}}
 
 {\state{{\tmname{Update-World-State}}(State-Changes)}}}}}}
+
+For the definition of the finality and the finalized block see Section
+\ref{sect-finality}.
 
 \section{State Storage and the Storage Trie}
 
 For storing the state of the system, Polkadot RE implements a hash table
 storage where the keys are used to access each data entry state. There is no
-limitation neither on the size of the key nor the size of the data stored
-under them, besides the fact that they are byte arrays.
+limitation either on the size of the key nor the size of the data stored under
+them, besides the fact that they are byte arrays.
 
 \subsection{Accessing The System Storage }
 
@@ -365,9 +594,9 @@ Polkadot RE.
 
 To authenticate the state of the system, the stored data needs to be
 re-arranged and hashed in a {\tmem{radix 16 tree}} also known as
-{\tmem{base-16 modified Merkle Patricia Tree}}, which hereafter we will refer
-to as the {\tmem{{\tmstrong{Trie}},}} in order to compute the hash of the
-whole state storage consistently and efficiently at any given time.
+{\tmem{base-16 modified Merkle Patricia Tree}}, which hereafter we refer to as
+the {\tmem{{\tmstrong{Trie}},}} in order to compute the hash of the whole
+state storage consistently and efficiently at any given time.
 
 As well, a modification has been made in the storing of the nodes' hash in the
 Merkle Tree structure to save space on entries storing small entries.
@@ -388,8 +617,8 @@ To identify the node corresponding to a key value, $k$, first we need to
 encode $k$ in a uniform way:
 
 \begin{definition}
-  The for the purpose labeling the branches of the Trie key $k$ is encoded to
-  $k_{\tmop{enc}}$ using KeyEncode functions:
+  For the purpose of labeling the branches of the Trie, the key $k$ is encoded
+  to $k_{\tmop{enc}}$ using KeyEncode functions:
   \begin{equation}
     k_{\tmop{enc}} \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{2 n}})
     \assign \tmop{KeyEncode} (k) \label{key-encode-in-trie}
@@ -404,7 +633,7 @@ encode $k$ in a uniform way:
   where $\tmop{Nibble}_4$ is the set of all nibbles of 4-bit arrays and
   $b^1_i$ and $b^2_i$ are 4-bit nibbles, which are the little endian
   representations of $b_i$:
-  \[ (b^1_i, b^2_i) \assign (b_1 \tmop{mod} 16, b_2 / 16) \]
+  \[ (b^1_i, b^2_i) \assign (b_i \tmop{mod} 16, b_i / 16) \]
   , where mod is the remainder and / is the integer division operators.
 \end{definition}
 
@@ -417,10 +646,11 @@ To prove the consistency of the state storage across the network and its
 modifications efficiently, the Merkle hash of the storage trie needs to be
 computed rigorously.
 
-The Merkle hash of the trie is computed recursively. As such, hash value of
-each node depends on the hash value of all its children and also on its value.
-Therefore, it suffices to define how to compute the hash value of a typical
-node as a function of the hash value of its children and its own value.
+The Merkle hash of the trie is computed recursively. As such, the hash value
+of each node depends on the hash value of all its children and also on its
+value. Therefore, it suffices to define how to compute the hash value of a
+typical node as a function of the hash value of its children and its own
+value.
 
 \begin{definition}
   Suppose node N of storage state trie has key value $k_N$, and parent key
@@ -483,12 +713,6 @@ $N$.
      \end{array} \]
 \end{definition}
 
-\section{Extrinsics trie}
-
-To validate that the Extrinsics data are stored in a block across clients,
-Polkadot RE uses the same trie structure as for the state storage described in
-Section \ref{sect-merkl-proof} to generate the Merkle proof.
-
 \section{Consensus Engine}
 
 Consensus in Polkadot RE is achieved during the execution of two different
@@ -499,7 +723,7 @@ on a validator node.
 \subsection{Block Tree}
 
 In the course of formation of a (distributed) blockchain, it is possible that
-the chain forks into multiple sub chains in various block positions. We refer
+the chain forks into multiple subchains in various block positions. We refer
 to this structure as a {\tmem{block tree:}}
 
 \begin{definition}
@@ -512,17 +736,17 @@ to this structure as a {\tmem{block tree:}}
 Because every block in the blockchain contains a reference to its parent, it
 is easy to see that the block tree is actually a tree.
 
-A block tree naturally imposes a partial order relationships on the blocks as
+A block tree naturally imposes partial order relationships on the blocks as
 follows:
 
 \begin{definition}
   We say {\tmstrong{B is descendant of $B'$}}, formally noted as {\tmstrong{$B
-  > B'$}} if $B$ is a descendent of $B'$ in the block tree. 
+  > B'$}} if $B$ is a descendant of $B'$ in the block tree.
 \end{definition}
 
 \subsection{Block Production}
 
-\subsection{Finality}
+\subsection{Finality}\label{sect-finality}
 
 Polkadot RE uses GRANDPA Finality protocol {\cite{AlSt19-Grandpai}} to
 finalize blocks. Finality is obtained by consecutive rounds of voting by
@@ -531,13 +755,13 @@ Block Production as an independent service. In this section, we describe the
 different functions that GRANDPA service is supposed to perform to
 successfully participate in the block finalization process.
 
-\subsubsection{Priliminaries}
+\subsubsection{Preliminaries}
 
 \begin{definition}
   A {\tmstrong{GRANDPA Voter}}, $v$, is represented by a key pair
   $(k^{\tmop{pr}}_v, v_{\tmop{id}})$ where $k_v^{\tmop{pr}}$ represents its
-  private key which is a $\tmop{ED} 25519$ private key, is a node running
-  GRANDPA protocol, and broadcasts votes to finilize blocks in a Polkadot RE -
+  private key which is an $\tmop{ED} 25519$ private key, is a node running
+  GRANDPA protocol, and broadcasts votes to finalize blocks in a Polkadot RE -
   based chain. The {\tmstrong{set of all GRANDPA voters}} is indicated by
   $\mathbb{V}$. For a given block B, we have
   \[ \mathbb{V}_B = \tmverbatim{\tmop{authorities}} (B) \]
@@ -565,31 +789,31 @@ $B$. First a vote is defined as:
   \label{def-vote}A {\tmstrong{GRANDPA vote }}or simply a vote for block $B$
   is an ordered pair defined as
   \[ V_{\nosymbol} (B) \assign (H_h (B), H_i (B)) \]
-  where $H_h (B)$ and $H_i (B)$ are block hash and block number defined in
-  Definitions \ref{def-block-header} and \ref{def-block-header-hash}
-  respectively.
+  where $H_h (B)$ and $H_i (B)$ are the block hash and the block number
+  defined in Definitions \ref{def-block-header} and
+  \ref{def-block-header-hash} respectively.
 \end{definition}
 
 \begin{definition}
-  Voters engage in a maximum two sub-rounds of voting for each round $r$. The
-  first sub-round is called {\tmstrong{pre-vote}} and the second sub-round is
-  called {\tmstrong{pre-commit}}.
+  Voters engage in a maximum of two sub-rounds of voting for each round $r$.
+  The first sub-round is called {\tmstrong{pre-vote}} and the second sub-round
+  is called {\tmstrong{pre-commit}}.
   
   By {\tmstrong{$V_v^{r, \tmop{pv}}$}} and {\tmstrong{$V_v^{r, \tmop{pc}}$}}
-  we refer to the vote casted by voter $v$ in round $r$ (for block $B$) during
+  we refer to the vote cast by voter $v$ in round $r$ (for block $B$) during
   the pre-vote and the pre-commit sub-round respectively.
 \end{definition}
 
 The GRANDPA protocol dictates how an honest voter should vote in each
 sub-round, which is described in Algorithm \ref{alg-grandpa-round}. After
-defining what consititues a vote in GRANDPA, we define how GRANDPA counts
+defining what constitues a vote in GRANDPA, we define how GRANDPA counts
 votes.
 
 \begin{definition}
   Voter $v$ {\tmstrong{equivocates}} if they broadcast two or more valid votes
   to blocks not residing on the same branch of the block tree during one
   voting sub-round. In such a situation, we say that $v$ is an
-  {\tmstrong{equivocator}} and any vote $V_v^{r, \tmop{stage}} (B)$ casted by
+  {\tmstrong{equivocator}} and any vote $V_v^{r, \tmop{stage}} (B)$ cast by
   $v$ in that round is an {\tmstrong{equivocatory vote}} and
   \[ \mathcal{E}^{r, \tmop{stage}} \]
   represents the set of all equivocators voters in sub-round
@@ -606,14 +830,14 @@ votes.
     \begin{itemizedot}
       \item $H (B)$ does not correspond to a valid block;
       
-      \item $B$ is not an (eventual) descendent of a previously finalized
+      \item $B$ is not an (eventual) descendant of a previously finalized
       block;
       
       \item $M^{r, \tmop{stage}}_v$ does not bear a valid signature;
       
       \item $\tmop{id}_{\mathbb{V}}$ does not match the current $\mathbb{V}$;
       
-      \item If $V_v^{r, \tmop{stage}}$ is an equivacatory vote.
+      \item If $V_v^{r, \tmop{stage}}$ is an equivocatory vote.
     \end{itemizedot}
   \end{itemize}
 \end{definition}
@@ -623,8 +847,8 @@ votes.
   in round $r$}}, formally denoted by $\tmop{VD}^{r, \tmop{stage}}_{\tmop{obs}
   (v)}^{\nosymbol}_{\nosymbol} (B)$ is equal to the union of:
   \begin{itemizedot}
-    \item set of valid votes $V^{r, \tmop{stage}}_{v_i}$ casted in round $r$
-    and received by v such that $V^{r, \tmop{stage}}_{v_i} = V (B)$.
+    \item set of valid votes $V^{r, \tmop{stage}}_{v_i}$ cast in round $r$ and
+    received by v such that $V^{r, \tmop{stage}}_{v_i} = V (B)$.
   \end{itemizedot}
 \end{definition}
 
@@ -660,7 +884,7 @@ Note that for genesis block $\tmop{Genesis}$ we always have $\#V_{\tmop{obs}
 
 \
 
-Finally we define when a voter $v$ see a round as completable, that is when
+Finally, we define when a voter $v$ see a round as completable, that is when
 they are confident that $B_v^{r, \tmop{pv}}$ is an upper bound for what is
 going to be finalised in this round. \
 
@@ -721,7 +945,7 @@ more details). These messages are specified in this section.
   \[ B' > B \]
   or $V^{r, \tmop{pc}}_{v_i} (B')$ is an equivocatory vote.
   
-  In all cases $\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B')$ is the signature of
+  In all cases, $\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B')$ is the signature of
   voter $v_i$ broadcasted during the pre-commit sub-round of round r.
 \end{definition}
 
@@ -745,7 +969,7 @@ voting is assigned a unique sequential round number $r_v$, it needs to
 determine and set its round counter $r$ in accordance with the current voting
 round $r_n$, which is currently undergoing in the network.
 
-As instructed in Algortihm \ref{alg-join-leave-grandpa}, whenever the
+As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
@@ -834,7 +1058,7 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 {\state{{\tmstrong{schedule-call}} {\tmname{Attempt-To-Finalize-Round}}($r$)
 {\tmstrong{when}} {\tmname{Receive-Messages}} }}}}}}
 
-\section{Auxilary Encodings}
+\section{Auxiliary Encodings}
 
 \subsection{SCALE Codec}\label{sect-scale-codec}
 
@@ -844,7 +1068,8 @@ consistent hash values across their implementation, including the Merkle hash
 proof for the State Storage.
 
 \begin{definition}
-  The {\tmstrong{SCALE codec}} for {\tmstrong{Byte array}} $A$ such that
+  \label{def-scale-codec}The {\tmstrong{SCALE codec}} for {\tmstrong{Byte
+  array}} $A$ such that
   \[ A \assign b_1 b_2 \ldots b_n \]
   such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{SC}}
   (A)$ and defined as follows:
@@ -855,7 +1080,7 @@ proof for the State Storage.
        j^{\nosymbol}_1 j^{\nosymbol}_2 j_3 b_1 \ldots b_n &  & 2^{14}
        \leqslant n < 2^{30}\\
        k_1^{\nosymbol} k_2^{\nosymbol} \ldots k_m^{\nosymbol} b_1 \ldots b_n &
-       & 2^{14} \leqslant n
+       & 2^{30} \leqslant n
      \end{array} \right. \]
   in which:{\hspace{0.17em}}
   \[ \begin{array}{|l|}
@@ -871,7 +1096,7 @@ proof for the State Storage.
      \end{array} \]
   and n is stored in $\tmop{Enc}_{\tmop{SC}} (A)$ in little-endian format in
   base-2 as follows:
-  \[ n = \left\{ \begin{array}{lll}
+  \[ \left. \begin{array}{lll}
        l^7_1 \ldots l^3_1 l^2_1 &  & n < 2^6\\
        i_2^7 \ldots i_2^0 i_1^7 \ldots i^2_1^{\nosymbol} &  & 2^6 \leqslant n
        < 2^{14}\\
@@ -879,9 +1104,9 @@ proof for the State Storage.
        \leqslant n < 2^{30}\\
        k_2 + k_3 2^8 + k_4 2^{2 \cdummy 8} + \cdots + k_m 2^{(m - 2) 8} &  &
        2^{30} \leqslant n
-     \end{array} \right. \]
+     \end{array} \right\} \assign n \]
   where:
-  \[ m = l^7_1 \ldots l^3_1 l^2_1 + 4 \]
+  \[ k^7_1 \ldots k^3_1 k^2_1 : = m - 4 \]
 \end{definition}
 
 \begin{definition}
@@ -938,84 +1163,12 @@ broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
   \ref{def-node-prefix}.
 \end{definition}
 
-\section{Genisis Block Specification}\label{sect-genisis-block}
+\section{Genesis Block Specification}\label{sect-genisis-block}
 
 \section{Predefined Storage keys}\label{sect-predef-storage-keys}
 
 \section{Runtime upgrade}\label{sect-runtime-upgrade}
 
-\section{Runtime API}\label{sect-runtime-api}
-
-Runtime API is a set of functions, which Polkadot RE exposes to Runtime to
-access Storage content and other external functions. Some of the functions are
-exposed to the runtime for efficiency reasons. Here is the list of the
-functions which Polkadot RE exposes to the runtime:
-\begin{itemizedot}
-  \item \tmverbatim{ext\_blake2\_256}
-  
-  \item \tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}
-  
-  \item \tmverbatim{ext\_chain\_id}
-  
-  \item \tmverbatim{ext\_child\_storage\_root}
-  
-  \item \tmverbatim{ext\_clear\_child\_storage}
-  
-  \item \tmverbatim{ext\_clear\_prefix}
-  
-  \item \tmverbatim{ext\_clear\_storage}
-  
-  \item \tmverbatim{ext\_ed25519\_verify}
-  
-  \item \tmverbatim{ext\_exists\_child\_storage}
-  
-  \item \tmverbatim{ext\_free}
-  
-  \item \tmverbatim{ext\_get\_allocated\_child\_storage}
-  
-  \item \tmverbatim{ext\_get\_allocated\_storage}
-  
-  \item \tmverbatim{ext\_get\_child\_storage\_into}
-  
-  \item \tmverbatim{ext\_get\_storage\_into}
-  
-  \item \tmverbatim{ext\_kill\_child\_storage}
-  
-  \item \tmverbatim{ext\_malloc}
-  
-  \item \tmverbatim{ext\_print\_hex}
-  
-  \item \tmverbatim{ext\_print\_num}
-  
-  \item \tmverbatim{ext\_print\_utf8}
-  
-  \item \tmverbatim{ext\_sandbox\_instance\_teardown}
-  
-  \item \tmverbatim{ext\_sandbox\_instantiate}
-  
-  \item \tmverbatim{ext\_sandbox\_invoke}
-  
-  \item \tmverbatim{ext\_sandbox\_memory\_get}
-  
-  \item \tmverbatim{ext\_sandbox\_memory\_new}
-  
-  \item \tmverbatim{ext\_sandbox\_memory\_set}
-  
-  \item \tmverbatim{ext\_sandbox\_memory\_teardown}
-  
-  \item \tmverbatim{ext\_set\_child\_storage}
-  
-  \item \tmverbatim{ext\_set\_storage}
-  
-  \item \tmverbatim{ext\_storage\_changes\_root}
-  
-  \item \tmverbatim{ext\_storage\_root}
-  
-  \item \tmverbatim{ext\_twox\_128}
-  
-  \item \tmverbatim{ext\_twox\_256}
-  
-  \item \tmverbatim{ext\_exists\_storage}
-\end{itemizedot}
+;
 
 \end{document}

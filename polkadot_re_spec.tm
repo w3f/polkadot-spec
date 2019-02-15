@@ -45,7 +45,7 @@
 
   <\definition>
     <label|def-path-graph>A <strong|path graph> or a <strong|path> of
-    <math|n> nodes, formally referred to as <strong|<math|P<rsub|n>>>, is a
+    <math|n> nodes formally referred to as <strong|<math|P<rsub|n>>>, is a
     tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex
     degree 2. Therefore, <math|P<rsub|n>> can be represented by sequences of
     <math|<around|(|v<rsub|1>,\<ldots\>,v<rsub|n>|)>> where
@@ -90,7 +90,7 @@
   </definition>
 
   <\notation>
-    We represent the concatination of byte arrays
+    We represent the concatenation of byte arrays
     <math|a\<assign\><around|(|a<rsub|0>,\<ldots\>,a<rsub|n>|)>> and
     <math|b\<assign\><around|(|b<rsub|0>,\<ldots\>,b<rsub|m>|)>> by:
 
@@ -115,8 +115,8 @@
   </definition>
 
   <\definition>
-    By <strong|little-endian> representation of non-negative integer I
-    represented as
+    By <verbatim|>the <strong|little-endian> representation of a non-negative
+    integer, I represented as
 
     <\equation*>
       I=<around*|(|B<rsub|n>\<ldots\>B<rsub|0>|)><rsub|256>
@@ -138,11 +138,11 @@
   <\definition>
     A <strong|blockchain> <math|C> is a directed path graph. Each node of the
     graph is called <strong|Block> and indicated by <strong|<math|B>>. The
-    unique sink of <math|C> is called <strong|Genisis Block> and the source
-    is called the <strong|Head> of C. For any vertix
+    unique sink of <math|C> is called <strong|Genesis Block>, and the source
+    is called the <strong|Head> of C. For any vertex
     <math|<around*|(|B<rsub|1>,B<rsub|2>|)>> where
     <math|B<rsub|1>\<rightarrow\>B<rsub|2>> we say <math|B<rsub|2>> is the
-    <strong|parent> of <math|B<rsub|1>> and we indicated by\ 
+    <strong|parent> of <math|B<rsub|1>> and we indicate it by\ 
 
     <\equation*>
       B<rsub|2>\<assign\>P<around*|(|B<rsub|1>|)>
@@ -183,10 +183,10 @@
       implement the storage for the system.
 
       <item><strong|<samp|extrinsics_root:>> is the field which is reserved
-      for the runtime to validate the integrity of the extrinsics which
-      compose the block body. For example, it can hold the root hash of the
-      Merkle trie which stores an ordered list of the extrinsics being
-      validated in this block. This element is formally referred to as
+      for the runtime to validate the integrity of the extrinsics composing
+      the block body. For example, it can hold the root hash of the Merkle
+      trie which stores an ordered list of the extrinsics being validated in
+      this block. This element is formally referred to as
       <strong|<math|H<rsub|e>>>.
 
       <item><strong|<samp|digest:>> this field is used to store any
@@ -230,23 +230,23 @@
 
   <subsection|Extrinsics>
 
-  Each block also contains a list of extrinsics. Polkadot RE does not specify
-  or limit the internal of each extrinsics beside the fact that each
+  Each block contains as well a list of extrinsics. Polkadot RE does not
+  specify or limit the internal of each extrinsics beside the fact that each
   extrinsics is a byte array encoded using SCALE codec
   [<reference|def-scale-codec>].\ 
 
-  The <samp|extrinsics_root> is set by the runtime and its value is opaque to
-  Polkadot RE.
+  The <samp|extrinsics_root> is set by the runtime, and its value is opaque
+  to Polkadot RE.
 
-  The extrinsics in a a block are ordered using by pairing each extrinsics by
-  a UINT32 integer sequential number starting at 0 which is encoded using
-  SCALE codeca.
+  The extrinsics in a block are ordered using pairing each extrinsics by a
+  UINT32 integer sequential number starting at 0 which is encoded using SCALE
+  codec.
 
   <section|Interactions with the Runtime><label|sect-entries-into-runtime>
 
-  Runtime is the code which implement the logic of the chain. This code is
-  decoupled from the Polkadot RE in order to make the runtime easily
-  upgradable without the need to upgrade the Polkadot RE. In this section we
+  Runtime is the code implementing the logic of the chain. This code is
+  decoupled from the Polkadot RE to make the Runtime easily upgradable
+  without the need to upgrade the Polkadot RE itself. In this section, we
   describe the details upon which the Polkadot RE is interacting with the
   Runtime.
 
@@ -262,8 +262,8 @@
 
   which is the byte array of ASCII representation of string \P:code\Q (see
   Section <reference|sect-predef-storage-keys>). For any call to the runtime,
-  Polkadot RE makes sure that it has most updated runtime as calls to runtime
-  have potentially the ability to change the runtime code.
+  Polkadot RE makes sure that it has the most updated Runtime as calls to
+  runtime have potentially the ability to change the runtime code.
 
   The initial runtime code of the chain is embedded as an extrinsics into the
   chain initialization JSON file and is submitted to Polkadot RE (see Section
@@ -275,47 +275,47 @@
 
   <subsection|Code Executor>
 
-  Polkadot RE provide a Wasm Virtual Machine (VM) to run the runtime. The
-  Wasm VM exposes the Polkadot RE API to the Runtime. And execute call to the
-  Runtime entries stored in the Wasm module. This part of the runtime
-  enviornment is refered to as the <em|<strong|Executor>.>
+  Polkadot RE provides a Wasm Virtual Machine (VM) to run the Runtime. The
+  Wasm VM exposes the Polkadot RE API to the Runtime, which, on its turn,
+  executes a call to the Runtime entries stored in the Wasm module. This part
+  of the Runtime environment is referred to as the <em|<strong|Executor>.>
 
-  In this section we specify the general setup for an Executor call into the
-  runtime. In Section <reference|sect-runtime-entries> we specifies the
-  parameter and the return value of each runtime entry separately.
+  In this section, we specify the general setup for an Executor call into the
+  Runtime. In Section <reference|sect-runtime-entries> we specify the
+  parameters and the return values of each Runtime entry separately.
 
   <subsubsection|ABI Encoding between Runtime and the Runtime
-  Enviornment><label|sect-abi-encoding>
+  Environment><label|sect-abi-encoding>
 
-  All data exchanged between Polkadot RE and the runtime is encoded using
+  All data exchanged between Polkadot RE and the Runtime is encoded using
   SCALE codec described in Section <reference|sect-scale-codec>.
 
   <subsubsection|Access to Runtime API>
 
-  When Polkadot RE calls a runtime entry it should makes sure runtime has
+  When Polkadot RE calls a Runtime entry it should make sure Runtime has
   access to the all Polkadot Runtime API functions described in Appendix
   <reference|sect-runtime-api>. This can be done for example by loading
-  another Wasm module along side the runtime which imports these functions
+  another Wasm module alongside the runtime which imports these functions
   from Polkadot RE as host functions.
 
-  <subsubsection|Sending argument to Runtime \ >
+  <subsubsection|Sending Arguments to Runtime \ >
 
-  In each invocation of a Runtime entry the arguments which are supposed to
-  be sent to the entry needs to be encoded using SCALE coded into a byte
-  array <math|B>. The executor then needs to retrieve the memory buffer of
-  the runtime Wasm module and extend it to fit the size of the byte array and
-  copy the byte array value in the correct offset of the extended buffer.
-  Finally when the Wasm method correcsponding to the entry is called, two
-  UINT32 integer are sent to the method as arguments. The first is the offset
-  of the byte array <math|B> in the extended shared memory buffer and the
-  second is the size of <math|B>.
+  In each invocation of a Runtime entry, the arguments which are supposed to
+  be sent to the entry need to be encoded using SCALE codec into a byte array
+  <math|B>. The Executor then needs to retrieve the memory buffer of the
+  Runtime Wasm module and extend it to fit the size of the byte array. Then
+  it needs to copy the byte array value in the correct offset of the extended
+  buffer. Finally, when the Wasm method corresponding to the entry is called,
+  two UINT32 integers are sent to the method as arguments. The first one is
+  the offset of the byte array <math|B> in the extended shared memory buffer,
+  and the second one is the size of <math|B>.
 
-  <subsubsection|Return value from a Runtime entry>
+  <subsubsection|The Return Value from a Runtime Entry>
 
-  The value which is returns from the invocation is two concequtive UINT32
-  integers in which the first is the pointer to the offset of the result
-  returned by the entry encoded in SCALE codec in the memory buffer. The
-  second is the size of the blob.
+  The value which is returned from the invocation represents two consecutive
+  UINT32 integers in which the first one indicates the pointer to the offset
+  of the result returned by the entry encoded in SCALE codec in the memory
+  buffer. The second one provides the size of the blob.
 
   <subsection|Entries into Runtime><label|sect-runtime-entries>
 
@@ -347,7 +347,7 @@
 
   <subsubsection|version>
 
-  This entry receives no argument, it returns the vesion data encoded in ABI
+  This entry receives no argument; it returns the version data encoded in ABI
   format described in Section <reference|sect-abi-encoding> containing the
   following data:
 
@@ -367,14 +367,14 @@
   <subsubsection|authorities><label|sect-runtime-api-auth>
 
   This entry is to report the set of authorities at a given block. It
-  receives <verbatim|block_id> as an argument, it returns an array of
+  receives <verbatim|block_id> as an argument; it returns an array of
   <verbatim|authority_id>'s.
 
   <subsubsection|execute_block>
 
-  This entry is responsible to execute all extrinsics in the block and
+  This entry is responsible for executing all extrinsics in the block and
   reporting back the changes into the state storage. It receives the block
-  header and the block body as its arguments and it returns a triplet:
+  header and the block body as its arguments, and it returns a triplet:
 
   <\with|par-mode|center>
     \;
@@ -391,11 +391,11 @@
 
   <subsection|Runtime API><label|sect-runtime-api>
 
-  Runtime API is a set of functions, which Polkadot RE exposes to Runtime to
-  access external functions which are needed for various reasons, such as
-  Storage content access and manupilation, memory allocation and also for
-  efficiency reason. In each subsequent subsection for each category of those
-  functions are specified.
+  Runtime API is a set of functions that Polkadot RE exposes to Runtime to
+  access external functions needed for various reasons, such as Storage
+  content access and manipulation, memory allocation and also for efficiency.
+  The functios are specified in each subsequent subsection for each category
+  of those functions.
 
   <subsubsection|Storage>
 
@@ -453,7 +453,7 @@
   <\itemize>
     <item><verbatim|ext_malloc>
 
-    Allocates memory of size <verbatim|size> in heap and returns a 32bit
+    Allocates memory of size <verbatim|size> in the heap and returns a 32bit
     pointer to the allocated memory.
 
     <strong|Arguments:>
@@ -532,23 +532,23 @@
 
   <subsection|Extrinsics Submission>
 
-  Extrinsic submission is done by sending an extrinsic network message. The
+  Extrinsic submission is made by sending an extrinsic network message. The
   structure of this message is specified in Definition
   <reference|def-extrinsic-network-message>.
 
   Upon receiving an extrinsics message, Polkadot RE decodes the transaction
   and calls <verbatim|validate_trasaction> runtime function defined in
-  Section <reference|sect-validate-transaction>, to check the validitiy of
-  the extrinsic. If <verbatim|validate_transaction> considers the submitted
-  extrinsics as a valid one, Polkadot RE, makes the extrinsics available for
+  Section <reference|sect-validate-transaction>, to check the validity of the
+  extrinsic. If <verbatim|validate_transaction> considers the submitted
+  extrinsics as a valid one, Polkadot RE makes the extrinsics available for
   the consensus engine for inclusion in future blocks.
 
   <subsection|Network Messages>
 
   <\definition>
-    <label|def-extrinsic-network-message><strong|Extrinsic submssion network
+    <label|def-extrinsic-network-message><strong|Extrinsic submission network
     message: ><todo|<label|def-extrinsic-network-message><strong|Extrinsic
-    submssion network message definition>>
+    submission network message definition>>
   </definition>
 
   <subsection|Block Submission and Validation>
@@ -559,9 +559,9 @@
   system to a new valid state.
 
   Blocks can be handed to the Polkadot RE both from the network stack and
-  from consensus engine.
+  from the consensus engine.
 
-  Both the runtime and the Polkadot RE need to work together to assure block
+  Both the Runtime and the Polkadot RE need to work together to assure block
   validity. This can be accomplished by Polkadot RE invoking
   <verbatim|execute_block> entry into the runtime as a part of the validation
   process.
@@ -600,15 +600,15 @@
     </algorithmic>
   </algorithm>
 
-  For the definition of finality and finalized block see Section
+  For the definition of the finality and the finalized block see Section
   <reference|sect-finality>.
 
   <section|State Storage and the Storage Trie>
 
   For storing the state of the system, Polkadot RE implements a hash table
   storage where the keys are used to access each data entry state. There is
-  no limitation neither on the size of the key nor the size of the data
-  stored under them, besides the fact that they are byte arrays.
+  no limitation either on the size of the key nor the size of the data stored
+  under them, besides the fact that they are byte arrays.
 
   <subsection|Accessing The System Storage >
 
@@ -634,7 +634,7 @@
 
   To authenticate the state of the system, the stored data needs to be
   re-arranged and hashed in a <em|radix 16 tree> also known as <em|base-16
-  modified Merkle Patricia Tree>, which hereafter we will refer to as the
+  modified Merkle Patricia Tree>, which hereafter we refer to as the
   <em|<strong|Trie>,> in order to compute the hash of the whole state storage
   consistently and efficiently at any given time.
 
@@ -692,11 +692,11 @@
   modifications efficiently, the Merkle hash of the storage trie needs to be
   computed rigorously.
 
-  The Merkle hash of the trie is computed recursively. As such, hash value of
-  each node depends on the hash value of all its children and also on its
-  value. Therefore, it suffices to define how to compute the hash value of a
-  typical node as a function of the hash value of its children and its own
-  value.
+  The Merkle hash of the trie is computed recursively. As such, the hash
+  value of each node depends on the hash value of all its children and also
+  on its value. Therefore, it suffices to define how to compute the hash
+  value of a typical node as a function of the hash value of its children and
+  its own value.
 
   <\definition>
     Suppose node N of storage state trie has key value <math|k<rsub|N>>, and
@@ -776,8 +776,8 @@
   <subsection|Block Tree>
 
   In the course of formation of a (distributed) blockchain, it is possible
-  that the chain forks into multiple sub chains in various block positions.
-  We refer to this structure as a <em|block tree:>
+  that the chain forks into multiple subchains in various block positions. We
+  refer to this structure as a <em|block tree:>
 
   <\definition>
     The <strong|Block Tree> of a blockchain is the union of all different
@@ -790,12 +790,12 @@
   Because every block in the blockchain contains a reference to its parent,
   it is easy to see that the block tree is actually a tree.
 
-  A block tree naturally imposes a partial order relationships on the blocks
-  as follows:
+  A block tree naturally imposes partial order relationships on the blocks as
+  follows:
 
   <\definition>
     We say <strong|B is descendant of <math|B<rprime|'>>>, formally noted as
-    <strong|<math|B\<gtr\>B<rprime|'>>> if <math|B> is a descendent of
+    <strong|<math|B\<gtr\>B<rprime|'>>> if <math|B> is a descendant of
     <math|B<rprime|'>> in the block tree.
   </definition>
 
@@ -810,14 +810,14 @@
   the different functions that GRANDPA service is supposed to perform to
   successfully participate in the block finalization process.
 
-  <subsubsection|Priliminaries>
+  <subsubsection|Preliminaries>
 
   <\definition>
     A <strong|GRANDPA Voter>, <math|v>, is represented by a key pair
     <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
-    <math|k<rsub|v><rsup|pr>> represents its private key which is a
+    <math|k<rsub|v><rsup|pr>> represents its private key which is an
     <math|ED25519> private key, is a node running GRANDPA protocol, and
-    broadcasts votes to finilize blocks in a Polkadot RE - based chain. The
+    broadcasts votes to finalize blocks in a Polkadot RE - based chain. The
     <strong|set of all GRANDPA voters> is indicated by <math|\<bbb-V\>>. For
     a given block B, we have
 
@@ -858,25 +858,25 @@
     </equation*>
 
     where <math|H<rsub|h><around|(|B|)>> and <math|H<rsub|i><around|(|B|)>>
-    are block hash and block number defined in Definitions
+    are the block hash and the block number defined in Definitions
     <reference|def-block-header> and <reference|def-block-header-hash>
     respectively.
   </definition>
 
   <\definition>
-    Voters engage in a maximum two sub-rounds of voting for each round
+    Voters engage in a maximum of two sub-rounds of voting for each round
     <math|r>. The first sub-round is called <strong|pre-vote> and the second
     sub-round is called <strong|pre-commit>.
 
     By <strong|<math|V<rsub|v><rsup|r,pv>>> and
-    <strong|<math|V<rsub|v><rsup|r,pc>>> we refer to the vote casted by voter
+    <strong|<math|V<rsub|v><rsup|r,pc>>> we refer to the vote cast by voter
     <math|v> in round <math|r> (for block <math|B>) during the pre-vote and
     the pre-commit sub-round respectively.
   </definition>
 
   The GRANDPA protocol dictates how an honest voter should vote in each
   sub-round, which is described in Algorithm <reference|alg-grandpa-round>.
-  After defining what consititues a vote in GRANDPA, we define how GRANDPA
+  After defining what constitues a vote in GRANDPA, we define how GRANDPA
   counts votes.
 
   <\definition>
@@ -884,7 +884,7 @@
     votes to blocks not residing on the same branch of the block tree during
     one voting sub-round. In such a situation, we say that <math|v> is an
     <strong|equivocator> and any vote <math|V<rsub|v><rsup|r,stage><around*|(|B|)>>
-    casted by <math|v> in that round is an <strong|equivocatory vote> and
+    cast by <math|v> in that round is an <strong|equivocatory vote> and
 
     <\equation*>
       \<cal-E\><rsup|r,stage>
@@ -910,7 +910,7 @@
       <\itemize-dot>
         <item><math|H<around|(|B|)>> does not correspond to a valid block;
 
-        <item><math|B> is not an (eventual) descendent of a previously
+        <item><math|B> is not an (eventual) descendant of a previously
         finalized block;
 
         <item><math|M<rsup|r,stage><rsub|v>> does not bear a valid signature;
@@ -918,7 +918,7 @@
         <item><math|id<rsub|\<bbb-V\>>> does not match the current
         <math|\<bbb-V\>>;
 
-        <item>If <math|V<rsub|v><rsup|r,stage>> is an equivacatory vote.
+        <item>If <math|V<rsub|v><rsup|r,stage>> is an equivocatory vote.
       </itemize-dot>
     </itemize>
   </definition>
@@ -930,8 +930,8 @@
     is equal to the union of:
 
     <\itemize-dot>
-      <item>set of valid votes <math|V<rsup|r,stage><rsub|v<rsub|i>>> casted
-      in round <math|r> and received by v such that
+      <item>set of valid votes <math|V<rsup|r,stage><rsub|v<rsub|i>>> cast in
+      round <math|r> and received by v such that
       <math|V<rsup|r,stage><rsub|v<rsub|i>>=V<around|(|B|)>>.
     </itemize-dot>
   </definition>
@@ -974,9 +974,9 @@
 
   \;
 
-  Finally we define when a voter <math|v> see a round as completable, that is
-  when they are confident that <math|B<rsub|v><rsup|r,pv>> is an upper bound
-  for what is going to be finalised in this round. \ 
+  Finally, we define when a voter <math|v> see a round as completable, that
+  is when they are confident that <math|B<rsub|v><rsup|r,pv>> is an upper
+  bound for what is going to be finalised in this round. \ 
 
   <\definition>
     We say that round <math|r> is <strong|completable> if
@@ -1045,7 +1045,7 @@
     or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
     equivocatory vote.
 
-    In all cases <math|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
+    In all cases, <math|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
     is the signature of voter <math|v<rsub|i>> broadcasted during the
     pre-commit sub-round of round r.
   </definition>
@@ -1075,7 +1075,7 @@
   the current voting round <math|r<rsub|n>>, which is currently undergoing in
   the network.
 
-  As instructed in Algortihm <reference|alg-join-leave-grandpa>, whenever the
+  As instructed in Algorithm <reference|alg-join-leave-grandpa>, whenever the
   membership of GRANDPA voters changes, <math|r> is set to 0 and
   <math|V<rsub|id>> needs to be incremented.
 
@@ -1260,7 +1260,7 @@
     </algorithmic>
   </algorithm>
 
-  <section|Auxilary Encodings>
+  <section|Auxiliary Encodings>
 
   <subsection|SCALE Codec><label|sect-scale-codec>
 
@@ -1348,7 +1348,7 @@
     <reference|def-node-prefix>.
   </definition>
 
-  <section|Genisis Block Specification><label|sect-genisis-block>
+  <section|Genesis Block Specification><label|sect-genisis-block>
 
   <section|Predefined Storage keys><label|sect-predef-storage-keys>
 
@@ -1508,7 +1508,8 @@
       <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|2tab>|3.2.1<space|2spc>ABI Encoding between
-      Runtime and the Runtime Enviornment
+      Runtime and the Runtime <with|color|<quote|dark
+      red>|Enviornment><with|color|<quote|dark green>|Environment>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
@@ -1516,12 +1517,17 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|2tab>|3.2.3<space|2spc>Sending argument to
-      Runtime \ \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|3.2.3<space|2spc>Sending
+      <with|color|<quote|dark red>|argument ><with|color|<quote|dark
+      green>|Arguments >to Runtime \ \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-11>>
 
-      <with|par-left|<quote|2tab>|3.2.4<space|2spc>Return value from a
-      Runtime entry <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|3.2.4<space|2spc><with|color|<quote|dark
+      red>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>><with|color|<quote|dark
+      green>|The >Return <with|color|<quote|dark red>|value
+      ><with|color|<quote|dark green>|Value >from a Runtime
+      <with|color|<quote|dark red>|entry><with|color|<quote|dark
+      green>|Entry> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-12>>
 
       <with|par-left|<quote|1tab>|3.3<space|2spc>Entries into Runtime
@@ -1620,7 +1626,8 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-39>>
 
-      <with|par-left|<quote|2tab>|6.3.1<space|2spc>Priliminaries
+      <with|par-left|<quote|2tab>|6.3.1<space|2spc><with|color|<quote|dark
+      red>|Priliminaries><with|color|<quote|dark green>|Preliminaries>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-40>>
 
@@ -1636,8 +1643,9 @@
       <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-43>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc>Auxilary
-      Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc><with|color|<quote|dark
+      red>|Auxilary ><with|color|<quote|dark green>|Auxiliary >Encodings>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-44><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|7.1<space|2spc>SCALE Codec
@@ -1652,8 +1660,9 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-47>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|8<space|2spc>Genisis
-      Block Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|8<space|2spc><with|color|<quote|dark
+      red>|Genisis ><with|color|<quote|dark green>|Genesis >Block
+      Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-48><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|9<space|2spc>Predefined
