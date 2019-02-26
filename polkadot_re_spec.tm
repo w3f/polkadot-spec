@@ -1,4 +1,4 @@
-<TeXmacs|1.99.7>
+<TeXmacs|1.99.8>
 
 <style|<tuple|article|std-latex|/home/klaymen/doc/code/algorithmacs/algorithmacs-style.ts>>
 
@@ -257,7 +257,7 @@
   state database under the key represented as a byte array:
 
   <\equation*>
-    b=<text|3A,63,6F,64,65>
+    b\<assign\><text|3A,63,6F,64,65>
   </equation*>
 
   which is the byte array of ASCII representation of string \P:code\Q (see
@@ -388,145 +388,6 @@
   <subsubsection|validate_transaction><label|sect-validate-transaction>
 
   <todo|Explain function>
-
-  <subsection|Runtime API><label|sect-runtime-api>
-
-  Runtime API is a set of functions that Polkadot RE exposes to Runtime to
-  access external functions needed for various reasons, such as Storage
-  content access and manipulation, memory allocation and also for efficiency.
-  The functios are specified in each subsequent subsection for each category
-  of those functions.
-
-  <subsubsection|Storage>
-
-  <\itemize>
-    <item><verbatim|ext_child_storage_root>
-
-    <item><verbatim|ext_clear_child_storage>
-
-    <item><verbatim|ext_clear_prefix>
-
-    <item><verbatim|ext_clear_storage>
-
-    <item><verbatim|ext_exists_child_storage>
-
-    <item><verbatim|ext_get_allocated_child_storage>
-
-    <item><verbatim|ext_get_allocated_storage>
-
-    <item><verbatim|ext_get_child_storage_into>
-
-    <item><verbatim|ext_get_storage_into>
-
-    <item><verbatim|ext_kill_child_storage>
-
-    <item><verbatim|ext_set_child_storage>
-
-    <item><verbatim|ext_set_storage>
-
-    Sets the value of a specific key in the state storage.
-
-    <strong|Arguments>:
-
-    <\itemize>
-      <item><verbatim|key>: 32bit pointer pointing the buffer containing the
-      key.
-
-      <item><verbatim|key_len>: UINT32 integer specifying the key length.
-
-      <item><verbatim|value>: 32bit pointer pointing the buffer containing
-      the value to be stored under the key.
-
-      <item><verbatim|value_len>: UINT32 integer specifying the length of the
-      value buffer.
-    </itemize>
-
-    <item><verbatim|ext_storage_changes_root>
-
-    <item><verbatim|ext_storage_root>
-
-    <item><verbatim|ext_exists_storage>
-  </itemize>
-
-  <subsubsection|Memory>
-
-  <\itemize>
-    <item><verbatim|ext_malloc>
-
-    Allocates memory of size <verbatim|size> in the heap and returns a 32bit
-    pointer to the allocated memory.
-
-    <strong|Arguments:>
-
-    <\itemize>
-      <item><verbatim|size:> UINT32 integer indicating the size of the buffer
-      to be allocated.\ 
-    </itemize>
-
-    <item><verbatim|ext_free>
-
-    Deallocates a previously allocated memory.
-
-    <\strong>
-      Arguments:
-    </strong>
-
-    <\itemize>
-      <item><verbatim|addr>: 32bit pointer pointing to the allocated memory.
-    </itemize>
-  </itemize>
-
-  <subsubsection|Input/Output>
-
-  <\itemize>
-    <item><verbatim|ext_print_hex>
-
-    <item><verbatim|ext_print_num>
-
-    <item><verbatim|ext_print_utf8>
-  </itemize>
-
-  <subsubsection|Cryptograhpic auxilary functions>
-
-  <\itemize>
-    <item><verbatim|ext_blake2_256>
-
-    <item><verbatim|ext_blake2_256_enumerated_trie_root>
-
-    <item><verbatim|ext_ed25519_verify>
-
-    <item><verbatim|ext_twox_128>
-
-    <item><verbatim|ext_twox_256>
-
-    \;
-  </itemize>
-
-  <subsubsection|Sandboxing>
-
-  <\itemize>
-    <item><verbatim|ext_sandbox_instance_teardown>
-
-    <item><verbatim|ext_sandbox_instantiate>
-
-    <item><verbatim|ext_sandbox_invoke>
-
-    <item><verbatim|ext_sandbox_memory_get>
-
-    <item><verbatim|ext_sandbox_memory_new>
-
-    <item><verbatim|ext_sandbox_memory_set>
-
-    <item><verbatim|ext_sandbox_memory_teardown>
-
-    \;
-  </itemize>
-
-  <subsubsection|Misc>\ 
-
-  <\itemize-dot>
-    <item><verbatim|ext_chain_id>
-  </itemize-dot>
 
   <section|Network Interactions>
 
@@ -1318,6 +1179,9 @@
     </equation*>
   </definition>
 
+  In case of a tuple (or struct) the knowledge of the shape of data is
+  necessery for decoding.
+
   <subsection|Hex Encoding>
 
   Practically, it is more convenient and efficient to store and process data
@@ -1354,7 +1218,267 @@
 
   <section|Runtime upgrade><label|sect-runtime-upgrade>
 
-  ;
+  <appendix|Runtime API<label|sect-runtime-api>>
+
+  Runtime API is a set of functions that Polkadot RE exposes to Runtime to
+  access external functions needed for various reasons, such as Storage
+  content access and manipulation, memory allocation and also for efficiency.
+  The functios are specified in each subsequent subsection for each category
+  of those functions.
+
+  <subsection|Storage>
+
+  <subsubsection|<verbatim|ext_set_storage>>
+
+  Sets the value of a specific key in the state storage.
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_storage
+
+    \ \ (param $key_data i32) (param $key_len i32) (param $value_data i32)
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ (param $value_len
+    i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|key>: a pointer pointing the buffer containing the key.
+
+    <item><verbatim|key_len>: the key length in bytes.
+
+    <item><verbatim|value>: a pointer pointing the buffer containing the
+    value to be stored under the key.
+
+    <item><verbatim|value_len>: \ the length of the value buffer in bytes.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_storage_root>>
+
+  Retrieves the root of state storage.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_storage_root
+
+    \ \ (param $result_ptr i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|result_ptr>: a pointer which points to a byte array which
+    contains the root of state storage after the function concludes.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_blake2_256_enumerated_trie_root>>
+
+  Given an array of byte arrays, arranges them in a Merkle trie defined in
+  <reference|sect-merkl-proof> and computes the trie root hash.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_blake2_256_enumerated_trie_root
+
+    \ \ \ \ \ \ (param $values_data i32) (param $lens_data i32) (param
+    $lens_len i32)\ 
+
+    \ \ \ \ \ \ (param $result i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|values_data>: a pointer pointing to the buffer containing
+    the array where byte arrays are stored consecutively.
+
+    <item><verbatim|lens_data>: an array of <verbatim|i32> elements each
+    stores the length of each byte array stored in <verbatim|value_data>.
+
+    <item><verbatim|len>s_len: the number of <verbatim|i32> elements in
+    <verbatim|lens_data>.
+
+    <item><verbatim|result>: a pointer pointing to the beginning of a 32-byte
+    byte array contanining the root of the Merkle trie corresponding to
+    elements of <verbatim|values_data>.
+  </itemize>
+
+  <subsubsection|To be Specced>
+
+  <\itemize>
+    <item><verbatim|ext_clear_child_storage>
+
+    <item><verbatim|ext_clear_prefix>
+
+    <item><verbatim|ext_clear_storage>
+
+    <item><verbatim|ext_exists_child_storage>
+
+    <item><verbatim|ext_get_allocated_child_storage>
+
+    <item><verbatim|ext_get_allocated_storage>
+
+    <item><verbatim|ext_get_child_storage_into>
+
+    <item><verbatim|ext_get_storage_into>
+
+    <item><verbatim|ext_kill_child_storage>
+
+    <item><verbatim|ext_set_child_storage>
+
+    <item><verbatim|ext_storage_changes_root>
+
+    <item><verbatim|ext_storage_root>
+
+    <item><verbatim|ext_exists_storage>
+  </itemize>
+
+  <subsection|Memory>
+
+  <subsubsection|<verbatim|ext_malloc>>
+
+  Allocates memory of requested size in the heap.
+
+  \;
+
+  <strong|Prototype>:
+
+  <\verbatim>
+    (func $ext_malloc
+
+    \ \ (param $size i32) (result i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|size:> the size of the buffer to be allocated in number
+    of bytes.\ 
+  </itemize>
+
+  \;
+
+  <strong|Result>:
+
+  <\itemize>
+    a pointer pointing to the beginning of the allocated buffer.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_free>>
+
+  Deallocates a previously allocated memory.
+
+  \;
+
+  <\strong>
+    Arguments:
+  </strong>
+
+  <\itemize>
+    <item><verbatim|addr>: 32bit pointer pointing to the allocated memory.
+  </itemize>
+
+  <subsubsection|Input/Output>
+
+  <\itemize>
+    <item><verbatim|ext_print_hex>
+
+    <item><verbatim|ext_print_num>
+
+    <item><verbatim|ext_print_utf8>
+  </itemize>
+
+  <subsection|Cryptograhpic auxilary functions>
+
+  <subsubsection|ext_blake2_256>
+
+  Computes the Blake2s hash of a given byte array.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func (export "ext_blake2_256")
+
+    \ \ \ \ \ \ (param $data i32) (param \ $len i32) (param $out i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|data>: a pointer pointing the buffer containing the byte
+    array to be hashed.
+
+    <item><verbatim|len>: the length of the byte array in bytes.
+
+    <item><verbatim|out>: a pointer pointing to the beginning of a 32-byte
+    byte array contanining the Blake2s hash of the data.
+  </itemize>
+
+  \;
+
+  <subsubsection|To be Specced>
+
+  <\itemize>
+    <item><verbatim|ext_ed25519_verify>
+
+    <item><verbatim|ext_twox_128>
+
+    <item><verbatim|ext_twox_256>
+
+    \;
+  </itemize>
+
+  <subsection|Sandboxing>
+
+  <subsubsection|To be Specced>
+
+  <\itemize>
+    <item><verbatim|ext_sandbox_instance_teardown>
+
+    <item><verbatim|ext_sandbox_instantiate>
+
+    <item><verbatim|ext_sandbox_invoke>
+
+    <item><verbatim|ext_sandbox_memory_get>
+
+    <item><verbatim|ext_sandbox_memory_new>
+
+    <item><verbatim|ext_sandbox_memory_set>
+
+    <item><verbatim|ext_sandbox_memory_teardown>
+
+    \;
+  </itemize>
+
+  <subsubsection|Misc>
+
+  <subsubsection|To be Specced>\ 
+
+  <\itemize-dot>
+    <item><verbatim|ext_chain_id>
+  </itemize-dot>
+
+  <verbatim|><subsection|Not implemented in Polkadot-JS>
 </body>
 
 <\initial>
@@ -1389,40 +1513,51 @@
     <associate|auto-19|<tuple|2|5>>
     <associate|auto-2|<tuple|2|2>>
     <associate|auto-20|<tuple|3.3.4|5>>
-    <associate|auto-21|<tuple|3.4|5>>
-    <associate|auto-22|<tuple|3.4.1|5>>
-    <associate|auto-23|<tuple|3.4.2|6>>
-    <associate|auto-24|<tuple|3.4.3|6>>
-    <associate|auto-25|<tuple|3.4.4|6>>
-    <associate|auto-26|<tuple|3.4.5|6>>
-    <associate|auto-27|<tuple|3.4.6|7>>
-    <associate|auto-28|<tuple|4|7>>
-    <associate|auto-29|<tuple|4.1|7>>
+    <associate|auto-21|<tuple|4|5>>
+    <associate|auto-22|<tuple|4.1|5>>
+    <associate|auto-23|<tuple|4.2|6>>
+    <associate|auto-24|<tuple|4.3|6>>
+    <associate|auto-25|<tuple|5|6>>
+    <associate|auto-26|<tuple|5.1|6>>
+    <associate|auto-27|<tuple|5.2|7>>
+    <associate|auto-28|<tuple|5.3|7>>
+    <associate|auto-29|<tuple|6|7>>
     <associate|auto-3|<tuple|2.1|2>>
-    <associate|auto-30|<tuple|4.2|7>>
-    <associate|auto-31|<tuple|4.3|7>>
-    <associate|auto-32|<tuple|5|8>>
-    <associate|auto-33|<tuple|5.1|8>>
-    <associate|auto-34|<tuple|5.2|8>>
-    <associate|auto-35|<tuple|5.3|9>>
-    <associate|auto-36|<tuple|6|10>>
-    <associate|auto-37|<tuple|6.1|10>>
-    <associate|auto-38|<tuple|6.2|10>>
-    <associate|auto-39|<tuple|6.3|10>>
+    <associate|auto-30|<tuple|6.1|7>>
+    <associate|auto-31|<tuple|6.2|7>>
+    <associate|auto-32|<tuple|6.3|8>>
+    <associate|auto-33|<tuple|6.3.1|8>>
+    <associate|auto-34|<tuple|6.3.2|8>>
+    <associate|auto-35|<tuple|6.3.3|9>>
+    <associate|auto-36|<tuple|6.3.4|10>>
+    <associate|auto-37|<tuple|7|10>>
+    <associate|auto-38|<tuple|7.1|10>>
+    <associate|auto-39|<tuple|7.2|10>>
     <associate|auto-4|<tuple|2.2|2>>
-    <associate|auto-40|<tuple|6.3.1|10>>
-    <associate|auto-41|<tuple|6.3.2|12>>
-    <associate|auto-42|<tuple|6.3.3|13>>
-    <associate|auto-43|<tuple|6.3.4|13>>
-    <associate|auto-44|<tuple|7|14>>
-    <associate|auto-45|<tuple|7.1|14>>
-    <associate|auto-46|<tuple|7.2|15>>
-    <associate|auto-47|<tuple|7.3|15>>
-    <associate|auto-48|<tuple|8|15>>
-    <associate|auto-49|<tuple|9|15>>
+    <associate|auto-40|<tuple|7.3|10>>
+    <associate|auto-41|<tuple|8|12>>
+    <associate|auto-42|<tuple|9|13>>
+    <associate|auto-43|<tuple|10|13>>
+    <associate|auto-44|<tuple|A|14>>
+    <associate|auto-45|<tuple|A.1|14>>
+    <associate|auto-46|<tuple|A.1.1|15>>
+    <associate|auto-47|<tuple|A.1.2|15>>
+    <associate|auto-48|<tuple|A.1.3|15>>
+    <associate|auto-49|<tuple|A.1.4|15>>
     <associate|auto-5|<tuple|2.3|3>>
-    <associate|auto-50|<tuple|10|15>>
+    <associate|auto-50|<tuple|A.2|15>>
+    <associate|auto-51|<tuple|A.2.1|?>>
+    <associate|auto-52|<tuple|A.2.2|?>>
+    <associate|auto-53|<tuple|A.2.3|?>>
+    <associate|auto-54|<tuple|A.3|?>>
+    <associate|auto-55|<tuple|A.3.1|?>>
+    <associate|auto-56|<tuple|A.3.2|?>>
+    <associate|auto-57|<tuple|A.4|?>>
+    <associate|auto-58|<tuple|A.4.1|?>>
+    <associate|auto-59|<tuple|A.4.2|?>>
     <associate|auto-6|<tuple|3|3>>
+    <associate|auto-60|<tuple|A.4.3|?>>
+    <associate|auto-61|<tuple|A.5|?>>
     <associate|auto-7|<tuple|3.1|3>>
     <associate|auto-8|<tuple|3.2|3>>
     <associate|auto-9|<tuple|3.2.1|3>>
@@ -1447,7 +1582,7 @@
     <associate|sect-genisis-block|<tuple|8|15>>
     <associate|sect-merkl-proof|<tuple|5.3|9>>
     <associate|sect-predef-storage-keys|<tuple|9|15>>
-    <associate|sect-runtime-api|<tuple|3.4|5>>
+    <associate|sect-runtime-api|<tuple|A|5>>
     <associate|sect-runtime-api-auth|<tuple|3.3.2|5>>
     <associate|sect-runtime-entries|<tuple|3.3|4>>
     <associate|sect-runtime-upgrade|<tuple|10|15>>
@@ -1463,15 +1598,16 @@
       AlSt19-Grandpai
     </associate>
     <\associate|figure>
-      <tuple|normal|<surround|<hidden|<tuple>>||Snippet to export entries
-      into tho Wasm runtime module>|<pageref|auto-14>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|1>||Snippet to export
+      entries into tho Wasm runtime module>|<pageref|auto-14>>
     </associate>
     <\associate|table>
-      <tuple|normal|<surround|<hidden|<tuple>>||Detail of the version data
-      type returns from runtime <with|font-family|<quote|tt>|language|<quote|verbatim>|version>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|1>||Detail of the
+      version data type returns from runtime
+      <with|font-family|<quote|tt>|language|<quote|verbatim>|version>
       function>|<pageref|auto-16>>
 
-      <tuple|normal|<surround|<hidden|<tuple>>||Detail of the data
+      <tuple|normal|<surround|<hidden-binding|<tuple>|2>||Detail of the data
       execute_block returns after execution>|<pageref|auto-19>>
     </associate>
     <\associate|toc>
@@ -1508,8 +1644,7 @@
       <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|2tab>|3.2.1<space|2spc>ABI Encoding between
-      Runtime and the Runtime <with|color|<quote|dark
-      red>|Enviornment><with|color|<quote|dark green>|Environment>
+      Runtime and the Runtime Environment
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
@@ -1517,17 +1652,12 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|2tab>|3.2.3<space|2spc>Sending
-      <with|color|<quote|dark red>|argument ><with|color|<quote|dark
-      green>|Arguments >to Runtime \ \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|3.2.3<space|2spc>Sending Arguments to
+      Runtime \ \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-11>>
 
-      <with|par-left|<quote|2tab>|3.2.4<space|2spc><with|color|<quote|dark
-      red>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>><with|color|<quote|dark
-      green>|The >Return <with|color|<quote|dark red>|value
-      ><with|color|<quote|dark green>|Value >from a Runtime
-      <with|color|<quote|dark red>|entry><with|color|<quote|dark
-      green>|Entry> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|3.2.4<space|2spc>The Return Value from a
+      Runtime Entry <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-12>>
 
       <with|par-left|<quote|1tab>|3.3<space|2spc>Entries into Runtime
@@ -1550,128 +1680,169 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20>>
 
-      <with|par-left|<quote|1tab>|3.4<space|2spc>Runtime API
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
-
-      <with|par-left|<quote|2tab>|3.4.1<space|2spc>Storage
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
-
-      <with|par-left|<quote|2tab>|3.4.2<space|2spc>Memory
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
-
-      <with|par-left|<quote|2tab>|3.4.3<space|2spc>Input/Output
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24>>
-
-      <with|par-left|<quote|2tab>|3.4.4<space|2spc>Cryptograhpic auxilary
-      functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-25>>
-
-      <with|par-left|<quote|2tab>|3.4.5<space|2spc>Sandboxing
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26>>
-
-      <with|par-left|<quote|2tab>|3.4.6<space|2spc>Misc
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27>>
-
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|4<space|2spc>Network
       Interactions> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-28><vspace|0.5fn>
+      <no-break><pageref|auto-21><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|4.1<space|2spc>Extrinsics Submission
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-29>>
+      <no-break><pageref|auto-22>>
 
       <with|par-left|<quote|1tab>|4.2<space|2spc>Network Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-30>>
+      <no-break><pageref|auto-23>>
 
       <with|par-left|<quote|1tab>|4.3<space|2spc>Block Submission and
       Validation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-31>>
+      <no-break><pageref|auto-24>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>State
       Storage and the Storage Trie> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-32><vspace|0.5fn>
+      <no-break><pageref|auto-25><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|5.1<space|2spc>Accessing The System Storage
       \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-33>>
+      <no-break><pageref|auto-26>>
 
       <with|par-left|<quote|1tab>|5.2<space|2spc>The General Tree Structure
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-34>>
+      <no-break><pageref|auto-27>>
 
       <with|par-left|<quote|1tab>|5.3<space|2spc>The Merkle proof
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-35>>
+      <no-break><pageref|auto-28>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Consensus
       Engine> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-36><vspace|0.5fn>
+      <no-break><pageref|auto-29><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|6.1<space|2spc>Block Tree
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-37>>
+      <no-break><pageref|auto-30>>
 
       <with|par-left|<quote|1tab>|6.2<space|2spc>Block Production
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-38>>
+      <no-break><pageref|auto-31>>
 
       <with|par-left|<quote|1tab>|6.3<space|2spc>Finality
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-39>>
+      <no-break><pageref|auto-32>>
 
-      <with|par-left|<quote|2tab>|6.3.1<space|2spc><with|color|<quote|dark
-      red>|Priliminaries><with|color|<quote|dark green>|Preliminaries>
+      <with|par-left|<quote|2tab>|6.3.1<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-40>>
+      <no-break><pageref|auto-33>>
 
       <with|par-left|<quote|2tab>|6.3.2<space|2spc>Voting Messages
       Specification <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-41>>
+      <no-break><pageref|auto-34>>
 
       <with|par-left|<quote|2tab>|6.3.3<space|2spc>Initiating the GRANDPA
       State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-42>>
+      <no-break><pageref|auto-35>>
 
       <with|par-left|<quote|2tab>|6.3.4<space|2spc>Voting Process in Round
       <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-43>>
+      <no-break><pageref|auto-36>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc><with|color|<quote|dark
-      red>|Auxilary ><with|color|<quote|dark green>|Auxiliary >Encodings>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-44><vspace|0.5fn>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc>Auxiliary
+      Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-37><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|7.1<space|2spc>SCALE Codec
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-45>>
+      <no-break><pageref|auto-38>>
 
       <with|par-left|<quote|1tab>|7.2<space|2spc>Hex Encoding
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-46>>
+      <no-break><pageref|auto-39>>
 
       <with|par-left|<quote|1tab>|7.3<space|2spc>Partial Key Encoding
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-47>>
+      <no-break><pageref|auto-40>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|8<space|2spc><with|color|<quote|dark
-      red>|Genisis ><with|color|<quote|dark green>|Genesis >Block
-      Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-48><vspace|0.5fn>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|8<space|2spc>Genesis
+      Block Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-41><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|9<space|2spc>Predefined
       Storage keys> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-49><vspace|0.5fn>
+      <no-break><pageref|auto-42><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|10<space|2spc>Runtime
       upgrade> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-50><vspace|0.5fn>
+      <no-break><pageref|auto-43><vspace|0.5fn>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
+      A<space|2spc>Runtime API> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-44><vspace|0.5fn>
+
+      <with|par-left|<quote|1tab>|A.1<space|2spc>Storage
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-45>>
+
+      <with|par-left|<quote|2tab>|A.1.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_set_storage>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-46>>
+
+      <with|par-left|<quote|2tab>|A.1.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_root>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-47>>
+
+      <with|par-left|<quote|2tab>|A.1.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256_enumerated_trie_root>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-48>>
+
+      <with|par-left|<quote|2tab>|A.1.4<space|2spc>To be Specced
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-49>>
+
+      <with|par-left|<quote|1tab>|A.2<space|2spc>Memory
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-50>>
+
+      <with|par-left|<quote|2tab>|A.2.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_malloc>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-51>>
+
+      <with|par-left|<quote|2tab>|A.2.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_free>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-52>>
+
+      <with|par-left|<quote|2tab>|A.2.3<space|2spc>Input/Output
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-53>>
+
+      <with|par-left|<quote|1tab>|A.3<space|2spc>Cryptograhpic auxilary
+      functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-54>>
+
+      <with|par-left|<quote|2tab>|A.3.1<space|2spc>ext_blake2_256
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-55>>
+
+      <with|par-left|<quote|2tab>|A.3.2<space|2spc>To be Specced
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-56>>
+
+      <with|par-left|<quote|1tab>|A.4<space|2spc>Sandboxing
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-57>>
+
+      <with|par-left|<quote|2tab>|A.4.1<space|2spc>To be Specced
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-58>>
+
+      <with|par-left|<quote|2tab>|A.4.2<space|2spc>Misc
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-59>>
+
+      <with|par-left|<quote|2tab>|A.4.3<space|2spc>To be Specced
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-60>>
+
+      <with|par-left|<quote|1tab>|A.5<space|2spc>Not implemented in
+      Polkadot-JS <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-61>>
     </associate>
   </collection>
 </auxiliary>
