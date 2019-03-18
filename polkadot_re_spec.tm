@@ -115,19 +115,27 @@
   </definition>
 
   <\definition>
-    By <verbatim|>the <strong|little-endian> representation of a non-negative
-    integer, I represented as
+    <label|defn-little-endian>By <verbatim|>the <strong|little-endian>
+    representation of a non-negative integer, I, represented as
 
     <\equation*>
       I=<around*|(|B<rsub|n>\<ldots\>B<rsub|0>|)><rsub|256>
     </equation*>
 
-    In two base 256, is a byte array <math|B=<around*|(|b<rsub|0>,b<rsub|1>,\<ldots\>,b<rsub|n>|)>>
-    such that
+    in base 256, we refer to a byte array
+    <math|B=<around*|(|b<rsub|0>,b<rsub|1>,\<ldots\>,b<rsub|n>|)>> such that
 
     <\equation*>
       b<rsub|i>\<assign\>B<rsub|i>
     </equation*>
+
+    Accordingly, define the function <math|Enc<rsub|LE>>:
+
+    <\equation*>
+      <tabular|<tformat|<table|<row|<cell|Enc<rsub|LE>:>|<cell|\<bbb-Z\><rsup|+>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\>>>|<row|<cell|>|<cell|<around*|(|B<rsub|n>\<ldots\>B<rsub|0>|)><rsub|256>>|<cell|\<mapsto\>>|<cell|<around*|(|B<rsub|0,>B<rsub|1>,\<ldots\><rsub|>,B<rsub|n>|)>>>>>>
+    </equation*>
+
+    \;
   </definition>
 
   <\definition>
@@ -549,9 +557,14 @@
   By looking at <math|k<rsub|enc>> as a sequence of nibbles, one can walk the
   radix tree to reach the node identifying the storage value of <math|k>.
 
-  \;
-
   <subsection|Different node types>
+
+  In this subsection we specifies the structure of the nodes in the Trie:
+
+  <\notation>
+    We refer to the <strong|set of the nodes of Polkadot state trie> by
+    <math|\<cal-N\>.>
+  </notation>
 
   The Trie consists of 3 three types of node base on how they stores the
   subsequence of shared prefix nibbles:
@@ -574,7 +587,17 @@
   Accordingly, we define:
 
   <\definition>
-    The <strong|the partial key> of node N of length <math|j> to be\ 
+    <label|defn-nodetype>We define <strong|<math|NodeType>> function to be
+
+    <\equation*>
+      <tabular|<tformat|<table|<row|<cell|NodeType>|<cell|:>|<cell|\<cal-N\>>|<cell|\<rightarrow\>>|<cell|<around*|{|Leaf,Extension,Branch|}>>>|<row|<cell|>|<cell|>|<cell|N>|<cell|\<mapsto\>>|<cell|The
+      type of node N>>>>>
+    </equation*>
+  </definition>
+
+  <\definition>
+    The <strong|the partial key> of node N of length <math|j\<leqslant\>380>
+    to be\ 
 
     <\equation*>
       pk<rsub|N>\<assign\><around|(|k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|i+j>>|)>
@@ -642,7 +665,7 @@
       <item>N is a branch node:
 
       <\equation*>
-        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<text|Enc<rsub|Node>(N)>\<assign\>>>|<row|<cell|\<nobracket\>NodePrefix<around|(|N|)><around|\|||\|>*ChildrenBitmap<around|(|N|)>\<\|\|\>Enc<rsub|SC><around|(|v|)><around|\|||\|>*>>|<row|<cell|Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|n>>|)>|)>>>>>>
+        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<text|Enc<rsub|Node>(N)>\<assign\>>>|<row|<cell|\<nobracket\>NodePrefix<around|(|N|)><around|\|||\|>Enc<rsub|LE><around*|(|*ChildrenBitmap<around|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around|(|v|)><around|\|||\|>*>>|<row|<cell|Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|n>>|)>|)>>>>>>
       </equation*>
     </itemize>
   </definition>
@@ -655,7 +678,14 @@
     <item><math|Enc<rsub|len>,Enc<rsub|HE>> and <math|Enc<rsub|SC>> are
     encdoings defined in Section <reference|sect-encoding>.
 
+    <item><math|Enc<rsub|LE>> is the little-endian encoding defined in
+    Definition <reference|defn-little-endian>.
+
     <item><math|C> is the unique child of the extension node <math|N>.
+
+    <item><math|ChildrenBitmap(N)\<assign\><around*|(|b<rsub|15>b<rsub|15>\<ldots\>b<rsub|0>|)><rsub|2>>
+    where bit <math|b<rsub|i>=1> if <math|N> has a child with partial key
+    <math|i>.
 
     <item><math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
     <math|n\<leqslant\>16> are the children nodes of the branch node
@@ -1243,17 +1273,27 @@
   <subsection|Partial Key Encoding>
 
   <\definition>
-    <label|def-key-len-enc>Let <math|N> be a node in the storage state trie
-    with Partial Key <math|PK<rsub|N>>. We define the <strong|Partial key
-    length encoding> function, formally referred to as
+    <label|def-key-len-enc>Let <math|N> be a leaf or an extension node in the
+    storage state trie with Partial Key <math|PK<rsub|N>>. We define the
+    <strong|Partial key length encoding> function, formally referred to as
     <math|Enc<rsub|len><around|(|N|)>> as follows:
 
     <\equation*>
-      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|Enc<rsub|len><around|(|N|)>>|<cell|\<assign\>>>|<row|<cell|NodePrefix<around|(|N|)>>|<cell|+>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|4|4|cell-halign|l>|<cwith|1|-1|5|5|cell-halign|l>|<cwith|1|-1|5|5|cell-rborder|0ln>|<table|<row|<cell|<around|(|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>|)>>|<cell|>|<cell|NisleafNode>|<cell|&>|<cell|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>\<less\>127>>|<row|<cell|<around|(|127|)><around|\|||\|><around|(|LE<around|(|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>-127|)>|)>>|<cell|>|<cell|NisaleafNode>|<cell|&>|<cell|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>\<geqslant\>127>>>>>|\<nobracket\>>>|<cell|>>>>>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|Enc<rsub|len><around|(|N|)>>|<cell|\<assign\>>>|<row|<cell|NodePrefix<around|(|N|)>>|<cell|+>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<around|(|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>|)>>|<cell|>|<cell|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>\<less\>BigKeySize<around*|(|NodeType<around*|(|N|)>|)>>>|<row|<cell|<around|(|127|)><around|\|||\|><around|(|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>-BigKeySize<around*|(|NodeType<around*|(|N|)>|)>|)>>|<cell|>|<cell|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>\<geqslant\>BigKeySize<around*|(|NodeType<around*|(|N|)>|)>>>>>>|\<nobracket\>>>|<cell|>>>>>
     </equation*>
 
-    where <math|NodePrefix> function is defined in Definition
-    <reference|def-node-prefix>.
+    where <math|NodePrefix>, <math|NodeType> and <math|BigKeySize> functions
+    are defined in Definitions <reference|def-node-prefix>,<reference|defn-nodetype>
+    and <reference|defn-bigkeysize> respectively.
+  </definition>
+
+  <\definition>
+    <label|defn-bigkeysize>We define <math|BigKeySize> function for each node
+    type of the Trie as follows: \ 
+
+    <\equation*>
+      <tabular|<tformat|<table|<row|<cell|BigKeySize<around*|(|T|)>>|<cell|:>|<cell|<around*|{|Leaf,Extension|}>>|<cell|\<rightarrow\>>|<cell|\<bbb-N\>>>|<row|<cell|>|<cell|>|<cell|T>|<cell|\<mapsto\>>|<cell|<around*|{|<tabular|<tformat|<table|<row|<cell|126>|<cell|T=Leaf>>|<row|<cell|125>|<cell|T=Extension>>>>>|\<nobracket\>>>>>>>
+    </equation*>
   </definition>
 
   <section|Genesis Block Specification><label|sect-genisis-block>
@@ -1541,9 +1581,9 @@
 
 <\references>
   <\collection>
-    <associate|alg-grandpa-best-candidate|<tuple|4|14>>
-    <associate|alg-grandpa-round|<tuple|3|13>>
-    <associate|alg-join-leave-grandpa|<tuple|2|13>>
+    <associate|alg-grandpa-best-candidate|<tuple|4|13>>
+    <associate|alg-grandpa-round|<tuple|3|12>>
+    <associate|alg-join-leave-grandpa|<tuple|2|12>>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|3.2.2|4>>
     <associate|auto-11|<tuple|3.2.3|4>>
@@ -1551,7 +1591,7 @@
     <associate|auto-13|<tuple|3.3|4>>
     <associate|auto-14|<tuple|1|4>>
     <associate|auto-15|<tuple|3.3.1|4>>
-    <associate|auto-16|<tuple|1|4>>
+    <associate|auto-16|<tuple|1|5>>
     <associate|auto-17|<tuple|3.3.2|5>>
     <associate|auto-18|<tuple|3.3.3|5>>
     <associate|auto-19|<tuple|2|5>>
@@ -1559,81 +1599,84 @@
     <associate|auto-20|<tuple|3.3.4|5>>
     <associate|auto-21|<tuple|4|5>>
     <associate|auto-22|<tuple|4.1|5>>
-    <associate|auto-23|<tuple|4.2|6>>
+    <associate|auto-23|<tuple|4.2|5>>
     <associate|auto-24|<tuple|4.3|6>>
     <associate|auto-25|<tuple|5|6>>
     <associate|auto-26|<tuple|5.1|6>>
     <associate|auto-27|<tuple|5.2|7>>
     <associate|auto-28|<tuple|5.3|7>>
-    <associate|auto-29|<tuple|5.4|7>>
+    <associate|auto-29|<tuple|5.4|8>>
     <associate|auto-3|<tuple|2.1|2>>
-    <associate|auto-30|<tuple|6|7>>
-    <associate|auto-31|<tuple|6.1|7>>
-    <associate|auto-32|<tuple|6.2|8>>
-    <associate|auto-33|<tuple|6.3|8>>
-    <associate|auto-34|<tuple|6.3.1|8>>
-    <associate|auto-35|<tuple|6.3.2|9>>
-    <associate|auto-36|<tuple|6.3.3|10>>
-    <associate|auto-37|<tuple|6.3.4|10>>
-    <associate|auto-38|<tuple|7|10>>
-    <associate|auto-39|<tuple|7.1|10>>
-    <associate|auto-4|<tuple|2.2|2>>
-    <associate|auto-40|<tuple|7.2|10>>
-    <associate|auto-41|<tuple|7.3|12>>
-    <associate|auto-42|<tuple|8|13>>
-    <associate|auto-43|<tuple|9|13>>
-    <associate|auto-44|<tuple|10|14>>
-    <associate|auto-45|<tuple|A|14>>
+    <associate|auto-30|<tuple|6|9>>
+    <associate|auto-31|<tuple|6.1|9>>
+    <associate|auto-32|<tuple|6.2|9>>
+    <associate|auto-33|<tuple|6.3|9>>
+    <associate|auto-34|<tuple|6.3.1|10>>
+    <associate|auto-35|<tuple|6.3.2|11>>
+    <associate|auto-36|<tuple|6.3.3|12>>
+    <associate|auto-37|<tuple|6.3.4|12>>
+    <associate|auto-38|<tuple|7|13>>
+    <associate|auto-39|<tuple|7.1|13>>
+    <associate|auto-4|<tuple|2.2|3>>
+    <associate|auto-40|<tuple|7.2|14>>
+    <associate|auto-41|<tuple|7.3|15>>
+    <associate|auto-42|<tuple|8|15>>
+    <associate|auto-43|<tuple|9|15>>
+    <associate|auto-44|<tuple|10|15>>
+    <associate|auto-45|<tuple|A|15>>
     <associate|auto-46|<tuple|A.1|15>>
     <associate|auto-47|<tuple|A.1.1|15>>
-    <associate|auto-48|<tuple|A.1.2|15>>
-    <associate|auto-49|<tuple|A.1.3|15>>
+    <associate|auto-48|<tuple|A.1.2|16>>
+    <associate|auto-49|<tuple|A.1.3|16>>
     <associate|auto-5|<tuple|2.3|3>>
-    <associate|auto-50|<tuple|A.1.4|15>>
-    <associate|auto-51|<tuple|A.2|?>>
-    <associate|auto-52|<tuple|A.2.1|?>>
-    <associate|auto-53|<tuple|A.2.2|?>>
-    <associate|auto-54|<tuple|A.2.3|?>>
-    <associate|auto-55|<tuple|A.3|?>>
-    <associate|auto-56|<tuple|A.3.1|?>>
-    <associate|auto-57|<tuple|A.3.2|?>>
-    <associate|auto-58|<tuple|A.4|?>>
-    <associate|auto-59|<tuple|A.4.1|?>>
+    <associate|auto-50|<tuple|A.1.4|16>>
+    <associate|auto-51|<tuple|A.2|17>>
+    <associate|auto-52|<tuple|A.2.1|17>>
+    <associate|auto-53|<tuple|A.2.2|17>>
+    <associate|auto-54|<tuple|A.2.3|17>>
+    <associate|auto-55|<tuple|A.3|17>>
+    <associate|auto-56|<tuple|A.3.1|17>>
+    <associate|auto-57|<tuple|A.3.2|18>>
+    <associate|auto-58|<tuple|A.4|18>>
+    <associate|auto-59|<tuple|A.4.1|18>>
     <associate|auto-6|<tuple|3|3>>
-    <associate|auto-60|<tuple|A.4.2|?>>
-    <associate|auto-61|<tuple|A.4.3|?>>
-    <associate|auto-62|<tuple|A.5|?>>
+    <associate|auto-60|<tuple|A.4.2|18>>
+    <associate|auto-61|<tuple|A.4.3|18>>
+    <associate|auto-62|<tuple|A.5|18>>
     <associate|auto-63|<tuple|A.5|?>>
     <associate|auto-7|<tuple|3.1|3>>
     <associate|auto-8|<tuple|3.2|3>>
-    <associate|auto-9|<tuple|3.2.1|3>>
+    <associate|auto-9|<tuple|3.2.1|4>>
     <associate|block|<tuple|2.1|2>>
     <associate|def-block-header|<tuple|10|2>>
     <associate|def-block-header-hash|<tuple|11|2>>
-    <associate|def-extrinsic-network-message|<tuple|12|7>>
-    <associate|def-grandpa-justification|<tuple|32|12>>
-    <associate|def-hpe|<tuple|36|15>>
-    <associate|def-key-len-enc|<tuple|37|15>>
-    <associate|def-node-prefix|<tuple|16|9>>
+    <associate|def-extrinsic-network-message|<tuple|12|5>>
+    <associate|def-grandpa-justification|<tuple|34|12>>
+    <associate|def-hpe|<tuple|38|14>>
+    <associate|def-key-len-enc|<tuple|39|15>>
+    <associate|def-node-prefix|<tuple|18|8>>
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-radix-tree|<tuple|3|1>>
-    <associate|def-scale-codec|<tuple|34|14>>
-    <associate|def-state-read-write|<tuple|13|8>>
-    <associate|def-vote|<tuple|23|11>>
+    <associate|def-scale-codec|<tuple|36|14>>
+    <associate|def-state-read-write|<tuple|13|6>>
+    <associate|def-vote|<tuple|25|10>>
+    <associate|defn-bigkeysize|<tuple|40|15>>
     <associate|defn-bit-rep|<tuple|6|1>>
-    <associate|key-encode-in-trie|<tuple|1|8>>
-    <associate|sect-abi-encoding|<tuple|3.2.1|3>>
-    <associate|sect-encoding|<tuple|7|?>>
+    <associate|defn-little-endian|<tuple|7|1>>
+    <associate|defn-nodetype|<tuple|16|?>>
+    <associate|key-encode-in-trie|<tuple|1|7>>
+    <associate|sect-abi-encoding|<tuple|3.2.1|4>>
+    <associate|sect-encoding|<tuple|7|13>>
     <associate|sect-entries-into-runtime|<tuple|3|3>>
-    <associate|sect-finality|<tuple|6.3|10>>
+    <associate|sect-finality|<tuple|6.3|9>>
     <associate|sect-genisis-block|<tuple|8|15>>
-    <associate|sect-merkl-proof|<tuple|5.4|9>>
+    <associate|sect-merkl-proof|<tuple|5.4|8>>
     <associate|sect-predef-storage-keys|<tuple|9|15>>
-    <associate|sect-runtime-api|<tuple|A|5>>
+    <associate|sect-runtime-api|<tuple|A|15>>
     <associate|sect-runtime-api-auth|<tuple|3.3.2|5>>
     <associate|sect-runtime-entries|<tuple|3.3|4>>
     <associate|sect-runtime-upgrade|<tuple|10|15>>
-    <associate|sect-scale-codec|<tuple|7.1|14>>
+    <associate|sect-scale-codec|<tuple|7.1|13>>
     <associate|sect-validate-transaction|<tuple|3.3.4|5>>
     <associate|snippet-runtime-enteries|<tuple|1|4>>
   </collection>
@@ -1755,141 +1798,145 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
 
-      <with|par-left|<quote|1tab>|5.3<space|2spc>The Merkle proof
+      <with|par-left|<quote|1tab>|5.3<space|2spc>Different node types
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-28>>
 
+      <with|par-left|<quote|1tab>|5.4<space|2spc>The Merkle proof
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-29>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Consensus
       Engine> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-29><vspace|0.5fn>
+      <no-break><pageref|auto-30><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|6.1<space|2spc>Block Tree
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-30>>
+      <no-break><pageref|auto-31>>
 
       <with|par-left|<quote|1tab>|6.2<space|2spc>Block Production
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-31>>
+      <no-break><pageref|auto-32>>
 
       <with|par-left|<quote|1tab>|6.3<space|2spc>Finality
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-32>>
+      <no-break><pageref|auto-33>>
 
       <with|par-left|<quote|2tab>|6.3.1<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-33>>
+      <no-break><pageref|auto-34>>
 
       <with|par-left|<quote|2tab>|6.3.2<space|2spc>Voting Messages
       Specification <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-34>>
+      <no-break><pageref|auto-35>>
 
       <with|par-left|<quote|2tab>|6.3.3<space|2spc>Initiating the GRANDPA
       State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-35>>
+      <no-break><pageref|auto-36>>
 
       <with|par-left|<quote|2tab>|6.3.4<space|2spc>Voting Process in Round
       <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-36>>
+      <no-break><pageref|auto-37>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc>Auxiliary
       Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-37><vspace|0.5fn>
+      <no-break><pageref|auto-38><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|7.1<space|2spc>SCALE Codec
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-38>>
+      <no-break><pageref|auto-39>>
 
       <with|par-left|<quote|1tab>|7.2<space|2spc>Hex Encoding
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-39>>
+      <no-break><pageref|auto-40>>
 
       <with|par-left|<quote|1tab>|7.3<space|2spc>Partial Key Encoding
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-40>>
+      <no-break><pageref|auto-41>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|8<space|2spc>Genesis
       Block Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-41><vspace|0.5fn>
+      <no-break><pageref|auto-42><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|9<space|2spc>Predefined
       Storage keys> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-42><vspace|0.5fn>
+      <no-break><pageref|auto-43><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|10<space|2spc>Runtime
       upgrade> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-43><vspace|0.5fn>
+      <no-break><pageref|auto-44><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
       A<space|2spc>Runtime API> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-44><vspace|0.5fn>
+      <no-break><pageref|auto-45><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|A.1<space|2spc>Storage
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-45>>
+      <no-break><pageref|auto-46>>
 
       <with|par-left|<quote|2tab>|A.1.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_set_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-46>>
+      <no-break><pageref|auto-47>>
 
       <with|par-left|<quote|2tab>|A.1.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-47>>
+      <no-break><pageref|auto-48>>
 
       <with|par-left|<quote|2tab>|A.1.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256_enumerated_trie_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-48>>
+      <no-break><pageref|auto-49>>
 
       <with|par-left|<quote|2tab>|A.1.4<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-49>>
+      <no-break><pageref|auto-50>>
 
       <with|par-left|<quote|1tab>|A.2<space|2spc>Memory
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-50>>
+      <no-break><pageref|auto-51>>
 
       <with|par-left|<quote|2tab>|A.2.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_malloc>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-51>>
+      <no-break><pageref|auto-52>>
 
       <with|par-left|<quote|2tab>|A.2.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_free>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-52>>
+      <no-break><pageref|auto-53>>
 
       <with|par-left|<quote|2tab>|A.2.3<space|2spc>Input/Output
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-53>>
+      <no-break><pageref|auto-54>>
 
       <with|par-left|<quote|1tab>|A.3<space|2spc>Cryptograhpic auxilary
       functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-54>>
+      <no-break><pageref|auto-55>>
 
       <with|par-left|<quote|2tab>|A.3.1<space|2spc>ext_blake2_256
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-55>>
+      <no-break><pageref|auto-56>>
 
       <with|par-left|<quote|2tab>|A.3.2<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-56>>
+      <no-break><pageref|auto-57>>
 
       <with|par-left|<quote|1tab>|A.4<space|2spc>Sandboxing
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-57>>
+      <no-break><pageref|auto-58>>
 
       <with|par-left|<quote|2tab>|A.4.1<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-58>>
+      <no-break><pageref|auto-59>>
 
       <with|par-left|<quote|2tab>|A.4.2<space|2spc>Misc
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-59>>
+      <no-break><pageref|auto-60>>
 
       <with|par-left|<quote|2tab>|A.4.3<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-60>>
+      <no-break><pageref|auto-61>>
 
       <with|par-left|<quote|1tab>|A.5<space|2spc>Not implemented in
       Polkadot-JS <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-61>>
+      <no-break><pageref|auto-62>>
     </associate>
   </collection>
 </auxiliary>
