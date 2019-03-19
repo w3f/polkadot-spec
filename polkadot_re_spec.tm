@@ -521,12 +521,13 @@
 
   Each key value identifies a unique node in the tree. However, a node in a
   tree might or might not be associated with a key in the storage. Similar to
-  a radix trie, when traversing the Trie subsequences of the key is stored in
-  nodes on the path to the node associated with the key.
+  a radix trie, when traversing the Trie, subsequences of the key, are stored
+  in the nodes on the path to the node associated with the key.
 
   To identify the node corresponding to a key value, <math|k>, first we need
-  to encode <math|k> in a uniform way. Because each node in the trie has at
-  most 16 children, we represents the key as a sequences of 4-bit nibbles:
+  to encode <math|k> in a way consistent with the Trie structure. Because
+  each node in the trie has at most 16 children, we represent the key as a
+  sequence of 4-bit nibbles:
 
   <\definition>
     For the purpose of labeling the branches of the Trie, the key <math|k> is
@@ -559,27 +560,28 @@
 
   <subsection|Different node types>
 
-  In this subsection we specifies the structure of the nodes in the Trie:
+  In this subsection, we specify the structure of the nodes in the Trie:
 
   <\notation>
     We refer to the <strong|set of the nodes of Polkadot state trie> by
     <math|\<cal-N\>.>
   </notation>
 
-  The Trie consists of 3 three types of node base on how they stores the
+  The Trie consists of 3 three types of nodes based on how they store the
   subsequence of shared prefix nibbles:
 
   <\itemize>
-    <item><strong|Leaf:> It is a childless stores the remaining subsequence
-    of <math|KeyEncode<around|(|k|)>> not accounted for in the path to the
-    node, as well as the value associated to that key.\ 
+    <item><strong|Leaf:> It is a childless node that stores the remaining
+    subsequence of <math|KeyEncode<around|(|k|)>> not accounted for in the
+    path to the node, as well as the value associated with that key.\ 
 
-    <item><strong|Extension:> It stores subsequence of KeyEncode(<math|k>) of
-    size larger than 1 (i.e. 4 bits) which at least shared with two or more
-    keys in the Trie. It always has one child. It does not store a value.
+    <item><strong|Extension:> It stores the subsequence of
+    KeyEncode(<math|k>) of a size larger than 1 (i.e. 4 bits), which is at
+    least shared with two or more keys in the Trie. It always has one child.
+    It does not store a value.
 
     <item><strong|Branch:> It has up to 16 children. It stores no key. It
-    accounts for one nibble of the key corresponding to to the path passing
+    accounts for one nibble of the key corresponding to the path passing
     through each of its children. It optionally stores a value of the key
     corresponding to the path traversed to the node.
   </itemize>
@@ -596,8 +598,8 @@
   </definition>
 
   <\definition>
-    The <strong|the partial key> of node N of length <math|j\<leqslant\>380>
-    to be\ 
+    The <strong|partial key> of node N of length <math|j\<leqslant\>380> to
+    be\ 
 
     <\equation*>
       pk<rsub|N>\<assign\><around|(|k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|i+j>>|)>
@@ -609,7 +611,7 @@
       KeyEncode<around|(|k|)>=<around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|i-1>>,k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|2*n>>|)>
     </equation*>
 
-    corresponding to key-value paired <math|<around*|(|k,v|)>> in the State
+    corresponding to a key-value paired <math|<around*|(|k,v|)>> in the State
     storage such that <math|pk<rsub|N>> is stored in <math|N>.
   </definition>
 
@@ -683,7 +685,7 @@
 
     <item><math|C> is the unique child of the extension node <math|N>.
 
-    <item><math|ChildrenBitmap(N)\<assign\><around*|(|b<rsub|15>b<rsub|15>\<ldots\>b<rsub|0>|)><rsub|2>>
+    <item><math|ChildrenBitmap(N)\<assign\><around*|(|b<rsub|15>b<rsub|14>\<ldots\>,b<rsub|1>,b<rsub|0>|)><rsub|2>>
     where bit <math|b<rsub|i>=1> if <math|N> has a child with partial key
     <math|i>.
 
@@ -1253,15 +1255,15 @@
     </equation*>
   </definition>
 
-  In case of a tuple (or struct) the knowledge of the shape of data is
-  necessery for decoding.
+  In case of a tuple (or struct), the knowledge of the shape of data is
+  necessary for decoding.
 
   <subsection|Hex Encoding>
 
   Practically, it is more convenient and efficient to store and process data
-  which is stored in a byte array. On the other hand the Trie keys are broken
-  in 4-bits nibbles. Accordingly, we need a method to encode sequences of
-  4-bits nibbles into byte arrays canonically:
+  which is stored in a byte array. On the other hand, the Trie keys are
+  broken into 4-bits nibbles. Accordingly, we need a method to encode
+  sequences of 4-bits nibbles into byte arrays canonically:
 
   <\definition>
     <label|def-hpe>Suppose that <math|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>
@@ -1276,7 +1278,7 @@
     <label|def-key-len-enc>Let <math|N> be a leaf or an extension node in the
     storage state trie with Partial Key <math|PK<rsub|N>>. We define the
     <strong|Partial key length encoding> function, formally referred to as
-    <math|Enc<rsub|len><around|(|N|)>> as follows:
+    <math|Enc<rsub|len><around|(|N|)>,> as follows:
 
     <\equation*>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|Enc<rsub|len><around|(|N|)>>|<cell|\<assign\>>>|<row|<cell|NodePrefix<around|(|N|)>>|<cell|+>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<around|(|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>|)>>|<cell|>|<cell|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>\<less\>BigKeySize<around*|(|NodeType<around*|(|N|)>|)>>>|<row|<cell|<around|(|127|)><around|\|||\|><around|(|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>-BigKeySize<around*|(|NodeType<around*|(|N|)>|)>|)>>|<cell|>|<cell|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>\<geqslant\>BigKeySize<around*|(|NodeType<around*|(|N|)>|)>>>>>>|\<nobracket\>>>|<cell|>>>>>
@@ -1305,9 +1307,9 @@
   <appendix|Runtime API<label|sect-runtime-api>>
 
   Runtime API is a set of functions that Polkadot RE exposes to Runtime to
-  access external functions needed for various reasons, such as Storage
-  content access and manipulation, memory allocation and also for efficiency.
-  The functios are specified in each subsequent subsection for each category
+  access external functions needed for various reasons, such as Storage of
+  content, access and manipulation, memory allocation, and also efficiency.
+  The functions are specified in each subsequent subsection for each category
   of those functions.
 
   <subsection|Storage>
@@ -1331,11 +1333,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: a pointer pointing the buffer containing the key.
+    <item><verbatim|key>: a pointer indicating the buffer containing the key.
 
     <item><verbatim|key_len>: the key length in bytes.
 
-    <item><verbatim|value>: a pointer pointing the buffer containing the
+    <item><verbatim|value>: a pointer indicating the buffer containing the
     value to be stored under the key.
 
     <item><verbatim|value_len>: \ the length of the value buffer in bytes.
@@ -1343,7 +1345,7 @@
 
   <subsubsection|<verbatim|ext_storage_root>>
 
-  Retrieves the root of state storage.
+  Retrieves the root of the state storage.
 
   \;
 
@@ -1360,14 +1362,15 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result_ptr>: a pointer which points to a byte array which
-    contains the root of state storage after the function concludes.
+    <item><verbatim|result_ptr>: a memory address pointing at a byte array
+    which contains the root of the state storage after the function
+    concludes.
   </itemize>
 
   <subsubsection|<verbatim|ext_blake2_256_enumerated_trie_root>>
 
-  Given an array of byte arrays, arranges them in a Merkle trie defined in
-  <reference|sect-merkl-proof> and computes the trie root hash.
+  Given an array of byte arrays, arranges them in a Merkle trie, defined in
+  <reference|sect-merkl-proof>, and computes the trie root hash.
 
   \;
 
@@ -1387,8 +1390,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|values_data>: a pointer pointing to the buffer containing
-    the array where byte arrays are stored consecutively.
+    <item><verbatim|values_data>: a memory address pointing at the buffer
+    containing the array where byte arrays are stored consecutively.
 
     <item><verbatim|lens_data>: an array of <verbatim|i32> elements each
     stores the length of each byte array stored in <verbatim|value_data>.
@@ -1396,9 +1399,9 @@
     <item><verbatim|len>s_len: the number of <verbatim|i32> elements in
     <verbatim|lens_data>.
 
-    <item><verbatim|result>: a pointer pointing to the beginning of a 32-byte
-    byte array contanining the root of the Merkle trie corresponding to
-    elements of <verbatim|values_data>.
+    <item><verbatim|result>: a memory address pointing at the beginning of a
+    32-byte byte array containing the root of the Merkle trie corresponding
+    to elements of <verbatim|values_data>.
   </itemize>
 
   <subsubsection|To be Specced>
@@ -1435,7 +1438,7 @@
 
   <subsubsection|<verbatim|ext_malloc>>
 
-  Allocates memory of requested size in the heap.
+  Allocates memory of a requested size in the heap.
 
   \;
 
@@ -1461,7 +1464,7 @@
   <strong|Result>:
 
   <\itemize>
-    a pointer pointing to the beginning of the allocated buffer.
+    a memory address pointing at the beginning of the allocated buffer.
   </itemize>
 
   <subsubsection|<verbatim|ext_free>>
@@ -1475,7 +1478,8 @@
   </strong>
 
   <\itemize>
-    <item><verbatim|addr>: 32bit pointer pointing to the allocated memory.
+    <item><verbatim|addr>: a 32bit memory address pointing at the allocated
+    memory.
   </itemize>
 
   <subsubsection|Input/Output>
@@ -1509,13 +1513,13 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|data>: a pointer pointing the buffer containing the byte
-    array to be hashed.
+    <item><verbatim|data>: a memory address pointing at the buffer and
+    containing the byte array to be hashed.
 
     <item><verbatim|len>: the length of the byte array in bytes.
 
-    <item><verbatim|out>: a pointer pointing to the beginning of a 32-byte
-    byte array contanining the Blake2s hash of the data.
+    <item><verbatim|out>: a memory address pointing at the beginning of a
+    32-byte byte array contanining the Blake2s hash of the data.
   </itemize>
 
   \;
@@ -1643,7 +1647,6 @@
     <associate|auto-60|<tuple|A.4.2|18>>
     <associate|auto-61|<tuple|A.4.3|18>>
     <associate|auto-62|<tuple|A.5|18>>
-    <associate|auto-63|<tuple|A.5|?>>
     <associate|auto-7|<tuple|3.1|3>>
     <associate|auto-8|<tuple|3.2|3>>
     <associate|auto-9|<tuple|3.2.1|4>>

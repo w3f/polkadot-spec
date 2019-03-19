@@ -23,6 +23,11 @@
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
 \newenvironment{tmcode}[1][]{\begin{alltt} }{\end{alltt}}
+\newcounter{tmcounter}
+\newcommand{\custombinding}[1]{%
+  \setcounter{tmcounter}{#1}%
+  \addtocounter{tmcounter}{-1}%
+  \refstepcounter{tmcounter}}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
 \newcommand{\tmfloatcontents}{}
@@ -65,7 +70,7 @@
   {\Large Protocol Specification}
 }
 
-\date{February 15, 2019}
+\date{March 19, 2019}
 
 \maketitle
 
@@ -126,11 +131,18 @@ sparse.
 \end{definition}
 
 \begin{definition}
-  By \tmverbatim{}the {\tmstrong{little-endian}} representation of a
-  non-negative integer, I represented as
+  \label{defn-little-endian}By \tmverbatim{}the {\tmstrong{little-endian}}
+  representation of a non-negative integer, I, represented as
   \[ I = (B_n \ldots B_0)_{256} \]
-  In two base 256, is a byte array $B = (b_0, b_1, \ldots, b_n)$ such that
+  in base 256, we refer to a byte array $B = (b_0, b_1, \ldots, b_n)$ such
+  that
   \[ b_i \assign B_i \]
+  Accordingly, define the function $\tmop{Enc}_{\tmop{LE}}$:
+  \[ \begin{array}{llll}
+       \tmop{Enc}_{\tmop{LE}} : & \mathbb{Z}^+ & \rightarrow & \mathbb{B}\\
+       & (B_n \ldots B_0)_{256} & \mapsto & (B_{0,} B_1, \ldots_{}, B_n)
+     \end{array} \]
+  
 \end{definition}
 
 \begin{definition}
@@ -246,7 +258,7 @@ details upon which the Polkadot RE is interacting with the Runtime.
 Polkadot RE expects to receive the code for the runtime of the chain as a
 compiled WebAssembly (Wasm) Blob. The current runtime is stored in the state
 database under the key represented as a byte array:
-\[ b = \text{3A,63,6F,64,65} \]
+\[ b \assign \text{3A,63,6F,64,65} \]
 which is the byte array of ASCII representation of string ``:code'' (see
 Section \ref{sect-predef-storage-keys}). For any call to the runtime, Polkadot
 RE makes sure that it has the most updated Runtime as calls to runtime have
@@ -381,136 +393,6 @@ header and the block body as its arguments, and it returns a triplet:
 
 {\todo{Explain function}}
 
-\subsection{Runtime API}\label{sect-runtime-api}
-
-Runtime API is a set of functions that Polkadot RE exposes to Runtime to
-access external functions needed for various reasons, such as Storage content
-access and manipulation, memory allocation and also for efficiency. The
-functios are specified in each subsequent subsection for each category of
-those functions.
-
-\subsubsection{Storage}
-
-\begin{itemize}
-  \item \tmverbatim{ext\_child\_storage\_root}
-  
-  \item \tmverbatim{ext\_clear\_child\_storage}
-  
-  \item \tmverbatim{ext\_clear\_prefix}
-  
-  \item \tmverbatim{ext\_clear\_storage}
-  
-  \item \tmverbatim{ext\_exists\_child\_storage}
-  
-  \item \tmverbatim{ext\_get\_allocated\_child\_storage}
-  
-  \item \tmverbatim{ext\_get\_allocated\_storage}
-  
-  \item \tmverbatim{ext\_get\_child\_storage\_into}
-  
-  \item \tmverbatim{ext\_get\_storage\_into}
-  
-  \item \tmverbatim{ext\_kill\_child\_storage}
-  
-  \item \tmverbatim{ext\_set\_child\_storage}
-  
-  \item \tmverbatim{ext\_set\_storage}
-  
-  Sets the value of a specific key in the state storage.
-  
-  {\tmstrong{Arguments}}:
-  \begin{itemize}
-    \item \tmverbatim{key}: 32bit pointer pointing the buffer containing the
-    key.
-    
-    \item \tmverbatim{key\_len}: UINT32 integer specifying the key length.
-    
-    \item \tmverbatim{value}: 32bit pointer pointing the buffer containing the
-    value to be stored under the key.
-    
-    \item \tmverbatim{value\_len}: UINT32 integer specifying the length of the
-    value buffer.
-  \end{itemize}
-  \item \tmverbatim{ext\_storage\_changes\_root}
-  
-  \item \tmverbatim{ext\_storage\_root}
-  
-  \item \tmverbatim{ext\_exists\_storage}
-\end{itemize}
-
-\subsubsection{Memory}
-
-\begin{itemize}
-  \item \tmverbatim{ext\_malloc}
-  
-  Allocates memory of size \tmverbatim{size} in the heap and returns a 32bit
-  pointer to the allocated memory.
-  
-  {\tmstrong{Arguments:}}
-  \begin{itemize}
-    \item \tmverbatim{size:} UINT32 integer indicating the size of the buffer
-    to be allocated. 
-  \end{itemize}
-  \item \tmverbatim{ext\_free}
-  
-  Deallocates a previously allocated memory.
-  
-  {\tmstrong{Arguments:}}
-  \begin{itemize}
-    \item \tmverbatim{addr}: 32bit pointer pointing to the allocated memory.
-  \end{itemize}
-\end{itemize}
-
-\subsubsection{Input/Output}
-
-\begin{itemize}
-  \item \tmverbatim{ext\_print\_hex}
-  
-  \item \tmverbatim{ext\_print\_num}
-  
-  \item \tmverbatim{ext\_print\_utf8}
-\end{itemize}
-
-\subsubsection{Cryptograhpic auxilary functions}
-
-\begin{itemize}
-  \item \tmverbatim{ext\_blake2\_256}
-  
-  \item \tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}
-  
-  \item \tmverbatim{ext\_ed25519\_verify}
-  
-  \item \tmverbatim{ext\_twox\_128}
-  
-  \item \tmverbatim{ext\_twox\_256}
-  
-  \ 
-\end{itemize}
-
-\subsubsection{Sandboxing}
-
-\begin{itemize}
-  \item \tmverbatim{ext\_sandbox\_instance\_teardown}
-  
-  \item \tmverbatim{ext\_sandbox\_instantiate}
-  
-  \item \tmverbatim{ext\_sandbox\_invoke}
-  
-  \item \tmverbatim{ext\_sandbox\_memory\_get}
-  
-  \item \tmverbatim{ext\_sandbox\_memory\_new}
-  
-  \item \tmverbatim{ext\_sandbox\_memory\_set}
-  
-  \item \tmverbatim{ext\_sandbox\_memory\_teardown}
-  
-  \ 
-\end{itemize}
-\subsubsection{Misc}
-\begin{itemizedot}
-  \item \tmverbatim{ext\_chain\_id}
-\end{itemizedot}
-
 \section{Network Interactions}
 
 \subsection{Extrinsics Submission}
@@ -552,9 +434,15 @@ process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-{\algorithm{{\tmname{Import-and-Validate-Block($B, \tmop{Just}
-(B)$)}}}{{\algorithmic{{\state{{\tmname{Verify-Block-Justification}}$(B,
-\tmop{Just} (B))$}}
+\custombinding{1}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  1. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  (B)$)}}\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just}
+(B))$}}
 
 {\state{{\IF{$B$ {\tmstrong{is}} Finalized {\tmstrong{and}} $P (B)$
 {\tmstrong{is not}} Finalized}}}}
@@ -565,7 +453,9 @@ block:
 
 {\state{State-Changes = Runtime{\tmname{$(B)$}}}}
 
-{\state{{\tmname{Update-World-State}}(State-Changes)}}}}}}
+{\state{{\tmname{Update-World-State}}(State-Changes)}}}}
+
+\hrulefill{\medskip}
 
 For the definition of the finality and the finalized block see Section
 \ref{sect-finality}.
@@ -593,10 +483,10 @@ Polkadot RE.
 \end{definition}
 
 To authenticate the state of the system, the stored data needs to be
-re-arranged and hashed in a {\tmem{radix 16 tree}} also known as
-{\tmem{base-16 modified Merkle Patricia Tree}}, which hereafter we refer to as
-the {\tmem{{\tmstrong{Trie}},}} in order to compute the hash of the whole
-state storage consistently and efficiently at any given time.
+re-arranged and hashed in a {\tmem{modified Merkle Patricia Tree}}, which
+hereafter we refer to as the {\tmem{{\tmstrong{Trie}},}} in order to compute
+the hash of the whole state storage consistently and efficiently at any given
+time.
 
 As well, a modification has been made in the storing of the nodes' hash in the
 Merkle Tree structure to save space on entries storing small entries.
@@ -609,12 +499,15 @@ hash, $H_r$, matches across clients.
 
 \subsection{The General Tree Structure}
 
-As the trie is a radix 16 tree, in this sense, each key value identifies a
-unique node in the tree. However, a node in a tree might or might not be
-associated with a key in the storage.
+Each key value identifies a unique node in the tree. However, a node in a tree
+might or might not be associated with a key in the storage. Similar to a radix
+trie, when traversing the Trie, subsequences of the key, are stored in the
+nodes on the path to the node associated with the key.
 
 To identify the node corresponding to a key value, $k$, first we need to
-encode $k$ in a uniform way:
+encode $k$ in a way consistent with the Trie structure. Because each node in
+the trie has at most 16 children, we represent the key as a sequence of 4-bit
+nibbles:
 
 \begin{definition}
   For the purpose of labeling the branches of the Trie, the key $k$ is encoded
@@ -640,6 +533,56 @@ encode $k$ in a uniform way:
 By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the
 radix tree to reach the node identifying the storage value of $k$.
 
+\subsection{Different node types}
+
+In this subsection, we specify the structure of the nodes in the Trie:
+
+\begin{notation}
+  We refer to the {\tmstrong{set of the nodes of Polkadot state trie}} by
+  $\mathcal{N}.$
+\end{notation}
+
+The Trie consists of 3 three types of nodes based on how they store the
+subsequence of shared prefix nibbles:
+\begin{itemize}
+  \item {\tmstrong{Leaf:}} It is a childless node that stores the remaining
+  subsequence of $\tmop{KeyEncode} (k)$ not accounted for in the path to the
+  node, as well as the value associated with that key.
+  
+  \item {\tmstrong{Extension:}} It stores the subsequence of KeyEncode($k$)
+  of a size larger than 1 (i.e. 4 bits), which is at least shared with two or
+  more keys in the Trie. It always has one child. It does not store a value.
+  
+  \item {\tmstrong{Branch:}} It has up to 16 children. It stores no key. It
+  accounts for one nibble of the key corresponding to the path passing through
+  each of its children. It optionally stores a value of the key corresponding
+  to the path traversed to the node.
+\end{itemize}
+Accordingly, we define:
+
+\begin{definition}
+  \label{defn-nodetype}We define {\tmstrong{$\tmop{NodeType}$}} function to be
+  \[ \begin{array}{lllll}
+       \tmop{NodeType} & : & \mathcal{N} & \rightarrow & \{ \tmop{Leaf},
+       \tmop{Extension}, \tmop{Branch} \}\\
+       &  & N & \mapsto & \tmop{The} \tmop{type} \tmop{of} \tmop{node} N
+     \end{array} \]
+\end{definition}
+
+\begin{definition}
+  The {\tmstrong{partial key}} of node N of length $j \leqslant 380$ to be
+  \[ \tmop{pk}_N \assign (k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{i + j}})
+  \]
+  a subsequence of a key $k$
+  \[ \tmop{KeyEncode} (k) = (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{i - 1}},
+     k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{2 n}}) \]
+  corresponding to a key-value paired $(k, v)$ in the State storage such that
+  $\tmop{pk}_N$ is stored in $N$.
+\end{definition}
+
+Consequently, for an extension node $j \geqslant 2$ and for a branch node $j =
+0$.
+
 \subsection{The Merkle proof}\label{sect-merkl-proof}
 
 To prove the consistency of the state storage across the network and its
@@ -652,26 +595,16 @@ value. Therefore, it suffices to define how to compute the hash value of a
 typical node as a function of the hash value of its children and its own
 value.
 
-\begin{definition}
-  Suppose node N of storage state trie has key value $k_N$, and parent key
-  value of $k_{P (N)}$, such that:
-  \[ \tmop{KeyEncode} (k_N) = (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{i -
-     1}}, k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{2 n}}) \]
-  and
-  \[ \tmop{KeyEncode} (k_{P (N)}) = (k_{\tmop{enc}_1}, \ldots,
-     k_{\tmop{enc}_{i - 1}}) \]
-  We define
-  \[ \tmop{pk}_N \assign (k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{2 n}}) \]
-  to be the {\tmstrong{the partial key}} of N.
-\end{definition}
+\
 
 \begin{definition}
   \label{def-node-prefix}For a trie node N, {\tmstrong{Node Prefix }}function
   is a value specifying the node type as follows:
   \[ \tmop{NodePrefix} (N) \assign \left\{ \begin{array}{lll}
-       1 &  & N \text{is a leaf node}\\
-       254 &  & N \text{is a branch node without value}\\
-       255 &  & N \text{is a branch node with value}
+       1 &  & N \text{ is a leaf node}\\
+       128 &  & N \text{ is an extension node}\\
+       254 &  & N \text{ is a branch node without value}\\
+       255 &  & N \text{ is a branch node with value}
      \end{array} \right. \]
 \end{definition}
 
@@ -682,22 +615,41 @@ value.
   \begin{itemize}
     \item $N$ is a leaf node:
     \[ \tmop{Enc}_{\tmop{Node}} (N) \assign \tmop{Enc}_{\tmop{len}} (N) ||
-       \tmop{HPE} (\tmop{pk}_N) || \tmop{Enc}_{\tmop{SC}} (v) \]
+       \tmop{Enc}_{\tmop{HE}} (\tmop{pk}_N) || \tmop{Enc}_{\tmop{SC}} (v) \]
+    \item N is an extension node:
+    \[ \tmop{Enc}_{\tmop{Node}} (N) : = \tmop{Enc}_{\tmop{len}} (\nobracket N)
+       \| \tmop{Enc}_{\tmop{HE}} (\tmop{pk}_N) | | \tmop{Enc}_{\tmop{SC}} (H
+       (C)) \]
     \item N is a branch node:
     \[ \begin{array}{l}
          \text{Enc\tmrsub{Node}(N)} \assign\\
-         \nobracket \tmop{NodePrefix} (N) || \tmop{ChildrenBitmap} (N) \|
-         \tmop{HPE}_{\tmop{PC}} (v) || \tmop{Enc}_{\tmop{SC}}
-         (\tmop{Enc}_{\tmop{Node}}) ||\\
-         \tmop{Enc}_{\tmop{SC}} (N_{C_1}) \ldots \tmop{Enc}_{\tmop{SC}}
-         (N_{C_n})
+         \nobracket \tmop{NodePrefix} (N) || \tmop{Enc}_{\tmop{LE}}
+         (\tmop{ChildrenBitmap} (N)) \| \tmop{Enc}_{\tmop{SC}} (v) || \\
+         \tmop{Enc}_{\tmop{SC}} (H (N_{C_1})) \ldots \tmop{Enc}_{\tmop{SC}} (H
+         (N_{C_n}))
        \end{array} \]
   \end{itemize}
 \end{definition}
 
-Where $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes of
-$N$.
+Where
 
+
+\begin{itemize}
+  \item $\tmop{Enc}_{\tmop{len}}, \tmop{Enc}_{\tmop{HE}}$ and
+  $\tmop{Enc}_{\tmop{SC}}$ are encdoings defined in Section
+  \ref{sect-encoding}.
+  
+  \item $\tmop{Enc}_{\tmop{LE}}$ is the little-endian encoding defined in
+  Definition \ref{defn-little-endian}.
+  
+  \item $C$ is the unique child of the extension node $N$.
+  
+  \item $\tmop{ChildrenBitmap} (N) \assign (b_{15} b_{14} \ldots, b_1, b_0)_2$
+  where bit $b_i = 1$ if $N$ has a child with partial key $i$.
+  
+  \item $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes
+  of the branch node $N$.
+\end{itemize}
 \begin{definition}
   For a given node $N$, the {\tmstrong{Merkle value}} of $N$, denoted by $H
   (N)$ is defined as follows:
@@ -817,9 +769,9 @@ votes.
   $v$ in that round is an {\tmstrong{equivocatory vote}} and
   \[ \mathcal{E}^{r, \tmop{stage}} \]
   represents the set of all equivocators voters in sub-round
-  ``$\tmop{stage}$'' of round $r$. When we want to refer to the number of
-  equivocators whose equivocation has been observed by voter $v$ we refer to
-  it by:
+  ``$\tmop{stage}$'' of round $r$. When we want to refer to the number
+  of\tmverbatim{} equivocators whose equivocation has been observed by voter
+  $v$ we refer to it by:
   \[ \mathcal{E}^{r, \tmop{stage}}_{\tmop{obs} (v)} \]
   
 \end{definition}
@@ -973,15 +925,24 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-{\algorithm{\label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
-($\mathcal{V}$)}{{\algorithmic{{\state{$r \leftarrow 0$}}
+\custombinding{2}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  2. }
+  \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
+  ($\mathcal{V}$)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$r \leftarrow 0$}}
 
 {\state{$\mathcal{V}_{\tmop{id}} \leftarrow \tmop{ReadState} ('
 \tmop{AUTHORITY} \_ \tmop{SET} \_ \tmop{KEY}')$}}
 
 {\state{$\mathcal{V}_{\tmop{id}} \leftarrow \mathcal{V}_{\tmop{id}} + 1$}}
 
-{\state{{\tmname{Execute-One-Grandpa-Round}}$(r)$}}}}}}
+{\state{{\tmname{Execute-One-Grandpa-Round}}$(r)$}}}}
+
+\hrulefill{\medskip}
 
 Each voter should run Algorithm \ref{alg-completable-round} to verify that a
 round is completable.
@@ -991,8 +952,14 @@ round is completable.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-{\algorithm{\label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$}{{\algorithmic{{\state{$t_{r,
-v} \leftarrow$Time}}
+\custombinding{3}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  3. }
+  \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$t_{r, v} \leftarrow$Time}}
 
 {\state{$\tmop{primary} \leftarrow${\tmname{Derive-Primary}}}}
 
@@ -1023,11 +990,20 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 
 {\state{{\tmname{Broadcast($M_v^{r, \tmop{pc}}$($B_v^{r, \tmop{pv}}$))}}}}
 
-{\state{{\tmname{Play-Grandpa-round}}($r + 1$)}}}}}}
+{\state{{\tmname{Play-Grandpa-round}}($r + 1$)}}}}
 
-{\algorithm{\label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)}{{\algorithmic{{\state{$\mathcal{C}_{\nosymbol}
-\leftarrow \{B' |B' \leqslant B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} |
--\#V_v^{r, \tmop{pc}} (B') \leqslant 1 / 3|\mathbb{V}|\}$}}
+\hrulefill{\medskip}
+
+\custombinding{4}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  4. }
+  \label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$\mathcal{C}_{\nosymbol} \leftarrow \{B' |B' \leqslant
+B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
+\leqslant 1 / 3|\mathbb{V}|\}$}}
 
 {\state{{\IF{$\mathcal{C}= \phi$}}}}
 
@@ -1036,10 +1012,17 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 {\state{{\ELSE{\ }}}}
 
 {\state{{\RETURN{$E \in \mathcal{C}: H_n (E) = \max \{H_n (B') : B' \in
-\mathcal{C}\}${\END}}}}}}}}}
+\mathcal{C}\}${\END}}}}}}}
 
-{\algorithm{{\tmname{Attempt-To-Finalize-Round}}($r$)}{{\algorithmic{{\state{$L
-\leftarrow${\tmname{Last-Finalized-Block}}}}
+\hrulefill{\medskip}
+
+\custombinding{5}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  5. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$L \leftarrow${\tmname{Last-Finalized-Block}}}}
 
 {\state{$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
 
@@ -1056,9 +1039,11 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 {\state{{\RETURN{{\END}{\END}}}}}
 
 {\state{{\tmstrong{schedule-call}} {\tmname{Attempt-To-Finalize-Round}}($r$)
-{\tmstrong{when}} {\tmname{Receive-Messages}} }}}}}}
+{\tmstrong{when}} {\tmname{Receive-Messages}} }}}}
 
-\section{Auxiliary Encodings}
+\hrulefill{\medskip}
+
+\section{Auxiliary Encodings}\label{sect-encoding}
 
 \subsection{SCALE Codec}\label{sect-scale-codec}
 
@@ -1117,11 +1102,14 @@ proof for the State Storage.
      \tmop{Enc}_{\tmop{SC}} (A_2) | \ldots | \tmop{Enc}_{\tmop{SC}} (A_n) \]
 \end{definition}
 
+In case of a tuple (or struct), the knowledge of the shape of data is
+necessary for decoding.
+
 \subsection{Hex Encoding}
 
 Practically, it is more convenient and efficient to store and process data
-which is stored in a byte array. On the other hand, radix-16 tree keys are
-broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
+which is stored in a byte array. On the other hand, the Trie keys are broken
+into 4-bits nibbles. Accordingly, we need a method to encode sequences of
 4-bits nibbles into byte arrays canonically:
 
 \begin{definition}
@@ -1145,22 +1133,37 @@ broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
 \subsection{Partial Key Encoding}
 
 \begin{definition}
-  \label{def-key-len-enc}Let $N$ be a node in the storage state trie with
-  Partial Key $\tmop{PK}_N$. We define the {\tmstrong{Partial key length
-  encoding}} function, formally referred to as $\tmop{Enc}_{\tmop{len}} (N)$
-  as follows:
+  \label{def-key-len-enc}Let $N$ be a leaf or an extension node in the storage
+  state trie with Partial Key $\tmop{PK}_N$. We define the {\tmstrong{Partial
+  key length encoding}} function, formally referred to as
+  $\tmop{Enc}_{\tmop{len}} (N),$ as follows:
   \[ \begin{array}{ll}
        \tmop{Enc}_{\tmop{len}} (N) & \assign\\
        \tmop{NodePrefix} (N) & +\\
-       \left\{ \begin{array}{lllll}
-         (\| \tmop{PK}_N \|) &  & \tmop{NisleafNode} & \& & \| \tmop{PK}_N \|<
-         127\\
-         (127) || (\tmop{LE} (\| \tmop{PK}_N \|- 127)) &  &
-         \tmop{NisaleafNode} & \& & \| \tmop{PK}_N \| \geqslant 127
+       \left\{ \begin{array}{lcl}
+         (\| \tmop{PK}_N \|) &  & \| \tmop{PK}_N \|< \tmop{BigKeySize}
+         (\tmop{NodeType} (N))\\
+         (127) || (\| \tmop{PK}_N \|- \tmop{BigKeySize} (\tmop{NodeType} (N)))
+         &  & \| \tmop{PK}_N \| \geqslant \tmop{BigKeySize} (\tmop{NodeType}
+         (N))
        \end{array} \right. & 
      \end{array} \]
-  where $\tmop{NodePrefix}$ function is defined in Definition
-  \ref{def-node-prefix}.
+  where $\tmop{NodePrefix}$, $\tmop{NodeType}$ and $\tmop{BigKeySize}$
+  functions are defined in Definitions \ref{def-node-prefix},
+  \ref{defn-nodetype} and \ref{defn-bigkeysize} respectively.
+\end{definition}
+
+\begin{definition}
+  \label{defn-bigkeysize}We define $\tmop{BigKeySize}$ function for each node
+  type of the Trie as follows: \
+  \[ \begin{array}{lllll}
+       \tmop{BigKeySize} (T) & : & \{ \tmop{Leaf}, \tmop{Extension} \} &
+       \rightarrow & \mathbb{N}\\
+       &  & T & \mapsto & \left\{ \begin{array}{ll}
+         126 & T = \tmop{Leaf}\\
+         125 & T = \tmop{Extension}
+       \end{array} \right.
+     \end{array} \]
 \end{definition}
 
 \section{Genesis Block Specification}\label{sect-genisis-block}
@@ -1169,6 +1172,235 @@ broken in 4-bits nibbles. Accordingly, we need a method to encode sequences of
 
 \section{Runtime upgrade}\label{sect-runtime-upgrade}
 
-;
+\appendix\section{Runtime API\label{sect-runtime-api}}
+
+Runtime API is a set of functions that Polkadot RE exposes to Runtime to
+access external functions needed for various reasons, such as Storage of
+content, access and manipulation, memory allocation, and also efficiency. The
+functions are specified in each subsequent subsection for each category of
+those functions.
+
+\subsection{Storage}
+
+\subsubsection{\tmverbatim{ext\_set\_storage}}
+
+Sets the value of a specific key in the state storage.
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_storage
+  (param $key_data i32) (param $key_len i32) (param $value_data i32)                           (param $value_len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key}: a pointer indicating the buffer containing the key.
+  
+  \item \tmverbatim{key\_len}: the key length in bytes.
+  
+  \item \tmverbatim{value}: a pointer indicating the buffer containing the
+  value to be stored under the key.
+  
+  \item \tmverbatim{value\_len}: \ the length of the value buffer in bytes.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_storage\_root}}
+
+Retrieves the root of the state storage.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_storage_root
+  (param $result_ptr i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{result\_ptr}: a memory address pointing at a byte array
+  which contains the root of the state storage after the function concludes.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}}
+
+Given an array of byte arrays, arranges them in a Merkle trie, defined in
+\ref{sect-merkl-proof}, and computes the trie root hash.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_blake2_256_enumerated_trie_root
+      (param $values_data i32) (param $lens_data i32) (param $lens_len i32) 
+      (param $result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{values\_data}: a memory address pointing at the buffer
+  containing the array where byte arrays are stored consecutively.
+  
+  \item \tmverbatim{lens\_data}: an array of \tmverbatim{i32} elements each
+  stores the length of each byte array stored in \tmverbatim{value\_data}.
+  
+  \item \tmverbatim{len}s\_len: the number of \tmverbatim{i32} elements in
+  \tmverbatim{lens\_data}.
+  
+  \item \tmverbatim{result}: a memory address pointing at the beginning of a
+  32-byte byte array containing the root of the Merkle trie corresponding to
+  elements of \tmverbatim{values\_data}.
+\end{itemize}
+
+\subsubsection{To be Specced}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_clear\_child\_storage}
+  
+  \item \tmverbatim{ext\_clear\_prefix}
+  
+  \item \tmverbatim{ext\_clear\_storage}
+  
+  \item \tmverbatim{ext\_exists\_child\_storage}
+  
+  \item \tmverbatim{ext\_get\_allocated\_child\_storage}
+  
+  \item \tmverbatim{ext\_get\_allocated\_storage}
+  
+  \item \tmverbatim{ext\_get\_child\_storage\_into}
+  
+  \item \tmverbatim{ext\_get\_storage\_into}
+  
+  \item \tmverbatim{ext\_kill\_child\_storage}
+  
+  \item \tmverbatim{ext\_set\_child\_storage}
+  
+  \item \tmverbatim{ext\_storage\_changes\_root}
+  
+  \item \tmverbatim{ext\_storage\_root}
+  
+  \item \tmverbatim{ext\_exists\_storage}
+\end{itemize}
+
+\subsection{Memory}
+
+\subsubsection{\tmverbatim{ext\_malloc}}
+
+Allocates memory of a requested size in the heap.
+
+\
+
+{\tmstrong{Prototype}}:
+\begin{alltt}
+(func $ext_malloc
+  (param $size i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{size:} the size of the buffer to be allocated in number of
+  bytes. 
+\end{itemize}
+
+
+{\tmstrong{Result}}:
+\begin{itemize}
+  a memory address pointing at the beginning of the allocated buffer.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_free}}
+
+Deallocates a previously allocated memory.
+
+\
+
+{\tmstrong{Arguments:}}
+\begin{itemize}
+  \item \tmverbatim{addr}: a 32bit memory address pointing at the allocated
+  memory.
+\end{itemize}
+
+\subsubsection{Input/Output}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_print\_hex}
+  
+  \item \tmverbatim{ext\_print\_num}
+  
+  \item \tmverbatim{ext\_print\_utf8}
+\end{itemize}
+
+\subsection{Cryptograhpic auxilary functions}
+
+\subsubsection{ext\_blake2\_256}
+
+Computes the Blake2s hash of a given byte array.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func (export "ext_blake2_256")
+      (param $data i32) (param  $len i32) (param $out i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a memory address pointing at the buffer and
+  containing the byte array to be hashed.
+  
+  \item \tmverbatim{len}: the length of the byte array in bytes.
+  
+  \item \tmverbatim{out}: a memory address pointing at the beginning of a
+  32-byte byte array contanining the Blake2s hash of the data.
+\end{itemize}
+
+
+\subsubsection{To be Specced}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_ed25519\_verify}
+  
+  \item \tmverbatim{ext\_twox\_128}
+  
+  \item \tmverbatim{ext\_twox\_256}
+  
+  \ 
+\end{itemize}
+
+\subsection{Sandboxing}
+
+\subsubsection{To be Specced}
+
+\begin{itemize}
+  \item \tmverbatim{ext\_sandbox\_instance\_teardown}
+  
+  \item \tmverbatim{ext\_sandbox\_instantiate}
+  
+  \item \tmverbatim{ext\_sandbox\_invoke}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_get}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_new}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_set}
+  
+  \item \tmverbatim{ext\_sandbox\_memory\_teardown}
+  
+  \ 
+\end{itemize}
+
+\subsubsection{Misc}
+
+\subsubsection{To be Specced}
+\begin{itemizedot}
+  \item \tmverbatim{ext\_chain\_id}
+\end{itemizedot}
+\tmverbatim{}\subsection{Not implemented in Polkadot-JS}
 
 \end{document}
