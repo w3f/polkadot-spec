@@ -36,6 +36,7 @@ fn main() {
         .subcommand(SubCommand::with_name("encode")
                     .about("Encode input using SCALE codec")
                     .arg(Arg::with_name("input")
+                         .long("input")
                          .short("i")
                          .required(true)
                          .value_name("INPUT_VALUE")
