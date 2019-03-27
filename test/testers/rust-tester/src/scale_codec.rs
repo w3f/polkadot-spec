@@ -24,7 +24,7 @@ extern crate base64;
 use parity_codec::{Encode, Decode, HasCompact, Compact, EncodeAsRef, CompactAs};
 use clap::{Arg, ArgMatches, App, SubCommand};
 fn encode(matches: &ArgMatches) {
-    let scale_encoded_value = matches.value_of("input").unwrap();
+    let scale_encoded_value = matches.value_of("input").unwrap().encode();
     
     println!("encoded {}: {}", matches.value_of("input").unwrap(), base64::encode(&scale_encoded_value));
 }

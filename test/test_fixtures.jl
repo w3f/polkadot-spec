@@ -1,5 +1,5 @@
 module ScaleCodecFixtures
-test_byte_arrays = [b"1", b"22", b"333", b"1234", b"abcdefghijklmnopqrstuvwxyz",
+const test_byte_arrays = [b"1", b"22", b"333", b"1234", b"abcdefghijklmnopqrstuvwxyz",
                     b"""A towel, it says, is about the most massively useful  thing  an 
                         interstellar  hitch hiker can have. Partly it has great practical 
                         value - you can wrap it around you for warmth as you bound across 
@@ -17,7 +17,8 @@ test_byte_arrays = [b"1", b"22", b"333", b"1234", b"abcdefghijklmnopqrstuvwxyz",
                         enough."""
                     ]
 #reference implementation to be first
-reference_implementation = 1
-cli_scale_encoders = ["testers/rust-tester/target/debug/scale_codec", 
-                      "testers/go-tester/scale_codec/scale_codec"]
+const cli_scale_encoders = ["testers/rust-tester/target/debug/scale_codec", 
+                            "testers/go-tester/scale_codec/scale_codec"]
+#set rust to be the reference implementation
+const reference_implementation = 1
 end
