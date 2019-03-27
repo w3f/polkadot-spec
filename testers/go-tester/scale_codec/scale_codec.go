@@ -22,7 +22,6 @@ package main
 import (
 	"../../../../implementations/go/gossamer/codec"
 	"bytes"
-	//"encoding/base64"
 	"flag"
 	"fmt"
 	"os"
@@ -71,7 +70,6 @@ func main() {
 		if err != nil {
 			os.Exit(1)
 		}
-		//encodedText := base64.StdEncoding.EncodeToString(buffer.Bytes())
 		encodedText := buffer.Bytes()
 		// Print
 		fmt.Printf("encoded %s: %x\n", *inputTextPtr, encodedText)
