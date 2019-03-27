@@ -26,7 +26,7 @@ use clap::{Arg, ArgMatches, App, SubCommand};
 fn encode(matches: &ArgMatches) {
     let scale_encoded_value = matches.value_of("input").unwrap();
     
-    println!("encoded {}: {}", matches.value_of("input").unwrap(), base64::encode(&scale_encoded_value));
+    println!("encoded {}: {:x?}", matches.value_of("input").unwrap(), &scale_encoded_value);
 }
 
 fn main() {
