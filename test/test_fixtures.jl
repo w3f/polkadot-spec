@@ -17,8 +17,8 @@ const test_byte_arrays = [b"1", b"22", b"333", b"1234", b"abcdefghijklmnopqrstuv
                         enough."""
                     ]
 #reference implementation to be first
-const cli_scale_encoders = ["testers/rust-tester/target/debug/scale_codec", 
-                            "testers/go-tester/scale_codec/scale_codec"]
-#set rust to be the reference implementation
+const cli_scale_encoders = ["../build/test/testers/rust-tester/scale_codec", 
+                            "../build/test/testers/go-tester/scale_codec_go"]
+
 const reference_implementation = 1
 end
