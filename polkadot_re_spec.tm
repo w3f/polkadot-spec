@@ -1369,7 +1369,10 @@
 
   <subsubsection|<verbatim|ext_blake2_256_enumerated_trie_root>>
 
-  Given an array of byte arrays, arranges them in a Merkle trie, defined in
+  Given an array of byte arrays, Remove storage entries which key starts with
+  given prefix.Remove storage entries which key starts with given
+  prefix.Remove storage entries which key starts with given
+  prefix.<verbatim|>arranges them in a Merkle trie, defined in
   <reference|sect-merkl-proof>, and computes the trie root hash.
 
   \;
@@ -1404,12 +1407,66 @@
     to elements of <verbatim|values_data>.
   </itemize>
 
+  <subsubsection|<verbatim|ext_clear_prefix>>
+
+  Given a byte arrays, it removes all storage entries whose key matches the
+  prefix specified in the array.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_clear_prefix
+
+    \ \ \ \ \ \ (param $prefix_data i32) (param $prefix_len i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|prefix_data>: a memory address pointing at the buffer
+    containing the byte array containing the prefix.
+
+    <item><verbatim|prefix_len>: the length of the byte array in number of
+    bytes.
+  </itemize>
+
+  <\subsubsection>
+    <verbatim|ext_clear_storage>
+  </subsubsection>
+
+  Given a byte arrays, it removes the storage entry whose key specified in
+  the array.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_clear_storage
+
+    \ \ \ \ \ \ (param $key_data i32) (param $key_len i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|key_data>: a memory address pointing at the buffer
+    containing the byte array containing the key value.
+
+    <item><verbatim|key_len>: the length of the byte array in number of
+    bytes.
+  </itemize>
+
   <subsubsection|To be Specced>
 
   <\itemize>
     <item><verbatim|ext_clear_child_storage>
-
-    <item><verbatim|ext_clear_prefix>
 
     <item><verbatim|ext_clear_storage>
 
@@ -1522,13 +1579,49 @@
     32-byte byte array contanining the Blake2s hash of the data.
   </itemize>
 
+  <subsubsection|<verbatim|ext_ed25519_verify>>
+
+  Given a message signed by ED25519 signature algorithm along side with its
+  signature and the public key which allegedly signed it, it verifies the
+  validity of the signature by the provided public key.
+
   \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_ed25519_verify
+
+    \ \ \ \ \ \ (param $msg_data i32) (param $msg_len i32) (param $sig_data
+    i32)
+
+    \ \ \ \ \ \ (param $pubkey_data i32) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|msg_data>: a pointer to the buffer containing the message
+    body.
+
+    <item><verbatim|msg_len>: an <verbatim|i32> integer indicating the size
+    of the message buffer in bytes.
+
+    <item><verbatim|sig_data>: a pointer to the 64 byte memory buffer
+    containing the ED25519 signature corresponding to the message.
+
+    <item><verbatim|pubkey_data>: a pointer to the 32 byte buffer containing
+    the public key corresponding the secret key which has signed the message.
+
+    <item><verbatim|result>: \ an integer value which is equal to 0
+    indicating the validity of the signature or a nonzero value otherwise.
+  </itemize>
 
   <subsubsection|To be Specced>
 
   <\itemize>
-    <item><verbatim|ext_ed25519_verify>
-
     <item><verbatim|ext_twox_128>
 
     <item><verbatim|ext_twox_256>
@@ -1634,19 +1727,22 @@
     <associate|auto-49|<tuple|A.1.3|16>>
     <associate|auto-5|<tuple|2.3|3>>
     <associate|auto-50|<tuple|A.1.4|16>>
-    <associate|auto-51|<tuple|A.2|17>>
-    <associate|auto-52|<tuple|A.2.1|17>>
-    <associate|auto-53|<tuple|A.2.2|17>>
-    <associate|auto-54|<tuple|A.2.3|17>>
-    <associate|auto-55|<tuple|A.3|17>>
-    <associate|auto-56|<tuple|A.3.1|17>>
-    <associate|auto-57|<tuple|A.3.2|18>>
-    <associate|auto-58|<tuple|A.4|18>>
-    <associate|auto-59|<tuple|A.4.1|18>>
+    <associate|auto-51|<tuple|A.1.5|17>>
+    <associate|auto-52|<tuple|A.1.6|17>>
+    <associate|auto-53|<tuple|A.2|17>>
+    <associate|auto-54|<tuple|A.2.1|17>>
+    <associate|auto-55|<tuple|A.2.2|17>>
+    <associate|auto-56|<tuple|A.2.3|17>>
+    <associate|auto-57|<tuple|A.3|18>>
+    <associate|auto-58|<tuple|A.3.1|18>>
+    <associate|auto-59|<tuple|A.3.2|18>>
     <associate|auto-6|<tuple|3|3>>
-    <associate|auto-60|<tuple|A.4.2|18>>
-    <associate|auto-61|<tuple|A.4.3|18>>
-    <associate|auto-62|<tuple|A.5|18>>
+    <associate|auto-60|<tuple|A.3.3|18>>
+    <associate|auto-61|<tuple|A.4|18>>
+    <associate|auto-62|<tuple|A.4.1|18>>
+    <associate|auto-63|<tuple|A.4.2|?>>
+    <associate|auto-64|<tuple|A.4.3|?>>
+    <associate|auto-65|<tuple|A.5|?>>
     <associate|auto-7|<tuple|3.1|3>>
     <associate|auto-8|<tuple|3.2|3>>
     <associate|auto-9|<tuple|3.2.1|4>>
@@ -1889,57 +1985,69 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-49>>
 
-      <with|par-left|<quote|2tab>|A.1.4<space|2spc>To be Specced
+      <with|par-left|<quote|2tab>|A.1.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_prefix>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-50>>
 
-      <with|par-left|<quote|1tab>|A.2<space|2spc>Memory
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|A.1.5<space|2spc>\ \ \ \ (func
+      $ext_clear_storage
+
+      \ \ \ \ \ \ (param $key_data i32) (param $key_len i32))
+
+      \; <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-51>>
 
-      <with|par-left|<quote|2tab>|A.2.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_malloc>
+      <with|par-left|<quote|2tab>|A.1.6<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-52>>
 
-      <with|par-left|<quote|2tab>|A.2.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_free>
+      <with|par-left|<quote|1tab>|A.2<space|2spc>Memory
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-53>>
 
-      <with|par-left|<quote|2tab>|A.2.3<space|2spc>Input/Output
+      <with|par-left|<quote|2tab>|A.2.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_malloc>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-54>>
 
-      <with|par-left|<quote|1tab>|A.3<space|2spc>Cryptograhpic auxilary
-      functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|A.2.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_free>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-55>>
 
-      <with|par-left|<quote|2tab>|A.3.1<space|2spc>ext_blake2_256
+      <with|par-left|<quote|2tab>|A.2.3<space|2spc>Input/Output
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-56>>
 
-      <with|par-left|<quote|2tab>|A.3.2<space|2spc>To be Specced
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|A.3<space|2spc>Cryptograhpic auxilary
+      functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-57>>
 
-      <with|par-left|<quote|1tab>|A.4<space|2spc>Sandboxing
+      <with|par-left|<quote|2tab>|A.3.1<space|2spc>ext_blake2_256
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-58>>
 
-      <with|par-left|<quote|2tab>|A.4.1<space|2spc>To be Specced
+      <with|par-left|<quote|2tab>|A.3.2<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-59>>
 
-      <with|par-left|<quote|2tab>|A.4.2<space|2spc>Misc
+      <with|par-left|<quote|1tab>|A.4<space|2spc>Sandboxing
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-60>>
 
-      <with|par-left|<quote|2tab>|A.4.3<space|2spc>To be Specced
+      <with|par-left|<quote|2tab>|A.4.1<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-61>>
 
+      <with|par-left|<quote|2tab>|A.4.2<space|2spc>Misc
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-62>>
+
+      <with|par-left|<quote|2tab>|A.4.3<space|2spc>To be Specced
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-63>>
+
       <with|par-left|<quote|1tab>|A.5<space|2spc>Not implemented in
       Polkadot-JS <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-62>>
+      <no-break><pageref|auto-64>>
     </associate>
   </collection>
 </auxiliary>
