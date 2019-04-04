@@ -12,4 +12,5 @@ set(TARGET_FILE ${CARGO_TARGET_DIR}/${LIB_TARGET}/${LIB_BUILD_TYPE}/scale_codec)
 
 add_custom_command(TARGET scale_codec_target POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${TARGET_FILE} ${CMAKE_CURRENT_BINARY_DIR}/${NAME})
 
-
+add_custom_target(git_submodule_init COMMAND git submodule update --init --recursive)
+add_dependencies(scale_codec_target git_submodule_init)
