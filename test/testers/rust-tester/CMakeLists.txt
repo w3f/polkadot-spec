@@ -1,15 +1,10 @@
 enable_language(Rust)
 include(CMakeCargo)
+include(CMakeCargoCommon)
 
 cargo_build(NAME scale_codec)
+cargo_lib_file()
 
-#TODO: currently only works for linux, customize it based on actual build values
-set(CARGO_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR})
-set(LIB_TARGET "x86_64-unknown-linux-gnu")
-set(LIB_BUILD_TYPE "debug")
+set(TARGET_FILE ${CMAKE_CURRENT_BINARY_DIR}/${LIB_TARGET}/${LIB_BUILD_TYPE}/scale_codec)
 
-set(TARGET_FILE ${CARGO_TARGET_DIR}/${LIB_TARGET}/${LIB_BUILD_TYPE}/scale_codec)
-
-add_custom_command(TARGET scale_codec_target POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${TARGET_FILE} ${CMAKE_CURRENT_BINARY_DIR}/${NAME})
-
-
+install(FILES ${TARGET_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${NAME})
