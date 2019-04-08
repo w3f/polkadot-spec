@@ -77,5 +77,5 @@ function(cargo_build)
   add_dependencies(${CARGO_NAME} ${CARGO_NAME}_target)
   set_target_properties(${CARGO_NAME} PROPERTIES IMPORTED_LOCATION ${LIB_FILE})
 
-  install(FILES ${LIB_COMPILED_FILE} DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+  install(PROGRAMS ${LIB_COMPILED_FILE} DESTINATION bin)
 endfunction()
