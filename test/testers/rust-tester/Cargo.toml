@@ -7,7 +7,9 @@ edition = "2018"
 [dependencies]
 base64 = "*"
 clap = "*"
+data-encoding = "*"
 parity-codec={path = "../../../implementations/rust/parity-codec"}
+
 
 [[bin]]
 name = "scale_codec"

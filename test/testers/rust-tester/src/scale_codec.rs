@@ -16,7 +16,9 @@
 // along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
 
 extern crate clap;
+extern crate data_encoding;
 
+use data_encoding::{HEXLOWER};
 ///This file is an interface to run Parity implementation of SCALE codec.
 
 //use std::process;
@@ -25,6 +27,7 @@ use parity_codec::{Encode, Decode, HasCompact, Compact, EncodeAsRef, CompactAs};
 use clap::{Arg, ArgMatches, App, SubCommand};
 fn encode(matches: &ArgMatches) {
     let scale_encoded_value = matches.value_of("input").unwrap().encode();
+    //let hex_encoded_value = HEXLOWER.encode(scale_encoded_value);
     
     println!("encoded {}: {:x?}", matches.value_of("input").unwrap(), &scale_encoded_value);
 }

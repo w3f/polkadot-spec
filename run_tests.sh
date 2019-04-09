@@ -1,7 +1,10 @@
 #!/bin/bash
 
+SCRIPT_DIR=$(dirname -- "$(readlink -f -- "$BASH_SOURCE")")
+cd ${SCRIPT_DIR}
+
 ./build_test.sh
 
 cd test
-julia -L runtests.jl
+julia -qL runtests.jl
 
