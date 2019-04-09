@@ -5,4 +5,4 @@ cd build
 
 cmake ..
 make
-
+make DESTDIR=bin install
