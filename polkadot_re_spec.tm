@@ -758,7 +758,7 @@
   <\definition>
     <label|defn-account-key><strong|Account key
     <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>> is a pair of <math|>ristretto
-    SR25519 used to sign transaction among other account and blance related
+    SR25519 used to sign transactions among other accounts and blance-related
     functions.
   </definition>
 
@@ -798,22 +798,24 @@
   <subsection|Block Production>
 
   Polkadot RE uses BABE protocol <cite|w3f_research_group_blind_2019> for
-  block production which is designed based on Ouroboros praos
+  block production designed based on Ouroboros praos
   <cite|david_ouroboros_2018>. BABE execution happens in sequential
-  overlapping phases known as <strong|<em|epoch>>. Each epoch on it turns is
-  divided in sequential slots. At beginning of each epoch, the BABE node need
-  to run Algorithm <reference|algo-babe-slot-selection> to find out in which
-  slots it should produce a block and gossip to the other block producers. In
-  turn, block producer node should keep copy of the block tree and grow it as
-  it receives valid blocks from other block producers. A block producer prune
-  the tree in parallel using Algorithm <reference|algo-block-tree-prunning>.
+  non-overlapping phases known as an <strong|<em|epoch>>. Each epoch on its
+  turn is divided into a predefined number of slots. All slots in each epoch
+  are sequentially indexed starting from 0. At the beginning of each epoch,
+  the BABE node needs to run Algorithm <reference|algo-babe-slot-selection>
+  to find out in which slots it should produce a block and gossip to the
+  other block producers. In turn, the block producer node should keep a copy
+  of the block tree and grow it as it receives valid blocks from other block
+  producers. A block producer prunes the tree in parallel using Algorithm
+  <reference|algo-block-tree-prunning>.
 
   <subsubsection|Preliminaries>
 
   <\definition>
     A <strong|Block Producer>, noted by <math|\<cal-P\><rsub|j>> is a node
-    running Polkadot RE which is authorized to keep a transaction queue gets
-    a turn in producing blocks.
+    running Polkadot RE which is authorized to keep a transaction queue and
+    which gets a turn in producing blocks.
   </definition>
 
   <\definition>
@@ -828,19 +830,18 @@
 
   <\definition>
     A block production <strong|epoch>, formally refered to as
-    <math|\<cal-E\>> is a period of time with known starting time and fixed
+    <math|\<cal-E\>> is a period with pre-known starting time and fixed
     length during which the set of block producers stays constant. Epochs are
-    indexed sequentially, we refer to <math|n<rsup|th>> epoch since genesis
-    by <math|\<cal-E\><rsub|n>>. Each epoch is divided into <math|>equal
-    length period knowns as block production <strong|slolt>s sequentialy
-    index in each epoch. Each slot is awarded to a subset of block producers
-    during which they are allowed to generate a block.
+    indexed sequentially, we refer to the <math|n<rsup|th>> epoch since
+    genesis by <math|\<cal-E\><rsub|n>>. Each epoch is divided into
+    <math|>equal length periods known as block production <strong|slot>s
+    sequentially indexed in each epoch. Each slot is awarded to a subset of
+    block producers during which they are allowed to generate a block.
   </definition>
 
   <\notation>
     We refer to the number of slots in epoch <math|\<cal-E\><rsub|n>> by
-    <math|sc<rsub|n>>. Block producers should contact handan@web3.foundation
-    and they might receive the actual value in response.\ 
+    <math|sc<rsub|n>>. <math|sc<rsub|n>> is set to ??? at the genesis.\ 
   </notation>
 
   <subsubsection|Block Production Lottery>
@@ -848,15 +849,15 @@
   <\definition>
     <strong|Winning threshold> denoted by <strong|<math|\<tau\>>> is the
     threshold which is used in Algorirthm <reference|algo-slot-lottery> to
-    decide if a block producer is winner of a specific slot. <math|\<tau\>>
-    is initially set to ???.
+    decide if a block producer is the winner of a specific slot.
+    <math|\<tau\>> is initially set to ???.
   </definition>
 
-  During each epoch each block producer node should runs Algorithm
-  <reference|algo-block-lottery> to identify the slots it is awarded during
-  which it is able to produce block. The <math|sk<rsup|v>> is the block
-  producer lottery secret key and <math|n> is the epoch for whose slots the
-  block producer is running the lottery.
+  During each epoch, each block producer node should run Algorithm
+  <reference|algo-block-lottery> to identify the slots it is awarded. These
+  are the slots during which the block producer is allowed to build a block.
+  The <math|sk<rsup|v>> is the block producer lottery secret key and <math|n>
+  is the epoch for whose slots the block producer is running the lottery.
 
   <\algorithm|<label|algo-block-production><name|Block-production-lottery><math|<around*|(|sk<rsup|v>,n|)>>>
     <\algorithmic>
@@ -886,7 +887,7 @@
 
   For any slot <math|i> in epoch <math|n> where <math|d\<less\>\<tau\>>, the
   block producer is required to produce a block. For the definitions of
-  <name|Epoch-Randomness<math|>> and <em|<name|VRF>> functions see Sections
+  <name|Epoch-Randomness<math|>> and <em|<name|VRF>> functions, see Sections
   <reference|sect-randomness> and <reference|sect-vrf> respectively.
 
   \ <subsubsection|Block Production>
@@ -1531,11 +1532,9 @@
 
   <subsubsection|<verbatim|ext_blake2_256_enumerated_trie_root>>
 
-  Given an array of byte arrays, Remove storage entries which key starts with
-  given prefix.Remove storage entries which key starts with given
-  prefix.Remove storage entries which key starts with given
-  prefix.<verbatim|>arranges them in a Merkle trie, defined in
-  <reference|sect-merkl-proof>, and computes the trie root hash.
+  Given an array of byte arrays, arranges them in a Merkle trie, defined
+  in<verbatim|<em|<strong|>>> Section <reference|sect-merkl-proof>, and
+  computes the trie root hash.
 
   \;
 
@@ -1571,8 +1570,8 @@
 
   <subsubsection|<verbatim|ext_clear_prefix>>
 
-  Given a byte arrays, it removes all storage entries whose key matches the
-  prefix specified in the array.
+  Given a byte array, this function removes all storage entries whose key
+  matches the prefix specified in the array.
 
   \;
 
@@ -1596,12 +1595,39 @@
     bytes.
   </itemize>
 
+  <subsubsection|<verbatim|><verbatim|ext_clear_storage>>
+
+  Given a byte array, this function removes the storage entry whose key is
+  specified in the array.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_clear_storage
+
+    \ \ \ \ \ \ (param $key_data i32) (param $key_len i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|key_data>: a memory address pointing at the buffer
+    containing the byte array containing the key value.
+
+    <item><verbatim|key_len>: the length of the byte array in number of
+    bytes.
+  </itemize>
+
   <\subsubsection>
-    <verbatim|ext_clear_storage>
+    <verbatim|ext_exists_storage>
   </subsubsection>
 
-  Given a byte arrays, it checks if the storage entry corresponding to the
-  key specified in the array exists.
+  Given a byte array, this function checks if the storage entry corresponding
+  to the key specified in the array exists.
 
   \;
 
@@ -1626,43 +1652,17 @@
     <item><verbatim|key_len>: the length of the byte array in number of
     bytes.
 
-    <item><verbatim|result>: An <verbatim|i32> integer which is equal to 1 if
-    an entry with the give key exists in the storage or 0 if the key storage
-    does not contain an entry with the given key.
-  </itemize>
-
-  <subsubsection|<verbatim|ext_exists_storage>>
-
-  Given a byte arrays, it removes the storage entry whose key specified in
-  the array.
-
-  \;
-
-  <strong|Prototype:>
-
-  <\verbatim>
-    (func $ext_clear_storage
-
-    \ \ \ \ \ \ (param $key_data i32) (param $key_len i32))
-  </verbatim>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize>
-    <item><verbatim|key_data>: a memory address pointing at the buffer
-    containing the byte array containing the key value.
-
-    <item><verbatim|key_len>: the length of the byte array in number of
-    bytes.
+    <item><verbatim|result>: An <verbatim|i32> integer which is equal to 1
+    verifies if an entry with the given key exists in the storage or 0 if the
+    key storage does not contain an entry with the given key.
   </itemize>
 
   <subsubsection|<verbatim|ext_get_allocated_storage>>
 
-  Given a byte arrays, it allocates a large enough buffer in memory and
-  retrieves the value stored under the key specified in the array and store
-  it in the allocated buffer, if the entry exists in the storage.
+  Given a byte array, this function allocates a large enough buffer in the
+  memory and retrieves the value stored under the key that is specified in
+  the array. Then, it stores it in the allocated buffer if the entry exists
+  in the storage.
 
   \;
 
@@ -1688,18 +1688,18 @@
 
     <item><verbatim|written_out>: the function stores the length of the
     retrieved value in number of bytes if the enty exists. If the entry does
-    not exists it returns <math|2<rsup|32>-1>.
+    not exist, it returns <math|2<rsup|32>-1>.
 
-    <item><verbatim|result>: A pointer to the buffer which the function
+    <item><verbatim|result>: A pointer to the buffer in which the function
     allocates and stores the value corresponding to the given key if such an
-    entry exists otherwise it is equal to 0.
+    entry exist; otherwise it is equal to 0.
   </itemize>
 
   <subsubsection|<verbatim|ext_get_storage_into>>
 
-  Given a byte arrays, it retrieves the value stored under the key specified
-  in the array and store a specified chunk of it in the provided buffer, if
-  the entry exists in the storage.
+  Given a byte array, this function retrieves the value stored under the key
+  specified in the array and stores a specified chunk of it in the provided
+  buffer, if the entry exists in the storage.
 
   \;
 
@@ -1727,20 +1727,20 @@
     bytes.
 
     <item><verbatim|value_data>: a pointer to the buffer in which the
-    function stores the chunk of the value it retrievs.
+    function stores the chunk of the value it retrieves.
 
     <item><verbatim|value_len>: the (maximum) length of the chunk in bytes
-    the function will read of the value and stores in <verbatim|value_data>
-    buffer.
+    the function will read of the value and will store in the
+    <verbatim|value_data> buffer.
 
     <item><verbatim|value_offset>: the offset of the chunk where the function
-    should starts storing the value in the provided buffer, i.e. the number
-    of bytes the functions should skip from the retrieved value before start
-    storing the data in the <verbatim|value_data> in number of bytes.
+    should start storing the value in the provided buffer, i.e. the number of
+    bytes the functions should skip from the retrieved value before storing
+    the data in the <verbatim|value_data> in number of bytes.
 
-    <item><verbatim|result>: The number bytes the function writes in
+    <item><verbatim|result>: The number of bytes the function writes in
     <verbatim|value_data> if the value exists or <math|2<rsup|32>-1> if the
-    entry does not exists under the specified key.
+    entry does not exist under the specified key.
   </itemize>
 
   <subsubsection|To be Specced>
@@ -1865,9 +1865,9 @@
 
   <subsubsection|<verbatim|ext_ed25519_verify>>
 
-  Given a message signed by ED25519 signature algorithm along side with its
-  signature and the public key which allegedly signed it, it verifies the
-  validity of the signature by the provided public key.
+  Given a message signed by the ED25519 signature algorithm alongside with
+  its signature and the allegedly signer public key, it verifies the validity
+  of the signature by the provided public key.
 
   \;
 
@@ -1897,10 +1897,11 @@
     containing the ED25519 signature corresponding to the message.
 
     <item><verbatim|pubkey_data>: a pointer to the 32 byte buffer containing
-    the public key corresponding the secret key which has signed the message.
+    the public key and corresponding to the secret key which has signed the
+    message.
 
-    <item><verbatim|result>: \ an integer value which is equal to 0
-    indicating the validity of the signature or a nonzero value otherwise.
+    <item><verbatim|result>: \ an integer value equal to 0 indicating the
+    validity of the signature or a nonzero value otherwise.
   </itemize>
 
   <subsubsection|To be Specced>
@@ -2370,7 +2371,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-63>>
 
-      <with|par-left|<quote|2tab>|A.1.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_allocated_storage>
+      <with|par-left|<quote|2tab>|A.1.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_storage_into>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-64>>
 
