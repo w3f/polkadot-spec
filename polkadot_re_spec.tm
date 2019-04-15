@@ -55,7 +55,7 @@
   </definition>
 
   <\definition>
-    <label|def-radix-tree><strong|radix r tree> is a variant of \ a trie in
+    <label|defn-radix-tree><strong|Radix-r tree> is a variant of \ a trie in
     which:
 
     <\itemize>
@@ -549,14 +549,13 @@
     where v and k are byte arrays.
   </definition>
 
+  <subsection|The General Tree Structure>
+
   To authenticate the state of the system, the stored data needs to be
   re-arranged and hashed in a <em|modified Merkle Patricia Tree>, which
   hereafter we refer to as the <em|<strong|Trie>,> in order to compute the
   hash of the whole state storage consistently and efficiently at any given
   time.
-
-  As well, a modification has been made in the storing of the nodes' hash in
-  the Merkle Tree structure to save space on entries storing small entries.
 
   Because the Trie is used to compute the <em|state root>, <math|H<rsub|r>>,
   (see Definition <reference|def-block-header>), which is used to
@@ -565,12 +564,13 @@
   to ensure that the computed Merkle hash, <math|H<rsub|r>>, matches across
   clients.
 
-  <subsection|The General Tree Structure>
-
-  Each key value identifies a unique node in the tree. However, a node in a
-  tree might or might not be associated with a key in the storage. Similar to
-  a radix trie, when traversing the Trie, subsequences of the key, are stored
-  in the nodes on the path to the node associated with the key.
+  The Trie is a <em|radix-16> tree as defined in Definition
+  <reference|defn-radix-tree>. Each key value identifies a unique node in the
+  tree. However, a node in a tree might or might not be associated with a key
+  in the storage. When traversing the Trie to a specific node, its key can be
+  reconstructed by concatinating the subsequences of the key which are stored
+  either explicitly in the nodes on the path or implicitly in their postion
+  as a child of their parent.
 
   To identify the node corresponding to a key value, <math|k>, first we need
   to encode <math|k> in a way consistent with the Trie structure. Because
@@ -606,117 +606,145 @@
   By looking at <math|k<rsub|enc>> as a sequence of nibbles, one can walk the
   radix tree to reach the node identifying the storage value of <math|k>.
 
-  <subsection|Different node types>
+  <subsection|The Trie structure>
 
-  In this subsection, we specify the structure of the nodes in the Trie:
+  In this subsection, we specify the structure of the nodes in the Trie as
+  well as the Trie structure:
 
   <\notation>
     We refer to the <strong|set of the nodes of Polkadot state trie> by
-    <math|\<cal-N\>.>
+    <math|\<cal-N\>.> By <math|N\<in\>\<cal-N\>> to refer to an individual
+    node in the trie.
   </notation>
 
-  The Trie consists of 3 three types of nodes based on how they store the
-  subsequence of shared prefix nibbles:
-
-  <\itemize>
-    <item><strong|Leaf:> It is a childless node that stores the remaining
-    subsequence of <math|KeyEncode<around|(|k|)>> not accounted for in the
-    path to the node, as well as the value associated with that key.\ 
-
-    <item><strong|Extension:> It stores the subsequence of
-    KeyEncode(<math|k>) of a size larger than 1 (i.e. 4 bits), which is at
-    least shared with two or more keys in the Trie. It always has one child.
-    It does not store a value.
-
-    <item><strong|Branch:> It has up to 16 children. It stores no key. It
-    accounts for one nibble of the key corresponding to the path passing
-    through each of its children. It optionally stores a value of the key
-    corresponding to the path traversed to the node.
-  </itemize>
-
-  Accordingly, we define:
-
   <\definition>
-    <label|defn-nodetype>We define <strong|<math|NodeType>> function to be
+    <label|defn-node-key>Each Node in the Trie is identified with a unique
+    key <math|k<rsub|N>> such that:
+
+    <\itemize-minus>
+      <item>if Node <math|N> correspond to an entry in the State Storage then
+      the it would the entry stored under key <math|k<rsub|N>>.
+
+      <item><math|k<rsub|N>> is the shared prefix of the key of all
+      descendent of <math|N> in the Trie.
+    </itemize-minus>
+
+    <math|k<rsub|N>> is divided into an <strong|aggregated prefix key>,
+    <strong|<math|pk<rsub|N><rsup|Agr>>>, aggregated by Algorithm
+    <reference|algo-aggregate-partial-key> and a <strong|partial key>,
+    <strong|<math|pk<rsub|N>>> of length <math|0\<leqslant\>l<rsub|pk<rsub|N>>\<leqslant\>65535>
+    such that:
 
     <\equation*>
-      <tabular|<tformat|<table|<row|<cell|NodeType>|<cell|:>|<cell|\<cal-N\>>|<cell|\<rightarrow\>>|<cell|<around*|{|Leaf,Extension,Branch|}>>>|<row|<cell|>|<cell|>|<cell|N>|<cell|\<mapsto\>>|<cell|The
-      type of node N>>>>>
+      pk<rsub|N>\<assign\><around|(|k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
+    </equation*>
+
+    where <math|pk<rsub|N>> is a suffix subsequence of <math|k<rsub|N>> and
+    we have:
+
+    <\equation*>
+      KeyEncode<around|(|k<rsub|N>|)>=pk<rsub|N><rsup|Agr>\|pk<rsub|N>=<around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|i-1>>,k<rsub|enc<rsub|i>>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
     </equation*>
   </definition>
 
+  Accordingly we enforce the radix-16 tree optimization structure:
+
   <\definition>
-    The <strong|partial key> of node N of length <math|j\<leqslant\>380> to
-    be\ 
+    <label|defn-nodetype>The State Trie is a radix-16 tree. As such, for any
+    <math|N\<in\>\<cal-N\>> with key <math|k<rsub|N>>, at least one of the
+    following statements holds:
+
+    <\itemize-minus>
+      <item><math|<around*|(|k<rsub|N>,V|)>> corresponds to a existing entry
+      in the State Storage.
+
+      <item>N has more than one child.
+    </itemize-minus>
+
+    A <strong|branch> node is a node which has one child or more. A branch
+    node can have at most 16 children. A <strong|leaf> node is a childless
+    node.
+
+    Accordingly, We define <strong|<math|NodeType>> function to be
 
     <\equation*>
-      pk<rsub|N>\<assign\><around|(|k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|i+j>>|)>
+      <tabular|<tformat|<table|<row|<cell|NodeType>|<cell|:>|<cell|\<cal-N\>>|<cell|\<rightarrow\>>|<cell|<around*|{|Leaf,Branch|}>>>|<row|<cell|>|<cell|>|<cell|N>|<cell|\<mapsto\>>|<cell|
+      <around*|{|<tabular|<tformat|<table|<row|<cell|Branch >|<cell|N
+      <text|has a child>>>|<row|<cell|Leaf>|<cell|N <text|is
+      childless>>>>>>|\<nobracket\>>>>>>>
     </equation*>
-
-    a subsequence of a key <math|k>
-
-    <\equation*>
-      KeyEncode<around|(|k|)>=<around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|i-1>>,k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|2*n>>|)>
-    </equation*>
-
-    corresponding to a key-value paired <math|<around*|(|k,v|)>> in the State
-    storage such that <math|pk<rsub|N>> is stored in <math|N>.
   </definition>
-
-  Consequently, for an extension node <math|j\<geqslant\>2> and for a branch
-  node <math|j=0>.\ 
-
-  <subsection|The Merkle proof><label|sect-merkl-proof>
-
-  To prove the consistency of the state storage across the network and its
-  modifications efficiently, the Merkle hash of the storage trie needs to be
-  computed rigorously.
-
-  The Merkle hash of the trie is computed recursively. As such, the hash
-  value of each node depends on the hash value of all its children and also
-  on its value. Therefore, it suffices to define how to compute the hash
-  value of a typical node as a function of the hash value of its children and
-  its own value.
 
   \;
 
   <\definition>
-    <label|def-node-prefix>For a trie node N, <strong|Node Prefix >function
-    is a value specifying the node type as follows:
+    <label|defn-node-value>A node <math|N\<in\>\<cal-N\>> stores the
+    <strong|node value>, <strong|<math|v<rsub|N>>>, which consists of the
+    following concatinated data:
 
     <\equation*>
-      NodePrefix<around|(|N|)>\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|1>|<cell|>|<cell|N
-      <text| is a leaf node>>>|<row|<cell|128>|<cell|>|<cell|N <text| is an
-      extension node>>>|<row|<cell|254>|<cell|>|<cell|N<text| is a branch
-      node without value>>>|<row|<cell|255>|<cell|>|<cell|N<text| is a branch
-      node with value>>>>>>|\<nobracket\>>
+      v<rsub|N>\<assign\><tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|1|1|1|-1|cell-lborder|1ln>|<cwith|1|1|1|-1|cell-rborder|1ln>|<table|<row|<cell|Node
+      Header>|<cell|Enc<rsub|nb><around*|(|pk<rsub|N>|)>>|<cell|Node
+      Subvalue>>>>>
     </equation*>
+
+    where Node Header, <math|pk<rsub|N>>, <math|Enc<rsub|nb>> and Node Merkle
+    Value are defined in Definitions <reference|defn-node-header>,<reference|defn-node-key>,
+    <reference|defn-nibble-encoding> and <reference|defn-merkle-value>.
   </definition>
 
   <\definition>
-    For a given node <math|N>, with partial key of <math|pk<rsub|N>> and
-    Value <math|v>, the <strong|encoded representation> of <math|N>, formally
-    referred to as <math|Enc<rsub|Node><around|(|N|)>> is determined as
-    follows, in case which:
+    <label|defn-node-header>The <strong|node header> of node <math|N>,
+    <math|Head<rsub|N>>, consists of l \<gtr\> 1 bytes
+
+    \;
+
+    <\equation*>
+      <tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|1|1|1|-1|cell-lborder|1ln>|<cwith|1|1|1|-1|cell-rborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-lborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-lborder|0ln>|<cwith|2|2|1|1|cell-rborder|0ln>|<cwith|2|2|2|2|cell-rborder|1ln>|<cwith|2|2|1|1|cell-halign|c>|<cwith|2|2|2|2|cell-halign|c>|<table|<row|<cell|Node
+      Type>|<cell|pk length>>|<row|<cell|Head<rsub|N,1><rsup|6-7><rsup|><rsub|>>|<cell|Head<rsub|N,1><rsup|0-5><rsup|><rsub|>>>>>>
+      <block|<tformat|<cwith|2|2|1|1|cell-halign|c>|<table|<row|<cell|pk
+      length extra byte 1>>|<row|<cell|Head<rsub|N,2><rsub|>>>>>>
+      <block|<tformat|<cwith|2|2|1|1|cell-halign|c>|<table|<row|<cell|pk key
+      length extra byte 2>>|<row|<cell|\<ldots\>.>>>>>\<ldots\><block|<tformat|<cwith|2|2|1|1|cell-halign|c>|<table|<row|<cell|pk
+      length extra byte l>>|<row|<cell|Head<rsub|N,l+1><rsup|><rsub|>>>>>>
+    </equation*>
+
+    \;
+
+    In which <math|Head<rsub|N,1><rsup|6-7><rsup|><rsub|>>, the two most
+    significant bit of the first byte of <math|Head<rsub|N>> are determined
+    as follows:
+
+    <\equation*>
+      Head<rsub|N,1><rsup|6-7><rsup|><rsub|>\<assign\><around*|{|<tabular|<tformat|<table|<row|<cell|00>|<cell|Special
+      case>>|<row|<cell|01>|<cell|Leaf Node>>|<row|<cell|10>|<cell|Branch
+      Node with k<rsub|N>\<nin\>\<cal-K\>>>|<row|<cell|11>|<cell|Branch Node
+      with k<rsub|N>\<in\>\<cal-K\>>>>>>|\<nobracket\>>
+    </equation*>
+
+    and <math|Head<rsub|N,1><rsup|0-5><rsup|><rsub|>>, the 6 least
+    significant bits of the first byte of <math|Head<rsub|N>> is defined to
+    be:
+
+    <\equation*>
+      Head<rsub|N,1><rsup|0-5><rsup|><rsub|>\<assign\><around*|{|<tabular|<tformat|<cwith|1|1|2|2|cell-valign|b>|<table|<row|<cell|l<rsub|pk<rsub|N>>>|<cell|l<rsub|pk<rsub|N>>\<less\>63>>|<row|<cell|63>|<cell|l<rsub|pk<rsub|N>>\<geqslant\>63>>>>>|\<nobracket\>>
+    </equation*>
+
+    <math|Head<rsub|N,2>,\<ldots\>,Head<rsub|N,l>> bytes are determined by
+    Algorithm <reference|algo-pk-length>.
+  </definition>
+
+  <\definition>
+    For a given node <math|N>, the <strong|subvalue> of <math|N>, formally
+    referred to as <math|sv<rsub|N>> is determined as follows, in case which:
 
     <\itemize>
-      <item><math|N> is a leaf node:
-
       <\equation*>
-        Enc<rsub|Node><around|(|N|)>\<assign\>Enc<rsub|len><around|(|N|)><around|\|||\|>*Enc<rsub|HE><around|(|pk<rsub|N>|)><around|\|||\|>*Enc<rsub|SC><around|(|v|)>
+        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around|(|v|)>>|<cell|<text|NodeType(N)
+        = Leaf>>>|<row|<cell|\<nobracket\>Enc<rsub|LE><around*|(|*ChildrenBitmap<around|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>Enc<rsub|SC><around|(|v|)>*>|<cell|<text|NodeType(N)=branch>>>>>>|\<nobracket\>>>>>>>
       </equation*>
 
-      <item>N is an extension node:
-
-      <\equation*>
-        Enc<rsub|Node><around*|(|N|)>:=Enc<rsub|len><around*|(|<around*|\<nobracket\>|N|)>|\<\|\|\>>Enc<rsub|HE><around|(|pk<rsub|N>|)><around*|\|||\|>Enc<rsub|SC><around*|(|H<around*|(|C|)>|)>
-      </equation*>
-
-      <item>N is a branch node:
-
-      <\equation*>
-        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<text|Enc<rsub|Node>(N)>\<assign\>>>|<row|<cell|\<nobracket\>NodePrefix<around|(|N|)><around|\|||\|>Enc<rsub|LE><around*|(|*ChildrenBitmap<around|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around|(|v|)><around|\|||\|>*>>|<row|<cell|Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|n>>|)>|)>>>>>>
-      </equation*>
+      \;
     </itemize>
   </definition>
 
@@ -725,16 +753,14 @@
   \;
 
   <\itemize>
-    <item><math|Enc<rsub|len>,Enc<rsub|HE>> and <math|Enc<rsub|SC>> are
-    encdoings defined in Section <reference|sect-encoding>.
+    <item><math|Enc<rsub|SC>> defined in Definition
+    <reference|def-scale-codec>.
 
     <item><math|Enc<rsub|LE>> is the little-endian encoding defined in
     Definition <reference|defn-little-endian>.
 
-    <item><math|C> is the unique child of the extension node <math|N>.
-
     <item><math|ChildrenBitmap(N)\<assign\><around*|(|b<rsub|15>b<rsub|14>\<ldots\>,b<rsub|1>,b<rsub|0>|)><rsub|2>>
-    where bit <math|b<rsub|i>=1> if <math|N> has a child with partial key
+    where bit <math|b<rsub|i>:=1> if <math|N> has a child with partial key
     <math|i>.
 
     <item><math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
@@ -742,12 +768,29 @@
     <math|N>.
   </itemize>
 
+  <subsection|The Merkle proof><label|sect-merkl-proof>
+
+  To prove the consistency of the state storage across the network and its
+  modifications efficiently, the Trie implements a Merkle tree structure for
+  which the hash value corresponding to each node needs to be computed
+  rigorously.
+
+  The Merkle hash of a node is computed recursively. As such, the hash value
+  of each node depends on the hash value of all its children and also on the
+  data it stores. Therefore, it suffices to define how to compute the hash
+  value of a typical node as a function of the hash value of its children and
+  its own value.
+
+  The Trie deviate from a traditional Merkle tree where node value,
+  <math|v<rsub|N>> (see Definition <reference|defn-node-value>) is presented
+  instead of its hash if it occupies less space than its hash.
+
   <\definition>
     For a given node <math|N>, the <strong|Merkle value> of <math|N>, denoted
     by <math|H<around|(|N|)>> is defined as follows:
 
     <\equation*>
-      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\><big|cup><rsub|i=0<rsup|\<nosymbol\>>><rsup|32>\<bbb-B\><rsub|i>>|<cell|>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Enc<rsub|Node><around|(|N|)>>|<cell|<around|\<\|\|\>|Enc<rsub|Node><around|(|N|)>|\<\|\|\>>\<less\>32>|<cell|>>|<row|<cell|Hash<around|(|Enc<rsub|Node><around|(|N|)>|)>>|<cell|<around|\<\|\|\>|Enc<rsub|Node><around|(|N|)>|\<\|\|\>>\<geqslant\>32>|<cell|>>>>>|\<nobracket\>>>|<cell|>>>>>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<bbb-B\><rsub|32>>|<cell|>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Pad<rsub|N><around*|(|v<rsub|N>|)>>|<cell|<around|\<\|\|\>|Enc<rsub|Node><around|(|N|)>|\<\|\|\>>\<less\>32>|<cell|>>|<row|<cell|Blake2s<around|(|v<rsub|N>|)>>|<cell|<around|\<\|\|\>|Enc<rsub|Node><around|(|N|)>|\<\|\|\>>\<geqslant\>32>|<cell|>>>>>|\<nobracket\>>>|<cell|>>>>>
     </equation*>
   </definition>
 
@@ -2064,6 +2107,9 @@
     <associate|auto-78|<tuple|A.5|?>>
     <associate|auto-79|<tuple|A.5|?>>
     <associate|auto-8|<tuple|3.1|3>>
+    <associate|auto-80|<tuple|A.5|?>>
+    <associate|auto-81|<tuple|A.5|?>>
+    <associate|auto-82|<tuple|A.5|?>>
     <associate|auto-9|<tuple|3.2|4>>
     <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|20>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|20>>
@@ -2072,22 +2118,28 @@
     <associate|def-block-header|<tuple|10|2>>
     <associate|def-block-header-hash|<tuple|11|2>>
     <associate|def-extrinsic-network-message|<tuple|12|5>>
-    <associate|def-grandpa-justification|<tuple|40|12>>
-    <associate|def-hpe|<tuple|44|15>>
-    <associate|def-key-len-enc|<tuple|45|15>>
-    <associate|def-node-prefix|<tuple|18|8>>
+    <associate|def-grandpa-justification|<tuple|41|12>>
+    <associate|def-hpe|<tuple|45|15>>
+    <associate|def-key-len-enc|<tuple|46|15>>
+    <associate|def-node-prefix|<tuple|21|8>>
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-radix-tree|<tuple|3|1>>
-    <associate|def-scale-codec|<tuple|42|14>>
+    <associate|def-scale-codec|<tuple|43|14>>
     <associate|def-state-read-write|<tuple|13|6>>
-    <associate|def-vote|<tuple|31|10>>
-    <associate|defn-account-key|<tuple|21|?>>
-    <associate|defn-bigkeysize|<tuple|46|15>>
+    <associate|def-vote|<tuple|32|10>>
+    <associate|defn|<tuple|16|?>>
+    <associate|defn-account-key|<tuple|22|?>>
+    <associate|defn-bigkeysize|<tuple|47|15>>
     <associate|defn-bit-rep|<tuple|6|1>>
-    <associate|defn-block-tree|<tuple|22|9>>
+    <associate|defn-block-tree|<tuple|23|9>>
     <associate|defn-little-endian|<tuple|7|1>>
-    <associate|defn-nodetype|<tuple|16|7>>
+    <associate|defn-node-header|<tuple|19|?>>
+    <associate|defn-node-key|<tuple|16|?>>
+    <associate|defn-node-value|<tuple|18|?>>
+    <associate|defn-nodetype|<tuple|17|7>>
+    <associate|defn-radix-tree|<tuple|3|?>>
     <associate|key-encode-in-trie|<tuple|1|7>>
+    <associate|node-value|<tuple|18|?>>
     <associate|sect-abi-encoding|<tuple|3.2.1|4>>
     <associate|sect-encoding|<tuple|9|14>>
     <associate|sect-entries-into-runtime|<tuple|3|3>>
@@ -2359,7 +2411,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-60>>
 
-      <with|par-left|<quote|2tab>|A.1.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_storage>
+      <with|par-left|<quote|2tab>|A.1.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-61>>
 
