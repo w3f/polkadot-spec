@@ -631,7 +631,7 @@
 
     <math|k<rsub|N>> is divided into an <strong|aggregated prefix key>,
     <strong|<math|pk<rsub|N><rsup|Agr>>>, aggregated by Algorithm
-    <reference|algo-aggregate-partial-key> and a <strong|partial key>,
+    <reference|algo-aggregate-key> and a <strong|partial key>,
     <strong|<math|pk<rsub|N>>> of length <math|0\<leqslant\>l<rsub|pk<rsub|N>>\<leqslant\>65535>
     such that:
 
@@ -646,6 +646,41 @@
       KeyEncode<around|(|k<rsub|N>|)>=pk<rsub|N><rsup|Agr>\|pk<rsub|N>=<around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|i-1>>,k<rsub|enc<rsub|i>>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
     </equation*>
   </definition>
+
+  <\algorithm>
+    <label|algo-aggregate-key><name|Aggregate-Key><math|<around*|(|P<rsub|N>:=<around*|(|TrieRoot=N<rsub|1>,\<ldots\>,N<rsub|j>=N|)>|)>>
+  <|algorithm>
+    <\algorithmic>
+      <\state>
+        <math|pk<rsup|Agr><rsub|N>\<leftarrow\>\<phi\>>
+      </state>
+
+      <\state>
+        <math|i\<leftarrow\>1>
+      </state>
+
+      <\state>
+        <\WHILE>
+          <math|<around*|(|N<rsub|i>\<neq\>N|)>>
+        </WHILE>
+      </state>
+
+      <\state>
+        <math|pk<rsup|Agr><rsub|N>\<leftarrow\>pk<rsup|Agr><rsub|N><around*|\|||\|>pk<rsub|N>
+        >
+      </state>
+
+      <\state>
+        <math|pk<rsup|Agr><rsub|N>\<leftarrow\>pk<rsup|Agr><rsub|N><around*|\|||\|>Index<rsub|N<rsub|i>><around*|(|N<rsub|i+1>|)>><END>
+      </state>
+
+      <\state>
+        <\RETURN>
+          <math|pk<rsup|Agr><rsub|N>>
+        </RETURN>
+      </state>
+    </algorithmic>
+  </algorithm>
 
   Accordingly we enforce the radix-16 tree optimization structure:
 
@@ -664,18 +699,7 @@
     A <strong|branch> node is a node which has one child or more. A branch
     node can have at most 16 children. A <strong|leaf> node is a childless
     node.
-
-    Accordingly, We define <strong|<math|NodeType>> function to be
-
-    <\equation*>
-      <tabular|<tformat|<table|<row|<cell|NodeType>|<cell|:>|<cell|\<cal-N\>>|<cell|\<rightarrow\>>|<cell|<around*|{|Leaf,Branch|}>>>|<row|<cell|>|<cell|>|<cell|N>|<cell|\<mapsto\>>|<cell|
-      <around*|{|<tabular|<tformat|<table|<row|<cell|Branch >|<cell|N
-      <text|has a child>>>|<row|<cell|Leaf>|<cell|N <text|is
-      childless>>>>>>|\<nobracket\>>>>>>>
-    </equation*>
   </definition>
-
-  \;
 
   <\definition>
     <label|defn-node-value>A node <math|N\<in\>\<cal-N\>> stores the
@@ -683,14 +707,20 @@
     following concatinated data:
 
     <\equation*>
-      v<rsub|N>\<assign\><tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|1|1|1|-1|cell-lborder|1ln>|<cwith|1|1|1|-1|cell-rborder|1ln>|<table|<row|<cell|Node
-      Header>|<cell|Enc<rsub|nb><around*|(|pk<rsub|N>|)>>|<cell|Node
-      Subvalue>>>>>
+      <tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|1|1|1|-1|cell-lborder|1ln>|<cwith|1|1|1|-1|cell-rborder|1ln>|<table|<row|<cell|Node
+      Header>|<cell|Partial key>|<cell|Node Subvalue>>>>>
     </equation*>
 
-    where Node Header, <math|pk<rsub|N>>, <math|Enc<rsub|nb>> and Node Merkle
-    Value are defined in Definitions <reference|defn-node-header>,<reference|defn-node-key>,
-    <reference|defn-nibble-encoding> and <reference|defn-merkle-value>.
+    Formally noted as:
+
+    <\equation*>
+      v<rsub|N>\<assign\>Head<rsub|N><around*|\|||\|>Enc<rsub|HE><around*|(|pk<rsub|N>|)><around*|\|||\|>sv<rsub|N>
+    </equation*>
+
+    where <math|Head<rsub|N>>, <math|pk<rsub|N>>, <math|Enc<rsub|nibbles>>
+    and <math|sv<rsub|N>> are defined in Definitions
+    <reference|defn-node-header>,<reference|defn-node-key>,
+    <reference|defn-he> and <reference|defn-node-subvalue>, respectively.
   </definition>
 
   <\definition>
@@ -727,21 +757,110 @@
     be:
 
     <\equation*>
-      Head<rsub|N,1><rsup|0-5><rsup|><rsub|>\<assign\><around*|{|<tabular|<tformat|<cwith|1|1|2|2|cell-valign|b>|<table|<row|<cell|l<rsub|pk<rsub|N>>>|<cell|l<rsub|pk<rsub|N>>\<less\>63>>|<row|<cell|63>|<cell|l<rsub|pk<rsub|N>>\<geqslant\>63>>>>>|\<nobracket\>>
+      Head<rsub|N,1><rsup|0-5><rsup|><rsub|>\<assign\><around*|{|<tabular|<tformat|<cwith|1|1|2|2|cell-valign|b>|<table|<row|<cell|<around*|\<\|\|\>|pk<rsub|N>|\<\|\|\>><rsub|nib>>|<cell|<around*|\<\|\|\>|pk<rsub|N>|\<\|\|\>><rsub|nib>\<less\>63>>|<row|<cell|63>|<cell|<around*|\<\|\|\>|pk<rsub|N>|\<\|\|\>><rsub|nib>\<geqslant\>63>>>>>|\<nobracket\>>
     </equation*>
 
+    In which <strong|<math|<around*|\<\|\|\>|pk<rsub|N>|\<\|\|\>><rsub|nib>>>
+    is the length of <math|pk<rsub|N> > in number nibbles.
     <math|Head<rsub|N,2>,\<ldots\>,Head<rsub|N,l>> bytes are determined by
     Algorithm <reference|algo-pk-length>.
   </definition>
 
+  <\algorithm>
+    <label|algo-pk-length><name|Partial-Key-Length-Encoding<math|<around*|(|Head<rsub|N,1><rsup|6-7><rsup|><rsub|>,pk<rsub|N>|)>>>
+  <|algorithm>
+    <\algorithmic>
+      <\state>
+        <\IF>
+          <math|<around*|\<\|\|\>|pk<rsub|N>|\<\|\|\>><rsub|nib>\<geqslant\>2<rsup|16>>
+        </IF>
+      </state>
+
+      <\state>
+        <\RETURN>
+          Error<END>
+        </RETURN>
+      </state>
+
+      <\state>
+        <math|Head<rsub|N,1>\<leftarrow\>64\<times\>Head<rsub|N,1><rsup|6-7><rsup|><rsub|>>
+      </state>
+
+      <\state>
+        <\IF>
+          <math|<around*|\<\|\|\>|pk<rsub|N>|\<\|\|\>><rsub|nib>\<less\>63>
+        </IF>
+      </state>
+
+      <\state>
+        <math|Head<rsub|N,1>\<leftarrow\>Head<rsub|N,1>+pk<rsub|N>>
+      </state>
+
+      <\state>
+        <\RETURN>
+          <math|Head<rsub|N><END>>
+        </RETURN>
+      </state>
+
+      <\state>
+        <math|Head<rsub|N,1>\<leftarrow\>Head<rsub|N,1>+63>
+      </state>
+
+      <\state>
+        <math|l\<leftarrow\><around*|\<\|\|\>|pk<rsub|N>|\<\|\|\>><rsub|nib>-62>
+      </state>
+
+      <\state>
+        <math|i\<leftarrow\>2>
+      </state>
+
+      <\state>
+        <\WHILE>
+          <math|<around*|(|l\<gtr\>255|)>>
+        </WHILE>
+      </state>
+
+      <\state>
+        <math|Head<rsub|N,i>\<leftarrow\>255>
+      </state>
+
+      <\state>
+        <math|l\<leftarrow\>l-254>
+      </state>
+
+      <\state>
+        <math|i\<leftarrow\>i+1<END>>
+      </state>
+
+      <\state>
+        <math|Head<rsub|N>,i\<leftarrow\>l>
+      </state>
+    </algorithmic>
+  </algorithm>
+
+  <subsection|The Merkle proof><label|sect-merkl-proof>
+
+  To prove the consistency of the state storage across the network and its
+  modifications both efficiently and effectively, the Trie implements a
+  Merkle tree structure. The hash value corresponding to each node needs to
+  be computed rigorously, in order to make inter-implementation data
+  integrity possible.
+
+  The Merkle value of each node should depend on the Merkle value of all its
+  children as well as on its corresponding data in the state Storage. This
+  recursive dependancy is encompassed into the subvalue part of the node
+  value which recursively depends on the Merkle value of its children.
+
   <\definition>
-    For a given node <math|N>, the <strong|subvalue> of <math|N>, formally
-    referred to as <math|sv<rsub|N>> is determined as follows, in case which:
+    <label|defn-node-subvalue>For a given node <math|N>, the
+    <strong|subvalue> of <math|N>, formally referred to as <math|sv<rsub|N>>
+    is determined as follows, in case which:
 
     <\itemize>
       <\equation*>
-        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around|(|v|)>>|<cell|<text|NodeType(N)
-        = Leaf>>>|<row|<cell|\<nobracket\>Enc<rsub|LE><around*|(|*ChildrenBitmap<around|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>Enc<rsub|SC><around|(|v|)>*>|<cell|<text|NodeType(N)=branch>>>>>>|\<nobracket\>>>>>>>
+        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around|(|v|)>>|<cell|<text|N
+        is a leaf node>>>|<row|<cell|\<nobracket\>Enc<rsub|LE><around*|(|*ChildrenBitmap<around|(|N|)>|)>\<\|\|\>H<around|(|N<rsub|C<rsub|1>>|)>*\<ldots\>*<around*|\<nobracket\>|H<around|(|N<rsub|C<rsub|n>>|\<nobracket\>>|)><around*|\|||\|>Enc<rsub|SC><around|(|v|)>*>|<cell|<text|N
+        is a branch node>>>>>>|\<nobracket\>>>>>>>
       </equation*>
 
       \;
@@ -749,8 +868,6 @@
   </definition>
 
   Where
-
-  \;
 
   <\itemize>
     <item><math|Enc<rsub|SC>> defined in Definition
@@ -768,19 +885,6 @@
     <math|N>.
   </itemize>
 
-  <subsection|The Merkle proof><label|sect-merkl-proof>
-
-  To prove the consistency of the state storage across the network and its
-  modifications efficiently, the Trie implements a Merkle tree structure for
-  which the hash value corresponding to each node needs to be computed
-  rigorously.
-
-  The Merkle hash of a node is computed recursively. As such, the hash value
-  of each node depends on the hash value of all its children and also on the
-  data it stores. Therefore, it suffices to define how to compute the hash
-  value of a typical node as a function of the hash value of its children and
-  its own value.
-
   The Trie deviate from a traditional Merkle tree where node value,
   <math|v<rsub|N>> (see Definition <reference|defn-node-value>) is presented
   instead of its hash if it occupies less space than its hash.
@@ -790,8 +894,11 @@
     by <math|H<around|(|N|)>> is defined as follows:
 
     <\equation*>
-      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<bbb-B\><rsub|32>>|<cell|>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Pad<rsub|N><around*|(|v<rsub|N>|)>>|<cell|<around|\<\|\|\>|Enc<rsub|Node><around|(|N|)>|\<\|\|\>>\<less\>32>|<cell|>>|<row|<cell|Blake2s<around|(|v<rsub|N>|)>>|<cell|<around|\<\|\|\>|Enc<rsub|Node><around|(|N|)>|\<\|\|\>>\<geqslant\>32>|<cell|>>>>>|\<nobracket\>>>|<cell|>>>>>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<bbb-B\><rsub|32>>|<cell|>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|v<rsub|N><around*|\|||\|>0<rsub|B<rsub|32-<around*|\<\|\|\>|v<rsub|N>|\<\|\|\>>>>>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<less\>32>|<cell|>>|<row|<cell|Blake2s<around|(|v<rsub|N>|)>>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<geqslant\>32>|<cell|>>>>>|\<nobracket\>>>|<cell|>>>>>
     </equation*>
+
+    Where <math|0<rsub|32-<around*|\<\|\|\>|v<rsub|N>|\<\|\|\>>>> an all zero
+    byte array of length <math|32-<around*|\|||\|>v<rsub|N><around*|\|||\|>>.
   </definition>
 
   <section|Transactions>
@@ -1472,36 +1579,10 @@
   sequences of 4-bits nibbles into byte arrays canonically:
 
   <\definition>
-    <label|def-hpe>Suppose that <math|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>
+    <label|defn-he>Suppose that <math|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>
     is a sequence of nibbles, then
 
-    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|Enc<rsub|HE><around|(|PK|)>\<assign\>>>>|<row|<cell|<math|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Nibbles<rsub|4>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\>>>|<row|<cell|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>|<cell|\<mapsto\>>|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|<around|(|0,k<rsub|1>+16*k<rsub|2>,\<ldots\>,k<rsub|2*i-1>+16*k<rsub|2*i>|)>>|<cell|n=2*i>>|<row|<cell|<around|(|k<rsub|1>,k<rsub|2>+16*k<rsub|3>,\<ldots\>,k<rsub|2*i>+16*k<rsub|2*i+1>|)>>|<cell|n=2*i+1>>>>>>>>>>|\<nobracket\>>>>>>>|\<nobracket\>>>>>>>>
-  </definition>
-
-  <subsection|Partial Key Encoding>
-
-  <\definition>
-    <label|def-key-len-enc>Let <math|N> be a leaf or an extension node in the
-    storage state trie with Partial Key <math|PK<rsub|N>>. We define the
-    <strong|Partial key length encoding> function, formally referred to as
-    <math|Enc<rsub|len><around|(|N|)>,> as follows:
-
-    <\equation*>
-      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|Enc<rsub|len><around|(|N|)>>|<cell|\<assign\>>>|<row|<cell|NodePrefix<around|(|N|)>>|<cell|+>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<around|(|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>|)>>|<cell|>|<cell|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>\<less\>BigKeySize<around*|(|NodeType<around*|(|N|)>|)>>>|<row|<cell|<around|(|127|)><around|\|||\|><around|(|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>-BigKeySize<around*|(|NodeType<around*|(|N|)>|)>|)>>|<cell|>|<cell|<around|\<\|\|\>|PK<rsub|N>|\<\|\|\>>\<geqslant\>BigKeySize<around*|(|NodeType<around*|(|N|)>|)>>>>>>|\<nobracket\>>>|<cell|>>>>>
-    </equation*>
-
-    where <math|NodePrefix>, <math|NodeType> and <math|BigKeySize> functions
-    are defined in Definitions <reference|def-node-prefix>,<reference|defn-nodetype>
-    and <reference|defn-bigkeysize> respectively.
-  </definition>
-
-  <\definition>
-    <label|defn-bigkeysize>We define <math|BigKeySize> function for each node
-    type of the Trie as follows: \ 
-
-    <\equation*>
-      <tabular|<tformat|<table|<row|<cell|BigKeySize<around*|(|T|)>>|<cell|:>|<cell|<around*|{|Leaf,Extension|}>>|<cell|\<rightarrow\>>|<cell|\<bbb-N\>>>|<row|<cell|>|<cell|>|<cell|T>|<cell|\<mapsto\>>|<cell|<around*|{|<tabular|<tformat|<table|<row|<cell|126>|<cell|T=Leaf>>|<row|<cell|125>|<cell|T=Extension>>>>>|\<nobracket\>>>>>>>
-    </equation*>
+    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|Enc<rsub|HE><around|(|PK|)>\<assign\>>>>|<row|<cell|<math|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Nibbles<rsub|4>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\>>>|<row|<cell|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>|<cell|\<mapsto\>>|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|<around|(|k<rsub|1>+16*k<rsub|2>,\<ldots\>,k<rsub|2*i-1>+16*k<rsub|2*i>|)>>|<cell|n=2*i>>|<row|<cell|<around|(|k<rsub|1>,k<rsub|2>+16*k<rsub|3>,\<ldots\>,k<rsub|2*i-1>+16*k<rsub|2*i>,k<rsub|2i+1>|)>>|<cell|n=2*i+1>>>>>>>>>>|\<nobracket\>>>>>>>|\<nobracket\>>>>>>>>
   </definition>
 
   <section|Genesis Block Specification><label|sect-genisis-block>
@@ -2025,12 +2106,14 @@
 
 <\references>
   <\collection>
-    <associate|alg-grandpa-best-candidate|<tuple|5|13>>
-    <associate|alg-grandpa-round|<tuple|4|13>>
-    <associate|alg-join-leave-grandpa|<tuple|3|12>>
-    <associate|algo-block-production|<tuple|2|?>>
+    <associate|alg-grandpa-best-candidate|<tuple|7|14>>
+    <associate|alg-grandpa-round|<tuple|6|14>>
+    <associate|alg-join-leave-grandpa|<tuple|5|14>>
+    <associate|algo-aggregate-key|<tuple|2|?>>
+    <associate|algo-block-production|<tuple|4|11>>
+    <associate|algo-pk-length|<tuple|3|?>>
     <associate|auto-1|<tuple|1|1>>
-    <associate|auto-10|<tuple|3.2.1|4>>
+    <associate|auto-10|<tuple|3.2.1|3>>
     <associate|auto-11|<tuple|3.2.2|4>>
     <associate|auto-12|<tuple|3.2.3|4>>
     <associate|auto-13|<tuple|3.2.4|4>>
@@ -2045,116 +2128,112 @@
     <associate|auto-21|<tuple|3.3.4|5>>
     <associate|auto-22|<tuple|3.3.5|5>>
     <associate|auto-23|<tuple|4|5>>
-    <associate|auto-24|<tuple|4.1|6>>
+    <associate|auto-24|<tuple|4.1|5>>
     <associate|auto-25|<tuple|4.2|6>>
     <associate|auto-26|<tuple|4.3|6>>
-    <associate|auto-27|<tuple|5|7>>
-    <associate|auto-28|<tuple|5.1|7>>
-    <associate|auto-29|<tuple|5.2|8>>
+    <associate|auto-27|<tuple|5|6>>
+    <associate|auto-28|<tuple|5.1|6>>
+    <associate|auto-29|<tuple|5.2|7>>
     <associate|auto-3|<tuple|2.1|2>>
-    <associate|auto-30|<tuple|5.3|9>>
+    <associate|auto-30|<tuple|5.3|7>>
     <associate|auto-31|<tuple|5.4|9>>
     <associate|auto-32|<tuple|6|9>>
     <associate|auto-33|<tuple|6.1|9>>
-    <associate|auto-34|<tuple|7|10>>
+    <associate|auto-34|<tuple|7|9>>
     <associate|auto-35|<tuple|7.1|10>>
-    <associate|auto-36|<tuple|7.2|12>>
-    <associate|auto-37|<tuple|7.2.1|12>>
-    <associate|auto-38|<tuple|7.2.2|13>>
-    <associate|auto-39|<tuple|7.2.3|14>>
-    <associate|auto-4|<tuple|2.2|3>>
-    <associate|auto-40|<tuple|7.3|14>>
-    <associate|auto-41|<tuple|7.3.1|14>>
-    <associate|auto-42|<tuple|7.3.2|15>>
-    <associate|auto-43|<tuple|7.3.3|15>>
-    <associate|auto-44|<tuple|7.3.4|15>>
+    <associate|auto-36|<tuple|7.2|10>>
+    <associate|auto-37|<tuple|7.2.1|10>>
+    <associate|auto-38|<tuple|7.2.2|10>>
+    <associate|auto-39|<tuple|7.2.3|11>>
+    <associate|auto-4|<tuple|2.2|2>>
+    <associate|auto-40|<tuple|7.3|11>>
+    <associate|auto-41|<tuple|7.3.1|11>>
+    <associate|auto-42|<tuple|7.3.2|13>>
+    <associate|auto-43|<tuple|7.3.3|14>>
+    <associate|auto-44|<tuple|7.3.4|14>>
     <associate|auto-45|<tuple|8|15>>
     <associate|auto-46|<tuple|8.1|15>>
-    <associate|auto-47|<tuple|8.2|16>>
-    <associate|auto-48|<tuple|9|16>>
-    <associate|auto-49|<tuple|9.1|16>>
+    <associate|auto-47|<tuple|8.2|15>>
+    <associate|auto-48|<tuple|9|15>>
+    <associate|auto-49|<tuple|9.1|15>>
     <associate|auto-5|<tuple|2.3|3>>
     <associate|auto-50|<tuple|9.2|16>>
-    <associate|auto-51|<tuple|9.3|17>>
-    <associate|auto-52|<tuple|10|17>>
-    <associate|auto-53|<tuple|11|17>>
-    <associate|auto-54|<tuple|12|17>>
-    <associate|auto-55|<tuple|A|18>>
-    <associate|auto-56|<tuple|A.1|18>>
-    <associate|auto-57|<tuple|A.1.1|18>>
-    <associate|auto-58|<tuple|A.1.2|19>>
-    <associate|auto-59|<tuple|A.1.3|19>>
+    <associate|auto-51|<tuple|10|16>>
+    <associate|auto-52|<tuple|11|17>>
+    <associate|auto-53|<tuple|12|17>>
+    <associate|auto-54|<tuple|A|17>>
+    <associate|auto-55|<tuple|A.1|17>>
+    <associate|auto-56|<tuple|A.1.1|17>>
+    <associate|auto-57|<tuple|A.1.2|17>>
+    <associate|auto-58|<tuple|A.1.3|17>>
+    <associate|auto-59|<tuple|A.1.4|18>>
     <associate|auto-6|<tuple|2.4|3>>
-    <associate|auto-60|<tuple|A.1.4|19>>
-    <associate|auto-61|<tuple|A.1.5|19>>
-    <associate|auto-62|<tuple|A.1.6|19>>
-    <associate|auto-63|<tuple|A.1.7|20>>
-    <associate|auto-64|<tuple|A.1.8|20>>
-    <associate|auto-65|<tuple|A.1.9|20>>
-    <associate|auto-66|<tuple|A.2|20>>
-    <associate|auto-67|<tuple|A.2.1|20>>
-    <associate|auto-68|<tuple|A.2.2|20>>
-    <associate|auto-69|<tuple|A.2.3|20>>
+    <associate|auto-60|<tuple|A.1.5|18>>
+    <associate|auto-61|<tuple|A.1.6|18>>
+    <associate|auto-62|<tuple|A.1.7|19>>
+    <associate|auto-63|<tuple|A.1.8|19>>
+    <associate|auto-64|<tuple|A.1.9|19>>
+    <associate|auto-65|<tuple|A.2|20>>
+    <associate|auto-66|<tuple|A.2.1|20>>
+    <associate|auto-67|<tuple|A.2.2|20>>
+    <associate|auto-68|<tuple|A.2.3|21>>
+    <associate|auto-69|<tuple|A.3|21>>
     <associate|auto-7|<tuple|3|3>>
-    <associate|auto-70|<tuple|A.3|?>>
-    <associate|auto-71|<tuple|A.3.1|?>>
-    <associate|auto-72|<tuple|A.3.2|?>>
-    <associate|auto-73|<tuple|A.3.3|?>>
-    <associate|auto-74|<tuple|A.4|?>>
-    <associate|auto-75|<tuple|A.4.1|?>>
-    <associate|auto-76|<tuple|A.4.2|?>>
-    <associate|auto-77|<tuple|A.4.3|?>>
-    <associate|auto-78|<tuple|A.5|?>>
-    <associate|auto-79|<tuple|A.5|?>>
+    <associate|auto-70|<tuple|A.3.1|21>>
+    <associate|auto-71|<tuple|A.3.2|21>>
+    <associate|auto-72|<tuple|A.3.3|21>>
+    <associate|auto-73|<tuple|A.4|22>>
+    <associate|auto-74|<tuple|A.4.1|22>>
+    <associate|auto-75|<tuple|A.4.2|22>>
+    <associate|auto-76|<tuple|A.4.3|22>>
+    <associate|auto-77|<tuple|A.5|22>>
+    <associate|auto-78|<tuple|A.5|22>>
+    <associate|auto-79|<tuple|A.5|22>>
     <associate|auto-8|<tuple|3.1|3>>
-    <associate|auto-80|<tuple|A.5|?>>
-    <associate|auto-81|<tuple|A.5|?>>
-    <associate|auto-82|<tuple|A.5|?>>
-    <associate|auto-9|<tuple|3.2|4>>
-    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|20>>
-    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|20>>
-    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|20>>
+    <associate|auto-9|<tuple|3.2|3>>
+    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|22>>
+    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|22>>
+    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|22>>
     <associate|block|<tuple|2.1|2>>
     <associate|def-block-header|<tuple|10|2>>
     <associate|def-block-header-hash|<tuple|11|2>>
-    <associate|def-extrinsic-network-message|<tuple|12|5>>
-    <associate|def-grandpa-justification|<tuple|41|12>>
-    <associate|def-hpe|<tuple|45|15>>
-    <associate|def-key-len-enc|<tuple|46|15>>
-    <associate|def-node-prefix|<tuple|21|8>>
+    <associate|def-extrinsic-network-message|<tuple|12|6>>
+    <associate|def-grandpa-justification|<tuple|41|13>>
+    <associate|def-hpe|<tuple|45|16>>
+    <associate|def-key-len-enc|<tuple|46|16>>
     <associate|def-path-graph|<tuple|2|1>>
-    <associate|def-radix-tree|<tuple|3|1>>
-    <associate|def-scale-codec|<tuple|43|14>>
+    <associate|def-scale-codec|<tuple|43|15>>
     <associate|def-state-read-write|<tuple|13|6>>
-    <associate|def-vote|<tuple|32|10>>
-    <associate|defn|<tuple|16|?>>
-    <associate|defn-account-key|<tuple|22|?>>
-    <associate|defn-bigkeysize|<tuple|47|15>>
+    <associate|def-vote|<tuple|32|11>>
+    <associate|defn-account-key|<tuple|22|9>>
+    <associate|defn-bigkeysize|<tuple|47|17>>
     <associate|defn-bit-rep|<tuple|6|1>>
-    <associate|defn-block-tree|<tuple|23|9>>
+    <associate|defn-block-tree|<tuple|23|10>>
+    <associate|defn-he|<tuple|45|?>>
+    <associate|defn-hpe|<tuple|45|?>>
     <associate|defn-little-endian|<tuple|7|1>>
-    <associate|defn-node-header|<tuple|19|?>>
-    <associate|defn-node-key|<tuple|16|?>>
-    <associate|defn-node-value|<tuple|18|?>>
-    <associate|defn-nodetype|<tuple|17|7>>
-    <associate|defn-radix-tree|<tuple|3|?>>
+    <associate|defn-node-header|<tuple|19|8>>
+    <associate|defn-node-key|<tuple|16|7>>
+    <associate|defn-node-subvalue|<tuple|20|?>>
+    <associate|defn-node-value|<tuple|18|8>>
+    <associate|defn-nodetype|<tuple|17|8>>
+    <associate|defn-radix-tree|<tuple|3|1>>
     <associate|key-encode-in-trie|<tuple|1|7>>
-    <associate|node-value|<tuple|18|?>>
-    <associate|sect-abi-encoding|<tuple|3.2.1|4>>
-    <associate|sect-encoding|<tuple|9|14>>
+    <associate|sect-abi-encoding|<tuple|3.2.1|3>>
+    <associate|sect-encoding|<tuple|9|15>>
     <associate|sect-entries-into-runtime|<tuple|3|3>>
-    <associate|sect-finality|<tuple|7.3|10>>
-    <associate|sect-genisis-block|<tuple|10|15>>
-    <associate|sect-merkl-proof|<tuple|5.4|8>>
-    <associate|sect-predef-storage-keys|<tuple|11|15>>
-    <associate|sect-randomness|<tuple|8.1|?>>
-    <associate|sect-runtime-api|<tuple|A|15>>
+    <associate|sect-finality|<tuple|7.3|11>>
+    <associate|sect-genisis-block|<tuple|10|17>>
+    <associate|sect-merkl-proof|<tuple|5.4|9>>
+    <associate|sect-predef-storage-keys|<tuple|11|17>>
+    <associate|sect-randomness|<tuple|8.1|15>>
+    <associate|sect-runtime-api|<tuple|A|17>>
     <associate|sect-runtime-api-auth|<tuple|3.3.2|5>>
     <associate|sect-runtime-entries|<tuple|3.3|4>>
-    <associate|sect-runtime-upgrade|<tuple|12|15>>
-    <associate|sect-scale-codec|<tuple|9.1|14>>
+    <associate|sect-runtime-upgrade|<tuple|12|17>>
+    <associate|sect-scale-codec|<tuple|9.1|15>>
     <associate|sect-validate-transaction|<tuple|3.3.5|5>>
-    <associate|sect-vrf|<tuple|8.2|?>>
+    <associate|sect-vrf|<tuple|8.2|15>>
     <associate|snippet-runtime-enteries|<tuple|1|4>>
   </collection>
 </references>
@@ -2287,7 +2366,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-29>>
 
-      <with|par-left|<quote|1tab>|5.3<space|2spc>Different node types
+      <with|par-left|<quote|1tab>|5.3<space|2spc>The Trie structure
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-30>>
 
