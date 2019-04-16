@@ -4,6 +4,8 @@
 \geometry{letterpaper, paperheight= auto, paperwidth= auto}
 
 %%%%%%%%%% Start TeXmacs macros
+\catcode`\>=\active \def>{
+\fontencoding{T1}\selectfont\symbol{62}\fontencoding{\encodingdefault}}
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
 \newcommand{\nin}{\not\in}
@@ -22,6 +24,7 @@
 \newcommand{\tmtexttt}[1]{{\ttfamily{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
+\newenvironment{itemizeminus}{\begin{itemize} \renewcommand{\labelitemi}{$-$}\renewcommand{\labelitemii}{$-$}\renewcommand{\labelitemiii}{$-$}\renewcommand{\labelitemiv}{$-$}}{\end{itemize}}
 \newenvironment{tmcode}[1][]{\begin{alltt} }{\end{alltt}}
 \newcounter{tmcounter}
 \newcommand{\custombinding}[1]{%
@@ -70,7 +73,7 @@
   {\Large Protocol Specification}
 }
 
-\date{March 19, 2019}
+\date{April 16, 2019}
 
 \maketitle
 
@@ -91,7 +94,7 @@
 \end{definition}
 
 \begin{definition}
-  \label{def-radix-tree}{\tmstrong{radix r tree}} is a variant of \ a trie in
+  \label{defn-radix-tree}{\tmstrong{Radix-r tree}} is a variant of \ a trie in
   which:
   \begin{itemize}
     \item Every node has at most $r$ children where $r = 2^x$ for some $x$;
@@ -246,6 +249,8 @@ The extrinsics in a block are ordered using pairing each extrinsics by a
 UINT32 integer sequential number starting at 0 which is encoded using SCALE
 codec.
 
+\subsection{Block Format}
+
 \section{Interactions with the Runtime}\label{sect-entries-into-runtime}
 
 Runtime is the code implementing the logic of the chain. This code is
@@ -323,18 +328,33 @@ the Runtime Wasm blob and has been exported as shown in Snippet
 \ref{snippet-runtime-enteries}:
 
 \tmfloat{h}{small}{figure}{\begin{tmcode}[cpp]
-(export "version" (func $version))
-(export "authorities" (func $authorities))
-(export "execute_block" (func $execute_block))
-(export "validate_transaction" (func $validate_transaction))
-(export "initialise_block" (func $initialise_block))
+  (export "Core_version" (func $Core_version))
+  (export "Core_authorities" (func $Core_authorities))
+  (export "Core_execute_block" (func $Core_execute_block))
+  (export "Core_initialise_block" (func $Core_initialise_block))
+  (export "Metadata_metadata" (func $Metadata_metadata))
+  (export "BlockBuilder_apply_extrinsic" (func $BlockBuilder_apply_extrinsic))
+  (export "BlockBuilder_finalise_block" (func $BlockBuilder_finalise_block))
+  (export "BlockBuilder_inherent_extrinsics" (func $BlockBuilder_inherent_extrinsics))
+  (export "BlockBuilder_check_inherents" (func $BlockBuilder_check_inherents))
+  (export "BlockBuilder_random_seed" (func $BlockBuilder_random_seed))
+  (export "TaggedTransactionQueue_validate_transaction" (func $TaggedTransactionQueue_validate_transaction))
+  (export "OffchainWorkerApi_offchain_worker" (func $OffchainWorkerApi_offchain_worker))
+  (export "ParachainHost_duty_roster" (func $ParachainHost_duty_roster))
+  (export "ParachainHost_active_parachains" (func $ParachainHost_active_parachains))
+  (export "ParachainHost_parachain_head" (func $ParachainHost_parachain_head))
+  (export "ParachainHost_parachain_code" (func $ParachainHost_parachain_code))
+  (export "GrandpaApi_grandpa_pending_change" (func $GrandpaApi_grandpa_pending_change))
+  (export "GrandpaApi_grandpa_forced_change" (func $GrandpaApi_grandpa_forced_change))
+  (export "GrandpaApi_grandpa_authorities" (func $GrandpaApi_grandpa_authorities))
+  (export "ParachainHost_validators" (func $Core_authorities))
 \end{tmcode}}{\label{snippet-runtime-enteries}Snippet to export entries into
 tho Wasm runtime module}
 
 The following sections describe the standard based on which Polkadot RE
 communicates with each runtime entry.
 
-\subsubsection{version}
+\subsubsection{\tmverbatim{Core\_version}}
 
 This entry receives no argument; it returns the version data encoded in ABI
 format described in Section \ref{sect-abi-encoding} containing the following
@@ -362,13 +382,13 @@ data:
   \tmverbatim{version} function}
 \end{center}
 
-\subsubsection{authorities}\label{sect-runtime-api-auth}
+\subsubsection{\tmverbatim{Core\_authorities}}\label{sect-runtime-api-auth}
 
 This entry is to report the set of authorities at a given block. It receives
 \tmverbatim{block\_id} as an argument; it returns an array of
 \tmverbatim{authority\_id}'s.
 
-\subsubsection{execute\_block}
+\subsubsection{\tmverbatim{Core\_execute\_block}}
 
 This entry is responsible for executing all extrinsics in the block and
 reporting back the changes into the state storage. It receives the block
@@ -389,7 +409,9 @@ header and the block body as its arguments, and it returns a triplet:
   \end{tabular}}{Detail of the data execute\_block returns after execution}
 \end{center}
 
-\subsubsection{validate\_transaction}\label{sect-validate-transaction}
+\subsubsection{\tmverbatim{Core\_initialise\_block}}
+
+\subsubsection{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}\label{sect-validate-transaction}
 
 {\todo{Explain function}}
 
@@ -482,14 +504,13 @@ Polkadot RE.
   where v and k are byte arrays.
 \end{definition}
 
+\subsection{The General Tree Structure}
+
 To authenticate the state of the system, the stored data needs to be
 re-arranged and hashed in a {\tmem{modified Merkle Patricia Tree}}, which
 hereafter we refer to as the {\tmem{{\tmstrong{Trie}},}} in order to compute
 the hash of the whole state storage consistently and efficiently at any given
 time.
-
-As well, a modification has been made in the storing of the nodes' hash in the
-Merkle Tree structure to save space on entries storing small entries.
 
 Because the Trie is used to compute the {\tmem{state root}}, $H_r$, (see
 Definition \ref{def-block-header}), which is used to authenticate the validity
@@ -497,12 +518,13 @@ of the state database, Polkadot RE follows a rigorous encoding algorithm to
 compute the values stored in the trie nodes to ensure that the computed Merkle
 hash, $H_r$, matches across clients.
 
-\subsection{The General Tree Structure}
-
-Each key value identifies a unique node in the tree. However, a node in a tree
-might or might not be associated with a key in the storage. Similar to a radix
-trie, when traversing the Trie, subsequences of the key, are stored in the
-nodes on the path to the node associated with the key.
+The Trie is a {\tmem{radix-16}} tree as defined in Definition
+\ref{defn-radix-tree}. Each key value identifies a unique node in the tree.
+However, a node in a tree might or might not be associated with a key in the
+storage. When traversing the Trie to a specific node, its key can be
+reconstructed by concatenating the subsequences of the key which are stored
+either explicitly in the nodes on the path or implicitly in their position as
+a child of their parent.
 
 To identify the node corresponding to a key value, $k$, first we need to
 encode $k$ in a way consistent with the Trie structure. Because each node in
@@ -533,136 +555,254 @@ nibbles:
 By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the
 radix tree to reach the node identifying the storage value of $k$.
 
-\subsection{Different node types}
+\subsection{The Trie structure}
 
-In this subsection, we specify the structure of the nodes in the Trie:
+In this subsection, we specify the structure of the nodes in the Trie as well
+as the Trie structure:
 
 \begin{notation}
   We refer to the {\tmstrong{set of the nodes of Polkadot state trie}} by
-  $\mathcal{N}.$
+  $\mathcal{N}.$ By $N \in \mathcal{N}$ to refer to an individual node in the
+  trie.
 \end{notation}
 
-The Trie consists of 3 three types of nodes based on how they store the
-subsequence of shared prefix nibbles:
-\begin{itemize}
-  \item {\tmstrong{Leaf:}} It is a childless node that stores the remaining
-  subsequence of $\tmop{KeyEncode} (k)$ not accounted for in the path to the
-  node, as well as the value associated with that key.
-  
-  \item {\tmstrong{Extension:}} It stores the subsequence of KeyEncode($k$)
-  of a size larger than 1 (i.e. 4 bits), which is at least shared with two or
-  more keys in the Trie. It always has one child. It does not store a value.
-  
-  \item {\tmstrong{Branch:}} It has up to 16 children. It stores no key. It
-  accounts for one nibble of the key corresponding to the path passing through
-  each of its children. It optionally stores a value of the key corresponding
-  to the path traversed to the node.
-\end{itemize}
-Accordingly, we define:
+\begin{definition}
+  \label{defn-node-key}Each Node in the Trie is identified with a unique key
+  $k_N$ such that $k_N$ is the shared prefix of the key of all the descendents
+  of $N$ in the Trie. $k_N$ is divided into an {\tmstrong{aggregated prefix
+  key}}, {\tmstrong{$\tmop{pk}_N^{\tmop{Agr}}$}}, aggregated by Algorithm
+  \ref{algo-aggregate-key} and a {\tmstrong{partial key}},
+  {\tmstrong{$\tmop{pk}_N$}} of length $0 \leqslant l_{\tmop{pk}_N} \leqslant
+  65535$ such that:
+  \[ \tmop{pk}_N \assign (k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{i +
+     l_{\tmop{pk}_N}}}) \]
+  where $\tmop{pk}_N$ is a suffix subsequence of $k_N$; and we have:
+  \[ \tmop{KeyEncode} (k_N) = \tmop{pk}_N^{\tmop{Agr}} | \tmop{pk}_N =
+     (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{i - 1}}, k_{\tmop{enc}_i},
+     k_{\tmop{enc}_{i + l_{\tmop{pk}_N}}}) \]
+\end{definition}
+
+\custombinding{2}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  2. }
+  \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
+  = N_1, \ldots, N_j = N))$\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \phi$}}
+
+{\state{$i \leftarrow 1$}}
+
+{\state{{\WHILE{$(N_i \neq N)$}}}}
+
+{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
+\tmop{pk}_N $}}
+
+{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
+\tmop{Index}_{N_i} (N_{i + 1})${\END}}}
+
+{\state{{\RETURN{$\tmop{pk}^{\tmop{Agr}}_N$}}}}}}
+
+\hrulefill{\medskip}
+
+Accordingly, we enforce the radix-16 tree optimization structure:
 
 \begin{definition}
-  \label{defn-nodetype}We define {\tmstrong{$\tmop{NodeType}$}} function to be
-  \[ \begin{array}{lllll}
-       \tmop{NodeType} & : & \mathcal{N} & \rightarrow & \{ \tmop{Leaf},
-       \tmop{Extension}, \tmop{Branch} \}\\
-       &  & N & \mapsto & \tmop{The} \tmop{type} \tmop{of} \tmop{node} N
+  \label{defn-nodetype}The State Trie is a radix-16 tree. As such, for any $N
+  \in \mathcal{N}$ with key $k_N$, at least one of the following statements
+  holds:
+  \begin{itemizeminus}
+    \item $(k_N, V)$ corresponds to an existing entry in the State Storage.
+    
+    \item N has more than one child.
+  \end{itemizeminus}
+  Conversly, if $(k, V)$ is an entry in the State Trie then there is a node $N
+  \in \mathcal{N}$ such that $k_N$=k.
+  
+  A {\tmstrong{branch}} node is a node which has one child or more. A branch
+  node can have at most 16 children. A {\tmstrong{leaf}} node is a childless
+  node.
+\end{definition}
+
+\begin{definition}
+  \label{defn-node-value}A node $N \in \mathcal{N}$ stores the {\tmstrong{node
+  value}}, {\tmstrong{$v_N$}}, which consists of the following concatenated
+  data:
+  \[ \begin{array}{|l|l|l|}
+       \hline
+       \tmop{Node} \tmop{Header} & \tmop{Partial} \tmop{key} & \tmop{Node}
+       \tmop{Subvalue}\\
+       \hline
      \end{array} \]
+  Formally noted as:
+  \[ v_N \assign \tmop{Head}_N | | \tmop{Enc}_{\tmop{HE}} (\tmop{pk}_N) | |
+     \tmop{sv}_N \]
+  where $\tmop{Head}_N$, $\tmop{pk}_N$, $\tmop{Enc}_{\tmop{nibbles}}$ and
+  $\tmop{sv}_N$ are defined in Definitions \ref{defn-node-header},
+  \ref{defn-node-key}, \ref{defn-he} and \ref{defn-node-subvalue},
+  respectively.
 \end{definition}
 
 \begin{definition}
-  The {\tmstrong{partial key}} of node N of length $j \leqslant 380$ to be
-  \[ \tmop{pk}_N \assign (k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{i + j}})
-  \]
-  a subsequence of a key $k$
-  \[ \tmop{KeyEncode} (k) = (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{i - 1}},
-     k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{2 n}}) \]
-  corresponding to a key-value paired $(k, v)$ in the State storage such that
-  $\tmop{pk}_N$ is stored in $N$.
+  \label{defn-node-header}The {\tmstrong{node header}} of node $N$,
+  $\tmop{Head}_N$, consists of l > 1 bytes
+  
+  
+  \[ \begin{array}{ll}
+       \hline
+       \tmop{Node} \tmop{Type} & \tmop{pk} \tmop{length}\\
+       \hline
+       \tmop{Head}_{N, 1}^{6 - 7}_{} & \tmop{Head}_{N, 1}^{0 - 5}_{}
+     \end{array}  \begin{array}{|l|}
+       \hline
+       \tmop{pk} \tmop{length} \tmop{extra} \tmop{byte} 1\\
+       \hline
+       \tmop{Head}_{N, 2}\\
+       \hline
+     \end{array}  \begin{array}{|l|}
+       \hline
+       \tmop{pk} \tmop{key} \tmop{length} \tmop{extra} \tmop{byte} 2\\
+       \hline
+       \ldots .\\
+       \hline
+     \end{array} \ldots \begin{array}{|l|}
+       \hline
+       \tmop{pk} \tmop{length} \tmop{extra} \tmop{byte} l\\
+       \hline
+       \tmop{Head}_{N, l + 1}^{}_{}\\
+       \hline
+     \end{array} \]
+  
+  
+  In which $\tmop{Head}_{N, 1}^{6 - 7}_{}$, the two most significant bits of
+  the first byte of $\tmop{Head}_N$ are determined as follows:
+  \[ \tmop{Head}_{N, 1}^{6 - 7}_{} \assign \left\{ \begin{array}{ll}
+       00 & \tmop{Special} \tmop{case}\\
+       01 & \tmop{Leaf} \tmop{Node}\\
+       10 & \tmop{Branch} \tmop{Node} \tmop{with} k_N \nin \mathcal{K}\\
+       11 & \tmop{Branch} \tmop{Node} \tmop{with} k_N \in \mathcal{K}
+     \end{array} \right. \]
+  and $\tmop{Head}_{N, 1}^{0 - 5}_{}$, the 6 least significant bits of the
+  first byte of $\tmop{Head}_N$ are defined to be:
+  \[ \tmop{Head}_{N, 1}^{0 - 5}_{} \assign \left\{ \begin{array}{ll}
+       \| \tmop{pk}_N \|_{\tmop{nib}} & \| \tmop{pk}_N \|_{\tmop{nib}} < 63\\
+       63 & \| \tmop{pk}_N \|_{\tmop{nib}} \geqslant 63
+     \end{array} \right. \]
+  In which {\tmstrong{$\| \tmop{pk}_N \|_{\tmop{nib}}$}} is the length of
+  $\tmop{pk}_N $ in number nibbles. $\tmop{Head}_{N, 2}, \ldots,
+  \tmop{Head}_{N, l}$ bytes are determined by Algorithm \ref{algo-pk-length}.
 \end{definition}
 
-Consequently, for an extension node $j \geqslant 2$ and for a branch node $j =
-0$.
+\custombinding{3}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  3. }
+  \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
+  1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} \geqslant
+2^{16}$}}}}
+
+{\state{{\RETURN{Error{\END}}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow 64 \times \tmop{Head}_{N, 1}^{6 -
+7}_{}$}}
+
+{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} < 63$}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + \tmop{pk}_N$}}
+
+{\state{{\RETURN{$\tmop{Head}_N \END$}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + 63$}}
+
+{\state{$l \leftarrow \| \tmop{pk}_N \|_{\tmop{nib}} - 62$}}
+
+{\state{$i \leftarrow 2$}}
+
+{\state{{\WHILE{$(l > 255)$}}}}
+
+{\state{$\tmop{Head}_{N, i} \leftarrow 255$}}
+
+{\state{$l \leftarrow l - 254$}}
+
+{\state{$i \leftarrow i + 1 \END$}}
+
+{\state{$\tmop{Head}_N, i \leftarrow l$}}}}
+
+\hrulefill{\medskip}
 
 \subsection{The Merkle proof}\label{sect-merkl-proof}
 
 To prove the consistency of the state storage across the network and its
-modifications efficiently, the Merkle hash of the storage trie needs to be
-computed rigorously.
+modifications both efficiently and effectively, the Trie implements a Merkle
+tree structure. The hash value corresponding to each node needs to be computed
+rigorously to make the inter-implementation data integrity possible.
 
-The Merkle hash of the trie is computed recursively. As such, the hash value
-of each node depends on the hash value of all its children and also on its
-value. Therefore, it suffices to define how to compute the hash value of a
-typical node as a function of the hash value of its children and its own
-value.
-
-\
+The Merkle value of each node should depend on the Merkle value of all its
+children as well as on its corresponding data in the state Storage. This
+recursive dependancy is encompassed into the subvalue part of the node value
+which recursively depends on the Merkle value of its children.
 
 \begin{definition}
-  \label{def-node-prefix}For a trie node N, {\tmstrong{Node Prefix }}function
-  is a value specifying the node type as follows:
-  \[ \tmop{NodePrefix} (N) \assign \left\{ \begin{array}{lll}
-       1 &  & N \text{ is a leaf node}\\
-       128 &  & N \text{ is an extension node}\\
-       254 &  & N \text{ is a branch node without value}\\
-       255 &  & N \text{ is a branch node with value}
-     \end{array} \right. \]
-\end{definition}
-
-\begin{definition}
-  For a given node $N$, with partial key of $\tmop{pk}_N$ and Value $v$, the
-  {\tmstrong{encoded representation}} of $N$, formally referred to as
-  $\tmop{Enc}_{\tmop{Node}} (N)$ is determined as follows, in case which:
+  \label{defn-node-subvalue}For a given node $N$, the {\tmstrong{subvalue}} of
+  $N$, formally referred to as $\tmop{sv}_N$ is determined as follows, in a
+  case which:
   \begin{itemize}
-    \item $N$ is a leaf node:
-    \[ \tmop{Enc}_{\tmop{Node}} (N) \assign \tmop{Enc}_{\tmop{len}} (N) ||
-       \tmop{Enc}_{\tmop{HE}} (\tmop{pk}_N) || \tmop{Enc}_{\tmop{SC}} (v) \]
-    \item N is an extension node:
-    \[ \tmop{Enc}_{\tmop{Node}} (N) : = \tmop{Enc}_{\tmop{len}} (\nobracket N)
-       \| \tmop{Enc}_{\tmop{HE}} (\tmop{pk}_N) | | \tmop{Enc}_{\tmop{SC}} (H
-       (C)) \]
-    \item N is a branch node:
     \[ \begin{array}{l}
-         \text{Enc\tmrsub{Node}(N)} \assign\\
-         \nobracket \tmop{NodePrefix} (N) || \tmop{Enc}_{\tmop{LE}}
-         (\tmop{ChildrenBitmap} (N)) \| \tmop{Enc}_{\tmop{SC}} (v) || \\
-         \tmop{Enc}_{\tmop{SC}} (H (N_{C_1})) \ldots \tmop{Enc}_{\tmop{SC}} (H
-         (N_{C_n}))
+         \tmop{sv}_N \assign\\
+         \left\{ \begin{array}{cc}
+           \tmop{Enc}_{\tmop{SC}} (v) & \text{N is a leaf node}\\
+           \nobracket \tmop{Enc}_{\tmop{LE}} (\tmop{ChildrenBitmap} (N)) \|H
+           (N_{C_1}) \ldots \nobracket H (N_{C_n}) | | \tmop{Enc}_{\tmop{SC}}
+           (v) & \text{N is a branch node}
+         \end{array} \right.
        \end{array} \]
+    
   \end{itemize}
 \end{definition}
 
 Where
-
-
 \begin{itemize}
-  \item $\tmop{Enc}_{\tmop{len}}, \tmop{Enc}_{\tmop{HE}}$ and
-  $\tmop{Enc}_{\tmop{SC}}$ are encdoings defined in Section
-  \ref{sect-encoding}.
+  \item $\tmop{Enc}_{\tmop{SC}}$ defined in Definition \ref{def-scale-codec}.
   
   \item $\tmop{Enc}_{\tmop{LE}}$ is the little-endian encoding defined in
   Definition \ref{defn-little-endian}.
   
-  \item $C$ is the unique child of the extension node $N$.
-  
   \item $\tmop{ChildrenBitmap} (N) \assign (b_{15} b_{14} \ldots, b_1, b_0)_2$
-  where bit $b_i = 1$ if $N$ has a child with partial key $i$.
+  where bit $b_i : = 1$ if $N$ has a child with partial key $i$.
   
   \item $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes
   of the branch node $N$.
 \end{itemize}
+The Trie deviates from a traditional Merkle tree where node value, $v_N$ (see
+Definition \ref{defn-node-value}) is presented instead of its hash if it
+occupies less space than its hash.
+
 \begin{definition}
   For a given node $N$, the {\tmstrong{Merkle value}} of $N$, denoted by $H
   (N)$ is defined as follows:
   \[ \begin{array}{lll}
-       & H : \mathbb{B} \rightarrow \bigcup_{i = 0^{\nosymbol}}^{32}
-       \mathbb{B}_i & \\
+       & H : \mathbb{B} \rightarrow \mathbb{B}_{32} & \\
        & H (N) : \left\{ \begin{array}{lll}
-         \tmop{Enc}_{\tmop{Node}} (N) & \| \tmop{Enc}_{\tmop{Node}} (N)\|< 32
-         & \\
-         \tmop{Hash} (\tmop{Enc}_{\tmop{Node}} (N)) & \|
-         \tmop{Enc}_{\tmop{Node}} (N)\| \geqslant 32 & 
+         v_N | | 0_{B_{32 - \| v_N \|}} & \|v_N \|< 32 & \\
+         \tmop{Blake} 2 s (v_N) & \|v_N \| \geqslant 32 & 
        \end{array} \right. & 
      \end{array} \]
+  Where $0_{32 - \| v_N \|}$ an all zero byte array of length $32 - | | v_N |
+  |$.
+\end{definition}
+
+\section{Transactions}
+
+\subsection{preliminaries}
+
+\begin{definition}
+  \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
+  \tmop{pk}^a)$}} is a pair of ristretto SR25519 used to sign transactions
+  among other accounts and blance-related functions.
 \end{definition}
 
 \section{Consensus Engine}
@@ -679,10 +819,10 @@ the chain forks into multiple subchains in various block positions. We refer
 to this structure as a {\tmem{block tree:}}
 
 \begin{definition}
-  The {\tmstrong{Block Tree}} of a blockchain is the union of all different
-  versions of the blockchain observed by all the nodes in the system such as
-  every such block is a node in the graph and $B_1$ is connected to $B_2$ if
-  $B_1$ is a parent of $B_2$.
+  \label{defn-block-tree}The {\tmstrong{Block Tree}} of a blockchain is the
+  union of all different versions of the blockchain observed by all the nodes
+  in the system such as every such block is a node in the graph and $B_1$ is
+  connected to $B_2$ if $B_1$ is a parent of $B_2$.
 \end{definition}
 
 Because every block in the blockchain contains a reference to its parent, it
@@ -698,14 +838,102 @@ follows:
 
 \subsection{Block Production}
 
+Polkadot RE uses BABE protocol {\cite{w3f_research_group_blind_2019}} for
+block production designed based on Ouroboros praos
+{\cite{david_ouroboros_2018}}. BABE execution happens in sequential
+non-overlapping phases known as an {\tmstrong{{\tmem{epoch}}}}. Each epoch on
+its turn is divided into a predefined number of slots. All slots in each epoch
+are sequentially indexed starting from 0. At the beginning of each epoch, the
+BABE node needs to run Algorithm \ref{algo-babe-slot-selection} to find out in
+which slots it should produce a block and gossip to the other block producers.
+In turn, the block producer node should keep a copy of the block tree and grow
+it as it receives valid blocks from other block producers. A block producer
+prunes the tree in parallel using Algorithm \ref{algo-block-tree-prunning}.
+
+\subsubsection{Preliminaries}
+
+\begin{definition}
+  A {\tmstrong{Block Producer}}, noted by $\mathcal{P}_j$ is a node running
+  Polkadot RE which is authorized to keep a transaction queue and which gets a
+  turn in producing blocks.
+\end{definition}
+
+\begin{definition}
+  {\tmstrong{Block signing key pair $(\tmop{sk}^s_j, \tmop{pk}^s_j)$}} is an
+  ED25519 key pair which the block producer $\mathcal{P}_j$ signs by their
+  account key (see Definition \ref{defn-account-key}) and is used to sign the
+  produced block. Similarly {\tmstrong{block lottery key pair}}, noted by
+  {\tmstrong{$(\tmop{sk}_j^v, \tmop{pk}^s_j)$}}, is a ED25519 key pair which
+  is used by $\mathcal{P}_j$ to compute its lottery values. 
+\end{definition}
+
+\begin{definition}
+  A block production {\tmstrong{epoch}}, formally refered to as $\mathcal{E}$
+  is a period with pre-known starting time and fixed length during which the
+  set of block producers stays constant. Epochs are indexed sequentially, we
+  refer to the $n^{\tmop{th}}$ epoch since genesis by $\mathcal{E}_n$. Each
+  epoch is divided into equal length periods known as block production
+  {\tmstrong{slot}}s sequentially indexed in each epoch. Each slot is awarded
+  to a subset of block producers during which they are allowed to generate a
+  block.
+\end{definition}
+
+\begin{notation}
+  We refer to the number of slots in epoch $\mathcal{E}_n$ by $\tmop{sc}_n$.
+  $\tmop{sc}_n$ is set to ??? at the genesis. 
+\end{notation}
+
+\subsubsection{Block Production Lottery}
+
+\begin{definition}
+  {\tmstrong{Winning threshold}} denoted by {\tmstrong{$\tau$}} is the
+  threshold which is used in Algorirthm \ref{algo-slot-lottery} to decide if a
+  block producer is the winner of a specific slot. $\tau$ is initially set to
+  ???.
+\end{definition}
+
+During each epoch, each block producer node should run Algorithm
+\ref{algo-block-lottery} to identify the slots it is awarded. These are the
+slots during which the block producer is allowed to build a block. The
+$\tmop{sk}^v$ is the block producer lottery secret key and $n$ is the epoch
+for whose slots the block producer is running the lottery.
+
+\custombinding{4}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  4. }
+  \label{algo-block-production}{\tmname{Block-production-lottery}}$(\tmop{sk}^v,
+  n)$\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$r \leftarrow${\tmname{Epoch-Randomness$(n)$}}}}
+
+{\state{{\FORTO{$i \assign 1$}{$\tmop{sc}_n$}}}}
+
+{\state{$(d, \pi) \leftarrow${\tmem{{\tmname{VRF}}}}($i, \tmop{sk}^v$)}}
+
+{\state{$A [i] \leftarrow (i, d, \pi)${\END}}}
+
+{\state{{\RETURN{A}}}}}}
+
+\hrulefill{\medskip}
+
+For any slot $i$ in epoch $n$ where $d < \tau$, the block producer is required
+to produce a block. For the definitions of {\tmname{Epoch-Randomness}} and
+{\tmem{{\tmname{VRF}}}} functions, see Sections \ref{sect-randomness} and
+\ref{sect-vrf} respectively.
+
+\subsubsection{Block Production}
+
 \subsection{Finality}\label{sect-finality}
 
-Polkadot RE uses GRANDPA Finality protocol {\cite{AlSt19-Grandpai}} to
-finalize blocks. Finality is obtained by consecutive rounds of voting by
-validator nodes. Validators execute GRANDPA finality process in parallel to
-Block Production as an independent service. In this section, we describe the
-different functions that GRANDPA service is supposed to perform to
-successfully participate in the block finalization process.
+Polkadot RE uses GRANDPA Finality protocol
+{\cite{alistair_stewart_grandpa:_2019}} to finalize blocks. Finality is
+obtained by consecutive rounds of voting by validator nodes. Validators
+execute GRANDPA finality process in parallel to Block Production as an
+independent service. In this section, we describe the different functions that
+GRANDPA service is supposed to perform to successfully participate in the
+block finalization process.
 
 \subsubsection{Preliminaries}
 
@@ -715,7 +943,7 @@ successfully participate in the block finalization process.
   private key which is an $\tmop{ED} 25519$ private key, is a node running
   GRANDPA protocol, and broadcasts votes to finalize blocks in a Polkadot RE -
   based chain. The {\tmstrong{set of all GRANDPA voters}} is indicated by
-  $\mathbb{V}$. For a given block B, we have
+  $\mathbb{V}$. For a given block B, we have4
   \[ \mathbb{V}_B = \tmverbatim{\tmop{authorities}} (B) \]
   where $\mathtt{authorities}$ is the entry into runtime described in Section
   \ref{sect-runtime-api-auth}.
@@ -729,7 +957,7 @@ successfully participate in the block finalization process.
   $\mathbb{V}$: is the set of voters.
   
   {\tmstrong{$\mathbb{V}_{\tmop{id}}$}}: is an incremental counter tracking
-  membership, which changes in V.
+  \tmverbatim{}membership, which changes in V.
   
   {\tmstrong{r}}: is the voting round number.
 \end{definition}
@@ -748,8 +976,8 @@ $B$. First a vote is defined as:
 
 \begin{definition}
   Voters engage in a maximum of two sub-rounds of voting for each round $r$.
-  The first sub-round is called {\tmstrong{pre-vote}} and the second sub-round
-  is called {\tmstrong{pre-commit}}.
+  The first sub-round is called {\tmstrong{pre-vote}} and\tmverbatim{} the
+  second sub-round is called {\tmstrong{pre-commit}}.
   
   By {\tmstrong{$V_v^{r, \tmop{pv}}$}} and {\tmstrong{$V_v^{r, \tmop{pc}}$}}
   we refer to the vote cast by voter $v$ in round $r$ (for block $B$) during
@@ -925,9 +1153,9 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{2}{\noindent}\begin{tabular}{l}
+\custombinding{5}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  2. }
+  \tmtextbf{Algorithm  5. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -952,9 +1180,9 @@ round is completable.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-\custombinding{3}{\noindent}\begin{tabular}{l}
+\custombinding{6}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  3. }
+  \tmtextbf{Algorithm  6. }
   \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
@@ -994,9 +1222,9 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 
 \hrulefill{\medskip}
 
-\custombinding{4}{\noindent}\begin{tabular}{l}
+\custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  4. }
+  \tmtextbf{Algorithm  7. }
   \label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1016,9 +1244,9 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\custombinding{5}{\noindent}\begin{tabular}{l}
+\custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  5. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextbf{Algorithm  8. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
@@ -1042,6 +1270,14 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 {\tmstrong{when}} {\tmname{Receive-Messages}} }}}}
 
 \hrulefill{\medskip}
+
+\section{Cryptographic Algorithms}
+
+\subsection{Randomness}\label{sect-randomness}
+
+\subsection{VRF}\label{sect-vrf}
+
+\
 
 \section{Auxiliary Encodings}\label{sect-encoding}
 
@@ -1113,7 +1349,7 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
 4-bits nibbles into byte arrays canonically:
 
 \begin{definition}
-  \label{def-hpe}Suppose that $\tmop{PK} = (k_1, \ldots, k_n)$ is a sequence
+  \label{defn-he}Suppose that $\tmop{PK} = (k_1, \ldots, k_n)$ is a sequence
   of nibbles, then
   
   \begin{tabular}{l}
@@ -1122,48 +1358,13 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
       \tmop{Nibbles}_4 & \rightarrow & \mathbb{B}\\
       \tmop{PK} = (k_1, \ldots, k_n) & \mapsto & \left\{ \begin{array}{l}
         \begin{array}{ll}
-          (0, k_1 + 16 k_2, \ldots, k_{2 i - 1} + 16 k_{2 i}) & n = 2 i\\
-          (k_1, k_2 + 16 k_3, \ldots, k_{2 i} + 16 k_{2 i + 1}) & n = 2 i + 1
+          (k_1 + 16 k_2, \ldots, k_{2 i - 1} + 16 k_{2 i}) & n = 2 i\\
+          (k_1, k_2 + 16 k_3, \ldots, k_{2 i - 1} + 16 k_{2 i}, k_{2 i + 1}) &
+          n = 2 i + 1
         \end{array}
       \end{array} \right.
     \end{array} \right.$
   \end{tabular}
-\end{definition}
-
-\subsection{Partial Key Encoding}
-
-\begin{definition}
-  \label{def-key-len-enc}Let $N$ be a leaf or an extension node in the storage
-  state trie with Partial Key $\tmop{PK}_N$. We define the {\tmstrong{Partial
-  key length encoding}} function, formally referred to as
-  $\tmop{Enc}_{\tmop{len}} (N),$ as follows:
-  \[ \begin{array}{ll}
-       \tmop{Enc}_{\tmop{len}} (N) & \assign\\
-       \tmop{NodePrefix} (N) & +\\
-       \left\{ \begin{array}{lcl}
-         (\| \tmop{PK}_N \|) &  & \| \tmop{PK}_N \|< \tmop{BigKeySize}
-         (\tmop{NodeType} (N))\\
-         (127) || (\| \tmop{PK}_N \|- \tmop{BigKeySize} (\tmop{NodeType} (N)))
-         &  & \| \tmop{PK}_N \| \geqslant \tmop{BigKeySize} (\tmop{NodeType}
-         (N))
-       \end{array} \right. & 
-     \end{array} \]
-  where $\tmop{NodePrefix}$, $\tmop{NodeType}$ and $\tmop{BigKeySize}$
-  functions are defined in Definitions \ref{def-node-prefix},
-  \ref{defn-nodetype} and \ref{defn-bigkeysize} respectively.
-\end{definition}
-
-\begin{definition}
-  \label{defn-bigkeysize}We define $\tmop{BigKeySize}$ function for each node
-  type of the Trie as follows: \
-  \[ \begin{array}{lllll}
-       \tmop{BigKeySize} (T) & : & \{ \tmop{Leaf}, \tmop{Extension} \} &
-       \rightarrow & \mathbb{N}\\
-       &  & T & \mapsto & \left\{ \begin{array}{ll}
-         126 & T = \tmop{Leaf}\\
-         125 & T = \tmop{Extension}
-       \end{array} \right.
-     \end{array} \]
 \end{definition}
 
 \section{Genesis Block Specification}\label{sect-genisis-block}
@@ -1226,8 +1427,9 @@ Retrieves the root of the state storage.
 
 \subsubsection{\tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}}
 
-Given an array of byte arrays, arranges them in a Merkle trie, defined in
-\ref{sect-merkl-proof}, and computes the trie root hash.
+Given an array of byte arrays, arranges them in a Merkle trie, defined
+in\tmverbatim{{\tmem{{\tmstrong{}}}}} Section \ref{sect-merkl-proof}, and
+computes the trie root hash.
 
 \
 
@@ -1255,20 +1457,162 @@ Given an array of byte arrays, arranges them in a Merkle trie, defined in
   elements of \tmverbatim{values\_data}.
 \end{itemize}
 
+\subsubsection{\tmverbatim{ext\_clear\_prefix}}
+
+Given a byte array, this function removes all storage entries whose key
+matches the prefix specified in the array.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_clear_prefix
+      (param $prefix_data i32) (param $prefix_len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{prefix\_data}: a memory address pointing at the buffer
+  containing the byte array containing the prefix.
+  
+  \item \tmverbatim{prefix\_len}: the length of the byte array in number of
+  bytes.
+\end{itemize}
+
+\subsubsection{\tmverbatim{}\tmverbatim{ext\_clear\_storage}}
+
+Given a byte array, this function removes the storage entry whose key is
+specified in the array.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_clear_storage
+      (param $key_data i32) (param $key_len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer
+  containing the byte array containing the key value.
+  
+  \item \tmverbatim{key\_len}: the length of the byte array in number of
+  bytes.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_exists\_storage}}
+
+Given a byte array, this function checks if the storage entry corresponding to
+the key specified in the array exists.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_exists_storage
+      (param $key_data i32) (param $key_len i32) (result i32)
+    )
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer
+  containing the byte array containing the key value.
+  
+  \item \tmverbatim{key\_len}: the length of the byte array in number of
+  bytes.
+  
+  \item \tmverbatim{result}: An \tmverbatim{i32} integer which is equal to 1
+  verifies if an entry with the given key exists in the storage or 0 if the
+  key storage does not contain an entry with the given key.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_get\_allocated\_storage}}
+
+Given a byte array, this function allocates a large enough buffer in the
+memory and retrieves the value stored under the key that is specified in the
+array. Then, it stores it in the allocated buffer if the entry exists in the
+storage.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+    (func $get_allocated_storage
+      (param $key_data i32) (param $key_len i32) (param $written_out i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer
+  containing the byte array containing the key value.
+  
+  \item \tmverbatim{key\_len}: the length of the byte array in number of
+  bytes.
+  
+  \item \tmverbatim{written\_out}: the function stores the length of the
+  retrieved value in number of bytes if the enty exists. If the entry does not
+  exist, it returns $2^{32} - 1$.
+  
+  \item \tmverbatim{result}: A pointer to the buffer in which the function
+  allocates and stores the value corresponding to the given key if such an
+  entry exist; otherwise it is equal to 0.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_get\_storage\_into}}
+
+Given a byte array, this function retrieves the value stored under the key
+specified in the array and stores a specified chunk of it in the provided
+buffer, if the entry exists in the storage.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+    (func $ext_get_storage_into 
+      (param $key_data i32) (param $key_len i32) (param $value_data i32)
+      (param $value_len i32) (param $value_offset i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer
+  containing the byte array containing the key value.
+  
+  \item \tmverbatim{key\_len}: the length of the byte array in number of
+  bytes.
+  
+  \item \tmverbatim{value\_data}: a pointer to the buffer in which the
+  function stores the chunk of the value it retrieves.
+  
+  \item \tmverbatim{value\_len}: the (maximum) length of the chunk in bytes
+  the function will read of the value and will store in the
+  \tmverbatim{value\_data} buffer.
+  
+  \item \tmverbatim{value\_offset}: the offset of the chunk where the function
+  should start storing the value in the provided buffer, i.e. the number of
+  bytes the functions should skip from the retrieved value before storing the
+  data in the \tmverbatim{value\_data} in number of bytes.
+  
+  \item \tmverbatim{result}: The number of bytes the function writes in
+  \tmverbatim{value\_data} if the value exists or $2^{32} - 1$ if the entry
+  does not exist under the specified key.
+\end{itemize}
+
 \subsubsection{To be Specced}
 
 \begin{itemize}
   \item \tmverbatim{ext\_clear\_child\_storage}
   
-  \item \tmverbatim{ext\_clear\_prefix}
-  
-  \item \tmverbatim{ext\_clear\_storage}
-  
   \item \tmverbatim{ext\_exists\_child\_storage}
   
   \item \tmverbatim{ext\_get\_allocated\_child\_storage}
-  
-  \item \tmverbatim{ext\_get\_allocated\_storage}
   
   \item \tmverbatim{ext\_get\_child\_storage\_into}
   
@@ -1281,8 +1625,6 @@ Given an array of byte arrays, arranges them in a Merkle trie, defined in
   \item \tmverbatim{ext\_storage\_changes\_root}
   
   \item \tmverbatim{ext\_storage\_root}
-  
-  \item \tmverbatim{ext\_exists\_storage}
 \end{itemize}
 
 \subsection{Memory}
@@ -1317,6 +1659,13 @@ Allocates memory of a requested size in the heap.
 Deallocates a previously allocated memory.
 
 \
+
+{\tmstrong{Prototype}}:
+\begin{alltt}
+(func $ext_free
+      (param $addr i32))
+\end{alltt}
+
 
 {\tmstrong{Arguments:}}
 \begin{itemize}
@@ -1360,12 +1709,44 @@ Computes the Blake2s hash of a given byte array.
   32-byte byte array contanining the Blake2s hash of the data.
 \end{itemize}
 
+\subsubsection{\tmverbatim{ext\_ed25519\_verify}}
+
+Given a message signed by the ED25519 signature algorithm alongside with its
+signature and the allegedly signer public key, it verifies the validity of the
+signature by the provided public key.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_ed25519_verify
+      (param $msg_data i32) (param $msg_len i32) (param $sig_data i32)
+      (param $pubkey_data i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{msg\_data}: a pointer to the buffer containing the message
+  body.
+  
+  \item \tmverbatim{msg\_len}: an \tmverbatim{i32} integer indicating the size
+  of the message buffer in bytes.
+  
+  \item \tmverbatim{sig\_data}: a pointer to the 64 byte memory buffer
+  containing the ED25519 signature corresponding to the message.
+  
+  \item \tmverbatim{pubkey\_data}: a pointer to the 32 byte buffer containing
+  the public key and corresponding to the secret key which has signed the
+  message.
+  
+  \item \tmverbatim{result}: \ an integer value equal to 0 indicating the
+  validity of the signature or a nonzero value otherwise.
+\end{itemize}
 
 \subsubsection{To be Specced}
 
 \begin{itemize}
-  \item \tmverbatim{ext\_ed25519\_verify}
-  
   \item \tmverbatim{ext\_twox\_128}
   
   \item \tmverbatim{ext\_twox\_256}
@@ -1402,5 +1783,21 @@ Computes the Blake2s hash of a given byte array.
   \item \tmverbatim{ext\_chain\_id}
 \end{itemizedot}
 \tmverbatim{}\subsection{Not implemented in Polkadot-JS}
+
+\begin{thebibliography}{DGKR18}
+  \bibitem[Ali19]{alistair_stewart_grandpa:_2019}Alistair Stewart.
+  {\newblock}GRANDPA: A Byzantine Finality Gadgets, 2019.
+  
+  \bibitem[DGKR18]{david_ouroboros_2018}Bernardo David, Peter Ga{\v z}i,
+  Aggelos Kiayias, and Alexander Russell. {\newblock}Ouroboros praos: An
+  adaptively-secure, semi-synchronous proof-of-stake blockchain. {\newblock}In
+  \tmtextit{Annual International Conference on the Theory and Applications of
+  Cryptographic Techniques}, pages 66--98. Springer, 2018.
+  
+  \bibitem[Gro19]{w3f_research_group_blind_2019}W3F~Research Group.
+  {\newblock}Blind Assignment for Blockchain Extension. {\newblock}Technical
+  Specification, Web 3.0 Foundation,
+  http://research.web3.foundation/en/latest/polkadot/BABE/Babe/, 2019.
+\end{thebibliography}
 
 \end{document}
