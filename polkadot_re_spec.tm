@@ -568,8 +568,8 @@
   <reference|defn-radix-tree>. Each key value identifies a unique node in the
   tree. However, a node in a tree might or might not be associated with a key
   in the storage. When traversing the Trie to a specific node, its key can be
-  reconstructed by concatinating the subsequences of the key which are stored
-  either explicitly in the nodes on the path or implicitly in their postion
+  reconstructed by concatenating the subsequences of the key which are stored
+  either explicitly in the nodes on the path or implicitly in their position
   as a child of their parent.
 
   To identify the node corresponding to a key value, <math|k>, first we need
@@ -619,17 +619,9 @@
 
   <\definition>
     <label|defn-node-key>Each Node in the Trie is identified with a unique
-    key <math|k<rsub|N>> such that:
-
-    <\itemize-minus>
-      <item>if Node <math|N> correspond to an entry in the State Storage then
-      the it would the entry stored under key <math|k<rsub|N>>.
-
-      <item><math|k<rsub|N>> is the shared prefix of the key of all
-      descendent of <math|N> in the Trie.
-    </itemize-minus>
-
-    <math|k<rsub|N>> is divided into an <strong|aggregated prefix key>,
+    key <math|k<rsub|N>> such that <math|k<rsub|N>> is the shared prefix of
+    the key of all the descendents of <math|N> in the Trie. <math|k<rsub|N>>
+    is divided into an <strong|aggregated prefix key>,
     <strong|<math|pk<rsub|N><rsup|Agr>>>, aggregated by Algorithm
     <reference|algo-aggregate-key> and a <strong|partial key>,
     <strong|<math|pk<rsub|N>>> of length <math|0\<leqslant\>l<rsub|pk<rsub|N>>\<leqslant\>65535>
@@ -639,7 +631,7 @@
       pk<rsub|N>\<assign\><around|(|k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
     </equation*>
 
-    where <math|pk<rsub|N>> is a suffix subsequence of <math|k<rsub|N>> and
+    where <math|pk<rsub|N>> is a suffix subsequence of <math|k<rsub|N>>; and
     we have:
 
     <\equation*>
@@ -682,7 +674,7 @@
     </algorithmic>
   </algorithm>
 
-  Accordingly we enforce the radix-16 tree optimization structure:
+  Accordingly, we enforce the radix-16 tree optimization structure:
 
   <\definition>
     <label|defn-nodetype>The State Trie is a radix-16 tree. As such, for any
@@ -690,11 +682,14 @@
     following statements holds:
 
     <\itemize-minus>
-      <item><math|<around*|(|k<rsub|N>,V|)>> corresponds to a existing entry
+      <item><math|<around*|(|k<rsub|N>,V|)>> corresponds to an existing entry
       in the State Storage.
 
       <item>N has more than one child.
     </itemize-minus>
+
+    Conversly, if <math|<around*|(|k,V|)>> is an entry in the State Trie then
+    there is a node <math|N\<in\>\<cal-N\>> such that <math|k<rsub|N>>=k.
 
     A <strong|branch> node is a node which has one child or more. A branch
     node can have at most 16 children. A <strong|leaf> node is a childless
@@ -704,7 +699,7 @@
   <\definition>
     <label|defn-node-value>A node <math|N\<in\>\<cal-N\>> stores the
     <strong|node value>, <strong|<math|v<rsub|N>>>, which consists of the
-    following concatinated data:
+    following concatenated data:
 
     <\equation*>
       <tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|1|1|1|-1|cell-lborder|1ln>|<cwith|1|1|1|-1|cell-rborder|1ln>|<table|<row|<cell|Node
@@ -742,7 +737,7 @@
     \;
 
     In which <math|Head<rsub|N,1><rsup|6-7><rsup|><rsub|>>, the two most
-    significant bit of the first byte of <math|Head<rsub|N>> are determined
+    significant bits of the first byte of <math|Head<rsub|N>> are determined
     as follows:
 
     <\equation*>
@@ -753,7 +748,7 @@
     </equation*>
 
     and <math|Head<rsub|N,1><rsup|0-5><rsup|><rsub|>>, the 6 least
-    significant bits of the first byte of <math|Head<rsub|N>> is defined to
+    significant bits of the first byte of <math|Head<rsub|N>> are defined to
     be:
 
     <\equation*>
@@ -843,8 +838,8 @@
   To prove the consistency of the state storage across the network and its
   modifications both efficiently and effectively, the Trie implements a
   Merkle tree structure. The hash value corresponding to each node needs to
-  be computed rigorously, in order to make inter-implementation data
-  integrity possible.
+  be computed rigorously to make the inter-implementation data integrity
+  possible.
 
   The Merkle value of each node should depend on the Merkle value of all its
   children as well as on its corresponding data in the state Storage. This
@@ -854,7 +849,7 @@
   <\definition>
     <label|defn-node-subvalue>For a given node <math|N>, the
     <strong|subvalue> of <math|N>, formally referred to as <math|sv<rsub|N>>
-    is determined as follows, in case which:
+    is determined as follows, in a case which:
 
     <\itemize>
       <\equation*>
@@ -885,7 +880,7 @@
     <math|N>.
   </itemize>
 
-  The Trie deviate from a traditional Merkle tree where node value,
+  The Trie deviates from a traditional Merkle tree where node value,
   <math|v<rsub|N>> (see Definition <reference|defn-node-value>) is presented
   instead of its hash if it occupies less space than its hash.
 
@@ -2188,7 +2183,6 @@
     <associate|auto-76|<tuple|A.4.3|22>>
     <associate|auto-77|<tuple|A.5|22>>
     <associate|auto-78|<tuple|A.5|22>>
-    <associate|auto-79|<tuple|A.5|22>>
     <associate|auto-8|<tuple|3.1|3>>
     <associate|auto-9|<tuple|3.2|3>>
     <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|22>>
@@ -2199,18 +2193,14 @@
     <associate|def-block-header-hash|<tuple|11|2>>
     <associate|def-extrinsic-network-message|<tuple|12|6>>
     <associate|def-grandpa-justification|<tuple|41|13>>
-    <associate|def-hpe|<tuple|45|16>>
-    <associate|def-key-len-enc|<tuple|46|16>>
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-scale-codec|<tuple|43|15>>
     <associate|def-state-read-write|<tuple|13|6>>
     <associate|def-vote|<tuple|32|11>>
     <associate|defn-account-key|<tuple|22|9>>
-    <associate|defn-bigkeysize|<tuple|47|17>>
     <associate|defn-bit-rep|<tuple|6|1>>
     <associate|defn-block-tree|<tuple|23|10>>
     <associate|defn-he|<tuple|45|?>>
-    <associate|defn-hpe|<tuple|45|?>>
     <associate|defn-little-endian|<tuple|7|1>>
     <associate|defn-node-header|<tuple|19|8>>
     <associate|defn-node-key|<tuple|16|7>>
@@ -2450,121 +2440,117 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-50>>
 
-      <with|par-left|<quote|1tab>|9.3<space|2spc>Partial Key Encoding
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-51>>
-
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|10<space|2spc>Genesis
       Block Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-52><vspace|0.5fn>
+      <no-break><pageref|auto-51><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|11<space|2spc>Predefined
       Storage keys> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-53><vspace|0.5fn>
+      <no-break><pageref|auto-52><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|12<space|2spc>Runtime
       upgrade> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-54><vspace|0.5fn>
+      <no-break><pageref|auto-53><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
       A<space|2spc>Runtime API> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-55><vspace|0.5fn>
+      <no-break><pageref|auto-54><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|A.1<space|2spc>Storage
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-56>>
+      <no-break><pageref|auto-55>>
 
       <with|par-left|<quote|2tab>|A.1.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_set_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-57>>
+      <no-break><pageref|auto-56>>
 
       <with|par-left|<quote|2tab>|A.1.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-58>>
+      <no-break><pageref|auto-57>>
 
       <with|par-left|<quote|2tab>|A.1.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256_enumerated_trie_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-59>>
+      <no-break><pageref|auto-58>>
 
       <with|par-left|<quote|2tab>|A.1.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_prefix>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-60>>
+      <no-break><pageref|auto-59>>
 
       <with|par-left|<quote|2tab>|A.1.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-61>>
+      <no-break><pageref|auto-60>>
 
       <with|par-left|<quote|2tab>|A.1.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_exists_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-62>>
+      <no-break><pageref|auto-61>>
 
       <with|par-left|<quote|2tab>|A.1.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_allocated_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-63>>
+      <no-break><pageref|auto-62>>
 
       <with|par-left|<quote|2tab>|A.1.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_storage_into>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-64>>
+      <no-break><pageref|auto-63>>
 
       <with|par-left|<quote|2tab>|A.1.9<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-65>>
+      <no-break><pageref|auto-64>>
 
       <with|par-left|<quote|1tab>|A.2<space|2spc>Memory
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-66>>
+      <no-break><pageref|auto-65>>
 
       <with|par-left|<quote|2tab>|A.2.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_malloc>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-67>>
+      <no-break><pageref|auto-66>>
 
       <with|par-left|<quote|2tab>|A.2.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_free>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-68>>
+      <no-break><pageref|auto-67>>
 
       <with|par-left|<quote|2tab>|A.2.3<space|2spc>Input/Output
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-69>>
+      <no-break><pageref|auto-68>>
 
       <with|par-left|<quote|1tab>|A.3<space|2spc>Cryptograhpic auxilary
       functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-70>>
+      <no-break><pageref|auto-69>>
 
       <with|par-left|<quote|2tab>|A.3.1<space|2spc>ext_blake2_256
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-71>>
+      <no-break><pageref|auto-70>>
 
       <with|par-left|<quote|2tab>|A.3.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_ed25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-72>>
+      <no-break><pageref|auto-71>>
 
       <with|par-left|<quote|2tab>|A.3.3<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-73>>
+      <no-break><pageref|auto-72>>
 
       <with|par-left|<quote|1tab>|A.4<space|2spc>Sandboxing
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-74>>
+      <no-break><pageref|auto-73>>
 
       <with|par-left|<quote|2tab>|A.4.1<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-75>>
+      <no-break><pageref|auto-74>>
 
       <with|par-left|<quote|2tab>|A.4.2<space|2spc>Misc
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-76>>
+      <no-break><pageref|auto-75>>
 
       <with|par-left|<quote|2tab>|A.4.3<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-77>>
+      <no-break><pageref|auto-76>>
 
       <with|par-left|<quote|1tab>|A.5<space|2spc>Not implemented in
       Polkadot-JS <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-78>>
+      <no-break><pageref|auto-77>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-79><vspace|0.5fn>
+      <no-break><pageref|auto-78><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
