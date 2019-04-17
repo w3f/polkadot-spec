@@ -353,8 +353,9 @@
       \ \ (export "BlockBuilder_finalise_block" (func
       $BlockBuilder_finalise_block))
 
-      \ \ (export "BlockBuilder_inherent_extrinsics" (func
-      $BlockBuilder_inherent_extrinsics))
+      \ \ (export "BlockBuilder_inherent_extrinsics"\ 
+
+      \ \ \ \ \ \ \ \ \ \ (func $BlockBuilder_inherent_extrinsics))
 
       \ \ (export "BlockBuilder_check_inherents" (func
       $BlockBuilder_check_inherents))
@@ -362,17 +363,20 @@
       \ \ (export "BlockBuilder_random_seed" (func
       $BlockBuilder_random_seed))
 
-      \ \ (export "TaggedTransactionQueue_validate_transaction" (func
-      $TaggedTransactionQueue_validate_transaction))
+      \ \ (export "TaggedTransactionQueue_validate_transaction"\ 
 
-      \ \ (export "OffchainWorkerApi_offchain_worker" (func
-      $OffchainWorkerApi_offchain_worker))
+      \ \ \ \ \ \ \ \ \ \ (func $TaggedTransactionQueue_validate_transaction))
+
+      \ \ (export "OffchainWorkerApi_offchain_worker"\ 
+
+      \ \ \ \ \ \ \ \ \ \ (func $OffchainWorkerApi_offchain_worker))
 
       \ \ (export "ParachainHost_duty_roster" (func
       $ParachainHost_duty_roster))
 
-      \ \ (export "ParachainHost_active_parachains" (func
-      $ParachainHost_active_parachains))
+      \ \ (export "ParachainHost_active_parachains"\ 
+
+      \ \ \ \ \ \ \ \ \ \ (func $ParachainHost_active_parachains))
 
       \ \ (export "ParachainHost_parachain_head" (func
       $ParachainHost_parachain_head))
@@ -380,14 +384,17 @@
       \ \ (export "ParachainHost_parachain_code" (func
       $ParachainHost_parachain_code))
 
-      \ \ (export "GrandpaApi_grandpa_pending_change" (func
-      $GrandpaApi_grandpa_pending_change))
+      \ \ (export "GrandpaApi_grandpa_pending_change"\ 
 
-      \ \ (export "GrandpaApi_grandpa_forced_change" (func
-      $GrandpaApi_grandpa_forced_change))
+      \ \ \ \ \ \ \ \ \ \ (func $GrandpaApi_grandpa_pending_change))
 
-      \ \ (export "GrandpaApi_grandpa_authorities" (func
-      $GrandpaApi_grandpa_authorities))
+      \ \ (export "GrandpaApi_grandpa_forced_change"\ 
+
+      \ \ \ \ \ \ \ \ \ \ (func $GrandpaApi_grandpa_forced_change))
+
+      \ \ (export "GrandpaApi_grandpa_authorities"\ 
+
+      \ \ \ \ \ \ \ \ \ \ (func $GrandpaApi_grandpa_authorities))
 
       \ \ (export "ParachainHost_validators" (func $Core_authorities))
     </cpp-code>
@@ -523,54 +530,54 @@
   <section|State Storage and the Storage Trie>
 
   For storing the state of the system, Polkadot RE implements a hash table
-  storage where the keys are used to access each data entry state. There is
-  no limitation either on the size of the key nor the size of the data stored
+  storage where the keys are used to access each data entry. There is no
+  limitation either on the size of the key nor the size of the data stored
   under them, besides the fact that they are byte arrays.
 
   <subsection|Accessing The System Storage >
 
   Polkadot RE implements various functions to facilitate access to the system
   storage for the runtime. Section <reference|sect-runtime-api> lists all of
-  those functions. Here we define the essential ones which are also used by
-  the Polkadot RE.
+  those functions. Here we formalize the access to the storage when it is
+  directly accessed by Polkadot RE (in contrast to by Polkadot runtime).
 
   <\definition>
-    <label|def-state-read-write>The <strong|StateRead> and
-    <strong|StateWrite> functions provide basic access to the State Storage:
+    <label|defn-stored-value>The <strong|StoredValue> function retrieves the
+    value stored under a specific key in the state storage and is formally
+    defined as :
 
     <\equation*>
-      v=StateRead<around|(|k|)>
+      <tabular*|<tformat|<table|<row|<cell|StoredValue:>|<cell|\<bbb-B\>\<rightarrow\>\<bbb-B\>>>|<row|<cell|>|<cell|k\<mapsto\><around*|{|<tabular*|<tformat|<table|<row|<cell|v>|<cell|<text|if
+      (k,v) exists in state storage>>>|<row|<cell|\<phi\>>|<cell|otherwise>>>>>|\<nobracket\>>>>>>>
     </equation*>
 
-    <\equation*>
-      StateWrite<around|(|k,v|)>
-    </equation*>
-
-    where v and k are byte arrays.
+    \;
   </definition>
 
   <subsection|The General Tree Structure>
 
-  To authenticate the state of the system, the stored data needs to be
-  re-arranged and hashed in a <em|modified Merkle Patricia Tree>, which
-  hereafter we refer to as the <em|<strong|Trie>,> in order to compute the
-  hash of the whole state storage consistently and efficiently at any given
-  time.
+  To assure the integrity of the state of the system, the stored data needs
+  to be re-arranged and hashed in a <em|modified Merkle Patricia Tree>, which
+  hereafter we refer to as the <em|<strong|Trie>>. This is necessary in order
+  to be able to compute the Merkle hash of the whole or part of the state
+  storage, consistently and efficiently at any given time.
 
   Because the Trie is used to compute the <em|state root>, <math|H<rsub|r>>,
   (see Definition <reference|def-block-header>), which is used to
   authenticate the validity of the state database, Polkadot RE follows a
   rigorous encoding algorithm to compute the values stored in the trie nodes
   to ensure that the computed Merkle hash, <math|H<rsub|r>>, matches across
-  clients.
+  Polkadot RE implementations.
 
   The Trie is a <em|radix-16> tree as defined in Definition
   <reference|defn-radix-tree>. Each key value identifies a unique node in the
   tree. However, a node in a tree might or might not be associated with a key
-  in the storage. When traversing the Trie to a specific node, its key can be
-  reconstructed by concatenating the subsequences of the key which are stored
-  either explicitly in the nodes on the path or implicitly in their position
-  as a child of their parent.
+  in the storage.\ 
+
+  When traversing the Trie to a specific node, its key can be reconstructed
+  by concatenating the subsequences of the key which are stored either
+  explicitly in the nodes on the path or implicitly in their position as a
+  child of their parent.
 
   To identify the node corresponding to a key value, <math|k>, first we need
   to encode <math|k> in a way consistent with the Trie structure. Because
@@ -588,16 +595,16 @@
     such that:
 
     <\equation*>
-      KeyEncode<around|(|k|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|\<bbb-B\><rsup|\<nosymbol\>>>|<cell|\<rightarrow\>>|<cell|Nibbles<rsub|4>>>|<row|<cell|k\<assign\><around|(|b<rsub|1>,\<ldots\>,b<rsub|n>|)>\<assign\>>|<cell|\<mapsto\>>|<cell|<around|(|b<rsup|1><rsub|1>,b<rsup|2><rsub|1>,b<rsub|2><rsup|1>,b<rsup|2><rsub|2>,\<ldots\>,b<rsup|1><rsub|n>,b<rsup|2><rsub|n>|)>>>|<row|<cell|>|<cell|>|<cell|\<assign\><around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|2*n>>|)>>>>>>|\<nobracket\>>
+      KeyEncode<around|(|k|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|\<bbb-B\><rsup|\<nosymbol\>>>|<cell|\<rightarrow\>>|<cell|Nibbles<rsup|4>>>|<row|<cell|k\<assign\><around|(|b<rsub|1>,\<ldots\>,b<rsub|n>|)>\<assign\>>|<cell|\<mapsto\>>|<cell|<around|(|b<rsup|1><rsub|1>,b<rsup|2><rsub|1>,b<rsub|2><rsup|1>,b<rsup|2><rsub|2>,\<ldots\>,b<rsup|1><rsub|n>,b<rsup|2><rsub|n>|)>>>|<row|<cell|>|<cell|>|<cell|\<assign\><around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|2*n>>|)>>>>>>|\<nobracket\>>
     </equation*>
 
-    where <math|Nibble<rsub|4>> is the set of all nibbles of 4-bit arrays and
+    where <math|Nibble<rsup|4>> is the set of all nibbles of 4-bit arrays and
     <math|b<rsup|1><rsub|i>> and <math|b<rsup|2><rsub|i>> are 4-bit nibbles,
-    which are the little endian representations of <math|b<rsub|i>>:
+    which are the big endian representations of <math|b<rsub|i>>:
 
     <\equation*>
-      <around|(|b<rsup|1><rsub|i>,b<rsup|2><rsub|i>|)>\<assign\><around|(|b<rsub|i>mod
-      16,b<rsub|i>/16|)>
+      <around|(|b<rsup|1><rsub|i>,b<rsup|2><rsub|i>|)>\<assign\><around|(|b<rsub|i>/16,b<rsub|i>mod
+      16|)>
     </equation*>
 
     , where mod is the remainder and / is the integer division operators.
@@ -618,10 +625,47 @@
   </notation>
 
   <\definition>
-    <label|defn-node-key>Each Node in the Trie is identified with a unique
-    key <math|k<rsub|N>> such that <math|k<rsub|N>> is the shared prefix of
-    the key of all the descendents of <math|N> in the Trie. <math|k<rsub|N>>
-    is divided into an <strong|aggregated prefix key>,
+    <label|defn-nodetype>The State Trie is a radix-16 tree. Each Node in the
+    Trie is identified with a unique key <math|k<rsub|N>> such that:
+
+    <\itemize-minus>
+      <item><math|k<rsub|N>> is the shared prefix of the key of all the
+      descendents of <math|N> in the Trie.
+    </itemize-minus>
+
+    \ and, at least one of the following statements holds:
+
+    <\itemize-minus>
+      <item><math|<around*|(|k<rsub|N>,v|)>> corresponds to an existing entry
+      in the State Storage.
+
+      <item>N has more than one child.
+    </itemize-minus>
+
+    Conversely, if <math|<around*|(|k,v|)>> is an entry in the State Trie
+    then there is a node <math|N\<in\>\<cal-N\>> such that
+    <math|k<rsub|N>>=k.
+  </definition>
+
+  <\notation>
+    A <strong|branch> node is a node which has one child or more. A branch
+    node can have at most 16 children. A <strong|leaf> node is a childless
+    node. Accordingly:
+
+    <\equation*>
+      <tabular*|<tformat|<table|<row|<cell|\<cal-N\><rsub|b>\<assign\><around*|{|N\<in\>\<cal-N\>\|N
+      <text|is a branch node>|}>>>|<row|<cell|\<cal-N\><rsub|l>\<assign\><around*|{|N\<in\>\<cal-N\>\|N
+      <text|is a leaf node>|}>>>>>>
+    </equation*>
+  </notation>
+
+  For each Node, part of <math|k<rsub|N>> is built while the trie is
+  traversed from root to <math|N> part of <math|k<rsub|N>> is stored in
+  <math|N> as formalized in Definition <reference|defn-node-key>.
+
+  <\definition>
+    <label|defn-node-key>For any <math|N\<in\>\<cal-N\>>, its key
+    <math|k<rsub|N>> is divided into an <strong|aggregated prefix key>,
     <strong|<math|pk<rsub|N><rsup|Agr>>>, aggregated by Algorithm
     <reference|algo-aggregate-key> and a <strong|partial key>,
     <strong|<math|pk<rsub|N>>> of length <math|0\<leqslant\>l<rsub|pk<rsub|N>>\<leqslant\>65535>
@@ -638,6 +682,34 @@
       KeyEncode<around|(|k<rsub|N>|)>=pk<rsub|N><rsup|Agr>\|pk<rsub|N>=<around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|i-1>>,k<rsub|enc<rsub|i>>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
     </equation*>
   </definition>
+
+  Some part of <math|pk<rsub|N><rsup|Agr>> is explicitly stored in <math|N>'s
+  anscestors. Additionally, for each anscestor a single nibble is derived
+  implicitly while traversing from the anscestor to its child included in the
+  traversal path by means of <math|Index<rsub|N>> function defined in
+  Definition <reference|defn-index-function>.
+
+  <\definition>
+    <label|defn-index-function>For <math|N\<in\>\<cal-N\><rsub|b>> and
+    <math|N<rsub|c>> child of N, we define <strong|<math|Index<rsub|N>>>
+    function as:
+
+    <\equation*>
+      <tabular*|<tformat|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Index<rsub|N>:>|<cell|<around*|{|N<rsub|c>\<in\>\<cal-N\>\|N<rsub|c>
+      <text|is a child of N>|}>\<rightarrow\>Nibbles<rsup|4><rsub|1>>>|<row|<cell|>|<cell|N<rsub|c>\<mapsto\>i<rsub|>>>>>>
+    </equation*>
+
+    such that
+
+    <\equation*>
+      k<rsub|N<rsub|c>>=k<rsub|N><around*|\|||\|>i<around*|\|||\|>pk<rsub|N<rsub|c>>
+    </equation*>
+  </definition>
+
+  Aussming that <math|P<rsub|N>> is the path (see Definition
+  <reference|def-path-graph>) from the Trie root to node <math|N>, Algorithm
+  <reference|algo-aggregate-key> demonestrates rigorusly how to build
+  <math|pk<rsup|Agr><rsub|N>> while traversing <math|P<rsub|N>>.
 
   <\algorithm>
     <label|algo-aggregate-key><name|Aggregate-Key><math|<around*|(|P<rsub|N>:=<around*|(|TrieRoot=N<rsub|1>,\<ldots\>,N<rsub|j>=N|)>|)>>
@@ -673,28 +745,6 @@
       </state>
     </algorithmic>
   </algorithm>
-
-  Accordingly, we enforce the radix-16 tree optimization structure:
-
-  <\definition>
-    <label|defn-nodetype>The State Trie is a radix-16 tree. As such, for any
-    <math|N\<in\>\<cal-N\>> with key <math|k<rsub|N>>, at least one of the
-    following statements holds:
-
-    <\itemize-minus>
-      <item><math|<around*|(|k<rsub|N>,V|)>> corresponds to an existing entry
-      in the State Storage.
-
-      <item>N has more than one child.
-    </itemize-minus>
-
-    Conversly, if <math|<around*|(|k,V|)>> is an entry in the State Trie then
-    there is a node <math|N\<in\>\<cal-N\>> such that <math|k<rsub|N>>=k.
-
-    A <strong|branch> node is a node which has one child or more. A branch
-    node can have at most 16 children. A <strong|leaf> node is a childless
-    node.
-  </definition>
 
   <\definition>
     <label|defn-node-value>A node <math|N\<in\>\<cal-N\>> stores the
@@ -820,7 +870,7 @@
       </state>
 
       <\state>
-        <math|l\<leftarrow\>l-254>
+        <math|l\<leftarrow\>l-255>
       </state>
 
       <\state>
@@ -828,7 +878,7 @@
       </state>
 
       <\state>
-        <math|Head<rsub|N>,i\<leftarrow\>l>
+        <math|Head<rsub|N,i>\<leftarrow\>l-1>
       </state>
     </algorithmic>
   </algorithm>
@@ -842,9 +892,30 @@
   possible.
 
   The Merkle value of each node should depend on the Merkle value of all its
-  children as well as on its corresponding data in the state Storage. This
+  children as well as on its corresponding data in the state storage. This
   recursive dependancy is encompassed into the subvalue part of the node
   value which recursively depends on the Merkle value of its children.
+
+  We use the auxilary function introduced in Definition
+  <reference|defn-children-bitmap-index> to encode and decode information
+  stored in a branch node.
+
+  <\definition>
+    <label|defn-children-bitmap>Suppose <math|N<rsub|b>,N<rsub|c>\<in\>\<cal-N\>>
+    and <math|N<rsub|c>> is a child of <math|N<rsub|b>>, We define<math|>
+    where bit <math|b<rsub|i>:=1> if <math|N> has a child with partial key
+    <math|i>, we define <strong|ChildrenBitmap> functions as follows:
+
+    <\equation*>
+      <tabular*|<tformat|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|ChildrenBitmap:>|<cell|\<cal-N\><rsub|b>\<rightarrow\>\<bbb-B\><rsub|2>>>|<row|<cell|>|<cell|N\<mapsto\><around*|(|b<rsub|15>,\<ldots\>,b<rsub|8>,b<rsub|7>,\<ldots\>b<rsub|0>|)><rsub|2>>>>>>
+    </equation*>
+
+    where
+
+    <\equation*>
+      b<rsub|i>\<assign\><around*|{|<tabular*|<tformat|<table|<row|<cell|1>|<cell|\<exists\>N<rsub|c>\<in\>\<cal-N\>:k<rsub|N<rsub|c>>=k<rsub|N<rsub|b>><around*|\|||\|>i<around*|\|||\|>pk<rsub|N<rsub|c>>>>|<row|<cell|0>|<cell|<text|otherwise>>>>>>|\<nobracket\>>
+    </equation*>
+  </definition>
 
   <\definition>
     <label|defn-node-subvalue>For a given node <math|N>, the
@@ -853,40 +924,31 @@
 
     <\itemize>
       <\equation*>
-        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around|(|v|)>>|<cell|<text|N
-        is a leaf node>>>|<row|<cell|\<nobracket\>Enc<rsub|LE><around*|(|*ChildrenBitmap<around|(|N|)>|)>\<\|\|\>H<around|(|N<rsub|C<rsub|1>>|)>*\<ldots\>*<around*|\<nobracket\>|H<around|(|N<rsub|C<rsub|n>>|\<nobracket\>>|)><around*|\|||\|>Enc<rsub|SC><around|(|v|)>*>|<cell|<text|N
+        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around|(|StoredValue<around*|(|k<rsub|N>|)>|)>>|<cell|<text|N
+        is a leaf node>>>|<row|<cell|\<nobracket\>*ChildrenBitmap<around|(|N|)>\<\|\|\>H<around|(|N<rsub|C<rsub|1>>|)>*\<ldots\>*H<around*|(|N<rsub|C<rsub|n>>|)><around*|\|||\|>Enc<rsub|SC><around*|(|StoredValue<around*|(|k<rsub|N>|)>|)>*>|<cell|<text|N
         is a branch node>>>>>>|\<nobracket\>>>>>>>
       </equation*>
-
-      \;
     </itemize>
   </definition>
 
-  Where
+  Where <math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
+  <math|n\<leqslant\>16> are the children nodes of the branch node <math|N>
+  and Enc<rsub|SC>, <math|StoredValue>, <math|H>, and
+  <math|*ChildrenBitmap<around|(|N|)>> are defined in Definitions
+  <reference|def-scale-codec>,<reference|defn-stored-value>,
+  <reference|defn-merkle-value> and <reference|defn-children-bitmap>
+  respectively.
 
-  <\itemize>
-    <item><math|Enc<rsub|SC>> defined in Definition
-    <reference|def-scale-codec>.
-
-    <item><math|Enc<rsub|LE>> is the little-endian encoding defined in
-    Definition <reference|defn-little-endian>.
-
-    <item><math|ChildrenBitmap(N)\<assign\><around*|(|b<rsub|15>b<rsub|14>\<ldots\>,b<rsub|1>,b<rsub|0>|)><rsub|2>>
-    where bit <math|b<rsub|i>:=1> if <math|N> has a child with partial key
-    <math|i>.
-
-    <item><math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
-    <math|n\<leqslant\>16> are the children nodes of the branch node
-    <math|N>.
-  </itemize>
+  \;
 
   The Trie deviates from a traditional Merkle tree where node value,
   <math|v<rsub|N>> (see Definition <reference|defn-node-value>) is presented
   instead of its hash if it occupies less space than its hash.
 
   <\definition>
-    For a given node <math|N>, the <strong|Merkle value> of <math|N>, denoted
-    by <math|H<around|(|N|)>> is defined as follows:
+    <label|defn-merkle-value>For a given node <math|N>, the <strong|Merkle
+    value> of <math|N>, denoted by <math|H<around|(|N|)>> is defined as
+    follows:
 
     <\equation*>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<bbb-B\><rsub|32>>|<cell|>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|v<rsub|N><around*|\|||\|>0<rsub|B<rsub|32-<around*|\<\|\|\>|v<rsub|N>|\<\|\|\>>>>>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<less\>32>|<cell|>>|<row|<cell|Blake2s<around|(|v<rsub|N>|)>>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<geqslant\>32>|<cell|>>>>>|\<nobracket\>>>|<cell|>>>>>
@@ -1574,10 +1636,11 @@
   sequences of 4-bits nibbles into byte arrays canonically:
 
   <\definition>
-    <label|defn-he>Suppose that <math|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>
-    is a sequence of nibbles, then
+    <label|defn-hex-encoding>Suppose that
+    <math|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>> is a sequence of
+    nibbles, then
 
-    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|Enc<rsub|HE><around|(|PK|)>\<assign\>>>>|<row|<cell|<math|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Nibbles<rsub|4>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\>>>|<row|<cell|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>|<cell|\<mapsto\>>|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|<around|(|k<rsub|1>+16*k<rsub|2>,\<ldots\>,k<rsub|2*i-1>+16*k<rsub|2*i>|)>>|<cell|n=2*i>>|<row|<cell|<around|(|k<rsub|1>,k<rsub|2>+16*k<rsub|3>,\<ldots\>,k<rsub|2*i-1>+16*k<rsub|2*i>,k<rsub|2i+1>|)>>|<cell|n=2*i+1>>>>>>>>>>|\<nobracket\>>>>>>>|\<nobracket\>>>>>>>>
+    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|Enc<rsub|HE><around|(|PK|)>\<assign\>>>>|<row|<cell|<math|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Nibbles<rsub|4>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\>>>|<row|<cell|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>|<cell|\<mapsto\>>|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|<around|(|16k<rsub|1>+*k<rsub|2>,\<ldots\>,16k<rsub|2*i-1>+*k<rsub|2*i>|)>>|<cell|n=2*i>>|<row|<cell|<around|(|k<rsub|1>,16k<rsub|2>+*k<rsub|3>,\<ldots\>,16k<rsub|2*i>+*k<rsub|2*i+1>|)>>|<cell|n=2*i+1>>>>>>>>>>|\<nobracket\>>>>>>>|\<nobracket\>>>>>>>>
   </definition>
 
   <section|Genesis Block Specification><label|sect-genisis-block>
@@ -2101,12 +2164,12 @@
 
 <\references>
   <\collection>
-    <associate|alg-grandpa-best-candidate|<tuple|7|14>>
-    <associate|alg-grandpa-round|<tuple|6|14>>
+    <associate|alg-grandpa-best-candidate|<tuple|7|15>>
+    <associate|alg-grandpa-round|<tuple|6|15>>
     <associate|alg-join-leave-grandpa|<tuple|5|14>>
-    <associate|algo-aggregate-key|<tuple|2|?>>
+    <associate|algo-aggregate-key|<tuple|2|8>>
     <associate|algo-block-production|<tuple|4|11>>
-    <associate|algo-pk-length|<tuple|3|?>>
+    <associate|algo-pk-length|<tuple|3|9>>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|3.2.1|3>>
     <associate|auto-11|<tuple|3.2.2|4>>
@@ -2132,98 +2195,106 @@
     <associate|auto-3|<tuple|2.1|2>>
     <associate|auto-30|<tuple|5.3|7>>
     <associate|auto-31|<tuple|5.4|9>>
-    <associate|auto-32|<tuple|6|9>>
-    <associate|auto-33|<tuple|6.1|9>>
-    <associate|auto-34|<tuple|7|9>>
+    <associate|auto-32|<tuple|6|10>>
+    <associate|auto-33|<tuple|6.1|10>>
+    <associate|auto-34|<tuple|7|10>>
     <associate|auto-35|<tuple|7.1|10>>
-    <associate|auto-36|<tuple|7.2|10>>
-    <associate|auto-37|<tuple|7.2.1|10>>
-    <associate|auto-38|<tuple|7.2.2|10>>
-    <associate|auto-39|<tuple|7.2.3|11>>
+    <associate|auto-36|<tuple|7.2|11>>
+    <associate|auto-37|<tuple|7.2.1|11>>
+    <associate|auto-38|<tuple|7.2.2|11>>
+    <associate|auto-39|<tuple|7.2.3|12>>
     <associate|auto-4|<tuple|2.2|2>>
-    <associate|auto-40|<tuple|7.3|11>>
-    <associate|auto-41|<tuple|7.3.1|11>>
-    <associate|auto-42|<tuple|7.3.2|13>>
+    <associate|auto-40|<tuple|7.3|12>>
+    <associate|auto-41|<tuple|7.3.1|12>>
+    <associate|auto-42|<tuple|7.3.2|14>>
     <associate|auto-43|<tuple|7.3.3|14>>
-    <associate|auto-44|<tuple|7.3.4|14>>
-    <associate|auto-45|<tuple|8|15>>
-    <associate|auto-46|<tuple|8.1|15>>
-    <associate|auto-47|<tuple|8.2|15>>
-    <associate|auto-48|<tuple|9|15>>
-    <associate|auto-49|<tuple|9.1|15>>
+    <associate|auto-44|<tuple|7.3.4|15>>
+    <associate|auto-45|<tuple|8|16>>
+    <associate|auto-46|<tuple|8.1|16>>
+    <associate|auto-47|<tuple|8.2|16>>
+    <associate|auto-48|<tuple|9|16>>
+    <associate|auto-49|<tuple|9.1|16>>
     <associate|auto-5|<tuple|2.3|3>>
-    <associate|auto-50|<tuple|9.2|16>>
-    <associate|auto-51|<tuple|10|16>>
+    <associate|auto-50|<tuple|9.2|17>>
+    <associate|auto-51|<tuple|10|17>>
     <associate|auto-52|<tuple|11|17>>
     <associate|auto-53|<tuple|12|17>>
     <associate|auto-54|<tuple|A|17>>
     <associate|auto-55|<tuple|A.1|17>>
     <associate|auto-56|<tuple|A.1.1|17>>
-    <associate|auto-57|<tuple|A.1.2|17>>
-    <associate|auto-58|<tuple|A.1.3|17>>
+    <associate|auto-57|<tuple|A.1.2|18>>
+    <associate|auto-58|<tuple|A.1.3|18>>
     <associate|auto-59|<tuple|A.1.4|18>>
     <associate|auto-6|<tuple|2.4|3>>
-    <associate|auto-60|<tuple|A.1.5|18>>
-    <associate|auto-61|<tuple|A.1.6|18>>
+    <associate|auto-60|<tuple|A.1.5|19>>
+    <associate|auto-61|<tuple|A.1.6|19>>
     <associate|auto-62|<tuple|A.1.7|19>>
-    <associate|auto-63|<tuple|A.1.8|19>>
-    <associate|auto-64|<tuple|A.1.9|19>>
-    <associate|auto-65|<tuple|A.2|20>>
-    <associate|auto-66|<tuple|A.2.1|20>>
-    <associate|auto-67|<tuple|A.2.2|20>>
+    <associate|auto-63|<tuple|A.1.8|20>>
+    <associate|auto-64|<tuple|A.1.9|20>>
+    <associate|auto-65|<tuple|A.2|21>>
+    <associate|auto-66|<tuple|A.2.1|21>>
+    <associate|auto-67|<tuple|A.2.2|21>>
     <associate|auto-68|<tuple|A.2.3|21>>
     <associate|auto-69|<tuple|A.3|21>>
     <associate|auto-7|<tuple|3|3>>
     <associate|auto-70|<tuple|A.3.1|21>>
-    <associate|auto-71|<tuple|A.3.2|21>>
-    <associate|auto-72|<tuple|A.3.3|21>>
+    <associate|auto-71|<tuple|A.3.2|22>>
+    <associate|auto-72|<tuple|A.3.3|22>>
     <associate|auto-73|<tuple|A.4|22>>
     <associate|auto-74|<tuple|A.4.1|22>>
-    <associate|auto-75|<tuple|A.4.2|22>>
-    <associate|auto-76|<tuple|A.4.3|22>>
-    <associate|auto-77|<tuple|A.5|22>>
-    <associate|auto-78|<tuple|A.5|22>>
+    <associate|auto-75|<tuple|A.4.2|23>>
+    <associate|auto-76|<tuple|A.4.3|23>>
+    <associate|auto-77|<tuple|A.5|23>>
+    <associate|auto-78|<tuple|A.5|23>>
     <associate|auto-8|<tuple|3.1|3>>
     <associate|auto-9|<tuple|3.2|3>>
-    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|22>>
-    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|22>>
-    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|22>>
+    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|23>>
+    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|23>>
+    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|23>>
     <associate|block|<tuple|2.1|2>>
     <associate|def-block-header|<tuple|10|2>>
     <associate|def-block-header-hash|<tuple|11|2>>
     <associate|def-extrinsic-network-message|<tuple|12|6>>
-    <associate|def-grandpa-justification|<tuple|41|13>>
+    <associate|def-grandpa-justification|<tuple|44|14>>
+    <associate|def-hpe|<tuple|45|?>>
     <associate|def-path-graph|<tuple|2|1>>
-    <associate|def-scale-codec|<tuple|43|15>>
+    <associate|def-scale-codec|<tuple|46|16>>
     <associate|def-state-read-write|<tuple|13|6>>
-    <associate|def-vote|<tuple|32|11>>
-    <associate|defn-account-key|<tuple|22|9>>
+    <associate|def-stored-value|<tuple|13|?>>
+    <associate|def-vote|<tuple|35|12>>
+    <associate|defn-account-key|<tuple|25|10>>
     <associate|defn-bit-rep|<tuple|6|1>>
-    <associate|defn-block-tree|<tuple|23|10>>
-    <associate|defn-he|<tuple|45|?>>
+    <associate|defn-block-tree|<tuple|26|10>>
+    <associate|defn-children-bitmap|<tuple|22|?>>
+    <associate|defn-children-bitmap-index|<tuple|21|?>>
+    <associate|defn-he|<tuple|45|17>>
+    <associate|defn-hex-encoding|<tuple|48|?>>
+    <associate|defn-index-function|<tuple|19|?>>
     <associate|defn-little-endian|<tuple|7|1>>
-    <associate|defn-node-header|<tuple|19|8>>
-    <associate|defn-node-key|<tuple|16|7>>
-    <associate|defn-node-subvalue|<tuple|20|?>>
-    <associate|defn-node-value|<tuple|18|8>>
-    <associate|defn-nodetype|<tuple|17|8>>
+    <associate|defn-merkle-value|<tuple|24|?>>
+    <associate|defn-node-header|<tuple|21|8>>
+    <associate|defn-node-key|<tuple|18|7>>
+    <associate|defn-node-subvalue|<tuple|23|9>>
+    <associate|defn-node-value|<tuple|20|8>>
+    <associate|defn-nodetype|<tuple|16|8>>
     <associate|defn-radix-tree|<tuple|3|1>>
+    <associate|defn-stored-value|<tuple|13|?>>
     <associate|key-encode-in-trie|<tuple|1|7>>
     <associate|sect-abi-encoding|<tuple|3.2.1|3>>
-    <associate|sect-encoding|<tuple|9|15>>
+    <associate|sect-encoding|<tuple|9|16>>
     <associate|sect-entries-into-runtime|<tuple|3|3>>
-    <associate|sect-finality|<tuple|7.3|11>>
+    <associate|sect-finality|<tuple|7.3|12>>
     <associate|sect-genisis-block|<tuple|10|17>>
     <associate|sect-merkl-proof|<tuple|5.4|9>>
     <associate|sect-predef-storage-keys|<tuple|11|17>>
-    <associate|sect-randomness|<tuple|8.1|15>>
+    <associate|sect-randomness|<tuple|8.1|16>>
     <associate|sect-runtime-api|<tuple|A|17>>
     <associate|sect-runtime-api-auth|<tuple|3.3.2|5>>
     <associate|sect-runtime-entries|<tuple|3.3|4>>
     <associate|sect-runtime-upgrade|<tuple|12|17>>
-    <associate|sect-scale-codec|<tuple|9.1|15>>
+    <associate|sect-scale-codec|<tuple|9.1|16>>
     <associate|sect-validate-transaction|<tuple|3.3.5|5>>
-    <associate|sect-vrf|<tuple|8.2|15>>
+    <associate|sect-vrf|<tuple|8.2|16>>
     <associate|snippet-runtime-enteries|<tuple|1|4>>
   </collection>
 </references>
