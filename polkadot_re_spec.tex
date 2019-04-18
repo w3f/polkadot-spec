@@ -73,7 +73,7 @@
   {\Large Protocol Specification}
 }
 
-\date{April 16, 2019}
+\date{April 18, 2019}
 
 \maketitle
 
@@ -335,18 +335,25 @@ the Runtime Wasm blob and has been exported as shown in Snippet
   (export "Metadata_metadata" (func $Metadata_metadata))
   (export "BlockBuilder_apply_extrinsic" (func $BlockBuilder_apply_extrinsic))
   (export "BlockBuilder_finalise_block" (func $BlockBuilder_finalise_block))
-  (export "BlockBuilder_inherent_extrinsics" (func $BlockBuilder_inherent_extrinsics))
+  (export "BlockBuilder_inherent_extrinsics" 
+          (func $BlockBuilder_inherent_extrinsics))
   (export "BlockBuilder_check_inherents" (func $BlockBuilder_check_inherents))
   (export "BlockBuilder_random_seed" (func $BlockBuilder_random_seed))
-  (export "TaggedTransactionQueue_validate_transaction" (func $TaggedTransactionQueue_validate_transaction))
-  (export "OffchainWorkerApi_offchain_worker" (func $OffchainWorkerApi_offchain_worker))
+  (export "TaggedTransactionQueue_validate_transaction" 
+          (func $TaggedTransactionQueue_validate_transaction))
+  (export "OffchainWorkerApi_offchain_worker" 
+          (func $OffchainWorkerApi_offchain_worker))
   (export "ParachainHost_duty_roster" (func $ParachainHost_duty_roster))
-  (export "ParachainHost_active_parachains" (func $ParachainHost_active_parachains))
+  (export "ParachainHost_active_parachains" 
+          (func $ParachainHost_active_parachains))
   (export "ParachainHost_parachain_head" (func $ParachainHost_parachain_head))
   (export "ParachainHost_parachain_code" (func $ParachainHost_parachain_code))
-  (export "GrandpaApi_grandpa_pending_change" (func $GrandpaApi_grandpa_pending_change))
-  (export "GrandpaApi_grandpa_forced_change" (func $GrandpaApi_grandpa_forced_change))
-  (export "GrandpaApi_grandpa_authorities" (func $GrandpaApi_grandpa_authorities))
+  (export "GrandpaApi_grandpa_pending_change" 
+          (func $GrandpaApi_grandpa_pending_change))
+  (export "GrandpaApi_grandpa_forced_change" 
+          (func $GrandpaApi_grandpa_forced_change))
+  (export "GrandpaApi_grandpa_authorities" 
+          (func $GrandpaApi_grandpa_authorities))
   (export "ParachainHost_validators" (func $Core_authorities))
 \end{tmcode}}{\label{snippet-runtime-enteries}Snippet to export entries into
 tho Wasm runtime module}
@@ -485,49 +492,57 @@ For the definition of the finality and the finalized block see Section
 \section{State Storage and the Storage Trie}
 
 For storing the state of the system, Polkadot RE implements a hash table
-storage where the keys are used to access each data entry state. There is no
-limitation either on the size of the key nor the size of the data stored under
-them, besides the fact that they are byte arrays.
+storage where the keys are used to access each data entry. There is no
+limitation neither on the size of the key nor on the size of the data stored
+under them, besides the fact that they are byte arrays.
 
 \subsection{Accessing The System Storage }
 
 Polkadot RE implements various functions to facilitate access to the system
 storage for the runtime. Section \ref{sect-runtime-api} lists all of those
-functions. Here we define the essential ones which are also used by the
-Polkadot RE.
+functions. Here we formalize the access to the storage when it is being
+directly accessed by Polkadot RE (in contrast to Polkadot runtime).
 
 \begin{definition}
-  \label{def-state-read-write}The {\tmstrong{StateRead}} and
-  {\tmstrong{StateWrite}} functions provide basic access to the State Storage:
-  \[ v = \tmop{StateRead} (k) \]
-  \[ \tmop{StateWrite} (k, v) \]
-  where v and k are byte arrays.
+  \label{defn-stored-value}The {\tmstrong{StoredValue}} function retrieves the
+  value stored under a specific key in the state storage and is formally
+  defined as :
+  \[ \begin{array}{cc}
+       \tmop{StoredValue} : & \mathbb{B} \rightarrow \mathbb{B}\\
+       & k \mapsto \left\{ \begin{array}{cc}
+         v & \text{if (k,v) exists in state storage}\\
+         \phi & \tmop{otherwise}
+       \end{array} \right.
+     \end{array} \]
+  
 \end{definition}
 
 \subsection{The General Tree Structure}
 
-To authenticate the state of the system, the stored data needs to be
-re-arranged and hashed in a {\tmem{modified Merkle Patricia Tree}}, which
-hereafter we refer to as the {\tmem{{\tmstrong{Trie}},}} in order to compute
-the hash of the whole state storage consistently and efficiently at any given
-time.
+In order to ensure the integrity of the state of the system, the stored data
+needs to be re-arranged and hashed in a {\tmem{modified Merkle Patricia
+Tree}}, which hereafter we refer to as the {\tmem{{\tmstrong{Trie}}}}. This
+rearrangment is necessary to be able to compute the Merkle hash of the whole
+or part of the state storage, consistently and efficiently at any given time.
 
-Because the Trie is used to compute the {\tmem{state root}}, $H_r$, (see
-Definition \ref{def-block-header}), which is used to authenticate the validity
-of the state database, Polkadot RE follows a rigorous encoding algorithm to
+The Trie is used to compute the {\tmem{state root}}, $H_r$, (see Definition
+\ref{def-block-header}), whose purpose is to authenticate the validity of the
+state database. Thus, Polkadot RE follows a rigorous encoding algorithm to
 compute the values stored in the trie nodes to ensure that the computed Merkle
-hash, $H_r$, matches across clients.
+hash, $H_r$, matches across the Polkadot RE implementations.
 
 The Trie is a {\tmem{radix-16}} tree as defined in Definition
 \ref{defn-radix-tree}. Each key value identifies a unique node in the tree.
 However, a node in a tree might or might not be associated with a key in the
-storage. When traversing the Trie to a specific node, its key can be
-reconstructed by concatenating the subsequences of the key which are stored
-either explicitly in the nodes on the path or implicitly in their position as
-a child of their parent.
+storage.
+
+When traversing the Trie to a specific node, its key can be reconstructed by
+concatenating the subsequences of the key which are stored either explicitly
+in the nodes on the path or implicitly in their position as a child of their
+parent.
 
 To identify the node corresponding to a key value, $k$, first we need to
-encode $k$ in a way consistent with the Trie structure. Because each node in
+encode $k$ in a consistent with the Trie structure way. Because each node in
 the trie has at most 16 children, we represent the key as a sequence of 4-bit
 nibbles:
 
@@ -540,15 +555,15 @@ nibbles:
   \end{equation}
   such that:
   \[ \tmop{KeyEncode} (k) : \left\{ \begin{array}{lll}
-       \mathbb{B}^{\nosymbol} & \rightarrow & \tmop{Nibbles}_4\\
+       \mathbb{B}^{\nosymbol} & \rightarrow & \tmop{Nibbles}^4\\
        k \assign (b_1, \ldots, b_n) \assign & \mapsto & (b^1_1, b^2_1, b_2^1,
        b^2_2, \ldots, b^1_n, b^2_n)\\
        &  & \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{2 n}})
      \end{array} \right. \]
-  where $\tmop{Nibble}_4$ is the set of all nibbles of 4-bit arrays and
-  $b^1_i$ and $b^2_i$ are 4-bit nibbles, which are the little endian
+  where $\tmop{Nibble}^4$ is the set of all nibbles of 4-bit arrays and
+  $b^1_i$ and $b^2_i$ are 4-bit nibbles, which are the big endian
   representations of $b_i$:
-  \[ (b^1_i, b^2_i) \assign (b_i \tmop{mod} 16, b_i / 16) \]
+  \[ (b^1_i, b^2_i) \assign (b_i / 16, b_i \tmop{mod} 16) \]
   , where mod is the remainder and / is the integer division operators.
 \end{definition}
 
@@ -567,10 +582,42 @@ as the Trie structure:
 \end{notation}
 
 \begin{definition}
-  \label{defn-node-key}Each Node in the Trie is identified with a unique key
-  $k_N$ such that $k_N$ is the shared prefix of the key of all the descendents
-  of $N$ in the Trie. $k_N$ is divided into an {\tmstrong{aggregated prefix
-  key}}, {\tmstrong{$\tmop{pk}_N^{\tmop{Agr}}$}}, aggregated by Algorithm
+  \label{defn-nodetype}The State Trie is a radix-16 tree. Each Node in the
+  Trie is identified with a unique key $k_N$ such that:
+  \begin{itemizeminus}
+    \item $k_N$ is the shared prefix of the key of all the descendants of $N$
+    in the Trie.
+  \end{itemizeminus}
+  and, at least one of the following statements holds:
+  \begin{itemizeminus}
+    \item $(k_N, v)$ corresponds to an existing entry in the State Storage.
+    
+    \item N has more than one child.
+  \end{itemizeminus}
+  Conversely, if $(k, v)$ is an entry in the State Trie then there is a node
+  $N \in \mathcal{N}$ such that $k_N$=k.
+\end{definition}
+
+\begin{notation}
+  A {\tmstrong{branch}} node is a node which has one child or more. A branch
+  node can have at most 16 children. A {\tmstrong{leaf}} node is a childless
+  node. Accordingly:
+  \[ \begin{array}{c}
+       \mathcal{N}_b \assign \left\{ N \in \mathcal{N}|N \text{is a branch
+       node} \right\}\\
+       \mathcal{N}_l \assign \left\{ N \in \mathcal{N}|N \text{is a leaf node}
+       \right\}
+     \end{array} \]
+\end{notation}
+
+For each Node, part of $k_N$ is built while the trie is traversed from root to
+$N$ part of $k_N$ is stored in $N$ as formalized in Definition
+\ref{defn-node-key}.
+
+\begin{definition}
+  \label{defn-node-key}For any $N \in \mathcal{N}$, its key $k_N$ is divided
+  into an {\tmstrong{aggregated prefix key}},
+  {\tmstrong{$\tmop{pk}_N^{\tmop{Agr}}$}}, aggregated by Algorithm
   \ref{algo-aggregate-key} and a {\tmstrong{partial key}},
   {\tmstrong{$\tmop{pk}_N$}} of length $0 \leqslant l_{\tmop{pk}_N} \leqslant
   65535$ such that:
@@ -581,6 +628,27 @@ as the Trie structure:
      (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{i - 1}}, k_{\tmop{enc}_i},
      k_{\tmop{enc}_{i + l_{\tmop{pk}_N}}}) \]
 \end{definition}
+
+Part of $\tmop{pk}_N^{\tmop{Agr}}$ is explicitly stored in $N$'s ancestors.
+Additionally, for each ancestor, a single nibble is implicitly derived while
+traversing from the ancestor to its child included in the traversal path using
+the $\tmop{Index}_N$ function defined in Definition \ref{defn-index-function}.
+
+\begin{definition}
+  \label{defn-index-function}For $N \in \mathcal{N}_b$ and $N_c$ child of N,
+  we define {\tmstrong{$\tmop{Index}_N$}} function as:
+  \[ \begin{array}{cc}
+       \tmop{Index}_N : & \left\{ N_c \in \mathcal{N}|N_c  \text{is a child of
+       N} \right\} \rightarrow \tmop{Nibbles}^4_1\\
+       & N_c \mapsto i_{}
+     \end{array} \]
+  such that
+  \[ k_{N_c} = k_N | | i | | \tmop{pk}_{N_c} \]
+\end{definition}
+
+Assuming that $P_N$ is the path (see Definition \ref{def-path-graph}) from the
+Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
+demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 \custombinding{2}{\noindent}\begin{tabular}{l}
   \hline
@@ -605,25 +673,6 @@ as the Trie structure:
 {\state{{\RETURN{$\tmop{pk}^{\tmop{Agr}}_N$}}}}}}
 
 \hrulefill{\medskip}
-
-Accordingly, we enforce the radix-16 tree optimization structure:
-
-\begin{definition}
-  \label{defn-nodetype}The State Trie is a radix-16 tree. As such, for any $N
-  \in \mathcal{N}$ with key $k_N$, at least one of the following statements
-  holds:
-  \begin{itemizeminus}
-    \item $(k_N, V)$ corresponds to an existing entry in the State Storage.
-    
-    \item N has more than one child.
-  \end{itemizeminus}
-  Conversly, if $(k, V)$ is an entry in the State Trie then there is a node $N
-  \in \mathcal{N}$ such that $k_N$=k.
-  
-  A {\tmstrong{branch}} node is a node which has one child or more. A branch
-  node can have at most 16 children. A {\tmstrong{leaf}} node is a childless
-  node.
-\end{definition}
 
 \begin{definition}
   \label{defn-node-value}A node $N \in \mathcal{N}$ stores the {\tmstrong{node
@@ -726,11 +775,11 @@ Accordingly, we enforce the radix-16 tree optimization structure:
 
 {\state{$\tmop{Head}_{N, i} \leftarrow 255$}}
 
-{\state{$l \leftarrow l - 254$}}
+{\state{$l \leftarrow l - 255$}}
 
 {\state{$i \leftarrow i + 1 \END$}}
 
-{\state{$\tmop{Head}_N, i \leftarrow l$}}}}
+{\state{$\tmop{Head}_{N, i} \leftarrow l - 1$}}}}
 
 \hrulefill{\medskip}
 
@@ -742,48 +791,64 @@ tree structure. The hash value corresponding to each node needs to be computed
 rigorously to make the inter-implementation data integrity possible.
 
 The Merkle value of each node should depend on the Merkle value of all its
-children as well as on its corresponding data in the state Storage. This
+children as well as on its corresponding data in the state storage. This
 recursive dependancy is encompassed into the subvalue part of the node value
 which recursively depends on the Merkle value of its children.
 
+We use the auxilary function introduced in Definition
+\ref{defn-children-bitmap-index} to encode and decode information stored in a
+branch node.
+
+\begin{definition}
+  \label{defn-children-bitmap}Suppose $N_b, N_c \in \mathcal{N}$ and $N_c$ is
+  a child of $N_b$. We define where bit $b_i : = 1$ if $N$ has a child with
+  partial key $i$, therefore we define {\tmstrong{ChildrenBitmap}} functions
+  as follows:
+  \[ \begin{array}{cc}
+       \tmop{ChildrenBitmap} : & \mathcal{N}_b \rightarrow \mathbb{B}_2\\
+       & N \mapsto (b_{15}, \ldots, b_8, b_7, \ldots b_0)_2
+     \end{array} \]
+  where
+  \[ b_i \assign \left\{ \begin{array}{cc}
+       1 & \exists N_c \in \mathcal{N}: k_{N_c} = k_{N_b} | | i | |
+       \tmop{pk}_{N_c}\\
+       0 & \text{otherwise}
+     \end{array} \right. \]
+\end{definition}
+
 \begin{definition}
   \label{defn-node-subvalue}For a given node $N$, the {\tmstrong{subvalue}} of
-  $N$, formally referred to as $\tmop{sv}_N$ is determined as follows, in a
+  $N$, formally referred to as $\tmop{sv}_N$, is determined as follows: in a
   case which:
   \begin{itemize}
     \[ \begin{array}{l}
          \tmop{sv}_N \assign\\
          \left\{ \begin{array}{cc}
-           \tmop{Enc}_{\tmop{SC}} (v) & \text{N is a leaf node}\\
-           \nobracket \tmop{Enc}_{\tmop{LE}} (\tmop{ChildrenBitmap} (N)) \|H
-           (N_{C_1}) \ldots \nobracket H (N_{C_n}) | | \tmop{Enc}_{\tmop{SC}}
-           (v) & \text{N is a branch node}
+           \tmop{Enc}_{\tmop{SC}} (\tmop{StoredValue} (k_N)) & \text{N is a
+           leaf node}\\
+           \nobracket \tmop{ChildrenBitmap} (N)\|H (N_{C_1}) \ldots H
+           (N_{C_n}) | | \tmop{Enc}_{\tmop{SC}} (\tmop{StoredValue} (k_N))  &
+           \text{N is a branch node}
          \end{array} \right.
        \end{array} \]
-    
   \end{itemize}
 \end{definition}
 
-Where
-\begin{itemize}
-  \item $\tmop{Enc}_{\tmop{SC}}$ defined in Definition \ref{def-scale-codec}.
-  
-  \item $\tmop{Enc}_{\tmop{LE}}$ is the little-endian encoding defined in
-  Definition \ref{defn-little-endian}.
-  
-  \item $\tmop{ChildrenBitmap} (N) \assign (b_{15} b_{14} \ldots, b_1, b_0)_2$
-  where bit $b_i : = 1$ if $N$ has a child with partial key $i$.
-  
-  \item $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes
-  of the branch node $N$.
-\end{itemize}
+Where $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes of
+the branch node $N$ and Enc\tmrsub{SC}, $\tmop{StoredValue}$, $H$, and
+$\tmop{ChildrenBitmap} (N)$ are defined in Definitions \ref{def-scale-codec},
+\ref{defn-stored-value}, \ref{defn-merkle-value} and
+\ref{defn-children-bitmap} respectively.
+
+\
+
 The Trie deviates from a traditional Merkle tree where node value, $v_N$ (see
 Definition \ref{defn-node-value}) is presented instead of its hash if it
 occupies less space than its hash.
 
 \begin{definition}
-  For a given node $N$, the {\tmstrong{Merkle value}} of $N$, denoted by $H
-  (N)$ is defined as follows:
+  \label{defn-merkle-value}For a given node $N$, the {\tmstrong{Merkle value}}
+  of $N$, denoted by $H (N)$ is defined as follows:
   \[ \begin{array}{lll}
        & H : \mathbb{B} \rightarrow \mathbb{B}_{32} & \\
        & H (N) : \left\{ \begin{array}{lll}
@@ -797,11 +862,11 @@ occupies less space than its hash.
 
 \section{Transactions}
 
-\subsection{preliminaries}
+\subsection{Preliminaries}
 
 \begin{definition}
   \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
-  \tmop{pk}^a)$}} is a pair of ristretto SR25519 used to sign transactions
+  \tmop{pk}^a)$}} is a pair of Ristretto SR25519 used to sign transactions
   among other accounts and blance-related functions.
 \end{definition}
 
@@ -1349,8 +1414,8 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
 4-bits nibbles into byte arrays canonically:
 
 \begin{definition}
-  \label{defn-he}Suppose that $\tmop{PK} = (k_1, \ldots, k_n)$ is a sequence
-  of nibbles, then
+  \label{defn-hex-encoding}Suppose that $\tmop{PK} = (k_1, \ldots, k_n)$ is a
+  sequence of nibbles, then
   
   \begin{tabular}{l}
     $\tmop{Enc}_{\tmop{HE}} (\tmop{PK}) \assign$\\
@@ -1358,9 +1423,8 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
       \tmop{Nibbles}_4 & \rightarrow & \mathbb{B}\\
       \tmop{PK} = (k_1, \ldots, k_n) & \mapsto & \left\{ \begin{array}{l}
         \begin{array}{ll}
-          (k_1 + 16 k_2, \ldots, k_{2 i - 1} + 16 k_{2 i}) & n = 2 i\\
-          (k_1, k_2 + 16 k_3, \ldots, k_{2 i - 1} + 16 k_{2 i}, k_{2 i + 1}) &
-          n = 2 i + 1
+          (16 k_1 + k_2, \ldots, 16 k_{2 i - 1} + k_{2 i}) & n = 2 i\\
+          (k_1, 16 k_2 + k_3, \ldots, 16 k_{2 i} + k_{2 i + 1}) & n = 2 i + 1
         \end{array}
       \end{array} \right.
     \end{array} \right.$
@@ -1683,7 +1747,7 @@ Deallocates a previously allocated memory.
   \item \tmverbatim{ext\_print\_utf8}
 \end{itemize}
 
-\subsection{Cryptograhpic auxilary functions}
+\subsection{Cryptograhpic auxiliary functions}
 
 \subsubsection{ext\_blake2\_256}
 

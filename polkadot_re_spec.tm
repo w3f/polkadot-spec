@@ -531,15 +531,15 @@
 
   For storing the state of the system, Polkadot RE implements a hash table
   storage where the keys are used to access each data entry. There is no
-  limitation either on the size of the key nor the size of the data stored
-  under them, besides the fact that they are byte arrays.
+  limitation neither on the size of the key nor on the size of the data
+  stored under them, besides the fact that they are byte arrays.
 
   <subsection|Accessing The System Storage >
 
   Polkadot RE implements various functions to facilitate access to the system
   storage for the runtime. Section <reference|sect-runtime-api> lists all of
   those functions. Here we formalize the access to the storage when it is
-  directly accessed by Polkadot RE (in contrast to by Polkadot runtime).
+  being directly accessed by Polkadot RE (in contrast to Polkadot runtime).
 
   <\definition>
     <label|defn-stored-value>The <strong|StoredValue> function retrieves the
@@ -556,17 +556,18 @@
 
   <subsection|The General Tree Structure>
 
-  To assure the integrity of the state of the system, the stored data needs
-  to be re-arranged and hashed in a <em|modified Merkle Patricia Tree>, which
-  hereafter we refer to as the <em|<strong|Trie>>. This is necessary in order
-  to be able to compute the Merkle hash of the whole or part of the state
-  storage, consistently and efficiently at any given time.
+  In order to ensure the integrity of the state of the system, the stored
+  data needs to be re-arranged and hashed in a <em|modified Merkle Patricia
+  Tree>, which hereafter we refer to as the <em|<strong|Trie>>. This
+  rearrangment is necessary to be able to compute the Merkle hash of the
+  whole or part of the state storage, consistently and efficiently at any
+  given time.
 
-  Because the Trie is used to compute the <em|state root>, <math|H<rsub|r>>,
-  (see Definition <reference|def-block-header>), which is used to
-  authenticate the validity of the state database, Polkadot RE follows a
-  rigorous encoding algorithm to compute the values stored in the trie nodes
-  to ensure that the computed Merkle hash, <math|H<rsub|r>>, matches across
+  The Trie is used to compute the <em|state root>, <math|H<rsub|r>>, (see
+  Definition <reference|def-block-header>), whose purpose is to authenticate
+  the validity of the state database. Thus, Polkadot RE follows a rigorous
+  encoding algorithm to compute the values stored in the trie nodes to ensure
+  that the computed Merkle hash, <math|H<rsub|r>>, matches across the
   Polkadot RE implementations.
 
   The Trie is a <em|radix-16> tree as defined in Definition
@@ -580,7 +581,7 @@
   child of their parent.
 
   To identify the node corresponding to a key value, <math|k>, first we need
-  to encode <math|k> in a way consistent with the Trie structure. Because
+  to encode <math|k> in a consistent with the Trie structure way. Because
   each node in the trie has at most 16 children, we represent the key as a
   sequence of 4-bit nibbles:
 
@@ -630,7 +631,7 @@
 
     <\itemize-minus>
       <item><math|k<rsub|N>> is the shared prefix of the key of all the
-      descendents of <math|N> in the Trie.
+      descendants of <math|N> in the Trie.
     </itemize-minus>
 
     \ and, at least one of the following statements holds:
@@ -683,10 +684,10 @@
     </equation*>
   </definition>
 
-  Some part of <math|pk<rsub|N><rsup|Agr>> is explicitly stored in <math|N>'s
-  anscestors. Additionally, for each anscestor a single nibble is derived
-  implicitly while traversing from the anscestor to its child included in the
-  traversal path by means of <math|Index<rsub|N>> function defined in
+  Part of <math|pk<rsub|N><rsup|Agr>> is explicitly stored in <math|N>'s
+  ancestors. Additionally, for each ancestor, a single nibble is implicitly
+  derived while traversing from the ancestor to its child included in the
+  traversal path using the <math|Index<rsub|N>> function defined in
   Definition <reference|defn-index-function>.
 
   <\definition>
@@ -706,9 +707,9 @@
     </equation*>
   </definition>
 
-  Aussming that <math|P<rsub|N>> is the path (see Definition
+  Assuming that <math|P<rsub|N>> is the path (see Definition
   <reference|def-path-graph>) from the Trie root to node <math|N>, Algorithm
-  <reference|algo-aggregate-key> demonestrates rigorusly how to build
+  <reference|algo-aggregate-key> rigorously demonstrates how to build
   <math|pk<rsup|Agr><rsub|N>> while traversing <math|P<rsub|N>>.
 
   <\algorithm>
@@ -902,9 +903,10 @@
 
   <\definition>
     <label|defn-children-bitmap>Suppose <math|N<rsub|b>,N<rsub|c>\<in\>\<cal-N\>>
-    and <math|N<rsub|c>> is a child of <math|N<rsub|b>>, We define<math|>
+    and <math|N<rsub|c>> is a child of <math|N<rsub|b>>. We define<math|>
     where bit <math|b<rsub|i>:=1> if <math|N> has a child with partial key
-    <math|i>, we define <strong|ChildrenBitmap> functions as follows:
+    <math|i>, therefore we define <strong|ChildrenBitmap> functions as
+    follows:
 
     <\equation*>
       <tabular*|<tformat|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|ChildrenBitmap:>|<cell|\<cal-N\><rsub|b>\<rightarrow\>\<bbb-B\><rsub|2>>>|<row|<cell|>|<cell|N\<mapsto\><around*|(|b<rsub|15>,\<ldots\>,b<rsub|8>,b<rsub|7>,\<ldots\>b<rsub|0>|)><rsub|2>>>>>>
@@ -919,8 +921,8 @@
 
   <\definition>
     <label|defn-node-subvalue>For a given node <math|N>, the
-    <strong|subvalue> of <math|N>, formally referred to as <math|sv<rsub|N>>
-    is determined as follows, in a case which:
+    <strong|subvalue> of <math|N>, formally referred to as <math|sv<rsub|N>>,
+    is determined as follows: in a case which:
 
     <\itemize>
       <\equation*>
@@ -960,11 +962,11 @@
 
   <section|Transactions>
 
-  <subsection|preliminaries>
+  <subsection|Preliminaries>
 
   <\definition>
     <label|defn-account-key><strong|Account key
-    <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>> is a pair of <math|>ristretto
+    <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>> is a pair of <math|>Ristretto
     SR25519 used to sign transactions among other accounts and blance-related
     functions.
   </definition>
@@ -2015,7 +2017,7 @@
     <item><verbatim|ext_print_utf8>
   </itemize>
 
-  <subsection|Cryptograhpic auxilary functions>
+  <subsection|Cryptograhpic auxiliary functions>
 
   <subsubsection|ext_blake2_256>
 
@@ -2256,18 +2258,13 @@
     <associate|def-block-header-hash|<tuple|11|2>>
     <associate|def-extrinsic-network-message|<tuple|12|6>>
     <associate|def-grandpa-justification|<tuple|44|14>>
-    <associate|def-hpe|<tuple|45|?>>
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-scale-codec|<tuple|46|16>>
-    <associate|def-state-read-write|<tuple|13|6>>
-    <associate|def-stored-value|<tuple|13|?>>
     <associate|def-vote|<tuple|35|12>>
     <associate|defn-account-key|<tuple|25|10>>
     <associate|defn-bit-rep|<tuple|6|1>>
     <associate|defn-block-tree|<tuple|26|10>>
     <associate|defn-children-bitmap|<tuple|22|?>>
-    <associate|defn-children-bitmap-index|<tuple|21|?>>
-    <associate|defn-he|<tuple|45|17>>
     <associate|defn-hex-encoding|<tuple|48|?>>
     <associate|defn-index-function|<tuple|19|?>>
     <associate|defn-little-endian|<tuple|7|1>>
