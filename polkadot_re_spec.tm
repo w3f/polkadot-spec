@@ -1028,13 +1028,12 @@
   </definition>
 
   <\definition>
-    <strong|Block signing key pair <math|<around*|(|sk<rsup|s><rsub|j>,pk<rsup|s><rsub|j>|)>>>
-    is an ED25519 key pair which the block producer <math|\<cal-P\><rsub|j>>
-    signs by their account key (see Definition <reference|defn-account-key>)
-    and is used to sign the produced block. Similarly <strong|block lottery
-    key pair>, noted by <strong|<math|<around*|(|sk<rsub|j><rsup|v>,pk<rsup|s><rsub|j>|)>>>,
-    is a ED25519 key pair which is used by <math|\<cal-P\><rsub|j>> to
-    compute its lottery values.\ 
+    <strong|Block authring session key pair
+    <math|<around*|(|sk<rsup|s><rsub|j>,pk<rsup|s><rsub|j>|)>>> is an SR25519
+    key pair which the block producer <math|\<cal-P\><rsub|j>> signs by their
+    account key (see Definition <reference|defn-account-key>) and is used to
+    sign the produced block as well as to compute its lottery values in
+    Algorithm <reference|algo-block-production-lottery>.\ 
   </definition>
 
   <\definition>
@@ -1043,8 +1042,8 @@
     length during which the set of block producers stays constant. Epochs are
     indexed sequentially, we refer to the <math|n<rsup|th>> epoch since
     genesis by <math|\<cal-E\><rsub|n>>. Each epoch is divided into
-    <math|>equal length periods known as block production <strong|slot>s
-    sequentially indexed in each epoch. Each slot is awarded to a subset of
+    <math|>equal length periods known as block production <strong|slots>
+    sequentially indexed in each epoch.Each slot is awarded to a subset of
     block producers during which they are allowed to generate a block.
   </definition>
 
@@ -1065,10 +1064,10 @@
   During each epoch, each block producer node should run Algorithm
   <reference|algo-block-lottery> to identify the slots it is awarded. These
   are the slots during which the block producer is allowed to build a block.
-  The <math|sk<rsup|v>> is the block producer lottery secret key and <math|n>
-  is the epoch for whose slots the block producer is running the lottery.
+  The <math|sk> is the block producer lottery secret key and <math|n> is the
+  index of epoch for whose slots the block producer is running the lottery.
 
-  <\algorithm|<label|algo-block-production><name|Block-production-lottery><math|<around*|(|sk<rsup|v>,n|)>>>
+  <\algorithm|<label|algo-block-production-lottery><name|Block-production-lottery><math|<around*|(|sk<rsup|>,n|)>>>
     <\algorithmic>
       <\state>
         <math|r\<leftarrow\>><name|Epoch-Randomness<math|<around*|(|n|)>>>
@@ -1079,11 +1078,11 @@
       </state>
 
       <\state>
-        <math|<around*|(|d,\<pi\>|)>\<leftarrow\>><em|<name|VRF>>(<math|i,sk<rsup|v>>)
+        <math|<around*|(|d,\<pi\>|)>\<leftarrow\>><em|<name|VRF>>(<math|i,sk>)
       </state>
 
       <\state>
-        <math|A<around*|[|i|]>\<leftarrow\><around*|(|i,d,\<pi\>|)>><END>
+        <math|A<around*|[|i|]>\<leftarrow\><around*|(|d,\<pi\>|)>><END>
       </state>
 
       <\state>
@@ -1099,7 +1098,127 @@
   <name|Epoch-Randomness<math|>> and <em|<name|VRF>> functions, see Sections
   <reference|sect-randomness> and <reference|sect-vrf> respectively.
 
-  \ <subsubsection|Block Production>
+  <subsubsection|Slot number calculation>
+
+  It is essential for a block producer to calculate and validate slot number
+  at a given time. Slots are dividing the time continoum in overlapping
+  interval. At a given time, the block producer should be able to determine
+  the set of slots with a valid block at. We formalize the notion of validity
+  in the following definitions:
+
+  <\definition>
+    <label|slot-time-cal-tail><strong|Slot tail>, formally refered to by
+    <math|SlTl> is the number of finalized block which are used to estimate
+    the slot time of a given slot.
+  </definition>
+
+  Algorithm <reference|algo-slot-time> determines the slot time for a future
+  slot based on the time blocks has been generated in the past.
+
+  <\algorithm>
+    <label|algo-slot-time><name|Slot-Time>(<math|s>: the number of the slot
+    whose time to be determined)
+  <|algorithm>
+    <\algorithmic>
+      <\state>
+        <math|T<rsub|s>\<leftarrow\><around*|{||}>>
+      </state>
+
+      <\state>
+        <FOR-IN|<math|B<rsub|i>>|<name|SubCkhain>(<name|Last-Finalized-Slot>
+        <math|-SlTl>, <name|Last-Finalized-Slot>)>
+      </state>
+
+      <\state>
+        <name|<math|s<rsub|t><rsup|B<rsub|i>>\<leftarrow\>H<rsub|T><around*|(|B<rsub|i>|)>>+Slot-Offset(<math|B<rsub|i>,s>)<math|\<times\>\<cal-T\><rsub|>>>
+      </state>
+
+      <\state>
+        <math|T<rsub|s>\<leftarrow\>T<rsub|s>\<cup\>><math|s<rsub|t><rsup|B<rsub|i>>><END>
+      </state>
+
+      <\state>
+        <\RETURN>
+          Median(<math|T<rsub|s>>)
+        </RETURN>
+      </state>
+    </algorithmic>
+  </algorithm>
+
+  <subsubsection|Block Production>
+
+  At each epoch, each block producer should run Algorithm
+  <reference|algo-block-production> to produce blocks during the slots it has
+  been awarded in that epoch. The produced blocks needs to be broadcasted
+  along side with <em|babe> header defined in Definition
+  <reference|defn-babe-header>.
+
+  <\definition>
+    <label|defn-babe-header><strong|Babe Header> of block B, refered to
+    formaly by <strong|<math|H<rsub|Babe><around*|(|B|)>>> is a tuple
+    consists of the following components:
+
+    <\equation*>
+      <around*|(|\<pi\>,S<rsub|B>,pk,s,d|)>
+    </equation*>
+
+    in which:
+
+    <\with|par-mode|center>
+      <tabular|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<table|<row|<cell|s:>|<cell|is
+      the slot the block is produced at.>>|<row|<cell|<math|\<pi\>,d>:>|<cell|are
+      the result of block lottery for slot s.
+      >>|<row|<cell|<math|pk<rsub|j><rsup|s>>:>|<cell|is the SR25519 session
+      public key associated with the block producer
+      >>|<row|<cell|<math|S<rsub|B>>:>|<cell|<math|Sig<rsub|SR25519,sk<rsup|s><rsub|j>>><math|<around*|(|Enc<rsub|SC><around*|(|s,Black2s<around*|(|Head<around*|(|B<rsub|>|)>,\<pi\>|)>|)>|)>><math|>>>>>>
+    </with>
+
+    \;
+  </definition>
+
+  <\algorithm|<label|algo-block-production><name|Invoke-Block-Authoring>(<math|sk>,
+  pk, <math|n>, <math|BT:Current Block Tree>)>
+    <\algorithmic>
+      <\state>
+        <math|A\<leftarrow\>><name|Block-production-lottery(<math|sk>,
+        <math|n>)>
+      </state>
+
+      <\state>
+        <FOR-TO|<\math>
+          s\<leftarrow\>1
+        </math>|<math|sc<rsub|n>>>
+      </state>
+
+      <\state>
+        <name|Wait>(<strong|until> <name|Slot-Time>(s))
+      </state>
+
+      <\state>
+        <math|<around*|(|d,\<pi\>|)>\<leftarrow\>A<around*|[|s|]>>
+      </state>
+
+      <\state>
+        <\IF>
+          <math|d\<less\>\<tau\>>
+        </IF>
+      </state>
+
+      <\state>
+        <math|C<rsub|Best>\<leftarrow\>><name|Longest-Branch>(BT)
+      </state>
+
+      <\state>
+        <name|<math|B<rsub|s>\<leftarrow\>>Build-Block(<math|C<rsub|Best>>)>
+      </state>
+
+      <\state>
+        <name|Broadcast-Block>(<math|B<rsub|s>,H<rsub|Babe><around*|(|B<rsub|s>|)>>)
+      </state>
+    </algorithmic>
+  </algorithm>
+
+  <subsubsection|Block Validation>
 
   <subsection|Finality><label|sect-finality>
 
@@ -2116,11 +2235,64 @@
     <item><verbatim|ext_sandbox_memory_set>
 
     <item><verbatim|ext_sandbox_memory_teardown>
-
-    \;
   </itemize>
 
-  <subsubsection|Misc>
+  <subsection|Auxillary Debugging API>
+
+  <subsubsection|<verbatim|ext_print_hex>>
+
+  Print out the content of the given buffer on the host debugging console
+  each byte is represented as two digit hexadecimal number.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    \ \ \ \ (func $ext_print_hex
+
+    \ \ \ \ \ \ (param $data i32) (parm $len i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|data>: a pointer to the buffer containing the data to be
+    printed.
+
+    <item><verbatim|len>: an <verbatim|i32> integer indicating the size of
+    the buffer containing the data in bytes.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_print_utf8>>
+
+  Print out the content of the given buffer on the host debugging console
+  each by interpreting it as a UTF-8 string, if it represents a valid UTF-8
+  string, otherwise does nothing and returns.
+
+  <strong|Prototype:>o
+
+  <\verbatim>
+    \ \ \ \ (func $ext_print_utf8
+
+    \ \ \ \ \ \ (param $utf8_data i32) (param $utf8_len i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|utf8_data>: a pointer to the buffer containing the utf8
+    encoded string to be printed.
+
+    <item><verbatim|utf8_len>: an <verbatim|i32> integer indicating the size
+    of the buffer containing the utf8 string in bytes.
+  </itemize>
+
+  <subsection|Misc>
 
   <subsubsection|To be Specced>\ 
 
@@ -2166,12 +2338,16 @@
 
 <\references>
   <\collection>
-    <associate|alg-grandpa-best-candidate|<tuple|7|15>>
-    <associate|alg-grandpa-round|<tuple|6|15>>
-    <associate|alg-join-leave-grandpa|<tuple|5|14>>
+    <associate|alg-grandpa-best-candidate|<tuple|9|15>>
+    <associate|alg-grandpa-round|<tuple|8|15>>
+    <associate|alg-join-leave-grandpa|<tuple|7|14>>
     <associate|algo-aggregate-key|<tuple|2|8>>
-    <associate|algo-block-production|<tuple|4|11>>
+    <associate|algo-best-babe-chain|<tuple|8|?>>
+    <associate|algo-block-production|<tuple|6|11>>
+    <associate|algo-block-production-lottery|<tuple|4|?>>
     <associate|algo-pk-length|<tuple|3|9>>
+    <associate|algo-slot-time|<tuple|5|?>>
+    <associate|alog-slot-time|<tuple|5|?>>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|3.2.1|3>>
     <associate|auto-11|<tuple|3.2.2|4>>
@@ -2206,49 +2382,55 @@
     <associate|auto-38|<tuple|7.2.2|11>>
     <associate|auto-39|<tuple|7.2.3|12>>
     <associate|auto-4|<tuple|2.2|2>>
-    <associate|auto-40|<tuple|7.3|12>>
-    <associate|auto-41|<tuple|7.3.1|12>>
-    <associate|auto-42|<tuple|7.3.2|14>>
-    <associate|auto-43|<tuple|7.3.3|14>>
-    <associate|auto-44|<tuple|7.3.4|15>>
-    <associate|auto-45|<tuple|8|16>>
-    <associate|auto-46|<tuple|8.1|16>>
-    <associate|auto-47|<tuple|8.2|16>>
-    <associate|auto-48|<tuple|9|16>>
-    <associate|auto-49|<tuple|9.1|16>>
+    <associate|auto-40|<tuple|7.2.4|12>>
+    <associate|auto-41|<tuple|7.2.5|12>>
+    <associate|auto-42|<tuple|7.3|14>>
+    <associate|auto-43|<tuple|7.3.1|14>>
+    <associate|auto-44|<tuple|7.3.2|15>>
+    <associate|auto-45|<tuple|7.3.3|16>>
+    <associate|auto-46|<tuple|7.3.4|16>>
+    <associate|auto-47|<tuple|8|16>>
+    <associate|auto-48|<tuple|8.1|16>>
+    <associate|auto-49|<tuple|8.2|16>>
     <associate|auto-5|<tuple|2.3|3>>
-    <associate|auto-50|<tuple|9.2|17>>
-    <associate|auto-51|<tuple|10|17>>
-    <associate|auto-52|<tuple|11|17>>
-    <associate|auto-53|<tuple|12|17>>
-    <associate|auto-54|<tuple|A|17>>
-    <associate|auto-55|<tuple|A.1|17>>
-    <associate|auto-56|<tuple|A.1.1|17>>
-    <associate|auto-57|<tuple|A.1.2|18>>
-    <associate|auto-58|<tuple|A.1.3|18>>
-    <associate|auto-59|<tuple|A.1.4|18>>
+    <associate|auto-50|<tuple|9|17>>
+    <associate|auto-51|<tuple|9.1|17>>
+    <associate|auto-52|<tuple|9.2|17>>
+    <associate|auto-53|<tuple|10|17>>
+    <associate|auto-54|<tuple|11|17>>
+    <associate|auto-55|<tuple|12|17>>
+    <associate|auto-56|<tuple|A|17>>
+    <associate|auto-57|<tuple|A.1|18>>
+    <associate|auto-58|<tuple|A.1.1|18>>
+    <associate|auto-59|<tuple|A.1.2|18>>
     <associate|auto-6|<tuple|2.4|3>>
-    <associate|auto-60|<tuple|A.1.5|19>>
-    <associate|auto-61|<tuple|A.1.6|19>>
-    <associate|auto-62|<tuple|A.1.7|19>>
-    <associate|auto-63|<tuple|A.1.8|20>>
-    <associate|auto-64|<tuple|A.1.9|20>>
-    <associate|auto-65|<tuple|A.2|21>>
-    <associate|auto-66|<tuple|A.2.1|21>>
-    <associate|auto-67|<tuple|A.2.2|21>>
-    <associate|auto-68|<tuple|A.2.3|21>>
-    <associate|auto-69|<tuple|A.3|21>>
+    <associate|auto-60|<tuple|A.1.3|19>>
+    <associate|auto-61|<tuple|A.1.4|19>>
+    <associate|auto-62|<tuple|A.1.5|19>>
+    <associate|auto-63|<tuple|A.1.6|20>>
+    <associate|auto-64|<tuple|A.1.7|20>>
+    <associate|auto-65|<tuple|A.1.8|21>>
+    <associate|auto-66|<tuple|A.1.9|21>>
+    <associate|auto-67|<tuple|A.2|21>>
+    <associate|auto-68|<tuple|A.2.1|21>>
+    <associate|auto-69|<tuple|A.2.2|21>>
     <associate|auto-7|<tuple|3|3>>
-    <associate|auto-70|<tuple|A.3.1|21>>
-    <associate|auto-71|<tuple|A.3.2|22>>
-    <associate|auto-72|<tuple|A.3.3|22>>
-    <associate|auto-73|<tuple|A.4|22>>
-    <associate|auto-74|<tuple|A.4.1|22>>
-    <associate|auto-75|<tuple|A.4.2|23>>
-    <associate|auto-76|<tuple|A.4.3|23>>
+    <associate|auto-70|<tuple|A.2.3|21>>
+    <associate|auto-71|<tuple|A.3|22>>
+    <associate|auto-72|<tuple|A.3.1|22>>
+    <associate|auto-73|<tuple|A.3.2|22>>
+    <associate|auto-74|<tuple|A.3.3|22>>
+    <associate|auto-75|<tuple|A.4|23>>
+    <associate|auto-76|<tuple|A.4.1|23>>
     <associate|auto-77|<tuple|A.5|23>>
-    <associate|auto-78|<tuple|A.5|23>>
+    <associate|auto-78|<tuple|A.5.1|23>>
+    <associate|auto-79|<tuple|A.5.2|?>>
     <associate|auto-8|<tuple|3.1|3>>
+    <associate|auto-80|<tuple|A.6|?>>
+    <associate|auto-81|<tuple|A.6.1|?>>
+    <associate|auto-82|<tuple|A.7|?>>
+    <associate|auto-83|<tuple|A.7|?>>
+    <associate|auto-84|<tuple|A.7|?>>
     <associate|auto-9|<tuple|3.2|3>>
     <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|23>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|23>>
@@ -2257,15 +2439,16 @@
     <associate|def-block-header|<tuple|10|2>>
     <associate|def-block-header-hash|<tuple|11|2>>
     <associate|def-extrinsic-network-message|<tuple|12|6>>
-    <associate|def-grandpa-justification|<tuple|44|14>>
+    <associate|def-grandpa-justification|<tuple|46|14>>
     <associate|def-path-graph|<tuple|2|1>>
-    <associate|def-scale-codec|<tuple|46|16>>
-    <associate|def-vote|<tuple|35|12>>
+    <associate|def-scale-codec|<tuple|48|16>>
+    <associate|def-vote|<tuple|37|12>>
     <associate|defn-account-key|<tuple|25|10>>
+    <associate|defn-babe-header|<tuple|34|?>>
     <associate|defn-bit-rep|<tuple|6|1>>
     <associate|defn-block-tree|<tuple|26|10>>
     <associate|defn-children-bitmap|<tuple|22|?>>
-    <associate|defn-hex-encoding|<tuple|48|?>>
+    <associate|defn-hex-encoding|<tuple|50|?>>
     <associate|defn-index-function|<tuple|19|?>>
     <associate|defn-little-endian|<tuple|7|1>>
     <associate|defn-merkle-value|<tuple|24|?>>
@@ -2292,6 +2475,7 @@
     <associate|sect-scale-codec|<tuple|9.1|16>>
     <associate|sect-validate-transaction|<tuple|3.3.5|5>>
     <associate|sect-vrf|<tuple|8.2|16>>
+    <associate|slot-time-cal-tail|<tuple|33|?>>
     <associate|snippet-runtime-enteries|<tuple|1|4>>
   </collection>
 </references>
@@ -2436,7 +2620,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-32><vspace|0.5fn>
 
-      <with|par-left|<quote|1tab>|6.1<space|2spc>preliminaries
+      <with|par-left|<quote|1tab>|6.1<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-33>>
 
@@ -2580,7 +2764,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-68>>
 
-      <with|par-left|<quote|1tab>|A.3<space|2spc>Cryptograhpic auxilary
+      <with|par-left|<quote|1tab>|A.3<space|2spc>Cryptograhpic auxiliary
       functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-69>>
 
