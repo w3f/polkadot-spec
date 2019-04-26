@@ -73,7 +73,7 @@
   {\Large Protocol Specification}
 }
 
-\date{April 18, 2019}
+\date{April 26, 2019}
 
 \maketitle
 
@@ -924,12 +924,12 @@ prunes the tree in parallel using Algorithm \ref{algo-block-tree-prunning}.
 \end{definition}
 
 \begin{definition}
-  {\tmstrong{Block signing key pair $(\tmop{sk}^s_j, \tmop{pk}^s_j)$}} is an
-  ED25519 key pair which the block producer $\mathcal{P}_j$ signs by their
-  account key (see Definition \ref{defn-account-key}) and is used to sign the
-  produced block. Similarly {\tmstrong{block lottery key pair}}, noted by
-  {\tmstrong{$(\tmop{sk}_j^v, \tmop{pk}^s_j)$}}, is a ED25519 key pair which
-  is used by $\mathcal{P}_j$ to compute its lottery values. 
+  {\tmstrong{Block authring session key pair $(\tmop{sk}^s_j,
+  \tmop{pk}^s_j)$}} is an SR25519 key pair which the block producer
+  $\mathcal{P}_j$ signs by their account key (see Definition
+  \ref{defn-account-key}) and is used to sign the produced block as well as to
+  compute its lottery values in Algorithm \ref{algo-block-production-lottery}.
+  
 \end{definition}
 
 \begin{definition}
@@ -938,7 +938,7 @@ prunes the tree in parallel using Algorithm \ref{algo-block-tree-prunning}.
   set of block producers stays constant. Epochs are indexed sequentially, we
   refer to the $n^{\tmop{th}}$ epoch since genesis by $\mathcal{E}_n$. Each
   epoch is divided into equal length periods known as block production
-  {\tmstrong{slot}}s sequentially indexed in each epoch. Each slot is awarded
+  {\tmstrong{slots}} sequentially indexed in each epoch.Each slot is awarded
   to a subset of block producers during which they are allowed to generate a
   block.
 \end{definition}
@@ -960,13 +960,13 @@ prunes the tree in parallel using Algorithm \ref{algo-block-tree-prunning}.
 During each epoch, each block producer node should run Algorithm
 \ref{algo-block-lottery} to identify the slots it is awarded. These are the
 slots during which the block producer is allowed to build a block. The
-$\tmop{sk}^v$ is the block producer lottery secret key and $n$ is the epoch
-for whose slots the block producer is running the lottery.
+$\tmop{sk}$ is the block producer lottery secret key and $n$ is the index of
+epoch for whose slots the block producer is running the lottery.
 
 \custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
   \tmtextbf{Algorithm  4. }
-  \label{algo-block-production}{\tmname{Block-production-lottery}}$(\tmop{sk}^v,
+  \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}$(\tmop{sk}^{},
   n)$\\
   \hline
 \end{tabular}
@@ -975,9 +975,9 @@ for whose slots the block producer is running the lottery.
 
 {\state{{\FORTO{$i \assign 1$}{$\tmop{sc}_n$}}}}
 
-{\state{$(d, \pi) \leftarrow${\tmem{{\tmname{VRF}}}}($i, \tmop{sk}^v$)}}
+{\state{$(d, \pi) \leftarrow${\tmem{{\tmname{VRF}}}}($i, \tmop{sk}$)}}
 
-{\state{$A [i] \leftarrow (i, d, \pi)${\END}}}
+{\state{$A [i] \leftarrow (d, \pi)${\END}}}
 
 {\state{{\RETURN{A}}}}}}
 
@@ -988,7 +988,114 @@ to produce a block. For the definitions of {\tmname{Epoch-Randomness}} and
 {\tmem{{\tmname{VRF}}}} functions, see Sections \ref{sect-randomness} and
 \ref{sect-vrf} respectively.
 
+\subsubsection{Slot number calculation}
+
+It is essential for a block producer to calculate and validate the slot number
+at a certain point in time. Slots are dividing the time continuum in an
+overlapping interval. At a given time, the block producer should be able to
+determine the set of slots which can be associated to a valid block generated
+at that time. We formalize the notion of validity in the following
+definitions:
+
+\begin{definition}
+  \label{slot-time-cal-tail}The {\tmstrong{slot tail}}, formally referred to
+  by $\tmop{SlTl}$ represents the number of on-chain blocks that are used to
+  estimate the slot time of a given slot.
+\end{definition}
+
+Algorithm \ref{algo-slot-time} determines the slot time for a future slot
+based on the {\tmem{block time}} associated with blocks in the slot tail
+defined in Definition \ref{defn-block-time}.
+
+\begin{definition}
+  \label{defn-block-time}The {\tmstrong{Block time}} of block $B$ for node $j$
+  formally represented by {\tmstrong{$T^j_B$}} is the local time of node $j$
+  when node $j$ has received the block $B$ for the first time. If the node $j$
+  itself is the producer of $B$ or if the node $j$ was not connected to the
+  network when block $B$ was produced then $T_B^j$ is set equal to the time
+  that block is (claimed to be) produced. We may drop index $j$ in $T^j_B$
+  notation if there is no ambiguity about the underlying node.
+\end{definition}
+
+\custombinding{5}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  5. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
+  the number of the slots whose time needs to be determined)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$T_s \leftarrow \{ \}$}}
+
+{\state{{\FORIN{$B_i$}{{\tmname{SubCkhain}}({\tmname{Last-Finalized-Slot}} $-
+\tmop{SlTl}$, {\tmname{Last-Finalized-Slot}})}}}}
+
+{\state{{\tmname{$s_t^{B_i} \leftarrow T^{}_{B_i}$+Slot-Offset($B_i,
+s$)$\times \mathcal{T}_{}$}}}}
+
+{\state{$T_s \leftarrow T_s \cup s_t^{B_i}${\END}}}
+
+{\state{{\RETURN{Median($T_s$)}}}}}}
+
+\hrulefill{\medskip}
+
 \subsubsection{Block Production}
+
+At each epoch, each block producer should run Algorithm
+\ref{algo-block-production} to produce blocks during the slots it has been
+awarded during that epoch. The produced blocks need to be broadcasted
+alongside with the {\tmem{babe header}} defined in Definition
+\ref{defn-babe-header}.
+
+\begin{definition}
+  The \label{defn-babe-header}{\tmstrong{Babe Header}} of block B, referred to
+  formally by {\tmstrong{$H_{\tmop{Babe}} (B)$}} is a tuple that consists of
+  the following components:
+  \[ (\pi, S_B, \tmop{pk}, s, d) \]
+  in which:
+  
+  \begin{center}
+    \begin{tabular}{rl}
+      s: & is the slot at which the block is produced.\\
+      $\pi, d$: & are the results of the block lottery for slot s. \\
+      $\tmop{pk}_j^s$: & is the SR25519 session public key associated with the
+      block producer. \\
+      $S_B$: & $\tmop{Sig}_{\tmop{SR} 25519, \tmop{sk}^s_j}
+      (\tmop{Enc}_{\tmop{SC}} (s, \tmop{Black} 2 s (\tmop{Head} (B_{}),
+      \pi)))$
+    \end{tabular}
+  \end{center}
+  
+  \ 
+\end{definition}
+
+\custombinding{6}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  6. }
+  \label{algo-block-production}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
+  pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$A
+\leftarrow${\tmname{Block-production-lottery($\tmop{sk}$, $n$)}}}}
+
+{\state{{\FORTO{$s \leftarrow 1$}{$\tmop{sc}_n$}}}}
+
+{\state{{\tmname{Wait}}({\tmstrong{until}} {\tmname{Slot-Time}}(s))}}
+
+{\state{$(d, \pi) \leftarrow A [s]$}}
+
+{\state{{\IF{$d < \tau$}}}}
+
+{\state{$C_{\tmop{Best}} \leftarrow${\tmname{Longest-Branch}}(BT)}}
+
+{\state{{\tmname{$B_s \leftarrow$Build-Block($C_{\tmop{Best}}$)}}}}
+
+{\state{{\tmname{Broadcast-Block}}($B_s, H_{\tmop{Babe}} (B_s)$)}}}}
+
+\hrulefill{\medskip}
+
+\subsubsection{Block Validation}
 
 \subsection{Finality}\label{sect-finality}
 
@@ -1218,9 +1325,9 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{5}{\noindent}\begin{tabular}{l}
+\custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  5. }
+  \tmtextbf{Algorithm  7. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -1245,9 +1352,9 @@ round is completable.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-\custombinding{6}{\noindent}\begin{tabular}{l}
+\custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  6. }
+  \tmtextbf{Algorithm  8. }
   \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
@@ -1287,9 +1394,9 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 
 \hrulefill{\medskip}
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
+\custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  7. }
+  \tmtextbf{Algorithm  9. }
   \label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1309,9 +1416,9 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
+\custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  8. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextbf{Algorithm  10. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
@@ -1836,11 +1943,56 @@ signature by the provided public key.
   \item \tmverbatim{ext\_sandbox\_memory\_set}
   
   \item \tmverbatim{ext\_sandbox\_memory\_teardown}
-  
-  \ 
 \end{itemize}
 
-\subsubsection{Misc}
+\subsection{Auxillary Debugging API}
+
+\subsubsection{\tmverbatim{ext\_print\_hex}}
+
+Prints out the content of the given buffer on the host's debugging console.
+Each byte is represented as a two-digit hexadecimal number.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+    (func $ext_print_hex
+      (param $data i32) (parm $len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a pointer to the buffer containing the data that
+  needs to be printed.
+  
+  \item \tmverbatim{len}: an \tmverbatim{i32} integer indicating the size of
+  the buffer containing the data in bytes.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_print\_utf8}}
+
+Prints out the content of the given buffer on the host's debugging console.
+The buffer content is interpreted as a UTF-8 string if it represents a valid
+UTF-8 string, otherwise does nothing and returns.
+
+{\tmstrong{Prototype:}}o
+\begin{alltt}
+    (func $ext_print_utf8
+      (param $utf8_data i32) (param $utf8_len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{utf8\_data}: a pointer to the buffer containing the
+  utf8-encoded string to be printed.
+  
+  \item \tmverbatim{utf8\_len}: an \tmverbatim{i32} integer indicating the
+  size of the buffer containing the UTF-8 string in bytes.
+\end{itemize}
+
+\subsection{Misc}
 
 \subsubsection{To be Specced}
 \begin{itemizedot}
