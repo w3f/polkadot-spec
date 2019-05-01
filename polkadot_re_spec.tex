@@ -4,8 +4,6 @@
 \geometry{letterpaper, paperheight= auto, paperwidth= auto}
 
 %%%%%%%%%% Start TeXmacs macros
-\catcode`\>=\active \def>{
-\fontencoding{T1}\selectfont\symbol{62}\fontencoding{\encodingdefault}}
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
 \newcommand{\nin}{\not\in}
@@ -73,7 +71,7 @@
   {\Large Protocol Specification}
 }
 
-\date{April 26, 2019}
+\date{May 1, 2019}
 
 \maketitle
 
@@ -493,8 +491,10 @@ For the definition of the finality and the finalized block see Section
 
 For storing the state of the system, Polkadot RE implements a hash table
 storage where the keys are used to access each data entry. There is no
-limitation neither on the size of the key nor on the size of the data stored
-under them, besides the fact that they are byte arrays.
+assumption either on the size of the key nor on the size of the data stored
+under them, besides the fact that they are byte arrays with specific upper
+limits on their length. The limit is imposed by the encoding algorithms to
+store the key and the value in the storage trie.
 
 \subsection{Accessing The System Storage }
 
@@ -508,13 +508,16 @@ directly accessed by Polkadot RE (in contrast to Polkadot runtime).
   value stored under a specific key in the state storage and is formally
   defined as :
   \[ \begin{array}{cc}
-       \tmop{StoredValue} : & \mathbb{B} \rightarrow \mathbb{B}\\
+       \tmop{StoredValue} : & \mathcal{K} \rightarrow \mathcal{V}\\
        & k \mapsto \left\{ \begin{array}{cc}
          v & \text{if (k,v) exists in state storage}\\
          \phi & \tmop{otherwise}
        \end{array} \right.
      \end{array} \]
+  where $\mathcal{K} \subset \mathbb{B}$ and $\mathcal{V} \subset \mathbb{B}$
+  are respectively the set of all keys and values stored in the state storage.
   
+  \ 
 \end{definition}
 
 \subsection{The General Tree Structure}
@@ -695,7 +698,7 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 \begin{definition}
   \label{defn-node-header}The {\tmstrong{node header}} of node $N$,
-  $\tmop{Head}_N$, consists of l > 1 bytes
+  $\tmop{Head}_N$, consists of $l \geqslant 1$ bytes
   
   
   \[ \begin{array}{ll}
@@ -732,8 +735,10 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
        10 & \tmop{Branch} \tmop{Node} \tmop{with} k_N \nin \mathcal{K}\\
        11 & \tmop{Branch} \tmop{Node} \tmop{with} k_N \in \mathcal{K}
      \end{array} \right. \]
-  and $\tmop{Head}_{N, 1}^{0 - 5}_{}$, the 6 least significant bits of the
-  first byte of $\tmop{Head}_N$ are defined to be:
+  where $\mathcal{K}$ is defined in Definition \ref{defn-stored-value}.
+  
+  $\tmop{Head}_{N, 1}^{0 - 5}_{}$, the 6 least significant bits of the first
+  byte of $\tmop{Head}_N$ are defined to be:
   \[ \tmop{Head}_{N, 1}^{0 - 5}_{} \assign \left\{ \begin{array}{ll}
        \| \tmop{pk}_N \|_{\tmop{nib}} & \| \tmop{pk}_N \|_{\tmop{nib}} < 63\\
        63 & \| \tmop{pk}_N \|_{\tmop{nib}} \geqslant 63
@@ -761,7 +766,8 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 {\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} < 63$}}}}
 
-{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + \tmop{pk}_N$}}
+{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + \| \tmop{pk}_N
+\|_{\tmop{nib}}$}}
 
 {\state{{\RETURN{$\tmop{Head}_N \END$}}}}
 
@@ -779,7 +785,9 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 {\state{$i \leftarrow i + 1 \END$}}
 
-{\state{$\tmop{Head}_{N, i} \leftarrow l - 1$}}}}
+{\state{$\tmop{Head}_{N, i} \leftarrow l - 1$}}
+
+{\state{{\RETURN{$\tmop{Head}_N$}}}}}}
 
 \hrulefill{\medskip}
 
@@ -884,10 +892,25 @@ the chain forks into multiple subchains in various block positions. We refer
 to this structure as a {\tmem{block tree:}}
 
 \begin{definition}
-  \label{defn-block-tree}The {\tmstrong{Block Tree}} of a blockchain is the
-  union of all different versions of the blockchain observed by all the nodes
-  in the system such as every such block is a node in the graph and $B_1$ is
-  connected to $B_2$ if $B_1$ is a parent of $B_2$.
+  \label{defn-block-tree}The {\tmstrong{block tree}} of a blockchain, denoted
+  by $\tmop{BT}$, is the union of all different versions of the blockchain
+  observed by all the nodes in the system such as every such block is a node
+  in the graph and $B_1$ is connected to $B_2$ if $B_1$ is a parent of $B_2$.
+\end{definition}
+
+Definition \ref{defn-chain-subchain} gives the means to high light various
+branchs of the block tree.
+
+\begin{definition}
+  \label{defn-chain-subchain}Let $G$ be the root of the block tree and $B$ be
+  a node of it. By {\tmname{{\tmstrong{Chain($B$)}},}} we refer to the path
+  graph from $G$ to $B$ in $\tmop{BT}$. If $B'$ is another node on
+  {\tmname{Chain($B$)}}, then by {\tmname{SubChain($B', B$)}} we refer to the
+  subgraph of {\tmname{Chain($B$)}} path graph which contains both $B$ and
+  $B'$. {\tmname{Longest-Path($\tmop{BT}$)}} returns a path graph of
+  $\tmop{BT}$ which is the longest among all paths in $\tmop{BT}$.
+  {\tmname{Deepest-Leaf($\tmop{BT}$)}} returns the head of
+  {\tmname{Longest-Path($\tmop{BT}$)}} chain.
 \end{definition}
 
 Because every block in the blockchain contains a reference to its parent, it
@@ -918,7 +941,7 @@ prunes the tree in parallel using Algorithm \ref{algo-block-tree-prunning}.
 \subsubsection{Preliminaries}
 
 \begin{definition}
-  A {\tmstrong{Block Producer}}, noted by $\mathcal{P}_j$ is a node running
+  A {\tmstrong{block producer}}, noted by $\mathcal{P}_j$, is a node running
   Polkadot RE which is authorized to keep a transaction queue and which gets a
   turn in producing blocks.
 \end{definition}
@@ -933,35 +956,50 @@ prunes the tree in parallel using Algorithm \ref{algo-block-tree-prunning}.
 \end{definition}
 
 \begin{definition}
-  A block production {\tmstrong{epoch}}, formally refered to as $\mathcal{E}$
+  A block production {\tmstrong{epoch}}, formally referred to as $\mathcal{E}$
   is a period with pre-known starting time and fixed length during which the
-  set of block producers stays constant. Epochs are indexed sequentially, we
-  refer to the $n^{\tmop{th}}$ epoch since genesis by $\mathcal{E}_n$. Each
+  set of block producers stays constant. Epochs are indexed sequentially, and
+  we refer to the $n^{\tmop{th}}$ epoch since genesis by $\mathcal{E}_n$. Each
   epoch is divided into equal length periods known as block production
-  {\tmstrong{slots}} sequentially indexed in each epoch.Each slot is awarded
+  {\tmstrong{slots}}, sequentially indexed in each epoch. Each slot is awarded
   to a subset of block producers during which they are allowed to generate a
   block.
 \end{definition}
 
 \begin{notation}
-  We refer to the number of slots in epoch $\mathcal{E}_n$ by $\tmop{sc}_n$.
-  $\tmop{sc}_n$ is set to ??? at the genesis. 
+  \label{note-slot}We refer to the number of slots in epoch $\mathcal{E}_n$ by
+  $\tmop{sc}_n$. $\tmop{sc}_n$ is set to ??? at the genesis. For a given block
+  $B$, we use the notation {\tmstrong{$s_B$}} to refer to the slot during
+  which $B$ has been produced. Conversely, for slot $s$, $\mathcal{B}_s$ is
+  the set of Blocks generated at slot $s$.
 \end{notation}
+
+Definition \ref{defn-epoch-subchain} provides an iterator over the blocks
+produced during an specific epoch.
+
+\begin{definition}
+  \label{defn-epoch-subchain} By {\tmname{SubChain($\mathcal{E}_n$)}} for
+  epoch $\mathcal{E}_n$, we refer to the path graph of $\tmop{BT}$ which
+  contains all the blocks generated during the slots of epoch $\mathcal{E}_n$.
+  When there is more than one block generated at a slot, we choose the one
+  which is also on {\tmname{Longest-Branch($\tmop{BT}$)}}.
+\end{definition}
 
 \subsubsection{Block Production Lottery}
 
 \begin{definition}
   {\tmstrong{Winning threshold}} denoted by {\tmstrong{$\tau$}} is the
-  threshold which is used in Algorirthm \ref{algo-slot-lottery} to decide if a
-  block producer is the winner of a specific slot. $\tau$ is initially set to
-  ???.
+  threshold which is used alongside with the result of Algorirthm
+  \ref{algo-block-production-lottery} to decide if a block producer is the
+  winner of a specific slot. $\tau$ is initially set to ???.
 \end{definition}
 
-During each epoch, each block producer node should run Algorithm
-\ref{algo-block-lottery} to identify the slots it is awarded. These are the
-slots during which the block producer is allowed to build a block. The
-$\tmop{sk}$ is the block producer lottery secret key and $n$ is the index of
-epoch for whose slots the block producer is running the lottery.
+A block producer aiming to produce a block during $\mathcal{E}_n$ should run
+Algorithm \ref{algo-block-production-lottery} to identify the slots it is
+awarded. These are the slots during which the block producer is allowed to
+build a block. The $\tmop{sk}$ is the block producer lottery secret key and
+$n$ is the index of epoch for whose slots the block producer is running the
+lottery.
 
 \custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
@@ -975,7 +1013,7 @@ epoch for whose slots the block producer is running the lottery.
 
 {\state{{\FORTO{$i \assign 1$}{$\tmop{sc}_n$}}}}
 
-{\state{$(d, \pi) \leftarrow${\tmem{{\tmname{VRF}}}}($i, \tmop{sk}$)}}
+{\state{$(d, \pi) \leftarrow${\tmem{{\tmname{VRF}}}}($r, i, \tmop{sk}$)}}
 
 {\state{$A [i] \leftarrow (d, \pi)${\END}}}
 
@@ -985,8 +1023,8 @@ epoch for whose slots the block producer is running the lottery.
 
 For any slot $i$ in epoch $n$ where $d < \tau$, the block producer is required
 to produce a block. For the definitions of {\tmname{Epoch-Randomness}} and
-{\tmem{{\tmname{VRF}}}} functions, see Sections \ref{sect-randomness} and
-\ref{sect-vrf} respectively.
+{\tmem{{\tmname{VRF}}}} functions, see Algorithm \ref{algo-epoch-randomness}
+and Section \ref{sect-vrf} respectively.
 
 \subsubsection{Slot number calculation}
 
@@ -1000,21 +1038,32 @@ definitions:
 \begin{definition}
   \label{slot-time-cal-tail}The {\tmstrong{slot tail}}, formally referred to
   by $\tmop{SlTl}$ represents the number of on-chain blocks that are used to
-  estimate the slot time of a given slot.
+  estimate the slot time of a given slot. This number is set to be 1200.
 \end{definition}
 
 Algorithm \ref{algo-slot-time} determines the slot time for a future slot
-based on the {\tmem{block time}} associated with blocks in the slot tail
-defined in Definition \ref{defn-block-time}.
+based on the {\tmem{block arrival time}} associated with blocks in the slot
+tail defined in Definition \ref{defn-block-time}.
 
 \begin{definition}
-  \label{defn-block-time}The {\tmstrong{Block time}} of block $B$ for node $j$
-  formally represented by {\tmstrong{$T^j_B$}} is the local time of node $j$
-  when node $j$ has received the block $B$ for the first time. If the node $j$
-  itself is the producer of $B$ or if the node $j$ was not connected to the
-  network when block $B$ was produced then $T_B^j$ is set equal to the time
-  that block is (claimed to be) produced. We may drop index $j$ in $T^j_B$
-  notation if there is no ambiguity about the underlying node.
+  \label{defn-block-time}The {\tmstrong{block arrival time}} of block $B$ for
+  node $j$ formally represented by {\tmstrong{$T^j_B$}} is the local time of
+  node $j$ when node $j$ has received the block $B$ for the first time. If the
+  node $j$ itself is the producer of $B$, $T_B^j$ is set equal to the time
+  that the block is produced. The index $j$ in $T^j_B$ notation may be dropped
+  when there is no ambiguity about the underlying node.
+\end{definition}
+
+In addition to the arrival time of block $B$, the block producer also needs to
+know how many slots have passed since the arrival of $B$. This value is
+formalized in Definition \ref{defn-slot-offset}.
+
+\begin{definition}
+  \label{defn-slot-offset}Let $s_i$ and $s_j$ be two slots belonging to epochs
+  $\mathcal{E}_k$ and $\mathcal{E}_l$. By {\tmname{Slot-Offset}}$(s_i, s_j)$
+  we refer to the function whose value is equal to the number of slots between
+  $s_i$ and $s_j$ (counting $s_j$) on time continuum. As such, we have
+  {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
 \custombinding{5}{\noindent}\begin{tabular}{l}
@@ -1026,10 +1075,12 @@ defined in Definition \ref{defn-block-time}.
 
 {\algorithmic{{\state{$T_s \leftarrow \{ \}$}}
 
-{\state{{\FORIN{$B_i$}{{\tmname{SubCkhain}}({\tmname{Last-Finalized-Slot}} $-
-\tmop{SlTl}$, {\tmname{Last-Finalized-Slot}})}}}}
+{\state{{\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
 
-{\state{{\tmname{$s_t^{B_i} \leftarrow T^{}_{B_i}$+Slot-Offset($B_i,
+{\state{{\FORIN{$B_i$}{{\tmname{SubChain}}({\tmname{}} $- \tmop{SlTl}$,
+{\tmname{Last-Finalized-Slot}})}}}}
+
+{\state{{\tmname{$s_t^{B_i} \leftarrow T^{}_{B_i}$+Slot-Offset($s_{B_i},
 s$)$\times \mathcal{T}_{}$}}}}
 
 {\state{$T_s \leftarrow T_s \cup s_t^{B_i}${\END}}}
@@ -1037,6 +1088,8 @@ s$)$\times \mathcal{T}_{}$}}}}
 {\state{{\RETURN{Median($T_s$)}}}}}}
 
 \hrulefill{\medskip}
+
+\
 
 \subsubsection{Block Production}
 
@@ -1097,6 +1150,36 @@ alongside with the {\tmem{babe header}} defined in Definition
 
 \subsubsection{Block Validation}
 
+\subsubsection{Epoch Randomness}
+
+At the end of epoch $\mathcal{E}_n$, each block producer is able to compute
+the randomness seed it needs in order to participate in the block production
+lottery in epoch $\mathcal{E}_{n + 2}$. The computation of the seed is
+described in Algorithm \ref{algo-epoch-randomness} which uses the concept of
+epoch subchain described in Definition \ref{defn-epoch-subchain}.
+
+\custombinding{7}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  7. }
+  \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
+  index)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$\rho \leftarrow \phi$}}
+
+{\state{{\FORIN{$B$}{}}{\tmem{{\tmname{SubChain($\mathcal{E}_{n - 2}$)}}}}}}
+
+{\state{$\rho \leftarrow \rho | | d_B${\END}}}
+
+{\state{{\RETURN{Blake2s({\tmname{Epoch-Randomness}}($n -
+1$)\textbar\textbar$n$\textbar\textbar$\rho$)}}}}}}
+
+\hrulefill{\medskip}
+
+In which value $d_B$ is the VRF output computed for slot $s_B$ by running
+Algorithm \ref{algo-block-production-lottery}.
+
 \subsection{Finality}\label{sect-finality}
 
 Polkadot RE uses GRANDPA Finality protocol
@@ -1131,7 +1214,7 @@ block finalization process.
   {\tmstrong{$\mathbb{V}_{\tmop{id}}$}}: is an incremental counter tracking
   \tmverbatim{}membership, which changes in V.
   
-  {\tmstrong{r}}: is the voting round number.
+  {\tmstrong{r}}: is the votin\tmverbatim{}g round number.
 \end{definition}
 
 Now we need to define how Polkadot RE counts the number of votes for block
@@ -1325,9 +1408,9 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
+\custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  7. }
+  \tmtextbf{Algorithm  8. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -1352,9 +1435,9 @@ round is completable.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
+\custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  8. }
+  \tmtextbf{Algorithm  9. }
   \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
@@ -1394,9 +1477,9 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 
 \hrulefill{\medskip}
 
-\custombinding{9}{\noindent}\begin{tabular}{l}
+\custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  9. }
+  \tmtextbf{Algorithm  10. }
   \label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1416,9 +1499,9 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\custombinding{10}{\noindent}\begin{tabular}{l}
+\custombinding{11}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  10. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextbf{Algorithm  11. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
@@ -1787,15 +1870,11 @@ buffer, if the entry exists in the storage.
   
   \item \tmverbatim{ext\_get\_child\_storage\_into}
   
-  \item \tmverbatim{ext\_get\_storage\_into}
-  
   \item \tmverbatim{ext\_kill\_child\_storage}
   
   \item \tmverbatim{ext\_set\_child\_storage}
   
   \item \tmverbatim{ext\_storage\_changes\_root}
-  
-  \item \tmverbatim{ext\_storage\_root}
 \end{itemize}
 
 \subsection{Memory}
@@ -1871,13 +1950,42 @@ Computes the Blake2s hash of a given byte array.
 
 {\tmstrong{Arguments}}:
 \begin{itemize}
-  \item \tmverbatim{data}: a memory address pointing at the buffer and
-  containing the byte array to be hashed.
+  \item \tmverbatim{data}: a memory address pointing at the buffer containing
+  the byte array to be hashed.
   
   \item \tmverbatim{len}: the length of the byte array in bytes.
   
   \item \tmverbatim{out}: a memory address pointing at the beginning of a
   32-byte byte array contanining the Blake2s hash of the data.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_twox\_128}}
+
+Computes the {\tmem{xxHash64}} algorithm (see
+{\cite{collet_extremely_nodate}}) twice initiated with seeds 0 and 1 and
+applied on a given byte array and outputs the concatenated result.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_twox_128
+       (param $data i32) (param $len i32) (param $out i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a memory address pointing at the buffer containing
+  the byte array to be hashed.
+  
+  \item \tmverbatim{len}: the length of the byte array in bytes.
+  
+  \item \tmverbatim{out}: a memory address pointing at the beginning of a
+  16-byte byte array containing \ {\tmem{$\text{xxhash}
+  64_0$}}(\tmverbatim{data})\textbar\textbar{\tmem{$\text{xxhash64}_1$}}(\tmverbatim{data})
+  where {\tmem{$\text{xxhash} 64_i$}} is the xxhash64 function initiated with
+  seed i as a 64bit unsigned integer.
 \end{itemize}
 
 \subsubsection{\tmverbatim{ext\_ed25519\_verify}}
@@ -1911,18 +2019,14 @@ signature by the provided public key.
   the public key and corresponding to the secret key which has signed the
   message.
   
-  \item \tmverbatim{result}: \ an integer value equal to 0 indicating the
-  validity of the signature or a nonzero value otherwise.
+  \item \tmverbatim{result}: \ an in\tmverbatim{}teger value equal to 0
+  indicating the validity of the signature or a nonzero value otherwise.
 \end{itemize}
 
 \subsubsection{To be Specced}
 
 \begin{itemize}
-  \item \tmverbatim{ext\_twox\_128}
-  
   \item \tmverbatim{ext\_twox\_256}
-  
-  \ 
 \end{itemize}
 
 \subsection{Sandboxing}
@@ -2003,6 +2107,10 @@ UTF-8 string, otherwise does nothing and returns.
 \begin{thebibliography}{DGKR18}
   \bibitem[Ali19]{alistair_stewart_grandpa:_2019}Alistair Stewart.
   {\newblock}GRANDPA: A Byzantine Finality Gadgets, 2019.
+  
+  \bibitem[Col]{collet_extremely_nodate}Yann Collet. {\newblock}Extremely fast
+  non-cryptographic hash algorithm. {\newblock}Technical report,
+  http://cyan4973.github.io/xxHash/.
   
   \bibitem[DGKR18]{david_ouroboros_2018}Bernardo David, Peter Ga{\v z}i,
   Aggelos Kiayias, and Alexander Russell. {\newblock}Ouroboros praos: An
