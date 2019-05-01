@@ -531,10 +531,10 @@
 
   For storing the state of the system, Polkadot RE implements a hash table
   storage where the keys are used to access each data entry. There is no
-  assumption neither on the size of the key nor on the size of the data
-  stored under them, besides the fact that they are byte arrays with certain
-  upper limit on their length. The limit is imposed by the encoding
-  algorithms to store the key and the value in the storage trie.
+  assumption either on the size of the key nor on the size of the data stored
+  under them, besides the fact that they are byte arrays with specific upper
+  limits on their length. The limit is imposed by the encoding algorithms to
+  store the key and the value in the storage trie.
 
   <subsection|Accessing The System Storage >
 
@@ -999,20 +999,27 @@
   refer to this structure as a <em|block tree:>
 
   <\definition>
-    <label|defn-block-tree>The <strong|Block Tree> of a blockchain is the
-    union of all different versions of the blockchain observed by all the
-    nodes in the system such as every such block is a node in the graph and
-    <math|B<rsub|1>> is connected to <math|B<rsub|2>> if <math|B<rsub|1>> is
-    a parent of <math|B<rsub|2>>.
+    <label|defn-block-tree>The <strong|block tree> of a blockchain, denoted
+    by <math|BT>, is the union of all different versions of the blockchain
+    observed by all the nodes in the system such as every such block is a
+    node in the graph and <math|B<rsub|1>> is connected to <math|B<rsub|2>>
+    if <math|B<rsub|1>> is a parent of <math|B<rsub|2>>.
   </definition>
 
+  Definition <reference|defn-chain-subchain> gives the means to high light
+  various branchs of the block tree.
+
   <\definition>
-    <label|defn-chain-subchain>For <math|G> being the root of the block tree
-    and <math|B> a node of it. By <name|Chain(B)> we refer to the path graph
-    from <math|G> to <math|B>. If <math|B<rprime|'>> is another node on
-    <name|Chain(<math|B>)> then by <name|SubChain(<math|B<rprime|'>,B>)> we
-    refer to the subgraph of <math|><name|Chain(<math|B>)> path graph which
-    cantains both <math|B> and <math|B<rprime|'>>.
+    <label|defn-chain-subchain>Let <math|G> be the root of the block tree and
+    <math|B> be a node of it. By <name|<strong|Chain(<math|B>)>,> we refer to
+    the path graph from <math|G> to <math|B> in <math|BT>. If
+    <math|B<rprime|'>> is another node on <name|Chain(<math|B>)>, then by
+    <name|SubChain(<math|B<rprime|'>,B>)> we refer to the subgraph of
+    <math|><name|Chain(<math|B>)> path graph which contains both <math|B> and
+    <math|B<rprime|'>>. <name|Longest-Path(<math|BT>)> returns a path graph
+    of <math|BT> which is the longest among all paths in <math|BT>.
+    <name|Deepest-Leaf(<math|BT>)> returns the head of
+    <name|Longest-Path(<math|BT>)> chain.
   </definition>
 
   Because every block in the blockchain contains a reference to its parent,
@@ -1045,7 +1052,7 @@
   <subsubsection|Preliminaries>
 
   <\definition>
-    A <strong|block producer>, noted by <math|\<cal-P\><rsub|j>> is a node
+    A <strong|block producer>, noted by <math|\<cal-P\><rsub|j>>, is a node
     running Polkadot RE which is authorized to keep a transaction queue and
     which gets a turn in producing blocks.
   </definition>
@@ -1060,12 +1067,12 @@
   </definition>
 
   <\definition>
-    A block production <strong|epoch>, formally refered to as
+    A block production <strong|epoch>, formally referred to as
     <math|\<cal-E\>> is a period with pre-known starting time and fixed
     length during which the set of block producers stays constant. Epochs are
-    indexed sequentially, we refer to the <math|n<rsup|th>> epoch since
+    indexed sequentially, and we refer to the <math|n<rsup|th>> epoch since
     genesis by <math|\<cal-E\><rsub|n>>. Each epoch is divided into
-    <math|>equal length periods known as block production <strong|slots>
+    <math|>equal length periods known as block production <strong|slots>,
     sequentially indexed in each epoch. Each slot is awarded to a subset of
     block producers during which they are allowed to generate a block.
   </definition>
@@ -1073,15 +1080,23 @@
   <\notation>
     <label|note-slot>We refer to the number of slots in epoch
     <math|\<cal-E\><rsub|n>> by <math|sc<rsub|n>>. <math|sc<rsub|n>> is set
-    to ??? at the genesis. The sub chain which contains the blocks actually
-    generated in <math|\<cal-E\><rsub|n>> and is on the best branch is
-    denoted by <strong|<math|<around*|\||\<cal-E\><rsub|n>|\|>>> and so we
-    have <math|0\<leqslant\><around*|\||\<cal-E\><rsub|n>|\|>\<leqslant\>sc<rsub|n>>.
-    For a given block <math|B>, we use the notation <strong|<math|s<rsub|B>>>
-    to refer to the slot during which <math|B> has been produced. Conversely,
-    for slot <math|s>, \ <math|\<cal-B\><rsub|s>> is the set of Blocks
-    generated at slot <math|s>.
+    to ??? at the genesis. For a given block <math|B>, we use the notation
+    <strong|<math|s<rsub|B>>> to refer to the slot during which <math|B> has
+    been produced. Conversely, for slot <math|s>, <math|\<cal-B\><rsub|s>> is
+    the set of Blocks generated at slot <math|s>.
   </notation>
+
+  Definition <reference|defn-epoch-subchain> provides an iterator over the
+  blocks produced during an specific epoch.
+
+  <\definition>
+    <label|defn-epoch-subchain> By <name|SubChain(<math|\<cal-E\><rsub|n>>)>
+    for epoch <math|\<cal-E\><rsub|n>>, we refer to the path graph of
+    <math|BT> which contains all the blocks generated during the slots of
+    epoch <math|\<cal-E\><rsub|n>>. When there is more than one block
+    generated at a slot, we choose the one which is also on
+    <name|Longest-Branch(<math|BT>)>.
+  </definition>
 
   <subsubsection|Block Production Lottery>
 
@@ -1092,7 +1107,7 @@
     is the winner of a specific slot. <math|\<tau\>> is initially set to ???.
   </definition>
 
-  \ Block producer which aim to produce a block during
+  \ A block producer aiming to produce a block during
   <math|\<cal-E\><rsub|n>> should run Algorithm
   <reference|algo-block-production-lottery> to identify the slots it is
   awarded. These are the slots during which the block producer is allowed to
@@ -1152,29 +1167,28 @@
   slot tail defined in Definition <reference|defn-block-time>.
 
   <\definition>
-    <label|defn-block-time>The <strong|arrival time> of block <math|B> for
-    node <math|j> formally represented by <strong|<math|T<rsup|j><rsub|B>>>
-    is the local time of node <math|j> when node <math|j> has received the
-    block <math|B> for the first time. If the node <math|j> itself is the
-    producer of <math|B>, <math|T<rsub|B><rsup|j>> is set equal to the time
-    that block is produced. We may drop index <math|j> in
-    <math|T<rsup|j><rsub|B>> notation if there is no ambiguity about the
-    underlying node.
+    <label|defn-block-time>The <strong|block arrival time> of block <math|B>
+    for node <math|j> formally represented by
+    <strong|<math|T<rsup|j><rsub|B>>> is the local time of node <math|j> when
+    node <math|j> has received the block <math|B> for the first time. If the
+    node <math|j> itself is the producer of <math|B>,
+    <math|T<rsub|B><rsup|j>> is set equal to the time that the block is
+    produced. The index <math|j> in <math|T<rsup|j><rsub|B>> notation may be
+    dropped when there is no ambiguity about the underlying node.
   </definition>
 
-  In addition to the arrival time of a block <math|B>, the block producer
-  also needs to know how many slots has been passed since arrival of
-  <math|B>. This value is formalized in Definition
-  <reference|defn-slot-offset>.
+  In addition to the arrival time of block <math|B>, the block producer also
+  needs to know how many slots have passed since the arrival of <math|B>.
+  This value is formalized in Definition <reference|defn-slot-offset>.
 
   <\definition>
     <label|defn-slot-offset>Let <math|s<rsub|i>> and <math|s<rsub|j>> be two
     slots belonging to epochs <math|\<cal-E\><rsub|k>> and
-    <math|\<cal-E\><rsub|l>>, by <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|j>|)>>
+    <math|\<cal-E\><rsub|l>>. By <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|j>|)>>
     we refer to the function whose value is equal to the number of slots
     between <math|s<rsub|i>> and <math|s<rsub|j>> (counting <math|s<rsub|j>>)
-    on time continuum. As such we have <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|i>|)>=0>.
-    </definition>
+    on time continuum. As such, we have <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|i>|)>=0>.
+  </definition>
 
   <\algorithm>
     <label|algo-slot-time><name|Slot-Time>(<math|s>: the number of the slots
@@ -1186,8 +1200,12 @@
       </state>
 
       <\state>
-        <FOR-IN|<math|B<rsub|i>>|<name|SubChain>(<name|Last-Finalized-Slot>
-        <math|-SlTl>, <name|Last-Finalized-Slot>)>
+        <name|Deepest-Leaf(<math|BT>)>
+      </state>
+
+      <\state>
+        <FOR-IN|<math|B<rsub|i>>|<name|SubChain>(<name|> <math|-SlTl>,
+        <name|Last-Finalized-Slot>)>
       </state>
 
       <\state>
@@ -1205,6 +1223,8 @@
       </state>
     </algorithmic>
   </algorithm>
+
+  \;
 
   <subsubsection|Block Production>
 
@@ -1283,21 +1303,12 @@
 
   <subsubsection|Epoch Randomness>
 
-  At end of each epoch, each block producer is able to compute the randomness
-  seed it needs to participate in the block production lottery in the epoch
-  following the next epoch. The computation of the seed is described in
-  Algorithm <reference|algo-epoch-randomness> which uses the concept of epoch
-  subchain describe in Definition <reference|defn-epoch-subchain>.
-
-  <\definition>
-    <label|defn-epoch-subchain><name|Longest-Branch(<math|BT>)>returns a path
-    graph of <math|BT> which has the longest length among all pathes in
-    <math|BT>. By <name|SubChain(<math|\<cal-E\><rsub|n>>)> for epoch
-    <math|\<cal-E\><rsub|n>> is path graph which contains all blocks
-    generated during slots of epoch <math|\<cal-E\><rsub|n>>. When there is
-    more than one block is generated at a slot we choose the one which is
-    also on <name|Longest-Branch(<math|BT>)>.
-  </definition>
+  At the end of epoch <math|\<cal-E\><rsub|n>>, each block producer is able
+  to compute the randomness seed it needs in order to participate in the
+  block production lottery in epoch <math|\<cal-E\><rsub|n+2>>. The
+  computation of the seed is described in Algorithm
+  <reference|algo-epoch-randomness> which uses the concept of epoch subchain
+  described in Definition <reference|defn-epoch-subchain>.
 
   <\algorithm>
     <label|algo-epoch-randomness><name|Epoch-Randomness>(<math|n\<gtr\>2:>epoch
@@ -1323,6 +1334,9 @@
       </state>
     </algorithmic>
   </algorithm>
+
+  In which value <math|d<rsub|B>> is the VRF output computed for slot
+  <math|s<rsub|B>> by running Algorithm <reference|algo-block-production-lottery>.
 
   <subsection|Finality><label|sect-finality>
 
@@ -2270,7 +2284,7 @@
 
   Computes the <em|xxHash64> algorithm (see <cite|collet_extremely_nodate>)
   twice initiated with seeds 0 and 1 and applied on a given byte array and
-  output the concatinated result.
+  outputs the concatenated result.
 
   \;
 
@@ -2293,7 +2307,7 @@
     <item><verbatim|len>: the length of the byte array in bytes.
 
     <item><verbatim|out>: a memory address pointing at the beginning of a
-    16-byte byte array contanining \ <em|<math|<text|xxhash>64<rsub|0>>>(<verbatim|data>)\|<em|<math|<text|xxhash64><rsub|1>>>(<verbatim|data>)
+    16-byte byte array containing \ <em|<math|<text|xxhash>64<rsub|0>>>(<verbatim|data>)\|\|<em|<math|<text|xxhash64><rsub|1>>>(<verbatim|data>)
     where <math|><em|<math|<text|xxhash>64<rsub|i>>> is the xxhash64 function
     initiated with seed i as a 64bit unsigned integer.
   </itemize>
@@ -2577,13 +2591,13 @@
     <associate|def-scale-codec|<tuple|52|19>>
     <associate|def-vote|<tuple|41|15>>
     <associate|defn-account-key|<tuple|25|11>>
-    <associate|defn-babe-header|<tuple|37|14>>
+    <associate|defn-babe-header|<tuple|38|14>>
     <associate|defn-bit-rep|<tuple|6|1>>
-    <associate|defn-block-time|<tuple|35|13>>
+    <associate|defn-block-time|<tuple|36|13>>
     <associate|defn-block-tree|<tuple|26|12>>
     <associate|defn-chain-subchain|<tuple|27|?>>
     <associate|defn-children-bitmap|<tuple|22|11>>
-    <associate|defn-epoch-subchain|<tuple|38|?>>
+    <associate|defn-epoch-subchain|<tuple|33|?>>
     <associate|defn-hex-encoding|<tuple|54|19>>
     <associate|defn-index-function|<tuple|19|9>>
     <associate|defn-little-endian|<tuple|7|1>>
@@ -2594,7 +2608,7 @@
     <associate|defn-node-value|<tuple|20|9>>
     <associate|defn-nodetype|<tuple|16|8>>
     <associate|defn-radix-tree|<tuple|3|1>>
-    <associate|defn-slot-offset|<tuple|36|?>>
+    <associate|defn-slot-offset|<tuple|37|?>>
     <associate|defn-stored-value|<tuple|13|7>>
     <associate|key-encode-in-trie|<tuple|1|8>>
     <associate|note-slot|<tuple|32|?>>
@@ -2613,7 +2627,7 @@
     <associate|sect-scale-codec|<tuple|9.1|18>>
     <associate|sect-validate-transaction|<tuple|3.3.5|6>>
     <associate|sect-vrf|<tuple|8.2|18>>
-    <associate|slot-time-cal-tail|<tuple|34|13>>
+    <associate|slot-time-cal-tail|<tuple|35|13>>
     <associate|snippet-runtime-enteries|<tuple|1|5>>
   </collection>
 </references>
