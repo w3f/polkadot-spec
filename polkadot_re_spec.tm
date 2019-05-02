@@ -397,6 +397,13 @@
       \ \ \ \ \ \ \ \ \ \ (func $GrandpaApi_grandpa_authorities))
 
       \ \ (export "ParachainHost_validators" (func $Core_authorities))
+
+      \ <code*| (export "BabeApi_slot_duration" (func
+      $BabeApi_slot_duration))>
+
+      \ \ (export "BabeApi_slot_winning_threshold"\ 
+
+      \ \ \ \ \ \ \ \ \ \ (func $BabeApi_slot_winning_threshold))
     </cpp-code>
   </small-figure|<label|snippet-runtime-enteries>Snippet to export entries
   into tho Wasm runtime module>
@@ -772,7 +779,8 @@
     where <math|Head<rsub|N>>, <math|pk<rsub|N>>, <math|Enc<rsub|nibbles>>
     and <math|sv<rsub|N>> are defined in Definitions
     <reference|defn-node-header>,<reference|defn-node-key>,
-    <reference|defn-he> and <reference|defn-node-subvalue>, respectively.
+    <reference|defn-hex-encoding> and <reference|defn-node-subvalue>,
+    respectively.
   </definition>
 
   <\definition>
@@ -912,8 +920,8 @@
   value which recursively depends on the Merkle value of its children.
 
   We use the auxilary function introduced in Definition
-  <reference|defn-children-bitmap-index> to encode and decode information
-  stored in a branch node.
+  <reference|defn-children-bitmap> to encode and decode information stored in
+  a branch node.
 
   <\definition>
     <label|defn-children-bitmap>Suppose <math|N<rsub|b>,N<rsub|c>\<in\>\<cal-N\>>
@@ -1042,7 +1050,7 @@
   non-overlapping phases known as an <strong|<em|epoch>>. Each epoch on its
   turn is divided into a predefined number of slots. All slots in each epoch
   are sequentially indexed starting from 0. At the beginning of each epoch,
-  the BABE node needs to run Algorithm <reference|algo-babe-slot-selection>
+  the BABE node needs to run Algorithm <reference|algo-block-production-lottery>
   to find out in which slots it should produce a block and gossip to the
   other block producers. In turn, the block producer node should keep a copy
   of the block tree and grow it as it receives valid blocks from other block
@@ -1080,10 +1088,11 @@
   <\notation>
     <label|note-slot>We refer to the number of slots in epoch
     <math|\<cal-E\><rsub|n>> by <math|sc<rsub|n>>. <math|sc<rsub|n>> is set
-    to ??? at the genesis. For a given block <math|B>, we use the notation
-    <strong|<math|s<rsub|B>>> to refer to the slot during which <math|B> has
-    been produced. Conversely, for slot <math|s>, <math|\<cal-B\><rsub|s>> is
-    the set of Blocks generated at slot <math|s>.
+    to the result of calling runtime entry \ <verbatim|BabeApi_slot_duration>
+    at the \Pbeginning of each epoch. For a given block <math|B>, we use the
+    notation <strong|<math|s<rsub|B>>> to refer to the slot during which
+    <math|B> has been produced. Conversely, for slot <math|s>,
+    <math|\<cal-B\><rsub|s>> is the set of Blocks generated at slot <math|s>.
   </notation>
 
   Definition <reference|defn-epoch-subchain> provides an iterator over the
@@ -1104,7 +1113,8 @@
     <strong|Winning threshold> denoted by <strong|<math|\<tau\>>> is the
     threshold which is used alongside with the result of Algorirthm
     <reference|algo-block-production-lottery> to decide if a block producer
-    is the winner of a specific slot. <math|\<tau\>> is initially set to ???.
+    is the winner of a specific slot. <math|\<tau\>> is set to result of call
+    into <code*|BabeApi_slot_winning_threshold> runtime entry.
   </definition>
 
   \ A block producer aiming to produce a block during
@@ -1517,8 +1527,8 @@
   bound for what is going to be finalised in this round. \ 
 
   <\definition>
-    We say that round <math|r> is <strong|completable> if
-    <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>+\<cal-E\><rsup|r,pc><rsub|obs<around*|(|v|)>>\<gtr\><frac|2|3>\<bbb-V\>>
+    <label|defn-grandpa-completable>We say that round <math|r> is
+    <strong|completable> if <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>+\<cal-E\><rsup|r,pc><rsub|obs<around*|(|v|)>>\<gtr\><frac|2|3>\<bbb-V\>>
     and for all <math|B<rprime|'>\<gtr\>B<rsub|v><rsup|r,pv>>:
 
     <\equation*>
@@ -1640,9 +1650,6 @@
     </algorithmic>
   </algorithm>
 
-  Each voter should run Algorithm <reference|alg-completable-round> to verify
-  that a round is completable.
-
   <subsubsection|Voting Process in Round <math|r>>
 
   For each round <math|r>, an honest voter <math|v> must participate in the
@@ -1721,7 +1728,11 @@
     </algorithmic>
   </algorithm>
 
-  <\algorithm|<label|alg-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)>
+  The condition of <em|completablitiy> is defined in Definition
+  <reference|defn-grandpa-completable>. <name|Best-Final-Candidate> function
+  is explained in Algorithm <reference|algo-grandpa-best-candidate>.
+
+  <\algorithm|<label|algo-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)>
     <\algorithmic>
       <\state>
         <math|\<cal-C\><rsub|\<nosymbol\>>\<leftarrow\><around|{|B<rprime|'>\|B<rprime|'>\<leqslant\>B<rsub|v><rsup|r,pv>:<around|\||V<rsub|v><rsup|r,pc>|\|>-#V<rsub|v><rsup|r,pc><around|(|B<rprime|'>|)>\<leqslant\>1/3<around|\||\<bbb-V\>|\|>|}>>
@@ -2282,7 +2293,7 @@
 
   <subsubsection|<verbatim|ext_twox_128>>
 
-  Computes the <em|xxHash64> algorithm (see <cite|collet_extremely_nodate>)
+  Computes the <em|xxHash64> algorithm (see <cite|collet_extremely_2019>)
   twice initiated with seeds 0 and 1 and applied on a given byte array and
   outputs the concatenated result.
 
@@ -2449,10 +2460,6 @@
       <bibitem*|Ali19><label|bib-alistair_stewart_grandpa:_2019>Alistair
       Stewart. <newblock>GRANDPA: A Byzantine Finality Gadgets, 2019.
 
-      <bibitem*|Col><label|bib-collet_extremely_nodate>Yann Collet.
-      <newblock>Extremely fast non-cryptographic hash algorithm.
-      <newblock>Technical report, http://cyan4973.github.io/xxHash/.
-
       <bibitem*|DGKR18><label|bib-david_ouroboros_2018>Bernardo David, Peter
       Gaºi, Aggelos Kiayias, and Alexander Russell. <newblock>Ouroboros
       praos: An adaptively-secure, semi-synchronous proof-of-stake
@@ -2484,24 +2491,25 @@
 
 <\references>
   <\collection>
-    <associate|alg-grandpa-best-candidate|<tuple|10|18>>
-    <associate|alg-grandpa-round|<tuple|9|17>>
-    <associate|alg-join-leave-grandpa|<tuple|8|17>>
+    <associate|alg-grandpa-best-candidate|<tuple|10|19>>
+    <associate|alg-grandpa-round|<tuple|9|18>>
+    <associate|alg-join-leave-grandpa|<tuple|8|18>>
     <associate|algo-aggregate-key|<tuple|2|9>>
     <associate|algo-block-production|<tuple|6|14>>
     <associate|algo-block-production-lottery|<tuple|4|13>>
-    <associate|algo-epoch-randomness|<tuple|7|?>>
+    <associate|algo-epoch-randomness|<tuple|7|15>>
+    <associate|algo-grandpa-best-candidate|<tuple|10|?>>
     <associate|algo-pk-length|<tuple|3|10>>
-    <associate|algo-slot-time|<tuple|5|13>>
+    <associate|algo-slot-time|<tuple|5|14>>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|3.2.1|4>>
     <associate|auto-11|<tuple|3.2.2|4>>
     <associate|auto-12|<tuple|3.2.3|4>>
     <associate|auto-13|<tuple|3.2.4|4>>
-    <associate|auto-14|<tuple|3.3|4>>
+    <associate|auto-14|<tuple|3.3|5>>
     <associate|auto-15|<tuple|1|5>>
     <associate|auto-16|<tuple|3.3.1|5>>
-    <associate|auto-17|<tuple|1|5>>
+    <associate|auto-17|<tuple|1|6>>
     <associate|auto-18|<tuple|3.3.2|6>>
     <associate|auto-19|<tuple|3.3.3|6>>
     <associate|auto-2|<tuple|2|2>>
@@ -2511,122 +2519,122 @@
     <associate|auto-23|<tuple|4|6>>
     <associate|auto-24|<tuple|4.1|6>>
     <associate|auto-25|<tuple|4.2|6>>
-    <associate|auto-26|<tuple|4.3|6>>
+    <associate|auto-26|<tuple|4.3|7>>
     <associate|auto-27|<tuple|5|7>>
     <associate|auto-28|<tuple|5.1|7>>
-    <associate|auto-29|<tuple|5.2|7>>
+    <associate|auto-29|<tuple|5.2|8>>
     <associate|auto-3|<tuple|2.1|2>>
     <associate|auto-30|<tuple|5.3|8>>
-    <associate|auto-31|<tuple|5.4|10>>
+    <associate|auto-31|<tuple|5.4|11>>
     <associate|auto-32|<tuple|6|11>>
     <associate|auto-33|<tuple|6.1|11>>
-    <associate|auto-34|<tuple|7|11>>
+    <associate|auto-34|<tuple|7|12>>
     <associate|auto-35|<tuple|7.1|12>>
     <associate|auto-36|<tuple|7.2|12>>
     <associate|auto-37|<tuple|7.2.1|12>>
-    <associate|auto-38|<tuple|7.2.2|12>>
+    <associate|auto-38|<tuple|7.2.2|13>>
     <associate|auto-39|<tuple|7.2.3|13>>
     <associate|auto-4|<tuple|2.2|3>>
-    <associate|auto-40|<tuple|7.2.4|13>>
-    <associate|auto-41|<tuple|7.2.5|14>>
-    <associate|auto-42|<tuple|7.2.6|14>>
-    <associate|auto-43|<tuple|7.3|14>>
-    <associate|auto-44|<tuple|7.3.1|16>>
+    <associate|auto-40|<tuple|7.2.4|14>>
+    <associate|auto-41|<tuple|7.2.5|15>>
+    <associate|auto-42|<tuple|7.2.6|15>>
+    <associate|auto-43|<tuple|7.3|15>>
+    <associate|auto-44|<tuple|7.3.1|15>>
     <associate|auto-45|<tuple|7.3.2|17>>
-    <associate|auto-46|<tuple|7.3.3|17>>
+    <associate|auto-46|<tuple|7.3.3|18>>
     <associate|auto-47|<tuple|7.3.4|18>>
-    <associate|auto-48|<tuple|8|18>>
-    <associate|auto-49|<tuple|8.1|18>>
+    <associate|auto-48|<tuple|8|19>>
+    <associate|auto-49|<tuple|8.1|19>>
     <associate|auto-5|<tuple|2.3|3>>
-    <associate|auto-50|<tuple|8.2|18>>
-    <associate|auto-51|<tuple|9|18>>
+    <associate|auto-50|<tuple|8.2|19>>
+    <associate|auto-51|<tuple|9|19>>
     <associate|auto-52|<tuple|9.1|19>>
     <associate|auto-53|<tuple|9.2|20>>
-    <associate|auto-54|<tuple|10|20>>
-    <associate|auto-55|<tuple|11|20>>
-    <associate|auto-56|<tuple|12|20>>
-    <associate|auto-57|<tuple|A|20>>
-    <associate|auto-58|<tuple|A.1|20>>
-    <associate|auto-59|<tuple|A.1.1|20>>
+    <associate|auto-54|<tuple|10|21>>
+    <associate|auto-55|<tuple|11|21>>
+    <associate|auto-56|<tuple|12|21>>
+    <associate|auto-57|<tuple|A|21>>
+    <associate|auto-58|<tuple|A.1|21>>
+    <associate|auto-59|<tuple|A.1.1|21>>
     <associate|auto-6|<tuple|2.4|3>>
     <associate|auto-60|<tuple|A.1.2|21>>
-    <associate|auto-61|<tuple|A.1.3|21>>
-    <associate|auto-62|<tuple|A.1.4|21>>
-    <associate|auto-63|<tuple|A.1.5|21>>
+    <associate|auto-61|<tuple|A.1.3|22>>
+    <associate|auto-62|<tuple|A.1.4|22>>
+    <associate|auto-63|<tuple|A.1.5|22>>
     <associate|auto-64|<tuple|A.1.6|22>>
-    <associate|auto-65|<tuple|A.1.7|22>>
+    <associate|auto-65|<tuple|A.1.7|23>>
     <associate|auto-66|<tuple|A.1.8|23>>
-    <associate|auto-67|<tuple|A.1.9|23>>
-    <associate|auto-68|<tuple|A.2|23>>
-    <associate|auto-69|<tuple|A.2.1|23>>
+    <associate|auto-67|<tuple|A.1.9|24>>
+    <associate|auto-68|<tuple|A.2|24>>
+    <associate|auto-69|<tuple|A.2.1|24>>
     <associate|auto-7|<tuple|3|3>>
     <associate|auto-70|<tuple|A.2.2|24>>
-    <associate|auto-71|<tuple|A.2.3|24>>
-    <associate|auto-72|<tuple|A.3|24>>
-    <associate|auto-73|<tuple|A.3.1|24>>
+    <associate|auto-71|<tuple|A.2.3|25>>
+    <associate|auto-72|<tuple|A.3|25>>
+    <associate|auto-73|<tuple|A.3.1|25>>
     <associate|auto-74|<tuple|A.3.2|25>>
     <associate|auto-75|<tuple|A.3.3|25>>
-    <associate|auto-76|<tuple|A.3.4|25>>
-    <associate|auto-77|<tuple|A.4|25>>
-    <associate|auto-78|<tuple|A.4.1|25>>
-    <associate|auto-79|<tuple|A.5|25>>
-    <associate|auto-8|<tuple|3.1|3>>
+    <associate|auto-76|<tuple|A.3.4|26>>
+    <associate|auto-77|<tuple|A.4|26>>
+    <associate|auto-78|<tuple|A.4.1|26>>
+    <associate|auto-79|<tuple|A.5|26>>
+    <associate|auto-8|<tuple|3.1|4>>
     <associate|auto-80|<tuple|A.5.1|26>>
-    <associate|auto-81|<tuple|A.5.2|26>>
-    <associate|auto-82|<tuple|A.6|26>>
-    <associate|auto-83|<tuple|A.6.1|26>>
-    <associate|auto-84|<tuple|A.7|?>>
-    <associate|auto-85|<tuple|A.7|?>>
+    <associate|auto-81|<tuple|A.5.2|27>>
+    <associate|auto-82|<tuple|A.6|27>>
+    <associate|auto-83|<tuple|A.6.1|27>>
+    <associate|auto-84|<tuple|A.7|27>>
+    <associate|auto-85|<tuple|A.7|27>>
     <associate|auto-9|<tuple|3.2|4>>
-    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|26>>
-    <associate|bib-collet_extremely_nodate|<tuple|Col|?>>
-    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|26>>
-    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|26>>
+    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|27>>
+    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|27>>
+    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|27>>
     <associate|block|<tuple|2.1|2>>
     <associate|def-block-header|<tuple|10|2>>
     <associate|def-block-header-hash|<tuple|11|3>>
     <associate|def-extrinsic-network-message|<tuple|12|6>>
-    <associate|def-grandpa-justification|<tuple|50|16>>
+    <associate|def-grandpa-justification|<tuple|50|17>>
     <associate|def-path-graph|<tuple|2|1>>
-    <associate|def-scale-codec|<tuple|52|19>>
-    <associate|def-vote|<tuple|41|15>>
+    <associate|def-scale-codec|<tuple|52|20>>
+    <associate|def-vote|<tuple|41|16>>
     <associate|defn-account-key|<tuple|25|11>>
     <associate|defn-babe-header|<tuple|38|14>>
     <associate|defn-bit-rep|<tuple|6|1>>
-    <associate|defn-block-time|<tuple|36|13>>
+    <associate|defn-block-time|<tuple|36|14>>
     <associate|defn-block-tree|<tuple|26|12>>
-    <associate|defn-chain-subchain|<tuple|27|?>>
+    <associate|defn-chain-subchain|<tuple|27|12>>
     <associate|defn-children-bitmap|<tuple|22|11>>
-    <associate|defn-epoch-subchain|<tuple|33|?>>
-    <associate|defn-hex-encoding|<tuple|54|19>>
+    <associate|defn-epoch-subchain|<tuple|33|13>>
+    <associate|defn-grandpa-completable|<tuple|48|?>>
+    <associate|defn-hex-encoding|<tuple|54|20>>
     <associate|defn-index-function|<tuple|19|9>>
-    <associate|defn-little-endian|<tuple|7|1>>
+    <associate|defn-little-endian|<tuple|7|2>>
     <associate|defn-merkle-value|<tuple|24|11>>
-    <associate|defn-node-header|<tuple|21|9>>
+    <associate|defn-node-header|<tuple|21|10>>
     <associate|defn-node-key|<tuple|18|9>>
     <associate|defn-node-subvalue|<tuple|23|11>>
-    <associate|defn-node-value|<tuple|20|9>>
+    <associate|defn-node-value|<tuple|20|10>>
     <associate|defn-nodetype|<tuple|16|8>>
     <associate|defn-radix-tree|<tuple|3|1>>
-    <associate|defn-slot-offset|<tuple|37|?>>
+    <associate|defn-slot-offset|<tuple|37|14>>
     <associate|defn-stored-value|<tuple|13|7>>
     <associate|key-encode-in-trie|<tuple|1|8>>
-    <associate|note-slot|<tuple|32|?>>
+    <associate|note-slot|<tuple|32|13>>
     <associate|sect-abi-encoding|<tuple|3.2.1|4>>
-    <associate|sect-encoding|<tuple|9|18>>
+    <associate|sect-encoding|<tuple|9|19>>
     <associate|sect-entries-into-runtime|<tuple|3|3>>
-    <associate|sect-finality|<tuple|7.3|14>>
-    <associate|sect-genisis-block|<tuple|10|20>>
-    <associate|sect-merkl-proof|<tuple|5.4|10>>
-    <associate|sect-predef-storage-keys|<tuple|11|20>>
-    <associate|sect-randomness|<tuple|8.1|18>>
-    <associate|sect-runtime-api|<tuple|A|20>>
+    <associate|sect-finality|<tuple|7.3|15>>
+    <associate|sect-genisis-block|<tuple|10|21>>
+    <associate|sect-merkl-proof|<tuple|5.4|11>>
+    <associate|sect-predef-storage-keys|<tuple|11|21>>
+    <associate|sect-randomness|<tuple|8.1|19>>
+    <associate|sect-runtime-api|<tuple|A|21>>
     <associate|sect-runtime-api-auth|<tuple|3.3.2|6>>
-    <associate|sect-runtime-entries|<tuple|3.3|4>>
-    <associate|sect-runtime-upgrade|<tuple|12|20>>
-    <associate|sect-scale-codec|<tuple|9.1|18>>
+    <associate|sect-runtime-entries|<tuple|3.3|5>>
+    <associate|sect-runtime-upgrade|<tuple|12|21>>
+    <associate|sect-scale-codec|<tuple|9.1|19>>
     <associate|sect-validate-transaction|<tuple|3.3.5|6>>
-    <associate|sect-vrf|<tuple|8.2|18>>
+    <associate|sect-vrf|<tuple|8.2|19>>
     <associate|slot-time-cal-tail|<tuple|35|13>>
     <associate|snippet-runtime-enteries|<tuple|1|5>>
   </collection>
@@ -2641,7 +2649,7 @@
 
       alistair_stewart_grandpa:_2019
 
-      collet_extremely_nodate
+      collet_extremely_2019
     </associate>
     <\associate|figure>
       <tuple|normal|<surround|<hidden-binding|<tuple>|1>||Snippet to export

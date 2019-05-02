@@ -71,7 +71,7 @@
   {\Large Protocol Specification}
 }
 
-\date{May 1, 2019}
+\date{May 2, 2019}
 
 \maketitle
 
@@ -353,6 +353,9 @@ the Runtime Wasm blob and has been exported as shown in Snippet
   (export "GrandpaApi_grandpa_authorities" 
           (func $GrandpaApi_grandpa_authorities))
   (export "ParachainHost_validators" (func $Core_authorities))
+ 
+  (export "BabeApi_slot_winning_threshold" 
+          (func $BabeApi_slot_winning_threshold))
 \end{tmcode}}{\label{snippet-runtime-enteries}Snippet to export entries into
 tho Wasm runtime module}
 
@@ -692,7 +695,7 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
      \tmop{sv}_N \]
   where $\tmop{Head}_N$, $\tmop{pk}_N$, $\tmop{Enc}_{\tmop{nibbles}}$ and
   $\tmop{sv}_N$ are defined in Definitions \ref{defn-node-header},
-  \ref{defn-node-key}, \ref{defn-he} and \ref{defn-node-subvalue},
+  \ref{defn-node-key}, \ref{defn-hex-encoding} and \ref{defn-node-subvalue},
   respectively.
 \end{definition}
 
@@ -804,8 +807,8 @@ recursive dependancy is encompassed into the subvalue part of the node value
 which recursively depends on the Merkle value of its children.
 
 We use the auxilary function introduced in Definition
-\ref{defn-children-bitmap-index} to encode and decode information stored in a
-branch node.
+\ref{defn-children-bitmap} to encode and decode information stored in a branch
+node.
 
 \begin{definition}
   \label{defn-children-bitmap}Suppose $N_b, N_c \in \mathcal{N}$ and $N_c$ is
@@ -932,11 +935,12 @@ block production designed based on Ouroboros praos
 non-overlapping phases known as an {\tmstrong{{\tmem{epoch}}}}. Each epoch on
 its turn is divided into a predefined number of slots. All slots in each epoch
 are sequentially indexed starting from 0. At the beginning of each epoch, the
-BABE node needs to run Algorithm \ref{algo-babe-slot-selection} to find out in
-which slots it should produce a block and gossip to the other block producers.
-In turn, the block producer node should keep a copy of the block tree and grow
-it as it receives valid blocks from other block producers. A block producer
-prunes the tree in parallel using Algorithm \ref{algo-block-tree-prunning}.
+BABE node needs to run Algorithm \ref{algo-block-production-lottery} to find
+out in which slots it should produce a block and gossip to the other block
+producers. In turn, the block producer node should keep a copy of the block
+tree and grow it as it receives valid blocks from other block producers. A
+block producer prunes the tree in parallel using Algorithm
+\ref{algo-block-tree-prunning}.
 
 \subsubsection{Preliminaries}
 
@@ -968,10 +972,11 @@ prunes the tree in parallel using Algorithm \ref{algo-block-tree-prunning}.
 
 \begin{notation}
   \label{note-slot}We refer to the number of slots in epoch $\mathcal{E}_n$ by
-  $\tmop{sc}_n$. $\tmop{sc}_n$ is set to ??? at the genesis. For a given block
-  $B$, we use the notation {\tmstrong{$s_B$}} to refer to the slot during
-  which $B$ has been produced. Conversely, for slot $s$, $\mathcal{B}_s$ is
-  the set of Blocks generated at slot $s$.
+  $\tmop{sc}_n$. $\tmop{sc}_n$ is set to the result of calling runtime entry \
+  \tmverbatim{BabeApi\_slot\_duration} at the ``beginning of each epoch. For a
+  given block $B$, we use the notation {\tmstrong{$s_B$}} to refer to the slot
+  during which $B$ has been produced. Conversely, for slot $s$,
+  $\mathcal{B}_s$ is the set of Blocks generated at slot $s$.
 \end{notation}
 
 Definition \ref{defn-epoch-subchain} provides an iterator over the blocks
@@ -991,7 +996,8 @@ produced during an specific epoch.
   {\tmstrong{Winning threshold}} denoted by {\tmstrong{$\tau$}} is the
   threshold which is used alongside with the result of Algorirthm
   \ref{algo-block-production-lottery} to decide if a block producer is the
-  winner of a specific slot. $\tau$ is initially set to ???.
+  winner of a specific slot. $\tau$ is set to result of call into
+  {\code*{BabeApi\_slot\_winning\_threshold}} runtime entry.
 \end{definition}
 
 A block producer aiming to produce a block during $\mathcal{E}_n$ should run
@@ -1324,9 +1330,10 @@ they are confident that $B_v^{r, \tmop{pv}}$ is an upper bound for what is
 going to be finalised in this round. \
 
 \begin{definition}
-  We say that round $r$ is {\tmstrong{completable}} if $|V^{r,
-  \tmop{pc}}_{\tmop{obs} (v)} | +\mathcal{E}^{r, \tmop{pc}}_{\tmop{obs} (v)} >
-  \frac{2}{3} \mathbb{V}$ and for all $B' > B_v^{r, \tmop{pv}}$:
+  \label{defn-grandpa-completable}We say that round $r$ is
+  {\tmstrong{completable}} if $|V^{r, \tmop{pc}}_{\tmop{obs} (v)} |
+  +\mathcal{E}^{r, \tmop{pc}}_{\tmop{obs} (v)} > \frac{2}{3} \mathbb{V}$ and
+  for all $B' > B_v^{r, \tmop{pv}}$:
   \[ \begin{array}{l}
        |V^{r, \tmop{pc}}_{\tmop{obs} (v)} | -\mathcal{E}^{r,
        \tmop{pc}}_{\tmop{obs} (v)} - |V^{r, \tmop{pc}}_{\tmop{obs}
@@ -1427,9 +1434,6 @@ needs to be incremented.
 
 \hrulefill{\medskip}
 
-Each voter should run Algorithm \ref{alg-completable-round} to verify that a
-round is completable.
-
 \subsubsection{Voting Process in Round $r$}
 
 For each round $r$, an honest voter $v$ must participate in the voting process
@@ -1477,10 +1481,14 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 
 \hrulefill{\medskip}
 
+The condition of {\tmem{completablitiy}} is defined in Definition
+\ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
+explained in Algorithm \ref{algo-grandpa-best-candidate}.
+
 \custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
   \tmtextbf{Algorithm  10. }
-  \label{alg-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
+  \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
 
@@ -1961,9 +1969,9 @@ Computes the Blake2s hash of a given byte array.
 
 \subsubsection{\tmverbatim{ext\_twox\_128}}
 
-Computes the {\tmem{xxHash64}} algorithm (see
-{\cite{collet_extremely_nodate}}) twice initiated with seeds 0 and 1 and
-applied on a given byte array and outputs the concatenated result.
+Computes the {\tmem{xxHash64}} algorithm (see {\cite{collet_extremely_2019}})
+twice initiated with seeds 0 and 1 and applied on a given byte array and
+outputs the concatenated result.
 
 \
 
@@ -2107,10 +2115,6 @@ UTF-8 string, otherwise does nothing and returns.
 \begin{thebibliography}{DGKR18}
   \bibitem[Ali19]{alistair_stewart_grandpa:_2019}Alistair Stewart.
   {\newblock}GRANDPA: A Byzantine Finality Gadgets, 2019.
-  
-  \bibitem[Col]{collet_extremely_nodate}Yann Collet. {\newblock}Extremely fast
-  non-cryptographic hash algorithm. {\newblock}Technical report,
-  http://cyan4973.github.io/xxHash/.
   
   \bibitem[DGKR18]{david_ouroboros_2018}Bernardo David, Peter Ga{\v z}i,
   Aggelos Kiayias, and Alexander Russell. {\newblock}Ouroboros praos: An
