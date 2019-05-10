@@ -220,9 +220,9 @@ efficiency of the light clients. It is defined formally as follows:
   {\tmstrong{$\tmop{Head} (B)$}} is a 5-tuple containing the following
   elements:
   \begin{itemize}
-    \item \tmtextbf{{\tmsamp{parent\_hash:}}} is the 32-byte Blake2s hash of
-    the header of the parent of the block indicated henceforth by
-    \tmtextbf{$H_p$}.
+    \item \tmtextbf{{\tmsamp{parent\_hash:}}} is the 32-byte Blake2b hash (see
+    Section \ref{sect-blake2}) of the header of the parent of the block
+    indicated henceforth by \tmtextbf{$H_p$}.
     
     \item {\tmstrong{{\tmsamp{number:}}}} formally indicated as
     {\tmstrong{$H_i$}} is an integer, which represents the index of the
@@ -254,7 +254,7 @@ efficiency of the light clients. It is defined formally as follows:
   \label{def-block-header-hash}The {\tmstrong{Block Header Hash of Block
   $B$}}, {\tmstrong{$H_h (b)$}}, is the hash of the header of block $B$
   encoded by simple codec:
-  \[ H_b (b) \assign \tmop{Blake} 2 s (\tmop{Enc}_{\tmop{SC}} (\tmop{Head}
+  \[ H_b (b) \assign \tmop{Blake} 2 b (\tmop{Enc}_{\tmop{SC}} (\tmop{Head}
      (B))) \]
 \end{definition}
 
@@ -281,7 +281,7 @@ contains the following parts:
 The block body consists of a set of extrinsics. Nonetheless, Polkadot RE does
 not specify or limit the internals of each extrinsics. From Polkadot RE point
 of view, each extrinsics is a SCALE encoded in byte arrays (see Definition
-\ref{def-scale-byte-array}).
+\ref{defn-scale-byte-array}).
 
 The extrinsics are submitted to the node through the {\tmem{transactions}}
 network message specified in Section \ref{sect-message-transactions}. Upon
@@ -394,7 +394,7 @@ function, all runtime entries have the following identical signatures:
 
 In each invocation of a Runtime entry, the arguments which are supposed to be
 sent to the entry, need to be encoded using SCALE codec into a byte array $B$
-using the procedure defined in Definition \ref{defn-scale-tuple}.
+using the procedure defined in Definition \ref{sect-scale-codec}.
 
 The Executor then needs to retrieve the Wam memory buffer of the Runtime Wasm
 module and extend it to fit the size of the byte array. Afterwards, it needs
@@ -406,7 +406,8 @@ $B$ is stored in the Wasm the extended shared memory buffer. The second
 argument \tmverbatim{len} sets the length of the data stored in $B$., and the
 second one is the size of $B$.
 
-\subsubsection{The Return Value from a Runtime Entry}
+\subsubsection{The Return Value from a Runtime
+Entry}\label{sect-runtime-return-value}
 
 The value which is returned from the invocation is an \tmverbatim{i64}
 integer, representing two consecutive \tmverbatim{i32} integers in which the
@@ -464,8 +465,8 @@ communicates with each runtime entry.
 \subsubsection{\tmverbatim{Core\_version}}
 
 This entry receives no argument; it returns the version data encoded in ABI
-format described in Section \ref{sect-abi-encoding} containing the following
-data:
+format described in Section \ref{sect-runtime-return-value} containing the
+following data:
 
 \
 
@@ -1003,7 +1004,7 @@ node.
 
 Where $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes of
 the branch node $N$ and Enc\tmrsub{SC}, $\tmop{StoredValue}$, $H$, and
-$\tmop{ChildrenBitmap} (N)$ are defined in Definitions \ref{def-scale-codec},
+$\tmop{ChildrenBitmap} (N)$ are defined in Definitions \ref{sect-scale-code},
 \ref{defn-stored-value}, \ref{defn-merkle-value} and
 \ref{defn-children-bitmap} respectively.
 
@@ -1020,7 +1021,7 @@ occupies less space than its hash.
        & H : \mathbb{B} \rightarrow \mathbb{B}_{32} & \\
        & H (N) : \left\{ \begin{array}{lll}
          v_N | | 0_{B_{32 - \| v_N \|}} & \|v_N \|< 32 & \\
-         \tmop{Blake} 2 s (v_N) & \|v_N \| \geqslant 32 & 
+         \tmop{Blake} 2 b (v_N) & \|v_N \| \geqslant 32 & 
        \end{array} \right. & 
      \end{array} \]
   Where $0_{32 - \| v_N \|}$ an all zero byte array of length $32 - | | v_N |
@@ -1293,7 +1294,7 @@ epoch subchain described in Definition \ref{defn-epoch-subchain}.
 
 {\state{$\rho \leftarrow \rho | | d_B${\END}}}
 
-{\state{{\RETURN{Blake2s({\tmname{Epoch-Randomness}}($n -
+{\state{{\RETURN{Blake2b({\tmname{Epoch-Randomness}}($n -
 1$)\textbar\textbar$n$\textbar\textbar$\rho$)}}}}}}
 
 \hrulefill{\medskip}
@@ -1653,6 +1654,18 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \subsection{Hash functions}\label{sect-hash-functions}
 
+\subsection{BLAKE2}\label{sect-blake2}
+
+BLAKE2 is a collection of cryptographic hash functions known for their high
+speed. their design closely resembles BLAKE which has been a finalist in SHA-3
+competition.
+
+Polkadot is using Blake2b variant which is optimized for 64bit platforms.
+Unless otherwise specified, Blake2b hash function with 256bit output is used
+whenever Blake2b is invoked in this document. The detailed specification and
+sample implementations of all variants of Blake2 hash functions can be found
+in RFC 7693 {\cite{saarinen_blake2_2015}}.
+
 \subsection{Randomness}\label{sect-randomness}
 
 \subsection{VRF}\label{sect-vrf}
@@ -1669,8 +1682,8 @@ a canonical encoding to produce consistent hash values across their
 implementation, including the Merkle hash proof for the State Storage.
 
 \begin{definition}
-  \label{def-scale-byte-array}The {\tmstrong{SCALE codec}} for {\tmstrong{Byte
-  array}} $A$ such that
+  \label{defn-scale-byte-array}The {\tmstrong{SCALE codec}} for
+  {\tmstrong{Byte array}} $A$ such that
   \[ A \assign b_1 b_2 \ldots b_n \]
   such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{SC}}
   (A)$ and defined as:
@@ -2110,7 +2123,7 @@ Deallocates a previously allocated memory.
 
 \subsubsection{\tmverbatim{ext\_blake2\_256}}
 
-Computes the Blake2s hash of a given byte array.
+Computes the Blake2b 256bit hash of a given byte array.
 
 \
 
@@ -2129,7 +2142,7 @@ Computes the Blake2s hash of a given byte array.
   \item \tmverbatim{len}: the length of the byte array in bytes.
   
   \item \tmverbatim{out}: a memory address pointing at the beginning of a
-  32-byte byte array contanining the Blake2s hash of the data.
+  32-byte byte array contanining the Blake2b hash of the data.
 \end{itemize}
 
 \subsubsection{\tmverbatim{ext\_keccak\_256}}
@@ -2354,6 +2367,11 @@ UTF-8 string, otherwise does nothing and returns.
   {\newblock}Blind Assignment for Blockchain Extension. {\newblock}Technical
   Specification, Web 3.0 Foundation,
   http://research.web3.foundation/en/latest/polkadot/BABE/Babe/, 2019.
+  
+  \bibitem[SA15]{saarinen_blake2_2015}Markku~Juhani Saarinen and Jean-Philippe
+  Aumasson. {\newblock}The BLAKE2 cryptographic hash and message
+  authentication code (MAC). {\newblock}RFC 7693,
+  https://tools.ietf.org/html/rfc7693, 2015.
 \end{thebibliography}
 
 \end{document}
