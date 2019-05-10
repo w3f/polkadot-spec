@@ -9,6 +9,7 @@
 \newcommand{\nin}{\not\in}
 \newcommand{\nobracket}{}
 \newcommand{\nosymbol}{}
+\newcommand{\tmcodeinline}[2][]{{\ttfamily{#2}}}
 \newcommand{\tmem}[1]{{\em #1\/}}
 \newcommand{\tmname}[1]{\textsc{#1}}
 \newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
@@ -71,7 +72,7 @@
   {\Large Protocol Specification}
 }
 
-\date{May 2, 2019}
+\date{May 10, 2019}
 
 \maketitle
 
@@ -162,7 +163,46 @@ sparse.
   \[ B_2 \assign P (B_1) \]
 \end{definition}
 
-\section{Block}
+\subsection{Block Tree}
+
+In the course of formation of a (distributed) blockchain, it is possible that
+the chain forks into multiple subchains in various block positions. We refer
+to this structure as a {\tmem{block tree:}}
+
+\begin{definition}
+  \label{defn-block-tree}The {\tmstrong{block tree}} of a blockchain, denoted
+  by $\tmop{BT}$ is the union of all different versions of the blockchain
+  observed by all the nodes in the system such as every such block is a node
+  in the graph and $B_1$ is connected to $B_2$ if $B_1$ is a parent of $B_2$.
+\end{definition}
+
+Definition \ref{defn-chain-subchain} gives the means to highlight various
+branches of the block tree.
+
+\begin{definition}
+  \label{defn-chain-subchain}Let $G$ be the root of the block tree and $B$ be
+  a node of it. By {\tmname{{\tmstrong{Chain($B$)}},}} we refer to the path
+  graph from $G$ to $B$ in $\tmop{BT}$. If $B'$ is another node on
+  {\tmname{Chain($B$)}}, then by {\tmname{SubChain($B', B$)}} we refer to the
+  subgraph of {\tmname{Chain($B$)}} path graph which contains both $B$ and
+  $B'$. {\tmname{Longest-Path($\tmop{BT}$)}} returns a path graph of
+  $\tmop{BT}$ which is the longest among all paths in $\tmop{BT}$.
+  {\tmname{Deepest-Leaf($\tmop{BT}$)}} returns the head of
+  {\tmname{Longest-Path($\tmop{BT}$)}} chain.
+\end{definition}
+
+Because every block in the blockchain contains a reference to its parent, it
+is easy to see that the block tree is de facto a tree.
+
+A block tree naturally imposes partial order relationships on the blocks as
+follows:
+
+\begin{definition}
+  We say {\tmstrong{B is descendant of $B'$}}, formally noted as {\tmstrong{$B
+  > B'$}} if $B$ is a descendant of $B'$ in the block tree.
+\end{definition}
+
+\section{Block Format}
 
 In Polkadot RE, a block is made of two main parts, namely the \tmtextit{block
 header} and the \tmtextit{list of extrinsics}. {\tmem{The Extrinsics}}
@@ -197,7 +237,9 @@ efficiency of the light clients. It is defined formally as follows:
     reserved for the runtime to validate the integrity of the extrinsics
     composing the block body. For example, it can hold the root hash of the
     Merkle trie which stores an ordered list of the extrinsics being validated
-    in this block. This element is formally referred to as {\tmstrong{$H_e$}}.
+    in this block. The {\tmsamp{extrinsics\_root}} is set by the runtime and
+    its value is opaque to Polkadot RE. This element is formally referred to
+    as {\tmstrong{$H_e$}}.
     
     \item {\tmstrong{{\tmsamp{digest:}}}} this field is used to store any
     chain-specific auxiliary data, which could help the light clients interact
@@ -234,18 +276,47 @@ contains the following parts:
   referred to as $A (B)$. An authority Id is 32bit.
 \end{itemize}
 
-\subsection{Extrinsics}
+\subsection{Processing Extrinsics}
 
-Each block contains as well a list of extrinsics. Polkadot RE does not specify
-or limit the internal of each extrinsics beside the fact that each extrinsics
-is a byte array encoded using SCALE codec [\ref{def-scale-codec}].
+The block body consists of a set of extrinsics. Nonetheless, Polkadot RE does
+not specify or limit the internals of each extrinsics. From Polkadot RE point
+of view, each extrinsics is a SCALE encoded in byte arrays (see Definition
+\ref{def-scale-byte-array}).
 
-The {\tmsamp{extrinsics\_root}} is set by the runtime, and its value is
-opaque to Polkadot RE.
+The extrinsics are submitted to the node through the {\tmem{transactions}}
+network message specified in Section \ref{sect-message-transactions}. Upon
+receiving a transactions message, Polkadot RE separates the submitted
+transactions message into individual extrinsics and runs Algorithm
+\ref{algo-validate-transactions} to validate them and store them to include
+them into future blocks.
 
-The extrinsics in a block are ordered using pairing each extrinsics by a
-UINT32 integer sequential number starting at 0 which is encoded using SCALE
-codec.
+\custombinding{1}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  1. }
+  \label{algo-validate-transactions}{\tmname{Validate-Extrinsics-and-Store}}($L$:
+  list of extrinsics)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\FORIN{$E$}{$L$}}}}
+
+{\state{$B_d \leftarrow${\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
+
+{\state{$N \leftarrow H_n (B_d)$}}
+
+{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}, N, E
+\right)$}}
+
+{\state{{\IF{$R$ indicates $E$ is $\tmop{Valid}$}}}}
+
+{\state{{\tmname{Add-To-Extrinsic-Queue($E, R$)}}}}}}
+
+\hrulefill{\medskip}
+
+\subsection{Extrinsic Queue}
+
+{\todo{To be specced}}
 
 \subsection{Block Format}
 
@@ -282,15 +353,23 @@ VM exposes the Polkadot RE API to the Runtime, which, on its turn, executes a
 call to the Runtime entries stored in the Wasm module. This part of the
 Runtime environment is referred to as the {\tmem{{\tmstrong{Executor}}.}}
 
+Definition \ref{nota-call-into-runtime} introduces the notation for calling
+the runtime entry which is used whenever an algorithm of Polkadot RE needs to
+access the runtime.
+
+\begin{notation}
+  \label{nota-call-into-runtime} By
+  \[ \text{{\tmname{Call-Runtime-Entry}}} \left(
+     \text{\tmverbatim{Runtime-Entry}}, A_1, A_2, \ldots, A_n \right) \]
+  we refer to the task using the execuping me cherie when the edits are
+  readytor to invoke the \tmverbatim{Runtime-Entry} while passing an $A_1,
+  \ldots, A_n$ argument to it and using the encoding described in Section
+  \ref{sect-send-args-to-runtime}.
+\end{notation}
+
 In this section, we specify the general setup for an Executor call into the
 Runtime. In Section \ref{sect-runtime-entries} we specify the parameters and
 the return values of each Runtime entry separately.
-
-\subsubsection{ABI Encoding between Runtime and the Runtime
-Environment}\label{sect-abi-encoding}
-
-All data exchanged between Polkadot RE and the Runtime is encoded using SCALE
-codec described in Section \ref{sect-scale-codec}.
 
 \subsubsection{Access to Runtime API}
 
@@ -300,24 +379,44 @@ to the all Polkadot Runtime API functions described in Appendix
 module alongside the runtime which imports these functions from Polkadot RE as
 host functions.
 
-\subsubsection{Sending Arguments to Runtime \ }
+\subsubsection{Sending Arguments to Runtime }\label{sect-send-args-to-runtime}
+
+In general, all data exchanged between Polkadot RE and the Runtime is encoded
+using SCALE codec described in Section \ref{sect-scale-codec}. As a Wasm
+function, all runtime entries have the following identical signatures:
+
+\
+
+\tmcodeinline[cpp]{\tmverbatim{}(func \$runtime\_entry (param \$data i32)
+(param \$len i32) (result i64))}
+
+\
 
 In each invocation of a Runtime entry, the arguments which are supposed to be
-sent to the entry need to be encoded using SCALE codec into a byte array $B$.
-The Executor then needs to retrieve the memory buffer of the Runtime Wasm
-module and extend it to fit the size of the byte array. Then it needs to copy
-the byte array value in the correct offset of the extended buffer. Finally,
-when the Wasm method corresponding to the entry is called, two UINT32 integers
-are sent to the method as arguments. The first one is the offset of the byte
-array $B$ in the extended shared memory buffer, and the second one is the size
-of $B$.
+sent to the entry, need to be encoded using SCALE codec into a byte array $B$
+using the procedure defined in Definition \ref{defn-scale-tuple}.
+
+The Executor then needs to retrieve the Wam memory buffer of the Runtime Wasm
+module and extend it to fit the size of the byte array. Afterwards, it needs
+to copy the byte array $B$ value in the correct offset of the extended buffer.
+Finally, when the Wasm method \tmverbatim{runtime\_entry}, corresponding to
+the entry is invoked, two UINT32 integers are sent to the method as arguments.
+The first argument \tmverbatim{data} is set to the offset where the byte array
+$B$ is stored in the Wasm the extended shared memory buffer. The second
+argument \tmverbatim{len} sets the length of the data stored in $B$., and the
+second one is the size of $B$.
 
 \subsubsection{The Return Value from a Runtime Entry}
 
-The value which is returned from the invocation represents two consecutive
-UINT32 integers in which the first one indicates the pointer to the offset of
-the result returned by the entry encoded in SCALE codec in the memory buffer.
-The second one provides the size of the blob.
+The value which is returned from the invocation is an \tmverbatim{i64}
+integer, representing two consecutive \tmverbatim{i32} integers in which the
+least significant one indicates the pointer to the offset of the result
+returned by the entry encoded in SCALE codec in the memory buffer. The most
+significant one provides the size of the blob.
+
+In the case that the runtime entry is returning a boolean value, then the
+SCALEd value returns in the least significant byte and all other bytes are set
+to zero.
 
 \subsection{Entries into Runtime}\label{sect-runtime-entries}
 
@@ -427,24 +526,81 @@ header and the block body as its arguments, and it returns a triplet:
 
 \subsection{Extrinsics Submission}
 
-Extrinsic submission is made by sending an extrinsic network message. The
-structure of this message is specified in Definition
-\ref{def-extrinsic-network-message}.
+Extrinsic submission is made by sending a {\tmem{Transactions}} network
+message. The structure of this message is specified in Section
+\ref{sect-message-transactions}.
 
-Upon receiving an extrinsics message, Polkadot RE decodes the transaction and
-calls \tmverbatim{validate\_trasaction} runtime function defined in Section
-\ref{sect-validate-transaction}, to check the validity of the extrinsic. If
-\tmverbatim{validate\_transaction} considers the submitted extrinsics as a
-valid one, Polkadot RE makes the extrinsics available for the consensus engine
-for inclusion in future blocks.
+Upon receiving an Transactions message, Polkadot RE decodes the transaction
+and calls \tmverbatim{validate\_trasaction} runtime function defined in
+Section \ref{sect-validate-transaction}, to check the validity of the
+extrinsic. If \tmverbatim{validate\_transaction} considers the submitted
+extrinsics as a valid one, Polkadot RE makes the extrinsics available for the
+consensus engine for inclusion in future blocks.
 
 \subsection{Network Messages}
 
+This section specifies various types of messages which Polkadot RE receives
+from the network. Furthermore, it also explains the appropriate responses to
+those messages.
+
+\subsection{General structure of network messages}
+
 \begin{definition}
-  \label{def-extrinsic-network-message}{\tmstrong{Extrinsic submission network
-  message: }}{\todo{\label{def-extrinsic-network-message}{\tmstrong{Extrinsic
-  submission network message definition}}}}
+  A {\tmstrong{network message}} is a byte array, {\tmstrong{$M$}} of length
+  $\| M \|$ such that:
+  
+  
+  \[ \begin{array}{cc}
+       M_1 & \tmop{Message} \tmop{Type} \tmop{Indicator}\\
+       M_2 \ldots M_{\| M \|} & \tmop{Enc}_{\tmop{SC}} (\tmop{MessageBody})
+     \end{array} \]
+  
 \end{definition}
+
+The body of each message consists of different components based on its type.
+The different possible message types are listed below in Table
+\ref{tabl-message-types}. We describe the sub-components of each message type
+individually in Section \ref{sect-message-detail}.
+
+\begin{table}[h]
+  \begin{tabular}{|c|c|c|}
+    \hline
+    $M_1$ & Message Type & Description\\
+    \hline
+    0 & Status & \\
+    1 & Block Request & \\
+    2 & Block Response & \\
+    3 & Block Announce & \\
+    4 & Transactions & \\
+    5 & Consensus & \\
+    6 & Remote Call Request & \\
+    7 & Remote Call Response & \\
+    8 & Remote Read Request & \\
+    9 & Remote Read Response & \\
+    10 & Remote Header Request & \\
+    11 & Remote Header Response & \\
+    12 & Remote Changes Request & \\
+    13 & Remote Changes Response & \\
+    255 & Chain Specific & \\
+    \hline
+  \end{tabular}
+  \caption{\label{tabl-message-types}List of possible network message types}
+\end{table}
+
+\subsection{Detailed Message Structure}\label{sect-message-detail}
+
+This section disucsses the detailed structure of each network message.
+
+\subsubsection{Transactions}\label{sect-message-transactions}
+
+\ \ \ The transactions Message is represented by $M_T$ and is defined as
+follows:
+\[ M_T \assign \tmop{Enc}_{\tmop{SC}} (C_1, \ldots, C_n) \]
+in which:
+\[ C_i \assign \tmop{Enc}_{\tmop{SC}} (E_i) \]
+Where each $E_i$ is a byte array and represents a sepearate extrinsic.
+Polkadot RE is indifferent about the content of an extrinsic and treats is as
+a blob of data.
 
 \subsection{Block Submission and Validation}
 
@@ -464,9 +620,9 @@ process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-\custombinding{1}{\noindent}\begin{tabular}{l}
+\custombinding{2}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  1. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  \tmtextbf{Algorithm  2. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
   (B)$)}}\\
   \hline
 \end{tabular}
@@ -656,9 +812,9 @@ Assuming that $P_N$ is the path (see Definition \ref{def-path-graph}) from the
 Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
 demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
-\custombinding{2}{\noindent}\begin{tabular}{l}
+\custombinding{3}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  2. }
+  \tmtextbf{Algorithm  3. }
   \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
   = N_1, \ldots, N_j = N))$\\
   \hline
@@ -751,9 +907,9 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
   \tmop{Head}_{N, l}$ bytes are determined by Algorithm \ref{algo-pk-length}.
 \end{definition}
 
-\custombinding{3}{\noindent}\begin{tabular}{l}
+\custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  3. }
+  \tmtextbf{Algorithm  4. }
   \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
   1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
   \hline
@@ -888,45 +1044,6 @@ procedures. The first procedure is block production and the second is
 finality. Polkadot RE must run these procedures, if and only if it is running
 on a validator node.
 
-\subsection{Block Tree}
-
-In the course of formation of a (distributed) blockchain, it is possible that
-the chain forks into multiple subchains in various block positions. We refer
-to this structure as a {\tmem{block tree:}}
-
-\begin{definition}
-  \label{defn-block-tree}The {\tmstrong{block tree}} of a blockchain, denoted
-  by $\tmop{BT}$, is the union of all different versions of the blockchain
-  observed by all the nodes in the system such as every such block is a node
-  in the graph and $B_1$ is connected to $B_2$ if $B_1$ is a parent of $B_2$.
-\end{definition}
-
-Definition \ref{defn-chain-subchain} gives the means to high light various
-branchs of the block tree.
-
-\begin{definition}
-  \label{defn-chain-subchain}Let $G$ be the root of the block tree and $B$ be
-  a node of it. By {\tmname{{\tmstrong{Chain($B$)}},}} we refer to the path
-  graph from $G$ to $B$ in $\tmop{BT}$. If $B'$ is another node on
-  {\tmname{Chain($B$)}}, then by {\tmname{SubChain($B', B$)}} we refer to the
-  subgraph of {\tmname{Chain($B$)}} path graph which contains both $B$ and
-  $B'$. {\tmname{Longest-Path($\tmop{BT}$)}} returns a path graph of
-  $\tmop{BT}$ which is the longest among all paths in $\tmop{BT}$.
-  {\tmname{Deepest-Leaf($\tmop{BT}$)}} returns the head of
-  {\tmname{Longest-Path($\tmop{BT}$)}} chain.
-\end{definition}
-
-Because every block in the blockchain contains a reference to its parent, it
-is easy to see that the block tree is actually a tree.
-
-A block tree naturally imposes partial order relationships on the blocks as
-follows:
-
-\begin{definition}
-  We say {\tmstrong{B is descendant of $B'$}}, formally noted as {\tmstrong{$B
-  > B'$}} if $B$ is a descendant of $B'$ in the block tree.
-\end{definition}
-
 \subsection{Block Production}
 
 Polkadot RE uses BABE protocol {\cite{w3f_research_group_blind_2019}} for
@@ -1007,9 +1124,9 @@ build a block. The $\tmop{sk}$ is the block producer lottery secret key and
 $n$ is the index of epoch for whose slots the block producer is running the
 lottery.
 
-\custombinding{4}{\noindent}\begin{tabular}{l}
+\custombinding{5}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  4. }
+  \tmtextbf{Algorithm  5. }
   \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}$(\tmop{sk}^{},
   n)$\\
   \hline
@@ -1072,19 +1189,19 @@ formalized in Definition \ref{defn-slot-offset}.
   {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
-\custombinding{5}{\noindent}\begin{tabular}{l}
+\custombinding{6}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  5. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
+  \tmtextbf{Algorithm  6. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
   the number of the slots whose time needs to be determined)\\
   \hline
 \end{tabular}
 
 {\algorithmic{{\state{$T_s \leftarrow \{ \}$}}
 
-{\state{{\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
+{\state{$B_d \leftarrow${\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
 
-{\state{{\FORIN{$B_i$}{{\tmname{SubChain}}({\tmname{}} $- \tmop{SlTl}$,
-{\tmname{Last-Finalized-Slot}})}}}}
+{\state{{\FORIN{$B_i$}{{\tmname{SubChain}}($B_{H_n (B_d) - \tmop{SITL}}$,
+$B_d$)}}}}
 
 {\state{{\tmname{$s_t^{B_i} \leftarrow T^{}_{B_i}$+Slot-Offset($s_{B_i},
 s$)$\times \mathcal{T}_{}$}}}}
@@ -1094,8 +1211,6 @@ s$)$\times \mathcal{T}_{}$}}}}
 {\state{{\RETURN{Median($T_s$)}}}}}}
 
 \hrulefill{\medskip}
-
-\
 
 \subsubsection{Block Production}
 
@@ -1127,9 +1242,9 @@ alongside with the {\tmem{babe header}} defined in Definition
   \ 
 \end{definition}
 
-\custombinding{6}{\noindent}\begin{tabular}{l}
+\custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  6. }
+  \tmtextbf{Algorithm  7. }
   \label{algo-block-production}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
   pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
   \hline
@@ -1164,9 +1279,9 @@ lottery in epoch $\mathcal{E}_{n + 2}$. The computation of the seed is
 described in Algorithm \ref{algo-epoch-randomness} which uses the concept of
 epoch subchain described in Definition \ref{defn-epoch-subchain}.
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
+\custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  7. }
+  \tmtextbf{Algorithm  8. }
   \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
   index)\\
   \hline
@@ -1415,9 +1530,9 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
+\custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  8. }
+  \tmtextbf{Algorithm  9. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -1439,9 +1554,9 @@ needs to be incremented.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-\custombinding{9}{\noindent}\begin{tabular}{l}
+\custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  9. }
+  \tmtextbf{Algorithm  10. }
   \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
@@ -1485,9 +1600,9 @@ The condition of {\tmem{completablitiy}} is defined in Definition
 \ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
 explained in Algorithm \ref{algo-grandpa-best-candidate}.
 
-\custombinding{10}{\noindent}\begin{tabular}{l}
+\custombinding{11}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  10. }
+  \tmtextbf{Algorithm  11. }
   \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1507,9 +1622,9 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\custombinding{11}{\noindent}\begin{tabular}{l}
+\custombinding{12}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  11. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextbf{Algorithm  12. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
@@ -1536,50 +1651,111 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \section{Cryptographic Algorithms}
 
+\subsection{Hash functions}\label{sect-hash-functions}
+
 \subsection{Randomness}\label{sect-randomness}
 
 \subsection{VRF}\label{sect-vrf}
 
-\
-
 \section{Auxiliary Encodings}\label{sect-encoding}
+
+\
 
 \subsection{SCALE Codec}\label{sect-scale-codec}
 
 Polkadot RE uses {\tmem{Simple Concatenated Aggregate Little-Endian'' (SCALE)
-codec}} to encode byte arrays that provide canonical encoding and to produce
-consistent hash values across their implementation, including the Merkle hash
-proof for the State Storage.
+codec}} to encode byte arrays as well as other data structures. SCALE provides
+a canonical encoding to produce consistent hash values across their
+implementation, including the Merkle hash proof for the State Storage.
 
 \begin{definition}
-  \label{def-scale-codec}The {\tmstrong{SCALE codec}} for {\tmstrong{Byte
+  \label{def-scale-byte-array}The {\tmstrong{SCALE codec}} for {\tmstrong{Byte
   array}} $A$ such that
   \[ A \assign b_1 b_2 \ldots b_n \]
   such that $n < 2^{536}$ is a byte array refered to $\tmop{Enc}_{\tmop{SC}}
-  (A)$ and defined as follows:
-  \[ \tmop{Enc}_{\tmop{SC}} (A) \assign \left\{ \begin{array}{lll}
-       l^{\nosymbol}_1 b_1 b_2 \ldots b_n &  & 0 \leqslant n < 2^6\\
-       i^{\nosymbol}_1 i^{\nosymbol}_2 b_1 \ldots b_n &  & 2^6 \leqslant n <
-       2^{14}\\
-       j^{\nosymbol}_1 j^{\nosymbol}_2 j_3 b_1 \ldots b_n &  & 2^{14}
-       \leqslant n < 2^{30}\\
-       k_1^{\nosymbol} k_2^{\nosymbol} \ldots k_m^{\nosymbol} b_1 \ldots b_n &
-       & 2^{30} \leqslant n
-     \end{array} \right. \]
-  in which:{\hspace{0.17em}}
-  \[ \begin{array}{|l|}
-       \hline
-       l^1_1 l_1^0 = 00\\
-       \hline
-       i^1_1 i_1^0 = 01\\
-       \hline
-       j^1_1 j_1^0 = 10\\
-       \hline
-       k^1_1 k_1^0 = 11\\
-       \hline
+  (A)$ and defined as:
+  \[ \tmop{Enc}_{\tmop{SC}} (A) \assign \tmop{Enc}^{\tmop{Len}}_{\tmop{SC}}
+     (\| A \|) | | A \]
+  where $\tmop{Enc}_{\tmop{SC}}^{\tmop{Len}}$ is defined in Definition
+  \ref{defn-sc-len-encoding}. 
+\end{definition}
+
+\begin{definition}
+  \label{defn-scale-tuple}The {\tmstrong{SCALE codec}} for {\tmstrong{Tuple}}
+  $T$ such that:
+  \[ T \assign (A_1, \ldots, A_n) \]
+  Where $A_i$'s are values of {\tmstrong{different types}}, is defined as:
+  \[ \tmop{Enc}_{\tmop{SC}} (T) \assign \tmop{Enc}_{\tmop{SC}} (A_1) |
+     \tmop{Enc}_{\tmop{SC}} (A_2) | \ldots | \tmop{Enc}_{\tmop{SC}} (A_n) \]
+\end{definition}
+
+In case of a tuple (or struct), the knowledge of the shape of data is not
+encoded even though it is necessary for decoding. The decoder needs to derive
+that information from the context where the encoding/decoding is happenning.
+
+\begin{definition}
+  \label{defn-scale-list}The {\tmstrong{SCALE codec}} for
+  {\tmstrong{sequence}} $S$ such that:
+  \[ S \assign A_1, \ldots, A_n \]
+  where $A_i$'s are values of {\tmstrong{the same type}} (and the decoder is
+  unable to infer value of $n$ from the context) is defined as:
+  \[ \tmop{Enc}_{\tmop{SC}} (T) \assign \tmop{Enc}^{\tmop{Len}}_{\tmop{SC}}
+     (\| S \|) \tmop{Enc}_{\tmop{SC}} (A_1) | \tmop{Enc}_{\tmop{SC}} (A_2) |
+     \ldots | \tmop{Enc}_{\tmop{SC}} (A_n) \]
+  where $\tmop{Enc}_{\tmop{SC}}^{\tmop{Len}}$ is defined in Definition
+  \ref{defn-sc-len-encoding}.
+\end{definition}
+
+\begin{definition}
+  The {\tmstrong{SCALE codec}} for {\tmstrong{boolean value}} $b$ defined as a
+  byte as follows:
+  \[ \begin{array}{ll}
+       \tmop{Enc}_{\tmop{SC}} : & \{ \tmop{False}, \tmop{True} \} \rightarrow
+       \mathbb{B}_1\\
+       & b \rightarrow \left\{ \begin{array}{lcl}
+         0 &  & b = \tmop{False}\\
+         1 &  & b = \tmop{True}
+       \end{array} \right.
      \end{array} \]
-  and n is stored in $\tmop{Enc}_{\tmop{SC}} (A)$ in little-endian format in
-  base-2 as follows:
+\end{definition}
+
+\begin{definition}
+  The {\tmstrong{SCALE codec, $\tmop{Enc}_{\tmop{SC}}$}} for other types such
+  as fixed length integers not defined here otherwise, is equal to little
+  endian encoding of those values defined in Definition
+  \ref{defn-little-endian}. 
+\end{definition}
+
+\subsubsection{Length Encoding}\label{sect-int-encoding}
+
+{\tmem{SCALE Length encoding}} is used to encode integer numbers of variying
+sizes prominently in an encoding length of arrays:
+
+\begin{definition}
+  \label{defn-sc-len-encoding}{\tmstrong{SCALE Length Encoding,
+  $\tmop{Enc}^{\tmop{Len}}_{\tmop{SC}}$}} also known as compact encoding of a
+  non-negative integer number $n$ is defined as follows:
+  \[ \begin{array}{ll}
+       \tmop{Enc}^{\tmop{Len}}_{\tmop{SC}} : & \mathbb{N} \rightarrow
+       \mathbb{B}\\
+       & n \rightarrow b \assign \left\{ \begin{array}{lll}
+         l^{\nosymbol}_1 &  & 0 \leqslant n < 2^6\\
+         i^{\nosymbol}_1 i^{\nosymbol}_2 &  & 2^6 \leqslant n < 2^{14}\\
+         j^{\nosymbol}_1 j^{\nosymbol}_2 j_3 &  & 2^{14} \leqslant n <
+         2^{30}\\
+         k_1^{\nosymbol} k_2^{\nosymbol} \ldots k_m^{\nosymbol}  &  & 2^{30}
+         \leqslant n
+       \end{array} \right.
+     \end{array} \]
+  in where the bits of byte array b are defined as follows:
+  \[ \begin{array}{lcc}
+       l^1_1 l_1^0 & = & 00\\
+       i^1_1 i_1^0 & = & 01\\
+       j^1_1 j_1^0 & = & 10\\
+       k^1_1 k_1^0 & = & 11
+     \end{array} \]
+  and the rest of the bits of $b$ store the value of $n$ in little-endian
+  format in base-2 as follows:
   \[ \left. \begin{array}{lll}
        l^7_1 \ldots l^3_1 l^2_1 &  & n < 2^6\\
        i_2^7 \ldots i_2^0 i_1^7 \ldots i^2_1^{\nosymbol} &  & 2^6 \leqslant n
@@ -1589,20 +1765,9 @@ proof for the State Storage.
        k_2 + k_3 2^8 + k_4 2^{2 \cdummy 8} + \cdots + k_m 2^{(m - 2) 8} &  &
        2^{30} \leqslant n
      \end{array} \right\} \assign n \]
-  where:
+  such that:
   \[ k^7_1 \ldots k^3_1 k^2_1 : = m - 4 \]
 \end{definition}
-
-\begin{definition}
-  The {\tmstrong{SCALE codec}} for {\tmstrong{Tuple}} $T$ such that:
-  \[ T \assign (A_1, \ldots, A_n) \]
-  Where $A_i$'s are values of different types, is defined as:
-  \[ \tmop{Enc}_{\tmop{SC}} (T) \assign \tmop{Enc}_{\tmop{SC}} (A_1) |
-     \tmop{Enc}_{\tmop{SC}} (A_2) | \ldots | \tmop{Enc}_{\tmop{SC}} (A_n) \]
-\end{definition}
-
-In case of a tuple (or struct), the knowledge of the shape of data is
-necessary for decoding.
 
 \subsection{Hex Encoding}
 
@@ -1943,7 +2108,7 @@ Deallocates a previously allocated memory.
 
 \subsection{Cryptograhpic auxiliary functions}
 
-\subsubsection{ext\_blake2\_256}
+\subsubsection{\tmverbatim{ext\_blake2\_256}}
 
 Computes the Blake2s hash of a given byte array.
 
@@ -1965,6 +2130,30 @@ Computes the Blake2s hash of a given byte array.
   
   \item \tmverbatim{out}: a memory address pointing at the beginning of a
   32-byte byte array contanining the Blake2s hash of the data.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_keccak\_256}}
+
+Computes the Keccak-256 hash of a given byte array.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_keccak_256
+      (param $data i32) (param $len i32) (param $out i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a memory address pointing at the buffer containing
+  the byte array to be hashed.
+  
+  \item \tmverbatim{len}: the length of the byte array in bytes.
+  
+  \item \tmverbatim{out}: a memory address pointing at the beginning of a
+  32-byte byte array contanining the Keccak-256 hash of the data.
 \end{itemize}
 
 \subsubsection{\tmverbatim{ext\_twox\_128}}
@@ -1993,7 +2182,7 @@ outputs the concatenated result.
   16-byte byte array containing \ {\tmem{$\text{xxhash}
   64_0$}}(\tmverbatim{data})\textbar\textbar{\tmem{$\text{xxhash64}_1$}}(\tmverbatim{data})
   where {\tmem{$\text{xxhash} 64_i$}} is the xxhash64 function initiated with
-  seed i as a 64bit unsigned integer.
+  seed $i$ as a 64bit unsigned integer.
 \end{itemize}
 
 \subsubsection{\tmverbatim{ext\_ed25519\_verify}}
@@ -2022,6 +2211,41 @@ signature by the provided public key.
   
   \item \tmverbatim{sig\_data}: a pointer to the 64 byte memory buffer
   containing the ED25519 signature corresponding to the message.
+  
+  \item \tmverbatim{pubkey\_data}: a pointer to the 32 byte buffer containing
+  the public key and corresponding to the secret key which has signed the
+  message.
+  
+  \item \tmverbatim{result}: \ an in\tmverbatim{}teger value equal to 0
+  indicating the validity of the signature or a nonzero value otherwise.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_sr25519\_verify}}
+
+Given a message signed by the SR25519 signature algorithm alongside with its
+signature and the allegedly signer public key, it verifies the validity of the
+signature by the provided public key.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_sr25519_verify
+      (param $msg_data i32) (param $msg_len i32) (param $sig_data i32)
+      (param $pubkey_data i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{msg\_data}: a pointer to the buffer containing the message
+  body.
+  
+  \item \tmverbatim{msg\_len}: an \tmverbatim{i32} integer indicating the size
+  of the message buffer in bytes.
+  
+  \item \tmverbatim{sig\_data}: a pointer to the 64 byte memory buffer
+  containing the SR25519 signature corresponding to the message.
   
   \item \tmverbatim{pubkey\_data}: a pointer to the 32 byte buffer containing
   the public key and corresponding to the secret key which has signed the
@@ -2115,6 +2339,10 @@ UTF-8 string, otherwise does nothing and returns.
 \begin{thebibliography}{DGKR18}
   \bibitem[Ali19]{alistair_stewart_grandpa:_2019}Alistair Stewart.
   {\newblock}GRANDPA: A Byzantine Finality Gadgets, 2019.
+  
+  \bibitem[Col19]{collet_extremely_2019}Yann Collet. {\newblock}Extremely fast
+  non-cryptographic hash algorithm. {\newblock}Technical report, -,
+  http://cyan4973.github.io/xxHash/, 2019.
   
   \bibitem[DGKR18]{david_ouroboros_2018}Bernardo David, Peter Ga{\v z}i,
   Aggelos Kiayias, and Alexander Russell. {\newblock}Ouroboros praos: An
