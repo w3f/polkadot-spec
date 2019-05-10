@@ -220,8 +220,9 @@
 
     <\itemize>
       <item><with|font-series|bold|<samp|parent_hash:>> is the 32-byte
-      Blake2s hash of the header of the parent of the block indicated
-      henceforth by <with|font-series|bold|mode|math|H<rsub|p>>.
+      Blake2b hash (see Section <reference|sect-blake2>) of the header of the
+      parent of the block indicated henceforth by
+      <with|font-series|bold|mode|math|H<rsub|p>>.
 
       <item><strong|<samp|number:>> formally indicated as
       <strong|<math|H<rsub|i>>> is an integer, which represents the index of
@@ -255,7 +256,7 @@
     header of block <math|B> encoded by simple codec:
 
     <\equation*>
-      H<rsub|b><around|(|b|)>\<assign\>Blake2*s<around|(|Enc<rsub|SC><around|(|Head<around|(|B|)>|)>|)>
+      H<rsub|b><around|(|b|)>\<assign\>Blake2b<around|(|Enc<rsub|SC><around|(|Head<around|(|B|)>|)>|)>
     </equation*>
   </definition>
 
@@ -284,7 +285,7 @@
   The block body consists of a set of extrinsics. Nonetheless, Polkadot RE
   does not specify or limit the internals of each extrinsics. From Polkadot
   RE point of view, each extrinsics is a SCALE encoded in byte arrays (see
-  Definition <reference|def-scale-byte-array>).
+  Definition <reference|defn-scale-byte-array>).
 
   The extrinsics are submitted to the node through the <em|transactions>
   network message specified in Section <reference|sect-message-transactions>.
@@ -415,7 +416,7 @@
   In each invocation of a Runtime entry, the arguments which are supposed to
   be sent to the entry, need to be encoded using SCALE codec into a byte
   array <math|B> using the procedure defined in Definition
-  <reference|defn-scale-tuple>.
+  <reference|sect-scale-codec>.
 
   The Executor then needs to retrieve the Wam memory buffer of the Runtime
   Wasm module and extend it to fit the size of the byte array. Afterwards, it
@@ -427,7 +428,8 @@
   shared memory buffer. The second argument <verbatim|len> sets the length of
   the data stored in <math|B>., and the second one is the size of <math|B>.
 
-  <subsubsection|The Return Value from a Runtime Entry>
+  <subsubsection|The Return Value from a Runtime
+  Entry><label|sect-runtime-return-value>
 
   The value which is returned from the invocation is an <verbatim|i64>
   integer, representing two consecutive <verbatim|i32> integers in which the
@@ -528,8 +530,8 @@
   <subsubsection|<verbatim|Core_version>>
 
   This entry receives no argument; it returns the version data encoded in ABI
-  format described in Section <reference|sect-abi-encoding> containing the
-  following data:
+  format described in Section <reference|sect-runtime-return-value>
+  containing the following data:
 
   \;
 
@@ -1129,7 +1131,7 @@
   <math|n\<leqslant\>16> are the children nodes of the branch node <math|N>
   and Enc<rsub|SC>, <math|StoredValue>, <math|H>, and
   <math|*ChildrenBitmap<around|(|N|)>> are defined in Definitions
-  <reference|def-scale-codec>,<reference|defn-stored-value>,
+  <reference|sect-scale-code>,<reference|defn-stored-value>,
   <reference|defn-merkle-value> and <reference|defn-children-bitmap>
   respectively.
 
@@ -1145,7 +1147,7 @@
     follows:
 
     <\equation*>
-      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<bbb-B\><rsub|32>>|<cell|>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|v<rsub|N><around*|\|||\|>0<rsub|B<rsub|32-<around*|\<\|\|\>|v<rsub|N>|\<\|\|\>>>>>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<less\>32>|<cell|>>|<row|<cell|Blake2s<around|(|v<rsub|N>|)>>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<geqslant\>32>|<cell|>>>>>|\<nobracket\>>>|<cell|>>>>>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<bbb-B\><rsub|32>>|<cell|>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|v<rsub|N><around*|\|||\|>0<rsub|B<rsub|32-<around*|\<\|\|\>|v<rsub|N>|\<\|\|\>>>>>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<less\>32>|<cell|>>|<row|<cell|Blake2b<around|(|v<rsub|N>|)>>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<geqslant\>32>|<cell|>>>>>|\<nobracket\>>>|<cell|>>>>>
     </equation*>
 
     Where <math|0<rsub|32-<around*|\<\|\|\>|v<rsub|N>|\<\|\|\>>>> an all zero
@@ -1465,7 +1467,7 @@
 
       <\state>
         <\RETURN>
-          Blake2s(<name|Epoch-Randomness>(<math|n-1>)\|\|<math|n>\|\|<math|\<rho\>>)
+          Blake2b(<name|Epoch-Randomness>(<math|n-1>)\|\|<math|n>\|\|<math|\<rho\>>)
         </RETURN>
       </state>
     </algorithmic>
@@ -1939,6 +1941,18 @@
 
   <subsection|Hash functions><label|sect-hash-functions>
 
+  <subsection|BLAKE2><label|sect-blake2>
+
+  BLAKE2 is a collection of cryptographic hash functions known for their high
+  speed. their design closely resembles BLAKE which has been a finalist in
+  SHA-3 competition.
+
+  Polkadot is using Blake2b variant which is optimized for 64bit platforms.
+  Unless otherwise specified, Blake2b hash function with 256bit output is
+  used whenever Blake2b is invoked in this document. The detailed
+  specification and sample implementations of all variants of Blake2 hash
+  functions can be found in RFC 7693 <cite|saarinen_blake2_2015>.
+
   <subsection|Randomness><label|sect-randomness>
 
   <subsection|VRF><label|sect-vrf>
@@ -1956,7 +1970,7 @@
   Storage.
 
   <\definition>
-    <label|def-scale-byte-array>The <strong|SCALE codec> for <strong|Byte
+    <label|defn-scale-byte-array>The <strong|SCALE codec> for <strong|Byte
     array> <math|A> such that
 
     <\equation*>
@@ -2452,7 +2466,7 @@
 
   <subsubsection|<verbatim|ext_blake2_256>>
 
-  Computes the Blake2s hash of a given byte array.
+  Computes the Blake2b 256bit hash of a given byte array.
 
   \;
 
@@ -2475,7 +2489,7 @@
     <item><verbatim|len>: the length of the byte array in bytes.
 
     <item><verbatim|out>: a memory address pointing at the beginning of a
-    32-byte byte array contanining the Blake2s hash of the data.
+    32-byte byte array contanining the Blake2b hash of the data.
   </itemize>
 
   <subsubsection|<verbatim|ext_keccak_256>>
@@ -2731,6 +2745,11 @@
       Group. <newblock>Blind Assignment for Blockchain Extension.
       <newblock>Technical Specification, Web 3.0 Foundation,
       http://research.web3.foundation/en/latest/polkadot/BABE/Babe/, 2019.
+
+      <bibitem*|SA15><label|bib-saarinen_blake2_2015>Markku<nbsp>Juhani
+      Saarinen and Jean-Philippe Aumasson. <newblock>The BLAKE2 cryptographic
+      hash and message authentication code (MAC). <newblock>RFC 7693,
+      https://tools.ietf.org/html/rfc7693, 2015.
     </bib-list>
   </bibliography>
 </body>
@@ -2768,10 +2787,10 @@
     <associate|auto-12|<tuple|3.2.1|5>>
     <associate|auto-13|<tuple|3.2.2|5>>
     <associate|auto-14|<tuple|3.2.3|5>>
-    <associate|auto-15|<tuple|3.3|5>>
+    <associate|auto-15|<tuple|3.3|6>>
     <associate|auto-16|<tuple|1|6>>
     <associate|auto-17|<tuple|3.3.1|6>>
-    <associate|auto-18|<tuple|1|6>>
+    <associate|auto-18|<tuple|1|7>>
     <associate|auto-19|<tuple|3.3.2|7>>
     <associate|auto-2|<tuple|1.1|2>>
     <associate|auto-20|<tuple|3.3.3|7>>
@@ -2781,90 +2800,91 @@
     <associate|auto-24|<tuple|4|7>>
     <associate|auto-25|<tuple|4.1|7>>
     <associate|auto-26|<tuple|4.2|7>>
-    <associate|auto-27|<tuple|4.3|7>>
+    <associate|auto-27|<tuple|4.3|8>>
     <associate|auto-28|<tuple|3|8>>
     <associate|auto-29|<tuple|4.4|8>>
     <associate|auto-3|<tuple|2|2>>
     <associate|auto-30|<tuple|4.4.1|8>>
     <associate|auto-31|<tuple|4.5|8>>
-    <associate|auto-32|<tuple|5|8>>
+    <associate|auto-32|<tuple|5|9>>
     <associate|auto-33|<tuple|5.1|9>>
     <associate|auto-34|<tuple|5.2|9>>
-    <associate|auto-35|<tuple|5.3|9>>
-    <associate|auto-36|<tuple|5.4|10>>
+    <associate|auto-35|<tuple|5.3|10>>
+    <associate|auto-36|<tuple|5.4|13>>
     <associate|auto-37|<tuple|6|13>>
     <associate|auto-38|<tuple|6.1|13>>
-    <associate|auto-39|<tuple|7|13>>
+    <associate|auto-39|<tuple|7|14>>
     <associate|auto-4|<tuple|2.1|3>>
     <associate|auto-40|<tuple|7.1|14>>
     <associate|auto-41|<tuple|7.1.1|14>>
     <associate|auto-42|<tuple|7.1.2|14>>
-    <associate|auto-43|<tuple|7.1.3|14>>
-    <associate|auto-44|<tuple|7.1.4|15>>
+    <associate|auto-43|<tuple|7.1.3|15>>
+    <associate|auto-44|<tuple|7.1.4|16>>
     <associate|auto-45|<tuple|7.1.5|16>>
     <associate|auto-46|<tuple|7.1.6|16>>
-    <associate|auto-47|<tuple|7.2|16>>
+    <associate|auto-47|<tuple|7.2|17>>
     <associate|auto-48|<tuple|7.2.1|17>>
-    <associate|auto-49|<tuple|7.2.2|17>>
+    <associate|auto-49|<tuple|7.2.2|19>>
     <associate|auto-5|<tuple|2.2|3>>
     <associate|auto-50|<tuple|7.2.3|19>>
-    <associate|auto-51|<tuple|7.2.4|19>>
-    <associate|auto-52|<tuple|8|20>>
+    <associate|auto-51|<tuple|7.2.4|20>>
+    <associate|auto-52|<tuple|8|21>>
     <associate|auto-53|<tuple|8.1|21>>
     <associate|auto-54|<tuple|8.2|21>>
     <associate|auto-55|<tuple|8.3|21>>
-    <associate|auto-56|<tuple|9|21>>
-    <associate|auto-57|<tuple|9.1|21>>
-    <associate|auto-58|<tuple|9.1.1|22>>
-    <associate|auto-59|<tuple|9.2|22>>
+    <associate|auto-56|<tuple|8.4|21>>
+    <associate|auto-57|<tuple|9|21>>
+    <associate|auto-58|<tuple|9.1|22>>
+    <associate|auto-59|<tuple|9.1.1|23>>
     <associate|auto-6|<tuple|2.3|3>>
-    <associate|auto-60|<tuple|10|22>>
-    <associate|auto-61|<tuple|11|22>>
-    <associate|auto-62|<tuple|12|22>>
-    <associate|auto-63|<tuple|A|22>>
-    <associate|auto-64|<tuple|A.1|22>>
-    <associate|auto-65|<tuple|A.1.1|23>>
-    <associate|auto-66|<tuple|A.1.2|23>>
-    <associate|auto-67|<tuple|A.1.3|23>>
-    <associate|auto-68|<tuple|A.1.4|24>>
-    <associate|auto-69|<tuple|A.1.5|24>>
+    <associate|auto-60|<tuple|9.2|23>>
+    <associate|auto-61|<tuple|10|23>>
+    <associate|auto-62|<tuple|11|23>>
+    <associate|auto-63|<tuple|12|23>>
+    <associate|auto-64|<tuple|A|23>>
+    <associate|auto-65|<tuple|A.1|23>>
+    <associate|auto-66|<tuple|A.1.1|24>>
+    <associate|auto-67|<tuple|A.1.2|24>>
+    <associate|auto-68|<tuple|A.1.3|24>>
+    <associate|auto-69|<tuple|A.1.4|25>>
     <associate|auto-7|<tuple|2.4|4>>
-    <associate|auto-70|<tuple|A.1.6|24>>
-    <associate|auto-71|<tuple|A.1.7|25>>
-    <associate|auto-72|<tuple|A.1.8|25>>
-    <associate|auto-73|<tuple|A.1.9|26>>
-    <associate|auto-74|<tuple|A.2|26>>
-    <associate|auto-75|<tuple|A.2.1|26>>
-    <associate|auto-76|<tuple|A.2.2|26>>
-    <associate|auto-77|<tuple|A.2.3|26>>
-    <associate|auto-78|<tuple|A.3|26>>
-    <associate|auto-79|<tuple|A.3.1|27>>
+    <associate|auto-70|<tuple|A.1.5|25>>
+    <associate|auto-71|<tuple|A.1.6|25>>
+    <associate|auto-72|<tuple|A.1.7|26>>
+    <associate|auto-73|<tuple|A.1.8|26>>
+    <associate|auto-74|<tuple|A.1.9|26>>
+    <associate|auto-75|<tuple|A.2|26>>
+    <associate|auto-76|<tuple|A.2.1|27>>
+    <associate|auto-77|<tuple|A.2.2|27>>
+    <associate|auto-78|<tuple|A.2.3|27>>
+    <associate|auto-79|<tuple|A.3|27>>
     <associate|auto-8|<tuple|2.5|4>>
-    <associate|auto-80|<tuple|A.3.2|27>>
-    <associate|auto-81|<tuple|A.3.3|27>>
-    <associate|auto-82|<tuple|A.3.4|28>>
-    <associate|auto-83|<tuple|A.3.5|28>>
-    <associate|auto-84|<tuple|A.3.6|28>>
-    <associate|auto-85|<tuple|A.4|28>>
-    <associate|auto-86|<tuple|A.4.1|28>>
-    <associate|auto-87|<tuple|A.5|28>>
-    <associate|auto-88|<tuple|A.5.1|29>>
-    <associate|auto-89|<tuple|A.5.2|29>>
+    <associate|auto-80|<tuple|A.3.1|27>>
+    <associate|auto-81|<tuple|A.3.2|28>>
+    <associate|auto-82|<tuple|A.3.3|28>>
+    <associate|auto-83|<tuple|A.3.4|29>>
+    <associate|auto-84|<tuple|A.3.5|29>>
+    <associate|auto-85|<tuple|A.3.6|29>>
+    <associate|auto-86|<tuple|A.4|29>>
+    <associate|auto-87|<tuple|A.4.1|29>>
+    <associate|auto-88|<tuple|A.5|29>>
+    <associate|auto-89|<tuple|A.5.1|30>>
     <associate|auto-9|<tuple|3|4>>
-    <associate|auto-90|<tuple|A.6|29>>
-    <associate|auto-91|<tuple|A.6.1|29>>
-    <associate|auto-92|<tuple|A.7|?>>
-    <associate|auto-93|<tuple|A.7|?>>
-    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|29>>
-    <associate|bib-collet_extremely_2019|<tuple|Col19|29>>
-    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|29>>
-    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|29>>
+    <associate|auto-90|<tuple|A.5.2|30>>
+    <associate|auto-91|<tuple|A.6|30>>
+    <associate|auto-92|<tuple|A.6.1|30>>
+    <associate|auto-93|<tuple|A.7|30>>
+    <associate|auto-94|<tuple|A.7|?>>
+    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|30>>
+    <associate|bib-collet_extremely_2019|<tuple|Col19|30>>
+    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|30>>
+    <associate|bib-saarinen_blake2_2015|<tuple|SA15|?>>
+    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|30>>
     <associate|block|<tuple|2.1|3>>
     <associate|def-block-header|<tuple|13|3>>
     <associate|def-block-header-hash|<tuple|14|3>>
     <associate|def-grandpa-justification|<tuple|51|19>>
     <associate|def-path-graph|<tuple|2|1>>
-    <associate|def-scale-byte-array|<tuple|53|?>>
     <associate|def-vote|<tuple|42|17>>
     <associate|defn-account-key|<tuple|29|13>>
     <associate|defn-babe-header|<tuple|39|16>>
@@ -2875,7 +2895,7 @@
     <associate|defn-children-bitmap|<tuple|26|13>>
     <associate|defn-epoch-subchain|<tuple|34|14>>
     <associate|defn-grandpa-completable|<tuple|49|18>>
-    <associate|defn-hex-encoding|<tuple|59|22>>
+    <associate|defn-hex-encoding|<tuple|59|23>>
     <associate|defn-index-function|<tuple|23|11>>
     <associate|defn-little-endian|<tuple|7|1>>
     <associate|defn-merkle-value|<tuple|28|13>>
@@ -2885,36 +2905,39 @@
     <associate|defn-node-value|<tuple|24|11>>
     <associate|defn-nodetype|<tuple|20|10>>
     <associate|defn-radix-tree|<tuple|3|1>>
-    <associate|defn-sc-len-encoding|<tuple|58|?>>
-    <associate|defn-scale-list|<tuple|55|?>>
-    <associate|defn-scale-tuple|<tuple|54|?>>
+    <associate|defn-sc-len-encoding|<tuple|58|22>>
+    <associate|defn-scale-byte-array|<tuple|53|?>>
+    <associate|defn-scale-list|<tuple|55|22>>
+    <associate|defn-scale-tuple|<tuple|54|21>>
     <associate|defn-slot-offset|<tuple|38|15>>
     <associate|defn-stored-value|<tuple|17|9>>
     <associate|key-encode-in-trie|<tuple|1|10>>
     <associate|nota-call-into-runtime|<tuple|15|5>>
     <associate|note-slot|<tuple|33|14>>
+    <associate|sect-blake2|<tuple|8.2|?>>
     <associate|sect-encoding|<tuple|9|21>>
     <associate|sect-entries-into-runtime|<tuple|3|4>>
     <associate|sect-finality|<tuple|7.2|17>>
-    <associate|sect-genisis-block|<tuple|10|22>>
-    <associate|sect-hash-functions|<tuple|8.1|?>>
-    <associate|sect-int-encoding|<tuple|9.1.1|?>>
+    <associate|sect-genisis-block|<tuple|10|23>>
+    <associate|sect-hash-functions|<tuple|8.1|21>>
+    <associate|sect-int-encoding|<tuple|9.1.1|22>>
     <associate|sect-merkl-proof|<tuple|5.4|13>>
     <associate|sect-message-detail|<tuple|4.4|8>>
     <associate|sect-message-transactions|<tuple|4.4.1|8>>
-    <associate|sect-predef-storage-keys|<tuple|11|22>>
-    <associate|sect-randomness|<tuple|8.2|21>>
-    <associate|sect-runtime-api|<tuple|A|22>>
+    <associate|sect-predef-storage-keys|<tuple|11|23>>
+    <associate|sect-randomness|<tuple|8.3|21>>
+    <associate|sect-runtime-api|<tuple|A|23>>
     <associate|sect-runtime-api-auth|<tuple|3.3.2|7>>
     <associate|sect-runtime-entries|<tuple|3.3|6>>
-    <associate|sect-runtime-upgrade|<tuple|12|22>>
+    <associate|sect-runtime-return-value|<tuple|3.2.3|?>>
+    <associate|sect-runtime-upgrade|<tuple|12|23>>
     <associate|sect-scale-codec|<tuple|9.1|21>>
     <associate|sect-send-args-to-runtime|<tuple|3.2.2|5>>
     <associate|sect-validate-transaction|<tuple|3.3.5|7>>
-    <associate|sect-vrf|<tuple|8.3|21>>
+    <associate|sect-vrf|<tuple|8.4|21>>
     <associate|slot-time-cal-tail|<tuple|36|15>>
     <associate|snippet-runtime-enteries|<tuple|1|6>>
-    <associate|tabl-message-types|<tuple|3|?>>
+    <associate|tabl-message-types|<tuple|3|8>>
   </collection>
 </references>
 
@@ -2926,6 +2949,8 @@
       david_ouroboros_2018
 
       alistair_stewart_grandpa:_2019
+
+      saarinen_blake2_2015
 
       collet_extremely_2019
     </associate>
@@ -3142,165 +3167,169 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-53>>
 
-      <with|par-left|<quote|1tab>|8.2<space|2spc>Randomness
+      <with|par-left|<quote|1tab>|8.2<space|2spc>BLAKE2
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-54>>
 
-      <with|par-left|<quote|1tab>|8.3<space|2spc>VRF
+      <with|par-left|<quote|1tab>|8.3<space|2spc>Randomness
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-55>>
 
+      <with|par-left|<quote|1tab>|8.4<space|2spc>VRF
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-56>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|9<space|2spc>Auxiliary
       Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-56><vspace|0.5fn>
+      <no-break><pageref|auto-57><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|9.1<space|2spc>SCALE Codec
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-57>>
+      <no-break><pageref|auto-58>>
 
       <with|par-left|<quote|2tab>|9.1.1<space|2spc>Length Encoding
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-58>>
+      <no-break><pageref|auto-59>>
 
       <with|par-left|<quote|1tab>|9.2<space|2spc>Hex Encoding
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-59>>
+      <no-break><pageref|auto-60>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|10<space|2spc>Genesis
       Block Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-60><vspace|0.5fn>
+      <no-break><pageref|auto-61><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|11<space|2spc>Predefined
       Storage keys> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-61><vspace|0.5fn>
+      <no-break><pageref|auto-62><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|12<space|2spc>Runtime
       upgrade> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-62><vspace|0.5fn>
+      <no-break><pageref|auto-63><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
       A<space|2spc>Runtime API> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-63><vspace|0.5fn>
+      <no-break><pageref|auto-64><vspace|0.5fn>
 
       <with|par-left|<quote|1tab>|A.1<space|2spc>Storage
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-64>>
+      <no-break><pageref|auto-65>>
 
       <with|par-left|<quote|2tab>|A.1.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_set_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-65>>
+      <no-break><pageref|auto-66>>
 
       <with|par-left|<quote|2tab>|A.1.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-66>>
+      <no-break><pageref|auto-67>>
 
       <with|par-left|<quote|2tab>|A.1.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256_enumerated_trie_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-67>>
+      <no-break><pageref|auto-68>>
 
       <with|par-left|<quote|2tab>|A.1.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_prefix>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-68>>
+      <no-break><pageref|auto-69>>
 
       <with|par-left|<quote|2tab>|A.1.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-69>>
+      <no-break><pageref|auto-70>>
 
       <with|par-left|<quote|2tab>|A.1.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_exists_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-70>>
+      <no-break><pageref|auto-71>>
 
       <with|par-left|<quote|2tab>|A.1.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_allocated_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-71>>
+      <no-break><pageref|auto-72>>
 
       <with|par-left|<quote|2tab>|A.1.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_storage_into>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-72>>
+      <no-break><pageref|auto-73>>
 
       <with|par-left|<quote|2tab>|A.1.9<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-73>>
+      <no-break><pageref|auto-74>>
 
       <with|par-left|<quote|1tab>|A.2<space|2spc>Memory
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-74>>
+      <no-break><pageref|auto-75>>
 
       <with|par-left|<quote|2tab>|A.2.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_malloc>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-75>>
+      <no-break><pageref|auto-76>>
 
       <with|par-left|<quote|2tab>|A.2.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_free>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-76>>
+      <no-break><pageref|auto-77>>
 
       <with|par-left|<quote|2tab>|A.2.3<space|2spc>Input/Output
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-77>>
+      <no-break><pageref|auto-78>>
 
       <with|par-left|<quote|1tab>|A.3<space|2spc>Cryptograhpic auxiliary
       functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-78>>
+      <no-break><pageref|auto-79>>
 
       <with|par-left|<quote|2tab>|A.3.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-79>>
+      <no-break><pageref|auto-80>>
 
       <with|par-left|<quote|2tab>|A.3.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_keccak_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-80>>
+      <no-break><pageref|auto-81>>
 
       <with|par-left|<quote|2tab>|A.3.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_twox_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-81>>
+      <no-break><pageref|auto-82>>
 
       <with|par-left|<quote|2tab>|A.3.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_ed25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-82>>
+      <no-break><pageref|auto-83>>
 
       <with|par-left|<quote|2tab>|A.3.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_sr25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-83>>
+      <no-break><pageref|auto-84>>
 
       <with|par-left|<quote|2tab>|A.3.6<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-84>>
+      <no-break><pageref|auto-85>>
 
       <with|par-left|<quote|1tab>|A.4<space|2spc>Sandboxing
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-85>>
+      <no-break><pageref|auto-86>>
 
       <with|par-left|<quote|2tab>|A.4.1<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-86>>
+      <no-break><pageref|auto-87>>
 
       <with|par-left|<quote|1tab>|A.5<space|2spc>Auxillary Debugging API
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-87>>
+      <no-break><pageref|auto-88>>
 
       <with|par-left|<quote|2tab>|A.5.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_hex>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-88>>
+      <no-break><pageref|auto-89>>
 
       <with|par-left|<quote|2tab>|A.5.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_utf8>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-89>>
+      <no-break><pageref|auto-90>>
 
       <with|par-left|<quote|1tab>|A.6<space|2spc>Misc
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-90>>
+      <no-break><pageref|auto-91>>
 
       <with|par-left|<quote|2tab>|A.6.1<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-91>>
+      <no-break><pageref|auto-92>>
 
       <with|par-left|<quote|1tab>|A.7<space|2spc>Not implemented in
       Polkadot-JS <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-92>>
+      <no-break><pageref|auto-93>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-93><vspace|0.5fn>
+      <no-break><pageref|auto-94><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
