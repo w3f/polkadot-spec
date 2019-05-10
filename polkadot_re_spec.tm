@@ -165,14 +165,14 @@
 
   <\definition>
     <label|defn-block-tree>The <strong|block tree> of a blockchain, denoted
-    by <math|BT>, is the union of all different versions of the blockchain
+    by <math|BT> is the union of all different versions of the blockchain
     observed by all the nodes in the system such as every such block is a
     node in the graph and <math|B<rsub|1>> is connected to <math|B<rsub|2>>
     if <math|B<rsub|1>> is a parent of <math|B<rsub|2>>.
   </definition>
 
-  Definition <reference|defn-chain-subchain> gives the means to high light
-  various branchs of the block tree.
+  Definition <reference|defn-chain-subchain> gives the means to highlight
+  various branches of the block tree.
 
   <\definition>
     <label|defn-chain-subchain>Let <math|G> be the root of the block tree and
@@ -188,7 +188,7 @@
   </definition>
 
   Because every block in the blockchain contains a reference to its parent,
-  it is easy to see that the block tree is actually a tree.
+  it is easy to see that the block tree is de facto a tree.
 
   A block tree naturally imposes partial order relationships on the blocks as
   follows:
@@ -236,7 +236,7 @@
       for the runtime to validate the integrity of the extrinsics composing
       the block body. For example, it can hold the root hash of the Merkle
       trie which stores an ordered list of the extrinsics being validated in
-      this block. The <samp|extrinsics_root> is set by the runtime, and its
+      this block. The <samp|extrinsics_root> is set by the runtime and its
       value is opaque to Polkadot RE. This element is formally referred to as
       <strong|<math|H<rsub|e>>>.
 
@@ -281,17 +281,17 @@
 
   <subsection|Processing Extrinsics>
 
-  Block body consists of a set of extrinsics. Nonetheless, Polkadot RE does
-  not specify or limit the internal of each extrinsics. From Polkadot RE
-  point of view each extrinsics is a SCALE encoded byte array (see Definition
-  <reference|def-scale-codec>).
+  The block body consists of a set of extrinsics. Nonetheless, Polkadot RE
+  does not specify or limit the internals of each extrinsics. From Polkadot
+  RE point of view, each extrinsics is a SCALE encoded in byte arrays (see
+  Definition <reference|def-scale-byte-array>).
 
-  Extrinsics are submitted to the node by means of <em|transactions> network
-  message<space|1em>specfied in Section <reference|sect-message-transactions>.
+  The extrinsics are submitted to the node through the <em|transactions>
+  network message specified in Section <reference|sect-message-transactions>.
   Upon receiving a transactions message, Polkadot RE separates the submitted
-  transactions message into individual extrinsics and run Algorithm
-  <reference|algo-validate-transactions> to validate them and store them for
-  the purpose of including them into future blocks.
+  transactions message into individual extrinsics and runs Algorithm
+  <reference|algo-validate-transactions> to validate them and store them to
+  include them into future blocks.
 
   <\algorithm|<label|algo-validate-transactions><name|Validate-Extrinsics-and-Store>(<math|L>:
   list of extrinsics)>
@@ -314,7 +314,7 @@
 
       <\state>
         <\IF>
-          <math|R> is <math|Valid>
+          <math|R> indicates <math|E> is <math|Valid>
         </IF>
       </state>
 
@@ -368,9 +368,9 @@
   executes a call to the Runtime entries stored in the Wasm module. This part
   of the Runtime environment is referred to as the <em|<strong|Executor>.>
 
-  Definition <reference|nota-call-into-runtime> introduce the notation for
-  calling the runtime entry which is used wheneven an algorithm of Polkadot
-  RE needs to access the runtime
+  Definition <reference|nota-call-into-runtime> introduces the notation for
+  calling the runtime entry which is used whenever an algorithm of Polkadot
+  RE needs to access the runtime.
 
   <\notation>
     <label|nota-call-into-runtime> By
@@ -379,9 +379,9 @@
       <text|<name|Call-Runtime-Entry>><around*|(|<text|<verbatim|Runtime-Entry>>,A<rsub|1>,A<rsub|2>,\<ldots\>,A<rsub|n>|)>
     </equation*>
 
-    we refer to the task using the executor to invoke the
-    <verbatim|Runtime-Entry> while passing
-    <math|A<rsub|1>,\<ldots\>,A<rsub|n>> argument to it using the the
+    we refer to the task using the execuping me cherie when the edits are
+    readytor to invoke the <verbatim|Runtime-Entry> while passing an
+    <math|A<rsub|1>,\<ldots\>,A<rsub|n>> argument to it and using the
     encoding described in Section <reference|sect-send-args-to-runtime>.
   </notation>
 
@@ -400,12 +400,10 @@
   <subsubsection|Sending Arguments to Runtime
   ><label|sect-send-args-to-runtime>
 
-  In general all data exchanged between Polkadot RE and the Runtime is
+  In general, all data exchanged between Polkadot RE and the Runtime is
   encoded using SCALE codec described in Section
-  <reference|sect-scale-codec>.
-
-  As a Wasm function, all runtime entries have the following identical
-  signature:
+  <reference|sect-scale-codec>. As a Wasm function, all runtime entries have
+  the following identical signatures:
 
   \;
 
@@ -415,20 +413,19 @@
   \;
 
   In each invocation of a Runtime entry, the arguments which are supposed to
-  be sent to the entry need to be encoded using SCALE codec into a byte array
-  <math|B> using the procedure defined in Definition
+  be sent to the entry, need to be encoded using SCALE codec into a byte
+  array <math|B> using the procedure defined in Definition
   <reference|defn-scale-tuple>.
 
   The Executor then needs to retrieve the Wam memory buffer of the Runtime
-  Wasm module and extend it to fit the size of the byte array. Afterward, it
+  Wasm module and extend it to fit the size of the byte array. Afterwards, it
   needs to copy the byte array <math|B> value in the correct offset of the
   extended buffer. Finally, when the Wasm method <verbatim|runtime_entry>,
   corresponding to the entry is invoked, two UINT32 integers are sent to the
   method as arguments. The first argument <verbatim|data> is set to the
-  offset where the the byte array <math|B> is stored in the Wasm the extended
-  shared memory buffer and the second argumet <verbatim|len> is set the
-  length of the data stored in <math|B>. , and the second one is the size of
-  <math|B>.
+  offset where the byte array <math|B> is stored in the Wasm the extended
+  shared memory buffer. The second argument <verbatim|len> sets the length of
+  the data stored in <math|B>., and the second one is the size of <math|B>.
 
   <subsubsection|The Return Value from a Runtime Entry>
 
@@ -438,8 +435,8 @@
   returned by the entry encoded in SCALE codec in the memory buffer. The most
   significant one provides the size of the blob.
 
-  In the case, that the runtime entry is returning a boolean value then the
-  SCALEd value retuns in the least significant byte and all other bytes are
+  In the case that the runtime entry is returning a boolean value, then the
+  SCALEd value returns in the least significant byte and all other bytes are
   set to zero.
 
   <subsection|Entries into Runtime><label|sect-runtime-entries>
@@ -591,9 +588,9 @@
 
   <subsection|Network Messages>
 
-  In this section, specifies various types of messages which Polkadot RE
-  receives from the network. Furthermore the it also explains the
-  approperiate responses those messages.
+  This section specifies various types of messages which Polkadot RE receives
+  from the network. Furthermore, it also explains the appropriate responses
+  to those messages.
 
   <subsection|General structure of network messages>
 
@@ -612,9 +609,9 @@
   </definition>
 
   The body of each message consists of different components based on its
-  type. The different possible message types is listed in Table
-  <reference|tabl-message-types>. We describe sub-components of each message
-  individually in Section <reference|sect-message-detail>.
+  type. The different possible message types are listed below in Table
+  <reference|tabl-message-types>. We describe the sub-components of each
+  message type individually in Section <reference|sect-message-detail>.
 
   <big-table|<tabular*|<tformat|<cwith|2|-1|2|2|cell-halign|l>|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|1ln>|<cwith|1|-1|1|-1|cell-rborder|1ln>|<cwith|16|16|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|1ln>|<cwith|1|-1|3|3|cell-rborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|1|1|1|-1|cell-lborder|1ln>|<cwith|1|1|1|-1|cell-rborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<table|<row|<cell|<math|M<rsub|1>>>|<cell|Message
   Type>|<cell|Description>>|<row|<cell|0>|<cell|Status>|<cell|>>|<row|<cell|1>|<cell|Block
@@ -634,12 +631,12 @@
 
   <subsection|Detailed Message Structure><label|sect-message-detail>
 
-  In this section detail structure of each network message is discussed.
+  This section disucsses the detailed structure of each network message.
 
   <subsubsection|Transactions><label|sect-message-transactions>
 
-  \ \ \ \ Transactions Message is represented by <math|M<rsub|T>> is defined
-  as follows
+  \ \ \ \ The transactions Message is represented by <math|M<rsub|T>> and is
+  defined as follows:
 
   <\equation*>
     M<rsub|T>\<assign\>Enc<rsub|SC><around*|(|C<rsub|1>,\<ldots\>,C<rsub|n>|)>
@@ -651,9 +648,9 @@
     C<rsub|i>\<assign\>Enc<rsub|SC><around*|(|E<rsub|i>|)>
   </equation*>
 
-  Where each <math|E<rsub|i>> is a byte array \ represents a sepearate
-  extrinsic. Polkadot RE is agnostic about the content of an extrinsic and
-  treat them as blob of data.
+  Where each <math|E<rsub|i>> is a byte array and represents a sepearate
+  extrinsic. Polkadot RE is indifferent about the content of an extrinsic and
+  treats is as a blob of data.
 
   <subsection|Block Submission and Validation>
 
@@ -2007,8 +2004,8 @@
     </equation*>
 
     where <math|A<rsub|i>>'s are values of <strong|the same type> (and the
-    decorder is unable to infer value of <math|n> from the context) is
-    defined as:
+    decoder is unable to infer value of <math|n> from the context) is defined
+    as:
 
     <\equation*>
       Enc<rsub|SC><around|(|T|)>\<assign\>Enc<rsup|Len><rsub|SC><around*|(|<around*|\<\|\|\>|S|\<\|\|\>>|)>Enc<rsub|SC><around|(|A<rsub|1>|)>\|Enc<rsub|SC><around|(|A<rsub|2>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|A<rsub|n>|)>
@@ -2030,14 +2027,14 @@
   <\definition>
     The <strong|SCALE codec, <math|Enc<rsub|SC>>> for other types such as
     fixed length integers not defined here otherwise, is equal to little
-    endian encoding of those value defined in Definition
+    endian encoding of those values defined in Definition
     <reference|defn-little-endian>.\ 
   </definition>
 
   <subsubsection|Length Encoding><label|sect-int-encoding>
 
   <em|SCALE Length encoding> is used to encode integer numbers of variying
-  size prominently in encoding length of arrays:\ 
+  sizes prominently in an encoding length of arrays:\ 
 
   <\definition>
     <label|defn-sc-len-encoding><strong|SCALE Length Encoding,
@@ -2048,13 +2045,13 @@
       <tabular|<tformat|<table|<row|<cell|Enc<rsup|Len><rsub|SC>:>|<cell|\<bbb-N\>\<rightarrow\>\<bbb-B\>>>|<row|<cell|>|<cell|n\<rightarrow\>b\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|l<rsup|\<nosymbol\>><rsub|1>>|<cell|>|<cell|0\<leqslant\>n\<less\>2<rsup|6>>>|<row|<cell|i<rsup|\<nosymbol\>><rsub|1>*i<rsup|\<nosymbol\>><rsub|2>>|<cell|>|<cell|2<rsup|6>\<leqslant\>n\<less\>2<rsup|14>>>|<row|<cell|j<rsup|\<nosymbol\>><rsub|1>*j<rsup|\<nosymbol\>><rsub|2>*j<rsub|3>>|<cell|>|<cell|2<rsup|14>\<leqslant\>n\<less\>2<rsup|30>>>|<row|<cell|k<rsub|1><rsup|\<nosymbol\>>*k<rsub|2><rsup|\<nosymbol\>>*\<ldots\>*k<rsub|m><rsup|\<nosymbol\>>*>|<cell|>|<cell|2<rsup|30>\<leqslant\>n>>>>>|\<nobracket\>>>>>>>
     </equation*>
 
-    in where the bits of byte array b is defined as follows:
+    in where the bits of byte array b are defined as follows:
 
     <\equation*>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<cwith|1|-1|3|3|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|2|2|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|2|1|1|cell-lborder|0ln>|<cwith|1|2|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|0ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|3|4|1|1|cell-lborder|0ln>|<cwith|3|4|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|l<rsup|1><rsub|1>*l<rsub|1><rsup|0>>|<cell|=>|<cell|00>>|<row|<cell|i<rsup|1><rsub|1>*i<rsub|1><rsup|0>>|<cell|=>|<cell|01>>|<row|<cell|j<rsup|1><rsub|1>*j<rsub|1><rsup|0>>|<cell|=>|<cell|10>>|<row|<cell|k<rsup|1><rsub|1>*k<rsub|1><rsup|0>>|<cell|=>|<cell|11>>>>>
     </equation*>
 
-    and the rest of the bits of <math|b> stores the value of <math|n> in
+    and the rest of the bits of <math|b> store the value of <math|n> in
     little-endian format in base-2 as follows:
 
     <\equation*>
@@ -2869,7 +2866,6 @@
     <associate|def-path-graph|<tuple|2|1>>
     <associate|def-scale-byte-array|<tuple|53|?>>
     <associate|def-vote|<tuple|42|17>>
-    <associate|defn-SCALE-tuple|<tuple|54|?>>
     <associate|defn-account-key|<tuple|29|13>>
     <associate|defn-babe-header|<tuple|39|16>>
     <associate|defn-bit-rep|<tuple|6|1>>
@@ -3262,45 +3258,49 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-82>>
 
-      <with|par-left|<quote|2tab>|A.3.5<space|2spc>To be Specced
+      <with|par-left|<quote|2tab>|A.3.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_sr25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-83>>
 
-      <with|par-left|<quote|1tab>|A.4<space|2spc>Sandboxing
+      <with|par-left|<quote|2tab>|A.3.6<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-84>>
 
-      <with|par-left|<quote|2tab>|A.4.1<space|2spc>To be Specced
+      <with|par-left|<quote|1tab>|A.4<space|2spc>Sandboxing
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-85>>
 
-      <with|par-left|<quote|1tab>|A.5<space|2spc>Auxillary Debugging API
+      <with|par-left|<quote|2tab>|A.4.1<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-86>>
 
-      <with|par-left|<quote|2tab>|A.5.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_hex>
+      <with|par-left|<quote|1tab>|A.5<space|2spc>Auxillary Debugging API
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-87>>
 
-      <with|par-left|<quote|2tab>|A.5.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_utf8>
+      <with|par-left|<quote|2tab>|A.5.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_hex>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-88>>
 
-      <with|par-left|<quote|1tab>|A.6<space|2spc>Misc
+      <with|par-left|<quote|2tab>|A.5.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_utf8>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-89>>
 
-      <with|par-left|<quote|2tab>|A.6.1<space|2spc>To be Specced
+      <with|par-left|<quote|1tab>|A.6<space|2spc>Misc
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-90>>
 
+      <with|par-left|<quote|2tab>|A.6.1<space|2spc>To be Specced
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-91>>
+
       <with|par-left|<quote|1tab>|A.7<space|2spc>Not implemented in
       Polkadot-JS <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-91>>
+      <no-break><pageref|auto-92>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-92><vspace|0.5fn>
+      <no-break><pageref|auto-93><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
