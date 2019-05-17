@@ -44,7 +44,7 @@
   </definition>
 
   <\definition>
-    <label|def-path-graph>A <strong|path graph> or a <strong|path> of
+    <label|defn-path-graph>A <strong|path graph> or a <strong|path> of
     <math|n> nodes formally referred to as <strong|<math|P<rsub|n>>>, is a
     tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex
     degree 2. Therefore, <math|P<rsub|n>> can be represented by sequences of
@@ -176,11 +176,12 @@
 
   <\definition>
     <label|defn-chain-subchain>Let <math|G> be the root of the block tree and
-    <math|B> be a node of it. By <name|<strong|Chain(<math|B>)>,> we refer to
-    the path graph from <math|G> to <math|B> in <math|BT>. Conversely, for a
-    chain <math|C>=<name|Chain(B)>, we define <strong|the head of <math|C>>
-    to be <math|B> formally noted as \ <math|B\<assign\>><name|Head(<math|C>)>.If
-    <math|B<rprime|'>> is another node on <name|Chain(<math|B>)>, then by
+    <math|B> be one of its node. By <name|<strong|Chain(<math|B>)>,> we refer
+    to the path graph from <math|G> to <math|B> in <math|BT>. Conversely, for
+    a chain <math|C>=<name|Chain(B)>, we define <strong|the head of <math|C>>
+    to be <math|B><version-both| |, >formally noted as
+    <math|B\<assign\>><name|Head(<math|C>)>. If <math|B<rprime|'>> is another
+    node on <name|Chain(<math|B>)>, then by
     <name|SubChain(<math|B<rprime|'>,B>)> we refer to the subgraph of
     <math|><name|Chain(<math|B>)> path graph which contains both <math|B> and
     <math|B<rprime|'>>. <name|Longest-Path(<math|BT>)> returns a path graph
@@ -253,7 +254,7 @@
   </definition>
 
   <\definition>
-    <label|def-block-header-hash>The <strong|Block Header Hash of Block
+    <label|defn-block-header-hash>The <strong|Block Header Hash of Block
     <math|B>>, <strong|<math|H<rsub|h><around|(|b|)>>>, is the hash of the
     header of block <math|B> encoded by simple codec:\Q
 
@@ -702,7 +703,7 @@
   given time.
 
   The Trie is used to compute the <em|state root>, <math|H<rsub|r>>, (see
-  Definition <reference|def-block-header>), whose purpose is to authenticate
+  Definition <reference|defn-block-header>), whose purpose is to authenticate
   the validity of the state database. Thus, Polkadot RE follows a rigorous
   encoding algorithm to compute the values stored in the trie nodes to ensure
   that the computed Merkle hash, <math|H<rsub|r>>, matches across the
@@ -846,7 +847,7 @@
   </definition>
 
   Assuming that <math|P<rsub|N>> is the path (see Definition
-  <reference|def-path-graph>) from the Trie root to node <math|N>, Algorithm
+  <reference|defn-path-graph>) from the Trie root to node <math|N>, Algorithm
   <reference|algo-aggregate-key> rigorously demonstrates how to build
   <math|pk<rsup|Agr><rsub|N>> while traversing <math|P<rsub|N>>.
 
@@ -1129,7 +1130,7 @@
   network message specified in Section <reference|sect-message-transactions>.
   Upon receiving a transactions message, Polkadot RE separates the submitted
   transactions message into individual extrinsics and runs Algorithm
-  <reference|algo-validate-transactions> to validate them and store them to
+  <reference|algo-validate-transactions> to validate and store them to
   include them into future blocks.
 
   <\algorithm|<label|algo-validate-transactions><name|Validate-Extrinsics-and-Store>(<math|L>:
@@ -1167,15 +1168,15 @@
 
   <todo|To be specced>
 
-  <section|Buildng Blocks>
+  <section|Blocks Building Process>
 
-  Block building process is triggered by Algorithm
+  The blocks building process is triggered by Algorithm
   <reference|algo-block-production> of the consensus engine which runs
-  Alogrithm <reference|alg-build-block>.
+  Alogrithm <reference|algo-build-block>.
 
   <\algorithm>
-    <name|Build-Block>(<math|C<rsub|Best>>: The chain at its head the block
-    to be constructed,
+    <label|algo-build-block><name|Build-Block>(<math|C<rsub|Best>>: The chain
+    at its head the block to be constructed,
 
     s: Slot number)
   <|algorithm>
@@ -1244,7 +1245,7 @@
   <math|Head<around*|(|B|)>> is defined in Definition
   <reference|defn-block-header>. <name|Block-Inherents-Data>,
   <name|Inherents-Queue>, <name|Block-Is-Full> and
-  <name|Next-Ready-Extrinsic> are defined <todo|Define these entities>
+  <name|Next-Ready-Extrinsic> are defined in <todo|Define these entities>
 
   <section|Consensus Engine>
 
@@ -1607,7 +1608,7 @@
   <math|B>. First a vote is defined as:
 
   <\definition>
-    <label|def-vote>A <strong|GRANDPA vote >or simply a vote for block
+    <label|defn-vote>A <strong|GRANDPA vote >or simply a vote for block
     <math|B> is an ordered pair defined as
 
     <\equation*>
@@ -1616,7 +1617,7 @@
 
     where <math|H<rsub|h><around|(|B|)>> and <math|H<rsub|i><around|(|B|)>>
     are the block hash and the block number defined in Definitions
-    <reference|def-block-header> and <reference|def-block-header-hash>
+    <reference|defn-block-header> and <reference|defn-block-header-hash>
     respectively.
   </definition>
 
@@ -1785,7 +1786,7 @@
   </definition>
 
   <\definition>
-    <label|def-grandpa-justification>The <strong|justification for block B in
+    <label|defn-grandpa-justification>The <strong|justification for block B in
     round <math|r>> of GRANDPA protocol defined
     <math|J<rsup|r><around*|(|B|)>> is a vector of pairs of the type:
 
@@ -1819,7 +1820,7 @@
     </equation*>
 
     in which <math|J<rsup|r><around*|(|B|)>> in the justification defined in
-    Definition <reference|def-grandpa-justification>.
+    Definition <reference|defn-grandpa-justification>.
   </definition>
 
   <subsubsection|Initiating the GRANDPA State>
@@ -2857,6 +2858,7 @@
     <associate|algo-aggregate-key|<tuple|2|10>>
     <associate|algo-block-production|<tuple|8|16>>
     <associate|algo-block-production-lottery|<tuple|6|15>>
+    <associate|algo-build-block|<tuple|5|?>>
     <associate|algo-epoch-randomness|<tuple|9|16>>
     <associate|algo-grandpa-best-candidate|<tuple|12|20>>
     <associate|algo-pk-length|<tuple|3|11>>
@@ -2963,11 +2965,10 @@
     <associate|bib-saarinen_blake2_2015|<tuple|SA15|30>>
     <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|30>>
     <associate|block|<tuple|2.1|2>>
-    <associate|def-block-header|<tuple|13|3>>
-    <associate|def-block-header-hash|<tuple|14|3>>
-    <associate|def-grandpa-justification|<tuple|51|19>>
-    <associate|def-path-graph|<tuple|2|1>>
-    <associate|def-vote|<tuple|42|17>>
+    <associate|defn-block-header-hash|<tuple|14|3>>
+    <associate|defn-grandpa-justification|<tuple|51|19>>
+    <associate|defn-path-graph|<tuple|2|1>>
+    <associate|defn-vote|<tuple|42|17>>
     <associate|defn-account-key|<tuple|29|13>>
     <associate|defn-babe-header|<tuple|39|16>>
     <associate|defn-bit-rep|<tuple|6|1>>
@@ -3190,8 +3191,11 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-38>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc>Buildng
-      Blocks> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc><with|color|<quote|dark
+      red>|Buildng ><with|color|<quote|dark
+      green>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>>Blocks<with|color|<quote|dark
+      red>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>><with|color|<quote|dark
+      green>| Building Process>> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-39><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|8<space|2spc>Consensus

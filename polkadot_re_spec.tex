@@ -72,7 +72,7 @@
   {\Large Protocol Specification}
 }
 
-\date{May 10, 2019}
+\date{May 17, 2019}
 
 \maketitle
 
@@ -84,7 +84,7 @@
 \end{definition}
 
 \begin{definition}
-  \label{def-path-graph}A {\tmstrong{path graph}} or a {\tmstrong{path}} of
+  \label{defn-path-graph}A {\tmstrong{path graph}} or a {\tmstrong{path}} of
   $n$ nodes formally referred to as {\tmstrong{$P_n$}}, is a tree with two
   nodes of vertex degree 1 and the other n-2 nodes of vertex degree 2.
   Therefore, $P_n$ can be represented by sequences of $(v_1, \ldots, v_n)$
@@ -181,12 +181,15 @@ branches of the block tree.
 
 \begin{definition}
   \label{defn-chain-subchain}Let $G$ be the root of the block tree and $B$ be
-  a node of it. By {\tmname{{\tmstrong{Chain($B$)}},}} we refer to the path
-  graph from $G$ to $B$ in $\tmop{BT}$. If $B'$ is another node on
-  {\tmname{Chain($B$)}}, then by {\tmname{SubChain($B', B$)}} we refer to the
-  subgraph of {\tmname{Chain($B$)}} path graph which contains both $B$ and
-  $B'$. {\tmname{Longest-Path($\tmop{BT}$)}} returns a path graph of
-  $\tmop{BT}$ which is the longest among all paths in $\tmop{BT}$.
+  one of its node. By {\tmname{{\tmstrong{Chain($B$)}},}} we refer to the path
+  graph from $G$ to $B$ in $\tmop{BT}$. Conversely, for a chain
+  $C$={\tmname{Chain(B)}}, we define {\tmstrong{the head of $C$}} to be
+  $B${\versionboth{ }{, }}formally noted as $B \assign${\tmname{Head($C$)}}.
+  If $B'$ is another node on {\tmname{Chain($B$)}}, then by
+  {\tmname{SubChain($B', B$)}} we refer to the subgraph of
+  {\tmname{Chain($B$)}} path graph which contains both $B$ and $B'$.
+  {\tmname{Longest-Path($\tmop{BT}$)}} returns a path graph of $\tmop{BT}$
+  which is the longest among all paths in $\tmop{BT}$.
   {\tmname{Deepest-Leaf($\tmop{BT}$)}} returns the head of
   {\tmname{Longest-Path($\tmop{BT}$)}} chain.
 \end{definition}
@@ -216,7 +219,7 @@ The block header is designed to be minimalistic in order to boost the
 efficiency of the light clients. It is defined formally as follows:
 
 \begin{definition}
-  \label{def-block-header}The {\tmstrong{header of block B}},
+  \label{defn-block-header}The {\tmstrong{header of block B}},
   {\tmstrong{$\tmop{Head} (B)$}} is a 5-tuple containing the following
   elements:
   \begin{itemize}
@@ -251,9 +254,9 @@ efficiency of the light clients. It is defined formally as follows:
 \end{definition}
 
 \begin{definition}
-  \label{def-block-header-hash}The {\tmstrong{Block Header Hash of Block
+  \label{defn-block-header-hash}The {\tmstrong{Block Header Hash of Block
   $B$}}, {\tmstrong{$H_h (b)$}}, is the hash of the header of block $B$
-  encoded by simple codec:
+  encoded by simple codec:''
   \[ H_b (b) \assign \tmop{Blake} 2 b (\tmop{Enc}_{\tmop{SC}} (\tmop{Head}
      (B))) \]
 \end{definition}
@@ -275,48 +278,6 @@ contains the following parts:
   authorities, which have voted for the block to be stored and is formally
   referred to as $A (B)$. An authority Id is 32bit.
 \end{itemize}
-
-\subsection{Processing Extrinsics}
-
-The block body consists of a set of extrinsics. Nonetheless, Polkadot RE does
-not specify or limit the internals of each extrinsics. From Polkadot RE point
-of view, each extrinsics is a SCALE encoded in byte arrays (see Definition
-\ref{defn-scale-byte-array}).
-
-The extrinsics are submitted to the node through the {\tmem{transactions}}
-network message specified in Section \ref{sect-message-transactions}. Upon
-receiving a transactions message, Polkadot RE separates the submitted
-transactions message into individual extrinsics and runs Algorithm
-\ref{algo-validate-transactions} to validate them and store them to include
-them into future blocks.
-
-\custombinding{1}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextbf{Algorithm  1. }
-  \label{algo-validate-transactions}{\tmname{Validate-Extrinsics-and-Store}}($L$:
-  list of extrinsics)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\FORIN{$E$}{$L$}}}}
-
-{\state{$B_d \leftarrow${\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
-
-{\state{$N \leftarrow H_n (B_d)$}}
-
-{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}, N, E
-\right)$}}
-
-{\state{{\IF{$R$ indicates $E$ is $\tmop{Valid}$}}}}
-
-{\state{{\tmname{Add-To-Extrinsic-Queue($E, R$)}}}}}}
-
-\hrulefill{\medskip}
-
-\subsection{Extrinsic Queue}
-
-{\todo{To be specced}}
 
 \subsection{Block Format}
 
@@ -621,9 +582,9 @@ process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-\custombinding{2}{\noindent}\begin{tabular}{l}
+\custombinding{1}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  2. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  \tmtextbf{Algorithm  1. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
   (B)$)}}\\
   \hline
 \end{tabular}
@@ -689,7 +650,7 @@ rearrangment is necessary to be able to compute the Merkle hash of the whole
 or part of the state storage, consistently and efficiently at any given time.
 
 The Trie is used to compute the {\tmem{state root}}, $H_r$, (see Definition
-\ref{def-block-header}), whose purpose is to authenticate the validity of the
+\ref{defn-block-header}), whose purpose is to authenticate the validity of the
 state database. Thus, Polkadot RE follows a rigorous encoding algorithm to
 compute the values stored in the trie nodes to ensure that the computed Merkle
 hash, $H_r$, matches across the Polkadot RE implementations.
@@ -809,13 +770,13 @@ the $\tmop{Index}_N$ function defined in Definition \ref{defn-index-function}.
   \[ k_{N_c} = k_N | | i | | \tmop{pk}_{N_c} \]
 \end{definition}
 
-Assuming that $P_N$ is the path (see Definition \ref{def-path-graph}) from the
-Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
+Assuming that $P_N$ is the path (see Definition \ref{defn-path-graph}) from
+the Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
 demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
-\custombinding{3}{\noindent}\begin{tabular}{l}
+\custombinding{2}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  3. }
+  \tmtextbf{Algorithm  2. }
   \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
   = N_1, \ldots, N_j = N))$\\
   \hline
@@ -908,9 +869,9 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
   \tmop{Head}_{N, l}$ bytes are determined by Algorithm \ref{algo-pk-length}.
 \end{definition}
 
-\custombinding{4}{\noindent}\begin{tabular}{l}
+\custombinding{3}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  4. }
+  \tmtextbf{Algorithm  3. }
   \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
   1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
   \hline
@@ -1004,7 +965,7 @@ node.
 
 Where $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes of
 the branch node $N$ and Enc\tmrsub{SC}, $\tmop{StoredValue}$, $H$, and
-$\tmop{ChildrenBitmap} (N)$ are defined in Definitions \ref{sect-scale-code},
+$\tmop{ChildrenBitmap} (N)$ are defined in Definitions \ref{sect-scale-codec},
 \ref{defn-stored-value}, \ref{defn-merkle-value} and
 \ref{defn-children-bitmap} respectively.
 
@@ -1028,15 +989,117 @@ occupies less space than its hash.
   |$.
 \end{definition}
 
-\section{Transactions}
+\section{Extrinsics}
 
 \subsection{Preliminaries}
 
 \begin{definition}
   \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
-  \tmop{pk}^a)$}} is a pair of Ristretto SR25519 used to sign transactions
-  among other accounts and blance-related functions.
+  \tmop{pk}^a)$}} is a pair of Ristretto SR25519 used to sign extrinsics among
+  other accounts and blance-related functions.
 \end{definition}
+
+\subsection{Processing Extrinsics}
+
+The block body consists of a set of extrinsics. Nonetheless, Polkadot RE does
+not specify or limit the internals of each extrinsics. From Polkadot RE point
+of view, each extrinsics is a SCALE encoded in byte arrays (see Definition
+\ref{defn-scale-byte-array}).
+
+The extrinsics are submitted to the node through the {\tmem{transactions}}
+network message specified in Section \ref{sect-message-transactions}. Upon
+receiving a transactions message, Polkadot RE separates the submitted
+transactions message into individual extrinsics and runs Algorithm
+\ref{algo-validate-transactions} to validate and store them to include them
+into future blocks.
+
+\custombinding{4}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  4. }
+  \label{algo-validate-transactions}{\tmname{Validate-Extrinsics-and-Store}}($L$:
+  list of extrinsics)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\FORIN{$E$}{$L$}}}}
+
+{\state{$B_d \leftarrow${\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
+
+{\state{$N \leftarrow H_n (B_d)$}}
+
+{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}, N, E
+\right)$}}
+
+{\state{{\IF{$R$ indicates $E$ is $\tmop{Valid}$}}}}
+
+{\state{{\tmname{Add-To-Extrinsic-Queue($E, R$)}}}}}}
+
+\hrulefill{\medskip}
+
+\subsection{Extrinsic Queue}
+
+{\todo{To be specced}}
+
+\section{Blocks Building Process}
+
+The blocks building process is triggered by Algorithm
+\ref{algo-block-production} of the consensus engine which runs Alogrithm
+\ref{algo-build-block}.
+
+\custombinding{5}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  5. }
+  \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
+  at its head the block to be constructed,
+  
+  s: Slot number)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$P_B \leftarrow_{}${\tmname{Head($C_{\tmop{Best}}$)}}}}
+
+{\state{$H_h (P_B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{block\_hash\_from\_id}}, H_i (P_B) \right)$}}
+
+{\state{$\tmop{Head} (B) \leftarrow$($H_p \leftarrow H_h (P_B), H_i \leftarrow
+H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
+\phi$)}}
+
+{\state{{\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{initialze\_block}}, \tmop{Head} (_{} B) \right)$}}
+
+{\state{{\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{inherent\_extrinsics}},
+\text{{\tmname{Block-Inherents-Data}}} \right)${\END}}}
+
+{\state{{\FORIN{$E$}{{\tmname{Inherents-Queue}}}}}}
+
+{\state{{\tmname{$R \leftarrow$Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{apply\_extrinsic}}, E \right)${\END}}}
+
+{\state{{\WHILE{{\tmstrong{not }}{\tmname{Block-Is-Full($R$}})
+{\tmstrong{and}} {\tmstrong{not}} {\tmname{End-Of-Slot(s)}}}}}}
+
+{\state{$E
+\leftarrow$\tmverbatim{}{\tmname{{\tmname{}}Next-Ready-Extrinsic()}}}}
+
+{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{apply\_extrinsics}}, E \right)$}}
+
+{\state{{\IF{{\tmstrong{not}} {\tmname{Block-Is-FULL($R$}})}}}}
+
+{\state{{\tmname{Drop(Ready-Extrinsic-Queue,$E$)}}}}
+
+{\state{$\tmop{Head} (B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{finalize\_block}}, E \right)${\END}}}}}
+
+\hrulefill{\medskip}
+
+$\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
+{\tmname{Block-Inherents-Data}}, {\tmname{Inherents-Queue}},
+{\tmname{Block-Is-Full}} and {\tmname{Next-Ready-Extrinsic}} are defined in
+{\todo{Define these entities}}
 
 \section{Consensus Engine}
 
@@ -1125,9 +1188,9 @@ build a block. The $\tmop{sk}$ is the block producer lottery secret key and
 $n$ is the index of epoch for whose slots the block producer is running the
 lottery.
 
-\custombinding{5}{\noindent}\begin{tabular}{l}
+\custombinding{6}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  5. }
+  \tmtextbf{Algorithm  6. }
   \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}$(\tmop{sk}^{},
   n)$\\
   \hline
@@ -1190,9 +1253,9 @@ formalized in Definition \ref{defn-slot-offset}.
   {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
-\custombinding{6}{\noindent}\begin{tabular}{l}
+\custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  6. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
+  \tmtextbf{Algorithm  7. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
   the number of the slots whose time needs to be determined)\\
   \hline
 \end{tabular}
@@ -1243,10 +1306,10 @@ alongside with the {\tmem{babe header}} defined in Definition
   \ 
 \end{definition}
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
+\custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  7. }
-  \label{algo-block-production}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
+  \tmtextbf{Algorithm  8. }
+  \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
   pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
   \hline
 \end{tabular}
@@ -1280,9 +1343,9 @@ lottery in epoch $\mathcal{E}_{n + 2}$. The computation of the seed is
 described in Algorithm \ref{algo-epoch-randomness} which uses the concept of
 epoch subchain described in Definition \ref{defn-epoch-subchain}.
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
+\custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  8. }
+  \tmtextbf{Algorithm  9. }
   \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
   index)\\
   \hline
@@ -1343,12 +1406,12 @@ Now we need to define how Polkadot RE counts the number of votes for block
 $B$. First a vote is defined as:
 
 \begin{definition}
-  \label{def-vote}A {\tmstrong{GRANDPA vote }}or simply a vote for block $B$
+  \label{defn-vote}A {\tmstrong{GRANDPA vote }}or simply a vote for block $B$
   is an ordered pair defined as
   \[ V_{\nosymbol} (B) \assign (H_h (B), H_i (B)) \]
   where $H_h (B)$ and $H_i (B)$ are the block hash and the block number
-  defined in Definitions \ref{def-block-header} and
-  \ref{def-block-header-hash} respectively.
+  defined in Definitions \ref{defn-block-header} and
+  \ref{defn-block-header-hash} respectively.
 \end{definition}
 
 \begin{definition}
@@ -1495,8 +1558,8 @@ more details). These messages are specified in this section.
 \end{definition}
 
 \begin{definition}
-  \label{def-grandpa-justification}The {\tmstrong{justification for block B in
-  round $r$}} of GRANDPA protocol defined $J^r (B)$ is a vector of pairs of
+  \label{defn-grandpa-justification}The {\tmstrong{justification for block B
+  in round $r$}} of GRANDPA protocol defined $J^r (B)$ is a vector of pairs of
   the type:
   \[ (V (B'), (\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B'), v_{\tmop{id}})) \]
   in which either
@@ -1515,7 +1578,7 @@ more details). These messages are specified in this section.
   \[ M^{r, \tmop{Fin}}_v (B) \assign \tmop{Enc}_{\tmop{SC}} (r, V (B), J^r
      (B)) \]
   in which $J^r (B)$ in the justification defined in Definition
-  \ref{def-grandpa-justification}.
+  \ref{defn-grandpa-justification}.
 \end{definition}
 
 \subsubsection{Initiating the GRANDPA State}
@@ -1531,9 +1594,9 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{9}{\noindent}\begin{tabular}{l}
+\custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  9. }
+  \tmtextbf{Algorithm  10. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -1555,9 +1618,9 @@ needs to be incremented.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-\custombinding{10}{\noindent}\begin{tabular}{l}
+\custombinding{11}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  10. }
+  \tmtextbf{Algorithm  11. }
   \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
@@ -1601,9 +1664,9 @@ The condition of {\tmem{completablitiy}} is defined in Definition
 \ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
 explained in Algorithm \ref{algo-grandpa-best-candidate}.
 
-\custombinding{11}{\noindent}\begin{tabular}{l}
+\custombinding{12}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  11. }
+  \tmtextbf{Algorithm  12. }
   \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1623,9 +1686,9 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\custombinding{12}{\noindent}\begin{tabular}{l}
+\custombinding{13}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  12. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextbf{Algorithm  13. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
