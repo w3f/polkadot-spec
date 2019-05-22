@@ -289,11 +289,47 @@
 
   Runtime is the code implementing the logic of the chain. This code is
   decoupled from the Polkadot RE to make the Runtime easily upgradable
-  without the need to upgrade the Polkadot RE itself. In this section, we
-  describe the details upon which the Polkadot RE is interacting with the
-  Runtime.
+  without the need to upgrade the Polkadot RE itself. The general procedure
+  to interact with runtime is described in Algorithm
+  <reference|algo-runtime-interaction>.
 
-  <subsection|Loading the Runtime code \ \ >
+  <\algorithm>
+    <label|algo-runtime-interaction><name|Interact-With-Runtime>(<math|F>:
+    the runtime entry,\ 
+
+    <math|H<rsub|b><around*|(|B|)>>: Block hash indicating the state at the
+    end of <math|B>,\ 
+
+    <math|A<rsub|1>,A<rsub|2>,\<ldots\>,A<rsub|n>>: arguments to be passed to
+    the runtime entry)
+  <|algorithm>
+    <\algorithmic>
+      <\state>
+        <name|<math|\<cal-S\><rsub|B>\<leftarrow\>>Storage-At-State(<math|H<rsub|b><around*|(|B|)>>)>
+      </state>
+
+      <\state>
+        <math|A\<leftarrow\>Enc<rsub|SC><around*|(|<around*|(|A<rsub|1>,\<ldots\>,A<rsub|n>|)>|)>>
+      </state>
+
+      <\state>
+        <math|<text|<name|Call-Runtime-Entry>><around*|(|R<rsub|B>,\<cal-R\>\<cal-E\><rsub|B>,F,A,A<rsub|len>|)>>
+      </state>
+    </algorithmic>
+  </algorithm>
+
+  In this section, we describe the details upon which the Polkadot RE is
+  interacting with the Runtime. In particular <name|Storage-At-State> and
+  <name|Call-Runtime-Entry> procedures called in Algorithm
+  <reference|algo-runtime-interaction> are explained in Notation
+  <reference|nota-call-into-runtime> and Definition
+  <reference|defn-storage-at-state> respectively. <math|R<rsub|B>> is the
+  runtime code loaded from <math|\<cal-S\><rsub|B>> as described in Notation
+  <reference|nota-runtime-code-at-state> and
+  <math|\<cal-R\>\<cal-E\><rsub|B>> is the Polkadot RE API described in
+  Notation <reference|nota-re-api-at-state>.
+
+  <subsection|Loading the Runtime code \ \ ><label|sect-loading-runtime-code>
 
   Polkadot RE expects to receive the code for the runtime of the chain as a
   compiled WebAssembly (Wasm) Blob. The current runtime is stored in the
@@ -305,8 +341,17 @@
 
   which is the byte array of ASCII representation of string \P:code\Q (see
   Section <reference|sect-predef-storage-keys>). For any call to the runtime,
-  Polkadot RE makes sure that it has the most updated Runtime as calls to
-  runtime have potentially the ability to change the runtime code.
+  Polkadot RE makes sure that it has the Runtime corresponding to the state
+  in which the entry has been called. This is in part because calls to
+  runtime have potentially the ability to change the runtime code and hence
+  runtime code is state sensetive. Accordingly we introduce the following
+  notation to refer to the runtime code at a specific state:
+
+  <\notation>
+    <label|nota-runtime-code-at-state>By <math|R<rsub|B>> we refer to the
+    Runtime code stored in the state storage whose state is set at the end of
+    execution of block <math|B>.
+  </notation>
 
   The initial runtime code of the chain is embedded as an extrinsics into the
   chain initialization JSON file and is submitted to Polkadot RE (see Section
@@ -331,7 +376,7 @@
     <label|nota-call-into-runtime> By
 
     <\equation*>
-      <text|<name|Call-Runtime-Entry>><around*|(|<text|<verbatim|Runtime-Entry>>,A<rsub|1>,A<rsub|2>,\<ldots\>,A<rsub|n>|)>
+      <text|<name|Call-Runtime-Entry>><around*|(|R,\<cal-R\>\<cal-E\>,<text|<verbatim|Runtime-Entry>>,A,A<rsub|len>|)>
     </equation*>
 
     we refer to the task using the execuping me cherie when the edits are
@@ -1786,8 +1831,8 @@
   </definition>
 
   <\definition>
-    <label|defn-grandpa-justification>The <strong|justification for block B in
-    round <math|r>> of GRANDPA protocol defined
+    <label|defn-grandpa-justification>The <strong|justification for block B
+    in round <math|r>> of GRANDPA protocol defined
     <math|J<rsup|r><around*|(|B|)>> is a vector of pairs of the type:
 
     <\equation*>
@@ -2182,13 +2227,23 @@
 
   <section|Runtime upgrade><label|sect-runtime-upgrade>
 
-  <appendix|Runtime API<label|sect-runtime-api>>
+  <appendix|Runtime Environment API<label|sect-re-api>>
 
-  Runtime API is a set of functions that Polkadot RE exposes to Runtime to
-  access external functions needed for various reasons, such as Storage of
-  content, access and manipulation, memory allocation, and also efficiency.
-  The functions are specified in each subsequent subsection for each category
-  of those functions.
+  Runtime Environment API is a set of functions that Polkadot RE exposes to
+  Runtime to access external functions needed for various reasons, such as
+  Storage of content, access and manipulation, memory allocation, and also
+  efficiency. We introduce notation \ the result of some of the API functions
+  depends on the content of state storage.
+
+  <\notation>
+    <label|nota-re-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we refer
+    to the API exposed by Polkadot RE which interact, manipulate and response
+    based on the state storage whose state is set at the end of execution of
+    block <math|B>.
+  </notation>
+
+  \ The functions are specified in each subsequent subsection for each
+  category of those functions.
 
   <subsection|Storage>
 
@@ -2853,17 +2908,18 @@
 
 <\references>
   <\collection>
-    <associate|alg-grandpa-round|<tuple|11|20>>
-    <associate|alg-join-leave-grandpa|<tuple|10|20>>
-    <associate|algo-aggregate-key|<tuple|2|10>>
-    <associate|algo-block-production|<tuple|8|16>>
-    <associate|algo-block-production-lottery|<tuple|6|15>>
-    <associate|algo-build-block|<tuple|5|?>>
-    <associate|algo-epoch-randomness|<tuple|9|16>>
-    <associate|algo-grandpa-best-candidate|<tuple|12|20>>
-    <associate|algo-pk-length|<tuple|3|11>>
-    <associate|algo-slot-time|<tuple|7|15>>
-    <associate|algo-validate-transactions|<tuple|4|13>>
+    <associate|alg-grandpa-round|<tuple|12|20>>
+    <associate|alg-join-leave-grandpa|<tuple|11|20>>
+    <associate|algo-aggregate-key|<tuple|3|10>>
+    <associate|algo-block-production|<tuple|9|16>>
+    <associate|algo-block-production-lottery|<tuple|7|15>>
+    <associate|algo-build-block|<tuple|6|13>>
+    <associate|algo-epoch-randomness|<tuple|10|17>>
+    <associate|algo-grandpa-best-candidate|<tuple|13|20>>
+    <associate|algo-pk-length|<tuple|4|11>>
+    <associate|algo-runtime-interaction|<tuple|1|?>>
+    <associate|algo-slot-time|<tuple|8|16>>
+    <associate|algo-validate-transactions|<tuple|5|13>>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|3.2.1|4>>
     <associate|auto-11|<tuple|3.2.2|4>>
@@ -2965,39 +3021,41 @@
     <associate|bib-saarinen_blake2_2015|<tuple|SA15|30>>
     <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|30>>
     <associate|block|<tuple|2.1|2>>
-    <associate|defn-block-header-hash|<tuple|14|3>>
-    <associate|defn-grandpa-justification|<tuple|51|19>>
-    <associate|defn-path-graph|<tuple|2|1>>
-    <associate|defn-vote|<tuple|42|17>>
-    <associate|defn-account-key|<tuple|29|13>>
-    <associate|defn-babe-header|<tuple|39|16>>
+    <associate|defn-account-key|<tuple|30|13>>
+    <associate|defn-babe-header|<tuple|40|16>>
     <associate|defn-bit-rep|<tuple|6|1>>
-    <associate|defn-block-header|<tuple|13|?>>
-    <associate|defn-block-time|<tuple|37|15>>
+    <associate|defn-block-header|<tuple|13|3>>
+    <associate|defn-block-header-hash|<tuple|14|3>>
+    <associate|defn-block-time|<tuple|38|15>>
     <associate|defn-block-tree|<tuple|10|2>>
     <associate|defn-chain-subchain|<tuple|11|2>>
-    <associate|defn-children-bitmap|<tuple|26|12>>
-    <associate|defn-epoch-subchain|<tuple|34|14>>
-    <associate|defn-grandpa-completable|<tuple|49|19>>
-    <associate|defn-hex-encoding|<tuple|59|23>>
-    <associate|defn-index-function|<tuple|23|10>>
+    <associate|defn-children-bitmap|<tuple|27|12>>
+    <associate|defn-epoch-subchain|<tuple|35|15>>
+    <associate|defn-grandpa-completable|<tuple|50|19>>
+    <associate|defn-grandpa-justification|<tuple|52|19>>
+    <associate|defn-hex-encoding|<tuple|60|23>>
+    <associate|defn-index-function|<tuple|24|10>>
     <associate|defn-little-endian|<tuple|7|1>>
-    <associate|defn-merkle-value|<tuple|28|12>>
-    <associate|defn-node-header|<tuple|25|11>>
-    <associate|defn-node-key|<tuple|22|10>>
-    <associate|defn-node-subvalue|<tuple|27|12>>
-    <associate|defn-node-value|<tuple|24|11>>
-    <associate|defn-nodetype|<tuple|20|10>>
+    <associate|defn-merkle-value|<tuple|29|12>>
+    <associate|defn-node-header|<tuple|26|11>>
+    <associate|defn-node-key|<tuple|23|10>>
+    <associate|defn-node-subvalue|<tuple|28|12>>
+    <associate|defn-node-value|<tuple|25|11>>
+    <associate|defn-nodetype|<tuple|21|10>>
+    <associate|defn-path-graph|<tuple|2|1>>
     <associate|defn-radix-tree|<tuple|3|1>>
-    <associate|defn-sc-len-encoding|<tuple|58|22>>
-    <associate|defn-scale-byte-array|<tuple|53|21>>
-    <associate|defn-scale-list|<tuple|55|22>>
-    <associate|defn-scale-tuple|<tuple|54|22>>
-    <associate|defn-slot-offset|<tuple|38|15>>
-    <associate|defn-stored-value|<tuple|17|8>>
+    <associate|defn-sc-len-encoding|<tuple|59|22>>
+    <associate|defn-scale-byte-array|<tuple|54|21>>
+    <associate|defn-scale-list|<tuple|56|22>>
+    <associate|defn-scale-tuple|<tuple|55|22>>
+    <associate|defn-slot-offset|<tuple|39|16>>
+    <associate|defn-stored-value|<tuple|18|8>>
+    <associate|defn-vote|<tuple|43|17>>
     <associate|key-encode-in-trie|<tuple|1|9>>
-    <associate|nota-call-into-runtime|<tuple|15|4>>
-    <associate|note-slot|<tuple|33|14>>
+    <associate|nota-call-into-runtime|<tuple|16|4>>
+    <associate|nota-re-api-at-state|<tuple|61|?>>
+    <associate|nota-runtime-code-at-state|<tuple|15|?>>
+    <associate|note-slot|<tuple|34|14>>
     <associate|sect-blake2|<tuple|9.2|21>>
     <associate|sect-encoding|<tuple|10|21>>
     <associate|sect-entries-into-runtime|<tuple|3|3>>
@@ -3005,11 +3063,13 @@
     <associate|sect-genisis-block|<tuple|11|23>>
     <associate|sect-hash-functions|<tuple|9.1|21>>
     <associate|sect-int-encoding|<tuple|10.1.1|22>>
+    <associate|sect-loading-runtime-code|<tuple|3.1|?>>
     <associate|sect-merkl-proof|<tuple|5.4|12>>
     <associate|sect-message-detail|<tuple|4.4|7>>
     <associate|sect-message-transactions|<tuple|4.4.1|7>>
     <associate|sect-predef-storage-keys|<tuple|12|23>>
     <associate|sect-randomness|<tuple|9.3|21>>
+    <associate|sect-re-api|<tuple|A|?>>
     <associate|sect-runtime-api|<tuple|A|23>>
     <associate|sect-runtime-api-auth|<tuple|3.3.2|6>>
     <associate|sect-runtime-entries|<tuple|3.3|5>>
@@ -3019,7 +3079,7 @@
     <associate|sect-send-args-to-runtime|<tuple|3.2.2|4>>
     <associate|sect-validate-transaction|<tuple|3.3.5|6>>
     <associate|sect-vrf|<tuple|9.4|21>>
-    <associate|slot-time-cal-tail|<tuple|36|15>>
+    <associate|slot-time-cal-tail|<tuple|37|15>>
     <associate|snippet-runtime-enteries|<tuple|1|5>>
     <associate|tabl-message-types|<tuple|3|7>>
   </collection>
@@ -3191,11 +3251,8 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-38>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc><with|color|<quote|dark
-      red>|Buildng ><with|color|<quote|dark
-      green>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>>Blocks<with|color|<quote|dark
-      red>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>><with|color|<quote|dark
-      green>| Building Process>> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|7<space|2spc>Blocks
+      Building Process> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-39><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|8<space|2spc>Consensus
