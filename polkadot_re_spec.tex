@@ -72,15 +72,15 @@
   {\Large Protocol Specification}
 }
 
-\date{May 17, 2019}
+\date{May 23, 2019}
 
 \maketitle
 
 \section{Conventions and Definitions}
 
 \begin{definition}
-  {\tmstrong{Runtime}} is the state transition function of the decentralized
-  ledger protocol.\tmverbatim{}
+  \label{defn-runtime}{\tmstrong{Runtime}} is the state transition function of
+  the decentralized ledger protocol.\tmverbatim{}
 \end{definition}
 
 \begin{definition}
@@ -283,21 +283,63 @@ contains the following parts:
 
 \section{Interactions with the Runtime}\label{sect-entries-into-runtime}
 
-Runtime is the code implementing the logic of the chain. This code is
-decoupled from the Polkadot RE to make the Runtime easily upgradable without
-the need to upgrade the Polkadot RE itself. In this section, we describe the
-details upon which the Polkadot RE is interacting with the Runtime.
+Runtime as defined in Definition \ref{defn-runtime} is the code implementing
+the logic of the chain. This code is decoupled from the Polkadot RE to make
+the Runtime easily upgradable without the need to upgrade the Polkadot RE
+itself. The general procedure to interact with Runtime is described in
+Algorithm \ref{algo-runtime-interaction}.
 
-\subsection{Loading the Runtime code \ \ }
+\custombinding{1}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  1. }
+  \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$: the
+  runtime entry,
+  
+  $H_b (B)$: Block hash indicating the state at the end of $B$,
+  
+  $A_1, A_2, \ldots, A_n$: arguments to be passed to the runtime entry)\\
+  \hline
+\end{tabular}
 
-Polkadot RE expects to receive the code for the runtime of the chain as a
+{\algorithmic{{\state{{\tmname{$\mathcal{S}_B \leftarrow$Storage-At-State($H_b
+(B)$)}}}}
+
+{\state{$A \leftarrow \tmop{Enc}_{\tmop{SC}} ((A_1, \ldots, A_n))$}}
+
+{\state{$\text{{\tmname{Call-Runtime-Entry}}} (R_B, \mathcal{R}\mathcal{E}_B,
+F, A, A_{\tmop{len}})$}}}}
+
+\hrulefill{\medskip}
+
+In this section, we describe the details upon which the Polkadot RE is
+interacting with the Runtime. In particular, {\tmname{Storage-At-State}} and
+{\tmname{Call-Runtime-Entry}} procedures called in Algorithm
+\ref{algo-runtime-interaction} are explained in Notation
+\ref{nota-call-into-runtime} and Definition \ref{defn-storage-at-state}
+respectively. $R_B$ is the Runtime code loaded from $\mathcal{S}_B$, as
+described in Notation \ref{nota-runtime-code-at-state}, and
+$\mathcal{R}\mathcal{E}_B$ is the Polkadot RE API, as described in Notation
+\ref{nota-re-api-at-state}.
+
+\subsection{Loading the Runtime Code \ \ }\label{sect-loading-runtime-code}
+
+Polkadot RE expects to receive the code for the Runtime of the chain as a
 compiled WebAssembly (Wasm) Blob. The current runtime is stored in the state
 database under the key represented as a byte array:
 \[ b \assign \text{3A,63,6F,64,65} \]
 which is the byte array of ASCII representation of string ``:code'' (see
-Section \ref{sect-predef-storage-keys}). For any call to the runtime, Polkadot
-RE makes sure that it has the most updated Runtime as calls to runtime have
-potentially the ability to change the runtime code.
+Section \ref{sect-predef-storage-keys}). For any call to the Runtime, Polkadot
+RE makes sure that it has the Runtime corresponding to the state in which the
+entry has been called. This is, in part, because the calls to Runtime have
+potentially the ability to change the Runtime code and hence Runtime code is
+state sensitive. Accordingly, we introduce the following notation to refer to
+the Runtime code at a specific state:
+
+\begin{notation}
+  \label{nota-runtime-code-at-state}By $R_B$, we refer to the Runtime code
+  stored in the state storage whose state is set at the end of the execution
+  of block $B$.
+\end{notation}
 
 The initial runtime code of the chain is embedded as an extrinsics into the
 chain initialization JSON file and is submitted to Polkadot RE (see Section
@@ -320,8 +362,8 @@ access the runtime.
 
 \begin{notation}
   \label{nota-call-into-runtime} By
-  \[ \text{{\tmname{Call-Runtime-Entry}}} \left(
-     \text{\tmverbatim{Runtime-Entry}}, A_1, A_2, \ldots, A_n \right) \]
+  \[ \text{{\tmname{Call-Runtime-Entry}}} \left( R, \mathcal{R}\mathcal{E},
+     \text{\tmverbatim{Runtime-Entry}}, A, A_{\tmop{len}} \right) \]
   we refer to the task using the execuping me cherie when the edits are
   readytor to invoke the \tmverbatim{Runtime-Entry} while passing an $A_1,
   \ldots, A_n$ argument to it and using the encoding described in Section
@@ -582,9 +624,9 @@ process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-\custombinding{1}{\noindent}\begin{tabular}{l}
+\custombinding{2}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  1. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  \tmtextbf{Algorithm  2. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
   (B)$)}}\\
   \hline
 \end{tabular}
@@ -774,9 +816,9 @@ Assuming that $P_N$ is the path (see Definition \ref{defn-path-graph}) from
 the Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
 demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
-\custombinding{2}{\noindent}\begin{tabular}{l}
+\custombinding{3}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  2. }
+  \tmtextbf{Algorithm  3. }
   \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
   = N_1, \ldots, N_j = N))$\\
   \hline
@@ -869,9 +911,9 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
   \tmop{Head}_{N, l}$ bytes are determined by Algorithm \ref{algo-pk-length}.
 \end{definition}
 
-\custombinding{3}{\noindent}\begin{tabular}{l}
+\custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  3. }
+  \tmtextbf{Algorithm  4. }
   \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
   1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
   \hline
@@ -894,7 +936,7 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 {\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + 63$}}
 
-{\state{$l \leftarrow \| \tmop{pk}_N \|_{\tmop{nib}} - 62$}}
+{\state{$l \leftarrow \| \tmop{pk}_N \|_{\tmop{nib}} - 63$}}
 
 {\state{$i \leftarrow 2$}}
 
@@ -906,7 +948,7 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 {\state{$i \leftarrow i + 1 \END$}}
 
-{\state{$\tmop{Head}_{N, i} \leftarrow l - 1$}}
+{\state{$\tmop{Head}_{N, i} \leftarrow l$}}
 
 {\state{{\RETURN{$\tmop{Head}_N$}}}}}}
 
@@ -1013,9 +1055,9 @@ transactions message into individual extrinsics and runs Algorithm
 \ref{algo-validate-transactions} to validate and store them to include them
 into future blocks.
 
-\custombinding{4}{\noindent}\begin{tabular}{l}
+\custombinding{5}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  4. }
+  \tmtextbf{Algorithm  5. }
   \label{algo-validate-transactions}{\tmname{Validate-Extrinsics-and-Store}}($L$:
   list of extrinsics)\\
   \hline
@@ -1047,9 +1089,9 @@ The blocks building process is triggered by Algorithm
 \ref{algo-block-production} of the consensus engine which runs Alogrithm
 \ref{algo-build-block}.
 
-\custombinding{5}{\noindent}\begin{tabular}{l}
+\custombinding{6}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  5. }
+  \tmtextbf{Algorithm  6. }
   \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
   at its head the block to be constructed,
   
@@ -1188,9 +1230,9 @@ build a block. The $\tmop{sk}$ is the block producer lottery secret key and
 $n$ is the index of epoch for whose slots the block producer is running the
 lottery.
 
-\custombinding{6}{\noindent}\begin{tabular}{l}
+\custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  6. }
+  \tmtextbf{Algorithm  7. }
   \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}$(\tmop{sk}^{},
   n)$\\
   \hline
@@ -1253,9 +1295,9 @@ formalized in Definition \ref{defn-slot-offset}.
   {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
+\custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  7. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
+  \tmtextbf{Algorithm  8. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
   the number of the slots whose time needs to be determined)\\
   \hline
 \end{tabular}
@@ -1306,9 +1348,9 @@ alongside with the {\tmem{babe header}} defined in Definition
   \ 
 \end{definition}
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
+\custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  8. }
+  \tmtextbf{Algorithm  9. }
   \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
   pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
   \hline
@@ -1343,9 +1385,9 @@ lottery in epoch $\mathcal{E}_{n + 2}$. The computation of the seed is
 described in Algorithm \ref{algo-epoch-randomness} which uses the concept of
 epoch subchain described in Definition \ref{defn-epoch-subchain}.
 
-\custombinding{9}{\noindent}\begin{tabular}{l}
+\custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  9. }
+  \tmtextbf{Algorithm  10. }
   \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
   index)\\
   \hline
@@ -1594,9 +1636,9 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{10}{\noindent}\begin{tabular}{l}
+\custombinding{11}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  10. }
+  \tmtextbf{Algorithm  11. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -1618,9 +1660,9 @@ needs to be incremented.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-\custombinding{11}{\noindent}\begin{tabular}{l}
+\custombinding{12}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  11. }
+  \tmtextbf{Algorithm  12. }
   \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
@@ -1664,9 +1706,9 @@ The condition of {\tmem{completablitiy}} is defined in Definition
 \ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
 explained in Algorithm \ref{algo-grandpa-best-candidate}.
 
-\custombinding{12}{\noindent}\begin{tabular}{l}
+\custombinding{13}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  12. }
+  \tmtextbf{Algorithm  13. }
   \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1686,9 +1728,9 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\custombinding{13}{\noindent}\begin{tabular}{l}
+\custombinding{14}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  13. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextbf{Algorithm  14. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
@@ -1876,13 +1918,24 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
 
 \section{Runtime upgrade}\label{sect-runtime-upgrade}
 
-\appendix\section{Runtime API\label{sect-runtime-api}}
+\appendix\section{Runtime Environment API\label{sect-re-api}}
 
-Runtime API is a set of functions that Polkadot RE exposes to Runtime to
-access external functions needed for various reasons, such as Storage of
-content, access and manipulation, memory allocation, and also efficiency. The
-functions are specified in each subsequent subsection for each category of
-those functions.
+The Runtime Environment API is a set of functions that Polkadot RE exposes to
+Runtime to access external functions needed for various reasons, such as the
+Storage of the content, access and manipulation, memory allocation, and also
+efficiency. We introduce Notation \ref{nota-re-api-at-state} to emphasize that
+the result of some of the API functions depends on the content of state
+storage.
+
+\begin{notation}
+  \label{nota-re-api-at-state}By $\mathcal{R}\mathcal{E}_B$ we refer to the
+  API exposed by Polkadot RE which interact, manipulate and response based on
+  the state storage whose state is set at the end of the execution of block
+  $B$.
+\end{notation}
+
+The functions are specified in each subsequent subsection for each category
+of those functions.
 
 \subsection{Storage}
 
