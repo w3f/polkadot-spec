@@ -914,12 +914,20 @@
       </state>
 
       <\state>
-        <math|pk<rsup|Agr><rsub|N>\<leftarrow\>pk<rsup|Agr><rsub|N><around*|\|||\|>pk<rsub|N>
+        <math|pk<rsup|Agr><rsub|N>\<leftarrow\>pk<rsup|Agr><rsub|N><around*|\|||\|>pk<rsub|N<rsub|i>>
         >
       </state>
 
       <\state>
-        <math|pk<rsup|Agr><rsub|N>\<leftarrow\>pk<rsup|Agr><rsub|N><around*|\|||\|>Index<rsub|N<rsub|i>><around*|(|N<rsub|i+1>|)>><END>
+        <math|pk<rsup|Agr><rsub|N>\<leftarrow\>pk<rsup|Agr><rsub|N><around*|\|||\|>Index<rsub|N<rsub|i>><around*|(|N<rsub|i+1>|)>>
+      </state>
+
+      <\state>
+        <math|i\<leftarrow\>i+1><END>
+      </state>
+
+      <\state>
+        <math|pk<rsup|Agr><rsub|N>\<leftarrow\>pk<rsup|Agr><rsub|N><around*|\|||\|>pk<rsub|N<rsub|i>>>
       </state>
 
       <\state>
@@ -955,7 +963,8 @@
 
   <\definition>
     <label|defn-node-header>The <strong|node header> of node <math|N>,
-    <math|Head<rsub|N>>, consists of <math|l\<geqslant\>1> bytes
+    <math|Head<rsub|N>>, consists of <math|l+1\<geqslant\>1> bytes
+    <math|Head<rsub|N,1>,\<ldots\>,Head<rsub|N,l+1>> such that:
 
     \;
 
@@ -994,7 +1003,7 @@
 
     In which <strong|<math|<around*|\<\|\|\>|pk<rsub|N>|\<\|\|\>><rsub|nib>>>
     is the length of <math|pk<rsub|N> > in number nibbles.
-    <math|Head<rsub|N,2>,\<ldots\>,Head<rsub|N,l>> bytes are determined by
+    <math|Head<rsub|N,2>,\<ldots\>,Head<rsub|N,l+1>> bytes are determined by
     Algorithm <reference|algo-pk-length>.
   </definition>
 
