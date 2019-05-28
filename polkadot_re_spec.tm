@@ -853,17 +853,18 @@
     <strong|<math|pk<rsub|N><rsup|Agr>>>, aggregated by Algorithm
     <reference|algo-aggregate-key> and a <strong|partial key>,
     <strong|<math|pk<rsub|N>>> of length <math|0\<leqslant\>l<rsub|pk<rsub|N>>\<leqslant\>65535>
-    such that:
+    in nibbles such that:
 
     <\equation*>
       pk<rsub|N>\<assign\><around|(|k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
     </equation*>
 
-    where <math|pk<rsub|N>> is a suffix subsequence of <math|k<rsub|N>>; and
+    where <math|pk<rsub|N>> is a suffix subsequence of <math|k<rsub|N>>;
+    <math|i> is the length of <math|pk<rsub|N><rsup|Agr>> in nibbles and so
     we have:
 
     <\equation*>
-      KeyEncode<around|(|k<rsub|N>|)>=pk<rsub|N><rsup|Agr>\|pk<rsub|N>=<around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|i-1>>,k<rsub|enc<rsub|i>>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
+      KeyEncode<around|(|k<rsub|N>|)>=pk<rsub|N><rsup|Agr><around*|\|||\|>pk<rsub|N>=<around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|i-1>>,k<rsub|enc<rsub|i>>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
     </equation*>
   </definition>
 
@@ -3079,7 +3080,7 @@
     <associate|sect-message-transactions|<tuple|4.4.1|8>>
     <associate|sect-predef-storage-keys|<tuple|12|24>>
     <associate|sect-randomness|<tuple|9.3|22>>
-    <associate|sect-re-api|<tuple|SA15|24>>
+    <associate|sect-re-api|<tuple|A|24>>
     <associate|sect-runtime-api-auth|<tuple|3.3.2|7>>
     <associate|sect-runtime-entries|<tuple|3.3|6>>
     <associate|sect-runtime-return-value|<tuple|3.2.3|5>>
