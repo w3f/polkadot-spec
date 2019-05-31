@@ -1,11 +1,11 @@
-[submodule "parity-codec"]
-	path = implementations/rust/parity-codec
-	url = https://github.com/paritytech/parity-codec
 [submodule "implementations/rust/parity-codec"]
 	path = implementations/rust/parity-codec
 	url = https://github.com/paritytech/parity-codec
 [submodule "implementations/go/gossamer"]
 	path = implementations/go/gossamer
 	url = https://github.com/ChainSafeSystems/gossamer
-[submodule "go-pre"]
 	branch = development
+[submodule "parity-trie"]
+	path = implementations/rust/trie
+	url = https://github.com/cheme/trie
+	branch = n_ext_trie

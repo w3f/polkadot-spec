@@ -17,50 +17,29 @@
 
 // this file provide a command line interface to call scale codec go library
 
-package main
+package go_tester
 
 import (
 	"../../../../implementations/go/gossamer/codec"
+	"/home/klaymen/doc/code/polkadot-re-tests/implementations/go/gossamer/codec"
 	"bytes"
-	"encoding/hex"
 	"flag"
 	"fmt"
 	"os"
 )
 
-func csvHexPrinter(encodedText []byte) {
-	hexEncoded := make([]byte, hex.EncodedLen(len(encodedText)))
-	hex.Encode(hexEncoded, encodedText)
+func ProcessScaleCodecCommand(scale_codec_command *flag.FlagSet, scale_codec_args []string) {
+	//here we need to parse the args related to scale_codec
 
-	bihexcode := make([]byte, 2)
-	for i, c := range hexEncoded {
-		if i%2 == 0 {
-			bihexcode[0] = c
-		} else {
-			bihexcode[1] = c
-			if bihexcode[0] == '0' {
-				fmt.Printf("%c", bihexcode[1])
-			} else {
-				fmt.Printf("%s", bihexcode)
-			}
-			if i < len(hexEncoded)-1 {
-				fmt.Printf(", ")
-			}
-		}
-	}
-}
-
-func main() {
 	// Subcommands
 	encodeCommand := flag.NewFlagSet("encode", flag.ExitOnError)
 
-	// encod subcommand flag pointers
+	// encode subcommand flag pointers
 	inputTextPtr := encodeCommand.String("input", "", "Text to parse. (Required)")
 
 	// Verify that a subcommand has been provided
-	// os.Arg[0] is the main command
-	// os.Arg[1] will be the subcommand
-	if len(os.Args) < 2 {
+	// scale_codec_args[0] is the subcommand
+	if len(scale_codec_args) < 1 {
 		fmt.Println("encode or decode subcommand is required")
 		os.Exit(1)
 	}
@@ -68,9 +47,9 @@ func main() {
 	// Switch on the subcommand
 	// Parse the flags for appropriate FlagSet
 	// os.Args[2:] will be all arguments starting after the subcommand at os.Args[1]
-	switch os.Args[1] {
+	switch scale_codec_args[0] {
 	case "encode":
-		encodeCommand.Parse(os.Args[2:])
+		encodeCommand.Parse(scale_codec_args[1:])
 	default:
 		flag.PrintDefaults()
 		os.Exit(1)
@@ -96,7 +75,7 @@ func main() {
 		encodedText := buffer.Bytes()
 
 		fmt.Printf("encoded %s: [", *inputTextPtr)
-		csvHexPrinter(encodedText)
+		util.csvHexPrinter(encodedText)
 		fmt.Printf("]\n")
 	}
 
