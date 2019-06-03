@@ -17,19 +17,23 @@
 
 // this file provide a command line interface to call scale codec go library
 
-package go_tester
+package main
 
 import (
 	"flag"
 	"fmt"
 	"os"
 )
+import (
+	"runtime"
+)
 
 func main() {
 
+	runtime.Breakpoint()
 	// Subcommands
 	codecCommand := flag.NewFlagSet("scale-codec", flag.ExitOnError)
-	trieCommand := flag.NewFlagSet("trie", flag.ExitOnError)
+	//trieCommand := flag.NewFlagSet("trie", flag.ExitOnError)
 
 	// Verify that a subcommand has been provided
 	// os.Arg[0] is the main command
@@ -44,7 +48,7 @@ func main() {
 	// Parse the flags for appropriate FlagSet
 	// os.Args[2:] will be all arguments starting after the subcommand at os.Args[1]
 	switch os.Args[1] {
-	case "scale-code":
+	case "scale-codec":
 		ProcessScaleCodecCommand(codecCommand, os.Args[2:])
 	default:
 		flag.PrintDefaults()

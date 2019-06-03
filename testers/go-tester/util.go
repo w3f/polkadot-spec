@@ -1,7 +1,6 @@
-package go_tester
+package main
 
 import (
-	"bytes"
 	"encoding/hex"
 	"fmt"
 )

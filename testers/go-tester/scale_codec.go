@@ -17,11 +17,10 @@
 
 // this file provide a command line interface to call scale codec go library
 
-package go_tester
+package main
 
 import (
-	"../../../../implementations/go/gossamer/codec"
-	"/home/klaymen/doc/code/polkadot-re-tests/implementations/go/gossamer/codec"
+	"../../../implementations/go/gossamer/codec"
 	"bytes"
 	"flag"
 	"fmt"
@@ -75,7 +74,7 @@ func ProcessScaleCodecCommand(scale_codec_command *flag.FlagSet, scale_codec_arg
 		encodedText := buffer.Bytes()
 
 		fmt.Printf("encoded %s: [", *inputTextPtr)
-		util.csvHexPrinter(encodedText)
+		csvHexPrinter(encodedText)
 		fmt.Printf("]\n")
 	}
 
