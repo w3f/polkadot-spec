@@ -1,0 +1,43 @@
+version: 2
+
+jobs:
+  runTests:
+    docker:
+      - image: rust:1.33-slim
+    steps:
+      - checkout
+      - run:
+          name: install deps
+          environment:
+            GOLANG_VERSION: "1.12.3"
+            JULIA_VERSION_LONG: "1.1.0"
+            JULIA_VERSION_SHORT: "1.1"
+          command: |
+            apt update && apt install -y --no-install-recommends \
+              build-essential \
+              cmake \
+              git \
+              wget
+
+            wget https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz
+            tar -C /usr/local -xzf go$GOLANG_VERSION.linux-amd64.tar.gz
+            mkdir -p ${HOME}/go/{src,bin}
+            echo 'export PATH=$PATH:/usr/local/go/bin' >> $BASH_ENV
+
+            wget https://julialang-s3.julialang.org/bin/linux/x64/${JULIA_VERSION_SHORT}/julia-${JULIA_VERSION_LONG}-linux-x86_64.tar.gz
+            tar -xzf julia-${JULIA_VERSION_LONG}-linux-x86_64.tar.gz
+            ln -s $(pwd)/julia-${JULIA_VERSION_LONG}/bin/julia /usr/local/bin/julia
+
+      - run:
+          name: run tests
+          command: |
+            ./run_tests.sh
+
+workflows:
+  version: 2
+  tests:
+    jobs:
+      - runTests:
+          filters:
+            tags:
+              only: /.*/
