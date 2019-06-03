@@ -17,9 +17,10 @@ const test_byte_arrays = [b"1", b"22", b"333", b"1234", b"abcdefghijklmnopqrstuv
                         enough."""
                     ]
 #reference implementation to be first
-const cli_scale_encoders = ["../build/bin/usr/local/bin/scale_codec", 
-                            "../build/bin/usr/local/bin/scale_codec_go"]
-
+const cli_testers = ["../build/bin/usr/local/bin/go_tester", #"../build/bin/usr/local/bin/rust-tester", 
+                            "../build/bin/usr/local/bin/go_tester"]
+const scale_codec_test_command = " scale-codec";
+const scale_codec_encode_subcommand = " encode";
 
 const reference_implementation = 1
 end
