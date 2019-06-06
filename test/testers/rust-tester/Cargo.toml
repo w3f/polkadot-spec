@@ -6,11 +6,10 @@ edition = "2018"
 
 [dependencies]
 base64 = "*"
-clap = "*"
+clap = {version = "~2.27.0", features = ["yaml"]}
 data-encoding = "*"
-parity-codec={path = "../../../implementations/rust/parity-codec"}
-
+parity-scale-codec={path = "../../../implementations/rust/parity-codec"}
 
 [[bin]]
-name = "scale_codec"
-path = "src/scale_codec.rs"
+name = "rust_tester"
+path = "src/main.rs"

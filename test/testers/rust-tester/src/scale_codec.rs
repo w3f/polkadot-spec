@@ -13,41 +13,25 @@
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+// along with Polkadot RE Test Suite.  If not, see <https://www.gnu.org/licenses/>.
+
+///This file is an interface to run Parity implementation of SCALE codec.
 
 extern crate clap;
 extern crate data_encoding;
-
-use data_encoding::{HEXLOWER};
-///This file is an interface to run Parity implementation of SCALE codec.
-
-//use std::process;
 extern crate base64;
-use parity_codec::{Encode, Decode, HasCompact, Compact, EncodeAsRef, CompactAs};
-use clap::{Arg, ArgMatches, App, SubCommand};
+
+use parity_scale_codec::{Encode, Decode, HasCompact, Compact, EncodeAsRef, CompactAs};
+use clap::{ArgMatches};
+
 fn encode(matches: &ArgMatches) {
     let scale_encoded_value = matches.value_of("input").unwrap().encode();
-    //let hex_encoded_value = HEXLOWER.encode(scale_encoded_value);
-    
     println!("encoded {}: {:x?}", matches.value_of("input").unwrap(), &scale_encoded_value);
 }
 
-fn main() {
-    let matches = App::new("SCALE codec tester")
-        .version("0.1")
-        .about("Simple SCALE CLI enocder/decoder")
-        .subcommand(SubCommand::with_name("encode")
-                    .about("Encode input using SCALE codec")
-                    .arg(Arg::with_name("input")
-                         .long("input")
-                         .short("i")
-                         .required(true)
-                         .value_name("INPUT_VALUE")
-                         .help("the value to be encoded")))
-        .get_matches();
-
-    if let Some(matches) = matches.subcommand_matches("encode") {
-        encode(matches);
+pub fn process_scale_codec_command(subcmd_matches: &ArgMatches) {
+    if subcmd_matches.is_present("encode") {
+            encode(subcmd_matches);
     }
 }
 

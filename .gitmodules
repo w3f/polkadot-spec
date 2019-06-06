@@ -1,6 +1,6 @@
 [submodule "implementations/rust/parity-codec"]
 	path = implementations/rust/parity-codec
-	url = https://github.com/paritytech/parity-codec
+	url = https://github.com/paritytech/parity-scale-codec
 [submodule "implementations/go/gossamer"]
 	path = implementations/go/gossamer
 	url = https://github.com/ChainSafeSystems/gossamer

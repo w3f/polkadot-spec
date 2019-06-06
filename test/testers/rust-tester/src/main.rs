@@ -13,25 +13,27 @@
 // GNU General Public License for more details.
 
 // You should have received a copy of the GNU General Public License
-// along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
+// along with Polkadot RE Test Suite.  If not, see <https://www.gnu.org/licenses/>.
 
+///This file is an interface to run various Polkadot RE functions
+
+#[macro_use]
 extern crate clap;
+extern crate data_encoding;
+extern crate base64;
+use clap::{App};
 
-///This file is an interface to run Parity implementation of state trie used in Polkadot RE.
+pub mod scale_codec;
+pub mod trie_tester;
+    
+fn main() {
+    let yaml_data = load_yaml!("cli.yaml");
+    let matches = App::from_yaml(yaml_data).get_matches();
 
-//use trie::{Encode, Decode, HasCompact, Compact, EncodeAsRef, CompactAs};
-use clap::{ArgMatches};
-
-fn compute_state_root(matches: &ArgMatches) {
-    let trie_key_value_file = matches.value_of("state-file").unwrap();
-
-    let state_trie_root = "";
-    println!("state trie root: {:x?}", &state_trie_root);
-}
-
-pub fn process_state_trie_command(subcmd_matches: &ArgMatches) {
-    if subcmd_matches.is_present("state-root") {
-            compute_state_root(subcmd_matches);
+    if let Some(matches) = matches.subcommand_matches("scale-codec") {
+        scale_codec::process_scale_codec_command(matches);
+    } else if let Some(matches) = matches.subcommand_matches("state-trie") {
+        trie_tester::process_state_trie_command(matches);
     }
 }
 

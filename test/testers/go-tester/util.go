@@ -5,6 +5,12 @@ import (
 	"fmt"
 )
 
+//describing the (key, value) data format in the yaml file
+type KeyValueData struct {
+	Keys   []string `yaml:"keys"`
+	Values []string `yaml:"values"`
+}
+
 func csvHexPrinter(encodedText []byte) {
 	hexEncoded := make([]byte, hex.EncodedLen(len(encodedText)))
 	hex.Encode(hexEncoded, encodedText)
