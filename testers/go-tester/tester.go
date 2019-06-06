@@ -24,16 +24,12 @@ import (
 	"fmt"
 	"os"
 )
-import (
-	"runtime"
-)
 
 func main() {
 
-	runtime.Breakpoint()
 	// Subcommands
 	codecCommand := flag.NewFlagSet("scale-codec", flag.ExitOnError)
-	//trieCommand := flag.NewFlagSet("trie", flag.ExitOnError)
+	trieCommand := flag.NewFlagSet("state-trie", flag.ExitOnError)
 
 	// Verify that a subcommand has been provided
 	// os.Arg[0] is the main command
@@ -50,6 +46,8 @@ func main() {
 	switch os.Args[1] {
 	case "scale-codec":
 		ProcessScaleCodecCommand(codecCommand, os.Args[2:])
+	case "state-trie":
+		ProcessStateTrieCommand(trieCommand, os.Args[2:])
 	default:
 		flag.PrintDefaults()
 		os.Exit(1)
