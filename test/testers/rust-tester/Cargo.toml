@@ -9,6 +9,16 @@ base64 = "*"
 clap = {version = "~2.27.0", features = ["yaml"]}
 data-encoding = "*"
 parity-scale-codec={path = "../../../implementations/rust/parity-codec"}
+serde_yaml="*"
+
+# importing blake2s hasher for the trie test
+primitive-types = { version = "0.2", default-features = false, features = ["codec"] }
+hash256-std-hasher = { version = "0.12", default-features = false }
+blake2-rfc = "*"
+
+#trie 
+reference-trie = { path = "../../../implementations/rust/trie/test-support/reference-trie", version = "0.12.2" }
+trie-root = {path = "../../../implementations/rust/trie/trie-root"}
 
 [[bin]]
 name = "rust_tester"

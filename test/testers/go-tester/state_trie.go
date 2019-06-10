@@ -20,12 +20,11 @@
 package main
 
 import (
-	"../../../implementations/go/gossamer/polkadb"
-	"github.com/go-yaml/yaml"
-	"io/ioutil"
-	//"../../../implementations/go/gossamer/trie"
 	"flag"
 	"fmt"
+	"github.com/ChainSafe/gossamer/trie"
+	"github.com/go-yaml/yaml"
+	"io/ioutil"
 	"log"
 	"os"
 	"runtime"
@@ -74,32 +73,31 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			log.Fatal(err)
 		}
 
-		runtime.Breakpoint()
 		err = yaml.Unmarshal(state_data_file, &key_value_data)
 		if err != nil {
 			log.Fatal(err)
 		}
 
+		runtime.Breakpoint()
+
 		fmt.Println(key_value_data.Keys[0])
 		fmt.Println(key_value_data.Values[0])
 
-		db := &Database{
+		db := trie.Database{
 			db: polkadb.NewMemDatabase(),
 		}
-		test_trie := NewEmptyTrie(db)
+		test_trie := trie.NewEmptyTrie(&db)
 
 		for i, key := range key_value_data.Keys {
-			err := test_trie.Put(key, key_value_data.Values[i])
+			err := test_trie.Put([]byte(key), []byte(key_value_data.Values[i]))
 			if err != nil {
-				return nil
+				return
 			}
 		}
 
-		h := test_trie.NewHasher()
-		h.Hash(t.root)
-
+		h := trie.newHasher()
 		fmt.Printf("state root hash: [")
-		csvHexPrinter(h.Hash(t.root))
+		csvHexPrinter(h.Hash(test_trie.root))
 		fmt.Printf("]\n")
 
 	}
