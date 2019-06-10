@@ -20,10 +20,10 @@
 package main
 
 import (
-	"../../../implementations/go/gossamer/codec"
 	"bytes"
 	"flag"
 	"fmt"
+	"github.com/ChainSafe/gossamer/codec"
 	"os"
 )
 

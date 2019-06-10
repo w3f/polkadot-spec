@@ -21,11 +21,14 @@
 extern crate clap;
 extern crate data_encoding;
 extern crate base64;
+
 use clap::{App};
 
 pub mod scale_codec;
 pub mod trie_tester;
-    
+pub mod hash;
+pub mod hasher;
+
 fn main() {
     let yaml_data = load_yaml!("cli.yaml");
     let matches = App::from_yaml(yaml_data).get_matches();
