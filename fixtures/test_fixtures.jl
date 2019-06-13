@@ -1,3 +1,19 @@
+module CommonFixtures
+const cli_testers = ["build/bin/usr/local/bin/rust_tester", 
+                     "build/bin/usr/local/bin/go_tester"]
+
+const reference_implementation = 1
+
+end
+
+ #####                                  #####                              
+#     #  ####    ##   #      ######    #     #  ####  #####  ######  ####  
+#       #    #  #  #  #      #         #       #    # #    # #      #    # 
+ #####  #      #    # #      #####     #       #    # #    # #####  #      
+      # #      ###### #      #         #       #    # #    # #      #      
+#     # #    # #    # #      #         #     # #    # #    # #      #    # 
+ #####   ####  #    # ###### ######     #####   ####  #####  ######  ####  
+
 module ScaleCodecFixtures
 const test_byte_arrays = [b"1", b"22", b"333", b"1234", b"abcdefghijklmnopqrstuvwxyz",
                     b"""A towel, it says, is about the most massively useful  thing  an 
@@ -17,10 +33,26 @@ const test_byte_arrays = [b"1", b"22", b"333", b"1234", b"abcdefghijklmnopqrstuv
                         enough."""
                     ]
 #reference implementation to be first
-const cli_testers = ["build/bin/usr/local/bin/rust_tester", 
-                            "build/bin/usr/local/bin/go_tester"]
 const scale_codec_test_command = " scale-codec";
 const scale_codec_encode_subcommand = " encode";
 
 const reference_implementation = 1
+end
+
+#######                 
+   #    #####  # ###### 
+   #    #    # # #      
+   #    #    # # #####  
+   #    #####  # #      
+   #    #   #  # #      
+   #    #    # # ######
+
+module StateTrieFixtures
+const state_trie_test_command = " state-trie";
+const state_trie_root_subcommand = " trie-root";
+
+const fixture_data_dir = "fixtures"
+const test_trie_files = [b"1c1_trie.yaml",
+                         b"random_state_trie_80.yaml"]
+
 end

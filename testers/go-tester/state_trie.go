@@ -22,19 +22,19 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/ChainSafe/gossamer/polkadb"
 	"github.com/ChainSafe/gossamer/trie"
 	"github.com/go-yaml/yaml"
 	"io/ioutil"
 	"log"
 	"os"
-	"runtime"
 )
 
 func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []string) {
 	//here we need to parse the args related to scale_codec
 
 	// Subcommands
-	stateRootCommand := flag.NewFlagSet("state-root", flag.ExitOnError)
+	stateRootCommand := flag.NewFlagSet("trie-root", flag.ExitOnError)
 
 	// state-file subcommand flag pointers
 	stateFilePtr := stateRootCommand.String("state-file", "", "YAML file containing the state")
@@ -48,7 +48,7 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 	// Switch on the subcommand
 	// Parse the flags for appropriate FlagSet
 	switch command_args[0] {
-	case "state-root":
+	case "trie-root":
 		stateRootCommand.Parse(command_args[1:])
 
 	default:
@@ -78,13 +78,8 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			log.Fatal(err)
 		}
 
-		runtime.Breakpoint()
-
-		fmt.Println(key_value_data.Keys[0])
-		fmt.Println(key_value_data.Values[0])
-
 		db := trie.Database{
-			db: polkadb.NewMemDatabase(),
+			Db: polkadb.NewMemDatabase(),
 		}
 		test_trie := trie.NewEmptyTrie(&db)
 
@@ -95,10 +90,10 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			}
 		}
 
-		h := trie.newHasher()
-		fmt.Printf("state root hash: [")
-		csvHexPrinter(h.Hash(test_trie.root))
-		fmt.Printf("]\n")
+		h, _ := trie.NewHasher()
+		trie_root_hash, _ := h.Hash(test_trie.Root())
+		fmt.Printf("state root hash: 0x")
+		continuousHexPrinter(trie_root_hash)
 
 	}
 

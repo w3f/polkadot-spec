@@ -36,7 +36,7 @@ func main() {
 	// os.Arg[1] will be the subcommand
 	// os.Arg[2] will be the sub subcommand
 	if len(os.Args) < 2 {
-		fmt.Println("a command amongst \"scale-codec\", \"trie\" needs to be specified.")
+		fmt.Println("a command amongst \"scale-codec\", \"state-trie\" needs to be specified.")
 		os.Exit(1)
 	}
 
