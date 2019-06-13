@@ -32,3 +32,10 @@ func csvHexPrinter(encodedText []byte) {
 		}
 	}
 }
+
+func continuousHexPrinter(encodedText []byte) {
+	hexEncoded := make([]byte, hex.EncodedLen(len(encodedText)))
+	hex.Encode(hexEncoded, encodedText)
+
+	fmt.Printf("%s", hexEncoded)
+}
