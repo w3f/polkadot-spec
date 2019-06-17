@@ -5,6 +5,11 @@ github.com/ChainSafe/gossamer v0.0.0-20190604204238-38c536d19048 h1:HiORO4iV85nW
 github.com/ChainSafe/gossamer v0.0.0-20190604204238-38c536d19048/go.mod h1:gBHf2qAiPkADWIh7AvhAOvzibFmReB2nWpGcnvnyCuE=
 github.com/ChainSafe/gossamer v0.0.0-20190610194214-48ab1b5a17bc h1:zhJ0bBTemLIuktbV2nlCm1NOCDQzKeyNsZPIjYypl6A=
 github.com/ChainSafe/gossamer v0.0.0-20190610194214-48ab1b5a17bc/go.mod h1:gBHf2qAiPkADWIh7AvhAOvzibFmReB2nWpGcnvnyCuE=
+github.com/ChainSafe/gossamer v0.0.0-20190610194214-c891936d5c5c h1:Q9EXBDSmkZMH0xktyGyqAV6X6TBjIeKue/OncV5520E=
+github.com/ChainSafe/gossamer v0.0.0-20190610194214-c891936d5c5c/go.mod h1:JbumCH6dJ9KSi821jGpn7zm46PKmYw67nSO8W28hC2E=
+github.com/ChainSafe/gossamer v0.0.0-20190614182438-c891936d5c5c h1:2a3dfTH1jjCe3iHLAnf7RLXMz8Aniy4//eE6QcTwozE=
+github.com/ChainSafe/gossamer v0.0.0-20190617184445-7fb1f5cbd45c h1:dLgIAFQWVBya3HXs86iyMWQd77EsSBNT9O1epmO9GCg=
+github.com/ChainSafe/gossamer v0.0.0-20190617184445-7fb1f5cbd45c/go.mod h1:BorwlfuFLXivTYm1d2TFns9jERvDXTMtg5GzkQ4yYjI=
 github.com/Kubuxu/go-os-helper v0.0.1/go.mod h1:N8B+I7vPCT80IcP58r50u4+gEEcsZETFUpAzWW2ep1Y=
 github.com/Kubuxu/gocovmerge v0.0.0-20161216165753-7ecaa51963cd/go.mod h1:bqoB8kInrTeEtYAwaIXoSRqdwnjQmFhsfusnzyui6yY=
 github.com/Stebalien/go-bitfield v0.0.0-20180330043415-076a62f9ce6e/go.mod h1:3oM7gXIttpYDAJXpVNnSCiUMYBLIZ6cb1t+Ip982MRo=
@@ -295,6 +300,7 @@ golang.org/x/crypto v0.0.0-20190225124518-7f87c0fbb88b/go.mod h1:6SG95UA2DQfeDnf
 golang.org/x/crypto v0.0.0-20190228161510-8dd112bcdc25 h1:jsG6UpNLt9iAsb0S2AGW28DveNzzgmbXR+ENoPjUeIU=
 golang.org/x/crypto v0.0.0-20190228161510-8dd112bcdc25/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/net v0.0.0-20180524181706-dfa909b99c79/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
+golang.org/x/net v0.0.0-20180724234803-3673e40ba225/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20180906233101-161cd47e91fd/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20181102091132-c10e9556a7bc/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
 golang.org/x/net v0.0.0-20181201002055-351d144fa1fc/go.mod h1:mL1N/T3taQHkDXs73rZJwtUhF3w3ftmwwsq0BUmARs4=
@@ -314,6 +320,7 @@ golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/tools v0.0.0-20180221164845-07fd8470d635/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/tools v0.0.0-20180917221912-90fa682c2a6e/go.mod h1:n7NCudcB/nEzxVGmLbDWY5pfWTLqBcC2KZ6jyYvM4mQ=
 golang.org/x/xerrors v0.0.0-20190212162355-a5947ffaace3/go.mod h1:I/5z698sn9Ka8TeJc9MKroUUfqBBauWjQqLJ2OPfmY0=
+google.golang.org/appengine v1.6.0/go.mod h1:xpcJRLb0r/rnEns0DIKYYv+WjYCduHsrkT7/EB5XEv4=
 google.golang.org/genproto v0.0.0-20180831171423-11092d34479b/go.mod h1:JiN7NxoALGmiZfu7CAH4rXhgtRTLTxftemlI0sWmxmc=
 gopkg.in/airbrake/gobrake.v2 v2.0.9/go.mod h1:/h5ZAUhDkGaJfjzjKLSjv6zCL6O0LLBxU4K+aSYdM/U=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
