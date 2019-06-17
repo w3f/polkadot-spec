@@ -96,7 +96,15 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("[go] encoded root: %x\n", encoded_root)
+		fmt.Printf("[go] encoded root: [")
+		for i, b := range encoded_root {
+			if i < len(encoded_root)-1 {
+				fmt.Printf("%x, ", b)
+			} else {
+				fmt.Printf("%x", b)
+			}
+		}
+		fmt.Println("]")
 		fmt.Printf("[go] len %d\n", len(encoded_root))
 	}
 
