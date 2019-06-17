@@ -90,11 +90,14 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			}
 		}
 
-		h, _ := trie.NewHasher()
-		trie_root_hash, _ := h.Hash(test_trie.Root())
-		fmt.Printf("state root hash: 0x")
-		continuousHexPrinter(trie_root_hash)
-
+		//h, _ := trie.NewHasher()
+		//trie_root_hash, _ := h.Hash(test_trie.Root())
+		encoded_root, err := test_trie.Encode()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("[go] encoded root: %x\n", encoded_root)
+		fmt.Printf("[go] len %d\n", len(encoded_root))
 	}
 
 }
