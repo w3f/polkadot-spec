@@ -10,6 +10,9 @@ github.com/ChainSafe/gossamer v0.0.0-20190610194214-c891936d5c5c/go.mod h1:JbumC
 github.com/ChainSafe/gossamer v0.0.0-20190614182438-c891936d5c5c h1:2a3dfTH1jjCe3iHLAnf7RLXMz8Aniy4//eE6QcTwozE=
 github.com/ChainSafe/gossamer v0.0.0-20190617184445-7fb1f5cbd45c h1:dLgIAFQWVBya3HXs86iyMWQd77EsSBNT9O1epmO9GCg=
 github.com/ChainSafe/gossamer v0.0.0-20190617184445-7fb1f5cbd45c/go.mod h1:BorwlfuFLXivTYm1d2TFns9jERvDXTMtg5GzkQ4yYjI=
+github.com/ChainSafe/gossamer v0.0.0-20190620154424-090fc9543268 h1:vS7n8F3xMyZBz3PxMLKOVhdcKnbtdYOh6EGbBwkTt2g=
+github.com/ChainSafe/gossamer v0.0.0-20190621171814-649b8a54eeae h1:FlXcUNjjXrs7C6sT9xpshKYADYb3a1gXgPxcDTaEqIY=
+github.com/ChainSafe/gossamer v0.0.0-20190621171814-649b8a54eeae/go.mod h1:BorwlfuFLXivTYm1d2TFns9jERvDXTMtg5GzkQ4yYjI=
 github.com/Kubuxu/go-os-helper v0.0.1/go.mod h1:N8B+I7vPCT80IcP58r50u4+gEEcsZETFUpAzWW2ep1Y=
 github.com/Kubuxu/gocovmerge v0.0.0-20161216165753-7ecaa51963cd/go.mod h1:bqoB8kInrTeEtYAwaIXoSRqdwnjQmFhsfusnzyui6yY=
 github.com/Stebalien/go-bitfield v0.0.0-20180330043415-076a62f9ce6e/go.mod h1:3oM7gXIttpYDAJXpVNnSCiUMYBLIZ6cb1t+Ip982MRo=

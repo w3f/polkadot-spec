@@ -24,7 +24,7 @@ extern crate reference_trie;
 
 //use trie_root::trie_root_no_ext;
 use trie_root::unhashed_trie_no_ext;
-use reference_trie::ReferenceTrieStream;
+use reference_trie::ReferenceTrieStreamNoExt;
 
 use std::collections::BTreeMap;
 
@@ -44,7 +44,7 @@ fn compute_state_root(matches: &ArgMatches) {
     //let trie_value =  key_value_map["data"];
     let trie_vec = key_value_map["keys"].iter().zip(key_value_map["values"].iter());
     //let state_trie_root = trie_root_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
-    let root_encoding = unhashed_trie_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
+    let root_encoding = unhashed_trie_no_ext::<Blake2Hasher, ReferenceTrieStreamNoExt, _, _, _>(trie_vec);
     //println!("[rust] state root: {:x}", &state_trie_root);
     println!("[rust] encoded root: {:x?}", &root_encoding);
     println!("[rust] len: {}", root_encoding.len())
