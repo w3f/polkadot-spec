@@ -23,7 +23,7 @@ extern crate trie_root;
 extern crate reference_trie;
 
 use trie_root::trie_root;
-use reference_trie::ReferenceTrieStream;
+use reference_trie::ReferenceTrieStreamNoExt;
 
 use std::collections::BTreeMap;
 
@@ -42,7 +42,7 @@ fn compute_state_root(matches: &ArgMatches) {
     
     //let trie_value =  key_value_map["data"];
     let trie_vec = key_value_map["keys"].iter().zip(key_value_map["values"].iter());
-    let state_trie_root = trie_root::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
+    let state_trie_root = trie_root::<Blake2Hasher, ReferenceTrieStreamNoExt, _, _, _>(trie_vec);
     println!("state trie root: {:x?}", &state_trie_root);
 
 }
