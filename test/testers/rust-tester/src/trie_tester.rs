@@ -20,11 +20,15 @@
 extern crate clap;
 extern crate serde_yaml;
 extern crate trie_root;
+extern crate trie_db;
 extern crate reference_trie;
 
-use trie_root::trie_root;
-use reference_trie::ReferenceTrieStreamNoExt;
-
+//use trie_root::trie_root_no_ext;
+use trie_root::{unhashed_trie_no_ext, Hasher};
+use reference_trie::ReferenceTrieStreamNoExt as ReferenceTrieStream;
+use reference_trie::LayoutNewH;
+use trie_db::{TrieRootPrint, trie_visit};
+use memory_db::{MemoryDB, HashKey};
 use std::collections::BTreeMap;
 
 //use trie::{Encode, Decode, HasCompact, Compact, EncodeAsRef, CompactAs};
@@ -41,9 +45,22 @@ fn compute_state_root(matches: &ArgMatches) {
     let key_value_map: BTreeMap<String, Vec<String>> = serde_yaml::from_reader(f).unwrap();
     
     //let trie_value =  key_value_map["data"];
-    let trie_vec = key_value_map["keys"].iter().zip(key_value_map["values"].iter());
-    let state_trie_root = trie_root::<Blake2Hasher, ReferenceTrieStreamNoExt, _, _, _>(trie_vec);
-    println!("state trie root: {:x?}", &state_trie_root);
+    let trie_vec: Vec<_> = key_value_map["keys"].iter().zip(key_value_map["values"].iter()).collect();
+
+
+    let root_new: <Blake2Hasher as Hasher>::Out = {
+      let mut cb = TrieRootPrint::<Blake2Hasher, _>::default();
+      trie_visit::<LayoutNewH<Blake2Hasher>, _, _, _, _>(trie_vec.clone().into_iter(), &mut cb);
+      cb.root.unwrap_or(Default::default())
+    };
+    println!("[rust] iter_build state root: {:x}", &root_new);
+    disp(trie_vec.as_ref());
+    //let state_trie_root = trie_root_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
+    let root_encoding = unhashed_trie_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
+    //assert_eq!(&root_encoding[..], root_new.as_ref());
+    //println!("[rust] state root: {:x}", &state_trie_root);
+    println!("[rust] encoded root: {:x?}", &root_encoding);
+    println!("[rust] len: {}", root_encoding.len())
 
 }
 
@@ -51,5 +68,36 @@ pub fn process_state_trie_command(subcmd_matches: &ArgMatches) {
     if subcmd_matches.is_present("state-root") {
             compute_state_root(subcmd_matches);
     }
+}
+
+fn disp<A: AsRef<[u8]>>(
+	data: &[(A,A)],
+) {
+
+use memory_db::{MemoryDB, HashKey};
+use reference_trie::{
+	RefTrieDBMutNoExt,
+	RefTrieDBNoExt,
+	ref_trie_root,
+};
+use trie_db::{TrieMut};
+
+
+
+	let mut memdb = MemoryDB::<_, HashKey<_>, _>::default();
+
+	let root = {
+		let mut root = Default::default();
+		let mut t = RefTrieDBMutNoExt::new(&mut memdb, &mut root);
+		for i in 0..data.len() {
+			t.insert(data[i].0.as_ref(),data[i].1.as_ref()).unwrap();
+		}
+		t.root().clone()
+	};
+	{
+		let db : &dyn hash_db::HashDB<_,_> = &memdb;
+			let t = RefTrieDBNoExt::new(&db, &root).unwrap();
+			println!("{:?}", t);
+	}
 }
 
