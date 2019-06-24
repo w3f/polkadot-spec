@@ -53,6 +53,8 @@ const state_trie_root_subcommand = " trie-root";
 
 const fixture_data_dir = "fixtures"
 const test_trie_files = [b"1c1_trie.yaml",
-                         b"random_state_trie_80.yaml"]
+                         b"random_state_trie_80.yaml",
+			 b"pk_branch_test.yaml",
+			 b"pk_branch_test2.yaml"]
 
 end
