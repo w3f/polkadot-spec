@@ -6,6 +6,7 @@
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
+\newcommand{\chapter}[1]{\medskip\bigskip--\noindent\textbf{\huge #1}}
 \newcommand{\nin}{\not\in}
 \newcommand{\nobracket}{}
 \newcommand{\nosymbol}{}
@@ -73,11 +74,51 @@
   {\Large Protocol Specification}
 }
 
-\date{June 20, 2019}
+\date{June 26, 2019}
 
 \maketitle
 
-\section{Conventions and Definitions}
+\chapter{Background}
+
+\section{Introduction}
+
+Formally, Polkadot is a replicated sharded state machine designed to resolve
+the scalability and interoperability among blockchains. In Polkadot
+vocabulary, shards are called {\tmem{parachains}} and Polkadot {\tmem{relay
+chain}} is part of the protocol ensuring global consensus among all the
+parachains. The Polkadot relay chain protocol henceforward called
+{\tmem{Polkadot protocol}}, can itself be considered as a replicated state
+machine on its own. As such, the protocol can be specified by specifying the
+state machine and the replication strategy.
+
+From a more technical point of view, the Polkadot protocol has been divided
+into two parts, the {\tmem{Runtime}} and the {\tmem{Runtime environment}}
+(RE). The Runtime comprises most of the state transition logic for the
+Polkadot protocol and is designed and expected to be upgradable as part of the
+state transition process. On the other hand, the Runtime environment consists
+of parts of the protocol, which is mostly shared among peer-to-peer
+decentralized proof-of-stake-consensus-based cryptographically-secured
+transaction systems. The RE is planned to be stable and static for the
+lifetime duration of the Polkadot protocol.
+
+With the current document, we aim at specifying the RE part of the Polkadot
+protocol as a replicated state machine. After defining the basic terms in
+Chapter 1, we proceed to specifying the representation of a valid state of the
+Protocol in Chapter \ref{chap-state-spec}. After specifying protocol states,
+in Chapter \ref{chap-state-transit}, we explain Polkadot state transition and
+discuss the detail based on which Polkadot RE interacts with the state
+transition function, i.e. Runtime. We specify the inputs triggering the state
+transition in Section \ref{sect-network-interactions} of this chapter. More
+elaborate messages such as extrinsics and block messages are specified in
+Sections \ref{sect-extrinsics} and \ref{sect-block-format}. The initial state
+of the machine is identified and discussed in Appendix
+\ref{sect-genisis-block}. A Polkadot RE implementation which conforms with
+this part of the specification should successfully be able to sync its states
+with the Polkadot network. Finally, in Chapter \ref{chap-consensu}, we specify
+the consensus protocol, which is responsible for keeping all the replica in
+the same state.
+
+\section{Definitions and Conventions}\label{sect-defn-conv}
 
 \begin{definition}
   \label{defn-runtime}{\tmstrong{Runtime}} is the state transition function of
@@ -205,107 +246,403 @@ follows:
   > B'$}} if $B$ is a descendant of $B'$ in the block tree.
 \end{definition}
 
-\section{Block Format}
+\chapter{ State Specification}\label{chap-state-spec}
 
-In Polkadot RE, a block is made of two main parts, namely the \tmtextit{block
-header} and the \tmtextit{list of extrinsics}. {\tmem{The Extrinsics}}
-represent the generalization of the concept of {\tmem{transaction}},
-containing any set of data that is external to the system, and which the
-underlying chain wishes to validate and keep track of.
+\section{State Storage and the Storage Trie}
 
-\subsection{Block Header}\label{block}
+For storing the state of the system, Polkadot RE implements a hash table
+storage where the keys are used to access each data entry. There is no
+assumption either on the size of the key nor on the size of the data stored
+under them, besides the fact that they are byte arrays with specific upper
+limits on their length. The limit is imposed by the encoding algorithms to
+store the key and the value in the storage trie.
 
-The block header is designed to be minimalistic in order to boost the
-efficiency of the light clients. It is defined formally as follows:
+\subsection{Accessing The System Storage }
+
+Polkadot RE implements various functions to facilitate access to the system
+storage for the runtime. Section \ref{sect-runtime-api} lists all of those
+functions. Here we formalize the access to the storage when it is being
+directly accessed by Polkadot RE (in contrast to Polkadot runtime).
 
 \begin{definition}
-  \label{defn-block-header}The {\tmstrong{header of block B}},
-  {\tmstrong{$\tmop{Head} (B)$}} is a 5-tuple containing the following
-  elements:
+  \label{defn-stored-value}The {\tmstrong{StoredValue}} function retrieves the
+  value stored under a specific key in the state storage and is formally
+  defined as :
+  \[ \begin{array}{cc}
+       \tmop{StoredValue} : & \mathcal{K} \rightarrow \mathcal{V}\\
+       & k \mapsto \left\{ \begin{array}{cc}
+         v & \text{if (k,v) exists in state storage}\\
+         \phi & \tmop{otherwise}
+       \end{array} \right.
+     \end{array} \]
+  where $\mathcal{K} \subset \mathbb{B}$ and $\mathcal{V} \subset \mathbb{B}$
+  are respectively the set of all keys and values stored in the state storage.
+  
+  \ 
+\end{definition}
+
+\subsection{The General Tree Structure}
+
+In order to ensure the integrity of the state of the system, the stored data
+needs to be re-arranged and hashed in a {\tmem{modified Merkle Patricia
+Tree}}, which hereafter we refer to as the {\tmem{{\tmstrong{Trie}}}}. This
+rearrangment is necessary to be able to compute the Merkle hash of the whole
+or part of the state storage, consistently and efficiently at any given time.
+
+The Trie is used to compute the {\tmem{state root}}, $H_r$, (see Definition
+\ref{defn-block-header}), whose purpose is to authenticate the validity of the
+state database. Thus, Polkadot RE follows a rigorous encoding algorithm to
+compute the values stored in the trie nodes to ensure that the computed Merkle
+hash, $H_r$, matches across the Polkadot RE implementations.
+
+The Trie is a {\tmem{radix-16}} tree as defined in Definition
+\ref{defn-radix-tree}. Each key value identifies a unique node in the tree.
+However, a node in a tree might or might not be associated with a key in the
+storage.
+
+When traversing the Trie to a specific node, its key can be reconstructed by
+concatenating the subsequences of the key which are stored either explicitly
+in the nodes on the path or implicitly in their position as a child of their
+parent.
+
+To identify the node corresponding to a key value, $k$, first we need to
+encode $k$ in a consistent with the Trie structure way. Because each node in
+the trie has at most 16 children, we represent the key as a sequence of 4-bit
+nibbles:
+
+\begin{definition}
+  For the purpose of labeling the branches of the Trie, the key $k$ is encoded
+  to $k_{\tmop{enc}}$ using KeyEncode functions:
+  \begin{equation}
+    k_{\tmop{enc}} \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{2 n}})
+    \assign \tmop{KeyEncode} (k) \label{key-encode-in-trie}
+  \end{equation}
+  such that:
+  \[ \tmop{KeyEncode} (k) : \left\{ \begin{array}{lll}
+       \mathbb{B}^{\nosymbol} & \rightarrow & \tmop{Nibbles}^4\\
+       k \assign (b_1, \ldots, b_n) \assign & \mapsto & (b^1_1, b^2_1, b_2^1,
+       b^2_2, \ldots, b^1_n, b^2_n)\\
+       &  & \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{2 n}})
+     \end{array} \right. \]
+  where $\tmop{Nibble}^4$ is the set of all nibbles of 4-bit arrays and
+  $b^1_i$ and $b^2_i$ are 4-bit nibbles, which are the big endian
+  representations of $b_i$:
+  \[ (b^1_i, b^2_i) \assign (b_i / 16, b_i \tmop{mod} 16) \]
+  , where mod is the remainder and / is the integer division operators.
+\end{definition}
+
+By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the
+radix tree to reach the node identifying the storage value of $k$.
+
+\subsection{The Trie structure}
+
+In this subsection, we specify the structure of the nodes in the Trie as well
+as the Trie structure:
+
+\begin{notation}
+  We refer to the {\tmstrong{set of the nodes of Polkadot state trie}} by
+  $\mathcal{N}.$ By $N \in \mathcal{N}$ to refer to an individual node in the
+  trie.
+\end{notation}
+
+\begin{definition}
+  \label{defn-nodetype}The State Trie is a radix-16 tree. Each Node in the
+  Trie is identified with a unique key $k_N$ such that:
+  \begin{itemizeminus}
+    \item $k_N$ is the shared prefix of the key of all the descendants of $N$
+    in the Trie.
+  \end{itemizeminus}
+  and, at least one of the following statements holds:
+  \begin{itemizeminus}
+    \item $(k_N, v)$ corresponds to an existing entry in the State Storage.
+    
+    \item N has more than one child.
+  \end{itemizeminus}
+  \tmverbatim{}Conversely, if $(k, v)$ is an entry in the State Trie then
+  there is a node $N \in \mathcal{N}$ such that $k_N$=k.
+\end{definition}
+
+\begin{notation}
+  A {\tmstrong{branch}} node is a node which has one child or more. A branch
+  node can have at most 16 children. A {\tmstrong{leaf}} node is a childless
+  node. Accordingly:
+  \[ \begin{array}{c}
+       \mathcal{N}_b \assign \left\{ N \in \mathcal{N}|N \text{is a branch
+       node} \right\}\\
+       \mathcal{N}_l \assign \left\{ N \in \mathcal{N}|N \text{is a leaf node}
+       \right\}
+     \end{array} \]
+\end{notation}
+
+For each Node, part of $k_N$ is built while the trie is traversed from root to
+$N$ part of $k_N$ is stored in $N$ as formalized in Definition
+\ref{defn-node-key}.
+
+\begin{definition}
+  \label{defn-node-key}For any $N \in \mathcal{N}$, its key $k_N$ is divided
+  into an {\tmstrong{aggregated prefix key}},
+  {\tmstrong{$\tmop{pk}_N^{\tmop{Agr}}$}}, aggregated by Algorithm
+  \ref{algo-aggregate-key} and a {\tmstrong{partial key}},
+  {\tmstrong{$\tmop{pk}_N$}} of length $0 \leqslant l_{\tmop{pk}_N} \leqslant
+  65535$ in nibbles such that:
+  \[ \tmop{pk}_N \assign (k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{i +
+     l_{\tmop{pk}_N}}}) \]
+  where $\tmop{pk}_N$ is a suffix subsequence of $k_N$; $i$ is the length of
+  $\tmop{pk}_N^{\tmop{Agr}}$ in nibbles and so we have:
+  \[ \tmop{KeyEncode} (k_N) = \tmop{pk}_N^{\tmop{Agr}} | | \tmop{pk}_N =
+     (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{i - 1}}, k_{\tmop{enc}_i},
+     k_{\tmop{enc}_{i + l_{\tmop{pk}_N}}}) \]
+\end{definition}
+
+Part of $\tmop{pk}_N^{\tmop{Agr}}$ is explicitly stored in $N$'s ancestors.
+Additionally, for each ancestor, a single nibble is implicitly derived while
+traversing from the ancestor to its child included in the traversal path using
+the $\tmop{Index}_N$ function defined in Definition \ref{defn-index-function}.
+
+\begin{definition}
+  \label{defn-index-function}For $N \in \mathcal{N}_b$ and $N_c$ child of N,
+  we define {\tmstrong{$\tmop{Index}_N$}} function as:
+  \[ \begin{array}{cc}
+       \tmop{Index}_N : & \left\{ N_c \in \mathcal{N}|N_c  \text{is a child of
+       N} \right\} \rightarrow \tmop{Nibbles}^4_1\\
+       & N_c \mapsto i_{}
+     \end{array} \]
+  such that
+  \[ k_{N_c} = k_N | | i | | \tmop{pk}_{N_c} \]
+\end{definition}
+
+Assuming that $P_N$ is the path (see Definition \ref{defn-path-graph}) from
+the Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
+demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
+
+\custombinding{1}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  1. }
+  \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
+  = N_1, \ldots, N_j = N))$\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \phi$}}
+
+{\state{$i \leftarrow 1$}}
+
+{\state{{\WHILE{$(N_i \neq N)$}}}}
+
+{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
+\tmop{pk}_{N_i} $}}
+
+{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
+\tmop{Index}_{N_i} (N_{i + 1})$}}
+
+{\state{$i \leftarrow i + 1${\END}}}
+
+{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
+\tmop{pk}_{N_i}$}}
+
+{\state{{\RETURN{$\tmop{pk}^{\tmop{Agr}}_N$}}}}}}
+
+\hrulefill{\medskip}
+
+\begin{definition}
+  \label{defn-node-value}A node $N \in \mathcal{N}$ stores the {\tmstrong{node
+  value}}, {\tmstrong{$v_N$}}, which consists of the following concatenated
+  data:
+  \[ \begin{array}{|l|l|l|}
+       \hline
+       \tmop{Node} \tmop{Header} & \tmop{Partial} \tmop{key} & \tmop{Node}
+       \tmop{Subvalue}\\
+       \hline
+     \end{array} \]
+  Formally noted as:
+  \[ v_N \assign \tmop{Head}_N | | \tmop{Enc}_{\tmop{HE}} (\tmop{pk}_N) | |
+     \tmop{sv}_N \]
+  where $\tmop{Head}_N$, $\tmop{pk}_N$, $\tmop{Enc}_{\tmop{nibbles}}$ and
+  $\tmop{sv}_N$ are defined in Definitions \ref{defn-node-header},
+  \ref{defn-node-key}, \ref{defn-hex-encoding} and \ref{defn-node-subvalue},
+  respectively.
+\end{definition}
+
+\begin{definition}
+  \label{defn-node-header}The {\tmstrong{node header}} of node $N$,
+  $\tmop{Head}_N$, consists of $l + 1 \geqslant 1$ bytes $\tmop{Head}_{N, 1},
+  \ldots, \tmop{Head}_{N, l + 1}$ such that:
+  
+  
+  \[ \begin{array}{ll}
+       \hline
+       \tmop{Node} \tmop{Type} & \tmop{pk} \tmop{length}\\
+       \hline
+       \tmop{Head}_{N, 1}^{6 - 7}_{} & \tmop{Head}_{N, 1}^{0 - 5}_{}
+     \end{array}  \begin{array}{|l|}
+       \hline
+       \tmop{pk} \tmop{length} \tmop{extra} \tmop{byte} 1\\
+       \hline
+       \tmop{Head}_{N, 2}\\
+       \hline
+     \end{array}  \begin{array}{|l|}
+       \hline
+       \tmop{pk} \tmop{key} \tmop{length} \tmop{extra} \tmop{byte} 2\\
+       \hline
+       \ldots .\\
+       \hline
+     \end{array} \ldots \begin{array}{|l|}
+       \hline
+       \tmop{pk} \tmop{length} \tmop{extra} \tmop{byte} l\\
+       \hline
+       \tmop{Head}_{N, l + 1}^{}_{}\\
+       \hline
+     \end{array} \]
+  
+  
+  In which $\tmop{Head}_{N, 1}^{6 - 7}_{}$, the two most significant bits of
+  the first byte of $\tmop{Head}_N$ are determined as follows:
+  \[ \tmop{Head}_{N, 1}^{6 - 7}_{} \assign \left\{ \begin{array}{ll}
+       00 & \tmop{Special} \tmop{case}\\
+       01 & \tmop{Leaf} \tmop{Node}\\
+       10 & \tmop{Branch} \tmop{Node} \tmop{with} k_N \nin \mathcal{K}\\
+       11 & \tmop{Branch} \tmop{Node} \tmop{with} k_N \in \mathcal{K}
+     \end{array} \right. \]
+  where $\mathcal{K}$ is defined in Definition \ref{defn-stored-value}.
+  
+  $\tmop{Head}_{N, 1}^{0 - 5}_{}$, the 6 least significant bits of the first
+  byte of $\tmop{Head}_N$ are defined to be:
+  \[ \tmop{Head}_{N, 1}^{0 - 5}_{} \assign \left\{ \begin{array}{ll}
+       \| \tmop{pk}_N \|_{\tmop{nib}} & \| \tmop{pk}_N \|_{\tmop{nib}} < 63\\
+       63 & \| \tmop{pk}_N \|_{\tmop{nib}} \geqslant 63
+     \end{array} \right. \]
+  In which {\tmstrong{$\| \tmop{pk}_N \|_{\tmop{nib}}$}} is the length of
+  $\tmop{pk}_N $ in number nibbles. $\tmop{Head}_{N, 2}, \ldots,
+  \tmop{Head}_{N, l + 1}$ bytes are determined by Algorithm
+  \ref{algo-pk-length}.
+\end{definition}
+
+\custombinding{2}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  2. }
+  \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
+  1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} \geqslant
+2^{16}$}}}}
+
+{\state{{\RETURN{Error{\END}}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow 64 \times \tmop{Head}_{N, 1}^{6 -
+7}_{}$}}
+
+{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} < 63$}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + \| \tmop{pk}_N
+\|_{\tmop{nib}}$}}
+
+{\state{{\RETURN{$\tmop{Head}_N \END$}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + 63$}}
+
+{\state{$l \leftarrow \| \tmop{pk}_N \|_{\tmop{nib}} - 63$}}
+
+{\state{$i \leftarrow 2$}}
+
+{\state{{\WHILE{$(l > 255)$}}}}
+
+{\state{$\tmop{Head}_{N, i} \leftarrow 255$}}
+
+{\state{$l \leftarrow l - 255$}}
+
+{\state{$i \leftarrow i + 1 \END$}}
+
+{\state{$\tmop{Head}_{N, i} \leftarrow l$}}
+
+{\state{{\RETURN{$\tmop{Head}_N$}}}}}}
+
+\hrulefill{\medskip}
+
+\subsection{The Merkle proof}\label{sect-merkl-proof}
+
+To prove the consistency of the state storage across the network and its
+modifications both efficiently and effectively, the Trie implements a Merkle
+tree structure. The hash value corresponding to each node needs to be computed
+rigorously to make the inter-implementation data integrity possible.
+
+The Merkle value of each node should depend on the Merkle value of all its
+children as well as on its corresponding data in the state storage. This
+recursive dependancy is encompassed into the subvalue part of the node value
+which recursively depends on the Merkle value of its children.
+
+We use the auxilary function introduced in Definition
+\ref{defn-children-bitmap} to encode and decode information stored in a branch
+node.
+
+\begin{definition}
+  \label{defn-children-bitmap}Suppose $N_b, N_c \in \mathcal{N}$ and $N_c$ is
+  a child of $N_b$. We define where bit $b_i : = 1$ if $N$ has a child with
+  partial key $i$, therefore we define {\tmstrong{ChildrenBitmap}} functions
+  as follows:
+  \[ \begin{array}{cc}
+       \tmop{ChildrenBitmap} : & \mathcal{N}_b \rightarrow \mathbb{B}_2\\
+       & N \mapsto (b_{15}, \ldots, b_8, b_7, \ldots b_0)_2
+     \end{array} \]
+  where
+  \[ b_i \assign \left\{ \begin{array}{cc}
+       1 & \exists N_c \in \mathcal{N}: k_{N_c} = k_{N_b} | | i | |
+       \tmop{pk}_{N_c}\\
+       0 & \text{otherwise}
+     \end{array} \right. \]
+\end{definition}
+
+\begin{definition}
+  \label{defn-node-subvalue}For a given node $N$, the {\tmstrong{subvalue}} of
+  $N$, formally referred to as $\tmop{sv}_N$, is determined as follows: in a
+  case which:
   \begin{itemize}
-    \item \tmtextbf{{\tmsamp{parent\_hash:}}} is the 32-byte Blake2b hash (see
-    Section \ref{sect-blake2}) of the header of the parent of the block
-    indicated henceforth by \tmtextbf{$H_p$}.
-    
-    \item {\tmstrong{{\tmsamp{number:}}}} formally indicated as
-    {\tmstrong{$H_i$}} is an integer, which represents the index of the
-    current block in the chain. It is equal to the number of the ancestor
-    blocks. The genesis block has number 0.
-    
-    \item {\tmstrong{{\tmsamp{state\_root:}}}} formally indicated as
-    {\tmstrong{$H_r$}} is the root of the Merkle trie, whose leaves implement
-    the storage for the system.
-    
-    \item {\tmstrong{{\tmsamp{extrinsics\_root:}}}} is the field which is
-    reserved for the runtime to validate the integrity of the extrinsics
-    composing the block body. For example, it can hold the root hash of the
-    Merkle trie which stores an ordered list of the extrinsics being validated
-    in this block. The {\tmsamp{extrinsics\_root}} is set by the runtime and
-    its value is opaque to Polkadot RE. This element is formally referred to
-    as {\tmstrong{$H_e$}}.
-    
-    \item {\tmstrong{{\tmsamp{digest:}}}} this field is used to store any
-    chain-specific auxiliary data, which could help the light clients interact
-    with the block without the need of accessing the full storage. Polkadot RE
-    does not impose any limitation or specification for this field.
-    Essentially, it can be a byte array of any length. This field is indicated
-    as {\tmstrong{$H_d$}}
+    \[ \begin{array}{l}
+         \tmop{sv}_N \assign\\
+         \left\{ \begin{array}{cc}
+           \tmop{Enc}_{\tmop{SC}} (\tmop{StoredValue} (k_N)) & \text{N is a
+           leaf node}\\
+           \nobracket \tmop{ChildrenBitmap} (N)\| \tmop{Enc}_{\tmop{SC}} (H
+           (N_{C_1})) \ldots \tmop{Enc}_{\tmop{SC}} (H (N_{C_n})) | |
+           \tmop{Enc}_{\tmop{SC}} (\tmop{StoredValue} (k_N))  & \text{N is a
+           branch node}
+         \end{array} \right.
+       \end{array} \]
   \end{itemize}
 \end{definition}
 
-\begin{definition}
-  \label{defn-block-header-hash}The {\tmstrong{Block Header Hash of Block
-  $B$}}, {\tmstrong{$H_h (b)$}}, is the hash of the header of block $B$
-  encoded by simple codec:''
-  \[ H_b (b) \assign \tmop{Blake} 2 b (\tmop{Enc}_{\tmop{SC}} (\tmop{Head}
-     (B))) \]
-\end{definition}
+Where $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes of
+the branch node $N$ and Enc\tmrsub{SC}, $\tmop{StoredValue}$, $H$, and
+$\tmop{ChildrenBitmap} (N)$ are defined in Definitions \ref{sect-scale-codec},
+\ref{defn-stored-value}, \ref{defn-merkle-value} and
+\ref{defn-children-bitmap} respectively.
 
-\subsection{Justified Block Header}
+\
 
-The Justified Block Header is provided by the consensus engine and presented
-to the Polkadot RE, for the block to be appended to the blockchain. It
-contains the following parts:
-\begin{itemize}
-  \item {\tmstrong{{\tmsamp{{\tmstrong{block\_header}}}}}} the complete block
-  header as defined in Section \ref{block} and denoted by $\tmop{Head} (B)$.
-  
-  \item {\tmstrong{{\tmsamp{justification}}}}: as defined by the consensus
-  specification indicated by $\tmop{Just} (B)$ {\todo{link this to its
-  definition from consensus}}.
-  
-  \item {\tmstrong{{\tmsamp{authority Ids}}}}: This is the list of the Ids of
-  authorities, which have voted for the block to be stored and is formally
-  referred to as $A (B)$. An authority Id is 32bit.
-\end{itemize}
-
-\subsection{Block Inherent Data}
-
-Block inherent data are unsigned extrinsics which are included in each block.
-In general, these data are collected or generated by Polkadot RE and handed to
-the Runtime for inclusion in the block. Table \ref{tabl-inherent-data} lists
-these inherent data, their identifiers and types.
-
-\begin{table}[h]
-  \begin{tabular}{lll}
-    \hline
-    Identifier & Type  & Description\\
-    \hline
-    timstap0 & u64 & Unix epoch time in number of seconds\\
-    babeslot & u64 & Babe Slot Number\tmrsup{\ref{defn-epoch-slot}}\\
-    \hline
-  \end{tabular}
-  \caption{\label{tabl-inherent-data}List of inherent data}
-\end{table}
+The Trie deviates from a traditional Merkle tree where node value, $v_N$ (see
+Definition \ref{defn-node-value}) is presented instead of its hash if it
+occupies less space than its hash.
 
 \begin{definition}
-  \label{defn-func-inherent-data}The function
-  {\tmname{Block-Inherents-Data($B_n$)}} return the inherent data defined in
-  Table \ref{tabl-inherent-data} corresponding to Block $B$ as a SCALE encoded
-  dictionary as defined in Definition \ref{defn-scale-list}.
+  \label{defn-merkle-value}For a given node $N$, the {\tmstrong{Merkle value}}
+  of $N$, denoted by $H (N)$ is defined as follows:
+  \[ \begin{array}{ll}
+       & H : \mathbb{B} \rightarrow \mathbb{B}_{32}\\
+       & H (N) : \left\{ \begin{array}{lcl}
+         v_N &  & \|v_N \|< 32\\
+         \tmop{Blake} 2 b (v_N) &  & \|v_N \| \geqslant 32
+       \end{array} \right.
+     \end{array} \]
+  Where $v_N$ is the node value of $N$ defined in Definition
+  \ref{defn-node-value} and $0_{32 - \| v_N \|}$ an all zero byte array of
+  length $32 - | | v_N | |$. The {\tmstrong{Merkle hash}} of the Trie is
+  defined as:
+  \[ \tmop{Blake} 2 b (H (R)) \]
+  Where $R$ is the root of the Trie.
 \end{definition}
 
-\subsection{Block Format}
+\chapter{ State Transition}\label{chap-state-transit}
 
 \section{Interactions with the Runtime}\label{sect-entries-into-runtime}
 
@@ -315,9 +652,9 @@ the Runtime easily upgradable without the need to upgrade the Polkadot RE
 itself. The general procedure to interact with Runtime is described in
 Algorithm \ref{algo-runtime-interaction}.
 
-\custombinding{1}{\noindent}\begin{tabular}{l}
+\custombinding{3}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  1. }
+  \tmtextbf{Algorithm  3. }
   \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$: the
   runtime entry,
   
@@ -552,7 +889,7 @@ header and the block body as its arguments, and it returns a triplet:
 
 {\todo{Explain function}}
 
-\section{Network Interactions}
+\section{Network Interactions}\label{sect-network-interactions}
 
 \subsection{Extrinsics Submission}
 
@@ -650,9 +987,9 @@ process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-\custombinding{2}{\noindent}\begin{tabular}{l}
+\custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  2. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  \tmtextbf{Algorithm  4. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
   (B)$)}}\\
   \hline
 \end{tabular}
@@ -676,401 +1013,7 @@ block:
 For the definition of the finality and the finalized block see Section
 \ref{sect-finality}.
 
-\section{State Storage and the Storage Trie}
-
-For storing the state of the system, Polkadot RE implements a hash table
-storage where the keys are used to access each data entry. There is no
-assumption either on the size of the key nor on the size of the data stored
-under them, besides the fact that they are byte arrays with specific upper
-limits on their length. The limit is imposed by the encoding algorithms to
-store the key and the value in the storage trie.
-
-\subsection{Accessing The System Storage }
-
-Polkadot RE implements various functions to facilitate access to the system
-storage for the runtime. Section \ref{sect-runtime-api} lists all of those
-functions. Here we formalize the access to the storage when it is being
-directly accessed by Polkadot RE (in contrast to Polkadot runtime).
-
-\begin{definition}
-  \label{defn-stored-value}The {\tmstrong{StoredValue}} function retrieves the
-  value stored under a specific key in the state storage and is formally
-  defined as :
-  \[ \begin{array}{cc}
-       \tmop{StoredValue} : & \mathcal{K} \rightarrow \mathcal{V}\\
-       & k \mapsto \left\{ \begin{array}{cc}
-         v & \text{if (k,v) exists in state storage}\\
-         \phi & \tmop{otherwise}
-       \end{array} \right.
-     \end{array} \]
-  where $\mathcal{K} \subset \mathbb{B}$ and $\mathcal{V} \subset \mathbb{B}$
-  are respectively the set of all keys and values stored in the state storage.
-  
-  \ 
-\end{definition}
-
-\subsection{The General Tree Structure}
-
-In order to ensure the integrity of the state of the system, the stored data
-needs to be re-arranged and hashed in a {\tmem{modified Merkle Patricia
-Tree}}, which hereafter we refer to as the {\tmem{{\tmstrong{Trie}}}}. This
-rearrangment is necessary to be able to compute the Merkle hash of the whole
-or part of the state storage, consistently and efficiently at any given time.
-
-The Trie is used to compute the {\tmem{state root}}, $H_r$, (see Definition
-\ref{defn-block-header}), whose purpose is to authenticate the validity of the
-state database. Thus, Polkadot RE follows a rigorous encoding algorithm to
-compute the values stored in the trie nodes to ensure that the computed Merkle
-hash, $H_r$, matches across the Polkadot RE implementations.
-
-The Trie is a {\tmem{radix-16}} tree as defined in Definition
-\ref{defn-radix-tree}. Each key value identifies a unique node in the tree.
-However, a node in a tree might or might not be associated with a key in the
-storage.
-
-When traversing the Trie to a specific node, its key can be reconstructed by
-concatenating the subsequences of the key which are stored either explicitly
-in the nodes on the path or implicitly in their position as a child of their
-parent.
-
-To identify the node corresponding to a key value, $k$, first we need to
-encode $k$ in a consistent with the Trie structure way. Because each node in
-the trie has at most 16 children, we represent the key as a sequence of 4-bit
-nibbles:
-
-\begin{definition}
-  For the purpose of labeling the branches of the Trie, the key $k$ is encoded
-  to $k_{\tmop{enc}}$ using KeyEncode functions:
-  \begin{equation}
-    k_{\tmop{enc}} \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{2 n}})
-    \assign \tmop{KeyEncode} (k) \label{key-encode-in-trie}
-  \end{equation}
-  such that:
-  \[ \tmop{KeyEncode} (k) : \left\{ \begin{array}{lll}
-       \mathbb{B}^{\nosymbol} & \rightarrow & \tmop{Nibbles}^4\\
-       k \assign (b_1, \ldots, b_n) \assign & \mapsto & (b^1_1, b^2_1, b_2^1,
-       b^2_2, \ldots, b^1_n, b^2_n)\\
-       &  & \assign (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{2 n}})
-     \end{array} \right. \]
-  where $\tmop{Nibble}^4$ is the set of all nibbles of 4-bit arrays and
-  $b^1_i$ and $b^2_i$ are 4-bit nibbles, which are the big endian
-  representations of $b_i$:
-  \[ (b^1_i, b^2_i) \assign (b_i / 16, b_i \tmop{mod} 16) \]
-  , where mod is the remainder and / is the integer division operators.
-\end{definition}
-
-By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the
-radix tree to reach the node identifying the storage value of $k$.
-
-\subsection{The Trie structure}
-
-In this subsection, we specify the structure of the nodes in the Trie as well
-as the Trie structure:
-
-\begin{notation}
-  We refer to the {\tmstrong{set of the nodes of Polkadot state trie}} by
-  $\mathcal{N}.$ By $N \in \mathcal{N}$ to refer to an individual node in the
-  trie.
-\end{notation}
-
-\begin{definition}
-  \label{defn-nodetype}The State Trie is a radix-16 tree. Each Node in the
-  Trie is identified with a unique key $k_N$ such that:
-  \begin{itemizeminus}
-    \item $k_N$ is the shared prefix of the key of all the descendants of $N$
-    in the Trie.
-  \end{itemizeminus}
-  and, at least one of the following statements holds:
-  \begin{itemizeminus}
-    \item $(k_N, v)$ corresponds to an existing entry in the State Storage.
-    
-    \item N has more than one child.
-  \end{itemizeminus}
-  Conversely, if $(k, v)$ is an entry in the State Trie then there is a node
-  $N \in \mathcal{N}$ such that $k_N$=k.
-\end{definition}
-
-\begin{notation}
-  A {\tmstrong{branch}} node is a node which has one child or more. A branch
-  node can have at most 16 children. A {\tmstrong{leaf}} node is a childless
-  node. Accordingly:
-  \[ \begin{array}{c}
-       \mathcal{N}_b \assign \left\{ N \in \mathcal{N}|N \text{is a branch
-       node} \right\}\\
-       \mathcal{N}_l \assign \left\{ N \in \mathcal{N}|N \text{is a leaf node}
-       \right\}
-     \end{array} \]
-\end{notation}
-
-For each Node, part of $k_N$ is built while the trie is traversed from root to
-$N$ part of $k_N$ is stored in $N$ as formalized in Definition
-\ref{defn-node-key}.
-
-\begin{definition}
-  \label{defn-node-key}For any $N \in \mathcal{N}$, its key $k_N$ is divided
-  into an {\tmstrong{aggregated prefix key}},
-  {\tmstrong{$\tmop{pk}_N^{\tmop{Agr}}$}}, aggregated by Algorithm
-  \ref{algo-aggregate-key} and a {\tmstrong{partial key}},
-  {\tmstrong{$\tmop{pk}_N$}} of length $0 \leqslant l_{\tmop{pk}_N} \leqslant
-  65535$ in nibbles such that:
-  \[ \tmop{pk}_N \assign (k_{\tmop{enc}_i}, \ldots, k_{\tmop{enc}_{i +
-     l_{\tmop{pk}_N}}}) \]
-  where $\tmop{pk}_N$ is a suffix subsequence of $k_N$; $i$ is the length of
-  $\tmop{pk}_N^{\tmop{Agr}}$ in nibbles and so we have:
-  \[ \tmop{KeyEncode} (k_N) = \tmop{pk}_N^{\tmop{Agr}} | | \tmop{pk}_N =
-     (k_{\tmop{enc}_1}, \ldots, k_{\tmop{enc}_{i - 1}}, k_{\tmop{enc}_i},
-     k_{\tmop{enc}_{i + l_{\tmop{pk}_N}}}) \]
-\end{definition}
-
-Part of $\tmop{pk}_N^{\tmop{Agr}}$ is explicitly stored in $N$'s ancestors.
-Additionally, for each ancestor, a single nibble is implicitly derived while
-traversing from the ancestor to its child included in the traversal path using
-the $\tmop{Index}_N$ function defined in Definition \ref{defn-index-function}.
-
-\begin{definition}
-  \label{defn-index-function}For $N \in \mathcal{N}_b$ and $N_c$ child of N,
-  we define {\tmstrong{$\tmop{Index}_N$}} function as:
-  \[ \begin{array}{cc}
-       \tmop{Index}_N : & \left\{ N_c \in \mathcal{N}|N_c  \text{is a child of
-       N} \right\} \rightarrow \tmop{Nibbles}^4_1\\
-       & N_c \mapsto i_{}
-     \end{array} \]
-  such that
-  \[ k_{N_c} = k_N | | i | | \tmop{pk}_{N_c} \]
-\end{definition}
-
-Assuming that $P_N$ is the path (see Definition \ref{defn-path-graph}) from
-the Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
-demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
-
-\custombinding{3}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextbf{Algorithm  3. }
-  \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
-  = N_1, \ldots, N_j = N))$\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \phi$}}
-
-{\state{$i \leftarrow 1$}}
-
-{\state{{\WHILE{$(N_i \neq N)$}}}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{pk}_{N_i} $}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{Index}_{N_i} (N_{i + 1})$}}
-
-{\state{$i \leftarrow i + 1${\END}}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{pk}_{N_i}$}}
-
-{\state{{\RETURN{$\tmop{pk}^{\tmop{Agr}}_N$}}}}}}
-
-\hrulefill{\medskip}
-
-\begin{definition}
-  \label{defn-node-value}A node $N \in \mathcal{N}$ stores the {\tmstrong{node
-  value}}, {\tmstrong{$v_N$}}, which consists of the following concatenated
-  data:
-  \[ \begin{array}{|l|l|l|}
-       \hline
-       \tmop{Node} \tmop{Header} & \tmop{Partial} \tmop{key} & \tmop{Node}
-       \tmop{Subvalue}\\
-       \hline
-     \end{array} \]
-  Formally noted as:
-  \[ v_N \assign \tmop{Head}_N | | \tmop{Enc}_{\tmop{HE}} (\tmop{pk}_N) | |
-     \tmop{sv}_N \]
-  where $\tmop{Head}_N$, $\tmop{pk}_N$, $\tmop{Enc}_{\tmop{nibbles}}$ and
-  $\tmop{sv}_N$ are defined in Definitions \ref{defn-node-header},
-  \ref{defn-node-key}, \ref{defn-hex-encoding} and \ref{defn-node-subvalue},
-  respectively.
-\end{definition}
-
-\begin{definition}
-  \label{defn-node-header}The {\tmstrong{node header}} of node $N$,
-  $\tmop{Head}_N$, consists of $l + 1 \geqslant 1$ bytes $\tmop{Head}_{N, 1},
-  \ldots, \tmop{Head}_{N, l + 1}$ such that:
-  
-  
-  \[ \begin{array}{ll}
-       \hline
-       \tmop{Node} \tmop{Type} & \tmop{pk} \tmop{length}\\
-       \hline
-       \tmop{Head}_{N, 1}^{6 - 7}_{} & \tmop{Head}_{N, 1}^{0 - 5}_{}
-     \end{array}  \begin{array}{|l|}
-       \hline
-       \tmop{pk} \tmop{length} \tmop{extra} \tmop{byte} 1\\
-       \hline
-       \tmop{Head}_{N, 2}\\
-       \hline
-     \end{array}  \begin{array}{|l|}
-       \hline
-       \tmop{pk} \tmop{key} \tmop{length} \tmop{extra} \tmop{byte} 2\\
-       \hline
-       \ldots .\\
-       \hline
-     \end{array} \ldots \begin{array}{|l|}
-       \hline
-       \tmop{pk} \tmop{length} \tmop{extra} \tmop{byte} l\\
-       \hline
-       \tmop{Head}_{N, l + 1}^{}_{}\\
-       \hline
-     \end{array} \]
-  
-  
-  In which $\tmop{Head}_{N, 1}^{6 - 7}_{}$, the two most significant bits of
-  the first byte of $\tmop{Head}_N$ are determined as follows:
-  \[ \tmop{Head}_{N, 1}^{6 - 7}_{} \assign \left\{ \begin{array}{ll}
-       00 & \tmop{Special} \tmop{case}\\
-       01 & \tmop{Leaf} \tmop{Node}\\
-       10 & \tmop{Branch} \tmop{Node} \tmop{with} k_N \nin \mathcal{K}\\
-       11 & \tmop{Branch} \tmop{Node} \tmop{with} k_N \in \mathcal{K}
-     \end{array} \right. \]
-  where $\mathcal{K}$ is defined in Definition \ref{defn-stored-value}.
-  
-  $\tmop{Head}_{N, 1}^{0 - 5}_{}$, the 6 least significant bits of the first
-  byte of $\tmop{Head}_N$ are defined to be:
-  \[ \tmop{Head}_{N, 1}^{0 - 5}_{} \assign \left\{ \begin{array}{ll}
-       \| \tmop{pk}_N \|_{\tmop{nib}} & \| \tmop{pk}_N \|_{\tmop{nib}} < 63\\
-       63 & \| \tmop{pk}_N \|_{\tmop{nib}} \geqslant 63
-     \end{array} \right. \]
-  In which {\tmstrong{$\| \tmop{pk}_N \|_{\tmop{nib}}$}} is the length of
-  $\tmop{pk}_N $ in number nibbles. $\tmop{Head}_{N, 2}, \ldots,
-  \tmop{Head}_{N, l + 1}$ bytes are determined by Algorithm
-  \ref{algo-pk-length}.
-\end{definition}
-
-\custombinding{4}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextbf{Algorithm  4. }
-  \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
-  1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} \geqslant
-2^{16}$}}}}
-
-{\state{{\RETURN{Error{\END}}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow 64 \times \tmop{Head}_{N, 1}^{6 -
-7}_{}$}}
-
-{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} < 63$}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + \| \tmop{pk}_N
-\|_{\tmop{nib}}$}}
-
-{\state{{\RETURN{$\tmop{Head}_N \END$}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + 63$}}
-
-{\state{$l \leftarrow \| \tmop{pk}_N \|_{\tmop{nib}} - 63$}}
-
-{\state{$i \leftarrow 2$}}
-
-{\state{{\WHILE{$(l > 255)$}}}}
-
-{\state{$\tmop{Head}_{N, i} \leftarrow 255$}}
-
-{\state{$l \leftarrow l - 255$}}
-
-{\state{$i \leftarrow i + 1 \END$}}
-
-{\state{$\tmop{Head}_{N, i} \leftarrow l$}}
-
-{\state{{\RETURN{$\tmop{Head}_N$}}}}}}
-
-\hrulefill{\medskip}
-
-\subsection{The Merkle proof}\label{sect-merkl-proof}
-
-To prove the consistency of the state storage across the network and its
-modifications both efficiently and effectively, the Trie implements a Merkle
-tree structure. The hash value corresponding to each node needs to be computed
-rigorously to make the inter-implementation data integrity possible.
-
-The Merkle value of each node should depend on the Merkle value of all its
-children as well as on its corresponding data in the state storage. This
-recursive dependancy is encompassed into the subvalue part of the node value
-which recursively depends on the Merkle value of its children.
-
-We use the auxilary function introduced in Definition
-\ref{defn-children-bitmap} to encode and decode information stored in a branch
-node.
-
-\begin{definition}
-  \label{defn-children-bitmap}Suppose $N_b, N_c \in \mathcal{N}$ and $N_c$ is
-  a child of $N_b$. We define where bit $b_i : = 1$ if $N$ has a child with
-  partial key $i$, therefore we define {\tmstrong{ChildrenBitmap}} functions
-  as follows:
-  \[ \begin{array}{cc}
-       \tmop{ChildrenBitmap} : & \mathcal{N}_b \rightarrow \mathbb{B}_2\\
-       & N \mapsto (b_{15}, \ldots, b_8, b_7, \ldots b_0)_2
-     \end{array} \]
-  where
-  \[ b_i \assign \left\{ \begin{array}{cc}
-       1 & \exists N_c \in \mathcal{N}: k_{N_c} = k_{N_b} | | i | |
-       \tmop{pk}_{N_c}\\
-       0 & \text{otherwise}
-     \end{array} \right. \]
-\end{definition}
-
-\begin{definition}
-  \label{defn-node-subvalue}For a given node $N$, the {\tmstrong{subvalue}} of
-  $N$, formally referred to as $\tmop{sv}_N$, is determined as follows: in a
-  case which:
-  \begin{itemize}
-    \[ \begin{array}{l}
-         \tmop{sv}_N \assign\\
-         \left\{ \begin{array}{cc}
-           \tmop{Enc}_{\tmop{SC}} (\tmop{StoredValue} (k_N)) & \text{N is a
-           leaf node}\\
-           \nobracket \tmop{ChildrenBitmap} (N)\| \tmop{Enc}_{\tmop{SC}} (H
-           (N_{C_1})) \ldots \tmop{Enc}_{\tmop{SC}} (H (N_{C_n})) | |
-           \tmop{Enc}_{\tmop{SC}} (\tmop{StoredValue} (k_N))  & \text{N is a
-           branch node}
-         \end{array} \right.
-       \end{array} \]
-  \end{itemize}
-\end{definition}
-
-Where $N_{C_1} \ldots N_{C_n}$ with $n \leqslant 16$ are the children nodes of
-the branch node $N$ and Enc\tmrsub{SC}, $\tmop{StoredValue}$, $H$, and
-$\tmop{ChildrenBitmap} (N)$ are defined in Definitions \ref{sect-scale-codec},
-\ref{defn-stored-value}, \ref{defn-merkle-value} and
-\ref{defn-children-bitmap} respectively.
-
-\
-
-The Trie deviates from a traditional Merkle tree where node value, $v_N$ (see
-Definition \ref{defn-node-value}) is presented instead of its hash if it
-occupies less space than its hash.
-
-\begin{definition}
-  \label{defn-merkle-value}For a given node $N$, the {\tmstrong{Merkle value}}
-  of $N$, denoted by $H (N)$ is defined as follows:
-  \[ \begin{array}{ll}
-       & H : \mathbb{B} \rightarrow \mathbb{B}_{32}\\
-       & H (N) : \left\{ \begin{array}{lcl}
-         v_N &  & \|v_N \|< 32\\
-         \tmop{Blake} 2 b (v_N) &  & \|v_N \| \geqslant 32
-       \end{array} \right.
-     \end{array} \]
-  Where $v_N$ is the node value of $N$ defined in Definition
-  \ref{defn-node-value} and $0_{32 - \| v_N \|}$ an all zero byte array of
-  length $32 - | | v_N | |$. The {\tmstrong{Merkle hash}} of the Trie is
-  defined as:
-  \[ \tmop{Blake} 2 b (H (R)) \]
-  Where $R$ is the root of the Trie.
-\end{definition}
-
-\section{Extrinsics}
+\section{Extrinsics}\label{sect-extrinsics}
 
 \subsection{Preliminaries}
 
@@ -1122,74 +1065,116 @@ into future blocks.
 
 {\todo{To be specced}}
 
-\section{Blocks Building Process}
+\section{Block Format}\label{sect-block-format}
 
-The blocks building process is triggered by Algorithm
-\ref{algo-block-production} of the consensus engine which runs Alogrithm
-\ref{algo-build-block}.
+In Polkadot RE, a block is made of two main parts, namely the \tmtextit{block
+header} and the \tmtextit{list of extrinsics}. {\tmem{The Extrinsics}}
+represent the generalization of the concept of {\tmem{transaction}},
+containing any set of data that is external to the system, and which the
+underlying chain wishes to validate and keep track of.
 
-\custombinding{6}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextbf{Algorithm  6. }
-  \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
-  at its head the block to be constructed,
+\subsection{Block Header}\label{block}
+
+The block header is designed to be minimalistic in order to boost the
+efficiency of the light clients. It is defined formally as follows:
+
+\begin{definition}
+  \label{defn-block-header}The {\tmstrong{header of block B}},
+  {\tmstrong{$\tmop{Head} (B)$}} is a 5-tuple containing the following
+  elements:
+  \begin{itemize}
+    \item \tmtextbf{{\tmsamp{parent\_hash:}}} is the 32-byte Blake2b hash (see
+    Section \ref{sect-blake2}) of the header of the parent of the block
+    indicated henceforth by \tmtextbf{$H_p$}.
+    
+    \item {\tmstrong{{\tmsamp{number:}}}} formally indicated as
+    {\tmstrong{$H_i$}} is an integer, which represents the index of the
+    current block in the chain. It is equal to the number of the ancestor
+    blocks. The genesis block has number 0.
+    
+    \item {\tmstrong{{\tmsamp{state\_root:}}}} formally indicated as
+    {\tmstrong{$H_r$}} is the root of the Merkle trie, whose leaves implement
+    the storage for the system.
+    
+    \item {\tmstrong{{\tmsamp{extrinsics\_root:}}}} is the field which is
+    reserved for the runtime to validate the integrity of the extrinsics
+    composing the block body. For example, it can hold the root hash of the
+    Merkle trie which stores an ordered list of the extrinsics being validated
+    in this block. The {\tmsamp{extrinsics\_root}} is set by the runtime and
+    its value is opaque to Polkadot RE. This element is formally referred to
+    as {\tmstrong{$H_e$}}.
+    
+    \item {\tmstrong{{\tmsamp{digest:}}}} this field is used to store any
+    chain-specific auxiliary data, which could help the light clients interact
+    with the block without the need of accessing the full storage. Polkadot RE
+    does not impose any limitation or specification for this field.
+    Essentially, it can be a byte array of any length. This field is indicated
+    as {\tmstrong{$H_d$}}
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  \label{defn-block-header-hash}The {\tmstrong{Block Header Hash of Block
+  $B$}}, {\tmstrong{$H_h (b)$}}, is the hash of the header of block $B$
+  encoded by simple codec:''
+  \[ H_b (b) \assign \tmop{Blake} 2 b (\tmop{Enc}_{\tmop{SC}} (\tmop{Head}
+     (B))) \]
+\end{definition}
+
+\subsection{Justified Block Header}
+
+The Justified Block Header is provided by the consensus engine and presented
+to the Polkadot RE, for the block to be appended to the blockchain. It
+contains the following parts:
+\begin{itemize}
+  \item {\tmstrong{{\tmsamp{{\tmstrong{block\_header}}}}}} the complete block
+  header as defined in Section \ref{block} and denoted by $\tmop{Head} (B)$.
   
-  s: Slot number)\\
-  \hline
-\end{tabular}
+  \item {\tmstrong{{\tmsamp{justification}}}}: as defined by the consensus
+  specification indicated by $\tmop{Just} (B)$ {\todo{link this to its
+  definition from consensus}}.
+  
+  \item {\tmstrong{{\tmsamp{authority Ids}}}}: This is the list of the Ids of
+  authorities, which have voted for the block to be stored and is formally
+  referred to as $A (B)$. An authority Id is 32bit.
+\end{itemize}
 
-{\algorithmic{{\state{$P_B \leftarrow_{}${\tmname{Head($C_{\tmop{Best}}$)}}}}
+\subsection{Block Inherent Data}
 
-{\state{$H_h (P_B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{block\_hash\_from\_id}}, H_i (P_B) \right)$}}
+Block inherent data are unsigned extrinsics which are included in each block.
+In general, these data are collected or generated by Polkadot RE and handed to
+the Runtime for inclusion in the block. Table \ref{tabl-inherent-data} lists
+these inherent data, their identifiers and types.
 
-{\state{$\tmop{Head} (B) \leftarrow$($H_p \leftarrow H_h (P_B), H_i \leftarrow
-H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
-\phi$)}}
+\begin{table}[h]
+  \begin{tabular}{lll}
+    \hline
+    Identifier & Type  & Description\\
+    \hline
+    timstap0 & u64 & Unix epoch time in number of seconds\\
+    babeslot & u64 & Babe Slot Number\tmrsup{\ref{defn-epoch-slot}}\\
+    \hline
+  \end{tabular}
+  \caption{\label{tabl-inherent-data}List of inherent data}
+\end{table}
 
-{\state{{\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{initialze\_block}}, \tmop{Head} (_{} B) \right)$}}
+\begin{definition}
+  \label{defn-func-inherent-data}The function
+  {\tmname{Block-Inherents-Data($B_n$)}} return the inherent data defined in
+  Table \ref{tabl-inherent-data} corresponding to Block $B$ as a SCALE encoded
+  dictionary as defined in Definition \ref{defn-scale-list}.
+\end{definition}
 
-{\state{{\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{inherent\_extrinsics}},
-\text{{\tmname{Block-Inherents-Data}}} \right)${\END}}}
+\subsection{Block Format}
 
-{\state{{\FORIN{$E$}{{\tmname{Inherents-Queue}}}}}}
-
-{\state{{\tmname{$R \leftarrow$Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{apply\_extrinsic}}, E \right)${\END}}}
-
-{\state{{\WHILE{{\tmstrong{not }}{\tmname{Block-Is-Full($R$}})
-{\tmstrong{and}} {\tmstrong{not}} {\tmname{End-Of-Slot(s)}}}}}}
-
-{\state{$E
-\leftarrow$\tmverbatim{}{\tmname{{\tmname{}}Next-Ready-Extrinsic()}}}}
-
-{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{apply\_extrinsics}}, E \right)$}}
-
-{\state{{\IF{{\tmstrong{not}} {\tmname{Block-Is-FULL($R$}})}}}}
-
-{\state{{\tmname{Drop(Ready-Extrinsic-Queue,$E$)}}}}
-
-{\state{$\tmop{Head} (B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{finalize\_block}}, E \right)${\END}}}}}
-
-\hrulefill{\medskip}
-
-$\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
-{\tmname{Block-Inherents-Data}}, {\tmname{Inherents-Queue}},
-{\tmname{Block-Is-Full}} and {\tmname{Next-Ready-Extrinsic}} are defined in
-Definition {\todo{Define these entities}}
-
-\section{Consensus Engine}
+\chapter{Consensus}\label{chap-consensu}
 
 Consensus in Polkadot RE is achieved during the execution of two different
 procedures. The first procedure is block production and the second is
 finality. Polkadot RE must run these procedures, if and only if it is running
 on a validator node.
 
-\subsection{Block Production}
+\section{Block Production}
 
 Polkadot RE uses BABE protocol {\cite{w3f_research_group_blind_2019}} for
 block production designed based on Ouroboros praos
@@ -1270,9 +1255,9 @@ build a block. The $\tmop{sk}$ is the block producer lottery secret key and
 $n$ is the index of epoch for whose slots the block producer is running the
 lottery.
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
+\custombinding{6}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  7. }
+  \tmtextbf{Algorithm  6. }
   \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}$(\tmop{sk}^{},
   n)$\\
   \hline
@@ -1316,11 +1301,12 @@ tail defined in Definition \ref{defn-block-time}.
 
 \begin{definition}
   \label{defn-block-time}The {\tmstrong{block arrival time}} of block $B$ for
-  node $j$ formally represented by {\tmstrong{$T^j_B$}} is the local time of
-  node $j$ when node $j$ has received the block $B$ for the first time. If the
-  node $j$ itself is the producer of $B$, $T_B^j$ is set equal to the time
-  that the block is produced. The index $j$ in $T^j_B$ notation may be dropped
-  when there is no ambiguity about the underlying node.
+  node $j$ formally represented by {\tmstrong{$T^j_B$}} is the local time
+  of\tmverbatim{} node $j$ when node $j$ has received the block $B$ for the
+  first time. If the node $j$ itself is the producer of $B$, $T_B^j$ is set
+  equal to the time that the block is produced. The index $j$ in $T^j_B$
+  notation may be dropped when there is no ambiguity about the underlying
+  node.
 \end{definition}
 
 In addition to the arrival time of block $B$, the block producer also needs to
@@ -1335,9 +1321,9 @@ formalized in Definition \ref{defn-slot-offset}.
   {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
+\custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  8. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
+  \tmtextbf{Algorithm  7. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
   the slot number of the slot whose time needs to be determined)\\
   \hline
 \end{tabular}
@@ -1388,9 +1374,9 @@ alongside with the {\tmem{babe header}} defined in Definition
   \ 
 \end{definition}
 
-\custombinding{9}{\noindent}\begin{tabular}{l}
+\custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  9. }
+  \tmtextbf{Algorithm  8. }
   \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
   pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
   \hline
@@ -1425,9 +1411,9 @@ lottery in epoch $\mathcal{E}_{n + 2}$. The computation of the seed is
 described in Algorithm \ref{algo-epoch-randomness} which uses the concept of
 epoch subchain described in Definition \ref{defn-epoch-subchain}.
 
-\custombinding{10}{\noindent}\begin{tabular}{l}
+\custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  10. }
+  \tmtextbf{Algorithm  9. }
   \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
   index)\\
   \hline
@@ -1447,7 +1433,69 @@ epoch subchain described in Definition \ref{defn-epoch-subchain}.
 In which value $d_B$ is the VRF output computed for slot $s_B$ by running
 Algorithm \ref{algo-block-production-lottery}.
 
-\subsection{Finality}\label{sect-finality}
+\
+
+\subsection{Blocks Building Process}
+
+The blocks building process is triggered by Algorithm
+\ref{algo-block-production} of the consensus engine which runs Alogrithm
+\ref{algo-build-block}.
+
+\custombinding{10}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextbf{Algorithm  10. }
+  \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
+  at its head the block to be constructed,
+  
+  s: Slot number)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$P_B \leftarrow_{}${\tmname{Head($C_{\tmop{Best}}$)}}}}
+
+{\state{$H_h (P_B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{block\_hash\_from\_id}}, H_i (P_B) \right)$}}
+
+{\state{$\tmop{Head} (B) \leftarrow$($H_p \leftarrow H_h (P_B), H_i \leftarrow
+H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
+\phi$)}}
+
+{\state{{\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{initialze\_block}}, \tmop{Head} (_{} B) \right)$}}
+
+{\state{{\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{inherent\_extrinsics}},
+\text{{\tmname{Block-Inherents-Data}}} \right)${\END}}}
+
+{\state{{\FORIN{$E$}{{\tmname{Inherents-Queue}}}}}}
+
+{\state{{\tmname{$R \leftarrow$Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{apply\_extrinsic}}, E \right)${\END}}}
+
+{\state{{\WHILE{{\tmstrong{not }}{\tmname{Block-Is-Full($R$}})
+{\tmstrong{and}} {\tmstrong{not}} {\tmname{End-Of-Slot(s)}}}}}}
+
+{\state{$E
+\leftarrow$\tmverbatim{}{\tmname{{\tmname{}}Next-Ready-Extrinsic()}}}}
+
+{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{apply\_extrinsics}}, E \right)$}}
+
+{\state{{\IF{{\tmstrong{not}} {\tmname{Block-Is-FULL($R$}})}}}}
+
+{\state{{\tmname{Drop(Ready-Extrinsic-Queue,$E$)}}}}
+
+{\state{$\tmop{Head} (B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{finalize\_block}}, E \right)${\END}}}}}
+
+\hrulefill{\medskip}
+
+$\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
+{\tmname{Block-Inherents-Data}}, {\tmname{Inherents-Queue}},
+{\tmname{Block-Is-Full}} and {\tmname{Next-Ready-Extrinsic}} are defined in
+Definition {\todo{Define these entities}}
+
+\section{Finality}\label{sect-finality}
 
 Polkadot RE uses GRANDPA Finality protocol
 {\cite{alistair_stewart_grandpa:_2019}} to finalize blocks. Finality is
@@ -1795,7 +1843,7 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\section{Cryptographic Algorithms}
+\appendix\section{Cryptographic Algorithms}
 
 \subsection{Hash functions}\label{sect-hash-functions}
 
@@ -1965,9 +2013,7 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
 
 \section{Predefined Storage keys}\label{sect-predef-storage-keys}
 
-\section{Runtime upgrade}\label{sect-runtime-upgrade}
-
-\appendix\section{Runtime Environment API\label{sect-re-api}}
+\section{Runtime Environment API\label{sect-re-api}}
 
 The Runtime Environment API is a set of functions that Polkadot RE exposes to
 Runtime to access external functions needed for various reasons, such as the
