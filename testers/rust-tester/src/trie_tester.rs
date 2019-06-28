@@ -53,11 +53,11 @@ fn compute_state_root(matches: &ArgMatches) {
       //cb.root.unwrap_or(Default::default())
     //};
     //println!("[rust] iter_build state root: {:x}", &root_new);
-    disp(trie_vec.as_ref());
+   // disp(trie_vec.as_ref());
     let state_trie_root = trie_root_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
     //let root_encoding = unhashed_trie_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
     //assert_eq!(&root_encoding[..], root_new.as_ref());
-    println!("[rust] state root: {:x}", &state_trie_root);
+    println!("state root: {:x}", &state_trie_root);
     //println!("[rust] encoded root: {:x?}", &root_encoding);
     //println!("[rust] len: {}", root_encoding.len())
 
