@@ -48,7 +48,6 @@ fn compute_state_root(matches: &ArgMatches) {
     //let trie_value =  key_value_map["data"];
     let trie_vec: Vec<_> = key_value_map["keys"].iter().zip(key_value_map["values"].iter()).collect();
 
-
     //let root_new: <Blake2Hasher as Hasher>::Out = {
       //let mut cb = TrieRootPrint::<Blake2Hasher, _>::default();
       //cb.root.unwrap_or(Default::default())
