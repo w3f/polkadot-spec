@@ -43,7 +43,7 @@ fn compute_state_root(matches: &ArgMatches) {
     //let trie_value =  key_value_map["data"];
     let trie_vec = key_value_map["keys"].iter().zip(key_value_map["values"].iter());
     let state_trie_root = trie_root::<Blake2Hasher, ReferenceTrieStreamNoExt, _, _, _>(trie_vec);
-    println!("state trie root: {:x?}", &state_trie_root);
+    println!("state trie root hash: {:x?}", &state_trie_root);
 
 }
 
