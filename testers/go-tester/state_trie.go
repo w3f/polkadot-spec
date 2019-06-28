@@ -106,6 +106,11 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 		}
 		fmt.Println("]")
 		fmt.Printf("[go] len %d\n", len(encoded_root))
+		hash, err := test_trie.Hash()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Printf("[go] root hash %x\n", hash)
 	}
 
 }
