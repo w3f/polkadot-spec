@@ -8,6 +8,7 @@ edition = "2018"
 base64 = "*"
 clap = {version = "~2.27.0", features = ["yaml"]}
 data-encoding = "*"
+hex = "*"
 parity-codec={path = "../../../implementations/rust/parity-codec"}
 serde_yaml="*"
 

@@ -20,6 +20,7 @@
 package main
 
 import (
+	"encoding/hex"
 	"flag"
 	"fmt"
 	"github.com/ChainSafe/gossamer/polkadb"
@@ -38,10 +39,11 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 
 	// state-file subcommand flag pointers
 	stateFilePtr := stateRootCommand.String("state-file", "", "YAML file containing the state")
+	keysInHexPtr := stateRootCommand.Bool("keys-in-hex", false, "keys in the YAML file are treated as hex entries")
 
 	// Verify that a subcommand has been provided
 	if len(command_args) < 1 {
-		fmt.Println("encode or decode subcommand is required")
+		fmt.Println("trie-root subcommand is required")
 		os.Exit(1)
 	}
 
@@ -84,29 +86,22 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 		test_trie := trie.NewEmptyTrie(&db)
 
 		for i, key := range key_value_data.Keys {
-			err := test_trie.Put([]byte(key), []byte(key_value_data.Values[i]))
+			var keyBytes []byte
+			var err error
+			if *keysInHexPtr {
+				keyBytes, err = hex.DecodeString(key)
+				if err != nil {
+					log.Fatal(err)
+				}
+			} else {
+				keyBytes = []byte(key)
+			}
+			err = test_trie.Put(keyBytes, []byte(key_value_data.Values[i]))
 			if err != nil {
 				return
 			}
 		}
 
-		//test_trie.PrintEncoding()
-		//h, _ := trie.NewHasher()
-		//trie_root_hash, _ := h.Hash(test_trie.Root())
-		// encoded_root, err := test_trie.Encode()
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-		// fmt.Printf("[go] encoded root: [")
-		// for i, b := range encoded_root {
-		// 	if i < len(encoded_root)-1 {
-		// 		fmt.Printf("%x, ", b)
-		// 	} else {
-		// 		fmt.Printf("%x", b)
-		// 	}
-		// }
-		//fmt.Println("]")
-		//fmt.Printf("[go] len %d\n", len(encoded_root))
 		hash, err := test_trie.Hash()
 		if err != nil {
 			log.Fatal(err)
