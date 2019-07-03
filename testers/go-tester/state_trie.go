@@ -23,6 +23,7 @@ import (
 	"encoding/hex"
 	"flag"
 	"fmt"
+	"github.com/ChainSafe/gossamer/common"
 	"github.com/ChainSafe/gossamer/polkadb"
 	"github.com/ChainSafe/gossamer/trie"
 	"github.com/go-yaml/yaml"
@@ -53,6 +54,8 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 	case "trie-root":
 		stateRootCommand.Parse(command_args[1:])
 
+	case "insert-and-delete":
+		stateRootCommand.Parse(command_args[1:])
 	default:
 		flag.PrintDefaults()
 		os.Exit(1)
@@ -69,6 +72,8 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 
 		//Insert all (key, value) pairs in the YAML file into state trie.
 		key_value_data := &KeyValueData{}
+		var key_list [][]byte
+
 		state_data_file, err := ioutil.ReadFile(*stateFilePtr)
 
 		if err != nil {
@@ -85,9 +90,10 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 		}
 		test_trie := trie.NewEmptyTrie(&db)
 
+		var trieHash common.Hash
+
 		for i, key := range key_value_data.Keys {
 			var keyBytes []byte
-			var err error
 			if *keysInHexPtr {
 				keyBytes, err = hex.DecodeString(key)
 				if err != nil {
@@ -96,17 +102,41 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			} else {
 				keyBytes = []byte(key)
 			}
+			key_list = append(key_list, keyBytes)
 			err = test_trie.Put(keyBytes, []byte(key_value_data.Values[i]))
 			if err != nil {
 				return
 			}
+			if command_args[0] == "insert-and-delete" {
+				trieHash, err = test_trie.Hash()
+				if err != nil {
+					log.Fatal(err)
+				}
+				fmt.Printf("state root: %x\n", trieHash)
+			}
 		}
 
-		hash, err := test_trie.Hash()
-		if err != nil {
-			log.Fatal(err)
+		if command_args[0] == "insert-and-delete" {
+			for len(key_list) > 0 {
+				key_index_to_drop := int(trieHash[0]) % len(key_list)
+				test_trie.Delete(key_list[key_index_to_drop])
+
+				trieHash, err = test_trie.Hash()
+				if err != nil {
+					log.Fatal(err)
+				}
+				fmt.Printf("state root: %x\n", trieHash)
+
+				key_list = append(key_list[:key_index_to_drop], key_list[key_index_to_drop+1:]...)
+			}
+
+		} else {
+			trieHash, err = test_trie.Hash()
+			if err != nil {
+				log.Fatal(err)
+			}
+			fmt.Printf("state root: %x\n", trieHash)
 		}
-		fmt.Printf("state root: %x\n", hash)
 	}
 
 }

@@ -107,20 +107,20 @@ impl TrieTester {
         
     }
     
-    // /// Perform a sequentials insert and delete test: it insert the key value pairs from the yaml file
-    // /// One by one and compute the hash at each stages then it takes
-    // /// random steps in the key list equal to the first byte of the last hash it has computed and delete
-    // /// the key it lands on and print the hash of the the new trie. It continue this process till all
-    // /// keys are deleted.
+    /// Perform a sequentials insert and delete test: it insert the key value pairs from the yaml file
+    /// One by one and compute the hash at each stages then it takes
+    /// random steps in the key list equal to the first byte of the last hash it has computed and delete
+    /// the key it lands on and print the hash of the the new trie. It continue this process till all
+    /// keys are deleted.
     fn insert_and_delete_test(&mut self, matches: &ArgMatches) {
 		let mut memdb = MemoryDB::<_, HashKey<_>, _>::default();
 		let mut root = Default::default();
 
 		let mut memtrie = RefTrieDBMutNoExt::new(&mut memdb, &mut root);
-        // pub type RefPolkadotTrieDBMutNoExt<'a> = trie_db::TrieDBMut<'a, PolkadotTrieLayout>;
+        //pub type RefPolkadotTrieDBMutNoExt<'a> = trie_db::TrieDBMut<'a, PolkadotTrieLayout>;
         //let mut memtrie = RefPolkadotTrieDBMutNoExt::new(&mut memdb, &mut root);
 
-		for i in 0..self.value_list.len() {
+		for i in 0..self.processed_key_list.len() {
 			let key: &[u8]= &self.processed_key_list[i];
 			let val: &[u8] = &self.value_list[i].as_bytes();
 			memtrie.insert(key, val).unwrap();
