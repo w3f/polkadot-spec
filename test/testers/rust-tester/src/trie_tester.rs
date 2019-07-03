@@ -26,50 +26,131 @@ extern crate hex;
 
 use trie_root::trie_root_no_ext;
 use reference_trie::ReferenceTrieStreamNoExt as ReferenceTrieStream;
-use reference_trie::LayoutNew;//H;
-use trie_db::trie_visit;
+use reference_trie::RefTrieDBMutNoExt;
+
 use memory_db::{MemoryDB, HashKey};
 use std::collections::BTreeMap;
+
+use reference_trie::{LayoutNew, BitMap16, ReferenceNodeCodecNoExt};//H;
+//use trie_db::{TrieRootPrint, trie_visit};
+use trie_db::{
+	Cache16,
+    TrieMut,
+    TrieLayOut,
+    NibbleHalf,
+};
+
+// pub struct PolkadotTrieLayout;
+
+// impl TrieLayOut for PolkadotTrieLayout {
+// 	const USE_EXTENSION: bool = false;
+// 	type H = Blake2Hasher;
+// 	type C = ReferenceNodeCodecNoExt<BitMap16>;
+// 	type N = NibbleHalf;
+// 	type CB = Cache16;
+// }
+
+pub use primitive_types::{H160, H256, H512};
 
 //use trie::{Encode, Decode, HasCompact, Compact, EncodeAsRef, CompactAs};
 use clap::{ArgMatches};
 
 use crate::hasher::blake2::Blake2Hasher;
 
-fn compute_state_root(matches: &ArgMatches) {
-    let trie_key_value_file = matches.value_of("state-file").unwrap();
+///An object to perform various tests on a trie
+pub struct TrieTester {
+    processed_key_list : Vec<Vec<u8>>,
+    value_list : Vec<String>,
+}
 
-    let f = std::fs::File::open(trie_key_value_file).unwrap();
+impl TrieTester {
+    ////Create TrieTester and read its data according to the command line arg
 
-    // We are deserializing the state data in a BTree
-    let key_value_map: BTreeMap<String, Vec<String>> = serde_yaml::from_reader(f).unwrap();
-
-    let key_list = &key_value_map["keys"];
-    let value_list = &key_value_map["values"];
-
-    let mut processed_key_list : Vec<Vec<u8>> = Vec::new();
-
-    if !(matches.is_present("keys-in-hex")) {
-        for cur_key_str in key_list.iter() {
-            processed_key_list.push(cur_key_str.clone().into_bytes());
-        }
-    } else {
-        for cur_key_str in key_list.iter() {
-            processed_key_list.push(hex::decode(cur_key_str).expect("Decoding failed"));
-        }
-    }
+    pub fn new(matches: &ArgMatches) -> Self {
+        let trie_key_value_file = matches.value_of("state-file").unwrap();
         
-    //let trie_value =  key_value_map["data"];
-    let trie_vec: Vec<_> = processed_key_list.iter().zip(value_list.iter()).collect();
+        let f = std::fs::File::open(trie_key_value_file).unwrap();
+        
+        // We are deserializing the state data in a BTree
+        let key_value_map: BTreeMap<String, Vec<String>> = serde_yaml::from_reader(f).unwrap();
+        
+        let mut new_tester : TrieTester = TrieTester { value_list : key_value_map["values"].clone(), processed_key_list : Vec::new()};
 
-    let state_trie_root = trie_root_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
-    println!("state root: {:x}", &state_trie_root);
+        let key_list = &key_value_map["keys"];
+        if !(matches.is_present("keys-in-hex")) {
+            for cur_key_str in key_list.iter() {
+                new_tester.processed_key_list.push(cur_key_str.clone().into_bytes());
+            }
+        } else {
+            for cur_key_str in key_list.iter() {
+                new_tester.processed_key_list.push(hex::decode(cur_key_str).expect("Decoding failed"));
+            }
+        }
 
-}
-
-pub fn process_state_trie_command(subcmd_matches: &ArgMatches) {
-    if subcmd_matches.is_present("trie-root") {
-            compute_state_root(subcmd_matches);
+        new_tester
     }
-}
+    
+    ///read a yaml file containig key value pairs and return a list of key 
 
+    /// Create a trie from the key value yaml file and compute its hash and print it out.
+    ///
+    /// # Arguments
+    ///
+    /// * `Argmatches` - the resulting command line argument matches from clap processor related to state-trie command
+    ///
+    fn compute_state_root(&self, matches: &ArgMatches) {
+        //let trie_value =  key_value_map["data"];
+        let trie_vec: Vec<_> = self.processed_key_list.iter().zip(self.value_list.iter()).collect();
+        
+        let state_trie_root = trie_root_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
+        println!("state root: {:x}", &state_trie_root);
+        
+    }
+    
+    // /// Perform a sequentials insert and delete test: it insert the key value pairs from the yaml file
+    // /// One by one and compute the hash at each stages then it takes
+    // /// random steps in the key list equal to the first byte of the last hash it has computed and delete
+    // /// the key it lands on and print the hash of the the new trie. It continue this process till all
+    // /// keys are deleted.
+    fn insert_and_delete_test(&mut self, matches: &ArgMatches) {
+		let mut memdb = MemoryDB::<_, HashKey<_>, _>::default();
+		let mut root = Default::default();
+
+		let mut memtrie = RefTrieDBMutNoExt::new(&mut memdb, &mut root);
+        // pub type RefPolkadotTrieDBMutNoExt<'a> = trie_db::TrieDBMut<'a, PolkadotTrieLayout>;
+        //let mut memtrie = RefPolkadotTrieDBMutNoExt::new(&mut memdb, &mut root);
+
+		for i in 0..self.value_list.len() {
+			let key: &[u8]= &self.processed_key_list[i];
+			let val: &[u8] = &self.value_list[i].as_bytes();
+			memtrie.insert(key, val).unwrap();
+            memtrie.commit();
+            println!("state root: {:x}", &H256(*memtrie.root()));
+		}
+
+        //now we randomly drop nodes
+        while(self.processed_key_list.len() > 0) {
+            let key_index_to_drop = memtrie.root()[0] as usize % self.processed_key_list.len();
+            let key_to_drop = &self.processed_key_list[key_index_to_drop];
+            memtrie.remove(key_to_drop).unwrap();
+            memtrie.commit();
+            println!("state root: {:x}", &H256(*memtrie.root()));
+            self.processed_key_list.remove(key_index_to_drop);
+        }
+        
+    }
+    
+    pub fn process_state_trie_command(&mut self, subcmd_matches: &ArgMatches) {
+        if let Some(trie_subcommand) = subcmd_matches.value_of("trie-subcommand") {
+            if trie_subcommand == "trie-root" {
+                self.compute_state_root(subcmd_matches);
+            } else if trie_subcommand == "insert-and-delete" {
+                self.insert_and_delete_test(subcmd_matches);
+            }
+        } else {
+            panic!("trie-root subcommand is required");
+        }
+            
+    }
+    
+}
