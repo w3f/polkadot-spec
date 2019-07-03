@@ -29,6 +29,8 @@ pub mod trie_tester;
 pub mod hash;
 pub mod hasher;
 
+use trie_tester::TrieTester;
+
 fn main() {
     let yaml_data = load_yaml!("cli.yaml");
     let matches = App::from_yaml(yaml_data).get_matches();
@@ -36,7 +38,7 @@ fn main() {
     if let Some(matches) = matches.subcommand_matches("scale-codec") {
         scale_codec::process_scale_codec_command(matches);
     } else if let Some(matches) = matches.subcommand_matches("state-trie") {
-        trie_tester::process_state_trie_command(matches);
+        let mut trie_tryer: TrieTester = TrieTester::new(matches);
+        trie_tryer.process_state_trie_command(matches);
     }
 }
-

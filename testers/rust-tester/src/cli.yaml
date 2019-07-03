@@ -25,11 +25,10 @@ subcommands:
     - state-trie:
         about: trie related tests
         args:
-          - trie-root:
-              long: trie-root
+          - trie-subcommand:
               index: 1
               requires: state-file
-                
+              
           - keys-in-hex:
               long: keys-in-hex
               help: regard the keys in the trie file as hex values and convert them to binary before inserting into the trie

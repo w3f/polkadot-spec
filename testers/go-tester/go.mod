@@ -3,7 +3,7 @@ module w3f/go-testers
 replace github.com/go-interpreter/wagon v0.0.0 => github.com/perlin-network/wagon v0.3.1-0.20180825141017-f8cb99b55a39
 
 require (
-	github.com/ChainSafe/gossamer v0.0.0-20190627215236-687f07d145e4
+	github.com/ChainSafe/gossamer v0.0.0-20190702222354-733f21ff13f4
 	github.com/coreos/go-semver v0.3.0 // indirect
 	github.com/dgraph-io/badger v1.5.5-0.20190226225317-8115aed38f8f
 	github.com/go-yaml/yaml v2.1.0+incompatible
