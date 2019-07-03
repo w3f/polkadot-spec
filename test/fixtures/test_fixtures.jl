@@ -50,6 +50,7 @@ end
 module StateTrieFixtures
 const state_trie_test_command = " state-trie";
 const state_trie_root_subcommand = " trie-root";
+const state_trie_insert_and_delete_subcommand = " insert-and-delete";
 const state_trie_root_hex_flag = " --keys-in-hex";
 
 const fixture_data_dir = "fixtures"
