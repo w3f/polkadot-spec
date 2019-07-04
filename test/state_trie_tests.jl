@@ -1,6 +1,6 @@
 include("./fixtures/test_fixtures.jl")
 using Test
-using Debugger
+#using Debugger
 @testset "State Trie Tests" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
