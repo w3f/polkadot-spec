@@ -31,7 +31,7 @@ use reference_trie::RefTrieDBMutNoExt;
 use memory_db::{MemoryDB, HashKey};
 use std::collections::BTreeMap;
 
-use reference_trie::{LayoutNew, BitMap16, ReferenceNodeCodecNoExt};//H;
+use reference_trie::{LayoutNew, LayoutNewH, BitMap16, ReferenceNodeCodecNoExt};//H;
 //use trie_db::{TrieRootPrint, trie_visit};
 use trie_db::{
 	Cache16,
@@ -116,16 +116,16 @@ impl TrieTester {
 		let mut memdb = MemoryDB::<_, HashKey<_>, _>::default();
 		let mut root = Default::default();
 
-		let mut memtrie = RefTrieDBMutNoExt::new(&mut memdb, &mut root);
-        //pub type RefPolkadotTrieDBMutNoExt<'a> = trie_db::TrieDBMut<'a, PolkadotTrieLayout>;
-        //let mut memtrie = RefPolkadotTrieDBMutNoExt::new(&mut memdb, &mut root);
+		//let mut memtrie = RefTrieDBMutNoExt::new(&mut memdb, &mut root);
+        pub type RefPolkadotTrieDBMutNoExt<'a> = trie_db::TrieDBMut<'a, LayoutNewH<Blake2Hasher>>;
+        let mut memtrie = RefPolkadotTrieDBMutNoExt::new(&mut memdb, &mut root);
 
 		for i in 0..self.processed_key_list.len() {
 			let key: &[u8]= &self.processed_key_list[i];
 			let val: &[u8] = &self.value_list[i].as_bytes();
 			memtrie.insert(key, val).unwrap();
             memtrie.commit();
-            println!("state root: {:x}", &H256(*memtrie.root()));
+            println!("state root: {:x}", memtrie.root());
 		}
 
         //now we randomly drop nodes
@@ -134,7 +134,7 @@ impl TrieTester {
             let key_to_drop = &self.processed_key_list[key_index_to_drop];
             memtrie.remove(key_to_drop).unwrap();
             memtrie.commit();
-            println!("state root: {:x}", &H256(*memtrie.root()));
+            println!("state root: {:x}", memtrie.root());
             self.processed_key_list.remove(key_index_to_drop);
         }
         
