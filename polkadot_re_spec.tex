@@ -1,7 +1,7 @@
 \documentclass{article}
 \usepackage[english]{babel}
 \usepackage{geometry,amsmath,amssymb,calc,ifthen,alltt,capt-of}
-\geometry{letterpaper, paperheight= auto, paperwidth= auto}
+\geometry{letterpaper}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
@@ -12,6 +12,7 @@
 \newcommand{\nosymbol}{}
 \newcommand{\tmcodeinline}[2][]{{\ttfamily{#2}}}
 \newcommand{\tmem}[1]{{\em #1\/}}
+\newcommand{\tmmathbf}[1]{\ensuremath{\boldsymbol{#1}}}
 \newcommand{\tmname}[1]{\textsc{#1}}
 \newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
 \newcommand{\tmrsub}[1]{\ensuremath{_{\textrm{#1}}}}
@@ -74,7 +75,7 @@
   {\Large Protocol Specification}
 }
 
-\date{June 26, 2019}
+\date{July 23, 2019}
 
 \maketitle
 
@@ -122,7 +123,7 @@ the same state.
 
 \begin{definition}
   \label{defn-runtime}{\tmstrong{Runtime}} is the state transition function of
-  the decentralized ledger protocol.\tmverbatim{}
+  a state machine.\tmverbatim{}
 \end{definition}
 
 \begin{definition}
@@ -727,9 +728,9 @@ access the runtime.
   \label{nota-call-into-runtime} By
   \[ \text{{\tmname{Call-Runtime-Entry}}} \left( R, \mathcal{R}\mathcal{E},
      \text{\tmverbatim{Runtime-Entry}}, A, A_{\tmop{len}} \right) \]
-  we refer to the task using the execuping me cherie when the edits are
-  readytor to invoke the \tmverbatim{Runtime-Entry} while passing an $A_1,
-  \ldots, A_n$ argument to it and using the encoding described in Section
+  we refer to the task using the executor to invoke the
+  \tmverbatim{Runtime-Entry} while passing an $A_1, \ldots, A_n$ argument to
+  it and using the encoding described in Section
   \ref{sect-send-args-to-runtime}.
 \end{notation}
 
@@ -934,7 +935,7 @@ individually in Section \ref{sect-message-detail}.
     \hline
     $M_1$ & Message Type & Description\\
     \hline
-    0 & Status & \\
+    0 & Status & \ref{sect-msg-status}\\
     1 & Block Request & \\
     2 & Block Response & \\
     3 & Block Announce & \\
@@ -958,6 +959,139 @@ individually in Section \ref{sect-message-detail}.
 
 This section disucsses the detailed structure of each network message.
 
+\subsubsection{Status Message}\label{sect-msg-status}
+
+A {\tmem{Status}} Message represented by $M_S$ is sent after connection with a
+neighbouring node is established and has the following structure:
+\[ M^{}_S \assign \tmop{Enc}_{\tmop{SC}} (v, r, N_B, \tmop{Hash}_B,
+   \tmop{Hash}_G, C_S) \]
+Where:
+{\center{\begin{tabular}{rll}
+  $v$: & Protocol version & 32 bit integer\\
+  $r$: & Roles & 1 byte\\
+  $N_B$: & Best Block Number & 64 bit integer\\
+  $\tmop{Hash}_B$ & Best block Hash & $\mathbb{B}_{32}$\\
+  $\tmop{Hash}_G$ & Genesis Hash & $\mathbb{B}_{32}$\\
+  $C_S$ & Chain Status & Byte array 
+\end{tabular}}}
+
+
+In which, Role is a bitmap value whose bits represent different roles for the
+sender node as specified in Table \ref{tabl-node-role}:
+
+\
+
+\begin{center}
+  \tmfloat{h}{small}{table}{
+  {\center{\begin{tabular}{|r|l|l|}
+    \hline
+    Value & Binary representation & Role\\
+    \hline
+    $0$ & 00000000 & No network\\
+    1 & 00000001 & Full node, does not participate in consensus\\
+    2 & 00000010 & Light client node\\
+    4 & 00000100 & Act as an authority \\
+    \hline
+  \end{tabular}}}
+  }{\label{tabl-node-role}Node role representation in the status message}
+\end{center}
+
+\subsubsection{Block request Message}\label{sect-block-request}
+
+A Block request message, represented by $M_{\tmop{BR}}$, is sent to request
+block data for a range of blocks from a peer and has the following structure:
+\[ M^{}_{\tmop{BR}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{id}, A_B, S_B,
+   \tmop{Hash}_E, d, \tmop{Max}) \]
+where:
+{\center{\begin{tabular}{rll}
+  $\tmop{id}$: & Unique request id & 32 bit integer\\
+  $A_B$: & Requested data & 1 byte\\
+  $S_B$: & Starting Block & Varying \{$\mathbb{B}_{32}, 64 \tmop{bit}
+  \tmop{integer}$\}\\
+  $\tmop{Hash}_E$ & End block Hash & $\mathbb{B}_{32}$ optional type\\
+  $d$ & Block sequence direction & 1 byte\\
+  $\tmop{Max}$ & Maximum number of blocks to return & 32 bit integer optional
+  type
+\end{tabular}}}
+
+
+\
+
+in which
+\begin{itemizeminus}
+  \item $A_B$, the requested data, is a bitmap value, whose bits represent the
+  part of the block data requested, as explained in Table
+  \ref{tabl-block-attributes}:
+\end{itemizeminus}
+\begin{center}
+  \tmfloat{h}{small}{table}{
+  {\center{\begin{tabular}{|r|l|l|}
+    \hline
+    Value & Binary representation & Requested Attribute\\
+    \hline
+    $1$ & 00000001 & Block header\\
+    2 & 00000010 & Block Body\\
+    4 & 00000100 & Receipt\\
+    8 & 00001000 & Message queue\\
+    16 & 00010000 & Justification \\
+    \hline
+  \end{tabular}}}
+  }{\label{tabl-block-attributes}Bit values for block attribute $A_B$, to
+  indicate the requested parts of the data}
+\end{center}
+\begin{itemizeminus}
+  \item $S_B$ is SCALE encoded varying data type (see Definition
+  \ref{defn-scale-variable-type}) of either $\mathbb{B}_{32}$ representing the
+  block hash, $H_B$, or $64 \tmop{bit}$ integer representing the block number
+  of the starting block of the requested range of blocks.
+  
+  \item $\tmop{Hash}_E$ is optionally the block hash of the last block in the
+  range.
+  
+  \item $d$ is a flag; it defines the direction on the block chain where the
+  block range should be considered (starting with the starting block), as
+  follows
+  \[ d = \left\{ \begin{array}{cc}
+       0 & \tmop{child} \tmop{to} \tmop{parent} \tmop{direction}\\
+       1 & \tmop{parent} \tmop{to} \tmop{child} \tmop{direction}
+     \end{array} \right. \]
+\end{itemizeminus}
+Optional data type is defined in Definition \ref{defn-varrying-data-type}.
+
+\subsubsection{Block response Message}\label{sect-block-response}
+
+A block response message represented by $M_{\tmop{BS}}$ is sent in a response
+to a requested block message (see Section \ref{sect-block-request}). It has
+the following structure:
+\[ M^{}_{\tmop{BR}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{id}, D) \]
+where:
+{\center{\begin{tabular}{rll}
+  $\tmop{id}$: & Unique id of the requested response was made for & 32 bit
+  integer\\
+  $D$: & Block data for the requested sequence of Block & Array of block data
+\end{tabular}}}
+
+
+\
+
+In which block data is a tuple:
+\[ (H_B, \tmop{Header}_B, \tmop{Body}, \tmop{Body}, \tmop{Receipt},
+   \tmop{MessageQueue}, \tmop{Justification}) \]
+Whose elements, with the exception of $H_B$, are all of the following
+{\tmem{optional type}} (see Definition \ref{defn-varrying-data-type}) and are
+defined as follows:
+{\center{\begin{tabular}{rll}
+  $H_B$: & Block header hash & $\mathbb{B}_{32}$\\
+  $\tmop{Header}_B$: & Block header & 5-tuple (Definition
+  \ref{defn-block-header})\\
+  Body & Array of extrinsics & Array of Byte arrays (Section
+  \ref{sect-extrinsics})\\
+  Receipt & Block Receipt & Byte array\\
+  Message Queue & Block message queue & Byte array\\
+  Justification & Block Justification & Byte array
+\end{tabular}}}
+
+
 \subsubsection{Transactions}\label{sect-message-transactions}
 
 \ \ \ The transactions Message is represented by $M_T$ and is defined as
@@ -966,12 +1100,12 @@ follows:
 in which:
 \[ C_i \assign \tmop{Enc}_{\tmop{SC}} (E_i) \]
 Where each $E_i$ is a byte array and represents a sepearate extrinsic.
-Polkadot RE is indifferent about the content of an extrinsic and treats is as
+Polkadot RE is indifferent about the content of an extrinsic and treats it as
 a blob of data.
 
 \subsection{Block Submission and Validation}
 
-Block validation is the process, by which the client asserts that a block is
+Block validation is the process by which the client asserts that a block is
 fit to be added to the blockchain. This means that the block is consistent
 with the world state and transitions from the state of the system to a new
 valid state.
@@ -1673,17 +1807,15 @@ more details). These messages are specified in this section.
      (\tmop{stage}, V_v^{r, \tmop{stage}}, r, V_{\tmop{id}}), v_{\tmop{id}})
   \]
   Where:
-  \begin{center}
-    \begin{tabular}{rll}
-      r: & round number & 64 bit integer\\
-      $V_{\tmop{id}}$: & incremental change tracker counter & 64 bit integer\\
-      {\rightaligned{$v_{\tmop{id}}$}}: & Ed25519 public key of $v$ & 4 byte
-      array\\
-      {\rightaligned{}}$\tmop{stage}$: & 0 if it is the pre-vote sub-round & 1
-      byte\\
-      & 1 if it the pre-commit sub-round & 
-    \end{tabular}
-  \end{center}
+  {\center{\begin{tabular}{rll}
+    r: & round number & 64 bit integer\\
+    $V_{\tmop{id}}$: & incremental change tracker counter & 64 bit integer\\
+    {\rightaligned{$v_{\tmop{id}}$}}: & Ed25519 public key of $v$ & 4 byte
+    array\\
+    {\rightaligned{}}$\tmop{stage}$: & 0 if it is the pre-vote sub-round & 1
+    byte\\
+    & 1 if it the pre-commit sub-round & 
+  \end{tabular}}}
   
 \end{definition}
 
@@ -1891,13 +2023,50 @@ implementation, including the Merkle hash proof for the State Storage.
   $T$ such that:
   \[ T \assign (A_1, \ldots, A_n) \]
   Where $A_i$'s are values of {\tmstrong{different types}}, is defined as:
-  \[ \tmop{Enc}_{\tmop{SC}} (T) \assign \tmop{Enc}_{\tmop{SC}} (A_1) |
-     \tmop{Enc}_{\tmop{SC}} (A_2) | \ldots | \tmop{Enc}_{\tmop{SC}} (A_n) \]
+  \[ \tmop{Enc}_{\tmop{SC}} (T) \assign \tmop{Enc}_{\tmop{SC}} (A_1) | |
+     \tmop{Enc}_{\tmop{SC}} (A_2) | | \ldots | | \tmop{Enc}_{\tmop{SC}} (A_n)
+  \]
 \end{definition}
 
 In case of a tuple (or struct), the knowledge of the shape of data is not
 encoded even though it is necessary for decoding. The decoder needs to derive
 that information from the context where the encoding/decoding is happenning.
+
+\begin{definition}
+  \label{defn-varrying-data-type}We define a {\tmstrong{varying data}} type to
+  be an ordered set of data types
+  \[ \mathcal{T}= \{ T_1, \ldots, T_n \} \]
+  A value $\tmmathbf{A}$ of varying date type is a pair $(A_{\tmop{Type}},
+  A_{\tmop{Value}})$ where $A_{\tmop{Type}} = T_i$ for some $T_i \in
+  \mathcal{T}$ and $A_{\tmop{Value}}$ is its value of type $T_i$. We define
+  $\tmop{idx} (T_i) = i - 1.$
+  
+  In particular, we define {\tmstrong{optional type}} to be $\mathcal{O}= \{
+  \tmop{None}, T_2 \}$ for some data type $T_2$ where $\tmop{idx}
+  (\tmop{None}) = 0$ $(\tmop{None}, \phi)$ is the only possible value, when
+  the data is of type None.
+  
+  
+\end{definition}
+
+\begin{definition}
+  \label{defn-scale-variable-type}Scale coded for value {\tmstrong{$A =
+  (A_{\tmop{Type}}, A_{\tmop{Value}})$ of varying data type}} $\mathcal{T}= \{
+  T_1, \ldots, T_n \}$
+  \[ \tmop{Enc}_{\tmop{SC}} (A) \assign \tmop{Enc}_{\tmop{SC}} (\tmop{Idx}
+     (A_{\tmop{Type}})) | | \tmop{Enc}_{\tmop{SC}} (A_{\tmop{Value}}) \]
+  Where $\tmop{Idx}$ is encoded in a fixed length integer determining the type
+  of $A$.
+  
+  In particular, for the optional type defined in Definition
+  \ref{defn-varrying-data-type}, we have:
+  \[ \tmop{Enc}_{\tmop{SC}} ((\tmop{None}, \phi)) \assign 0_{\mathbb{B}_1} \]
+\end{definition}
+
+SCALE codec does not encode the correspondence between the value of
+$\tmop{Idx}$ defined in Definition \ref{defn-scale-variable-type} and the data
+type it represents; the decoder needs prior knowledge of such correspondence
+to decode the data.
 
 \begin{definition}
   \label{defn-scale-list}The {\tmstrong{SCALE codec}} for
@@ -2078,9 +2247,10 @@ Retrieves the root of the state storage.
 
 \subsubsection{\tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}}
 
-Given an array of byte arrays, arranges them in a Merkle trie, defined
-in\tmverbatim{{\tmem{{\tmstrong{}}}}} Section \ref{sect-merkl-proof}, and
-computes the trie root hash.
+Given an array of byte arrays, it arranges them in a Merkle trie, defined
+in\tmverbatim{{\tmem{{\tmstrong{}}}}} Section \ref{sect-merkl-proof}, where
+the key under which the values are stored is the 0-based index of that value
+in the array. It computes and returns the root hash of the constructed trie.
 
 \
 
