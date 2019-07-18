@@ -1109,7 +1109,7 @@
     status message>
   </with>
 
-  <subsubsection|Block request Message><label|sect-block-request>
+  <subsubsection|Block Request Message><label|sect-block-request>
 
   A Block request message, represented by <math|M<rsub|BR>>, is sent to
   request block data for a range of blocks from a peer and has the following
@@ -1186,14 +1186,14 @@
   Optional data type is defined in Definition
   <reference|defn-varrying-data-type>.
 
-  <subsubsection|Block response Message><label|sect-block-response>
+  <subsubsection|Block Response Message><label|sect-block-response>
 
-  A block response message represented by <math|M<rsub|BS>> is sent in a
+  A <em|block response message> represented by <math|M<rsub|BS>> is sent in a
   response to a requested block message (see Section
   <reference|sect-block-request>). It has the following structure:
 
   <\equation*>
-    M<rsup|><rsub|BR>\<assign\>Enc<rsub|SC><around*|(|id,D|)>
+    M<rsup|><rsub|BS>\<assign\>Enc<rsub|SC><around*|(|id,D|)>
   </equation*>
 
   where:
@@ -1231,6 +1231,24 @@
   </center>
 
   \;
+
+  <subsubsection|Block Announce Message><label|sect-msg-status>
+
+  A <em|block announce message> representd by <math|M<rsub|BA>> is sent when
+  a node becomes aware of a new complete block on the network and has the
+  following structure:
+
+  <\equation*>
+    M<rsub|BA>\<assign\>Enc<rsub|SC><around*|(|Header<rsub|B>|)>
+  </equation*>
+
+  Wh<verbatim|>ere:
+
+  <\center>
+    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|Header<rsub|B>>:>|<cell|Header
+    of new block B>|<cell|5-tuple header (Definition
+    <reference|defn-block-header>)>>>>>
+  </center>
 
   <subsubsection|Transactions><label|sect-message-transactions>
 
@@ -3103,6 +3121,40 @@
     <item><verbatim|ext_twox_256>
   </itemize>
 
+  <subsection|Off Chain Worker >
+
+  <subsubsection|<verbatim|ext_submit_transaction>>
+
+  Given a extrinsic as a SCALE encoded byte array, decodes the byte array and
+  submits the extrinsic in the inherent pool as a extrinsic to be included in
+  the next produced block.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_submit_transaction
+
+    \ \ \ \ \ \ (param $data i32) (param $len i32) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|data>: a pointer to the buffer containing the byte array
+    storing the encoded extrinsic.
+
+    <item><verbatim|len>: an <verbatim|i32> integer indicating the size of
+    the encoded extrinsic.
+
+    <item><verbatim|result>: \ an in<verbatim|>teger value equal to 0
+    indicates that the extrinsic is successfully added to the pool or a
+    nonzero value otherwise.
+  </itemize>
+
   <subsection|Sandboxing>
 
   <subsubsection|To be Specced>
@@ -3248,12 +3300,15 @@
     <associate|algo-validate-transactions|<tuple|5|15>>
     <associate|auto-1|<tuple|1|1>>
     <associate|auto-10|<tuple|1.4|7>>
-    <associate|auto-100|<tuple|E.5.1|34>>
-    <associate|auto-101|<tuple|E.5.2|34>>
+    <associate|auto-100|<tuple|E.5|34>>
+    <associate|auto-101|<tuple|E.5.1|34>>
     <associate|auto-102|<tuple|E.6|34>>
     <associate|auto-103|<tuple|E.6.1|34>>
-    <associate|auto-104|<tuple|E.7|34>>
+    <associate|auto-104|<tuple|E.6.2|34>>
     <associate|auto-105|<tuple|E.7|34>>
+    <associate|auto-106|<tuple|E.7.1|?>>
+    <associate|auto-107|<tuple|E.8|?>>
+    <associate|auto-108|<tuple|E.8|?>>
     <associate|auto-11|<tuple|3|8>>
     <associate|auto-12|<tuple|1|8>>
     <associate|auto-13|<tuple|1.1|8>>
@@ -3284,73 +3339,73 @@
     <associate|auto-36|<tuple|5|13>>
     <associate|auto-37|<tuple|2.4.3|14>>
     <associate|auto-38|<tuple|2.4.4|14>>
-    <associate|auto-39|<tuple|2.5|14>>
+    <associate|auto-39|<tuple|2.4.5|14>>
     <associate|auto-4|<tuple|2.1|2>>
-    <associate|auto-40|<tuple|3|15>>
-    <associate|auto-41|<tuple|3.1|15>>
-    <associate|auto-42|<tuple|3.2|15>>
-    <associate|auto-43|<tuple|3.3|15>>
-    <associate|auto-44|<tuple|4|15>>
-    <associate|auto-45|<tuple|4.1|16>>
-    <associate|auto-46|<tuple|4.2|16>>
-    <associate|auto-47|<tuple|4.3|16>>
-    <associate|auto-48|<tuple|6|16>>
-    <associate|auto-49|<tuple|4.4|17>>
+    <associate|auto-40|<tuple|2.5|15>>
+    <associate|auto-41|<tuple|3|15>>
+    <associate|auto-42|<tuple|3.1|15>>
+    <associate|auto-43|<tuple|3.2|15>>
+    <associate|auto-44|<tuple|3.3|15>>
+    <associate|auto-45|<tuple|4|16>>
+    <associate|auto-46|<tuple|4.1|16>>
+    <associate|auto-47|<tuple|4.2|16>>
+    <associate|auto-48|<tuple|4.3|16>>
+    <associate|auto-49|<tuple|6|17>>
     <associate|auto-5|<tuple|2|3>>
-    <associate|auto-50|<tuple|4|17>>
-    <associate|auto-51|<tuple|1|17>>
-    <associate|auto-52|<tuple|1.0.1|17>>
-    <associate|auto-53|<tuple|1.0.2|18>>
-    <associate|auto-54|<tuple|1.0.3|18>>
-    <associate|auto-55|<tuple|1.0.4|19>>
-    <associate|auto-56|<tuple|1.0.5|19>>
-    <associate|auto-57|<tuple|1.0.6|19>>
-    <associate|auto-58|<tuple|1.1|20>>
-    <associate|auto-59|<tuple|2|20>>
+    <associate|auto-50|<tuple|4.4|17>>
+    <associate|auto-51|<tuple|4|17>>
+    <associate|auto-52|<tuple|1|17>>
+    <associate|auto-53|<tuple|1.0.1|18>>
+    <associate|auto-54|<tuple|1.0.2|18>>
+    <associate|auto-55|<tuple|1.0.3|19>>
+    <associate|auto-56|<tuple|1.0.4|19>>
+    <associate|auto-57|<tuple|1.0.5|19>>
+    <associate|auto-58|<tuple|1.0.6|20>>
+    <associate|auto-59|<tuple|1.1|20>>
     <associate|auto-6|<tuple|1|3>>
-    <associate|auto-60|<tuple|2.0.1|20>>
-    <associate|auto-61|<tuple|2.0.2|22>>
-    <associate|auto-62|<tuple|2.0.3|23>>
-    <associate|auto-63|<tuple|2.0.4|23>>
-    <associate|auto-64|<tuple|A|24>>
-    <associate|auto-65|<tuple|A.1|24>>
-    <associate|auto-66|<tuple|A.2|24>>
-    <associate|auto-67|<tuple|A.3|25>>
-    <associate|auto-68|<tuple|A.4|25>>
-    <associate|auto-69|<tuple|B|25>>
+    <associate|auto-60|<tuple|2|20>>
+    <associate|auto-61|<tuple|2.0.1|22>>
+    <associate|auto-62|<tuple|2.0.2|23>>
+    <associate|auto-63|<tuple|2.0.3|23>>
+    <associate|auto-64|<tuple|2.0.4|24>>
+    <associate|auto-65|<tuple|A|24>>
+    <associate|auto-66|<tuple|A.1|24>>
+    <associate|auto-67|<tuple|A.2|25>>
+    <associate|auto-68|<tuple|A.3|25>>
+    <associate|auto-69|<tuple|A.4|25>>
     <associate|auto-7|<tuple|1.1|3>>
-    <associate|auto-70|<tuple|B.1|25>>
-    <associate|auto-71|<tuple|B.1.1|26>>
-    <associate|auto-72|<tuple|B.2|27>>
-    <associate|auto-73|<tuple|C|27>>
-    <associate|auto-74|<tuple|D|27>>
-    <associate|auto-75|<tuple|E|27>>
-    <associate|auto-76|<tuple|E.1|28>>
-    <associate|auto-77|<tuple|E.1.1|28>>
-    <associate|auto-78|<tuple|E.1.2|28>>
-    <associate|auto-79|<tuple|E.1.3|28>>
+    <associate|auto-70|<tuple|B|25>>
+    <associate|auto-71|<tuple|B.1|26>>
+    <associate|auto-72|<tuple|B.1.1|27>>
+    <associate|auto-73|<tuple|B.2|27>>
+    <associate|auto-74|<tuple|C|27>>
+    <associate|auto-75|<tuple|D|27>>
+    <associate|auto-76|<tuple|E|28>>
+    <associate|auto-77|<tuple|E.1|28>>
+    <associate|auto-78|<tuple|E.1.1|28>>
+    <associate|auto-79|<tuple|E.1.2|28>>
     <associate|auto-8|<tuple|1.2|4>>
-    <associate|auto-80|<tuple|E.1.4|29>>
-    <associate|auto-81|<tuple|E.1.5|29>>
-    <associate|auto-82|<tuple|E.1.6|29>>
-    <associate|auto-83|<tuple|E.1.7|29>>
-    <associate|auto-84|<tuple|E.1.8|30>>
-    <associate|auto-85|<tuple|E.1.9|30>>
-    <associate|auto-86|<tuple|E.2|31>>
-    <associate|auto-87|<tuple|E.2.1|31>>
-    <associate|auto-88|<tuple|E.2.2|31>>
-    <associate|auto-89|<tuple|E.2.3|31>>
+    <associate|auto-80|<tuple|E.1.3|29>>
+    <associate|auto-81|<tuple|E.1.4|29>>
+    <associate|auto-82|<tuple|E.1.5|29>>
+    <associate|auto-83|<tuple|E.1.6|29>>
+    <associate|auto-84|<tuple|E.1.7|30>>
+    <associate|auto-85|<tuple|E.1.8|30>>
+    <associate|auto-86|<tuple|E.1.9|31>>
+    <associate|auto-87|<tuple|E.2|31>>
+    <associate|auto-88|<tuple|E.2.1|31>>
+    <associate|auto-89|<tuple|E.2.2|31>>
     <associate|auto-9|<tuple|1.3|4>>
-    <associate|auto-90|<tuple|E.3|31>>
-    <associate|auto-91|<tuple|E.3.1|31>>
-    <associate|auto-92|<tuple|E.3.2|32>>
-    <associate|auto-93|<tuple|E.3.3|32>>
-    <associate|auto-94|<tuple|E.3.4|32>>
-    <associate|auto-95|<tuple|E.3.5|33>>
-    <associate|auto-96|<tuple|E.3.6|33>>
-    <associate|auto-97|<tuple|E.4|33>>
-    <associate|auto-98|<tuple|E.4.1|33>>
-    <associate|auto-99|<tuple|E.5|34>>
+    <associate|auto-90|<tuple|E.2.3|31>>
+    <associate|auto-91|<tuple|E.3|31>>
+    <associate|auto-92|<tuple|E.3.1|32>>
+    <associate|auto-93|<tuple|E.3.2|32>>
+    <associate|auto-94|<tuple|E.3.3|32>>
+    <associate|auto-95|<tuple|E.3.4|33>>
+    <associate|auto-96|<tuple|E.3.5|33>>
+    <associate|auto-97|<tuple|E.3.6|33>>
+    <associate|auto-98|<tuple|E.4|33>>
+    <associate|auto-99|<tuple|E.4.1|34>>
     <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|34>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|34>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|34>>
@@ -3415,8 +3470,8 @@
     <associate|sect-loading-runtime-code|<tuple|1.1|8>>
     <associate|sect-merkl-proof|<tuple|1.4|7>>
     <associate|sect-message-detail|<tuple|2.4|12>>
-    <associate|sect-message-transactions|<tuple|2.4.4|14>>
-    <associate|sect-msg-status|<tuple|2.4.1|12>>
+    <associate|sect-message-transactions|<tuple|2.4.5|14>>
+    <associate|sect-msg-status|<tuple|2.4.4|12>>
     <associate|sect-network-interactions|<tuple|2|11>>
     <associate|sect-predef-storage-keys|<tuple|D|27>>
     <associate|sect-randomness|<tuple|A.3|25>>
