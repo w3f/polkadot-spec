@@ -1,0 +1,4 @@
+* Mon Jul 22 2019 
+  - Network message clean up, adding references.
+  - Changing the Style from Article to Documentation so the chapter numbers
+    are added to the section for easier referral.
