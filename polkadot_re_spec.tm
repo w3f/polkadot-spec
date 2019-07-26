@@ -3692,8 +3692,7 @@
 
   <\itemize>
     <item>The entry accept <em|block data> defined in Definition
-    <reference|defn-block-data> as the only argument. <todo|check if still
-    \Pdelete one type of digestitem from the logs.\Q holds >.
+    <reference|defn-block-data> as the only argument.
   </itemize>
 
   \;
