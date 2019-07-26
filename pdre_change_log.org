@@ -1,3 +1,9 @@
+* Fri Jul 26 2019
+  - Change the document style from "article" to "generic" to get chapters numbers included in subparts.
+  - Table of content is added.
+  - The description of individual Runtime entries moved to an Appendix.
+  - Core_Execute_block was documented more accurately.
+
 * Mon Jul 22 2019 
   - Network message clean up, adding references.
   - Changing the Style from Article to Documentation so the chapter numbers
