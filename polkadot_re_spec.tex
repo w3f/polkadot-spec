@@ -1,4 +1,4 @@
-\documentclass{article}
+\documentclass{book}
 \usepackage[english]{babel}
 \usepackage{geometry,amsmath,amssymb,calc,ifthen,alltt,capt-of}
 \geometry{letterpaper}
@@ -6,7 +6,6 @@
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
-\newcommand{\chapter}[1]{\medskip\bigskip--\noindent\textbf{\huge #1}}
 \newcommand{\nin}{\not\in}
 \newcommand{\nobracket}{}
 \newcommand{\nosymbol}{}
@@ -65,6 +64,8 @@
 \providecommand{\tmverbatim}[1]{\tmtexttt{#1}}
 \newtheorem{definition}{Definition}
 \newtheorem{notation}{Notation}
+%
+
 \newcommand{\figuretext}{Snippet}
 \newcommand{\figuretext}{Figure}
 
@@ -75,9 +76,11 @@
   {\Large Protocol Specification}
 }
 
-\date{July 23, 2019}
+\date{July 27, 2019}
 
 \maketitle
+
+{\tableofcontents}
 
 \chapter{Background}
 
@@ -87,37 +90,35 @@ Formally, Polkadot is a replicated sharded state machine designed to resolve
 the scalability and interoperability among blockchains. In Polkadot
 vocabulary, shards are called {\tmem{parachains}} and Polkadot {\tmem{relay
 chain}} is part of the protocol ensuring global consensus among all the
-parachains. The Polkadot relay chain protocol henceforward called
+parachains. The Polkadot relay chain protocol, henceforward called
 {\tmem{Polkadot protocol}}, can itself be considered as a replicated state
-machine on its own. As such, the protocol can be specified by specifying the
+machine on its own. As such, the protocol can be specified by identifying the
 state machine and the replication strategy.
 
 From a more technical point of view, the Polkadot protocol has been divided
 into two parts, the {\tmem{Runtime}} and the {\tmem{Runtime environment}}
 (RE). The Runtime comprises most of the state transition logic for the
 Polkadot protocol and is designed and expected to be upgradable as part of the
-state transition process. On the other hand, the Runtime environment consists
-of parts of the protocol, which is mostly shared among peer-to-peer
-decentralized proof-of-stake-consensus-based cryptographically-secured
-transaction systems. The RE is planned to be stable and static for the
-lifetime duration of the Polkadot protocol.
+state transition process. The Runtime environment consists of parts of the
+protocol,\quad shared mostly among peer-to-peer decentralized
+cryptographically-secured transaction systems, i.e. blockchains whose
+consensus system is based on the proof-of-stake. The RE is planned to be
+stable and static for the lifetime duration of the Polkadot protocol.
 
-With the current document, we aim at specifying the RE part of the Polkadot
+With the current document, we aim to specify the RE part of the Polkadot
 protocol as a replicated state machine. After defining the basic terms in
-Chapter 1, we proceed to specifying the representation of a valid state of the
-Protocol in Chapter \ref{chap-state-spec}. After specifying protocol states,
-in Chapter \ref{chap-state-transit}, we explain Polkadot state transition and
-discuss the detail based on which Polkadot RE interacts with the state
-transition function, i.e. Runtime. We specify the inputs triggering the state
-transition in Section \ref{sect-network-interactions} of this chapter. More
-elaborate messages such as extrinsics and block messages are specified in
-Sections \ref{sect-extrinsics} and \ref{sect-block-format}. The initial state
-of the machine is identified and discussed in Appendix
+Chapter 1, we proceed to specify the representation of a valid state of the
+Protocol in Chapter \ref{chap-state-spec}. In Chapter
+\ref{chap-state-transit}, we identify the protocol states, by explain the
+Polkadot state transition and discussing the detail based on which Polkadot RE
+interacts with the state transition function, i.e. Runtime. Following, we
+specify the input messages triggering the state transition and the system
+behaviour. In Chapter \ref{chap-consensu}, we specify the consensus protocol,
+which is responsible for keeping all the replica in the same state. Finally,
+the initial state of the machine is identified and discussed in Appendix
 \ref{sect-genisis-block}. A Polkadot RE implementation which conforms with
 this part of the specification should successfully be able to sync its states
-with the Polkadot network. Finally, in Chapter \ref{chap-consensu}, we specify
-the consensus protocol, which is responsible for keeping all the replica in
-the same state.
+with the Polkadot network.
 
 \section{Definitions and Conventions}\label{sect-defn-conv}
 
@@ -247,9 +248,9 @@ follows:
   > B'$}} if $B$ is a descendant of $B'$ in the block tree.
 \end{definition}
 
-\chapter{ State Specification}\label{chap-state-spec}
+\chapter{State Specification}\label{chap-state-spec}
 
-\section{State Storage and the Storage Trie}
+\section{State Storage and Storage Trie}
 
 For storing the state of the system, Polkadot RE implements a hash table
 storage where the keys are used to access each data entry. There is no
@@ -258,7 +259,7 @@ under them, besides the fact that they are byte arrays with specific upper
 limits on their length. The limit is imposed by the encoding algorithms to
 store the key and the value in the storage trie.
 
-\subsection{Accessing The System Storage }
+\subsection{Accessing System Storage }
 
 Polkadot RE implements various functions to facilitate access to the system
 storage for the runtime. Section \ref{sect-runtime-api} lists all of those
@@ -335,7 +336,7 @@ nibbles:
 By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the
 radix tree to reach the node identifying the storage value of $k$.
 
-\subsection{The Trie structure}
+\subsection{Trie Structure}
 
 In this subsection, we specify the structure of the nodes in the Trie as well
 as the Trie structure:
@@ -418,7 +419,7 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 \custombinding{1}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  1. }
+  \tmtextsc{Algorithm  1. }
   \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
   = N_1, \ldots, N_j = N))$\\
   \hline
@@ -520,7 +521,7 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 \custombinding{2}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  2. }
+  \tmtextsc{Algorithm  2. }
   \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
   1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
   \hline
@@ -561,7 +562,7 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
 \hrulefill{\medskip}
 
-\subsection{The Merkle proof}\label{sect-merkl-proof}
+\subsection{Merkle Proof}\label{sect-merkl-proof}
 
 To prove the consistency of the state storage across the network and its
 modifications both efficiently and effectively, the Trie implements a Merkle
@@ -643,9 +644,9 @@ occupies less space than its hash.
   Where $R$ is the root of the Trie.
 \end{definition}
 
-\chapter{ State Transition}\label{chap-state-transit}
+\chapter{State Transition}\label{chap-state-transit}
 
-\section{Interactions with the Runtime}\label{sect-entries-into-runtime}
+\section{Interactions with Runtime}\label{sect-entries-into-runtime}
 
 Runtime as defined in Definition \ref{defn-runtime} is the code implementing
 the logic of the chain. This code is decoupled from the Polkadot RE to make
@@ -655,7 +656,7 @@ Algorithm \ref{algo-runtime-interaction}.
 
 \custombinding{3}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  3. }
+  \tmtextsc{Algorithm  3. }
   \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$: the
   runtime entry,
   
@@ -746,7 +747,8 @@ to the all Polkadot Runtime API functions described in Appendix
 module alongside the runtime which imports these functions from Polkadot RE as
 host functions.
 
-\subsubsection{Sending Arguments to Runtime }\label{sect-send-args-to-runtime}
+\subsubsection{Sending Arguments to Runtime
+}\label{sect-runtime-send-args-to-runtime-enteries}
 
 In general, all data exchanged between Polkadot RE and the Runtime is encoded
 using SCALE codec described in Section \ref{sect-scale-codec}. As a Wasm
@@ -759,9 +761,9 @@ function, all runtime entries have the following identical signatures:
 
 \
 
-In each invocation of a Runtime entry, the arguments which are supposed to be
-sent to the entry, need to be encoded using SCALE codec into a byte array $B$
-using the procedure defined in Definition \ref{sect-scale-codec}.
+In each invocation of a Runtime entry, the argument(s) which are supposed to
+be sent to the entry, need to be encoded using SCALE codec into a byte array
+$B$ using the procedure defined in Definition \ref{sect-scale-codec}.
 
 The Executor then needs to retrieve the Wam memory buffer of the Runtime Wasm
 module and extend it to fit the size of the byte array. Afterwards, it needs
@@ -783,135 +785,16 @@ returned by the entry encoded in SCALE codec in the memory buffer. The most
 significant one provides the size of the blob.
 
 In the case that the runtime entry is returning a boolean value, then the
-SCALEd value returns in the least significant byte and all other bytes are set
-to zero.
-
-\subsection{Entries into Runtime}\label{sect-runtime-entries}
-
-Polkadot RE assumes that at least the following functions are implemented in
-the Runtime Wasm blob and has been exported as shown in Snippet
-\ref{snippet-runtime-enteries}:
-
-\tmfloat{h}{small}{figure}{\begin{tmcode}[cpp]
-  (export "Core_version" (func $Core_version))
-  (export "Core_authorities" (func $Core_authorities))
-  (export "Core_execute_block" (func $Core_execute_block))
-  (export "Core_initialise_block" (func $Core_initialise_block))
-  (export "Metadata_metadata" (func $Metadata_metadata))
-  (export "BlockBuilder_apply_extrinsic" (func $BlockBuilder_apply_extrinsic))
-  (export "BlockBuilder_finalise_block" (func $BlockBuilder_finalise_block))
-  (export "BlockBuilder_inherent_extrinsics" 
-          (func $BlockBuilder_inherent_extrinsics))
-  (export "BlockBuilder_check_inherents" (func $BlockBuilder_check_inherents))
-  (export "BlockBuilder_random_seed" (func $BlockBuilder_random_seed))
-  (export "TaggedTransactionQueue_validate_transaction" 
-          (func $TaggedTransactionQueue_validate_transaction))
-  (export "OffchainWorkerApi_offchain_worker" 
-          (func $OffchainWorkerApi_offchain_worker))
-  (export "ParachainHost_duty_roster" (func $ParachainHost_duty_roster))
-  (export "ParachainHost_active_parachains" 
-          (func $ParachainHost_active_parachains))
-  (export "ParachainHost_parachain_head" (func $ParachainHost_parachain_head))
-  (export "ParachainHost_parachain_code" (func $ParachainHost_parachain_code))
-  (export "GrandpaApi_grandpa_pending_change" 
-          (func $GrandpaApi_grandpa_pending_change))
-  (export "GrandpaApi_grandpa_forced_change" 
-          (func $GrandpaApi_grandpa_forced_change))
-  (export "GrandpaApi_grandpa_authorities" 
-          (func $GrandpaApi_grandpa_authorities))
-  (export "ParachainHost_validators" (func $Core_authorities))
- 
-  (export "BabeApi_slot_winning_threshold" 
-          (func $BabeApi_slot_winning_threshold))
-\end{tmcode}}{\label{snippet-runtime-enteries}Snippet to export entries into
-tho Wasm runtime module}
-
-The following sections describe the standard based on which Polkadot RE
-communicates with each runtime entry.
-
-\subsubsection{\tmverbatim{Core\_version}}
-
-This entry receives no argument; it returns the version data encoded in ABI
-format described in Section \ref{sect-runtime-return-value} containing the
-following data:
-
-\
-
-\begin{center}
-  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
-    \hline
-    Name & Type & Description\\
-    \hline
-    \tmverbatim{spec\_name} & String & runtime identifier\\
-    \tmverbatim{impl\_name} & String & the name of the implementation (e.g.
-    C++)\\
-    \tmverbatim{authoring\_version} & UINT32 & the version of the authorship
-    interface\\
-    \tmverbatim{spec\_version} & UINT32 & the version of the runtime
-    specification\\
-    \tmverbatim{impl\_version} & UINT32 & the version of the runtime
-    implementation\\
-    \tmverbatim{apis} & ApisVec & List of supported AP\\
-    \hline
-  \end{tabular}}{Detail of the version data type returns from runtime
-  \tmverbatim{version} function}
-\end{center}
-
-\subsubsection{\tmverbatim{Core\_authorities}}\label{sect-runtime-api-auth}
-
-This entry is to report the set of authorities at a given block. It receives
-\tmverbatim{block\_id} as an argument; it returns an array of
-\tmverbatim{authority\_id}'s.
-
-\subsubsection{\tmverbatim{Core\_execute\_block}}
-
-This entry is responsible for executing all extrinsics in the block and
-reporting back the changes into the state storage. It receives the block
-header and the block body as its arguments, and it returns a triplet:
-
-\begin{center}
-  \
-  
-  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
-    \hline
-    Name & Type & Description\\
-    \hline
-    \tmverbatim{results} & Boolean & Indicating if the execution was su\\
-    \tmverbatim{storage\_changes} & {\todo{???}} & Contains all changes to the
-    state storage\\
-    \tmverbatim{change\_updat} & {\todo{???}} & \\
-    \hline
-  \end{tabular}}{Detail of the data execute\_block returns after execution}
-\end{center}
-
-\subsubsection{\tmverbatim{Core\_initialise\_block}}
-
-\subsubsection{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}\label{sect-validate-transaction}
-
-{\todo{Explain function}}
+SCALEd (boolean) value returns in the least significant byte and all other
+bytes are set to zero.
 
 \section{Network Interactions}\label{sect-network-interactions}
-
-\subsection{Extrinsics Submission}
-
-Extrinsic submission is made by sending a {\tmem{Transactions}} network
-message. The structure of this message is specified in Section
-\ref{sect-message-transactions}.
-
-Upon receiving an Transactions message, Polkadot RE decodes the transaction
-and calls \tmverbatim{validate\_trasaction} runtime function defined in
-Section \ref{sect-validate-transaction}, to check the validity of the
-extrinsic. If \tmverbatim{validate\_transaction} considers the submitted
-extrinsics as a valid one, Polkadot RE makes the extrinsics available for the
-consensus engine for inclusion in future blocks.
 
 \subsection{Network Messages}
 
 This section specifies various types of messages which Polkadot RE receives
 from the network. Furthermore, it also explains the appropriate responses to
 those messages.
-
-\subsection{General structure of network messages}
 
 \begin{definition}
   A {\tmstrong{network message}} is a byte array, {\tmstrong{$M$}} of length
@@ -936,11 +819,11 @@ individually in Section \ref{sect-message-detail}.
     $M_1$ & Message Type & Description\\
     \hline
     0 & Status & \ref{sect-msg-status}\\
-    1 & Block Request & \\
-    2 & Block Response & \\
-    3 & Block Announce & \\
-    4 & Transactions & \\
-    5 & Consensus & \\
+    1 & Block Request & \ref{sect-msg-block-request}\\
+    2 & Block Response & \ref{sect-msg-block-response}\\
+    3 & Block Announce & \ref{sect-msg-block-announce}\\
+    4 & Transactions & \ref{sect-msg-transactions}\\
+    5 & Consensus & \ref{sect-msg-consensus}\\
     6 & Remote Call Request & \\
     7 & Remote Call Response & \\
     8 & Remote Read Request & \\
@@ -949,10 +832,12 @@ individually in Section \ref{sect-message-detail}.
     11 & Remote Header Response & \\
     12 & Remote Changes Request & \\
     13 & Remote Changes Response & \\
+    14 & FinalityProofRequest & \\
+    15 & FinalityProofResponse & \\
     255 & Chain Specific & \\
     \hline
   \end{tabular}
-  \caption{\label{tabl-message-types}List of possible network message types}
+  \caption{\label{tabl-message-types}List of possible network message types.}
 \end{table}
 
 \subsection{Detailed Message Structure}\label{sect-message-detail}
@@ -996,7 +881,7 @@ sender node as specified in Table \ref{tabl-node-role}:
   }{\label{tabl-node-role}Node role representation in the status message}
 \end{center}
 
-\subsubsection{Block request Message}\label{sect-block-request}
+\subsubsection{Block Request Message}\label{sect-msg-block-request}
 
 A Block request message, represented by $M_{\tmop{BR}}$, is sent to request
 block data for a range of blocks from a peer and has the following structure:
@@ -1037,7 +922,7 @@ in which
     \hline
   \end{tabular}}}
   }{\label{tabl-block-attributes}Bit values for block attribute $A_B$, to
-  indicate the requested parts of the data}
+  indicate the requested parts of the data.}
 \end{center}
 \begin{itemizeminus}
   \item $S_B$ is SCALE encoded varying data type (see Definition
@@ -1058,12 +943,12 @@ in which
 \end{itemizeminus}
 Optional data type is defined in Definition \ref{defn-varrying-data-type}.
 
-\subsubsection{Block response Message}\label{sect-block-response}
+\subsubsection{Block Response Message}\label{sect-msg-block-response}
 
-A block response message represented by $M_{\tmop{BS}}$ is sent in a response
-to a requested block message (see Section \ref{sect-block-request}). It has
-the following structure:
-\[ M^{}_{\tmop{BR}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{id}, D) \]
+A {\tmem{block response message}} represented by $M_{\tmop{BS}}$ is sent in a
+response to a requested block message (see Section
+\ref{sect-msg-block-request}). It has the following structure:
+\[ M^{}_{\tmop{BS}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{id}, D) \]
 where:
 {\center{\begin{tabular}{rll}
   $\tmop{id}$: & Unique id of the requested response was made for & 32 bit
@@ -1074,9 +959,14 @@ where:
 
 \
 
-In which block data is a tuple:
-\[ (H_B, \tmop{Header}_B, \tmop{Body}, \tmop{Body}, \tmop{Receipt},
-   \tmop{MessageQueue}, \tmop{Justification}) \]
+In which block data is defined in Definition \ref{defn-block-data}.
+
+\begin{definition}
+  \label{defn-block-data}{\tmstrong{Block Data}} is defined as the follownig
+  tuple:{\todo{Block Data definition should go to block format section}}
+\end{definition}
+\[ (H_B, \tmop{Header}_B, \tmop{Body}, \tmop{Receipt}, \tmop{MessageQueue},
+   \tmop{Justification}) \]
 Whose elements, with the exception of $H_B$, are all of the following
 {\tmem{optional type}} (see Definition \ref{defn-varrying-data-type}) and are
 defined as follows:
@@ -1092,7 +982,18 @@ defined as follows:
 \end{tabular}}}
 
 
-\subsubsection{Transactions}\label{sect-message-transactions}
+\subsubsection{Block Announce Message}\label{sect-msg-block-announce}
+
+A {\tmem{block announce message}} represented by $M_{\tmop{BA}}$ is sent when
+a node becomes aware of a new complete block on the network and has the
+following structure:
+\[ M_{\tmop{BA}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{Header}_B) \]
+Wh\tmverbatim{}ere:
+{\center{\begin{tabular}{rll}
+  $\tmop{Header}_B$: & Header of new block B & 5-tuple header (Definition
+  \ref{defn-block-header})
+\end{tabular}}}
+\subsubsection{Transactions}\label{sect-msg-transactions}
 
 \ \ \ The transactions Message is represented by $M_T$ and is defined as
 follows:
@@ -1102,6 +1003,45 @@ in which:
 Where each $E_i$ is a byte array and represents a sepearate extrinsic.
 Polkadot RE is indifferent about the content of an extrinsic and treats it as
 a blob of data.
+
+\
+
+\subsubsection{Consensus Message}\label{sect-msg-consensus}
+
+A {\tmem{consensus message}} represented by $M_C$ is sent to communicate
+messages related to consensus process:
+\[ M_C \assign \tmop{Enc}_{\tmop{SC}} (E_{\tmop{id}}, D) \]
+Wh\tmverbatim{}ere:
+{\center{\begin{tabular}{rll}
+  $E_{\tmop{id}}$: & The consensus engine unique identifier & $\mathbb{B}_4$\\
+  $D$ & Consensus message payload & $\mathbb{B}$
+\end{tabular}}}
+
+
+in which
+\[ E_{\tmop{id}} \assign \left\{ \begin{array}{ccc}
+     '' \tmop{BABE}'' &  & \tmop{For} \tmop{messages} \tmop{related} \tmop{to}
+     \tmop{BABE} \tmop{protocol}\\
+     '' \tmop{FRNK}'' &  & \tmop{For} \tmop{messages} \tmop{related} \tmop{to}
+     \tmop{GRANDPA} \tmop{protocol}
+   \end{array} \right. \]
+
+
+The network agent should hand over $D$ to approperiate consensus engine which
+identified by $E_{\tmop{id}}$.
+
+\subsection{Extrinsics Submission}
+
+Extrinsic submission is made by sending a {\tmem{Transactions}} network
+message. The structure of this message is specified in Section
+\ref{sect-msg-transactions}.
+
+Upon receiving a Transactions message, Polkadot RE decodes the transaction and
+calls \tmverbatim{validate\_trasaction} runtime function, defined in Section
+\ref{sect-validate-transaction}, to check the validity of the extrinsic. If
+\tmverbatim{validate\_transaction} considers the submitted extrinsics as a
+valid one, Polkadot RE makes the extrinsics available for the consensus engine
+for inclusion in future blocks.
 
 \subsection{Block Submission and Validation}
 
@@ -1123,7 +1063,7 @@ block:
 
 \custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  4. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  \tmtextsc{Algorithm  4. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
   (B)$)}}\\
   \hline
 \end{tabular}
@@ -1173,7 +1113,7 @@ into future blocks.
 
 \custombinding{5}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  5. }
+  \tmtextsc{Algorithm  5. }
   \label{algo-validate-transactions}{\tmname{Validate-Extrinsics-and-Store}}($L$:
   list of extrinsics)\\
   \hline
@@ -1308,7 +1248,7 @@ procedures. The first procedure is block production and the second is
 finality. Polkadot RE must run these procedures, if and only if it is running
 on a validator node.
 
-\section{Block Production}
+\section{Block Production}\label{sect-babe}\label{sect-block-production}
 
 Polkadot RE uses BABE protocol {\cite{w3f_research_group_blind_2019}} for
 block production designed based on Ouroboros praos
@@ -1323,7 +1263,7 @@ tree and grow it as it receives valid blocks from other block producers. A
 block producer prunes the tree in parallel using Algorithm
 \ref{algo-block-tree-prunning}.
 
-\subsubsection{Preliminaries}
+\subsection{Preliminaries}
 
 \begin{definition}
   A {\tmstrong{block producer}}, noted by $\mathcal{P}_j$, is a node running
@@ -1372,7 +1312,7 @@ produced during an specific epoch.
   which is also on {\tmname{Longest-Branch($\tmop{BT}$)}}.
 \end{definition}
 
-\subsubsection{Block Production Lottery}
+\subsection{Block Production Lottery}
 
 \begin{definition}
   {\tmstrong{Winning threshold}} denoted by {\tmstrong{$\tau$}} is the
@@ -1391,7 +1331,7 @@ lottery.
 
 \custombinding{6}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  6. }
+  \tmtextsc{Algorithm  6. }
   \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}$(\tmop{sk}^{},
   n)$\\
   \hline
@@ -1414,7 +1354,7 @@ to produce a block. For the definitions of {\tmname{Epoch-Randomness}} and
 {\tmem{{\tmname{VRF}}}} functions, see Algorithm \ref{algo-epoch-randomness}
 and Section \ref{sect-vrf} respectively.
 
-\subsubsection{Slot number calculation}
+\subsection{Slot Number Calculation}
 
 It is essential for a block producer to calculate and validate the slot number
 at a certain point in time. Slots are dividing the time continuum in an
@@ -1457,7 +1397,7 @@ formalized in Definition \ref{defn-slot-offset}.
 
 \custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  7. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
+  \tmtextsc{Algorithm  7. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
   the slot number of the slot whose time needs to be determined)\\
   \hline
 \end{tabular}
@@ -1478,7 +1418,7 @@ s$)$\times \mathcal{T}_{}$}}}}
 
 \hrulefill{\medskip}
 
-\subsubsection{Block Production}
+\subsection{Block Production}
 
 At each epoch, each block producer should run Algorithm
 \ref{algo-block-production} to produce blocks during the slots it has been
@@ -1510,7 +1450,7 @@ alongside with the {\tmem{babe header}} defined in Definition
 
 \custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  8. }
+  \tmtextsc{Algorithm  8. }
   \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
   pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
   \hline
@@ -1535,9 +1475,9 @@ alongside with the {\tmem{babe header}} defined in Definition
 
 \hrulefill{\medskip}
 
-\subsubsection{Block Validation}
+\subsection{Block Validation}
 
-\subsubsection{Epoch Randomness}
+\subsection{Epoch Randomness}
 
 At the end of epoch $\mathcal{E}_n$, each block producer is able to compute
 the randomness seed it needs in order to participate in the block production
@@ -1547,7 +1487,7 @@ epoch subchain described in Definition \ref{defn-epoch-subchain}.
 
 \custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  9. }
+  \tmtextsc{Algorithm  9. }
   \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
   index)\\
   \hline
@@ -1577,7 +1517,7 @@ The blocks building process is triggered by Algorithm
 
 \custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  10. }
+  \tmtextsc{Algorithm  10. }
   \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
   at its head the block to be constructed,
   
@@ -1629,7 +1569,7 @@ $\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
 {\tmname{Block-Is-Full}} and {\tmname{Next-Ready-Extrinsic}} are defined in
 Definition {\todo{Define these entities}}
 
-\section{Finality}\label{sect-finality}
+\section{Finality}\label{sect-finality}\label{sect-grandpa}
 
 Polkadot RE uses GRANDPA Finality protocol
 {\cite{alistair_stewart_grandpa:_2019}} to finalize blocks. Finality is
@@ -1639,7 +1579,7 @@ independent service. In this section, we describe the different functions that
 GRANDPA service is supposed to perform to successfully participate in the
 block finalization process.
 
-\subsubsection{Preliminaries}
+\subsection{Preliminaries}
 
 \begin{definition}
   A {\tmstrong{GRANDPA Voter}}, $v$, is represented by a key pair
@@ -1790,7 +1730,7 @@ B_v^{r, \tmop{pv}}$ where $|V^{r, \tmop{pc}}_{\tmop{obs} (v)_{\nosymbol}} (B')
 
 \
 
-\subsubsection{Voting Messages Specification}
+\subsection{Voting Messages Specification}
 
 Voting is done by means of broadcasting voting messages to the network.
 Validators inform their peers about the block finalized in round $r$ by
@@ -1843,7 +1783,7 @@ more details). These messages are specified in this section.
   \ref{defn-grandpa-justification}.
 \end{definition}
 
-\subsubsection{Initiating the GRANDPA State}
+\subsection{Initiating the GRANDPA State}
 
 A validator needs to initiate its state and sync it with other validators, to
 be able to participate coherently in the voting process. In particular,
@@ -1858,7 +1798,7 @@ needs to be incremented.
 
 \custombinding{11}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  11. }
+  \tmtextsc{Algorithm  11. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -1875,14 +1815,14 @@ needs to be incremented.
 
 \hrulefill{\medskip}
 
-\subsubsection{Voting Process in Round $r$}
+\subsection{Voting Process in Round $r$}
 
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
 \custombinding{12}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  12. }
+  \tmtextsc{Algorithm  12. }
   \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
@@ -1928,7 +1868,7 @@ explained in Algorithm \ref{algo-grandpa-best-candidate}.
 
 \custombinding{13}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  13. }
+  \tmtextsc{Algorithm  13. }
   \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1950,7 +1890,7 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \custombinding{14}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextbf{Algorithm  14. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextsc{Algorithm  14. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
@@ -1975,11 +1915,11 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\appendix\section{Cryptographic Algorithms}
+\appendix\chapter{Cryptographic Algorithms}
 
-\subsection{Hash functions}\label{sect-hash-functions}
+\section{Hash Functions}\label{sect-hash-functions}
 
-\subsection{BLAKE2}\label{sect-blake2}
+\section{BLAKE2}\label{sect-blake2}
 
 BLAKE2 is a collection of cryptographic hash functions known for their high
 speed. their design closely resembles BLAKE which has been a finalist in SHA-3
@@ -1991,11 +1931,11 @@ whenever Blake2b is invoked in this document. The detailed specification and
 sample implementations of all variants of Blake2 hash functions can be found
 in RFC 7693 {\cite{saarinen_blake2_2015}}.
 
-\subsection{Randomness}\label{sect-randomness}
+\section{Randomness}\label{sect-randomness}
 
-\subsection{VRF}\label{sect-vrf}
+\section{VRF}\label{sect-vrf}
 
-\section{Auxiliary Encodings}\label{sect-encoding}
+\chapter{Auxiliary Encodings}\label{sect-encoding}
 
 \
 
@@ -2178,11 +2118,11 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
   \end{tabular}
 \end{definition}
 
-\section{Genesis Block Specification}\label{sect-genisis-block}
+\chapter{Genesis Block Specification}\label{sect-genisis-block}
 
-\section{Predefined Storage keys}\label{sect-predef-storage-keys}
+\chapter{Predefined Storage Keys}\label{sect-predef-storage-keys}
 
-\section{Runtime Environment API\label{sect-re-api}}
+\chapter{Runtime Environment API\label{sect-re-api}}
 
 The Runtime Environment API is a set of functions that Polkadot RE exposes to
 Runtime to access external functions needed for various reasons, such as the
@@ -2426,7 +2366,7 @@ buffer, if the entry exists in the storage.
   does not exist under the specified key.
 \end{itemize}
 
-\subsubsection{To be Specced}
+\subsubsection{To Be Specced}
 
 \begin{itemize}
   \item \tmverbatim{ext\_clear\_child\_storage}
@@ -2500,7 +2440,7 @@ Deallocates a previously allocated memory.
   \item \tmverbatim{ext\_print\_utf8}
 \end{itemize}
 
-\subsection{Cryptograhpic auxiliary functions}
+\subsection{Cryptograhpic Auxiliary Functions}
 
 \subsubsection{\tmverbatim{ext\_blake2\_256}}
 
@@ -2655,6 +2595,36 @@ signature by the provided public key.
   \item \tmverbatim{ext\_twox\_256}
 \end{itemize}
 
+\subsection{Offchain Worker }
+
+\subsubsection{\tmverbatim{ext\_submit\_transaction}}
+
+Given an extrinsic as a SCALE encoded byte array, the system decodes the byte
+array and submits the extrinsic in the inherent pool as an extrinsic to be
+included in the next produced block.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_submit_transaction
+      (param $data i32) (param $len i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a pointer to the buffer containing the byte array
+  storing the encoded extrinsic.
+  
+  \item \tmverbatim{len}: an \tmverbatim{i32} integer indicating the size of
+  the encoded extrinsic.
+  
+  \item \tmverbatim{result}: \ an in\tmverbatim{}teger value equal to 0
+  indicates that the extrinsic is successfully added to the pool or a nonzero
+  value otherwise.
+\end{itemize}
+
 \subsection{Sandboxing}
 
 \subsubsection{To be Specced}
@@ -2728,7 +2698,129 @@ UTF-8 string, otherwise does nothing and returns.
 \begin{itemizedot}
   \item \tmverbatim{ext\_chain\_id}
 \end{itemizedot}
-\tmverbatim{}\subsection{Not implemented in Polkadot-JS}
+\tmverbatim{}\subsection{Not Implemented in Polkadot-JS}
+
+\chapter{Runtime Entries}\label{sect-runtime-entries}
+
+\section{List of Runtime Entries}\label{sect-list-of-runtime-entries}
+
+Polkadot RE assumes that at least the following functions are implemented in
+the Runtime Wasm blob and have been exported as shown in Snippet
+\ref{snippet-runtime-enteries}:
+
+\tmfloat{h}{small}{figure}{\begin{tmcode}[cpp]
+  (export "Core_version" (func $Core_version))
+  (export "Core_authorities" (func $Core_authorities))
+  (export "Core_execute_block" (func $Core_execute_block))
+  (export "Core_initialise_block" (func $Core_initialise_block))
+  (export "Metadata_metadata" (func $Metadata_metadata))
+  (export "BlockBuilder_apply_extrinsic" (func $BlockBuilder_apply_extrinsic))
+  (export "BlockBuilder_finalise_block" (func $BlockBuilder_finalise_block))
+  (export "BlockBuilder_inherent_extrinsics" 
+          (func $BlockBuilder_inherent_extrinsics))
+  (export "BlockBuilder_check_inherents" (func $BlockBuilder_check_inherents))
+  (export "BlockBuilder_random_seed" (func $BlockBuilder_random_seed))
+  (export "TaggedTransactionQueue_validate_transaction" 
+          (func $TaggedTransactionQueue_validate_transaction))
+  (export "OffchainWorkerApi_offchain_worker" 
+          (func $OffchainWorkerApi_offchain_worker))
+  (export "ParachainHost_duty_roster" (func $ParachainHost_duty_roster))
+  (export "ParachainHost_active_parachains" 
+          (func $ParachainHost_active_parachains))
+  (export "ParachainHost_parachain_head" (func $ParachainHost_parachain_head))
+  (export "ParachainHost_parachain_code" (func $ParachainHost_parachain_code))
+  (export "GrandpaApi_grandpa_pending_change" 
+          (func $GrandpaApi_grandpa_pending_change))
+  (export "GrandpaApi_grandpa_forced_change" 
+          (func $GrandpaApi_grandpa_forced_change))
+  (export "GrandpaApi_grandpa_authorities" 
+          (func $GrandpaApi_grandpa_authorities))
+  (export "ParachainHost_validators" (func $Core_authorities))
+ 
+  (export "BabeApi_slot_winning_threshold" 
+          (func $BabeApi_slot_winning_threshold))
+\end{tmcode}}{\label{snippet-runtime-enteries}Snippet to export entries into
+tho Wasm runtime module.}
+
+The following sections describe the standard based on which Polkadot RE
+communicates with each runtime entry.
+
+\section{Argument Specification}
+
+As a wasm functions, all runtime entries have the following prototype
+signature:
+\begin{alltt}
+    (func $generic_runtime_entry
+      (param $data i32) (parm $len i32) (reslut i64))
+\end{alltt}
+where \tmverbatim{data} points to the SCALE encoded paramaters sent to the
+function and \tmverbatim{len} is the length of the data. \tmverbatim{result}
+can similarly either point to the SCALE encoded data the function returns or
+represent a boolean value (See Sections
+\ref{sect-runtime-send-args-to-runtime-enteries} and
+\ref{sect-runtime-return-value}).
+
+In this section, we describe the function of each of the entries alongside
+with the details of the SCALE encoded arguments and the return values for each
+one of these enteries.
+
+\subsection{\tmverbatim{Core\_version}}
+
+This entry receives no argument; it returns the version data encoded in ABI
+format described in Section \ref{sect-runtime-return-value} containing the
+following information:
+
+\
+
+\begin{center}
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    \hline
+    Name & Type & Description\\
+    \hline
+    \tmverbatim{spec\_name} & String & Runtime identifier\\
+    \tmverbatim{impl\_name} & String & the name of the implementation (e.g.
+    C++)\\
+    \tmverbatim{authoring\_version} & UINT32 & the version of the authorship
+    interface\\
+    \tmverbatim{spec\_version} & UINT32 & the version of the Runtime
+    specification\\
+    \tmverbatim{impl\_version} & UINT32 & the version of the Runtime
+    implementation\\
+    \tmverbatim{apis} & ApisVec & List of supported AP\\
+    \hline
+  \end{tabular}}{Detail of the version data type returns from runtime
+  \tmverbatim{version} function.}
+\end{center}
+
+\subsection{\tmverbatim{Core\_execute\_block}}
+
+This entry is responsible for executing all extrinsics in the block and
+reporting back if the block was successfully executed.
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item The entry accepts the {\tmem{block data}} defined in Definition
+  \ref{defn-block-data} as the only argument.
+\end{itemize}
+
+
+{\tmstrong{Return}}:
+
+A Boolean value indicates if the execution was successful.
+
+\subsection{\tmverbatim{Core\_initialise\_block}}
+
+\subsection{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}\label{sect-validate-transaction}
+
+{\todo{Explain function}}
+
+\
+
+\subsection{\tmverbatim{Babe\_authorities}}\label{sect-runtime-api-auth}
+
+This entry serves to report the set of authorities at a given block. It
+receives \tmverbatim{block\_id} as an argument; and returns an array of
+\tmverbatim{authority\_id}'s.
 
 \begin{thebibliography}{DGKR18}
   \bibitem[Ali19]{alistair_stewart_grandpa:_2019}Alistair Stewart.
