@@ -1,9 +1,29 @@
+* Tue Aug 06 2019
+  - Beginning to Spec the behaviour transaction queue/pool
+  - Raw spec of hash_and_length Runtime entry
+* Mon Aug 05 2019
+    - More development of Blockchain paradigm: Discrete State Machine added and information about block moved to state replication section.
+  - Block body specced.
+* Sat Aug 03 2019
+  - Describing State Transition and transactions.
+  - Relate the extrinsics to the state transition in the intro of extrinsics section
+  - Add a section for State replication describing Block as transaction journals.
+  - Move parts related to Block format and validation to State replication section.
+  - Improve Documentation of TaggedTransactionQueue_validate_transaction including
+    the description of its output.
+* Fri Aug 02 2019
+  - Documenting the output of Runtime APIs when they return a Result object. 
+  - Write a definition for finality for non-validator set
+* Wed Jul 31 2019
+  - Status Message updated to include minimum version.
+  - Definition of finalized block and justifies finalization.
+  - Definition Pruned Block tree.
+  - Updated Definition of Longest-Chain to include the arrival time of the last block to break tie.
 * Fri Jul 26 2019
   - Change the document style from "article" to "generic" to get chapters numbers included in subparts.
   - Table of content is added.
   - The description of individual Runtime entries moved to an Appendix.
   - Core_Execute_block was documented more accurately.
-
 * Mon Jul 22 2019 
   - Network message clean up, adding references.
   - Changing the Style from Article to Documentation so the chapter numbers
