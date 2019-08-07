@@ -1,3 +1,5 @@
+* Wed Aug 07 2019
+  - Transaction Queue and tranaction pool added to transaction processing.
 * Tue Aug 06 2019
   - Beginning to Spec the behaviour transaction queue/pool
   - Raw spec of hash_and_length Runtime entry
