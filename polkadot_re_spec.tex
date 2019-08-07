@@ -1,6 +1,7 @@
 \documentclass{book}
 \usepackage[english]{babel}
-\usepackage{geometry,amsmath,amssymb,calc,ifthen,alltt,capt-of}
+\usepackage{geometry,amsmath,amssymb,calc,ifthen,alltt,capt-of,makeidx}
+\makeindex
 \geometry{letterpaper}
 
 %%%%%%%%%% Start TeXmacs macros
@@ -76,7 +77,7 @@
   {\Large Protocol Specification}
 }
 
-\date{July 27, 2019}
+\date{August 7, 2019}
 
 \maketitle
 
@@ -123,8 +124,23 @@ with the Polkadot network.
 \section{Definitions and Conventions}\label{sect-defn-conv}
 
 \begin{definition}
-  \label{defn-runtime}{\tmstrong{Runtime}} is the state transition function of
-  a state machine.\tmverbatim{}
+  \label{defn-state-machine}A {\tmstrong{Discrete State Machine (DSM)}} is a
+  state transition system whose set of states and set of transitions are
+  countable and admits a starting state. Formally, it is a tuple of
+  \[  (\Sigma, S, s_0, \delta) \]
+  where
+  \begin{itemize}
+    \item $\Sigma$ is the countable set of all possible transactions.
+    
+    \item $S$ is a countable set of all possible states.
+    
+    \item $s_0 \in S$ is the initial state.
+    
+    \item $\delta$ is the state-transition function, known as
+    \label{defn-runtime}{\tmstrong{Runtime}} in the Polkadot vocabulary, such
+    that
+    \[ \delta : S \times \Sigma \rightarrow S \]
+  \end{itemize}
 \end{definition}
 
 \begin{definition}
@@ -220,28 +236,62 @@ to this structure as a {\tmem{block tree:}}
   in the graph and $B_1$ is connected to $B_2$ if $B_1$ is a parent of $B_2$.
 \end{definition}
 
+When a block in the block tree gets finalized, there is an opportunity to
+prune the block tree to free up resources into branches of blocks that do not
+contain all of the finalized blocks or those that can never be finalized in
+the blockchain. For a definition of finality, see Section \ref{sect-finality}.
+
+\begin{definition}
+  \label{defn-pruned-tree}By {\tmstrong{Pruned Block Tree}}, denoted by
+  $\tmop{PBT}$, we refer to a subtree of the block tree obtained by
+  eliminating all branches which do not contain the most recent finalized
+  blocks, as defined in Definition \ref{defn-finalized-block}. By
+  {\tmstrong{pruning}}, we refer to the procedure of $\tmop{BT} \leftarrow
+  \tmop{PBT}$. When there is no risk of ambiguity and is safe to prune BT, we
+  use $\tmop{BT}$ to refer to $\tmop{PBT}$.
+\end{definition}
+
 Definition \ref{defn-chain-subchain} gives the means to highlight various
 branches of the block tree.
 
 \begin{definition}
   \label{defn-chain-subchain}Let $G$ be the root of the block tree and $B$ be
-  one of its node. By {\tmname{{\tmstrong{Chain($B$)}},}} we refer to the path
-  graph from $G$ to $B$ in $\tmop{BT}$. Conversely, for a chain
+  one of its nodes. By {\tmname{{\tmstrong{Chain($B$)}},}} we refer to the
+  path graph from $G$ to $B$ in (P)$\tmop{BT}$. Conversely, for a chain
   $C$={\tmname{Chain(B)}}, we define {\tmstrong{the head of $C$}} to be $B$,
-  formally noted as $B \assign${\tmname{Head($C$)}}. If $B'$ is another node
-  on {\tmname{Chain($B$)}}, then by {\tmname{SubChain($B', B$)}} we refer to
-  the subgraph of {\tmname{Chain($B$)}} path graph which contains both $B$ and
-  $B'$. {\tmname{Longest-Path($\tmop{BT}$)}} returns a path graph of
-  $\tmop{BT}$ which is the longest among all paths in $\tmop{BT}$.
-  {\tmname{Deepest-Leaf($\tmop{BT}$)}} returns the head of
-  {\tmname{Longest-Path($\tmop{BT}$)}} chain.
+  formally noted as $B \assign${\tmname{Head($C$)}}. We define $| C |$, the
+  length of $C$as a path graph. If $B'$ is another node on
+  {\tmname{Chain($B$)}}, then by {\tmname{SubChain($B', B$)}} we refer to the
+  subgraph of {\tmname{Chain($B$)}} path graph which contains both $B$ and
+  $B'$. Accordingly, $\mathbb{C}_{B'} ((P) \tmop{BT})$ is the set of all
+  subchains of $(P) \tmop{BT}$ rooted at $B'$. The set of all chains of $(P)
+  \tmop{BT}$, $\mathbb{C}_G ((P) \tmop{BT})$ is denoted by $\mathbb{C}$((P)BT)
+  or simply $\mathbb{C}$, for the sake of brevity.
+\end{definition}
+
+\begin{definition}
+  We define the following complete order over $\mathbb{C}$ such that for $C_1,
+  C_2 \in \mathbb{C}$ if $| C_1 | \neq | C_2 |$ we say $C_1 > C_2$ if and only
+  if $| C_1 | > | C_2 |$.
+  
+  If $| C_1 | = | C_2 |$ we say $C_1 > C_2$ if and only if the block arrival
+  time of $\tmop{Head} (C_1)_{}$ is less than the block arrival time of
+  $\tmop{Head} (C_2)$ as defined in Definition \ref{defn-block-time}. We
+  define the {\tmstrong{{\tmname{Longest-Chain($\tmop{BT}$)}}}} to be the
+  maximum chain given by this order.
+\end{definition}
+
+\begin{definition}
+  {\tmname{Longest-Path($\tmop{BT}$)}} returns the path graph of $(P)
+  \tmop{BT}$ which is the longest among all paths in $(P) \tmop{BT}$ and has
+  the earliest block arrival time as defined in Definition
+  \ref{defn-block-time}. {\tmname{Deepest-Leaf($\tmop{BT}$)}} returns the head
+  of {\tmname{Longest-Path($\tmop{BT}$)}} chain.
 \end{definition}
 
 Because every block in the blockchain contains a reference to its parent, it
-is easy to see that the block tree is de facto a tree.
-
-A block tree naturally imposes partial order relationships on the blocks as
-follows:
+is easy to see that the block tree is de facto a tree. A block tree naturally
+imposes partial order relationships on the blocks as follows:
 
 \begin{definition}
   We say {\tmstrong{B is descendant of $B'$}}, formally noted as {\tmstrong{$B
@@ -595,6 +645,8 @@ node.
      \end{array} \right. \]
 \end{definition}
 
+\tmverbatim{}
+
 \begin{definition}
   \label{defn-node-subvalue}For a given node $N$, the {\tmstrong{subvalue}} of
   $N$, formally referred to as $\tmop{sv}_N$, is determined as follows: in a
@@ -645,6 +697,25 @@ occupies less space than its hash.
 \end{definition}
 
 \chapter{State Transition}\label{chap-state-transit}
+
+Like any transaction-based transition system, Polkadot state changes via an
+executing ordered set of instructions. These instructions are known as
+{\tmem{extrinsics}}. In Polkadot, the execution logic of the state-transition
+function is encapsulated in Runtime as defined in Definition
+\ref{defn-state-machine}. Runtime is presented as a Wasm blob in(if?) ordered
+be easily upgradable. Nonetheless, the Polkadot Runtime Environment needs to
+be in constant interaction with Runtime. The detail of such interaction is
+further described in Section \ref{sect-entries-into-runtime}.
+
+In Section \ref{sect-extrinsics}, we specify the procedure of the process
+where the extrinsics are submitted, pre-processed and validated by Runtime and
+queued to be applied to the current state.
+
+Polkadot, likewise most prominent distributed ledger systems that make state
+replication feasible, journals and batches a series of extrinsics together in
+a structure knows as a {\tmem{block}} before propagating to the other nodes.
+The specification of the Polkadot block as well the process of verifying its
+validity are both explained in Section \ref{sect-state-replication}.
 
 \section{Interactions with Runtime}\label{sect-entries-into-runtime}
 
@@ -788,247 +859,15 @@ In the case that the runtime entry is returning a boolean value, then the
 SCALEd (boolean) value returns in the least significant byte and all other
 bytes are set to zero.
 
-\section{Network Interactions}\label{sect-network-interactions}
+\section{Extrinsics}\label{sect-extrinsics}
 
-\subsection{Network Messages}
-
-This section specifies various types of messages which Polkadot RE receives
-from the network. Furthermore, it also explains the appropriate responses to
-those messages.
+\subsection{Preliminaries}
 
 \begin{definition}
-  A {\tmstrong{network message}} is a byte array, {\tmstrong{$M$}} of length
-  $\| M \|$ such that:
-  
-  
-  \[ \begin{array}{cc}
-       M_1 & \tmop{Message} \tmop{Type} \tmop{Indicator}\\
-       M_2 \ldots M_{\| M \|} & \tmop{Enc}_{\tmop{SC}} (\tmop{MessageBody})
-     \end{array} \]
-  
+  \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
+  \tmop{pk}^a)$}} is a pair of Ristretto SR25519 used to sign extrinsics among
+  other accounts and blance-related functions.
 \end{definition}
-
-The body of each message consists of different components based on its type.
-The different possible message types are listed below in Table
-\ref{tabl-message-types}. We describe the sub-components of each message type
-individually in Section \ref{sect-message-detail}.
-
-\begin{table}[h]
-  \begin{tabular}{|c|c|c|}
-    \hline
-    $M_1$ & Message Type & Description\\
-    \hline
-    0 & Status & \ref{sect-msg-status}\\
-    1 & Block Request & \ref{sect-msg-block-request}\\
-    2 & Block Response & \ref{sect-msg-block-response}\\
-    3 & Block Announce & \ref{sect-msg-block-announce}\\
-    4 & Transactions & \ref{sect-msg-transactions}\\
-    5 & Consensus & \ref{sect-msg-consensus}\\
-    6 & Remote Call Request & \\
-    7 & Remote Call Response & \\
-    8 & Remote Read Request & \\
-    9 & Remote Read Response & \\
-    10 & Remote Header Request & \\
-    11 & Remote Header Response & \\
-    12 & Remote Changes Request & \\
-    13 & Remote Changes Response & \\
-    14 & FinalityProofRequest & \\
-    15 & FinalityProofResponse & \\
-    255 & Chain Specific & \\
-    \hline
-  \end{tabular}
-  \caption{\label{tabl-message-types}List of possible network message types.}
-\end{table}
-
-\subsection{Detailed Message Structure}\label{sect-message-detail}
-
-This section disucsses the detailed structure of each network message.
-
-\subsubsection{Status Message}\label{sect-msg-status}
-
-A {\tmem{Status}} Message represented by $M_S$ is sent after connection with a
-neighbouring node is established and has the following structure:
-\[ M^{}_S \assign \tmop{Enc}_{\tmop{SC}} (v, r, N_B, \tmop{Hash}_B,
-   \tmop{Hash}_G, C_S) \]
-Where:
-{\center{\begin{tabular}{rll}
-  $v$: & Protocol version & 32 bit integer\\
-  $r$: & Roles & 1 byte\\
-  $N_B$: & Best Block Number & 64 bit integer\\
-  $\tmop{Hash}_B$ & Best block Hash & $\mathbb{B}_{32}$\\
-  $\tmop{Hash}_G$ & Genesis Hash & $\mathbb{B}_{32}$\\
-  $C_S$ & Chain Status & Byte array 
-\end{tabular}}}
-
-
-In which, Role is a bitmap value whose bits represent different roles for the
-sender node as specified in Table \ref{tabl-node-role}:
-
-\
-
-\begin{center}
-  \tmfloat{h}{small}{table}{
-  {\center{\begin{tabular}{|r|l|l|}
-    \hline
-    Value & Binary representation & Role\\
-    \hline
-    $0$ & 00000000 & No network\\
-    1 & 00000001 & Full node, does not participate in consensus\\
-    2 & 00000010 & Light client node\\
-    4 & 00000100 & Act as an authority \\
-    \hline
-  \end{tabular}}}
-  }{\label{tabl-node-role}Node role representation in the status message}
-\end{center}
-
-\subsubsection{Block Request Message}\label{sect-msg-block-request}
-
-A Block request message, represented by $M_{\tmop{BR}}$, is sent to request
-block data for a range of blocks from a peer and has the following structure:
-\[ M^{}_{\tmop{BR}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{id}, A_B, S_B,
-   \tmop{Hash}_E, d, \tmop{Max}) \]
-where:
-{\center{\begin{tabular}{rll}
-  $\tmop{id}$: & Unique request id & 32 bit integer\\
-  $A_B$: & Requested data & 1 byte\\
-  $S_B$: & Starting Block & Varying \{$\mathbb{B}_{32}, 64 \tmop{bit}
-  \tmop{integer}$\}\\
-  $\tmop{Hash}_E$ & End block Hash & $\mathbb{B}_{32}$ optional type\\
-  $d$ & Block sequence direction & 1 byte\\
-  $\tmop{Max}$ & Maximum number of blocks to return & 32 bit integer optional
-  type
-\end{tabular}}}
-
-
-\
-
-in which
-\begin{itemizeminus}
-  \item $A_B$, the requested data, is a bitmap value, whose bits represent the
-  part of the block data requested, as explained in Table
-  \ref{tabl-block-attributes}:
-\end{itemizeminus}
-\begin{center}
-  \tmfloat{h}{small}{table}{
-  {\center{\begin{tabular}{|r|l|l|}
-    \hline
-    Value & Binary representation & Requested Attribute\\
-    \hline
-    $1$ & 00000001 & Block header\\
-    2 & 00000010 & Block Body\\
-    4 & 00000100 & Receipt\\
-    8 & 00001000 & Message queue\\
-    16 & 00010000 & Justification \\
-    \hline
-  \end{tabular}}}
-  }{\label{tabl-block-attributes}Bit values for block attribute $A_B$, to
-  indicate the requested parts of the data.}
-\end{center}
-\begin{itemizeminus}
-  \item $S_B$ is SCALE encoded varying data type (see Definition
-  \ref{defn-scale-variable-type}) of either $\mathbb{B}_{32}$ representing the
-  block hash, $H_B$, or $64 \tmop{bit}$ integer representing the block number
-  of the starting block of the requested range of blocks.
-  
-  \item $\tmop{Hash}_E$ is optionally the block hash of the last block in the
-  range.
-  
-  \item $d$ is a flag; it defines the direction on the block chain where the
-  block range should be considered (starting with the starting block), as
-  follows
-  \[ d = \left\{ \begin{array}{cc}
-       0 & \tmop{child} \tmop{to} \tmop{parent} \tmop{direction}\\
-       1 & \tmop{parent} \tmop{to} \tmop{child} \tmop{direction}
-     \end{array} \right. \]
-\end{itemizeminus}
-Optional data type is defined in Definition \ref{defn-varrying-data-type}.
-
-\subsubsection{Block Response Message}\label{sect-msg-block-response}
-
-A {\tmem{block response message}} represented by $M_{\tmop{BS}}$ is sent in a
-response to a requested block message (see Section
-\ref{sect-msg-block-request}). It has the following structure:
-\[ M^{}_{\tmop{BS}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{id}, D) \]
-where:
-{\center{\begin{tabular}{rll}
-  $\tmop{id}$: & Unique id of the requested response was made for & 32 bit
-  integer\\
-  $D$: & Block data for the requested sequence of Block & Array of block data
-\end{tabular}}}
-
-
-\
-
-In which block data is defined in Definition \ref{defn-block-data}.
-
-\begin{definition}
-  \label{defn-block-data}{\tmstrong{Block Data}} is defined as the follownig
-  tuple:{\todo{Block Data definition should go to block format section}}
-\end{definition}
-\[ (H_B, \tmop{Header}_B, \tmop{Body}, \tmop{Receipt}, \tmop{MessageQueue},
-   \tmop{Justification}) \]
-Whose elements, with the exception of $H_B$, are all of the following
-{\tmem{optional type}} (see Definition \ref{defn-varrying-data-type}) and are
-defined as follows:
-{\center{\begin{tabular}{rll}
-  $H_B$: & Block header hash & $\mathbb{B}_{32}$\\
-  $\tmop{Header}_B$: & Block header & 5-tuple (Definition
-  \ref{defn-block-header})\\
-  Body & Array of extrinsics & Array of Byte arrays (Section
-  \ref{sect-extrinsics})\\
-  Receipt & Block Receipt & Byte array\\
-  Message Queue & Block message queue & Byte array\\
-  Justification & Block Justification & Byte array
-\end{tabular}}}
-
-
-\subsubsection{Block Announce Message}\label{sect-msg-block-announce}
-
-A {\tmem{block announce message}} represented by $M_{\tmop{BA}}$ is sent when
-a node becomes aware of a new complete block on the network and has the
-following structure:
-\[ M_{\tmop{BA}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{Header}_B) \]
-Wh\tmverbatim{}ere:
-{\center{\begin{tabular}{rll}
-  $\tmop{Header}_B$: & Header of new block B & 5-tuple header (Definition
-  \ref{defn-block-header})
-\end{tabular}}}
-\subsubsection{Transactions}\label{sect-msg-transactions}
-
-\ \ \ The transactions Message is represented by $M_T$ and is defined as
-follows:
-\[ M_T \assign \tmop{Enc}_{\tmop{SC}} (C_1, \ldots, C_n) \]
-in which:
-\[ C_i \assign \tmop{Enc}_{\tmop{SC}} (E_i) \]
-Where each $E_i$ is a byte array and represents a sepearate extrinsic.
-Polkadot RE is indifferent about the content of an extrinsic and treats it as
-a blob of data.
-
-\
-
-\subsubsection{Consensus Message}\label{sect-msg-consensus}
-
-A {\tmem{consensus message}} represented by $M_C$ is sent to communicate
-messages related to consensus process:
-\[ M_C \assign \tmop{Enc}_{\tmop{SC}} (E_{\tmop{id}}, D) \]
-Wh\tmverbatim{}ere:
-{\center{\begin{tabular}{rll}
-  $E_{\tmop{id}}$: & The consensus engine unique identifier & $\mathbb{B}_4$\\
-  $D$ & Consensus message payload & $\mathbb{B}$
-\end{tabular}}}
-
-
-in which
-\[ E_{\tmop{id}} \assign \left\{ \begin{array}{ccc}
-     '' \tmop{BABE}'' &  & \tmop{For} \tmop{messages} \tmop{related} \tmop{to}
-     \tmop{BABE} \tmop{protocol}\\
-     '' \tmop{FRNK}'' &  & \tmop{For} \tmop{messages} \tmop{related} \tmop{to}
-     \tmop{GRANDPA} \tmop{protocol}
-   \end{array} \right. \]
-
-
-The network agent should hand over $D$ to approperiate consensus engine which
-identified by $E_{\tmop{id}}$.
 
 \subsection{Extrinsics Submission}
 
@@ -1043,61 +882,21 @@ calls \tmverbatim{validate\_trasaction} runtime function, defined in Section
 valid one, Polkadot RE makes the extrinsics available for the consensus engine
 for inclusion in future blocks.
 
-\subsection{Block Submission and Validation}
+\subsection{Transaction Queue}
 
-Block validation is the process by which the client asserts that a block is
-fit to be added to the blockchain. This means that the block is consistent
-with the world state and transitions from the state of the system to a new
-valid state.
-
-Blocks can be handed to the Polkadot RE both from the network stack and from
-the consensus engine.
-
-Both the Runtime and the Polkadot RE need to work together to assure block
-validity. This can be accomplished by Polkadot RE invoking
-\tmverbatim{execute\_block} entry into the runtime as a part of the validation
-process.
-
-Polkadot RE implements the following procedure to assure the validity of the
-block:
-
-\custombinding{4}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  4. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
-  (B)$)}}\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just}
-(B))$}}
-
-{\state{{\IF{$B$ {\tmstrong{is}} Finalized {\tmstrong{and}} $P (B)$
-{\tmstrong{is not}} Finalized}}}}
-
-{\state{{\tmname{Mark-as-Final}}$(P (B))${\END}}}
-
-{\state{Verify $H_{p (B)} \in \tmop{Blockchain}$}}
-
-{\state{State-Changes = Runtime{\tmname{$(B)$}}}}
-
-{\state{{\tmname{Update-World-State}}(State-Changes)}}}}
-
-\hrulefill{\medskip}
-
-For the definition of the finality and the finalized block see Section
-\ref{sect-finality}.
-
-\section{Extrinsics}\label{sect-extrinsics}
-
-\subsection{Preliminaries}
+A Block producer node should listen to all Transaction
+Messages{\tmem{{\index{Transaction Message}}}} and keep a {\tmem{transaction
+pool{\index{transaction pool}}}} and a {\tmem{transaction {\index{transaction
+queue}}}} as defined as follows:
 
 \begin{definition}
-  \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
-  \tmop{pk}^a)$}} is a pair of Ristretto SR25519 used to sign extrinsics among
-  other accounts and blance-related functions.
+  The {\tmstrong{Transaction Queue}} of a block producer node, formally
+  referred to as $\tmop{TQ}$ is a data structure which stores the transactions
+  ready to be included in a block sorted according to their priorities. The
+  {\tmstrong{Transaction Pool}}, formally referred to as $\tmop{TP}$, is a
+  hash table in which Polkadot RE keeps the list of all valid transactions not
+  in the transaction queue. \ 
 \end{definition}
-
-\subsection{Processing Extrinsics}
 
 The block body consists of a set of extrinsics. Nonetheless, Polkadot RE does
 not specify or limit the internals of each extrinsics. From Polkadot RE point
@@ -1111,17 +910,19 @@ transactions message into individual extrinsics and runs Algorithm
 \ref{algo-validate-transactions} to validate and store them to include them
 into future blocks.
 
-\custombinding{5}{\noindent}\begin{tabular}{l}
+\custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  5. }
-  \label{algo-validate-transactions}{\tmname{Validate-Extrinsics-and-Store}}($L$:
-  list of extrinsics)\\
+  \tmtextsc{Algorithm  4. }
+  \label{algo-validate-transactions}{\tmname{Validate-Extrinsics-and-Store}}($M_T
+  :$Transaction Message)\\
   \hline
 \end{tabular}
 
-{\algorithmic{{\state{{\FORIN{$E$}{$L$}}}}
+{\algorithmic{{\state{$L \leftarrow \tmop{Dec}_{\tmop{SC}} (M_T)$}}
 
-{\state{$B_d \leftarrow${\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
+{\state{{\FORIN{$E$}{$L$}}}}
+
+{\state{$B_d \leftarrow${\tmname{Head(Longest-Chain(($\tmop{BT}$))}}}}
 
 {\state{$N \leftarrow H_n (B_d)$}}
 
@@ -1131,15 +932,25 @@ into future blocks.
 
 {\state{{\IF{$R$ indicates $E$ is $\tmop{Valid}$}}}}
 
-{\state{{\tmname{Add-To-Extrinsic-Queue($E, R$)}}}}}}
+{\state{{\tmname{Add-To-Transaction-Queue($E, R$)}}}}
+
+{\todo{Replace list of reaction based on R}}}}
 
 \hrulefill{\medskip}
 
-\subsection{Extrinsic Queue}
+where {\todo{Add References for validate\_transaction, R, Longest-Chain,
+Extrinsic-Queue}}
+\begin{itemize}
+  \ 
+\end{itemize}
+\section{State Replication}\label{sect-state-replication}
 
-{\todo{To be specced}}
+Polkadot nodes replicate each other's state by syncing the history of the
+extrinsics. This, however, is only practical if a large set of transactions
+are batched and synced at the time. The structure in which the transactions
+are journaled and propagated is known as a block (of extrinsics).
 
-\section{Block Format}\label{sect-block-format}
+\subsection{Block Format}\label{sect-block-format}
 
 In Polkadot RE, a block is made of two main parts, namely the \tmtextit{block
 header} and the \tmtextit{list of extrinsics}. {\tmem{The Extrinsics}}
@@ -1147,7 +958,7 @@ represent the generalization of the concept of {\tmem{transaction}},
 containing any set of data that is external to the system, and which the
 underlying chain wishes to validate and keep track of.
 
-\subsection{Block Header}\label{block}
+\subsubsection{Block Header}\label{block}
 
 The block header is designed to be minimalistic in order to boost the
 efficiency of the light clients. It is defined formally as follows:
@@ -1171,7 +982,7 @@ efficiency of the light clients. It is defined formally as follows:
     the storage for the system.
     
     \item {\tmstrong{{\tmsamp{extrinsics\_root:}}}} is the field which is
-    reserved for the runtime to validate the integrity of the extrinsics
+    reserved for the Runtime to validate the integrity of the extrinsics
     composing the block body. For example, it can hold the root hash of the
     Merkle trie which stores an ordered list of the extrinsics being validated
     in this block. The {\tmsamp{extrinsics\_root}} is set by the runtime and
@@ -1195,7 +1006,7 @@ efficiency of the light clients. It is defined formally as follows:
      (B))) \]
 \end{definition}
 
-\subsection{Justified Block Header}
+\subsubsection{Justified Block Header}
 
 The Justified Block Header is provided by the consensus engine and presented
 to the Polkadot RE, for the block to be appended to the blockchain. It
@@ -1213,12 +1024,12 @@ contains the following parts:
   referred to as $A (B)$. An authority Id is 32bit.
 \end{itemize}
 
-\subsection{Block Inherent Data}
+\subsubsection{Block Inherent Data}
 
-Block inherent data are unsigned extrinsics which are included in each block.
-In general, these data are collected or generated by Polkadot RE and handed to
-the Runtime for inclusion in the block. Table \ref{tabl-inherent-data} lists
-these inherent data, their identifiers and types.
+Block inherent data represent the totality of extrinsics included in each
+block. In general, these data are collected or generated by Polkadot RE and
+handed to Runtime for inclusion in the block. Table \ref{tabl-inherent-data}
+lists these inherent data, their identifiers, and types.
 
 \begin{table}[h]
   \begin{tabular}{lll}
@@ -1239,7 +1050,65 @@ these inherent data, their identifiers and types.
   dictionary as defined in Definition \ref{defn-scale-list}.
 \end{definition}
 
-\subsection{Block Format}
+\subsubsection{Block Body}\label{sect-block-body}
+
+The Block Body consists of array extrinsics each encoded as a byte array. The
+internal of extrinsics is completely opaque to Polkadot RE. As such, it forms
+the point of Polkadot RE, and is simply a SCALE encoded array of byte arrays.
+Formally:
+
+\begin{definition}
+  \label{defn-block-body}The {\tmstrong{body of Block}} $B$ represented as
+  {\tmstrong{$\tmop{Body} (B)$}} is defined to be
+  \[ \tmop{Body} (B) \assign \tmop{Enc}_{\tmop{SC}} (E_1, \ldots, E_n) \]
+  Where each $E_i \in \mathbb{B}$ is a SCALE encoded extrinsic.
+\end{definition}
+
+\subsection{Block Submission and Validation}
+
+Block validation is the process by which the client asserts that a block is
+fit to be added to the blockchain. This means that the block is consistent
+with the world state and transitions from the state of the system to a new
+valid state.
+
+Blocks can be handed to the Polkadot RE both from the network stack and from
+the consensus engine.
+
+Both the Runtime and the Polkadot RE need to work together to assure block
+validity. This can be accomplished by Polkadot RE invoking
+\tmverbatim{execute\_block} entry into the runtime as a part of the validation
+process.
+
+Polkadot RE implements the following procedure to assure the validity of the
+block:
+
+\custombinding{5}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  5. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  (B)$)}}\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just}
+(B))$}}
+
+{\state{{\IF{$B$ {\tmstrong{is}} Finalized {\tmstrong{and}} $P (B)$
+{\tmstrong{is not}} Finalized}}}}
+
+{\state{{\tmname{Mark-as-Final}}$(P (B))${\END}}}
+
+{\state{Verify $H_{p (B)} \in \tmop{Blockchain}$}}
+
+{\state{State-Changes = Runtime{\tmname{$(B)$}}}}
+
+{\state{{\tmname{Update-World-State}}(State-Changes)}}}}
+
+\hrulefill{\medskip}
+
+For the definition of the finality and the finalized block see Section
+\ref{sect-finality}.
+
+\section{Network Interactions}\label{sect-network-interactions}
 
 \chapter{Consensus}\label{chap-consensu}
 
@@ -1309,7 +1178,7 @@ produced during an specific epoch.
   epoch $\mathcal{E}_n$, we refer to the path graph of $\tmop{BT}$ which
   contains all the blocks generated during the slots of epoch $\mathcal{E}_n$.
   When there is more than one block generated at a slot, we choose the one
-  which is also on {\tmname{Longest-Branch($\tmop{BT}$)}}.
+  which is also on {\tmname{Longest-Chain($\tmop{BT}$)}}.
 \end{definition}
 
 \subsection{Block Production Lottery}
@@ -1467,7 +1336,7 @@ alongside with the {\tmem{babe header}} defined in Definition
 
 {\state{{\IF{$d < \tau$}}}}
 
-{\state{$C_{\tmop{Best}} \leftarrow${\tmname{Longest-Branch}}(BT)}}
+{\state{$C_{\tmop{Best}} \leftarrow${\tmname{Longest-Chain}}(BT)}}
 
 {\state{{\tmname{$B_s \leftarrow$Build-Block($C_{\tmop{Best}}$)}}}}
 
@@ -1587,10 +1456,10 @@ block finalization process.
   private key which is an $\tmop{ED} 25519$ private key, is a node running
   GRANDPA protocol, and broadcasts votes to finalize blocks in a Polkadot RE -
   based chain. The {\tmstrong{set of all GRANDPA voters}} is indicated by
-  $\mathbb{V}$. For a given block B, we have4
-  \[ \mathbb{V}_B = \tmverbatim{\tmop{authorities}} (B) \]
-  where $\mathtt{authorities}$ is the entry into runtime described in Section
-  \ref{sect-runtime-api-auth}.
+  $\mathbb{V}$. For a given block B, we have
+  \[ \mathbb{V}_B = \text{\tmverbatim{grandpa\_authorities}} (B) \]
+  where $\mathtt{grandpa\_authorities}$ is the entry into runtime described in
+  Section \ref{sect-rte-grandpa-auth}.
 \end{definition}
 
 \begin{definition}
@@ -1770,6 +1639,10 @@ more details). These messages are specified in this section.
   
   In all cases, $\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B')$ is the signature of
   voter $v_i$ broadcasted during the pre-commit sub-round of round r.
+  
+  We say $J^r (B)$ {\tmstrong{justifies the finalization}} of $B$ if the
+  number of valid signatures in $J^r (B)$ is greater than $\frac{2}{3}
+  |\mathbb{V}_B |$.
 \end{definition}
 
 \begin{definition}
@@ -1900,9 +1773,9 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 {\state{{\IF{$E \geqslant L$ {\tmstrong{and}} $V^{r - 1,
 \tmop{pc}}_{\tmop{obs} (v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3
-|\mathcal{V}|$}}}}
+|\mathbb{V}|$}}}}
 
-{\state{{\tmname{Last-Finalized-Block}}$\leftarrow B^{r, \tmop{pc}}$}}
+{\state{{\tmname{Last-Finalized-Block}}$\leftarrow E$}}
 
 {\state{{\IF{$M_v^{r, \tmop{Fin}} (E) \nin${\tmname{Received-Messages}}}}}}
 
@@ -1915,7 +1788,29 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\appendix\chapter{Cryptographic Algorithms}
+\section{Block Finalization}\label{sect-block-finalization}
+
+\begin{definition}
+  \label{defn-finalized-block}A Polkadot relay chain node n should consider
+  block $B$ as {\tmstrong{finalized}} if any of the following criteria holds
+  for $B' \geqslant B$:
+  \begin{itemize}
+    \item $V^{r, \tmop{pc}}_{\tmop{obs} (n)}^{\nosymbol}_{\nosymbol} (B') > 2
+    / 3 |\mathbb{V}_{B'} |$.
+    
+    \item it receives a $M_v^{r, \tmop{Fin}} (B')$ message in which $J^r (B)$
+    justifies the finalization (according to Definition
+    \ref{defn-grandpa-justification}).
+    
+    \item it receives a block data message for $B'$ with $\tmop{Just} (B')$
+    defined in Section \ref{sect-justified-block-header} which justifies the
+    finalization. 
+  \end{itemize}
+\end{definition}
+
+Note that all Polkadot relay chain nodes are supposed to listen to GRANDPA
+finalizing messages regardless if they are GRANDPA
+voters.\appendix\chapter{Cryptographic Algorithms}
 
 \section{Hash Functions}\label{sect-hash-functions}
 
@@ -1937,9 +1832,7 @@ in RFC 7693 {\cite{saarinen_blake2_2015}}.
 
 \chapter{Auxiliary Encodings}\label{sect-encoding}
 
-\
-
-\subsection{SCALE Codec}\label{sect-scale-codec}
+\section{SCALE Codec}\label{sect-scale-codec}
 
 Polkadot RE uses {\tmem{Simple Concatenated Aggregate Little-Endian'' (SCALE)
 codec}} to encode byte arrays as well as other data structures. SCALE provides
@@ -1984,7 +1877,7 @@ that information from the context where the encoding/decoding is happenning.
   In particular, we define {\tmstrong{optional type}} to be $\mathcal{O}= \{
   \tmop{None}, T_2 \}$ for some data type $T_2$ where $\tmop{idx}
   (\tmop{None}) = 0$ $(\tmop{None}, \phi)$ is the only possible value, when
-  the data is of type None.
+  the data is of type None and a codec value is one byte of 0 value.
   
   
 \end{definition}
@@ -2049,7 +1942,7 @@ to decode the data.
   \ref{defn-little-endian}. 
 \end{definition}
 
-\subsubsection{Length Encoding}\label{sect-int-encoding}
+\subsection{Length Encoding}\label{sect-int-encoding}
 
 {\tmem{SCALE Length encoding}} is used to encode integer numbers of variying
 sizes prominently in an encoding length of arrays:
@@ -2093,7 +1986,21 @@ sizes prominently in an encoding length of arrays:
   \[ k^7_1 \ldots k^3_1 k^2_1 : = m - 4 \]
 \end{definition}
 
-\subsection{Hex Encoding}
+\section{Frequently SCALEd Object}
+
+In this section, we will specify the objects which are frequently used in
+transmitting data between PDRE, \ Runtime and other clients and their SCALE
+encodings.
+
+\subsection{Result}
+
+{\todo{Spec Result Object}}
+
+\subsection{Error}
+
+{\todo{Spec Error Object}}
+
+\section{Hex Encoding}
 
 Practically, it is more convenient and efficient to store and process data
 which is stored in a byte array. On the other hand, the Trie keys are broken
@@ -2122,6 +2029,245 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
 
 \chapter{Predefined Storage Keys}\label{sect-predef-storage-keys}
 
+\chapter{Network Messages}\label{sect-network-messages}
+
+In this section, we will specify various types of messages which Polkadot RE
+receives from the network. Furthermore, we also explain the appropriate
+responses to those messages.
+
+\begin{definition}
+  A {\tmstrong{network message}} is a byte array, {\tmstrong{$M$}} of length
+  $\| M \|$ such that:
+  
+  
+  \[ \begin{array}{cc}
+       M_1 & \tmop{Message} \tmop{Type} \tmop{Indicator}\\
+       M_2 \ldots M_{\| M \|} & \tmop{Enc}_{\tmop{SC}} (\tmop{MessageBody})
+     \end{array} \]
+  
+\end{definition}
+
+The body of each message consists of different components based on its type.
+The different possible message types are listed below in Table
+\ref{tabl-message-types}. We describe the sub-components of each message type
+individually in Section \ref{sect-message-detail}.
+
+\begin{table}[h]
+  \begin{tabular}{|c|c|c|}
+    \hline
+    $M_1$ & Message Type & Description\\
+    \hline
+    0 & Status & \ref{sect-msg-status}\\
+    1 & Block Request & \ref{sect-msg-block-request}\\
+    2 & Block Response & \ref{sect-msg-block-response}\\
+    3 & Block Announce & \ref{sect-msg-block-announce}\\
+    4 & Transactions & \ref{sect-msg-transactions}\\
+    5 & Consensus & \ref{sect-msg-consensus}\\
+    6 & Remote Call Request & \\
+    7 & Remote Call Response & \\
+    8 & Remote Read Request & \\
+    9 & Remote Read Response & \\
+    10 & Remote Header Request & \\
+    11 & Remote Header Response & \\
+    12 & Remote Changes Request & \\
+    13 & Remote Changes Response & \\
+    14 & FinalityProofRequest & \\
+    15 & FinalityProofResponse & \\
+    255 & Chain Specific & \\
+    \hline
+  \end{tabular}
+  \caption{\label{tabl-message-types}List of possible network message types.}
+\end{table}
+
+\section{Detailed Message Structure}\label{sect-message-detail}
+
+This section disucsses the detailed structure of each network message.
+
+\subsection{Status Message}\label{sect-msg-status}
+
+A {\tmem{Status}} Message represented by $M_S$ is sent after a connection with
+a neighbouring node is established and has the following structure:
+\[ M^{}_S \assign \tmop{Enc}_{\tmop{SC}} (v, r, N_B, \tmop{Hash}_B,
+   \tmop{Hash}_G, C_S) \]
+Where:
+{\center{\begin{tabular}{rll}
+  $v$: & Protocol version & 32 bit integer\\
+  $v_{\min} :$ & Minimum supported version & 32 bit integer\\
+  $r$: & Roles & 1 byte\\
+  $N_B$: & Best Block Number & 64 bit integer\\
+  $\tmop{Hash}_B$ & Best block Hash & $\mathbb{B}_{32}$\\
+  $\tmop{Hash}_G$ & Genesis Hash & $\mathbb{B}_{32}$\\
+  $C_S$ & Chain Status & Byte array 
+\end{tabular}}}
+
+
+In which, Role is a bitmap value whose bits represent different roles for the
+sender node as specified in Table \ref{tabl-node-role}:
+
+\
+
+\begin{center}
+  \tmfloat{h}{small}{table}{
+  {\center{\begin{tabular}{|r|l|l|}
+    \hline
+    Value & Binary representation & Role\\
+    \hline
+    $0$ & 00000000 & No network\\
+    1 & 00000001 & Full node, does not participate in consensus\\
+    2 & 00000010 & Light client node\\
+    4 & 00000100 & Act as an authority \\
+    \hline
+  \end{tabular}}}
+  }{\label{tabl-node-role}Node role representation in the status message.}
+\end{center}
+
+\subsection{Block Request Message}\label{sect-msg-block-request}
+
+A Block request message, represented by $M_{\tmop{BR}}$, is sent to request
+block data for a range of blocks from a peer and has the following structure:
+\[ M^{}_{\tmop{BR}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{id}, A_B, S_B,
+   \tmop{Hash}_E, d, \tmop{Max}) \]
+where:
+{\center{\begin{tabular}{rll}
+  $\tmop{id}$: & Unique request id & 32 bit integer\\
+  $A_B$: & Requested data & 1 byte\\
+  $S_B$: & Starting Block & Varying \{$\mathbb{B}_{32}, 64 \tmop{bit}
+  \tmop{integer}$\}\\
+  $\tmop{Hash}_E$ & End block Hash & $\mathbb{B}_{32}$ optional type\\
+  $d$ & Block sequence direction & 1 byte\\
+  $\tmop{Max}$ & Maximum number of blocks to return & 32 bit integer optional
+  type
+\end{tabular}}}
+
+
+\
+
+in which
+\begin{itemizeminus}
+  \item $A_B$, the requested data, is a bitmap value, whose bits represent the
+  part of the block data requested, as explained in Table
+  \ref{tabl-block-attributes}:
+\end{itemizeminus}
+\begin{center}
+  \tmfloat{h}{small}{table}{
+  {\center{\begin{tabular}{|r|l|l|}
+    \hline
+    Value & Binary representation & Requested Attribute\\
+    \hline
+    $1$ & 00000001 & Block header\\
+    2 & 00000010 & Block Body\\
+    4 & 00000100 & Receipt\\
+    8 & 00001000 & Message queue\\
+    16 & 00010000 & Justification \\
+    \hline
+  \end{tabular}}}
+  }{\label{tabl-block-attributes}Bit values for block attribute $A_B$, to
+  indicate the requested parts of the data.}
+\end{center}
+\begin{itemizeminus}
+  \item $S_B$ is SCALE encoded varying data type (see Definition
+  \ref{defn-scale-variable-type}) of either $\mathbb{B}_{32}$ representing the
+  block hash, $H_B$, or $64 \tmop{bit}$ integer representing the block number
+  of the starting block of the requested range of blocks.
+  
+  \item $\tmop{Hash}_E$ is optionally the block hash of the last block in the
+  range.
+  
+  \item $d$ is a flag; it defines the direction on the block chain where the
+  block range should be considered (starting with the starting block), as
+  follows
+  \[ d = \left\{ \begin{array}{cc}
+       0 & \tmop{child} \tmop{to} \tmop{parent} \tmop{direction}\\
+       1 & \tmop{parent} \tmop{to} \tmop{child} \tmop{direction}
+     \end{array} \right. \]
+\end{itemizeminus}
+Optional data type is defined in Definition \ref{defn-varrying-data-type}.
+
+\subsection{Block Response Message}\label{sect-msg-block-response}
+
+A {\tmem{block response message}} represented by $M_{\tmop{BS}}$ is sent in a
+response to a requested block message (see Section
+\ref{sect-msg-block-request}). It has the following structure:
+\[ M^{}_{\tmop{BS}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{id}, D) \]
+where:
+{\center{\begin{tabular}{rll}
+  $\tmop{id}$: & Unique id of the requested response was made for & 32 bit
+  integer\\
+  $D$: & Block data for the requested sequence of Block & Array of block data
+\end{tabular}}}
+
+
+\
+
+In which block data is defined in Definition \ref{defn-block-data}.
+
+\begin{definition}
+  \label{defn-block-data}{\tmstrong{Block Data}} is defined as the follownig
+  tuple:{\todo{Block Data definition should go to block format section}}
+\end{definition}
+\[ (H_B, \tmop{Header}_B, \tmop{Body}, \tmop{Receipt}, \tmop{MessageQueue},
+   \tmop{Justification}) \]
+Whose elements, with the exception of $H_B$, are all of the following
+{\tmem{optional type}} (see Definition \ref{defn-varrying-data-type}) and are
+defined as follows:
+{\center{\begin{tabular}{rll}
+  $H_B$: & Block header hash & $\mathbb{B}_{32}$\\
+  $\tmop{Header}_B$: & Block header & 5-tuple (Definition
+  \ref{defn-block-header})\\
+  Body & Array of extrinsics & Array of Byte arrays (Section
+  \ref{sect-extrinsics})\\
+  Receipt & Block Receipt & Byte array\\
+  Message Queue & Block message queue & Byte array\\
+  Justification & Block Justification & Byte array
+\end{tabular}}}
+
+
+\subsection{Block Announce Message}\label{sect-msg-block-announce}
+
+A {\tmem{block announce message}} represented by $M_{\tmop{BA}}$ is sent when
+a node becomes aware of a new complete block on the network and has the
+following structure:
+\[ M_{\tmop{BA}} \assign \tmop{Enc}_{\tmop{SC}} (\tmop{Header}_B) \]
+Wh\tmverbatim{}ere:
+{\center{\begin{tabular}{rll}
+  $\tmop{Header}_B$: & Header of new block B & 5-tuple header (Definition
+  \ref{defn-block-header})
+\end{tabular}}}
+\subsection{Transactions}\label{sect-msg-transactions}
+
+\ \ \ The transactions Message is represented by $M_T$ and is defined as
+follows:
+\[ M_T \assign \tmop{Enc}_{\tmop{SC}} (C_1, \ldots, C_n) \]
+in which:
+\[ C_i \assign \tmop{Enc}_{\tmop{SC}} (E_i) \]
+Where each $E_i$ is a byte array and represents a sepearate extrinsic.
+Polkadot RE is indifferent about the content of an extrinsic and treats it as
+a blob of data.
+
+\subsection{Consensus Message}\label{sect-msg-consensus}
+
+A {\tmem{consensus message}} represented by $M_C$ is sent to communicate
+messages related to consensus process:
+\[ M_C \assign \tmop{Enc}_{\tmop{SC}} (E_{\tmop{id}}, D) \]
+Wh\tmverbatim{}ere:
+{\center{\begin{tabular}{rll}
+  $E_{\tmop{id}}$: & The consensus engine unique identifier & $\mathbb{B}_4$\\
+  $D$ & Consensus message payload & $\mathbb{B}$
+\end{tabular}}}
+
+
+in which
+\[ E_{\tmop{id}} \assign \left\{ \begin{array}{ccc}
+     '' \tmop{BABE}'' &  & \tmop{For} \tmop{messages} \tmop{related} \tmop{to}
+     \tmop{BABE} \tmop{protocol}\\
+     '' \tmop{FRNK}'' &  & \tmop{For} \tmop{messages} \tmop{related} \tmop{to}
+     \tmop{GRANDPA} \tmop{protocol}
+   \end{array} \right. \]
+
+
+The network agent should hand over $D$ to approperiate consensus engine which
+identified by $E_{\tmop{id}}$.
+
 \chapter{Runtime Environment API\label{sect-re-api}}
 
 The Runtime Environment API is a set of functions that Polkadot RE exposes to
@@ -2141,9 +2287,9 @@ storage.
 The functions are specified in each subsequent subsection for each category
 of those functions.
 
-\subsection{Storage}
+\section{Storage}
 
-\subsubsection{\tmverbatim{ext\_set\_storage}}
+\subsection{\tmverbatim{ext\_set\_storage}}
 
 Sets the value of a specific key in the state storage.
 
@@ -2166,7 +2312,7 @@ Sets the value of a specific key in the state storage.
   \item \tmverbatim{value\_len}: \ the length of the value buffer in bytes.
 \end{itemize}
 
-\subsubsection{\tmverbatim{ext\_storage\_root}}
+\subsection{\tmverbatim{ext\_storage\_root}}
 
 Retrieves the root of the state storage.
 
@@ -2218,7 +2364,7 @@ in the array. It computes and returns the root hash of the constructed trie.
   elements of \tmverbatim{values\_data}.
 \end{itemize}
 
-\subsubsection{\tmverbatim{ext\_clear\_prefix}}
+\subsection{\tmverbatim{ext\_clear\_prefix}}
 
 Given a byte array, this function removes all storage entries whose key
 matches the prefix specified in the array.
@@ -2241,7 +2387,7 @@ matches the prefix specified in the array.
   bytes.
 \end{itemize}
 
-\subsubsection{\tmverbatim{}\tmverbatim{ext\_clear\_storage}}
+\subsection{\tmverbatim{}\tmverbatim{ext\_clear\_storage}}
 
 Given a byte array, this function removes the storage entry whose key is
 specified in the array.
@@ -2292,7 +2438,7 @@ the key specified in the array exists.
   key storage does not contain an entry with the given key.
 \end{itemize}
 
-\subsubsection{\tmverbatim{ext\_get\_allocated\_storage}}
+\subsection{\tmverbatim{ext\_get\_allocated\_storage}}
 
 Given a byte array, this function allocates a large enough buffer in the
 memory and retrieves the value stored under the key that is specified in the
@@ -2325,7 +2471,7 @@ storage.
   entry exist; otherwise it is equal to 0.
 \end{itemize}
 
-\subsubsection{\tmverbatim{ext\_get\_storage\_into}}
+\subsection{\tmverbatim{ext\_get\_storage\_into}}
 
 Given a byte array, this function retrieves the value stored under the key
 specified in the array and stores a specified chunk of it in the provided
@@ -2366,7 +2512,7 @@ buffer, if the entry exists in the storage.
   does not exist under the specified key.
 \end{itemize}
 
-\subsubsection{To Be Specced}
+\subsection{To Be Specced}
 
 \begin{itemize}
   \item \tmverbatim{ext\_clear\_child\_storage}
@@ -2698,7 +2844,11 @@ UTF-8 string, otherwise does nothing and returns.
 \begin{itemizedot}
   \item \tmverbatim{ext\_chain\_id}
 \end{itemizedot}
-\tmverbatim{}\subsection{Not Implemented in Polkadot-JS}
+\tmverbatim{}\subsection{Block Production}
+
+\section{Validation}
+
+\
 
 \chapter{Runtime Entries}\label{sect-runtime-entries}
 
@@ -2810,17 +2960,107 @@ A Boolean value indicates if the execution was successful.
 
 \subsection{\tmverbatim{Core\_initialise\_block}}
 
-\subsection{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}\label{sect-validate-transaction}
+{\todo{Spec initialize block}}
 
-{\todo{Explain function}}
+\subsection{\tmverbatim{hash\_and\_length}}\label{sect-rte-hash-and-length}
 
-\
+An auxilarry function which returns hash and encoding length of an extrinsics.
 
-\subsection{\tmverbatim{Babe\_authorities}}\label{sect-runtime-api-auth}
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item A SCALE encoded blob of an extrinsic.
+\end{itemize}
+
+
+{\tmstrong{Return}}:
+
+Pair of Blake2Hash of the blob as element of $\mathbb{B}_{32}$ and its length
+as 64 bit integer.
+
+\subsection{\tmverbatim{Babe\_authorities}}\label{sect-rte-babe-auth}
 
 This entry serves to report the set of authorities at a given block. It
 receives \tmverbatim{block\_id} as an argument; and returns an array of
 \tmverbatim{authority\_id}'s.
+
+\subsection{\tmverbatim{Grandpa\_authorities}}\label{sect-rte-grandpa-auth}
+
+This entry is to report the set of GRANDPA voters at a given block. It
+receives \tmverbatim{block\_id} as an argument; it returns an array of
+\tmverbatim{authority\_id}'s.
+
+\subsection{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}\label{sect-validate-transaction}
+
+This entry is invoked against extrinsics submitted through the Transaction
+network message \ref{sect-msg-transactions} and indicates if the submitted
+blob represents a valid extrinsics applied to the specified block.
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item $H_n (B)$: the block number whose final state is where the transaction
+  should apply the system state.
+  
+  \item UTX: A byte array that contains the SCALE encoded transaction.
+\end{itemize}
+
+
+{\tmstrong{Return}}:
+
+A varying type Result object which has type of {\tmem{TransactionValidity}} in
+case no error occurs in course of its execution. TransactionValidity is of
+varying type described in the Table \ref{tabl-transaction-validity}:
+
+\
+
+\tmfloat{h}{small}{table}{\begin{tabular}{lll}
+  Type Index & Data type & Description\\
+  0 & Byte & Indicating invalid extrinsic and bearing the error code
+  concerning\\
+  &  & the cause of invalidity of the transaction.\\
+  1 & A Quin-tuple & Indicating whether the extrinsic is valid and providing
+  guidance for \\
+  &  & Polkadot RE on how to proceed with the extrinsic (see below)\\
+  2 & Byte & The Validity of the extrinsic cannot be determined
+\end{tabular}}{\label{tabl-transaction-validity}Type variation for the return
+value of \tmverbatim{TaggedTransactionQueue\_transaction\_validity}.}
+
+\
+
+In which the quintuple of type for valid extrinsics consists of the following
+parts:
+\[ (\tmop{priority}, \tmop{requires}, \tmop{provides}, \tmop{longevity},
+   \tmop{propagate}) \]
+
+
+\tmfloat{h}{small}{table}{\begin{tabular}{lll}
+  Name & Description & Type\\
+  Priority & Determines the ordering of two transactions that have & 64bit
+  integer\\
+  & all their dependencies (required tags) satisfied. & \\
+  Requires & List of tags specifying extrinsics which should be applied  &
+  Array of \\
+  & before the current exrinsics can be applied. & Transaction Tags\\
+  Provides & Informs Runtime of the extrinsics depending on the tags in &
+  Array of \\
+  & the list that can be applied after current extrinsics are being applied.
+  & Transaction Tags\\
+  & Describes the minimum number of blocks for the validity to be correct &
+  \\
+  Longevity & After this period, the transaction should be removed from the  &
+  64 bit integer\\
+  & pool or revalidated. & \\
+  Propagate & A flag indicating if the transaction should be propagated to  &
+  Boolean\\
+  & other peers. & 
+\end{tabular}}{The quintuple provided by
+\tmverbatim{TaggedTransactionQueue\_transaction\_validity}
+in the case the transaction is judged to be valid.}
+
+\
+
+Note that if {\tmem{Propagate}} is set to \tmverbatim{false} the transaction
+will still be considered for including in blocks that are authored on the
+current node, but will never be sent to other peers.
 
 \begin{thebibliography}{DGKR18}
   \bibitem[Ali19]{alistair_stewart_grandpa:_2019}Alistair Stewart.
@@ -2846,5 +3086,7 @@ receives \tmverbatim{block\_id} as an argument; and returns an array of
   authentication code (MAC). {\newblock}RFC 7693,
   https://tools.ietf.org/html/rfc7693, 2015.
 \end{thebibliography}
+
+\printindex
 
 \end{document}
