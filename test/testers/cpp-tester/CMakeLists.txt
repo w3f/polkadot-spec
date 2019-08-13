@@ -27,12 +27,3 @@ install(TARGETS kagome_tester
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
     FRAMEWORK DESTINATION ${CMAKE_INSTALL_PREFIX}
     )
-
-if (TESTING)
-    enable_testing()
-
-    set(EXECUTABLE ${CMAKE_BINARY_DIR}/kagome_tester)
-    add_test(ScaleTest1 ${EXECUTABLE} scale-codec encode -i 123456)
-    add_test(ScaleTest2 ${EXECUTABLE} scale-codec encode -i "a b c d")
-    add_test(ScaleTest3 ${EXECUTABLE} scale-codec encode --input "Hello, world")
-endif ()
