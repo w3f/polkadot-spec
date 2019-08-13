@@ -55,11 +55,11 @@ const state_trie_insert_and_delete_subcommand = " insert-and-delete";
 const state_trie_root_hex_flag = " --keys-in-hex";
 
 const fixture_data_dir = "fixtures"
-const test_trie_files = [b"1c1_trie.yaml"]
-                         #b"random_state_trie_80.yaml",
-			             #b"pk_branch_test.yaml",
-			             #b"pk_branch_test2.yaml",
-                         #b"hex_limit_trie.yaml"]
+const test_trie_files = [b"1c1_trie.yaml",
+                         b"random_state_trie_80.yaml",
+			             b"pk_branch_test.yaml",
+			             b"pk_branch_test2.yaml",
+                         b"hex_limit_trie.yaml"]
 
 const test_hexed_key_trie_files = [b"hex_limit_trie.yaml",
                                    b"10000-node-trie.yaml"]
