@@ -8,6 +8,7 @@
 
 #include <string>
 
+// Trie test args
 struct TrieCommandArgs {
     std::string subcommand;
     bool keys_in_hex;
@@ -15,8 +16,10 @@ struct TrieCommandArgs {
     std::string state_file_name;
 };
 
+// parses CLI input
 TrieCommandArgs extractTrieArgs(int argc, char **argv);
 
+// executes Trie tests according to provided args
 void processTrieCommand(const TrieCommandArgs& args);
 
 #endif //KAGOMECROSSTESTCLI_TRIE_HPP

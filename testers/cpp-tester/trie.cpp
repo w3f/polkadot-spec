@@ -103,7 +103,6 @@ parseYamlStateFile(const std::string &filename, bool keys_in_hex) {
 void processTrieCommand(const TrieCommandArgs &args) {
   auto db = std::make_unique<kagome::storage::InMemoryStorage>();
 
-  BOOST_ASSERT_MSG(db, "DB");
   kagome::storage::trie::PolkadotTrieDb trie(std::move(db));
 
   SubcommandRouter<std::vector<Buffer>, std::vector<Buffer>> router;

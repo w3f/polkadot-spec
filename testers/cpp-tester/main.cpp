@@ -1,12 +1,15 @@
 #include <boost/program_options.hpp>
 #include <boost/optional.hpp>
-#include <iostream>
-#include <spdlog/sinks/stdout_sinks.h>
 #include "subcommand_router.hpp"
 #include "scale_codec.hpp"
 #include "trie.hpp"
 
 namespace po = boost::program_options;
+
+/**
+ * Implementation of Polkadot RE compatibility tests
+ * Contains tests for SCALE codec and Merkle-Patricia Tree
+ */
 
 int main(int argc, char **argv) {
   SubcommandRouter<int, char **> router;
