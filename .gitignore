@@ -3,6 +3,9 @@
 *.jl.mem
 deps/deps.jl
 build/
+.idea/
+cmake-build-debug/
+.gitignore
 
 #executables
 test/testers/go-tester/scale_codec/scale_codec
