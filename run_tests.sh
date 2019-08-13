@@ -7,4 +7,3 @@ cd ${SCRIPT_DIR}
 
 cd test
 julia -qL runtests.jl
-

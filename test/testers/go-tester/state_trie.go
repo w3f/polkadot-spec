@@ -104,18 +104,18 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			}
 			key_list = append(key_list, keyBytes)
 			err = test_trie.Put(keyBytes, []byte(key_value_data.Values[i]))
+
 			if err != nil {
 				return
 			}
 			if command_args[0] == "insert-and-delete" {
-				trieHash, err = test_trie.Hash()
+		    	trieHash, err = test_trie.Hash()
 				if err != nil {
 					log.Fatal(err)
 				}
 				fmt.Printf("state root: %x\n", trieHash)
 			}
 		}
-
 		if command_args[0] == "insert-and-delete" {
 			for len(key_list) > 0 {
 				key_index_to_drop := int(trieHash[0]) % len(key_list)
