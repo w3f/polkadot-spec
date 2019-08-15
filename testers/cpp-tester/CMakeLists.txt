@@ -6,7 +6,13 @@ set(CMAKE_CXX_STANDARD 17)
 
 include(${CMAKE_SOURCE_DIR}/implementations/cpp/kagome/build/install/lib/cmake/kagome/kagomeConfig.cmake)
 
-add_executable(kagome_tester main.cpp scale_codec.cpp scale_codec.hpp trie.cpp subcommand_router.cpp subcommand_router.hpp trie.hpp)
+add_executable(kagome_tester
+    main.cpp
+    scale_codec.cpp
+    scale_codec.hpp
+    trie.cpp
+    subcommand_router.hpp
+    trie.hpp)
 
 target_include_directories(kagome_tester PUBLIC ${kagome_INCLUDE_DIRS})
 
