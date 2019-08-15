@@ -7,11 +7,9 @@
 
 #include <iostream>
 
-#include "../../../implementations/cpp/kagome/test/testutil/storage/polkadot_trie_db_printer.hpp"
 #include <boost/program_options.hpp>
 #include <kagome/storage/in_memory/in_memory_storage.hpp>
-#include <kagome/storage/leveldb/leveldb.hpp>
-#include <kagome/storage/trie/polkadot_trie_db/polkadot_trie_db.hpp>
+#include <kagome/storage/trie/impl/polkadot_trie_db.hpp>
 #include <spdlog/sinks/stdout_sinks.h>
 #include <yaml-cpp/yaml.h>
 
@@ -22,7 +20,6 @@ namespace po = boost::program_options;
 using kagome::common::Buffer;
 using kagome::common::hex_lower;
 using kagome::common::unhex;
-using kagome::storage::trie::operator<<;
 
 TrieCommandArgs extractTrieArgs(int argc, char **argv) {
   po::options_description desc("Trie codec related tests\nAllowed options:");
@@ -113,9 +110,6 @@ void processTrieCommand(const TrieCommandArgs &args) {
          keys_it != keys.end(); keys_it++, values_it++) {
       auto res = trie.put(*keys_it, *values_it);
       BOOST_ASSERT_MSG(res, "Error inserting to Trie");
-      if (args.log_trie) {
-        std::cout << "TRIE: " << trie << "\n";
-      }
       std::cout << "state root: " << hex_lower(trie.getRootHash()) << "\n";
     }
     // drop random nodes
@@ -134,9 +128,6 @@ void processTrieCommand(const TrieCommandArgs &args) {
          keys_it != keys.end(); keys_it++, values_it++) {
       BOOST_ASSERT_MSG(trie.put(*keys_it, *values_it),
                        "Error inserting to Trie");
-    }
-    if (args.log_trie) {
-      std::cout << "TRIE: " << trie << "\n";
     }
     std::cout << "state root: " << hex_lower(trie.getRootHash()) << "\n";
   });
