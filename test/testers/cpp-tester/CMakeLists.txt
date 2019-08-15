@@ -4,7 +4,7 @@ project(KagomeCrossTestCLI)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include(${CMAKE_SOURCE_DIR}/implementations/cpp/kagome/build/install/lib/cmake/kagome/kagomeConfig.cmake)
+include(${CMAKE_SOURCE_DIR}/build/kagome/install/lib/cmake/kagome/kagomeConfig.cmake)
 
 add_executable(kagome_tester
     main.cpp
