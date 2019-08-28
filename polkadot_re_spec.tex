@@ -77,7 +77,7 @@
   {\Large Protocol Specification}
 }
 
-\date{August 7, 2019}
+\date{August 28, 2019}
 
 \maketitle
 
@@ -270,9 +270,9 @@ branches of the block tree.
 \end{definition}
 
 \begin{definition}
-  We define the following complete order over $\mathbb{C}$ such that for $C_1,
-  C_2 \in \mathbb{C}$ if $| C_1 | \neq | C_2 |$ we say $C_1 > C_2$ if and only
-  if $| C_1 | > | C_2 |$.
+  \label{defn-longest-chain}We define the following complete order over
+  $\mathbb{C}$ such that for $C_1, C_2 \in \mathbb{C}$ if $| C_1 | \neq | C_2
+  |$ we say $C_1 > C_2$ if and only if $| C_1 | > | C_2 |$.
   
   If $| C_1 | = | C_2 |$ we say $C_1 > C_2$ if and only if the block arrival
   time of $\tmop{Head} (C_1)_{}$ is less than the block arrival time of
@@ -861,6 +861,11 @@ bytes are set to zero.
 
 \section{Extrinsics}\label{sect-extrinsics}
 
+The block body consists of an array of extrinsics. Nonetheless, Polkadot RE
+does not specify or limit the internals of each extrinsics. From Polkadot RE
+point of view, each extrinsics is simply a SCALE encoded byte array (see
+Definition \ref{defn-scale-byte-array}).
+
 \subsection{Preliminaries}
 
 \begin{definition}
@@ -884,10 +889,17 @@ for inclusion in future blocks.
 
 \subsection{Transaction Queue}
 
-A Block producer node should listen to all Transaction
-Messages{\tmem{{\index{Transaction Message}}}} and keep a {\tmem{transaction
-pool{\index{transaction pool}}}} and a {\tmem{transaction {\index{transaction
-queue}}}} as defined as follows:
+A Block producer node should listen to all transaction
+messages{\tmem{{\index{Transaction Message}}}}. This is because the
+transactions are submitted to the node through the {\tmem{transactions}}
+network message specified in Section \ref{sect-msg-transactions}. Upon
+receiving a transactions message, Polkadot RE separate the submitted
+transactions in the transactions message into individual extrinsics and pass
+them to the Runtime by executing Algorithm \ref{algo-validate-transactions} to
+validate and store them for inclusion into future blocks. To that aim,
+Polkodot RE should keep a {\tmem{transaction pool{\index{transaction pool}}}}
+and a {\tmem{transaction queue}}{\index{transaction queue}} defined as
+follows:
 
 \begin{definition}
   The {\tmstrong{Transaction Queue}} of a block producer node, formally
@@ -898,17 +910,8 @@ queue}}}} as defined as follows:
   in the transaction queue. \ 
 \end{definition}
 
-The block body consists of a set of extrinsics. Nonetheless, Polkadot RE does
-not specify or limit the internals of each extrinsics. From Polkadot RE point
-of view, each extrinsics is a SCALE encoded in byte arrays (see Definition
-\ref{defn-scale-byte-array}).
-
-The extrinsics are submitted to the node through the {\tmem{transactions}}
-network message specified in Section \ref{sect-message-transactions}. Upon
-receiving a transactions message, Polkadot RE separates the submitted
-transactions message into individual extrinsics and runs Algorithm
-\ref{algo-validate-transactions} to validate and store them to include them
-into future blocks.
+Algorithm \ref{algo-validate-transactions} updates the transaction pool and
+the transaction queue according to the received message:
 
 \custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
@@ -920,29 +923,77 @@ into future blocks.
 
 {\algorithmic{{\state{$L \leftarrow \tmop{Dec}_{\tmop{SC}} (M_T)$}}
 
-{\state{{\FORIN{$E$}{$L$}}}}
+{\state{{\FORIN{$T$}{$L$}}{\tmstrong{such that}} $E \nin \tmop{TQ}$
+{\tmstrong{and}} $E \nin \tmop{TP}$:}}
 
 {\state{$B_d \leftarrow${\tmname{Head(Longest-Chain(($\tmop{BT}$))}}}}
 
 {\state{$N \leftarrow H_n (B_d)$}}
 
 {\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}, N, E
+\text{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}, N, T
 \right)$}}
 
-{\state{{\IF{$R$ indicates $E$ is $\tmop{Valid}$}}}}
+{\state{{\IF{$R$ indicates $E$ is $\tmop{Valid} :$}}}}
 
-{\state{{\tmname{Add-To-Transaction-Queue($E, R$)}}}}
+{\state{{\IF{$\tmop{Requires}$(R){\subset}}}
 
-{\todo{Replace list of reaction based on R}}}}
+\quad$\bigcup_{\forall T \in (\tmop{TQ})}${\tmname{Provided-Tags}}(T) {\cup}
+$\bigcup_{i < d, \forall T, T \in B_i}${\tmname{Provided-Tags(T)}}:}}
+
+{\state{{\tmname{Insert-At(}}$\tmop{TQ}, T, \tmop{Requires} (R),
+\tmop{Priority} (R)$){\END}}}
+
+{\state{{\ELSE{\ }}}}
+
+{\state{{\tmname{Add-To(TP,$T$)}}{\END}}}
+
+{\state{{\tmname{Maintain-Transaction-Pool}}}}
+
+{\state{{\IF{Propagate(R)={\tmstrong{True}}:}}}}
+
+{\state{{\tmname{Propagate(}}$T$){\END}{\END}{\END}}}}}
 
 \hrulefill{\medskip}
 
-where {\todo{Add References for validate\_transaction, R, Longest-Chain,
-Extrinsic-Queue}}
-\begin{itemize}
-  \ 
-\end{itemize}
+In which
+\begin{itemizeminus}
+  \item {\tmname{Longest-Chain}} is defined in Definition
+  \ref{defn-longest-chain}.
+  
+  \item \tmverbatim{TaggedTransactionQueue\_validate\_transaction} is a
+  runtime entry specified in Section \ref{sect-rte-validate-transaction} and
+  Requires(R), Priority(R) and Propagate(R) refer to the corresponding fields
+  in the tuple returns by the entry when it deems that $T$ is valid.
+  
+  \item {\tmname{Provided-Tags}}(T) is the list of tags that transaction $T$
+  provides. Polkadot RE needs to keep track of tags which transaction $T$
+  provides as well as requires after validating it.
+  
+  \item {\tmname{Insert-At(}}$\tmop{TQ}, T, \tmop{Requires} (R),
+  \tmop{Priority} (R)$) places $T$ into $\tmop{TQ}$ approperiatly such that
+  the transactions providing the tags which $T$ requires or have higher
+  priority than $T$ are ahead of $T$.
+  
+  \item {\tmname{Maintain-Transaction-Pool}} is described in Algorithm
+  \ref{algo-maintain-transaction-pool}.
+  
+  \item {\tmname{Propagate(}}$T$) include $T$ in the next {\tmem{transactions
+  message{\index{Transaction Message}}}} sent to all peers of Polkadot RE
+  node.
+\end{itemizeminus}
+\custombinding{5}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  5. }
+  \label{algo-maintain-transaction-pool}{\tmname{Maintain-Transaction-Pool}}\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\todo{This is scaning the pool for ready transactions and
+moving them to the TQ and dropping transactions which are not valid}}}}
+
+\hrulefill{\medskip}
+
 \section{State Replication}\label{sect-state-replication}
 
 Polkadot nodes replicate each other's state by syncing the history of the
@@ -1082,9 +1133,9 @@ process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-\custombinding{5}{\noindent}\begin{tabular}{l}
+\custombinding{6}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  5. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  \tmtextsc{Algorithm  6. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
   (B)$)}}\\
   \hline
 \end{tabular}
@@ -1198,9 +1249,9 @@ build a block. The $\tmop{sk}$ is the block producer lottery secret key and
 $n$ is the index of epoch for whose slots the block producer is running the
 lottery.
 
-\custombinding{6}{\noindent}\begin{tabular}{l}
+\custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  6. }
+  \tmtextsc{Algorithm  7. }
   \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}$(\tmop{sk}^{},
   n)$\\
   \hline
@@ -1264,9 +1315,9 @@ formalized in Definition \ref{defn-slot-offset}.
   {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
+\custombinding{8}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  7. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
+  \tmtextsc{Algorithm  8. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
   the slot number of the slot whose time needs to be determined)\\
   \hline
 \end{tabular}
@@ -1317,9 +1368,9 @@ alongside with the {\tmem{babe header}} defined in Definition
   \ 
 \end{definition}
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
+\custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  8. }
+  \tmtextsc{Algorithm  9. }
   \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
   pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
   \hline
@@ -1354,9 +1405,9 @@ lottery in epoch $\mathcal{E}_{n + 2}$. The computation of the seed is
 described in Algorithm \ref{algo-epoch-randomness} which uses the concept of
 epoch subchain described in Definition \ref{defn-epoch-subchain}.
 
-\custombinding{9}{\noindent}\begin{tabular}{l}
+\custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  9. }
+  \tmtextsc{Algorithm  10. }
   \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
   index)\\
   \hline
@@ -1384,9 +1435,9 @@ The blocks building process is triggered by Algorithm
 \ref{algo-block-production} of the consensus engine which runs Alogrithm
 \ref{algo-build-block}.
 
-\custombinding{10}{\noindent}\begin{tabular}{l}
+\custombinding{11}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  10. }
+  \tmtextsc{Algorithm  11. }
   \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
   at its head the block to be constructed,
   
@@ -1669,9 +1720,9 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{11}{\noindent}\begin{tabular}{l}
+\custombinding{12}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  11. }
+  \tmtextsc{Algorithm  12. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -1693,9 +1744,9 @@ needs to be incremented.
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{alg-grandpa-round}.
 
-\custombinding{12}{\noindent}\begin{tabular}{l}
+\custombinding{13}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  12. }
+  \tmtextsc{Algorithm  13. }
   \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
@@ -1739,9 +1790,9 @@ The condition of {\tmem{completablitiy}} is defined in Definition
 \ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
 explained in Algorithm \ref{algo-grandpa-best-candidate}.
 
-\custombinding{13}{\noindent}\begin{tabular}{l}
+\custombinding{14}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  13. }
+  \tmtextsc{Algorithm  14. }
   \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1761,9 +1812,9 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\custombinding{14}{\noindent}\begin{tabular}{l}
+\custombinding{15}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  14. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextsc{Algorithm  15. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
@@ -2989,7 +3040,7 @@ This entry is to report the set of GRANDPA voters at a given block. It
 receives \tmverbatim{block\_id} as an argument; it returns an array of
 \tmverbatim{authority\_id}'s.
 
-\subsection{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}\label{sect-validate-transaction}
+\subsection{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}\label{sect-rte-validate-transaction}
 
 This entry is invoked against extrinsics submitted through the Transaction
 network message \ref{sect-msg-transactions} and indicates if the submitted
