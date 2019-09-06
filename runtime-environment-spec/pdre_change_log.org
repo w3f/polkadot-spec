@@ -1,3 +1,8 @@
+* Fri Sep 06 2019
+  - Specced the details of obtaining number of slots in an epoch
+  - Babeapi_Api Runtime entry specced 
+  - List of Runtime entries updated to Kusama's Runtime.
+  - Updating Block Validation.
 * Wed Aug 07 2019
   - Transaction Queue and tranaction pool added to transaction processing.
 * Tue Aug 06 2019
