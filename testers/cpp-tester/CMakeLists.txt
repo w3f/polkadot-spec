@@ -5,28 +5,29 @@ project(KagomeCrossTestCLI)
 set(CMAKE_CXX_STANDARD 17)
 
 set(KAGOME_BUILD_DIR ${CMAKE_BINARY_DIR}/kagome)
-execute_process(
+
+# triggers a fatal error if the process call doesn't succeed
+function (execute_vital_process)
+    cmake_parse_arguments(PARSE_ARGV 0 ARG ""
+        "DESCRIPTION" "COMMAND")
+
+    execute_process(
+        COMMAND ${ARG_COMMAND}
+        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/implementations/cpp/kagome
+        RESULT_VARIABLE COMMAND_RESULT
+    )
+    if (NOT ${COMMAND_RESULT} STREQUAL "0")
+        message(FATAL_ERROR "Error running ${ARG_DESCRIPTION} on kagome: ${COMMAND_RESULT}")
+    endif ()
+endfunction()
+
+execute_vital_process(
     COMMAND cmake -DCMAKE_INSTALL_PREFIX=${KAGOME_BUILD_DIR}/install -B ${KAGOME_BUILD_DIR}
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/implementations/cpp/kagome
-    RESULT_VARIABLE KAGOME_CMAKE_GEN_RESULT
-)
-if (NOT ${KAGOME_CMAKE_GEN_RESULT} STREQUAL "0")
-    message(FATAL_ERROR "Error running cmake on kagome: ${KAGOME_CMAKE_GEN_RESULT}")
-endif ()
-execute_process(COMMAND cmake --build ${KAGOME_BUILD_DIR} -- -j6
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/implementations/cpp/kagome
-    RESULT_VARIABLE KAGOME_BUILD_RESULT
-    )
-if (NOT ${KAGOME_BUILD_RESULT} STREQUAL "0")
-    message(FATAL_ERROR "Error building kagome: ${KAGOME_CMAKE_GEN_RESULT}")
-endif ()
-execute_process(COMMAND cmake --build ${KAGOME_BUILD_DIR} -- install
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/implementations/cpp/kagome
-    RESULT_VARIABLE KAGOME_INSTALL_RESULT
-    )
-if (NOT ${KAGOME_INSTALL_RESULT} STREQUAL "0")
-    message(FATAL_ERROR "Error installing kagome: ${KAGOME_CMAKE_GEN_RESULT}")
-endif ()
+    DESCRIPTION "CMake files generation")
+execute_vital_process(COMMAND cmake --build ${KAGOME_BUILD_DIR} -- -j6
+    DESCRIPTION build)
+execute_vital_process(COMMAND cmake --build ${KAGOME_BUILD_DIR} -- install
+    DESCRIPTION install)
 
 add_executable(kagome_tester
     main.cpp
