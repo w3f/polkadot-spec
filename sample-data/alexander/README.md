@@ -6,6 +6,8 @@ Note that the Core_import_block should fail on importing block #1 because the st
 
 block-001.hex contains data from the network message propagating the block. It is of the following struct type encoded using SCALED codec.
 
+In Rust:
+
     pub struct BlockData<Header, Hash, Extrinsic> {
 		/// Block header hash.
 		pub hash: Hash,
@@ -19,6 +21,22 @@ block-001.hex contains data from the network message propagating the block. It i
 		pub message_queue: Option<Vec<u8>>,
 		/// Justification if requested.
 		pub justification: Option<Justification>,
+    }
+
+
+
+In Javascript:
+
+    export default class BlockData extends Struct {
+    constructor (value?: any) {
+    super({
+    hash: Hash,
+      header: Option.with(Header),
+      body: Option.with(Vector.with(Bytes)),
+      receipt: Option.with(Bytes),
+      messageQueue: Option.with(Bytes),
+      justification: Option.with(Bytes)
+      }, value);
     }
 
 Where ``Extrinsic`` is defined to be ``Vecu<u8>``. ``Hash`` and ``<Hash>::output`` serialize to a byte array of 32 byte length.
