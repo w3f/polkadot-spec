@@ -1,3 +1,5 @@
+* Fri Sep 13 2019
+  - Main part of block verification specced.
 * Fri Sep 06 2019
   - Specced the details of obtaining number of slots in an epoch
   - Babeapi_Api Runtime entry specced 
