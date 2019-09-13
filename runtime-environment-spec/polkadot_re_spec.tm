@@ -3705,6 +3705,31 @@
 
   <subsection|Offchain Worker >
 
+  <subsubsection|<verbatim|is_validator>>
+
+  Returns if the local node is a potential validator. Even if this function
+  returns `true`, it does not mean that any keys are configured and that the
+  validator is registered in the chain.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $is_validator
+
+    \ \ \ \ \ \ ((result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|result>: \ an i32 in<verbatim|>teger which is equal to 1
+    if the local node is a potential validator or a equal to 0 if it is not.
+  </itemize>
+
   <subsubsection|<verbatim|ext_submit_transaction>>
 
   Given an extrinsic as a SCALE encoded byte array, the system decodes the
@@ -4151,32 +4176,33 @@
     <associate|algo-validate-transactions|<tuple|3.2|20>>
     <associate|auto-1|<tuple|1|7>>
     <associate|auto-10|<tuple|2.1.4|14>>
-    <associate|auto-100|<tuple|F.1.11.1|53>>
-    <associate|auto-101|<tuple|F.1.12|53>>
-    <associate|auto-102|<tuple|F.1.12.1|54>>
-    <associate|auto-103|<tuple|F.1.12.2|54>>
-    <associate|auto-104|<tuple|F.1.13|54>>
-    <associate|auto-105|<tuple|F.1.13.1|54>>
-    <associate|auto-106|<tuple|F.1.14|54>>
-    <associate|auto-107|<tuple|F.2|55>>
-    <associate|auto-108|<tuple|G|55>>
-    <associate|auto-109|<tuple|G.1|55>>
+    <associate|auto-100|<tuple|F.1.11|53>>
+    <associate|auto-101|<tuple|F.1.11.1|53>>
+    <associate|auto-102|<tuple|F.1.12|54>>
+    <associate|auto-103|<tuple|F.1.12.1|54>>
+    <associate|auto-104|<tuple|F.1.12.2|54>>
+    <associate|auto-105|<tuple|F.1.13|54>>
+    <associate|auto-106|<tuple|F.1.13.1|54>>
+    <associate|auto-107|<tuple|F.1.14|55>>
+    <associate|auto-108|<tuple|F.2|55>>
+    <associate|auto-109|<tuple|G|55>>
     <associate|auto-11|<tuple|3|17>>
     <associate|auto-110|<tuple|G.1|56>>
-    <associate|auto-111|<tuple|G.2|56>>
-    <associate|auto-112|<tuple|G.2.1|56>>
-    <associate|auto-113|<tuple|G.1|56>>
-    <associate|auto-114|<tuple|G.2.2|56>>
-    <associate|auto-115|<tuple|G.2.3|56>>
-    <associate|auto-116|<tuple|G.2.4|57>>
-    <associate|auto-117|<tuple|G.2.5|57>>
-    <associate|auto-118|<tuple|G.2.6|57>>
-    <associate|auto-119|<tuple|G.2.7|57>>
+    <associate|auto-111|<tuple|G.1|56>>
+    <associate|auto-112|<tuple|G.2|56>>
+    <associate|auto-113|<tuple|G.2.1|56>>
+    <associate|auto-114|<tuple|G.1|56>>
+    <associate|auto-115|<tuple|G.2.2|56>>
+    <associate|auto-116|<tuple|G.2.3|57>>
+    <associate|auto-117|<tuple|G.2.4|57>>
+    <associate|auto-118|<tuple|G.2.5|57>>
+    <associate|auto-119|<tuple|G.2.6|57>>
     <associate|auto-12|<tuple|3.1|17>>
-    <associate|auto-120|<tuple|G.2|57>>
-    <associate|auto-121|<tuple|G.3|59>>
+    <associate|auto-120|<tuple|G.2.7|57>>
+    <associate|auto-121|<tuple|G.2|59>>
     <associate|auto-122|<tuple|G.3|61>>
-    <associate|auto-123|<tuple|SA15|?>>
+    <associate|auto-123|<tuple|G.3|?>>
+    <associate|auto-124|<tuple|SA15|?>>
     <associate|auto-13|<tuple|3.1.1|17>>
     <associate|auto-14|<tuple|3.1.2|18>>
     <associate|auto-15|<tuple|3.1.2.1|18>>
@@ -4271,7 +4297,7 @@
     <associate|auto-96|<tuple|F.1.9.6|53>>
     <associate|auto-97|<tuple|F.1.10|53>>
     <associate|auto-98|<tuple|F.1.10.1|53>>
-    <associate|auto-99|<tuple|F.1.11|53>>
+    <associate|auto-99|<tuple|F.1.10.2|53>>
     <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|59>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|59>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|59>>
