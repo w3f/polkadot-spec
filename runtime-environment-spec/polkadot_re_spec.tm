@@ -1400,7 +1400,7 @@
 
   The block body consists of an array of extrinsics. Nonetheless, Polkadot RE
   does not specify or limit the internals of each extrinsics. From Polkadot
-  RE point of view, each extrinsics is simply a SCALE encoded byte array (see
+  RE point of view, each extrinsics is simply a SCALE-encoded byte array (see
   Definition <reference|defn-scale-byte-array>).
 
   <subsection|Preliminaries>
@@ -1416,11 +1416,10 @@
 
   Extrinsic submission is made by sending a <em|Transactions> network
   message. The structure of this message is specified in Section
-  <reference|sect-msg-transactions>.
-
-  Upon receiving a Transactions message, Polkadot RE decodes the transaction
-  and calls <verbatim|validate_trasaction> runtime function, defined in
-  Section <reference|sect-validate-transaction>, to check the validity of the
+  <reference|sect-msg-transactions>. Upon receiving a Transactions message,
+  Polkadot RE decodes the transaction and calls
+  <verbatim|validate_trasaction> runtime function, defined in Section
+  <reference|sect-validate-transaction>, to check the validity of the
   extrinsic. If <verbatim|validate_transaction> considers the submitted
   extrinsics as a valid one, Polkadot RE makes the extrinsics available for
   the consensus engine for inclusion in future blocks.
@@ -1431,8 +1430,8 @@
   messages<em|<index|Transaction Message>>. This is because the transactions
   are submitted to the node through the <em|transactions> network message
   specified in Section <reference|sect-msg-transactions>. Upon receiving a
-  transactions message, Polkadot RE separate the submitted transactions in
-  the transactions message into individual extrinsics and pass them to the
+  transactions message, Polkadot RE separates the submitted transactions in
+  the transactions message into individual extrinsics and passes them to the
   Runtime by executing Algorithm <reference|algo-validate-transactions> to
   validate and store them for inclusion into future blocks. To that aim,
   Polkodot RE should keep a <em|transaction pool<index|transaction pool>> and
@@ -1525,18 +1524,18 @@
     <item><name|Longest-Chain> is defined in Definition
     <reference|defn-longest-chain>.
 
-    <item><verbatim|TaggedTransactionQueue_validate_transaction> is a runtime
+    <item><verbatim|TaggedTransactionQueue_validate_transaction> is a Runtime
     entry specified in Section <reference|sect-rte-validate-transaction> and
     Requires(R), Priority(R) and Propagate(R) refer to the corresponding
-    fields in the tuple returns by the entry when it deems that <math|T> is
+    fields in the tuple returned by the entry when it deems that <math|T> is
     valid.
 
     <item><name|Provided-Tags>(T) is the list of tags that transaction
-    <math|T> provides. Polkadot RE needs to keep track of tags which
+    <math|T> provides. Polkadot RE needs to keep track of tags that
     transaction <math|T> provides as well as requires after validating it.
 
     <item><name|Insert-At(><math|TQ,T,Requires(R),Priority(R)>) places
-    <math|T> into <math|TQ> approperiatly such that the transactions
+    <math|T> into <math|TQ> approperietly such that the transactions
     providing the tags which <math|T> requires or have higher priority than
     <math|T> are ahead of <math|T>.
 
@@ -1700,10 +1699,10 @@
   Both the Runtime and the Polkadot RE need to work together to assure block
   validity. A block is deemed valid if the block author had the authorship
   right for the slot during which the slot was built as well as if the
-  transactions in the block consititutes a valid transition of states. The
+  transactions in the block constitute a valid transition of states. The
   former criterion is validated by Polkadot RE according to the block
   production consensus protocol. The latter can be verified by Polkadot RE
-  invoking <verbatim|execute_block> entry into the runtime as a part of the
+  invoking <verbatim|execute_block> entry into the Runtime as a part of the
   validation process.
 
   Polkadot RE implements the following procedure to assure the validity of
@@ -1760,7 +1759,7 @@
 
   For the definition of the finality and the finalized block see Section
   <reference|sect-finality>. <math|PBT> is the pruned block tree defined in
-  Definition <reference|defn-block-tree>.<name|Verify-Authorship-Right> is
+  Definition <reference|defn-block-tree>. <name|Verify-Authorship-Right> is
   part of the block production consensus protocol and is described in
   Algorithm <reference|algo-verify-authorship-right>.
 
@@ -1820,8 +1819,8 @@
   <\notation>
     <label|note-slot>We refer to the number of slots in epoch
     <math|\<cal-E\><rsub|n>> by <math|sc<rsub|n>>. <math|sc<rsub|n>> is set
-    to the <verbatim|duration> field in the \ returned data from the call of
-    runtime entry \ <verbatim|BabeApi_epoch> (see
+    to the <verbatim|duration> field in the returned data from the call of
+    the Runtime entry <verbatim|BabeApi_epoch> (see
     <reference|sect-rte-babeapi-epoch>) at the beginning of each epoch. For a
     given block <math|B>, we use the notation <strong|<math|s<rsub|B>>> to
     refer to the slot during which <math|B> has been produced. Conversely,
@@ -2005,7 +2004,7 @@
     \;
   </definition>
 
-  Block producer includes <math|H<rsub|Babe><around*|(|B|)>> as a log in
+  The block producer includes <math|H<rsub|Babe><around*|(|B|)>> as a log in
   <math|H<rsub|d><around*|(|B|)>> and sign <math|Head<around*|(|B|)>> as
   defined in Definition <reference|defn-block-signature>
 
@@ -2104,15 +2103,14 @@
   </definition>
 
   When a Polkadot node receives a produced block, it needs to verify if the
-  block producer actually was entitled to produce the block in the given slot
-  by means of running Algorithm <reference|algo-verify-authorship-right>
-  where:
+  block producer was entitled to produce the block in the given slot by
+  running Algorithm <reference|algo-verify-authorship-right> where:
 
   <\itemize-minus>
     <item>T<math|<rsub|B>> is <math|B>'s arrival time defined in Definition
     <reference|defn-block-time>.
 
-    <item><math|H<rsub|d><around*|(|B|)>> is the digest sub component of
+    <item><math|H<rsub|d><around*|(|B|)>> is the digest sub-component of
     <math|Head<around*|(|B|)>> defined in Definition
     <reference|defn-block-header>.
 
@@ -2193,11 +2191,11 @@
     </algorithmic>
   </algorithm>
 
-  Algorithm <reference|algo-verify-slot-winner> is run as a part of
-  verification, when a node is importing a block, in which:
+  Algorithm <reference|algo-verify-slot-winner> is run as a part of the
+  verification process, when a node is importing a block, in which:
 
   <\itemize-minus>
-    <item> <name|Epoch-Randomness> is defined in Algorithm
+    <item><name|Epoch-Randomness> is defined in Algorithm
     <reference|algo-epoch-randomness>.
 
     <item><math|H<rsub|BABE><around*|(|B|)>> is the BABE header defined in
@@ -2257,7 +2255,7 @@
 
   <\algorithm>
     <label|algo-build-block><name|Build-Block>(<math|C<rsub|Best>>: The chain
-    at its head the block to be constructed,
+    where at its head, the block to be constructed,
 
     s: Slot number)
   <|algorithm>
@@ -2568,7 +2566,7 @@
     in which either
 
     <\equation*>
-      B<rprime|'>\<gtr\>B
+      B<rprime|'>\<geqslant\>B
     </equation*>
 
     or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
@@ -2639,9 +2637,9 @@
   <subsection|Voting Process in Round <math|r>>
 
   For each round <math|r>, an honest voter <math|v> must participate in the
-  voting process by following Algorithm <reference|alg-grandpa-round>.
+  voting process by following Algorithm <reference|algo-grandpa-round>.
 
-  <\algorithm|<label|alg-grandpa-round><name|Play-Grandpa-round><math|<around|(|r|)>>>
+  <\algorithm|<label|algo-grandpa-round><name|Play-Grandpa-round><math|<around|(|r|)>>>
     <\algorithmic>
       <\state>
         <math|t<rsub|r,v>\<leftarrow\>>Time
@@ -2709,6 +2707,15 @@
       </state>
 
       <\state>
+        <name|Attempt-To-Finalize-Round>(<math|r>)
+      </state>
+
+      <\state>
+        <name|Receive-Messages>(<strong|until> <math|r> <strong|is>
+        completable)
+      </state>
+
+      <\state>
         <name|Play-Grandpa-round>(<math|r+1>)
       </state>
     </algorithmic>
@@ -2716,7 +2723,9 @@
 
   The condition of <em|completablitiy> is defined in Definition
   <reference|defn-grandpa-completable>. <name|Best-Final-Candidate> function
-  is explained in Algorithm <reference|algo-grandpa-best-candidate>.
+  is explained in Algorithm <reference|algo-grandpa-best-candidate> and
+  <name|<name|Attempt-To-Finalize-Round>(<math|r>)> is described in Algorithm
+  <reference|algo-attempt-to\Ufinalize>.
 
   <\algorithm|<label|algo-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)>
     <\algorithmic>
@@ -2751,7 +2760,7 @@
     </algorithmic>
   </algorithm>
 
-  <\algorithm|<name|Attempt-To-Finalize-Round>(<math|r>)>
+  <\algorithm|<label|algo-attempt-to\Ufinalize><name|Attempt-To-Finalize-Round>(<math|r>)>
     <\algorithmic>
       <\state>
         <math|L\<leftarrow\>><name|Last-Finalized-Block>
@@ -2764,7 +2773,7 @@
       <\state>
         <\IF>
           <math|E\<geqslant\>L> <strong|and>
-          <math|V<rsup|r-1,pc><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|E|)>\<gtr\>2/3<around|\||\<bbb-V\>|\|>>
+          <math|V<rsup|r,pc><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|E|)>\<gtr\>2/3<around|\||\<bbb-V\>|\|>>
         </IF>
       </state>
 
@@ -2816,6 +2825,17 @@
       finalization.\ 
     </itemize>
   </definition>
+
+  for\ 
+
+  <\itemize-dot>
+    <item>any round <math|r> if the node <math|n> is <em|not> a GRANDPA
+    voter.\ 
+
+    <item>only for rounds <math|r> for which the the node <math|n> has
+    invoked Algorithm <reference|algo-grandpa-round> if <math|n> is a GRANDPA
+    voter.
+  </itemize-dot>
 
   Note that all Polkadot relay chain nodes are supposed to listen to GRANDPA
   finalizing messages regardless if they are GRANDPA
@@ -4227,9 +4247,9 @@
 
   <\center>
     <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|\<cal-E\><rsub|n>>:>|<cell|epoch
-    index (see Definition <reference|defn-epoch-slot>)>|<cell|64 bit
+    index (see Definition <reference|defn-epoch-slot>)>|<cell|64-bit
     integer>>|<row|<cell|<math|s<rsup|n><rsub|0>:>>|<cell|The index of the
-    starting slot of <math|\<cal-E\><rsub|n>>>|<cell|64 bit
+    starting slot of <math|\<cal-E\><rsub|n>>>|<cell|64-bit
     integer>>|<row|<cell|<math|sc<rsub|n>>:>|<cell|Slot count of
     <math|\<cal-E\><rsub|n>> (see Definition
     <reference|defn-epoch-slot>)>|<cell|1
@@ -4387,50 +4407,51 @@
 
 <\references>
   <\collection>
-    <associate|alg-grandpa-round|<tuple|4.9|30>>
-    <associate|alg-join-leave-grandpa|<tuple|4.8|29>>
+    <associate|alg-join-leave-grandpa|<tuple|4.8|32>>
     <associate|algo-aggregate-key|<tuple|2.1|13>>
-    <associate|algo-block-production|<tuple|4.3|25>>
-    <associate|algo-block-production-lottery|<tuple|4.1|24>>
-    <associate|algo-build-block|<tuple|4.7|26>>
-    <associate|algo-epoch-randomness|<tuple|4.4|26>>
-    <associate|algo-grandpa-best-candidate|<tuple|4.10|30>>
-    <associate|algo-maintain-transaction-pool|<tuple|3.3|?>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|4.11|33>>
+    <associate|algo-block-production|<tuple|4.3|27>>
+    <associate|algo-block-production-lottery|<tuple|4.1|26>>
+    <associate|algo-build-block|<tuple|4.7|29>>
+    <associate|algo-epoch-randomness|<tuple|4.4|28>>
+    <associate|algo-grandpa-best-candidate|<tuple|4.10|33>>
+    <associate|algo-grandpa-round|<tuple|4.9|33>>
+    <associate|algo-maintain-transaction-pool|<tuple|3.3|20>>
     <associate|algo-pk-length|<tuple|2.2|14>>
     <associate|algo-runtime-interaction|<tuple|3.1|17>>
-    <associate|algo-slot-time|<tuple|4.2|25>>
+    <associate|algo-slot-time|<tuple|4.2|27>>
     <associate|algo-validate-transactions|<tuple|3.2|20>>
-    <associate|algo-verify-authorship-right|<tuple|4.5|?>>
-    <associate|algo-verify-slot-winner|<tuple|4.6|?>>
+    <associate|algo-verify-authorship-right|<tuple|4.5|28>>
+    <associate|algo-verify-slot-winner|<tuple|4.6|29>>
     <associate|auto-1|<tuple|1|7>>
     <associate|auto-10|<tuple|2.1.4|14>>
-    <associate|auto-100|<tuple|F.1.11|53>>
-    <associate|auto-101|<tuple|F.1.11.1|53>>
-    <associate|auto-102|<tuple|F.1.12|54>>
-    <associate|auto-103|<tuple|F.1.12.1|54>>
-    <associate|auto-104|<tuple|F.1.12.2|54>>
-    <associate|auto-105|<tuple|F.1.13|54>>
-    <associate|auto-106|<tuple|F.1.13.1|54>>
-    <associate|auto-107|<tuple|F.1.14|55>>
-    <associate|auto-108|<tuple|F.2|55>>
-    <associate|auto-109|<tuple|G|55>>
+    <associate|auto-100|<tuple|F.1.11|55>>
+    <associate|auto-101|<tuple|F.1.11.1|55>>
+    <associate|auto-102|<tuple|F.1.12|55>>
+    <associate|auto-103|<tuple|F.1.12.1|55>>
+    <associate|auto-104|<tuple|F.1.12.2|56>>
+    <associate|auto-105|<tuple|F.1.13|56>>
+    <associate|auto-106|<tuple|F.1.13.1|56>>
+    <associate|auto-107|<tuple|F.1.14|56>>
+    <associate|auto-108|<tuple|F.2|56>>
+    <associate|auto-109|<tuple|G|57>>
     <associate|auto-11|<tuple|3|17>>
-    <associate|auto-110|<tuple|G.1|56>>
-    <associate|auto-111|<tuple|G.1|56>>
-    <associate|auto-112|<tuple|G.2|56>>
-    <associate|auto-113|<tuple|G.2.1|56>>
-    <associate|auto-114|<tuple|G.1|56>>
-    <associate|auto-115|<tuple|G.2.2|56>>
-    <associate|auto-116|<tuple|G.2.3|57>>
-    <associate|auto-117|<tuple|G.2.4|57>>
-    <associate|auto-118|<tuple|G.2.5|57>>
-    <associate|auto-119|<tuple|G.2.6|57>>
+    <associate|auto-110|<tuple|G.1|57>>
+    <associate|auto-111|<tuple|G.1|57>>
+    <associate|auto-112|<tuple|G.2|58>>
+    <associate|auto-113|<tuple|G.2.1|58>>
+    <associate|auto-114|<tuple|G.1|58>>
+    <associate|auto-115|<tuple|G.2.2|58>>
+    <associate|auto-116|<tuple|G.2.3|58>>
+    <associate|auto-117|<tuple|G.2.4|58>>
+    <associate|auto-118|<tuple|G.2.5|59>>
+    <associate|auto-119|<tuple|G.2.6|59>>
     <associate|auto-12|<tuple|3.1|17>>
-    <associate|auto-120|<tuple|G.2.7|57>>
-    <associate|auto-121|<tuple|G.2|59>>
-    <associate|auto-122|<tuple|G.3|61>>
-    <associate|auto-123|<tuple|G.3|?>>
-    <associate|auto-124|<tuple|SA15|?>>
+    <associate|auto-120|<tuple|G.2.7|59>>
+    <associate|auto-121|<tuple|G.2|60>>
+    <associate|auto-122|<tuple|G.3|60>>
+    <associate|auto-123|<tuple|G.3|61>>
+    <associate|auto-124|<tuple|SA15|63>>
     <associate|auto-13|<tuple|3.1.1|17>>
     <associate|auto-14|<tuple|3.1.2|18>>
     <associate|auto-15|<tuple|3.1.2.1|18>>
@@ -4445,115 +4466,115 @@
     <associate|auto-23|<tuple|3.2.3|19>>
     <associate|auto-24|<tuple|3.2.3|19>>
     <associate|auto-25|<tuple|<with|mode|<quote|math>|<rigid|->>|20>>
-    <associate|auto-26|<tuple|3.3|21>>
+    <associate|auto-26|<tuple|3.3|20>>
     <associate|auto-27|<tuple|3.3.1|21>>
     <associate|auto-28|<tuple|3.3.1.1|21>>
     <associate|auto-29|<tuple|3.3.1.2|21>>
     <associate|auto-3|<tuple|1.2|7>>
-    <associate|auto-30|<tuple|3.3.1.3|22>>
+    <associate|auto-30|<tuple|3.3.1.3|21>>
     <associate|auto-31|<tuple|3.1|22>>
     <associate|auto-32|<tuple|3.3.1.4|22>>
     <associate|auto-33|<tuple|3.3.2|22>>
-    <associate|auto-34|<tuple|3.3.3|23>>
+    <associate|auto-34|<tuple|3.3.3|22>>
     <associate|auto-35|<tuple|3.4|23>>
-    <associate|auto-36|<tuple|4|23>>
-    <associate|auto-37|<tuple|4.1|24>>
-    <associate|auto-38|<tuple|4.1.1|24>>
-    <associate|auto-39|<tuple|4.1.2|25>>
+    <associate|auto-36|<tuple|4|25>>
+    <associate|auto-37|<tuple|4.1|25>>
+    <associate|auto-38|<tuple|4.1.1|25>>
+    <associate|auto-39|<tuple|4.1.2|26>>
     <associate|auto-4|<tuple|1.2.1|9>>
-    <associate|auto-40|<tuple|4.1.3|25>>
-    <associate|auto-41|<tuple|4.1.4|25>>
-    <associate|auto-42|<tuple|4.1.5|26>>
-    <associate|auto-43|<tuple|4.1.6|26>>
-    <associate|auto-44|<tuple|4.1.7|27>>
-    <associate|auto-45|<tuple|4.2|28>>
-    <associate|auto-46|<tuple|4.2.1|29>>
-    <associate|auto-47|<tuple|4.2.2|30>>
-    <associate|auto-48|<tuple|4.2.3|31>>
+    <associate|auto-40|<tuple|4.1.3|26>>
+    <associate|auto-41|<tuple|4.1.4|27>>
+    <associate|auto-42|<tuple|4.1.5|28>>
+    <associate|auto-43|<tuple|4.1.6|28>>
+    <associate|auto-44|<tuple|4.1.7|29>>
+    <associate|auto-45|<tuple|4.2|30>>
+    <associate|auto-46|<tuple|4.2.1|30>>
+    <associate|auto-47|<tuple|4.2.2|32>>
+    <associate|auto-48|<tuple|4.2.3|32>>
     <associate|auto-49|<tuple|4.2.4|33>>
     <associate|auto-5|<tuple|2|11>>
-    <associate|auto-50|<tuple|4.3|33>>
-    <associate|auto-51|<tuple|A|33>>
-    <associate|auto-52|<tuple|A.1|33>>
-    <associate|auto-53|<tuple|A.2|33>>
+    <associate|auto-50|<tuple|4.3|34>>
+    <associate|auto-51|<tuple|A|35>>
+    <associate|auto-52|<tuple|A.1|35>>
+    <associate|auto-53|<tuple|A.2|35>>
     <associate|auto-54|<tuple|A.3|35>>
     <associate|auto-55|<tuple|A.4|35>>
-    <associate|auto-56|<tuple|B|36>>
+    <associate|auto-56|<tuple|B|37>>
     <associate|auto-57|<tuple|B.1|37>>
-    <associate|auto-58|<tuple|B.1.1|37>>
-    <associate|auto-59|<tuple|B.2|37>>
+    <associate|auto-58|<tuple|B.1.1|38>>
+    <associate|auto-59|<tuple|B.2|39>>
     <associate|auto-6|<tuple|2.1|11>>
-    <associate|auto-60|<tuple|B.2.1|37>>
+    <associate|auto-60|<tuple|B.2.1|39>>
     <associate|auto-61|<tuple|B.2.2|39>>
-    <associate|auto-62|<tuple|B.3|41>>
-    <associate|auto-63|<tuple|C|43>>
+    <associate|auto-62|<tuple|B.3|39>>
+    <associate|auto-63|<tuple|C|41>>
     <associate|auto-64|<tuple|D|43>>
-    <associate|auto-65|<tuple|E|43>>
-    <associate|auto-66|<tuple|E.1|43>>
-    <associate|auto-67|<tuple|E.1|44>>
-    <associate|auto-68|<tuple|E.1.1|44>>
-    <associate|auto-69|<tuple|E.2|44>>
+    <associate|auto-65|<tuple|E|45>>
+    <associate|auto-66|<tuple|E.1|45>>
+    <associate|auto-67|<tuple|E.1|45>>
+    <associate|auto-68|<tuple|E.1.1|45>>
+    <associate|auto-69|<tuple|E.2|46>>
     <associate|auto-7|<tuple|2.1.1|11>>
-    <associate|auto-70|<tuple|E.1.2|45>>
-    <associate|auto-71|<tuple|E.3|45>>
-    <associate|auto-72|<tuple|E.1.3|45>>
-    <associate|auto-73|<tuple|E.1.4|46>>
+    <associate|auto-70|<tuple|E.1.2|46>>
+    <associate|auto-71|<tuple|E.3|46>>
+    <associate|auto-72|<tuple|E.1.3|47>>
+    <associate|auto-73|<tuple|E.1.4|47>>
     <associate|auto-74|<tuple|E.1.5|47>>
-    <associate|auto-75|<tuple|E.1.6|47>>
-    <associate|auto-76|<tuple|F|47>>
-    <associate|auto-77|<tuple|F.1|47>>
-    <associate|auto-78|<tuple|F.1.1|48>>
-    <associate|auto-79|<tuple|F.1.2|48>>
+    <associate|auto-75|<tuple|E.1.6|48>>
+    <associate|auto-76|<tuple|F|49>>
+    <associate|auto-77|<tuple|F.1|49>>
+    <associate|auto-78|<tuple|F.1.1|49>>
+    <associate|auto-79|<tuple|F.1.2|49>>
     <associate|auto-8|<tuple|2.1.2|11>>
-    <associate|auto-80|<tuple|F.1.2.1|48>>
-    <associate|auto-81|<tuple|F.1.3|48>>
-    <associate|auto-82|<tuple|F.1.4|49>>
-    <associate|auto-83|<tuple|F.1.4.1|49>>
-    <associate|auto-84|<tuple|F.1.5|50>>
-    <associate|auto-85|<tuple|F.1.6|50>>
-    <associate|auto-86|<tuple|F.1.7|50>>
-    <associate|auto-87|<tuple|F.1.8|50>>
-    <associate|auto-88|<tuple|F.1.8.1|51>>
-    <associate|auto-89|<tuple|F.1.8.2|51>>
+    <associate|auto-80|<tuple|F.1.2.1|50>>
+    <associate|auto-81|<tuple|F.1.3|50>>
+    <associate|auto-82|<tuple|F.1.4|50>>
+    <associate|auto-83|<tuple|F.1.4.1|50>>
+    <associate|auto-84|<tuple|F.1.5|51>>
+    <associate|auto-85|<tuple|F.1.6|51>>
+    <associate|auto-86|<tuple|F.1.7|52>>
+    <associate|auto-87|<tuple|F.1.8|52>>
+    <associate|auto-88|<tuple|F.1.8.1|52>>
+    <associate|auto-89|<tuple|F.1.8.2|52>>
     <associate|auto-9|<tuple|2.1.3|12>>
-    <associate|auto-90|<tuple|F.1.8.3|51>>
-    <associate|auto-91|<tuple|F.1.9|51>>
-    <associate|auto-92|<tuple|F.1.9.1|51>>
-    <associate|auto-93|<tuple|F.1.9.2|52>>
-    <associate|auto-94|<tuple|F.1.9.3|52>>
-    <associate|auto-95|<tuple|F.1.9.4|53>>
-    <associate|auto-96|<tuple|F.1.9.5|53>>
-    <associate|auto-97|<tuple|F.1.9.6|53>>
-    <associate|auto-98|<tuple|F.1.10|53>>
-    <associate|auto-99|<tuple|F.1.10.1|53>>
-    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|59>>
-    <associate|bib-collet_extremely_2019|<tuple|Col19|59>>
-    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|59>>
-    <associate|bib-saarinen_blake2_2015|<tuple|SA15|59>>
-    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|59>>
+    <associate|auto-90|<tuple|F.1.8.3|53>>
+    <associate|auto-91|<tuple|F.1.9|53>>
+    <associate|auto-92|<tuple|F.1.9.1|53>>
+    <associate|auto-93|<tuple|F.1.9.2|53>>
+    <associate|auto-94|<tuple|F.1.9.3|53>>
+    <associate|auto-95|<tuple|F.1.9.4|54>>
+    <associate|auto-96|<tuple|F.1.9.5|54>>
+    <associate|auto-97|<tuple|F.1.9.6|55>>
+    <associate|auto-98|<tuple|F.1.10|55>>
+    <associate|auto-99|<tuple|F.1.10.1|55>>
+    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|61>>
+    <associate|bib-collet_extremely_2019|<tuple|Col19|61>>
+    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|61>>
+    <associate|bib-saarinen_blake2_2015|<tuple|SA15|61>>
+    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|61>>
     <associate|block|<tuple|3.3.1.1|21>>
-    <associate|block-signature|<tuple|4.11|?>>
-    <associate|chap-consensu|<tuple|4|23>>
+    <associate|block-signature|<tuple|4.11|27>>
+    <associate|chap-consensu|<tuple|4|25>>
     <associate|chap-state-spec|<tuple|2|11>>
     <associate|chap-state-transit|<tuple|3|17>>
     <associate|defn-account-key|<tuple|3.3|19>>
-    <associate|defn-babe-header|<tuple|4.10|25>>
+    <associate|defn-babe-header|<tuple|4.10|27>>
     <associate|defn-bit-rep|<tuple|1.6|8>>
     <associate|defn-block-body|<tuple|3.8|22>>
-    <associate|defn-block-data|<tuple|E.2|45>>
+    <associate|defn-block-data|<tuple|E.2|47>>
     <associate|defn-block-header|<tuple|3.5|21>>
     <associate|defn-block-header-hash|<tuple|3.6|21>>
-    <associate|defn-block-time|<tuple|4.8|24>>
+    <associate|defn-block-time|<tuple|4.8|26>>
     <associate|defn-block-tree|<tuple|1.10|9>>
     <associate|defn-chain-subchain|<tuple|1.12|9>>
     <associate|defn-children-bitmap|<tuple|2.10|15>>
-    <associate|defn-epoch-slot|<tuple|4.3|23>>
-    <associate|defn-epoch-subchain|<tuple|4.5|23>>
-    <associate|defn-finalized-block|<tuple|4.26|31>>
+    <associate|defn-epoch-slot|<tuple|4.3|25>>
+    <associate|defn-epoch-subchain|<tuple|4.5|26>>
+    <associate|defn-finalized-block|<tuple|4.26|34>>
     <associate|defn-func-inherent-data|<tuple|3.7|22>>
-    <associate|defn-grandpa-completable|<tuple|4.22|28>>
-    <associate|defn-grandpa-justification|<tuple|4.24|29>>
-    <associate|defn-hex-encoding|<tuple|B.9|37>>
+    <associate|defn-grandpa-completable|<tuple|4.22|31>>
+    <associate|defn-grandpa-justification|<tuple|4.24|32>>
+    <associate|defn-hex-encoding|<tuple|B.9|39>>
     <associate|defn-index-function|<tuple|2.7|13>>
     <associate|defn-little-endian|<tuple|1.7|8>>
     <associate|defn-longest-chain|<tuple|1.13|9>>
@@ -4567,69 +4588,69 @@
     <associate|defn-pruned-tree|<tuple|1.11|9>>
     <associate|defn-radix-tree|<tuple|1.3|8>>
     <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|7>>
-    <associate|defn-sc-len-encoding|<tuple|B.8|36>>
-    <associate|defn-scale-byte-array|<tuple|B.1|35>>
-    <associate|defn-scale-list|<tuple|B.5|36>>
-    <associate|defn-scale-tuple|<tuple|B.2|35>>
-    <associate|defn-scale-variable-type|<tuple|B.4|35>>
-    <associate|defn-slot-offset|<tuple|4.9|24>>
+    <associate|defn-sc-len-encoding|<tuple|B.8|38>>
+    <associate|defn-scale-byte-array|<tuple|B.1|37>>
+    <associate|defn-scale-list|<tuple|B.5|38>>
+    <associate|defn-scale-tuple|<tuple|B.2|37>>
+    <associate|defn-scale-variable-type|<tuple|B.4|37>>
+    <associate|defn-slot-offset|<tuple|4.9|27>>
     <associate|defn-state-machine|<tuple|1.1|7>>
     <associate|defn-stored-value|<tuple|2.1|11>>
-    <associate|defn-varrying-data-type|<tuple|B.3|35>>
-    <associate|defn-vote|<tuple|4.15|27>>
-    <associate|defn-winning-threshold|<tuple|4.6|?>>
+    <associate|defn-varrying-data-type|<tuple|B.3|37>>
+    <associate|defn-vote|<tuple|4.15|30>>
+    <associate|defn-winning-threshold|<tuple|4.6|26>>
     <associate|key-encode-in-trie|<tuple|2.1|12>>
     <associate|nota-call-into-runtime|<tuple|3.2|18>>
-    <associate|nota-re-api-at-state|<tuple|F.1|47>>
+    <associate|nota-re-api-at-state|<tuple|F.1|49>>
     <associate|nota-runtime-code-at-state|<tuple|3.1|18>>
-    <associate|note-slot|<tuple|4.4|23>>
-    <associate|sect-babe|<tuple|4.1|23>>
-    <associate|sect-blake2|<tuple|A.2|33>>
+    <associate|note-slot|<tuple|4.4|25>>
+    <associate|sect-babe|<tuple|4.1|25>>
+    <associate|sect-blake2|<tuple|A.2|35>>
     <associate|sect-block-body|<tuple|3.3.1.4|22>>
-    <associate|sect-block-finalization|<tuple|4.3|31>>
+    <associate|sect-block-finalization|<tuple|4.3|34>>
     <associate|sect-block-format|<tuple|3.3.1|21>>
-    <associate|sect-block-production|<tuple|4.1|23>>
+    <associate|sect-block-production|<tuple|4.1|25>>
     <associate|sect-defn-conv|<tuple|1.2|7>>
-    <associate|sect-encoding|<tuple|B|35>>
+    <associate|sect-encoding|<tuple|B|37>>
     <associate|sect-entries-into-runtime|<tuple|3.1|17>>
-    <associate|sect-epoch-randomness|<tuple|4.1.5|?>>
+    <associate|sect-epoch-randomness|<tuple|4.1.5|28>>
     <associate|sect-extrinsics|<tuple|3.2|19>>
-    <associate|sect-finality|<tuple|4.2|26>>
-    <associate|sect-genisis-block|<tuple|C|39>>
-    <associate|sect-grandpa|<tuple|4.2|26>>
-    <associate|sect-hash-functions|<tuple|A.1|33>>
-    <associate|sect-int-encoding|<tuple|B.1.1|36>>
-    <associate|sect-list-of-runtime-entries|<tuple|G.1|55>>
+    <associate|sect-finality|<tuple|4.2|30>>
+    <associate|sect-genisis-block|<tuple|C|41>>
+    <associate|sect-grandpa|<tuple|4.2|30>>
+    <associate|sect-hash-functions|<tuple|A.1|35>>
+    <associate|sect-int-encoding|<tuple|B.1.1|38>>
+    <associate|sect-list-of-runtime-entries|<tuple|G.1|57>>
     <associate|sect-loading-runtime-code|<tuple|3.1.1|17>>
     <associate|sect-merkl-proof|<tuple|2.1.4|14>>
-    <associate|sect-message-detail|<tuple|E.1|43>>
-    <associate|sect-msg-block-announce|<tuple|E.1.4|45>>
-    <associate|sect-msg-block-request|<tuple|E.1.2|44>>
-    <associate|sect-msg-block-response|<tuple|E.1.3|45>>
-    <associate|sect-msg-consensus|<tuple|E.1.6|46>>
-    <associate|sect-msg-status|<tuple|E.1.1|43>>
-    <associate|sect-msg-transactions|<tuple|E.1.5|45>>
-    <associate|sect-network-interactions|<tuple|3.4|22>>
-    <associate|sect-network-messages|<tuple|E|43>>
-    <associate|sect-predef-storage-keys|<tuple|D|41>>
-    <associate|sect-randomness|<tuple|A.3|33>>
-    <associate|sect-re-api|<tuple|F|47>>
-    <associate|sect-rte-grandpa-auth|<tuple|G.2.6|57>>
-    <associate|sect-rte-hash-and-length|<tuple|G.2.4|56>>
-    <associate|sect-rte-validate-transaction|<tuple|G.2.7|57>>
-    <associate|sect-runtime-entries|<tuple|G|55>>
+    <associate|sect-message-detail|<tuple|E.1|45>>
+    <associate|sect-msg-block-announce|<tuple|E.1.4|47>>
+    <associate|sect-msg-block-request|<tuple|E.1.2|46>>
+    <associate|sect-msg-block-response|<tuple|E.1.3|47>>
+    <associate|sect-msg-consensus|<tuple|E.1.6|48>>
+    <associate|sect-msg-status|<tuple|E.1.1|45>>
+    <associate|sect-msg-transactions|<tuple|E.1.5|47>>
+    <associate|sect-network-interactions|<tuple|3.4|23>>
+    <associate|sect-network-messages|<tuple|E|45>>
+    <associate|sect-predef-storage-keys|<tuple|D|43>>
+    <associate|sect-randomness|<tuple|A.3|35>>
+    <associate|sect-re-api|<tuple|SA15|49>>
+    <associate|sect-rte-grandpa-auth|<tuple|G.2.6|59>>
+    <associate|sect-rte-hash-and-length|<tuple|G.2.4|58>>
+    <associate|sect-rte-validate-transaction|<tuple|G.2.7|59>>
+    <associate|sect-runtime-entries|<tuple|G|57>>
     <associate|sect-runtime-return-value|<tuple|3.1.2.3|19>>
     <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|18>>
-    <associate|sect-scale-codec|<tuple|B.1|35>>
+    <associate|sect-scale-codec|<tuple|B.1|37>>
     <associate|sect-state-replication|<tuple|3.3|20>>
-    <associate|sect-vrf|<tuple|A.4|33>>
-    <associate|slot-time-cal-tail|<tuple|4.7|24>>
-    <associate|snippet-runtime-enteries|<tuple|G.1|55>>
-    <associate|tabl-block-attributes|<tuple|E.3|44>>
+    <associate|sect-vrf|<tuple|A.4|35>>
+    <associate|slot-time-cal-tail|<tuple|4.7|26>>
+    <associate|snippet-runtime-enteries|<tuple|G.1|57>>
+    <associate|tabl-block-attributes|<tuple|E.3|46>>
     <associate|tabl-inherent-data|<tuple|3.1|22>>
-    <associate|tabl-message-types|<tuple|E.1|43>>
-    <associate|tabl-node-role|<tuple|E.2|44>>
-    <associate|tabl-transaction-validity|<tuple|G.2|57>>
+    <associate|tabl-message-types|<tuple|E.1|45>>
+    <associate|tabl-node-role|<tuple|E.2|46>>
+    <associate|tabl-transaction-validity|<tuple|G.2|60>>
   </collection>
 </references>
 
