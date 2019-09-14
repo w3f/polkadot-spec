@@ -1,3 +1,6 @@
+* Sat Sep 14 2019
+  - Grandpa corrections to Algorithm Play Grandpa round and Attempt-to-finalized
+  - Differentiating between grandpa nodes and other nodes over finalization.
 * Fri Sep 13 2019
   - Main part of block verification specced.
 * Fri Sep 06 2019
