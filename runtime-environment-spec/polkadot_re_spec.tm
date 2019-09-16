@@ -3857,9 +3857,18 @@
 
   <subsubsection|<verbatim|ext_local_storage_set>>
 
-  Sets a value in the local storage. Note this storage is not part of the
+  Sets a value in the local storage. This storage is not part of the
   consensus, it's only accessible by offchain worker tasks running on the
-  same machine. It IS persisted between runs.
+  same machine and is persisted between runs. Two storage kinds can be used:
+  \PPersistent storage\Q is non-revertible and not fork-aware. It means that
+  any value set by the offchain worker triggered at block `N(hash1)` is
+  persisted even if that block is reverted as non-canonical and is available
+  for the worker that is re-run at block `N(hash2)`. This storage can be used
+  by offchain workers to handle forks and coordinate offchain workers running
+  on different forks. \PLocal storage\Q is revertible and fork-aware. It
+  means that any value set by the offchain worker triggered at block
+  `N(hash1)` is reverted if that block is reverted as non-canonical and is
+  NOT available for the worker that is re-run at block `N(hash2)`.
 
   \;
 
@@ -3868,7 +3877,9 @@
   <\verbatim>
     (func $local_storage_set
 
-    \ \ \ \ \ \ (TODO (result i32))
+    \ \ \ \ \ \ (param $kind i32) (param $key i32) (param $key_len i32)
+
+    \ \ \ \ \ \ (param $value i32) (param $value_len i32))
   </verbatim>
 
   \ 
@@ -3876,17 +3887,27 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: TODO.
+    <item><verbatim|kind>: an i32 integer indicating the storage kind. A
+    value equal to 1 is used for persistent storage and a value equal to 2
+    for local storage.
+
+    <item><verbatim|key>: a pointer to the buffer containing the key.
+
+    <item><verbatim|key_len>: an i32 integer indicating the size of the key.
+
+    <item><verbatim|value>: a pointer to the buffer containg the value.
+
+    <item><verbatim|value_len>: an i32 integer indicating the size of the
+    value.
   </itemize>
 
   <subsubsection|<verbatim|local_storage_compare_and_set>>
 
   Sets a value in the local storage if it matches current value. Since
   multiple offchain workers may be running concurrently, to prevent data
-  races use CAS to coordinate between them. Returns `true` if the value has
-  been set, `false` otherwise. Note this storage is not part of the
+  races use CAS to coordinate between them. This storage is not part of the
   consensus, it's only accessible by offchain worker tasks running on the
-  same machine. It IS persisted between runs.
+  same machine. It is persisted between runs.
 
   \;
 
@@ -3895,7 +3916,11 @@
   <\verbatim>
     (func $local_storage_set
 
-    \ \ \ \ \ \ (TODO (result i32))
+    \ \ \ \ \ \ (param $kind i32) (param $key i32) (param $key_len i32)
+
+    \ \ \ \ \ \ (param $old_value i32) (param $old_value_len)
+
+    \ \ \ \ \ \ (param $new_value i32) (param $new_value_len) (result i32))
   </verbatim>
 
   \ 
@@ -3903,7 +3928,28 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: TODO.
+    <item><verbatim|kind>: an i32 integer indicating the storage kind. A
+    value equal to 1 is used for persistent storage and a value equal to 2
+    for local storage.
+
+    <item><verbatim|key>: a pointer to the buffer containing the key.
+
+    <item><verbatim|key_len>: an i32 integer indicating the size of the key.
+
+    <item><verbatim|old_value>: a pointer to the buffer containing the
+    current value.
+
+    <item><verbatim|old_value_len>: an i32 integer indicating the size of the
+    current value.
+
+    <item><verbatim|new_value>: a pointer to the buffer containing the new
+    value.
+
+    <item><verbatim|new_value_len>: an i32 integer indicating the size of the
+    new value.
+
+    <item><verbatim|result>: an i32 integer equal to 1 if the new value has
+    been set or a value equal to 0 if otherwise.
   </itemize>
 
   <subsection|Sandboxing>
