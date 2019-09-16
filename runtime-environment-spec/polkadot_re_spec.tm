@@ -3948,8 +3948,8 @@
     <item><verbatim|new_value_len>: an i32 integer indicating the size of the
     new value.
 
-    <item><verbatim|result>: an i32 integer equal to 1 if the new value has
-    been set or a value equal to 0 if otherwise.
+    <item><verbatim|result>: an i32 integer equal to 0 if the new value has
+    been set or a value equal to 1 if otherwise.
   </itemize>
 
   <subsubsection|<verbatim|ext_local_storage_get>>
@@ -3993,8 +3993,8 @@
   <subsubsection|<verbatim|ext_http_request_start>>
 
   Initiates a http request given HTTP verb and the URL. Meta is a
-  future-reserved field containing additional, parity-scale-codec encoded
-  parameters. Returns the id of newly started request.
+  future-reserved field containing additional, SCALE encoded parameters.
+  Returns the id of newly started request.
 
   \;
 
@@ -4023,11 +4023,54 @@
 
     <item><verbatim|url_len>: an i32 integer indicating the size of the url.
 
-    <item><verbatim|meta>: TODO
+    <item><verbatim|meta>: future-reserved, SCALE encoded parameters.
 
-    <item><verbatim|meta_len>: TODO
+    <item><verbatim|meta_len>: an i32 integer indicating the size of the
+    parameters
 
-    <item><verbatim|result>: TODO
+    <item><verbatim|result>: in i32 integer indicating the ID of the newly
+    started request.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_http_request_add_header>>
+
+  Append header to the request.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $request_id i32) (param $name i32) (param $name_len
+    i32)
+
+    \ \ \ \ \ \ (param $value i32) (param $value_len i32) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|request_id>: a i32 integer indicating the ID of the
+    started request.
+
+    <item><verbatim|name>: a pointer to the buffer containing the header
+    name.
+
+    <item><verbatim|name_len>: an i32 integer indicating the size of the
+    header name.
+
+    <item><verbatim|value>: a pointer to the buffer containing the header
+    value.
+
+    <item><verbatim|value_len>: an i32 integer indicating the size of the
+    header value.
+
+    <item><verbatim|result>: an i32 integer where the value equal to 0
+    indicated if the header has been set or a value equal to 1 if otherwise.
   </itemize>
 
   <subsection|Sandboxing>
@@ -4452,34 +4495,35 @@
     <associate|auto-105|<tuple|F.1.10.8|54>>
     <associate|auto-106|<tuple|F.1.10.9|54>>
     <associate|auto-107|<tuple|F.1.10.10|55>>
-    <associate|auto-108|<tuple|F.1.11|55>>
-    <associate|auto-109|<tuple|F.1.11.1|55>>
+    <associate|auto-108|<tuple|F.1.10.11|55>>
+    <associate|auto-109|<tuple|F.1.11|55>>
     <associate|auto-11|<tuple|3|17>>
-    <associate|auto-110|<tuple|F.1.12|56>>
-    <associate|auto-111|<tuple|F.1.12.1|56>>
-    <associate|auto-112|<tuple|F.1.12.2|56>>
-    <associate|auto-113|<tuple|F.1.13|56>>
-    <associate|auto-114|<tuple|F.1.13.1|56>>
-    <associate|auto-115|<tuple|F.1.14|56>>
-    <associate|auto-116|<tuple|F.2|57>>
-    <associate|auto-117|<tuple|G|57>>
-    <associate|auto-118|<tuple|G.1|57>>
+    <associate|auto-110|<tuple|F.1.11.1|56>>
+    <associate|auto-111|<tuple|F.1.12|56>>
+    <associate|auto-112|<tuple|F.1.12.1|56>>
+    <associate|auto-113|<tuple|F.1.12.2|56>>
+    <associate|auto-114|<tuple|F.1.13|56>>
+    <associate|auto-115|<tuple|F.1.13.1|56>>
+    <associate|auto-116|<tuple|F.1.14|57>>
+    <associate|auto-117|<tuple|F.2|57>>
+    <associate|auto-118|<tuple|G|57>>
     <associate|auto-119|<tuple|G.1|57>>
     <associate|auto-12|<tuple|3.1|17>>
-    <associate|auto-120|<tuple|G.2|57>>
-    <associate|auto-121|<tuple|G.2.1|59>>
-    <associate|auto-122|<tuple|G.1|61>>
-    <associate|auto-123|<tuple|G.2.2|?>>
-    <associate|auto-124|<tuple|G.2.3|?>>
-    <associate|auto-125|<tuple|G.2.4|?>>
-    <associate|auto-126|<tuple|G.2.5|?>>
-    <associate|auto-127|<tuple|G.2.6|?>>
-    <associate|auto-128|<tuple|G.2.7|?>>
-    <associate|auto-129|<tuple|G.2|?>>
+    <associate|auto-120|<tuple|G.1|57>>
+    <associate|auto-121|<tuple|G.2|59>>
+    <associate|auto-122|<tuple|G.2.1|61>>
+    <associate|auto-123|<tuple|G.1|?>>
+    <associate|auto-124|<tuple|G.2.2|?>>
+    <associate|auto-125|<tuple|G.2.3|?>>
+    <associate|auto-126|<tuple|G.2.4|?>>
+    <associate|auto-127|<tuple|G.2.5|?>>
+    <associate|auto-128|<tuple|G.2.6|?>>
+    <associate|auto-129|<tuple|G.2.7|?>>
     <associate|auto-13|<tuple|3.1.1|17>>
-    <associate|auto-130|<tuple|G.3|?>>
+    <associate|auto-130|<tuple|G.2|?>>
     <associate|auto-131|<tuple|G.3|?>>
-    <associate|auto-132|<tuple|SA15|?>>
+    <associate|auto-132|<tuple|G.3|?>>
+    <associate|auto-133|<tuple|SA15|?>>
     <associate|auto-14|<tuple|3.1.2|18>>
     <associate|auto-15|<tuple|3.1.2.1|18>>
     <associate|auto-16|<tuple|3.1.2.2|18>>
