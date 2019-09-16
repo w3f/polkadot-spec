@@ -4112,6 +4112,42 @@
     indicating if the header has been set or a non-zero value if otherwise.
   </itemize>
 
+  <subsubsection|<verbatim|ext_http_request_response_wait>>
+
+  Block and wait for the responses for given requests. Returns a vector of
+  request statuses (the len is the same as ids). Note that if deadline is not
+  provided the method will block indefinitely, otherwise unready responses
+  will produce `DeadlineReached` status. Passing `null` as deadline blocks
+  forever.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $ids i32) (param $ids_len i32) (param $statuses i32)
+
+    \ \ \ \ \ \ (param $deadline i64) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|ids>: TODO.
+
+    <item><verbatim|ids_len>: TODO.
+
+    <item><verbatim|statuses>: TODO.
+
+    <item><verbatim|deadline>: TODO.
+
+    <item><verbatim|result>: TODO.
+  </itemize>
+
   <subsection|Sandboxing>
 
   <subsubsection|To be Specced>
@@ -4537,33 +4573,34 @@
     <associate|auto-108|<tuple|F.1.10.11|55>>
     <associate|auto-109|<tuple|F.1.10.12|55>>
     <associate|auto-11|<tuple|3|17>>
-    <associate|auto-110|<tuple|F.1.11|56>>
-    <associate|auto-111|<tuple|F.1.11.1|56>>
-    <associate|auto-112|<tuple|F.1.12|56>>
-    <associate|auto-113|<tuple|F.1.12.1|56>>
-    <associate|auto-114|<tuple|F.1.12.2|56>>
-    <associate|auto-115|<tuple|F.1.13|56>>
-    <associate|auto-116|<tuple|F.1.13.1|57>>
-    <associate|auto-117|<tuple|F.1.14|57>>
-    <associate|auto-118|<tuple|F.2|57>>
-    <associate|auto-119|<tuple|G|57>>
+    <associate|auto-110|<tuple|F.1.10.13|56>>
+    <associate|auto-111|<tuple|F.1.11|56>>
+    <associate|auto-112|<tuple|F.1.11.1|56>>
+    <associate|auto-113|<tuple|F.1.12|56>>
+    <associate|auto-114|<tuple|F.1.12.1|56>>
+    <associate|auto-115|<tuple|F.1.12.2|56>>
+    <associate|auto-116|<tuple|F.1.13|57>>
+    <associate|auto-117|<tuple|F.1.13.1|57>>
+    <associate|auto-118|<tuple|F.1.14|57>>
+    <associate|auto-119|<tuple|F.2|57>>
     <associate|auto-12|<tuple|3.1|17>>
-    <associate|auto-120|<tuple|G.1|57>>
+    <associate|auto-120|<tuple|G|57>>
     <associate|auto-121|<tuple|G.1|59>>
-    <associate|auto-122|<tuple|G.2|61>>
-    <associate|auto-123|<tuple|G.2.1|?>>
-    <associate|auto-124|<tuple|G.1|?>>
-    <associate|auto-125|<tuple|G.2.2|?>>
-    <associate|auto-126|<tuple|G.2.3|?>>
-    <associate|auto-127|<tuple|G.2.4|?>>
-    <associate|auto-128|<tuple|G.2.5|?>>
-    <associate|auto-129|<tuple|G.2.6|?>>
+    <associate|auto-122|<tuple|G.1|61>>
+    <associate|auto-123|<tuple|G.2|?>>
+    <associate|auto-124|<tuple|G.2.1|?>>
+    <associate|auto-125|<tuple|G.1|?>>
+    <associate|auto-126|<tuple|G.2.2|?>>
+    <associate|auto-127|<tuple|G.2.3|?>>
+    <associate|auto-128|<tuple|G.2.4|?>>
+    <associate|auto-129|<tuple|G.2.5|?>>
     <associate|auto-13|<tuple|3.1.1|17>>
-    <associate|auto-130|<tuple|G.2.7|?>>
-    <associate|auto-131|<tuple|G.2|?>>
-    <associate|auto-132|<tuple|G.3|?>>
+    <associate|auto-130|<tuple|G.2.6|?>>
+    <associate|auto-131|<tuple|G.2.7|?>>
+    <associate|auto-132|<tuple|G.2|?>>
     <associate|auto-133|<tuple|G.3|?>>
-    <associate|auto-134|<tuple|SA15|?>>
+    <associate|auto-134|<tuple|G.3|?>>
+    <associate|auto-135|<tuple|SA15|?>>
     <associate|auto-14|<tuple|3.1.2|18>>
     <associate|auto-15|<tuple|3.1.2.1|18>>
     <associate|auto-16|<tuple|3.1.2.2|18>>
