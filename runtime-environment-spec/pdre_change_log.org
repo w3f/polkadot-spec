@@ -1,3 +1,19 @@
+* Mon Sep 16 2019
+  - Specced the following Offchain APIs:
+    - ext_is_validator
+    - ext_network_state
+    - ext_timestamp
+    - ext_sleep_until
+    - ext_random_seed
+    - ext_local_storage_set
+    - ext_local_storage_compare_and_set
+    - ext_local_storage_get
+    - ext_http_request_start
+    - ext_http_request_add_header
+    - ext_http_request_write_body
+    - ext_http_response_wait
+    - ext_http_response_header
+    - ext_http_response_read_body
 * Sat Sep 14 2019
   - Grandpa corrections to Algorithm Play Grandpa round and Attempt-to-finalized
   - Differentiating between grandpa nodes and other nodes over finalization.
