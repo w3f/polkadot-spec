@@ -389,92 +389,148 @@
     \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-98>>
 
-    <with|par-left|2tab|F.1.10.1.<space|2spc><with|font-family|tt|language|verbatim|ext_submit_transaction>
+    <with|par-left|2tab|F.1.10.1.<space|2spc><with|font-family|tt|language|verbatim|ext_is_validator>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-99>>
 
-    <with|par-left|1tab|F.1.11.<space|2spc>Sandboxing
+    <with|par-left|2tab|F.1.10.2.<space|2spc><with|font-family|tt|language|verbatim|ext_submit_transaction>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-100>>
 
-    <with|par-left|2tab|F.1.11.1.<space|2spc>To be Specced
+    <with|par-left|2tab|F.1.10.3.<space|2spc><with|font-family|tt|language|verbatim|ext_network_state>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-101>>
 
-    <with|par-left|1tab|F.1.12.<space|2spc>Auxillary Debugging API
+    <with|par-left|2tab|F.1.10.4.<space|2spc><with|font-family|tt|language|verbatim|ext_timestamp>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-102>>
 
-    <with|par-left|2tab|F.1.12.1.<space|2spc><with|font-family|tt|language|verbatim|ext_print_hex>
+    <with|par-left|2tab|F.1.10.5.<space|2spc><with|font-family|tt|language|verbatim|ext_sleep_until>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-103>>
 
-    <with|par-left|2tab|F.1.12.2.<space|2spc><with|font-family|tt|language|verbatim|ext_print_utf8>
+    <with|par-left|2tab|F.1.10.6.<space|2spc><with|font-family|tt|language|verbatim|ext_random_seed>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-104>>
 
-    <with|par-left|1tab|F.1.13.<space|2spc>Misc
+    <with|par-left|2tab|F.1.10.7.<space|2spc><with|font-family|tt|language|verbatim|ext_local_storage_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-105>>
 
-    <with|par-left|2tab|F.1.13.1.<space|2spc>To be Specced
+    <with|par-left|2tab|F.1.10.8.<space|2spc><with|font-family|tt|language|verbatim|ext_local_storage_compare_and_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-106>>
 
-    <with|par-left|1tab|F.1.14.<space|2spc>Block Production
+    <with|par-left|2tab|F.1.10.9.<space|2spc><with|font-family|tt|language|verbatim|ext_local_storage_get>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-107>>
 
-    F.2.<space|2spc>Validation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-108>
-
-    <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
-    G.<space|2spc>Runtime Entries> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-109><vspace|0.5fn>
-
-    G.1.<space|2spc>List of Runtime Entries
+    <with|par-left|2tab|F.1.10.10.<space|2spc><with|font-family|tt|language|verbatim|ext_http_request_start>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-110>
+    <no-break><pageref|auto-108>>
 
-    G.2.<space|2spc>Argument Specification
+    <with|par-left|2tab|F.1.10.11.<space|2spc><with|font-family|tt|language|verbatim|ext_http_request_add_header>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-112>
+    <no-break><pageref|auto-109>>
 
-    <with|par-left|1tab|G.2.1.<space|2spc><with|font-family|tt|language|verbatim|Core_version>
+    <with|par-left|2tab|F.1.10.12.<space|2spc><with|font-family|tt|language|verbatim|ext_http_request_write_body>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-110>>
+
+    <with|par-left|2tab|F.1.10.13.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_wait>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-111>>
+
+    <with|par-left|2tab|F.1.10.14.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_headers>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-112>>
+
+    <with|par-left|2tab|F.1.10.15.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_read_body>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-113>>
 
-    <with|par-left|1tab|G.2.2.<space|2spc><with|font-family|tt|language|verbatim|Core_execute_block>
+    <with|par-left|1tab|F.1.11.<space|2spc>Sandboxing
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-114>>
+
+    <with|par-left|2tab|F.1.11.1.<space|2spc>To be Specced
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-115>>
 
-    <with|par-left|1tab|G.2.3.<space|2spc><with|font-family|tt|language|verbatim|Core_initialise_block>
+    <with|par-left|1tab|F.1.12.<space|2spc>Auxillary Debugging API
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-116>>
 
-    <with|par-left|1tab|G.2.4.<space|2spc><with|font-family|tt|language|verbatim|hash_and_length>
+    <with|par-left|2tab|F.1.12.1.<space|2spc><with|font-family|tt|language|verbatim|ext_print_hex>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-117>>
 
-    <with|par-left|1tab|G.2.5.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_epoch>
+    <with|par-left|2tab|F.1.12.2.<space|2spc><with|font-family|tt|language|verbatim|ext_print_utf8>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-118>>
 
-    <with|par-left|1tab|G.2.6.<space|2spc><with|font-family|tt|language|verbatim|Grandpa_authorities>
+    <with|par-left|1tab|F.1.13.<space|2spc>Misc
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-119>>
 
-    <with|par-left|1tab|G.2.7.<space|2spc><with|font-family|tt|language|verbatim|TaggedTransactionQueue_validate_transaction>
+    <with|par-left|2tab|F.1.13.1.<space|2spc>To be Specced
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-120>>
 
+    <with|par-left|1tab|F.1.14.<space|2spc>Block Production
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-121>>
+
+    F.2.<space|2spc>Validation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-122>
+
+    <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
+    G.<space|2spc>Runtime Entries> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <pageref|auto-123><vspace|0.5fn>
+
+    G.1.<space|2spc>List of Runtime Entries
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-124>
+
+    G.2.<space|2spc>Argument Specification
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-126>
+
+    <with|par-left|1tab|G.2.1.<space|2spc><with|font-family|tt|language|verbatim|Core_version>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-127>>
+
+    <with|par-left|1tab|G.2.2.<space|2spc><with|font-family|tt|language|verbatim|Core_execute_block>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-129>>
+
+    <with|par-left|1tab|G.2.3.<space|2spc><with|font-family|tt|language|verbatim|Core_initialise_block>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-130>>
+
+    <with|par-left|1tab|G.2.4.<space|2spc><with|font-family|tt|language|verbatim|hash_and_length>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-131>>
+
+    <with|par-left|1tab|G.2.5.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_epoch>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-132>>
+
+    <with|par-left|1tab|G.2.6.<space|2spc><with|font-family|tt|language|verbatim|Grandpa_authorities>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-133>>
+
+    <with|par-left|1tab|G.2.7.<space|2spc><with|font-family|tt|language|verbatim|TaggedTransactionQueue_validate_transaction>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-134>>
+
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Bibliography>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-123><vspace|0.5fn>
+    <pageref|auto-137><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Index>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-124><vspace|0.5fn>
+    <pageref|auto-138><vspace|0.5fn>
   </table-of-contents>
 
   <chapter|Background>
@@ -1683,7 +1739,7 @@
     Where each <math|E<rsub|i>\<in\>\<bbb-B\>> is a SCALE encoded extrinsic.
   </definition>
 
-  <subsection|Block Submission>
+  <subsection|Block Submission><label|sect-block-submission>
 
   Block validation is the process by which the client asserts that a block is
   fit to be added to the blockchain. This means that the block is consistent
@@ -1694,7 +1750,7 @@
   example by means of Block response network message (see Section
   <reference|sect-msg-block-response> ) and from the consensus engine.
 
-  <subsection|Block Validation>
+  <subsection|Block Validation><label|sect-block-validation>
 
   Both the Runtime and the Polkadot RE need to work together to assure block
   validity. A block is deemed valid if the block author had the authorship
@@ -2096,7 +2152,7 @@
 
   \;
 
-  <subsection|Verifying Authorship Right>
+  <subsection|Verifying Authorship Right><label|sect-verifying-authorship>
 
   <\definition>
     Seal <math|D<rsub|s>> <todo|define seal>
@@ -2247,7 +2303,7 @@
 
   AuthorID: The public session key of the block producer
 
-  <subsection|Blocks Building Process>
+  <subsection|Blocks Building Process><label|sect-block-building>
 
   The blocks building process is triggered by Algorithm
   <reference|algo-block-production> of the consensus engine which runs
@@ -2327,7 +2383,7 @@
   <name|Next-Ready-Extrinsic> are defined in Definition
   <inactive|<reference|>><todo|Define these entities>
 
-  <section|Finality><label|sect-finality><label|sect-grandpa>
+  <section|Finality><label|sect-finality>
 
   Polkadot RE uses GRANDPA Finality protocol
   <cite|alistair_stewart_grandpa:_2019> to finalize blocks. Finality is
@@ -3926,6 +3982,33 @@
 
   <subsection|Offchain Worker >
 
+  <todo|perhaps add an intro to this that what is an offchain worker>
+
+  <subsubsection|<verbatim|ext_is_validator>>
+
+  Returns if the local node is a potential validator. Even if this function
+  returns 1, it does not mean that any keys are configured and that the
+  validator is registered in the chain.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $is_validator
+
+    \ \ \ \ \ \ (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|result>: \ an i32 in<verbatim|>teger which is equal to 1
+    if the local node is a potential validator or a equal to 0 if it is not.
+  </itemize>
+
   <subsubsection|<verbatim|ext_submit_transaction>>
 
   Given an extrinsic as a SCALE encoded byte array, the system decodes the
@@ -3953,9 +4036,486 @@
     <item><verbatim|len>: an <verbatim|i32> integer indicating the size of
     the encoded extrinsic.
 
-    <item><verbatim|result>: \ an in<verbatim|>teger value equal to 0
-    indicates that the extrinsic is successfully added to the pool or a
-    nonzero value otherwise.
+    <item><verbatim|result>: an in<verbatim|>teger value equal to 0 indicates
+    that the extrinsic is successfully added to the pool or a nonzero value
+    otherwise.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_network_state>>
+
+  Returns information about the local node's network state.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $network_state
+
+    \ \ \ \ \ \ (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|result>: a pointer to the buffer containing the SCALE
+    encoded network state. <todo|So if the implementors to implement this
+    they probably need to know what is the network state so they can return
+    it.>
+  </itemize>
+
+  <subsubsection|<verbatim|ext_timestamp>>
+
+  Returns current UNIX timestamp (in milliseconds).
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $timestamp
+
+    \ \ \ \ \ \ (result i64))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|result>: an i64 integer indicating the current UNIX
+    timestamp (in milliseconds). <todo|maybe either refer to UNIX timestamp
+    definition or include its definition somewhere in the document and refer
+    to it>
+  </itemize>
+
+  <subsubsection|<verbatim|ext_sleep_until>>
+
+  Pause the execution until `<math|>deadline` is reached.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $sleep_until
+
+    \ \ \ \ \ \ (param $deadline i64))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
+    (in milliseconds).<todo|same here>
+  </itemize>
+
+  <subsubsection|<verbatim|ext_random_seed>>
+
+  Generates a random seed. This is a truly random non deterministic seed
+  generated by host environment.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $random_seed
+
+    \ \ \ \ \ \ (param $seed_data i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|seed_data>: a memory address pointing at the beginning of
+    a 32-byte byte array containing the generated seed.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_local_storage_set>>
+
+  Sets a value in the local storage. This storage is not part of the
+  consensus, it's only accessible by offchain worker tasks running on the
+  same machine and is persisted between runs. Two storage kinds can be used:\ 
+
+  <\itemize-dot>
+    <\definition>
+      <strong|Persistent <strong|storage>> is non-revertible and not
+      fork-aware. It means that any value set by the offchain worker
+      triggered at block `N(hash1)` <todo|the notation is
+      <math|H<rsub|h><around*|(|B|)>=h<rsub|1>> i think and please refer to
+      its definition. I think also we use \Ptest\Q instead of
+      \<#2018\>test\<#2018\> or at least \<#2018\>test\<#2019\> if you don't
+      like double quote>is persisted even if that block is reverted as
+      non-canonical and is available for the worker that is re-run at block
+      `N(hash2)`. This storage can be used by offchain workers to handle
+      forks and coordinate offchain workers running on different forks.
+      \PLocal storage\Q is revertible and fork-aware. It means that any value
+      set by the offchain worker triggered at block `N(hash1)` is reverted if
+      that block is reverted as non-canonical and is NOT available for the
+      worker that is re-run at block `N(hash2)`.
+    </definition>
+
+    <todo|I'd turn this into a definition style and move somewhere up (at
+    offchain intro or at the begining RE api section and refer to it here and
+    in the remaining spec >
+  </itemize-dot>
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $kind i32) (param $key i32) (param $key_len i32)
+
+    \ \ \ \ \ \ (param $value i32) (param $value_len i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|kind>: an i32 integer indicating the storage kind. A
+    value equal to 1 is used for persistent storage and a value equal to 2
+    for local storage <todo|as defined in Definition blah>.
+
+    <item><verbatim|key>: a pointer to the buffer containing the key.
+
+    <item><verbatim|key_len>: an i32 integer indicating the size of the key.
+
+    <item><verbatim|value>: a pointer to the buffer containg the value.
+
+    <item><verbatim|value_len>: an i32 integer indicating the size of the
+    value.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_local_storage_compare_and_set>>
+
+  Sets a new value in the local storage if the condition matches the current
+  value.
+
+  \;
+
+  <strong|Prototype:> <todo|function name?>
+
+  <\verbatim>
+    (func $local_storage_set\ 
+
+    \ \ \ \ \ \ (param $kind i32) (param $key i32) (param $key_len i32)
+
+    \ \ \ \ \ \ (param $old_value i32) (param $old_value_len) (param
+    $new_value i32)
+
+    \ \ \ \ \ \ (param $new_value_len) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|kind>: an i32 integer indicating the storage kind. A
+    value equal to 1 is used for persistent storage and a value equal to 2
+    for local storage.
+
+    <item><verbatim|key>: a pointer to the buffer containing the key.
+
+    <item><verbatim|key_len>: an i32 integer indicating the size of the key.
+
+    <item><verbatim|old_value>: a pointer to the buffer containing the
+    current value.
+
+    <item><verbatim|old_value_len>: an i32 integer indicating the size of the
+    current value.
+
+    <item><verbatim|new_value>: a pointer to the buffer containing the new
+    value.
+
+    <item><verbatim|new_value_len>: an i32 integer indicating the size of the
+    new value.
+
+    <item><verbatim|result>: an i32 integer equal to 0 if the new value has
+    been set or a value equal to 1 if otherwise.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_local_storage_get>>
+
+  Gets a value from the local storage. If the value does not exist in the
+  storage then `null<todo|what is null>' will be returned.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $kind i32) (param $key i32) (param $key_len i32)
+
+    \ \ \ \ \ \ (param $value_len i32) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|kind>: an i32 integer indicating the storage kind. A
+    value equal to 1 is used for persistent storage and a value equal to 2
+    for local storage.
+
+    <item><verbatim|key>: a pointer to the buffer containing the key.
+
+    <item><verbatim|key_len>: an i32 integer indicating the size of the key.
+
+    <item><verbatim|value_len>: an i32 integer indication the size of the
+    value.
+
+    <item><verbatim|result>: a pointer to the buffer containing the value or
+    \<#2018\>null\<#2018\> if the value does not exist. <todo|what is null?
+    and please clarify it for the rest of the functions you used>
+  </itemize>
+
+  <subsubsection|<verbatim|ext_http_request_start>>
+
+  Initiates a http request given HTTP verb <todo|is this http method? then
+  why not call it method?> and the URL. Meta is a future-reserved field
+  containing additional, SCALE encoded parameters. Returns the id of newly
+  started request.
+
+  \;
+
+  <strong|Prototype:> <todo|function name?>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $method i32) (param $method_len i32) (param $url i32)
+
+    \ \ \ \ \ \ (param $url_len i32) (param $meta i32) (param $meta_len i32)
+    (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|method>: a pointer to the buffer containing the key.
+
+    <item><verbatim|method_len>: an i32 integer indicating the size of the
+    method.
+
+    <item><verbatim|url>: a pointer to the buffer containing the url.
+
+    <item><verbatim|url_len>: an i32 integer indicating the size of the url.
+
+    <item><verbatim|meta>: future-reserved, SCALE encoded parameters.
+
+    <item><verbatim|meta_len>: an i32 integer indicating the size of the
+    parameters.
+
+    <item><verbatim|result>: an i32 integer indicating the ID of the newly
+    started request.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_http_request_add_header>>
+
+  Append header to the request. <todo|how does this work if the request is
+  actually sent?>
+
+  \;
+
+  <strong|Prototype:> <todo|function name>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $request_id i32) (param $name i32) (param $name_len
+    i32)
+
+    \ \ \ \ \ \ (param $value i32) (param $value_len i32) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|request_id>: a i32 integer indicating the ID of the
+    started request.
+
+    <item><verbatim|name>: a pointer to the buffer containing the header
+    name.
+
+    <item><verbatim|name_len>: an i32 integer indicating the size of the
+    header name.
+
+    <item><verbatim|value>: a pointer to the buffer containing the header
+    value.
+
+    <item><verbatim|value_len>: an i32 integer indicating the size of the
+    header value.
+
+    <item><verbatim|result>: an i32 integer where the value equal to 0
+    indicating if the header has been set or a value equal to 1 if otherwise.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_http_request_write_body>>
+
+  Write a chunk of request body. Writing an empty chunk finalises the
+  request. Passing `null` as deadline blocks forever. Returns a non-zero
+  value in case deadline is reached or the chunk couldn't be written.
+
+  \;
+
+  <strong|Prototype:> <todo|function name?>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $request_id i32) (param $chunk i32) (param $chunk_len
+    i32)
+
+    \ \ \ \ \ \ (param $deadline i64) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|request_id>: an i32 integer indicating the ID of the
+    started request.
+
+    <item><verbatim|chunk>: a pointer to the buffer containing the chunk.
+
+    <item><verbatim|chunk_len>: an i32 integer indicating the size of the
+    chunk.
+
+    <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
+    (in milliseconds).
+
+    <item><verbatim|result>: an i32 integer where the value equal to 0
+    indicating if the header has been set or a non-zero value if otherwise.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_http_response_wait>>
+
+  Block and wait for the responses for given requests. Returns an array of
+  request statuses (the size is the same as number of IDs). Passing `null` as
+  deadline blocks forever.
+
+  \;
+
+  <strong|Prototype:> <todo|function name>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $ids i32) (param $ids_len i32) (param $statuses i32)
+
+    \ \ \ \ \ \ (param $deadline i64))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|ids>: a pointer to the buffer containing the started IDs.
+
+    <item><verbatim|ids_len>: an i32 integer indicating the size of IDs.
+
+    <item><verbatim|statuses>: a pointer to the buffer where the request
+    statuses get written to.
+
+    <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
+    (in milliseconds).
+  </itemize>
+
+  <subsubsection|<verbatim|ext_http_response_headers>>
+
+  Read all response headers. Returns a vector of key/value pairs. Response
+  headers must be read before the response body.
+
+  \;
+
+  <strong|Prototype:> <todo|function name>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $request_id i32) (param $written_out i32) (result
+    i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|request_id>: an i32 integer indicating the ID of the
+    started request.
+
+    <item><verbatim|written_out>: a pointer to the buffer where the size of
+    the response headers gets written to.
+
+    <item><verbatim|result>: a pointer to the buffer containing the response
+    headers.
+  </itemize>
+
+  <subsubsection|<verbatim|ext_http_response_read_body>>
+
+  Reads a chunk of body response to the given buffer. Returns the number of
+  bytes written or an error in case a deadline is reached or server closed
+  the connection. If `0' is returned it means that the response has been
+  fully consumed and the `request_id` <todo|use verbatim font when you refer
+  to programming variables in the text> is now invalid. This implies that
+  response headers must be read before draining the body. Passing `null` as a
+  deadline blocks forever.
+
+  \;
+
+  <strong|Prototype:> <todo|function name>
+
+  <\verbatim>
+    (func $local_storage_set
+
+    \ \ \ \ \ \ (param $request_id i32) (param $buffer i32) (param
+    $buffer_len)
+
+    \ \ \ \ \ \ (param $deadline i64) (result i32))
+  </verbatim>
+
+  \ 
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|request_id>: an i32 integer indicating the ID of the
+    started request.
+
+    <item><verbatim|buffer>: a pointer to the buffer where the body gets
+    written to.
+
+    <item><verbatim|buffer_len>: an i32 integer indicating the size of the
+    buffer.
+
+    <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
+    (in milliseconds).
+
+    <item><verbatim|result>: an i32 integer where the value equal to 0
+    indicated a fully consumed response or a non-zero value if otherwise.
   </itemize>
 
   <subsection|Sandboxing>
@@ -4425,34 +4985,48 @@
     <associate|algo-verify-slot-winner|<tuple|4.6|29>>
     <associate|auto-1|<tuple|1|7>>
     <associate|auto-10|<tuple|2.1.4|14>>
-    <associate|auto-100|<tuple|F.1.11|55>>
-    <associate|auto-101|<tuple|F.1.11.1|55>>
-    <associate|auto-102|<tuple|F.1.12|55>>
-    <associate|auto-103|<tuple|F.1.12.1|55>>
-    <associate|auto-104|<tuple|F.1.12.2|56>>
-    <associate|auto-105|<tuple|F.1.13|56>>
-    <associate|auto-106|<tuple|F.1.13.1|56>>
-    <associate|auto-107|<tuple|F.1.14|56>>
-    <associate|auto-108|<tuple|F.2|56>>
-    <associate|auto-109|<tuple|G|57>>
+    <associate|auto-100|<tuple|F.1.10.2|55>>
+    <associate|auto-101|<tuple|F.1.10.3|55>>
+    <associate|auto-102|<tuple|F.1.10.4|55>>
+    <associate|auto-103|<tuple|F.1.10.5|55>>
+    <associate|auto-104|<tuple|F.1.10.6|56>>
+    <associate|auto-105|<tuple|F.1.10.7|56>>
+    <associate|auto-106|<tuple|F.1.10.8|56>>
+    <associate|auto-107|<tuple|F.1.10.9|56>>
+    <associate|auto-108|<tuple|F.1.10.10|56>>
+    <associate|auto-109|<tuple|F.1.10.11|57>>
     <associate|auto-11|<tuple|3|17>>
-    <associate|auto-110|<tuple|G.1|57>>
-    <associate|auto-111|<tuple|G.1|57>>
-    <associate|auto-112|<tuple|G.2|58>>
-    <associate|auto-113|<tuple|G.2.1|58>>
-    <associate|auto-114|<tuple|G.1|58>>
-    <associate|auto-115|<tuple|G.2.2|58>>
-    <associate|auto-116|<tuple|G.2.3|58>>
-    <associate|auto-117|<tuple|G.2.4|58>>
-    <associate|auto-118|<tuple|G.2.5|59>>
-    <associate|auto-119|<tuple|G.2.6|59>>
+    <associate|auto-110|<tuple|F.1.10.12|57>>
+    <associate|auto-111|<tuple|F.1.10.13|57>>
+    <associate|auto-112|<tuple|F.1.10.14|58>>
+    <associate|auto-113|<tuple|F.1.10.15|58>>
+    <associate|auto-114|<tuple|F.1.11|58>>
+    <associate|auto-115|<tuple|F.1.11.1|58>>
+    <associate|auto-116|<tuple|F.1.12|58>>
+    <associate|auto-117|<tuple|F.1.12.1|58>>
+    <associate|auto-118|<tuple|F.1.12.2|59>>
+    <associate|auto-119|<tuple|F.1.13|59>>
     <associate|auto-12|<tuple|3.1|17>>
-    <associate|auto-120|<tuple|G.2.7|59>>
-    <associate|auto-121|<tuple|G.2|60>>
-    <associate|auto-122|<tuple|G.3|60>>
-    <associate|auto-123|<tuple|G.3|61>>
-    <associate|auto-124|<tuple|SA15|63>>
+    <associate|auto-120|<tuple|F.1.13.1|59>>
+    <associate|auto-121|<tuple|F.1.14|60>>
+    <associate|auto-122|<tuple|F.2|60>>
+    <associate|auto-123|<tuple|G|61>>
+    <associate|auto-124|<tuple|G.1|63>>
+    <associate|auto-125|<tuple|G.1|?>>
+    <associate|auto-126|<tuple|G.2|?>>
+    <associate|auto-127|<tuple|G.2.1|?>>
+    <associate|auto-128|<tuple|G.1|?>>
+    <associate|auto-129|<tuple|G.2.2|?>>
     <associate|auto-13|<tuple|3.1.1|17>>
+    <associate|auto-130|<tuple|G.2.3|?>>
+    <associate|auto-131|<tuple|G.2.4|?>>
+    <associate|auto-132|<tuple|G.2.5|?>>
+    <associate|auto-133|<tuple|G.2.6|?>>
+    <associate|auto-134|<tuple|G.2.7|?>>
+    <associate|auto-135|<tuple|G.2|?>>
+    <associate|auto-136|<tuple|G.3|?>>
+    <associate|auto-137|<tuple|G.3|?>>
+    <associate|auto-138|<tuple|SA15|?>>
     <associate|auto-14|<tuple|3.1.2|18>>
     <associate|auto-15|<tuple|3.1.2.1|18>>
     <associate|auto-16|<tuple|3.1.2.2|18>>
@@ -4475,7 +5049,7 @@
     <associate|auto-31|<tuple|3.1|22>>
     <associate|auto-32|<tuple|3.3.1.4|22>>
     <associate|auto-33|<tuple|3.3.2|22>>
-    <associate|auto-34|<tuple|3.3.3|22>>
+    <associate|auto-34|<tuple|3.3.3|?>>
     <associate|auto-35|<tuple|3.4|23>>
     <associate|auto-36|<tuple|4|25>>
     <associate|auto-37|<tuple|4.1|25>>
@@ -4486,8 +5060,8 @@
     <associate|auto-41|<tuple|4.1.4|27>>
     <associate|auto-42|<tuple|4.1.5|28>>
     <associate|auto-43|<tuple|4.1.6|28>>
-    <associate|auto-44|<tuple|4.1.7|29>>
-    <associate|auto-45|<tuple|4.2|30>>
+    <associate|auto-44|<tuple|4.1.7|?>>
+    <associate|auto-45|<tuple|4.2|?>>
     <associate|auto-46|<tuple|4.2.1|30>>
     <associate|auto-47|<tuple|4.2.2|32>>
     <associate|auto-48|<tuple|4.2.3|32>>
@@ -4547,11 +5121,11 @@
     <associate|auto-97|<tuple|F.1.9.6|55>>
     <associate|auto-98|<tuple|F.1.10|55>>
     <associate|auto-99|<tuple|F.1.10.1|55>>
-    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|61>>
-    <associate|bib-collet_extremely_2019|<tuple|Col19|61>>
-    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|61>>
-    <associate|bib-saarinen_blake2_2015|<tuple|SA15|61>>
-    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|61>>
+    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|Ali19|?>>
+    <associate|bib-collet_extremely_2019|<tuple|Col19|?>>
+    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|?>>
+    <associate|bib-saarinen_blake2_2015|<tuple|SA15|?>>
+    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|?>>
     <associate|block|<tuple|3.3.1.1|21>>
     <associate|block-signature|<tuple|4.11|27>>
     <associate|chap-consensu|<tuple|4|25>>
@@ -4607,9 +5181,12 @@
     <associate|sect-babe|<tuple|4.1|25>>
     <associate|sect-blake2|<tuple|A.2|35>>
     <associate|sect-block-body|<tuple|3.3.1.4|22>>
+    <associate|sect-block-building|<tuple|4.1.7|?>>
     <associate|sect-block-finalization|<tuple|4.3|34>>
     <associate|sect-block-format|<tuple|3.3.1|21>>
     <associate|sect-block-production|<tuple|4.1|25>>
+    <associate|sect-block-submission|<tuple|3.3.2|?>>
+    <associate|sect-block-validation|<tuple|3.3.3|?>>
     <associate|sect-defn-conv|<tuple|1.2|7>>
     <associate|sect-encoding|<tuple|B|37>>
     <associate|sect-entries-into-runtime|<tuple|3.1|17>>
@@ -4617,7 +5194,6 @@
     <associate|sect-extrinsics|<tuple|3.2|19>>
     <associate|sect-finality|<tuple|4.2|30>>
     <associate|sect-genisis-block|<tuple|C|41>>
-    <associate|sect-grandpa|<tuple|4.2|30>>
     <associate|sect-hash-functions|<tuple|A.1|35>>
     <associate|sect-int-encoding|<tuple|B.1.1|38>>
     <associate|sect-list-of-runtime-entries|<tuple|G.1|57>>
@@ -4634,7 +5210,7 @@
     <associate|sect-network-messages|<tuple|E|45>>
     <associate|sect-predef-storage-keys|<tuple|D|43>>
     <associate|sect-randomness|<tuple|A.3|35>>
-    <associate|sect-re-api|<tuple|SA15|49>>
+    <associate|sect-re-api|<tuple|F|49>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|59>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|58>>
     <associate|sect-rte-validate-transaction|<tuple|G.2.7|59>>
@@ -4643,6 +5219,7 @@
     <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|18>>
     <associate|sect-scale-codec|<tuple|B.1|37>>
     <associate|sect-state-replication|<tuple|3.3|20>>
+    <associate|sect-verifying-authorship|<tuple|4.1.6|?>>
     <associate|sect-vrf|<tuple|A.4|35>>
     <associate|slot-time-cal-tail|<tuple|4.7|26>>
     <associate|snippet-runtime-enteries|<tuple|G.1|57>>
@@ -4669,7 +5246,7 @@
     </associate>
     <\associate|figure>
       <tuple|normal|<surround|<hidden-binding|<tuple>|G.1>||Snippet to export
-      entries into tho Wasm runtime module.>|<pageref|auto-111>>
+      entries into tho Wasm runtime module.>|<pageref|auto-125>>
     </associate>
     <\associate|idx>
       <tuple|<tuple|Transaction Message>|<pageref|auto-22>>
@@ -4698,16 +5275,16 @@
       <tuple|normal|<surround|<hidden-binding|<tuple>|G.1>||Detail of the
       version data type returns from runtime
       <with|font-family|<quote|tt>|language|<quote|verbatim>|version>
-      function.>|<pageref|auto-114>>
+      function.>|<pageref|auto-128>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|G.2>||Type variation
-      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-121>>
+      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-135>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|G.3>|>
         The quintuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
 
         in the case the transaction is judged to be valid.
-      </surround>|<pageref|auto-122>>
+      </surround>|<pageref|auto-136>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|1.<space|2spc>Background>
@@ -5061,92 +5638,148 @@
       \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-98>>
 
-      <with|par-left|<quote|2tab>|F.1.10.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_submit_transaction>
+      <with|par-left|<quote|2tab>|F.1.10.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_is_validator>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-99>>
 
-      <with|par-left|<quote|1tab>|F.1.11.<space|2spc>Sandboxing
+      <with|par-left|<quote|2tab>|F.1.10.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_submit_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-100>>
 
-      <with|par-left|<quote|2tab>|F.1.11.1.<space|2spc>To be Specced
+      <with|par-left|<quote|2tab>|F.1.10.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_network_state>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-101>>
 
-      <with|par-left|<quote|1tab>|F.1.12.<space|2spc>Auxillary Debugging API
+      <with|par-left|<quote|2tab>|F.1.10.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_timestamp>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-102>>
 
-      <with|par-left|<quote|2tab>|F.1.12.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_hex>
+      <with|par-left|<quote|2tab>|F.1.10.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_sleep_until>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-103>>
 
-      <with|par-left|<quote|2tab>|F.1.12.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_utf8>
+      <with|par-left|<quote|2tab>|F.1.10.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_random_seed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-104>>
 
-      <with|par-left|<quote|1tab>|F.1.13.<space|2spc>Misc
+      <with|par-left|<quote|2tab>|F.1.10.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_local_storage_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-105>>
 
-      <with|par-left|<quote|2tab>|F.1.13.1.<space|2spc>To be Specced
+      <with|par-left|<quote|2tab>|F.1.10.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_local_storage_compare_and_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-106>>
 
-      <with|par-left|<quote|1tab>|F.1.14.<space|2spc>Block Production
+      <with|par-left|<quote|2tab>|F.1.10.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_local_storage_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-107>>
 
-      F.2.<space|2spc>Validation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-108>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
-      G.<space|2spc>Runtime Entries> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-109><vspace|0.5fn>
-
-      G.1.<space|2spc>List of Runtime Entries
+      <with|par-left|<quote|2tab>|F.1.10.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_start>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-110>
+      <no-break><pageref|auto-108>>
 
-      G.2.<space|2spc>Argument Specification
+      <with|par-left|<quote|2tab>|F.1.10.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_add_header>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-112>
+      <no-break><pageref|auto-109>>
 
-      <with|par-left|<quote|1tab>|G.2.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
+      <with|par-left|<quote|2tab>|F.1.10.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_write_body>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-110>>
+
+      <with|par-left|<quote|2tab>|F.1.10.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_wait>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-111>>
+
+      <with|par-left|<quote|2tab>|F.1.10.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_headers>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-112>>
+
+      <with|par-left|<quote|2tab>|F.1.10.15.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_read_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-113>>
 
-      <with|par-left|<quote|1tab>|G.2.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
+      <with|par-left|<quote|1tab>|F.1.11.<space|2spc>Sandboxing
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-114>>
+
+      <with|par-left|<quote|2tab>|F.1.11.1.<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-115>>
 
-      <with|par-left|<quote|1tab>|G.2.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialise_block>
+      <with|par-left|<quote|1tab>|F.1.12.<space|2spc>Auxillary Debugging API
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-116>>
 
-      <with|par-left|<quote|1tab>|G.2.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|hash_and_length>
+      <with|par-left|<quote|2tab>|F.1.12.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_hex>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-117>>
 
-      <with|par-left|<quote|1tab>|G.2.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_epoch>
+      <with|par-left|<quote|2tab>|F.1.12.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_utf8>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-118>>
 
-      <with|par-left|<quote|1tab>|G.2.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Grandpa_authorities>
+      <with|par-left|<quote|1tab>|F.1.13.<space|2spc>Misc
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-119>>
 
-      <with|par-left|<quote|1tab>|G.2.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
+      <with|par-left|<quote|2tab>|F.1.13.1.<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-120>>
 
+      <with|par-left|<quote|1tab>|F.1.14.<space|2spc>Block Production
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-121>>
+
+      F.2.<space|2spc>Validation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-122>
+
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
+      G.<space|2spc>Runtime Entries> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <pageref|auto-123><vspace|0.5fn>
+
+      G.1.<space|2spc>List of Runtime Entries
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-124>
+
+      G.2.<space|2spc>Argument Specification
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-126>
+
+      <with|par-left|<quote|1tab>|G.2.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-127>>
+
+      <with|par-left|<quote|1tab>|G.2.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-129>>
+
+      <with|par-left|<quote|1tab>|G.2.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialise_block>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-130>>
+
+      <with|par-left|<quote|1tab>|G.2.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|hash_and_length>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-131>>
+
+      <with|par-left|<quote|1tab>|G.2.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_epoch>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-132>>
+
+      <with|par-left|<quote|1tab>|G.2.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Grandpa_authorities>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-133>>
+
+      <with|par-left|<quote|1tab>|G.2.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-134>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-123><vspace|0.5fn>
+      <pageref|auto-137><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Index>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-124><vspace|0.5fn>
+      <pageref|auto-138><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
