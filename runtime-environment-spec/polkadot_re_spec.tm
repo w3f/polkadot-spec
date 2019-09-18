@@ -3995,7 +3995,7 @@
   <strong|Prototype:>
 
   <\verbatim>
-    (func $is_validator
+    (func $ext_is_validator
 
     \ \ \ \ \ \ (result i32))
   </verbatim>
@@ -4050,7 +4050,7 @@
   <strong|Prototype:>
 
   <\verbatim>
-    (func $network_state
+    (func $ext_network_state
 
     \ \ \ \ \ \ (result i32))
   </verbatim>
@@ -4075,7 +4075,7 @@
   <strong|Prototype:>
 
   <\verbatim>
-    (func $timestamp
+    (func $ext_timestamp
 
     \ \ \ \ \ \ (result i64))
   </verbatim>
@@ -4100,7 +4100,7 @@
   <strong|Prototype:>
 
   <\verbatim>
-    (func $sleep_until
+    (func $ext_sleep_until
 
     \ \ \ \ \ \ (param $deadline i64))
   </verbatim>
@@ -4124,7 +4124,7 @@
   <strong|Prototype:>
 
   <\verbatim>
-    (func $random_seed
+    (func $ext_random_seed
 
     \ \ \ \ \ \ (param $seed_data i32))
   </verbatim>
@@ -4172,7 +4172,7 @@
   <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set
+    (func $ext_local_storage_set
 
     \ \ \ \ \ \ (param $kind i32) (param $key i32) (param $key_len i32)
 
@@ -4205,10 +4205,10 @@
 
   \;
 
-  <strong|Prototype:> <todo|function name?>
+  <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set\ 
+    (func $ext_local_storage_compare_and_set\ 
 
     \ \ \ \ \ \ (param $kind i32) (param $key i32) (param $key_len i32)
 
@@ -4257,7 +4257,7 @@
   <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set
+    (func $ext_local_storage_set
 
     \ \ \ \ \ \ (param $kind i32) (param $key i32) (param $key_len i32)
 
@@ -4294,10 +4294,10 @@
 
   \;
 
-  <strong|Prototype:> <todo|function name?>
+  <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set
+    (func $ext_http_request_start
 
     \ \ \ \ \ \ (param $method i32) (param $method_len i32) (param $url i32)
 
@@ -4335,10 +4335,10 @@
 
   \;
 
-  <strong|Prototype:> <todo|function name>
+  <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set
+    (func $ext_http_request_add_header
 
     \ \ \ \ \ \ (param $request_id i32) (param $name i32) (param $name_len
     i32)
@@ -4378,10 +4378,10 @@
 
   \;
 
-  <strong|Prototype:> <todo|function name?>
+  <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set
+    (func $ext_http_request_write_body
 
     \ \ \ \ \ \ (param $request_id i32) (param $chunk i32) (param $chunk_len
     i32)
@@ -4417,10 +4417,10 @@
 
   \;
 
-  <strong|Prototype:> <todo|function name>
+  <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set
+    (func $ext_http_response_wait
 
     \ \ \ \ \ \ (param $ids i32) (param $ids_len i32) (param $statuses i32)
 
@@ -4450,10 +4450,10 @@
 
   \;
 
-  <strong|Prototype:> <todo|function name>
+  <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set
+    (func $ext_http_response_headers
 
     \ \ \ \ \ \ (param $request_id i32) (param $written_out i32) (result
     i32))
@@ -4486,10 +4486,10 @@
 
   \;
 
-  <strong|Prototype:> <todo|function name>
+  <strong|Prototype:>
 
   <\verbatim>
-    (func $local_storage_set
+    (func $ext_http_response_read_body
 
     \ \ \ \ \ \ (param $request_id i32) (param $buffer i32) (param
     $buffer_len)
@@ -5697,34 +5697,6 @@
       <with|par-left|<quote|2tab>|F.1.10.15.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_read_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-113>>
-
-      <with|par-left|<quote|2tab>|F.1.10.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_submit_transaction>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-99>>
-
-      <with|par-left|<quote|2tab>|F.1.10.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_network_state>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-100>>
-
-      <with|par-left|<quote|2tab>|F.1.10.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|timestamp>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-101>>
-
-      <with|par-left|<quote|2tab>|F.1.10.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|sleep_until>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-102>>
-
-      <with|par-left|<quote|2tab>|F.1.10.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|random_seed>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-103>>
-
-      <with|par-left|<quote|2tab>|F.1.10.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|local_storage_set>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-104>>
-
-      <with|par-left|<quote|2tab>|F.1.10.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|local_storage_compare_and_set>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-105>>
 
       <with|par-left|<quote|1tab>|F.1.11.<space|2spc>Sandboxing
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
