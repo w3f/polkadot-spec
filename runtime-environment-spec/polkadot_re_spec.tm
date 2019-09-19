@@ -717,13 +717,11 @@
   </definition>
 
   <\definition>
-    By <strong|UNIX time> we refer to the unsigned 64-bit integer which
-    stores the number of <strong|milliseconds> that have elapsed since the
-    Unix epoch, that is the time 00:00:00 UTC on 1 January 1970, minus leap
-    seconds. Leap seconds are ignored, and every day is treated as if it
-    contains exactly 86400 seconds.
-
-    \;
+    By <strong|UNIX time> we refer to the unsigned, little-endian encoded
+    64-bit integer which stores the number of <strong|milliseconds> that have
+    elapsed since the Unix epoch, that is the time 00:00:00 UTC on 1 January
+    1970, minus leap seconds. Leap seconds are ignored, and every day is
+    treated as if it contains exactly 86400 seconds.
   </definition>
 
   <subsection|Block Tree>
