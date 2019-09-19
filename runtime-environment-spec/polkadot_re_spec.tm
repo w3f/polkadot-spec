@@ -3982,7 +3982,13 @@
 
   <subsection|Offchain Worker >
 
-  <todo|perhaps add an intro to this that what is an offchain worker>
+  Offchain Workers allow the execution of long-running and possibly
+  non-deterministic tasks (e.g. web requests, encryption/decryption and
+  signing of data, random number generation, CPU-intensive computations,
+  enumeration/aggregation of on-chain data, etc.) which could otherwise
+  require longer than the block execution time. Offchain workers have their
+  own execution environment. This separation of concerns is to make sure that
+  the block production is not impacted by the long-running tasks.
 
   <subsubsection|<verbatim|ext_is_validator>>
 
