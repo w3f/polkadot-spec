@@ -716,6 +716,16 @@
     </equation*>
   </definition>
 
+  <\definition>
+    By <strong|UNIX time> we refer to the unsigned 64-bit integer which
+    stores the number of <strong|milliseconds> that have elapsed since the
+    Unix epoch, that is the time 00:00:00 UTC on 1 January 1970, minus leap
+    seconds. Leap seconds are ignored, and every day is treated as if it
+    contains exactly 86400 seconds.
+
+    \;
+  </definition>
+
   <subsection|Block Tree>
 
   In the course of formation of a (distributed) blockchain, it is possible
@@ -5145,8 +5155,8 @@
     <associate|defn-block-header|<tuple|3.5|21>>
     <associate|defn-block-header-hash|<tuple|3.6|21>>
     <associate|defn-block-time|<tuple|4.8|26>>
-    <associate|defn-block-tree|<tuple|1.10|9>>
-    <associate|defn-chain-subchain|<tuple|1.12|9>>
+    <associate|defn-block-tree|<tuple|1.11|9>>
+    <associate|defn-chain-subchain|<tuple|1.13|9>>
     <associate|defn-children-bitmap|<tuple|2.10|15>>
     <associate|defn-epoch-slot|<tuple|4.3|25>>
     <associate|defn-epoch-subchain|<tuple|4.5|26>>
@@ -5157,7 +5167,7 @@
     <associate|defn-hex-encoding|<tuple|B.9|39>>
     <associate|defn-index-function|<tuple|2.7|13>>
     <associate|defn-little-endian|<tuple|1.7|8>>
-    <associate|defn-longest-chain|<tuple|1.13|9>>
+    <associate|defn-longest-chain|<tuple|1.14|9>>
     <associate|defn-merkle-value|<tuple|2.12|15>>
     <associate|defn-node-header|<tuple|2.9|13>>
     <associate|defn-node-key|<tuple|2.6|13>>
@@ -5165,7 +5175,7 @@
     <associate|defn-node-value|<tuple|2.8|13>>
     <associate|defn-nodetype|<tuple|2.4|12>>
     <associate|defn-path-graph|<tuple|1.2|8>>
-    <associate|defn-pruned-tree|<tuple|1.11|9>>
+    <associate|defn-pruned-tree|<tuple|1.12|9>>
     <associate|defn-radix-tree|<tuple|1.3|8>>
     <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|7>>
     <associate|defn-sc-len-encoding|<tuple|B.8|38>>
