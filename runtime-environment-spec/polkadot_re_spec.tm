@@ -717,11 +717,12 @@
   </definition>
 
   <\definition>
-    By <strong|UNIX time> we refer to the unsigned, little-endian encoded
-    64-bit integer which stores the number of <strong|milliseconds> that have
-    elapsed since the Unix epoch, that is the time 00:00:00 UTC on 1 January
-    1970, minus leap seconds. Leap seconds are ignored, and every day is
-    treated as if it contains exactly 86400 seconds.
+    <label|defn-unix-time>By <strong|UNIX time> we refer to the unsigned,
+    little-endian encoded 64-bit integer which stores the number of
+    <strong|milliseconds> that have elapsed since the Unix epoch, that is the
+    time 00:00:00 UTC on 1 January 1970, minus leap seconds. Leap seconds are
+    ignored, and every day is treated as if it contains exactly 86400
+    seconds.
   </definition>
 
   <subsection|Block Tree>
@@ -4082,7 +4083,7 @@
 
   <subsubsection|<verbatim|ext_timestamp>>
 
-  Returns current UNIX timestamp (in milliseconds).
+  Returns current timestamp.
 
   \;
 
@@ -4100,9 +4101,7 @@
 
   <\itemize>
     <item><verbatim|result>: an i64 integer indicating the current UNIX
-    timestamp (in milliseconds). <todo|maybe either refer to UNIX timestamp
-    definition or include its definition somewhere in the document and refer
-    to it>
+    timestamp as defined in <reference|defn-unix-time>.
   </itemize>
 
   <subsubsection|<verbatim|ext_sleep_until>>
@@ -4125,7 +4124,7 @@
 
   <\itemize>
     <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
-    (in milliseconds).<todo|same here>
+    as defined in <reference|defn-unix-time>.
   </itemize>
 
   <subsubsection|<verbatim|ext_random_seed>>
@@ -4417,7 +4416,7 @@
     chunk.
 
     <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
-    (in milliseconds).
+    as defined in <reference|defn-unix-time>.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
     indicating if the header has been set or a non-zero value if otherwise.
@@ -4454,7 +4453,7 @@
     statuses get written to.
 
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    (in milliseconds).
+    as defined in <reference|defn-unix-time>.
   </itemize>
 
   <subsubsection|<verbatim|ext_http_response_headers>>
@@ -4526,7 +4525,7 @@
     buffer.
 
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    (in milliseconds).
+    as defined in <reference|defn-unix-time>.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
     indicated a fully consumed response or a non-zero value if otherwise.
@@ -5184,6 +5183,7 @@
     <associate|defn-slot-offset|<tuple|4.9|27>>
     <associate|defn-state-machine|<tuple|1.1|7>>
     <associate|defn-stored-value|<tuple|2.1|11>>
+    <associate|defn-unix-time|<tuple|1.10|?>>
     <associate|defn-varrying-data-type|<tuple|B.3|37>>
     <associate|defn-vote|<tuple|4.15|30>>
     <associate|defn-winning-threshold|<tuple|4.6|26>>
