@@ -4076,10 +4076,10 @@
 
   <\itemize>
     <item><verbatim|result>: a pointer to the buffer containing the SCALE
-    encoded network state. TODO -\<gtr\> this requires slightly more
-    information<text-dots> <todo|So if the implementors to implement this
-    they probably need to know what is the network state so they can return
-    it.>
+    encoded network state. TODO -\<gtr\> this requires a deeper look since it
+    includes datastructures from libp2p-dev<text-dots> <todo|So if the
+    implementors to implement this they probably need to know what is the
+    network state so they can return it.>
   </itemize>
 
   <subsubsection|<verbatim|ext_timestamp>>
@@ -4263,8 +4263,7 @@
 
   <subsubsection|<verbatim|ext_local_storage_get>>
 
-  Gets a value from the local storage. If the value does not exist in the
-  storage then `null<todo|what is null>' will be returned.
+  Gets a value from the local storage.
 
   \;
 
@@ -4294,9 +4293,9 @@
     <item><verbatim|value_len>: an i32 integer indication the size of the
     value.
 
-    <item><verbatim|result>: a pointer to the buffer containing the value or
-    \<#2018\>null\<#2018\> if the value does not exist. <todo|what is null?
-    and please clarify it for the rest of the functions you used>
+    <item><verbatim|result>: a pointer to the bu\[er in which the function
+    allocates and stores the value corresponding to the given key if such an
+    entry exist; otherwise it is equal to 0.
   </itemize>
 
   <subsubsection|<verbatim|ext_http_request_start>>
