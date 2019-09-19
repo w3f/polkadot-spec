@@ -4076,7 +4076,8 @@
 
   <\itemize>
     <item><verbatim|result>: a pointer to the buffer containing the SCALE
-    encoded network state. <todo|So if the implementors to implement this
+    encoded network state. TODO -\<gtr\> this requires slightly more
+    information<text-dots> <todo|So if the implementors to implement this
     they probably need to know what is the network state so they can return
     it.>
   </itemize>
@@ -4300,10 +4301,9 @@
 
   <subsubsection|<verbatim|ext_http_request_start>>
 
-  Initiates a http request given HTTP verb <todo|is this http method? then
-  why not call it method?> and the URL. Meta is a future-reserved field
-  containing additional, SCALE encoded parameters. Returns the id of newly
-  started request.
+  Initiates a http request given HTTP method and the URL. Meta is a
+  future-reserved field containing additional, SCALE encoded parameters.
+  Returns the id of newly started request.
 
   \;
 
@@ -4343,8 +4343,7 @@
 
   <subsubsection|<verbatim|ext_http_request_add_header>>
 
-  Append header to the request. <todo|how does this work if the request is
-  actually sent?>
+  Append header to the request.
 
   \;
 
