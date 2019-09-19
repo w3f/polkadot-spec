@@ -4102,7 +4102,7 @@
 
   <\itemize>
     <item><verbatim|result>: an i64 integer indicating the current UNIX
-    timestamp as defined in <reference|defn-unix-time>.
+    timestamp as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
   <subsubsection|<verbatim|ext_sleep_until>>
@@ -4125,7 +4125,7 @@
 
   <\itemize>
     <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
-    as defined in <reference|defn-unix-time>.
+    as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
   <subsubsection|<verbatim|ext_random_seed>>
@@ -4415,7 +4415,7 @@
     chunk.
 
     <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
-    as defined in <reference|defn-unix-time>.
+    as defined in Definition <reference|defn-unix-time>.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
     indicating if the header has been set or a non-zero value if otherwise.
@@ -4452,7 +4452,7 @@
     statuses get written to.
 
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    as defined in <reference|defn-unix-time>.
+    as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
   <subsubsection|<verbatim|ext_http_response_headers>>
@@ -4524,7 +4524,7 @@
     buffer.
 
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    as defined in <reference|defn-unix-time>.
+    as defined in Definition <reference|defn-unix-time>.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
     indicated a fully consumed response or a non-zero value if otherwise.
