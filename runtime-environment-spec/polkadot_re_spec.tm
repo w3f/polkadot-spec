@@ -4490,8 +4490,7 @@
   Reads a chunk of body response to the given buffer. Returns the number of
   bytes written or an error in case a deadline is reached or server closed
   the connection. If `0' is returned it means that the response has been
-  fully consumed and the `request_id` <todo|use verbatim font when you refer
-  to programming variables in the text> is now invalid. This implies that
+  fully consumed and the <verbatim|request_id> is now invalid. This implies that
   response headers must be read before draining the body. Passing `null` as a
   deadline blocks forever.
 
