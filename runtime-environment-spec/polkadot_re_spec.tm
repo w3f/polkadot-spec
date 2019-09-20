@@ -3999,6 +3999,26 @@
   own execution environment. This separation of concerns is to make sure that
   the block production is not impacted by the long-running tasks.
 
+  <\definition>
+    <strong|Persistent <strong|storage>> is non-revertible and not
+    fork-aware. It means that any value set by the offchain worker triggered
+    at block `N(hash1)` <todo|the notation is
+    <math|H<rsub|h><around*|(|B|)>=h<rsub|1>> i think and please refer to its
+    definition. I think also we use \Ptest\Q instead of
+    \<#2018\>test\<#2018\> or at least \<#2018\>test\<#2019\> if you don't
+    like double quote>is persisted even if that block is reverted as
+    non-canonical and is available for the worker that is re-run at block
+    `N(hash2)`. This storage can be used by offchain workers to handle forks
+    and coordinate offchain workers running on different forks.
+  </definition>
+
+  <\definition>
+    <strong|Local storage> is revertible and fork-aware. It means that any
+    value set by the offchain worker triggered at block `N(hash1)` is
+    reverted if that block is reverted as non-canonical and is NOT available
+    for the worker that is re-run at block `N(hash2)`.
+  </definition>
+
   <subsubsection|<verbatim|ext_is_validator>>
 
   Returns if the local node is a potential validator. Even if this function
@@ -4159,26 +4179,7 @@
   same machine and is persisted between runs. Two storage kinds can be used:\ 
 
   <\itemize-dot>
-    <\definition>
-      <strong|Persistent <strong|storage>> is non-revertible and not
-      fork-aware. It means that any value set by the offchain worker
-      triggered at block `N(hash1)` <todo|the notation is
-      <math|H<rsub|h><around*|(|B|)>=h<rsub|1>> i think and please refer to
-      its definition. I think also we use \Ptest\Q instead of
-      \<#2018\>test\<#2018\> or at least \<#2018\>test\<#2019\> if you don't
-      like double quote>is persisted even if that block is reverted as
-      non-canonical and is available for the worker that is re-run at block
-      `N(hash2)`. This storage can be used by offchain workers to handle
-      forks and coordinate offchain workers running on different forks.
-      \PLocal storage\Q is revertible and fork-aware. It means that any value
-      set by the offchain worker triggered at block `N(hash1)` is reverted if
-      that block is reverted as non-canonical and is NOT available for the
-      worker that is re-run at block `N(hash2)`.
-    </definition>
-
-    <todo|I'd turn this into a definition style and move somewhere up (at
-    offchain intro or at the begining RE api section and refer to it here and
-    in the remaining spec >
+    \;
   </itemize-dot>
 
   \;
@@ -4300,8 +4301,8 @@
 
   <subsubsection|<verbatim|ext_http_request_start>>
 
-  Initiates a http request given HTTP method and the URL. Meta is a
-  future-reserved field containing additional, SCALE encoded parameters.
+  Initiates a http request given HTTP method and the URL. <verbatim|meta> is
+  a future-reserved field containing additional, SCALE encoded parameters.
   Returns the id of newly started request.
 
   \;
@@ -4490,9 +4491,9 @@
   Reads a chunk of body response to the given buffer. Returns the number of
   bytes written or an error in case a deadline is reached or server closed
   the connection. If `0' is returned it means that the response has been
-  fully consumed and the <verbatim|request_id> is now invalid. This implies that
-  response headers must be read before draining the body. Passing `null` as a
-  deadline blocks forever.
+  fully consumed and the <verbatim|request_id> is now invalid. This implies
+  that response headers must be read before draining the body. Passing `null`
+  as a deadline blocks forever.
 
   \;
 
