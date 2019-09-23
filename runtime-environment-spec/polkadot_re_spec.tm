@@ -4000,19 +4000,21 @@
   the block production is not impacted by the long-running tasks.
 
   <\definition>
-    <label|offchain-persistent-storage><strong|Persistent <strong|storage>> is non-revertible and not
-    fork-aware. It means that any value set by the offchain worker is
-    persisted even if that block is reverted as non-canonical. The value is
-    available for the worker that is re-run at the next and future blocks.
-    This storage can be used by offchain workers to handle forks and
-    coordinate offchain workers running on different forks.
+    <label|offchain-persistent-storage><strong|Persistent <strong|storage>>
+    is non-revertible and not fork-aware. It means that any value set by the
+    offchain worker is persisted even if that block is reverted as
+    non-canonical. The value is available for the worker that is re-run at
+    the next and future blocks. This storage can be used by offchain workers
+    to handle forks and coordinate offchain workers running on different
+    forks.
   </definition>
 
   <\definition>
-    <label|offchain-local-storage><strong|Local storage> is revertible and fork-aware. It means that any
-    value set by the offchain worker triggered at a certain block is reverted
-    if that block is reverted as non-canonical. The value is NOT available
-    for the worker that is re-run at the next or any future blocks.
+    <label|offchain-local-storage><strong|Local storage> is revertible and
+    fork-aware. It means that any value set by the offchain worker triggered
+    at a certain block is reverted if that block is reverted as
+    non-canonical. The value is NOT available for the worker that is re-run
+    at the next or any future blocks.
   </definition>
 
   <subsubsection|<verbatim|ext_is_validator>>
@@ -4074,7 +4076,7 @@
 
   <subsubsection|<verbatim|ext_network_state>>
 
-  Returns information about the local node's network state.
+  Returns opaque information about the local node's network state.
 
   \;
 
@@ -4083,7 +4085,7 @@
   <\verbatim>
     (func $ext_network_state
 
-    \ \ \ \ \ \ (result i32))
+    \ \ \ \ \ \ (param $written_out i32)(result i32))
   </verbatim>
 
   \ 
@@ -4091,11 +4093,12 @@
   <strong|Arguments>:
 
   <\itemize>
+    <item><verbatim|written_out>: a pointer to the 4-byte buffer where the
+    size of the opaque network state gets written to.
+
     <item><verbatim|result>: a pointer to the buffer containing the SCALE
-    encoded network state. TODO -\<gtr\> this requires a deeper look since it
-    includes datastructures from libp2p-dev<text-dots> <todo|So if the
-    implementors to implement this they probably need to know what is the
-    network state so they can return it.>
+    encoded network state. It contains the <verbatim|libp2p PeerId> followed
+    by an unknown amount of <verbatim|libp2p MultiAdress>-es
   </itemize>
 
   <subsubsection|<verbatim|ext_timestamp>>
@@ -4196,7 +4199,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage as defined in Definition <reference|offchain-persistent-storage> and a value equal to 2 for local storage as defined in Definition <reference|offchain-local-storage>.
+    value equal to 1 is used for persistent storage as defined in Definition
+    <reference|offchain-persistent-storage> and a value equal to 2 for local
+    storage as defined in Definition <reference|offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
@@ -4234,7 +4239,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage as defined in Definition <reference|offchain-persistent-storage> and a value equal to 2 for local storage as defined in Definition <reference|offchain-local-storage>.
+    value equal to 1 is used for persistent storage as defined in Definition
+    <reference|offchain-persistent-storage> and a value equal to 2 for local
+    storage as defined in Definition <reference|offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
@@ -4278,7 +4285,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage as defined in Definition <reference|offchain-persistent-storage> and a value equal to 2 for local storage as defined in Definition <reference|offchain-local-storage>.
+    value equal to 1 is used for persistent storage as defined in Definition
+    <reference|offchain-persistent-storage> and a value equal to 2 for local
+    storage as defined in Definition <reference|offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
@@ -5183,6 +5192,8 @@
     <associate|nota-re-api-at-state|<tuple|F.1|49>>
     <associate|nota-runtime-code-at-state|<tuple|3.1|18>>
     <associate|note-slot|<tuple|4.4|25>>
+    <associate|offchain-local-storage|<tuple|F.3|?>>
+    <associate|offchain-persistent-storage|<tuple|F.2|?>>
     <associate|sect-babe|<tuple|4.1|25>>
     <associate|sect-blake2|<tuple|A.2|35>>
     <associate|sect-block-body|<tuple|3.3.1.4|22>>
