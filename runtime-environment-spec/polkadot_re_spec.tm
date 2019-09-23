@@ -4000,7 +4000,7 @@
   the block production is not impacted by the long-running tasks.
 
   <\definition>
-    <strong|Persistent <strong|storage>> is non-revertible and not
+    <label|offchain-persistent-storage><strong|Persistent <strong|storage>> is non-revertible and not
     fork-aware. It means that any value set by the offchain worker is
     persisted even if that block is reverted as non-canonical. The value is
     available for the worker that is re-run at the next and future blocks.
@@ -4009,7 +4009,7 @@
   </definition>
 
   <\definition>
-    <strong|Local storage> is revertible and fork-aware. It means that any
+    <label|offchain-local-storage><strong|Local storage> is revertible and fork-aware. It means that any
     value set by the offchain worker triggered at a certain block is reverted
     if that block is reverted as non-canonical. The value is NOT available
     for the worker that is re-run at the next or any future blocks.
@@ -4196,8 +4196,7 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage and a value equal to 2
-    for local storage <todo|as defined in Definition blah>.
+    value equal to 1 is used for persistent storage as defined in Definition <reference|offchain-persistent-storage> and a value equal to 2 for local storage as defined in Definition <reference|offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
@@ -4235,8 +4234,7 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage and a value equal to 2
-    for local storage.
+    value equal to 1 is used for persistent storage as defined in Definition <reference|offchain-persistent-storage> and a value equal to 2 for local storage as defined in Definition <reference|offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
@@ -4280,8 +4278,7 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage and a value equal to 2
-    for local storage.
+    value equal to 1 is used for persistent storage as defined in Definition <reference|offchain-persistent-storage> and a value equal to 2 for local storage as defined in Definition <reference|offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
