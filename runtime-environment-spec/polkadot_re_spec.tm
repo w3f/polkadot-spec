@@ -4001,22 +4001,18 @@
 
   <\definition>
     <strong|Persistent <strong|storage>> is non-revertible and not
-    fork-aware. It means that any value set by the offchain worker triggered
-    at block `N(hash1)` <todo|the notation is
-    <math|H<rsub|h><around*|(|B|)>=h<rsub|1>> i think and please refer to its
-    definition. I think also we use \Ptest\Q instead of
-    \<#2018\>test\<#2018\> or at least \<#2018\>test\<#2019\> if you don't
-    like double quote>is persisted even if that block is reverted as
-    non-canonical and is available for the worker that is re-run at block
-    `N(hash2)`. This storage can be used by offchain workers to handle forks
-    and coordinate offchain workers running on different forks.
+    fork-aware. It means that any value set by the offchain worker is
+    persisted even if that block is reverted as non-canonical. The value is
+    available for the worker that is re-run at the next and future blocks.
+    This storage can be used by offchain workers to handle forks and
+    coordinate offchain workers running on different forks.
   </definition>
 
   <\definition>
     <strong|Local storage> is revertible and fork-aware. It means that any
-    value set by the offchain worker triggered at block `N(hash1)` is
-    reverted if that block is reverted as non-canonical and is NOT available
-    for the worker that is re-run at block `N(hash2)`.
+    value set by the offchain worker triggered at a certain block is reverted
+    if that block is reverted as non-canonical. The value is NOT available
+    for the worker that is re-run at the next or any future blocks.
   </definition>
 
   <subsubsection|<verbatim|ext_is_validator>>
