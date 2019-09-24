@@ -27,7 +27,10 @@ jobs:
             wget https://julialang-s3.julialang.org/bin/linux/x64/${JULIA_VERSION_SHORT}/julia-${JULIA_VERSION_LONG}-linux-x86_64.tar.gz
             tar -xzf julia-${JULIA_VERSION_LONG}-linux-x86_64.tar.gz
             ln -s $(pwd)/julia-${JULIA_VERSION_LONG}/bin/julia /usr/local/bin/julia
-
+      - run:
+          name: pull submodules
+          command: |
+            git submodule update --init --recursive --remote
       - run:
           name: run tests
           command: |
