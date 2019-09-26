@@ -4041,17 +4041,17 @@
     at the next or any future blocks.
 
     <\definition>
-      <label|defn-http-return-value><strong|HTTP return value> is <text-dots>
+      <label|defn-http-return-value><strong|HTTP status codes> that can get
+      returned by certain the Offchain http functions.
 
       <\itemize-dot>
         <item>0: the specified request identifier is invalid.
 
         <item>10: the deadline of the started request was reached.
 
-        <item>20: an error has occured during the request, e.g. a timeout has
-        occured or the remote has closed the connection. On returning this
-        error code, the request is considered destroyed and must be
-        reconstructed again.
+        <item>20: an error has occured during the request, e.g. a timeout or
+        the remote has closed the connection. On returning this error code,
+        the request is considered destroyed and must be reconstructed again.
 
         <item>100..999: the request has finished with the given HTTP status
         code.
@@ -4427,7 +4427,7 @@
     header value.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
-    indicating if the header has been set or a value equal to 1 if otherwise.
+    indicates if the header has been set or a value equal to 1 if otherwise.
   </itemize>
 
   <subsubsection|<verbatim|ext_http_request_write_body>>
@@ -4497,7 +4497,8 @@
     <item><verbatim|ids_len>: an i32 integer indicating the size of IDs.
 
     <item><verbatim|statuses>: a pointer to the buffer where the request
-    statuses get written to.
+    statuses get written to as defined in Definition. The lenght is the same
+    as the length of <verbatim|ids>.
 
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
     as defined in Definition <reference|defn-unix-time>. Passing '0' as
