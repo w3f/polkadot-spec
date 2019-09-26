@@ -4371,8 +4371,10 @@
 
   <subsubsection|<verbatim|ext_http_request_add_header>>
 
-  Append header to the request. <todo|how does this work if the request is
-  actually sent? Could you explain it?>
+  Append header to the request. Returns an error if the request identifier is
+  invalid, <verbatim|http_response_wait> has already been called on the
+  specified request identifier, the deadline is reached or an I/O error has
+  happened (e.g. the remote has closed the connection).
 
   \;
 
