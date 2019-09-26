@@ -4034,7 +4034,7 @@
   </definition>
 
   <\definition>
-    <label|defn-offchain-local-storage><strong|Local storage> is revertible
+    <label|defn-offchain-local-storage><strong|Local storage> is revertible 
     and fork-aware. It means that any value set by the offchain worker
     triggered at a certain block is reverted if that block is reverted as
     non-canonical. The value is NOT available for the worker that is re-run
@@ -4100,7 +4100,7 @@
 
   <subsubsection|<verbatim|ext_network_state>>
 
-  Returns information about the local node's network state.
+  Returns opaque information about the local node's network state.
 
   \;
 
@@ -4109,7 +4109,7 @@
   <\verbatim>
     (func $ext_network_state
 
-    \ \ \ \ \ \ (result i32))
+    \ \ \ \ \ \ (param $written_out i32)(result i32))
   </verbatim>
 
   \ 
@@ -4117,6 +4117,9 @@
   <strong|Arguments>:
 
   <\itemize>
+    <item><verbatim|written_out>: a pointer to the 4-byte buffer where the
+    size of the opaque network state gets written to.
+
     <item><verbatim|result>: a pointer to the buffer containing the SCALE
     encoded network state. <todo|Spec the detail of the the result this
     requires a deeper look since it includes datastructures from libp2p-dev>
