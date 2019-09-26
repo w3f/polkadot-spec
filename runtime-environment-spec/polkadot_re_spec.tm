@@ -4034,7 +4034,7 @@
   </definition>
 
   <\definition>
-    <label|defn-offchain-local-storage><strong|Local storage> is revertible 
+    <label|defn-offchain-local-storage><strong|Local storage> is revertible
     and fork-aware. It means that any value set by the offchain worker
     triggered at a certain block is reverted if that block is reverted as
     non-canonical. The value is NOT available for the worker that is re-run
@@ -4453,8 +4453,8 @@
   <subsubsection|<verbatim|ext_http_response_wait>>
 
   Block and wait for the responses for given requests. Returns an array of
-  request statuses (the size is the same as number of IDs). Passing `null` as
-  deadline blocks forever.
+  request statuses (the size is the same as number of IDs). Passing `0` as
+  deadline will block indefinitely.
 
   \;
 
@@ -4481,7 +4481,8 @@
     statuses get written to.
 
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>.
+    as defined in Definition <reference|defn-unix-time>. Passing '0' as
+    deadline will block indefinitely.
   </itemize>
 
   <subsubsection|<verbatim|ext_http_response_headers>>
@@ -5221,8 +5222,6 @@
     <associate|nota-re-api-at-state|<tuple|F.1|49>>
     <associate|nota-runtime-code-at-state|<tuple|3.1|18>>
     <associate|note-slot|<tuple|4.4|25>>
-    <associate|offchain-local-storage|<tuple|F.3|?>>
-    <associate|offchain-persistent-storage|<tuple|F.2|?>>
     <associate|sect-babe|<tuple|4.1|25>>
     <associate|sect-blake2|<tuple|A.2|35>>
     <associate|sect-block-body|<tuple|3.3.1.4|22>>
