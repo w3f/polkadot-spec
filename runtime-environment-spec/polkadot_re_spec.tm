@@ -4414,8 +4414,8 @@
   <subsubsection|<verbatim|ext_http_request_write_body>>
 
   Write a chunk of request body. Writing an empty chunk finalises the
-  request. Passing `null` as deadline blocks forever. Returns a non-zero
-  value in case deadline is reached or the chunk couldn't be written.
+  request. Returns a non-zero value in case deadline is reached or the chunk
+  couldn't be written.
 
   \;
 
@@ -4444,7 +4444,8 @@
     chunk.
 
     <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>.
+    as defined in Definition <reference|defn-unix-time>. Passing '0' will
+    block indefinitely.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
     indicating if the header has been set or a non-zero value if otherwise.
@@ -4453,8 +4454,7 @@
   <subsubsection|<verbatim|ext_http_response_wait>>
 
   Block and wait for the responses for given requests. Returns an array of
-  request statuses (the size is the same as number of IDs). Passing `0` as
-  deadline will block indefinitely.
+  request statuses (the size is the same as number of IDs).
 
   \;
 
@@ -4522,8 +4522,7 @@
   bytes written or an error in case a deadline is reached or server closed
   the connection. If `0' is returned it means that the response has been
   fully consumed and the <verbatim|request_id> is now invalid. This implies
-  that response headers must be read before draining the body. Passing `null`
-  as a deadline blocks forever.
+  that response headers must be read before draining the body.
 
   \;
 
@@ -4553,7 +4552,8 @@
     buffer.
 
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>.
+    as defined in Definition <reference|defn-unix-time>. Passing '0' will
+    block indefinitely.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
     indicated a fully consumed response or a non-zero value if otherwise.
