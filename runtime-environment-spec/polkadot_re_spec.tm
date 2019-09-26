@@ -3997,22 +3997,46 @@
   enumeration/aggregation of on-chain data, etc.) which could otherwise
   require longer than the block execution time. Offchain workers have their
   own execution environment. This separation of concerns is to make sure that
-  the block production is not impacted by the long-running tasks.
+  the block production is not impacted by the long-running tasks.\ 
+
+  <\todo>
+    could we have two sentence here on how the results are going to impact
+    the blocks etc, I guess they always
+
+    should be applied as extrinsics/transactions as they might be
+    underteministic and so not reproducible by\ 
+
+    other producers or could it be otherwise?
+  </todo>
+
+  \;
+
+  \;
+
+  As Offchain workers runs on their own execution environment they have
+  access to their own separate storage. There is two different types of
+  storage is available which are defined in Definitions
+  <reference|defn-offchain-persistent-storage> and
+  <reference|defn-offchain-local-storage>.
 
   <\definition>
-    <label|offchain-persistent-storage><strong|Persistent <strong|storage>>
-    is non-revertible and not fork-aware. It means that any value set by the
-    offchain worker is persisted even if that block is reverted as
-    non-canonical. The value is available for the worker that is re-run at
-    the next and future blocks. This storage can be used by offchain workers
-    to handle forks and coordinate offchain workers running on different
-    forks.
+    <label|defn-offchain-persistent-storage><strong|Persistent
+    <strong|storage>> is non-revertible and not fork-aware. It means that any
+    value set by the offchain worker is persisted even if that block (at
+    which the worker is called) is reverted as non-canonical <todo|I would
+    define \Preverted as non-canonical\Q somewhere its meaning ins't
+    selfevident>. The value is available for the worker that is re-run at the
+    next <todo|is this next block as a child or different block with the same
+    block number? maybe you would want to make the meaning of next here as
+    explicit as possible> and future blocks. This storage can be used by
+    offchain workers to handle forks and coordinate offchain workers running
+    on different forks.
   </definition>
 
   <\definition>
-    <label|offchain-local-storage><strong|Local storage> is revertible and
-    fork-aware. It means that any value set by the offchain worker triggered
-    at a certain block is reverted if that block is reverted as
+    <label|defn-offchain-local-storage><strong|Local storage> is revertible 
+    and fork-aware. It means that any value set by the offchain worker
+    triggered at a certain block is reverted if that block is reverted as
     non-canonical. The value is NOT available for the worker that is re-run
     at the next or any future blocks.
   </definition>
@@ -4097,8 +4121,8 @@
     size of the opaque network state gets written to.
 
     <item><verbatim|result>: a pointer to the buffer containing the SCALE
-    encoded network state. It contains the <verbatim|libp2p PeerId> followed
-    by an unknown amount of <verbatim|libp2p MultiAdress>-es
+    encoded network state. <todo|Spec the detail of the the result this
+    requires a deeper look since it includes datastructures from libp2p-dev>
   </itemize>
 
   <subsubsection|<verbatim|ext_timestamp>>
@@ -4240,8 +4264,9 @@
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
     value equal to 1 is used for persistent storage as defined in Definition
-    <reference|offchain-persistent-storage> and a value equal to 2 for local
-    storage as defined in Definition <reference|offchain-local-storage>.
+    <reference|defn-offchain-persistent-storage> and a value equal to 2 for
+    local storage as defined in Definition
+    <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
@@ -4286,8 +4311,9 @@
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
     value equal to 1 is used for persistent storage as defined in Definition
-    <reference|offchain-persistent-storage> and a value equal to 2 for local
-    storage as defined in Definition <reference|offchain-local-storage>.
+    <reference|defn-offchain-persistent-storage> and a value equal to 2 for
+    local storage as defined in Definition
+    <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
@@ -4303,9 +4329,8 @@
 
   <subsubsection|<verbatim|ext_http_request_start>>
 
-  Initiates a http request given HTTP method and the URL. <verbatim|meta> is
-  a future-reserved field containing additional, SCALE encoded parameters.
-  Returns the id of newly started request.
+  Initiates a http request given HTTP method and the URL. Returns the id of
+  newly started request.
 
   \;
 
@@ -4334,7 +4359,8 @@
 
     <item><verbatim|url_len>: an i32 integer indicating the size of the url.
 
-    <item><verbatim|meta>: future-reserved, SCALE encoded parameters.
+    <item><verbatim|meta>: a future-reserved field containing additional,
+    SCALE encoded parameters.
 
     <item><verbatim|meta_len>: an i32 integer indicating the size of the
     parameters.
@@ -4345,7 +4371,8 @@
 
   <subsubsection|<verbatim|ext_http_request_add_header>>
 
-  Append header to the request.
+  Append header to the request. <todo|how does this work if the request is
+  actually sent? Could you explain it?>
 
   \;
 
@@ -5171,6 +5198,8 @@
     <associate|defn-node-subvalue|<tuple|2.11|15>>
     <associate|defn-node-value|<tuple|2.8|13>>
     <associate|defn-nodetype|<tuple|2.4|12>>
+    <associate|defn-offchain-local-storage|<tuple|F.3|?>>
+    <associate|defn-offchain-persistent-storage|<tuple|F.2|?>>
     <associate|defn-path-graph|<tuple|1.2|8>>
     <associate|defn-pruned-tree|<tuple|1.12|9>>
     <associate|defn-radix-tree|<tuple|1.3|8>>
