@@ -32,9 +32,8 @@ pub fn test_http() {
     );
     */
 
-    let mut statuses = [0; 8]; // 4-bytes per id
-    api.rtm_ext_http_response_wait(&[req_id1, req_id2], &mut statuses, 0); // 0 => Block forever
-                                                                           //println!("STAT: {:?}", statuses);
+    let mut _statuses = [0; 8]; // 4-bytes per id
+    //api.rtm_ext_http_response_wait(&[req_id1, req_id2], &mut statuses, 0); // 0 => Block forever
 
     // TODO...
 }
@@ -44,8 +43,6 @@ pub fn test_network_state() {
 
     let mut written_out = 0;
     let _res = api.rtm_ext_network_state(&mut written_out);
-    //println!("WRITTEN: {:?}", written_out);
-    //println!("RES: {:?}", res);
 
     // TODO...
 }
