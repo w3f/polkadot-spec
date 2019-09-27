@@ -1,5 +1,5 @@
 @testset "Runtime Environment Tests" begin
     cd("test/testers/rust-tester/")
-    @test run(`cargo run pdre-api`)
-    true
+    run(`cargo run pdre-api`)
+    @test true
 end
