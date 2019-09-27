@@ -4023,14 +4023,12 @@
     <label|defn-offchain-persistent-storage><strong|Persistent
     <strong|storage>> is non-revertible and not fork-aware. It means that any
     value set by the offchain worker is persisted even if that block (at
-    which the worker is called) is reverted as non-canonical <todo|I would
-    define \Preverted as non-canonical\Q somewhere its meaning ins't
-    selfevident>. The value is available for the worker that is re-run at the
-    next <todo|is this next block as a child or different block with the same
-    block number? maybe you would want to make the meaning of next here as
-    explicit as possible> and future blocks. This storage can be used by
-    offchain workers to handle forks and coordinate offchain workers running
-    on different forks.
+    which the worker is called) is reverted as non-canonical (meaning the
+    block was surpassed by a longer chain). The value is available for the
+    worker that is re-run at the new (different block with the same block
+    number) and future blocks. This storage can be used by offchain workers
+    to handle forks and coordinate offchain workers running on different
+    forks.
   </definition>
 
   <\definition>
