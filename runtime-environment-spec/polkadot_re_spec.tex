@@ -1,6 +1,6 @@
 \documentclass{book}
 \usepackage[english]{babel}
-\usepackage{geometry,amsmath,amssymb,calc,ifthen,alltt,capt-of,makeidx}
+\usepackage{geometry,amsmath,amssymb,hyperref,calc,ifthen,alltt,theorem,capt-of,makeidx}
 \makeindex
 \geometry{letterpaper}
 
@@ -49,6 +49,7 @@
       \captionof{#3}{#5}
     \end{center}
   \end{minipage}}
+{\theorembodyfont{\rmfamily}\newtheorem{warning}{Warning}}
 %%%%%%%%%% End TeXmacs macros
 
 \providecommand{\cdummy}{{\cdot}}
@@ -77,7 +78,7 @@
   {\Large Protocol Specification}
 }
 
-\date{September 14, 2019}
+\date{September 30, 2019}
 
 \maketitle
 
@@ -221,6 +222,15 @@ sparse.
   \rightarrow B_2$ we say $B_2$ is the {\tmstrong{parent}} of $B_1$ and we
   indicate it by
   \[ B_2 \assign P (B_1) \]
+\end{definition}
+
+\begin{definition}
+  \label{defn-unix-time}By {\tmstrong{UNIX time}}, we refer to the unsigned,
+  little-endian encoded 64-bit integer which stores the number of
+  {\tmstrong{milliseconds}} that have elapsed since the Unix epoch, that is
+  the time 00:00:00 UTC on 1 January 1970, minus leap seconds. Leap seconds
+  are ignored, and every day is treated as if it contained exactly 86400
+  seconds.
 \end{definition}
 
 \subsection{Block Tree}
@@ -880,7 +890,7 @@ Extrinsic submission is made by sending a {\tmem{Transactions}} network
 message. The structure of this message is specified in Section
 \ref{sect-msg-transactions}. Upon receiving a Transactions message, Polkadot
 RE decodes the transaction and calls \tmverbatim{validate\_trasaction} runtime
-function, defined in Section \ref{sect-validate-transaction}, to check the
+function, defined in Section \ref{sect-rte-validate-transaction}, to check the
 validity of the extrinsic. If \tmverbatim{validate\_transaction} considers the
 submitted extrinsics as a valid one, Polkadot RE makes the extrinsics
 available for the consensus engine for inclusion in future blocks.
@@ -1113,7 +1123,7 @@ Formally:
   Where each $E_i \in \mathbb{B}$ is a SCALE encoded extrinsic.
 \end{definition}
 
-\subsection{Block Submission}
+\subsection{Block Submission}\label{sect-block-submission}
 
 Block validation is the process by which the client asserts that a block is
 fit to be added to the blockchain. This means that the block is consistent
@@ -1124,7 +1134,7 @@ Blocks can be handed to the Polkadot RE both from the network stack for
 example by means of Block response network message (see Section
 \ref{sect-msg-block-response} ) and from the consensus engine.
 
-\subsection{Block Validation}
+\subsection{Block Validation}\label{sect-block-validation}
 
 Both the Runtime and the Polkadot RE need to work together to assure block
 validity. A block is deemed valid if the block author had the authorship right
@@ -1172,8 +1182,185 @@ Definition \ref{defn-block-tree}. {\tmname{Verify-Authorship-Right}} is part
 of the block production consensus protocol and is described in Algorithm
 \ref{algo-verify-authorship-right}.
 
-\section{Network Interactions}\label{sect-network-interactions}
+\chapter{Network
+Protocol\label{sect-network-interactions}}\label{network-protocol}
 
+\begin{warning}
+  Polkadot network protocol is work-in-progress. The API specification and
+  usage may change in future.
+\end{warning}
+
+This chapter offers a high-level description of the network protocol based on
+{\cite{parity_technologies_substrate_2019}}. Polkadot network protocol relies
+on {\tmem{libp2p}}. Specifically, the following libp2p modules are being used
+in the Polkadot Networking protocol:
+\begin{itemize}
+  \item {\tmsamp{mplex.}}
+  
+  \item {\tmsamp{yamux}}
+  
+  \item {\tmsamp{secio}}
+  
+  \item {\tmsamp{noise}}
+  
+  \item {\tmsamp{kad}} (kademlia)
+  
+  \item {\tmsamp{identity}}
+  
+  \item {\tmsamp{ping}}
+\end{itemize}
+For more detailed specification of these modules and the Peer-to-Peer layer
+see libp2p specification document {\cite{protocol_labs_libp2p_2019}}.
+
+\section{Node Identities and Addresses}
+
+Similar to other decentralized networks, each Polkadot RE node possesses a
+network private key and a network public key representing an ED25519 key pair
+{\cite{liusvaara_edwards-curve_2017}}.
+
+{\todo{SPEC: local node's keypair must be passed as part of the network
+configuration.}}
+
+\begin{definition}
+  {\tmstrong{Peer Identity}}, formally noted by $P_{\tmop{id}}$ is derived
+  from the node's public key as follows:
+  
+  {\todo{SPEC: How to derive $P_{\tmop{id}}$}} \ and uniquely identifies a
+  node on the network.
+\end{definition}
+
+Because the $P_{\tmop{id}}$ is derived from the node's public key, running two
+or more instances of Polkadot network using the same network key is contrary
+to the Polkadot protocol.
+
+All network communications between nodes on the network use encryption derived
+from both sides' keys.
+
+{\todo{SPEC: p2p key derivation}}
+
+\section{Discovery Mechanisms}
+
+In order for a Polkadot node to join a peer-to-peer network, it has to know a
+list of Polkadot nodes that already take part in the network. This process of
+building such a list is referred to as {\tmem{Discovery}}. Each element of
+this list is a pair consisting of the peer's node identities and their
+addresses.
+
+{\todo{SPEC: Node address}}
+
+Polkadot discovery is done through the following mechanisms:
+\begin{itemize}
+  \item {\tmem{Bootstrap nodes}}: These are hard-coded node identities and
+  addresses passed alongside with the network configuration.
+  
+  \item {\tmem{mDNS}}, performing a UDP broadcast on the local network. Nodes
+  that listen may respond with their identity as described in the mDNS section
+  of {\cite{protocol_labs_libp2p_2019}}. (Note: mDNS can be disabled in the
+  network configuration.)
+  
+  \item {\tmem{Kademlia random walk}}. Once connected to a peer node, a
+  Polkadot node can perform a random Kademlia `FIND\_NODE` requests for the
+  nodes {\todo{which nodes?}} to respond by propagating their view of the
+  network.
+  
+  \ 
+\end{itemize}
+
+\section{Transport Protocol}
+
+A Polkadot node can establish a connection with nodes in its peer list. All
+the connections must always use encryption and multiplexing. While some nodes'
+addresses (eg. addresses using `/quic`) already imply the encryption and/or
+multiplexing to use, for others the ``multistream-select'' protocol is used in
+order to negotiate an encryption layer and/or a multiplexing layer.
+
+The following transport protocol is supported by a Polkadot node:
+\begin{itemize}
+  \item {\tmem{TCP/IP}} for addresses of the form `/ip4/1.2.3.4/tcp/5`. Once
+  the TCP connection is open, an encryption and a multiplexing layers are
+  negotiated on top.
+  
+  \item {\tmem{WebSockets}} for addresses of the form `/ip4/1.2.3.4/tcp/5/ws`.
+  A TC/IP connection is open and the WebSockets protocol is negotiated on top.
+  Communications then happen inside WebSockets data frames. Encryption and
+  multiplexing are additionally negotiated again inside this channel.
+  
+  \item DNS for addresses of the form `/dns4/example.com/tcp/5` or
+  `/dns4/example.com/tcp/5/ws`. A node's address can contain a domain name.
+\end{itemize}
+
+\subsection{Encryption}
+
+The following encryption protocols from libp2p are supported by Polkadot
+protocol:
+
+\item {\tmstrong{Secio}}: A TLS-1.2-like protocol but without certificates
+{\cite{protocol_labs_libp2p_2019}}. Support for secio will likely to be
+deprecated in the future.
+
+\item {\tmstrong{Noise}}: Noise is a framework for crypto protocols based on
+the Diffie-Hellman key agreement {\cite{perrin_noise_2018}}. Support for noise
+is experimental and details may change in the future.
+
+\subsection{Multiplexing}
+
+The following multiplexing protocols are supported:
+\begin{itemize}
+  \item {\tmstrong{Mplex}}: Support for mplex will be deprecated in the
+  future.
+  
+  \item {\tmstrong{Yamux}}.
+\end{itemize}
+
+\section{Substreams}
+
+Once a connection has been established between two nodes and is able to use
+multiplexing, substreams can be opened. When a substream is open, the
+{\tmem{multistream-select}} protocol is used to negotiate which protocol to
+use on that given substream.
+
+\subsection{Periodic Ephemeral Substreams}
+
+A Polkadot RE node should open several substreams. In particular, it should
+periodically open ephemeral substreams in order to:
+\begin{itemize}
+  \item ping the remote peer and check whether the connection is still alive.
+  Failure for the remote peer to reply leads to a disconnection. This uses the
+  libp2p {\tmem{ping}} protocol specified in
+  {\cite{protocol_labs_libp2p_2019}}.
+  
+  \item ask information from the remote. This is the {\tmem{identity}}
+  protocol specified in {\cite{protocol_labs_libp2p_2019}}.
+  
+  \item send Kademlia random walk queries. Each Kademlia query is done in a
+  new separate substreams. This uses the libp2p {\tmem{Kademlia}} protocol
+  specified in {\cite{protocol_labs_libp2p_2019}}.
+\end{itemize}
+
+\subsection{Polkadot Communication Substream}
+
+For the purposes of communicating Polkadot messages, the dailer of the
+connection opens a unique substream. Optionally, the node can keep a unique
+substream alive for this purpose. The name of the protocol negotiated is based
+on the {\tmem{protocol ID}} passed as part of the network configuration. This
+protocol ID should be unique for each chain and prevents nodes from different
+chains to connect to each other.
+
+The structure of SCALE encoded messages sent over the unique Polkadot
+communication substream is described in Appendix \ref{sect-network-messages}.
+
+Once the substream is open, the first step is an exchange of a {\tmem{status}}
+message from both sides described in Section \ref{sect-net-msg-status}.
+
+Communications within this substream include:
+\begin{itemize}
+  \item Syncing. Blocks are announced and requested from other nodes.
+  
+  \item Gossiping. Used by various subprotocols such as GRANDPA.
+  
+  \item Polkadot Network Specialization: {\todo{spec this protocol for
+  polkadot}}.
+\end{itemize}
 \chapter{Consensus}\label{chap-consensu}
 
 Consensus in Polkadot RE is achieved during the execution of two different
@@ -1454,7 +1641,7 @@ Algorithm \ref{algo-block-production-lottery}.
 
 \
 
-\subsection{Verifying Authorship Right}
+\subsection{Verifying Authorship Right}\label{sect-verifying-authorship}
 
 \begin{definition}
   Seal $D_s$ {\todo{define seal}}
@@ -1561,7 +1748,7 @@ $n$: Epoch index
 
 AuthorID: The public session key of the block producer
 
-\subsection{Blocks Building Process}
+\subsection{Blocks Building Process}\label{sect-block-building}
 
 The blocks building process is triggered by Algorithm
 \ref{algo-block-production} of the consensus engine which runs Alogrithm
@@ -1621,15 +1808,14 @@ $\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
 {\tmname{Block-Is-Full}} and {\tmname{Next-Ready-Extrinsic}} are defined in
 Definition {\todo{Define these entities}}
 
-\section{Finality}\label{sect-finality}\label{sect-grandpa}
+\section{Finality}\label{sect-finality}
 
-Polkadot RE uses GRANDPA Finality protocol
-{\cite{alistair_stewart_grandpa:_2019}} to finalize blocks. Finality is
-obtained by consecutive rounds of voting by validator nodes. Validators
-execute GRANDPA finality process in parallel to Block Production as an
-independent service. In this section, we describe the different functions that
-GRANDPA service is supposed to perform to successfully participate in the
-block finalization process.
+Polkadot RE uses GRANDPA Finality protocol {\cite{stewart_grandpa:_2019}} to
+finalize blocks. Finality is obtained by consecutive rounds of voting by
+validator nodes. Validators execute GRANDPA finality process in parallel to
+Block Production as an independent service. In this section, we describe the
+different functions that GRANDPA service is supposed to perform to
+successfully participate in the block finalization process.
 
 \subsection{Preliminaries}
 
@@ -1681,7 +1867,7 @@ $B$. First a vote is defined as:
 \end{definition}
 
 The GRANDPA protocol dictates how an honest voter should vote in each
-sub-round, which is described in Algorithm \ref{alg-grandpa-round}. After
+sub-round, which is described in Algorithm \ref{algo-grandpa-round}. After
 defining what constitues a vote in GRANDPA, we define how GRANDPA counts
 votes.
 
@@ -1786,8 +1972,8 @@ B_v^{r, \tmop{pv}}$ where $|V^{r, \tmop{pc}}_{\tmop{obs} (v)_{\nosymbol}} (B')
 
 Voting is done by means of broadcasting voting messages to the network.
 Validators inform their peers about the block finalized in round $r$ by
-broadcasting a finalization message (see Algorithm \ref{alg-grandpa-round} for
-more details). These messages are specified in this section.
+broadcasting a finalization message (see Algorithm \ref{algo-grandpa-round}
+for more details). These messages are specified in this section.
 
 \begin{definition}
   A vote casted by voter $v$ should be broadcasted as a {\tmstrong{message
@@ -2940,6 +3126,83 @@ signature by the provided public key.
 
 \subsection{Offchain Worker }
 
+The Offchain Workers allow the execution of long-running and possibly
+non-deterministic tasks (e.g. web requests, encryption/decryption and signing
+of data, random number generation, CPU-intensive computations,
+enumeration/aggregation of on-chain data, etc.) which could otherwise require
+longer than the block execution time. Offchain Workers have their own
+execution environment. This separation of concerns is to make sure that the
+block production is not impacted by the long-running tasks.
+
+{\todo{Describe how the results are going to impact the blocks etc}}
+
+\
+
+As Offchain Workers run on their own execution environment they have access
+to their separate storage. There are two different types of storage available
+as defined in Definitions \ref{defn-offchain-persistent-storage} and
+\ref{defn-offchain-local-storage}.
+
+\begin{definition}
+  \label{defn-offchain-persistent-storage}{\tmstrong{Persistent
+  {\tmstrong{storage}}}} is non-revertible and not fork-aware. It means that
+  any value set by the offchain worker is persisted even if that block (at
+  which the worker is called) is reverted as non-canonical (meaning that the
+  block was surpassed by a longer chain). The value is available for the
+  worker that is re-run at the new (different block with the same block
+  number) and future blocks. This storage can be used by offchain workers to
+  handle forks and coordinate offchain workers running on different forks.
+\end{definition}
+
+\begin{definition}
+  \label{defn-offchain-local-storage}{\tmstrong{Local storage}} is revertible
+  and fork-aware. It means that any value set by the offchain worker triggered
+  at a certain block is reverted if that block is reverted as non-canonical.
+  The value is NOT available for the worker that is re-run at the next or any
+  future blocks.
+  
+  \begin{definition}
+    \label{defn-http-return-value}{\tmstrong{HTTP status codes}} that can get
+    returned by certain Offchain HTTP functions.
+    \begin{itemizedot}
+      \item {\tmstrong{0}}: the specified request identifier is invalid.
+      
+      \item {\tmstrong{10}}: the deadline for the started request was reached.
+      
+      \item {\tmstrong{20}}: an error has occurred during the request, e.g. a
+      timeout or the remote server has closed the connection. On returning
+      this error code, the request is considered destroyed and must be
+      reconstructed again.
+      
+      \item {\tmstrong{100}}..{\tmstrong{999}}: the request has finished with
+      the given HTTP status code.
+    \end{itemizedot}
+  \end{definition}
+  
+  \ 
+\end{definition}
+
+\subsubsection{\tmverbatim{ext\_is\_validator}}
+
+Returns if the local node is a potential validator. Even if this function
+returns 1, it does not mean that any keys are configured and that the
+validator is registered in the chain.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_is_validator
+      (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{result}: \ an i32 in\tmverbatim{}teger which is equal to 1
+  if the local node is a potential validator or a equal to 0 if it is not.
+\end{itemize}
+
 \subsubsection{\tmverbatim{ext\_submit\_transaction}}
 
 Given an extrinsic as a SCALE encoded byte array, the system decodes the byte
@@ -2963,9 +3226,400 @@ included in the next produced block.
   \item \tmverbatim{len}: an \tmverbatim{i32} integer indicating the size of
   the encoded extrinsic.
   
-  \item \tmverbatim{result}: \ an in\tmverbatim{}teger value equal to 0
+  \item \tmverbatim{result}: an in\tmverbatim{}teger value equal to 0
   indicates that the extrinsic is successfully added to the pool or a nonzero
   value otherwise.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_network\_state}}
+
+Returns opaque information about the local node's network state.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_network_state
+      (param $written_out i32)(result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{written\_out}: a pointer to the 4-byte buffer where the
+  size of the opaque network state gets written to.
+  
+  \item \tmverbatim{result}: a pointer to the buffer containing the SCALE
+  encoded network state. {\todo{Spec the detail of the the result this
+  requires a deeper look since it includes datastructures from libp2p-dev}}
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_timestamp}}
+
+Returns current timestamp.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_timestamp
+      (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{result}: an i64 integer indicating the current UNIX
+  timestamp as defined in Definition \ref{defn-unix-time}.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_sleep\_until}}
+
+Pause the execution until `deadline` is reached.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_sleep_until
+      (param $deadline i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{deadline}: an i64 integer specifying the UNIX timestamp as
+  defined in Definition \ref{defn-unix-time}.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_random\_seed}}
+
+Generates a random seed. This is a truly random non deterministic seed
+generated by the host environment.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_random_seed
+      (param $seed_data i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{seed\_data}: a memory address pointing at the beginning of
+  a 32-byte byte array containing the generated seed.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_local\_storage\_set}}
+
+Sets a value in the local storage. This storage is not part of the consensus,
+it's only accessible by the offchain worker tasks running on the same machine
+and is persisted between runs.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_local_storage_set
+      (param $kind i32) (param $key i32) (param $key_len i32)
+      (param $value i32) (param $value_len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{kind}: an i32 integer indicating the storage kind. A value
+  equal to 1 is used for a persistent storage as defined in Definition
+  \ref{defn-offchain-persistent-storage} and a value equal to 2 for local
+  storage as defined in Definition \ref{defn-offchain-local-storage}.
+  
+  \item \tmverbatim{key}: a pointer to the buffer containing the key.
+  
+  \item \tmverbatim{key\_len}: an i32 integer indicating the size of the key.
+  
+  \item \tmverbatim{value}: a pointer to the buffer containg the value.
+  
+  \item \tmverbatim{value\_len}: an i32 integer indicating the size of the
+  value.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_local\_storage\_compare\_and\_set}}
+
+Sets a new value in the local storage if the condition matches the current
+value.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_local_storage_compare_and_set 
+      (param $kind i32) (param $key i32) (param $key_len i32)
+      (param $old_value i32) (param $old_value_len) (param $new_value i32)
+      (param $new_value_len) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{kind}: an i32 integer indicating the storage kind. A value
+  equal to 1 is used for a persistent storage as defined in Definition
+  \ref{defn-offchain-persistent-storage} and a value equal to 2 for local
+  storage as defined in Definition \ref{defn-offchain-local-storage}.
+  
+  \item \tmverbatim{key}: a pointer to the buffer containing the key.
+  
+  \item \tmverbatim{key\_len}: an i32 integer indicating the size of the key.
+  
+  \item \tmverbatim{old\_value}: a pointer to the buffer containing the
+  current value.
+  
+  \item \tmverbatim{old\_value\_len}: an i32 integer indicating the size of
+  the current value.
+  
+  \item \tmverbatim{new\_value}: a pointer to the buffer containing the new
+  value.
+  
+  \item \tmverbatim{new\_value\_len}: an i32 integer indicating the size of
+  the new value.
+  
+  \item \tmverbatim{result}: an i32 integer equal to 0 if the new value has
+  been set or a value equal to 1 if otherwise.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_local\_storage\_get}}
+
+Gets a value from the local storage.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_local_storage_set
+      (param $kind i32) (param $key i32) (param $key_len i32)
+      (param $value_len i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{kind}: an i32 integer indicating the storage kind. A value
+  equal to 1 is used for a persistent storage as defined in Definition
+  \ref{defn-offchain-persistent-storage} and a value equal to 2 for local
+  storage as defined in Definition \ref{defn-offchain-local-storage}.
+  
+  \item \tmverbatim{key}: a pointer to the buffer containing the key.
+  
+  \item \tmverbatim{key\_len}: an i32 integer indicating the size of the key.
+  
+  \item \tmverbatim{value\_len}: an i32 integer indicating the size of the
+  value.
+  
+  \item \tmverbatim{result}: a pointer to the buffer in which the function
+  allocates and stores the value corresponding to the given key if such an
+  entry exist; otherwise it is equal to 0.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_http\_request\_start}}
+
+Initiates a http request given by the HTTP method and the URL. Returns the id
+of a newly started request.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_http_request_start
+      (param $method i32) (param $method_len i32) (param $url i32)
+      (param $url_len i32) (param $meta i32) (param $meta_len i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{method}: a pointer to the buffer containing the key.
+  
+  \item \tmverbatim{method\_len}: an i32 integer indicating the size of the
+  method.
+  
+  \item \tmverbatim{url}: a pointer to the buffer containing the url.
+  
+  \item \tmverbatim{url\_len}: an i32 integer indicating the size of the url.
+  
+  \item \tmverbatim{meta}: a future-reserved field containing additional,
+  SCALE encoded parameters.
+  
+  \item \tmverbatim{meta\_len}: an i32 integer indicating the size of the
+  parameters.
+  
+  \item \tmverbatim{result}: an i32 integer indicating the ID of the newly
+  started request.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_http\_request\_add\_header}}
+
+Append header to the request. Returns an error if the request identifier is
+invalid, \tmverbatim{http\_response\_wait} has already been called on the
+specified request identifier, the deadline is reached or an I/O error has
+happened (e.g. the remote has closed the connection).
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_http_request_add_header
+      (param $request_id i32) (param $name i32) (param $name_len i32)
+      (param $value i32) (param $value_len i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{request\_id}: an i32 integer indicating the ID of the
+  started request.
+  
+  \item \tmverbatim{name}: a pointer to the buffer containing the header name.
+  
+  \item \tmverbatim{name\_len}: an i32 integer indicating the size of the
+  header name.
+  
+  \item \tmverbatim{value}: a pointer to the buffer containing the header
+  value.
+  
+  \item \tmverbatim{value\_len}: an i32 integer indicating the size of the
+  header value.
+  
+  \item \tmverbatim{result}: an i32 integer where the value equal to 0
+  indicates if the header has been set or a value equal to 1 if otherwise.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_http\_request\_write\_body}}
+
+Writes a chunk of the request body. Writing an empty chunk finalises the
+request. Returns a non-zero value in case the deadline is reached or the chunk
+could not be written.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_http_request_write_body
+      (param $request_id i32) (param $chunk i32) (param $chunk_len i32)
+      (param $deadline i64) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{request\_id}: an i32 integer indicating the ID of the
+  started request.
+  
+  \item \tmverbatim{chunk}: a pointer to the buffer containing the chunk.
+  
+  \item \tmverbatim{chunk\_len}: an i32 integer indicating the size of the
+  chunk.
+  
+  \item \tmverbatim{deadline}: an i64 integer specifying the UNIX timestamp as
+  defined in Definition \ref{defn-unix-time}. Passing '0' will block
+  indefinitely.
+  
+  \item \tmverbatim{result}: an i32 integer where the value equal to 0
+  indicates if the header has been set or a non-zero value if otherwise.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_http\_response\_wait}}
+
+Blocks and waits for the responses for given requests. Returns an array of
+request statuses (the size is the same as number of IDs).
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_http_response_wait
+      (param $ids i32) (param $ids_len i32) (param $statuses i32)
+      (param $deadline i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{ids}: a pointer to the buffer containing the started IDs.
+  
+  \item \tmverbatim{ids\_len}: an i32 integer indicating the size of IDs.
+  
+  \item \tmverbatim{statuses}: a pointer to the buffer where the request
+  statuses get written to as defined in Definition
+  \ref{defn-http-return-value}. The lenght is the same as the length of
+  \tmverbatim{ids}.
+  
+  \item \tmverbatim{deadline}: an i64 integer indicating the UNIX timestamp as
+  defined in Definition \ref{defn-unix-time}. Passing '0' as deadline will
+  block indefinitely.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_http\_response\_headers}}
+
+Read all response headers. Returns a vector of key/value pairs. Response
+headers must be read before the response body.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_http_response_headers
+      (param $request_id i32) (param $written_out i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{request\_id}: an i32 integer indicating the ID of the
+  started request.
+  
+  \item \tmverbatim{written\_out}: a pointer to the buffer where the size of
+  the response headers gets written to.
+  
+  \item \tmverbatim{result}: a pointer to the buffer containing the response
+  headers.
+\end{itemize}
+
+\subsubsection{\tmverbatim{ext\_http\_response\_read\_body}}
+
+Reads a chunk of body response to the given buffer. Returns the number of
+bytes written or an error in case a deadline is reached or the server closed
+the connection. If `0' is returned it means that the response has been fully
+consumed and the \tmverbatim{request\_id} is now invalid. This implies that
+response headers must be read before draining the body.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_http_response_read_body
+      (param $request_id i32) (param $buffer i32) (param $buffer_len)
+      (param $deadline i64) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{request\_id}: an i32 integer indicating the ID of the
+  started request.
+  
+  \item \tmverbatim{buffer}: a pointer to the buffer where the body gets
+  written to.
+  
+  \item \tmverbatim{buffer\_len}: an i32 integer indicating the size of the
+  buffer.
+  
+  \item \tmverbatim{deadline}: an i64 integer indicating the UNIX timestamp as
+  defined in Definition \ref{defn-unix-time}. Passing '0' will block
+  indefinitely.
+  
+  \item \tmverbatim{result}: an i32 integer where the value equal to 0
+  indicateds a fully consumed response or a non-zero value if otherwise.
 \end{itemize}
 
 \subsection{Sandboxing}
@@ -3175,7 +3829,7 @@ An auxilarry function which returns hash and encoding length of an extrinsics.
 Pair of Blake2Hash of the blob as element of $\mathbb{B}_{32}$ and its length
 as 64 bit integer.
 
-\subsection{\tmverbatim{BabeApi\_epoch}}\label{sect-rte-validate-transaction}
+\subsection{\tmverbatim{BabeApi\_epoch}}\label{sect-rte-babeapi-epoch}
 
 This entry is called to obtain the current configuration of BABE consensus
 protocol.
@@ -3295,28 +3949,46 @@ will still be considered for including in blocks that are authored on the
 current node, but will never be sent to other peers.
 
 \begin{thebibliography}{DGKR18}
-  \bibitem[Ali19]{alistair_stewart_grandpa:_2019}Alistair Stewart.
-  {\newblock}GRANDPA: A Byzantine Finality Gadgets, 2019.
-  
   \bibitem[Col19]{collet_extremely_2019}Yann Collet. {\newblock}Extremely fast
-  non-cryptographic hash algorithm. {\newblock}Technical report, -,
-  http://cyan4973.github.io/xxHash/, 2019.
+  non-cryptographic hash algorithm. {\newblock}Technical Report, -,
+  \url{http://cyan4973.github.io/xxHash/}, 2019.{\newblock}
   
   \bibitem[DGKR18]{david_ouroboros_2018}Bernardo David, Peter Ga{\v z}i,
-  Aggelos Kiayias, and Alexander Russell. {\newblock}Ouroboros praos: An
+  Aggelos Kiayias, and  Alexander Russell. {\newblock}Ouroboros praos: An
   adaptively-secure, semi-synchronous proof-of-stake blockchain. {\newblock}In
   \tmtextit{Annual International Conference on the Theory and Applications of
-  Cryptographic Techniques}, pages 66--98. Springer, 2018.
+  Cryptographic Techniques},  pages  66--98. Springer, 2018.{\newblock}
   
   \bibitem[Gro19]{w3f_research_group_blind_2019}W3F~Research Group.
   {\newblock}Blind Assignment for Blockchain Extension. {\newblock}Technical
-  Specification, Web 3.0 Foundation,
-  http://research.web3.foundation/en/latest/polkadot/BABE/Babe/, 2019.
+  {\keepcase{Specification}}, Web 3.0 Foundation,
+  \url{http://research.web3.foundation/en/latest/polkadot/BABE/Babe/},
+  2019.{\newblock}
   
-  \bibitem[SA15]{saarinen_blake2_2015}Markku~Juhani Saarinen and Jean-Philippe
-  Aumasson. {\newblock}The BLAKE2 cryptographic hash and message
-  authentication code (MAC). {\newblock}RFC 7693,
-  https://tools.ietf.org/html/rfc7693, 2015.
+  \bibitem[lab19]{protocol_labs_libp2p_2019}Protocol labs. {\newblock}Libp2p
+  Specification. {\newblock}Technical Report, Protocol labs,
+  \url{https://github.com/libp2p/specs}, 2019.{\newblock}
+  
+  \bibitem[LJ17]{liusvaara_edwards-curve_2017}Ilari Liusvaara  and  Simon
+  Josefsson. {\newblock}Edwards-Curve Digital Signature Algorithm (EdDSA).
+  {\newblock}2017.{\newblock}
+  
+  \bibitem[Per18]{perrin_noise_2018}Trevor Perrin. {\newblock}The Noise
+  Protocol Framework. {\newblock}Technical Report,
+  \url{https://noiseprotocol.org/noise.html}, 2018.{\newblock}
+  
+  \bibitem[SA15]{saarinen_blake2_2015}Markku~Juhani Saarinen  and 
+  Jean-Philippe Aumasson. {\newblock}The BLAKE2 cryptographic hash and message
+  authentication code (MAC). {\newblock}{\keepcase{RFC}} 7693, -,
+  \url{https://tools.ietf.org/html/rfc7693}, 2015.{\newblock}
+  
+  \bibitem[Ste19]{stewart_grandpa:_2019}Alistair Stewart. {\newblock}GRANDPA:
+  A Byzantine Finality Gadgets. {\newblock}2019.{\newblock}
+  
+  \bibitem[Tec19]{parity_technologies_substrate_2019}Parity Technologies.
+  {\newblock}Substrate Reference Documentation. {\newblock}Rust
+  {\keepcase{Doc}}, Parity Technologies,
+  \url{https://substrate.dev/rustdocs/}, 2019.{\newblock}
 \end{thebibliography}
 
 \printindex
