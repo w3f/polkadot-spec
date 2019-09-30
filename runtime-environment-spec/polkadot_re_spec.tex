@@ -77,7 +77,7 @@
   {\Large Protocol Specification}
 }
 
-\date{August 28, 2019}
+\date{September 14, 2019}
 
 \maketitle
 
@@ -863,7 +863,7 @@ bytes are set to zero.
 
 The block body consists of an array of extrinsics. Nonetheless, Polkadot RE
 does not specify or limit the internals of each extrinsics. From Polkadot RE
-point of view, each extrinsics is simply a SCALE encoded byte array (see
+point of view, each extrinsics is simply a SCALE-encoded byte array (see
 Definition \ref{defn-scale-byte-array}).
 
 \subsection{Preliminaries}
@@ -878,14 +878,12 @@ Definition \ref{defn-scale-byte-array}).
 
 Extrinsic submission is made by sending a {\tmem{Transactions}} network
 message. The structure of this message is specified in Section
-\ref{sect-msg-transactions}.
-
-Upon receiving a Transactions message, Polkadot RE decodes the transaction and
-calls \tmverbatim{validate\_trasaction} runtime function, defined in Section
-\ref{sect-validate-transaction}, to check the validity of the extrinsic. If
-\tmverbatim{validate\_transaction} considers the submitted extrinsics as a
-valid one, Polkadot RE makes the extrinsics available for the consensus engine
-for inclusion in future blocks.
+\ref{sect-msg-transactions}. Upon receiving a Transactions message, Polkadot
+RE decodes the transaction and calls \tmverbatim{validate\_trasaction} runtime
+function, defined in Section \ref{sect-validate-transaction}, to check the
+validity of the extrinsic. If \tmverbatim{validate\_transaction} considers the
+submitted extrinsics as a valid one, Polkadot RE makes the extrinsics
+available for the consensus engine for inclusion in future blocks.
 
 \subsection{Transaction Queue}
 
@@ -893,8 +891,8 @@ A Block producer node should listen to all transaction
 messages{\tmem{{\index{Transaction Message}}}}. This is because the
 transactions are submitted to the node through the {\tmem{transactions}}
 network message specified in Section \ref{sect-msg-transactions}. Upon
-receiving a transactions message, Polkadot RE separate the submitted
-transactions in the transactions message into individual extrinsics and pass
+receiving a transactions message, Polkadot RE separates the submitted
+transactions in the transactions message into individual extrinsics and passes
 them to the Runtime by executing Algorithm \ref{algo-validate-transactions} to
 validate and store them for inclusion into future blocks. To that aim,
 Polkodot RE should keep a {\tmem{transaction pool{\index{transaction pool}}}}
@@ -962,16 +960,16 @@ In which
   \ref{defn-longest-chain}.
   
   \item \tmverbatim{TaggedTransactionQueue\_validate\_transaction} is a
-  runtime entry specified in Section \ref{sect-rte-validate-transaction} and
+  Runtime entry specified in Section \ref{sect-rte-validate-transaction} and
   Requires(R), Priority(R) and Propagate(R) refer to the corresponding fields
-  in the tuple returns by the entry when it deems that $T$ is valid.
+  in the tuple returned by the entry when it deems that $T$ is valid.
   
   \item {\tmname{Provided-Tags}}(T) is the list of tags that transaction $T$
-  provides. Polkadot RE needs to keep track of tags which transaction $T$
+  provides. Polkadot RE needs to keep track of tags that transaction $T$
   provides as well as requires after validating it.
   
   \item {\tmname{Insert-At(}}$\tmop{TQ}, T, \tmop{Requires} (R),
-  \tmop{Priority} (R)$) places $T$ into $\tmop{TQ}$ approperiatly such that
+  \tmop{Priority} (R)$) places $T$ into $\tmop{TQ}$ approperietly such that
   the transactions providing the tags which $T$ requires or have higher
   priority than $T$ are ahead of $T$.
   
@@ -1051,9 +1049,9 @@ efficiency of the light clients. It is defined formally as follows:
 
 \begin{definition}
   \label{defn-block-header-hash}The {\tmstrong{Block Header Hash of Block
-  $B$}}, {\tmstrong{$H_h (b)$}}, is the hash of the header of block $B$
+  $B$}}, {\tmstrong{$H_h (B)$}}, is the hash of the header of block $B$
   encoded by simple codec:''
-  \[ H_b (b) \assign \tmop{Blake} 2 b (\tmop{Enc}_{\tmop{SC}} (\tmop{Head}
+  \[ H_h (B) \assign \tmop{Blake} 2 b (\tmop{Enc}_{\tmop{SC}} (\tmop{Head}
      (B))) \]
 \end{definition}
 
@@ -1115,20 +1113,26 @@ Formally:
   Where each $E_i \in \mathbb{B}$ is a SCALE encoded extrinsic.
 \end{definition}
 
-\subsection{Block Submission and Validation}
+\subsection{Block Submission}
 
 Block validation is the process by which the client asserts that a block is
 fit to be added to the blockchain. This means that the block is consistent
 with the world state and transitions from the state of the system to a new
 valid state.
 
-Blocks can be handed to the Polkadot RE both from the network stack and from
-the consensus engine.
+Blocks can be handed to the Polkadot RE both from the network stack for
+example by means of Block response network message (see Section
+\ref{sect-msg-block-response} ) and from the consensus engine.
+
+\subsection{Block Validation}
 
 Both the Runtime and the Polkadot RE need to work together to assure block
-validity. This can be accomplished by Polkadot RE invoking
-\tmverbatim{execute\_block} entry into the runtime as a part of the validation
-process.
+validity. A block is deemed valid if the block author had the authorship right
+for the slot during which the slot was built as well as if the transactions in
+the block constitute a valid transition of states. The former criterion is
+validated by Polkadot RE according to the block production consensus protocol.
+The latter can be verified by Polkadot RE invoking \tmverbatim{execute\_block}
+entry into the Runtime as a part of the validation process.
 
 Polkadot RE implements the following procedure to assure the validity of the
 block:
@@ -1140,24 +1144,33 @@ block:
   \hline
 \end{tabular}
 
-{\algorithmic{{\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just}
-(B))$}}
+{\algorithmic{{\state{{\IF{$\tmop{Just} (B) \neq \emptyset$}}}}
+
+{\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$}}
 
 {\state{{\IF{$B$ {\tmstrong{is}} Finalized {\tmstrong{and}} $P (B)$
 {\tmstrong{is not}} Finalized}}}}
 
-{\state{{\tmname{Mark-as-Final}}$(P (B))${\END}}}
+{\state{{\tmname{Mark-as-Final}}$(P (B))${\END}{\END}}}
 
-{\state{Verify $H_{p (B)} \in \tmop{Blockchain}$}}
+{\state{{\IF{$H_p (B) \nin \tmop{PBT}$}}}}
 
-{\state{State-Changes = Runtime{\tmname{$(B)$}}}}
+{\state{{\RETURN{{\END}}}}}
 
-{\state{{\tmname{Update-World-State}}(State-Changes)}}}}
+{\state{{\tmname{Verify-Authorship-Right}}($\tmop{Head} (B)$)}}
+
+{\state{$S \leftarrow$ {\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{Core\_execute\_block}}, B \right)$}}
+
+{\state{{\tmname{Update-World-State}}($S$)}}}}
 
 \hrulefill{\medskip}
 
 For the definition of the finality and the finalized block see Section
-\ref{sect-finality}.
+\ref{sect-finality}. $\tmop{PBT}$ is the pruned block tree defined in
+Definition \ref{defn-block-tree}. {\tmname{Verify-Authorship-Right}} is part
+of the block production consensus protocol and is described in Algorithm
+\ref{algo-verify-authorship-right}.
 
 \section{Network Interactions}\label{sect-network-interactions}
 
@@ -1192,7 +1205,7 @@ block producer prunes the tree in parallel using Algorithm
 \end{definition}
 
 \begin{definition}
-  {\tmstrong{Block authring session key pair $(\tmop{sk}^s_j,
+  {\tmstrong{Block authoring session key pair $(\tmop{sk}^s_j,
   \tmop{pk}^s_j)$}} is an SR25519 key pair which the block producer
   $\mathcal{P}_j$ signs by their account key (see Definition
   \ref{defn-account-key}) and is used to sign the produced block as well as to
@@ -1214,11 +1227,13 @@ block producer prunes the tree in parallel using Algorithm
 
 \begin{notation}
   \label{note-slot}We refer to the number of slots in epoch $\mathcal{E}_n$ by
-  $\tmop{sc}_n$. $\tmop{sc}_n$ is set to the result of calling runtime entry \
-  \tmverbatim{BabeApi\_slot\_duration} at the ``beginning of each epoch. For a
-  given block $B$, we use the notation {\tmstrong{$s_B$}} to refer to the slot
-  during which $B$ has been produced. Conversely, for slot $s$,
-  $\mathcal{B}_s$ is the set of Blocks generated at slot $s$.
+  $\tmop{sc}_n$. $\tmop{sc}_n$ is set to the \tmverbatim{duration} field in
+  the returned data from the call of the Runtime entry
+  \tmverbatim{BabeApi\_epoch} (see \ref{sect-rte-babeapi-epoch}) at the
+  beginning of each epoch. For a given block $B$, we use the notation
+  {\tmstrong{$s_B$}} to refer to the slot during which $B$ has been produced.
+  Conversely, for slot $s$, $\mathcal{B}_s$ is the set of Blocks generated at
+  slot $s$.
 \end{notation}
 
 Definition \ref{defn-epoch-subchain} provides an iterator over the blocks
@@ -1235,11 +1250,11 @@ produced during an specific epoch.
 \subsection{Block Production Lottery}
 
 \begin{definition}
-  {\tmstrong{Winning threshold}} denoted by {\tmstrong{$\tau$}} is the
-  threshold which is used alongside with the result of Algorirthm
-  \ref{algo-block-production-lottery} to decide if a block producer is the
-  winner of a specific slot. $\tau$ is set to result of call into
-  {\code*{BabeApi\_slot\_winning\_threshold}} runtime entry.
+  \label{defn-winning-threshold}{\tmstrong{Winning threshold}} denoted by
+  {\tmstrong{$\tau$}} is the threshold which is used alongside with the result
+  of Algorirthm \ref{algo-block-production-lottery} to decide if a block
+  producer is the winner of a specific slot. $\tau$ is set to result of call
+  into {\code*{BabeApi\_slot\_winning\_threshold}} runtime entry.
 \end{definition}
 
 A block producer aiming to produce a block during $\mathcal{E}_n$ should run
@@ -1252,8 +1267,10 @@ lottery.
 \custombinding{7}{\noindent}\begin{tabular}{l}
   \hline
   \tmtextsc{Algorithm  7. }
-  \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}$(\tmop{sk}^{},
-  n)$\\
+  \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}($\tmop{sk}
+  :$session secret key of the producer,
+  
+  $n :$epoch index)\\
   \hline
 \end{tabular}
 
@@ -1299,8 +1316,8 @@ tail defined in Definition \ref{defn-block-time}.
   of\tmverbatim{} node $j$ when node $j$ has received the block $B$ for the
   first time. If the node $j$ itself is the producer of $B$, $T_B^j$ is set
   equal to the time that the block is produced. The index $j$ in $T^j_B$
-  notation may be dropped when there is no ambiguity about the underlying
-  node.
+  notation may be dropped and B's arrival time is referred to by $T_B$ when
+  there is no ambiguity about the underlying node.
 \end{definition}
 
 In addition to the arrival time of block $B$, the block producer also needs to
@@ -1350,23 +1367,33 @@ alongside with the {\tmem{babe header}} defined in Definition
   The \label{defn-babe-header}{\tmstrong{Babe Header}} of block B, referred to
   formally by {\tmstrong{$H_{\tmop{Babe}} (B)$}} is a tuple that consists of
   the following components:
-  \[ (\pi, S_B, \tmop{pk}, s, d) \]
+  \[ (\pi, d, j, s, w) \]
   in which:
   
   \begin{center}
     \begin{tabular}{rl}
+      $\pi, d$: & are the results of the block lottervrf\_output, vrfy for
+      slot s. \\
+      $j$: & is the SR25519 session public key associated with the block
+      producer. \\
       s: & is the slot at which the block is produced.\\
-      $\pi, d$: & are the results of the block lottery for slot s. \\
-      $\tmop{pk}_j^s$: & is the SR25519 session public key associated with the
-      block producer. \\
-      $S_B$: & $\tmop{Sig}_{\tmop{SR} 25519, \tmop{sk}^s_j}
-      (\tmop{Enc}_{\tmop{SC}} (s, \tmop{Black} 2 s (\tmop{Head} (B_{}),
-      \pi)))$
+      w & reserved
     \end{tabular}
   \end{center}
   
   \ 
 \end{definition}
+
+The block producer includes $H_{\tmop{Babe}} (B)$ as a log in $H_d (B)$ and
+sign $\tmop{Head} (B)$ as defined in Definition \ref{defn-block-signature}
+
+\begin{definition}
+  \label{block-signature}The {\tmstrong{Block Signature}} noted by $S_B$ is
+  computed as $\tmop{Sig}_{\tmop{SR} 25519, \tmop{sk}^s_j}
+  (\tmop{Enc}_{\tmop{SC}} (\tmop{Black} 2 s (\tmop{Head} (B_{}))))$
+\end{definition}
+
+\
 
 \custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
@@ -1395,9 +1422,7 @@ alongside with the {\tmem{babe header}} defined in Definition
 
 \hrulefill{\medskip}
 
-\subsection{Block Validation}
-
-\subsection{Epoch Randomness}
+\subsection{Epoch Randomness}\label{sect-epoch-randomness}
 
 At the end of epoch $\mathcal{E}_n$, each block producer is able to compute
 the randomness seed it needs in order to participate in the block production
@@ -1429,17 +1454,124 @@ Algorithm \ref{algo-block-production-lottery}.
 
 \
 
+\subsection{Verifying Authorship Right}
+
+\begin{definition}
+  Seal $D_s$ {\todo{define seal}}
+\end{definition}
+
+When a Polkadot node receives a produced block, it needs to verify if the
+block producer was entitled to produce the block in the given slot by running
+Algorithm \ref{algo-verify-authorship-right} where:
+\begin{itemizeminus}
+  \item T$_B$ is $B$'s arrival time defined in Definition
+  \ref{defn-block-time}.
+  
+  \item $H_d (B)$ is the digest sub-component of $\tmop{Head} (B)$ defined in
+  Definition \ref{defn-block-header}.
+  
+  \item $\tmop{AuthorityDirectory}^{\mathcal{E}_c}$ is the set of Authority ID
+  for block producers of epoch $\mathcal{E}_c$.
+  
+  \item {\tmname{verify-Slot-Winner}} is defined in Algorithm
+  \ref{algo-verify-slot-winner}.
+\end{itemizeminus}
+\custombinding{11}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  11. }
+  \label{algo-verify-authorship-right}{\tmname{Verify-Authorship-Right}}($\tmop{Head}_s
+  (B)$: The header of the block being verified) \\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$s
+\leftarrow${\tmname{Slot-Number-At-Given-Time}}($T_{B_{}}$)}}
+
+{\state{$\mathcal{E}_c \leftarrow${\tmname{Current-Epoch}}()}}
+
+{\state{$(D_1, \ldots, D_{\tmop{length} (H_d (B))}) \leftarrow H_d (B)$}}
+
+{\state{$D_s \leftarrow D_{\tmop{length} (H_d (B))}$}}
+
+{\state{$H_d (B) \leftarrow (D_1, \ldots, D_{\tmop{length} (H_d (B)) - 1})$
+//remove the seal from the digest}}
+
+{\state{($\tmop{id}, \tmop{Sig}_B$)$\leftarrow \tmop{Dec}_{\tmop{SC}} (D_s)$}}
+
+{\state{{\IF{$\tmop{id} \neq${\tmname{Seal-Id}}}}}}
+
+{\state{{\ERROR{``Seal missing''{\END}}}}}
+
+{\state{AuthorID $\leftarrow \tmop{AuthorityDirectory}^{\mathcal{E}_c}
+[H_{\tmop{BABE}} (B) . \tmop{SingerIndex}]$}}
+
+{\state{{\tmname{Verify-Signature}}($\tmop{AuthorID}, H_h (B),
+\tmop{Sig}_B$)}}
+
+{\state{{\IF{$\exists B' \in \tmop{BT} : H_h (B) \neq H_h (B)$
+{\tmstrong{and}} $s_B = s'_B$ {\tmstrong{and}} $\tmop{SignerIndex}_B =
+\tmop{SignerIndex}_{B'}$}}}}
+
+{\state{{\ERROR{``Block producer is equivocating''{\END}}}}}
+
+{\state{{\tmname{Verify-Slot-Winner}}($(d_B, \pi_B), s$,AuthorID)}}}}
+
+\hrulefill{\medskip}
+
+Algorithm \ref{algo-verify-slot-winner} is run as a part of the verification
+process, when a node is importing a block, in which:
+\begin{itemizeminus}
+  \item {\tmname{Epoch-Randomness}} is defined in Algorithm
+  \ref{algo-epoch-randomness}.
+  
+  \item $H_{\tmop{BABE}} (B)$ is the BABE header defined in Definition
+  \ref{defn-babe-header}.
+  
+  \item {\tmname{Verify-VRF}} is described in Section \ref{sect-vrf}.
+  
+  \item $\tau$ is the winning threshold defined in
+  \ref{defn-winning-threshold}.
+\end{itemizeminus}
+\custombinding{12}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  12. }
+  \label{algo-verify-slot-winner}{\tmname{Verify-Slot-Winner}}($B$: the block
+  whose winning status to be verified)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$\mathcal{E}_c \leftarrow${\tmname{Current-Epoch}}}}
+
+{\state{$\rho \leftarrow${\tmname{Epoch-Randomness}}$(c)$}}
+
+{\state{{\tmname{Verify-VRF}}($\rho, H_{\tmop{BABE}} (B) . (d_B, \pi_B),
+H_{\tmop{BABE}} (B) .s, c$)}}
+
+{\state{{\IF{$d_B \geqslant \tau$}}}}
+
+{\state{{\ERROR{``Block producer is not a winner of the slot''{\END}}}}}}}
+
+\hrulefill{\medskip}
+
+$(d_B, \pi_B)$: Block Lottery Result for Block $B$,
+
+$s_n$: the slot number,
+
+$n$: Epoch index
+
+AuthorID: The public session key of the block producer
+
 \subsection{Blocks Building Process}
 
 The blocks building process is triggered by Algorithm
 \ref{algo-block-production} of the consensus engine which runs Alogrithm
 \ref{algo-build-block}.
 
-\custombinding{11}{\noindent}\begin{tabular}{l}
+\custombinding{13}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  11. }
+  \tmtextsc{Algorithm  13. }
   \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
-  at its head the block to be constructed,
+  where at its head, the block to be constructed,
   
   s: Slot number)\\
   \hline
@@ -1477,7 +1609,7 @@ H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
 
 {\state{{\IF{{\tmstrong{not}} {\tmname{Block-Is-FULL($R$}})}}}}
 
-{\state{{\tmname{Drop(Ready-Extrinsic-Queue,$E$)}}}}
+{\state{{\tmname{Drop(Ready-Extrinsic-Queue,$E$)}}{\END}{\END}}}
 
 {\state{$\tmop{Head} (B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
 \text{\tmverbatim{finalize\_block}}, E \right)${\END}}}}}
@@ -1670,7 +1802,7 @@ more details). These messages are specified in this section.
   {\center{\begin{tabular}{rll}
     r: & round number & 64 bit integer\\
     $V_{\tmop{id}}$: & incremental change tracker counter & 64 bit integer\\
-    {\rightaligned{$v_{\tmop{id}}$}}: & Ed25519 public key of $v$ & 4 byte
+    {\rightaligned{$v_{\tmop{id}}$}}: & Ed25519 public key of $v$ & 32 byte
     array\\
     {\rightaligned{}}$\tmop{stage}$: & 0 if it is the pre-vote sub-round & 1
     byte\\
@@ -1685,7 +1817,7 @@ more details). These messages are specified in this section.
   the type:
   \[ (V (B'), (\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B'), v_{\tmop{id}})) \]
   in which either
-  \[ B' > B \]
+  \[ B' \geqslant B \]
   or $V^{r, \tmop{pc}}_{v_i} (B')$ is an equivocatory vote.
   
   In all cases, $\tmop{Sign}^{r, \tmop{pc}}_{v_i} (B')$ is the signature of
@@ -1720,9 +1852,9 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{12}{\noindent}\begin{tabular}{l}
+\custombinding{14}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  12. }
+  \tmtextsc{Algorithm  14. }
   \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
   ($\mathcal{V}$)\\
   \hline
@@ -1742,12 +1874,12 @@ needs to be incremented.
 \subsection{Voting Process in Round $r$}
 
 For each round $r$, an honest voter $v$ must participate in the voting process
-by following Algorithm \ref{alg-grandpa-round}.
+by following Algorithm \ref{algo-grandpa-round}.
 
-\custombinding{13}{\noindent}\begin{tabular}{l}
+\custombinding{15}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  13. }
-  \label{alg-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
+  \tmtextsc{Algorithm  15. }
+  \label{algo-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
   \hline
 \end{tabular}
 
@@ -1782,17 +1914,24 @@ v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
 
 {\state{{\tmname{Broadcast($M_v^{r, \tmop{pc}}$($B_v^{r, \tmop{pv}}$))}}}}
 
+{\state{{\tmname{Attempt-To-Finalize-Round}}($r$)}}
+
+{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $r$ {\tmstrong{is}}
+completable)}}
+
 {\state{{\tmname{Play-Grandpa-round}}($r + 1$)}}}}
 
 \hrulefill{\medskip}
 
 The condition of {\tmem{completablitiy}} is defined in Definition
 \ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
-explained in Algorithm \ref{algo-grandpa-best-candidate}.
+explained in Algorithm \ref{algo-grandpa-best-candidate} and
+{\tmname{{\tmname{Attempt-To-Finalize-Round}}($r$)}} is described in Algorithm
+\ref{algo-attempt-tofinalize}.
 
-\custombinding{14}{\noindent}\begin{tabular}{l}
+\custombinding{16}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  14. }
+  \tmtextsc{Algorithm  16. }
   \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
   \hline
 \end{tabular}
@@ -1812,9 +1951,10 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 \hrulefill{\medskip}
 
-\custombinding{15}{\noindent}\begin{tabular}{l}
+\custombinding{17}{\noindent}\begin{tabular}{l}
   \hline
-  \tmtextsc{Algorithm  15. } {\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \tmtextsc{Algorithm  17. }
+  \label{algo-attempt-tofinalize}{\tmname{Attempt-To-Finalize-Round}}($r$)\\
   \hline
 \end{tabular}
 
@@ -1822,9 +1962,8 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
 
 {\state{$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
 
-{\state{{\IF{$E \geqslant L$ {\tmstrong{and}} $V^{r - 1,
-\tmop{pc}}_{\tmop{obs} (v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3
-|\mathbb{V}|$}}}}
+{\state{{\IF{$E \geqslant L$ {\tmstrong{and}} $V^{r, \tmop{pc}}_{\tmop{obs}
+(v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3 |\mathbb{V}|$}}}}
 
 {\state{{\tmname{Last-Finalized-Block}}$\leftarrow E$}}
 
@@ -1859,6 +1998,13 @@ B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
   \end{itemize}
 \end{definition}
 
+for
+\begin{itemizedot}
+  \item any round $r$ if the node $n$ is {\tmem{not}} a GRANDPA voter.
+  
+  \item only for rounds $r$ for which the the node $n$ has invoked Algorithm
+  \ref{algo-grandpa-round} if $n$ is a GRANDPA voter.
+\end{itemizedot}
 Note that all Polkadot relay chain nodes are supposed to listen to GRANDPA
 finalizing messages regardless if they are GRANDPA
 voters.\appendix\chapter{Cryptographic Algorithms}
@@ -2911,12 +3057,11 @@ the Runtime Wasm blob and have been exported as shown in Snippet
 
 \tmfloat{h}{small}{figure}{\begin{tmcode}[cpp]
   (export "Core_version" (func $Core_version))
-  (export "Core_authorities" (func $Core_authorities))
   (export "Core_execute_block" (func $Core_execute_block))
-  (export "Core_initialise_block" (func $Core_initialise_block))
+  (export "Core_initialize_block" (func $Core_initialize_block))
   (export "Metadata_metadata" (func $Metadata_metadata))
   (export "BlockBuilder_apply_extrinsic" (func $BlockBuilder_apply_extrinsic))
-  (export "BlockBuilder_finalise_block" (func $BlockBuilder_finalise_block))
+  (export "BlockBuilder_finalize_block" (func $BlockBuilder_finalize_block))
   (export "BlockBuilder_inherent_extrinsics" 
           (func $BlockBuilder_inherent_extrinsics))
   (export "BlockBuilder_check_inherents" (func $BlockBuilder_check_inherents))
@@ -2925,21 +3070,23 @@ the Runtime Wasm blob and have been exported as shown in Snippet
           (func $TaggedTransactionQueue_validate_transaction))
   (export "OffchainWorkerApi_offchain_worker" 
           (func $OffchainWorkerApi_offchain_worker))
+  (export "ParachainHost_validators" (func $ParachainHost_validators))
   (export "ParachainHost_duty_roster" (func $ParachainHost_duty_roster))
   (export "ParachainHost_active_parachains" 
           (func $ParachainHost_active_parachains))
-  (export "ParachainHost_parachain_head" (func $ParachainHost_parachain_head))
+  (export "ParachainHost_parachain_status" (func $ParachainHost_parachain_status))
   (export "ParachainHost_parachain_code" (func $ParachainHost_parachain_code))
+  (export "ParachainHost_ingress" (func $ParachainHost_ingress))
   (export "GrandpaApi_grandpa_pending_change" 
           (func $GrandpaApi_grandpa_pending_change))
   (export "GrandpaApi_grandpa_forced_change" 
           (func $GrandpaApi_grandpa_forced_change))
-  (export "GrandpaApi_grandpa_authorities" 
-          (func $GrandpaApi_grandpa_authorities))
-  (export "ParachainHost_validators" (func $Core_authorities))
- 
-  (export "BabeApi_slot_winning_threshold" 
-          (func $BabeApi_slot_winning_threshold))
+  (export "GrandpaApi_grandpa_authorities" (func $GrandpaApi_grandpa_authorities))
+  (export "BabeApi_startup_data" (func $BabeApi_startup_data))
+  (export "BabeApi_epoch" (func $BabeApi_epoch))
+  (export "SessionKeys_generate_session_keys" 
+          (func $SessionKeys_generate_session_keys))
+
 \end{tmcode}}{\label{snippet-runtime-enteries}Snippet to export entries into
 tho Wasm runtime module.}
 
@@ -3028,11 +3175,45 @@ An auxilarry function which returns hash and encoding length of an extrinsics.
 Pair of Blake2Hash of the blob as element of $\mathbb{B}_{32}$ and its length
 as 64 bit integer.
 
-\subsection{\tmverbatim{Babe\_authorities}}\label{sect-rte-babe-auth}
+\subsection{\tmverbatim{BabeApi\_epoch}}\label{sect-rte-validate-transaction}
 
-This entry serves to report the set of authorities at a given block. It
-receives \tmverbatim{block\_id} as an argument; and returns an array of
-\tmverbatim{authority\_id}'s.
+This entry is called to obtain the current configuration of BABE consensus
+protocol.
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item $H_n (B)$: the block number at whose final state the epoch
+  configuration should be obtained.
+\end{itemize}
+
+
+{\tmstrong{Return}}:
+
+A tuple
+\[ (\mathcal{E}_n, s^n_0, \tmop{sc}_n, A, \rho, \tmop{Sec}) \]
+
+
+where:
+{\center{\begin{tabular}{rll}
+  $\mathcal{E}_n$: & epoch index (see Definition \ref{defn-epoch-slot}) &
+  64-bit integer\\
+  $s^n_0 :$ & The index of the starting slot of $\mathcal{E}_n$ & 64-bit
+  integer\\
+  $\tmop{sc}_n$: & Slot count of $\mathcal{E}_n$ (see Definition
+  \ref{defn-epoch-slot}) & 1 byte\\
+  $A$: & The list of authorities and their weights & Array of $(P_A, W_A)$\\
+  $\rho$ & Randomness used in $\mathcal{E}_n$ (see Section
+  \ref{sect-epoch-randomness}) & $\mathbb{B}_{32}$\\
+  Sec & To be specced & Boolean
+\end{tabular}}}
+
+
+in which:
+{\center{\begin{tabular}{rll}
+  $P_A$: & The public key of authority A & $\mathbb{B}_{32}$\\
+  $W_A :$ & The weight of the authority A & 64 bit integer
+\end{tabular}}}
+
 
 \subsection{\tmverbatim{Grandpa\_authorities}}\label{sect-rte-grandpa-auth}
 
