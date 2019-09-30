@@ -43,6 +43,7 @@ pub fn test_network_state() {
 
     let mut written_out = 0;
     let res = api.rtm_ext_network_state(&mut written_out);
+    assert_eq!(written_out, 3);
     assert_eq!(res, vec![0,0,0]); // [PeerId, MultiaddressIPv4, MultiaddressIPv6]
 
     println!("> testing network state");
