@@ -1,3 +1,6 @@
+* Mon Sep 30 2019
+  - Diffed pdf refered in README.
+  - Minor revision and correction for recent additions.
 * Fri Sep 27 2019
   - High level description of the p2p network protocol and list of libp2p modules.
   - Revision and improvement of the Offchain APIs.
@@ -59,3 +62,4 @@
   - Network message clean up, adding references.
   - Changing the Style from Article to Documentation so the chapter numbers
     are added to the section for easier referral.
+    

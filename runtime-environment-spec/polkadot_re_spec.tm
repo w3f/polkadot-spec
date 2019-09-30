@@ -38,8 +38,6 @@
   <doc-data|<doc-title|Polkadot Runtime Environment<next-line><with|font-size|1.41|Protocol
   Specification>>|<doc-date|<date|>>>
 
-  \;
-
   <\table-of-contents|toc>
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|1.<space|2spc>Background>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -158,14 +156,14 @@
     Protocol> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <pageref|auto-35><vspace|0.5fn>
 
-    4.1.<space|2spc>Node identities and addresses
+    4.1.<space|2spc>Node Identities and Addresses
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-36>
 
-    4.2.<space|2spc>Discovery mechanisms <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    4.2.<space|2spc>Discovery Mechanisms <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-37>
 
-    4.3.<space|2spc>Transport protocol <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    4.3.<space|2spc>Transport Protocol <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-38>
 
     <with|par-left|1tab|4.3.1.<space|2spc>Encryption
@@ -749,11 +747,11 @@
   </definition>
 
   <\definition>
-    <label|defn-unix-time>By <strong|UNIX time> we refer to the unsigned,
+    <label|defn-unix-time>By <strong|UNIX time>, we refer to the unsigned,
     little-endian encoded 64-bit integer which stores the number of
     <strong|milliseconds> that have elapsed since the Unix epoch, that is the
     time 00:00:00 UTC on 1 January 1970, minus leap seconds. Leap seconds are
-    ignored, and every day is treated as if it contains exactly 86400
+    ignored, and every day is treated as if it contained exactly 86400
     seconds.
   </definition>
 
@@ -1516,7 +1514,7 @@
   <reference|sect-msg-transactions>. Upon receiving a Transactions message,
   Polkadot RE decodes the transaction and calls
   <verbatim|validate_trasaction> runtime function, defined in Section
-  <reference|sect-validate-transaction>, to check the validity of the
+  <reference|sect-rte-validate-transaction>, to check the validity of the
   extrinsic. If <verbatim|validate_transaction> considers the submitted
   extrinsics as a valid one, Polkadot RE makes the extrinsics available for
   the consensus engine for inclusion in future blocks.
@@ -1863,17 +1861,17 @@
   <chapter|Network Protocol<label|sect-network-interactions>><label|network-protocol>
 
   <\warning>
-    Polkadot network protocol is a work-in-progress and the API and usage may
-    change.
+    Polkadot network protocol is work-in-progress. The API specification and
+    usage may change in future.
   </warning>
 
-  In this section a high level decreption of the network protocol is
-  presented based on <cite|parity_technologies_substrate_2019>. Polkadot
-  network protocol relies on <em|libp2p>. Specifically the following libp2p
-  modules has are used in Polkadot Networking protocol:
+  This chapter offers a high-level description of the network protocol based
+  on <cite|parity_technologies_substrate_2019>. Polkadot network protocol
+  relies on <em|libp2p>. Specifically, the following libp2p modules are being
+  used in the Polkadot Networking protocol:
 
-  <\itemize-minus>
-    <item><strong|><samp|mplex.>
+  <\itemize>
+    <item><samp|mplex.>
 
     <item><samp|yamux>
 
@@ -1886,44 +1884,44 @@
     <item><samp|identity>
 
     <item><samp|ping>
-  </itemize-minus>
+  </itemize>
 
-  For more detail specification of these modules and of the Peer-to-Peer
-  layer see libp2p specification document <cite|protocol_labs_libp2p_2019>.
+  For more detailed specification of these modules and the Peer-to-Peer layer
+  see libp2p specification document <cite|protocol_labs_libp2p_2019>.
 
-  <section|Node identities and addresses>
+  <section|Node Identities and Addresses>
 
   Similar to other decentralized networks, each Polkadot RE node possesses a
-  network private key and a network public key which is an ed25519 key pairs
-  described in Section <reference|sect-ed25519>.
+  network private key and a network public key representing an ED25519 key
+  pair <cite|liusvaara_edwards-curve_2017>.
 
   <todo|SPEC: local node's keypair must be passed as part of the network
   configuration.>
 
   <\definition>
     <strong|Peer Identity>, formally noted by <math|P<rsub|id>> is derived
-    from node's public key as follows:
+    from the node's public key as follows:
 
     <todo|SPEC: How to derive <math|P<rsub|id>>> \ and uniquely identifies a
     node on the network.
   </definition>
 
-  Because the <math|P<rsub|id>> is dervied from node's public key, running
-  two or more instances of Polkadot network using the same network key is
-  contrary to the Polkadot protocol.
+  Because the <math|P<rsub|id>> is derived from the node's public key,
+  running two or more instances of Polkadot network using the same network
+  key is contrary to the Polkadot protocol.
 
   All network communications between nodes on the network use encryption
-  derived from both sides's keys.
+  derived from both sides' keys.
 
   <todo|SPEC: p2p key derivation>
 
-  <section|Discovery mechanisms>
+  <section|Discovery Mechanisms>
 
   \ In order for a Polkadot node to join a peer-to-peer network, it has to
-  know a list of Polkadot nodes that arealready part of the network. This
+  know a list of Polkadot nodes that already take part in the network. This
   process of building such a list is referred to as <em|Discovery>. Each
-  elment of this list is pair contsisting of the peer node's identities and
-  its address.\ 
+  element of this list is a pair consisting of the peer's node identities and
+  their addresses.\ 
 
   <todo|SPEC: Node address>
 
@@ -1933,37 +1931,37 @@
     <item><em|Bootstrap nodes>: These are hard-coded node identities and
     addresses passed alongside with the network configuration.
 
-    <item><em|mDNS>. By performng a UDP broadcast on the local network. Nodes
-    that listen may respond with their identity as described in mDNS section
-    of <cite|protocol_labs_libp2p_2019>. (mDNS can be disabled in the network
-    configuration.)
+    <item><em|mDNS>, performing a UDP broadcast on the local network. Nodes
+    that listen may respond with their identity as described in the mDNS
+    section of <cite|protocol_labs_libp2p_2019>. (Note: mDNS can be disabled
+    in the network configuration.)
 
     <item><em|Kademlia random walk>. Once connected to a peer node, a
-    Polkadot node can perform a random Kademlia `FIND_NODE` requests in order
-    for nodes <todo|which nodes?> responds by propagatingtheir view of the
+    Polkadot node can perform a random Kademlia `FIND_NODE` requests for the
+    nodes <todo|which nodes?> to respond by propagating their view of the
     network.
 
     \;
   </itemize>
 
-  <section|Transport protocol>
+  <section|Transport Protocol>
 
   A Polkadot node can establish a connection with nodes in its peer list. All
-  connections must always use encryption and multiplexing. While some node
-  addresses (eg. addresses using `/quic`) already imply which encryption
+  the connections must always use encryption and multiplexing. While some
+  nodes' addresses (eg. addresses using `/quic`) already imply the encryption
   and/or multiplexing to use, for others the \Pmultistream-select\Q protocol
   is used in order to negotiate an encryption layer and/or a multiplexing
   layer.
 
-  Following transport protocol is supported by a Polkadot node:
+  The following transport protocol is supported by a Polkadot node:
 
   <\itemize>
     <item><em|TCP/IP> for addresses of the form `/ip4/1.2.3.4/tcp/5`. Once
-    the TCP connection is open, an encryption and a multiplexing layer are
+    the TCP connection is open, an encryption and a multiplexing layers are
     negotiated on top.
 
     <item><em|WebSockets> for addresses of the form `/ip4/1.2.3.4/tcp/5/ws`.
-    A TCP/IP connection is open and the WebSockets protocol is negotiated on
+    A TC/IP connection is open and the WebSockets protocol is negotiated on
     top. Communications then happen inside WebSockets data frames. Encryption
     and multiplexing are additionally negotiated again inside this channel.
 
@@ -1973,17 +1971,16 @@
 
   <subsection|Encryption>
 
-  \ The following encryption protocols from libp2p are supported:
+  \ The following encryption protocols from libp2p are supported by Polkadot
+  protocol:
 
-  <\itemize>
-    <item><strong|Secio>: A TLS-1.2-like protocol but without
-    certificates<inactive|<cite|>>. Support for secio will likely to be
-    deprecated in the future.
+  <item><strong|Secio>: A TLS-1.2-like protocol but without certificates
+  <cite|protocol_labs_libp2p_2019>. Support for secio will likely to be
+  deprecated in the future.
 
-    <item><strong|Noise>: Noise is a framework for crypto protocols based on
-    Diffie-Hellman key agreement <cite|perrin_trevor_noise_2018>. Support for
-    noise is experimental and details may change in the future.
-  </itemize>
+  <item><strong|Noise>: Noise is a framework for crypto protocols based on
+  the Diffie-Hellman key agreement <cite|perrin_noise_2018>. Support for
+  noise is experimental and details may change in the future.
 
   <subsection|Multiplexing>\ 
 
@@ -1997,39 +1994,40 @@
 
   <section|Substreams>
 
-  \ Once a connection has been established between two nodes and is able to
-  use multiplexing, substreams can be opened. When a substream is open, the
-  <em|multistream-select> protocol is used to negotiate which protocol touse
+  Once a connection has been established between two nodes and is able to use
+  multiplexing, substreams can be opened. When a substream is open, the
+  <em|multistream-select> protocol is used to negotiate which protocol to use
   on that given substream.\ 
 
   <subsection|Periodic Ephemeral Substreams>
 
   A Polkadot RE node should open several substreams. In particular, it should
-  periodically opens ephemeral substreams in order to:
+  periodically open ephemeral substreams in order to:
 
   <\itemize>
     <item>ping the remote peer and check whether the connection is still
     alive. Failure for the remote peer to reply leads to a disconnection.
-    This uses the libp2p <em|ping> protocol specified
+    This uses the libp2p <em|ping> protocol specified in
+    <cite|protocol_labs_libp2p_2019>.
 
     <item>ask information from the remote. This is the <em|identity> protocol
     specified in <cite|protocol_labs_libp2p_2019>.
 
     <item>send Kademlia random walk queries. Each Kademlia query is done in a
-    new separate substream. This uses the libp2p <em|Kademlia> protocol
+    new separate substreams. This uses the libp2p <em|Kademlia> protocol
     specified in <cite|protocol_labs_libp2p_2019>.
   </itemize>
 
   <subsection|Polkadot Communication Substream>
 
-  For the purpose of communicating Polkadot messages, the dailer of a
-  connection opens a unique substream. Optionally the node can keeps a unique
+  For the purposes of communicating Polkadot messages, the dailer of the
+  connection opens a unique substream. Optionally, the node can keep a unique
   substream alive for this purpose. The name of the protocol negotiated is
   based on the <em|protocol ID> passed as part of the network configuration.
   This protocol ID should be unique for each chain and prevents nodes from
-  different chains from connecting to each other.
+  different chains to connect to each other.
 
-  The structure of \ SCALE encoded messages sent over the unique Polkadot
+  The structure of SCALE encoded messages sent over the unique Polkadot
   communication substream is described in Appendix
   <reference|sect-network-messages>.
 
@@ -2042,7 +2040,7 @@
   <\itemize>
     <item>Syncing. Blocks are announced and requested from other nodes.
 
-    <item>Gossiping. Used by various subprotocols such as GRANDPA
+    <item>Gossiping. Used by various subprotocols such as GRANDPA.
 
     <item>Polkadot Network Specialization: <todo|spec this protocol for
     polkadot>.
@@ -2612,13 +2610,12 @@
 
   <section|Finality><label|sect-finality>
 
-  Polkadot RE uses GRANDPA Finality protocol
-  <cite|alistair_stewart_grandpa:_2019> to finalize blocks. Finality is
-  obtained by consecutive rounds of voting by validator nodes. Validators
-  execute GRANDPA finality process in parallel to Block Production as an
-  independent service. In this section, we describe the different functions
-  that GRANDPA service is supposed to perform to successfully participate in
-  the block finalization process.
+  Polkadot RE uses GRANDPA Finality protocol <cite|stewart_grandpa:_2019> to
+  finalize blocks. Finality is obtained by consecutive rounds of voting by
+  validator nodes. Validators execute GRANDPA finality process in parallel to
+  Block Production as an independent service. In this section, we describe
+  the different functions that GRANDPA service is supposed to perform to
+  successfully participate in the block finalization process.
 
   <subsection|Preliminaries>
 
@@ -2685,7 +2682,7 @@
   </definition>
 
   The GRANDPA protocol dictates how an honest voter should vote in each
-  sub-round, which is described in Algorithm <reference|alg-grandpa-round>.
+  sub-round, which is described in Algorithm <reference|algo-grandpa-round>.
   After defining what constitues a vote in GRANDPA, we define how GRANDPA
   counts votes.
 
@@ -2809,7 +2806,7 @@
   Voting is done by means of broadcasting voting messages to the network.
   Validators inform their peers about the block finalized in round <math|r>
   by broadcasting a finalization message (see Algorithm
-  <reference|alg-grandpa-round> for more details). These messages are
+  <reference|algo-grandpa-round> for more details). These messages are
   specified in this section.
 
   <\definition>
@@ -4209,11 +4206,11 @@
 
   <subsection|Offchain Worker >
 
-  Offchain Workers allow the execution of long-running and possibly
+  The Offchain Workers allow the execution of long-running and possibly
   non-deterministic tasks (e.g. web requests, encryption/decryption and
   signing of data, random number generation, CPU-intensive computations,
   enumeration/aggregation of on-chain data, etc.) which could otherwise
-  require longer than the block execution time. Offchain workers have their
+  require longer than the block execution time. Offchain Workers have their
   own execution environment. This separation of concerns is to make sure that
   the block production is not impacted by the long-running tasks.\ 
 
@@ -4223,19 +4220,18 @@
 
   \;
 
-  As Offchain workers runs on their own execution environment they have
-  access to their own separate storage. There is two different types of
-  storage is available which are defined in Definitions
-  <reference|defn-offchain-persistent-storage> and
-  <reference|defn-offchain-local-storage>.
+  As Offchain Workers run on their own execution environment they have access
+  to their separate storage. There are two different types of storage
+  available as defined in Definitions <reference|defn-offchain-persistent-storage>
+  and <reference|defn-offchain-local-storage>.
 
   <\definition>
     <label|defn-offchain-persistent-storage><strong|Persistent
     <strong|storage>> is non-revertible and not fork-aware. It means that any
     value set by the offchain worker is persisted even if that block (at
-    which the worker is called) is reverted as non-canonical (meaning the
-    block was surpassed by a longer chain). The value is available for the
-    worker that is re-run at the new (different block with the same block
+    which the worker is called) is reverted as non-canonical (meaning that
+    the block was surpassed by a longer chain). The value is available for
+    the worker that is re-run at the new (different block with the same block
     number) and future blocks. This storage can be used by offchain workers
     to handle forks and coordinate offchain workers running on different
     forks.
@@ -4250,16 +4246,16 @@
 
     <\definition>
       <label|defn-http-return-value><strong|HTTP status codes> that can get
-      returned by certain the Offchain HTTP functions.
+      returned by certain Offchain HTTP functions.
 
       <\itemize-dot>
         <item><strong|0>: the specified request identifier is invalid.
 
-        <item><strong|10>: the deadline of the started request was reached.
+        <item><strong|10>: the deadline for the started request was reached.
 
-        <item><strong|20>: an error has occured during the request, e.g. a
-        timeout or the remote has closed the connection. On returning this
-        error code, the request is considered destroyed and must be
+        <item><strong|20>: an error has occurred during the request, e.g. a
+        timeout or the remote server has closed the connection. On returning
+        this error code, the request is considered destroyed and must be
         reconstructed again.
 
         <item><strong|100>..<strong|999>: the request has finished with the
@@ -4403,7 +4399,7 @@
   <subsubsection|<verbatim|ext_random_seed>>
 
   Generates a random seed. This is a truly random non deterministic seed
-  generated by host environment.
+  generated by the host environment.
 
   \;
 
@@ -4427,7 +4423,7 @@
   <subsubsection|<verbatim|ext_local_storage_set>>
 
   Sets a value in the local storage. This storage is not part of the
-  consensus, it's only accessible by offchain worker tasks running on the
+  consensus, it's only accessible by the offchain worker tasks running on the
   same machine and is persisted between runs.
 
   \;
@@ -4448,9 +4444,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage as defined in Definition
-    <reference|defn-offchain-persistent-storage> and a value equal to 2 for
-    local storage as defined in Definition
+    value equal to 1 is used for a persistent storage as defined in
+    Definition <reference|defn-offchain-persistent-storage> and a value equal
+    to 2 for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
@@ -4489,9 +4485,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage as defined in Definition
-    <reference|defn-offchain-persistent-storage> and a value equal to 2 for
-    local storage as defined in Definition
+    value equal to 1 is used for a persistent storage as defined in
+    Definition <reference|defn-offchain-persistent-storage> and a value equal
+    to 2 for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
@@ -4536,16 +4532,16 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for persistent storage as defined in Definition
-    <reference|defn-offchain-persistent-storage> and a value equal to 2 for
-    local storage as defined in Definition
+    value equal to 1 is used for a persistent storage as defined in
+    Definition <reference|defn-offchain-persistent-storage> and a value equal
+    to 2 for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer to the buffer containing the key.
 
     <item><verbatim|key_len>: an i32 integer indicating the size of the key.
 
-    <item><verbatim|value_len>: an i32 integer indication the size of the
+    <item><verbatim|value_len>: an i32 integer indicating the size of the
     value.
 
     <item><verbatim|result>: a pointer to the bu\[er in which the function
@@ -4555,8 +4551,8 @@
 
   <subsubsection|<verbatim|ext_http_request_start>>
 
-  Initiates a http request given HTTP method and the URL. Returns the id of
-  newly started request.
+  Initiates a http request given by the HTTP method and the URL. Returns the
+  id of a newly started request.
 
   \;
 
@@ -4641,9 +4637,9 @@
 
   <subsubsection|<verbatim|ext_http_request_write_body>>
 
-  Write a chunk of request body. Writing an empty chunk finalises the
-  request. Returns a non-zero value in case deadline is reached or the chunk
-  couldn't be written.
+  Writes a chunk of the request body. Writing an empty chunk finalises the
+  request. Returns a non-zero value in case the deadline is reached or the
+  chunk could not be written.
 
   \;
 
@@ -4676,12 +4672,12 @@
     block indefinitely.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
-    indicating if the header has been set or a non-zero value if otherwise.
+    indicates if the header has been set or a non-zero value if otherwise.
   </itemize>
 
   <subsubsection|<verbatim|ext_http_response_wait>>
 
-  Block and wait for the responses for given requests. Returns an array of
+  Blocks and waits for the responses for given requests. Returns an array of
   request statuses (the size is the same as number of IDs).
 
   \;
@@ -4749,10 +4745,10 @@
   <subsubsection|<verbatim|ext_http_response_read_body>>
 
   Reads a chunk of body response to the given buffer. Returns the number of
-  bytes written or an error in case a deadline is reached or server closed
-  the connection. If `0' is returned it means that the response has been
-  fully consumed and the <verbatim|request_id> is now invalid. This implies
-  that response headers must be read before draining the body.
+  bytes written or an error in case a deadline is reached or the server
+  closed the connection. If `0' is returned it means that the response has
+  been fully consumed and the <verbatim|request_id> is now invalid. This
+  implies that response headers must be read before draining the body.
 
   \;
 
@@ -4786,7 +4782,7 @@
     block indefinitely.
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
-    indicated a fully consumed response or a non-zero value if otherwise.
+    indicateds a fully consumed response or a non-zero value if otherwise.
   </itemize>
 
   <subsection|Sandboxing>
@@ -5050,7 +5046,7 @@
   Pair of Blake2Hash of the blob as element of <math|\<bbb-B\><rsub|32>> and
   its length as 64 bit integer.
 
-  <subsection|<verbatim|BabeApi_epoch>><label|sect-rte-validate-transaction>
+  <subsection|<verbatim|BabeApi_epoch>><label|sect-rte-babeapi-epoch>
 
   This entry is called to obtain the current configuration of BABE consensus
   protocol.\ 
@@ -5184,12 +5180,62 @@
   still be considered for including in blocks that are authored on the
   current node, but will never be sent to other peers.
 
-  <\bibliography|bib|tm-plain|polkadot_re_spec>
-    \;
+  <\bibliography|bib|tm-alpha|polkadot_re_spec>
+    <\bib-list|9>
+      <bibitem*|Col19><label|bib-collet_extremely_2019>Yann Collet.
+      <newblock>Extremely fast non-cryptographic hash algorithm.
+      <newblock><localize|Technical Report>, -,
+      <slink|http://cyan4973.github.io/xxHash/>, 2019.<newblock>
+
+      <bibitem*|DGKR18><label|bib-david_ouroboros_2018>Bernardo David, Peter
+      Gaºi, Aggelos Kiayias<localize|, and >Alexander Russell.
+      <newblock>Ouroboros praos: An adaptively-secure, semi-synchronous
+      proof-of-stake blockchain. <newblock><localize|In
+      ><with|font-shape|italic|Annual International Conference on the Theory
+      and Applications of Cryptographic Techniques>, <localize|pages >66\U98.
+      Springer, 2018.<newblock>
+
+      <bibitem*|Gro19><label|bib-w3f_research_group_blind_2019>W3F<nbsp>Research
+      Group. <newblock>Blind Assignment for Blockchain Extension.
+      <newblock>Technical <keepcase|Specification>, Web 3.0 Foundation,
+      <slink|http://research.web3.foundation/en/latest/polkadot/BABE/Babe/>,
+      2019.<newblock>
+
+      <bibitem*|lab19><label|bib-protocol_labs_libp2p_2019>Protocol labs.
+      <newblock>Libp2p Specification. <newblock><localize|Technical Report>,
+      Protocol labs, <slink|https://github.com/libp2p/specs>, 2019.<newblock>
+
+      <bibitem*|LJ17><label|bib-liusvaara_edwards-curve_2017>Ilari
+      Liusvaara<localize| and >Simon Josefsson. <newblock>Edwards-Curve
+      Digital Signature Algorithm (EdDSA). <newblock>2017.<newblock>
+
+      <bibitem*|Per18><label|bib-perrin_noise_2018>Trevor Perrin.
+      <newblock>The Noise Protocol Framework. <newblock><localize|Technical
+      Report>, <slink|https://noiseprotocol.org/noise.html>, 2018.<newblock>
+
+      <bibitem*|SA15><label|bib-saarinen_blake2_2015>Markku<nbsp>Juhani
+      Saarinen<localize| and >Jean-Philippe Aumasson. <newblock>The BLAKE2
+      cryptographic hash and message authentication code (MAC).
+      <newblock><keepcase|RFC> 7693, -, <slink|https://tools.ietf.org/html/rfc7693>,
+      2015.<newblock>
+
+      <bibitem*|Ste19><label|bib-stewart_grandpa:_2019>Alistair Stewart.
+      <newblock>GRANDPA: A Byzantine Finality Gadgets.
+      <newblock>2019.<newblock>
+
+      <bibitem*|Tec19><label|bib-parity_technologies_substrate_2019>Parity
+      Technologies. <newblock>Substrate Reference Documentation.
+      <newblock>Rust <keepcase|Doc>, Parity Technologies,
+      <slink|https://substrate.dev/rustdocs/>, 2019.<newblock>
+    </bib-list>
   </bibliography>
 
   <\the-index|idx>
-    \;
+    <index+1|Transaction Message|<pageref|auto-22>\U<pageref|auto-25>>
+
+    <index+1|transaction pool|<pageref|auto-23>>
+
+    <index+1|transaction queue|<pageref|auto-24>>
   </the-index>
 </body>
 
@@ -5278,7 +5324,7 @@
     <associate|auto-143|<tuple|G.2|72>>
     <associate|auto-144|<tuple|G.3|72>>
     <associate|auto-145|<tuple|G.3|73>>
-    <associate|auto-146|<tuple|G.3|75>>
+    <associate|auto-146|<tuple|Tec19|75>>
     <associate|auto-15|<tuple|3.1.2.1|20>>
     <associate|auto-16|<tuple|3.1.2.2|20>>
     <associate|auto-17|<tuple|3.1.2.3|21>>
@@ -5372,14 +5418,15 @@
     <associate|auto-97|<tuple|F.1.8.2|58>>
     <associate|auto-98|<tuple|F.1.8.3|59>>
     <associate|auto-99|<tuple|F.1.9|59>>
-    <associate|bib-alistair_stewart_grandpa:_2019|<tuple|1|73>>
-    <associate|bib-collet_extremely_2019|<tuple|2|73>>
-    <associate|bib-david_ouroboros_2018|<tuple|3|73>>
-    <associate|bib-parity_technologies_substrate_2019|<tuple|8|73>>
-    <associate|bib-perrin_trevor_noise_2018|<tuple|6|73>>
-    <associate|bib-protocol_labs_libp2p_2019|<tuple|5|73>>
-    <associate|bib-saarinen_blake2_2015|<tuple|7|73>>
-    <associate|bib-w3f_research_group_blind_2019|<tuple|4|73>>
+    <associate|bib-collet_extremely_2019|<tuple|Col19|?>>
+    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|?>>
+    <associate|bib-liusvaara_edwards-curve_2017|<tuple|LJ17|?>>
+    <associate|bib-parity_technologies_substrate_2019|<tuple|Tec19|?>>
+    <associate|bib-perrin_noise_2018|<tuple|Per18|?>>
+    <associate|bib-protocol_labs_libp2p_2019|<tuple|lab19|?>>
+    <associate|bib-saarinen_blake2_2015|<tuple|SA15|?>>
+    <associate|bib-stewart_grandpa:_2019|<tuple|Ste19|?>>
+    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|?>>
     <associate|block|<tuple|3.3.1.1|23>>
     <associate|block-signature|<tuple|5.11|33>>
     <associate|chap-consensu|<tuple|5|31>>
@@ -5465,11 +5512,12 @@
     <associate|sect-msg-consensus|<tuple|E.1.6|54>>
     <associate|sect-msg-status|<tuple|E.1.1|51>>
     <associate|sect-msg-transactions|<tuple|E.1.5|53>>
-    <associate|sect-network-interactions|<tuple|8|27>>
+    <associate|sect-network-interactions|<tuple|4|27>>
     <associate|sect-network-messages|<tuple|E|51>>
     <associate|sect-predef-storage-keys|<tuple|D|49>>
     <associate|sect-randomness|<tuple|A.3|41>>
-    <associate|sect-re-api|<tuple|8|55>>
+    <associate|sect-re-api|<tuple|F|55>>
+    <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|?>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|71>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|70>>
     <associate|sect-rte-validate-transaction|<tuple|G.2.7|71>>
@@ -5497,9 +5545,15 @@
 
       protocol_labs_libp2p_2019
 
+      liusvaara_edwards-curve_2017
+
       protocol_labs_libp2p_2019
 
-      perrin_trevor_noise_2018
+      protocol_labs_libp2p_2019
+
+      perrin_noise_2018
+
+      protocol_labs_libp2p_2019
 
       protocol_labs_libp2p_2019
 
@@ -5509,7 +5563,7 @@
 
       david_ouroboros_2018
 
-      alistair_stewart_grandpa:_2019
+      stewart_grandpa:_2019
 
       saarinen_blake2_2015
 
@@ -5675,15 +5729,15 @@
       Protocol> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <pageref|auto-35><vspace|0.5fn>
 
-      4.1.<space|2spc>Node identities and addresses
+      4.1.<space|2spc>Node Identities and Addresses
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-36>
 
-      4.2.<space|2spc>Discovery mechanisms
+      4.2.<space|2spc>Discovery Mechanisms
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-37>
 
-      4.3.<space|2spc>Transport protocol <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      4.3.<space|2spc>Transport Protocol <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-38>
 
       <with|par-left|<quote|1tab>|4.3.1.<space|2spc>Encryption
