@@ -4325,7 +4325,13 @@
 
   <subsubsection|<verbatim|ext_network_state>>
 
-  Returns opaque information about the local node's network state.
+  Returns the SCALE encoded, opaque information about the local node's
+  network state. This information is fetched by calling into
+  <verbatim|libp2p>, which <em|might> include the <verbatim|PeerId> and
+  possible <verbatim|Multiaddress(-es)> by which the node is publicly known
+  by. Those values are unique and have to be known by the node individually.
+  Due to its opaque nature, it's unknown whether that information is
+  available prior to execution.
 
   \;
 
@@ -4346,8 +4352,9 @@
     size of the opaque network state gets written to.
 
     <item><verbatim|result>: a pointer to the buffer containing the SCALE
-    encoded network state. <todo|Spec the detail of the the result this
-    requires a deeper look since it includes datastructures from libp2p-dev>
+    encoded network state. This includes none or one <verbatim|PeerId>
+    followed by none, one or more IPv4 or IPv6 <verbatim|Multiaddress(-es)>
+    by which the node is publicly known by.
   </itemize>
 
   <subsubsection|<verbatim|ext_timestamp>>
