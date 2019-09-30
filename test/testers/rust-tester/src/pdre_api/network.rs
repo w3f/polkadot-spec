@@ -42,7 +42,9 @@ pub fn test_network_state() {
     let mut api = NetworkApi::new_with_offchain_context();
 
     let mut written_out = 0;
-    let _res = api.rtm_ext_network_state(&mut written_out);
+    let res = api.rtm_ext_network_state(&mut written_out);
+    assert_eq!(res, vec![0,0,0]); // [PeerId, MultiaddressIPv4, MultiaddressIPv6]
 
-    // TODO...
+    println!("> testing network state");
+    println!("  - Opaque info : {:?}", res);
 }
