@@ -1,69 +1,60 @@
 use super::utils::StorageApi;
 
-pub fn set_get_storage() {
+pub fn set_get_storage(key: &str, value: &str) {
     let mut api = StorageApi::new();
-
-    let key1 = String::from("Key1");
-    let value1 = String::from("Value1");
 
     // Get invalid key
     let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key1.as_bytes(), &mut written_out);
+    let res = api.rtm_ext_get_allocated_storage(key.as_bytes(), &mut written_out);
     assert_eq!(written_out, u32::max_value());
     assert_eq!(res, [0u8; 0]);
 
     // Set key/value
-    api.rtm_ext_set_storage(key1.as_bytes(), value1.as_bytes());
+    api.rtm_ext_set_storage(key.as_bytes(), value.as_bytes());
 
     // Get valid key
     let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key1.as_bytes(), &mut written_out);
+    let res = api.rtm_ext_get_allocated_storage(key.as_bytes(), &mut written_out);
     assert_eq!(written_out, 6);
-    assert_eq!(res, value1.as_bytes());
+    assert_eq!(res, value.as_bytes());
 }
 
-pub fn exists_storage() {
+pub fn exists_storage(key: &str, value: &str) {
     let mut api = StorageApi::new();
 
-    let key1 = String::from("Key1");
-    let value1 = String::from("Value1");
-
     // Check invalid key
-    let res = api.rtm_ext_exists_storage(key1.as_bytes());
+    let res = api.rtm_ext_exists_storage(key.as_bytes());
     assert_eq!(res, 0);
 
     // Set key/value
-    api.rtm_ext_set_storage(key1.as_bytes(), value1.as_bytes());
+    api.rtm_ext_set_storage(key.as_bytes(), value.as_bytes());
 
     // Check valid key
-    let res = api.rtm_ext_exists_storage(key1.as_bytes());
+    let res = api.rtm_ext_exists_storage(key.as_bytes());
     assert_eq!(res, 1);
 }
 
-pub fn clear_storage() {
+pub fn clear_storage(key: &str, value: &str) {
     let mut api = StorageApi::new();
 
-    let key1 = String::from("Key1");
-    let value1 = String::from("Value1");
-
     // Set key/value
-    api.rtm_ext_set_storage(key1.as_bytes(), value1.as_bytes());
+    api.rtm_ext_set_storage(key.as_bytes(), value.as_bytes());
 
     // Get valid key
     let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key1.as_bytes(), &mut written_out);
-    assert_eq!(res, value1.as_bytes());
+    let res = api.rtm_ext_get_allocated_storage(key.as_bytes(), &mut written_out);
+    assert_eq!(res, value.as_bytes());
 
     // Clear key
-    api.rtm_ext_clear_storage(key1.as_bytes());
+    api.rtm_ext_clear_storage(key.as_bytes());
 
     // Get invalid key
     let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key1.as_bytes(), &mut written_out);
+    let res = api.rtm_ext_get_allocated_storage(key.as_bytes(), &mut written_out);
     assert_eq!(res, [0; 0]);
 }
 
-pub fn clear_prefix() {
+pub fn clear_prefix() { // TODO
     let mut api = StorageApi::new();
 
     let key1 = String::from("Key1");
@@ -96,63 +87,54 @@ pub fn clear_prefix() {
     assert_eq!(res, [0; 0]);
 }
 
-pub fn set_get_child_storage() {
+pub fn set_get_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut api = StorageApi::new();
 
+    /*
+    let store2 = String::from(":child_storage:default:Store2");
     let store1 = String::from(":child_storage:default:Store1");
 
     let key1 = String::from("Key1");
     let value1 = String::from("Value1");
     let key2 = String::from("Key2");
     let value2 = String::from("Value2");
+    */
 
     // Get invalid key
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
         store1.as_bytes(),
-        key1.as_bytes(),
+        key.as_bytes(),
         &mut written_out,
     );
     assert_eq!(written_out, u32::max_value());
     assert_eq!(res, [0u8; 0]);
 
-    // Set key/values
-    api.rtm_ext_set_child_storage(store1.as_bytes(), key1.as_bytes(), value1.as_bytes());
-    api.rtm_ext_set_child_storage(store1.as_bytes(), key2.as_bytes(), value2.as_bytes());
+    // Set key/value
+    api.rtm_ext_set_child_storage(store1.as_bytes(), key.as_bytes(), value.as_bytes());
 
     // Get valid key
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
         store1.as_bytes(),
-        key1.as_bytes(),
+        key.as_bytes(),
         &mut written_out,
     );
     assert_eq!(written_out, 6);
-    assert_eq!(res, value1.as_bytes());
-
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(
-        store1.as_bytes(),
-        key2.as_bytes(),
-        &mut written_out,
-    );
-    assert_eq!(written_out, 6);
-    assert_eq!(res, value2.as_bytes());
+    assert_eq!(res, value.as_bytes());
 
     // Get invalid key from invalid store
-    let store2 = String::from(":child_storage:default:Store2");
-
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
         store2.as_bytes(),
-        key1.as_bytes(),
+        key.as_bytes(),
         &mut written_out,
     );
     assert_eq!(written_out, u32::max_value());
     assert_eq!(res, [0; 0]);
 }
 
-pub fn exists_child_storage() {
+pub fn exists_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut api = StorageApi::new();
 
     let store1 = String::from(":child_storage:default:Store1");
@@ -160,38 +142,54 @@ pub fn exists_child_storage() {
     let value1 = String::from("Value1");
 
     // Check invalid key
-    let res = api.rtm_ext_exists_child_storage(store1.as_bytes(), key1.as_bytes());
+    let res = api.rtm_ext_exists_child_storage(store1.as_bytes(), key.as_bytes());
     assert_eq!(res, 0);
 
     // Set key/value
-    api.rtm_ext_set_child_storage(store1.as_bytes(), key1.as_bytes(), value1.as_bytes());
+    api.rtm_ext_set_child_storage(store1.as_bytes(), key.as_bytes(), value.as_bytes());
 
     // Check valid key
     let res = api.rtm_ext_exists_child_storage(store1.as_bytes(), key1.as_bytes());
     assert_eq!(res, 1);
+
+    // Check invalid key from invalid store
+    let res = api.rtm_ext_exists_child_storage(store2.as_bytes(), key.as_bytes());
+    assert_eq!(res, 0);
 }
 
-pub fn clear_child_storage() {
+pub fn clear_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut api = StorageApi::new();
 
+    /*
     let store1 = String::from(":child_storage:default:Store1");
     let key1 = String::from("Key1");
     let value1 = String::from("Value1");
+    */
 
     // Set key/value
-    api.rtm_ext_set_child_storage(store1.as_bytes(), key1.as_bytes(), value1.as_bytes());
+    api.rtm_ext_set_child_storage(store1.as_bytes(), key.as_bytes(), value.as_bytes());
+    api.rtm_ext_set_child_storage(store2.as_bytes(), key.as_bytes(), value.as_bytes());
 
-    // Get valid key
+    // Get valid keys
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
         store1.as_bytes(),
-        key1.as_bytes(),
+        key.as_bytes(),
         &mut written_out,
     );
-    assert_eq!(res, value1.as_bytes());
+    // TODO: check len of written_out
+    assert_eq!(res, value.as_bytes());
+
+    let mut written_out = 0;
+    let res = api.rtm_ext_get_allocated_child_storage(
+        store2.as_bytes(),
+        key.as_bytes(),
+        &mut written_out,
+    );
+    assert_eq!(res, value.as_bytes());
 
     // Clear key
-    api.rtm_ext_clear_child_storage(store1.as_bytes(), key1.as_bytes());
+    api.rtm_ext_clear_child_storage(store1.as_bytes(), key.as_bytes());
 
     // Get invalid key
     let mut written_out = 0;
@@ -201,9 +199,18 @@ pub fn clear_child_storage() {
         &mut written_out,
     );
     assert_eq!(res, [0; 0]);
+
+    // Get valid key from other store
+    let mut written_out = 0;
+    let res = api.rtm_ext_get_allocated_child_storage(
+        store2.as_bytes(),
+        key.as_bytes(),
+        &mut written_out,
+    );
+    assert_eq!(res, value.as_bytes());
 }
 
-pub fn clear_child_prefix() {
+pub fn clear_child_prefix() { // TODO
     let mut api = StorageApi::new();
 
     let store1 = String::from(":child_storage:default:Store1");
@@ -258,19 +265,21 @@ pub fn clear_child_prefix() {
     assert_eq!(res, [0; 0]);
 }
 
-pub fn kill_child_storage() {
+pub fn kill_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut api = StorageApi::new();
 
+    /*
     let store1 = String::from(":child_storage:default:Store1");
 
     let key1 = String::from("Key1");
     let value1 = String::from("Value1");
     let key2 = String::from("Key2");
     let value2 = String::from("Value2");
+    */
 
     // Set key/values
-    api.rtm_ext_set_child_storage(store1.as_bytes(), key1.as_bytes(), value1.as_bytes());
-    api.rtm_ext_set_child_storage(store1.as_bytes(), key2.as_bytes(), value2.as_bytes());
+    api.rtm_ext_set_child_storage(store1.as_bytes(), key.as_bytes(), value.as_bytes());
+    api.rtm_ext_set_child_storage(store2.as_bytes(), key.as_bytes(), value.as_bytes());
 
     // Kill the child
     api.rtm_ext_kill_child_storage(store1.as_bytes());
@@ -279,18 +288,19 @@ pub fn kill_child_storage() {
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
         store1.as_bytes(),
-        key1.as_bytes(),
+        key.as_bytes(),
         &mut written_out,
     );
     assert_eq!(res, [0; 0]);
 
+    // Get valid key from other store
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
-        store1.as_bytes(),
-        key2.as_bytes(),
+        store2.as_bytes(),
+        key.as_bytes(),
         &mut written_out,
     );
-    assert_eq!(res, [0; 0]);
+    assert_eq!(res, value.as_bytes());
 }
 
 pub fn allocate_storage() {
