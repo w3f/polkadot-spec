@@ -116,9 +116,9 @@ pub fn test_ed25519(input: &str) { // message
     println!("  - signature: {}", hex::encode(&signature[..]));
     print!("  - signature valid?: ");
     if verify == 0 {
-        println!("YES");
+        println!("GOOD SIGNATURE");
     } else {
-        println!("NO");
+        println!("BAD SIGNATURE");
     }
     println!("  - public key 2: {}", hex::encode(pubkey2));
     println!("  - all public keys : {}", hex::encode(&all_pubkeys[1..])); // TODO; should be [..]
@@ -162,9 +162,9 @@ pub fn test_sr25519(input: &str) {
     println!("  - signature: {}", hex::encode(&signature[..]));
     print!("  - signature valid?: ");
     if verify == 0 {
-        println!("YES");
+        println!("GOOD SIGNATURE");
     } else {
-        println!("NO");
+        println!("BAD SIGNATURE");
     }
     println!("  - public key 2: {}", hex::encode(pubkey2));
     println!("  - all public keys : {}", hex::encode(&all_pubkeys[1..])); // TODO; should be [..]
