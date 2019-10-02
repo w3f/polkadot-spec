@@ -1,7 +1,12 @@
+use super::ParsedInput;
 use super::utils::StorageApi;
 
-pub fn test_set_get_storage(key: &str, value: &str) {
+// Input: key, value
+pub fn test_set_get_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
+
+    let key = input.get(0);
+    let value = input.get(1);
 
     // Get invalid key
     let mut written_out = 0;
@@ -19,8 +24,12 @@ pub fn test_set_get_storage(key: &str, value: &str) {
     assert_eq!(res, value.as_bytes());
 }
 
-pub fn test_exists_storage(key: &str, value: &str) {
+// Input: key, value
+pub fn test_exists_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
+
+    let key = input.get(0);
+    let value = input.get(1);
 
     // Check invalid key
     let res = api.rtm_ext_exists_storage(key.as_bytes());
@@ -34,8 +43,12 @@ pub fn test_exists_storage(key: &str, value: &str) {
     assert_eq!(res, 1);
 }
 
-pub fn test_clear_storage(key: &str, value: &str) {
+// Input: key, value
+pub fn test_clear_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
+
+    let key = input.get(0);
+    let value = input.get(1);
 
     // Set key/value
     api.rtm_ext_set_storage(key.as_bytes(), value.as_bytes());
@@ -87,8 +100,14 @@ pub fn test_clear_prefix() { // TODO
     assert_eq!(res, [0; 0]);
 }
 
-pub fn test_set_get_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
+// Input: store1, store2, key, value
+pub fn test_set_get_child_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
+
+    let store1 = input.get(0);
+    let store2 = input.get(1);
+    let key = input.get(2);
+    let value = input.get(3);
 
     /*
     let store2 = String::from(":child_storage:default:Store2");
@@ -134,12 +153,20 @@ pub fn test_set_get_child_storage(store1: &str, store2: &str, key: &str, value: 
     assert_eq!(res, [0; 0]);
 }
 
-pub fn test_exists_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
+// Input: store1, store2, key, value
+pub fn test_exists_child_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
 
+    let store1 = input.get(0);
+    let store2 = input.get(1);
+    let key = input.get(2);
+    let value = input.get(3);
+
+    /*
     let store1 = String::from(":child_storage:default:Store1");
     let key1 = String::from("Key1");
     let value1 = String::from("Value1");
+    */
 
     // Check invalid key
     let res = api.rtm_ext_exists_child_storage(store1.as_bytes(), key.as_bytes());
@@ -149,7 +176,7 @@ pub fn test_exists_child_storage(store1: &str, store2: &str, key: &str, value: &
     api.rtm_ext_set_child_storage(store1.as_bytes(), key.as_bytes(), value.as_bytes());
 
     // Check valid key
-    let res = api.rtm_ext_exists_child_storage(store1.as_bytes(), key1.as_bytes());
+    let res = api.rtm_ext_exists_child_storage(store1.as_bytes(), key.as_bytes());
     assert_eq!(res, 1);
 
     // Check invalid key from invalid store
@@ -157,8 +184,14 @@ pub fn test_exists_child_storage(store1: &str, store2: &str, key: &str, value: &
     assert_eq!(res, 0);
 }
 
-pub fn test_clear_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
+// Input: store1, store2, key, value
+pub fn test_clear_child_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
+
+    let store1 = input.get(0);
+    let store2 = input.get(1);
+    let key = input.get(2);
+    let value = input.get(3);
 
     /*
     let store1 = String::from(":child_storage:default:Store1");
@@ -265,8 +298,14 @@ pub fn test_clear_child_prefix() { // TODO
     assert_eq!(res, [0; 0]);
 }
 
-pub fn test_kill_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
+// Input: store1, store2, key, value
+pub fn test_kill_child_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
+
+    let store1 = input.get(0);
+    let store2 = input.get(1);
+    let key = input.get(2);
+    let value = input.get(3);
 
     /*
     let store1 = String::from(":child_storage:default:Store1");
