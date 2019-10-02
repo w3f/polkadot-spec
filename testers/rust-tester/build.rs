@@ -11,6 +11,8 @@ fn main() {
         .args(&["--crate-type", "cdylib"])
         // optimize (aka "--release" for cargo)
         .arg("-O")
+        // set output path
+        .args(&["--out-dir", "target/wasm32-unknown-unknown/release/"])
         .arg("src/pdre_api/wasm_blob.rs")
         .status()
         .map(|status| {
