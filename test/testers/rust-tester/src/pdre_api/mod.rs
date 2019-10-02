@@ -4,6 +4,7 @@ mod storage;
 mod utils;
 
 pub fn run_full_tests() {
+    /*
     println!("***** PDRE API Test Suite *****");
     println!("NOTE: not all tests display information, only those deemed necessary. If a test fails, this program panics.");
     println!("");
@@ -43,4 +44,5 @@ pub fn run_full_tests() {
     storage::set_get_storage();
     storage::storage_root();
     println!("DONE - OK!");
+    */
 }
