@@ -1,6 +1,6 @@
 use super::utils::StorageApi;
 
-pub fn set_get_storage(key: &str, value: &str) {
+pub fn test_set_get_storage(key: &str, value: &str) {
     let mut api = StorageApi::new();
 
     // Get invalid key
@@ -19,7 +19,7 @@ pub fn set_get_storage(key: &str, value: &str) {
     assert_eq!(res, value.as_bytes());
 }
 
-pub fn exists_storage(key: &str, value: &str) {
+pub fn test_exists_storage(key: &str, value: &str) {
     let mut api = StorageApi::new();
 
     // Check invalid key
@@ -34,7 +34,7 @@ pub fn exists_storage(key: &str, value: &str) {
     assert_eq!(res, 1);
 }
 
-pub fn clear_storage(key: &str, value: &str) {
+pub fn test_clear_storage(key: &str, value: &str) {
     let mut api = StorageApi::new();
 
     // Set key/value
@@ -54,7 +54,7 @@ pub fn clear_storage(key: &str, value: &str) {
     assert_eq!(res, [0; 0]);
 }
 
-pub fn clear_prefix() { // TODO
+pub fn test_clear_prefix() { // TODO
     let mut api = StorageApi::new();
 
     let key1 = String::from("Key1");
@@ -87,7 +87,7 @@ pub fn clear_prefix() { // TODO
     assert_eq!(res, [0; 0]);
 }
 
-pub fn set_get_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
+pub fn test_set_get_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut api = StorageApi::new();
 
     /*
@@ -134,7 +134,7 @@ pub fn set_get_child_storage(store1: &str, store2: &str, key: &str, value: &str)
     assert_eq!(res, [0; 0]);
 }
 
-pub fn exists_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
+pub fn test_exists_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut api = StorageApi::new();
 
     let store1 = String::from(":child_storage:default:Store1");
@@ -157,7 +157,7 @@ pub fn exists_child_storage(store1: &str, store2: &str, key: &str, value: &str) 
     assert_eq!(res, 0);
 }
 
-pub fn clear_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
+pub fn test_clear_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut api = StorageApi::new();
 
     /*
@@ -210,7 +210,7 @@ pub fn clear_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     assert_eq!(res, value.as_bytes());
 }
 
-pub fn clear_child_prefix() { // TODO
+pub fn test_clear_child_prefix() { // TODO
     let mut api = StorageApi::new();
 
     let store1 = String::from(":child_storage:default:Store1");
@@ -265,7 +265,7 @@ pub fn clear_child_prefix() { // TODO
     assert_eq!(res, [0; 0]);
 }
 
-pub fn kill_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
+pub fn test_kill_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut api = StorageApi::new();
 
     /*
@@ -303,7 +303,7 @@ pub fn kill_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     assert_eq!(res, value.as_bytes());
 }
 
-pub fn allocate_storage() {
+pub fn test_allocate_storage() {
     let mut api = StorageApi::new();
 
     let address = api.rtm_ext_malloc((44 as u32).to_le());
@@ -313,7 +313,7 @@ pub fn allocate_storage() {
     api.rtm_ext_free(&address);
 }
 
-pub fn storage_root() {
+pub fn test_storage_root() {
     let mut api = StorageApi::new();
 
     let mut result = [0; 32];
@@ -322,7 +322,7 @@ pub fn storage_root() {
     // TODO...
 }
 
-pub fn set_get_local_storage() {
+pub fn test_set_get_local_storage() {
     let mut api = StorageApi::new_with_offchain_context();
 
     let key1 = String::from("Key1");
