@@ -3,7 +3,9 @@ mod network;
 mod storage;
 mod utils;
 
-pub fn run_full_tests() {
+use clap::ArgMatches;
+
+pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
     /*
     println!("***** PDRE API Test Suite *****");
     println!("NOTE: not all tests display information, only those deemed necessary. If a test fails, this program panics.");

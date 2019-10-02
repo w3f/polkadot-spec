@@ -195,7 +195,7 @@ pub fn clear_child_storage(store1: &str, store2: &str, key: &str, value: &str) {
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
         store1.as_bytes(),
-        key1.as_bytes(),
+        key.as_bytes(),
         &mut written_out,
     );
     assert_eq!(res, [0; 0]);
