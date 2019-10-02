@@ -50,6 +50,9 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_set_get_local_storage" => storage::test_set_get_local_storage(),
             "test_set_get_storage" => storage::test_set_get_storage(input),
             "test_storage_root" => storage::test_storage_root(),
+            // test network functions
+            "test_http" => network::test_http(),
+            "test_network_state" => network::test_network_state(),
             _ => panic!("specified functio not available"),
         }
     }
