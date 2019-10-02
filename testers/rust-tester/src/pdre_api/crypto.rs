@@ -3,6 +3,7 @@ use super::utils::CryptoApi;
 
 use substrate_primitives::hashing::{twox_128, twox_256, twox_64};
 
+// Input: data
 pub fn test_blake2_128(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
