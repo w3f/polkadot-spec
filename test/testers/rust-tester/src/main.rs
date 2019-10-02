@@ -48,6 +48,6 @@ fn main() {
         let mut trie_tryer: TrieTester = TrieTester::new(matches);
         trie_tryer.process_state_trie_command(matches);
     } else if let Some(matches) = matches.subcommand_matches("pdre-api") {
-        pdre_api::run_full_tests();
+        pdre_api::process_pdre_api_tests(matches);
     }
 }
