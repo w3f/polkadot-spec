@@ -70,14 +70,14 @@ using Test
             end
         end
 
-        # ## Test storage functions (prefix values)
-        for func in PdreApiTestFixtures.fn_storage_store
-            for (store1, store2, key, value) in PdreApiTestData.store_data_key_value_data
+        # ## Test storage functions (child storage)
+        for func in PdreApiTestFixtures.fn_storage_child
+            for (child1, child2, key, value) in PdreApiTestData.child_data_key_value_data
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
 
-                input = join([store1, store2, key, value], ",")
+                input = join([child1, child2, key, value], ",")
 
                 # append input
                 cmd = string(cmd, " \"", input,"\"")
