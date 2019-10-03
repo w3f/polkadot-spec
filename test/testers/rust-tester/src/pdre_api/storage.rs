@@ -60,6 +60,7 @@ pub fn test_clear_storage(input: ParsedInput) {
     // Get valid key
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
+    assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 
     // Clear key
@@ -68,6 +69,7 @@ pub fn test_clear_storage(input: ParsedInput) {
     // Get invalid key
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
+    assert_eq!(written_out, u32::max_value());
     assert_eq!(res, [0; 0]);
 }
 
@@ -92,9 +94,11 @@ pub fn test_clear_prefix(input: ParsedInput) {
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key1, &mut written_out);
     if key1.starts_with(prefix) {
+        assert_eq!(written_out, u32::max_value());
         assert_eq!(res, [0; 0]);
         println!("Key `{}` was deleted", str(key1));
     } else {
+        assert_eq!(written_out, value1.len() as u32);
         assert_eq!(res, value1);
         println!("Key `{}` remains", str(key1));
     }
@@ -102,9 +106,11 @@ pub fn test_clear_prefix(input: ParsedInput) {
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key2, &mut written_out);
     if key2.starts_with(prefix) {
+        assert_eq!(written_out, u32::max_value());
         assert_eq!(res, [0; 0]);
         println!("Key `{}` was deleted", str(key2));
     } else {
+        assert_eq!(written_out, value2.len() as u32);
         assert_eq!(res, value2);
         println!("Key `{}` remains", str(key2));
     }
@@ -198,7 +204,7 @@ pub fn test_clear_child_storage(input: ParsedInput) {
         key,
         &mut written_out,
     );
-    // TODO: check len of written_out
+    assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 
     let mut written_out = 0;
@@ -207,6 +213,7 @@ pub fn test_clear_child_storage(input: ParsedInput) {
         key,
         &mut written_out,
     );
+    assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 
     // Clear key
@@ -219,6 +226,7 @@ pub fn test_clear_child_storage(input: ParsedInput) {
         key,
         &mut written_out,
     );
+    assert_eq!(written_out, u32::max_value());
     assert_eq!(res, [0; 0]);
 
     // Get valid key from other child
@@ -228,6 +236,7 @@ pub fn test_clear_child_storage(input: ParsedInput) {
         key,
         &mut written_out,
     );
+    assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 }
 
@@ -259,6 +268,7 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
         key1,
         &mut written_out,
     );
+    assert_eq!(written_out, value1.len() as u32);
     assert_eq!(res, value1);
 
     let mut written_out = 0;
@@ -267,6 +277,7 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
         key2,
         &mut written_out,
     );
+    assert_eq!(written_out, value2.len() as u32);
     assert_eq!(res, value2);
 
     let mut written_out = 0;
@@ -276,9 +287,11 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
         &mut written_out,
     );
     if key1.starts_with(prefix) {
+        assert_eq!(written_out, u32::max_value());
         assert_eq!(res, [0; 0]);
         println!("Key `{}` was deleted", str(key1));
     } else {
+        assert_eq!(written_out, value1.len() as u32);
         assert_eq!(res, value1);
         println!("Key `{}` remains", str(key1));
     }
@@ -290,9 +303,11 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
         &mut written_out,
     );
     if key2.starts_with(prefix) {
+        assert_eq!(written_out, u32::max_value());
         assert_eq!(res, [0; 0]);
         println!("Key `{}` was deleted", str(key2));
     } else {
+        assert_eq!(written_out, value2.len() as u32);
         assert_eq!(res, value2);
         println!("Key `{}` remains", str(key2));
     }
@@ -321,6 +336,7 @@ pub fn test_kill_child_storage(input: ParsedInput) {
         key,
         &mut written_out,
     );
+    assert_eq!(written_out, u32::max_value());
     assert_eq!(res, [0; 0]);
 
     // Get valid key from other child
@@ -330,6 +346,7 @@ pub fn test_kill_child_storage(input: ParsedInput) {
         key,
         &mut written_out,
     );
+    assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 }
 
