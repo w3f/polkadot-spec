@@ -119,16 +119,6 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
     let key = input.get(2);
     let value = input.get(3);
 
-    /*
-    let child2 = String::from(":child_storage:default:Store2");
-    let child1 = String::from(":child_storage:default:Store1");
-
-    let key1 = String::from("Key1");
-    let value1 = String::from("Value1");
-    let key2 = String::from("Key2");
-    let value2 = String::from("Value2");
-    */
-
     // Get invalid key
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
@@ -172,12 +162,6 @@ pub fn test_exists_child_storage(input: ParsedInput) {
     let key = input.get(2);
     let value = input.get(3);
 
-    /*
-    let child1 = String::from(":child_storage:default:Store1");
-    let key1 = String::from("Key1");
-    let value1 = String::from("Value1");
-    */
-
     // Check invalid key
     let res = api.rtm_ext_exists_child_storage(child1, key);
     assert_eq!(res, 0);
@@ -202,12 +186,6 @@ pub fn test_clear_child_storage(input: ParsedInput) {
     let child2 = input.get(1);
     let key = input.get(2);
     let value = input.get(3);
-
-    /*
-    let child1 = String::from(":child_storage:default:Store1");
-    let key1 = String::from("Key1");
-    let value1 = String::from("Value1");
-    */
 
     // Set key/value
     api.rtm_ext_set_child_storage(child1, key, value);
@@ -264,16 +242,6 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
     let value1 = input.get(4);
     let key2 = input.get(5);
     let value2 = input.get(6);
-
-    /*
-    let child1 = String::from(":child_storage:default:Store1").as_bytes();
-    let child2 = String::from(":child_storage:default:Store2").as_bytes();
-
-    let key1 = String::from("some_prefix:Key1").as_bytes();
-    let value1 = String::from("Value1").as_bytes();
-    let key2 = String::from("some_prefix:Key2").as_bytes();
-    let value2 = String::from("Value2").as_bytes();
-    */
 
     // Set keys/values for each child
     api.rtm_ext_set_child_storage(child1, key1, value1);
@@ -338,15 +306,6 @@ pub fn test_kill_child_storage(input: ParsedInput) {
     let child2 = input.get(1);
     let key = input.get(2);
     let value = input.get(3);
-
-    /*
-    let child1 = String::from(":child_storage:default:Store1");
-
-    let key1 = String::from("Key1");
-    let value1 = String::from("Value1");
-    let key2 = String::from("Key2");
-    let value2 = String::from("Value2");
-    */
 
     // Set key/values
     api.rtm_ext_set_child_storage(child1, key, value);
