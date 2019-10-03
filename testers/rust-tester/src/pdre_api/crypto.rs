@@ -14,6 +14,7 @@ pub fn test_blake2_128(input: ParsedInput) {
     println!("Output: {}", hex::encode(output));
 }
 
+// Input: data
 pub fn test_blake2_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
@@ -24,6 +25,7 @@ pub fn test_blake2_256(input: ParsedInput) {
     println!("Output: {}", hex::encode(output));
 }
 
+// Input: data
 pub fn test_twox_64(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
@@ -36,6 +38,7 @@ pub fn test_twox_64(input: ParsedInput) {
     println!("Output: {}", hex::encode(output));
 }
 
+// Input: data
 pub fn test_twox_128(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
@@ -48,6 +51,7 @@ pub fn test_twox_128(input: ParsedInput) {
     println!("Output: {}", hex::encode(output));
 }
 
+// Input: data
 pub fn test_twox_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
@@ -60,6 +64,7 @@ pub fn test_twox_256(input: ParsedInput) {
     println!("Output: {}", hex::encode(output));
 }
 
+// Input: data
 pub fn test_keccak_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
@@ -75,6 +80,7 @@ pub fn test_keccak_256(input: ParsedInput) {
     println!("Output: {}", hex::encode(output));
 }
 
+// Input: data
 pub fn test_ed25519(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
@@ -121,6 +127,7 @@ pub fn test_ed25519(input: ParsedInput) {
     println!("All public keys : {}", hex::encode(&all_pubkeys[1..])); // TODO; should be [..]
 }
 
+// Input: data
 pub fn test_sr25519(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
