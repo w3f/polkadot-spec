@@ -5,17 +5,17 @@ using Test
     root_dir = script_dir * "/.."
     manifest_dir = script_dir * "testers/rust-tester/Cargo.toml"
     println(root_dir)
-    cd(root_dir)
+    cd("testers/rust-tester/")
     for cli in PdreApiTestFixtures.cli_testers
-        cd("test/testers/rust-tester/")
         # Test crypto functions
         for func in PdreApiTestFixtures.fn_crypto
-            for value in PdreApiTestFixtures.value_data
-                
+            for value in PdreApiTestData.value_data
+                cmdparams = ["cargo run pdre-api --function ", func, " --input \"", value, "\""]
+                cmd = join(cmdparams)
+                @test read(`sh -c $cmd`, String) != 1
             end
         end
         # run(`cargo run pdre-api`)
-        @test true
     end
     cd(root_dir)
 end
