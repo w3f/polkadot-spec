@@ -3,10 +3,6 @@ const cli_testers = [
   "build/bin/usr/local/bin/rust_tester"
 ]
 
-const test_command = "pdre-api"
-const function_arg = "--function"
-const input_art = "--input"
-
 # Input: data
 const fn_crypto = [
   "test_blake2_128",
