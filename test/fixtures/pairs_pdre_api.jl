@@ -1,4 +1,6 @@
-value_data = [
+module PdreApiFixtures
+
+const value_data = [
   "static", # value
   "Inverse", # value...
   "even-keeled",
@@ -11,7 +13,7 @@ value_data = [
   "portal",
 ]
 
-key_value_data = [
+const key_value_data = [
   [
     "static", # key
     "Inverse" # value
@@ -54,7 +56,7 @@ key_value_data = [
   ],
 ]
 
-prefix_key_value_data = [
+const prefix_key_value_data = [
   [
     "stat", # prefix
     "static", # key1
@@ -127,7 +129,7 @@ prefix_key_value_data = [
   ]
 ]
 
-store_data_key_value_data = [
+const store_data_key_value_data = [
   [
     ":child_storage:default:moratorium", # store1
     ":child_storage:default:hardware", # store2
@@ -190,7 +192,7 @@ store_data_key_value_data = [
   ]
 ]
 
-prefix_store_key_value_data = [
+const prefix_store_key_value_data = [
   [
     "stat", # prefix
     ":child_storage:default:moratorium", # store1
@@ -282,3 +284,5 @@ prefix_store_key_value_data = [
     "toolset"
   ]
 ]
+
+end
