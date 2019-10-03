@@ -37,6 +37,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_twox_64" => crypto::test_twox_64(input),
             "test_twox_128" => crypto::test_twox_128(input),
             "test_twox_256" => crypto::test_twox_256(input),
+            //
             // test storage functions
             "test_allocate_storage" => storage::test_allocate_storage(),
             "test_clear_child_prefix" => storage::test_clear_child_prefix(input),
@@ -50,52 +51,12 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_set_get_local_storage" => storage::test_set_get_local_storage(input),
             "test_set_get_storage" => storage::test_set_get_storage(input),
             "test_storage_root" => storage::test_storage_root(), // TODO
+            //
             // test network functions
             "test_http" => network::test_http(),
             "test_network_state" => network::test_network_state(),
+            //
             _ => panic!("specified functio not available"),
         }
     }
-
-    /*
-    println!("***** PDRE API Test Suite *****");
-    println!("NOTE: not all tests display information, only those deemed necessary. If a test fails, this program panics.");
-    println!("");
-
-    // crypto tests
-    println!("Running crypto tests...");
-    crypto::test_blake2_128();
-    crypto::test_blake2_256();
-    crypto::test_ed25519();
-    crypto::test_keccak_256();
-    crypto::test_sr25519();
-    crypto::test_twox_64();
-    crypto::test_twox_128();
-    crypto::test_twox_256();
-    println!("DONE - OK!");
-
-    // network tests
-    println!("**********");
-    println!("Running network tests...");
-    network::test_http();
-    network::test_network_state();
-    println!("DONE - OK!");
-
-    // storage tests
-    println!("**********");
-    println!("Running storage tests...");
-    storage::test_allocate_storage();
-    storage::test_clear_child_prefix();
-    storage::test_clear_child_storage();
-    storage::test_clear_prefix();
-    storage::test_clear_storage();
-    storage::test_exists_child_storage();
-    storage::test_exists_storage();
-    storage::test_kill_child_storage();
-    storage::test_set_get_child_storage();
-    storage::test_set_get_local_storage();
-    storage::test_set_get_storage();
-    storage::test_storage_root();
-    println!("DONE - OK!");
-    */
 }

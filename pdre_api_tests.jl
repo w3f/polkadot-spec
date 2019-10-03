@@ -113,6 +113,24 @@ using Test
                 @test true
             end
         end
+
+        # ## Test network functions
+        for func in PdreApiTestFixtures.fn_network
+            # create first part of the command
+            cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+            cmd = join(cmdparams, " ")
+
+            # append input
+            cmd = string(cmd, " \"\"")
+
+            # Run
+            println(">> Running:", cmd)
+            output = read(`sh -c $cmd`, String)
+            if output != ""
+                println(output)
+            end
+            @test true
+        end
     end
     cd(root_dir)
 end
