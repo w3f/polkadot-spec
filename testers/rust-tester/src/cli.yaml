@@ -49,4 +49,5 @@ subcommands:
           - input:
               long: input
               takes_value: true
+              use_delimiter: true
               value_name: TEST_DATA
