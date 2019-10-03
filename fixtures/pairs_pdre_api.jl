@@ -1,6 +1,6 @@
-text_data = [
-  "static",
-  "Inverse",
+value_data = [
+  "static", # value
+  "Inverse", # value...
   "even-keeled",
   "Future-proofed",
   "function",
@@ -13,8 +13,8 @@ text_data = [
 
 key_value_data = [
   [
-    "static",
-    "Inverse"
+    "static", # key
+    "Inverse" # value
   ],
   [
     "even-keeled",
@@ -56,11 +56,11 @@ key_value_data = [
 
 prefix_key_value_data = [
   [
-    "stat",
-    "static",
-    "Inverse",
-    "even-keeled",
-    "Future-proofed"
+    "stat", # prefix
+    "static", # key1
+    "Inverse", # value1
+    "even-keeled", # key2
+    "Future-proofed" # value2
   ],
   [
     "Face",
@@ -129,10 +129,10 @@ prefix_key_value_data = [
 
 store_data_key_value_data = [
   [
-    ":child_storage:default:moratorium",
-    ":child_storage:default:hardware",
-    "radical",
-    "access"
+    ":child_storage:default:moratorium", # store1
+    ":child_storage:default:hardware", # store2
+    "radical", # key
+    "access" # value
   ],
   [
     ":child_storage:default:implementation",
@@ -192,13 +192,13 @@ store_data_key_value_data = [
 
 prefix_store_key_value_data = [
   [
-    "stat",
-    ":child_storage:default:moratorium",
-    ":child_storage:default:hardware",
-    "static",
-    "Inverse",
-    "even-keeled",
-    "Future-proofed"
+    "stat", # prefix
+    ":child_storage:default:moratorium", # store1
+    ":child_storage:default:hardware", # store2
+    "static", # key1
+    "Inverse", # value1
+    "even-keeled", # key2
+    "Future-proofed" # value2
   ],
   [
     "Face",
