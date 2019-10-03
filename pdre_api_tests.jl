@@ -3,9 +3,8 @@ using Test
 @testset "RE API Tests" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
-    manifest_dir = script_dir * "testers/rust-tester/Cargo.toml"
-    println(root_dir)
-    cd("testers/rust-tester/")
+    manifest_dir = script_dir * "test/testers/rust-tester/Cargo.toml"
+    cd(root_dir)
     for (cli, sub_cmd, func_arg, input_arg) in PdreApiTestFixtures.cli_testers
         # Test crypto functions
         for func in PdreApiTestFixtures.fn_crypto
