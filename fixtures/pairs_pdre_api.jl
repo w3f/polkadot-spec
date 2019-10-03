@@ -1,5 +1,56 @@
-module PdreApiFixtures
+module PdreApiTestFixtures
+const cli_testers = [
+  "build/bin/usr/local/bin/rust_tester"
+]
 
+const test_command = "pdre-api"
+const function_arg = "--function"
+const input_art = "--input"
+
+# Input: data
+const fn_crypto = [
+  "test_blake2_128",
+  "test_blake2_256",
+  "test_ed25519",
+  "test_keccak_256",
+  "test_sr25519",
+  "test_twox_64",
+  "test_twox_128",
+  "test_twox_256"
+]
+
+# Input: key, value
+const fn_storage_kv = [
+  "test_set_get_storage",
+  "test_exists_storage",
+  "test_clear_storage"
+]
+
+# Input: prefix, key1, value1, key2, value2
+const fn_storage_prefix = [
+  "test_clear_prefix"
+]
+
+# Input: store1, store2, key, value
+const fn_storage_store = [
+  "test_set_get_child_storage",
+  "test_exists_child_storage",
+  "test_clear_child_storage",
+  "test_kill_child_storage"
+]
+
+# Input: prefix, store1, store2, key1, value1, key2, value2
+const fn_storage_prefix_store = [
+  "test_clear_child_prefix"
+]
+
+const fn_network = [
+  "test_http",
+  "test_network_state"
+]
+end
+
+module PdreApiTestData
 const value_data = [
   "static", # value
   "Inverse", # value...
@@ -284,5 +335,4 @@ const prefix_store_key_value_data = [
     "toolset"
   ]
 ]
-
 end
