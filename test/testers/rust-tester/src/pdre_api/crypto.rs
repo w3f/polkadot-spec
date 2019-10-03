@@ -72,10 +72,6 @@ pub fn test_keccak_256(input: ParsedInput) {
     let mut output = [0; 32];
 
     api.rtm_ext_keccak_256(data, &mut output);
-    assert_eq!(
-        hex::decode("de58a0bbe5d87cf47773472428863d8d7e52c6f9251288660bbbef7afa2a6286").unwrap(),
-        output
-    );
 
     println!("Output: {}", hex::encode(output));
 }

@@ -1,6 +1,10 @@
 use super::ParsedInput;
 use super::utils::StorageApi;
 
+fn str<'a>(input: &'a [u8]) -> &'a str {
+    std::str::from_utf8(input).unwrap()
+}
+
 // Input: key, value
 pub fn test_set_get_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
@@ -20,7 +24,7 @@ pub fn test_set_get_storage(input: ParsedInput) {
     // Get valid key
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
-    assert_eq!(written_out, 6);
+    assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 }
 
@@ -87,11 +91,23 @@ pub fn test_clear_prefix(input: ParsedInput) {
     // Check deletions
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key1, &mut written_out);
-    assert_eq!(res, value1);
+    if key1.starts_with(prefix) {
+        assert_eq!(res, [0; 0]);
+        println!("Key `{}` was deleted", str(key1));
+    } else {
+        assert_eq!(res, value1);
+        println!("Key `{}` remains", str(key1));
+    }
 
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key2, &mut written_out);
-    assert_eq!(res, [0; 0]);
+    if key2.starts_with(prefix) {
+        assert_eq!(res, [0; 0]);
+        println!("Key `{}` was deleted", str(key2));
+    } else {
+        assert_eq!(res, value2);
+        println!("Key `{}` remains", str(key2));
+    }
 }
 
 // Input: store1, store2, key, value
@@ -133,7 +149,7 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
         key,
         &mut written_out,
     );
-    assert_eq!(written_out, 6);
+    assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 
     // Get invalid key from invalid store
@@ -291,7 +307,13 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
         key1,
         &mut written_out,
     );
-    assert_eq!(res, [0; 0]);
+    if key1.starts_with(prefix) {
+        assert_eq!(res, [0; 0]);
+        println!("Key `{}` was deleted", str(key1));
+    } else {
+        assert_eq!(res, value1);
+        println!("Key `{}` remains", str(key1));
+    }
 
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
@@ -299,7 +321,13 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
         key2,
         &mut written_out,
     );
-    assert_eq!(res, [0; 0]);
+    if key2.starts_with(prefix) {
+        assert_eq!(res, [0; 0]);
+        println!("Key `{}` was deleted", str(key2));
+    } else {
+        assert_eq!(res, value2);
+        println!("Key `{}` remains", str(key2));
+    }
 }
 
 // Input: store1, store2, key, value
