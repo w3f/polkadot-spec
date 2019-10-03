@@ -69,6 +69,28 @@ using Test
                 @test true
             end
         end
+
+        # ## Test storage functions (prefix values)
+        for func in PdreApiTestFixtures.fn_storage_store
+            for (store1, store2, key, value) in PdreApiTestData.store_data_key_value_data
+                # create first part of the command
+                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+                cmd = join(cmdparams, " ")
+
+                input = join([store1, store2, key, value], ",")
+
+                # append input
+                cmd = string(cmd, " \"", input,"\"")
+
+                # Run
+                println(">> Running:", cmd)
+                output = read(`sh -c $cmd`, String)
+                if output != ""
+                    println(output)
+                end
+                @test true
+            end
+        end
     end
     cd(root_dir)
 end
