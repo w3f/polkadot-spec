@@ -91,6 +91,28 @@ using Test
                 @test true
             end
         end
+
+        # ## Test storage functions (prefix values on child storage)
+        for func in PdreApiTestFixtures.fn_storage_prefix_child
+            for (prefix, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
+                # create first part of the command
+                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+                cmd = join(cmdparams, " ")
+
+                input = join([prefix, child1, child2, key1, value1, key2, value2], ",")
+
+                # append input
+                cmd = string(cmd, " \"", input,"\"")
+
+                # Run
+                println(">> Running:", cmd)
+                output = read(`sh -c $cmd`, String)
+                if output != ""
+                    println(output)
+                end
+                @test true
+            end
+        end
     end
     cd(root_dir)
 end
