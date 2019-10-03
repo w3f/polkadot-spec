@@ -32,16 +32,16 @@ const fn_storage_prefix = [
   "test_clear_prefix"
 ]
 
-# Input: store1, store2, key, value
-const fn_storage_store = [
+# Input: child1, child2, key, value
+const fn_storage_child = [
   "test_set_get_child_storage",
   "test_exists_child_storage",
   "test_clear_child_storage",
   "test_kill_child_storage"
 ]
 
-# Input: prefix, store1, store2, key1, value1, key2, value2
-const fn_storage_prefix_store = [
+# Input: prefix, child1, child2, key1, value1, key2, value2
+const fn_storage_prefix_child = [
   "test_clear_child_prefix"
 ]
 
@@ -181,10 +181,10 @@ const prefix_key_value_data = [
   ]
 ]
 
-const store_data_key_value_data = [
+const child_data_key_value_data = [
   [
-    ":child_storage:default:moratorium", # store1
-    ":child_storage:default:hardware", # store2
+    ":child_storage:default:moratorium", # child1
+    ":child_storage:default:hardware", # child2
     "radical", # key
     "access" # value
   ],
@@ -244,11 +244,11 @@ const store_data_key_value_data = [
   ]
 ]
 
-const prefix_store_key_value_data = [
+const prefix_child_key_value_data = [
   [
     "stat", # prefix
-    ":child_storage:default:moratorium", # store1
-    ":child_storage:default:hardware", # store2
+    ":child_storage:default:moratorium", # child1
+    ":child_storage:default:hardware", # child2
     "static", # key1
     "Inverse", # value1
     "even-keeled", # key2
