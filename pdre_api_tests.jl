@@ -1,4 +1,4 @@
-include("./fixtures/pairs_pdre_api.jl")
+include("./fixtures/pdre_api_dataset.jl")
 using Test
 @testset "RE API Tests" begin
     script_dir = @__DIR__

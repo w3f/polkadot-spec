@@ -120,7 +120,7 @@ pub fn test_ed25519(input: ParsedInput) {
         println!("BAD SIGNATURE");
     }
     println!("Public key 2: {}", hex::encode(pubkey2));
-    println!("All public keys : {}", hex::encode(&all_pubkeys[1..])); // TODO; should be [..]
+    println!("All public keys : {}", hex::encode(&all_pubkeys[1..]));
 }
 
 // Input: data
@@ -166,5 +166,5 @@ pub fn test_sr25519(input: ParsedInput) {
         println!("BAD SIGNATURE");
     }
     println!("Public key 2: {}", hex::encode(pubkey2));
-    println!("All public keys : {}", hex::encode(&all_pubkeys[1..])); // TODO; should be [..]
+    println!("All public keys : {}", hex::encode(&all_pubkeys[1..]));
 }
