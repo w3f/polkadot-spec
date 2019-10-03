@@ -12,7 +12,7 @@ fn get_wasm_blob() -> Vec<u8> {
     use std::fs::File;
     use std::io::prelude::*;
 
-    let mut f = File::open("target/wasm32-unknown-unknown/release/wasm_blob.wasm")
+    let mut f = File::open("test/testers/rust-tester/target/wasm32-unknown-unknown/release/wasm_blob.wasm")
         .expect("Failed to open wasm blob in target");
     let mut buffer = Vec::new();
     f.read_to_end(&mut buffer)

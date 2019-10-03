@@ -9,10 +9,10 @@ fn main() {
         .args(&["--target", "wasm32-unknown-unknown"])
         // generate dynamic system library
         .args(&["--crate-type", "cdylib"])
-        // default path for (`cargo build --release --target wasm32...`)
-        .args(&["--out-dir", "target/wasm32-unknown-unknown/release"])
         // optimize (aka "--release" for cargo)
         .arg("-O")
+        // set output path
+        .args(&["--out-dir", "target/wasm32-unknown-unknown/release/"])
         .arg("src/pdre_api/wasm_blob.rs")
         .status()
         .map(|status| {
