@@ -32,7 +32,7 @@ pub fn test_http() {
     );
     */
 
-    let mut _statuses = [0; 8]; // 4-bytes per id
+    //let mut _statuses = [0; 8]; // 4-bytes per id
     //api.rtm_ext_http_response_wait(&[req_id1, req_id2], &mut statuses, 0); // 0 => Block forever
 
     // TODO...
@@ -46,6 +46,5 @@ pub fn test_network_state() {
     assert_eq!(written_out, 3);
     assert_eq!(res, vec![0,0,0]); // [PeerId, MultiaddressIPv4, MultiaddressIPv6]
 
-    println!("> testing network state");
-    println!("  - Opaque info : {:?}", res);
+    println!("Output (opaque): {:?}", res);
 }
