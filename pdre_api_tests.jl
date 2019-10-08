@@ -16,7 +16,7 @@ using Test
 
     # ## Test crypto functions
     counter = 1
-    for func in PdreApiTestFixtures.fn_crypto
+    for func in PdreApiTestFixtures.fn_crypto_hashes
         for value in PdreApiTestData.value_data
             for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
@@ -27,12 +27,12 @@ using Test
                 cmd = string(cmd, " \"", value,"\"")
 
                 if print_verbose
-                    println("Running:", cmd)
+                    println("Running: ", cmd)
                 end
 
                 # Run command
                 output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
-                @test output == PdreApiExpectedResults.fn_crypto[counter]
+                @test output == PdreApiExpectedResults.res_crypto_hashes[counter]
 
                 if output != "" && print_verbose
                     println("> Result: ", output)

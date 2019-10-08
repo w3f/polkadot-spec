@@ -1,5 +1,5 @@
 module PdreApiExpectedResults
-const fn_crypto = [
+const res_crypto_hashes = [
     "440973e4e50902f1d0ec97de357eb2fd",
     "d81f39ad0ab560c74fd47b88184fd40c",
     "3b66066d9406db94cbba8cbee70afe1a",
