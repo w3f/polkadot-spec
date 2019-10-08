@@ -1,5 +1,8 @@
 include("./fixtures/pdre_api_dataset.jl")
+include("./fixtures/pdre_api_results.jl")
+
 using Test
+
 @testset "RE API Tests" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
@@ -12,6 +15,7 @@ using Test
     input_arg = "--input"
 
     # ## Test crypto functions
+    counter = 1
     for func in PdreApiTestFixtures.fn_crypto
         for value in PdreApiTestData.value_data
             for cli in PdreApiTestFixtures.cli_testers
@@ -23,16 +27,20 @@ using Test
                 cmd = string(cmd, " \"", value,"\"")
 
                 # Run
-                println(">> Running:", cmd)
-                output = read(`sh -c $cmd`, String)
+                println("Running:", cmd)
+                output = replace(read(`sh -c $cmd`, String), "\n" => "")
+
+                @test output == PdreApiExpectedResults.fn_crypto[counter]
+
                 if output != ""
-                    println(output)
+                    println("> Result:", output)
                 end
-                @test true
             end
+            counter = counter + 1
         end
     end
 
+    #=
     # ## Test storage functions (key/value inputs and outputs)
     for func in PdreApiTestFixtures.fn_storage_kv
         for (key, value) in PdreApiTestData.key_value_data
@@ -149,4 +157,5 @@ using Test
         end
     end
     cd(root_dir)
+    =#
 end

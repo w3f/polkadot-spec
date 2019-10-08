@@ -83,13 +83,11 @@ pub fn test_ed25519(input: ParsedInput) {
 
     // Generate key pair
     let keystore = String::from("dumy");
-    let mut pubkey1 = [0; 32]; // will get generated
-
+    let mut pubkey1 = [0; 32];
     api.rtm_ext_ed25519_generate(keystore.as_bytes(), &[], &mut pubkey1);
 
     // Sign a message
-    let mut signature = [0; 64]; // will get generated
-
+    let mut signature = [0; 64];
     let res = api.rtm_ext_ed25519_sign(
         keystore.as_bytes(),
         &pubkey1,
@@ -130,13 +128,11 @@ pub fn test_sr25519(input: ParsedInput) {
 
     // Generate key pair
     let keystore = String::from("dumy");
-    let mut pubkey1 = [0; 32]; // will get generated
-
+    let mut pubkey1 = [0; 32];
     api.rtm_ext_sr25519_generate(keystore.as_bytes(), &[], &mut pubkey1);
 
     // Sign a message
-    let mut signature = [0; 64]; // will get generated
-
+    let mut signature = [0; 64];
     let res = api.rtm_ext_sr25519_sign(
         keystore.as_bytes(),
         &pubkey1,
