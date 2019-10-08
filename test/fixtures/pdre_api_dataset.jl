@@ -6,7 +6,7 @@ const cli_testers = [
 ]
 
 # Input: data
-const fn_crypto = [
+const fn_crypto_hashes = [
   "test_blake2_128",
   "test_blake2_256",
   "test_keccak_256",
