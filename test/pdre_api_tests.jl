@@ -11,10 +11,10 @@ using Test
     func_arg = "--function"
     input_arg = "--input"
 
-    for cli in PdreApiTestFixtures.cli_testers
-        # ## Test crypto functions
-        for func in PdreApiTestFixtures.fn_crypto
-            for value in PdreApiTestData.value_data
+    # ## Test crypto functions
+    for func in PdreApiTestFixtures.fn_crypto
+        for value in PdreApiTestData.value_data
+            for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
@@ -31,10 +31,12 @@ using Test
                 @test true
             end
         end
+    end
 
-        # ## Test storage functions (key/value inputs and outputs)
-        for func in PdreApiTestFixtures.fn_storage_kv
-            for (key, value) in PdreApiTestData.key_value_data
+    # ## Test storage functions (key/value inputs and outputs)
+    for func in PdreApiTestFixtures.fn_storage_kv
+        for (key, value) in PdreApiTestData.key_value_data
+            for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
@@ -53,10 +55,12 @@ using Test
                 @test true
             end
         end
+    end
 
-        # ## Test storage functions (prefix values)
-        for func in PdreApiTestFixtures.fn_storage_prefix
-            for (prefix, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data
+    # ## Test storage functions (prefix values)
+    for func in PdreApiTestFixtures.fn_storage_prefix
+        for (prefix, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data
+            for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
@@ -75,10 +79,12 @@ using Test
                 @test true
             end
         end
+    end
 
-        # ## Test storage functions (child storage)
-        for func in PdreApiTestFixtures.fn_storage_child
-            for (child1, child2, key, value) in PdreApiTestData.child_data_key_value_data
+    # ## Test storage functions (child storage)
+    for func in PdreApiTestFixtures.fn_storage_child
+        for (child1, child2, key, value) in PdreApiTestData.child_data_key_value_data
+            for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
@@ -97,10 +103,12 @@ using Test
                 @test true
             end
         end
+    end
 
-        # ## Test storage functions (prefix values on child storage)
-        for func in PdreApiTestFixtures.fn_storage_prefix_child
-            for (prefix, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
+    # ## Test storage functions (prefix values on child storage)
+    for func in PdreApiTestFixtures.fn_storage_prefix_child
+        for (prefix, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
+            for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
@@ -119,9 +127,11 @@ using Test
                 @test true
             end
         end
+    end
 
-        # ## Test network functions
-        for func in PdreApiTestFixtures.fn_network
+    # ## Test network functions
+    for func in PdreApiTestFixtures.fn_network
+        for cli in PdreApiTestFixtures.cli_testers
             # create first part of the command
             cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
             cmd = join(cmdparams, " ")
