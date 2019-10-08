@@ -26,14 +26,16 @@ using Test
                 # append input
                 cmd = string(cmd, " \"", value,"\"")
 
-                # Run
-                println("Running:", cmd)
-                output = replace(read(`sh -c $cmd`, String), "\n" => "")
+                if print_verbose
+                    println("Running:", cmd)
+                end
 
+                # Run command
+                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
                 @test output == PdreApiExpectedResults.fn_crypto[counter]
 
-                if output != ""
-                    println("> Result:", output)
+                if output != "" && print_verbose
+                    println("> Result: ", output)
                 end
             end
             counter = counter + 1
