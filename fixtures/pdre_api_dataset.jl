@@ -9,12 +9,16 @@ const cli_testers = [
 const fn_crypto = [
   "test_blake2_128",
   "test_blake2_256",
-  "test_ed25519",
   "test_keccak_256",
-  "test_sr25519",
   "test_twox_64",
   "test_twox_128",
   "test_twox_256"
+]
+
+# Input: data
+const fn_crypto_key = [
+  "test_ed25519",
+  "test_sr25519",
 ]
 
 # Input: key, value
