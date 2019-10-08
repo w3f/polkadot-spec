@@ -14,6 +14,7 @@ using Test
     func_arg = "--function"
     input_arg = "--input"
 
+    #=
     # ## Test crypto functions
     counter = 1
     for func in PdreApiTestFixtures.fn_crypto_hashes
@@ -42,8 +43,37 @@ using Test
         end
     end
 
-    #=
+    # ## Test crypto functions
+    counter = 1
+    for func in PdreApiTestFixtures.fn_crypto_keys
+        for value in PdreApiTestData.value_data
+            for cli in PdreApiTestFixtures.cli_testers
+                # create first part of the command
+                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+                cmd = join(cmdparams, " ")
+
+                # append input
+                cmd = string(cmd, " \"", value,"\"")
+
+                if print_verbose
+                    println("Running: ", cmd)
+                end
+
+                # Run command
+                output = read(`sh -c $cmd`, String)
+                @test true
+
+                if output != "" && print_verbose
+                    println("> Result:\n", output)
+                end
+            end
+            counter = counter + 1
+        end
+    end
+    =#
+
     # ## Test storage functions (key/value inputs and outputs)
+    counter = 1
     for func in PdreApiTestFixtures.fn_storage_kv
         for (key, value) in PdreApiTestData.key_value_data
             for cli in PdreApiTestFixtures.cli_testers
@@ -56,17 +86,23 @@ using Test
                 # append input
                 cmd = string(cmd, " \"", input,"\"")
 
-                # Run
-                println(">> Running:", cmd)
-                output = read(`sh -c $cmd`, String)
-                if output != ""
-                    println(output)
+                if print_verbose
+                    println("Running: ", cmd)
                 end
-                @test true
+
+                # Run command
+                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                @test output == PdreApiExpectedResults.res_storage_kv[counter]
+
+                if output != "" && print_verbose
+                    println("> Result: ", output)
+                end
             end
+            counter = counter + 1
         end
     end
 
+    #=
     # ## Test storage functions (prefix values)
     for func in PdreApiTestFixtures.fn_storage_prefix
         for (prefix, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data

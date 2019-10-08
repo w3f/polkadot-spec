@@ -16,7 +16,7 @@ const fn_crypto_hashes = [
 ]
 
 # Input: data
-const fn_crypto_key = [
+const fn_crypto_keys = [
   "test_ed25519",
   "test_sr25519",
 ]

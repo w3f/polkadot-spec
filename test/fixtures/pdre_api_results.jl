@@ -62,4 +62,37 @@ const res_crypto_hashes = [
     "17542d4a435eddd774861314c6dc2897babf6e17b7be87ea5d38b2941be485a6",
 ]
 
+const res_storage_kv = [
+    "Inverse",
+    "Future-proofed",
+    "Horizontal",
+    "Expanded",
+    "portal",
+    "pricing structure",
+    "Monitored",
+    "emulation",
+    "secondary",
+    "Visionary",
+    "true",
+    "true",
+    "true",
+    "true",
+    "true",
+    "true",
+    "true",
+    "true",
+    "true",
+    "true",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+]
+
 end
