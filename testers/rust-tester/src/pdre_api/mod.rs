@@ -1,6 +1,7 @@
 mod crypto;
 mod network;
 mod storage;
+mod child_storage;
 mod utils;
 
 use clap::{ArgMatches, Values};
@@ -40,17 +41,19 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             //
             // test storage functions
             "test_allocate_storage" => storage::test_allocate_storage(),
-            "test_clear_child_prefix" => storage::test_clear_child_prefix(input),
-            "test_clear_child_storage" => storage::test_clear_child_storage(input),
             "test_clear_prefix" => storage::test_clear_prefix(input),
             "test_clear_storage" => storage::test_clear_storage(input),
-            "test_exists_child_storage" => storage::test_exists_child_storage(input),
             "test_exists_storage" => storage::test_exists_storage(input),
-            "test_kill_child_storage" => storage::test_kill_child_storage(input),
-            "test_set_get_child_storage" => storage::test_set_get_child_storage(input),
             "test_set_get_local_storage" => storage::test_set_get_local_storage(input),
             "test_set_get_storage" => storage::test_set_get_storage(input),
             "test_storage_root" => storage::test_storage_root(), // TODO
+            //
+            // test child storage functions
+            "test_clear_child_prefix" => child_storage::test_clear_child_prefix(input),
+            "test_clear_child_storage" => child_storage::test_clear_child_storage(input),
+            "test_exists_child_storage" => child_storage::test_exists_child_storage(input),
+            "test_kill_child_storage" => child_storage::test_kill_child_storage(input),
+            "test_set_get_child_storage" => child_storage::test_set_get_child_storage(input),
             //
             // test network functions
             "test_http" => network::test_http(),
