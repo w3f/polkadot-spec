@@ -5,7 +5,13 @@ using Test
     root_dir = script_dir * "/.."
     manifest_dir = script_dir * "test/testers/rust-tester/Cargo.toml"
     cd(root_dir)
-    for (cli, sub_cmd, func_arg, input_arg) in PdreApiTestFixtures.cli_testers
+
+    # Basic parameters for testing CLIs
+    sub_cmd = "pdre-api"
+    func_arg = "--function"
+    input_arg = "--input"
+
+    for cli in PdreApiTestFixtures.cli_testers
         # ## Test crypto functions
         for func in PdreApiTestFixtures.fn_crypto
             for value in PdreApiTestData.value_data
