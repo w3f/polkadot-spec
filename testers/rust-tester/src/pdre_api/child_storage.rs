@@ -36,7 +36,7 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
     assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 
-    println!("{}", hex::encode(&res));
+    println!("{}", str(&res));
 
     // Get invalid key from invalid child
     let mut written_out = 0;
