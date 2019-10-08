@@ -36,6 +36,8 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
     assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
 
+    println!("{}", hex::encode(&res));
+
     // Get invalid key from invalid child
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_child_storage(
@@ -66,6 +68,8 @@ pub fn test_exists_child_storage(input: ParsedInput) {
     // Check valid key
     let res = api.rtm_ext_exists_child_storage(child1, key);
     assert_eq!(res, 1);
+
+    println!("true");
 
     // Check invalid key from invalid child
     let res = api.rtm_ext_exists_child_storage(child2, key);
