@@ -14,7 +14,6 @@ using Test
     func_arg = "--function"
     input_arg = "--input"
 
-    #=
     # ## Test crypto functions
     counter = 1
     for func in PdreApiTestFixtures.fn_crypto_hashes
@@ -128,7 +127,6 @@ using Test
             end
         end
     end
-    =#
 
     # ## Test storage functions (child storage)
     counter = 1
@@ -160,7 +158,6 @@ using Test
         end
     end
 
-    #=
     # ## Test storage functions (prefix values on child storage)
     for func in PdreApiTestFixtures.fn_storage_prefix_child
         for (prefix, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
@@ -174,13 +171,17 @@ using Test
                 # append input
                 cmd = string(cmd, " \"", input,"\"")
 
-                # Run
-                println(">> Running:", cmd)
-                output = read(`sh -c $cmd`, String)
-                if output != ""
-                    println(output)
+                if print_verbose
+                    println("Running: ", cmd)
                 end
+
+                # Run command
+                output = read(`sh -c $cmd`, String)
                 @test true
+
+                if output != "" && print_verbose
+                    println("> Result:\n", output)
+                end
             end
         end
     end
@@ -195,15 +196,18 @@ using Test
             # append input
             cmd = string(cmd, " \"\"")
 
-            # Run
-            println(">> Running:", cmd)
-            output = read(`sh -c $cmd`, String)
-            if output != ""
-                println(output)
+            if print_verbose
+                println("Running: ", cmd)
             end
+
+            # Run command
+            output = read(`sh -c $cmd`, String)
             @test true
+
+            if output != "" && print_verbose
+                println("> Result:\n", output)
+            end
         end
     end
     cd(root_dir)
-    =#
 end
