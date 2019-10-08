@@ -26,6 +26,8 @@ pub fn test_set_get_storage(input: ParsedInput) {
     let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
     assert_eq!(written_out, value.len() as u32);
     assert_eq!(res, value);
+
+    println!("{}", str(&res));
 }
 
 // Input: key, value
@@ -45,6 +47,8 @@ pub fn test_exists_storage(input: ParsedInput) {
     // Check valid key
     let res = api.rtm_ext_exists_storage(key);
     assert_eq!(res, 1);
+
+    println!("true");
 }
 
 // Input: key, value
