@@ -130,8 +130,8 @@ using Test
     end
     =#
 
-    #=
     # ## Test storage functions (child storage)
+    counter = 1
     for func in PdreApiTestFixtures.fn_storage_child
         for (child1, child2, key, value) in PdreApiTestData.child_data_key_value_data
             for cli in PdreApiTestFixtures.cli_testers
@@ -144,17 +144,23 @@ using Test
                 # append input
                 cmd = string(cmd, " \"", input,"\"")
 
-                # Run
-                println(">> Running:", cmd)
-                output = read(`sh -c $cmd`, String)
-                if output != ""
-                    println(output)
+                if print_verbose
+                    println("Running: ", cmd)
                 end
-                @test true
+
+                # Run command
+                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                @test output == PdreApiExpectedResults.res_storage_child[counter]
+
+                if output != "" && print_verbose
+                    println("> Result: ", output)
+                end
             end
+            counter = counter + 1
         end
     end
 
+    #=
     # ## Test storage functions (prefix values on child storage)
     for func in PdreApiTestFixtures.fn_storage_prefix_child
         for (prefix, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
