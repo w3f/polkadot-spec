@@ -24,21 +24,16 @@ extern crate trie_db;
 extern crate reference_trie;
 extern crate hex;
 
-use trie_root::trie_root_no_ext;
+use trie_db::TrieMut;
+use trie_root::trie_root_no_extension;
 use reference_trie::ReferenceTrieStreamNoExt as ReferenceTrieStream;
 use reference_trie::RefTrieDBMutNoExt;
 
 use memory_db::{MemoryDB, HashKey};
 use std::collections::BTreeMap;
 
-use reference_trie::{LayoutNew, LayoutNewH, BitMap16, ReferenceNodeCodecNoExt};//H;
+use reference_trie::{GenericNoExtensionLayout, ReferenceNodeCodecNoExt};//H;
 //use trie_db::{TrieRootPrint, trie_visit};
-use trie_db::{
-	Cache16,
-    TrieMut,
-    TrieLayOut,
-    NibbleHalf,
-};
 
 // pub struct PolkadotTrieLayout;
 
@@ -102,7 +97,7 @@ impl TrieTester {
         //let trie_value =  key_value_map["data"];
         let trie_vec: Vec<_> = self.processed_key_list.iter().zip(self.value_list.iter()).collect();
         
-        let state_trie_root = trie_root_no_ext::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
+        let state_trie_root = trie_root_no_extension::<Blake2Hasher, ReferenceTrieStream, _, _, _>(trie_vec);
         println!("state root: {:x}", &state_trie_root);
         
     }
@@ -117,7 +112,7 @@ impl TrieTester {
 		let mut root = Default::default();
 
 		//let mut memtrie = RefTrieDBMutNoExt::new(&mut memdb, &mut root);
-        pub type RefPolkadotTrieDBMutNoExt<'a> = trie_db::TrieDBMut<'a, LayoutNewH<Blake2Hasher>>;
+        pub type RefPolkadotTrieDBMutNoExt<'a> = trie_db::TrieDBMut<'a, GenericNoExtensionLayout<Blake2Hasher>>;
         let mut memtrie = RefPolkadotTrieDBMutNoExt::new(&mut memdb, &mut root);
 
 		for i in 0..self.processed_key_list.len() {
