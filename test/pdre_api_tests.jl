@@ -70,7 +70,6 @@ using Test
             counter = counter + 1
         end
     end
-    =#
 
     # ## Test storage functions (key/value inputs and outputs)
     counter = 1
@@ -102,7 +101,6 @@ using Test
         end
     end
 
-    #=
     # ## Test storage functions (prefix values)
     for func in PdreApiTestFixtures.fn_storage_prefix
         for (prefix, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data
@@ -116,17 +114,23 @@ using Test
                 # append input
                 cmd = string(cmd, " \"", input,"\"")
 
-                # Run
-                println(">> Running:", cmd)
-                output = read(`sh -c $cmd`, String)
-                if output != ""
-                    println(output)
+                if print_verbose
+                    println("Running: ", cmd)
                 end
+
+                # Run command
+                output = read(`sh -c $cmd`, String)
                 @test true
+
+                if output != "" && print_verbose
+                    println("> Result:\n", output)
+                end
             end
         end
     end
+    =#
 
+    #=
     # ## Test storage functions (child storage)
     for func in PdreApiTestFixtures.fn_storage_child
         for (child1, child2, key, value) in PdreApiTestData.child_data_key_value_data
