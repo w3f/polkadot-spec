@@ -1,11 +1,6 @@
 module PdreApiTestFixtures
 const cli_testers = [
-  [
-    "build/bin/usr/local/bin/rust_tester", # cli
-    "pdre-api", # subcommand
-    "--function", # function arg
-    "--input" # input arg
-  ]
+  "build/bin/usr/local/bin/rust_tester"
 ]
 
 # Input: data
