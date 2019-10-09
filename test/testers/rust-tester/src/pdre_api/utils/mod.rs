@@ -81,7 +81,7 @@ fn with_data_output(data: &[u8], output: &[u8]) -> (
     let mut ptr = 0;
 
     (
-        move |alloc: &mut dyn FnMut(&[u8]) -> Result<u32, Error>| {
+        move |alloc| {
             let data_offset = alloc(&data_c)?;
             let output_offset = alloc(&output_c)?;
             ptr = output_offset as u32;
