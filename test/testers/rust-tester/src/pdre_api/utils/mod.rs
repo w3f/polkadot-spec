@@ -58,23 +58,45 @@ impl<'a> CallWasm<'a> {
                 filter_return
             )
     }
-    fn gen_param_verify(&mut self, msg_data: &[u8], sig_data: &[u8], pubkey_data: &[u8]) {
+    fn gen_param_verify(&'a mut self, msg_data: &[u8], sig_data: &[u8], pubkey_data: &[u8]) -> AfterCallWasm<'a> {
         let msg_data_c = msg_data.to_owned();
         let sig_data_c = sig_data.to_owned();
         let pubkey_data_c = pubkey_data.to_owned();
 
-        self.create_param = Box::new(
-            move |alloc| {
-                let msg_data_offset = alloc(&msg_data_c)?;
-                let sig_data_offset = alloc(&sig_data_c)?;
-                let pubkey_data_offset = alloc(&pubkey_data_c)?;
-                Ok(vec![
-                    I32(msg_data_offset as i32),
-                    I32(msg_data_c.len() as i32),
-                    I32(sig_data_offset as i32),
-                    I32(pubkey_data_offset as i32),
-                ])
-            }
+        //self.create_param = Box::new(
+        AfterCallWasm::from(
+            self,
+            Box::new(
+                move |alloc: &mut dyn FnMut(&[u8]) -> Result<u32, Error>| {
+                    let msg_data_offset = alloc(&msg_data_c)?;
+                    let sig_data_offset = alloc(&sig_data_c)?;
+                    let pubkey_data_offset = alloc(&pubkey_data_c)?;
+                    Ok(vec![
+                        I32(msg_data_offset as i32),
+                        I32(msg_data_c.len() as i32),
+                        I32(sig_data_offset as i32),
+                        I32(pubkey_data_offset as i32),
+                    ])
+                }
+            )
         )
+    }
+}
+
+struct AfterCallWasm<'a> {
+    ext: &'a mut TestExternalities<Blake2Hasher>,
+    blob: &'a [u8],
+    method: &'a str,
+    create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>,
+}
+
+impl<'a> AfterCallWasm<'a> {
+    fn from(w: &'a mut CallWasm<'a>, create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>) -> Self {
+        AfterCallWasm {
+            ext: w.ext,
+            blob: w.blob,
+            method: w.method,
+            create_param: create_param,
+        }
     }
 }
