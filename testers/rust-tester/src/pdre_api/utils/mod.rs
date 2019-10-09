@@ -21,3 +21,40 @@ fn get_wasm_blob() -> Vec<u8> {
         .expect("Failed to load wasm blob into memory");
     buffer
 }
+
+use substrate_executor::error::Error;
+use substrate_executor::WasmExecutor;
+use substrate_primitives::testing::KeyStore;
+use substrate_primitives::Blake2Hasher;
+use substrate_state_machine::TestExternalities as CoreTestExternalities;
+use wasmi::RuntimeValue::{self, I32};
+use wasmi::MemoryRef;
+
+use std::cell::RefCell;
+use std::rc::Rc;
+
+type TestExternalities<H> = CoreTestExternalities<H, u64>;
+
+
+struct CallWasm<'a> {
+    ext: &'a mut TestExternalities<Blake2Hasher>,
+    blob: &'a [u8],
+    method: &'a str,
+}
+
+impl<'a> CallWasm<'a> {
+    fn call<F, FR, R>(&mut self, create_param: F, filter_return: FR) -> Result<R, Error> where
+		F: FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>,
+		FR: FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<R>, Error>
+    {
+        WasmExecutor::new()
+            .call_with_custom_signature(
+                self.ext,
+                1,
+                self.blob,
+                self.method,
+                create_param,
+                filter_return
+            )
+    }
+}
