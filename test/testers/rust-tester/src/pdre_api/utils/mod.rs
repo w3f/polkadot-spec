@@ -40,57 +40,19 @@ struct CallWasm<'a> {
     ext: &'a mut TestExternalities<Blake2Hasher>,
     blob: &'a [u8],
     method: &'a str,
-    create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>,
+    //create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>,
 }
 
 impl<'a> CallWasm<'a> {
-    fn gen_param_verify(&'a mut self, data: &[u8], output: &'a mut [u8]) -> AfterCallWasm<'a> {
-        let data_c = data.to_owned();
-        let output_c = output.to_owned();
-        let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
-
-        AfterCallWasm::from(
-            self,
-            Box::new(
-                move |alloc: &mut dyn FnMut(&[u8]) -> Result<u32, Error>| {
-                    let data_offset = alloc(&data_c)?;
-                    let output_offset = alloc(&output_c)?;
-                    *ptr_holder.borrow_mut() = output_offset as u32;
-                    Ok(vec![
-                        I32(data_offset as i32),
-                        I32(data_c.len() as i32),
-                        I32(output_offset as i32),
-                    ])
-                }
-            ),
-            Some(ptr_holder),
-            Some(output)
-        )
-    }
-}
-
-struct AfterCallWasm<'a> {
-    ext: &'a mut TestExternalities<Blake2Hasher>,
-    blob: &'a [u8],
-    method: &'a str,
-    create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>,
-    ptr_holder: Option<Rc<RefCell<u32>>>,
-    output: Option<&'a mut [u8]>,
-}
-
-impl<'a> AfterCallWasm<'a> {
-    fn from(w: &'a mut CallWasm<'a>,
-        create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>,
-        ptr_holder: Option<Rc<RefCell<u32>>>,
-        output: Option<&'a mut [u8]>,
+    fn new(
+        ext: &'a mut TestExternalities<Blake2Hasher>,
+        blob: &'a [u8],
+        method: &'a str,
     ) -> Self {
-        AfterCallWasm {
-            ext: w.ext,
-            blob: w.blob,
-            method: w.method,
-            create_param: create_param,
-            ptr_holder: ptr_holder,
-            output: output,
+        CallWasm {
+            ext: ext,
+            blob: blob,
+            method: method,
         }
     }
     /// Calls the final Wasm Runtime function (this method does not get used directly)
@@ -108,20 +70,27 @@ impl<'a> AfterCallWasm<'a> {
                 filter_return
             )
     }
-    fn return_none(&mut self) {
-        let temp = vec![0; self.output.unwrap().len()];
-        self.call_into_wasm(self.create_param,
-            |_, memory| {
-                temp.copy_from_slice(
-                    memory
-                        .get(*self.ptr_holder.as_ref().unwrap().borrow(), 16)
-                        .map_err(|_| Error::Runtime)?
-                        .as_slice(),
-                );
-                Ok(Some(()))
-            }
-        );
+}
 
-        self.output.as_mut().unwrap().copy_from_slice(&temp);
-    }
+fn with_data_output(data: &[u8], output: &[u8]) -> (
+    impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>,
+    u32 // pointer to Wasm memory
+) {
+    let data_c = data.to_owned();
+    let output_c = output.to_owned();
+    let mut ptr = 0;
+
+    (
+        move |alloc: &mut dyn FnMut(&[u8]) -> Result<u32, Error>| {
+            let data_offset = alloc(&data_c)?;
+            let output_offset = alloc(&output_c)?;
+            ptr = output_offset as u32;
+            Ok(vec![
+                I32(data_offset as i32),
+                I32(data_c.len() as i32),
+                I32(output_offset as i32),
+            ])
+        },
+        ptr
+    )
 }
