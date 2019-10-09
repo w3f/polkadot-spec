@@ -70,27 +70,39 @@ impl<'a> CallWasm<'a> {
                 filter_return
             )
     }
-}
+    fn with_data_output(data: &[u8], output: &[u8]) -> (
+        impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>,
+        u32 // pointer to Wasm memory
+    ) {
+        let data_c = data.to_owned();
+        let output_c = output.to_owned();
+        let mut ptr = 0;
 
-fn with_data_output(data: &[u8], output: &[u8]) -> (
-    impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>,
-    u32 // pointer to Wasm memory
-) {
-    let data_c = data.to_owned();
-    let output_c = output.to_owned();
-    let mut ptr = 0;
-
-    (
-        move |alloc| {
-            let data_offset = alloc(&data_c)?;
-            let output_offset = alloc(&output_c)?;
-            ptr = output_offset as u32;
-            Ok(vec![
-                I32(data_offset as i32),
-                I32(data_c.len() as i32),
-                I32(output_offset as i32),
-            ])
-        },
-        ptr
-    )
+        (
+            move |alloc| {
+                let data_offset = alloc(&data_c)?;
+                let output_offset = alloc(&output_c)?;
+                ptr = output_offset as u32;
+                Ok(vec![
+                    I32(data_offset as i32),
+                    I32(data_c.len() as i32),
+                    I32(output_offset as i32),
+                ])
+            },
+            ptr
+        )
+    }
+    fn return_none_write_buffer(output: &'static mut [u8], ptr: u32) ->
+	    impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<()>, Error>
+    {
+        move |_, memory| {
+            output.copy_from_slice(
+                memory
+                    .get(ptr, 16)
+                    .map_err(|_| Error::Runtime)?
+                    .as_slice(),
+            );
+            Ok(Some(()))
+        }
+    }
 }
