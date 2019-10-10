@@ -10,7 +10,6 @@ pub use storage::StorageApi;
 
 use substrate_executor::error::Error;
 use substrate_executor::WasmExecutor;
-use substrate_primitives::testing::KeyStore;
 use substrate_primitives::Blake2Hasher;
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
 use wasmi::MemoryRef;
