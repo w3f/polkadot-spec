@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{copy, get_wasm_blob, wrap, CallWasm};
+use super::{copy_u32, copy_slice, get_wasm_blob, wrap, CallWasm};
 
 use substrate_executor::error::Error;
 use substrate_executor::WasmExecutor;
@@ -45,7 +45,7 @@ impl CryptoApi {
             CallWasm::return_none_write_buffer(output_scoped.clone(), ptr),
         );
 
-        copy(output_scoped, output);
+        copy_slice(output_scoped, output);
         res.unwrap()
     }
     pub fn rtm_ext_blake2_128(&mut self, data: &[u8], output: &mut [u8]) {
@@ -77,7 +77,7 @@ impl CryptoApi {
             CallWasm::return_none_write_buffer(output_scoped.clone(), ptr),
         );
 
-        copy(output_scoped, output);
+        copy_slice(output_scoped, output);
     }
     pub fn rtm_ext_ed25519_sign(
         &mut self,
@@ -100,7 +100,7 @@ impl CryptoApi {
             CallWasm::return_value_write_buffer(output_scoped.clone(), ptr),
         );
 
-        copy(output_scoped, output);
+        copy_slice(output_scoped, output);
         res.unwrap()
     }
     pub fn rtm_ext_ed25519_verify(
@@ -118,22 +118,22 @@ impl CryptoApi {
 
         res.unwrap()
     }
-    pub fn rtm_ext_ed25519_public_keys(&mut self, id_data: &[u8], result_len: &mut u32) -> Vec<u8> {
+    pub fn rtm_ext_ed25519_public_keys(&mut self, id_data: &[u8], written_out: &mut u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_ed25519_public_keys");
 
         let ptr = wrap(0);
-        let result_len_scoped = wrap(0);
+        let written_out_scoped = wrap(0);
 
         let res = wasm.call(
             CallWasm::gen_params(
-                &[id_data, &result_len.to_le_bytes()],
+                &[id_data, &written_out.to_le_bytes()],
                 &[],
                 Some(ptr.clone()),
             ),
-            CallWasm::return_buffer(result_len_scoped.clone(), ptr),
+            CallWasm::return_buffer(written_out_scoped.clone(), ptr),
         );
 
-        *result_len = *result_len_scoped.borrow();
+        copy_u32(written_out_scoped, written_out);
         res.unwrap()
     }
     pub fn rtm_ext_sr25519_generate(&mut self, id_data: &[u8], seed: &[u8], output: &mut [u8]) {
@@ -147,7 +147,7 @@ impl CryptoApi {
             CallWasm::return_none_write_buffer(output_scoped.clone(), ptr),
         );
 
-        copy(output_scoped, output);
+        copy_slice(output_scoped, output);
         res.unwrap()
     }
     pub fn rtm_ext_sr25519_sign(
@@ -171,7 +171,7 @@ impl CryptoApi {
             CallWasm::return_value_write_buffer(output_scoped.clone(), ptr),
         );
 
-        copy(output_scoped, output);
+        copy_slice(output_scoped, output);
         res.unwrap()
     }
     pub fn rtm_ext_sr25519_verify(
@@ -189,22 +189,22 @@ impl CryptoApi {
 
         res.unwrap()
     }
-    pub fn rtm_ext_sr25519_public_keys(&mut self, id_data: &[u8], result_len: &mut u32) -> Vec<u8> {
+    pub fn rtm_ext_sr25519_public_keys(&mut self, id_data: &[u8], written_out: &mut u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_sr25519_public_keys");
 
         let ptr = wrap(0);
-        let result_len_scoped = wrap(0);
+        let written_out_scoped = wrap(0);
 
         let res = wasm.call(
             CallWasm::gen_params(
-                &[id_data, &result_len.to_le_bytes()],
+                &[id_data, &written_out.to_le_bytes()],
                 &[],
                 Some(ptr.clone()),
             ),
-            CallWasm::return_buffer(result_len_scoped.clone(), ptr),
+            CallWasm::return_buffer(written_out_scoped.clone(), ptr),
         );
 
-        *result_len = *result_len_scoped.borrow();
+        copy_u32(written_out_scoped, written_out);
         res.unwrap()
     }
 }
