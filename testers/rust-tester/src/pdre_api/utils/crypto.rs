@@ -40,12 +40,13 @@ impl CryptoApi {
         let ptr = wrap(0);
         let output_scoped = wrap(vec![0;output.len()]);
 
-        let _ = wasm.call(
-            CallWasm::with_data_output_ptr(data, output, ptr.clone()),
+        let res = wasm.call(
+            CallWasm::gen_params(&[data, output], &[0], Some(ptr.clone())),
             CallWasm::return_none_write_buffer(output_scoped.clone(), ptr)
         );
 
         copy(output_scoped, output);
+        res.unwrap()
     }
     pub fn rtm_ext_blake2_128(&mut self, data: &[u8], output: &mut [u8]) {
         self.common_hash_fn_handler("test_ext_blake2_128", data, output)
@@ -72,7 +73,7 @@ impl CryptoApi {
         let output_scoped = wrap(vec![0;output.len()]);
 
         let _ = wasm.call(
-            CallWasm::with_2x_data_output_ptr(id_data, seed, output, ptr.clone()),
+            CallWasm::gen_params(&[id_data, seed, output], &[1], Some(ptr.clone())),
             CallWasm::return_none_write_buffer(output_scoped.clone(), ptr)
         );
 
@@ -91,16 +92,7 @@ impl CryptoApi {
         let output_scoped = wrap(vec![0;output.len()]);
 
         let res = wasm.call(
-            CallWasm::gen_params(
-                &[
-                    id_data,
-                    pubkey_data,
-                    msg_data,
-                    output,
-                ],
-                &[2],
-                Some(ptr.clone())
-            ),
+            CallWasm::gen_params(&[id_data, pubkey_data, msg_data, output], &[2], Some(ptr.clone())),
             CallWasm::return_value_write_buffer(output_scoped.clone(), ptr)
         );
 
