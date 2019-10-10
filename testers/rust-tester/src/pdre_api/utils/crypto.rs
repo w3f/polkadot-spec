@@ -20,7 +20,7 @@ type TestExternalities<H> = CoreTestExternalities<H, u64>;
 fn wrap<T>(t: T) -> Rc<RefCell<T>> {
     Rc::new(RefCell::new(t))
 }
-fn copy(output: &mut [u8], scoped: Rc<RefCell<Vec<u8>>>) {
+fn copy(scoped: Rc<RefCell<Vec<u8>>>, output: &mut [u8]) {
     output.copy_from_slice(scoped.borrow().as_slice());
 }
 
@@ -53,7 +53,7 @@ impl CryptoApi {
             CallWasm::return_none_write_buffer(output_scoped.clone(), ptr)
         );
 
-        copy(output, output_scoped);
+        copy(output_scoped, output);
     }
     pub fn rtm_ext_blake2_256(&mut self, data: &[u8], output: &mut [u8]) {
         let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
