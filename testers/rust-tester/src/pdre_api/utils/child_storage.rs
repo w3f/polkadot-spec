@@ -39,7 +39,6 @@ impl ChildStorageApi {
         written_out: &mut u32,
     ) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_get_allocated_child_storage");
-
         let ptr = wrap(0);
         let written_out_scoped = wrap(0);
 
@@ -58,7 +57,6 @@ impl ChildStorageApi {
         value_data: &[u8],
     ) {
         let mut wasm = self.prep_wasm("test_ext_set_child_storage");
-
         let _ = wasm.call(
             CallWasm::gen_params(&[storage_key_data, key_data, value_data], &[0, 1, 2], None),
             CallWasm::return_none(),
@@ -66,7 +64,6 @@ impl ChildStorageApi {
     }
     pub fn rtm_ext_clear_child_storage(&mut self, storage_key_data: &[u8], key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_child_storage");
-
         wasm.call(
             CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
             CallWasm::return_none(),
@@ -78,7 +75,6 @@ impl ChildStorageApi {
         key_data: &[u8],
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_exists_child_storage");
-
         wasm.call(
             CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
             CallWasm::return_value_no_buffer(),
@@ -86,7 +82,6 @@ impl ChildStorageApi {
     }
     pub fn rtm_ext_clear_child_prefix(&mut self, storage_key_data: &[u8], prefix_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_child_prefix");
-
         let _ = wasm.call(
             CallWasm::gen_params(&[storage_key_data, prefix_data], &[0, 1], None),
             CallWasm::return_none(),
@@ -94,7 +89,6 @@ impl ChildStorageApi {
     }
     pub fn rtm_ext_kill_child_storage(&mut self, storage_key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_kill_child_storage");
-
         let _ = wasm.call(
             CallWasm::gen_params(&[storage_key_data], &[0], None),
             CallWasm::return_none(),
