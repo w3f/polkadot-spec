@@ -76,6 +76,36 @@ impl<'a> CallWasm<'a> {
                 filter_return
             )
     }
+    fn gen_params(data: Vec<&[u8]>, len_index: &[usize])
+        -> impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>
+    {
+        let data_c: Vec<Vec<u8>> = data
+            .iter()
+            .map(|d| d.to_vec())
+            .collect();
+        let len_index_c = len_index.to_owned();
+
+        move |alloc| {
+            let mut offsets = vec![];
+            for d in &data_c {
+                offsets.push(alloc(d)?);
+            }
+
+            let mut counter = 0;
+            let mut runtime_vals = vec![];
+            for off in offsets {
+                // Push the offset to vals
+                runtime_vals.push(I32(off as i32));
+                // If there also must be the length, push too
+                if len_index_c.contains(&counter) {
+                    runtime_vals.push(I32(data_c[counter].len() as i32))
+                }
+                counter += 1;
+            }
+
+            Ok(runtime_vals)
+        }
+    }
     fn with_data_output_ptr(data: &[u8], output: &[u8], ptr: Rc<RefCell<u32>>)
         -> impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>
     {
@@ -150,6 +180,17 @@ impl<'a> CallWasm<'a> {
                     .as_slice(),
             );
             Ok(Some(()))
+        }
+    }
+    fn return_value_no_buffer()
+	    -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<u32>, Error>
+    {
+        |res, _| {
+            if let Some(I32(r)) = res {
+                Ok(Some(r as u32))
+            } else {
+                Ok(None)
+            }
         }
     }
     fn return_value_write_buffer(output: Rc<RefCell<Vec<u8>>>, ptr: Rc<RefCell<u32>>)
