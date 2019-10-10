@@ -223,4 +223,26 @@ impl<'a> CallWasm<'a> {
             }
         }
     }
+    fn return_buffer(result_len: Rc<RefCell<u32>>, ptr: Rc<RefCell<u32>>)
+	    -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<Vec<u8>>, Error>
+    {
+        move |res, memory| {
+            let mut result_len_b = result_len.borrow_mut();
+            use std::convert::TryInto;
+            if let Some(I32(r)) = res {
+                *result_len_b = u32::from_le_bytes(
+                    memory.get(*ptr.borrow(), 4).unwrap().as_slice()[0..4]
+                        .try_into()
+                        .unwrap(),
+                );
+
+                memory
+                    .get(r as u32, *result_len_b as usize)
+                    .map_err(|_| Error::Runtime)
+                    .map(Some)
+            } else {
+                Ok(None)
+            }
+        }
+    }
 }
