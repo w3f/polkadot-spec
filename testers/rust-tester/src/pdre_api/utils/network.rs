@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::get_wasm_blob;
+use super::{copy_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
 
 use parking_lot::RwLock;
 use substrate_executor::error::Error;
@@ -37,79 +37,34 @@ impl NetworkApi {
             state: Some(state),
         }
     }
-    #[allow(unused)]
+    #[allow(unused)] // TODO
     /// Set the expected HTTP request for testing HTTP functionality
     pub fn dbg_http_expect_request(&mut self, id: u16, expected: PendingRequest) {
         let mut inner = self.state.as_ref().unwrap().write();
         inner.expect_request(id, expected);
     }
+    fn prep_wasm<'a>(&'a mut self, method: &'a str) -> CallWasm<'a> {
+        CallWasm::new(&mut self.ext, &self.blob, method)
+    }
     pub fn rtm_ext_http_request_start(&mut self, method: &[u8], url: &[u8], meta: &[u8]) -> u32 {
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_http_request_start",
-                |alloc| {
-                    let method_offset = alloc(method)?;
-                    let url_offset = alloc(url)?;
-                    let meta_offset = alloc(meta)?;
-                    Ok(vec![
-                        I32(method_offset as i32),
-                        I32(method.len() as i32),
-                        I32(url_offset as i32),
-                        I32(url.len() as i32),
-                        I32(meta_offset as i32),
-                        I32(meta.len() as i32),
-                    ])
-                },
-                |res, _| {
-                    if let Some(I32(r)) = res {
-                        Ok(Some(r as u32))
-                    } else {
-                        Ok(None)
-                    }
-                },
-            )
-            .unwrap()
+        let mut wasm = self.prep_wasm("test_ext_http_request_start");
+        wasm.call(
+            CallWasm::gen_params(&[method, url, meta], &[0, 1, 2], None),
+            CallWasm::return_value_no_buffer(),
+        ).unwrap()
     }
     pub fn rtm_ext_network_state(&mut self, written_out: &mut u32) -> Vec<u8> {
-        let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_network_state",
-                |alloc| {
-                    let written_out_offset = alloc(&[0, 4])?;
-                    *ptr_holder.borrow_mut() = written_out_offset as u32;
-                    Ok(vec![I32(written_out_offset as i32)])
-                },
-                |res, memory| {
-                    use std::convert::TryInto;
-                    if let Some(I32(r)) = res {
-                        *written_out = u32::from_le_bytes(
-                            memory
-                                .get(*ptr_holder.borrow(), 4)
-                                .unwrap()
-                                .as_slice()
-                                .split_at(4)
-                                .0
-                                .try_into()
-                                .unwrap(),
-                        );
+        let mut wasm = self.prep_wasm("test_ext_network_state");
+        let ptr = wrap(0);
+        let written_out_scoped = wrap(0);
 
-                        memory
-                            .get(r as u32, *written_out as usize)
-                            .map_err(|_| Error::Runtime)
-                            .map(Some)
-                    } else {
-                        Ok(None)
-                    }
-                },
-            )
-            .unwrap()
+        let res = wasm.call(
+            CallWasm::gen_params(&[&le(written_out)], &[], Some(ptr.clone())),
+            CallWasm::return_buffer(written_out_scoped.clone(), ptr)
+        );
+
+        copy_u32(written_out_scoped, written_out);
+        res.unwrap()
     }
     pub fn rtm_ext_http_request_add_header(
         &mut self,
@@ -117,6 +72,7 @@ impl NetworkApi {
         name: &[u8],
         value: &[u8],
     ) -> u32 {
+        // TODO...
         WasmExecutor::new()
             .call_with_custom_signature(
                 &mut self.ext,
@@ -144,7 +100,9 @@ impl NetworkApi {
             )
             .unwrap()
     }
+    #[allow(unused)] // temporarly
     pub fn rtm_ext_http_response_wait(&mut self, ids: &[u32], statuses: &mut [u8], deadline: u64) {
+        // TODO...
         let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
         let ids_len = ids.len() * 4; // 4-bytes per id
         WasmExecutor::new()
