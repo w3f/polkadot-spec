@@ -17,6 +17,14 @@ use std::rc::Rc;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 
+fn wrap<T>(t: T) -> Rc<RefCell<T>> {
+    Rc::new(RefCell::new(t))
+}
+fn copy(output: &mut [u8], scoped: Rc<RefCell<Vec<u8>>>) {
+    output.copy_from_slice(scoped.borrow().as_slice());
+}
+
+
 pub struct CryptoApi {
     blob: Vec<u8>,
     ext: TestExternalities<Blake2Hasher>,
@@ -36,15 +44,16 @@ impl CryptoApi {
     }
     pub fn rtm_ext_blake2_128(&mut self, data: &[u8], output: &mut [u8]) {
         let mut wasm = self.prep_wasm("test_ext_blake2_128");
-        let ptr = Rc::new(RefCell::new(0));
-        let mut temp_output = Rc::new(RefCell::new(vec![0;output.len()]));
+
+        let ptr = wrap(0); // Rc<RefCell<T>>
+        let output_scoped = wrap(vec![0;output.len()]);
 
         let _ = wasm.call(
-            //CallWasm::with_data_output_ptr(data, output, Rc::clone(&ptr)),
             CallWasm::with_data_output_ptr(data, output, ptr.clone()),
-            CallWasm::return_none_write_buffer(temp_output.clone(), ptr)
+            CallWasm::return_none_write_buffer(output_scoped.clone(), ptr)
         );
-        output.copy_from_slice(temp_output.borrow().as_slice());
+
+        copy(output, output_scoped);
     }
     pub fn rtm_ext_blake2_256(&mut self, data: &[u8], output: &mut [u8]) {
         let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
