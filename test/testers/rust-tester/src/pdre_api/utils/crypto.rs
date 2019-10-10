@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{get_wasm_blob, wrap, copy, CallWasm};
+use super::{copy, get_wasm_blob, wrap, CallWasm};
 
 use substrate_executor::error::Error;
 use substrate_executor::WasmExecutor;
@@ -38,11 +38,11 @@ impl CryptoApi {
         let mut wasm = self.prep_wasm(method);
 
         let ptr = wrap(0);
-        let output_scoped = wrap(vec![0;output.len()]);
+        let output_scoped = wrap(vec![0; output.len()]);
 
         let res = wasm.call(
             CallWasm::gen_params(&[data, output], &[0], Some(ptr.clone())),
-            CallWasm::return_none_write_buffer(output_scoped.clone(), ptr)
+            CallWasm::return_none_write_buffer(output_scoped.clone(), ptr),
         );
 
         copy(output_scoped, output);
@@ -70,11 +70,11 @@ impl CryptoApi {
         let mut wasm = self.prep_wasm("test_ext_ed25519_generate");
 
         let ptr = wrap(0);
-        let output_scoped = wrap(vec![0;output.len()]);
+        let output_scoped = wrap(vec![0; output.len()]);
 
         let _ = wasm.call(
             CallWasm::gen_params(&[id_data, seed, output], &[1], Some(ptr.clone())),
-            CallWasm::return_none_write_buffer(output_scoped.clone(), ptr)
+            CallWasm::return_none_write_buffer(output_scoped.clone(), ptr),
         );
 
         copy(output_scoped, output);
@@ -89,11 +89,15 @@ impl CryptoApi {
         let mut wasm = self.prep_wasm("test_ext_ed25519_sign");
 
         let ptr = wrap(0);
-        let output_scoped = wrap(vec![0;output.len()]);
+        let output_scoped = wrap(vec![0; output.len()]);
 
         let res = wasm.call(
-            CallWasm::gen_params(&[id_data, pubkey_data, msg_data, output], &[2], Some(ptr.clone())),
-            CallWasm::return_value_write_buffer(output_scoped.clone(), ptr)
+            CallWasm::gen_params(
+                &[id_data, pubkey_data, msg_data, output],
+                &[2],
+                Some(ptr.clone()),
+            ),
+            CallWasm::return_value_write_buffer(output_scoped.clone(), ptr),
         );
 
         copy(output_scoped, output);
@@ -108,16 +112,8 @@ impl CryptoApi {
         let mut wasm = self.prep_wasm("test_ext_ed25519_verify");
 
         let res = wasm.call(
-            CallWasm::gen_params(
-                &[
-                    msg_data,
-                    sig_data,
-                    pubkey_data
-                ],
-                &[0],
-                None
-            ),
-            CallWasm::return_value_no_buffer()
+            CallWasm::gen_params(&[msg_data, sig_data, pubkey_data], &[0], None),
+            CallWasm::return_value_no_buffer(),
         );
 
         res.unwrap()
@@ -130,14 +126,11 @@ impl CryptoApi {
 
         let res = wasm.call(
             CallWasm::gen_params(
-                &[
-                    id_data,
-                    &result_len.to_le_bytes(),
-                ],
+                &[id_data, &result_len.to_le_bytes()],
                 &[],
-                Some(ptr.clone())
+                Some(ptr.clone()),
             ),
-            CallWasm::return_buffer(result_len_scoped.clone(), ptr)
+            CallWasm::return_buffer(result_len_scoped.clone(), ptr),
         );
 
         *result_len = *result_len_scoped.borrow();
@@ -147,19 +140,11 @@ impl CryptoApi {
         let mut wasm = self.prep_wasm("test_ext_sr25519_generate");
 
         let ptr = wrap(0);
-        let output_scoped = wrap(vec![0;output.len()]);
+        let output_scoped = wrap(vec![0; output.len()]);
 
         let res = wasm.call(
-            CallWasm::gen_params(
-                &[
-                    id_data,
-                    seed,
-                    output
-                ],
-                &[1],
-                Some(ptr.clone())
-            ),
-            CallWasm::return_none_write_buffer(output_scoped.clone(), ptr)
+            CallWasm::gen_params(&[id_data, seed, output], &[1], Some(ptr.clone())),
+            CallWasm::return_none_write_buffer(output_scoped.clone(), ptr),
         );
 
         copy(output_scoped, output);
@@ -175,20 +160,15 @@ impl CryptoApi {
         let mut wasm = self.prep_wasm("test_ext_sr25519_sign");
 
         let ptr = wrap(0);
-        let output_scoped = wrap(vec![0;output.len()]);
+        let output_scoped = wrap(vec![0; output.len()]);
 
         let res = wasm.call(
             CallWasm::gen_params(
-                &[
-                    id_data,
-                    pubkey_data,
-                    msg_data,
-                    output
-                ],
+                &[id_data, pubkey_data, msg_data, output],
                 &[2],
-                Some(ptr.clone())
+                Some(ptr.clone()),
             ),
-            CallWasm::return_value_write_buffer(output_scoped.clone(), ptr)
+            CallWasm::return_value_write_buffer(output_scoped.clone(), ptr),
         );
 
         copy(output_scoped, output);
@@ -203,16 +183,8 @@ impl CryptoApi {
         let mut wasm = self.prep_wasm("test_ext_sr25519_verify");
 
         let res = wasm.call(
-            CallWasm::gen_params(
-                &[
-                    msg_data,
-                    sig_data,
-                    pubkey_data
-                ],
-                &[0],
-                None
-            ),
-            CallWasm::return_value_no_buffer()
+            CallWasm::gen_params(&[msg_data, sig_data, pubkey_data], &[0], None),
+            CallWasm::return_value_no_buffer(),
         );
 
         res.unwrap()
@@ -225,14 +197,11 @@ impl CryptoApi {
 
         let res = wasm.call(
             CallWasm::gen_params(
-                &[
-                    id_data,
-                    &result_len.to_le_bytes(),
-                ],
+                &[id_data, &result_len.to_le_bytes()],
                 &[],
-                Some(ptr.clone())
+                Some(ptr.clone()),
             ),
-            CallWasm::return_buffer(result_len_scoped.clone(), ptr)
+            CallWasm::return_buffer(result_len_scoped.clone(), ptr),
         );
 
         *result_len = *result_len_scoped.borrow();
