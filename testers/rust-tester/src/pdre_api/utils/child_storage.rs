@@ -77,69 +77,27 @@ impl ChildStorageApi {
         storage_key_data: &[u8],
         key_data: &[u8],
     ) -> u32 {
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_exists_child_storage",
-                |alloc| {
-                    let storage_key_offset = alloc(storage_key_data)?;
-                    let key_offset = alloc(key_data)?;
-                    Ok(vec![
-                        I32(storage_key_offset as i32),
-                        I32(storage_key_data.len() as i32),
-                        I32(key_offset as i32),
-                        I32(key_data.len() as i32),
-                    ])
-                },
-                |res, _| {
-                    if let Some(I32(r)) = res {
-                        Ok(Some(r as u32))
-                    } else {
-                        Ok(None)
-                    }
-                },
-            )
-            .unwrap()
+        let mut wasm = self.prep_wasm("test_ext_exists_child_storage");
+
+        wasm.call(
+            CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
+            CallWasm::return_value_no_buffer(),
+        ).unwrap()
     }
     pub fn rtm_ext_clear_child_prefix(&mut self, storage_key_data: &[u8], prefix_data: &[u8]) {
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_clear_child_prefix",
-                |alloc| {
-                    let storage_key_offset = alloc(storage_key_data)?;
-                    let prefix_offset = alloc(prefix_data)?;
-                    Ok(vec![
-                        I32(storage_key_offset as i32),
-                        I32(storage_key_data.len() as i32),
-                        I32(prefix_offset as i32),
-                        I32(prefix_data.len() as i32),
-                    ])
-                },
-                |_, _| Ok(Some(())),
-            )
-            .unwrap()
+        let mut wasm = self.prep_wasm("test_ext_clear_child_prefix");
+
+        let _ = wasm.call(
+            CallWasm::gen_params(&[storage_key_data, prefix_data], &[0, 1], None),
+            CallWasm::return_none(),
+        );
     }
     pub fn rtm_ext_kill_child_storage(&mut self, storage_key_data: &[u8]) {
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_kill_child_storage",
-                |alloc| {
-                    let storage_key_offset = alloc(storage_key_data)?;
-                    Ok(vec![
-                        I32(storage_key_offset as i32),
-                        I32(storage_key_data.len() as i32),
-                    ])
-                },
-                |_, _| Ok(Some(())),
-            )
-            .unwrap()
+        let mut wasm = self.prep_wasm("test_ext_kill_child_storage");
+
+        let _ = wasm.call(
+            CallWasm::gen_params(&[storage_key_data], &[0], None),
+            CallWasm::return_none(),
+        );
     }
 }
