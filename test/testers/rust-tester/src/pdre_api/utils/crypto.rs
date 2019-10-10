@@ -30,46 +30,21 @@ impl CryptoApi {
             blob: get_wasm_blob(),
             ext: ext,
         }
-    }    fn prep_wasm<'a>(&'a mut self, method: &'a str) -> CallWasm<'a> {
+    }
+    fn prep_wasm<'a>(&'a mut self, method: &'a str) -> CallWasm<'a> {
         CallWasm::new(&mut self.ext, &self.blob, method)
     }
     pub fn rtm_ext_blake2_128(&mut self, data: &[u8], output: &mut [u8]) {
-        /*
         let mut wasm = self.prep_wasm("test_ext_blake2_128");
-        let mut ptr = 0;
+        let ptr = Rc::new(RefCell::new(0));
+        let mut temp_output = Rc::new(RefCell::new(vec![0;output.len()]));
+
         let _ = wasm.call(
-            CallWasm::with_data_output_ptr(data, output, &mut ptr),
-            CallWasm::return_none_write_buffer(output, ptr)
+            //CallWasm::with_data_output_ptr(data, output, Rc::clone(&ptr)),
+            CallWasm::with_data_output_ptr(data, output, ptr.clone()),
+            CallWasm::return_none_write_buffer(temp_output.clone(), ptr)
         );
-        */
-        let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_blake2_128",
-                |alloc| {
-                    let data_offset = alloc(data)?;
-                    let output_offset = alloc(&[0; 16])?;
-                    *ptr_holder.borrow_mut() = output_offset as u32;
-                    Ok(vec![
-                        I32(data_offset as i32),
-                        I32(data.len() as i32),
-                        I32(output_offset as i32),
-                    ])
-                },
-                |_, memory| {
-                    output.copy_from_slice(
-                        memory
-                            .get(*ptr_holder.borrow(), 16)
-                            .map_err(|_| Error::Runtime)?
-                            .as_slice(),
-                    );
-                    Ok(Some(()))
-                },
-            )
-            .unwrap()
+        output.copy_from_slice(temp_output.borrow().as_slice());
     }
     pub fn rtm_ext_blake2_256(&mut self, data: &[u8], output: &mut [u8]) {
         let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));

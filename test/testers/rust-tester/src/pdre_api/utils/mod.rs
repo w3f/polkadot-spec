@@ -70,7 +70,7 @@ impl<'a> CallWasm<'a> {
                 filter_return
             )
     }
-    fn with_data_output_ptr(data: &[u8], output: &[u8], ptr: &'static mut u32)
+    fn with_data_output_ptr(data: &[u8], output: &[u8], ptr: Rc<RefCell<u32>>)
         -> impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>
     {
         let data_c = data.to_owned();
@@ -79,7 +79,7 @@ impl<'a> CallWasm<'a> {
         move |alloc| {
             let data_offset = alloc(&data_c)?;
             let output_offset = alloc(&output_c)?;
-            *ptr = output_offset as u32;
+            *ptr.borrow_mut() = output_offset as u32;
             Ok(vec![
                 I32(data_offset as i32),
                 I32(data_c.len() as i32),
@@ -87,13 +87,13 @@ impl<'a> CallWasm<'a> {
             ])
         }
     }
-    fn return_none_write_buffer(output: &'static mut [u8], ptr: u32)
+    fn return_none_write_buffer(output: Rc<RefCell<Vec<u8>>>, ptr: Rc<RefCell<u32>>)
 	    -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<()>, Error>
     {
         move |_, memory| {
-            output.copy_from_slice(
+            output.borrow_mut().copy_from_slice(
                 memory
-                    .get(ptr, 16)
+                    .get(*ptr.borrow(), 16)
                     .map_err(|_| Error::Runtime)?
                     .as_slice(),
             );
