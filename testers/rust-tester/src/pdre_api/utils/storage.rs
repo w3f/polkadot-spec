@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::get_wasm_blob;
+use super::{copy_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
 
 use substrate_executor::error::Error;
 use substrate_executor::WasmExecutor;
@@ -39,26 +39,21 @@ impl StorageApi {
             ext: ext,
         }
     }
+    fn prep_wasm<'a>(&'a mut self, method: &'a str) -> CallWasm<'a> {
+        CallWasm::new(&mut self.ext, &self.blob, method)
+    }
     pub fn rtm_ext_malloc(&mut self, size: u32) -> Vec<u8> {
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_malloc",
-                |_| Ok(vec![I32(size as i32)]),
-                |res, memory| {
-                    if let Some(I32(r)) = res {
-                        memory
-                            .get(r as u32, size as usize)
-                            .map_err(|_| Error::Runtime)
-                            .map(Some)
-                    } else {
-                        Ok(None)
-                    }
-                },
-            )
-            .unwrap()
+        let mut wasm = self.prep_wasm("test_ext_malloc");
+
+        let written_out = wrap(size);
+        let mut size_scoped = size;
+
+        let res = wasm.call(
+            CallWasm::gen_params(&[&le(&mut size_scoped)], &[], None),
+            CallWasm::return_buffer_no_ptr(written_out),
+        );
+
+        res.unwrap()
     }
     pub fn rtm_ext_free(&mut self, data: &[u8]) {
         WasmExecutor::new()
