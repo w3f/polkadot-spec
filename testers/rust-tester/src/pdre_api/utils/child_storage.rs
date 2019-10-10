@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::get_wasm_blob;
+use super::{copy_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
 
 use substrate_executor::error::Error;
 use substrate_executor::WasmExecutor;
@@ -29,60 +29,27 @@ impl ChildStorageApi {
             ext: TestExternalities::default(),
         }
     }
+    fn prep_wasm<'a>(&'a mut self, method: &'a str) -> CallWasm<'a> {
+        CallWasm::new(&mut self.ext, &self.blob, method)
+    }
     pub fn rtm_ext_get_allocated_child_storage(
         &mut self,
         storage_key_data: &[u8],
         key_data: &[u8],
         written_out: &mut u32,
     ) -> Vec<u8> {
-        let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_get_allocated_child_storage",
-                |alloc| {
-                    let storage_key_offset = alloc(storage_key_data)?;
-                    let key_offset = alloc(key_data)?;
-                    let written_out_offset = alloc(&[0; 4])?;
-                    *ptr_holder.borrow_mut() = written_out_offset as u32;
-                    Ok(vec![
-                        I32(storage_key_offset as i32),
-                        I32(storage_key_data.len() as i32),
-                        I32(key_offset as i32),
-                        I32(key_data.len() as i32),
-                        I32(written_out_offset as i32),
-                    ])
-                },
-                |res, memory| {
-                    use std::convert::TryInto;
-                    if let Some(I32(r)) = res {
-                        *written_out = u32::from_le_bytes(
-                            memory
-                                .get(*ptr_holder.borrow(), 4)
-                                .unwrap()
-                                .as_slice()
-                                .split_at(4)
-                                .0
-                                .try_into()
-                                .unwrap(),
-                        );
+        let mut wasm = self.prep_wasm("test_ext_get_allocated_child_storage");
 
-                        if r == 0 {
-                            return Ok(Some(vec![]));
-                        }
+        let ptr = wrap(0);
+        let written_out_scoped = wrap(0);
 
-                        memory
-                            .get(r as u32, *written_out as usize)
-                            .map_err(|_| Error::Runtime)
-                            .map(Some)
-                    } else {
-                        Ok(None)
-                    }
-                },
-            )
-            .unwrap()
+        let res = wasm.call(
+            CallWasm::gen_params(&[storage_key_data, key_data, &le(written_out)], &[0, 1], Some(ptr.clone())),
+            CallWasm::return_buffer(written_out_scoped.clone(), ptr),
+        );
+
+        copy_u32(written_out_scoped, written_out);
+        res.unwrap()
     }
     pub fn rtm_ext_set_child_storage(
         &mut self,

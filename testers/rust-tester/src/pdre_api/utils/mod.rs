@@ -36,11 +36,20 @@ fn get_wasm_blob() -> Vec<u8> {
     buffer
 }
 
+fn le(num: &mut u32) -> [u8; 4] {
+    num.to_le_bytes()
+}
+
 fn wrap<T>(t: T) -> Rc<RefCell<T>> {
     Rc::new(RefCell::new(t))
 }
-fn copy(scoped: Rc<RefCell<Vec<u8>>>, output: &mut [u8]) {
+
+fn copy_slice(scoped: Rc<RefCell<Vec<u8>>>, output: &mut [u8]) {
     output.copy_from_slice(scoped.borrow().as_slice());
+}
+
+fn copy_u32(scope: Rc<RefCell<u32>>, num: &mut u32) {
+    *num = *scope.borrow();
 }
 
 struct CallWasm<'a> {
@@ -172,6 +181,11 @@ impl<'a> CallWasm<'a> {
                         .try_into()
                         .unwrap(),
                 );
+
+                if r == 0 {
+                    return Ok(Some(vec![]));
+                }
+
 
                 memory
                     .get(r as u32, *result_len_b as usize)
