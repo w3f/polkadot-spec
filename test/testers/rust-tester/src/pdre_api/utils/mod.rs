@@ -93,12 +93,56 @@ impl<'a> CallWasm<'a> {
             ])
         }
     }
+    fn with_2x_data_output_ptr(data1: &[u8], data2: &[u8], output: &mut [u8], ptr: Rc<RefCell<u32>>)
+        -> impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>
+    {
+        let data1_c = data1.to_owned();
+        let data2_c = data2.to_owned();
+        let output_c = output.to_owned();
+
+        move |alloc| {
+            let data1_offset = alloc(&data1_c)?;
+            let data2_offset = alloc(&data2_c)?;
+            let output_offset = alloc(&output_c)?;
+            *ptr.borrow_mut() = output_offset as u32;
+            Ok(vec![
+                I32(data1_offset as i32),
+                I32(data2_offset as i32),
+                I32(data2_c.len() as i32),
+                I32(output_offset as i32),
+            ])
+        }
+    }
+    fn with_3x_data_output_ptr(data1: &[u8], data2: &[u8], data3: &[u8], output: &mut [u8], ptr: Rc<RefCell<u32>>)
+        -> impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>
+    {
+        let data1_c = data1.to_owned();
+        let data2_c = data2.to_owned();
+        let data3_c = data3.to_owned();
+        let output_c = output.to_owned();
+
+        move |alloc| {
+            let data1_offset = alloc(&data1_c)?;
+            let data2_offset = alloc(&data2_c)?;
+            let data3_offset = alloc(&data3_c)?;
+            let output_offset = alloc(&output_c)?;
+            *ptr.borrow_mut() = output_offset as u32;
+            Ok(vec![
+                I32(data1_offset as i32),
+                I32(data2_offset as i32),
+                I32(data3_offset as i32),
+                I32(data3_c.len() as i32),
+                I32(output_offset as i32),
+            ])
+        }
+    }
     fn return_none_write_buffer(output: Rc<RefCell<Vec<u8>>>, ptr: Rc<RefCell<u32>>)
 	    -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<()>, Error>
     {
         move |_, memory| {
             let mut output_b = output.borrow_mut();
             let len = output_b.len();
+
             output_b.copy_from_slice(
                 memory
                     .get(*ptr.borrow(), len)
@@ -106,6 +150,27 @@ impl<'a> CallWasm<'a> {
                     .as_slice(),
             );
             Ok(Some(()))
+        }
+    }
+    fn return_value_write_buffer(output: Rc<RefCell<Vec<u8>>>, ptr: Rc<RefCell<u32>>)
+	    -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<u32>, Error>
+    {
+        move |res, memory| {
+            let mut output_b = output.borrow_mut();
+            let len = output_b.len();
+
+            if let Some(I32(r)) = res {
+                output_b.copy_from_slice(
+                    memory
+                        .get(*ptr.borrow(), len)
+                        .map_err(|_| Error::Runtime)?
+                        .as_slice(),
+                );
+
+                Ok(Some(r as u32))
+            } else {
+                Ok(None)
+            }
         }
     }
 }
