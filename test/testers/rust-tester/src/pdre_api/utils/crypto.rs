@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{copy_u32, copy_slice, get_wasm_blob, wrap, CallWasm};
+use super::{copy_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
 
 use substrate_executor::error::Error;
 use substrate_executor::WasmExecutor;
@@ -126,7 +126,7 @@ impl CryptoApi {
 
         let res = wasm.call(
             CallWasm::gen_params(
-                &[id_data, &written_out.to_le_bytes()],
+                &[id_data, &le(written_out)],
                 &[],
                 Some(ptr.clone()),
             ),
@@ -197,7 +197,7 @@ impl CryptoApi {
 
         let res = wasm.call(
             CallWasm::gen_params(
-                &[id_data, &written_out.to_le_bytes()],
+                &[id_data, &le(written_out)],
                 &[],
                 Some(ptr.clone()),
             ),
