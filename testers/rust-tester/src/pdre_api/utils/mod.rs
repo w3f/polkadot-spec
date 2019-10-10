@@ -119,6 +119,10 @@ impl<'a> CallWasm<'a> {
             Ok(runtime_vals)
         }
     }
+    fn return_none(
+    ) -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<()>, Error> {
+        |_, _| { Ok(Some(()))}
+    }
     fn return_none_write_buffer(
         output: Rc<RefCell<Vec<u8>>>,
         ptr: Rc<RefCell<u32>>,
@@ -185,7 +189,6 @@ impl<'a> CallWasm<'a> {
                 if r == 0 {
                     return Ok(Some(vec![]));
                 }
-
 
                 memory
                     .get(r as u32, *result_len_b as usize)

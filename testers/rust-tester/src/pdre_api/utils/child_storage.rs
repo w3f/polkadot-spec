@@ -57,49 +57,20 @@ impl ChildStorageApi {
         key_data: &[u8],
         value_data: &[u8],
     ) {
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_set_child_storage",
-                |alloc| {
-                    let storage_key_offset = alloc(storage_key_data)?;
-                    let key_offset = alloc(key_data)?;
-                    let value_offset = alloc(value_data)?;
-                    Ok(vec![
-                        I32(storage_key_offset as i32),
-                        I32(storage_key_data.len() as i32),
-                        I32(key_offset as i32),
-                        I32(key_data.len() as i32),
-                        I32(value_offset as i32),
-                        I32(value_data.len() as i32),
-                    ])
-                },
-                |_, _| Ok(Some(())),
-            )
-            .unwrap()
+        let mut wasm = self.prep_wasm("test_ext_set_child_storage");
+
+        let _ = wasm.call(
+            CallWasm::gen_params(&[storage_key_data, key_data, value_data], &[0, 1, 2], None),
+            CallWasm::return_none(),
+        );
     }
     pub fn rtm_ext_clear_child_storage(&mut self, storage_key_data: &[u8], key_data: &[u8]) {
-        WasmExecutor::new()
-            .call_with_custom_signature(
-                &mut self.ext,
-                1,
-                &self.blob,
-                "test_ext_clear_child_storage",
-                |alloc| {
-                    let storage_key_offset = alloc(storage_key_data)?;
-                    let key_offset = alloc(key_data)?;
-                    Ok(vec![
-                        I32(storage_key_offset as i32),
-                        I32(storage_key_data.len() as i32),
-                        I32(key_offset as i32),
-                        I32(key_data.len() as i32),
-                    ])
-                },
-                |_, _| Ok(Some(())),
-            )
-            .unwrap()
+        let mut wasm = self.prep_wasm("test_ext_clear_child_storage");
+
+        wasm.call(
+            CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
+            CallWasm::return_none(),
+        );
     }
     pub fn rtm_ext_exists_child_storage(
         &mut self,
