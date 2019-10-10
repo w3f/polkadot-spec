@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{get_wasm_blob, CallWasm};
+use super::{get_wasm_blob, wrap, copy, CallWasm};
 
 use substrate_executor::error::Error;
 use substrate_executor::WasmExecutor;
@@ -16,14 +16,6 @@ use std::cell::RefCell;
 use std::rc::Rc;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
-
-fn wrap<T>(t: T) -> Rc<RefCell<T>> {
-    Rc::new(RefCell::new(t))
-}
-fn copy(scoped: Rc<RefCell<Vec<u8>>>, output: &mut [u8]) {
-    output.copy_from_slice(scoped.borrow().as_slice());
-}
-
 
 pub struct CryptoApi {
     blob: Vec<u8>,

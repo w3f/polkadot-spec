@@ -35,6 +35,12 @@ use std::rc::Rc;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 
+fn wrap<T>(t: T) -> Rc<RefCell<T>> {
+    Rc::new(RefCell::new(t))
+}
+fn copy(scoped: Rc<RefCell<Vec<u8>>>, output: &mut [u8]) {
+    output.copy_from_slice(scoped.borrow().as_slice());
+}
 
 struct CallWasm<'a> {
     ext: &'a mut TestExternalities<Blake2Hasher>,
@@ -91,9 +97,11 @@ impl<'a> CallWasm<'a> {
 	    -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<()>, Error>
     {
         move |_, memory| {
-            output.borrow_mut().copy_from_slice(
+            let mut output_b = output.borrow_mut();
+            let len = output_b.len();
+            output_b.copy_from_slice(
                 memory
-                    .get(*ptr.borrow(), 16)
+                    .get(*ptr.borrow(), len)
                     .map_err(|_| Error::Runtime)?
                     .as_slice(),
             );
