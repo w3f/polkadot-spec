@@ -76,7 +76,7 @@ impl<'a> CallWasm<'a> {
                 filter_return
             )
     }
-    fn gen_params(data: Vec<&[u8]>, len_index: &[usize])
+    fn gen_params(data: &[&[u8]], len_index: &[usize])
         -> impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>
     {
         let data_c: Vec<Vec<u8>> = data

@@ -104,17 +104,23 @@ impl CryptoApi {
         sig_data: &[u8],
         pubkey_data: &[u8],
     ) -> u32 {
-        /*
         let mut wasm = self.prep_wasm("test_ext_ed25519_verify");
 
         let res = wasm.call(
-            CallWasm::with_2x_data_output_ptr(msg_data, sig_data, output, ptr.clone()),
+            CallWasm::gen_params(
+                &[
+                    msg_data,
+                    sig_data,
+                    pubkey_data
+                ],
+                &[0]
+            ),
             CallWasm::return_value_no_buffer()
         );
 
         res.unwrap()
-        */
 
+        /*
         WasmExecutor::new()
             .call_with_custom_signature(
                 &mut self.ext,
@@ -141,6 +147,7 @@ impl CryptoApi {
                 },
             )
             .unwrap()
+            */
     }
     pub fn rtm_ext_ed25519_public_keys(&mut self, id_data: &[u8], result_len: &mut u32) -> Vec<u8> {
         let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
