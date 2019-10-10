@@ -91,7 +91,16 @@ impl CryptoApi {
         let output_scoped = wrap(vec![0;output.len()]);
 
         let res = wasm.call(
-            CallWasm::with_3x_data_output_ptr(id_data, pubkey_data, msg_data, output, ptr.clone()),
+            CallWasm::gen_params(
+                &[
+                    id_data,
+                    pubkey_data,
+                    msg_data,
+                    output,
+                ],
+                &[2],
+                Some(ptr.clone())
+            ),
             CallWasm::return_value_write_buffer(output_scoped.clone(), ptr)
         );
 
@@ -113,7 +122,8 @@ impl CryptoApi {
                     sig_data,
                     pubkey_data
                 ],
-                &[0]
+                &[0],
+                None
             ),
             CallWasm::return_value_no_buffer()
         );
