@@ -76,7 +76,7 @@ impl<'a> CallWasm<'a> {
                 filter_return
             )
     }
-    fn gen_params(data: &[&[u8]], len_index: &[usize])
+    fn gen_params(data: &[&[u8]], len_index: &[usize], ptr: Option<Rc<RefCell<u32>>>)
         -> impl FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>
     {
         let data_c: Vec<Vec<u8>> = data
@@ -89,6 +89,15 @@ impl<'a> CallWasm<'a> {
             let mut offsets = vec![];
             for d in &data_c {
                 offsets.push(alloc(d)?);
+            }
+
+            if ptr.is_some() && offsets.len() >= 1 {
+                *ptr.as_ref()
+                    .unwrap()
+                    .borrow_mut() = **offsets
+                    .last()
+                    .as_ref()
+                    .unwrap() as u32;
             }
 
             let mut counter = 0;
