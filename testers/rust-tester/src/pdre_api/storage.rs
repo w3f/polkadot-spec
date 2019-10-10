@@ -1,5 +1,5 @@
-use super::ParsedInput;
 use super::utils::StorageApi;
+use super::ParsedInput;
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
