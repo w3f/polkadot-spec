@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::get_wasm_blob;
+use super::{get_wasm_blob, CallWasm};
 
 use substrate_executor::error::Error;
 use substrate_executor::WasmExecutor;
@@ -30,8 +30,18 @@ impl CryptoApi {
             blob: get_wasm_blob(),
             ext: ext,
         }
+    }    fn prep_wasm<'a>(&'a mut self, method: &'a str) -> CallWasm<'a> {
+        CallWasm::new(&mut self.ext, &self.blob, method)
     }
     pub fn rtm_ext_blake2_128(&mut self, data: &[u8], output: &mut [u8]) {
+        /*
+        let mut wasm = self.prep_wasm("test_ext_blake2_128");
+        let mut ptr = 0;
+        let _ = wasm.call(
+            CallWasm::with_data_output_ptr(data, output, &mut ptr),
+            CallWasm::return_none_write_buffer(output, ptr)
+        );
+        */
         let ptr_holder: Rc<RefCell<u32>> = Rc::new(RefCell::new(0));
         WasmExecutor::new()
             .call_with_custom_signature(
