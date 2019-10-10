@@ -3,17 +3,10 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{copy_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
+use super::{copy_u32, get_wasm_blob, le, wrap, CallWasm};
 
-use substrate_executor::error::Error;
-use substrate_executor::WasmExecutor;
-use substrate_offchain::testing::TestOffchainExt;
 use substrate_primitives::Blake2Hasher;
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
-use wasmi::RuntimeValue::I32;
-
-use std::cell::RefCell;
-use std::rc::Rc;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 
@@ -64,7 +57,7 @@ impl ChildStorageApi {
     }
     pub fn rtm_ext_clear_child_storage(&mut self, storage_key_data: &[u8], key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_child_storage");
-        wasm.call(
+        let _ = wasm.call(
             CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
             CallWasm::return_none(),
         );

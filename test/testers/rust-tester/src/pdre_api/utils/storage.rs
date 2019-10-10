@@ -5,15 +5,9 @@
 
 use super::{copy_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
 
-use substrate_executor::error::Error;
-use substrate_executor::WasmExecutor;
 use substrate_offchain::testing::TestOffchainExt;
 use substrate_primitives::Blake2Hasher;
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
-use wasmi::RuntimeValue::I32;
-
-use std::cell::RefCell;
-use std::rc::Rc;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 
@@ -55,7 +49,6 @@ impl StorageApi {
     }
     pub fn rtm_ext_free(&mut self, data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_free");
-
         let _ = wasm.call(
             CallWasm::gen_params(&[data], &[], None),
             CallWasm::return_none(),
@@ -63,7 +56,6 @@ impl StorageApi {
     }
     pub fn rtm_ext_set_storage(&mut self, key_data: &[u8], value_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_set_storage");
-
         let _ = wasm.call(
             CallWasm::gen_params(&[key_data, value_data], &[0, 1], None),
             CallWasm::return_none(),
@@ -88,7 +80,6 @@ impl StorageApi {
     }
     pub fn rtm_ext_clear_storage(&mut self, key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_storage");
-
         let _ = wasm.call(
             CallWasm::gen_params(&[key_data], &[0], None),
             CallWasm::return_none()
@@ -96,7 +87,6 @@ impl StorageApi {
     }
     pub fn rtm_ext_exists_storage(&mut self, key_data: &[u8]) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_exists_storage");
-
         wasm.call(
             CallWasm::gen_params(&[key_data], &[0], None),
             CallWasm::return_value_no_buffer()
@@ -104,7 +94,6 @@ impl StorageApi {
     }
     pub fn rtm_ext_clear_prefix(&mut self, prefix_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_prefix");
-
         let _ = wasm.call(
             CallWasm::gen_params(&[prefix_data], &[0], None),
             CallWasm::return_none()

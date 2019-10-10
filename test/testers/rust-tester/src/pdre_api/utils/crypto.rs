@@ -5,15 +5,9 @@
 
 use super::{copy_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
 
-use substrate_executor::error::Error;
-use substrate_executor::WasmExecutor;
 use substrate_primitives::testing::KeyStore;
 use substrate_primitives::Blake2Hasher;
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
-use wasmi::RuntimeValue::I32;
-
-use std::cell::RefCell;
-use std::rc::Rc;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 
@@ -36,7 +30,6 @@ impl CryptoApi {
     }
     fn common_hash_fn_handler(&mut self, method: &str, data: &[u8], output: &mut [u8]) {
         let mut wasm = self.prep_wasm(method);
-
         let ptr = wrap(0);
         let output_scoped = wrap(vec![0; output.len()]);
 
@@ -68,7 +61,6 @@ impl CryptoApi {
     }
     pub fn rtm_ext_ed25519_generate(&mut self, id_data: &[u8], seed: &[u8], output: &mut [u8]) {
         let mut wasm = self.prep_wasm("test_ext_ed25519_generate");
-
         let ptr = wrap(0);
         let output_scoped = wrap(vec![0; output.len()]);
 
@@ -105,7 +97,6 @@ impl CryptoApi {
         pubkey_data: &[u8],
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_ed25519_verify");
-
          wasm.call(
             CallWasm::gen_params(&[msg_data, sig_data, pubkey_data], &[0], None),
             CallWasm::return_value_no_buffer(),
@@ -163,7 +154,6 @@ impl CryptoApi {
         pubkey_data: &[u8],
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_sr25519_verify");
-
         wasm.call(
             CallWasm::gen_params(&[msg_data, sig_data, pubkey_data], &[0], None),
             CallWasm::return_value_no_buffer(),
