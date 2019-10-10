@@ -87,16 +87,11 @@ impl CryptoApi {
         output: &mut [u8],
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_ed25519_sign");
-
         let ptr = wrap(0);
         let output_scoped = wrap(vec![0; output.len()]);
 
         let res = wasm.call(
-            CallWasm::gen_params(
-                &[id_data, pubkey_data, msg_data, output],
-                &[2],
-                Some(ptr.clone()),
-            ),
+            CallWasm::gen_params(&[id_data, pubkey_data, msg_data, output], &[2], Some(ptr.clone())),
             CallWasm::return_value_write_buffer(output_scoped.clone(), ptr),
         );
 
@@ -120,16 +115,11 @@ impl CryptoApi {
     }
     pub fn rtm_ext_ed25519_public_keys(&mut self, id_data: &[u8], written_out: &mut u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_ed25519_public_keys");
-
         let ptr = wrap(0);
         let written_out_scoped = wrap(0);
 
         let res = wasm.call(
-            CallWasm::gen_params(
-                &[id_data, &le(written_out)],
-                &[],
-                Some(ptr.clone()),
-            ),
+            CallWasm::gen_params(&[id_data, &le(written_out)], &[], Some(ptr.clone())),
             CallWasm::return_buffer(written_out_scoped.clone(), ptr),
         );
 
@@ -138,7 +128,6 @@ impl CryptoApi {
     }
     pub fn rtm_ext_sr25519_generate(&mut self, id_data: &[u8], seed: &[u8], output: &mut [u8]) {
         let mut wasm = self.prep_wasm("test_ext_sr25519_generate");
-
         let ptr = wrap(0);
         let output_scoped = wrap(vec![0; output.len()]);
 
@@ -158,16 +147,11 @@ impl CryptoApi {
         output: &mut [u8],
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_sr25519_sign");
-
         let ptr = wrap(0);
         let output_scoped = wrap(vec![0; output.len()]);
 
         let res = wasm.call(
-            CallWasm::gen_params(
-                &[id_data, pubkey_data, msg_data, output],
-                &[2],
-                Some(ptr.clone()),
-            ),
+            CallWasm::gen_params(&[id_data, pubkey_data, msg_data, output], &[2], Some(ptr.clone())),
             CallWasm::return_value_write_buffer(output_scoped.clone(), ptr),
         );
 
@@ -191,16 +175,11 @@ impl CryptoApi {
     }
     pub fn rtm_ext_sr25519_public_keys(&mut self, id_data: &[u8], written_out: &mut u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_sr25519_public_keys");
-
         let ptr = wrap(0);
         let written_out_scoped = wrap(0);
 
         let res = wasm.call(
-            CallWasm::gen_params(
-                &[id_data, &le(written_out)],
-                &[],
-                Some(ptr.clone()),
-            ),
+            CallWasm::gen_params(&[id_data, &le(written_out)], &[], Some(ptr.clone())),
             CallWasm::return_buffer(written_out_scoped.clone(), ptr),
         );
 
