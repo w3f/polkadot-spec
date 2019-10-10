@@ -192,8 +192,8 @@ impl CryptoApi {
     pub fn rtm_ext_sr25519_public_keys(&mut self, id_data: &[u8], result_len: &mut u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_sr25519_public_keys");
 
-        let result_len_scoped = wrap(0);
         let ptr = wrap(0);
+        let result_len_scoped = wrap(0);
 
         let res = wasm.call(
             CallWasm::gen_params(
