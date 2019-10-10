@@ -106,12 +106,10 @@ impl CryptoApi {
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_ed25519_verify");
 
-        let res = wasm.call(
+         wasm.call(
             CallWasm::gen_params(&[msg_data, sig_data, pubkey_data], &[0], None),
             CallWasm::return_value_no_buffer(),
-        );
-
-        res.unwrap()
+        ).unwrap()
     }
     pub fn rtm_ext_ed25519_public_keys(&mut self, id_data: &[u8], written_out: &mut u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_ed25519_public_keys");
@@ -166,12 +164,10 @@ impl CryptoApi {
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_sr25519_verify");
 
-        let res = wasm.call(
+        wasm.call(
             CallWasm::gen_params(&[msg_data, sig_data, pubkey_data], &[0], None),
             CallWasm::return_value_no_buffer(),
-        );
-
-        res.unwrap()
+        ).unwrap()
     }
     pub fn rtm_ext_sr25519_public_keys(&mut self, id_data: &[u8], written_out: &mut u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_sr25519_public_keys");

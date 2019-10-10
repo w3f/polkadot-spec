@@ -140,8 +140,7 @@ impl<'a> CallWasm<'a> {
             Ok(Some(()))
         }
     }
-    fn return_value_no_buffer(
-    ) -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<u32>, Error> {
+    fn return_value_no_buffer() -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<u32>, Error> {
         |res, _| {
             if let Some(I32(r)) = res {
                 Ok(Some(r as u32))
