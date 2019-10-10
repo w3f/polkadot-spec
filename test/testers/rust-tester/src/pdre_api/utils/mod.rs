@@ -198,14 +198,11 @@ impl<'a> CallWasm<'a> {
             }
         }
     }
-    fn return_buffer_no_ptr(
-        written_out: Rc<RefCell<u32>>,
-    ) -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<Vec<u8>>, Error> {
+    fn return_buffer_no_ptr(written_out: u32) -> impl FnOnce(Option<RuntimeValue>, &MemoryRef) -> Result<Option<Vec<u8>>, Error> {
         move |res, memory| {
-            let mut written_out_b = written_out.borrow_mut();
             if let Some(I32(r)) = res {
                 memory
-                    .get(r as u32, *written_out_b as usize)
+                    .get(r as u32, written_out as usize)
                     .map_err(|_| Error::Runtime)
                     .map(Some)
             } else {
