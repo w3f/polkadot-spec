@@ -1,5 +1,5 @@
-use super::ParsedInput;
 use super::utils::CryptoApi;
+use super::ParsedInput;
 
 use substrate_primitives::hashing::{twox_128, twox_256, twox_64};
 
@@ -88,12 +88,7 @@ pub fn test_ed25519(input: ParsedInput) {
 
     // Sign a message
     let mut signature = [0; 64];
-    let res = api.rtm_ext_ed25519_sign(
-        keystore.as_bytes(),
-        &pubkey1,
-        data,
-        &mut signature,
-    );
+    let res = api.rtm_ext_ed25519_sign(keystore.as_bytes(), &pubkey1, data, &mut signature);
     assert_eq!(res, 0);
 
     // Verify message
@@ -133,12 +128,7 @@ pub fn test_sr25519(input: ParsedInput) {
 
     // Sign a message
     let mut signature = [0; 64];
-    let res = api.rtm_ext_sr25519_sign(
-        keystore.as_bytes(),
-        &pubkey1,
-        data,
-        &mut signature,
-    );
+    let res = api.rtm_ext_sr25519_sign(keystore.as_bytes(), &pubkey1, data, &mut signature);
     assert_eq!(res, 0);
 
     let verify = api.rtm_ext_sr25519_verify(data, &signature, &pubkey1);
