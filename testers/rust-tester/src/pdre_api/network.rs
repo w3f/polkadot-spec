@@ -8,32 +8,10 @@ pub fn test_http() {
     // Request 1
     let req_id1 = api.rtm_ext_http_request_start("GET".as_bytes(), "example.com".as_bytes(), &[]);
     assert_eq!(req_id1, 0);
-    let res = api.rtm_ext_http_request_add_header(req_id1, b"User-Agent", b"Spec Tester");
-    assert_eq!(res, 0);
 
     // Request 2
     let req_id2 = api.rtm_ext_http_request_start("GET".as_bytes(), "example.com".as_bytes(), &[]);
     assert_eq!(req_id2, 1);
-    let res = api.rtm_ext_http_request_add_header(req_id2, b"User-Agent", b"Spec Tester");
-    assert_eq!(res, 0);
-
-    // Set expected requests for TestOffchainExt
-    /*
-    api.dbg_http_expect_request(
-        0,
-        PendingRequest {
-            method: "GET".to_string(),
-            uri: "example.com".to_string(),
-            body: vec![],
-            headers: vec![("User-Agent".to_string(), "Spec Tester".to_string())],
-            sent: true,
-            ..Default::default()
-        },
-    );
-    */
-
-    //let mut _statuses = [0; 8]; // 4-bytes per id
-    //api.rtm_ext_http_response_wait(&[req_id1, req_id2], &mut statuses, 0); // 0 => Block forever
 
     // TODO...
 }
