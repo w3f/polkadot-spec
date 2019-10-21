@@ -5,6 +5,8 @@
 
 use super::{copy_u32, get_wasm_blob, le, wrap, CallWasm};
 
+use parity_scale_codec::{Encode, Decode};
+
 use substrate_primitives::Blake2Hasher;
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
 
@@ -35,13 +37,13 @@ impl ChildStorageApi {
         let ptr = wrap(0);
         let written_out_scoped = wrap(0);
 
-        let res = wasm.call(
-            CallWasm::gen_params(&[storage_key_data, key_data, &le(written_out)], &[0, 1], Some(ptr.clone())),
-            CallWasm::return_buffer(written_out_scoped.clone(), ptr),
+        let res = wasm.call(&[storage_key_data, key_data, &le(written_out)].encode()
+            // CallWasm::gen_params(&[storage_key_data, key_data, &le(written_out)], &[0, 1], Some(ptr.clone())),
+            // CallWasm::return_buffer(written_out_scoped.clone(), ptr),
         );
 
         copy_u32(written_out_scoped, written_out);
-        res.unwrap()
+        res
     }
     pub fn rtm_ext_set_child_storage(
         &mut self,
@@ -50,16 +52,16 @@ impl ChildStorageApi {
         value_data: &[u8],
     ) {
         let mut wasm = self.prep_wasm("test_ext_set_child_storage");
-        let _ = wasm.call(
-            CallWasm::gen_params(&[storage_key_data, key_data, value_data], &[0, 1, 2], None),
-            CallWasm::return_none(),
+        let _ = wasm.call(&[storage_key_data, key_data, value_data].encode()
+            // CallWasm::gen_params(&[storage_key_data, key_data, value_data], &[0, 1, 2], None),
+            // CallWasm::return_none(),
         );
     }
     pub fn rtm_ext_clear_child_storage(&mut self, storage_key_data: &[u8], key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_child_storage");
-        let _ = wasm.call(
-            CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
-            CallWasm::return_none(),
+        let _ = wasm.call(&[storage_key_data, key_data].encode()
+            // CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
+            // CallWasm::return_none(),
         );
     }
     pub fn rtm_ext_exists_child_storage(
@@ -68,23 +70,23 @@ impl ChildStorageApi {
         key_data: &[u8],
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_exists_child_storage");
-        wasm.call(
-            CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
-            CallWasm::return_value_no_buffer(),
-        ).unwrap()
+        u32::decode(&mut wasm.call(&[storage_key_data, key_data].encode()
+            // CallWasm::gen_params(&[storage_key_data, key_data], &[0, 1], None),
+            // CallWasm::return_value_no_buffer(),
+        ).as_slice()).unwrap()
     }
     pub fn rtm_ext_clear_child_prefix(&mut self, storage_key_data: &[u8], prefix_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_child_prefix");
-        let _ = wasm.call(
-            CallWasm::gen_params(&[storage_key_data, prefix_data], &[0, 1], None),
-            CallWasm::return_none(),
+        let _ = wasm.call(&[storage_key_data, prefix_data].encode()
+            // CallWasm::gen_params(&[storage_key_data, prefix_data], &[0, 1], None),
+            // CallWasm::return_none(),
         );
     }
     pub fn rtm_ext_kill_child_storage(&mut self, storage_key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_kill_child_storage");
-        let _ = wasm.call(
-            CallWasm::gen_params(&[storage_key_data], &[0], None),
-            CallWasm::return_none(),
+        let _ = wasm.call(&[storage_key_data].encode()
+            // CallWasm::gen_params(&[storage_key_data], &[0], None),
+            // CallWasm::return_none(),
         );
     }
 }

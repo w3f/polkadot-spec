@@ -8,9 +8,7 @@ pub fn test_blake2_128(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
 
-    let mut output = [0; 16];
-    api.rtm_ext_blake2_128(data, &mut output);
-
+    let output = api.rtm_ext_blake2_128(data);
     println!("{}", hex::encode(output));
 }
 
@@ -18,9 +16,8 @@ pub fn test_blake2_128(input: ParsedInput) {
 pub fn test_blake2_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
-
-    let mut output = [0; 32];
-    api.rtm_ext_blake2_256(data, &mut output);
+ 
+    let output = api.rtm_ext_blake2_256(data);
 
     println!("{}", hex::encode(output));
 }
@@ -30,10 +27,8 @@ pub fn test_twox_64(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
 
-    let mut output = [0; 8];
-
-    api.rtm_ext_twox_64(data, &mut output);
-    assert_eq!(twox_64(data), output);
+    let output = api.rtm_ext_twox_64(data);
+    assert_eq!(twox_64(data), output.as_slice());
 
     println!("{}", hex::encode(output));
 }
@@ -43,10 +38,8 @@ pub fn test_twox_128(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
 
-    let mut output = [0; 16];
-
-    api.rtm_ext_twox_128(data, &mut output);
-    assert_eq!(twox_128(data), output);
+    let output = api.rtm_ext_twox_128(data);
+    assert_eq!(twox_128(data), output.as_slice());
 
     println!("{}", hex::encode(output));
 }
@@ -56,10 +49,8 @@ pub fn test_twox_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
 
-    let mut output = [0; 32];
-
-    api.rtm_ext_twox_256(data, &mut output);
-    assert_eq!(twox_256(data), output);
+    let output =  api.rtm_ext_twox_256(data);
+    assert_eq!(twox_256(data), output.as_slice());
 
     println!("{}", hex::encode(output));
 }
@@ -69,9 +60,7 @@ pub fn test_keccak_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
     let data = input.get(0);
 
-    let mut output = [0; 32];
-
-    api.rtm_ext_keccak_256(data, &mut output);
+    let output = api.rtm_ext_keccak_256(data);
 
     println!("{}", hex::encode(output));
 }
