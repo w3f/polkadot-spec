@@ -1,3 +1,5 @@
+use std::slice;
+
 use substrate_primitives::Blake2Hasher;
 use substrate_primitives::wasm_export_functions;
 use parity_scale_codec::{Encode, Decode};
@@ -301,15 +303,14 @@ pub extern "C" fn test_ext_free(addr: *mut u8) {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_set_storage(
-    key_data: *const u8,
-    key_len: u32,
-    value_data: *const u8,
-    value_len: u32,
-) {
-    unsafe {
-        ext_set_storage(key_data, key_len, value_data, value_len);
+substrate_primitives::wasm_export_functions! {
+    fn test_ext_set_storage(
+        key_data: Vec<u8>,
+        value_data: Vec<u8>,
+    ) {
+        unsafe {
+            ext_set_storage(key_data.as_ptr(), key_data.len() as u32, value_data.as_ptr(), value_data.len() as u32);
+        }
     }
 }
 
@@ -398,21 +399,19 @@ pub extern "C" fn test_ext_kill_child_storage(storage_key_data: *const u8, stora
     }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_get_allocated_storage(
-    key_data: *const u8,
-    key_len: u32,
-    written_out: *mut u32,
-) -> u32 {
-    let output;
-    unsafe {
-        output = ext_get_allocated_storage(key_data, key_len, written_out);
-    }
-
-    if output.is_null() {
-        0
-    } else {
-        output as u32
+substrate_primitives::wasm_export_functions! {
+    fn test_ext_get_allocated_storage(
+        key_data: Vec<u8>
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let output = ext_get_allocated_storage(key_data.as_ptr(), key_data.len() as u32, &mut written_out);
+            if output.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(output, written_out as usize).to_vec()
+            }
+        }
     }
 }
 

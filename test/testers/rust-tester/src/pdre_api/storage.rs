@@ -1,5 +1,6 @@
 use super::utils::StorageApi;
 use super::ParsedInput;
+use parity_scale_codec::{Encode, Decode};
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
@@ -15,17 +16,16 @@ pub fn test_set_get_storage(input: ParsedInput) {
     // Get invalid key
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
-    assert_eq!(written_out, u32::max_value());
-    assert_eq!(res, [0u8; 0]);
+    assert_eq!(res, [0u8]);
 
     // Set key/value
     api.rtm_ext_set_storage(key, value);
 
     // Get valid key
     let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
-    assert_eq!(written_out, value.len() as u32);
-    assert_eq!(res, value);
+    let mut res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
+    let res_dec = Vec::<u8>::decode(&mut res.as_slice()).unwrap();
+    assert_eq!(res_dec, value);
 
     println!("{}", str(&res));
 }
