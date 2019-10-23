@@ -6,7 +6,6 @@
 use super::{copy_u32, copy_slice, de_scale_u32, get_wasm_blob, le, wrap, CallWasm};
 
 use parity_scale_codec::{Encode, Decode};
-
 use substrate_offchain::testing::TestOffchainExt;
 use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
@@ -51,21 +50,15 @@ impl StorageApi {
     }
     pub fn rtm_ext_set_storage(&mut self, key_data: &[u8], value_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_set_storage");
-        let _ = wasm.call(&[key_data, value_data].encode());
+        let _ = wasm.call(&(key_data, value_data).encode());
     }
     pub fn rtm_ext_get_allocated_storage(
         &mut self,
         key_data: &[u8],
-        written_out: &mut u32,
+        _: &mut u32,
     ) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_get_allocated_storage");
-        let ptr = wrap(0);
-        let written_out_scoped = wrap(0);
-
-        let res = wasm.call(&[key_data, &le(written_out)].encode());
-
-        copy_u32(written_out_scoped, written_out);
-        res
+        wasm.call(&key_data.encode())
     }
     pub fn rtm_ext_clear_storage(&mut self, key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_storage");
