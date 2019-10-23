@@ -1,6 +1,6 @@
 <TeXmacs|1.99.11>
 
-<style|<tuple|tmbook|std-latex|/home/klaymen/doc/code/algorithmacs/algorithmacs-style.ts>>
+<style|<tuple|tmbook|std-latex|algorithmacs-style>>
 
 <\body>
   <\hide-preamble>
