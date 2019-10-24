@@ -45,38 +45,49 @@ impl StorageApi {
         res
     }
     pub fn rtm_ext_free(&mut self, data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_free");
-        let _ = wasm.call(data.encode().as_slice());
+        self
+            .prep_wasm("test_ext_free")
+            .call(data.encode().as_slice());
     }
     pub fn rtm_ext_set_storage(&mut self, key_data: &[u8], value_data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_set_storage");
-        let _ = wasm.call(&(key_data, value_data).encode());
+        self
+            .prep_wasm("test_ext_set_storage")
+            .call(&(key_data, value_data).encode());
     }
     pub fn rtm_ext_get_allocated_storage(
         &mut self,
         key_data: &[u8],
     ) -> Vec<u8> {
-        let mut wasm = self.prep_wasm("test_ext_get_allocated_storage");
-        wasm.call(&key_data.encode()).decode_vec()
+        self
+            .prep_wasm("test_ext_get_allocated_storage")
+            .call(&key_data.encode())
+            .decode_vec()
     }
     pub fn rtm_ext_clear_storage(&mut self, key_data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_clear_storage");
-        let _ = wasm.call(&key_data.encode());
+        self
+            .prep_wasm("test_ext_clear_storage")
+            .call(&key_data.encode());
     }
     pub fn rtm_ext_exists_storage(&mut self, key_data: &[u8]) -> u32 {
-        let mut wasm = self.prep_wasm("test_ext_exists_storage");
-        wasm.call(&key_data.encode()).decode_u32()
+        self
+            .prep_wasm("test_ext_exists_storage")
+            .call(&key_data.encode())
+            .decode_u32()
     }
     pub fn rtm_ext_clear_prefix(&mut self, prefix_data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_clear_prefix");
-        let _ = wasm.call(&prefix_data.encode());
+        self
+            .prep_wasm("test_ext_clear_prefix")
+            .call(&prefix_data.encode());
     }
     pub fn rtm_ext_storage_root(&mut self) -> Vec<u8> {
-        let mut wasm = self.prep_wasm("test_ext_storage_root");
-        wasm.call(&[]).decode_vec()
+        self
+            .prep_wasm("test_ext_storage_root")
+            .call(&[])
+            .decode_vec()
     }
     pub fn rtm_ext_local_storage_set(&mut self, kind: u32, key_data: &[u8], value_data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_local_storage_set");
-        let _ = wasm.call(&(kind, key_data, value_data).encode());
+        self
+            .prep_wasm("test_ext_local_storage_set")
+            .call(&(kind, key_data, value_data).encode());
     }
 }
