@@ -85,9 +85,8 @@ pub fn test_ed25519(input: ParsedInput) {
     let pubkey2 = api.rtm_ext_ed25519_generate(keystore.as_bytes(), &[]);
 
     // Get all public keys
-    let mut result_len: u32 = 0;
-    let all_pubkeys = api.rtm_ext_ed25519_public_keys(keystore.as_bytes(), &mut result_len);
-    //assert_eq!(result_len, 65); // Why 65 and not 64?
+    let all_pubkeys = api.rtm_ext_ed25519_public_keys(keystore.as_bytes());
+    assert_eq!(all_pubkeys.len(), 64);
 
     println!("Public key 1: {}", hex::encode(pubkey1));
     println!("Input/message: {}", std::str::from_utf8(data).unwrap());
@@ -122,9 +121,8 @@ pub fn test_sr25519(input: ParsedInput) {
     let pubkey2 = api.rtm_ext_sr25519_generate(keystore.as_bytes(), &[]);
 
     // Get all public keys
-    let mut result_len: u32 = 0;
-    let all_pubkeys = api.rtm_ext_sr25519_public_keys(keystore.as_bytes(), &mut result_len);
-    assert_eq!(result_len, 65);
+    let all_pubkeys = api.rtm_ext_sr25519_public_keys(keystore.as_bytes());
+    assert_eq!(all_pubkeys.len(), 64);
 
     println!("Public key 1: {}", hex::encode(pubkey1));
     println!("Input/message: {}", std::str::from_utf8(data).unwrap());
