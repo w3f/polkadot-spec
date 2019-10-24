@@ -484,36 +484,44 @@ wasm_export_functions! {
             slice::from_raw_parts(ptr, written_out as usize).to_vec()
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_storage_changes_root(
-    parent_hash_data: *const u8,
-    parent_hash_len: u32,
-    result: *mut u8,
-) -> u32 {
-    unsafe { ext_storage_changes_root(parent_hash_data, parent_hash_len, result) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_blake2_256_enumerated_trie_root(
-    values_data: *const u8,
-    lens_data: *const u32,
-    lens_len: u32,
-    result: *mut u8,
-) {
-    unsafe {
-        ext_blake2_256_enumerated_trie_root(values_data, lens_data, lens_len, result);
+    fn test_ext_storage_changes_root(
+        parent_hash_data: Vec<u8>,
+        result: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut result = result;
+        unsafe {
+            ext_storage_changes_root(
+                parent_hash_data.as_ptr(),
+                parent_hash_data.len() as u32,
+                result.as_mut_ptr()
+            );
+        }
+        result
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_chain_id() -> u64 {
-    unsafe { ext_chain_id() }
-}
+    fn test_ext_blake2_256_enumerated_trie_root(
+        values_data: Vec<u8>,
+        lens_data: u32,
+        lens_len: u32,
+        result: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut result = result;
+        unsafe {
+            ext_blake2_256_enumerated_trie_root(
+                values_data.as_ptr(),
+                &lens_data,
+                lens_len,
+                result.as_mut_ptr(),
+            );
+        }
+        result
+    }
 
+    fn test_ext_chain_id() -> u64 {
+        unsafe { ext_chain_id() }
+    }
 
-wasm_export_functions! {
     fn test_ext_ed25519_public_keys(
         id_data: Vec<u8>,
     ) -> Vec<u8> {
@@ -645,28 +653,35 @@ wasm_export_functions! {
             slice::from_raw_parts(out.as_ptr(), 64).to_vec()
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_secp256k1_ecdsa_recover(
-    msg_data: *const u8,
-    sig_data: *const u8,
-    pubkey_data: *mut u8,
-) -> u32 {
-    unsafe { ext_secp256k1_ecdsa_recover(msg_data, sig_data, pubkey_data) }
-}
+    fn test_ext_secp256k1_ecdsa_recover(
+        msg_data: Vec<u8>,
+        sig_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+    ) -> u32 {
+        let mut pubkey_data = pubkey_data;
+        unsafe {
+            ext_secp256k1_ecdsa_recover(
+                msg_data.as_ptr(),
+                sig_data.as_ptr(),
+                pubkey_data.as_mut_ptr(),
+            )
+        }
+    }
 
-#[no_mangle]
-pub extern "C" fn test_ext_is_validator(input_data: *mut u8, input_len: u32) -> u64 {
-    unsafe { ext_is_validator().into() }
-}
+    fn test_ext_is_validator() -> u32 {
+        unsafe { ext_is_validator() }
+    }
 
-#[no_mangle]
-pub extern "C" fn test_ext_submit_transaction(msg_data: *const u8, len: u32) -> u32 {
-    unsafe { ext_submit_transaction(msg_data, len) }
-}
+    fn test_ext_submit_transaction(msg_data: Vec<u8>) -> u32 {
+        unsafe {
+            ext_submit_transaction(
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+            )
+        }
+    }
 
-wasm_export_functions! {
     fn test_ext_network_state() -> Vec<u8> {
         let mut written_out = 0;
         unsafe {
@@ -674,34 +689,29 @@ wasm_export_functions! {
             slice::from_raw_parts(ptr, written_out as usize).to_vec()
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_timestamp() -> u64 {
-    unsafe { ext_timestamp() }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_sleep_until(deadline: u64) {
-    unsafe {
-        ext_sleep_until(deadline);
+    fn test_ext_timestamp() -> u64 {
+        unsafe { ext_timestamp() }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_random_seed(seed_data: *mut u8) {
-    unsafe {
-        ext_random_seed(seed_data);
+    fn test_ext_sleep_until(deadline: u64) {
+        unsafe {
+            ext_sleep_until(deadline);
+        }
     }
-}
 
-wasm_export_functions! {
+    fn test_ext_random_seed(seed_data: Vec<u8>) -> Vec<u8> {
+        let mut seed_data = seed_data;
+        unsafe {
+            ext_random_seed(seed_data.as_mut_ptr());
+        }
+        seed_data
+    }
+
     fn test_ext_local_storage_set(
         kind: u32,
         key: Vec<u8>,
-        key_len: u32,
         value: Vec<u8>,
-        value_len: u32,
     ) {
         unsafe {
             ext_local_storage_set(
@@ -713,43 +723,47 @@ wasm_export_functions! {
             );
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_local_storage_get(
-    kind: u32,
-    key: *const u8,
-    key_len: u32,
-    value_len: *mut u32,
-) -> *mut u8 {
-    unsafe { ext_local_storage_get(kind, key, key_len, value_len) }
-}
+    fn test_ext_local_storage_get(
+        kind: u32,
+        key: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut value_len = 0;
+        unsafe {
+            let ptr = ext_local_storage_get(
+                kind,
+                key.as_ptr(),
+                key.len() as u32,
+                &mut value_len,
+            );
 
-#[no_mangle]
-pub extern "C" fn test_ext_local_storage_compare_and_set(
-    kind: u32,
-    key: *const u8,
-    key_len: u32,
-    old_value: *const u8,
-    old_value_len: u32,
-    new_value: *const u8,
-    new_value_len: u32,
-) -> u32 {
-    unsafe {
-        ext_local_storage_compare_and_set(
-            kind,
-            key,
-            key_len,
-            old_value,
-            old_value_len,
-            new_value,
-            new_value_len,
-        )
+            if ptr.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(ptr, value_len as usize).to_vec()
+            }
+        }
     }
-}
 
-#[no_mangle]
-wasm_export_functions! {
+    fn test_ext_local_storage_compare_and_set(
+        kind: u32,
+        key: Vec<u8>,
+        old_value: Vec<u8>,
+        new_value: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_local_storage_compare_and_set(
+                kind,
+                key.as_ptr(),
+                key.len() as u32,
+                old_value.as_ptr(),
+                old_value.len() as u32,
+                new_value.as_ptr(),
+                new_value.len() as u32,
+            )
+        }
+    }
+
     fn test_ext_http_request_start(
         method: Vec<u8>,
         url: Vec<u8>,
@@ -784,36 +798,56 @@ wasm_export_functions! {
             )
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_http_request_write_body(
-    request_id: u32,
-    chunk: *const u8,
-    chunk_len: u32,
-    deadline: u64,
-) -> u32 {
-    unsafe { ext_http_request_write_body(request_id, chunk, chunk_len, deadline) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_http_response_wait(
-    ids: *const u32,
-    ids_len: u32,
-    statuses: *mut u32,
-    deadline: u64,
-) {
-    unsafe {
-        ext_http_response_wait(ids, ids_len, statuses, deadline);
+    fn test_ext_http_request_write_body(
+        request_id: u32,
+        chunk: Vec<u8>,
+        deadline: u64,
+    ) -> u32 {
+        unsafe {
+            ext_http_request_write_body(
+                request_id,
+                chunk.as_ptr(),
+                chunk.len() as u32,
+                deadline
+            )
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_http_response_headers(
-    request_id: u32,
-    written_out: *mut u32,
-) -> *mut u8 {
-    unsafe { ext_http_response_headers(request_id, written_out) }
+    fn test_ext_http_response_wait(
+        ids: u32,
+        ids_len: u32,
+        statuses: u32,
+        deadline: u64,
+    ) {
+        let mut statuses = statuses;
+        unsafe {
+            ext_http_response_wait(
+                &ids,
+                ids_len,
+                &mut statuses,
+                deadline
+            );
+        }
+    }
+
+    fn test_ext_http_response_headers(
+        request_id: u32,
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let ptr = ext_http_response_headers(
+                request_id,
+                &mut written_out,
+            );
+
+            if ptr.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(ptr, written_out as usize).to_vec()
+            }
+        }
+    }
 }
 
 #[no_mangle]
