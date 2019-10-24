@@ -56,28 +56,6 @@ impl Decoder for Vec<u8> {
     }
 }
 
-fn le(num: &mut u32) -> [u8; 4] {
-    num.to_le_bytes()
-}
-
-fn wrap<T>(t: T) -> Rc<RefCell<T>> {
-    Rc::new(RefCell::new(t))
-}
-
-fn copy_slice(scoped: Rc<RefCell<Vec<u8>>>, output: &mut [u8]) {
-    output.copy_from_slice(scoped.borrow().as_slice());
-}
-
-fn copy_u32(scope: Rc<RefCell<u32>>, num: &mut u32) {
-    *num = *scope.borrow();
-}
-
-fn de_scale_u32(scaled_vec : Vec<u8>)-> u32 {
-    //first turn it into slice and decode it
-    u32::decode(&mut scaled_vec.as_slice()).unwrap()
-}
-    
-
 struct CallWasm<'a> {
     ext: &'a mut TestExternalities<Blake2Hasher, u64>,
     blob: &'a [u8],
