@@ -672,9 +672,14 @@ pub extern "C" fn test_ext_submit_transaction(msg_data: *const u8, len: u32) -> 
     unsafe { ext_submit_transaction(msg_data, len) }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_network_state(written_out: *mut u32) -> *mut u8 {
-    unsafe { ext_network_state(written_out) }
+wasm_export_functions! {
+    fn test_ext_network_state() -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let ptr = ext_network_state(&mut written_out);
+            slice::from_raw_parts(ptr, written_out as usize).to_vec()
+        }
+    }
 }
 
 #[no_mangle]
@@ -743,26 +748,41 @@ pub extern "C" fn test_ext_local_storage_compare_and_set(
 }
 
 #[no_mangle]
-pub extern "C" fn test_ext_http_request_start(
-    method: *const u8,
-    method_len: u32,
-    url: *const u8,
-    url_len: u32,
-    meta: *const u8,
-    meta_len: u32,
-) -> u32 {
-    unsafe { ext_http_request_start(method, method_len, url, url_len, meta, meta_len) }
-}
+wasm_export_functions! {
+    fn test_ext_http_request_start(
+        method: Vec<u8>,
+        url: Vec<u8>,
+        meta: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_http_request_start(
+                method.as_ptr(),
+                method.len() as u32,
+                url.as_ptr(),
+                url.len() as u32,
+                meta.as_ptr(),
+                meta.len() as u32,
+            )
+        }
+    }
 
-#[no_mangle]
-pub extern "C" fn test_ext_http_request_add_header(
-    request_id: u32,
-    name: *const u8,
-    name_len: u32,
-    value: *const u8,
-    value_len: u32,
-) -> u32 {
-    unsafe { ext_http_request_add_header(request_id, name, name_len, value, value_len) }
+    fn test_ext_http_request_add_header(
+        request_id: u32,
+        name: Vec<u8>,
+        name_len: u32,
+        value: Vec<u8>,
+        value_len: u32,
+    ) -> u32 {
+        unsafe {
+            ext_http_request_add_header(
+                request_id,
+                name.as_ptr(),
+                name.len() as u32,
+                value.as_ptr(),
+                value.len() as u32,
+            )
+        }
+    }
 }
 
 #[no_mangle]
