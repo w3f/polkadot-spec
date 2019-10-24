@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{CallWasm, get_wasm_blob};
+use super::{CallWasm, get_wasm_blob, Decoder};
 
 use parity_scale_codec::{Encode, Decode};
 use substrate_offchain::testing::TestOffchainExt;
@@ -11,22 +11,6 @@ use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
-
-trait CodeHandler {
-    fn dec_scale_vec(&self) -> Vec<u8>;
-    fn dec_scale_u32(&self) -> u32;
-}
-
-impl CodeHandler for Vec<u8> {
-    fn dec_scale_vec(&self) -> Vec<u8> {
-        Vec::<u8>::decode(&mut self.as_slice())
-            .expect("Failed to decode SCALE encoding")
-    }
-    fn dec_scale_u32(&self) -> u32 {
-        u32::decode(&mut self.as_slice())
-            .expect("Failed to decode SCALE encoding")
-    }
-}
 
 pub struct StorageApi {
     blob: Vec<u8>,
@@ -73,7 +57,7 @@ impl StorageApi {
         key_data: &[u8],
     ) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_get_allocated_storage");
-        wasm.call(&key_data.encode()).dec_scale_vec()
+        wasm.call(&key_data.encode()).decode_vec()
     }
     pub fn rtm_ext_clear_storage(&mut self, key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_storage");
@@ -81,7 +65,7 @@ impl StorageApi {
     }
     pub fn rtm_ext_exists_storage(&mut self, key_data: &[u8]) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_exists_storage");
-        wasm.call(&key_data.encode()).dec_scale_u32()
+        wasm.call(&key_data.encode()).decode_u32()
     }
     pub fn rtm_ext_clear_prefix(&mut self, prefix_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_prefix");
@@ -89,7 +73,7 @@ impl StorageApi {
     }
     pub fn rtm_ext_storage_root(&mut self) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_storage_root");
-        wasm.call(&[]).dec_scale_vec()
+        wasm.call(&[]).decode_vec()
     }
     pub fn rtm_ext_local_storage_set(&mut self, kind: u32, key_data: &[u8], value_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_local_storage_set");
