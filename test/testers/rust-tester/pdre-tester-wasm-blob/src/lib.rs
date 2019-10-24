@@ -1,5 +1,6 @@
-use substrate_primitives::Blake2Hasher;
-use substrate_primitives::wasm_export_functions;
+use std::slice;
+
+use substrate_primitives::{wasm_export_functions, Blake2Hasher};
 use parity_scale_codec::{Encode, Decode};
 
 extern "C" {
@@ -215,8 +216,7 @@ extern "C" {
 
 #[cfg(not(feature = "std"))]
 
-substrate_primitives::wasm_export_functions! {
-
+wasm_export_functions! {
     fn test_ext_twox_64(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 8] = [0; 8];
         unsafe {
@@ -264,493 +264,620 @@ substrate_primitives::wasm_export_functions! {
         }
         api_output.to_vec()
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_print_utf8(utf8_data: *const u8, utf8_len: u32) {
-    unsafe {
-        ext_print_utf8(utf8_data, utf8_len)
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_print_hex(data: *const u8, len: u32) {
-    unsafe {
-        ext_print_hex(data, len)
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_print_num(number: u64) {
-    unsafe {
-        ext_print_num(number)
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_malloc(size: u32) -> u32 {
-    unsafe {
-        ext_malloc(size)
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_free(addr: *mut u8) {
-    unsafe {
-        ext_free(addr);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_set_storage(
-    key_data: *const u8,
-    key_len: u32,
-    value_data: *const u8,
-    value_len: u32,
-) {
-    unsafe {
-        ext_set_storage(key_data, key_len, value_data, value_len);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_set_child_storage(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-    value_data: *const u8,
-    value_len: u32,
-) {
-    unsafe {
-        ext_set_child_storage(
-            storage_key_data,
-            storage_key_len,
-            key_data,
-            key_len,
-            value_data,
-            value_len,
-        );
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_clear_child_storage(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-) {
-    unsafe {
-        ext_clear_child_storage(storage_key_data, storage_key_len, key_data, key_len);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_clear_storage(key_data: *const u8, key_len: u32) {
-    unsafe {
-        ext_clear_storage(key_data, key_len);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_exists_storage(key_data: *const u8, key_len: u32) -> u32 {
-    unsafe {
-        ext_exists_storage(key_data, key_len)
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_exists_child_storage(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-) -> u32 {
-    unsafe {
-        ext_exists_child_storage(storage_key_data, storage_key_len, key_data, key_len)
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_clear_prefix(prefix_data: *const u8, prefix_len: u32) {
-    unsafe {
-        ext_clear_prefix(prefix_data, prefix_len);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_clear_child_prefix(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    prefix_data: *const u8,
-    prefix_len: u32,
-) {
-    unsafe {
-        ext_clear_child_prefix(storage_key_data, storage_key_len, prefix_data, prefix_len);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_kill_child_storage(storage_key_data: *const u8, storage_key_len: u32) {
-    unsafe {
-        ext_kill_child_storage(storage_key_data, storage_key_len);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_get_allocated_storage(
-    key_data: *const u8,
-    key_len: u32,
-    written_out: *mut u32,
-) -> u32 {
-    let output;
-    unsafe {
-        output = ext_get_allocated_storage(key_data, key_len, written_out);
+    fn test_ext_print_utf8(utf8_data: Vec<u8>) {
+        unsafe {
+            ext_print_utf8(utf8_data.as_ptr(), utf8_data.len() as u32);
+        }
     }
 
-    if output.is_null() {
-        0
-    } else {
-        output as u32
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_get_allocated_child_storage(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-    written_out: *mut u32,
-) -> u32 {
-    let output;
-    unsafe {
-        output = ext_get_allocated_child_storage(
-            storage_key_data,
-            storage_key_len,
-            key_data,
-            key_len,
-            written_out,
-        )
+    fn test_ext_print_hex(data: Vec<u8>) {
+        unsafe {
+            ext_print_hex(data.as_ptr(), data.len() as u32);
+        }
     }
 
-    if output.is_null() {
-        0
-    } else {
-        output as u32
+    fn test_ext_print_num(number: u64) {
+        unsafe {
+            ext_print_num(number);
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_get_storage_into(
-    key_data: *const u8,
-    key_len: u32,
-    value_data: *mut u8,
-    value_len: u32,
-    value_offset: u32,
-) -> u32 {
-    unsafe { ext_get_storage_into(key_data, key_len, value_data, value_len, value_offset) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_get_child_storage_into(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-    value_data: *mut u8,
-    value_len: u32,
-    value_offset: u32,
-) -> u32 {
-    unsafe {
-        ext_get_child_storage_into(
-            storage_key_data,
-            storage_key_len,
-            key_data,
-            key_len,
-            value_data,
-            value_len,
-            value_offset,
-        )
+    fn test_ext_malloc(size: u32) -> u32 {
+        unsafe {
+            ext_malloc(size)
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_storage_root(result: *mut u8) {
-    unsafe {
-        ext_storage_root(result);
+    fn test_ext_free(addr: Vec<u8>) {
+        let mut addr = addr;
+        unsafe {
+            ext_free(addr.as_mut_ptr());
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_child_storage_root(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    written_out: *mut u32,
-) -> *mut u8 {
-    unsafe { ext_child_storage_root(storage_key_data, storage_key_len, written_out) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_storage_changes_root(
-    parent_hash_data: *const u8,
-    parent_hash_len: u32,
-    result: *mut u8,
-) -> u32 {
-    unsafe { ext_storage_changes_root(parent_hash_data, parent_hash_len, result) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_blake2_256_enumerated_trie_root(
-    values_data: *const u8,
-    lens_data: *const u32,
-    lens_len: u32,
-    result: *mut u8,
-) {
-    unsafe {
-        ext_blake2_256_enumerated_trie_root(values_data, lens_data, lens_len, result);
+    fn test_ext_set_storage(
+        key_data: Vec<u8>,
+        value_data: Vec<u8>,
+    ) {
+        unsafe {
+            ext_set_storage(
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                value_data.as_ptr(),
+                value_data.len() as u32
+            );
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_chain_id() -> u64 {
-    unsafe { ext_chain_id() }
-}
-
-
-#[no_mangle]
-pub extern "C" fn test_ext_ed25519_public_keys(
-    id_data: *const u8,
-    result_len: *mut u32,
-) -> *mut u8 {
-    unsafe { ext_ed25519_public_keys(id_data, result_len) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_ed25519_verify(
-    msg_data: *const u8,
-    msg_len: u32,
-    sig_data: *const u8,
-    pubkey_data: *const u8,
-) -> u32 {
-    unsafe { ext_ed25519_verify(msg_data, msg_len, sig_data, pubkey_data) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_ed25519_generate(
-    id_data: *const u8,
-    seed: *const u8,
-    seed_len: u32,
-    out: *mut u8,
-) {
-    unsafe { ext_ed25519_generate(id_data, seed, seed_len, out) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_ed25519_sign(
-    id_data: *const u8,
-    pubkey_data: *const u8,
-    msg_data: *const u8,
-    msg_len: u32,
-    out: *mut u8,
-) -> u32 {
-    unsafe {
-        ext_ed25519_sign(id_data, pubkey_data, msg_data, msg_len, out)
+    fn test_ext_set_child_storage(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+        value_data: Vec<u8>,
+    ) {
+        unsafe {
+            ext_set_child_storage(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                value_data.as_ptr(),
+                value_data.len() as u32,
+            );
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_sr25519_public_keys(
-    id_data: *const u8,
-    result_len: *mut u32,
-) -> *mut u8 {
-    unsafe { ext_sr25519_public_keys(id_data, result_len) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_sr25519_verify(
-    msg_data: *const u8,
-    msg_len: u32,
-    sig_data: *const u8,
-    pubkey_data: *const u8,
-) -> u32 {
-    unsafe { ext_sr25519_verify(msg_data, msg_len, sig_data, pubkey_data) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_sr25519_generate(
-    id_data: *const u8,
-    seed: *const u8,
-    seed_len: u32,
-    out: *mut u8,
-) {
-    unsafe {
-        ext_sr25519_generate(id_data, seed, seed_len, out);
+    fn test_ext_clear_child_storage(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+    ) {
+        unsafe {
+            ext_clear_child_storage(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+            );
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_sr25519_sign(
-    id_data: *const u8,
-    pubkey_data: *const u8,
-    msg_data: *const u8,
-    msg_len: u32,
-    out: *mut u8,
-) -> u32 {
-    unsafe { ext_sr25519_sign(id_data, pubkey_data, msg_data, msg_len, out) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_secp256k1_ecdsa_recover(
-    msg_data: *const u8,
-    sig_data: *const u8,
-    pubkey_data: *mut u8,
-) -> u32 {
-    unsafe { ext_secp256k1_ecdsa_recover(msg_data, sig_data, pubkey_data) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_is_validator(input_data: *mut u8, input_len: u32) -> u64 {
-    unsafe { ext_is_validator().into() }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_submit_transaction(msg_data: *const u8, len: u32) -> u32 {
-    unsafe { ext_submit_transaction(msg_data, len) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_network_state(written_out: *mut u32) -> *mut u8 {
-    unsafe { ext_network_state(written_out) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_timestamp() -> u64 {
-    unsafe { ext_timestamp() }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_sleep_until(deadline: u64) {
-    unsafe {
-        ext_sleep_until(deadline);
+    fn test_ext_clear_storage(key_data: Vec<u8>) {
+        unsafe {
+            ext_clear_storage(key_data.as_ptr(), key_data.len() as u32);
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_random_seed(seed_data: *mut u8) {
-    unsafe {
-        ext_random_seed(seed_data);
+    fn test_ext_exists_storage(key_data: Vec<u8>) -> u32 {
+        unsafe {
+            ext_exists_storage(key_data.as_ptr(), key_data.len() as u32)
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_local_storage_set(
-    kind: u32,
-    key: *const u8,
-    key_len: u32,
-    value: *const u8,
-    value_len: u32,
-) {
-    unsafe {
-        ext_local_storage_set(kind, key, key_len, value, value_len);
+    fn test_ext_exists_child_storage(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_exists_child_storage(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+            )
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_local_storage_get(
-    kind: u32,
-    key: *const u8,
-    key_len: u32,
-    value_len: *mut u32,
-) -> *mut u8 {
-    unsafe { ext_local_storage_get(kind, key, key_len, value_len) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_local_storage_compare_and_set(
-    kind: u32,
-    key: *const u8,
-    key_len: u32,
-    old_value: *const u8,
-    old_value_len: u32,
-    new_value: *const u8,
-    new_value_len: u32,
-) -> u32 {
-    unsafe {
-        ext_local_storage_compare_and_set(
-            kind,
-            key,
-            key_len,
-            old_value,
-            old_value_len,
-            new_value,
-            new_value_len,
-        )
+    fn test_ext_clear_prefix(prefix_data: Vec<u8>) {
+        unsafe {
+            ext_clear_prefix(prefix_data.as_ptr(), prefix_data.len() as u32);
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_http_request_start(
-    method: *const u8,
-    method_len: u32,
-    url: *const u8,
-    url_len: u32,
-    meta: *const u8,
-    meta_len: u32,
-) -> u32 {
-    unsafe { ext_http_request_start(method, method_len, url, url_len, meta, meta_len) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_http_request_add_header(
-    request_id: u32,
-    name: *const u8,
-    name_len: u32,
-    value: *const u8,
-    value_len: u32,
-) -> u32 {
-    unsafe { ext_http_request_add_header(request_id, name, name_len, value, value_len) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_http_request_write_body(
-    request_id: u32,
-    chunk: *const u8,
-    chunk_len: u32,
-    deadline: u64,
-) -> u32 {
-    unsafe { ext_http_request_write_body(request_id, chunk, chunk_len, deadline) }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_http_response_wait(
-    ids: *const u32,
-    ids_len: u32,
-    statuses: *mut u32,
-    deadline: u64,
-) {
-    unsafe {
-        ext_http_response_wait(ids, ids_len, statuses, deadline);
+    fn test_ext_clear_child_prefix(
+        storage_key_data: Vec<u8>,
+        prefix_data: Vec<u8>,
+    ) {
+        unsafe {
+            ext_clear_child_prefix(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                prefix_data.as_ptr(),
+                prefix_data.len() as u32,
+            );
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_http_response_headers(
-    request_id: u32,
-    written_out: *mut u32,
-) -> *mut u8 {
-    unsafe { ext_http_response_headers(request_id, written_out) }
-}
+    fn test_ext_kill_child_storage(storage_key_data: Vec<u8>) {
+        unsafe {
+            ext_kill_child_storage(storage_key_data.as_ptr(), storage_key_data.len() as u32);
+        }
+    }
 
-#[no_mangle]
-pub extern "C" fn test_ext_http_response_read_body(
-    request_id: u32,
-    buffer: *mut u8,
-    buffer_len: u32,
-    deadline: u64,
-) -> u32 {
-    unsafe { ext_http_response_read_body(request_id, buffer, buffer_len, deadline) }
+    fn test_ext_get_allocated_storage(
+        key_data: Vec<u8>
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let ptr = ext_get_allocated_storage(
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                &mut written_out
+            );
+
+            if ptr.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(ptr, written_out as usize).to_vec()
+            }
+        }
+    }
+
+    fn test_ext_get_allocated_child_storage(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let ptr = ext_get_allocated_child_storage(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                &mut written_out,
+            );
+
+            if ptr.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(ptr, written_out as usize).to_vec()
+            }
+        }
+    }
+
+    fn test_ext_get_storage_into(
+        key_data: Vec<u8>,
+        value_data: Vec<u8>,
+        value_offset: u32,
+    ) -> Vec<u8> {
+        let mut value_data = value_data;
+        unsafe {
+            ext_get_storage_into(
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                value_data.as_mut_ptr(),
+                value_data.len() as u32,
+                value_offset
+            );
+        }
+        value_data
+    }
+
+    fn test_ext_get_child_storage_into(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+        value_data: Vec<u8>,
+        value_offset: u32,
+    ) -> Vec<u8> {
+        let mut value_data = value_data;
+        unsafe {
+            ext_get_child_storage_into(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                value_data.as_mut_ptr(),
+                value_data.len() as u32,
+                value_offset,
+            );
+        }
+        value_data
+    }
+
+    fn test_ext_storage_root() -> Vec<u8> {
+        let mut result = vec![0; 32];
+        unsafe {
+            ext_storage_root(result.as_mut_ptr());
+        }
+        result
+    }
+
+    fn test_ext_child_storage_root(
+        storage_key_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let ptr = ext_child_storage_root(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                &mut written_out,
+            );
+            slice::from_raw_parts(ptr, written_out as usize).to_vec()
+        }
+    }
+
+    fn test_ext_storage_changes_root(
+        parent_hash_data: Vec<u8>,
+        result: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut result = result;
+        unsafe {
+            ext_storage_changes_root(
+                parent_hash_data.as_ptr(),
+                parent_hash_data.len() as u32,
+                result.as_mut_ptr()
+            );
+        }
+        result
+    }
+
+    fn test_ext_blake2_256_enumerated_trie_root(
+        values_data: Vec<u8>,
+        lens_data: u32,
+        lens_len: u32,
+        result: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut result = result;
+        unsafe {
+            ext_blake2_256_enumerated_trie_root(
+                values_data.as_ptr(),
+                &lens_data,
+                lens_len,
+                result.as_mut_ptr(),
+            );
+        }
+        result
+    }
+
+    fn test_ext_chain_id() -> u64 {
+        unsafe { ext_chain_id() }
+    }
+
+    fn test_ext_ed25519_public_keys(
+        id_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let out = ext_ed25519_public_keys(
+                id_data.as_ptr(),
+                &mut written_out,
+            );
+
+            if out.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(out, written_out as usize).to_vec()
+            }
+        }
+    }
+
+    fn test_ext_ed25519_verify(
+        msg_data: Vec<u8>,
+        sig_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_ed25519_verify(
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+                sig_data.as_ptr(),
+                pubkey_data.as_ptr(),
+            )
+        }
+    }
+
+    fn test_ext_ed25519_generate(
+        id_data: Vec<u8>,
+        seed: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut out = vec![];
+        unsafe {
+            ext_ed25519_generate(
+                id_data.as_ptr(),
+                seed.as_ptr(),
+                seed.len() as u32,
+                out.as_mut_ptr()
+            );
+            slice::from_raw_parts(out.as_ptr(), 32).to_vec()
+        }
+    }
+
+    fn test_ext_ed25519_sign(
+        id_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+        msg_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut out = vec![];
+        unsafe {
+            ext_ed25519_sign(
+                id_data.as_ptr(),
+                pubkey_data.as_ptr(),
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+                out.as_mut_ptr(),
+            );
+            slice::from_raw_parts(out.as_ptr(), 64).to_vec()
+        }
+    }
+
+    fn test_ext_sr25519_public_keys(
+        id_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let out = ext_sr25519_public_keys(
+                id_data.as_ptr(),
+                &mut written_out,
+            );
+
+            if out.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(out, written_out as usize).to_vec()
+            }
+        }
+    }
+
+    fn test_ext_sr25519_verify(
+        msg_data: Vec<u8>,
+        sig_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_sr25519_verify(
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+                sig_data.as_ptr(),
+                pubkey_data.as_ptr(),
+            )
+        }
+    }
+
+    fn test_ext_sr25519_generate(
+        id_data: Vec<u8>,
+        seed: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut out = vec![];
+        unsafe {
+            ext_sr25519_generate(
+                id_data.as_ptr(),
+                seed.as_ptr(),
+                seed.len() as u32,
+                out.as_mut_ptr(),
+            );
+            slice::from_raw_parts(out.as_ptr(), 32).to_vec()
+        }
+    }
+
+    fn test_ext_sr25519_sign(
+        id_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+        msg_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut out = vec![];
+        unsafe {
+            ext_sr25519_sign(
+                id_data.as_ptr(),
+                pubkey_data.as_ptr(),
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+                out.as_mut_ptr(),
+            );
+            slice::from_raw_parts(out.as_ptr(), 64).to_vec()
+        }
+    }
+
+    fn test_ext_secp256k1_ecdsa_recover(
+        msg_data: Vec<u8>,
+        sig_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+    ) -> u32 {
+        let mut pubkey_data = pubkey_data;
+        unsafe {
+            ext_secp256k1_ecdsa_recover(
+                msg_data.as_ptr(),
+                sig_data.as_ptr(),
+                pubkey_data.as_mut_ptr(),
+            )
+        }
+    }
+
+    fn test_ext_is_validator() -> u32 {
+        unsafe { ext_is_validator() }
+    }
+
+    fn test_ext_submit_transaction(msg_data: Vec<u8>) -> u32 {
+        unsafe {
+            ext_submit_transaction(
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+            )
+        }
+    }
+
+    fn test_ext_network_state() -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let ptr = ext_network_state(&mut written_out);
+            slice::from_raw_parts(ptr, written_out as usize).to_vec()
+        }
+    }
+
+    fn test_ext_timestamp() -> u64 {
+        unsafe { ext_timestamp() }
+    }
+
+    fn test_ext_sleep_until(deadline: u64) {
+        unsafe {
+            ext_sleep_until(deadline);
+        }
+    }
+
+    fn test_ext_random_seed(seed_data: Vec<u8>) -> Vec<u8> {
+        let mut seed_data = seed_data;
+        unsafe {
+            ext_random_seed(seed_data.as_mut_ptr());
+        }
+        seed_data
+    }
+
+    fn test_ext_local_storage_set(
+        kind: u32,
+        key: Vec<u8>,
+        value: Vec<u8>,
+    ) {
+        unsafe {
+            ext_local_storage_set(
+                kind,
+                key.as_ptr(),
+                key.len() as u32,
+                value.as_ptr(),
+                value.len() as u32,
+            );
+        }
+    }
+
+    fn test_ext_local_storage_get(
+        kind: u32,
+        key: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut value_len = 0;
+        unsafe {
+            let ptr = ext_local_storage_get(
+                kind,
+                key.as_ptr(),
+                key.len() as u32,
+                &mut value_len,
+            );
+
+            if ptr.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(ptr, value_len as usize).to_vec()
+            }
+        }
+    }
+
+    fn test_ext_local_storage_compare_and_set(
+        kind: u32,
+        key: Vec<u8>,
+        old_value: Vec<u8>,
+        new_value: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_local_storage_compare_and_set(
+                kind,
+                key.as_ptr(),
+                key.len() as u32,
+                old_value.as_ptr(),
+                old_value.len() as u32,
+                new_value.as_ptr(),
+                new_value.len() as u32,
+            )
+        }
+    }
+
+    fn test_ext_http_request_start(
+        method: Vec<u8>,
+        url: Vec<u8>,
+        meta: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_http_request_start(
+                method.as_ptr(),
+                method.len() as u32,
+                url.as_ptr(),
+                url.len() as u32,
+                meta.as_ptr(),
+                meta.len() as u32,
+            )
+        }
+    }
+
+    fn test_ext_http_request_add_header(
+        request_id: u32,
+        name: Vec<u8>,
+        name_len: u32,
+        value: Vec<u8>,
+        value_len: u32,
+    ) -> u32 {
+        unsafe {
+            ext_http_request_add_header(
+                request_id,
+                name.as_ptr(),
+                name.len() as u32,
+                value.as_ptr(),
+                value.len() as u32,
+            )
+        }
+    }
+
+    fn test_ext_http_request_write_body(
+        request_id: u32,
+        chunk: Vec<u8>,
+        deadline: u64,
+    ) -> u32 {
+        unsafe {
+            ext_http_request_write_body(
+                request_id,
+                chunk.as_ptr(),
+                chunk.len() as u32,
+                deadline
+            )
+        }
+    }
+
+    fn test_ext_http_response_wait(
+        ids: u32,
+        ids_len: u32,
+        statuses: u32,
+        deadline: u64,
+    ) {
+        let mut statuses = statuses;
+        unsafe {
+            ext_http_response_wait(
+                &ids,
+                ids_len,
+                &mut statuses,
+                deadline
+            );
+        }
+    }
+
+    fn test_ext_http_response_headers(
+        request_id: u32,
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let ptr = ext_http_response_headers(
+                request_id,
+                &mut written_out,
+            );
+
+            if ptr.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(ptr, written_out as usize).to_vec()
+            }
+        }
+    }
+
+    fn test_ext_http_response_read_body(
+        request_id: u32,
+        buffer: Vec<u8>,
+        buffer_len: u32,
+        deadline: u64,
+    ) -> Vec<u8> {
+        let mut buffer = buffer;
+        unsafe {
+            ext_http_response_read_body(
+                request_id,
+                buffer.as_mut_ptr(),
+                buffer.len() as u32,
+                deadline,
+            );
+        }
+        buffer
+    }
 }
 
 #[no_mangle]
@@ -828,7 +955,14 @@ pub extern "C" fn test_ext_sandbox_memory_set(
     val_ptr: *const u8,
     val_len: u32,
 ) -> u32 {
-    unsafe { ext_sandbox_memory_set(memory_idx, offset, val_ptr, val_len) }
+    unsafe {
+        ext_sandbox_memory_set(
+            memory_idx,
+            offset,
+            val_ptr,
+            val_len
+        )
+    }
 }
 
 #[no_mangle]

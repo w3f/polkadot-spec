@@ -30,34 +30,31 @@ fn get_wasm_blob() -> Vec<u8> {
     let mut f =
     //File::open("test/testers/rust-tester/target/wasm32-unknown-unknown/release/wasm_blob.wasm")
     //File::open("test/testers/rust-tester/pdre-tester-wasm-blob/target/release/wbuild/target/wasm32-unknown-unknown/release/pdre_tester_wasm_blob.wasm")
-    File::open("test/testers/rust-tester/pdre-tester-wasm-blob/target/debug/wbuild/target/wasm32-unknown-unknown/debug/pdre_tester_wasm_blob.wasm")
+    // for `run_tests.sh` in root directory
+    File::open("build/test/testers/rust-tester/x86_64-unknown-linux-gnu/debug/wbuild/pdre-tester-wasm-blob/pdre_tester_wasm_blob.compact.wasm")
+    // for `cargo` inside rust-tester directory
+    //File::open("target/debug/wbuild/target/wasm32-unknown-unknown/debug/pdre_tester_wasm_blob.wasm")
         .expect("Failed to open wasm blob in target");
     let mut buffer = Vec::new(); f.read_to_end(&mut buffer)
         .expect("Failed to load wasm blob into memory");
     buffer
 }
 
-fn le(num: &mut u32) -> [u8; 4] {
-    num.to_le_bytes()
+trait Decoder {
+    fn decode_vec(&self) -> Vec<u8>;
+    fn decode_u32(&self) -> u32;
 }
 
-fn wrap<T>(t: T) -> Rc<RefCell<T>> {
-    Rc::new(RefCell::new(t))
+impl Decoder for Vec<u8> {
+    fn decode_vec(&self) -> Vec<u8> {
+        Vec::<u8>::decode(&mut self.as_slice())
+            .expect("Failed to decode SCALE encoding")
+    }
+    fn decode_u32(&self) -> u32 {
+        u32::decode(&mut self.as_slice())
+            .expect("Failed to decode SCALE encoding")
+    }
 }
-
-fn copy_slice(scoped: Rc<RefCell<Vec<u8>>>, output: &mut [u8]) {
-    output.copy_from_slice(scoped.borrow().as_slice());
-}
-
-fn copy_u32(scope: Rc<RefCell<u32>>, num: &mut u32) {
-    *num = *scope.borrow();
-}
-
-fn de_scale_u32(scaled_vec : Vec<u8>)-> u32 {
-    //first turn it into slice and decode it
-    u32::decode(&mut scaled_vec.as_slice()).unwrap()
-}
-    
 
 struct CallWasm<'a> {
     ext: &'a mut TestExternalities<Blake2Hasher, u64>,

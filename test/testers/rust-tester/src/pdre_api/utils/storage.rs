@@ -3,10 +3,9 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{copy_u32, copy_slice, de_scale_u32, get_wasm_blob, le, wrap, CallWasm};
+use super::{CallWasm, get_wasm_blob, Decoder};
 
 use parity_scale_codec::{Encode, Decode};
-
 use substrate_offchain::testing::TestOffchainExt;
 use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
@@ -46,52 +45,46 @@ impl StorageApi {
         res
     }
     pub fn rtm_ext_free(&mut self, data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_free");
-        let _ = wasm.call(data.encode().as_slice());
+        self
+            .prep_wasm("test_ext_free")
+            .call(data.encode().as_slice());
     }
     pub fn rtm_ext_set_storage(&mut self, key_data: &[u8], value_data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_set_storage");
-        let _ = wasm.call(&[key_data, value_data].encode());
+        self
+            .prep_wasm("test_ext_set_storage")
+            .call(&(key_data, value_data).encode());
     }
-    pub fn rtm_ext_get_allocated_storage(
-        &mut self,
-        key_data: &[u8],
-        written_out: &mut u32,
-    ) -> Vec<u8> {
-        let mut wasm = self.prep_wasm("test_ext_get_allocated_storage");
-        let ptr = wrap(0);
-        let written_out_scoped = wrap(0);
-
-        let res = wasm.call(&[key_data, &le(written_out)].encode());
-
-        copy_u32(written_out_scoped, written_out);
-        res
+    pub fn rtm_ext_get_allocated_storage(&mut self, key_data: &[u8]) -> Vec<u8> {
+        self
+            .prep_wasm("test_ext_get_allocated_storage")
+            .call(&key_data.encode())
+            .decode_vec()
     }
     pub fn rtm_ext_clear_storage(&mut self, key_data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_clear_storage");
-        let _ = wasm.call(&[key_data].encode());
+        self
+            .prep_wasm("test_ext_clear_storage")
+            .call(&key_data.encode());
     }
     pub fn rtm_ext_exists_storage(&mut self, key_data: &[u8]) -> u32 {
-        let mut wasm = self.prep_wasm("test_ext_exists_storage");
-        de_scale_u32(wasm.call(&key_data))
+        self
+            .prep_wasm("test_ext_exists_storage")
+            .call(&key_data.encode())
+            .decode_u32()
     }
     pub fn rtm_ext_clear_prefix(&mut self, prefix_data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_clear_prefix");
-        let _ = wasm.call(&[prefix_data].encode());
+        self
+            .prep_wasm("test_ext_clear_prefix")
+            .call(&prefix_data.encode());
     }
-    pub fn rtm_ext_storage_root(&mut self, output: &mut [u8]) {
-        let mut wasm = self.prep_wasm("test_ext_storage_root");
-        let ptr = wrap(0);
-        let output_scoped = wrap(vec![0; output.len()]);
-
-        let _ = wasm.call(output.encode().as_slice());
-
-        copy_slice(output_scoped, output);
+    pub fn rtm_ext_storage_root(&mut self) -> Vec<u8> {
+        self
+            .prep_wasm("test_ext_storage_root")
+            .call(&[])
+            .decode_vec()
     }
     pub fn rtm_ext_local_storage_set(&mut self, kind: u32, key_data: &[u8], value_data: &[u8]) {
-        let mut wasm = self.prep_wasm("test_ext_local_storage_set");
-        let mut kind_scoped = kind;
-
-        let _ = wasm.call(&[&le(&mut kind_scoped), key_data, value_data].encode());
+        self
+            .prep_wasm("test_ext_local_storage_set")
+            .call(&(kind, key_data, value_data).encode());
     }
 }
