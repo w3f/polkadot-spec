@@ -14,16 +14,14 @@ pub fn test_set_get_storage(input: ParsedInput) {
     let value = input.get(1);
 
     // Get invalid key
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
+    let res = api.rtm_ext_get_allocated_storage(key);
     assert_eq!(res, [0u8;0]);
 
     // Set key/value
     api.rtm_ext_set_storage(key, value);
 
     // Get valid key
-    let mut written_out = 0;
-    let mut res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
+    let mut res = api.rtm_ext_get_allocated_storage(key);
     assert_eq!(res, value);
 
     println!("{}", str(&res));
@@ -61,19 +59,15 @@ pub fn test_clear_storage(input: ParsedInput) {
     api.rtm_ext_set_storage(key, value);
 
     // Get valid key
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
-    assert_eq!(written_out, value.len() as u32);
+    let res = api.rtm_ext_get_allocated_storage(key);
     assert_eq!(res, value);
 
     // Clear key
     api.rtm_ext_clear_storage(key);
 
     // Get invalid key
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
-    assert_eq!(written_out, u32::max_value());
-    assert_eq!(res, [0; 0]);
+    let res = api.rtm_ext_get_allocated_storage(key);
+    assert_eq!(res, [0u8;0]);
 }
 
 // Input: prefix, key1, value1, key2, value2
@@ -94,26 +88,20 @@ pub fn test_clear_prefix(input: ParsedInput) {
     api.rtm_ext_clear_prefix(prefix);
 
     // Check deletions
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key1, &mut written_out);
+    let res = api.rtm_ext_get_allocated_storage(key1);
     if key1.starts_with(prefix) {
-        assert_eq!(written_out, u32::max_value());
-        assert_eq!(res, [0; 0]);
+        assert_eq!(res, [0u8;0]);
         println!("Key `{}` was deleted", str(key1));
     } else {
-        assert_eq!(written_out, value1.len() as u32);
         assert_eq!(res, value1);
         println!("Key `{}` remains", str(key1));
     }
 
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_storage(key2, &mut written_out);
+    let res = api.rtm_ext_get_allocated_storage(key2);
     if key2.starts_with(prefix) {
-        assert_eq!(written_out, u32::max_value());
-        assert_eq!(res, [0; 0]);
+        assert_eq!(res, [0u8;0]);
         println!("Key `{}` was deleted", str(key2));
     } else {
-        assert_eq!(written_out, value2.len() as u32);
         assert_eq!(res, value2);
         println!("Key `{}` remains", str(key2));
     }
@@ -132,9 +120,7 @@ pub fn test_allocate_storage() {
 pub fn test_storage_root() {
     let mut api = StorageApi::new();
 
-    let mut result = [0; 32];
-    api.rtm_ext_storage_root(&mut result);
-
+    let root = api.rtm_ext_storage_root();
     // TODO...
 }
 

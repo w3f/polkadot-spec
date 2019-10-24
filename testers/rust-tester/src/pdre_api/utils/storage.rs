@@ -55,7 +55,6 @@ impl StorageApi {
     pub fn rtm_ext_get_allocated_storage(
         &mut self,
         key_data: &[u8],
-        _: &mut u32,
     ) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_get_allocated_storage");
         let res = wasm.call(&key_data.encode());
@@ -73,14 +72,10 @@ impl StorageApi {
         let mut wasm = self.prep_wasm("test_ext_clear_prefix");
         let _ = wasm.call(&prefix_data.encode());
     }
-    pub fn rtm_ext_storage_root(&mut self, output: &mut [u8]) {
+    pub fn rtm_ext_storage_root(&mut self) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_storage_root");
-        let ptr = wrap(0);
-        let output_scoped = wrap(vec![0; output.len()]);
-
-        let _ = wasm.call(output.encode().as_slice());
-
-        copy_slice(output_scoped, output);
+        let res = wasm.call(&[]);
+        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
     pub fn rtm_ext_local_storage_set(&mut self, kind: u32, key_data: &[u8], value_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_local_storage_set");

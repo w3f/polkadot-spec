@@ -31,7 +31,6 @@ impl ChildStorageApi {
         &mut self,
         storage_key_data: &[u8],
         key_data: &[u8],
-        written_out: &mut u32,
     ) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_get_allocated_child_storage");
         let res = wasm.call(&(storage_key_data, key_data).encode());
