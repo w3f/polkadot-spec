@@ -30,7 +30,9 @@ fn get_wasm_blob() -> Vec<u8> {
     let mut f =
     //File::open("test/testers/rust-tester/target/wasm32-unknown-unknown/release/wasm_blob.wasm")
     //File::open("test/testers/rust-tester/pdre-tester-wasm-blob/target/release/wbuild/target/wasm32-unknown-unknown/release/pdre_tester_wasm_blob.wasm")
-    // for run_tests.sh -> File::open("build/test/testers/rust-tester/x86_64-unknown-linux-gnu/debug/wbuild/pdre-tester-wasm-blob/pdre_tester_wasm_blob.compact.wasm")
+    // for `run_tests.sh` in root directory
+    //File::open("build/test/testers/rust-tester/x86_64-unknown-linux-gnu/debug/wbuild/pdre-tester-wasm-blob/pdre_tester_wasm_blob.compact.wasm")
+    // for `cargo` inside rust-tester directory
     File::open("target/debug/wbuild/target/wasm32-unknown-unknown/debug/pdre_tester_wasm_blob.wasm")
         .expect("Failed to open wasm blob in target");
     let mut buffer = Vec::new(); f.read_to_end(&mut buffer)

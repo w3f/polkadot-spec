@@ -36,7 +36,7 @@ impl CryptoApi {
         let mut wasm = self.prep_wasm(method);
         //the data need to be scaled
         let res = wasm.call(&data.encode());
-        <Vec::<u8>>::decode(&mut res.as_slice()).unwrap()
+        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
     pub fn rtm_ext_blake2_128(&mut self, data: &[u8]) -> Vec<u8> {
         self.common_hash_fn_handler("test_ext_blake2_128", data)
@@ -104,9 +104,7 @@ impl CryptoApi {
         let written_out_scoped = wrap(0);
 
         let res = wasm.call(&[id_data, &le(written_out)].encode());
-
-        copy_u32(written_out_scoped, written_out);
-        res
+        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
     pub fn rtm_ext_sr25519_generate(&mut self, id_data: &[u8], seed: &[u8], output: &mut [u8]) {
         let mut wasm = self.prep_wasm("test_ext_sr25519_generate");
