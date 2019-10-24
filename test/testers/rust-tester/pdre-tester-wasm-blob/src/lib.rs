@@ -518,36 +518,54 @@ pub extern "C" fn test_ext_ed25519_public_keys(
     unsafe { ext_ed25519_public_keys(id_data, result_len) }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_ed25519_verify(
-    msg_data: *const u8,
-    msg_len: u32,
-    sig_data: *const u8,
-    pubkey_data: *const u8,
-) -> u32 {
-    unsafe { ext_ed25519_verify(msg_data, msg_len, sig_data, pubkey_data) }
-}
+substrate_primitives::wasm_export_functions! {
+    fn test_ext_ed25519_verify(
+        msg_data: Vec<u8>,
+        sig_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_ed25519_verify(
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+                sig_data.as_ptr(),
+                pubkey_data.as_ptr(),
+            )
+        }
+    }
 
-#[no_mangle]
-pub extern "C" fn test_ext_ed25519_generate(
-    id_data: *const u8,
-    seed: *const u8,
-    seed_len: u32,
-    out: *mut u8,
-) {
-    unsafe { ext_ed25519_generate(id_data, seed, seed_len, out) }
-}
+    fn test_ext_ed25519_generate(
+        id_data: Vec<u8>,
+        seed: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut output = vec![];
+        unsafe {
+            ext_ed25519_generate(
+                id_data.as_ptr(),
+                seed.as_ptr(),
+                seed.len() as u32,
+                output.as_mut_ptr()
+            );
+            slice::from_raw_parts(output.as_ptr(), 32).to_vec()
+        }
+    }
 
-#[no_mangle]
-pub extern "C" fn test_ext_ed25519_sign(
-    id_data: *const u8,
-    pubkey_data: *const u8,
-    msg_data: *const u8,
-    msg_len: u32,
-    out: *mut u8,
-) -> u32 {
-    unsafe {
-        ext_ed25519_sign(id_data, pubkey_data, msg_data, msg_len, out)
+    fn test_ext_ed25519_sign(
+        id_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+        msg_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut output = vec![];
+        unsafe {
+            ext_ed25519_sign(
+                id_data.as_ptr(),
+                pubkey_data.as_ptr(),
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+                output.as_mut_ptr(),
+            );
+            slice::from_raw_parts(output.as_ptr(), 64).to_vec()
+        }
     }
 }
 
@@ -559,25 +577,36 @@ pub extern "C" fn test_ext_sr25519_public_keys(
     unsafe { ext_sr25519_public_keys(id_data, result_len) }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_sr25519_verify(
-    msg_data: *const u8,
-    msg_len: u32,
-    sig_data: *const u8,
-    pubkey_data: *const u8,
-) -> u32 {
-    unsafe { ext_sr25519_verify(msg_data, msg_len, sig_data, pubkey_data) }
-}
+substrate_primitives::wasm_export_functions! {
+    fn test_ext_sr25519_verify(
+        msg_data: Vec<u8>,
+        sig_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_sr25519_verify(
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+                sig_data.as_ptr(),
+                pubkey_data.as_ptr(),
+            )
+        }
+    }
 
-#[no_mangle]
-pub extern "C" fn test_ext_sr25519_generate(
-    id_data: *const u8,
-    seed: *const u8,
-    seed_len: u32,
-    out: *mut u8,
-) {
-    unsafe {
-        ext_sr25519_generate(id_data, seed, seed_len, out);
+    fn test_ext_sr25519_generate(
+        id_data: Vec<u8>,
+        seed: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut out = vec![];
+        unsafe {
+            ext_sr25519_generate(
+                id_data.as_ptr(),
+                seed.as_ptr(),
+                seed.len() as u32,
+                out.as_mut_ptr(),
+            );
+            slice::from_raw_parts(out.as_ptr(), 32).to_vec()
+        }
     }
 }
 

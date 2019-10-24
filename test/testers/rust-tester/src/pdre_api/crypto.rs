@@ -72,21 +72,17 @@ pub fn test_ed25519(input: ParsedInput) {
 
     // Generate key pair
     let keystore = String::from("dumy");
-    let mut pubkey1 = [0; 32];
-    api.rtm_ext_ed25519_generate(keystore.as_bytes(), &[], &mut pubkey1);
+    let pubkey1 = api.rtm_ext_ed25519_generate(keystore.as_bytes(), &[]);
 
     // Sign a message
-    let mut signature = [0; 64];
-    let res = api.rtm_ext_ed25519_sign(keystore.as_bytes(), &pubkey1, data, &mut signature);
-    assert_eq!(res, 0);
+    let signature = api.rtm_ext_ed25519_sign(keystore.as_bytes(), &pubkey1, data);
 
     // Verify message
-    let verify = api.rtm_ext_ed25519_verify(data, &signature, &pubkey1);
+    let verify = api.rtm_ext_ed25519_verify(data, signature.as_slice(), &pubkey1);
     assert_eq!(verify, 0);
 
     // Generate new key pair for listing
-    let mut pubkey2 = [0; 32]; // will get generated
-    api.rtm_ext_ed25519_generate(keystore.as_bytes(), &[], &mut pubkey2);
+    let pubkey2 = api.rtm_ext_ed25519_generate(keystore.as_bytes(), &[]);
 
     // Get all public keys
     let mut result_len: u32 = 0;
@@ -112,8 +108,7 @@ pub fn test_sr25519(input: ParsedInput) {
 
     // Generate key pair
     let keystore = String::from("dumy");
-    let mut pubkey1 = [0; 32];
-    api.rtm_ext_sr25519_generate(keystore.as_bytes(), &[], &mut pubkey1);
+    let pubkey1 = api.rtm_ext_sr25519_generate(keystore.as_bytes(), &[]);
 
     // Sign a message
     let mut signature = [0; 64];
@@ -124,8 +119,7 @@ pub fn test_sr25519(input: ParsedInput) {
     assert_eq!(verify, 0);
 
     // Generate new key pair for listing
-    let mut pubkey2 = [0; 32]; // will get generated
-    api.rtm_ext_sr25519_generate(keystore.as_bytes(), &[], &mut pubkey2);
+    let pubkey2 = api.rtm_ext_sr25519_generate(keystore.as_bytes(), &[]);
 
     // Get all public keys
     let mut result_len: u32 = 0;

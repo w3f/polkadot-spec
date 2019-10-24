@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{copy_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
+use super::{copy_u32, de_scale_u32, copy_slice, get_wasm_blob, le, wrap, CallWasm};
 
 use parity_scale_codec::{Encode, Decode};
 use substrate_primitives::testing::KeyStore;
@@ -56,36 +56,20 @@ impl CryptoApi {
     pub fn rtm_ext_keccak_256(&mut self, data: &[u8]) -> Vec<u8> {
         self.common_hash_fn_handler("test_ext_keccak_256", data)
     }
-    pub fn rtm_ext_ed25519_generate(&mut self, id_data: &[u8], seed: &[u8], output: &mut [u8]) {
+    pub fn rtm_ext_ed25519_generate(&mut self, id_data: &[u8], seed: &[u8]) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_ed25519_generate");
-        let ptr = wrap(0);
-        let output_scoped = wrap(vec![0; output.len()]);
-
-        let _ = wasm.call(&[id_data, seed, output].encode()
-            // CallWasm::gen_params(&[id_data, seed, output], &[1], Some(ptr.clone())),
-            // CallWasm::return_none_write_buffer(output_scoped.clone(), ptr),
-        );
-
-        copy_slice(output_scoped, output);
+        let res = wasm.call(&(id_data, seed).encode());
+        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
     pub fn rtm_ext_ed25519_sign(
         &mut self,
         id_data: &[u8],
         pubkey_data: &[u8],
         msg_data: &[u8],
-        output: &mut [u8],
-    ) -> u32 {
+    ) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_ed25519_sign");
-        let ptr = wrap(0);
-        let output_scoped = wrap(vec![0; output.len()]);
-
-        let mut res = wasm.call(&[id_data, pubkey_data, msg_data, output].encode()
-            // CallWasm::gen_params(&[id_data, pubkey_data, msg_data, output], &[2], Some(ptr.clone())),
-            // CallWasm::return_value_write_buffer(output_scoped.clone(), ptr),
-        );
-
-        copy_slice(output_scoped, output);
-        u32::decode(&mut res.as_slice()).unwrap()
+        let res = wasm.call(&(id_data, pubkey_data, msg_data).encode());
+        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
     pub fn rtm_ext_ed25519_verify(
         &mut self,
@@ -94,8 +78,7 @@ impl CryptoApi {
         pubkey_data: &[u8],
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_ed25519_verify");
-        let mut res = wasm.call(&[msg_data, sig_data, pubkey_data].encode());
-        u32::decode(&mut res.as_slice()).unwrap()
+        de_scale_u32(wasm.call(&(msg_data, sig_data, pubkey_data).encode()))
             
     }
     pub fn rtm_ext_ed25519_public_keys(&mut self, id_data: &[u8], written_out: &mut u32) -> Vec<u8> {
@@ -106,15 +89,10 @@ impl CryptoApi {
         let res = wasm.call(&[id_data, &le(written_out)].encode());
         Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
-    pub fn rtm_ext_sr25519_generate(&mut self, id_data: &[u8], seed: &[u8], output: &mut [u8]) {
+    pub fn rtm_ext_sr25519_generate(&mut self, id_data: &[u8], seed: &[u8]) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_sr25519_generate");
-        let ptr = wrap(0);
-        let output_scoped = wrap(vec![0; output.len()]);
-
-        let res = wasm.call(&[id_data, seed, output].encode());
-
-        copy_slice(output_scoped, output);
-        res;
+        let res = wasm.call(&(id_data, seed).encode());
+        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
     pub fn rtm_ext_sr25519_sign(
         &mut self,
@@ -139,8 +117,7 @@ impl CryptoApi {
         pubkey_data: &[u8],
     ) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_sr25519_verify");
-        let res = wasm.call(&[msg_data, sig_data, pubkey_data].encode());
-        u32::decode(&mut res.as_slice()).unwrap()
+        de_scale_u32(wasm.call(&(msg_data, sig_data, pubkey_data).encode()))
     }
     pub fn rtm_ext_sr25519_public_keys(&mut self, id_data: &[u8], written_out: &mut u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_sr25519_public_keys");
