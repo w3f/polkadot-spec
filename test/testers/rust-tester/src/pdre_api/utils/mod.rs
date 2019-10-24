@@ -40,6 +40,22 @@ fn get_wasm_blob() -> Vec<u8> {
     buffer
 }
 
+trait Decoder {
+    fn decode_vec(&self) -> Vec<u8>;
+    fn decode_u32(&self) -> u32;
+}
+
+impl Decoder for Vec<u8> {
+    fn decode_vec(&self) -> Vec<u8> {
+        Vec::<u8>::decode(&mut self.as_slice())
+            .expect("Failed to decode SCALE encoding")
+    }
+    fn decode_u32(&self) -> u32 {
+        u32::decode(&mut self.as_slice())
+            .expect("Failed to decode SCALE encoding")
+    }
+}
+
 fn le(num: &mut u32) -> [u8; 4] {
     num.to_le_bytes()
 }
