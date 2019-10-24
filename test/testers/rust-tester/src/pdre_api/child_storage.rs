@@ -14,26 +14,20 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
     let value = input.get(3);
 
     // Get invalid key
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key, &mut written_out);
-    assert_eq!(written_out, u32::max_value());
+    let res = api.rtm_ext_get_allocated_child_storage(child1, key);
     assert_eq!(res, [0u8; 0]);
 
     // Set key/value
     api.rtm_ext_set_child_storage(child1, key, value);
 
     // Get valid key
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key, &mut written_out);
-    assert_eq!(written_out, value.len() as u32);
+    let res = api.rtm_ext_get_allocated_child_storage(child1, key);
     assert_eq!(res, value);
 
     println!("{}", str(&res));
 
     // Get invalid key from invalid child
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key, &mut written_out);
-    assert_eq!(written_out, u32::max_value());
+    let res = api.rtm_ext_get_allocated_child_storage(child2, key);
     assert_eq!(res, [0; 0]);
 }
 
@@ -78,29 +72,21 @@ pub fn test_clear_child_storage(input: ParsedInput) {
     api.rtm_ext_set_child_storage(child2, key, value);
 
     // Get valid keys
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key, &mut written_out);
-    assert_eq!(written_out, value.len() as u32);
+    let res = api.rtm_ext_get_allocated_child_storage(child1, key);
     assert_eq!(res, value);
 
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key, &mut written_out);
-    assert_eq!(written_out, value.len() as u32);
+    let res = api.rtm_ext_get_allocated_child_storage(child2, key);
     assert_eq!(res, value);
 
     // Clear key
     api.rtm_ext_clear_child_storage(child1, key);
 
     // Get invalid key
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key, &mut written_out);
-    assert_eq!(written_out, u32::max_value());
+    let res = api.rtm_ext_get_allocated_child_storage(child1, key);
     assert_eq!(res, [0; 0]);
 
     // Get valid key from other child
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key, &mut written_out);
-    assert_eq!(written_out, value.len() as u32);
+    let res = api.rtm_ext_get_allocated_child_storage(child2, key);
     assert_eq!(res, value);
 }
 
@@ -126,36 +112,26 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
     api.rtm_ext_clear_child_prefix(child2, prefix);
 
     // Check deletions (only keys from `child2` are got deleted)
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key1, &mut written_out);
-    assert_eq!(written_out, value1.len() as u32);
+    let res = api.rtm_ext_get_allocated_child_storage(child1, key1);
     assert_eq!(res, value1);
 
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key2, &mut written_out);
-    assert_eq!(written_out, value2.len() as u32);
+    let res = api.rtm_ext_get_allocated_child_storage(child1, key2);
     assert_eq!(res, value2);
 
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key1, &mut written_out);
+    let res = api.rtm_ext_get_allocated_child_storage(child2, key1);
     if key1.starts_with(prefix) {
-        assert_eq!(written_out, u32::max_value());
         assert_eq!(res, [0; 0]);
         println!("Key `{}` was deleted", str(key1));
     } else {
-        assert_eq!(written_out, value1.len() as u32);
         assert_eq!(res, value1);
         println!("Key `{}` remains", str(key1));
     }
 
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key2, &mut written_out);
+    let res = api.rtm_ext_get_allocated_child_storage(child2, key2);
     if key2.starts_with(prefix) {
-        assert_eq!(written_out, u32::max_value());
         assert_eq!(res, [0; 0]);
         println!("Key `{}` was deleted", str(key2));
     } else {
-        assert_eq!(written_out, value2.len() as u32);
         assert_eq!(res, value2);
         println!("Key `{}` remains", str(key2));
     }
@@ -178,14 +154,10 @@ pub fn test_kill_child_storage(input: ParsedInput) {
     api.rtm_ext_kill_child_storage(child1);
 
     // Get invalid key
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key, &mut written_out);
-    assert_eq!(written_out, u32::max_value());
+    let res = api.rtm_ext_get_allocated_child_storage(child1, key);
     assert_eq!(res, [0; 0]);
 
     // Get valid key from other child
-    let mut written_out = 0;
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key, &mut written_out);
-    assert_eq!(written_out, value.len() as u32);
+    let res = api.rtm_ext_get_allocated_child_storage(child2, key);
     assert_eq!(res, value);
 }

@@ -399,11 +399,11 @@ wasm_export_functions! {
     ) -> Vec<u8> {
         let mut written_out = 0;
         unsafe {
-            let out = ext_get_allocated_storage(key_data.as_ptr(), key_data.len() as u32, &mut written_out);
-            if out.is_null() {
+            let ptr = ext_get_allocated_storage(key_data.as_ptr(), key_data.len() as u32, &mut written_out);
+            if ptr.is_null() {
                 vec![]
             } else {
-                slice::from_raw_parts(out, written_out as usize).to_vec()
+                slice::from_raw_parts(ptr, written_out as usize).to_vec()
             }
         }
     }
@@ -414,7 +414,7 @@ wasm_export_functions! {
     ) -> Vec<u8> {
         let mut written_out = 0;
         unsafe {
-            let out = ext_get_allocated_child_storage(
+            let ptr = ext_get_allocated_child_storage(
                 storage_key_data.as_ptr(),
                 storage_key_data.len() as u32,
                 key_data.as_ptr(),
@@ -422,10 +422,10 @@ wasm_export_functions! {
                 &mut written_out,
             );
 
-            if out.is_null() {
+            if ptr.is_null() {
                 vec![]
             } else {
-                slice::from_raw_parts(out, written_out as usize).to_vec()
+                slice::from_raw_parts(ptr, written_out as usize).to_vec()
             }
         }
     }
@@ -468,22 +468,28 @@ wasm_export_functions! {
         }
         value_data
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_storage_root(result: *mut u8) {
-    unsafe {
-        ext_storage_root(result);
+    fn test_ext_storage_root() -> Vec<u8> {
+        let mut result = vec![0; 32];
+        unsafe {
+            ext_storage_root(result.as_mut_ptr());
+        }
+        result
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_child_storage_root(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    written_out: *mut u32,
-) -> *mut u8 {
-    unsafe { ext_child_storage_root(storage_key_data, storage_key_len, written_out) }
+    fn test_ext_child_storage_root(
+        storage_key_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let ptr = ext_child_storage_root(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                &mut written_out,
+            );
+            slice::from_raw_parts(ptr, written_out as usize).to_vec()
+        }
+    }
 }
 
 #[no_mangle]
