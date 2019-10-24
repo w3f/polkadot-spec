@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{copy_u32, de_scale_u32, le, wrap, CallWasm, get_wasm_blob, Decoder};
+use super::{CallWasm, get_wasm_blob, Decoder};
 
 use parity_scale_codec::{Encode, Decode};
 
