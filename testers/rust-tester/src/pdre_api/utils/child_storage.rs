@@ -60,10 +60,10 @@ impl ChildStorageApi {
     }
     pub fn rtm_ext_clear_child_prefix(&mut self, storage_key_data: &[u8], prefix_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_child_prefix");
-        let _ = wasm.call(&(storage_key_data, prefix_data).encode())
+        let _ = wasm.call(&(storage_key_data, prefix_data).encode());
     }
     pub fn rtm_ext_kill_child_storage(&mut self, storage_key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_kill_child_storage");
-        let _ = wasm.call(&storage_key_data.encode())
+        let _ = wasm.call(&storage_key_data.encode());
     }
 }
