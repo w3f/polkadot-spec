@@ -701,16 +701,23 @@ pub extern "C" fn test_ext_random_seed(seed_data: *mut u8) {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_local_storage_set(
-    kind: u32,
-    key: *const u8,
-    key_len: u32,
-    value: *const u8,
-    value_len: u32,
-) {
-    unsafe {
-        ext_local_storage_set(kind, key, key_len, value, value_len);
+wasm_export_functions! {
+    fn test_ext_local_storage_set(
+        kind: u32,
+        key: Vec<u8>,
+        key_len: u32,
+        value: Vec<u8>,
+        value_len: u32,
+    ) {
+        unsafe {
+            ext_local_storage_set(
+                kind,
+                key.as_ptr(),
+                key.len() as u32,
+                value.as_ptr(),
+                value.len() as u32,
+            );
+        }
     }
 }
 
