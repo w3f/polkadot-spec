@@ -347,17 +347,17 @@ pub extern "C" fn test_ext_clear_child_storage(
     }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_clear_storage(key_data: *const u8, key_len: u32) {
-    unsafe {
-        ext_clear_storage(key_data, key_len);
+substrate_primitives::wasm_export_functions! {
+    fn test_ext_clear_storage(key_data: Vec<u8>) {
+        unsafe {
+            ext_clear_storage(key_data.as_ptr(), key_data.len());
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_exists_storage(key_data: *const u8, key_len: u32) -> u32 {
-    unsafe {
-        ext_exists_storage(key_data, key_len)
+    fn test_ext_exists_storage(key_data: Vec<u8>) -> u32 {
+        unsafe {
+            ext_exists_storage(key_data.as_ptr(), key_data.len() as u32)
+        }
     }
 }
 

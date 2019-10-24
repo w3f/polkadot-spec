@@ -16,7 +16,7 @@ pub fn test_set_get_storage(input: ParsedInput) {
     // Get invalid key
     let mut written_out = 0;
     let res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
-    assert_eq!(res, [0u8]);
+    assert_eq!(res, [0u8;0]);
 
     // Set key/value
     api.rtm_ext_set_storage(key, value);
@@ -24,8 +24,7 @@ pub fn test_set_get_storage(input: ParsedInput) {
     // Get valid key
     let mut written_out = 0;
     let mut res = api.rtm_ext_get_allocated_storage(key, &mut written_out);
-    let res_dec = Vec::<u8>::decode(&mut res.as_slice()).unwrap();
-    assert_eq!(res_dec, value);
+    assert_eq!(res, value);
 
     println!("{}", str(&res));
 }

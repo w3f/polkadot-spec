@@ -58,15 +58,16 @@ impl StorageApi {
         _: &mut u32,
     ) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_get_allocated_storage");
-        wasm.call(&key_data.encode())
+        let res = wasm.call(&key_data.encode());
+        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
     pub fn rtm_ext_clear_storage(&mut self, key_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_storage");
-        let _ = wasm.call(&[key_data].encode());
+        let _ = wasm.call(&key_data.encode());
     }
     pub fn rtm_ext_exists_storage(&mut self, key_data: &[u8]) -> u32 {
         let mut wasm = self.prep_wasm("test_ext_exists_storage");
-        de_scale_u32(wasm.call(&key_data))
+        de_scale_u32(wasm.call(&key_data.encode()))
     }
     pub fn rtm_ext_clear_prefix(&mut self, prefix_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_prefix");
