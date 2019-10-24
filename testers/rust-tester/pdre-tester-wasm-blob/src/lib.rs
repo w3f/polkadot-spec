@@ -401,11 +401,11 @@ substrate_primitives::wasm_export_functions! {
     ) -> Vec<u8> {
         let mut written_out = 0;
         unsafe {
-            let output = ext_get_allocated_storage(key_data.as_ptr(), key_data.len() as u32, &mut written_out);
-            if output.is_null() {
+            let out = ext_get_allocated_storage(key_data.as_ptr(), key_data.len() as u32, &mut written_out);
+            if out.is_null() {
                 vec![]
             } else {
-                slice::from_raw_parts(output, written_out as usize).to_vec()
+                slice::from_raw_parts(out, written_out as usize).to_vec()
             }
         }
     }
@@ -416,7 +416,7 @@ substrate_primitives::wasm_export_functions! {
     ) -> Vec<u8> {
         let mut written_out = 0;
         unsafe {
-            let output = ext_get_allocated_child_storage(
+            let out = ext_get_allocated_child_storage(
                 storage_key_data.as_ptr(),
                 storage_key_data.len() as u32,
                 key_data.as_ptr(),
@@ -424,10 +424,10 @@ substrate_primitives::wasm_export_functions! {
                 &mut written_out,
             );
 
-            if output.is_null() {
+            if out.is_null() {
                 vec![]
             } else {
-                slice::from_raw_parts(output, written_out as usize).to_vec()
+                slice::from_raw_parts(out, written_out as usize).to_vec()
             }
         }
     }
@@ -538,15 +538,15 @@ substrate_primitives::wasm_export_functions! {
         id_data: Vec<u8>,
         seed: Vec<u8>,
     ) -> Vec<u8> {
-        let mut output = vec![];
+        let mut out = vec![];
         unsafe {
             ext_ed25519_generate(
                 id_data.as_ptr(),
                 seed.as_ptr(),
                 seed.len() as u32,
-                output.as_mut_ptr()
+                out.as_mut_ptr()
             );
-            slice::from_raw_parts(output.as_ptr(), 32).to_vec()
+            slice::from_raw_parts(out.as_ptr(), 32).to_vec()
         }
     }
 
@@ -555,16 +555,16 @@ substrate_primitives::wasm_export_functions! {
         pubkey_data: Vec<u8>,
         msg_data: Vec<u8>,
     ) -> Vec<u8> {
-        let mut output = vec![];
+        let mut out = vec![];
         unsafe {
             ext_ed25519_sign(
                 id_data.as_ptr(),
                 pubkey_data.as_ptr(),
                 msg_data.as_ptr(),
                 msg_data.len() as u32,
-                output.as_mut_ptr(),
+                out.as_mut_ptr(),
             );
-            slice::from_raw_parts(output.as_ptr(), 64).to_vec()
+            slice::from_raw_parts(out.as_ptr(), 64).to_vec()
         }
     }
 }
