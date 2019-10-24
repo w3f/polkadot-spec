@@ -541,6 +541,7 @@ wasm_export_functions! {
                 id_data.as_ptr(),
                 &mut written_out,
             );
+
             if out.is_null() {
                 vec![]
             } else {
@@ -607,6 +608,7 @@ wasm_export_functions! {
                 id_data.as_ptr(),
                 &mut written_out,
             );
+
             if out.is_null() {
                 vec![]
             } else {
