@@ -32,11 +32,9 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             // test crypto functions
             "test_blake2_128" => crypto::test_blake2_128(input),
             "test_blake2_256" => crypto::test_blake2_256(input),
-            //"test_ed25519" => crypto::test_ed25519(input),
-            "test_ed25519" => {},
+            "test_ed25519" => crypto::test_ed25519(input),
             "test_keccak_256" => crypto::test_keccak_256(input),
-            //"test_sr25519" => crypto::test_sr25519(input),
-            "test_sr25519" => {},
+            "test_sr25519" => crypto::test_sr25519(input),
             "test_twox_64" => crypto::test_twox_64(input),
             "test_twox_128" => crypto::test_twox_128(input),
             "test_twox_256" => crypto::test_twox_256(input),
