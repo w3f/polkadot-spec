@@ -54,10 +54,7 @@ impl StorageApi {
             .prep_wasm("test_ext_set_storage")
             .call(&(key_data, value_data).encode());
     }
-    pub fn rtm_ext_get_allocated_storage(
-        &mut self,
-        key_data: &[u8],
-    ) -> Vec<u8> {
+    pub fn rtm_ext_get_allocated_storage(&mut self, key_data: &[u8]) -> Vec<u8> {
         self
             .prep_wasm("test_ext_get_allocated_storage")
             .call(&key_data.encode())

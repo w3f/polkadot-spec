@@ -3,7 +3,7 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{copy_u32, de_scale_u32, get_wasm_blob, le, wrap, CallWasm};
+use super::{copy_u32, de_scale_u32, le, wrap, CallWasm, get_wasm_blob, Decoder};
 
 use parity_scale_codec::{Encode, Decode};
 
@@ -44,14 +44,16 @@ impl NetworkApi {
         CallWasm::new(&mut self.ext, &self.blob, method)
     }
     pub fn rtm_ext_http_request_start(&mut self, method: &[u8], url: &[u8], meta: &[u8]) -> u32 {
-        let mut wasm = self.prep_wasm("test_ext_http_request_start");
-        let res = wasm.call(&[method, url, meta].encode());
-        de_scale_u32(res)
+        self
+            .prep_wasm("test_ext_http_request_start")
+            .call(&[method, url, meta].encode())
+            .decode_u32()
     }
     pub fn rtm_ext_network_state(&mut self) -> Vec<u8> {
-        let mut wasm = self.prep_wasm("test_ext_network_state");
-        let res = wasm.call(&[]);
-        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
+        self
+            .prep_wasm("test_ext_network_state")
+            .call(&[])
+            .decode_vec()
     }
     #[allow(unused)] // temporarly
     pub fn rtm_ext_http_request_add_header(
