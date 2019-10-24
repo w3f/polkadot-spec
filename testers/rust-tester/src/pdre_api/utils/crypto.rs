@@ -96,16 +96,10 @@ impl CryptoApi {
         id_data: &[u8],
         pubkey_data: &[u8],
         msg_data: &[u8],
-        output: &mut [u8],
-    ) -> u32 {
+    ) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_sr25519_sign");
-        let ptr = wrap(0);
-        let output_scoped = wrap(vec![0; output.len()]);
-
-        let res = wasm.call(&[id_data, pubkey_data, msg_data, output].encode());
-
-        copy_slice(output_scoped, output);
-        u32::decode(&mut res.as_slice()).unwrap()
+        let res = wasm.call(&(id_data, pubkey_data, msg_data).encode());
+        Vec::<u8>::decode(&mut res.as_slice()).unwrap()
     }
     pub fn rtm_ext_sr25519_verify(
         &mut self,

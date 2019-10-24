@@ -110,9 +110,7 @@ pub fn test_sr25519(input: ParsedInput) {
     let pubkey1 = api.rtm_ext_sr25519_generate(keystore.as_bytes(), &[]);
 
     // Sign a message
-    let mut signature = [0; 64];
-    let res = api.rtm_ext_sr25519_sign(keystore.as_bytes(), &pubkey1, data, &mut signature);
-    assert_eq!(res, 0);
+    let signature = api.rtm_ext_sr25519_sign(keystore.as_bytes(), &pubkey1, data);
 
     let verify = api.rtm_ext_sr25519_verify(data, &signature, &pubkey1);
     assert_eq!(verify, 0);
