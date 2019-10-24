@@ -314,43 +314,41 @@ substrate_primitives::wasm_export_functions! {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_set_child_storage(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-    value_data: *const u8,
-    value_len: u32,
-) {
-    unsafe {
-        ext_set_child_storage(
-            storage_key_data,
-            storage_key_len,
-            key_data,
-            key_len,
-            value_data,
-            value_len,
-        );
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn test_ext_clear_child_storage(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-) {
-    unsafe {
-        ext_clear_child_storage(storage_key_data, storage_key_len, key_data, key_len);
-    }
-}
-
 substrate_primitives::wasm_export_functions! {
+    fn test_ext_set_child_storage(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+        value_data: Vec<u8>,
+    ) {
+        unsafe {
+            ext_set_child_storage(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                value_data.as_ptr(),
+                value_data.len() as u32,
+            );
+        }
+    }
+
+    fn test_ext_clear_child_storage(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+    ) {
+        unsafe {
+            ext_clear_child_storage(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+            );
+        }
+    }
+
     fn test_ext_clear_storage(key_data: Vec<u8>) {
         unsafe {
-            ext_clear_storage(key_data.as_ptr(), key_data.len());
+            ext_clear_storage(key_data.as_ptr(), key_data.len() as u32);
         }
     }
 
@@ -359,17 +357,19 @@ substrate_primitives::wasm_export_functions! {
             ext_exists_storage(key_data.as_ptr(), key_data.len() as u32)
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_exists_child_storage(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-) -> u32 {
-    unsafe {
-        ext_exists_child_storage(storage_key_data, storage_key_len, key_data, key_len)
+    fn test_ext_exists_child_storage(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+    ) -> u32 {
+        unsafe {
+            ext_exists_child_storage(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+            )
+        }
     }
 }
 
@@ -380,22 +380,25 @@ pub extern "C" fn test_ext_clear_prefix(prefix_data: *const u8, prefix_len: u32)
     }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_clear_child_prefix(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    prefix_data: *const u8,
-    prefix_len: u32,
-) {
-    unsafe {
-        ext_clear_child_prefix(storage_key_data, storage_key_len, prefix_data, prefix_len);
+substrate_primitives::wasm_export_functions! {
+    fn test_ext_clear_child_prefix(
+        storage_key_data: Vec<u8>,
+        prefix_data: Vec<u8>,
+    ) {
+        unsafe {
+            ext_clear_child_prefix(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                prefix_data.as_ptr(),
+                prefix_data.len() as u32,
+            );
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_kill_child_storage(storage_key_data: *const u8, storage_key_len: u32) {
-    unsafe {
-        ext_kill_child_storage(storage_key_data, storage_key_len);
+    fn test_ext_kill_child_storage(storage_key_data: Vec<u8>) {
+        unsafe {
+            ext_kill_child_storage(storage_key_data.as_ptr(), storage_key_data.len() as u32);
+        }
     }
 }
 
@@ -415,29 +418,27 @@ substrate_primitives::wasm_export_functions! {
     }
 }
 
-#[no_mangle]
-pub extern "C" fn test_ext_get_allocated_child_storage(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-    written_out: *mut u32,
-) -> u32 {
-    let output;
-    unsafe {
-        output = ext_get_allocated_child_storage(
-            storage_key_data,
-            storage_key_len,
-            key_data,
-            key_len,
-            written_out,
-        )
-    }
+substrate_primitives::wasm_export_functions! {
+    fn test_ext_get_allocated_child_storage(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut written_out = 0;
+        unsafe {
+            let output = ext_get_allocated_child_storage(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                &mut written_out,
+            );
 
-    if output.is_null() {
-        0
-    } else {
-        output as u32
+            if output.is_null() {
+                vec![]
+            } else {
+                slice::from_raw_parts(output, written_out as usize).to_vec()
+            }
+        }
     }
 }
 
