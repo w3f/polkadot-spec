@@ -301,7 +301,12 @@ wasm_export_functions! {
         value_data: Vec<u8>,
     ) {
         unsafe {
-            ext_set_storage(key_data.as_ptr(), key_data.len() as u32, value_data.as_ptr(), value_data.len() as u32);
+            ext_set_storage(
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                value_data.as_ptr(),
+                value_data.len() as u32
+            );
         }
     }
 
@@ -393,7 +398,12 @@ wasm_export_functions! {
     ) -> Vec<u8> {
         let mut written_out = 0;
         unsafe {
-            let ptr = ext_get_allocated_storage(key_data.as_ptr(), key_data.len() as u32, &mut written_out);
+            let ptr = ext_get_allocated_storage(
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                &mut written_out
+            );
+
             if ptr.is_null() {
                 vec![]
             } else {
@@ -848,16 +858,24 @@ wasm_export_functions! {
             }
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_http_response_read_body(
-    request_id: u32,
-    buffer: *mut u8,
-    buffer_len: u32,
-    deadline: u64,
-) -> u32 {
-    unsafe { ext_http_response_read_body(request_id, buffer, buffer_len, deadline) }
+    fn test_ext_http_response_read_body(
+        request_id: u32,
+        buffer: Vec<u8>,
+        buffer_len: u32,
+        deadline: u64,
+    ) -> Vec<u8> {
+        let mut buffer = buffer;
+        unsafe {
+            ext_http_response_read_body(
+                request_id,
+                buffer.as_mut_ptr(),
+                buffer.len() as u32,
+                deadline,
+            );
+        }
+        buffer
+    }
 }
 
 #[no_mangle]
@@ -935,7 +953,14 @@ pub extern "C" fn test_ext_sandbox_memory_set(
     val_ptr: *const u8,
     val_len: u32,
 ) -> u32 {
-    unsafe { ext_sandbox_memory_set(memory_idx, offset, val_ptr, val_len) }
+    unsafe {
+        ext_sandbox_memory_set(
+            memory_idx,
+            offset,
+            val_ptr,
+            val_len
+        )
+    }
 }
 
 #[no_mangle]
