@@ -1,7 +1,6 @@
 use std::slice;
 
-use substrate_primitives::Blake2Hasher;
-use substrate_primitives::wasm_export_functions;
+use substrate_primitives::{wasm_export_functions, Blake2Hasher};
 use parity_scale_codec::{Encode, Decode};
 
 extern "C" {
@@ -217,8 +216,7 @@ extern "C" {
 
 #[cfg(not(feature = "std"))]
 
-substrate_primitives::wasm_export_functions! {
-
+wasm_export_functions! {
     fn test_ext_twox_64(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 8] = [0; 8];
         unsafe {
@@ -303,7 +301,7 @@ pub extern "C" fn test_ext_free(addr: *mut u8) {
     }
 }
 
-substrate_primitives::wasm_export_functions! {
+wasm_export_functions! {
     fn test_ext_set_storage(
         key_data: Vec<u8>,
         value_data: Vec<u8>,
@@ -431,39 +429,44 @@ substrate_primitives::wasm_export_functions! {
             }
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_get_storage_into(
-    key_data: *const u8,
-    key_len: u32,
-    value_data: *mut u8,
-    value_len: u32,
-    value_offset: u32,
-) -> u32 {
-    unsafe { ext_get_storage_into(key_data, key_len, value_data, value_len, value_offset) }
-}
+    fn test_ext_get_storage_into(
+        key_data: Vec<u8>,
+        value_data: Vec<u8>,
+        value_offset: u32,
+    ) -> Vec<u8> {
+        let mut value_data = value_data;
+        unsafe {
+            ext_get_storage_into(
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                value_data.as_mut_ptr(),
+                value_data.len() as u32,
+                value_offset
+            );
+        }
+        value_data
+    }
 
-#[no_mangle]
-pub extern "C" fn test_ext_get_child_storage_into(
-    storage_key_data: *const u8,
-    storage_key_len: u32,
-    key_data: *const u8,
-    key_len: u32,
-    value_data: *mut u8,
-    value_len: u32,
-    value_offset: u32,
-) -> u32 {
-    unsafe {
-        ext_get_child_storage_into(
-            storage_key_data,
-            storage_key_len,
-            key_data,
-            key_len,
-            value_data,
-            value_len,
-            value_offset,
-        )
+    fn test_ext_get_child_storage_into(
+        storage_key_data: Vec<u8>,
+        key_data: Vec<u8>,
+        value_data: Vec<u8>,
+        value_offset: u32,
+    ) -> Vec<u8> {
+        let mut value_data = value_data;
+        unsafe {
+            ext_get_child_storage_into(
+                storage_key_data.as_ptr(),
+                storage_key_data.len() as u32,
+                key_data.as_ptr(),
+                key_data.len() as u32,
+                value_data.as_mut_ptr(),
+                value_data.len() as u32,
+                value_offset,
+            );
+        }
+        value_data
     }
 }
 
@@ -510,7 +513,7 @@ pub extern "C" fn test_ext_chain_id() -> u64 {
 }
 
 
-substrate_primitives::wasm_export_functions! {
+wasm_export_functions! {
     fn test_ext_ed25519_public_keys(
         id_data: Vec<u8>,
     ) -> Vec<u8> {
@@ -624,17 +627,24 @@ substrate_primitives::wasm_export_functions! {
             slice::from_raw_parts(out.as_ptr(), 32).to_vec()
         }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_sr25519_sign(
-    id_data: *const u8,
-    pubkey_data: *const u8,
-    msg_data: *const u8,
-    msg_len: u32,
-    out: *mut u8,
-) -> u32 {
-    unsafe { ext_sr25519_sign(id_data, pubkey_data, msg_data, msg_len, out) }
+    fn test_ext_sr25519_sign(
+        id_data: Vec<u8>,
+        pubkey_data: Vec<u8>,
+        msg_data: Vec<u8>,
+    ) -> Vec<u8> {
+        let mut out = vec![];
+        unsafe {
+            ext_sr25519_sign(
+                id_data.as_ptr(),
+                pubkey_data.as_ptr(),
+                msg_data.as_ptr(),
+                msg_data.len() as u32,
+                out.as_mut_ptr(),
+            );
+            slice::from_raw_parts(out.as_ptr(), 64).to_vec()
+        }
+    }
 }
 
 #[no_mangle]
