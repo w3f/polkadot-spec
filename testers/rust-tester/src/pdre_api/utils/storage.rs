@@ -71,7 +71,7 @@ impl StorageApi {
     }
     pub fn rtm_ext_clear_prefix(&mut self, prefix_data: &[u8]) {
         let mut wasm = self.prep_wasm("test_ext_clear_prefix");
-        let _ = wasm.call(&[prefix_data].encode());
+        let _ = wasm.call(&prefix_data.encode());
     }
     pub fn rtm_ext_storage_root(&mut self, output: &mut [u8]) {
         let mut wasm = self.prep_wasm("test_ext_storage_root");
