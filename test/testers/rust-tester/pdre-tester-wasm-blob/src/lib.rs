@@ -264,44 +264,38 @@ wasm_export_functions! {
         }
         api_output.to_vec()
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_print_utf8(utf8_data: *const u8, utf8_len: u32) {
-    unsafe {
-        ext_print_utf8(utf8_data, utf8_len)
+    fn test_ext_print_utf8(utf8_data: Vec<u8>) {
+        unsafe {
+            ext_print_utf8(utf8_data.as_ptr(), utf8_data.len() as u32);
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_print_hex(data: *const u8, len: u32) {
-    unsafe {
-        ext_print_hex(data, len)
+    fn test_ext_print_hex(data: Vec<u8>) {
+        unsafe {
+            ext_print_hex(data.as_ptr(), data.len() as u32);
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_print_num(number: u64) {
-    unsafe {
-        ext_print_num(number)
+    fn test_ext_print_num(number: u64) {
+        unsafe {
+            ext_print_num(number);
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_malloc(size: u32) -> u32 {
-    unsafe {
-        ext_malloc(size)
+    fn test_ext_malloc(size: u32) -> u32 {
+        unsafe {
+            ext_malloc(size)
+        }
     }
-}
 
-#[no_mangle]
-pub extern "C" fn test_ext_free(addr: *mut u8) {
-    unsafe {
-        ext_free(addr);
+    fn test_ext_free(addr: Vec<u8>) {
+        let mut addr = addr;
+        unsafe {
+            ext_free(addr.as_mut_ptr());
+        }
     }
-}
 
-wasm_export_functions! {
     fn test_ext_set_storage(
         key_data: Vec<u8>,
         value_data: Vec<u8>,
