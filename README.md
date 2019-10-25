@@ -69,7 +69,9 @@ Example:
 
 `rust_tester pdre-api --function test_blake2_128 --input "Horizontal"`
 
-Each function gets tested with multiple inputs and then goes on to the next function. The functions are grouped depending on the format of the inputs. Those correspond in the same order with the listed outputs.
+Each function gets tested with multiple inputs and then goes on to the next function.
+
+In the Julia scripts, the functions (module *PdreApiTestFixtures*) are grouped together depending on the format of the inputs (module *PdreApiTestData*). Their outputs are compared with the corresponding list (module *PdreApiExpectedResults*). The sequence of those entries must be paid attention to.
 
 |PdreApiTestFixtures    |PdreApiTestData            |PdreApiExpectedResults|
 |-----------------------|---------------------------|----------------------|
