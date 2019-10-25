@@ -3,7 +3,7 @@ include("./fixtures/pdre_api_results.jl")
 
 using Test
 
-@testset "RE API Tests" begin
+@testset "PDRE API Tests" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
     manifest_dir = script_dir * "test/testers/rust-tester/Cargo.toml"
