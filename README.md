@@ -22,23 +22,23 @@ In the `test/` directory we include tests for the following components:
 The goal is to make sure that the different implementations (from foreign languges and projects) behave the same and produce the identical output.
 
 ### Running tests
-First, make sure that Julia is installed and download the required third party components:
+First, install Julia and download the required third party components:
 
 ```
 apt install -y julia
 git submodule update --init --recursive
 ```
 
-By running `./run_tests.sh` the automated tests get executed. With `./run_tests.sh verbose` the CLI parameters including the outputs can be displayed. Do note that this script should be run from this repos root directory, since there are some directory dependend relative paths used.
+By running `./run_tests.sh` the automated tests get executed. With `./run_tests.sh verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths.
 
 ### Structure
 Inside the testing directory, the tests are executed in the following way:
 
 ```
 runtests.jl
-|-> scale_codec_tests.jl
-|-> state_trie_tests.jl
-|-> pdre_api_tests.jl
+|-- scale_codec_tests.jl
+|-- state_trie_tests.jl
+|-- pdre_api_tests.jl
 ```
 
 Each of those tests defines how the final executable tests are called and pass data to it. The function names, testing data and results can be found in the *test/fixtures* directory.
