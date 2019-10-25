@@ -87,4 +87,10 @@ impl StorageApi {
             .prep_wasm("test_ext_local_storage_set")
             .call(&(kind, key_data, value_data).encode());
     }
+    pub fn rtm_ext_get_storage_into(&mut self, key_data: &[u8], value_data: &[u8], value_offset: u32) -> Vec<u8> {
+        self
+            .prep_wasm("test_ext_get_storage_into")
+            .call(&(key_data, value_data, value_offset).encode())
+            .decode_vec()
+    }
 }
