@@ -434,6 +434,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_get_storage_into(
         key_data: Vec<u8>,
         value_data: Vec<u8>,
@@ -452,6 +453,7 @@ wasm_export_functions! {
         value_data
     }
 
+    // TODO: Implement this
     fn test_ext_get_child_storage_into(
         storage_key_data: Vec<u8>,
         key_data: Vec<u8>,
@@ -473,6 +475,7 @@ wasm_export_functions! {
         value_data
     }
 
+    // TODO: Implement this
     fn test_ext_storage_root() -> Vec<u8> {
         let mut result = vec![0; 32];
         unsafe {
@@ -481,6 +484,7 @@ wasm_export_functions! {
         result
     }
 
+    // TODO: Implement this
     fn test_ext_child_storage_root(
         storage_key_data: Vec<u8>,
     ) -> Vec<u8> {
@@ -495,6 +499,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_storage_changes_root(
         parent_hash_data: Vec<u8>,
         result: Vec<u8>,
@@ -510,6 +515,7 @@ wasm_export_functions! {
         result
     }
 
+    // TODO: Implement this
     fn test_ext_blake2_256_enumerated_trie_root(
         values_data: Vec<u8>,
         lens_data: u32,
@@ -528,6 +534,7 @@ wasm_export_functions! {
         result
     }
 
+    // TODO: Implement this
     fn test_ext_chain_id() -> u64 {
         unsafe { ext_chain_id() }
     }
@@ -666,6 +673,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_secp256k1_ecdsa_recover(
         msg_data: Vec<u8>,
         sig_data: Vec<u8>,
@@ -681,10 +689,12 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_is_validator() -> u32 {
         unsafe { ext_is_validator() }
     }
 
+    // TODO: Implement this
     fn test_ext_submit_transaction(msg_data: Vec<u8>) -> u32 {
         unsafe {
             ext_submit_transaction(
@@ -702,16 +712,19 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_timestamp() -> u64 {
         unsafe { ext_timestamp() }
     }
 
+    // TODO: Implement this
     fn test_ext_sleep_until(deadline: u64) {
         unsafe {
             ext_sleep_until(deadline);
         }
     }
 
+    // TODO: Implement this
     fn test_ext_random_seed(seed_data: Vec<u8>) -> Vec<u8> {
         let mut seed_data = seed_data;
         unsafe {
@@ -720,6 +733,7 @@ wasm_export_functions! {
         seed_data
     }
 
+    // TODO: Implement this
     fn test_ext_local_storage_set(
         kind: u32,
         key: Vec<u8>,
@@ -736,6 +750,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_local_storage_get(
         kind: u32,
         key: Vec<u8>,
@@ -757,6 +772,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_local_storage_compare_and_set(
         kind: u32,
         key: Vec<u8>,
@@ -776,6 +792,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_http_request_start(
         method: Vec<u8>,
         url: Vec<u8>,
@@ -793,6 +810,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_http_request_add_header(
         request_id: u32,
         name: Vec<u8>,
@@ -811,6 +829,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_http_request_write_body(
         request_id: u32,
         chunk: Vec<u8>,
@@ -826,6 +845,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_http_response_wait(
         ids: u32,
         ids_len: u32,
@@ -843,6 +863,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_http_response_headers(
         request_id: u32,
     ) -> Vec<u8> {
@@ -861,6 +882,7 @@ wasm_export_functions! {
         }
     }
 
+    // TODO: Implement this
     fn test_ext_http_response_read_body(
         request_id: u32,
         buffer: Vec<u8>,
@@ -880,6 +902,7 @@ wasm_export_functions! {
     }
 }
 
+// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn test_ext_sandbox_instantiate(
     dispatch_thunk_idx: u32,
@@ -901,6 +924,7 @@ pub extern "C" fn test_ext_sandbox_instantiate(
     }
 }
 
+// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn test_ext_sandbox_instance_teardown(instance_idx: u32) {
     unsafe {
@@ -908,6 +932,7 @@ pub extern "C" fn test_ext_sandbox_instance_teardown(instance_idx: u32) {
     }
 }
 
+// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn test_ext_sandbox_invoke(
     instance_idx: u32,
@@ -933,11 +958,13 @@ pub extern "C" fn test_ext_sandbox_invoke(
     }
 }
 
+// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn test_ext_sandbox_memory_new(initial: u32, maximum: u32) -> u32 {
     unsafe { ext_sandbox_memory_new(initial, maximum) }
 }
 
+// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn test_ext_sandbox_memory_get(
     memory_idx: u32,
@@ -948,6 +975,7 @@ pub extern "C" fn test_ext_sandbox_memory_get(
     unsafe { ext_sandbox_memory_get(memory_idx, offset, buf_ptr, buf_len) }
 }
 
+// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn test_ext_sandbox_memory_set(
     memory_idx: u32,
@@ -965,6 +993,7 @@ pub extern "C" fn test_ext_sandbox_memory_set(
     }
 }
 
+// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn test_ext_sandbox_memory_teardown(memory_idx: u32) {
     unsafe {
