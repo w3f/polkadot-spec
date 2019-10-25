@@ -29,7 +29,7 @@ apt install -y julia
 git submodule update --init --recursive
 ```
 
-By running `./run_tests.sh` the automated tests get executed. With `./run_tests.sh verbose` the CLI call with parameters including the outputs can be displayed. Do note that this script should be run from this repos root directory, since there are some directory dependend relative paths used.
+By running `./run_tests.sh` the automated tests get executed. With `./run_tests.sh verbose` the CLI parameters including the outputs can be displayed. Do note that this script should be run from this repos root directory, since there are some directory dependend relative paths used.
 
 ### Implementing tests and components
 Inside the testing directory, the tests are executed in the following way:
@@ -55,11 +55,11 @@ Each of those tests defines how the final executable tests are called and pass d
 
 Those testers call functions that test the PDRE API.
 
-|Directory/File                      | Description                                         |
-|------------------------------------|-----------------------------------------------------|
-|*test/pdre_api_tests.jl*            | Runs the different testers and passes data to it.   |
-|*test/fixtures/pdre_api_dataset.jl* | Contains names of testers, functions and input data |
-|*test/fixtures/pdre_api_result.jl*  | Contains the outputs/results of the tester          |
+|Directory/File                     |Description                                        |
+|-----------------------------------|---------------------------------------------------|
+|*test/pdre_api_tests.jl*           |Runs the different testers and passes data to it   |
+|*test/fixtures/pdre_api_dataset.jl*|Contains names of testers, functions and input data|
+|*test/fixtures/pdre_api_result.jl* |Contains the outputs/results of the tester         |
 
 The tests are executed in the following way:
 
@@ -73,12 +73,13 @@ Each function gets tested with multiple inputs and then goes on to the next func
 
 In the Julia scripts, the functions (module *PdreApiTestFixtures*) are grouped together depending on the format of the inputs (module *PdreApiTestData*). Their outputs are compared with the corresponding list (module *PdreApiExpectedResults*). The sequence of those entries must be paid attention to.
 
+This table shows the relationship between the lists.
 |PdreApiTestFixtures    |PdreApiTestData            |PdreApiExpectedResults|
 |-----------------------|---------------------------|----------------------|
 |fn_crypto_hashes       |value_data                 |res_crypto_hashes     |
 |fn_crypto_keys         |value_data                 |                      |
 |fn_storage_kv          |key_value_data             |res_storage_kv        |
 |fn_storage_prefix      |prefix_key_value_data      |                      |
-|fn_storage_child       |child_data_key_value_data  |res_storage_child     |
+|fn_storage_child       |child_key_value_data       |res_storage_child     |
 |fn_storage_prefix_child|prefix_child_key_value_data|                      |
 |fn_network             |                           |                      |

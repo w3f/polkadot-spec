@@ -131,7 +131,7 @@ using Test
     # ## Test storage functions (child storage)
     counter = 1
     for func in PdreApiTestFixtures.fn_storage_child
-        for (child1, child2, key, value) in PdreApiTestData.child_data_key_value_data
+        for (child1, child2, key, value) in PdreApiTestData.child_key_value_data
             for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
