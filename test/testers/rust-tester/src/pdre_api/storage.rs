@@ -27,6 +27,28 @@ pub fn test_set_get_storage(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
+pub fn test_set_get_storage_into(input: ParsedInput) {
+    use std::convert::TryInto;
+
+    let mut api = StorageApi::new();
+
+    let key = input.get(0);
+    let value = input.get(1);
+    let offset = std::str::from_utf8(input.get(2)).unwrap().parse::<usize>().unwrap();
+
+    // Set key/value
+    api.rtm_ext_set_storage(key, value);
+
+    // Prepare for comparison, set the min required length
+    let empty = vec![0; value.len() - offset];
+
+    // Get key with offset
+    let res = api.rtm_ext_get_storage_into(key, &empty, offset as u32);
+    assert_eq!(*res.as_slice(), value[(offset as usize)..]);
+
+    println!("{}", str(&res));
+}
+
 // Input: key, value
 pub fn test_exists_storage(input: ParsedInput) {
     let mut api = StorageApi::new();
