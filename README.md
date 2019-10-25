@@ -31,7 +31,7 @@ git submodule update --init --recursive
 
 By running `./run_tests.sh` the automated tests get executed. With `./run_tests.sh verbose` the CLI parameters including the outputs can be displayed. Do note that this script should be run from this repos root directory, since there are some directory dependend relative paths used.
 
-### Implementing tests and components
+### Structure
 Inside the testing directory, the tests are executed in the following way:
 
 ```
@@ -41,7 +41,7 @@ runtests.jl
 |-> pdre_api_tests.jl
 ```
 
-Each of those tests defines how the final executable tests are called and pass data to it. The testing data, results and additional info can be found in the *test/fixtures* directory.
+Each of those tests defines how the final executable tests are called and pass data to it. The function names, testing data and results can be found in the *test/fixtures* directory.
 
 #### SCALE Codec
 
