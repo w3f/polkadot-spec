@@ -182,7 +182,7 @@ module PdreApiTestData
 	  ]
 	]
 
-	const child_data_key_value_data = [
+	const child_key_value_data = [
 	  [
 	    ":child_storage:default:moratorium", # child1
 	    ":child_storage:default:hardware", # child2
