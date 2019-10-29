@@ -1,6 +1,5 @@
 use super::utils::StorageApi;
 use super::ParsedInput;
-use parity_scale_codec::{Encode, Decode};
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
@@ -21,15 +20,13 @@ pub fn test_set_get_storage(input: ParsedInput) {
     api.rtm_ext_set_storage(key, value);
 
     // Get valid key
-    let mut res = api.rtm_ext_get_allocated_storage(key);
+    let res = api.rtm_ext_get_allocated_storage(key);
     assert_eq!(res, value);
 
     println!("{}", str(&res));
 }
 
 pub fn test_set_get_storage_into(input: ParsedInput) {
-    use std::convert::TryInto;
-
     let mut api = StorageApi::new();
 
     let key = input.get(0);
@@ -142,7 +139,7 @@ pub fn test_allocate_storage() {
 pub fn test_storage_root() {
     let mut api = StorageApi::new();
 
-    let root = api.rtm_ext_storage_root();
+    let _root = api.rtm_ext_storage_root();
     // TODO...
 }
 

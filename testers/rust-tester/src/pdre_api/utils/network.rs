@@ -5,7 +5,7 @@
 
 use super::{CallWasm, get_wasm_blob, Decoder};
 
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::Encode;
 
 use parking_lot::RwLock;
 use substrate_offchain::testing::{PendingRequest, State, TestOffchainExt};
