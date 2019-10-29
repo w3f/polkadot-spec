@@ -1,7 +1,6 @@
 use std::slice;
 
-use substrate_primitives::{wasm_export_functions, Blake2Hasher};
-use parity_scale_codec::{Encode, Decode};
+use substrate_primitives::wasm_export_functions;
 
 extern "C" {
     fn ext_print_utf8(utf8_data: *const u8, utf8_len: u32);
@@ -814,9 +813,9 @@ wasm_export_functions! {
     fn test_ext_http_request_add_header(
         request_id: u32,
         name: Vec<u8>,
-        name_len: u32,
+        _name_len: u32,
         value: Vec<u8>,
-        value_len: u32,
+        _value_len: u32,
     ) -> u32 {
         unsafe {
             ext_http_request_add_header(
@@ -886,7 +885,7 @@ wasm_export_functions! {
     fn test_ext_http_response_read_body(
         request_id: u32,
         buffer: Vec<u8>,
-        buffer_len: u32,
+        _buffer_len: u32,
         deadline: u64,
     ) -> Vec<u8> {
         let mut buffer = buffer;

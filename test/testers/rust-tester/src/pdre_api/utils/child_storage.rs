@@ -5,7 +5,7 @@
 
 use super::{CallWasm, get_wasm_blob, Decoder};
 
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::Encode;
 
 use substrate_primitives::Blake2Hasher;
 use substrate_state_machine::TestExternalities as CoreTestExternalities;

@@ -5,7 +5,7 @@
 
 use super::{CallWasm, get_wasm_blob, Decoder};
 
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::Encode;
 use substrate_primitives::testing::KeyStore;
 use substrate_primitives::{Blake2Hasher, traits::{KeystoreExt}};
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
@@ -20,7 +20,7 @@ pub struct CryptoApi {
 impl CryptoApi {
     pub fn new() -> Self {
         let mut ext = TestExternalities::default();
-        let mut key_store = KeystoreExt(KeyStore::new());
+        let key_store = KeystoreExt(KeyStore::new());
         ext.register_extension(key_store);
         CryptoApi {
             blob: get_wasm_blob(),

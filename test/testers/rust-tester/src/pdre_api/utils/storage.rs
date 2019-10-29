@@ -5,7 +5,7 @@
 
 use super::{CallWasm, get_wasm_blob, Decoder};
 
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::Encode;
 use substrate_offchain::testing::TestOffchainExt;
 use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
@@ -39,7 +39,6 @@ impl StorageApi {
     }
     pub fn rtm_ext_malloc(&mut self, size: u32) -> Vec<u8> {
         let mut wasm = self.prep_wasm("test_ext_malloc");
-        let mut size_scoped = size;
 
         let res = wasm.call(u32::encode(&size).as_slice());
         res
