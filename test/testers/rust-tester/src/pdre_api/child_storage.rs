@@ -31,6 +31,42 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
     assert_eq!(res, [0; 0]);
 }
 
+pub fn test_ext_get_child_storage_into(input: ParsedInput) {
+    let mut api = ChildStorageApi::new();
+
+    let child1 = input.get(0);
+    let child2 = input.get(1);
+    let key = input.get(2);
+    let value = input.get(3);
+    let offset = std::str::from_utf8(input.get(4)).unwrap().parse::<usize>().unwrap();
+
+    // Prepare for comparison, set the min required length
+    let empty = vec![0; value.len() - offset];
+
+    // Get invalid key
+    let res = api.rtm_ext_get_child_storage_into(child1, key, &empty, offset as u32);
+    assert_eq!(res, [0u8; 0]);
+
+    // Set key/value
+    api.rtm_ext_set_child_storage(child1, key, value);
+
+    // Prepare for comparison, set the min required length
+    let empty = vec![0; value.len() - offset];
+
+    // Get valid key
+    let res = api.rtm_ext_get_child_storage_into(child1, key, &empty, offset as u32);
+    assert_eq!(res, value);
+
+    println!("{}", str(&res));
+
+    // Prepare for comparison, set the min required length
+    let empty = vec![0; value.len() - offset];
+
+    // Get invalid key from invalid child
+    let res = api.rtm_ext_get_child_storage_into(child2, key, &empty, offset as u32);
+    assert_eq!(res, [0; 0]);
+}
+
 // Input: child1, child2, key, value
 pub fn test_exists_child_storage(input: ParsedInput) {
     let mut api = ChildStorageApi::new();

@@ -433,7 +433,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn test_ext_get_storage_into(
         key_data: Vec<u8>,
         value_data: Vec<u8>,
