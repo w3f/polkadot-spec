@@ -33,6 +33,8 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
     let value = input.get(1);
     let offset = std::str::from_utf8(input.get(2)).unwrap().parse::<usize>().unwrap();
 
+    // TODO: Test invalid access
+
     // Set key/value
     api.rtm_ext_set_storage(key, value);
 
