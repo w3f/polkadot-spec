@@ -45,26 +45,20 @@ pub fn test_ext_get_child_storage_into(input: ParsedInput) {
 
     // Get invalid key
     let res = api.rtm_ext_get_child_storage_into(child1, key, &empty, offset as u32);
-    assert_eq!(res, [0u8; 0]);
+    assert_eq!(res, empty);
 
     // Set key/value
     api.rtm_ext_set_child_storage(child1, key, value);
 
-    // Prepare for comparison, set the min required length
-    let empty = vec![0; value.len() - offset];
-
     // Get valid key
     let res = api.rtm_ext_get_child_storage_into(child1, key, &empty, offset as u32);
-    assert_eq!(res, value);
+    assert_eq!(*res.as_slice(), value[(offset as usize)..]);
 
     println!("{}", str(&res));
 
-    // Prepare for comparison, set the min required length
-    let empty = vec![0; value.len() - offset];
-
     // Get invalid key from invalid child
     let res = api.rtm_ext_get_child_storage_into(child2, key, &empty, offset as u32);
-    assert_eq!(res, [0; 0]);
+    assert_eq!(res, empty);
 }
 
 // Input: child1, child2, key, value
