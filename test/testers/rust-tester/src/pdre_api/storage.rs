@@ -140,11 +140,20 @@ pub fn test_allocate_storage() {
     api.rtm_ext_free(&address);
 }
 
-pub fn test_storage_root(_input: ParsedInput) {
+// Input: key1, value1, key2, value2
+pub fn test_storage_root(input: ParsedInput) {
     let mut api = StorageApi::new();
 
-    let _root = api.rtm_ext_storage_root();
-    // TODO...
+    let key1 = input.get(0);
+    let value1 = input.get(1);
+    let key2 = input.get(2);
+    let value2 = input.get(3);
+
+    api.rtm_ext_set_storage(key1, value1);
+    api.rtm_ext_set_storage(key2, value2);
+
+    let root = api.rtm_ext_storage_root();
+    println!("{}", hex::encode(root));
 }
 
 pub fn test_storage_changes_root(_input: ParsedInput) {
