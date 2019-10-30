@@ -23,3 +23,10 @@ pub fn test_submit_transaction(_input: ParsedInput) {
     let _res = api.rtm_ext_submit_transaction(&msg_data);
     // TODO...
 }
+
+pub fn test_timestamp() {
+    let mut api = MiscApi::new();
+
+    let _res = api.rtm_ext_timestamp();
+    // TODO...
+}

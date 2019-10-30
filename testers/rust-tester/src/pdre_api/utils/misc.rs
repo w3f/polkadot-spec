@@ -44,4 +44,10 @@ impl MiscApi {
             .call(&msg_data.encode())
             .decode_u32()
     }
+    pub fn rtm_ext_timestamp(&mut self) -> u64 {
+        self
+            .prep_wasm("test_ext_timestamp")
+            .call(&[])
+            .decode_u64()
+    }
 }
