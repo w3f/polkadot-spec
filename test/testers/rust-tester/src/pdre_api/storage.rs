@@ -167,3 +167,16 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
 
     // TODO...
 }
+
+pub fn test_local_storage_compare_and_set(_input: ParsedInput) {
+    let mut api = StorageApi::new_with_offchain_context();
+
+    let kind = 0;
+    let key = [];
+    let old_value = [];
+    let new_value = [];
+
+    let _res = api.rtm_ext_local_storage_compare_and_set(kind, &key, &old_value, &new_value);
+
+    // TODO...
+}
