@@ -30,3 +30,12 @@ pub fn test_timestamp() {
     let _res = api.rtm_ext_timestamp();
     // TODO...
 }
+
+pub fn test_sleep_until(_input: ParsedInput) {
+    let mut api = MiscApi::new();
+
+    let deadline = 0;
+
+    let _res = api.rtm_ext_sleep_until(deadline);
+    // TODO...
+}

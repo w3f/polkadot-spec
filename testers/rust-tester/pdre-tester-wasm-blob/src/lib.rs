@@ -698,7 +698,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn test_ext_timestamp() -> u64 {
         unsafe { ext_timestamp() }
     }

@@ -50,4 +50,9 @@ impl MiscApi {
             .call(&[])
             .decode_u64()
     }
+    pub fn rtm_ext_sleep_until(&mut self, deadline: u64) {
+        self
+            .prep_wasm("test_ext_sleep_until")
+            .call(&deadline.encode());
+    }
 }

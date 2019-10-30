@@ -82,6 +82,8 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_submit_transaction" => misc::test_submit_transaction(input),
             // TODO: Call from Julia
             "test_timestamp" => misc::test_timestamp(),
+            // TODO: Call from Julia
+            "test_sleep_until" => misc::test_sleep_until(input),
             //
             _ => panic!("specified functio not available"),
         }
