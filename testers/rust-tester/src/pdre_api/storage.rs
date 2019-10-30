@@ -33,13 +33,15 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
     let value = input.get(1);
     let offset = std::str::from_utf8(input.get(2)).unwrap().parse::<usize>().unwrap();
 
-    // TODO: Test invalid access
+    // Prepare for comparison, set the min required length
+    let empty = vec![0; value.len() - offset];
+
+    // Invalid access
+    let res = api.rtm_ext_get_storage_into(key, &empty, offset as u32);
+    assert_eq!(res, empty);
 
     // Set key/value
     api.rtm_ext_set_storage(key, value);
-
-    // Prepare for comparison, set the min required length
-    let empty = vec![0; value.len() - offset];
 
     // Get key with offset
     let res = api.rtm_ext_get_storage_into(key, &empty, offset as u32);
