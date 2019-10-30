@@ -84,4 +84,10 @@ impl ChildStorageApi {
             .prep_wasm("test_ext_kill_child_storage")
             .call(&storage_key_data.encode());
     }
+    pub fn rtm_ext_child_storage_root(&mut self, storage_key_data: &[u8]) -> Vec<u8> {
+        self
+            .prep_wasm("test_ext_child_storage_root")
+            .call(&storage_key_data.encode())
+            .decode_vec()
+    }
 }

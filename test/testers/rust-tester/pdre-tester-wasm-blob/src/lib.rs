@@ -451,7 +451,6 @@ wasm_export_functions! {
         value_data
     }
 
-    // TODO: Implement this
     fn test_ext_get_child_storage_into(
         storage_key_data: Vec<u8>,
         key_data: Vec<u8>,
@@ -473,7 +472,6 @@ wasm_export_functions! {
         value_data
     }
 
-    // TODO: Implement this
     fn test_ext_storage_root() -> Vec<u8> {
         let mut result = vec![0; 32];
         unsafe {
@@ -482,7 +480,6 @@ wasm_export_functions! {
         result
     }
 
-    // TODO: Implement this
     fn test_ext_child_storage_root(
         storage_key_data: Vec<u8>,
     ) -> Vec<u8> {

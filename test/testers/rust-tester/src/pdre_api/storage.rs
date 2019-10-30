@@ -138,7 +138,7 @@ pub fn test_allocate_storage() {
     api.rtm_ext_free(&address);
 }
 
-pub fn test_storage_root() {
+pub fn test_storage_root(_input: ParsedInput) {
     let mut api = StorageApi::new();
 
     let _root = api.rtm_ext_storage_root();
