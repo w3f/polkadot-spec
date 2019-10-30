@@ -33,4 +33,10 @@ impl MiscApi {
             .call(&[])
             .decode_u64()
     }
+    pub fn rtm_ext_is_validator(&mut self) -> u32 {
+        self
+            .prep_wasm("test_ext_is_validator")
+            .call(&[])
+            .decode_u32()
+    }
 }

@@ -524,7 +524,6 @@ wasm_export_functions! {
         result
     }
 
-    // TODO: Implement this
     fn test_ext_chain_id() -> u64 {
         unsafe { ext_chain_id() }
     }
