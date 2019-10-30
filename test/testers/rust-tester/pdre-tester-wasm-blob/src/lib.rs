@@ -663,7 +663,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn test_ext_secp256k1_ecdsa_recover(
         msg_data: Vec<u8>,
         sig_data: Vec<u8>,
