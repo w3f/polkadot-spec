@@ -677,7 +677,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn test_ext_is_validator() -> u32 {
         unsafe { ext_is_validator() }
     }

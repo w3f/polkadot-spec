@@ -6,8 +6,7 @@
 use super::{CallWasm, get_wasm_blob, Decoder};
 
 use parity_scale_codec::Encode;
-use substrate_primitives::testing::KeyStore;
-use substrate_primitives::{Blake2Hasher, traits::{KeystoreExt}};
+use substrate_primitives::Blake2Hasher;
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
@@ -37,6 +36,12 @@ impl MiscApi {
         self
             .prep_wasm("test_ext_is_validator")
             .call(&[])
+            .decode_u32()
+    }
+    pub fn rtm_ext_submit_transaction(&mut self, msg_data: &[u8]) -> u32 {
+        self
+            .prep_wasm("test_ext_submit_transaction")
+            .call(&msg_data.encode())
             .decode_u32()
     }
 }

@@ -76,7 +76,10 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             // miscellaneous functions
             // TODO: Call from Julia
             "test_chain_id" => misc::test_chain_id(),
+            // TODO: Call from Julia
             "test_is_validator" => misc::test_is_validator(),
+            // TODO: Call from Julia
+            "test_submit_transaction" => misc::test_submit_transaction(input),
             //
             _ => panic!("specified functio not available"),
         }
