@@ -55,4 +55,10 @@ impl MiscApi {
             .prep_wasm("test_ext_sleep_until")
             .call(&deadline.encode());
     }
+    pub fn rtm_ext_random_seed(&mut self, seed_data: &[u8]) -> Vec<u8> {
+        self
+            .prep_wasm("test_ext_random_seed")
+            .call(&seed_data.encode())
+            .decode_vec()
+    }
 }

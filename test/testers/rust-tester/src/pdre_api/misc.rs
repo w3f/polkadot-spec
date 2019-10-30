@@ -39,3 +39,12 @@ pub fn test_sleep_until(_input: ParsedInput) {
     let _res = api.rtm_ext_sleep_until(deadline);
     // TODO...
 }
+
+pub fn test_random_seed() {
+    let mut api = MiscApi::new();
+
+    let seed_data = [];
+
+    let _res = api.rtm_ext_random_seed(&seed_data);
+    // TODO...
+}

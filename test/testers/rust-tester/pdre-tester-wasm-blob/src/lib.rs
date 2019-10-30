@@ -702,7 +702,6 @@ wasm_export_functions! {
         unsafe { ext_timestamp() }
     }
 
-    // TODO: Implement this
     fn test_ext_sleep_until(deadline: u64) {
         unsafe {
             ext_sleep_until(deadline);
