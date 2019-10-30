@@ -497,9 +497,8 @@ wasm_export_functions! {
     // TODO: Implement this
     fn test_ext_storage_changes_root(
         parent_hash_data: Vec<u8>,
-        result: Vec<u8>,
     ) -> Vec<u8> {
-        let mut result = result;
+        let mut result = vec![0; 32];
         unsafe {
             ext_storage_changes_root(
                 parent_hash_data.as_ptr(),

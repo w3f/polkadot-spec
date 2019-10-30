@@ -92,4 +92,10 @@ impl StorageApi {
             .call(&(key_data, value_data, value_offset).encode())
             .decode_vec()
     }
+    pub fn rtm_ext_storage_changes_root(&mut self, parent_hash_data: &[u8]) -> Vec<u8> {
+        self
+            .prep_wasm("test_ext_storage_changes_root")
+            .call(&parent_hash_data.encode())
+            .decode_vec()
+    }
 }
