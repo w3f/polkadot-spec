@@ -58,6 +58,8 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_storage_root" => storage::test_storage_root(input),
             // TODO: Call from Julia
             "test_storage_changes_root" => storage::test_storage_changes_root(input),
+            // TODO: Call from Julia
+            "test_local_storage_compare_and_set" => storage::test_local_storage_compare_and_set(input),
             //
             // test child storage functions
             "test_clear_child_prefix" => child_storage::test_clear_child_prefix(input),

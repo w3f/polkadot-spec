@@ -732,7 +732,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn test_ext_local_storage_get(
         kind: u32,
         key: Vec<u8>,
