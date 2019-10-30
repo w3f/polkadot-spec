@@ -681,7 +681,6 @@ wasm_export_functions! {
         unsafe { ext_is_validator() }
     }
 
-    // TODO: Implement this
     fn test_ext_submit_transaction(msg_data: Vec<u8>) -> u32 {
         unsafe {
             ext_submit_transaction(
