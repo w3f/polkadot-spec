@@ -40,6 +40,8 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_twox_64" => crypto::test_twox_64(input),
             "test_twox_128" => crypto::test_twox_128(input),
             "test_twox_256" => crypto::test_twox_256(input),
+            // TODO: Call from Julia
+            "test_ext_secp256k1_ecdsa_recover" => crypto::secp256k1_ecdsa_recover(input),
             //
             // test storage functions
             "test_allocate_storage" => storage::test_allocate_storage(),

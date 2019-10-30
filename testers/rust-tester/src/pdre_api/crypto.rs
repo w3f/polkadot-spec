@@ -143,3 +143,14 @@ pub fn test_sr25519(input: ParsedInput) {
     println!("Public key 2: {}", hex::encode(pubkey2));
     println!("All public keys : {}", hex::encode(&all_pubkeys[1..]));
 }
+
+pub fn secp256k1_ecdsa_recover(_input: ParsedInput) {
+    let mut api = CryptoApi::new();
+
+    let msg_data = [];
+    let sig_data = [];
+    let pubkey_data = [];
+
+    let _res = api.rtm_ext_secp256k1_ecdsa_recover(&msg_data, &sig_data, &pubkey_data);
+    // TODO...
+}
