@@ -123,4 +123,14 @@ impl CryptoApi {
             .call(&id_data.encode())
             .decode_vec()
     }
+    pub fn rtm_ext_blake2_256_enumerated_trie_root(
+        &mut self,
+        values_data: &[u8],
+        lens_data: &[u32],
+    ) -> Vec<u8> {
+        self
+            .prep_wasm("test_ext_blake2_256_enumerated_trie_root")
+            .call(&(values_data, lens_data).encode())
+            .decode_vec()
+    }
 }
