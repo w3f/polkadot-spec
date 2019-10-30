@@ -31,7 +31,7 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
     assert_eq!(res, [0; 0]);
 }
 
-pub fn test_ext_get_child_storage_into(input: ParsedInput) {
+pub fn test_get_child_storage_into(input: ParsedInput) {
     let mut api = ChildStorageApi::new();
 
     let child1 = input.get(0);
@@ -190,4 +190,13 @@ pub fn test_kill_child_storage(input: ParsedInput) {
     // Get valid key from other child
     let res = api.rtm_ext_get_allocated_child_storage(child2, key);
     assert_eq!(res, value);
+}
+
+pub fn test_child_storage_root(input: ParsedInput) {
+    let mut api = ChildStorageApi::new();
+
+    let child1 = input.get(0);
+
+    let _root = api.rtm_ext_child_storage_root(child1);
+    // TODO...
 }
