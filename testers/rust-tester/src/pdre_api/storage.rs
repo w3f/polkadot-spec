@@ -212,15 +212,46 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
     assert_eq!(res, [0u8;0]);
 }
 
-pub fn test_local_storage_compare_and_set(_input: ParsedInput) {
+pub fn test_local_storage_compare_and_set(input: ParsedInput) {
     let mut api = StorageApi::new_with_offchain_context();
 
-    let kind = 0;
-    let key = [];
-    let old_value = [];
-    let new_value = [];
+    let key = input.get(0);
+    let old_value = input.get(1);
+    let new_value = input.get(2);
 
-    let _res = api.rtm_ext_local_storage_compare_and_set(kind, &key, &old_value, &new_value);
+    // Test invalid key
+    let res = api.rtm_ext_local_storage_compare_and_set(1, key, old_value, new_value);
+    assert_eq!(res, 1);
 
-    // TODO...
+    api.rtm_ext_local_storage_set(1, key, old_value);
+
+    // Test invalid value
+    let res = api.rtm_ext_local_storage_compare_and_set(1, key, new_value, new_value);
+    assert_eq!(res, 1);
+
+    // Test valid value
+    let res = api.rtm_ext_local_storage_compare_and_set(1, key, old_value, new_value);
+    assert_eq!(res, 0);
+
+    let res = api.rtm_ext_local_storage_get(1, key);
+    assert_eq!(res, new_value);
+
+    println!("{}", str(new_value));
+
+    // Invalid cross access
+    // -> make sure keys set in persistant storage cannot be access by local storage (and vice-versa)
+    let key1 = "somekey1".as_bytes();
+    let value1 = "somevalue1".as_bytes();
+
+    let key2 = "somekey2".as_bytes();
+    let value2 = "somevalue2".as_bytes();
+
+    api.rtm_ext_local_storage_set(1, key1, value1);
+    api.rtm_ext_local_storage_set(2, key2, value2);
+
+    let res = api.rtm_ext_local_storage_compare_and_set(1, key2, value1, new_value);
+    assert_eq!(res, 1);
+
+    let res = api.rtm_ext_local_storage_compare_and_set(2, key1, value2, new_value);
+    assert_eq!(res, 1);
 }

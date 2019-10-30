@@ -753,7 +753,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn test_ext_local_storage_compare_and_set(
         kind: u32,
         key: Vec<u8>,
