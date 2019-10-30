@@ -145,6 +145,15 @@ pub fn test_storage_root(_input: ParsedInput) {
     // TODO...
 }
 
+pub fn test_storage_changes_root(_input: ParsedInput) {
+    let mut api = StorageApi::new();
+
+    let parent_hash = [];
+
+    let _root = api.rtm_ext_storage_changes_root(&parent_hash);
+    // TODO...
+}
+
 // Input: key, value
 pub fn test_set_get_local_storage(input: ParsedInput) {
     let mut api = StorageApi::new_with_offchain_context();
