@@ -494,7 +494,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn test_ext_storage_changes_root(
         parent_hash_data: Vec<u8>,
     ) -> Vec<u8> {
@@ -509,19 +508,16 @@ wasm_export_functions! {
         result
     }
 
-    // TODO: Implement this
     fn test_ext_blake2_256_enumerated_trie_root(
         values_data: Vec<u8>,
-        lens_data: u32,
-        lens_len: u32,
-        result: Vec<u8>,
+        lens_data: Vec<u32>,
     ) -> Vec<u8> {
-        let mut result = result;
+        let mut result = vec![0; 32];
         unsafe {
             ext_blake2_256_enumerated_trie_root(
                 values_data.as_ptr(),
-                &lens_data,
-                lens_len,
+                lens_data.as_ptr(),
+                lens_data.len() as u32,
                 result.as_mut_ptr(),
             );
         }

@@ -32,6 +32,8 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             // test crypto functions
             "test_blake2_128" => crypto::test_blake2_128(input),
             "test_blake2_256" => crypto::test_blake2_256(input),
+            // TODO: Call from Julia
+            "test_blake2_256_enumerated_trie_root" => crypto::test_blake2_256_enumerated_trie_root(input),
             "test_ed25519" => crypto::test_ed25519(input),
             "test_keccak_256" => crypto::test_keccak_256(input),
             "test_sr25519" => crypto::test_sr25519(input),
@@ -50,6 +52,8 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_set_get_storage_into" => storage::test_set_get_storage_into(input),
             // TODO: Call from Julia
             "test_storage_root" => storage::test_storage_root(input),
+            // TODO: Call from Julia
+            "test_storage_changes_root" => storage::test_storage_changes_root(input),
             //
             // test child storage functions
             "test_clear_child_prefix" => child_storage::test_clear_child_prefix(input),
