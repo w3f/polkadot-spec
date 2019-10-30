@@ -2,6 +2,7 @@ mod child_storage;
 mod crypto;
 mod network;
 mod storage;
+mod misc;
 mod utils;
 
 use clap::{ArgMatches, Values};
@@ -71,6 +72,10 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             // test network functions
             "test_http" => network::test_http(),
             "test_network_state" => network::test_network_state(),
+            //
+            // miscellaneous functions
+            // TODO: Call from Julia
+            "test_chain_id" => misc::test_chain_id(),
             //
             _ => panic!("specified functio not available"),
         }
