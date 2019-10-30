@@ -2,12 +2,13 @@ mod child_storage;
 mod crypto;
 mod network;
 mod storage;
-
+mod misc;
 
 pub use child_storage::ChildStorageApi;
 pub use crypto::CryptoApi;
 pub use network::NetworkApi;
 pub use storage::StorageApi;
+pub use misc::MiscApi;
 
 use parity_scale_codec::Decode;
 use substrate_executor::{call_in_wasm, WasmExecutionMethod};
@@ -37,6 +38,7 @@ fn get_wasm_blob() -> Vec<u8> {
 trait Decoder {
     fn decode_vec(&self) -> Vec<u8>;
     fn decode_u32(&self) -> u32;
+    fn decode_u64(&self) -> u64;
 }
 
 impl Decoder for Vec<u8> {
@@ -46,6 +48,10 @@ impl Decoder for Vec<u8> {
     }
     fn decode_u32(&self) -> u32 {
         u32::decode(&mut self.as_slice())
+            .expect("Failed to decode SCALE encoding")
+    }
+    fn decode_u64(&self) -> u64 {
+        u64::decode(&mut self.as_slice())
             .expect("Failed to decode SCALE encoding")
     }
 }
