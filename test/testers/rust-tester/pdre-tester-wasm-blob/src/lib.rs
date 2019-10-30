@@ -708,7 +708,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn test_ext_random_seed(seed_data: Vec<u8>) -> Vec<u8> {
         let mut seed_data = seed_data;
         unsafe {
@@ -717,7 +716,6 @@ wasm_export_functions! {
         seed_data
     }
 
-    // TODO: Implement this
     fn test_ext_local_storage_set(
         kind: u32,
         key: Vec<u8>,

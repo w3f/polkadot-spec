@@ -163,5 +163,7 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
 
     api.rtm_ext_local_storage_set(2, key1, value1);
 
+    let _res = api.rtm_ext_local_storage_get(2, key1);
+
     // TODO...
 }
