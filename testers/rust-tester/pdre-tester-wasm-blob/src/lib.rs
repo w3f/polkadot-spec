@@ -665,16 +665,16 @@ wasm_export_functions! {
     fn test_ext_secp256k1_ecdsa_recover(
         msg_data: Vec<u8>,
         sig_data: Vec<u8>,
-        pubkey_data: Vec<u8>,
-    ) -> u32 {
-        let mut pubkey_data = pubkey_data;
+    ) -> Vec<u8> {
+        let mut pubkey_data = vec![0;32];
         unsafe {
             ext_secp256k1_ecdsa_recover(
                 msg_data.as_ptr(),
                 sig_data.as_ptr(),
                 pubkey_data.as_mut_ptr(),
-            )
+            );
         }
+        pubkey_data
     }
 
     fn test_ext_is_validator() -> u32 {

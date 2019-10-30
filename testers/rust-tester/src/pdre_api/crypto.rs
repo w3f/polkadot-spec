@@ -144,13 +144,15 @@ pub fn test_sr25519(input: ParsedInput) {
     println!("All public keys : {}", hex::encode(&all_pubkeys[1..]));
 }
 
-pub fn secp256k1_ecdsa_recover(_input: ParsedInput) {
+// Input: message, signature, pubkey
+pub fn secp256k1_ecdsa_recover(input: ParsedInput) {
     let mut api = CryptoApi::new();
 
-    let msg_data = [];
-    let sig_data = [];
-    let pubkey_data = [];
+    let msg_data = input.get(0);
+    let sig_data = hex::decode(input.get(1)).expect("Failed hex decoding of input");
+    let expected = hex::decode(input.get(2)).expect("Failed hex decoding of input");
 
-    let _res = api.rtm_ext_secp256k1_ecdsa_recover(&msg_data, &sig_data, &pubkey_data);
-    // TODO...
+    let recovered = api.rtm_ext_secp256k1_ecdsa_recover(msg_data, &sig_data);
+
+    assert_eq!(expected, recovered.as_slice());
 }

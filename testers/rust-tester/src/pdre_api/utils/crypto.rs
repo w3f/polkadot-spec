@@ -137,11 +137,10 @@ impl CryptoApi {
         &mut self,
         msg_data: &[u8],
         sig_data: &[u8],
-        pubkey_data: &[u8],
-    ) -> u32 {
+    ) -> Vec<u8> {
         self
             .prep_wasm("test_ext_secp256k1_ecdsa_recover")
-            .call(&(msg_data, sig_data, pubkey_data).encode())
-            .decode_u32()
+            .call(&(msg_data, sig_data).encode())
+            .decode_vec()
     }
 }
