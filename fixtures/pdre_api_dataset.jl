@@ -67,6 +67,11 @@ module PdreApiTestFixtures
 		"test_get_child_storage_into"
 	]
 
+	# Input: child1, child2, key1, value1, key2, value2
+	const fn_storage_child_2x_kv = [
+		"test_child_storage_root"
+	]
+
 	const fn_network = [
 	  "test_http",
 	  "test_network_state"
