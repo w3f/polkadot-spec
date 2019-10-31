@@ -1,5 +1,6 @@
 module PdreApiExpectedResults
     const res_crypto_hashes = [
+        # test_blake2_128
         "440973e4e50902f1d0ec97de357eb2fd",
         "d81f39ad0ab560c74fd47b88184fd40c",
         "3b66066d9406db94cbba8cbee70afe1a",
@@ -10,6 +11,7 @@ module PdreApiExpectedResults
         "d049f31a8413756b27946f69a984ab84",
         "0c36ec0e9e6d918b01e32a2bc766584e",
         "25a39078b7b908383777c4bb66d1e064",
+        # test_blake2_256
         "2c5774435a18ac7aa03d294838bafb5fc05181252adc4f56d4d2771f7346788c",
         "f3198593ed759fce088bcefad9ad2297d5b66018f75b65eb54f90260d02c69fb",
         "7e28b339dbd254208b43b8cb1c467ceae2a6dfaeba9bd5e6b73ed8663dfb728c",
@@ -20,6 +22,7 @@ module PdreApiExpectedResults
         "f4b587818104b1ea46c15cb6297119904cc36044af8efbb93db8b4a2cc53b715",
         "0c609d88e7db2076893414c5a7ab75ee680db8e97446b5aa51595fb5713aa01f",
         "6883a1f4ecd7b4f11cbd2ec35b249dfc9dd2feea8a73dab4cb37e48dee300a4b",
+        # test_keccak_256
         "d517392f8119f79c1623774b9346e00104a1d193f1fa641e6e659bf323c37967",
         "7255f80dc5ed95295406be7f5521293b43ba2df0a39d609e6a31e357ed7e8018",
         "7d8bfd013cf9729b35f19658cf60f70ae04a5d498f504b07321589c66c4067bc",
@@ -30,6 +33,7 @@ module PdreApiExpectedResults
         "d8611d5cd76e714d6b5b3a171ae407e786b637610d6df653011d56f50db15726",
         "390f0a254b7642744486c0ba8bc8300e74fa9492bacf16f8814254d66ccea48d",
         "ee34bd85a19481381ede633f03a8365593a3819928e4b8adee0c66bb38c10d4a",
+        # test_twox_64
         "50946b0f6af893d8",
         "af8418aaca2fede1",
         "eb1432a77c4299f6",
@@ -40,6 +44,7 @@ module PdreApiExpectedResults
         "a85fa102cba3e8e9",
         "febde401d103f0f7",
         "17542d4a435eddd7",
+        # test_twox_128
         "50946b0f6af893d85f16c85eb1eb1724",
         "af8418aaca2fede1c98960f89afd3e08",
         "eb1432a77c4299f66be0951d98e366d1",
@@ -50,6 +55,7 @@ module PdreApiExpectedResults
         "a85fa102cba3e8e9765b35b73718bb4a",
         "febde401d103f0f7053d574d2eff8879",
         "17542d4a435eddd774861314c6dc2897",
+        # test_twox_256
         "50946b0f6af893d85f16c85eb1eb1724e268f07177959a25bc26ccc720e3b05a",
         "af8418aaca2fede1c98960f89afd3e08ff3db5243130547a0834d6cf7d7d793b",
         "eb1432a77c4299f66be0951d98e366d14d0a5f991388ac1c640c0636642d9a00",
@@ -63,6 +69,7 @@ module PdreApiExpectedResults
     ]
 
     const res_storage_kv = [
+        # test_set_get_storage
         "Inverse",
         "Future-proofed",
         "Horizontal",
@@ -73,6 +80,7 @@ module PdreApiExpectedResults
         "emulation",
         "secondary",
         "Visionary",
+        # test_exists_storage
         "true",
         "true",
         "true",
@@ -83,6 +91,7 @@ module PdreApiExpectedResults
         "true",
         "true",
         "true",
+        # test_clear_storage
         "",
         "",
         "",
@@ -96,6 +105,7 @@ module PdreApiExpectedResults
     ]
 
     const res_storage_child = [
+        # test_set_get_child_storage
         "access",
         "Function-based",
         "system engine",
@@ -106,6 +116,7 @@ module PdreApiExpectedResults
         "Vision-oriented",
         "radical",
         "heuristic",
+        # test_exists_child_storage
         "true",
         "true",
         "true",
@@ -116,6 +127,7 @@ module PdreApiExpectedResults
         "true",
         "true",
         "true",
+        # test_clear_child_storage
         "",
         "",
         "",
@@ -126,6 +138,7 @@ module PdreApiExpectedResults
         "",
         "",
         "",
+        # test_kill_child_storage
         "",
         "",
         "",
