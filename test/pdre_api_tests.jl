@@ -100,9 +100,8 @@ using Test
             counter = counter + 1
         end
     end
-    =#
 
-    # ## Test storage functions (key/value inputs and outputs)
+    # ## Test storage functions (key/value inputs and outputs with offset)
     counter = 1
     for func in PdreApiTestFixtures.fn_storage_kv_offset
         for (key, value, offset) in PdreApiTestData.key_value_data
@@ -126,6 +125,37 @@ using Test
 
                 if output != "" && print_verbose
                     println("> Result: ", output)
+                end
+            end
+            counter = counter + 1
+        end
+    end
+    =#
+
+    # ## Test storage functions (two keys with two values)
+    counter = 1
+    for func in PdreApiTestFixtures.fn_storage_2x_kv
+        for (_, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data
+            for cli in PdreApiTestFixtures.cli_testers
+                # create first part of the command
+                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+                cmd = join(cmdparams, " ")
+
+                input = join([key1, value1, key2, value2], ",")
+
+                # append input
+                cmd = string(cmd, " \"", input,"\"")
+
+                if print_verbose
+                    println("Running: ", cmd)
+                end
+
+                # Run command
+                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                @test output == PdreApiExpectedResults.res_storage_2x_kv[counter]
+
+                if output != "" && print_verbose
+                    println("> Result:\n", output)
                 end
             end
             counter = counter + 1

@@ -129,6 +129,20 @@ module PdreApiExpectedResults
         ""
     ]
 
+    const res_storage_2x_kv = [
+        # test_storage_root
+        "88642528f17282b87fabd1f04e75228e2a167b847e6656c9b95beda1ffd24d87",
+        "aba4e533d278005c1814c64ccb1f524d5eb425bdaf74870895ce4d0148ede0e9",
+        "38e58296e627090ba24d4fb4a2aa321550709f9474cda22a86650f5383916101",
+        "2ea5608acee55be4551b39f44e70135289600930bebd7c5e33d2363bf832695b",
+        "ef892cfb7c591bcd1d93ff7d7453e10353d82b30ec71c3f87b73bd8936d419c3",
+        "dfeb34bd1bf7caced1c12bb8c04a9d614982a587db2ad084b30319f82d7b6868",
+        "cc1431d76ada06cc9beb5a41dead5b2ded9035d14a5a69b3e7a00284e52ce5ce",
+        "f5ab2ad6934f2e3b2408aced5bfd774d75f84f3b981b6654298592d12c4775a0",
+        "6693bcbbccc2dccc664ab5b12bdc933d52f0b20f247c64a43c5ef8f6b40f0150",
+        "c8d46590a11e29e65b2ea147421c8aaf49997101469dd78190fcbe59712639c2"
+    ]
+
     const res_storage_child = [
         # test_set_get_child_storage
         "access",
