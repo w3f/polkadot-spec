@@ -156,13 +156,12 @@ pub fn test_storage_root(input: ParsedInput) {
     println!("{}", hex::encode(root));
 }
 
-pub fn test_storage_changes_root(_input: ParsedInput) {
+pub fn test_storage_changes_root(input: ParsedInput) {
+    let parent_hash_data = input.get(0);
+
     let mut api = StorageApi::new();
-
-    let parent_hash = [];
-
-    let _root = api.rtm_ext_storage_changes_root(&parent_hash);
-    // TODO...
+    let root = api.rtm_ext_storage_changes_root(&parent_hash_data);
+    println!("{}", hex::encode(root));
 }
 
 // Input: key, value
