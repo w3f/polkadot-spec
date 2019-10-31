@@ -53,8 +53,37 @@ Each of those tests defines how the final executable tests are called and pass d
 
 #### PDRE API
 
-Those testers call functions that test the PDRE API. Currently, NOT all PDRE APIs are fully implemented. Some "expected results" will be adjusted.
+Those testers call functions that call the PDRE API. Currently, NOT all PDRE APIs are fully implemented. Some "expected results" will be adjusted.
 
+```
++--------------------+
+| pdre_api_tests.jl  |
+|                    |
++----------+---------+
+           |                  +----------------+
+           |                  |Polkadot        |    *call test function*
+           +----------------->+Runtime         +---------------------------+
+           | rust_tester      |                |                           |
+           |                  |                |                           v
+           |                  |  +-------------+                 +---------+---------+
+           |                  |  |Polkadot     |    *call API*   |Wasm Runtime blob  |
+           |                  |  |Runtme       +<----------------+                   |
+           |                  |  |Environment  |                 |                   |
+           |                  |  |             |                 |                   |
+           |                  +--+-------------+                 +-------------------+
+           |
+           |
+           +-----------------> ...
+           | go_tester
+           |
+           |
+           +-----------------> ...
+             cpp_tester
+```
+
+Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the PDRE API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
+
+Relevant files:
 |Directory/File                     |Description                                        |
 |-----------------------------------|---------------------------------------------------|
 |*test/pdre_api_tests.jl*           |Runs the different testers and passes data to it   |
