@@ -6,6 +6,7 @@ use substrate_primitives::hashing::{twox_128, twox_256, twox_64};
 // Input: data
 pub fn test_blake2_128(input: ParsedInput) {
     let mut api = CryptoApi::new();
+
     let data = input.get(0);
 
     let output = api.rtm_ext_blake2_128(data);
@@ -15,6 +16,7 @@ pub fn test_blake2_128(input: ParsedInput) {
 // Input: data
 pub fn test_blake2_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
+
     let data = input.get(0);
  
     let output = api.rtm_ext_blake2_256(data);
@@ -35,6 +37,7 @@ pub fn test_blake2_256_enumerated_trie_root(_input: ParsedInput) {
 // Input: data
 pub fn test_twox_64(input: ParsedInput) {
     let mut api = CryptoApi::new();
+
     let data = input.get(0);
 
     let output = api.rtm_ext_twox_64(data);
@@ -46,6 +49,7 @@ pub fn test_twox_64(input: ParsedInput) {
 // Input: data
 pub fn test_twox_128(input: ParsedInput) {
     let mut api = CryptoApi::new();
+
     let data = input.get(0);
 
     let output = api.rtm_ext_twox_128(data);
@@ -57,6 +61,7 @@ pub fn test_twox_128(input: ParsedInput) {
 // Input: data
 pub fn test_twox_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
+
     let data = input.get(0);
 
     let output =  api.rtm_ext_twox_256(data);
@@ -68,16 +73,17 @@ pub fn test_twox_256(input: ParsedInput) {
 // Input: data
 pub fn test_keccak_256(input: ParsedInput) {
     let mut api = CryptoApi::new();
+
     let data = input.get(0);
 
     let output = api.rtm_ext_keccak_256(data);
-
     println!("{}", hex::encode(output));
 }
 
 // Input: data
 pub fn test_ed25519(input: ParsedInput) {
     let mut api = CryptoApi::new();
+
     let data = input.get(0);
 
     // Generate key pair
@@ -113,6 +119,7 @@ pub fn test_ed25519(input: ParsedInput) {
 // Input: data
 pub fn test_sr25519(input: ParsedInput) {
     let mut api = CryptoApi::new();
+
     let data = input.get(0);
 
     // Generate key pair
