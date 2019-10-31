@@ -203,4 +203,18 @@ module PdreApiExpectedResults
         "",
         "",
     ]
+
+    const res_child_storage_offset = [
+        # test_get_child_storage_into
+        "ess",
+        "Function-based",
+        "engine",
+        "",
+        "Ameliorated",
+        "",
+        "ontingency",
+        "-oriented",
+        "radical",
+        ""
+    ]
 end
