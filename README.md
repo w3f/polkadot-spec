@@ -53,7 +53,7 @@ Each of those tests defines how the final executable tests are called and pass d
 
 #### PDRE API
 
-Those testers call functions that test the PDRE API. Currently, NOT all PDRE APIs are fully implemented. Some "expected results" have not been defined yet.
+Those testers call functions that test the PDRE API. Currently, NOT all PDRE APIs are fully implemented. Some "expected results" will be adjusted.
 
 |Directory/File                     |Description                                        |
 |-----------------------------------|---------------------------------------------------|
