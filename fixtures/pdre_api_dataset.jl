@@ -34,6 +34,11 @@ module PdreApiTestFixtures
 		"test_set_get_storage_into"
 	]
 
+	# Input: key1, value1, key2, value2
+	const fn_storage_2x_kv = [
+		"test_storage_root"
+	]
+
 	# Input: prefix, key1, value1, key2, value2
 	const fn_storage_prefix = [
 	  "test_clear_prefix"
