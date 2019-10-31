@@ -143,6 +143,20 @@ module PdreApiExpectedResults
         "c8d46590a11e29e65b2ea147421c8aaf49997101469dd78190fcbe59712639c2"
     ]
 
+    const res_storage_compare_set = [
+        # test_local_storage_compare_and_set
+        "Future-proofed",
+        "Expanded",
+        "pricing structure",
+        "emulation",
+        "Visionary",
+        "approach",
+        "function",
+        "Configurable",
+        "Automated",
+        "toolset"
+    ]
+
     const res_storage_child = [
         # test_set_get_child_storage
         "access",
