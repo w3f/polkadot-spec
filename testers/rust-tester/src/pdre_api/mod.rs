@@ -64,7 +64,6 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_kill_child_storage" => child_storage::test_kill_child_storage(input),
             "test_set_get_child_storage" => child_storage::test_set_get_child_storage(input),
             "test_get_child_storage_into" => child_storage::test_get_child_storage_into(input),
-            // TODO: Call from Julia
             "test_child_storage_root" => child_storage::test_child_storage_root(input),
             //
             // test network functions
