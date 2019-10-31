@@ -72,7 +72,7 @@ using Test
 
     # ## Test key/value storage functions
     counter = 1
-    for func in PdreApiTestFixtures.fn_storage_kv
+    for func in PdreApiTestFixtures.fn_general_kv
         for (key, value, _) in PdreApiTestData.key_value_data
             for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command

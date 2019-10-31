@@ -22,7 +22,7 @@ module PdreApiTestFixtures
 	]
 
 	# Input: key, value
-	const fn_storage_kv = [
+	const fn_general_kv = [
 	  "test_set_get_storage",
 	  "test_exists_storage",
 	  "test_clear_storage",
