@@ -115,6 +115,20 @@ module PdreApiExpectedResults
         "Visionary,Visionary"
     ]
 
+    const res_storage_kv_offset = [
+        # test_set_get_storage_into
+        "erse",
+        "e-proofed",
+        "Horizontal",
+        "",
+        "ortal",
+        "structure",
+        "red",
+        "",
+        "condary",
+        ""
+    ]
+
     const res_storage_child = [
         # test_set_get_child_storage
         "access",
