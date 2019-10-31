@@ -26,7 +26,8 @@ module PdreApiTestFixtures
 	  "test_set_get_storage",
 	  "test_exists_storage",
 	  "test_clear_storage",
-	  "test_set_get_local_storage"
+	  "test_set_get_local_storage",
+	  "test_blake2_256_enumerated_trie_root"
 	]
 
 	# Input: key, value, offset

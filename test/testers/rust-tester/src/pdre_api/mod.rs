@@ -33,7 +33,6 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             // test crypto functions
             "test_blake2_128" => crypto::test_blake2_128(input),
             "test_blake2_256" => crypto::test_blake2_256(input),
-            // TODO: Call from Julia
             "test_blake2_256_enumerated_trie_root" => crypto::test_blake2_256_enumerated_trie_root(input),
             "test_ed25519" => crypto::test_ed25519(input),
             "test_keccak_256" => crypto::test_keccak_256(input),

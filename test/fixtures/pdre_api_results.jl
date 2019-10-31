@@ -112,7 +112,18 @@ module PdreApiExpectedResults
         "Monitored,Monitored",
         "emulation,emulation",
         "secondary,secondary",
-        "Visionary,Visionary"
+        "Visionary,Visionary",
+        # test_blake2_256_enumerated_trie_root
+        "da1630f8a79c2273ce71af9082e9d76d017fccb2e5ebd9d8928c9418fc50cf8d",
+        "5147323d593b7bb01fe8ea3e9d5a4bba0497c7f47b5daa121f4a6d791164d60b",
+        "d393fa78dfddc5fc91e9faef6b1cf045049c9d833b1baeb59a84dc0f1145a31d",
+        "088560d2353a1afd5058e4810c4e77f459616c776ec49d339e4401071a7c8879",
+        "ea64d09f9740275ef7faaa3cee5a6a45fc8fe655cf049addbcefa7ba2ba6032d",
+        "a340fba4541947a516c3ae686cf0f3155b1d69f9146e4096c54bc8b45db718f1",
+        "ad6a77200cfac3b9fe1565fc651c9361d76033ff910440f10dddaebbf65aeda8",
+        "86755bbcc0c2db567c58d30a2786e9ff8c68391a3f91188871db4e91993a4975",
+        "73077d09d5c33c7f8c015d015a2228730150e4d10a2a17c7c26128371e92449d",
+        "17fa3916030b48170365735f8371df909a98eeb5f0370f6580b0552243387c8d"
     ]
 
     const res_storage_kv_offset = [
