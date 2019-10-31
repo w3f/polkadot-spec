@@ -49,7 +49,6 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_clear_prefix" => storage::test_clear_prefix(input),
             "test_clear_storage" => storage::test_clear_storage(input),
             "test_exists_storage" => storage::test_exists_storage(input),
-            // TODO: Call from Julia
             "test_set_get_local_storage" => storage::test_set_get_local_storage(input),
             "test_set_get_storage" => storage::test_set_get_storage(input),
             // TODO: Call from Julia
