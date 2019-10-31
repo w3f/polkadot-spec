@@ -37,26 +37,26 @@ impl CryptoApi {
             .decode_vec()
     }
     pub fn rtm_ext_blake2_128(&mut self, data: &[u8]) -> Vec<u8> {
-        self.common_hash_fn_handler("test_ext_blake2_128", data)
+        self.common_hash_fn_handler("rtm_ext_blake2_128", data)
     }
     pub fn rtm_ext_blake2_256(&mut self, data: &[u8]) -> Vec<u8> {
-        self.common_hash_fn_handler("test_ext_blake2_256", data)
+        self.common_hash_fn_handler("rtm_ext_blake2_256", data)
     }
     pub fn rtm_ext_twox_64(&mut self, data: &[u8]) -> Vec<u8> {
-        self.common_hash_fn_handler("test_ext_twox_64", data)
+        self.common_hash_fn_handler("rtm_ext_twox_64", data)
     }
     pub fn rtm_ext_twox_128(&mut self, data: &[u8]) -> Vec<u8> {
-        self.common_hash_fn_handler("test_ext_twox_128", data)
+        self.common_hash_fn_handler("rtm_ext_twox_128", data)
     }
     pub fn rtm_ext_twox_256(&mut self, data: &[u8]) -> Vec<u8> {
-        self.common_hash_fn_handler("test_ext_twox_256", data)
+        self.common_hash_fn_handler("rtm_ext_twox_256", data)
     }
     pub fn rtm_ext_keccak_256(&mut self, data: &[u8]) -> Vec<u8> {
-        self.common_hash_fn_handler("test_ext_keccak_256", data)
+        self.common_hash_fn_handler("rtm_ext_keccak_256", data)
     }
     pub fn rtm_ext_ed25519_generate(&mut self, id_data: &[u8], seed: &[u8]) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_ed25519_generate")
+            .prep_wasm("rtm_ext_ed25519_generate")
             .call(&(id_data, seed).encode())
             .decode_vec()
     }
@@ -67,7 +67,7 @@ impl CryptoApi {
         msg_data: &[u8],
     ) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_ed25519_sign")
+            .prep_wasm("rtm_ext_ed25519_sign")
             .call(&(id_data, pubkey_data, msg_data).encode())
             .decode_vec()
     }
@@ -78,20 +78,20 @@ impl CryptoApi {
         pubkey_data: &[u8],
     ) -> u32 {
         self
-            .prep_wasm("test_ext_ed25519_verify")
+            .prep_wasm("rtm_ext_ed25519_verify")
             .call(&(msg_data, sig_data, pubkey_data).encode())
             .decode_u32()
             
     }
     pub fn rtm_ext_ed25519_public_keys(&mut self, id_data: &[u8]) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_ed25519_public_keys")
+            .prep_wasm("rtm_ext_ed25519_public_keys")
             .call(&id_data.encode())
             .decode_vec()
     }
     pub fn rtm_ext_sr25519_generate(&mut self, id_data: &[u8], seed: &[u8]) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_sr25519_generate")
+            .prep_wasm("rtm_ext_sr25519_generate")
             .call(&(id_data, seed).encode())
             .decode_vec()
     }
@@ -102,7 +102,7 @@ impl CryptoApi {
         msg_data: &[u8],
     ) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_sr25519_sign")
+            .prep_wasm("rtm_ext_sr25519_sign")
             .call(&(id_data, pubkey_data, msg_data).encode())
             .decode_vec()
     }
@@ -113,13 +113,13 @@ impl CryptoApi {
         pubkey_data: &[u8],
     ) -> u32 {
         self
-            .prep_wasm("test_ext_sr25519_verify")
+            .prep_wasm("rtm_ext_sr25519_verify")
             .call(&(msg_data, sig_data, pubkey_data).encode())
             .decode_u32()
     }
     pub fn rtm_ext_sr25519_public_keys(&mut self, id_data: &[u8]) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_sr25519_public_keys")
+            .prep_wasm("rtm_ext_sr25519_public_keys")
             .call(&id_data.encode())
             .decode_vec()
     }
@@ -129,7 +129,7 @@ impl CryptoApi {
         lens_data: &[u32],
     ) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_blake2_256_enumerated_trie_root")
+            .prep_wasm("rtm_ext_blake2_256_enumerated_trie_root")
             .call(&(values_data, lens_data).encode())
             .decode_vec()
     }
@@ -139,7 +139,7 @@ impl CryptoApi {
         sig_data: &[u8],
     ) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_secp256k1_ecdsa_recover")
+            .prep_wasm("rtm_ext_secp256k1_ecdsa_recover")
             .call(&(msg_data, sig_data).encode())
             .decode_vec()
     }
