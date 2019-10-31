@@ -1,7 +1,5 @@
 use super::utils::NetworkApi;
 
-//use substrate_offchain::testing::PendingRequest;
-
 pub fn test_http() {
     let mut api = NetworkApi::new_with_offchain_context();
 
@@ -23,4 +21,6 @@ pub fn test_network_state() {
     assert_eq!(res, vec![0, 0, 0]); // [PeerId, MultiaddressIPv4, MultiaddressIPv6]
 
     println!("Output (opaque): {:?}", res);
+
+    // TODO...
 }

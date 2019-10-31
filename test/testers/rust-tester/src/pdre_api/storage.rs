@@ -26,6 +26,7 @@ pub fn test_set_get_storage(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
+// Input: key, value, offset
 pub fn test_set_get_storage_into(input: ParsedInput) {
     let mut api = StorageApi::new();
 
@@ -156,6 +157,7 @@ pub fn test_storage_root(input: ParsedInput) {
     println!("{}", hex::encode(root));
 }
 
+// Input: hash
 pub fn test_storage_changes_root(input: ParsedInput) {
     let parent_hash_data = input.get(0);
 
@@ -168,28 +170,28 @@ pub fn test_storage_changes_root(input: ParsedInput) {
 pub fn test_set_get_local_storage(input: ParsedInput) {
     let mut api = StorageApi::new_with_offchain_context();
 
-    let key1 = input.get(0);
-    let value1 = input.get(1);
+    let key = input.get(0);
+    let value = input.get(1);
 
     // Test invalid persistant storage
-    let res = api.rtm_ext_local_storage_get(1, key1);
+    let res = api.rtm_ext_local_storage_get(1, key);
     assert_eq!(res, [0u8;0]);
 
     // Test valid persistant storage
-    api.rtm_ext_local_storage_set(1, key1, value1);
-    let res = api.rtm_ext_local_storage_get(1, key1);
-    assert_eq!(res.as_slice(), value1);
+    api.rtm_ext_local_storage_set(1, key, value);
+    let res = api.rtm_ext_local_storage_get(1, key);
+    assert_eq!(res.as_slice(), value);
 
     print!("{},", str(&res)); // Result of persistant storage
 
     // Test invalid local storage
-    let res = api.rtm_ext_local_storage_get(2, key1);
+    let res = api.rtm_ext_local_storage_get(2, key);
     assert_eq!(res, [0u8;0]);
 
     // Test valid local storage
-    api.rtm_ext_local_storage_set(2, key1, value1);
-    let res = api.rtm_ext_local_storage_get(2, key1);
-    assert_eq!(res.as_slice(), value1);
+    api.rtm_ext_local_storage_set(2, key, value);
+    let res = api.rtm_ext_local_storage_get(2, key);
+    assert_eq!(res.as_slice(), value);
 
     println!("{}", str(&res)); // Result of local storage
 
@@ -211,6 +213,7 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
     assert_eq!(res, [0u8;0]);
 }
 
+// Input: key, old_value, new_value
 pub fn test_local_storage_compare_and_set(input: ParsedInput) {
     let mut api = StorageApi::new_with_offchain_context();
 

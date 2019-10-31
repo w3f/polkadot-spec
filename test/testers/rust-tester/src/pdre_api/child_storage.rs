@@ -31,6 +31,7 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
     assert_eq!(res, [0; 0]);
 }
 
+// Input: child1, child2, key, value, offset
 pub fn test_get_child_storage_into(input: ParsedInput) {
     let mut api = ChildStorageApi::new();
 
@@ -192,11 +193,24 @@ pub fn test_kill_child_storage(input: ParsedInput) {
     assert_eq!(res, value);
 }
 
+// Input: child1, child2, key1, value1, key2, value2
 pub fn test_child_storage_root(input: ParsedInput) {
     let mut api = ChildStorageApi::new();
 
     let child1 = input.get(0);
+    let child2 = input.get(1);
+    let key1 = input.get(2);
+    let value1 = input.get(3);
+    let key2 = input.get(4);
+    let value2 = input.get(5);
 
-    let _root = api.rtm_ext_child_storage_root(child1);
-    // TODO...
+    api.rtm_ext_set_child_storage(child1, key1, value1);
+
+    // Test multiple key/value pairs
+    api.rtm_ext_set_child_storage(child2, key1, value1);
+    api.rtm_ext_set_child_storage(child2, key2, value2);
+
+    let child_root1 = api.rtm_ext_child_storage_root(child1);
+    let child_root2 = api.rtm_ext_child_storage_root(child2);
+    println!("{},{}", hex::encode(child_root1), hex::encode(child_root2));
 }
