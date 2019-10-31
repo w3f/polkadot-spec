@@ -39,6 +39,11 @@ module PdreApiTestFixtures
 		"test_storage_root"
 	]
 
+	# Input: key, old_value, new_value
+	const fn_storage_compare_set = [
+		"test_local_storage_compare_and_set"
+	]
+
 	# Input: prefix, key1, value1, key2, value2
 	const fn_storage_prefix = [
 	  "test_clear_prefix"
@@ -132,6 +137,8 @@ module PdreApiTestData
 	  ],
 	]
 
+	# Intended for prefix functions, but also reused
+	# by `test_local_storage_compare_and_set`
 	const prefix_key_value_data = [
 	  [
 	    "stat", # prefix
