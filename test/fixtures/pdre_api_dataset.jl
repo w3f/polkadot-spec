@@ -50,7 +50,7 @@ module PdreApiTestFixtures
 	]
 
 	# Input: child1, child2, key, value
-	const fn_storage_child = [
+	const fn_storage_child_kv = [
 	  "test_set_get_child_storage",
 	  "test_exists_child_storage",
 	  "test_clear_child_storage",
@@ -92,8 +92,6 @@ module PdreApiTestData
 	  "portal",
 	]
 
-	# Most key/value tests will ignore the third (offset) field.
-	# That field is only by the `test_set_get_storage_into` test function.
 	const key_value_data = [
 	  [
 	    "static", # key
@@ -147,8 +145,6 @@ module PdreApiTestData
 	  ],
 	]
 
-	# Intended for prefix functions, but also reused
-	# by `test_local_storage_compare_and_set`
 	const prefix_key_value_data = [
 	  [
 	    "stat", # prefix

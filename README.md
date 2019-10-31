@@ -84,7 +84,7 @@ This table shows the relationship between the lists.
 |fn_storage_2x_kv        |prefix_key_value_data       |res_storage_2x_kv       |
 |fn_storage_compare_set  |prefix_key_value_data       |res_storage_compare_set |
 |fn_storage_prefix       |prefix_key_value_data       |                        |
-|fn_storage_child        |child_key_value_data        |res_storage_child       |
+|fn_storage_child_kv     |child_key_value_data        |res_storage_child       |
 |fn_storage_child_2x_kv  |prefix_child_key_value_data |res_child_storage_root  |
 |fn_storage_prefix_child |prefix_child_key_value_data |                        |
 |fn_network              |                            |                        |
