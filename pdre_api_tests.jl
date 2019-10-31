@@ -220,7 +220,7 @@ using Test
 
     # ## Test storage functions (child storage)
     counter = 1
-    for func in PdreApiTestFixtures.fn_storage_child
+    for func in PdreApiTestFixtures.fn_storage_child_kv
         for (child1, child2, key, value, _) in PdreApiTestData.child_key_value_data
             for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
