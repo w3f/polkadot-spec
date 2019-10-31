@@ -102,6 +102,17 @@ module PdreApiExpectedResults
         "",
         "",
         "",
+        # test_set_get_local_storage
+        "Inverse,Inverse",
+        "Future-proofed,Future-proofed",
+        "Horizontal,Horizontal",
+        "Expanded,Expanded",
+        "portal,portal",
+        "pricing structure,pricing structure",
+        "Monitored,Monitored",
+        "emulation,emulation",
+        "secondary,secondary",
+        "Visionary,Visionary"
     ]
 
     const res_storage_child = [

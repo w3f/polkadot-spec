@@ -14,6 +14,7 @@ using Test
     func_arg = "--function"
     input_arg = "--input"
 
+    #=
     # ## Test crypto functions
     counter = 1
     for func in PdreApiTestFixtures.fn_crypto_hashes
@@ -69,6 +70,7 @@ using Test
             counter = counter + 1
         end
     end
+    =#
 
     # ## Test storage functions (key/value inputs and outputs)
     counter = 1
@@ -100,6 +102,7 @@ using Test
         end
     end
 
+    #=
     # ## Test storage functions (prefix values)
     for func in PdreApiTestFixtures.fn_storage_prefix
         for (prefix, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data
@@ -209,5 +212,7 @@ using Test
             end
         end
     end
+    =#
+
     cd(root_dir)
 end
