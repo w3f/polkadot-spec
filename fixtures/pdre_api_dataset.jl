@@ -29,6 +29,11 @@ module PdreApiTestFixtures
 	  "test_set_get_local_storage"
 	]
 
+	# Input: key, value, offset
+	const fn_storage_kv_offset = [
+		"test_set_get_storage_into"
+	]
+
 	# Input: prefix, key1, value1, key2, value2
 	const fn_storage_prefix = [
 	  "test_clear_prefix"
@@ -67,46 +72,58 @@ module PdreApiTestData
 	  "portal",
 	]
 
+	# Most key/value tests will ignore the third (offset) field.
+	# That field is only by the `test_set_get_storage_into` test function.
 	const key_value_data = [
 	  [
 	    "static", # key
-	    "Inverse" # value
+		"Inverse", # value
+		3 # offset
 	  ],
 	  [
 	    "even-keeled",
-	    "Future-proofed"
+		"Future-proofed",
+		5
 	  ],
 	  [
 	    "function",
-	    "Horizontal"
+		"Horizontal",
+		0
 	  ],
 	  [
 	    "Face to face",
-	    "Expanded"
+		"Expanded",
+		20
 	  ],
 	  [
 	    "Integrated",
-	    "portal"
+		"portal",
+		1
 	  ],
 	  [
 	    "budgetary management",
-	    "pricing structure"
+		"pricing structure",
+		8
 	  ],
 	  [
 	    "Ameliorated",
-	    "Monitored"
+		"Monitored",
+		6
 	  ],
 	  [
 	    "non-volatile",
-	    "emulation"
+		"emulation",
+		30
 	  ],
 	  [
 	    "productivity",
-	    "secondary"
+		"secondary",
+		2
 	  ],
 	  [
 	    "Total",
-	    "Visionary"
+		"Visionary",
+		9
 	  ],
 	]
 
