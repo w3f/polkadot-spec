@@ -15,7 +15,7 @@ using Test
     input_arg = "--input"
 
     #=
-    # ## Test crypto functions
+    # ## Test crypto hashing functions
     counter = 1
     for func in PdreApiTestFixtures.fn_crypto_hashes
         for value in PdreApiTestData.value_data
@@ -43,7 +43,7 @@ using Test
         end
     end
 
-    # ## Test crypto functions
+    # ## Test crypto key functions
     counter = 1
     for func in PdreApiTestFixtures.fn_crypto_keys
         for value in PdreApiTestData.value_data
@@ -71,7 +71,7 @@ using Test
         end
     end
 
-    # ## Test storage functions (key/value inputs and outputs)
+    # ## Test key/value storage functions
     counter = 1
     for func in PdreApiTestFixtures.fn_storage_kv
         for (key, value, _) in PdreApiTestData.key_value_data
@@ -101,7 +101,7 @@ using Test
         end
     end
 
-    # ## Test storage functions (key/value inputs and outputs with offset)
+    # ## Test key/value storage functions with offsets
     counter = 1
     for func in PdreApiTestFixtures.fn_storage_kv_offset
         for (key, value, offset) in PdreApiTestData.key_value_data
@@ -131,7 +131,7 @@ using Test
         end
     end
 
-    # ## Test storage functions (two keys with two values)
+    # ## Test multipl key/value storage functions
     counter = 1
     for func in PdreApiTestFixtures.fn_storage_2x_kv
         for (_, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data
@@ -160,9 +160,8 @@ using Test
             counter = counter + 1
         end
     end
-    =#
 
-    # ## Test storage functions (one key, an old and a new value)
+    # ## Test compare/set storage functions
     counter = 1
     for func in PdreApiTestFixtures.fn_storage_compare_set
         for (_, key1, value1, _, value2) in PdreApiTestData.prefix_key_value_data
@@ -183,6 +182,37 @@ using Test
                 # Run command
                 output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
                 @test output == PdreApiExpectedResults.res_storage_compare_set[counter]
+
+                if output != "" && print_verbose
+                    println("> Result: ", output)
+                end
+            end
+            counter = counter + 1
+        end
+    end
+    =#
+
+    # ## Test child storage function with offsets
+    counter = 1
+    for func in PdreApiTestFixtures.fn_storage_child_offset
+        for (child1, child2, key, value, offset) in PdreApiTestData.child_key_value_data
+            for cli in PdreApiTestFixtures.cli_testers
+                # create first part of the command
+                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+                cmd = join(cmdparams, " ")
+
+                input = join([child1, child2, key, value, offset], ",")
+
+                # append input
+                cmd = string(cmd, " \"", input,"\"")
+
+                if print_verbose
+                    println("Running: ", cmd)
+                end
+
+                # Run command
+                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                @test output == PdreApiExpectedResults.res_child_storage_offset[counter]
 
                 if output != "" && print_verbose
                     println("> Result: ", output)
@@ -224,7 +254,7 @@ using Test
     # ## Test storage functions (child storage)
     counter = 1
     for func in PdreApiTestFixtures.fn_storage_child
-        for (child1, child2, key, value) in PdreApiTestData.child_key_value_data
+        for (child1, child2, key, value, _) in PdreApiTestData.child_key_value_data
             for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]

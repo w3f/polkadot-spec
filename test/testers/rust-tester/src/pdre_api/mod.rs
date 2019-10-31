@@ -55,7 +55,6 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_storage_root" => storage::test_storage_root(input),
             // TODO: Call from Julia
             "test_storage_changes_root" => storage::test_storage_changes_root(input),
-            // TODO: Call from Julia
             "test_local_storage_compare_and_set" => storage::test_local_storage_compare_and_set(input),
             //
             // test child storage functions
@@ -64,7 +63,6 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_exists_child_storage" => child_storage::test_exists_child_storage(input),
             "test_kill_child_storage" => child_storage::test_kill_child_storage(input),
             "test_set_get_child_storage" => child_storage::test_set_get_child_storage(input),
-            // TODO: Call from Julia
             "test_get_child_storage_into" => child_storage::test_get_child_storage_into(input),
             // TODO: Call from Julia
             "test_child_storage_root" => child_storage::test_child_storage_root(input),

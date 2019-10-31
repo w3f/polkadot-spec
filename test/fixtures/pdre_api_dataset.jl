@@ -62,6 +62,11 @@ module PdreApiTestFixtures
 	  "test_clear_child_prefix"
 	]
 
+	# Input: child1, child2, key, value, offset
+	const fn_storage_child_offset = [
+		"test_get_child_storage_into"
+	]
+
 	const fn_network = [
 	  "test_http",
 	  "test_network_state"
@@ -217,61 +222,71 @@ module PdreApiTestData
 	    ":child_storage:default:moratorium", # child1
 	    ":child_storage:default:hardware", # child2
 	    "radical", # key
-	    "access" # value
+		"access", # value
+		3
 	  ],
 	  [
 	    ":child_storage:default:implementation",
 	    ":child_storage:default:artificial intelligence",
 	    "initiative",
-	    "Function-based"
+		"Function-based",
+		0
 	  ],
 	  [
 	    ":child_storage:default:Switchable",
 	    ":child_storage:default:matrix",
 	    "Assimilated",
-	    "system engine"
+		"system engine",
+		7
 	  ],
 	  [
 	    ":child_storage:default:strategy",
 	    ":child_storage:default:Graphic Interface",
 	    "help-desk",
-	    "knowledge user"
+		"knowledge user",
+		30
 	  ],
 	  [
 	    ":child_storage:default:Total",
 	    ":child_storage:default:24 hour",
 	    "zero administration",
-	    "Ameliorated"
+		"Ameliorated",
+		0
 	  ],
 	  [
 	    ":child_storage:default:exuding",
 	    ":child_storage:default:Triple-buffered",
 	    "optimizing",
-	    "paradigm"
+		"paradigm",
+		8
 	  ],
 	  [
 	    ":child_storage:default:middleware",
 	    ":child_storage:default:Operative",
 	    "well-modulated",
-	    "contingency"
+		"contingency",
+		1
 	  ],
 	  [
 	    ":child_storage:default:Mandatory",
 	    ":child_storage:default:intranet",
 	    "Devolved",
-	    "Vision-oriented"
+		"Vision-oriented",
+		6
 	  ],
 	  [
 	    ":child_storage:default:4th generation",
 	    ":child_storage:default:encryption",
 	    "needs-based",
-	    "radical"
+		"radical",
+		0
 	  ],
 	  [
 	    ":child_storage:default:policy",
 	    ":child_storage:default:full-range",
 	    "forecast",
-	    "heuristic"
+		"heuristic",
+		40
 	  ]
 	]
 
