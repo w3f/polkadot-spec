@@ -75,12 +75,16 @@ In the Julia scripts, the functions (module *PdreApiTestFixtures*) are grouped t
 
 This table shows the relationship between the lists.
 
-|PdreApiTestFixtures    |PdreApiTestData            |PdreApiExpectedResults|
-|-----------------------|---------------------------|----------------------|
-|fn_crypto_hashes       |value_data                 |res_crypto_hashes     |
-|fn_crypto_keys         |value_data                 |                      |
-|fn_storage_kv          |key_value_data             |res_storage_kv        |
-|fn_storage_prefix      |prefix_key_value_data      |                      |
-|fn_storage_child       |child_key_value_data       |res_storage_child     |
-|fn_storage_prefix_child|prefix_child_key_value_data|                      |
-|fn_network             |                           |                      |
+|PdreApiTestFixtures     |PdreApiTestData             |PdreApiExpectedResults  |
+|------------------------|----------------------------|------------------------|
+|fn_crypto_hashes        |value_data                  |res_crypto_hashes       |
+|fn_crypto_keys          |value_data                  |                        |
+|fn_storage_kv           |key_value_data              |res_storage_kv          |
+|fn_storage_kv_offset    |key_value_data              |res_storage_kv_offset   |
+|fn_storage_2x_kv        |prefix_key_value_data       |res_storage_2x_kv       |
+|fn_storage_compare_set  |prefix_key_value_data       |res_storage_compare_set |
+|fn_storage_prefix       |prefix_key_value_data       |                        |
+|fn_storage_child        |child_key_value_data        |res_storage_child       |
+|fn_storage_child_2x_kv  |prefix_child_key_value_data |res_child_storage_root  |
+|fn_storage_prefix_child |prefix_child_key_value_data |                        |
+|fn_network              |                            |                        |

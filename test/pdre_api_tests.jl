@@ -14,7 +14,6 @@ using Test
     func_arg = "--function"
     input_arg = "--input"
 
-    #=
     # ## Test crypto hashing functions
     counter = 1
     for func in PdreApiTestFixtures.fn_crypto_hashes
@@ -190,39 +189,7 @@ using Test
             counter = counter + 1
         end
     end
-    =#
 
-    # ## Test child storage function with offsets
-    counter = 1
-    for func in PdreApiTestFixtures.fn_storage_child_2x_kv
-        for (_, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
-            for cli in PdreApiTestFixtures.cli_testers
-                # create first part of the command
-                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
-                cmd = join(cmdparams, " ")
-
-                input = join([child1, child2, key1, value1, key2, value2], ",")
-
-                # append input
-                cmd = string(cmd, " \"", input,"\"")
-
-                if print_verbose
-                    println("Running: ", cmd)
-                end
-
-                # Run command
-                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
-                @test output == PdreApiExpectedResults.res_child_storage_root[counter]
-
-                if output != "" && print_verbose
-                    println("> Result: ", output)
-                end
-            end
-            counter = counter + 1
-        end
-    end
-
-    #=
     # ## Test storage functions (prefix values)
     for func in PdreApiTestFixtures.fn_storage_prefix
         for (prefix, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data
@@ -272,6 +239,36 @@ using Test
                 # Run command
                 output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
                 @test output == PdreApiExpectedResults.res_storage_child[counter]
+
+                if output != "" && print_verbose
+                    println("> Result: ", output)
+                end
+            end
+            counter = counter + 1
+        end
+    end
+
+    # ## Test child storage function with offsets
+    counter = 1
+    for func in PdreApiTestFixtures.fn_storage_child_2x_kv
+        for (_, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
+            for cli in PdreApiTestFixtures.cli_testers
+                # create first part of the command
+                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+                cmd = join(cmdparams, " ")
+
+                input = join([child1, child2, key1, value1, key2, value2], ",")
+
+                # append input
+                cmd = string(cmd, " \"", input,"\"")
+
+                if print_verbose
+                    println("Running: ", cmd)
+                end
+
+                # Run command
+                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                @test output == PdreApiExpectedResults.res_child_storage_root[counter]
 
                 if output != "" && print_verbose
                     println("> Result: ", output)
@@ -332,7 +329,6 @@ using Test
             end
         end
     end
-    =#
 
     cd(root_dir)
 end
