@@ -24,14 +24,15 @@ pub fn test_blake2_256(input: ParsedInput) {
     println!("{}", hex::encode(output));
 }
 
-pub fn test_blake2_256_enumerated_trie_root(_input: ParsedInput) {
+pub fn test_blake2_256_enumerated_trie_root(input: ParsedInput) {
     let mut api = CryptoApi::new();
 
-    let values_data = vec![];
-    let lens_data = vec![];
+    let value1 = input.get(0);
+    let value2 = input.get(1);
+    let lens_data = vec![value1.len() as u32, value2.len() as u32];
 
-    let _res = api.rtm_ext_blake2_256_enumerated_trie_root(values_data.as_slice(), lens_data.as_slice());
-    // TODO...
+    let res = api.rtm_ext_blake2_256_enumerated_trie_root([value1, value2].concat().as_slice(), lens_data.as_slice());
+    println!("{}", hex::encode(res));
 }
 
 // Input: data

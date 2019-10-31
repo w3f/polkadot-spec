@@ -33,7 +33,7 @@ impl ChildStorageApi {
         key_data: &[u8],
     ) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_get_allocated_child_storage")
+            .prep_wasm("rtm_ext_get_allocated_child_storage")
             .call(&(storage_key_data, key_data).encode())
             .decode_vec()
     }
@@ -45,7 +45,7 @@ impl ChildStorageApi {
         value_offset: u32
     ) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_get_child_storage_into")
+            .prep_wasm("rtm_ext_get_child_storage_into")
             .call(&(storage_key_data, key_data, value_data, value_offset).encode())
             .decode_vec()
     }
@@ -56,12 +56,12 @@ impl ChildStorageApi {
         value_data: &[u8],
     ) {
         self
-            .prep_wasm("test_ext_set_child_storage")
+            .prep_wasm("rtm_ext_set_child_storage")
             .call(&(storage_key_data, key_data, value_data).encode());
     }
     pub fn rtm_ext_clear_child_storage(&mut self, storage_key_data: &[u8], key_data: &[u8]) {
         self
-            .prep_wasm("test_ext_clear_child_storage")
+            .prep_wasm("rtm_ext_clear_child_storage")
             .call(&(storage_key_data, key_data).encode());
     }
     pub fn rtm_ext_exists_child_storage(
@@ -70,23 +70,23 @@ impl ChildStorageApi {
         key_data: &[u8],
     ) -> u32 {
         self
-            .prep_wasm("test_ext_exists_child_storage")
+            .prep_wasm("rtm_ext_exists_child_storage")
             .call(&(storage_key_data, key_data).encode())
             .decode_u32()
     }
     pub fn rtm_ext_clear_child_prefix(&mut self, storage_key_data: &[u8], prefix_data: &[u8]) {
         self
-            .prep_wasm("test_ext_clear_child_prefix")
+            .prep_wasm("rtm_ext_clear_child_prefix")
             .call(&(storage_key_data, prefix_data).encode());
     }
     pub fn rtm_ext_kill_child_storage(&mut self, storage_key_data: &[u8]) {
         self
-            .prep_wasm("test_ext_kill_child_storage")
+            .prep_wasm("rtm_ext_kill_child_storage")
             .call(&storage_key_data.encode());
     }
     pub fn rtm_ext_child_storage_root(&mut self, storage_key_data: &[u8]) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_child_storage_root")
+            .prep_wasm("rtm_ext_child_storage_root")
             .call(&storage_key_data.encode())
             .decode_vec()
     }

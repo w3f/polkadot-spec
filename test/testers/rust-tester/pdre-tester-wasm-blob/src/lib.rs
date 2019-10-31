@@ -216,7 +216,7 @@ extern "C" {
 #[cfg(not(feature = "std"))]
 
 wasm_export_functions! {
-    fn test_ext_twox_64(input: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_twox_64(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 8] = [0; 8];
         unsafe {
             ext_twox_64(input.as_slice().as_ptr(),  input.len() as u32, api_output.as_mut_ptr());
@@ -224,7 +224,7 @@ wasm_export_functions! {
         api_output.to_vec()
     }
 
-	fn test_ext_twox_128(input: Vec<u8>) -> Vec<u8> {
+	fn rtm_ext_twox_128(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 16] = [0; 16];
         unsafe {
 		    ext_twox_128(input.as_slice().as_ptr(), input.len() as u32, api_output.as_mut_ptr());
@@ -232,7 +232,7 @@ wasm_export_functions! {
         api_output.to_vec()
 	}
 
-    fn test_ext_twox_256(input: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_twox_256(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 32] = [0; 32];
         unsafe {
             ext_twox_256(input.as_slice().as_ptr(), input.len() as u32, api_output.as_mut_ptr())
@@ -240,7 +240,7 @@ wasm_export_functions! {
         api_output.to_vec()
     }
 
-    fn test_ext_blake2_128(input: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_blake2_128(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 16] = [0; 16];
         unsafe {
             ext_blake2_128(input.as_slice().as_ptr(), input.len() as u32, api_output.as_mut_ptr())
@@ -248,7 +248,7 @@ wasm_export_functions! {
         api_output.to_vec()
     }
     
-    fn test_ext_blake2_256(input: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_blake2_256(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 32] = [0; 32];
         unsafe {
             ext_blake2_256(input.as_slice().as_ptr(), input.len() as u32, api_output.as_mut_ptr())
@@ -256,7 +256,7 @@ wasm_export_functions! {
         api_output.to_vec()
     }
     
-    fn test_ext_keccak_256(input: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_keccak_256(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 32] = [0; 32];
         unsafe {
             ext_keccak_256(input.as_slice().as_ptr(), input.len() as u32, api_output.as_mut_ptr())
@@ -264,38 +264,38 @@ wasm_export_functions! {
         api_output.to_vec()
     }
 
-    fn test_ext_print_utf8(utf8_data: Vec<u8>) {
+    fn rtm_ext_print_utf8(utf8_data: Vec<u8>) {
         unsafe {
             ext_print_utf8(utf8_data.as_ptr(), utf8_data.len() as u32);
         }
     }
 
-    fn test_ext_print_hex(data: Vec<u8>) {
+    fn rtm_ext_print_hex(data: Vec<u8>) {
         unsafe {
             ext_print_hex(data.as_ptr(), data.len() as u32);
         }
     }
 
-    fn test_ext_print_num(number: u64) {
+    fn rtm_ext_print_num(number: u64) {
         unsafe {
             ext_print_num(number);
         }
     }
 
-    fn test_ext_malloc(size: u32) -> u32 {
+    fn rtm_ext_malloc(size: u32) -> u32 {
         unsafe {
             ext_malloc(size)
         }
     }
 
-    fn test_ext_free(addr: Vec<u8>) {
+    fn rtm_ext_free(addr: Vec<u8>) {
         let mut addr = addr;
         unsafe {
             ext_free(addr.as_mut_ptr());
         }
     }
 
-    fn test_ext_set_storage(
+    fn rtm_ext_set_storage(
         key_data: Vec<u8>,
         value_data: Vec<u8>,
     ) {
@@ -309,7 +309,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_set_child_storage(
+    fn rtm_ext_set_child_storage(
         storage_key_data: Vec<u8>,
         key_data: Vec<u8>,
         value_data: Vec<u8>,
@@ -326,7 +326,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_clear_child_storage(
+    fn rtm_ext_clear_child_storage(
         storage_key_data: Vec<u8>,
         key_data: Vec<u8>,
     ) {
@@ -340,19 +340,19 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_clear_storage(key_data: Vec<u8>) {
+    fn rtm_ext_clear_storage(key_data: Vec<u8>) {
         unsafe {
             ext_clear_storage(key_data.as_ptr(), key_data.len() as u32);
         }
     }
 
-    fn test_ext_exists_storage(key_data: Vec<u8>) -> u32 {
+    fn rtm_ext_exists_storage(key_data: Vec<u8>) -> u32 {
         unsafe {
             ext_exists_storage(key_data.as_ptr(), key_data.len() as u32)
         }
     }
 
-    fn test_ext_exists_child_storage(
+    fn rtm_ext_exists_child_storage(
         storage_key_data: Vec<u8>,
         key_data: Vec<u8>,
     ) -> u32 {
@@ -366,13 +366,13 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_clear_prefix(prefix_data: Vec<u8>) {
+    fn rtm_ext_clear_prefix(prefix_data: Vec<u8>) {
         unsafe {
             ext_clear_prefix(prefix_data.as_ptr(), prefix_data.len() as u32);
         }
     }
 
-    fn test_ext_clear_child_prefix(
+    fn rtm_ext_clear_child_prefix(
         storage_key_data: Vec<u8>,
         prefix_data: Vec<u8>,
     ) {
@@ -386,13 +386,13 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_kill_child_storage(storage_key_data: Vec<u8>) {
+    fn rtm_ext_kill_child_storage(storage_key_data: Vec<u8>) {
         unsafe {
             ext_kill_child_storage(storage_key_data.as_ptr(), storage_key_data.len() as u32);
         }
     }
 
-    fn test_ext_get_allocated_storage(
+    fn rtm_ext_get_allocated_storage(
         key_data: Vec<u8>
     ) -> Vec<u8> {
         let mut written_out = 0;
@@ -411,7 +411,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_get_allocated_child_storage(
+    fn rtm_ext_get_allocated_child_storage(
         storage_key_data: Vec<u8>,
         key_data: Vec<u8>,
     ) -> Vec<u8> {
@@ -433,7 +433,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_get_storage_into(
+    fn rtm_ext_get_storage_into(
         key_data: Vec<u8>,
         value_data: Vec<u8>,
         value_offset: u32,
@@ -451,7 +451,7 @@ wasm_export_functions! {
         value_data
     }
 
-    fn test_ext_get_child_storage_into(
+    fn rtm_ext_get_child_storage_into(
         storage_key_data: Vec<u8>,
         key_data: Vec<u8>,
         value_data: Vec<u8>,
@@ -472,7 +472,7 @@ wasm_export_functions! {
         value_data
     }
 
-    fn test_ext_storage_root() -> Vec<u8> {
+    fn rtm_ext_storage_root() -> Vec<u8> {
         let mut result = vec![0; 32];
         unsafe {
             ext_storage_root(result.as_mut_ptr());
@@ -480,7 +480,7 @@ wasm_export_functions! {
         result
     }
 
-    fn test_ext_child_storage_root(
+    fn rtm_ext_child_storage_root(
         storage_key_data: Vec<u8>,
     ) -> Vec<u8> {
         let mut written_out = 0;
@@ -494,7 +494,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_storage_changes_root(
+    fn rtm_ext_storage_changes_root(
         parent_hash_data: Vec<u8>,
     ) -> Vec<u8> {
         let mut result = vec![0; 32];
@@ -508,7 +508,7 @@ wasm_export_functions! {
         result
     }
 
-    fn test_ext_blake2_256_enumerated_trie_root(
+    fn rtm_ext_blake2_256_enumerated_trie_root(
         values_data: Vec<u8>,
         lens_data: Vec<u32>,
     ) -> Vec<u8> {
@@ -524,11 +524,11 @@ wasm_export_functions! {
         result
     }
 
-    fn test_ext_chain_id() -> u64 {
+    fn rtm_ext_chain_id() -> u64 {
         unsafe { ext_chain_id() }
     }
 
-    fn test_ext_ed25519_public_keys(
+    fn rtm_ext_ed25519_public_keys(
         id_data: Vec<u8>,
     ) -> Vec<u8> {
         let mut written_out = 0;
@@ -546,7 +546,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_ed25519_verify(
+    fn rtm_ext_ed25519_verify(
         msg_data: Vec<u8>,
         sig_data: Vec<u8>,
         pubkey_data: Vec<u8>,
@@ -561,7 +561,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_ed25519_generate(
+    fn rtm_ext_ed25519_generate(
         id_data: Vec<u8>,
         seed: Vec<u8>,
     ) -> Vec<u8> {
@@ -577,7 +577,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_ed25519_sign(
+    fn rtm_ext_ed25519_sign(
         id_data: Vec<u8>,
         pubkey_data: Vec<u8>,
         msg_data: Vec<u8>,
@@ -595,7 +595,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_sr25519_public_keys(
+    fn rtm_ext_sr25519_public_keys(
         id_data: Vec<u8>,
     ) -> Vec<u8> {
         let mut written_out = 0;
@@ -613,7 +613,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_sr25519_verify(
+    fn rtm_ext_sr25519_verify(
         msg_data: Vec<u8>,
         sig_data: Vec<u8>,
         pubkey_data: Vec<u8>,
@@ -628,7 +628,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_sr25519_generate(
+    fn rtm_ext_sr25519_generate(
         id_data: Vec<u8>,
         seed: Vec<u8>,
     ) -> Vec<u8> {
@@ -644,7 +644,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_sr25519_sign(
+    fn rtm_ext_sr25519_sign(
         id_data: Vec<u8>,
         pubkey_data: Vec<u8>,
         msg_data: Vec<u8>,
@@ -662,7 +662,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_secp256k1_ecdsa_recover(
+    fn rtm_ext_secp256k1_ecdsa_recover(
         msg_data: Vec<u8>,
         sig_data: Vec<u8>,
     ) -> Vec<u8> {
@@ -677,11 +677,11 @@ wasm_export_functions! {
         pubkey_data
     }
 
-    fn test_ext_is_validator() -> u32 {
+    fn rtm_ext_is_validator() -> u32 {
         unsafe { ext_is_validator() }
     }
 
-    fn test_ext_submit_transaction(msg_data: Vec<u8>) -> u32 {
+    fn rtm_ext_submit_transaction(msg_data: Vec<u8>) -> u32 {
         unsafe {
             ext_submit_transaction(
                 msg_data.as_ptr(),
@@ -690,7 +690,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_network_state() -> Vec<u8> {
+    fn rtm_ext_network_state() -> Vec<u8> {
         let mut written_out = 0;
         unsafe {
             let ptr = ext_network_state(&mut written_out);
@@ -698,17 +698,17 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_timestamp() -> u64 {
+    fn rtm_ext_timestamp() -> u64 {
         unsafe { ext_timestamp() }
     }
 
-    fn test_ext_sleep_until(deadline: u64) {
+    fn rtm_ext_sleep_until(deadline: u64) {
         unsafe {
             ext_sleep_until(deadline);
         }
     }
 
-    fn test_ext_random_seed(seed_data: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_random_seed(seed_data: Vec<u8>) -> Vec<u8> {
         let mut seed_data = seed_data;
         unsafe {
             ext_random_seed(seed_data.as_mut_ptr());
@@ -716,7 +716,7 @@ wasm_export_functions! {
         seed_data
     }
 
-    fn test_ext_local_storage_set(
+    fn rtm_ext_local_storage_set(
         kind: u32,
         key: Vec<u8>,
         value: Vec<u8>,
@@ -732,7 +732,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_local_storage_get(
+    fn rtm_ext_local_storage_get(
         kind: u32,
         key: Vec<u8>,
     ) -> Vec<u8> {
@@ -753,7 +753,7 @@ wasm_export_functions! {
         }
     }
 
-    fn test_ext_local_storage_compare_and_set(
+    fn rtm_ext_local_storage_compare_and_set(
         kind: u32,
         key: Vec<u8>,
         old_value: Vec<u8>,
@@ -773,7 +773,7 @@ wasm_export_functions! {
     }
 
     // TODO: Implement this
-    fn test_ext_http_request_start(
+    fn rtm_ext_http_request_start(
         method: Vec<u8>,
         url: Vec<u8>,
         meta: Vec<u8>,
@@ -791,7 +791,7 @@ wasm_export_functions! {
     }
 
     // TODO: Implement this
-    fn test_ext_http_request_add_header(
+    fn rtm_ext_http_request_add_header(
         request_id: u32,
         name: Vec<u8>,
         _name_len: u32,
@@ -810,7 +810,7 @@ wasm_export_functions! {
     }
 
     // TODO: Implement this
-    fn test_ext_http_request_write_body(
+    fn rtm_ext_http_request_write_body(
         request_id: u32,
         chunk: Vec<u8>,
         deadline: u64,
@@ -826,7 +826,7 @@ wasm_export_functions! {
     }
 
     // TODO: Implement this
-    fn test_ext_http_response_wait(
+    fn rtm_ext_http_response_wait(
         ids: u32,
         ids_len: u32,
         statuses: u32,
@@ -844,7 +844,7 @@ wasm_export_functions! {
     }
 
     // TODO: Implement this
-    fn test_ext_http_response_headers(
+    fn rtm_ext_http_response_headers(
         request_id: u32,
     ) -> Vec<u8> {
         let mut written_out = 0;
@@ -863,7 +863,7 @@ wasm_export_functions! {
     }
 
     // TODO: Implement this
-    fn test_ext_http_response_read_body(
+    fn rtm_ext_http_response_read_body(
         request_id: u32,
         buffer: Vec<u8>,
         _buffer_len: u32,
@@ -884,7 +884,7 @@ wasm_export_functions! {
 
 // TODO: Implement this
 #[no_mangle]
-pub extern "C" fn test_ext_sandbox_instantiate(
+pub extern "C" fn rtm_ext_sandbox_instantiate(
     dispatch_thunk_idx: u32,
     wasm_ptr: *const u8,
     wasm_len: u32,
@@ -906,7 +906,7 @@ pub extern "C" fn test_ext_sandbox_instantiate(
 
 // TODO: Implement this
 #[no_mangle]
-pub extern "C" fn test_ext_sandbox_instance_teardown(instance_idx: u32) {
+pub extern "C" fn rtm_ext_sandbox_instance_teardown(instance_idx: u32) {
     unsafe {
         ext_sandbox_instance_teardown(instance_idx);
     }
@@ -914,7 +914,7 @@ pub extern "C" fn test_ext_sandbox_instance_teardown(instance_idx: u32) {
 
 // TODO: Implement this
 #[no_mangle]
-pub extern "C" fn test_ext_sandbox_invoke(
+pub extern "C" fn rtm_ext_sandbox_invoke(
     instance_idx: u32,
     export_ptr: *const u8,
     export_len: u32,
@@ -940,13 +940,13 @@ pub extern "C" fn test_ext_sandbox_invoke(
 
 // TODO: Implement this
 #[no_mangle]
-pub extern "C" fn test_ext_sandbox_memory_new(initial: u32, maximum: u32) -> u32 {
+pub extern "C" fn rtm_ext_sandbox_memory_new(initial: u32, maximum: u32) -> u32 {
     unsafe { ext_sandbox_memory_new(initial, maximum) }
 }
 
 // TODO: Implement this
 #[no_mangle]
-pub extern "C" fn test_ext_sandbox_memory_get(
+pub extern "C" fn rtm_ext_sandbox_memory_get(
     memory_idx: u32,
     offset: u32,
     buf_ptr: *mut u8,
@@ -957,7 +957,7 @@ pub extern "C" fn test_ext_sandbox_memory_get(
 
 // TODO: Implement this
 #[no_mangle]
-pub extern "C" fn test_ext_sandbox_memory_set(
+pub extern "C" fn rtm_ext_sandbox_memory_set(
     memory_idx: u32,
     offset: u32,
     val_ptr: *const u8,
@@ -975,7 +975,7 @@ pub extern "C" fn test_ext_sandbox_memory_set(
 
 // TODO: Implement this
 #[no_mangle]
-pub extern "C" fn test_ext_sandbox_memory_teardown(memory_idx: u32) {
+pub extern "C" fn rtm_ext_sandbox_memory_teardown(memory_idx: u32) {
     unsafe {
         ext_sandbox_memory_teardown(memory_idx);
     }

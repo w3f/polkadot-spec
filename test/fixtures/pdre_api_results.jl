@@ -1,5 +1,6 @@
 module PdreApiExpectedResults
     const res_crypto_hashes = [
+        # test_blake2_128
         "440973e4e50902f1d0ec97de357eb2fd",
         "d81f39ad0ab560c74fd47b88184fd40c",
         "3b66066d9406db94cbba8cbee70afe1a",
@@ -10,6 +11,7 @@ module PdreApiExpectedResults
         "d049f31a8413756b27946f69a984ab84",
         "0c36ec0e9e6d918b01e32a2bc766584e",
         "25a39078b7b908383777c4bb66d1e064",
+        # test_blake2_256
         "2c5774435a18ac7aa03d294838bafb5fc05181252adc4f56d4d2771f7346788c",
         "f3198593ed759fce088bcefad9ad2297d5b66018f75b65eb54f90260d02c69fb",
         "7e28b339dbd254208b43b8cb1c467ceae2a6dfaeba9bd5e6b73ed8663dfb728c",
@@ -20,6 +22,7 @@ module PdreApiExpectedResults
         "f4b587818104b1ea46c15cb6297119904cc36044af8efbb93db8b4a2cc53b715",
         "0c609d88e7db2076893414c5a7ab75ee680db8e97446b5aa51595fb5713aa01f",
         "6883a1f4ecd7b4f11cbd2ec35b249dfc9dd2feea8a73dab4cb37e48dee300a4b",
+        # test_keccak_256
         "d517392f8119f79c1623774b9346e00104a1d193f1fa641e6e659bf323c37967",
         "7255f80dc5ed95295406be7f5521293b43ba2df0a39d609e6a31e357ed7e8018",
         "7d8bfd013cf9729b35f19658cf60f70ae04a5d498f504b07321589c66c4067bc",
@@ -30,6 +33,7 @@ module PdreApiExpectedResults
         "d8611d5cd76e714d6b5b3a171ae407e786b637610d6df653011d56f50db15726",
         "390f0a254b7642744486c0ba8bc8300e74fa9492bacf16f8814254d66ccea48d",
         "ee34bd85a19481381ede633f03a8365593a3819928e4b8adee0c66bb38c10d4a",
+        # test_twox_64
         "50946b0f6af893d8",
         "af8418aaca2fede1",
         "eb1432a77c4299f6",
@@ -40,6 +44,7 @@ module PdreApiExpectedResults
         "a85fa102cba3e8e9",
         "febde401d103f0f7",
         "17542d4a435eddd7",
+        # test_twox_128
         "50946b0f6af893d85f16c85eb1eb1724",
         "af8418aaca2fede1c98960f89afd3e08",
         "eb1432a77c4299f66be0951d98e366d1",
@@ -50,6 +55,7 @@ module PdreApiExpectedResults
         "a85fa102cba3e8e9765b35b73718bb4a",
         "febde401d103f0f7053d574d2eff8879",
         "17542d4a435eddd774861314c6dc2897",
+        # test_twox_256
         "50946b0f6af893d85f16c85eb1eb1724e268f07177959a25bc26ccc720e3b05a",
         "af8418aaca2fede1c98960f89afd3e08ff3db5243130547a0834d6cf7d7d793b",
         "eb1432a77c4299f66be0951d98e366d14d0a5f991388ac1c640c0636642d9a00",
@@ -63,6 +69,7 @@ module PdreApiExpectedResults
     ]
 
     const res_storage_kv = [
+        # test_set_get_storage
         "Inverse",
         "Future-proofed",
         "Horizontal",
@@ -73,6 +80,7 @@ module PdreApiExpectedResults
         "emulation",
         "secondary",
         "Visionary",
+        # test_exists_storage
         "true",
         "true",
         "true",
@@ -83,6 +91,118 @@ module PdreApiExpectedResults
         "true",
         "true",
         "true",
+        # test_clear_storage
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        # test_set_get_local_storage
+        "Inverse,Inverse",
+        "Future-proofed,Future-proofed",
+        "Horizontal,Horizontal",
+        "Expanded,Expanded",
+        "portal,portal",
+        "pricing structure,pricing structure",
+        "Monitored,Monitored",
+        "emulation,emulation",
+        "secondary,secondary",
+        "Visionary,Visionary",
+        # test_blake2_256_enumerated_trie_root
+        "da1630f8a79c2273ce71af9082e9d76d017fccb2e5ebd9d8928c9418fc50cf8d",
+        "5147323d593b7bb01fe8ea3e9d5a4bba0497c7f47b5daa121f4a6d791164d60b",
+        "d393fa78dfddc5fc91e9faef6b1cf045049c9d833b1baeb59a84dc0f1145a31d",
+        "088560d2353a1afd5058e4810c4e77f459616c776ec49d339e4401071a7c8879",
+        "ea64d09f9740275ef7faaa3cee5a6a45fc8fe655cf049addbcefa7ba2ba6032d",
+        "a340fba4541947a516c3ae686cf0f3155b1d69f9146e4096c54bc8b45db718f1",
+        "ad6a77200cfac3b9fe1565fc651c9361d76033ff910440f10dddaebbf65aeda8",
+        "86755bbcc0c2db567c58d30a2786e9ff8c68391a3f91188871db4e91993a4975",
+        "73077d09d5c33c7f8c015d015a2228730150e4d10a2a17c7c26128371e92449d",
+        "17fa3916030b48170365735f8371df909a98eeb5f0370f6580b0552243387c8d"
+    ]
+
+    const res_storage_kv_offset = [
+        # test_set_get_storage_into
+        "erse",
+        "e-proofed",
+        "Horizontal",
+        "",
+        "ortal",
+        "structure",
+        "red",
+        "",
+        "condary",
+        ""
+    ]
+
+    const res_storage_2x_kv = [
+        # test_storage_root
+        "88642528f17282b87fabd1f04e75228e2a167b847e6656c9b95beda1ffd24d87",
+        "aba4e533d278005c1814c64ccb1f524d5eb425bdaf74870895ce4d0148ede0e9",
+        "38e58296e627090ba24d4fb4a2aa321550709f9474cda22a86650f5383916101",
+        "2ea5608acee55be4551b39f44e70135289600930bebd7c5e33d2363bf832695b",
+        "ef892cfb7c591bcd1d93ff7d7453e10353d82b30ec71c3f87b73bd8936d419c3",
+        "dfeb34bd1bf7caced1c12bb8c04a9d614982a587db2ad084b30319f82d7b6868",
+        "cc1431d76ada06cc9beb5a41dead5b2ded9035d14a5a69b3e7a00284e52ce5ce",
+        "f5ab2ad6934f2e3b2408aced5bfd774d75f84f3b981b6654298592d12c4775a0",
+        "6693bcbbccc2dccc664ab5b12bdc933d52f0b20f247c64a43c5ef8f6b40f0150",
+        "c8d46590a11e29e65b2ea147421c8aaf49997101469dd78190fcbe59712639c2"
+    ]
+
+    const res_storage_compare_set = [
+        # test_local_storage_compare_and_set
+        "Future-proofed",
+        "Expanded",
+        "pricing structure",
+        "emulation",
+        "Visionary",
+        "approach",
+        "function",
+        "Configurable",
+        "Automated",
+        "toolset"
+    ]
+
+    const res_storage_child = [
+        # test_set_get_child_storage
+        "access",
+        "Function-based",
+        "system engine",
+        "knowledge user",
+        "Ameliorated",
+        "paradigm",
+        "contingency",
+        "Vision-oriented",
+        "radical",
+        "heuristic",
+        # test_exists_child_storage
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        # test_clear_child_storage
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        # test_kill_child_storage
         "",
         "",
         "",
@@ -95,46 +215,31 @@ module PdreApiExpectedResults
         "",
     ]
 
-    const res_storage_child = [
-        "access",
+    const res_child_storage_offset = [
+        # test_get_child_storage_into
+        "ess",
         "Function-based",
-        "system engine",
-        "knowledge user",
+        "engine",
+        "",
         "Ameliorated",
-        "paradigm",
-        "contingency",
-        "Vision-oriented",
+        "",
+        "ontingency",
+        "-oriented",
         "radical",
-        "heuristic",
-        "true",
-        "true",
-        "true",
-        "true",
-        "true",
-        "true",
-        "true",
-        "true",
-        "true",
-        "true",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
+        ""
+    ]
+
+    const res_child_storage_root = [
+        # test_child_storage_root
+        "04e84064489b7e28b44dfc00207a2d15bda2a70348fe1f8c031d42dbbdb25e77,e04eb753bc044436c6624b2062f7ad2be3bf19c62ed6f10aa2d7ee2586828cd5",
+        "18712edae2dfee26306f506f020fda38070170a12ed423bfccd91add0c33a423,e563e5520daa936c3629783df1390428bf1a57bf2ea2e30d26efe54bd225e706",
+        "217d66a95da3f5072060f08341126dce48f8a71555d6e81ad77cdf882316ccec,10577651a2a8b02fa35d6aaed6e9cdceb26db2bf76746b4135401dd9fa4661d5",
+        "ab492af16aa8de74f777c70c5c483d0fdd400154879ae8fe620225797a8e6f26,532931bf9fab64b045404c3ef1f6098c239a57120dc6a868c387aff2460d0353",
+        "0928820d95a21d4ae404f622a08f6943edf33b6094d3736da1b27bebee71bbf4,0150b3380992a8ac69f31a7d78de314e021b5d2d5db8e2128deda8b37fedcfde",
+        "06703e7d9f3a3600db97b375dbd27da325d2c295739fbdac563b6f20b194bdb6,f4dd4421a4830b4d5f4bfb3894b747d07a25c5436c9db4147dda7f7b1cc4ae20",
+        "9bfa428bfd220768609b195b8beb97dab68425a43900fa0276bddac2212ffd33,9c4268aac75479a264b4b293c828bf3f23823326c173ed87ca63130e406ae5ec",
+        "2b8a4d37aea421f450fbe1fe919cbe576485f69474594e446a670c16dd34e4b8,803205f7b32b7aadcf4955a2f934a065060da645a45c817f26c90025f8e4a978",
+        "acd774b551da724c0959b5e5bc5f4d333116865cb2a28b4a981a327c5be429f2,41d7e4e8d2198d42c00a753db0f11dde0d2288ce0d148a83e9e774eafbf17584",
+        "a811569241ab8e81751d7d971a8a81ef54ba4da91262c99e03e0208ec60fc9ae,3b71375a64a94627d03b257d2d2538474ac0263c0a5e6872d848ce6889092e15"
     ]
 end

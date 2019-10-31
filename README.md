@@ -53,8 +53,37 @@ Each of those tests defines how the final executable tests are called and pass d
 
 #### PDRE API
 
-Those testers call functions that test the PDRE API. Currently, NOT all PDRE APIs are fully implemented. Some "expected results" have not been defined yet.
+Those testers call functions that call the PDRE API. Currently, NOT all PDRE APIs are fully implemented. Some "expected results" will be adjusted.
 
+```
++--------------------+
+| pdre_api_tests.jl  |
+|                    |
++----------+---------+
+           |                  +----------------+
+           |                  |Polkadot        |    *call test function*
+           +----------------->+Runtime         +---------------------------+
+           | rust_tester      |                |                           |
+           |                  |                |                           v
+           |                  |  +-------------+                 +---------+---------+
+           |                  |  |Polkadot     |    *call API*   |Wasm Runtime blob  |
+           |                  |  |Runtme       +<----------------+                   |
+           |                  |  |Environment  |                 |                   |
+           |                  |  |             |                 |                   |
+           |                  +--+-------------+                 +-------------------+
+           |
+           |
+           +-----------------> ...
+           | go_tester
+           |
+           |
+           +-----------------> ...
+             cpp_tester
+```
+
+Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the PDRE API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
+
+Relevant files:
 |Directory/File                     |Description                                        |
 |-----------------------------------|---------------------------------------------------|
 |*test/pdre_api_tests.jl*           |Runs the different testers and passes data to it   |
@@ -75,12 +104,16 @@ In the Julia scripts, the functions (module *PdreApiTestFixtures*) are grouped t
 
 This table shows the relationship between the lists.
 
-|PdreApiTestFixtures    |PdreApiTestData            |PdreApiExpectedResults|
-|-----------------------|---------------------------|----------------------|
-|fn_crypto_hashes       |value_data                 |res_crypto_hashes     |
-|fn_crypto_keys         |value_data                 |                      |
-|fn_storage_kv          |key_value_data             |res_storage_kv        |
-|fn_storage_prefix      |prefix_key_value_data      |                      |
-|fn_storage_child       |child_key_value_data       |res_storage_child     |
-|fn_storage_prefix_child|prefix_child_key_value_data|                      |
-|fn_network             |                           |                      |
+|PdreApiTestFixtures     |PdreApiTestData             |PdreApiExpectedResults  |
+|------------------------|----------------------------|------------------------|
+|fn_crypto_hashes        |value_data                  |res_crypto_hashes       |
+|fn_crypto_keys          |value_data                  |                        |
+|fn_general_kv           |key_value_data              |res_storage_kv          |
+|fn_storage_kv_offset    |key_value_data              |res_storage_kv_offset   |
+|fn_storage_2x_kv        |prefix_key_value_data       |res_storage_2x_kv       |
+|fn_storage_compare_set  |prefix_key_value_data       |res_storage_compare_set |
+|fn_storage_prefix       |prefix_key_value_data       |                        |
+|fn_storage_child_kv     |child_key_value_data        |res_storage_child       |
+|fn_storage_child_2x_kv  |prefix_child_key_value_data |res_child_storage_root  |
+|fn_storage_prefix_child |prefix_child_key_value_data |                        |
+|fn_network              |                            |                        |

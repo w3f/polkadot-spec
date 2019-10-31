@@ -35,7 +35,11 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
     let offset = std::str::from_utf8(input.get(2)).unwrap().parse::<usize>().unwrap();
 
     // Prepare for comparison, set the min required length
-    let empty = vec![0; value.len() - offset];
+    let empty = if offset > value.len() {
+        vec![0u8;0]
+    } else {
+        vec![0; value.len() - offset]
+    };
 
     // Invalid access
     let res = api.rtm_ext_get_storage_into(key, &empty, offset as u32);
@@ -46,7 +50,11 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
 
     // Get key with offset
     let res = api.rtm_ext_get_storage_into(key, &empty, offset as u32);
-    assert_eq!(*res.as_slice(), value[(offset as usize)..]);
+    if offset > value.len() {
+        assert_eq!(*res.as_slice(), [0u8;0]);
+    } else {
+        assert_eq!(*res.as_slice(), value[(offset as usize)..]);
+    };
 
     println!("{}", str(&res));
 }

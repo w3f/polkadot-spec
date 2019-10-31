@@ -45,13 +45,13 @@ impl NetworkApi {
     }
     pub fn rtm_ext_http_request_start(&mut self, method: &[u8], url: &[u8], meta: &[u8]) -> u32 {
         self
-            .prep_wasm("test_ext_http_request_start")
+            .prep_wasm("rtm_ext_http_request_start")
             .call(&[method, url, meta].encode())
             .decode_u32()
     }
     pub fn rtm_ext_network_state(&mut self) -> Vec<u8> {
         self
-            .prep_wasm("test_ext_network_state")
+            .prep_wasm("rtm_ext_network_state")
             .call(&[])
             .decode_vec()
     }

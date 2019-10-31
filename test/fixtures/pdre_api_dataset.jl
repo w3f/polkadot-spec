@@ -22,10 +22,27 @@ module PdreApiTestFixtures
 	]
 
 	# Input: key, value
-	const fn_storage_kv = [
+	const fn_general_kv = [
 	  "test_set_get_storage",
 	  "test_exists_storage",
-	  "test_clear_storage"
+	  "test_clear_storage",
+	  "test_set_get_local_storage",
+	  "test_blake2_256_enumerated_trie_root"
+	]
+
+	# Input: key, value, offset
+	const fn_storage_kv_offset = [
+		"test_set_get_storage_into"
+	]
+
+	# Input: key1, value1, key2, value2
+	const fn_storage_2x_kv = [
+		"test_storage_root"
+	]
+
+	# Input: key, old_value, new_value
+	const fn_storage_compare_set = [
+		"test_local_storage_compare_and_set"
 	]
 
 	# Input: prefix, key1, value1, key2, value2
@@ -34,7 +51,7 @@ module PdreApiTestFixtures
 	]
 
 	# Input: child1, child2, key, value
-	const fn_storage_child = [
+	const fn_storage_child_kv = [
 	  "test_set_get_child_storage",
 	  "test_exists_child_storage",
 	  "test_clear_child_storage",
@@ -44,6 +61,16 @@ module PdreApiTestFixtures
 	# Input: prefix, child1, child2, key1, value1, key2, value2
 	const fn_storage_prefix_child = [
 	  "test_clear_child_prefix"
+	]
+
+	# Input: child1, child2, key, value, offset
+	const fn_storage_child_offset = [
+		"test_get_child_storage_into"
+	]
+
+	# Input: child1, child2, key1, value1, key2, value2
+	const fn_storage_child_2x_kv = [
+		"test_child_storage_root"
 	]
 
 	const fn_network = [
@@ -69,43 +96,53 @@ module PdreApiTestData
 	const key_value_data = [
 	  [
 	    "static", # key
-	    "Inverse" # value
+		"Inverse", # value
+		3 # offset
 	  ],
 	  [
 	    "even-keeled",
-	    "Future-proofed"
+		"Future-proofed",
+		5
 	  ],
 	  [
 	    "function",
-	    "Horizontal"
+		"Horizontal",
+		0
 	  ],
 	  [
 	    "Face to face",
-	    "Expanded"
+		"Expanded",
+		20
 	  ],
 	  [
 	    "Integrated",
-	    "portal"
+		"portal",
+		1
 	  ],
 	  [
 	    "budgetary management",
-	    "pricing structure"
+		"pricing structure",
+		8
 	  ],
 	  [
 	    "Ameliorated",
-	    "Monitored"
+		"Monitored",
+		6
 	  ],
 	  [
 	    "non-volatile",
-	    "emulation"
+		"emulation",
+		30
 	  ],
 	  [
 	    "productivity",
-	    "secondary"
+		"secondary",
+		2
 	  ],
 	  [
 	    "Total",
-	    "Visionary"
+		"Visionary",
+		9
 	  ],
 	]
 
@@ -187,61 +224,71 @@ module PdreApiTestData
 	    ":child_storage:default:moratorium", # child1
 	    ":child_storage:default:hardware", # child2
 	    "radical", # key
-	    "access" # value
+		"access", # value
+		3
 	  ],
 	  [
 	    ":child_storage:default:implementation",
 	    ":child_storage:default:artificial intelligence",
 	    "initiative",
-	    "Function-based"
+		"Function-based",
+		0
 	  ],
 	  [
 	    ":child_storage:default:Switchable",
 	    ":child_storage:default:matrix",
 	    "Assimilated",
-	    "system engine"
+		"system engine",
+		7
 	  ],
 	  [
 	    ":child_storage:default:strategy",
 	    ":child_storage:default:Graphic Interface",
 	    "help-desk",
-	    "knowledge user"
+		"knowledge user",
+		30
 	  ],
 	  [
 	    ":child_storage:default:Total",
 	    ":child_storage:default:24 hour",
 	    "zero administration",
-	    "Ameliorated"
+		"Ameliorated",
+		0
 	  ],
 	  [
 	    ":child_storage:default:exuding",
 	    ":child_storage:default:Triple-buffered",
 	    "optimizing",
-	    "paradigm"
+		"paradigm",
+		8
 	  ],
 	  [
 	    ":child_storage:default:middleware",
 	    ":child_storage:default:Operative",
 	    "well-modulated",
-	    "contingency"
+		"contingency",
+		1
 	  ],
 	  [
 	    ":child_storage:default:Mandatory",
 	    ":child_storage:default:intranet",
 	    "Devolved",
-	    "Vision-oriented"
+		"Vision-oriented",
+		6
 	  ],
 	  [
 	    ":child_storage:default:4th generation",
 	    ":child_storage:default:encryption",
 	    "needs-based",
-	    "radical"
+		"radical",
+		0
 	  ],
 	  [
 	    ":child_storage:default:policy",
 	    ":child_storage:default:full-range",
 	    "forecast",
-	    "heuristic"
+		"heuristic",
+		40
 	  ]
 	]
 

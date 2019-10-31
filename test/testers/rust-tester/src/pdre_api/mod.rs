@@ -33,7 +33,6 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             // test crypto functions
             "test_blake2_128" => crypto::test_blake2_128(input),
             "test_blake2_256" => crypto::test_blake2_256(input),
-            // TODO: Call from Julia
             "test_blake2_256_enumerated_trie_root" => crypto::test_blake2_256_enumerated_trie_root(input),
             "test_ed25519" => crypto::test_ed25519(input),
             "test_keccak_256" => crypto::test_keccak_256(input),
@@ -49,16 +48,12 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_clear_prefix" => storage::test_clear_prefix(input),
             "test_clear_storage" => storage::test_clear_storage(input),
             "test_exists_storage" => storage::test_exists_storage(input),
-            // TODO: Call from Julia
             "test_set_get_local_storage" => storage::test_set_get_local_storage(input),
             "test_set_get_storage" => storage::test_set_get_storage(input),
-            // TODO: Call from Julia
             "test_set_get_storage_into" => storage::test_set_get_storage_into(input),
-            // TODO: Call from Julia
             "test_storage_root" => storage::test_storage_root(input),
             // TODO: Call from Julia
             "test_storage_changes_root" => storage::test_storage_changes_root(input),
-            // TODO: Call from Julia
             "test_local_storage_compare_and_set" => storage::test_local_storage_compare_and_set(input),
             //
             // test child storage functions
@@ -67,9 +62,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_exists_child_storage" => child_storage::test_exists_child_storage(input),
             "test_kill_child_storage" => child_storage::test_kill_child_storage(input),
             "test_set_get_child_storage" => child_storage::test_set_get_child_storage(input),
-            // TODO: Call from Julia
             "test_get_child_storage_into" => child_storage::test_get_child_storage_into(input),
-            // TODO: Call from Julia
             "test_child_storage_root" => child_storage::test_child_storage_root(input),
             //
             // test network functions
