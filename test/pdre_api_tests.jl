@@ -194,14 +194,14 @@ using Test
 
     # ## Test child storage function with offsets
     counter = 1
-    for func in PdreApiTestFixtures.fn_storage_child_offset
-        for (child1, child2, key, value, offset) in PdreApiTestData.child_key_value_data
+    for func in PdreApiTestFixtures.fn_storage_child_2x_kv
+        for (_, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
             for cli in PdreApiTestFixtures.cli_testers
                 # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
 
-                input = join([child1, child2, key, value, offset], ",")
+                input = join([child1, child2, key1, value1, key2, value2], ",")
 
                 # append input
                 cmd = string(cmd, " \"", input,"\"")
@@ -212,7 +212,7 @@ using Test
 
                 # Run command
                 output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
-                @test output == PdreApiExpectedResults.res_child_storage_offset[counter]
+                @test output == PdreApiExpectedResults.res_child_storage_root[counter]
 
                 if output != "" && print_verbose
                     println("> Result: ", output)
