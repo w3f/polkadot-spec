@@ -1,8 +1,8 @@
-#include <boost/program_options.hpp>
-#include <boost/optional.hpp>
-#include "subcommand_router.hpp"
 #include "scale_codec.hpp"
+#include "subcommand_router.hpp"
 #include "trie.hpp"
+#include <boost/optional.hpp>
+#include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
 
@@ -13,10 +13,10 @@ namespace po = boost::program_options;
 
 int main(int argc, char **argv) {
   SubcommandRouter<int, char **> router;
-  router.addSubcommand("scale-codec", [](int argc, char** argv) {
+  router.addSubcommand("scale-codec", [](int argc, char **argv) {
     processScaleCodecCommand(extractScaleArgs(argc, argv));
   });
-  router.addSubcommand("state-trie", [](int argc, char** argv) {
+  router.addSubcommand("state-trie", [](int argc, char **argv) {
     processTrieCommand(extractTrieArgs(argc, argv));
   });
 

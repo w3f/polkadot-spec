@@ -44,8 +44,8 @@ target_include_directories(kagome_tester PUBLIC ${kagome_INCLUDE_DIRS})
 target_link_libraries(kagome_tester
     Boost::program_options
     leveldb::leveldb
-    ${kagome_LIBRARIES}
     yaml-cpp::yaml-cpp
+    ${kagome_LIBRARIES}
     )
 
 include(GNUInstallDirs)

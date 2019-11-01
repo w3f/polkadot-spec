@@ -38,4 +38,16 @@ subcommands:
               short: i
               help: the file containing the key value data defining the state
               value_name: INPUT_VALUE
-              
+    - pdre-api:
+        about: runtime environment API related tests 
+        args:
+          - function:
+              long: function  
+              takes_value: true
+              value_name: FUNCTION
+              requires: input
+          - input:
+              long: input
+              takes_value: true
+              use_delimiter: true
+              value_name: TEST_DATA
