@@ -22,12 +22,19 @@ extern crate clap;
 extern crate data_encoding;
 extern crate base64;
 
+// For PDRE API
+extern crate hex;
+extern crate substrate_executor;
+extern crate substrate_primitives;
+extern crate substrate_state_machine;
+
 use clap::{App};
 
 pub mod scale_codec;
 pub mod trie_tester;
 pub mod hash;
 pub mod hasher;
+mod pdre_api;
 
 use trie_tester::TrieTester;
 
@@ -40,5 +47,7 @@ fn main() {
     } else if let Some(matches) = matches.subcommand_matches("state-trie") {
         let mut trie_tryer: TrieTester = TrieTester::new(matches);
         trie_tryer.process_state_trie_command(matches);
+    } else if let Some(matches) = matches.subcommand_matches("pdre-api") {
+        pdre_api::process_pdre_api_tests(matches);
     }
 }

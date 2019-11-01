@@ -388,7 +388,7 @@ macro(HunterGate)
     )
     include("${_hunter_self}/cmake/Hunter")
   else()
-    set(HUNTER_GATE_LOCATION "../test/testers/cpp-tester/cmake")
+    set(HUNTER_GATE_LOCATION "Hunter")
 
     string(COMPARE NOTEQUAL "${PROJECT_NAME}" "" _have_project_name)
     if(_have_project_name)

@@ -6,4 +6,8 @@ cd ${SCRIPT_DIR}
 ./build_test.sh
 
 cd test
-julia -qL runtests.jl
+if [ "$1" = "verbose" ]; then
+    julia runtests.jl $1
+else
+    julia -qL runtests.jl
+fi

@@ -7,6 +7,6 @@ cd ${SCRIPT_DIR}
 mkdir -p build
 cd build
 
-cmake ..
-make
+cmake .. -DCMAKE_CXX_COMPILER=g++-8
+make -j 11
 make DESTDIR=bin install

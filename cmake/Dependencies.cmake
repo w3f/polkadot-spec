@@ -19,3 +19,6 @@ find_package(yaml-cpp CONFIG REQUIRED)
 
 hunter_add_package(spdlog)
 find_package(spdlog CONFIG REQUIRED)
+
+hunter_add_package(libp2p)
+find_package(libp2p REQUIRED)
