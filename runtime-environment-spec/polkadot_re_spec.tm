@@ -1758,11 +1758,10 @@
 
       <item><strong|<samp|digest:>> this field is used to store any
       chain-specific auxiliary data, which could help the light clients
-      interact with the block without the need of accessing the full storage.
-      Polkadot RE does not impose any limitation or specification for this
-      field. Essentially, it can be a byte array of any length. This field is
-      indicated as <strong|<math|H<rsub|d>>> and its detailed format is
-      defined in Definition <reference|defn-digest>
+      interact with the block without the need of accessing the full storage
+      as well as consensus-related data including the block signature. This
+      field is indicated as <strong|<math|H<rsub|d>>> and its detailed format
+      is defined in Definition <reference|defn-digest>
     </itemize>
   </definition>
 
@@ -1785,12 +1784,12 @@
         \;
 
         <\center>
-          <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|1|-1|cell-valign|c>|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|1ln>|<cwith|1|-1|1|-1|cell-rborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|1ln>|<cwith|1|-1|3|3|cell-rborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|1ln>|<cwith|1|1|3|3|cell-rborder|1ln>|<table|<row|<cell|Type
-          index>|<cell|subcomponent >|<cell|Description>>|<row|<cell|<math|0>>|<cell|<math|\<bbb-B\><rsub|32>>>|<cell|Hash
-          of the root of changes trie>>|<row|<cell|1>|<cell|<math|E<rsub|id>,\<bbb-B\>>>|<cell|Pre-Runtime
-          digest>>|<row|<cell|2>|<cell|<math|E<rsub|id>,\<bbb-B\>>>|<cell|Consensus
-          Message>>|<row|<cell|4>|<cell|<math|E<rsub|id>,\<bbb-B\>>>|<cell|Act
-          as an authority >>>>>
+          <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|1|-1|cell-valign|c>|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|1ln>|<cwith|1|-1|1|-1|cell-rborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|1ln>|<cwith|1|1|1|3|cell-halign|l>|<cwith|1|5|2|2|cell-halign|l>|<cwith|1|5|2|2|cell-valign|c>|<cwith|1|5|2|2|cell-tborder|0ln>|<cwith|1|5|2|2|cell-bborder|0ln>|<cwith|1|5|2|2|cell-lborder|1ln>|<cwith|1|5|2|2|cell-rborder|1ln>|<cwith|5|5|2|2|cell-bborder|1ln>|<cwith|1|5|2|2|cell-rborder|1ln>|<cwith|1|1|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|1ln>|<table|<row|<cell|Type
+          Id>|<cell|Type name>|<cell|sub-components
+          >>|<row|<cell|<math|0>>|<cell|Changes trie
+          root>|<cell|<math|\<bbb-B\><rsub|32>>>>|<row|<cell|1>|<cell|Pre-Runtime>|<cell|<math|E<rsub|id>,\<bbb-B\>>>>|<row|<cell|2>|<cell|Consensus
+          Message>|<cell|<math|E<rsub|id>,\<bbb-B\>>>>|<row|<cell|4>|<cell|Seal
+          >|<cell|<math|E<rsub|id>,\<bbb-B\>>>>>>>
         </center>
 
         \;
@@ -1804,6 +1803,9 @@
     in Section <reference|sect-msg-consensus>. and
 
     <\itemize-dot>
+      <item><strong|Changes trie root> contains the root of changes trie at
+      block <math|B>.
+
       <item><strong|Pre-runtime> digest item is a messages produced by
       consensus engine to the Runtime.
 
@@ -2052,8 +2054,6 @@
     Polkadot node can perform a random Kademlia `FIND_NODE` requests for the
     nodes <todo|which nodes?> to respond by propagating their view of the
     network.
-
-    \;
   </itemize>
 
   <section|Transport Protocol>
@@ -2177,8 +2177,9 @@
   to find out in which slots it should produce a block and gossip to the
   other block producers. In turn, the block producer node should keep a copy
   of the block tree and grow it as it receives valid blocks from other block
-  producers. A block producer prunes the tree in parallel using Algorithm
-  <reference|algo-block-tree-prunning>.
+  producers. A block producer prunes the tree in parallel by eliminating
+  branches which do not includes the most recent finalized block according to
+  Definition <reference|defn-pruned-tree>.
 
   <subsection|Preliminaries>
 
@@ -2268,7 +2269,7 @@
       </state>
 
       <\state>
-        <math|<around*|(|d,\<pi\>|)>\<leftarrow\>><em|<name|VRF>>(<math|r,i,sk>)
+        <math|<around*|(|\<pi\>,d|)>\<leftarrow\>><em|<name|VRF>>(<math|r,i,sk>)
       </state>
 
       <\state>
@@ -2371,42 +2372,63 @@
 
   At each epoch, each block producer should run Algorithm
   <reference|algo-block-production> to produce blocks during the slots it has
-  been awarded during that epoch. The produced blocks need to be broadcasted
-  alongside with the <em|babe header> defined in Definition
-  <reference|defn-babe-header>.
+  been awarded during that epoch. The produced block needs to carry <em|BABE
+  header> as well as the <em|block signature> \ as Pre-Runtime and Seal
+  digest items defined in Definition <reference|defn-babe-header> and
+  <reference|defn-block-signature> respectively.
 
   <\definition>
-    The <label|defn-babe-header><strong|Babe Header> of block B, referred to
-    formally by <strong|<math|H<rsub|Babe><around*|(|B|)>>> is a tuple that
+    The <label|defn-babe-header><strong|BABE Header> of block B, referred to
+    formally by <strong|<math|H<rsub|BABE><around*|(|B|)>>> is a tuple that
     consists of the following components:
 
     <\equation*>
-      <around*|(|\<pi\>,d,j,s,w|)>
+      <around*|(|d,\<pi\>,j,s|)>
     </equation*>
 
     in which:
 
     <\with|par-mode|center>
       <tabular|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|3|3|1|1|cell-halign|r>|<table|<row|<cell|<math|\<pi\>,d>:>|<cell|are
-      the results of the block lottervrf_output, vrfy for slot s.
-      >>|<row|<cell|<math|j>:>|<cell|is the SR25519 session public key
-      associated with the block producer. >>|<row|<cell|s:>|<cell|is the slot
-      at which the block is produced.>>|<row|<cell|w>|<cell|reserved>>>>>
+      the results of the block lottery for slot s.
+      >>|<row|<cell|<math|j>:>|<cell|is index of the block producer producing
+      block in the current authority directory of current epoch.
+      >>|<row|<cell|s:>|<cell|is the slot at which the block is
+      produced.>>>>>
+
+      \;
     </with>
 
     \;
-  </definition>
 
-  The block producer includes <math|H<rsub|Babe><around*|(|B|)>> as a log in
-  <math|H<rsub|d><around*|(|B|)>> and sign <math|Head<around*|(|B|)>> as
-  defined in Definition <reference|defn-block-signature>
+    <math|H<rsub|BABE><around*|(|B|)>> must be included as a diegst item of
+    Pre-Runtime type in the header digest <math|H<rsub|d><around*|(|B|)>> as
+    defined in Definition <reference|defn-digest>.\ 
+  </definition>
 
   <\definition>
-    <label|block-signature>The <strong|Block Signature> noted by
-    <math|S<rsub|B>> is computed as <math|Sig<rsub|SR25519,sk<rsup|s><rsub|j>>><math|<around*|(|Enc<rsub|SC><around*|(|Black2s<around*|(|Head<around*|(|B<rsub|>|)>|)>|)>|)>>
-  </definition>
+    <label|defn-block-signature><label|defn-babe-seal>The <strong|Block
+    Signature> noted by <math|S<rsub|B>> is computed as
 
-  \;
+    <\equation*>
+      Sig<rsub|SR25519,sk<rsup|s><rsub|j>><around*|(|H<rsub|h><around*|(|B|)>|)>
+    </equation*>
+
+    \ <math|S<rsub|B>> should be included in <math|H<rsub|d><around*|(|B|)>>
+    as Seal digest item according to Definition <reference|defn-digest> of
+    value:
+
+    <\equation*>
+      <around*|(|E<rsub|id><around*|(|BABE|)>,S<rsub|B>|)>
+    </equation*>
+
+    in which, <math|E<rsub|id><around*|(|BABE|)>> is the BABE consensus
+    engine unique identifier defined in Section
+    <reference|sect-msg-consensus>. The Seal digest item is referred to as
+    <strong|BABE Seal>.
+
+    \;
+  </definition>
 
   <\algorithm|<label|algo-block-production><verbatim|><name|Invoke-Block-Authoring>(<math|sk>,
   pk, <math|n>, <math|BT:Current Block Tree>)>
@@ -2445,10 +2467,22 @@
       </state>
 
       <\state>
-        <name|Broadcast-Block>(<math|B<rsub|s>,H<rsub|Babe><around*|(|B<rsub|s>|)>>)
+        <name|Add-Digest-Item>(<math|B<rsub|s>>,Pre-Runtime,<math|E<rsub|id><around*|(|BABE|)>,H<rsub|BABE><around*|(|B<rsub|s>|)>>)
+      </state>
+
+      <\state>
+        <name|Add-Digest-Item>(<math|B<rsub|s>>,Seal,<math|S<rsub|B>>)
+      </state>
+
+      <\state>
+        <name|Broadcast-Block>(<math|B<rsub|s>,H<rsub|BABE><around*|(|B<rsub|s>|)>>)
       </state>
     </algorithmic>
   </algorithm>
+
+  <name|Add-Digest-Item> appends a digest item to the end of the header
+  digest <math|H<rsub|d><around*|(|B|)>> according to Definition
+  <reference|defn-digest>.
 
   <subsection|Epoch Randomness><label|sect-epoch-randomness>
 
@@ -2491,10 +2525,6 @@
 
   <subsection|Verifying Authorship Right><label|sect-verifying-authorship>
 
-  <\definition>
-    Seal <math|D<rsub|s>> <todo|define seal>
-  </definition>
-
   When a Polkadot node receives a produced block, it needs to verify if the
   block producer was entitled to produce the block in the given slot by
   running Algorithm <reference|algo-verify-authorship-right> where:
@@ -2504,8 +2534,16 @@
     <reference|defn-block-time>.
 
     <item><math|H<rsub|d><around*|(|B|)>> is the digest sub-component of
-    <math|Head<around*|(|B|)>> defined in Definition
-    <reference|defn-block-header>.
+    <math|Head<around*|(|B|)>> defined in Definitions
+    <reference|defn-block-header> and <reference|defn-digest>.
+
+    <item>The Seal <math|D<rsub|s>> is the last element in the digest array
+    <math|H<rsub|d><around*|(|B|)>> as defined in Definition
+    <reference|defn-digest>.
+
+    <item><name|Seal-Id> is the type index showing that a digest item of
+    variable type is of <em|Seal> type (See Definitions
+    <reference|defn-scale-variable-type> and <reference|defn-digest>)
 
     <item><math|AuthorityDirectory<rsup|\<cal-E\><rsub|c>>> is the set of
     Authority ID for block producers of epoch <math|\<cal-E\><rsub|c>>.
@@ -3755,8 +3793,10 @@
 
   <\equation*>
     E<rsub|id>\<assign\><around*|{|<tabular*|<tformat|<table|<row|<cell|<rprime|''>BABE<rprime|''>>|<cell|>|<cell|For
-    messages related to BABE protocol>>|<row|<cell|<rprime|''>FRNK<rprime|''>>|<cell|>|<cell|For
-    messages related to GRANDPA protocol >>>>>|\<nobracket\>>
+    messages related to BABE protocol refered to as
+    E<rsub|id><around*|(|BABE|)>>>|<row|<cell|<rprime|''>FRNK<rprime|''>>|<cell|>|<cell|For
+    messages related to GRANDPA protocol referred to as
+    E<rsub|id><around*|(|FRNK|)>>>>>>|\<nobracket\>>
   </equation*>
 
   \;
@@ -5677,11 +5717,13 @@
     <associate|chap-state-transit|<tuple|3|17>>
     <associate|defn-account-key|<tuple|3.3|19>>
     <associate|defn-babe-header|<tuple|5.10|31>>
+    <associate|defn-babe-seal|<tuple|5.11|?>>
     <associate|defn-bit-rep|<tuple|1.6|8>>
     <associate|defn-block-body|<tuple|3.9|22>>
     <associate|defn-block-data|<tuple|E.2|51>>
     <associate|defn-block-header|<tuple|3.5|21>>
     <associate|defn-block-header-hash|<tuple|3.7|21>>
+    <associate|defn-block-signature|<tuple|5.11|?>>
     <associate|defn-block-time|<tuple|5.8|30>>
     <associate|defn-block-tree|<tuple|1.11|9>>
     <associate|defn-chain-subchain|<tuple|1.13|9>>
@@ -5689,10 +5731,10 @@
     <associate|defn-digest|<tuple|3.6|?>>
     <associate|defn-epoch-slot|<tuple|5.3|29>>
     <associate|defn-epoch-subchain|<tuple|5.5|30>>
-    <associate|defn-finalized-block|<tuple|5.26|38>>
+    <associate|defn-finalized-block|<tuple|5.25|38>>
     <associate|defn-func-inherent-data|<tuple|3.8|22>>
-    <associate|defn-grandpa-completable|<tuple|5.22|35>>
-    <associate|defn-grandpa-justification|<tuple|5.24|36>>
+    <associate|defn-grandpa-completable|<tuple|5.21|35>>
+    <associate|defn-grandpa-justification|<tuple|5.23|36>>
     <associate|defn-hex-encoding|<tuple|B.9|43>>
     <associate|defn-http-return-value|<tuple|F.4|59>>
     <associate|defn-index-function|<tuple|2.7|13>>
@@ -5720,7 +5762,7 @@
     <associate|defn-stored-value|<tuple|2.1|11>>
     <associate|defn-unix-time|<tuple|1.10|9>>
     <associate|defn-varrying-data-type|<tuple|B.3|41>>
-    <associate|defn-vote|<tuple|5.15|34>>
+    <associate|defn-vote|<tuple|5.14|34>>
     <associate|defn-winning-threshold|<tuple|5.6|30>>
     <associate|key-encode-in-trie|<tuple|2.1|12>>
     <associate|network-protocol|<tuple|4|25>>

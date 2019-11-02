@@ -1,3 +1,9 @@
+* Sat Nov 02 2019
+  - Babe Header formalized and (re)-corrected, 
+  - Babe Seal added and Block.
+  - Auth algorithm formalization improved.
+* Fri Nov 01 2019
+  - Digest header and its different items redefined.
 * Tue Oct 08 2019
   - How to use the result of offchain computation.
   - Network status spec.
