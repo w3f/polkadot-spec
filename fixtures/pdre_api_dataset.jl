@@ -50,28 +50,28 @@ module PdreApiTestFixtures
 	  "test_clear_prefix"
 	]
 
-	# Input: child1, child2, key, value
-	const fn_storage_child_kv = [
-	  "test_set_get_child_storage",
-	  "test_exists_child_storage",
-	  "test_clear_child_storage",
-	  "test_kill_child_storage"
-	]
+	# # Input: child1, child2, key, value
+	# const fn_storage_child_kv = [
+	#   "test_set_get_child_storage",
+	#   "test_exists_child_storage",
+	#   "test_clear_child_storage",
+	#   "test_kill_child_storage"
+	# ]
 
-	# Input: prefix, child1, child2, key1, value1, key2, value2
-	const fn_storage_prefix_child = [
-	  "test_clear_child_prefix"
-	]
+	# # Input: prefix, child1, child2, key1, value1, key2, value2
+	# const fn_storage_prefix_child = [
+	#   "test_clear_child_prefix"
+	# ]
 
-	# Input: child1, child2, key, value, offset
-	const fn_storage_child_offset = [
-		"test_get_child_storage_into"
-	]
+	# # Input: child1, child2, key, value, offset
+	# const fn_storage_child_offset = [
+	# 	"test_get_child_storage_into"
+	# ]
 
-	# Input: child1, child2, key1, value1, key2, value2
-	const fn_storage_child_2x_kv = [
-		"test_child_storage_root"
-	]
+	# # Input: child1, child2, key1, value1, key2, value2
+	# const fn_storage_child_2x_kv = [
+	# 	"test_child_storage_root"
+	# ]
 
 	const fn_network = [
 	  "test_http",

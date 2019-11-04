@@ -57,13 +57,13 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_local_storage_compare_and_set" => storage::test_local_storage_compare_and_set(input),
             //
             // test child storage functions
-            "test_clear_child_prefix" => child_storage::test_clear_child_prefix(input),
-            "test_clear_child_storage" => child_storage::test_clear_child_storage(input),
-            "test_exists_child_storage" => child_storage::test_exists_child_storage(input),
-            "test_kill_child_storage" => child_storage::test_kill_child_storage(input),
-            "test_set_get_child_storage" => child_storage::test_set_get_child_storage(input),
-            "test_get_child_storage_into" => child_storage::test_get_child_storage_into(input),
-            "test_child_storage_root" => child_storage::test_child_storage_root(input),
+            // "test_clear_child_prefix" => child_storage::test_clear_child_prefix(input),
+            // "test_clear_child_storage" => child_storage::test_clear_child_storage(input),
+            // "test_exists_child_storage" => child_storage::test_exists_child_storage(input),
+            // "test_kill_child_storage" => child_storage::test_kill_child_storage(input),
+            // "test_set_get_child_storage" => child_storage::test_set_get_child_storage(input),
+            // "test_get_child_storage_into" => child_storage::test_get_child_storage_into(input),
+            // "test_child_storage_root" => child_storage::test_child_storage_root(input),
             //
             // test network functions
             "test_http" => network::test_http(),
