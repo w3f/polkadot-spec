@@ -2238,11 +2238,22 @@
 
   <\definition>
     <label|defn-winning-threshold><strong|Winning threshold> denoted by
-    <strong|<math|\<tau\>>> is the threshold which is used alongside with the
-    result of Algorirthm <reference|algo-block-production-lottery> to decide
-    if a block producer is the winner of a specific slot. <math|\<tau\>> is
-    set to result of call into <code*|BabeApi_slot_winning_threshold> runtime
-    entry.
+    <strong|<math|\<tau\><rsub|\<varepsilon\><rsub|n>>>> is the threshold
+    which is used alongside with the result of Algorirthm
+    <reference|algo-block-production-lottery> to decide if a block producer
+    is the winner of a specific slot. <math|\<tau\><rsub|\<varepsilon\><rsub|n>>>
+    is calculated \ as follows:
+
+    <\equation*>
+      \<tau\><rsub|\<varepsilon\><rsub|n>>\<assign\>1-<around*|(|1-c|)><rsup|<frac|1|<around*|\||AuthorityDirectory<rsup|\<cal-E\><rsub|n>>|\|>>>
+    </equation*>
+
+    where <math|AuthorityDirectory<rsup|\<cal-E\><rsub|n>>> is the set of
+    BABE authorities for epoch <math|\<varepsilon\><rsub|n>> and
+    <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>. The pair
+    <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>> can be
+    retrieve part of the data returned by a call into runtime entry
+    <verbatim|BabeApi_configuration>.
   </definition>
 
   \ A block producer aiming to produce a block during
@@ -5975,13 +5986,8 @@
       <tuple|<tuple|Transaction Message>|<pageref|auto-49>>
     </associate>
     <\associate|table>
-      <tuple|normal|<surround|<hidden-binding|<tuple>|3.1>||<with|color|<quote|dark
-      red>| ><with|color|<quote|dark green>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>>The
-      detail of <with|color|<quote|dark red>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>><with|color|<quote|dark
-      green>|the >varying type <with|color|<quote|dark
-      red>|<with|mode|<quote|math>|<with|math-condensed|<quote|true>|<syntax|\<times\>|x>>>><with|color|<quote|dark
-      green>|that >a digest item can <with|color|<quote|dark
-      red>|have.><with|color|<quote|dark green>|hold.>>|<pageref|auto-53>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|3.1>||The detail of the
+      varying type that a digest item can hold.>|<pageref|auto-53>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|3.2>|>
         List of inherent data
