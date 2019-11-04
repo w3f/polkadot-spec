@@ -1,6 +1,6 @@
 
-hunter_add_package(Boost COMPONENTS program_options)
-find_package(Boost CONFIG REQUIRED COMPONENTS program_options)
+hunter_add_package(Boost COMPONENTS program_options random)
+find_package(Boost CONFIG REQUIRED COMPONENTS program_options random)
 
 hunter_add_package(leveldb)
 find_package(leveldb CONFIG REQUIRED)
@@ -22,3 +22,11 @@ find_package(spdlog CONFIG REQUIRED)
 
 hunter_add_package(libp2p)
 find_package(libp2p REQUIRED)
+
+# https://docs.hunter.sh/en/latest/packages/pkg/iroha-ed25519.html
+hunter_add_package(iroha-ed25519)
+find_package(ed25519 CONFIG REQUIRED)
+
+# not in hunter, added in cmake/HunterСonfig.cmake
+hunter_add_package(sr25519)
+find_package(sr25519 REQUIRED)

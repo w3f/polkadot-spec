@@ -1,6 +1,6 @@
-
-set(GOPATH "${CMAKE_CURRENT_BINARY_DIR}/go")
-file(MAKE_DIRECTORY ${GOPATH})
+#TODO: Install packages to this dir
+#set(GOPATH "${CMAKE_CURRENT_BINARY_DIR}/go")
+#file(MAKE_DIRECTORY ${GOPATH})
 
 function(GO_GET TARG)
   add_custom_target(${TARG} env GOPATH=${GOPATH} go get ${ARGN})
