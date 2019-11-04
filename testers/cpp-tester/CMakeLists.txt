@@ -35,7 +35,11 @@ add_executable(kagome_tester
     scale_codec.hpp
     trie.cpp
     subcommand_router.hpp
-    trie.hpp)
+    trie.hpp
+    extension.cpp
+    extension.hpp
+    extension/storage.cpp
+    extension/storage.hpp)
 
 include(${CMAKE_SOURCE_DIR}/build/kagome/install/lib/cmake/kagome/kagomeConfig.cmake)
 
@@ -45,6 +49,10 @@ target_link_libraries(kagome_tester
     Boost::program_options
     leveldb::leveldb
     yaml-cpp::yaml-cpp
+    Boost::random
+    p2p::p2p_random_generator
+    iroha::ed25519
+    sr25519::sr25519
     ${kagome_LIBRARIES}
     )
 
