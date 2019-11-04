@@ -6,7 +6,6 @@ using Test
 @testset "PDRE API Tests" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
-    manifest_dir = script_dir * "test/testers/rust-tester/Cargo.toml"
     cd(root_dir)
 
     # Basic parameters for testing CLIs
