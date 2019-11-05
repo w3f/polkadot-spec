@@ -1377,10 +1377,10 @@
   executing ordered set of instructions. These instructions are known as
   <em|extrinsics>. In Polkadot, the execution logic of the state-transition
   function is encapsulated in Runtime as defined in Definition
-  <reference|defn-state-machine>. Runtime is presented as a Wasm blob in(if?)
-  ordered be easily upgradable. Nonetheless, the Polkadot Runtime Environment
-  needs to be in constant interaction with Runtime. The detail of such
-  interaction is further described in Section
+  <reference|defn-state-machine>. Runtime is presented as a Wasm blob in
+  order to be easily upgradable. Nonetheless, the Polkadot Runtime
+  Environment needs to be in constant interaction with Runtime. The detail of
+  such interaction is further described in Section
   <reference|sect-entries-into-runtime>.
 
   In Section <reference|sect-extrinsics>, we specify the procedure of the
@@ -1463,12 +1463,12 @@
   </notation>
 
   The initial runtime code of the chain is embedded as an extrinsics into the
-  chain initialization JSON file and is submitted to Polkadot RE (see Section
-  <reference|sect-genisis-block>).
+  chain initialization JSON file (representing the genesis block) and is
+  submitted to Polkadot RE (see Section <reference|sect-genisis-block>).
 
-  Subsequent calls to the runtime have the ability to call the storage API
-  (see Section <reference|sect-runtime-api>) to insert a new Wasm blob into
-  runtime storage slot to upgrade the runtime.
+  Subsequent calls to the runtime have the ability to, in turn, call the
+  storage API (see Section <reference|sect-re-api>) to insert a new Wasm blob
+  into runtime storage slot to upgrade the runtime.
 
   <subsection|Code Executor>
 
@@ -1551,31 +1551,43 @@
 
   <section|Extrinsics><label|sect-extrinsics>
 
-  The block body consists of an array of extrinsics. Nonetheless, Polkadot RE
-  does not specify or limit the internals of each extrinsics. From Polkadot
-  RE point of view, each extrinsics is simply a SCALE-encoded byte array (see
-  Definition <reference|defn-scale-byte-array>).
+  The block body consists of an array of extrinsics. In a broad sense
+  exterinsics are data from outside of the state which can trigger the state
+  transition. This section describe the specification of extrinsics and their
+  inclusion in the block.
 
   <subsection|Preliminaries>
 
+  The extrinsics are dividedd into two main categories defined as follows:
+
   <\definition>
-    <label|defn-account-key><strong|Account key
-    <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>> is a pair of <math|>Ristretto
-    SR25519 used to sign extrinsics among other accounts and blance-related
-    functions.
+    <strong|Transaction extrinsics> are extrinsics which are signed using
+    either of the key types described in section
+    <reference|sect-cryptographic-keys> and broadcasted between the nodes.
+    <strong|Inherents extrinsics> are unsigned extrinsics which are generated
+    by Polkadot RE and only included in the block produced by the node
+    itself. They are broadcasted as part of the produced block rather than
+    being gossiped as individual extrinsics
   </definition>
 
-  <subsection|Extrinsics Submission>
+  Polkadot RE does not specify or limit the internals of each extrinsics and
+  those are dealt with by the Runtime. From Polkadot RE point of view, each
+  extrinsics is simply a SCALE-encoded byte array (see Definition
+  <reference|defn-scale-byte-array>).
 
-  Extrinsic submission is made by sending a <em|Transactions> network
+  <subsection|Transactions>
+
+  <subsubsection|Transaction Submission>
+
+  Transaction submission is made by sending a <em|Transactions> network
   message. The structure of this message is specified in Section
   <reference|sect-msg-transactions>. Upon receiving a Transactions message,
-  Polkadot RE decodes the transaction and calls
-  <verbatim|validate_trasaction> runtime function, defined in Section
-  <reference|sect-rte-validate-transaction>, to check the validity of the
-  extrinsic. If <verbatim|validate_transaction> considers the submitted
-  extrinsics as a valid one, Polkadot RE makes the extrinsics available for
-  the consensus engine for inclusion in future blocks.
+  Polkadot RE decodes and decouple the transactions and calls
+  <verbatim|validate_trasaction> Runtime entry, defined in Section
+  <reference|sect-rte-validate-transaction>, to check the validity of each of
+  received transaction. If <verbatim|validate_transaction> considers the
+  submitted transaction as a valid one, Polkadot RE makes the transaction
+  available for the consensus engine for inclusion in future blocks.
 
   <subsection|Transaction Queue>
 
@@ -1584,9 +1596,9 @@
   are submitted to the node through the <em|transactions> network message
   specified in Section <reference|sect-msg-transactions>. Upon receiving a
   transactions message, Polkadot RE separates the submitted transactions in
-  the transactions message into individual extrinsics and passes them to the
-  Runtime by executing Algorithm <reference|algo-validate-transactions> to
-  validate and store them for inclusion into future blocks. To that aim,
+  the transactions message into individual transactions and passes them to
+  the Runtime by executing Algorithm <reference|algo-validate-transactions>
+  to validate and store them for inclusion into future blocks. To that aim,
   Polkodot RE should keep a <em|transaction pool<index|transaction pool>> and
   a <em|transaction queue><index|transaction queue> defined as follows:
 
@@ -1602,7 +1614,7 @@
   Algorithm <reference|algo-validate-transactions> updates the transaction
   pool and the transaction queue according to the received message:
 
-  <\algorithm|<label|algo-validate-transactions><name|Validate-Extrinsics-and-Store>(<math|M<rsub|T>:>Transaction
+  <\algorithm|<label|algo-validate-transactions><name|Validate-Transactions-and-Store>(<math|M<rsub|T>:>Transaction
   Message)>
     <\algorithmic>
       <\state>
@@ -1706,6 +1718,29 @@
       to the TQ and dropping transactions which are not valid>
     </algorithmic>
   </algorithm>
+
+  <subsubsection|Inherents>
+
+  Block inherent data represent the totality of inherent extrinsics included
+  in each block. In general, these data are collected or generated by
+  Polkadot RE and handed to Runtime for inclusion in the block. Table
+  <reference|tabl-inherent-data> lists these inherent data, their
+  identifiers, and types.
+
+  <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Type
+  >|<cell|Description>>|<row|<cell|timstap0>|<cell|u64>|<cell|Unix epoch time
+  in number of seconds>>|<row|<cell|babeslot>|<cell|u64>|<cell|Babe Slot
+  Number<rsup|<reference|defn-epoch-slot>>>>>>>>
+    <label|tabl-inherent-data>List of inherent data
+  </big-table>
+
+  <\definition>
+    <label|defn-func-inherent-data>The function
+    <name|Block-Inherents-Data(<math|B<rsub|n>>)> return the inherent data
+    defined in Table <reference|tabl-inherent-data> corresponding to Block
+    <math|B> as a SCALE encoded dictionary as defined in Definition
+    <reference|defn-scale-list>.
+  </definition>
 
   <section|State Replication><label|sect-state-replication>
 
@@ -1850,29 +1885,6 @@
     authorities, which have voted for the block to be stored and is formally
     referred to as <math|A<around|(|B|)>>. An authority Id is 32bit.
   </itemize>
-
-  <subsubsection|Block Inherent Data>
-
-  Block inherent data represent the totality of extrinsics included in each
-  block. In general, these data are collected or generated by Polkadot RE and
-  handed to Runtime for inclusion in the block. Table
-  <reference|tabl-inherent-data> lists these inherent data, their
-  identifiers, and types.
-
-  <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Type
-  >|<cell|Description>>|<row|<cell|timstap0>|<cell|u64>|<cell|Unix epoch time
-  in number of seconds>>|<row|<cell|babeslot>|<cell|u64>|<cell|Babe Slot
-  Number<rsup|<reference|defn-epoch-slot>>>>>>>>
-    <label|tabl-inherent-data>List of inherent data
-  </big-table>
-
-  <\definition>
-    <label|defn-func-inherent-data>The function
-    <name|Block-Inherents-Data(<math|B<rsub|n>>)> return the inherent data
-    defined in Table <reference|tabl-inherent-data> corresponding to Block
-    <math|B> as a SCALE encoded dictionary as defined in Definition
-    <reference|defn-scale-list>.
-  </definition>
 
   <subsubsection|Block Body><label|sect-block-body>
 
@@ -2206,8 +2218,10 @@
     epoch since genesis by <math|\<cal-E\><rsub|n>>. Each epoch is divided
     into <math|>equal length periods known as block production
     <strong|slots>, sequentially indexed in each epoch. The index of each
-    slot is called <strong|slot number>. Each slot is awarded to a subset of
-    block producers during which they are allowed to generate a block.
+    slot is called <strong|slot number>. The equal length duration of each
+    slots is called the <strong|slot duration> and indicated by
+    <math|\<cal-T\>>. Each slot is awarded to a subset of block producers
+    during which they are allowed to generate a block.
   </definition>
 
   <\notation>
@@ -2379,6 +2393,9 @@
     </algorithmic>
   </algorithm>
 
+  \ <math|\<cal-T\>> is the slot duration defined in Definition
+  <reference|defn-epoch-slot>.
+
   <subsection|Block Production>
 
   At each epoch, each block producer should run Algorithm
@@ -2499,7 +2516,8 @@
 
   At the end of epoch <math|\<cal-E\><rsub|n>>, each block producer is able
   to compute the randomness seed it needs in order to participate in the
-  block production lottery in epoch <math|\<cal-E\><rsub|n+2>>. The
+  block production lottery in epoch <math|\<cal-E\><rsub|n+2>>. For epoch 0
+  and 1, the randomness seed is provided in the genesis block. The
   computation of the seed is described in Algorithm
   <reference|algo-epoch-randomness> which uses the concept of epoch subchain
   described in Definition <reference|defn-epoch-subchain>.
@@ -2707,10 +2725,6 @@
       </state>
 
       <\state>
-        <math|H<rsub|h><rsub|><around*|(|P<rsub|B>|)>\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|block_hash_from_id>>,H<rsub|i><around*|(|P<rsub|B>|)>|)>>
-      </state>
-
-      <\state>
         <math|Head<around*|(|B|)>\<leftarrow\>>(<math|H<rsub|p>\<leftarrow\>H<rsub|h><rsub|><around*|(|P<rsub|B>|)>,H<rsub|i>\<leftarrow\>H<rsub|i><around*|(|P<rsub|B>|)>+1,H<rsub|r>\<leftarrow\>\<phi\>,H<rsub|e>\<leftarrow\>\<phi\>,H<rsub|d>\<leftarrow\>\<phi\>>)
       </state>
 
@@ -2758,7 +2772,7 @@
       </state>
 
       <\state>
-        <math|Head<around*|(|B|)>\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|finalize_block>>,E|)>><END>
+        <math|Head<around*|(|B|)>\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|finalize_block>>,B|)>><END>
       </state>
     </algorithmic>
   </algorithm>
@@ -3299,6 +3313,38 @@
   <section|Randomness><label|sect-randomness>
 
   <section|VRF><label|sect-vrf>
+
+  <section|Cryptographic Keys><label|sect-cryptographic-keys>
+
+  Various type keys are used in Polkadot to prove the identity of the actor.
+  In the following section we specify the detail of those keys and comment on
+  their usage
+
+  <\definition>
+    <label|defn-account-key><strong|Account key
+    <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>> is a key pair of type of
+    either of schemes listed in Table <reference|tabl-account-key-schemes>:
+
+    <\center>
+      <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<twith|table-halign|l>|<table|<row|<cell|Key
+      scheme>|<cell|Description>>|<row|<cell|SR25519>|<cell|>>|<row|<cell|ED25519>|<cell|>>|<row|<cell|secp256k1>|<cell|Only
+      for outgoing transfer transaction>>>>>>
+        <label|tabl-account-key-schemes>List of public key scheme which can
+        be used for an account key
+      </big-table>
+    </center>
+
+    Account key can be used to sign transactions among other accounts and
+    blance-related functions.
+  </definition>
+
+  <\definition>
+    <strong|Controller key> <todo|TBS>
+  </definition>
+
+  <\definition>
+    <strong|Session key> <todo|TBS>
+  </definition>
 
   <appendix|Auxiliary Encodings><label|sect-encoding>
 
@@ -5542,86 +5588,89 @@
     <associate|algo-verify-slot-winner|<tuple|5.6|33>>
     <associate|auto-1|<tuple|1|7>>
     <associate|auto-10|<tuple|1.9|9>>
-    <associate|auto-100|<tuple|E.1|49>>
-    <associate|auto-101|<tuple|E.1.1|49>>
-    <associate|auto-102|<tuple|E.2|50>>
-    <associate|auto-103|<tuple|E.1.2|50>>
-    <associate|auto-104|<tuple|E.3|50>>
-    <associate|auto-105|<tuple|E.1.3|51>>
-    <associate|auto-106|<tuple|E.1.4|51>>
-    <associate|auto-107|<tuple|E.1.5|51>>
-    <associate|auto-108|<tuple|E.1.6|52>>
-    <associate|auto-109|<tuple|F|53>>
+    <associate|auto-100|<tuple|D|49>>
+    <associate|auto-101|<tuple|E|49>>
+    <associate|auto-102|<tuple|E.1|50>>
+    <associate|auto-103|<tuple|E.1|50>>
+    <associate|auto-104|<tuple|E.1.1|50>>
+    <associate|auto-105|<tuple|E.2|51>>
+    <associate|auto-106|<tuple|E.1.2|51>>
+    <associate|auto-107|<tuple|E.3|51>>
+    <associate|auto-108|<tuple|E.1.3|52>>
+    <associate|auto-109|<tuple|E.1.4|53>>
     <associate|auto-11|<tuple|1.9|9>>
-    <associate|auto-110|<tuple|F.1|53>>
-    <associate|auto-111|<tuple|F.1.1|53>>
-    <associate|auto-112|<tuple|F.1.2|53>>
-    <associate|auto-113|<tuple|F.1.2.1|54>>
-    <associate|auto-114|<tuple|F.1.3|54>>
-    <associate|auto-115|<tuple|F.1.4|54>>
-    <associate|auto-116|<tuple|F.1.4.1|54>>
-    <associate|auto-117|<tuple|F.1.5|55>>
-    <associate|auto-118|<tuple|F.1.6|55>>
-    <associate|auto-119|<tuple|F.1.7|56>>
+    <associate|auto-110|<tuple|E.1.5|53>>
+    <associate|auto-111|<tuple|E.1.6|53>>
+    <associate|auto-112|<tuple|F|53>>
+    <associate|auto-113|<tuple|F.1|54>>
+    <associate|auto-114|<tuple|F.1.1|54>>
+    <associate|auto-115|<tuple|F.1.2|54>>
+    <associate|auto-116|<tuple|F.1.2.1|54>>
+    <associate|auto-117|<tuple|F.1.3|55>>
+    <associate|auto-118|<tuple|F.1.4|55>>
+    <associate|auto-119|<tuple|F.1.4.1|56>>
     <associate|auto-12|<tuple|1.9|9>>
-    <associate|auto-120|<tuple|F.1.8|56>>
-    <associate|auto-121|<tuple|F.1.8.1|56>>
-    <associate|auto-122|<tuple|F.1.8.2|56>>
-    <associate|auto-123|<tuple|F.1.8.3|57>>
-    <associate|auto-124|<tuple|F.1.9|57>>
-    <associate|auto-125|<tuple|F.1.9.1|57>>
-    <associate|auto-126|<tuple|F.1.9.2|57>>
-    <associate|auto-127|<tuple|F.1.9.3|57>>
-    <associate|auto-128|<tuple|F.1.9.4|58>>
-    <associate|auto-129|<tuple|F.1.9.5|58>>
+    <associate|auto-120|<tuple|F.1.5|56>>
+    <associate|auto-121|<tuple|F.1.6|56>>
+    <associate|auto-122|<tuple|F.1.7|56>>
+    <associate|auto-123|<tuple|F.1.8|57>>
+    <associate|auto-124|<tuple|F.1.8.1|57>>
+    <associate|auto-125|<tuple|F.1.8.2|57>>
+    <associate|auto-126|<tuple|F.1.8.3|57>>
+    <associate|auto-127|<tuple|F.1.9|57>>
+    <associate|auto-128|<tuple|F.1.9.1|58>>
+    <associate|auto-129|<tuple|F.1.9.2|58>>
     <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|F.1.9.6|59>>
-    <associate|auto-131|<tuple|F.1.10|59>>
-    <associate|auto-132|<tuple|F.1.10.1|59>>
-    <associate|auto-133|<tuple|F.1.10.2|60>>
-    <associate|auto-134|<tuple|F.1.10.3|60>>
-    <associate|auto-135|<tuple|F.1.10.4|60>>
-    <associate|auto-136|<tuple|F.1.10.5|61>>
-    <associate|auto-137|<tuple|F.1.10.6|61>>
-    <associate|auto-138|<tuple|F.1.10.7|61>>
-    <associate|auto-139|<tuple|F.1.10.8|62>>
+    <associate|auto-130|<tuple|F.1.9.3|59>>
+    <associate|auto-131|<tuple|F.1.9.4|59>>
+    <associate|auto-132|<tuple|F.1.9.5|59>>
+    <associate|auto-133|<tuple|F.1.9.6|60>>
+    <associate|auto-134|<tuple|F.1.10|60>>
+    <associate|auto-135|<tuple|F.1.10.1|60>>
+    <associate|auto-136|<tuple|F.1.10.2|61>>
+    <associate|auto-137|<tuple|F.1.10.3|61>>
+    <associate|auto-138|<tuple|F.1.10.4|61>>
+    <associate|auto-139|<tuple|F.1.10.5|62>>
     <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|F.1.10.9|62>>
-    <associate|auto-141|<tuple|F.1.10.10|62>>
-    <associate|auto-142|<tuple|F.1.10.11|63>>
-    <associate|auto-143|<tuple|F.1.10.12|63>>
-    <associate|auto-144|<tuple|F.1.10.13|64>>
-    <associate|auto-145|<tuple|F.1.10.14|64>>
-    <associate|auto-146|<tuple|F.1.10.15|65>>
-    <associate|auto-147|<tuple|F.1.11|65>>
-    <associate|auto-148|<tuple|F.1.11.1|65>>
-    <associate|auto-149|<tuple|F.1.12|65>>
+    <associate|auto-140|<tuple|F.1.10.6|62>>
+    <associate|auto-141|<tuple|F.1.10.7|62>>
+    <associate|auto-142|<tuple|F.1.10.8|63>>
+    <associate|auto-143|<tuple|F.1.10.9|63>>
+    <associate|auto-144|<tuple|F.1.10.10|64>>
+    <associate|auto-145|<tuple|F.1.10.11|64>>
+    <associate|auto-146|<tuple|F.1.10.12|65>>
+    <associate|auto-147|<tuple|F.1.10.13|65>>
+    <associate|auto-148|<tuple|F.1.10.14|65>>
+    <associate|auto-149|<tuple|F.1.10.15|65>>
     <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|F.1.12.1|65>>
-    <associate|auto-151|<tuple|F.1.12.2|66>>
-    <associate|auto-152|<tuple|F.1.13|66>>
-    <associate|auto-153|<tuple|F.1.13.1|66>>
-    <associate|auto-154|<tuple|F.1.14|66>>
-    <associate|auto-155|<tuple|F.2|66>>
-    <associate|auto-156|<tuple|G|67>>
-    <associate|auto-157|<tuple|G.1|67>>
-    <associate|auto-158|<tuple|G.1|67>>
-    <associate|auto-159|<tuple|G.2|68>>
+    <associate|auto-150|<tuple|F.1.11|65>>
+    <associate|auto-151|<tuple|F.1.11.1|66>>
+    <associate|auto-152|<tuple|F.1.12|66>>
+    <associate|auto-153|<tuple|F.1.12.1|66>>
+    <associate|auto-154|<tuple|F.1.12.2|66>>
+    <associate|auto-155|<tuple|F.1.13|66>>
+    <associate|auto-156|<tuple|F.1.13.1|67>>
+    <associate|auto-157|<tuple|F.1.14|67>>
+    <associate|auto-158|<tuple|F.2|67>>
+    <associate|auto-159|<tuple|G|68>>
     <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|G.2.1|68>>
+    <associate|auto-160|<tuple|G.1|68>>
     <associate|auto-161|<tuple|G.1|68>>
-    <associate|auto-162|<tuple|G.2.2|68>>
-    <associate|auto-163|<tuple|G.2.3|68>>
-    <associate|auto-164|<tuple|G.2.4|68>>
-    <associate|auto-165|<tuple|G.2.5|69>>
-    <associate|auto-166|<tuple|G.2.6|69>>
-    <associate|auto-167|<tuple|G.2.7|69>>
-    <associate|auto-168|<tuple|G.2|70>>
-    <associate|auto-169|<tuple|G.3|70>>
+    <associate|auto-162|<tuple|G.2|68>>
+    <associate|auto-163|<tuple|G.2.1|68>>
+    <associate|auto-164|<tuple|G.1|68>>
+    <associate|auto-165|<tuple|G.2.2|69>>
+    <associate|auto-166|<tuple|G.2.3|69>>
+    <associate|auto-167|<tuple|G.2.4|69>>
+    <associate|auto-168|<tuple|G.2.5|70>>
+    <associate|auto-169|<tuple|G.2.6|70>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|G.3|71>>
-    <associate|auto-171|<tuple|G.3|73>>
-    <associate|auto-172|<tuple|Tec19|75>>
+    <associate|auto-170|<tuple|G.2.7|71>>
+    <associate|auto-171|<tuple|G.2|73>>
+    <associate|auto-172|<tuple|G.3|75>>
+    <associate|auto-173|<tuple|G.3|?>>
+    <associate|auto-174|<tuple|G.3|?>>
+    <associate|auto-175|<tuple|Tec19|?>>
     <associate|auto-18|<tuple|1.13|9>>
     <associate|auto-19|<tuple|1.13|9>>
     <associate|auto-2|<tuple|1.1|7>>
@@ -5652,66 +5701,66 @@
     <associate|auto-42|<tuple|3.2|19>>
     <associate|auto-43|<tuple|3.2.1|19>>
     <associate|auto-44|<tuple|3.2.2|19>>
-    <associate|auto-45|<tuple|3.2.3|19>>
+    <associate|auto-45|<tuple|3.2.2.1|19>>
     <associate|auto-46|<tuple|3.2.3|19>>
     <associate|auto-47|<tuple|3.2.3|19>>
     <associate|auto-48|<tuple|3.2.3|19>>
-    <associate|auto-49|<tuple|<with|mode|<quote|math>|<rigid|->>|20>>
+    <associate|auto-49|<tuple|3.2.3|20>>
     <associate|auto-5|<tuple|1.4|8>>
-    <associate|auto-50|<tuple|3.3|20>>
-    <associate|auto-51|<tuple|3.3.1|20>>
-    <associate|auto-52|<tuple|3.3.1.1|21>>
-    <associate|auto-53|<tuple|3.1|21>>
-    <associate|auto-54|<tuple|3.3.1.2|22>>
-    <associate|auto-55|<tuple|3.3.1.3|22>>
+    <associate|auto-50|<tuple|<with|mode|<quote|math>|<rigid|->>|20>>
+    <associate|auto-51|<tuple|3.2.3.1|20>>
+    <associate|auto-52|<tuple|3.1|21>>
+    <associate|auto-53|<tuple|3.3|21>>
+    <associate|auto-54|<tuple|3.3.1|22>>
+    <associate|auto-55|<tuple|3.3.1.1|22>>
     <associate|auto-56|<tuple|3.2|22>>
-    <associate|auto-57|<tuple|3.3.1.4|22>>
-    <associate|auto-58|<tuple|3.3.2|22>>
-    <associate|auto-59|<tuple|3.3.3|23>>
+    <associate|auto-57|<tuple|3.3.1.2|22>>
+    <associate|auto-58|<tuple|3.3.1.3|22>>
+    <associate|auto-59|<tuple|3.3.2|23>>
     <associate|auto-6|<tuple|1.7|8>>
-    <associate|auto-60|<tuple|4|25>>
-    <associate|auto-61|<tuple|4.1|25>>
-    <associate|auto-62|<tuple|4.2|25>>
-    <associate|auto-63|<tuple|4.3|26>>
-    <associate|auto-64|<tuple|4.3.1|26>>
-    <associate|auto-65|<tuple|4.3.2|26>>
-    <associate|auto-66|<tuple|4.4|26>>
-    <associate|auto-67|<tuple|4.4.1|27>>
-    <associate|auto-68|<tuple|4.4.2|27>>
-    <associate|auto-69|<tuple|5|29>>
+    <associate|auto-60|<tuple|3.3.3|25>>
+    <associate|auto-61|<tuple|4|25>>
+    <associate|auto-62|<tuple|4.1|25>>
+    <associate|auto-63|<tuple|4.2|26>>
+    <associate|auto-64|<tuple|4.3|26>>
+    <associate|auto-65|<tuple|4.3.1|26>>
+    <associate|auto-66|<tuple|4.3.2|26>>
+    <associate|auto-67|<tuple|4.4|27>>
+    <associate|auto-68|<tuple|4.4.1|27>>
+    <associate|auto-69|<tuple|4.4.2|29>>
     <associate|auto-7|<tuple|1.7|8>>
-    <associate|auto-70|<tuple|5.1|29>>
-    <associate|auto-71|<tuple|5.1.1|29>>
-    <associate|auto-72|<tuple|5.1.2|30>>
-    <associate|auto-73|<tuple|5.1.3|30>>
-    <associate|auto-74|<tuple|5.1.4|31>>
-    <associate|auto-75|<tuple|5.1.5|32>>
-    <associate|auto-76|<tuple|5.1.6|32>>
-    <associate|auto-77|<tuple|5.1.7|33>>
-    <associate|auto-78|<tuple|5.2|34>>
-    <associate|auto-79|<tuple|5.2.1|34>>
+    <associate|auto-70|<tuple|5|29>>
+    <associate|auto-71|<tuple|5.1|29>>
+    <associate|auto-72|<tuple|5.1.1|30>>
+    <associate|auto-73|<tuple|5.1.2|30>>
+    <associate|auto-74|<tuple|5.1.3|31>>
+    <associate|auto-75|<tuple|5.1.4|32>>
+    <associate|auto-76|<tuple|5.1.5|32>>
+    <associate|auto-77|<tuple|5.1.6|33>>
+    <associate|auto-78|<tuple|5.1.7|34>>
+    <associate|auto-79|<tuple|5.2|34>>
     <associate|auto-8|<tuple|1.7|8>>
-    <associate|auto-80|<tuple|5.2.2|36>>
-    <associate|auto-81|<tuple|5.2.3|37>>
-    <associate|auto-82|<tuple|5.2.4|37>>
-    <associate|auto-83|<tuple|5.3|38>>
-    <associate|auto-84|<tuple|A|39>>
-    <associate|auto-85|<tuple|A.1|39>>
-    <associate|auto-86|<tuple|A.2|39>>
-    <associate|auto-87|<tuple|A.3|39>>
-    <associate|auto-88|<tuple|A.4|39>>
-    <associate|auto-89|<tuple|B|41>>
+    <associate|auto-80|<tuple|5.2.1|36>>
+    <associate|auto-81|<tuple|5.2.2|37>>
+    <associate|auto-82|<tuple|5.2.3|37>>
+    <associate|auto-83|<tuple|5.2.4|38>>
+    <associate|auto-84|<tuple|5.3|39>>
+    <associate|auto-85|<tuple|A|39>>
+    <associate|auto-86|<tuple|A.1|39>>
+    <associate|auto-87|<tuple|A.2|39>>
+    <associate|auto-88|<tuple|A.3|39>>
+    <associate|auto-89|<tuple|A.4|41>>
     <associate|auto-9|<tuple|1.9|9>>
-    <associate|auto-90|<tuple|B.1|41>>
-    <associate|auto-91|<tuple|B.1.1|42>>
-    <associate|auto-92|<tuple|B.2|43>>
-    <associate|auto-93|<tuple|B.2.1|43>>
-    <associate|auto-94|<tuple|B.2.2|43>>
-    <associate|auto-95|<tuple|B.3|43>>
-    <associate|auto-96|<tuple|C|45>>
-    <associate|auto-97|<tuple|D|47>>
-    <associate|auto-98|<tuple|E|49>>
-    <associate|auto-99|<tuple|E.1|49>>
+    <associate|auto-90|<tuple|A.5|41>>
+    <associate|auto-91|<tuple|A.1|42>>
+    <associate|auto-92|<tuple|B|43>>
+    <associate|auto-93|<tuple|B.1|43>>
+    <associate|auto-94|<tuple|B.1.1|43>>
+    <associate|auto-95|<tuple|B.2|43>>
+    <associate|auto-96|<tuple|B.2.1|45>>
+    <associate|auto-97|<tuple|B.2.2|47>>
+    <associate|auto-98|<tuple|B.3|49>>
+    <associate|auto-99|<tuple|C|49>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|73>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|73>>
     <associate|bib-liusvaara_edwards-curve_2017|<tuple|LJ17|73>>
@@ -5725,24 +5774,24 @@
     <associate|chap-consensu|<tuple|5|29>>
     <associate|chap-state-spec|<tuple|2|11>>
     <associate|chap-state-transit|<tuple|3|17>>
-    <associate|defn-account-key|<tuple|3.3|19>>
+    <associate|defn-account-key|<tuple|A.1|19>>
     <associate|defn-babe-header|<tuple|5.10|31>>
     <associate|defn-babe-seal|<tuple|5.11|31>>
     <associate|defn-bit-rep|<tuple|1.6|8>>
     <associate|defn-block-body|<tuple|3.9|22>>
     <associate|defn-block-data|<tuple|E.2|51>>
-    <associate|defn-block-header|<tuple|3.5|21>>
-    <associate|defn-block-header-hash|<tuple|3.7|22>>
+    <associate|defn-block-header|<tuple|3.6|21>>
+    <associate|defn-block-header-hash|<tuple|3.8|22>>
     <associate|defn-block-signature|<tuple|5.11|31>>
     <associate|defn-block-time|<tuple|5.8|30>>
     <associate|defn-block-tree|<tuple|1.11|9>>
     <associate|defn-chain-subchain|<tuple|1.13|9>>
     <associate|defn-children-bitmap|<tuple|2.10|15>>
-    <associate|defn-digest|<tuple|3.6|21>>
+    <associate|defn-digest|<tuple|3.7|21>>
     <associate|defn-epoch-slot|<tuple|5.3|29>>
     <associate|defn-epoch-subchain|<tuple|5.5|29>>
     <associate|defn-finalized-block|<tuple|5.25|38>>
-    <associate|defn-func-inherent-data|<tuple|3.8|22>>
+    <associate|defn-func-inherent-data|<tuple|3.5|22>>
     <associate|defn-grandpa-completable|<tuple|5.21|36>>
     <associate|defn-grandpa-justification|<tuple|5.23|36>>
     <associate|defn-hex-encoding|<tuple|B.9|43>>
@@ -5782,13 +5831,14 @@
     <associate|note-slot|<tuple|5.4|29>>
     <associate|sect-babe|<tuple|5.1|29>>
     <associate|sect-blake2|<tuple|A.2|39>>
-    <associate|sect-block-body|<tuple|3.3.1.4|22>>
+    <associate|sect-block-body|<tuple|3.3.1.3|22>>
     <associate|sect-block-building|<tuple|5.1.7|33>>
     <associate|sect-block-finalization|<tuple|5.3|38>>
     <associate|sect-block-format|<tuple|3.3.1|20>>
     <associate|sect-block-production|<tuple|5.1|29>>
     <associate|sect-block-submission|<tuple|3.3.2|22>>
     <associate|sect-block-validation|<tuple|3.3.3|23>>
+    <associate|sect-cryptographic-keys|<tuple|A.5|?>>
     <associate|sect-defn-conv|<tuple|1.2|7>>
     <associate|sect-encoding|<tuple|B|41>>
     <associate|sect-entries-into-runtime|<tuple|3.1|17>>
@@ -5808,11 +5858,11 @@
     <associate|sect-msg-consensus|<tuple|E.1.6|52>>
     <associate|sect-msg-status|<tuple|E.1.1|49>>
     <associate|sect-msg-transactions|<tuple|E.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
+    <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|E|49>>
     <associate|sect-predef-storage-keys|<tuple|D|47>>
     <associate|sect-randomness|<tuple|A.3|39>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
+    <associate|sect-re-api|<tuple|F|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|69>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|69>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|68>>
@@ -5824,11 +5874,13 @@
     <associate|sect-state-replication|<tuple|3.3|20>>
     <associate|sect-verifying-authorship|<tuple|5.1.6|32>>
     <associate|sect-vrf|<tuple|A.4|39>>
+    <associate|section-cryptographic-keys|<tuple|A.5|?>>
     <associate|slot-time-cal-tail|<tuple|5.7|30>>
     <associate|snippet-runtime-enteries|<tuple|G.1|67>>
+    <associate|tabl-account-key-schemes|<tuple|A.1|?>>
     <associate|tabl-block-attributes|<tuple|E.3|50>>
-    <associate|tabl-digest-items|<tuple|3.1|21>>
-    <associate|tabl-inherent-data|<tuple|3.2|22>>
+    <associate|tabl-digest-items|<tuple|3.2|21>>
+    <associate|tabl-inherent-data|<tuple|3.1|22>>
     <associate|tabl-message-types|<tuple|E.1|49>>
     <associate|tabl-node-role|<tuple|E.2|50>>
     <associate|tabl-transaction-validity|<tuple|G.2|70>>
