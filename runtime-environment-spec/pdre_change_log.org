@@ -1,5 +1,6 @@
 * Tue Nov 05 2019
   Extrinsics section updated, Inherents definition added and extrinsics are distinguished.
+  Fixing Babe typos.
 * Mon Nov 04 2019
   Calculation of winning threshold
 * Sat Nov 02 2019
