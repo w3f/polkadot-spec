@@ -28,16 +28,16 @@ ClearPrefixCommandArgs extractClearPrefixArgs(int argc, char **argv) {
        po::value(&prefix)->required(), "The prefix for deletion")
       ("key1",
        po::value(&key1),
-       "first key")
+       "first storage key")
       ("value1",
        po::value(&value1),
-       "first value")
+       "first storage value")
       ("key2",
        po::value(&key2),
-       "second key")
+       "second storage key")
       ("value2",
        po::value(&value2),
-       "second value");
+       "second storage value");
   // clang-format on
 
   po::variables_map vm;
@@ -141,4 +141,81 @@ void processExtClearPrefix(const ClearPrefixCommandArgs& args) {
   BOOST_ASSERT_MSG(memory->deallocate(value2Ptr) == value2Size, "Memory Leak: Value 2");
   BOOST_ASSERT_MSG(memory->deallocate(sizePtr) == memory->kMaxMemorySize, "Memory Leak: Size");
   BOOST_ASSERT_MSG(memory->deallocate(prefixPtr) == prefixSize, "Memory Leak: Prefix");
+}
+
+ClearStorageCommandArgs extractClearStorageArgs(int argc, char **argv){
+  po::options_description desc("Clear Storage related tests\nAllowed options:");
+  boost::optional<std::string> key;
+  boost::optional<std::string> value;
+
+  // clang-format off
+  desc.add_options()
+      ("help", "produce help message")
+      ("key",
+       po::value(&key)->required(),
+       "Storage key")
+      ("value",
+       po::value(&value),
+       "Storage value");
+  // clang-format on
+
+  po::variables_map vm;
+  po::store(
+      po::command_line_parser(argc, argv).options(desc).run(),
+      vm);
+  po::notify(vm);
+
+  BOOST_ASSERT_MSG(key, "Key is not provided");
+  BOOST_ASSERT_MSG(value, "Value is not provided");
+
+  return ClearStorageCommandArgs{.key = *key,
+      .value = *value};
+}
+
+
+void processExtClearStorage(const ClearStorageCommandArgs& args){
+  auto db = std::make_unique<kagome::storage::InMemoryStorage>();
+  std::unique_ptr<kagome::storage::trie::TrieDb> trie =
+      std::make_unique<kagome::storage::trie::PolkadotTrieDb>(std::move(db));
+  std::shared_ptr<kagome::runtime::WasmMemory> memory =
+      std::shared_ptr<kagome::runtime::WasmMemoryImpl>();
+
+  std::unique_ptr<kagome::extensions::Extension> extension =
+      std::make_unique<kagome::extensions::ExtensionImpl>(memory,
+                                                          std::move(trie));
+
+  memory->resize(memory->kMaxMemorySize);
+
+  kagome::common::Buffer buffer;
+
+  buffer.put(args.key);
+  kagome::runtime::SizeType  keySize = buffer.size();
+  kagome::runtime::WasmPointer keyPtr = memory->allocate(keySize);
+  memory->storeBuffer(keyPtr, buffer);
+  buffer.clear();
+
+  buffer.put(args.value);
+  kagome::runtime::SizeType  valueSize = buffer.size();
+  kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
+  memory->storeBuffer(valuePtr, buffer);
+  buffer.clear();
+
+  extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
+
+  kagome::runtime::WasmPointer sizePtr = memory->allocate(sizeof(memory->kMaxMemorySize));
+  auto res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
+  kagome::runtime::SizeType written_out = memory->load32u(sizePtr);
+  BOOST_ASSERT_MSG( written_out == valueSize, "No value");
+  BOOST_ASSERT_MSG(res == valuePtr, "No value");
+
+  extension->ext_clear_storage(keyPtr, keySize);
+
+  res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
+  written_out = memory->load32u(sizePtr);
+  BOOST_ASSERT_MSG( written_out == memory->kMaxMemorySize, "Value wasn't deleted");
+  BOOST_ASSERT_MSG(res == 0, "Value wasn't deleted");
+
+  BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
+  BOOST_ASSERT_MSG(memory->deallocate(valuePtr) == valueSize, "Memory Leak: Value ");
+  BOOST_ASSERT_MSG(memory->deallocate(sizePtr) == memory->kMaxMemorySize, "Memory Leak: Size");
 }

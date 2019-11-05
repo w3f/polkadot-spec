@@ -22,8 +22,16 @@ ClearPrefixCommandArgs extractClearPrefixArgs(int argc, char **argv);
 // executes ext_clear_prefix tests according to provided args
 void processExtClearPrefix(const ClearPrefixCommandArgs& args);
 
+struct ClearStorageCommandArgs {
+  std::string key;
+  std::string value;
+};
+
+// parses CLI input
+ClearStorageCommandArgs extractClearStorageArgs(int argc, char **argv);
+
 // executes ext_clear_storage tests according to provided args
-// void processExtClearStorage();
+void processExtClearStorage(const ClearStorageCommandArgs& args);
 
 // executes ext_exists_storage tests according to provided args
 // void processExtExistsStorage();
