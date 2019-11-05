@@ -53,6 +53,7 @@ target_link_libraries(kagome_tester
     p2p::p2p_random_generator
     iroha::ed25519
     sr25519::sr25519
+    spdlog::spdlog
     ${kagome_LIBRARIES}
     )
 
