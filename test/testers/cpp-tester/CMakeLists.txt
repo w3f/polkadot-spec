@@ -39,7 +39,13 @@ add_executable(kagome_tester
     extension.cpp
     extension.hpp
     extension/storage.cpp
-    extension/storage.hpp)
+    extension/storage.hpp
+    extension/network.cpp
+    extension/network.hpp
+    extension/child_storage.cpp
+    extension/child_storage.hpp
+    extension/crypto.cpp
+    extension/crypto.hpp)
 
 include(${CMAKE_SOURCE_DIR}/build/kagome/install/lib/cmake/kagome/kagomeConfig.cmake)
 
