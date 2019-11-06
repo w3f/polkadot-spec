@@ -6,6 +6,18 @@
 #ifndef KAGOMECROSSTESTCLI_EXTENSION_HPP
 #define KAGOMECROSSTESTCLI_EXTENSION_HPP
 
-void processExtensionsCommands(int argc, char **argv);
+#include <memory>
+#include <string>
+#include <vector>
+
+struct ExtensionCommandArgs {
+  std::string function;
+  std::vector<std::string> input;
+};
+
+// parses CLI input
+ExtensionCommandArgs extractExtensionArgs(int argc, char **argv);
+
+void processExtensionsCommands(const ExtensionCommandArgs& args);
 
 #endif //KAGOMECROSSTESTCLI_STORAGE_EXTENSION_HPP

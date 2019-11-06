@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     processTrieCommand(extractTrieArgs(argc, argv));
   });
   router.addSubcommand("pdre-api", [](int argc, char **argv) {
-    processExtensionsCommands(argc, argv);
+    processExtensionsCommands(extractExtensionArgs(argc, argv));
   });
 
   std::string commands_list = "Valid subcommands are: ";
