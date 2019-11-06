@@ -3363,7 +3363,7 @@
     <strong|Controller key> This account key acts on behalf of the Stash
     account, signalling decisions about nominating and validating. It's a
     semi-online key that will be in the direct control of a user and used to
-    submit manual extrinsics. It set preferences like payout account and
+    submit manual extrinsics. It sets preferences like payout account and
     commission. If used for a validator, it also sets the session keys. It
     only needs enough funds to pay transaction fees.
   </definition>
@@ -3389,7 +3389,13 @@
     </big-table>
   </definition>
 
-  <appendix|Auxiliary Encodings><label|sect-encoding>
+  \;
+
+  <strong|Note>: the runtime has no knowledge or concept of Account keys and
+  only uses Session keys. Stash keys and Controller keys are created and
+  managed by the user, which is independent of the Polkadot implementation.
+  The user can notify the network about the used keys by submitting a
+  transaction.<appendix|Auxiliary Encodings><label|sect-encoding>
 
   <section|SCALE Codec><label|sect-scale-codec>
 
