@@ -3325,32 +3325,68 @@
 
   Various type keys are used in Polkadot to prove the identity of the actor.
   In the following section we specify the detail of those keys and comment on
-  their usage
+  their usage.
 
   <\definition>
-    <label|defn-account-key><strong|Account key
+    <label|defn-account-key><strong|Account keys
     <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>> is a key pair of type of
     either of schemes listed in Table <reference|tabl-account-key-schemes>:
 
     <\center>
       <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<twith|table-halign|l>|<table|<row|<cell|Key
-      scheme>|<cell|Description>>|<row|<cell|SR25519>|<cell|>>|<row|<cell|ED25519>|<cell|>>|<row|<cell|secp256k1>|<cell|Only
-      for outgoing transfer transaction>>>>>>
+      scheme>|<cell|Description>>|<row|<cell|SR25519>|<cell|The
+      Schnorrkel/Ristretto variant using Schnorr
+      signatures>>|<row|<cell|ED25519>|<cell|The vanilla implementation using
+      Schnorr signatures>>|<row|<cell|secp256k1>|<cell|Only for outgoing
+      transfer transaction>>>>>>
         <label|tabl-account-key-schemes>List of public key scheme which can
         be used for an account key
       </big-table>
     </center>
 
     Account key can be used to sign transactions among other accounts and
-    blance-related functions.
+    blance-related functions. Account keys are distinguished by \Pstash
+    keys\Q and \Pcontroller keys\Q.
   </definition>
 
   <\definition>
-    <strong|Controller key> <todo|TBS>
+    <label|defn-account-key><strong|Stash key> This account key holds funds
+    bonded for staking to a particular Controller. As a result, one may
+    actively participate with a Stash key kept in a cold wallet, meaning it
+    stays offline all the time. It can also be used to designate a Proxy
+    account to vote in governance proposals. The Stash key holds the majority
+    of the users funds and should never be exposed to the internet or used to
+    submit extrinsics.
   </definition>
 
   <\definition>
-    <strong|Session key> <todo|TBS>
+    <strong|Controller key> This account key acts on behalf of the Stash
+    account, signalling decisions about nominating and validating. It's a
+    semi-online key that will be in the direct control of a user and used to
+    submit manual extrinsics. It set preferences like payout account and
+    commission. If used for a validator, it also sets the session keys. It
+    only needs enough funds to pay transaction fees.
+  </definition>
+
+  <\definition>
+    <strong|Session key> Session keys are hot keys that be must kept online
+    by a validator to perform network operations. Session keys are typically
+    generated in the client, although they don't have to be. They are
+    <em|not> meant to control funds and should only be used for their
+    intended purpose. They can be changed regularly; the controller only
+    needs to create a certificate by signing a session public key and
+    broadcast this certificate via an extrinsic.
+
+    \;
+
+    Polkadot uses four session keys:
+
+    <\big-table|<tabular|<tformat|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|5|5|1|1|cell-lborder|0ln>|<cwith|5|5|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|2|2|cell-width|100>|<cwith|1|1|2|2|cell-hmode|max>|<table|<row|<cell|Protocol>|<cell|Key
+    scheme>>|<row|<cell|GRANDPA>|<cell|ED25519>>|<row|<cell|BABE>|<cell|SR25519>>|<row|<cell|I'm
+    Online>|<cell|SR25519>>|<row|<cell|Parachain>|<cell|SR25519>>>>>>
+      List of key schemes which are used for session keys depending on the
+      protocol
+    </big-table>
   </definition>
 
   <appendix|Auxiliary Encodings><label|sect-encoding>
@@ -5595,89 +5631,91 @@
     <associate|algo-verify-slot-winner|<tuple|5.6|33>>
     <associate|auto-1|<tuple|1|7>>
     <associate|auto-10|<tuple|1.9|9>>
-    <associate|auto-100|<tuple|D|47>>
-    <associate|auto-101|<tuple|E|49>>
-    <associate|auto-102|<tuple|E.1|49>>
+    <associate|auto-100|<tuple|C|47>>
+    <associate|auto-101|<tuple|D|49>>
+    <associate|auto-102|<tuple|E|49>>
     <associate|auto-103|<tuple|E.1|49>>
-    <associate|auto-104|<tuple|E.1.1|49>>
-    <associate|auto-105|<tuple|E.2|50>>
-    <associate|auto-106|<tuple|E.1.2|50>>
-    <associate|auto-107|<tuple|E.3|50>>
-    <associate|auto-108|<tuple|E.1.3|51>>
-    <associate|auto-109|<tuple|E.1.4|51>>
+    <associate|auto-104|<tuple|E.1|49>>
+    <associate|auto-105|<tuple|E.1.1|50>>
+    <associate|auto-106|<tuple|E.2|50>>
+    <associate|auto-107|<tuple|E.1.2|50>>
+    <associate|auto-108|<tuple|E.3|51>>
+    <associate|auto-109|<tuple|E.1.3|51>>
     <associate|auto-11|<tuple|1.9|9>>
-    <associate|auto-110|<tuple|E.1.5|51>>
-    <associate|auto-111|<tuple|E.1.6|52>>
-    <associate|auto-112|<tuple|F|53>>
-    <associate|auto-113|<tuple|F.1|53>>
-    <associate|auto-114|<tuple|F.1.1|53>>
-    <associate|auto-115|<tuple|F.1.2|53>>
-    <associate|auto-116|<tuple|F.1.2.1|54>>
-    <associate|auto-117|<tuple|F.1.3|54>>
-    <associate|auto-118|<tuple|F.1.4|54>>
-    <associate|auto-119|<tuple|F.1.4.1|54>>
+    <associate|auto-110|<tuple|E.1.4|51>>
+    <associate|auto-111|<tuple|E.1.5|52>>
+    <associate|auto-112|<tuple|E.1.6|53>>
+    <associate|auto-113|<tuple|F|53>>
+    <associate|auto-114|<tuple|F.1|53>>
+    <associate|auto-115|<tuple|F.1.1|53>>
+    <associate|auto-116|<tuple|F.1.2|54>>
+    <associate|auto-117|<tuple|F.1.2.1|54>>
+    <associate|auto-118|<tuple|F.1.3|54>>
+    <associate|auto-119|<tuple|F.1.4|54>>
     <associate|auto-12|<tuple|1.9|9>>
-    <associate|auto-120|<tuple|F.1.5|55>>
-    <associate|auto-121|<tuple|F.1.6|55>>
-    <associate|auto-122|<tuple|F.1.7|56>>
-    <associate|auto-123|<tuple|F.1.8|56>>
-    <associate|auto-124|<tuple|F.1.8.1|56>>
-    <associate|auto-125|<tuple|F.1.8.2|56>>
-    <associate|auto-126|<tuple|F.1.8.3|57>>
-    <associate|auto-127|<tuple|F.1.9|57>>
-    <associate|auto-128|<tuple|F.1.9.1|57>>
-    <associate|auto-129|<tuple|F.1.9.2|57>>
+    <associate|auto-120|<tuple|F.1.4.1|55>>
+    <associate|auto-121|<tuple|F.1.5|55>>
+    <associate|auto-122|<tuple|F.1.6|56>>
+    <associate|auto-123|<tuple|F.1.7|56>>
+    <associate|auto-124|<tuple|F.1.8|56>>
+    <associate|auto-125|<tuple|F.1.8.1|56>>
+    <associate|auto-126|<tuple|F.1.8.2|57>>
+    <associate|auto-127|<tuple|F.1.8.3|57>>
+    <associate|auto-128|<tuple|F.1.9|57>>
+    <associate|auto-129|<tuple|F.1.9.1|57>>
     <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|F.1.9.3|57>>
-    <associate|auto-131|<tuple|F.1.9.4|58>>
-    <associate|auto-132|<tuple|F.1.9.5|58>>
-    <associate|auto-133|<tuple|F.1.9.6|59>>
-    <associate|auto-134|<tuple|F.1.10|59>>
-    <associate|auto-135|<tuple|F.1.10.1|59>>
-    <associate|auto-136|<tuple|F.1.10.2|60>>
-    <associate|auto-137|<tuple|F.1.10.3|60>>
-    <associate|auto-138|<tuple|F.1.10.4|60>>
-    <associate|auto-139|<tuple|F.1.10.5|61>>
+    <associate|auto-130|<tuple|F.1.9.2|57>>
+    <associate|auto-131|<tuple|F.1.9.3|58>>
+    <associate|auto-132|<tuple|F.1.9.4|58>>
+    <associate|auto-133|<tuple|F.1.9.5|59>>
+    <associate|auto-134|<tuple|F.1.9.6|59>>
+    <associate|auto-135|<tuple|F.1.10|59>>
+    <associate|auto-136|<tuple|F.1.10.1|60>>
+    <associate|auto-137|<tuple|F.1.10.2|60>>
+    <associate|auto-138|<tuple|F.1.10.3|60>>
+    <associate|auto-139|<tuple|F.1.10.4|61>>
     <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|F.1.10.6|61>>
-    <associate|auto-141|<tuple|F.1.10.7|61>>
-    <associate|auto-142|<tuple|F.1.10.8|62>>
-    <associate|auto-143|<tuple|F.1.10.9|62>>
-    <associate|auto-144|<tuple|F.1.10.10|62>>
-    <associate|auto-145|<tuple|F.1.10.11|63>>
-    <associate|auto-146|<tuple|F.1.10.12|63>>
-    <associate|auto-147|<tuple|F.1.10.13|64>>
-    <associate|auto-148|<tuple|F.1.10.14|64>>
-    <associate|auto-149|<tuple|F.1.10.15|65>>
+    <associate|auto-140|<tuple|F.1.10.5|61>>
+    <associate|auto-141|<tuple|F.1.10.6|61>>
+    <associate|auto-142|<tuple|F.1.10.7|62>>
+    <associate|auto-143|<tuple|F.1.10.8|62>>
+    <associate|auto-144|<tuple|F.1.10.9|62>>
+    <associate|auto-145|<tuple|F.1.10.10|63>>
+    <associate|auto-146|<tuple|F.1.10.11|63>>
+    <associate|auto-147|<tuple|F.1.10.12|64>>
+    <associate|auto-148|<tuple|F.1.10.13|64>>
+    <associate|auto-149|<tuple|F.1.10.14|65>>
     <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|F.1.11|65>>
-    <associate|auto-151|<tuple|F.1.11.1|65>>
-    <associate|auto-152|<tuple|F.1.12|65>>
-    <associate|auto-153|<tuple|F.1.12.1|65>>
-    <associate|auto-154|<tuple|F.1.12.2|66>>
-    <associate|auto-155|<tuple|F.1.13|66>>
-    <associate|auto-156|<tuple|F.1.13.1|66>>
-    <associate|auto-157|<tuple|F.1.14|66>>
-    <associate|auto-158|<tuple|F.2|66>>
-    <associate|auto-159|<tuple|G|67>>
+    <associate|auto-150|<tuple|F.1.10.15|65>>
+    <associate|auto-151|<tuple|F.1.11|65>>
+    <associate|auto-152|<tuple|F.1.11.1|65>>
+    <associate|auto-153|<tuple|F.1.12|65>>
+    <associate|auto-154|<tuple|F.1.12.1|66>>
+    <associate|auto-155|<tuple|F.1.12.2|66>>
+    <associate|auto-156|<tuple|F.1.13|66>>
+    <associate|auto-157|<tuple|F.1.13.1|66>>
+    <associate|auto-158|<tuple|F.1.14|66>>
+    <associate|auto-159|<tuple|F.2|67>>
     <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|G.1|67>>
+    <associate|auto-160|<tuple|G|67>>
     <associate|auto-161|<tuple|G.1|67>>
-    <associate|auto-162|<tuple|G.2|68>>
-    <associate|auto-163|<tuple|G.2.1|68>>
-    <associate|auto-164|<tuple|G.1|68>>
-    <associate|auto-165|<tuple|G.2.2|68>>
-    <associate|auto-166|<tuple|G.2.3|68>>
-    <associate|auto-167|<tuple|G.2.4|68>>
-    <associate|auto-168|<tuple|G.2.5|69>>
-    <associate|auto-169|<tuple|G.2.6|69>>
+    <associate|auto-162|<tuple|G.1|68>>
+    <associate|auto-163|<tuple|G.2|68>>
+    <associate|auto-164|<tuple|G.2.1|68>>
+    <associate|auto-165|<tuple|G.1|68>>
+    <associate|auto-166|<tuple|G.2.2|68>>
+    <associate|auto-167|<tuple|G.2.3|68>>
+    <associate|auto-168|<tuple|G.2.4|69>>
+    <associate|auto-169|<tuple|G.2.5|69>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|G.2.7|69>>
-    <associate|auto-171|<tuple|G.2|70>>
-    <associate|auto-172|<tuple|G.3|70>>
+    <associate|auto-170|<tuple|G.2.6|69>>
+    <associate|auto-171|<tuple|G.2.7|70>>
+    <associate|auto-172|<tuple|G.2|70>>
     <associate|auto-173|<tuple|G.3|71>>
     <associate|auto-174|<tuple|G.3|73>>
-    <associate|auto-175|<tuple|Tec19|75>>
+    <associate|auto-175|<tuple|G.3|75>>
+    <associate|auto-176|<tuple|Tec19|?>>
+    <associate|auto-177|<tuple|Tec19|?>>
     <associate|auto-18|<tuple|1.13|9>>
     <associate|auto-19|<tuple|1.13|9>>
     <associate|auto-2|<tuple|1.1|7>>
@@ -5760,14 +5798,14 @@
     <associate|auto-9|<tuple|1.9|9>>
     <associate|auto-90|<tuple|A.5|39>>
     <associate|auto-91|<tuple|A.1|39>>
-    <associate|auto-92|<tuple|B|41>>
-    <associate|auto-93|<tuple|B.1|41>>
-    <associate|auto-94|<tuple|B.1.1|42>>
-    <associate|auto-95|<tuple|B.2|43>>
-    <associate|auto-96|<tuple|B.2.1|43>>
-    <associate|auto-97|<tuple|B.2.2|43>>
-    <associate|auto-98|<tuple|B.3|43>>
-    <associate|auto-99|<tuple|C|45>>
+    <associate|auto-92|<tuple|A.2|41>>
+    <associate|auto-93|<tuple|B|41>>
+    <associate|auto-94|<tuple|B.1|42>>
+    <associate|auto-95|<tuple|B.1.1|43>>
+    <associate|auto-96|<tuple|B.2|43>>
+    <associate|auto-97|<tuple|B.2.1|43>>
+    <associate|auto-98|<tuple|B.2.2|43>>
+    <associate|auto-99|<tuple|B.3|45>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|73>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|73>>
     <associate|bib-liusvaara_edwards-curve_2017|<tuple|LJ17|73>>
@@ -5781,7 +5819,7 @@
     <associate|chap-consensu|<tuple|5|29>>
     <associate|chap-state-spec|<tuple|2|11>>
     <associate|chap-state-transit|<tuple|3|17>>
-    <associate|defn-account-key|<tuple|A.1|39>>
+    <associate|defn-account-key|<tuple|A.2|39>>
     <associate|defn-babe-header|<tuple|5.10|31>>
     <associate|defn-babe-seal|<tuple|5.11|31>>
     <associate|defn-bit-rep|<tuple|1.6|8>>
@@ -5865,11 +5903,11 @@
     <associate|sect-msg-consensus|<tuple|E.1.6|52>>
     <associate|sect-msg-status|<tuple|E.1.1|49>>
     <associate|sect-msg-transactions|<tuple|E.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
+    <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|E|49>>
     <associate|sect-predef-storage-keys|<tuple|D|47>>
     <associate|sect-randomness|<tuple|A.3|39>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
+    <associate|sect-re-api|<tuple|F|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|69>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|69>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|68>>
