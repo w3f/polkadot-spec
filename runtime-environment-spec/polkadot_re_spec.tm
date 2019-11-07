@@ -4233,9 +4233,9 @@
   <subsection|<verbatim|ext_get_allocated_child_storage>>
 
   Given a byte array, this function allocates a large enough buffer in the
-  memory and retrieves the value stored under the key that is specified in
-  the array. Then, it stores in in the allocated buffer if the entry exists
-  in the child storage.
+  memory and retrieves the child value stored under the key that is specified
+  in the array. Then, it stores in in the allocated buffer if the entry
+  exists in the child storage.
 
   \;
 
@@ -4275,6 +4275,62 @@
     entry exist; otherwise it is equal to 0.
   </itemize>
 
+  <subsection|<verbatim|ext_get_child_storage_into>>
+
+  Given a byte array, this function retrieves the child value stored under
+  the key specified in the array and stores a specified chunk of it in the
+  provided buffer, if the entry exists in the storage.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    \ \ \ \ (func $ext_get_child_storage_into
+
+    \ \ \ \ \ \ (param $storage_key_data i32) (param $storage_key_len i32)
+
+    \ \ \ \ \ \ (param $key_data i32) (param $key_len i32) (param $value_data
+    i32)
+
+    \ \ \ \ \ \ (param $value_len i32) (param $value_offset i32) (result
+    i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|storage_key_data>: a memory address pointing at the
+    buffer of the byte array containing the child storage key.
+
+    <item><verbatim|storage_key_len>: the length of the child storage key
+    byte array in number of bytes.
+
+    <item><verbatim|key_data>: a memory address pointing at the buffer of the
+    byte array containing the key value.
+
+    <item><verbatim|key_len>: the length of the byte array in number of
+    bytes.
+
+    <item><verbatim|value_data>: a pointer to the buffer in which the
+    function stores the chunk of the value it retrieves.
+
+    <item><verbatim|value_len>: the (maximum) length of the chunk in bytes
+    the function will read of the value and will store in the
+    <verbatim|value_data> buffer.
+
+    <item><verbatim|value_offset>: the offset of the chunk where the function
+    should start storing the value in the provided buffer, i.e. the number of
+    bytes the functions should skip from the retrieved value before storing
+    the data in the <verbatim|value_data> in number of bytes.
+
+    <item><verbatim|result>: The number of bytes the function writes in
+    <verbatim|value_data> if the value exists or <math|2<rsup|32>-1> if the
+    entry does not exist under the specified key.
+  </itemize>
+
   <subsection|To Be Specced>
 
   <\itemize>
@@ -4284,7 +4340,7 @@
 
     <item><verbatim|>
 
-    <item><verbatim|ext_get_child_storage_into>
+    <item><verbatim|>
 
     <item><verbatim|ext_kill_child_storage>
 
@@ -5743,64 +5799,66 @@
     <associate|auto-124|<tuple|F.1.9|56>>
     <associate|auto-125|<tuple|F.1.10|56>>
     <associate|auto-126|<tuple|F.1.11|57>>
-    <associate|auto-127|<tuple|F.1.11.1|57>>
-    <associate|auto-128|<tuple|F.1.11.2|57>>
-    <associate|auto-129|<tuple|F.1.11.3|57>>
+    <associate|auto-127|<tuple|F.1.12|57>>
+    <associate|auto-128|<tuple|F.1.12.1|57>>
+    <associate|auto-129|<tuple|F.1.12.2|57>>
     <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|F.1.12|57>>
-    <associate|auto-131|<tuple|F.1.12.1|58>>
-    <associate|auto-132|<tuple|F.1.12.2|58>>
-    <associate|auto-133|<tuple|F.1.12.3|59>>
-    <associate|auto-134|<tuple|F.1.12.4|59>>
-    <associate|auto-135|<tuple|F.1.12.5|59>>
-    <associate|auto-136|<tuple|F.1.12.6|60>>
-    <associate|auto-137|<tuple|F.1.13|60>>
-    <associate|auto-138|<tuple|F.1.13.1|60>>
-    <associate|auto-139|<tuple|F.1.13.2|61>>
+    <associate|auto-130|<tuple|F.1.12.3|57>>
+    <associate|auto-131|<tuple|F.1.13|58>>
+    <associate|auto-132|<tuple|F.1.13.1|58>>
+    <associate|auto-133|<tuple|F.1.13.2|59>>
+    <associate|auto-134|<tuple|F.1.13.3|59>>
+    <associate|auto-135|<tuple|F.1.13.4|59>>
+    <associate|auto-136|<tuple|F.1.13.5|60>>
+    <associate|auto-137|<tuple|F.1.13.6|60>>
+    <associate|auto-138|<tuple|F.1.14|60>>
+    <associate|auto-139|<tuple|F.1.14.1|61>>
     <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|F.1.13.3|61>>
-    <associate|auto-141|<tuple|F.1.13.4|61>>
-    <associate|auto-142|<tuple|F.1.13.5|62>>
-    <associate|auto-143|<tuple|F.1.13.6|62>>
-    <associate|auto-144|<tuple|F.1.13.7|62>>
-    <associate|auto-145|<tuple|F.1.13.8|63>>
-    <associate|auto-146|<tuple|F.1.13.9|63>>
-    <associate|auto-147|<tuple|F.1.13.10|64>>
-    <associate|auto-148|<tuple|F.1.13.11|64>>
-    <associate|auto-149|<tuple|F.1.13.12|65>>
+    <associate|auto-140|<tuple|F.1.14.2|61>>
+    <associate|auto-141|<tuple|F.1.14.3|61>>
+    <associate|auto-142|<tuple|F.1.14.4|62>>
+    <associate|auto-143|<tuple|F.1.14.5|62>>
+    <associate|auto-144|<tuple|F.1.14.6|62>>
+    <associate|auto-145|<tuple|F.1.14.7|63>>
+    <associate|auto-146|<tuple|F.1.14.8|63>>
+    <associate|auto-147|<tuple|F.1.14.9|64>>
+    <associate|auto-148|<tuple|F.1.14.10|64>>
+    <associate|auto-149|<tuple|F.1.14.11|65>>
     <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|F.1.13.13|65>>
-    <associate|auto-151|<tuple|F.1.13.14|65>>
-    <associate|auto-152|<tuple|F.1.13.15|65>>
-    <associate|auto-153|<tuple|F.1.14|65>>
-    <associate|auto-154|<tuple|F.1.14.1|66>>
-    <associate|auto-155|<tuple|F.1.15|66>>
-    <associate|auto-156|<tuple|F.1.15.1|66>>
-    <associate|auto-157|<tuple|F.1.15.2|66>>
-    <associate|auto-158|<tuple|F.1.16|66>>
-    <associate|auto-159|<tuple|F.1.16.1|67>>
+    <associate|auto-150|<tuple|F.1.14.12|65>>
+    <associate|auto-151|<tuple|F.1.14.13|65>>
+    <associate|auto-152|<tuple|F.1.14.14|65>>
+    <associate|auto-153|<tuple|F.1.14.15|65>>
+    <associate|auto-154|<tuple|F.1.15|66>>
+    <associate|auto-155|<tuple|F.1.15.1|66>>
+    <associate|auto-156|<tuple|F.1.16|66>>
+    <associate|auto-157|<tuple|F.1.16.1|66>>
+    <associate|auto-158|<tuple|F.1.16.2|66>>
+    <associate|auto-159|<tuple|F.1.17|67>>
     <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|F.1.17|67>>
-    <associate|auto-161|<tuple|F.2|67>>
-    <associate|auto-162|<tuple|G|68>>
-    <associate|auto-163|<tuple|G.1|68>>
+    <associate|auto-160|<tuple|F.1.17.1|67>>
+    <associate|auto-161|<tuple|F.1.18|67>>
+    <associate|auto-162|<tuple|F.2|68>>
+    <associate|auto-163|<tuple|G|68>>
     <associate|auto-164|<tuple|G.1|68>>
-    <associate|auto-165|<tuple|G.2|68>>
-    <associate|auto-166|<tuple|G.2.1|68>>
-    <associate|auto-167|<tuple|G.1|68>>
-    <associate|auto-168|<tuple|G.2.2|69>>
-    <associate|auto-169|<tuple|G.2.3|69>>
+    <associate|auto-165|<tuple|G.1|68>>
+    <associate|auto-166|<tuple|G.2|68>>
+    <associate|auto-167|<tuple|G.2.1|68>>
+    <associate|auto-168|<tuple|G.1|69>>
+    <associate|auto-169|<tuple|G.2.2|69>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|G.2.4|69>>
-    <associate|auto-171|<tuple|G.2.5|70>>
-    <associate|auto-172|<tuple|G.2.6|70>>
-    <associate|auto-173|<tuple|G.2.7|71>>
-    <associate|auto-174|<tuple|G.2|73>>
-    <associate|auto-175|<tuple|G.3|75>>
+    <associate|auto-170|<tuple|G.2.3|69>>
+    <associate|auto-171|<tuple|G.2.4|70>>
+    <associate|auto-172|<tuple|G.2.5|70>>
+    <associate|auto-173|<tuple|G.2.6|71>>
+    <associate|auto-174|<tuple|G.2.7|73>>
+    <associate|auto-175|<tuple|G.2|75>>
     <associate|auto-176|<tuple|G.3|?>>
     <associate|auto-177|<tuple|G.3|?>>
-    <associate|auto-178|<tuple|Tec19|?>>
+    <associate|auto-178|<tuple|G.3|?>>
+    <associate|auto-179|<tuple|Tec19|?>>
     <associate|auto-18|<tuple|1.13|9>>
+    <associate|auto-180|<tuple|Tec19|?>>
     <associate|auto-19|<tuple|1.13|9>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
