@@ -4396,22 +4396,31 @@
     <item><verbatim|value_len>: the length of the value buffer in bytes.
   </itemize>
 
-  <subsection|To Be Specced>
+  <subsection|<verbatim|ext_storage_changes_root>>
+
+  Todo
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_storage_changes_root
+
+    \ \ (param $parent_hash_data i32) (param $parent_hash_len i32) (result
+    i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|>
+    <item><verbatim|parent_hash_data>: todo.
 
-    <item><verbatim|>
+    <item><verbatim|parent_hash_len>: todo.
 
-    <item><verbatim|>
-
-    <item><verbatim|>
-
-    <item><verbatim|>
-
-    <item><verbatim|>
-
-    <item><verbatim|ext_storage_changes_root>
+    <item><verbatim|result>: todo.
   </itemize>
 
   <subsection|Memory>
@@ -5925,6 +5934,7 @@
     <associate|auto-18|<tuple|1.13|9>>
     <associate|auto-180|<tuple|G.3|?>>
     <associate|auto-181|<tuple|Tec19|?>>
+    <associate|auto-182|<tuple|Tec19|?>>
     <associate|auto-19|<tuple|1.13|9>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
