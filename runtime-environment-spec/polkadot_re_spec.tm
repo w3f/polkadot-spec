@@ -4131,8 +4131,8 @@
   <subsection|<verbatim|ext_get_storage_into>>
 
   Given a byte array, this function retrieves the value stored under the key
-  specified in the array and stores a specified chunk of it in the provided
-  buffer, if the entry exists in the storage.
+  specified in the array and stores the specified chunk starting at the
+  offset into the provided buffer, if the entry exists in the storage.
 
   \;
 
@@ -4174,6 +4174,45 @@
     <item><verbatim|result>: The number of bytes the function writes in
     <verbatim|value_data> if the value exists or <math|2<rsup|32>-1> if the
     entry does not exist under the specified key.
+  </itemize>
+
+  <subsection|<verbatim|ext_set_child_storage>>
+
+  Sets the value of a specific key in the child state storage.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    (func $ext_set_child_storage
+
+    \ \ (param $storage_key_data i32) (param $storage_key_len i32) (param
+    $key_data i32)
+
+    \ \ (param $key_len i32) (param $value_data i32) (param $value_len i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|storage_key_data>: a memory address pointing at the
+    buffer of the byte array containing the child storage key. This key
+    <strong|must> be prefixed with <code|<code*|:child_storage:default:>>
+
+    <item><verbatim|storage_key_len>: the length of the child storage key
+    byte array in number of bytes.
+
+    <item><verbatim|key>: a pointer indicating the buffer containing the key.
+
+    <item><verbatim|key_len>: the key length in bytes.
+
+    <item><verbatim|value>: a pointer indicating the buffer containing the
+    value to be stored under the key.
+
+    <item><verbatim|value_len>: the length of the value buffer in bytes.
   </itemize>
 
   <subsection|<verbatim|ext_clear_child_storage>>
@@ -4288,7 +4327,7 @@
 
     <item><verbatim|written_out>: the function stores the length of the
     retrieved value in number of bytes if the enty exists. If the entry does
-    not exist, it returns <math|2<rsup|32>-1>.
+    not exist, it stores <math|2<rsup|32>-1>.
 
     <item><verbatim|result>: A pointer to the buffer in which the function
     allocates and stores the value corresponding to the given key if such an
@@ -4298,8 +4337,8 @@
   <subsection|<verbatim|ext_get_child_storage_into>>
 
   Given a byte array, this function retrieves the child value stored under
-  the key specified in the array and stores a specified chunk of it in the
-  provided buffer, if the entry exists in the storage.
+  the key specified in the array and stores the specified chunk starting the
+  offset into the provided buffer, if the entry exists in the storage.
 
   \;
 
@@ -4376,44 +4415,6 @@
 
     <item><verbatim|storage_key_len>: the length of the child storage key
     byte array in number of bytes.
-  </itemize>
-
-  <subsection|<verbatim|ext_set_child_storage>>
-
-  Sets the value of a specific key in the child state storage.
-
-  \;
-
-  <strong|Prototype:>
-
-  <\verbatim>
-    (func $ext_set_child_storage
-
-    \ \ (param $storage_key_data i32) (param $storage_key_len i32) (param
-    $key_data i32)
-
-    \ \ (param $key_len i32) (param $value_data i32) (param $value_len i32))
-  </verbatim>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize>
-    <item><verbatim|storage_key_data>: a memory address pointing at the
-    buffer of the byte array containing the child storage key.
-
-    <item><verbatim|storage_key_len>: the length of the child storage key
-    byte array in number of bytes.
-
-    <item><verbatim|key>: a pointer indicating the buffer containing the key.
-
-    <item><verbatim|key_len>: the key length in bytes.
-
-    <item><verbatim|value>: a pointer indicating the buffer containing the
-    value to be stored under the key.
-
-    <item><verbatim|value_len>: the length of the value buffer in bytes.
   </itemize>
 
   <subsection|Memory>
