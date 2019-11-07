@@ -4158,8 +4158,8 @@
 
   <subsection|<verbatim|ext_clear_child_storage>>
 
-  Given a byte array, this function removes all child storage entries whose
-  key is specified in the array.
+  Given a byte array, this function removes the child storage entry whose key
+  is specified in the array.
 
   \;
 
@@ -4331,6 +4331,33 @@
     entry does not exist under the specified key.
   </itemize>
 
+  <subsection|<verbatim|ext_kill_child_storage>>
+
+  Given a byte array, this function removes all entries of the child storage
+  whose child storage key is specified in the array.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    \ \ \ \ (func $ext_kill_child_storage
+
+    \ \ \ \ \ \ (param $storage_key_data i32) (param $storage_key_len i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|storage_key_data>: a memory address pointing at the
+    buffer of the byte array containing the child storage key.
+
+    <item><verbatim|storage_key_len>: the length of the child storage key
+    byte array in number of bytes.
+  </itemize>
+
   <subsection|To Be Specced>
 
   <\itemize>
@@ -4342,7 +4369,7 @@
 
     <item><verbatim|>
 
-    <item><verbatim|ext_kill_child_storage>
+    <item><verbatim|>
 
     <item><verbatim|ext_set_child_storage>
 
@@ -5800,63 +5827,63 @@
     <associate|auto-125|<tuple|F.1.10|56>>
     <associate|auto-126|<tuple|F.1.11|57>>
     <associate|auto-127|<tuple|F.1.12|57>>
-    <associate|auto-128|<tuple|F.1.12.1|57>>
-    <associate|auto-129|<tuple|F.1.12.2|57>>
+    <associate|auto-128|<tuple|F.1.13|57>>
+    <associate|auto-129|<tuple|F.1.13.1|57>>
     <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|F.1.12.3|57>>
-    <associate|auto-131|<tuple|F.1.13|58>>
-    <associate|auto-132|<tuple|F.1.13.1|58>>
-    <associate|auto-133|<tuple|F.1.13.2|59>>
-    <associate|auto-134|<tuple|F.1.13.3|59>>
-    <associate|auto-135|<tuple|F.1.13.4|59>>
-    <associate|auto-136|<tuple|F.1.13.5|60>>
-    <associate|auto-137|<tuple|F.1.13.6|60>>
-    <associate|auto-138|<tuple|F.1.14|60>>
-    <associate|auto-139|<tuple|F.1.14.1|61>>
+    <associate|auto-130|<tuple|F.1.13.2|57>>
+    <associate|auto-131|<tuple|F.1.13.3|58>>
+    <associate|auto-132|<tuple|F.1.14|58>>
+    <associate|auto-133|<tuple|F.1.14.1|59>>
+    <associate|auto-134|<tuple|F.1.14.2|59>>
+    <associate|auto-135|<tuple|F.1.14.3|59>>
+    <associate|auto-136|<tuple|F.1.14.4|60>>
+    <associate|auto-137|<tuple|F.1.14.5|60>>
+    <associate|auto-138|<tuple|F.1.14.6|60>>
+    <associate|auto-139|<tuple|F.1.15|61>>
     <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|F.1.14.2|61>>
-    <associate|auto-141|<tuple|F.1.14.3|61>>
-    <associate|auto-142|<tuple|F.1.14.4|62>>
-    <associate|auto-143|<tuple|F.1.14.5|62>>
-    <associate|auto-144|<tuple|F.1.14.6|62>>
-    <associate|auto-145|<tuple|F.1.14.7|63>>
-    <associate|auto-146|<tuple|F.1.14.8|63>>
-    <associate|auto-147|<tuple|F.1.14.9|64>>
-    <associate|auto-148|<tuple|F.1.14.10|64>>
-    <associate|auto-149|<tuple|F.1.14.11|65>>
+    <associate|auto-140|<tuple|F.1.15.1|61>>
+    <associate|auto-141|<tuple|F.1.15.2|61>>
+    <associate|auto-142|<tuple|F.1.15.3|62>>
+    <associate|auto-143|<tuple|F.1.15.4|62>>
+    <associate|auto-144|<tuple|F.1.15.5|62>>
+    <associate|auto-145|<tuple|F.1.15.6|63>>
+    <associate|auto-146|<tuple|F.1.15.7|63>>
+    <associate|auto-147|<tuple|F.1.15.8|64>>
+    <associate|auto-148|<tuple|F.1.15.9|64>>
+    <associate|auto-149|<tuple|F.1.15.10|65>>
     <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|F.1.14.12|65>>
-    <associate|auto-151|<tuple|F.1.14.13|65>>
-    <associate|auto-152|<tuple|F.1.14.14|65>>
-    <associate|auto-153|<tuple|F.1.14.15|65>>
-    <associate|auto-154|<tuple|F.1.15|66>>
-    <associate|auto-155|<tuple|F.1.15.1|66>>
-    <associate|auto-156|<tuple|F.1.16|66>>
-    <associate|auto-157|<tuple|F.1.16.1|66>>
-    <associate|auto-158|<tuple|F.1.16.2|66>>
-    <associate|auto-159|<tuple|F.1.17|67>>
+    <associate|auto-150|<tuple|F.1.15.11|65>>
+    <associate|auto-151|<tuple|F.1.15.12|65>>
+    <associate|auto-152|<tuple|F.1.15.13|65>>
+    <associate|auto-153|<tuple|F.1.15.14|65>>
+    <associate|auto-154|<tuple|F.1.15.15|66>>
+    <associate|auto-155|<tuple|F.1.16|66>>
+    <associate|auto-156|<tuple|F.1.16.1|66>>
+    <associate|auto-157|<tuple|F.1.17|66>>
+    <associate|auto-158|<tuple|F.1.17.1|66>>
+    <associate|auto-159|<tuple|F.1.17.2|67>>
     <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|F.1.17.1|67>>
-    <associate|auto-161|<tuple|F.1.18|67>>
-    <associate|auto-162|<tuple|F.2|68>>
-    <associate|auto-163|<tuple|G|68>>
-    <associate|auto-164|<tuple|G.1|68>>
+    <associate|auto-160|<tuple|F.1.18|67>>
+    <associate|auto-161|<tuple|F.1.18.1|67>>
+    <associate|auto-162|<tuple|F.1.19|68>>
+    <associate|auto-163|<tuple|F.2|68>>
+    <associate|auto-164|<tuple|G|68>>
     <associate|auto-165|<tuple|G.1|68>>
-    <associate|auto-166|<tuple|G.2|68>>
-    <associate|auto-167|<tuple|G.2.1|68>>
-    <associate|auto-168|<tuple|G.1|69>>
-    <associate|auto-169|<tuple|G.2.2|69>>
+    <associate|auto-166|<tuple|G.1|68>>
+    <associate|auto-167|<tuple|G.2|68>>
+    <associate|auto-168|<tuple|G.2.1|69>>
+    <associate|auto-169|<tuple|G.1|69>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|G.2.3|69>>
-    <associate|auto-171|<tuple|G.2.4|70>>
-    <associate|auto-172|<tuple|G.2.5|70>>
-    <associate|auto-173|<tuple|G.2.6|71>>
-    <associate|auto-174|<tuple|G.2.7|73>>
-    <associate|auto-175|<tuple|G.2|75>>
-    <associate|auto-176|<tuple|G.3|?>>
+    <associate|auto-170|<tuple|G.2.2|69>>
+    <associate|auto-171|<tuple|G.2.3|70>>
+    <associate|auto-172|<tuple|G.2.4|70>>
+    <associate|auto-173|<tuple|G.2.5|71>>
+    <associate|auto-174|<tuple|G.2.6|73>>
+    <associate|auto-175|<tuple|G.2.7|75>>
+    <associate|auto-176|<tuple|G.2|?>>
     <associate|auto-177|<tuple|G.3|?>>
     <associate|auto-178|<tuple|G.3|?>>
-    <associate|auto-179|<tuple|Tec19|?>>
+    <associate|auto-179|<tuple|G.3|?>>
     <associate|auto-18|<tuple|1.13|9>>
     <associate|auto-180|<tuple|Tec19|?>>
     <associate|auto-19|<tuple|1.13|9>>
