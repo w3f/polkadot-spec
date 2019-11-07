@@ -4133,8 +4133,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key_data>: a memory address pointing at the buffer
-    containing the byte array containing the key value.
+    <item><verbatim|key_data>: a memory address pointing at the buffer of the
+    byte array containing the key value.
 
     <item><verbatim|key_len>: the length of the byte array in number of
     bytes.
@@ -4156,10 +4156,45 @@
     entry does not exist under the specified key.
   </itemize>
 
+  <subsection|<verbatim|ext_clear_child_storage>>
+
+  Given a byte array, this function removes all child storage entries whose
+  key is specified in the array.
+
+  \;
+
+  <strong|Prototype:>
+
+  <\verbatim>
+    \ \ \ \ (func $ext_clear_child_storage
+
+    \ \ \ \ \ \ (param $storage_key_data i32) (param $storage_key_len i32)
+
+    \ \ \ \ \ \ (param $key_data i32) (param $key_len i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|storage_key_data>: a memory address pointing at the
+    buffer of the byte array containing the child storage key.
+
+    <item><verbatim|storage_key_len>: the length of the child storage key
+    byte array in number of bytes.
+
+    <item><verbatim|key_data>: a memory address pointing at the buffer of the
+    byte array containing the key value.
+
+    <item><verbatim|key_len>: the length of the key byte array in number of
+    bytes.
+  </itemize>
+
   <subsection|To Be Specced>
 
   <\itemize>
-    <item><verbatim|ext_clear_child_storage>
+    <item><verbatim|>
 
     <item><verbatim|ext_exists_child_storage>
 
@@ -5621,63 +5656,64 @@
     <associate|auto-121|<tuple|F.1.6|55>>
     <associate|auto-122|<tuple|F.1.7|56>>
     <associate|auto-123|<tuple|F.1.8|56>>
-    <associate|auto-124|<tuple|F.1.8.1|56>>
-    <associate|auto-125|<tuple|F.1.8.2|56>>
-    <associate|auto-126|<tuple|F.1.8.3|57>>
-    <associate|auto-127|<tuple|F.1.9|57>>
-    <associate|auto-128|<tuple|F.1.9.1|57>>
-    <associate|auto-129|<tuple|F.1.9.2|57>>
+    <associate|auto-124|<tuple|F.1.9|56>>
+    <associate|auto-125|<tuple|F.1.9.1|56>>
+    <associate|auto-126|<tuple|F.1.9.2|57>>
+    <associate|auto-127|<tuple|F.1.9.3|57>>
+    <associate|auto-128|<tuple|F.1.10|57>>
+    <associate|auto-129|<tuple|F.1.10.1|57>>
     <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|F.1.9.3|57>>
-    <associate|auto-131|<tuple|F.1.9.4|58>>
-    <associate|auto-132|<tuple|F.1.9.5|58>>
-    <associate|auto-133|<tuple|F.1.9.6|59>>
-    <associate|auto-134|<tuple|F.1.10|59>>
-    <associate|auto-135|<tuple|F.1.10.1|59>>
-    <associate|auto-136|<tuple|F.1.10.2|60>>
-    <associate|auto-137|<tuple|F.1.10.3|60>>
-    <associate|auto-138|<tuple|F.1.10.4|60>>
-    <associate|auto-139|<tuple|F.1.10.5|61>>
+    <associate|auto-130|<tuple|F.1.10.2|57>>
+    <associate|auto-131|<tuple|F.1.10.3|58>>
+    <associate|auto-132|<tuple|F.1.10.4|58>>
+    <associate|auto-133|<tuple|F.1.10.5|59>>
+    <associate|auto-134|<tuple|F.1.10.6|59>>
+    <associate|auto-135|<tuple|F.1.11|59>>
+    <associate|auto-136|<tuple|F.1.11.1|60>>
+    <associate|auto-137|<tuple|F.1.11.2|60>>
+    <associate|auto-138|<tuple|F.1.11.3|60>>
+    <associate|auto-139|<tuple|F.1.11.4|61>>
     <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|F.1.10.6|61>>
-    <associate|auto-141|<tuple|F.1.10.7|61>>
-    <associate|auto-142|<tuple|F.1.10.8|62>>
-    <associate|auto-143|<tuple|F.1.10.9|62>>
-    <associate|auto-144|<tuple|F.1.10.10|62>>
-    <associate|auto-145|<tuple|F.1.10.11|63>>
-    <associate|auto-146|<tuple|F.1.10.12|63>>
-    <associate|auto-147|<tuple|F.1.10.13|64>>
-    <associate|auto-148|<tuple|F.1.10.14|64>>
-    <associate|auto-149|<tuple|F.1.10.15|65>>
+    <associate|auto-140|<tuple|F.1.11.5|61>>
+    <associate|auto-141|<tuple|F.1.11.6|61>>
+    <associate|auto-142|<tuple|F.1.11.7|62>>
+    <associate|auto-143|<tuple|F.1.11.8|62>>
+    <associate|auto-144|<tuple|F.1.11.9|62>>
+    <associate|auto-145|<tuple|F.1.11.10|63>>
+    <associate|auto-146|<tuple|F.1.11.11|63>>
+    <associate|auto-147|<tuple|F.1.11.12|64>>
+    <associate|auto-148|<tuple|F.1.11.13|64>>
+    <associate|auto-149|<tuple|F.1.11.14|65>>
     <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|F.1.11|65>>
-    <associate|auto-151|<tuple|F.1.11.1|65>>
-    <associate|auto-152|<tuple|F.1.12|65>>
-    <associate|auto-153|<tuple|F.1.12.1|65>>
-    <associate|auto-154|<tuple|F.1.12.2|66>>
-    <associate|auto-155|<tuple|F.1.13|66>>
-    <associate|auto-156|<tuple|F.1.13.1|66>>
-    <associate|auto-157|<tuple|F.1.14|66>>
-    <associate|auto-158|<tuple|F.2|66>>
-    <associate|auto-159|<tuple|G|67>>
+    <associate|auto-150|<tuple|F.1.11.15|65>>
+    <associate|auto-151|<tuple|F.1.12|65>>
+    <associate|auto-152|<tuple|F.1.12.1|65>>
+    <associate|auto-153|<tuple|F.1.13|65>>
+    <associate|auto-154|<tuple|F.1.13.1|66>>
+    <associate|auto-155|<tuple|F.1.13.2|66>>
+    <associate|auto-156|<tuple|F.1.14|66>>
+    <associate|auto-157|<tuple|F.1.14.1|66>>
+    <associate|auto-158|<tuple|F.1.15|66>>
+    <associate|auto-159|<tuple|F.2|67>>
     <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|G.1|67>>
+    <associate|auto-160|<tuple|G|67>>
     <associate|auto-161|<tuple|G.1|67>>
-    <associate|auto-162|<tuple|G.2|68>>
-    <associate|auto-163|<tuple|G.2.1|68>>
-    <associate|auto-164|<tuple|G.1|68>>
-    <associate|auto-165|<tuple|G.2.2|68>>
-    <associate|auto-166|<tuple|G.2.3|68>>
-    <associate|auto-167|<tuple|G.2.4|68>>
-    <associate|auto-168|<tuple|G.2.5|69>>
-    <associate|auto-169|<tuple|G.2.6|69>>
+    <associate|auto-162|<tuple|G.1|68>>
+    <associate|auto-163|<tuple|G.2|68>>
+    <associate|auto-164|<tuple|G.2.1|68>>
+    <associate|auto-165|<tuple|G.1|68>>
+    <associate|auto-166|<tuple|G.2.2|68>>
+    <associate|auto-167|<tuple|G.2.3|68>>
+    <associate|auto-168|<tuple|G.2.4|69>>
+    <associate|auto-169|<tuple|G.2.5|69>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|G.2.7|69>>
-    <associate|auto-171|<tuple|G.2|70>>
-    <associate|auto-172|<tuple|G.3|70>>
+    <associate|auto-170|<tuple|G.2.6|69>>
+    <associate|auto-171|<tuple|G.2.7|70>>
+    <associate|auto-172|<tuple|G.2|70>>
     <associate|auto-173|<tuple|G.3|71>>
     <associate|auto-174|<tuple|G.3|73>>
-    <associate|auto-175|<tuple|Tec19|75>>
+    <associate|auto-175|<tuple|G.3|75>>
+    <associate|auto-176|<tuple|Tec19|?>>
     <associate|auto-18|<tuple|1.13|9>>
     <associate|auto-19|<tuple|1.13|9>>
     <associate|auto-2|<tuple|1.1|7>>
@@ -5865,11 +5901,11 @@
     <associate|sect-msg-consensus|<tuple|E.1.6|52>>
     <associate|sect-msg-status|<tuple|E.1.1|49>>
     <associate|sect-msg-transactions|<tuple|E.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
+    <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|E|49>>
     <associate|sect-predef-storage-keys|<tuple|D|47>>
     <associate|sect-randomness|<tuple|A.3|39>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
+    <associate|sect-re-api|<tuple|F|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|69>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|69>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|68>>
