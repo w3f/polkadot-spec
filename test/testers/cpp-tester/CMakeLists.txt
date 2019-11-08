@@ -13,7 +13,7 @@ function (execute_vital_process)
 
     execute_process(
         COMMAND ${ARG_COMMAND}
-        WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/implementations/cpp/kagome
+        WORKING_DIRECTORY /home/harrm/Projects/kagome#${CMAKE_SOURCE_DIR}/implementations/cpp/kagome
         RESULT_VARIABLE COMMAND_RESULT
     )
     if (NOT ${COMMAND_RESULT} STREQUAL "0")
