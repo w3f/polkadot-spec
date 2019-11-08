@@ -24,7 +24,7 @@ void processExtClearPrefix(const std::vector<std::string> &args) {
   std::unique_ptr<kagome::storage::trie::TrieDb> trie =
       std::make_unique<kagome::storage::trie::PolkadotTrieDb>(std::move(db));
   std::shared_ptr<kagome::runtime::WasmMemory> memory =
-      std::make_shared<kagome::runtime::WasmMemoryImpl>();
+      std::make_shared<kagome::runtime::WasmMemoryImpl>(4096);
 
   std::unique_ptr<kagome::extensions::Extension> extension =
       std::make_unique<kagome::extensions::ExtensionImpl>(memory,
@@ -62,11 +62,10 @@ void processExtClearPrefix(const std::vector<std::string> &args) {
   memory->storeBuffer(value2Ptr, buffer);
   buffer.clear();
 
-  extension->ext_set_storage(key2Ptr, key2Size, value1Ptr, value1Size);
+  extension->ext_set_storage(key2Ptr, key2Size, value2Ptr, value2Size);
 
   buffer.put(prefix);
   kagome::runtime::SizeType prefixSize = buffer.size();
-  memory->resize(memory->size() + buffer.size());
   kagome::runtime::WasmPointer prefixPtr = memory->allocate(prefixSize);
   memory->storeBuffer(prefixPtr, buffer);
   buffer.clear();
@@ -74,14 +73,12 @@ void processExtClearPrefix(const std::vector<std::string> &args) {
   extension->ext_clear_prefix(prefixPtr, prefixSize);
 
   kagome::runtime::SizeType sizePtrSize = sizeof(kagome::runtime::SizeType);
-  memory->resize(memory->size() + sizePtrSize);
-  kagome::runtime::WasmPointer sizePtr =
-      memory->allocate(sizePtrSize);
+  kagome::runtime::WasmPointer sizePtr = memory->allocate(sizePtrSize);
   auto res = extension->ext_get_allocated_storage(key1Ptr, key1Size, sizePtr);
   kagome::runtime::SizeType written_out = memory->load32u(sizePtr);
   if (prefix == key1.substr(0, prefix.size())) {
-    /*BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
-                     "Value 1 wasn't deleted");*/
+    BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
+                     "Value 1 wasn't deleted");
     BOOST_ASSERT_MSG(res == 0, "Value 1 wasn't deleted");
     std::cout << "Key '" + key1 + "' was deleted\n";
   } else {
@@ -95,15 +92,15 @@ void processExtClearPrefix(const std::vector<std::string> &args) {
   res = extension->ext_get_allocated_storage(key2Ptr, key2Size, sizePtr);
   written_out = memory->load32u(sizePtr);
   if (prefix == key2.substr(0, prefix.size())) {
-    /*BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
-                     "Value 2 wasn't deleted");*/
+    BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
+                     "Value 2 wasn't deleted");
     BOOST_ASSERT_MSG(res == 0, "Value 2 wasn't deleted");
     std::cout << "Key '" + key2 + "' was deleted\n";
   } else {
-    /*BOOST_ASSERT_MSG(written_out == value2Size, "Value 2 was deleted");
+    BOOST_ASSERT_MSG(written_out == value2Size, "Value 2 was deleted");
     BOOST_ASSERT_MSG(memory->loadN(res, written_out) ==
                          memory->loadN(value2Ptr, written_out),
-                     "Value 2 was deleted");*/
+                     "Value 2 was deleted");
     std::cout << "Key '" + key2 + "' remains\n";
   }
 
@@ -115,8 +112,8 @@ void processExtClearPrefix(const std::vector<std::string> &args) {
                    "Memory Leak: Key2");
   BOOST_ASSERT_MSG(memory->deallocate(value2Ptr) == value2Size,
                    "Memory Leak: Value 2");
-  /*BOOST_ASSERT_MSG(memory->deallocate(sizePtr) == memory->kMaxMemorySize,
-                   "Memory Leak: Size");*/
+  BOOST_ASSERT_MSG(memory->deallocate(sizePtr) == sizePtrSize,
+                   "Memory Leak: Size");
   BOOST_ASSERT_MSG(memory->deallocate(prefixPtr) == prefixSize,
                    "Memory Leak: Prefix");
 }
@@ -130,7 +127,7 @@ void processExtClearStorage(const std::vector<std::string> &args) {
   std::unique_ptr<kagome::storage::trie::TrieDb> trie =
       std::make_unique<kagome::storage::trie::PolkadotTrieDb>(std::move(db));
   std::shared_ptr<kagome::runtime::WasmMemory> memory =
-      std::make_shared<kagome::runtime::WasmMemoryImpl>();
+      std::make_shared<kagome::runtime::WasmMemoryImpl>(4096);
 
   std::unique_ptr<kagome::extensions::Extension> extension =
       std::make_unique<kagome::extensions::ExtensionImpl>(memory,
@@ -140,22 +137,18 @@ void processExtClearStorage(const std::vector<std::string> &args) {
 
   buffer.put(key);
   kagome::runtime::SizeType keySize = buffer.size();
-  memory->resize(memory->size() + buffer.size());
   kagome::runtime::WasmPointer keyPtr = memory->allocate(keySize);
   memory->storeBuffer(keyPtr, buffer);
   buffer.clear();
 
   buffer.put(value);
   kagome::runtime::SizeType valueSize = buffer.size();
-  memory->resize(memory->size() + buffer.size());
   kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
   memory->storeBuffer(valuePtr, buffer);
   buffer.clear();
 
   extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
-
   kagome::runtime::SizeType sizePtrSize = sizeof(kagome::runtime::SizeType);
-  memory->resize(memory->size() + sizePtrSize);
   kagome::runtime::WasmPointer sizePtr = memory->allocate(sizePtrSize);
   auto res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
   kagome::runtime::SizeType written_out = memory->load32u(sizePtr);
@@ -169,8 +162,8 @@ void processExtClearStorage(const std::vector<std::string> &args) {
   res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
   written_out = memory->load32u(sizePtr);
   BOOST_ASSERT_MSG(res == 0, "Value wasn't deleted");
-  /*BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
-                   "Value wasn't deleted");*/
+  BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
+                   "Value wasn't deleted");
 
   BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
   BOOST_ASSERT_MSG(memory->deallocate(valuePtr) == valueSize,
@@ -188,7 +181,7 @@ void processExtExistsStorage(const std::vector<std::string> &args) {
   std::unique_ptr<kagome::storage::trie::TrieDb> trie =
       std::make_unique<kagome::storage::trie::PolkadotTrieDb>(std::move(db));
   std::shared_ptr<kagome::runtime::WasmMemory> memory =
-      std::make_shared<kagome::runtime::WasmMemoryImpl>();
+      std::make_shared<kagome::runtime::WasmMemoryImpl>(4096);
 
   std::unique_ptr<kagome::extensions::Extension> extension =
       std::make_unique<kagome::extensions::ExtensionImpl>(memory,
@@ -198,16 +191,13 @@ void processExtExistsStorage(const std::vector<std::string> &args) {
 
   buffer.put(key);
   kagome::runtime::SizeType keySize = buffer.size();
-  memory->resize(memory->size() + buffer.size());
   kagome::runtime::WasmPointer keyPtr = memory->allocate(keySize);
   memory->storeBuffer(keyPtr, buffer);
   buffer.clear();
 
   buffer.put(value);
   kagome::runtime::SizeType valueSize = buffer.size();
-  memory->resize(memory->size() + buffer.size());
   kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-
   memory->storeBuffer(valuePtr, buffer);
   buffer.clear();
 
@@ -222,7 +212,8 @@ void processExtExistsStorage(const std::vector<std::string> &args) {
 
   BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
   BOOST_ASSERT_MSG(memory->deallocate(valuePtr) == valueSize,
-                   "Memory Leak: Value ");
+                   "Memory Leak: Value");
+
   std::cout << "true\n";
 }
 
