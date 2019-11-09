@@ -11,3 +11,10 @@ hunter_config(
     SHA1 b5ac58f102b6bffb981050583d6a3ca70e9da461
     CMAKE_ARGS TESTING=OFF
 )
+
+hunter_config(
+    spdlog
+    URL https://github.com/gabime/spdlog/archive/v1.4.2.zip
+    SHA1 4b10e9aa17f7d568e24f464b48358ab46cb6f39c
+)
+
