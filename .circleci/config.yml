@@ -33,6 +33,8 @@ jobs:
             ln -s $(pwd)/julia-${JULIA_VERSION_LONG}/bin/julia /usr/local/bin/julia
 
             rustup target add wasm32-unknown-unknown --toolchain nightly
+
+            cargo install --git https://github.com/alexcrichton/wasm-gc
       - run:
           name: run tests
           command: |
