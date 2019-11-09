@@ -16,7 +16,11 @@ jobs:
             apt update && apt install -y --no-install-recommends \
               build-essential \
               cmake \
+              pkg-config \
+              libssl-dev \
               git \
+              clang \
+              libclang-dev \
               wget
 
             wget https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz
