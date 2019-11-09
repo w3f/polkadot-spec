@@ -32,6 +32,7 @@ jobs:
             tar -xzf julia-${JULIA_VERSION_LONG}-linux-x86_64.tar.gz
             ln -s $(pwd)/julia-${JULIA_VERSION_LONG}/bin/julia /usr/local/bin/julia
 
+            rustup target add wasm32-unknown-unknown --toolchain nightly
       - run:
           name: run tests
           command: |
