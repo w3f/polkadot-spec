@@ -22,11 +22,24 @@ In the `test/` directory we include tests for the following components:
 The goal is to make sure that the different implementations (from foreign languges and projects) behave the same and produce the identical output.
 
 ### Running tests
-First, install Julia and download the required third party components:
+First, make sure Rust and the Wasm toolchain are installed.
 
 ```
-apt install -y julia
-git submodule update --init --recursive
+curl https://sh.rustup.rs -sSf | sh
+rustup update nightly
+rustup target add wasm32-unknown-unknown --toolchain nightly
+```
+
+Then, install the required dependencies.
+
+- Linux (Debian/Ubuntu/Mint)
+```
+sudo apt install cmake pkg-config libssl-dev git clang libclang-dev julia
+```
+
+- Mac
+```
+brew install cmake pkg-config openssl git llvm julia
 ```
 
 By running `./run_tests.sh` the automated tests get executed. With `./run_tests.sh verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths.
