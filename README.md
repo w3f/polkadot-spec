@@ -61,8 +61,8 @@ Those testers call functions that call the PDRE API. Currently, NOT all PDRE API
 |                    |
 +----------+---------+
            |                  +----------------+
-           +----------------->+Polkadot        |    *call runtime function*
-           | rust_tester      |Runtime         +---------------------------+
+           +----------------->+Wasm Executor   |    *call runtime function*
+           | rust_tester      |                +---------------------------+
            |                  |                |                           |
            |                  |                |                           v
            |                  |  +-------------+                 +---------+---------+
