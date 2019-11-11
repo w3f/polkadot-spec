@@ -25,6 +25,10 @@ namespace storage {
   // executes ext_get_allocated_storage tests according to provided args
   // Input: key, value
   void processExtGetAllocatedStorage(const std::vector<std::string> &args);
+
+  // executes ext_get_allocated_storage_into tests according to provided args
+  // Input: key, value, offset
+  void processExtGetAllocatedStorageInto(const std::vector<std::string> &args);
 } // namespace storage
 
 #endif // KAGOMECROSSTESTCLI_STORAGE_EXTENSION_HPP
