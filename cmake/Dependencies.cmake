@@ -1,6 +1,13 @@
+# https://docs.hunter.sh/en/latest/packages/pkg/iroha-ed25519.html
+hunter_add_package(iroha-ed25519)
+find_package(ed25519 CONFIG REQUIRED)
 
-hunter_add_package(Boost COMPONENTS program_options)
-find_package(Boost CONFIG REQUIRED COMPONENTS program_options)
+# not in hunter, added in cmake/Hunter/config.cmake
+hunter_add_package(sr25519)
+find_package(sr25519 REQUIRED)
+
+hunter_add_package(Boost COMPONENTS program_options random)
+find_package(Boost CONFIG REQUIRED COMPONENTS program_options random)
 
 hunter_add_package(leveldb)
 find_package(leveldb CONFIG REQUIRED)
