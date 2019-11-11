@@ -3,6 +3,7 @@
 *.jl.mem
 deps/deps.jl
 build/
+target/
 .idea/
 
 #executables

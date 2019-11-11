@@ -70,6 +70,21 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
   router.addSubcommand("test_set_get_storage", [](const std::vector<std::string>& args) {
     storage::processExtGetAllocatedStorage(args);
   });
+  router.addSubcommand("test_allocate_storage", [](const std::vector<std::string>& args) {
+    //storage::processExtGetAllocatedStorage(args);
+  });
+  router.addSubcommand("test_set_get_local_storage", [](const std::vector<std::string>& args) {
+    //storage::processExtGetAllocatedStorage(args);
+  });
+  router.addSubcommand("test_set_get_storage_into", [](const std::vector<std::string>& args) {
+    //storage::processExtGetAllocatedStorage(args);
+  });
+  router.addSubcommand("test_storage_root", [](const std::vector<std::string>& args) {
+    //storage::processExtGetAllocatedStorage(args);
+  });
+  router.addSubcommand("test_local_storage_compare_and_set", [](const std::vector<std::string>& args) {
+    //storage::processExtGetAllocatedStorage(args);
+  });
 
   // test crypto functions
   router.addSubcommand("test_blake2_128", [](const std::vector<std::string>& args) {
@@ -77,6 +92,9 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
   });
   router.addSubcommand("test_blake2_256", [](const std::vector<std::string>& args) {
     crypto::processExtBlake2_256(args);
+  });
+  router.addSubcommand("test_blake2_256_enumerated_trie_root", [](const std::vector<std::string>& args) {
+    //crypto::processExtBlake2_256(args);
   });
   router.addSubcommand("test_ed25519", [](const std::vector<std::string>& args) {
     crypto::processExtEd25519(args);
@@ -97,22 +115,22 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
     crypto::processExtTwox256(args);
   });
 
-  // test child storage functions
-  router.addSubcommand("test_clear_child_prefix", [](const std::vector<std::string>& args) {
-    child_storage::processExtClearChildPrefix(args);
-  });
-  router.addSubcommand("test_clear_child_storage", [](const std::vector<std::string>& args) {
-    child_storage::processExtClearChildStorage(args);
-  });
-  router.addSubcommand("test_exists_child_storage", [](const std::vector<std::string>& args) {
-    child_storage::processExtExistsChildStorage(args);
-  });
-  router.addSubcommand("test_kill_child_storage", [](const std::vector<std::string>& args) {
-    child_storage::processExtKillChildStorage(args);
-  });
-  router.addSubcommand("test_set_get_child_storage", [](const std::vector<std::string>& args) {
-    child_storage::processExtSetGetChildStorage(args);
-  });
+  //  test child storage functions
+  //  router.addSubcommand("test_clear_child_prefix", [](const std::vector<std::string>& args) {
+  //    child_storage::processExtClearChildPrefix(args);
+  //  });
+  //  router.addSubcommand("test_clear_child_storage", [](const std::vector<std::string>& args) {
+  //    child_storage::processExtClearChildStorage(args);
+  //  });
+  //  router.addSubcommand("test_exists_child_storage", [](const std::vector<std::string>& args) {
+  //    child_storage::processExtExistsChildStorage(args);
+  //  });
+  //  router.addSubcommand("test_kill_child_storage", [](const std::vector<std::string>& args) {
+  //    child_storage::processExtKillChildStorage(args);
+  //  });
+  //  router.addSubcommand("test_set_get_child_storage", [](const std::vector<std::string>& args) {
+  //    child_storage::processExtSetGetChildStorage(args);
+  //  });
 
   // test network functions
   router.addSubcommand("test_http", [](const std::vector<std::string>& args) {
