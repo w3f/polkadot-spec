@@ -253,8 +253,8 @@ void processExtGetAllocatedStorage(const std::vector<std::string> &args) {
   auto res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
   kagome::runtime::SizeType written_out = memory->load32u(sizePtr);
   BOOST_ASSERT_MSG(written_out == valueSize, "Value not preserved");
-  BOOST_ASSERT_MSG(memory->loadN(res, written_out) ==
-                       memory->loadN(valuePtr, written_out),
+  auto resultBuffer = memory->loadN(res, written_out);
+  BOOST_ASSERT_MSG(resultBuffer == memory->loadN(valuePtr, written_out),
                    "Values are different");
 
   BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
@@ -262,6 +262,73 @@ void processExtGetAllocatedStorage(const std::vector<std::string> &args) {
                    "Memory Leak: Value");
   BOOST_ASSERT_MSG(memory->deallocate(sizePtr) == sizePtrSize,
                    "Memory Leak: Size");
-  std::cout << value << "\n";
+
+  std::string message(reinterpret_cast<const char *>(resultBuffer.data()),
+                      written_out);
+  std::cout << message << "\n";
 }
+
+// Input: key, value, offset
+void processExtGetAllocatedStorageInto(const std::vector<std::string> &args) {
+  std::string key = args[0];
+  std::string value = args[1];
+  uint32_t offset = static_cast<uint32_t>(std::stoul(args[2]));
+
+  auto db = std::make_unique<kagome::storage::InMemoryStorage>();
+  std::unique_ptr<kagome::storage::trie::TrieDb> trie =
+      std::make_unique<kagome::storage::trie::PolkadotTrieDb>(std::move(db));
+  std::shared_ptr<kagome::runtime::WasmMemory> memory =
+      std::make_shared<kagome::runtime::WasmMemoryImpl>(4096);
+
+  std::unique_ptr<kagome::extensions::Extension> extension =
+      std::make_unique<kagome::extensions::ExtensionImpl>(memory,
+                                                          std::move(trie));
+
+  kagome::common::Buffer buffer;
+
+  buffer.put(key);
+  kagome::runtime::SizeType keySize = buffer.size();
+  kagome::runtime::WasmPointer keyPtr = memory->allocate(keySize);
+  memory->storeBuffer(keyPtr, buffer);
+  buffer.clear();
+
+  buffer.put(value);
+  kagome::runtime::SizeType valueSize = buffer.size();
+  kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
+  memory->storeBuffer(valuePtr, buffer);
+  buffer.clear();
+
+  kagome::runtime::SizeType resultSize =
+      valueSize < offset ? 0 : valueSize - offset;
+  kagome::runtime::WasmPointer resultPtr = memory->allocate(resultSize);
+
+  auto res = extension->ext_get_storage_into(keyPtr, keySize, resultPtr,
+                                             resultSize, offset);
+  BOOST_ASSERT_MSG(res == kagome::runtime::WasmMemory::kMaxMemorySize,
+                   "Data exists");
+
+  extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
+
+  res = extension->ext_get_storage_into(keyPtr, keySize, resultPtr, resultSize,
+                                        offset);
+  BOOST_ASSERT_MSG(res == resultSize, "Values are different");
+  auto resultBuffer = memory->loadN(resultPtr, res);
+  BOOST_ASSERT_MSG(resultBuffer == memory->loadN(valuePtr + offset, resultSize),
+                   "Values are different");
+
+  BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
+  BOOST_ASSERT_MSG(memory->deallocate(valuePtr) == valueSize,
+                   "Memory Leak: Value");
+  if (resultSize == 0) {
+    BOOST_ASSERT_MSG(memory->deallocate(resultPtr) == boost::none,
+                     "Memory Leak: Result");
+  } else {
+    BOOST_ASSERT_MSG(memory->deallocate(resultPtr) == resultSize,
+                     "Memory Leak: Result");
+  }
+
+  std::string message(reinterpret_cast<const char *>(resultBuffer.data()), res);
+  std::cout << message << "\n";
+}
+
 } // namespace storage

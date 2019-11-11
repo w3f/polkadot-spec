@@ -77,7 +77,7 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
     //storage::processExtGetAllocatedStorage(args);
   });
   router.addSubcommand("test_set_get_storage_into", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args);
+    storage::processExtGetAllocatedStorageInto(args);
   });
   router.addSubcommand("test_storage_root", [](const std::vector<std::string>& args) {
     //storage::processExtGetAllocatedStorage(args);
