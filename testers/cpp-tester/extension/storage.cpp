@@ -246,12 +246,18 @@ void processExtGetAllocatedStorage(const std::vector<std::string> &args) {
   memory->storeBuffer(valuePtr, buffer);
   buffer.clear();
 
-  extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
-
   kagome::runtime::SizeType sizePtrSize = sizeof(kagome::runtime::SizeType);
   kagome::runtime::WasmPointer sizePtr = memory->allocate(sizePtrSize);
   auto res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
   kagome::runtime::SizeType written_out = memory->load32u(sizePtr);
+  BOOST_ASSERT_MSG(written_out == kagome::runtime::WasmMemory::kMaxMemorySize,
+                   "Data exists");
+  BOOST_ASSERT_MSG(res == 0, "Data exists");
+
+  extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
+
+  res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
+  written_out = memory->load32u(sizePtr);
   BOOST_ASSERT_MSG(written_out == valueSize, "Value not preserved");
   auto resultBuffer = memory->loadN(res, written_out);
   BOOST_ASSERT_MSG(resultBuffer == memory->loadN(valuePtr, written_out),

@@ -71,19 +71,19 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
     storage::processExtGetAllocatedStorage(args);
   });
   router.addSubcommand("test_allocate_storage", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args);
+    //storage::processExtGetAllocatedStorage(args); TODO:
   });
   router.addSubcommand("test_set_get_local_storage", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args);
+    //storage::processExtGetAllocatedStorage(args); TODO: not implemented
   });
   router.addSubcommand("test_set_get_storage_into", [](const std::vector<std::string>& args) {
     storage::processExtGetAllocatedStorageInto(args);
   });
   router.addSubcommand("test_storage_root", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args);
+    //storage::processExtGetAllocatedStorage(args); TODO: in stash
   });
   router.addSubcommand("test_local_storage_compare_and_set", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args);
+    //storage::processExtGetAllocatedStorage(args); TODO: not implemented
   });
 
   // test crypto functions
