@@ -59,7 +59,31 @@ namespace crypto {
 
   // Input: data
   void processExtTwox128(const std::vector<std::string> &args){
+    std::string data = args[0];
 
+    auto db = std::make_unique<kagome::storage::InMemoryStorage>();
+    std::unique_ptr<kagome::storage::trie::TrieDb> trie =
+        std::make_unique<kagome::storage::trie::PolkadotTrieDb>(std::move(db));
+    std::shared_ptr<kagome::runtime::WasmMemory> memory =
+        std::make_shared<kagome::runtime::WasmMemoryImpl>(4096);
+
+    std::unique_ptr<kagome::extensions::Extension> extension =
+        std::make_unique<kagome::extensions::ExtensionImpl>(memory,
+                                                            std::move(trie));
+
+    kagome::common::Buffer buffer;
+
+    buffer.put(data);
+    kagome::runtime::SizeType valueSize = buffer.size();
+    kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
+    memory->storeBuffer(valuePtr, buffer);
+    buffer.clear();
+
+    auto resultPtr = memory->allocate(16);
+    extension->ext_twox_128(valuePtr, valueSize, resultPtr);
+    auto hash = memory->loadN(resultPtr, 16);
+
+    std::cout << kagome::common::hex_lower(hash) << "\n";
   }
 
   // Input: data
