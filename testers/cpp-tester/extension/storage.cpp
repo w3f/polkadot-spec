@@ -337,8 +337,62 @@ void processExtGetAllocatedStorageInto(const std::vector<std::string> &args) {
   std::cout << message << "\n";
 }
 
+// Input: key1, value1, key2, value2
+void processExtStorageRoot(const std::vector<std::string> &args) {
+  std::string key1 = args[0];
+  std::string value1 = args[1];
+  std::string key2 = args[2];
+  std::string value2 = args[3];
+
+  auto db = std::make_unique<kagome::storage::InMemoryStorage>();
+  std::unique_ptr<kagome::storage::trie::TrieDb> trie =
+      std::make_unique<kagome::storage::trie::PolkadotTrieDb>(std::move(db));
+  std::shared_ptr<kagome::runtime::WasmMemory> memory =
+      std::make_shared<kagome::runtime::WasmMemoryImpl>(4096);
+
+  std::unique_ptr<kagome::extensions::Extension> extension =
+      std::make_unique<kagome::extensions::ExtensionImpl>(memory,
+                                                          std::move(trie));
+
+  kagome::common::Buffer buffer;
+
+  buffer.put(key1);
+  kagome::runtime::SizeType key1Size = buffer.size();
+  kagome::runtime::WasmPointer key1Ptr = memory->allocate(key1Size);
+  memory->storeBuffer(key1Ptr, buffer);
+  buffer.clear();
+
+  buffer.put(value1);
+  kagome::runtime::SizeType value1Size = buffer.size();
+  kagome::runtime::WasmPointer value1Ptr = memory->allocate(value1Size);
+  memory->storeBuffer(value1Ptr, buffer);
+  buffer.clear();
+
+  buffer.put(key2);
+  kagome::runtime::SizeType key2Size = buffer.size();
+  kagome::runtime::WasmPointer key2Ptr = memory->allocate(key2Size);
+  memory->storeBuffer(key2Ptr, buffer);
+  buffer.clear();
+
+  buffer.put(value2);
+  kagome::runtime::SizeType value2Size = buffer.size();
+  kagome::runtime::WasmPointer value2Ptr = memory->allocate(value2Size);
+  memory->storeBuffer(value2Ptr, buffer);
+  buffer.clear();
+
+  extension->ext_set_storage(key1Ptr, key1Size, value1Ptr, value1Size);
+  extension->ext_set_storage(key2Ptr, key2Size, value2Ptr, value2Size);
+
+  auto resultPtr = memory->allocate(32);
+  extension->ext_storage_root(resultPtr);
+  auto rootHash = memory->loadN(resultPtr, 32);
+
+  std::cout << kagome::common::hex_lower(rootHash) << "\n";
+}
+
 // Input: value1, value2
-void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args){
+void processExtBlake2_256EnumeratedTrieRoot(
+    const std::vector<std::string> &args) {
   std::string value1 = args[0];
   std::string value2 = args[1];
 
@@ -366,12 +420,14 @@ void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args
   kagome::runtime::SizeType value2Size = buffer2.size();
   memory->store32(valuesLenPtr + 4, value2Size);
 
-  kagome::runtime::WasmPointer valuesPtr = memory->allocate(value1Size + value2Size);
+  kagome::runtime::WasmPointer valuesPtr =
+      memory->allocate(value1Size + value2Size);
   memory->storeBuffer(valuesPtr, buffer1);
   memory->storeBuffer(valuesPtr + value1Size, buffer2);
 
   auto resultPtr = memory->allocate(32);
-  extension->ext_blake2_256_enumerated_trie_root(valuesPtr, valuesLenPtr, 2, resultPtr);
+  extension->ext_blake2_256_enumerated_trie_root(valuesPtr, valuesLenPtr, 2,
+                                                 resultPtr);
   auto hash = memory->loadN(resultPtr, 32);
 
   std::cout << kagome::common::hex_lower(hash) << "\n";
