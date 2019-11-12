@@ -80,7 +80,7 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
     storage::processExtGetAllocatedStorageInto(args);
   });
   router.addSubcommand("test_storage_root", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args); TODO: in stash
+    storage::processExtStorageRoot(args);
   });
   router.addSubcommand("test_local_storage_compare_and_set", [](const std::vector<std::string>& args) {
     //storage::processExtGetAllocatedStorage(args); TODO: not implemented

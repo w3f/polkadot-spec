@@ -30,6 +30,10 @@ namespace storage {
   // Input: key, value, offset
   void processExtGetAllocatedStorageInto(const std::vector<std::string> &args);
 
+  // executes ext_storage_changes_root tests according to provided args
+  // Input: key1, value1, key2, value2
+  void processExtStorageRoot(const std::vector<std::string> &args);
+
   // executes ext_blake2_256_enumerated_trie_root tests according to provided args
   // Input: value1, value2
   void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args);
