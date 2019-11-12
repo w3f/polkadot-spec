@@ -85,6 +85,9 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
   router.addSubcommand("test_local_storage_compare_and_set", [](const std::vector<std::string>& args) {
     //storage::processExtGetAllocatedStorage(args); TODO: not implemented
   });
+  router.addSubcommand("test_blake2_256_enumerated_trie_root", [](const std::vector<std::string>& args) {
+    storage::processExtBlake2_256EnumeratedTrieRoot(args);
+  });
 
   // test crypto functions
   router.addSubcommand("test_blake2_128", [](const std::vector<std::string>& args) {
@@ -92,9 +95,6 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
   });
   router.addSubcommand("test_blake2_256", [](const std::vector<std::string>& args) {
     crypto::processExtBlake2_256(args);
-  });
-  router.addSubcommand("test_blake2_256_enumerated_trie_root", [](const std::vector<std::string>& args) {
-    //crypto::processExtBlake2_256(args);
   });
   router.addSubcommand("test_ed25519", [](const std::vector<std::string>& args) {
     crypto::processExtEd25519(args);
