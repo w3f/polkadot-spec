@@ -26,7 +26,6 @@ void processExtEd25519(const std::vector<std::string> &args);
 
 // executes ext_keccak_256 tests according to provided args
 // Input: data
-// not implemented
 void processExtKeccak256(const std::vector<std::string> &args);
 
 // executes ext_sr25519 tests according to provided args
