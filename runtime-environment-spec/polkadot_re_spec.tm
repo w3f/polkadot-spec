@@ -561,17 +561,33 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-170>>
 
+    <with|par-left|1tab|G.2.8.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_apply_extrinsic>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-173>>
+
+    <with|par-left|1tab|G.2.9.<space|2spc><with|font-series|bold|math-font-series|bold|<with|font-series|bold|math-font-series|bold|<with|font-family|tt|language|verbatim|BlockBuilder_inherent_extrinsics>>>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-174>>
+
+    <with|par-left|1tab|G.2.10.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_initialize_block>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-175>>
+
+    <with|par-left|1tab|G.2.11.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_finalise_block>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-176>>
+
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Glossary>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-173><vspace|0.5fn>
+    <pageref|auto-177><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Bibliography>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-174><vspace|0.5fn>
+    <pageref|auto-178><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Index>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-175><vspace|0.5fn>
+    <pageref|auto-179><vspace|0.5fn>
   </table-of-contents>
 
   <chapter|Background>
@@ -5234,6 +5250,8 @@
   This entry is responsible for executing all extrinsics in the block and
   reporting back if the block was successfully executed.
 
+  \;
+
   <strong|Arguments>:
 
   <\itemize>
@@ -5245,16 +5263,36 @@
 
   <strong|Return>:
 
-  A Boolean value indicates if the execution was successful.
+  <\itemize-dot>
+    <item>A Boolean value indicates if the execution was successful.
+  </itemize-dot>
 
   <subsection|<verbatim|Core_initialise_block>>
 
-  <todo|Spec initialize block>
+  Starts the execution of a particular block.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item>A block header as defined in <reference|defn-block-header>.
+  </itemize>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
 
   <subsection|<verbatim|hash_and_length>><label|sect-rte-hash-and-length>
 
   An auxilarry function which returns hash and encoding length of an
   extrinsics.
+
+  \;
 
   <strong|Arguments>:
 
@@ -5266,13 +5304,17 @@
 
   <strong|Return>:
 
-  Pair of Blake2Hash of the blob as element of <math|\<bbb-B\><rsub|32>> and
-  its length as 64 bit integer.
+  <\itemize-dot>
+    <item>Pair of Blake2Hash of the blob as element of
+    <math|\<bbb-B\><rsub|32>> and its length as 64 bit integer.
+  </itemize-dot>
 
   <subsection|<verbatim|BabeApi_epoch>><label|sect-rte-babeapi-epoch>
 
   This entry is called to obtain the current configuration of BABE consensus
-  protocol.\ 
+  protocol.
+
+  \;
 
   <strong|Arguments>:
 
@@ -5402,6 +5444,57 @@
   Note that if <em|Propagate> is set to <verbatim|false> the transaction will
   still be considered for including in blocks that are authored on the
   current node, but will never be sent to other peers.
+
+  <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
+
+  Apply extrinsic outside of the block execution function. This doesn't
+  attempt to validate anything regarding the block, but it builds a list of
+  transaction hashes.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item>A SCALE encoded array of extrinisic where each extrinsics is a
+    variable byte array.
+  </itemize>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>The result from the attempt to apply extrinsic .
+  </itemize-dot>
+
+  <subsection|<strong|<strong|<verbatim|BlockBuilder_inherent_extrinsics>>>>
+
+  Generate inherent extrinsics. The inherent data will vary from chain to
+  chain.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item>A <name|Inherents-Data> structure as defined in
+    <reference|tabl-inherent-data>.
+  </itemize>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A SCALE encoded array of extrinisic where each extrinsics is a
+    variable byte array.
+  </itemize-dot>
+
+  <subsection|<verbatim|BlockBuilder_finalize_block>>
+
+  Finalize the block - it is up to the caller to ensure that all header
+  fields are valid except for the state root.
 
   <\the-glossary|gly>
     <glossary-2|<with|font-series|bold|math-font-series|bold|<with|mode|math|P<rsub|n>>>|a
@@ -5552,11 +5645,11 @@
   </bibliography>
 
   <\the-index|idx>
-    <index+1|Transaction Message|<pageref|auto-47>\U<pageref|auto-50>>
+    <index-1|Transaction Message|<pageref|auto-47>\U<pageref|auto-50>>
 
-    <index+1|transaction pool|<pageref|auto-48>>
+    <index-1|transaction pool|<pageref|auto-48>>
 
-    <index+1|transaction queue|<pageref|auto-49>>
+    <index-1|transaction queue|<pageref|auto-49>>
   </the-index>
 </body>
 
@@ -5675,9 +5768,13 @@
     <associate|auto-170|<tuple|G.2.7|69>>
     <associate|auto-171|<tuple|G.2|70>>
     <associate|auto-172|<tuple|G.3|70>>
-    <associate|auto-173|<tuple|G.3|71>>
-    <associate|auto-174|<tuple|G.3|73>>
-    <associate|auto-175|<tuple|Tec19|75>>
+    <associate|auto-173|<tuple|G.2.8|71>>
+    <associate|auto-174|<tuple|G.2.9|73>>
+    <associate|auto-175|<tuple|G.2.10|75>>
+    <associate|auto-176|<tuple|G.2.10|?>>
+    <associate|auto-177|<tuple|G.2.10|?>>
+    <associate|auto-178|<tuple|Tec19|?>>
+    <associate|auto-179|<tuple|Tec19|?>>
     <associate|auto-18|<tuple|1.13|9>>
     <associate|auto-19|<tuple|1.13|9>>
     <associate|auto-2|<tuple|1.1|7>>
@@ -5865,11 +5962,11 @@
     <associate|sect-msg-consensus|<tuple|E.1.6|52>>
     <associate|sect-msg-status|<tuple|E.1.1|49>>
     <associate|sect-msg-transactions|<tuple|E.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
+    <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|E|49>>
     <associate|sect-predef-storage-keys|<tuple|D|47>>
     <associate|sect-randomness|<tuple|A.3|39>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
+    <associate|sect-re-api|<tuple|F|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|69>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|69>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|68>>
@@ -6603,17 +6700,33 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-170>>
 
+      <with|par-left|<quote|1tab>|G.2.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-173>>
+
+      <with|par-left|<quote|1tab>|G.2.9.<space|2spc><with|font-series|<quote|bold>|math-font-series|<quote|bold>|<with|font-series|<quote|bold>|math-font-series|<quote|bold>|<with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>>>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-174>>
+
+      <with|par-left|<quote|1tab>|G.2.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_initialize_block>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-175>>
+
+      <with|par-left|<quote|1tab>|G.2.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalise_block>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-176>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Glossary>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-173><vspace|0.5fn>
+      <pageref|auto-177><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-174><vspace|0.5fn>
+      <pageref|auto-178><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Index>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-175><vspace|0.5fn>
+      <pageref|auto-179><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
