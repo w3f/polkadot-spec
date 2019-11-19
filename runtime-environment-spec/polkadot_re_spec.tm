@@ -5456,7 +5456,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>A SCALE encoded array of extrinisic where each extrinsics is a
+    <item>A SCALE encoded array of extrinisic where each extrinsic is a
     variable byte array.
   </itemize>
 
@@ -5465,7 +5465,47 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>The result from the attempt to apply extrinsic .
+    <item>The SCALE encoded result from the attempt to apply extrinsic. On
+    success it returns an array of zero length (one byte zero value). On
+    failure it either returns a Dispatch error or an Apply error. An Apply
+    error uses identifiers to indicate the specific error type.
+
+    \;
+
+    Dispatch error (<verbatim|0x0001> prefix) byte array, contains the
+    following information.
+
+    <small-table|<tabular|<tformat|<table|<row|<cell|<strong|Name>>|<cell|<strong|Type>>|<cell|<strong|Description>>>|<row|<cell|module>|<cell|unsigned
+    8 bit integer>|<cell|Module index, matching the metadata module
+    index>>|<row|<cell|error>|<cell|unsigend 8 bit integer>|<cell|Module
+    specific error value>>>>>|>
+
+    \;
+
+    Apply error (<verbatim|0x01> prefix). A Validity error type contains
+    additional data for specific error types.
+
+    <small-table|<tabular|<tformat|<table|<row|<cell|<strong|Identifier>>|<cell|<strong|Type>>|<cell|<strong|Description>>>|<row|<cell|<verbatim|0x00>>|<cell|NoPermission>|<cell|General
+    error to do wth the permissions of the
+    sender>>|<row|<cell|<verbatim|0x01>>|<cell|BadState>|<cell|General error
+    to do with the state of the system in
+    general>>|<row|<cell|<verbatim|0x02>>|<cell|Validity>|<cell|Any error to
+    do with the transaction validity>>|<row|<cell|<verbatim|0x020000>>|<cell|Call>|<cell|The
+    call of the transaction is not expected>>|<row|<cell|<verbatim|0x020001>>|<cell|Payment>|<cell|Inability
+    to pay some fees (e.g. account balance too
+    low)>>|<row|<cell|<verbatim|0x020002>>|<cell|Future>|<cell|Transaction
+    not yet being valid (e.g. nonce too high)>>|<row|<cell|<verbatim|0x020003>>|<cell|Stale>|<cell|Transaction
+    being outdated (e.g. nonce too low)>>|<row|<cell|<verbatim|0x020004>>|<cell|BadProof>|<cell|Invalid
+    transactions proofs (e.g. bad signature)>>|<row|<cell|<verbatim|0x020005>>|<cell|AncientBirthBlock>|<cell|The
+    transaction birth block is ancient>>|<row|<cell|<verbatim|0x020006>>|<cell|ExhaustsResources>|<cell|Would
+    exhaust the resources of current block>>|<row|<cell|>|<cell|>|<cell|the
+    transaction might be valid)>>|<row|<cell|<verbatim|0x020007>>|<cell|Custom>|<cell|Any
+    other custom invalidity of unknown size>>|<row|<cell|<verbatim|0x020100>>|<cell|CannotLookup>|<cell|Could
+    not lookup some information that is required>>|<row|<cell|>|<cell|>|<cell|to
+    validate the transaction>>|<row|<cell|<verbatim|0x020101>>|<cell|NoUnsignedValidator>|<cell|No
+    validator found for the given unsigned
+    transaction>>|<row|<cell|<verbatim|0x020102>>|<cell|Custom>|<cell|Any
+    other custom invalidity of unknown size>>>>>|>
   </itemize-dot>
 
   <subsection|<strong|<strong|<verbatim|BlockBuilder_inherent_extrinsics>>>>
@@ -5487,7 +5527,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A SCALE encoded array of extrinisic where each extrinsics is a
+    <item>A SCALE encoded array of extrinisic where each extrinsic is a
     variable byte array.
   </itemize-dot>
 
@@ -5769,13 +5809,15 @@
     <associate|auto-171|<tuple|G.2|70>>
     <associate|auto-172|<tuple|G.3|70>>
     <associate|auto-173|<tuple|G.2.8|71>>
-    <associate|auto-174|<tuple|G.2.9|73>>
-    <associate|auto-175|<tuple|G.2.10|75>>
-    <associate|auto-176|<tuple|G.2.10|?>>
+    <associate|auto-174|<tuple|G.4|73>>
+    <associate|auto-175|<tuple|G.5|75>>
+    <associate|auto-176|<tuple|G.2.9|?>>
     <associate|auto-177|<tuple|G.2.10|?>>
-    <associate|auto-178|<tuple|Tec19|?>>
-    <associate|auto-179|<tuple|Tec19|?>>
+    <associate|auto-178|<tuple|G.2.10|?>>
+    <associate|auto-179|<tuple|G.2.10|?>>
     <associate|auto-18|<tuple|1.13|9>>
+    <associate|auto-180|<tuple|Tec19|?>>
+    <associate|auto-181|<tuple|Tec19|?>>
     <associate|auto-19|<tuple|1.13|9>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
@@ -6708,25 +6750,21 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-174>>
 
-      <with|par-left|<quote|1tab>|G.2.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_initialize_block>
+      <with|par-left|<quote|1tab>|G.2.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-175>>
 
-      <with|par-left|<quote|1tab>|G.2.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalise_block>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-176>>
-
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Glossary>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-177><vspace|0.5fn>
+      <pageref|auto-176><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-178><vspace|0.5fn>
+      <pageref|auto-177><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Index>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-179><vspace|0.5fn>
+      <pageref|auto-178><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
