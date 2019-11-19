@@ -5456,8 +5456,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>A SCALE encoded array of extrinisic where each extrinsic is a
-    variable byte array.
+    <item>A SCALE encoded extrinisic.
   </itemize>
 
   \;
@@ -5478,7 +5477,7 @@
     <small-table|<tabular|<tformat|<table|<row|<cell|<strong|Name>>|<cell|<strong|Type>>|<cell|<strong|Description>>>|<row|<cell|module>|<cell|unsigned
     8 bit integer>|<cell|Module index, matching the metadata module
     index>>|<row|<cell|error>|<cell|unsigend 8 bit integer>|<cell|Module
-    specific error value>>>>>|>
+    specific error value>>>>>|Data format of the Dispatch error type>
 
     \;
 
@@ -5505,7 +5504,8 @@
     validate the transaction>>|<row|<cell|<verbatim|0x020101>>|<cell|NoUnsignedValidator>|<cell|No
     validator found for the given unsigned
     transaction>>|<row|<cell|<verbatim|0x020102>>|<cell|Custom>|<cell|Any
-    other custom invalidity of unknown size>>>>>|>
+    other custom invalidity of unknown size>>>>>|Identifiers of the Apply
+    error type>
   </itemize-dot>
 
   <subsection|<strong|<strong|<verbatim|BlockBuilder_inherent_extrinsics>>>>
