@@ -13,10 +13,15 @@ using Test
             state_data_file_full_path = join(["\"", script_dir, "/", StateTrieFixtures.fixture_data_dir,"/", String(trie_data_file), "\""])
             cmdparams = [cli_encoder, StateTrieFixtures.state_trie_test_command, StateTrieFixtures.state_trie_root_subcommand,  " --state-file ", state_data_file_full_path]
             cmd = join(cmdparams)
-            push!(test_result_array, read(`sh -c $cmd`, String))
 
             if print_verbose
-                println(test_result_array[end])
+                println(cmd)
+            end
+
+            push!(test_result_array, read(`sh -c $cmd`, String))
+
+            if test_result_array[end] != "" && print_verbose
+		println("> Result: ", test_result_array[end])
             end
 
             if cli_encoder != CommonFixtures.cli_testers[CommonFixtures.reference_implementation]
@@ -26,10 +31,15 @@ using Test
             #insert-and-delete test
             cmdparams = [cli_encoder, StateTrieFixtures.state_trie_test_command, StateTrieFixtures.state_trie_insert_and_delete_subcommand,  " --state-file ", state_data_file_full_path]
             cmd = join(cmdparams)
-            push!(test_result_array_iad, read(`sh -c $cmd`, String))
 
             if print_verbose
-                println(test_result_array[end])
+                println(cmd)
+            end
+
+            push!(test_result_array_iad, read(`sh -c $cmd`, String))
+
+            if test_result_array_iad[end] != "" && print_verbose
+		println("> Result: ", test_result_array_iad[end])
             end
 
             if cli_encoder != CommonFixtures.cli_testers[CommonFixtures.reference_implementation]
