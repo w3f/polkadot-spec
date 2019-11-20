@@ -3,11 +3,13 @@
 //!
 //! Not relevant for other implementators. Look at the `tests/` directory for the acutal tests.
 
-use super::{copy_u32, get_wasm_blob, le, wrap, CallWasm};
+use super::{CallWasm, get_wasm_blob, Decoder};
+
+use parity_scale_codec::Encode;
 
 use parking_lot::RwLock;
 use substrate_offchain::testing::{PendingRequest, State, TestOffchainExt};
-use substrate_primitives::Blake2Hasher;
+use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
 
 use std::sync::Arc;
@@ -24,7 +26,7 @@ impl NetworkApi {
     pub fn new_with_offchain_context() -> Self {
         let mut ext = TestExternalities::default();
         let (offchain, state) = TestOffchainExt::new();
-        ext.set_offchain_externalities(offchain);
+		ext.register_extension(OffchainExt::new(offchain));
 
         NetworkApi {
             blob: get_wasm_blob(),
@@ -42,24 +44,16 @@ impl NetworkApi {
         CallWasm::new(&mut self.ext, &self.blob, method)
     }
     pub fn rtm_ext_http_request_start(&mut self, method: &[u8], url: &[u8], meta: &[u8]) -> u32 {
-        let mut wasm = self.prep_wasm("test_ext_http_request_start");
-        wasm.call(
-            CallWasm::gen_params(&[method, url, meta], &[0, 1, 2], None),
-            CallWasm::return_value_no_buffer(),
-        ).unwrap()
+        self
+            .prep_wasm("rtm_ext_http_request_start")
+            .call(&[method, url, meta].encode())
+            .decode_u32()
     }
-    pub fn rtm_ext_network_state(&mut self, written_out: &mut u32) -> Vec<u8> {
-        let mut wasm = self.prep_wasm("test_ext_network_state");
-        let ptr = wrap(0);
-        let written_out_scoped = wrap(0);
-
-        let res = wasm.call(
-            CallWasm::gen_params(&[&le(written_out)], &[], Some(ptr.clone())),
-            CallWasm::return_buffer(written_out_scoped.clone(), ptr)
-        );
-
-        copy_u32(written_out_scoped, written_out);
-        res.unwrap()
+    pub fn rtm_ext_network_state(&mut self) -> Vec<u8> {
+        self
+            .prep_wasm("rtm_ext_network_state")
+            .call(&[])
+            .decode_vec()
     }
     #[allow(unused)] // temporarly
     pub fn rtm_ext_http_request_add_header(

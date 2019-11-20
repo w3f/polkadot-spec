@@ -21,7 +21,7 @@ extern crate clap;
 extern crate data_encoding;
 extern crate base64;
 
-use parity_scale_codec::{Encode, Decode, HasCompact, Compact, EncodeAsRef, CompactAs};
+use parity_scale_codec::Encode;
 use clap::{ArgMatches};
 
 fn encode(matches: &ArgMatches) {
