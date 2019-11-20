@@ -21,7 +21,10 @@ jobs:
               git \
               clang \
               libclang-dev \
-              wget
+              wget \
+              gcc \
+              g++ \
+              python
 
             wget https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz
             tar -C /usr/local -xzf go$GOLANG_VERSION.linux-amd64.tar.gz
