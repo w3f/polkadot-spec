@@ -3,7 +3,7 @@ name = "rust-tester"
 version = "0.1.0"
 authors = ["Skalman <skalman@riseup.net>"]
 edition = "2018"
-build = "build.rs"
+#build = "build.rs"
 
 [dependencies]
 base64 = "*"
@@ -30,9 +30,13 @@ trie-root = {path = "../../../implementations/rust/trie/trie-root"}
 wasmi = "0.5.1"
 parking_lot = "0.9.0"
 substrate-primitives = { git = "https://github.com/paritytech/substrate" }
-substrate-executor = { git = "https://github.com/paritytech/substrate" }
-substrate-state-machine = { git = "https://github.com/paritytech/substrate" }
+substrate-externalities = { git = "https://github.com/paritytech/substrate"}
+substrate-executor = { git = "https://github.com/paritytech/substrate"}
+substrate-state-machine = { git = "https://github.com/paritytech/substrate"}
 substrate-offchain = { git = "https://github.com/paritytech/substrate" }
+
+# Wasm Blob
+pdre-tester-wasm-blob = { package = "pdre-tester-wasm-blob", path = "./pdre-tester-wasm-blob" }
 
 [[bin]]
 name = "rust_tester"

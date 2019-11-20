@@ -3,7 +3,7 @@ version: 2
 jobs:
   runTests:
     docker:
-      - image: rust:1.33-slim
+      - image: rustlang/rust:nightly-slim
     steps:
       - checkout
       - run:
@@ -16,7 +16,11 @@ jobs:
             apt update && apt install -y --no-install-recommends \
               build-essential \
               cmake \
+              pkg-config \
+              libssl-dev \
               git \
+              clang \
+              libclang-dev \
               wget
 
             wget https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz
@@ -28,6 +32,9 @@ jobs:
             tar -xzf julia-${JULIA_VERSION_LONG}-linux-x86_64.tar.gz
             ln -s $(pwd)/julia-${JULIA_VERSION_LONG}/bin/julia /usr/local/bin/julia
 
+            rustup target add wasm32-unknown-unknown --toolchain nightly
+
+            cargo install --git https://github.com/alexcrichton/wasm-gc
       - run:
           name: run tests
           command: |

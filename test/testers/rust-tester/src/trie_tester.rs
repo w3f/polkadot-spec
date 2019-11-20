@@ -27,12 +27,11 @@ extern crate hex;
 use trie_db::TrieMut;
 use trie_root::trie_root_no_extension;
 use reference_trie::ReferenceTrieStreamNoExt as ReferenceTrieStream;
-use reference_trie::RefTrieDBMutNoExt;
 
 use memory_db::{MemoryDB, HashKey};
 use std::collections::BTreeMap;
 
-use reference_trie::{GenericNoExtensionLayout, ReferenceNodeCodecNoExt};//H;
+use reference_trie::GenericNoExtensionLayout;//H;
 //use trie_db::{TrieRootPrint, trie_visit};
 
 // pub struct PolkadotTrieLayout;
@@ -93,7 +92,7 @@ impl TrieTester {
     ///
     /// * `Argmatches` - the resulting command line argument matches from clap processor related to state-trie command
     ///
-    fn compute_state_root(&self, matches: &ArgMatches) {
+    fn compute_state_root(&self, _matches: &ArgMatches) {
         //let trie_value =  key_value_map["data"];
         let trie_vec: Vec<_> = self.processed_key_list.iter().zip(self.value_list.iter()).collect();
         
@@ -107,7 +106,7 @@ impl TrieTester {
     /// random steps in the key list equal to the first byte of the last hash it has computed and delete
     /// the key it lands on and print the hash of the the new trie. It continue this process till all
     /// keys are deleted.
-    fn insert_and_delete_test(&mut self, matches: &ArgMatches) {
+    fn insert_and_delete_test(&mut self, _matches: &ArgMatches) {
 		let mut memdb = MemoryDB::<_, HashKey<_>, _>::default();
 		let mut root = Default::default();
 
@@ -124,7 +123,7 @@ impl TrieTester {
 		}
 
         //now we randomly drop nodes
-        while(self.processed_key_list.len() > 0) {
+        while self.processed_key_list.len() > 0 {
             let key_index_to_drop = memtrie.root()[0] as usize % self.processed_key_list.len();
             let key_to_drop = &self.processed_key_list[key_index_to_drop];
             memtrie.remove(key_to_drop).unwrap();

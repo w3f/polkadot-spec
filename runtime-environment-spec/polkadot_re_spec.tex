@@ -7,6 +7,7 @@
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
+\newcommand{\glossaryentry}[3]{\item[{#1}\hfill]#2\dotfill#3}
 \newcommand{\nin}{\not\in}
 \newcommand{\nobracket}{}
 \newcommand{\nosymbol}{}
@@ -27,6 +28,7 @@
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
 \newenvironment{itemizeminus}{\begin{itemize} \renewcommand{\labelitemi}{$-$}\renewcommand{\labelitemii}{$-$}\renewcommand{\labelitemiii}{$-$}\renewcommand{\labelitemiv}{$-$}}{\end{itemize}}
+\newenvironment{theglossary}[1]{\begin{list}{}{\setlength{\labelwidth}{6.5em}\setlength{\leftmargin}{7em}\small} }{\end{list}}
 \newenvironment{tmcode}[1][]{\begin{alltt} }{\end{alltt}}
 \newcounter{tmcounter}
 \newcommand{\custombinding}[1]{%
@@ -78,7 +80,7 @@
   {\Large Protocol Specification}
 }
 
-\date{September 30, 2019}
+\date{November 5, 2019}
 
 \maketitle
 
@@ -146,11 +148,11 @@ with the Polkadot network.
 
 \begin{definition}
   \label{defn-path-graph}A {\tmstrong{path graph}} or a {\tmstrong{path}} of
-  $n$ nodes formally referred to as {\tmstrong{$P_n$}}, is a tree with two
-  nodes of vertex degree 1 and the other n-2 nodes of vertex degree 2.
-  Therefore, $P_n$ can be represented by sequences of $(v_1, \ldots, v_n)$
-  where $e_i = (v_i, v_{i + 1})$ for $1 \leqslant i \leqslant n - 1$ is the
-  edge which connect $v_i$ and $v_{i + 1}$.
+  $n$ nodes formally referred to as \label{autolab1}{\tmstrong{$P_n$}}, is a
+  tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex
+  degree 2. Therefore, $P_n$ can be represented by sequences of $(v_1, \ldots,
+  v_n)$ where $e_i = (v_i, v_{i + 1})$ for $1 \leqslant i \leqslant n - 1$ is
+  the edge which connect $v_i$ and $v_{i + 1}$.
 \end{definition}
 
 \begin{definition}
@@ -174,8 +176,8 @@ sparse.
   length $n$, we refer to
   \[ b \assign (b_0, b_1, ..., b_{n - 1})  \text{such that } 0 \leqslant b_i
      \leqslant 255 \]
-  We define $\mathbb{B}_n$ to be the {\tmstrong{set of all byte arrays of
-  length $n$}}. Furthermore, we define:
+  We define \label{autolab2}$\mathbb{B}_n$ to be the {\tmstrong{set of all
+  byte arrays of length $n$}}. Furthermore, we define:
   \[ \mathbb{B} \assign \bigcup^{\infty}_{i = 0} \mathbb{B}_i \]
 \end{definition}
 
@@ -195,12 +197,12 @@ sparse.
 
 \begin{definition}
   \label{defn-little-endian}By \tmverbatim{}the {\tmstrong{little-endian}}
-  representation of a non-negative integer, I, represented as
+  representation of a non-negative integer, \label{autolab3}I, represented as
   \[ I = (B_n \ldots B_0)_{256} \]
-  in base 256, we refer to a byte array $B = (b_0, b_1, \ldots, b_n)$ such
-  that
+  in base 256, we refer to a byte array \label{autolab4}$B = (b_0, b_1,
+  \ldots, b_n)$ such that
   \[ b_i \assign B_i \]
-  Accordingly, define the function $\tmop{Enc}_{\tmop{LE}}$:
+  Accordingly, define the function \label{autolab5}$\tmop{Enc}_{\tmop{LE}}$:
   \[ \begin{array}{llll}
        \tmop{Enc}_{\tmop{LE}} : & \mathbb{Z}^+ & \rightarrow & \mathbb{B}\\
        & (B_n \ldots B_0)_{256} & \mapsto & (B_{0,} B_1, \ldots_{}, B_n)
@@ -215,12 +217,13 @@ sparse.
 \end{definition}
 
 \begin{definition}
-  A {\tmstrong{blockchain}} $C$ is a directed path graph. Each node of the
-  graph is called {\tmstrong{Block}} and indicated by {\tmstrong{$B$}}. The
-  unique sink of $C$ is called {\tmstrong{Genesis Block}}, and the source is
-  called the {\tmstrong{Head}} of C. For any vertex $(B_1, B_2)$ where $B_1
-  \rightarrow B_2$ we say $B_2$ is the {\tmstrong{parent}} of $B_1$ and we
-  indicate it by
+  A \label{autolab6}{\tmstrong{blockchain}} $C$ is a directed path graph. Each
+  node of the graph is called \label{autolab7}{\tmstrong{Block}} and indicated
+  by {\tmstrong{$B$}}. The unique sink of $C$ is called
+  \label{autolab8}{\tmstrong{Genesis Block}}, and the source is called the
+  \label{autolab9}{\tmstrong{Head}} of C. For any vertex $(B_1, B_2)$ where
+  $B_1 \rightarrow B_2$ we say $B_2$ is the
+  \label{autolab10}{\tmstrong{parent}} of $B_1$ and we indicate it by
   \[ B_2 \assign P (B_1) \]
 \end{definition}
 
@@ -240,10 +243,11 @@ the chain forks into multiple subchains in various block positions. We refer
 to this structure as a {\tmem{block tree:}}
 
 \begin{definition}
-  \label{defn-block-tree}The {\tmstrong{block tree}} of a blockchain, denoted
-  by $\tmop{BT}$ is the union of all different versions of the blockchain
-  observed by all the nodes in the system such as every such block is a node
-  in the graph and $B_1$ is connected to $B_2$ if $B_1$ is a parent of $B_2$.
+  \label{defn-block-tree}The \label{autolab11}{\tmstrong{block tree}} of a
+  blockchain, denoted by $\tmop{BT}$ is the union of all different versions of
+  the blockchain observed by all the nodes in the system such as every such
+  block is a node in the graph and $B_1$ is connected to $B_2$ if $B_1$ is a
+  parent of $B_2$.
 \end{definition}
 
 When a block in the block tree gets finalized, there is an opportunity to
@@ -252,31 +256,34 @@ contain all of the finalized blocks or those that can never be finalized in
 the blockchain. For a definition of finality, see Section \ref{sect-finality}.
 
 \begin{definition}
-  \label{defn-pruned-tree}By {\tmstrong{Pruned Block Tree}}, denoted by
-  $\tmop{PBT}$, we refer to a subtree of the block tree obtained by
+  \label{defn-pruned-tree}By \label{autolab12}{\tmstrong{Pruned Block Tree}},
+  denoted by $\tmop{PBT}$, we refer to a subtree of the block tree obtained by
   eliminating all branches which do not contain the most recent finalized
   blocks, as defined in Definition \ref{defn-finalized-block}. By
-  {\tmstrong{pruning}}, we refer to the procedure of $\tmop{BT} \leftarrow
-  \tmop{PBT}$. When there is no risk of ambiguity and is safe to prune BT, we
-  use $\tmop{BT}$ to refer to $\tmop{PBT}$.
+  \label{autolab13}{\tmstrong{pruning}}, we refer to the procedure of
+  $\tmop{BT} \leftarrow \tmop{PBT}$. When there is no risk of ambiguity and is
+  safe to prune BT, we use $\tmop{BT}$ to refer to $\tmop{PBT}$.
 \end{definition}
 
 Definition \ref{defn-chain-subchain} gives the means to highlight various
 branches of the block tree.
 
 \begin{definition}
-  \label{defn-chain-subchain}Let $G$ be the root of the block tree and $B$ be
-  one of its nodes. By {\tmname{{\tmstrong{Chain($B$)}},}} we refer to the
-  path graph from $G$ to $B$ in (P)$\tmop{BT}$. Conversely, for a chain
-  $C$={\tmname{Chain(B)}}, we define {\tmstrong{the head of $C$}} to be $B$,
-  formally noted as $B \assign${\tmname{Head($C$)}}. We define $| C |$, the
-  length of $C$as a path graph. If $B'$ is another node on
-  {\tmname{Chain($B$)}}, then by {\tmname{SubChain($B', B$)}} we refer to the
-  subgraph of {\tmname{Chain($B$)}} path graph which contains both $B$ and
-  $B'$. Accordingly, $\mathbb{C}_{B'} ((P) \tmop{BT})$ is the set of all
-  subchains of $(P) \tmop{BT}$ rooted at $B'$. The set of all chains of $(P)
-  \tmop{BT}$, $\mathbb{C}_G ((P) \tmop{BT})$ is denoted by $\mathbb{C}$((P)BT)
-  or simply $\mathbb{C}$, for the sake of brevity.
+  \label{defn-chain-subchain}Let \label{autolab14}$G$ be the root of the block
+  tree and $B$ be one of its nodes. By
+  \label{autolab15}{\tmname{{\tmstrong{Chain($B$)}},}} we refer to the path
+  graph from $G$ to $B$ in (P)$\tmop{BT}$. Conversely, for a chain
+  $C$={\tmname{Chain(B)}}, we define \label{autolab16}{\tmstrong{the head of
+  $C$}} to be $B$, formally noted as $B \assign${\tmname{Head($C$)}}. We
+  define \label{autolab17}$| C |$, the length of $C$as a path graph. If $B'$
+  is another node on {\tmname{Chain($B$)}}, then by
+  \label{autolab18}{\tmname{SubChain($B', B$)}} we refer to the subgraph of
+  {\tmname{Chain($B$)}} path graph which contains both $B$ and $B'$.
+  Accordingly, \label{autolab19}$\mathbb{C}_{B'} ((P) \tmop{BT})$ is the set
+  of all subchains of $(P) \tmop{BT}$ rooted at $B'$. The set of all chains of
+  $(P) \tmop{BT}$, $\mathbb{C}_G ((P) \tmop{BT})$ is denoted by
+  $\mathbb{C}$((P)BT) or simply \label{autolab20}$\mathbb{C}$, for the sake of
+  brevity.
 \end{definition}
 
 \begin{definition}
@@ -287,16 +294,18 @@ branches of the block tree.
   If $| C_1 | = | C_2 |$ we say $C_1 > C_2$ if and only if the block arrival
   time of $\tmop{Head} (C_1)_{}$ is less than the block arrival time of
   $\tmop{Head} (C_2)$ as defined in Definition \ref{defn-block-time}. We
-  define the {\tmstrong{{\tmname{Longest-Chain($\tmop{BT}$)}}}} to be the
-  maximum chain given by this order.
+  define the
+  \label{autolab21}{\tmstrong{{\tmname{Longest-Chain($\tmop{BT}$)}}}} to be
+  the maximum chain given by this order.
 \end{definition}
 
 \begin{definition}
-  {\tmname{Longest-Path($\tmop{BT}$)}} returns the path graph of $(P)
-  \tmop{BT}$ which is the longest among all paths in $(P) \tmop{BT}$ and has
-  the earliest block arrival time as defined in Definition
-  \ref{defn-block-time}. {\tmname{Deepest-Leaf($\tmop{BT}$)}} returns the head
-  of {\tmname{Longest-Path($\tmop{BT}$)}} chain.
+  \label{autolab22}{\tmname{Longest-Path($\tmop{BT}$)}} returns the path graph
+  of $(P) \tmop{BT}$ which is the longest among all paths in $(P) \tmop{BT}$
+  and has the earliest block arrival time as defined in Definition
+  \ref{defn-block-time}. \label{autolab23}
+  {\tmname{Deepest-Leaf($\tmop{BT}$)}} returns the head of
+  {\tmname{Longest-Path($\tmop{BT}$)}} chain.
 \end{definition}
 
 Because every block in the blockchain contains a reference to its parent, it
@@ -327,9 +336,9 @@ functions. Here we formalize the access to the storage when it is being
 directly accessed by Polkadot RE (in contrast to Polkadot runtime).
 
 \begin{definition}
-  \label{defn-stored-value}The {\tmstrong{StoredValue}} function retrieves the
-  value stored under a specific key in the state storage and is formally
-  defined as :
+  \label{defn-stored-value}The \label{autolab24}{\tmstrong{StoredValue}}
+  function retrieves the value stored under a specific key in the state
+  storage and is formally defined as :
   \[ \begin{array}{cc}
        \tmop{StoredValue} : & \mathcal{K} \rightarrow \mathcal{V}\\
        & k \mapsto \left\{ \begin{array}{cc}
@@ -712,9 +721,9 @@ Like any transaction-based transition system, Polkadot state changes via an
 executing ordered set of instructions. These instructions are known as
 {\tmem{extrinsics}}. In Polkadot, the execution logic of the state-transition
 function is encapsulated in Runtime as defined in Definition
-\ref{defn-state-machine}. Runtime is presented as a Wasm blob in(if?) ordered
-be easily upgradable. Nonetheless, the Polkadot Runtime Environment needs to
-be in constant interaction with Runtime. The detail of such interaction is
+\ref{defn-state-machine}. Runtime is presented as a Wasm blob in order to be
+easily upgradable. Nonetheless, the Polkadot Runtime Environment needs to be
+in constant interaction with Runtime. The detail of such interaction is
 further described in Section \ref{sect-entries-into-runtime}.
 
 In Section \ref{sect-extrinsics}, we specify the procedure of the process
@@ -788,12 +797,12 @@ the Runtime code at a specific state:
 \end{notation}
 
 The initial runtime code of the chain is embedded as an extrinsics into the
-chain initialization JSON file and is submitted to Polkadot RE (see Section
-\ref{sect-genisis-block}).
+chain initialization JSON file (representing the genesis block) and is
+submitted to Polkadot RE (see Section \ref{sect-genisis-block}).
 
-Subsequent calls to the runtime have the ability to call the storage API (see
-Section \ref{sect-runtime-api}) to insert a new Wasm blob into runtime storage
-slot to upgrade the runtime.
+Subsequent calls to the runtime have the ability to, in turn, call the storage
+API (see Section \ref{sect-re-api}) to insert a new Wasm blob into runtime
+storage slot to upgrade the runtime.
 
 \subsection{Code Executor}
 
@@ -871,29 +880,42 @@ bytes are set to zero.
 
 \section{Extrinsics}\label{sect-extrinsics}
 
-The block body consists of an array of extrinsics. Nonetheless, Polkadot RE
-does not specify or limit the internals of each extrinsics. From Polkadot RE
-point of view, each extrinsics is simply a SCALE-encoded byte array (see
-Definition \ref{defn-scale-byte-array}).
+The block body consists of an array of extrinsics. In a broad sense
+exterinsics are data from outside of the state which can trigger the state
+transition. This section describe the specification of extrinsics and their
+inclusion in the block.
 
 \subsection{Preliminaries}
 
+The extrinsics are dividedd into two main categories defined as follows:
+
 \begin{definition}
-  \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
-  \tmop{pk}^a)$}} is a pair of Ristretto SR25519 used to sign extrinsics among
-  other accounts and blance-related functions.
+  {\tmstrong{Transaction extrinsics}} are extrinsics which are signed using
+  either of the key types described in section \ref{sect-cryptographic-keys}
+  and broadcasted between the nodes. {\tmstrong{Inherents extrinsics}} are
+  unsigned extrinsics which are generated by Polkadot RE and only included in
+  the block produced by the node itself. They are broadcasted as part of the
+  produced block rather than being gossiped as individual extrinsics
 \end{definition}
 
-\subsection{Extrinsics Submission}
+Polkadot RE does not specify or limit the internals of each extrinsics and
+those are dealt with by the Runtime. From Polkadot RE point of view, each
+extrinsics is simply a SCALE-encoded byte array (see Definition
+\ref{defn-scale-byte-array}).
 
-Extrinsic submission is made by sending a {\tmem{Transactions}} network
+\subsection{Transactions}
+
+\subsubsection{Transaction Submission}
+
+Transaction submission is made by sending a {\tmem{Transactions}} network
 message. The structure of this message is specified in Section
 \ref{sect-msg-transactions}. Upon receiving a Transactions message, Polkadot
-RE decodes the transaction and calls \tmverbatim{validate\_trasaction} runtime
-function, defined in Section \ref{sect-rte-validate-transaction}, to check the
-validity of the extrinsic. If \tmverbatim{validate\_transaction} considers the
-submitted extrinsics as a valid one, Polkadot RE makes the extrinsics
-available for the consensus engine for inclusion in future blocks.
+RE decodes and decouple the transactions and calls
+\tmverbatim{validate\_trasaction} Runtime entry, defined in Section
+\ref{sect-rte-validate-transaction}, to check the validity of each of received
+transaction. If \tmverbatim{validate\_transaction} considers the submitted
+transaction as a valid one, Polkadot RE makes the transaction available for
+the consensus engine for inclusion in future blocks.
 
 \subsection{Transaction Queue}
 
@@ -902,12 +924,12 @@ messages{\tmem{{\index{Transaction Message}}}}. This is because the
 transactions are submitted to the node through the {\tmem{transactions}}
 network message specified in Section \ref{sect-msg-transactions}. Upon
 receiving a transactions message, Polkadot RE separates the submitted
-transactions in the transactions message into individual extrinsics and passes
-them to the Runtime by executing Algorithm \ref{algo-validate-transactions} to
-validate and store them for inclusion into future blocks. To that aim,
-Polkodot RE should keep a {\tmem{transaction pool{\index{transaction pool}}}}
-and a {\tmem{transaction queue}}{\index{transaction queue}} defined as
-follows:
+transactions in the transactions message into individual transactions and
+passes them to the Runtime by executing Algorithm
+\ref{algo-validate-transactions} to validate and store them for inclusion into
+future blocks. To that aim, Polkodot RE should keep a {\tmem{transaction
+pool{\index{transaction pool}}}} and a {\tmem{transaction
+queue}}{\index{transaction queue}} defined as follows:
 
 \begin{definition}
   The {\tmstrong{Transaction Queue}} of a block producer node, formally
@@ -924,7 +946,7 @@ the transaction queue according to the received message:
 \custombinding{4}{\noindent}\begin{tabular}{l}
   \hline
   \tmtextsc{Algorithm  4. }
-  \label{algo-validate-transactions}{\tmname{Validate-Extrinsics-and-Store}}($M_T
+  \label{algo-validate-transactions}{\tmname{Validate-Transactions-and-Store}}($M_T
   :$Transaction Message)\\
   \hline
 \end{tabular}
@@ -1002,6 +1024,33 @@ moving them to the TQ and dropping transactions which are not valid}}}}
 
 \hrulefill{\medskip}
 
+\subsubsection{Inherents}
+
+Block inherent data represent the totality of inherent extrinsics included in
+each block. In general, these data are collected or generated by Polkadot RE
+and handed to Runtime for inclusion in the block. Table
+\ref{tabl-inherent-data} lists these inherent data, their identifiers, and
+types.
+
+\begin{table}[h]
+  \begin{tabular}{lll}
+    \hline
+    Identifier & Type  & Description\\
+    \hline
+    timstap0 & u64 & Unix epoch time in number of seconds\\
+    babeslot & u64 & Babe Slot Number\tmrsup{\ref{defn-epoch-slot}}\\
+    \hline
+  \end{tabular}
+  \caption{\label{tabl-inherent-data}List of inherent data}
+\end{table}
+
+\begin{definition}
+  \label{defn-func-inherent-data}The function
+  {\tmname{Block-Inherents-Data($B_n$)}} return the inherent data defined in
+  Table \ref{tabl-inherent-data} corresponding to Block $B$ as a SCALE encoded
+  dictionary as defined in Definition \ref{defn-scale-list}.
+\end{definition}
+
 \section{State Replication}\label{sect-state-replication}
 
 Polkadot nodes replicate each other's state by syncing the history of the
@@ -1050,11 +1099,59 @@ efficiency of the light clients. It is defined formally as follows:
     
     \item {\tmstrong{{\tmsamp{digest:}}}} this field is used to store any
     chain-specific auxiliary data, which could help the light clients interact
-    with the block without the need of accessing the full storage. Polkadot RE
-    does not impose any limitation or specification for this field.
-    Essentially, it can be a byte array of any length. This field is indicated
-    as {\tmstrong{$H_d$}}
+    with the block without the need of accessing the full storage as well as
+    consensus-related data including the block signature. This field is
+    indicated as {\tmstrong{$H_d$}} and its detailed format is defined in
+    Definition \ref{defn-digest}
   \end{itemize}
+\end{definition}
+
+\begin{definition}
+  \label{defn-digest}The header {\tmstrong{digest}} of block $B$ formally
+  referred to by {\tmstrong{$H_d (B)$}} is an array of {\tmstrong{digest
+  items}} $H^i_d$'s , known as digest items of varying data type (see
+  Definition \ref{defn-varrying-data-type}) such that
+  \[ H_d (B) : = H^1_d, \ldots, H^n_d \]
+  where each digest item can hold one of the type described in table
+  \ref{tabl-digest-items}:
+  
+  \begin{center}
+    \tmfloat{h}{small}{table}{
+    {\center{\begin{tabular}{|r|l|l|}
+      \hline
+      Type Id & Type name & sub-components \\
+      \hline
+      $0$ & Changes trie root & $\mathbb{B}_{32}$\\
+      1 & Pre-Runtime & $E_{\tmop{id}}, \mathbb{B}$\\
+      2 & Consensus Message & $E_{\tmop{id}}, \mathbb{B}$\\
+      4 & Seal  & $E_{\tmop{id}}, \mathbb{B}$\\
+      \hline
+    \end{tabular}}}
+    }{\label{tabl-digest-items}The detail of the varying type that a digest
+    item can hold.}
+  \end{center}
+  
+  \
+  
+  Where $E_{\tmop{id}}$ is the unique consensus engine identifier defined in
+  Section \ref{sect-msg-consensus}. and
+  \begin{itemizedot}
+    \item {\tmstrong{Changes trie root}} contains the root of changes trie at
+    block $B$.
+    
+    \item {\tmstrong{Pre-runtime}} digest item represents messages produced by
+    a consensus engine to the Runtime.
+    
+    \item {\tmstrong{Consensus}} \tmtextbf{Message} digest item represents a
+    message from the Runtime to the consensus engine.
+    
+    \item {\tmstrong{Seal}} is the data produced by the consensus engine and
+    proving the authorship of the block producer. In particular, the Seal
+    digest item must be the last item in the digest array and must be stripped
+    off before the block is submitted to the Runtime for validation and be
+    added back to the digest afterward. The detail of the Seal digest item is
+    laid out in Definition \ref{defn-babe-seal}.
+  \end{itemizedot}
 \end{definition}
 
 \begin{definition}
@@ -1082,33 +1179,6 @@ contains the following parts:
   authorities, which have voted for the block to be stored and is formally
   referred to as $A (B)$. An authority Id is 32bit.
 \end{itemize}
-
-\subsubsection{Block Inherent Data}
-
-Block inherent data represent the totality of extrinsics included in each
-block. In general, these data are collected or generated by Polkadot RE and
-handed to Runtime for inclusion in the block. Table \ref{tabl-inherent-data}
-lists these inherent data, their identifiers, and types.
-
-\begin{table}[h]
-  \begin{tabular}{lll}
-    \hline
-    Identifier & Type  & Description\\
-    \hline
-    timstap0 & u64 & Unix epoch time in number of seconds\\
-    babeslot & u64 & Babe Slot Number\tmrsup{\ref{defn-epoch-slot}}\\
-    \hline
-  \end{tabular}
-  \caption{\label{tabl-inherent-data}List of inherent data}
-\end{table}
-
-\begin{definition}
-  \label{defn-func-inherent-data}The function
-  {\tmname{Block-Inherents-Data($B_n$)}} return the inherent data defined in
-  Table \ref{tabl-inherent-data} corresponding to Block $B$ as a SCALE encoded
-  dictionary as defined in Definition \ref{defn-scale-list}.
-\end{definition}
-
 \subsubsection{Block Body}\label{sect-block-body}
 
 The Block Body consists of array extrinsics each encoded as a byte array. The
@@ -1262,8 +1332,6 @@ Polkadot discovery is done through the following mechanisms:
   Polkadot node can perform a random Kademlia `FIND\_NODE` requests for the
   nodes {\todo{which nodes?}} to respond by propagating their view of the
   network.
-  
-  \ 
 \end{itemize}
 
 \section{Transport Protocol}
@@ -1371,7 +1439,7 @@ on a validator node.
 \section{Block Production}\label{sect-babe}\label{sect-block-production}
 
 Polkadot RE uses BABE protocol {\cite{w3f_research_group_blind_2019}} for
-block production designed based on Ouroboros praos
+block production. It is designed based on Ouroboros praos
 {\cite{david_ouroboros_2018}}. BABE execution happens in sequential
 non-overlapping phases known as an {\tmstrong{{\tmem{epoch}}}}. Each epoch on
 its turn is divided into a predefined number of slots. All slots in each epoch
@@ -1380,8 +1448,9 @@ BABE node needs to run Algorithm \ref{algo-block-production-lottery} to find
 out in which slots it should produce a block and gossip to the other block
 producers. In turn, the block producer node should keep a copy of the block
 tree and grow it as it receives valid blocks from other block producers. A
-block producer prunes the tree in parallel using Algorithm
-\ref{algo-block-tree-prunning}.
+block producer prunes the tree in parallel by eliminating branches which do
+not include the most recent finalized blocks according to Definition
+\ref{defn-pruned-tree}.
 
 \subsection{Preliminaries}
 
@@ -1407,9 +1476,10 @@ block producer prunes the tree in parallel using Algorithm
   are indexed sequentially, and we refer to the $n^{\tmop{th}}$ epoch since
   genesis by $\mathcal{E}_n$. Each epoch is divided into equal length periods
   known as block production {\tmstrong{slots}}, sequentially indexed in each
-  epoch. The index of each slot is called {\tmstrong{slot number}}. Each slot
-  is awarded to a subset of block producers during which they are allowed to
-  generate a block.
+  epoch. The index of each slot is called {\tmstrong{slot number}}. The equal
+  length duration of each slots is called the {\tmstrong{slot duration}} and
+  indicated by $\mathcal{T}$. Each slot is awarded to a subset of block
+  producers during which they are allowed to generate a block.
 \end{definition}
 
 \begin{notation}
@@ -1438,10 +1508,18 @@ produced during an specific epoch.
 
 \begin{definition}
   \label{defn-winning-threshold}{\tmstrong{Winning threshold}} denoted by
-  {\tmstrong{$\tau$}} is the threshold which is used alongside with the result
-  of Algorirthm \ref{algo-block-production-lottery} to decide if a block
-  producer is the winner of a specific slot. $\tau$ is set to result of call
-  into {\code*{BabeApi\_slot\_winning\_threshold}} runtime entry.
+  {\tmstrong{$\tau_{\varepsilon_n}$}} is the threshold which is used alongside
+  with the result of Algorirthm \ref{algo-block-production-lottery} to decide
+  if a block producer is the winner of a specific slot. $\tau_{\varepsilon_n}$
+  is calculated \ as follows:
+  \[ \tau_{\varepsilon_n} \assign 1 - (1 - c)^{\frac{1}{|
+     \tmop{AuthorityDirectory}^{\mathcal{E}_n} |}} \]
+  where $\tmop{AuthorityDirectory}^{\mathcal{E}_n}$ is the set of BABE
+  authorities for epoch $\varepsilon_n$ and $c =
+  \frac{c_{\tmop{nominator}}}{c_{\tmop{denominator}}}$. The pair
+  $(c_{\tmop{nominator}}, c_{\tmop{denominator}})$ can be retrieve part of the
+  data returned by a call into runtime entry
+  \tmverbatim{BabeApi\_configuration}.
 \end{definition}
 
 A block producer aiming to produce a block during $\mathcal{E}_n$ should run
@@ -1465,7 +1543,7 @@ lottery.
 
 {\state{{\FORTO{$i \assign 1$}{$\tmop{sc}_n$}}}}
 
-{\state{$(d, \pi) \leftarrow${\tmem{{\tmname{VRF}}}}($r, i, \tmop{sk}$)}}
+{\state{$(\pi, d) \leftarrow${\tmem{{\tmname{VRF}}}}($r, i, \tmop{sk}$)}}
 
 {\state{$A [i] \leftarrow (d, \pi)${\END}}}
 
@@ -1542,45 +1620,55 @@ s$)$\times \mathcal{T}_{}$}}}}
 
 \hrulefill{\medskip}
 
+$\mathcal{T}$ is the slot duration defined in Definition
+\ref{defn-epoch-slot}.
+
 \subsection{Block Production}
 
 At each epoch, each block producer should run Algorithm
 \ref{algo-block-production} to produce blocks during the slots it has been
-awarded during that epoch. The produced blocks need to be broadcasted
-alongside with the {\tmem{babe header}} defined in Definition
-\ref{defn-babe-header}.
+awarded during that epoch. The produced block needs to carry {\tmem{BABE
+header}} as well as the {\tmem{block signature}} \ as Pre-Runtime and Seal
+digest items defined in Definition \ref{defn-babe-header} and
+\ref{defn-block-signature} respectively.
 
 \begin{definition}
-  The \label{defn-babe-header}{\tmstrong{Babe Header}} of block B, referred to
-  formally by {\tmstrong{$H_{\tmop{Babe}} (B)$}} is a tuple that consists of
+  The \label{defn-babe-header}{\tmstrong{BABE Header}} of block B, referred to
+  formally by {\tmstrong{$H_{\tmop{BABE}} (B)$}} is a tuple that consists of
   the following components:
-  \[ (\pi, d, j, s, w) \]
+  \[ (d, \pi, j, s) \]
   in which:
   
   \begin{center}
     \begin{tabular}{rl}
-      $\pi, d$: & are the results of the block lottervrf\_output, vrfy for
-      slot s. \\
-      $j$: & is the SR25519 session public key associated with the block
-      producer. \\
-      s: & is the slot at which the block is produced.\\
-      w & reserved
+      $\pi, d$: & are the results of the block lottery for slot s. \\
+      $j$: & is index of the block producer producing block in the current
+      authority directory of current epoch. \\
+      s: & is the slot at which the block is produced.
     \end{tabular}
+    
+    \ 
   \end{center}
+  
+  \
+  
+  $H_{\tmop{BABE}} (B)$ must be included as a diegst item of Pre-Runtime type
+  in the header digest $H_d (B)$ as defined in Definition \ref{defn-digest}. 
+\end{definition}
+
+\begin{definition}
+  \label{defn-block-signature}\label{defn-babe-seal}The {\tmstrong{Block
+  Signature}} noted by $S_B$ is computed as
+  \[ \tmop{Sig}_{\tmop{SR} 25519, \tmop{sk}^s_j} (H_h (B)) \]
+  $S_B$ should be included in $H_d (B)$ as the Seal digest item according to
+  Definition \ref{defn-digest} of value:
+  \[ (E_{\tmop{id}} (\tmop{BABE}), S_B) \]
+  in which, $E_{\tmop{id}} (\tmop{BABE})$ is the BABE consensus engine unique
+  identifier defined in Section \ref{sect-msg-consensus}. The Seal digest item
+  is referred to as {\tmstrong{BABE Seal}}.
   
   \ 
 \end{definition}
-
-The block producer includes $H_{\tmop{Babe}} (B)$ as a log in $H_d (B)$ and
-sign $\tmop{Head} (B)$ as defined in Definition \ref{defn-block-signature}
-
-\begin{definition}
-  \label{block-signature}The {\tmstrong{Block Signature}} noted by $S_B$ is
-  computed as $\tmop{Sig}_{\tmop{SR} 25519, \tmop{sk}^s_j}
-  (\tmop{Enc}_{\tmop{SC}} (\tmop{Black} 2 s (\tmop{Head} (B_{}))))$
-\end{definition}
-
-\
 
 \custombinding{9}{\noindent}\begin{tabular}{l}
   \hline
@@ -1605,17 +1693,26 @@ sign $\tmop{Head} (B)$ as defined in Definition \ref{defn-block-signature}
 
 {\state{{\tmname{$B_s \leftarrow$Build-Block($C_{\tmop{Best}}$)}}}}
 
-{\state{{\tmname{Broadcast-Block}}($B_s, H_{\tmop{Babe}} (B_s)$)}}}}
+{\state{{\tmname{Add-Digest-Item}}($B_s$,Pre-Runtime,$E_{\tmop{id}}
+(\tmop{BABE}), H_{\tmop{BABE}} (B_s)$)}}
+
+{\state{{\tmname{Add-Digest-Item}}($B_s$,Seal,$S_B$)}}
+
+{\state{{\tmname{Broadcast-Block}}($B_s$)}}}}
 
 \hrulefill{\medskip}
+
+{\tmname{Add-Digest-Item}} appends a digest item to the end of the header
+digest $H_d (B)$ according to Definition \ref{defn-digest}.
 
 \subsection{Epoch Randomness}\label{sect-epoch-randomness}
 
 At the end of epoch $\mathcal{E}_n$, each block producer is able to compute
 the randomness seed it needs in order to participate in the block production
-lottery in epoch $\mathcal{E}_{n + 2}$. The computation of the seed is
-described in Algorithm \ref{algo-epoch-randomness} which uses the concept of
-epoch subchain described in Definition \ref{defn-epoch-subchain}.
+lottery in epoch $\mathcal{E}_{n + 2}$. For epoch 0 and 1, the randomness seed
+is provided in the genesis block. The computation of the seed is described in
+Algorithm \ref{algo-epoch-randomness} which uses the concept of epoch subchain
+described in Definition \ref{defn-epoch-subchain}.
 
 \custombinding{10}{\noindent}\begin{tabular}{l}
   \hline
@@ -1643,10 +1740,6 @@ Algorithm \ref{algo-block-production-lottery}.
 
 \subsection{Verifying Authorship Right}\label{sect-verifying-authorship}
 
-\begin{definition}
-  Seal $D_s$ {\todo{define seal}}
-\end{definition}
-
 When a Polkadot node receives a produced block, it needs to verify if the
 block producer was entitled to produce the block in the given slot by running
 Algorithm \ref{algo-verify-authorship-right} where:
@@ -1655,7 +1748,14 @@ Algorithm \ref{algo-verify-authorship-right} where:
   \ref{defn-block-time}.
   
   \item $H_d (B)$ is the digest sub-component of $\tmop{Head} (B)$ defined in
-  Definition \ref{defn-block-header}.
+  Definitions \ref{defn-block-header} and \ref{defn-digest}.
+  
+  \item The Seal $D_s$ is the last element in the digest array $H_d (B)$ as
+  defined in Definition \ref{defn-digest}.
+  
+  \item {\tmname{Seal-Id}} is the type index showing that a digest item of
+  variable type is of {\tmem{Seal}} type (See Definitions
+  \ref{defn-scale-variable-type} and \ref{defn-digest})
   
   \item $\tmop{AuthorityDirectory}^{\mathcal{E}_c}$ is the set of Authority ID
   for block producers of epoch $\mathcal{E}_c$.
@@ -1766,9 +1866,6 @@ The blocks building process is triggered by Algorithm
 
 {\algorithmic{{\state{$P_B \leftarrow_{}${\tmname{Head($C_{\tmop{Best}}$)}}}}
 
-{\state{$H_h (P_B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{block\_hash\_from\_id}}, H_i (P_B) \right)$}}
-
 {\state{$\tmop{Head} (B) \leftarrow$($H_p \leftarrow H_h (P_B), H_i \leftarrow
 H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
 \phi$)}}
@@ -1799,7 +1896,7 @@ H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
 {\state{{\tmname{Drop(Ready-Extrinsic-Queue,$E$)}}{\END}{\END}}}
 
 {\state{$\tmop{Head} (B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{finalize\_block}}, E \right)${\END}}}}}
+\text{\tmverbatim{finalize\_block}}, B \right)${\END}}}}}
 
 \hrulefill{\medskip}
 
@@ -2212,6 +2309,41 @@ in RFC 7693 {\cite{saarinen_blake2_2015}}.
 \section{Randomness}\label{sect-randomness}
 
 \section{VRF}\label{sect-vrf}
+
+\section{Cryptographic Keys}\label{sect-cryptographic-keys}
+
+Various type keys are used in Polkadot to prove the identity of the actor. In
+the following section we specify the detail of those keys and comment on their
+usage
+
+\begin{definition}
+  \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
+  \tmop{pk}^a)$}} is a key pair of type of either of schemes listed in Table
+  \ref{tabl-account-key-schemes}:
+  {\center{\begin{table}[h]
+    \begin{tabular}{ll}
+      \hline
+      Key scheme & Description\\
+      \hline
+      SR25519 & \\
+      ED25519 & \\
+      secp256k1 & Only for outgoing transfer transaction\\
+      \hline
+    \end{tabular}
+    \caption{\label{tabl-account-key-schemes}List of public key scheme which
+    can be used for an account key}
+  \end{table}}}
+  Account key can be used to sign transactions among other accounts and
+  blance-related functions.
+\end{definition}
+
+\begin{definition}
+  {\tmstrong{Controller key}} {\todo{TBS}}
+\end{definition}
+
+\begin{definition}
+  {\tmstrong{Session key}} {\todo{TBS}}
+\end{definition}
 
 \chapter{Auxiliary Encodings}\label{sect-encoding}
 
@@ -2642,9 +2774,11 @@ Wh\tmverbatim{}ere:
 in which
 \[ E_{\tmop{id}} \assign \left\{ \begin{array}{ccc}
      '' \tmop{BABE}'' &  & \tmop{For} \tmop{messages} \tmop{related} \tmop{to}
-     \tmop{BABE} \tmop{protocol}\\
+     \tmop{BABE} \tmop{protocol} \tmop{refered} \tmop{to} \tmop{as}
+     E_{\tmop{id}} (\tmop{BABE})\\
      '' \tmop{FRNK}'' &  & \tmop{For} \tmop{messages} \tmop{related} \tmop{to}
-     \tmop{GRANDPA} \tmop{protocol}
+     \tmop{GRANDPA} \tmop{protocol} \tmop{referred} \tmop{to} \tmop{as}
+     E_{\tmop{id}} (\tmop{FRNK})
    \end{array} \right. \]
 
 
@@ -3134,13 +3268,14 @@ longer than the block execution time. Offchain Workers have their own
 execution environment. This separation of concerns is to make sure that the
 block production is not impacted by the long-running tasks.
 
-{\todo{Describe how the results are going to impact the blocks etc}}
-
 \
 
-As Offchain Workers run on their own execution environment they have access
-to their separate storage. There are two different types of storage available
-as defined in Definitions \ref{defn-offchain-persistent-storage} and
+All data and results generated by Offchain workers are unique per node and
+nondeterministic. Information can be propagated to other nodes by submitting a
+transaction that should be included in the next block. As Offchain workers
+runs on their own execution environment they have access to their own separate
+storage. There are two different types of storage available which are defined
+in Definitions \ref{defn-offchain-persistent-storage} and
 \ref{defn-offchain-local-storage}.
 
 \begin{definition}
@@ -3233,7 +3368,13 @@ included in the next produced block.
 
 \subsubsection{\tmverbatim{ext\_network\_state}}
 
-Returns opaque information about the local node's network state.
+Returns the SCALE encoded, opaque information about the local node's network
+state. This information is fetched by calling into \tmverbatim{libp2p}, which
+{\tmem{might}} include the \tmverbatim{PeerId} and possible
+\tmverbatim{Multiaddress(-es)} by which the node is publicly known by. Those
+values are unique and have to be known by the node individually. Due to its
+opaque nature, it's unknown whether that information is available prior to
+execution.
 
 \
 
@@ -3250,8 +3391,9 @@ Returns opaque information about the local node's network state.
   size of the opaque network state gets written to.
   
   \item \tmverbatim{result}: a pointer to the buffer containing the SCALE
-  encoded network state. {\todo{Spec the detail of the the result this
-  requires a deeper look since it includes datastructures from libp2p-dev}}
+  encoded network state. This includes none or one \tmverbatim{PeerId}
+  followed by none, one or more IPv4 or IPv6 \tmverbatim{Multiaddress(-es)} by
+  which the node is publicly known by.
 \end{itemize}
 
 \subsubsection{\tmverbatim{ext\_timestamp}}
@@ -3947,6 +4089,103 @@ in the case the transaction is judged to be valid.}
 Note that if {\tmem{Propagate}} is set to \tmverbatim{false} the transaction
 will still be considered for including in blocks that are authored on the
 current node, but will never be sent to other peers.
+
+\chapter*{Glossary}
+
+\begin{theglossary}{gly}
+  \glossaryentry{\tmtextbf{$P_n$}}{a path graph or a path of n nodes, can be
+  represented by sequences of $(v_1, \ldots, v_n)$ where $e_i = (v_i, v_{i +
+  1})$ for $1 \leqslant i \leqslant n - 1$ is the edge which connect $v_i$ and
+  $v_{i + 1}$}{\pageref{autolab1}}
+  
+  \glossaryentry{$\mathbb{B}_n$}{a set of all byte arrays of length
+  n}{\pageref{autolab2}}
+  
+  \glossaryentry{I}{the little-endian representation of a non-negative
+  interger, represented as $I = (B_n \ldots B_0)_{256}$}{\pageref{autolab3}}
+  
+  \glossaryentry{$B$}{a byte array $B = (b_0, b_1, \ldots, b_n)$ such that
+  $b_i \assign B_i$}{\pageref{autolab4}}
+  
+  \glossaryentry{$\tmop{Enc}_{\tmop{LE}}$}{$\begin{array}{lll}
+    \mathbb{Z}^+ & \rightarrow & \mathbb{B}\\
+    (B_n \ldots B_0)_{256} & \mapsto & (B_{0,} B_1, \ldots_{}, B_n)
+  \end{array}$}{\pageref{autolab5}}
+  
+  \glossaryentry{C, blockchain}{a blockchain C is a directed path
+  graph.}{\pageref{autolab6}}
+  
+  \glossaryentry{Block}{a node of the graph in blockchain C and indicated by
+  $B$}{\pageref{autolab7}}
+  
+  \glossaryentry{Genesis Block}{the unique sink of blockchain
+  C}{\pageref{autolab8}}
+  
+  \glossaryentry{Head}{the source of blockchain C}{\pageref{autolab9}}
+  
+  \glossaryentry{P}{for any vertex $(B_1, B_2)$ where $B_1 \rightarrow B_2$ we
+  say $B_2$ is the parent of $B_1$ and we indicate it by $B_2 \assign P
+  (B_1)$}{\pageref{autolab10}}
+  
+  \glossaryentry{BT, block tree}{is the union of all different versions of the
+  blockchain observed by all the nodes in the system such as every such block
+  is a node in the graph and $B_1$ is connected to $B_2$ if $B_1$ is a parent
+  of $B_2$}{\pageref{autolab11}}
+  
+  \glossaryentry{PBT, Pruned BT}{Pruned Block Tree refers to a subtree of the
+  block tree obtained by eliminating all branches which do not contain the
+  most recent finalized blocks, as defined in Definition
+  \ref{defn-finalized-block}.}{\pageref{autolab12}}
+  
+  \glossaryentry{pruning}{}{\pageref{autolab13}}
+  
+  \glossaryentry{G}{is the root of the block tree and B is one of its
+  nodes.}{\pageref{autolab14}}
+  
+  \glossaryentry{CHAIN(B)}{refers to the path graph from $G$ to $B$ in
+  (P)$\tmop{BT}$.}{\pageref{autolab15}}
+  
+  \glossaryentry{head of C}{defines the head of C to be $B$, formally noted as
+  $B \assign$\tmtextsc{Head($C$)}.}{\pageref{autolab16}}
+  
+  \glossaryentry{$| C |$}{defines he length of $C$as a path
+  graph}{\pageref{autolab17}}
+  
+  \glossaryentry{SubChain($B', B$)}{If $B'$ is another node on
+  \tmtextsc{Chain($B$)}, then by \tmtextsc{SubChain($B', B$)} we refer to the
+  subgraph of \tmtextsc{Chain($B$)} path graph which contains both $B$ and
+  $B'$.}{\pageref{autolab18}}
+  
+  \glossaryentry{$\mathbb{C}_{B'} ((P) \tmop{BT})$}{is the set of all
+  subchains of $(P) \tmop{BT}$ rooted at $B'$.}{\pageref{autolab19}}
+  
+  \glossaryentry{$\mathbb{C}$}{the set of all chains of $(P) \tmop{BT}$,
+  $\mathbb{C}_G ((P) \tmop{BT})$ is denoted by $\mathbb{C}$((P)BT) or simply
+  $\mathbb{C}$}{\pageref{autolab20}}
+  
+  \glossaryentry{LONGEST-CHAIN(BT)}{the maximum chain given by the complete
+  order over $\mathbb{C}$}{\pageref{autolab21}}
+  
+  \glossaryentry{LONGEST-PATH(BT)}{the path graph of $(P) \tmop{BT}$ which is
+  the longest among all paths in $(P) \tmop{BT}$ and has the earliest block
+  arrival time as defined in Definition
+  \ref{defn-block-time}.}{\pageref{autolab22}}
+  
+  \glossaryentry{DEEPEST-LEAF(BT)}{the head of
+  LONGEST-PATH(BT)}{\pageref{autolab23}}
+  
+  \glossaryentry{StoredValue}{the function retrieves the value stored under a
+  specific key in the state storage and is formally defined as
+  $\begin{array}{l}
+    \mathcal{K} \rightarrow \mathcal{V}\\
+    k \mapsto \left\{ \begin{array}{cc}
+      v & \text{if (k,v) exists in state storage}\\
+      \phi & \tmop{otherwise}
+    \end{array} \right.
+  \end{array}$. Here $\mathcal{K} \subset \mathbb{B}$ and $\mathcal{V} \subset
+  \mathbb{B}$ are respectively the set of all keys and values stored in the
+  state storage.}{\pageref{autolab24}}
+\end{theglossary}
 
 \begin{thebibliography}{DGKR18}
   \bibitem[Col19]{collet_extremely_2019}Yann Collet. {\newblock}Extremely fast

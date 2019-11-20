@@ -4,6 +4,7 @@
 deps/deps.jl
 build/
 .idea/
+target/
 
 #executables
 test/testers/go-tester/scale_codec/scale_codec
