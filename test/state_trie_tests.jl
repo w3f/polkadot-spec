@@ -15,6 +15,10 @@ using Test
             cmd = join(cmdparams)
             push!(test_result_array, read(`sh -c $cmd`, String))
 
+            if print_verbose
+                println(test_result_array[end])
+            end
+
             if cli_encoder != CommonFixtures.cli_testers[CommonFixtures.reference_implementation]
                 @test test_result_array[end] == test_result_array[CommonFixtures.reference_implementation]
             end
@@ -23,6 +27,10 @@ using Test
             cmdparams = [cli_encoder, StateTrieFixtures.state_trie_test_command, StateTrieFixtures.state_trie_insert_and_delete_subcommand,  " --state-file ", state_data_file_full_path]
             cmd = join(cmdparams)
             push!(test_result_array_iad, read(`sh -c $cmd`, String))
+
+            if print_verbose
+                println(test_result_array[end])
+            end
 
             if cli_encoder != CommonFixtures.cli_testers[CommonFixtures.reference_implementation]
                 @test test_result_array_iad[end] == test_result_array_iad[CommonFixtures.reference_implementation]
