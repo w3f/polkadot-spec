@@ -1,7 +1,7 @@
 include("./fixtures/test_fixtures.jl")
 using Test
 #using Debugger
-@testset "Scale codec byte arrey tests" begin
+@testset "Scale codec byte array tests" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
     cd(root_dir)
