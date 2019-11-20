@@ -10,9 +10,15 @@ using Test
         for cli_encoder in CommonFixtures.cli_testers
             cmdparams = [cli_encoder, ScaleCodecFixtures.scale_codec_test_command, ScaleCodecFixtures.scale_codec_encode_subcommand,  " --input ", "\"", String(test_byte_array), "\""]
             cmd = join(cmdparams)
-            push!(test_result_array, read(`sh -c $cmd`, String))
+
             if print_verbose
-                println(test_result_array[end])
+                println(cmd)
+            end
+
+            push!(test_result_array, read(`sh -c $cmd`, String))
+
+            if test_result_array[end] != "" && print_verbose
+		println("> Result: ", test_result_array[end])
             end
 
             if cli_encoder != CommonFixtures.cli_testers[CommonFixtures.reference_implementation]
