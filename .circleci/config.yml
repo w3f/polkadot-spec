@@ -28,7 +28,7 @@ jobs:
             wget https://github.com/Kitware/CMake/releases/download/v3.16.0-rc4/cmake-3.16.0-rc4.tar.gz
             tar xzvf cmake-3.16.0-rc4.tar.gz
             cd cmake-3.16.0-rc4
-            ./bootstrap && make && sudo make install
+            ./bootstrap && make && make install
             cd ../
 
             # Install toolchain required for Wasm
