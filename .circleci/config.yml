@@ -24,12 +24,11 @@ jobs:
               julia \
               python
 
-            # Build and install CMake
-            wget https://github.com/Kitware/CMake/releases/download/v3.16.0-rc4/cmake-3.16.0-rc4.tar.gz
-            tar xzvf cmake-3.16.0-rc4.tar.gz
-            cd cmake-3.16.0-rc4
-            ./bootstrap && make && make install
-            cd ../
+            # Install CMake
+            wget https://github.com/Kitware/CMake/releases/download/v3.16.0-rc4/cmake-3.16.0-rc4-Linux-x86_64.sh
+            chmod +x cmake-3.16.0-rc4-Linux-x86_64.sh
+            ./cmake-3.16.0-rc4-Linux-x86_64.sh --skip-license --prefix=/root
+            export PATH=/root/bin:$PATH
 
             # Install toolchain required for Wasm
             rustup target add wasm32-unknown-unknown --toolchain nightly
