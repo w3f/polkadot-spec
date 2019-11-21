@@ -22,8 +22,8 @@ jobs:
               clang \
               libclang-dev \
               wget \
-              gcc \
-              g++ \
+              gcc-8 \
+              g++-8 \
               python
 
             wget https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz
@@ -38,6 +38,9 @@ jobs:
             rustup target add wasm32-unknown-unknown --toolchain nightly
 
             cargo install --git https://github.com/alexcrichton/wasm-gc
+
+            ln -sf /usr/bin/gcc-8 /usr/bin/gcc
+            ln -sf /usr/bin/g++-8 /usr/bin/g++
       - run:
           name: run tests
           command: |
