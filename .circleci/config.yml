@@ -12,7 +12,7 @@ jobs:
           command: |
             apt update && apt install -y --no-install-recommends \
               build-essential \
-              cmake \
+              make \
               pkg-config \
               libssl-dev \
               clang \
@@ -24,6 +24,13 @@ jobs:
               julia \
               python
 
+            # Build and install CMake
+            wget https://github.com/Kitware/CMake/releases/download/v3.16.0-rc4/cmake-3.16.0-rc4.tar.gz
+            tar xzvf cmake-3.16.0-rc4.tar.gz
+            cd cmake-3.16.0-rc4
+            ./bootstrap && make && sudo make install
+            cd ../
+
             # Install toolchain required for Wasm
             rustup target add wasm32-unknown-unknown --toolchain nightly
             cargo install --git https://github.com/alexcrichton/wasm-gc
@@ -33,13 +40,14 @@ jobs:
             ln -sf /usr/bin/g++-8 /usr/bin/g++
 
             # Debug statements
-            echo "Language versions:"
+            echo "Toolchain versions:"
             rustc --version
             clang --version
             gcc --version
             g++ --version
             julia --version
             python --version
+            cmake --version
       - run:
           name: run tests
           command: |
