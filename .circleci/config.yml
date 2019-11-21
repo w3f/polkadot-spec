@@ -5,6 +5,7 @@ jobs:
     docker:
       - image: rustlang/rust:nightly-slim
     steps:
+      - run: apt update; apt install -y git
       - checkout
       - run:
           name: install deps
@@ -14,7 +15,6 @@ jobs:
               cmake \
               pkg-config \
               libssl-dev \
-              git \
               clang \
               libclang-dev \
               wget \
