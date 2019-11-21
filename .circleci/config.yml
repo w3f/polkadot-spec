@@ -8,10 +8,6 @@ jobs:
       - checkout
       - run:
           name: install deps
-          environment:
-            GOLANG_VERSION: "1.12.3"
-            JULIA_VERSION_LONG: "1.1.0"
-            JULIA_VERSION_SHORT: "1.1"
           command: |
             apt update && apt install -y --no-install-recommends \
               build-essential \
@@ -24,23 +20,26 @@ jobs:
               wget \
               gcc-8 \
               g++-8 \
+              golang \
+              julia \
               python
 
-            wget https://dl.google.com/go/go${GOLANG_VERSION}.linux-amd64.tar.gz
-            tar -C /usr/local -xzf go$GOLANG_VERSION.linux-amd64.tar.gz
-            mkdir -p ${HOME}/go/{src,bin}
-            echo 'export PATH=$PATH:/usr/local/go/bin' >> $BASH_ENV
-
-            wget https://julialang-s3.julialang.org/bin/linux/x64/${JULIA_VERSION_SHORT}/julia-${JULIA_VERSION_LONG}-linux-x86_64.tar.gz
-            tar -xzf julia-${JULIA_VERSION_LONG}-linux-x86_64.tar.gz
-            ln -s $(pwd)/julia-${JULIA_VERSION_LONG}/bin/julia /usr/local/bin/julia
-
+            # Install toolchain required for Wasm
             rustup target add wasm32-unknown-unknown --toolchain nightly
-
             cargo install --git https://github.com/alexcrichton/wasm-gc
 
+            # Set default gcc and g++ binaries to version 8
             ln -sf /usr/bin/gcc-8 /usr/bin/gcc
             ln -sf /usr/bin/g++-8 /usr/bin/g++
+
+            # Debug statements
+            echo "Language versions:"
+            rustc --version
+            clang --version
+            gcc --version
+            g++ --version
+            julia --version
+            python --version
       - run:
           name: run tests
           command: |
