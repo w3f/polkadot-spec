@@ -60,7 +60,8 @@ const test_trie_files = [b"1c1_trie.yaml",
 			             b"pk_branch_test2.yaml",
                          b"hex_limit_trie.yaml"]
 
-const test_hexed_key_trie_files = [b"hex_limit_trie.yaml",
+const test_hexed_key_trie_files = [b"hex_1c1_trie.yaml",
+                                   b"hex_limit_trie.yaml",
                                    b"10000-node-trie.yaml"]
 
 end
