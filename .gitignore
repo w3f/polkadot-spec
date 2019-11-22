@@ -3,8 +3,8 @@
 *.jl.mem
 deps/deps.jl
 build/
-target/
 .idea/
+target/
 
 #executables
 test/testers/go-tester/scale_codec/scale_codec
