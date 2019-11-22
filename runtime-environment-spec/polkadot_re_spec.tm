@@ -5205,22 +5205,27 @@
   As a wasm functions, all runtime entries have the following prototype
   signature:
 
+  \;
+
   <\verbatim>
     \ \ \ \ (func $generic_runtime_entry
 
     \ \ \ \ \ \ (param $data i32) (parm $len i32) (reslut i64))
   </verbatim>
 
-  where <verbatim|data> points to the SCALE encoded paramaters sent to the
-  function and <verbatim|len> is the length of the data. <verbatim|result>
-  can similarly either point to the SCALE encoded data the function returns
-  or represent a boolean value (See Sections
-  <reference|sect-runtime-send-args-to-runtime-enteries> and
+  \;
+
+  where <verbatim|data> points to the paramaters sent to the function and
+  <verbatim|len> is the length of the data. <verbatim|result> can similarly
+  either point to the data the function returns or represent a boolean value
+  (See Sections <reference|sect-runtime-send-args-to-runtime-enteries> and
   <reference|sect-runtime-return-value>).
 
+  \;
+
   In this section, we describe the function of each of the entries alongside
-  with the details of the SCALE encoded arguments and the return values for
-  each one of these enteries.
+  with the details of the arguments and the return values for each one of
+  these enteries.
 
   <subsection|<verbatim|Core_version>>
 
@@ -5293,7 +5298,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>A SCALE encoded blob of an extrinsic.
+    <item>A blob of an extrinsic.
   </itemize>
 
   \;
@@ -5379,7 +5384,7 @@
     <item><math|H<rsub|n><around*|(|B|)>>: the block number whose final state
     is where the transaction should apply the system state.
 
-    <item>UTX: A byte array that contains the SCALE encoded transaction.
+    <item>UTX: A byte array that contains the transaction.
   </itemize>
 
   \;
@@ -5452,7 +5457,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>A SCALE encoded extrinisic.
+    <item>An extrinisic.
   </itemize>
 
   \;
@@ -5460,10 +5465,10 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>The SCALE encoded result from the attempt to apply extrinsic. On
-    success it returns an array of zero length (one byte zero value). On
-    failure it either returns a Dispatch error or an Apply error. An Apply
-    error uses identifiers to indicate the specific error type.
+    <item>The result from the attempt to apply extrinsic. On success it
+    returns an array of zero length (one byte zero value). On failure it
+    either returns a Dispatch error or an Apply error. An Apply error uses
+    identifiers to indicate the specific error type.
 
     \;
 
@@ -5523,8 +5528,8 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A SCALE encoded array of extrinisic where each extrinsic is a
-    variable byte array.
+    <item>An array of extrinisic where each extrinsic is a variable byte
+    array.
   </itemize-dot>
 
   <subsection|<verbatim|BlockBuilder_finalize_block>>
