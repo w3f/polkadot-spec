@@ -80,7 +80,7 @@
   {\Large Protocol Specification}
 }
 
-\date{November 22, 2019}
+\date{November 25, 2019}
 
 \maketitle
 
@@ -319,7 +319,7 @@ imposes partial order relationships on the blocks as follows:
 
 \chapter{State Specification}\label{chap-state-spec}
 
-\section{State Storage and Storage Trie}
+\section{State Storage and Storage Trie}\label{sect-state-storage}
 
 For storing the state of the system, Polkadot RE implements a hash table
 storage where the keys are used to access each data entry. There is no
@@ -331,9 +331,10 @@ store the key and the value in the storage trie.
 \subsection{Accessing System Storage }
 
 Polkadot RE implements various functions to facilitate access to the system
-storage for the runtime. Section \ref{sect-runtime-api} lists all of those
-functions. Here we formalize the access to the storage when it is being
-directly accessed by Polkadot RE (in contrast to Polkadot runtime).
+storage for the Runtime. See Section \ref{sect-entries-into-runtime} for a an
+explaination of those functions. Here we formalize the access to the storage
+when it is being directly accessed by Polkadot RE (in contrast to Polkadot
+runtime).
 
 \begin{definition}
   \label{defn-stored-value}The \label{autolab24}{\tmstrong{StoredValue}}
@@ -405,7 +406,7 @@ nibbles:
 By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the
 radix tree to reach the node identifying the storage value of $k$.
 
-\subsection{Trie Structure}
+\subsection{Trie Structure}\label{sect-state-storage-trie-structure}
 
 In this subsection, we specify the structure of the nodes in the Trie as well
 as the Trie structure:
@@ -756,7 +757,7 @@ Algorithm \ref{algo-runtime-interaction}.
   \hline
 \end{tabular}
 
-{\algorithmic{{\state{{\tmname{$\mathcal{S}_B \leftarrow$Storage-At-State($H_b
+{\algorithmic{{\state{{\tmname{$\mathcal{S}_B \leftarrow$Set-State-At($H_b
 (B)$)}}}}
 
 {\state{$A \leftarrow \tmop{Enc}_{\tmop{SC}} ((A_1, \ldots, A_n))$}}
@@ -767,10 +768,10 @@ F, A, A_{\tmop{len}})$}}}}
 \hrulefill{\medskip}
 
 In this section, we describe the details upon which the Polkadot RE is
-interacting with the Runtime. In particular, {\tmname{Storage-At-State}} and
+interacting with the Runtime. In particular, {\tmname{Set-State-At}} and
 {\tmname{Call-Runtime-Entry}} procedures called in Algorithm
 \ref{algo-runtime-interaction} are explained in Notation
-\ref{nota-call-into-runtime} and Definition \ref{defn-storage-at-state}
+\ref{nota-call-into-runtime} and Definition \ref{defn-set-state-at}
 respectively. $R_B$ is the Runtime code loaded from $\mathcal{S}_B$, as
 described in Notation \ref{nota-runtime-code-at-state}, and
 $\mathcal{R}\mathcal{E}_B$ is the Polkadot RE API, as described in Notation
@@ -822,7 +823,7 @@ access the runtime.
   we refer to the task using the executor to invoke the
   \tmverbatim{Runtime-Entry} while passing an $A_1, \ldots, A_n$ argument to
   it and using the encoding described in Section
-  \ref{sect-send-args-to-runtime}.
+  \ref{sect-runtime-send-args-to-runtime-enteries}.
 \end{notation}
 
 In this section, we specify the general setup for an Executor call into the
@@ -833,9 +834,9 @@ the return values of each Runtime entry separately.
 
 When Polkadot RE calls a Runtime entry it should make sure Runtime has access
 to the all Polkadot Runtime API functions described in Appendix
-\ref{sect-runtime-api}. This can be done for example by loading another Wasm
-module alongside the runtime which imports these functions from Polkadot RE as
-host functions.
+\ref{sect-runtime-entries}. This can be done for example by loading another
+Wasm module alongside the runtime which imports these functions from Polkadot
+RE as host functions.
 
 \subsubsection{Sending Arguments to Runtime
 }\label{sect-runtime-send-args-to-runtime-enteries}
@@ -873,10 +874,6 @@ integer, representing two consecutive \tmverbatim{i32} integers in which the
 least significant one indicates the pointer to the offset of the result
 returned by the entry encoded in SCALE codec in the memory buffer. The most
 significant one provides the size of the blob.
-
-In the case that the runtime entry is returning a boolean value, then the
-SCALEd (boolean) value returns in the least significant byte and all other
-bytes are set to zero.
 
 \section{Extrinsics}\label{sect-extrinsics}
 
@@ -1056,7 +1053,11 @@ types.
 Polkadot nodes replicate each other's state by syncing the history of the
 extrinsics. This, however, is only practical if a large set of transactions
 are batched and synced at the time. The structure in which the transactions
-are journaled and propagated is known as a block (of extrinsics).
+are journaled and propagated is known as a block (of extrinsics) which is
+specefied in Section \ref{sect-block-format}. Like any other replicated states
+machines state inconsistency happens across Polkadot replicas. Section
+\ref{sect-managing-multiple-states} is giving an overview on how a Polkadot RE
+node manage multiple variants of the state.
 
 \subsection{Block Format}\label{sect-block-format}
 
@@ -1176,8 +1177,8 @@ contains the following parts:
   definition from consensus}}.
   
   \item {\tmstrong{{\tmsamp{authority Ids}}}}: This is the list of the Ids of
-  authorities, which have voted for the block to be stored and is formally
-  referred to as $A (B)$. An authority Id is 32bit.
+  authorities, which have voted for the block to be stored and\tmverbatim{} is
+  formally referred to as $A (B)$. An authority Id is 32bit.
 \end{itemize}
 \subsubsection{Block Body}\label{sect-block-body}
 
@@ -1224,7 +1225,9 @@ block:
   \hline
 \end{tabular}
 
-{\algorithmic{{\state{{\IF{$\tmop{Just} (B) \neq \emptyset$}}}}
+{\algorithmic{{\state{{\tmname{Set-Storage-State-At($P (B)$)}}}}
+
+{\state{{\IF{$\tmop{Just} (B) \neq \emptyset$}}}}
 
 {\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$}}
 
@@ -1240,9 +1243,7 @@ block:
 {\state{{\tmname{Verify-Authorship-Right}}($\tmop{Head} (B)$)}}
 
 {\state{$S \leftarrow$ {\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{Core\_execute\_block}}, B \right)$}}
-
-{\state{{\tmname{Update-World-State}}($S$)}}}}
+\text{\tmverbatim{Core\_execute\_block}}, B \right)$}}}}
 
 \hrulefill{\medskip}
 
@@ -1252,7 +1253,33 @@ Definition \ref{defn-block-tree}. {\tmname{Verify-Authorship-Right}} is part
 of the block production consensus protocol and is described in Algorithm
 \ref{algo-verify-authorship-right}.
 
-\chapter{Network
+\subsection{Managaing Multiple Variants of
+State}\label{sect-managing-multiple-states}
+
+Unless a node is commited to only update its state according to finalized
+block (See Definition \ref{defn-finalized-block}), it is inevitable for the
+node to store multiple variant of the state (one for each block). This is for
+example necessary for nodes which are participating in block production and
+finalization.
+
+While the state trie structure described in Section
+\ref{sect-state-storage-trie-structure} facilitates and optimises storing and
+switching between multiple variants of the state storage, Polkadot RE does not
+specifies how a node is required to accoplish this task. Instead Polkadot RE
+is required to implement {\tmname{Set-State-At}} operation which behave as
+defined in Definition \ref{defn-set-state-at}:
+
+\begin{definition}
+  \label{defn-set-state-at}The function
+  \[ \text{{\tmname{{\tmstrong{Set-State-At($\tmmathbf{B}$)}}}}} \]
+  in which $B$ is a block in the block tree (See Definition
+  \ref{defn-block-tree}), sets the content of state storage equal to the
+  resulting state of executing all extrinsics contained in the branch of the
+  block tree from genisis till block B including those recorded in Block B.
+\end{definition}
+
+For the definition of the state storage see Section
+\ref{sect-state-storage}.\chapter{Network
 Protocol\label{sect-network-interactions}}\label{network-protocol}
 
 \begin{warning}
@@ -4165,20 +4192,23 @@ communicates with each runtime entry.
 
 As a wasm functions, all runtime entries have the following prototype
 signature:
+
+
 \begin{alltt}
     (func $generic_runtime_entry
       (param $data i32) (parm $len i32) (reslut i64))
 \end{alltt}
+
+
 where \tmverbatim{data} points to the SCALE encoded paramaters sent to the
 function and \tmverbatim{len} is the length of the data. \tmverbatim{result}
-can similarly either point to the SCALE encoded data the function returns or
-represent a boolean value (See Sections
-\ref{sect-runtime-send-args-to-runtime-enteries} and
+can similarly either point to the SCALE encoded data the function returns (See
+Sections \ref{sect-runtime-send-args-to-runtime-enteries} and
 \ref{sect-runtime-return-value}).
 
 In this section, we describe the function of each of the entries alongside
-with the details of the SCALE encoded arguments and the return values for each
-one of these enteries.
+with the details of the arguments and the return values for each one of these
+enteries.
 
 \subsection{\tmverbatim{Core\_version}}
 
@@ -4213,6 +4243,8 @@ following information:
 This entry is responsible for executing all extrinsics in the block and
 reporting back if the block was successfully executed.
 
+\
+
 {\tmstrong{Arguments}}:
 \begin{itemize}
   \item The entry accepts the {\tmem{block data}} defined in Definition
@@ -4221,32 +4253,49 @@ reporting back if the block was successfully executed.
 
 
 {\tmstrong{Return}}:
+\begin{itemizedot}
+  \item A boolean value indicates if the execution was successful.
+\end{itemizedot}
 
-A Boolean value indicates if the execution was successful.
+\subsection{\tmverbatim{Core\_initialize\_block}}
 
-\subsection{\tmverbatim{Core\_initialise\_block}}
+Starts the execution of a particular block.
 
-{\todo{Spec initialize block}}
-
-\subsection{\tmverbatim{hash\_and\_length}}\label{sect-rte-hash-and-length}
-
-An auxilarry function which returns hash and encoding length of an extrinsics.
+\
 
 {\tmstrong{Arguments}}:
 \begin{itemize}
-  \item A SCALE encoded blob of an extrinsic.
+  \item A block header as defined in \ref{defn-block-header}.
 \end{itemize}
 
 
 {\tmstrong{Return}}:
+\begin{itemizedot}
+  \item None.
+\end{itemizedot}
+\subsection{\tmverbatim{hash\_and\_length}}\label{sect-rte-hash-and-length}
 
-Pair of Blake2Hash of the blob as element of $\mathbb{B}_{32}$ and its length
-as 64 bit integer.
+An auxilarry function which returns hash and encoding length of an extrinsics.
 
+\
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item A blob of an extrinsic.
+\end{itemize}
+\tmverbatim{}
+
+{\tmstrong{Return}}:
+\begin{itemizedot}
+  \item Pair of Blake2Hash of the blob as element of $\mathbb{B}_{32}$ and its
+  length as 64 bit integer.
+\end{itemizedot}
 \subsection{\tmverbatim{BabeApi\_epoch}}\label{sect-rte-babeapi-epoch}
 
 This entry is called to obtain the current configuration of BABE consensus
 protocol.
+
+\
 
 {\tmstrong{Arguments}}:
 \begin{itemize}
@@ -4300,7 +4349,7 @@ blob represents a valid extrinsics applied to the specified block.
   \item $H_n (B)$: the block number whose final state is where the transaction
   should apply the system state.
   
-  \item UTX: A byte array that contains the SCALE encoded transaction.
+  \item UTX: A byte array that contains the transaction.
 \end{itemize}
 
 
@@ -4361,6 +4410,102 @@ in the case the transaction is judged to be valid.}
 Note that if {\tmem{Propagate}} is set to \tmverbatim{false} the transaction
 will still be considered for including in blocks that are authored on the
 current node, but will never be sent to other peers.
+
+\subsection{\tmverbatim{BlockBuilder\_apply\_extrinsic}}
+
+Apply extrinsic outside of the block execution function. This doesn't attempt
+to validate anything regarding the block, but it builds a list of transaction
+hashes.
+
+\
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item An extrinisic.
+\end{itemize}
+
+
+{\tmstrong{Return}}:
+\begin{itemizedot}
+  \item The result from the attempt to apply extrinsic. On success it returns
+  an array of zero length (one byte zero value). On failure it either returns
+  a Dispatch error or an Apply error. An Apply error uses identifiers to
+  indicate the specific error type.
+  
+  \
+  
+  Dispatch error (\tmverbatim{0x0001} prefix) byte array, contains the
+  following information.
+  
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    {\tmstrong{Name}} & {\tmstrong{Type}} & {\tmstrong{Description}}\\
+    module & unsigned 8 bit integer & Module index, matching the metadata
+    module index\\
+    error & unsigend 8 bit integer & Module specific error value
+  \end{tabular}}{Data format of the Dispatch error type}
+  
+  \
+  
+  Apply error (\tmverbatim{0x01} prefix). A Validity error type contains
+  additional data for specific error types.
+  
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    {\tmstrong{Identifier}} & {\tmstrong{Type}} & {\tmstrong{Description}}\\
+    \tmverbatim{0x00} & NoPermission & General error to do wth the permissions
+    of the sender\\
+    \tmverbatim{0x01} & BadState & General error to do with the state of the
+    system in general\\
+    \tmverbatim{0x02} & Validity & Any error to do with the transaction
+    validity\\
+    \tmverbatim{0x020000} & Call & The call of the transaction is not
+    expected\\
+    \tmverbatim{0x020001} & Payment & Inability to pay some fees (e.g. account
+    balance too low)\\
+    \tmverbatim{0x020002} & Future & Transaction not yet being valid (e.g.
+    nonce too high)\\
+    \tmverbatim{0x020003} & Stale & Transaction being outdated (e.g. nonce too
+    low)\\
+    \tmverbatim{0x020004} & BadProof & Invalid transactions proofs (e.g. bad
+    signature)\\
+    \tmverbatim{0x020005} & AncientBirthBlock & The transaction birth block is
+    ancient\\
+    \tmverbatim{0x020006} & ExhaustsResources & Would exhaust the resources of
+    current block\\
+    &  & the transaction might be valid)\\
+    \tmverbatim{0x020007} & Custom & Any other custom invalidity of unknown
+    size\\
+    \tmverbatim{0x020100} & CannotLookup & Could not lookup some information
+    that is required\\
+    &  & to validate the transaction\\
+    \tmverbatim{0x020101} & NoUnsignedValidator & No validator found for the
+    given unsigned transaction\\
+    \tmverbatim{0x020102} & Custom & Any other custom invalidity of unknown
+    size
+  \end{tabular}}{Identifiers of the Apply error type}
+\end{itemizedot}
+
+\subsection{{\tmstrong{{\tmstrong{\tmverbatim{BlockBuilder\_inherent\_extrinsics}}}}}}
+
+Generate inherent extrinsics. The inherent data will vary from chain to chain.
+
+\
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item A {\tmname{Inherents-Data}} structure as defined in
+  \ref{tabl-inherent-data}.
+\end{itemize}
+
+
+{\tmstrong{Return}}:
+\begin{itemizedot}
+  \item An array of extrinisic where each extrinsic is a variable byte array.
+\end{itemizedot}
+
+\subsection{\tmverbatim{BlockBuilder\_finalize\_block}}
+
+Finalize the block - it is up to the caller to ensure that all header fields
+are valid except for the state root.
 
 \chapter*{Glossary}
 
