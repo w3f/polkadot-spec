@@ -1,3 +1,6 @@
+* Mon Nov 25 2019
+  - BlockBuilder runtime enteries specced.
+  - Update-State-At explained.
 * Tue Nov 05 2019
   Extrinsics section updated, Inherents definition added and extrinsics are distinguished.
   Fixing Babe typos.
