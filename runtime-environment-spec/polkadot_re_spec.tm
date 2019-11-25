@@ -436,7 +436,7 @@
 
     <with|par-left|1tab|F.1.16.<space|2spc>Cryptograhpic Auxiliary Functions
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-138>>
+    <no-break><pageref|auto-134>>
 
     <with|par-left|2tab|F.1.16.1.<space|2spc><with|font-family|tt|language|verbatim|ext_blake2_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -6009,14 +6009,18 @@
   </the-glossary>
 
   <\bibliography|bib|tm-alpha|polkadot_re_spec>
-    <\bib-list|9>
+    <\bib-list|11>
+      <bibitem*|Bur19><label|bib-burdges_schnorr_2019>Jeff Burdges.
+      <newblock>Schnorr VRFs and signatures on the Ristretto group.
+      <newblock><localize|Technical Report>, 2019.<newblock>
+
       <bibitem*|Col19><label|bib-collet_extremely_2019>Yann Collet.
       <newblock>Extremely fast non-cryptographic hash algorithm.
       <newblock><localize|Technical Report>, -,
       <slink|http://cyan4973.github.io/xxHash/>, 2019.<newblock>
 
       <bibitem*|DGKR18><label|bib-david_ouroboros_2018>Bernardo David, Peter
-      Gaºi, Aggelos Kiayias<localize|, and >Alexander Russell.
+      GaÂºi, Aggelos Kiayias<localize|, and >Alexander Russell.
       <newblock>Ouroboros praos: An adaptively-secure, semi-synchronous
       proof-of-stake blockchain. <newblock><localize|In
       ><with|font-shape|italic|Annual International Conference on the Theory
@@ -6028,6 +6032,12 @@
       <newblock>Technical <keepcase|Specification>, Web 3.0 Foundation,
       <slink|http://research.web3.foundation/en/latest/polkadot/BABE/Babe/>,
       2019.<newblock>
+
+      <bibitem*|JL17><label|bib-josefsson_edwards-curve_2017>Simon
+      Josefsson<localize| and >Ilari Liusvaara. <newblock>Edwards-curve
+      digital signature algorithm (EdDSA). <newblock><localize|In
+      ><with|font-shape|italic|Internet Research Task Force, Crypto Forum
+      Research Group, RFC>, <localize|volume> 8032. 2017.<newblock>
 
       <bibitem*|lab19><label|bib-protocol_labs_libp2p_2019>Protocol labs.
       <newblock>Libp2p Specification. <newblock><localize|Technical Report>,
@@ -6059,11 +6069,11 @@
   </bibliography>
 
   <\the-index|idx>
-    <index+1|Transaction Message|<pageref|auto-47>\U<pageref|auto-50>>
+    <index-1|Transaction Message|<pageref|auto-47>\U<pageref|auto-50>>
 
-    <index+1|transaction pool|<pageref|auto-48>>
+    <index-1|transaction pool|<pageref|auto-48>>
 
-    <index+1|transaction queue|<pageref|auto-49>>
+    <index-1|transaction queue|<pageref|auto-49>>
   </the-index>
 </body>
 
@@ -6398,7 +6408,7 @@
     <associate|sect-msg-consensus|<tuple|E.1.6|52>>
     <associate|sect-msg-status|<tuple|E.1.1|49>>
     <associate|sect-msg-transactions|<tuple|E.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
+    <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|E|49>>
     <associate|sect-predef-storage-keys|<tuple|D|47>>
     <associate|sect-randomness|<tuple|A.3|39>>
@@ -6599,6 +6609,11 @@
         List of key schemes which are used for session keys depending on the
         protocol
       </surround>|<pageref|auto-93>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.2>|>
+        List of key schemes which are used for session keys depending on the
+        protocol
+      </surround>|<pageref|auto-92>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|E.1>||List of possible
       network message types.>|<pageref|auto-109>>
@@ -6883,6 +6898,26 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-98>>
 
+      <with|par-left|<quote|1tab>|A.5.1.<space|2spc>Holding and staking funds
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-93>>
+
+      <with|par-left|<quote|1tab>|A.5.2.<space|2spc>Creating a Controller key
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-94>>
+
+      <with|par-left|<quote|1tab>|A.5.3.<space|2spc>Designating a proxy for
+      voting <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-95>>
+
+      <with|par-left|<quote|1tab>|A.5.4.<space|2spc>Controller settings
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-96>>
+
+      <with|par-left|<quote|1tab>|A.5.5.<space|2spc>Certifying keys
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-97>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       B.<space|2spc>Auxiliary Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <pageref|auto-99><vspace|0.5fn>
@@ -7009,7 +7044,7 @@
 
       <with|par-left|<quote|1tab>|F.1.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_child_storage_into>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-133>>
+      <no-break><pageref|auto-127>>
 
       <with|par-left|<quote|1tab>|F.1.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_kill_child_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -7037,7 +7072,7 @@
 
       <with|par-left|<quote|2tab>|F.1.16.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-140>>
+      <no-break><pageref|auto-134>>
 
       <with|par-left|<quote|2tab>|F.1.16.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_keccak_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
