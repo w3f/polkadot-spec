@@ -80,7 +80,7 @@
   {\Large Protocol Specification}
 }
 
-\date{November 5, 2019}
+\date{November 25, 2019}
 
 \maketitle
 
@@ -319,7 +319,7 @@ imposes partial order relationships on the blocks as follows:
 
 \chapter{State Specification}\label{chap-state-spec}
 
-\section{State Storage and Storage Trie}
+\section{State Storage and Storage Trie}\label{sect-state-storage}
 
 For storing the state of the system, Polkadot RE implements a hash table
 storage where the keys are used to access each data entry. There is no
@@ -331,9 +331,10 @@ store the key and the value in the storage trie.
 \subsection{Accessing System Storage }
 
 Polkadot RE implements various functions to facilitate access to the system
-storage for the runtime. Section \ref{sect-runtime-api} lists all of those
-functions. Here we formalize the access to the storage when it is being
-directly accessed by Polkadot RE (in contrast to Polkadot runtime).
+storage for the Runtime. See Section \ref{sect-entries-into-runtime} for a an
+explaination of those functions. Here we formalize the access to the storage
+when it is being directly accessed by Polkadot RE (in contrast to Polkadot
+runtime).
 
 \begin{definition}
   \label{defn-stored-value}The \label{autolab24}{\tmstrong{StoredValue}}
@@ -405,7 +406,7 @@ nibbles:
 By looking at $k_{\tmop{enc}}$ as a sequence of nibbles, one can walk the
 radix tree to reach the node identifying the storage value of $k$.
 
-\subsection{Trie Structure}
+\subsection{Trie Structure}\label{sect-state-storage-trie-structure}
 
 In this subsection, we specify the structure of the nodes in the Trie as well
 as the Trie structure:
@@ -756,7 +757,7 @@ Algorithm \ref{algo-runtime-interaction}.
   \hline
 \end{tabular}
 
-{\algorithmic{{\state{{\tmname{$\mathcal{S}_B \leftarrow$Storage-At-State($H_b
+{\algorithmic{{\state{{\tmname{$\mathcal{S}_B \leftarrow$Set-State-At($H_b
 (B)$)}}}}
 
 {\state{$A \leftarrow \tmop{Enc}_{\tmop{SC}} ((A_1, \ldots, A_n))$}}
@@ -767,10 +768,10 @@ F, A, A_{\tmop{len}})$}}}}
 \hrulefill{\medskip}
 
 In this section, we describe the details upon which the Polkadot RE is
-interacting with the Runtime. In particular, {\tmname{Storage-At-State}} and
+interacting with the Runtime. In particular, {\tmname{Set-State-At}} and
 {\tmname{Call-Runtime-Entry}} procedures called in Algorithm
 \ref{algo-runtime-interaction} are explained in Notation
-\ref{nota-call-into-runtime} and Definition \ref{defn-storage-at-state}
+\ref{nota-call-into-runtime} and Definition \ref{defn-set-state-at}
 respectively. $R_B$ is the Runtime code loaded from $\mathcal{S}_B$, as
 described in Notation \ref{nota-runtime-code-at-state}, and
 $\mathcal{R}\mathcal{E}_B$ is the Polkadot RE API, as described in Notation
@@ -822,7 +823,7 @@ access the runtime.
   we refer to the task using the executor to invoke the
   \tmverbatim{Runtime-Entry} while passing an $A_1, \ldots, A_n$ argument to
   it and using the encoding described in Section
-  \ref{sect-send-args-to-runtime}.
+  \ref{sect-runtime-send-args-to-runtime-enteries}.
 \end{notation}
 
 In this section, we specify the general setup for an Executor call into the
@@ -833,9 +834,9 @@ the return values of each Runtime entry separately.
 
 When Polkadot RE calls a Runtime entry it should make sure Runtime has access
 to the all Polkadot Runtime API functions described in Appendix
-\ref{sect-runtime-api}. This can be done for example by loading another Wasm
-module alongside the runtime which imports these functions from Polkadot RE as
-host functions.
+\ref{sect-runtime-entries}. This can be done for example by loading another
+Wasm module alongside the runtime which imports these functions from Polkadot
+RE as host functions.
 
 \subsubsection{Sending Arguments to Runtime
 }\label{sect-runtime-send-args-to-runtime-enteries}
@@ -873,10 +874,6 @@ integer, representing two consecutive \tmverbatim{i32} integers in which the
 least significant one indicates the pointer to the offset of the result
 returned by the entry encoded in SCALE codec in the memory buffer. The most
 significant one provides the size of the blob.
-
-In the case that the runtime entry is returning a boolean value, then the
-SCALEd (boolean) value returns in the least significant byte and all other
-bytes are set to zero.
 
 \section{Extrinsics}\label{sect-extrinsics}
 
@@ -1056,7 +1053,11 @@ types.
 Polkadot nodes replicate each other's state by syncing the history of the
 extrinsics. This, however, is only practical if a large set of transactions
 are batched and synced at the time. The structure in which the transactions
-are journaled and propagated is known as a block (of extrinsics).
+are journaled and propagated is known as a block (of extrinsics) which is
+specefied in Section \ref{sect-block-format}. Like any other replicated states
+machines state inconsistency happens across Polkadot replicas. Section
+\ref{sect-managing-multiple-states} is giving an overview on how a Polkadot RE
+node manage multiple variants of the state.
 
 \subsection{Block Format}\label{sect-block-format}
 
@@ -1176,8 +1177,8 @@ contains the following parts:
   definition from consensus}}.
   
   \item {\tmstrong{{\tmsamp{authority Ids}}}}: This is the list of the Ids of
-  authorities, which have voted for the block to be stored and is formally
-  referred to as $A (B)$. An authority Id is 32bit.
+  authorities, which have voted for the block to be stored and\tmverbatim{} is
+  formally referred to as $A (B)$. An authority Id is 32bit.
 \end{itemize}
 \subsubsection{Block Body}\label{sect-block-body}
 
@@ -1224,7 +1225,9 @@ block:
   \hline
 \end{tabular}
 
-{\algorithmic{{\state{{\IF{$\tmop{Just} (B) \neq \emptyset$}}}}
+{\algorithmic{{\state{{\tmname{Set-Storage-State-At($P (B)$)}}}}
+
+{\state{{\IF{$\tmop{Just} (B) \neq \emptyset$}}}}
 
 {\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$}}
 
@@ -1240,9 +1243,7 @@ block:
 {\state{{\tmname{Verify-Authorship-Right}}($\tmop{Head} (B)$)}}
 
 {\state{$S \leftarrow$ {\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{Core\_execute\_block}}, B \right)$}}
-
-{\state{{\tmname{Update-World-State}}($S$)}}}}
+\text{\tmverbatim{Core\_execute\_block}}, B \right)$}}}}
 
 \hrulefill{\medskip}
 
@@ -1252,7 +1253,33 @@ Definition \ref{defn-block-tree}. {\tmname{Verify-Authorship-Right}} is part
 of the block production consensus protocol and is described in Algorithm
 \ref{algo-verify-authorship-right}.
 
-\chapter{Network
+\subsection{Managaing Multiple Variants of
+State}\label{sect-managing-multiple-states}
+
+Unless a node is commited to only update its state according to finalized
+block (See Definition \ref{defn-finalized-block}), it is inevitable for the
+node to store multiple variant of the state (one for each block). This is for
+example necessary for nodes which are participating in block production and
+finalization.
+
+While the state trie structure described in Section
+\ref{sect-state-storage-trie-structure} facilitates and optimises storing and
+switching between multiple variants of the state storage, Polkadot RE does not
+specifies how a node is required to accoplish this task. Instead Polkadot RE
+is required to implement {\tmname{Set-State-At}} operation which behave as
+defined in Definition \ref{defn-set-state-at}:
+
+\begin{definition}
+  \label{defn-set-state-at}The function
+  \[ \text{{\tmname{{\tmstrong{Set-State-At($\tmmathbf{B}$)}}}}} \]
+  in which $B$ is a block in the block tree (See Definition
+  \ref{defn-block-tree}), sets the content of state storage equal to the
+  resulting state of executing all extrinsics contained in the branch of the
+  block tree from genisis till block B including those recorded in Block B.
+\end{definition}
+
+For the definition of the state storage see Section
+\ref{sect-state-storage}.\chapter{Network
 Protocol\label{sect-network-interactions}}\label{network-protocol}
 
 \begin{warning}
@@ -2312,9 +2339,10 @@ in RFC 7693 {\cite{saarinen_blake2_2015}}.
 
 \section{Cryptographic Keys}\label{sect-cryptographic-keys}
 
-Various type keys are used in Polkadot to prove the identity of the actor. In
-the following section we specify the detail of those keys and comment on their
-usage
+Various type keys are used in Polkadot to prove the identity of the actors
+involve in Polkadot Protocols. To improve security for users, each key type
+has its own unique function and must be treated differently, as described by
+this section.
 
 \begin{definition}
   \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
@@ -2325,8 +2353,10 @@ usage
       \hline
       Key scheme & Description\\
       \hline
-      SR25519 & \\
-      ED25519 & \\
+      SR25519 & Schnorr signature on Ristretto compressed Ed25519 points as
+      implemented in {\cite{burdges_schnorr_2019}}\\
+      ED25519 & The standard ED25519 signature complying with
+      {\cite{josefsson_edwards-curve_2017}}\\
       secp256k1 & Only for outgoing transfer transaction\\
       \hline
     \end{tabular}
@@ -2337,15 +2367,93 @@ usage
   blance-related functions.
 \end{definition}
 
+There are two prominent subcategories of account keys namely ``stash keys''
+and ``controller keys'', each being used for a different function as described
+below.
+
 \begin{definition}
-  {\tmstrong{Controller key}} {\todo{TBS}}
+  \label{defn-stash-key}{\tmstrong{Stash key}} is a type of an account key
+  which holds funds bonded for staking \ (described in Section
+  \ref{desc-staking-funds}) to a particular controller key (definied in
+  Definition \ref{defn-controller-key}). As a result, one may actively
+  participate with a stash key keeping the stash key offline in a secure
+  location. It can also be used to designate a Proxy account to vote in
+  governance proposals, as described in \ref{desc-creating-controller-key}.
+  The Stash key holds the majority of the users funds and should neither be
+  shared with anyone, saved on an online device, or used to submit extrinsics.
 \end{definition}
 
 \begin{definition}
-  {\tmstrong{Session key}} {\todo{TBS}}
+  \label{defn-controller-key}{\tmstrong{Controller key}} is a type of account
+  key which acts on behalf of the Stash account. It signs transactions which
+  make decisions regarding nomination and validation of other keys. It is a
+  key that will be in the direct control of a user and should mostly be kept
+  offline, used to submit manual extrinsics. It sets \ preferences like payout
+  account and commission, as described in \ref{desc-controller-settings}. If
+  used for a validator, it certifies the session keys, as described in
+  \ref{desc-certifying-keys}. It only needs the required funds to pay
+  transaction fees {\todo{key needing fund needs to be defined}}.
 \end{definition}
 
-\chapter{Auxiliary Encodings}\label{sect-encoding}
+Keys defined in Definitions \ref{defn-account-key}, \ref{defn-stash-key} and
+\ref{defn-controller-key} are created and managed by the user independent of
+the Polkadot implementation. The user notifies the network about the used keys
+by submitting a transaction, as defined in \ref{desc-creating-controller-key}
+and \ref{desc-certifying-keys} respectively.
+
+\begin{definition}
+  {\tmstrong{Session keys}} are short lived keys which are used to
+  authenticate validator operations. Session keys are generated by Polkadot RE
+  and should be changed regularly due to security reasons. Nonetheless no
+  validity period is enforced by Polkadot protocol on session keys. Various
+  types of key used by Polkadot RE are presented in Table
+  \ref{tabl-session-keys}{\tmem{:}}
+  
+  \begin{table}[h]
+    \begin{tabular}{ll}
+      \hline
+      Protocol & Key scheme\\
+      \hline
+      GRANDPA & ED25519\\
+      BABE & SR25519\\
+      I'm Online & SR25519\\
+      Parachain & SR25519\\
+      \hline
+    \end{tabular}
+    \caption{\label{tabl-session-keys}List of key schemes which are used for
+    session keys depending on the protocol}
+  \end{table}
+\end{definition}
+
+Session keys must be accessible by certain Runtime Environment APIs defined in
+Appendix \ref{sect-re-api}. Session keys are {\tmem{not}} meant to control the
+majority of the user's funds and should only be used for their intended
+purpose. {\todo{key managing fund need to be defined}}
+
+\subsection{Holding and staking funds}
+
+\label{desc-staking-funds}To be specced
+
+\subsection{Creating a Controller key}
+
+\label{desc-creating-controller-key}To be specced
+
+\subsection{Designating a proxy for voting}
+
+\label{desc-designating-proxy}To be specced
+
+\subsection{Controller settings}
+
+\label{desc-controller-settings}To be specced
+
+\subsection{Certifying keys}
+
+\label{desc-certifying-keys}Session keys should be changed regularly. As such,
+new session keys need to be certfied by a controller key before put in use.
+The controller only needs to create a certificate by signing a session public
+key and broadcast this certificate via an extrinsic. {\todo{spec the detail of
+the data structure of the certificate etc.}}\chapter{Auxiliary
+Encodings}\label{sect-encoding}
 
 \section{SCALE Codec}\label{sect-scale-codec}
 
@@ -2826,7 +2934,7 @@ Sets the value of a specific key in the state storage.
   \item \tmverbatim{value}: a pointer indicating the buffer containing the
   value to be stored under the key.
   
-  \item \tmverbatim{value\_len}: \ the length of the value buffer in bytes.
+  \item \tmverbatim{value\_len}: the length of the value buffer in bytes.
 \end{itemize}
 
 \subsection{\tmverbatim{ext\_storage\_root}}
@@ -2848,7 +2956,7 @@ Retrieves the root of the state storage.
   which contains the root of the state storage after the function concludes.
 \end{itemize}
 
-\subsubsection{\tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}}
+\subsection{\tmverbatim{ext\_blake2\_256\_enumerated\_trie\_root}}
 
 Given an array of byte arrays, it arranges them in a Merkle trie, defined
 in\tmverbatim{{\tmem{{\tmstrong{}}}}} Section \ref{sect-merkl-proof}, where
@@ -2927,7 +3035,7 @@ specified in the array.
   bytes.
 \end{itemize}
 
-\subsubsection{\tmverbatim{ext\_exists\_storage}}
+\subsection{\tmverbatim{ext\_exists\_storage}}
 
 Given a byte array, this function checks if the storage entry corresponding to
 the key specified in the array exists.
@@ -2991,8 +3099,8 @@ storage.
 \subsection{\tmverbatim{ext\_get\_storage\_into}}
 
 Given a byte array, this function retrieves the value stored under the key
-specified in the array and stores a specified chunk of it in the provided
-buffer, if the entry exists in the storage.
+specified in the array and stores the specified chunk starting at the offset
+into the provided buffer, if the entry exists in the storage.
 
 \
 
@@ -3006,8 +3114,8 @@ buffer, if the entry exists in the storage.
 
 {\tmstrong{Arguments}}:
 \begin{itemize}
-  \item \tmverbatim{key\_data}: a memory address pointing at the buffer
-  containing the byte array containing the key value.
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer of the
+  byte array containing the key value.
   
   \item \tmverbatim{key\_len}: the length of the byte array in number of
   bytes.
@@ -3029,22 +3137,213 @@ buffer, if the entry exists in the storage.
   does not exist under the specified key.
 \end{itemize}
 
-\subsection{To Be Specced}
+\subsection{\tmverbatim{ext\_set\_child\_storage}}
 
+Sets the value of a specific key in the child state storage.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+(func $ext_set_child_storage
+  (param $storage_key_data i32) (param $storage_key_len i32) (param $key_data i32)
+  (param $key_len i32) (param $value_data i32) (param $value_len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
 \begin{itemize}
-  \item \tmverbatim{ext\_clear\_child\_storage}
+  \item \tmverbatim{storage\_key\_data}: a memory address pointing at the
+  buffer of the byte array containing the child storage key. This key
+  {\tmstrong{must}} be prefixed with \begin{tmcode}
+  \tmverbatim{{\code*{:child\_storage:default:}}}
+  \end{tmcode}
   
-  \item \tmverbatim{ext\_exists\_child\_storage}
+  \item \tmverbatim{storage\_key\_len}: the length of the child storage key
+  byte array in number of bytes.
   
-  \item \tmverbatim{ext\_get\_allocated\_child\_storage}
+  \item \tmverbatim{key}: a pointer indicating the buffer containing the key.
   
-  \item \tmverbatim{ext\_get\_child\_storage\_into}
+  \item \tmverbatim{key\_len}: the key length in bytes.
   
-  \item \tmverbatim{ext\_kill\_child\_storage}
+  \item \tmverbatim{value}: a pointer indicating the buffer containing the
+  value to be stored under the key.
   
-  \item \tmverbatim{ext\_set\_child\_storage}
+  \item \tmverbatim{value\_len}: the length of the value buffer in bytes.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_clear\_child\_storage}}
+
+Given a byte array, this function removes the child storage entry whose key is
+specified in the array.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+    (func $ext_clear_child_storage
+      (param $storage_key_data i32) (param $storage_key_len i32)
+      (param $key_data i32) (param $key_len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{storage\_key\_data}: a memory address pointing at the
+  buffer of the byte array containing the child storage key.
   
-  \item \tmverbatim{ext\_storage\_changes\_root}
+  \item \tmverbatim{storage\_key\_len}: the length of the child storage key
+  byte array in number of bytes.
+  
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer of the
+  byte array containing the key value.
+  
+  \item \tmverbatim{key\_len}: the length of the key byte array in number of
+  bytes.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_exists\_child\_storage}}
+
+Given a byte array, this function checks if the child storage entry
+corresponding to the key specified in the array exists.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+    (func $ext_exists_child_storage
+      (param $storage_key_data i32) (param $storage_key_len i32)
+      (param $key_data i32) (param $key_len i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{storage\_key\_data}: a memory address pointing at the
+  buffer of the byte array containing the child storage key.
+  
+  \item \tmverbatim{storage\_key\_len}: the length of the child storage key
+  byte array in number of bytes.
+  
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer of the
+  byte array containing the key value.
+  
+  \item \tmverbatim{key\_len}: the length of the key byte array in number of
+  bytes.
+  
+  \item \tmverbatim{result}: an i32 integer which is equal to 1 verifies if an
+  entry with the given key exists in the child storage or 0 if the child
+  storage does not contain an entry with the given key.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_get\_allocated\_child\_storage}}
+
+Given a byte array, this function allocates a large enough buffer in the
+memory and retrieves the child value stored under the key that is specified in
+the array. Then, it stores in in the allocated buffer if the entry exists in
+the child storage.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+    (func $ext_get_allocated_child_storage
+      (param $storage_key_data i32) (param $storage_key_len i32) (param $key_data i32)             (param $key_len i32) (param $written_out) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{storage\_key\_data}: a memory address pointing at the
+  buffer of the byte array containing the child storage key.
+  
+  \item \tmverbatim{storage\_key\_len}: the length of the child storage key
+  byte array in number of bytes.
+  
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer of the
+  byte array containing the key value.
+  
+  \item \tmverbatim{key\_len}: the length of the key byte array in number of
+  bytes.
+  
+  \item \tmverbatim{written\_out}: the function stores the length of the
+  retrieved value in number of bytes if the enty exists. If the entry does not
+  exist, it stores $2^{32} - 1$.
+  
+  \item \tmverbatim{result}: A pointer to the buffer in which the function
+  allocates and stores the value corresponding to the given key if such an
+  entry exist; otherwise it is equal to 0.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_get\_child\_storage\_into}}
+
+Given a byte array, this function retrieves the child value stored under the
+key specified in the array and stores the specified chunk starting the offset
+into the provided buffer, if the entry exists in the storage.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+    (func $ext_get_child_storage_into
+      (param $storage_key_data i32) (param $storage_key_len i32)
+      (param $key_data i32) (param $key_len i32) (param $value_data i32)
+      (param $value_len i32) (param $value_offset i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{storage\_key\_data}: a memory address pointing at the
+  buffer of the byte array containing the child storage key.
+  
+  \item \tmverbatim{storage\_key\_len}: the length of the child storage key
+  byte array in number of bytes.
+  
+  \item \tmverbatim{key\_data}: a memory address pointing at the buffer of the
+  byte array containing the key value.
+  
+  \item \tmverbatim{key\_len}: the length of the byte array in number of
+  bytes.
+  
+  \item \tmverbatim{value\_data}: a pointer to the buffer in which the
+  function stores the chunk of the value it retrieves.
+  
+  \item \tmverbatim{value\_len}: the (maximum) length of the chunk in bytes
+  the function will read of the value and will store in the
+  \tmverbatim{value\_data} buffer.
+  
+  \item \tmverbatim{value\_offset}: the offset of the chunk where the function
+  should start storing the value in the provided buffer, i.e. the number of
+  bytes the functions should skip from the retrieved value before storing the
+  data in the \tmverbatim{value\_data} in number of bytes.
+  
+  \item \tmverbatim{result}: The number of bytes the function writes in
+  \tmverbatim{value\_data} if the value exists or $2^{32} - 1$ if the entry
+  does not exist under the specified key.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_kill\_child\_storage}}
+
+Given a byte array, this function removes all entries of the child storage
+whose child storage key is specified in the array.
+
+\
+
+{\tmstrong{Prototype:}}
+\begin{alltt}
+    (func $ext_kill_child_storage
+      (param $storage_key_data i32) (param $storage_key_len i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{storage\_key\_data}: a memory address pointing at the
+  buffer of the byte array containing the child storage key.
+  
+  \item \tmverbatim{storage\_key\_len}: the length of the child storage key
+  byte array in number of bytes.
 \end{itemize}
 
 \subsection{Memory}
@@ -3893,20 +4192,23 @@ communicates with each runtime entry.
 
 As a wasm functions, all runtime entries have the following prototype
 signature:
+
+
 \begin{alltt}
     (func $generic_runtime_entry
       (param $data i32) (parm $len i32) (reslut i64))
 \end{alltt}
+
+
 where \tmverbatim{data} points to the SCALE encoded paramaters sent to the
 function and \tmverbatim{len} is the length of the data. \tmverbatim{result}
-can similarly either point to the SCALE encoded data the function returns or
-represent a boolean value (See Sections
-\ref{sect-runtime-send-args-to-runtime-enteries} and
+can similarly either point to the SCALE encoded data the function returns (See
+Sections \ref{sect-runtime-send-args-to-runtime-enteries} and
 \ref{sect-runtime-return-value}).
 
 In this section, we describe the function of each of the entries alongside
-with the details of the SCALE encoded arguments and the return values for each
-one of these enteries.
+with the details of the arguments and the return values for each one of these
+enteries.
 
 \subsection{\tmverbatim{Core\_version}}
 
@@ -3941,6 +4243,8 @@ following information:
 This entry is responsible for executing all extrinsics in the block and
 reporting back if the block was successfully executed.
 
+\
+
 {\tmstrong{Arguments}}:
 \begin{itemize}
   \item The entry accepts the {\tmem{block data}} defined in Definition
@@ -3949,32 +4253,49 @@ reporting back if the block was successfully executed.
 
 
 {\tmstrong{Return}}:
+\begin{itemizedot}
+  \item A boolean value indicates if the execution was successful.
+\end{itemizedot}
 
-A Boolean value indicates if the execution was successful.
+\subsection{\tmverbatim{Core\_initialize\_block}}
 
-\subsection{\tmverbatim{Core\_initialise\_block}}
+Starts the execution of a particular block.
 
-{\todo{Spec initialize block}}
-
-\subsection{\tmverbatim{hash\_and\_length}}\label{sect-rte-hash-and-length}
-
-An auxilarry function which returns hash and encoding length of an extrinsics.
+\
 
 {\tmstrong{Arguments}}:
 \begin{itemize}
-  \item A SCALE encoded blob of an extrinsic.
+  \item A block header as defined in \ref{defn-block-header}.
 \end{itemize}
 
 
 {\tmstrong{Return}}:
+\begin{itemizedot}
+  \item None.
+\end{itemizedot}
+\subsection{\tmverbatim{hash\_and\_length}}\label{sect-rte-hash-and-length}
 
-Pair of Blake2Hash of the blob as element of $\mathbb{B}_{32}$ and its length
-as 64 bit integer.
+An auxilarry function which returns hash and encoding length of an extrinsics.
 
+\
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item A blob of an extrinsic.
+\end{itemize}
+\tmverbatim{}
+
+{\tmstrong{Return}}:
+\begin{itemizedot}
+  \item Pair of Blake2Hash of the blob as element of $\mathbb{B}_{32}$ and its
+  length as 64 bit integer.
+\end{itemizedot}
 \subsection{\tmverbatim{BabeApi\_epoch}}\label{sect-rte-babeapi-epoch}
 
 This entry is called to obtain the current configuration of BABE consensus
 protocol.
+
+\
 
 {\tmstrong{Arguments}}:
 \begin{itemize}
@@ -4028,7 +4349,7 @@ blob represents a valid extrinsics applied to the specified block.
   \item $H_n (B)$: the block number whose final state is where the transaction
   should apply the system state.
   
-  \item UTX: A byte array that contains the SCALE encoded transaction.
+  \item UTX: A byte array that contains the transaction.
 \end{itemize}
 
 
@@ -4089,6 +4410,102 @@ in the case the transaction is judged to be valid.}
 Note that if {\tmem{Propagate}} is set to \tmverbatim{false} the transaction
 will still be considered for including in blocks that are authored on the
 current node, but will never be sent to other peers.
+
+\subsection{\tmverbatim{BlockBuilder\_apply\_extrinsic}}
+
+Apply extrinsic outside of the block execution function. This doesn't attempt
+to validate anything regarding the block, but it builds a list of transaction
+hashes.
+
+\
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item An extrinisic.
+\end{itemize}
+
+
+{\tmstrong{Return}}:
+\begin{itemizedot}
+  \item The result from the attempt to apply extrinsic. On success it returns
+  an array of zero length (one byte zero value). On failure it either returns
+  a Dispatch error or an Apply error. An Apply error uses identifiers to
+  indicate the specific error type.
+  
+  \
+  
+  Dispatch error (\tmverbatim{0x0001} prefix) byte array, contains the
+  following information.
+  
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    {\tmstrong{Name}} & {\tmstrong{Type}} & {\tmstrong{Description}}\\
+    module & unsigned 8 bit integer & Module index, matching the metadata
+    module index\\
+    error & unsigend 8 bit integer & Module specific error value
+  \end{tabular}}{Data format of the Dispatch error type}
+  
+  \
+  
+  Apply error (\tmverbatim{0x01} prefix). A Validity error type contains
+  additional data for specific error types.
+  
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    {\tmstrong{Identifier}} & {\tmstrong{Type}} & {\tmstrong{Description}}\\
+    \tmverbatim{0x00} & NoPermission & General error to do wth the permissions
+    of the sender\\
+    \tmverbatim{0x01} & BadState & General error to do with the state of the
+    system in general\\
+    \tmverbatim{0x02} & Validity & Any error to do with the transaction
+    validity\\
+    \tmverbatim{0x020000} & Call & The call of the transaction is not
+    expected\\
+    \tmverbatim{0x020001} & Payment & Inability to pay some fees (e.g. account
+    balance too low)\\
+    \tmverbatim{0x020002} & Future & Transaction not yet being valid (e.g.
+    nonce too high)\\
+    \tmverbatim{0x020003} & Stale & Transaction being outdated (e.g. nonce too
+    low)\\
+    \tmverbatim{0x020004} & BadProof & Invalid transactions proofs (e.g. bad
+    signature)\\
+    \tmverbatim{0x020005} & AncientBirthBlock & The transaction birth block is
+    ancient\\
+    \tmverbatim{0x020006} & ExhaustsResources & Would exhaust the resources of
+    current block\\
+    &  & the transaction might be valid)\\
+    \tmverbatim{0x020007} & Custom & Any other custom invalidity of unknown
+    size\\
+    \tmverbatim{0x020100} & CannotLookup & Could not lookup some information
+    that is required\\
+    &  & to validate the transaction\\
+    \tmverbatim{0x020101} & NoUnsignedValidator & No validator found for the
+    given unsigned transaction\\
+    \tmverbatim{0x020102} & Custom & Any other custom invalidity of unknown
+    size
+  \end{tabular}}{Identifiers of the Apply error type}
+\end{itemizedot}
+
+\subsection{{\tmstrong{{\tmstrong{\tmverbatim{BlockBuilder\_inherent\_extrinsics}}}}}}
+
+Generate inherent extrinsics. The inherent data will vary from chain to chain.
+
+\
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item A {\tmname{Inherents-Data}} structure as defined in
+  \ref{tabl-inherent-data}.
+\end{itemize}
+
+
+{\tmstrong{Return}}:
+\begin{itemizedot}
+  \item An array of extrinisic where each extrinsic is a variable byte array.
+\end{itemizedot}
+
+\subsection{\tmverbatim{BlockBuilder\_finalize\_block}}
+
+Finalize the block - it is up to the caller to ensure that all header fields
+are valid except for the state root.
 
 \chapter*{Glossary}
 
@@ -4188,6 +4605,10 @@ current node, but will never be sent to other peers.
 \end{theglossary}
 
 \begin{thebibliography}{DGKR18}
+  \bibitem[Bur19]{burdges_schnorr_2019}Jeff Burdges. {\newblock}Schnorr VRFs
+  and signatures on the Ristretto group. {\newblock}Technical Report,
+  2019.{\newblock}
+  
   \bibitem[Col19]{collet_extremely_2019}Yann Collet. {\newblock}Extremely fast
   non-cryptographic hash algorithm. {\newblock}Technical Report, -,
   \url{http://cyan4973.github.io/xxHash/}, 2019.{\newblock}
@@ -4203,6 +4624,11 @@ current node, but will never be sent to other peers.
   {\keepcase{Specification}}, Web 3.0 Foundation,
   \url{http://research.web3.foundation/en/latest/polkadot/BABE/Babe/},
   2019.{\newblock}
+  
+  \bibitem[JL17]{josefsson_edwards-curve_2017}Simon Josefsson  and  Ilari
+  Liusvaara. {\newblock}Edwards-curve digital signature algorithm (EdDSA).
+  {\newblock}In \tmtextit{Internet Research Task Force, Crypto Forum Research
+  Group, RFC},  volume  8032. 2017.{\newblock}
   
   \bibitem[lab19]{protocol_labs_libp2p_2019}Protocol labs. {\newblock}Libp2p
   Specification. {\newblock}Technical Report, Protocol labs,
