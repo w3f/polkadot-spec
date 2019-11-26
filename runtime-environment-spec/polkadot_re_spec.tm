@@ -3738,6 +3738,15 @@
 
   <appendix|Genesis Block Specification><label|sect-genisis-block>
 
+  The genesis block is a list of key/value pairs, each offering identifyable
+  information which can be used by the Runtime. The only required key for the
+  Runtime Environment is <verbatim|:code>, as described in
+  <reference|sect-loading-runtime-code>. The other keys and values are
+  unspecifed and its usage depends on the chain respectively its
+  corresponding Runtime. The keys and values should be inserted into the
+  state storage with the <verbatim|set_storage> RE API, as defined in
+  <reference|sect_ext_set_storage>.
+
   <appendix|Predefined Storage Keys><label|sect-predef-storage-keys>
 
   <appendix|Network Messages><label|sect-network-messages>
@@ -4053,7 +4062,7 @@
 
   <section|Storage>
 
-  <subsection|<verbatim|ext_set_storage>>
+  <subsection|<verbatim|ext_set_storage>><label|sect_ext_set_storage>
 
   Sets the value of a specific key in the state storage.
 
@@ -6302,8 +6311,10 @@
     <associate|auto-97|<tuple|A.5.4|40>>
     <associate|auto-98|<tuple|A.5.5|40>>
     <associate|auto-99|<tuple|B|41>>
+    <associate|bib-burdges_schnorr_2019|<tuple|Bur19|?>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|79>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|79>>
+    <associate|bib-josefsson_edwards-curve_2017|<tuple|JL17|?>>
     <associate|bib-liusvaara_edwards-curve_2017|<tuple|LJ17|79>>
     <associate|bib-parity_technologies_substrate_2019|<tuple|Tec19|79>>
     <associate|bib-perrin_noise_2018|<tuple|Per18|79>>
@@ -6412,7 +6423,7 @@
     <associate|sect-network-messages|<tuple|E|49>>
     <associate|sect-predef-storage-keys|<tuple|D|47>>
     <associate|sect-randomness|<tuple|A.3|39>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
+    <associate|sect-re-api|<tuple|F|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|73>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|73>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|73>>
@@ -6426,6 +6437,7 @@
     <associate|sect-state-storage-trie-structure|<tuple|2.1.3|12>>
     <associate|sect-verifying-authorship|<tuple|5.1.6|32>>
     <associate|sect-vrf|<tuple|A.4|39>>
+    <associate|sect_ext_set_storage|<tuple|F.1.1|?>>
     <associate|slot-time-cal-tail|<tuple|5.7|30>>
     <associate|snippet-runtime-enteries|<tuple|G.1|71>>
     <associate|tabl-account-key-schemes|<tuple|A.1|39>>
@@ -6609,11 +6621,6 @@
         List of key schemes which are used for session keys depending on the
         protocol
       </surround>|<pageref|auto-93>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.2>|>
-        List of key schemes which are used for session keys depending on the
-        protocol
-      </surround>|<pageref|auto-92>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|E.1>||List of possible
       network message types.>|<pageref|auto-109>>
@@ -6898,26 +6905,6 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-98>>
 
-      <with|par-left|<quote|1tab>|A.5.1.<space|2spc>Holding and staking funds
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-93>>
-
-      <with|par-left|<quote|1tab>|A.5.2.<space|2spc>Creating a Controller key
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-94>>
-
-      <with|par-left|<quote|1tab>|A.5.3.<space|2spc>Designating a proxy for
-      voting <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-95>>
-
-      <with|par-left|<quote|1tab>|A.5.4.<space|2spc>Controller settings
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-96>>
-
-      <with|par-left|<quote|1tab>|A.5.5.<space|2spc>Certifying keys
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-97>>
-
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       B.<space|2spc>Auxiliary Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <pageref|auto-99><vspace|0.5fn>
@@ -7044,7 +7031,7 @@
 
       <with|par-left|<quote|1tab>|F.1.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_child_storage_into>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-127>>
+      <no-break><pageref|auto-133>>
 
       <with|par-left|<quote|1tab>|F.1.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_kill_child_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
@@ -7072,7 +7059,7 @@
 
       <with|par-left|<quote|2tab>|F.1.16.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-134>>
+      <no-break><pageref|auto-140>>
 
       <with|par-left|<quote|2tab>|F.1.16.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_keccak_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
