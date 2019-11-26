@@ -1523,7 +1523,7 @@
   </notation>
 
   The initial runtime code of the chain is embedded as an extrinsics into the
-  chain initialization JSON file (representing the genesis block) and is
+  chain initialization JSON file (representing the genesis state) and is
   submitted to Polkadot RE (see Section <reference|sect-genisis-block>).
 
   Subsequent calls to the runtime have the ability to, in turn, call the
@@ -1837,7 +1837,7 @@
       <item><strong|<samp|number:>> formally indicated as
       <strong|<math|H<rsub|i>>> is an integer, which represents the index of
       the current block in the chain. It is equal to the number of the
-      ancestor blocks. The genesis block has number 0.
+      ancestor blocks. The genesis state has number 0.
 
       <item><strong|<samp|state_root:>> formally indicated as
       <strong|<math|H<rsub|r>>> is the root of the Merkle trie, whose leaves
@@ -2162,7 +2162,7 @@
     network.
   </itemize>
 
-  <section|Transport Protocol>
+  <section|Transport Protocol><label|sect_transport_protocol>
 
   A Polkadot node can establish a connection with nodes in its peer list. All
   the connections must always use encryption and multiplexing. While some
@@ -2236,7 +2236,7 @@
     specified in <cite|protocol_labs_libp2p_2019>.
   </itemize>
 
-  <subsection|Polkadot Communication Substream>
+  <subsection|Polkadot Communication Substream><label|sect_polkadot_communication_substream>
 
   For the purposes of communicating Polkadot messages, the dailer of the
   connection opens a unique substream. Optionally, the node can keep a unique
@@ -2611,7 +2611,7 @@
   At the end of epoch <math|\<cal-E\><rsub|n>>, each block producer is able
   to compute the randomness seed it needs in order to participate in the
   block production lottery in epoch <math|\<cal-E\><rsub|n+2>>. For epoch 0
-  and 1, the randomness seed is provided in the genesis block. The
+  and 1, the randomness seed is provided in the genesis state. The
   computation of the seed is described in Algorithm
   <reference|algo-epoch-randomness> which uses the concept of epoch subchain
   described in Definition <reference|defn-epoch-subchain>.
@@ -3045,7 +3045,7 @@
     </equation*>
   </definition>
 
-  Note that for genesis block <math|Genesis> we always have
+  Note that for genesis state <math|Genesis> we always have
   <math|#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>=<around*|\||\<bbb-V\>|\|>>.
 
   \;
@@ -3736,9 +3736,9 @@
     <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|Enc<rsub|HE><around|(|PK|)>\<assign\>>>>|<row|<cell|<math|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Nibbles<rsub|4>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\>>>|<row|<cell|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>|<cell|\<mapsto\>>|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|<around|(|16k<rsub|1>+*k<rsub|2>,\<ldots\>,16k<rsub|2*i-1>+*k<rsub|2*i>|)>>|<cell|n=2*i>>|<row|<cell|<around|(|k<rsub|1>,16k<rsub|2>+*k<rsub|3>,\<ldots\>,16k<rsub|2*i>+*k<rsub|2*i+1>|)>>|<cell|n=2*i+1>>>>>>>>>>|\<nobracket\>>>>>>>|\<nobracket\>>>>>>>>
   </definition>
 
-  <appendix|Genesis Block Specification><label|sect-genisis-block>
+  <appendix|Genesis State Specification><label|sect-genisis-block>
 
-  The genesis block is a list of key/value pairs, each offering identifyable
+  The genesis state is a list of key/value pairs, each offering identifyable
   information which can be used by the Runtime. The only required key for the
   Runtime Environment is <verbatim|:code>, as described in
   <reference|sect-loading-runtime-code>. The other keys and values are
@@ -3746,6 +3746,29 @@
   corresponding Runtime. The keys and values should be inserted into the
   state storage with the <verbatim|set_storage> RE API, as defined in
   <reference|sect_ext_set_storage>.
+
+  \;
+
+  The genesis state also includes following information, which vary depending
+  on the chain and network.
+
+  <\itemize-dot>
+    <item><strong|Boot nodes>: addresses of boot nodes as defined in section
+    <reference|sect_transport_protocol>. Those are the nodes that the client
+    should contact, communicate and exchange messages with. This behavior is
+    defined in Appendix <reference|sect-network-messages>.
+  </itemize-dot>
+
+  <\itemize-dot>
+    <item><strong|Protocol ID>: the identification of the network
+    configuration as described in section
+    <reference|sect_polkadot_communication_substream>.
+  </itemize-dot>
+
+  <\itemize-dot>
+    <item><strong|Properties>: specification about ss58 format, token
+    decimals and token symbol.
+  </itemize-dot>
 
   <appendix|Predefined Storage Keys><label|sect-predef-storage-keys>
 
@@ -6438,6 +6461,8 @@
     <associate|sect-verifying-authorship|<tuple|5.1.6|32>>
     <associate|sect-vrf|<tuple|A.4|39>>
     <associate|sect_ext_set_storage|<tuple|F.1.1|?>>
+    <associate|sect_polkadot_communication_substream|<tuple|4.4.2|?>>
+    <associate|sect_transport_protocol|<tuple|4.3|?>>
     <associate|slot-time-cal-tail|<tuple|5.7|30>>
     <associate|snippet-runtime-enteries|<tuple|G.1|71>>
     <associate|tabl-account-key-schemes|<tuple|A.1|39>>
