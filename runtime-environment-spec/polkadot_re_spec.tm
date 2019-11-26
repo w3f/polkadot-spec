@@ -3756,14 +3756,14 @@
   </itemize-dot>
 
   <\itemize-dot>
-    <item>[optional] <strong|Protocol ID>: the identification of the network
+    <item>[optional] <strong|protocol_id>: the identification of the network
     configuration as described in section
     <reference|sect_polkadot_communication_substream>.
   </itemize-dot>
 
   <\itemize-dot>
-    <item>[optional] <strong|Properties>: specification about formats, token
-    decimals and token symbol.
+    <item>[optional] <strong|properties>: useful information such as formats,
+    token decimals and token symbol.
 
     <item><strong|extensions>: a list of key/value pairs, each offering
     identifyable information which can be used by the Runtime. The only
