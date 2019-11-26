@@ -3738,36 +3738,41 @@
 
   <appendix|Genesis State Specification><label|sect-genisis-block>
 
-  The genesis state is a list of key/value pairs, each offering identifyable
-  information which can be used by the Runtime. The only required key for the
-  Runtime Environment is <verbatim|:code>, as described in
-  <reference|sect-loading-runtime-code>. The other keys and values are
-  unspecifed and its usage depends on the chain respectively its
-  corresponding Runtime. The keys and values should be inserted into the
-  state storage with the <verbatim|set_storage> RE API, as defined in
-  <reference|sect_ext_set_storage>.
-
-  \;
-
-  The genesis state also includes following information, which vary depending
-  on the chain and network.
+  The genesis state includes following information, which vary depending on
+  the chain and network.
 
   <\itemize-dot>
-    <item><strong|Boot nodes>: addresses of boot nodes as defined in section
+    <item><strong|name>: the name of the network
+
+    <item><strong|id>: the identification of the network configuration as
+    described in section <reference|sect_polkadot_communication_substream>.
+  </itemize-dot>
+
+  <\itemize-dot>
+    <item><strong|boot nodes>: addresses of boot nodes as defined in section
     <reference|sect_transport_protocol>. Those are the nodes that the client
     should contact, communicate and exchange messages with. This behavior is
     defined in Appendix <reference|sect-network-messages>.
   </itemize-dot>
 
   <\itemize-dot>
-    <item><strong|Protocol ID>: the identification of the network
+    <item>[optional] <strong|Protocol ID>: the identification of the network
     configuration as described in section
     <reference|sect_polkadot_communication_substream>.
   </itemize-dot>
 
   <\itemize-dot>
-    <item><strong|Properties>: specification about ss58 format, token
+    <item>[optional] <strong|Properties>: specification about formats, token
     decimals and token symbol.
+
+    <item><strong|extensions>: a list of key/value pairs, each offering
+    identifyable information which can be used by the Runtime. The only
+    required key for the Runtime Environment is <verbatim|:code>, as
+    described in <reference|sect-loading-runtime-code>. The other keys and
+    values are unspecifed and its usage depends on the chain respectively its
+    corresponding Runtime. The data should be inserted into the state storage
+    with the <verbatim|set_storage> RE API, as defined in
+    <reference|sect_ext_set_storage>.
   </itemize-dot>
 
   <appendix|Predefined Storage Keys><label|sect-predef-storage-keys>
