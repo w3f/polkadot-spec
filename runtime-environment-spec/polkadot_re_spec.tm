@@ -3775,6 +3775,14 @@
     <reference|sect_ext_set_storage>.
   </itemize-dot>
 
+  \;
+
+  After the information has been inserted into the state, a genesis block
+  must be included, as defined in section <reference|block>. It has no
+  extrinsics and it's values such as <verbatim|number>,
+  <verbatim|parent_hash> and <verbatim|digest> equal to zero. The
+  <verbatim|state_root> is the root of the genesis state.
+
   <appendix|Predefined Storage Keys><label|sect-predef-storage-keys>
 
   <appendix|Network Messages><label|sect-network-messages>
@@ -6962,7 +6970,7 @@
       <no-break><pageref|auto-105>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
-      C.<space|2spc>Genesis Block Specification>
+      C.<space|2spc>Genesis State Specification>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <pageref|auto-106><vspace|0.5fn>
 
