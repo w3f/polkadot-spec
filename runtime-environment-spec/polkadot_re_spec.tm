@@ -3738,42 +3738,15 @@
 
   <appendix|Genesis State Specification><label|sect-genisis-block>
 
-  The genesis state includes following information, which vary depending on
-  the chain and network.
-
-  <\itemize-dot>
-    <item><strong|name>: the name of the network
-
-    <item><strong|id>: the identification of the network configuration as
-    described in section <reference|sect_polkadot_communication_substream>.
-  </itemize-dot>
-
-  <\itemize-dot>
-    <item><strong|boot nodes>: addresses of boot nodes as defined in section
-    <reference|sect_transport_protocol>. Those are the nodes that the client
-    should contact, communicate and exchange messages with. This behavior is
-    defined in Appendix <reference|sect-network-messages>.
-  </itemize-dot>
-
-  <\itemize-dot>
-    <item>[optional] <strong|protocol_id>: the identification of the network
-    configuration as described in section
-    <reference|sect_polkadot_communication_substream>.
-  </itemize-dot>
-
-  <\itemize-dot>
-    <item>[optional] <strong|properties>: useful information such as formats,
-    token decimals and token symbol.
-
-    <item><strong|extensions>: a list of key/value pairs, each offering
-    identifyable information which can be used by the Runtime. The only
-    required key for the Runtime Environment is <verbatim|:code>, as
-    described in <reference|sect-loading-runtime-code>. The other keys and
-    values are unspecifed and its usage depends on the chain respectively its
-    corresponding Runtime. The data should be inserted into the state storage
-    with the <verbatim|set_storage> RE API, as defined in
-    <reference|sect_ext_set_storage>.
-  </itemize-dot>
+  The genesis state includes arbitrary data, which vary depending on the
+  chain and network. Each of those key/value pairs offer identifyable
+  information which can be used by the Runtime. The only required key for the
+  Runtime Environment is <verbatim|:code>, as described in
+  <reference|sect-loading-runtime-code>. The other keys and values are
+  unspecifed and its usage depends on the chain respectively its
+  corresponding Runtime. The data should be inserted into the state storage
+  with the <verbatim|set_storage> RE API, as defined in
+  <reference|sect_ext_set_storage>.
 
   \;
 
