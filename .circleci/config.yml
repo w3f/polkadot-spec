@@ -11,6 +11,7 @@ jobs:
       - run:
           name: install deps
           command: |
+            # Only install dependencies if code changed
             if (! git diff master.. --name-only --diff-filter=AMDR | grep 'test')
             then
               echo "No test code changed, skipping dependencies..."
@@ -58,11 +59,12 @@ jobs:
       - run:
           name: run tests
           command: |
+            # Only run tests if code changed
             if (! git diff master.. --name-only --diff-filter=AMDR | grep 'test')
             then
-              echo "No test code changed, skipping dependencies..."
+              echo "No test code changed, skipping tests..."
             else
-              echo "Test code changed, installing dependencies..."
+              echo "Test code changed, running tests..."
               ./run_tests.sh verbose
             fi
 
