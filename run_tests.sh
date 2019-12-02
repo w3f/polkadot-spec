@@ -11,3 +11,4 @@ if [ "$1" = "verbose" ]; then
 else
     julia -qL runtests.jl
 fi
+
