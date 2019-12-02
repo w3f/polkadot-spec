@@ -11,9 +11,10 @@ jobs:
       - run:
           name: install deps
           command: |
-            if ! (( $(git diff kagome-test.. --name-only --diff-filter=AMDR | grep 'test') )); then
+            if (! git diff master.. --name-only --diff-filter=AMDR | grep 'test')
+            then
               echo "No test code changed, skipping dependencies..."
-              exit
+              exit 0
             fi
 
             echo "Test code changed, installing dependencies..."
@@ -57,7 +58,8 @@ jobs:
       - run:
           name: run tests
           command: |
-            if ! (( $(git diff kagome-test.. --name-only --diff-filter=AMDR | grep 'test') )); then
+            if (! git diff master.. --name-only --diff-filter=AMDR | grep 'test')
+            then
               echo "No test code changed, skipping dependencies..."
             else
               echo "Test code changed, installing dependencies..."
