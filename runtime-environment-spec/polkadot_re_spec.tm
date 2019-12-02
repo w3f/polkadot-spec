@@ -3750,12 +3750,12 @@
 
   \;
 
-  After the information has been inserted into the state, the genesis block
-  must be included, as described in section <reference|sect-block-format>. It
-  has no extrinsics and the header values (as defined in <reference|block>)
-  such as <verbatim|number>, <verbatim|parent_hash>,
-  <verbatim|extrinsics_root> and <verbatim|digest> are equal to zero. The
-  <verbatim|state_root> is the root of the genesis state.
+  After the information has been inserted into the state, the genesis header
+  must be included, as described in section <reference|defn-block-header>. It
+  has no extrinsics and the header values such as <verbatim|number>,
+  <verbatim|parent_hash>, <verbatim|extrinsics_root> and <verbatim|digest>
+  are equal to zero. The <verbatim|state_root> is the root of the genesis
+  state.
 
   <appendix|Predefined Storage Keys><label|sect-predef-storage-keys>
 
