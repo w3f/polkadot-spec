@@ -12,7 +12,7 @@ jobs:
           name: install deps
           command: |
             # Only install dependencies if code changed
-            if ! git diff --name-only --diff-filter=AMDR HEAD^ | grep -q ^test\/; then
+            if ! git diff --name-only --diff-filter=AMDR HEAD^ | grep -q ^test\/
             then
               echo "No test code changed, skipping dependencies..."
               exit 0
@@ -60,7 +60,7 @@ jobs:
           name: run tests
           command: |
             # Only run tests if code changed
-            if ! git diff --name-only --diff-filter=AMDR HEAD^ | grep -q ^test\/; then
+            if ! git diff --name-only --diff-filter=AMDR HEAD^ | grep -q ^test\/
             then
               echo "No test code changed, skipping tests..."
             else
