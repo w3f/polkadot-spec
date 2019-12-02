@@ -9,3 +9,6 @@
 	path = implementations/rust/trie
 	url = https://github.com/cheme/trie
 	branch = n_ext_trie
+[submodule "implementations/cpp/kagome"]
+	path = implementations/cpp/kagome
+	url = https://github.com/soramitsu/kagome

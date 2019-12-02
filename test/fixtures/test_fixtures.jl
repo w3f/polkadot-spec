@@ -1,6 +1,7 @@
 module CommonFixtures
 const cli_testers = ["build/bin/usr/local/bin/rust_tester", 
-                     "build/bin/usr/local/bin/go_tester"]
+                     "build/bin/usr/local/bin/go_tester",
+                     "build/bin/usr/local/bin/kagome_tester"]
 
 const reference_implementation = 1
 
