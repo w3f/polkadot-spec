@@ -11,6 +11,14 @@ jobs:
       - run:
           name: install deps
           command: |
+            if (! git diff master.. --name-only --diff-filter=AMDR | grep 'test')
+            then
+              echo "No test code changed, skipping dependencies..."
+              exit 0
+            fi
+
+            echo "Test code changed, installing dependencies..."
+
             apt update && apt install -y --no-install-recommends \
               build-essential \
               make \
@@ -50,7 +58,13 @@ jobs:
       - run:
           name: run tests
           command: |
-            ./run_tests.sh verbose
+            if (! git diff master.. --name-only --diff-filter=AMDR | grep 'test')
+            then
+              echo "No test code changed, skipping dependencies..."
+            else
+              echo "Test code changed, installing dependencies..."
+              ./run_tests.sh verbose
+            fi
 
 workflows:
   version: 2
