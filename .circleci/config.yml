@@ -4,6 +4,7 @@ jobs:
   runTests:
     docker:
       - image: rustlang/rust:nightly-slim
+    resource_class: large
     steps:
       - run: apt update; apt install -y git
       - checkout
