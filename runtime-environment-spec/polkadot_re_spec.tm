@@ -3738,21 +3738,25 @@
 
   <appendix|Genesis State Specification><label|sect-genisis-block>
 
-  The genesis state includes arbitrary data, which vary depending on the
-  chain and network. Each of those key/value pairs offer identifyable
-  information which can be used by the Runtime. The only required key for the
-  Runtime Environment is <verbatim|:code>, as described in
-  <reference|sect-loading-runtime-code>. The other keys and values are
-  unspecifed and its usage depends on the chain respectively its
-  corresponding Runtime. The data should be inserted into the state storage
-  with the <verbatim|set_storage> RE API, as defined in
+  The genesis state represents the intial state of Polkadot state storage as
+  a set of key-value pairs. While each of those key/value pairs offer
+  important identifyable information which can be used by the Runtime, from
+  Polkadot RE points of view, it is a set of arbitrary key-value pair data as
+  it is chain and network dependent. \ Except for the <verbatim|:code>
+  described in Section <reference|sect-loading-runtime-code> which needs to
+  be identified by the Polkadot RE to load its content as the Runtime. The
+  other keys and values are unspecifed and its usage depends on the chain
+  respectively its corresponding Runtime. The data should be inserted into
+  the state storage with the <verbatim|set_storage> RE API, as defined in
   <reference|sect_ext_set_storage>.
 
   \;
 
   After the information has been inserted into the state, the genesis header
-  must be included, as described in section <reference|defn-block-header>. It
-  has no extrinsics and the header values such as <verbatim|number>,
+  must be included, as described in section <reference|defn-block-header>.
+  <todo|I'd put the header field in a table and define their genisis value
+  there. It is easier to spot and to read and is more authoritative>It has no
+  extrinsics and the header values such as <verbatim|number>,
   <verbatim|parent_hash>, <verbatim|extrinsics_root> and <verbatim|digest>
   are equal to zero. The <verbatim|state_root> is the root of the genesis
   state.
