@@ -56,7 +56,7 @@ wget https://github.com/Kitware/CMake/releases/download/v3.16.0-rc4/cmake-3.16.0
 chmod +x cmake-3.16.0-rc4-Linux-x86_64.sh
 ./cmake-3.16.0-rc4-Linux-x86_64.sh --skip-license --prefix=/usr/local
 
-# Install Rust toolchain required for Wasm
+# Install Rust and toolchains required for Wasm
 curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly
 rustup target add wasm32-unknown-unknown --toolchain nightly
 cargo install --git https://github.com/alexcrichton/wasm-gc
