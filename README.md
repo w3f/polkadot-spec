@@ -157,3 +157,8 @@ This table shows the relationship between the lists.
 |fn_storage_child_2x_kv  |prefix_child_key_value_data |res_child_storage_root  |
 |fn_storage_prefix_child |prefix_child_key_value_data |                        |
 |fn_network              |                            |                        |
+
+## Genesis files
+This repository contains genesis parameters for different networks in the `sample-data/` directory.
+- The `alexander` test network
+- The `kusama` test network
