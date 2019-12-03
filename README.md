@@ -13,7 +13,7 @@ Here your can find the latest version of [Polkadot Runtime Environment Specifica
 Please refer to [Change log](./runtime-environment-spec/pdre_change_log.org) to review the history of changes to the spec.
 
 ## Testing
-In the `test/` directory we include tests for the following components, using the Rust, Golang and C++ implementations:
+The `test/` directory contains tests for the following components from different implementations such as Rust, C++ and Golang:
 
 - SCALE Codec
 - State Trie
@@ -21,7 +21,7 @@ In the `test/` directory we include tests for the following components, using th
 
 The goal is to make sure that the different implementations behave the same and produce the identical output.
 
-### Local Container (CircleCi)
+### Local container (CircleCi)
 The easiest way to run those tests is by using `docker` via the [local-ci tool](https://circleci.com/docs/2.0/local-cli/). No API tokens are required for running the suite.
 
 ```
@@ -34,7 +34,7 @@ circleci local execute -c .circleci/config.yml --job runTests
 #### Installing toolchains and dependencies
 Install the required software in order to run all the tests.
 
-**Note:** The test suite requires CMake version 3.16 or higher and gcc/g++ version 8. It is not recommended to run those test on the main workstation, since changing gcc/g++ versions can lead to issues.
+**Note:** The test suite requires CMake version 3.16 or higher and gcc/g++ version 8. It is not recommended to run those tests on the main workstation, since changing gcc/g++ versions can lead to issues.
 
 ```
 apt update && apt install -y --no-install-recommends \
