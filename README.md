@@ -21,7 +21,7 @@ The `test/` directory contains tests for the following components from different
 
 The goal is to make sure that the different implementations behave the same and produce the identical output.
 
-### Local container (CircleCi)
+### Local container (CircleCI)
 The easiest way to run those tests is by using `docker` via the [local-ci tool](https://circleci.com/docs/2.0/local-cli/). No API tokens are required for running the suite.
 
 ```
