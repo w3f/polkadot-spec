@@ -159,6 +159,6 @@ This table shows the relationship between the lists.
 |fn_network              |                            |                        |
 
 ## Genesis files
-This repository contains genesis parameters for different networks in the `sample-data/` directory.
+This repository contains genesis parameters for different networks in the `genesis-state/` directory.
 - The `alexander` test network
 - The `kusama` test network
