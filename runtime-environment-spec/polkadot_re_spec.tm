@@ -1611,23 +1611,23 @@
 
   <section|Extrinsics><label|sect-extrinsics>
 
-  The block body consists of an array of extrinsics. In a broad sense
-  exterinsics are data from outside of the state which can trigger the state
-  transition. This section describe the specification of extrinsics and their
-  inclusion in the block.
+  The block body consists of an array of extrinsics. In a broad sense,
+  extrinsics are data from outside of the state which can trigger the state
+  transition. This section describes the specifications of the extrinsics and
+  their inclusion in the blocks.
 
   <subsection|Preliminaries>
 
-  The extrinsics are dividedd into two main categories defined as follows:
+  The extrinsics are divided in two main categories and defined as follows:
 
   <\definition>
     <strong|Transaction extrinsics> are extrinsics which are signed using
     either of the key types described in section
     <reference|sect-cryptographic-keys> and broadcasted between the nodes.
     <strong|Inherents extrinsics> are unsigned extrinsics which are generated
-    by Polkadot RE and only included in the block produced by the node
-    itself. They are broadcasted as part of the produced block rather than
-    being gossiped as individual extrinsics
+    by Polkadot RE and only included in the blocks produced by the node
+    itself. They are broadcasted as part of the produced blocks rather than
+    being gossiped as individual extrinsics.
   </definition>
 
   Polkadot RE does not specify or limit the internals of each extrinsics and
@@ -1642,9 +1642,9 @@
   Transaction submission is made by sending a <em|Transactions> network
   message. The structure of this message is specified in Section
   <reference|sect-msg-transactions>. Upon receiving a Transactions message,
-  Polkadot RE decodes and decouple the transactions and calls
+  Polkadot RE decodes and decouples the transactions and calls
   <verbatim|validate_trasaction> Runtime entry, defined in Section
-  <reference|sect-rte-validate-transaction>, to check the validity of each of
+  <reference|sect-rte-validate-transaction>, to check the validity of each
   received transaction. If <verbatim|validate_transaction> considers the
   submitted transaction as a valid one, Polkadot RE makes the transaction
   available for the consensus engine for inclusion in future blocks.
@@ -1796,9 +1796,9 @@
 
   <\definition>
     <label|defn-func-inherent-data>The function
-    <name|Block-Inherents-Data(<math|B<rsub|n>>)> return the inherent data
+    <name|Block-Inherents-Data(<math|B<rsub|n>>)> returns the inherent data
     defined in Table <reference|tabl-inherent-data> corresponding to Block
-    <math|B> as a SCALE encoded dictionary as defined in Definition
+    <math|B> as a SCALE encoded dictionary, as defined in Definition
     <reference|defn-scale-list>.
   </definition>
 
@@ -1808,10 +1808,10 @@
   extrinsics. This, however, is only practical if a large set of transactions
   are batched and synced at the time. The structure in which the transactions
   are journaled and propagated is known as a block (of extrinsics) which is
-  specefied in Section <reference|sect-block-format>. Like any other
-  replicated states machines state inconsistency happens across Polkadot
+  specified in Section <reference|sect-block-format>. Like any other
+  replicated state machines, state inconsistency happens across Polkadot
   replicas. Section <reference|sect-managing-multiple-states> is giving an
-  overview on how a Polkadot RE node manage multiple variants of the state.
+  overview of how a Polkadot RE node manages multiple variants of the state.
 
   <subsection|Block Format><label|sect-block-format>
 
@@ -2052,18 +2052,18 @@
   <subsection|Managaing Multiple Variants of
   State><label|sect-managing-multiple-states>
 
-  Unless a node is commited to only update its state according to finalized
-  block (See Definition <reference|defn-finalized-block>), it is inevitable
-  for the node to store multiple variant of the state (one for each block).
-  This is for example necessary for nodes which are participating in block
-  production and finalization.
+  Unless a node is committed to only update its state according to the
+  finalized block (See Definition <reference|defn-finalized-block>), it is
+  inevitable for the node to store multiple variants of the state (one for
+  each block). This is, for example, necessary for nodes participating in the
+  block production and finalization.
 
   While the state trie structure described in Section
-  <reference|sect-state-storage-trie-structure> facilitates and optimises
+  <reference|sect-state-storage-trie-structure> facilitates and optimizes
   storing and switching between multiple variants of the state storage,
-  Polkadot RE does not specifies how a node is required to accoplish this
-  task. Instead Polkadot RE is required to implement <name|Set-State-At>
-  operation which behave as defined in Definition
+  Polkadot RE does not specify how a node is required to accomplish this
+  task. Instead, Polkadot RE is required to implement <name|Set-State-At>
+  operation which behaves as defined in Definition
   <reference|defn-set-state-at>:
 
   <\definition>
@@ -2310,14 +2310,14 @@
 
   <\definition>
     <label|defn-epoch-slot>A block production <strong|epoch>, formally
-    referred to as <math|\<cal-E\>> is a period with pre-known starting time
+    referred to as <math|\<cal-E\>>, is a period with pre-known starting time
     and fixed length during which the set of block producers stays constant.
     Epochs are indexed sequentially, and we refer to the <math|n<rsup|th>>
     epoch since genesis by <math|\<cal-E\><rsub|n>>. Each epoch is divided
     into <math|>equal length periods known as block production
     <strong|slots>, sequentially indexed in each epoch. The index of each
     slot is called <strong|slot number>. The equal length duration of each
-    slots is called the <strong|slot duration> and indicated by
+    slot is called the <strong|slot duration> and indicated by
     <math|\<cal-T\>>. Each slot is awarded to a subset of block producers
     during which they are allowed to generate a block.
   </definition>
@@ -3414,10 +3414,10 @@
 
   <section|Cryptographic Keys><label|sect-cryptographic-keys>
 
-  Various type keys are used in Polkadot to prove the identity of the actors
-  involve in Polkadot Protocols. To improve security for users, each key type
-  has its own unique function and must be treated differently, as described
-  by this section.
+  Various types of keys are used in Polkadot to prove the identity of the
+  actors involved in Polkadot Protocols. To improve the security of the
+  users, each key type has its own unique function and must be treated
+  differently, as described by this section.
 
   <\definition>
     <label|defn-account-key><strong|Account key
@@ -3430,7 +3430,7 @@
       on Ristretto compressed Ed25519 points as implemented in
       <cite|burdges_schnorr_2019>>>|<row|<cell|ED25519>|<cell|The standard
       ED25519 signature complying with <cite|josefsson_edwards-curve_2017>>>|<row|<cell|secp256k1>|<cell|Only
-      for outgoing transfer transaction>>>>>>
+      for outgoing transfer transactions>>>>>>
         <label|tabl-account-key-schemes>List of public key scheme which can
         be used for an account key
       </big-table>
@@ -3445,27 +3445,27 @@
   described below.
 
   <\definition>
-    <label|defn-stash-key><strong|Stash key> is a type of an account key
-    which holds funds bonded for staking \ (described in Section
-    <reference|desc-staking-funds>) to a particular controller key (definied
+    The <label|defn-stash-key><strong|Stash key> is a type of an account key
+    that holds funds bonded for staking (described in Section
+    <reference|desc-staking-funds>) to a particular controller key (defined
     in Definition <reference|defn-controller-key>). As a result, one may
     actively participate with a stash key keeping the stash key offline in a
     secure location. It can also be used to designate a Proxy account to vote
     in governance proposals, as described in
     <reference|desc-creating-controller-key>. The Stash key holds the
-    majority of the users funds and should neither be shared with anyone,
-    saved on an online device, or used to submit extrinsics.
+    majority of the users' funds and should neither be shared with anyone,
+    saved on an online device, nor used to submit extrinsics.
   </definition>
 
   <\definition>
-    <label|defn-controller-key><strong|Controller key> is a type of account
-    key which acts on behalf of the Stash account. It signs transactions
-    which make decisions regarding nomination and validation of other keys.
-    It is a key that will be in the direct control of a user and should
-    mostly be kept offline, used to submit manual extrinsics. It sets
-    \ preferences like payout account and commission, as described in
-    <reference|desc-controller-settings>. If used for a validator, it
-    certifies the session keys, as described in
+    <label|defn-controller-key>The <strong|Controller key> is a type of
+    account key that acts on behalf of the Stash account. It signs
+    transactions that make decisions regarding the nomination and the
+    validation of other keys. It is a key that will be in the direct control
+    of a user and should mostly be kept offline, used to submit manual
+    extrinsics. It sets preferences like payout account and commission, as
+    described in <reference|desc-controller-settings>. If used for a
+    validator, it certifies the session keys, as described in
     <reference|desc-certifying-keys>. It only needs the required funds to pay
     transaction fees <todo|key needing fund needs to be defined>.
   </definition>
@@ -3478,11 +3478,11 @@
   <reference|desc-certifying-keys> respectively.
 
   <\definition>
-    <strong|Session keys> are short lived keys which are used to authenticate
+    <strong|Session keys> are short-lived keys that are used to authenticate
     validator operations. Session keys are generated by Polkadot RE and
-    should be changed regularly due to security reasons. Nonetheless no
+    should be changed regularly due to security reasons. Nonetheless, no
     validity period is enforced by Polkadot protocol on session keys. Various
-    types of key used by Polkadot RE are presented in Table
+    types of keys used by Polkadot RE are presented in Table
     <reference|tabl-session-keys><em|:>
 
     <\big-table|<tabular|<tformat|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|5|5|1|1|cell-lborder|0ln>|<cwith|5|5|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|2|2|cell-width|100>|<cwith|1|1|2|2|cell-hmode|max>|<table|<row|<cell|Protocol>|<cell|Key
@@ -3495,7 +3495,7 @@
 
   Session keys must be accessible by certain Runtime Environment APIs defined
   in Appendix <reference|sect-re-api>. Session keys are <em|not> meant to
-  control the majority of the user's funds and should only be used for their
+  control the majority of the users' funds and should only be used for their
   intended purpose. <todo|key managing fund need to be defined>
 
   <subsection|Holding and staking funds>
@@ -3517,10 +3517,10 @@
   <subsection|Certifying keys>
 
   <label|desc-certifying-keys>Session keys should be changed regularly. As
-  such, new session keys need to be certfied by a controller key before put
-  in use. The controller only needs to create a certificate by signing a
-  session public key and broadcast this certificate via an extrinsic.
-  <todo|spec the detail of the data structure of the certificate
+  such, new session keys need to be certified by a controller key before
+  putting in use. The controller only needs to create a certificate by
+  signing a session public key and broadcast this certificate via an
+  extrinsic. <todo|spec the detail of the data structure of the certificate
   etc.><appendix|Auxiliary Encodings><label|sect-encoding>
 
   <section|SCALE Codec><label|sect-scale-codec>
@@ -5825,7 +5825,7 @@
 
   <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
 
-  Apply extrinsic outside of the block execution function. This doesn't
+  Apply the extrinsic outside of the block execution function. This doesn't
   attempt to validate anything regarding the block, but it builds a list of
   transaction hashes.
 
@@ -5842,15 +5842,15 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>The result from the attempt to apply extrinsic. On success it
-    returns an array of zero length (one byte zero value). On failure it
+    <item>The result from the attempt to apply extrinsic. On success, it
+    returns an array of zero length (one byte zero value). On failure, it
     either returns a Dispatch error or an Apply error. An Apply error uses
     identifiers to indicate the specific error type.
 
     \;
 
     Dispatch error (<verbatim|0x0001> prefix) byte array, contains the
-    following information.
+    following information:
 
     <small-table|<tabular|<tformat|<table|<row|<cell|<strong|Name>>|<cell|<strong|Type>>|<cell|<strong|Description>>>|<row|<cell|module>|<cell|unsigned
     8 bit integer>|<cell|Module index, matching the metadata module
@@ -5869,14 +5869,14 @@
     general>>|<row|<cell|<verbatim|0x02>>|<cell|Validity>|<cell|Any error to
     do with the transaction validity>>|<row|<cell|<verbatim|0x020000>>|<cell|Call>|<cell|The
     call of the transaction is not expected>>|<row|<cell|<verbatim|0x020001>>|<cell|Payment>|<cell|Inability
-    to pay some fees (e.g. account balance too
+    to pay fees (e.g. account balance too
     low)>>|<row|<cell|<verbatim|0x020002>>|<cell|Future>|<cell|Transaction
     not yet being valid (e.g. nonce too high)>>|<row|<cell|<verbatim|0x020003>>|<cell|Stale>|<cell|Transaction
     being outdated (e.g. nonce too low)>>|<row|<cell|<verbatim|0x020004>>|<cell|BadProof>|<cell|Invalid
-    transactions proofs (e.g. bad signature)>>|<row|<cell|<verbatim|0x020005>>|<cell|AncientBirthBlock>|<cell|The
+    transaction proofs (e.g. bad signature)>>|<row|<cell|<verbatim|0x020005>>|<cell|AncientBirthBlock>|<cell|The
     transaction birth block is ancient>>|<row|<cell|<verbatim|0x020006>>|<cell|ExhaustsResources>|<cell|Would
     exhaust the resources of current block>>|<row|<cell|>|<cell|>|<cell|the
-    transaction might be valid)>>|<row|<cell|<verbatim|0x020007>>|<cell|Custom>|<cell|Any
+    transaction might be valid>>|<row|<cell|<verbatim|0x020007>>|<cell|Custom>|<cell|Any
     other custom invalidity of unknown size>>|<row|<cell|<verbatim|0x020100>>|<cell|CannotLookup>|<cell|Could
     not lookup some information that is required>>|<row|<cell|>|<cell|>|<cell|to
     validate the transaction>>|<row|<cell|<verbatim|0x020101>>|<cell|NoUnsignedValidator>|<cell|No
@@ -6098,350 +6098,350 @@
 
 <\references>
   <\collection>
-    <associate|alg-join-leave-grandpa|<tuple|5.8|37>>
-    <associate|algo-aggregate-key|<tuple|2.1|13>>
-    <associate|algo-attempt-to\Ufinalize|<tuple|5.11|38>>
-    <associate|algo-block-production|<tuple|5.3|32>>
-    <associate|algo-block-production-lottery|<tuple|5.1|30>>
-    <associate|algo-build-block|<tuple|5.7|34>>
-    <associate|algo-epoch-randomness|<tuple|5.4|32>>
-    <associate|algo-grandpa-best-candidate|<tuple|5.10|38>>
-    <associate|algo-grandpa-round|<tuple|5.9|37>>
-    <associate|algo-maintain-transaction-pool|<tuple|3.3|20>>
-    <associate|algo-pk-length|<tuple|2.2|14>>
-    <associate|algo-runtime-interaction|<tuple|3.1|17>>
-    <associate|algo-slot-time|<tuple|5.2|31>>
-    <associate|algo-validate-transactions|<tuple|3.2|20>>
-    <associate|algo-verify-authorship-right|<tuple|5.5|33>>
-    <associate|algo-verify-slot-winner|<tuple|5.6|33>>
-    <associate|auto-1|<tuple|1|7>>
-    <associate|auto-10|<tuple|1.9|9>>
-    <associate|auto-100|<tuple|B.1|41>>
-    <associate|auto-101|<tuple|B.1.1|42>>
-    <associate|auto-102|<tuple|B.2|43>>
-    <associate|auto-103|<tuple|B.2.1|43>>
-    <associate|auto-104|<tuple|B.2.2|43>>
-    <associate|auto-105|<tuple|B.3|43>>
-    <associate|auto-106|<tuple|C|45>>
-    <associate|auto-107|<tuple|D|47>>
-    <associate|auto-108|<tuple|E|49>>
-    <associate|auto-109|<tuple|E.1|49>>
-    <associate|auto-11|<tuple|1.9|9>>
-    <associate|auto-110|<tuple|E.1|49>>
-    <associate|auto-111|<tuple|E.1.1|49>>
-    <associate|auto-112|<tuple|E.2|50>>
-    <associate|auto-113|<tuple|E.1.2|50>>
-    <associate|auto-114|<tuple|E.3|50>>
-    <associate|auto-115|<tuple|E.1.3|51>>
-    <associate|auto-116|<tuple|E.1.4|51>>
-    <associate|auto-117|<tuple|E.1.5|51>>
-    <associate|auto-118|<tuple|E.1.6|52>>
-    <associate|auto-119|<tuple|F|53>>
-    <associate|auto-12|<tuple|1.9|9>>
-    <associate|auto-120|<tuple|F.1|53>>
-    <associate|auto-121|<tuple|F.1.1|53>>
-    <associate|auto-122|<tuple|F.1.2|53>>
-    <associate|auto-123|<tuple|F.1.3|54>>
-    <associate|auto-124|<tuple|F.1.4|54>>
-    <associate|auto-125|<tuple|F.1.5|54>>
-    <associate|auto-126|<tuple|F.1.6|55>>
-    <associate|auto-127|<tuple|F.1.7|55>>
-    <associate|auto-128|<tuple|F.1.8|55>>
-    <associate|auto-129|<tuple|F.1.9|56>>
-    <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|F.1.10|56>>
-    <associate|auto-131|<tuple|F.1.11|57>>
-    <associate|auto-132|<tuple|F.1.12|57>>
-    <associate|auto-133|<tuple|F.1.13|58>>
-    <associate|auto-134|<tuple|F.1.14|58>>
-    <associate|auto-135|<tuple|F.1.15|59>>
-    <associate|auto-136|<tuple|F.1.15.1|59>>
-    <associate|auto-137|<tuple|F.1.15.2|59>>
-    <associate|auto-138|<tuple|F.1.15.3|59>>
-    <associate|auto-139|<tuple|F.1.16|59>>
-    <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|F.1.16.1|59>>
-    <associate|auto-141|<tuple|F.1.16.2|60>>
-    <associate|auto-142|<tuple|F.1.16.3|60>>
-    <associate|auto-143|<tuple|F.1.16.4|60>>
-    <associate|auto-144|<tuple|F.1.16.5|61>>
-    <associate|auto-145|<tuple|F.1.16.6|61>>
-    <associate|auto-146|<tuple|F.1.17|61>>
-    <associate|auto-147|<tuple|F.1.17.1|62>>
-    <associate|auto-148|<tuple|F.1.17.2|62>>
-    <associate|auto-149|<tuple|F.1.17.3|63>>
-    <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|F.1.17.4|63>>
-    <associate|auto-151|<tuple|F.1.17.5|63>>
-    <associate|auto-152|<tuple|F.1.17.6|64>>
-    <associate|auto-153|<tuple|F.1.17.7|64>>
-    <associate|auto-154|<tuple|F.1.17.8|64>>
-    <associate|auto-155|<tuple|F.1.17.9|65>>
-    <associate|auto-156|<tuple|F.1.17.10|65>>
-    <associate|auto-157|<tuple|F.1.17.11|66>>
-    <associate|auto-158|<tuple|F.1.17.12|66>>
-    <associate|auto-159|<tuple|F.1.17.13|66>>
-    <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|F.1.17.14|67>>
-    <associate|auto-161|<tuple|F.1.17.15|67>>
-    <associate|auto-162|<tuple|F.1.18|68>>
-    <associate|auto-163|<tuple|F.1.18.1|68>>
-    <associate|auto-164|<tuple|F.1.19|68>>
-    <associate|auto-165|<tuple|F.1.19.1|68>>
-    <associate|auto-166|<tuple|F.1.19.2|68>>
-    <associate|auto-167|<tuple|F.1.20|69>>
-    <associate|auto-168|<tuple|F.1.20.1|69>>
-    <associate|auto-169|<tuple|F.1.21|69>>
-    <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|F.2|69>>
-    <associate|auto-171|<tuple|G|71>>
-    <associate|auto-172|<tuple|G.1|71>>
-    <associate|auto-173|<tuple|G.1|71>>
-    <associate|auto-174|<tuple|G.2|72>>
-    <associate|auto-175|<tuple|G.2.1|72>>
-    <associate|auto-176|<tuple|G.1|72>>
-    <associate|auto-177|<tuple|G.2.2|72>>
-    <associate|auto-178|<tuple|G.2.3|72>>
-    <associate|auto-179|<tuple|G.2.4|73>>
-    <associate|auto-18|<tuple|1.13|9>>
-    <associate|auto-180|<tuple|G.2.5|73>>
-    <associate|auto-181|<tuple|G.2.6|73>>
-    <associate|auto-182|<tuple|G.2.7|74>>
-    <associate|auto-183|<tuple|G.2|74>>
-    <associate|auto-184|<tuple|G.3|74>>
-    <associate|auto-185|<tuple|G.2.8|74>>
-    <associate|auto-186|<tuple|G.4|75>>
-    <associate|auto-187|<tuple|G.5|75>>
-    <associate|auto-188|<tuple|G.2.9|75>>
-    <associate|auto-189|<tuple|G.2.10|76>>
-    <associate|auto-19|<tuple|1.13|9>>
-    <associate|auto-190|<tuple|G.2.10|77>>
-    <associate|auto-191|<tuple|G.2.10|79>>
-    <associate|auto-192|<tuple|Tec19|81>>
-    <associate|auto-2|<tuple|1.1|7>>
-    <associate|auto-20|<tuple|1.13|9>>
-    <associate|auto-21|<tuple|1.13|9>>
-    <associate|auto-22|<tuple|1.13|9>>
-    <associate|auto-23|<tuple|1.13|9>>
-    <associate|auto-24|<tuple|1.13|9>>
-    <associate|auto-25|<tuple|1.14|9>>
-    <associate|auto-26|<tuple|1.15|9>>
-    <associate|auto-27|<tuple|1.15|9>>
-    <associate|auto-28|<tuple|2|11>>
-    <associate|auto-29|<tuple|2.1|11>>
-    <associate|auto-3|<tuple|1.2|7>>
-    <associate|auto-30|<tuple|2.1.1|11>>
-    <associate|auto-31|<tuple|2.1|11>>
-    <associate|auto-32|<tuple|2.1.2|11>>
-    <associate|auto-33|<tuple|2.1.3|12>>
-    <associate|auto-34|<tuple|2.1.4|14>>
-    <associate|auto-35|<tuple|3|17>>
-    <associate|auto-36|<tuple|3.1|17>>
-    <associate|auto-37|<tuple|3.1.1|17>>
-    <associate|auto-38|<tuple|3.1.2|18>>
-    <associate|auto-39|<tuple|3.1.2.1|18>>
-    <associate|auto-4|<tuple|1.2|8>>
-    <associate|auto-40|<tuple|3.1.2.2|18>>
-    <associate|auto-41|<tuple|3.1.2.3|19>>
-    <associate|auto-42|<tuple|3.2|19>>
-    <associate|auto-43|<tuple|3.2.1|19>>
-    <associate|auto-44|<tuple|3.2.2|19>>
-    <associate|auto-45|<tuple|3.2.2.1|19>>
-    <associate|auto-46|<tuple|3.2.3|19>>
-    <associate|auto-47|<tuple|3.2.3|19>>
-    <associate|auto-48|<tuple|3.2.3|19>>
-    <associate|auto-49|<tuple|3.2.3|19>>
-    <associate|auto-5|<tuple|1.4|8>>
-    <associate|auto-50|<tuple|<with|mode|<quote|math>|<rigid|->>|20>>
-    <associate|auto-51|<tuple|3.2.3.1|21>>
-    <associate|auto-52|<tuple|3.1|21>>
-    <associate|auto-53|<tuple|3.3|21>>
-    <associate|auto-54|<tuple|3.3.1|21>>
-    <associate|auto-55|<tuple|3.3.1.1|21>>
-    <associate|auto-56|<tuple|3.2|22>>
-    <associate|auto-57|<tuple|3.3.1.2|22>>
-    <associate|auto-58|<tuple|3.3.1.3|22>>
-    <associate|auto-59|<tuple|3.3.2|23>>
-    <associate|auto-6|<tuple|1.7|8>>
-    <associate|auto-60|<tuple|3.3.3|23>>
-    <associate|auto-61|<tuple|3.3.4|23>>
-    <associate|auto-62|<tuple|4|25>>
-    <associate|auto-63|<tuple|4.1|25>>
-    <associate|auto-64|<tuple|4.2|25>>
-    <associate|auto-65|<tuple|4.3|26>>
-    <associate|auto-66|<tuple|4.3.1|26>>
-    <associate|auto-67|<tuple|4.3.2|26>>
-    <associate|auto-68|<tuple|4.4|27>>
-    <associate|auto-69|<tuple|4.4.1|27>>
-    <associate|auto-7|<tuple|1.7|8>>
-    <associate|auto-70|<tuple|4.4.2|27>>
-    <associate|auto-71|<tuple|5|29>>
-    <associate|auto-72|<tuple|5.1|29>>
-    <associate|auto-73|<tuple|5.1.1|29>>
-    <associate|auto-74|<tuple|5.1.2|30>>
-    <associate|auto-75|<tuple|5.1.3|30>>
-    <associate|auto-76|<tuple|5.1.4|31>>
-    <associate|auto-77|<tuple|5.1.5|32>>
-    <associate|auto-78|<tuple|5.1.6|32>>
-    <associate|auto-79|<tuple|5.1.7|33>>
-    <associate|auto-8|<tuple|1.7|8>>
-    <associate|auto-80|<tuple|5.2|34>>
-    <associate|auto-81|<tuple|5.2.1|34>>
-    <associate|auto-82|<tuple|5.2.2|36>>
-    <associate|auto-83|<tuple|5.2.3|37>>
-    <associate|auto-84|<tuple|5.2.4|37>>
-    <associate|auto-85|<tuple|5.3|38>>
-    <associate|auto-86|<tuple|A|39>>
-    <associate|auto-87|<tuple|A.1|39>>
-    <associate|auto-88|<tuple|A.2|39>>
-    <associate|auto-89|<tuple|A.3|39>>
-    <associate|auto-9|<tuple|1.9|9>>
-    <associate|auto-90|<tuple|A.4|39>>
-    <associate|auto-91|<tuple|A.5|39>>
-    <associate|auto-92|<tuple|A.1|39>>
-    <associate|auto-93|<tuple|A.2|40>>
-    <associate|auto-94|<tuple|A.5.1|40>>
-    <associate|auto-95|<tuple|A.5.2|40>>
-    <associate|auto-96|<tuple|A.5.3|40>>
-    <associate|auto-97|<tuple|A.5.4|40>>
-    <associate|auto-98|<tuple|A.5.5|40>>
-    <associate|auto-99|<tuple|B|41>>
-    <associate|bib-burdges_schnorr_2019|<tuple|Bur19|79>>
-    <associate|bib-collet_extremely_2019|<tuple|Col19|79>>
-    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|79>>
-    <associate|bib-josefsson_edwards-curve_2017|<tuple|JL17|79>>
-    <associate|bib-liusvaara_edwards-curve_2017|<tuple|LJ17|79>>
-    <associate|bib-parity_technologies_substrate_2019|<tuple|Tec19|79>>
-    <associate|bib-perrin_noise_2018|<tuple|Per18|79>>
-    <associate|bib-protocol_labs_libp2p_2019|<tuple|lab19|79>>
-    <associate|bib-saarinen_blake2_2015|<tuple|SA15|79>>
-    <associate|bib-stewart_grandpa:_2019|<tuple|Ste19|79>>
-    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|79>>
-    <associate|block|<tuple|3.3.1.1|21>>
-    <associate|chap-consensu|<tuple|5|29>>
-    <associate|chap-state-spec|<tuple|2|11>>
-    <associate|chap-state-transit|<tuple|3|17>>
-    <associate|defn-account-key|<tuple|A.1|39>>
-    <associate|defn-babe-header|<tuple|5.10|31>>
-    <associate|defn-babe-seal|<tuple|5.11|31>>
-    <associate|defn-bit-rep|<tuple|1.6|8>>
-    <associate|defn-block-body|<tuple|3.9|23>>
-    <associate|defn-block-data|<tuple|E.2|51>>
-    <associate|defn-block-header|<tuple|3.6|21>>
-    <associate|defn-block-header-hash|<tuple|3.8|22>>
-    <associate|defn-block-signature|<tuple|5.11|31>>
-    <associate|defn-block-time|<tuple|5.8|30>>
-    <associate|defn-block-tree|<tuple|1.11|9>>
-    <associate|defn-chain-subchain|<tuple|1.13|9>>
-    <associate|defn-children-bitmap|<tuple|2.10|15>>
-    <associate|defn-controller-key|<tuple|A.3|40>>
-    <associate|defn-digest|<tuple|3.7|22>>
-    <associate|defn-epoch-slot|<tuple|5.3|29>>
-    <associate|defn-epoch-subchain|<tuple|5.5|30>>
-    <associate|defn-finalized-block|<tuple|5.25|38>>
-    <associate|defn-func-inherent-data|<tuple|3.5|21>>
-    <associate|defn-grandpa-completable|<tuple|5.21|36>>
-    <associate|defn-grandpa-justification|<tuple|5.23|36>>
-    <associate|defn-hex-encoding|<tuple|B.9|43>>
-    <associate|defn-http-return-value|<tuple|F.4|62>>
-    <associate|defn-index-function|<tuple|2.7|13>>
-    <associate|defn-little-endian|<tuple|1.7|8>>
-    <associate|defn-longest-chain|<tuple|1.14|9>>
-    <associate|defn-merkle-value|<tuple|2.12|15>>
-    <associate|defn-node-header|<tuple|2.9|13>>
-    <associate|defn-node-key|<tuple|2.6|13>>
-    <associate|defn-node-subvalue|<tuple|2.11|15>>
-    <associate|defn-node-value|<tuple|2.8|13>>
-    <associate|defn-nodetype|<tuple|2.4|12>>
-    <associate|defn-offchain-local-storage|<tuple|F.3|62>>
-    <associate|defn-offchain-persistent-storage|<tuple|F.2|62>>
-    <associate|defn-path-graph|<tuple|1.2|8>>
-    <associate|defn-pruned-tree|<tuple|1.12|9>>
-    <associate|defn-radix-tree|<tuple|1.3|8>>
-    <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|7>>
-    <associate|defn-sc-len-encoding|<tuple|B.8|42>>
-    <associate|defn-scale-byte-array|<tuple|B.1|41>>
-    <associate|defn-scale-list|<tuple|B.5|42>>
-    <associate|defn-scale-tuple|<tuple|B.2|41>>
-    <associate|defn-scale-variable-type|<tuple|B.4|41>>
-    <associate|defn-set-state-at|<tuple|3.10|24>>
-    <associate|defn-slot-offset|<tuple|5.9|31>>
-    <associate|defn-stash-key|<tuple|A.2|39>>
-    <associate|defn-state-machine|<tuple|1.1|7>>
-    <associate|defn-stored-value|<tuple|2.1|11>>
-    <associate|defn-unix-time|<tuple|1.10|9>>
-    <associate|defn-varrying-data-type|<tuple|B.3|41>>
-    <associate|defn-vote|<tuple|5.14|35>>
-    <associate|defn-winning-threshold|<tuple|5.6|30>>
-    <associate|desc-certifying-keys|<tuple|A.5.5|40>>
-    <associate|desc-controller-settings|<tuple|A.5.4|40>>
-    <associate|desc-creating-controller-key|<tuple|A.5.2|40>>
-    <associate|desc-designating-proxy|<tuple|A.5.3|40>>
-    <associate|desc-staking-funds|<tuple|A.5.1|40>>
-    <associate|key-encode-in-trie|<tuple|2.1|12>>
-    <associate|network-protocol|<tuple|4|25>>
-    <associate|nota-call-into-runtime|<tuple|3.2|18>>
-    <associate|nota-re-api-at-state|<tuple|F.1|53>>
-    <associate|nota-runtime-code-at-state|<tuple|3.1|18>>
-    <associate|note-slot|<tuple|5.4|29>>
-    <associate|sect-babe|<tuple|5.1|29>>
-    <associate|sect-blake2|<tuple|A.2|39>>
-    <associate|sect-block-body|<tuple|3.3.1.3|22>>
-    <associate|sect-block-building|<tuple|5.1.7|33>>
-    <associate|sect-block-finalization|<tuple|5.3|38>>
-    <associate|sect-block-format|<tuple|3.3.1|21>>
-    <associate|sect-block-production|<tuple|5.1|29>>
-    <associate|sect-block-submission|<tuple|3.3.2|23>>
-    <associate|sect-block-validation|<tuple|3.3.3|23>>
-    <associate|sect-cryptographic-keys|<tuple|A.5|39>>
-    <associate|sect-defn-conv|<tuple|1.2|7>>
-    <associate|sect-encoding|<tuple|B|41>>
-    <associate|sect-entries-into-runtime|<tuple|3.1|17>>
-    <associate|sect-epoch-randomness|<tuple|5.1.5|32>>
-    <associate|sect-extrinsics|<tuple|3.2|19>>
-    <associate|sect-finality|<tuple|5.2|34>>
-    <associate|sect-genisis-block|<tuple|C|45>>
-    <associate|sect-hash-functions|<tuple|A.1|39>>
-    <associate|sect-int-encoding|<tuple|B.1.1|42>>
-    <associate|sect-list-of-runtime-entries|<tuple|G.1|71>>
-    <associate|sect-loading-runtime-code|<tuple|3.1.1|17>>
-    <associate|sect-managing-multiple-states|<tuple|3.3.4|23>>
-    <associate|sect-merkl-proof|<tuple|2.1.4|14>>
-    <associate|sect-message-detail|<tuple|E.1|49>>
-    <associate|sect-msg-block-announce|<tuple|E.1.4|51>>
-    <associate|sect-msg-block-request|<tuple|E.1.2|50>>
-    <associate|sect-msg-block-response|<tuple|E.1.3|51>>
-    <associate|sect-msg-consensus|<tuple|E.1.6|52>>
-    <associate|sect-msg-status|<tuple|E.1.1|49>>
-    <associate|sect-msg-transactions|<tuple|E.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
-    <associate|sect-network-messages|<tuple|E|49>>
-    <associate|sect-predef-storage-keys|<tuple|D|47>>
-    <associate|sect-randomness|<tuple|A.3|39>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
-    <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|73>>
-    <associate|sect-rte-grandpa-auth|<tuple|G.2.6|73>>
-    <associate|sect-rte-hash-and-length|<tuple|G.2.4|73>>
-    <associate|sect-rte-validate-transaction|<tuple|G.2.7|74>>
-    <associate|sect-runtime-entries|<tuple|G|71>>
-    <associate|sect-runtime-return-value|<tuple|3.1.2.3|19>>
-    <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|18>>
-    <associate|sect-scale-codec|<tuple|B.1|41>>
-    <associate|sect-state-replication|<tuple|3.3|21>>
-    <associate|sect-state-storage|<tuple|2.1|11>>
-    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|12>>
-    <associate|sect-verifying-authorship|<tuple|5.1.6|32>>
-    <associate|sect-vrf|<tuple|A.4|39>>
-    <associate|slot-time-cal-tail|<tuple|5.7|30>>
-    <associate|snippet-runtime-enteries|<tuple|G.1|71>>
-    <associate|tabl-account-key-schemes|<tuple|A.1|39>>
-    <associate|tabl-block-attributes|<tuple|E.3|50>>
-    <associate|tabl-digest-items|<tuple|3.2|22>>
-    <associate|tabl-inherent-data|<tuple|3.1|21>>
-    <associate|tabl-message-types|<tuple|E.1|49>>
-    <associate|tabl-node-role|<tuple|E.2|50>>
-    <associate|tabl-session-keys|<tuple|A.2|40>>
-    <associate|tabl-transaction-validity|<tuple|G.2|74>>
+    <associate|alg-join-leave-grandpa|<tuple|5.8|37|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-aggregate-key|<tuple|2.1|13|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|5.11|38|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-block-production|<tuple|5.3|32|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-block-production-lottery|<tuple|5.1|30|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-build-block|<tuple|5.7|34|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-epoch-randomness|<tuple|5.4|32|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-grandpa-best-candidate|<tuple|5.10|38|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-grandpa-round|<tuple|5.9|37|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-maintain-transaction-pool|<tuple|3.3|20|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-pk-length|<tuple|2.2|14|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-runtime-interaction|<tuple|3.1|17|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-slot-time|<tuple|5.2|31|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-validate-transactions|<tuple|3.2|20|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-verify-authorship-right|<tuple|5.5|33|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|algo-verify-slot-winner|<tuple|5.6|33|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-1|<tuple|1|7|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-10|<tuple|1.9|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-100|<tuple|B.1|41|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-101|<tuple|B.1.1|42|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-102|<tuple|B.2|43|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-103|<tuple|B.2.1|43|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-104|<tuple|B.2.2|43|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-105|<tuple|B.3|43|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-106|<tuple|C|45|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-107|<tuple|D|47|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-108|<tuple|E|49|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-109|<tuple|E.1|49|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-11|<tuple|1.9|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-110|<tuple|E.1|49|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-111|<tuple|E.1.1|49|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-112|<tuple|E.2|50|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-113|<tuple|E.1.2|50|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-114|<tuple|E.3|50|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-115|<tuple|E.1.3|51|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-116|<tuple|E.1.4|51|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-117|<tuple|E.1.5|51|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-118|<tuple|E.1.6|52|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-119|<tuple|F|53|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-12|<tuple|1.9|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-120|<tuple|F.1|53|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-121|<tuple|F.1.1|53|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-122|<tuple|F.1.2|53|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-123|<tuple|F.1.3|54|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-124|<tuple|F.1.4|54|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-125|<tuple|F.1.5|54|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-126|<tuple|F.1.6|55|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-127|<tuple|F.1.7|55|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-128|<tuple|F.1.8|55|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-129|<tuple|F.1.9|56|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-13|<tuple|1.9|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-130|<tuple|F.1.10|56|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-131|<tuple|F.1.11|57|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-132|<tuple|F.1.12|57|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-133|<tuple|F.1.13|58|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-134|<tuple|F.1.14|58|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-135|<tuple|F.1.15|59|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-136|<tuple|F.1.15.1|59|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-137|<tuple|F.1.15.2|59|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-138|<tuple|F.1.15.3|59|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-139|<tuple|F.1.16|59|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-14|<tuple|1.2.1|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-140|<tuple|F.1.16.1|59|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-141|<tuple|F.1.16.2|60|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-142|<tuple|F.1.16.3|60|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-143|<tuple|F.1.16.4|60|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-144|<tuple|F.1.16.5|61|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-145|<tuple|F.1.16.6|61|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-146|<tuple|F.1.17|61|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-147|<tuple|F.1.17.1|62|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-148|<tuple|F.1.17.2|62|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-149|<tuple|F.1.17.3|63|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-15|<tuple|1.11|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-150|<tuple|F.1.17.4|63|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-151|<tuple|F.1.17.5|63|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-152|<tuple|F.1.17.6|64|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-153|<tuple|F.1.17.7|64|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-154|<tuple|F.1.17.8|64|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-155|<tuple|F.1.17.9|65|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-156|<tuple|F.1.17.10|65|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-157|<tuple|F.1.17.11|66|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-158|<tuple|F.1.17.12|66|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-159|<tuple|F.1.17.13|66|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-16|<tuple|1.12|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-160|<tuple|F.1.17.14|67|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-161|<tuple|F.1.17.15|67|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-162|<tuple|F.1.18|68|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-163|<tuple|F.1.18.1|68|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-164|<tuple|F.1.19|68|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-165|<tuple|F.1.19.1|68|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-166|<tuple|F.1.19.2|68|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-167|<tuple|F.1.20|69|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-168|<tuple|F.1.20.1|69|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-169|<tuple|F.1.21|69|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-17|<tuple|1.12|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-170|<tuple|F.2|69|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-171|<tuple|G|71|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-172|<tuple|G.1|71|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-173|<tuple|G.1|71|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-174|<tuple|G.2|72|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-175|<tuple|G.2.1|72|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-176|<tuple|G.1|72|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-177|<tuple|G.2.2|72|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-178|<tuple|G.2.3|72|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-179|<tuple|G.2.4|73|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-18|<tuple|1.13|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-180|<tuple|G.2.5|73|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-181|<tuple|G.2.6|73|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-182|<tuple|G.2.7|74|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-183|<tuple|G.2|74|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-184|<tuple|G.3|74|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-185|<tuple|G.2.8|74|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-186|<tuple|G.4|75|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-187|<tuple|G.5|75|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-188|<tuple|G.2.9|75|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-189|<tuple|G.2.10|76|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-19|<tuple|1.13|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-190|<tuple|G.2.10|77|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-191|<tuple|G.2.10|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-192|<tuple|Tec19|81|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-2|<tuple|1.1|7|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-20|<tuple|1.13|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-21|<tuple|1.13|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-22|<tuple|1.13|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-23|<tuple|1.13|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-24|<tuple|1.13|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-25|<tuple|1.14|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-26|<tuple|1.15|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-27|<tuple|1.15|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-28|<tuple|2|11|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-29|<tuple|2.1|11|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-3|<tuple|1.2|7|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-30|<tuple|2.1.1|11|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-31|<tuple|2.1|11|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-32|<tuple|2.1.2|11|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-33|<tuple|2.1.3|12|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-34|<tuple|2.1.4|14|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-35|<tuple|3|17|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-36|<tuple|3.1|17|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-37|<tuple|3.1.1|17|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-38|<tuple|3.1.2|18|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-39|<tuple|3.1.2.1|18|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-4|<tuple|1.2|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-40|<tuple|3.1.2.2|18|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-41|<tuple|3.1.2.3|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-42|<tuple|3.2|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-43|<tuple|3.2.1|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-44|<tuple|3.2.2|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-45|<tuple|3.2.2.1|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-46|<tuple|3.2.3|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-47|<tuple|3.2.3|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-48|<tuple|3.2.3|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-49|<tuple|3.2.3|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-5|<tuple|1.4|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-50|<tuple|<with|mode|<quote|math>|<rigid|->>|20|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-51|<tuple|3.2.3.1|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-52|<tuple|3.1|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-53|<tuple|3.3|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-54|<tuple|3.3.1|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-55|<tuple|3.3.1.1|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-56|<tuple|3.2|22|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-57|<tuple|3.3.1.2|22|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-58|<tuple|3.3.1.3|22|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-59|<tuple|3.3.2|23|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-6|<tuple|1.7|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-60|<tuple|3.3.3|23|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-61|<tuple|3.3.4|23|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-62|<tuple|4|25|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-63|<tuple|4.1|25|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-64|<tuple|4.2|25|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-65|<tuple|4.3|26|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-66|<tuple|4.3.1|26|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-67|<tuple|4.3.2|26|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-68|<tuple|4.4|27|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-69|<tuple|4.4.1|27|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-7|<tuple|1.7|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-70|<tuple|4.4.2|27|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-71|<tuple|5|29|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-72|<tuple|5.1|29|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-73|<tuple|5.1.1|29|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-74|<tuple|5.1.2|30|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-75|<tuple|5.1.3|30|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-76|<tuple|5.1.4|31|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-77|<tuple|5.1.5|32|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-78|<tuple|5.1.6|32|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-79|<tuple|5.1.7|33|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-8|<tuple|1.7|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-80|<tuple|5.2|34|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-81|<tuple|5.2.1|34|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-82|<tuple|5.2.2|36|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-83|<tuple|5.2.3|37|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-84|<tuple|5.2.4|37|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-85|<tuple|5.3|38|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-86|<tuple|A|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-87|<tuple|A.1|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-88|<tuple|A.2|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-89|<tuple|A.3|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-9|<tuple|1.9|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-90|<tuple|A.4|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-91|<tuple|A.5|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-92|<tuple|A.1|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-93|<tuple|A.2|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-94|<tuple|A.5.1|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-95|<tuple|A.5.2|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-96|<tuple|A.5.3|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-97|<tuple|A.5.4|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-98|<tuple|A.5.5|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|auto-99|<tuple|B|41|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-burdges_schnorr_2019|<tuple|Bur19|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-collet_extremely_2019|<tuple|Col19|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-david_ouroboros_2018|<tuple|DGKR18|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-josefsson_edwards-curve_2017|<tuple|JL17|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-liusvaara_edwards-curve_2017|<tuple|LJ17|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-parity_technologies_substrate_2019|<tuple|Tec19|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-perrin_noise_2018|<tuple|Per18|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-protocol_labs_libp2p_2019|<tuple|lab19|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-saarinen_blake2_2015|<tuple|SA15|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-stewart_grandpa:_2019|<tuple|Ste19|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|79|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|block|<tuple|3.3.1.1|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|chap-consensu|<tuple|5|29|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|chap-state-spec|<tuple|2|11|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|chap-state-transit|<tuple|3|17|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-account-key|<tuple|A.1|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-babe-header|<tuple|5.10|31|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-babe-seal|<tuple|5.11|31|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-bit-rep|<tuple|1.6|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-block-body|<tuple|3.9|23|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-block-data|<tuple|E.2|51|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-block-header|<tuple|3.6|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-block-header-hash|<tuple|3.8|22|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-block-signature|<tuple|5.11|31|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-block-time|<tuple|5.8|30|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-block-tree|<tuple|1.11|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-chain-subchain|<tuple|1.13|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-children-bitmap|<tuple|2.10|15|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-controller-key|<tuple|A.3|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-digest|<tuple|3.7|22|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-epoch-slot|<tuple|5.3|29|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-epoch-subchain|<tuple|5.5|30|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-finalized-block|<tuple|5.25|38|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-func-inherent-data|<tuple|3.5|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-grandpa-completable|<tuple|5.21|36|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-grandpa-justification|<tuple|5.23|36|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-hex-encoding|<tuple|B.9|43|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-http-return-value|<tuple|F.4|62|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-index-function|<tuple|2.7|13|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-little-endian|<tuple|1.7|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-longest-chain|<tuple|1.14|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-merkle-value|<tuple|2.12|15|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-node-header|<tuple|2.9|13|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-node-key|<tuple|2.6|13|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-node-subvalue|<tuple|2.11|15|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-node-value|<tuple|2.8|13|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-nodetype|<tuple|2.4|12|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-offchain-local-storage|<tuple|F.3|62|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-offchain-persistent-storage|<tuple|F.2|62|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-path-graph|<tuple|1.2|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-pruned-tree|<tuple|1.12|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-radix-tree|<tuple|1.3|8|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|7|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-sc-len-encoding|<tuple|B.8|42|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-scale-byte-array|<tuple|B.1|41|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-scale-list|<tuple|B.5|42|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-scale-tuple|<tuple|B.2|41|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-scale-variable-type|<tuple|B.4|41|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-set-state-at|<tuple|3.10|24|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-slot-offset|<tuple|5.9|31|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-stash-key|<tuple|A.2|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-state-machine|<tuple|1.1|7|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-stored-value|<tuple|2.1|11|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-unix-time|<tuple|1.10|9|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-varrying-data-type|<tuple|B.3|41|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-vote|<tuple|5.14|35|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|defn-winning-threshold|<tuple|5.6|30|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|desc-certifying-keys|<tuple|A.5.5|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|desc-controller-settings|<tuple|A.5.4|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|desc-creating-controller-key|<tuple|A.5.2|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|desc-designating-proxy|<tuple|A.5.3|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|desc-staking-funds|<tuple|A.5.1|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|key-encode-in-trie|<tuple|2.1|12|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|network-protocol|<tuple|4|25|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|nota-call-into-runtime|<tuple|3.2|18|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|nota-re-api-at-state|<tuple|F.1|53|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|nota-runtime-code-at-state|<tuple|3.1|18|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|note-slot|<tuple|5.4|29|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-babe|<tuple|5.1|29|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-blake2|<tuple|A.2|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-block-body|<tuple|3.3.1.3|22|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-block-building|<tuple|5.1.7|33|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-block-finalization|<tuple|5.3|38|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-block-format|<tuple|3.3.1|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-block-production|<tuple|5.1|29|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-block-submission|<tuple|3.3.2|23|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-block-validation|<tuple|3.3.3|23|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-cryptographic-keys|<tuple|A.5|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-defn-conv|<tuple|1.2|7|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-encoding|<tuple|B|41|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-entries-into-runtime|<tuple|3.1|17|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-epoch-randomness|<tuple|5.1.5|32|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-extrinsics|<tuple|3.2|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-finality|<tuple|5.2|34|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-genisis-block|<tuple|C|45|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-hash-functions|<tuple|A.1|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-int-encoding|<tuple|B.1.1|42|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-list-of-runtime-entries|<tuple|G.1|71|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-loading-runtime-code|<tuple|3.1.1|17|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-managing-multiple-states|<tuple|3.3.4|23|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-merkl-proof|<tuple|2.1.4|14|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-message-detail|<tuple|E.1|49|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-msg-block-announce|<tuple|E.1.4|51|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-msg-block-request|<tuple|E.1.2|50|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-msg-block-response|<tuple|E.1.3|51|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-msg-consensus|<tuple|E.1.6|52|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-msg-status|<tuple|E.1.1|49|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-msg-transactions|<tuple|E.1.5|51|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-network-interactions|<tuple|4|25|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-network-messages|<tuple|E|49|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-predef-storage-keys|<tuple|D|47|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-randomness|<tuple|A.3|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-re-api|<tuple|F|53|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|73|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-rte-grandpa-auth|<tuple|G.2.6|73|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-rte-hash-and-length|<tuple|G.2.4|73|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-rte-validate-transaction|<tuple|G.2.7|74|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-runtime-entries|<tuple|G|71|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-runtime-return-value|<tuple|3.1.2.3|19|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|18|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-scale-codec|<tuple|B.1|41|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-state-replication|<tuple|3.3|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-state-storage|<tuple|2.1|11|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|12|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-verifying-authorship|<tuple|5.1.6|32|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|sect-vrf|<tuple|A.4|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|slot-time-cal-tail|<tuple|5.7|30|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|snippet-runtime-enteries|<tuple|G.1|71|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|tabl-account-key-schemes|<tuple|A.1|39|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|tabl-block-attributes|<tuple|E.3|50|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|tabl-digest-items|<tuple|3.2|22|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|tabl-inherent-data|<tuple|3.1|21|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|tabl-message-types|<tuple|E.1|49|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|tabl-node-role|<tuple|E.2|50|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|tabl-session-keys|<tuple|A.2|40|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
+    <associate|tabl-transaction-validity|<tuple|G.2|74|../doc/code/polkadot-spec/runtime-environment-spec/polkadot_re_spec.tm>>
   </collection>
 </references>
 
