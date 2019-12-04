@@ -56,6 +56,7 @@ const state_trie_root_hex_flag = " --keys-in-hex";
 
 const fixture_data_dir = "fixtures"
 const test_trie_files = [b"1c1_trie.yaml",
+                         b"scv_trie.yaml",
                          b"random_state_trie_80.yaml",
 			             b"pk_branch_test.yaml",
 			             b"pk_branch_test2.yaml",
