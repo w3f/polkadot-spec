@@ -2007,9 +2007,10 @@
     <label|defn-authority-list>The <verbatim|authority_list> is an array
     containing tuples, consisting of two types. The first type is the
     identity (session key) of the authority as defined in definition
-    <reference|defn-session-key>. The second type is a u64 value, indicating
-    the authority weight. In Polkadot, all authorities have the weight value
-    1.
+    <reference|defn-session-key>. The second type is a <verbatim|u64> value,
+    indicating the authority weight. In Polkadot, all authorities have the
+    weight value 1. The weights could have a potential usecase in the future,
+    but right now those weight values can be ignored.
   </definition>
 
   <subsubsection|Block Body><label|sect-block-body>
