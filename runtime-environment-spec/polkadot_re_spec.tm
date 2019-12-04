@@ -1938,7 +1938,8 @@
 
     <item><strong|<samp|justification>>: as defined by the consensus
     specification indicated by <math|Just<around|(|B|)>> as described in
-    section <reference|sect-consensus-log>.
+    section <reference|sect-consensus-log>. <todo|is this section correct
+    here? is there additional data?>
 
     <item><strong|<samp|authority Ids>>: This is the list of the Ids of
     authorities, which have voted for the block to be stored and<verbatim|>
@@ -2009,8 +2010,9 @@
     identity (session key) of the authority as defined in definition
     <reference|defn-session-key>. The second type is a <verbatim|u64> value,
     indicating the authority weight. In Polkadot, all authorities have the
-    weight value 1. The weights could have a potential usecase in the future,
-    but right now those weight values can be ignored.
+    weight value equal to 1. The weights exist for potential improvements in
+    the protocol and could have a use-case in the future, but right now those
+    weight values can be ignored.
   </definition>
 
   <subsubsection|Block Body><label|sect-block-body>
