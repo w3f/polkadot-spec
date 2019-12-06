@@ -37,6 +37,7 @@ substrate-offchain = { git = "https://github.com/paritytech/substrate" }
 
 # Wasm Blob
 pdre-tester-wasm-blob = { package = "pdre-tester-wasm-blob", path = "./pdre-tester-wasm-blob" }
+legacy-tester-wasm-blob = { package = "legacy-pdre-tester-wasm-blob", path = "./legacy-pdre-tester-wasm-blob" }
 
 [[bin]]
 name = "rust_tester"

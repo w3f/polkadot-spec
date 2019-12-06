@@ -1160,6 +1160,15 @@ version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "legacy-pdre-tester-wasm-blob"
+version = "0.1.0"
+dependencies = [
+ "parity-scale-codec 1.0.6",
+ "substrate-primitives 2.0.0 (git+https://github.com/paritytech/substrate)",
+ "substrate-wasm-builder-runner 1.0.4 (git+https://github.com/paritytech/substrate)",
+]
+
+[[package]]
 name = "libc"
 version = "0.2.65"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2438,6 +2447,7 @@ dependencies = [
  "hash256-std-hasher 0.12.4 (registry+https://github.com/rust-lang/crates.io-index)",
  "hex 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "keccak-hasher 0.15.0",
+ "legacy-pdre-tester-wasm-blob 0.1.0",
  "memory-db 0.15.0",
  "parity-scale-codec 1.0.6",
  "parking_lot 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)",
