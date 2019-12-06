@@ -1,9 +1,4 @@
-mod child_storage;
-mod crypto;
-mod network;
-mod storage;
-mod misc;
-mod utils;
+mod legacy;
 
 use clap::{ArgMatches, Values};
 
@@ -31,57 +26,57 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
 
         match func {
             // test crypto functions
-            "test_blake2_128" => crypto::test_blake2_128(input),
-            "test_blake2_256" => crypto::test_blake2_256(input),
-            "test_blake2_256_enumerated_trie_root" => crypto::test_blake2_256_enumerated_trie_root(input),
-            "test_ed25519" => crypto::test_ed25519(input),
-            "test_keccak_256" => crypto::test_keccak_256(input),
-            "test_sr25519" => crypto::test_sr25519(input),
-            "test_twox_64" => crypto::test_twox_64(input),
-            "test_twox_128" => crypto::test_twox_128(input),
-            "test_twox_256" => crypto::test_twox_256(input),
+            "test_blake2_128" => legacy::crypto::test_blake2_128(input),
+            "test_blake2_256" => legacy::crypto::test_blake2_256(input),
+            "test_blake2_256_enumerated_trie_root" => legacy::crypto::test_blake2_256_enumerated_trie_root(input),
+            "test_ed25519" => legacy::crypto::test_ed25519(input),
+            "test_keccak_256" => legacy::crypto::test_keccak_256(input),
+            "test_sr25519" => legacy::crypto::test_sr25519(input),
+            "test_twox_64" => legacy::crypto::test_twox_64(input),
+            "test_twox_128" => legacy::crypto::test_twox_128(input),
+            "test_twox_256" => legacy::crypto::test_twox_256(input),
             // TODO: Call from Julia
-            "test_secp256k1_ecdsa_recover" => crypto::secp256k1_ecdsa_recover(input),
+            "test_secp256k1_ecdsa_recover" => legacy::crypto::secp256k1_ecdsa_recover(input),
             //
             // test storage functions
-            "test_allocate_storage" => storage::test_allocate_storage(),
-            "test_clear_prefix" => storage::test_clear_prefix(input),
-            "test_clear_storage" => storage::test_clear_storage(input),
-            "test_exists_storage" => storage::test_exists_storage(input),
-            "test_set_get_local_storage" => storage::test_set_get_local_storage(input),
-            "test_set_get_storage" => storage::test_set_get_storage(input),
-            "test_set_get_storage_into" => storage::test_set_get_storage_into(input),
-            "test_storage_root" => storage::test_storage_root(input),
+            "test_allocate_storage" => legacy::storage::test_allocate_storage(),
+            "test_clear_prefix" => legacy::storage::test_clear_prefix(input),
+            "test_clear_storage" => legacy::storage::test_clear_storage(input),
+            "test_exists_storage" => legacy::storage::test_exists_storage(input),
+            "test_set_get_local_storage" => legacy::storage::test_set_get_local_storage(input),
+            "test_set_get_storage" => legacy::storage::test_set_get_storage(input),
+            "test_set_get_storage_into" => legacy::storage::test_set_get_storage_into(input),
+            "test_storage_root" => legacy::storage::test_storage_root(input),
             // TODO: Call from Julia
-            "test_storage_changes_root" => storage::test_storage_changes_root(input),
-            "test_local_storage_compare_and_set" => storage::test_local_storage_compare_and_set(input),
+            "test_storage_changes_root" => legacy::storage::test_storage_changes_root(input),
+            "test_local_storage_compare_and_set" => legacy::storage::test_local_storage_compare_and_set(input),
             //
             // test child storage functions
-            "test_clear_child_prefix" => child_storage::test_clear_child_prefix(input),
-            "test_clear_child_storage" => child_storage::test_clear_child_storage(input),
-            "test_exists_child_storage" => child_storage::test_exists_child_storage(input),
-            "test_kill_child_storage" => child_storage::test_kill_child_storage(input),
-            "test_set_get_child_storage" => child_storage::test_set_get_child_storage(input),
-            "test_get_child_storage_into" => child_storage::test_get_child_storage_into(input),
-            "test_child_storage_root" => child_storage::test_child_storage_root(input),
+            "test_clear_child_prefix" => legacy::child_storage::test_clear_child_prefix(input),
+            "test_clear_child_storage" => legacy::child_storage::test_clear_child_storage(input),
+            "test_exists_child_storage" => legacy::child_storage::test_exists_child_storage(input),
+            "test_kill_child_storage" => legacy::child_storage::test_kill_child_storage(input),
+            "test_set_get_child_storage" => legacy::child_storage::test_set_get_child_storage(input),
+            "test_get_child_storage_into" => legacy::child_storage::test_get_child_storage_into(input),
+            "test_child_storage_root" => legacy::child_storage::test_child_storage_root(input),
             //
             // test network functions
-            "test_http" => network::test_http(),
-            "test_network_state" => network::test_network_state(),
+            "test_http" => legacy::network::test_http(),
+            "test_network_state" => legacy::network::test_network_state(),
             //
             // miscellaneous functions
             // TODO: Call from Julia
-            "test_chain_id" => misc::test_chain_id(),
+            "test_chain_id" => legacy::misc::test_chain_id(),
             // TODO: Call from Julia
-            "test_is_validator" => misc::test_is_validator(),
+            "test_is_validator" => legacy::misc::test_is_validator(),
             // TODO: Call from Julia
-            "test_submit_transaction" => misc::test_submit_transaction(input),
+            "test_submit_transaction" => legacy::misc::test_submit_transaction(input),
             // TODO: Call from Julia
-            "test_timestamp" => misc::test_timestamp(),
+            "test_timestamp" => legacy::misc::test_timestamp(),
             // TODO: Call from Julia
-            "test_sleep_until" => misc::test_sleep_until(input),
+            "test_sleep_until" => legacy::misc::test_sleep_until(input),
             // TODO: Call from Julia
-            "test_random_seed" => misc::test_random_seed(),
+            "test_random_seed" => legacy::misc::test_random_seed(),
             //
             _ => panic!("specified function not available"),
         }
