@@ -1,5 +1,5 @@
+use crate::pdre_api::ParsedInput;
 use super::utils::MiscApi;
-use super::ParsedInput;
 
 pub fn test_chain_id() {
     let mut api = MiscApi::new();
