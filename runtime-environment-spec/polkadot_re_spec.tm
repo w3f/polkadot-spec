@@ -1783,9 +1783,9 @@
   identifiers, and types.
 
   <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Type
-  >|<cell|Description>>|<row|<cell|timstap0>|<cell|u64>|<cell|Unix epoch time
-  in number of seconds>>|<row|<cell|babeslot>|<cell|u64>|<cell|Babe Slot
-  Number<rsup|<reference|defn-epoch-slot>>>>>>>>
+  >|<cell|Description>>|<row|<cell|timstap0>|<cell|64 bit integer>|<cell|Unix
+  epoch time in number of seconds>>|<row|<cell|babeslot>|<cell|64 bit
+  integer>|<cell|Babe Slot Number<rsup|<reference|defn-epoch-slot>>>>>>>>
     <label|tabl-inherent-data>List of inherent data
   </big-table>
 
@@ -1870,7 +1870,7 @@
       H<rsub|d><around*|(|B|)>:=H<rsup|1><rsub|d>,\<ldots\>,H<rsup|n><rsub|d>
     </equation*>
 
-    where each digest item can hold one of the type described in table
+    where each digest item can hold one of the type described in Table
     <reference|tabl-digest-items>:
 
     <\with|par-mode|center>
@@ -1894,7 +1894,7 @@
     \;
 
     Where <math|E<rsub|id>> is the unique consensus engine identifier defined
-    in Section <reference|sect-msg-consensus>. and
+    in Definition <reference|defn-consensus-message-digest>. and
 
     <\itemize-dot>
       <item><strong|Changes trie root> contains the root of changes trie at
@@ -1904,7 +1904,8 @@
       a consensus engine to the Runtime.
 
       <item><strong|Consensus> <with|font-series|bold|Message> digest item
-      represents a message from the Runtime to the consensus engine.
+      represents a message from the Runtime to the consensus engine (see
+      Section <reference|sect-consensus-message>.
 
       <item><strong|Seal> is the data produced by the consensus engine and
       proving the authorship of the block producer. In particular, the Seal
@@ -1947,73 +1948,7 @@
     32bit.
   </itemize>
 
-  <subsubsection|Consensus log><label|sect-consensus-log>
-
-  The consensus log describes the actions and behaviors in authority changes
-  and can be one of the following types.
-
   \;
-
-  <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Identifier>>|<cell|<strong|Type>>|<cell|<strong|Description>>>|<row|<cell|0x01>|<cell|ScheduledChange>|<cell|Schedule
-  an authority set change. The earliest digest of this type in
-  a>>|<row|<cell|>|<cell|>|<cell|single block will be respected, provided
-  that there is no <verbatim|ForcedChange>>>|<row|<cell|>|<cell|>|<cell|digest.
-  If there is, then the <verbatim|ForcedChange> will take
-  precedence.>>|<row|<cell|>|<cell|>|<cell|No change should be scheduled if
-  one is already and the delay has not>>|<row|<cell|>|<cell|>|<cell|passed
-  completely.>>|<row|<cell|0x02>|<cell|ForcedChange>|<cell|Force an authority
-  set change. Forced changes are applied after a
-  delay>>|<row|<cell|>|<cell|>|<cell|imported blocks, while pending changes
-  are applied after a delay of>>|<row|<cell|>|<cell|>|<cell|finalized blocks
-  The earliest digest of this type in a single block will
-  be>>|<row|<cell|>|<cell|>|<cell|respected, with others ignored. No change
-  should be scheduled if one is>>|<row|<cell|>|<cell|>|<cell|already and the
-  delay has not passed completely.>>|<row|<cell|0x03>|<cell|OnDisabled>|<cell|The
-  authority with given index is disabled until the next
-  change.>>|<row|<cell|0x04>|<cell|Pause>|<cell|A signal to pause the current
-  authority set after the given delay.>>|<row|<cell|>|<cell|>|<cell|After
-  finalizing the block at delay the authorities should stop
-  voting.>>|<row|<cell|0x05>|<cell|Resume>|<cell|A signal to resume the
-  current authority set after the given delay.>>|<row|<cell|>|<cell|>|<cell|After
-  authoring the block at delay the authorities should resume voting.>>>>>>
-    The consensus log for GRANDPA authorities
-  </small-table>
-
-  \;
-
-  Depending on the resulting consensus type, different values get appended
-  after it.
-
-  \;
-
-  <small-table|<tabular|<tformat|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Consensus
-  type>>|<cell|<strong|Appended Type(s)>>|<cell|<strong|Description>>>|<row|<cell|ScheduledChange>|<cell|authority_list>|<cell|As
-  defined in definition <reference|defn-authority-list>>>|<row|<cell|>|<cell|u32>|<cell|The
-  finalized block to delay to <todo|isn't block number u64,
-  anyway?>>>|<row|<cell|ForcedChange>|<cell|u32>|<cell|The finalized block to
-  delay to>>|<row|<cell|>|<cell|authority_list>|<cell|As defined in
-  definition <reference|defn-authority-list>>>|<row|<cell|>|<cell|u32>|<cell|The
-  finalized block to delay to <todo|why is this specified
-  twice?>>>|<row|<cell|OnDisabled>|<cell|u64>|<cell|The index of an
-  authority>>|<row|<cell|>|<cell|>|<cell|<todo|since no authority_list is
-  returned, where does the index point to?>>>|<row|<cell|Pause>|<cell|u32>|<cell|The
-  finalized block after the authorities should stop
-  voting>>|<row|<cell|Resume>|<cell|u32>|<cell|The authoring block after the
-  authorities should resume voting>>>>>|The additionally appended data for
-  the consensus log on grandpa authority changes.>
-
-  \;
-
-  <\definition>
-    <label|defn-authority-list>The <verbatim|authority_list> is an array
-    containing tuples, consisting of two types. The first type is the
-    identity (session key) of the authority as defined in definition
-    <reference|defn-session-key>. The second type is a <verbatim|u64> value,
-    indicating the authority weight. In Polkadot, all authorities have the
-    weight value equal to 1. The weights exist for potential improvements in
-    the protocol and could have a use-case in the future, but right now those
-    weight values can be ignored.
-  </definition>
 
   <subsubsection|Block Body><label|sect-block-body>
 
@@ -2337,6 +2272,180 @@
   procedures. The first procedure is block production and the second is
   finality. Polkadot RE must run these procedures, if and only if it is
   running on a validator node.
+
+  <section|Common Consensus Structures>
+
+  <subsection|Consensus Authority Set><label|sect-authority-set>
+
+  Because Polkadot is a proof-of-stake protocol, each of its consensus engine
+  has its own set of nodes, represented by known public keys which have the
+  authority to influence the protocol in pre-defined ways explained in this
+  section. In order to verifiy the validity of each block, Polkadot node must
+  track the current list of authoities for that block as formalised in
+  Definition <reference|defn-authority-list>
+
+  <\definition>
+    <label|defn-authority-list>The <strong|authority list> of block <math|B>
+    for consensus engine <math|C> noted as
+    <strong|<math|Auth<rsub|C><around*|(|B|)>>> \ is an array of pairs of
+    type:
+
+    <\equation*>
+      <around*|(|Pk<rsub|A>,W<rsub|A>|)>
+    </equation*>
+
+    <math|P<rsub|A>> is the session public key of authority A as defined in
+    definition <reference|defn-session-key>. And <math|W<rsub|A>> is a
+    <verbatim|u64> value, indicating the authority weight which is set to
+    equal to 1. The value of <math|Auth<rsub|C><around*|(|B|)>> is part of
+    the Polkadot state. The value for <math|Auth<rsub|C><around*|(|B<rsub|0>|)>>
+    is set in the genesis state (see Section <reference|sect-genesis-block>)
+    and can be retrieved using a runtime entery corresponding to consensus
+    engine <math|C>.
+  </definition>
+
+  Note that in Polkadot, all authorities have equal weight. The weight
+  <math|W<rsub|A>> in Definition <reference|defn-authority-list> exists for
+  potential improvements in the protocol and could have a use-case in the
+  future.
+
+  The initial value
+
+  <subsection|Runtime to Consensus Message><label|sect-consensus-message-digest>
+
+  The authority lists (see Definition <reference|defn-authority-list>) is
+  part of Polkadot state and the Runtime has the authority of updating the
+  lists in the course of state transitions. The runtime inform the
+  corresponding consensus engine about the changes in the authority set by
+  means of setting a consensus message digest item as defined in Definition
+  <reference|defn-consensus-message-digest> , in the block header of block
+  <math|B> during which course of exectution the transition in the authority
+  set has occured.\ 
+
+  <\definition>
+    <label|defn-consensus-message-digest> Consensus Message is digest item of
+    type 2 as defined in Definition <reference|defn-digest> and consists of
+    the pair:
+
+    <\equation*>
+      <around*|(|E<rsub|id>,CM|)>
+    </equation*>
+
+    Where <math|E<rsub|id>\<in\>\<bbb-B\><rsub|4>> is the consensus engine
+    unique identifier which can hold the following possible values
+
+    \;
+
+    <\equation*>
+      E<rsub|id>\<assign\><around*|{|<tabular*|<tformat|<table|<row|<cell|<rprime|''>BABE<rprime|''>>|<cell|>|<cell|For
+      messages related to BABE protocol refered to as
+      E<rsub|id><around*|(|BABE|)>>>|<row|<cell|<rprime|''>FRNK<rprime|''>>|<cell|>|<cell|For
+      messages related to GRANDPA protocol referred to as
+      E<rsub|id><around*|(|FRNK|)>>>>>>|\<nobracket\>>
+    </equation*>
+
+    and CM is of varying data type which can hold one of the type described
+    in Table <reference|tabl-consensus-messages>:
+
+    <\center>
+      <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<table|<row|<cell|<strong|Type
+      Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Scheduled
+      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|2>|<cell|Forced
+      Change>|<cell|(<math|M<rsub|B>,<around*|\<nobracket\>|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|3>|<cell|On
+      Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|B>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|B>>>>>>>>
+        <label|tabl-consensus-messages>The consensus digest item for GRANDPA
+        authorities
+      </small-table>
+    </center>
+
+    Where Auth<math|<rsub|C>> is defined in Definition
+    <reference|defn-authority-list>, <math|N<rsub|B>> is a <todo|I'm also
+    confused that if this is block number or number of blocks>,
+    <math|M<rsub|B>> <todo|this is median last finalized as described below>
+    <math|Auth<rsub|ID>> is 64 bit integer <todo|define authority set id>.
+
+    \;
+  </definition>
+
+  Polkadot RE should inspect the digest header of each block and delegats
+  consesus messages to their consensus engines. Consensus engine should react
+  based on the type of consensus messages they receives as follows:
+
+  <\itemize-minus>
+    <item><strong|Scheduled Change>: Schedule an authority set change. The
+    earliest digest of this type in a single block will be respected,
+    provided that there is no consensus message digest of \P<em|Forced
+    Change>\Q type. If there is a <em|Forced Change>, then the <em|Forced
+    Change> will take precedence. No change should be scheduled if one is
+    already and the delay has not passed completely.
+
+    <item><strong|Forced Change>: Force an authority set change. Forced
+    changes are applied after a delay imported blocks, while pending changes
+    are applied after a delay of finalized blocks The earliest digest of this
+    type in a single block will be respected, with others ignored. No change
+    should be scheduled if one is already and the delay has not passed
+    completely.
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // NOTE:
+    when we do a force change we are "discrediting" the old set so we
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // ignore
+    any justifications from them. this block may contain a justification
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // which
+    should be checked and imported below against the new authority
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //
+    triggered by this forced change. the new grandpa voter will start at the
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // last
+    median finalized block (which is before the block that enacts the
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //
+    change), full nodes syncing the chain will not be able to successfully
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // import
+    justifications for those blocks since their local authority set view
+
+    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // is
+    still of the set before the forced change was enacted
+
+    <item><strong|On Disabled>: The authority set index with given index is
+    disabled until the next change.
+
+    <item><strong|Pause>: A signal to pause the current authority set after
+    the given delay. After finalizing the block at delay the authorities
+    should stop voting.
+
+    <item><strong|Resume>: A signal to resume the current authority set after
+    the given delay. After authoring the block at delay the authorities
+    should resume voting.
+  </itemize-minus>
+
+  \ \ \ \ \ <todo|move this information in to description of the messages>:
+
+  \;
+
+  <small-table|<tabular|<tformat|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Consensus
+  type>>|<cell|<strong|Appended Type(s)>>|<cell|<strong|Description>>>|<row|<cell|ScheduledChange>|<cell|authority_list>|<cell|As
+  defined in definition <reference|defn-authority-list>>>|<row|<cell|>|<cell|u32>|<cell|The
+  finalized block to delay to <todo|isn't block number u64,
+  anyway?>>>|<row|<cell|ForcedChange>|<cell|u32>|<cell|The finalized block to
+  delay to>>|<row|<cell|>|<cell|authority_list>|<cell|As defined in
+  definition <reference|defn-authority-list>>>|<row|<cell|>|<cell|u3>|<cell|The
+  finalized block to delay to <todo|why is this specified
+  twice?>>>|<row|<cell|OnDisabled>|<cell|64 bit integer>|<cell|The index of
+  an authority>>|<row|<cell|>|<cell|>|<cell|<todo|since no authority_list is
+  returned, where does the index point to?>>>|<row|<cell|Pause>|<cell|u32>|<cell|The
+  finalized block after the authorities should stop
+  voting>>|<row|<cell|Resume>|<cell|u32>|<cell|The authoring block after the
+  authorities should resume voting>>>>>|The additionally appended data for
+  the consensus log on grandpa authority changes.>
+
+  <todo|describe conflict resolution strategy when there are conflicting
+  changes scheduled maybe as an algorithm.>
+
+  \;
 
   <section|Block Production><label|sect-babe><label|sect-block-production>
 
@@ -4122,7 +4231,7 @@
   in which
 
   <\equation*>
-    E<rsub|id>\<assign\><around*|{|<tabular*|<tformat|<table|<row|<cell|<rprime|''>BABE<rprime|''>>|<cell|>|<cell|For
+    E!<rsub|id>\<assign\><around*|{|<tabular*|<tformat|<table|<row|<cell|<rprime|''>BABE<rprime|''>>|<cell|>|<cell|For
     messages related to BABE protocol refered to as
     E<rsub|id><around*|(|BABE|)>>>|<row|<cell|<rprime|''>FRNK<rprime|''>>|<cell|>|<cell|For
     messages related to GRANDPA protocol referred to as
@@ -5842,9 +5951,10 @@
 
   <subsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
 
-  This entry is to report the set of GRANDPA voters at a given block. It
-  receives <verbatim|block_id> as an argument; it returns a consensus log as
-  described in section <reference|sect-consensus-log>
+  This entry is to report the initial set of GRANDPA voters at the genesis.
+  <todo|this is not what discussed in the channel>It receives
+  <verbatim|block_id> as an argument; it returns a consensus log as described
+  in section <reference|sect-consensus-log>
 
   <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
@@ -5894,7 +6004,7 @@
 
   \;
 
-  <\small-table|<tabular|<tformat|<table|<row|<cell|Name>|<cell|Description>|<cell|Type>>|<row|<cell|Priority>|<cell|Determines
+  <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|12|12|1|1|cell-bborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|1|3|3|cell-tborder|0ln>|<cwith|12|12|3|3|cell-bborder|0ln>|<cwith|1|-1|3|3|cell-lborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-bborder|0ln>|<cwith|7|7|1|-1|cell-tborder|0ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|9|9|1|1|cell-lborder|0ln>|<cwith|9|9|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-bborder|0ln>|<cwith|12|12|1|-1|cell-tborder|0ln>|<cwith|11|11|1|1|cell-lborder|0ln>|<cwith|11|11|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Priority>|<cell|Determines
   the ordering of two transactions that have>|<cell|64bit
   integer>>|<row|<cell|>|<cell|all their dependencies (required tags)
   satisfied.>|<cell|>>|<row|<cell|Requires>|<cell|List of tags specifying
@@ -6220,111 +6330,115 @@
     <associate|algo-verify-slot-winner|<tuple|5.6|33>>
     <associate|auto-1|<tuple|1|7>>
     <associate|auto-10|<tuple|1.9|9>>
-    <associate|auto-100|<tuple|A.5.4|41>>
-    <associate|auto-101|<tuple|A.5.5|42>>
-    <associate|auto-102|<tuple|B|43>>
-    <associate|auto-103|<tuple|B.1|43>>
-    <associate|auto-104|<tuple|B.1.1|43>>
-    <associate|auto-105|<tuple|B.2|43>>
-    <associate|auto-106|<tuple|B.2.1|45>>
-    <associate|auto-107|<tuple|B.2.2|45>>
-    <associate|auto-108|<tuple|B.3|47>>
-    <associate|auto-109|<tuple|C|47>>
+    <associate|auto-100|<tuple|A.5.2|41>>
+    <associate|auto-101|<tuple|A.5.3|42>>
+    <associate|auto-102|<tuple|A.5.4|43>>
+    <associate|auto-103|<tuple|A.5.5|43>>
+    <associate|auto-104|<tuple|B|43>>
+    <associate|auto-105|<tuple|B.1|43>>
+    <associate|auto-106|<tuple|B.1.1|45>>
+    <associate|auto-107|<tuple|B.2|45>>
+    <associate|auto-108|<tuple|B.2.1|47>>
+    <associate|auto-109|<tuple|B.2.2|47>>
     <associate|auto-11|<tuple|1.9|9>>
-    <associate|auto-110|<tuple|C.1|47>>
-    <associate|auto-111|<tuple|D|47>>
-    <associate|auto-112|<tuple|D.1|48>>
-    <associate|auto-113|<tuple|D.1|48>>
-    <associate|auto-114|<tuple|D.1.1|48>>
-    <associate|auto-115|<tuple|D.2|49>>
-    <associate|auto-116|<tuple|D.1.2|49>>
-    <associate|auto-117|<tuple|D.3|49>>
-    <associate|auto-118|<tuple|D.1.3|50>>
-    <associate|auto-119|<tuple|D.1.4|51>>
+    <associate|auto-110|<tuple|B.3|47>>
+    <associate|auto-111|<tuple|C|47>>
+    <associate|auto-112|<tuple|C.1|48>>
+    <associate|auto-113|<tuple|D|48>>
+    <associate|auto-114|<tuple|D.1|48>>
+    <associate|auto-115|<tuple|D.1|49>>
+    <associate|auto-116|<tuple|D.1.1|49>>
+    <associate|auto-117|<tuple|D.2|49>>
+    <associate|auto-118|<tuple|D.1.2|50>>
+    <associate|auto-119|<tuple|D.3|51>>
     <associate|auto-12|<tuple|1.9|9>>
-    <associate|auto-120|<tuple|D.1.5|51>>
-    <associate|auto-121|<tuple|D.1.6|51>>
-    <associate|auto-122|<tuple|E|51>>
-    <associate|auto-123|<tuple|E.1|52>>
-    <associate|auto-124|<tuple|E.1.1|52>>
-    <associate|auto-125|<tuple|E.1.2|52>>
-    <associate|auto-126|<tuple|E.1.3|53>>
-    <associate|auto-127|<tuple|E.1.4|53>>
-    <associate|auto-128|<tuple|E.1.5|53>>
-    <associate|auto-129|<tuple|E.1.6|54>>
+    <associate|auto-120|<tuple|D.1.3|51>>
+    <associate|auto-121|<tuple|D.1.4|51>>
+    <associate|auto-122|<tuple|D.1.5|51>>
+    <associate|auto-123|<tuple|D.1.6|52>>
+    <associate|auto-124|<tuple|E|52>>
+    <associate|auto-125|<tuple|E.1|52>>
+    <associate|auto-126|<tuple|E.1.1|53>>
+    <associate|auto-127|<tuple|E.1.2|53>>
+    <associate|auto-128|<tuple|E.1.3|53>>
+    <associate|auto-129|<tuple|E.1.4|54>>
     <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|E.1.7|54>>
-    <associate|auto-131|<tuple|E.1.8|55>>
-    <associate|auto-132|<tuple|E.1.9|55>>
-    <associate|auto-133|<tuple|E.1.10|56>>
-    <associate|auto-134|<tuple|E.1.11|56>>
-    <associate|auto-135|<tuple|E.1.12|57>>
-    <associate|auto-136|<tuple|E.1.13|57>>
-    <associate|auto-137|<tuple|E.1.14|57>>
-    <associate|auto-138|<tuple|E.1.15|57>>
-    <associate|auto-139|<tuple|E.1.15.1|57>>
+    <associate|auto-130|<tuple|E.1.5|54>>
+    <associate|auto-131|<tuple|E.1.6|55>>
+    <associate|auto-132|<tuple|E.1.7|55>>
+    <associate|auto-133|<tuple|E.1.8|56>>
+    <associate|auto-134|<tuple|E.1.9|56>>
+    <associate|auto-135|<tuple|E.1.10|57>>
+    <associate|auto-136|<tuple|E.1.11|57>>
+    <associate|auto-137|<tuple|E.1.12|57>>
+    <associate|auto-138|<tuple|E.1.13|57>>
+    <associate|auto-139|<tuple|E.1.14|57>>
     <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|E.1.15.2|57>>
-    <associate|auto-141|<tuple|E.1.15.3|58>>
-    <associate|auto-142|<tuple|E.1.16|58>>
-    <associate|auto-143|<tuple|E.1.16.1|58>>
-    <associate|auto-144|<tuple|E.1.16.2|59>>
-    <associate|auto-145|<tuple|E.1.16.3|59>>
-    <associate|auto-146|<tuple|E.1.16.4|59>>
-    <associate|auto-147|<tuple|E.1.16.5|60>>
-    <associate|auto-148|<tuple|E.1.16.6|60>>
-    <associate|auto-149|<tuple|E.1.17|61>>
+    <associate|auto-140|<tuple|E.1.15|57>>
+    <associate|auto-141|<tuple|E.1.15.1|58>>
+    <associate|auto-142|<tuple|E.1.15.2|58>>
+    <associate|auto-143|<tuple|E.1.15.3|58>>
+    <associate|auto-144|<tuple|E.1.16|59>>
+    <associate|auto-145|<tuple|E.1.16.1|59>>
+    <associate|auto-146|<tuple|E.1.16.2|59>>
+    <associate|auto-147|<tuple|E.1.16.3|60>>
+    <associate|auto-148|<tuple|E.1.16.4|60>>
+    <associate|auto-149|<tuple|E.1.16.5|61>>
     <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|E.1.17.1|61>>
-    <associate|auto-151|<tuple|E.1.17.2|61>>
-    <associate|auto-152|<tuple|E.1.17.3|62>>
-    <associate|auto-153|<tuple|E.1.17.4|62>>
-    <associate|auto-154|<tuple|E.1.17.5|62>>
-    <associate|auto-155|<tuple|E.1.17.6|63>>
-    <associate|auto-156|<tuple|E.1.17.7|63>>
-    <associate|auto-157|<tuple|E.1.17.8|64>>
-    <associate|auto-158|<tuple|E.1.17.9|64>>
-    <associate|auto-159|<tuple|E.1.17.10|64>>
+    <associate|auto-150|<tuple|E.1.16.6|61>>
+    <associate|auto-151|<tuple|E.1.17|61>>
+    <associate|auto-152|<tuple|E.1.17.1|62>>
+    <associate|auto-153|<tuple|E.1.17.2|62>>
+    <associate|auto-154|<tuple|E.1.17.3|62>>
+    <associate|auto-155|<tuple|E.1.17.4|63>>
+    <associate|auto-156|<tuple|E.1.17.5|63>>
+    <associate|auto-157|<tuple|E.1.17.6|64>>
+    <associate|auto-158|<tuple|E.1.17.7|64>>
+    <associate|auto-159|<tuple|E.1.17.8|64>>
     <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|E.1.17.11|65>>
-    <associate|auto-161|<tuple|E.1.17.12|65>>
-    <associate|auto-162|<tuple|E.1.17.13|66>>
-    <associate|auto-163|<tuple|E.1.17.14|66>>
-    <associate|auto-164|<tuple|E.1.17.15|66>>
-    <associate|auto-165|<tuple|E.1.18|66>>
-    <associate|auto-166|<tuple|E.1.18.1|66>>
-    <associate|auto-167|<tuple|E.1.19|67>>
-    <associate|auto-168|<tuple|E.1.19.1|67>>
-    <associate|auto-169|<tuple|E.1.19.2|67>>
+    <associate|auto-160|<tuple|E.1.17.9|65>>
+    <associate|auto-161|<tuple|E.1.17.10|65>>
+    <associate|auto-162|<tuple|E.1.17.11|66>>
+    <associate|auto-163|<tuple|E.1.17.12|66>>
+    <associate|auto-164|<tuple|E.1.17.13|66>>
+    <associate|auto-165|<tuple|E.1.17.14|66>>
+    <associate|auto-166|<tuple|E.1.17.15|66>>
+    <associate|auto-167|<tuple|E.1.18|67>>
+    <associate|auto-168|<tuple|E.1.18.1|67>>
+    <associate|auto-169|<tuple|E.1.19|67>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|E.1.20|67>>
-    <associate|auto-171|<tuple|E.1.20.1|69>>
-    <associate|auto-172|<tuple|E.1.21|69>>
-    <associate|auto-173|<tuple|E.2|69>>
-    <associate|auto-174|<tuple|F|70>>
-    <associate|auto-175|<tuple|F.1|70>>
-    <associate|auto-176|<tuple|F.1|70>>
-    <associate|auto-177|<tuple|F.2|70>>
-    <associate|auto-178|<tuple|F.2.1|70>>
-    <associate|auto-179|<tuple|F.1|71>>
+    <associate|auto-170|<tuple|E.1.19.1|67>>
+    <associate|auto-171|<tuple|E.1.19.2|69>>
+    <associate|auto-172|<tuple|E.1.20|69>>
+    <associate|auto-173|<tuple|E.1.20.1|69>>
+    <associate|auto-174|<tuple|E.1.21|70>>
+    <associate|auto-175|<tuple|E.2|70>>
+    <associate|auto-176|<tuple|F|70>>
+    <associate|auto-177|<tuple|F.1|70>>
+    <associate|auto-178|<tuple|F.1|70>>
+    <associate|auto-179|<tuple|F.2|71>>
     <associate|auto-18|<tuple|1.13|9>>
-    <associate|auto-180|<tuple|F.2.2|71>>
-    <associate|auto-181|<tuple|F.2.3|71>>
-    <associate|auto-182|<tuple|F.2.4|72>>
-    <associate|auto-183|<tuple|F.2.5|72>>
-    <associate|auto-184|<tuple|F.2.6|72>>
-    <associate|auto-185|<tuple|F.2.7|72>>
-    <associate|auto-186|<tuple|F.2|73>>
-    <associate|auto-187|<tuple|F.3|73>>
-    <associate|auto-188|<tuple|F.2.8|73>>
-    <associate|auto-189|<tuple|F.4|74>>
+    <associate|auto-180|<tuple|F.2.1|71>>
+    <associate|auto-181|<tuple|F.1|71>>
+    <associate|auto-182|<tuple|F.2.2|72>>
+    <associate|auto-183|<tuple|F.2.3|72>>
+    <associate|auto-184|<tuple|F.2.4|72>>
+    <associate|auto-185|<tuple|F.2.5|72>>
+    <associate|auto-186|<tuple|F.2.6|73>>
+    <associate|auto-187|<tuple|F.2.7|73>>
+    <associate|auto-188|<tuple|F.2|73>>
+    <associate|auto-189|<tuple|F.3|74>>
     <associate|auto-19|<tuple|1.13|9>>
-    <associate|auto-190|<tuple|F.5|75>>
-    <associate|auto-191|<tuple|F.2.9|77>>
-    <associate|auto-192|<tuple|F.2.10|79>>
-    <associate|auto-193|<tuple|F.2.10|?>>
+    <associate|auto-190|<tuple|F.2.8|75>>
+    <associate|auto-191|<tuple|F.4|77>>
+    <associate|auto-192|<tuple|F.5|79>>
+    <associate|auto-193|<tuple|F.2.9|?>>
     <associate|auto-194|<tuple|F.2.10|?>>
-    <associate|auto-195|<tuple|Tec19|?>>
+    <associate|auto-195|<tuple|F.2.10|?>>
+    <associate|auto-196|<tuple|F.2.10|?>>
+    <associate|auto-197|<tuple|Tec19|?>>
+    <associate|auto-198|<tuple|Tec19|?>>
+    <associate|auto-199|<tuple|Tec19|?>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
     <associate|auto-21|<tuple|1.13|9>>
@@ -6368,51 +6482,51 @@
     <associate|auto-56|<tuple|3.2|22>>
     <associate|auto-57|<tuple|3.3.1.2|22>>
     <associate|auto-58|<tuple|3.3.1.3|22>>
-    <associate|auto-59|<tuple|3.3|23>>
+    <associate|auto-59|<tuple|3.3.2|23>>
     <associate|auto-6|<tuple|1.7|8>>
-    <associate|auto-60|<tuple|3.4|23>>
-    <associate|auto-61|<tuple|3.3.1.4|23>>
-    <associate|auto-62|<tuple|3.3.2|25>>
-    <associate|auto-63|<tuple|3.3.3|25>>
-    <associate|auto-64|<tuple|3.3.4|25>>
-    <associate|auto-65|<tuple|4|26>>
-    <associate|auto-66|<tuple|4.1|26>>
-    <associate|auto-67|<tuple|4.2|26>>
-    <associate|auto-68|<tuple|4.3|27>>
-    <associate|auto-69|<tuple|4.3.1|27>>
+    <associate|auto-60|<tuple|3.3.3|23>>
+    <associate|auto-61|<tuple|3.3.4|23>>
+    <associate|auto-62|<tuple|4|25>>
+    <associate|auto-63|<tuple|4.1|25>>
+    <associate|auto-64|<tuple|4.2|25>>
+    <associate|auto-65|<tuple|4.3|26>>
+    <associate|auto-66|<tuple|4.3.1|26>>
+    <associate|auto-67|<tuple|4.3.2|26>>
+    <associate|auto-68|<tuple|4.4|27>>
+    <associate|auto-69|<tuple|4.4.1|27>>
     <associate|auto-7|<tuple|1.7|8>>
-    <associate|auto-70|<tuple|4.3.2|27>>
-    <associate|auto-71|<tuple|4.4|29>>
-    <associate|auto-72|<tuple|4.4.1|29>>
-    <associate|auto-73|<tuple|4.4.2|29>>
-    <associate|auto-74|<tuple|5|30>>
+    <associate|auto-70|<tuple|4.4.2|27>>
+    <associate|auto-71|<tuple|5|29>>
+    <associate|auto-72|<tuple|5.1|29>>
+    <associate|auto-73|<tuple|5.1.1|29>>
+    <associate|auto-74|<tuple|5.1.2|30>>
     <associate|auto-75|<tuple|5.1|30>>
-    <associate|auto-76|<tuple|5.1.1|31>>
-    <associate|auto-77|<tuple|5.1.2|32>>
-    <associate|auto-78|<tuple|5.1.3|32>>
-    <associate|auto-79|<tuple|5.1.4|33>>
+    <associate|auto-76|<tuple|5.2|31>>
+    <associate|auto-77|<tuple|5.2|32>>
+    <associate|auto-78|<tuple|5.2.1|32>>
+    <associate|auto-79|<tuple|5.2.2|33>>
     <associate|auto-8|<tuple|1.7|8>>
-    <associate|auto-80|<tuple|5.1.5|34>>
-    <associate|auto-81|<tuple|5.1.6|34>>
-    <associate|auto-82|<tuple|5.1.7|36>>
-    <associate|auto-83|<tuple|5.2|37>>
-    <associate|auto-84|<tuple|5.2.1|37>>
-    <associate|auto-85|<tuple|5.2.2|38>>
-    <associate|auto-86|<tuple|5.2.3|39>>
-    <associate|auto-87|<tuple|5.2.4|39>>
-    <associate|auto-88|<tuple|5.3|39>>
-    <associate|auto-89|<tuple|A|39>>
+    <associate|auto-80|<tuple|5.2.3|34>>
+    <associate|auto-81|<tuple|5.2.4|34>>
+    <associate|auto-82|<tuple|5.2.5|36>>
+    <associate|auto-83|<tuple|5.2.6|37>>
+    <associate|auto-84|<tuple|5.2.7|37>>
+    <associate|auto-85|<tuple|5.3|38>>
+    <associate|auto-86|<tuple|5.3.1|39>>
+    <associate|auto-87|<tuple|5.3.2|39>>
+    <associate|auto-88|<tuple|5.3.3|39>>
+    <associate|auto-89|<tuple|5.3.4|39>>
     <associate|auto-9|<tuple|1.9|9>>
-    <associate|auto-90|<tuple|A.1|39>>
-    <associate|auto-91|<tuple|A.2|39>>
-    <associate|auto-92|<tuple|A.3|39>>
-    <associate|auto-93|<tuple|A.4|40>>
-    <associate|auto-94|<tuple|A.5|40>>
-    <associate|auto-95|<tuple|A.1|40>>
-    <associate|auto-96|<tuple|A.2|40>>
-    <associate|auto-97|<tuple|A.5.1|40>>
-    <associate|auto-98|<tuple|A.5.2|40>>
-    <associate|auto-99|<tuple|A.5.3|41>>
+    <associate|auto-90|<tuple|5.4|39>>
+    <associate|auto-91|<tuple|A|39>>
+    <associate|auto-92|<tuple|A.1|39>>
+    <associate|auto-93|<tuple|A.2|40>>
+    <associate|auto-94|<tuple|A.3|40>>
+    <associate|auto-95|<tuple|A.4|40>>
+    <associate|auto-96|<tuple|A.5|40>>
+    <associate|auto-97|<tuple|A.1|40>>
+    <associate|auto-98|<tuple|A.2|40>>
+    <associate|auto-99|<tuple|A.5.1|41>>
     <associate|bib-burdges_schnorr_2019|<tuple|Bur19|77>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|77>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|77>>
@@ -6430,28 +6544,29 @@
     <associate|chap-state-spec|<tuple|2|11>>
     <associate|chap-state-transit|<tuple|3|17>>
     <associate|defn-account-key|<tuple|A.1|39>>
-    <associate|defn-authority-list|<tuple|3.9|?>>
-    <associate|defn-babe-header|<tuple|5.10|31>>
-    <associate|defn-babe-seal|<tuple|5.11|31>>
+    <associate|defn-authority-list|<tuple|5.1|?>>
+    <associate|defn-babe-header|<tuple|5.12|31>>
+    <associate|defn-babe-seal|<tuple|5.13|31>>
     <associate|defn-bit-rep|<tuple|1.6|8>>
-    <associate|defn-block-body|<tuple|3.10|23>>
+    <associate|defn-block-body|<tuple|3.9|23>>
     <associate|defn-block-data|<tuple|D.2|49>>
     <associate|defn-block-header|<tuple|3.6|21>>
     <associate|defn-block-header-hash|<tuple|3.8|22>>
-    <associate|defn-block-signature|<tuple|5.11|31>>
-    <associate|defn-block-time|<tuple|5.8|30>>
+    <associate|defn-block-signature|<tuple|5.13|31>>
+    <associate|defn-block-time|<tuple|5.10|30>>
     <associate|defn-block-tree|<tuple|1.11|9>>
     <associate|defn-chain-subchain|<tuple|1.13|9>>
     <associate|defn-children-bitmap|<tuple|2.10|15>>
+    <associate|defn-consensus-message-digest|<tuple|5.2|?>>
     <associate|defn-controller-key|<tuple|A.3|40>>
     <associate|defn-digest|<tuple|3.7|22>>
-    <associate|defn-epoch-slot|<tuple|5.3|29>>
-    <associate|defn-epoch-subchain|<tuple|5.5|30>>
-    <associate|defn-finalized-block|<tuple|5.25|38>>
+    <associate|defn-epoch-slot|<tuple|5.5|29>>
+    <associate|defn-epoch-subchain|<tuple|5.7|30>>
+    <associate|defn-finalized-block|<tuple|5.27|38>>
     <associate|defn-func-inherent-data|<tuple|3.5|21>>
     <associate|defn-genesis-header|<tuple|C.1|45>>
-    <associate|defn-grandpa-completable|<tuple|5.21|36>>
-    <associate|defn-grandpa-justification|<tuple|5.23|36>>
+    <associate|defn-grandpa-completable|<tuple|5.23|36>>
+    <associate|defn-grandpa-justification|<tuple|5.25|36>>
     <associate|defn-hex-encoding|<tuple|B.9|43>>
     <associate|defn-http-return-value|<tuple|E.4|60>>
     <associate|defn-index-function|<tuple|2.7|13>>
@@ -6475,15 +6590,15 @@
     <associate|defn-scale-tuple|<tuple|B.2|41>>
     <associate|defn-scale-variable-type|<tuple|B.4|41>>
     <associate|defn-session-key|<tuple|A.4|?>>
-    <associate|defn-set-state-at|<tuple|3.11|24>>
-    <associate|defn-slot-offset|<tuple|5.9|31>>
+    <associate|defn-set-state-at|<tuple|3.10|24>>
+    <associate|defn-slot-offset|<tuple|5.11|31>>
     <associate|defn-stash-key|<tuple|A.2|39>>
     <associate|defn-state-machine|<tuple|1.1|7>>
     <associate|defn-stored-value|<tuple|2.1|11>>
     <associate|defn-unix-time|<tuple|1.10|9>>
     <associate|defn-varrying-data-type|<tuple|B.3|41>>
-    <associate|defn-vote|<tuple|5.14|35>>
-    <associate|defn-winning-threshold|<tuple|5.6|30>>
+    <associate|defn-vote|<tuple|5.16|35>>
+    <associate|defn-winning-threshold|<tuple|5.8|30>>
     <associate|desc-certifying-keys|<tuple|A.5.5|40>>
     <associate|desc-controller-settings|<tuple|A.5.4|40>>
     <associate|desc-creating-controller-key|<tuple|A.5.2|40>>
@@ -6494,24 +6609,27 @@
     <associate|nota-call-into-runtime|<tuple|3.2|18>>
     <associate|nota-re-api-at-state|<tuple|E.1|51>>
     <associate|nota-runtime-code-at-state|<tuple|3.1|18>>
-    <associate|note-slot|<tuple|5.4|29>>
-    <associate|sect-babe|<tuple|5.1|29>>
+    <associate|note-slot|<tuple|5.6|29>>
+    <associate|sect-authority-set|<tuple|5.1.1|?>>
+    <associate|sect-babe|<tuple|5.2|29>>
     <associate|sect-blake2|<tuple|A.2|39>>
-    <associate|sect-block-body|<tuple|3.3.1.4|22>>
-    <associate|sect-block-building|<tuple|5.1.7|33>>
-    <associate|sect-block-finalization|<tuple|5.3|38>>
+    <associate|sect-block-body|<tuple|3.3.1.3|22>>
+    <associate|sect-block-building|<tuple|5.2.7|33>>
+    <associate|sect-block-finalization|<tuple|5.4|38>>
     <associate|sect-block-format|<tuple|3.3.1|21>>
-    <associate|sect-block-production|<tuple|5.1|29>>
+    <associate|sect-block-production|<tuple|5.2|29>>
     <associate|sect-block-submission|<tuple|3.3.2|23>>
     <associate|sect-block-validation|<tuple|3.3.3|23>>
-    <associate|sect-consensus-log|<tuple|3.3.1.3|?>>
+    <associate|sect-consensus-log|<tuple|5.1.2|?>>
+    <associate|sect-consensus-message|<tuple|5.1.2|?>>
+    <associate|sect-consensus-message-digest|<tuple|5.1.2|?>>
     <associate|sect-cryptographic-keys|<tuple|A.5|39>>
     <associate|sect-defn-conv|<tuple|1.2|7>>
     <associate|sect-encoding|<tuple|B|41>>
     <associate|sect-entries-into-runtime|<tuple|3.1|17>>
-    <associate|sect-epoch-randomness|<tuple|5.1.5|32>>
+    <associate|sect-epoch-randomness|<tuple|5.2.5|32>>
     <associate|sect-extrinsics|<tuple|3.2|19>>
-    <associate|sect-finality|<tuple|5.2|34>>
+    <associate|sect-finality|<tuple|5.3|34>>
     <associate|sect-genesis-block|<tuple|C|45>>
     <associate|sect-hash-functions|<tuple|A.1|39>>
     <associate|sect-int-encoding|<tuple|B.1.1|42>>
@@ -6543,15 +6661,17 @@
     <associate|sect-state-replication|<tuple|3.3|21>>
     <associate|sect-state-storage|<tuple|2.1|11>>
     <associate|sect-state-storage-trie-structure|<tuple|2.1.3|12>>
-    <associate|sect-verifying-authorship|<tuple|5.1.6|32>>
+    <associate|sect-verifying-authorship|<tuple|5.2.6|32>>
     <associate|sect-vrf|<tuple|A.4|39>>
     <associate|sect_polkadot_communication_substream|<tuple|4.4.2|?>>
     <associate|sect_transport_protocol|<tuple|4.3|?>>
-    <associate|slot-time-cal-tail|<tuple|5.7|30>>
+    <associate|set-authority-set|<tuple|5.1.1|?>>
+    <associate|slot-time-cal-tail|<tuple|5.9|30>>
     <associate|snippet-runtime-enteries|<tuple|F.1|69>>
     <associate|tabl-account-key-schemes|<tuple|A.1|39>>
     <associate|tabl-block-attributes|<tuple|D.3|48>>
-    <associate|tabl-digest-items|<tuple|3.2|22>>
+    <associate|tabl-consensus-messages|<tuple|5.1|?>>
+    <associate|tabl-digest-items|<tuple|5.2|22>>
     <associate|tabl-genesis-header|<tuple|C.1|45>>
     <associate|tabl-inherent-data|<tuple|3.1|21>>
     <associate|tabl-message-types|<tuple|D.1|47>>
@@ -7335,7 +7455,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-183>>
 
-      <with|par-left|<quote|1tab>|F.2.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Grandpa_authorities>
+      <with|par-left|<quote|1tab>|F.2.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-184>>
 
