@@ -380,6 +380,37 @@ void processExtStorageRoot(const std::vector<std::string> &args) {
   memory->storeBuffer(value2Ptr, buffer);
   buffer.clear();
 
+  buffer.put(":code");
+  kagome::runtime::SizeType prepareKey1Size = buffer.size();
+  kagome::runtime::WasmPointer prepareKey1Ptr =
+      memory->allocate(prepareKey1Size);
+  memory->storeBuffer(prepareKey1Ptr, buffer);
+  buffer.clear();
+
+  buffer.put("");
+  kagome::runtime::SizeType prepareValue1Size = buffer.size();
+  kagome::runtime::WasmPointer prepareValue1Ptr =
+      memory->allocate(prepareValue1Size);
+  memory->storeBuffer(prepareValue1Ptr, buffer);
+  buffer.clear();
+
+  buffer.put(":heappages");
+  kagome::runtime::SizeType prepareKey2Size = buffer.size();
+  kagome::runtime::WasmPointer prepareKey2Ptr =
+      memory->allocate(prepareKey2Size);
+  memory->storeBuffer(prepareKey2Ptr, buffer);
+  buffer.clear();
+
+  kagome::runtime::SizeType prepareValue2Size = 8;
+  kagome::runtime::WasmPointer prepareValue2Ptr =
+      memory->allocate(prepareValue2Size);
+  memory->store64(prepareValue2Ptr, 8);
+  buffer.clear();
+
+  extension->ext_set_storage(prepareKey1Ptr, prepareKey1Size, prepareValue1Ptr,
+                             prepareValue1Size);
+  extension->ext_set_storage(prepareKey2Ptr, prepareKey2Size, prepareValue2Ptr,
+                             prepareValue2Size);
   extension->ext_set_storage(key1Ptr, key1Size, value1Ptr, value1Size);
   extension->ext_set_storage(key2Ptr, key2Size, value2Ptr, value2Size);
 
