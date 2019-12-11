@@ -17,7 +17,7 @@ HunterGate(
     FILEPATH ${CMAKE_CURRENT_LIST_DIR}/cmake/HunterConfig.cmake
 )
 
-project (PolkadotRuntimeEnvironmentTests)
+project (PolkadotRuntimeEnvironmentTests C CXX)
 
 include(cmake/Dependencies.cmake)
 
