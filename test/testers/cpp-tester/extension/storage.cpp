@@ -463,5 +463,22 @@ void processExtBlake2_256EnumeratedTrieRoot(
 
   std::cout << kagome::common::hex_lower(hash) << "\n";
 }
+void processExtAllocatedStorage(const std::vector<std::string> &args) {
+  auto db = std::make_unique<kagome::storage::InMemoryStorage>();
+  std::unique_ptr<kagome::storage::trie::TrieDb> trie =
+      std::make_unique<kagome::storage::trie::PolkadotTrieDb>(std::move(db));
+  std::shared_ptr<kagome::runtime::WasmMemory> memory =
+      std::make_shared<kagome::runtime::WasmMemoryImpl>(4096);
+
+  std::unique_ptr<kagome::extensions::Extension> extension =
+      std::make_unique<kagome::extensions::ExtensionImpl>(memory,
+                                                          std::move(trie));
+
+  auto pointer = extension->ext_malloc(44);
+
+  // TODO
+
+  extension->ext_free(pointer);
+}
 
 } // namespace storage

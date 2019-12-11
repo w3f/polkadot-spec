@@ -37,6 +37,10 @@ namespace storage {
   // executes ext_blake2_256_enumerated_trie_root tests according to provided args
   // Input: value1, value2
   void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args);
+
+  // executes ext_malloc and ext_free tests according to provided args
+  // Input:
+  void processExtAllocatedStorage(const std::vector<std::string> &args);
 } // namespace storage
 
 #endif // KAGOMECROSSTESTCLI_STORAGE_EXTENSION_HPP
