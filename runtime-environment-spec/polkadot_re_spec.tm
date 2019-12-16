@@ -2304,12 +2304,10 @@
     engine <math|C>.
   </definition>
 
-  Note that in Polkadot, all authorities have equal weight. The weight
-  <math|W<rsub|A>> in Definition <reference|defn-authority-list> exists for
-  potential improvements in the protocol and could have a use-case in the
-  future.
-
-  The initial value
+  Note that in Polkadot, all authorities have the weight equal to 1. The
+  weight <math|W<rsub|A>> in Definition <reference|defn-authority-list>
+  exists for potential improvements in the protocol and could have a use-case
+  in the future.
 
   <subsection|Runtime to Consensus Message><label|sect-consensus-message-digest>
 
@@ -2350,8 +2348,7 @@
     <\center>
       <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<table|<row|<cell|<strong|Type
       Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Scheduled
-      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|2>|<cell|Forced
-      Change>|<cell|(<math|M<rsub|B>,<around*|\<nobracket\>|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|3>|<cell|On
+      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|2>|<cell|[RESERVED]>|<cell|[RESERVED]>>|<row|<cell|3>|<cell|On
       Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|B>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|B>>>>>>>>
         <label|tabl-consensus-messages>The consensus digest item for GRANDPA
         authorities
@@ -2359,10 +2356,10 @@
     </center>
 
     Where Auth<math|<rsub|C>> is defined in Definition
-    <reference|defn-authority-list>, <math|N<rsub|B>> is a <todo|I'm also
-    confused that if this is block number or number of blocks>,
-    <math|M<rsub|B>> <todo|this is median last finalized as described below>
-    <math|Auth<rsub|ID>> is 64 bit integer <todo|define authority set id>.
+    <reference|defn-authority-list>, <math|N<rsub|B>> is the number of blocks
+    to delay the change. <math|Auth<rsub|ID>> is a 64 bit integer pointing to
+    the authority list of the current block. Type Id 2 is reserved for future
+    development.
 
     \;
   </definition>
@@ -2379,37 +2376,6 @@
     Change> will take precedence. No change should be scheduled if one is
     already and the delay has not passed completely.
 
-    <item><strong|Forced Change>: Force an authority set change. Forced
-    changes are applied after a delay imported blocks, while pending changes
-    are applied after a delay of finalized blocks The earliest digest of this
-    type in a single block will be respected, with others ignored. No change
-    should be scheduled if one is already and the delay has not passed
-    completely.
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // NOTE:
-    when we do a force change we are "discrediting" the old set so we
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // ignore
-    any justifications from them. this block may contain a justification
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // which
-    should be checked and imported below against the new authority
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //
-    triggered by this forced change. the new grandpa voter will start at the
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // last
-    median finalized block (which is before the block that enacts the
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ //
-    change), full nodes syncing the chain will not be able to successfully
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // import
-    justifications for those blocks since their local authority set view
-
-    \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ // is
-    still of the set before the forced change was enacted
-
     <item><strong|On Disabled>: The authority set index with given index is
     disabled until the next change.
 
@@ -2422,25 +2388,7 @@
     should resume voting.
   </itemize-minus>
 
-  \ \ \ \ \ <todo|move this information in to description of the messages>:
-
   \;
-
-  <small-table|<tabular|<tformat|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Consensus
-  type>>|<cell|<strong|Appended Type(s)>>|<cell|<strong|Description>>>|<row|<cell|ScheduledChange>|<cell|authority_list>|<cell|As
-  defined in definition <reference|defn-authority-list>>>|<row|<cell|>|<cell|u32>|<cell|The
-  finalized block to delay to <todo|isn't block number u64,
-  anyway?>>>|<row|<cell|ForcedChange>|<cell|u32>|<cell|The finalized block to
-  delay to>>|<row|<cell|>|<cell|authority_list>|<cell|As defined in
-  definition <reference|defn-authority-list>>>|<row|<cell|>|<cell|u3>|<cell|The
-  finalized block to delay to <todo|why is this specified
-  twice?>>>|<row|<cell|OnDisabled>|<cell|64 bit integer>|<cell|The index of
-  an authority>>|<row|<cell|>|<cell|>|<cell|<todo|since no authority_list is
-  returned, where does the index point to?>>>|<row|<cell|Pause>|<cell|u32>|<cell|The
-  finalized block after the authorities should stop
-  voting>>|<row|<cell|Resume>|<cell|u32>|<cell|The authoring block after the
-  authorities should resume voting>>>>>|The additionally appended data for
-  the consensus log on grandpa authority changes.>
 
   <todo|describe conflict resolution strategy when there are conflicting
   changes scheduled maybe as an algorithm.>
@@ -3071,7 +3019,8 @@
     <math|ED25519> private key, is a node running GRANDPA protocol, and
     broadcasts votes to finalize blocks in a Polkadot RE - based chain. The
     <strong|set of all GRANDPA voters> is indicated by <math|\<bbb-V\>>. For
-    a given block B, we have
+    a given block B, we have <todo|change function name, only call at
+    genesis, adjust V_B over the sections>
 
     <\equation*>
       \<bbb-V\><rsub|B>=<text|<verbatim|grandpa_authorities>><around*|(|B|)>
@@ -3082,7 +3031,8 @@
   </definition>
 
   <\definition>
-    <strong|GRANDPA state>, <math|GS>, is defined as
+    <strong|GRANDPA state>, <math|GS>, is defined as <todo|verify V_id and
+    id_V usage, unify>
 
     <\equation*>
       GS\<assign\><around|{|\<bbb-V\>,id<rsub|\<bbb-V\>>,r|}>
@@ -6330,112 +6280,112 @@
     <associate|algo-verify-slot-winner|<tuple|5.6|33>>
     <associate|auto-1|<tuple|1|7>>
     <associate|auto-10|<tuple|1.9|9>>
-    <associate|auto-100|<tuple|A.5.2|41>>
-    <associate|auto-101|<tuple|A.5.3|42>>
-    <associate|auto-102|<tuple|A.5.4|43>>
-    <associate|auto-103|<tuple|A.5.5|43>>
-    <associate|auto-104|<tuple|B|43>>
-    <associate|auto-105|<tuple|B.1|43>>
-    <associate|auto-106|<tuple|B.1.1|45>>
-    <associate|auto-107|<tuple|B.2|45>>
-    <associate|auto-108|<tuple|B.2.1|47>>
-    <associate|auto-109|<tuple|B.2.2|47>>
+    <associate|auto-100|<tuple|A.5.3|41>>
+    <associate|auto-101|<tuple|A.5.4|42>>
+    <associate|auto-102|<tuple|A.5.5|43>>
+    <associate|auto-103|<tuple|B|43>>
+    <associate|auto-104|<tuple|B.1|43>>
+    <associate|auto-105|<tuple|B.1.1|43>>
+    <associate|auto-106|<tuple|B.2|45>>
+    <associate|auto-107|<tuple|B.2.1|45>>
+    <associate|auto-108|<tuple|B.2.2|47>>
+    <associate|auto-109|<tuple|B.3|47>>
     <associate|auto-11|<tuple|1.9|9>>
-    <associate|auto-110|<tuple|B.3|47>>
-    <associate|auto-111|<tuple|C|47>>
-    <associate|auto-112|<tuple|C.1|48>>
-    <associate|auto-113|<tuple|D|48>>
+    <associate|auto-110|<tuple|C|47>>
+    <associate|auto-111|<tuple|C.1|47>>
+    <associate|auto-112|<tuple|D|48>>
+    <associate|auto-113|<tuple|D.1|48>>
     <associate|auto-114|<tuple|D.1|48>>
-    <associate|auto-115|<tuple|D.1|49>>
-    <associate|auto-116|<tuple|D.1.1|49>>
-    <associate|auto-117|<tuple|D.2|49>>
-    <associate|auto-118|<tuple|D.1.2|50>>
-    <associate|auto-119|<tuple|D.3|51>>
+    <associate|auto-115|<tuple|D.1.1|49>>
+    <associate|auto-116|<tuple|D.2|49>>
+    <associate|auto-117|<tuple|D.1.2|49>>
+    <associate|auto-118|<tuple|D.3|50>>
+    <associate|auto-119|<tuple|D.1.3|51>>
     <associate|auto-12|<tuple|1.9|9>>
-    <associate|auto-120|<tuple|D.1.3|51>>
-    <associate|auto-121|<tuple|D.1.4|51>>
-    <associate|auto-122|<tuple|D.1.5|51>>
-    <associate|auto-123|<tuple|D.1.6|52>>
-    <associate|auto-124|<tuple|E|52>>
-    <associate|auto-125|<tuple|E.1|52>>
-    <associate|auto-126|<tuple|E.1.1|53>>
-    <associate|auto-127|<tuple|E.1.2|53>>
-    <associate|auto-128|<tuple|E.1.3|53>>
-    <associate|auto-129|<tuple|E.1.4|54>>
+    <associate|auto-120|<tuple|D.1.4|51>>
+    <associate|auto-121|<tuple|D.1.5|51>>
+    <associate|auto-122|<tuple|D.1.6|51>>
+    <associate|auto-123|<tuple|E|52>>
+    <associate|auto-124|<tuple|E.1|52>>
+    <associate|auto-125|<tuple|E.1.1|52>>
+    <associate|auto-126|<tuple|E.1.2|53>>
+    <associate|auto-127|<tuple|E.1.3|53>>
+    <associate|auto-128|<tuple|E.1.4|53>>
+    <associate|auto-129|<tuple|E.1.5|54>>
     <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|E.1.5|54>>
-    <associate|auto-131|<tuple|E.1.6|55>>
-    <associate|auto-132|<tuple|E.1.7|55>>
-    <associate|auto-133|<tuple|E.1.8|56>>
-    <associate|auto-134|<tuple|E.1.9|56>>
-    <associate|auto-135|<tuple|E.1.10|57>>
-    <associate|auto-136|<tuple|E.1.11|57>>
-    <associate|auto-137|<tuple|E.1.12|57>>
-    <associate|auto-138|<tuple|E.1.13|57>>
-    <associate|auto-139|<tuple|E.1.14|57>>
+    <associate|auto-130|<tuple|E.1.6|54>>
+    <associate|auto-131|<tuple|E.1.7|55>>
+    <associate|auto-132|<tuple|E.1.8|55>>
+    <associate|auto-133|<tuple|E.1.9|56>>
+    <associate|auto-134|<tuple|E.1.10|56>>
+    <associate|auto-135|<tuple|E.1.11|57>>
+    <associate|auto-136|<tuple|E.1.12|57>>
+    <associate|auto-137|<tuple|E.1.13|57>>
+    <associate|auto-138|<tuple|E.1.14|57>>
+    <associate|auto-139|<tuple|E.1.15|57>>
     <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|E.1.15|57>>
-    <associate|auto-141|<tuple|E.1.15.1|58>>
-    <associate|auto-142|<tuple|E.1.15.2|58>>
-    <associate|auto-143|<tuple|E.1.15.3|58>>
-    <associate|auto-144|<tuple|E.1.16|59>>
-    <associate|auto-145|<tuple|E.1.16.1|59>>
-    <associate|auto-146|<tuple|E.1.16.2|59>>
-    <associate|auto-147|<tuple|E.1.16.3|60>>
-    <associate|auto-148|<tuple|E.1.16.4|60>>
-    <associate|auto-149|<tuple|E.1.16.5|61>>
+    <associate|auto-140|<tuple|E.1.15.1|57>>
+    <associate|auto-141|<tuple|E.1.15.2|58>>
+    <associate|auto-142|<tuple|E.1.15.3|58>>
+    <associate|auto-143|<tuple|E.1.16|58>>
+    <associate|auto-144|<tuple|E.1.16.1|59>>
+    <associate|auto-145|<tuple|E.1.16.2|59>>
+    <associate|auto-146|<tuple|E.1.16.3|59>>
+    <associate|auto-147|<tuple|E.1.16.4|60>>
+    <associate|auto-148|<tuple|E.1.16.5|60>>
+    <associate|auto-149|<tuple|E.1.16.6|61>>
     <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|E.1.16.6|61>>
-    <associate|auto-151|<tuple|E.1.17|61>>
-    <associate|auto-152|<tuple|E.1.17.1|62>>
-    <associate|auto-153|<tuple|E.1.17.2|62>>
-    <associate|auto-154|<tuple|E.1.17.3|62>>
-    <associate|auto-155|<tuple|E.1.17.4|63>>
-    <associate|auto-156|<tuple|E.1.17.5|63>>
-    <associate|auto-157|<tuple|E.1.17.6|64>>
-    <associate|auto-158|<tuple|E.1.17.7|64>>
-    <associate|auto-159|<tuple|E.1.17.8|64>>
+    <associate|auto-150|<tuple|E.1.17|61>>
+    <associate|auto-151|<tuple|E.1.17.1|61>>
+    <associate|auto-152|<tuple|E.1.17.2|62>>
+    <associate|auto-153|<tuple|E.1.17.3|62>>
+    <associate|auto-154|<tuple|E.1.17.4|62>>
+    <associate|auto-155|<tuple|E.1.17.5|63>>
+    <associate|auto-156|<tuple|E.1.17.6|63>>
+    <associate|auto-157|<tuple|E.1.17.7|64>>
+    <associate|auto-158|<tuple|E.1.17.8|64>>
+    <associate|auto-159|<tuple|E.1.17.9|64>>
     <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|E.1.17.9|65>>
-    <associate|auto-161|<tuple|E.1.17.10|65>>
-    <associate|auto-162|<tuple|E.1.17.11|66>>
-    <associate|auto-163|<tuple|E.1.17.12|66>>
-    <associate|auto-164|<tuple|E.1.17.13|66>>
-    <associate|auto-165|<tuple|E.1.17.14|66>>
-    <associate|auto-166|<tuple|E.1.17.15|66>>
-    <associate|auto-167|<tuple|E.1.18|67>>
-    <associate|auto-168|<tuple|E.1.18.1|67>>
-    <associate|auto-169|<tuple|E.1.19|67>>
+    <associate|auto-160|<tuple|E.1.17.10|65>>
+    <associate|auto-161|<tuple|E.1.17.11|65>>
+    <associate|auto-162|<tuple|E.1.17.12|66>>
+    <associate|auto-163|<tuple|E.1.17.13|66>>
+    <associate|auto-164|<tuple|E.1.17.14|66>>
+    <associate|auto-165|<tuple|E.1.17.15|66>>
+    <associate|auto-166|<tuple|E.1.18|66>>
+    <associate|auto-167|<tuple|E.1.18.1|67>>
+    <associate|auto-168|<tuple|E.1.19|67>>
+    <associate|auto-169|<tuple|E.1.19.1|67>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|E.1.19.1|67>>
-    <associate|auto-171|<tuple|E.1.19.2|69>>
-    <associate|auto-172|<tuple|E.1.20|69>>
-    <associate|auto-173|<tuple|E.1.20.1|69>>
-    <associate|auto-174|<tuple|E.1.21|70>>
-    <associate|auto-175|<tuple|E.2|70>>
-    <associate|auto-176|<tuple|F|70>>
+    <associate|auto-170|<tuple|E.1.19.2|67>>
+    <associate|auto-171|<tuple|E.1.20|69>>
+    <associate|auto-172|<tuple|E.1.20.1|69>>
+    <associate|auto-173|<tuple|E.1.21|69>>
+    <associate|auto-174|<tuple|E.2|70>>
+    <associate|auto-175|<tuple|F|70>>
+    <associate|auto-176|<tuple|F.1|70>>
     <associate|auto-177|<tuple|F.1|70>>
-    <associate|auto-178|<tuple|F.1|70>>
-    <associate|auto-179|<tuple|F.2|71>>
+    <associate|auto-178|<tuple|F.2|70>>
+    <associate|auto-179|<tuple|F.2.1|71>>
     <associate|auto-18|<tuple|1.13|9>>
-    <associate|auto-180|<tuple|F.2.1|71>>
-    <associate|auto-181|<tuple|F.1|71>>
-    <associate|auto-182|<tuple|F.2.2|72>>
-    <associate|auto-183|<tuple|F.2.3|72>>
-    <associate|auto-184|<tuple|F.2.4|72>>
-    <associate|auto-185|<tuple|F.2.5|72>>
-    <associate|auto-186|<tuple|F.2.6|73>>
-    <associate|auto-187|<tuple|F.2.7|73>>
-    <associate|auto-188|<tuple|F.2|73>>
-    <associate|auto-189|<tuple|F.3|74>>
+    <associate|auto-180|<tuple|F.1|71>>
+    <associate|auto-181|<tuple|F.2.2|71>>
+    <associate|auto-182|<tuple|F.2.3|72>>
+    <associate|auto-183|<tuple|F.2.4|72>>
+    <associate|auto-184|<tuple|F.2.5|72>>
+    <associate|auto-185|<tuple|F.2.6|72>>
+    <associate|auto-186|<tuple|F.2.7|73>>
+    <associate|auto-187|<tuple|F.2|73>>
+    <associate|auto-188|<tuple|F.3|73>>
+    <associate|auto-189|<tuple|F.2.8|74>>
     <associate|auto-19|<tuple|1.13|9>>
-    <associate|auto-190|<tuple|F.2.8|75>>
-    <associate|auto-191|<tuple|F.4|77>>
-    <associate|auto-192|<tuple|F.5|79>>
-    <associate|auto-193|<tuple|F.2.9|?>>
+    <associate|auto-190|<tuple|F.4|75>>
+    <associate|auto-191|<tuple|F.5|77>>
+    <associate|auto-192|<tuple|F.2.9|79>>
+    <associate|auto-193|<tuple|F.2.10|?>>
     <associate|auto-194|<tuple|F.2.10|?>>
     <associate|auto-195|<tuple|F.2.10|?>>
-    <associate|auto-196|<tuple|F.2.10|?>>
+    <associate|auto-196|<tuple|Tec19|?>>
     <associate|auto-197|<tuple|Tec19|?>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
@@ -6500,31 +6450,31 @@
     <associate|auto-74|<tuple|5.1.2|30>>
     <associate|auto-75|<tuple|5.1|30>>
     <associate|auto-76|<tuple|5.2|31>>
-    <associate|auto-77|<tuple|5.2|32>>
-    <associate|auto-78|<tuple|5.2.1|32>>
-    <associate|auto-79|<tuple|5.2.2|33>>
+    <associate|auto-77|<tuple|5.2.1|32>>
+    <associate|auto-78|<tuple|5.2.2|32>>
+    <associate|auto-79|<tuple|5.2.3|33>>
     <associate|auto-8|<tuple|1.7|8>>
-    <associate|auto-80|<tuple|5.2.3|34>>
-    <associate|auto-81|<tuple|5.2.4|34>>
-    <associate|auto-82|<tuple|5.2.5|36>>
-    <associate|auto-83|<tuple|5.2.6|37>>
-    <associate|auto-84|<tuple|5.2.7|37>>
-    <associate|auto-85|<tuple|5.3|38>>
-    <associate|auto-86|<tuple|5.3.1|39>>
-    <associate|auto-87|<tuple|5.3.2|39>>
-    <associate|auto-88|<tuple|5.3.3|39>>
-    <associate|auto-89|<tuple|5.3.4|39>>
+    <associate|auto-80|<tuple|5.2.4|34>>
+    <associate|auto-81|<tuple|5.2.5|34>>
+    <associate|auto-82|<tuple|5.2.6|36>>
+    <associate|auto-83|<tuple|5.2.7|37>>
+    <associate|auto-84|<tuple|5.3|37>>
+    <associate|auto-85|<tuple|5.3.1|38>>
+    <associate|auto-86|<tuple|5.3.2|39>>
+    <associate|auto-87|<tuple|5.3.3|39>>
+    <associate|auto-88|<tuple|5.3.4|39>>
+    <associate|auto-89|<tuple|5.4|39>>
     <associate|auto-9|<tuple|1.9|9>>
-    <associate|auto-90|<tuple|5.4|39>>
-    <associate|auto-91|<tuple|A|39>>
-    <associate|auto-92|<tuple|A.1|39>>
-    <associate|auto-93|<tuple|A.2|40>>
-    <associate|auto-94|<tuple|A.3|40>>
-    <associate|auto-95|<tuple|A.4|40>>
-    <associate|auto-96|<tuple|A.5|40>>
-    <associate|auto-97|<tuple|A.1|40>>
-    <associate|auto-98|<tuple|A.2|40>>
-    <associate|auto-99|<tuple|A.5.1|41>>
+    <associate|auto-90|<tuple|A|39>>
+    <associate|auto-91|<tuple|A.1|39>>
+    <associate|auto-92|<tuple|A.2|39>>
+    <associate|auto-93|<tuple|A.3|40>>
+    <associate|auto-94|<tuple|A.4|40>>
+    <associate|auto-95|<tuple|A.5|40>>
+    <associate|auto-96|<tuple|A.1|40>>
+    <associate|auto-97|<tuple|A.2|40>>
+    <associate|auto-98|<tuple|A.5.1|40>>
+    <associate|auto-99|<tuple|A.5.2|41>>
     <associate|bib-burdges_schnorr_2019|<tuple|Bur19|77>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|77>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|77>>
