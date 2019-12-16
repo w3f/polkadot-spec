@@ -5899,10 +5899,12 @@
 
   <subsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
 
-  This entry is to report the initial set of GRANDPA voters at the genesis.
-  <todo|this is not what discussed in the channel>It receives
-  <verbatim|block_id> as an argument; it returns a consensus log as described
-  in section <reference|sect-consensus-log>
+  This entry fetches GRANDPA authorities at the given block. It's mostly used
+  to initialize authorities at genesis, since any authority changes get
+  tracked via the block header digest as described in definition
+  <reference|defn-block-header>. This function receives <verbatim|block_id>
+  as an argument; it returns the authority list as described in section
+  <reference|defn-authority-list>.
 
   <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
