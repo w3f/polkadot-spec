@@ -5900,11 +5900,11 @@
   <subsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
 
   This entry fetches GRANDPA authorities at the given block. It's mostly used
-  to initialize authorities at genesis, since any authority changes get
-  tracked via the block header digest as described in definition
+  to initialize authorities at genesis, since any future authority changes
+  get tracked via the block header digest as described in definition
   <reference|defn-block-header>. This function receives <verbatim|block_id>
-  as an argument; it returns the authority list as described in section
-  <reference|defn-authority-list>.
+  as an argument; it returns the authority list at the given block as
+  described in section <reference|defn-authority-list>.
 
   <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
