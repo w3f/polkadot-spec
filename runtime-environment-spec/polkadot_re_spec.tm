@@ -2281,7 +2281,7 @@
   has its own set of nodes, represented by known public keys which have the
   authority to influence the protocol in pre-defined ways explained in this
   section. In order to verifiy the validity of each block, Polkadot node must
-  track the current list of authoities for that block as formalised in
+  track the current list of authorities for that block as formalised in
   Definition <reference|defn-authority-list>
 
   <\definition>
@@ -2372,7 +2372,8 @@
     <item><strong|Scheduled Change>: Schedule an authority set change. The
     earliest digest of this type in a single block will be respected. No
     change should be scheduled if one is already and the delay has not passed
-    completely.
+    completely. If such an inconsitency occures, the scheduled change should
+    be ignored.
 
     <item><strong|On Disabled>: The authority set index with given index is
     disabled until the next change.
@@ -2386,12 +2387,11 @@
     should resume voting.
   </itemize-minus>
 
-  \;
-
-  <todo|describe conflict resolution strategy when there are conflicting
-  changes scheduled maybe as an algorithm.>
-
-  \;
+  The active GRANDPA authorities can only vote for blocks that occured after
+  the finalized block in which they were selected. Any votes for blocks
+  before the <verbatim|Scheduled Change> came into effect get rejected.
+  Selecting the best final candidates is described in algorithm
+  <reference|algo-grandpa-best-candidate>.
 
   <section|Block Production><label|sect-babe><label|sect-block-production>
 
