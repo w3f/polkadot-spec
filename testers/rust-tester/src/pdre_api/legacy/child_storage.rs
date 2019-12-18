@@ -207,7 +207,7 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
 
 // Input: child1, child2, key, value
 pub fn test_kill_child_storage(input: ParsedInput) {
-    let mut api = ChildStorageApi::new();
+    let mut rtm = Runtime::new();
 
     let child1 = input.get(0);
     let child2 = input.get(1);
@@ -215,18 +215,22 @@ pub fn test_kill_child_storage(input: ParsedInput) {
     let value = input.get(3);
 
     // Set key/values
-    api.rtm_ext_set_child_storage(child1, key, value);
-    api.rtm_ext_set_child_storage(child2, key, value);
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key, value).encode());
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key, value).encode());
 
     // Kill the child
-    api.rtm_ext_kill_child_storage(child1);
+    let _ = rtm.call("rtm_ext_kill_child_storage", &child1.encode());
 
     // Get invalid key
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child1, key).encode())
+        .decode_vec();
     assert_eq!(res, [0; 0]);
 
     // Get valid key from other child
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child2, key).encode())
+        .decode_vec();
     assert_eq!(res, value);
 }
 
