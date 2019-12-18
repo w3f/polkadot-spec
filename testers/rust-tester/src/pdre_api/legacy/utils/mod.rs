@@ -23,21 +23,15 @@ pub struct Runtime {
 }
 
 impl Runtime {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Runtime {
             blob: get_wasm_blob(),
             ext: TestExternalities::default(),
         }
     }
-    fn call(&mut self, method: &str, data: Option<&[u8]>) -> Vec<u8> {
-        // By default, don't send any data to the runtime function
-        let mut call_data: &[u8] = &[];
-        if let Some(data) = data {
-            call_data = data;
-        }
-
-        let mut extext = self.ext.ext();
-        call_in_wasm(method, call_data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
+    pub fn call(&mut self, method: &str, data: &[u8]) -> Vec<u8> {
+		let mut extext = self.ext.ext();
+        call_in_wasm(method, data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
     }
 }
 
@@ -57,7 +51,7 @@ fn get_wasm_blob() -> Vec<u8> {
     buffer
 }
 
-trait Decoder {
+pub trait Decoder {
     fn decode_vec(&self) -> Vec<u8>;
     fn decode_u32(&self) -> u32;
     fn decode_u64(&self) -> u64;

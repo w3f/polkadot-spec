@@ -1,5 +1,7 @@
 use crate::pdre_api::ParsedInput;
-use super::utils::StorageApi;
+use super::utils::{Runtime, Decoder, StorageApi};
+
+use parity_scale_codec::Encode;
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
@@ -7,20 +9,24 @@ fn str<'a>(input: &'a [u8]) -> &'a str {
 
 // Input: key, value
 pub fn test_set_get_storage(input: ParsedInput) {
-    let mut api = StorageApi::new();
+    let mut rtm = Runtime::new();
 
     let key = input.get(0);
     let value = input.get(1);
 
     // Get invalid key
-    let res = api.rtm_ext_get_allocated_storage(key);
+    let res = rtm
+        .call("rtm_ext_get_allocated_storage", &key.encode())
+        .decode_vec();
     assert_eq!(res, [0u8;0]);
 
     // Set key/value
-    api.rtm_ext_set_storage(key, value);
+    let _ = rtm.call("rtm_ext_set_storage", &(key, value).encode());
 
     // Get valid key
-    let res = api.rtm_ext_get_allocated_storage(key);
+    let res = rtm
+        .call("rtm_ext_get_allocated_storage", &key.encode())
+        .decode_vec();
     assert_eq!(res, value);
 
     println!("{}", str(&res));
