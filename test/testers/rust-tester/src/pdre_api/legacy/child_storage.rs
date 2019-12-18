@@ -85,7 +85,7 @@ pub fn test_get_child_storage_into(input: ParsedInput) {
 
 // Input: child1, child2, key, value
 pub fn test_exists_child_storage(input: ParsedInput) {
-    let mut api = ChildStorageApi::new();
+    let mut rtm = Runtime::new();
 
     let child1 = input.get(0);
     let child2 = input.get(1);
@@ -93,20 +93,20 @@ pub fn test_exists_child_storage(input: ParsedInput) {
     let value = input.get(3);
 
     // Check invalid key
-    let res = api.rtm_ext_exists_child_storage(child1, key);
+    let res = rtm.call("rtm_ext_exists_child_storage", &(child1, key).encode()).decode_u32();
     assert_eq!(res, 0);
 
     // Set key/value
-    api.rtm_ext_set_child_storage(child1, key, value);
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key, value).encode());
 
     // Check valid key
-    let res = api.rtm_ext_exists_child_storage(child1, key);
+    let res = rtm.call("rtm_ext_exists_child_storage", &(child1, key).encode()).decode_u32();
     assert_eq!(res, 1);
 
     println!("true");
 
     // Check invalid key from invalid child
-    let res = api.rtm_ext_exists_child_storage(child2, key);
+    let res = rtm.call("rtm_ext_exists_child_storage", &(child2, key).encode()).decode_u32();
     assert_eq!(res, 0);
 }
 
