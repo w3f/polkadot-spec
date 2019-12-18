@@ -1,37 +1,46 @@
 use crate::pdre_api::ParsedInput;
-use super::utils::CryptoApi;
+use super::utils::{Runtime, Decoder, CryptoApi};
+use parity_scale_codec::Encode;
 
 use substrate_primitives::hashing::{twox_128, twox_256, twox_64};
 
 // Input: data
 pub fn test_blake2_128(input: ParsedInput) {
-    let mut api = CryptoApi::new();
+    let mut rtm = Runtime::new();
 
     let data = input.get(0);
 
-    let output = api.rtm_ext_blake2_128(data);
+    let output = rtm
+        .call("rtm_ext_blake2_128", &data.encode())
+        .decode_vec();
     println!("{}", hex::encode(output));
 }
 
 // Input: data
 pub fn test_blake2_256(input: ParsedInput) {
-    let mut api = CryptoApi::new();
+    let mut rtm = Runtime::new();
 
     let data = input.get(0);
  
-    let output = api.rtm_ext_blake2_256(data);
+    let output = rtm
+        .call("rtm_ext_blake2_256", &data.encode())
+        .decode_vec();
 
     println!("{}", hex::encode(output));
 }
 
 pub fn test_blake2_256_enumerated_trie_root(input: ParsedInput) {
     let mut api = CryptoApi::new();
+    let mut rtm = Runtime::new();
 
     let value1 = input.get(0);
     let value2 = input.get(1);
     let lens_data = vec![value1.len() as u32, value2.len() as u32];
 
     let res = api.rtm_ext_blake2_256_enumerated_trie_root([value1, value2].concat().as_slice(), lens_data.as_slice());
+    let res = rtm
+        .call("rtm_ext_blake2_256_enumerated_trie_root", &([value1, value2].concat(), lens_data).encode())
+        .decode_vec();
     println!("{}", hex::encode(res));
 }
 
