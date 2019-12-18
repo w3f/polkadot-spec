@@ -123,7 +123,7 @@ pub fn test_clear_storage(input: ParsedInput) {
 
 // Input: prefix, key1, value1, key2, value2
 pub fn test_clear_prefix(input: ParsedInput) {
-    let mut api = StorageApi::new();
+    let mut rtm = Runtime::new();
 
     let prefix = input.get(0);
     let key1 = input.get(1);
@@ -132,14 +132,16 @@ pub fn test_clear_prefix(input: ParsedInput) {
     let value2 = input.get(4);
 
     // Set keys/values
-    api.rtm_ext_set_storage(key1, value1);
-    api.rtm_ext_set_storage(key2, value2);
+    let _ = rtm.call("rtm_ext_set_storage", &(key1, value1).encode());
+    let _ = rtm.call("rtm_ext_set_storage", &(key2, value2).encode());
 
     // Clear keys with specified prefix
-    api.rtm_ext_clear_prefix(prefix);
+    let _ = rtm.call("rtm_ext_clear_prefix", &prefix.encode());
 
     // Check deletions
-    let res = api.rtm_ext_get_allocated_storage(key1);
+    let res = rtm
+        .call("rtm_ext_get_allocated_storage", &key1.encode())
+        .decode_vec();
     if key1.starts_with(prefix) {
         assert_eq!(res, [0u8;0]);
         println!("Key `{}` was deleted", str(key1));
@@ -148,7 +150,9 @@ pub fn test_clear_prefix(input: ParsedInput) {
         println!("Key `{}` remains", str(key1));
     }
 
-    let res = api.rtm_ext_get_allocated_storage(key2);
+    let res = rtm
+        .call("rtm_ext_get_allocated_storage", &key2.encode())
+        .decode_vec();
     if key2.starts_with(prefix) {
         assert_eq!(res, [0u8;0]);
         println!("Key `{}` was deleted", str(key2));
