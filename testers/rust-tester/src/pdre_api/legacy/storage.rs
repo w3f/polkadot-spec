@@ -175,17 +175,20 @@ pub fn test_allocate_storage() {
 
 // Input: key1, value1, key2, value2
 pub fn test_storage_root(input: ParsedInput) {
-    let mut api = StorageApi::new();
+    let mut rtm = Runtime::new();
 
     let key1 = input.get(0);
     let value1 = input.get(1);
     let key2 = input.get(2);
     let value2 = input.get(3);
 
-    api.rtm_ext_set_storage(key1, value1);
-    api.rtm_ext_set_storage(key2, value2);
+    let _ = rtm.call("rtm_ext_set_storage", &(key1, value1).encode());
+    let _ = rtm.call("rtm_ext_set_storage", &(key2, value2).encode());
 
-    let root = api.rtm_ext_storage_root();
+    let root = rtm
+        .call("rtm_ext_storage_root", &[])
+        .decode_vec();
+
     println!("{}", hex::encode(root));
 }
 
