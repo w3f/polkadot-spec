@@ -152,7 +152,7 @@ pub fn test_clear_child_storage(input: ParsedInput) {
 
 // Input: prefix, child1, child2, key1, value1, key2, value2
 pub fn test_clear_child_prefix(input: ParsedInput) {
-    let mut api = ChildStorageApi::new();
+    let mut rtm = Runtime::new();
 
     let prefix = input.get(0);
     let child1 = input.get(1);
@@ -163,22 +163,28 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
     let value2 = input.get(6);
 
     // Set keys/values for each child
-    api.rtm_ext_set_child_storage(child1, key1, value1);
-    api.rtm_ext_set_child_storage(child1, key2, value2);
-    api.rtm_ext_set_child_storage(child2, key1, value1);
-    api.rtm_ext_set_child_storage(child2, key2, value2);
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key1, value1).encode());
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key2, value2).encode());
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key1, value1).encode());
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key2, value2).encode());
 
     // Clear keys with specified prefix
-    api.rtm_ext_clear_child_prefix(child2, prefix);
+    let _ = rtm.call("rtm_ext_clear_child_prefix", &(child2, prefix).encode());
 
     // Check deletions (only keys from `child2` are got deleted)
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key1);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child1, key1).encode())
+        .decode_vec();
     assert_eq!(res, value1);
 
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key2);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child1, key2).encode())
+        .decode_vec();
     assert_eq!(res, value2);
 
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key1);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child2, key1).encode())
+        .decode_vec();
     if key1.starts_with(prefix) {
         assert_eq!(res, [0; 0]);
         println!("Key `{}` was deleted", str(key1));
@@ -187,7 +193,9 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
         println!("Key `{}` remains", str(key1));
     }
 
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key2);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child2, key2).encode())
+        .decode_vec();
     if key2.starts_with(prefix) {
         assert_eq!(res, [0; 0]);
         println!("Key `{}` was deleted", str(key2));
