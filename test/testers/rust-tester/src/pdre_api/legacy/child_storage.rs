@@ -1,12 +1,13 @@
 use crate::pdre_api::ParsedInput;
-use super::utils::ChildStorageApi;
+use super::utils::{Runtime, Decoder, ChildStorageApi};
+use parity_scale_codec::Encode;
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
 }
 // Input: child1, child2, key, value
 pub fn test_set_get_child_storage(input: ParsedInput) {
-    let mut api = ChildStorageApi::new();
+    let mut rtm = Runtime::new();
 
     let child1 = input.get(0);
     let child2 = input.get(1);
@@ -14,20 +15,26 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
     let value = input.get(3);
 
     // Get invalid key
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child1, key).encode())
+        .decode_vec();
     assert_eq!(res, [0u8; 0]);
 
     // Set key/value
-    api.rtm_ext_set_child_storage(child1, key, value);
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key, value).encode());
 
     // Get valid key
-    let res = api.rtm_ext_get_allocated_child_storage(child1, key);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child1, key).encode())
+        .decode_vec();
     assert_eq!(res, value);
 
     println!("{}", str(&res));
 
     // Get invalid key from invalid child
-    let res = api.rtm_ext_get_allocated_child_storage(child2, key);
+    let res = rtm
+        .call("rtm_ext_get_allocated_child_storage", &(child2, key).encode())
+        .decode_vec();
     assert_eq!(res, [0; 0]);
 }
 
