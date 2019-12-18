@@ -1,5 +1,5 @@
 use crate::pdre_api::ParsedInput;
-use super::utils::{Runtime, Decoder, ChildStorageApi};
+use super::utils::{Runtime, Decoder};
 use parity_scale_codec::Encode;
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
@@ -236,7 +236,7 @@ pub fn test_kill_child_storage(input: ParsedInput) {
 
 // Input: child1, child2, key1, value1, key2, value2
 pub fn test_child_storage_root(input: ParsedInput) {
-    let mut api = ChildStorageApi::new();
+    let mut rtm = Runtime::new();
 
     let child1 = input.get(0);
     let child2 = input.get(1);
@@ -245,13 +245,17 @@ pub fn test_child_storage_root(input: ParsedInput) {
     let key2 = input.get(4);
     let value2 = input.get(5);
 
-    api.rtm_ext_set_child_storage(child1, key1, value1);
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key1, value1).encode());
 
     // Test multiple key/value pairs
-    api.rtm_ext_set_child_storage(child2, key1, value1);
-    api.rtm_ext_set_child_storage(child2, key2, value2);
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key1, value1).encode());
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key2, value2).encode());
 
-    let child_root1 = api.rtm_ext_child_storage_root(child1);
-    let child_root2 = api.rtm_ext_child_storage_root(child2);
+    let child_root1 = rtm
+        .call("rtm_ext_child_storage_root", &child1.encode())
+        .decode_vec();
+    let child_root2 = rtm
+        .call("rtm_ext_child_storage_root", &child2.encode())
+        .decode_vec();
     println!("{},{}", hex::encode(child_root1), hex::encode(child_root2));
 }
