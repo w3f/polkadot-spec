@@ -206,29 +206,42 @@ pub fn test_storage_changes_root(input: ParsedInput) {
 
 // Input: key, value
 pub fn test_set_get_local_storage(input: ParsedInput) {
-    let mut api = StorageApi::new_with_offchain_context();
+    let mut rtm = Runtime::new_offchain();
 
     let key = input.get(0);
     let value = input.get(1);
 
     // Test invalid persistant storage
-    let res = api.rtm_ext_local_storage_get(1, key);
+    let res = rtm
+        .call("rtm_ext_local_storage_get", &(1, key).encode())
+        .decode_vec();
     assert_eq!(res, [0u8;0]);
 
     // Test valid persistant storage
-    api.rtm_ext_local_storage_set(1, key, value);
-    let res = api.rtm_ext_local_storage_get(1, key);
+    let _ = rtm
+        .call("rtm_ext_local_storage_set", &(1, key, value).encode())
+        .decode_vec();
+
+    let res = rtm
+        .call("rtm_ext_local_storage_get", &(1, key).encode())
+        .decode_vec();
     assert_eq!(res.as_slice(), value);
 
     print!("{},", str(&res)); // Result of persistant storage
 
     // Test invalid local storage
-    let res = api.rtm_ext_local_storage_get(2, key);
+    let res = rtm
+        .call("rtm_ext_local_storage_get", &(2, key).encode())
+        .decode_vec();
     assert_eq!(res, [0u8;0]);
 
     // Test valid local storage
-    api.rtm_ext_local_storage_set(2, key, value);
-    let res = api.rtm_ext_local_storage_get(2, key);
+    let _ = rtm
+        .call("rtm_ext_local_storage_set", &(2, key, value).encode())
+        .decode_vec();
+    let res = rtm
+        .call("rtm_ext_local_storage_get", &(2, key).encode())
+        .decode_vec();
     assert_eq!(res.as_slice(), value);
 
     println!("{}", str(&res)); // Result of local storage
@@ -241,13 +254,21 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
     let key2 = "somekey2".as_bytes();
     let value2 = "somevalue2".as_bytes();
 
-    api.rtm_ext_local_storage_set(1, key1, value1);
-    api.rtm_ext_local_storage_set(2, key2, value2);
+    let _ = rtm
+        .call("rtm_ext_local_storage_set", &(1, key1, value1).encode())
+        .decode_vec();
+    let _ = rtm
+        .call("rtm_ext_local_storage_set", &(2, key2, value2).encode())
+        .decode_vec();
 
-    let res = api.rtm_ext_local_storage_get(1, key2);
+    let res = rtm
+        .call("rtm_ext_local_storage_get", &(1, key2).encode())
+        .decode_vec();
     assert_eq!(res, [0u8;0]);
 
-    let res = api.rtm_ext_local_storage_get(2, key1);
+    let res = rtm
+        .call("rtm_ext_local_storage_get", &(2, key1).encode())
+        .decode_vec();
     assert_eq!(res, [0u8;0]);
 }
 
