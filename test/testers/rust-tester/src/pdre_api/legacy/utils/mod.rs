@@ -23,6 +23,12 @@ pub struct Runtime {
 }
 
 impl Runtime {
+    fn new() -> Self {
+        Runtime {
+            blob: get_wasm_blob(),
+            ext: TestExternalities::default(),
+        }
+    }
     fn call(&mut self, method: &str, data: Option<&[u8]>) -> Vec<u8> {
         // By default, don't send any data to the runtime function
         let mut call_data: &[u8] = &[];
