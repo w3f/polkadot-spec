@@ -196,8 +196,11 @@ pub fn test_storage_root(input: ParsedInput) {
 pub fn test_storage_changes_root(input: ParsedInput) {
     let parent_hash_data = input.get(0);
 
-    let mut api = StorageApi::new();
-    let root = api.rtm_ext_storage_changes_root(&parent_hash_data);
+    let mut rtm = Runtime::new();
+    let root = rtm
+        .call("rtm_ext_storage_changes_root", &parent_hash_data.encode())
+        .decode_vec();
+
     println!("{}", hex::encode(root));
 }
 
