@@ -71,20 +71,25 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
 
 // Input: key, value
 pub fn test_exists_storage(input: ParsedInput) {
-    let mut api = StorageApi::new();
+    let mut rtm = Runtime::new();
 
     let key = input.get(0);
     let value = input.get(1);
 
     // Check invalid key
-    let res = api.rtm_ext_exists_storage(key);
+    let res = rtm
+        .call("rtm_ext_exists_storage", &key.encode())
+        .decode_u32();
     assert_eq!(res, 0);
 
     // Set key/value
-    api.rtm_ext_set_storage(key, value);
+    let _ = rtm.call("rtm_ext_set_storage", &(key, value).encode());
+
 
     // Check valid key
-    let res = api.rtm_ext_exists_storage(key);
+    let res = rtm
+        .call("rtm_ext_exists_storage", &key.encode())
+        .decode_u32();
     assert_eq!(res, 1);
 
     println!("true");
