@@ -1,6 +1,5 @@
 use crate::pdre_api::ParsedInput;
-use super::utils::{Runtime, Decoder, StorageApi};
-
+use super::utils::{Runtime, Decoder};
 use parity_scale_codec::Encode;
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
@@ -271,27 +270,38 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
 
 // Input: key, old_value, new_value
 pub fn test_local_storage_compare_and_set(input: ParsedInput) {
-    let mut api = StorageApi::new_with_offchain_context();
+    let mut rtm = Runtime::new_offchain();
 
     let key = input.get(0);
     let old_value = input.get(1);
     let new_value = input.get(2);
 
     // Test invalid key
-    let res = api.rtm_ext_local_storage_compare_and_set(1, key, old_value, new_value);
+    let res = rtm
+        .call("rtm_ext_local_storage_compare_and_set", &(1, key, old_value, new_value).encode())
+        .decode_u32();
+
     assert_eq!(res, 1);
 
-    api.rtm_ext_local_storage_set(1, key, old_value);
+    let _ = rtm.call("rtm_ext_local_storage_set", &(1, key, old_value).encode());
 
     // Test invalid value
-    let res = api.rtm_ext_local_storage_compare_and_set(1, key, new_value, new_value);
+    let res = rtm
+        .call("rtm_ext_local_storage_compare_and_set", &(1, key, new_value, new_value).encode())
+        .decode_u32();
+
     assert_eq!(res, 1);
 
     // Test valid value
-    let res = api.rtm_ext_local_storage_compare_and_set(1, key, old_value, new_value);
+    let res = rtm
+        .call("rtm_ext_local_storage_compare_and_set", &(1, key, old_value, new_value).encode())
+        .decode_u32();
+
     assert_eq!(res, 0);
 
-    let res = api.rtm_ext_local_storage_get(1, key);
+    let res = rtm
+        .call("rtm_ext_local_storage_get", &(1, key).encode())
+        .decode_vec();
     assert_eq!(res, new_value);
 
     println!("{}", str(new_value));
@@ -304,12 +314,18 @@ pub fn test_local_storage_compare_and_set(input: ParsedInput) {
     let key2 = "somekey2".as_bytes();
     let value2 = "somevalue2".as_bytes();
 
-    api.rtm_ext_local_storage_set(1, key1, value1);
-    api.rtm_ext_local_storage_set(2, key2, value2);
+    let _ = rtm.call("rtm_ext_local_storage_set", &(1, key1, value1).encode());
+    let _ = rtm.call("rtm_ext_local_storage_set", &(2, key2, value2).encode());
 
-    let res = api.rtm_ext_local_storage_compare_and_set(1, key2, value1, new_value);
+    let res = rtm
+        .call("rtm_ext_local_storage_compare_and_set", &(1, key2, value1, new_value).encode())
+        .decode_u32();
+
     assert_eq!(res, 1);
 
-    let res = api.rtm_ext_local_storage_compare_and_set(2, key1, value2, new_value);
+    let res = rtm
+        .call("rtm_ext_local_storage_compare_and_set", &(2, key1, value2, new_value).encode())
+        .decode_u32();
+
     assert_eq!(res, 1);
 }
