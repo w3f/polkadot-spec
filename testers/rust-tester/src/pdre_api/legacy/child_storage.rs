@@ -40,7 +40,7 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
 
 // Input: child1, child2, key, value, offset
 pub fn test_get_child_storage_into(input: ParsedInput) {
-    let mut api = ChildStorageApi::new();
+    let mut rtm = Runtime::new();
 
     let child1 = input.get(0);
     let child2 = input.get(1);
@@ -56,14 +56,18 @@ pub fn test_get_child_storage_into(input: ParsedInput) {
     };
 
     // Get invalid key
-    let res = api.rtm_ext_get_child_storage_into(child1, key, &empty, offset as u32);
+    let res = rtm
+        .call("rtm_ext_get_child_storage_into", &(child1, key, &empty, offset as u32).encode())
+        .decode_vec();
     assert_eq!(res, empty);
 
     // Set key/value
-    api.rtm_ext_set_child_storage(child1, key, value);
+    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key, value).encode());
 
     // Get valid key
-    let res = api.rtm_ext_get_child_storage_into(child1, key, &empty, offset as u32);
+    let res = rtm
+        .call("rtm_ext_get_child_storage_into", &(child1, key, &empty, offset as u32).encode())
+        .decode_vec();
     if offset > value.len() {
         assert_eq!(*res.as_slice(), [0u8;0]);
     } else {
@@ -73,7 +77,9 @@ pub fn test_get_child_storage_into(input: ParsedInput) {
     println!("{}", str(&res));
 
     // Get invalid key from invalid child
-    let res = api.rtm_ext_get_child_storage_into(child2, key, &empty, offset as u32);
+    let res = rtm
+        .call("rtm_ext_get_child_storage_into", &(child2, key, &empty, offset as u32).encode())
+        .decode_vec();
     assert_eq!(res, empty);
 }
 
