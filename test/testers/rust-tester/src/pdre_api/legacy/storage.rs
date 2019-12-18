@@ -34,7 +34,7 @@ pub fn test_set_get_storage(input: ParsedInput) {
 
 // Input: key, value, offset
 pub fn test_set_get_storage_into(input: ParsedInput) {
-    let mut api = StorageApi::new();
+    let mut rtm = Runtime::new();
 
     let key = input.get(0);
     let value = input.get(1);
@@ -48,14 +48,18 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
     };
 
     // Invalid access
-    let res = api.rtm_ext_get_storage_into(key, &empty, offset as u32);
+    let res = rtm
+        .call("rtm_ext_get_storage_into",&(key, &empty, offset as u32).encode())
+        .decode_vec();
     assert_eq!(res, empty);
 
     // Set key/value
-    api.rtm_ext_set_storage(key, value);
+    let _ = rtm.call("rtm_ext_set_storage", &(key, value).encode());
 
     // Get key with offset
-    let res = api.rtm_ext_get_storage_into(key, &empty, offset as u32);
+    let res = rtm
+        .call("rtm_ext_get_storage_into",&(key, &empty, offset as u32).encode())
+        .decode_vec();
     if offset > value.len() {
         assert_eq!(*res.as_slice(), [0u8;0]);
     } else {
