@@ -219,8 +219,7 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
 
     // Test valid persistant storage
     let _ = rtm
-        .call("rtm_ext_local_storage_set", &(1, key, value).encode())
-        .decode_vec();
+        .call("rtm_ext_local_storage_set", &(1, key, value).encode());
 
     let res = rtm
         .call("rtm_ext_local_storage_get", &(1, key).encode())
@@ -237,11 +236,11 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
 
     // Test valid local storage
     let _ = rtm
-        .call("rtm_ext_local_storage_set", &(2, key, value).encode())
-        .decode_vec();
+        .call("rtm_ext_local_storage_set", &(2, key, value).encode());
     let res = rtm
         .call("rtm_ext_local_storage_get", &(2, key).encode())
         .decode_vec();
+
     assert_eq!(res.as_slice(), value);
 
     println!("{}", str(&res)); // Result of local storage
@@ -255,11 +254,9 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
     let value2 = "somevalue2".as_bytes();
 
     let _ = rtm
-        .call("rtm_ext_local_storage_set", &(1, key1, value1).encode())
-        .decode_vec();
+        .call("rtm_ext_local_storage_set", &(1, key1, value1).encode());
     let _ = rtm
-        .call("rtm_ext_local_storage_set", &(2, key2, value2).encode())
-        .decode_vec();
+        .call("rtm_ext_local_storage_set", &(2, key2, value2).encode());
 
     let res = rtm
         .call("rtm_ext_local_storage_get", &(1, key2).encode())
