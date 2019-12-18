@@ -13,7 +13,27 @@ pub use misc::MiscApi;
 use parity_scale_codec::Decode;
 use substrate_executor::{call_in_wasm, WasmExecutionMethod};
 use substrate_primitives::Blake2Hasher;
-use substrate_state_machine::TestExternalities;
+use substrate_state_machine::TestExternalities as CoreTestExternalities;
+
+type TestExternalities<H> = CoreTestExternalities<H, u64>;
+
+pub struct Runtime {
+    blob: Vec<u8>,
+    ext: TestExternalities<Blake2Hasher>,
+}
+
+impl Runtime {
+    fn call(&mut self, method: &str, data: Option<&[u8]>) -> Vec<u8> {
+        // By default, don't send any data to the runtime function
+        let mut call_data: &[u8] = &[];
+        if let Some(data) = data {
+            call_data = data;
+        }
+
+        let mut extext = self.ext.ext();
+        call_in_wasm(method, call_data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
+    }
+}
 
 // Convenience function, get the wasm blob
 fn get_wasm_blob() -> Vec<u8> {
@@ -53,14 +73,14 @@ impl Decoder for Vec<u8> {
 }
 
 struct CallWasm<'a> {
-    ext: &'a mut TestExternalities<Blake2Hasher, u64>,
+    ext: &'a mut TestExternalities<Blake2Hasher>,
     blob: &'a [u8],
     method: &'a str,
     //create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>,
 }
 
 impl<'a> CallWasm<'a> {
-    fn new(ext: &'a mut TestExternalities<Blake2Hasher, u64>, blob: &'a [u8], method: &'a str) -> Self {
+    fn new(ext: &'a mut TestExternalities<Blake2Hasher>, blob: &'a [u8], method: &'a str) -> Self {
         CallWasm {
             ext: ext,
             blob: blob,
