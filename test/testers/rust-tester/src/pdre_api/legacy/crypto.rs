@@ -86,11 +86,13 @@ pub fn test_twox_256(input: ParsedInput) {
 
 // Input: data
 pub fn test_keccak_256(input: ParsedInput) {
-    let mut api = CryptoApi::new();
+    let mut rtm = Runtime::new();
 
     let data = input.get(0);
 
-    let output = api.rtm_ext_keccak_256(data);
+    let output = rtm
+        .call("rtm_ext_keccak_256", &data.encode())
+        .decode_vec();
     println!("{}", hex::encode(output));
 }
 
