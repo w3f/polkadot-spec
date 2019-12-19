@@ -1,6 +1,6 @@
 use std::slice;
 
-use substrate_primitives::wasm_export_functions;
+use sp_core::wasm_export_functions;
 
 extern "C" {
     fn ext_print_utf8(utf8_data: *const u8, utf8_len: u32);
