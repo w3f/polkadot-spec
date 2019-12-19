@@ -1,19 +1,29 @@
-mod child_storage;
-mod crypto;
-mod network;
-mod storage;
-mod misc;
-
-pub use network::NetworkApi;
-pub use misc::MiscApi;
-
 use parity_scale_codec::Decode;
 use substrate_executor::{call_in_wasm, WasmExecutionMethod};
 use substrate_offchain::testing::TestOffchainExt;
 use substrate_primitives::{Blake2Hasher, {testing::KeyStore}, {traits::KeystoreExt}, {offchain::OffchainExt}};
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
+use clap::Values;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
+
+pub struct ParsedInput<'a>(Vec<&'a str>);
+
+impl<'a> ParsedInput<'a> {
+    pub fn get(&self, index: usize) -> &[u8] {
+        if let Some(ret) = self.0.get(index) {
+            ret.as_bytes()
+        } else {
+            panic!("failed to get index, wrong input data provided for the test function");
+        }
+    }
+}
+
+impl<'a> From<Values<'a>> for ParsedInput<'a> {
+    fn from(input: Values<'a>) -> Self {
+        ParsedInput(input.collect())
+    }
+}
 
 pub struct Runtime {
     blob: Vec<u8>,

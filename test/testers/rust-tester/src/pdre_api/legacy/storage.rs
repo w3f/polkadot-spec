@@ -1,5 +1,4 @@
-use crate::pdre_api::ParsedInput;
-use super::utils::{Runtime, Decoder};
+use crate::pdre_api::utils::{ParsedInput, Runtime, Decoder};
 use parity_scale_codec::Encode;
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
