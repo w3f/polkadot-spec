@@ -36,7 +36,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_twox_128" => legacy::crypto::test_twox_128(input),
             "test_twox_256" => legacy::crypto::test_twox_256(input),
             // TODO: Call from Julia
-            "test_secp256k1_ecdsa_recover" => legacy::crypto::secp256k1_ecdsa_recover(input),
+            "test_secp256k1_ecdsa_recover" => legacy::crypto::test_secp256k1_ecdsa_recover(input),
             //
             // test storage functions
             "test_allocate_storage" => legacy::storage::test_allocate_storage(),
