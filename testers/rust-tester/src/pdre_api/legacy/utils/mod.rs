@@ -13,7 +13,7 @@ pub use misc::MiscApi;
 use parity_scale_codec::Decode;
 use substrate_executor::{call_in_wasm, WasmExecutionMethod};
 use substrate_offchain::testing::TestOffchainExt;
-use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
+use substrate_primitives::{Blake2Hasher, {testing::KeyStore}, {traits::KeystoreExt}, {offchain::OffchainExt}};
 use substrate_state_machine::TestExternalities as CoreTestExternalities;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
@@ -28,6 +28,15 @@ impl Runtime {
         Runtime {
             blob: get_wasm_blob(),
             ext: TestExternalities::default(),
+        }
+    }
+    pub fn new_keystore() -> Self {
+        let mut ext = TestExternalities::default();
+        let key_store = KeystoreExt(KeyStore::new());
+        ext.register_extension(key_store);
+        Runtime {
+            blob: get_wasm_blob(),
+            ext: ext,
         }
     }
     pub fn new_offchain() -> Self {
