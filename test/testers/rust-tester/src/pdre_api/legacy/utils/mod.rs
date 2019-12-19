@@ -4,10 +4,7 @@ mod network;
 mod storage;
 mod misc;
 
-pub use child_storage::ChildStorageApi;
-pub use crypto::CryptoApi;
 pub use network::NetworkApi;
-pub use storage::StorageApi;
 pub use misc::MiscApi;
 
 use parity_scale_codec::Decode;
