@@ -1,24 +1,8 @@
 mod legacy;
+mod utils;
 
-use clap::{ArgMatches, Values};
-
-pub struct ParsedInput<'a>(Vec<&'a str>);
-
-impl<'a> ParsedInput<'a> {
-    pub fn get(&self, index: usize) -> &[u8] {
-        if let Some(ret) = self.0.get(index) {
-            ret.as_bytes()
-        } else {
-            panic!("failed to get index, wrong input data provided for the test function");
-        }
-    }
-}
-
-impl<'a> From<Values<'a>> for ParsedInput<'a> {
-    fn from(input: Values<'a>) -> Self {
-        ParsedInput(input.collect())
-    }
-}
+use utils::ParsedInput;
+use clap::ArgMatches;
 
 pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
     if let Some(func) = subcmd_matches.value_of("function") {
