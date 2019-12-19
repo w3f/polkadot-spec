@@ -98,26 +98,36 @@ pub fn test_keccak_256(input: ParsedInput) {
 
 // Input: data
 pub fn test_ed25519(input: ParsedInput) {
-    let mut api = CryptoApi::new();
+    let mut rtm = Runtime::new_keystore();
 
     let data = input.get(0);
 
     // Generate key pair
     let keystore = String::from("dumy");
-    let pubkey1 = api.rtm_ext_ed25519_generate(keystore.as_bytes(), &[]);
+    let pubkey1 = rtm
+        .call("rtm_ext_ed25519_generate", &(&keystore, "").encode())
+        .decode_vec();
 
     // Sign a message
-    let signature = api.rtm_ext_ed25519_sign(keystore.as_bytes(), &pubkey1, data);
+    let signature = rtm
+        .call("rtm_ext_ed25519_sign", &(&keystore, &pubkey1, &data).encode())
+        .decode_vec();
 
     // Verify message
-    let verify = api.rtm_ext_ed25519_verify(data, signature.as_slice(), &pubkey1);
+    let verify = rtm
+        .call("rtm_ext_ed25519_verify", &(&data, &signature, &pubkey1).encode())
+        .decode_u32();
     assert_eq!(verify, 0);
 
     // Generate new key pair for listing
-    let pubkey2 = api.rtm_ext_ed25519_generate(keystore.as_bytes(), &[]);
+    let pubkey2 = rtm
+        .call("rtm_ext_ed25519_generate", &(&keystore, "").encode())
+        .decode_vec();
 
     // Get all public keys
-    let all_pubkeys = api.rtm_ext_ed25519_public_keys(keystore.as_bytes());
+    let all_pubkeys = rtm
+        .call("rtm_ext_ed25519_public_keys", &keystore.encode())
+        .decode_vec();
     assert_eq!(all_pubkeys.len(), 65);
 
     println!("Public key 1: {}", hex::encode(pubkey1));
