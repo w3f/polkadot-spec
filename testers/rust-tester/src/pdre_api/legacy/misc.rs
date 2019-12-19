@@ -1,50 +1,61 @@
 use crate::pdre_api::ParsedInput;
-use super::utils::MiscApi;
+use super::utils::{Runtime, Decoder};
+use parity_scale_codec::Encode;
 
 pub fn test_chain_id() {
-    let mut api = MiscApi::new();
+    let mut rtm = Runtime::new();
 
-    let _res = api.rtm_ext_chain_id();
+    let _res = rtm
+        .call("rtm_ext_chain_id", &[])
+        .decode_u64();
     // TODO...
 }
 
 pub fn test_is_validator() {
-    let mut api = MiscApi::new();
+    let mut rtm = Runtime::new();
 
-    let _res = api.rtm_ext_is_validator();
+    let _res = rtm
+        .call("rtm_ext_is_validator", &[])
+        .decode_u32();
     // TODO...
 }
 
 pub fn test_submit_transaction(_input: ParsedInput) {
-    let mut api = MiscApi::new();
+    let mut rtm = Runtime::new();
 
-    let msg_data = [];
+    let msg_data: &[u8] = &[];
 
-    let _res = api.rtm_ext_submit_transaction(&msg_data);
+    let _res = rtm
+        .call("rtm_ext_submit_transaction", &msg_data.encode())
+        .decode_u32();
     // TODO...
 }
 
 pub fn test_timestamp() {
-    let mut api = MiscApi::new();
+    let mut rtm = Runtime::new();
 
-    let _res = api.rtm_ext_timestamp();
+    let _res = rtm
+        .call("rtm_ext_timestamp", &[])
+        .decode_u64();
     // TODO...
 }
 
 pub fn test_sleep_until(_input: ParsedInput) {
-    let mut api = MiscApi::new();
+    let mut rtm = Runtime::new();
 
     let deadline = 0;
 
-    let _res = api.rtm_ext_sleep_until(deadline);
+    let _res = rtm
+        .call("rtm_ext_sleep_until", &deadline.encode());
     // TODO...
 }
 
 pub fn test_random_seed() {
-    let mut api = MiscApi::new();
+    let mut rtm = Runtime::new();
 
-    let seed_data = [];
+    let seed_data: &[u8] = &[];
 
-    let _res = api.rtm_ext_random_seed(&seed_data);
+    let _res = rtm
+        .call("rtm_ext_random_seed", &seed_data.encode());
     // TODO...
 }
