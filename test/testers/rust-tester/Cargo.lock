@@ -1232,6 +1232,7 @@ dependencies = [
  "serde_yaml",
  "sp-core",
  "sp-externalities",
+ "sp-io",
  "sp-offchain",
  "sp-state-machine",
  "trie-db 0.15.0",

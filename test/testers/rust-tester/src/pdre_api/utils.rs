@@ -1,6 +1,6 @@
 use parity_scale_codec::Decode;
 use sc_executor::{call_in_wasm, WasmExecutionMethod};
-use sp_offchain::testing::TestOffchainExt;
+use sp_core::offchain::testing::TestOffchainExt;
 use sp_core::{Blake2Hasher, {testing::KeyStore}, {traits::KeystoreExt}, {offchain::OffchainExt}};
 use sp_state_machine::TestExternalities as CoreTestExternalities;
 use clap::Values;
@@ -58,7 +58,7 @@ impl Runtime {
     }
     pub fn call(&mut self, method: &str, data: &[u8]) -> Vec<u8> {
 		let mut extext = self.ext.ext();
-        call_in_wasm(method, data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
+        call_in_wasm::<_, sp_io::SubstrateHostFunctions>(method, data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
     }
 }
 
@@ -96,29 +96,5 @@ impl Decoder for Vec<u8> {
     fn decode_u64(&self) -> u64 {
         u64::decode(&mut self.as_slice())
             .expect("Failed to decode SCALE encoding")
-    }
-}
-
-struct CallWasm<'a> {
-    ext: &'a mut TestExternalities<Blake2Hasher>,
-    blob: &'a [u8],
-    method: &'a str,
-    //create_param: Box<FnOnce(&mut dyn FnMut(&[u8]) -> Result<u32, Error>) -> Result<Vec<RuntimeValue>, Error>>,
-}
-
-impl<'a> CallWasm<'a> {
-    fn new(ext: &'a mut TestExternalities<Blake2Hasher>, blob: &'a [u8], method: &'a str) -> Self {
-        CallWasm {
-            ext: ext,
-            blob: blob,
-            method: method,
-        }
-    }
-    /// Calls the final Wasm Runtime function (this method does not get used directly)
-    fn call(&mut self, scaled_data: &[u8]) -> Vec<u8>
-    {
-		let mut extext = self.ext.ext();
-
-        call_in_wasm(self.method, scaled_data, WasmExecutionMethod::Interpreted, &mut extext, self.blob, 8).unwrap()
     }
 }
