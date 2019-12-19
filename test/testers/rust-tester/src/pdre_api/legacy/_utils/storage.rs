@@ -6,9 +6,9 @@
 use super::{CallWasm, get_wasm_blob, Decoder};
 
 use parity_scale_codec::Encode;
-use substrate_offchain::testing::TestOffchainExt;
-use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
-use substrate_state_machine::TestExternalities as CoreTestExternalities;
+use sp_offchain::testing::TestOffchainExt;
+use sp_core::{Blake2Hasher, {offchain::OffchainExt}};
+use sp_state_machine::TestExternalities as CoreTestExternalities;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 

@@ -24,9 +24,9 @@ extern crate base64;
 
 // For PDRE API
 extern crate hex;
-extern crate substrate_executor;
-extern crate substrate_primitives;
-extern crate substrate_state_machine;
+extern crate sc_executor;
+extern crate sp_core;
+extern crate sp_state_machine;
 
 use clap::{App};
 

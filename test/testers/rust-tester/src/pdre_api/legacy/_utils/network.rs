@@ -8,9 +8,9 @@ use super::{CallWasm, get_wasm_blob, Decoder};
 use parity_scale_codec::Encode;
 
 use parking_lot::RwLock;
-use substrate_offchain::testing::{PendingRequest, State, TestOffchainExt};
-use substrate_primitives::{Blake2Hasher, {offchain::OffchainExt}};
-use substrate_state_machine::TestExternalities as CoreTestExternalities;
+use sp_offchain::testing::{PendingRequest, State, TestOffchainExt};
+use sp_core::{Blake2Hasher, {offchain::OffchainExt}};
+use sp_state_machine::TestExternalities as CoreTestExternalities;
 
 use std::sync::Arc;
 

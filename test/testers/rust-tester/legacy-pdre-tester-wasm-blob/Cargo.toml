@@ -6,7 +6,7 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-substrate-primitives = { git = "https://github.com/paritytech/substrate", default-features = false }
+sp-core = { git = "https://github.com/paritytech/substrate", default-features = false }
 parity-scale-codec={path = "../../../../implementations/rust/parity-codec"}
 
 

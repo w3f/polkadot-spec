@@ -5,10 +5,10 @@ mod storage;
 mod misc;
 
 use parity_scale_codec::Decode;
-use substrate_executor::{call_in_wasm, WasmExecutionMethod};
-use substrate_offchain::testing::TestOffchainExt;
-use substrate_primitives::{Blake2Hasher, {testing::KeyStore}, {traits::KeystoreExt}, {offchain::OffchainExt}};
-use substrate_state_machine::TestExternalities as CoreTestExternalities;
+use sc_executor::{call_in_wasm, WasmExecutionMethod};
+use sp_offchain::testing::TestOffchainExt;
+use sp_core::{Blake2Hasher, {testing::KeyStore}, {traits::KeystoreExt}, {offchain::OffchainExt}};
+use sp_state_machine::TestExternalities as CoreTestExternalities;
 use clap::Values;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
