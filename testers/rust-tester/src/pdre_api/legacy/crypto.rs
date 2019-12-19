@@ -58,11 +58,13 @@ pub fn test_twox_64(input: ParsedInput) {
 
 // Input: data
 pub fn test_twox_128(input: ParsedInput) {
-    let mut api = CryptoApi::new();
+    let mut rtm = Runtime::new();
 
     let data = input.get(0);
 
-    let output = api.rtm_ext_twox_128(data);
+    let output = rtm
+        .call("rtm_ext_twox_128", &data.encode())
+        .decode_vec();
     assert_eq!(twox_128(data), output.as_slice());
 
     println!("{}", hex::encode(output));
