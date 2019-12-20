@@ -58,7 +58,7 @@ impl Runtime {
     }
     pub fn call(&mut self, method: &str, data: &[u8]) -> Vec<u8> {
 		let mut extext = self.ext.ext();
-        call_in_wasm::<_, sp_io::SubstrateHostFunctions>(method, data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
+        call_in_wasm::<_, (sp_io::SubstrateHostFunctions, sc_executor::deprecated_host_interface::SubstrateExternals)>(method, data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
     }
 }
 

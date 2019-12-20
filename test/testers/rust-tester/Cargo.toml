@@ -29,12 +29,12 @@ trie-root = {path = "../../../implementations/rust/trie/trie-root"}
 # PDRE API
 wasmi = "0.5.1"
 parking_lot = "0.9.0"
-sp-core = { git = "https://github.com/paritytech/substrate", default-features = false }
-sp-io = { git = "https://github.com/paritytech/substrate", default-features = false }
-sp-externalities = { git = "https://github.com/paritytech/substrate"}
-sc-executor = { git = "https://github.com/paritytech/substrate"}
-sp-state-machine = { git = "https://github.com/paritytech/substrate"}
-sp-offchain = { git = "https://github.com/paritytech/substrate" }
+sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, rev = "605f5c1" }
+sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, rev = "605f5c1" }
+sp-externalities = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
+sc-executor = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
+sp-state-machine = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
+sp-offchain = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
 
 # Wasm Blob
 pdre-tester-wasm-blob = { package = "pdre-tester-wasm-blob", path = "./pdre-tester-wasm-blob" }
