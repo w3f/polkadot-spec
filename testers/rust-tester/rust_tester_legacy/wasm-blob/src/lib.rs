@@ -226,13 +226,13 @@ wasm_export_functions! {
         api_output.to_vec()
     }
 
-	fn rtm_ext_twox_128(input: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_twox_128(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 16] = [0; 16];
         unsafe {
-		    ext_twox_128(input.as_slice().as_ptr(), input.len() as u32, api_output.as_mut_ptr());
+            ext_twox_128(input.as_slice().as_ptr(), input.len() as u32, api_output.as_mut_ptr());
         }
         api_output.to_vec()
-	}
+    }
 
     fn rtm_ext_twox_256(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 32] = [0; 32];
@@ -249,7 +249,7 @@ wasm_export_functions! {
         }
         api_output.to_vec()
     }
-    
+
     fn rtm_ext_blake2_256(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 32] = [0; 32];
         unsafe {
@@ -257,7 +257,7 @@ wasm_export_functions! {
         }
         api_output.to_vec()
     }
-    
+
     fn rtm_ext_keccak_256(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 32] = [0; 32];
         unsafe {
@@ -965,14 +965,7 @@ pub extern "C" fn rtm_ext_sandbox_memory_set(
     val_ptr: *const u8,
     val_len: u32,
 ) -> u32 {
-    unsafe {
-        ext_sandbox_memory_set(
-            memory_idx,
-            offset,
-            val_ptr,
-            val_len
-        )
-    }
+    unsafe { ext_sandbox_memory_set(memory_idx, offset, val_ptr, val_len) }
 }
 
 // TODO: Implement this

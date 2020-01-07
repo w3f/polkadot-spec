@@ -1,12 +1,12 @@
 mod child_storage;
 mod crypto;
+mod misc;
 mod network;
 mod storage;
-mod misc;
 mod utils;
 
-use utils::ParsedInput;
 use clap::ArgMatches;
+use utils::ParsedInput;
 
 pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
     if let Some(func) = subcmd_matches.value_of("function") {
@@ -16,7 +16,9 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             // test crypto functions
             "test_blake2_128" => crypto::test_blake2_128(input),
             "test_blake2_256" => crypto::test_blake2_256(input),
-            "test_blake2_256_enumerated_trie_root" => crypto::test_blake2_256_enumerated_trie_root(input),
+            "test_blake2_256_enumerated_trie_root" => {
+                crypto::test_blake2_256_enumerated_trie_root(input)
+            }
             "test_ed25519" => crypto::test_ed25519(input),
             "test_keccak_256" => crypto::test_keccak_256(input),
             "test_sr25519" => crypto::test_sr25519(input),
@@ -37,7 +39,9 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "test_storage_root" => storage::test_storage_root(input),
             // TODO: Not fully implemented/tested
             "test_storage_changes_root" => storage::test_storage_changes_root(input),
-            "test_local_storage_compare_and_set" => storage::test_local_storage_compare_and_set(input),
+            "test_local_storage_compare_and_set" => {
+                storage::test_local_storage_compare_and_set(input)
+            }
             //
             // test child storage functions
             "test_clear_child_prefix" => child_storage::test_clear_child_prefix(input),

@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{ParsedInput, Runtime, Decoder};
+use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
@@ -15,7 +15,10 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child1, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child1, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, [0u8; 0]);
 
@@ -24,7 +27,10 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child1, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child1, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, value);
 
@@ -32,7 +38,10 @@ pub fn test_set_get_child_storage(input: ParsedInput) {
 
     // Get invalid key from invalid child
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child2, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child2, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, [0; 0]);
 }
@@ -45,18 +54,24 @@ pub fn test_get_child_storage_into(input: ParsedInput) {
     let child2 = input.get(1);
     let key = input.get(2);
     let value = input.get(3);
-    let offset = std::str::from_utf8(input.get(4)).unwrap().parse::<usize>().unwrap();
+    let offset = std::str::from_utf8(input.get(4))
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
 
     // Prepare for comparison, set the min required length
     let empty = if offset > value.len() {
-        vec![0u8;0]
+        vec![0u8; 0]
     } else {
         vec![0; value.len() - offset]
     };
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_get_child_storage_into", &(child1, key, &empty, offset as u32).encode())
+        .call(
+            "rtm_ext_get_child_storage_into",
+            &(child1, key, &empty, offset as u32).encode(),
+        )
         .decode_vec();
     assert_eq!(res, empty);
 
@@ -65,10 +80,13 @@ pub fn test_get_child_storage_into(input: ParsedInput) {
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_get_child_storage_into", &(child1, key, &empty, offset as u32).encode())
+        .call(
+            "rtm_ext_get_child_storage_into",
+            &(child1, key, &empty, offset as u32).encode(),
+        )
         .decode_vec();
     if offset > value.len() {
-        assert_eq!(*res.as_slice(), [0u8;0]);
+        assert_eq!(*res.as_slice(), [0u8; 0]);
     } else {
         assert_eq!(*res.as_slice(), value[(offset as usize)..]);
     };
@@ -77,7 +95,10 @@ pub fn test_get_child_storage_into(input: ParsedInput) {
 
     // Get invalid key from invalid child
     let res = rtm
-        .call("rtm_ext_get_child_storage_into", &(child2, key, &empty, offset as u32).encode())
+        .call(
+            "rtm_ext_get_child_storage_into",
+            &(child2, key, &empty, offset as u32).encode(),
+        )
         .decode_vec();
     assert_eq!(res, empty);
 }
@@ -92,20 +113,26 @@ pub fn test_exists_child_storage(input: ParsedInput) {
     let value = input.get(3);
 
     // Check invalid key
-    let res = rtm.call("rtm_ext_exists_child_storage", &(child1, key).encode()).decode_u32();
+    let res = rtm
+        .call("rtm_ext_exists_child_storage", &(child1, key).encode())
+        .decode_u32();
     assert_eq!(res, 0);
 
     // Set key/value
     let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key, value).encode());
 
     // Check valid key
-    let res = rtm.call("rtm_ext_exists_child_storage", &(child1, key).encode()).decode_u32();
+    let res = rtm
+        .call("rtm_ext_exists_child_storage", &(child1, key).encode())
+        .decode_u32();
     assert_eq!(res, 1);
 
     println!("true");
 
     // Check invalid key from invalid child
-    let res = rtm.call("rtm_ext_exists_child_storage", &(child2, key).encode()).decode_u32();
+    let res = rtm
+        .call("rtm_ext_exists_child_storage", &(child2, key).encode())
+        .decode_u32();
     assert_eq!(res, 0);
 }
 
@@ -124,12 +151,18 @@ pub fn test_clear_child_storage(input: ParsedInput) {
 
     // Get valid keys
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child1, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child1, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, value);
 
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child2, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child2, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, value);
 
@@ -138,13 +171,19 @@ pub fn test_clear_child_storage(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child1, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child1, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, [0; 0]);
 
     // Get valid key from other child
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child2, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child2, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, value);
 }
@@ -162,27 +201,48 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
     let value2 = input.get(6);
 
     // Set keys/values for each child
-    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key1, value1).encode());
-    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key2, value2).encode());
-    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key1, value1).encode());
-    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key2, value2).encode());
+    let _ = rtm.call(
+        "rtm_ext_set_child_storage",
+        &(child1, key1, value1).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_set_child_storage",
+        &(child1, key2, value2).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_set_child_storage",
+        &(child2, key1, value1).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_set_child_storage",
+        &(child2, key2, value2).encode(),
+    );
 
     // Clear keys with specified prefix
     let _ = rtm.call("rtm_ext_clear_child_prefix", &(child2, prefix).encode());
 
     // Check deletions (only keys from `child2` are got deleted)
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child1, key1).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child1, key1).encode(),
+        )
         .decode_vec();
     assert_eq!(res, value1);
 
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child1, key2).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child1, key2).encode(),
+        )
         .decode_vec();
     assert_eq!(res, value2);
 
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child2, key1).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child2, key1).encode(),
+        )
         .decode_vec();
     if key1.starts_with(prefix) {
         assert_eq!(res, [0; 0]);
@@ -193,7 +253,10 @@ pub fn test_clear_child_prefix(input: ParsedInput) {
     }
 
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child2, key2).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child2, key2).encode(),
+        )
         .decode_vec();
     if key2.starts_with(prefix) {
         assert_eq!(res, [0; 0]);
@@ -222,13 +285,19 @@ pub fn test_kill_child_storage(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child1, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child1, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, [0; 0]);
 
     // Get valid key from other child
     let res = rtm
-        .call("rtm_ext_get_allocated_child_storage", &(child2, key).encode())
+        .call(
+            "rtm_ext_get_allocated_child_storage",
+            &(child2, key).encode(),
+        )
         .decode_vec();
     assert_eq!(res, value);
 }
@@ -244,11 +313,20 @@ pub fn test_child_storage_root(input: ParsedInput) {
     let key2 = input.get(4);
     let value2 = input.get(5);
 
-    let _ = rtm.call("rtm_ext_set_child_storage", &(child1, key1, value1).encode());
+    let _ = rtm.call(
+        "rtm_ext_set_child_storage",
+        &(child1, key1, value1).encode(),
+    );
 
     // Test multiple key/value pairs
-    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key1, value1).encode());
-    let _ = rtm.call("rtm_ext_set_child_storage", &(child2, key2, value2).encode());
+    let _ = rtm.call(
+        "rtm_ext_set_child_storage",
+        &(child2, key1, value1).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_set_child_storage",
+        &(child2, key2, value2).encode(),
+    );
 
     let child_root1 = rtm
         .call("rtm_ext_child_storage_root", &child1.encode())

@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{ParsedInput, Runtime, Decoder};
+use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 fn str<'a>(input: &'a [u8]) -> &'a str {
@@ -16,7 +16,7 @@ pub fn test_set_get_storage(input: ParsedInput) {
     let res = rtm
         .call("rtm_ext_get_allocated_storage", &key.encode())
         .decode_vec();
-    assert_eq!(res, [0u8;0]);
+    assert_eq!(res, [0u8; 0]);
 
     // Set key/value
     let _ = rtm.call("rtm_ext_set_storage", &(key, value).encode());
@@ -36,18 +36,24 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
 
     let key = input.get(0);
     let value = input.get(1);
-    let offset = std::str::from_utf8(input.get(2)).unwrap().parse::<usize>().unwrap();
+    let offset = std::str::from_utf8(input.get(2))
+        .unwrap()
+        .parse::<usize>()
+        .unwrap();
 
     // Prepare for comparison, set the min required length
     let empty = if offset > value.len() {
-        vec![0u8;0]
+        vec![0u8; 0]
     } else {
         vec![0; value.len() - offset]
     };
 
     // Invalid access
     let res = rtm
-        .call("rtm_ext_get_storage_into", &(key, &empty, offset as u32).encode())
+        .call(
+            "rtm_ext_get_storage_into",
+            &(key, &empty, offset as u32).encode(),
+        )
         .decode_vec();
     assert_eq!(res, empty);
 
@@ -56,10 +62,13 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
 
     // Get key with offset
     let res = rtm
-        .call("rtm_ext_get_storage_into", &(key, &empty, offset as u32).encode())
+        .call(
+            "rtm_ext_get_storage_into",
+            &(key, &empty, offset as u32).encode(),
+        )
         .decode_vec();
     if offset > value.len() {
-        assert_eq!(*res.as_slice(), [0u8;0]);
+        assert_eq!(*res.as_slice(), [0u8; 0]);
     } else {
         assert_eq!(*res.as_slice(), value[(offset as usize)..]);
     };
@@ -82,7 +91,6 @@ pub fn test_exists_storage(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_set_storage", &(key, value).encode());
-
 
     // Check valid key
     let res = rtm
@@ -116,7 +124,7 @@ pub fn test_clear_storage(input: ParsedInput) {
     let res = rtm
         .call("rtm_ext_get_allocated_storage", &key.encode())
         .decode_vec();
-    assert_eq!(res, [0u8;0]);
+    assert_eq!(res, [0u8; 0]);
 }
 
 // Input: prefix, key1, value1, key2, value2
@@ -141,7 +149,7 @@ pub fn test_clear_prefix(input: ParsedInput) {
         .call("rtm_ext_get_allocated_storage", &key1.encode())
         .decode_vec();
     if key1.starts_with(prefix) {
-        assert_eq!(res, [0u8;0]);
+        assert_eq!(res, [0u8; 0]);
         println!("Key `{}` was deleted", str(key1));
     } else {
         assert_eq!(res, value1);
@@ -152,7 +160,7 @@ pub fn test_clear_prefix(input: ParsedInput) {
         .call("rtm_ext_get_allocated_storage", &key2.encode())
         .decode_vec();
     if key2.starts_with(prefix) {
-        assert_eq!(res, [0u8;0]);
+        assert_eq!(res, [0u8; 0]);
         println!("Key `{}` was deleted", str(key2));
     } else {
         assert_eq!(res, value2);
@@ -163,8 +171,7 @@ pub fn test_clear_prefix(input: ParsedInput) {
 pub fn test_allocate_storage() {
     let mut rtm = Runtime::new();
 
-    let address = rtm
-        .call("rtm_ext_malloc", &(44 as u32).encode());
+    let address = rtm.call("rtm_ext_malloc", &(44 as u32).encode());
 
     // TODO...
 
@@ -183,9 +190,7 @@ pub fn test_storage_root(input: ParsedInput) {
     let _ = rtm.call("rtm_ext_set_storage", &(key1, value1).encode());
     let _ = rtm.call("rtm_ext_set_storage", &(key2, value2).encode());
 
-    let root = rtm
-        .call("rtm_ext_storage_root", &[])
-        .decode_vec();
+    let root = rtm.call("rtm_ext_storage_root", &[]).decode_vec();
 
     println!("{}", hex::encode(root));
 }
@@ -213,11 +218,10 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
     let res = rtm
         .call("rtm_ext_local_storage_get", &(1, key).encode())
         .decode_vec();
-    assert_eq!(res, [0u8;0]);
+    assert_eq!(res, [0u8; 0]);
 
     // Test valid persistant storage
-    let _ = rtm
-        .call("rtm_ext_local_storage_set", &(1, key, value).encode());
+    let _ = rtm.call("rtm_ext_local_storage_set", &(1, key, value).encode());
 
     let res = rtm
         .call("rtm_ext_local_storage_get", &(1, key).encode())
@@ -230,11 +234,10 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
     let res = rtm
         .call("rtm_ext_local_storage_get", &(2, key).encode())
         .decode_vec();
-    assert_eq!(res, [0u8;0]);
+    assert_eq!(res, [0u8; 0]);
 
     // Test valid local storage
-    let _ = rtm
-        .call("rtm_ext_local_storage_set", &(2, key, value).encode());
+    let _ = rtm.call("rtm_ext_local_storage_set", &(2, key, value).encode());
     let res = rtm
         .call("rtm_ext_local_storage_get", &(2, key).encode())
         .decode_vec();
@@ -251,20 +254,18 @@ pub fn test_set_get_local_storage(input: ParsedInput) {
     let key2 = "somekey2".as_bytes();
     let value2 = "somevalue2".as_bytes();
 
-    let _ = rtm
-        .call("rtm_ext_local_storage_set", &(1, key1, value1).encode());
-    let _ = rtm
-        .call("rtm_ext_local_storage_set", &(2, key2, value2).encode());
+    let _ = rtm.call("rtm_ext_local_storage_set", &(1, key1, value1).encode());
+    let _ = rtm.call("rtm_ext_local_storage_set", &(2, key2, value2).encode());
 
     let res = rtm
         .call("rtm_ext_local_storage_get", &(1, key2).encode())
         .decode_vec();
-    assert_eq!(res, [0u8;0]);
+    assert_eq!(res, [0u8; 0]);
 
     let res = rtm
         .call("rtm_ext_local_storage_get", &(2, key1).encode())
         .decode_vec();
-    assert_eq!(res, [0u8;0]);
+    assert_eq!(res, [0u8; 0]);
 }
 
 // Input: key, old_value, new_value
@@ -277,7 +278,10 @@ pub fn test_local_storage_compare_and_set(input: ParsedInput) {
 
     // Test invalid key
     let res = rtm
-        .call("rtm_ext_local_storage_compare_and_set", &(1, key, old_value, new_value).encode())
+        .call(
+            "rtm_ext_local_storage_compare_and_set",
+            &(1, key, old_value, new_value).encode(),
+        )
         .decode_u32();
 
     assert_eq!(res, 1);
@@ -286,14 +290,20 @@ pub fn test_local_storage_compare_and_set(input: ParsedInput) {
 
     // Test invalid value
     let res = rtm
-        .call("rtm_ext_local_storage_compare_and_set", &(1, key, new_value, new_value).encode())
+        .call(
+            "rtm_ext_local_storage_compare_and_set",
+            &(1, key, new_value, new_value).encode(),
+        )
         .decode_u32();
 
     assert_eq!(res, 1);
 
     // Test valid value
     let res = rtm
-        .call("rtm_ext_local_storage_compare_and_set", &(1, key, old_value, new_value).encode())
+        .call(
+            "rtm_ext_local_storage_compare_and_set",
+            &(1, key, old_value, new_value).encode(),
+        )
         .decode_u32();
 
     assert_eq!(res, 0);
@@ -317,13 +327,19 @@ pub fn test_local_storage_compare_and_set(input: ParsedInput) {
     let _ = rtm.call("rtm_ext_local_storage_set", &(2, key2, value2).encode());
 
     let res = rtm
-        .call("rtm_ext_local_storage_compare_and_set", &(1, key2, value1, new_value).encode())
+        .call(
+            "rtm_ext_local_storage_compare_and_set",
+            &(1, key2, value1, new_value).encode(),
+        )
         .decode_u32();
 
     assert_eq!(res, 1);
 
     let res = rtm
-        .call("rtm_ext_local_storage_compare_and_set", &(2, key1, value2, new_value).encode())
+        .call(
+            "rtm_ext_local_storage_compare_and_set",
+            &(2, key1, value2, new_value).encode(),
+        )
         .decode_u32();
 
     assert_eq!(res, 1);

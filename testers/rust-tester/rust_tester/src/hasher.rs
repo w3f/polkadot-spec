@@ -16,35 +16,35 @@
 
 //! Substrate Blake2b Hasher implementation
 
-use trie_root::Hasher;
-use hash256_std_hasher::Hash256StdHasher;
 use crate::hash::H256;
+use hash256_std_hasher::Hash256StdHasher;
+use trie_root::Hasher;
 
 pub mod blake2 {
-	use super::{Hasher, Hash256StdHasher, H256};
+    use super::{Hash256StdHasher, Hasher, H256};
 
     /// Do a Blake2 256-bit hash and place result in `dest`.
     pub fn blake2_256_into(data: &[u8], dest: &mut [u8; 32]) {
-	    dest.copy_from_slice(blake2_rfc::blake2b::blake2b(32, &[], data).as_bytes());
+        dest.copy_from_slice(blake2_rfc::blake2b::blake2b(32, &[], data).as_bytes());
     }
 
     /// Do a Blake2 256-bit hash and return result.
     pub fn blake2_256(data: &[u8]) -> [u8; 32] {
-	    let mut r = [0; 32];
-	    blake2_256_into(data, &mut r);
-	    r
+        let mut r = [0; 32];
+        blake2_256_into(data, &mut r);
+        r
     }
 
-	/// Concrete implementation of Hasher using Blake2b 256-bit hashes
-	#[derive(Debug)]
-	pub struct Blake2Hasher;
+    /// Concrete implementation of Hasher using Blake2b 256-bit hashes
+    #[derive(Debug)]
+    pub struct Blake2Hasher;
 
-	impl Hasher for Blake2Hasher {
-		type Out = H256;
-		type StdHasher = Hash256StdHasher;
-		const LENGTH: usize = 32;
-		fn hash(x: &[u8]) -> Self::Out {
-			blake2_256(x).into()
-		}
-	}
+    impl Hasher for Blake2Hasher {
+        type Out = H256;
+        type StdHasher = Hash256StdHasher;
+        const LENGTH: usize = 32;
+        fn hash(x: &[u8]) -> Self::Out {
+            blake2_256(x).into()
+        }
+    }
 }
