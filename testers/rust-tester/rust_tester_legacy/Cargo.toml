@@ -18,6 +18,14 @@ primitive-types = { version = "0.2", default-features = false, features = ["code
 hash256-std-hasher = { version = "0.12", default-features = false }
 blake2-rfc = "*"
 
+#trie 
+reference-trie = { path = "../../../../implementations/rust/trie/test-support/reference-trie" }
+keccak-hasher = { path = "../../../../implementations/rust/trie/test-support/keccak-hasher" }
+memory-db = { path = "../../../../implementations/rust/trie/memory-db" }
+hash-db = { path = "../../../../implementations/rust/trie/hash-db" }
+trie-db = { path = "../../../../implementations/rust/trie/trie-db" }
+trie-root = {path = "../../../../implementations/rust/trie/trie-root"}
+
 # PDRE API
 wasmi = "0.5.1"
 parking_lot = "0.9.0"
