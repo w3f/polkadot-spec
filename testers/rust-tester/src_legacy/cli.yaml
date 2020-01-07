@@ -1,0 +1,24 @@
+name: "Polkadot RE CLI tester"
+version: "0.2"
+author: Web3 Technologies Foundation
+about: "CLI tester for the legacy (Kusama-only) Polkadot RE"
+args:
+    - verbose:
+        short: v
+        multiple: true
+        help: Sets the level of verbosity
+
+subcommands:
+    - pdre-api:
+        about: runtime environment API related tests 
+        args:
+          - function:
+              long: function  
+              takes_value: true
+              value_name: FUNCTION
+              requires: input
+          - input:
+              long: input
+              takes_value: true
+              use_delimiter: true
+              value_name: TEST_DATA

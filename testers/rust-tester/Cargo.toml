@@ -43,3 +43,7 @@ legacy-tester-wasm-blob = { package = "legacy-pdre-tester-wasm-blob", path = "./
 [[bin]]
 name = "rust_tester"
 path = "src/main.rs"
+
+[[bin]]
+name = "rust_tester_legacy"
+path = "src_legacy/main.rs"
