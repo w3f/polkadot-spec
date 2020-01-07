@@ -20,7 +20,6 @@ pub fn test_blake2_256(input: ParsedInput) {
     let data = input.get(0);
 
     let output = rtm.call("rtm_ext_blake2_256", &data.encode()).decode_vec();
-
     println!("{}", hex::encode(output));
 }
 
