@@ -1,3 +1,5 @@
+#![allow(dead_code)]
+#![allow(unused_imports)]
 use std::slice;
 
 use sp_core::wasm_export_functions;
