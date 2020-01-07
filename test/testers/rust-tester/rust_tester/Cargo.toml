@@ -1,0 +1,44 @@
+[package]
+name = "rust-tester"
+version = "0.1.0"
+authors = ["Skalman <skalman@riseup.net>"]
+edition = "2018"
+#build = "build.rs"
+
+[dependencies]
+base64 = "*"
+clap = {version = "~2.27.0", features = ["yaml"]}
+data-encoding = "*"
+hex = "*"
+parity-scale-codec={path = "../../../../implementations/rust/parity-codec"}
+serde_yaml="*"
+
+# importing blake2s hasher for the trie test
+primitive-types = { version = "0.2", default-features = false, features = ["codec"] }
+hash256-std-hasher = { version = "0.12", default-features = false }
+blake2-rfc = "*"
+
+#trie 
+reference-trie = { path = "../../../../implementations/rust/trie/test-support/reference-trie" }
+keccak-hasher = { path = "../../../../implementations/rust/trie/test-support/keccak-hasher" }
+memory-db = { path = "../../../../implementations/rust/trie/memory-db" }
+hash-db = { path = "../../../../implementations/rust/trie/hash-db" }
+trie-db = { path = "../../../../implementations/rust/trie/trie-db" }
+trie-root = {path = "../../../../implementations/rust/trie/trie-root"}
+
+# PDRE API
+wasmi = "0.5.1"
+parking_lot = "0.9.0"
+sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, rev = "605f5c1" }
+sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, rev = "605f5c1" }
+sp-externalities = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
+sc-executor = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
+sp-state-machine = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
+sp-offchain = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
+
+# Wasm Blob
+wasm-blob = { package = "wasm-blob", path = "./wasm-blob" }
+
+[[bin]]
+name = "rust_tester"
+path = "src/main.rs"

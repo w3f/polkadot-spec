@@ -172,7 +172,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "pdre-tester-wasm-blob"
+name = "wasm-blob"
 version = "0.1.0"
 dependencies = [
  "parity-scale-codec 1.0.6",
