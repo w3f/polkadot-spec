@@ -4,6 +4,7 @@ use parity_scale_codec::Encode;
 fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
 }
+
 // Input: child1, child2, key, value
 pub fn test_set_get_child_storage(input: ParsedInput) {
     let mut rtm = Runtime::new();
