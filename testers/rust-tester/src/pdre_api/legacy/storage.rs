@@ -47,7 +47,7 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
 
     // Invalid access
     let res = rtm
-        .call("rtm_ext_get_storage_into",&(key, &empty, offset as u32).encode())
+        .call("rtm_ext_get_storage_into", &(key, &empty, offset as u32).encode())
         .decode_vec();
     assert_eq!(res, empty);
 
@@ -56,7 +56,7 @@ pub fn test_set_get_storage_into(input: ParsedInput) {
 
     // Get key with offset
     let res = rtm
-        .call("rtm_ext_get_storage_into",&(key, &empty, offset as u32).encode())
+        .call("rtm_ext_get_storage_into", &(key, &empty, offset as u32).encode())
         .decode_vec();
     if offset > value.len() {
         assert_eq!(*res.as_slice(), [0u8;0]);
