@@ -69,7 +69,7 @@ fn get_wasm_blob() -> Vec<u8> {
     
     let mut f =
     // for `run_tests.sh` in root directory
-    File::open("build/test/testers/rust-tester/x86_64-unknown-linux-gnu/debug/wbuild/legacy-wasm-blob/legacy_pdre_tester_wasm_blob.compact.wasm")
+    File::open("build/test/testers/rust-tester/x86_64-unknown-linux-gnu/debug/wbuild/wasm-blob/wasm_blob.compact.wasm")
     // for `cargo` inside rust-tester directory
     //File::open("target/debug/wbuild/legacy-wasm-blob/legacy_pdre_tester_wasm_blob.compact.wasm")
         .expect("Failed to open wasm blob in target");
