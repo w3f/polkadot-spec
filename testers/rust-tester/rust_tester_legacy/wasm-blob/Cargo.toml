@@ -1,5 +1,5 @@
 [package]
-name = "legacy-pdre-tester-wasm-blob"
+name = "wasm-blob-legacy"
 version = "0.1.0"
 authors = ["Web3 Foundations <hello@web3.foundation>"]
 edition = "2018"
@@ -7,7 +7,7 @@ build = "build.rs"
 
 [dependencies]
 sp-core = { git = "https://github.com/paritytech/substrate", default-features = false }
-parity-scale-codec = { path = "../../../../implementations/rust/parity-codec", default-features = false }
+parity-scale-codec = { path = "../../../../../implementations/rust/parity-codec", default-features = false }
 
 [build-dependencies]
 substrate-wasm-builder-runner = { package = "substrate-wasm-builder-runner", git = "https://github.com/paritytech/substrate" }
