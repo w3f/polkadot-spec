@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{ParsedInput, Runtime, Decoder};
+use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 use sp_core::hashing::{twox_128, twox_256, twox_64};
@@ -9,9 +9,7 @@ pub fn test_blake2_128(input: ParsedInput) {
 
     let data = input.get(0);
 
-    let output = rtm
-        .call("rtm_ext_blake2_128", &data.encode())
-        .decode_vec();
+    let output = rtm.call("rtm_ext_blake2_128", &data.encode()).decode_vec();
     println!("{}", hex::encode(output));
 }
 
@@ -20,10 +18,8 @@ pub fn test_blake2_256(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let data = input.get(0);
- 
-    let output = rtm
-        .call("rtm_ext_blake2_256", &data.encode())
-        .decode_vec();
+
+    let output = rtm.call("rtm_ext_blake2_256", &data.encode()).decode_vec();
 
     println!("{}", hex::encode(output));
 }
@@ -36,7 +32,10 @@ pub fn test_blake2_256_enumerated_trie_root(input: ParsedInput) {
     let lens_data = vec![value1.len() as u32, value2.len() as u32];
 
     let res = rtm
-        .call("rtm_ext_blake2_256_enumerated_trie_root", &([value1, value2].concat(), lens_data).encode())
+        .call(
+            "rtm_ext_blake2_256_enumerated_trie_root",
+            &([value1, value2].concat(), lens_data).encode(),
+        )
         .decode_vec();
     println!("{}", hex::encode(res));
 }
@@ -47,9 +46,7 @@ pub fn test_twox_64(input: ParsedInput) {
 
     let data = input.get(0);
 
-    let output = rtm
-        .call("rtm_ext_twox_64", &data.encode())
-        .decode_vec();
+    let output = rtm.call("rtm_ext_twox_64", &data.encode()).decode_vec();
     assert_eq!(twox_64(data), output.as_slice());
 
     println!("{}", hex::encode(output));
@@ -61,9 +58,7 @@ pub fn test_twox_128(input: ParsedInput) {
 
     let data = input.get(0);
 
-    let output = rtm
-        .call("rtm_ext_twox_128", &data.encode())
-        .decode_vec();
+    let output = rtm.call("rtm_ext_twox_128", &data.encode()).decode_vec();
     assert_eq!(twox_128(data), output.as_slice());
 
     println!("{}", hex::encode(output));
@@ -75,9 +70,7 @@ pub fn test_twox_256(input: ParsedInput) {
 
     let data = input.get(0);
 
-    let output = rtm
-        .call("rtm_ext_twox_256", &data.encode())
-        .decode_vec();
+    let output = rtm.call("rtm_ext_twox_256", &data.encode()).decode_vec();
     assert_eq!(twox_256(data), output.as_slice());
 
     println!("{}", hex::encode(output));
@@ -89,9 +82,7 @@ pub fn test_keccak_256(input: ParsedInput) {
 
     let data = input.get(0);
 
-    let output = rtm
-        .call("rtm_ext_keccak_256", &data.encode())
-        .decode_vec();
+    let output = rtm.call("rtm_ext_keccak_256", &data.encode()).decode_vec();
     println!("{}", hex::encode(output));
 }
 
@@ -109,12 +100,18 @@ pub fn test_ed25519(input: ParsedInput) {
 
     // Sign a message
     let signature = rtm
-        .call("rtm_ext_ed25519_sign", &(&keystore, &pubkey1, &data).encode())
+        .call(
+            "rtm_ext_ed25519_sign",
+            &(&keystore, &pubkey1, &data).encode(),
+        )
         .decode_vec();
 
     // Verify message
     let verify = rtm
-        .call("rtm_ext_ed25519_verify", &(&data, &signature, &pubkey1).encode())
+        .call(
+            "rtm_ext_ed25519_verify",
+            &(&data, &signature, &pubkey1).encode(),
+        )
         .decode_u32();
     assert_eq!(verify, 0);
 
@@ -155,11 +152,17 @@ pub fn test_sr25519(input: ParsedInput) {
 
     // Sign a message
     let signature = rtm
-        .call("rtm_ext_sr25519_sign", &(&keystore, &pubkey1, &data).encode())
+        .call(
+            "rtm_ext_sr25519_sign",
+            &(&keystore, &pubkey1, &data).encode(),
+        )
         .decode_vec();
 
     let verify = rtm
-        .call("rtm_ext_sr25519_verify", &(&data, &signature, &pubkey1).encode())
+        .call(
+            "rtm_ext_sr25519_verify",
+            &(&data, &signature, &pubkey1).encode(),
+        )
         .decode_u32();
     assert_eq!(verify, 0);
 
@@ -195,7 +198,10 @@ pub fn test_secp256k1_ecdsa_recover(input: ParsedInput) {
     let expected = hex::decode(input.get(2)).expect("Failed hex decoding of input");
 
     let recovered = rtm
-        .call("rtm_ext_secp256k1_ecdsa_recover", &(&msg_data, &sig_data).encode())
+        .call(
+            "rtm_ext_secp256k1_ecdsa_recover",
+            &(&msg_data, &sig_data).encode(),
+        )
         .decode_vec();
 
     assert_eq!(expected, recovered.as_slice());

@@ -15,23 +15,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Polkadot RE Test Suite.  If not, see <https://www.gnu.org/licenses/>.
 
+extern crate base64;
 ///This file is an interface to run Parity implementation of SCALE codec.
-
 extern crate clap;
 extern crate data_encoding;
-extern crate base64;
 
+use clap::ArgMatches;
 use parity_scale_codec::Encode;
-use clap::{ArgMatches};
 
 fn encode(matches: &ArgMatches) {
     let scale_encoded_value = matches.value_of("input").unwrap().encode();
-    println!("encoded {}: {:x?}", matches.value_of("input").unwrap(), &scale_encoded_value);
+    println!(
+        "encoded {}: {:x?}",
+        matches.value_of("input").unwrap(),
+        &scale_encoded_value
+    );
 }
 
 pub fn process_scale_codec_command(subcmd_matches: &ArgMatches) {
     if subcmd_matches.is_present("encode") {
-            encode(subcmd_matches);
+        encode(subcmd_matches);
     }
 }
-

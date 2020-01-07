@@ -19,8 +19,8 @@
 
 #[macro_use]
 extern crate clap;
-extern crate data_encoding;
 extern crate base64;
+extern crate data_encoding;
 
 // For PDRE API
 extern crate hex;
@@ -28,7 +28,7 @@ extern crate sc_executor;
 extern crate sp_core;
 extern crate sp_state_machine;
 
-use clap::{App};
+use clap::App;
 
 mod pdre_api;
 

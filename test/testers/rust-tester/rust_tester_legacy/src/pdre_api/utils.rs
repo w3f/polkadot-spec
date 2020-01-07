@@ -1,9 +1,9 @@
+use clap::Values;
 use parity_scale_codec::Decode;
 use sc_executor::{call_in_wasm, WasmExecutionMethod};
 use sp_core::offchain::testing::TestOffchainExt;
-use sp_core::{Blake2Hasher, {testing::KeyStore}, {traits::KeystoreExt}, {offchain::OffchainExt}};
+use sp_core::{offchain::OffchainExt, testing::KeyStore, traits::KeystoreExt, Blake2Hasher};
 use sp_state_machine::TestExternalities as CoreTestExternalities;
-use clap::Values;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 
@@ -57,8 +57,22 @@ impl Runtime {
         }
     }
     pub fn call(&mut self, method: &str, data: &[u8]) -> Vec<u8> {
-		let mut extext = self.ext.ext();
-        call_in_wasm::<_, (sp_io::SubstrateHostFunctions, sc_executor::deprecated_host_interface::SubstrateExternals)>(method, data, WasmExecutionMethod::Interpreted, &mut extext, &self.blob, 8).unwrap()
+        let mut extext = self.ext.ext();
+        call_in_wasm::<
+            _,
+            (
+                sp_io::SubstrateHostFunctions,
+                sc_executor::deprecated_host_interface::SubstrateExternals,
+            ),
+        >(
+            method,
+            data,
+            WasmExecutionMethod::Interpreted,
+            &mut extext,
+            &self.blob,
+            8,
+        )
+        .unwrap()
     }
 }
 
@@ -66,14 +80,15 @@ impl Runtime {
 fn get_wasm_blob() -> Vec<u8> {
     use std::fs::File;
     use std::io::prelude::*;
-    
+
     let mut f =
     // for `run_tests.sh` in root directory
     File::open("build/test/testers/rust-tester/x86_64-unknown-linux-gnu/debug/wbuild/wasm-blob-legacy/wasm_blob_legacy.compact.wasm")
     // for `cargo` inside rust-tester directory
     //File::open("target/debug/wbuild/wasm-blob-legacy/legacy_pdre_tester_wasm_blob.compact.wasm")
         .expect("Failed to open wasm blob in target");
-    let mut buffer = Vec::new(); f.read_to_end(&mut buffer)
+    let mut buffer = Vec::new();
+    f.read_to_end(&mut buffer)
         .expect("Failed to load wasm blob into memory");
     buffer
 }
@@ -86,15 +101,12 @@ pub trait Decoder {
 
 impl Decoder for Vec<u8> {
     fn decode_vec(&self) -> Vec<u8> {
-        Vec::<u8>::decode(&mut self.as_slice())
-            .expect("Failed to decode SCALE encoding")
+        Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
     fn decode_u32(&self) -> u32 {
-        u32::decode(&mut self.as_slice())
-            .expect("Failed to decode SCALE encoding")
+        u32::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
     fn decode_u64(&self) -> u64 {
-        u64::decode(&mut self.as_slice())
-            .expect("Failed to decode SCALE encoding")
+        u64::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
 }
