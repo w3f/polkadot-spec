@@ -428,9 +428,9 @@ dependencies = [
 
 [[package]]
 name = "getrandom"
-version = "0.1.13"
+version = "0.1.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e7db7ca94ed4cd01190ceee0d8a8052f08a247aa1b469a7f68c6a3b71afcf407"
+checksum = "7abc8dd8451921606d809ba32e95b6111925cd2906060d2dcc29c070220503eb"
 dependencies = [
  "cfg-if",
  "libc",
@@ -1248,11 +1248,15 @@ dependencies = [
  "blake2-rfc",
  "clap",
  "data-encoding",
+ "hash-db 0.15.0",
  "hash256-std-hasher 0.12.4",
  "hex",
+ "keccak-hasher",
+ "memory-db 0.15.0",
  "parity-scale-codec 1.0.6",
  "parking_lot 0.9.0",
  "primitive-types 0.2.4",
+ "reference-trie",
  "sc-executor",
  "serde_yaml",
  "sp-core 2.0.0 (git+https://github.com/paritytech/substrate?rev=605f5c1)",
@@ -1260,6 +1264,8 @@ dependencies = [
  "sp-io",
  "sp-offchain",
  "sp-state-machine",
+ "trie-db 0.15.0",
+ "trie-root 0.15.0",
  "wasm-blob-legacy",
  "wasmi 0.5.1",
 ]
@@ -1477,7 +1483,7 @@ dependencies = [
 [[package]]
 name = "sp-core"
 version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 dependencies = [
  "base58",
  "blake2-rfc",
@@ -1555,7 +1561,7 @@ dependencies = [
 [[package]]
 name = "sp-debug-derive"
 version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -1575,7 +1581,7 @@ dependencies = [
 [[package]]
 name = "sp-externalities"
 version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 dependencies = [
  "environmental",
  "sp-std 2.0.0 (git+https://github.com/paritytech/substrate)",
@@ -1661,7 +1667,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime-interface"
 version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 dependencies = [
  "environmental",
  "parity-scale-codec 1.1.2",
@@ -1691,7 +1697,7 @@ dependencies = [
 [[package]]
 name = "sp-runtime-interface-proc-macro"
 version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 dependencies = [
  "Inflector",
  "proc-macro-crate",
@@ -1743,7 +1749,7 @@ dependencies = [
 [[package]]
 name = "sp-std"
 version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 
 [[package]]
 name = "sp-std"
@@ -1753,7 +1759,7 @@ source = "git+https://github.com/paritytech/substrate?rev=605f5c1#605f5c1b89616d
 [[package]]
 name = "sp-storage"
 version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 dependencies = [
  "impl-serde 0.2.3",
  "serde",
@@ -1801,7 +1807,7 @@ dependencies = [
 [[package]]
 name = "sp-wasm-interface"
 version = "2.0.0"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 dependencies = [
  "impl-trait-for-tuples",
  "wasmi 0.6.2",
@@ -1849,7 +1855,7 @@ dependencies = [
 [[package]]
 name = "substrate-wasm-builder-runner"
 version = "1.0.4"
-source = "git+https://github.com/paritytech/substrate#ddb309ae7c70e5e51a60879af18819cf28be4a32"
+source = "git+https://github.com/paritytech/substrate#9178b420532b0d130cde8c22b6aa99e630b2db58"
 
 [[package]]
 name = "subtle"
@@ -2044,9 +2050,9 @@ checksum = "05c78687fb1a80548ae3250346c3db86a80a7cdd77bda190189f2d0a0987c81a"
 
 [[package]]
 name = "wasi"
-version = "0.7.0"
+version = "0.9.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b89c3ce4ce14bdc6fb6beaf9ec7928ca331de5df7e5ea278375642a2f478570d"
+checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
 
 [[package]]
 name = "wasm-blob"
