@@ -2821,11 +2821,11 @@
       </state>
 
       <\state>
-        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|initialze_block>>,Head<around*|(|<rsub|>B|)>|)>>
+        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_initialize_block>>,Head<around*|(|<rsub|>B|)>|)>>
       </state>
 
       <\state>
-        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|inherent_extrinsics>>,<text|<name|Block-Inherents-Data>>|)>><END>
+        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_inherent_extrinsics>>,<text|<name|Block-Inherents-Data>>|)>><END>
       </state>
 
       <\state>
@@ -2835,7 +2835,7 @@
       </state>
 
       <\state>
-        <math|><name|<math|R\<leftarrow\>>Call-Runtime-Entry><math|<around*|(|<text|<verbatim|apply_extrinsic>>,E|)>><END>
+        <math|><name|<math|R\<leftarrow\>>Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_apply_extrinsic>>,E|)>><END>
       </state>
 
       <\state>
@@ -2850,7 +2850,7 @@
       </state>
 
       <\state>
-        <math|R\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|apply_extrinsics>>,E|)>>
+        <math|R\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_apply_extrinsics>>,E|)>>
       </state>
 
       <\state>
@@ -2864,7 +2864,7 @@
       </state>
 
       <\state>
-        <math|Head<around*|(|B|)>\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|finalize_block>>,B|)>><END>
+        <math|Head<around*|(|B|)>\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_finalize_block>>,B|)>><END>
       </state>
     </algorithmic>
   </algorithm>
