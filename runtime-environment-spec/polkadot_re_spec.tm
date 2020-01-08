@@ -5676,7 +5676,9 @@
 
   <subsection|<verbatim|Core_initialize_block>>
 
-  Starts the execution of a particular block.
+  Starts the execution of a particular block. This function also gets called
+  during block production as defined in algorithm
+  <reference|algo-build-block>.
 
   \;
 
