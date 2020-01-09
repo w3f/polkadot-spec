@@ -1,6 +1,6 @@
 <TeXmacs|1.99.11>
 
-<style|<tuple|tmbook|std-latex|algorithmacs-style>>
+<style|<tuple|tmbook|std-latex|algorithmacs-style|/home/anon/.TeXmacs/packages/algorithmacs-style.ts>>
 
 <\body>
   <\hide-preamble>
@@ -5656,7 +5656,8 @@
 
   Executes a full block by internally calling to
   <verbatim|Core_initialize_block>, <verbatim|Core_inherent_extrinsics>,
-  <verbatim|Core_apply_extrinsics> and <verbatim|Core_finalize_block>. This
+  <verbatim|Core_apply_extrinsics> and <verbatim|Core_finalize_block>, as
+  described in algorithm <reference|algo-build-block>. Using a single call
   avoids unnecessary overhead when communicating between the Polkadot RE and
   Runtime. Additionally, some integrity checks are executed such as
   validating if the parent hash is correct and that the transaction root
@@ -5664,8 +5665,9 @@
 
   \;
 
-  This function is used when a fully complete block is available that is not
-  currently being built on, such as received blocks from other peers.
+  This function should be called when a fully complete block is available
+  that is not actively being built on, such as blocks received from other
+  peers.
 
   \;
 
