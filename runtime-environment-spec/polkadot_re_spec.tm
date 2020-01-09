@@ -5654,20 +5654,20 @@
 
   <subsection|<verbatim|Core_execute_block>>
 
-  Executes a full block by internally calling to
-  <verbatim|Core_initialize_block>, <verbatim|Core_inherent_extrinsics>,
-  <verbatim|Core_apply_extrinsics> and <verbatim|Core_finalize_block>, as
-  described in algorithm <reference|algo-build-block>. Using a single call
-  avoids unnecessary overhead when communicating between the Polkadot RE and
-  Runtime. Additionally, some integrity checks are executed such as
-  validating if the parent hash is correct and that the transaction root
-  represents the transactions.
+  Executes a full block as described in algorithm
+  <reference|algo-build-block>. Additionally, some integrity checks are
+  executed such as validating if the parent hash is correct and that the
+  transaction root represents the transactions. This function should be
+  called when a fully complete block is available that is not actively being
+  built on, such as blocks received from other peers.
 
   \;
 
-  This function should be called when a fully complete block is available
-  that is not actively being built on, such as blocks received from other
-  peers.
+  This function internally calls <verbatim|Core_initialize_block>,
+  <verbatim|Core_inherent_extrinsics>, <verbatim|Core_apply_extrinsics> and
+  <verbatim|Core_finalize_block>. Therefore using a single call avoids
+  unnecessary overhead when communicating between the Polkadot RE and the
+  Runtime.
 
   \;
 
