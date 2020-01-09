@@ -5686,8 +5686,8 @@
 
   <\itemize>
     <item>The block header of the new block as defined in
-    <reference|defn-block-header>. The values <math|H<rsub|r>>,
-    <math|H<rsub|e>><verbatim|> and <math|H<rsub|d>> are left empty.
+    <reference|defn-block-header>. The values <strong|<math|H<rsub|r>>>,
+    <strong|<math|H<rsub|e>>> and <strong|<math|H<rsub|d>>> are left empty.
   </itemize>
 
   \;
