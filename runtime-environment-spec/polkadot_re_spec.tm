@@ -5664,10 +5664,11 @@
   \;
 
   This function internally calls <verbatim|Core_initialize_block>,
-  <verbatim|Core_inherent_extrinsics>, <verbatim|Core_apply_extrinsics> and
-  <verbatim|Core_finalize_block>. Therefore using a single call avoids
-  unnecessary overhead when communicating between the Polkadot RE and the
-  Runtime.
+  <verbatim|BlockBuilder_inherent_extrinsics>,
+  <verbatim|BlockBuilder_apply_extrinsics> and
+  <verbatim|BlockBuilder_finalize_block>. Therefore using a single call
+  avoids unnecessary overhead when communicating between the Polkadot RE and
+  the Runtime.
 
   \;
 
