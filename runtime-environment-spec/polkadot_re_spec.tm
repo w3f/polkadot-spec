@@ -5654,8 +5654,18 @@
 
   <subsection|<verbatim|Core_execute_block>>
 
-  This entry is responsible for executing all extrinsics in the block and
-  reporting back if the block was successfully executed.
+  Executes a full block by internally calling to
+  <verbatim|Core_initialize_block>, <verbatim|Core_inherent_extrinsics>,
+  <verbatim|Core_apply_extrinsics> and <verbatim|Core_finalize_block>. This
+  avoids unnecessary overhead when communicating between the Polkadot RE and
+  Runtime. Additionally, some integrity checks are executed such as
+  validating if the parent hash is correct and that the transaction root
+  represents the transactions.
+
+  \;
+
+  This function is used when a fully complete block is available that is not
+  currently being built on, such as received blocks from other peers.
 
   \;
 
@@ -5676,9 +5686,8 @@
 
   <subsection|<verbatim|Core_initialize_block>>
 
-  Starts the execution of a particular block. This function also gets called
-  during block production as defined in algorithm
-  <reference|algo-build-block>.
+  Sets up the environment required for building blocks as described in
+  algorithm <reference|algo-build-block>.
 
   \;
 
