@@ -1658,12 +1658,13 @@
   a <em|transaction queue><index|transaction queue> defined as follows:
 
   <\definition>
-    The <strong|Transaction Queue> of a block producer node, formally
-    referred to as <math|TQ> is a data structure which stores the
-    transactions ready to be included in a block sorted according to their
-    priorities. The <strong|Transaction Pool>, formally referred to as
-    <math|TP>, is a hash table in which Polkadot RE keeps the list of all
-    valid transactions not in the transaction queue. \ 
+    <label|defn-transaction-queue>The <strong|Transaction Queue> of a block
+    producer node, formally referred to as <math|TQ> is a data structure
+    which stores the transactions ready to be included in a block sorted
+    according to their priorities (Definition
+    <reference|sect-msg-transactions>). The <strong|Transaction Pool>,
+    formally referred to as <math|TP>, is a hash table in which Polkadot RE
+    keeps the list of all valid transactions not in the transaction queue. \ 
   </definition>
 
   Algorithm <reference|algo-validate-transactions> updates the transaction
@@ -2826,17 +2827,17 @@
       </state>
 
       <\state>
-        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_inherent_extrinsics>>,<text|<name|Block-Inherents-Data>>|)>><END>
+        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_inherent_extrinsics>>,<text|<name|Inherent-Data>>|)>><END>
       </state>
 
       <\state>
-        <\FOR-IN|<math|E>>
-          <name|Inherents-Queue>
+        <\FOR-IN|<math|T>>
+          <name|Transaction-queue>
         </FOR-IN>
       </state>
 
       <\state>
-        <math|><name|<math|R\<leftarrow\>>Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_apply_extrinsic>>,E|)>><END>
+        <math|><name|<math|R\<leftarrow\>>Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_apply_extrinsic>>,T|)>><END>
       </state>
 
       <\state>
@@ -2870,11 +2871,19 @@
     </algorithmic>
   </algorithm>
 
-  <math|Head<around*|(|B|)>> is defined in Definition
-  <reference|defn-block-header>. <name|Block-Inherents-Data>,
-  <name|Inherents-Queue>, <name|Block-Is-Full> and
-  <name|Next-Ready-Extrinsic> are defined in Definition
-  <inactive|<reference|>><todo|Define these entities>
+  <\itemize-minus>
+    <item><math|Head<around*|(|B|)>> is defined in Definition
+    <reference|defn-block-header>.
+
+    <item><name|Call-Runtime> is defined in Definition .
+
+    <item><name|Inherent-Data> is defined in Definition .
+
+    <item><name|Transaction-Queue> is defined in Definition
+    <reference|defn-transaction-queue>.
+
+    <item><name|Block-Is-Full> .
+  </itemize-minus>
 
   <section|Finality><label|sect-finality>
 
@@ -6422,6 +6431,7 @@
     <associate|defn-stash-key|<tuple|A.2|39>>
     <associate|defn-state-machine|<tuple|1.1|7>>
     <associate|defn-stored-value|<tuple|2.1|11>>
+    <associate|defn-transaction-queue|<tuple|3.4|?>>
     <associate|defn-unix-time|<tuple|1.10|9>>
     <associate|defn-varrying-data-type|<tuple|B.3|41>>
     <associate|defn-vote|<tuple|5.14|35>>
