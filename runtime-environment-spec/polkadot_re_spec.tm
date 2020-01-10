@@ -2800,7 +2800,7 @@
 
   AuthorID: The public session key of the block producer
 
-  <subsection|Blocks Building Process><label|sect-block-building>
+  <subsection|Block Building Process><label|sect-block-building>
 
   The blocks building process is triggered by Algorithm
   <reference|algo-block-production> of the consensus engine which runs
@@ -2830,24 +2830,33 @@
       </state>
 
       <\state>
-        <\FOR-IN|<math|T>>
-          <name|Transaction-queue>
-        </FOR-IN>
+        <\WHILE>
+          <strong|not> <name|Block-Is-Full(B)> <strong|and not>
+          <name|End-Of-Slot(s)>
+        </WHILE>
       </state>
 
       <\state>
-        <math|><name|<math|R\<leftarrow\>>Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_apply_extrinsic>>,T|)>>
+        <math|E\<leftarrow\>><name|Next-Ready-Extrinsic()>
+      </state>
+
+      <\state>
+        <math|R\<leftarrow\>><name|Call-Runtime-Entry(><verbatim|BlockBuilder_apply_extrinsics>,<em|E>)
       </state>
 
       <\state>
         <\IF>
-          <name|Block-Is-Full(R)> <strong|or> <name|End-Of-Slot(s)>
+          <name|Ok-Result(R)>
         </IF>
       </state>
 
       <\state>
+        <name|Drop(Ready-Extrinsics-Queue>,<em|E>)<END><END>
+      </state>
+
+      <\state>
         <math|Head<around*|(|B|)>\<leftarrow\>><name|Call-Runtime-Entry(><verbatim|BlockBuilder_finalize_block>,<em|B>)
-        </state>
+      </state>
     </algorithmic>
   </algorithm>
 
@@ -2866,7 +2875,18 @@
     <item><name|Block-Is-Full> indicates that the maximum block size as been
     used.
 
-    <item><name|End-Of-Slot> .
+    <item><name|End-Of-Slot> indicates the end of the BABE slot as defined in
+    Definition X.
+
+    <item><name|Ok-Result> indicates whether the result of
+    BlockBuilder_apply_extrinsics is successfull. The error type of the
+    Runtime function is defined in Definition X.
+
+    <item><name|Ready-Extrinsics-Queue> indicates picking an extrinsics from
+    the extrinsics queue (Definition <reference|defn-transaction-queue>).
+
+    <item><name|Drop> indicates removing the extrinsic from the transaction
+    queue (Definition <reference|defn-transaction-queue>).
   </itemize-minus>
 
   <section|Finality><label|sect-finality>
