@@ -1,6 +1,6 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
-<style|<tuple|tmbook|std-latex|algorithmacs-style|/home/anon/.TeXmacs/packages/algorithmacs-style.ts>>
+<style|<tuple|tmbook|std-latex|algorithmacs-style|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
 
 <\body>
   <\hide-preamble>
@@ -2249,7 +2249,8 @@
   <reference|sect-network-messages>.
 
   Once the substream is open, the first step is an exchange of a <em|status>
-  message from both sides described in Section <reference|sect-msg-status>.
+  message from both sides described in Section
+  <reference|sect-net-msg-status>.
 
   Communications within this substream include:
 
@@ -5639,7 +5640,7 @@
   format described in Section <reference|sect-runtime-return-value>
   containing the following information:
 
-  \;
+  <verbatim|>
 
   <\with|par-mode|center>
     <small-table|<tabular|<tformat|<cwith|1|7|1|1|cell-halign|l>|<cwith|1|7|1|1|cell-lborder|0ln>|<cwith|1|7|2|2|cell-halign|l>|<cwith|1|7|3|3|cell-halign|l>|<cwith|1|7|3|3|cell-rborder|0ln>|<cwith|1|7|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|7|7|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
@@ -5647,28 +5648,25 @@
     name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|UINT32>|<cell|the
     version of the authorship interface>>|<row|<cell|<verbatim|spec_version>>|<cell|UINT32>|<cell|the
     version of the Runtime specification>>|<row|<cell|<verbatim|impl_version>>|<cell|UINT32>|<cell|the
-    version of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec>|<cell|List
+    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec>|<cell|List
     of supported AP>>>>>|Detail of the version data type returns from runtime
     <verbatim|version> function.>
   </with>
 
   <subsection|<verbatim|Core_execute_block>>
 
-  Executes a full block as described in algorithm
-  <reference|algo-build-block>. Additionally, some integrity checks are
-  executed such as validating if the parent hash is correct and that the
-  transaction root represents the transactions. This function should be
-  called when a fully complete block is available that is not actively being
-  built on, such as blocks received from other peers.
-
-  \;
-
-  This function internally calls <verbatim|Core_initialize_block>,
-  <verbatim|BlockBuilder_inherent_extrinsics>,
+  Executes a full block by executing all exctrinsics includedin it and update
+  the state accordingly. Additionally, some integrity checks are executed
+  such as validating if the parent hash is correct and that the transaction
+  root represents the transactions. Internally this function performs an
+  operation similar to the process described in Algorithm
+  <reference|algo-build-block>, by calling <verbatim|Core_initialize_block>,
   <verbatim|BlockBuilder_apply_extrinsics> and
-  <verbatim|BlockBuilder_finalize_block>. Therefore using a single call
-  avoids unnecessary overhead when communicating between the Polkadot RE and
-  the Runtime.
+  <verbatim|BlockBuilder_finalize_block>.
+
+  This function should be called when a fully complete block is available
+  that is not actively being built on, such as blocks received from other
+  peers.
 
   \;
 
@@ -5689,8 +5687,8 @@
 
   <subsection|<verbatim|Core_initialize_block>>
 
-  Sets up the environment required for building blocks as described in
-  algorithm <reference|algo-build-block>.
+  Sets up the environment required for building a new block as described in
+  Algorithm <reference|algo-build-block>.
 
   \;
 
