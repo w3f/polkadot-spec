@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|algorithmacs-style|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
 
@@ -5655,14 +5655,16 @@
 
   <subsection|<verbatim|Core_execute_block>>
 
-  Executes a full block by executing all exctrinsics includedin it and update
-  the state accordingly. Additionally, some integrity checks are executed
-  such as validating if the parent hash is correct and that the transaction
-  root represents the transactions. Internally this function performs an
-  operation similar to the process described in Algorithm
+  Executes a full block by executing all exctrinsics included in it and
+  update the state accordingly. Additionally, some integrity checks are
+  executed such as validating if the parent hash is correct and that the
+  transaction root represents the transactions. Internally, this function
+  performs an operation similar to the process described in Algorithm
   <reference|algo-build-block>, by calling <verbatim|Core_initialize_block>,
   <verbatim|BlockBuilder_apply_extrinsics> and
   <verbatim|BlockBuilder_finalize_block>.
+
+  \;
 
   This function should be called when a fully complete block is available
   that is not actively being built on, such as blocks received from other
