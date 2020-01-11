@@ -652,7 +652,7 @@
   protocol as a replicated state machine. After defining the basic terms in
   Chapter 1, we proceed to specify the representation of a valid state of the
   Protocol in Chapter <reference|chap-state-spec>. In Chapter
-  <reference|chap-state-transit>, we identify the protocol states, by explain
+  <reference|chap-state-transit>, we identify the protocol states, by explaining
   the Polkadot state transition and discussing the detail based on which
   Polkadot RE interacts with the state transition function, i.e. Runtime.
   Following, we specify the input messages triggering the state transition
@@ -678,7 +678,7 @@
 
     <\itemize>
       <item><math|\<Sigma\>> is the countable set of all possible
-      transactions.
+      transitions.
 
       <item><math|S> is a countable set of all possible states.
 
@@ -6113,7 +6113,7 @@
       2015.<newblock>
 
       <bibitem*|Ste19><label|bib-stewart_grandpa:_2019>Alistair Stewart.
-      <newblock>GRANDPA: A Byzantine Finality Gadgets.
+      <newblock>GRANDPA: A Byzantine Finality Gadget.
       <newblock>2019.<newblock>
 
       <bibitem*|Tec19><label|bib-parity_technologies_substrate_2019>Parity
