@@ -1432,8 +1432,8 @@
 
   <chapter|State Transition><label|chap-state-transit>
 
-  Like any transaction-based transition system, Polkadot state changes via an
-  executing ordered set of instructions. These instructions are known as
+  Like any transaction-based transition system, Polkadot state changes via
+  executing an ordered set of instructions. These instructions are known as
   <em|extrinsics>. In Polkadot, the execution logic of the state-transition
   function is encapsulated in Runtime as defined in Definition
   <reference|defn-state-machine>. Runtime is presented as a Wasm blob in
@@ -1446,10 +1446,10 @@
   process where the extrinsics are submitted, pre-processed and validated by
   Runtime and queued to be applied to the current state.
 
-  Polkadot, likewise most prominent distributed ledger systems that make
+  Polkadot, as with most prominent distributed ledger systems that make
   state replication feasible, journals and batches a series of extrinsics
-  together in a structure knows as a <em|block> before propagating to the
-  other nodes. The specification of the Polkadot block as well the process of
+  together in a structure known as a <em|block> before propagating to the
+  other nodes. The specification of the Polkadot block as well as the process of
   verifying its validity are both explained in Section
   <reference|sect-state-replication>.
 
