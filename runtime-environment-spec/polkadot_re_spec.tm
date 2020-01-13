@@ -2864,7 +2864,8 @@
     <item><math|Head<around*|(|B|)>> is defined in Definition
     <reference|defn-block-header>.
 
-    <item><name|Call-Runtime-Entry> is defined in Definition .
+    <item><name|Call-Runtime-Entry> is defined in Notation
+    <reference|nota-call-into-runtime>.
 
     <item><name|Inherent-Data> is defined in Definition
     <reference|defn-inherent-data>.
@@ -2876,11 +2877,12 @@
     used.
 
     <item><name|End-Of-Slot> indicates the end of the BABE slot as defined in
-    Definition X.
+    Algorithm <reference|algo-slot-time> respectively Definition
+    <reference|defn-epoch-slot>.
 
     <item><name|Ok-Result> indicates whether the result of
-    BlockBuilder_apply_extrinsics is successfull. The error type of the
-    Runtime function is defined in Definition X.
+    <verbatim|BlockBuilder_apply_extrinsics> is successfull. The error type
+    of the Runtime function is defined in Definition X.
 
     <item><name|Ready-Extrinsics-Queue> indicates picking an extrinsics from
     the extrinsics queue (Definition <reference|defn-transaction-queue>).
@@ -6404,7 +6406,6 @@
     <associate|defn-epoch-slot|<tuple|5.3|29>>
     <associate|defn-epoch-subchain|<tuple|5.5|30>>
     <associate|defn-finalized-block|<tuple|5.25|38>>
-    <associate|defn-func-inherent-data|<tuple|3.5|21>>
     <associate|defn-genesis-header|<tuple|C.1|45>>
     <associate|defn-grandpa-completable|<tuple|5.21|36>>
     <associate|defn-grandpa-justification|<tuple|5.23|36>>
@@ -6911,7 +6912,7 @@
       Right <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-78>>
 
-      <with|par-left|<quote|1tab>|5.1.7.<space|2spc>Blocks Building Process
+      <with|par-left|<quote|1tab>|5.1.7.<space|2spc>Block Building Process
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-79>>
 
