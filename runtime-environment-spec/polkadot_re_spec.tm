@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|algorithmacs-style|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
 
@@ -1783,10 +1783,12 @@
   <reference|tabl-inherent-data> lists these inherent data, their
   identifiers, and types.
 
-  <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Type
+  <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Type
   >|<cell|Description>>|<row|<cell|timstap0>|<cell|u64>|<cell|Unix epoch time
   in number of seconds>>|<row|<cell|babeslot>|<cell|u64>|<cell|Babe Slot
-  Number<rsup|<reference|defn-epoch-slot>>>>>>>>
+  Number<rsup|<reference|defn-epoch-slot>>>>|<row|<cell|auraslot>|<cell|u64>|<cell|Aura
+  slot duration>>|<row|<cell|finalnum>|<cell|>|<cell|>>|<row|<cell|uncles00>|<cell|array
+  of block headers>|<cell|>>>>>>
     <label|tabl-inherent-data>List of inherent data
   </big-table>
 
