@@ -1,0 +1,211 @@
+* High level grandpa
+
+#+begin_src plantuml :file grandpa_high_level.png
+participant "cli::cli.rs" as cli 
+participant "cli::service.rs" as cli_service
+participant "client::service::ServiceBuilder" as service_builder
+participant "client::service::NetworkService" as network_service
+participant "finality_granpa::lib.rs" as sr_gf
+participant "finality_granpa::VoterWork" as sr_gf_voter_work
+participant "finality_granpa::Envioronment" as sr_gf_env
+
+autoactivate on
+
+cli -> cli_service ++ : new_full_start
+cli_service -> service_builder ** : new
+return 
+cli -> cli_service ++ : new_full
+cli_service -> service_builder ++ : with_network_protocol
+service_builder -> network_service ** : new
+return
+cli_service -> network_service ++ : spawn_essential_task
+network_service -> sr_gf ++ : run_grandpa_voter 
+sr_gf -> sr_gf_voter_work ** #005500 : new
+sr_gf_voter_work -> sr_gf_env ** : new
+sr_gf -> sr_gf_voter_work ++ : rebuild_voter
+sr_gf_voter_work -> Voter ** : new (last completed round, last finalized block)
+sr_gf_voter_work -> Voter ++ : poll
+return
+#+end_src
+
+#+results:
+[[file:grandpa_high_level.png]]
+
+* grandpa voter
+
+#+begin_src plantuml :file grandpa_voter.png
+autoactivate off
+
+Network -> Voter ++ : poll
+  Voter -> Voter ++ : process_incoming
+  return
+  Voter -> Voter ++ : prune_background_rounds
+  return
+  Voter -> Voter ++ : global_out.poll
+  return
+    Voter -> Voter ++ : process_best_round
+      Voter -> VotingRound ++ : best_round.poll
+        VotingRound -> VotingRound ++ : process_incoming
+          loop for all received messages for this round
+            VotingRound -> VotingRound ++ : handle_vote
+              alt it is a prevote message
+                VotingRound -> Votes ++ : import_prevote
+                return
+              else it is a precommit message
+                VotingRound -> Votes ++ : import_precommit
+                return
+              else it is a primary propose        
+                VotingRound -> Votes ++ : who is the primary voter?
+                return : primary_id
+                alt I am the primary voter
+                  note over VotingRound
+                   set primary block as the 
+                   one proposed in the 
+                   message
+                  end note
+                else I am not the primary
+                 note over VotingRound: do nothing
+                end  
+              end /'message type'/
+            return
+          end /'message loop'/
+        return /'process incoming'/
+
+        alt if last_round_state is not empty
+          note over VotingRound: we can participate in voting process
+
+          VotingRound -> VotingRound ++ : primary_propose
+
+            VotingRound -> RoundState : current_state?
+            alt if this round state is "Start":
+              RoundState -> VotingRound : Start
+              alt if we are primary
+                alt if last round estimate > last round finalized
+                  VotingRound -> Network ++ : send(PrimaryPropose, last round estimate)
+                  return
+                  VotingRound -> RoundState ++ : set State to "Proposed"
+                  return 
+                end
+              end
+            else anything other state 
+              RoundState -> VotingRound : Other states
+              note over VotingRound: do nothing
+            end
+          return
+
+          VotingRound -> VotingRound ++ : prevote
+            VotingRound -> RoundState : current_state?
+            alt state is "Start" or "Proposed"
+              RoundState -> VotingRound : Start or Proposed
+              VotingRound -> Votes  : completable?
+              alt prevote timer is up or votes are completable
+                Votes --> VotingRound  : completable
+                VotingRound --> VotingRound ++ : construct_prevote
+                return
+
+                alt prevote got constructed
+                  VotingRound --> Envioronment ++ : prevoted
+                  return
+                  VotingRound --> Votes ++ : set_prevoted_index
+                  return
+                  VotingRound --> Network ++ : send prevote message
+                  return
+                  VotingRound --> RoundState : set state to "Prevoted"
+                else failed to construct prevote
+                  VotingRound --> RoundState : set state to "None"
+                  VotingRound --> VotingState : set state to "No"
+                end
+              end
+            else anything other state
+              RoundState --> VotingRound  : other states
+                note over VotingRound: do nothing
+            end
+          return
+
+          VotingRound -> VotingRound ++ : precommit
+            VotingRound -> RoundState : current_state?
+
+            alt state is "Prevoted"
+              RoundState -> VotingRound : "Prevoted"
+              VotingRound -> VotingRound ++ : get last round estimate
+              return 
+              note over VotingRound
+                Panic! if last round does not have estimate
+                This means we started this round before last
+                round is completable
+              end note
+
+              VotingRound -> Votes ++ : get prevote_ghost
+              return
+
+              alt prevote_ghost > last round estimate
+                VotingRound --> Votes  : completable?
+
+                alt precommit timer is up or votes are completable
+                  Votes --> VotingRound  : completable
+                  VotingRound --> VotingRound ++ : construct_precommit
+                  return
+                  VotingRound --> Envioronment ++ : precommited
+                  return
+                  VotingRound --> Votes ++ : set_precommited_index
+                  return
+                  VotingRound --> Network ++ : send precommit message
+                  return
+
+                  VotingRound --> RoundState : set state to "Precommited"
+         
+                else failed to construct precommit
+                  note over VotingRound: do nothing
+                end
+              else prevote_ghost > last round estimate
+                note over VotingRound: do nothing
+              end
+            else anything other state
+              RoundState --> VotingRound  : other states
+              note over VotingRound: do nothing
+            end
+          return /' precommit '/
+   
+        else last round state is null
+          note over VotingRound
+            we are just catching up
+            do not participate in voting
+          end note
+        end
+
+        VotingRound -> VotingRound : process_incoming
+          note right
+            processing our own 
+            messages in case we 
+            voted
+          end note
+        
+        VotingRound --> Votes  : completable?
+        alt completable
+          Votes --> VotingRound  : completable
+          alt is last round estimate finalized
+            VotingRound --> Voter : Ready
+            Voter -> VotingRound: precommited?
+            alt current round is Ready and precommited
+              Voter -> Voter ++ : compelete best round 
+              return
+              note over Voter: start next round
+            else voter has not precommited
+              note over Voter: do not start next round
+            end
+          else last round estimate is not finalized
+            VotingRound --> Voter : Not Ready
+            note over Voter: do not start next round
+          end
+        else votes are not completable
+          VotingRound --> Voter : Note Ready
+          note over Voter: do not start next round
+        end
+      return
+  Voter --> Voter
+Voter --> Network
+#+end_src
+
+#+results:
+[[file:grandpa_voter_and_voting_round.png]]
+
