@@ -1787,8 +1787,11 @@
   >|<cell|Description>>|<row|<cell|timstap0>|<cell|u64>|<cell|Unix epoch time
   in number of seconds>>|<row|<cell|babeslot>|<cell|u64>|<cell|Babe Slot
   Number<rsup|<reference|defn-epoch-slot>>>>|<row|<cell|auraslot>|<cell|u64>|<cell|Aura
-  slot duration>>|<row|<cell|finalnum>|<cell|>|<cell|>>|<row|<cell|uncles00>|<cell|array
-  of block headers>|<cell|>>>>>>
+  Slot duration>>|<row|<cell|finalnum>|<cell|compact integer>|<cell|Finality
+  tracker of the header number<math|<rsup|<reference|defn-block-header>>>>>|<row|<cell|uncles00>|<cell|array
+  of block headers<math|<rsup|>>>|<cell|Provides a list of potential uncle
+  block headers<math|<rsup|<reference|defn-block-header>>> for a given
+  block>>>>>>
     <label|tabl-inherent-data>List of inherent data
   </big-table>
 
