@@ -652,16 +652,17 @@
   protocol as a replicated state machine. After defining the basic terms in
   Chapter 1, we proceed to specify the representation of a valid state of the
   Protocol in Chapter <reference|chap-state-spec>. In Chapter
-  <reference|chap-state-transit>, we identify the protocol states, by explaining
-  the Polkadot state transition and discussing the detail based on which
-  Polkadot RE interacts with the state transition function, i.e. Runtime.
-  Following, we specify the input messages triggering the state transition
-  and the system behaviour. In Chapter <reference|chap-consensu>, we specify
-  the consensus protocol, which is responsible for keeping all the replica in
-  the same state. Finally, the initial state of the machine is identified and
-  discussed in Appendix <reference|sect-genesis-block>. A Polkadot RE
-  implementation which conforms with this part of the specification should
-  successfully be able to sync its states with the Polkadot network.
+  <reference|chap-state-transit>, we identify the protocol states, by
+  explaining the Polkadot state transition and discussing the detail based on
+  which Polkadot RE interacts with the state transition function, i.e.
+  Runtime. Following, we specify the input messages triggering the state
+  transition and the system behaviour. In Chapter <reference|chap-consensu>,
+  we specify the consensus protocol, which is responsible for keeping all the
+  replica in the same state. Finally, the initial state of the machine is
+  identified and discussed in Appendix <reference|sect-genesis-block>. A
+  Polkadot RE implementation which conforms with this part of the
+  specification should successfully be able to sync its states with the
+  Polkadot network.
 
   <section|Definitions and Conventions><label|sect-defn-conv>
 
@@ -1783,11 +1784,10 @@
   <reference|tabl-inherent-data> lists these inherent data, their
   identifiers, and types.
 
-  <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Type
+  <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Type
   >|<cell|Description>>|<row|<cell|timstap0>|<cell|u64>|<cell|Unix epoch time
   in number of seconds>>|<row|<cell|babeslot>|<cell|u64>|<cell|Babe Slot
-  Number<rsup|<reference|defn-epoch-slot>>>>|<row|<cell|auraslot>|<cell|u64>|<cell|Aura
-  Slot duration>>|<row|<cell|finalnum>|<cell|compact
+  Number<rsup|<reference|defn-epoch-slot>>>>|<row|<cell|finalnum>|<cell|compact
   integer<math|<rsup|<reference|defn-sc-len-encoding>>>>|<cell|Finality
   tracker of the header number<math|<rsup|<reference|defn-block-header>>>>>|<row|<cell|uncles00>|<cell|array
   of block headers<math|<rsup|>>>|<cell|Provides a list of potential uncle
