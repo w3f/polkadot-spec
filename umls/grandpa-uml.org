@@ -32,6 +32,9 @@ return
 [[file:grandpa_high_level.png]]
 
 * grandpa voter
+  :LOGBOOK:
+  CLOCK: [2020-01-15 Wed 09:38]--[2020-01-15 Wed 10:03] =>  0:25
+  :END:
 
 #+begin_src plantuml :file grandpa_voter.png
 autoactivate off
@@ -100,7 +103,40 @@ Network -> Voter ++ : poll
               VotingRound -> Votes  : completable?
               alt prevote timer is up or votes are completable
                 Votes --> VotingRound  : completable
+
                 VotingRound --> VotingRound ++ : construct_prevote
+                  note over VotingRound: Panic! if last round does not have estimate
+
+                  VotingRound --> VotingRound ++ : compute_anscestor_of_best_block
+                    alt if we do not have primary_block
+                      note over VotingRound : ancester ←  last_round_estimate 
+                    else if we have a primary_block
+                      note over VotingRound: Panic! if there is no last_round_prevote_ghost
+                      alt if primary_block = last_round_prevote_ghost
+                        note over VotingRound : ancester ←  primary_block
+                      else if #primary_block >= #last_round_prevote_ghost
+                        note over VotingRound : ancester ←  last_round_estimate
+                      else if #primary_block < #last_round_prevote_ghost (migh not be a desecndent)
+                        note over VotingRound
+                          if the primary block is in the ancestry of 
+                          prevote ghost we vote for the best chain 
+                          containing "it?".
+                        end note
+                        alt last_round_estimitate <= last_prevote_ghost
+                          note over VotingRound : ancester ← primary_block
+                        else last_round_estimitate is not an ancestor of last_prevote_ghost
+                          note over VotingRound : ancester ← last_round_estimate
+                        end /' primary < pg '/
+                      end /' primary = pg '/ 
+                    end /' no priamyr '/
+                  return 
+
+                  VotingRound -> Environment ++ : best block of best chain containing the anscestor 
+                    note over VotingRound
+                      best block is the greatest block on the longest
+                      chain which can be finalized by current auth set 
+                    end note
+                  return best block
                 return
 
                 alt prevote got constructed
@@ -175,7 +211,7 @@ Network -> Voter ++ : poll
 
         VotingRound -> VotingRound : process_incoming
           note right
-            processing our own 
+nnn            processing our own 
             messages in case we 
             voted
           end note
@@ -207,5 +243,5 @@ Voter --> Network
 #+end_src
 
 #+results:
-[[file:grandpa_voter_and_voting_round.png]]
+[[file:grandpa_voter.png]]
 
