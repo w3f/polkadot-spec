@@ -122,9 +122,12 @@ Network -> Voter ++ : poll
                           prevote ghost we vote for the best chain 
                           containing "it?".
                         end note
-                        alt last_round_estimitate <= last_prevote_ghost
+                        alt last_round_estimitate < primary_block <= last_prevote_ghost 
                           note over VotingRound : ancester ← primary_block
-                        else last_round_estimitate is not an ancestor of last_prevote_ghost
+                        else  primary_block ∉ subChain[last_round_estimitate, last_prevote_ghost]
+                            note over VotingRound : ancester ← last_round_estimate
+                        else last_round_estimitate is not an ancestor of last_prevote_ghost 
+                          note over VotingRound : This only happens if there is a massive equivocation
                           note over VotingRound : ancester ← last_round_estimate
                         end /' primary < pg '/
                       end /' primary = pg '/ 
@@ -211,7 +214,7 @@ Network -> Voter ++ : poll
 
         VotingRound -> VotingRound : process_incoming
           note right
-nnn            processing our own 
+            processing our own 
             messages in case we 
             voted
           end note
