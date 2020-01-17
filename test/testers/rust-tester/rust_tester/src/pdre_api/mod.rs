@@ -13,6 +13,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
         let input: ParsedInput = subcmd_matches.values_of("input").unwrap().into();
 
         match func {
+            "ext_storage_get" => storage::ext_storage_get(input),
             _ => panic!("specified function not available"),
         }
     }
