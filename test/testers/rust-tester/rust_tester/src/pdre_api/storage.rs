@@ -14,20 +14,25 @@ pub fn ext_storage_get(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_storage_get", &key.encode())
-        .decode_vec();
+        .call("rtm_ext_storage_get", &key.encode());
+        //.decode_vec();
     assert_eq!(res, [0u8; 0]);
 
+    /*
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let mut data = vec![];
+    data.extend_from_slice(&key);
+    data.extend_from_slice(&value);
+    let _ = rtm.call("rtm_ext_storage_set", &data);
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_storage_get", &key.encode())
-        .decode_vec();
+        .call("rtm_ext_storage_get", &key.encode());
+        //.decode_vec();
     assert_eq!(res, value);
 
     println!("{}", str(&res));
+    */
 }
 
 // Input: key, value
