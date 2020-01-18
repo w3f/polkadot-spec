@@ -60,10 +60,7 @@ impl Runtime {
         let mut extext = self.ext.ext();
         call_in_wasm::<
             _,
-            (
-                sp_io::SubstrateHostFunctions,
-                sc_executor::deprecated_host_interface::SubstrateExternals,
-            ),
+            sp_io::SubstrateHostFunctions,
         >(
             method,
             data,
