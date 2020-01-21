@@ -5,28 +5,39 @@ use std::slice;
 use sp_core::wasm_export_functions;
 
 extern "C" {
-    fn ext_storage_get_version_1(data: u64) -> u64;
-    fn ext_storage_set_version_1(data: u64) -> u64;
+    fn ext_storage_get_version_1(key: u64) -> u64;
+    fn ext_storage_set_version_1(key: u64, value: u64);
+}
+
+fn from_mem(value: u64) -> Vec<u8> {
+    let ptr = value as u32;
+    let len = value >> 32 as u32;
+    unsafe {
+        std::slice::from_raw_parts(ptr as *mut u8, len as usize).to_vec()
+    }
 }
 
 wasm_export_functions! {
     fn rtm_ext_storage_get(
-        key_data: Vec<u8>,
-    ) -> u64 {
+        key_data: Vec<u8>
+    ) -> Vec<u8> {
+    //) -> u64 {
         unsafe {
-            ext_storage_get_version_1(
+            let value = ext_storage_get_version_1(
 			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
-            )
+            );
+            from_mem(value)
         }
     }
     fn rtm_ext_storage_set(
         key_data: Vec<u8>,
-        value_data: Vec<u8>,
-    ) -> u64 {
+        value_data: Vec<u8>
+    ) {
         unsafe {
-            ext_storage_set_version_1(
+            let _ = ext_storage_set_version_1(
 			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
-            )
+			    (value_data.len() as u64) << 32 | value_data.as_ptr() as u64
+            );
         }
     }
 }
