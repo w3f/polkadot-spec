@@ -23,8 +23,8 @@ pub fn ext_storage_get(input: ParsedInput) {
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_storage_get", &key.encode());
-        //.decode_vec();
+        .call("rtm_ext_storage_get", &key.encode())
+        .decode_vec();
     assert_eq!(res, value);
 
     println!("{}", str(&res));
