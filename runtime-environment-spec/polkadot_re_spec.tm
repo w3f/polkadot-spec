@@ -1,4 +1,4 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <style|<tuple|tmbook|std-latex|algorithmacs-style|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
 
@@ -1415,20 +1415,13 @@
     follows:
 
     <\equation*>
-      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<bbb-B\><rsub|32>>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|2|3|3|cell-halign|l>|<table|<row|<cell|v<rsub|N>>|<cell|>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<less\>32>>|<row|<cell|Blake2b<around|(|v<rsub|N>|)>>|<cell|>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<geqslant\>32>>>>>|\<nobracket\>>>>>>>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<cup\><rsub|i\<rightarrow\>0><rsup|32>\<bbb-B\><rsub|32>>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|2|3|3|cell-halign|l>|<table|<row|<cell|v<rsub|N>>|<cell|>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<less\>32<infix-and>N\<neq\>R>>|<row|<cell|Blake2b<around|(|v<rsub|N>|)>>|<cell|>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<geqslant\>32<infix-or>N=R>>>>>|\<nobracket\>>>>>>>
     </equation*>
 
     Where <math|v<rsub|N>> is the node value of <math|N> defined in
-    Definition <reference|defn-node-value> and
-    <math|0<rsub|32-<around*|\<\|\|\>|v<rsub|N>|\<\|\|\>>>> an all zero byte
-    array of length <math|32-<around*|\|||\|>v<rsub|N><around*|\|||\|>>. The
-    <strong|Merkle hash> of the Trie is defined as:
-
-    <\equation*>
-      Blake2b<around|(|H<around*|(|R|)>|)>
-    </equation*>
-
-    Where <math|R> is the root of the Trie.
+    Definition <reference|defn-node-value> and <math|R> is the root of the
+    Trie. The <strong|Merkle hash> of the Trie is defined to be
+    <math|H<around*|(|R|)>>.
   </definition>
 
   <chapter|State Transition><label|chap-state-transit>
@@ -1447,11 +1440,11 @@
   process where the extrinsics are submitted, pre-processed and validated by
   Runtime and queued to be applied to the current state.
 
-  Polkadot, as with most prominent distributed ledger systems that make
-  state replication feasible, journals and batches a series of extrinsics
-  together in a structure known as a <em|block> before propagating to the
-  other nodes. The specification of the Polkadot block as well as the process of
-  verifying its validity are both explained in Section
+  Polkadot, as with most prominent distributed ledger systems that make state
+  replication feasible, journals and batches a series of extrinsics together
+  in a structure known as a <em|block> before propagating to the other nodes.
+  The specification of the Polkadot block as well as the process of verifying
+  its validity are both explained in Section
   <reference|sect-state-replication>.
 
   <section|Interactions with Runtime><label|sect-entries-into-runtime>
