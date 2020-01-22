@@ -15,16 +15,18 @@ pub fn ext_storage_get(input: ParsedInput) {
     // Get invalid key
     let res = rtm
         .call("rtm_ext_storage_get", &key.encode())
-        .decode_vec();
-    assert_eq!(res, [0]);
+        .decode_option();
+    assert!(res.is_none());
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
 
     // Get valid key
-    let res = rtm
+    let mut res = rtm
         .call("rtm_ext_storage_get", &key.encode())
-        .decode_vec();
+        .decode_option()
+        .unwrap()
+        .decode_val();
     assert_eq!(res, value);
 
     println!("{}", str(&res));

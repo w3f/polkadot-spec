@@ -91,19 +91,28 @@ fn get_wasm_blob() -> Vec<u8> {
 }
 
 pub trait Decoder {
-    fn decode_vec(&self) -> Vec<u8>;
-    fn decode_u32(&self) -> u32;
-    fn decode_u64(&self) -> u64;
+    fn decode_val(&self) -> Vec<u8>;
+    fn decode_option(&self) -> Option<Vec<u8>>;
 }
 
 impl Decoder for Vec<u8> {
-    fn decode_vec(&self) -> Vec<u8> {
+    fn decode_val(&self) -> Vec<u8> {
         Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
-    fn decode_u32(&self) -> u32 {
-        u32::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
-    }
-    fn decode_u64(&self) -> u64 {
-        u64::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
+    fn decode_option(&self) -> Option<Vec<u8>> {
+        let mut option = Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding");
+        match option.get(0).unwrap() {
+            0 => {
+                if option.len() > 1 {
+                    panic!("The None value appends additional data");
+                }
+                None
+            }
+            1 => {
+                option.remove(0);
+                Some(option)
+            },
+            _ => panic!("Not a valid Option value"),
+        }
     }
 }
