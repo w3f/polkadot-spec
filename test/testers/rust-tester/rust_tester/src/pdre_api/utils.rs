@@ -93,6 +93,7 @@ fn get_wasm_blob() -> Vec<u8> {
 pub trait Decoder {
     fn decode_val(&self) -> Vec<u8>;
     fn decode_option(&self) -> Option<Vec<u8>>;
+    fn decode_bool(&self) -> bool;
 }
 
 impl Decoder for Vec<u8> {
@@ -101,18 +102,21 @@ impl Decoder for Vec<u8> {
     }
     fn decode_option(&self) -> Option<Vec<u8>> {
         let mut option = Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding");
-        match option.get(0).unwrap() {
+        match option[0] {
             0 => {
                 if option.len() > 1 {
                     panic!("The None value appends additional data");
                 }
                 None
-            }
+            },
             1 => {
                 option.remove(0);
                 Some(option)
             },
             _ => panic!("Not a valid Option value"),
         }
+    }
+    fn decode_bool(&self) -> bool {
+        bool::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
 }
