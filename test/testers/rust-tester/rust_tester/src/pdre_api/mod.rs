@@ -14,6 +14,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
 
         match func {
             "ext_storage_get" => storage::ext_storage_get(input),
+            "ext_storage_clear" => storage::ext_storage_clear(input),
             _ => panic!("specified function not available"),
         }
     }

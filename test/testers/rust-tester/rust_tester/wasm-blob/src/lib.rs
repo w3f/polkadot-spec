@@ -16,6 +16,7 @@ fn from_mem(value: u64) -> Vec<u8> {
 extern "C" {
     fn ext_storage_get_version_1(key: u64) -> u64;
     fn ext_storage_set_version_1(key: u64, value: u64);
+    fn ext_storage_clear_version_1(key: u64);
 }
 
 wasm_export_functions! {
@@ -37,6 +38,15 @@ wasm_export_functions! {
             let _ = ext_storage_set_version_1(
 			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
 			    (value_data.len() as u64) << 32 | value_data.as_ptr() as u64
+            );
+        }
+    }
+    fn rtm_ext_storage_clear_version_1(
+        key_data: Vec<u8>
+    ) {
+        unsafe {
+            let _ = ext_storage_clear_version_1(
+			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
             );
         }
     }
