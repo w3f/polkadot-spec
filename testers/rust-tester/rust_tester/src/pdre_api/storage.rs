@@ -36,3 +36,24 @@ pub fn ext_storage_get(input: ParsedInput) {
 pub fn ext_storage_set(input: ParsedInput) {
     // TODO
 }
+
+// Input: child key, child definition, child type, key
+pub fn ext_storage_clear(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let key = input.get(0);
+    let value = input.get(1);
+
+    // Set key/value
+    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+
+    // Clear value
+    let _ = rtm.call("rtm_ext_storage_clear_version_1", &key.encode());
+
+    // Get cleared value
+    let res = rtm
+        .call("rtm_ext_storage_get", &key.encode())
+        .decode_option();
+    assert!(res.is_none());
+
+}
