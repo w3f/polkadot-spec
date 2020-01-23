@@ -32,7 +32,29 @@ pub fn ext_storage_get(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
-// Input: key, value
+pub fn ext_storage_read(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let key = input.get(0);
+    let value = input.get(1);
+
+    // Get invalid key
+    let mut res = rtm
+        .call("rtm_ext_storage_read", &(key, 0).encode())
+        .decode_val();
+    assert_eq!(res, vec![0u8; 20]);
+
+    // Set key/value
+    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+
+    // Get valid key
+    let mut res = rtm
+        .call("rtm_ext_storage_read", &(key, 0).encode())
+        .decode_val();
+    println!("{:?}", res);
+    // TODO...
+}
+
 pub fn ext_storage_set(input: ParsedInput) {
     // TODO
 }

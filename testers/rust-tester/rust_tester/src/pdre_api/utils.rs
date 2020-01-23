@@ -105,6 +105,7 @@ impl Decoder for Vec<u8> {
         Vec::<Vec<u8>>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
     fn decode_option(&self) -> Option<Vec<u8>> {
+        println!(">>> {:?}", self);
         let mut option = Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding");
         match option[0] {
             0 => {
