@@ -19,6 +19,7 @@ extern "C" {
     fn ext_storage_clear_version_1(key: u64);
     fn ext_storage_exists_version_1(key: u64) -> i32; // Boolean
     fn ext_storage_clear_prefix_version_1(key: u64);
+    fn ext_storage_root_version_1() -> u64;
 }
 
 wasm_export_functions! {
@@ -68,6 +69,12 @@ wasm_export_functions! {
             let _ = ext_storage_clear_prefix_version_1(
 			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
             );
+        }
+    }
+    fn rtm_ext_storage_root_version_1() -> Vec<u8> {
+        unsafe {
+            let value = ext_storage_root_version_1();
+            from_mem(value)
         }
     }
 }
