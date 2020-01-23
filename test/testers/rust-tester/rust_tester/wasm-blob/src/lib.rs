@@ -30,6 +30,7 @@ extern "C" {
     fn ext_crypto_sr25519_sign_version_1(id: u32, pubkey: u32, msg: u64) -> u64;
     fn ext_crypto_sr25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32;
     fn ext_hashing_keccak_256_version_1(data: u64) -> i32;
+    fn ext_hashing_sha2_256_version_1(data: u64) -> i32;
 }
 
 wasm_export_functions! {
@@ -172,6 +173,14 @@ wasm_export_functions! {
     fn rtm_ext_hashing_keccak_256_version_1(data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_hashing_keccak_256_version_1(
+                (data.len() as u64) << 32 | data.as_ptr() as u64,
+            );
+            std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
+        }
+    }
+    fn rtm_ext_hashing_sha2_256_version_1(data: Vec<u8>) -> Vec<u8> {
+        unsafe {
+            let value = ext_hashing_sha2_256_version_1(
                 (data.len() as u64) << 32 | data.as_ptr() as u64,
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
