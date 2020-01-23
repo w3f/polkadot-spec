@@ -15,6 +15,7 @@ fn from_mem(value: u64) -> Vec<u8> {
 
 extern "C" {
     fn ext_storage_get_version_1(key: u64) -> u64;
+    fn ext_storage_read_version_1(key: u64, out: u64, offset: u32) -> u64;
     fn ext_storage_set_version_1(key: u64, value: u64);
     fn ext_storage_clear_version_1(key: u64);
     fn ext_storage_exists_version_1(key: u64) -> i32;
@@ -48,6 +49,20 @@ wasm_export_functions! {
             );
             from_mem(value)
         }
+    }
+    fn rtm_ext_storage_read(
+        key_data: Vec<u8>,
+        offset: u32
+    ) -> Vec<u8> {
+        let mut buffer = [0u8; 20];
+        unsafe {
+            ext_storage_read_version_1(
+                (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    (buffer.len() as u64) << 32 | buffer.as_ptr() as u64,
+                offset
+            );
+        }
+        buffer.to_vec()
     }
     fn rtm_ext_storage_set(
         key_data: Vec<u8>,
