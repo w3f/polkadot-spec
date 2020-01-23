@@ -31,6 +31,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "ext_hashing_blake2_128" => crypto::ext_hashing_blake2_128_version_1(input),
             "ext_hashing_blake2_256" => crypto::ext_hashing_blake2_256_version_1(input),
             "ext_hashing_twox_256" => crypto::ext_hashing_twox_256_version_1(input),
+            "ext_hashing_twox_128" => crypto::ext_hashing_twox_128_version_1(input),
             _ => panic!("specified function not available"),
         }
     }
