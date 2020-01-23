@@ -1838,20 +1838,23 @@
       <with|font-series|bold|mode|math|H<rsub|p>>.
 
       <item><strong|<samp|number:>> formally indicated as
-      <strong|<math|H<rsub|i>>> is an integer, which represents the index of
-      the current block in the chain. It is equal to the number of the
-      ancestor blocks. The genesis state has number 0.
+      <strong|<math|H<rsub|i>>> is a compact integer as defined in Definition
+      <reference|defn-sc-len-encoding>, which represents the index of the
+      current block in the chain. It is equal to the number of the ancestor
+      blocks. The genesis state has number 0.
 
       <item><strong|<samp|state_root:>> formally indicated as
-      <strong|<math|H<rsub|r>>> is the root of the Merkle trie, whose leaves
+      <strong|<math|H<rsub|r>>> is the 32-byte Blake2b hash (see Section
+      <reference|sect-blake2>) root of the Merkle trie, whose leaves
       implement the storage for the system.
 
       <item><strong|<samp|extrinsics_root:>> is the field which is reserved
       for the Runtime to validate the integrity of the extrinsics composing
-      the block body. For example, it can hold the root hash of the Merkle
-      trie which stores an ordered list of the extrinsics being validated in
-      this block. The <samp|extrinsics_root> is set by the runtime and its
-      value is opaque to Polkadot RE. This element is formally referred to as
+      the block body. It holds the 32-byte Blake2b hash (see Section
+      <reference|sect-blake2>) root of the Merkle trie which stores an
+      ordered list of the extrinsics being validated in this block. The
+      <samp|extrinsics_root> is set by the runtime and its value is opaque to
+      Polkadot RE. This element is formally referred to as
       <strong|<math|H<rsub|e>>>.
 
       <item><strong|<samp|digest:>> this field is used to store any
@@ -3702,8 +3705,8 @@
 
   <\definition>
     <label|defn-sc-len-encoding><strong|SCALE Length Encoding,
-    <math|Enc<rsup|Len><rsub|SC>>> also known as compact encoding of a
-    non-negative integer number <math|n> is defined as follows:
+    <math|Enc<rsup|Len><rsub|SC>>> also known as <strong|compact encoding of
+    a non-negative integer number> <math|n> is defined as follows:
 
     <\equation*>
       <tabular|<tformat|<table|<row|<cell|Enc<rsup|Len><rsub|SC>:>|<cell|\<bbb-N\>\<rightarrow\>\<bbb-B\>>>|<row|<cell|>|<cell|n\<rightarrow\>b\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|l<rsup|\<nosymbol\>><rsub|1>>|<cell|>|<cell|0\<leqslant\>n\<less\>2<rsup|6>>>|<row|<cell|i<rsup|\<nosymbol\>><rsub|1>*i<rsup|\<nosymbol\>><rsub|2>>|<cell|>|<cell|2<rsup|6>\<leqslant\>n\<less\>2<rsup|14>>>|<row|<cell|j<rsup|\<nosymbol\>><rsub|1>*j<rsup|\<nosymbol\>><rsub|2>*j<rsub|3>>|<cell|>|<cell|2<rsup|14>\<leqslant\>n\<less\>2<rsup|30>>>|<row|<cell|k<rsub|1><rsup|\<nosymbol\>>*k<rsub|2><rsup|\<nosymbol\>>*\<ldots\>*k<rsub|m><rsup|\<nosymbol\>>*>|<cell|>|<cell|2<rsup|30>\<leqslant\>n>>>>>|\<nobracket\>>>>>>>
@@ -6158,6 +6161,8 @@
 
     <index+1|transaction queue|<pageref|auto-49>>
   </the-index>
+
+  <verbatim|>
 </body>
 
 <\initial>
