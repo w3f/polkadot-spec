@@ -21,6 +21,7 @@ extern "C" {
     fn ext_storage_clear_prefix_version_1(key: u64);
     fn ext_storage_root_version_1() -> u64;
     fn ext_storage_next_key_version_1(key: u64) -> u64; // Option
+    fn ext_crypto_ed25519_public_keys_version_1(id: u32) -> u64;
 }
 
 wasm_export_functions! {
@@ -82,6 +83,18 @@ wasm_export_functions! {
         unsafe {
             let value = ext_storage_next_key_version_1(
 			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+            );
+            from_mem(value)
+        }
+    }
+    fn rtm_ext_crypto_ed25519_public_keys_version_1(key_data: [u8; 4]) -> Vec<u8> {
+        //let mut array = [0u8; 4];
+        //array.copy_from_slice(&key);
+
+        unsafe {
+            let value = ext_crypto_ed25519_public_keys_version_1(
+                //u32::from_ne_bytes(array)
+			    key_data.as_ptr() as u32,
             );
             from_mem(value)
         }

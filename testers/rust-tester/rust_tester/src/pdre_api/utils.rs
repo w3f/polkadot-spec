@@ -92,6 +92,7 @@ fn get_wasm_blob() -> Vec<u8> {
 
 pub trait Decoder {
     fn decode_val(&self) -> Vec<u8>;
+    fn decode_vec(&self) -> Vec<Vec<u8>>;
     fn decode_option(&self) -> Option<Vec<u8>>;
     fn decode_bool(&self) -> bool;
 }
@@ -99,6 +100,9 @@ pub trait Decoder {
 impl Decoder for Vec<u8> {
     fn decode_val(&self) -> Vec<u8> {
         Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
+    }
+    fn decode_vec(&self) -> Vec<Vec<u8>> {
+        Vec::<Vec<u8>>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
     fn decode_option(&self) -> Option<Vec<u8>> {
         let mut option = Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding");
