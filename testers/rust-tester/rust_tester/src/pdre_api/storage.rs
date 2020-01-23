@@ -144,3 +144,41 @@ pub fn ext_storage_root(input: ParsedInput) {
 
     println!("{}", hex::encode(res));
 }
+
+// TODO
+pub fn ext_storage_next_key(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let key1 = input.get(0);
+    let value1 = input.get(1);
+    let key2 = input.get(2);
+    let value2 = input.get(3);
+    let key3 = input.get(4);
+    let value3 = input.get(5);
+
+    // No next key available
+    let res = rtm
+        .call("rtm_ext_storage_next_key_version_1", &key1.encode())
+        .decode_option();
+    assert!(res.is_none());
+
+    // Set key/value
+    let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
+    // Set key/value
+    let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+
+    // No next key available
+    let res = rtm
+        .call("rtm_ext_storage_next_key_version_1", &key1.encode())
+        .decode_option()
+        .unwrap()
+        .decode_val();
+    assert_eq!(res, key2);
+
+    let res = rtm
+        .call("rtm_ext_storage_next_key_version_1", &key2.encode())
+        .decode_option()
+        .unwrap()
+        .decode_val();
+    assert_eq!(res, key3);
+}
