@@ -18,6 +18,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "ext_storage_exists" => storage::ext_storage_exists(input),
             "ext_storage_clear_prefix" => storage::ext_storage_clear_prefix(input),
             "ext_storage_root" => storage::ext_storage_root(input),
+            "ext_storage_next_key" => storage::ext_storage_next_key(input),
             _ => panic!("specified function not available"),
         }
     }
