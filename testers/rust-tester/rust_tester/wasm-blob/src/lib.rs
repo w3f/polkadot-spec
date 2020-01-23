@@ -34,6 +34,7 @@ extern "C" {
     fn ext_hashing_blake2_128_version_1(data: u64) -> i32;
     fn ext_hashing_blake2_256_version_1(data: u64) -> i32;
     fn ext_hashing_twox_256_version_1(data: u64) -> i32;
+    fn ext_hashing_twox_128_version_1(data: u64) -> i32;
 }
 
 wasm_export_functions! {
@@ -211,6 +212,14 @@ wasm_export_functions! {
                 (data.len() as u64) << 32 | data.as_ptr() as u64,
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
+        }
+    }
+    fn rtm_ext_hashing_twox_128_version_1(data: Vec<u8>) -> Vec<u8> {
+        unsafe {
+            let value = ext_hashing_twox_128_version_1(
+                (data.len() as u64) << 32 | data.as_ptr() as u64,
+            );
+            std::slice::from_raw_parts(value as *mut u8, 16).to_vec()
         }
     }
 }
