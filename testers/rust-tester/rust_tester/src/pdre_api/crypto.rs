@@ -126,3 +126,29 @@ pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
     assert_eq!(verified, true);
     println!("true")
 }
+
+// TODO
+pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
+
+}
+
+pub fn ext_crypto_sr25519_generate_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new_keystore();
+
+    let seed = input.get(0);
+    let seed_opt = if seed.is_empty() {
+        None
+    } else {
+        Some(seed)
+    };
+
+    // Generate a key
+    let res = rtm
+        .call(
+            "rtm_ext_crypto_sr25519_generate_version_1",
+            &(DUMMY.0, seed_opt).encode(),
+        )
+        .decode_val();
+
+    println!("{}", hex::encode(res));
+}

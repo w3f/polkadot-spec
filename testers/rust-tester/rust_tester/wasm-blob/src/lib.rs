@@ -23,6 +23,7 @@ extern "C" {
     fn ext_storage_next_key_version_1(key: u64) -> u64; // Option
     fn ext_crypto_ed25519_public_keys_version_1(id: u32) -> u64;
     fn ext_crypto_ed25519_generate_version_1(id: u32, seed: u64) -> u32;
+    fn ext_crypto_sr25519_generate_version_1(id: u32, seed: u64) -> u32;
     fn ext_crypto_ed25519_sign_version_1(id: u32, pubkey: u32, msg: u64) -> u64;
     fn ext_crypto_ed25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32; // Boolean
 }
@@ -125,6 +126,16 @@ wasm_export_functions! {
                 (msg_data.len() as u64) << 32 | msg_data.as_ptr() as u64,
                 pubkey_data.as_ptr() as u32
             ) as u32
+        }
+    }
+    fn rtm_ext_crypto_sr25519_generate_version_1(id_data: [u8; 4], seed_data: Option<Vec<u8>>) -> Vec<u8> {
+        let seed_data = seed_data.encode();
+        unsafe {
+            let value = ext_crypto_sr25519_generate_version_1(
+			    id_data.as_ptr() as u32,
+                (seed_data.len() as u64) << 32 | seed_data.as_ptr() as u64
+            );
+            std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
     }
 }
