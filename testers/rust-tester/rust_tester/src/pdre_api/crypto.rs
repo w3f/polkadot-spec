@@ -183,3 +183,37 @@ pub fn ext_crypto_sr25519_sign_version_1(input: ParsedInput) {
 
     println!("{}", hex::encode(res));
 }
+
+// TODO
+pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new_keystore();
+
+    let seed = input.get(0);
+    let msg = input.get(1);
+
+    // Generate a key
+    let pubkey = rtm
+        .call(
+            "rtm_ext_crypto_sr25519_generate_version_1",
+            &(DUMMY.0, Some(seed)).encode(),
+        )
+        .decode_val();
+
+    // Sign message
+    let sig = rtm
+        .call(
+            "rtm_ext_crypto_sr25519_sign_version_1",
+            &(DUMMY.0, &pubkey, &msg).encode(),
+        )
+        .decode_val();
+
+    let verified = rtm
+        .call(
+            "rtm_ext_crypto_sr25519_verify_version_1",
+            &(&sig, &msg, &pubkey).encode(),
+        )
+        .decode_bool();
+
+    assert_eq!(verified, true);
+    println!("true")
+}
