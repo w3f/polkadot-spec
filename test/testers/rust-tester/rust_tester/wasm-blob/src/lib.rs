@@ -14,21 +14,22 @@ fn from_mem(value: u64) -> Vec<u8> {
 }
 
 extern "C" {
-    fn ext_storage_get_version_1(key: u64) -> u64; // Option
+    fn ext_storage_get_version_1(key: u64) -> u64;
     fn ext_storage_set_version_1(key: u64, value: u64);
     fn ext_storage_clear_version_1(key: u64);
-    fn ext_storage_exists_version_1(key: u64) -> i32; // Boolean
+    fn ext_storage_exists_version_1(key: u64) -> i32;
     fn ext_storage_clear_prefix_version_1(key: u64);
     fn ext_storage_root_version_1() -> u64;
-    fn ext_storage_next_key_version_1(key: u64) -> u64; // Option
+    fn ext_storage_next_key_version_1(key: u64) -> u64;
     fn ext_crypto_ed25519_public_keys_version_1(id: u32) -> u64;
     fn ext_crypto_ed25519_generate_version_1(id: u32, seed: u64) -> u32;
     fn ext_crypto_ed25519_sign_version_1(id: u32, pubkey: u32, msg: u64) -> u64;
-    fn ext_crypto_ed25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32; // Boolean
+    fn ext_crypto_ed25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32;
     fn ext_crypto_sr25519_public_keys_version_1(id: u32) -> u64;
     fn ext_crypto_sr25519_generate_version_1(id: u32, seed: u64) -> u32;
     fn ext_crypto_sr25519_sign_version_1(id: u32, pubkey: u32, msg: u64) -> u64;
-    fn ext_crypto_sr25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32; // Boolean
+    fn ext_crypto_sr25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32;
+    fn ext_hashing_keccak_256_version_1(data: u64) -> i32;
 }
 
 wasm_export_functions! {
@@ -166,6 +167,14 @@ wasm_export_functions! {
                 (msg_data.len() as u64) << 32 | msg_data.as_ptr() as u64,
                 pubkey_data.as_ptr() as u32
             ) as u32
+        }
+    }
+    fn rtm_ext_hashing_keccak_256_version_1(data: Vec<u8>) -> Vec<u8> {
+        unsafe {
+            let value = ext_hashing_keccak_256_version_1(
+                (data.len() as u64) << 32 | data.as_ptr() as u64,
+            );
+            std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
     }
 }
