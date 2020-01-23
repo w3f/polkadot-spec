@@ -317,3 +317,18 @@ pub fn ext_hashing_twox_128_version_1(input: ParsedInput) {
 
     println!("{}", hex::encode(res));
 }
+
+pub fn ext_hashing_twox_64_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let data = input.get(0);
+
+    let res = rtm
+        .call(
+            "rtm_ext_hashing_twox_64_version_1",
+            &(data).encode(),
+        )
+        .decode_val();
+
+    println!("{}", hex::encode(res));
+}
