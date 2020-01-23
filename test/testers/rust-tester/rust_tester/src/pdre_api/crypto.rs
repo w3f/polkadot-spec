@@ -257,3 +257,18 @@ pub fn ext_hashing_sha2_256_version_1(input: ParsedInput) {
 
     println!("{}", hex::encode(res));
 }
+
+pub fn ext_hashing_blake2_128_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let data = input.get(0);
+
+    let res = rtm
+        .call(
+            "rtm_ext_hashing_blake2_128_version_1",
+            &(data).encode(),
+        )
+        .decode_val();
+
+    println!("{}", hex::encode(res));
+}
