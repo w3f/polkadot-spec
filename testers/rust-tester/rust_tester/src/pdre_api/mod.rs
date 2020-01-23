@@ -26,6 +26,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "ext_crypto_sr25519_generate" => crypto::ext_crypto_sr25519_generate_version_1(input),
             "ext_crypto_sr25519_sign" => crypto::ext_crypto_sr25519_sign_version_1(input),
             "ext_crypto_sr25519_verify" => crypto::ext_crypto_sr25519_verify_version_1(input),
+            "ext_hashing_keccak_256" => crypto::ext_hashing_keccak_256_version_1(input),
             _ => panic!("specified function not available"),
         }
     }

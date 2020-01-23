@@ -217,3 +217,28 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
     assert_eq!(verified, true);
     println!("true")
 }
+
+// TODO
+pub fn ext_crypto_secp256k1_ecdsa_recover_version_1(input: ParsedInput) {
+
+}
+
+// TODO
+pub fn ext_crypto_secp256k1_ecdsa_recover_compressed_version_1(input: ParsedInput) {
+
+}
+
+pub fn ext_hashing_keccak_256_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let data = input.get(0);
+
+    let res = rtm
+        .call(
+            "rtm_ext_hashing_keccak_256_version_1",
+            &(data).encode(),
+        )
+        .decode_val();
+
+    println!("{}", hex::encode(res));
+}
