@@ -25,12 +25,39 @@ pub fn ext_crypto_ed25519_public_keys_version_1() {
 pub fn ext_crypto_ed25519_generate_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();
 
-    let seed = input.get(0).to_vec();
+    let seed = input.get(0);
 
     let res = rtm
         .call(
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
+        )
+        .decode_val();
+
+    println!("{}", hex::encode(res));
+}
+
+// TODO: Spec return type (64byte array)
+// TODO: Spec pubkey parameter (32byte array)
+pub fn ext_crypto_ed25519_sign_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new_keystore();
+
+    let seed = input.get(0);
+    let msg = input.get(1);
+
+    // Generate a key
+    let pubkey = rtm
+        .call(
+            "rtm_ext_crypto_ed25519_generate_version_1",
+            &(DUMMY.0, Some(seed)).encode(),
+        )
+        .decode_val();
+
+    // Sign message
+    let res = rtm
+        .call(
+            "rtm_ext_crypto_ed25519_sign_version_1",
+            &(DUMMY.0, pubkey, msg).encode(),
         )
         .decode_val();
 
