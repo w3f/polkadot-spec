@@ -122,3 +122,25 @@ pub fn ext_storage_clear_prefix(input: ParsedInput) {
         println!("{}", str(&val));
     }
 }
+
+// Input: prefix, key1, value1, key2, value2
+pub fn ext_storage_root(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let key1 = input.get(0);
+    let value1 = input.get(1);
+    let key2 = input.get(2);
+    let value2 = input.get(3);
+
+    // Set key/value
+    let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
+    // Set key/value
+    let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+
+    // Get root
+    let res = rtm
+        .call("rtm_ext_storage_root_version_1", &[])
+        .decode_val();
+
+    println!("{}", hex::encode(res));
+}
