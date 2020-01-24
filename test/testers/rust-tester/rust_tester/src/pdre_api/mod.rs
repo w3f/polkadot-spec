@@ -32,6 +32,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "ext_crypto_ed25519_generate_version_1" => crypto::ext_crypto_ed25519_generate_version_1(input),
             "ext_crypto_ed25519_sign_version_1" => crypto::ext_crypto_ed25519_sign_version_1(input),
             "ext_crypto_ed25519_verify_version_1" => crypto::ext_crypto_ed25519_verify_version_1(input),
+            "ext_crypto_sr25519_public_keys_version_1" => crypto::ext_crypto_sr25519_public_keys_version_1(input),
             "ext_crypto_sr25519_generate_version_1" => crypto::ext_crypto_sr25519_generate_version_1(input),
             "ext_crypto_sr25519_sign_version_1" => crypto::ext_crypto_sr25519_sign_version_1(input),
             "ext_crypto_sr25519_verify_version_1" => crypto::ext_crypto_sr25519_verify_version_1(input),
