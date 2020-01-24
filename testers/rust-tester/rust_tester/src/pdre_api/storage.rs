@@ -37,22 +37,30 @@ pub fn ext_storage_read(input: ParsedInput) {
 
     let key = input.get(0);
     let value = input.get(1);
+    let offset = input.get_u32(2);
+    let buffer_size = input.get_u32(3);
 
     // Get invalid key
     let mut res = rtm
-        .call("rtm_ext_storage_read", &(key, 0).encode())
+        .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
         .decode_val();
-    assert_eq!(res, vec![0u8; 20]);
+    assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
 
     // Get valid key
     let mut res = rtm
-        .call("rtm_ext_storage_read", &(key, 0).encode())
+        .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
         .decode_val();
-    println!("{:?}", res);
-    // TODO...
+    // Verify the return value includes the initial value (in regard to the offset)
+    assert!(res.starts_with(&value[offset as usize ..]));
+    // Verify the remaining values are all zeros
+    assert_eq!(
+        &res[value.len()..],
+        vec![0u8; buffer_size as usize-value.len()].as_slice()
+    );
+    println!("{}", str(&res));
 }
 
 pub fn ext_storage_set(input: ParsedInput) {
