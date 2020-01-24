@@ -249,26 +249,51 @@ pub fn ext_storage_child_exists_version_1(input: ParsedInput) {
 }
 
 // Input: prefix, key1, value1, key2, value2
-pub fn ext_storage_clear_prefix(input: ParsedInput) {
+pub fn ext_storage_child_clear_prefix(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let prefix = input.get(0);
-    let key1 = input.get(1);
-    let value1 = input.get(2);
-    let key2 = input.get(3);
-    let value2 = input.get(4);
+    let child_key = input.get(0);
+    let child_definition = input.get(1);
+    let child_type = input.get_u32(2);
+    let prefix = input.get(3);
+    let key1 = input.get(4);
+    let value1 = input.get(5);
+    let key2 = input.get(6);
+    let value2 = input.get(7);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key1,
+        value1
+    ).encode());
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key2,
+        value2
+    ).encode());
 
     // Clear value
-    let _ = rtm.call("rtm_ext_storage_clear_prefix_version_1", &prefix.encode());
+    let _ = rtm.call("rtm_ext_storage_child_clear_prefix_version_1", &(
+        child_key,
+        child_definition,
+        child_type,
+        prefix
+    ).encode());
 
     // Check first key
     let res = rtm
-        .call("rtm_ext_storage_get", &key1.encode())
+        .call("rtm_ext_storage_child_get", &(
+            child_key,
+            child_definition,
+            child_type,
+            key1
+        ).encode())
         .decode_option();
     if key1.starts_with(prefix) {
         assert!(res.is_none());
@@ -280,7 +305,12 @@ pub fn ext_storage_clear_prefix(input: ParsedInput) {
 
     // Check second key
     let res = rtm
-        .call("rtm_ext_storage_get", &key2.encode())
+        .call("rtm_ext_storage_child_get", &(
+            child_key,
+            child_definition,
+            child_type,
+            key2
+        ).encode())
         .decode_option();
     if key2.starts_with(prefix) {
         assert!(res.is_none());
