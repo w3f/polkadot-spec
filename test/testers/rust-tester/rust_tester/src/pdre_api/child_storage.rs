@@ -50,28 +50,51 @@ pub fn ext_storage_child_get(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
-// TODO
-pub fn ext_storage_read(input: ParsedInput) {
+pub fn ext_storage_child_read(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let key = input.get(0);
-    let value = input.get(1);
-    let offset = input.get_u32(2);
-    let buffer_size = input.get_u32(3);
+    let child_key = input.get(0);
+    let child_definition = input.get(1);
+    let child_type = input.get_u32(2);
+    let key = input.get(3);
+    let value = input.get(4);
+    let offset = input.get_u32(5);
+    let buffer_size = input.get_u32(6);
 
     // Get invalid key
     let mut res = rtm
-        .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
+        .call("rtm_ext_storage_child_read", &(
+            child_key,
+            child_definition,
+            child_type,
+            key,
+            offset,
+            buffer_size
+        ).encode())
         .decode_val();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key,
+        value
+    ).encode());
 
     // Get valid key
     let mut res = rtm
-        .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
+        .call("rtm_ext_storage_child_read", &(
+            child_key,
+            child_definition,
+            child_type,
+            key,
+            offset,
+            buffer_size
+        ).encode())
         .decode_val();
+
     // Verify the return value includes the initial value (in regard to the offset)
     assert!(res.starts_with(&value[offset as usize ..]));
     // Verify the remaining values are all zeros

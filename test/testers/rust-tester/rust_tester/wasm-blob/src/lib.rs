@@ -17,6 +17,7 @@ extern "C" {
     fn ext_storage_get_version_1(key: u64) -> u64;
     fn ext_storage_child_get_version_1(child_key: u64, def: u64, child_type: u32, key: u64) -> u64;
     fn ext_storage_read_version_1(key: u64, out: u64, offset: u32) -> u64;
+    fn ext_storage_child_read_version_1(child_key: u64, def: u64, child_type: u32, key: u64, out: u64, offset: u32) -> u64;
     fn ext_storage_set_version_1(key: u64, value: u64);
     fn ext_storage_child_set_version_1(child_key: u64, def: u64, child_type: u32, key: u64, value: u64);
     fn ext_storage_clear_version_1(key: u64);
@@ -76,6 +77,27 @@ wasm_export_functions! {
         let mut buffer = vec![0u8; buffer_size as usize];
         unsafe {
             ext_storage_read_version_1(
+                (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    (buffer.len() as u64) << 32 | buffer.as_ptr() as u64,
+                offset
+            );
+        }
+        buffer.to_vec()
+    }
+    fn rtm_ext_storage_child_read(
+        child_key: Vec<u8>,
+        child_definition: Vec<u8>,
+        child_type: u32,
+        key_data: Vec<u8>,
+        offset: u32,
+        buffer_size: u32 // not directly required for PDRE API, only used for testing
+    ) -> Vec<u8> {
+        let mut buffer = vec![0u8; buffer_size as usize];
+        unsafe {
+            ext_storage_child_read_version_1(
+			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
+                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+                child_type,
                 (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
 			    (buffer.len() as u64) << 32 | buffer.as_ptr() as u64,
                 offset
