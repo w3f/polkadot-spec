@@ -15,8 +15,10 @@ fn from_mem(value: u64) -> Vec<u8> {
 
 extern "C" {
     fn ext_storage_get_version_1(key: u64) -> u64;
+    fn ext_storage_child_get_version_1(child_key: u64, def: u64, child_type: u32, key: u64) -> u64;
     fn ext_storage_read_version_1(key: u64, out: u64, offset: u32) -> u64;
     fn ext_storage_set_version_1(key: u64, value: u64);
+    fn ext_storage_child_set_version_1(child_key: u64, def: u64, child_type: u32, key: u64, value: u64);
     fn ext_storage_clear_version_1(key: u64);
     fn ext_storage_exists_version_1(key: u64) -> i32;
     fn ext_storage_clear_prefix_version_1(key: u64);
@@ -50,6 +52,22 @@ wasm_export_functions! {
             from_mem(value)
         }
     }
+    fn rtm_ext_storage_child_get(
+        child_key: Vec<u8>,
+        child_definition: Vec<u8>,
+        child_type: u32,
+        key_data: Vec<u8>
+    ) -> Vec<u8> {
+        unsafe {
+            let value = ext_storage_child_get_version_1(
+			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
+                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+                child_type,
+			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+            );
+            from_mem(value)
+        }
+    }
     fn rtm_ext_storage_read(
         key_data: Vec<u8>,
         offset: u32,
@@ -71,6 +89,23 @@ wasm_export_functions! {
     ) {
         unsafe {
             let _ = ext_storage_set_version_1(
+			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    (value_data.len() as u64) << 32 | value_data.as_ptr() as u64
+            );
+        }
+    }
+    fn rtm_ext_storage_child_set(
+        child_key: Vec<u8>,
+        child_definition: Vec<u8>,
+        child_type: u32,
+        key_data: Vec<u8>,
+        value_data: Vec<u8>
+    ) {
+        unsafe {
+            let _ = ext_storage_child_set_version_1(
+			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
+                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+                child_type,
 			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
 			    (value_data.len() as u64) << 32 | value_data.as_ptr() as u64
             );

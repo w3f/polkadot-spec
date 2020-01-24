@@ -5,25 +5,43 @@ fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
 }
 
-// Input: key, value
-pub fn ext_storage_get(input: ParsedInput) {
+pub fn ext_storage_child_get(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let key = input.get(0);
-    let value = input.get(1);
+    let child_key = input.get(0);
+    let child_definition = input.get(1);
+    let child_type = input.get_u32(2);
+    let key = input.get(3);
+    let value = input.get(4);
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_storage_get", &key.encode())
+        .call("rtm_ext_storage_child_get", &(
+            child_key,
+            child_definition,
+            child_type,
+            key,
+        ).encode())
         .decode_option();
     assert!(res.is_none());
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key,
+        value
+    ).encode());
 
     // Get valid key
     let mut res = rtm
-        .call("rtm_ext_storage_get", &key.encode())
+        .call("rtm_ext_storage_child_get", &(
+            child_key,
+            child_definition,
+            child_type,
+            key,
+        ).encode())
         .decode_option()
         .unwrap()
         .decode_val();
@@ -32,6 +50,7 @@ pub fn ext_storage_get(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
+// TODO
 pub fn ext_storage_read(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
