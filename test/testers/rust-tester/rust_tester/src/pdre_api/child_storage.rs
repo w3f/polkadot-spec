@@ -207,25 +207,43 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
     assert!(res.is_none());
 }
 
-// Input: key, value
-pub fn ext_storage_exists(input: ParsedInput) {
+pub fn ext_storage_child_exists_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let key = input.get(0);
-    let value = input.get(1);
+    let child_key = input.get(0);
+    let child_definition = input.get(1);
+    let child_type = input.get_u32(2);
+    let key = input.get(3);
+    let value = input.get(4);
 
     // Check if key exists (invalid)
     let res = rtm
-        .call("rtm_ext_storage_exists_version_1", &(key).encode())
+        .call("rtm_ext_storage_child_exists_version_1", &(
+            child_key,
+            child_definition,
+            child_type,
+            key
+        ).encode())
         .decode_bool();
     assert_eq!(res, false);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key,
+        value
+    ).encode());
 
     // Check if key exists
     let res = rtm
-        .call("rtm_ext_storage_exists_version_1", &(key).encode())
+        .call("rtm_ext_storage_child_exists_version_1", &(
+            child_key,
+            child_definition,
+            child_type,
+            key
+        ).encode())
         .decode_bool();
     assert_eq!(res, true);
 }
