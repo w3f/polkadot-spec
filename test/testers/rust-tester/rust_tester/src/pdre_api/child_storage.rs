@@ -107,7 +107,7 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
 
 // TODO
 pub fn ext_storage_set_version_1(input: ParsedInput) {
-    // TODO
+    // TODO: Remove this and just keep the "get" test?
 }
 
 pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
