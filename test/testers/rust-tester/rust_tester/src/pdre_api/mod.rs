@@ -23,6 +23,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "ext_storage_exists" => storage::ext_storage_exists(input),
             "ext_storage_child_exists" => child_storage::ext_storage_child_exists_version_1(input),
             "ext_storage_clear_prefix" => storage::ext_storage_clear_prefix(input),
+            "ext_storage_child_clear_prefix" => child_storage::ext_storage_child_clear_prefix(input),
             "ext_storage_root" => storage::ext_storage_root(input),
             "ext_storage_next_key" => storage::ext_storage_next_key(input),
             "ext_crypto_ed25519_public_keys" => crypto::ext_crypto_ed25519_public_keys_version_1(input),
