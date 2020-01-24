@@ -148,6 +148,65 @@ pub fn ext_storage_child_clear(input: ParsedInput) {
     assert!(res.is_none());
 }
 
+pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let child_key = input.get(0);
+    let child_definition = input.get(1);
+    let child_type = input.get_u32(2);
+    let key1 = input.get(3);
+    let value1 = input.get(4);
+    let key2 = input.get(5);
+    let value2 = input.get(6);
+
+    // Set key/value
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key1,
+        value1
+    ).encode());
+
+    // Set key/value
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key2,
+        value2
+    ).encode());
+
+    // Kill child
+    let _ = rtm.call("rtm_ext_storage_child_storage_kill_version_1", &(
+        child_key,
+        child_definition,
+        child_type,
+    ).encode());
+
+    // Get killed value
+    let mut res = rtm
+        .call("rtm_ext_storage_child_get", &(
+            child_key,
+            child_definition,
+            child_type,
+            key1,
+        ).encode())
+        .decode_option();
+    assert!(res.is_none());
+
+    // Get killed value
+    let mut res = rtm
+        .call("rtm_ext_storage_child_get", &(
+            child_key,
+            child_definition,
+            child_type,
+            key2,
+        ).encode())
+        .decode_option();
+    assert!(res.is_none());
+}
+
 // Input: key, value
 pub fn ext_storage_exists(input: ParsedInput) {
     let mut rtm = Runtime::new();
