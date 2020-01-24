@@ -1,5 +1,5 @@
 use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime};
-use parity_scale_codec::Encode;
+use parity_scale_codec::{Encode, Decode};
 // TODO: Spec key types
 use sp_core::crypto::key_types::DUMMY;
 
@@ -7,7 +7,6 @@ fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
 }
 
-// TODO: Test this with generating keys
 pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();
 
@@ -30,21 +29,28 @@ pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
         )
         .decode_val();
 
-    let res = rtm
+    let mut res = rtm
         .call(
             "rtm_ext_crypto_ed25519_public_keys_version_1",
             &DUMMY.0.encode()
         )
-        //.decode_val()
-        .decode_vec();
+        .decode_val();
 
-    assert_eq!(res.len(), 2);
-    //assert!(res.contains(&pubkey1));
-    //assert!(res.contains(&pubkey2));
+    // TODO: decode this properly
+    res.remove(0);
+    assert_eq!(res.len(), 64);
+    let res1 = &res[..32]; // first pubkey
+    let res2 = &res[32..]; // second pubkey
 
-    for pubkey in res {
-        println!("{}", hex::encode(&pubkey));
+    if pubkey1 != res1 && pubkey1 != res2 {
+        panic!("Return value does not include pubkey")
     }
+
+    if pubkey2 != res1 && pubkey2 != res2 {
+        panic!("Return value does not include pubkey")
+    }
+
+    println!("{},{}", hex::encode(res1), hex::encode(res2));
 }
 
 // TODO: Spec that seed is Option<>
@@ -127,9 +133,50 @@ pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
     println!("true")
 }
 
-// TODO
 pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new_keystore();
 
+    let seed1 = input.get(0);
+    let seed2 = input.get(1);
+
+    // Generate first key
+    let pubkey1 = rtm
+        .call(
+            "rtm_ext_crypto_sr25519_generate_version_1",
+            &(DUMMY.0, Some(seed1)).encode(),
+        )
+        .decode_val();
+
+    // Generate second key
+    let pubkey2 = rtm
+        .call(
+            "rtm_ext_crypto_sr25519_generate_version_1",
+            &(DUMMY.0, Some(seed2)).encode(),
+        )
+        .decode_val();
+
+    let mut res = rtm
+        .call(
+            "rtm_ext_crypto_sr25519_public_keys_version_1",
+            &DUMMY.0.encode()
+        )
+        .decode_val();
+
+    // TODO: decode this properly
+    res.remove(0);
+    assert_eq!(res.len(), 64);
+    let res1 = &res[..32]; // first pubkey
+    let res2 = &res[32..]; // second pubkey
+
+    if pubkey1 != res1 && pubkey1 != res2 {
+        panic!("Return value does not include pubkey")
+    }
+
+    if pubkey2 != res1 && pubkey2 != res2 {
+        panic!("Return value does not include pubkey")
+    }
+
+    println!("{},{}", hex::encode(res1), hex::encode(res2));
 }
 
 // TODO: Spec that seed is Option<>
