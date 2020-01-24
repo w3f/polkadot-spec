@@ -24,6 +24,7 @@ extern "C" {
     fn ext_storage_child_clear_version_1(child_key: u64, def: u64, child_type: u32, key: u64);
     fn ext_storage_child_storage_kill_version_1(child_key: u64, def: u64, child_type: u32);
     fn ext_storage_exists_version_1(key: u64) -> i32;
+    fn ext_storage_child_exists_version_1(child_key: u64, def: u64, child_type: u32, key: u64) -> i32;
     fn ext_storage_clear_prefix_version_1(key: u64);
     fn ext_storage_root_version_1() -> u64;
     fn ext_storage_next_key_version_1(key: u64) -> u64;
@@ -177,6 +178,21 @@ wasm_export_functions! {
     ) -> u32 {
         unsafe {
             ext_storage_exists_version_1(
+			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+            ) as u32
+        }
+    }
+    fn rtm_ext_storage_child_exists_version_1(
+        child_key: Vec<u8>,
+        child_definition: Vec<u8>,
+        child_type: u32,
+        key_data: Vec<u8>
+    ) -> u32 {
+        unsafe {
+            ext_storage_child_exists_version_1(
+			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
+                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+                child_type,
 			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
             ) as u32
         }
