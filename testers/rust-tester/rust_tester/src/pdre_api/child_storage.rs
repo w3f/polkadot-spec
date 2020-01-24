@@ -105,26 +105,45 @@ pub fn ext_storage_child_read(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
+// TODO
 pub fn ext_storage_set(input: ParsedInput) {
     // TODO
 }
 
-// Input: key, value
-pub fn ext_storage_clear(input: ParsedInput) {
+pub fn ext_storage_child_clear(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
+    let child_key = input.get(0);
+    let child_definition = input.get(1);
+    let child_type = input.get_u32(2);
     let key = input.get(0);
     let value = input.get(1);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key,
+        value
+    ).encode());
 
     // Clear value
-    let _ = rtm.call("rtm_ext_storage_clear_version_1", &key.encode());
+    let _ = rtm.call("rtm_ext_storage_child_clear_version_1", &(
+        child_key,
+        child_definition,
+        child_type,
+        key,
+    ).encode());
 
     // Get cleared value
-    let res = rtm
-        .call("rtm_ext_storage_get", &key.encode())
+    let mut res = rtm
+        .call("rtm_ext_storage_child_get", &(
+            child_key,
+            child_definition,
+            child_type,
+            key,
+        ).encode())
         .decode_option();
     assert!(res.is_none());
 }
