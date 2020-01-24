@@ -17,6 +17,13 @@ impl<'a> ParsedInput<'a> {
             panic!("failed to get index, wrong input data provided for the test function");
         }
     }
+    pub fn get_u32(&self, index: usize) -> u32 {
+        if let Some(ret) = self.0.get(index) {
+            ret.parse().expect("failed to parse parameter as u32")
+        } else {
+            panic!("failed to get index, wrong input data provided for the test function");
+        }
+    }
 }
 
 impl<'a> From<Values<'a>> for ParsedInput<'a> {

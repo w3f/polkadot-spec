@@ -52,9 +52,10 @@ wasm_export_functions! {
     }
     fn rtm_ext_storage_read(
         key_data: Vec<u8>,
-        offset: u32
+        offset: u32,
+        buffer_size: u32 // not directly required for PDRE API, only used for testing
     ) -> Vec<u8> {
-        let mut buffer = [0u8; 20];
+        let mut buffer = vec![0u8; buffer_size as usize];
         unsafe {
             ext_storage_read_version_1(
                 (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
