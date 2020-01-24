@@ -5,14 +5,6 @@ use std::slice;
 use parity_scale_codec::{Encode, Decode};
 use sp_core::wasm_export_functions;
 
-fn from_mem(value: u64) -> Vec<u8> {
-    let ptr = value as u32;
-    let len = (value >> 32) as usize;
-    unsafe {
-        std::slice::from_raw_parts(ptr as *mut u8, len).to_vec()
-    }
-}
-
 extern "C" {
     fn ext_storage_get_version_1(key: u64) -> u64;
     fn ext_storage_child_get_version_1(child_key: u64, def: u64, child_type: u32, key: u64) -> u64;
@@ -48,13 +40,31 @@ extern "C" {
     fn ext_hashing_twox_64_version_1(data: u64) -> i32;
 }
 
+fn from_mem(value: u64) -> Vec<u8> {
+    let ptr = value as u32;
+    let len = (value >> 32) as usize;
+    unsafe {
+        std::slice::from_raw_parts(ptr as *mut u8, len).to_vec()
+    }
+}
+
+trait AsRePtr {
+    fn as_re_ptr(&self) -> u64;
+}
+
+impl AsRePtr for Vec<u8> {
+    fn as_re_ptr(&self) -> u64 {
+        (self.len() as u64) << 32 | self.as_ptr() as u64
+    }
+}
+
 wasm_export_functions! {
     fn rtm_ext_storage_get(
         key_data: Vec<u8>
     ) -> Vec<u8> {
         unsafe {
             let value = ext_storage_get_version_1(
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             );
             from_mem(value)
         }
@@ -67,10 +77,10 @@ wasm_export_functions! {
     ) -> Vec<u8> {
         unsafe {
             let value = ext_storage_child_get_version_1(
-			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
-                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+			    child_key.as_re_ptr(),
+                child_definition.as_re_ptr(),
                 child_type,
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             );
             from_mem(value)
         }
@@ -83,8 +93,8 @@ wasm_export_functions! {
         let mut buffer = vec![0u8; buffer_size as usize];
         unsafe {
             ext_storage_read_version_1(
-                (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
-			    (buffer.len() as u64) << 32 | buffer.as_ptr() as u64,
+                key_data.as_re_ptr(),
+			    buffer.as_re_ptr(),
                 offset
             );
         }
@@ -101,11 +111,11 @@ wasm_export_functions! {
         let mut buffer = vec![0u8; buffer_size as usize];
         unsafe {
             ext_storage_child_read_version_1(
-			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
-                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+			    child_key.as_re_ptr(),
+                child_definition.as_re_ptr(),
                 child_type,
-                (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
-			    (buffer.len() as u64) << 32 | buffer.as_ptr() as u64,
+                key_data.as_re_ptr(),
+			    buffer.as_re_ptr(),
                 offset
             );
         }
@@ -117,8 +127,8 @@ wasm_export_functions! {
     ) {
         unsafe {
             let _ = ext_storage_set_version_1(
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
-			    (value_data.len() as u64) << 32 | value_data.as_ptr() as u64
+			    key_data.as_re_ptr(),
+			    value_data.as_re_ptr()
             );
         }
     }
@@ -131,11 +141,11 @@ wasm_export_functions! {
     ) {
         unsafe {
             let _ = ext_storage_child_set_version_1(
-			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
-                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+			    child_key.as_re_ptr(),
+                child_definition.as_re_ptr(),
                 child_type,
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
-			    (value_data.len() as u64) << 32 | value_data.as_ptr() as u64
+			    key_data.as_re_ptr(),
+			    value_data.as_re_ptr()
             );
         }
     }
@@ -144,7 +154,7 @@ wasm_export_functions! {
     ) {
         unsafe {
             let _ = ext_storage_clear_version_1(
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             );
         }
     }
@@ -156,10 +166,10 @@ wasm_export_functions! {
     ) {
         unsafe {
             let _ = ext_storage_child_clear_version_1(
-			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
-                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+			    child_key.as_re_ptr(),
+                child_definition.as_re_ptr(),
                 child_type,
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             );
         }
     }
@@ -170,8 +180,8 @@ wasm_export_functions! {
     ) {
         unsafe {
             let _ = ext_storage_child_storage_kill_version_1(
-			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
-                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+			    child_key.as_re_ptr(),
+                child_definition.as_re_ptr(),
                 child_type
             );
         }
@@ -181,7 +191,7 @@ wasm_export_functions! {
     ) -> u32 {
         unsafe {
             ext_storage_exists_version_1(
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             ) as u32
         }
     }
@@ -193,10 +203,10 @@ wasm_export_functions! {
     ) -> u32 {
         unsafe {
             ext_storage_child_exists_version_1(
-			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
-                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+			    child_key.as_re_ptr(),
+                child_definition.as_re_ptr(),
                 child_type,
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             ) as u32
         }
     }
@@ -205,7 +215,7 @@ wasm_export_functions! {
     ) {
         unsafe {
             let _ = ext_storage_clear_prefix_version_1(
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             );
         }
     }
@@ -217,10 +227,10 @@ wasm_export_functions! {
     ) {
         unsafe {
             let _ = ext_storage_child_clear_prefix_version_1(
-			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
-                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+			    child_key.as_re_ptr(),
+                child_definition.as_re_ptr(),
                 child_type,
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             );
         }
     }
@@ -239,7 +249,7 @@ wasm_export_functions! {
     fn rtm_ext_storage_next_key_version_1(key_data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_storage_next_key_version_1(
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             );
             from_mem(value)
         }
@@ -252,10 +262,10 @@ wasm_export_functions! {
     ) -> Vec<u8> {
         unsafe {
             let value = ext_storage_child_next_key_version_1(
-			    (child_key.len() as u64) << 32 | child_key.as_ptr() as u64,
-                (child_definition.len() as u64) << 32 | child_definition.as_ptr() as u64,
+			    child_key.as_re_ptr(),
+                child_definition.as_re_ptr(),
                 child_type,
-			    (key_data.len() as u64) << 32 | key_data.as_ptr() as u64,
+			    key_data.as_re_ptr(),
             );
             from_mem(value)
         }
@@ -273,7 +283,7 @@ wasm_export_functions! {
         unsafe {
             let value = ext_crypto_ed25519_generate_version_1(
 			    id_data.as_ptr() as u32,
-                (seed_data.len() as u64) << 32 | seed_data.as_ptr() as u64
+                seed_data.as_re_ptr()
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
@@ -283,7 +293,7 @@ wasm_export_functions! {
             let value = ext_crypto_ed25519_sign_version_1(
                 id_data.as_ptr() as u32,
                 pubkey_data.as_ptr() as u32,
-                (msg_data.len() as u64) << 32 | msg_data.as_ptr() as u64
+                msg_data.as_re_ptr()
             );
             from_mem(value)
         }
@@ -292,7 +302,7 @@ wasm_export_functions! {
         unsafe {
             ext_crypto_ed25519_verify_version_1(
                 sig_data.as_ptr() as u32,
-                (msg_data.len() as u64) << 32 | msg_data.as_ptr() as u64,
+                msg_data.as_re_ptr(),
                 pubkey_data.as_ptr() as u32
             ) as u32
         }
@@ -310,7 +320,7 @@ wasm_export_functions! {
         unsafe {
             let value = ext_crypto_sr25519_generate_version_1(
 			    id_data.as_ptr() as u32,
-                (seed_data.len() as u64) << 32 | seed_data.as_ptr() as u64
+                seed_data.as_re_ptr()
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
@@ -320,7 +330,7 @@ wasm_export_functions! {
             let value = ext_crypto_sr25519_sign_version_1(
                 id_data.as_ptr() as u32,
                 pubkey_data.as_ptr() as u32,
-                (msg_data.len() as u64) << 32 | msg_data.as_ptr() as u64
+                msg_data.as_re_ptr()
             );
             from_mem(value)
         }
@@ -329,7 +339,7 @@ wasm_export_functions! {
         unsafe {
             ext_crypto_sr25519_verify_version_1(
                 sig_data.as_ptr() as u32,
-                (msg_data.len() as u64) << 32 | msg_data.as_ptr() as u64,
+                msg_data.as_re_ptr(),
                 pubkey_data.as_ptr() as u32
             ) as u32
         }
@@ -337,7 +347,7 @@ wasm_export_functions! {
     fn rtm_ext_hashing_keccak_256_version_1(data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_hashing_keccak_256_version_1(
-                (data.len() as u64) << 32 | data.as_ptr() as u64,
+                data.as_re_ptr(),
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
@@ -345,7 +355,7 @@ wasm_export_functions! {
     fn rtm_ext_hashing_sha2_256_version_1(data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_hashing_sha2_256_version_1(
-                (data.len() as u64) << 32 | data.as_ptr() as u64,
+                data.as_re_ptr(),
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
@@ -353,7 +363,7 @@ wasm_export_functions! {
     fn rtm_ext_hashing_blake2_128_version_1(data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_hashing_blake2_128_version_1(
-                (data.len() as u64) << 32 | data.as_ptr() as u64,
+                data.as_re_ptr(),
             );
             std::slice::from_raw_parts(value as *mut u8, 16).to_vec()
         }
@@ -361,7 +371,7 @@ wasm_export_functions! {
     fn rtm_ext_hashing_blake2_256_version_1(data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_hashing_blake2_256_version_1(
-                (data.len() as u64) << 32 | data.as_ptr() as u64,
+                data.as_re_ptr(),
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
@@ -369,7 +379,7 @@ wasm_export_functions! {
     fn rtm_ext_hashing_twox_256_version_1(data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_hashing_twox_256_version_1(
-                (data.len() as u64) << 32 | data.as_ptr() as u64,
+                data.as_re_ptr(),
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
@@ -377,7 +387,7 @@ wasm_export_functions! {
     fn rtm_ext_hashing_twox_128_version_1(data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_hashing_twox_128_version_1(
-                (data.len() as u64) << 32 | data.as_ptr() as u64,
+                data.as_re_ptr(),
             );
             std::slice::from_raw_parts(value as *mut u8, 16).to_vec()
         }
@@ -385,7 +395,7 @@ wasm_export_functions! {
     fn rtm_ext_hashing_twox_64_version_1(data: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_hashing_twox_64_version_1(
-                (data.len() as u64) << 32 | data.as_ptr() as u64,
+                data.as_re_ptr(),
             );
             std::slice::from_raw_parts(value as *mut u8, 8).to_vec()
         }
