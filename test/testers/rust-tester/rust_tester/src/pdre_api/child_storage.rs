@@ -269,6 +269,7 @@ pub fn ext_storage_child_clear_prefix(input: ParsedInput) {
         key1,
         value1
     ).encode());
+
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
         child_key,
@@ -341,6 +342,7 @@ pub fn ext_storage_child_root(input: ParsedInput) {
         key1,
         value1
     ).encode());
+
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
         child_key,
@@ -391,6 +393,7 @@ pub fn ext_storage_child_next_key(input: ParsedInput) {
         key1,
         value1
     ).encode());
+
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
         child_key,

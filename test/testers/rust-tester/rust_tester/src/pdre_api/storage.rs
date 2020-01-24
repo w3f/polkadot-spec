@@ -53,6 +53,7 @@ pub fn ext_storage_read(input: ParsedInput) {
     let mut res = rtm
         .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
         .decode_val();
+
     // Verify the return value includes the initial value (in regard to the offset)
     assert!(res.starts_with(&value[offset as usize ..]));
     // Verify the remaining values are all zeros
@@ -60,6 +61,7 @@ pub fn ext_storage_read(input: ParsedInput) {
         &res[value.len()..],
         vec![0u8; buffer_size as usize-value.len()].as_slice()
     );
+
     println!("{}", str(&res));
 }
 
@@ -122,6 +124,7 @@ pub fn ext_storage_clear_prefix(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
+
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
 
@@ -164,6 +167,7 @@ pub fn ext_storage_root(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
+
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
 
@@ -194,6 +198,7 @@ pub fn ext_storage_next_key(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
+
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
 
