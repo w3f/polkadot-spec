@@ -28,6 +28,7 @@ extern "C" {
     fn ext_storage_clear_prefix_version_1(key: u64);
     fn ext_storage_child_clear_prefix_version_1(child_key: u64, def: u64, child_type: u32, key: u64);
     fn ext_storage_root_version_1() -> u64;
+    fn ext_storage_child_root_version_1(child_key: u64) -> u64;
     fn ext_storage_next_key_version_1(key: u64) -> u64;
     fn ext_crypto_ed25519_public_keys_version_1(id: u32) -> u64;
     fn ext_crypto_ed25519_generate_version_1(id: u32, seed: u64) -> u32;
@@ -223,6 +224,12 @@ wasm_export_functions! {
         }
     }
     fn rtm_ext_storage_root_version_1() -> Vec<u8> {
+        unsafe {
+            let value = ext_storage_root_version_1();
+            from_mem(value)
+        }
+    }
+    fn rtm_ext_storage_child_root_version_1(child_key: Vec<u8>) -> Vec<u8> {
         unsafe {
             let value = ext_storage_root_version_1();
             from_mem(value)

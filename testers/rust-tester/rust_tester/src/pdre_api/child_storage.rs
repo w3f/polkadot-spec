@@ -322,22 +322,37 @@ pub fn ext_storage_child_clear_prefix(input: ParsedInput) {
 }
 
 // Input: prefix, key1, value1, key2, value2
-pub fn ext_storage_root(input: ParsedInput) {
+pub fn ext_storage_child_root(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let key1 = input.get(0);
-    let value1 = input.get(1);
-    let key2 = input.get(2);
-    let value2 = input.get(3);
+    let child_key = input.get(0);
+    let child_definition = input.get(1);
+    let child_type = input.get_u32(2);
+    let key1 = input.get(3);
+    let value1 = input.get(4);
+    let key2 = input.get(5);
+    let value2 = input.get(6);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key1,
+        value1
+    ).encode());
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key2,
+        value2
+    ).encode());
 
     // Get root
     let res = rtm
-        .call("rtm_ext_storage_root_version_1", &[])
+        .call("rtm_ext_storage_child_root_version_1", &child_key.encode())
         .decode_val();
 
     println!("{}", hex::encode(res));
