@@ -359,37 +359,67 @@ pub fn ext_storage_child_root(input: ParsedInput) {
 }
 
 // TODO
-pub fn ext_storage_next_key(input: ParsedInput) {
+pub fn ext_storage_child_next_key(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let key1 = input.get(0);
-    let value1 = input.get(1);
-    let key2 = input.get(2);
-    let value2 = input.get(3);
-    let key3 = input.get(4);
-    let value3 = input.get(5);
+    let child_key = input.get(0);
+    let child_definition = input.get(1);
+    let child_type = input.get_u32(2);
+    let key1 = input.get(3);
+    let value1 = input.get(4);
+    let key2 = input.get(5);
+    let value2 = input.get(6);
+    let key3 = input.get(7);
+    let value3 = input.get(8);
 
     // No next key available
     let res = rtm
-        .call("rtm_ext_storage_next_key_version_1", &key1.encode())
+        .call("rtm_ext_storage_child_next_key_version_1", &(
+            child_key,
+            child_definition,
+            child_type,
+            key1
+        ).encode())
         .decode_option();
     assert!(res.is_none());
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key1,
+        value1
+    ).encode());
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key2,
+        value2
+    ).encode());
 
     // No next key available
     let res = rtm
-        .call("rtm_ext_storage_next_key_version_1", &key1.encode())
+        .call("rtm_ext_storage_child_next_key_version_1", &(
+            child_key,
+            child_definition,
+            child_type,
+            key1
+        ).encode())
         .decode_option()
         .unwrap()
         .decode_val();
     assert_eq!(res, key2);
 
     let res = rtm
-        .call("rtm_ext_storage_next_key_version_1", &key2.encode())
+        .call("rtm_ext_storage_child_next_key_version_1", &(
+            child_key,
+            child_definition,
+            child_type,
+            key2
+        ).encode())
         .decode_option()
         .unwrap()
         .decode_val();
