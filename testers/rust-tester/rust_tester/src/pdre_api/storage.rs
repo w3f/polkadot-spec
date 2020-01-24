@@ -5,7 +5,6 @@ fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
 }
 
-// Input: key, value
 pub fn ext_storage_get(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
@@ -69,7 +68,6 @@ pub fn ext_storage_set(input: ParsedInput) {
     // TODO
 }
 
-// Input: key, value
 pub fn ext_storage_clear(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
@@ -89,7 +87,6 @@ pub fn ext_storage_clear(input: ParsedInput) {
     assert!(res.is_none());
 }
 
-// Input: key, value
 pub fn ext_storage_exists(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
@@ -112,7 +109,6 @@ pub fn ext_storage_exists(input: ParsedInput) {
     assert_eq!(res, true);
 }
 
-// Input: prefix, key1, value1, key2, value2
 pub fn ext_storage_clear_prefix(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
@@ -156,7 +152,6 @@ pub fn ext_storage_clear_prefix(input: ParsedInput) {
     }
 }
 
-// Input: prefix, key1, value1, key2, value2
 pub fn ext_storage_root(input: ParsedInput) {
     let mut rtm = Runtime::new();
 

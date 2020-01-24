@@ -248,7 +248,6 @@ pub fn ext_storage_child_exists_version_1(input: ParsedInput) {
     assert_eq!(res, true);
 }
 
-// Input: prefix, key1, value1, key2, value2
 pub fn ext_storage_child_clear_prefix(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
@@ -322,7 +321,6 @@ pub fn ext_storage_child_clear_prefix(input: ParsedInput) {
     }
 }
 
-// Input: prefix, key1, value1, key2, value2
 pub fn ext_storage_child_root(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
