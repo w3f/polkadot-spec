@@ -5,7 +5,7 @@ fn str<'a>(input: &'a [u8]) -> &'a str {
     std::str::from_utf8(input).unwrap()
 }
 
-pub fn ext_storage_child_get(input: ParsedInput) {
+pub fn ext_storage_child_get_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key = input.get(0);
@@ -50,7 +50,7 @@ pub fn ext_storage_child_get(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
-pub fn ext_storage_child_read(input: ParsedInput) {
+pub fn ext_storage_child_read_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key = input.get(0);
@@ -106,11 +106,11 @@ pub fn ext_storage_child_read(input: ParsedInput) {
 }
 
 // TODO
-pub fn ext_storage_set(input: ParsedInput) {
+pub fn ext_storage_set_version_1(input: ParsedInput) {
     // TODO
 }
 
-pub fn ext_storage_child_clear(input: ParsedInput) {
+pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key = input.get(0);
@@ -248,7 +248,7 @@ pub fn ext_storage_child_exists_version_1(input: ParsedInput) {
     assert_eq!(res, true);
 }
 
-pub fn ext_storage_child_clear_prefix(input: ParsedInput) {
+pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key = input.get(0);
@@ -321,7 +321,7 @@ pub fn ext_storage_child_clear_prefix(input: ParsedInput) {
     }
 }
 
-pub fn ext_storage_child_root(input: ParsedInput) {
+pub fn ext_storage_child_root_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key = input.get(0);
@@ -359,7 +359,7 @@ pub fn ext_storage_child_root(input: ParsedInput) {
 }
 
 // TODO
-pub fn ext_storage_child_next_key(input: ParsedInput) {
+pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key = input.get(0);
