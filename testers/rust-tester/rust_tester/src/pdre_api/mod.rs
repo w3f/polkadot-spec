@@ -16,6 +16,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "ext_storage_get" => storage::ext_storage_get(input),
             "ext_storage_child_get" => child_storage::ext_storage_child_get(input),
             "ext_storage_read" => storage::ext_storage_read(input),
+            "ext_storage_child_read" => child_storage::ext_storage_child_read(input),
             "ext_storage_clear" => storage::ext_storage_clear(input),
             "ext_storage_exists" => storage::ext_storage_exists(input),
             "ext_storage_clear_prefix" => storage::ext_storage_clear_prefix(input),
