@@ -4855,7 +4855,7 @@
     message that is to be signed.
 
     <item><verbatim|return>: an i64 FFI type as defined in X containing the
-    SCALE encoded public keys as defined in Y.
+    signature.
   </itemize>
 
   <appendix|Legacy Runtime Environment API<label|sect-re-api>>
