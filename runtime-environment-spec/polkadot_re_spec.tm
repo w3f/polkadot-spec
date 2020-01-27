@@ -3602,12 +3602,12 @@
   <\definition>
     The <label|defn-stash-key><strong|Stash key> is a type of an account key
     that holds funds bonded for staking (described in Section
-    <reference|desc-staking-funds>) to a particular controller key (defined
+    <reference|sect-staking-funds>) to a particular controller key (defined
     in Definition <reference|defn-controller-key>). As a result, one may
     actively participate with a stash key keeping the stash key offline in a
     secure location. It can also be used to designate a Proxy account to vote
     in governance proposals, as described in
-    <reference|desc-creating-controller-key>. The Stash key holds the
+    <reference|sect-creating-controller-key>. The Stash key holds the
     majority of the users' funds and should neither be shared with anyone,
     saved on an online device, nor used to submit extrinsics.
   </definition>
@@ -3619,9 +3619,9 @@
     validation of other keys. It is a key that will be in the direct control
     of a user and should mostly be kept offline, used to submit manual
     extrinsics. It sets preferences like payout account and commission, as
-    described in <reference|desc-controller-settings>. If used for a
+    described in <reference|sect-controller-settings>. If used for a
     validator, it certifies the session keys, as described in
-    <reference|desc-certifying-keys>. It only needs the required funds to pay
+    <reference|sect-certifying-keys>. It only needs the required funds to pay
     transaction fees <todo|key needing fund needs to be defined>.
   </definition>
 
@@ -3629,8 +3629,8 @@
   <reference|defn-stash-key> and <reference|defn-controller-key> are created
   and managed by the user independent of the Polkadot implementation. The
   user notifies the network about the used keys by submitting a transaction,
-  as defined in <reference|desc-creating-controller-key> and
-  <reference|desc-certifying-keys> respectively.
+  as defined in <reference|sect-creating-controller-key> and
+  <reference|sect-certifying-keys> respectively.
 
   <\definition>
     <label|defn-session-key><strong|Session keys> are short-lived keys that
@@ -3653,21 +3653,21 @@
   control the majority of the users' funds and should only be used for their
   intended purpose. <todo|key managing fund need to be defined>
 
-  <subsection|Holding and staking funds>
+  <subsection|Holding and staking funds><label|sect-staking-funds>
 
-  <label|desc-staking-funds>To be specced
+  To be specced
 
-  <subsection|Creating a Controller key>
+  <subsection|Creating a Controller key><label|sect-creating-controller-key>
 
-  <label|desc-creating-controller-key>To be specced
+  To be specced
 
-  <subsection|Designating a proxy for voting>
+  <subsection|Designating a proxy for voting><label|sect-designating-proxy>
 
-  <label|desc-designating-proxy>To be specced<math|>
+  To be specced
 
-  <subsection|Controller settings>
+  <subsection|Controller settings><label|sect-controller-settings>
 
-  <label|desc-controller-settings>To be specced<math|>
+  To be specced
 
   <subsection|Certifying keys><label|sect-certifying-keys>
 
