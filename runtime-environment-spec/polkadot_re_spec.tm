@@ -4625,12 +4625,14 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as described in X
-    containing the key.
+    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
+    containing the child storage key as defined in Y.
 
-    <item><verbatim|child_def>: .
+    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
+    containing the child definition as described in Y.
 
-    <item><verbatim|child_type>: .
+    <item><verbatim|child_type_data>: an i32 integer specifying the child
+    storage type as defined in X.
   </itemize>
 
   <subsection|ext_storage_child_exists>
