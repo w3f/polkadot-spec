@@ -4743,8 +4743,12 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_storage_child_next_key_version_1 (param $key_data i64) (return
-    i64))
+    (func $ext_storage_child_next_key_version_1
+
+    \ \ (param $storage_key_data i64) (param $child_def i64) (param
+    $child_type i32)
+
+    \ \ (param $key_data i64) (return i64))
   </verbatim>
 
   \;
@@ -4752,10 +4756,19 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_data>: an i64 FFI type as described in X
+    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
+    containing the child storage key as defined in Y.
+
+    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
+    containing the child definition as described in Y.
+
+    <item><verbatim|child_type_data>: an i32 integer specifying the child
+    storage type as defined in X.
+
+    <item><strong|><verbatim|key_data>: an i64 FFI type as defined in X
     containing the key.
 
-    <item><verbatim|return>: an i64 FFI type as described in X containing the
+    <item><verbatim|return>: an i64 FFI type as defined in X containing the
     SCALE encoded Option <todo|reference Option> containing the change root.
   </itemize>
 
