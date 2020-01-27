@@ -193,11 +193,10 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
-
-    // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+    let _ = rtm.call("rtm_ext_storage_set", &(key3, value3).encode());
 
-    // No next key available
+    // Get next key
     let res = rtm
         .call("rtm_ext_storage_next_key_version_1", &key1.encode())
         .decode_option()
@@ -211,4 +210,10 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
         .unwrap()
         .decode_val();
     assert_eq!(res, key3);
+
+    // No next key available
+    let res = rtm
+        .call("rtm_ext_storage_next_key_version_1", &key3.encode())
+        .decode_option();
+    assert!(res.is_none());
 }

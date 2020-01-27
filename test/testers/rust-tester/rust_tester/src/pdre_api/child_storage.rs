@@ -391,8 +391,6 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
         key1,
         value1
     ).encode());
-
-    // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
         child_key,
         child_definition,
@@ -400,8 +398,15 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
         key2,
         value2
     ).encode());
+    let _ = rtm.call("rtm_ext_storage_child_set", &(
+        child_key,
+        child_definition,
+        child_type,
+        key3,
+        value3
+    ).encode());
 
-    // No next key available
+    // Get next key
     let res = rtm
         .call("rtm_ext_storage_child_next_key_version_1", &(
             child_key,
@@ -425,4 +430,15 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
         .unwrap()
         .decode_val();
     assert_eq!(res, key3);
+
+    // No next key available
+    let res = rtm
+        .call("rtm_ext_storage_child_next_key_version_1", &(
+            child_key,
+            child_definition,
+            child_type,
+            key3
+        ).encode())
+        .decode_option();
+    assert!(res.is_none());
 }
