@@ -31,6 +31,7 @@ pub fn ext_storage_get_version_1(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
+// TODO: assert in wasm, make sure returned length matches buffer length
 pub fn ext_storage_read_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
