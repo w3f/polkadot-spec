@@ -25,11 +25,15 @@
 \newcommand{\tmtextsc}[1]{{\scshape{#1}}}
 \newcommand{\tmtextsf}[1]{{\sffamily{#1}}}
 \newcommand{\tmtexttt}[1]{{\ttfamily{#1}}}
+\newcommand{\tmtextup}[1]{{\upshape{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
 \newenvironment{itemizeminus}{\begin{itemize} \renewcommand{\labelitemi}{$-$}\renewcommand{\labelitemii}{$-$}\renewcommand{\labelitemiii}{$-$}\renewcommand{\labelitemiv}{$-$}}{\end{itemize}}
 \newenvironment{theglossary}[1]{\begin{list}{}{\setlength{\labelwidth}{6.5em}\setlength{\leftmargin}{7em}\small} }{\end{list}}
 \newenvironment{tmcode}[1][]{\begin{alltt} }{\end{alltt}}
+\newenvironment{tmindent}{\begin{tmparmod}{1.5em}{0pt}{0pt}}{\end{tmparmod}}
+\newenvironment{tmparmod}[3]{\begin{list}{}{\setlength{\topsep}{0pt}\setlength{\leftmargin}{#1}\setlength{\rightmargin}{#2}\setlength{\parindent}{#3}\setlength{\listparindent}{\parindent}\setlength{\itemindent}{\parindent}\setlength{\parsep}{\parskip}} \item[]}{\end{list}}
+\newenvironment{tmparsep}[1]{\begingroup\setlength{\parskip}{#1}}{\endgroup}
 \newcounter{tmcounter}
 \newcommand{\custombinding}[1]{%
   \setcounter{tmcounter}{#1}%
@@ -80,7 +84,7 @@
   {\Large Protocol Specification}
 }
 
-\date{November 25, 2019}
+\date{January 27, 2020}
 
 \maketitle
 
@@ -113,14 +117,14 @@ With the current document, we aim to specify the RE part of the Polkadot
 protocol as a replicated state machine. After defining the basic terms in
 Chapter 1, we proceed to specify the representation of a valid state of the
 Protocol in Chapter \ref{chap-state-spec}. In Chapter
-\ref{chap-state-transit}, we identify the protocol states, by explain the
+\ref{chap-state-transit}, we identify the protocol states, by explaining the
 Polkadot state transition and discussing the detail based on which Polkadot RE
 interacts with the state transition function, i.e. Runtime. Following, we
 specify the input messages triggering the state transition and the system
 behaviour. In Chapter \ref{chap-consensu}, we specify the consensus protocol,
 which is responsible for keeping all the replica in the same state. Finally,
 the initial state of the machine is identified and discussed in Appendix
-\ref{sect-genisis-block}. A Polkadot RE implementation which conforms with
+\ref{sect-genesis-block}. A Polkadot RE implementation which conforms with
 this part of the specification should successfully be able to sync its states
 with the Polkadot network.
 
@@ -133,7 +137,7 @@ with the Polkadot network.
   \[  (\Sigma, S, s_0, \delta) \]
   where
   \begin{itemize}
-    \item $\Sigma$ is the countable set of all possible transactions.
+    \item $\Sigma$ is the countable set of all possible transitions.
     
     \item $S$ is a countable set of all possible states.
     
@@ -487,34 +491,16 @@ Assuming that $P_N$ is the path (see Definition \ref{defn-path-graph}) from
 the Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
 demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
-\custombinding{1}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  1. }
-  \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
-  = N_1, \ldots, N_j = N))$\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \phi$}}
-
-{\state{$i \leftarrow 1$}}
-
-{\state{{\WHILE{$(N_i \neq N)$}}}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{pk}_{N_i} $}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{Index}_{N_i} (N_{i + 1})$}}
-
-{\state{$i \leftarrow i + 1${\END}}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{pk}_{N_i}$}}
-
-{\state{{\RETURN{$\tmop{pk}^{\tmop{Agr}}_N$}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{1}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{1}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : =
+      (\tmop{TrieRoot} = N_1, \ldots, N_j = N))$
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \begin{definition}
   \label{defn-node-value}A node $N \in \mathcal{N}$ stores the {\tmstrong{node
@@ -589,48 +575,16 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
   \ref{algo-pk-length}.
 \end{definition}
 
-\custombinding{2}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  2. }
-  \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
-  1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} \geqslant
-2^{16}$}}}}
-
-{\state{{\RETURN{Error{\END}}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow 64 \times \tmop{Head}_{N, 1}^{6 -
-7}_{}$}}
-
-{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} < 63$}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + \| \tmop{pk}_N
-\|_{\tmop{nib}}$}}
-
-{\state{{\RETURN{$\tmop{Head}_N \END$}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + 63$}}
-
-{\state{$l \leftarrow \| \tmop{pk}_N \|_{\tmop{nib}} - 63$}}
-
-{\state{$i \leftarrow 2$}}
-
-{\state{{\WHILE{$(l > 255)$}}}}
-
-{\state{$\tmop{Head}_{N, i} \leftarrow 255$}}
-
-{\state{$l \leftarrow l - 255$}}
-
-{\state{$i \leftarrow i + 1 \END$}}
-
-{\state{$\tmop{Head}_{N, i} \leftarrow l$}}
-
-{\state{{\RETURN{$\tmop{Head}_N$}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{2}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{2}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
+      1}^{6 - 7}_{}, \tmop{pk}_N)$}}
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \subsection{Merkle Proof}\label{sect-merkl-proof}
 
@@ -702,24 +656,22 @@ occupies less space than its hash.
   \label{defn-merkle-value}For a given node $N$, the {\tmstrong{Merkle value}}
   of $N$, denoted by $H (N)$ is defined as follows:
   \[ \begin{array}{ll}
-       & H : \mathbb{B} \rightarrow \mathbb{B}_{32}\\
+       & H : \mathbb{B} \rightarrow \cup_{i \rightarrow 0}^{32}
+       \mathbb{B}_{32}\\
        & H (N) : \left\{ \begin{array}{lcl}
-         v_N &  & \|v_N \|< 32\\
-         \tmop{Blake} 2 b (v_N) &  & \|v_N \| \geqslant 32
+         v_N &  & \|v_N \|< 32 \infixand N \neq R\\
+         \tmop{Blake} 2 b (v_N) &  & \|v_N \| \geqslant 32 \infixor N = R
        \end{array} \right.
      \end{array} \]
   Where $v_N$ is the node value of $N$ defined in Definition
-  \ref{defn-node-value} and $0_{32 - \| v_N \|}$ an all zero byte array of
-  length $32 - | | v_N | |$. The {\tmstrong{Merkle hash}} of the Trie is
-  defined as:
-  \[ \tmop{Blake} 2 b (H (R)) \]
-  Where $R$ is the root of the Trie.
+  \ref{defn-node-value} and $R$ is the root of the Trie. The {\tmstrong{Merkle
+  hash}} of the Trie is defined to be $H (R)$.
 \end{definition}
 
 \chapter{State Transition}\label{chap-state-transit}
 
-Like any transaction-based transition system, Polkadot state changes via an
-executing ordered set of instructions. These instructions are known as
+Like any transaction-based transition system, Polkadot state changes via
+executing an ordered set of instructions. These instructions are known as
 {\tmem{extrinsics}}. In Polkadot, the execution logic of the state-transition
 function is encapsulated in Runtime as defined in Definition
 \ref{defn-state-machine}. Runtime is presented as a Wasm blob in order to be
@@ -731,11 +683,11 @@ In Section \ref{sect-extrinsics}, we specify the procedure of the process
 where the extrinsics are submitted, pre-processed and validated by Runtime and
 queued to be applied to the current state.
 
-Polkadot, likewise most prominent distributed ledger systems that make state
+Polkadot, as with most prominent distributed ledger systems that make state
 replication feasible, journals and batches a series of extrinsics together in
-a structure knows as a {\tmem{block}} before propagating to the other nodes.
-The specification of the Polkadot block as well the process of verifying its
-validity are both explained in Section \ref{sect-state-replication}.
+a structure known as a {\tmem{block}} before propagating to the other nodes.
+The specification of the Polkadot block as well as the process of verifying
+its validity are both explained in Section \ref{sect-state-replication}.
 
 \section{Interactions with Runtime}\label{sect-entries-into-runtime}
 
@@ -745,27 +697,20 @@ the Runtime easily upgradable without the need to upgrade the Polkadot RE
 itself. The general procedure to interact with Runtime is described in
 Algorithm \ref{algo-runtime-interaction}.
 
-\custombinding{3}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  3. }
-  \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$: the
-  runtime entry,
-  
-  $H_b (B)$: Block hash indicating the state at the end of $B$,
-  
-  $A_1, A_2, \ldots, A_n$: arguments to be passed to the runtime entry)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\tmname{$\mathcal{S}_B \leftarrow$Set-State-At($H_b
-(B)$)}}}}
-
-{\state{$A \leftarrow \tmop{Enc}_{\tmop{SC}} ((A_1, \ldots, A_n))$}}
-
-{\state{$\text{{\tmname{Call-Runtime-Entry}}} (R_B, \mathcal{R}\mathcal{E}_B,
-F, A, A_{\tmop{len}})$}}}}
-
-\hrulefill{\medskip}
+\custombinding{3}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{3}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$:
+      the runtime entry,
+      
+      $H_b (B)$: Block hash indicating the state at the end of $B$,
+      
+      $A_1, A_2, \ldots, A_n$: arguments to be passed to the runtime entry)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 In this section, we describe the details upon which the Polkadot RE is
 interacting with the Runtime. In particular, {\tmname{Set-State-At}} and
@@ -784,8 +729,8 @@ compiled WebAssembly (Wasm) Blob. The current runtime is stored in the state
 database under the key represented as a byte array:
 \[ b \assign \text{3A,63,6F,64,65} \]
 which is the byte array of ASCII representation of string ``:code'' (see
-Section \ref{sect-predef-storage-keys}). For any call to the Runtime, Polkadot
-RE makes sure that it has the Runtime corresponding to the state in which the
+Section \ref{sect-genesis-block}). For any call to the Runtime, Polkadot RE
+makes sure that it has the Runtime corresponding to the state in which the
 entry has been called. This is, in part, because the calls to Runtime have
 potentially the ability to change the Runtime code and hence Runtime code is
 state sensitive. Accordingly, we introduce the following notation to refer to
@@ -798,8 +743,8 @@ the Runtime code at a specific state:
 \end{notation}
 
 The initial runtime code of the chain is embedded as an extrinsics into the
-chain initialization JSON file (representing the genesis block) and is
-submitted to Polkadot RE (see Section \ref{sect-genisis-block}).
+chain initialization JSON file (representing the genesis state) and is
+submitted to Polkadot RE (see Section \ref{sect-genesis-block}).
 
 Subsequent calls to the runtime have the ability to, in turn, call the storage
 API (see Section \ref{sect-re-api}) to insert a new Wasm blob into runtime
@@ -877,28 +822,28 @@ significant one provides the size of the blob.
 
 \section{Extrinsics}\label{sect-extrinsics}
 
-The block body consists of an array of extrinsics. In a broad sense
-exterinsics are data from outside of the state which can trigger the state
-transition. This section describe the specification of extrinsics and their
-inclusion in the block.
+The block body consists of an array of extrinsics. In a broad sense,
+extrinsics are data from outside of the state which can trigger the state
+transition. This section describes the specifications of the extrinsics and
+their inclusion in the blocks.
 
 \subsection{Preliminaries}
 
-The extrinsics are dividedd into two main categories defined as follows:
+The extrinsics are divided in two main categories and defined as follows:
 
 \begin{definition}
   {\tmstrong{Transaction extrinsics}} are extrinsics which are signed using
   either of the key types described in section \ref{sect-cryptographic-keys}
   and broadcasted between the nodes. {\tmstrong{Inherents extrinsics}} are
   unsigned extrinsics which are generated by Polkadot RE and only included in
-  the block produced by the node itself. They are broadcasted as part of the
-  produced block rather than being gossiped as individual extrinsics
+  the blocks produced by the node itself. They are broadcasted as part of the
+  produced blocks rather than being gossiped as individual extrinsics.
 \end{definition}
 
 Polkadot RE does not specify or limit the internals of each extrinsics and
 those are dealt with by the Runtime. From Polkadot RE point of view, each
-extrinsics is simply a SCALE-encoded byte array (see Definition
-\ref{defn-scale-byte-array}).
+extrinsics is simply a SCALE-encoded blob (see Section
+\ref{sect-scale-codec}).
 
 \subsection{Transactions}
 
@@ -907,9 +852,9 @@ extrinsics is simply a SCALE-encoded byte array (see Definition
 Transaction submission is made by sending a {\tmem{Transactions}} network
 message. The structure of this message is specified in Section
 \ref{sect-msg-transactions}. Upon receiving a Transactions message, Polkadot
-RE decodes and decouple the transactions and calls
+RE decodes and decouples the transactions and calls
 \tmverbatim{validate\_trasaction} Runtime entry, defined in Section
-\ref{sect-rte-validate-transaction}, to check the validity of each of received
+\ref{sect-rte-validate-transaction}, to check the validity of each received
 transaction. If \tmverbatim{validate\_transaction} considers the submitted
 transaction as a valid one, Polkadot RE makes the transaction available for
 the consensus engine for inclusion in future blocks.
@@ -929,59 +874,28 @@ pool{\index{transaction pool}}}} and a {\tmem{transaction
 queue}}{\index{transaction queue}} defined as follows:
 
 \begin{definition}
-  The {\tmstrong{Transaction Queue}} of a block producer node, formally
-  referred to as $\tmop{TQ}$ is a data structure which stores the transactions
-  ready to be included in a block sorted according to their priorities. The
+  \label{defn-transaction-queue}The {\tmstrong{Transaction Queue}} of a block
+  producer node, formally referred to as $\tmop{TQ}$ is a data structure which
+  stores the transactions ready to be included in a block sorted according to
+  their priorities (Definition \ref{sect-msg-transactions}). The
   {\tmstrong{Transaction Pool}}, formally referred to as $\tmop{TP}$, is a
   hash table in which Polkadot RE keeps the list of all valid transactions not
-  in the transaction queue. \ 
+  in the transaction queue.
 \end{definition}
 
 Algorithm \ref{algo-validate-transactions} updates the transaction pool and
 the transaction queue according to the received message:
 
-\custombinding{4}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  4. }
-  \label{algo-validate-transactions}{\tmname{Validate-Transactions-and-Store}}($M_T
-  :$Transaction Message)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$L \leftarrow \tmop{Dec}_{\tmop{SC}} (M_T)$}}
-
-{\state{{\FORIN{$T$}{$L$}}{\tmstrong{such that}} $E \nin \tmop{TQ}$
-{\tmstrong{and}} $E \nin \tmop{TP}$:}}
-
-{\state{$B_d \leftarrow${\tmname{Head(Longest-Chain(($\tmop{BT}$))}}}}
-
-{\state{$N \leftarrow H_n (B_d)$}}
-
-{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}, N, T
-\right)$}}
-
-{\state{{\IF{$R$ indicates $E$ is $\tmop{Valid} :$}}}}
-
-{\state{{\IF{$\tmop{Requires}$(R){\subset}}}
-
-\quad$\bigcup_{\forall T \in (\tmop{TQ})}${\tmname{Provided-Tags}}(T) {\cup}
-$\bigcup_{i < d, \forall T, T \in B_i}${\tmname{Provided-Tags(T)}}:}}
-
-{\state{{\tmname{Insert-At(}}$\tmop{TQ}, T, \tmop{Requires} (R),
-\tmop{Priority} (R)$){\END}}}
-
-{\state{{\ELSE{\ }}}}
-
-{\state{{\tmname{Add-To(TP,$T$)}}{\END}}}
-
-{\state{{\tmname{Maintain-Transaction-Pool}}}}
-
-{\state{{\IF{Propagate(R)={\tmstrong{True}}:}}}}
-
-{\state{{\tmname{Propagate(}}$T$){\END}{\END}{\END}}}}}
-
-\hrulefill{\medskip}
+\custombinding{4}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{4}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-validate-transactions}{\tmname{Validate-Transactions-and-Store}}($M_T
+      :$Transaction Message)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 In which
 \begin{itemizeminus}
@@ -1009,43 +923,48 @@ In which
   message{\index{Transaction Message}}}} sent to all peers of Polkadot RE
   node.
 \end{itemizeminus}
-\custombinding{5}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  5. }
-  \label{algo-maintain-transaction-pool}{\tmname{Maintain-Transaction-Pool}}\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\todo{This is scaning the pool for ready transactions and
-moving them to the TQ and dropping transactions which are not valid}}}}
-
-\hrulefill{\medskip}
+\custombinding{5}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{5}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-maintain-transaction-pool}{\tmname{Maintain-Transaction-Pool}}
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \subsubsection{Inherents}
 
-Block inherent data represent the totality of inherent extrinsics included in
-each block. In general, these data are collected or generated by Polkadot RE
-and handed to Runtime for inclusion in the block. Table
-\ref{tabl-inherent-data} lists these inherent data, their identifiers, and
-types.
+Block inherent data represents the totality of inherent extrinsics included in
+each block. This data is collected or generated by the Polkadot RE and handed
+to the Runtime for inclusion in the block. It's the responsability of the RE
+implementation to keep track of those values. Table \ref{tabl-inherent-data}
+lists these inherent data, identifiers, and types. {\todo{define uncles}}
 
 \begin{table}[h]
   \begin{tabular}{lll}
     \hline
-    Identifier & Type  & Description\\
+    Identifier & Value type  & Description\\
     \hline
-    timstap0 & u64 & Unix epoch time in number of seconds\\
-    babeslot & u64 & Babe Slot Number\tmrsup{\ref{defn-epoch-slot}}\\
+    timstap0 & u64 & Unix epoch time in number of milliseconds\\
+    babeslot & u64 & Babe Slot Number\tmrsup{\ref{defn-epoch-slot}} of the
+    current building block\\
+    finalnum & compact integer$^{\ref{defn-sc-len-encoding}}$ & Header
+    number$^{\ref{defn-block-header}}$ of the last finalized block\\
+    uncles00 & array of block headers$^{}$ & Provides a list of potential
+    uncle block headers$^{\ref{defn-block-header}}$ for a given block\\
     \hline
   \end{tabular}
   \caption{\label{tabl-inherent-data}List of inherent data}
 \end{table}
 
 \begin{definition}
-  \label{defn-func-inherent-data}The function
-  {\tmname{Block-Inherents-Data($B_n$)}} return the inherent data defined in
-  Table \ref{tabl-inherent-data} corresponding to Block $B$ as a SCALE encoded
-  dictionary as defined in Definition \ref{defn-scale-list}.
+  \label{defn-inherent-data}{\tmname{Inherent-Data }}is a hashtable
+  (Definition \ref{defn-scale-list}) representing the totality of inherent
+  extrinsics included in each block. The entries of this hash table which are
+  listed in Table \ref{tabl-inherent-data} are collected or generated by the
+  Polkadot RE and then handed to the Runtime for inclusion as dercribed in
+  Algorithm \ref{algo-build-block}. The identifiers are 8-byte values.
 \end{definition}
 
 \section{State Replication}\label{sect-state-replication}
@@ -1054,10 +973,10 @@ Polkadot nodes replicate each other's state by syncing the history of the
 extrinsics. This, however, is only practical if a large set of transactions
 are batched and synced at the time. The structure in which the transactions
 are journaled and propagated is known as a block (of extrinsics) which is
-specefied in Section \ref{sect-block-format}. Like any other replicated states
-machines state inconsistency happens across Polkadot replicas. Section
-\ref{sect-managing-multiple-states} is giving an overview on how a Polkadot RE
-node manage multiple variants of the state.
+specified in Section \ref{sect-block-format}. Like any other replicated state
+machines, state inconsistency happens across Polkadot replicas. Section
+\ref{sect-managing-multiple-states} is giving an overview of how a Polkadot RE
+node manages multiple variants of the state.
 
 \subsection{Block Format}\label{sect-block-format}
 
@@ -1084,7 +1003,7 @@ efficiency of the light clients. It is defined formally as follows:
     \item {\tmstrong{{\tmsamp{number:}}}} formally indicated as
     {\tmstrong{$H_i$}} is an integer, which represents the index of the
     current block in the chain. It is equal to the number of the ancestor
-    blocks. The genesis block has number 0.
+    blocks. The genesis state has number 0.
     
     \item {\tmstrong{{\tmsamp{state\_root:}}}} formally indicated as
     {\tmstrong{$H_r$}} is the root of the Merkle trie, whose leaves implement
@@ -1113,7 +1032,7 @@ efficiency of the light clients. It is defined formally as follows:
   items}} $H^i_d$'s , known as digest items of varying data type (see
   Definition \ref{defn-varrying-data-type}) such that
   \[ H_d (B) : = H^1_d, \ldots, H^n_d \]
-  where each digest item can hold one of the type described in table
+  where each digest item can hold one of the type described in Table
   \ref{tabl-digest-items}:
   
   \begin{center}
@@ -1122,10 +1041,10 @@ efficiency of the light clients. It is defined formally as follows:
       \hline
       Type Id & Type name & sub-components \\
       \hline
-      $0$ & Changes trie root & $\mathbb{B}_{32}$\\
-      1 & Pre-Runtime & $E_{\tmop{id}}, \mathbb{B}$\\
-      2 & Consensus Message & $E_{\tmop{id}}, \mathbb{B}$\\
-      4 & Seal  & $E_{\tmop{id}}, \mathbb{B}$\\
+      $2$ & Changes trie root & $\mathbb{B}_{32}$\\
+      6 & Pre-Runtime & $E_{\tmop{id}}, \mathbb{B}$\\
+      4 & Consensus Message & $E_{\tmop{id}}, \mathbb{B}$\\
+      5 & Seal  & $E_{\tmop{id}}, \mathbb{B}$\\
       \hline
     \end{tabular}}}
     }{\label{tabl-digest-items}The detail of the varying type that a digest
@@ -1144,7 +1063,8 @@ efficiency of the light clients. It is defined formally as follows:
     a consensus engine to the Runtime.
     
     \item {\tmstrong{Consensus}} \tmtextbf{Message} digest item represents a
-    message from the Runtime to the consensus engine.
+    message from the Runtime to the consensus engine (see Section
+    \ref{sect-consensus-message-digest}).
     
     \item {\tmstrong{Seal}} is the data produced by the consensus engine and
     proving the authorship of the block producer. In particular, the Seal
@@ -1163,7 +1083,7 @@ efficiency of the light clients. It is defined formally as follows:
      (B))) \]
 \end{definition}
 
-\subsubsection{Justified Block Header}
+\subsubsection{Justified Block Header}\label{sect-justified-block-header}
 
 The Justified Block Header is provided by the consensus engine and presented
 to the Polkadot RE, for the block to be appended to the blockchain. It
@@ -1218,34 +1138,15 @@ entry into the Runtime as a part of the validation process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-\custombinding{6}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  6. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
-  (B)$)}}\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\tmname{Set-Storage-State-At($P (B)$)}}}}
-
-{\state{{\IF{$\tmop{Just} (B) \neq \emptyset$}}}}
-
-{\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$}}
-
-{\state{{\IF{$B$ {\tmstrong{is}} Finalized {\tmstrong{and}} $P (B)$
-{\tmstrong{is not}} Finalized}}}}
-
-{\state{{\tmname{Mark-as-Final}}$(P (B))${\END}{\END}}}
-
-{\state{{\IF{$H_p (B) \nin \tmop{PBT}$}}}}
-
-{\state{{\RETURN{{\END}}}}}
-
-{\state{{\tmname{Verify-Authorship-Right}}($\tmop{Head} (B)$)}}
-
-{\state{$S \leftarrow$ {\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{Core\_execute\_block}}, B \right)$}}}}
-
-\hrulefill{\medskip}
+\custombinding{6}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{6}}{\smallskip}
+    
+    \begin{tmindent}
+      {\tmname{Import-and-Validate-Block($B, \tmop{Just} (B)$)}}
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 For the definition of the finality and the finalized block see Section
 \ref{sect-finality}. $\tmop{PBT}$ is the pruned block tree defined in
@@ -1256,17 +1157,17 @@ of the block production consensus protocol and is described in Algorithm
 \subsection{Managaing Multiple Variants of
 State}\label{sect-managing-multiple-states}
 
-Unless a node is commited to only update its state according to finalized
+Unless a node is committed to only update its state according to the finalized
 block (See Definition \ref{defn-finalized-block}), it is inevitable for the
-node to store multiple variant of the state (one for each block). This is for
-example necessary for nodes which are participating in block production and
+node to store multiple variants of the state (one for each block). This is,
+for example, necessary for nodes participating in the block production and
 finalization.
 
 While the state trie structure described in Section
-\ref{sect-state-storage-trie-structure} facilitates and optimises storing and
+\ref{sect-state-storage-trie-structure} facilitates and optimizes storing and
 switching between multiple variants of the state storage, Polkadot RE does not
-specifies how a node is required to accoplish this task. Instead Polkadot RE
-is required to implement {\tmname{Set-State-At}} operation which behave as
+specify how a node is required to accomplish this task. Instead, Polkadot RE
+is required to implement {\tmname{Set-State-At}} operation which behaves as
 defined in Definition \ref{defn-set-state-at}:
 
 \begin{definition}
@@ -1275,7 +1176,7 @@ defined in Definition \ref{defn-set-state-at}:
   in which $B$ is a block in the block tree (See Definition
   \ref{defn-block-tree}), sets the content of state storage equal to the
   resulting state of executing all extrinsics contained in the branch of the
-  block tree from genisis till block B including those recorded in Block B.
+  block tree from genesis till block B including those recorded in Block B.
 \end{definition}
 
 For the definition of the state storage see Section
@@ -1360,8 +1261,7 @@ Polkadot discovery is done through the following mechanisms:
   nodes {\todo{which nodes?}} to respond by propagating their view of the
   network.
 \end{itemize}
-
-\section{Transport Protocol}
+\section{Transport Protocol}\label{sect_transport_protocol}
 
 A Polkadot node can establish a connection with nodes in its peer list. All
 the connections must always use encryption and multiplexing. While some nodes'
@@ -1431,8 +1331,8 @@ periodically open ephemeral substreams in order to:
   new separate substreams. This uses the libp2p {\tmem{Kademlia}} protocol
   specified in {\cite{protocol_labs_libp2p_2019}}.
 \end{itemize}
-
-\subsection{Polkadot Communication Substream}
+\subsection{Polkadot Communication
+Substream}\label{sect_polkadot_communication_substream}
 
 For the purposes of communicating Polkadot messages, the dailer of the
 connection opens a unique substream. Optionally, the node can keep a unique
@@ -1445,7 +1345,7 @@ The structure of SCALE encoded messages sent over the unique Polkadot
 communication substream is described in Appendix \ref{sect-network-messages}.
 
 Once the substream is open, the first step is an exchange of a {\tmem{status}}
-message from both sides described in Section \ref{sect-net-msg-status}.
+message from both sides described in Section \ref{sect-msg-status}.
 
 Communications within this substream include:
 \begin{itemize}
@@ -1462,6 +1362,104 @@ Consensus in Polkadot RE is achieved during the execution of two different
 procedures. The first procedure is block production and the second is
 finality. Polkadot RE must run these procedures, if and only if it is running
 on a validator node.
+
+\section{Common Consensus Structures}
+
+\subsection{Consensus Authority Set}\label{sect-authority-set}
+
+Because Polkadot is a proof-of-stake protocol, each of its consensus engine
+has its own set of nodes, represented by known public keys which have the
+authority to influence the protocol in pre-defined ways explained in this
+section. In order to verifiy the validity of each block, Polkadot node must
+track the current list of authorities for that block as formalised in
+Definition \ref{defn-authority-list}
+
+\begin{definition}
+  \label{defn-authority-list}The {\tmstrong{authority list}} of block $B$ for
+  consensus engine $C$ noted as {\tmstrong{$\tmop{Auth}_C (B)$}} \ is an array
+  of pairs of type:
+  \[ (\tmop{Pk}_A, W_A) \]
+  $P_A$ is the session public key of authority A as defined in Definition
+  \ref{defn-session-key}. And $W_A$ is a \tmverbatim{u64} value, indicating
+  the authority weight which is set to equal to 1. The value of $\tmop{Auth}_C
+  (B)$ is part of the Polkadot state. The value for $\tmop{Auth}_C (B_0)$ is
+  set in the genesis state (see Section \ref{sect-genesis-block}) and can be
+  retrieved using a runtime entery corresponding to consensus engine $C$.
+\end{definition}
+
+Note that in Polkadot, all authorities have the weight equal to 1. The weight
+$W_A$ in Definition \ref{defn-authority-list} exists for potential
+improvements in the protocol and could have a use-case in the future.
+
+\subsection{Runtime-to-Consensus Engine
+Message}\label{sect-consensus-message-digest}
+
+The authority lists (see Definition \ref{defn-authority-list}) is part of
+Polkadot state and the Runtime has the authority of updating the lists in the
+course of state transitions. The runtime inform the corresponding consensus
+engine about the changes in the authority set by means of setting a consensus
+message digest item as defined in Definition
+\ref{defn-consensus-message-digest}, in the block header of block $B$ during
+which course of exectution the transition in the authority set has occured.
+
+\begin{definition}
+  \label{defn-consensus-message-digest} Consensus Message is digest item of
+  type 4 as defined in Definition \ref{defn-digest} and consists of the pair:
+  \[ (E_{\tmop{id}}, \tmop{CM}) \]
+  Where $E_{\tmop{id}} \in \mathbb{B}_4$ is the consensus engine unique
+  identifier which can hold the following possible values
+  
+  
+  \[ E_{\tmop{id}} \assign \left\{ \begin{array}{ccc}
+       '' \tmop{BABE}'' &  & \tmop{For} \tmop{messages} \tmop{related}
+       \tmop{to} \tmop{BABE} \tmop{protocol} \tmop{refered} \tmop{to}
+       \tmop{as} E_{\tmop{id}} (\tmop{BABE})\\
+       '' \tmop{FRNK}'' &  & \tmop{For} \tmop{messages} \tmop{related}
+       \tmop{to} \tmop{GRANDPA} \tmop{protocol} \tmop{referred} \tmop{to}
+       \tmop{as} E_{\tmop{id}} (\tmop{FRNK})
+     \end{array} \right. \]
+  and CM is of varying data type which can hold one of the type described in
+  Table \ref{tabl-consensus-messages}:
+  {\center{\tmfloat{h}{small}{table}{\begin{tabular}{l|l|l}
+    {\tmstrong{Type Id}} & {\tmstrong{Type}} & {\tmstrong{Sub-components}}\\
+    \hline
+    1 & Scheduled Change & $(\tmop{Auth}_C, N_B)$\\
+    2 & [RESERVED] & [RESERVED]\\
+    3 & On Disabled & $\tmop{Auth}_{\tmop{ID}}$\\
+    4 & Pause & $N_B$\\
+    5 & Resume & N$_B$
+  \end{tabular}}{\label{tabl-consensus-messages}The consensus digest item for
+  GRANDPA authorities}}}
+  Where Auth$_C$ is defined in Definition \ref{defn-authority-list}, $N_B$ is
+  the number of blocks to delay the change. $\tmop{Auth}_{\tmop{ID}}$ is a 64
+  bit integer pointing to the authority list of the current block. Type Id 2
+  is reserved for future development {\todo{Spec Force Change}}.
+\end{definition}
+
+Polkadot RE should inspect the digest header of each block and delegates
+consesus messages to their consensus engines. Consensus engine should react
+based on the type of consensus messages they receives as follows:
+\begin{itemizeminus}
+  \item {\tmstrong{Scheduled Change}}: Schedule an authority set change. The
+  earliest digest of this type in a single block will be respected. No change
+  should be scheduled if one is already and the delay has not passed
+  completely. If such an inconsitency occures, the scheduled change should be
+  ignored.
+  
+  \item {\tmstrong{On Disabled}}: The authority set index with given index is
+  disabled until the next change.
+  
+  \item {\tmstrong{Pause}}: A signal to pause the current authority set after
+  the given delay. After finalizing the block at delay the authorities should
+  stop voting.
+  
+  \item {\tmstrong{Resume}}: A signal to resume the current authority set
+  after the given delay. After authoring the block at delay the authorities
+  should resume voting.
+\end{itemizeminus}
+The active GRANDPA authorities can only vote for blocks that occured after the
+finalized block in which they were selected. Any votes for blocks before the
+\tmverbatim{Scheduled Change} came into effect get rejected.
 
 \section{Block Production}\label{sect-babe}\label{sect-block-production}
 
@@ -1498,13 +1496,13 @@ not include the most recent finalized blocks according to Definition
 
 \begin{definition}
   \label{defn-epoch-slot}A block production {\tmstrong{epoch}}, formally
-  referred to as $\mathcal{E}$ is a period with pre-known starting time and
+  referred to as $\mathcal{E}$, is a period with pre-known starting time and
   fixed length during which the set of block producers stays constant. Epochs
   are indexed sequentially, and we refer to the $n^{\tmop{th}}$ epoch since
   genesis by $\mathcal{E}_n$. Each epoch is divided into equal length periods
   known as block production {\tmstrong{slots}}, sequentially indexed in each
   epoch. The index of each slot is called {\tmstrong{slot number}}. The equal
-  length duration of each slots is called the {\tmstrong{slot duration}} and
+  length duration of each slot is called the {\tmstrong{slot duration}} and
   indicated by $\mathcal{T}$. Each slot is awarded to a subset of block
   producers during which they are allowed to generate a block.
 \end{definition}
@@ -1556,27 +1554,18 @@ build a block. The $\tmop{sk}$ is the block producer lottery secret key and
 $n$ is the index of epoch for whose slots the block producer is running the
 lottery.
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  7. }
-  \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}($\tmop{sk}
-  :$session secret key of the producer,
-  
-  $n :$epoch index)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$r \leftarrow${\tmname{Epoch-Randomness$(n)$}}}}
-
-{\state{{\FORTO{$i \assign 1$}{$\tmop{sc}_n$}}}}
-
-{\state{$(\pi, d) \leftarrow${\tmem{{\tmname{VRF}}}}($r, i, \tmop{sk}$)}}
-
-{\state{$A [i] \leftarrow (d, \pi)${\END}}}
-
-{\state{{\RETURN{A}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{7}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{7}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}($\tmop{sk}
+      :$session secret key of the producer,
+      
+      $n :$epoch index)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 For any slot $i$ in epoch $n$ where $d < \tau$, the block producer is required
 to produce a block. For the definitions of {\tmname{Epoch-Randomness}} and
@@ -1624,28 +1613,16 @@ formalized in Definition \ref{defn-slot-offset}.
   {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  8. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
-  the slot number of the slot whose time needs to be determined)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$T_s \leftarrow \{ \}$}}
-
-{\state{$B_d \leftarrow${\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
-
-{\state{{\FORIN{$B_i$}{{\tmname{SubChain}}($B_{H_n (B_d) - \tmop{SITL}}$,
-$B_d$)}}}}
-
-{\state{{\tmname{$s_t^{B_i} \leftarrow T^{}_{B_i}$+Slot-Offset($s_{B_i},
-s$)$\times \mathcal{T}_{}$}}}}
-
-{\state{$T_s \leftarrow T_s \cup s_t^{B_i}${\END}}}
-
-{\state{{\RETURN{Median($T_s$)}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{8}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{8}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-slot-time}{\tmname{Slot-Time}}($s$: the slot number of the
+      slot whose time needs to be determined)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 $\mathcal{T}$ is the slot duration defined in Definition
 \ref{defn-epoch-slot}.
@@ -1697,37 +1674,16 @@ digest items defined in Definition \ref{defn-babe-header} and
   \ 
 \end{definition}
 
-\custombinding{9}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  9. }
-  \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
-  pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$A
-\leftarrow${\tmname{Block-production-lottery($\tmop{sk}$, $n$)}}}}
-
-{\state{{\FORTO{$s \leftarrow 1$}{$\tmop{sc}_n$}}}}
-
-{\state{{\tmname{Wait}}({\tmstrong{until}} {\tmname{Slot-Time}}(s))}}
-
-{\state{$(d, \pi) \leftarrow A [s]$}}
-
-{\state{{\IF{$d < \tau$}}}}
-
-{\state{$C_{\tmop{Best}} \leftarrow${\tmname{Longest-Chain}}(BT)}}
-
-{\state{{\tmname{$B_s \leftarrow$Build-Block($C_{\tmop{Best}}$)}}}}
-
-{\state{{\tmname{Add-Digest-Item}}($B_s$,Pre-Runtime,$E_{\tmop{id}}
-(\tmop{BABE}), H_{\tmop{BABE}} (B_s)$)}}
-
-{\state{{\tmname{Add-Digest-Item}}($B_s$,Seal,$S_B$)}}
-
-{\state{{\tmname{Broadcast-Block}}($B_s$)}}}}
-
-\hrulefill{\medskip}
+\custombinding{9}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{9}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
+      pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 {\tmname{Add-Digest-Item}} appends a digest item to the end of the header
 digest $H_d (B)$ according to Definition \ref{defn-digest}.
@@ -1737,28 +1693,20 @@ digest $H_d (B)$ according to Definition \ref{defn-digest}.
 At the end of epoch $\mathcal{E}_n$, each block producer is able to compute
 the randomness seed it needs in order to participate in the block production
 lottery in epoch $\mathcal{E}_{n + 2}$. For epoch 0 and 1, the randomness seed
-is provided in the genesis block. The computation of the seed is described in
+is provided in the genesis state. The computation of the seed is described in
 Algorithm \ref{algo-epoch-randomness} which uses the concept of epoch subchain
 described in Definition \ref{defn-epoch-subchain}.
 
-\custombinding{10}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  10. }
-  \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
-  index)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$\rho \leftarrow \phi$}}
-
-{\state{{\FORIN{$B$}{}}{\tmem{{\tmname{SubChain($\mathcal{E}_{n - 2}$)}}}}}}
-
-{\state{$\rho \leftarrow \rho | | d_B${\END}}}
-
-{\state{{\RETURN{Blake2b({\tmname{Epoch-Randomness}}($n -
-1$)\textbar\textbar$n$\textbar\textbar$\rho$)}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{10}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{10}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
+      index)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 In which value $d_B$ is the VRF output computed for slot $s_B$ by running
 Algorithm \ref{algo-block-production-lottery}.
@@ -1790,47 +1738,16 @@ Algorithm \ref{algo-verify-authorship-right} where:
   \item {\tmname{verify-Slot-Winner}} is defined in Algorithm
   \ref{algo-verify-slot-winner}.
 \end{itemizeminus}
-\custombinding{11}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  11. }
-  \label{algo-verify-authorship-right}{\tmname{Verify-Authorship-Right}}($\tmop{Head}_s
-  (B)$: The header of the block being verified) \\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$s
-\leftarrow${\tmname{Slot-Number-At-Given-Time}}($T_{B_{}}$)}}
-
-{\state{$\mathcal{E}_c \leftarrow${\tmname{Current-Epoch}}()}}
-
-{\state{$(D_1, \ldots, D_{\tmop{length} (H_d (B))}) \leftarrow H_d (B)$}}
-
-{\state{$D_s \leftarrow D_{\tmop{length} (H_d (B))}$}}
-
-{\state{$H_d (B) \leftarrow (D_1, \ldots, D_{\tmop{length} (H_d (B)) - 1})$
-//remove the seal from the digest}}
-
-{\state{($\tmop{id}, \tmop{Sig}_B$)$\leftarrow \tmop{Dec}_{\tmop{SC}} (D_s)$}}
-
-{\state{{\IF{$\tmop{id} \neq${\tmname{Seal-Id}}}}}}
-
-{\state{{\ERROR{``Seal missing''{\END}}}}}
-
-{\state{AuthorID $\leftarrow \tmop{AuthorityDirectory}^{\mathcal{E}_c}
-[H_{\tmop{BABE}} (B) . \tmop{SingerIndex}]$}}
-
-{\state{{\tmname{Verify-Signature}}($\tmop{AuthorID}, H_h (B),
-\tmop{Sig}_B$)}}
-
-{\state{{\IF{$\exists B' \in \tmop{BT} : H_h (B) \neq H_h (B)$
-{\tmstrong{and}} $s_B = s'_B$ {\tmstrong{and}} $\tmop{SignerIndex}_B =
-\tmop{SignerIndex}_{B'}$}}}}
-
-{\state{{\ERROR{``Block producer is equivocating''{\END}}}}}
-
-{\state{{\tmname{Verify-Slot-Winner}}($(d_B, \pi_B), s$,AuthorID)}}}}
-
-\hrulefill{\medskip}
+\custombinding{11}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{11}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-verify-authorship-right}{\tmname{Verify-Authorship-Right}}($\tmop{Head}_s
+      (B)$: The header of the block being verified) 
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 Algorithm \ref{algo-verify-slot-winner} is run as a part of the verification
 process, when a node is importing a block, in which:
@@ -1846,26 +1763,16 @@ process, when a node is importing a block, in which:
   \item $\tau$ is the winning threshold defined in
   \ref{defn-winning-threshold}.
 \end{itemizeminus}
-\custombinding{12}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  12. }
-  \label{algo-verify-slot-winner}{\tmname{Verify-Slot-Winner}}($B$: the block
-  whose winning status to be verified)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$\mathcal{E}_c \leftarrow${\tmname{Current-Epoch}}}}
-
-{\state{$\rho \leftarrow${\tmname{Epoch-Randomness}}$(c)$}}
-
-{\state{{\tmname{Verify-VRF}}($\rho, H_{\tmop{BABE}} (B) . (d_B, \pi_B),
-H_{\tmop{BABE}} (B) .s, c$)}}
-
-{\state{{\IF{$d_B \geqslant \tau$}}}}
-
-{\state{{\ERROR{``Block producer is not a winner of the slot''{\END}}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{12}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{12}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-verify-slot-winner}{\tmname{Verify-Slot-Winner}}($B$: the
+      block whose winning status to be verified)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 $(d_B, \pi_B)$: Block Lottery Result for Block $B$,
 
@@ -1875,63 +1782,53 @@ $n$: Epoch index
 
 AuthorID: The public session key of the block producer
 
-\subsection{Blocks Building Process}\label{sect-block-building}
+\subsection{Block Building Process}\label{sect-block-building}
 
 The blocks building process is triggered by Algorithm
 \ref{algo-block-production} of the consensus engine which runs Alogrithm
 \ref{algo-build-block}.
 
-\custombinding{13}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  13. }
-  \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
-  where at its head, the block to be constructed,
+\custombinding{13}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{13}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The
+      chain where at its head, the block to be constructed,
+      
+      s: Slot number)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
+\begin{itemizeminus}
+  \item $\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
   
-  s: Slot number)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$P_B \leftarrow_{}${\tmname{Head($C_{\tmop{Best}}$)}}}}
-
-{\state{$\tmop{Head} (B) \leftarrow$($H_p \leftarrow H_h (P_B), H_i \leftarrow
-H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
-\phi$)}}
-
-{\state{{\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{initialze\_block}}, \tmop{Head} (_{} B) \right)$}}
-
-{\state{{\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{inherent\_extrinsics}},
-\text{{\tmname{Block-Inherents-Data}}} \right)${\END}}}
-
-{\state{{\FORIN{$E$}{{\tmname{Inherents-Queue}}}}}}
-
-{\state{{\tmname{$R \leftarrow$Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{apply\_extrinsic}}, E \right)${\END}}}
-
-{\state{{\WHILE{{\tmstrong{not }}{\tmname{Block-Is-Full($R$}})
-{\tmstrong{and}} {\tmstrong{not}} {\tmname{End-Of-Slot(s)}}}}}}
-
-{\state{$E
-\leftarrow$\tmverbatim{}{\tmname{{\tmname{}}Next-Ready-Extrinsic()}}}}
-
-{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{apply\_extrinsics}}, E \right)$}}
-
-{\state{{\IF{{\tmstrong{not}} {\tmname{Block-Is-FULL($R$}})}}}}
-
-{\state{{\tmname{Drop(Ready-Extrinsic-Queue,$E$)}}{\END}{\END}}}
-
-{\state{$\tmop{Head} (B) \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{finalize\_block}}, B \right)${\END}}}}}
-
-\hrulefill{\medskip}
-
-$\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
-{\tmname{Block-Inherents-Data}}, {\tmname{Inherents-Queue}},
-{\tmname{Block-Is-Full}} and {\tmname{Next-Ready-Extrinsic}} are defined in
-Definition {\todo{Define these entities}}
-
+  \item {\tmname{Call-Runtime-Entry}} is defined in Notation
+  \ref{nota-call-into-runtime}.
+  
+  \item {\tmname{Inherent-Data}} is defined in Definition
+  \ref{defn-inherent-data}.
+  
+  \item {\tmname{Transaction-Queue}} is defined in Definition
+  \ref{defn-transaction-queue}.
+  
+  \item {\tmname{Block-Is-Full}} indicates that the maximum block size as been
+  used.
+  
+  \item {\tmname{End-Of-Slot}} indicates the end of the BABE slot as defined
+  in Algorithm \ref{algo-slot-time} respectively Definition
+  \ref{defn-epoch-slot}.
+  
+  \item {\tmname{Ok-Result}} indicates whether the result of
+  \tmverbatim{BlockBuilder\_apply\_extrinsics} is successfull. The error type
+  of the Runtime function is defined in Definition {\todo{define error type}}.
+  
+  \item {\tmname{Ready-Extrinsics-Queue}} indicates picking an extrinsics from
+  the extrinsics queue (Definition \ref{defn-transaction-queue}).
+  
+  \item {\tmname{Drop}} indicates removing the extrinsic from the transaction
+  queue (Definition \ref{defn-transaction-queue}).
+\end{itemizeminus}
 \section{Finality}\label{sect-finality}
 
 Polkadot RE uses GRANDPA Finality protocol {\cite{stewart_grandpa:_2019}} to
@@ -1949,14 +1846,16 @@ successfully participate in the block finalization process.
   private key which is an $\tmop{ED} 25519$ private key, is a node running
   GRANDPA protocol, and broadcasts votes to finalize blocks in a Polkadot RE -
   based chain. The {\tmstrong{set of all GRANDPA voters}} is indicated by
-  $\mathbb{V}$. For a given block B, we have
+  $\mathbb{V}$. For a given block B, we have {\todo{change function name, only
+  call at genesis, adjust V\_B over the sections}}
   \[ \mathbb{V}_B = \text{\tmverbatim{grandpa\_authorities}} (B) \]
   where $\mathtt{grandpa\_authorities}$ is the entry into runtime described in
   Section \ref{sect-rte-grandpa-auth}.
 \end{definition}
 
 \begin{definition}
-  {\tmstrong{GRANDPA state}}, $\tmop{GS}$, is defined as
+  {\tmstrong{GRANDPA state}}, $\tmop{GS}$, is defined as {\todo{verify V\_id
+  and id\_V usage, unify}}
   \[ \tmop{GS} \assign \{\mathbb{V}, \tmop{id}_{\mathbb{V}}, r\} \]
   where:
   
@@ -2065,7 +1964,7 @@ votes.
      \#V_{\tmop{obs} (v)}^{r, \tmop{pv}} (B) \geqslant 2 / 3|\mathbb{V}|) \]
 \end{definition}
 
-Note that for genesis block $\tmop{Genesis}$ we always have $\#V_{\tmop{obs}
+Note that for genesis state $\tmop{Genesis}$ we always have $\#V_{\tmop{obs}
 (v)}^{r, \tmop{pv}} (B) = | \mathbb{V} |$.
 
 \
@@ -2162,76 +2061,31 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{14}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  14. }
-  \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
-  ($\mathcal{V}$)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$r \leftarrow 0$}}
-
-{\state{$\mathcal{V}_{\tmop{id}} \leftarrow \tmop{ReadState} ('
-\tmop{AUTHORITY} \_ \tmop{SET} \_ \tmop{KEY}')$}}
-
-{\state{$\mathcal{V}_{\tmop{id}} \leftarrow \mathcal{V}_{\tmop{id}} + 1$}}
-
-{\state{{\tmname{Execute-One-Grandpa-Round}}$(r)$}}}}
-
-\hrulefill{\medskip}
+\custombinding{14}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{14}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
+      ($\mathcal{V}$)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \subsection{Voting Process in Round $r$}
 
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{algo-grandpa-round}.
 
-\custombinding{15}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  15. }
-  \label{algo-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$t_{r, v} \leftarrow$Time}}
-
-{\state{$\tmop{primary} \leftarrow${\tmname{Derive-Primary}}}}
-
-{\state{{\IF{$v = \tmop{primary}$}}}}
-
-{\state{{\tmname{Broadcast(}}\left.$M_{v_{\nosymbol}}^{r - 1,
-\tmop{Fin}}$({\tmname{Best-Final-Candidate}}($r$-1))\right){\END}}}
-
-{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} Time $\geqslant t_{r_,
-v} + 2 \times T$ {\tmstrong{or}} $r$ {\tmstrong{is}} completable){\END}}}
-
-{\state{$L \leftarrow${\tmname{Best-Final-Candidate}}($r$-1)}}
-
-{\state{{\IF{{\tmname{Received($M_{v_{\tmop{primary}}}^{r, \tmop{pv}} (B)$)}}
-{\tmstrong{and}} $B^{r, \tmop{pv}}_v \geqslant B > L$}}}}
-
-{\state{$N \leftarrow B${\END}}}
-
-{\state{{\ELSE{\ }}}}
-
-{\state{$N \leftarrow B' : H_n (B') = \max \{H_n (B') : B' > L\} \END$}}
-
-{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{pv}} (N)$)}}
-
-{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $B^{r,
-\tmop{pv}_{\nosymbol}}_v \geqslant L$ {\tmstrong{and}} (Time $\geqslant t_{r_,
-v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
-
-{\state{{\tmname{Broadcast($M_v^{r, \tmop{pc}}$($B_v^{r, \tmop{pv}}$))}}}}
-
-{\state{{\tmname{Attempt-To-Finalize-Round}}($r$)}}
-
-{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $r$ {\tmstrong{is}}
-completable)}}
-
-{\state{{\tmname{Play-Grandpa-round}}($r + 1$)}}}}
-
-\hrulefill{\medskip}
+\custombinding{15}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{15}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 The condition of {\tmem{completablitiy}} is defined in Definition
 \ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
@@ -2239,54 +2093,25 @@ explained in Algorithm \ref{algo-grandpa-best-candidate} and
 {\tmname{{\tmname{Attempt-To-Finalize-Round}}($r$)}} is described in Algorithm
 \ref{algo-attempt-tofinalize}.
 
-\custombinding{16}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  16. }
-  \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
-  \hline
-\end{tabular}
+\custombinding{16}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{16}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
-{\algorithmic{{\state{$\mathcal{C}_{\nosymbol} \leftarrow \{B' |B' \leqslant
-B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
-\leqslant 1 / 3|\mathbb{V}|\}$}}
-
-{\state{{\IF{$\mathcal{C}= \phi$}}}}
-
-{\state{{\RETURN{$\phi${\END}}}}}
-
-{\state{{\ELSE{\ }}}}
-
-{\state{{\RETURN{$E \in \mathcal{C}: H_n (E) = \max \{H_n (B') : B' \in
-\mathcal{C}\}${\END}}}}}}}
-
-\hrulefill{\medskip}
-
-\custombinding{17}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  17. }
-  \label{algo-attempt-tofinalize}{\tmname{Attempt-To-Finalize-Round}}($r$)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$L \leftarrow${\tmname{Last-Finalized-Block}}}}
-
-{\state{$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
-
-{\state{{\IF{$E \geqslant L$ {\tmstrong{and}} $V^{r, \tmop{pc}}_{\tmop{obs}
-(v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3 |\mathbb{V}|$}}}}
-
-{\state{{\tmname{Last-Finalized-Block}}$\leftarrow E$}}
-
-{\state{{\IF{$M_v^{r, \tmop{Fin}} (E) \nin${\tmname{Received-Messages}}}}}}
-
-{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (E)$)}}
-
-{\state{{\RETURN{{\END}{\END}}}}}
-
-{\state{{\tmstrong{schedule-call}} {\tmname{Attempt-To-Finalize-Round}}($r$)
-{\tmstrong{when}} {\tmname{Receive-Messages}} }}}}
-
-\hrulefill{\medskip}
+\custombinding{17}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{17}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-attempt-tofinalize}{\tmname{Attempt-To-Finalize-Round}}($r$)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \section{Block Finalization}\label{sect-block-finalization}
 
@@ -2339,10 +2164,10 @@ in RFC 7693 {\cite{saarinen_blake2_2015}}.
 
 \section{Cryptographic Keys}\label{sect-cryptographic-keys}
 
-Various type keys are used in Polkadot to prove the identity of the actors
-involve in Polkadot Protocols. To improve security for users, each key type
-has its own unique function and must be treated differently, as described by
-this section.
+Various types of keys are used in Polkadot to prove the identity of the actors
+involved in Polkadot Protocols. To improve the security of the users, each key
+type has its own unique function and must be treated differently, as described
+by this section.
 
 \begin{definition}
   \label{defn-account-key}{\tmstrong{Account key $(\tmop{sk}^a,
@@ -2357,7 +2182,7 @@ this section.
       implemented in {\cite{burdges_schnorr_2019}}\\
       ED25519 & The standard ED25519 signature complying with
       {\cite{josefsson_edwards-curve_2017}}\\
-      secp256k1 & Only for outgoing transfer transaction\\
+      secp256k1 & Only for outgoing transfer transactions\\
       \hline
     \end{tabular}
     \caption{\label{tabl-account-key-schemes}List of public key scheme which
@@ -2372,41 +2197,43 @@ and ``controller keys'', each being used for a different function as described
 below.
 
 \begin{definition}
-  \label{defn-stash-key}{\tmstrong{Stash key}} is a type of an account key
-  which holds funds bonded for staking \ (described in Section
-  \ref{desc-staking-funds}) to a particular controller key (definied in
+  The \label{defn-stash-key}{\tmstrong{Stash key}} is a type of an account key
+  that holds funds bonded for staking (described in Section
+  \ref{sect-staking-funds}) to a particular controller key (defined in
   Definition \ref{defn-controller-key}). As a result, one may actively
   participate with a stash key keeping the stash key offline in a secure
   location. It can also be used to designate a Proxy account to vote in
-  governance proposals, as described in \ref{desc-creating-controller-key}.
-  The Stash key holds the majority of the users funds and should neither be
-  shared with anyone, saved on an online device, or used to submit extrinsics.
+  governance proposals, as described in \ref{sect-creating-controller-key}.
+  The Stash key holds the majority of the users' funds and should neither be
+  shared with anyone, saved on an online device, nor used to submit
+  extrinsics.
 \end{definition}
 
 \begin{definition}
-  \label{defn-controller-key}{\tmstrong{Controller key}} is a type of account
-  key which acts on behalf of the Stash account. It signs transactions which
-  make decisions regarding nomination and validation of other keys. It is a
-  key that will be in the direct control of a user and should mostly be kept
-  offline, used to submit manual extrinsics. It sets \ preferences like payout
-  account and commission, as described in \ref{desc-controller-settings}. If
-  used for a validator, it certifies the session keys, as described in
-  \ref{desc-certifying-keys}. It only needs the required funds to pay
-  transaction fees {\todo{key needing fund needs to be defined}}.
+  \label{defn-controller-key}The {\tmstrong{Controller key}} is a type of
+  account key that acts on behalf of the Stash account. It signs transactions
+  that make decisions regarding the nomination and the validation of other
+  keys. It is a key that will be in the direct control of a user and should
+  mostly be kept offline, used to submit manual extrinsics. It sets
+  preferences like payout account and commission, as described in
+  \ref{sect-controller-settings}. If used for a validator, it certifies the
+  session keys, as described in \ref{sect-certifying-keys}. It only needs the
+  required funds to pay transaction fees {\todo{key needing fund needs to be
+  defined}}.
 \end{definition}
 
 Keys defined in Definitions \ref{defn-account-key}, \ref{defn-stash-key} and
 \ref{defn-controller-key} are created and managed by the user independent of
 the Polkadot implementation. The user notifies the network about the used keys
-by submitting a transaction, as defined in \ref{desc-creating-controller-key}
-and \ref{desc-certifying-keys} respectively.
+by submitting a transaction, as defined in \ref{sect-creating-controller-key}
+and \ref{sect-certifying-keys} respectively.
 
 \begin{definition}
-  {\tmstrong{Session keys}} are short lived keys which are used to
-  authenticate validator operations. Session keys are generated by Polkadot RE
-  and should be changed regularly due to security reasons. Nonetheless no
-  validity period is enforced by Polkadot protocol on session keys. Various
-  types of key used by Polkadot RE are presented in Table
+  \label{defn-session-key}{\tmstrong{Session keys}} are short-lived keys that
+  are used to authenticate validator operations. Session keys are generated by
+  Polkadot RE and should be changed regularly due to security reasons.
+  Nonetheless, no validity period is enforced by Polkadot protocol on session
+  keys. Various types of keys used by Polkadot RE are presented in Table
   \ref{tabl-session-keys}{\tmem{:}}
   
   \begin{table}[h]
@@ -2427,33 +2254,32 @@ and \ref{desc-certifying-keys} respectively.
 
 Session keys must be accessible by certain Runtime Environment APIs defined in
 Appendix \ref{sect-re-api}. Session keys are {\tmem{not}} meant to control the
-majority of the user's funds and should only be used for their intended
+majority of the users' funds and should only be used for their intended
 purpose. {\todo{key managing fund need to be defined}}
 
-\subsection{Holding and staking funds}
+\subsection{Holding and staking funds}\label{sect-staking-funds}
 
-\label{desc-staking-funds}To be specced
+To be specced
 
-\subsection{Creating a Controller key}
+\subsection{Creating a Controller key}\label{sect-creating-controller-key}
 
-\label{desc-creating-controller-key}To be specced
+To be specced
 
-\subsection{Designating a proxy for voting}
+\subsection{Designating a proxy for voting}\label{sect-designating-proxy}
 
-\label{desc-designating-proxy}To be specced
+To be specced
 
-\subsection{Controller settings}
+\subsection{Controller settings}\label{sect-controller-settings}
 
-\label{desc-controller-settings}To be specced
+To be specced
 
-\subsection{Certifying keys}
+\subsection{Certifying keys}\label{sect-certifying-keys}
 
-\label{desc-certifying-keys}Session keys should be changed regularly. As such,
-new session keys need to be certfied by a controller key before put in use.
-The controller only needs to create a certificate by signing a session public
-key and broadcast this certificate via an extrinsic. {\todo{spec the detail of
-the data structure of the certificate etc.}}\chapter{Auxiliary
-Encodings}\label{sect-encoding}
+Session keys should be changed regularly. As such, new session keys need to be
+certified by a controller key before putting in use. The controller only needs
+to create a certificate by signing a session public key and broadcastg this
+certificate via an extrinsic. {\todo{spec the detail of the data structure of
+the certificate etc.}}\chapter{Auxiliary Encodings}\label{sect-encoding}
 
 \section{SCALE Codec}\label{sect-scale-codec}
 
@@ -2648,9 +2474,53 @@ into 4-bits nibbles. Accordingly, we need a method to encode sequences of
   \end{tabular}
 \end{definition}
 
-\chapter{Genesis Block Specification}\label{sect-genisis-block}
+\
 
-\chapter{Predefined Storage Keys}\label{sect-predef-storage-keys}
+\chapter{Genesis State Specification}\label{sect-genesis-block}
+
+The genesis state represents the intial state of Polkadot state storage as a
+set of key-value pairs, which can be retrieved from
+{\cite{web3.0_technologies_foundation_polkadot_2020}}. While each of those
+key/value pairs offer important identifyable information which can be used by
+the Runtime, from Polkadot RE points of view, it is a set of arbitrary
+key-value pair data as it is chain and network dependent. \ Except for the
+\tmverbatim{:code} described in Section \ref{sect-loading-runtime-code} which
+needs to be identified by the Polkadot RE to load its content as the Runtime.
+The other keys and values are unspecifed and its usage depends on the chain
+respectively its corresponding Runtime. The data should be inserted into the
+state storage with the \tmverbatim{set\_storage} RE API, as defined in Section
+\ref{sect-set-storage}.
+
+As such, Polkadot does not defined a formal genesis block. Nonetheless for the
+complatibilty reasons in several algorithms, Polkadot RE defines the
+{\tmem{genesis header}} according to Definition \ref{defn-genesis-header}. By
+the abuse of terminalogy, ``{\tmem{genesis block}}'' refers to the
+hypothetical parent of block number 1 which holds genisis header as its
+header.
+
+\begin{definition}
+  \label{defn-genesis-header}The Polkadot genesis header is a data structure
+  conforming to block header format described in section
+  \ref{defn-block-header}. It contains the values depicted in Table
+  \ref{tabl-genesis-header}:
+  
+  \begin{table}[h]
+    \begin{tabular}{ll}
+      \hline
+      Block header field & Genesis Header Value\\
+      \hline
+      \tmverbatim{}{\tmsamp{parent\_hash}} & 0\\
+      {\tmsamp{number}} & 0\\
+      \tmverbatim{state\_root} & Merkle hash of the state storage trie as
+      defined in Definition \ref{defn-merkle-value} \\
+      & after inserting the genesis state in it.\\
+      {\tmsamp{extrinsics\_root}} & 0\\
+      {\tmsamp{digest}} & 0\\
+      \hline
+    \end{tabular}
+    \caption{\label{tabl-genesis-header}Genesis header values}
+  \end{table}
+\end{definition}
 
 \chapter{Network Messages}\label{sect-network-messages}
 
@@ -2914,7 +2784,7 @@ of those functions.
 
 \section{Storage}
 
-\subsection{\tmverbatim{ext\_set\_storage}}
+\subsection{\tmverbatim{ext\_set\_storage}}\label{sect-set-storage}
 
 Sets the value of a specific key in the state storage.
 
@@ -4216,7 +4086,7 @@ This entry receives no argument; it returns the version data encoded in ABI
 format described in Section \ref{sect-runtime-return-value} containing the
 following information:
 
-\
+\tmverbatim{}
 
 \begin{center}
   \tmfloat{h}{small}{table}{\begin{tabular}{lll}
@@ -4230,8 +4100,8 @@ following information:
     interface\\
     \tmverbatim{spec\_version} & UINT32 & the version of the Runtime
     specification\\
-    \tmverbatim{impl\_version} & UINT32 & the version of the Runtime
-    implementation\\
+    \tmverbatim{impl\_version} & UINT32 & the v\tmverbatim{}ersion of the
+    Runtime implementation\\
     \tmverbatim{apis} & ApisVec & List of supported AP\\
     \hline
   \end{tabular}}{Detail of the version data type returns from runtime
@@ -4240,8 +4110,19 @@ following information:
 
 \subsection{\tmverbatim{Core\_execute\_block}}
 
-This entry is responsible for executing all extrinsics in the block and
-reporting back if the block was successfully executed.
+Executes a full block by executing all exctrinsics included in it and update
+the state accordingly. Additionally, some integrity checks are executed such
+as validating if the parent hash is correct and that the transaction root
+represents the transactions. Internally, this function performs an operation
+similar to the process described in Algorithm \ref{algo-build-block}, by
+calling \tmverbatim{Core\_initialize\_block},
+\tmverbatim{BlockBuilder\_apply\_extrinsics} and
+\tmverbatim{BlockBuilder\_finalize\_block}.
+
+\
+
+This function should be called when a fully complete block is available that
+is not actively being built on, such as blocks received from other peers.
 
 \
 
@@ -4259,13 +4140,16 @@ reporting back if the block was successfully executed.
 
 \subsection{\tmverbatim{Core\_initialize\_block}}
 
-Starts the execution of a particular block.
+Sets up the environment required for building a new block as described in
+Algorithm \ref{algo-build-block}.
 
 \
 
 {\tmstrong{Arguments}}:
 \begin{itemize}
-  \item A block header as defined in \ref{defn-block-header}.
+  \item The block header of the new block as defined in
+  \ref{defn-block-header}. The values {\tmstrong{$H_r$}}, {\tmstrong{$H_e$}}
+  and {\tmstrong{$H_d$}} are left empty.
 \end{itemize}
 
 
@@ -4332,11 +4216,13 @@ in which:
 \end{tabular}}}
 
 
-\subsection{\tmverbatim{Grandpa\_authorities}}\label{sect-rte-grandpa-auth}
+\subsection{\tmverbatim{GrandpaApi\_grandpa\_authorities}}\label{sect-rte-grandpa-auth}
 
-This entry is to report the set of GRANDPA voters at a given block. It
-receives \tmverbatim{block\_id} as an argument; it returns an array of
-\tmverbatim{authority\_id}'s.
+This entry fetches the list of GRANDPA authorities according to the genesis
+block and is used to initialize authority list defined in Definition
+\ref{defn-authority-list}, at genisis. Any future authority changes get
+tracked via Runtiem-to-consensus engine messages as described in Section
+\ref{sect-consensus-message-digest}.
 
 \subsection{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}\label{sect-rte-validate-transaction}
 
@@ -4362,7 +4248,10 @@ varying type described in the Table \ref{tabl-transaction-validity}:
 \
 
 \tmfloat{h}{small}{table}{\begin{tabular}{lll}
-  Type Index & Data type & Description\\
+  \hline
+  {\tmstrong{Type Index}} & {\tmstrong{Data type}} &
+  {\tmstrong{Descri{\tmstrong{}}ption}}\\
+  \hline
   0 & Byte & Indicating invalid extrinsic and bearing the error code
   concerning\\
   &  & the cause of invalidity of the transaction.\\
@@ -4381,23 +4270,28 @@ parts:
    \tmop{propagate}) \]
 
 
-\tmfloat{h}{small}{table}{\begin{tabular}{lll}
-  Name & Description & Type\\
+\tmfloat{h}{small}{table}{\begin{tabular}{|lll|}
+  \hline
+  {\tmstrong{Name}} & {\tmstrong{Description}} & {\tmstrong{Type}}\\
   Priority & Determines the ordering of two transactions that have & 64bit
   integer\\
   & all their dependencies (required tags) satisfied. & \\
+  \hline
   Requires & List of tags specifying extrinsics which should be applied  &
   Array of \\
   & before the current exrinsics can be applied. & Transaction Tags\\
+  \hline
   Provides & Informs Runtime of the extrinsics depending on the tags in &
   Array of \\
   & the list that can be applied after current extrinsics are being applied.
   & Transaction Tags\\
   & Describes the minimum number of blocks for the validity to be correct &
   \\
+  \hline
   Longevity & After this period, the transaction should be removed from the  &
   64 bit integer\\
   & pool or revalidated. & \\
+  \hline
   Propagate & A flag indicating if the transaction should be propagated to  &
   Boolean\\
   & other peers. & 
@@ -4413,9 +4307,9 @@ current node, but will never be sent to other peers.
 
 \subsection{\tmverbatim{BlockBuilder\_apply\_extrinsic}}
 
-Apply extrinsic outside of the block execution function. This doesn't attempt
-to validate anything regarding the block, but it builds a list of transaction
-hashes.
+Apply the extrinsic outside of the block execution function. This doesn't
+attempt to validate anything regarding the block, but it builds a list of
+transaction hashes.
 
 \
 
@@ -4427,15 +4321,15 @@ hashes.
 
 {\tmstrong{Return}}:
 \begin{itemizedot}
-  \item The result from the attempt to apply extrinsic. On success it returns
-  an array of zero length (one byte zero value). On failure it either returns
+  \item The result from the attempt to apply extrinsic. On success, it returns
+  an array of zero length (one byte zero value). On failure, it either returns
   a Dispatch error or an Apply error. An Apply error uses identifiers to
   indicate the specific error type.
   
   \
   
   Dispatch error (\tmverbatim{0x0001} prefix) byte array, contains the
-  following information.
+  following information:
   
   \tmfloat{h}{small}{table}{\begin{tabular}{lll}
     {\tmstrong{Name}} & {\tmstrong{Type}} & {\tmstrong{Description}}\\
@@ -4459,19 +4353,19 @@ hashes.
     validity\\
     \tmverbatim{0x020000} & Call & The call of the transaction is not
     expected\\
-    \tmverbatim{0x020001} & Payment & Inability to pay some fees (e.g. account
+    \tmverbatim{0x020001} & Payment & Inability to pay fees (e.g. account
     balance too low)\\
     \tmverbatim{0x020002} & Future & Transaction not yet being valid (e.g.
     nonce too high)\\
     \tmverbatim{0x020003} & Stale & Transaction being outdated (e.g. nonce too
     low)\\
-    \tmverbatim{0x020004} & BadProof & Invalid transactions proofs (e.g. bad
+    \tmverbatim{0x020004} & BadProof & Invalid transaction proofs (e.g. bad
     signature)\\
     \tmverbatim{0x020005} & AncientBirthBlock & The transaction birth block is
     ancient\\
     \tmverbatim{0x020006} & ExhaustsResources & Would exhaust the resources of
     current block\\
-    &  & the transaction might be valid)\\
+    &  & the transaction might be valid\\
     \tmverbatim{0x020007} & Custom & Any other custom invalidity of unknown
     size\\
     \tmverbatim{0x020100} & CannotLookup & Could not lookup some information
@@ -4493,7 +4387,7 @@ Generate inherent extrinsics. The inherent data will vary from chain to chain.
 {\tmstrong{Arguments}}:
 \begin{itemize}
   \item A {\tmname{Inherents-Data}} structure as defined in
-  \ref{tabl-inherent-data}.
+  \ref{defn-inherent-data}.
 \end{itemize}
 
 
@@ -4619,6 +4513,11 @@ are valid except for the state root.
   \tmtextit{Annual International Conference on the Theory and Applications of
   Cryptographic Techniques},  pages  66--98. Springer, 2018.{\newblock}
   
+  \bibitem[Fou20]{web3.0_technologies_foundation_polkadot_2020}Web3.0~Technologies
+  Foundation. {\newblock}Polkadot Genisis State. {\newblock}Technical Report,
+  \url{https://github.com/w3f/polkadot-spec/blob/master/genesis-state/},
+  2020.{\newblock}
+  
   \bibitem[Gro19]{w3f_research_group_blind_2019}W3F~Research Group.
   {\newblock}Blind Assignment for Blockchain Extension. {\newblock}Technical
   {\keepcase{Specification}}, Web 3.0 Foundation,
@@ -4648,7 +4547,7 @@ are valid except for the state root.
   \url{https://tools.ietf.org/html/rfc7693}, 2015.{\newblock}
   
   \bibitem[Ste19]{stewart_grandpa:_2019}Alistair Stewart. {\newblock}GRANDPA:
-  A Byzantine Finality Gadgets. {\newblock}2019.{\newblock}
+  A Byzantine Finality Gadget. {\newblock}2019.{\newblock}
   
   \bibitem[Tec19]{parity_technologies_substrate_2019}Parity Technologies.
   {\newblock}Substrate Reference Documentation. {\newblock}Rust
