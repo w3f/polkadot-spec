@@ -94,7 +94,8 @@ pub fn ext_crypto_ed25519_sign_version_1(input: ParsedInput) {
             "rtm_ext_crypto_ed25519_sign_version_1",
             &(DUMMY.0, pubkey, msg).encode(),
         )
-        .decode_val();
+        .decode_option()
+        .unwrap();
 
     println!("{}", hex::encode(res));
 }
@@ -120,8 +121,10 @@ pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
             "rtm_ext_crypto_ed25519_sign_version_1",
             &(DUMMY.0, &pubkey, &msg).encode(),
         )
-        .decode_val();
+        .decode_option()
+        .unwrap();
 
+    // Verify signature
     let verified = rtm
         .call(
             "rtm_ext_crypto_ed25519_verify_version_1",
@@ -226,7 +229,8 @@ pub fn ext_crypto_sr25519_sign_version_1(input: ParsedInput) {
             "rtm_ext_crypto_sr25519_sign_version_1",
             &(DUMMY.0, pubkey, msg).encode(),
         )
-        .decode_val();
+        .decode_option()
+        .unwrap();
 
     println!("{}", hex::encode(res));
 }
@@ -252,7 +256,8 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
             "rtm_ext_crypto_sr25519_sign_version_1",
             &(DUMMY.0, &pubkey, &msg).encode(),
         )
-        .decode_val();
+        .decode_option()
+        .unwrap();
 
     let verified = rtm
         .call(
