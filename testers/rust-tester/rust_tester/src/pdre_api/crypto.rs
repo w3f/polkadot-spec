@@ -72,7 +72,7 @@ pub fn ext_crypto_ed25519_generate_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-// TODO: Spec return type (64byte array)
+// TODO: Spec return type (Option<64byte array>)
 // TODO: Spec pubkey parameter (32byte array)
 pub fn ext_crypto_ed25519_sign_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();
@@ -100,7 +100,6 @@ pub fn ext_crypto_ed25519_sign_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-// TODO
 pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();
 
@@ -207,7 +206,7 @@ pub fn ext_crypto_sr25519_generate_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-// TODO: Spec return type (64byte array)
+// TODO: Spec return type (Option<64byte array>)
 // TODO: Spec pubkey parameter (32byte array)
 pub fn ext_crypto_sr25519_sign_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();
@@ -235,7 +234,6 @@ pub fn ext_crypto_sr25519_sign_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-// TODO
 pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();
 
