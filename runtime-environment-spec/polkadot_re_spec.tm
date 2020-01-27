@@ -4275,7 +4275,7 @@
 
   <subsection|ext_storage_get>
 
-  Retrieves the value associated with the given key
+  Retrieves the value associated with the given key from storage.
 
   <strong|Version 1 - Prototype:>
 
@@ -4299,7 +4299,7 @@
 
   Gets the given key from storage, placing the value into a buffer and
   returning the number of bytes that the entry in storage has beyond the
-  offset. If the entry does not exist at all it return None <todo|reference
+  offset. If the entry does not exist at all it returns None <todo|reference
   None>.
 
   <strong|Version 1 - Prototype:>
@@ -4458,7 +4458,7 @@
 
   <subsection|ext_storage_child_set>
 
-  Sets the value under a given key into storage.
+  Sets the value under a given key into the child storage.
 
   <strong|Version 1 - Prototype:>
 
@@ -4493,7 +4493,7 @@
 
   <subsection|ext_storage_child_get>
 
-  Retrieves the value associated with the given key
+  Retrieves the value associated with the given key from the child storage.
 
   <strong|Version 1 - Prototype:>
 
@@ -4530,13 +4530,16 @@
 
   Gets the given key from storage, placing the value into a buffer and
   returning the number of bytes that the entry in storage has beyond the
-  offset. If the entry does not exist at all it return None <todo|reference
+  offset. If the entry does not exist at all it returns None <todo|reference
   None>.
 
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
     (func $ext_storage_child_read_version_1
+
+    \ \ (param $storage_key_data i64) (param $child_def_data i64) (param
+    $child_type_data i32)
 
     \ \ (param $key_data i64) (param $value_out i64) (param $offset i32)
     (result i64))
@@ -4547,6 +4550,15 @@
   <strong|Arguments>:
 
   <\itemize>
+    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
+    containing the storage key as defined in Y.
+
+    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
+    containing the child definition as described in Y.
+
+    <item><verbatim|child_type_data>: an i32 integer specifying the child
+    storage type as defined in X.
+
     <item><verbatim|key>: an i64 FFI type as described in X containing the
     key.
 
