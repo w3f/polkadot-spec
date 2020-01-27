@@ -76,8 +76,6 @@ pub fn ext_storage_clear_version_1(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
-
-    // Clear value
     let _ = rtm.call("rtm_ext_storage_clear_version_1", &key.encode());
 
     // Get cleared value
@@ -120,11 +118,7 @@ pub fn ext_storage_clear_prefix_version_1(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
-
-    // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
-
-    // Clear value
     let _ = rtm.call("rtm_ext_storage_clear_prefix_version_1", &prefix.encode());
 
     // Check first key
@@ -162,8 +156,6 @@ pub fn ext_storage_root_version_1(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
-
-    // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
 
     // Get root
