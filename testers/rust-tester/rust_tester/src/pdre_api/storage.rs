@@ -174,7 +174,6 @@ pub fn ext_storage_root_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-// TODO
 pub fn ext_storage_next_key_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
