@@ -4465,6 +4465,9 @@
   <\verbatim>
     (func $ext_storage_child_set_version_1
 
+    \ \ (param $storage_key_data i64) (param $child_def_data i64) (param
+    $child_type_data i32)
+
     \ \ (param $key_data i64) (param $value_data i64))
   </verbatim>
 
@@ -4473,10 +4476,18 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
+    containing the storage key as defined in Y.
 
-    <item><verbatim|value>: an i64 FFI type as described X containing the
+    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
+    containing the child definition as described in Y.
+
+    <item><verbatim|child_type_data>: an i32 integer specifying the child
+    storage type as defined in X.
+
+    <item><verbatim|key>: an i64 FFI type as defined in X containing the key.
+
+    <item><verbatim|value>: an i64 FFI type as defined X containing the
     value.
   </itemize>
 
