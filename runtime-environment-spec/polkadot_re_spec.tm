@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
 
@@ -4226,7 +4226,54 @@
   The network agent should hand over <math|D> to approperiate consensus
   engine which identified by <math|E<rsub|id>>.
 
-  <appendix|Runtime Environment API<label|sect-re-api>>
+  \;
+
+  <appendix|Runtime Environment API>
+
+  The Runtime Environment API is a set of functions that Polkadot RE exposes
+  to Runtime to access external functions needed for various reasons, such as
+  the Storage of the content, access and manipulation, memory allocation, and
+  also efficiency. We introduce Notation <reference|nota-re-api-at-state> to
+  emphasize that the result of some of the API functions depends on the
+  content of state storage.
+
+  <\notation>
+    <label|nota-re-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we refer
+    to the API exposed by Polkadot RE which interact, manipulate and response
+    based on the state storage whose state is set at the end of the execution
+    of block <math|B>.
+  </notation>
+
+  \ The functions are specified in each subsequent subsection for each
+  category of those functions.
+
+  <section|Storage>
+
+  <subsection|ext_storage_get>
+
+  Retrieves the value associated with the given key
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_storage_get_version_1 (param $key_data i64) (result i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|key>: an i64 FFI type as described in X containing the
+    key.
+
+    <item><verbatim|result>: an i64 FFI type as described in X returning the
+    SCALE encoded Option containing the value.
+  </itemize>
+
+  <subsection|><appendix|Legacy Runtime Environment API<label|sect-re-api>>
+
+  \;
 
   The Runtime Environment API is a set of functions that Polkadot RE exposes
   to Runtime to access external functions needed for various reasons, such as
@@ -6359,85 +6406,91 @@
     <associate|auto-124|<tuple|E.1|52>>
     <associate|auto-125|<tuple|E.1.1|52>>
     <associate|auto-126|<tuple|E.1.2|53>>
-    <associate|auto-127|<tuple|E.1.3|53>>
-    <associate|auto-128|<tuple|E.1.4|53>>
-    <associate|auto-129|<tuple|E.1.5|54>>
+    <associate|auto-127|<tuple|F|53>>
+    <associate|auto-128|<tuple|F.1|53>>
+    <associate|auto-129|<tuple|F.1.1|54>>
     <associate|auto-13|<tuple|1.9|9>>
-    <associate|auto-130|<tuple|E.1.6|54>>
-    <associate|auto-131|<tuple|E.1.7|55>>
-    <associate|auto-132|<tuple|E.1.8|55>>
-    <associate|auto-133|<tuple|E.1.9|56>>
-    <associate|auto-134|<tuple|E.1.10|56>>
-    <associate|auto-135|<tuple|E.1.11|57>>
-    <associate|auto-136|<tuple|E.1.12|57>>
-    <associate|auto-137|<tuple|E.1.13|57>>
-    <associate|auto-138|<tuple|E.1.14|57>>
-    <associate|auto-139|<tuple|E.1.15|57>>
+    <associate|auto-130|<tuple|F.1.2|54>>
+    <associate|auto-131|<tuple|F.1.3|55>>
+    <associate|auto-132|<tuple|F.1.4|55>>
+    <associate|auto-133|<tuple|F.1.5|56>>
+    <associate|auto-134|<tuple|F.1.6|56>>
+    <associate|auto-135|<tuple|F.1.7|57>>
+    <associate|auto-136|<tuple|F.1.8|57>>
+    <associate|auto-137|<tuple|F.1.9|57>>
+    <associate|auto-138|<tuple|F.1.10|57>>
+    <associate|auto-139|<tuple|F.1.11|57>>
     <associate|auto-14|<tuple|1.2.1|9>>
-    <associate|auto-140|<tuple|E.1.15.1|57>>
-    <associate|auto-141|<tuple|E.1.15.2|58>>
-    <associate|auto-142|<tuple|E.1.15.3|58>>
-    <associate|auto-143|<tuple|E.1.16|58>>
-    <associate|auto-144|<tuple|E.1.16.1|59>>
-    <associate|auto-145|<tuple|E.1.16.2|59>>
-    <associate|auto-146|<tuple|E.1.16.3|59>>
-    <associate|auto-147|<tuple|E.1.16.4|60>>
-    <associate|auto-148|<tuple|E.1.16.5|60>>
-    <associate|auto-149|<tuple|E.1.16.6|61>>
+    <associate|auto-140|<tuple|F.1.12|57>>
+    <associate|auto-141|<tuple|F.1.13|58>>
+    <associate|auto-142|<tuple|F.1.14|58>>
+    <associate|auto-143|<tuple|F.1.15|58>>
+    <associate|auto-144|<tuple|F.1.15.1|59>>
+    <associate|auto-145|<tuple|F.1.15.2|59>>
+    <associate|auto-146|<tuple|F.1.15.3|59>>
+    <associate|auto-147|<tuple|F.1.16|60>>
+    <associate|auto-148|<tuple|F.1.16.1|60>>
+    <associate|auto-149|<tuple|F.1.16.2|61>>
     <associate|auto-15|<tuple|1.11|9>>
-    <associate|auto-150|<tuple|E.1.17|61>>
-    <associate|auto-151|<tuple|E.1.17.1|61>>
-    <associate|auto-152|<tuple|E.1.17.2|62>>
-    <associate|auto-153|<tuple|E.1.17.3|62>>
-    <associate|auto-154|<tuple|E.1.17.4|62>>
-    <associate|auto-155|<tuple|E.1.17.5|63>>
-    <associate|auto-156|<tuple|E.1.17.6|63>>
-    <associate|auto-157|<tuple|E.1.17.7|64>>
-    <associate|auto-158|<tuple|E.1.17.8|64>>
-    <associate|auto-159|<tuple|E.1.17.9|64>>
+    <associate|auto-150|<tuple|F.1.16.3|61>>
+    <associate|auto-151|<tuple|F.1.16.4|61>>
+    <associate|auto-152|<tuple|F.1.16.5|62>>
+    <associate|auto-153|<tuple|F.1.16.6|62>>
+    <associate|auto-154|<tuple|F.1.17|62>>
+    <associate|auto-155|<tuple|F.1.17.1|63>>
+    <associate|auto-156|<tuple|F.1.17.2|63>>
+    <associate|auto-157|<tuple|F.1.17.3|64>>
+    <associate|auto-158|<tuple|F.1.17.4|64>>
+    <associate|auto-159|<tuple|F.1.17.5|64>>
     <associate|auto-16|<tuple|1.12|9>>
-    <associate|auto-160|<tuple|E.1.17.10|65>>
-    <associate|auto-161|<tuple|E.1.17.11|65>>
-    <associate|auto-162|<tuple|E.1.17.12|66>>
-    <associate|auto-163|<tuple|E.1.17.13|66>>
-    <associate|auto-164|<tuple|E.1.17.14|66>>
-    <associate|auto-165|<tuple|E.1.17.15|66>>
-    <associate|auto-166|<tuple|E.1.18|66>>
-    <associate|auto-167|<tuple|E.1.18.1|67>>
-    <associate|auto-168|<tuple|E.1.19|67>>
-    <associate|auto-169|<tuple|E.1.19.1|67>>
+    <associate|auto-160|<tuple|F.1.17.6|65>>
+    <associate|auto-161|<tuple|F.1.17.7|65>>
+    <associate|auto-162|<tuple|F.1.17.8|66>>
+    <associate|auto-163|<tuple|F.1.17.9|66>>
+    <associate|auto-164|<tuple|F.1.17.10|66>>
+    <associate|auto-165|<tuple|F.1.17.11|66>>
+    <associate|auto-166|<tuple|F.1.17.12|66>>
+    <associate|auto-167|<tuple|F.1.17.13|67>>
+    <associate|auto-168|<tuple|F.1.17.14|67>>
+    <associate|auto-169|<tuple|F.1.17.15|67>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|E.1.19.2|67>>
-    <associate|auto-171|<tuple|E.1.20|69>>
-    <associate|auto-172|<tuple|E.1.20.1|69>>
-    <associate|auto-173|<tuple|E.1.21|69>>
-    <associate|auto-174|<tuple|E.2|70>>
-    <associate|auto-175|<tuple|F|70>>
-    <associate|auto-176|<tuple|F.1|70>>
-    <associate|auto-177|<tuple|F.1|70>>
+    <associate|auto-170|<tuple|F.1.18|67>>
+    <associate|auto-171|<tuple|F.1.18.1|69>>
+    <associate|auto-172|<tuple|F.1.19|69>>
+    <associate|auto-173|<tuple|F.1.19.1|69>>
+    <associate|auto-174|<tuple|F.1.19.2|70>>
+    <associate|auto-175|<tuple|F.1.20|70>>
+    <associate|auto-176|<tuple|F.1.20.1|70>>
+    <associate|auto-177|<tuple|F.1.21|70>>
     <associate|auto-178|<tuple|F.2|70>>
-    <associate|auto-179|<tuple|F.2.1|71>>
+    <associate|auto-179|<tuple|G|71>>
     <associate|auto-18|<tuple|1.13|9>>
-    <associate|auto-180|<tuple|F.1|71>>
-    <associate|auto-181|<tuple|F.2.2|71>>
-    <associate|auto-182|<tuple|F.2.3|72>>
-    <associate|auto-183|<tuple|F.2.4|72>>
-    <associate|auto-184|<tuple|F.2.5|72>>
-    <associate|auto-185|<tuple|F.2.6|72>>
-    <associate|auto-186|<tuple|F.2.7|73>>
-    <associate|auto-187|<tuple|F.2|73>>
-    <associate|auto-188|<tuple|F.3|73>>
-    <associate|auto-189|<tuple|F.2.8|74>>
+    <associate|auto-180|<tuple|G.1|71>>
+    <associate|auto-181|<tuple|G.1|71>>
+    <associate|auto-182|<tuple|G.2|72>>
+    <associate|auto-183|<tuple|G.2.1|72>>
+    <associate|auto-184|<tuple|G.1|72>>
+    <associate|auto-185|<tuple|G.2.2|72>>
+    <associate|auto-186|<tuple|G.2.3|73>>
+    <associate|auto-187|<tuple|G.2.4|73>>
+    <associate|auto-188|<tuple|G.2.5|73>>
+    <associate|auto-189|<tuple|G.2.6|74>>
     <associate|auto-19|<tuple|1.13|9>>
-    <associate|auto-190|<tuple|F.4|75>>
-    <associate|auto-191|<tuple|F.5|77>>
-    <associate|auto-192|<tuple|F.2.9|79>>
-    <associate|auto-193|<tuple|F.2.10|?>>
-    <associate|auto-194|<tuple|F.2.10|?>>
-    <associate|auto-195|<tuple|F.2.10|?>>
-    <associate|auto-196|<tuple|Tec19|?>>
+    <associate|auto-190|<tuple|G.2.7|75>>
+    <associate|auto-191|<tuple|G.2|77>>
+    <associate|auto-192|<tuple|G.3|79>>
+    <associate|auto-193|<tuple|G.2.8|?>>
+    <associate|auto-194|<tuple|G.4|?>>
+    <associate|auto-195|<tuple|G.5|?>>
+    <associate|auto-196|<tuple|G.2.9|?>>
+    <associate|auto-197|<tuple|G.2.10|?>>
+    <associate|auto-198|<tuple|G.2.10|?>>
+    <associate|auto-199|<tuple|G.2.10|?>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
+    <associate|auto-200|<tuple|Tec19|?>>
+    <associate|auto-201|<tuple|G.2.10|?>>
+    <associate|auto-202|<tuple|Tec19|?>>
     <associate|auto-21|<tuple|1.13|9>>
     <associate|auto-22|<tuple|1.13|9>>
     <associate|auto-23|<tuple|1.13|9>>
@@ -6564,7 +6617,7 @@
     <associate|defn-grandpa-completable|<tuple|5.23|36>>
     <associate|defn-grandpa-justification|<tuple|5.25|36>>
     <associate|defn-hex-encoding|<tuple|B.9|43>>
-    <associate|defn-http-return-value|<tuple|E.4|60>>
+    <associate|defn-http-return-value|<tuple|F.4|60>>
     <associate|defn-index-function|<tuple|2.7|13>>
     <associate|defn-inherent-data|<tuple|3.5|?>>
     <associate|defn-little-endian|<tuple|1.7|8>>
@@ -6575,8 +6628,8 @@
     <associate|defn-node-subvalue|<tuple|2.11|15>>
     <associate|defn-node-value|<tuple|2.8|13>>
     <associate|defn-nodetype|<tuple|2.4|12>>
-    <associate|defn-offchain-local-storage|<tuple|E.3|60>>
-    <associate|defn-offchain-persistent-storage|<tuple|E.2|60>>
+    <associate|defn-offchain-local-storage|<tuple|F.3|60>>
+    <associate|defn-offchain-persistent-storage|<tuple|F.2|60>>
     <associate|defn-path-graph|<tuple|1.2|8>>
     <associate|defn-pruned-tree|<tuple|1.12|9>>
     <associate|defn-radix-tree|<tuple|1.3|8>>
@@ -6597,14 +6650,10 @@
     <associate|defn-varrying-data-type|<tuple|B.3|41>>
     <associate|defn-vote|<tuple|5.16|35>>
     <associate|defn-winning-threshold|<tuple|5.8|30>>
-    <associate|desc-controller-settings|<tuple|A.5.4|40>>
-    <associate|desc-creating-controller-key|<tuple|A.5.2|40>>
-    <associate|desc-designating-proxy|<tuple|A.5.3|40>>
-    <associate|desc-staking-funds|<tuple|A.5.1|40>>
     <associate|key-encode-in-trie|<tuple|2.1|12>>
     <associate|network-protocol|<tuple|4|25>>
     <associate|nota-call-into-runtime|<tuple|3.2|18>>
-    <associate|nota-re-api-at-state|<tuple|E.1|51>>
+    <associate|nota-re-api-at-state|<tuple|F.1|51>>
     <associate|nota-runtime-code-at-state|<tuple|3.1|18>>
     <associate|note-slot|<tuple|5.6|29>>
     <associate|sect-authority-set|<tuple|5.1.1|?>>
@@ -6619,8 +6668,11 @@
     <associate|sect-block-validation|<tuple|3.3.3|23>>
     <associate|sect-certifying-keys|<tuple|A.5.5|?>>
     <associate|sect-consensus-message-digest|<tuple|5.1.2|?>>
+    <associate|sect-controller-settings|<tuple|A.5.4|?>>
+    <associate|sect-creating-controller-key|<tuple|A.5.2|?>>
     <associate|sect-cryptographic-keys|<tuple|A.5|39>>
     <associate|sect-defn-conv|<tuple|1.2|7>>
+    <associate|sect-designating-proxy|<tuple|A.5.3|?>>
     <associate|sect-encoding|<tuple|B|41>>
     <associate|sect-entries-into-runtime|<tuple|3.1|17>>
     <associate|sect-epoch-randomness|<tuple|5.2.5|32>>
@@ -6630,7 +6682,7 @@
     <associate|sect-hash-functions|<tuple|A.1|39>>
     <associate|sect-int-encoding|<tuple|B.1.1|42>>
     <associate|sect-justified-block-header|<tuple|3.3.1.2|22>>
-    <associate|sect-list-of-runtime-entries|<tuple|F.1|69>>
+    <associate|sect-list-of-runtime-entries|<tuple|G.1|69>>
     <associate|sect-loading-runtime-code|<tuple|3.1.1|17>>
     <associate|sect-managing-multiple-states|<tuple|3.3.4|23>>
     <associate|sect-merkl-proof|<tuple|2.1.4|14>>
@@ -6644,16 +6696,17 @@
     <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|D|47>>
     <associate|sect-randomness|<tuple|A.3|39>>
-    <associate|sect-re-api|<tuple|E|51>>
-    <associate|sect-rte-babeapi-epoch|<tuple|F.2.5|71>>
-    <associate|sect-rte-grandpa-auth|<tuple|F.2.6|71>>
-    <associate|sect-rte-hash-and-length|<tuple|F.2.4|71>>
-    <associate|sect-rte-validate-transaction|<tuple|F.2.7|72>>
-    <associate|sect-runtime-entries|<tuple|F|69>>
+    <associate|sect-re-api|<tuple|F|51>>
+    <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|71>>
+    <associate|sect-rte-grandpa-auth|<tuple|G.2.6|71>>
+    <associate|sect-rte-hash-and-length|<tuple|G.2.4|71>>
+    <associate|sect-rte-validate-transaction|<tuple|G.2.7|72>>
+    <associate|sect-runtime-entries|<tuple|G|69>>
     <associate|sect-runtime-return-value|<tuple|3.1.2.3|19>>
     <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|18>>
     <associate|sect-scale-codec|<tuple|B.1|41>>
-    <associate|sect-set-storage|<tuple|E.1.1|51>>
+    <associate|sect-set-storage|<tuple|F.1.1|51>>
+    <associate|sect-staking-funds|<tuple|A.5.1|?>>
     <associate|sect-state-replication|<tuple|3.3|21>>
     <associate|sect-state-storage|<tuple|2.1|11>>
     <associate|sect-state-storage-trie-structure|<tuple|2.1.3|12>>
@@ -6662,7 +6715,7 @@
     <associate|sect_polkadot_communication_substream|<tuple|4.4.2|?>>
     <associate|sect_transport_protocol|<tuple|4.3|?>>
     <associate|slot-time-cal-tail|<tuple|5.9|30>>
-    <associate|snippet-runtime-enteries|<tuple|F.1|69>>
+    <associate|snippet-runtime-enteries|<tuple|G.1|69>>
     <associate|tabl-account-key-schemes|<tuple|A.1|39>>
     <associate|tabl-block-attributes|<tuple|D.3|48>>
     <associate|tabl-consensus-messages|<tuple|5.1|?>>
@@ -6672,7 +6725,7 @@
     <associate|tabl-message-types|<tuple|D.1|47>>
     <associate|tabl-node-role|<tuple|D.2|48>>
     <associate|tabl-session-keys|<tuple|A.2|40>>
-    <associate|tabl-transaction-validity|<tuple|F.2|72>>
+    <associate|tabl-transaction-validity|<tuple|G.2|72>>
   </collection>
 </references>
 
@@ -7055,8 +7108,8 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-73>>
 
-      <with|par-left|<quote|1tab>|5.1.2.<space|2spc>Runtime to Consensus
-      Message <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|5.1.2.<space|2spc>Runtime-to-Consensus
+      Engine Message <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-74>>
 
       5.2.<space|2spc>Block Production <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
