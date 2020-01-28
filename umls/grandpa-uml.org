@@ -32,10 +32,6 @@ return
 [[file:grandpa_high_level.png]]
 
 * grandpa voter
-  :LOGBOOK:
-  CLOCK: [2020-01-15 Wed 09:38]--[2020-01-15 Wed 10:03] =>  0:25
-  :END:
-
 #+begin_src plantuml :file grandpa_voter.png
 autoactivate off
 
@@ -132,15 +128,15 @@ Network -> Voter ++ : poll
                         end /' primary < pg '/
                       end /' primary = pg '/ 
                     end /' no priamyr '/
-                  return 
+                  return /' compute_anscestor_of_best_block '/
 
                   VotingRound -> Environment ++ : best block of best chain containing the anscestor 
                     note over VotingRound
                       best block is the greatest block on the longest
                       chain which can be finalized by current auth set 
                     end note
-                  return best block
-                return
+                  return best block /' best block of best chain '/
+                return /' construct_prevote '/
 
                 alt prevote got constructed
                   VotingRound --> Envioronment ++ : prevoted
@@ -182,8 +178,21 @@ Network -> Voter ++ : poll
 
                 alt precommit timer is up or votes are completable
                   Votes --> VotingRound  : completable
+
                   VotingRound --> VotingRound ++ : construct_precommit
-                  return
+                    VotingRound -> Votes ++ : get prevote_ghost
+                    return
+
+                    alt prevote_ghost exsits
+                       note over VotingRound : pre-commit candidate ← prevote_ghost
+                    else prevote_ghost does not exsits
+                      VotingRound -> Votes ++ : base
+                      return VotingGraph base
+                      note over VotingRound : pre-commit candidate ← base
+                    end
+                    
+                  return pre-commit candidate /'construct pre-commit'/
+
                   VotingRound --> Envioronment ++ : precommited
                   return
                   VotingRound --> Votes ++ : set_precommited_index
