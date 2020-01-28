@@ -37,6 +37,26 @@ autoactivate off
 
 Network -> Voter ++ : poll
   Voter -> Voter ++ : process_incoming
+    loop for all messages in global queue
+      note over Voter: Only possible message types are Commit and Catchup
+      alt it is a Commit message
+        note over Voter: TBS
+      else it is a Catchup message
+        Voter -> Voter ++ : vaidate_catchup
+        alt Good CatchUp 
+           note over Voter: catchup_round ← the round the catchup belong to 
+           Voter -> VotingRound ++ : make a completed round
+           return completed round
+           Voter -> VotingRound ++ : new round whose last round to be the completed round 
+           return new round
+           note over Voter: last_finalized_round ← completed round
+           VotingRound -> Environment ++ : completed (completed round)
+           Voter -> Voter ++ : process_catchup_outcome(for good catchup)
+        else Bad Catchup
+          Voter -> Voter ++ : process_catchup_outcome(for bad catchup)
+        end /' good/bad catchup '/
+      end /' alt message type '/
+    end 
   return
   Voter -> Voter ++ : prune_background_rounds
   return
