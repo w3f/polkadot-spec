@@ -4228,7 +4228,7 @@
 
   \;
 
-  <appendix|Runtime Environment API>
+  <appendix|Runtime Environment API><label|appendix-e>
 
   The Runtime Environment API is a set of functions that Polkadot RE exposes
   to Runtime to access external functions needed for various reasons, such as
@@ -5178,22 +5178,10 @@
 
   \;
 
-  The Runtime Environment API is a set of functions that Polkadot RE exposes
-  to Runtime to access external functions needed for various reasons, such as
-  the Storage of the content, access and manipulation, memory allocation, and
-  also efficiency. We introduce Notation <reference|nota-re-api-at-state> to
-  emphasize that the result of some of the API functions depends on the
-  content of state storage.
-
-  <\notation>
-    <label|nota-re-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we refer
-    to the API exposed by Polkadot RE which interact, manipulate and response
-    based on the state storage whose state is set at the end of the execution
-    of block <math|B>.
-  </notation>
-
-  \ The functions are specified in each subsequent subsection for each
-  category of those functions.
+  The Legacy Runtime Environments APIs were exceeded and replaces by the
+  current API as described in Appendix <reference|appendix-e>. Those legacy
+  functions are only required for executing Runtimes prior the official
+  Polkadot Runtime, such as the Kusama test network.
 
   <section|Storage>
 
@@ -7278,6 +7266,7 @@
     <associate|algo-validate-transactions|<tuple|3.2|20>>
     <associate|algo-verify-authorship-right|<tuple|5.5|33>>
     <associate|algo-verify-slot-winner|<tuple|5.6|33>>
+    <associate|appendix-e|<tuple|E|?>>
     <associate|auto-1|<tuple|1|7>>
     <associate|auto-10|<tuple|1.9|9>>
     <associate|auto-100|<tuple|A.5.3|41>>
@@ -7552,7 +7541,7 @@
     <associate|defn-grandpa-completable|<tuple|5.23|36>>
     <associate|defn-grandpa-justification|<tuple|5.25|36>>
     <associate|defn-hex-encoding|<tuple|B.9|43>>
-    <associate|defn-http-return-value|<tuple|F.4|60>>
+    <associate|defn-http-return-value|<tuple|F.3|60>>
     <associate|defn-index-function|<tuple|2.7|13>>
     <associate|defn-inherent-data|<tuple|3.5|?>>
     <associate|defn-little-endian|<tuple|1.7|8>>
@@ -7563,8 +7552,8 @@
     <associate|defn-node-subvalue|<tuple|2.11|15>>
     <associate|defn-node-value|<tuple|2.8|13>>
     <associate|defn-nodetype|<tuple|2.4|12>>
-    <associate|defn-offchain-local-storage|<tuple|F.3|60>>
-    <associate|defn-offchain-persistent-storage|<tuple|F.2|60>>
+    <associate|defn-offchain-local-storage|<tuple|F.2|60>>
+    <associate|defn-offchain-persistent-storage|<tuple|F.1|60>>
     <associate|defn-path-graph|<tuple|1.2|8>>
     <associate|defn-pruned-tree|<tuple|1.12|9>>
     <associate|defn-radix-tree|<tuple|1.3|8>>
