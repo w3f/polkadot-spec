@@ -5615,7 +5615,7 @@
 
   \;
 
-  <strong|Prototype:>
+  <strong|Version 1 - Prototype:>
 
   <\verbatim>
     (func $ext_offchain_local_storage_get_version_1
@@ -5648,7 +5648,7 @@
 
   \;
 
-  <strong|Prototype:>
+  <strong|Version 1 - Prototype:>
 
   <\verbatim>
     (func $ext_offchain_http_request_start_version_1
@@ -5673,7 +5673,7 @@
     started request.
   </itemize>
 
-  <subsubsection|<verbatim|ext_http_request_add_header>>
+  <subsection|ext_offchain_http_request_add_header>
 
   Append header to the request. Returns an error if the request identifier is
   invalid, <verbatim|http_response_wait> has already been called on the
@@ -5682,15 +5682,13 @@
 
   \;
 
-  <strong|Prototype:>
+  <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_http_request_add_header
+    (func $ext_offchain_http_request_add_header_version_1
 
-    \ \ \ \ \ \ (param $request_id i32) (param $name i32) (param $name_len
-    i32)
-
-    \ \ \ \ \ \ (param $value i32) (param $value_len i32) (result i32))
+    \ \ (param $request_id i32) (param $name i64) (param $value i64) (result
+    i32))
   </verbatim>
 
   \ 
@@ -5701,39 +5699,29 @@
     <item><verbatim|request_id>: an i32 integer indicating the ID of the
     started request.
 
-    <item><verbatim|name>: a pointer to the buffer containing the header
-    name.
+    <item><verbatim|name>: a i64 FFI type pointing to the HTTP header name.
 
-    <item><verbatim|name_len>: an i32 integer indicating the size of the
-    header name.
+    <item><verbatim|value>: a i64 FFI type pointing to the HTTP header value.
 
-    <item><verbatim|value>: a pointer to the buffer containing the header
-    value.
-
-    <item><verbatim|value_len>: an i32 integer indicating the size of the
-    header value.
-
-    <item><verbatim|result>: an i32 integer where the value equal to 0
-    indicates if the header has been set or a value equal to 1 if otherwise.
+    <item><verbatim|result>: an i32 integer where the value equal to
+    <verbatim|0> indicates if the header has been set or a value equal to
+    <verbatim|1> if otherwise. <todo|verify this>
   </itemize>
 
-  <subsubsection|<verbatim|ext_http_request_write_body>>
+  <subsection|ext_http_request_write_body>
 
-  Writes a chunk of the request body. Writing an empty chunk finalises the
-  request. Returns a non-zero value in case the deadline is reached or the
-  chunk could not be written.
+  Writes a chunk of the request body. Returns a non-zero value in case the
+  deadline is reached or the chunk could not be written.
 
   \;
 
-  <strong|Prototype:>
+  <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_http_request_write_body
+    (func $ext_offchain_http_request_write_body_version_1
 
-    \ \ \ \ \ \ (param $request_id i32) (param $chunk i32) (param $chunk_len
-    i32)
-
-    \ \ \ \ \ \ (param $deadline i64) (result i32))
+    \ \ (param $request_id i32) (param $chunk i32) (param $deadline i64)
+    (result i32))
   </verbatim>
 
   \ 
@@ -5744,34 +5732,33 @@
     <item><verbatim|request_id>: an i32 integer indicating the ID of the
     started request.
 
-    <item><verbatim|chunk>: a pointer to the buffer containing the chunk.
-
-    <item><verbatim|chunk_len>: an i32 integer indicating the size of the
-    chunk.
+    <item><verbatim|chunk>: a i64 FFI type pointing to the chunk of bytes.
+    Writing an empty chunk finalizes the request.
 
     <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>. Passing '0' will
-    block indefinitely.
+    as defined in Definition <reference|defn-unix-time>. Passing
+    <verbatim|None> blocks forever. <todo|reference Option>
 
-    <item><verbatim|result>: an i32 integer where the value equal to 0
-    indicates if the header has been set or a non-zero value if otherwise.
+    <item><verbatim|result>: an i32 integer where the value equal to
+    <verbatim|0> indicates if the header has been set or a non-zero value if
+    otherwise.
   </itemize>
 
-  <subsubsection|<verbatim|ext_http_response_wait>>
+  <subsection|ext_http_response_wait>
 
-  Blocks and waits for the responses for given requests. Returns an array of
-  request statuses (the size is the same as number of IDs).
+  Returns a vector of request statuses (the length is the same as IDs). Note
+  that if deadline is not provided the method will block indefinitely,
+  otherwise unready responses will produce <verbatim|DeadlineReached> status.
+  <todo|define statuses>
 
   \;
 
-  <strong|Prototype:>
+  <strong|Version 1- Prototype:>
 
   <\verbatim>
-    (func $ext_http_response_wait
+    (func $ext_offchain_http_response_wait_version_1
 
-    \ \ \ \ \ \ (param $ids i32) (param $ids_len i32) (param $statuses i32)
-
-    \ \ \ \ \ \ (param $deadline i64))
+    \ \ (param $ids i32) (param $deadline i64) (result i64))
   </verbatim>
 
   \ 
@@ -5781,32 +5768,27 @@
   <\itemize>
     <item><verbatim|ids>: a pointer to the buffer containing the started IDs.
 
-    <item><verbatim|ids_len>: an i32 integer indicating the size of IDs.
-
-    <item><verbatim|statuses>: a pointer to the buffer where the request
-    statuses get written to as defined in Definition
-    <reference|defn-http-return-value>. The lenght is the same as the length
-    of <verbatim|ids>.
-
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>. Passing '0' as
-    deadline will block indefinitely.
+    as defined in Definition <reference|defn-unix-time>. Passing None as
+    deadline will block indefinitely. <todo|reference Option>
+
+    <item><verbatim|result>: a i64 FFI type pointing to the SCALE encoded
+    request headers.
   </itemize>
 
-  <subsubsection|<verbatim|ext_http_response_headers>>
+  <subsection|ext_http_response_headers>
 
-  Read all response headers. Returns a vector of key/value pairs. Response
-  headers must be read before the response body.
+  Read all response headers. Returns an array of key/value pairs. Response
+  headers must be read before the response body. <todo|define values>
 
   \;
 
-  <strong|Prototype:>
+  <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_http_response_headers
+    (func $ext_offchain_http_response_headers_version_1
 
-    \ \ \ \ \ \ (param $request_id i32) (param $written_out i32) (result
-    i32))
+    \ \ (param $request_id i32) (param $written_out i32) (result i32))
   </verbatim>
 
   \ 
@@ -5824,7 +5806,7 @@
     headers.
   </itemize>
 
-  <subsubsection|<verbatim|ext_http_response_read_body>>
+  <subsection|ext_http_response_read_body>
 
   Reads a chunk of body response to the given buffer. Returns the number of
   bytes written or an error in case a deadline is reached or the server
@@ -5834,15 +5816,13 @@
 
   \;
 
-  <strong|Prototype:>
+  <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_http_response_read_body
+    (func $ext_offchain_http_response_read_body_version_1
 
-    \ \ \ \ \ \ (param $request_id i32) (param $buffer i32) (param
-    $buffer_len)
-
-    \ \ \ \ \ \ (param $deadline i64) (result i32))
+    \ \ (param $request_id i32) (param $buffer i32) (param $deadline i64)
+    (result i64))
   </verbatim>
 
   \ 
@@ -5853,15 +5833,12 @@
     <item><verbatim|request_id>: an i32 integer indicating the ID of the
     started request.
 
-    <item><verbatim|buffer>: a pointer to the buffer where the body gets
-    written to.
-
-    <item><verbatim|buffer_len>: an i32 integer indicating the size of the
-    buffer.
+    <item><verbatim|buffer>: a i64 FFI type pointing to the buffer where the
+    body gets written to.
 
     <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>. Passing '0' will
-    block indefinitely.
+    as defined in Definition <reference|defn-unix-time>. Passing
+    <verbatim|None> will block indefinitely. <todo|reference Option>
 
     <item><verbatim|result>: an i32 integer where the value equal to 0
     indicateds a fully consumed response or a non-zero value if otherwise.
@@ -8041,11 +8018,11 @@
     <associate|auto-17|<tuple|1.12|9>>
     <associate|auto-170|<tuple|E.5.9|67>>
     <associate|auto-171|<tuple|E.5.10|69>>
-    <associate|auto-172|<tuple|E.5.10.1|69>>
-    <associate|auto-173|<tuple|E.5.10.2|69>>
-    <associate|auto-174|<tuple|E.5.10.3|70>>
-    <associate|auto-175|<tuple|E.5.10.4|70>>
-    <associate|auto-176|<tuple|E.5.10.5|70>>
+    <associate|auto-172|<tuple|E.5.11|69>>
+    <associate|auto-173|<tuple|E.5.12|69>>
+    <associate|auto-174|<tuple|E.5.13|70>>
+    <associate|auto-175|<tuple|E.5.14|70>>
+    <associate|auto-176|<tuple|E.5.15|70>>
     <associate|auto-177|<tuple|F|70>>
     <associate|auto-178|<tuple|F.1|70>>
     <associate|auto-179|<tuple|F.1.1|71>>
