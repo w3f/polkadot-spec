@@ -5236,6 +5236,28 @@
     </itemize-dot>
   </definition>
 
+  <subsection|ext_offchain_is_validator>
+
+  Verifies if the local node is a potential validator. Even if this function
+  returns true, it does not mean that any keys are configured or that the
+  validator is registered in the chain.
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_offchain_is_validator_version_1 (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|return>: a i32 integer which is equal to <verbatim|1> if
+    the local node is a potential validator or a integer equal to
+    <verbatim|0> if it is not.
+  </itemize>
+
   <appendix|Legacy Runtime Environment API<label|sect-re-api>>
 
   \;
@@ -7399,88 +7421,89 @@
     <associate|auto-16|<tuple|1.12|9>>
     <associate|auto-160|<tuple|E.4.7|65>>
     <associate|auto-161|<tuple|E.5|65>>
-    <associate|auto-162|<tuple|F|66>>
-    <associate|auto-163|<tuple|F.1|66>>
-    <associate|auto-164|<tuple|F.1.1|66>>
-    <associate|auto-165|<tuple|F.1.2|66>>
-    <associate|auto-166|<tuple|F.1.3|66>>
-    <associate|auto-167|<tuple|F.1.4|67>>
-    <associate|auto-168|<tuple|F.1.5|67>>
-    <associate|auto-169|<tuple|F.1.6|67>>
+    <associate|auto-162|<tuple|E.5.1|66>>
+    <associate|auto-163|<tuple|F|66>>
+    <associate|auto-164|<tuple|F.1|66>>
+    <associate|auto-165|<tuple|F.1.1|66>>
+    <associate|auto-166|<tuple|F.1.2|66>>
+    <associate|auto-167|<tuple|F.1.3|67>>
+    <associate|auto-168|<tuple|F.1.4|67>>
+    <associate|auto-169|<tuple|F.1.5|67>>
     <associate|auto-17|<tuple|1.12|9>>
-    <associate|auto-170|<tuple|F.1.7|67>>
-    <associate|auto-171|<tuple|F.1.8|69>>
-    <associate|auto-172|<tuple|F.1.9|69>>
-    <associate|auto-173|<tuple|F.1.10|69>>
-    <associate|auto-174|<tuple|F.1.11|70>>
-    <associate|auto-175|<tuple|F.1.12|70>>
-    <associate|auto-176|<tuple|F.1.13|70>>
-    <associate|auto-177|<tuple|F.1.14|70>>
-    <associate|auto-178|<tuple|F.1.15|70>>
-    <associate|auto-179|<tuple|F.1.15.1|71>>
+    <associate|auto-170|<tuple|F.1.6|67>>
+    <associate|auto-171|<tuple|F.1.7|69>>
+    <associate|auto-172|<tuple|F.1.8|69>>
+    <associate|auto-173|<tuple|F.1.9|69>>
+    <associate|auto-174|<tuple|F.1.10|70>>
+    <associate|auto-175|<tuple|F.1.11|70>>
+    <associate|auto-176|<tuple|F.1.12|70>>
+    <associate|auto-177|<tuple|F.1.13|70>>
+    <associate|auto-178|<tuple|F.1.14|70>>
+    <associate|auto-179|<tuple|F.1.15|71>>
     <associate|auto-18|<tuple|1.13|9>>
-    <associate|auto-180|<tuple|F.1.15.2|71>>
-    <associate|auto-181|<tuple|F.1.15.3|71>>
-    <associate|auto-182|<tuple|F.1.16|72>>
-    <associate|auto-183|<tuple|F.1.16.1|72>>
-    <associate|auto-184|<tuple|F.1.16.2|72>>
-    <associate|auto-185|<tuple|F.1.16.3|72>>
-    <associate|auto-186|<tuple|F.1.16.4|73>>
-    <associate|auto-187|<tuple|F.1.16.5|73>>
-    <associate|auto-188|<tuple|F.1.16.6|73>>
-    <associate|auto-189|<tuple|F.1.17|74>>
+    <associate|auto-180|<tuple|F.1.15.1|71>>
+    <associate|auto-181|<tuple|F.1.15.2|71>>
+    <associate|auto-182|<tuple|F.1.15.3|72>>
+    <associate|auto-183|<tuple|F.1.16|72>>
+    <associate|auto-184|<tuple|F.1.16.1|72>>
+    <associate|auto-185|<tuple|F.1.16.2|72>>
+    <associate|auto-186|<tuple|F.1.16.3|73>>
+    <associate|auto-187|<tuple|F.1.16.4|73>>
+    <associate|auto-188|<tuple|F.1.16.5|73>>
+    <associate|auto-189|<tuple|F.1.16.6|74>>
     <associate|auto-19|<tuple|1.13|9>>
-    <associate|auto-190|<tuple|F.1.17.1|75>>
-    <associate|auto-191|<tuple|F.1.17.2|77>>
-    <associate|auto-192|<tuple|F.1.17.3|79>>
-    <associate|auto-193|<tuple|F.1.17.4|?>>
-    <associate|auto-194|<tuple|F.1.17.5|?>>
-    <associate|auto-195|<tuple|F.1.17.6|?>>
-    <associate|auto-196|<tuple|F.1.17.7|?>>
-    <associate|auto-197|<tuple|F.1.17.8|?>>
-    <associate|auto-198|<tuple|F.1.17.9|?>>
-    <associate|auto-199|<tuple|F.1.17.10|?>>
+    <associate|auto-190|<tuple|F.1.17|75>>
+    <associate|auto-191|<tuple|F.1.17.1|77>>
+    <associate|auto-192|<tuple|F.1.17.2|79>>
+    <associate|auto-193|<tuple|F.1.17.3|?>>
+    <associate|auto-194|<tuple|F.1.17.4|?>>
+    <associate|auto-195|<tuple|F.1.17.5|?>>
+    <associate|auto-196|<tuple|F.1.17.6|?>>
+    <associate|auto-197|<tuple|F.1.17.7|?>>
+    <associate|auto-198|<tuple|F.1.17.8|?>>
+    <associate|auto-199|<tuple|F.1.17.9|?>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
-    <associate|auto-200|<tuple|F.1.17.11|?>>
-    <associate|auto-201|<tuple|F.1.17.12|?>>
-    <associate|auto-202|<tuple|F.1.17.13|?>>
-    <associate|auto-203|<tuple|F.1.17.14|?>>
-    <associate|auto-204|<tuple|F.1.17.15|?>>
-    <associate|auto-205|<tuple|F.1.18|?>>
-    <associate|auto-206|<tuple|F.1.18.1|?>>
-    <associate|auto-207|<tuple|F.1.19|?>>
-    <associate|auto-208|<tuple|F.1.19.1|?>>
-    <associate|auto-209|<tuple|F.1.19.2|?>>
+    <associate|auto-200|<tuple|F.1.17.10|?>>
+    <associate|auto-201|<tuple|F.1.17.11|?>>
+    <associate|auto-202|<tuple|F.1.17.12|?>>
+    <associate|auto-203|<tuple|F.1.17.13|?>>
+    <associate|auto-204|<tuple|F.1.17.14|?>>
+    <associate|auto-205|<tuple|F.1.17.15|?>>
+    <associate|auto-206|<tuple|F.1.18|?>>
+    <associate|auto-207|<tuple|F.1.18.1|?>>
+    <associate|auto-208|<tuple|F.1.19|?>>
+    <associate|auto-209|<tuple|F.1.19.1|?>>
     <associate|auto-21|<tuple|1.13|9>>
-    <associate|auto-210|<tuple|F.1.20|?>>
-    <associate|auto-211|<tuple|F.1.20.1|?>>
-    <associate|auto-212|<tuple|F.1.21|?>>
-    <associate|auto-213|<tuple|F.2|?>>
-    <associate|auto-214|<tuple|G|?>>
-    <associate|auto-215|<tuple|G.1|?>>
+    <associate|auto-210|<tuple|F.1.19.2|?>>
+    <associate|auto-211|<tuple|F.1.20|?>>
+    <associate|auto-212|<tuple|F.1.20.1|?>>
+    <associate|auto-213|<tuple|F.1.21|?>>
+    <associate|auto-214|<tuple|F.2|?>>
+    <associate|auto-215|<tuple|G|?>>
     <associate|auto-216|<tuple|G.1|?>>
-    <associate|auto-217|<tuple|G.2|?>>
-    <associate|auto-218|<tuple|G.2.1|?>>
-    <associate|auto-219|<tuple|G.1|?>>
+    <associate|auto-217|<tuple|G.1|?>>
+    <associate|auto-218|<tuple|G.2|?>>
+    <associate|auto-219|<tuple|G.2.1|?>>
     <associate|auto-22|<tuple|1.13|9>>
-    <associate|auto-220|<tuple|G.2.2|?>>
-    <associate|auto-221|<tuple|G.2.3|?>>
-    <associate|auto-222|<tuple|G.2.4|?>>
-    <associate|auto-223|<tuple|G.2.5|?>>
-    <associate|auto-224|<tuple|G.2.6|?>>
-    <associate|auto-225|<tuple|G.2.7|?>>
-    <associate|auto-226|<tuple|G.2|?>>
-    <associate|auto-227|<tuple|G.3|?>>
-    <associate|auto-228|<tuple|G.2.8|?>>
-    <associate|auto-229|<tuple|G.4|?>>
+    <associate|auto-220|<tuple|G.1|?>>
+    <associate|auto-221|<tuple|G.2.2|?>>
+    <associate|auto-222|<tuple|G.2.3|?>>
+    <associate|auto-223|<tuple|G.2.4|?>>
+    <associate|auto-224|<tuple|G.2.5|?>>
+    <associate|auto-225|<tuple|G.2.6|?>>
+    <associate|auto-226|<tuple|G.2.7|?>>
+    <associate|auto-227|<tuple|G.2|?>>
+    <associate|auto-228|<tuple|G.3|?>>
+    <associate|auto-229|<tuple|G.2.8|?>>
     <associate|auto-23|<tuple|1.13|9>>
-    <associate|auto-230|<tuple|G.5|?>>
-    <associate|auto-231|<tuple|G.2.9|?>>
-    <associate|auto-232|<tuple|G.2.10|?>>
+    <associate|auto-230|<tuple|G.4|?>>
+    <associate|auto-231|<tuple|G.5|?>>
+    <associate|auto-232|<tuple|G.2.9|?>>
     <associate|auto-233|<tuple|G.2.10|?>>
     <associate|auto-234|<tuple|G.2.10|?>>
-    <associate|auto-235|<tuple|Tec19|?>>
+    <associate|auto-235|<tuple|G.2.10|?>>
+    <associate|auto-236|<tuple|Tec19|?>>
     <associate|auto-24|<tuple|1.13|9>>
     <associate|auto-25|<tuple|1.14|9>>
     <associate|auto-26|<tuple|1.15|9>>
