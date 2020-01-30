@@ -5875,8 +5875,8 @@
 
   <\itemize>
     <item><verbatim|ids>: a pointer as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded, started
-    request IDs.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded array of
+    started request IDs.
 
     <item><verbatim|deadline>: a pointer as defined in Definition E.2
     indicating the SCALE encoded <verbatim|Option> as defined in Definition
@@ -5884,8 +5884,9 @@
     defined in Definition 1.10. Passing <verbatim|None> blocks indefinitely.
 
     <item><verbatim|result>: a pointer as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded request
-    statuses as defined in Definition <reference|defn-http-status-codes>.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded array of
+    request statuses as defined in Definition
+    <reference|defn-http-status-codes>.
   </itemize>
 
   <subsection|ext_http_response_headers>
