@@ -4435,10 +4435,10 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: a pointer as described in
+    <item><verbatim|key>: a pointer as described in Definition
     <reference|defn-runtime-pointer> containing the key.
 
-    <item><verbatim|value>: a pointer as described in
+    <item><verbatim|value>: a pointer as described in Definition
     <reference|defn-runtime-pointer> containing the value.
   </itemize>
 
@@ -4457,11 +4457,12 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|key>: a pointer as described in Definition
+    <reference|defn-runtime-pointer> containing the key.
 
-    <item><verbatim|result>: an i64 FFI type as described in X returning the
-    SCALE encoded Option containing the value.
+    <item><verbatim|result>: a pointer as described in Definition
+    <reference|defn-runtime-pointer> returning the SCALE encoded
+    <verbatim|Option> containing the value. <todo|reference Option>
   </itemize>
 
   <subsection|ext_storage_read>
@@ -4485,13 +4486,13 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|key>: a pointer as described in Definition
+    <reference|defn-runtime-pointer> containing the key.
 
-    <item><verbatim|value_out>: an i64 FFI type as described in X containing
-    the buffer in which the value will be written in. This function will
-    never write more then the length of the buffer, even if the values length
-    is bigger.
+    <item><verbatim|value_out>: a pointer as described in Definition
+    <reference|defn-runtime-pointer> containing the buffer to which the value
+    will be written to. This function will never write more then the length
+    of the buffer, even if the value's length is bigger.
 
     <item><verbatim|offset>: an i32 integer containing the offset beyond the
     value should be read from.
@@ -4515,8 +4516,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|key>: a pointer as described in Definition
+    <reference|defn-runtime-pointer> containing the key.
   </itemize>
 
   <subsection|ext_storage_exists>
@@ -4526,7 +4527,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_storage_exists_version_1 (param $key_data i64))
+    (func $ext_storage_exists_version_1 (param $key_data i64) (return i32))
   </verbatim>
 
   \;
@@ -4534,8 +4535,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> containing the key.
+
+    <item><strong|return>: an i32 value equal to <verbatim|1> if the key
+    exists or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
   <subsection|ext_storage_clear_prefix>
@@ -4554,8 +4558,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|prefix>: an i64 FFI type as described in X containing the
-    prefix.
+    <item><verbatim|prefix>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> containing the prefix.
   </itemize>
 
   <subsection|ext_storage_root>
@@ -4573,8 +4577,9 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|return>: an i64 FFI type as described in X containing the
-    SCALE encoded storage root.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded storage
+    root.
   </itemize>
 
   <subsection|ext_storage_changes_root>
@@ -4594,11 +4599,12 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|parent_hash>: an i64 FFI type as described in X
-    containing the SCALE encoded block hash.
+    <item><strong|><verbatim|parent_hash>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded block hash.
 
-    <item><verbatim|return>: an i64 FFI type as described in X containing the
-    SCALE encoded Option <todo|reference Option> containing the change root.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> <todo|reference Option> containing the change root.
   </itemize>
 
   <subsection|ext_storage_next_key>
@@ -4616,11 +4622,12 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_data>: an i64 FFI type as described in X
-    containing the key.
+    <item><strong|><verbatim|key_data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
 
-    <item><verbatim|return>: an i64 FFI type as described in X containing the
-    SCALE encoded Option <todo|reference Option> containing the change root.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded Option
+    <todo|reference Option> containing the next key in lexicographic order.
   </itemize>
 
   <section|Child Storage>
