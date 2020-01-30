@@ -4990,6 +4990,12 @@
 
   <section|Crypto>
 
+  Crypto
+
+  <\definition>
+    <label|defn-key-type-id>Key type ID<text-dots>
+  </definition>
+
   <subsection|ext_crypto_ed25519_public_keys>
 
   Returns all <verbatim|ed25519> public keys for the given key id from the
@@ -5007,24 +5013,25 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key
-    type ID as defined in X.
+    <item><strong|><verbatim|key_type_id>: an i32 integer indicating the key
+    type ID as defined in Defintion <reference|defn-key-type-id>.
 
-    <item><verbatim|return>: an i64 FFI type as defined in X containing the
-    SCALE encoded public keys as defined in Y.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded 32-byte
+    public keys.
   </itemize>
 
   <subsection|ext_crypto_ed25519_generate>
 
   Generates an <verbatim|ed25519> key for the given key type using an
-  optional seed and stores it in the keystore.
+  optional BIP-39 seed <todo|link BIP-39> and stores it in the keystore.
 
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
     (func $ext_crypto_ed25519_generate_version_1
 
-    \ \ (param $key_type_id i32) (param $seed i64) (return i64))
+    \ \ (param $key_type_id i32) (param $seed i64) (return i32))
   </verbatim>
 
   \;
@@ -5032,14 +5039,16 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key id
-    as defined in X.
+    <item><strong|><verbatim|key_type_id>: an i32 integer indicating the key
+    type ID as defined in Definition <reference|defn-key-type-id>.
 
-    <item><verbatim|seed>: a SCALE encoded <verbatim|Option> <todo|reference
-    Option> containing the seed which must be valid UTF-8.
+    <item><verbatim|seed>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> inicating the SCALE encoded
+    <verbatim|Option> <todo|reference Option> containing the BIP-39 seed
+    which must be valid UTF8.
 
-    <item><verbatim|return>: an i64 FFI type as defined in X containing the
-    SCALE encoded public keys as defined in Y.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    32-byte public key.
   </itemize>
 
   <subsection|ext_crypto_ed25519_sign>
@@ -5052,8 +5061,8 @@
   <\verbatim>
     (func $ext_crypto_ed25519_sign_version_1
 
-    \ \ (param $key_type_id i32) (param $key_data i32) (param $msg_data i64)
-    (return i64))
+    \ \ (param $key_type_id i32) (param $key i32) (param $msg i64) (return
+    i64))
   </verbatim>
 
   \;
@@ -5061,17 +5070,21 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key id
-    as defined in X.
+    <item><strong|><verbatim|key_type_id>: an i32 integer indicating the key
+    type ID as defined in Definition <reference|defn-key-type-id>.
 
-    <item><verbatim|key_data>: a pointer to the buffer containing the public
-    key.
+    <item><verbatim|key>: a regular pointer to the buffer containing the
+    32-byte public key.
 
-    <item><verbatim|msg_data>: an i64 FFI type as defined in X containing the
-    message that is to be signed.
+    <item><verbatim|msg_data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the message that is to be
+    signed.
 
-    <item><verbatim|return>: an i64 FFI type as defined in X containing the
-    signature.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> <todo|reference Option> containing the signature. This
+    function returns <verbatim|None> if the public key cannot be found in the
+    key store.
   </itemize>
 
   <subsection|ext_crypto_ed25519_verify>
@@ -5083,8 +5096,7 @@
   <\verbatim>
     (func $ext_crypto_ed25519_verify_version_1
 
-    \ \ (param $sig_data i32) (param $msg_data i64) (param $key_data i32)
-    (return i64))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
   </verbatim>
 
   \;
@@ -5092,17 +5104,18 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig_data>: a pointer to the buffer containing
-    the signature.
+    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    the 64-byte signature.
 
-    <item><verbatim|msg_data>: an i64 FFI type as defined in X containing the
-    message that is to be verified.
+    <item><verbatim|msg>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the message that is to be
+    verified.
 
-    <item><verbatim|key_data>: a pointer to the buffer containing the public
-    key.
+    <item><verbatim|key>: a regular pointer to the buffer containing the
+    32-byte public key.
 
-    <item><verbatim|return>: a SCALE encoded boolean value of <verbatim|true>
-    if the signature is valid, <verbatim|false> if otherwise.
+    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
+    signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
   <subsection|ext_crypto_sr25519_public_keys>
@@ -5123,23 +5136,24 @@
 
   <\itemize>
     <item><strong|><verbatim|key_type_id>: an i32 integer containg the key
-    type ID as defined in X.
+    type ID as defined in <reference|defn-key-type-id>.
 
-    <item><verbatim|return>: an i64 FFI type as defined in X containing the
-    SCALE encoded public keys as defined in Y.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded 32-byte
+    public keys.
   </itemize>
 
   <subsection|ext_crypto_sr25519_generate>
 
   Generates an <verbatim|sr25519> key for the given key type using an
-  optional seed and stores it in the keystore.
+  optional BIP-39 seed and stores it in the keystore.
 
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
     (func $ext_crypto_sr25519_generate_version_1
 
-    \ \ (param $key_type_id i32) (param $seed i64) (return i64))
+    \ \ (param $key_type_id i32) (param $seed i64) (return i32))
   </verbatim>
 
   \;
@@ -5147,14 +5161,16 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key id
-    as defined in X.
+    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
+    as defined in Definition <reference|defn-key-type-id>.
 
-    <item><verbatim|seed>: a SCALE encoded <verbatim|Option> <todo|reference
-    Option> containing the seed which must be valid UTF-8.
+    <item><verbatim|seed>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> <todo|reference Option> containing the BIP-39 seed
+    which must be valid UTF8.
 
-    <item><verbatim|return>: an i64 FFI type as defined in X containing the
-    SCALE encoded public keys as defined in Y.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    32-byte public key.
   </itemize>
 
   <subsection|ext_crypto_sr25519_sign>
@@ -5167,8 +5183,8 @@
   <\verbatim>
     (func $ext_crypto_sr25519_sign_version_1
 
-    \ \ (param $key_type_id i32) (param $key_data i32) (param $msg_data i64)
-    (return i64))
+    \ \ (param $key_type_id i32) (param $key i32) (param $msg i64) (return
+    i64))
   </verbatim>
 
   \;
@@ -5176,17 +5192,21 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key id
-    as defined in X.
+    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
+    as defined in Definition <reference|defn-key-type-id>
 
-    <item><verbatim|key_data>: a pointer to the buffer containing the public
-    key.
+    <item><verbatim|key>: a regular pointer to the buffer containing the
+    32-byte public key.
 
-    <item><verbatim|msg_data>: an i64 FFI type as defined in X containing the
-    message that is to be signed.
+    <item><verbatim|msg>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the message that is to be
+    signed.
 
-    <item><verbatim|return>: an i64 FFI type as defined in X containing the
-    signature.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> <todo|reference Option> containing the signature. This
+    function returns <verbatim|None> if the public key cannot be found in the
+    key store.
   </itemize>
 
   <subsection|ext_crypto_sr25519_verify>
@@ -5198,8 +5218,7 @@
   <\verbatim>
     (func $ext_crypto_sr25519_verify_version_1
 
-    \ \ (param $sig_data i32) (param $msg_data i64) (param $key_data i32)
-    (return i64))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
   </verbatim>
 
   \;
@@ -5207,17 +5226,18 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig_data>: a pointer to the buffer containing
-    the signature.
+    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    the 64-byte signature.
 
-    <item><verbatim|msg_data>: an i64 FFI type as defined in X containing the
-    message that is to be verified.
+    <item><verbatim|msg>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the message that is to be
+    verified.
 
-    <item><verbatim|key_data>: a pointer to the buffer containing the public
-    key.
+    <item><verbatim|key>: a regular pointer to the buffer containing the
+    32-byte public key.
 
-    <item><verbatim|return>: a SCALE encoded boolean value of <verbatim|true>
-    if the signature is valid, <verbatim|false> if otherwise.
+    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
+    signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
   <section|Hashing>
@@ -8290,6 +8310,7 @@
     <associate|defn-http-return-value|<tuple|F.3|60>>
     <associate|defn-index-function|<tuple|2.7|13>>
     <associate|defn-inherent-data|<tuple|3.5|?>>
+    <associate|defn-key-type-id|<tuple|E.6|?>>
     <associate|defn-little-endian|<tuple|1.7|8>>
     <associate|defn-longest-chain|<tuple|1.14|9>>
     <associate|defn-merkle-value|<tuple|2.12|15>>
@@ -8302,6 +8323,8 @@
     <associate|defn-offchain-persistent-storage|<tuple|F.1|60>>
     <associate|defn-path-graph|<tuple|1.2|8>>
     <associate|defn-pruned-tree|<tuple|1.12|9>>
+    <associate|defn-public-key|<tuple|E.7|?>>
+    <associate|defn-public-keys|<tuple|E.7|?>>
     <associate|defn-radix-tree|<tuple|1.3|8>>
     <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|7>>
     <associate|defn-runtime-pointer|<tuple|E.2|?>>
