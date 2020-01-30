@@ -4425,9 +4425,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_storage_set_version_1
-
-    \ \ (param $key_data i64) (param $value_data i64))
+    (func $ext_storage_set_version_1 (param $key i64) (param $value i64))
   </verbatim>
 
   \;
@@ -4449,7 +4447,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_storage_get_version_1 (param $key_data i64) (result i64))
+    (func $ext_storage_get_version_1 (param $key i64) (result i64))
   </verbatim>
 
   \;
@@ -4477,8 +4475,8 @@
   <\verbatim>
     (func $ext_storage_read_version_1
 
-    \ \ (param $key_data i64) (param $value_out i64) (param $offset i32)
-    (result i64))
+    \ \ (param $key i64) (param $value_out i64) (param $offset i32) (result
+    i64))
   </verbatim>
 
   \;
@@ -4619,7 +4617,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_storage_next_key_version_1 (param $key_data i64) (return i64))
+    (func $ext_storage_next_key_version_1 (param $key i64) (return i64))
   </verbatim>
 
   \;
@@ -4627,7 +4625,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_data>: a pointer as defined in Definition
+    <item><strong|><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|return>: a pointer as defined in Definition
@@ -4719,8 +4717,8 @@
     <reference|defn-runtime-pointer> indicating the child definition as
     described in Defnition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in Definition <reference|defn-child-type>.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in Definition <reference|defn-child-type>.
 
     <item><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
@@ -4845,8 +4843,8 @@
     <reference|defn-runtime-pointer> indicating the child definition as
     described in Definition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in Definition <reference|defn-child-type>.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in Definition <reference|defn-child-type>.
   </itemize>
 
   <subsection|ext_storage_child_exists>
@@ -4877,8 +4875,8 @@
     <reference|defn-runtime-pointer> indicating the child definition as
     described in Definition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in Defintion <reference|defn-child-type>.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in Defintion <reference|defn-child-type>.
 
     <item><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
@@ -4991,7 +4989,7 @@
     <item><verbatim|child_type>: an i32 integer specifying the child storage
     type as defined in Definition <reference|defn-child-type>.
 
-    <item><strong|><verbatim|key_data>: a pointer as defined in Definition
+    <item><strong|><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|return>: a pointer as defined in Definition
@@ -5091,7 +5089,7 @@
     <item><verbatim|key>: a regular pointer to the buffer containing the
     32-byte public key.
 
-    <item><verbatim|msg_data>: a pointer as defined in Definition
+    <item><verbatim|msg>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the message that is to be
     signed.
 
@@ -5917,9 +5915,6 @@
   <\itemize>
     <item><verbatim|request_id>: an i32 integer indicating the ID of the
     started request.
-
-    <item><verbatim|written_out>: a pointer to the buffer where the size of
-    the response headers gets written to.
 
     <item><verbatim|result>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded value
