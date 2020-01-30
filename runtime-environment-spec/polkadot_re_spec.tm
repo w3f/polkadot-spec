@@ -4637,8 +4637,6 @@
 
   <section|Child Storage>
 
-  Child storage
-
   <\definition>
     <label|defn-child-storage-type>Child storage type<text-dots>
   </definition>
@@ -5001,8 +4999,6 @@
   </itemize>
 
   <section|Crypto>
-
-  Crypto
 
   <\definition>
     <label|defn-key-type-id>Key type ID<text-dots>
@@ -5465,8 +5461,8 @@
   </definition>
 
   <\definition>
-    <strong|HTTP status codes> that can get returned by certain Offchain HTTP
-    functions.
+    <label|defn-http-status-codes><strong|HTTP status codes> that can get
+    returned by certain Offchain HTTP functions.
 
     <\itemize-dot>
       <item><verbatim|0>: the specified request identifier is invalid.
@@ -5862,7 +5858,6 @@
   Returns an array of request statuses (the length is the same as IDs). Note
   that if deadline is not provided the method will block indefinitely,
   otherwise unready responses will produce <verbatim|DeadlineReached> status.
-  <todo|define statuses>
 
   \;
 
@@ -5890,13 +5885,13 @@
 
     <item><verbatim|result>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded request
-    responses. <todo|define responses>
+    statuses as defined in Definition <reference|defn-http-status-codes>.
   </itemize>
 
   <subsection|ext_http_response_headers>
 
-  Read all response headers. Returns an array of key/value pairs. Response
-  headers must be read before the response body. <todo|define values>
+  Read all HTTP response headers. Returns an array of key/value pairs.
+  Response headers must be read before the response body.
 
   \;
 
@@ -5917,8 +5912,8 @@
     started request.
 
     <item><verbatim|result>: a pointer as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded value
-    pairs.
+    <reference|defn-runtime-pointer> indicating a SCALE encoded array of
+    key/value pairs.
   </itemize>
 
   <subsection|ext_http_response_read_body>
@@ -8352,6 +8347,7 @@
     <associate|defn-grandpa-justification|<tuple|5.25|36>>
     <associate|defn-hex-encoding|<tuple|B.9|43>>
     <associate|defn-http-return-value|<tuple|F.3|60>>
+    <associate|defn-http-status-codes|<tuple|E.9|?>>
     <associate|defn-index-function|<tuple|2.7|13>>
     <associate|defn-inherent-data|<tuple|3.5|?>>
     <associate|defn-key-type-id|<tuple|E.6|?>>
