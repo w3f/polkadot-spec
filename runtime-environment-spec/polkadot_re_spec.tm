@@ -5259,11 +5259,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|data>: an i64 FFI type as defined in X
-    containing the data to be hashed.
+    <item><strong|><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a pointer to the buffer containing the 256-bit
-    hash result.
+    <item><verbatim|return>: a reglar pointer to the buffer containing the
+    256-bit hash result.
   </itemize>
 
   <subsection|ext_hashing_sha2_256>
@@ -5283,11 +5283,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|data>: an i64 FFI type as defined in X
-    containing the data to be hashed.
+    <item><strong|><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a pointer to the buffer containing the 256-bit
-    hash result.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    256-bit hash result.
   </itemize>
 
   <subsection|ext_hashing_blake2_128>
@@ -5307,11 +5307,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|data>: an i64 FFI type as defined in X
-    containing the data to be hashed.
+    <item><strong|><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a pointer to the buffer containing the 128-bit
-    hash result.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    128-bit hash result.
   </itemize>
 
   <subsection|ext_hashing_blake2_256>
@@ -5331,11 +5331,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|data>: an i64 FFI type as defined in X
-    containing the data to be hashed.
+    <item><strong|><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a pointer to the buffer containing the 256-bit
-    hash result.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    256-bit hash result.
   </itemize>
 
   <subsection|ext_hashing_twox_64>
@@ -5355,11 +5355,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|data>: an i64 FFI type as defined in X
-    containing the data to be hashed.
+    <item><strong|><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a pointer to the buffer containing the 64-bit
-    hash result.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    64-bit hash result.
   </itemize>
 
   <subsection|ext_hashing_twox_128>
@@ -5379,11 +5379,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|data>: an i64 FFI type as defined in X
-    containing the data to be hashed.
+    <item><strong|><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a pointer to the buffer containing the 128-bit
-    hash result.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    128-bit hash result.
   </itemize>
 
   <subsection|ext_hashing_twox_256>
@@ -5403,11 +5403,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|data>: an i64 FFI type as defined in X
-    containing the data to be hashed.
+    <item><strong|><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a pointer to the buffer containing the 256-bit
-    hash result.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    256-bit hash result.
   </itemize>
 
   <section|Offchain>
