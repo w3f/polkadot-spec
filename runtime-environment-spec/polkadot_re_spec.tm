@@ -4418,6 +4418,9 @@
 
   <section|Storage>
 
+  Those APIs offer functionality regarding storage, such as the insertion,
+  modification and reading of keys and their corresponding values.
+
   <subsection|ext_storage_set>
 
   Sets the value under a given key into storage.
@@ -4636,6 +4639,10 @@
   </itemize>
 
   <section|Child Storage>
+
+  Those APIs offer functionality regarding child storage, such as the
+  insertion, modification and reading of keys and their corresponding values
+  in their own, segregated child storages.
 
   <\definition>
     <label|defn-child-storage-type>Child storage type<text-dots>
@@ -5000,6 +5007,9 @@
 
   <section|Crypto>
 
+  Those APIs offer cryptographic functionality, such as the generation of
+  keys, signing and verifying.
+
   <\definition>
     <label|defn-key-type-id>Key type ID<text-dots>
   </definition>
@@ -5253,6 +5263,9 @@
   </itemize>
 
   <section|Hashing>
+
+  Those APIs offer hashing functionality of various algorithms and hash
+  sizes.
 
   <subsection|ext_hashing_keccak_256>
 
