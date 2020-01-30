@@ -4435,10 +4435,10 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: a pointer as described in Definition
+    <item><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> containing the key.
 
-    <item><verbatim|value>: a pointer as described in Definition
+    <item><verbatim|value>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> containing the value.
   </itemize>
 
@@ -4457,10 +4457,10 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: a pointer as described in Definition
+    <item><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> containing the key.
 
-    <item><verbatim|result>: a pointer as described in Definition
+    <item><verbatim|result>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> returning the SCALE encoded
     <verbatim|Option> containing the value. <todo|reference Option>
   </itemize>
@@ -4486,10 +4486,10 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: a pointer as described in Definition
+    <item><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> containing the key.
 
-    <item><verbatim|value_out>: a pointer as described in Definition
+    <item><verbatim|value_out>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> containing the buffer to which the value
     will be written to. This function will never write more then the length
     of the buffer, even if the value's length is bigger.
@@ -4516,7 +4516,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: a pointer as described in Definition
+    <item><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> containing the key.
   </itemize>
 
