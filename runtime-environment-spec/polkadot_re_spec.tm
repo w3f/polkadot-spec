@@ -4404,6 +4404,15 @@
     of block <math|B>.
   </notation>
 
+  <\definition>
+    <label|defn-runtime-pointer>The <strong|Runtime pointer> is an
+    <verbatim|i64> integer, representing two consecutive <verbatim|i32>
+    integers in which the least significant one indicates the pointer to the
+    memory buffer. The most significant one provides the size of the buffer.
+    This pointer is the primary way to exchange data of arbitrary sizes
+    between the Runtime and the Runtime Environment.
+  </definition>
+
   \ The functions are specified in each subsequent subsection for each
   category of those functions.
 
@@ -4426,11 +4435,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|key>: a pointer as described in
+    <reference|defn-runtime-pointer> containing the key.
 
-    <item><verbatim|value>: an i64 FFI type as described X containing the
-    value.
+    <item><verbatim|value>: a pointer as described in
+    <reference|defn-runtime-pointer> containing the value.
   </itemize>
 
   <subsection|ext_storage_get>
@@ -5810,9 +5819,10 @@
 
   Reads a chunk of body response to the given buffer. Returns the number of
   bytes written or an error in case a deadline is reached or the server
-  closed the connection. If `0' is returned it means that the response has
-  been fully consumed and the <verbatim|request_id> is now invalid. This
-  implies that response headers must be read before draining the body.
+  closed the connection. If <verbatim|0> is returned it means that the
+  response has been fully consumed and the <verbatim|request_id> is now
+  invalid. This implies that response headers must be read before draining
+  the body.
 
   \;
 
@@ -8106,7 +8116,6 @@
     <associate|auto-249|<tuple|G.2.10|?>>
     <associate|auto-25|<tuple|1.14|9>>
     <associate|auto-250|<tuple|Tec19|?>>
-    <associate|auto-251|<tuple|Tec19|?>>
     <associate|auto-26|<tuple|1.15|9>>
     <associate|auto-27|<tuple|1.15|9>>
     <associate|auto-28|<tuple|2|11>>
@@ -8245,6 +8254,7 @@
     <associate|defn-pruned-tree|<tuple|1.12|9>>
     <associate|defn-radix-tree|<tuple|1.3|8>>
     <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|7>>
+    <associate|defn-runtime-pointer|<tuple|E.2|?>>
     <associate|defn-sc-len-encoding|<tuple|B.8|42>>
     <associate|defn-scale-byte-array|<tuple|B.1|41>>
     <associate|defn-scale-list|<tuple|B.5|42>>
@@ -9067,27 +9077,27 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-170>>
 
-      <with|par-left|<quote|2tab>|E.5.9.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_start>
+      <with|par-left|<quote|1tab>|E.5.10.<space|2spc>ext_offchain_http_request_start
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-171>>
 
-      <with|par-left|<quote|2tab>|E.5.9.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_add_header>
+      <with|par-left|<quote|1tab>|E.5.11.<space|2spc>ext_offchain_http_request_add_header
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-172>>
 
-      <with|par-left|<quote|2tab>|E.5.9.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_write_body>
+      <with|par-left|<quote|1tab>|E.5.12.<space|2spc>ext_http_request_write_body
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-173>>
 
-      <with|par-left|<quote|2tab>|E.5.9.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_wait>
+      <with|par-left|<quote|1tab>|E.5.13.<space|2spc>ext_http_response_wait
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-174>>
 
-      <with|par-left|<quote|2tab>|E.5.9.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_headers>
+      <with|par-left|<quote|1tab>|E.5.14.<space|2spc>ext_http_response_headers
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-175>>
 
-      <with|par-left|<quote|2tab>|E.5.9.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_read_body>
+      <with|par-left|<quote|1tab>|E.5.15.<space|2spc>ext_http_response_read_body
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-176>>
 
