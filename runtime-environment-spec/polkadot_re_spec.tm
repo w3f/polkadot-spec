@@ -4538,8 +4538,8 @@
     <item><verbatim|key>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> containing the key.
 
-    <item><strong|return>: an i32 value equal to <verbatim|1> if the key
-    exists or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
+    the key exists or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
   <subsection|ext_storage_clear_prefix>
@@ -4632,6 +4632,20 @@
 
   <section|Child Storage>
 
+  Child storage
+
+  <\definition>
+    <label|defn-child-storage-type>Child storage type<text-dots>
+  </definition>
+
+  <\definition>
+    <label|defn-child-storage-definition>Child storage definition<text-dots>
+  </definition>
+
+  <\definition>
+    <label|defn-child-type>Child type <text-dots>
+  </definition>
+
   <subsection|ext_storage_child_set>
 
   Sets the value under a given key into the child storage.
@@ -4641,10 +4655,10 @@
   <\verbatim>
     (func $ext_storage_child_set_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def_data i64) (param
-    $child_type_data i32)
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
+    $child_type i32)
 
-    \ \ (param $key_data i64) (param $value i64 (param $value_data i64))
+    \ \ (param $key i64) (param $value i64))
   </verbatim>
 
   \;
@@ -4652,19 +4666,22 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child definition as
+    described in Definition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in <reference|defn-child-type>.
 
-    <item><verbatim|key>: an i64 FFI type as defined in X containing the key.
+    <item><verbatim|key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
 
-    <item><verbatim|value>: an i64 FFI type as defined X containing the
-    value.
+    <item><verbatim|value>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the value.
   </itemize>
 
   <subsection|ext_storage_child_get>
@@ -4676,10 +4693,10 @@
   <\verbatim>
     (func $ext_storage_child_get_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def_data i64) (param
-    $child_type_data i32)
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
+    $child_type i32)
 
-    \ \ (param $key_data i64) (result i64))
+    \ \ (param $key i64) (result i64))
   </verbatim>
 
   \;
@@ -4687,19 +4704,23 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child definition as
+    described in Defnition <reference|defn-child-storage-definition>.
 
     <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    storage type as defined in Definition <reference|defn-child-type>.
 
-    <item><verbatim|key>: an i64 FFI type as defined in X containing the key.
+    <item><verbatim|key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
 
-    <item><verbatim|result>: an i64 FFI type as defined in X returning the
-    SCALE encoded Option containing the value.
+    <item><verbatim|result>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> containing the value. <todo|reference Option>
   </itemize>
 
   <subsection|ext_storage_child_read>
@@ -4714,11 +4735,11 @@
   <\verbatim>
     (func $ext_storage_child_read_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def_data i64) (param
-    $child_type_data i32)
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
+    $child_type i32)
 
-    \ \ (param $key_data i64) (param $value_out i64) (param $offset i32)
-    (result i64))
+    \ \ (param $key i64) (param $value_out i64) (param $offset i32) (result
+    i64))
   </verbatim>
 
   \;
@@ -4726,22 +4747,24 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Defintion
+    <reference|defn-runtime-pointer> indicating the child definition as
+    described in Definition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in Definition <reference|defn-child-type>.
 
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|key>: a pointer as defined Definition
+    <reference|defn-runtime-pointer> indicating the key.
 
-    <item><verbatim|value_out>: an i64 FFI type as described in X containing
-    the buffer in which the value will be written in. This function will
-    never write more then the length of the buffer, even if the values length
-    is bigger.
+    <item><verbatim|value_out>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the buffer to which the value
+    will be written to. This function will never write more then the length
+    of the buffer, even if the value's length is bigger.
 
     <item><verbatim|offset>: an i32 integer containing the offset beyond the
     value should be read from.
@@ -4759,10 +4782,10 @@
   <\verbatim>
     (func $ext_storage_child_clear_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def_data i64) (param
-    $child_type_data i32)
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
+    $child_type i32)
 
-    \ \ (param $key_data i64))
+    \ \ (param $key i64))
   </verbatim>
 
   \;
@@ -4770,17 +4793,19 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child definition as
+    described in Definition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in <reference|defn-child-type>.
 
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
   </itemize>
 
   <subsection|ext_storage_child_storage_kill>
@@ -4792,7 +4817,7 @@
   <\verbatim>
     (func $ext_storage_child_storage_kill_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def i64) (param
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
     $child_type i32))
   </verbatim>
 
@@ -4801,14 +4826,16 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child definition as
+    described in Definition <reference|defn-child-storage-definition>.
 
     <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    storage type as defined in Definition <reference|defn-child-type>.
   </itemize>
 
   <subsection|ext_storage_child_exists>
@@ -4820,10 +4847,10 @@
   <\verbatim>
     (func $ext_storage_child_exists_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def i64) (param
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
     $child_type i32)
 
-    \ \ (param $key_data i64))
+    \ \ (param $key_data i64) (return i32))
   </verbatim>
 
   \;
@@ -4831,17 +4858,22 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Defintion <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child definition as
+    described in Definition <reference|defn-child-storage-definition>.
 
     <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    storage type as defined in Defintion <reference|defn-child-type>.
 
-    <item><verbatim|key>: an i64 FFI type as described in X containing the
-    key.
+    <item><verbatim|key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
+
+    <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
+    the key exists or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
   <subsection|ext_storage_child_clear_prefix>
@@ -4854,7 +4886,7 @@
   <\verbatim>
     (func $ext_storage_child_clear_prefix_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def i64) (param
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
     $child_type i32)
 
     \ \ (param $prefix i64))
@@ -4865,17 +4897,19 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child definition as
+    described in Definition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in Definition <reference|defn-child-type>.
 
-    <item><verbatim|prefix>: an i64 FFI type as described in X containing the
-    prefix.
+    <item><verbatim|prefix>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the prefix.
   </itemize>
 
   <subsection|ext_storage_child_root>
@@ -4888,7 +4922,7 @@
   <\verbatim>
     (func $ext_storage_child_root_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def i64) (param
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
     $child_type i32)
 
     \ \ (return i64))
@@ -4899,17 +4933,20 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Definition
+    <reference|defn-child-storage-definition> indicating the child definition
+    as described in Definition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in Definition <reference|defn-child-type>.
 
-    <item><verbatim|return>: an i64 FFI type as described in X containing the
-    SCALE encoded storage root.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded storage
+    root.
   </itemize>
 
   <subsection|ext_storage_child_next_key>
@@ -4921,10 +4958,10 @@
   <\verbatim>
     (func $ext_storage_child_next_key_version_1
 
-    \ \ (param $storage_key_data i64) (param $child_def i64) (param
+    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
     $child_type i32)
 
-    \ \ (param $key_data i64) (return i64))
+    \ \ (param $key i64) (return i64))
   </verbatim>
 
   \;
@@ -4932,20 +4969,23 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|storage_key_data>: an i64 FFI type as defined in X
-    containing the child storage key as defined in Y.
+    <item><verbatim|child_storage_key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the child storage key as
+    defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_def_data>: an i64 FFI type as defined in X
-    containing the child definition as described in Y.
+    <item><verbatim|child_definition>: a pointer as defined in Defintion
+    <reference|defn-runtime-pointer> indicting the child definition as
+    described in Definition <reference|defn-child-storage-definition>.
 
-    <item><verbatim|child_type_data>: an i32 integer specifying the child
-    storage type as defined in X.
+    <item><verbatim|child_type>: an i32 integer specifying the child storage
+    type as defined in Definition <reference|defn-child-type>.
 
-    <item><strong|><verbatim|key_data>: an i64 FFI type as defined in X
-    containing the key.
+    <item><strong|><verbatim|key_data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
 
-    <item><verbatim|return>: an i64 FFI type as defined in X containing the
-    SCALE encoded Option <todo|reference Option> containing the change root.
+    <item><verbatim|return>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded Option
+    <todo|reference Option> containing the next key in lexicographic order.
   </itemize>
 
   <section|Crypto>
@@ -8233,6 +8273,9 @@
     <associate|defn-block-time|<tuple|5.10|30>>
     <associate|defn-block-tree|<tuple|1.11|9>>
     <associate|defn-chain-subchain|<tuple|1.13|9>>
+    <associate|defn-child-storage-definition|<tuple|E.4|?>>
+    <associate|defn-child-storage-type|<tuple|E.3|?>>
+    <associate|defn-child-type|<tuple|E.5|?>>
     <associate|defn-children-bitmap|<tuple|2.10|15>>
     <associate|defn-consensus-message-digest|<tuple|5.2|?>>
     <associate|defn-controller-key|<tuple|A.3|40>>
