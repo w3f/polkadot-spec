@@ -40,7 +40,32 @@ Network -> Voter ++ : poll
     loop for all messages in global queue
       note over Voter: Only possible message types are Commit and Catchup
       alt it is a Commit message
-        note over Voter: TBS
+        Voter -> PastRounds ++ : import_commit
+        return
+        alt was the commit for a background round
+          note over Voter: we are actively voting on this round
+          Voter -> Voter ++ : process_commit_outcome(for good commit)
+          return
+        else the commit does not belong to any active background round
+          note over Voter
+            we are not actively voting on this round
+            just validate the signature and accept the block as finalized.
+          end note
+          Voter -> Voter ++ : validate_commit
+          return
+          alt the commit message is valid
+            alt the finalized block number > last finalized block number
+              note over Voter: last finalized block ← the new finalized block
+              Voter -> Enviornment ++ : finalize the new finalized block
+            end
+            Voter -> Voter ++ : process_commit_outcome(for good commit)
+            return
+  
+           else the commit message is invalid
+             Voter -> Voter ++ : process_commit_outcome(for bad commit)
+             return
+           end
+        end
       else it is a Catchup message
         Voter -> Voter ++ : vaidate_catchup
         alt Good CatchUp 
@@ -51,9 +76,12 @@ Network -> Voter ++ : poll
            return new round
            note over Voter: last_finalized_round ← completed round
            VotingRound -> Environment ++ : completed (completed round)
+           return
            Voter -> Voter ++ : process_catchup_outcome(for good catchup)
+           return
         else Bad Catchup
           Voter -> Voter ++ : process_catchup_outcome(for bad catchup)
+          return
         end /' good/bad catchup '/
       end /' alt message type '/
     end 
