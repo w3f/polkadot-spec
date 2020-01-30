@@ -4462,15 +4462,15 @@
 
     <item><verbatim|result>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> returning the SCALE encoded
-    <verbatim|Option> containing the value. <todo|reference Option>
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the value.
   </itemize>
 
   <subsection|ext_storage_read>
 
   Gets the given key from storage, placing the value into a buffer and
   returning the number of bytes that the entry in storage has beyond the
-  offset. If the entry does not exist at all it returns None <todo|reference
-  None>.
+  offset.
 
   <strong|Version 1 - Prototype:>
 
@@ -4497,8 +4497,12 @@
     <item><verbatim|offset>: an i32 integer containing the offset beyond the
     value should be read from.
 
-    <item><verbatim|result>: an i32 integer containing the number of bytes
-    written into the <strong|value_out> buffer.
+    <item><verbatim|result>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the number of bytes
+    written into the <strong|value_out> buffer. Returns <verbatim|None> if
+    the entry does not exists.
   </itemize>
 
   <subsection|ext_storage_clear>
@@ -4604,7 +4608,8 @@
 
     <item><verbatim|return>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> <todo|reference Option> containing the change root.
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the change root.
   </itemize>
 
   <subsection|ext_storage_next_key>
@@ -4626,8 +4631,10 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|return>: a pointer as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded Option
-    <todo|reference Option> containing the next key in lexicographic order.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the next key in
+    lexicographic order.
   </itemize>
 
   <section|Child Storage>
@@ -4720,15 +4727,15 @@
 
     <item><verbatim|result>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> containing the value. <todo|reference Option>
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the value.
   </itemize>
 
   <subsection|ext_storage_child_read>
 
   Gets the given key from storage, placing the value into a buffer and
   returning the number of bytes that the entry in storage has beyond the
-  offset. If the entry does not exist at all it returns None <todo|reference
-  None>.
+  offset.
 
   <strong|Version 1 - Prototype:>
 
@@ -4769,8 +4776,12 @@
     <item><verbatim|offset>: an i32 integer containing the offset beyond the
     value should be read from.
 
-    <item><verbatim|result>: an i32 integer containing the number of bytes
-    written into the <strong|value_out> buffer.
+    <item><verbatim|result>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the number of bytes
+    written into the <strong|value_out> buffer. Returns <verbatim|None> if
+    the entry does not exists.
   </itemize>
 
   <subsection|ext_storage_child_clear>
@@ -4984,8 +4995,11 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|return>: a pointer as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded Option
-    <todo|reference Option> containing the next key in lexicographic order.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the next key in
+    lexicographic order. Returns <verbatim|None> if the entry cannot be
+    found.
   </itemize>
 
   <section|Crypto>
@@ -5024,7 +5038,7 @@
   <subsection|ext_crypto_ed25519_generate>
 
   Generates an <verbatim|ed25519> key for the given key type using an
-  optional BIP-39 seed <todo|link BIP-39> and stores it in the keystore.
+  optional BIP-39 seed and stores it in the keystore.
 
   <strong|Version 1 - Prototype:>
 
@@ -5043,9 +5057,10 @@
     type ID as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|seed>: a pointer as defined in Definition
-    <reference|defn-runtime-pointer> inicating the SCALE encoded
-    <verbatim|Option> <todo|reference Option> containing the BIP-39 seed
-    which must be valid UTF8.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the BIP-39 seed which must
+    be valid UTF8.
 
     <item><verbatim|return>: a regular pointer to the buffer containing the
     32-byte public key.
@@ -5082,7 +5097,8 @@
 
     <item><verbatim|return>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> <todo|reference Option> containing the signature. This
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the signature. This
     function returns <verbatim|None> if the public key cannot be found in the
     key store.
   </itemize>
@@ -5166,8 +5182,9 @@
 
     <item><verbatim|seed>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> <todo|reference Option> containing the BIP-39 seed
-    which must be valid UTF8.
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the BIP-39 seed which must
+    be valid UTF8.
 
     <item><verbatim|return>: a regular pointer to the buffer containing the
     32-byte public key.
@@ -5204,7 +5221,8 @@
 
     <item><verbatim|return>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> <todo|reference Option> containing the signature. This
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the signature. This
     function returns <verbatim|None> if the public key cannot be found in the
     key store.
   </itemize>
@@ -5430,21 +5448,22 @@
   available which are defined in Definitions F.1 and F.2.
 
   <\definition>
-    <strong|Persistent storage> is non-revertible and not fork-aware. It
-    means that any value set by the offchain worker is persisted even if that
-    block (at which the worker is called) is reverted as non-canonical
-    (meaning that the block was surpassed by a longer chain). The value is
-    available for the worker that is re-run at the new (different block with
-    the same block number) and future blocks. This storage can be used by
-    offchain workers to handle forks and coordinate offchain workers running
-    on different forks.
+    <label|defn-persistent-storage><strong|Persistent storage> is
+    non-revertible and not fork-aware. It means that any value set by the
+    offchain worker is persisted even if that block (at which the worker is
+    called) is reverted as non-canonical (meaning that the block was
+    surpassed by a longer chain). The value is available for the worker that
+    is re-run at the new (different block with the same block number) and
+    future blocks. This storage can be used by offchain workers to handle
+    forks and coordinate offchain workers running on different forks.
   </definition>
 
   <\definition>
-    <strong|Local storage> is revertible and fork-aware. It means that any
-    value set by the offchain worker triggered at a certain block is reverted
-    if that block is reverted as non-canonical. The value is NOT available
-    for the worker that is re-run at the next or any future blocks.
+    <label|defn-local-storage><strong|Local storage> is revertible and
+    fork-aware. It means that any value set by the offchain worker triggered
+    at a certain block is reverted if that block is reverted as
+    non-canonical. The value is NOT available for the worker that is re-run
+    at the next or any future blocks.
   </definition>
 
   <\definition>
@@ -5512,12 +5531,13 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|data>: an FFI integer type containing the byte array
-    storing the encoded extrinsic.
+    <item><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the byte array storing the
+    encoded extrinsic.
 
     <item><verbatim|return>: an integer value equal to 0 indicating that the
     extrinsic was successfully added to the pool of a nonzero value if
-    otherwise. <todo|verify this>
+    otherwise.
   </itemize>
 
   <subsection|ext_offchain_network_state>
@@ -5543,10 +5563,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: a pointer to the buffer containing the SCALE
-    encoded network state. This includes none or one <verbatim|PeerId>
+    <item><verbatim|result>: a regular pointer to the buffer containing the
+    SCALE encoded network state. This includes none or one <verbatim|PeerId>
     followed by none, one or more IPv4 or IPv6 <verbatim|Multiaddress(-es)>
-    by which the node is publicly known by. <todo|verify this>
+    by which the node is publicly known by. Returns an empty value if the
+    network state cannot be fetched.
   </itemize>
 
   <subsection|ext_offchain_timestamp>
@@ -5640,9 +5661,11 @@
     to 2 for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
-    <item><verbatim|key>: a i64 FFI type pointing to the key.
+    <item><verbatim|key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
 
-    <item><verbatim|value>: a i64 FFI type pointing to the value.
+    <item><verbatim|value>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the value.
   </itemize>
 
   <subsection|ext_offchain_local_storage_compare_and_set>
@@ -5674,12 +5697,16 @@
     to 2 for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
-    <item><verbatim|key>: a i64 FFI type pointing to the key.
+    <item><verbatim|key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
 
-    <item><verbatim|old_value>: a i64 FFI type pointing to the SCALE encoded
-    <verbatim|Option> <todo|reference Option> containing the old key.
+    <item><verbatim|old_value>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the old key.
 
-    <item><verbatim|new_value>: a i64 FFI type pointing to the new value.
+    <item><verbatim|new_value>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the new value.
 
     <item><verbatim|result>: an i32 integer equal to <verbatim|1> if the new
     value has been set or a value equal to <verbatim|0> if otherwise.
@@ -5710,11 +5737,14 @@
     to 2 for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
-    <item><verbatim|key>: a i64 FFI type pointing to the key.
+    <item><verbatim|key>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
 
-    <item><verbatim|result>: a i64 FFI type pointing to the SCALE encoded
-    Option <todo|reference Option> containing the value or the corresponding
-    key.
+    <item><verbatim|result>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the value or the
+    corresponding key.
   </itemize>
 
   <subsection|ext_offchain_http_request_start>
@@ -5737,16 +5767,19 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|method>: a i64 FFI type pointing to the HTTP method.
-    Possible values are <verbatim|\PGET\Q> and <verbatim|\PPOST\Q>.
+    <item><verbatim|method>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the HTTP method. Possible
+    values are <verbatim|\PGET\Q> and <verbatim|\PPOST\Q>.
 
-    <item><verbatim|urli>: a i64 FFI type pointing to the URI.
+    <item><verbatim|urli>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the URI.
 
     <item><verbatim|meta>: a future-reserved field containing additional,
     SCALE encoded parameters.
 
     <item><verbatim|result>: an i32 integer indicating the ID of the newly
-    started request.
+    started request. Returns an empty value if the HTTP request couldn't be
+    initiated.
   </itemize>
 
   <subsection|ext_offchain_http_request_add_header>
@@ -5775,13 +5808,15 @@
     <item><verbatim|request_id>: an i32 integer indicating the ID of the
     started request.
 
-    <item><verbatim|name>: a i64 FFI type pointing to the HTTP header name.
+    <item><verbatim|name>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the HTTP header name.
 
-    <item><verbatim|value>: a i64 FFI type pointing to the HTTP header value.
+    <item><verbatim|value>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the HTTP header value.
 
     <item><verbatim|result>: an i32 integer where the value equal to
     <verbatim|0> indicates if the header has been set or a value equal to
-    <verbatim|1> if otherwise. <todo|verify this>
+    <verbatim|1> if otherwise.
   </itemize>
 
   <subsection|ext_http_request_write_body>
@@ -5808,12 +5843,16 @@
     <item><verbatim|request_id>: an i32 integer indicating the ID of the
     started request.
 
-    <item><verbatim|chunk>: a i64 FFI type pointing to the chunk of bytes.
-    Writing an empty chunk finalizes the request.
+    <item><verbatim|chunk>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the chunk of bytes. Writing
+    an empty chunk finalizes the request.
 
-    <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>. Passing
-    <verbatim|None> blocks forever. <todo|reference Option>
+    <item><verbatim|deadline>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the UNIX timestamp as
+    defined in Definition <reference|defn-unix-time>. Passing <verbatim|None>
+    blocks indefinitely.
 
     <item><verbatim|result>: an i32 integer where the value equal to
     <verbatim|0> indicates if the header has been set or a non-zero value if
@@ -5822,7 +5861,7 @@
 
   <subsection|ext_http_response_wait>
 
-  Returns a vector of request statuses (the length is the same as IDs). Note
+  Returns an array of request statuses (the length is the same as IDs). Note
   that if deadline is not provided the method will block indefinitely,
   otherwise unready responses will produce <verbatim|DeadlineReached> status.
   <todo|define statuses>
@@ -5834,7 +5873,7 @@
   <\verbatim>
     (func $ext_offchain_http_response_wait_version_1
 
-    \ \ (param $ids i32) (param $deadline i64) (result i64))
+    \ \ (param $ids i64) (param $deadline i64) (result i64))
   </verbatim>
 
   \ 
@@ -5842,14 +5881,18 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|ids>: a pointer to the buffer containing the started IDs.
+    <item><verbatim|ids>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded, started
+    request IDs.
 
-    <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>. Passing None as
-    deadline will block indefinitely. <todo|reference Option>
+    <item><verbatim|deadline>: a pointer as defined in Definition E.2
+    indicating the SCALE encoded <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the UNIX timestamp as
+    defined in Definition 1.10. Passing <verbatim|None> blocks indefinitely.
 
-    <item><verbatim|result>: a i64 FFI type pointing to the SCALE encoded
-    request headers.
+    <item><verbatim|result>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded request
+    responses. <todo|define responses>
   </itemize>
 
   <subsection|ext_http_response_headers>
@@ -5864,7 +5907,7 @@
   <\verbatim>
     (func $ext_offchain_http_response_headers_version_1
 
-    \ \ (param $request_id i32) (param $written_out i32) (result i32))
+    \ \ (param $request_id i32) (result i64))
   </verbatim>
 
   \ 
@@ -5878,8 +5921,9 @@
     <item><verbatim|written_out>: a pointer to the buffer where the size of
     the response headers gets written to.
 
-    <item><verbatim|result>: a pointer to the buffer containing the response
-    headers.
+    <item><verbatim|result>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded value
+    pairs.
   </itemize>
 
   <subsection|ext_http_response_read_body>
@@ -5898,7 +5942,7 @@
   <\verbatim>
     (func $ext_offchain_http_response_read_body_version_1
 
-    \ \ (param $request_id i32) (param $buffer i32) (param $deadline i64)
+    \ \ (param $request_id i32) (param $buffer i64) (param $deadline i64)
     (result i64))
   </verbatim>
 
@@ -5910,15 +5954,20 @@
     <item><verbatim|request_id>: an i32 integer indicating the ID of the
     started request.
 
-    <item><verbatim|buffer>: a i64 FFI type pointing to the buffer where the
-    body gets written to.
+    <item><verbatim|buffer>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the buffer where the body
+    gets written to.
 
-    <item><verbatim|deadline>: an i64 integer indicating the UNIX timestamp
-    as defined in Definition <reference|defn-unix-time>. Passing
-    <verbatim|None> will block indefinitely. <todo|reference Option>
+    <item><verbatim|deadline>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition
+    <reference|defn-varrying-data-type> containing the UNIX timestamp as
+    defined in Definition <reference|defn-unix-time>. Passing <verbatim|None>
+    will block indefinitely.
 
-    <item><verbatim|result>: an i32 integer where the value equal to 0
-    indicateds a fully consumed response or a non-zero value if otherwise.
+    <item><verbatim|result>: an i32 integer where the value equal to
+    <verbatim|0> indicateds a fully consumed response or a non-zero value if
+    otherwise.
   </itemize>
 
   <appendix|Legacy Runtime Environment API<label|sect-re-api>>
@@ -8312,6 +8361,7 @@
     <associate|defn-inherent-data|<tuple|3.5|?>>
     <associate|defn-key-type-id|<tuple|E.6|?>>
     <associate|defn-little-endian|<tuple|1.7|8>>
+    <associate|defn-local-storage|<tuple|E.8|?>>
     <associate|defn-longest-chain|<tuple|1.14|9>>
     <associate|defn-merkle-value|<tuple|2.12|15>>
     <associate|defn-node-header|<tuple|2.9|13>>
@@ -8322,6 +8372,7 @@
     <associate|defn-offchain-local-storage|<tuple|F.2|60>>
     <associate|defn-offchain-persistent-storage|<tuple|F.1|60>>
     <associate|defn-path-graph|<tuple|1.2|8>>
+    <associate|defn-persistent-storage|<tuple|E.7|?>>
     <associate|defn-pruned-tree|<tuple|1.12|9>>
     <associate|defn-public-key|<tuple|E.7|?>>
     <associate|defn-public-keys|<tuple|E.7|?>>
