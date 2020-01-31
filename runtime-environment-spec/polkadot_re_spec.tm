@@ -2387,6 +2387,13 @@
     completely. If such an inconsitency occures, the scheduled change should
     be ignored.
 
+    <item><strong|Forced Change>: Force an authority set change. Forced
+    changes are applied after a delay of <em|imported> blocks, while pending
+    changes are applied after a delay of <em|finalized> blocks. The earliest
+    digest of this type in a single block will be respected. No change should
+    be scheduled if one is already and the delay has not passed completely.
+    If such an inconsitency occures, the scheduled change should be ignored.
+
     <item><strong|On Disabled>: The authority set index with given index is
     disabled until the next change.
 
