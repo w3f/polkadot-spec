@@ -25,15 +25,11 @@
 \newcommand{\tmtextsc}[1]{{\scshape{#1}}}
 \newcommand{\tmtextsf}[1]{{\sffamily{#1}}}
 \newcommand{\tmtexttt}[1]{{\ttfamily{#1}}}
-\newcommand{\tmtextup}[1]{{\upshape{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
 \newenvironment{itemizeminus}{\begin{itemize} \renewcommand{\labelitemi}{$-$}\renewcommand{\labelitemii}{$-$}\renewcommand{\labelitemiii}{$-$}\renewcommand{\labelitemiv}{$-$}}{\end{itemize}}
 \newenvironment{theglossary}[1]{\begin{list}{}{\setlength{\labelwidth}{6.5em}\setlength{\leftmargin}{7em}\small} }{\end{list}}
 \newenvironment{tmcode}[1][]{\begin{alltt} }{\end{alltt}}
-\newenvironment{tmindent}{\begin{tmparmod}{1.5em}{0pt}{0pt}}{\end{tmparmod}}
-\newenvironment{tmparmod}[3]{\begin{list}{}{\setlength{\topsep}{0pt}\setlength{\leftmargin}{#1}\setlength{\rightmargin}{#2}\setlength{\parindent}{#3}\setlength{\listparindent}{\parindent}\setlength{\itemindent}{\parindent}\setlength{\parsep}{\parskip}} \item[]}{\end{list}}
-\newenvironment{tmparsep}[1]{\begingroup\setlength{\parskip}{#1}}{\endgroup}
 \newcounter{tmcounter}
 \newcommand{\custombinding}[1]{%
   \setcounter{tmcounter}{#1}%
@@ -84,7 +80,7 @@
   {\Large Protocol Specification}
 }
 
-\date{January 27, 2020}
+\date{January 31, 2020}
 
 \maketitle
 
@@ -491,16 +487,34 @@ Assuming that $P_N$ is the path (see Definition \ref{defn-path-graph}) from
 the Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
 demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
-\custombinding{1}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{1}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : =
-      (\tmop{TrieRoot} = N_1, \ldots, N_j = N))$
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{1}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  1. }
+  \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
+  = N_1, \ldots, N_j = N))$\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \phi$}}
+
+{\state{$i \leftarrow 1$}}
+
+{\state{{\WHILE{$(N_i \neq N)$}}}}
+
+{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
+\tmop{pk}_{N_i} $}}
+
+{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
+\tmop{Index}_{N_i} (N_{i + 1})$}}
+
+{\state{$i \leftarrow i + 1${\END}}}
+
+{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
+\tmop{pk}_{N_i}$}}
+
+{\state{{\RETURN{$\tmop{pk}^{\tmop{Agr}}_N$}}}}}}
+
+\hrulefill{\medskip}
 
 \begin{definition}
   \label{defn-node-value}A node $N \in \mathcal{N}$ stores the {\tmstrong{node
@@ -575,16 +589,48 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
   \ref{algo-pk-length}.
 \end{definition}
 
-\custombinding{2}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{2}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
-      1}^{6 - 7}_{}, \tmop{pk}_N)$}}
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{2}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  2. }
+  \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
+  1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} \geqslant
+2^{16}$}}}}
+
+{\state{{\RETURN{Error{\END}}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow 64 \times \tmop{Head}_{N, 1}^{6 -
+7}_{}$}}
+
+{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} < 63$}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + \| \tmop{pk}_N
+\|_{\tmop{nib}}$}}
+
+{\state{{\RETURN{$\tmop{Head}_N \END$}}}}
+
+{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + 63$}}
+
+{\state{$l \leftarrow \| \tmop{pk}_N \|_{\tmop{nib}} - 63$}}
+
+{\state{$i \leftarrow 2$}}
+
+{\state{{\WHILE{$(l > 255)$}}}}
+
+{\state{$\tmop{Head}_{N, i} \leftarrow 255$}}
+
+{\state{$l \leftarrow l - 255$}}
+
+{\state{$i \leftarrow i + 1 \END$}}
+
+{\state{$\tmop{Head}_{N, i} \leftarrow l$}}
+
+{\state{{\RETURN{$\tmop{Head}_N$}}}}}}
+
+\hrulefill{\medskip}
 
 \subsection{Merkle Proof}\label{sect-merkl-proof}
 
@@ -697,20 +743,27 @@ the Runtime easily upgradable without the need to upgrade the Polkadot RE
 itself. The general procedure to interact with Runtime is described in
 Algorithm \ref{algo-runtime-interaction}.
 
-\custombinding{3}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{3}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$:
-      the runtime entry,
-      
-      $H_b (B)$: Block hash indicating the state at the end of $B$,
-      
-      $A_1, A_2, \ldots, A_n$: arguments to be passed to the runtime entry)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{3}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  3. }
+  \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$: the
+  runtime entry,
+  
+  $H_b (B)$: Block hash indicating the state at the end of $B$,
+  
+  $A_1, A_2, \ldots, A_n$: arguments to be passed to the runtime entry)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\tmname{$\mathcal{S}_B \leftarrow$Set-State-At($H_b
+(B)$)}}}}
+
+{\state{$A \leftarrow \tmop{Enc}_{\tmop{SC}} ((A_1, \ldots, A_n))$}}
+
+{\state{$\text{{\tmname{Call-Runtime-Entry}}} (R_B, \mathcal{R}\mathcal{E}_B,
+F, A, A_{\tmop{len}})$}}}}
+
+\hrulefill{\medskip}
 
 In this section, we describe the details upon which the Polkadot RE is
 interacting with the Runtime. In particular, {\tmname{Set-State-At}} and
@@ -886,16 +939,48 @@ queue}}{\index{transaction queue}} defined as follows:
 Algorithm \ref{algo-validate-transactions} updates the transaction pool and
 the transaction queue according to the received message:
 
-\custombinding{4}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{4}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-validate-transactions}{\tmname{Validate-Transactions-and-Store}}($M_T
-      :$Transaction Message)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{4}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  4. }
+  \label{algo-validate-transactions}{\tmname{Validate-Transactions-and-Store}}($M_T
+  :$Transaction Message)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$L \leftarrow \tmop{Dec}_{\tmop{SC}} (M_T)$}}
+
+{\state{{\FORIN{$T$}{$L$}}{\tmstrong{such that}} $E \nin \tmop{TQ}$
+{\tmstrong{and}} $E \nin \tmop{TP}$:}}
+
+{\state{$B_d \leftarrow${\tmname{Head(Longest-Chain(($\tmop{BT}$))}}}}
+
+{\state{$N \leftarrow H_n (B_d)$}}
+
+{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}, N, T
+\right)$}}
+
+{\state{{\IF{$R$ indicates $E$ is $\tmop{Valid} :$}}}}
+
+{\state{{\IF{$\tmop{Requires}$(R){\subset}}}
+
+\quad$\bigcup_{\forall T \in (\tmop{TQ})}${\tmname{Provided-Tags}}(T) {\cup}
+$\bigcup_{i < d, \forall T, T \in B_i}${\tmname{Provided-Tags(T)}}:}}
+
+{\state{{\tmname{Insert-At(}}$\tmop{TQ}, T, \tmop{Requires} (R),
+\tmop{Priority} (R)$){\END}}}
+
+{\state{{\ELSE{\ }}}}
+
+{\state{{\tmname{Add-To(TP,$T$)}}{\END}}}
+
+{\state{{\tmname{Maintain-Transaction-Pool}}}}
+
+{\state{{\IF{Propagate(R)={\tmstrong{True}}:}}}}
+
+{\state{{\tmname{Propagate(}}$T$){\END}{\END}{\END}}}}}
+
+\hrulefill{\medskip}
 
 In which
 \begin{itemizeminus}
@@ -923,15 +1008,17 @@ In which
   message{\index{Transaction Message}}}} sent to all peers of Polkadot RE
   node.
 \end{itemizeminus}
-\custombinding{5}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{5}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-maintain-transaction-pool}{\tmname{Maintain-Transaction-Pool}}
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{5}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  5. }
+  \label{algo-maintain-transaction-pool}{\tmname{Maintain-Transaction-Pool}}\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\todo{This is scaning the pool for ready transactions and
+moving them to the TQ and dropping transactions which are not valid}}}}
+
+\hrulefill{\medskip}
 
 \subsubsection{Inherents}
 
@@ -1138,15 +1225,34 @@ entry into the Runtime as a part of the validation process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-\custombinding{6}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{6}}{\smallskip}
-    
-    \begin{tmindent}
-      {\tmname{Import-and-Validate-Block($B, \tmop{Just} (B)$)}}
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{6}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  6. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
+  (B)$)}}\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{{\tmname{Set-Storage-State-At($P (B)$)}}}}
+
+{\state{{\IF{$\tmop{Just} (B) \neq \emptyset$}}}}
+
+{\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$}}
+
+{\state{{\IF{$B$ {\tmstrong{is}} Finalized {\tmstrong{and}} $P (B)$
+{\tmstrong{is not}} Finalized}}}}
+
+{\state{{\tmname{Mark-as-Final}}$(P (B))${\END}{\END}}}
+
+{\state{{\IF{$H_p (B) \nin \tmop{PBT}$}}}}
+
+{\state{{\RETURN{{\END}}}}}
+
+{\state{{\tmname{Verify-Authorship-Right}}($\tmop{Head} (B)$)}}
+
+{\state{$S \leftarrow$ {\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{Core\_execute\_block}}, B \right)$}}}}
+
+\hrulefill{\medskip}
 
 For the definition of the finality and the finalized block see Section
 \ref{sect-finality}. $\tmop{PBT}$ is the pruned block tree defined in
@@ -1554,18 +1660,27 @@ build a block. The $\tmop{sk}$ is the block producer lottery secret key and
 $n$ is the index of epoch for whose slots the block producer is running the
 lottery.
 
-\custombinding{7}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{7}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}($\tmop{sk}
-      :$session secret key of the producer,
-      
-      $n :$epoch index)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{7}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  7. }
+  \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}($\tmop{sk}
+  :$session secret key of the producer,
+  
+  $n :$epoch index)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$r \leftarrow${\tmname{Epoch-Randomness$(n)$}}}}
+
+{\state{{\FORTO{$i \assign 1$}{$\tmop{sc}_n$}}}}
+
+{\state{$(\pi, d) \leftarrow${\tmem{{\tmname{VRF}}}}($r, i, \tmop{sk}$)}}
+
+{\state{$A [i] \leftarrow (d, \pi)${\END}}}
+
+{\state{{\RETURN{A}}}}}}
+
+\hrulefill{\medskip}
 
 For any slot $i$ in epoch $n$ where $d < \tau$, the block producer is required
 to produce a block. For the definitions of {\tmname{Epoch-Randomness}} and
@@ -1613,16 +1728,28 @@ formalized in Definition \ref{defn-slot-offset}.
   {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
-\custombinding{8}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{8}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-slot-time}{\tmname{Slot-Time}}($s$: the slot number of the
-      slot whose time needs to be determined)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{8}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  8. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
+  the slot number of the slot whose time needs to be determined)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$T_s \leftarrow \{ \}$}}
+
+{\state{$B_d \leftarrow${\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
+
+{\state{{\FORIN{$B_i$}{{\tmname{SubChain}}($B_{H_n (B_d) - \tmop{SITL}}$,
+$B_d$)}}}}
+
+{\state{{\tmname{$s_t^{B_i} \leftarrow T^{}_{B_i}$+Slot-Offset($s_{B_i},
+s$)$\times \mathcal{T}_{}$}}}}
+
+{\state{$T_s \leftarrow T_s \cup s_t^{B_i}${\END}}}
+
+{\state{{\RETURN{Median($T_s$)}}}}}}
+
+\hrulefill{\medskip}
 
 $\mathcal{T}$ is the slot duration defined in Definition
 \ref{defn-epoch-slot}.
@@ -1674,16 +1801,37 @@ digest items defined in Definition \ref{defn-babe-header} and
   \ 
 \end{definition}
 
-\custombinding{9}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{9}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
-      pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{9}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  9. }
+  \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
+  pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$A
+\leftarrow${\tmname{Block-production-lottery($\tmop{sk}$, $n$)}}}}
+
+{\state{{\FORTO{$s \leftarrow 1$}{$\tmop{sc}_n$}}}}
+
+{\state{{\tmname{Wait}}({\tmstrong{until}} {\tmname{Slot-Time}}(s))}}
+
+{\state{$(d, \pi) \leftarrow A [s]$}}
+
+{\state{{\IF{$d < \tau$}}}}
+
+{\state{$C_{\tmop{Best}} \leftarrow${\tmname{Longest-Chain}}(BT)}}
+
+{\state{{\tmname{$B_s \leftarrow$Build-Block($C_{\tmop{Best}}$)}}}}
+
+{\state{{\tmname{Add-Digest-Item}}($B_s$,Pre-Runtime,$E_{\tmop{id}}
+(\tmop{BABE}), H_{\tmop{BABE}} (B_s)$)}}
+
+{\state{{\tmname{Add-Digest-Item}}($B_s$,Seal,$S_B$)}}
+
+{\state{{\tmname{Broadcast-Block}}($B_s$)}}}}
+
+\hrulefill{\medskip}
 
 {\tmname{Add-Digest-Item}} appends a digest item to the end of the header
 digest $H_d (B)$ according to Definition \ref{defn-digest}.
@@ -1697,16 +1845,24 @@ is provided in the genesis state. The computation of the seed is described in
 Algorithm \ref{algo-epoch-randomness} which uses the concept of epoch subchain
 described in Definition \ref{defn-epoch-subchain}.
 
-\custombinding{10}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{10}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
-      index)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{10}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  10. }
+  \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
+  index)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$\rho \leftarrow \phi$}}
+
+{\state{{\FORIN{$B$}{}}{\tmem{{\tmname{SubChain($\mathcal{E}_{n - 2}$)}}}}}}
+
+{\state{$\rho \leftarrow \rho | | d_B${\END}}}
+
+{\state{{\RETURN{Blake2b({\tmname{Epoch-Randomness}}($n -
+2$)\textbar\textbar$n$\textbar\textbar$\rho$)}}}}}}
+
+\hrulefill{\medskip}
 
 In which value $d_B$ is the VRF output computed for slot $s_B$ by running
 Algorithm \ref{algo-block-production-lottery}.
@@ -1738,16 +1894,47 @@ Algorithm \ref{algo-verify-authorship-right} where:
   \item {\tmname{verify-Slot-Winner}} is defined in Algorithm
   \ref{algo-verify-slot-winner}.
 \end{itemizeminus}
-\custombinding{11}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{11}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-verify-authorship-right}{\tmname{Verify-Authorship-Right}}($\tmop{Head}_s
-      (B)$: The header of the block being verified) 
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{11}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  11. }
+  \label{algo-verify-authorship-right}{\tmname{Verify-Authorship-Right}}($\tmop{Head}_s
+  (B)$: The header of the block being verified) \\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$s
+\leftarrow${\tmname{Slot-Number-At-Given-Time}}($T_{B_{}}$)}}
+
+{\state{$\mathcal{E}_c \leftarrow${\tmname{Current-Epoch}}()}}
+
+{\state{$(D_1, \ldots, D_{\tmop{length} (H_d (B))}) \leftarrow H_d (B)$}}
+
+{\state{$D_s \leftarrow D_{\tmop{length} (H_d (B))}$}}
+
+{\state{$H_d (B) \leftarrow (D_1, \ldots, D_{\tmop{length} (H_d (B)) - 1})$
+//remove the seal from the digest}}
+
+{\state{($\tmop{id}, \tmop{Sig}_B$)$\leftarrow \tmop{Dec}_{\tmop{SC}} (D_s)$}}
+
+{\state{{\IF{$\tmop{id} \neq${\tmname{Seal-Id}}}}}}
+
+{\state{{\ERROR{``Seal missing''{\END}}}}}
+
+{\state{AuthorID $\leftarrow \tmop{AuthorityDirectory}^{\mathcal{E}_c}
+[H_{\tmop{BABE}} (B) . \tmop{SingerIndex}]$}}
+
+{\state{{\tmname{Verify-Signature}}($\tmop{AuthorID}, H_h (B),
+\tmop{Sig}_B$)}}
+
+{\state{{\IF{$\exists B' \in \tmop{BT} : H_h (B) \neq H_h (B)$
+{\tmstrong{and}} $s_B = s'_B$ {\tmstrong{and}} $\tmop{SignerIndex}_B =
+\tmop{SignerIndex}_{B'}$}}}}
+
+{\state{{\ERROR{``Block producer is equivocating''{\END}}}}}
+
+{\state{{\tmname{Verify-Slot-Winner}}($(d_B, \pi_B), s$,AuthorID)}}}}
+
+\hrulefill{\medskip}
 
 Algorithm \ref{algo-verify-slot-winner} is run as a part of the verification
 process, when a node is importing a block, in which:
@@ -1763,16 +1950,26 @@ process, when a node is importing a block, in which:
   \item $\tau$ is the winning threshold defined in
   \ref{defn-winning-threshold}.
 \end{itemizeminus}
-\custombinding{12}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{12}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-verify-slot-winner}{\tmname{Verify-Slot-Winner}}($B$: the
-      block whose winning status to be verified)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{12}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  12. }
+  \label{algo-verify-slot-winner}{\tmname{Verify-Slot-Winner}}($B$: the block
+  whose winning status to be verified)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$\mathcal{E}_c \leftarrow${\tmname{Current-Epoch}}}}
+
+{\state{$\rho \leftarrow${\tmname{Epoch-Randomness}}$(c)$}}
+
+{\state{{\tmname{Verify-VRF}}($\rho, H_{\tmop{BABE}} (B) . (d_B, \pi_B),
+H_{\tmop{BABE}} (B) .s, c$)}}
+
+{\state{{\IF{$d_B \geqslant \tau$}}}}
+
+{\state{{\ERROR{``Block producer is not a winner of the slot''{\END}}}}}}}
+
+\hrulefill{\medskip}
 
 $(d_B, \pi_B)$: Block Lottery Result for Block $B$,
 
@@ -1788,18 +1985,50 @@ The blocks building process is triggered by Algorithm
 \ref{algo-block-production} of the consensus engine which runs Alogrithm
 \ref{algo-build-block}.
 
-\custombinding{13}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{13}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The
-      chain where at its head, the block to be constructed,
-      
-      s: Slot number)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{13}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  13. }
+  \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
+  where at its head, the block to be constructed,
+  
+  s: Slot number)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$P_B \leftarrow_{}${\tmname{Head($C_{\tmop{Best}}$)}}}}
+
+{\state{$\tmop{Head} (B) \leftarrow$($H_p \leftarrow H_h (P_B), H_i \leftarrow
+H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
+\phi$)}}
+
+{\state{{\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{Core\_initialize\_block}}, \tmop{Head} (_{} B) \right)$}}
+
+{\state{{\tmname{Call-Runtime-Entry}}$\left(
+\text{\tmverbatim{BlockBuilder\_inherent\_extrinsics}},
+\text{{\tmname{Inherent-Data}}} \right)${\END}}}
+
+{\state{{\WHILE{{\tmstrong{not}} {\tmname{End-Of-Slot(s)}}}}}}
+
+{\state{$E \leftarrow${\tmname{Next-Ready-Extrinsic()}}}}
+
+{\state{$R
+\leftarrow${\tmname{Call-Runtime-Entry(}}\tmverbatim{BlockBuilder\_apply\_extrinsics},
+{\tmem{E}})}}
+
+{\state{{\IF{{\tmstrong{not}} {\tmname{Block-Is-FULL($R$}})}}}}
+
+{\state{{\tmname{Drop(Ready-Extrinsics-Queue}}, {\tmem{E}}){\END}}}
+
+{\state{{\ELSE{\ }}}}
+
+{\state{{\BREAK}{\END}{\END}}}
+
+{\state{$\tmop{Head} (B)
+\leftarrow${\tmname{Call-Runtime-Entry(}}\tmverbatim{BlockBuilder\_finalize\_block},
+{\tmem{B}})}}}}
+
+\hrulefill{\medskip}
 \begin{itemizeminus}
   \item $\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
   
@@ -2061,31 +2290,76 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{14}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{14}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
-      ($\mathcal{V}$)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{14}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  14. }
+  \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
+  ($\mathcal{V}$)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$r \leftarrow 0$}}
+
+{\state{$\mathcal{V}_{\tmop{id}} \leftarrow \tmop{ReadState} ('
+\tmop{AUTHORITY} \_ \tmop{SET} \_ \tmop{KEY}')$}}
+
+{\state{$\mathcal{V}_{\tmop{id}} \leftarrow \mathcal{V}_{\tmop{id}} + 1$}}
+
+{\state{{\tmname{Execute-One-Grandpa-Round}}$(r)$}}}}
+
+\hrulefill{\medskip}
 
 \subsection{Voting Process in Round $r$}
 
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{algo-grandpa-round}.
 
-\custombinding{15}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{15}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{15}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  15. }
+  \label{algo-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$t_{r, v} \leftarrow$Time}}
+
+{\state{$\tmop{primary} \leftarrow${\tmname{Derive-Primary}}}}
+
+{\state{{\IF{$v = \tmop{primary}$}}}}
+
+{\state{{\tmname{Broadcast(}}\left.$M_{v_{\nosymbol}}^{r - 1,
+\tmop{Fin}}$({\tmname{Best-Final-Candidate}}($r$-1))\right){\END}}}
+
+{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} Time $\geqslant t_{r_,
+v} + 2 \times T$ {\tmstrong{or}} $r$ {\tmstrong{is}} completable){\END}}}
+
+{\state{$L \leftarrow${\tmname{Best-Final-Candidate}}($r$-1)}}
+
+{\state{{\IF{{\tmname{Received($M_{v_{\tmop{primary}}}^{r, \tmop{pv}} (B)$)}}
+{\tmstrong{and}} $B^{r, \tmop{pv}}_v \geqslant B > L$}}}}
+
+{\state{$N \leftarrow B${\END}}}
+
+{\state{{\ELSE{\ }}}}
+
+{\state{$N \leftarrow B' : H_n (B') = \max \{H_n (B') : B' > L\} \END$}}
+
+{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{pv}} (N)$)}}
+
+{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $B^{r,
+\tmop{pv}_{\nosymbol}}_v \geqslant L$ {\tmstrong{and}} (Time $\geqslant t_{r_,
+v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
+
+{\state{{\tmname{Broadcast($M_v^{r, \tmop{pc}}$($B_v^{r, \tmop{pv}}$))}}}}
+
+{\state{{\tmname{Attempt-To-Finalize-Round}}($r$)}}
+
+{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $r$ {\tmstrong{is}}
+completable)}}
+
+{\state{{\tmname{Play-Grandpa-round}}($r + 1$)}}}}
+
+\hrulefill{\medskip}
 
 The condition of {\tmem{completablitiy}} is defined in Definition
 \ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
@@ -2093,25 +2367,54 @@ explained in Algorithm \ref{algo-grandpa-best-candidate} and
 {\tmname{{\tmname{Attempt-To-Finalize-Round}}($r$)}} is described in Algorithm
 \ref{algo-attempt-tofinalize}.
 
-\custombinding{16}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{16}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+\custombinding{16}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  16. }
+  \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
+  \hline
+\end{tabular}
 
-\custombinding{17}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
-  \begin{tmparsep}{0em}%
-    \tmtextbf{Algorithm \tmtextup{17}}{\smallskip}
-    
-    \begin{tmindent}
-      \label{algo-attempt-tofinalize}{\tmname{Attempt-To-Finalize-Round}}($r$)
-    \end{tmindent}
-  \end{tmparsep}
-\end{tmparmod}{\medskip}
+{\algorithmic{{\state{$\mathcal{C}_{\nosymbol} \leftarrow \{B' |B' \leqslant
+B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
+\leqslant 1 / 3|\mathbb{V}|\}$}}
+
+{\state{{\IF{$\mathcal{C}= \phi$}}}}
+
+{\state{{\RETURN{$\phi${\END}}}}}
+
+{\state{{\ELSE{\ }}}}
+
+{\state{{\RETURN{$E \in \mathcal{C}: H_n (E) = \max \{H_n (B') : B' \in
+\mathcal{C}\}${\END}}}}}}}
+
+\hrulefill{\medskip}
+
+\custombinding{17}{\noindent}\begin{tabular}{l}
+  \hline
+  \tmtextsc{Algorithm  17. }
+  \label{algo-attempt-tofinalize}{\tmname{Attempt-To-Finalize-Round}}($r$)\\
+  \hline
+\end{tabular}
+
+{\algorithmic{{\state{$L \leftarrow${\tmname{Last-Finalized-Block}}}}
+
+{\state{$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
+
+{\state{{\IF{$E \geqslant L$ {\tmstrong{and}} $V^{r, \tmop{pc}}_{\tmop{obs}
+(v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3 |\mathbb{V}|$}}}}
+
+{\state{{\tmname{Last-Finalized-Block}}$\leftarrow E$}}
+
+{\state{{\IF{$M_v^{r, \tmop{Fin}} (E) \nin${\tmname{Received-Messages}}}}}}
+
+{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (E)$)}}
+
+{\state{{\RETURN{{\END}{\END}}}}}
+
+{\state{{\tmstrong{schedule-call}} {\tmname{Attempt-To-Finalize-Round}}($r$)
+{\tmstrong{when}} {\tmname{Receive-Messages}} }}}}
+
+\hrulefill{\medskip}
 
 \section{Block Finalization}\label{sect-block-finalization}
 
