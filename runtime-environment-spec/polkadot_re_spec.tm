@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
 
@@ -2362,7 +2362,7 @@
     <\center>
       <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<table|<row|<cell|<strong|Type
       Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Scheduled
-      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|2>|<cell|[RESERVED]>|<cell|[RESERVED]>>|<row|<cell|3>|<cell|On
+      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|2>|<cell|ForcedChange>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|3>|<cell|On
       Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|B>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|B>>>>>>>>
         <label|tabl-consensus-messages>The consensus digest item for GRANDPA
         authorities
