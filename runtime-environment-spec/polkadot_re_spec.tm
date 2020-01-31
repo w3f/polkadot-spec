@@ -2372,8 +2372,7 @@
     Where Auth<math|<rsub|C>> is defined in Definition
     <reference|defn-authority-list>, <math|N<rsub|B>> is the number of blocks
     to delay the change. <math|Auth<rsub|ID>> is a 64 bit integer pointing to
-    the authority list of the current block. Type Id 2 is reserved for future
-    development <todo|Spec Force Change>.
+    the authority list of the current block.
   </definition>
 
   Polkadot RE should inspect the digest header of each block and delegates
