@@ -2381,18 +2381,17 @@
   based on the type of consensus messages they receives as follows:
 
   <\itemize-minus>
-    <item><strong|Scheduled Change>: Schedule an authority set change. The
-    earliest digest of this type in a single block will be respected. No
-    change should be scheduled if one is already and the delay has not passed
-    completely. If such an inconsitency occures, the scheduled change should
-    be ignored.
+    <item><strong|Scheduled Change>: Schedule an authority set change after a
+    delay of <em|finalized> blocks. The earliest digest of this type in a
+    single block will be respected. No change should be scheduled if one is
+    already and the delay has not passed completely. If such an inconsitency
+    occures, the scheduled change should be ignored.
 
-    <item><strong|Forced Change>: Force an authority set change. Forced
-    changes are applied after a delay of <em|imported> blocks, while pending
-    changes are applied after a delay of <em|finalized> blocks. The earliest
-    digest of this type in a single block will be respected. No change should
-    be scheduled if one is already and the delay has not passed completely.
-    If such an inconsitency occures, the scheduled change should be ignored.
+    <item><strong|Forced Change>: Force an authority set change after a delay
+    of <em|imported> blocks. The earliest digest of this type in a single
+    block will be respected. No change should be scheduled if one is already
+    and the delay has not passed completely. If such an inconsitency occures,
+    the scheduled change should be ignored.
 
     <item><strong|On Disabled>: The authority set index with given index is
     disabled until the next change.
