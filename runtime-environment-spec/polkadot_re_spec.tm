@@ -4706,11 +4706,11 @@
 
   <\definition>
     <strong|<label|defn-child-storage-definition>Child storage definition>
-    allows for further separation from within the child storage. When a key
-    gets set in the child storage using a certain definition, the same
-    definition must be used in order to fetch the key or perform other
-    operations on it. The value of the definition is undefined and set by the
-    Runtime.
+    allows for further separation from within the child storage, behaving
+    like a prefix. When a key gets set in the child storage using a certain
+    definition, the same definition must be used in order to fetch the key or
+    perform other operations on it. The value of the definition is undefined
+    and set by the Runtime.
   </definition>
 
   <\definition>
