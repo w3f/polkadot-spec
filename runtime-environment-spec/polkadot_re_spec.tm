@@ -2767,7 +2767,7 @@
 
       <\state>
         <\RETURN>
-          Blake2b(<name|Epoch-Randomness>(<math|n-2>)\|\|<math|n>\|\|<math|\<rho\>>)
+          Blake2b(<name|Epoch-Randomness>(<math|n-1>)\|\|<math|n>\|\|<math|\<rho\>>)
         </RETURN>
       </state>
     </algorithmic>

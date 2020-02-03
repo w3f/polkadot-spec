@@ -57,6 +57,7 @@ Network -> Voter ++ : poll
             alt the finalized block number > last finalized block number
               note over Voter: last finalized block ← the new finalized block
               Voter -> Enviornment ++ : finalize the new finalized block
+              return
             end
             Voter -> Voter ++ : process_commit_outcome(for good commit)
             return
@@ -84,144 +85,153 @@ Network -> Voter ++ : poll
           return
         end /' good/bad catchup '/
       end /' alt message type '/
-    end 
-  return
+    end  /' loop over all messages '/
+  return /' process_incoming '/
+
   Voter -> Voter ++ : prune_background_rounds
+    loop Voter -> PastRounds : poll
+      alt the poll return a commit TBS
+        Voter -> Network  ++: send Commit message
+        return
+      end 
+    end
+
+    loop Voter -> FinalizedNotification : poll
+      Voter -> PastRounds : update_finalized
+      alt the finalized block number > last finalized block number
+        note over Voter: last finalized block ← the new finalized block
+        Voter -> Enviornment ++ : finalize the new finalized block
+        return
+      end
+    end
+  return /' prune background rounds '/
+
+  Voter -> GlobalOut ++ : send all queued messages
   return
-  Voter -> Voter ++ : global_out.poll
-  return
-    Voter -> Voter ++ : process_best_round
-      Voter -> VotingRound ++ : best_round.poll
-        VotingRound -> VotingRound ++ : process_incoming
-          loop for all received messages for this round
-            VotingRound -> VotingRound ++ : handle_vote
-              alt it is a prevote message
-                VotingRound -> Votes ++ : import_prevote
-                return
-              else it is a precommit message
-                VotingRound -> Votes ++ : import_precommit
-                return
-              else it is a primary propose        
-                VotingRound -> Votes ++ : who is the primary voter?
-                return : primary_id
-                alt I am the primary voter
-                  note over VotingRound
-                   set primary block as the 
-                   one proposed in the 
-                   message
-                  end note
-                else I am not the primary
-                 note over VotingRound: do nothing
-                end  
-              end /'message type'/
-            return
-          end /'message loop'/
-        return /'process incoming'/
-
-        alt if last_round_state is not empty
-          note over VotingRound: we can participate in voting process
-
-          VotingRound -> VotingRound ++ : primary_propose
-
-            VotingRound -> RoundState : current_state?
-            alt if this round state is "Start":
-              RoundState -> VotingRound : Start
-              alt if we are primary
-                alt if last round estimate > last round finalized
-                  VotingRound -> Network ++ : send(PrimaryPropose, last round estimate)
-                  return
-                  VotingRound -> RoundState ++ : set State to "Proposed"
-                  return 
-                end
-              end
-            else anything other state 
-              RoundState -> VotingRound : Other states
-              note over VotingRound: do nothing
-            end
+  
+  Voter -> Voter ++ : process_best_round
+    Voter -> VotingRound ++ : best_round.poll
+      VotingRound -> VotingRound ++ : process_incoming
+        loop for all received messages for this round
+          VotingRound -> VotingRound ++ : handle_vote
+            alt it is a prevote message
+              VotingRound -> Votes ++ : import_prevote
+              return
+            else it is a precommit message
+              VotingRound -> Votes ++ : import_precommit
+              return
+            else it is a primary propose        
+              VotingRound -> Votes ++ : who is the primary voter?
+              return : primary_id
+              alt I am the primary voter
+                note over VotingRound
+                 set primary block as the 
+                 one proposed in the 
+                 message
+                end note
+              else I am not the primary
+               note over VotingRound: do nothing
+              end  
+            end /'message type'/
           return
+        end /'message loop'/
+      return /'process incoming'/
 
-          VotingRound -> VotingRound ++ : prevote
-            VotingRound -> RoundState : current_state?
-            alt state is "Start" or "Proposed"
-              RoundState -> VotingRound : Start or Proposed
-              VotingRound -> Votes  : completable?
-              alt prevote timer is up or votes are completable
-                Votes --> VotingRound  : completable
+      alt if last_round_state is not empty
+        note over VotingRound: we can participate in voting process
+        VotingRound -> VotingRound ++ : primary_propose
+          VotingRound -> RoundState : current_state?
+          alt if this round state is "Start":
+            RoundState -> VotingRound : Start
+            alt if we are primary
+              alt if last round estimate > last round finalized
+                VotingRound -> Network ++ : send(PrimaryPropose, last round estimate)
+                return
+                VotingRound -> RoundState ++ : set State to "Proposed"
+                return 
+              end
+            end
+          else anything other state 
+            RoundState -> VotingRound : Other states
+            note over VotingRound: do nothing
+          end
+        return
 
+        VotingRound -> VotingRound ++ : prevote
+          VotingRound -> RoundState : current_state?
+          alt state is "Start" or "Proposed"
+            RoundState -> VotingRound : Start or Proposed
+            VotingRound -> Votes  : completable?
+            alt prevote timer is up or votes are completable
+              Votes --> VotingRound  : completable
                 VotingRound --> VotingRound ++ : construct_prevote
-                  note over VotingRound: Panic! if last round does not have estimate
-
+                note over VotingRound: Panic! if last round does not have estimate
                   VotingRound --> VotingRound ++ : compute_anscestor_of_best_block
-                    alt if we do not have primary_block
-                      note over VotingRound : ancester ←  last_round_estimate 
-                    else if we have a primary_block
-                      note over VotingRound: Panic! if there is no last_round_prevote_ghost
-                      alt if primary_block = last_round_prevote_ghost
-                        note over VotingRound : ancester ←  primary_block
-                      else if #primary_block >= #last_round_prevote_ghost
-                        note over VotingRound : ancester ←  last_round_estimate
-                      else if #primary_block < #last_round_prevote_ghost (migh not be a desecndent)
-                        note over VotingRound
-                          if the primary block is in the ancestry of 
-                          prevote ghost we vote for the best chain 
-                          containing "it?".
-                        end note
-                        alt last_round_estimitate < primary_block <= last_prevote_ghost 
-                          note over VotingRound : ancester ← primary_block
-                        else  primary_block ∉ subChain[last_round_estimitate, last_prevote_ghost]
-                            note over VotingRound : ancester ← last_round_estimate
-                        else last_round_estimitate is not an ancestor of last_prevote_ghost 
-                          note over VotingRound : This only happens if there is a massive equivocation
+                  alt if we do not have primary_block
+                    note over VotingRound : ancester ←  last_round_estimate 
+                  else if we have a primary_block
+                    note over VotingRound: Panic! if there is no last_round_prevote_ghost
+                    alt if primary_block = last_round_prevote_ghost
+                      note over VotingRound : ancester ←  primary_block
+                    else if #primary_block >= #last_round_prevote_ghost
+                      note over VotingRound : ancester ←  last_round_estimate
+                    else if #primary_block < #last_round_prevote_ghost (migh not be a desecndent)
+                      note over VotingRound
+                        if the primary block is in the ancestry of 
+                        prevote ghost we vote for the best chain 
+                        containing "it?".
+                      end note
+                      alt last_round_estimitate < primary_block <= last_prevote_ghost 
+                        note over VotingRound : ancester ← primary_block
+                      else  primary_block ∉ subChain[last_round_estimitate, last_prevote_ghost]
                           note over VotingRound : ancester ← last_round_estimate
-                        end /' primary < pg '/
-                      end /' primary = pg '/ 
-                    end /' no priamyr '/
-                  return /' compute_anscestor_of_best_block '/
-
-                  VotingRound -> Environment ++ : best block of best chain containing the anscestor 
-                    note over VotingRound
-                      best block is the greatest block on the longest
-                      chain which can be finalized by current auth set 
-                    end note
-                  return best block /' best block of best chain '/
-                return /' construct_prevote '/
+                      else last_round_estimitate is not an ancestor of last_prevote_ghost 
+                        note over VotingRound : This only happens if there is a massive equivocation
+                        note over VotingRound : ancester ← last_round_estimate
+                      end /' primary < pg '/
+                    end /' primary = pg '/ 
+                  end /' no priamyr '/
+                return /' compute_anscestor_of_best_block '/
+                VotingRound -> Environment ++ : best block of best chain containing the anscestor 
+                   note over VotingRound
+                     best block is the greatest block on the longest
+                     chain which can be finalized by current auth set 
+                  end note
+                return best block /' best block of best chain '/
+              return /' construct_prevote '/
 
                 alt prevote got constructed
-                  VotingRound --> Envioronment ++ : prevoted
-                  return
-                  VotingRound --> Votes ++ : set_prevoted_index
-                  return
-                  VotingRound --> Network ++ : send prevote message
-                  return
-                  VotingRound --> RoundState : set state to "Prevoted"
-                else failed to construct prevote
-                  VotingRound --> RoundState : set state to "None"
-                  VotingRound --> VotingState : set state to "No"
-                end
-              end
-            else anything other state
-              RoundState --> VotingRound  : other states
-                note over VotingRound: do nothing
-            end
-          return
-
-          VotingRound -> VotingRound ++ : precommit
-            VotingRound -> RoundState : current_state?
-
-            alt state is "Prevoted"
-              RoundState -> VotingRound : "Prevoted"
-              VotingRound -> VotingRound ++ : get last round estimate
-              return 
-              note over VotingRound
-                Panic! if last round does not have estimate
-                This means we started this round before last
-                round is completable
-              end note
-
-              VotingRound -> Votes ++ : get prevote_ghost
+              VotingRound --> Envioronment ++ : prevoted
               return
-
-              alt prevote_ghost > last round estimate
+              VotingRound --> Votes ++ : set_prevoted_index
+              return
+              VotingRound --> Network ++ : send prevote message
+              return
+              VotingRound --> RoundState : set state to "Prevoted"
+            else failed to construct prevote
+              VotingRound --> RoundState : set state to "None"
+              VotingRound --> VotingState : set state to "No"
+            end
+          end
+        else anything other state
+          RoundState --> VotingRound  : other states
+            note over VotingRound: do nothing
+        end
+      return
+       VotingRound -> VotingRound ++ : precommit
+        VotingRound -> RoundState : current_state?
+         alt state is "Prevoted"
+          RoundState -> VotingRound : "Prevoted"
+          VotingRound -> VotingRound ++ : get last round estimate
+          return 
+          note over VotingRound
+            Panic! if last round does not have estimate
+            This means we started this round before last
+            round is completable
+          end note
+          VotingRound -> Votes ++ : get prevote_ghost
+          return
+             alt prevote_ghost > last round estimate
                 VotingRound --> Votes  : completable?
 
                 alt precommit timer is up or votes are completable
