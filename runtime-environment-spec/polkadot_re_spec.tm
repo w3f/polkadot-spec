@@ -4700,16 +4700,17 @@
     <label|defn-child-storage-type><strong|Child storage> key is the
     identifier for the child storage. Multiple child storages are possible,
     where it's corresponding entries are separated based on the identifier.
-    The identiefier must be prefixed with <verbatim|:child_storage:default:>,
-    but this is subject to future change.
+    The prefix <verbatim|:child_storage:default:> must be prepended to the
+    identiefier.
   </definition>
 
   <\definition>
     <strong|<label|defn-child-storage-definition>Child storage definition>
     allows for further separation from within the child storage. When a key
-    gets set in the child storage, the same definition must be used in order
-    to fetch the key or perform other operations on it. The value of the
-    definition is undefined and set by the Runtime.
+    gets set in the child storage using a certain definition, the same
+    definition must be used in order to fetch the key or perform other
+    operations on it. The value of the definition is undefined and set by the
+    Runtime.
   </definition>
 
   <\definition>
