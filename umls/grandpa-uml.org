@@ -315,3 +315,78 @@ Voter --> Network
 #+results:
 [[file:grandpa_voter.png]]
 
+* grandpa votes
+#+begin_src plantuml :file grandpa_votes.png
+
+VotingRound -> Round ++ : import_prevote
+  alt voter is not in voters set
+     note over Round: just ignore the vote
+     Round --> VotingRound : ignore
+  else
+    Round -> PrevoteTracker ++ : add vote
+    return
+    alt if it is a duplicate vote
+      Round --> VotingRound : duplicate
+    else if it is a new vote from new signer
+      Round --> VoteGraph ++ : insert vote
+      return
+      note over Round: equivocation_result ← nothing
+    else  if it is an equivocation
+      note over Round
+        mark the equivocator.
+        equivocation_result ← (round number, signer id, vote1, vote2)
+      end note
+    end /' not a duplicate vote '/
+    
+    alt #prevotes > 2/3 possible voters
+       Round --> VoteGraph ++ : find_ghost_descendent of current_ghost
+         note over VoteGraph 
+           The GHOST (hash, number) returned will be the 
+           block with highest number for which the
+	       cumulative votes of descendents and itself > 2/3 of voters.
+           TBS
+         end note
+      return new_gohst
+      note over Round 
+        current_ghost ← new_gohst
+      end note
+      /'update only if >2/3'/
+      alt we have a ghost
+        alt more than 2/3 pre-committed
+          Round -> VoteGraph ++ : find anscestor with 2/3 of precommit
+          return new finalized
+          note over Round: finalized ← new finalized.
+          Round -> Round ++ : update-estimate
+            note over Round: estimate ← nothing
+            loop over anscenstors of the ghost in descending order
+              Round -> Round ++ : compute full possible precommit votes for this block
+                note over Round: To be Specced
+              return
+              alt full possible votes > 2/3 threshold 
+                note over Round: estimate ← current anscestor
+                break
+              end
+            end /' looping over anscestor '/
+          return /' update estimate '/
+          alt if we have an estimate 
+            alt estimate ≠ ghost
+              note over Round: completable ← True
+            else if estimate = ghost
+              note over Round: completable ← True
+              loop over descendent of ghost
+                alt full possible precommit votes for current dsecndant  > 2/3 votes
+                note over Round: completable ← False
+                end
+             end /' estimate isn't ghost '/
+          else if we do not have an estimate
+                note over Round: completable ← Fa            
+          end /' no estimate '/
+        end /' more than 2/3 pre-commited '/
+      end /' we have a ghost '/
+    end /' #prevotes > 2/3'/
+  end /' voter in voter set '/
+return equivocation_result
+#+end_src
+
+#+results:
+[[file:grandpa_votes.png]]
