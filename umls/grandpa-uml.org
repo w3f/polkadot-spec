@@ -386,6 +386,32 @@ VotingRound -> Round ++ : import_prevote
     end /' #prevotes > 2/3'/
   end /' voter in voter set '/
 return equivocation_result
+
+/'/////////// PRE-COMMIT //////////'/
+VotingRound -> Round ++ : import_precommit
+  alt voter is not in voters set
+     note over Round: just ignore the vote
+     Round --> VotingRound : ignore
+  else voter is in the voters set
+    Round -> PrecommitTracker ++ : add vote
+    alt if it is a duplicate vote
+      PrecommitTracker --> Round : duplicate
+    else if it is a new vote from new signer
+      PrecommitTracker --> Round : haven't seen another vote from the voter.
+      Round --> VoteGraph ++ : insert vote
+      return
+      note over Round: equivocation_result ← nothing
+    else  if it is an equivocation
+      return  voter has voted on block1 and now block2
+      note over Round
+        mark the equivocator.
+        equivocation_result ← (round number, signer id, vote1, vote2)
+      end note
+    end /' not a duplicate vote '/
+    
+  end /' voter in voter set '/
+return equivocation_result
+
 #+end_src
 
 #+results:
