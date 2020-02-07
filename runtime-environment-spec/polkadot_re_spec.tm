@@ -6117,7 +6117,7 @@
   <\itemize>
     <item><verbatim|data>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the iterated items from which
-    the trie root gets formed.
+    the trie root gets formed. <todo|defines items>
 
     <item><verbatim|result>: a regular pointer to the buffer containing the
     256-bit trie root result.
@@ -6144,7 +6144,7 @@
   <\itemize>
     <item><verbatim|data>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the enumerated items from
-    which the trie root gets formed.
+    which the trie root gets formed. <todo|define items>
 
     <item><verbatim|result>: a regular pointer to the buffer containing the
     256-bit trie root result.
