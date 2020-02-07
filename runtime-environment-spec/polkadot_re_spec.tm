@@ -6235,7 +6235,7 @@
     >>|<row|<cell|0>|<cell|Error = 1>>|<row|<cell|1>|<cell|Warn =
     2>>|<row|<cell|2>|<cell|Info = 3>>|<row|<cell|3>|<cell|Debug =
     4>>|<row|<cell|4>|<cell|Trace = 5>>>>>>
-      \;
+      Log Levels for the logging interface
     </big-table>
   </definition>
 
