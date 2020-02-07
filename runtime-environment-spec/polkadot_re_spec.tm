@@ -6051,17 +6051,28 @@
 
   <section|miscellaneous>
 
+  Interface that provides miscellaneous functions for communicating between
+  the runtime and the node.
+
   <subsection|chain_id>
 
-  The current relay chain identifier.
+  Returns the current relay chain identifier.
 
   \;
 
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_misc_chain_id_version_1)
+    (func $ext_misc_chain_id_version_1 (result i64))
   </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|result>: the current relay chain identifier.
+  </itemize>
 
   <subsection|print_num>
 
@@ -6128,7 +6139,7 @@
 
   <subsection|runtime_version>
 
-  Extract the runtime version of the given Wasm blob by calling
+  Extract the Runtime version of the given Wasm blob by calling
   <verbatim|Core_version> as defined in Definition
   <reference|defn-rt-core-version>. Returns the SCALE encoded runtime version
   or <verbatim|None> as defined in Definition
@@ -6147,9 +6158,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_misc_runtime_version_version_1
-
-    \ \ (param $data i64))
+    (func $ext_misc_runtime_version_version_1 (param $data i64) (result i64))
   </verbatim>
 
   \;
@@ -6159,6 +6168,58 @@
   <\itemize>
     <item><verbatim|data>: a pointer as defined in Definition
     <reference|defn-runtime-pointer> indicating the Wasm blob.
+
+    <item><verbatim|result>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    Runtime version of the given Wasm blob.
+  </itemize>
+
+  <section|Allocator>
+
+  Provides functionality for calling into the memory allocator.
+
+  <subsection|malloc>
+
+  Malloc the given number of bytes and return the pointer to the allocated
+  memory location.
+
+  \;
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_allocator_malloc_version_1 (param $size i32) (result i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|size>: the size of the buffer to be allocated.
+
+    <item><verbatim|result>: a regular pointer to the allocated buffer.
+  </itemize>
+
+  <subsection|free>
+
+  Free the given pointer.
+
+  \;
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_allocator_free_version_1 (param $ptr i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|ptr>: the regular pointer to be freed.
   </itemize>
 
   <appendix|Legacy Runtime Environment API<label|sect-re-api>>
@@ -8348,89 +8409,92 @@
     <associate|auto-181|<tuple|E.6.3|71>>
     <associate|auto-182|<tuple|E.6.4|72>>
     <associate|auto-183|<tuple|E.6.5|72>>
-    <associate|auto-184|<tuple|F|72>>
-    <associate|auto-185|<tuple|F.1|72>>
-    <associate|auto-186|<tuple|F.1.1|73>>
-    <associate|auto-187|<tuple|F.1.2|73>>
-    <associate|auto-188|<tuple|F.1.3|73>>
-    <associate|auto-189|<tuple|F.1.4|74>>
+    <associate|auto-184|<tuple|E.7|72>>
+    <associate|auto-185|<tuple|E.7.1|72>>
+    <associate|auto-186|<tuple|E.7.2|73>>
+    <associate|auto-187|<tuple|F|73>>
+    <associate|auto-188|<tuple|F.1|73>>
+    <associate|auto-189|<tuple|F.1.1|74>>
     <associate|auto-19|<tuple|1.13|9>>
-    <associate|auto-190|<tuple|F.1.5|75>>
-    <associate|auto-191|<tuple|F.1.6|77>>
-    <associate|auto-192|<tuple|F.1.7|79>>
-    <associate|auto-193|<tuple|F.1.8|?>>
-    <associate|auto-194|<tuple|F.1.9|?>>
-    <associate|auto-195|<tuple|F.1.10|?>>
-    <associate|auto-196|<tuple|F.1.11|?>>
-    <associate|auto-197|<tuple|F.1.12|?>>
-    <associate|auto-198|<tuple|F.1.13|?>>
-    <associate|auto-199|<tuple|F.1.14|?>>
+    <associate|auto-190|<tuple|F.1.2|75>>
+    <associate|auto-191|<tuple|F.1.3|77>>
+    <associate|auto-192|<tuple|F.1.4|79>>
+    <associate|auto-193|<tuple|F.1.5|?>>
+    <associate|auto-194|<tuple|F.1.6|?>>
+    <associate|auto-195|<tuple|F.1.7|?>>
+    <associate|auto-196|<tuple|F.1.8|?>>
+    <associate|auto-197|<tuple|F.1.9|?>>
+    <associate|auto-198|<tuple|F.1.10|?>>
+    <associate|auto-199|<tuple|F.1.11|?>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
-    <associate|auto-200|<tuple|F.1.15|?>>
-    <associate|auto-201|<tuple|F.1.15.1|?>>
-    <associate|auto-202|<tuple|F.1.15.2|?>>
-    <associate|auto-203|<tuple|F.1.15.3|?>>
-    <associate|auto-204|<tuple|F.1.16|?>>
-    <associate|auto-205|<tuple|F.1.16.1|?>>
-    <associate|auto-206|<tuple|F.1.16.2|?>>
-    <associate|auto-207|<tuple|F.1.16.3|?>>
-    <associate|auto-208|<tuple|F.1.16.4|?>>
-    <associate|auto-209|<tuple|F.1.16.5|?>>
+    <associate|auto-200|<tuple|F.1.12|?>>
+    <associate|auto-201|<tuple|F.1.13|?>>
+    <associate|auto-202|<tuple|F.1.14|?>>
+    <associate|auto-203|<tuple|F.1.15|?>>
+    <associate|auto-204|<tuple|F.1.15.1|?>>
+    <associate|auto-205|<tuple|F.1.15.2|?>>
+    <associate|auto-206|<tuple|F.1.15.3|?>>
+    <associate|auto-207|<tuple|F.1.16|?>>
+    <associate|auto-208|<tuple|F.1.16.1|?>>
+    <associate|auto-209|<tuple|F.1.16.2|?>>
     <associate|auto-21|<tuple|1.13|9>>
-    <associate|auto-210|<tuple|F.1.16.6|?>>
-    <associate|auto-211|<tuple|F.1.17|?>>
-    <associate|auto-212|<tuple|F.1.17.1|?>>
-    <associate|auto-213|<tuple|F.1.17.2|?>>
-    <associate|auto-214|<tuple|F.1.17.3|?>>
-    <associate|auto-215|<tuple|F.1.17.4|?>>
-    <associate|auto-216|<tuple|F.1.17.5|?>>
-    <associate|auto-217|<tuple|F.1.17.6|?>>
-    <associate|auto-218|<tuple|F.1.17.7|?>>
-    <associate|auto-219|<tuple|F.1.17.8|?>>
+    <associate|auto-210|<tuple|F.1.16.3|?>>
+    <associate|auto-211|<tuple|F.1.16.4|?>>
+    <associate|auto-212|<tuple|F.1.16.5|?>>
+    <associate|auto-213|<tuple|F.1.16.6|?>>
+    <associate|auto-214|<tuple|F.1.17|?>>
+    <associate|auto-215|<tuple|F.1.17.1|?>>
+    <associate|auto-216|<tuple|F.1.17.2|?>>
+    <associate|auto-217|<tuple|F.1.17.3|?>>
+    <associate|auto-218|<tuple|F.1.17.4|?>>
+    <associate|auto-219|<tuple|F.1.17.5|?>>
     <associate|auto-22|<tuple|1.13|9>>
-    <associate|auto-220|<tuple|F.1.17.9|?>>
-    <associate|auto-221|<tuple|F.1.17.10|?>>
-    <associate|auto-222|<tuple|F.1.17.11|?>>
-    <associate|auto-223|<tuple|F.1.17.12|?>>
-    <associate|auto-224|<tuple|F.1.17.13|?>>
-    <associate|auto-225|<tuple|F.1.17.14|?>>
-    <associate|auto-226|<tuple|F.1.17.15|?>>
-    <associate|auto-227|<tuple|F.1.18|?>>
-    <associate|auto-228|<tuple|F.1.18.1|?>>
-    <associate|auto-229|<tuple|F.1.19|?>>
+    <associate|auto-220|<tuple|F.1.17.6|?>>
+    <associate|auto-221|<tuple|F.1.17.7|?>>
+    <associate|auto-222|<tuple|F.1.17.8|?>>
+    <associate|auto-223|<tuple|F.1.17.9|?>>
+    <associate|auto-224|<tuple|F.1.17.10|?>>
+    <associate|auto-225|<tuple|F.1.17.11|?>>
+    <associate|auto-226|<tuple|F.1.17.12|?>>
+    <associate|auto-227|<tuple|F.1.17.13|?>>
+    <associate|auto-228|<tuple|F.1.17.14|?>>
+    <associate|auto-229|<tuple|F.1.17.15|?>>
     <associate|auto-23|<tuple|1.13|9>>
-    <associate|auto-230|<tuple|F.1.19.1|?>>
-    <associate|auto-231|<tuple|F.1.19.2|?>>
-    <associate|auto-232|<tuple|F.1.20|?>>
-    <associate|auto-233|<tuple|F.1.20.1|?>>
-    <associate|auto-234|<tuple|F.1.21|?>>
-    <associate|auto-235|<tuple|F.2|?>>
-    <associate|auto-236|<tuple|G|?>>
-    <associate|auto-237|<tuple|G.1|?>>
-    <associate|auto-238|<tuple|G.1|?>>
-    <associate|auto-239|<tuple|G.2|?>>
+    <associate|auto-230|<tuple|F.1.18|?>>
+    <associate|auto-231|<tuple|F.1.18.1|?>>
+    <associate|auto-232|<tuple|F.1.19|?>>
+    <associate|auto-233|<tuple|F.1.19.1|?>>
+    <associate|auto-234|<tuple|F.1.19.2|?>>
+    <associate|auto-235|<tuple|F.1.20|?>>
+    <associate|auto-236|<tuple|F.1.20.1|?>>
+    <associate|auto-237|<tuple|F.1.21|?>>
+    <associate|auto-238|<tuple|F.2|?>>
+    <associate|auto-239|<tuple|G|?>>
     <associate|auto-24|<tuple|1.13|9>>
-    <associate|auto-240|<tuple|G.2.1|?>>
+    <associate|auto-240|<tuple|G.1|?>>
     <associate|auto-241|<tuple|G.1|?>>
-    <associate|auto-242|<tuple|G.2.2|?>>
-    <associate|auto-243|<tuple|G.2.3|?>>
-    <associate|auto-244|<tuple|G.2.4|?>>
-    <associate|auto-245|<tuple|G.2.5|?>>
-    <associate|auto-246|<tuple|G.2.6|?>>
-    <associate|auto-247|<tuple|G.2.7|?>>
-    <associate|auto-248|<tuple|G.2|?>>
-    <associate|auto-249|<tuple|G.3|?>>
+    <associate|auto-242|<tuple|G.2|?>>
+    <associate|auto-243|<tuple|G.2.1|?>>
+    <associate|auto-244|<tuple|G.1|?>>
+    <associate|auto-245|<tuple|G.2.2|?>>
+    <associate|auto-246|<tuple|G.2.3|?>>
+    <associate|auto-247|<tuple|G.2.4|?>>
+    <associate|auto-248|<tuple|G.2.5|?>>
+    <associate|auto-249|<tuple|G.2.6|?>>
     <associate|auto-25|<tuple|1.14|9>>
-    <associate|auto-250|<tuple|G.2.8|?>>
-    <associate|auto-251|<tuple|G.4|?>>
-    <associate|auto-252|<tuple|G.5|?>>
-    <associate|auto-253|<tuple|G.2.9|?>>
-    <associate|auto-254|<tuple|G.2.10|?>>
-    <associate|auto-255|<tuple|G.2.10|?>>
-    <associate|auto-256|<tuple|G.2.10|?>>
-    <associate|auto-257|<tuple|Tec19|?>>
+    <associate|auto-250|<tuple|G.2.7|?>>
+    <associate|auto-251|<tuple|G.2|?>>
+    <associate|auto-252|<tuple|G.3|?>>
+    <associate|auto-253|<tuple|G.2.8|?>>
+    <associate|auto-254|<tuple|G.4|?>>
+    <associate|auto-255|<tuple|G.5|?>>
+    <associate|auto-256|<tuple|G.2.9|?>>
+    <associate|auto-257|<tuple|G.2.10|?>>
+    <associate|auto-258|<tuple|G.2.10|?>>
+    <associate|auto-259|<tuple|G.2.10|?>>
     <associate|auto-26|<tuple|1.15|9>>
+    <associate|auto-260|<tuple|Tec19|?>>
     <associate|auto-27|<tuple|1.15|9>>
     <associate|auto-28|<tuple|2|11>>
     <associate|auto-29|<tuple|2.1|11>>
