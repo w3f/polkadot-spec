@@ -6049,6 +6049,117 @@
     otherwise.
   </itemize>
 
+  <section|miscellaneous>
+
+  <subsection|chain_id>
+
+  The current relay chain identifier.
+
+  \;
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_chain_id_version_1)
+  </verbatim>
+
+  <subsection|print_num>
+
+  Print a number.
+
+  \;
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_print_num_version_1 (param $value i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|value>: the number to be printed.
+  </itemize>
+
+  <subsection|print_utf8>
+
+  Print a valid <verbatim|UTF8> buffer.
+
+  \;
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_print_utf8_version_1 (param $data i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the valid <verbatim|UTF8>
+    buffer to be printed.
+  </itemize>
+
+  <subsection|print_hex>
+
+  Print any buffer in hexadecimal representation.
+
+  \;
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_print_hex_version_1 (param $data i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the buffer to be printed.
+  </itemize>
+
+  <subsection|runtime_version>
+
+  Extract the runtime version of the given Wasm blob by calling
+  <verbatim|Core_version> as defined in Definition
+  <reference|defn-rt-core-version>. Returns the SCALE encoded runtime version
+  or <verbatim|None> as defined in Definition
+  <reference|defn-varrying-data-type> if the call fails. This function gets
+  primarily used when upgrading Runtimes.
+
+  \;
+
+  <strong|Warning>: Calling this function is very expensive and should only
+  be done very occasionally. For getting the runtime version, it requires
+  instantiating the Wasm blob and calling a function in this blob.
+
+  \;
+
+  <strong|Version 1 - Prototype:>
+
+  <\verbatim>
+    (func $ext_runtime_version_version_1
+
+    \ \ (param $data i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><verbatim|data>: a pointer as defined in Definition
+    <reference|defn-runtime-pointer> indicating the Wasm blob.
+  </itemize>
+
   <appendix|Legacy Runtime Environment API<label|sect-re-api>>
 
   \;
@@ -7607,7 +7718,7 @@
   with the details of the arguments and the return values for each one of
   these enteries.
 
-  <subsection|<verbatim|Core_version>>
+  <subsection|<verbatim|Core_version>><label|defn-rt-core-version>
 
   This entry receives no argument; it returns the version data encoded in ABI
   format described in Section <reference|sect-runtime-return-value>
@@ -8229,89 +8340,95 @@
     <associate|auto-175|<tuple|E.5.13|70>>
     <associate|auto-176|<tuple|E.5.14|70>>
     <associate|auto-177|<tuple|E.5.15|70>>
-    <associate|auto-178|<tuple|F|70>>
-    <associate|auto-179|<tuple|F.1|71>>
+    <associate|auto-178|<tuple|E.6|70>>
+    <associate|auto-179|<tuple|E.6.1|71>>
     <associate|auto-18|<tuple|1.13|9>>
-    <associate|auto-180|<tuple|F.1.1|71>>
-    <associate|auto-181|<tuple|F.1.2|71>>
-    <associate|auto-182|<tuple|F.1.3|72>>
-    <associate|auto-183|<tuple|F.1.4|72>>
-    <associate|auto-184|<tuple|F.1.5|72>>
-    <associate|auto-185|<tuple|F.1.6|72>>
-    <associate|auto-186|<tuple|F.1.7|73>>
-    <associate|auto-187|<tuple|F.1.8|73>>
-    <associate|auto-188|<tuple|F.1.9|73>>
-    <associate|auto-189|<tuple|F.1.10|74>>
+    <associate|auto-180|<tuple|E.6.2|71>>
+    <associate|auto-181|<tuple|E.6.3|71>>
+    <associate|auto-182|<tuple|E.6.4|72>>
+    <associate|auto-183|<tuple|E.6.5|72>>
+    <associate|auto-184|<tuple|F|72>>
+    <associate|auto-185|<tuple|F.1|72>>
+    <associate|auto-186|<tuple|F.1.1|73>>
+    <associate|auto-187|<tuple|F.1.2|73>>
+    <associate|auto-188|<tuple|F.1.3|73>>
+    <associate|auto-189|<tuple|F.1.4|74>>
     <associate|auto-19|<tuple|1.13|9>>
-    <associate|auto-190|<tuple|F.1.11|75>>
-    <associate|auto-191|<tuple|F.1.12|77>>
-    <associate|auto-192|<tuple|F.1.13|79>>
-    <associate|auto-193|<tuple|F.1.14|?>>
-    <associate|auto-194|<tuple|F.1.15|?>>
-    <associate|auto-195|<tuple|F.1.15.1|?>>
-    <associate|auto-196|<tuple|F.1.15.2|?>>
-    <associate|auto-197|<tuple|F.1.15.3|?>>
-    <associate|auto-198|<tuple|F.1.16|?>>
-    <associate|auto-199|<tuple|F.1.16.1|?>>
+    <associate|auto-190|<tuple|F.1.5|75>>
+    <associate|auto-191|<tuple|F.1.6|77>>
+    <associate|auto-192|<tuple|F.1.7|79>>
+    <associate|auto-193|<tuple|F.1.8|?>>
+    <associate|auto-194|<tuple|F.1.9|?>>
+    <associate|auto-195|<tuple|F.1.10|?>>
+    <associate|auto-196|<tuple|F.1.11|?>>
+    <associate|auto-197|<tuple|F.1.12|?>>
+    <associate|auto-198|<tuple|F.1.13|?>>
+    <associate|auto-199|<tuple|F.1.14|?>>
     <associate|auto-2|<tuple|1.1|7>>
     <associate|auto-20|<tuple|1.13|9>>
-    <associate|auto-200|<tuple|F.1.16.2|?>>
-    <associate|auto-201|<tuple|F.1.16.3|?>>
-    <associate|auto-202|<tuple|F.1.16.4|?>>
-    <associate|auto-203|<tuple|F.1.16.5|?>>
-    <associate|auto-204|<tuple|F.1.16.6|?>>
-    <associate|auto-205|<tuple|F.1.17|?>>
-    <associate|auto-206|<tuple|F.1.17.1|?>>
-    <associate|auto-207|<tuple|F.1.17.2|?>>
-    <associate|auto-208|<tuple|F.1.17.3|?>>
-    <associate|auto-209|<tuple|F.1.17.4|?>>
+    <associate|auto-200|<tuple|F.1.15|?>>
+    <associate|auto-201|<tuple|F.1.15.1|?>>
+    <associate|auto-202|<tuple|F.1.15.2|?>>
+    <associate|auto-203|<tuple|F.1.15.3|?>>
+    <associate|auto-204|<tuple|F.1.16|?>>
+    <associate|auto-205|<tuple|F.1.16.1|?>>
+    <associate|auto-206|<tuple|F.1.16.2|?>>
+    <associate|auto-207|<tuple|F.1.16.3|?>>
+    <associate|auto-208|<tuple|F.1.16.4|?>>
+    <associate|auto-209|<tuple|F.1.16.5|?>>
     <associate|auto-21|<tuple|1.13|9>>
-    <associate|auto-210|<tuple|F.1.17.5|?>>
-    <associate|auto-211|<tuple|F.1.17.6|?>>
-    <associate|auto-212|<tuple|F.1.17.7|?>>
-    <associate|auto-213|<tuple|F.1.17.8|?>>
-    <associate|auto-214|<tuple|F.1.17.9|?>>
-    <associate|auto-215|<tuple|F.1.17.10|?>>
-    <associate|auto-216|<tuple|F.1.17.11|?>>
-    <associate|auto-217|<tuple|F.1.17.12|?>>
-    <associate|auto-218|<tuple|F.1.17.13|?>>
-    <associate|auto-219|<tuple|F.1.17.14|?>>
+    <associate|auto-210|<tuple|F.1.16.6|?>>
+    <associate|auto-211|<tuple|F.1.17|?>>
+    <associate|auto-212|<tuple|F.1.17.1|?>>
+    <associate|auto-213|<tuple|F.1.17.2|?>>
+    <associate|auto-214|<tuple|F.1.17.3|?>>
+    <associate|auto-215|<tuple|F.1.17.4|?>>
+    <associate|auto-216|<tuple|F.1.17.5|?>>
+    <associate|auto-217|<tuple|F.1.17.6|?>>
+    <associate|auto-218|<tuple|F.1.17.7|?>>
+    <associate|auto-219|<tuple|F.1.17.8|?>>
     <associate|auto-22|<tuple|1.13|9>>
-    <associate|auto-220|<tuple|F.1.17.15|?>>
-    <associate|auto-221|<tuple|F.1.18|?>>
-    <associate|auto-222|<tuple|F.1.18.1|?>>
-    <associate|auto-223|<tuple|F.1.19|?>>
-    <associate|auto-224|<tuple|F.1.19.1|?>>
-    <associate|auto-225|<tuple|F.1.19.2|?>>
-    <associate|auto-226|<tuple|F.1.20|?>>
-    <associate|auto-227|<tuple|F.1.20.1|?>>
-    <associate|auto-228|<tuple|F.1.21|?>>
-    <associate|auto-229|<tuple|F.2|?>>
+    <associate|auto-220|<tuple|F.1.17.9|?>>
+    <associate|auto-221|<tuple|F.1.17.10|?>>
+    <associate|auto-222|<tuple|F.1.17.11|?>>
+    <associate|auto-223|<tuple|F.1.17.12|?>>
+    <associate|auto-224|<tuple|F.1.17.13|?>>
+    <associate|auto-225|<tuple|F.1.17.14|?>>
+    <associate|auto-226|<tuple|F.1.17.15|?>>
+    <associate|auto-227|<tuple|F.1.18|?>>
+    <associate|auto-228|<tuple|F.1.18.1|?>>
+    <associate|auto-229|<tuple|F.1.19|?>>
     <associate|auto-23|<tuple|1.13|9>>
-    <associate|auto-230|<tuple|G|?>>
-    <associate|auto-231|<tuple|G.1|?>>
-    <associate|auto-232|<tuple|G.1|?>>
-    <associate|auto-233|<tuple|G.2|?>>
-    <associate|auto-234|<tuple|G.2.1|?>>
-    <associate|auto-235|<tuple|G.1|?>>
-    <associate|auto-236|<tuple|G.2.2|?>>
-    <associate|auto-237|<tuple|G.2.3|?>>
-    <associate|auto-238|<tuple|G.2.4|?>>
-    <associate|auto-239|<tuple|G.2.5|?>>
+    <associate|auto-230|<tuple|F.1.19.1|?>>
+    <associate|auto-231|<tuple|F.1.19.2|?>>
+    <associate|auto-232|<tuple|F.1.20|?>>
+    <associate|auto-233|<tuple|F.1.20.1|?>>
+    <associate|auto-234|<tuple|F.1.21|?>>
+    <associate|auto-235|<tuple|F.2|?>>
+    <associate|auto-236|<tuple|G|?>>
+    <associate|auto-237|<tuple|G.1|?>>
+    <associate|auto-238|<tuple|G.1|?>>
+    <associate|auto-239|<tuple|G.2|?>>
     <associate|auto-24|<tuple|1.13|9>>
-    <associate|auto-240|<tuple|G.2.6|?>>
-    <associate|auto-241|<tuple|G.2.7|?>>
-    <associate|auto-242|<tuple|G.2|?>>
-    <associate|auto-243|<tuple|G.3|?>>
-    <associate|auto-244|<tuple|G.2.8|?>>
-    <associate|auto-245|<tuple|G.4|?>>
-    <associate|auto-246|<tuple|G.5|?>>
-    <associate|auto-247|<tuple|G.2.9|?>>
-    <associate|auto-248|<tuple|G.2.10|?>>
-    <associate|auto-249|<tuple|G.2.10|?>>
+    <associate|auto-240|<tuple|G.2.1|?>>
+    <associate|auto-241|<tuple|G.1|?>>
+    <associate|auto-242|<tuple|G.2.2|?>>
+    <associate|auto-243|<tuple|G.2.3|?>>
+    <associate|auto-244|<tuple|G.2.4|?>>
+    <associate|auto-245|<tuple|G.2.5|?>>
+    <associate|auto-246|<tuple|G.2.6|?>>
+    <associate|auto-247|<tuple|G.2.7|?>>
+    <associate|auto-248|<tuple|G.2|?>>
+    <associate|auto-249|<tuple|G.3|?>>
     <associate|auto-25|<tuple|1.14|9>>
-    <associate|auto-250|<tuple|G.2.10|?>>
-    <associate|auto-251|<tuple|Tec19|?>>
+    <associate|auto-250|<tuple|G.2.8|?>>
+    <associate|auto-251|<tuple|G.4|?>>
+    <associate|auto-252|<tuple|G.5|?>>
+    <associate|auto-253|<tuple|G.2.9|?>>
+    <associate|auto-254|<tuple|G.2.10|?>>
+    <associate|auto-255|<tuple|G.2.10|?>>
+    <associate|auto-256|<tuple|G.2.10|?>>
+    <associate|auto-257|<tuple|Tec19|?>>
     <associate|auto-26|<tuple|1.15|9>>
     <associate|auto-27|<tuple|1.15|9>>
     <associate|auto-28|<tuple|2|11>>
@@ -8456,6 +8573,7 @@
     <associate|defn-persistent-storage|<tuple|E.7|?>>
     <associate|defn-pruned-tree|<tuple|1.12|9>>
     <associate|defn-radix-tree|<tuple|1.3|8>>
+    <associate|defn-rt-core-version|<tuple|G.2.1|?>>
     <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|7>>
     <associate|defn-runtime-pointer|<tuple|E.2|?>>
     <associate|defn-sc-len-encoding|<tuple|B.8|42>>
