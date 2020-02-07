@@ -6060,7 +6060,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_chain_id_version_1)
+    (func $ext_misc_chain_id_version_1)
   </verbatim>
 
   <subsection|print_num>
@@ -6072,7 +6072,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_print_num_version_1 (param $value i64))
+    (func $ext_misc_print_num_version_1 (param $value i64))
   </verbatim>
 
   \;
@@ -6092,7 +6092,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_print_utf8_version_1 (param $data i64))
+    (func $ext_misc_print_utf8_version_1 (param $data i64))
   </verbatim>
 
   \;
@@ -6114,7 +6114,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_print_hex_version_1 (param $data i64))
+    (func $ext_misc_print_hex_version_1 (param $data i64))
   </verbatim>
 
   \;
@@ -6147,7 +6147,7 @@
   <strong|Version 1 - Prototype:>
 
   <\verbatim>
-    (func $ext_runtime_version_version_1
+    (func $ext_misc_runtime_version_version_1
 
     \ \ (param $data i64))
   </verbatim>
