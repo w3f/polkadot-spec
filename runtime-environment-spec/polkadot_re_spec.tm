@@ -6139,7 +6139,8 @@
 
   <strong|Warning>: Calling this function is very expensive and should only
   be done very occasionally. For getting the runtime version, it requires
-  instantiating the Wasm blob and calling a function in this blob.
+  instantiating the Wasm blob as described in Section
+  <reference|sect-loading-runtime-code> and calling a function in this blob.
 
   \;
 
