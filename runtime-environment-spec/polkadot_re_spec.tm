@@ -6181,8 +6181,8 @@
 
   <subsection|malloc>
 
-  Malloc the given number of bytes and return the pointer to the allocated
-  memory location.
+  Allocates the given number of bytes and returns the pointer to that memory
+  location.
 
   \;
 
@@ -6219,7 +6219,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|ptr>: the regular pointer to be freed.
+    <item><verbatim|ptr>: a regular pointer to the memory buffer to be freed.
   </itemize>
 
   <appendix|Legacy Runtime Environment API<label|sect-re-api>>
