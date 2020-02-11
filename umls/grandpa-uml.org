@@ -44,7 +44,8 @@ Network -> Voter ++ : poll
         return
         alt was the commit for a background round
           note over Voter: we are actively voting on this round
-          Voter -> Voter ++ : process_commit_outcome(for good commit)
+          Voter -> Network ++ : process_commit_outcome(for good commit)
+              note over Voter: this a customized function defines consequences for good commit.
           return
         else the commit does not belong to any active background round
           note over Voter
@@ -59,29 +60,76 @@ Network -> Voter ++ : poll
               Voter -> Enviornment ++ : finalize the new finalized block
               return
             end
-            Voter -> Voter ++ : process_commit_outcome(for good commit)
+            Voter -> Network ++ : process_commit_outcome(for good commit)
+              note over Voter: this a customized function defines consequences for good commit.
             return
   
            else the commit message is invalid
-             Voter -> Voter ++ : process_commit_outcome(for bad commit)
+             Voter -> Catchup ++ : process_commit_outcome(for bad commit)
+               note over Voter: this a customized function defines consequences for bad commit.
              return
            end
         end
       else it is a Catchup message
         Voter -> Voter ++ : vaidate_catchup
-        alt Good CatchUp 
+          alt catch_up.round_number > best_round_number
+            alt all voters in the catch_up belong to the voter set
+              alt more than 2/3 of voter prevoted  and more than 2/3 of voter precommited
+                Voter -> Round ++ : new(catchup round number and voters)
+                return new Round
+                loop over all prevotes in catcup round
+                  Voter -> Round ++ : import_prevote
+                  return
+                  alt bad prevote
+                    note over Voter: result ← bad catchup
+                    break
+                  end
+                end
+                
+                loop over all precommits in catcup round
+                  Voter -> Round ++ : import_precommit
+                  return
+                  alt bad precommit
+                    note over Voter: result ← bad catchup
+                    break
+                  end
+                end
+
+                alt if there is no bad prevote or precommit
+                  Voter -> Round ++ : state
+                  return
+                  alt Round state is completable
+                    note over Voter: result ← Round
+                  else Round state is not completable
+                    note over Voter: result ← bad catchup
+                  end
+                else if there is a bad prevote or precommit
+                  note over Voter: result ← bad catchup
+                end
+
+              else either less than 2/3 prevoted or less than 2/3 precommited 
+                note over Voter: result ← bad catchup
+              end
+            else catch_up contains voter not in the voting set
+              note over Voter: result ← bad catchup
+            end 
+          else catch_up.round_number <= best_round_numbre
+            note over Voter: result ← bad catchup
+          end
+        return result
+        alt result = Good CatchUp 
            note over Voter: catchup_round ← the round the catchup belong to 
            Voter -> VotingRound ++ : make a completed round
            return completed round
            Voter -> VotingRound ++ : new round whose last round to be the completed round 
            return new round
            note over Voter: last_finalized_round ← completed round
-           VotingRound -> Environment ++ : completed (completed round)
+           Voter -> Environment ++ : completed (completed round)
            return
-           Voter -> Voter ++ : process_catchup_outcome(for good catchup)
+           Voter -> Network ++ : process_catchup_outcome(for good catchup)
            return
-        else Bad Catchup
-          Voter -> Voter ++ : process_catchup_outcome(for bad catchup)
+        else result = Bad Catchup
+          Voter -> Network ++ : process_catchup_outcome(for bad catchup)
           return
         end /' good/bad catchup '/
       end /' alt message type '/
@@ -115,13 +163,13 @@ Network -> Voter ++ : poll
         loop for all received messages for this round
           VotingRound -> VotingRound ++ : handle_vote
             alt it is a prevote message
-              VotingRound -> Votes ++ : import_prevote
+              VotingRound -> Round ++ : import_prevote
               return
             else it is a precommit message
-              VotingRound -> Votes ++ : import_precommit
+              VotingRound -> Round ++ : import_precommit
               return
             else it is a primary propose        
-              VotingRound -> Votes ++ : who is the primary voter?
+              VotingRound -> Round ++ : who is the primary voter?
               return : primary_id
               alt I am the primary voter
                 note over VotingRound
@@ -161,9 +209,9 @@ Network -> Voter ++ : poll
           VotingRound -> RoundState : current_state?
           alt state is "Start" or "Proposed"
             RoundState -> VotingRound : Start or Proposed
-            VotingRound -> Votes  : completable?
+            VotingRound -> Round  : completable?
             alt prevote timer is up or votes are completable
-              Votes --> VotingRound  : completable
+              Round --> VotingRound  : completable
                 VotingRound --> VotingRound ++ : construct_prevote
                 note over VotingRound: Panic! if last round does not have estimate
                   VotingRound --> VotingRound ++ : compute_anscestor_of_best_block
@@ -203,7 +251,7 @@ Network -> Voter ++ : poll
                 alt prevote got constructed
               VotingRound --> Envioronment ++ : prevoted
               return
-              VotingRound --> Votes ++ : set_prevoted_index
+              VotingRound --> Round ++ : set_prevoted_index
               return
               VotingRound --> Network ++ : send prevote message
               return
@@ -229,22 +277,22 @@ Network -> Voter ++ : poll
             This means we started this round before last
             round is completable
           end note
-          VotingRound -> Votes ++ : get prevote_ghost
+          VotingRound -> Round ++ : get prevote_ghost
           return
              alt prevote_ghost > last round estimate
-                VotingRound --> Votes  : completable?
+                VotingRound --> Round  : completable?
 
                 alt precommit timer is up or votes are completable
-                  Votes --> VotingRound  : completable
+                  Round --> VotingRound  : completable
 
                   VotingRound --> VotingRound ++ : construct_precommit
-                    VotingRound -> Votes ++ : get prevote_ghost
+                    VotingRound -> Round ++ : get prevote_ghost
                     return
 
                     alt prevote_ghost exsits
                        note over VotingRound : pre-commit candidate ← prevote_ghost
                     else prevote_ghost does not exsits
-                      VotingRound -> Votes ++ : base
+                      VotingRound -> Round ++ : base
                       return VotingGraph base
                       note over VotingRound : pre-commit candidate ← base
                     end
@@ -253,7 +301,7 @@ Network -> Voter ++ : poll
 
                   VotingRound --> Envioronment ++ : precommited
                   return
-                  VotingRound --> Votes ++ : set_precommited_index
+                  VotingRound --> Round ++ : set_precommited_index
                   return
                   VotingRound --> Network ++ : send precommit message
                   return
@@ -286,9 +334,9 @@ Network -> Voter ++ : poll
             voted
           end note
         
-        VotingRound --> Votes  : completable?
+        VotingRound --> Round  : completable?
         alt completable
-          Votes --> VotingRound  : completable
+          Round --> VotingRound  : completable
           alt is last round estimate finalized
             VotingRound --> Voter : Ready
             Voter -> VotingRound: precommited?
