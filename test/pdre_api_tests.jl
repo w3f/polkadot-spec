@@ -3,6 +3,53 @@ include("./fixtures/pdre_api_results.jl")
 
 using Test
 
+function run_dataset_adj(func_list, data_list, cli_list, result_list)
+    # Basic parameters for testing CLIs
+    sub_cmd = "pdre-api"
+    func_arg = "--function"
+    input_arg = "--input"
+
+    counter = 1
+    for func in func_list
+        for data in data_list
+            input = ""
+            if size(data)[1] == 1
+                input = data[1]
+            else
+                for entry in data
+                    input = join([input, entry], ",")
+                end
+            end
+
+            for cli in cli_list
+                # create first part of the command
+                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+                cmd = join(cmdparams, " ")
+
+                # append input
+                cmd = string(cmd, " \"", input, "\"")
+
+                if print_verbose
+                    println("Running: ", cmd)
+                end
+
+                # Run command
+                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                if result_list != false
+                    @test output == result_list[counter]
+                else
+                    @test true
+                end
+
+                if output != "" && print_verbose
+                    println("> Result: ", output)
+                end
+            end
+            counter = counter + 1
+        end
+    end
+end
+
 function run_dataset(func, cli, input, print_verbose, results, counter)
     # Basic parameters for testing CLIs
     sub_cmd = "pdre-api"
@@ -45,21 +92,13 @@ end
 
     # ## Test crypto hashing functions
     counter = 1
-    for func in PdreApiTestFixtures.fn_crypto_hashes
-        for value in PdreApiTestData.value_data
-            for cli in PdreApiTestFixtures.cli_testers
-                run_dataset(
-                    func,
-                    cli,
-                    value,
-                    print_verbose,
-                    PdreApiExpectedResults.res_crypto_hashes,
-                    counter
-                )
-            end
-            counter = counter + 1
-        end
-    end
+    # function run_dataset_adj(func_list, data_list, cli_list, result_list)
+    run_dataset_adj(
+        PdreApiTestFixtures.fn_crypto_hashes,
+        PdreApiTestData.value_data,
+        PdreApiTestFixtures.cli_testers,
+        PdreApiExpectedResults.res_crypto_hashes
+    )
 
     # ## Test crypto key functions
     counter = 1
