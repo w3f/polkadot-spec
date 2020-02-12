@@ -91,7 +91,6 @@ end
     input_arg = "--input"
 
     # ## Test crypto hashing functions
-    counter = 1
     # function run_dataset_adj(func_list, data_list, cli_list, result_list)
     run_dataset_adj(
         PdreApiTestFixtures.fn_crypto_hashes,
@@ -101,22 +100,12 @@ end
     )
 
     # ## Test crypto key functions
-    counter = 1
-    for func in PdreApiTestFixtures.fn_crypto_keys
-        for value in PdreApiTestData.value_data
-            for cli in PdreApiTestFixtures.cli_testers
-                run_dataset(
-                    func,
-                    cli,
-                    value,
-                    print_verbose,
-                    false,
-                    0
-                )
-            end
-            counter = counter + 1
-        end
-    end
+    run_dataset_adj(
+        PdreApiTestFixtures.fn_crypto_keys,
+        PdreApiTestData.value_data,
+        PdreApiTestFixtures.cli_testers,
+        false
+    )
 
     # ## Test key/value storage functions
     counter = 1
@@ -138,23 +127,12 @@ end
     end
 
     # ## Test key/value storage functions with offsets
-    counter = 1
-    for func in PdreApiTestFixtures.fn_storage_kv_offset
-        for (key, value, offset) in PdreApiTestData.key_value_data
-            for cli in PdreApiTestFixtures.cli_testers
-                input = join([key, value, offset], ",")
-                run_dataset(
-                    func,
-                    cli,
-                    input,
-                    print_verbose,
-                    PdreApiExpectedResults.res_storage_kv_offset,
-                    counter
-                )
-            end
-            counter = counter + 1
-        end
-    end
+    run_dataset_adj(
+        PdreApiTestFixtures.fn_storage_kv_offset,
+        PdreApiTestData.key_value_data,
+        PdreApiTestFixtures.cli_testers,
+        PdreApiExpectedResults.res_storage_kv_offset
+    )
 
     # ## Test multipl key/value storage functions
     counter = 1
@@ -195,21 +173,12 @@ end
     end
 
     # ## Test storage functions (prefix values)
-    for func in PdreApiTestFixtures.fn_storage_prefix
-        for (prefix, key1, value1, key2, value2) in PdreApiTestData.prefix_key_value_data
-            for cli in PdreApiTestFixtures.cli_testers
-                input = join([prefix, key1, value1, key2, value2], ",")
-                run_dataset(
-                    func,
-                    cli,
-                    input,
-                    print_verbose,
-                    false,
-                    0
-                )
-            end
-        end
-    end
+    run_dataset_adj(
+        PdreApiTestFixtures.fn_storage_prefix,
+        PdreApiTestData.prefix_key_value_data,
+        PdreApiTestFixtures.cli_testers,
+        false
+    )
 
     # ## Test storage functions (child storage)
     counter = 1
@@ -250,40 +219,20 @@ end
     end
 
     # ## Test storage functions (prefix values on child storage)
-    for func in PdreApiTestFixtures.fn_storage_prefix_child
-        for (prefix, child1, child2, key1, value1, key2, value2) in PdreApiTestData.prefix_child_key_value_data
-            for cli in PdreApiTestFixtures.cli_testers
-                input = join([prefix, child1, child2, key1, value1, key2, value2], ",")
-                run_dataset(
-                    func,
-                    cli,
-                    input,
-                    print_verbose,
-                    false,
-                    0
-                )
-            end
-        end
-    end
+    run_dataset_adj(
+        PdreApiTestFixtures.fn_storage_prefix_child,
+        PdreApiTestData.prefix_child_key_value_data,
+        PdreApiTestFixtures.cli_testers,
+        false
+    )
 
     # ## Test storage functions with offsets
-    counter = 1
-    for func in PdreApiTestFixtures.fn_storage_child_offset
-        for (child1, child2, key1, value1, offset) in PdreApiTestData.child_key_value_data
-            for cli in PdreApiTestFixtures.cli_testers
-                input = join([child1, child2, key1, value1, offset], ",")
-                run_dataset(
-                    func,
-                    cli,
-                    input,
-                    print_verbose,
-                    PdreApiExpectedResults.res_storage_child_offset,
-                    counter
-                )
-            end
-            counter = counter + 1
-        end
-    end
+    run_dataset_adj(
+        PdreApiTestFixtures.fn_storage_child_offset,
+        PdreApiTestData.child_key_value_data,
+        PdreApiTestFixtures.cli_testers,
+        PdreApiExpectedResults.res_storage_child_offset
+    )
 
     # ## Test network functions
     for func in PdreApiTestFixtures.fn_network
