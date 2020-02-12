@@ -82,16 +82,36 @@ end
 
 module PdreApiTestData
 	const value_data = [
-	  "static", # value
-	  "Inverse", # value...
-	  "even-keeled",
-	  "Future-proofed",
-	  "function",
-	  "Horizontal",
-	  "Face to face",
-	  "Expanded",
-	  "Integrated",
-	  "portal",
+		[
+			"static", # value
+		],
+		[
+			"Inverse", # value...
+		],
+		[
+			"even-keeled",
+		],
+		[
+			"Future-proofed",
+		],
+		[
+			"function",
+		],
+		[
+			"Horizontal",
+		],
+		[
+			"Face to face",
+		],
+		[
+			"Expanded",
+		],
+		[
+			"Integrated",
+		],
+		[
+			"portal",
+		]
 	]
 
 	const key_value_data = [
