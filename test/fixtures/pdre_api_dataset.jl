@@ -1,4 +1,4 @@
-module PdreApiTestFixtures
+module PdreApiTestBinaries
 	const cli_testers = [
       "test/testers/rust-tester/target/debug/rust_tester_legacy",
 	  # TODO "build/bin/usr/local/bin/rust_tester"
