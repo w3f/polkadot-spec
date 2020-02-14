@@ -299,18 +299,19 @@ pub fn ext_storage_child_exists_version_1(input: ParsedInput) {
 pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let child_key = input.get(0);
-    let child_definition = input.get(1);
-    let child_type = input.get_u32(2);
-    let prefix = input.get(3);
-    let key1 = input.get(4);
-    let value1 = input.get(5);
-    let key2 = input.get(6);
-    let value2 = input.get(7);
+    let child_key1 = input.get(0);
+    let child_key2 = input.get(1);
+    let child_definition = input.get(2);
+    let child_type = input.get_u32(3);
+    let prefix = input.get(4);
+    let key1 = input.get(5);
+    let value1 = input.get(6);
+    let key2 = input.get(7);
+    let value2 = input.get(8);
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
-        child_key,
+        child_key1,
         child_definition,
         child_type,
         key1,
@@ -319,16 +320,24 @@ pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
-        child_key,
+        child_key1,
         child_definition,
         child_type,
         key2,
         value2
     ).encode());
 
+    // Clear value (different key)
+    let _ = rtm.call("rtm_ext_storage_child_clear_prefix_version_1", &(
+        child_key2,
+        child_definition,
+        child_type,
+        prefix
+    ).encode());
+
     // Clear value
     let _ = rtm.call("rtm_ext_storage_child_clear_prefix_version_1", &(
-        child_key,
+        child_key1,
         child_definition,
         child_type,
         prefix
@@ -337,7 +346,7 @@ pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
     // Check first key
     let res = rtm
         .call("rtm_ext_storage_child_get", &(
-            child_key,
+            child_key1,
             child_definition,
             child_type,
             key1
@@ -354,7 +363,7 @@ pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
     // Check second key
     let res = rtm
         .call("rtm_ext_storage_child_get", &(
-            child_key,
+            child_key1,
             child_definition,
             child_type,
             key2

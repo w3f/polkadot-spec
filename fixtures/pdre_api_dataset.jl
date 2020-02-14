@@ -32,6 +32,10 @@ module PdreApiTestFunctions
 		"ext_storage_child_clear_version_1",
 		"ext_storage_child_exists_version_1"
 	]
+
+	const child_child_def_type_prefix_key_value_key_value = [
+		"ext_storage_child_clear_prefix_version_1",
+	]
 end
 
 # Module which contains the names of the LEGACY functions that need to be tested.
@@ -194,6 +198,120 @@ module PdreApiTestData
 		1,
 	    "forecast",
 		"heuristic"
+	  ]
+	]
+
+    # Only used by new APIs, not legacy
+	const child_child_def_type_prefix_key_value_key_value = [
+	  [
+	    ":child_storage:default:moratorium", # child1
+		":child_storage:default:hardware", # child2
+		"Ameliorated", # child key definition
+		1, # child type
+	    "stat", # prefix
+	    "static", # key1
+	    "Inverse", # value1
+	    "even-keeled", # key2
+	    "Future-proofed" # value2
+	  ],
+	  [
+	    ":child_storage:default:implementation",
+		":child_storage:default:artificial intelligence",
+		"radical",
+		1,
+	    "Face",
+	    "function",
+	    "Horizontal",
+	    "Face to face",
+	    "Expanded"
+	  ],
+	  [
+	    ":child_storage:default:Switchable",
+		":child_storage:default:matrix",
+		"forecast",
+		1,
+	    "Integrated",
+	    "Integrated",
+	    "portal",
+	    "budgetary management",
+	    "pricing structure"
+	  ],
+	  [
+	    ":child_storage:default:strategy",
+		":child_storage:default:Graphic Interface",
+		"well-modulated",
+		1,
+	    "non",
+	    "non-based",
+	    "Monitored",
+	    "non-volatile",
+	    "emulation"
+	  ],
+	  [
+	    ":child_storage:default:Total",
+		":child_storage:default:24 hour",
+		"Vision-oriented",
+		1,
+	    "sec",
+	    "productivity",
+	    "secondary",
+	    "Total",
+	    "Visionary"
+	  ],
+	  [
+	    ":child_storage:default:exuding",
+		":child_storage:default:Triple-buffered",
+		"needs-based",
+		1,
+	    "conc",
+	    "Exclusive",
+	    "next generation",
+	    "concept",
+	    "approach"
+	  ],
+	  [
+	    ":child_storage:default:middleware",
+		":child_storage:default:Operative",
+		"heuristic",
+		1,
+	    "disf",
+	    "disintermediate",
+	    "Grass-roots",
+	    "policy",
+	    "function"
+	  ],
+	  [
+	    ":child_storage:default:Mandatory",
+		":child_storage:default:intranet",
+		"system engine",
+		1,
+	    "cont",
+	    "contingency",
+	    "value-added",
+	    "context-sensitive",
+	    "Configurable"
+	  ],
+	  [
+	    ":child_storage:default:4th generation",
+		":child_storage:default:encryption",
+		"paradigm",
+		1,
+	    "Auto",
+	    "human-resource",
+	    "Reactive",
+	    "hardware",
+	    "Automated"
+	  ],
+	  [
+	    ":child_storage:default:policy",
+		":child_storage:default:full-range",
+		"Devolved",
+		1,
+	    "secon",
+	    "Optional",
+	    "secondary",
+	    "object-oriented",
+	    "toolset"
 	  ]
 	]
 

@@ -114,6 +114,19 @@ module PdreApiExpectedResults
         "true",
         "true"
     ]
+
+    const child_child_def_type_prefix_key_value_key_value = [
+        "Future-proofed",
+        "Horizontal",
+        "pricing structure",
+        "",
+        "secondaryVisionary",
+        "next generation",
+        "Grass-rootsfunction",
+        "",
+        "ReactiveAutomated",
+        "secondarytoolset"
+    ]
 end
 
 module PdreApiExpectedResultsLegacy
