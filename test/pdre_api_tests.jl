@@ -3,7 +3,7 @@ include("./fixtures/pdre_api_results.jl")
 
 using Test
 
-function run_dataset_adj(func_list, data_list, cli_list, result_list)
+function run_dataset(func_list, data_list, cli_list, result_list)
     # Basic parameters for testing CLIs
     sub_cmd = "pdre-api"
     func_arg = "--function"
@@ -59,36 +59,6 @@ function run_dataset_adj(func_list, data_list, cli_list, result_list)
     end
 end
 
-function run_dataset(func, cli, input, print_verbose, results, counter)
-    # Basic parameters for testing CLIs
-    sub_cmd = "pdre-api"
-    func_arg = "--function"
-    input_arg = "--input"
-
-    # create first part of the command
-    cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
-    cmd = join(cmdparams, " ")
-
-    # append input
-    cmd = string(cmd, " \"", input, "\"")
-
-    if print_verbose
-        println("Running: ", cmd)
-    end
-
-    # Run command
-    output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
-    if results != false
-        @test output == results[counter]
-    else
-        @test true
-    end
-
-    if output != "" && print_verbose
-        println("> Result: ", output)
-    end
-end
-
 @testset "PDRE API Tests" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
@@ -100,8 +70,8 @@ end
     input_arg = "--input"
 
     # ## Test crypto hashing functions
-    # function run_dataset_adj(func_list, data_list, cli_list, result_list)
-    run_dataset_adj(
+    # function run_dataset(func_list, data_list, cli_list, result_list)
+    run_dataset(
         PdreApiTestFixtures.fn_crypto_hashes,
         PdreApiTestData.value_data,
         PdreApiTestFixtures.cli_testers,
@@ -109,7 +79,7 @@ end
     )
 
     # ## Test crypto key functions
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_crypto_keys,
         PdreApiTestData.value_data,
         PdreApiTestFixtures.cli_testers,
@@ -117,7 +87,7 @@ end
     )
 
     # ## Test key/value storage functions
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_general_kv,
         PdreApiTestData.key_value_data,
         PdreApiTestFixtures.cli_testers,
@@ -125,7 +95,7 @@ end
     )
 
     # ## Test key/value storage functions with offsets
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_storage_kv_offset,
         PdreApiTestData.key_value_data_offset,
         PdreApiTestFixtures.cli_testers,
@@ -133,7 +103,7 @@ end
     )
 
     # ## Test multipl key/value storage functions
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_storage_2x_kv,
         PdreApiTestData.multi_key_value_data,
         PdreApiTestFixtures.cli_testers,
@@ -141,7 +111,7 @@ end
     )
 
     # ## Test compare/set storage functions
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_storage_compare_set,
         PdreApiTestData.key_multi_value_data,
         PdreApiTestFixtures.cli_testers,
@@ -149,7 +119,7 @@ end
     )
 
     # ## Test storage functions (prefix values)
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_storage_prefix,
         PdreApiTestData.prefix_multi_key_value_data,
         PdreApiTestFixtures.cli_testers,
@@ -157,7 +127,7 @@ end
     )
 
     # ## Test storage functions (child storage)
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_storage_child_kv,
         PdreApiTestData.child_key_value_data,
         PdreApiTestFixtures.cli_testers,
@@ -165,7 +135,7 @@ end
     )
 
     # ## Test child storage function with offsets
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_storage_child_2x_kv,
         PdreApiTestData.child_multi_key_multi_value_data,
         PdreApiTestFixtures.cli_testers,
@@ -173,7 +143,7 @@ end
     )
 
     # ## Test storage functions (prefix values on child storage)
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_storage_prefix_child,
         PdreApiTestData.prefix_child_key_value_data,
         PdreApiTestFixtures.cli_testers,
@@ -181,7 +151,7 @@ end
     )
 
     # ## Test storage functions with offsets
-    run_dataset_adj(
+    run_dataset(
         PdreApiTestFixtures.fn_storage_child_offset,
         PdreApiTestData.child_key_value_data_offset,
         PdreApiTestFixtures.cli_testers,
