@@ -45,6 +45,7 @@ function run_dataset(func_list, data_list, cli_list, result_list)
                 # Run command
                 output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
                 if result_list != false
+                    #println(output)
                     @test output == result_list[counter]
                 else
                     @test true
@@ -65,6 +66,12 @@ end
     cd(root_dir)
 
     # ## Test crypto hashing and key functions
+    run_dataset(
+        PdreApiTestFunctions.value,
+        PdreApiTestData.value,
+        PdreApiTestBinaries.cli_testers,
+        PdreApiExpectedResults.value
+    )
 
     cd(root_dir)
 end

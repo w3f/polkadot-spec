@@ -16,6 +16,18 @@ module PdreApiTestBinariesLegacy
 	]
 end
 
+module PdreApiTestFunctions
+	const value = [
+		"ext_hashing_keccak_256_version_1",
+		"ext_hashing_sha2_256_version_1",
+		"ext_hashing_blake2_128_version_1",
+		"ext_hashing_blake2_256_version_1",
+		"ext_hashing_twox_256_version_1",
+		"ext_hashing_twox_128_version_1",
+		"ext_hashing_twox_64_version_1",
+	]
+end
+
 # Module which contains the names of the LEGACY functions that need to be tested.
 # Thoses names get passed on to the CLI as`--function <NAME>`.
 # The functions are grouped into arrays, depending on the expected input
