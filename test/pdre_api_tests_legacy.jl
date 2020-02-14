@@ -13,7 +13,6 @@ function run_dataset(func_list, data_list, cli_list, result_list)
     for func in func_list
         for data in data_list
             input = ""
-
             if data == ""
                 # Skip
             elseif size(data)[1] == 1
@@ -21,17 +20,20 @@ function run_dataset(func_list, data_list, cli_list, result_list)
             else
                 set_first = true
                 for entry in data
+                    # On first run, manually add the first entry to `input`
+                    # in order to avoid having a prefixed comma in there.
                     if set_first
                         input = data[1]
                         set_first = false
                         continue
                     end
+                    # Append entry to input, separated by a comma
                     input = join([input, entry], ",")
                 end
             end
 
             for cli in cli_list
-                # create first part of the command
+                # create first part of the command, separated by whitespaces
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
 
@@ -59,7 +61,7 @@ function run_dataset(func_list, data_list, cli_list, result_list)
     end
 end
 
-@testset "PDRE API Tests" begin
+@testset "PDRE API Tests **LEGACY**" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
     cd(root_dir)
