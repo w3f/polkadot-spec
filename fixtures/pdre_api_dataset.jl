@@ -16,6 +16,10 @@ module PdreApiTestBinariesLegacy
 	]
 end
 
+# Module which contains the names of the LEGACY functions that need to be tested.
+# Thoses names get passed on to the CLI as`--function <NAME>`.
+# The functions are grouped into arrays, depending on the expected input
+# corresponding to the arrays in `PdreApiTestData`.
 module PdreApiTestFunctionsLegacy
 	# Input: data
 	const value = [
