@@ -45,8 +45,8 @@ function run_dataset(func_list, data_list, cli_list, result_list)
                 # Run command
                 output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
                 if result_list != false
-                    println(output)
-                    #test output == result_list[counter]
+                    #println(output)
+                    @test output == result_list[counter]
                 else
                     @test true
                 end
@@ -81,13 +81,20 @@ end
         PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_def_type_key_value
     )
-    =#
 
     run_dataset(
         PdreApiTestFunctions.child_child_def_type_prefix_key_value_key_value,
         PdreApiTestData.child_child_def_type_prefix_key_value_key_value,
         PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value
+    )
+    =#
+
+    run_dataset(
+        PdreApiTestFunctions.child_child_def_type_key_value_key_value,
+        PdreApiTestData.child_child_def_type_key_value_key_value,
+        PdreApiTestBinaries.cli_testers,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value
     )
 
     cd(root_dir)
