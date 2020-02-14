@@ -74,7 +74,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.value,
         PdreApiTestData.value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.value
     )
 
@@ -82,7 +82,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.value_no_output,
         PdreApiTestData.value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         false
     )
 
@@ -90,7 +90,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value,
         PdreApiTestData.key_value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_value
     )
 
@@ -98,7 +98,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value_offset,
         PdreApiTestData.key_value_offset,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_value_offset
     )
 
@@ -106,7 +106,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value_key_value,
         PdreApiTestData.key_value_key_value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_value_key_value
     )
 
@@ -114,7 +114,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.key_key_value,
         PdreApiTestData.key_key_value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_key_value
     )
 
@@ -122,7 +122,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.prefix_key_value_key_value,
         PdreApiTestData.prefix_key_value_key_value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         false
     )
 
@@ -130,7 +130,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value,
         PdreApiTestData.child_child_key_value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_key_value
     )
 
@@ -138,7 +138,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value_key_value,
         PdreApiTestData.child_child_key_value_key_value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_key_value_key_value
     )
 
@@ -146,7 +146,7 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.prefix_child_child_key_value_key_value,
         PdreApiTestData.prefix_child_child_key_value_key_value,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         false
     )
 
@@ -154,13 +154,13 @@ end
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value_offset,
         PdreApiTestData.child_child_key_value_offset,
-        PdreApiTestFixtures.cli_testers,
+        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_key_value_offset
     )
 
     # ## Test network functions
     for func in PdreApiTestFunctionsLegacy.fn_network
-        for cli in PdreApiTestFixtures.cli_testers
+        for cli in PdreApiTestBinaries.cli_testers
             # ...
         end
     end
