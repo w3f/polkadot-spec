@@ -73,7 +73,7 @@ end
     # function run_dataset(func_list, data_list, cli_list, result_list)
     run_dataset(
         PdreApiTestFixtures.fn_crypto_hashes,
-        PdreApiTestData.value_data,
+        PdreApiTestData.value,
         PdreApiTestFixtures.cli_testers,
         PdreApiExpectedResults.res_crypto_hashes
     )
@@ -81,7 +81,7 @@ end
     # ## Test crypto key functions
     run_dataset(
         PdreApiTestFixtures.fn_crypto_keys,
-        PdreApiTestData.value_data,
+        PdreApiTestData.value,
         PdreApiTestFixtures.cli_testers,
         false
     )
@@ -89,7 +89,7 @@ end
     # ## Test key/value storage functions
     run_dataset(
         PdreApiTestFixtures.fn_general_kv,
-        PdreApiTestData.key_value_data,
+        PdreApiTestData.key_value,
         PdreApiTestFixtures.cli_testers,
         PdreApiExpectedResults.res_storage_kv
     )
@@ -97,7 +97,7 @@ end
     # ## Test key/value storage functions with offsets
     run_dataset(
         PdreApiTestFixtures.fn_storage_kv_offset,
-        PdreApiTestData.key_value_data_offset,
+        PdreApiTestData.key_value_offset,
         PdreApiTestFixtures.cli_testers,
         PdreApiExpectedResults.res_storage_kv_offset
     )
@@ -105,7 +105,7 @@ end
     # ## Test multipl key/value storage functions
     run_dataset(
         PdreApiTestFixtures.fn_storage_2x_kv,
-        PdreApiTestData.multi_key_value_data,
+        PdreApiTestData.key_value_key_value,
         PdreApiTestFixtures.cli_testers,
         PdreApiExpectedResults.res_storage_2x_kv
     )
@@ -113,7 +113,7 @@ end
     # ## Test compare/set storage functions
     run_dataset(
         PdreApiTestFixtures.fn_storage_compare_set,
-        PdreApiTestData.key_multi_value_data,
+        PdreApiTestData.key_key_value,
         PdreApiTestFixtures.cli_testers,
         PdreApiExpectedResults.res_storage_compare_set
     )
@@ -121,7 +121,7 @@ end
     # ## Test storage functions (prefix values)
     run_dataset(
         PdreApiTestFixtures.fn_storage_prefix,
-        PdreApiTestData.prefix_multi_key_value_data,
+        PdreApiTestData.prefix_key_value_key_value,
         PdreApiTestFixtures.cli_testers,
         false
     )
@@ -129,7 +129,7 @@ end
     # ## Test storage functions (child storage)
     run_dataset(
         PdreApiTestFixtures.fn_storage_child_kv,
-        PdreApiTestData.child_key_value_data,
+        PdreApiTestData.child_child_key_value,
         PdreApiTestFixtures.cli_testers,
         PdreApiExpectedResults.res_storage_child
     )
@@ -137,7 +137,7 @@ end
     # ## Test child storage function with offsets
     run_dataset(
         PdreApiTestFixtures.fn_storage_child_2x_kv,
-        PdreApiTestData.child_multi_key_multi_value_data,
+        PdreApiTestData.child_child_key_value_key_value,
         PdreApiTestFixtures.cli_testers,
         PdreApiExpectedResults.res_child_storage_root
     )
@@ -145,7 +145,7 @@ end
     # ## Test storage functions (prefix values on child storage)
     run_dataset(
         PdreApiTestFixtures.fn_storage_prefix_child,
-        PdreApiTestData.prefix_child_key_value_data,
+        PdreApiTestData.prefix_child_child_key_value_key_value,
         PdreApiTestFixtures.cli_testers,
         false
     )
@@ -153,7 +153,7 @@ end
     # ## Test storage functions with offsets
     run_dataset(
         PdreApiTestFixtures.fn_storage_child_offset,
-        PdreApiTestData.child_key_value_data_offset,
+        PdreApiTestData.child_child_key_value_offset,
         PdreApiTestFixtures.cli_testers,
         PdreApiExpectedResults.res_storage_child_offset
     )

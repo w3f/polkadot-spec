@@ -81,7 +81,7 @@ module PdreApiTestFixtures
 end
 
 module PdreApiTestData
-	const value_data = [
+	const value = [
 		[
 			"static", # value
 		],
@@ -114,7 +114,7 @@ module PdreApiTestData
 		]
 	]
 
-	const key_value_data = [
+	const key_value = [
 	  [
 	    "static", # key
 		"Inverse" # value
@@ -157,7 +157,7 @@ module PdreApiTestData
 	  ],
 	]
 
-	const key_value_data_offset = [
+	const key_value_offset = [
 	  [
 	    "static", # key
 		"Inverse", # value
@@ -210,7 +210,7 @@ module PdreApiTestData
 	  ],
 	]
 
-	const multi_key_value_data = [
+	const key_value_key_value = [
 	  [
 	    "static", # key1
 	    "Inverse", # value1
@@ -273,7 +273,7 @@ module PdreApiTestData
 	  ]
 	]
 
-	const key_multi_value_data = [
+	const key_key_value = [
 	  [
 	    "static", # key1
 	    "even-keeled", # key2
@@ -326,7 +326,7 @@ module PdreApiTestData
 	  ]
 	]
 
-	const prefix_multi_key_value_data = [
+	const prefix_key_value_key_value = [
 	  [
 	    "stat", # prefix
 	    "static", # key1
@@ -399,7 +399,7 @@ module PdreApiTestData
 	  ]
 	]
 
-	const child_key_value_data = [
+	const child_child_key_value = [
 	  [
 	    ":child_storage:default:moratorium", # child1
 	    ":child_storage:default:hardware", # child2
@@ -462,7 +462,7 @@ module PdreApiTestData
 	  ]
 	]
 
-	const child_key_value_data_offset = [
+	const child_child_key_value_offset = [
 	  [
 	    ":child_storage:default:moratorium", # child1
 	    ":child_storage:default:hardware", # child2
@@ -535,7 +535,7 @@ module PdreApiTestData
 	  ]
 	]
 
-	const prefix_child_key_value_data = [
+	const prefix_child_child_key_value_key_value = [
 	  [
 	    "stat", # prefix
 	    ":child_storage:default:moratorium", # child1
@@ -628,7 +628,7 @@ module PdreApiTestData
 	  ]
 	]
 
-	const child_multi_key_multi_value_data = [
+	const child_child_key_value_key_value = [
 	  [
 	    ":child_storage:default:moratorium", # child1
 	    ":child_storage:default:hardware", # child2
