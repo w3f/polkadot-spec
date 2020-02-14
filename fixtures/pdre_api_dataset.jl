@@ -117,6 +117,49 @@ module PdreApiTestData
 	const key_value_data = [
 	  [
 	    "static", # key
+		"Inverse" # value
+	  ],
+	  [
+	    "even-keeled",
+		"Future-proofed"
+	  ],
+	  [
+	    "function",
+		"Horizontal"
+	  ],
+	  [
+	    "Face to face",
+		"Expanded"
+	  ],
+	  [
+	    "Integrated",
+		"portal"
+	  ],
+	  [
+	    "budgetary management",
+		"pricing structure"
+	  ],
+	  [
+	    "Ameliorated",
+		"Monitored"
+	  ],
+	  [
+	    "non-volatile",
+		"emulation"
+	  ],
+	  [
+	    "productivity",
+		"secondary"
+	  ],
+	  [
+	    "Total",
+		"Visionary"
+	  ],
+	]
+
+	const key_value_data_offset = [
+	  [
+	    "static", # key
 		"Inverse", # value
 		3 # offset
 	  ],
@@ -167,7 +210,123 @@ module PdreApiTestData
 	  ],
 	]
 
-	const prefix_key_value_data = [
+	const multi_key_value_data = [
+	  [
+	    "static", # key1
+	    "Inverse", # value1
+	    "even-keeled", # key2
+	    "Future-proofed" # value2
+	  ],
+	  [
+	    "function",
+	    "Horizontal",
+	    "Face to face",
+	    "Expanded"
+	  ],
+	  [
+	    "Integrated",
+	    "portal",
+	    "budgetary management",
+	    "pricing structure"
+	  ],
+	  [
+	    "non-based",
+	    "Monitored",
+	    "non-volatile",
+	    "emulation"
+	  ],
+	  [
+	    "productivity",
+	    "secondary",
+	    "Total",
+	    "Visionary"
+	  ],
+	  [
+	    "Exclusive",
+	    "next generation",
+	    "concept",
+	    "approach"
+	  ],
+	  [
+	    "disintermediate",
+	    "Grass-roots",
+	    "policy",
+	    "function"
+	  ],
+	  [
+	    "contingency",
+	    "value-added",
+	    "context-sensitive",
+	    "Configurable"
+	  ],
+	  [
+	    "human-resource",
+	    "Reactive",
+	    "hardware",
+	    "Automated"
+	  ],
+	  [
+	    "Optional",
+	    "secondary",
+	    "object-oriented",
+	    "toolset"
+	  ]
+	]
+
+	const key_multi_value_data = [
+	  [
+	    "static", # key1
+	    "even-keeled", # key2
+	    "Future-proofed" # value2
+	  ],
+	  [
+	    "function",
+	    "Face to face",
+	    "Expanded"
+	  ],
+	  [
+	    "Integrated",
+	    "budgetary management",
+	    "pricing structure"
+	  ],
+	  [
+	    "non-based",
+	    "non-volatile",
+	    "emulation"
+	  ],
+	  [
+	    "productivity",
+	    "Total",
+	    "Visionary"
+	  ],
+	  [
+	    "Exclusive",
+	    "concept",
+	    "approach"
+	  ],
+	  [
+	    "disintermediate",
+	    "policy",
+	    "function"
+	  ],
+	  [
+	    "contingency",
+	    "context-sensitive",
+	    "Configurable"
+	  ],
+	  [
+	    "human-resource",
+	    "hardware",
+	    "Automated"
+	  ],
+	  [
+	    "Optional",
+	    "object-oriented",
+	    "toolset"
+	  ]
+	]
+
+	const prefix_multi_key_value_data = [
 	  [
 	    "stat", # prefix
 	    "static", # key1
@@ -241,6 +400,69 @@ module PdreApiTestData
 	]
 
 	const child_key_value_data = [
+	  [
+	    ":child_storage:default:moratorium", # child1
+	    ":child_storage:default:hardware", # child2
+	    "radical", # key
+		"access" # value
+	  ],
+	  [
+	    ":child_storage:default:implementation",
+	    ":child_storage:default:artificial intelligence",
+	    "initiative",
+		"Function-based"
+	  ],
+	  [
+	    ":child_storage:default:Switchable",
+	    ":child_storage:default:matrix",
+	    "Assimilated",
+		"system engine"
+	  ],
+	  [
+	    ":child_storage:default:strategy",
+	    ":child_storage:default:Graphic Interface",
+	    "help-desk",
+		"knowledge user"
+	  ],
+	  [
+	    ":child_storage:default:Total",
+	    ":child_storage:default:24 hour",
+	    "zero administration",
+		"Ameliorated"
+	  ],
+	  [
+	    ":child_storage:default:exuding",
+	    ":child_storage:default:Triple-buffered",
+	    "optimizing",
+		"paradigm"
+	  ],
+	  [
+	    ":child_storage:default:middleware",
+	    ":child_storage:default:Operative",
+	    "well-modulated",
+		"contingency"
+	  ],
+	  [
+	    ":child_storage:default:Mandatory",
+	    ":child_storage:default:intranet",
+	    "Devolved",
+		"Vision-oriented"
+	  ],
+	  [
+	    ":child_storage:default:4th generation",
+	    ":child_storage:default:encryption",
+	    "needs-based",
+		"radical"
+	  ],
+	  [
+	    ":child_storage:default:policy",
+	    ":child_storage:default:full-range",
+	    "forecast",
+		"heuristic"
+	  ]
+	]
+
+	const child_key_value_data_offset = [
 	  [
 	    ":child_storage:default:moratorium", # child1
 	    ":child_storage:default:hardware", # child2
@@ -397,6 +619,89 @@ module PdreApiTestData
 	  ],
 	  [
 	    "secon",
+	    ":child_storage:default:policy",
+	    ":child_storage:default:full-range",
+	    "Optional",
+	    "secondary",
+	    "object-oriented",
+	    "toolset"
+	  ]
+	]
+
+	const child_multi_key_multi_value_data = [
+	  [
+	    ":child_storage:default:moratorium", # child1
+	    ":child_storage:default:hardware", # child2
+	    "static", # key1
+	    "Inverse", # value1
+	    "even-keeled", # key2
+	    "Future-proofed" # value2
+	  ],
+	  [
+	    ":child_storage:default:implementation",
+	    ":child_storage:default:artificial intelligence",
+	    "function",
+	    "Horizontal",
+	    "Face to face",
+	    "Expanded"
+	  ],
+	  [
+	    ":child_storage:default:Switchable",
+	    ":child_storage:default:matrix",
+	    "Integrated",
+	    "portal",
+	    "budgetary management",
+	    "pricing structure"
+	  ],
+	  [
+	    ":child_storage:default:strategy",
+	    ":child_storage:default:Graphic Interface",
+	    "non-based",
+	    "Monitored",
+	    "non-volatile",
+	    "emulation"
+	  ],
+	  [
+	    ":child_storage:default:Total",
+	    ":child_storage:default:24 hour",
+	    "productivity",
+	    "secondary",
+	    "Total",
+	    "Visionary"
+	  ],
+	  [
+	    ":child_storage:default:exuding",
+	    ":child_storage:default:Triple-buffered",
+	    "Exclusive",
+	    "next generation",
+	    "concept",
+	    "approach"
+	  ],
+	  [
+	    ":child_storage:default:middleware",
+	    ":child_storage:default:Operative",
+	    "disintermediate",
+	    "Grass-roots",
+	    "policy",
+	    "function"
+	  ],
+	  [
+	    ":child_storage:default:Mandatory",
+	    ":child_storage:default:intranet",
+	    "contingency",
+	    "value-added",
+	    "context-sensitive",
+	    "Configurable"
+	  ],
+	  [
+	    ":child_storage:default:4th generation",
+	    ":child_storage:default:encryption",
+	    "human-resource",
+	    "Reactive",
+	    "hardware",
+	    "Automated"
+	  ],
+	  [
 	    ":child_storage:default:policy",
 	    ":child_storage:default:full-range",
 	    "Optional",
