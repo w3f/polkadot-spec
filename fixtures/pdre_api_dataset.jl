@@ -1,5 +1,14 @@
 module PdreApiTestBinaries
 	const cli_testers = [
+      "test/testers/rust-tester/target/debug/rust_tester",
+	  # TODO "build/bin/usr/local/bin/rust_tester"
+	  # TODO "build/bin/usr/local/bin/go_tester"
+	  # TODO "build/bin/usr/local/bin/cpp_tester"
+	]
+end
+
+module PdreApiTestBinariesLegacy
+	const cli_testers = [
       "test/testers/rust-tester/target/debug/rust_tester_legacy",
 	  # TODO "build/bin/usr/local/bin/rust_tester"
 	  # TODO "build/bin/usr/local/bin/go_tester"
