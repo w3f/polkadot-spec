@@ -91,6 +91,17 @@ module PdreApiExpectedResults
         "Vision-oriented",
         "radical",
         "heuristic"
+        # ext_storage_child_clear_version_1
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        ""
     ]
 end
 
