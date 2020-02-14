@@ -8,16 +8,17 @@ fn str<'a>(input: &'a [u8]) -> &'a str {
 pub fn ext_storage_child_get_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let child_key = input.get(0);
-    let child_definition = input.get(1);
-    let child_type = input.get_u32(2);
-    let key = input.get(3);
-    let value = input.get(4);
+    let child_key1 = input.get(0);
+    let child_key2 = input.get(1);
+    let child_definition = input.get(2);
+    let child_type = input.get_u32(3);
+    let key = input.get(4);
+    let value = input.get(5);
 
     // Get invalid key
     let res = rtm
         .call("rtm_ext_storage_child_get", &(
-            child_key,
+            child_key1,
             child_definition,
             child_type,
             key,
@@ -27,17 +28,28 @@ pub fn ext_storage_child_get_version_1(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
-        child_key,
+        child_key1,
         child_definition,
         child_type,
         key,
         value
     ).encode());
 
+    // Get invalid key (wrong child key)
+    let mut res = rtm
+        .call("rtm_ext_storage_child_get", &(
+            child_key2,
+            child_definition,
+            child_type,
+            key,
+        ).encode())
+        .decode_option();
+    assert!(res.is_none());
+
     // Get valid key
     let mut res = rtm
         .call("rtm_ext_storage_child_get", &(
-            child_key,
+            child_key1,
             child_definition,
             child_type,
             key,

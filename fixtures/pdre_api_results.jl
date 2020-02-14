@@ -78,6 +78,20 @@ module PdreApiExpectedResults
         "febde401d103f0f7",
         "17542d4a435eddd7"
     ]
+
+    const child_child_def_type_key_value = [
+        # ext_storage_child_get_version_1
+        "access",
+        "Function-based",
+        "system engine",
+        "knowledge user",
+        "Ameliorated",
+        "paradigm",
+        "contingency",
+        "Vision-oriented",
+        "radical",
+        "heuristic"
+    ]
 end
 
 module PdreApiExpectedResultsLegacy

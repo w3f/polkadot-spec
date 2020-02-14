@@ -26,6 +26,10 @@ module PdreApiTestFunctions
 		"ext_hashing_twox_128_version_1",
 		"ext_hashing_twox_64_version_1",
 	]
+
+	const child_child_def_type_key_value = [
+		"ext_storage_child_get_version_1"
+	]
 end
 
 # Module which contains the names of the LEGACY functions that need to be tested.
@@ -107,6 +111,90 @@ module PdreApiTestFunctionsLegacy
 end
 
 module PdreApiTestData
+    # Only used by new APIs, not legacy
+	const child_child_def_type_key_value = [
+	  [
+	    ":child_storage:default:moratorium", # child1
+		":child_storage:default:hardware", # child2
+		"Ameliorated", # child key definition
+		1, # child type
+	    "radical", # key
+		"access" # value
+	  ],
+	  [
+	    ":child_storage:default:implementation",
+		":child_storage:default:artificial intelligence",
+		"radical",
+		1,
+	    "initiative",
+		"Function-based"
+	  ],
+	  [
+	    ":child_storage:default:Switchable",
+		":child_storage:default:matrix",
+		"forecast",
+		1,
+	    "Assimilated",
+		"system engine"
+	  ],
+	  [
+	    ":child_storage:default:strategy",
+		":child_storage:default:Graphic Interface",
+		"well-modulated",
+		1,
+	    "help-desk",
+		"knowledge user"
+	  ],
+	  [
+	    ":child_storage:default:Total",
+		":child_storage:default:24 hour",
+		"Vision-oriented",
+		1,
+	    "zero administration",
+		"Ameliorated"
+	  ],
+	  [
+	    ":child_storage:default:exuding",
+		":child_storage:default:Triple-buffered",
+		"needs-based",
+		1,
+	    "optimizing",
+		"paradigm"
+	  ],
+	  [
+	    ":child_storage:default:middleware",
+		":child_storage:default:Operative",
+		"heuristic",
+		1,
+	    "well-modulated",
+		"contingency"
+	  ],
+	  [
+	    ":child_storage:default:Mandatory",
+		":child_storage:default:intranet",
+		"system engine",
+		1,
+	    "Devolved",
+		"Vision-oriented"
+	  ],
+	  [
+	    ":child_storage:default:4th generation",
+		":child_storage:default:encryption",
+		"paradigm",
+		1,
+	    "needs-based",
+		"radical"
+	  ],
+	  [
+	    ":child_storage:default:policy",
+		":child_storage:default:full-range",
+		"Devolved",
+		1,
+	    "forecast",
+		"heuristic"
+	  ]
+	]
+
 	const value = [
 		[
 			"static", # value
