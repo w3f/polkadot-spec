@@ -7,7 +7,7 @@ module PdreApiTestFixtures
 	]
 end
 
-module PdreApiTestFunctions
+module PdreApiTestFunctionsLegacy
 	# Input: data
 	const value = [
 	  "test_blake2_128",
