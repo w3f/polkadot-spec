@@ -3,6 +3,29 @@ include("./fixtures/pdre_api_results.jl")
 
 using Test
 
+function merge_params(params)
+    #=
+    some = [
+    [[1, 2, 3], [7, 8, 9]],
+    [[4, 5, 6], [10, 11, 12]]
+    ]
+    =#
+    parts = size(params)[1] # 2
+    comps = size(params[1])[1] # 3
+
+    final = []
+    for comp in 1:comps
+        inner = []
+        for part in 1:parts
+        x = params[part][comp]
+        inner = vcat(inner, x)
+        end
+        push!(final, inner)
+    end
+
+    final
+end
+
 function run_dataset(func_list, data_list, cli_list, result_list)
     # Basic parameters for testing CLIs
     sub_cmd = "pdre-api"
