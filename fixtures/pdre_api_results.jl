@@ -1,5 +1,5 @@
 module PdreApiExpectedResults
-    const res_crypto_hashes = [
+    const value = [
         # test_blake2_128
         "440973e4e50902f1d0ec97de357eb2fd",
         "d81f39ad0ab560c74fd47b88184fd40c",
@@ -68,7 +68,7 @@ module PdreApiExpectedResults
         "17542d4a435eddd774861314c6dc2897babf6e17b7be87ea5d38b2941be485a6",
     ]
 
-    const res_storage_kv = [
+    const key_value = [
         # test_set_get_storage
         "Inverse",
         "Future-proofed",
@@ -126,7 +126,7 @@ module PdreApiExpectedResults
         "17fa3916030b48170365735f8371df909a98eeb5f0370f6580b0552243387c8d"
     ]
 
-    const res_storage_kv_offset = [
+    const key_value_offset = [
         # test_set_get_storage_into
         "erse",
         "e-proofed",
@@ -140,7 +140,7 @@ module PdreApiExpectedResults
         ""
     ]
 
-    const res_storage_2x_kv = [
+    const key_value_key_value = [
         # test_storage_root
         "88642528f17282b87fabd1f04e75228e2a167b847e6656c9b95beda1ffd24d87",
         "aba4e533d278005c1814c64ccb1f524d5eb425bdaf74870895ce4d0148ede0e9",
@@ -154,7 +154,7 @@ module PdreApiExpectedResults
         "c8d46590a11e29e65b2ea147421c8aaf49997101469dd78190fcbe59712639c2"
     ]
 
-    const res_storage_compare_set = [
+    const key_key_value = [
         # test_local_storage_compare_and_set
         "Future-proofed",
         "Expanded",
@@ -168,7 +168,7 @@ module PdreApiExpectedResults
         "toolset"
     ]
 
-    const res_storage_child = [
+    const child_child_key_value = [
         # test_set_get_child_storage
         "access",
         "Function-based",
@@ -215,7 +215,7 @@ module PdreApiExpectedResults
         "",
     ]
 
-    const res_storage_child_offset = [
+    const child_child_key_value_offset = [
         # test_get_child_storage_into
         "ess",
         "Function-based",
@@ -243,7 +243,7 @@ module PdreApiExpectedResults
         ""
     ]
 
-    const res_child_storage_root = [
+    const child_child_key_value_key_value = [
         # test_child_storage_root
         "04e84064489b7e28b44dfc00207a2d15bda2a70348fe1f8c031d42dbbdb25e77,e04eb753bc044436c6624b2062f7ad2be3bf19c62ed6f10aa2d7ee2586828cd5",
         "18712edae2dfee26306f506f020fda38070170a12ed423bfccd91add0c33a423,e563e5520daa936c3629783df1390428bf1a57bf2ea2e30d26efe54bd225e706",

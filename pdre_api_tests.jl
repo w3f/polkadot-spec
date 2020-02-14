@@ -69,18 +69,18 @@ end
     func_arg = "--function"
     input_arg = "--input"
 
-    # ## Test crypto hashing functions
+    # ## Test crypto hashing and key functions
     # function run_dataset(func_list, data_list, cli_list, result_list)
     run_dataset(
-        PdreApiTestFixtures.fn_crypto_hashes,
+        PdreApiTestFunctions.value,
         PdreApiTestData.value,
         PdreApiTestFixtures.cli_testers,
-        PdreApiExpectedResults.res_crypto_hashes
+        PdreApiExpectedResults.value
     )
 
     # ## Test crypto key functions
     run_dataset(
-        PdreApiTestFixtures.fn_crypto_keys,
+        PdreApiTestFunctions.value_no_output,
         PdreApiTestData.value,
         PdreApiTestFixtures.cli_testers,
         false
@@ -88,39 +88,39 @@ end
 
     # ## Test key/value storage functions
     run_dataset(
-        PdreApiTestFixtures.fn_general_kv,
+        PdreApiTestFunctions.key_value,
         PdreApiTestData.key_value,
         PdreApiTestFixtures.cli_testers,
-        PdreApiExpectedResults.res_storage_kv
+        PdreApiExpectedResults.key_value
     )
 
     # ## Test key/value storage functions with offsets
     run_dataset(
-        PdreApiTestFixtures.fn_storage_kv_offset,
+        PdreApiTestFunctions.key_value_offset,
         PdreApiTestData.key_value_offset,
         PdreApiTestFixtures.cli_testers,
-        PdreApiExpectedResults.res_storage_kv_offset
+        PdreApiExpectedResults.key_value_offset
     )
 
     # ## Test multipl key/value storage functions
     run_dataset(
-        PdreApiTestFixtures.fn_storage_2x_kv,
+        PdreApiTestFunctions.key_value_key_value,
         PdreApiTestData.key_value_key_value,
         PdreApiTestFixtures.cli_testers,
-        PdreApiExpectedResults.res_storage_2x_kv
+        PdreApiExpectedResults.key_value_key_value
     )
 
     # ## Test compare/set storage functions
     run_dataset(
-        PdreApiTestFixtures.fn_storage_compare_set,
+        PdreApiTestFunctions.key_key_value,
         PdreApiTestData.key_key_value,
         PdreApiTestFixtures.cli_testers,
-        PdreApiExpectedResults.res_storage_compare_set
+        PdreApiExpectedResults.key_key_value
     )
 
     # ## Test storage functions (prefix values)
     run_dataset(
-        PdreApiTestFixtures.fn_storage_prefix,
+        PdreApiTestFunctions.prefix_key_value_key_value,
         PdreApiTestData.prefix_key_value_key_value,
         PdreApiTestFixtures.cli_testers,
         false
@@ -128,23 +128,23 @@ end
 
     # ## Test storage functions (child storage)
     run_dataset(
-        PdreApiTestFixtures.fn_storage_child_kv,
+        PdreApiTestFunctions.child_child_key_value,
         PdreApiTestData.child_child_key_value,
         PdreApiTestFixtures.cli_testers,
-        PdreApiExpectedResults.res_storage_child
+        PdreApiExpectedResults.child_child_key_value
     )
 
     # ## Test child storage function with offsets
     run_dataset(
-        PdreApiTestFixtures.fn_storage_child_2x_kv,
+        PdreApiTestFunctions.child_child_key_value_key_value,
         PdreApiTestData.child_child_key_value_key_value,
         PdreApiTestFixtures.cli_testers,
-        PdreApiExpectedResults.res_child_storage_root
+        PdreApiExpectedResults.child_child_key_value_key_value
     )
 
     # ## Test storage functions (prefix values on child storage)
     run_dataset(
-        PdreApiTestFixtures.fn_storage_prefix_child,
+        PdreApiTestFunctions.prefix_child_child_key_value_key_value,
         PdreApiTestData.prefix_child_child_key_value_key_value,
         PdreApiTestFixtures.cli_testers,
         false
@@ -152,14 +152,14 @@ end
 
     # ## Test storage functions with offsets
     run_dataset(
-        PdreApiTestFixtures.fn_storage_child_offset,
+        PdreApiTestFunctions.child_child_key_value_offset,
         PdreApiTestData.child_child_key_value_offset,
         PdreApiTestFixtures.cli_testers,
-        PdreApiExpectedResults.res_storage_child_offset
+        PdreApiExpectedResults.child_child_key_value_offset
     )
 
     # ## Test network functions
-    for func in PdreApiTestFixtures.fn_network
+    for func in PdreApiTestFunctions.fn_network
         for cli in PdreApiTestFixtures.cli_testers
             # ...
         end
