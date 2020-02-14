@@ -5,9 +5,11 @@ module PdreApiTestFixtures
 	  # TODO "build/bin/usr/local/bin/go_tester"
 	  # TODO "build/bin/usr/local/bin/cpp_tester"
 	]
+end
 
+module PdreApiTestFunctions
 	# Input: data
-	const fn_crypto_hashes = [
+	const value = [
 	  "test_blake2_128",
 	  "test_blake2_256",
 	  "test_keccak_256",
@@ -16,14 +18,13 @@ module PdreApiTestFixtures
 	  "test_twox_256"
 	]
 
-	# Input: data
-	const fn_crypto_keys = [
+	const value_no_output = [
 	  "test_ed25519",
-	  "test_sr25519",
+	  "test_sr25519"
 	]
 
 	# Input: key, value
-	const fn_general_kv = [
+	const key_value = [
 	  "test_set_get_storage",
 	  "test_exists_storage",
 	  "test_clear_storage",
@@ -32,27 +33,27 @@ module PdreApiTestFixtures
 	]
 
 	# Input: key, value, offset
-	const fn_storage_kv_offset = [
+	const key_value_offset = [
 		"test_set_get_storage_into"
 	]
 
 	# Input: key1, value1, key2, value2
-	const fn_storage_2x_kv = [
+	const key_value_key_value = [
 		"test_storage_root"
 	]
 
 	# Input: key, old_value, new_value
-	const fn_storage_compare_set = [
+	const key_key_value = [
 		"test_local_storage_compare_and_set"
 	]
 
 	# Input: prefix, key1, value1, key2, value2
-	const fn_storage_prefix = [
+	const prefix_key_value_key_value = [
 	  "test_clear_prefix"
 	]
 
 	# Input: child1, child2, key, value
-	const fn_storage_child_kv = [
+	const child_child_key_value = [
 	  "test_set_get_child_storage",
 	  "test_exists_child_storage",
 	  "test_clear_child_storage",
@@ -60,17 +61,17 @@ module PdreApiTestFixtures
 	]
 
 	# Input: prefix, child1, child2, key1, value1, key2, value2
-	const fn_storage_prefix_child = [
+	const prefix_child_child_key_value_key_value = [
 	  "test_clear_child_prefix"
 	]
 
 	# Input: child1, child2, key, value, offset
-	const fn_storage_child_offset = [
+	const child_child_key_value_offset = [
 	  "test_get_child_storage_into"
 	]
 
 	# Input: child1, child2, key1, value1, key2, value2
-	const fn_storage_child_2x_kv = [
+	const child_child_key_value_key_value = [
 	  "test_child_storage_root"
 	]
 
