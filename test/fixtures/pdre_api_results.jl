@@ -90,7 +90,7 @@ module PdreApiExpectedResults
         "contingency",
         "Vision-oriented",
         "radical",
-        "heuristic"
+        "heuristic",
         # ext_storage_child_clear_version_1
         "",
         "",
@@ -101,7 +101,18 @@ module PdreApiExpectedResults
         "",
         "",
         "",
-        ""
+        "",
+        # ext_storage_child_exists_version_1
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
     ]
 end
 

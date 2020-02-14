@@ -28,8 +28,9 @@ module PdreApiTestFunctions
 	]
 
 	const child_child_def_type_key_value = [
-		#"ext_storage_child_get_version_1",
-		"ext_storage_child_clear_version_1"
+		"ext_storage_child_get_version_1",
+		"ext_storage_child_clear_version_1",
+		"ext_storage_child_exists_version_1"
 	]
 end
 
