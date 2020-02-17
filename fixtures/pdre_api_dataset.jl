@@ -39,6 +39,7 @@ module PdreApiTestFunctions
 
 	const child_child_def_type_key_value_key_value = [
 		"ext_storage_child_root_version_1",
+		"ext_storage_child_next_key_version_1",
 	]
 end
 
