@@ -46,8 +46,7 @@ end
 
 # Module which contains the names of the LEGACY functions that need to be tested.
 # Thoses names get passed on to the CLI as`--function <NAME>`.
-# The functions are grouped into arrays, depending on the expected input
-# corresponding to the arrays in `PdreApiTestData`.
+# The functions are grouped into arrays based on the expected (same) input data.
 module PdreApiTestFunctionsLegacy
 	# Input: data
 	const value = [
@@ -64,7 +63,6 @@ module PdreApiTestFunctionsLegacy
 	  "test_sr25519"
 	]
 
-	# Input: key, value
 	const key_value = [
 	  "test_set_get_storage",
 	  "test_exists_storage",
@@ -73,27 +71,22 @@ module PdreApiTestFunctionsLegacy
 	  "test_blake2_256_enumerated_trie_root"
 	]
 
-	# Input: key, value, offset
 	const key_value_offset = [
 		"test_set_get_storage_into"
 	]
 
-	# Input: key1, value1, key2, value2
 	const key_value_key_value = [
 		"test_storage_root"
 	]
 
-	# Input: key, old_value, new_value
 	const key_key_value = [
 		"test_local_storage_compare_and_set"
 	]
 
-	# Input: prefix, key1, value1, key2, value2
 	const prefix_key_value_key_value = [
 	  "test_clear_prefix"
 	]
 
-	# Input: child1, child2, key, value
 	const child_child_key_value = [
 	  "test_set_get_child_storage",
 	  "test_exists_child_storage",
@@ -101,17 +94,14 @@ module PdreApiTestFunctionsLegacy
 	  "test_kill_child_storage"
 	]
 
-	# Input: prefix, child1, child2, key1, value1, key2, value2
 	const prefix_child_child_key_value_key_value = [
 	  "test_clear_child_prefix"
 	]
 
-	# Input: child1, child2, key, value, offset
 	const child_child_key_value_offset = [
 	  "test_get_child_storage_into"
 	]
 
-	# Input: child1, child2, key1, value1, key2, value2
 	const child_child_key_value_key_value = [
 	  "test_child_storage_root"
 	]
@@ -167,7 +157,6 @@ module PdreApiTestData
 	  ]
 	]
 
-    # Only used by new APIs, not legacy
 	const prefix_key_value_key_value = [
 	  [
 	    "stat", # prefix
