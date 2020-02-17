@@ -67,8 +67,8 @@ function run_dataset(func_list, data_list, cli_list, result_list)
 
                 # Run command
                 output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                println(output)
                 if result_list != false
-                    #println(output)
                     @test output == result_list[counter]
                 else
                     @test true
@@ -97,29 +97,43 @@ end
         false
     )
 
-    #=
     # ##
     run_dataset(
         PdreApiTestFunctions.child_child_def_type_key_value,
-        PdreApiTestData.child_child_def_type_key_value,
+        [
+            PdreApiTestData.child_child,
+            PdreApiTestData.child_def_child_type,
+            PdreApiTestData.key_value_1,
+        ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value
+        #PdreApiExpectedResults.child_child_def_type_key_value
+        false
     )
 
     run_dataset(
         PdreApiTestFunctions.child_child_def_type_prefix_key_value_key_value,
-        PdreApiTestData.child_child_def_type_prefix_key_value_key_value,
+        [
+            PdreApiTestData.child_child,
+            PdreApiTestData.child_def_child_type,
+            PdreApiTestData.prefix_key_value_key_value,
+        ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value
+        #PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value
+        false
     )
 
     run_dataset(
         PdreApiTestFunctions.child_child_def_type_key_value_key_value,
-        PdreApiTestData.child_child_def_type_key_value_key_value,
+        [
+            PdreApiTestData.child_child,
+            PdreApiTestData.child_def_child_type,
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.key_value_2,
+        ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value
+        false
     )
-    =#
 
     cd(root_dir)
 end
