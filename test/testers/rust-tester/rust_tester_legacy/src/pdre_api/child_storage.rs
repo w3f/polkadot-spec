@@ -193,9 +193,9 @@ pub fn test_clear_child_storage(input: ParsedInput) {
 pub fn test_clear_child_prefix(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let prefix = input.get(0);
-    let child1 = input.get(1);
-    let child2 = input.get(2);
+    let child1 = input.get(0);
+    let child2 = input.get(1);
+    let prefix = input.get(2);
     let key1 = input.get(3);
     let value1 = input.get(4);
     let key2 = input.get(5);

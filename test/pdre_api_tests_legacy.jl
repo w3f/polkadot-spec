@@ -3,16 +3,41 @@ include("./fixtures/pdre_api_results.jl")
 
 using Test
 
+function merge_params(params)
+    #=
+    some = [
+    [[1, 2, 3], [7, 8, 9]],
+    [[4, 5, 6], [10, 11, 12]]
+    ]
+    =#
+    parts = size(params)[1] # 2
+    comps = size(params[1])[1] # 3
+
+    final = []
+    for comp in 1:comps
+        inner = []
+        for part in 1:parts
+        x = params[part][comp]
+        inner = vcat(inner, x)
+        end
+        push!(final, inner)
+    end
+
+    final
+end
+
 function run_dataset(func_list, data_list, cli_list, result_list)
     # Basic parameters for testing CLIs
     sub_cmd = "pdre-api"
     func_arg = "--function"
     input_arg = "--input"
 
+
     counter = 1
     for func in func_list
-        for data in data_list
+        for data in merge_params(data_list)
             input = ""
+
             if data == ""
                 # Skip
             elseif size(data)[1] == 1
@@ -20,20 +45,17 @@ function run_dataset(func_list, data_list, cli_list, result_list)
             else
                 set_first = true
                 for entry in data
-                    # On first run, manually add the first entry to `input`
-                    # in order to avoid having a prefixed comma in there.
                     if set_first
                         input = data[1]
                         set_first = false
                         continue
                     end
-                    # Append entry to input, separated by a comma
                     input = join([input, entry], ",")
                 end
             end
 
             for cli in cli_list
-                # create first part of the command, separated by whitespaces
+                # create first part of the command
                 cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
 
@@ -46,6 +68,7 @@ function run_dataset(func_list, data_list, cli_list, result_list)
 
                 # Run command
                 output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                println(output)
                 if result_list != false
                     @test output == result_list[counter]
                 else
@@ -67,10 +90,11 @@ end
     cd(root_dir)
 
     # ## Test crypto hashing and key functions
-    # function run_dataset(func_list, data_list, cli_list, result_list)
     run_dataset(
         PdreApiTestFunctionsLegacy.value,
-        PdreApiTestData.value,
+        [
+            PdreApiTestData.value
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.value
     )
@@ -78,7 +102,9 @@ end
     # ## Test crypto key functions
     run_dataset(
         PdreApiTestFunctionsLegacy.value_no_output,
-        PdreApiTestData.value,
+        [
+            PdreApiTestData.value
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         false
     )
@@ -86,7 +112,9 @@ end
     # ## Test key/value storage functions
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value,
-        PdreApiTestData.key_value,
+        [
+            PdreApiTestData.key_value_1
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.key_value
     )
@@ -94,7 +122,10 @@ end
     # ## Test key/value storage functions with offsets
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value_offset,
-        PdreApiTestData.key_value_offset,
+        [
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.offset
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.key_value_offset
     )
@@ -102,7 +133,10 @@ end
     # ## Test multipl key/value storage functions
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value_key_value,
-        PdreApiTestData.key_value_key_value,
+        [
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.key_value_2
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.key_value_key_value
     )
@@ -110,7 +144,10 @@ end
     # ## Test compare/set storage functions
     run_dataset(
         PdreApiTestFunctionsLegacy.key_key_value,
-        PdreApiTestData.key_key_value,
+        [
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.value
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.key_key_value
     )
@@ -118,7 +155,9 @@ end
     # ## Test storage functions (prefix values)
     run_dataset(
         PdreApiTestFunctionsLegacy.prefix_key_value_key_value,
-        PdreApiTestData.prefix_key_value_key_value,
+        [
+            PdreApiTestData.prefix_key_value_key_value
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         false
     )
@@ -126,7 +165,10 @@ end
     # ## Test storage functions (child storage)
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value,
-        PdreApiTestData.child_child_key_value,
+        [
+            PdreApiTestData.child_child,
+            PdreApiTestData.key_value_1
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.child_child_key_value
     )
@@ -134,7 +176,11 @@ end
     # ## Test child storage function with offsets
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value_key_value,
-        PdreApiTestData.child_child_key_value_key_value,
+        [
+            PdreApiTestData.child_child,
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.key_value_2
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.child_child_key_value_key_value
     )
@@ -142,7 +188,10 @@ end
     # ## Test storage functions (prefix values on child storage)
     run_dataset(
         PdreApiTestFunctionsLegacy.prefix_child_child_key_value_key_value,
-        PdreApiTestData.prefix_child_child_key_value_key_value,
+        [
+            PdreApiTestData.child_child,
+            PdreApiTestData.prefix_key_value_key_value
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         false
     )
@@ -150,7 +199,11 @@ end
     # ## Test storage functions with offsets
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value_offset,
-        PdreApiTestData.child_child_key_value_offset,
+        [
+            PdreApiTestData.child_child,
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.offset
+        ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.child_child_key_value_offset
     )
