@@ -70,11 +70,13 @@ module PdreApiTestFunctions
 		"ext_crypto_sr25519_generate_version_1"
 	]
 
+	# TODO: Expand seed data
 	const seed_seed = [
 		"ext_crypto_ed25519_public_keys_version_1",
 		"ext_crypto_sr25519_public_keys_version_1"
 	]
 
+	# TODO: Expand seed data
 	const seed_msg = [
 		"ext_crypto_ed25519_sign_version_1",
 		"ext_crypto_ed25519_verify_version_1",
@@ -516,18 +518,6 @@ module PdreApiTestData
 		[
 			"kind gate rocket bright march lottery large ritual ignore glory nut pipe left hand roast"
 		],
-		[
-			"away slight rare"
-		],
-		[
-			"move already cradle"
-		],
-		[
-			"candy blind october web onion volcano reason figure sphere"
-		],
-		[
-			"exchange bleak capital onion north curtain glance blue submit"
-		]
 	]
 
 	const seed_2 = [
@@ -549,17 +539,5 @@ module PdreApiTestData
 		[
 			"scorpion six useless front start crawl axis win auto bird genuine sort fee convince entire minute cost village miracle hotel country"
 		],
-		[
-			"eye carry cloth stove major lunch"
-		],
-		[
-			"deputy reduce train chef adult horn"
-		],
-		[
-			"husband actual egg mystery onion ostrich wine team lawsuit real comic someone"
-		],
-		[
-			"logic idea another trash figure grass pencil monster need urban surge nose"
-		]
 	]
 end
