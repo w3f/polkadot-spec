@@ -122,96 +122,52 @@ end
 
 module PdreApiTestData
     # Only used by new APIs, not legacy
-	const child_child_def_type_key_value = [
+	const child_def_child_type = [
 	  [
-	    ":child_storage:default:moratorium", # child1
-		":child_storage:default:hardware", # child2
 		"Ameliorated", # child key definition
-		1, # child type
-	    "radical", # key
-		"access" # value
+		1 # child type
 	  ],
 	  [
-	    ":child_storage:default:implementation",
-		":child_storage:default:artificial intelligence",
 		"radical",
-		1,
-	    "initiative",
-		"Function-based"
+		1
 	  ],
 	  [
-	    ":child_storage:default:Switchable",
-		":child_storage:default:matrix",
 		"forecast",
-		1,
-	    "Assimilated",
-		"system engine"
+		1
 	  ],
 	  [
-	    ":child_storage:default:strategy",
-		":child_storage:default:Graphic Interface",
 		"well-modulated",
-		1,
-	    "help-desk",
-		"knowledge user"
+		1
 	  ],
 	  [
-	    ":child_storage:default:Total",
-		":child_storage:default:24 hour",
 		"Vision-oriented",
-		1,
-	    "zero administration",
-		"Ameliorated"
+		1
 	  ],
 	  [
-	    ":child_storage:default:exuding",
-		":child_storage:default:Triple-buffered",
 		"needs-based",
-		1,
-	    "optimizing",
-		"paradigm"
+		1
 	  ],
 	  [
-	    ":child_storage:default:middleware",
-		":child_storage:default:Operative",
 		"heuristic",
-		1,
-	    "well-modulated",
-		"contingency"
+		1
 	  ],
 	  [
-	    ":child_storage:default:Mandatory",
-		":child_storage:default:intranet",
 		"system engine",
-		1,
-	    "Devolved",
-		"Vision-oriented"
+		1
 	  ],
 	  [
-	    ":child_storage:default:4th generation",
-		":child_storage:default:encryption",
 		"paradigm",
-		1,
-	    "needs-based",
-		"radical"
+		1
 	  ],
 	  [
-	    ":child_storage:default:policy",
-		":child_storage:default:full-range",
 		"Devolved",
-		1,
-	    "forecast",
-		"heuristic"
+		1
 	  ]
 	]
 
     # Only used by new APIs, not legacy
-	const child_child_def_type_prefix_key_value_key_value = [
+	const prefix_key_value_key_value = [
 	  [
-	    ":child_storage:default:moratorium", # child1
-		":child_storage:default:hardware", # child2
-		"Ameliorated", # child key definition
-		1, # child type
 	    "stat", # prefix
 	    "static", # key1
 	    "Inverse", # value1
@@ -219,10 +175,6 @@ module PdreApiTestData
 	    "Future-proofed" # value2
 	  ],
 	  [
-	    ":child_storage:default:implementation",
-		":child_storage:default:artificial intelligence",
-		"radical",
-		1,
 	    "Face",
 	    "function",
 	    "Horizontal",
@@ -230,10 +182,6 @@ module PdreApiTestData
 	    "Expanded"
 	  ],
 	  [
-	    ":child_storage:default:Switchable",
-		":child_storage:default:matrix",
-		"forecast",
-		1,
 	    "Integrated",
 	    "Integrated",
 	    "portal",
@@ -241,10 +189,6 @@ module PdreApiTestData
 	    "pricing structure"
 	  ],
 	  [
-	    ":child_storage:default:strategy",
-		":child_storage:default:Graphic Interface",
-		"well-modulated",
-		1,
 	    "non",
 	    "non-based",
 	    "Monitored",
@@ -252,10 +196,6 @@ module PdreApiTestData
 	    "emulation"
 	  ],
 	  [
-	    ":child_storage:default:Total",
-		":child_storage:default:24 hour",
-		"Vision-oriented",
-		1,
 	    "sec",
 	    "productivity",
 	    "secondary",
@@ -263,10 +203,6 @@ module PdreApiTestData
 	    "Visionary"
 	  ],
 	  [
-	    ":child_storage:default:exuding",
-		":child_storage:default:Triple-buffered",
-		"needs-based",
-		1,
 	    "conc",
 	    "Exclusive",
 	    "next generation",
@@ -274,10 +210,6 @@ module PdreApiTestData
 	    "approach"
 	  ],
 	  [
-	    ":child_storage:default:middleware",
-		":child_storage:default:Operative",
-		"heuristic",
-		1,
 	    "disf",
 	    "disintermediate",
 	    "Grass-roots",
@@ -285,10 +217,6 @@ module PdreApiTestData
 	    "function"
 	  ],
 	  [
-	    ":child_storage:default:Mandatory",
-		":child_storage:default:intranet",
-		"system engine",
-		1,
 	    "cont",
 	    "contingency",
 	    "value-added",
@@ -296,10 +224,6 @@ module PdreApiTestData
 	    "Configurable"
 	  ],
 	  [
-	    ":child_storage:default:4th generation",
-		":child_storage:default:encryption",
-		"paradigm",
-		1,
 	    "Auto",
 	    "human-resource",
 	    "Reactive",
@@ -307,10 +231,6 @@ module PdreApiTestData
 	    "Automated"
 	  ],
 	  [
-	    ":child_storage:default:policy",
-		":child_storage:default:full-range",
-		"Devolved",
-		1,
 	    "secon",
 	    "Optional",
 	    "secondary",
@@ -319,104 +239,87 @@ module PdreApiTestData
 	  ]
 	]
 
-	const child_child_def_type_key_value_key_value = [
+	const key_value_1 = [
 	  [
-	    ":child_storage:default:moratorium", # child1
-		":child_storage:default:hardware", # child2
-		"Ameliorated", # child key definition
-		1, # child type
-	    "static", # key1
-	    "Inverse", # value1
-	    "even-keeled", # key2
-	    "Future-proofed" # value2
+	    "static", # key
+	    "Inverse", # value
 	  ],
 	  [
-	    ":child_storage:default:implementation",
-		":child_storage:default:artificial intelligence",
-		"radical",
-		1,
 	    "function",
 	    "Horizontal",
+	  ],
+	  [
+	    "Integrated",
+	    "portal",
+	  ],
+	  [
+	    "non-based",
+	    "Monitored",
+	  ],
+	  [
+	    "productivity",
+	    "secondary",
+	  ],
+	  [
+	    "Exclusive",
+	    "next generation",
+	  ],
+	  [
+	    "disintermediate",
+	    "Grass-roots",
+	  ],
+	  [
+	    "contingency",
+	    "value-added",
+	  ],
+	  [
+	    "human-resource",
+	    "Reactive",
+	  ],
+	  [
+	    "Optional",
+	    "secondary",
+	  ]
+	]
+
+	const key_value_2 = [
+	  [
+	    "even-keeled", # key
+	    "Future-proofed" # value
+	  ],
+	  [
 	    "Face to face",
 	    "Expanded"
 	  ],
 	  [
-	    ":child_storage:default:Switchable",
-		":child_storage:default:matrix",
-		"forecast",
-		1,
-	    "Integrated",
-	    "portal",
 	    "budgetary management",
 	    "pricing structure"
 	  ],
 	  [
-	    ":child_storage:default:strategy",
-		":child_storage:default:Graphic Interface",
-		"well-modulated",
-		1,
-	    "non-based",
-	    "Monitored",
 	    "non-volatile",
 	    "emulation"
 	  ],
 	  [
-	    ":child_storage:default:Total",
-		":child_storage:default:24 hour",
-		"Vision-oriented",
-		1,
-	    "productivity",
-	    "secondary",
 	    "Total",
 	    "Visionary"
 	  ],
 	  [
-	    ":child_storage:default:exuding",
-		":child_storage:default:Triple-buffered",
-		"needs-based",
-		1,
-	    "Exclusive",
-	    "next generation",
 	    "concept",
 	    "approach"
 	  ],
 	  [
-	    ":child_storage:default:middleware",
-		":child_storage:default:Operative",
-		"heuristic",
-		1,
-	    "disintermediate",
-	    "Grass-roots",
 	    "policy",
 	    "function"
 	  ],
 	  [
-	    ":child_storage:default:Mandatory",
-		":child_storage:default:intranet",
-		"system engine",
-		1,
-	    "contingency",
-	    "value-added",
 	    "context-sensitive",
 	    "Configurable"
 	  ],
 	  [
-	    ":child_storage:default:4th generation",
-		":child_storage:default:encryption",
-		"paradigm",
-		1,
-	    "human-resource",
-	    "Reactive",
 	    "hardware",
 	    "Automated"
 	  ],
 	  [
-	    ":child_storage:default:policy",
-		":child_storage:default:full-range",
-		"Devolved",
-		1,
-	    "Optional",
-	    "secondary",
 	    "object-oriented",
 	    "toolset"
 	  ]
@@ -455,600 +358,79 @@ module PdreApiTestData
 		]
 	]
 
-	const key_value = [
+	const offset = [
 	  [
-	    "static", # key
-		"Inverse" # value
-	  ],
-	  [
-	    "even-keeled",
-		"Future-proofed"
-	  ],
-	  [
-	    "function",
-		"Horizontal"
-	  ],
-	  [
-	    "Face to face",
-		"Expanded"
-	  ],
-	  [
-	    "Integrated",
-		"portal"
-	  ],
-	  [
-	    "budgetary management",
-		"pricing structure"
-	  ],
-	  [
-	    "Ameliorated",
-		"Monitored"
-	  ],
-	  [
-	    "non-volatile",
-		"emulation"
-	  ],
-	  [
-	    "productivity",
-		"secondary"
-	  ],
-	  [
-	    "Total",
-		"Visionary"
-	  ],
-	]
-
-	const key_value_offset = [
-	  [
-	    "static", # key
-		"Inverse", # value
 		3 # offset
 	  ],
 	  [
-	    "even-keeled",
-		"Future-proofed",
 		5
 	  ],
 	  [
-	    "function",
-		"Horizontal",
 		0
 	  ],
 	  [
-	    "Face to face",
-		"Expanded",
 		20
 	  ],
 	  [
-	    "Integrated",
-		"portal",
 		1
 	  ],
 	  [
-	    "budgetary management",
-		"pricing structure",
 		8
 	  ],
 	  [
-	    "Ameliorated",
-		"Monitored",
 		6
 	  ],
 	  [
-	    "non-volatile",
-		"emulation",
 		30
 	  ],
 	  [
-	    "productivity",
-		"secondary",
 		2
 	  ],
 	  [
-	    "Total",
-		"Visionary",
 		9
 	  ],
 	]
 
-	const key_value_key_value = [
-	  [
-	    "static", # key1
-	    "Inverse", # value1
-	    "even-keeled", # key2
-	    "Future-proofed" # value2
-	  ],
-	  [
-	    "function",
-	    "Horizontal",
-	    "Face to face",
-	    "Expanded"
-	  ],
-	  [
-	    "Integrated",
-	    "portal",
-	    "budgetary management",
-	    "pricing structure"
-	  ],
-	  [
-	    "non-based",
-	    "Monitored",
-	    "non-volatile",
-	    "emulation"
-	  ],
-	  [
-	    "productivity",
-	    "secondary",
-	    "Total",
-	    "Visionary"
-	  ],
-	  [
-	    "Exclusive",
-	    "next generation",
-	    "concept",
-	    "approach"
-	  ],
-	  [
-	    "disintermediate",
-	    "Grass-roots",
-	    "policy",
-	    "function"
-	  ],
-	  [
-	    "contingency",
-	    "value-added",
-	    "context-sensitive",
-	    "Configurable"
-	  ],
-	  [
-	    "human-resource",
-	    "Reactive",
-	    "hardware",
-	    "Automated"
-	  ],
-	  [
-	    "Optional",
-	    "secondary",
-	    "object-oriented",
-	    "toolset"
-	  ]
-	]
-
-	const key_key_value = [
-	  [
-	    "static", # key1
-	    "even-keeled", # key2
-	    "Future-proofed" # value2
-	  ],
-	  [
-	    "function",
-	    "Face to face",
-	    "Expanded"
-	  ],
-	  [
-	    "Integrated",
-	    "budgetary management",
-	    "pricing structure"
-	  ],
-	  [
-	    "non-based",
-	    "non-volatile",
-	    "emulation"
-	  ],
-	  [
-	    "productivity",
-	    "Total",
-	    "Visionary"
-	  ],
-	  [
-	    "Exclusive",
-	    "concept",
-	    "approach"
-	  ],
-	  [
-	    "disintermediate",
-	    "policy",
-	    "function"
-	  ],
-	  [
-	    "contingency",
-	    "context-sensitive",
-	    "Configurable"
-	  ],
-	  [
-	    "human-resource",
-	    "hardware",
-	    "Automated"
-	  ],
-	  [
-	    "Optional",
-	    "object-oriented",
-	    "toolset"
-	  ]
-	]
-
-	const prefix_key_value_key_value = [
-	  [
-	    "stat", # prefix
-	    "static", # key1
-	    "Inverse", # value1
-	    "even-keeled", # key2
-	    "Future-proofed" # value2
-	  ],
-	  [
-	    "Face",
-	    "function",
-	    "Horizontal",
-	    "Face to face",
-	    "Expanded"
-	  ],
-	  [
-	    "Xar",
-	    "Integrated",
-	    "portal",
-	    "budgetary management",
-	    "pricing structure"
-	  ],
-	  [
-	    "non",
-	    "non-based",
-	    "Monitored",
-	    "non-volatile",
-	    "emulation"
-	  ],
-	  [
-	    "sec",
-	    "productivity",
-	    "secondary",
-	    "Total",
-	    "Visionary"
-	  ],
-	  [
-	    "conc",
-	    "Exclusive",
-	    "next generation",
-	    "concept",
-	    "approach"
-	  ],
-	  [
-	    "disf",
-	    "disintermediate",
-	    "Grass-roots",
-	    "policy",
-	    "function"
-	  ],
-	  [
-	    "cont",
-	    "contingency",
-	    "value-added",
-	    "context-sensitive",
-	    "Configurable"
-	  ],
-	  [
-	    "Auto",
-	    "human-resource",
-	    "Reactive",
-	    "hardware",
-	    "Automated"
-	  ],
-	  [
-	    "secon",
-	    "Optional",
-	    "secondary",
-	    "object-oriented",
-	    "toolset"
-	  ]
-	]
-
-	const child_child_key_value = [
+	const child_child = [
 	  [
 	    ":child_storage:default:moratorium", # child1
-	    ":child_storage:default:hardware", # child2
-	    "radical", # key
-		"access" # value
+	    ":child_storage:default:hardware" # child2
 	  ],
 	  [
 	    ":child_storage:default:implementation",
-	    ":child_storage:default:artificial intelligence",
-	    "initiative",
-		"Function-based"
+	    ":child_storage:default:artificial intelligence"
 	  ],
 	  [
 	    ":child_storage:default:Switchable",
-	    ":child_storage:default:matrix",
-	    "Assimilated",
-		"system engine"
+	    ":child_storage:default:matrix"
 	  ],
 	  [
 	    ":child_storage:default:strategy",
-	    ":child_storage:default:Graphic Interface",
-	    "help-desk",
-		"knowledge user"
+	    ":child_storage:default:Graphic Interface"
 	  ],
 	  [
 	    ":child_storage:default:Total",
-	    ":child_storage:default:24 hour",
-	    "zero administration",
-		"Ameliorated"
+	    ":child_storage:default:24 hour"
 	  ],
 	  [
 	    ":child_storage:default:exuding",
-	    ":child_storage:default:Triple-buffered",
-	    "optimizing",
-		"paradigm"
+	    ":child_storage:default:Triple-buffered"
 	  ],
 	  [
 	    ":child_storage:default:middleware",
-	    ":child_storage:default:Operative",
-	    "well-modulated",
-		"contingency"
+	    ":child_storage:default:Operative"
 	  ],
 	  [
 	    ":child_storage:default:Mandatory",
-	    ":child_storage:default:intranet",
-	    "Devolved",
-		"Vision-oriented"
+	    ":child_storage:default:intranet"
 	  ],
 	  [
 	    ":child_storage:default:4th generation",
-	    ":child_storage:default:encryption",
-	    "needs-based",
-		"radical"
+	    ":child_storage:default:encryption"
 	  ],
 	  [
 	    ":child_storage:default:policy",
-	    ":child_storage:default:full-range",
-	    "forecast",
-		"heuristic"
-	  ]
-	]
-
-	const child_child_key_value_offset = [
-	  [
-	    ":child_storage:default:moratorium", # child1
-	    ":child_storage:default:hardware", # child2
-	    "radical", # key
-		"access", # value
-		3
-	  ],
-	  [
-	    ":child_storage:default:implementation",
-	    ":child_storage:default:artificial intelligence",
-	    "initiative",
-		"Function-based",
-		0
-	  ],
-	  [
-	    ":child_storage:default:Switchable",
-	    ":child_storage:default:matrix",
-	    "Assimilated",
-		"system engine",
-		7
-	  ],
-	  [
-	    ":child_storage:default:strategy",
-	    ":child_storage:default:Graphic Interface",
-	    "help-desk",
-		"knowledge user",
-		30
-	  ],
-	  [
-	    ":child_storage:default:Total",
-	    ":child_storage:default:24 hour",
-	    "zero administration",
-		"Ameliorated",
-		0
-	  ],
-	  [
-	    ":child_storage:default:exuding",
-	    ":child_storage:default:Triple-buffered",
-	    "optimizing",
-		"paradigm",
-		8
-	  ],
-	  [
-	    ":child_storage:default:middleware",
-	    ":child_storage:default:Operative",
-	    "well-modulated",
-		"contingency",
-		1
-	  ],
-	  [
-	    ":child_storage:default:Mandatory",
-	    ":child_storage:default:intranet",
-	    "Devolved",
-		"Vision-oriented",
-		6
-	  ],
-	  [
-	    ":child_storage:default:4th generation",
-	    ":child_storage:default:encryption",
-	    "needs-based",
-		"radical",
-		0
-	  ],
-	  [
-	    ":child_storage:default:policy",
-	    ":child_storage:default:full-range",
-	    "forecast",
-		"heuristic",
-		40
-	  ]
-	]
-
-	const prefix_child_child_key_value_key_value = [
-	  [
-	    "stat", # prefix
-	    ":child_storage:default:moratorium", # child1
-	    ":child_storage:default:hardware", # child2
-	    "static", # key1
-	    "Inverse", # value1
-	    "even-keeled", # key2
-	    "Future-proofed" # value2
-	  ],
-	  [
-	    "Face",
-	    ":child_storage:default:implementation",
-	    ":child_storage:default:artificial intelligence",
-	    "function",
-	    "Horizontal",
-	    "Face to face",
-	    "Expanded"
-	  ],
-	  [
-	    "Xar",
-	    ":child_storage:default:Switchable",
-	    ":child_storage:default:matrix",
-	    "Integrated",
-	    "portal",
-	    "budgetary management",
-	    "pricing structure"
-	  ],
-	  [
-	    "non",
-	    ":child_storage:default:strategy",
-	    ":child_storage:default:Graphic Interface",
-	    "non-based",
-	    "Monitored",
-	    "non-volatile",
-	    "emulation"
-	  ],
-	  [
-	    "sec",
-	    ":child_storage:default:Total",
-	    ":child_storage:default:24 hour",
-	    "productivity",
-	    "secondary",
-	    "Total",
-	    "Visionary"
-	  ],
-	  [
-	    "conc",
-	    ":child_storage:default:exuding",
-	    ":child_storage:default:Triple-buffered",
-	    "Exclusive",
-	    "next generation",
-	    "concept",
-	    "approach"
-	  ],
-	  [
-	    "disf",
-	    ":child_storage:default:middleware",
-	    ":child_storage:default:Operative",
-	    "disintermediate",
-	    "Grass-roots",
-	    "policy",
-	    "function"
-	  ],
-	  [
-	    "cont",
-	    ":child_storage:default:Mandatory",
-	    ":child_storage:default:intranet",
-	    "contingency",
-	    "value-added",
-	    "context-sensitive",
-	    "Configurable"
-	  ],
-	  [
-	    "Auto",
-	    ":child_storage:default:4th generation",
-	    ":child_storage:default:encryption",
-	    "human-resource",
-	    "Reactive",
-	    "hardware",
-	    "Automated"
-	  ],
-	  [
-	    "secon",
-	    ":child_storage:default:policy",
-	    ":child_storage:default:full-range",
-	    "Optional",
-	    "secondary",
-	    "object-oriented",
-	    "toolset"
-	  ]
-	]
-
-	const child_child_key_value_key_value = [
-	  [
-	    ":child_storage:default:moratorium", # child1
-	    ":child_storage:default:hardware", # child2
-	    "static", # key1
-	    "Inverse", # value1
-	    "even-keeled", # key2
-	    "Future-proofed" # value2
-	  ],
-	  [
-	    ":child_storage:default:implementation",
-	    ":child_storage:default:artificial intelligence",
-	    "function",
-	    "Horizontal",
-	    "Face to face",
-	    "Expanded"
-	  ],
-	  [
-	    ":child_storage:default:Switchable",
-	    ":child_storage:default:matrix",
-	    "Integrated",
-	    "portal",
-	    "budgetary management",
-	    "pricing structure"
-	  ],
-	  [
-	    ":child_storage:default:strategy",
-	    ":child_storage:default:Graphic Interface",
-	    "non-based",
-	    "Monitored",
-	    "non-volatile",
-	    "emulation"
-	  ],
-	  [
-	    ":child_storage:default:Total",
-	    ":child_storage:default:24 hour",
-	    "productivity",
-	    "secondary",
-	    "Total",
-	    "Visionary"
-	  ],
-	  [
-	    ":child_storage:default:exuding",
-	    ":child_storage:default:Triple-buffered",
-	    "Exclusive",
-	    "next generation",
-	    "concept",
-	    "approach"
-	  ],
-	  [
-	    ":child_storage:default:middleware",
-	    ":child_storage:default:Operative",
-	    "disintermediate",
-	    "Grass-roots",
-	    "policy",
-	    "function"
-	  ],
-	  [
-	    ":child_storage:default:Mandatory",
-	    ":child_storage:default:intranet",
-	    "contingency",
-	    "value-added",
-	    "context-sensitive",
-	    "Configurable"
-	  ],
-	  [
-	    ":child_storage:default:4th generation",
-	    ":child_storage:default:encryption",
-	    "human-resource",
-	    "Reactive",
-	    "hardware",
-	    "Automated"
-	  ],
-	  [
-	    ":child_storage:default:policy",
-	    ":child_storage:default:full-range",
-	    "Optional",
-	    "secondary",
-	    "object-oriented",
-	    "toolset"
+	    ":child_storage:default:full-range"
 	  ]
 	]
 end
