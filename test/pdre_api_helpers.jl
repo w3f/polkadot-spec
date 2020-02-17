@@ -26,12 +26,11 @@ function merge_params(params)
     final
 end
 
-function run_dataset(func_list, data_list, cli_list, result_list)
+function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
     # Basic parameters for testing CLIs
     sub_cmd = "pdre-api"
     func_arg = "--function"
     input_arg = "--input"
-
 
     counter = 1
     for func in func_list
@@ -67,7 +66,12 @@ function run_dataset(func_list, data_list, cli_list, result_list)
                 end
 
                 # Run command
-                output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                if strip_newline
+                    output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
+                else
+                    output = read(`sh -c $cmd`, String)
+                end
+
                 if result_list != false
                     @test output == result_list[counter]
                 else

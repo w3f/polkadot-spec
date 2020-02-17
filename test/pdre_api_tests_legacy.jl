@@ -16,7 +16,8 @@ using Test
             PdreApiTestData.value
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        PdreApiExpectedResultsLegacy.value
+        PdreApiExpectedResultsLegacy.value,
+        true # strip newline
     )
 
     # ## Test crypto key functions
@@ -26,7 +27,8 @@ using Test
             PdreApiTestData.value
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        false
+        false,
+        false # strip newline
     )
 
     # ## Test key/value storage functions
@@ -36,7 +38,8 @@ using Test
             PdreApiTestData.key_value_1
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        PdreApiExpectedResultsLegacy.key_value
+        PdreApiExpectedResultsLegacy.key_value,
+        true # strip newline
     )
 
     # ## Test key/value storage functions with offsets
@@ -47,7 +50,8 @@ using Test
             PdreApiTestData.offset
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        PdreApiExpectedResultsLegacy.key_value_offset
+        PdreApiExpectedResultsLegacy.key_value_offset,
+        true # strip newline
     )
 
     # ## Test multipl key/value storage functions
@@ -58,7 +62,8 @@ using Test
             PdreApiTestData.key_value_2
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        PdreApiExpectedResultsLegacy.key_value_key_value
+        PdreApiExpectedResultsLegacy.key_value_key_value,
+        true # strip newline
     )
 
     # ## Test compare/set storage functions
@@ -69,7 +74,8 @@ using Test
             PdreApiTestData.value
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        PdreApiExpectedResultsLegacy.key_key_value
+        PdreApiExpectedResultsLegacy.key_key_value,
+        true # strip newline
     )
 
     # ## Test storage functions (prefix values)
@@ -79,7 +85,8 @@ using Test
             PdreApiTestData.prefix_key_value_key_value
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        false
+        false,
+        false # strip newline
     )
 
     # ## Test storage functions (child storage)
@@ -90,7 +97,8 @@ using Test
             PdreApiTestData.key_value_1
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        PdreApiExpectedResultsLegacy.child_child_key_value
+        PdreApiExpectedResultsLegacy.child_child_key_value,
+        true # strip newline
     )
 
     # ## Test child storage function with offsets
@@ -102,7 +110,8 @@ using Test
             PdreApiTestData.key_value_2
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        PdreApiExpectedResultsLegacy.child_child_key_value_key_value
+        PdreApiExpectedResultsLegacy.child_child_key_value_key_value,
+        true # strip newline
     )
 
     # ## Test storage functions (prefix values on child storage)
@@ -113,7 +122,8 @@ using Test
             PdreApiTestData.prefix_key_value_key_value
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        false
+        false,
+        false # strip newline
     )
 
     # ## Test storage functions with offsets
@@ -125,7 +135,8 @@ using Test
             PdreApiTestData.offset
         ],
         PdreApiTestBinariesLegacy.cli_testers,
-        PdreApiExpectedResultsLegacy.child_child_key_value_offset
+        PdreApiExpectedResultsLegacy.child_child_key_value_offset,
+        true # strip newline
     )
 
     # ## Test network functions

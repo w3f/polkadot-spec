@@ -16,7 +16,8 @@ using Test
             PdreApiTestData.value,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.value
+        PdreApiExpectedResults.value,
+        true # strip newline
     )
 
     # ##
@@ -28,7 +29,8 @@ using Test
             PdreApiTestData.key_value_1,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value
+        PdreApiExpectedResults.child_child_def_type_key_value,
+        true # strip newline
     )
 
     run_dataset(
@@ -39,7 +41,8 @@ using Test
             PdreApiTestData.prefix_key_value_key_value,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value
+        PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value,
+        true # strip newline
     )
 
     run_dataset(
@@ -51,7 +54,8 @@ using Test
             PdreApiTestData.key_value_2,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        true # strip newline
     )
 
     cd(root_dir)
