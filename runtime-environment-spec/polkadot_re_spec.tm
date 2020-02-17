@@ -1,4 +1,4 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <style|<tuple|tmbook|std-latex|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
 
@@ -2380,17 +2380,21 @@
   based on the type of consensus messages they receives as follows:
 
   <\itemize-minus>
-    <item><strong|Scheduled Change>: Schedule an authority set change after a
-    delay of <em|finalized> blocks. The earliest digest of this type in a
-    single block will be respected. No change should be scheduled if one is
-    already and the delay has not passed completely. If such an inconsitency
-    occures, the scheduled change should be ignored.
+    <item><strong|Scheduled Change>: Schedule an authority set change after
+    the given delay, specified as \Pthe number of blocks to be <em|finalized>
+    after the current block before the authority set change takes effect\Q.
+    The earliest digest of this type in a single block will be respected. No
+    change should be scheduled if one is already and the delay has not passed
+    completely. If such an inconsitency occures, the scheduled change should
+    be ignored.
 
-    <item><strong|Forced Change>: Force an authority set change after a delay
-    of <em|imported> blocks. The earliest digest of this type in a single
-    block will be respected. No change should be scheduled if one is already
-    and the delay has not passed completely. If such an inconsitency occures,
-    the scheduled change should be ignored.
+    <item><strong|Forced Change>: Force an authority set change after a given
+    delay in term of <em|imported> blocks <todo|\Pimported\Q needs to be
+    defined including if only counting the blocks on the \Pbest\Q chain or
+    the tree, if former case then best need to be defined.>. The earliest
+    digest of this type in a single block will be respected. No change should
+    be scheduled if one is already and the delay has not passed completely.
+    If such an inconsitency occures, the scheduled change should be ignored.
 
     <item><strong|On Disabled>: The authority set index with given index is
     disabled until the next change.
