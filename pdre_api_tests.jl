@@ -62,5 +62,52 @@ using Test
         true # strip newline
     )
 
+    run_dataset(
+        PdreApiTestFunctions.key_value,
+        [
+            PdreApiTestData.key_value_1,
+        ],
+        PdreApiTestBinaries.cli_testers,
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
+        true # strip newline
+    )
+
+    run_dataset(
+        PdreApiTestFunctions.key_value_offset_buffer_size,
+        [
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.offset,
+            PdreApiTestData.buffer_size
+        ],
+        PdreApiTestBinaries.cli_testers,
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
+        true # strip newline
+    )
+
+    run_dataset(
+        PdreApiTestFunctions.prefix_key_value_key_value,
+        [
+            PdreApiTestData.prefix_key_value_key_value
+        ],
+        PdreApiTestBinaries.cli_testers,
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
+        true # strip newline
+    )
+
+    run_dataset(
+        PdreApiTestFunctions.key_value_key_value,
+        [
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.key_value_2
+        ],
+        PdreApiTestBinaries.cli_testers,
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
+        true # strip newline
+    )
+
     cd(root_dir)
 end

@@ -27,6 +27,12 @@ module PdreApiTestFunctions
 		"ext_hashing_twox_64_version_1",
 	]
 
+	const key_value = [
+		"ext_storage_get_version_1",
+		"ext_storage_clear_version_1",
+		"ext_storage_exists_version_1"
+	]
+
 	const child_child_def_type_key_value = [
 		"ext_storage_child_get_version_1",
 		"ext_storage_child_clear_version_1",
@@ -41,6 +47,19 @@ module PdreApiTestFunctions
 		"ext_storage_child_storage_kill_version_1",
 		"ext_storage_child_root_version_1",
 		"ext_storage_child_next_key_version_1"
+	]
+
+	const key_value_offset_buffer_size = [
+		"ext_storage_read_version_1"
+	]
+
+	const prefix_key_value_key_value = [
+		"ext_storage_clear_prefix_version_1"
+	]
+
+	const key_value_key_value = [
+		"ext_storage_root_version_1",
+		"ext_storage_next_key_version_1"
 	]
 end
 
@@ -376,6 +395,39 @@ module PdreApiTestData
 	  ],
 	  [
 		2
+	  ],
+	  [
+		9
+	  ],
+	]
+
+	const buffer_size = [
+	  [
+		3 # buffer size
+	  ],
+	  [
+		6
+	  ],
+	  [
+		0
+	  ],
+	  [
+		20
+	  ],
+	  [
+		10
+	  ],
+	  [
+		8
+	  ],
+	  [
+		6
+	  ],
+	  [
+		30
+	  ],
+	  [
+		11
 	  ],
 	  [
 		9

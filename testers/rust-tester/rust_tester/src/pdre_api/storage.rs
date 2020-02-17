@@ -174,8 +174,12 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
     let value1 = input.get(1);
     let key2 = input.get(2);
     let value2 = input.get(3);
-    let key3 = input.get(4);
-    let value3 = input.get(5);
+
+    // Keep track of the ordering of the keys
+    let mut track = vec![];
+    track.push(key1);
+    track.push(key2);
+    track.sort();
 
     // No next key available
     let res = rtm
@@ -186,26 +190,28 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
     let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
-    let _ = rtm.call("rtm_ext_storage_set", &(key3, value3).encode());
 
-    // Get next key
+    // Try to read next key
     let res = rtm
-        .call("rtm_ext_storage_next_key_version_1", &key1.encode())
-        .decode_option()
-        .unwrap()
-        .decode_val();
-    assert_eq!(res, key2);
-
-    let res = rtm
-        .call("rtm_ext_storage_next_key_version_1", &key2.encode())
-        .decode_option()
-        .unwrap()
-        .decode_val();
-    assert_eq!(res, key3);
-
-    // No next key available
-    let res = rtm
-        .call("rtm_ext_storage_next_key_version_1", &key3.encode())
+        .call("rtm_ext_storage_child_next_key_version_1", &(
+            key1
+        ).encode())
         .decode_option();
-    assert!(res.is_none());
+    if key1 == track[0] {
+        assert_eq!(res.unwrap().decode_val(), key2)
+    } else {
+        assert!(res.is_none());
+    }
+
+    // Try to read next key
+    let res = rtm
+        .call("rtm_ext_storage_child_next_key_version_1", &(
+            key2
+        ).encode())
+        .decode_option();
+    if key2 == track[0] {
+        assert_eq!(res.unwrap().decode_val(), key1)
+    } else {
+        assert!(res.is_none());
+    }
 }
