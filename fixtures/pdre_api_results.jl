@@ -215,15 +215,15 @@ module PdreApiExpectedResultsLegacy
     const key_value = [
         # test_set_get_storage
         "Inverse",
-        "Future-proofed",
         "Horizontal",
-        "Expanded",
         "portal",
-        "pricing structure",
         "Monitored",
-        "emulation",
         "secondary",
-        "Visionary",
+        "next generation",
+        "Grass-roots",
+        "value-added",
+        "Reactive",
+        "secondary",
         # test_exists_storage
         "true",
         "true",
@@ -248,40 +248,40 @@ module PdreApiExpectedResultsLegacy
         "",
         # test_set_get_local_storage
         "Inverse,Inverse",
-        "Future-proofed,Future-proofed",
         "Horizontal,Horizontal",
-        "Expanded,Expanded",
         "portal,portal",
-        "pricing structure,pricing structure",
         "Monitored,Monitored",
-        "emulation,emulation",
         "secondary,secondary",
-        "Visionary,Visionary",
+        "next generation,next generation",
+        "Grass-roots,Grass-roots",
+        "value-added,value-added",
+        "Reactive,Reactive",
+        "secondary,secondary",
         # test_blake2_256_enumerated_trie_root
         "da1630f8a79c2273ce71af9082e9d76d017fccb2e5ebd9d8928c9418fc50cf8d",
-        "5147323d593b7bb01fe8ea3e9d5a4bba0497c7f47b5daa121f4a6d791164d60b",
         "d393fa78dfddc5fc91e9faef6b1cf045049c9d833b1baeb59a84dc0f1145a31d",
-        "088560d2353a1afd5058e4810c4e77f459616c776ec49d339e4401071a7c8879",
         "ea64d09f9740275ef7faaa3cee5a6a45fc8fe655cf049addbcefa7ba2ba6032d",
-        "a340fba4541947a516c3ae686cf0f3155b1d69f9146e4096c54bc8b45db718f1",
-        "ad6a77200cfac3b9fe1565fc651c9361d76033ff910440f10dddaebbf65aeda8",
-        "86755bbcc0c2db567c58d30a2786e9ff8c68391a3f91188871db4e91993a4975",
+        "473003480074cf0afd6f2723b992d538d4ba4013bd8ede9cae3d590f509f53fc",
         "73077d09d5c33c7f8c015d015a2228730150e4d10a2a17c7c26128371e92449d",
-        "17fa3916030b48170365735f8371df909a98eeb5f0370f6580b0552243387c8d"
+        "816e6d65c243386bc75f2c214cea2b5b269ad67d4f08a46078a49102c4c332ed",
+        "f1e68dde8164af4534310579c90ad1fd00ab7c0656ddbfa5174fdcf3d63b5b55",
+        "d305135ae735e76626c331b48e614df3400296d29b7ed5502325ce172b92dcb0",
+        "87568701aafe6eadc3916f99db5e27c584b59ba93244141b98e6a4dd2857b4f6",
+        "68c50ec521e260c1e54403c62ed90496d12f5a46cccd04b05c729c6283c2fa4c"
     ]
 
     const key_value_offset = [
         # test_set_get_storage_into
         "erse",
-        "e-proofed",
-        "Horizontal",
+        "ontal",
+        "portal",
         "",
-        "ortal",
-        "structure",
-        "red",
+        "econdary",
+        "eration",
+        "roots",
         "",
-        "condary",
-        ""
+        "active",
+        "",
     ]
 
     const key_value_key_value = [
@@ -300,30 +300,30 @@ module PdreApiExpectedResultsLegacy
 
     const key_key_value = [
         # test_local_storage_compare_and_set
+        "static",
+        "Inverse",
+        "even-keeled",
         "Future-proofed",
-        "Expanded",
-        "pricing structure",
-        "emulation",
-        "Visionary",
-        "approach",
         "function",
-        "Configurable",
-        "Automated",
-        "toolset"
+        "Horizontal",
+        "Face to face",
+        "Expanded",
+        "Integrated",
+        "portal"
     ]
 
     const child_child_key_value = [
         # test_set_get_child_storage
-        "access",
-        "Function-based",
-        "system engine",
-        "knowledge user",
-        "Ameliorated",
-        "paradigm",
-        "contingency",
-        "Vision-oriented",
-        "radical",
-        "heuristic",
+        "Inverse",
+        "Horizontal",
+        "portal",
+        "Monitored",
+        "secondary",
+        "next generation",
+        "Grass-roots",
+        "value-added",
+        "Reactive",
+        "secondary",
         # test_exists_child_storage
         "true",
         "true",
@@ -359,34 +359,6 @@ module PdreApiExpectedResultsLegacy
         "",
     ]
 
-    const child_child_key_value_offset = [
-        # test_get_child_storage_into
-        "ess",
-        "Function-based",
-        "engine",
-        "",
-        "Ameliorated",
-        "",
-        "ontingency",
-        "-oriented",
-        "radical",
-        "",
-    ]
-
-    const res_child_storage_offset = [
-        # test_get_child_storage_into
-        "ess",
-        "Function-based",
-        "engine",
-        "",
-        "Ameliorated",
-        "",
-        "ontingency",
-        "-oriented",
-        "radical",
-        ""
-    ]
-
     const child_child_key_value_key_value = [
         # test_child_storage_root
         "04e84064489b7e28b44dfc00207a2d15bda2a70348fe1f8c031d42dbbdb25e77,e04eb753bc044436c6624b2062f7ad2be3bf19c62ed6f10aa2d7ee2586828cd5",
@@ -399,5 +371,19 @@ module PdreApiExpectedResultsLegacy
         "2b8a4d37aea421f450fbe1fe919cbe576485f69474594e446a670c16dd34e4b8,803205f7b32b7aadcf4955a2f934a065060da645a45c817f26c90025f8e4a978",
         "acd774b551da724c0959b5e5bc5f4d333116865cb2a28b4a981a327c5be429f2,41d7e4e8d2198d42c00a753db0f11dde0d2288ce0d148a83e9e774eafbf17584",
         "a811569241ab8e81751d7d971a8a81ef54ba4da91262c99e03e0208ec60fc9ae,3b71375a64a94627d03b257d2d2538474ac0263c0a5e6872d848ce6889092e15"
+    ]
+
+    const child_child_key_value_offset = [
+        # test_get_child_storage_into
+        "erse",
+        "ontal",
+        "portal",
+        "",
+        "econdary",
+        "eration",
+        "roots",
+        "",
+        "active",
+        ""
     ]
 end
