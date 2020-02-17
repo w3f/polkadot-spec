@@ -185,17 +185,18 @@ pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
 pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let child_key = input.get(0);
-    let child_definition = input.get(1);
-    let child_type = input.get_u32(2);
-    let key1 = input.get(3);
-    let value1 = input.get(4);
-    let key2 = input.get(5);
-    let value2 = input.get(6);
+    let child_key1 = input.get(0);
+    let child_key2 = input.get(1);
+    let child_definition = input.get(2);
+    let child_type = input.get_u32(3);
+    let key1 = input.get(4);
+    let value1 = input.get(5);
+    let key2 = input.get(6);
+    let value2 = input.get(7);
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
-        child_key,
+        child_key1,
         child_definition,
         child_type,
         key1,
@@ -204,24 +205,57 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
-        child_key,
+        child_key1,
         child_definition,
         child_type,
         key2,
         value2
     ).encode());
 
-    // Kill child
+    // Kill child (different child key)
     let _ = rtm.call("rtm_ext_storage_child_storage_kill_version_1", &(
-        child_key,
+        child_key2,
         child_definition,
         child_type,
     ).encode());
 
-    // Get killed value
+    // Get valid value
     let mut res = rtm
         .call("rtm_ext_storage_child_get", &(
-            child_key,
+            child_key1,
+            child_definition,
+            child_type,
+            key1,
+        ).encode())
+        .decode_option()
+        .unwrap()
+        .decode_val();
+    assert_eq!(res, value1);
+
+    // Get valid value
+    let mut res = rtm
+        .call("rtm_ext_storage_child_get", &(
+            child_key1,
+            child_definition,
+            child_type,
+            key2,
+        ).encode())
+        .decode_option()
+        .unwrap()
+        .decode_val();
+    assert_eq!(res, value2);
+
+    // Kill child
+    let _ = rtm.call("rtm_ext_storage_child_storage_kill_version_1", &(
+        child_key1,
+        child_definition,
+        child_type,
+    ).encode());
+
+    // Get invalid killed value
+    let mut res = rtm
+        .call("rtm_ext_storage_child_get", &(
+            child_key1,
             child_definition,
             child_type,
             key1,
@@ -229,10 +263,10 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
         .decode_option();
     assert!(res.is_none());
 
-    // Get killed value
+    // Get invalid killed value
     let mut res = rtm
         .call("rtm_ext_storage_child_get", &(
-            child_key,
+            child_key1,
             child_definition,
             child_type,
             key2,
@@ -440,6 +474,12 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
     let key2 = input.get(6);
     let value2 = input.get(7);
 
+    // Keep track of the ordering of the keys
+    let mut track = vec![];
+    track.push(key1);
+    track.push(key2);
+    track.sort();
+
     // No next key available
     let res = rtm
         .call("rtm_ext_storage_child_next_key_version_1", &(
@@ -467,7 +507,7 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
         value2
     ).encode());
 
-    // Get valid next key
+    // Try to read next key
     let res = rtm
         .call("rtm_ext_storage_child_next_key_version_1", &(
             child_key1,
@@ -475,23 +515,27 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
             child_type,
             key1
         ).encode())
-        .decode_option()
-        .unwrap()
-        .decode_val();
-    assert_eq!(res, key2);
+        .decode_option();
+    if key1 == track[0] {
+        assert_eq!(res.unwrap().decode_val(), key2)
+    } else {
+        assert!(res.is_none());
+    }
 
-    // Get valid next key (same key, second try)
+    // Try to read next key
     let res = rtm
         .call("rtm_ext_storage_child_next_key_version_1", &(
             child_key1,
             child_definition,
             child_type,
-            key1
+            key2
         ).encode())
-        .decode_option()
-        .unwrap()
-        .decode_val();
-    assert_eq!(res, key2);
+        .decode_option();
+    if key2 == track[0] {
+        assert_eq!(res.unwrap().decode_val(), key1)
+    } else {
+        assert!(res.is_none());
+    }
 
     // Get invalid next key (different child key)
     let res = rtm
@@ -504,10 +548,10 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
         .decode_option();
     assert!(res.is_none());
 
-    // Get invalid next keyj
+    // Get invalid next key (different child key)
     let res = rtm
         .call("rtm_ext_storage_child_next_key_version_1", &(
-            child_key1,
+            child_key2,
             child_definition,
             child_type,
             key2

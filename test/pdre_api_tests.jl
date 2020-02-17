@@ -16,7 +16,8 @@ using Test
             PdreApiTestData.value,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.value,
+        #PdreApiExpectedResults.value,
+        false,
         true # strip newline
     )
 
@@ -29,7 +30,8 @@ using Test
             PdreApiTestData.key_value_1,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value,
+        #PdreApiExpectedResults.child_child_def_type_key_value,
+        false,
         true # strip newline
     )
 
@@ -41,7 +43,8 @@ using Test
             PdreApiTestData.prefix_key_value_key_value,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value,
+        #PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value,
+        false,
         true # strip newline
     )
 
@@ -54,7 +57,8 @@ using Test
             PdreApiTestData.key_value_2,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
         true # strip newline
     )
 
