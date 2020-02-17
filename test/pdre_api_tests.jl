@@ -109,5 +109,40 @@ using Test
         true # strip newline
     )
 
+    run_dataset(
+        PdreApiTestFunctions.seed,
+        [
+            PdreApiTestData.seed_1,
+        ],
+        PdreApiTestBinaries.cli_testers,
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
+        true # strip newline
+    )
+
+    run_dataset(
+        PdreApiTestFunctions.seed_seed,
+        [
+            PdreApiTestData.seed_1,
+            PdreApiTestData.seed_2
+        ],
+        PdreApiTestBinaries.cli_testers,
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
+        true # strip newline
+    )
+
+    run_dataset(
+        PdreApiTestFunctions.seed_msg,
+        [
+            PdreApiTestData.seed_1,
+            PdreApiTestData.value
+        ],
+        PdreApiTestBinaries.cli_testers,
+        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
+        true # strip newline
+    )
+
     cd(root_dir)
 end
