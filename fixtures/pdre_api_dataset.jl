@@ -61,6 +61,23 @@ module PdreApiTestFunctions
 		"ext_storage_root_version_1",
 		"ext_storage_next_key_version_1"
 	]
+
+	const seed = [
+		"ext_crypto_ed25519_generate_version_1",
+		"ext_crypto_sr25519_generate_version_1"
+	]
+
+	const seed_seed = [
+		"ext_crypto_ed25519_public_keys_version_1",
+		"ext_crypto_sr25519_public_keys_version_1"
+	]
+
+	const seed_msg = [
+		"ext_crypto_ed25519_sign_version_1",
+		"ext_crypto_ed25519_verify_version_1",
+		"ext_crypto_sr25519_sign_version_1",
+		"ext_crypto_sr25519_verify_version_1"
+	]
 end
 
 # Module which contains the names of the LEGACY functions that need to be tested.
