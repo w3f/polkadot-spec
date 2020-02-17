@@ -34,7 +34,7 @@ function run_dataset(func_list, data_list, cli_list, result_list)
 
     counter = 1
     for func in func_list
-        for data in data_list
+        for data in merge_params(data_list)
             input = ""
 
             if data == ""
@@ -89,14 +89,15 @@ end
     cd(root_dir)
 
     # ## Test crypto hashing and key functions
-    #=
     run_dataset(
         PdreApiTestFunctions.value,
         PdreApiTestData.value,
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.value
+        #PdreApiExpectedResults.value
+        false
     )
 
+    #=
     # ##
     run_dataset(
         PdreApiTestFunctions.child_child_def_type_key_value,
@@ -111,7 +112,6 @@ end
         PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value
     )
-    =#
 
     run_dataset(
         PdreApiTestFunctions.child_child_def_type_key_value_key_value,
@@ -119,6 +119,7 @@ end
         PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_def_type_key_value_key_value
     )
+    =#
 
     cd(root_dir)
 end
