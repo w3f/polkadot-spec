@@ -32,6 +32,7 @@ function run_dataset(func_list, data_list, cli_list, result_list)
     func_arg = "--function"
     input_arg = "--input"
 
+
     counter = 1
     for func in func_list
         for data in merge_params(data_list)
@@ -91,10 +92,11 @@ end
     # ## Test crypto hashing and key functions
     run_dataset(
         PdreApiTestFunctions.value,
-        PdreApiTestData.value,
+        [
+            PdreApiTestData.value,
+        ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.value
-        false
+        PdreApiExpectedResults.value
     )
 
     # ##
@@ -106,8 +108,7 @@ end
             PdreApiTestData.key_value_1,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value
-        false
+        PdreApiExpectedResults.child_child_def_type_key_value
     )
 
     run_dataset(
@@ -118,8 +119,7 @@ end
             PdreApiTestData.prefix_key_value_key_value,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value
-        false
+        PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value
     )
 
     run_dataset(
@@ -131,8 +131,7 @@ end
             PdreApiTestData.key_value_2,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value
-        false
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value
     )
 
     cd(root_dir)
