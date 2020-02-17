@@ -54,13 +54,27 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
         .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
         .decode_val();
 
-    // Verify the return value includes the initial value (in regard to the offset)
-    assert!(res.starts_with(&value[offset as usize ..]));
-    // Verify the remaining values are all zeros
-    assert_eq!(
-        &res[value.len()..],
-        vec![0u8; buffer_size as usize-value.len()].as_slice()
-    );
+    let offset = offset as usize;
+    let buffer_size = buffer_size as usize;
+
+    if offset < value.len() {
+        // Make sure `to_compare` does not exceed the length of the actual value
+        let mut to_compare = vec![];
+        if offset + buffer_size > value.len() {
+            to_compare = value[(offset)..value.len()].to_vec();
+        } else {
+            to_compare = value[(offset)..(offset + buffer_size)].to_vec();
+        }
+
+        // If the buffer is bigger than `to_compare`, fill the rest with zeroes
+        while to_compare.len() < buffer_size as usize {
+            to_compare.push(0);
+        }
+
+        assert_eq!(res, to_compare);
+    } else {
+        assert_eq!(res, vec![0; buffer_size])
+    }
 
     println!("{}", str(&res));
 }
@@ -193,9 +207,7 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
 
     // Try to read next key
     let res = rtm
-        .call("rtm_ext_storage_child_next_key_version_1", &(
-            key1
-        ).encode())
+        .call("rtm_ext_storage_next_key_version_1", &key1.encode())
         .decode_option();
     if key1 == track[0] {
         assert_eq!(res.unwrap().decode_val(), key2)
@@ -205,9 +217,7 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
 
     // Try to read next key
     let res = rtm
-        .call("rtm_ext_storage_child_next_key_version_1", &(
-            key2
-        ).encode())
+        .call("rtm_ext_storage_next_key_version_1", &key2.encode())
         .decode_option();
     if key2 == track[0] {
         assert_eq!(res.unwrap().decode_val(), key1)
