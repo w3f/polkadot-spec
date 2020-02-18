@@ -76,7 +76,7 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
         assert_eq!(res, vec![0; buffer_size])
     }
 
-    println!("{}", str(&res));
+    println!("{}", str(&res).trim_matches(char::from(0)));
 }
 
 pub fn ext_storage_set_version_1(input: ParsedInput) {
@@ -120,6 +120,7 @@ pub fn ext_storage_exists_version_1(input: ParsedInput) {
         .call("rtm_ext_storage_exists_version_1", &(key).encode())
         .decode_bool();
     assert_eq!(res, true);
+    println!("true");
 }
 
 pub fn ext_storage_clear_prefix_version_1(input: ParsedInput) {
@@ -145,7 +146,6 @@ pub fn ext_storage_clear_prefix_version_1(input: ParsedInput) {
     } else {
         let val = res.unwrap().decode_val();
         assert_eq!(val, value1);
-        println!("{}", str(&val));
     }
 
     // Check second key
@@ -157,7 +157,6 @@ pub fn ext_storage_clear_prefix_version_1(input: ParsedInput) {
     } else {
         let val = res.unwrap().decode_val();
         assert_eq!(val, value2);
-        println!("{}", str(&val));
     }
 }
 

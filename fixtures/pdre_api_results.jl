@@ -79,6 +79,55 @@ module PdreApiExpectedResults
         "17542d4a435eddd7"
     ]
 
+    const key_value = [
+        # test_set_get_storage
+        "Inverse",
+        "Horizontal",
+        "portal",
+        "Monitored",
+        "secondary",
+        "next generation",
+        "Grass-roots",
+        "value-added",
+        "Reactive",
+        "secondary",
+        # test_clear_storage
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        # test_exists_storage
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true",
+        "true"
+    ]
+
+    const key_value_offset_buffer_size = [
+        "ers",
+        "ontal",
+        "",
+        "",
+        "econdary",
+        "eration",
+        "roots",
+        "",
+        "active",
+        "",
+    ]
+
     const child_child_def_type_key_value = [
         # ext_storage_child_get_version_1
         "Inverse",

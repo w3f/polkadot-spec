@@ -71,7 +71,7 @@ function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
                 else
                     output = read(`sh -c $cmd`, String)
                 end
-                println(output)
+                #println(output)
 
                 if result_list != false
                     @test output == result_list[counter]
