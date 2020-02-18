@@ -84,7 +84,7 @@ using Test
             PdreApiTestData.prefix_key_value_key_value
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.prefix_key_value_key_value,
+        false,
         true # strip newline
     )
 

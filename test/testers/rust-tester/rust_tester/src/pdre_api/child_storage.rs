@@ -114,7 +114,7 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
         &res[value.len()..],
         vec![0u8; buffer_size as usize-value.len()].as_slice()
     );
-    println!("{}", str(&res));
+    println!("{}", str(&res).trim_matches(char::from(0)));
 }
 
 // TODO
