@@ -52,6 +52,10 @@ module PdreApiTestFunctions
 		"ext_storage_child_next_key_version_1"
 	]
 
+	const child_def_type_key_value_offset_buffer_size = [
+		"ext_storage_child_read_version_1"
+	]
+
 	const key_value_offset_buffer_size = [
 		"ext_storage_read_version_1"
 	]
