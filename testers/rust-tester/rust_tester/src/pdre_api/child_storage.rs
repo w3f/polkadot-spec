@@ -65,18 +65,19 @@ pub fn ext_storage_child_get_version_1(input: ParsedInput) {
 pub fn ext_storage_child_read_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
-    let child_key = input.get(0);
-    let child_definition = input.get(1);
-    let child_type = input.get_u32(2);
-    let key = input.get(3);
-    let value = input.get(4);
-    let offset = input.get_u32(5);
-    let buffer_size = input.get_u32(6);
+    let child_key1 = input.get(0);
+    let child_key2 = input.get(1);
+    let child_definition = input.get(2);
+    let child_type = input.get_u32(3);
+    let key = input.get(4);
+    let value = input.get(5);
+    let offset = input.get_u32(6);
+    let buffer_size = input.get_u32(7);
 
     // Get invalid key
     let mut res = rtm
         .call("rtm_ext_storage_child_read", &(
-            child_key,
+            child_key1,
             child_definition,
             child_type,
             key,
@@ -88,17 +89,30 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_child_set", &(
-        child_key,
+        child_key1,
         child_definition,
         child_type,
         key,
         value
     ).encode());
 
+    // Get invalid key (different child storage)
+    let mut res = rtm
+        .call("rtm_ext_storage_child_read", &(
+            child_key2,
+            child_definition,
+            child_type,
+            key,
+            offset,
+            buffer_size
+        ).encode())
+        .decode_val();
+    assert_eq!(res, vec![0u8; buffer_size as usize]);
+
     // Get valid key
     let mut res = rtm
         .call("rtm_ext_storage_child_read", &(
-            child_key,
+            child_key1,
             child_definition,
             child_type,
             key,
@@ -107,13 +121,28 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
         ).encode())
         .decode_val();
 
-    // Verify the return value includes the initial value (in regard to the offset)
-    assert!(res.starts_with(&value[offset as usize ..]));
-    // Verify the remaining values are all zeros
-    assert_eq!(
-        &res[value.len()..],
-        vec![0u8; buffer_size as usize-value.len()].as_slice()
-    );
+    let offset = offset as usize;
+    let buffer_size = buffer_size as usize;
+
+    if offset < value.len() {
+        // Make sure `to_compare` does not exceed the length of the actual value
+        let mut to_compare = vec![];
+        if offset + buffer_size > value.len() {
+            to_compare = value[(offset)..value.len()].to_vec();
+        } else {
+            to_compare = value[(offset)..(offset + buffer_size)].to_vec();
+        }
+
+        // If the buffer is bigger than `to_compare`, fill the rest with zeroes
+        while to_compare.len() < buffer_size as usize {
+            to_compare.push(0);
+        }
+
+        assert_eq!(res, to_compare);
+    } else {
+        assert_eq!(res, vec![0; buffer_size])
+    }
+
     println!("{}", str(&res).trim_matches(char::from(0)));
 }
 

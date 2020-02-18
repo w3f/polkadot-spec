@@ -32,6 +32,20 @@ using Test
     )
 
     run_dataset(
+        PdreApiTestFunctions.child_def_type_key_value_offset_buffer_size,
+        [
+            PdreApiTestData.child_child,
+            PdreApiTestData.child_def_child_type,
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.offset,
+            PdreApiTestData.buffer_size,
+        ],
+        PdreApiTestBinaries.cli_testers,
+        PdreApiExpectedResults.key_value_offset_buffer_size, # result can be reused
+        true # strip newline
+    )
+
+    run_dataset(
         PdreApiTestFunctions.child_child_def_type_prefix_key_value_key_value,
         [
             PdreApiTestData.child_child,
