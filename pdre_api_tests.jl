@@ -9,19 +9,16 @@ using Test
     root_dir = script_dir * "/.."
     cd(root_dir)
 
-    # ## Test crypto hashing and key functions
     run_dataset(
         PdreApiTestFunctions.value,
         [
             PdreApiTestData.value,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.value,
-        false,
+        PdreApiExpectedResults.value,
         true # strip newline
     )
 
-    # ##
     run_dataset(
         PdreApiTestFunctions.child_child_def_type_key_value,
         [
@@ -30,8 +27,7 @@ using Test
             PdreApiTestData.key_value_1,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value,
         true # strip newline
     )
 
@@ -43,8 +39,7 @@ using Test
             PdreApiTestData.prefix_key_value_key_value,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value,
         true # strip newline
     )
 
@@ -57,8 +52,7 @@ using Test
             PdreApiTestData.key_value_2,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
         true # strip newline
     )
 
@@ -68,8 +62,7 @@ using Test
             PdreApiTestData.key_value_1,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
         true # strip newline
     )
 
@@ -81,8 +74,7 @@ using Test
             PdreApiTestData.buffer_size
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
         true # strip newline
     )
 
@@ -92,8 +84,7 @@ using Test
             PdreApiTestData.prefix_key_value_key_value
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
         true # strip newline
     )
 
@@ -104,8 +95,7 @@ using Test
             PdreApiTestData.key_value_2
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
         true # strip newline
     )
 
@@ -115,8 +105,7 @@ using Test
             PdreApiTestData.seed_1,
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
         true # strip newline
     )
 
@@ -127,8 +116,7 @@ using Test
             PdreApiTestData.seed_2
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
         true # strip newline
     )
 
@@ -139,8 +127,7 @@ using Test
             PdreApiTestData.value
         ],
         PdreApiTestBinaries.cli_testers,
-        #PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        false,
+        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
         true # strip newline
     )
 
