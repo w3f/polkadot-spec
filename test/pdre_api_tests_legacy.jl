@@ -9,7 +9,6 @@ using Test
     root_dir = script_dir * "/.."
     cd(root_dir)
 
-    # ## Test crypto hashing and key functions
     run_dataset(
         PdreApiTestFunctionsLegacy.value,
         [
@@ -20,7 +19,6 @@ using Test
         true # strip newline
     )
 
-    # ## Test crypto key functions
     run_dataset(
         PdreApiTestFunctionsLegacy.value_no_output,
         [
@@ -31,7 +29,6 @@ using Test
         false # strip newline
     )
 
-    # ## Test key/value storage functions
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value,
         [
@@ -42,7 +39,6 @@ using Test
         true # strip newline
     )
 
-    # ## Test key/value storage functions with offsets
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value_offset,
         [
@@ -54,7 +50,6 @@ using Test
         true # strip newline
     )
 
-    # ## Test multipl key/value storage functions
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value_key_value,
         [
@@ -66,7 +61,6 @@ using Test
         true # strip newline
     )
 
-    # ## Test compare/set storage functions
     run_dataset(
         PdreApiTestFunctionsLegacy.key_key_value,
         [
@@ -78,7 +72,6 @@ using Test
         true # strip newline
     )
 
-    # ## Test storage functions (prefix values)
     run_dataset(
         PdreApiTestFunctionsLegacy.prefix_key_value_key_value,
         [
@@ -89,7 +82,6 @@ using Test
         false # strip newline
     )
 
-    # ## Test storage functions (child storage)
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value,
         [
@@ -101,7 +93,6 @@ using Test
         true # strip newline
     )
 
-    # ## Test child storage function with offsets
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value_key_value,
         [
@@ -114,7 +105,6 @@ using Test
         true # strip newline
     )
 
-    # ## Test storage functions (prefix values on child storage)
     run_dataset(
         PdreApiTestFunctionsLegacy.prefix_child_child_key_value_key_value,
         [
@@ -138,13 +128,6 @@ using Test
         PdreApiExpectedResultsLegacy.child_child_key_value_offset,
         true # strip newline
     )
-
-    # ## Test network functions
-    for func in PdreApiTestFunctionsLegacy.fn_network
-        for cli in PdreApiTestBinariesLegacy.cli_testers
-            # ...
-        end
-    end
 
     cd(root_dir)
 end
