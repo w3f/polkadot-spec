@@ -9,6 +9,7 @@ using Test
     root_dir = script_dir * "/.."
     cd(root_dir)
 
+    #=
     run_dataset(
         PdreApiTestFunctions.value,
         [
@@ -62,7 +63,7 @@ using Test
             PdreApiTestData.key_value_1,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        PdreApiExpectedResults.key_value,
         true # strip newline
     )
 
@@ -74,7 +75,7 @@ using Test
             PdreApiTestData.buffer_size
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        PdreApiExpectedResults.key_value_offset_buffer_size,
         true # strip newline
     )
 
@@ -84,7 +85,7 @@ using Test
             PdreApiTestData.prefix_key_value_key_value
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        PdreApiExpectedResults.prefix_key_value_key_value,
         true # strip newline
     )
 
@@ -95,7 +96,7 @@ using Test
             PdreApiTestData.key_value_2
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        PdreApiExpectedResults.key_value_key_value,
         true # strip newline
     )
 
@@ -105,7 +106,7 @@ using Test
             PdreApiTestData.seed_1,
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        PdreApiExpectedResults.seed,
         true # strip newline
     )
 
@@ -116,9 +117,10 @@ using Test
             PdreApiTestData.seed_2
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        true # strip newline
+        false,
+        false # strip newline
     )
+    =#
 
     run_dataset(
         PdreApiTestFunctions.seed_msg,
@@ -127,7 +129,7 @@ using Test
             PdreApiTestData.value
         ],
         PdreApiTestBinaries.cli_testers,
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value,
+        false,
         true # strip newline
     )
 

@@ -163,6 +163,46 @@ module PdreApiExpectedResults
         "human-resource",
         "object-oriented"
     ]
+
+    const key_value_key_value = [
+        # ext_storage_root_version_1
+        "88642528f17282b87fabd1f04e75228e2a167b847e6656c9b95beda1ffd24d87",
+        "aba4e533d278005c1814c64ccb1f524d5eb425bdaf74870895ce4d0148ede0e9",
+        "38e58296e627090ba24d4fb4a2aa321550709f9474cda22a86650f5383916101",
+        "2ea5608acee55be4551b39f44e70135289600930bebd7c5e33d2363bf832695b",
+        "ef892cfb7c591bcd1d93ff7d7453e10353d82b30ec71c3f87b73bd8936d419c3",
+        "dfeb34bd1bf7caced1c12bb8c04a9d614982a587db2ad084b30319f82d7b6868",
+        "cc1431d76ada06cc9beb5a41dead5b2ded9035d14a5a69b3e7a00284e52ce5ce",
+        "f5ab2ad6934f2e3b2408aced5bfd774d75f84f3b981b6654298592d12c4775a0",
+        "6693bcbbccc2dccc664ab5b12bdc933d52f0b20f247c64a43c5ef8f6b40f0150",
+        "c8d46590a11e29e65b2ea147421c8aaf49997101469dd78190fcbe59712639c2",
+        # ext_storage_next_key_version_1
+        "static",
+        "function",
+        "budgetary management",
+        "non-volatile",
+        "productivity",
+        "concept",
+        "policy",
+        "contingency",
+        "human-resource",
+        "object-oriented"
+    ]
+
+    const seed = [
+        "f56d9231e7b7badd3f1e10ad15ef8aa08b70839723d0a2d10d7329f0ea2b8c61",
+        "7f5214db0e07c3ae3b1bd378f085d25c7d0a7cd6854e4bc665bab611ba5c5b08",
+        "56e706706405c9cebf2d74c010753f0aff97676f1fdcbc23101ca8e4ad25b3a1",
+        "eda3217896cb4722af98310b02eabb684a8a251a8cad7f8396bb479e21950e30",
+        "c1c4c24c8e04411ff68f08f798856d3af715c9aec68144bd7cb116c422173ed2",
+        "21e90a3abfe02c19e4710b82eeba078f1cb690436e5f209049f913ac1b636b03",
+        "e451f630013e3095f1aa0c5bff87ead0688408ccfb98cee2a901513bec81cc0b",
+        "0abf87c02d7d3fa0a63a2f7ea233a6b04b36385c578e68563873b9e7c1cb8c5a",
+        "54b4d50d1bc01b13eb5a182ad25a1308d916cfe7e3aaf9a56e661a8dd991de00",
+        "f05cf612af77ce5f1e73ee3849b62a3919fd9f971134b2ac988e3d062942912a",
+        "40470edcf9813828d99f97f461e1f1e196151c2cf9f3ed05f7ed4d710aed087d",
+        "84f22cc1152616a2fe2b6b13ce18b183278397ba250f06ecfd293ad650c60e3b"
+    ]
 end
 
 module PdreApiExpectedResultsLegacy
