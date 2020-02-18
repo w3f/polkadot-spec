@@ -517,7 +517,8 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
         ).encode())
         .decode_option();
     if key1 == track[0] {
-        assert_eq!(res.unwrap().decode_val(), key2)
+        assert_eq!(res.unwrap().decode_val(), key2);
+        println!("{}", str(&key2));
     } else {
         assert!(res.is_none());
     }
@@ -532,7 +533,8 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
         ).encode())
         .decode_option();
     if key2 == track[0] {
-        assert_eq!(res.unwrap().decode_val(), key1)
+        assert_eq!(res.unwrap().decode_val(), key1);
+        println!("{}", str(&key1));
     } else {
         assert!(res.is_none());
     }

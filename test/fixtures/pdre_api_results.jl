@@ -129,6 +129,18 @@ module PdreApiExpectedResults
     ]
 
     const child_child_def_type_key_value_key_value = [
+        # ext_storage_child_storage_kill_version_1
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        # ext_storage_child_root_version_1
         "5b8a55ca09050f784e1b4c6fa3ea94115c246e99955c6e43465e43dee8b10caa",
         "afe46e2b2e1c904d5bad87fe690088eb25847c2a294794bf63adcee986e044fb",
         "d081741559b74dc7b3126c3ad7b8f483c8d0849b38e9e1acced3a0015505b426",
@@ -138,7 +150,18 @@ module PdreApiExpectedResults
         "b6ef587db2cc2300a238067f38f766c117ace22902570914e4ee12ff13e3a6d6",
         "eb90aa5e12c915bb15ad1b184577bf838e891394616df88f3c7003bbc053bf67",
         "1a7444af290eada7666d4cd4641fdab7f67b955959fb2716b967d2e112e8a559",
-        "ec723b8c6da62634c1f763e805f55b76836cb2fc1116099e9f667a2d28839f5a"
+        "ec723b8c6da62634c1f763e805f55b76836cb2fc1116099e9f667a2d28839f5a",
+        # ext_storage_child_next_key_version
+        "static",
+        "function",
+        "budgetary management",
+        "non-volatile",
+        "productivity",
+        "concept",
+        "policy",
+        "contingency",
+        "human-resource",
+        "object-oriented"
     ]
 end
 
