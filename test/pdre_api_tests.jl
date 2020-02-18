@@ -9,7 +9,6 @@ using Test
     root_dir = script_dir * "/.."
     cd(root_dir)
 
-    #=
     run_dataset(
         PdreApiTestFunctions.value,
         [
@@ -120,7 +119,6 @@ using Test
         false,
         false # strip newline
     )
-    =#
 
     run_dataset(
         PdreApiTestFunctions.seed_msg,
@@ -130,7 +128,7 @@ using Test
         ],
         PdreApiTestBinaries.cli_testers,
         false,
-        true # strip newline
+        false # strip newline
     )
 
     cd(root_dir)

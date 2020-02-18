@@ -50,7 +50,8 @@ pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
         panic!("Return value does not include pubkey")
     }
 
-    println!("{},{}", hex::encode(res1), hex::encode(res2));
+    println!("1. Public key: {}", hex::encode(res1));
+    println!("2. Public key: {}", hex::encode(res2));
 }
 
 // TODO: Spec that seed is Option<>
@@ -92,12 +93,14 @@ pub fn ext_crypto_ed25519_sign_version_1(input: ParsedInput) {
     let res = rtm
         .call(
             "rtm_ext_crypto_ed25519_sign_version_1",
-            &(DUMMY.0, pubkey, msg).encode(),
+            &(DUMMY.0, &pubkey, msg).encode(),
         )
         .decode_option()
         .unwrap();
 
-    println!("{}", hex::encode(res));
+    println!("Message: {}", str(&msg));
+    println!("Public key: {}", hex::encode(pubkey));
+    println!("Signature: {}", hex::encode(res));
 }
 
 pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
@@ -130,9 +133,16 @@ pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
             &(&sig, &msg, &pubkey).encode(),
         )
         .decode_bool();
-
     assert_eq!(verified, true);
-    println!("true")
+
+    println!("Message: {}", str(&msg));
+    println!("Public key: {}", hex::encode(&pubkey));
+    println!("Signature: {}", hex::encode(&sig));
+    if verified {
+        println!("GOOD SIGNATURE");
+    } else {
+        println!("BAD SIGNATURE");
+    }
 }
 
 pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
@@ -178,7 +188,8 @@ pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
         panic!("Return value does not include pubkey")
     }
 
-    println!("{},{}", hex::encode(res1), hex::encode(res2));
+    println!("1. Public key: {}", hex::encode(res1));
+    println!("2. Public key: {}", hex::encode(res2));
 }
 
 // TODO: Spec that seed is Option<>
@@ -226,12 +237,14 @@ pub fn ext_crypto_sr25519_sign_version_1(input: ParsedInput) {
     let res = rtm
         .call(
             "rtm_ext_crypto_sr25519_sign_version_1",
-            &(DUMMY.0, pubkey, msg).encode(),
+            &(DUMMY.0, &pubkey, msg).encode(),
         )
         .decode_option()
         .unwrap();
 
-    println!("{}", hex::encode(res));
+    println!("Message: {}", str(&msg));
+    println!("Public key: {}", hex::encode(pubkey));
+    println!("Signature: {}", hex::encode(res));
 }
 
 pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
@@ -265,7 +278,15 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
         .decode_bool();
 
     assert_eq!(verified, true);
-    println!("true")
+
+    println!("Message: {}", str(&msg));
+    println!("Public key: {}", hex::encode(&pubkey));
+    println!("Signature: {}", hex::encode(&sig));
+    if verified {
+        println!("GOOD SIGNATURE");
+    } else {
+        println!("BAD SIGNATURE");
+    }
 }
 
 // TODO
