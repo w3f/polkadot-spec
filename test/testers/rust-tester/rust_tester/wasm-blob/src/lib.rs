@@ -59,7 +59,7 @@ impl AsRePtr for Vec<u8> {
 }
 
 wasm_export_functions! {
-    fn rtm_ext_storage_get(
+    fn rtm_ext_storage_get_version_1(
         key_data: Vec<u8>
     ) -> Vec<u8> {
         unsafe {
@@ -69,7 +69,7 @@ wasm_export_functions! {
             from_mem(value)
         }
     }
-    fn rtm_ext_storage_child_get(
+    fn rtm_ext_storage_child_get_version_1(
         child_key: Vec<u8>,
         child_definition: Vec<u8>,
         child_type: u32,
@@ -85,7 +85,7 @@ wasm_export_functions! {
             from_mem(value)
         }
     }
-    fn rtm_ext_storage_read(
+    fn rtm_ext_storage_read_version_1(
         key_data: Vec<u8>,
         offset: u32,
         buffer_size: u32 // not directly required for PDRE API, only used for testing
@@ -100,7 +100,7 @@ wasm_export_functions! {
         }
         buffer.to_vec()
     }
-    fn rtm_ext_storage_child_read(
+    fn rtm_ext_storage_child_read_version_1(
         child_key: Vec<u8>,
         child_definition: Vec<u8>,
         child_type: u32,
@@ -121,7 +121,7 @@ wasm_export_functions! {
         }
         buffer.to_vec()
     }
-    fn rtm_ext_storage_set(
+    fn rtm_ext_storage_set_version_1(
         key_data: Vec<u8>,
         value_data: Vec<u8>
     ) {
@@ -132,7 +132,7 @@ wasm_export_functions! {
             );
         }
     }
-    fn rtm_ext_storage_child_set(
+    fn rtm_ext_storage_child_set_version_1(
         child_key: Vec<u8>,
         child_definition: Vec<u8>,
         child_type: u32,
