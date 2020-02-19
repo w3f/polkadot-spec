@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
 
@@ -2389,12 +2389,14 @@
     be ignored.
 
     <item><strong|Forced Change>: Force an authority set change after a given
-    delay in term of <em|imported> blocks <todo|\Pimported\Q needs to be
-    defined including if only counting the blocks on the \Pbest\Q chain or
-    the tree, if former case then best need to be defined.>. The earliest
-    digest of this type in a single block will be respected. No change should
-    be scheduled if one is already and the delay has not passed completely.
-    If such an inconsitency occures, the scheduled change should be ignored.
+    delay, specified as \Pthe number of <em|non-finalized>, <em|imported>
+    blocks on the longest chain after the current block before the authority
+    set change takes effect\Q. If one or more blocks gets finalized before
+    the change takes effect, the authority set change should be disregarded.
+    The earliest digest of this type in a single block will be respected. No
+    change should be scheduled if one is already and the delay has not passed
+    completely. If such an inconsitency occures, the scheduled change should
+    be ignored.
 
     <item><strong|On Disabled>: The authority set index with given index is
     disabled until the next change.
