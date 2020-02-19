@@ -1,6 +1,6 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
-<style|<tuple|tmbook|std-latex|/home/anon/.TeXmacs/packages/algorithmacs-style.ts|old-dots>>
+<style|<tuple|tmbook|std-latex|old-dots|algorithmacs-style>>
 
 <\body>
   <\hide-preamble>
@@ -911,8 +911,9 @@
     <math|><name|Chain(<math|B>)> path graph which contains both <math|B> and
     <math|B<rprime|'>>.><name|SubChain(<math|B<rprime|'>,B>)> we refer to the
     subgraph of <math|><name|Chain(<math|B>)> path graph which contains both
-    <math|B> and <math|B<rprime|'>>. Accordingly,
-    <glossary-explain|<math|\<bbb-C\><rsub|B<rprime|'>><around*|(|<around*|(|P|)>BT|)>>|is
+    <math|B> and <math|B<rprime|'>> and by
+    <name|\|SubChain(<math|B<rprime|'>,B>)\|> we refer to its length.
+    Accordingly, <glossary-explain|<math|\<bbb-C\><rsub|B<rprime|'>><around*|(|<around*|(|P|)>BT|)>>|is
     the set of all subchains of <math|<around*|(|P|)>BT> rooted at
     <math|B<rprime|'>>.><math|\<bbb-C\><rsub|B<rprime|'>><around*|(|<around*|(|P|)>BT|)>>
     is the set of all subchains of <math|<around*|(|P|)>BT> rooted at
@@ -2006,7 +2007,7 @@
   Polkadot RE implements the following procedure to assure the validity of
   the block:
 
-  <\algorithm|<name|Import-and-Validate-Block(<math|B,Just<around|(|B|)>>)>>
+  <\algorithm|<label|algo-import-and-validate-block><name|Import-and-Validate-Block(<math|B,Just<around|(|B|)>>)>>
     <\algorithmic>
       <\state>
         <name|Set-Storage-State-At(<math|P<around*|(|B|)>>)>
@@ -2362,26 +2363,30 @@
     <\center>
       <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<table|<row|<cell|<strong|Type
       Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Scheduled
-      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|2>|<cell|ForcedChange>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|3>|<cell|On
-      Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|B>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|B>>>>>>>>
+      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|delay>|)>>>>|<row|<cell|2>|<cell|ForcedChange>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|delay>|)>>>>|<row|<cell|3>|<cell|On
+      Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|delay>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|delay>>>>>>>>
         <label|tabl-consensus-messages>The consensus digest item for GRANDPA
         authorities
       </small-table>
     </center>
 
-    Where Auth<math|<rsub|C>> is defined in Definition
-    <reference|defn-authority-list>, <math|N<rsub|B>> is the number of blocks
-    to delay the change. <math|Auth<rsub|ID>> is a 64 bit integer pointing to
-    the authority list of the current block.
-  </definition>
+    Where:
 
-  <\definition>
-    <label|defn-forced-change-delay><name|<strong|Forced Change Delay>>
-    refers to the delay-period after which the forced authority set change
-    goes into effect. It applies to every block <name|<em|B'>> after
-    <name|\|SubChain(B', B)\|> + <verbatim|delay> where <name|<em|B>> is the
-    block that initializes the Forced Change. <name|\|SubChain(B', B)\|> is
-    the head of the subgraph as defined in <reference|defn-chain-subchain>.
+    <\itemize-minus>
+      <item>Auth<math|<rsub|C>> is the authority list defined in Definition
+      <reference|defn-authority-list>.
+
+      <item><math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+      the length of subchain starting at <math|B>, the block containing the
+      consensus message in its header digest and ending in block
+      <math|B<rprime|'>> which based on the message type is either finalized
+      or imported and validated by block <math|B<rprime|'>> by the block
+      production consensus engine according to Algorithm
+      <reference|algo-import-and-validate-block>. (see below for details).
+
+      <item><math|Auth<rsub|ID>> is a 64 bit integer pointing to the
+      authority list of the current block.
+    </itemize-minus>
   </definition>
 
   Polkadot RE should inspect the digest header of each block and delegates
@@ -2390,33 +2395,38 @@
 
   <\itemize-minus>
     <item><strong|Scheduled Change>: Schedule an authority set change after
-    the given delay, specified as \Pthe number of blocks to be <em|finalized>
-    after the current block before the authority set change takes effect\Q.
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> is a block <em|finalized> by the finality
+    consensus engine. The earliest digest of this type in a single block will
+    be respected. No change should be scheduled if one is already and the
+    delay has not passed completely. If such an inconsitency occures, the
+    scheduled change should be ignored.
+
+    <item><strong|Forced Change>: Force an authority set change after after
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> is a block imported and validated by the block
+    production conensus engine. If one or more blocks gets finalized before
+    the change takes effect, the authority set change should be disregarded.
     The earliest digest of this type in a single block will be respected. No
     change should be scheduled if one is already and the delay has not passed
     completely. If such an inconsitency occures, the scheduled change should
     be ignored.
 
-    <item><strong|Forced Change>: Force an authority set change after the
-    given <name|Forced Change Delay> as defined in
-    <reference|defn-forced-change-delay>, before the authority set change
-    takes effect. If one or more blocks gets finalized before the change
-    takes effect, the authority set change should be disregarded. The
-    earliest digest of this type in a single block will be respected. No
-    change should be scheduled if one is already and the delay has not passed
-    completely. If such an inconsitency occures, the scheduled change should
-    be ignored.
-
-    <item><strong|On Disabled>: The authority set index with given index is
-    disabled until the next change.
+    <item><strong|On Disabled>: The authority set<todo|isn't this just one
+    voting entity not the whole set> index with given index is disabled until
+    the next change.
 
     <item><strong|Pause>: A signal to pause the current authority set after
-    the given delay. After finalizing the block at delay the authorities
-    should stop voting.
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> is a block <em|finalized> by the finality
+    consensus engine. After finalizing block <math|B<rprime|'>>, the
+    authorities should stop voting.
 
     <item><strong|Resume>: A signal to resume the current authority set after
-    the given delay. After authoring the block at delay the authorities
-    should resume voting.
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> is a block <em|finalized> by the finality
+    consensus engine. After authoring the block <math|B<rprime|'>>, the
+    authorities should resume voting.
   </itemize-minus>
 
   The active GRANDPA authorities can only vote for blocks that occured after
@@ -6340,6 +6350,7 @@
     <associate|algo-epoch-randomness|<tuple|5.4|34>>
     <associate|algo-grandpa-best-candidate|<tuple|5.10|39>>
     <associate|algo-grandpa-round|<tuple|5.9|39>>
+    <associate|algo-import-and-validate-block|<tuple|3.4|?>>
     <associate|algo-maintain-transaction-pool|<tuple|3.3|20>>
     <associate|algo-pk-length|<tuple|2.2|14>>
     <associate|algo-runtime-interaction|<tuple|3.1|17>>
@@ -6561,29 +6572,27 @@
     <associate|chap-state-transit|<tuple|3|17>>
     <associate|defn-account-key|<tuple|A.1|41>>
     <associate|defn-authority-list|<tuple|5.1|29>>
-    <associate|defn-babe-header|<tuple|5.13|33>>
-    <associate|defn-babe-seal|<tuple|5.14|33>>
+    <associate|defn-babe-header|<tuple|5.12|33>>
+    <associate|defn-babe-seal|<tuple|5.13|33>>
     <associate|defn-bit-rep|<tuple|1.6|8>>
     <associate|defn-block-body|<tuple|3.9|23>>
     <associate|defn-block-data|<tuple|D.2|51>>
     <associate|defn-block-header|<tuple|3.6|21>>
     <associate|defn-block-header-hash|<tuple|3.8|22>>
-    <associate|defn-block-signature|<tuple|5.14|33>>
-    <associate|defn-block-time|<tuple|5.11|32>>
+    <associate|defn-block-signature|<tuple|5.13|33>>
+    <associate|defn-block-time|<tuple|5.10|32>>
     <associate|defn-block-tree|<tuple|1.11|9>>
     <associate|defn-chain-subchain|<tuple|1.13|9>>
     <associate|defn-children-bitmap|<tuple|2.10|15>>
     <associate|defn-consensus-message-digest|<tuple|5.2|29>>
     <associate|defn-controller-key|<tuple|A.3|42>>
     <associate|defn-digest|<tuple|3.7|22>>
-    <associate|defn-epoch-slot|<tuple|5.6|31>>
-    <associate|defn-epoch-subchain|<tuple|5.8|31>>
-    <associate|defn-finalized-block|<tuple|5.28|40>>
-    <associate|defn-forced-change|<tuple|<with|mode|<quote|math>|<rigid|->>|?>>
-    <associate|defn-forced-change-delay|<tuple|5.3|30>>
+    <associate|defn-epoch-slot|<tuple|5.5|31>>
+    <associate|defn-epoch-subchain|<tuple|5.7|31>>
+    <associate|defn-finalized-block|<tuple|5.27|40>>
     <associate|defn-genesis-header|<tuple|C.1|47>>
-    <associate|defn-grandpa-completable|<tuple|5.24|38>>
-    <associate|defn-grandpa-justification|<tuple|5.26|38>>
+    <associate|defn-grandpa-completable|<tuple|5.23|38>>
+    <associate|defn-grandpa-justification|<tuple|5.25|38>>
     <associate|defn-hex-encoding|<tuple|B.9|45>>
     <associate|defn-http-return-value|<tuple|E.4|62>>
     <associate|defn-index-function|<tuple|2.7|13>>
@@ -6591,7 +6600,6 @@
     <associate|defn-little-endian|<tuple|1.7|8>>
     <associate|defn-longest-chain|<tuple|1.14|9>>
     <associate|defn-merkle-value|<tuple|2.12|15>>
-    <associate|defn-message-forced-change|<tuple|<with|mode|<quote|math>|<rigid|->>|?>>
     <associate|defn-node-header|<tuple|2.9|13>>
     <associate|defn-node-key|<tuple|2.6|13>>
     <associate|defn-node-subvalue|<tuple|2.11|15>>
@@ -6610,21 +6618,21 @@
     <associate|defn-scale-variable-type|<tuple|B.4|43>>
     <associate|defn-session-key|<tuple|A.4|42>>
     <associate|defn-set-state-at|<tuple|3.10|24>>
-    <associate|defn-slot-offset|<tuple|5.12|32>>
+    <associate|defn-slot-offset|<tuple|5.11|32>>
     <associate|defn-stash-key|<tuple|A.2|41>>
     <associate|defn-state-machine|<tuple|1.1|7>>
     <associate|defn-stored-value|<tuple|2.1|11>>
     <associate|defn-transaction-queue|<tuple|3.4|20>>
     <associate|defn-unix-time|<tuple|1.10|9>>
     <associate|defn-varrying-data-type|<tuple|B.3|43>>
-    <associate|defn-vote|<tuple|5.17|36>>
-    <associate|defn-winning-threshold|<tuple|5.9|31>>
+    <associate|defn-vote|<tuple|5.16|36>>
+    <associate|defn-winning-threshold|<tuple|5.8|31>>
     <associate|key-encode-in-trie|<tuple|2.1|12>>
     <associate|network-protocol|<tuple|4|25>>
     <associate|nota-call-into-runtime|<tuple|3.2|18>>
     <associate|nota-re-api-at-state|<tuple|E.1|53>>
     <associate|nota-runtime-code-at-state|<tuple|3.1|18>>
-    <associate|note-slot|<tuple|5.7|31>>
+    <associate|note-slot|<tuple|5.6|31>>
     <associate|sect-authority-set|<tuple|5.1.1|29>>
     <associate|sect-babe|<tuple|5.2|30>>
     <associate|sect-blake2|<tuple|A.2|41>>
@@ -6662,10 +6670,10 @@
     <associate|sect-msg-consensus|<tuple|D.1.6|52>>
     <associate|sect-msg-status|<tuple|D.1.1|49>>
     <associate|sect-msg-transactions|<tuple|D.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
+    <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|D|49>>
     <associate|sect-randomness|<tuple|A.3|41>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
+    <associate|sect-re-api|<tuple|E|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|F.2.5|73>>
     <associate|sect-rte-grandpa-auth|<tuple|F.2.6|74>>
     <associate|sect-rte-hash-and-length|<tuple|F.2.4|73>>
@@ -6683,7 +6691,7 @@
     <associate|sect-vrf|<tuple|A.4|41>>
     <associate|sect_polkadot_communication_substream|<tuple|4.4.2|27>>
     <associate|sect_transport_protocol|<tuple|4.3|26>>
-    <associate|slot-time-cal-tail|<tuple|5.10|32>>
+    <associate|slot-time-cal-tail|<tuple|5.9|32>>
     <associate|snippet-runtime-enteries|<tuple|F.1|71>>
     <associate|tabl-account-key-schemes|<tuple|A.1|41>>
     <associate|tabl-block-attributes|<tuple|D.3|50>>
