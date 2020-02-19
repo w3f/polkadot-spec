@@ -8432,7 +8432,7 @@
     error type>
   </itemize-dot>
 
-  <subsection|<strong|<strong|<verbatim|BlockBuilder_inherent_extrinsics>>>>
+  <subsection|<verbatim|BlockBuilder_inherent_extrinsics>>
 
   Generate inherent extrinsics. The inherent data will vary from chain to
   chain.
