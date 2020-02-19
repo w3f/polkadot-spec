@@ -44,7 +44,8 @@ function(set_cargo_env)
 endfunction()
 
 function(cargo_build)
-  cmake_parse_arguments(CARGO "" "NAME" "" ${ARGN})
+  set(member MEMBER)
+  cmake_parse_arguments(CARGO "" "NAME" "" "${member}" ${ARGN})
   string(REPLACE "-" "_" LIB_NAME ${CARGO_NAME})
 
   set(CARGO_TARGET_DIR ${CMAKE_CURRENT_BINARY_DIR})
@@ -54,7 +55,11 @@ function(cargo_build)
 	if(IOS)
 		set(CARGO_ARGS "lipo")
 	else()
-    set(CARGO_ARGS "build")
+    if (CARGO_BUILD_MEMBER)
+      set(CARGO_ARGS "build --bin")
+    else
+      set(CARGO_ARGS "build")
+    endif()
 		list(APPEND CARGO_ARGS "--target" ${LIB_TARGET})
 	endif()
 
