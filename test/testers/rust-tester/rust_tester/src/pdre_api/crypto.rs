@@ -1,5 +1,5 @@
 use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime};
-use parity_scale_codec::{Encode, Decode};
+use parity_scale_codec::Encode;
 // TODO: Spec key types
 use sp_core::crypto::key_types::DUMMY;
 
@@ -290,12 +290,14 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
 }
 
 // TODO
-pub fn ext_crypto_secp256k1_ecdsa_recover_version_1(input: ParsedInput) {
+#[allow(dead_code)]
+pub fn ext_crypto_secp256k1_ecdsa_recover_version_1(_input: ParsedInput) {
 
 }
 
 // TODO
-pub fn ext_crypto_secp256k1_ecdsa_recover_compressed_version_1(input: ParsedInput) {
+#[allow(dead_code)]
+pub fn ext_crypto_secp256k1_ecdsa_recover_compressed_version_1(_input: ParsedInput) {
 
 }
 

@@ -53,6 +53,7 @@ impl Runtime {
             ext: ext,
         }
     }
+    #[allow(dead_code)]
     pub fn new_offchain() -> Self {
         let mut ext = TestExternalities::default();
         let (offchain, _) = TestOffchainExt::new();
