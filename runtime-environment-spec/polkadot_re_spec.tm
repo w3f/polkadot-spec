@@ -381,7 +381,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-126>>
 
-    <with|par-left|1tab|E.1.2.<space|2spc>ext_storage_get
+    <with|par-left|1tab|E.1.2.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_get>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-127>>
 
@@ -389,7 +389,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-128>>
 
-    <with|par-left|1tab|E.1.3.<space|2spc>ext_storage_read
+    <with|par-left|1tab|E.1.3.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_read>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-129>>
 
@@ -397,7 +397,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-130>>
 
-    <with|par-left|1tab|E.1.4.<space|2spc>ext_storage_clear
+    <with|par-left|1tab|E.1.4.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_clear>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-131>>
 
@@ -405,7 +405,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-132>>
 
-    <with|par-left|1tab|E.1.5.<space|2spc>ext_storage_exists
+    <with|par-left|1tab|E.1.5.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_exists>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-133>>
 
@@ -413,7 +413,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-134>>
 
-    <with|par-left|1tab|E.1.6.<space|2spc>ext_storage_clear_prefix
+    <with|par-left|1tab|E.1.6.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_clear_prefix>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-135>>
 
@@ -421,7 +421,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-136>>
 
-    <with|par-left|1tab|E.1.7.<space|2spc>ext_storage_root
+    <with|par-left|1tab|E.1.7.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-137>>
 
@@ -429,7 +429,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-138>>
 
-    <with|par-left|1tab|E.1.8.<space|2spc>ext_storage_changes_root
+    <with|par-left|1tab|E.1.8.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_changes_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-139>>
 
@@ -437,7 +437,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-140>>
 
-    <with|par-left|1tab|E.1.9.<space|2spc>ext_storage_next_key
+    <with|par-left|1tab|E.1.9.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_next_key>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-141>>
 
@@ -448,7 +448,7 @@
     E.2.<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-143>
 
-    <with|par-left|1tab|E.2.1.<space|2spc>ext_storage_child_set
+    <with|par-left|1tab|E.2.1.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-144>>
 
@@ -456,7 +456,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-145>>
 
-    <with|par-left|1tab|E.2.2.<space|2spc>ext_storage_child_get
+    <with|par-left|1tab|E.2.2.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_get>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-146>>
 
@@ -464,7 +464,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-147>>
 
-    <with|par-left|1tab|E.2.3.<space|2spc>ext_storage_child_read
+    <with|par-left|1tab|E.2.3.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_read>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-148>>
 
@@ -472,7 +472,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-149>>
 
-    <with|par-left|1tab|E.2.4.<space|2spc>ext_storage_child_clear
+    <with|par-left|1tab|E.2.4.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_clear>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-150>>
 
@@ -480,7 +480,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-151>>
 
-    <with|par-left|1tab|E.2.5.<space|2spc>ext_storage_child_storage_kill
+    <with|par-left|1tab|E.2.5.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_storage_kill>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-152>>
 
@@ -488,7 +488,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-153>>
 
-    <with|par-left|1tab|E.2.6.<space|2spc>ext_storage_child_exists
+    <with|par-left|1tab|E.2.6.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_exists>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-154>>
 
@@ -496,7 +496,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-155>>
 
-    <with|par-left|1tab|E.2.7.<space|2spc>ext_storage_child_clear_prefix
+    <with|par-left|1tab|E.2.7.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_clear_prefix>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-156>>
 
@@ -504,7 +504,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-157>>
 
-    <with|par-left|1tab|E.2.8.<space|2spc>ext_storage_child_root
+    <with|par-left|1tab|E.2.8.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-158>>
 
@@ -512,7 +512,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-159>>
 
-    <with|par-left|1tab|E.2.9.<space|2spc>ext_storage_child_next_key
+    <with|par-left|1tab|E.2.9.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_next_key>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-160>>
 
@@ -523,7 +523,7 @@
     E.3.<space|2spc>Crypto <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-162>
 
-    <with|par-left|1tab|E.3.1.<space|2spc>ext_crypto_ed25519_public_keys
+    <with|par-left|1tab|E.3.1.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ed25519_public_keys>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-164>>
 
@@ -531,7 +531,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-165>>
 
-    <with|par-left|1tab|E.3.2.<space|2spc>ext_crypto_ed25519_generate
+    <with|par-left|1tab|E.3.2.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ed25519_generate>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-166>>
 
@@ -539,7 +539,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-167>>
 
-    <with|par-left|1tab|E.3.3.<space|2spc>ext_crypto_ed25519_sign
+    <with|par-left|1tab|E.3.3.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ed25519_sign>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-168>>
 
@@ -547,7 +547,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-169>>
 
-    <with|par-left|1tab|E.3.4.<space|2spc>ext_crypto_ed25519_verify
+    <with|par-left|1tab|E.3.4.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ed25519_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-170>>
 
@@ -555,7 +555,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-171>>
 
-    <with|par-left|1tab|E.3.5.<space|2spc>ext_crypto_sr25519_public_keys
+    <with|par-left|1tab|E.3.5.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_sr25519_public_keys>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-172>>
 
@@ -563,7 +563,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-173>>
 
-    <with|par-left|1tab|E.3.6.<space|2spc>ext_crypto_sr25519_generate
+    <with|par-left|1tab|E.3.6.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_sr25519_generate>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-174>>
 
@@ -571,7 +571,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-175>>
 
-    <with|par-left|1tab|E.3.7.<space|2spc>ext_crypto_sr25519_sign
+    <with|par-left|1tab|E.3.7.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_sr25519_sign>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-176>>
 
@@ -579,7 +579,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-177>>
 
-    <with|par-left|1tab|E.3.8.<space|2spc>ext_crypto_sr25519_verify
+    <with|par-left|1tab|E.3.8.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_sr25519_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-178>>
 
@@ -590,7 +590,7 @@
     E.4.<space|2spc>Hashing <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-180>
 
-    <with|par-left|1tab|E.4.1.<space|2spc>ext_hashing_keccak_256
+    <with|par-left|1tab|E.4.1.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_keccak_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-181>>
 
@@ -598,7 +598,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-182>>
 
-    <with|par-left|1tab|E.4.2.<space|2spc>ext_hashing_sha2_256
+    <with|par-left|1tab|E.4.2.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_sha2_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-183>>
 
@@ -606,7 +606,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-184>>
 
-    <with|par-left|1tab|E.4.3.<space|2spc>ext_hashing_blake2_128
+    <with|par-left|1tab|E.4.3.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_blake2_128>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-185>>
 
@@ -614,7 +614,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-186>>
 
-    <with|par-left|1tab|E.4.4.<space|2spc>ext_hashing_blake2_256
+    <with|par-left|1tab|E.4.4.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_blake2_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-187>>
 
@@ -622,7 +622,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-188>>
 
-    <with|par-left|1tab|E.4.5.<space|2spc>ext_hashing_twox_64
+    <with|par-left|1tab|E.4.5.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_64>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-189>>
 
@@ -630,7 +630,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-190>>
 
-    <with|par-left|1tab|E.4.6.<space|2spc>ext_hashing_twox_128
+    <with|par-left|1tab|E.4.6.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_128>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-191>>
 
@@ -638,7 +638,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-192>>
 
-    <with|par-left|1tab|E.4.7.<space|2spc>ext_hashing_twox_256
+    <with|par-left|1tab|E.4.7.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-193>>
 
@@ -649,7 +649,7 @@
     E.5.<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-195>
 
-    <with|par-left|1tab|E.5.1.<space|2spc>ext_offchain_is_validator
+    <with|par-left|1tab|E.5.1.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_is_validator>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-196>>
 
@@ -657,7 +657,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-197>>
 
-    <with|par-left|1tab|E.5.2.<space|2spc>ext_offchain_submit_transaction
+    <with|par-left|1tab|E.5.2.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_submit_transaction>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-198>>
 
@@ -665,7 +665,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-199>>
 
-    <with|par-left|1tab|E.5.3.<space|2spc>ext_offchain_network_state
+    <with|par-left|1tab|E.5.3.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_network_state>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-200>>
 
@@ -673,7 +673,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-201>>
 
-    <with|par-left|1tab|E.5.4.<space|2spc>ext_offchain_timestamp
+    <with|par-left|1tab|E.5.4.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_timestamp>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-202>>
 
@@ -681,7 +681,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-203>>
 
-    <with|par-left|1tab|E.5.5.<space|2spc>ext_offchain_sleep_until
+    <with|par-left|1tab|E.5.5.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_sleep_until>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-204>>
 
@@ -689,7 +689,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-205>>
 
-    <with|par-left|1tab|E.5.6.<space|2spc>ext_offchain_random_seed
+    <with|par-left|1tab|E.5.6.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_random_seed>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-206>>
 
@@ -697,7 +697,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-207>>
 
-    <with|par-left|1tab|E.5.7.<space|2spc>ext_offchain_local_storage_set
+    <with|par-left|1tab|E.5.7.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-208>>
 
@@ -705,7 +705,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-209>>
 
-    <with|par-left|1tab|E.5.8.<space|2spc>ext_offchain_local_storage_compare_and_set
+    <with|par-left|1tab|E.5.8.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_compare_and_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-210>>
 
@@ -713,7 +713,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-211>>
 
-    <with|par-left|1tab|E.5.9.<space|2spc>ext_offchain_local_storage_get
+    <with|par-left|1tab|E.5.9.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_get>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-212>>
 
@@ -721,7 +721,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-213>>
 
-    <with|par-left|1tab|E.5.10.<space|2spc>ext_offchain_http_request_start
+    <with|par-left|1tab|E.5.10.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_request_start>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-214>>
 
@@ -729,7 +729,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-215>>
 
-    <with|par-left|1tab|E.5.11.<space|2spc>ext_offchain_http_request_add_header
+    <with|par-left|1tab|E.5.11.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_request_add_header>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-216>>
 
@@ -737,7 +737,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-217>>
 
-    <with|par-left|1tab|E.5.12.<space|2spc>ext_http_request_write_body
+    <with|par-left|1tab|E.5.12.<space|2spc><with|font-family|tt|language|verbatim|ext_http_request_write_body>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-218>>
 
@@ -745,7 +745,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-219>>
 
-    <with|par-left|1tab|E.5.13.<space|2spc>ext_http_response_wait
+    <with|par-left|1tab|E.5.13.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_wait>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-220>>
 
@@ -753,7 +753,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-221>>
 
-    <with|par-left|1tab|E.5.14.<space|2spc>ext_http_response_headers
+    <with|par-left|1tab|E.5.14.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_headers>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-222>>
 
@@ -761,7 +761,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-223>>
 
-    <with|par-left|1tab|E.5.15.<space|2spc>ext_http_response_read_body
+    <with|par-left|1tab|E.5.15.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_read_body>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-224>>
 
@@ -772,7 +772,7 @@
     E.6.<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-226>
 
-    <with|par-left|1tab|E.6.1.<space|2spc>blake2_256_root
+    <with|par-left|1tab|E.6.1.<space|2spc><with|font-family|tt|language|verbatim|blake2_256_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-227>>
 
@@ -780,7 +780,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-228>>
 
-    <with|par-left|1tab|E.6.2.<space|2spc>blake2_256_ordered_root
+    <with|par-left|1tab|E.6.2.<space|2spc><with|font-family|tt|language|verbatim|blake2_256_ordered_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-229>>
 
@@ -791,7 +791,7 @@
     E.7.<space|2spc>miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-231>
 
-    <with|par-left|1tab|E.7.1.<space|2spc>chain_id
+    <with|par-left|1tab|E.7.1.<space|2spc><with|font-family|tt|language|verbatim|chain_id>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-232>>
 
@@ -799,7 +799,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-233>>
 
-    <with|par-left|1tab|E.7.2.<space|2spc>print_num
+    <with|par-left|1tab|E.7.2.<space|2spc><with|font-family|tt|language|verbatim|print_num>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-234>>
 
@@ -807,7 +807,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-235>>
 
-    <with|par-left|1tab|E.7.3.<space|2spc>print_utf8
+    <with|par-left|1tab|E.7.3.<space|2spc><with|font-family|tt|language|verbatim|print_utf8>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-236>>
 
@@ -815,7 +815,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-237>>
 
-    <with|par-left|1tab|E.7.4.<space|2spc>print_hex
+    <with|par-left|1tab|E.7.4.<space|2spc><with|font-family|tt|language|verbatim|print_hex>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-238>>
 
@@ -823,7 +823,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-239>>
 
-    <with|par-left|1tab|E.7.5.<space|2spc>runtime_version
+    <with|par-left|1tab|E.7.5.<space|2spc><with|font-family|tt|language|verbatim|runtime_version>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-240>>
 
@@ -834,7 +834,7 @@
     E.8.<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-242>
 
-    <with|par-left|1tab|E.8.1.<space|2spc>malloc
+    <with|par-left|1tab|E.8.1.<space|2spc><with|font-family|tt|language|verbatim|malloc>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-243>>
 
@@ -842,7 +842,7 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-244>>
 
-    <with|par-left|1tab|E.8.2.<space|2spc>free
+    <with|par-left|1tab|E.8.2.<space|2spc><with|font-family|tt|language|verbatim|free>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-245>>
 
@@ -853,7 +853,7 @@
     E.9.<space|2spc>Logging <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-247>
 
-    <with|par-left|1tab|E.9.1.<space|2spc>log
+    <with|par-left|1tab|E.9.1.<space|2spc><with|font-family|tt|language|verbatim|log>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-249>>
 
@@ -4780,7 +4780,7 @@
     <reference|defn-runtime-pointer> containing the value.
   </itemize>
 
-  <subsection|ext_storage_get>
+  <subsection|<verbatim|ext_storage_get>>
 
   Retrieves the value associated with the given key from storage.
 
@@ -4804,7 +4804,7 @@
     <reference|defn-varrying-data-type> containing the value.
   </itemize>
 
-  <subsection|ext_storage_read>
+  <subsection|<verbatim|ext_storage_read>>
 
   Gets the given key from storage, placing the value into a buffer and
   returning the number of bytes that the entry in storage has beyond the
@@ -4843,7 +4843,7 @@
     the entry does not exists.
   </itemize>
 
-  <subsection|ext_storage_clear>
+  <subsection|<verbatim|ext_storage_clear>>
 
   Clears the storage of the given key and its value.
 
@@ -4862,7 +4862,7 @@
     <reference|defn-runtime-pointer> containing the key.
   </itemize>
 
-  <subsection|ext_storage_exists>
+  <subsection|<verbatim|ext_storage_exists>>
 
   Checks whether the given key exists in storage.
 
@@ -4884,7 +4884,7 @@
     the key exists or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
-  <subsection|ext_storage_clear_prefix>
+  <subsection|<verbatim|ext_storage_clear_prefix>>
 
   Clear the storage of each key/value pair where the key starts with the
   given prefix.
@@ -4904,7 +4904,7 @@
     <reference|defn-runtime-pointer> containing the prefix.
   </itemize>
 
-  <subsection|ext_storage_root>
+  <subsection|<verbatim|ext_storage_root>>
 
   Commits all existing operations and computes the resulting storage root.
 
@@ -4924,7 +4924,7 @@
     root.
   </itemize>
 
-  <subsection|ext_storage_changes_root>
+  <subsection|<verbatim|ext_storage_changes_root>>
 
   Commits all existing operations and gets the resulting change root. The
   parent hash is a SCALE encoded hash.
@@ -4951,7 +4951,7 @@
     <reference|defn-varrying-data-type> containing the change root.
   </itemize>
 
-  <subsection|ext_storage_next_key>
+  <subsection|<verbatim|ext_storage_next_key>>
 
   Gets the next key in storage after the given one in lexicographic order.
 
@@ -5003,7 +5003,7 @@
     allowed value is an i32 integer equal to <strong|1>.
   </definition>
 
-  <subsection|ext_storage_child_set>
+  <subsection|<verbatim|ext_storage_child_set>>
 
   Sets the value under a given key into the child storage.
 
@@ -5042,7 +5042,7 @@
     <reference|defn-runtime-pointer> indicating the value.
   </itemize>
 
-  <subsection|ext_storage_child_get>
+  <subsection|<verbatim|ext_storage_child_get>>
 
   Retrieves the value associated with the given key from the child storage.
 
@@ -5082,7 +5082,7 @@
     <reference|defn-varrying-data-type> containing the value.
   </itemize>
 
-  <subsection|ext_storage_child_read>
+  <subsection|<verbatim|ext_storage_child_read>>
 
   Gets the given key from storage, placing the value into a buffer and
   returning the number of bytes that the entry in storage has beyond the
@@ -5135,7 +5135,7 @@
     the entry does not exists.
   </itemize>
 
-  <subsection|ext_storage_child_clear>
+  <subsection|<verbatim|ext_storage_child_clear>>
 
   Clears the storage of the given key and its value from the child storage.
 
@@ -5171,7 +5171,7 @@
     <reference|defn-runtime-pointer> indicating the key.
   </itemize>
 
-  <subsection|ext_storage_child_storage_kill>
+  <subsection|<verbatim|ext_storage_child_storage_kill>>
 
   Clears an entire child storage.
 
@@ -5202,7 +5202,7 @@
     type as defined in Definition <reference|defn-child-type>.
   </itemize>
 
-  <subsection|ext_storage_child_exists>
+  <subsection|<verbatim|ext_storage_child_exists>>
 
   Checks whether the given key exists in the child storage.
 
@@ -5241,7 +5241,7 @@
     the key exists or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
-  <subsection|ext_storage_child_clear_prefix>
+  <subsection|<verbatim|ext_storage_child_clear_prefix>>
 
   Clears the child storage of each key/value pair where the key starts with
   the given prefix.
@@ -5278,7 +5278,7 @@
     <reference|defn-runtime-pointer> indicating the prefix.
   </itemize>
 
-  <subsection|ext_storage_child_root>
+  <subsection|<verbatim|ext_storage_child_root>>
 
   Commits all existing operations and computes the resulting child storage
   root.
@@ -5316,7 +5316,7 @@
     root.
   </itemize>
 
-  <subsection|ext_storage_child_next_key>
+  <subsection|<verbatim|ext_storage_child_next_key>>
 
   Gets the next key in storage after the given one in lexicographic order.
 
@@ -5379,7 +5379,7 @@
     </big-table>
   </definition>
 
-  <subsection|ext_crypto_ed25519_public_keys>
+  <subsection|<verbatim|ext_crypto_ed25519_public_keys>>
 
   Returns all <verbatim|ed25519> public keys for the given key id from the
   keystore.
@@ -5404,7 +5404,7 @@
     public keys.
   </itemize>
 
-  <subsection|ext_crypto_ed25519_generate>
+  <subsection|<verbatim|ext_crypto_ed25519_generate>>
 
   Generates an <verbatim|ed25519> key for the given key type using an
   optional BIP-39 seed and stores it in the keystore.
@@ -5435,7 +5435,7 @@
     32-byte public key.
   </itemize>
 
-  <subsection|ext_crypto_ed25519_sign>
+  <subsection|<verbatim|ext_crypto_ed25519_sign>>
 
   Signs the given message with the ed25519 key that corresponds to the given
   public key and key type in the keystore.
@@ -5472,7 +5472,7 @@
     key store.
   </itemize>
 
-  <subsection|ext_crypto_ed25519_verify>
+  <subsection|<verbatim|ext_crypto_ed25519_verify>>
 
   Verifies an ed25519 signature.
 
@@ -5503,7 +5503,7 @@
     signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
-  <subsection|ext_crypto_sr25519_public_keys>
+  <subsection|<verbatim|ext_crypto_sr25519_public_keys>>
 
   Returns all <verbatim|sr25519> public keys for the given key id from the
   keystore.
@@ -5528,7 +5528,7 @@
     public keys.
   </itemize>
 
-  <subsection|ext_crypto_sr25519_generate>
+  <subsection|<verbatim|ext_crypto_sr25519_generate>>
 
   Generates an <verbatim|sr25519> key for the given key type using an
   optional BIP-39 seed and stores it in the keystore.
@@ -5559,7 +5559,7 @@
     32-byte public key.
   </itemize>
 
-  <subsection|ext_crypto_sr25519_sign>
+  <subsection|<verbatim|ext_crypto_sr25519_sign>>
 
   Signs the given message with the <verbatim|sr25519> key that corresponds to
   the given public key and key type in the keystore.
@@ -5596,7 +5596,7 @@
     key store.
   </itemize>
 
-  <subsection|ext_crypto_sr25519_verify>
+  <subsection|<verbatim|ext_crypto_sr25519_verify>>
 
   Verifies an <verbatim|sr25519> signature.
 
@@ -5631,7 +5631,7 @@
 
   Interface that provides functions for hashing with different algorithms.
 
-  <subsection|ext_hashing_keccak_256>
+  <subsection|<verbatim|ext_hashing_keccak_256>>
 
   Conducts a 256-bit Keccak hash.
 
@@ -5655,7 +5655,7 @@
     256-bit hash result.
   </itemize>
 
-  <subsection|ext_hashing_sha2_256>
+  <subsection|<verbatim|ext_hashing_sha2_256>>
 
   Conducts a 256-bit Sha2 hash.
 
@@ -5679,7 +5679,7 @@
     256-bit hash result.
   </itemize>
 
-  <subsection|ext_hashing_blake2_128>
+  <subsection|<verbatim|ext_hashing_blake2_128>>
 
   Conducts a 128-bit Blake2 hash.
 
@@ -5703,7 +5703,7 @@
     128-bit hash result.
   </itemize>
 
-  <subsection|ext_hashing_blake2_256>
+  <subsection|<verbatim|ext_hashing_blake2_256>>
 
   Conducts a 256-bit Blake2 hash.
 
@@ -5727,7 +5727,7 @@
     256-bit hash result.
   </itemize>
 
-  <subsection|ext_hashing_twox_64>
+  <subsection|<verbatim|ext_hashing_twox_64>>
 
   Conducts a 64-bit xxHash hash.
 
@@ -5751,7 +5751,7 @@
     64-bit hash result.
   </itemize>
 
-  <subsection|ext_hashing_twox_128>
+  <subsection|<verbatim|ext_hashing_twox_128>>
 
   Conducts a 128-bit xxHash hash.
 
@@ -5775,7 +5775,7 @@
     128-bit hash result.
   </itemize>
 
-  <subsection|ext_hashing_twox_256>
+  <subsection|<verbatim|ext_hashing_twox_256>>
 
   Conducts a 256-bit xxHash hash.
 
@@ -5862,7 +5862,7 @@
     </itemize-dot>
   </definition>
 
-  <subsection|ext_offchain_is_validator>
+  <subsection|<verbatim|ext_offchain_is_validator>>
 
   Verifies if the local node is a potential validator. Even if this function
   returns true, it does not mean that any keys are configured or that the
@@ -5884,7 +5884,7 @@
     <verbatim|0> if it is not.
   </itemize>
 
-  <subsection|ext_offchain_submit_transaction>
+  <subsection|<verbatim|ext_offchain_submit_transaction>>
 
   Given an extrinsic as a SALE encoded byte array, the system decodes the
   byte array and submits the extrinsic in the inherent pool as an extrinsic
@@ -5911,7 +5911,7 @@
     otherwise.
   </itemize>
 
-  <subsection|ext_offchain_network_state>
+  <subsection|<verbatim|ext_offchain_network_state>>
 
   Returns the SCALE encoded, opaque information about the local node's
   network state. This information is fetched by calling into
@@ -5939,7 +5939,7 @@
     network state cannot be fetched.
   </itemize>
 
-  <subsection|ext_offchain_timestamp>
+  <subsection|<verbatim|ext_offchain_timestamp>>
 
   Returns current timestamp.
 
@@ -5958,7 +5958,7 @@
     timestamp as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
-  <subsection|ext_offchain_sleep_until>
+  <subsection|<verbatim|ext_offchain_sleep_until>>
 
   Pause the execution until `<math|>deadline` is reached.
 
@@ -5977,7 +5977,7 @@
     as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
-  <subsection|ext_offchain_random_seed>
+  <subsection|<verbatim|ext_offchain_random_seed>>
 
   Generates a random seed. This is a truly random non deterministic seed
   generated by the host environment.
@@ -5997,7 +5997,7 @@
     seed.
   </itemize>
 
-  <subsection|ext_offchain_local_storage_set>
+  <subsection|<verbatim|ext_offchain_local_storage_set>>
 
   Sets a value in the local storage. This storage is not part of the
   consensus, it's only accessible by the offchain worker tasks running on the
@@ -6029,7 +6029,7 @@
     <reference|defn-runtime-pointer> indicating the value.
   </itemize>
 
-  <subsection|ext_offchain_local_storage_compare_and_set>
+  <subsection|<verbatim|ext_offchain_local_storage_compare_and_set>>
 
   Sets a new value in the local storage if the condition matches the current
   value.
@@ -6071,7 +6071,7 @@
     value has been set or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
-  <subsection|ext_offchain_local_storage_get>
+  <subsection|<verbatim|ext_offchain_local_storage_get>>
 
   Gets a value from the local storage.
 
@@ -6104,7 +6104,7 @@
     corresponding key.
   </itemize>
 
-  <subsection|ext_offchain_http_request_start>
+  <subsection|<verbatim|ext_offchain_http_request_start>>
 
   Initiates a HTTP request given by the HTTP method and the URL. Returns the
   id of a newly started request.
@@ -6137,7 +6137,7 @@
     initiated.
   </itemize>
 
-  <subsection|ext_offchain_http_request_add_header>
+  <subsection|<verbatim|ext_offchain_http_request_add_header>>
 
   Append header to the request. Returns an error if the request identifier is
   invalid, <verbatim|http_response_wait> has already been called on the
@@ -6172,7 +6172,7 @@
     <verbatim|1> if otherwise.
   </itemize>
 
-  <subsection|ext_http_request_write_body>
+  <subsection|<verbatim|ext_http_request_write_body>>
 
   Writes a chunk of the request body. Returns a non-zero value in case the
   deadline is reached or the chunk could not be written.
@@ -6210,7 +6210,7 @@
     otherwise.
   </itemize>
 
-  <subsection|ext_http_response_wait>
+  <subsection|<verbatim|ext_http_response_wait>>
 
   Returns an array of request statuses (the length is the same as IDs). Note
   that if deadline is not provided the method will block indefinitely,
@@ -6245,7 +6245,7 @@
     <reference|defn-http-status-codes>.
   </itemize>
 
-  <subsection|ext_http_response_headers>
+  <subsection|<verbatim|ext_http_response_headers>>
 
   Read all HTTP response headers. Returns an array of key/value pairs.
   Response headers must be read before the response body.
@@ -6271,7 +6271,7 @@
     key/value pairs.
   </itemize>
 
-  <subsection|ext_http_response_read_body>
+  <subsection|<verbatim|ext_http_response_read_body>>
 
   Reads a chunk of body response to the given buffer. Returns the number of
   bytes written or an error in case a deadline is reached or the server
@@ -6279,8 +6279,6 @@
   response has been fully consumed and the <verbatim|request_id> is now
   invalid. This implies that response headers must be read before draining
   the body.
-
-  \;
 
   <subsubsection|Version 1 - Prototype>
 
@@ -6319,7 +6317,7 @@
 
   Interface that provides trie related functionality.
 
-  <subsection|blake2_256_root>
+  <subsection|<verbatim|blake2_256_root>>
 
   Conducts a 256-bit Blake2 trie root formed from the iterated items.
 
@@ -6344,7 +6342,7 @@
     256-bit trie root result.
   </itemize>
 
-  <subsection|blake2_256_ordered_root>
+  <subsection|<verbatim|blake2_256_ordered_root>>
 
   Conducts a 256-bit Blake2 trie root formed from the enumerated items.
 
@@ -6374,7 +6372,7 @@
   Interface that provides miscellaneous functions for communicating between
   the runtime and the node.
 
-  <subsection|chain_id>
+  <subsection|<verbatim|chain_id>>
 
   Returns the current relay chain identifier.
 
@@ -6392,7 +6390,7 @@
     <item><verbatim|result>: the current relay chain identifier.
   </itemize>
 
-  <subsection|print_num>
+  <subsection|<verbatim|print_num>>
 
   Print a number.
 
@@ -6410,7 +6408,7 @@
     <item><verbatim|value>: the number to be printed.
   </itemize>
 
-  <subsection|print_utf8>
+  <subsection|<verbatim|print_utf8>>
 
   Print a valid <verbatim|UTF8> buffer.
 
@@ -6430,7 +6428,7 @@
     buffer to be printed.
   </itemize>
 
-  <subsection|print_hex>
+  <subsection|<verbatim|print_hex>>
 
   Print any buffer in hexadecimal representation.
 
@@ -6449,7 +6447,7 @@
     <reference|defn-runtime-pointer> indicating the buffer to be printed.
   </itemize>
 
-  <subsection|runtime_version>
+  <subsection|<verbatim|runtime_version>>
 
   Extract the Runtime version of the given Wasm blob by calling
   <verbatim|Core_version> as defined in Definition
@@ -6489,7 +6487,7 @@
 
   Provides functionality for calling into the memory allocator.
 
-  <subsection|malloc>
+  <subsection|<verbatim|malloc>>
 
   Allocates the given number of bytes and returns the pointer to that memory
   location.
@@ -6510,7 +6508,7 @@
     <item><verbatim|result>: a regular pointer to the allocated buffer.
   </itemize>
 
-  <subsection|free>
+  <subsection|<verbatim|free>>
 
   Free the given pointer.
 
@@ -6545,7 +6543,7 @@
     </big-table>
   </definition>
 
-  <subsection|log>
+  <subsection|<verbatim|log>>
 
   Request to print a log message on the host. Note that this will be only
   displayed if the host is enabled to display log messages with given level
@@ -9718,7 +9716,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-126>>
 
-      <with|par-left|<quote|1tab>|E.1.2.<space|2spc>ext_storage_get
+      <with|par-left|<quote|1tab>|E.1.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-127>>
 
@@ -9726,7 +9724,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-128>>
 
-      <with|par-left|<quote|1tab>|E.1.3.<space|2spc>ext_storage_read
+      <with|par-left|<quote|1tab>|E.1.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_read>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-129>>
 
@@ -9734,7 +9732,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-130>>
 
-      <with|par-left|<quote|1tab>|E.1.4.<space|2spc>ext_storage_clear
+      <with|par-left|<quote|1tab>|E.1.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_clear>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-131>>
 
@@ -9742,7 +9740,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-132>>
 
-      <with|par-left|<quote|1tab>|E.1.5.<space|2spc>ext_storage_exists
+      <with|par-left|<quote|1tab>|E.1.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_exists>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-133>>
 
@@ -9750,7 +9748,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-134>>
 
-      <with|par-left|<quote|1tab>|E.1.6.<space|2spc>ext_storage_clear_prefix
+      <with|par-left|<quote|1tab>|E.1.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_clear_prefix>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-135>>
 
@@ -9758,7 +9756,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-136>>
 
-      <with|par-left|<quote|1tab>|E.1.7.<space|2spc>ext_storage_root
+      <with|par-left|<quote|1tab>|E.1.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-137>>
 
@@ -9766,7 +9764,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-138>>
 
-      <with|par-left|<quote|1tab>|E.1.8.<space|2spc>ext_storage_changes_root
+      <with|par-left|<quote|1tab>|E.1.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_changes_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-139>>
 
@@ -9774,7 +9772,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-140>>
 
-      <with|par-left|<quote|1tab>|E.1.9.<space|2spc>ext_storage_next_key
+      <with|par-left|<quote|1tab>|E.1.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_next_key>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-141>>
 
@@ -9785,7 +9783,7 @@
       E.2.<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-143>
 
-      <with|par-left|<quote|1tab>|E.2.1.<space|2spc>ext_storage_child_set
+      <with|par-left|<quote|1tab>|E.2.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-144>>
 
@@ -9793,7 +9791,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-145>>
 
-      <with|par-left|<quote|1tab>|E.2.2.<space|2spc>ext_storage_child_get
+      <with|par-left|<quote|1tab>|E.2.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-146>>
 
@@ -9801,7 +9799,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-147>>
 
-      <with|par-left|<quote|1tab>|E.2.3.<space|2spc>ext_storage_child_read
+      <with|par-left|<quote|1tab>|E.2.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_read>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-148>>
 
@@ -9809,7 +9807,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-149>>
 
-      <with|par-left|<quote|1tab>|E.2.4.<space|2spc>ext_storage_child_clear
+      <with|par-left|<quote|1tab>|E.2.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_clear>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-150>>
 
@@ -9817,7 +9815,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-151>>
 
-      <with|par-left|<quote|1tab>|E.2.5.<space|2spc>ext_storage_child_storage_kill
+      <with|par-left|<quote|1tab>|E.2.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_storage_kill>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-152>>
 
@@ -9825,7 +9823,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-153>>
 
-      <with|par-left|<quote|1tab>|E.2.6.<space|2spc>ext_storage_child_exists
+      <with|par-left|<quote|1tab>|E.2.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_exists>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-154>>
 
@@ -9833,7 +9831,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-155>>
 
-      <with|par-left|<quote|1tab>|E.2.7.<space|2spc>ext_storage_child_clear_prefix
+      <with|par-left|<quote|1tab>|E.2.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_clear_prefix>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-156>>
 
@@ -9841,7 +9839,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-157>>
 
-      <with|par-left|<quote|1tab>|E.2.8.<space|2spc>ext_storage_child_root
+      <with|par-left|<quote|1tab>|E.2.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-158>>
 
@@ -9849,7 +9847,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-159>>
 
-      <with|par-left|<quote|1tab>|E.2.9.<space|2spc>ext_storage_child_next_key
+      <with|par-left|<quote|1tab>|E.2.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_next_key>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-160>>
 
@@ -9860,7 +9858,7 @@
       E.3.<space|2spc>Crypto <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-162>
 
-      <with|par-left|<quote|1tab>|E.3.1.<space|2spc>ext_crypto_ed25519_public_keys
+      <with|par-left|<quote|1tab>|E.3.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ed25519_public_keys>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-164>>
 
@@ -9868,7 +9866,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-165>>
 
-      <with|par-left|<quote|1tab>|E.3.2.<space|2spc>ext_crypto_ed25519_generate
+      <with|par-left|<quote|1tab>|E.3.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ed25519_generate>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-166>>
 
@@ -9876,7 +9874,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-167>>
 
-      <with|par-left|<quote|1tab>|E.3.3.<space|2spc>ext_crypto_ed25519_sign
+      <with|par-left|<quote|1tab>|E.3.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ed25519_sign>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-168>>
 
@@ -9884,7 +9882,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-169>>
 
-      <with|par-left|<quote|1tab>|E.3.4.<space|2spc>ext_crypto_ed25519_verify
+      <with|par-left|<quote|1tab>|E.3.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ed25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-170>>
 
@@ -9892,7 +9890,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-171>>
 
-      <with|par-left|<quote|1tab>|E.3.5.<space|2spc>ext_crypto_sr25519_public_keys
+      <with|par-left|<quote|1tab>|E.3.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_sr25519_public_keys>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-172>>
 
@@ -9900,7 +9898,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-173>>
 
-      <with|par-left|<quote|1tab>|E.3.6.<space|2spc>ext_crypto_sr25519_generate
+      <with|par-left|<quote|1tab>|E.3.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_sr25519_generate>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-174>>
 
@@ -9908,7 +9906,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-175>>
 
-      <with|par-left|<quote|1tab>|E.3.7.<space|2spc>ext_crypto_sr25519_sign
+      <with|par-left|<quote|1tab>|E.3.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_sr25519_sign>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-176>>
 
@@ -9916,7 +9914,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-177>>
 
-      <with|par-left|<quote|1tab>|E.3.8.<space|2spc>ext_crypto_sr25519_verify
+      <with|par-left|<quote|1tab>|E.3.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_sr25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-178>>
 
@@ -9927,7 +9925,7 @@
       E.4.<space|2spc>Hashing <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-180>
 
-      <with|par-left|<quote|1tab>|E.4.1.<space|2spc>ext_hashing_keccak_256
+      <with|par-left|<quote|1tab>|E.4.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_keccak_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-181>>
 
@@ -9935,7 +9933,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-182>>
 
-      <with|par-left|<quote|1tab>|E.4.2.<space|2spc>ext_hashing_sha2_256
+      <with|par-left|<quote|1tab>|E.4.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_sha2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-183>>
 
@@ -9943,7 +9941,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-184>>
 
-      <with|par-left|<quote|1tab>|E.4.3.<space|2spc>ext_hashing_blake2_128
+      <with|par-left|<quote|1tab>|E.4.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-185>>
 
@@ -9951,7 +9949,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-186>>
 
-      <with|par-left|<quote|1tab>|E.4.4.<space|2spc>ext_hashing_blake2_256
+      <with|par-left|<quote|1tab>|E.4.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-187>>
 
@@ -9959,7 +9957,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-188>>
 
-      <with|par-left|<quote|1tab>|E.4.5.<space|2spc>ext_hashing_twox_64
+      <with|par-left|<quote|1tab>|E.4.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_64>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-189>>
 
@@ -9967,7 +9965,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-190>>
 
-      <with|par-left|<quote|1tab>|E.4.6.<space|2spc>ext_hashing_twox_128
+      <with|par-left|<quote|1tab>|E.4.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-191>>
 
@@ -9975,7 +9973,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-192>>
 
-      <with|par-left|<quote|1tab>|E.4.7.<space|2spc>ext_hashing_twox_256
+      <with|par-left|<quote|1tab>|E.4.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-193>>
 
@@ -9986,7 +9984,7 @@
       E.5.<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-195>
 
-      <with|par-left|<quote|1tab>|E.5.1.<space|2spc>ext_offchain_is_validator
+      <with|par-left|<quote|1tab>|E.5.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_is_validator>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-196>>
 
@@ -9994,7 +9992,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-197>>
 
-      <with|par-left|<quote|1tab>|E.5.2.<space|2spc>ext_offchain_submit_transaction
+      <with|par-left|<quote|1tab>|E.5.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_submit_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-198>>
 
@@ -10002,7 +10000,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-199>>
 
-      <with|par-left|<quote|1tab>|E.5.3.<space|2spc>ext_offchain_network_state
+      <with|par-left|<quote|1tab>|E.5.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_network_state>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-200>>
 
@@ -10010,7 +10008,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-201>>
 
-      <with|par-left|<quote|1tab>|E.5.4.<space|2spc>ext_offchain_timestamp
+      <with|par-left|<quote|1tab>|E.5.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_timestamp>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-202>>
 
@@ -10018,7 +10016,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-203>>
 
-      <with|par-left|<quote|1tab>|E.5.5.<space|2spc>ext_offchain_sleep_until
+      <with|par-left|<quote|1tab>|E.5.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_sleep_until>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-204>>
 
@@ -10026,7 +10024,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-205>>
 
-      <with|par-left|<quote|1tab>|E.5.6.<space|2spc>ext_offchain_random_seed
+      <with|par-left|<quote|1tab>|E.5.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_random_seed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-206>>
 
@@ -10034,7 +10032,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-207>>
 
-      <with|par-left|<quote|1tab>|E.5.7.<space|2spc>ext_offchain_local_storage_set
+      <with|par-left|<quote|1tab>|E.5.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-208>>
 
@@ -10042,7 +10040,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-209>>
 
-      <with|par-left|<quote|1tab>|E.5.8.<space|2spc>ext_offchain_local_storage_compare_and_set
+      <with|par-left|<quote|1tab>|E.5.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_compare_and_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-210>>
 
@@ -10050,7 +10048,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-211>>
 
-      <with|par-left|<quote|1tab>|E.5.9.<space|2spc>ext_offchain_local_storage_get
+      <with|par-left|<quote|1tab>|E.5.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-212>>
 
@@ -10058,7 +10056,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-213>>
 
-      <with|par-left|<quote|1tab>|E.5.10.<space|2spc>ext_offchain_http_request_start
+      <with|par-left|<quote|1tab>|E.5.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_start>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-214>>
 
@@ -10066,7 +10064,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-215>>
 
-      <with|par-left|<quote|1tab>|E.5.11.<space|2spc>ext_offchain_http_request_add_header
+      <with|par-left|<quote|1tab>|E.5.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_add_header>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-216>>
 
@@ -10074,7 +10072,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-217>>
 
-      <with|par-left|<quote|1tab>|E.5.12.<space|2spc>ext_http_request_write_body
+      <with|par-left|<quote|1tab>|E.5.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_write_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-218>>
 
@@ -10082,7 +10080,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-219>>
 
-      <with|par-left|<quote|1tab>|E.5.13.<space|2spc>ext_http_response_wait
+      <with|par-left|<quote|1tab>|E.5.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_wait>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-220>>
 
@@ -10090,7 +10088,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-221>>
 
-      <with|par-left|<quote|1tab>|E.5.14.<space|2spc>ext_http_response_headers
+      <with|par-left|<quote|1tab>|E.5.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_headers>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-222>>
 
@@ -10098,7 +10096,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-223>>
 
-      <with|par-left|<quote|1tab>|E.5.15.<space|2spc>ext_http_response_read_body
+      <with|par-left|<quote|1tab>|E.5.15.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_read_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-224>>
 
@@ -10109,7 +10107,7 @@
       E.6.<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-226>
 
-      <with|par-left|<quote|1tab>|E.6.1.<space|2spc>blake2_256_root
+      <with|par-left|<quote|1tab>|E.6.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|blake2_256_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-227>>
 
@@ -10117,7 +10115,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-228>>
 
-      <with|par-left|<quote|1tab>|E.6.2.<space|2spc>blake2_256_ordered_root
+      <with|par-left|<quote|1tab>|E.6.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|blake2_256_ordered_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-229>>
 
@@ -10128,7 +10126,7 @@
       E.7.<space|2spc>miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-231>
 
-      <with|par-left|<quote|1tab>|E.7.1.<space|2spc>chain_id
+      <with|par-left|<quote|1tab>|E.7.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|chain_id>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-232>>
 
@@ -10136,7 +10134,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-233>>
 
-      <with|par-left|<quote|1tab>|E.7.2.<space|2spc>print_num
+      <with|par-left|<quote|1tab>|E.7.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|print_num>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-234>>
 
@@ -10144,7 +10142,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-235>>
 
-      <with|par-left|<quote|1tab>|E.7.3.<space|2spc>print_utf8
+      <with|par-left|<quote|1tab>|E.7.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|print_utf8>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-236>>
 
@@ -10152,7 +10150,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-237>>
 
-      <with|par-left|<quote|1tab>|E.7.4.<space|2spc>print_hex
+      <with|par-left|<quote|1tab>|E.7.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|print_hex>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-238>>
 
@@ -10160,7 +10158,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-239>>
 
-      <with|par-left|<quote|1tab>|E.7.5.<space|2spc>runtime_version
+      <with|par-left|<quote|1tab>|E.7.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|runtime_version>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-240>>
 
@@ -10171,7 +10169,7 @@
       E.8.<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-242>
 
-      <with|par-left|<quote|1tab>|E.8.1.<space|2spc>malloc
+      <with|par-left|<quote|1tab>|E.8.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|malloc>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-243>>
 
@@ -10179,7 +10177,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-244>>
 
-      <with|par-left|<quote|1tab>|E.8.2.<space|2spc>free
+      <with|par-left|<quote|1tab>|E.8.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|free>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-245>>
 
@@ -10190,7 +10188,7 @@
       E.9.<space|2spc>Logging <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-247>
 
-      <with|par-left|<quote|1tab>|E.9.1.<space|2spc>log
+      <with|par-left|<quote|1tab>|E.9.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|log>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-249>>
 
