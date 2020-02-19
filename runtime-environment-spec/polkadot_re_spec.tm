@@ -2390,10 +2390,10 @@
 
     <item><strong|Forced Change>: Force an authority set change after a given
     delay, specified as \Pthe number of <em|non-finalized>, <em|imported>
-    blocks on the longest chain after the current block before the authority
-    set change takes effect\Q. If one or more blocks gets finalized before
-    the change takes effect, the authority set change should be disregarded.
-    The earliest digest of this type in a single block will be respected. No
+    blocks on the chain path after the current block before the authority set
+    change takes effect\Q. If one or more blocks gets finalized before the
+    change takes effect, the authority set change should be disregarded. The
+    earliest digest of this type in a single block will be respected. No
     change should be scheduled if one is already and the delay has not passed
     completely. If such an inconsitency occures, the scheduled change should
     be ignored.
