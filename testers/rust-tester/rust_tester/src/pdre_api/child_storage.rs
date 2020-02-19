@@ -36,7 +36,7 @@ pub fn ext_storage_child_get_version_1(input: ParsedInput) {
     ).encode());
 
     // Get invalid key (wrong child key)
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_get", &(
             child_key2,
             child_definition,
@@ -47,7 +47,7 @@ pub fn ext_storage_child_get_version_1(input: ParsedInput) {
     assert!(res.is_none());
 
     // Get valid key
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_get", &(
             child_key1,
             child_definition,
@@ -75,7 +75,7 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
     let buffer_size = input.get_u32(7);
 
     // Get invalid key
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_read", &(
             child_key1,
             child_definition,
@@ -97,7 +97,7 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
     ).encode());
 
     // Get invalid key (different child storage)
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_read", &(
             child_key2,
             child_definition,
@@ -110,7 +110,7 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Get valid key
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_read", &(
             child_key1,
             child_definition,
@@ -126,7 +126,7 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
 
     if offset < value.len() {
         // Make sure `to_compare` does not exceed the length of the actual value
-        let mut to_compare = vec![];
+        let mut to_compare;
         if offset + buffer_size > value.len() {
             to_compare = value[(offset)..value.len()].to_vec();
         } else {
@@ -144,11 +144,6 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
     }
 
     println!("{}", str(&res).trim_matches(char::from(0)));
-}
-
-// TODO
-pub fn ext_storage_set_version_1(input: ParsedInput) {
-    // TODO: Remove this and just keep the "get" test?
 }
 
 pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
@@ -179,7 +174,7 @@ pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
     ).encode());
 
     // Get valid key
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_get", &(
             child_key1,
             child_definition,
@@ -200,7 +195,7 @@ pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
     ).encode());
 
     // Get cleared value
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_get", &(
             child_key1,
             child_definition,
@@ -249,7 +244,7 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
     ).encode());
 
     // Get valid value
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_get", &(
             child_key1,
             child_definition,
@@ -262,7 +257,7 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
     assert_eq!(res, value1);
 
     // Get valid value
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_get", &(
             child_key1,
             child_definition,
@@ -282,7 +277,7 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
     ).encode());
 
     // Get invalid killed value
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_get", &(
             child_key1,
             child_definition,
@@ -293,7 +288,7 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
     assert!(res.is_none());
 
     // Get invalid killed value
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_child_get", &(
             child_key1,
             child_definition,
@@ -445,7 +440,7 @@ pub fn ext_storage_child_root_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key1 = input.get(0);
-    let child_key2 = input.get(1);
+    let _child_key2 = input.get(1);
     let child_definition = input.get(2);
     let child_type = input.get_u32(3);
     let key1 = input.get(4);

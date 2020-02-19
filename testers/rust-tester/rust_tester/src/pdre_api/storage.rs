@@ -21,7 +21,7 @@ pub fn ext_storage_get_version_1(input: ParsedInput) {
     let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
 
     // Get valid key
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_get", &key.encode())
         .decode_option()
         .unwrap()
@@ -41,7 +41,7 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
     let buffer_size = input.get_u32(3);
 
     // Get invalid key
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
         .decode_val();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
@@ -50,7 +50,7 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
     let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
 
     // Get valid key
-    let mut res = rtm
+    let res = rtm
         .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
         .decode_val();
 
@@ -59,7 +59,7 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
 
     if offset < value.len() {
         // Make sure `to_compare` does not exceed the length of the actual value
-        let mut to_compare = vec![];
+        let mut to_compare;
         if offset + buffer_size > value.len() {
             to_compare = value[(offset)..value.len()].to_vec();
         } else {
@@ -77,10 +77,6 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
     }
 
     println!("{}", str(&res).trim_matches(char::from(0)));
-}
-
-pub fn ext_storage_set_version_1(input: ParsedInput) {
-    // TODO: Remove this and just keep the "get" test?
 }
 
 pub fn ext_storage_clear_version_1(input: ParsedInput) {
