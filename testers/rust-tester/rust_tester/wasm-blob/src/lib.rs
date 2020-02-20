@@ -38,6 +38,8 @@ extern "C" {
     fn ext_hashing_twox_256_version_1(data: u64) -> i32;
     fn ext_hashing_twox_128_version_1(data: u64) -> i32;
     fn ext_hashing_twox_64_version_1(data: u64) -> i32;
+    fn ext_allocator_malloc_version_1(size: u32) -> u32;
+    fn ext_allocator_free_version_1(ptr: u32);
 }
 
 fn from_mem(value: u64) -> Vec<u8> {
@@ -398,6 +400,29 @@ wasm_export_functions! {
                 data.as_re_ptr(),
             );
             std::slice::from_raw_parts(value as *mut u8, 8).to_vec()
+        }
+    }
+    fn rtm_ext_allocator_malloc_version_1(value: Vec<u8>) -> Vec<u8> {
+        use std::ptr;
+        let size = value.len();
+
+        unsafe {
+            let ptr = ext_allocator_malloc_version_1(
+                size as u32,
+            ) as *mut u8;
+            assert!(!ptr.is_null());
+
+            // Write `value` to buffer
+            ptr::copy(value.as_ptr(), ptr, size);
+            // Read that value back from buffer
+            let result = std::slice::from_raw_parts(ptr, size).to_vec();
+
+            // Free buffer (panics if pointer is invalid)
+            ext_allocator_free_version_1(
+                ptr as u32
+            );
+
+            result
         }
     }
 }
