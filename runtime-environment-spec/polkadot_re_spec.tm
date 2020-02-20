@@ -2415,21 +2415,21 @@
     occures, the scheduled change should be ignored.
 
     <item><strong|On Disabled>: An index to the individual authority in the
-    current authority list that should be disabled until the next change.
-    When an authority gets disabled, the node should refuse to import any
-    data from that authority.
+    current authority list that should be immediately disabled until the next
+    change. When an authority gets disabled, the node should stop performing
+    any authority functionality from that authority, including authored
+    blocks and casting GRANDPA votes for finalization.
 
     <item><strong|Pause>: A signal to pause the current authority set after
-    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
-    where <math|B<rprime|'>> is a block <em|finalized> by the finality
-    consensus engine. After finalizing block <math|B<rprime|'>>, the
-    authorities should stop voting.
+    the given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is a
+    <em|finalized> block by the finality consensus engine. After finalizing
+    block <math|B<rprime|'>>, the authorities should stop voting.
 
     <item><strong|Resume>: A signal to resume the current authority set after
-    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
-    where <math|B<rprime|'>> is a block <em|finalized> by the finality
-    consensus engine. After authoring the block <math|B<rprime|'>>, the
-    authorities should resume voting.
+    the given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is an
+    <em|imported> block and validated by the block production consensus
+    engine. After authoring the block <math|B<rprime|'>>, the authorities
+    should resume voting.
   </itemize-minus>
 
   The active GRANDPA authorities can only vote for blocks that occured after
