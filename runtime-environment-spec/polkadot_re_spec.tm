@@ -2386,8 +2386,8 @@
       to Algorithm <reference|algo-import-and-validate-block>. (see below for
       details). The lenght of this subgraph is qual to the specified delay.
 
-      <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to
-      the authority list of the current block.
+      <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to an
+      individual authority in the current authority list.
     </itemize-minus>
   </definition>
 
@@ -2414,9 +2414,10 @@
     already and the delay has not passed completely. If such an inconsitency
     occures, the scheduled change should be ignored.
 
-    <item><strong|On Disabled>: The authority set<todo|isn't this just one
-    voting entity not the whole set> index with given index is disabled until
-    the next change.
+    <item><strong|On Disabled>: An index to the individual authority in the
+    current authority list that should be disabled until the next change.
+    When an authority gets disabled, the node should refuse to import any
+    data from that authority.
 
     <item><strong|Pause>: A signal to pause the current authority set after
     the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
