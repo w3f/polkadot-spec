@@ -2416,9 +2416,9 @@
 
     <item><strong|On Disabled>: An index to the individual authority in the
     current authority list that should be immediately disabled until the next
-    change. When an authority gets disabled, the node should stop performing
-    any authority functionality from that authority, including authoring
-    blocks and casting GRANDPA votes for finalization.
+    authority set change. When an authority gets disabled, the node should
+    stop performing any authority functionality from that authority,
+    including authoring blocks and casting GRANDPA votes for finalization.
 
     <item><strong|Pause>: A signal to pause the current authority set after
     the given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is a
