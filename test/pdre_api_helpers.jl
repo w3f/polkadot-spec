@@ -1,7 +1,7 @@
 #=
 # Description
-This function combines the inner arrays of the different test data types,
-iterates over them, and merges the inner arrays of each iteration into a single array.
+Combines the inner arrays of the different test data types, iterates over them,
+and merges those arrays of each iteration into a single, new array.
 This allows to reuse test data for functions of various input types.
 
 # Example:
@@ -35,6 +35,12 @@ function merge_params(params)
     final
 end
 
+#=
+# Description
+Parses the test data and passes it on to the test functions.
+The returned values gets captured, optionally compared to
+the expected results and optionally printed.
+=#
 function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
     # Basic parameters for testing CLIs
     sub_cmd = "pdre-api"
