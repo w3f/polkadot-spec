@@ -14,3 +14,7 @@ pub fn ext_allocator_malloc_version_1(input: ParsedInput) {
 
     println!("{}", str(&res));
 }
+
+pub fn ext_allocator_free_version_1(input: ParsedInput) {
+    ext_allocator_malloc_version_1(input)
+}
