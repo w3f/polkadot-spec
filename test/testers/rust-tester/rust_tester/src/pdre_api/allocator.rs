@@ -1,6 +1,8 @@
 use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime, str};
 use parity_scale_codec::Encode;
 
+/// TODO: Call from Julia
+/// The Wasm function tests both the allocation and freeing of the buffer
 pub fn ext_allocator_malloc_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
@@ -8,7 +10,7 @@ pub fn ext_allocator_malloc_version_1(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_allocator_malloc_version_1", &(value.len() as u32).encode())
+        .call("rtm_ext_allocator_malloc_version_1", &value.encode())
         .decode_val();
     assert_eq!(res, value);
 

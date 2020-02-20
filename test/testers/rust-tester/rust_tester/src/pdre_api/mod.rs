@@ -44,6 +44,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "ext_hashing_twox_256_version_1" => crypto::ext_hashing_twox_256_version_1(input),
             "ext_hashing_twox_128_version_1" => crypto::ext_hashing_twox_128_version_1(input),
             "ext_hashing_twox_64_version_1" => crypto::ext_hashing_twox_64_version_1(input),
+            "ext_allocator_malloc_version_1" => allocator::ext_allocator_malloc_version_1(input),
             _ => panic!("specified function not available"),
         }
     }
