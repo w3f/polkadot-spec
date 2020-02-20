@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|old-dots|algorithmacs-style>>
 
@@ -2377,15 +2377,18 @@
       <reference|defn-authority-list>.
 
       <item><math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
-      the length of subchain starting at <math|B>, the block containing the
-      consensus message in its header digest and ending in block
-      <math|B<rprime|'>> which based on the message type is either finalized
-      or imported and validated by block <math|B<rprime|'>> by the block
-      production consensus engine according to Algorithm
-      <reference|algo-import-and-validate-block>. (see below for details).
+      is an unsigned 32 bit integer indicating the length of the subgraph
+      starting at <math|B>, the block containing the consensus message in its
+      header digest and ending when the subgraph reaches the length defined
+      in the specified integer. The last block in that subgraph,
+      <math|B<rprime|'>>, is depending on the message type either finalized
+      or imported and therefore validated by the block production consensus
+      engine according to Algorithm <reference|algo-import-and-validate-block>.
+      (see below for details). The lenght of this subgraph is qual to the
+      specified delay.
 
-      <item><math|Auth<rsub|ID>> is a 64 bit integer pointing to the
-      authority list of the current block.
+      <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to
+      the authority list of the current block.
     </itemize-minus>
   </definition>
 
@@ -2395,22 +2398,22 @@
 
   <\itemize-minus>
     <item><strong|Scheduled Change>: Schedule an authority set change after
-    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
-    where <math|B<rprime|'>> is a block <em|finalized> by the finality
-    consensus engine. The earliest digest of this type in a single block will
+    the given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is a
+    block <em|finalized> by the finality consensus engine. The earliest
+    digest of this type in a single block will be respected. No change should
+    be scheduled if one is already and the delay has not passed completely.
+    If such an inconsitency occures, the scheduled change should be ignored.
+
+    <item><strong|Forced Change>: Force an authority set change after the
+    given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is an
+    imported block and validated by the block production conensus engine. The
+    authority change set is valid for every subchain which contains <em|B>
+    and where the delay has been exceeded. If one or more blocks gets
+    finalized before the change takes effect, the authority set change should
+    be disregarded. The earliest digest of this type in a single block will
     be respected. No change should be scheduled if one is already and the
     delay has not passed completely. If such an inconsitency occures, the
     scheduled change should be ignored.
-
-    <item><strong|Forced Change>: Force an authority set change after after
-    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
-    where <math|B<rprime|'>> is a block imported and validated by the block
-    production conensus engine. If one or more blocks gets finalized before
-    the change takes effect, the authority set change should be disregarded.
-    The earliest digest of this type in a single block will be respected. No
-    change should be scheduled if one is already and the delay has not passed
-    completely. If such an inconsitency occures, the scheduled change should
-    be ignored.
 
     <item><strong|On Disabled>: The authority set<todo|isn't this just one
     voting entity not the whole set> index with given index is disabled until
