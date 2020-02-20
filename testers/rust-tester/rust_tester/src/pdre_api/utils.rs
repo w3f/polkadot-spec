@@ -7,6 +7,10 @@ use sp_state_machine::TestExternalities as CoreTestExternalities;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 
+pub fn str<'a>(input: &'a [u8]) -> &'a str {
+    std::str::from_utf8(input).unwrap()
+}
+
 pub struct ParsedInput<'a>(Vec<&'a str>);
 
 impl<'a> ParsedInput<'a> {

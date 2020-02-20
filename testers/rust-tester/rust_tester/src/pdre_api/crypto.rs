@@ -1,11 +1,7 @@
-use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime};
+use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime, str};
 use parity_scale_codec::Encode;
 // TODO: Spec key types
 use sp_core::crypto::key_types::DUMMY;
-
-fn str<'a>(input: &'a [u8]) -> &'a str {
-    std::str::from_utf8(input).unwrap()
-}
 
 pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();

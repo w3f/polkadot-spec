@@ -1,11 +1,7 @@
-use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime};
+use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime, str};
 use parity_scale_codec::Encode;
 
-fn str<'a>(input: &'a [u8]) -> &'a str {
-    std::str::from_utf8(input).unwrap()
-}
-
-pub fn ext_storage_child_get_version_1(input: ParsedInput) {
+pub fn ext_storage_child_set_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key1 = input.get(0);
@@ -60,6 +56,10 @@ pub fn ext_storage_child_get_version_1(input: ParsedInput) {
     assert_eq!(res, value);
 
     println!("{}", str(&res));
+}
+
+pub fn ext_storage_child_get_version_1(input: ParsedInput) {
+    ext_storage_child_set_version_1(input)
 }
 
 pub fn ext_storage_child_read_version_1(input: ParsedInput) {
