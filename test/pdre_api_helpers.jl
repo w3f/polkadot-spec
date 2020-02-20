@@ -1,12 +1,21 @@
 #=
+# Description
+This function combines the inner arrays of the different test data types,
+iterates over them, and merges the inner arrays of each iteration into a single array.
+This allows to reuse test data for functions of various input types.
+
+# Example:
 Input = [
-    [[1, 2, 3], [7, 8, 9]],
-    [[4, 5, 6], [10, 11, 12]]
+    # Test data type (each inner array represents different values)
+    [[1, 2, 3], [7, 8, 9], [13, 14, 15]],
+    # Different test data type (each inner array represents different values)
+    [[4, 5, 6], [10, 11, 12], [16, 17, 18]]
 ]
 
 Output = [
     [1, 2, 3, 4, 5, 6],
     [7, 8, 9, 10, 11, 12]
+    [13, 14, 15, 16, 17, 18]
 ]
 =#
 function merge_params(params)
