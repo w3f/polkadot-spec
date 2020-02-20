@@ -2377,15 +2377,14 @@
       <reference|defn-authority-list>.
 
       <item><math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
-      is an unsigned 32 bit integer indicating the length of the subgraph
+      is an unsigned 32 bit integer indicating the length of the subchain
       starting at <math|B>, the block containing the consensus message in its
-      header digest and ending when the subgraph reaches the length defined
-      in the specified integer. The last block in that subgraph,
-      <math|B<rprime|'>>, is depending on the message type either finalized
-      or imported and therefore validated by the block production consensus
-      engine according to Algorithm <reference|algo-import-and-validate-block>.
-      (see below for details). The lenght of this subgraph is qual to the
-      specified delay.
+      header digest and ending when it reaches the length in the specified
+      integer. The last block in that subchain, <math|B<rprime|'>>, is
+      depending on the message type either finalized or imported and
+      therefore validated by the block production consensus engine according
+      to Algorithm <reference|algo-import-and-validate-block>. (see below for
+      details). The lenght of this subgraph is qual to the specified delay.
 
       <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to
       the authority list of the current block.
@@ -2406,14 +2405,14 @@
 
     <item><strong|Forced Change>: Force an authority set change after the
     given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is an
-    imported block and validated by the block production conensus engine. The
-    authority change set is valid for every subchain which contains <em|B>
-    and where the delay has been exceeded. If one or more blocks gets
-    finalized before the change takes effect, the authority set change should
-    be disregarded. The earliest digest of this type in a single block will
-    be respected. No change should be scheduled if one is already and the
-    delay has not passed completely. If such an inconsitency occures, the
-    scheduled change should be ignored.
+    <em|imported> block and validated by the block production conensus
+    engine. The authority change set is valid for every subchain which
+    contains <em|B> and where the delay has been exceeded. If one or more
+    blocks gets finalized before the change takes effect, the authority set
+    change should be disregarded. The earliest digest of this type in a
+    single block will be respected. No change should be scheduled if one is
+    already and the delay has not passed completely. If such an inconsitency
+    occures, the scheduled change should be ignored.
 
     <item><strong|On Disabled>: The authority set<todo|isn't this just one
     voting entity not the whole set> index with given index is disabled until
@@ -6348,12 +6347,12 @@
     <associate|algo-aggregate-key|<tuple|2.1|13>>
     <associate|algo-attempt-to\Ufinalize|<tuple|5.11|40>>
     <associate|algo-block-production|<tuple|5.3|33>>
-    <associate|algo-block-production-lottery|<tuple|5.1|31>>
+    <associate|algo-block-production-lottery|<tuple|5.1|32>>
     <associate|algo-build-block|<tuple|5.7|35>>
     <associate|algo-epoch-randomness|<tuple|5.4|34>>
-    <associate|algo-grandpa-best-candidate|<tuple|5.10|39>>
+    <associate|algo-grandpa-best-candidate|<tuple|5.10|40>>
     <associate|algo-grandpa-round|<tuple|5.9|39>>
-    <associate|algo-import-and-validate-block|<tuple|3.4|?>>
+    <associate|algo-import-and-validate-block|<tuple|3.4|23>>
     <associate|algo-maintain-transaction-pool|<tuple|3.3|20>>
     <associate|algo-pk-length|<tuple|2.2|14>>
     <associate|algo-runtime-interaction|<tuple|3.1|17>>
@@ -6531,19 +6530,19 @@
     <associate|auto-73|<tuple|5.1.1|29>>
     <associate|auto-74|<tuple|5.1.2|29>>
     <associate|auto-75|<tuple|5.1|30>>
-    <associate|auto-76|<tuple|5.2|30>>
+    <associate|auto-76|<tuple|5.2|31>>
     <associate|auto-77|<tuple|5.2.1|31>>
     <associate|auto-78|<tuple|5.2.2|31>>
     <associate|auto-79|<tuple|5.2.3|32>>
     <associate|auto-8|<tuple|1.7|8>>
-    <associate|auto-80|<tuple|5.2.4|32>>
-    <associate|auto-81|<tuple|5.2.5|33>>
+    <associate|auto-80|<tuple|5.2.4|33>>
+    <associate|auto-81|<tuple|5.2.5|34>>
     <associate|auto-82|<tuple|5.2.6|34>>
     <associate|auto-83|<tuple|5.2.7|35>>
     <associate|auto-84|<tuple|5.3|36>>
     <associate|auto-85|<tuple|5.3.1|36>>
     <associate|auto-86|<tuple|5.3.2|38>>
-    <associate|auto-87|<tuple|5.3.3|38>>
+    <associate|auto-87|<tuple|5.3.3|39>>
     <associate|auto-88|<tuple|5.3.4|39>>
     <associate|auto-89|<tuple|5.4|40>>
     <associate|auto-9|<tuple|1.9|9>>
@@ -6628,7 +6627,7 @@
     <associate|defn-transaction-queue|<tuple|3.4|20>>
     <associate|defn-unix-time|<tuple|1.10|9>>
     <associate|defn-varrying-data-type|<tuple|B.3|43>>
-    <associate|defn-vote|<tuple|5.16|36>>
+    <associate|defn-vote|<tuple|5.16|37>>
     <associate|defn-winning-threshold|<tuple|5.8|31>>
     <associate|key-encode-in-trie|<tuple|2.1|12>>
     <associate|network-protocol|<tuple|4|25>>
@@ -6637,13 +6636,13 @@
     <associate|nota-runtime-code-at-state|<tuple|3.1|18>>
     <associate|note-slot|<tuple|5.6|31>>
     <associate|sect-authority-set|<tuple|5.1.1|29>>
-    <associate|sect-babe|<tuple|5.2|30>>
+    <associate|sect-babe|<tuple|5.2|31>>
     <associate|sect-blake2|<tuple|A.2|41>>
     <associate|sect-block-body|<tuple|3.3.1.3|23>>
     <associate|sect-block-building|<tuple|5.2.7|35>>
     <associate|sect-block-finalization|<tuple|5.4|40>>
     <associate|sect-block-format|<tuple|3.3.1|21>>
-    <associate|sect-block-production|<tuple|5.2|30>>
+    <associate|sect-block-production|<tuple|5.2|31>>
     <associate|sect-block-submission|<tuple|3.3.2|23>>
     <associate|sect-block-validation|<tuple|3.3.3|23>>
     <associate|sect-certifying-keys|<tuple|A.5.5|42>>
@@ -6655,7 +6654,7 @@
     <associate|sect-designating-proxy|<tuple|A.5.3|42>>
     <associate|sect-encoding|<tuple|B|43>>
     <associate|sect-entries-into-runtime|<tuple|3.1|17>>
-    <associate|sect-epoch-randomness|<tuple|5.2.5|33>>
+    <associate|sect-epoch-randomness|<tuple|5.2.5|34>>
     <associate|sect-extrinsics|<tuple|3.2|19>>
     <associate|sect-finality|<tuple|5.3|36>>
     <associate|sect-genesis-block|<tuple|C|47>>
@@ -6673,10 +6672,10 @@
     <associate|sect-msg-consensus|<tuple|D.1.6|52>>
     <associate|sect-msg-status|<tuple|D.1.1|49>>
     <associate|sect-msg-transactions|<tuple|D.1.5|51>>
-    <associate|sect-network-interactions|<tuple|4|25>>
+    <associate|sect-network-interactions|<tuple|Tec19|25>>
     <associate|sect-network-messages|<tuple|D|49>>
     <associate|sect-randomness|<tuple|A.3|41>>
-    <associate|sect-re-api|<tuple|E|53>>
+    <associate|sect-re-api|<tuple|Tec19|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|F.2.5|73>>
     <associate|sect-rte-grandpa-auth|<tuple|F.2.6|74>>
     <associate|sect-rte-hash-and-length|<tuple|F.2.4|73>>
