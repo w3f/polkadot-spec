@@ -5936,8 +5936,8 @@
   </definition>
 
   <\definition>
-    <strong|HTTP error> specifies the error types of certain HTTP functions.
-    Following values are possible:
+    <label|defn-http-error><strong|HTTP error> specifies the error types of
+    certain HTTP functions. Following values are possible:
 
     <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>>|<row|<cell|0>|<cell|The
     deadline was reached>>|<row|<cell|1>|<cell|There was an IO error while
@@ -6239,7 +6239,7 @@
     (func $ext_offchain_http_request_add_header_version_1
 
     \ \ (param $request_id i32) (param $name i64) (param $value i64) (result
-    i32))
+    i64))
   </verbatim>
 
   \ 
@@ -6273,7 +6273,7 @@
     (func $ext_offchain_http_request_write_body_version_1
 
     \ \ (param $request_id i32) (param $chunk i64) (param $deadline i64)
-    (result i32))
+    (result i64))
   </verbatim>
 
   \ 
@@ -6295,9 +6295,11 @@
     defined in Definition <reference|defn-unix-time>. Passing <verbatim|None>
     blocks indefinitely.
 
-    <item><verbatim|result>: an i32 integer where the value equal to
-    <verbatim|0> indicates if the header has been set or a non-zero value if
-    otherwise.
+    <item><verbatim|result>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
+    defined Definition <reference|defn-varrying-data-type>. On success, no
+    additional data is provided. On error it contains the HTTP error type as
+    defined in Definition <reference|defn-http-error>.
   </itemize>
 
   <subsection|<verbatim|ext_http_response_wait>>
@@ -9131,6 +9133,7 @@
     <associate|defn-grandpa-completable|<tuple|5.23|41>>
     <associate|defn-grandpa-justification|<tuple|5.25|42>>
     <associate|defn-hex-encoding|<tuple|B.9|49>>
+    <associate|defn-http-error|<tuple|E.11|?>>
     <associate|defn-http-return-value|<tuple|F.3|88>>
     <associate|defn-http-status-codes|<tuple|E.10|69>>
     <associate|defn-index-function|<tuple|2.7|17>>
