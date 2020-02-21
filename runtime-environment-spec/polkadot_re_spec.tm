@@ -6020,10 +6020,11 @@
   <\itemize>
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type> containing the
-    SCALE encoded network state. This includes none or one <verbatim|PeerId>
-    followed by none, one or more IPv4 or IPv6 <verbatim|Multiaddress(-es)>
-    by which the node is publicly known by.
+    defined in Definition <reference|defn-varrying-data-type>. On success it
+    contains the SCALE encoded network state. This includes none or one
+    <verbatim|PeerId> followed by none, one or more IPv4 or IPv6
+    <verbatim|Multiaddress(-es)> by which the node is publicly known by. On
+    failure no additional data is provided.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_timestamp>>
