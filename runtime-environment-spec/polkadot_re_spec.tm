@@ -5636,7 +5636,7 @@
   <\verbatim>
     (func $ext_crypto_secp256k1_ecdsa_recover_version_1
 
-    \ \ (param $sig i32) (param $msg i64) (return i32))
+    \ \ (param $sig i32) (param $msg i32) (return i32))
   </verbatim>
 
   \;
@@ -5647,11 +5647,12 @@
     <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
     the 65-byte signature in RSV format.
 
-    <item><verbatim|msg>: a regular pointer to the buffer containg the
+    <item><verbatim|msg>: a regular pointer to the buffer containing the
     32-byte message.
 
-    <item><verbatim|return>: a byte equal to 0 followed by the 64-byte
-    recovered public key on success or a non-zero value if otherwise.
+    <item><verbatim|return>: a regular pointer to the buffer containing a
+    byte equal to 0 followed by the 64-byte recovered public key on success
+    or a non-zero value if otherwise.
   </itemize>
 
   <subsection|ext_crypto_secp256k1_ecdsa_recover_compressed>
@@ -5663,7 +5664,7 @@
   <\verbatim>
     (func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_1
 
-    \ \ (param $sig i32) (param $msg i64) (return i32))
+    \ \ (param $sig i32) (param $msg i32) (return i32))
   </verbatim>
 
   \;
@@ -5674,11 +5675,12 @@
     <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
     the 65-byte signature in RSV format.
 
-    <item><verbatim|msg>: a regular pointer to the buffer containg the
+    <item><verbatim|msg>: a regular pointer to the buffer containing the
     32-byte message.
 
-    <item><verbatim|return>: a byte equal to 0 followed by the 64-byte
-    recovered public key on success or a non-zero value if otherwise.
+    <item><verbatim|return>: a regular pointer to the buffer containing a
+    byte equal to 0 followed by the 33-byte recovered public key in
+    compressed form on success or a non-zero value if otherwise.
   </itemize>
 
   <section|Hashing>
