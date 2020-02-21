@@ -168,16 +168,6 @@ pub fn test_clear_prefix(input: ParsedInput) {
     }
 }
 
-pub fn test_allocate_storage() {
-    let mut rtm = Runtime::new();
-
-    let address = rtm.call("rtm_ext_malloc", &(44 as u32).encode());
-
-    // TODO...
-
-    let _ = rtm.call("rtm_ext_free", &address.encode());
-}
-
 // Input: key1, value1, key2, value2
 pub fn test_storage_root(input: ParsedInput) {
     let mut rtm = Runtime::new();

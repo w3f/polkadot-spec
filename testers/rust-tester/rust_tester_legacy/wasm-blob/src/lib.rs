@@ -774,7 +774,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn rtm_ext_http_request_start(
         method: Vec<u8>,
         url: Vec<u8>,
@@ -792,7 +791,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn rtm_ext_http_request_add_header(
         request_id: u32,
         name: Vec<u8>,
@@ -811,7 +809,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn rtm_ext_http_request_write_body(
         request_id: u32,
         chunk: Vec<u8>,
@@ -827,7 +824,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn rtm_ext_http_response_wait(
         ids: u32,
         ids_len: u32,
@@ -845,7 +841,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn rtm_ext_http_response_headers(
         request_id: u32,
     ) -> Vec<u8> {
@@ -864,7 +859,6 @@ wasm_export_functions! {
         }
     }
 
-    // TODO: Implement this
     fn rtm_ext_http_response_read_body(
         request_id: u32,
         buffer: Vec<u8>,
@@ -884,7 +878,6 @@ wasm_export_functions! {
     }
 }
 
-// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_instantiate(
     dispatch_thunk_idx: u32,
@@ -906,7 +899,6 @@ pub extern "C" fn rtm_ext_sandbox_instantiate(
     }
 }
 
-// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_instance_teardown(instance_idx: u32) {
     unsafe {
@@ -914,7 +906,6 @@ pub extern "C" fn rtm_ext_sandbox_instance_teardown(instance_idx: u32) {
     }
 }
 
-// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_invoke(
     instance_idx: u32,
@@ -940,13 +931,11 @@ pub extern "C" fn rtm_ext_sandbox_invoke(
     }
 }
 
-// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_memory_new(initial: u32, maximum: u32) -> u32 {
     unsafe { ext_sandbox_memory_new(initial, maximum) }
 }
 
-// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_memory_get(
     memory_idx: u32,
@@ -957,7 +946,6 @@ pub extern "C" fn rtm_ext_sandbox_memory_get(
     unsafe { ext_sandbox_memory_get(memory_idx, offset, buf_ptr, buf_len) }
 }
 
-// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_memory_set(
     memory_idx: u32,
@@ -968,7 +956,6 @@ pub extern "C" fn rtm_ext_sandbox_memory_set(
     unsafe { ext_sandbox_memory_set(memory_idx, offset, val_ptr, val_len) }
 }
 
-// TODO: Implement this
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_memory_teardown(memory_idx: u32) {
     unsafe {
