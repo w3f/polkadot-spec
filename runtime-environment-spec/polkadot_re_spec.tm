@@ -5664,8 +5664,8 @@
 
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type> containing the
-    64-byte recovered public key on success or an error type as defined in
+    defined in Definition <reference|defn-varrying-data-type>. On success it
+    contains the 64-byte recovered public key or an error type as defined in
     Definition <reference|defn-ecdsa-verify-error> on failure.
   </itemize>
 
@@ -5694,10 +5694,10 @@
 
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definiton <reference|defn-varrying-data-type> containing the
-    33-byte recovered public key in compressed form on success or an error
-    type as defined in Definition <reference|defn-ecdsa-verify-error> on
-    failure.
+    defined in Definiton <reference|defn-varrying-data-type>. On success it
+    contains the 33-byte recovered public key in compressed form on success
+    or an error type as defined in Definition
+    <reference|defn-ecdsa-verify-error> on failure.
   </itemize>
 
   <section|Hashing>
