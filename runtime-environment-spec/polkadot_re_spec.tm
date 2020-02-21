@@ -5639,7 +5639,7 @@
     signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
-  <subsection|ext_crypto_secp256k1_ecdsa_recover>
+  <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover>>
 
   Verify and recover a SECP256k1 ECDSA signature.
 
@@ -5669,7 +5669,7 @@
     Definition <reference|defn-ecdsa-verify-error> on failure.
   </itemize>
 
-  <subsection|ext_crypto_secp256k1_ecdsa_recover_compressed>
+  <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover_compressed>>
 
   Verify and recover a SECP256k1 ECDSA signature.
 
