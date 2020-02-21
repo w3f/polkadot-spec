@@ -5998,7 +5998,7 @@
   <strong|<subsubsection|Version 1 - Prototype>>
 
   <\verbatim>
-    (func $ext_offchain_network_state_version_1 (result i32))
+    (func $ext_offchain_network_state_version_1 (result i64))
   </verbatim>
 
   \ 
@@ -6006,11 +6006,12 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: a regular pointer to the buffer containing the
+    <item><verbatim|result>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
     SCALE encoded network state. This includes none or one <verbatim|PeerId>
     followed by none, one or more IPv4 or IPv6 <verbatim|Multiaddress(-es)>
-    by which the node is publicly known by. Returns an empty value if the
-    network state cannot be fetched.
+    by which the node is publicly known by.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_timestamp>>
