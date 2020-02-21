@@ -5981,8 +5981,8 @@
 
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type> which does not
-    contain any additonal data.
+    defined in Definition <reference|defn-varrying-data-type>. Neither on
+    success or failure is there any additional data provided.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_network_state>>
@@ -6189,7 +6189,7 @@
   <\verbatim>
     (func $ext_offchain_http_request_start_version_1
 
-    \ \ (param $method i64) (param $uri i64) (param $meta i64) (result i32))
+    \ \ (param $method i64) (param $uri i64) (param $meta i64) (result i64))
   </verbatim>
 
   \ 
@@ -6207,9 +6207,11 @@
     <item><verbatim|meta>: a future-reserved field containing additional,
     SCALE encoded parameters.
 
-    <item><verbatim|result>: an i32 integer indicating the ID of the newly
-    started request. Returns an empty value if the HTTP request couldn't be
-    initiated.
+    <item><verbatim|result>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    i16 ID of the newly started request. On failure no additionally data is
+    provided.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_http_request_add_header>>
