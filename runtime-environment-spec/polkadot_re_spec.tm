@@ -5967,7 +5967,7 @@
 
   <\verbatim>
     (func $ext_offchain_submit_transaction_version_1 (param $data i64)
-    (return i32))
+    (return i64))
   </verbatim>
 
   \;
@@ -5979,9 +5979,10 @@
     <reference|defn-runtime-pointer> indicating the byte array storing the
     encoded extrinsic.
 
-    <item><verbatim|return>: an integer value equal to 0 indicating that the
-    extrinsic was successfully added to the pool of a nonzero value if
-    otherwise.
+    <item><verbatim|return>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
+    defined in Definition <reference|defn-varrying-data-type> which does not
+    contain any additonal data.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_network_state>>
