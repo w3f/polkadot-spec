@@ -6400,9 +6400,12 @@
     defined in Definition <reference|defn-unix-time>. Passing <verbatim|None>
     will block indefinitely.
 
-    <item><verbatim|result>: an i32 integer where the value equal to
-    <verbatim|0> indicateds a fully consumed response or a non-zero value if
-    otherwise.
+    <item><verbatim|result>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
+    defined in Definition <reference|defn-varrying-data-type>. On success it
+    contains an i32 integer specifying the number of bytes written or a HTTP
+    error type as defined in Definition <reference|defn-http-error> on
+    faiure.
   </itemize>
 
   <section|Trie>
