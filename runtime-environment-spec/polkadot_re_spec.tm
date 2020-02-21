@@ -4258,6 +4258,36 @@
     <math|<around*|(|None,\<phi\>|)>> is the only possible value, when the
     data is of type None and a codec value is one byte of 0 value.
 
+    \;
+
+    <strong|Option> is a type indicating if a certain arbitrary data type is
+    available (\Psome\Q) or not (\Pempty\Q or \Pnull\Q).
+
+    The arbitrary data type can be appended if it's availalbe.
+
+    <\itemize-dot>
+      <item>If the data is available, then this type contains a byte
+      character equal to 1 followed by the encoded value (if any).
+
+      <item>If the data is not available, then this type contains a byte
+      character equal to 0 with no additional value.
+    </itemize-dot>
+
+    \;
+
+    <strong|Result> is a type indicating if a certain operation or function
+    was executed successfully (\Pok\Q) or not (\Perr\Q).
+
+    Both outcomes can have none, the same or varying data types appended.
+
+    <\itemize-dot>
+      <item>On success, this type contains a byte character equal to 0
+      followed by the encoded value (if any).
+
+      <item>On failure, this type contains a byte character equal to 1
+      followed by the encoded value (if any).
+    </itemize-dot>
+
     \ 
   </definition>
 
