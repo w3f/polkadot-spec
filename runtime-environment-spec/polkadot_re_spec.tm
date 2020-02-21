@@ -5657,7 +5657,8 @@
 
   <\itemize>
     <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
-    the 65-byte signature in RSV format.
+    the 65-byte signature in RSV format. V should be either <verbatim|0/1> or
+    <verbatim|27/28>.
 
     <item><verbatim|msg>: a regular pointer to the buffer containing the
     32-byte Blake2 hash of the message.
@@ -5687,7 +5688,8 @@
 
   <\itemize>
     <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
-    the 65-byte signature in RSV format.
+    the 65-byte signature in RSV format. V should be either <verbatim|0/1> or
+    <verbatim|27/28>.
 
     <item><verbatim|msg>: a regular pointer to the buffer containing the
     32-byte Blake2 hash of the message.
