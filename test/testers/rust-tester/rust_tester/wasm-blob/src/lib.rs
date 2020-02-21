@@ -31,6 +31,7 @@ extern "C" {
     fn ext_crypto_sr25519_generate_version_1(id: u32, seed: u64) -> u32;
     fn ext_crypto_sr25519_sign_version_1(id: u32, pubkey: u32, msg: u64) -> u64;
     fn ext_crypto_sr25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32;
+    fn ext_crypto_secp256k1_ecdsa_recover_version_1(sig: u32, msg: u32) -> u64;
     fn ext_hashing_keccak_256_version_1(data: u64) -> i32;
     fn ext_hashing_sha2_256_version_1(data: u64) -> i32;
     fn ext_hashing_blake2_128_version_1(data: u64) -> i32;
@@ -344,6 +345,15 @@ wasm_export_functions! {
                 msg_data.as_re_ptr(),
                 pubkey_data.as_ptr() as u32
             ) as u32
+        }
+    }
+    fn rtm_ext_crypto_secp256k1_ecdsa_recover_version_1(sig_data: Vec<u8>, msg_data: Vec<u8>) -> Vec<u8> {
+        unsafe {
+            let value = ext_crypto_secp256k1_ecdsa_recover_version_1(
+                sig_data.as_ptr() as u32,
+                msg_data.as_ptr() as u32,
+            );
+            from_mem(value)
         }
     }
     fn rtm_ext_hashing_keccak_256_version_1(data: Vec<u8>) -> Vec<u8> {

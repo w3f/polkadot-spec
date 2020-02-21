@@ -285,10 +285,21 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
     }
 }
 
-// TODO
-#[allow(dead_code)]
-pub fn ext_crypto_secp256k1_ecdsa_recover_version_1(_input: ParsedInput) {
+// TODO: Call from Julia
+pub fn ext_crypto_secp256k1_ecdsa_recover_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new_keystore();
 
+    let sig = input.get(0);
+    let msg = input.get(1);
+
+    let _ = rtm
+        .call(
+            "rtm_ext_crypto_secp256k1_ecdsa_recover_version_1",
+            &(&sig, &msg).encode(),
+        )
+        .decode_val();
+
+    // TODO... 
 }
 
 // TODO

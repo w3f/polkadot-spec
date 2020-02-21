@@ -36,6 +36,7 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
             "ext_crypto_sr25519_generate_version_1" => crypto::ext_crypto_sr25519_generate_version_1(input),
             "ext_crypto_sr25519_sign_version_1" => crypto::ext_crypto_sr25519_sign_version_1(input),
             "ext_crypto_sr25519_verify_version_1" => crypto::ext_crypto_sr25519_verify_version_1(input),
+            "ext_crypto_secp256k1_ecdsa_recover_version_1" => crypto::ext_crypto_secp256k1_ecdsa_recover_version_1(input),
             "ext_hashing_keccak_256_version_1" => crypto::ext_hashing_keccak_256_version_1(input),
             "ext_hashing_sha2_256_version_1" => crypto::ext_hashing_sha2_256_version_1(input),
             "ext_hashing_blake2_128_version_1" => crypto::ext_hashing_blake2_128_version_1(input),
