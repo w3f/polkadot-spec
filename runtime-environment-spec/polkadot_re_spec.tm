@@ -6244,9 +6244,10 @@
     <item><verbatim|value>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the HTTP header value.
 
-    <item><verbatim|result>: an i32 integer where the value equal to
-    <verbatim|0> indicates if the header has been set or a value equal to
-    <verbatim|1> if otherwise.
+    <item><verbatim|result>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
+    defined in Definition <reference|defn-varrying-data-type>. Neither on
+    success or failure is there any additional data provided.
   </itemize>
 
   <subsection|<verbatim|ext_http_request_write_body>>
