@@ -10,16 +10,16 @@ pub fn ext_storage_set_version_1(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_storage_get", &key.encode())
+        .call("rtm_ext_storage_get_version_1", &key.encode())
         .decode_option();
     assert!(res.is_none());
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key, value).encode());
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_storage_get", &key.encode())
+        .call("rtm_ext_storage_get_version_1", &key.encode())
         .decode_option()
         .unwrap()
         .decode_val();
@@ -43,16 +43,16 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
+        .call("rtm_ext_storage_read_version_1", &(key, offset, buffer_size).encode())
         .decode_val();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key, value).encode());
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_storage_read", &(key, offset, buffer_size).encode())
+        .call("rtm_ext_storage_read_version_1", &(key, offset, buffer_size).encode())
         .decode_val();
 
     let offset = offset as usize;
@@ -87,12 +87,12 @@ pub fn ext_storage_clear_version_1(input: ParsedInput) {
     let value = input.get(1);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key, value).encode());
     let _ = rtm.call("rtm_ext_storage_clear_version_1", &key.encode());
 
     // Get cleared value
     let res = rtm
-        .call("rtm_ext_storage_get", &key.encode())
+        .call("rtm_ext_storage_get_version_1", &key.encode())
         .decode_option();
     assert!(res.is_none());
 }
@@ -110,7 +110,7 @@ pub fn ext_storage_exists_version_1(input: ParsedInput) {
     assert_eq!(res, false);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key, value).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key, value).encode());
 
     // Check if key exists
     let res = rtm
@@ -130,13 +130,13 @@ pub fn ext_storage_clear_prefix_version_1(input: ParsedInput) {
     let value2 = input.get(4);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
-    let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key1, value1).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key2, value2).encode());
     let _ = rtm.call("rtm_ext_storage_clear_prefix_version_1", &prefix.encode());
 
     // Check first key
     let res = rtm
-        .call("rtm_ext_storage_get", &key1.encode())
+        .call("rtm_ext_storage_get_version_1", &key1.encode())
         .decode_option();
     if key1.starts_with(prefix) {
         assert!(res.is_none());
@@ -147,7 +147,7 @@ pub fn ext_storage_clear_prefix_version_1(input: ParsedInput) {
 
     // Check second key
     let res = rtm
-        .call("rtm_ext_storage_get", &key2.encode())
+        .call("rtm_ext_storage_get_version_1", &key2.encode())
         .decode_option();
     if key2.starts_with(prefix) {
         assert!(res.is_none());
@@ -166,8 +166,8 @@ pub fn ext_storage_root_version_1(input: ParsedInput) {
     let value2 = input.get(3);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
-    let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key1, value1).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key2, value2).encode());
 
     // Get root
     let res = rtm
@@ -198,8 +198,8 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
     assert!(res.is_none());
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_set", &(key1, value1).encode());
-    let _ = rtm.call("rtm_ext_storage_set", &(key2, value2).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key1, value1).encode());
+    let _ = rtm.call("rtm_ext_storage_set_version_1", &(key2, value2).encode());
 
     // Try to read next key
     let res = rtm
