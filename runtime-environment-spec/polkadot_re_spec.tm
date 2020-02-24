@@ -6359,6 +6359,7 @@
     <associate|algo-epoch-randomness|<tuple|5.4|35>>
     <associate|algo-grandpa-best-candidate|<tuple|5.10|41>>
     <associate|algo-grandpa-round|<tuple|5.9|41>>
+    <associate|algo-import-and-validate-block|<tuple|3.4|?>>
     <associate|algo-maintain-transaction-pool|<tuple|3.3|22>>
     <associate|algo-pk-length|<tuple|2.2|16>>
     <associate|algo-runtime-interaction|<tuple|3.1|19>>
@@ -6678,10 +6679,10 @@
     <associate|sect-msg-consensus|<tuple|D.1.6|54>>
     <associate|sect-msg-status|<tuple|D.1.1|51>>
     <associate|sect-msg-transactions|<tuple|D.1.5|53>>
-    <associate|sect-network-interactions|<tuple|Tec19|27>>
+    <associate|sect-network-interactions|<tuple|4|27>>
     <associate|sect-network-messages|<tuple|D|51>>
     <associate|sect-randomness|<tuple|A.3|43>>
-    <associate|sect-re-api|<tuple|Tec19|55>>
+    <associate|sect-re-api|<tuple|E|55>>
     <associate|sect-rte-babeapi-epoch|<tuple|F.2.5|75>>
     <associate|sect-rte-grandpa-auth|<tuple|F.2.6|76>>
     <associate|sect-rte-hash-and-length|<tuple|F.2.4|75>>
