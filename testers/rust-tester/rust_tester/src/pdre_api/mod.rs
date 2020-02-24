@@ -4,6 +4,7 @@ mod crypto;
 mod network;
 mod storage;
 mod utils;
+mod trie;
 
 use clap::ArgMatches;
 use utils::ParsedInput;
