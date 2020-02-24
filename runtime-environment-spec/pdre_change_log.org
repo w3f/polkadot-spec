@@ -1,3 +1,5 @@
+* Mon Feb 24 2020
+  - Authority change digest item updated, ForceChange added to it.
 * Wed Dec 04 2019
   Genesis State specced.
 * Mon Nov 25 2019
