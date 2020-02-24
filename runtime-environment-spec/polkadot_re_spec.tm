@@ -4249,46 +4249,28 @@
     A value <math|\<b-A\>> of varying date type is a pair
     <math|<around*|(|A<rsub|Type>,A<rsub|Value>|)>> where
     <math|A<rsub|Type>=T<rsub|i>> for some <math|T<rsub|i>\<in\>\<cal-T\>>
-    and <math|A<rsub|Value>> is its value of type <math|T<rsub|i>>. We define
-    <math|idx<around*|(|T<rsub|i>|)>=i-1.>
+    and <math|A<rsub|Value>> is its value of type <math|T<rsub|i>>, which can
+    be empty. We define <math|idx<around*|(|T<rsub|i>|)>=i-1>, which is a
+    little-endian, fixed-size integer and references the type in the varying
+    data type. The type of <strong|A> gets encoded as such integer (default
+    behavior), unless it's explicitly defined as another value.
 
     \;
 
-    In particular, we define <strong|optional type> to be
-    <math|\<cal-O\>=<around*|{|None,T<rsub|2>|}>> for some data type
-    <math|T<rsub|2>> where <math|idx<around*|(|None|)>=0>
-    <math|<around*|(|None,\<phi\>|)>> is the only possible value, when the
-    data is of type None and a codec value is one byte of 0 value.
+    In particular, we define <strong|Option> to be a varying data type of
+    <math|{None,<math|T<rsub|2>>}> which indicates if an arbitrary data type
+    is available (\Psome\Q) or not (\Pempty\Q or \Pnull\Q). None, being
+    <math|idx<around*|(|None|)>=0>, contains no additional data and implies
+    that the arbitrary data type is not available. <math|T<rsub|2>> implies
+    it is available.
 
     \;
 
-    <strong|Option> is a type indicating if a certain arbitrary data type is
-    available (\Psome\Q) or not (\Pempty\Q or \Pnull\Q).
-
-    The arbitrary data type can be appended if it's availalbe.
-
-    <\itemize-dot>
-      <item>If the data is available, then this type contains a byte
-      character equal to 1 followed by the encoded value (if any).
-
-      <item>If the data is not available, then this type contains a byte
-      character equal to 0 with no additional value.
-    </itemize-dot>
-
-    \;
-
-    <strong|Result> is a type indicating if a certain operation or function
-    was executed successfully (\Pok\Q) or not (\Perr\Q).
-
-    Both outcomes can have none, the same or varying data types appended.
-
-    <\itemize-dot>
-      <item>On success, this type contains a byte character equal to 0
-      followed by the encoded value (if any).
-
-      <item>On failure, this type contains a byte character equal to 1
-      followed by the encoded value (if any).
-    </itemize-dot>
+    Additionally, we define <strong|Result> to be a varying data type of
+    <math|{<math|T<rsub|1>>,<math|T<rsub|2>>}> which indicates if a certain
+    operation or function was executed successfully (\Pok\Q) or not
+    (\Perr\Q). <math|T<rsub|1>> implies success, <math|T<rsub|2>> implies
+    failure.
 
     \ 
   </definition>
