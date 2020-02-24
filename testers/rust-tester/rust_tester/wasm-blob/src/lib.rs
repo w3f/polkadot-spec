@@ -42,6 +42,7 @@ extern "C" {
     fn ext_allocator_malloc_version_1(size: u32) -> u32;
     fn ext_allocator_free_version_1(ptr: u32);
     fn ext_trie_blake2_256_root_version_1(data: u64) -> u32;
+    fn ext_trie_blake2_256_ordered_root_version_1(data: u64) -> u32;
 }
 
 fn from_mem(value: u64) -> Vec<u8> {
@@ -440,6 +441,15 @@ wasm_export_functions! {
         let data = data.encode();
         unsafe {
             let value = ext_trie_blake2_256_root_version_1(
+                data.as_re_ptr()
+            );
+            std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
+        }
+    }
+    fn rtm_ext_trie_blake2_256_ordered_root_version_1(data: Vec<Vec<u8>>) -> Vec<u8> {
+        let data = data.encode();
+        unsafe {
+            let value = ext_trie_blake2_256_ordered_root_version_1(
                 data.as_re_ptr()
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
