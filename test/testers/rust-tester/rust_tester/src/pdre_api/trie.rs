@@ -25,3 +25,25 @@ pub fn ext_trie_blake2_256_root_version_1(input: ParsedInput) {
 
     println!("{}", hex::encode(res));
 }
+
+// TODO: Call from Julia
+pub fn ext_trie_blake2_256_ordered_root_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let value1 = input.get(0);
+    let value2 = input.get(1);
+    let value3 = input.get(2);
+
+    let trie = vec![
+        value1,
+        value2,
+        value3
+    ];
+
+    // Get valid key
+    let res = rtm
+        .call("rtm_ext_trie_blake2_256_ordered_root_version_1", &(trie).encode())
+        .decode_val();
+
+    println!("{}", hex::encode(res));
+}
