@@ -1,6 +1,6 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
-<style|<tuple|tmbook|std-latex|old-dots|algorithmacs-style>>
+<style|<tuple|tmbook|std-latex|algorithmacs-style|old-dots>>
 
 <\body>
   <\hide-preamble>
@@ -2379,12 +2379,12 @@
       <item><math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
       is an unsigned 32 bit integer indicating the length of the subchain
       starting at <math|B>, the block containing the consensus message in its
-      header digest and ending when it reaches the length in the specified
-      integer. The last block in that subchain, <math|B<rprime|'>>, is
-      depending on the message type either finalized or imported and
+      header digest and ending when it reaches <math|N<rsub|delay>> length as
+      a path graph. The last block in that subchain, <math|B<rprime|'>>,
+      depending on the message type, is either finalized or imported (and
       therefore validated by the block production consensus engine according
-      to Algorithm <reference|algo-import-and-validate-block>. (see below for
-      details). The lenght of this subgraph is qual to the specified delay.
+      to Algorithm <reference|algo-import-and-validate-block>. see below for
+      details).
 
       <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to an
       individual authority in the current authority list.
@@ -2397,36 +2397,42 @@
 
   <\itemize-minus>
     <item><strong|Scheduled Change>: Schedule an authority set change after
-    the given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is a
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is a
     block <em|finalized> by the finality consensus engine. The earliest
     digest of this type in a single block will be respected. No change should
     be scheduled if one is already and the delay has not passed completely.
     If such an inconsitency occures, the scheduled change should be ignored.
 
     <item><strong|Forced Change>: Force an authority set change after the
-    given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is an
-    <em|imported> block and validated by the block production conensus
-    engine. The authority change set is valid for every subchain which
-    contains <em|B> and where the delay has been exceeded. If one or more
-    blocks gets finalized before the change takes effect, the authority set
-    change should be disregarded. The earliest digest of this type in a
-    single block will be respected. No change should be scheduled if one is
-    already and the delay has not passed completely. If such an inconsitency
-    occures, the scheduled change should be ignored.
+    given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is an
+    <em|imported> block which has been validated by the block production
+    conensus engine. Hence, the authority change set is valid for every
+    subchain which contains <em|B> and where the delay has been exceeded. If
+    one or more blocks gets finalized before the change takes effect, the
+    authority set change should be disregarded. The earliest digest of this
+    type in a single block will be respected. No change should be scheduled
+    if one is already and the delay has not passed completely. If such an
+    inconsitency occures, the scheduled change should be ignored.
 
     <item><strong|On Disabled>: An index to the individual authority in the
     current authority list that should be immediately disabled until the next
     authority set change. When an authority gets disabled, the node should
     stop performing any authority functionality from that authority,
     including authoring blocks and casting GRANDPA votes for finalization.
+    Similarly, other nodes should ignore all messages from the indicated
+    authority which pretain to their authority role.\ 
 
     <item><strong|Pause>: A signal to pause the current authority set after
-    the given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is a
-    <em|finalized> block by the finality consensus engine. After finalizing
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is a
+    block <em|finalized> by the finality consensus engine. After finalizing
     block <math|B<rprime|'>>, the authorities should stop voting.
 
     <item><strong|Resume>: A signal to resume the current authority set after
-    the given delay of <math|N<rsub|delay>> where <math|B<rprime|'>> is an
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is an
     <em|imported> block and validated by the block production consensus
     engine. After authoring the block <math|B<rprime|'>>, the authorities
     should resume voting.
@@ -6673,10 +6679,10 @@
     <associate|sect-msg-consensus|<tuple|D.1.6|52>>
     <associate|sect-msg-status|<tuple|D.1.1|49>>
     <associate|sect-msg-transactions|<tuple|D.1.5|51>>
-    <associate|sect-network-interactions|<tuple|Tec19|25>>
+    <associate|sect-network-interactions|<tuple|4|25>>
     <associate|sect-network-messages|<tuple|D|49>>
     <associate|sect-randomness|<tuple|A.3|41>>
-    <associate|sect-re-api|<tuple|Tec19|53>>
+    <associate|sect-re-api|<tuple|E|53>>
     <associate|sect-rte-babeapi-epoch|<tuple|F.2.5|73>>
     <associate|sect-rte-grandpa-auth|<tuple|F.2.6|74>>
     <associate|sect-rte-hash-and-length|<tuple|F.2.4|73>>
