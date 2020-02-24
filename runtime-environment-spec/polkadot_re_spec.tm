@@ -6456,7 +6456,8 @@
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the iterated items from which
-    the trie root gets formed. <todo|defines items>
+    the trie root gets formed. The items consist of a SCALE encoded array
+    containing arbitrary key/value pairs.
 
     <item><verbatim|result>: a regular pointer to the buffer containing the
     256-bit trie root result.
@@ -6481,7 +6482,10 @@
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the enumerated items from
-    which the trie root gets formed. <todo|define items>
+    which the trie root gets formed. The items consist of a SCALE encoded
+    array containing only values, where the corresponding key of each value
+    is the index of the item in the array, starting at 0. The keys are
+    little-endian, fixed-size integers.
 
     <item><verbatim|result>: a regular pointer to the buffer containing the
     256-bit trie root result.
