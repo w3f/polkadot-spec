@@ -4252,6 +4252,8 @@
     and <math|A<rsub|Value>> is its value of type <math|T<rsub|i>>. We define
     <math|idx<around*|(|T<rsub|i>|)>=i-1.>
 
+    \;
+
     In particular, we define <strong|optional type> to be
     <math|\<cal-O\>=<around*|{|None,T<rsub|2>|}>> for some data type
     <math|T<rsub|2>> where <math|idx<around*|(|None|)>=0>
@@ -4845,9 +4847,9 @@
     <reference|defn-runtime-pointer> containing the key.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> returning the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the value.
+    <reference|defn-runtime-pointer> returning the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    value.
   </itemize>
 
   <subsection|<verbatim|ext_storage_read>>
@@ -4882,11 +4884,10 @@
     value should be read from.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the number of bytes
-    written into the <strong|value_out> buffer. Returns <verbatim|None> if
-    the entry does not exists.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    number of bytes written into the <strong|value_out> buffer. Returns
+    <verbatim|None> if the entry does not exists.
   </itemize>
 
   <subsection|<verbatim|ext_storage_clear>>
@@ -4973,7 +4974,7 @@
   <subsection|<verbatim|ext_storage_changes_root>>
 
   Commits all existing operations and gets the resulting change root. The
-  parent hash is a SCALE encoded hash.
+  parent hash is a SCALE encoded change root.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -4992,9 +4993,9 @@
     block hash.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the change root.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    change root.
   </itemize>
 
   <subsection|<verbatim|ext_storage_next_key>>
@@ -5016,10 +5017,9 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the next key in
-    lexicographic order.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    next key in lexicographic order.
   </itemize>
 
   <section|Child Storage>
@@ -5123,9 +5123,9 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the value.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    value.
   </itemize>
 
   <subsection|<verbatim|ext_storage_child_read>>
@@ -5174,11 +5174,10 @@
     value should be read from.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the number of bytes
-    written into the <strong|value_out> buffer. Returns <verbatim|None> if
-    the entry does not exists.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    number of bytes written into the <strong|value_out> buffer. Returns
+    <verbatim|None> if the entry does not exists.
   </itemize>
 
   <subsection|<verbatim|ext_storage_child_clear>>
@@ -5398,11 +5397,10 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the next key in
-    lexicographic order. Returns <verbatim|None> if the entry cannot be
-    found.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    next key in lexicographic order. Returns <verbatim|None> if the entry
+    cannot be found.
   </itemize>
 
   <section|Crypto>
@@ -5484,10 +5482,9 @@
     type ID as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|seed>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the BIP-39 seed which must
-    be valid UTF8.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    BIP-39 seed which must be valid UTF8.
 
     <item><verbatim|return>: a regular pointer to the buffer containing the
     32-byte public key.
@@ -5523,11 +5520,10 @@
     signed.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the signature. This
-    function returns <verbatim|None> if the public key cannot be found in the
-    key store.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    signature. This function returns <verbatim|None> if the public key cannot
+    be found in the key store.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_ed25519_verify>>
@@ -5608,10 +5604,9 @@
     as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|seed>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the BIP-39 seed which must
-    be valid UTF8.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    BIP-39 seed which must be valid UTF8.
 
     <item><verbatim|return>: a regular pointer to the buffer containing the
     32-byte public key.
@@ -5647,11 +5642,10 @@
     signed.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the signature. This
-    function returns <verbatim|None> if the public key cannot be found in the
-    key store.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    signature. This function returns <verbatim|None> if the public key cannot
+    be found in the key store.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_sr25519_verify>>
@@ -6196,9 +6190,9 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|old_value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the old key.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    old key.
 
     <item><verbatim|new_value>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the new value.
@@ -6234,10 +6228,9 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the value or the
-    corresponding key.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    value or the corresponding key.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_http_request_start>>
@@ -6266,7 +6259,7 @@
     <reference|defn-runtime-pointer> indicating the URI.
 
     <item><verbatim|meta>: a future-reserved field containing additional,
-    SCALE encoded parameters.
+    SCALE encoded parameters. Currently, an empty array should be passed.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
@@ -6338,11 +6331,10 @@
     an empty chunk finalizes the request.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the UNIX timestamp as
-    defined in Definition <reference|defn-unix-time>. Passing <verbatim|None>
-    blocks indefinitely.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    UNIX timestamp as defined in Definition <reference|defn-unix-time>.
+    Passing <verbatim|None> blocks indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
@@ -6375,10 +6367,10 @@
     started request IDs.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the UNIX timestamp as
-    defined in Definition 1.10. Passing <verbatim|None> blocks indefinitely.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    UNIX timestamp as defined in Definition 1.10. Passing <verbatim|None>
+    blocks indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded array of
@@ -6443,11 +6435,10 @@
     gets written to.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the UNIX timestamp as
-    defined in Definition <reference|defn-unix-time>. Passing <verbatim|None>
-    will block indefinitely.
+    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
+    defined in Definition <reference|defn-varrying-data-type> containing the
+    UNIX timestamp as defined in Definition <reference|defn-unix-time>.
+    Passing <verbatim|None> will block indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
@@ -6727,6 +6718,10 @@
   current API as described in Appendix <reference|appendix-e>. Those legacy
   functions are only required for executing Runtimes prior the official
   Polkadot Runtime, such as the Kusama test network.
+
+  \;
+
+  <strong|Note>: This section will be removed in the future.
 
   <section|Storage>
 
