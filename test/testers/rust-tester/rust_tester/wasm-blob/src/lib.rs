@@ -43,7 +43,6 @@ extern "C" {
     fn ext_allocator_free_version_1(ptr: u32);
     fn ext_trie_blake2_256_root_version_1(data: u64) -> u32;
     fn ext_trie_blake2_256_ordered_root_version_1(data: u64) -> u32;
-    fn ext_misc_print_num_version_1(data: u64);
 }
 
 fn from_mem(value: u64) -> Vec<u8> {
@@ -454,13 +453,6 @@ wasm_export_functions! {
                 data.as_re_ptr()
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
-        }
-    }
-    fn rtm_ext_misc_print_num_version_1(data: Vec<u8>) {
-        unsafe {
-            ext_misc_print_num_version_1(
-                data.as_re_ptr()
-            );
         }
     }
 }
