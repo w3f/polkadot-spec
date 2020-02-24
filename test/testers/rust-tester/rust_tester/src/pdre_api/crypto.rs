@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime, str};
+use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 // TODO: Spec key types
 use sp_core::crypto::key_types::DUMMY;
@@ -28,7 +28,7 @@ pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
     let mut res = rtm
         .call(
             "rtm_ext_crypto_ed25519_public_keys_version_1",
-            &DUMMY.0.encode()
+            &DUMMY.0.encode(),
         )
         .decode_val();
 
@@ -160,7 +160,7 @@ pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
     let mut res = rtm
         .call(
             "rtm_ext_crypto_sr25519_public_keys_version_1",
-            &DUMMY.0.encode()
+            &DUMMY.0.encode(),
         )
         .decode_val();
 
@@ -186,11 +186,7 @@ pub fn ext_crypto_sr25519_generate_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();
 
     let seed = input.get(0);
-    let seed_opt = if seed.is_empty() {
-        None
-    } else {
-        Some(seed)
-    };
+    let seed_opt = if seed.is_empty() { None } else { Some(seed) };
 
     // Generate a key
     let res = rtm
@@ -287,14 +283,12 @@ pub fn ext_crypto_secp256k1_ecdsa_recover_version_1(input: ParsedInput) {
         )
         .decode_val();
 
-    // TODO... 
+    // TODO...
 }
 
 // TODO
 #[allow(dead_code)]
-pub fn ext_crypto_secp256k1_ecdsa_recover_compressed_version_1(_input: ParsedInput) {
-
-}
+pub fn ext_crypto_secp256k1_ecdsa_recover_compressed_version_1(_input: ParsedInput) {}
 
 pub fn ext_hashing_keccak_256_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
@@ -302,10 +296,7 @@ pub fn ext_hashing_keccak_256_version_1(input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
-        .call(
-            "rtm_ext_hashing_keccak_256_version_1",
-            &(data).encode(),
-        )
+        .call("rtm_ext_hashing_keccak_256_version_1", &(data).encode())
         .decode_val();
 
     println!("{}", hex::encode(res));
@@ -317,10 +308,7 @@ pub fn ext_hashing_sha2_256_version_1(input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
-        .call(
-            "rtm_ext_hashing_sha2_256_version_1",
-            &(data).encode(),
-        )
+        .call("rtm_ext_hashing_sha2_256_version_1", &(data).encode())
         .decode_val();
 
     println!("{}", hex::encode(res));
@@ -332,10 +320,7 @@ pub fn ext_hashing_blake2_128_version_1(input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
-        .call(
-            "rtm_ext_hashing_blake2_128_version_1",
-            &(data).encode(),
-        )
+        .call("rtm_ext_hashing_blake2_128_version_1", &(data).encode())
         .decode_val();
 
     println!("{}", hex::encode(res));
@@ -347,10 +332,7 @@ pub fn ext_hashing_blake2_256_version_1(input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
-        .call(
-            "rtm_ext_hashing_blake2_256_version_1",
-            &(data).encode(),
-        )
+        .call("rtm_ext_hashing_blake2_256_version_1", &(data).encode())
         .decode_val();
 
     println!("{}", hex::encode(res));
@@ -362,10 +344,7 @@ pub fn ext_hashing_twox_256_version_1(input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
-        .call(
-            "rtm_ext_hashing_twox_256_version_1",
-            &(data).encode(),
-        )
+        .call("rtm_ext_hashing_twox_256_version_1", &(data).encode())
         .decode_val();
 
     println!("{}", hex::encode(res));
@@ -377,10 +356,7 @@ pub fn ext_hashing_twox_128_version_1(input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
-        .call(
-            "rtm_ext_hashing_twox_128_version_1",
-            &(data).encode(),
-        )
+        .call("rtm_ext_hashing_twox_128_version_1", &(data).encode())
         .decode_val();
 
     println!("{}", hex::encode(res));
@@ -392,10 +368,7 @@ pub fn ext_hashing_twox_64_version_1(input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
-        .call(
-            "rtm_ext_hashing_twox_64_version_1",
-            &(data).encode(),
-        )
+        .call("rtm_ext_hashing_twox_64_version_1", &(data).encode())
         .decode_val();
 
     println!("{}", hex::encode(res));

@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime, str};
+use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 pub fn ext_storage_child_set_version_1(input: ParsedInput) {
@@ -13,43 +13,34 @@ pub fn ext_storage_child_set_version_1(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key).encode(),
+        )
         .decode_option();
     assert!(res.is_none());
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key,
-        value
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key, value).encode(),
+    );
 
     // Get invalid key (wrong child key)
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key2,
-            child_definition,
-            child_type,
-            key,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key2, child_definition, child_type, key).encode(),
+        )
         .decode_option();
     assert!(res.is_none());
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key).encode(),
+        )
         .decode_option()
         .unwrap()
         .decode_val();
@@ -76,49 +67,58 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_storage_child_read_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key,
-            offset,
-            buffer_size
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_read_version_1",
+            &(
+                child_key1,
+                child_definition,
+                child_type,
+                key,
+                offset,
+                buffer_size,
+            )
+                .encode(),
+        )
         .decode_val();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key,
-        value
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key, value).encode(),
+    );
 
     // Get invalid key (different child storage)
     let res = rtm
-        .call("rtm_ext_storage_child_read_version_1", &(
-            child_key2,
-            child_definition,
-            child_type,
-            key,
-            offset,
-            buffer_size
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_read_version_1",
+            &(
+                child_key2,
+                child_definition,
+                child_type,
+                key,
+                offset,
+                buffer_size,
+            )
+                .encode(),
+        )
         .decode_val();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_storage_child_read_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key,
-            offset,
-            buffer_size
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_read_version_1",
+            &(
+                child_key1,
+                child_definition,
+                child_type,
+                key,
+                offset,
+                buffer_size,
+            )
+                .encode(),
+        )
         .decode_val();
 
     let offset = offset as usize;
@@ -157,51 +157,40 @@ pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
     let value = input.get(5);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key,
-        value
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key, value).encode(),
+    );
 
     // Clear value (other child key)
-    let _ = rtm.call("rtm_ext_storage_child_clear_version_1", &(
-        child_key2,
-        child_definition,
-        child_type,
-        key,
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_clear_version_1",
+        &(child_key2, child_definition, child_type, key).encode(),
+    );
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key).encode(),
+        )
         .decode_option()
         .unwrap()
         .decode_val();
     assert_eq!(res, value);
 
     // Clear value
-    let _ = rtm.call("rtm_ext_storage_child_clear_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key,
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_clear_version_1",
+        &(child_key1, child_definition, child_type, key).encode(),
+    );
 
     // Get cleared value
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key).encode(),
+        )
         .decode_option();
     assert!(res.is_none());
 }
@@ -219,38 +208,29 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
     let value2 = input.get(7);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key1,
-        value1
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key1, value1).encode(),
+    );
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key2,
-        value2
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key2, value2).encode(),
+    );
 
     // Kill child (different child key)
-    let _ = rtm.call("rtm_ext_storage_child_storage_kill_version_1", &(
-        child_key2,
-        child_definition,
-        child_type,
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_storage_kill_version_1",
+        &(child_key2, child_definition, child_type).encode(),
+    );
 
     // Get valid value
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key1,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key1).encode(),
+        )
         .decode_option()
         .unwrap()
         .decode_val();
@@ -258,43 +238,36 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
 
     // Get valid value
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key2,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key2).encode(),
+        )
         .decode_option()
         .unwrap()
         .decode_val();
     assert_eq!(res, value2);
 
     // Kill child
-    let _ = rtm.call("rtm_ext_storage_child_storage_kill_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_storage_kill_version_1",
+        &(child_key1, child_definition, child_type).encode(),
+    );
 
     // Get invalid killed value
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key1,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key1).encode(),
+        )
         .decode_option();
     assert!(res.is_none());
 
     // Get invalid killed value
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key2,
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key2).encode(),
+        )
         .decode_option();
     assert!(res.is_none());
 }
@@ -311,43 +284,34 @@ pub fn ext_storage_child_exists_version_1(input: ParsedInput) {
 
     // Check if key exists (invalid)
     let res = rtm
-        .call("rtm_ext_storage_child_exists_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_exists_version_1",
+            &(child_key1, child_definition, child_type, key).encode(),
+        )
         .decode_bool();
     assert_eq!(res, false);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key,
-        value
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key, value).encode(),
+    );
 
     // Check if key exists (invalid, different child key)
     let res = rtm
-        .call("rtm_ext_storage_child_exists_version_1", &(
-            child_key2,
-            child_definition,
-            child_type,
-            key
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_exists_version_1",
+            &(child_key2, child_definition, child_type, key).encode(),
+        )
         .decode_bool();
     assert_eq!(res, false);
 
     // Check if key exists
     let res = rtm
-        .call("rtm_ext_storage_child_exists_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_exists_version_1",
+            &(child_key1, child_definition, child_type, key).encode(),
+        )
         .decode_bool();
     assert_eq!(res, true);
 
@@ -368,47 +332,35 @@ pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
     let value2 = input.get(8);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key1,
-        value1
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key1, value1).encode(),
+    );
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key2,
-        value2
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key2, value2).encode(),
+    );
 
     // Clear value (different key)
-    let _ = rtm.call("rtm_ext_storage_child_clear_prefix_version_1", &(
-        child_key2,
-        child_definition,
-        child_type,
-        prefix
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_clear_prefix_version_1",
+        &(child_key2, child_definition, child_type, prefix).encode(),
+    );
 
     // Clear value
-    let _ = rtm.call("rtm_ext_storage_child_clear_prefix_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        prefix
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_clear_prefix_version_1",
+        &(child_key1, child_definition, child_type, prefix).encode(),
+    );
 
     // Check first key
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key1
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key1).encode(),
+        )
         .decode_option();
     if key1.starts_with(prefix) {
         assert!(res.is_none());
@@ -420,12 +372,10 @@ pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
 
     // Check second key
     let res = rtm
-        .call("rtm_ext_storage_child_get_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key2
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_get_version_1",
+            &(child_key1, child_definition, child_type, key2).encode(),
+        )
         .decode_option();
     if key2.starts_with(prefix) {
         assert!(res.is_none());
@@ -449,22 +399,16 @@ pub fn ext_storage_child_root_version_1(input: ParsedInput) {
     let value2 = input.get(7);
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key1,
-        value1
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key1, value1).encode(),
+    );
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key2,
-        value2
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key2, value2).encode(),
+    );
 
     // Set key/value (different child key)
     /* TODO: Inserting this will cause the root hash to change.
@@ -506,39 +450,29 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
 
     // No next key available
     let res = rtm
-        .call("rtm_ext_storage_child_next_key_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key1
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_next_key_version_1",
+            &(child_key1, child_definition, child_type, key1).encode(),
+        )
         .decode_option();
     assert!(res.is_none());
 
     // Set key/value
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key1,
-        value1
-    ).encode());
-    let _ = rtm.call("rtm_ext_storage_child_set_version_1", &(
-        child_key1,
-        child_definition,
-        child_type,
-        key2,
-        value2
-    ).encode());
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key1, value1).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_storage_child_set_version_1",
+        &(child_key1, child_definition, child_type, key2, value2).encode(),
+    );
 
     // Try to read next key
     let res = rtm
-        .call("rtm_ext_storage_child_next_key_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key1
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_next_key_version_1",
+            &(child_key1, child_definition, child_type, key1).encode(),
+        )
         .decode_option();
     if key1 == track[0] {
         assert_eq!(res.unwrap().decode_val(), key2);
@@ -549,12 +483,10 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
 
     // Try to read next key
     let res = rtm
-        .call("rtm_ext_storage_child_next_key_version_1", &(
-            child_key1,
-            child_definition,
-            child_type,
-            key2
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_next_key_version_1",
+            &(child_key1, child_definition, child_type, key2).encode(),
+        )
         .decode_option();
     if key2 == track[0] {
         assert_eq!(res.unwrap().decode_val(), key1);
@@ -565,23 +497,19 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
 
     // Get invalid next key (different child key)
     let res = rtm
-        .call("rtm_ext_storage_child_next_key_version_1", &(
-            child_key2,
-            child_definition,
-            child_type,
-            key1
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_next_key_version_1",
+            &(child_key2, child_definition, child_type, key1).encode(),
+        )
         .decode_option();
     assert!(res.is_none());
 
     // Get invalid next key (different child key)
     let res = rtm
-        .call("rtm_ext_storage_child_next_key_version_1", &(
-            child_key2,
-            child_definition,
-            child_type,
-            key2
-        ).encode())
+        .call(
+            "rtm_ext_storage_child_next_key_version_1",
+            &(child_key2, child_definition, child_type, key2).encode(),
+        )
         .decode_option();
     assert!(res.is_none());
 }

@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime, str};
+use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 // TODO: Call from Julia
@@ -43,7 +43,10 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
 
     // Get invalid key
     let res = rtm
-        .call("rtm_ext_storage_read_version_1", &(key, offset, buffer_size).encode())
+        .call(
+            "rtm_ext_storage_read_version_1",
+            &(key, offset, buffer_size).encode(),
+        )
         .decode_val();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
@@ -52,7 +55,10 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_storage_read_version_1", &(key, offset, buffer_size).encode())
+        .call(
+            "rtm_ext_storage_read_version_1",
+            &(key, offset, buffer_size).encode(),
+        )
         .decode_val();
 
     let offset = offset as usize;
@@ -170,9 +176,7 @@ pub fn ext_storage_root_version_1(input: ParsedInput) {
     let _ = rtm.call("rtm_ext_storage_set_version_1", &(key2, value2).encode());
 
     // Get root
-    let res = rtm
-        .call("rtm_ext_storage_root_version_1", &[])
-        .decode_val();
+    let res = rtm.call("rtm_ext_storage_root_version_1", &[]).decode_val();
 
     println!("{}", hex::encode(res));
 }
