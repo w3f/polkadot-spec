@@ -4252,8 +4252,9 @@
     and <math|A<rsub|Value>> is its value of type <math|T<rsub|i>>, which can
     be empty. We define <math|idx<around*|(|T<rsub|i>|)>=i-1>, which is a
     little-endian, fixed-size integer and references the type in the varying
-    data type. The type of <strong|A> gets encoded as such integer (default
-    behavior), unless it's explicitly defined as another value.
+    data type. The type of <strong|A> gets encoded as
+    <math|idx(<math|T<rsub|i>>)>, unless it's explicitly defined as another
+    value.
 
     \;
 
@@ -4262,7 +4263,7 @@
     is available (\Psome\Q) or not (\Pempty\Q or \Pnull\Q). None, being
     <math|idx<around*|(|None|)>=0>, contains no additional data and implies
     that the arbitrary data type is not available. <math|T<rsub|2>> implies
-    it is available.
+    it is available and can contain additional data.
 
     \;
 
@@ -4270,7 +4271,7 @@
     <math|{<math|T<rsub|1>>,<math|T<rsub|2>>}> which indicates if a certain
     operation or function was executed successfully (\Pok\Q) or not
     (\Perr\Q). <math|T<rsub|1>> implies success, <math|T<rsub|2>> implies
-    failure.
+    failure. Both types can contain additional data.
 
     \ 
   </definition>
