@@ -3073,10 +3073,11 @@
 
     where:
 
-    <math|\<bbb-V\>>: is the set of voters.
+    <math|<math-bf|\<bbb-V\>>>: is the set of voters.
 
-    <strong|<math|\<bbb-V\><rsub|id>>>: is an incremental counter tracking
-    <verbatim|>membership, which changes in V.
+    <math|<math-bf|id<rsub|\<bbb-V\>>>>: is an incremental counter tracking
+    <verbatim|>membership, which changes in V.<todo|redefine as authority set
+    id>
 
     <strong|r>: is the votin<verbatim|>g round number.
   </definition>
@@ -3311,8 +3312,27 @@
 
   <subsubsection|Catch-up Messages>
 
+  Whenever a Polkadot node detects likely by means of neighbor packet network
+  message (see Section <reference|sect-msg-neighbor-packet>) that it is
+  lagging behind the finality procedure and therefore needs to initiate a
+  catch-up procedure explained in Section <reference|sect-grandpa-catchup> by
+  means of sending <em|catch-up request> and processing <em|catch-up
+  response> as specified here:
+
   <\definition>
-    <strong|GRANDPA catch-up request message>
+    <strong|GRANDPA catch-up request message for round r> represented as
+    <strong|<math|M<rsub|i,v><rsup|Cat><around*|(|\<bbb-V\><rsub|id>,r|)>>>
+    is a message sent from node <math|i> to its voting peer node <math|v>
+    requesting the latest status of a GRANDPA round
+    <math|r<rprime|'>\<gtr\>r> of of authority set <math|\<bbb-V\><rsub|id>>
+    along with the justification of the status and has the followin
+    structure:
+
+    <\equation*>
+      M<rsub|i,v><rsup|id<rsub|\<bbb-V\>>,r,Cat><around*|(|r|)>\<assign\>Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>|)>
+    </equation*>
+
+    \ 
   </definition>
 
   <\definition>
@@ -3362,6 +3382,15 @@
       </state>
     </algorithmic>
   </algorithm>
+
+  <subsubsection|Voter Set Changes>
+
+  Voter set changes are signaled by Runtime via a consensus engine message as
+  described in Section <reference|sect-consensus-message-digest>. When
+  Authorities process such messages they must not vote on any block with
+  higher number than the block at which the change is supposed to happen. The
+  new authority set should reinitiate GRANDPA protocol by exectutig Algorithm
+  <reference|algo-initiate-grandpa>.
 
   <subsection|Voting Process in Round <math|r>>
 
@@ -3569,14 +3598,9 @@
   Note that all Polkadot relay chain nodes are supposed to listen to GRANDPA
   finalizing messages regardless if they are GRANDPA voters.
 
-  <subsection|Voter Set Changes>
+  <subsection|Catching up>
 
-  Voter set changes are signaled by Runtime via a consensus engine message as
-  described in Section <reference|sect-consensus-message-digest>. When
-  Authorities process such messages they must not vote on any block with
-  higher number than the block at which the change is supposed to happen. The
-  new authority set should reinitiate GRANDPA protocol by exectutig Algorithm
-  <reference|algo-initiate-grandpa>.<appendix|Cryptographic Algorithms>
+  <appendix|Cryptographic Algorithms>
 
   <section|Hash Functions><label|sect-hash-functions>
 
@@ -6340,7 +6364,6 @@
 
 <\references>
   <\collection>
-    <associate|alg-join-leave-grandpa|<tuple|5.9|40>>
     <associate|algo-aggregate-key|<tuple|2.1|15>>
     <associate|algo-attempt-to\Ufinalize|<tuple|5.11|41>>
     <associate|algo-block-production|<tuple|5.3|35>>
@@ -6359,118 +6382,119 @@
     <associate|algo-verify-slot-winner|<tuple|5.6|36>>
     <associate|auto-1|<tuple|1|9>>
     <associate|auto-10|<tuple|1.9|11>>
-    <associate|auto-100|<tuple|A.1|44>>
-    <associate|auto-101|<tuple|A.2|44>>
-    <associate|auto-102|<tuple|A.5.1|44>>
-    <associate|auto-103|<tuple|A.5.2|45>>
-    <associate|auto-104|<tuple|A.5.3|45>>
-    <associate|auto-105|<tuple|A.5.4|46>>
-    <associate|auto-106|<tuple|A.5.5|47>>
-    <associate|auto-107|<tuple|B|47>>
-    <associate|auto-108|<tuple|B.1|47>>
-    <associate|auto-109|<tuple|B.1.1|47>>
+    <associate|auto-100|<tuple|A.5|44>>
+    <associate|auto-101|<tuple|A.1|44>>
+    <associate|auto-102|<tuple|A.2|44>>
+    <associate|auto-103|<tuple|A.5.1|45>>
+    <associate|auto-104|<tuple|A.5.2|45>>
+    <associate|auto-105|<tuple|A.5.3|46>>
+    <associate|auto-106|<tuple|A.5.4|47>>
+    <associate|auto-107|<tuple|A.5.5|47>>
+    <associate|auto-108|<tuple|B|47>>
+    <associate|auto-109|<tuple|B.1|47>>
     <associate|auto-11|<tuple|1.9|11>>
-    <associate|auto-110|<tuple|B.2|49>>
-    <associate|auto-111|<tuple|B.2.1|49>>
-    <associate|auto-112|<tuple|B.2.2|51>>
-    <associate|auto-113|<tuple|B.3|51>>
-    <associate|auto-114|<tuple|C|51>>
-    <associate|auto-115|<tuple|C.1|51>>
-    <associate|auto-116|<tuple|D|52>>
-    <associate|auto-117|<tuple|D.1|52>>
+    <associate|auto-110|<tuple|B.1.1|49>>
+    <associate|auto-111|<tuple|B.2|49>>
+    <associate|auto-112|<tuple|B.2.1|51>>
+    <associate|auto-113|<tuple|B.2.2|51>>
+    <associate|auto-114|<tuple|B.3|51>>
+    <associate|auto-115|<tuple|C|51>>
+    <associate|auto-116|<tuple|C.1|52>>
+    <associate|auto-117|<tuple|D|52>>
     <associate|auto-118|<tuple|D.1|52>>
-    <associate|auto-119|<tuple|D.1.1|53>>
+    <associate|auto-119|<tuple|D.1|53>>
     <associate|auto-12|<tuple|1.9|11>>
-    <associate|auto-120|<tuple|D.2|53>>
-    <associate|auto-121|<tuple|D.1.2|53>>
-    <associate|auto-122|<tuple|D.3|54>>
-    <associate|auto-123|<tuple|D.1.3|55>>
-    <associate|auto-124|<tuple|D.1.4|55>>
-    <associate|auto-125|<tuple|D.1.5|55>>
-    <associate|auto-126|<tuple|D.1.6|55>>
-    <associate|auto-127|<tuple|E|56>>
-    <associate|auto-128|<tuple|E.1|56>>
-    <associate|auto-129|<tuple|E.1.1|56>>
+    <associate|auto-120|<tuple|D.1.1|53>>
+    <associate|auto-121|<tuple|D.2|53>>
+    <associate|auto-122|<tuple|D.1.2|54>>
+    <associate|auto-123|<tuple|D.3|55>>
+    <associate|auto-124|<tuple|D.1.3|55>>
+    <associate|auto-125|<tuple|D.1.4|55>>
+    <associate|auto-126|<tuple|D.1.5|55>>
+    <associate|auto-127|<tuple|D.1.6|56>>
+    <associate|auto-128|<tuple|E|56>>
+    <associate|auto-129|<tuple|E.1|56>>
     <associate|auto-13|<tuple|1.9|11>>
-    <associate|auto-130|<tuple|E.1.2|57>>
-    <associate|auto-131|<tuple|E.1.3|57>>
-    <associate|auto-132|<tuple|E.1.4|57>>
-    <associate|auto-133|<tuple|E.1.5|58>>
-    <associate|auto-134|<tuple|E.1.6|58>>
-    <associate|auto-135|<tuple|E.1.7|59>>
-    <associate|auto-136|<tuple|E.1.8|59>>
-    <associate|auto-137|<tuple|E.1.9|60>>
-    <associate|auto-138|<tuple|E.1.10|60>>
-    <associate|auto-139|<tuple|E.1.11|61>>
+    <associate|auto-130|<tuple|E.1.1|57>>
+    <associate|auto-131|<tuple|E.1.2|57>>
+    <associate|auto-132|<tuple|E.1.3|57>>
+    <associate|auto-133|<tuple|E.1.4|58>>
+    <associate|auto-134|<tuple|E.1.5|58>>
+    <associate|auto-135|<tuple|E.1.6|59>>
+    <associate|auto-136|<tuple|E.1.7|59>>
+    <associate|auto-137|<tuple|E.1.8|60>>
+    <associate|auto-138|<tuple|E.1.9|60>>
+    <associate|auto-139|<tuple|E.1.10|61>>
     <associate|auto-14|<tuple|1.2.1|11>>
-    <associate|auto-140|<tuple|E.1.12|61>>
-    <associate|auto-141|<tuple|E.1.13|61>>
-    <associate|auto-142|<tuple|E.1.14|61>>
-    <associate|auto-143|<tuple|E.1.15|61>>
-    <associate|auto-144|<tuple|E.1.15.1|61>>
-    <associate|auto-145|<tuple|E.1.15.2|62>>
-    <associate|auto-146|<tuple|E.1.15.3|62>>
-    <associate|auto-147|<tuple|E.1.16|62>>
-    <associate|auto-148|<tuple|E.1.16.1|63>>
-    <associate|auto-149|<tuple|E.1.16.2|63>>
+    <associate|auto-140|<tuple|E.1.11|61>>
+    <associate|auto-141|<tuple|E.1.12|61>>
+    <associate|auto-142|<tuple|E.1.13|61>>
+    <associate|auto-143|<tuple|E.1.14|61>>
+    <associate|auto-144|<tuple|E.1.15|61>>
+    <associate|auto-145|<tuple|E.1.15.1|62>>
+    <associate|auto-146|<tuple|E.1.15.2|62>>
+    <associate|auto-147|<tuple|E.1.15.3|62>>
+    <associate|auto-148|<tuple|E.1.16|63>>
+    <associate|auto-149|<tuple|E.1.16.1|63>>
     <associate|auto-15|<tuple|1.11|11>>
-    <associate|auto-150|<tuple|E.1.16.3|63>>
-    <associate|auto-151|<tuple|E.1.16.4|64>>
-    <associate|auto-152|<tuple|E.1.16.5|64>>
-    <associate|auto-153|<tuple|E.1.16.6|65>>
-    <associate|auto-154|<tuple|E.1.17|65>>
-    <associate|auto-155|<tuple|E.1.17.1|65>>
-    <associate|auto-156|<tuple|E.1.17.2|66>>
-    <associate|auto-157|<tuple|E.1.17.3|66>>
-    <associate|auto-158|<tuple|E.1.17.4|66>>
-    <associate|auto-159|<tuple|E.1.17.5|67>>
+    <associate|auto-150|<tuple|E.1.16.2|63>>
+    <associate|auto-151|<tuple|E.1.16.3|64>>
+    <associate|auto-152|<tuple|E.1.16.4|64>>
+    <associate|auto-153|<tuple|E.1.16.5|65>>
+    <associate|auto-154|<tuple|E.1.16.6|65>>
+    <associate|auto-155|<tuple|E.1.17|65>>
+    <associate|auto-156|<tuple|E.1.17.1|66>>
+    <associate|auto-157|<tuple|E.1.17.2|66>>
+    <associate|auto-158|<tuple|E.1.17.3|66>>
+    <associate|auto-159|<tuple|E.1.17.4|67>>
     <associate|auto-16|<tuple|1.12|11>>
-    <associate|auto-160|<tuple|E.1.17.6|67>>
-    <associate|auto-161|<tuple|E.1.17.7|68>>
-    <associate|auto-162|<tuple|E.1.17.8|68>>
-    <associate|auto-163|<tuple|E.1.17.9|68>>
-    <associate|auto-164|<tuple|E.1.17.10|69>>
-    <associate|auto-165|<tuple|E.1.17.11|69>>
-    <associate|auto-166|<tuple|E.1.17.12|70>>
-    <associate|auto-167|<tuple|E.1.17.13|70>>
-    <associate|auto-168|<tuple|E.1.17.14|70>>
-    <associate|auto-169|<tuple|E.1.17.15|70>>
+    <associate|auto-160|<tuple|E.1.17.5|67>>
+    <associate|auto-161|<tuple|E.1.17.6|68>>
+    <associate|auto-162|<tuple|E.1.17.7|68>>
+    <associate|auto-163|<tuple|E.1.17.8|68>>
+    <associate|auto-164|<tuple|E.1.17.9|69>>
+    <associate|auto-165|<tuple|E.1.17.10|69>>
+    <associate|auto-166|<tuple|E.1.17.11|70>>
+    <associate|auto-167|<tuple|E.1.17.12|70>>
+    <associate|auto-168|<tuple|E.1.17.13|70>>
+    <associate|auto-169|<tuple|E.1.17.14|70>>
     <associate|auto-17|<tuple|1.12|11>>
-    <associate|auto-170|<tuple|E.1.18|70>>
-    <associate|auto-171|<tuple|E.1.18.1|71>>
-    <associate|auto-172|<tuple|E.1.19|71>>
-    <associate|auto-173|<tuple|E.1.19.1|71>>
-    <associate|auto-174|<tuple|E.1.19.2|71>>
-    <associate|auto-175|<tuple|E.1.20|73>>
-    <associate|auto-176|<tuple|E.1.20.1|73>>
-    <associate|auto-177|<tuple|E.1.21|73>>
-    <associate|auto-178|<tuple|E.2|74>>
-    <associate|auto-179|<tuple|F|74>>
+    <associate|auto-170|<tuple|E.1.17.15|70>>
+    <associate|auto-171|<tuple|E.1.18|71>>
+    <associate|auto-172|<tuple|E.1.18.1|71>>
+    <associate|auto-173|<tuple|E.1.19|71>>
+    <associate|auto-174|<tuple|E.1.19.1|71>>
+    <associate|auto-175|<tuple|E.1.19.2|73>>
+    <associate|auto-176|<tuple|E.1.20|73>>
+    <associate|auto-177|<tuple|E.1.20.1|73>>
+    <associate|auto-178|<tuple|E.1.21|74>>
+    <associate|auto-179|<tuple|E.2|74>>
     <associate|auto-18|<tuple|1.13|11>>
-    <associate|auto-180|<tuple|F.1|74>>
+    <associate|auto-180|<tuple|F|74>>
     <associate|auto-181|<tuple|F.1|74>>
-    <associate|auto-182|<tuple|F.2|75>>
-    <associate|auto-183|<tuple|F.2.1|75>>
-    <associate|auto-184|<tuple|F.1|75>>
-    <associate|auto-185|<tuple|F.2.2|76>>
-    <associate|auto-186|<tuple|F.2.3|76>>
-    <associate|auto-187|<tuple|F.2.4|76>>
-    <associate|auto-188|<tuple|F.2.5|76>>
-    <associate|auto-189|<tuple|F.2.6|77>>
+    <associate|auto-182|<tuple|F.1|75>>
+    <associate|auto-183|<tuple|F.2|75>>
+    <associate|auto-184|<tuple|F.2.1|75>>
+    <associate|auto-185|<tuple|F.1|76>>
+    <associate|auto-186|<tuple|F.2.2|76>>
+    <associate|auto-187|<tuple|F.2.3|76>>
+    <associate|auto-188|<tuple|F.2.4|76>>
+    <associate|auto-189|<tuple|F.2.5|77>>
     <associate|auto-19|<tuple|1.13|11>>
-    <associate|auto-190|<tuple|F.2.7|77>>
-    <associate|auto-191|<tuple|F.2|77>>
-    <associate|auto-192|<tuple|F.3|77>>
-    <associate|auto-193|<tuple|F.2.8|78>>
-    <associate|auto-194|<tuple|F.4|79>>
-    <associate|auto-195|<tuple|F.5|81>>
-    <associate|auto-196|<tuple|F.2.9|83>>
-    <associate|auto-197|<tuple|F.2.10|?>>
+    <associate|auto-190|<tuple|F.2.6|77>>
+    <associate|auto-191|<tuple|F.2.7|77>>
+    <associate|auto-192|<tuple|F.2|77>>
+    <associate|auto-193|<tuple|F.3|78>>
+    <associate|auto-194|<tuple|F.2.8|79>>
+    <associate|auto-195|<tuple|F.4|81>>
+    <associate|auto-196|<tuple|F.5|83>>
+    <associate|auto-197|<tuple|F.2.9|?>>
     <associate|auto-198|<tuple|F.2.10|?>>
     <associate|auto-199|<tuple|F.2.10|?>>
     <associate|auto-2|<tuple|1.1|9>>
     <associate|auto-20|<tuple|1.13|11>>
-    <associate|auto-200|<tuple|Tec19|?>>
+    <associate|auto-200|<tuple|F.2.10|?>>
+    <associate|auto-201|<tuple|Tec19|?>>
     <associate|auto-21|<tuple|1.13|11>>
     <associate|auto-22|<tuple|1.13|11>>
     <associate|auto-23|<tuple|1.13|11>>
@@ -6548,15 +6572,15 @@
     <associate|auto-89|<tuple|5.3.2.3|42>>
     <associate|auto-9|<tuple|1.9|11>>
     <associate|auto-90|<tuple|5.3.3|43>>
-    <associate|auto-91|<tuple|5.3.4|43>>
-    <associate|auto-92|<tuple|5.4|43>>
-    <associate|auto-93|<tuple|5.4.1|43>>
-    <associate|auto-94|<tuple|A|43>>
-    <associate|auto-95|<tuple|A.1|43>>
-    <associate|auto-96|<tuple|A.2|43>>
-    <associate|auto-97|<tuple|A.3|44>>
-    <associate|auto-98|<tuple|A.4|44>>
-    <associate|auto-99|<tuple|A.5|44>>
+    <associate|auto-91|<tuple|5.3.3.1|43>>
+    <associate|auto-92|<tuple|5.3.4|43>>
+    <associate|auto-93|<tuple|5.4|43>>
+    <associate|auto-94|<tuple|5.4.1|43>>
+    <associate|auto-95|<tuple|A|43>>
+    <associate|auto-96|<tuple|A.1|43>>
+    <associate|auto-97|<tuple|A.2|44>>
+    <associate|auto-98|<tuple|A.3|44>>
+    <associate|auto-99|<tuple|A.4|44>>
     <associate|bib-burdges_schnorr_2019|<tuple|Bur19|81>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|81>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|81>>
@@ -6585,6 +6609,7 @@
     <associate|defn-block-signature|<tuple|5.13|35>>
     <associate|defn-block-time|<tuple|5.10|34>>
     <associate|defn-block-tree|<tuple|1.11|11>>
+    <associate|defn-catchup-threshold|<tuple|5.27|?>>
     <associate|defn-chain-subchain|<tuple|1.13|11>>
     <associate|defn-children-bitmap|<tuple|2.10|17>>
     <associate|defn-consensus-message-digest|<tuple|5.2|31>>
@@ -7150,16 +7175,16 @@
       State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-90>>
 
-      <with|par-left|<quote|1tab>|5.3.4.<space|2spc>Voter Set Changes
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|5.3.4.<space|2spc>Voting Process in Round
+      <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-91>>
 
-      <with|par-left|<quote|1tab>|5.3.5.<space|2spc>Voting Process in Round
-      <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-92>>
-
       5.4.<space|2spc>Block Finalization <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-93>
+      <no-break><pageref|auto-92>
+
+      <with|par-left|<quote|1tab>|5.4.1.<space|2spc>Voter Set Changes
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-93>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       A.<space|2spc>Cryptographic Algorithms>
