@@ -911,8 +911,9 @@
     <math|><name|Chain(<math|B>)> path graph which contains both <math|B> and
     <math|B<rprime|'>>.><name|SubChain(<math|B<rprime|'>,B>)> we refer to the
     subgraph of <math|><name|Chain(<math|B>)> path graph which contains both
-    <math|B> and <math|B<rprime|'>>. Accordingly,
-    <glossary-explain|<math|\<bbb-C\><rsub|B<rprime|'>><around*|(|<around*|(|P|)>BT|)>>|is
+    <math|B> and <math|B<rprime|'>> and by
+    <name|\|SubChain(<math|B<rprime|'>,B>)\|> we refer to its length.
+    Accordingly, <glossary-explain|<math|\<bbb-C\><rsub|B<rprime|'>><around*|(|<around*|(|P|)>BT|)>>|is
     the set of all subchains of <math|<around*|(|P|)>BT> rooted at
     <math|B<rprime|'>>.><math|\<bbb-C\><rsub|B<rprime|'>><around*|(|<around*|(|P|)>BT|)>>
     is the set of all subchains of <math|<around*|(|P|)>BT> rooted at
@@ -2006,7 +2007,7 @@
   Polkadot RE implements the following procedure to assure the validity of
   the block:
 
-  <\algorithm|<name|Import-and-Validate-Block(<math|B,Just<around|(|B|)>>)>>
+  <\algorithm|<label|algo-import-and-validate-block><name|Import-and-Validate-Block(<math|B,Just<around|(|B|)>>)>>
     <\algorithmic>
       <\state>
         <name|Set-Storage-State-At(<math|P<around*|(|B|)>>)>
@@ -2362,18 +2363,32 @@
     <\center>
       <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<table|<row|<cell|<strong|Type
       Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Scheduled
-      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|B>|)>>>>|<row|<cell|2>|<cell|[RESERVED]>|<cell|[RESERVED]>>|<row|<cell|3>|<cell|On
-      Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|B>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|B>>>>>>>>
+      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|delay>|)>>>>|<row|<cell|2>|<cell|ForcedChange>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|delay>|)>>>>|<row|<cell|3>|<cell|On
+      Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|delay>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|delay>>>>>>>>
         <label|tabl-consensus-messages>The consensus digest item for GRANDPA
         authorities
       </small-table>
     </center>
 
-    Where Auth<math|<rsub|C>> is defined in Definition
-    <reference|defn-authority-list>, <math|N<rsub|B>> is the number of blocks
-    to delay the change. <math|Auth<rsub|ID>> is a 64 bit integer pointing to
-    the authority list of the current block. Type Id 2 is reserved for future
-    development <todo|Spec Force Change>.
+    Where:
+
+    <\itemize-minus>
+      <item>Auth<math|<rsub|C>> is the authority list defined in Definition
+      <reference|defn-authority-list>.
+
+      <item><math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+      is an unsigned 32 bit integer indicating the length of the subchain
+      starting at <math|B>, the block containing the consensus message in its
+      header digest and ending when it reaches <math|N<rsub|delay>> length as
+      a path graph. The last block in that subchain, <math|B<rprime|'>>,
+      depending on the message type, is either finalized or imported (and
+      therefore validated by the block production consensus engine according
+      to Algorithm <reference|algo-import-and-validate-block>. see below for
+      details).
+
+      <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to an
+      individual authority in the current authority list.
+    </itemize-minus>
   </definition>
 
   Polkadot RE should inspect the digest header of each block and delegates
@@ -2381,21 +2396,45 @@
   based on the type of consensus messages they receives as follows:
 
   <\itemize-minus>
-    <item><strong|Scheduled Change>: Schedule an authority set change. The
-    earliest digest of this type in a single block will be respected. No
-    change should be scheduled if one is already and the delay has not passed
-    completely. If such an inconsitency occures, the scheduled change should
-    be ignored.
+    <item><strong|Scheduled Change>: Schedule an authority set change after
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is a
+    block <em|finalized> by the finality consensus engine. The earliest
+    digest of this type in a single block will be respected. No change should
+    be scheduled if one is already and the delay has not passed completely.
+    If such an inconsitency occures, the scheduled change should be ignored.
 
-    <item><strong|On Disabled>: The authority set index with given index is
-    disabled until the next change.
+    <item><strong|Forced Change>: Force an authority set change after the
+    given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is an
+    <em|imported> block which has been validated by the block production
+    conensus engine. Hence, the authority change set is valid for every
+    subchain which contains <em|B> and where the delay has been exceeded. If
+    one or more blocks gets finalized before the change takes effect, the
+    authority set change should be disregarded. The earliest digest of this
+    type in a single block will be respected. No change should be scheduled
+    if one is already and the delay has not passed completely. If such an
+    inconsitency occures, the scheduled change should be ignored.
+
+    <item><strong|On Disabled>: An index to the individual authority in the
+    current authority list that should be immediately disabled until the next
+    authority set change. When an authority gets disabled, the node should
+    stop performing any authority functionality from that authority,
+    including authoring blocks and casting GRANDPA votes for finalization.
+    Similarly, other nodes should ignore all messages from the indicated
+    authority which pretain to their authority role.\ 
 
     <item><strong|Pause>: A signal to pause the current authority set after
-    the given delay. After finalizing the block at delay the authorities
-    should stop voting.
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is a
+    block <em|finalized> by the finality consensus engine. After finalizing
+    block <math|B<rprime|'>>, the authorities should stop voting.
 
     <item><strong|Resume>: A signal to resume the current authority set after
-    the given delay. After authoring the block at delay the authorities
+    the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
+    where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is an
+    <em|imported> block and validated by the block production consensus
+    engine. After authoring the block <math|B<rprime|'>>, the authorities
     should resume voting.
   </itemize-minus>
 
