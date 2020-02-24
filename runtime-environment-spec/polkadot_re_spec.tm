@@ -5393,8 +5393,8 @@
   <\definition>
     <label|defn-key-type-id>Cryptographic keys are saved in their own
     storages in order to avoid collision with each other. The storages are
-    identified by their 4-byte<strong| key type ID>. Following known types
-    are available:
+    identified by their 4-byte ASCII <strong|key type ID>. The following
+    known types are available:
 
     <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>>|<row|<cell|babe>|<cell|Key
     type for the Babe module>>|<row|<cell|gran>|<cell|Key type for the
@@ -5407,9 +5407,10 @@
   </definition>
 
   <\definition>
-    <label|defn-ecdsa-verify-error><strong|EcdsaVerifyError> specifies the
-    error type when using ECDSA recovery functionality. Following values are
-    possible:
+    <label|defn-ecdsa-verify-error><strong|EcdsaVerifyError> is a varying
+    data type as defined in Definition <reference|defn-varrying-data-type>
+    and specifies the error type when using ECDSA recovery functionality.
+    Following values are possible:
 
     <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>>|<row|<cell|0>|<cell|Incorrect
     value of R or S>>|<row|<cell|1>|<cell|Incorrect value of
@@ -5961,8 +5962,9 @@
   </definition>
 
   <\definition>
-    <label|defn-http-error><strong|HTTP error> specifies the error types of
-    certain HTTP functions. Following values are possible:
+    <label|defn-http-error><strong|HTTP error> is a varying data type as
+    defined in Definition <reference|defn-varrying-data-type> and specifies
+    the error types of certain HTTP functions. Following values are possible:
 
     <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>>|<row|<cell|0>|<cell|The
     deadline was reached>>|<row|<cell|1>|<cell|There was an IO error while
@@ -6649,9 +6651,10 @@
   Interface that provides functions for logging from within the runtime.
 
   <\definition>
-    <label|defn-logging-log-level><strong|Log Level> implies the (possible)
-    emergency of the log. Possible levels and it's identifiers are defined in
-    the following table.
+    <label|defn-logging-log-level><strong|Log Level> is a varying data type
+    as defined in Definition <reference|defn-varrying-data-type> and implies
+    the emergency of the log. Possible levels and it's identifiers are
+    defined in the following table.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Level>
     >>|<row|<cell|0>|<cell|Error = 1>>|<row|<cell|1>|<cell|Warn =
