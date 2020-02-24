@@ -5,6 +5,7 @@ mod network;
 mod storage;
 mod utils;
 mod trie;
+mod misc;
 
 use clap::ArgMatches;
 use utils::ParsedInput;
