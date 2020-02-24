@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime, str};
+use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 /// TODO: Call from Julia

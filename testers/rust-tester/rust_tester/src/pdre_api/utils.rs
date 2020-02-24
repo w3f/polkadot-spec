@@ -70,16 +70,14 @@ impl Runtime {
     }
     pub fn call(&mut self, method: &str, data: &[u8]) -> Vec<u8> {
         let mut extext = self.ext.ext();
-        call_in_wasm::<
-            sp_io::SubstrateHostFunctions,
-        >(
+        call_in_wasm::<sp_io::SubstrateHostFunctions>(
             method,
             data,
             WasmExecutionMethod::Interpreted,
             &mut extext,
             &self.blob,
             8,
-            false
+            false,
         )
         .unwrap()
     }
@@ -114,18 +112,19 @@ impl Decoder for Vec<u8> {
         Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
     fn decode_option(&self) -> Option<Vec<u8>> {
-        let mut option = Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding");
+        let mut option =
+            Vec::<u8>::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding");
         match option[0] {
             0 => {
                 if option.len() > 1 {
                     panic!("The None value appends additional data");
                 }
                 None
-            },
+            }
             1 => {
                 option.remove(0);
                 Some(option)
-            },
+            }
             _ => panic!("Not a valid Option value"),
         }
     }

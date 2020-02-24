@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime, str};
+use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 // TODO: Call from Julia
@@ -12,11 +12,7 @@ pub fn ext_trie_blake2_256_root_version_1(input: ParsedInput) {
     let key3 = input.get(4);
     let value3 = input.get(5);
 
-    let trie = vec![
-        (key1, value1),
-        (key2, value2),
-        (key3, value3)
-    ];
+    let trie = vec![(key1, value1), (key2, value2), (key3, value3)];
 
     // Get valid key
     let res = rtm
@@ -34,15 +30,14 @@ pub fn ext_trie_blake2_256_ordered_root_version_1(input: ParsedInput) {
     let value2 = input.get(1);
     let value3 = input.get(2);
 
-    let trie = vec![
-        value1,
-        value2,
-        value3
-    ];
+    let trie = vec![value1, value2, value3];
 
     // Get valid key
     let res = rtm
-        .call("rtm_ext_trie_blake2_256_ordered_root_version_1", &(trie).encode())
+        .call(
+            "rtm_ext_trie_blake2_256_ordered_root_version_1",
+            &(trie).encode(),
+        )
         .decode_val();
 
     println!("{}", hex::encode(res));
