@@ -365,37 +365,80 @@ module PdreApiTestData
 	  ]
 	]
 
+    const key_value_3 = [
+      [
+        "static", # value1
+        "even-keeled", # value2
+      ],
+      [
+        "function",
+        "Face to face",
+      ],
+      [
+        "Integrated",
+        "budgetary management",
+      ],
+      [
+        "non-based",
+        "non-volatile",
+      ],
+      [
+        "productivity",
+        "Total",
+      ],
+      [
+        "Exclusive",
+        "concept",
+      ],
+      [
+        "disintermediate",
+        "policy",
+      ],
+      [
+        "contingency",
+        "context-sensitive",
+      ],
+      [
+        "human-resource",
+        "hardware",
+      ],
+      [
+        "Optional",
+        "object-oriented",
+      ]
+    ]
+
 	const value = [
-		[
-			"static", # value
-		],
-		[
-			"Inverse", # value...
-		],
-		[
-			"even-keeled",
-		],
-		[
-			"Future-proofed",
-		],
-		[
-			"function",
-		],
-		[
-			"Horizontal",
-		],
-		[
-			"Face to face",
-		],
-		[
-			"Expanded",
-		],
-		[
-			"Integrated",
-		],
-		[
-			"portal",
-		]
+	  [
+	    "static", # value
+	  ],
+	  [
+	    "Inverse", # value...
+	  ],
+	  [
+	    "even-keeled",
+	  ],
+	  [
+	    "Future-proofed",
+	  ],
+	  [
+	    "function",
+	  ],
+	  [
+	    "Horizontal",
+	  ],
+	  [
+	    "Face to face",
+	  ],
+	  [
+	    "Expanded",
+	  ],
+	  [
+	    "Integrated",
+	  ],
+	  [
+	    "portal",
+	  ]
 	]
 
 	const offset = [
