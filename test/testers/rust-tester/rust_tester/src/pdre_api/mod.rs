@@ -14,7 +14,9 @@ pub fn process_pdre_api_tests(subcmd_matches: &ArgMatches) {
         let input: ParsedInput = subcmd_matches.values_of("input").unwrap().into();
 
         match func {
+            "ext_storage_set_version_1" => storage::ext_storage_set_version_1(input),
             "ext_storage_get_version_1" => storage::ext_storage_get_version_1(input),
+            "ext_storage_child_set_version_1" => child_storage::ext_storage_child_set_version_1(input),
             "ext_storage_child_get_version_1" => child_storage::ext_storage_child_get_version_1(input),
             "ext_storage_read_version_1" => storage::ext_storage_read_version_1(input),
             "ext_storage_child_read_version_1" => child_storage::ext_storage_child_read_version_1(input),
