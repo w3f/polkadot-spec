@@ -76,8 +76,30 @@ module PdreApiExpectedResults
         "27a5de00daecd452",
         "a85fa102cba3e8e9",
         "febde401d103f0f7",
-        "17542d4a435eddd7"
-    ]
+        "17542d4a435eddd7",
+        # ext_allocator_malloc_version_1
+        "static",
+        "Inverse",
+        "even-keeled",
+        "Future-proofed",
+        "function",
+        "Horizontal",
+        "Face to face",
+        "Expanded",
+        "Integrated",
+        "portal",
+        # ext_allocator_free_version_1
+        "static",
+        "Inverse",
+        "even-keeled",
+        "Future-proofed",
+        "function",
+        "Horizontal",
+        "Face to face",
+        "Expanded",
+        "Integrated",
+        "portal",
+]
 
     const key_value = [
         # test_set_get_storage
