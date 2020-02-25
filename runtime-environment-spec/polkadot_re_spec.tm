@@ -4769,9 +4769,9 @@
   The Runtime Environment API is a set of functions that Polkadot RE exposes
   to Runtime to access external functions needed for various reasons, such as
   the Storage of the content, access and manipulation, memory allocation, and
-  also efficiency. We introduce Notation <reference|nota-re-api-at-state> to
-  emphasize that the result of some of the API functions depends on the
-  content of state storage.
+  also efficiency. The encoding of each data type is specified or referenced
+  in this section. If the encoding is not mentioned, then the default Wasm
+  encoding is used, such as little-endian byte ordering for integers.
 
   <\notation>
     <label|nota-re-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we refer
