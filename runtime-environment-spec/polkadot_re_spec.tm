@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|algorithmacs-style>>
 
@@ -4839,9 +4839,9 @@
     <reference|defn-runtime-pointer> containing the key.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> returning the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the value.
+    <reference|defn-runtime-pointer> returning the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the value.
   </itemize>
 
   <subsection|<verbatim|ext_storage_read>>
@@ -4876,11 +4876,10 @@
     value should be read from.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-old|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the number of bytes
-    written into the <verbatim|value_out> buffer. Returns <verbatim|None> if
-    the entry does not exists.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the number of bytes written into the <verbatim|value_out>
+    buffer. Returns <verbatim|None> if the entry does not exists.
   </itemize>
 
   <subsection|<verbatim|ext_storage_clear>>
@@ -4986,9 +4985,9 @@
     block hash.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the change root.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the change root.
   </itemize>
 
   <subsection|<verbatim|ext_storage_next_key>>
@@ -5010,10 +5009,9 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the next key in
-    lexicographic order.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the next key in lexicographic order.
   </itemize>
 
   <section|Child Storage>
@@ -5118,8 +5116,8 @@
 
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the value.
+    encoded|> <verbatim|Option> as defined in Definition
+    <reference|defn-option-type> containing the value.
   </itemize>
 
   <subsection|<verbatim|ext_storage_child_read>>
@@ -5168,11 +5166,10 @@
     value should be read from.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the number of bytes
-    written into the <strong|value_out> buffer. Returns <verbatim|None> if
-    the entry does not exists.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the number of bytes written into the <strong|value_out>
+    buffer. Returns <verbatim|None> if the entry does not exists.
   </itemize>
 
   <subsection|<verbatim|ext_storage_child_clear>>
@@ -5392,11 +5389,10 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the next key in
-    lexicographic order. Returns <verbatim|None> if the entry cannot be
-    found.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the next key in lexicographic order. Returns <verbatim|None>
+    if the entry cannot be found.
   </itemize>
 
   <section|Crypto>
@@ -5479,10 +5475,9 @@
     type ID as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|seed>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the BIP-39 seed which must
-    be valid UTF8.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the BIP-39 seed which must be valid UTF8.
 
     <item><verbatim|return>: a regular pointer to the buffer containing the
     32-byte public key.
@@ -5518,11 +5513,10 @@
     signed.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the signature. This
-    function returns <verbatim|None> if the public key cannot be found in the
-    key store.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the signature. This function returns <verbatim|None> if the
+    public key cannot be found in the key store.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_ed25519_verify>>
@@ -5603,10 +5597,9 @@
     as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|seed>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the BIP-39 seed which must
-    be valid UTF8.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the BIP-39 seed which must be valid UTF8.
 
     <item><verbatim|return>: a regular pointer to the buffer containing the
     32-byte public key.
@@ -5642,11 +5635,10 @@
     signed.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the signature. This
-    function returns <verbatim|None> if the public key cannot be found in the
-    key store.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the signature. This function returns <verbatim|None> if the
+    public key cannot be found in the key store.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_sr25519_verify>>
@@ -5705,10 +5697,10 @@
     32-byte Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type>. On success it
-    contains the 64-byte recovered public key or an error type as defined in
-    Definition <reference|defn-ecdsa-verify-error> on failure.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Result> as defined in Definition <reference|defn-result-type>.
+    On success it contains the 64-byte recovered public key or an error type
+    as defined in Definition <reference|defn-ecdsa-verify-error> on failure.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover_compressed>>
@@ -5736,10 +5728,10 @@
     32-byte Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definiton <reference|defn-varrying-data-type>. On success it
-    contains the 33-byte recovered public key in compressed form on success
-    or an error type as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Result> as defined in Definiton <reference|defn-result-type>.
+    On success it contains the 33-byte recovered public key in compressed
+    form on success or an error type as defined in Definition
     <reference|defn-ecdsa-verify-error> on failure.
   </itemize>
 
@@ -6036,9 +6028,9 @@
     encoded extrinsic.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type>. Neither on
-    success or failure is there any additional data provided.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Result> as defined in Definition <reference|defn-result-type>.
+    Neither on success or failure is there any additional data provided.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_network_state>>
@@ -6063,10 +6055,10 @@
 
   <\itemize>
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type>. On success it
-    contains the SCALE encoded network state. This includes none or one
-    <verbatim|PeerId> followed by none, one or more IPv4 or IPv6
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Result> as defined in Definition <reference|defn-result-type>.
+    On success it contains the SCALE encoded network state. This includes
+    none or one <verbatim|PeerId> followed by none, one or more IPv4 or IPv6
     <verbatim|Multiaddress(-es)> by which the node is publicly known by. On
     failure no additional data is provided.
   </itemize>
@@ -6192,9 +6184,9 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|old_value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the old key.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the old key.
 
     <item><verbatim|new_value>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the new value.
@@ -6230,10 +6222,9 @@
     <reference|defn-runtime-pointer> indicating the key.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the value or the
-    corresponding key.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the value or the corresponding key.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_http_request_start>>
@@ -6265,10 +6256,10 @@
     SCALE encoded parameters. Currently, an empty array should be passed.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type> containing the
-    i16 ID of the newly started request. On failure no additionally data is
-    provided.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Result> as defined in Definition <reference|defn-result-type>
+    containing the i16 ID of the newly started request. On failure no
+    additionally data is provided.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_http_request_add_header>>
@@ -6302,9 +6293,9 @@
     <reference|defn-runtime-pointer> indicating the HTTP header value.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type>. Neither on
-    success or failure is there any additional data provided.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Result> as defined in Definition <reference|defn-result-type>.
+    Neither on success or failure is there any additional data provided.
   </itemize>
 
   <subsection|<verbatim|ext_http_request_write_body>>
@@ -6334,16 +6325,16 @@
     an empty chunk finalizes the request.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
-    defined in Definition <reference|defn-varrying-data-type> containing the
-    UNIX timestamp as defined in Definition <reference|defn-unix-time>.
-    Passing <verbatim|None> blocks indefinitely.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the UNIX timestamp as defined in Definition
+    <reference|defn-unix-time>. Passing <verbatim|None> blocks indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined Definition <reference|defn-varrying-data-type>. On success, no
-    additional data is provided. On error it contains the HTTP error type as
-    defined in Definition <reference|defn-http-error>.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Result> as defined Definition <reference|defn-result-type>. On
+    success, no additional data is provided. On error it contains the HTTP
+    error type as defined in Definition <reference|defn-http-error>.
   </itemize>
 
   <subsection|<verbatim|ext_http_response_wait>>
@@ -6370,10 +6361,10 @@
     started request IDs.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the UNIX timestamp as
-    defined in Definition 1.10. Passing <verbatim|None> blocks indefinitely.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the UNIX timestamp as defined in Definition 1.10. Passing
+    <verbatim|None> blocks indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded array of
@@ -6438,18 +6429,18 @@
     gets written to.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <version-both|SCALE
-    encoded |<version-suppressed>><verbatim|Option> as defined in Definition
-    <reference|defn-varrying-data-type> containing the UNIX timestamp as
-    defined in Definition <reference|defn-unix-time>. Passing <verbatim|None>
-    will block indefinitely.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the UNIX timestamp as defined in Definition
+    <reference|defn-unix-time>. Passing <verbatim|None> will block
+    indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Result> as
-    defined in Definition <reference|defn-varrying-data-type>. On success it
-    contains an i32 integer specifying the number of bytes written or a HTTP
-    error type as defined in Definition <reference|defn-http-error> on
-    faiure.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Result> as defined in Definition <reference|defn-result-type>.
+    On success it contains an i32 integer specifying the number of bytes
+    written or a HTTP error type as defined in Definition
+    <reference|defn-http-error> on faiure.
   </itemize>
 
   <section|Trie>
@@ -6595,9 +6586,8 @@
   Extract the Runtime version of the given Wasm blob by calling
   <verbatim|Core_version> as defined in Definition
   <reference|defn-rt-core-version>. Returns the SCALE encoded runtime version
-  or <verbatim|None> as defined in Definition
-  <reference|defn-varrying-data-type> if the call fails. This function gets
-  primarily used when upgrading Runtimes.
+  or <verbatim|None> as defined in Definition <reference|defn-option-type> if
+  the call fails. This function gets primarily used when upgrading Runtimes.
 
   \;
 
@@ -6621,9 +6611,9 @@
     <reference|defn-runtime-pointer> indicating the Wasm blob.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the <verbatim|Option> as
-    defined in Definition <reference|defn-varrying-data-type> containing the
-    Runtime version of the given Wasm blob.
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the Runtime version of the given Wasm blob.
   </itemize>
 
   <section|Allocator>
