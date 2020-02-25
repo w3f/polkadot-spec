@@ -90,6 +90,14 @@ module PdreApiTestFunctions
 		"ext_crypto_sr25519_sign_version_1",
 		"ext_crypto_sr25519_verify_version_1"
 	]
+
+	const key_value_key_value_key_value = [
+		"ext_trie_blake2_256_root_version_1"
+	]
+
+	const value_value_value = [
+		"ext_trie_blake2_256_ordered_root_version_1"
+	]
 end
 
 # Module which contains the names of the LEGACY functions that need to be tested.
@@ -440,6 +448,72 @@ module PdreApiTestData
 	    "portal",
 	  ]
 	]
+
+    const value_2 = [
+      [
+        "even-keeled", # value
+      ],
+      [
+        "Face to face",
+      ],
+      [
+        "budgetary management",
+      ],
+      [
+        "non-volatile",
+      ],
+      [
+        "Total",
+      ],
+      [
+        "concept",
+      ],
+      [
+        "policy",
+      ],
+      [
+        "context-sensitive",
+      ],
+      [
+        "hardware",
+      ],
+      [
+        "object-oriented",
+      ]
+    ]
+
+    const value_3 = [
+      [
+        "Future-proofed" # value
+      ],
+      [
+        "Expanded"
+      ],
+      [
+        "pricing structure"
+      ],
+      [
+        "emulation"
+      ],
+      [
+        "Visionary"
+      ],
+      [
+        "approach"
+      ],
+      [
+        "function"
+      ],
+      [
+        "Configurable"
+      ],
+      [
+        "Automated"
+      ],
+      [
+        "toolset"
+      ]
+    ]
 
 	const offset = [
 	  [

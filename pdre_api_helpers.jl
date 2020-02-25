@@ -86,6 +86,7 @@ function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
                 else
                     output = read(`sh -c $cmd`, String)
                 end
+
                 #println(output)
 
                 if result_list != false

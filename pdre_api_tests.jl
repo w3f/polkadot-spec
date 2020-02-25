@@ -145,5 +145,29 @@ using Test
         false # strip newline
     )
 
+    run_dataset(
+        PdreApiTestFunctions.key_value_key_value_key_value,
+        [
+            PdreApiTestData.key_value_1,
+            PdreApiTestData.key_value_2,
+            PdreApiTestData.key_value_3
+        ],
+        PdreApiTestBinaries.cli_testers,
+        PdreApiExpectedResults.key_value_key_value_key_value,
+        true # strip newline
+    )
+
+    run_dataset(
+        PdreApiTestFunctions.value_value_value,
+        [
+            PdreApiTestData.value,
+            PdreApiTestData.value_2,
+            PdreApiTestData.value_3,
+        ],
+        PdreApiTestBinaries.cli_testers,
+        PdreApiExpectedResults.value_value_value,
+        true # strip newline
+    )
+
     cd(root_dir)
 end
