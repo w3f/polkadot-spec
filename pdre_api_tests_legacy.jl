@@ -12,7 +12,7 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.value,
         [
-            PdreApiTestData.value
+            PdreApiTestData.value_1
         ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.value,
@@ -22,7 +22,7 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.value_no_output,
         [
-            PdreApiTestData.value
+            PdreApiTestData.value_1
         ],
         PdreApiTestBinariesLegacy.cli_testers,
         false,
@@ -65,7 +65,7 @@ using Test
         PdreApiTestFunctionsLegacy.key_key_value,
         [
             PdreApiTestData.key_value_1,
-            PdreApiTestData.value
+            PdreApiTestData.value_1
         ],
         PdreApiTestBinariesLegacy.cli_testers,
         PdreApiExpectedResultsLegacy.key_key_value,

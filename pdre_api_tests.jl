@@ -12,7 +12,7 @@ using Test
     run_dataset(
         PdreApiTestFunctions.value,
         [
-            PdreApiTestData.value,
+            PdreApiTestData.value_1,
         ],
         PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.value,
@@ -138,7 +138,7 @@ using Test
         PdreApiTestFunctions.seed_msg,
         [
             PdreApiTestData.seed_1,
-            PdreApiTestData.value
+            PdreApiTestData.value_1
         ],
         PdreApiTestBinaries.cli_testers,
         false,
@@ -160,7 +160,7 @@ using Test
     run_dataset(
         PdreApiTestFunctions.value_value_value,
         [
-            PdreApiTestData.value,
+            PdreApiTestData.value_1,
             PdreApiTestData.value_2,
             PdreApiTestData.value_3,
         ],
