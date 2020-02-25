@@ -1,7 +1,6 @@
 use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
-// TODO: Call from Julia
 pub fn ext_trie_blake2_256_root_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
@@ -22,7 +21,6 @@ pub fn ext_trie_blake2_256_root_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-// TODO: Call from Julia
 pub fn ext_trie_blake2_256_ordered_root_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
