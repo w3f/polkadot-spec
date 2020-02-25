@@ -162,6 +162,17 @@ module PdreApiExpectedResults
     ]
 
     const child_child_def_type_key_value = [
+        # ext_storage_child_set_version_1
+        "Inverse",
+        "Horizontal",
+        "portal",
+        "Monitored",
+        "secondary",
+        "next generation",
+        "Grass-roots",
+        "value-added",
+        "Reactive",
+        "secondary",
         # ext_storage_child_get_version_1
         "Inverse",
         "Horizontal",
