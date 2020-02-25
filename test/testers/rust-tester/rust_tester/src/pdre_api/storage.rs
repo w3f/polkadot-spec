@@ -1,7 +1,6 @@
 use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
-// TODO: Call from Julia
 pub fn ext_storage_set_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
@@ -32,7 +31,6 @@ pub fn ext_storage_get_version_1(input: ParsedInput) {
     ext_storage_set_version_1(input)
 }
 
-// TODO: assert in wasm, make sure returned length matches buffer length
 pub fn ext_storage_read_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 

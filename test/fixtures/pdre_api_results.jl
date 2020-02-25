@@ -102,7 +102,18 @@ module PdreApiExpectedResults
 ]
 
     const key_value = [
-        # test_set_get_storage
+        # test_set_storage
+        "Inverse",
+        "Horizontal",
+        "portal",
+        "Monitored",
+        "secondary",
+        "next generation",
+        "Grass-roots",
+        "value-added",
+        "Reactive",
+        "secondary",
+        # test_get_storage
         "Inverse",
         "Horizontal",
         "portal",

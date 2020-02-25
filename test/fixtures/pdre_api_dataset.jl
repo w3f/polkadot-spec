@@ -33,6 +33,7 @@ module PdreApiTestFunctions
 	]
 
 	const key_value = [
+		"ext_storage_set_version_1",
 		"ext_storage_get_version_1",
 		"ext_storage_clear_version_1",
 		"ext_storage_exists_version_1"

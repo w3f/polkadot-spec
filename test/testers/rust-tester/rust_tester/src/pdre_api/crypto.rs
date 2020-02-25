@@ -1,6 +1,5 @@
 use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
-// TODO: Spec key types
 use sp_core::crypto::key_types::DUMMY;
 
 pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
@@ -269,7 +268,6 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
     }
 }
 
-// TODO: Call from Julia
 pub fn ext_crypto_secp256k1_ecdsa_recover_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new_keystore();
 
