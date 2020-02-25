@@ -77,7 +77,7 @@ function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
                 cmd = string(cmd, " \"", input, "\"")
 
                 if print_verbose
-                    println("[RUNNING]: ", cmd)
+                    println("[> RUNNING]: ", cmd)
                 end
 
                 # Run command
@@ -96,7 +96,7 @@ function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
                 end
 
                 if output != "" && print_verbose
-                    println("> [OUTPUT]: ", output)
+                    println("  [OUTPUT]: ", output)
                 end
             end
             counter = counter + 1

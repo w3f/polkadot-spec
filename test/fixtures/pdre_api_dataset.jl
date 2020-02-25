@@ -417,7 +417,7 @@ module PdreApiTestData
       ]
     ]
 
-	const value = [
+	const value_1 = [
 	  [
 	    "static", # value
 	  ],
