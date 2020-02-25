@@ -28,6 +28,8 @@ module PdreApiTestFunctions
 		"ext_hashing_twox_256_version_1",
 		"ext_hashing_twox_128_version_1",
 		"ext_hashing_twox_64_version_1",
+		"ext_allocator_malloc_version_1",
+		"ext_allocator_free_version_1"
 	]
 
 	const key_value = [
