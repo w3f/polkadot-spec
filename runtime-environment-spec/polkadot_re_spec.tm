@@ -8237,8 +8237,6 @@
       \ \ (export "GrandpaApi_grandpa_authorities" (func
       $GrandpaApi_grandpa_authorities))
 
-      \ \ (export "BabeApi_startup_data" (func $BabeApi_startup_data))
-
       \ \ (export "BabeApi_configuration" (func $BabeApi_configuration))
 
       \ \ (export "SessionKeys_generate_session_keys"\ 
@@ -8463,7 +8461,7 @@
     \;
 
     <\small-table|<tabular|<tformat|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-bborder|0ln>|<cwith|7|7|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-bborder|0ln>|<cwith|12|12|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|2|2|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|0ln>|<twith|table-rborder|1ln>|<twith|table-lborder|0ln>|<twith|table-tborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|12|12|1|1|cell-tborder|0ln>|<cwith|11|11|1|1|cell-bborder|0ln>|<cwith|12|12|2|2|cell-tborder|0ln>|<cwith|11|11|2|2|cell-bborder|0ln>|<cwith|12|12|2|2|cell-lborder|0ln>|<cwith|12|12|1|1|cell-rborder|0ln>|<cwith|12|12|3|3|cell-tborder|0ln>|<cwith|11|11|3|3|cell-bborder|0ln>|<cwith|2|-1|3|3|cell-lborder|0ln>|<cwith|2|-1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|12|12|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Priority>|<cell|Determines
-    the ordering of two transactions that have>|<cell|unsigned
+    the ordering of two transactions that have>|<cell|Unsigned
     64bit>>|<row|<cell|>|<cell|all their dependencies (required tags)
     satisfied.>|<cell|integer>>|<row|<cell|Requires>|<cell|List of tags
     specifying extrinsics which should be applied >|<cell|Array
@@ -8474,10 +8472,10 @@
     current extrinsics are being applied.>|<cell|inner
     arrays>>|<row|<cell|>|<cell|Describes the minimum number of blocks for
     the validity to be correct>|<cell|>>|<row|<cell|Longevity>|<cell|After
-    this period, the transaction should be removed from the >|<cell|unsigned
+    this period, the transaction should be removed from the >|<cell|Unsigned
     64bit>>|<row|<cell|>|<cell|pool or revalidated.>|<cell|integer>>|<row|<cell|Propagate>|<cell|A
     flag indicating if the transaction should be propagated to
-    >|<cell|boolean>>|<row|<cell|>|<cell|other peers.>|<cell|>>>>>>
+    >|<cell|Boolean>>|<row|<cell|>|<cell|other peers.>|<cell|>>>>>>
       The tuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
 
       in the case the transaction is judged to be valid.
