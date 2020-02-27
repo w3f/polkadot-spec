@@ -8462,9 +8462,9 @@
 
   This function returns a <verbatim|Result> as defined in Definition
   <reference|defn-result-type> which contains the type <em|ValidTransaction>
-  on success and the type <em|TransactionValidityError> on failure. Both
-  types are listed in Definition <reference|defn-valid-transaction>
-  respectively in Definition <reference|defn-transaction-validity-error>.
+  as defined in Definition <reference|defn-valid-transaction> on success and
+  the type <em|TransactionValidityError> as defined in Definition
+  <reference|defn-transaction-validity-error> on failure.
 
   <\definition>
     <label|defn-valid-transaction><strong|ValidTransaction> contains
@@ -8506,36 +8506,53 @@
 
     \;
 
-    <small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|<strong|>Id>>|<cell|<strong|Appended>>|<cell|<strong|Descri<strong|>ption>>>|<row|<cell|0>|<cell|InvalidTransaction
-    (as defined in Definition )>|<cell|The transaction is
-    invalid.>>|<row|<cell|1>|<cell|UnknownTransaction (as defined in
-    Definition )>|<cell|The transaction validity can't be
-    determined.>>>>>|Type variation for the return value of
-    <verbatim|TaggedTransactionQueue_transaction_validity>.>
+    <small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-tborder|1ln>|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<table|<row|<cell|<strong|<strong|>Id>>|<cell|<strong|Descri<strong|>ption>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|The
+    transaction is invalid.>|<cell|InvalidTransaction (as defined in
+    Definition <reference|defn-invalid-transaction>)>>|<row|<cell|1>|<cell|The
+    transaction validity can't be determined.>|<cell|UnknownTransaction (as
+    defined in Definition <reference|defn-unknown-transaction>)>>>>>|Type
+    variation for the return value of <verbatim|TaggedTransactionQueue_transaction_validity>.>
 
     <\definition>
-      <strong|InvalidTransaction> is a varying data type as defined in
-      Definition <reference|defn-varrying-data-type> which describes the
-      invalid transaction in more precise detail. The following values are
-      possible:
+      <label|defn-invalid-transaction><strong|InvalidTransaction> is a
+      varying data type as defined in Definition
+      <reference|defn-varrying-data-type> which can get appended to
+      TransactionValidityError and describes the invalid transaction in more
+      precise detail. The following values are possible:
 
-      <\big-table|<tabular|<tformat|<cwith|1|1|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-tborder|1ln>|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|1|1|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Appended>>|<cell|<strong|Description>>>|<row|<cell|0>|<cell|>|<cell|Call:
-      The call of the transaction is not expected>>|<row|<cell|1>|<cell|>|<cell|Payment:
+      <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|Call:
+      The call of the transaction is not expected>|<cell|>>|<row|<cell|1>|<cell|Payment:
       Inability to pay some fees (e.g. balance too
-      low)>>|<row|<cell|2>|<cell|>|<cell|Future: Transaction not yet valid
-      (e.g. nonce too high)>>|<row|<cell|3>|<cell|>|<cell|Stale: Transaction
-      is outdated (e.g. nonce too low)>>|<row|<cell|4>|<cell|>|<cell|BadProof:
-      Bad transaction proof (e.g. bad signature)>>|<row|<cell|5>|<cell|>|<cell|AncientBirthBlock:
-      Transaction birth block is ancient.>>|<row|<cell|6>|<cell|>|<cell|ExhaustsResources:
+      low)>|<cell|>>|<row|<cell|2>|<cell|Future: Transaction not yet valid
+      (e.g. nonce too high)>|<cell|>>|<row|<cell|3>|<cell|Stale: Transaction
+      is outdated (e.g. nonce too low)>|<cell|>>|<row|<cell|4>|<cell|BadProof:
+      Bad transaction proof (e.g. bad signature)>|<cell|>>|<row|<cell|5>|<cell|AncientBirthBlock:
+      Transaction birth block is ancient.>|<cell|>>|<row|<cell|6>|<cell|ExhaustsResources:
       Transaction would exhaus the resources of the current
-      block>>|<row|<cell|7>|<cell|one byte>|<cell|Custom: Any other custom
-      message not covered by this type. >>>>>>
+      block>|<cell|>>|<row|<cell|7>|<cell|Custom: Any other custom message
+      not covered by this type. >|<cell|one byte>>>>>>
         Type variant whichs gets appended to Id 0 of
         <strong|TransactionValidityError>.
       </big-table>
     </definition>
 
-    \;
+    <\definition>
+      <label|defn-unknown-transaction><strong|UnknownTransacion> is a varying
+      data type as defined in Definition <reference|defn-varrying-data-type>
+      which can get appended to TransactionValidityError and describes the
+      unknown transaction validity in more precise detail. The following
+      values are possible:
+
+      <\big-table|<tabular|<tformat|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|CannotLookup:
+      Could not lookup some info that is required for the
+      transaction>|<cell|>>|<row|<cell|1>|<cell|NoUnsignedValidator: No
+      validator found for the given unsigned
+      transaction.>|<cell|>>|<row|<cell|2>|<cell|Custom: Any other custom
+      message not covered by this type>|<cell|one byte>>>>>>
+        Type variant whichs gets appended to Id 1 of
+        <strong|TransactionValidityError>.
+      </big-table>
+    </definition>
 
     \;
   </definition>
@@ -9086,14 +9103,15 @@
     <associate|auto-319|<tuple|G.3|102>>
     <associate|auto-32|<tuple|2.1.2|17>>
     <associate|auto-320|<tuple|G.4|103>>
-    <associate|auto-321|<tuple|G.2.8|103>>
-    <associate|auto-322|<tuple|G.5|103>>
+    <associate|auto-321|<tuple|G.5|103>>
+    <associate|auto-322|<tuple|G.2.8|103>>
     <associate|auto-323|<tuple|G.6|103>>
-    <associate|auto-324|<tuple|G.2.9|104>>
-    <associate|auto-325|<tuple|G.2.10|105>>
+    <associate|auto-324|<tuple|G.7|104>>
+    <associate|auto-325|<tuple|G.2.9|105>>
     <associate|auto-326|<tuple|G.2.10|107>>
     <associate|auto-327|<tuple|G.2.10|109>>
-    <associate|auto-328|<tuple|Tec19|?>>
+    <associate|auto-328|<tuple|G.2.10|?>>
+    <associate|auto-329|<tuple|Tec19|?>>
     <associate|auto-33|<tuple|2.1.3|18>>
     <associate|auto-34|<tuple|2.1.4|20>>
     <associate|auto-35|<tuple|3|23>>
@@ -9216,6 +9234,7 @@
     <associate|defn-http-status-codes|<tuple|E.10|72>>
     <associate|defn-index-function|<tuple|2.7|19>>
     <associate|defn-inherent-data|<tuple|3.5|27>>
+    <associate|defn-invalid-transaction|<tuple|G.3|?>>
     <associate|defn-key-type-id|<tuple|E.6|66>>
     <associate|defn-little-endian|<tuple|1.7|14>>
     <associate|defn-local-storage|<tuple|E.9|72>>
@@ -9254,6 +9273,7 @@
     <associate|defn-transaction-queue|<tuple|3.4|26>>
     <associate|defn-transaction-validity-error|<tuple|G.2|?>>
     <associate|defn-unix-time|<tuple|1.10|15>>
+    <associate|defn-unknown-transaction|<tuple|G.4|?>>
     <associate|defn-valid-transaction|<tuple|G.1|?>>
     <associate|defn-varrying-data-type|<tuple|B.3|49>>
     <associate|defn-vote|<tuple|5.16|43>>
