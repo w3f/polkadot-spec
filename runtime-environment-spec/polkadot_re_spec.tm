@@ -8378,7 +8378,7 @@
     <math|\<bbb-B\><rsub|32>> and its length as 64 bit integer.
   </itemize-dot>
 
-  <subsection|<verbatim|BabeApi_epoch>><label|sect-rte-babeapi-epoch>
+  <subsection|<verbatim|BabeApi_configuration>><label|sect-rte-babeapi-epoch>
 
   This entry is called to obtain the current configuration of BABE consensus
   protocol.
