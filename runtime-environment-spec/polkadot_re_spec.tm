@@ -8448,6 +8448,8 @@
   submitted blob represents a valid extrinsics applied to the specified
   block.
 
+  \;
+
   <strong|Arguments>:
 
   <\itemize>
@@ -8458,60 +8460,85 @@
 
   <strong|Return>:
 
-  A varying type Result object which has type of <em|TransactionValidity> in
-  case no error occurs in course of its execution. TransactionValidity is of
-  varying type described in the Table <reference|tabl-transaction-validity>:
+  This function returns a <verbatim|Result> as defined in Definition
+  <reference|defn-result-type> which contains the type <em|ValidTransaction>
+  on success and the type <em|TransactionValidityError> on failure. Both
+  types are listed in Definition <reference|defn-valid-transaction>
+  respectively in Definition <reference|defn-transaction-validity-error>.
 
-  \;
+  <\definition>
+    <label|defn-valid-transaction><strong|ValidTransaction> contains
+    information concerning a valid transaction. All those entries get
+    concatenated as a single byte array.
 
-  <small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Type
-  Index>>|<cell|<strong|Data type>>|<cell|<strong|Descri<strong|>ption>>>|<row|<cell|0>|<cell|Byte>|<cell|Indicating
-  invalid extrinsic and bearing the error code
-  concerning>>|<row|<cell|>|<cell|>|<cell|the cause of invalidity of the
-  transaction.>>|<row|<cell|1>|<cell|A Quin-tuple>|<cell|Indicating whether
-  the extrinsic is valid and providing guidance for
-  >>|<row|<cell|>|<cell|>|<cell|Polkadot RE on how to proceed with the
-  extrinsic (see below)>>|<row|<cell|2>|<cell|Byte>|<cell|The Validity of the
-  extrinsic cannot be determined>>>>>|<label|tabl-transaction-validity>Type
-  variation for the return value of <verbatim|TaggedTransactionQueue_transaction_validity>.>
+    \;
 
-  \;
+    <\small-table|<tabular|<tformat|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-bborder|0ln>|<cwith|7|7|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-bborder|0ln>|<cwith|12|12|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|2|2|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|0ln>|<twith|table-rborder|1ln>|<twith|table-lborder|0ln>|<twith|table-tborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|12|12|1|1|cell-tborder|0ln>|<cwith|11|11|1|1|cell-bborder|0ln>|<cwith|12|12|2|2|cell-tborder|0ln>|<cwith|11|11|2|2|cell-bborder|0ln>|<cwith|12|12|2|2|cell-lborder|0ln>|<cwith|12|12|1|1|cell-rborder|0ln>|<cwith|12|12|3|3|cell-tborder|0ln>|<cwith|11|11|3|3|cell-bborder|0ln>|<cwith|2|-1|3|3|cell-lborder|0ln>|<cwith|2|-1|2|2|cell-rborder|0ln>|<cwith|12|12|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Priority>|<cell|Determines
+    the ordering of two transactions that have>|<cell|unsigned
+    64bit>>|<row|<cell|>|<cell|all their dependencies (required tags)
+    satisfied.>|<cell|integer>>|<row|<cell|Requires>|<cell|List of tags
+    specifying extrinsics which should be applied >|<cell|Array
+    containing>>|<row|<cell|>|<cell|before the current exrinsics can be
+    applied.>|<cell|inner arrays>>|<row|<cell|Provides>|<cell|Informs Runtime
+    of the extrinsics depending on the tags in>|<cell|Array
+    containing>>|<row|<cell|>|<cell|the list that can be applied after
+    current extrinsics are being applied.>|<cell|inner
+    arrays>>|<row|<cell|>|<cell|Describes the minimum number of blocks for
+    the validity to be correct>|<cell|>>|<row|<cell|Longevity>|<cell|After
+    this period, the transaction should be removed from the >|<cell|unsigned
+    64bit>>|<row|<cell|>|<cell|pool or revalidated.>|<cell|integer>>|<row|<cell|Propagate>|<cell|A
+    flag indicating if the transaction should be propagated to
+    >|<cell|Boolean>>|<row|<cell|>|<cell|other peers.>|<cell|>>>>>>
+      The quintuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
 
-  In which the quintuple of type for valid extrinsics consists of the
-  following parts:
-
-  <\equation*>
-    <around*|(|priority, requires, provides, longevity, propagate|)>
-  </equation*>
-
-  \;
-
-  <\small-table|<tabular|<tformat|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-bborder|0ln>|<cwith|7|7|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-bborder|0ln>|<cwith|12|12|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|2|2|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|0ln>|<cwith|2|2|1|-1|cell-tborder|0ln>|<cwith|1|-1|3|3|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|0ln>|<cwith|1|-1|3|3|cell-rborder|1ln>|<twith|table-rborder|1ln>|<twith|table-lborder|0ln>|<twith|table-tborder|0ln>|<cwith|1|1|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|1ln>|<cwith|1|1|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-tborder|1ln>|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-rborder|1ln>|<cwith|12|12|1|1|cell-tborder|0ln>|<cwith|11|11|1|1|cell-bborder|0ln>|<cwith|12|12|1|1|cell-bborder|1ln>|<cwith|12|12|1|1|cell-lborder|1ln>|<cwith|12|12|2|2|cell-tborder|0ln>|<cwith|11|11|2|2|cell-bborder|0ln>|<cwith|12|12|2|2|cell-bborder|1ln>|<cwith|12|12|2|2|cell-lborder|0ln>|<cwith|12|12|1|1|cell-rborder|0ln>|<cwith|12|12|3|3|cell-tborder|0ln>|<cwith|11|11|3|3|cell-bborder|0ln>|<cwith|12|12|3|3|cell-bborder|1ln>|<cwith|12|12|3|3|cell-lborder|0ln>|<cwith|12|12|2|2|cell-rborder|0ln>|<cwith|12|12|3|3|cell-rborder|1ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Priority>|<cell|Determines
-  the ordering of two transactions that have>|<cell|64bit
-  integer>>|<row|<cell|>|<cell|all their dependencies (required tags)
-  satisfied.>|<cell|>>|<row|<cell|Requires>|<cell|List of tags specifying
-  extrinsics which should be applied >|<cell|Array of
-  >>|<row|<cell|>|<cell|before the current exrinsics can be
-  applied.>|<cell|Transaction Tags>>|<row|<cell|Provides>|<cell|Informs
-  Runtime of the extrinsics depending on the tags in>|<cell|Array of
-  >>|<row|<cell|>|<cell|the list that can be applied after current extrinsics
-  are being applied.>|<cell|Transaction Tags>>|<row|<cell|>|<cell|Describes
-  the minimum number of blocks for the validity to be
-  correct>|<cell|>>|<row|<cell|Longevity>|<cell|After this period, the
-  transaction should be removed from the >|<cell|64 bit
-  integer>>|<row|<cell|>|<cell|pool or revalidated.>|<cell|>>|<row|<cell|Propagate>|<cell|A
-  flag indicating if the transaction should be propagated to
-  >|<cell|Boolean>>|<row|<cell|>|<cell|other peers.>|<cell|>>>>>>
-    The quintuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
-
-    in the case the transaction is judged to be valid.
-  </small-table>
-
-  \;
+      in the case the transaction is judged to be valid.
+    </small-table>
+  </definition>
 
   Note that if <em|Propagate> is set to <verbatim|false> the transaction will
   still be considered for including in blocks that are authored on the
   current node, but will never be sent to other peers.
+
+  <\definition>
+    <label|defn-transaction-validity-error><strong|TransactionValidityError>
+    is a varying data type as defined in Definition
+    <reference|defn-varrying-data-type>, where following values are possible:
+
+    \;
+
+    <small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|<strong|>Id>>|<cell|<strong|Appended>>|<cell|<strong|Descri<strong|>ption>>>|<row|<cell|0>|<cell|InvalidTransaction
+    (as defined in Definition )>|<cell|The transaction is
+    invalid.>>|<row|<cell|1>|<cell|UnknownTransaction (as defined in
+    Definition )>|<cell|The transaction validity can't be
+    determined.>>>>>|Type variation for the return value of
+    <verbatim|TaggedTransactionQueue_transaction_validity>.>
+
+    <\definition>
+      <strong|InvalidTransaction> is a varying data type as defined in
+      Definition <reference|defn-varrying-data-type> which describes the
+      invalid transaction in more precise detail. The following values are
+      possible:
+
+      <\big-table|<tabular|<tformat|<cwith|1|1|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-tborder|1ln>|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|1|1|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Appended>>|<cell|<strong|Description>>>|<row|<cell|0>|<cell|>|<cell|Call:
+      The call of the transaction is not expected>>|<row|<cell|1>|<cell|>|<cell|Payment:
+      Inability to pay some fees (e.g. balance too
+      low)>>|<row|<cell|2>|<cell|>|<cell|Future: Transaction not yet valid
+      (e.g. nonce too high)>>|<row|<cell|3>|<cell|>|<cell|Stale: Transaction
+      is outdated (e.g. nonce too low)>>|<row|<cell|4>|<cell|>|<cell|BadProof:
+      Bad transaction proof (e.g. bad signature)>>|<row|<cell|5>|<cell|>|<cell|AncientBirthBlock:
+      Transaction birth block is ancient.>>|<row|<cell|6>|<cell|>|<cell|ExhaustsResources:
+      Transaction would exhaus the resources of the current
+      block>>|<row|<cell|7>|<cell|one byte>|<cell|Custom: Any other custom
+      message not covered by this type. >>>>>>
+        Type variant whichs gets appended to Id 0 of
+        <strong|TransactionValidityError>.
+      </big-table>
+    </definition>
+
+    \;
+
+    \;
+  </definition>
 
   <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
 
@@ -9058,14 +9085,15 @@
     <associate|auto-318|<tuple|G.2|102>>
     <associate|auto-319|<tuple|G.3|102>>
     <associate|auto-32|<tuple|2.1.2|17>>
-    <associate|auto-320|<tuple|G.2.8|103>>
-    <associate|auto-321|<tuple|G.4|103>>
+    <associate|auto-320|<tuple|G.4|103>>
+    <associate|auto-321|<tuple|G.2.8|103>>
     <associate|auto-322|<tuple|G.5|103>>
-    <associate|auto-323|<tuple|G.2.9|103>>
-    <associate|auto-324|<tuple|G.2.10|104>>
+    <associate|auto-323|<tuple|G.6|103>>
+    <associate|auto-324|<tuple|G.2.9|104>>
     <associate|auto-325|<tuple|G.2.10|105>>
     <associate|auto-326|<tuple|G.2.10|107>>
-    <associate|auto-327|<tuple|Tec19|109>>
+    <associate|auto-327|<tuple|G.2.10|109>>
+    <associate|auto-328|<tuple|Tec19|?>>
     <associate|auto-33|<tuple|2.1.3|18>>
     <associate|auto-34|<tuple|2.1.4|20>>
     <associate|auto-35|<tuple|3|23>>
@@ -9224,7 +9252,9 @@
     <associate|defn-state-machine|<tuple|1.1|13>>
     <associate|defn-stored-value|<tuple|2.1|17>>
     <associate|defn-transaction-queue|<tuple|3.4|26>>
+    <associate|defn-transaction-validity-error|<tuple|G.2|?>>
     <associate|defn-unix-time|<tuple|1.10|15>>
+    <associate|defn-valid-transaction|<tuple|G.1|?>>
     <associate|defn-varrying-data-type|<tuple|B.3|49>>
     <associate|defn-vote|<tuple|5.16|43>>
     <associate|defn-winning-threshold|<tuple|5.8|37>>
@@ -9303,7 +9333,7 @@
     <associate|tabl-message-types|<tuple|D.1|55>>
     <associate|tabl-node-role|<tuple|D.2|56>>
     <associate|tabl-session-keys|<tuple|A.2|48>>
-    <associate|tabl-transaction-validity|<tuple|G.2|102>>
+    <associate|tabl-transaction-validity|<tuple|G.3|102>>
   </collection>
 </references>
 
