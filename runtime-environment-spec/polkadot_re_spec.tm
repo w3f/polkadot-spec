@@ -8409,16 +8409,16 @@
   rational where the first number of the tuple is the>|<cell|two
   unsigned>>|<row|<cell|>|<cell|numerator and the seconds is the denominator.
   The rational should>|<cell|64bit integers>>|<row|<cell|>|<cell|represent a
-  value between 0 and 1.>|<cell|>>|<row|<cell|Genesis>|<cell|The authorities
-  for the genesis epoch. Authorities are identified by>|<cell|Array of
-  tuples>>|<row|<cell|Authorities>|<cell|their public key and their
-  corresponding weight. >|<cell|containing a
+  value between 0 and 1.>|<cell|>>|<row|<cell|Genesis>|<cell|The authority
+  list for the genesis epoch as defined in Definition
+  <reference|defn-authority-list>. >|<cell|Array of
+  tuples>>|<row|<cell|Authorities>|<cell|>|<cell|containing a
   256-bit>>|<row|<cell|>|<cell|>|<cell|byte array and
   a>>|<row|<cell|>|<cell|>|<cell|unsigned
   64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Randomness>|<cell|The
   randomness for the genesis epoch>|<cell|32-byte
   array>>|<row|<cell|SecondarySlot>|<cell|Whether this chain should run with
-  secondary slots, which are assigned>|<cell|Boolean>>|<row|<cell|>|<cell|in
+  secondary slots, which are>|<cell|Boolean>>|<row|<cell|>|<cell|assigned in
   a round-robin manner.>|<cell|>>>>>>
     The tuple provided by <strong|BabeApi_configuration>.
   </big-table>
