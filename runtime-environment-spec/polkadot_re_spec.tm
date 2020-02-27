@@ -8239,7 +8239,7 @@
 
       \ \ (export "BabeApi_startup_data" (func $BabeApi_startup_data))
 
-      \ \ (export "BabeApi_epoch" (func $BabeApi_epoch))
+      \ \ (export "BabeApi_configuration" (func $BabeApi_configuration))
 
       \ \ (export "SessionKeys_generate_session_keys"\ 
 
