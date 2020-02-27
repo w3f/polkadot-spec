@@ -8388,50 +8388,40 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><math|H<rsub|n><around*|(|B|)>>: the block number at whose final
-    state the epoch configuration should be obtained.
+    <item>None
   </itemize>
 
   \;
 
   <strong|Return>:
 
-  A tuple\ 
+  A tuple containing configuration data used by the Babe consensus engine.
 
-  <\equation*>
-    <around*|(|\<cal-E\><rsub|n>,s<rsup|n><rsub|0>,sc<rsub|n>,A,\<rho\>,Sec|)>
-  </equation*>
-
-  \;
-
-  where:
-
-  <\center>
-    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|\<cal-E\><rsub|n>>:>|<cell|epoch
-    index (see Definition <reference|defn-epoch-slot>)>|<cell|64-bit
-    integer>>|<row|<cell|<math|s<rsup|n><rsub|0>:>>|<cell|The index of the
-    starting slot of <math|\<cal-E\><rsub|n>>>|<cell|64-bit
-    integer>>|<row|<cell|<math|sc<rsub|n>>:>|<cell|Slot count of
-    <math|\<cal-E\><rsub|n>> (see Definition
-    <reference|defn-epoch-slot>)>|<cell|1
-    byte>>|<row|<cell|<math|A>:>|<cell|The list of authorities and their
-    weights>|<cell|Array of <math|<around*|(|P<rsub|A>,W<rsub|A>|)>>>>|<row|<cell|<math|\<rho\>>>|<cell|Randomness
-    used in <math|\<cal-E\><rsub|n>> (see Section
-    <reference|sect-epoch-randomness>)>|<cell|<math|\<bbb-B\><rsub|32>>>>|<row|<cell|Sec>|<cell|To
-    be specced>|<cell|Boolean>>>>>
-  </center>
-
-  \;
-
-  in which:
-
-  <\center>
-    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|P<rsub|A>>:>|<cell|The
-    public key of authority A>|<cell|<math|\<bbb-B\><rsub|32>>>>|<row|<cell|<math|W<rsub|A>:>>|<cell|The
-    weight of the authority A>|<cell|64 bit integer>>>>>
-  </center>
-
-  \;
+  <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|18|18|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|4|1|1|cell-lborder|0ln>|<cwith|2|4|3|3|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|6|1|1|cell-lborder|0ln>|<cwith|5|6|3|3|cell-rborder|0ln>|<cwith|7|7|1|-1|cell-tborder|1ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|7|10|1|1|cell-lborder|0ln>|<cwith|7|10|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|15|1|1|cell-lborder|0ln>|<cwith|11|15|3|3|cell-rborder|0ln>|<cwith|16|16|1|-1|cell-tborder|1ln>|<cwith|15|15|1|-1|cell-bborder|1ln>|<cwith|16|16|1|-1|cell-bborder|1ln>|<cwith|17|17|1|-1|cell-tborder|1ln>|<cwith|16|16|1|1|cell-lborder|0ln>|<cwith|16|16|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|SlotDuration>|<cell|The
+  slot duration in milliseconds. Currently, only the value
+  provided>|<cell|Unsigned 64bit>>|<row|<cell|>|<cell|by this type at genesis
+  will be used. Dynamic slot duration may
+  be>|<cell|integer>>|<row|<cell|>|<cell|supported in the
+  future.>|<cell|>>|<row|<cell|EpochLength>|<cell|The duration of epochs in
+  slots.>|<cell|Unsigned 64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Constant>|<cell|A
+  constant value that is used in the threshold calculation
+  formula.>|<cell|Tuple containing>>|<row|<cell|>|<cell|Expressed as a
+  rational where the first number of the tuple is the>|<cell|two
+  unsigned>>|<row|<cell|>|<cell|numerator and the seconds is the denominator.
+  The rational should>|<cell|64bit integers>>|<row|<cell|>|<cell|represent a
+  value between 0 and 1.>|<cell|>>|<row|<cell|Genesis>|<cell|The authorities
+  for the genesis epoch. Authorities are identified by>|<cell|Array of
+  tuples>>|<row|<cell|Authorities>|<cell|their public key and their
+  corresponding weight. >|<cell|containing a
+  256-bit>>|<row|<cell|>|<cell|>|<cell|byte array and
+  a>>|<row|<cell|>|<cell|>|<cell|unsigned
+  64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Randomness>|<cell|The
+  randomness for the genesis epoch>|<cell|32-byte
+  array>>|<row|<cell|SecondarySlot>|<cell|Whether this chain should run with
+  secondary slots, which are assigned>|<cell|Boolean>>|<row|<cell|>|<cell|in
+  a round-robin manner.>|<cell|>>>>>>
+    The tuple provided by <strong|BabeApi_configuration>.
+  </big-table>
 
   <subsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
 
@@ -8467,9 +8457,8 @@
   <reference|defn-transaction-validity-error> on failure.
 
   <\definition>
-    <label|defn-valid-transaction><strong|ValidTransaction> contains
-    information concerning a valid transaction. All those entries get
-    concatenated as a single byte array.
+    <label|defn-valid-transaction><strong|ValidTransaction> is a tuple which
+    contains information concerning a valid transaction.
 
     \;
 
@@ -8489,7 +8478,7 @@
     64bit>>|<row|<cell|>|<cell|pool or revalidated.>|<cell|integer>>|<row|<cell|Propagate>|<cell|A
     flag indicating if the transaction should be propagated to
     >|<cell|boolean>>|<row|<cell|>|<cell|other peers.>|<cell|>>>>>>
-      The quintuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
+      The tuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
 
       in the case the transaction is judged to be valid.
     </small-table>
@@ -9097,22 +9086,23 @@
     <associate|auto-313|<tuple|G.2.3|95>>
     <associate|auto-314|<tuple|G.2.4|95>>
     <associate|auto-315|<tuple|G.2.5|95>>
-    <associate|auto-316|<tuple|G.2.6|96>>
-    <associate|auto-317|<tuple|G.2.7|96>>
-    <associate|auto-318|<tuple|G.2|96>>
+    <associate|auto-316|<tuple|G.2|96>>
+    <associate|auto-317|<tuple|G.2.6|96>>
+    <associate|auto-318|<tuple|G.2.7|96>>
     <associate|auto-319|<tuple|G.3|97>>
     <associate|auto-32|<tuple|2.1.2|15>>
     <associate|auto-320|<tuple|G.4|97>>
     <associate|auto-321|<tuple|G.5|97>>
-    <associate|auto-322|<tuple|G.2.8|97>>
-    <associate|auto-323|<tuple|G.6|98>>
+    <associate|auto-322|<tuple|G.6|97>>
+    <associate|auto-323|<tuple|G.2.8|98>>
     <associate|auto-324|<tuple|G.7|98>>
-    <associate|auto-325|<tuple|G.2.9|98>>
-    <associate|auto-326|<tuple|G.2.10|98>>
+    <associate|auto-325|<tuple|G.8|98>>
+    <associate|auto-326|<tuple|G.2.9|98>>
     <associate|auto-327|<tuple|G.2.10|99>>
     <associate|auto-328|<tuple|G.2.10|101>>
-    <associate|auto-329|<tuple|Tec19|103>>
+    <associate|auto-329|<tuple|G.2.10|103>>
     <associate|auto-33|<tuple|2.1.3|16>>
+    <associate|auto-330|<tuple|Tec19|?>>
     <associate|auto-34|<tuple|2.1.4|18>>
     <associate|auto-35|<tuple|3|19>>
     <associate|auto-36|<tuple|3.1|19>>
