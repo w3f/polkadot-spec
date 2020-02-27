@@ -1100,41 +1100,41 @@
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-314>>
 
-    <with|par-left|1tab|G.2.5.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_epoch>
+    <with|par-left|1tab|G.2.5.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_configuration>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-315>>
 
     <with|par-left|1tab|G.2.6.<space|2spc><with|font-family|tt|language|verbatim|GrandpaApi_grandpa_authorities>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-316>>
+    <no-break><pageref|auto-317>>
 
     <with|par-left|1tab|G.2.7.<space|2spc><with|font-family|tt|language|verbatim|TaggedTransactionQueue_validate_transaction>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-317>>
+    <no-break><pageref|auto-318>>
 
     <with|par-left|1tab|G.2.8.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_apply_extrinsic>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-320>>
+    <no-break><pageref|auto-323>>
 
     <with|par-left|1tab|G.2.9.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_inherent_extrinsics>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-323>>
+    <no-break><pageref|auto-326>>
 
     <with|par-left|1tab|G.2.10.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_finalize_block>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-324>>
+    <no-break><pageref|auto-327>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Glossary>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-325><vspace|0.5fn>
+    <pageref|auto-328><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Bibliography>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-326><vspace|0.5fn>
+    <pageref|auto-329><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Index>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-327><vspace|0.5fn>
+    <pageref|auto-330><vspace|0.5fn>
   </table-of-contents>
 
   <chapter|Background>
@@ -2993,7 +2993,7 @@
     <label|note-slot>We refer to the number of slots in epoch
     <math|\<cal-E\><rsub|n>> by <math|sc<rsub|n>>. <math|sc<rsub|n>> is set
     to the <verbatim|duration> field in the returned data from the call of
-    the Runtime entry <verbatim|BabeApi_epoch> (see
+    the Runtime entry <verbatim|BabeApi_configuration> (see
     <reference|sect-rte-babeapi-epoch>) at the beginning of each epoch. For a
     given block <math|B>, we use the notation <strong|<math|s<rsub|B>>> to
     refer to the slot during which <math|B> has been produced. Conversely,
@@ -8800,11 +8800,11 @@
   </bibliography>
 
   <\the-index|idx>
-    <index+1|Transaction Message|<pageref|auto-47>\U<pageref|auto-50>>
+    <index-1|Transaction Message|<pageref|auto-47>\U<pageref|auto-50>>
 
-    <index+1|transaction pool|<pageref|auto-48>>
+    <index-1|transaction pool|<pageref|auto-48>>
 
-    <index+1|transaction queue|<pageref|auto-49>>
+    <index-1|transaction queue|<pageref|auto-49>>
   </the-index>
 </body>
 
@@ -9557,29 +9557,33 @@
       function.>|<pageref|auto-311>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|G.2>|>
-        The quintuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
+        The tuple provided by <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BabeApi_configuration>.
+      </surround>|<pageref|auto-316>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.3>|>
+        The tuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
 
         in the case the transaction is judged to be valid.
-      </surround>|<pageref|auto-318>>
+      </surround>|<pageref|auto-319>>
 
-      <tuple|normal|<surround|<hidden-binding|<tuple>|G.3>||Type variation
-      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-319>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.4>|>
-        Type variant whichs gets appended to Id 0 of
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-320>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|G.4>||Type variation
+      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-320>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|G.5>|>
-        Type variant whichs gets appended to Id 1 of
+        Type variant whichs gets appended to Id 0 of
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
       </surround>|<pageref|auto-321>>
 
-      <tuple|normal|<surround|<hidden-binding|<tuple>|G.6>||Data format of
-      the Dispatch error type>|<pageref|auto-323>>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.6>|>
+        Type variant whichs gets appended to Id 1 of
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
+      </surround>|<pageref|auto-322>>
 
-      <tuple|normal|<surround|<hidden-binding|<tuple>|G.7>||Identifiers of
-      the Apply error type>|<pageref|auto-324>>
+      <tuple|normal|<surround|<hidden-binding|<tuple>|G.7>||Data format of
+      the Dispatch error type>|<pageref|auto-324>>
+
+      <tuple|normal|<surround|<hidden-binding|<tuple>|G.8>||Identifiers of
+      the Apply error type>|<pageref|auto-325>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|1.<space|2spc>Background>
@@ -10644,41 +10648,41 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-314>>
 
-      <with|par-left|<quote|1tab>|G.2.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
+      <with|par-left|<quote|1tab>|G.2.5.<space|2spc>BabeApi_configuration
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-315>>
 
       <with|par-left|<quote|1tab>|G.2.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-316>>
+      <no-break><pageref|auto-317>>
 
       <with|par-left|<quote|1tab>|G.2.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-317>>
+      <no-break><pageref|auto-318>>
 
       <with|par-left|<quote|1tab>|G.2.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-322>>
+      <no-break><pageref|auto-323>>
 
       <with|par-left|<quote|1tab>|G.2.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-325>>
+      <no-break><pageref|auto-326>>
 
       <with|par-left|<quote|1tab>|G.2.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-326>>
+      <no-break><pageref|auto-327>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Glossary>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-327><vspace|0.5fn>
+      <pageref|auto-328><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-328><vspace|0.5fn>
+      <pageref|auto-329><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Index>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-329><vspace|0.5fn>
+      <pageref|auto-330><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
