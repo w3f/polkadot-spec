@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|algorithmacs-style>>
 
@@ -8451,9 +8451,6 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><math|H<rsub|n><around*|(|B|)>>: the block number whose final state
-    is where the transaction should apply the system state.
-
     <item>UTX: A byte array that contains the transaction.
   </itemize>
 
