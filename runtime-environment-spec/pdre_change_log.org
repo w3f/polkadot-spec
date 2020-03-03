@@ -1,3 +1,7 @@
+* Thu Feb 27 2020
+  - New Runtime API.
+  - runtime enteries BabeConfiguration and ValidateTransaction updated.
+
 * Mon Feb 24 2020
   - Authority change digest item updated, ForceChange added to it.
 * Wed Dec 04 2019

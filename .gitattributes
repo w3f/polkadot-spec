@@ -1,0 +1,2 @@
+secretfile filter=git-crypt diff=git-crypt
+notes/spec-meeting-notes.org filter=git-crypt diff=git-crypt
