@@ -1943,36 +1943,40 @@
   mechanism which allows identifying changes in the blockchain without
   requiring access to all the blocks. The <strong|Changes Trie> is a
   datastructure maintained by the Polkadot node which tracks storage changes
-  created by each block.
+  created by each block. Two different types of records get included in the
+  Trie; per-block records and range records, as described in the following
+  definitions:
 
   <\definition>
-    The <strong|Per-block Change Trie> tracks any changes which occure in a
+    The <strong|Per-block record> tracks any changes which occure in a
     individual block. The changed key gets inserted into the Trie, where it's
     value is the index of the extrinsic that caused that change. The index
     depends on the order in which the extrinsic is included in the block.
 
     \;
 
-    This Trie is generated when the Runtime calls
+    Those records are generated when the Runtime calls
     <verbatim|ext_storage_changes_root> as defined in Definition X.
   </definition>
 
   <\definition>
-    The <strong|Range Change Trie> tracks any changes which occured in a
-    certain range of blocks. The changed key gets inserted into the Trie,
-    where it's values are the block numbers which caused any changes to it.
+    The <strong|Range record> tracks any changes which occured in a certain
+    range of blocks. The changed key gets inserted into the Trie, where it's
+    values are the block numbers which caused any changes to it.
 
     \;
 
-    This Trie is generated when the Runtime calls
-    <verbatim|ext_storage_changes_root> as defined in Definition X.
+    Those records get generated when the Runtime calls
+    <verbatim|ext_storage_changes_root> as defined in Definition X, but
+    unlike the per-block records they do not get generated on each block. The
+    Runtime sets two values in storage: <verbatim|digest_interval> and
+    <verbatim|digest_level>.
   </definition>
-
-  \;
 
   The Trie itself is not part of the block, but a separately maintained
   database by the Polkadot node. The Merkle root of the Change Trie must be
-  inlcuded in the digest as described in X.<chapter|State
+  inlcuded in the digest as described in X and gets calculated as described
+  in section <reference|sect-merkl-proof>.<chapter|State
   Transition><label|chap-state-transit>
 
   Like any transaction-based transition system, Polkadot state changes via
