@@ -1965,7 +1965,7 @@
     range of blocks. The changed key gets inserted into the Trie, where it's
     value is the block number which caused any changes to it. Multiple
     records of the same key containing values of different block numbers are
-    possible.
+    possible and likely.
 
     \;
 
@@ -1979,16 +1979,20 @@
     <\itemize-dot>
       <item><verbatim|digest_interval> - The interval (in blocks) at which
       range changes are created. Range changes are not created when this is
-      less or equal to 1.
+      less or equal to <verbatim|1>.
 
-      <item><verbatim|digest_levels> - Maximul number of \Plevels\Q in the
-      hierarchy. 0 means that change ranges are not created at all, 1 means
-      only the regular digest_interval range changes are created. Any other
-      level means that the range changes are created every
-      <math|digestinterval<rsup|level>> block.
+      <item><verbatim|digest_levels> - Maximal number of \Plevels\Q in the
+      hierarchy. <verbatim|0> means that change ranges are not created at
+      all, <verbatim|1> means only the regular <verbatim|digest_interval>
+      range changes are created. Any other level means that the range changes
+      are created every <verbatim|digest_interval><math|<rsup|level>> block
+      for each level in 1 to <verbatim|digest_levels>.
     </itemize-dot>
 
-    asdf
+    The Polkadot node must track the interval and levels and generate those
+    changes when conditions apply and the Runtime calls the provided Host
+    function. The range spans from the last block where range changes were
+    created to the current block.
   </definition>
 
   The Trie itself is not part of the block, but a separately maintained
@@ -1997,8 +2001,12 @@
   <reference|defn-digest> and gets calculated as described in section
   <reference|sect-merkl-proof>. The root calculation uses entries of a
   per-block basis (including range changes that occure on that block), not
-  the whole changes spanning multiple blocks.<chapter|State
-  Transition><label|chap-state-transit>
+  the whole changes spanning multiple blocks.
+
+  \;
+
+  <todo|Mention \Pproof servers\Q? Not directly related to this
+  spec><chapter|State Transition><label|chap-state-transit>
 
   Like any transaction-based transition system, Polkadot state changes via
   executing an ordered set of instructions. These instructions are known as
