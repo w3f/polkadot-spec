@@ -1948,7 +1948,7 @@
   the following definitions:
 
   <\definition>
-    The <strong|per-block changes> tracks any changes which occure in a
+    The <strong|per-block changes> tracks any changes which occure in an
     individual block. The changed key gets inserted into the Trie, where it's
     value is the index of the extrinsic that caused that change. The index
     depends on the order in which the extrinsic is included in the block.
@@ -1964,7 +1964,7 @@
     The <strong|range changes> tracks any changes which occured in a certain
     range of blocks. The changed key gets inserted into the Trie, where it's
     value is the block number which caused any changes to it. Multiple
-    records of the same key containing values of different block numbers are
+    changes of the same key containing values of different block numbers are
     possible and likely.
 
     \;
@@ -1985,8 +1985,8 @@
       hierarchy. <verbatim|0> means that change ranges are not created at
       all, <verbatim|1> means only the regular <verbatim|digest_interval>
       range changes are created. Any other level means that the range changes
-      are created every <verbatim|digest_interval><math|<rsup|level>> block
-      for each level in 1 to <verbatim|digest_levels>.
+      are created every <math|digest_interval<rsup|level>> block for each
+      level in 1 to <verbatim|digest_levels>.
     </itemize-dot>
 
     The Polkadot node must track the interval and levels and generate those
