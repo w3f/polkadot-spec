@@ -1941,32 +1941,71 @@
 
   Polkadot focuses on light client friendliness and therefore implements a
   mechanism which allows identifying changes in the blockchain without
-  requiring access to all the blocks. The <strong|Changes Trie> is a
-  datastructure maintained by the Polkadot node which tracks storage changes
-  created by each block. Two different types of change entries get included
-  in the Trie; <em|per-block changes> and <em|range changes>, as described in
-  the following definitions:
+  requiring to search through the entire blockchain. The <strong|Changes
+  Trie> is a datastructure maintained by the Polkadot node which tracks
+  storage changes created by each block.
+
+  \;
+
+  The Changes Trie accepts three different types of keys, displayed in the
+  varying datatype as defined in <reference|defn-varrying-data-type> in table
+  <reference|table-changes-trie-key-types>. Each key type points to a
+  different value type, which is specified in their corresponding Definitions
+  <reference|defn-storage-key-to-extrinsics>,
+  <reference|defn-storage-key-to-blocks> and
+  <reference|defn-storage-key-to-child-tries>.
+
+  <\big-table>
+    <tabular|<tformat|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|1>|<cell|Mapping
+    between storage key and extrinsics (<reference|defn-storage-key-to-extrinsics>)>|<cell|<em|KeyIndex>
+    (<reference|defn-key-index>)>>|<row|<cell|2>|<cell|Mapping between
+    storage key and blocks (<reference|defn-storage-key-to-blocks>)>|<cell|<em|KeyIndex>
+    (<reference|defn-key-index>)>>|<row|<cell|3>|<cell|Mapping between
+    storage key and child change trie (<reference|defn-storage-key-to-child-tries>)>|<cell|<em|KeyIndex>
+    (<reference|defn-key-index>)>>>>>
+
+    \;
+  <|big-table>
+    <label|table-changes-trie-key-types>
+  </big-table>
+
+  <strong|Note>: the key used for the Chanes Trie must be the <em|varying
+  datatype>, not just the individual, appended <em|KeyIndex>. Unlike the
+  default encoding for varying data types, this strucute starts it's indexing
+  at <verbatim|1>.
 
   <\definition>
-    The <strong|per-block changes> tracks any changes which occure in an
-    individual block. The changed key gets inserted into the Trie, prefixed
-    with the current block number, where it's value is the index of the
-    extrinsic that caused that change. The index depends on the order in
-    which the extrinsic is included in the block.
+    <label|defn-key-index>The <strong|Key Index> is a tuple containing the
+    following information:
+
+    <\big-table|<tabular|<tformat|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Block>|<cell|Block
+    at which this key has been inserted in the trie>|<cell|Unsigned 32-bit
+    integer>>|<row|<cell|Key>|<cell|The changed key>|<cell|Byte array>>>>>>
+      \;
+    </big-table>
+  </definition>
+
+  <\definition>
+    <label|defn-storage-key-to-extrinsics>The <strong|storage key to
+    extrinsics mappings> tracks any changes which occure in an individual
+    block. The key index as defined in Definition <reference|defn-key-index>
+    gets inserted into the Trie, where it's value is an array of the indices
+    of the extrinsics that caused any changes to the key. The indices depend
+    on the order in which each extrinsic is included in the block.
 
     \;
 
-    Those change entries are generated when the Runtime calls
+    Those entries are generated when the Runtime calls
     <verbatim|ext_storage_changes_root> as described in section
     <reference|sect-ext-storage-changes-root>.
   </definition>
 
   <\definition>
-    The <strong|range changes> tracks any changes which occured in a certain
-    range of blocks. The changed key gets inserted into the Trie, prefixed
-    with the current block number, where it's value is the block number which
-    caused any changes to it. Multiple changes of the same key containing
-    values of different block numbers are possible and likely.
+    <label|defn-storage-key-to-blocks>The <strong|storage key to blocks
+    mappings> track any changes which occured in a certain range of blocks.
+    The key index as defined in Definition <reference|defn-key-index> gets
+    inserted into the Trie, where it's value is an array of block numbers
+    where extrinsics caused any changes to the key.
 
     \;
 
@@ -1994,6 +2033,11 @@
     changes when conditions apply and the Runtime calls the provided Host
     function. The range spans from the last block (where range changes were
     created) + 1 to the current block.
+  </definition>
+
+  <\definition>
+    <label|defn-storage-key-to-child-tries>The <strong|storage key to child
+    trie mappings> \ <text-dots>
   </definition>
 
   The Trie itself is not part of the block, but a separately maintained
@@ -8915,335 +8959,338 @@
     <associate|appendix-e|<tuple|E|53>>
     <associate|auto-1|<tuple|1|11>>
     <associate|auto-10|<tuple|1.9|13>>
-    <associate|auto-100|<tuple|A.5.2|42>>
-    <associate|auto-101|<tuple|A.5.3|42>>
-    <associate|auto-102|<tuple|A.5.4|42>>
-    <associate|auto-103|<tuple|A.5.5|43>>
-    <associate|auto-104|<tuple|B|43>>
-    <associate|auto-105|<tuple|B.1|44>>
-    <associate|auto-106|<tuple|B.1.1|45>>
-    <associate|auto-107|<tuple|B.2|47>>
-    <associate|auto-108|<tuple|C|47>>
-    <associate|auto-109|<tuple|C.1|49>>
+    <associate|auto-100|<tuple|A.2|42>>
+    <associate|auto-101|<tuple|A.5.1|42>>
+    <associate|auto-102|<tuple|A.5.2|42>>
+    <associate|auto-103|<tuple|A.5.3|43>>
+    <associate|auto-104|<tuple|A.5.4|43>>
+    <associate|auto-105|<tuple|A.5.5|44>>
+    <associate|auto-106|<tuple|B|45>>
+    <associate|auto-107|<tuple|B.1|47>>
+    <associate|auto-108|<tuple|B.1.1|47>>
+    <associate|auto-109|<tuple|B.2|49>>
     <associate|auto-11|<tuple|1.9|13>>
-    <associate|auto-110|<tuple|D|49>>
-    <associate|auto-111|<tuple|D.1|49>>
-    <associate|auto-112|<tuple|D.1|49>>
-    <associate|auto-113|<tuple|D.1.1|50>>
-    <associate|auto-114|<tuple|D.2|50>>
-    <associate|auto-115|<tuple|D.1.2|50>>
-    <associate|auto-116|<tuple|D.3|51>>
-    <associate|auto-117|<tuple|D.1.3|51>>
-    <associate|auto-118|<tuple|D.1.4|51>>
-    <associate|auto-119|<tuple|D.1.5|52>>
+    <associate|auto-110|<tuple|C|49>>
+    <associate|auto-111|<tuple|C.1|49>>
+    <associate|auto-112|<tuple|D|49>>
+    <associate|auto-113|<tuple|D.1|50>>
+    <associate|auto-114|<tuple|D.1|50>>
+    <associate|auto-115|<tuple|D.1.1|50>>
+    <associate|auto-116|<tuple|D.2|51>>
+    <associate|auto-117|<tuple|D.1.2|51>>
+    <associate|auto-118|<tuple|D.3|51>>
+    <associate|auto-119|<tuple|D.1.3|52>>
     <associate|auto-12|<tuple|1.9|13>>
-    <associate|auto-120|<tuple|D.1.6|53>>
-    <associate|auto-121|<tuple|E|53>>
-    <associate|auto-122|<tuple|E.1|53>>
-    <associate|auto-123|<tuple|E.1.1|53>>
-    <associate|auto-124|<tuple|E.1.1.1|53>>
-    <associate|auto-125|<tuple|E.1.2|53>>
-    <associate|auto-126|<tuple|E.1.2.1|54>>
-    <associate|auto-127|<tuple|E.1.3|54>>
-    <associate|auto-128|<tuple|E.1.3.1|54>>
-    <associate|auto-129|<tuple|E.1.4|54>>
+    <associate|auto-120|<tuple|D.1.4|53>>
+    <associate|auto-121|<tuple|D.1.5|53>>
+    <associate|auto-122|<tuple|D.1.6|53>>
+    <associate|auto-123|<tuple|E|53>>
+    <associate|auto-124|<tuple|E.1|53>>
+    <associate|auto-125|<tuple|E.1.1|53>>
+    <associate|auto-126|<tuple|E.1.1.1|54>>
+    <associate|auto-127|<tuple|E.1.2|54>>
+    <associate|auto-128|<tuple|E.1.2.1|54>>
+    <associate|auto-129|<tuple|E.1.3|54>>
     <associate|auto-13|<tuple|1.9|13>>
-    <associate|auto-130|<tuple|E.1.4.1|54>>
-    <associate|auto-131|<tuple|E.1.5|54>>
-    <associate|auto-132|<tuple|E.1.5.1|55>>
-    <associate|auto-133|<tuple|E.1.6|55>>
-    <associate|auto-134|<tuple|E.1.6.1|55>>
-    <associate|auto-135|<tuple|E.1.7|55>>
-    <associate|auto-136|<tuple|E.1.7.1|55>>
-    <associate|auto-137|<tuple|E.1.8|55>>
-    <associate|auto-138|<tuple|E.1.8.1|55>>
-    <associate|auto-139|<tuple|E.1.9|55>>
+    <associate|auto-130|<tuple|E.1.3.1|54>>
+    <associate|auto-131|<tuple|E.1.4|54>>
+    <associate|auto-132|<tuple|E.1.4.1|55>>
+    <associate|auto-133|<tuple|E.1.5|55>>
+    <associate|auto-134|<tuple|E.1.5.1|55>>
+    <associate|auto-135|<tuple|E.1.6|55>>
+    <associate|auto-136|<tuple|E.1.6.1|55>>
+    <associate|auto-137|<tuple|E.1.7|55>>
+    <associate|auto-138|<tuple|E.1.7.1|55>>
+    <associate|auto-139|<tuple|E.1.8|55>>
     <associate|auto-14|<tuple|1.2.1|13>>
-    <associate|auto-140|<tuple|E.1.9.1|56>>
-    <associate|auto-141|<tuple|E.2|56>>
-    <associate|auto-142|<tuple|E.2.1|56>>
-    <associate|auto-143|<tuple|E.2.1.1|56>>
-    <associate|auto-144|<tuple|E.2.2|56>>
-    <associate|auto-145|<tuple|E.2.2.1|57>>
-    <associate|auto-146|<tuple|E.2.3|57>>
-    <associate|auto-147|<tuple|E.2.3.1|57>>
-    <associate|auto-148|<tuple|E.2.4|57>>
-    <associate|auto-149|<tuple|E.2.4.1|58>>
+    <associate|auto-140|<tuple|E.1.8.1|56>>
+    <associate|auto-141|<tuple|E.1.9|56>>
+    <associate|auto-142|<tuple|E.1.9.1|56>>
+    <associate|auto-143|<tuple|E.2|56>>
+    <associate|auto-144|<tuple|E.2.1|56>>
+    <associate|auto-145|<tuple|E.2.1.1|57>>
+    <associate|auto-146|<tuple|E.2.2|57>>
+    <associate|auto-147|<tuple|E.2.2.1|57>>
+    <associate|auto-148|<tuple|E.2.3|57>>
+    <associate|auto-149|<tuple|E.2.3.1|58>>
     <associate|auto-15|<tuple|1.11|13>>
-    <associate|auto-150|<tuple|E.2.5|58>>
-    <associate|auto-151|<tuple|E.2.5.1|58>>
-    <associate|auto-152|<tuple|E.2.6|58>>
-    <associate|auto-153|<tuple|E.2.6.1|59>>
-    <associate|auto-154|<tuple|E.2.7|59>>
-    <associate|auto-155|<tuple|E.2.7.1|59>>
-    <associate|auto-156|<tuple|E.2.8|59>>
-    <associate|auto-157|<tuple|E.2.8.1|59>>
-    <associate|auto-158|<tuple|E.2.9|59>>
-    <associate|auto-159|<tuple|E.2.9.1|60>>
+    <associate|auto-150|<tuple|E.2.4|58>>
+    <associate|auto-151|<tuple|E.2.4.1|58>>
+    <associate|auto-152|<tuple|E.2.5|58>>
+    <associate|auto-153|<tuple|E.2.5.1|59>>
+    <associate|auto-154|<tuple|E.2.6|59>>
+    <associate|auto-155|<tuple|E.2.6.1|59>>
+    <associate|auto-156|<tuple|E.2.7|59>>
+    <associate|auto-157|<tuple|E.2.7.1|59>>
+    <associate|auto-158|<tuple|E.2.8|59>>
+    <associate|auto-159|<tuple|E.2.8.1|60>>
     <associate|auto-16|<tuple|1.12|13>>
-    <associate|auto-160|<tuple|E.3|60>>
-    <associate|auto-161|<tuple|E.1|60>>
-    <associate|auto-162|<tuple|E.2|60>>
-    <associate|auto-163|<tuple|E.3.1|60>>
-    <associate|auto-164|<tuple|E.3.1.1|61>>
-    <associate|auto-165|<tuple|E.3.2|61>>
-    <associate|auto-166|<tuple|E.3.2.1|61>>
-    <associate|auto-167|<tuple|E.3.3|61>>
-    <associate|auto-168|<tuple|E.3.3.1|61>>
-    <associate|auto-169|<tuple|E.3.4|61>>
+    <associate|auto-160|<tuple|E.2.9|60>>
+    <associate|auto-161|<tuple|E.2.9.1|60>>
+    <associate|auto-162|<tuple|E.3|60>>
+    <associate|auto-163|<tuple|E.1|60>>
+    <associate|auto-164|<tuple|E.2|61>>
+    <associate|auto-165|<tuple|E.3.1|61>>
+    <associate|auto-166|<tuple|E.3.1.1|61>>
+    <associate|auto-167|<tuple|E.3.2|61>>
+    <associate|auto-168|<tuple|E.3.2.1|61>>
+    <associate|auto-169|<tuple|E.3.3|61>>
     <associate|auto-17|<tuple|1.12|13>>
-    <associate|auto-170|<tuple|E.3.4.1|62>>
-    <associate|auto-171|<tuple|E.3.5|62>>
-    <associate|auto-172|<tuple|E.3.5.1|62>>
-    <associate|auto-173|<tuple|E.3.6|62>>
-    <associate|auto-174|<tuple|E.3.6.1|62>>
-    <associate|auto-175|<tuple|E.3.7|62>>
-    <associate|auto-176|<tuple|E.3.7.1|63>>
-    <associate|auto-177|<tuple|E.3.8|63>>
-    <associate|auto-178|<tuple|E.3.8.1|63>>
-    <associate|auto-179|<tuple|E.3.9|63>>
+    <associate|auto-170|<tuple|E.3.3.1|62>>
+    <associate|auto-171|<tuple|E.3.4|62>>
+    <associate|auto-172|<tuple|E.3.4.1|62>>
+    <associate|auto-173|<tuple|E.3.5|62>>
+    <associate|auto-174|<tuple|E.3.5.1|62>>
+    <associate|auto-175|<tuple|E.3.6|62>>
+    <associate|auto-176|<tuple|E.3.6.1|63>>
+    <associate|auto-177|<tuple|E.3.7|63>>
+    <associate|auto-178|<tuple|E.3.7.1|63>>
+    <associate|auto-179|<tuple|E.3.8|63>>
     <associate|auto-18|<tuple|1.13|13>>
-    <associate|auto-180|<tuple|E.3.9.1|63>>
-    <associate|auto-181|<tuple|E.3.10|64>>
-    <associate|auto-182|<tuple|E.3.10.1|64>>
-    <associate|auto-183|<tuple|E.4|64>>
-    <associate|auto-184|<tuple|E.4.1|64>>
-    <associate|auto-185|<tuple|E.4.1.1|64>>
-    <associate|auto-186|<tuple|E.4.2|64>>
-    <associate|auto-187|<tuple|E.4.2.1|64>>
-    <associate|auto-188|<tuple|E.4.3|65>>
-    <associate|auto-189|<tuple|E.4.3.1|65>>
+    <associate|auto-180|<tuple|E.3.8.1|63>>
+    <associate|auto-181|<tuple|E.3.9|64>>
+    <associate|auto-182|<tuple|E.3.9.1|64>>
+    <associate|auto-183|<tuple|E.3.10|64>>
+    <associate|auto-184|<tuple|E.3.10.1|64>>
+    <associate|auto-185|<tuple|E.4|64>>
+    <associate|auto-186|<tuple|E.4.1|64>>
+    <associate|auto-187|<tuple|E.4.1.1|64>>
+    <associate|auto-188|<tuple|E.4.2|65>>
+    <associate|auto-189|<tuple|E.4.2.1|65>>
     <associate|auto-19|<tuple|1.13|13>>
-    <associate|auto-190|<tuple|E.4.4|65>>
-    <associate|auto-191|<tuple|E.4.4.1|65>>
-    <associate|auto-192|<tuple|E.4.5|65>>
-    <associate|auto-193|<tuple|E.4.5.1|65>>
-    <associate|auto-194|<tuple|E.4.6|65>>
-    <associate|auto-195|<tuple|E.4.6.1|66>>
-    <associate|auto-196|<tuple|E.4.7|66>>
-    <associate|auto-197|<tuple|E.4.7.1|66>>
-    <associate|auto-198|<tuple|E.5|67>>
-    <associate|auto-199|<tuple|E.3|67>>
+    <associate|auto-190|<tuple|E.4.3|65>>
+    <associate|auto-191|<tuple|E.4.3.1|65>>
+    <associate|auto-192|<tuple|E.4.4|65>>
+    <associate|auto-193|<tuple|E.4.4.1|65>>
+    <associate|auto-194|<tuple|E.4.5|65>>
+    <associate|auto-195|<tuple|E.4.5.1|66>>
+    <associate|auto-196|<tuple|E.4.6|66>>
+    <associate|auto-197|<tuple|E.4.6.1|66>>
+    <associate|auto-198|<tuple|E.4.7|67>>
+    <associate|auto-199|<tuple|E.4.7.1|67>>
     <associate|auto-2|<tuple|1.1|11>>
     <associate|auto-20|<tuple|1.13|13>>
-    <associate|auto-200|<tuple|E.5.1|67>>
-    <associate|auto-201|<tuple|E.5.1.1|67>>
-    <associate|auto-202|<tuple|E.5.2|67>>
-    <associate|auto-203|<tuple|E.5.2.1|67>>
-    <associate|auto-204|<tuple|E.5.3|67>>
-    <associate|auto-205|<tuple|E.5.3.1|68>>
-    <associate|auto-206|<tuple|E.5.4|68>>
-    <associate|auto-207|<tuple|E.5.4.1|68>>
-    <associate|auto-208|<tuple|E.5.5|68>>
-    <associate|auto-209|<tuple|E.5.5.1|68>>
+    <associate|auto-200|<tuple|E.5|67>>
+    <associate|auto-201|<tuple|E.3|67>>
+    <associate|auto-202|<tuple|E.5.1|67>>
+    <associate|auto-203|<tuple|E.5.1.1|67>>
+    <associate|auto-204|<tuple|E.5.2|67>>
+    <associate|auto-205|<tuple|E.5.2.1|68>>
+    <associate|auto-206|<tuple|E.5.3|68>>
+    <associate|auto-207|<tuple|E.5.3.1|68>>
+    <associate|auto-208|<tuple|E.5.4|68>>
+    <associate|auto-209|<tuple|E.5.4.1|68>>
     <associate|auto-21|<tuple|1.13|13>>
-    <associate|auto-210|<tuple|E.5.6|68>>
-    <associate|auto-211|<tuple|E.5.6.1|68>>
-    <associate|auto-212|<tuple|E.5.7|68>>
-    <associate|auto-213|<tuple|E.5.7.1|69>>
-    <associate|auto-214|<tuple|E.5.8|69>>
-    <associate|auto-215|<tuple|E.5.8.1|69>>
-    <associate|auto-216|<tuple|E.5.9|69>>
-    <associate|auto-217|<tuple|E.5.9.1|69>>
-    <associate|auto-218|<tuple|E.5.10|69>>
-    <associate|auto-219|<tuple|E.5.10.1|70>>
+    <associate|auto-210|<tuple|E.5.5|68>>
+    <associate|auto-211|<tuple|E.5.5.1|68>>
+    <associate|auto-212|<tuple|E.5.6|68>>
+    <associate|auto-213|<tuple|E.5.6.1|69>>
+    <associate|auto-214|<tuple|E.5.7|69>>
+    <associate|auto-215|<tuple|E.5.7.1|69>>
+    <associate|auto-216|<tuple|E.5.8|69>>
+    <associate|auto-217|<tuple|E.5.8.1|69>>
+    <associate|auto-218|<tuple|E.5.9|69>>
+    <associate|auto-219|<tuple|E.5.9.1|70>>
     <associate|auto-22|<tuple|1.13|13>>
-    <associate|auto-220|<tuple|E.5.11|70>>
-    <associate|auto-221|<tuple|E.5.11.1|70>>
-    <associate|auto-222|<tuple|E.5.12|70>>
-    <associate|auto-223|<tuple|E.5.12.1|71>>
-    <associate|auto-224|<tuple|E.5.13|71>>
-    <associate|auto-225|<tuple|E.5.13.1|71>>
-    <associate|auto-226|<tuple|E.5.14|71>>
-    <associate|auto-227|<tuple|E.5.14.1|71>>
-    <associate|auto-228|<tuple|E.5.15|71>>
-    <associate|auto-229|<tuple|E.5.15.1|72>>
+    <associate|auto-220|<tuple|E.5.10|70>>
+    <associate|auto-221|<tuple|E.5.10.1|70>>
+    <associate|auto-222|<tuple|E.5.11|70>>
+    <associate|auto-223|<tuple|E.5.11.1|71>>
+    <associate|auto-224|<tuple|E.5.12|71>>
+    <associate|auto-225|<tuple|E.5.12.1|71>>
+    <associate|auto-226|<tuple|E.5.13|71>>
+    <associate|auto-227|<tuple|E.5.13.1|71>>
+    <associate|auto-228|<tuple|E.5.14|71>>
+    <associate|auto-229|<tuple|E.5.14.1|72>>
     <associate|auto-23|<tuple|1.13|13>>
-    <associate|auto-230|<tuple|E.6|72>>
-    <associate|auto-231|<tuple|E.6.1|72>>
-    <associate|auto-232|<tuple|E.6.1.1|72>>
-    <associate|auto-233|<tuple|E.6.2|72>>
-    <associate|auto-234|<tuple|E.6.2.1|72>>
-    <associate|auto-235|<tuple|E.7|73>>
-    <associate|auto-236|<tuple|E.7.1|73>>
-    <associate|auto-237|<tuple|E.7.1.1|73>>
-    <associate|auto-238|<tuple|E.7.2|73>>
-    <associate|auto-239|<tuple|E.7.2.1|73>>
+    <associate|auto-230|<tuple|E.5.15|72>>
+    <associate|auto-231|<tuple|E.5.15.1|72>>
+    <associate|auto-232|<tuple|E.6|72>>
+    <associate|auto-233|<tuple|E.6.1|72>>
+    <associate|auto-234|<tuple|E.6.1.1|72>>
+    <associate|auto-235|<tuple|E.6.2|73>>
+    <associate|auto-236|<tuple|E.6.2.1|73>>
+    <associate|auto-237|<tuple|E.7|73>>
+    <associate|auto-238|<tuple|E.7.1|73>>
+    <associate|auto-239|<tuple|E.7.1.1|73>>
     <associate|auto-24|<tuple|1.13|13>>
-    <associate|auto-240|<tuple|E.7.3|73>>
-    <associate|auto-241|<tuple|E.7.3.1|73>>
-    <associate|auto-242|<tuple|E.7.4|73>>
-    <associate|auto-243|<tuple|E.7.4.1|73>>
-    <associate|auto-244|<tuple|E.7.5|74>>
-    <associate|auto-245|<tuple|E.7.5.1|74>>
-    <associate|auto-246|<tuple|E.8|74>>
-    <associate|auto-247|<tuple|E.8.1|74>>
-    <associate|auto-248|<tuple|E.8.1.1|74>>
-    <associate|auto-249|<tuple|E.8.2|74>>
+    <associate|auto-240|<tuple|E.7.2|73>>
+    <associate|auto-241|<tuple|E.7.2.1|73>>
+    <associate|auto-242|<tuple|E.7.3|73>>
+    <associate|auto-243|<tuple|E.7.3.1|73>>
+    <associate|auto-244|<tuple|E.7.4|74>>
+    <associate|auto-245|<tuple|E.7.4.1|74>>
+    <associate|auto-246|<tuple|E.7.5|74>>
+    <associate|auto-247|<tuple|E.7.5.1|74>>
+    <associate|auto-248|<tuple|E.8|74>>
+    <associate|auto-249|<tuple|E.8.1|74>>
     <associate|auto-25|<tuple|1.14|13>>
-    <associate|auto-250|<tuple|E.8.2.1|74>>
-    <associate|auto-251|<tuple|E.9|75>>
-    <associate|auto-252|<tuple|E.4|75>>
-    <associate|auto-253|<tuple|E.9.1|75>>
-    <associate|auto-254|<tuple|E.9.1.1|77>>
-    <associate|auto-255|<tuple|F|77>>
-    <associate|auto-256|<tuple|F.1|77>>
-    <associate|auto-257|<tuple|F.1.1|77>>
-    <associate|auto-258|<tuple|F.1.2|78>>
-    <associate|auto-259|<tuple|F.1.3|78>>
+    <associate|auto-250|<tuple|E.8.1.1|74>>
+    <associate|auto-251|<tuple|E.8.2|75>>
+    <associate|auto-252|<tuple|E.8.2.1|75>>
+    <associate|auto-253|<tuple|E.9|75>>
+    <associate|auto-254|<tuple|E.4|77>>
+    <associate|auto-255|<tuple|E.9.1|77>>
+    <associate|auto-256|<tuple|E.9.1.1|77>>
+    <associate|auto-257|<tuple|F|77>>
+    <associate|auto-258|<tuple|F.1|78>>
+    <associate|auto-259|<tuple|F.1.1|78>>
     <associate|auto-26|<tuple|1.15|13>>
-    <associate|auto-260|<tuple|F.1.4|78>>
-    <associate|auto-261|<tuple|F.1.5|78>>
-    <associate|auto-262|<tuple|F.1.6|79>>
-    <associate|auto-263|<tuple|F.1.7|79>>
-    <associate|auto-264|<tuple|F.1.8|80>>
-    <associate|auto-265|<tuple|F.1.9|80>>
-    <associate|auto-266|<tuple|F.1.10|81>>
-    <associate|auto-267|<tuple|F.1.11|81>>
-    <associate|auto-268|<tuple|F.1.12|81>>
-    <associate|auto-269|<tuple|F.1.13|82>>
+    <associate|auto-260|<tuple|F.1.2|78>>
+    <associate|auto-261|<tuple|F.1.3|78>>
+    <associate|auto-262|<tuple|F.1.4|79>>
+    <associate|auto-263|<tuple|F.1.5|79>>
+    <associate|auto-264|<tuple|F.1.6|80>>
+    <associate|auto-265|<tuple|F.1.7|80>>
+    <associate|auto-266|<tuple|F.1.8|81>>
+    <associate|auto-267|<tuple|F.1.9|81>>
+    <associate|auto-268|<tuple|F.1.10|81>>
+    <associate|auto-269|<tuple|F.1.11|82>>
     <associate|auto-27|<tuple|1.15|13>>
-    <associate|auto-270|<tuple|F.1.14|82>>
-    <associate|auto-271|<tuple|F.1.15|82>>
-    <associate|auto-272|<tuple|F.1.15.1|83>>
-    <associate|auto-273|<tuple|F.1.15.2|83>>
-    <associate|auto-274|<tuple|F.1.15.3|83>>
-    <associate|auto-275|<tuple|F.1.16|83>>
-    <associate|auto-276|<tuple|F.1.16.1|83>>
-    <associate|auto-277|<tuple|F.1.16.2|84>>
-    <associate|auto-278|<tuple|F.1.16.3|84>>
-    <associate|auto-279|<tuple|F.1.16.4|85>>
+    <associate|auto-270|<tuple|F.1.12|82>>
+    <associate|auto-271|<tuple|F.1.13|82>>
+    <associate|auto-272|<tuple|F.1.14|83>>
+    <associate|auto-273|<tuple|F.1.15|83>>
+    <associate|auto-274|<tuple|F.1.15.1|83>>
+    <associate|auto-275|<tuple|F.1.15.2|83>>
+    <associate|auto-276|<tuple|F.1.15.3|83>>
+    <associate|auto-277|<tuple|F.1.16|84>>
+    <associate|auto-278|<tuple|F.1.16.1|84>>
+    <associate|auto-279|<tuple|F.1.16.2|85>>
     <associate|auto-28|<tuple|2|15>>
-    <associate|auto-280|<tuple|F.1.16.5|85>>
-    <associate|auto-281|<tuple|F.1.16.6|85>>
-    <associate|auto-282|<tuple|F.1.17|86>>
-    <associate|auto-283|<tuple|F.1.17.1|86>>
-    <associate|auto-284|<tuple|F.1.17.2|86>>
-    <associate|auto-285|<tuple|F.1.17.3|87>>
-    <associate|auto-286|<tuple|F.1.17.4|87>>
-    <associate|auto-287|<tuple|F.1.17.5|87>>
-    <associate|auto-288|<tuple|F.1.17.6|87>>
-    <associate|auto-289|<tuple|F.1.17.7|88>>
+    <associate|auto-280|<tuple|F.1.16.3|85>>
+    <associate|auto-281|<tuple|F.1.16.4|85>>
+    <associate|auto-282|<tuple|F.1.16.5|86>>
+    <associate|auto-283|<tuple|F.1.16.6|86>>
+    <associate|auto-284|<tuple|F.1.17|86>>
+    <associate|auto-285|<tuple|F.1.17.1|87>>
+    <associate|auto-286|<tuple|F.1.17.2|87>>
+    <associate|auto-287|<tuple|F.1.17.3|87>>
+    <associate|auto-288|<tuple|F.1.17.4|87>>
+    <associate|auto-289|<tuple|F.1.17.5|88>>
     <associate|auto-29|<tuple|2.1|15>>
-    <associate|auto-290|<tuple|F.1.17.8|88>>
-    <associate|auto-291|<tuple|F.1.17.9|89>>
-    <associate|auto-292|<tuple|F.1.17.10|89>>
-    <associate|auto-293|<tuple|F.1.17.11|90>>
-    <associate|auto-294|<tuple|F.1.17.12|90>>
-    <associate|auto-295|<tuple|F.1.17.13|91>>
-    <associate|auto-296|<tuple|F.1.17.14|91>>
-    <associate|auto-297|<tuple|F.1.17.15|91>>
-    <associate|auto-298|<tuple|F.1.18|91>>
-    <associate|auto-299|<tuple|F.1.18.1|92>>
+    <associate|auto-290|<tuple|F.1.17.6|88>>
+    <associate|auto-291|<tuple|F.1.17.7|89>>
+    <associate|auto-292|<tuple|F.1.17.8|89>>
+    <associate|auto-293|<tuple|F.1.17.9|90>>
+    <associate|auto-294|<tuple|F.1.17.10|90>>
+    <associate|auto-295|<tuple|F.1.17.11|91>>
+    <associate|auto-296|<tuple|F.1.17.12|91>>
+    <associate|auto-297|<tuple|F.1.17.13|91>>
+    <associate|auto-298|<tuple|F.1.17.14|91>>
+    <associate|auto-299|<tuple|F.1.17.15|92>>
     <associate|auto-3|<tuple|1.2|11>>
     <associate|auto-30|<tuple|2.1.1|15>>
-    <associate|auto-300|<tuple|F.1.19|92>>
-    <associate|auto-301|<tuple|F.1.19.1|92>>
-    <associate|auto-302|<tuple|F.1.19.2|92>>
-    <associate|auto-303|<tuple|F.1.20|92>>
-    <associate|auto-304|<tuple|F.1.20.1|92>>
-    <associate|auto-305|<tuple|F.1.21|92>>
-    <associate|auto-306|<tuple|F.2|93>>
-    <associate|auto-307|<tuple|G|93>>
-    <associate|auto-308|<tuple|G.1|93>>
-    <associate|auto-309|<tuple|G.1|94>>
+    <associate|auto-300|<tuple|F.1.18|92>>
+    <associate|auto-301|<tuple|F.1.18.1|92>>
+    <associate|auto-302|<tuple|F.1.19|92>>
+    <associate|auto-303|<tuple|F.1.19.1|92>>
+    <associate|auto-304|<tuple|F.1.19.2|92>>
+    <associate|auto-305|<tuple|F.1.20|92>>
+    <associate|auto-306|<tuple|F.1.20.1|93>>
+    <associate|auto-307|<tuple|F.1.21|93>>
+    <associate|auto-308|<tuple|F.2|93>>
+    <associate|auto-309|<tuple|G|94>>
     <associate|auto-31|<tuple|2.1|15>>
-    <associate|auto-310|<tuple|G.2|94>>
-    <associate|auto-311|<tuple|G.2.1|94>>
-    <associate|auto-312|<tuple|G.1|94>>
-    <associate|auto-313|<tuple|G.2.2|95>>
-    <associate|auto-314|<tuple|G.2.3|95>>
-    <associate|auto-315|<tuple|G.2.4|95>>
-    <associate|auto-316|<tuple|G.2.5|96>>
-    <associate|auto-317|<tuple|G.2|96>>
-    <associate|auto-318|<tuple|G.2.6|96>>
-    <associate|auto-319|<tuple|G.2.7|97>>
+    <associate|auto-310|<tuple|G.1|94>>
+    <associate|auto-311|<tuple|G.1|94>>
+    <associate|auto-312|<tuple|G.2|94>>
+    <associate|auto-313|<tuple|G.2.1|95>>
+    <associate|auto-314|<tuple|G.1|95>>
+    <associate|auto-315|<tuple|G.2.2|95>>
+    <associate|auto-316|<tuple|G.2.3|96>>
+    <associate|auto-317|<tuple|G.2.4|96>>
+    <associate|auto-318|<tuple|G.2.5|96>>
+    <associate|auto-319|<tuple|G.2|97>>
     <associate|auto-32|<tuple|2.1.2|15>>
-    <associate|auto-320|<tuple|G.3|97>>
-    <associate|auto-321|<tuple|G.4|97>>
-    <associate|auto-322|<tuple|G.5|97>>
-    <associate|auto-323|<tuple|G.6|98>>
-    <associate|auto-324|<tuple|G.2.8|98>>
-    <associate|auto-325|<tuple|G.7|98>>
-    <associate|auto-326|<tuple|G.8|98>>
-    <associate|auto-327|<tuple|G.2.9|99>>
-    <associate|auto-328|<tuple|G.2.10|101>>
-    <associate|auto-329|<tuple|G.2.10|103>>
+    <associate|auto-320|<tuple|G.2.6|97>>
+    <associate|auto-321|<tuple|G.2.7|97>>
+    <associate|auto-322|<tuple|G.3|97>>
+    <associate|auto-323|<tuple|G.4|98>>
+    <associate|auto-324|<tuple|G.5|98>>
+    <associate|auto-325|<tuple|G.6|98>>
+    <associate|auto-326|<tuple|G.2.8|98>>
+    <associate|auto-327|<tuple|G.7|99>>
+    <associate|auto-328|<tuple|G.8|101>>
+    <associate|auto-329|<tuple|G.2.9|103>>
     <associate|auto-33|<tuple|2.1.3|16>>
     <associate|auto-330|<tuple|G.2.10|?>>
-    <associate|auto-331|<tuple|Tec19|?>>
+    <associate|auto-331|<tuple|G.2.10|?>>
+    <associate|auto-332|<tuple|G.2.10|?>>
+    <associate|auto-333|<tuple|Tec19|?>>
+    <associate|auto-334|<tuple|Tec19|?>>
     <associate|auto-34|<tuple|2.1.4|18>>
     <associate|auto-35|<tuple|2.1.5|19>>
-    <associate|auto-36|<tuple|3|19>>
-    <associate|auto-37|<tuple|3.1|19>>
-    <associate|auto-38|<tuple|3.1.1|20>>
-    <associate|auto-39|<tuple|3.1.2|20>>
+    <associate|auto-36|<tuple|2.1|19>>
+    <associate|auto-37|<tuple|2.2|19>>
+    <associate|auto-38|<tuple|3|20>>
+    <associate|auto-39|<tuple|3.1|20>>
     <associate|auto-4|<tuple|1.2|12>>
-    <associate|auto-40|<tuple|3.1.2.1|20>>
-    <associate|auto-41|<tuple|3.1.2.2|21>>
-    <associate|auto-42|<tuple|3.1.2.3|21>>
-    <associate|auto-43|<tuple|3.2|21>>
-    <associate|auto-44|<tuple|3.2.1|21>>
-    <associate|auto-45|<tuple|3.2.2|21>>
-    <associate|auto-46|<tuple|3.2.2.1|21>>
-    <associate|auto-47|<tuple|3.2.3|21>>
-    <associate|auto-48|<tuple|3.2.3|21>>
+    <associate|auto-40|<tuple|3.1.1|20>>
+    <associate|auto-41|<tuple|3.1.2|21>>
+    <associate|auto-42|<tuple|3.1.2.1|21>>
+    <associate|auto-43|<tuple|3.1.2.2|21>>
+    <associate|auto-44|<tuple|3.1.2.3|21>>
+    <associate|auto-45|<tuple|3.2|21>>
+    <associate|auto-46|<tuple|3.2.1|21>>
+    <associate|auto-47|<tuple|3.2.2|21>>
+    <associate|auto-48|<tuple|3.2.2.1|21>>
     <associate|auto-49|<tuple|3.2.3|21>>
     <associate|auto-5|<tuple|1.4|12>>
     <associate|auto-50|<tuple|3.2.3|22>>
-    <associate|auto-51|<tuple|<with|mode|<quote|math>|<rigid|->>|22>>
-    <associate|auto-52|<tuple|3.2.3.1|22>>
-    <associate|auto-53|<tuple|3.1|22>>
-    <associate|auto-54|<tuple|3.3|23>>
-    <associate|auto-55|<tuple|3.3.1|23>>
-    <associate|auto-56|<tuple|3.3.1.1|23>>
-    <associate|auto-57|<tuple|3.2|24>>
-    <associate|auto-58|<tuple|3.3.1.2|24>>
-    <associate|auto-59|<tuple|3.3.1.3|24>>
+    <associate|auto-51|<tuple|3.2.3|22>>
+    <associate|auto-52|<tuple|3.2.3|22>>
+    <associate|auto-53|<tuple|<with|mode|<quote|math>|<rigid|->>|22>>
+    <associate|auto-54|<tuple|3.2.3.1|23>>
+    <associate|auto-55|<tuple|3.1|23>>
+    <associate|auto-56|<tuple|3.3|23>>
+    <associate|auto-57|<tuple|3.3.1|24>>
+    <associate|auto-58|<tuple|3.3.1.1|24>>
+    <associate|auto-59|<tuple|3.2|24>>
     <associate|auto-6|<tuple|1.7|12>>
-    <associate|auto-60|<tuple|3.3.2|24>>
-    <associate|auto-61|<tuple|3.3.3|25>>
-    <associate|auto-62|<tuple|3.3.4|27>>
-    <associate|auto-63|<tuple|4|27>>
-    <associate|auto-64|<tuple|4.1|27>>
-    <associate|auto-65|<tuple|4.2|28>>
-    <associate|auto-66|<tuple|4.3|28>>
-    <associate|auto-67|<tuple|4.3.1|28>>
-    <associate|auto-68|<tuple|4.3.2|29>>
-    <associate|auto-69|<tuple|4.4|29>>
+    <associate|auto-60|<tuple|3.3.1.2|24>>
+    <associate|auto-61|<tuple|3.3.1.3|25>>
+    <associate|auto-62|<tuple|3.3.2|27>>
+    <associate|auto-63|<tuple|3.3.3|27>>
+    <associate|auto-64|<tuple|3.3.4|27>>
+    <associate|auto-65|<tuple|4|28>>
+    <associate|auto-66|<tuple|4.1|28>>
+    <associate|auto-67|<tuple|4.2|28>>
+    <associate|auto-68|<tuple|4.3|29>>
+    <associate|auto-69|<tuple|4.3.1|29>>
     <associate|auto-7|<tuple|1.7|12>>
-    <associate|auto-70|<tuple|4.4.1|29>>
-    <associate|auto-71|<tuple|4.4.2|31>>
-    <associate|auto-72|<tuple|5|31>>
-    <associate|auto-73|<tuple|5.1|31>>
-    <associate|auto-74|<tuple|5.1.1|31>>
-    <associate|auto-75|<tuple|5.1.2|32>>
-    <associate|auto-76|<tuple|5.1|33>>
-    <associate|auto-77|<tuple|5.2|33>>
-    <associate|auto-78|<tuple|5.2.1|33>>
-    <associate|auto-79|<tuple|5.2.2|34>>
+    <associate|auto-70|<tuple|4.3.2|29>>
+    <associate|auto-71|<tuple|4.4|31>>
+    <associate|auto-72|<tuple|4.4.1|31>>
+    <associate|auto-73|<tuple|4.4.2|31>>
+    <associate|auto-74|<tuple|5|31>>
+    <associate|auto-75|<tuple|5.1|32>>
+    <associate|auto-76|<tuple|5.1.1|33>>
+    <associate|auto-77|<tuple|5.1.2|33>>
+    <associate|auto-78|<tuple|5.1|33>>
+    <associate|auto-79|<tuple|5.2|34>>
     <associate|auto-8|<tuple|1.7|12>>
-    <associate|auto-80|<tuple|5.2.3|34>>
-    <associate|auto-81|<tuple|5.2.4|35>>
-    <associate|auto-82|<tuple|5.2.5|35>>
-    <associate|auto-83|<tuple|5.2.6|36>>
-    <associate|auto-84|<tuple|5.2.7|37>>
-    <associate|auto-85|<tuple|5.3|37>>
-    <associate|auto-86|<tuple|5.3.1|39>>
-    <associate|auto-87|<tuple|5.3.2|39>>
-    <associate|auto-88|<tuple|5.3.3|40>>
-    <associate|auto-89|<tuple|5.3.4|40>>
+    <associate|auto-80|<tuple|5.2.1|34>>
+    <associate|auto-81|<tuple|5.2.2|35>>
+    <associate|auto-82|<tuple|5.2.3|35>>
+    <associate|auto-83|<tuple|5.2.4|36>>
+    <associate|auto-84|<tuple|5.2.5|37>>
+    <associate|auto-85|<tuple|5.2.6|37>>
+    <associate|auto-86|<tuple|5.2.7|39>>
+    <associate|auto-87|<tuple|5.3|39>>
+    <associate|auto-88|<tuple|5.3.1|40>>
+    <associate|auto-89|<tuple|5.3.2|40>>
     <associate|auto-9|<tuple|1.9|13>>
-    <associate|auto-90|<tuple|5.4|41>>
-    <associate|auto-91|<tuple|A|41>>
-    <associate|auto-92|<tuple|A.1|41>>
-    <associate|auto-93|<tuple|A.2|41>>
-    <associate|auto-94|<tuple|A.3|41>>
-    <associate|auto-95|<tuple|A.4|41>>
-    <associate|auto-96|<tuple|A.5|41>>
-    <associate|auto-97|<tuple|A.1|42>>
-    <associate|auto-98|<tuple|A.2|42>>
-    <associate|auto-99|<tuple|A.5.1|42>>
+    <associate|auto-90|<tuple|5.3.3|41>>
+    <associate|auto-91|<tuple|5.3.4|41>>
+    <associate|auto-92|<tuple|5.4|41>>
+    <associate|auto-93|<tuple|A|41>>
+    <associate|auto-94|<tuple|A.1|41>>
+    <associate|auto-95|<tuple|A.2|41>>
+    <associate|auto-96|<tuple|A.3|41>>
+    <associate|auto-97|<tuple|A.4|42>>
+    <associate|auto-98|<tuple|A.5|42>>
+    <associate|auto-99|<tuple|A.1|42>>
     <associate|bib-burdges_schnorr_2019|<tuple|Bur19|101>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|101>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|101>>
@@ -9294,6 +9341,7 @@
     <associate|defn-index-function|<tuple|2.7|17>>
     <associate|defn-inherent-data|<tuple|3.5|22>>
     <associate|defn-invalid-transaction|<tuple|G.3|97>>
+    <associate|defn-key-index|<tuple|2.13|?>>
     <associate|defn-key-type-id|<tuple|E.6|60>>
     <associate|defn-little-endian|<tuple|1.7|12>>
     <associate|defn-local-storage|<tuple|E.9|66>>
@@ -9328,6 +9376,9 @@
     <associate|defn-slot-offset|<tuple|5.11|34>>
     <associate|defn-stash-key|<tuple|A.2|41>>
     <associate|defn-state-machine|<tuple|1.1|11>>
+    <associate|defn-storage-key-to-blocks|<tuple|2.15|?>>
+    <associate|defn-storage-key-to-child-tries|<tuple|2.16|?>>
+    <associate|defn-storage-key-to-extrinsics|<tuple|2.14|?>>
     <associate|defn-stored-value|<tuple|2.1|15>>
     <associate|defn-transaction-queue|<tuple|3.4|21>>
     <associate|defn-transaction-validity-error|<tuple|G.2|96>>
@@ -9413,6 +9464,7 @@
     <associate|tabl-message-types|<tuple|D.1|49>>
     <associate|tabl-node-role|<tuple|D.2|50>>
     <associate|tabl-session-keys|<tuple|A.2|42>>
+    <associate|table-changes-trie-key-types|<tuple|2.1|?>>
   </collection>
 </references>
 
