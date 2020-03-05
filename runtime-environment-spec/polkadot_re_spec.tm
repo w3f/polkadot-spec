@@ -1991,8 +1991,8 @@
 
     The Polkadot node must track the interval and levels and generate those
     changes when conditions apply and the Runtime calls the provided Host
-    function. The range spans from the last block where range changes were
-    created to the current block.
+    function. The range spans from the last block (where range changes were
+    created) + 1 to the current block.
   </definition>
 
   The Trie itself is not part of the block, but a separately maintained
@@ -2000,8 +2000,8 @@
   inlcuded in the block digest as described in Definition
   <reference|defn-digest> and gets calculated as described in section
   <reference|sect-merkl-proof>. The root calculation uses entries of a
-  per-block basis (including range changes that occure on that block), not
-  the whole changes spanning multiple blocks.
+  per-block basis (including range changes which conditions apply on that
+  block), not the whole changes spanning multiple blocks.
 
   \;
 
