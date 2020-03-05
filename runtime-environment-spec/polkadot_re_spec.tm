@@ -1949,9 +1949,10 @@
 
   <\definition>
     The <strong|per-block changes> tracks any changes which occure in an
-    individual block. The changed key gets inserted into the Trie, where it's
-    value is the index of the extrinsic that caused that change. The index
-    depends on the order in which the extrinsic is included in the block.
+    individual block. The changed key gets inserted into the Trie, prefixed
+    with the current block number, where it's value is the index of the
+    extrinsic that caused that change. The index depends on the order in
+    which the extrinsic is included in the block.
 
     \;
 
@@ -1962,10 +1963,10 @@
 
   <\definition>
     The <strong|range changes> tracks any changes which occured in a certain
-    range of blocks. The changed key gets inserted into the Trie, where it's
-    value is the block number which caused any changes to it. Multiple
-    changes of the same key containing values of different block numbers are
-    possible and likely.
+    range of blocks. The changed key gets inserted into the Trie, prefixed
+    with the current block number, where it's value is the block number which
+    caused any changes to it. Multiple changes of the same key containing
+    values of different block numbers are possible and likely.
 
     \;
 
