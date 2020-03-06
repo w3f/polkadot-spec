@@ -1948,8 +1948,8 @@
   \;
 
   The Changes Trie accepts three different types of keys, displayed in the
-  varying datatype as defined in <reference|defn-varrying-data-type> in table
-  <reference|table-changes-trie-key-types>. Each key type points to a
+  varying datatype (as defined in <reference|defn-varrying-data-type>) in
+  table <reference|table-changes-trie-key-types>. Each key type points to a
   different value type, which is specified in their corresponding Definitions
   respectively <reference|defn-storage-key-to-extrinsics>,
   <reference|defn-storage-key-to-blocks> and
@@ -1966,7 +1966,8 @@
 
     \;
   <|big-table>
-    <label|table-changes-trie-key-types>
+    <label|table-changes-trie-key-types>Varying datatype of possible mappings
+    in the Changes Trie
   </big-table>
 
   <strong|Note>: the key used for the Chanes Trie must be the <em|varying
@@ -1981,7 +1982,7 @@
     <\big-table|<tabular|<tformat|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Block>|<cell|Block
     at which this key has been inserted in the trie>|<cell|Unsigned 32-bit
     integer>>|<row|<cell|Key>|<cell|The changed key>|<cell|Byte array>>>>>>
-      \;
+      Key structure inserted in the Changes Trie
     </big-table>
   </definition>
 
@@ -1990,9 +1991,9 @@
     extrinsics mappings> tracks any changes which occure in an individual
     block. The key gets inserted into the Trie, where it's value is a SCALE
     encoded array containing the indices of the extrinsics that caused any
-    changes to the key. The indices are presesented as unsigned 32-bit
-    integers and depend on the order in which each extrinsic is included in
-    the block.
+    changes to the key. The indices are unsigned 32-bit integers and it's
+    values depend on the order in which each extrinsic is included in the
+    block.
 
     \;
 
@@ -2012,8 +2013,8 @@
 
     Those entries are generated when the Runtime calls
     <verbatim|ext_storage_changes_root> as described in section
-    <reference|sect-ext-storage-changes-root>, but unlike the per-block
-    records they are not generated on each block. The Runtime sets the key
+    <reference|sect-ext-storage-changes-root>, but unlike the extrinsics
+    mappings they are not generated on each block. The Runtime sets the key
     <verbatim|:changes_trie> to storage, where it's value is made out of two
     concatenated 32-bit integers:
 
@@ -2030,10 +2031,10 @@
       each level in 1 to <verbatim|digest_levels>.
     </itemize-dot>
 
-    The Polkadot node must track the interval and levels and generate those
-    changes when conditions apply and the Runtime calls the provided Host
-    function. The range spans from the last block (where range changes were
-    created) + 1 to the current block.
+    The Polkadot node must track the interval and levels, verify if
+    conditions apply and then generate those mappings when the Runtime calls
+    <verbatim|ext_storage_changes_root>. The range spans from the last block
+    (where mappings were created) + 1 to the current block.
   </definition>
 
   <\definition>
@@ -2047,7 +2048,7 @@
   inlcuded in the block digest as described in Definition
   <reference|defn-digest> and gets calculated as described in section
   <reference|sect-merkl-proof>. The root calculation uses entries of a
-  per-block basis (including range changes which conditions apply on that
+  per-block basis (including block mappings when conditions apply on that
   block), not the whole changes spanning multiple blocks.
 
   \;
