@@ -1970,10 +1970,10 @@
     in the Changes Trie
   </big-table>
 
-  <strong|Note>: the key used for the Chanes Trie must be the <em|varying
-  datatype>, not just the individual, appended <em|KeyIndex>. Unlike the
-  default encoding for varying data types, this structure starts it's
-  indexing at <verbatim|1>.
+  <strong|Note>: the key used for the Changes Trie must be the <em|varying
+  datatype>, not the individual, appended <em|KeyIndex>. Unlike the default
+  encoding for varying data types, this structure starts it's indexing at
+  <verbatim|1>.
 
   <\definition>
     <label|defn-key-index>The <strong|Key Index> is a tuple containing the
@@ -1988,12 +1988,13 @@
 
   <\definition>
     <label|defn-storage-key-to-extrinsics>The <strong|storage key to
-    extrinsics mappings> tracks any changes which occure in an individual
-    block. The key gets inserted into the Trie, where it's value is a SCALE
+    extrinsics mappings> track any changes which occure in an individual
+    block. The key is inserted into the Trie, where it's value is a SCALE
     encoded array containing the indices of the extrinsics that caused any
     changes to the key. The indices are unsigned 32-bit integers and it's
     values depend on the order in which each extrinsic is included in the
-    block.
+    block. Additionally, a separate Changes Trie is created for each child
+    storage where changes occure.
 
     \;
 
@@ -2005,7 +2006,7 @@
   <\definition>
     <label|defn-storage-key-to-blocks>The <strong|storage key to blocks
     mappings> track any changes which occured in a certain range of blocks.
-    The key gets inserted into the Trie, where it's value is a SCALE encoded
+    The key is inserted into the Trie, where it's value is a SCALE encoded
     array containing block numbers where extrinsics caused any changes to the
     key. The block numbers are represented as unsigned 32-bit integers.
 
@@ -2013,8 +2014,8 @@
 
     Those entries are generated when the Runtime calls
     <verbatim|ext_storage_changes_root> as described in section
-    <reference|sect-ext-storage-changes-root>, but unlike the extrinsics
-    mappings they are not generated on each block. The Runtime sets the key
+    <reference|sect-ext-storage-changes-root>, but unlike the other mappings,
+    they are not generated on each block. The Runtime sets the key
     <verbatim|:changes_trie> to storage, where it's value is made out of two
     concatenated 32-bit integers:
 
@@ -2034,17 +2035,22 @@
     The Polkadot node must track the interval and levels, verify if
     conditions apply and then generate those mappings when the Runtime calls
     <verbatim|ext_storage_changes_root>. The range spans from the last block
-    (where mappings were created) + 1 to the current block.
+    (where this kind of mappings were created) + 1 to the current block.
   </definition>
 
   <\definition>
     <label|defn-storage-key-to-child-tries>The <strong|storage key to child
-    trie mappings> track any changes which occured in a different Changes
-    Trie. <todo|TODO>
+    changes tries mappings> track any storage keys from child storages and
+    their corresponding Child Changes Trie. As described in Definition
+    <reference|defn-storage-key-to-extrinsics>, changes inside child storages
+    are inserted into their own Trie. The changed key is inserted into the
+    main Trie, where it's value is the Merkle proof as desribed in section
+    <reference|sect-merkl-proof> of the corresponding Child Storage Trie,
+    which stores the mappings between the storage key and exstrinsics.
   </definition>
 
   The Trie itself is not part of the block, but a separately maintained
-  database by the Polkadot node. The Merkle root of the Change Trie must be
+  database by the Polkadot node. The Merkle proof of the Change Trie must be
   inlcuded in the block digest as described in Definition
   <reference|defn-digest> and gets calculated as described in section
   <reference|sect-merkl-proof>. The root calculation uses entries of a
@@ -9628,11 +9634,11 @@
     </associate>
     <\associate|table>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|2.1>|>
-        \;
+        Varying datatype of possible mappings in the Changes Trie
       </surround>|<pageref|auto-36>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|2.2>|>
-        \;
+        Key structure inserted in the Changes Trie
       </surround>|<pageref|auto-37>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|3.1>|>
