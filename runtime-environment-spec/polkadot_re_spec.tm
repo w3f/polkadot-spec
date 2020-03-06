@@ -2538,7 +2538,7 @@
 
     <\itemize-dot>
       <item><strong|Changes trie root> contains the root of changes trie at
-      block <math|B>.
+      block <math|B> as defined in Definition <reference|defn-changes-trie>.
 
       <item><strong|Pre-runtime> digest item represents messages produced by
       a consensus engine to the Runtime.
