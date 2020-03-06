@@ -1937,7 +1937,7 @@
     <math|H<around*|(|R|)>>.
   </definition>
 
-  <subsection|Changes Trie>
+  <subsection|Changes Trie><label|defn-changes-trie>
 
   Polkadot focuses on light client friendliness and therefore implements a
   mechanism which allows identifying changes in the blockchain without
@@ -5097,8 +5097,9 @@
 
   <subsection|<verbatim|ext_storage_changes_root>><label|sect-ext-storage-changes-root>
 
-  Commits all existing operations and gets the resulting change root. The
-  parent hash is a SCALE encoded change root.
+  Commits all existing operations and gets the resulting changes root as
+  defined in Definition <reference|defn-changes-trie>. The parent hash is a
+  SCALE encoded block hash.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -5119,7 +5120,8 @@
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
-    containing the change root.
+    containing the changes root as defined in Definition
+    <reference|defn-changes-trie>.
   </itemize>
 
   <subsection|<verbatim|ext_storage_next_key>>
@@ -9328,6 +9330,7 @@
     <associate|defn-block-time|<tuple|5.10|36>>
     <associate|defn-block-tree|<tuple|1.11|13>>
     <associate|defn-chain-subchain|<tuple|1.13|13>>
+    <associate|defn-changes-trie|<tuple|2.1.5|?>>
     <associate|defn-child-storage-definition|<tuple|E.4|58>>
     <associate|defn-child-storage-type|<tuple|E.3|58>>
     <associate|defn-child-type|<tuple|E.5|58>>
