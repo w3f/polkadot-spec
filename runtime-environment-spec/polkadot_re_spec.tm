@@ -2055,12 +2055,8 @@
   <reference|defn-digest> and gets calculated as described in section
   <reference|sect-merkl-proof>. The root calculation uses entries of a
   per-block basis (including block mappings when conditions apply on that
-  block), not the whole changes spanning multiple blocks.
-
-  \;
-
-  <todo|Mention \Pproof servers\Q? Not directly related to this
-  spec><chapter|State Transition><label|chap-state-transit>
+  block), not the whole changes spanning multiple blocks.<chapter|State
+  Transition><label|chap-state-transit>
 
   Like any transaction-based transition system, Polkadot state changes via
   executing an ordered set of instructions. These instructions are known as
@@ -9443,10 +9439,10 @@
     <associate|sect-msg-consensus|<tuple|D.1.6|54>>
     <associate|sect-msg-status|<tuple|D.1.1|51>>
     <associate|sect-msg-transactions|<tuple|D.1.5|53>>
-    <associate|sect-network-interactions|<tuple|Tec19|29>>
+    <associate|sect-network-interactions|<tuple|4|29>>
     <associate|sect-network-messages|<tuple|D|51>>
     <associate|sect-randomness|<tuple|A.3|43>>
-    <associate|sect-re-api|<tuple|Tec19|79>>
+    <associate|sect-re-api|<tuple|F|79>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|97>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|98>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|97>>
