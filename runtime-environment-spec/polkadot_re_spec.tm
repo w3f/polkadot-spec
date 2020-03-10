@@ -1998,6 +1998,11 @@
 
     \;
 
+    Keys that were modified outside of extrinsics, such as changes made by
+    the Runtime directly, have a <verbatim|0xffffffff> value as it's indice.
+
+    \;
+
     Those entries are generated when the Runtime calls
     <verbatim|ext_storage_changes_root> as described in section
     <reference|sect-ext-storage-changes-root>.
