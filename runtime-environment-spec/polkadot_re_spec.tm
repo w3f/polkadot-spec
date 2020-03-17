@@ -3039,9 +3039,9 @@
   <math|\<cal-E\><rsub|n>> should run Algorithm
   <reference|algo-block-production-lottery> to identify the slots it is
   awarded. These are the slots during which the block producer is allowed to
-  build a block. The <math|sk> is the block producer lottery secret key and
-  <math|n> is the index of epoch for whose slots the block producer is
-  running the lottery.
+  build a block. The <math|sk> is the block producer lottery secret key
+  <todo|is it the session key? needs to be specified> and <math|n> is the
+  index of epoch for whose slots the block producer is running the lottery.
 
   <\algorithm>
     <label|algo-block-production-lottery><name|Block-production-lottery>(<math|sk:>session
@@ -4094,7 +4094,7 @@
 
   BLAKE2 is a collection of cryptographic hash functions known for their high
   speed. their design closely resembles BLAKE which has been a finalist in
-  SHA-3 competition.
+  SHA-3 competition.<verbatim|>
 
   Polkadot is using Blake2b variant which is optimized for 64bit platforms.
   Unless otherwise specified, Blake2b hash function with 256bit output is
@@ -4105,6 +4105,8 @@
   <section|Randomness><label|sect-randomness>
 
   <section|VRF><label|sect-vrf>
+
+  <todo|TBS>
 
   <section|Cryptographic Keys><label|sect-cryptographic-keys>
 
