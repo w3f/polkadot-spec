@@ -1,4 +1,3 @@
-
 \chapter{Availibility and Validity Verification}
 
 \section{Introduction}
@@ -9,18 +8,29 @@
 Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assginments.
 
 \begin{algorithm}
-\caption[VRF computation for approval assignment]{\sc VRF computation for approval assignment}
-\label{algo-checker-vrf}
-\begin{algorithmic}
-\STATE $r\gets $\sc{Randomness}()
-%% \IF {$i\geq 5$} 
-%%         \STATE $i\gets i-1$
-%% \ELSE
-%%         \IF {$i\leq 3$}
-%%                 \STATE $i\gets i+2$
-%%         \ENDIF
-%% \ENDIF 
-\end{algorithmic}
+  \caption[VRF-for-Approval]{\sc VRF-for-Approval($B$, $z$, $s_k$)}
+  \label{algo-checker-vrf}
+  \begin{algorithmic}[1]
+  \Require
+
+    $B$: the block to be approved 
+
+    $z$: randomness for approval assignmen
+
+    $s_k$: session secret key of validator planning to participate in approval
+
+    \State $(\pi, d) \leftarrow \sc{VRF}(H_h(B),sk(z))$
+    \State \Return $(\pi,d)$
+  \end{algorithmic}
 \end{algorithm}
 
+\begin{algorithm}
+  \Require{}
+  %%  \Ensure{}
+  \caption[]{\sc }
+  \begin{algorithmic}[1]
+    \State
+  \end{algorithmic}
+\end{algorithm}
 
+Where \sc{VRF} function is defined in \cite{polkadot-crypto-spec}.

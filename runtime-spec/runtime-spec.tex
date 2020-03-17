@@ -1,7 +1,10 @@
 \documentclass{book}
 \usepackage[english]{babel}
 \usepackage{geometry,amsmath,amssymb,hyperref,calc,ifthen,alltt,theorem,capt-of,makeidx}
-\usepackage{algorithm,algorithmic}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%%\usepackage{algorithmic}
+
 
 \makeindex
 \geometry{letterpaper}
@@ -54,6 +57,8 @@
     \end{center}
   \end{minipage}}
 {\theorembodyfont{\rmfamily}\newtheorem{warning}{Warning}}
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}
+\renewcommand{\algorithmicensure}{\textbf{Output:}}
 %%%%%%%%%% End TeXmacs macros
 
 \providecommand{\cdummy}{{\cdot}}
