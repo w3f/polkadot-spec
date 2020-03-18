@@ -35,7 +35,7 @@
     \;
   </hide-preamble>
 
-  <doc-data|<doc-title|Polkadot Host<next-line><with|font-size|1.41|Protocol
+  <doc-data|<doc-title|The Polkadot Host<next-line><with|font-size|1.41|Protocol
   Specification>>|<doc-date|<date|>>>
 
   <\table-of-contents|toc>
@@ -1148,31 +1148,36 @@
   The Polkadot relay chain protocol, henceforward called <em|Polkadot
   protocol>, can itself be considered as a replicated state machine on its
   own. As such, the protocol can be specified by identifying the state
-  machine and the replication strategy.\ 
+  machine and the replication strategy.
+
+  \;
 
   From a more technical point of view, the Polkadot protocol has been divided
-  into two parts, the <em|Runtime> and the <em|Runtime environment> (RE). The
-  Runtime comprises most of the state transition logic for the Polkadot
-  protocol and is designed and expected to be upgradable as part of the state
-  transition process. The Runtime environment consists of parts of the
+  into two parts, the <em|Runtime> and the <em|Host>. The Runtime comprises
+  most of the state transition logic for the Polkadot protocol and is
+  designed and expected to be upgradable as part of the state transition
+  process. The Runtime environment consists of parts of the
   protocol,<space|1em>shared mostly among peer-to-peer decentralized
   cryptographically-secured transaction systems, i.e. blockchains whose
-  consensus system is based on the proof-of-stake. The RE is planned to be
-  stable and static for the lifetime duration of the Polkadot protocol.
+  consensus system is based on the proof-of-stake. The Polkadot Host is
+  planned to be stable and static for the lifetime duration of the Polkadot
+  protocol.
 
-  With the current document, we aim to specify the RE part of the Polkadot
-  protocol as a replicated state machine. After defining the basic terms in
-  Chapter 1, we proceed to specify the representation of a valid state of the
-  Protocol in Chapter <reference|chap-state-spec>. In Chapter
+  \;
+
+  With the current document, we aim to specify the Polkadot Host part of the
+  Polkadot protocol as a replicated state machine. After defining the basic
+  terms in Chapter 1, we proceed to specify the representation of a valid
+  state of the Protocol in Chapter <reference|chap-state-spec>. In Chapter
   <reference|chap-state-transit>, we identify the protocol states, by
   explaining the Polkadot state transition and discussing the detail based on
-  which Polkadot RE interacts with the state transition function, i.e.
+  which the Polkadot Host interacts with the state transition function, i.e.
   Runtime. Following, we specify the input messages triggering the state
   transition and the system behaviour. In Chapter <reference|chap-consensu>,
   we specify the consensus protocol, which is responsible for keeping all the
   replica in the same state. Finally, the initial state of the machine is
   identified and discussed in Appendix <reference|sect-genesis-block>. A
-  Polkadot RE implementation which conforms with this part of the
+  Polkadot Host implementation which conforms with this part of the
   specification should successfully be able to sync its states with the
   Polkadot network.
 
@@ -1470,7 +1475,7 @@
 
   <section|State Storage and Storage Trie><label|sect-state-storage>
 
-  For storing the state of the system, Polkadot RE implements a hash table
+  For storing the state of the system, Polkadot Host implements a hash table
   storage where the keys are used to access each data entry. There is no
   assumption either on the size of the key nor on the size of the data stored
   under them, besides the fact that they are byte arrays with specific upper
@@ -1479,11 +1484,11 @@
 
   <subsection|Accessing System Storage >
 
-  Polkadot RE implements various functions to facilitate access to the system
-  storage for the Runtime. See Section <reference|sect-entries-into-runtime>
-  for a an explaination of those functions. Here we formalize the access to
-  the storage when it is being directly accessed by Polkadot RE (in contrast
-  to Polkadot runtime).
+  The Polkadot Host implements various functions to facilitate access to the
+  system storage for the Runtime. See Section
+  <reference|sect-entries-into-runtime> for a an explaination of those
+  functions. Here we formalize the access to the storage when it is being
+  directly accessed by the Polkadot Host (in contrast to Polkadot runtime).
 
   <\definition>
     <label|defn-stored-value>The <glossary-explain|StoredValue|the function
@@ -1519,10 +1524,10 @@
 
   The Trie is used to compute the <em|state root>, <math|H<rsub|r>>, (see
   Definition <reference|defn-block-header>), whose purpose is to authenticate
-  the validity of the state database. Thus, Polkadot RE follows a rigorous
-  encoding algorithm to compute the values stored in the trie nodes to ensure
-  that the computed Merkle hash, <math|H<rsub|r>>, matches across the
-  Polkadot RE implementations.
+  the validity of the state database. Thus, the Polkadot Host follows a
+  rigorous encoding algorithm to compute the values stored in the trie nodes
+  to ensure that the computed Merkle hash, <math|H<rsub|r>>, matches across
+  the Polkadot Host implementations.
 
   The Trie is a <em|radix-16> tree as defined in Definition
   <reference|defn-radix-tree>. Each key value identifies a unique node in the
@@ -1963,8 +1968,8 @@
 
   Runtime as defined in Definition <reference|defn-runtime> is the code
   implementing the logic of the chain. This code is decoupled from the
-  Polkadot RE to make the Runtime easily upgradable without the need to
-  upgrade the Polkadot RE itself. The general procedure to interact with
+  Polkadot Host to make the Runtime easily upgradable without the need to
+  upgrade the Polkadot Host itself. The general procedure to interact with
   Runtime is described in Algorithm <reference|algo-runtime-interaction>.
 
   <\algorithm>
@@ -1992,7 +1997,7 @@
     </algorithmic>
   </algorithm>
 
-  In this section, we describe the details upon which the Polkadot RE is
+  In this section, we describe the details upon which the Polkadot Host is
   interacting with the Runtime. In particular, <name|Set-State-At> and
   <name|Call-Runtime-Entry> procedures called in Algorithm
   <reference|algo-runtime-interaction> are explained in Notation
@@ -2000,13 +2005,13 @@
   <reference|defn-set-state-at> respectively. <math|R<rsub|B>> is the Runtime
   code loaded from <math|\<cal-S\><rsub|B>>, as described in Notation
   <reference|nota-runtime-code-at-state>, and
-  <math|\<cal-R\>\<cal-E\><rsub|B>> is the Polkadot RE API, as described in
+  <math|\<cal-R\>\<cal-E\><rsub|B>> is the Polkadot Host API, as described in
   Notation <reference|nota-re-api-at-state>.
 
   <subsection|Loading the Runtime Code \ \ ><label|sect-loading-runtime-code>
 
-  Polkadot RE expects to receive the code for the Runtime of the chain as a
-  compiled WebAssembly (Wasm) Blob. The current runtime is stored in the
+  The Polkadot Host expects to receive the code for the Runtime of the chain
+  as a compiled WebAssembly (Wasm) Blob. The current runtime is stored in the
   state database under the key represented as a byte array:
 
   <\equation*>
@@ -2014,8 +2019,8 @@
   </equation*>
 
   which is the byte array of ASCII representation of string \P:code\Q (see
-  Section <reference|sect-genesis-block>). For any call to the Runtime,
-  Polkadot RE makes sure that it has the Runtime corresponding to the state
+  Section <reference|sect-genesis-block>). For any call to the Runtime, the
+  Polkadot Host makes sure that it has the Runtime corresponding to the state
   in which the entry has been called. This is, in part, because the calls to
   Runtime have potentially the ability to change the Runtime code and hence
   Runtime code is state sensitive. Accordingly, we introduce the following
@@ -2029,7 +2034,8 @@
 
   The initial runtime code of the chain is embedded as an extrinsics into the
   chain initialization JSON file (representing the genesis state) and is
-  submitted to Polkadot RE (see Section <reference|sect-genesis-block>).
+  submitted to the Polkadot Host (see Section
+  <reference|sect-genesis-block>).
 
   Subsequent calls to the runtime have the ability to, in turn, call the
   storage API (see Section <reference|sect-re-api>) to insert a new Wasm blob
@@ -2037,14 +2043,15 @@
 
   <subsection|Code Executor>
 
-  Polkadot RE provides a Wasm Virtual Machine (VM) to run the Runtime. The
-  Wasm VM exposes the Polkadot RE API to the Runtime, which, on its turn,
-  executes a call to the Runtime entries stored in the Wasm module. This part
-  of the Runtime environment is referred to as the <em|<strong|Executor>.>
+  The Polkadot Host provides a Wasm Virtual Machine (VM) to run the Runtime.
+  The Wasm VM exposes the Polkadot Host API to the Runtime, which, on its
+  turn, executes a call to the Runtime entries stored in the Wasm module.
+  This part of the Runtime environment is referred to as the
+  <em|<strong|Executor>.>
 
   Definition <reference|nota-call-into-runtime> introduces the notation for
-  calling the runtime entry which is used whenever an algorithm of Polkadot
-  RE needs to access the runtime.
+  calling the runtime entry which is used whenever an algorithm of the
+  Polkadot Host needs to access the runtime.
 
   <\notation>
     <label|nota-call-into-runtime> By
@@ -2065,16 +2072,16 @@
 
   <subsubsection|Access to Runtime API>
 
-  When Polkadot RE calls a Runtime entry it should make sure Runtime has
-  access to the all Polkadot Runtime API functions described in Appendix
+  When the Polkadot Host calls a Runtime entry it should make sure Runtime
+  has access to the all Polkadot Runtime API functions described in Appendix
   <reference|sect-runtime-entries>. This can be done for example by loading
   another Wasm module alongside the runtime which imports these functions
-  from Polkadot RE as host functions.
+  from the Polkadot Host as host functions.
 
   <subsubsection|Sending Arguments to Runtime
   ><label|sect-runtime-send-args-to-runtime-enteries>
 
-  In general, all data exchanged between Polkadot RE and the Runtime is
+  In general, all data exchanged between the Polkadot Host and the Runtime is
   encoded using SCALE codec described in Section
   <reference|sect-scale-codec>. As a Wasm function, all runtime entries have
   the following identical signatures:
@@ -2126,14 +2133,14 @@
     either of the key types described in section
     <reference|sect-cryptographic-keys> and broadcasted between the nodes.
     <strong|Inherents extrinsics> are unsigned extrinsics which are generated
-    by Polkadot RE and only included in the blocks produced by the node
+    by Polkadot Host and only included in the blocks produced by the node
     itself. They are broadcasted as part of the produced blocks rather than
     being gossiped as individual extrinsics.
   </definition>
 
-  Polkadot RE does not specify or limit the internals of each extrinsics and
-  those are dealt with by the Runtime. From Polkadot RE point of view, each
-  extrinsics is simply a SCALE-encoded blob (see Section
+  The Polkadot Host does not specify or limit the internals of each
+  extrinsics and those are dealt with by the Runtime. From the Polkadot Host
+  point of view, each extrinsics is simply a SCALE-encoded blob (see Section
   <reference|sect-scale-codec>).
 
   <subsection|Transactions>
@@ -2143,12 +2150,13 @@
   Transaction submission is made by sending a <em|Transactions> network
   message. The structure of this message is specified in Section
   <reference|sect-msg-transactions>. Upon receiving a Transactions message,
-  Polkadot RE decodes and decouples the transactions and calls
+  the Polkadot Host decodes and decouples the transactions and calls
   <verbatim|validate_trasaction> Runtime entry, defined in Section
   <reference|sect-rte-validate-transaction>, to check the validity of each
   received transaction. If <verbatim|validate_transaction> considers the
-  submitted transaction as a valid one, Polkadot RE makes the transaction
-  available for the consensus engine for inclusion in future blocks.
+  submitted transaction as a valid one, the Polkadot Host makes the
+  transaction available for the consensus engine for inclusion in future
+  blocks.
 
   <subsection|Transaction Queue>
 
@@ -2156,12 +2164,13 @@
   messages<em|<index|Transaction Message>>. This is because the transactions
   are submitted to the node through the <em|transactions> network message
   specified in Section <reference|sect-msg-transactions>. Upon receiving a
-  transactions message, Polkadot RE separates the submitted transactions in
-  the transactions message into individual transactions and passes them to
-  the Runtime by executing Algorithm <reference|algo-validate-transactions>
-  to validate and store them for inclusion into future blocks. To that aim,
-  Polkodot RE should keep a <em|transaction pool<index|transaction pool>> and
-  a <em|transaction queue><index|transaction queue> defined as follows:
+  transactions message, the Polkadot Host separates the submitted
+  transactions in the transactions message into individual transactions and
+  passes them to the Runtime by executing Algorithm
+  <reference|algo-validate-transactions> to validate and store them for
+  inclusion into future blocks. To that aim, the Polkadot Host should keep a
+  <em|transaction pool<index|transaction pool>> and a <em|transaction
+  queue><index|transaction queue> defined as follows:
 
   <\definition>
     <label|defn-transaction-queue>The <strong|Transaction Queue> of a block
@@ -2169,8 +2178,9 @@
     which stores the transactions ready to be included in a block sorted
     according to their priorities (Definition
     <reference|sect-msg-transactions>). The <strong|Transaction Pool>,
-    formally referred to as <math|TP>, is a hash table in which Polkadot RE
-    keeps the list of all valid transactions not in the transaction queue.
+    formally referred to as <math|TP>, is a hash table in which the Polkadot
+    Host keeps the list of all valid transactions not in the transaction
+    queue.
   </definition>
 
   Algorithm <reference|algo-validate-transactions> updates the transaction
@@ -2258,7 +2268,7 @@
     valid.
 
     <item><name|Provided-Tags>(T) is the list of tags that transaction
-    <math|T> provides. Polkadot RE needs to keep track of tags that
+    <math|T> provides. The Polkadot Host needs to keep track of tags that
     transaction <math|T> provides as well as requires after validating it.
 
     <item><name|Insert-At(><math|TQ,T,Requires(R),Priority(R)>) places
@@ -2271,7 +2281,7 @@
 
     <item><name|Propagate(><math|T>) include <math|T> in the next
     <em|transactions message<index|Transaction Message>> sent to all peers of
-    Polkadot RE node.
+    the Polkadot Host node.
   </itemize-minus>
 
   <\algorithm|<label|algo-maintain-transaction-pool><name|Maintain-Transaction-Pool>>
@@ -2284,9 +2294,9 @@
   <subsubsection|Inherents>
 
   Block inherent data represents the totality of inherent extrinsics included
-  in each block. This data is collected or generated by the Polkadot RE and
+  in each block. This data is collected or generated by the Polkadot Host and
   handed to the Runtime for inclusion in the block. It's the responsability
-  of the RE implementation to keep track of those values. Table
+  of the Polkadot Host implementation to keep track of those values. Table
   <reference|tabl-inherent-data> lists these inherent data, identifiers, and
   types. <todo|define uncles>
 
@@ -2308,9 +2318,9 @@
     <reference|defn-scale-list>) representing the totality of inherent
     extrinsics included in each block. The entries of this hash table which
     are listed in Table <reference|tabl-inherent-data> are collected or
-    generated by the Polkadot RE and then handed to the Runtime for inclusion
-    as dercribed in Algorithm <reference|algo-build-block>. The identifiers
-    are 8-byte values.
+    generated by the Polkadot Host and then handed to the Runtime for
+    inclusion as dercribed in Algorithm <reference|algo-build-block>. The
+    identifiers are 8-byte values.
   </definition>
 
   <section|State Replication><label|sect-state-replication>
@@ -2322,11 +2332,12 @@
   specified in Section <reference|sect-block-format>. Like any other
   replicated state machines, state inconsistency happens across Polkadot
   replicas. Section <reference|sect-managing-multiple-states> is giving an
-  overview of how a Polkadot RE node manages multiple variants of the state.
+  overview of how a Polkadot Host node manages multiple variants of the
+  state.
 
   <subsection|Block Format><label|sect-block-format>
 
-  In Polkadot RE, a block is made of two main parts, namely the
+  In the Polkadot Host, a block is made of two main parts, namely the
   <with|font-shape|italic|block header> and the <with|font-shape|italic|list
   of extrinsics>. <em|The Extrinsics> represent the generalization of the
   concept of <em|transaction>, containing any set of data that is external to
@@ -2363,8 +2374,8 @@
       the block body. For example, it can hold the root hash of the Merkle
       trie which stores an ordered list of the extrinsics being validated in
       this block. The <samp|extrinsics_root> is set by the runtime and its
-      value is opaque to Polkadot RE. This element is formally referred to as
-      <strong|<math|H<rsub|e>>>.
+      value is opaque to the Polkadot Host. This element is formally referred
+      to as <strong|<math|H<rsub|e>>>.
 
       <item><strong|<samp|digest:>> this field is used to store any
       chain-specific auxiliary data, which could help the light clients
@@ -2445,7 +2456,7 @@
   <subsubsection|Justified Block Header><label|sect-justified-block-header>
 
   The Justified Block Header is provided by the consensus engine and
-  presented to the Polkadot RE, for the block to be appended to the
+  presented to the Polkadot Host, for the block to be appended to the
   blockchain. It contains the following parts:
 
   <\itemize>
@@ -2466,9 +2477,9 @@
   <subsubsection|Block Body><label|sect-block-body>
 
   The Block Body consists of array extrinsics each encoded as a byte array.
-  The internal of extrinsics is completely opaque to Polkadot RE. As such, it
-  forms the point of Polkadot RE, and is simply a SCALE encoded array of byte
-  arrays. Formally:
+  The internal of extrinsics is completely opaque to the Polkadot Host. As
+  such, from the point of the Polkadot Host, and is simply a SCALE encoded
+  array of byte arrays. Formally:
 
   <\definition>
     <label|defn-block-body>The <strong|body of Block> <math|B> represented as
@@ -2488,23 +2499,25 @@
   with the world state and transitions from the state of the system to a new
   valid state.
 
-  Blocks can be handed to the Polkadot RE both from the network stack for
+  Blocks can be handed to the Polkadot Host both from the network stack for
   example by means of Block response network message (see Section
   <reference|sect-msg-block-response> ) and from the consensus engine.
 
   <subsection|Block Validation><label|sect-block-validation>
 
-  Both the Runtime and the Polkadot RE need to work together to assure block
-  validity. A block is deemed valid if the block author had the authorship
-  right for the slot during which the slot was built as well as if the
-  transactions in the block constitute a valid transition of states. The
-  former criterion is validated by Polkadot RE according to the block
-  production consensus protocol. The latter can be verified by Polkadot RE
-  invoking <verbatim|execute_block> entry into the Runtime as a part of the
-  validation process.
+  Both the Runtime and the Polkadot Host need to work together to assure
+  block validity. A block is deemed valid if the block author had the
+  authorship right for the slot during which the slot was built as well as if
+  the transactions in the block constitute a valid transition of states. The
+  former criterion is validated by the Polkadot Host according to the block
+  production consensus protocol. The latter can be verified by the Polkadot
+  Host invoking <verbatim|execute_block> entry into the Runtime as a part of
+  the validation process.
 
-  Polkadot RE implements the following procedure to assure the validity of
-  the block:
+  \;
+
+  The Polkadot Host implements the following procedure to assure the validity
+  of the block:
 
   <\algorithm|<label|algo-import-and-validate-block><name|Import-and-Validate-Block(<math|B,Just<around|(|B|)>>)>>
     <\algorithmic>
@@ -2572,10 +2585,10 @@
 
   While the state trie structure described in Section
   <reference|sect-state-storage-trie-structure> facilitates and optimizes
-  storing and switching between multiple variants of the state storage,
-  Polkadot RE does not specify how a node is required to accomplish this
-  task. Instead, Polkadot RE is required to implement <name|Set-State-At>
-  operation which behaves as defined in Definition
+  storing and switching between multiple variants of the state storage, the
+  Polkadot Host does not specify how a node is required to accomplish this
+  task. Instead, the Polkadot Host is required to implement
+  <name|Set-State-At> operation which behaves as defined in Definition
   <reference|defn-set-state-at>:
 
   <\definition>
@@ -2627,8 +2640,8 @@
 
   <section|Node Identities and Addresses>
 
-  Similar to other decentralized networks, each Polkadot RE node possesses a
-  network private key and a network public key representing an ED25519 key
+  Similar to other decentralized networks, each Polkadot Host node possesses
+  a network private key and a network public key representing an ED25519 key
   pair <cite|liusvaara_edwards-curve_2017>.
 
   <todo|SPEC: local node's keypair must be passed as part of the network
@@ -2735,8 +2748,8 @@
 
   <subsection|Periodic Ephemeral Substreams>
 
-  A Polkadot RE node should open several substreams. In particular, it should
-  periodically open ephemeral substreams in order to:
+  A Polkadot Host node should open several substreams. In particular, it
+  should periodically open ephemeral substreams in order to:
 
   <\itemize>
     <item>ping the remote peer and check whether the connection is still
@@ -2781,10 +2794,10 @@
 
   <chapter|Consensus><label|chap-consensu>
 
-  Consensus in Polkadot RE is achieved during the execution of two different
-  procedures. The first procedure is block production and the second is
-  finality. Polkadot RE must run these procedures, if and only if it is
-  running on a validator node.
+  Consensus in the Polkadot Host is achieved during the execution of two
+  different procedures. The first procedure is block production and the
+  second is finality. The Polkadot Host must run these procedures, if and
+  only if it is running on a validator node.
 
   <section|Common Consensus Structures>
 
@@ -2890,9 +2903,10 @@
     </itemize-minus>
   </definition>
 
-  Polkadot RE should inspect the digest header of each block and delegates
-  consesus messages to their consensus engines. Consensus engine should react
-  based on the type of consensus messages they receives as follows:
+  The Polkadot Host should inspect the digest header of each block and
+  delegates consesus messages to their consensus engines. Consensus engine
+  should react based on the type of consensus messages they receives as
+  follows:
 
   <\itemize-minus>
     <item><strong|Scheduled Change>: Schedule an authority set change after
@@ -2943,8 +2957,8 @@
 
   <section|Block Production><label|sect-babe><label|sect-block-production>
 
-  Polkadot RE uses BABE protocol <cite|w3f_research_group_blind_2019> for
-  block production. It is designed based on Ouroboros praos
+  The Polkadot Host uses BABE protocol <cite|w3f_research_group_blind_2019>
+  for block production. It is designed based on Ouroboros praos
   <cite|david_ouroboros_2018>. BABE execution happens in sequential
   non-overlapping phases known as an <strong|<em|epoch>>. Each epoch on its
   turn is divided into a predefined number of slots. All slots in each epoch
@@ -2961,8 +2975,8 @@
 
   <\definition>
     A <strong|block producer>, noted by <math|\<cal-P\><rsub|j>>, is a node
-    running Polkadot RE which is authorized to keep a transaction queue and
-    which gets a turn in producing blocks.
+    running the Polkadot Host which is authorized to keep a transaction queue
+    and which gets a turn in producing blocks.
   </definition>
 
   <\definition>
@@ -3574,12 +3588,13 @@
 
   <section|Finality><label|sect-finality>
 
-  Polkadot RE uses GRANDPA Finality protocol <cite|stewart_grandpa:_2019> to
-  finalize blocks. Finality is obtained by consecutive rounds of voting by
-  validator nodes. Validators execute GRANDPA finality process in parallel to
-  Block Production as an independent service. In this section, we describe
-  the different functions that GRANDPA service is supposed to perform to
-  successfully participate in the block finalization process.
+  The Polkadot Host uses GRANDPA Finality protocol
+  <cite|stewart_grandpa:_2019> to finalize blocks. Finality is obtained by
+  consecutive rounds of voting by validator nodes. Validators execute GRANDPA
+  finality process in parallel to Block Production as an independent service.
+  In this section, we describe the different functions that GRANDPA service
+  is supposed to perform to successfully participate in the block
+  finalization process.
 
   <subsection|Preliminaries>
 
@@ -3588,7 +3603,7 @@
     <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
     <math|k<rsub|v><rsup|pr>> represents its private key which is an
     <math|ED25519> private key, is a node running GRANDPA protocol, and
-    broadcasts votes to finalize blocks in a Polkadot RE - based chain. The
+    broadcasts votes to finalize blocks in a Polkadot Host - based chain. The
     <strong|set of all GRANDPA voters> is indicated by <math|\<bbb-V\>>. For
     a given block B, we have <todo|change function name, only call at
     genesis, adjust V_B over the sections>
@@ -3619,8 +3634,8 @@
     <strong|r>: is the votin<verbatim|>g round number.
   </definition>
 
-  Now we need to define how Polkadot RE counts the number of votes for block
-  <math|B>. First a vote is defined as:
+  Now we need to define how the Polkadot Host counts the number of votes for
+  block <math|B>. First a vote is defined as:
 
   <\definition>
     <label|defn-vote>A <strong|GRANDPA vote >or simply a vote for block
@@ -4173,10 +4188,10 @@
   <\definition>
     <label|defn-session-key><strong|Session keys> are short-lived keys that
     are used to authenticate validator operations. Session keys are generated
-    by Polkadot RE and should be changed regularly due to security reasons.
-    Nonetheless, no validity period is enforced by Polkadot protocol on
-    session keys. Various types of keys used by Polkadot RE are presented in
-    Table <reference|tabl-session-keys><em|:>
+    by the Polkadot Host and should be changed regularly due to security
+    reasons. Nonetheless, no validity period is enforced by Polkadot protocol
+    on session keys. Various types of keys used by the Polkadot Host are
+    presented in Table <reference|tabl-session-keys><em|:>
 
     <\big-table|<tabular|<tformat|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|5|5|1|1|cell-lborder|0ln>|<cwith|5|5|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|2|2|cell-width|100>|<cwith|1|1|2|2|cell-hmode|max>|<table|<row|<cell|Protocol>|<cell|Key
     scheme>>|<row|<cell|GRANDPA>|<cell|ED25519>>|<row|<cell|BABE>|<cell|SR25519>>|<row|<cell|I'm
@@ -4186,10 +4201,10 @@
     </big-table>
   </definition>
 
-  Session keys must be accessible by certain Host APIs defined in Appendix
-  <reference|sect-re-api>. Session keys are <em|not> meant to control the
-  majority of the users' funds and should only be used for their intended
-  purpose. <todo|key managing fund need to be defined>
+  Session keys must be accessible by certain Polkadot Host APIs defined in
+  Appendix <reference|sect-re-api>. Session keys are <em|not> meant to
+  control the majority of the users' funds and should only be used for their
+  intended purpose. <todo|key managing fund need to be defined>
 
   <subsection|Holding and staking funds><label|sect-staking-funds>
 
@@ -4218,10 +4233,10 @@
 
   <section|SCALE Codec><label|sect-scale-codec>
 
-  Polkadot RE uses <em|Simple Concatenated Aggregate Little-Endian\Q (SCALE)
-  codec> to encode byte arrays as well as other data structures. SCALE
-  provides a canonical encoding to produce consistent hash values across
-  their implementation, including the Merkle hash proof for the State
+  The Polkadot Host uses <em|Simple Concatenated Aggregate Little-Endian\Q
+  (SCALE) codec> to encode byte arrays as well as other data structures.
+  SCALE provides a canonical encoding to produce consistent hash values
+  across their implementation, including the Merkle hash proof for the State
   Storage.
 
   <\definition>
@@ -4447,18 +4462,19 @@
   a set of key-value pairs, which can be retrieved from
   <cite|web3.0_technologies_foundation_polkadot_2020>. While each of those
   key/value pairs offer important identifyable information which can be used
-  by the Runtime, from Polkadot RE points of view, it is a set of arbitrary
-  key-value pair data as it is chain and network dependent. \ Except for the
-  <verbatim|:code> described in Section <reference|sect-loading-runtime-code>
-  which needs to be identified by the Polkadot RE to load its content as the
-  Runtime. The other keys and values are unspecifed and its usage depends on
-  the chain respectively its corresponding Runtime. The data should be
-  inserted into the state storage with the <verbatim|set_storage> RE API, as
-  defined in Section <reference|sect-set-storage>.
+  by the Runtime, from the Polkadot Host points of view, it is a set of
+  arbitrary key-value pair data as it is chain and network dependent.
+  \ Except for the <verbatim|:code> described in Section
+  <reference|sect-loading-runtime-code> which needs to be identified by the
+  Polkadot Host to load its content as the Runtime. The other keys and values
+  are unspecifed and its usage depends on the chain respectively its
+  corresponding Runtime. The data should be inserted into the state storage
+  with the <verbatim|set_storage> Host API, as defined in Section
+  <reference|sect-set-storage>.
 
   As such, Polkadot does not defined a formal genesis block. Nonetheless for
-  the complatibilty reasons in several algorithms, Polkadot RE defines the
-  <em|genesis header> according to Definition
+  the complatibilty reasons in several algorithms, the Polkadot Host defines
+  the <em|genesis header> according to Definition
   <reference|defn-genesis-header>. By the abuse of terminalogy, \P<em|genesis
   block>\Q refers to the hypothetical parent of block number 1 which holds
   genisis header as its header.
@@ -4480,9 +4496,9 @@
 
   <appendix|Network Messages><label|sect-network-messages>
 
-  In this section, we will specify various types of messages which Polkadot
-  RE receives from the network. Furthermore, we also explain the appropriate
-  responses to those messages.
+  In this section, we will specify various types of messages which the
+  Polkadot Host receives from the network. Furthermore, we also explain the
+  appropriate responses to those messages.
 
   <\definition>
     A <strong|network message> is a byte array, <strong|<math|M>> of length
@@ -4733,8 +4749,8 @@
   </equation*>
 
   Where each <math|E<rsub|i>> is a byte array and represents a sepearate
-  extrinsic. Polkadot RE is indifferent about the content of an extrinsic and
-  treats it as a blob of data.
+  extrinsic. The Polkadot Host is indifferent about the content of an
+  extrinsic and treats it as a blob of data.
 
   <subsection|Consensus Message><label|sect-msg-consensus>
 
@@ -4772,20 +4788,20 @@
 
   \;
 
-  <appendix|Host API><label|appendix-e>
+  <appendix|Polkadot Host API><label|appendix-e>
 
-  The Host API is a set of functions that Polkadot RE exposes to Runtime to
-  access external functions needed for various reasons, such as the Storage
-  of the content, access and manipulation, memory allocation, and also
-  efficiency. The encoding of each data type is specified or referenced in
-  this section. If the encoding is not mentioned, then the default Wasm
+  The Polkadot Host API is a set of functions that the Polkadot Host exposes
+  to Runtime to access external functions needed for various reasons, such as
+  the Storage of the content, access and manipulation, memory allocation, and
+  also efficiency. The encoding of each data type is specified or referenced
+  in this section. If the encoding is not mentioned, then the default Wasm
   encoding is used, such as little-endian byte ordering for integers.
 
   <\notation>
     <label|nota-re-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we refer
-    to the API exposed by Polkadot RE which interact, manipulate and response
-    based on the state storage whose state is set at the end of the execution
-    of block <math|B>.
+    to the API exposed by the Polkadot Host which interact, manipulate and
+    response based on the state storage whose state is set at the end of the
+    execution of block <math|B>.
   </notation>
 
   <\definition>
@@ -4794,7 +4810,7 @@
     integers in which the least significant one indicates the pointer to the
     memory buffer. The most significant one provides the size of the buffer.
     This pointer is the primary way to exchange data of arbitrary sizes
-    between the Runtime and the Host.
+    between the Runtime and the Polkadot Host.
   </definition>
 
   \ The functions are specified in each subsequent subsection for each
@@ -6717,12 +6733,12 @@
     <reference|defn-runtime-pointer> indicating the log message.
   </itemize>
 
-  <appendix|Legacy Host API<label|sect-re-api>>
+  <appendix|Legacy Polkadot Host API<label|sect-re-api>>
 
   \;
 
-  The Legacy Host APIs were exceeded and replaces by the current API as
-  described in Appendix <reference|appendix-e>. Those legacy functions are
+  The Legacy Polkadot Host APIs were exceeded and replaces by the current API
+  as described in Appendix <reference|appendix-e>. Those legacy functions are
   only required for executing Runtimes prior the official Polkadot Runtime,
   such as the Kusama test network.
 
@@ -8167,9 +8183,9 @@
 
   <section|List of Runtime Entries><label|sect-list-of-runtime-entries>
 
-  Polkadot RE assumes that at least the following functions are implemented
-  in the Runtime Wasm blob and have been exported as shown in Snippet
-  <reference|snippet-runtime-enteries>:
+  The Polkadot Host assumes that at least the following functions are
+  implemented in the Runtime Wasm blob and have been exported as shown in
+  Snippet <reference|snippet-runtime-enteries>:
 
   <assign|figure-text|<macro|Snippet>>
 
@@ -8249,8 +8265,8 @@
 
   <assign|figure-text|<macro|Figure>>
 
-  The following sections describe the standard based on which Polkadot RE
-  communicates with each runtime entry.
+  The following sections describe the standard based on which the Polkadot
+  Host communicates with each runtime entry.
 
   <section|Argument Specification>
 
