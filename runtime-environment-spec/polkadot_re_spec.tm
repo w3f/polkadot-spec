@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|algorithmacs-style|old-dots>>
 
@@ -35,7 +35,7 @@
     \;
   </hide-preamble>
 
-  <doc-data|<doc-title|Polkadot Runtime Environment<next-line><with|font-size|1.41|Protocol
+  <doc-data|<doc-title|Polkadot Host<next-line><with|font-size|1.41|Protocol
   Specification>>|<doc-date|<date|>>>
 
   <\table-of-contents|toc>
@@ -1944,10 +1944,9 @@
   <em|extrinsics>. In Polkadot, the execution logic of the state-transition
   function is encapsulated in Runtime as defined in Definition
   <reference|defn-state-machine>. Runtime is presented as a Wasm blob in
-  order to be easily upgradable. Nonetheless, the Polkadot Runtime
-  Environment needs to be in constant interaction with Runtime. The detail of
-  such interaction is further described in Section
-  <reference|sect-entries-into-runtime>.
+  order to be easily upgradable. Nonetheless, the Polkadot Host needs to be
+  in constant interaction with Runtime. The detail of such interaction is
+  further described in Section <reference|sect-entries-into-runtime>.
 
   In Section <reference|sect-extrinsics>, we specify the procedure of the
   process where the extrinsics are submitted, pre-processed and validated by
@@ -4187,10 +4186,10 @@
     </big-table>
   </definition>
 
-  Session keys must be accessible by certain Runtime Environment APIs defined
-  in Appendix <reference|sect-re-api>. Session keys are <em|not> meant to
-  control the majority of the users' funds and should only be used for their
-  intended purpose. <todo|key managing fund need to be defined>
+  Session keys must be accessible by certain Host APIs defined in Appendix
+  <reference|sect-re-api>. Session keys are <em|not> meant to control the
+  majority of the users' funds and should only be used for their intended
+  purpose. <todo|key managing fund need to be defined>
 
   <subsection|Holding and staking funds><label|sect-staking-funds>
 
@@ -4773,13 +4772,13 @@
 
   \;
 
-  <appendix|Runtime Environment API><label|appendix-e>
+  <appendix|Host API><label|appendix-e>
 
-  The Runtime Environment API is a set of functions that Polkadot RE exposes
-  to Runtime to access external functions needed for various reasons, such as
-  the Storage of the content, access and manipulation, memory allocation, and
-  also efficiency. The encoding of each data type is specified or referenced
-  in this section. If the encoding is not mentioned, then the default Wasm
+  The Host API is a set of functions that Polkadot RE exposes to Runtime to
+  access external functions needed for various reasons, such as the Storage
+  of the content, access and manipulation, memory allocation, and also
+  efficiency. The encoding of each data type is specified or referenced in
+  this section. If the encoding is not mentioned, then the default Wasm
   encoding is used, such as little-endian byte ordering for integers.
 
   <\notation>
@@ -4795,7 +4794,7 @@
     integers in which the least significant one indicates the pointer to the
     memory buffer. The most significant one provides the size of the buffer.
     This pointer is the primary way to exchange data of arbitrary sizes
-    between the Runtime and the Runtime Environment.
+    between the Runtime and the Host.
   </definition>
 
   \ The functions are specified in each subsequent subsection for each
@@ -6718,14 +6717,14 @@
     <reference|defn-runtime-pointer> indicating the log message.
   </itemize>
 
-  <appendix|Legacy Runtime Environment API<label|sect-re-api>>
+  <appendix|Legacy Host API<label|sect-re-api>>
 
   \;
 
-  The Legacy Runtime Environments APIs were exceeded and replaces by the
-  current API as described in Appendix <reference|appendix-e>. Those legacy
-  functions are only required for executing Runtimes prior the official
-  Polkadot Runtime, such as the Kusama test network.
+  The Legacy Host APIs were exceeded and replaces by the current API as
+  described in Appendix <reference|appendix-e>. Those legacy functions are
+  only required for executing Runtimes prior the official Polkadot Runtime,
+  such as the Kusama test network.
 
   \;
 
