@@ -1155,7 +1155,7 @@
   into two parts, the <em|Runtime> and the <em|Host>. The Runtime comprises
   most of the state transition logic for the Polkadot protocol and is
   designed and expected to be upgradable as part of the state transition
-  process. The Runtime environment consists of parts of the
+  process. The Polkadot Host consists of parts of the
   protocol,<space|1em>shared mostly among peer-to-peer decentralized
   cryptographically-secured transaction systems, i.e. blockchains whose
   consensus system is based on the proof-of-stake. The Polkadot Host is
@@ -2045,7 +2045,7 @@
   The Polkadot Host provides a Wasm Virtual Machine (VM) to run the Runtime.
   The Wasm VM exposes the Polkadot Host API to the Runtime, which, on its
   turn, executes a call to the Runtime entries stored in the Wasm module.
-  This part of the Runtime environment is referred to as the
+  This part of the Polkadot Host is referred to as the
   <em|<strong|Executor>.>
 
   Definition <reference|nota-call-into-runtime> introduces the notation for
@@ -8839,26 +8839,26 @@
 
 <\references>
   <\collection>
-    <associate|alg-join-leave-grandpa|<tuple|5.8|45>>
-    <associate|algo-aggregate-key|<tuple|2.1|19>>
-    <associate|algo-attempt-to\Ufinalize|<tuple|5.11|46>>
-    <associate|algo-block-production|<tuple|5.3|39>>
-    <associate|algo-block-production-lottery|<tuple|5.1|38>>
-    <associate|algo-build-block|<tuple|5.7|41>>
-    <associate|algo-epoch-randomness|<tuple|5.4|40>>
-    <associate|algo-grandpa-best-candidate|<tuple|5.10|46>>
-    <associate|algo-grandpa-round|<tuple|5.9|45>>
-    <associate|algo-import-and-validate-block|<tuple|3.4|29>>
-    <associate|algo-maintain-transaction-pool|<tuple|3.3|26>>
-    <associate|algo-pk-length|<tuple|2.2|20>>
-    <associate|algo-runtime-interaction|<tuple|3.1|23>>
-    <associate|algo-slot-time|<tuple|5.2|38>>
-    <associate|algo-validate-transactions|<tuple|3.2|26>>
-    <associate|algo-verify-authorship-right|<tuple|5.5|40>>
-    <associate|algo-verify-slot-winner|<tuple|5.6|41>>
+    <associate|alg-join-leave-grandpa|<tuple|5.8|43>>
+    <associate|algo-aggregate-key|<tuple|2.1|17>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|5.11|44>>
+    <associate|algo-block-production|<tuple|5.3|37>>
+    <associate|algo-block-production-lottery|<tuple|5.1|36>>
+    <associate|algo-build-block|<tuple|5.7|39>>
+    <associate|algo-epoch-randomness|<tuple|5.4|38>>
+    <associate|algo-grandpa-best-candidate|<tuple|5.10|44>>
+    <associate|algo-grandpa-round|<tuple|5.9|43>>
+    <associate|algo-import-and-validate-block|<tuple|3.4|27>>
+    <associate|algo-maintain-transaction-pool|<tuple|3.3|24>>
+    <associate|algo-pk-length|<tuple|2.2|18>>
+    <associate|algo-runtime-interaction|<tuple|3.1|21>>
+    <associate|algo-slot-time|<tuple|5.2|36>>
+    <associate|algo-validate-transactions|<tuple|3.2|24>>
+    <associate|algo-verify-authorship-right|<tuple|5.5|38>>
+    <associate|algo-verify-slot-winner|<tuple|5.6|39>>
     <associate|appendix-e|<tuple|E|59>>
-    <associate|auto-1|<tuple|1|13>>
-    <associate|auto-10|<tuple|1.9|15>>
+    <associate|auto-1|<tuple|1|11>>
+    <associate|auto-10|<tuple|1.9|13>>
     <associate|auto-100|<tuple|A.5.3|48>>
     <associate|auto-101|<tuple|A.5.4|48>>
     <associate|auto-102|<tuple|A.5.5|48>>
@@ -8869,7 +8869,7 @@
     <associate|auto-107|<tuple|C|53>>
     <associate|auto-108|<tuple|C.1|53>>
     <associate|auto-109|<tuple|D|55>>
-    <associate|auto-11|<tuple|1.9|15>>
+    <associate|auto-11|<tuple|1.9|13>>
     <associate|auto-110|<tuple|D.1|55>>
     <associate|auto-111|<tuple|D.1|55>>
     <associate|auto-112|<tuple|D.1.1|55>>
@@ -8880,7 +8880,7 @@
     <associate|auto-117|<tuple|D.1.4|57>>
     <associate|auto-118|<tuple|D.1.5|57>>
     <associate|auto-119|<tuple|D.1.6|58>>
-    <associate|auto-12|<tuple|1.9|15>>
+    <associate|auto-12|<tuple|1.9|13>>
     <associate|auto-120|<tuple|E|59>>
     <associate|auto-121|<tuple|E.1|59>>
     <associate|auto-122|<tuple|E.1.1|59>>
@@ -8891,7 +8891,7 @@
     <associate|auto-127|<tuple|E.1.3.1|60>>
     <associate|auto-128|<tuple|E.1.4|60>>
     <associate|auto-129|<tuple|E.1.4.1|60>>
-    <associate|auto-13|<tuple|1.9|15>>
+    <associate|auto-13|<tuple|1.9|13>>
     <associate|auto-130|<tuple|E.1.5|60>>
     <associate|auto-131|<tuple|E.1.5.1|60>>
     <associate|auto-132|<tuple|E.1.6|61>>
@@ -8902,7 +8902,7 @@
     <associate|auto-137|<tuple|E.1.8.1|61>>
     <associate|auto-138|<tuple|E.1.9|61>>
     <associate|auto-139|<tuple|E.1.9.1|61>>
-    <associate|auto-14|<tuple|1.2.1|15>>
+    <associate|auto-14|<tuple|1.2.1|13>>
     <associate|auto-140|<tuple|E.2|62>>
     <associate|auto-141|<tuple|E.2.1|62>>
     <associate|auto-142|<tuple|E.2.1.1|62>>
@@ -8913,7 +8913,7 @@
     <associate|auto-147|<tuple|E.2.4|63>>
     <associate|auto-148|<tuple|E.2.4.1|63>>
     <associate|auto-149|<tuple|E.2.5|64>>
-    <associate|auto-15|<tuple|1.11|15>>
+    <associate|auto-15|<tuple|1.11|13>>
     <associate|auto-150|<tuple|E.2.5.1|64>>
     <associate|auto-151|<tuple|E.2.6|64>>
     <associate|auto-152|<tuple|E.2.6.1|64>>
@@ -8924,7 +8924,7 @@
     <associate|auto-157|<tuple|E.2.9|65>>
     <associate|auto-158|<tuple|E.2.9.1|65>>
     <associate|auto-159|<tuple|E.3|66>>
-    <associate|auto-16|<tuple|1.12|15>>
+    <associate|auto-16|<tuple|1.12|13>>
     <associate|auto-160|<tuple|E.1|66>>
     <associate|auto-161|<tuple|E.2|66>>
     <associate|auto-162|<tuple|E.3.1|66>>
@@ -8935,7 +8935,7 @@
     <associate|auto-167|<tuple|E.3.3.1|67>>
     <associate|auto-168|<tuple|E.3.4|67>>
     <associate|auto-169|<tuple|E.3.4.1|67>>
-    <associate|auto-17|<tuple|1.12|15>>
+    <associate|auto-17|<tuple|1.12|13>>
     <associate|auto-170|<tuple|E.3.5|68>>
     <associate|auto-171|<tuple|E.3.5.1|68>>
     <associate|auto-172|<tuple|E.3.6|68>>
@@ -8946,7 +8946,7 @@
     <associate|auto-177|<tuple|E.3.8.1|69>>
     <associate|auto-178|<tuple|E.3.9|69>>
     <associate|auto-179|<tuple|E.3.9.1|69>>
-    <associate|auto-18|<tuple|1.13|15>>
+    <associate|auto-18|<tuple|1.13|13>>
     <associate|auto-180|<tuple|E.3.10|69>>
     <associate|auto-181|<tuple|E.3.10.1|70>>
     <associate|auto-182|<tuple|E.4|70>>
@@ -8957,7 +8957,7 @@
     <associate|auto-187|<tuple|E.4.3|70>>
     <associate|auto-188|<tuple|E.4.3.1|71>>
     <associate|auto-189|<tuple|E.4.4|71>>
-    <associate|auto-19|<tuple|1.13|15>>
+    <associate|auto-19|<tuple|1.13|13>>
     <associate|auto-190|<tuple|E.4.4.1|71>>
     <associate|auto-191|<tuple|E.4.5|71>>
     <associate|auto-192|<tuple|E.4.5.1|71>>
@@ -8968,8 +8968,8 @@
     <associate|auto-197|<tuple|E.5|72>>
     <associate|auto-198|<tuple|E.3|73>>
     <associate|auto-199|<tuple|E.5.1|73>>
-    <associate|auto-2|<tuple|1.1|13>>
-    <associate|auto-20|<tuple|1.13|15>>
+    <associate|auto-2|<tuple|1.1|11>>
+    <associate|auto-20|<tuple|1.13|13>>
     <associate|auto-200|<tuple|E.5.1.1|73>>
     <associate|auto-201|<tuple|E.5.2|73>>
     <associate|auto-202|<tuple|E.5.2.1|73>>
@@ -8980,7 +8980,7 @@
     <associate|auto-207|<tuple|E.5.5|74>>
     <associate|auto-208|<tuple|E.5.5.1|74>>
     <associate|auto-209|<tuple|E.5.6|74>>
-    <associate|auto-21|<tuple|1.13|15>>
+    <associate|auto-21|<tuple|1.13|13>>
     <associate|auto-210|<tuple|E.5.6.1|74>>
     <associate|auto-211|<tuple|E.5.7|74>>
     <associate|auto-212|<tuple|E.5.7.1|74>>
@@ -8991,7 +8991,7 @@
     <associate|auto-217|<tuple|E.5.10|75>>
     <associate|auto-218|<tuple|E.5.10.1|75>>
     <associate|auto-219|<tuple|E.5.11|76>>
-    <associate|auto-22|<tuple|1.13|15>>
+    <associate|auto-22|<tuple|1.13|13>>
     <associate|auto-220|<tuple|E.5.11.1|76>>
     <associate|auto-221|<tuple|E.5.12|76>>
     <associate|auto-222|<tuple|E.5.12.1|76>>
@@ -9002,7 +9002,7 @@
     <associate|auto-227|<tuple|E.5.15|77>>
     <associate|auto-228|<tuple|E.5.15.1|77>>
     <associate|auto-229|<tuple|E.6|78>>
-    <associate|auto-23|<tuple|1.13|15>>
+    <associate|auto-23|<tuple|1.13|13>>
     <associate|auto-230|<tuple|E.6.1|78>>
     <associate|auto-231|<tuple|E.6.1.1|78>>
     <associate|auto-232|<tuple|E.6.2|78>>
@@ -9013,7 +9013,7 @@
     <associate|auto-237|<tuple|E.7.2|79>>
     <associate|auto-238|<tuple|E.7.2.1|79>>
     <associate|auto-239|<tuple|E.7.3|79>>
-    <associate|auto-24|<tuple|1.13|15>>
+    <associate|auto-24|<tuple|1.13|13>>
     <associate|auto-240|<tuple|E.7.3.1|79>>
     <associate|auto-241|<tuple|E.7.4|79>>
     <associate|auto-242|<tuple|E.7.4.1|79>>
@@ -9024,7 +9024,7 @@
     <associate|auto-247|<tuple|E.8.1.1|80>>
     <associate|auto-248|<tuple|E.8.2|80>>
     <associate|auto-249|<tuple|E.8.2.1|80>>
-    <associate|auto-25|<tuple|1.14|15>>
+    <associate|auto-25|<tuple|1.14|13>>
     <associate|auto-250|<tuple|E.9|80>>
     <associate|auto-251|<tuple|E.4|81>>
     <associate|auto-252|<tuple|E.9.1|81>>
@@ -9035,7 +9035,7 @@
     <associate|auto-257|<tuple|F.1.2|83>>
     <associate|auto-258|<tuple|F.1.3|84>>
     <associate|auto-259|<tuple|F.1.4|84>>
-    <associate|auto-26|<tuple|1.15|15>>
+    <associate|auto-26|<tuple|1.15|13>>
     <associate|auto-260|<tuple|F.1.5|84>>
     <associate|auto-261|<tuple|F.1.6|84>>
     <associate|auto-262|<tuple|F.1.7|85>>
@@ -9046,7 +9046,7 @@
     <associate|auto-267|<tuple|F.1.12|87>>
     <associate|auto-268|<tuple|F.1.13|87>>
     <associate|auto-269|<tuple|F.1.14|88>>
-    <associate|auto-27|<tuple|1.15|15>>
+    <associate|auto-27|<tuple|1.15|13>>
     <associate|auto-270|<tuple|F.1.15|88>>
     <associate|auto-271|<tuple|F.1.15.1|88>>
     <associate|auto-272|<tuple|F.1.15.2|89>>
@@ -9057,7 +9057,7 @@
     <associate|auto-277|<tuple|F.1.16.3|90>>
     <associate|auto-278|<tuple|F.1.16.4|90>>
     <associate|auto-279|<tuple|F.1.16.5|91>>
-    <associate|auto-28|<tuple|2|17>>
+    <associate|auto-28|<tuple|2|15>>
     <associate|auto-280|<tuple|F.1.16.6|91>>
     <associate|auto-281|<tuple|F.1.17|91>>
     <associate|auto-282|<tuple|F.1.17.1|92>>
@@ -9068,7 +9068,7 @@
     <associate|auto-287|<tuple|F.1.17.6|93>>
     <associate|auto-288|<tuple|F.1.17.7|93>>
     <associate|auto-289|<tuple|F.1.17.8|94>>
-    <associate|auto-29|<tuple|2.1|17>>
+    <associate|auto-29|<tuple|2.1|15>>
     <associate|auto-290|<tuple|F.1.17.9|94>>
     <associate|auto-291|<tuple|F.1.17.10|95>>
     <associate|auto-292|<tuple|F.1.17.11|95>>
@@ -9079,8 +9079,8 @@
     <associate|auto-297|<tuple|F.1.18|97>>
     <associate|auto-298|<tuple|F.1.18.1|97>>
     <associate|auto-299|<tuple|F.1.19|98>>
-    <associate|auto-3|<tuple|1.2|13>>
-    <associate|auto-30|<tuple|2.1.1|17>>
+    <associate|auto-3|<tuple|1.2|11>>
+    <associate|auto-30|<tuple|2.1.1|15>>
     <associate|auto-300|<tuple|F.1.19.1|98>>
     <associate|auto-301|<tuple|F.1.19.2|98>>
     <associate|auto-302|<tuple|F.1.20|98>>
@@ -9091,7 +9091,7 @@
     <associate|auto-307|<tuple|G.1|99>>
     <associate|auto-308|<tuple|G.1|99>>
     <associate|auto-309|<tuple|G.2|100>>
-    <associate|auto-31|<tuple|2.1|17>>
+    <associate|auto-31|<tuple|2.1|15>>
     <associate|auto-310|<tuple|G.2.1|100>>
     <associate|auto-311|<tuple|G.1|100>>
     <associate|auto-312|<tuple|G.2.2|100>>
@@ -9102,7 +9102,7 @@
     <associate|auto-317|<tuple|G.2.6|102>>
     <associate|auto-318|<tuple|G.2.7|102>>
     <associate|auto-319|<tuple|G.3|102>>
-    <associate|auto-32|<tuple|2.1.2|17>>
+    <associate|auto-32|<tuple|2.1.2|15>>
     <associate|auto-320|<tuple|G.4|102>>
     <associate|auto-321|<tuple|G.5|103>>
     <associate|auto-322|<tuple|G.6|103>>
@@ -9113,70 +9113,70 @@
     <associate|auto-327|<tuple|G.2.10|104>>
     <associate|auto-328|<tuple|G.2.10|105>>
     <associate|auto-329|<tuple|G.2.10|107>>
-    <associate|auto-33|<tuple|2.1.3|18>>
+    <associate|auto-33|<tuple|2.1.3|16>>
     <associate|auto-330|<tuple|Tec19|109>>
-    <associate|auto-34|<tuple|2.1.4|20>>
-    <associate|auto-35|<tuple|3|23>>
-    <associate|auto-36|<tuple|3.1|23>>
-    <associate|auto-37|<tuple|3.1.1|23>>
-    <associate|auto-38|<tuple|3.1.2|24>>
-    <associate|auto-39|<tuple|3.1.2.1|24>>
-    <associate|auto-4|<tuple|1.2|14>>
-    <associate|auto-40|<tuple|3.1.2.2|24>>
-    <associate|auto-41|<tuple|3.1.2.3|25>>
-    <associate|auto-42|<tuple|3.2|25>>
-    <associate|auto-43|<tuple|3.2.1|25>>
-    <associate|auto-44|<tuple|3.2.2|25>>
-    <associate|auto-45|<tuple|3.2.2.1|25>>
-    <associate|auto-46|<tuple|3.2.3|25>>
-    <associate|auto-47|<tuple|3.2.3|25>>
-    <associate|auto-48|<tuple|3.2.3|25>>
-    <associate|auto-49|<tuple|3.2.3|25>>
-    <associate|auto-5|<tuple|1.4|14>>
-    <associate|auto-50|<tuple|<with|mode|<quote|math>|<rigid|->>|26>>
-    <associate|auto-51|<tuple|3.2.3.1|27>>
-    <associate|auto-52|<tuple|3.1|27>>
-    <associate|auto-53|<tuple|3.3|27>>
-    <associate|auto-54|<tuple|3.3.1|27>>
-    <associate|auto-55|<tuple|3.3.1.1|27>>
-    <associate|auto-56|<tuple|3.2|28>>
-    <associate|auto-57|<tuple|3.3.1.2|28>>
-    <associate|auto-58|<tuple|3.3.1.3|29>>
-    <associate|auto-59|<tuple|3.3.2|29>>
-    <associate|auto-6|<tuple|1.7|14>>
-    <associate|auto-60|<tuple|3.3.3|29>>
-    <associate|auto-61|<tuple|3.3.4|30>>
-    <associate|auto-62|<tuple|4|31>>
-    <associate|auto-63|<tuple|4.1|31>>
-    <associate|auto-64|<tuple|4.2|31>>
-    <associate|auto-65|<tuple|4.3|32>>
-    <associate|auto-66|<tuple|4.3.1|32>>
-    <associate|auto-67|<tuple|4.3.2|32>>
-    <associate|auto-68|<tuple|4.4|33>>
-    <associate|auto-69|<tuple|4.4.1|33>>
-    <associate|auto-7|<tuple|1.7|14>>
-    <associate|auto-70|<tuple|4.4.2|33>>
-    <associate|auto-71|<tuple|5|35>>
-    <associate|auto-72|<tuple|5.1|35>>
-    <associate|auto-73|<tuple|5.1.1|35>>
-    <associate|auto-74|<tuple|5.1.2|35>>
-    <associate|auto-75|<tuple|5.1|36>>
-    <associate|auto-76|<tuple|5.2|37>>
-    <associate|auto-77|<tuple|5.2.1|37>>
-    <associate|auto-78|<tuple|5.2.2|37>>
-    <associate|auto-79|<tuple|5.2.3|38>>
-    <associate|auto-8|<tuple|1.7|14>>
-    <associate|auto-80|<tuple|5.2.4|39>>
-    <associate|auto-81|<tuple|5.2.5|40>>
-    <associate|auto-82|<tuple|5.2.6|40>>
-    <associate|auto-83|<tuple|5.2.7|41>>
-    <associate|auto-84|<tuple|5.3|42>>
-    <associate|auto-85|<tuple|5.3.1|42>>
-    <associate|auto-86|<tuple|5.3.2|44>>
-    <associate|auto-87|<tuple|5.3.3|45>>
-    <associate|auto-88|<tuple|5.3.4|45>>
-    <associate|auto-89|<tuple|5.4|46>>
-    <associate|auto-9|<tuple|1.9|15>>
+    <associate|auto-34|<tuple|2.1.4|18>>
+    <associate|auto-35|<tuple|3|21>>
+    <associate|auto-36|<tuple|3.1|21>>
+    <associate|auto-37|<tuple|3.1.1|21>>
+    <associate|auto-38|<tuple|3.1.2|22>>
+    <associate|auto-39|<tuple|3.1.2.1|22>>
+    <associate|auto-4|<tuple|1.2|12>>
+    <associate|auto-40|<tuple|3.1.2.2|22>>
+    <associate|auto-41|<tuple|3.1.2.3|23>>
+    <associate|auto-42|<tuple|3.2|23>>
+    <associate|auto-43|<tuple|3.2.1|23>>
+    <associate|auto-44|<tuple|3.2.2|23>>
+    <associate|auto-45|<tuple|3.2.2.1|23>>
+    <associate|auto-46|<tuple|3.2.3|23>>
+    <associate|auto-47|<tuple|3.2.3|23>>
+    <associate|auto-48|<tuple|3.2.3|23>>
+    <associate|auto-49|<tuple|3.2.3|23>>
+    <associate|auto-5|<tuple|1.4|12>>
+    <associate|auto-50|<tuple|<with|mode|<quote|math>|<rigid|->>|24>>
+    <associate|auto-51|<tuple|3.2.3.1|24>>
+    <associate|auto-52|<tuple|3.1|25>>
+    <associate|auto-53|<tuple|3.3|25>>
+    <associate|auto-54|<tuple|3.3.1|25>>
+    <associate|auto-55|<tuple|3.3.1.1|25>>
+    <associate|auto-56|<tuple|3.2|26>>
+    <associate|auto-57|<tuple|3.3.1.2|26>>
+    <associate|auto-58|<tuple|3.3.1.3|26>>
+    <associate|auto-59|<tuple|3.3.2|27>>
+    <associate|auto-6|<tuple|1.7|12>>
+    <associate|auto-60|<tuple|3.3.3|27>>
+    <associate|auto-61|<tuple|3.3.4|27>>
+    <associate|auto-62|<tuple|4|29>>
+    <associate|auto-63|<tuple|4.1|29>>
+    <associate|auto-64|<tuple|4.2|29>>
+    <associate|auto-65|<tuple|4.3|30>>
+    <associate|auto-66|<tuple|4.3.1|30>>
+    <associate|auto-67|<tuple|4.3.2|30>>
+    <associate|auto-68|<tuple|4.4|31>>
+    <associate|auto-69|<tuple|4.4.1|31>>
+    <associate|auto-7|<tuple|1.7|12>>
+    <associate|auto-70|<tuple|4.4.2|31>>
+    <associate|auto-71|<tuple|5|33>>
+    <associate|auto-72|<tuple|5.1|33>>
+    <associate|auto-73|<tuple|5.1.1|33>>
+    <associate|auto-74|<tuple|5.1.2|33>>
+    <associate|auto-75|<tuple|5.1|34>>
+    <associate|auto-76|<tuple|5.2|35>>
+    <associate|auto-77|<tuple|5.2.1|35>>
+    <associate|auto-78|<tuple|5.2.2|35>>
+    <associate|auto-79|<tuple|5.2.3|36>>
+    <associate|auto-8|<tuple|1.7|12>>
+    <associate|auto-80|<tuple|5.2.4|37>>
+    <associate|auto-81|<tuple|5.2.5|38>>
+    <associate|auto-82|<tuple|5.2.6|38>>
+    <associate|auto-83|<tuple|5.2.7|39>>
+    <associate|auto-84|<tuple|5.3|40>>
+    <associate|auto-85|<tuple|5.3.1|40>>
+    <associate|auto-86|<tuple|5.3.2|42>>
+    <associate|auto-87|<tuple|5.3.3|43>>
+    <associate|auto-88|<tuple|5.3.4|43>>
+    <associate|auto-89|<tuple|5.4|44>>
+    <associate|auto-9|<tuple|1.9|13>>
     <associate|auto-90|<tuple|A|47>>
     <associate|auto-91|<tuple|A.1|47>>
     <associate|auto-92|<tuple|A.2|47>>
@@ -9199,65 +9199,65 @@
     <associate|bib-stewart_grandpa:_2019|<tuple|Ste19|107>>
     <associate|bib-w3f_research_group_blind_2019|<tuple|Gro19|107>>
     <associate|bib-web3.0_technologies_foundation_polkadot_2020|<tuple|Fou20|107>>
-    <associate|block|<tuple|3.3.1.1|27>>
-    <associate|chap-consensu|<tuple|5|35>>
-    <associate|chap-state-spec|<tuple|2|17>>
-    <associate|chap-state-transit|<tuple|3|23>>
+    <associate|block|<tuple|3.3.1.1|25>>
+    <associate|chap-consensu|<tuple|5|33>>
+    <associate|chap-state-spec|<tuple|2|15>>
+    <associate|chap-state-transit|<tuple|3|21>>
     <associate|defn-account-key|<tuple|A.1|47>>
-    <associate|defn-authority-list|<tuple|5.1|35>>
-    <associate|defn-babe-header|<tuple|5.12|39>>
-    <associate|defn-babe-seal|<tuple|5.13|39>>
-    <associate|defn-bit-rep|<tuple|1.6|14>>
-    <associate|defn-block-body|<tuple|3.9|29>>
+    <associate|defn-authority-list|<tuple|5.1|33>>
+    <associate|defn-babe-header|<tuple|5.12|37>>
+    <associate|defn-babe-seal|<tuple|5.13|37>>
+    <associate|defn-bit-rep|<tuple|1.6|12>>
+    <associate|defn-block-body|<tuple|3.9|26>>
     <associate|defn-block-data|<tuple|D.2|57>>
-    <associate|defn-block-header|<tuple|3.6|27>>
-    <associate|defn-block-header-hash|<tuple|3.8|28>>
-    <associate|defn-block-signature|<tuple|5.13|39>>
-    <associate|defn-block-time|<tuple|5.10|38>>
-    <associate|defn-block-tree|<tuple|1.11|15>>
-    <associate|defn-chain-subchain|<tuple|1.13|15>>
+    <associate|defn-block-header|<tuple|3.6|25>>
+    <associate|defn-block-header-hash|<tuple|3.8|26>>
+    <associate|defn-block-signature|<tuple|5.13|37>>
+    <associate|defn-block-time|<tuple|5.10|36>>
+    <associate|defn-block-tree|<tuple|1.11|13>>
+    <associate|defn-chain-subchain|<tuple|1.13|13>>
     <associate|defn-child-storage-definition|<tuple|E.4|62>>
     <associate|defn-child-storage-type|<tuple|E.3|62>>
     <associate|defn-child-type|<tuple|E.5|62>>
-    <associate|defn-children-bitmap|<tuple|2.10|21>>
-    <associate|defn-consensus-message-digest|<tuple|5.2|35>>
+    <associate|defn-children-bitmap|<tuple|2.10|19>>
+    <associate|defn-consensus-message-digest|<tuple|5.2|33>>
     <associate|defn-controller-key|<tuple|A.3|48>>
-    <associate|defn-digest|<tuple|3.7|28>>
+    <associate|defn-digest|<tuple|3.7|26>>
     <associate|defn-ecdsa-verify-error|<tuple|E.7|66>>
-    <associate|defn-epoch-slot|<tuple|5.5|37>>
-    <associate|defn-epoch-subchain|<tuple|5.7|37>>
-    <associate|defn-finalized-block|<tuple|5.27|46>>
+    <associate|defn-epoch-slot|<tuple|5.5|35>>
+    <associate|defn-epoch-subchain|<tuple|5.7|35>>
+    <associate|defn-finalized-block|<tuple|5.27|44>>
     <associate|defn-genesis-header|<tuple|C.1|53>>
-    <associate|defn-grandpa-completable|<tuple|5.23|44>>
-    <associate|defn-grandpa-justification|<tuple|5.25|44>>
+    <associate|defn-grandpa-completable|<tuple|5.23|42>>
+    <associate|defn-grandpa-justification|<tuple|5.25|42>>
     <associate|defn-hex-encoding|<tuple|B.12|51>>
     <associate|defn-http-error|<tuple|E.11|72>>
     <associate|defn-http-return-value|<tuple|F.3|92>>
     <associate|defn-http-status-codes|<tuple|E.10|72>>
-    <associate|defn-index-function|<tuple|2.7|19>>
-    <associate|defn-inherent-data|<tuple|3.5|27>>
+    <associate|defn-index-function|<tuple|2.7|17>>
+    <associate|defn-inherent-data|<tuple|3.5|25>>
     <associate|defn-invalid-transaction|<tuple|G.3|103>>
     <associate|defn-key-type-id|<tuple|E.6|66>>
-    <associate|defn-little-endian|<tuple|1.7|14>>
+    <associate|defn-little-endian|<tuple|1.7|12>>
     <associate|defn-local-storage|<tuple|E.9|72>>
     <associate|defn-logging-log-level|<tuple|E.12|80>>
-    <associate|defn-longest-chain|<tuple|1.14|15>>
-    <associate|defn-merkle-value|<tuple|2.12|21>>
-    <associate|defn-node-header|<tuple|2.9|19>>
-    <associate|defn-node-key|<tuple|2.6|19>>
-    <associate|defn-node-subvalue|<tuple|2.11|21>>
-    <associate|defn-node-value|<tuple|2.8|19>>
-    <associate|defn-nodetype|<tuple|2.4|18>>
+    <associate|defn-longest-chain|<tuple|1.14|13>>
+    <associate|defn-merkle-value|<tuple|2.12|19>>
+    <associate|defn-node-header|<tuple|2.9|17>>
+    <associate|defn-node-key|<tuple|2.6|17>>
+    <associate|defn-node-subvalue|<tuple|2.11|19>>
+    <associate|defn-node-value|<tuple|2.8|17>>
+    <associate|defn-nodetype|<tuple|2.4|16>>
     <associate|defn-offchain-local-storage|<tuple|F.2|91>>
     <associate|defn-offchain-persistent-storage|<tuple|F.1|91>>
     <associate|defn-option-type|<tuple|B.4|49>>
-    <associate|defn-path-graph|<tuple|1.2|14>>
+    <associate|defn-path-graph|<tuple|1.2|12>>
     <associate|defn-persistent-storage|<tuple|E.8|72>>
-    <associate|defn-pruned-tree|<tuple|1.12|15>>
-    <associate|defn-radix-tree|<tuple|1.3|14>>
+    <associate|defn-pruned-tree|<tuple|1.12|13>>
+    <associate|defn-radix-tree|<tuple|1.3|12>>
     <associate|defn-result-type|<tuple|B.5|50>>
     <associate|defn-rt-core-version|<tuple|G.2.1|100>>
-    <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|13>>
+    <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|12>>
     <associate|defn-runtime-pointer|<tuple|E.2|59>>
     <associate|defn-sc-len-encoding|<tuple|B.11|51>>
     <associate|defn-scale-byte-array|<tuple|B.1|49>>
@@ -9267,55 +9267,55 @@
     <associate|defn-scale-tuple|<tuple|B.2|49>>
     <associate|defn-scale-variable-type|<tuple|B.6|50>>
     <associate|defn-session-key|<tuple|A.4|48>>
-    <associate|defn-set-state-at|<tuple|3.10|30>>
-    <associate|defn-slot-offset|<tuple|5.11|38>>
+    <associate|defn-set-state-at|<tuple|3.10|28>>
+    <associate|defn-slot-offset|<tuple|5.11|36>>
     <associate|defn-stash-key|<tuple|A.2|47>>
-    <associate|defn-state-machine|<tuple|1.1|13>>
-    <associate|defn-stored-value|<tuple|2.1|17>>
-    <associate|defn-transaction-queue|<tuple|3.4|26>>
+    <associate|defn-state-machine|<tuple|1.1|11>>
+    <associate|defn-stored-value|<tuple|2.1|15>>
+    <associate|defn-transaction-queue|<tuple|3.4|23>>
     <associate|defn-transaction-validity-error|<tuple|G.2|102>>
-    <associate|defn-unix-time|<tuple|1.10|15>>
+    <associate|defn-unix-time|<tuple|1.10|13>>
     <associate|defn-unknown-transaction|<tuple|G.4|103>>
     <associate|defn-valid-transaction|<tuple|G.1|102>>
     <associate|defn-varrying-data-type|<tuple|B.3|49>>
-    <associate|defn-vote|<tuple|5.16|43>>
-    <associate|defn-winning-threshold|<tuple|5.8|37>>
-    <associate|key-encode-in-trie|<tuple|2.1|18>>
-    <associate|network-protocol|<tuple|4|31>>
-    <associate|nota-call-into-runtime|<tuple|3.2|24>>
+    <associate|defn-vote|<tuple|5.16|41>>
+    <associate|defn-winning-threshold|<tuple|5.8|35>>
+    <associate|key-encode-in-trie|<tuple|2.1|16>>
+    <associate|network-protocol|<tuple|4|29>>
+    <associate|nota-call-into-runtime|<tuple|3.2|22>>
     <associate|nota-re-api-at-state|<tuple|E.1|59>>
-    <associate|nota-runtime-code-at-state|<tuple|3.1|24>>
-    <associate|note-slot|<tuple|5.6|37>>
-    <associate|sect-authority-set|<tuple|5.1.1|35>>
-    <associate|sect-babe|<tuple|5.2|37>>
+    <associate|nota-runtime-code-at-state|<tuple|3.1|22>>
+    <associate|note-slot|<tuple|5.6|35>>
+    <associate|sect-authority-set|<tuple|5.1.1|33>>
+    <associate|sect-babe|<tuple|5.2|35>>
     <associate|sect-blake2|<tuple|A.2|47>>
-    <associate|sect-block-body|<tuple|3.3.1.3|29>>
-    <associate|sect-block-building|<tuple|5.2.7|41>>
-    <associate|sect-block-finalization|<tuple|5.4|46>>
-    <associate|sect-block-format|<tuple|3.3.1|27>>
-    <associate|sect-block-production|<tuple|5.2|37>>
-    <associate|sect-block-submission|<tuple|3.3.2|29>>
-    <associate|sect-block-validation|<tuple|3.3.3|29>>
+    <associate|sect-block-body|<tuple|3.3.1.3|26>>
+    <associate|sect-block-building|<tuple|5.2.7|39>>
+    <associate|sect-block-finalization|<tuple|5.4|44>>
+    <associate|sect-block-format|<tuple|3.3.1|25>>
+    <associate|sect-block-production|<tuple|5.2|35>>
+    <associate|sect-block-submission|<tuple|3.3.2|27>>
+    <associate|sect-block-validation|<tuple|3.3.3|27>>
     <associate|sect-certifying-keys|<tuple|A.5.5|48>>
-    <associate|sect-consensus-message-digest|<tuple|5.1.2|35>>
+    <associate|sect-consensus-message-digest|<tuple|5.1.2|33>>
     <associate|sect-controller-settings|<tuple|A.5.4|48>>
     <associate|sect-creating-controller-key|<tuple|A.5.2|48>>
     <associate|sect-cryptographic-keys|<tuple|A.5|47>>
-    <associate|sect-defn-conv|<tuple|1.2|13>>
+    <associate|sect-defn-conv|<tuple|1.2|11>>
     <associate|sect-designating-proxy|<tuple|A.5.3|48>>
     <associate|sect-encoding|<tuple|B|49>>
-    <associate|sect-entries-into-runtime|<tuple|3.1|23>>
-    <associate|sect-epoch-randomness|<tuple|5.2.5|40>>
-    <associate|sect-extrinsics|<tuple|3.2|25>>
-    <associate|sect-finality|<tuple|5.3|42>>
+    <associate|sect-entries-into-runtime|<tuple|3.1|21>>
+    <associate|sect-epoch-randomness|<tuple|5.2.5|38>>
+    <associate|sect-extrinsics|<tuple|3.2|23>>
+    <associate|sect-finality|<tuple|5.3|40>>
     <associate|sect-genesis-block|<tuple|C|53>>
     <associate|sect-hash-functions|<tuple|A.1|47>>
     <associate|sect-int-encoding|<tuple|B.1.1|50>>
-    <associate|sect-justified-block-header|<tuple|3.3.1.2|28>>
+    <associate|sect-justified-block-header|<tuple|3.3.1.2|26>>
     <associate|sect-list-of-runtime-entries|<tuple|G.1|99>>
-    <associate|sect-loading-runtime-code|<tuple|3.1.1|23>>
-    <associate|sect-managing-multiple-states|<tuple|3.3.4|30>>
-    <associate|sect-merkl-proof|<tuple|2.1.4|20>>
+    <associate|sect-loading-runtime-code|<tuple|3.1.1|21>>
+    <associate|sect-managing-multiple-states|<tuple|3.3.4|27>>
+    <associate|sect-merkl-proof|<tuple|2.1.4|18>>
     <associate|sect-message-detail|<tuple|D.1|55>>
     <associate|sect-msg-block-announce|<tuple|D.1.4|57>>
     <associate|sect-msg-block-request|<tuple|D.1.2|56>>
@@ -9323,35 +9323,35 @@
     <associate|sect-msg-consensus|<tuple|D.1.6|58>>
     <associate|sect-msg-status|<tuple|D.1.1|55>>
     <associate|sect-msg-transactions|<tuple|D.1.5|57>>
-    <associate|sect-network-interactions|<tuple|4|31>>
+    <associate|sect-network-interactions|<tuple|Tec19|29>>
     <associate|sect-network-messages|<tuple|D|55>>
     <associate|sect-randomness|<tuple|A.3|47>>
-    <associate|sect-re-api|<tuple|F|83>>
+    <associate|sect-re-api|<tuple|Tec19|83>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|101>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|102>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|101>>
     <associate|sect-rte-validate-transaction|<tuple|G.2.7|102>>
     <associate|sect-runtime-entries|<tuple|G|99>>
-    <associate|sect-runtime-return-value|<tuple|3.1.2.3|25>>
-    <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|24>>
+    <associate|sect-runtime-return-value|<tuple|3.1.2.3|23>>
+    <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|22>>
     <associate|sect-scale-codec|<tuple|B.1|49>>
     <associate|sect-set-storage|<tuple|F.1.1|83>>
     <associate|sect-staking-funds|<tuple|A.5.1|48>>
-    <associate|sect-state-replication|<tuple|3.3|27>>
-    <associate|sect-state-storage|<tuple|2.1|17>>
-    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|18>>
-    <associate|sect-verifying-authorship|<tuple|5.2.6|40>>
+    <associate|sect-state-replication|<tuple|3.3|25>>
+    <associate|sect-state-storage|<tuple|2.1|15>>
+    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|16>>
+    <associate|sect-verifying-authorship|<tuple|5.2.6|38>>
     <associate|sect-vrf|<tuple|A.4|47>>
-    <associate|sect_polkadot_communication_substream|<tuple|4.4.2|33>>
-    <associate|sect_transport_protocol|<tuple|4.3|32>>
-    <associate|slot-time-cal-tail|<tuple|5.9|38>>
+    <associate|sect_polkadot_communication_substream|<tuple|4.4.2|31>>
+    <associate|sect_transport_protocol|<tuple|4.3|30>>
+    <associate|slot-time-cal-tail|<tuple|5.9|36>>
     <associate|snippet-runtime-enteries|<tuple|G.1|99>>
     <associate|tabl-account-key-schemes|<tuple|A.1|47>>
     <associate|tabl-block-attributes|<tuple|D.3|56>>
-    <associate|tabl-consensus-messages|<tuple|5.1|36>>
-    <associate|tabl-digest-items|<tuple|3.2|28>>
+    <associate|tabl-consensus-messages|<tuple|5.1|34>>
+    <associate|tabl-digest-items|<tuple|3.2|26>>
     <associate|tabl-genesis-header|<tuple|C.1|53>>
-    <associate|tabl-inherent-data|<tuple|3.1|27>>
+    <associate|tabl-inherent-data|<tuple|3.1|25>>
     <associate|tabl-message-types|<tuple|D.1|55>>
     <associate|tabl-node-role|<tuple|D.2|56>>
     <associate|tabl-session-keys|<tuple|A.2|48>>
