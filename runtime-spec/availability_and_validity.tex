@@ -49,3 +49,19 @@ Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachai
 \end{algorithm}
 
 Where \sc{VRF} function is defined in \cite{polkadot-crypto-spec}.
+
+\section{Distribution of Pieces}\label{distribute-piece}
+
+\section{One Shot Assignment plus some extra assignemnts}\label{shot-assignment}
+Validators assign themselves to PoV blocks that have been announced to be distributed. The assignemnt needs to be random. Using their own VRF to sign the VRF outpit from the current relay chain block. Each validaot takes the output of this VRF mod the number of parahcain blocks. This will give them the index of the PoV block they need to check. Note that each PoV block shold be assigned in average to the same number of validators as the number of parahcian validators.
+
+Now in addition to this assigment some extra validatord are assigned to every PoV block as follows (the reason for this extra assignemtn is described in security analysis).
+
+Let us assume we want $\alpha$ validators to check every PoV block during the secondary validity checking. Note that $\alpha$ is not a fixed number but depends on reports from collators or fishermen. Lets us assume $\beta$ is a number depending on the validators who we would expect to have checked the PoV block.  
+
+
+Now each validator computes for each PoV block a VRF with the input being the relay chain block VRF concatinated with the parachain index. 
+
+NOTATION
+
+Every validator compares $\alpha - \beta$ to the output of its VRF and if the VRF output is small enough than the validator check the PoV blocks immidately otherwise depending on their VRF output validators wait for some time and only perform a check if they have not seen alpha checks from validators who either whether 1) parachain validtors of this PoV block 2) or assigned during one shot assigment or 3) had a smaller VRF output than us during this time. 
