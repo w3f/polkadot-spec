@@ -96,7 +96,7 @@ These signatures go into a relay chain block and are processed as follows:
 
 
 
-\section{One Shot Assignment plus some extra assignemnts}\label{shot-assignment}
+\section{Secondary Checking Assignment}\label{shot-assignment}
 Validators assign themselves to PoV blocks that have been announced to be distributed. The assignemnt needs to be random. Using their own VRF to sign the VRF outpit from the current relay chain block. Each validaot takes the output of this VRF mod the number of parahcain blocks. This will give them the index of the PoV block they need to check. Note that each PoV block shold be assigned in average to the same number of validators as the number of parahcian validators.
 
 Now in addition to this assigment some extra validatord are assigned to every PoV block as follows (the reason for this extra assignemtn is described in security analysis).
