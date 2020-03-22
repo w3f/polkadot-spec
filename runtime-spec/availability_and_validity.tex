@@ -1,7 +1,11 @@
 \chapter{Availibility and Validity Verification}
 
 \section{Introduction}
-Validators are reposible for the validity of PoV blocks. There two phases of validation that takes place in the AnV protocol. The primary validation check that hapens by parachain validators who are assigned to the parachain who has produced the PoV block. The secondary check is happening by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV that is invalid and not keeping it availblet to avoid the possiblity of being punished for the attack. The security analysis in the end of this documents dives deeper into the incentives of the ncessity of a a availbility checking that also serves as the secondary validty checking. 
+Validators are responsible for guaranteeing validity and availability of PoV blocks. 
+There are two phases of validation that takes place in the AnV protocol. 
+The primary validation check that hapens by parachain validators who are assigned to the parachain who has produced the PoV block. 
+The secondary check is happening by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV that is invalid and not keeping it availblet to avoid the possiblity of being punished for the attack. 
+The security analysis in the end of this documents dives deeper into the incentives of the ncessity of a a availbility checking that also serves as the secondary validty checking. 
 
 Once parachain validators have validated a PoV block successfully they either have to send a proposal for it to the realy chain or confirm a proposal sent in from another parachain validator. 
 
@@ -14,8 +18,6 @@ Note that every validator will find out whether a PoV has been checked in the se
 If a block has been checked at least by one validator, the rest of the validators continute with voting on that block in the GRANDPA protocol. 
 
 If validators notice that a equvication has happened an additnal validty/availbity checking will take place that is described in \ref{equivocation-case}. 
-
-
 
 \section{Approval Checker Assignment}
 \subsection{VRF computation}
