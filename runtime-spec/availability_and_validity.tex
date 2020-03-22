@@ -1,24 +1,26 @@
 \chapter{Availibility and Validity Verification}
 
 \section{Introduction}
-Validators are responsible for guaranteeing validity and availability of PoV blocks. 
+
+Validators are responsible for guaranteeing the validity and availability of PoV blocks. 
 There are two phases of validation that takes place in the AnV protocol. 
-The primary validation check that hapens by parachain validators who are assigned to the parachain who has produced the PoV block. 
-The secondary check is happening by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV that is invalid and not keeping it availblet to avoid the possiblity of being punished for the attack. 
-The security analysis in the end of this documents dives deeper into the incentives of the ncessity of a a availbility checking that also serves as the secondary validty checking. 
-
-Once parachain validators have validated a PoV block successfully they either have to send a proposal for it to the realy chain or confirm a proposal sent in from another parachain validator. 
-
-Once the porposal of a PoV block is on chain, the parachain validators break down the PoV block into erasure coded pieces and distribute them among all validator. See \ref{distribute-pieces} for details on how this distribution takes place.
-
-Once validators have received erasure coded pieces for a number of PoVs for this round that were proposed earlier on the relay chain, they announce this on the relay chain. As sson as 2/3 of validators have made this announcement a in \ref{shot-assignment} assigns every validator one of these PoV blocks to check its validity. A validator checks the validity of the PoV it is assigned to by obtaining the PoV block (see \ref{obtaining-block}) and comparing it to the original proposal of it that is on chain. 
-
-Note that every validator will find out whether a PoV has been checked in the secndary validity checking. 
-
-If a block has been checked at least by one validator, the rest of the validators continute with voting on that block in the GRANDPA protocol. 
-
-If validators notice that a equvication has happened an additnal validty/availbity checking will take place that is described in \ref{equivocation-case}. 
-
+The primary validation check is carried out by parachain validators who are assigned to the parachain which has produced the PoV block. 
+The secondary check is done by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV that is invalid and not keeping it available to avoid the possibility of being punished for the attack. 
+The security analysis at the end of this document dives deeper into the incentives of the necessity of the secondary  checking validity/availability checking. 
+	 
+Once parachain validators have validated a parachain block's PoV block successfully, that is primary validity checking, they either have to send a proposal for this parachain block, called the candidate receipt, to the relay chain or confirm a candidate receipt sent in from another parachain validators. 
+	 
+Once the proposal of a PoV block is on-chain, the parachain validators break down the this PoV block into erasure-coded pieces and distribute them among all validators. See \ref{distribute-pieces} for details on how this distribution takes place.
+	 
+Once validators have received erasure-coded pieces for several PoV blocks for this relay chain block that were proposed earlier on the relay chain, they announce that they have received the erasure coded pieces on the relay chain, see \ref{voting} for more details. As soon as 2/3 of validators have made this announcement for any parachain block we execute the candidate receipt for that parachain block and change the relay chain state for this event. If a candidate receipt for a parachain block is not discovered to be available during a certain time we decide it is unavailbel we assume this parachain block hasnt happened we allow alternative blocks to be built on its parent parachain block. Once a candidate receipt of a parachain block is available then we carry the secondary validity/avliabilty checks as follows. A scheme assigns every validator to one of these PoV blocks to check its validity, see \ref{shot-assignment} for details. An assigned validator aquires the PoV block (see \ref{obtaining-block}) and checks its validity by comparing it to the candidate receipt.
+If any validator announces that a parachain in invalid then all validators obtain the parachain block and check its validity, see \ref{escalation} for more details. 
+	 
+Note that every validator will find out whether a PoV has been checked in the secondary validity/availbailty checking. 
+	 
+If a parachain block has been checked at least by certain number of validators, the rest of the validators continue with voting on that block in the GRANDPA protocol. Note that the blck might be challegd later. 
+	 
+If validators notices that an equivocation has happened an additional validity/availability checking will take place that is described in \ref{equivocation-case}. 
+  
 \section{Approval Checker Assignment}
 \subsection{VRF computation}
 
@@ -54,6 +56,46 @@ Where \sc{VRF} function is defined in \cite{polkadot-crypto-spec}.
 
 \section{Distribution of Pieces}\label{distribute-piece}
 
+\section{Announcing Avaliability}\label{voting}
+
+Let us assume we have 100 parachains and 1000 validators. Some or all parachains have candidates that we need to vote on the availability of, that is decided by >2/3 of validators voting for availability. This will involve putting 100k items of data and processing them on-chain every block. So using more bit operations would be good.
+
+For each parachain, we store:
+
+availability status, candidate reciept (abridged with signatures whatever), candidate relay chain block no.
+
+where availibility status if one of {no candidate, to be determined, unavailable, available}
+
+For each block, each validator v signs a message
+
+bitfield $b_v$, block hash
+
+where the $i$th bit of $b_v$ if $1$ if and only if 
+
+1) the relay chain has to be determined for the availability status of a candidate reciept of the $i$th parachain and 
+2) $v$ has the erasure coded piece of the corresponding parachain block to this candidate receipt
+
+These signatures go into a relay chain block and are processed as follows:
+
+1) We store the last vote from each validator on chain. For each new signature, we check if it is for a block in this chain later than the last vote we stored from this validator. If it is we update it and stor the bitfield $b_v$ and block number of the vote.
+
+2) For each block with number N in between current block number -1 and current block number - timeout period, we compute a bitmask $bm_N$, which represents whether the candidate considered in that block is still relevant. That is the $i$th bit of $bm_N$ is $1$ if and only if for the $i$th parachain, 
+    (a) the availability status is to be determined and
+    (b) candidate block number <= N
+    
+3) We zero a vector of counts with one entry for each parachain. Then for each validator
+    1. We compute 
+    b_v and bm_N 
+    where N is the block number of the validator's last vote
+    2. For each bit in b_v and bm_N
+        1. add the $i$th bit to the $i$th count.
+        
+4) For each count that is >2/3 of the number of validators, we set that candidate to available. Otherwise, if the candidate is at least timout blocks old, then we set it to unavailable.
+
+5) We act on available candidates and discard unavailable ones, and then clear the record, setting the avilability status to no candidate. Then we accept new cadidate reciepts for these parachains, with any such new candodate reciepts haveing their availability status as to be determined.
+
+
+
 \section{One Shot Assignment plus some extra assignemnts}\label{shot-assignment}
 Validators assign themselves to PoV blocks that have been announced to be distributed. The assignemnt needs to be random. Using their own VRF to sign the VRF outpit from the current relay chain block. Each validaot takes the output of this VRF mod the number of parahcain blocks. This will give them the index of the PoV block they need to check. Note that each PoV block shold be assigned in average to the same number of validators as the number of parahcian validators.
 
@@ -67,3 +109,5 @@ Now each validator computes for each PoV block a VRF with the input being the re
 NOTATION
 
 Every validator compares $\alpha - \beta$ to the output of its VRF and if the VRF output is small enough than the validator check the PoV blocks immidately otherwise depending on their VRF output validators wait for some time and only perform a check if they have not seen alpha checks from validators who either whether 1) parachain validtors of this PoV block 2) or assigned during one shot assigment or 3) had a smaller VRF output than us during this time. 
+
+\section{Invalidity Escalation}\label{escalation}
