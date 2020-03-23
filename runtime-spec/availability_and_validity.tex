@@ -97,6 +97,7 @@ These signatures go into a relay chain block and are processed as follows:
 
 
 \section{Secondary Checking Assignment}\label{shot-assignment}
+
 Validators assign themselves to PoV blocks that are noted on the relay chian to be availble, meaning that the candidate receipt has been voted to be availble by 2/3 validators. 
 The assignemnt needs to be random. Validators use their own VRF to sign the VRF output from the current relay chain block. Each validaotor takes the output of this VRF mod the number of parahchain blocks that we were decided to be avilable in this relay chain block and exectued. This will give them the index of the PoV block they are assigned to and need to check. 
 
