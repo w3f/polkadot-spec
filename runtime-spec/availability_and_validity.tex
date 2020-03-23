@@ -2,6 +2,53 @@
 
 \section{Introduction}
 
+\section{Priliminaries}
+
+\begin{definition}
+  In the remainder of this chapter we assume that $\rho$ is a Polkadot Parachain and $B$ is a block which has been produced by $rho$ and is supposed to be approved by $\rho$. By $R_{rho}$ we refer to runtime code of parachain $\rho$  as a WASM Blob. 
+\end{definition}
+
+\begin{definition}
+  \label{defn-witness-proof}
+  The {\b witness proof} of block $B$, denoted by {\bf $\pi_B$}, is the set of all the external data which has gathered while the $\rho$ runtime executes block $B$. The data is suffice to re-execute $R_{rho}$ against $B$ and acheive the final state indicated in the $H(B)$.
+\end{definition}
+
+\begin{definition}
+  \label{defn-pov-blob}
+  Accordingly we define the {\bf proof of validity blob} or {\bf PoV} blob in short, {\bf $\blobB$} to be the tuple:
+  \[
+  (B, \pi_B)
+  \]
+\end{definition}
+
+\section{Availability}
+
+\begin{definition}
+  \label{defn-erasure-encoder-decoder}
+  The {\bf erasure encoder/decoder} {\bf $encode_{k,n}/decoder_{k,n}$ } is defined to be the Reed-Solomon encoder defined in \cite{??}. 
+\end{definition}
+
+\begin{algorithm}
+  \caption[]{\sc Erasure-Encode($\blobB$, $n$}
+  \label{algo-erasure-encode}
+  \begin{algorithmic}[1]
+  \Require
+    $\blobB$: PoV blob defined in Definition \ref{defn-pov-blob}
+  
+  
+    \State TBA
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{definition}
+  \label{defn-erauser-coded-pieces} 
+  The {\bf set of erasure encode pieces} of $\blobB$, denoted by: 
+  \[
+   Er_B := {(e_1, m_1),...,(e_n,m_n)}
+   \]
+   is defined to be the output of the Algorithm \ref{algo-erasure-encode}.
+\end{definition}
+
 \section{Approval Checker Assignment}
 \subsection{VRF computation}
 
@@ -19,18 +66,59 @@ Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachai
 
     $s_k$: session secret key of validator planning to participate in approval
 
-    \State $(\pi, d) \leftarrow \sc{VRF}(H_h(B),sk(z))$
+    \State $(\pi, d) \leftarrow {\sc VRF}(H_h(B),sk(z))$
     \State \Return $(\pi,d)$
   \end{algorithmic}
 \end{algorithm}
 
+Where {\sc VRF} function is defined in \cite{polkadot-crypto-spec}.
+
+\section{The Approval Check}
+\subsubsection{Retrieval}
+\label{sect-retrieval-of-erasure-pieces}
+TBA
+
+%%We never consider substructure of $B$ to be meaningful, so $V$ must {\em retrieve} the full {\em candidate proof-of-validity blob} $\blobB$ before checking.  Now $V$ knows which which nodes have their individual pieces, thanks to their availability announcements.  It thus follows from our 2/3rd honest assumption that $V$ could always reconstruct $\blobB$ by obtaining enough pieces $\pieces_B$ from nodes known to posses them.  
+
+%We note however that $V$ also knows that all pieces are known by the preliminary backing validity checkers aka parachain validators who approved $\blobB$, as well as approval checkers who already approved $\blobB$.  So $V$ could first contact some node that possesses all of $\blobB$, and only then begin a full reconstruction process. 
+
+%In both cases, $V$ must recompute $\pieces_B$ to verify $\receipt_{B,\cdot}$.  We therefore cannot see much computational difference between $V$ reconstructing $\pieces_B$ from arbitrary pieces or from $\blobB$ itself.  It remains plausible $V$ avoids some networking overhead by asking for $\blobB$ though.  We think a first implementation could reasonably target reconstructing $\pieces_B$ from arbitrary pieces, while leaving requests for the full $\blobB$ to future optimisations. 
+
+%Ideally $V$ might retrieve the pieces in $\pieces_B$ only using its existing connections in our topology specified above, except these intentionally do not include 1/3rd of validators.  Also, $V$ need not connect to any node with all of $\pieces_B$.  Yet, $V$ should connect to at least one prachain validators in $\vals_\rho$ who ideally should check $B$ first.  
+
+%We strongly caution against abandoning approval checkers over topology concerns because then adversarial influence over the topology could wreck our assignment criteria below.
+
+%In fact, our retrieval component could be engineered to avoid requests entirely:  After obtaining $\pi_{V,\cdot}$, another validator $V'$ could simply compute its own priority for sending its piece from $\pieces_B$ to $V$.  We caution that doing do might become inefficient, either because $V$ winds up rejecting sends, or when many nodes go offline.  
+
+\subsubsection{Reconstruction}
+\label
+After receiving $2f+1$ of erasure pieces, every assgined approval checker $v$ will run Algorithm \ref{algo-reconstruct-pov} to make sure that the code is complete and the subsequently recover the original $\blobB$.
+
 \begin{algorithm}
-  \Require{}
-  %%  \Ensure{}
-  \caption[]{\sc }
+  \caption[Reconstruct-PoV-Erasure]{\sc Reconstruct-PoV-Erasure($S_{Er_B}$)}
+  \label{algo-reconstruct-pov-erasure}
   \begin{algorithmic}[1]
-    \State
+  \Require
+    $S_{Er_B} := {(e_{j_1}, m_{j_1}),\cdot,(e_{j_k}, m_{j_k}))}$ such that $k > 2f$
+    
+  %%  \Ensure{}
+    \State $\blobB \rightarrow$ {\sc Erasure-Decoder}(${e_{j_1},\cdots, e_{j_k}}$)
+    \If {{\sc Erasure-Decoder} {\bf failed}}
+        \State {\sc Announce-Failure}
+        \State \Return
+    \EndIf
+    \State $Er_B \rightarrow$ {\sc Erasure-Encoder}($\blobB$)
+    \If {{\sc Verify-Merkle-Proof}($S_{Er_B}$, $Er_B$) {\bf failed}}
+      \State {\sc Announce-Failure}
+      \State \Return
+    \EndIf
+    \State \Return $\blobB$
   \end{algorithmic}
 \end{algorithm}
 
-Where \sc{VRF} function is defined in \cite{polkadot-crypto-spec}.
+\subsection{Verification}
+%%Verify
+%%\If {{\sc Execute}($R_{\rho}$, $\blobB$) {\bf failed}}
+%%      \State {\sc Announce-Failure}
+%%      \State \Return
+%%    \EndIf
