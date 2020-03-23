@@ -6,7 +6,7 @@ Validators are responsible for guaranteeing the validity and availability of PoV
 There are two phases of validation that takes place in the AnV protocol. 
 The primary validation check is carried out by parachain validators who are assigned to the parachain which has produced the PoV block. 
 The secondary check is done by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV that is invalid and not keeping it available to avoid the possibility of being punished for the attack. 
-The security analysis at the end of this document dives deeper into the incentives of the necessity of the secondary  checking validity/availability checking. 
+The security analysis at the end of this document dives deeper into the incentives of the necessity of the secondary checking validity/availability checking. 
 	 
 Once parachain validators have validated a parachain block's PoV block successfully, that is primary validity checking, they either have to send a proposal for this parachain block, called the candidate receipt, to the relay chain or confirm a candidate receipt sent in from another parachain validators. 
 	 
@@ -95,7 +95,6 @@ These signatures go into a relay chain block and are processed as follows:
 5) We act on available candidates and discard unavailable ones, and then clear the record, setting the avilability status to no candidate. Then we accept new cadidate reciepts for these parachains, with any such new candodate reciepts haveing their availability status as to be determined.
 
 
-
 \section{Secondary Checking Assignment}\label{shot-assignment}
 
 Validators assign themselves to PoV blocks that are noted on the relay chian to be availble, meaning that the candidate receipt has been voted to be availble by 2/3 validators. 
@@ -113,8 +112,9 @@ NOTATION
 
 For every PoV bock, every validator compares $#VCheck - #VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immidately otherwise depending on their difference waits for some time and only perform a check if it has not seen $#VCheck$ checks from validators who either 1) parachain validtors of this PoV block 2) or assigned during the assigment procedure or 3) had a smaller VRF output than us during this time. 
 
-\subsection{Equivocation}\label{equivocation-case}
+\subsection{Additional Checking in Case of Equivocation}\label{equivocation-case}
 
 
 \section{Invalidity Escalation}\label{escalation}
 
+\section{Security Analysis}
