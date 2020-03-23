@@ -15,9 +15,8 @@ Once the proposal of a PoV block is on-chain, the parachain validators break dow
 Once validators have received erasure-coded pieces for several PoV blocks for this relay chain block that were proposed earlier on the relay chain, they announce that they have received the erasure coded pieces on the relay chain, see \ref{voting} for more details. As soon as 2/3 of validators have made this announcement for any parachain block we execute the candidate receipt for that parachain block and change the relay chain state for this event. If a candidate receipt for a parachain block is not discovered to be available during a certain time we decide it is unavailbel we assume this parachain block hasnt happened we allow alternative blocks to be built on its parent parachain block. Once a candidate receipt of a parachain block is available then we carry the secondary validity/avliabilty checks as follows. A scheme assigns every validator to one of these PoV blocks to check its validity, see \ref{shot-assignment} for details. An assigned validator aquires the PoV block (see \ref{obtaining-block}) and checks its validity by comparing it to the candidate receipt.
 If any validator announces that a parachain in invalid then all validators obtain the parachain block and check its validity, see \ref{escalation} for more details. 
 	 
-Note that every validator will find out whether a PoV has been checked in the secondary validity/availbailty checking. 
-	 
-If a parachain block has been checked at least by certain number of validators, the rest of the validators continue with voting on that block in the GRANDPA protocol. Note that the blck might be challegd later. 
+
+All validity and invalidity attestaions go onto the relay chain. If a parachain block has been checked at least by certain number of validators, the rest of the validators continue with voting on that block in the GRANDPA protocol. Note that the blck might be challegd later. 
 	 
 If validators notices that an equivocation has happened an additional validity/availability checking will take place that is described in \ref{equivocation-case}. 
   
@@ -85,9 +84,9 @@ These signatures go into a relay chain block and are processed as follows:
     
 3) We zero a vector of counts with one entry for each parachain. Then for each validator
     1. We compute 
-    b_v and bm_N 
-    where N is the block number of the validator's last vote
-    2. For each bit in b_v and bm_N
+    $b_v$ and $bm_N$ 
+    where $N$ is the block number of the validator's last vote
+    2. For each bit in $b_v$ and $bm_N$
         1. add the $i$th bit to the $i$th count.
         
 4) For each count that is >2/3 of the number of validators, we set that candidate to available. Otherwise, if the candidate is at least timout blocks old, then we set it to unavailable.
@@ -110,10 +109,16 @@ Now each validator computes for each PoV block a VRF with the input being the re
 
 NOTATION
 
-For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immidately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validtors of this PoV block 2) or assigned during the assigment procedure or 3) had a smaller VRF output than us during this time. 
+For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immidately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validtors of this PoV block 2) or assigned during the assigment procedure or 3) had a smaller VRF output than us during this time.
+
 
 \subsection{Additional Checking in Case of Equivocation}\label{equivocation-case}
 
+\section{Secdondary checking}
+
+Once a validator has a VRF which tells them to check a block, they announce this VRF and attempt to obtain the block. It is unclear yet whether this is best done by requesting the PoV block from parachain validators or by announcing that they want erasure coded pieces. Then they recreate the entirity of the erasure code and they execute the PoV block. If the erasure code does not have the claimed Merkle root, the validation function says that the PoV block is invalid or the result is inconsistent with the candidate receipt on the relay chain, then we declare the block as invalid. Otherwise if everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF. 
+
+These attestations are included in the relay chain, which must also verify the VRF and may need to judge when enough time has passed. Reports of unavailability and invailidty go onto the relay chain as well.
 
 \section{Invalidity Escalation}\label{escalation}
 
