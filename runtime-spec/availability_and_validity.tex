@@ -138,20 +138,27 @@ These signatures go into a relay chain block and are processed as follows:
 \label{sect-shot-assignment}
 
 Validators assign themselves to PoV blocks that are noted on the relay chain to be available, meaning that the candidate receipt has been voted to be available by 2/3 validators. 
-The assignment needs to be random. Validators use their own VRF to sign the VRF output from the current relay chain block. Each validator takes the output of this VRF mod the number of parachain blocks that we were decided to be available in this relay chain block and executed. This will give them the index of the PoV block they are assigned to and need to check. 
+The assignment needs to be random. Validators use their own VRF to sign the VRF output from the current relay chain block. Each validator takes the output of this VRF mod the number of parachain blocks that we were decided to be available in this relay chain block and executed. This will give them the index of the PoV block they are assigned to and need to check.
 
-Now in addition to this assignment some extra validators are assigned to every PoV block as follows (the reason for this extra assignment is described in security analysis).
+Now in addition to this assignment some extra validators are assigned to every PoV block as follows .
 
-No for each PoV block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us assume $\#VDefault$ is the number  of validators who we would expect to have checked the PoV block so far, which is the number of parachain validator +1.  
+No for each PoV block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimium number of validatora we want to check the block, which should be the number of paracgain validators plus some constat like $2$.  We set
 
-Now each validator computes for each PoV block a VRF with the input being the relay chain block VRF concatenated with the parachain index as follows. 
+$$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$
+where $c_f$ is some factor we use to weight fishermen reports. Reports from fishermen about this 
+
+Now each validator computes for each PoV block a VRF with the input being the relay chain block VRF concatenated with the parachain index. 
 
 For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immidiately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validators of this PoV block 2) or assigned during the assignment procedure or 3) had a smaller VRF output than us during this time.
+
+More fisherman reports can increase $\#VCheck$ and require new checks. We should carry on doing secondary checks for the entire fishing period if more are required. A validator need to keep track of whoch blocks have $\#VCheck$ smaller than the number of higher priority cjecks performed. A new report can make us check straight away, no matter the number of current checks, or mean that we need to put this block back into this set. If we later decide to prune some of this data, such as who has checked the block, then we'll need a new approach here.
+
+
 
 
 \subsection{VRF computation}
 
-Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assginments.
+Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assginments. TODO: Fix this. It is incorrect so far.
 
 \begin{algorithm}
   \caption[VRF-for-Approval]{\sc VRF-for-Approval($B$, $z$, $s_k$)}
