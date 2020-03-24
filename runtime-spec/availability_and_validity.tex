@@ -1,4 +1,4 @@
-\chapter{Availibility and Validity Verification}
+\chapter{Availability and Validity Verification}
 
 \section{Introduction}
 
@@ -141,8 +141,6 @@ Now in addition to this assigment some extra validators are assigned to every Po
 No for each PoV block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us assume $\#VDefault$ is the number  of validators who we would expect to have checked the PoV block so far, which is the number of parachain validator +1.  
 
 Now each validator computes for each PoV block a VRF with the input being the relay chain block VRF concatinated with the parachain index as foloows. 
-
-NOTATION
 
 For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immidately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validtors of this PoV block 2) or assigned during the assigment procedure or 3) had a smaller VRF output than us during this time.
 
