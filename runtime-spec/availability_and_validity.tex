@@ -201,7 +201,11 @@ After receiving $2f+1$ of erasure pieces, every assgined approval checker $v$ wi
 
 \subsection{Additional Checking in Case of Equivocation}\label{sect-equivocation-case}
 
-Once a validator has a VRF which tells them to check a block, they announce this VRF and attempt to obtain the block. It is unclear yet whether this is best done by requesting the PoV block from parachain validators or by announcing that they want erasure coded pieces. Then they recreate the entirity of the erasure code and they execute the PoV block. If the erasure code does not have the claimed Merkle root, the validation function says that the PoV block is invalid or the result is inconsistent with the candidate receipt on the relay chain, then we declare the block as invalid. Otherwise if everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF. 
+Once a validator has a VRF which tells them to check a block, they announce this VRF and attempt to obtain the block. 
+It is unclear yet whether this is best done by requesting the PoV block from parachain validators or by announcing that they want erasure coded pieces. 
+Then they recreate the entirity of the erasure code and they execute the PoV block. 
+If the erasure code does not have the claimed Merkle root, the validation function says that the PoV block is invalid or the result is inconsistent with the candidate receipt on the relay chain, then we declare the block as invalid. 
+Otherwise if everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF. 
 
 These attestations are included in the relay chain, which must also verify the VRF and may need to judge when enough time has passed. Reports of unavailability and invailidty go onto the relay chain as well.
 
