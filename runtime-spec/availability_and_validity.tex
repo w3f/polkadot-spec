@@ -71,7 +71,7 @@ There may be different validation data for the same $B$ as it depends on the rel
 \end{algorithm}
 
 \begin{definition}
-  \label{defn-erauser-coded-pieces} 
+  \label{defn-erasure-coded-pieces} 
   The {\bf set of erasure encode pieces} of $\blobB$, denoted by: 
   \[
    Er_B := {(e_1, m_1),...,(e_n,m_n)}
@@ -170,6 +170,8 @@ Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachai
 
 Where {\sc VRF} function is defined in \cite{polkadot-crypto-spec}.
 
+\subsection{Additional Checking in Case of Equivocation}\label{sect-equivocation-case}
+
 \section{The Approval Check}
 \subsubsection{Retrieval}
 \label{sect-retrieval-of-erasure-pieces}
@@ -221,7 +223,7 @@ After receiving $2f+1$ of erasure pieces, every assgined approval checker $v$ wi
 %%    \EndIf
 
 
-\subsection{Additional Checking in Case of Equivocation}\label{sect-equivocation-case}
+
 
 Once a validator has a VRF which tells them to check a block, they announce this VRF and attempt to obtain the block. 
 It is unclear yet whether this is best done by requesting the PoV block from parachain validators or by announcing that they want erasure coded pieces. 
@@ -232,4 +234,12 @@ Otherwise if everything checks out correctly, we declare the block is valid. Thi
 These attestations are included in the relay chain, which must also verify the VRF and may need to judge when enough time has passed. Reports of unavailability and invailidty go onto the relay chain as well.
 
 \subsection{Invalidity Escalation}\label{escalation}
+
+When for any candidate receipt, there are attestations for both its validity and invalidity, then all validators acquire and validate the blob, irrespective of the assignments from section. We do not vote in GRANDPA for a chain were the candidate recuiept is executed until ithis vote is resolved. If we have $n$ validators, we wait for $>2n/3$ of them to attest to the blob and then the outcome of this vote is one of the following:
+
+If $>n/3$ validators attest to the validaty of the blob and $\leq n/3$ attest to its invalidity, then we can vote on the chain in GRANDPA again and slash validators who attested to its invalidity.
+
+If $>n/3$ validators attest to the invalidity of the blob and $\leq n/3$ attest to its validity, then we consider the blob as invalid. If the rely chain block where the corresponding candidate receipt was executed was not finalised, then we never vote on it or build on it. We slash the validators who attested to its validity.
+
+If $>n/3$ validators attest to the validity of the blob and $>n/3$ attest to its invalidity then we consider the blob to be invalid as above but we do not slash validators who attest either way. We want to leave a reasonable length of time in the first two cases to slash anyone to see if this happens.
 
