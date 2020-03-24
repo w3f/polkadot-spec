@@ -21,7 +21,7 @@ All validity and invalidity attestaions go onto the relay chain. If a parachain 
 	 
 If validators notices that an equivocation has happened an additional validity/availability checking will take place that is described in \ref{equivocation-case}. 
 
-\section{Priliminaries}
+\section{Preliminaries}
 
 \begin{definition}
   In the remainder of this chapter we assume that $\rho$ is a Polkadot Parachain and $B$ is a block which has been produced by $rho$ and is supposed to be approved by $\rho$. By $R_{rho}$ we refer to runtime code of parachain $\rho$  as a WASM Blob. 
@@ -33,10 +33,22 @@ If validators notices that an equivocation has happened an additional validity/a
 \end{definition}
 
 \begin{definition}
-  \label{defn-pov-blob}
-  Accordingly we define the {\bf proof of validity blob} or {\bf PoV} blob in short, {\bf $\blobB$} to be the tuple:
+  \label{defn-pov-block}
+  Accordingly we define the {\bf proof of validity block} or {\bf PoV} block in short, %{\bf $\PoVB$},
+  to be the tuple:
   \[
   (B, \pi_B)
+  \]
+\end{definition}
+
+\begin{definition}  \label{extra-validation-data} The extra validation data $v_B$ if the additional data from the relay chain state that the validation function takes as input. \end{definition}
+There may be different validation data for the same $B$ as it depends on the relay chain state at the time the parachain validators attempted to get the corresponding candidate receipt into the relay chain. The validation data includes things like the previous parachain block header, likely including the previous state root.
+
+\begin{definition}
+  \label{defn-blob}
+  Accordingly we define the {\bf erasure coding blob} or {\bf blob} in short, {\bf $\blobB$} to be the tuple:
+  \[
+  (B, \pi_B, v_B)
   \]
 \end{definition}
 
@@ -52,7 +64,7 @@ If validators notices that an equivocation has happened an additional validity/a
   \label{algo-erasure-encode}
   \begin{algorithmic}[1]
   \Require
-    $\blobB$: PoV blob defined in Definition \ref{defn-pov-blob}
+    $\blobB$: blob defined in Definition \ref{defn-blob}
   
     \State TBA
   \end{algorithmic}
@@ -77,7 +89,7 @@ For each parachain, we store:
 
 availability status, candidate reciept (abridged with signatures whatever), candidate relay chain block no.
 
-where availibility status if one of {no candidate, to be determined, unavailable, available}
+where availibility status if one of \{no candidate, to be determined, unavailable, available\} .
 
 For each block, each validator v signs a message
 
@@ -85,27 +97,36 @@ bitfield $b_v$, block hash
 
 where the $i$th bit of $b_v$ if $1$ if and only if 
 
-1) the relay chain has to be determined for the availability status of a candidate reciept of the $i$th parachain and 
-2) $v$ has the erasure coded piece of the corresponding parachain block to this candidate receipt
+\begin{enumerate}
+\item  the relay chain has to be determined that the PoV block corrresponding to the candidate reciept of the $i$th parachain is available and
+
+\item $v$ has the erasure coded piece of the corresponding parachain block to this candidate receipt.
+\end{enumerate}
 
 These signatures go into a relay chain block and are processed as follows:
 
-1) We store the last vote from each validator on chain. For each new signature, we check if it is for a block in this chain later than the last vote we stored from this validator. If it is we update it and stor the bitfield $b_v$ and block number of the vote.
+\begin{enumerate}
+\item We store the last vote from each validator on chain. For each new signature, we check if it is for a block in this chain later than the last vote we stored from this validator. If it is we update it and stor the bitfield $b_v$ and block number of the vote.
 
-2) For each block with number N in between current block number -1 and current block number - timeout period, we compute a bitmask $bm_N$, which represents whether the candidate considered in that block is still relevant. That is the $i$th bit of $bm_N$ is $1$ if and only if for the $i$th parachain, 
+\item For each block with number N in between current block number -1 and current block number - timeout period, we compute a bitmask $bm_N$, which represents whether the candidate considered in that block is still relevant. That is the $i$th bit of $bm_N$ is $1$ if and only if for the $i$th parachain, 
     (a) the availability status is to be determined and
     (b) candidate block number <= N
     
-3) We zero a vector of counts with one entry for each parachain. Then for each validator
-    1. We compute 
+\item We zero a vector of counts with one entry for each parachain. Then for each validator
+	\begin{enumerate}
+    \item We compute 
     $b_v$ and $bm_N$ 
     where $N$ is the block number of the validator's last vote
-    2. For each bit in $b_v$ and $bm_N$
-        1. add the $i$th bit to the $i$th count.
-        
-4) For each count that is >2/3 of the number of validators, we set that candidate to available. Otherwise, if the candidate is at least timout blocks old, then we set it to unavailable.
+   \item For each bit in $b_v$ and $bm_N$
+		\begin{itemize}
+        \item add the $i$th bit to the $i$th count.
+        \end{itemize}
+	\end{enumerate}
+		
+\item For each count that is >2/3 of the number of validators, we set that candidate to available. Otherwise, if the candidate is at least timout blocks old, then we set it to unavailable.
 
-5) We act on available candidates and discard unavailable ones, and then clear the record, setting the avilability status to no candidate. Then we accept new cadidate reciepts for these parachains, with any such new candodate reciepts haveing their availability status as to be determined.
+\item We act on available candidates and discard unavailable ones, and then clear the record, setting the avilability status to no candidate. Then we accept new cadidate reciepts for these parachains, with any such new candodate reciepts haveing their availability status as to be determined.
+\end{enumerate}
 
 \section{Approval Checker Assignment}
 \label{sect-shot-assignment}
