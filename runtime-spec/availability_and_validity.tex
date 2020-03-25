@@ -14,7 +14,7 @@ As soon as the proposal of a PoV block is on-chain, the parachain validators bre
 	 
 Once validators have received erasure-coded pieces for several PoV blocks for the current relay chain block (that might have been proposed a couple of blocks earlier on the relay chain), they announce that they have received the erasure coded pieces on the relay chain bu voting on the received pieces, see \ref{voting} for more details. 
 
-As soon as 2/3 of validators have made this announcement for any parachain block we act on the parachain block i.e., we update the relay chain state based on the the candidate receipt and considered the parachain block to have happened on this relay chain fork. 
+As soon as $>2/3$ of validators have made this announcement for any parachain block we act on the parachain block i.e., we update the relay chain state based on the the candidate receipt and considered the parachain block to have happened on this relay chain fork. 
 
 After a certain time, if a candidate receipt for a parachain block is not discovered to be available we decide it is unavailable and allow alternative blocks to be built on its parent parachain block. 
 
