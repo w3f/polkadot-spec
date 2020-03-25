@@ -18,7 +18,7 @@ As soon as 2/3 of validators have made this announcement for any parachain block
 
 After a certain time, if a candidate receipt for a parachain block is not discovered to be available we decide it is unavailable and allow alternative blocks to be built on its parent parachain block. 
 
-Once a parachain block is acted on we carry the secondary validity/availability checks as follows. A scheme assigns every validator to one or more PoV blocks to check its validity, see \ref{shot-assignment} for details. An assigned validator acquires the PoV block (see \ref{obtaining-block}) and checks its validity by comparing it to the candidate receipt. If validators notices that an equivocation has happened an additional validity/availability assingments will be made that is described in \ref{equivocation-case}. 
+Once a parachain block is acted on we carry the secondary validity/availability checks as follows. A scheme assigns every validator to one or more PoV blocks to check its validity, see \ref{shot-assignment} for details. An assigned validator acquires the PoV block (see \ref{obtaining-block}) and checks its validity by comparing it to the candidate receipt. If validators notices that an equivocation has happened an additional validity/availability assignments will be made that is described in \ref{equivocation-case}. 
 
 During any of the phases, if any validator announces that a parachain is invalid then all validators obtain the parachain block and check its validity, see \ref{escalation} for more details. 
 
@@ -142,23 +142,23 @@ The assignment needs to be random. Validators use their own VRF to sign the VRF 
 
 Now in addition to this assignment some extra validators are assigned to every PoV block as follows .
 
-No for each PoV block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimium number of validatora we want to check the block, which should be the number of paracgain validators plus some constat like $2$.  We set
+No for each PoV block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constat like $2$.  We set
 
 $$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$
 where $c_f$ is some factor we use to weight fishermen reports. Reports from fishermen about this 
 
 Now each validator computes for each PoV block a VRF with the input being the relay chain block VRF concatenated with the parachain index. 
 
-For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immidiately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validators of this PoV block 2) or assigned during the assignment procedure or 3) had a smaller VRF output than us during this time.
+For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immediately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validators of this PoV block 2) or assigned during the assignment procedure or 3) had a smaller VRF output than us during this time.
 
-More fisherman reports can increase $\#VCheck$ and require new checks. We should carry on doing secondary checks for the entire fishing period if more are required. A validator need to keep track of whoch blocks have $\#VCheck$ smaller than the number of higher priority cjecks performed. A new report can make us check straight away, no matter the number of current checks, or mean that we need to put this block back into this set. If we later decide to prune some of this data, such as who has checked the block, then we'll need a new approach here.
+More fisherman reports can increase $\#VCheck$ and require new checks. We should carry on doing secondary checks for the entire fishing period if more are required. A validator need to keep track of which blocks have $\#VCheck$ smaller than the number of higher priority checks performed. A new report can make us check straight away, no matter the number of current checks, or mean that we need to put this block back into this set. If we later decide to prune some of this data, such as who has checked the block, then we'll need a new approach here.
 
 
 
 
 \subsection{VRF computation}
 
-Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assginments. TODO: Fix this. It is incorrect so far.
+Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assignments. TODO: Fix this. It is incorrect so far.
 
 \begin{algorithm}
   \caption[VRF-for-Approval]{\sc VRF-for-Approval($B$, $z$, $s_k$)}
