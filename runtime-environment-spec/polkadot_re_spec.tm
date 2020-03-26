@@ -1961,7 +1961,7 @@
     (<reference|defn-key-index>)>>|<row|<cell|2>|<cell|Mapping between
     storage key and blocks (<reference|defn-storage-key-to-blocks>)>|<cell|<em|KeyIndex>
     (<reference|defn-key-index>)>>|<row|<cell|3>|<cell|Mapping between
-    storage key and child change Trie (<reference|defn-storage-key-to-child-tries>)>|<cell|<em|KeyIndex>
+    storage key and child changes Trie (<reference|defn-storage-key-to-child-tries>)>|<cell|<em|KeyIndex>
     (<reference|defn-key-index>)>>>>>
 
     \;
@@ -1972,7 +1972,7 @@
 
   <strong|Note>: the key used for the Changes Trie must be the <em|varying
   datatype>, not the individual, appended <em|KeyIndex>. Unlike the default
-  encoding for varying data types, this structure starts it's indexing at
+  encoding for varying data types, this structure starts its indexing at
   <verbatim|1>.
 
   <\definition>
@@ -1989,7 +1989,7 @@
   <\definition>
     <label|defn-storage-key-to-extrinsics>The <strong|storage key to
     extrinsics mappings> track any changes which occure in an individual
-    block. The key is inserted into the Trie, where it's value is a SCALE
+    block. The key is inserted into the Trie, where its value is a SCALE
     encoded array containing the indices of the extrinsics that caused any
     changes to the key. The indices are unsigned 32-bit integers and it's
     values depend on the order in which each extrinsic is included in the
@@ -1999,7 +1999,7 @@
     \;
 
     Keys that were modified outside of extrinsics, such as changes made by
-    the Runtime directly, have a <verbatim|0xffffffff> value as it's indice.
+    the Runtime directly, have a <verbatim|0xffffffff> value as its indice.
 
     \;
 
@@ -2021,7 +2021,7 @@
     <verbatim|ext_storage_changes_root> as described in section
     <reference|sect-ext-storage-changes-root>, but unlike the other mappings,
     they are not generated on each block. The Runtime sets the key
-    <verbatim|:changes_trie> to storage, where it's value is made out of two
+    <verbatim|:changes_trie> to storage, where its value is made out of two
     concatenated 32-bit integers:
 
     <\itemize-dot>
@@ -2049,13 +2049,13 @@
     their corresponding Child Changes Trie. As described in Definition
     <reference|defn-storage-key-to-extrinsics>, changes inside child storages
     are inserted into their own Trie. The changed key is inserted into the
-    main Trie, where it's value is the Merkle proof as desribed in section
+    main Trie, where its value is the Merkle proof as desribed in section
     <reference|sect-merkl-proof> of the corresponding Child Storage Trie,
-    which stores the mappings between the storage key and exstrinsics.
+    which stores the mappings between the storage key and extrinsics.
   </definition>
 
   The Trie itself is not part of the block, but a separately maintained
-  database by the Polkadot node. The Merkle proof of the Change Trie must be
+  database by the Polkadot node. The Merkle proof of the Changes Trie must be
   inlcuded in the block digest as described in Definition
   <reference|defn-digest> and gets calculated as described in section
   <reference|sect-merkl-proof>. The root calculation uses entries of a
