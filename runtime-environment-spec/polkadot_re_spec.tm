@@ -1980,8 +1980,9 @@
     following information:
 
     <\big-table|<tabular|<tformat|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Block>|<cell|Block
-    at which this key has been inserted in the trie>|<cell|Unsigned 32-bit
-    integer>>|<row|<cell|Key>|<cell|The changed key>|<cell|Byte array>>>>>>
+    number at which this key has been inserted in the trie>|<cell|Unsigned
+    32-bit integer>>|<row|<cell|Key>|<cell|The changed key>|<cell|Byte
+    array>>>>>>
       Key structure inserted in the Changes Trie
     </big-table>
   </definition>
@@ -2011,7 +2012,7 @@
   <\definition>
     <label|defn-storage-key-to-blocks>The <strong|storage key to blocks
     mappings> track any changes which occured in a certain range of blocks.
-    The key is inserted into the Trie, where it's value is a SCALE encoded
+    The key is inserted into the Trie, where its value is a SCALE encoded
     array containing block numbers where extrinsics caused any changes to the
     key. The block numbers are represented as unsigned 32-bit integers.
 
@@ -2054,9 +2055,9 @@
     which stores the mappings between the storage key and extrinsics.
   </definition>
 
-  The Trie itself is not part of the block, but a separately maintained
-  database by the Polkadot node. The Merkle proof of the Changes Trie must be
-  inlcuded in the block digest as described in Definition
+  The Changes Trie itself is not part of the block, but a separately
+  maintained database by the Polkadot node. The Merkle proof of the Changes
+  Trie must be inlcuded in the block digest as described in Definition
   <reference|defn-digest> and gets calculated as described in section
   <reference|sect-merkl-proof>. The root calculation uses entries of a
   per-block basis (including block mappings when conditions apply on that
