@@ -2004,7 +2004,7 @@
 
     \;
 
-    Those entries are generated when the Runtime calls
+    The Changes Trie is generated when the Runtime calls
     <verbatim|ext_storage_changes_root> as described in section
     <reference|sect-ext-storage-changes-root>.
   </definition>
@@ -2018,7 +2018,7 @@
 
     \;
 
-    Those entries are generated when the Runtime calls
+    The Changes Trie is generated when the Runtime calls
     <verbatim|ext_storage_changes_root> as described in section
     <reference|sect-ext-storage-changes-root>, but unlike the other mappings,
     they are not generated on each block. The Runtime sets the key
