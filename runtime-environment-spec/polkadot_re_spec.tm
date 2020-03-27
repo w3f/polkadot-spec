@@ -1992,7 +1992,7 @@
     extrinsics mappings> track any changes which occure in an individual
     block. The key is inserted into the Trie, where its value is a SCALE
     encoded array containing the indices of the extrinsics that caused any
-    changes to the key. The indices are unsigned 32-bit integers and it's
+    changes to the key. The indices are unsigned 32-bit integers and its
     values depend on the order in which each extrinsic is included in the
     block. Additionally, a separate Changes Trie is created for each child
     storage where changes occure.
