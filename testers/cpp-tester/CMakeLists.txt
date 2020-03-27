@@ -45,8 +45,12 @@ target_link_libraries(kagome_tester
     Boost::program_options
     leveldb::leveldb
     yaml-cpp::yaml-cpp
-    ${kagome_LIBRARIES}
-    )
+    kagome::buffer
+    kagome::hexutil
+    kagome::in_memory_storage
+    kagome::trie_db_backend
+    kagome::polkadot_trie
+)
 
 include(GNUInstallDirs)
 
