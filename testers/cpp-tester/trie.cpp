@@ -10,6 +10,7 @@
 #include <boost/program_options.hpp>
 #include <kagome/storage/in_memory/in_memory_storage.hpp>
 #include <kagome/storage/trie/impl/polkadot_trie_db.hpp>
+#include <kagome/storage/trie/impl/trie_db_backend_impl.hpp>
 #include <spdlog/sinks/stdout_sinks.h>
 #include <yaml-cpp/yaml.h>
 
@@ -98,9 +99,12 @@ parseYamlStateFile(const std::string &filename, bool keys_in_hex) {
 }
 
 void processTrieCommand(const TrieCommandArgs &args) {
-  auto db = std::make_unique<kagome::storage::InMemoryStorage>();
-
-  kagome::storage::trie::PolkadotTrieDb trie(std::move(db));
+  auto trie = kagome::storage::trie::PolkadotTrieDb::createEmpty(
+    std::make_shared<kagome::storage::trie::TrieDbBackendImpl>(
+      std::make_shared<kagome::storage::InMemoryStorage>(),
+      kagome::common::Buffer{}
+    )
+  );
 
   SubcommandRouter<std::vector<Buffer>, std::vector<Buffer>> router;
   router.addSubcommand("insert-and-delete", [&trie, &args](
@@ -108,17 +112,17 @@ void processTrieCommand(const TrieCommandArgs &args) {
                                                 std::vector<Buffer> values) {
     for (auto keys_it = keys.begin(), values_it = values.begin();
          keys_it != keys.end(); keys_it++, values_it++) {
-      auto res = trie.put(*keys_it, *values_it);
+      auto res = trie->put(*keys_it, *values_it);
       BOOST_ASSERT_MSG(res, "Error inserting to Trie");
-      std::cout << "state root: " << hex_lower(trie.getRootHash()) << "\n";
+      std::cout << "state root: " << hex_lower(trie->getRootHash()) << "\n";
     }
     // drop random nodes
     while (not keys.empty()) {
-      auto key_index_to_drop = trie.getRootHash()[0] % keys.size();
+      auto key_index_to_drop = trie->getRootHash()[0] % keys.size();
       auto key_to_drop = keys.begin();
       std::advance(key_to_drop, key_index_to_drop);
-      BOOST_ASSERT_MSG(trie.remove(*key_to_drop), "Error removing from Trie");
-      std::cout << "state root: " << hex_lower(trie.getRootHash()) << "\n";
+      BOOST_ASSERT_MSG(trie->remove(*key_to_drop), "Error removing from Trie");
+      std::cout << "state root: " << hex_lower(trie->getRootHash()) << "\n";
       keys.erase(key_to_drop);
     }
   });
@@ -126,10 +130,10 @@ void processTrieCommand(const TrieCommandArgs &args) {
                                                    std::vector<Buffer> values) {
     for (auto keys_it = keys.begin(), values_it = values.begin();
          keys_it != keys.end(); keys_it++, values_it++) {
-      BOOST_ASSERT_MSG(trie.put(*keys_it, *values_it),
+      BOOST_ASSERT_MSG(trie->put(*keys_it, *values_it),
                        "Error inserting to Trie");
     }
-    std::cout << "state root: " << hex_lower(trie.getRootHash()) << "\n";
+    std::cout << "state root: " << hex_lower(trie->getRootHash()) << "\n";
   });
 
   auto [keys, values] =
