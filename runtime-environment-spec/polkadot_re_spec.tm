@@ -2247,18 +2247,16 @@
   to track changes that are made per block. Therefore, every call to the Host
   API that inserts and manipulates data in the state storage is first
   accumulated in an isolated environment and only committed after the Runtime
-  calls <verbatim|ext_storage_root> (as defined in section
-  <reference|sect-ext-storage-root>) or <verbatim|ext_storage_changes_root>
-  (as defined in section <reference|sect-ext-storage-changes-root>). Those
-  functions use the entries in that isolated environment to generate the
-  resulting root, then it will be wiped clean and all the changes will be
-  committed to the primary state storage.
+  calls <verbatim|ext_storage_root> as defined in section
+  <reference|sect-ext-storage-root>. Those functions use the entries in that
+  isolated environment to generate the resulting root, then it will be wiped
+  clean and all the changes will be committed to the primary state storage.
 
   \;
 
   Each child storage uses its own isolated environment, where the behavior of
-  <verbatim|ext_storage_child_root> (as described in section
-  <reference|sect-ext-storage-child-root>) behaves the same way as described
+  <verbatim|ext_storage_child_root> as described in section
+  <reference|sect-ext-storage-child-root> behaves the same way as described
   above.
 
   <section|Extrinsics><label|sect-extrinsics>
@@ -5127,10 +5125,9 @@
 
   <subsection|<verbatim|ext_storage_changes_root>><label|sect-ext-storage-changes-root>
 
-  Commits all existing operations as described in section
-  <reference|sect-accumulating-committing> and gets the resulting changes
-  root as defined in Definition <reference|defn-changes-trie>. The parent
-  hash is a SCALE encoded block hash.
+  Generates the resulting changes root as defined in Definition
+  <reference|defn-changes-trie>. The parent hash is a SCALE encoded block
+  hash.
 
   <subsubsection|Version 1 - Prototype>
 
