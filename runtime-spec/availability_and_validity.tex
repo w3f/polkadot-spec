@@ -73,15 +73,16 @@ Primary validity checking refers to the process of parachain validators as defin
   \end{algorithmic}
 \end{algorithm}
 
-
 \subsection{Primary validity announcement}
 \label{sect-primary-validaty-announcement}
 Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
 
-In case that validation has been successful, the announcement will either in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt}, to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block. 
+In case that validation has been successful, the announcement will either in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt}, to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}
+
+However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
 
 \begin{definition}
-  \label{defn-candidate-receipt"}
+  \label{defn-candidate-receipt}
         {\b TBS} is a proposal for $B$,
 \end{definition}
 
@@ -98,7 +99,7 @@ In case that validation has been successful, the announcement will either in the
 
 
 \begin{algorithm}
-  \caption[]{\sc SendPoVProposal}
+  \caption[]{\sc SendPoVCandidateReceipt}
   \label{algo-send-candidate-receipt}
   \begin{algorithmic}[1]
     \Require{}
@@ -108,9 +109,44 @@ In case that validation has been successful, the announcement will either in the
   \end{algorithmic}
 \end{algorithm}
 
+\begin{algorithm}
+  \caption[]{\sc ConfirmCandidateReceipt}
+  \label{algo-endorse-candidate-receipt}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+    
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
 
+\begin{algorithm}
+  \caption[]{\sc AnnouncePrimaryValidationFailure}
+  \label{algo-announce-primary-validation-failure}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+    
+    \State
+  \end{algorithmic}
+\end{algorithm}
 
-, they either have to send a proposal for this parachain block, called the candidate receipt, to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block. 
+\subsection{Primary Validation Disagreement}
+\syed{Parachain}{verify} validators need to keep track of candidate receipts (see Definition \ref{defn-candidate-receipt}) and validation failure messages of their peer. In case, there is a disagreement among the parachain validators about $\blobB$, all parachain validators must invoke Algorithm \ref{algo-primary-validation-disagreemnt}
+
+\begin{algorithm}
+  \caption[]{\sc PrimaryValidationDisagreement}
+  \label{algo-primary-validation-disagreemnt}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+    
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
+\subsection{name}
+\label{sec:primary-validation-disagreemnt}
+
 
 \begin{definition}
   \label{defn-pov-proposal}
@@ -215,10 +251,9 @@ For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the outp
 
 More fisherman reports can increase $\#VCheck$ and require new checks. We should carry on doing secondary checks for the entire fishing period if more are required. A validator need to keep track of which blocks have $\#VCheck$ smaller than the number of higher priority checks performed. A new report can make us check straight away, no matter the number of current checks, or mean that we need to put this block back into this set. If we later decide to prune some of this data, such as who has checked the block, then we'll need a new approach here.
 
-
 \subsection{VRF computation}
 
-Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assignments. \todo{Fix this. It is incorrect so far.}
+Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assignments. \todo{Fix this. It is incorrect so far.} 
 
 \begin{algorithm}
   \caption[VRF-for-Approval]{\sc VRF-for-Approval($B$, $z$, $s_k$)}
