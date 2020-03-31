@@ -67,6 +67,7 @@ jobs:
               echo "No test code changed, skipping tests..."
             else
               echo "Test code changed, running tests..."
+              source ~/.cargo/env
               ./run_tests.sh verbose
             fi
 
