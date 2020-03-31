@@ -22,6 +22,7 @@ jobs:
 
             apt update && apt install -y --no-install-recommends \
               build-essential \
+              cmake \
               make \
               pkg-config \
               libssl-dev \
@@ -34,11 +35,6 @@ jobs:
               julia \
               python \
               curl
-
-            # Install CMake
-            wget https://github.com/Kitware/CMake/releases/download/v3.16.0-rc4/cmake-3.16.0-rc4-Linux-x86_64.sh
-            chmod +x cmake-3.16.0-rc4-Linux-x86_64.sh
-            ./cmake-3.16.0-rc4-Linux-x86_64.sh --skip-license --prefix=/usr/local
 
             # Install Rust
             curl https://sh.rustup.rs -sSf | sh -s -- -y

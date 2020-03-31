@@ -419,8 +419,7 @@ pub fn ext_storage_child_root_version_1(input: ParsedInput) {
         child_type,
         key2,
         value1
-    ).encode());
-    */
+    ).encode());*/
 
     // Get root
     let res = rtm
