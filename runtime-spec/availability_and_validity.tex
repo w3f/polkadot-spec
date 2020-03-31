@@ -7,7 +7,7 @@ There are two phases of validation that takes place in the AnV protocol.
 
 The primary validation check is carried out by parachain validators who are assigned to the parachain which has produced the PoV block as described in Section \ref{sect-primary-validation}. Once parachain validators have validated a parachain's PoV block successfully, they have to announce according to the procedure described in Section \ref{sect-primary-validaty-announcement}.
 
-As soon as the proposal of a PoV block is on-chain, the parachain validators break the PoV block into erasure-coded pieces and distribute them among all validators. See Section \ref{sect-distribute-pieces} for details on how this distribution takes place.
+As soon as the proposal of a PoV block is on-chain, the parachain validators break the PoV block into erasure-coded pieces as described in Section \ref{sect-erasure-code-pov} and distribute them among all validators. See Section \ref{sect-distribute-pieces} for details on how this distribution takes place.
 	 
 Once validators have received erasure-coded pieces for several PoV blocks for the current relay chain block (that might have been proposed a couple of blocks earlier on the relay chain), they announce that they have received the erasure coded pieces on the relay chain by voting on the received pieces, see Section \ref{sect-voting-on-availability} for more details. 
 
@@ -78,7 +78,7 @@ Primary validity checking refers to the process of parachain validators as defin
 Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
 
 In case that validation has been successful, the announcement will either in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt}, to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}
-
+o
 However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
 
 \begin{definition}
@@ -96,7 +96,6 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
     \State TBS
   \end{algorithmic}
 \end{algorithm}
-
 
 \begin{algorithm}
   \caption[]{\sc SendPoVCandidateReceipt}
@@ -131,7 +130,23 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \end{algorithmic}
 \end{algorithm}
 
+\subsction{Inclusion of PoV proposal on the relay chain}
+
+\begin{definition}
+  \label{defn-pov-proposal}
+        {\b PoV Proposal} from parachain $\rho$ is a $\blobB$ whose candidate receipt has been confirmed by at least 2/3 of $mathcal{V}_\rho$ 
+
+\end{definition}
+
+A block producer $p$ when receive a PoV Proposal as defined in Definition \ref{defn-pov-proposal} \syed{need to/must include the receipt in the next block as a transaction in the following format}{please make this accurate.
+
+\begin{definition}
+  \label{defn-candidate-receipt-transaction}
+        {\b }
+\end{definition}
+
 \subsection{Primary Validation Disagreement}
+\label{sect-primary-validation-disagreemnt}
 \syed{Parachain}{verify} validators need to keep track of candidate receipts (see Definition \ref{defn-candidate-receipt}) and validation failure messages of their peer. In case, there is a disagreement among the parachain validators about $\blobB$, all parachain validators must invoke Algorithm \ref{algo-primary-validation-disagreemnt}
 
 \begin{algorithm}
@@ -144,17 +159,10 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
     \State TBS
   \end{algorithmic}
 \end{algorithm}
-\subsection{name}
-\label{sec:primary-validation-disagreemnt}
-
-
-\begin{definition}
-  \label{defn-pov-proposal}
-        {\b }
-        PoV blocks that are noted on the relay chain to be available, meaning that the candidate receipt has been voted to be available by 2/3 validators.
-\end{definition}
 
 \section{Availability}
+
+When a $v \in \para-valid-set$ observes that a block containing PoV Proposal is included in a relay chain block $R_p$ then it must invoke Algorithm \ref{algo-erasure-encode}.
 
 \begin{definition}
   \label{defn-erasure-encoder-decoder}
@@ -182,11 +190,23 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 \end{definition}
 
 \section{Distribution of Pieces}\label{sect-distribute-piece}
-TBS
+Following the computation of $Er_B$, $v$ must construct the $\blobB$ Avalailability message defined in Definition \ref{defn-pov-erasure-piece-message}. And distribute them to target validators designated by the Availability Networking Specification \cite{??}.
+
+\begin{definition}
+  \label{defn-pov-erasure-piece-message}
+        {\b PoV erasure piece message} $M_{PoV_\blobB}(i)$ is TBS
+\end{definition}
 
 \section{Announcing Availability}\label{sect-voting-on-availability}
 
-Some parachains have blocks that we need to vote on the availability of, that is decided by >2/3 of validators voting for availability. For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations as follows.
+When validator $v$ receives its designated piece for \blobB it needs to broadcast Availability vote message as defined in Definition\ref{defn-availability-vote-message}
+\begin{definition}
+  \label{defn-availability-vote-message} 
+        {\b Availability vote message} $M_{PoV}^{Avail,v_i}$ TBS
+\end{definition}
+
+
+Some parachains have blocks that we need to vote on the availability of, that is decided by >2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations as follows.}{this is not really relevant to the spec}
 
 For each parachain, we store:
 
@@ -231,8 +251,20 @@ These signatures go into a relay chain block and are processed as follows:
 \item We act on available candidates and discard unavailable ones, and then clear the record, setting the availability status to no candidate. Then we accept new candidate receipts for these parachains, with any such new candidate receipts having their availability status as to be determined.
 \end{enumerate}
 
+\begin{definition}
+  \label{defn-available-pov-proposal}
+        {\b }
+        PoV blocks that are noted on the relay chain to be available, meaning that the candidate receipt has been voted to be available by 2/3 validators.
+\end{definition}
+
+\section{Unavailability}
+\label{sect-unavailability}
+TBS
+
 \section{Publishing Attestations}
 \label{sect-publishing-attestations}
+TBS 
+
 \section{Approval Checker Assignment}
 \label{sect-shot-assignment}
 
