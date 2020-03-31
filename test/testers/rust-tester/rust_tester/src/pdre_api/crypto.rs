@@ -31,7 +31,6 @@ pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
         )
         .decode_val();
 
-    // TODO: decode this properly
     res.remove(0);
     assert_eq!(res.len(), 64);
     let res1 = &res[..32]; // first pubkey
@@ -163,7 +162,6 @@ pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
         )
         .decode_val();
 
-    // TODO: decode this properly
     res.remove(0);
     assert_eq!(res.len(), 64);
     let res1 = &res[..32]; // first pubkey
@@ -267,26 +265,6 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
         println!("BAD SIGNATURE");
     }
 }
-
-pub fn ext_crypto_secp256k1_ecdsa_recover_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
-
-    let sig = input.get(0);
-    let msg = input.get(1);
-
-    let _ = rtm
-        .call(
-            "rtm_ext_crypto_secp256k1_ecdsa_recover_version_1",
-            &(&sig, &msg).encode(),
-        )
-        .decode_val();
-
-    // TODO...
-}
-
-// TODO
-#[allow(dead_code)]
-pub fn ext_crypto_secp256k1_ecdsa_recover_compressed_version_1(_input: ParsedInput) {}
 
 pub fn ext_hashing_keccak_256_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
