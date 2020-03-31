@@ -5653,8 +5653,9 @@
   <subsection|<verbatim|ext_crypto_sr25519_verify>>
 
   Verifies an <verbatim|sr25519> signature. Only version 1 of this function
-  supports deprecated 0.1.1 Schnorr signatures and should only be used for
-  backward compatibility.
+  supports deprecated Schnorr signatures introduced by the <em|schnorrkel>
+  Rust library version 0.1.1 and should only be used for backward
+  compatibility.
 
   <subsubsection|Version 2 - Prototype>
 
