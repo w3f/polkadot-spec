@@ -2243,7 +2243,7 @@
 
   <subsubsection|Accumulating and committing><label|sect-accumulating-committing>
 
-  Some functionality, such as storage root calculation, require a mechanism
+  Some functionality, such as storage root calculation, requires a mechanism
   to track changes that are made per block. Therefore, every call to the Host
   API that inserts and manipulates data in the state storage is first
   accumulated in an isolated environment and only committed to the primary
@@ -2252,8 +2252,8 @@
   <reference|sect-core-execute-block>) or
   <verbatim|BlockBuilder_finalize_block> (defined in section
   <reference|sect-blockbuilder-finalize-block>). After one of those functions
-  gets called, the isolated environment will be wiped clean, ready to be used
-  for the next block.
+  gets called, the Polkadot Host wipes the isolated environment, ready to be
+  used for the next block.
 
   <section|Extrinsics><label|sect-extrinsics>
 
