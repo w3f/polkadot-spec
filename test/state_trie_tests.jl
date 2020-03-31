@@ -21,7 +21,7 @@ using Test
             push!(test_result_array, read(`sh -c $cmd`, String))
 
             if test_result_array[end] != "" && print_verbose
-		println("> Result: ", test_result_array[end])
+		        println("> Result: ", test_result_array[end])
             end
 
             if cli_encoder != CommonFixtures.cli_testers[CommonFixtures.reference_implementation]
@@ -39,7 +39,7 @@ using Test
             push!(test_result_array_iad, read(`sh -c $cmd`, String))
 
             if test_result_array_iad[end] != "" && print_verbose
-		println("> Result: ", test_result_array_iad[end])
+		        println("> Result: ", test_result_array_iad[end])
             end
 
             if cli_encoder != CommonFixtures.cli_testers[CommonFixtures.reference_implementation]
