@@ -23,6 +23,7 @@ jobs:
             apt update && apt install -y --no-install-recommends \
               build-essential \
               cmake \
+              cmake-extras \
               make \
               pkg-config \
               libssl-dev \
