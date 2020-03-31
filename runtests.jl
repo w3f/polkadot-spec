@@ -1,3 +1,4 @@
+#!/usr/bin/env julia
 using Test
 
 print_verbose = false

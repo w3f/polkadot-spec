@@ -11,9 +11,9 @@ pub use storage::StorageApi;
 pub use misc::MiscApi;
 
 use parity_scale_codec::Decode;
-use substrate_executor::{call_in_wasm, WasmExecutionMethod};
-use substrate_primitives::Blake2Hasher;
-use substrate_state_machine::TestExternalities;
+use sc_executor::{call_in_wasm, WasmExecutionMethod};
+use sp_core::Blake2Hasher;
+use sp_state_machine::TestExternalities;
 
 // Convenience function, get the wasm blob
 fn get_wasm_blob() -> Vec<u8> {

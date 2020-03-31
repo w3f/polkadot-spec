@@ -1,7 +1,5 @@
 use std::slice;
 
-use substrate_primitives::wasm_export_functions;
-
 extern "C" {
     fn ext_print_utf8(utf8_data: *const u8, utf8_len: u32);
     fn ext_print_hex(data: *const u8, len: u32);
@@ -213,9 +211,8 @@ extern "C" {
     fn ext_sandbox_memory_teardown(memory_idx: u32);
 }
 
-#[cfg(not(feature = "std"))]
 
-wasm_export_functions! {
+sp_core::wasm_export_functions! {
     fn rtm_ext_twox_64(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 8] = [0; 8];
         unsafe {

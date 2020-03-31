@@ -1,7 +1,7 @@
 use super::utils::CryptoApi;
 use super::ParsedInput;
 
-use substrate_primitives::hashing::{twox_128, twox_256, twox_64};
+use sp_core::hashing::{twox_128, twox_256, twox_64};
 
 // Input: data
 pub fn test_blake2_128(input: ParsedInput) {

@@ -1,0 +1,23 @@
+default:
+  image: nixos/nix:2.3
+  before_script:
+   - nix-env -iA cachix -f https://cachix.org/api/v1/install
+   - cachix use w3fpkgs
+
+stages:
+   - build
+   - test
+
+
+go-tester:
+  stage: build
+  script: nix-build release.nix -A go-tester | cachix push w3fpkgs
+
+cpp-tester:
+  stage: build
+  script: nix-build release.nix -A cpp-tester | cachix push w3fpkgs
+
+
+tests:
+  stage: test
+  script: nix-shell release-shell.nix --pure --run ./runtests.jl
