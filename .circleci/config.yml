@@ -3,7 +3,7 @@ version: 2
 jobs:
   runTests:
     docker:
-      - image: rustlang/rust:nightly-slim
+      - image: rust:slim-buster
     resource_class: large
     steps:
       - run: apt update; apt install -y git
