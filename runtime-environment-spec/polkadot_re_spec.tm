@@ -2246,18 +2246,14 @@
   Some functionality, such as storage root calculation, require a mechanism
   to track changes that are made per block. Therefore, every call to the Host
   API that inserts and manipulates data in the state storage is first
-  accumulated in an isolated environment and only committed after the Runtime
-  calls <verbatim|ext_storage_root> as defined in section
-  <reference|sect-ext-storage-root>. Those functions use the entries in that
-  isolated environment to generate the resulting root, then it will be wiped
-  clean and all the changes will be committed to the primary state storage.
-
-  \;
-
-  Each child storage uses its own isolated environment, where the behavior of
-  <verbatim|ext_storage_child_root> as described in section
-  <reference|sect-ext-storage-child-root> behaves the same way as described
-  above.
+  accumulated in an isolated environment and only committed to the primary
+  state storage after the Polkadot Host calls the Runtime functions
+  <verbatim|Core_execute_block> (defined in section
+  <reference|sect-core-execute-block>) or
+  <verbatim|BlockBuilder_finalize_block> (defined in section
+  <reference|sect-blockbuilder-finalize-block>). After one of those functions
+  gets called, the isolated environment will be wiped clean, ready to be used
+  for the next block.
 
   <section|Extrinsics><label|sect-extrinsics>
 
@@ -5103,9 +5099,8 @@
 
   <subsection|<verbatim|ext_storage_root>><label|sect-ext-storage-root>
 
-  Commits all existing operations as described in section
-  <reference|sect-accumulating-committing> and computes the resulting storage
-  root as described in section <reference|sect-merkl-proof>.
+  Computes the resulting storage root as described in section
+  <reference|sect-merkl-proof>.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -5479,9 +5474,8 @@
 
   <subsection|<verbatim|ext_storage_child_root>><label|sect-ext-storage-child-root>
 
-  Commits all existing operations as described in section
-  <reference|sect-accumulating-committing> and computes the resulting child
-  storage root as described in section <reference|sect-merkl-proof>.
+  Computes the resulting child storage root as described in section
+  <reference|sect-merkl-proof>.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -8451,7 +8445,7 @@
     <verbatim|version> function.>
   </with>
 
-  <subsection|<verbatim|Core_execute_block>>
+  <subsection|<verbatim|Core_execute_block>><label|sect-core-execute-block>
 
   Executes a full block by executing all exctrinsics included in it and
   update the state accordingly. Additionally, some integrity checks are
@@ -8467,6 +8461,12 @@
   This function should be called when a fully complete block is available
   that is not actively being built on, such as blocks received from other
   peers.
+
+  \;
+
+  When this functions runs successfully, the Host must commit all changes
+  into the main storage as described in section
+  <reference|sect-accumulating-committing>.
 
   \;
 
@@ -8784,10 +8784,16 @@
     array.
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_finalize_block>>
+  <subsection|<verbatim|BlockBuilder_finalize_block>><label|sect-blockbuilder-finalize-block>
 
   Finalize the block - it is up to the caller to ensure that all header
   fields are valid except for the state root.
+
+  \;
+
+  When this functions runs successfully, the Host must commit all changes
+  into the main storage as described in section
+  <reference|sect-accumulating-committing>.
 
   <\the-glossary|gly>
     <glossary-2|<with|font-series|bold|math-font-series|bold|<with|mode|math|P<rsub|n>>>|a
@@ -9446,9 +9452,12 @@
     <associate|sect-block-production|<tuple|5.2|35>>
     <associate|sect-block-submission|<tuple|3.3.2|26>>
     <associate|sect-block-validation|<tuple|3.3.3|26>>
+    <associate|sect-blockbuilder-finalize-block|<tuple|G.2.10|?>>
+    <associate|sect-blockbuilder_finalize_block|<tuple|G.2.10|?>>
     <associate|sect-certifying-keys|<tuple|A.5.5|44>>
     <associate|sect-consensus-message-digest|<tuple|5.1.2|33>>
     <associate|sect-controller-settings|<tuple|A.5.4|44>>
+    <associate|sect-core-execute-block|<tuple|G.2.2|?>>
     <associate|sect-creating-controller-key|<tuple|A.5.2|44>>
     <associate|sect-cryptographic-keys|<tuple|A.5|43>>
     <associate|sect-defn-conv|<tuple|1.2|11>>
