@@ -2910,6 +2910,7 @@ dependencies = [
  "sp-core 2.0.0-alpha.5",
  "sp-externalities 0.8.0-alpha.5",
  "sp-io 2.0.0-alpha.5",
+ "sp-serializer 2.0.0-alpha.5",
  "sp-state-machine 0.8.0-alpha.5",
  "trie-db 0.20.0",
  "trie-root 0.16.0",

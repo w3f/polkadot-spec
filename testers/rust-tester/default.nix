@@ -5,15 +5,14 @@ rustWasmPlatform.buildRustPackage {
 
   src = ./.;
 
-  cargoSha256 = "1hl97rxxj6nkmz2v1ahd2bckgyk3yr5dqga732537ri00n84d47i";
+  cargoSha256 = "1v3z912cn1blyhjh2shcya3xdfvhd5piwi4bxm1b1wnwbw62a8fc";
 
-  buildInputs = [
-    protobuf
-  ];
+  buildInputs = [ protobuf ];
 
+  # Needed to build rust-libp2p
   PROTOC         = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
-  # This way we can use wasm-builder directly
-  extraRustcOpts = "-Z features=build_dep";
+  # Fix to allows direct use of wasm-builder for no_std binaries
+  cargoBuildFlags = [ "-Z features=build_dep" ];
 }

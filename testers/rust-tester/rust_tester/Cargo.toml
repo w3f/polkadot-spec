@@ -34,6 +34,7 @@ sp-externalities = "0.8.0-alpha.5"
 sc-executor = "0.8.0-alpha.5"
 sp-state-machine = "0.8.0-alpha.5"
 sc-offchain = "2.0.0-alpha.5"
+sp-serializer = "2.0.0-alpha.5"
 
 # Wasm Blob
 wasm-blob = { package = "wasm-blob", path = "./wasm-blob" }
