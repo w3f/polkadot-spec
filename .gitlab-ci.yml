@@ -25,6 +25,18 @@ cpp-tester:
   timeout: 1h
 
 
-tests:
+scale-codec:
   stage: test
-  script: nix-shell release-shell.nix --pure --run ./runtests.jl
+  script: nix-shell release-shell.nix --pure --run "./run_scale_codec_tests.jl verbose"
+
+state-trie:
+  stage: test
+  script: nix-shell release-shell.nix --pure --run "./run_state_trie_tests.jl verbose"
+
+pdre-api:
+  stage: test
+  script: nix-shell release-shell.nix --pure --run "./run_pdre_api_tests.jl vebose"
+
+pdre-api-legacy:
+  stage: test
+  script: nix-shell release-shell.nix --pure --run "./run_pdre_api_tests_legacy.jl verbose"
