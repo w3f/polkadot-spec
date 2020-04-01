@@ -1,4 +1,4 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <style|<tuple|tmbook|std-latex|algorithmacs-style|old-dots>>
 
@@ -8814,11 +8814,11 @@
   </bibliography>
 
   <\the-index|idx>
-    <index-1|Transaction Message|<pageref|auto-47>\U<pageref|auto-50>>
+    <index+1|Transaction Message|<pageref|auto-47>\U<pageref|auto-50>>
 
-    <index-1|transaction pool|<pageref|auto-48>>
+    <index+1|transaction pool|<pageref|auto-48>>
 
-    <index-1|transaction queue|<pageref|auto-49>>
+    <index+1|transaction queue|<pageref|auto-49>>
   </the-index>
 </body>
 
@@ -9323,10 +9323,10 @@
     <associate|sect-msg-consensus|<tuple|D.1.6|58>>
     <associate|sect-msg-status|<tuple|D.1.1|55>>
     <associate|sect-msg-transactions|<tuple|D.1.5|57>>
-    <associate|sect-network-interactions|<tuple|Tec19|29>>
+    <associate|sect-network-interactions|<tuple|4|29>>
     <associate|sect-network-messages|<tuple|D|55>>
     <associate|sect-randomness|<tuple|A.3|47>>
-    <associate|sect-re-api|<tuple|Tec19|83>>
+    <associate|sect-re-api|<tuple|F|83>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|101>>
     <associate|sect-rte-grandpa-auth|<tuple|G.2.6|102>>
     <associate|sect-rte-hash-and-length|<tuple|G.2.4|101>>
