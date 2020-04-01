@@ -6,12 +6,11 @@ edition = "2018"
 build = "build.rs"
 
 [dependencies]
-sp-core = { git = "https://github.com/paritytech/substrate", default-features = false }
-parity-scale-codec = { path = "../../../../../implementations/rust/parity-codec", default-features = false }
+sp-core = { git = "https://github.com/paritytech/substrate", rev = "605f5c1", default-features = false }
 
 [build-dependencies]
-substrate-wasm-builder-runner = { package = "substrate-wasm-builder-runner", git = "https://github.com/paritytech/substrate" }
+substrate-wasm-builder = "1.0.9"
 
 [features]
 default = [ "std" ]
-std = [ "sp-core/std", "parity-scale-codec/std" ]
+std = [ "sp-core/std" ]

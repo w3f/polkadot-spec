@@ -1,7 +1,7 @@
-name: "Polkadot RE CLI tester"
+name: "Polkadot Host CLI tester"
 version: "0.2"
 author: Web3 Technologies Foundation
-about: "CLI tester for the legacy (Kusama-only) Polkadot RE"
+about: "CLI tester for the legacy (Kusama-only) Polkadot Host"
 args:
     - verbose:
         short: v
@@ -10,7 +10,7 @@ args:
 
 subcommands:
     - pdre-api:
-        about: runtime environment API related tests 
+        about: host API related tests 
         args:
           - function:
               long: function  
