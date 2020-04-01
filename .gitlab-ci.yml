@@ -12,14 +12,17 @@ stages:
 rus-tester:
   stage: build
   script: nix-build release.nix -A rust-tester | cachix push w3fpkgs
+  timeout: 1h
 
 go-tester:
   stage: build
   script: nix-build release.nix -A go-tester | cachix push w3fpkgs
+  timeout: 1h
 
 cpp-tester:
   stage: build
   script: nix-build release.nix -A cpp-tester | cachix push w3fpkgs
+  timeout: 1h
 
 
 tests:
