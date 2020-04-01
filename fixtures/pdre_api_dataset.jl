@@ -1,6 +1,6 @@
 module PdreApiTestBinaries
 	const cli_testers = [
-    "rust_tester",
+    "rust-tester",
 	]
 end
 
