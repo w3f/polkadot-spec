@@ -4,6 +4,7 @@ default:
    - nix-env -iA cachix -f https://cachix.org/api/v1/install
    - cachix use w3fpkgs
 
+
 stages:
    - build
    - test
@@ -12,17 +13,17 @@ stages:
 rust-tester:
   stage: build
   script: nix-build release.nix -A rust-tester | cachix push w3fpkgs
-  timeout: 1h
+  timeout: 2h
 
 go-tester:
   stage: build
   script: nix-build release.nix -A go-tester | cachix push w3fpkgs
-  timeout: 1h
+  timeout: 15m
 
 cpp-tester:
   stage: build
   script: nix-build release.nix -A cpp-tester | cachix push w3fpkgs
-  timeout: 1h
+  timeout: 15m
 
 
 scale-codec:
