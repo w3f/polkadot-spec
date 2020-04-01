@@ -2,6 +2,11 @@
 #![allow(unused_imports)]
 use std::slice;
 
+use sp_core::wasm_export_functions;
+
+#[cfg(not(target_arch = "wasm32"))]
+include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
+
 extern "C" {
     fn ext_print_utf8(utf8_data: *const u8, utf8_len: u32);
     fn ext_print_hex(data: *const u8, len: u32);
@@ -214,7 +219,7 @@ extern "C" {
 }
 
 
-sp_core::wasm_export_functions! {
+wasm_export_functions! {
     fn rtm_ext_twox_64(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 8] = [0; 8];
         unsafe {

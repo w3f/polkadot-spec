@@ -5,6 +5,9 @@ use std::slice;
 use parity_scale_codec::{Decode, Encode};
 use sp_core::wasm_export_functions;
 
+#[cfg(not(target_arch = "wasm32"))]
+include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
+
 extern "C" {
     fn ext_storage_get_version_1(key: u64) -> u64;
     fn ext_storage_child_get_version_1(child_key: u64, def: u64, child_type: u32, key: u64) -> u64;

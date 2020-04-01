@@ -5,6 +5,8 @@ use sp_core::offchain::testing::TestOffchainExt;
 use sp_core::{offchain::OffchainExt, testing::KeyStore, traits::KeystoreExt, Blake2Hasher};
 use sp_state_machine::TestExternalities as CoreTestExternalities;
 
+use wasm_blob_legacy::WASM_BINARY;
+
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 
 pub struct ParsedInput<'a>(Vec<&'a str>);
@@ -33,7 +35,7 @@ pub struct Runtime {
 impl Runtime {
     pub fn new() -> Self {
         Runtime {
-            blob: get_wasm_blob(),
+            blob: WASM_BINARY.to_vec(),
             ext: TestExternalities::default(),
         }
     }
@@ -42,7 +44,7 @@ impl Runtime {
         let key_store = KeystoreExt(KeyStore::new());
         ext.register_extension(key_store);
         Runtime {
-            blob: get_wasm_blob(),
+            blob: WASM_BINARY.to_vec(),
             ext: ext,
         }
     }
@@ -52,7 +54,7 @@ impl Runtime {
         ext.register_extension(OffchainExt::new(offchain));
 
         Runtime {
-            blob: get_wasm_blob(),
+            blob: WASM_BINARY.to_vec(),
             ext: ext,
         }
     }
@@ -74,23 +76,6 @@ impl Runtime {
         )
         .unwrap()
     }
-}
-
-// Convenience function, get the wasm blob
-fn get_wasm_blob() -> Vec<u8> {
-    use std::fs::File;
-    use std::io::prelude::*;
-
-    let mut f =
-    // for `build_tests.sh` in root directory
-    File::open("test/testers/rust-tester/target/debug/wbuild/wasm-blob-legacy/wasm_blob_legacy.compact.wasm")
-    // for `cargo` inside rust-tester directory
-    //File::open("test/testers/rust-tester/target/debug/wbuild/wasm-blob-legacy/wasm_blob_legacy.compact.wasm")
-        .expect("Failed to open wasm blob in target");
-    let mut buffer = Vec::new();
-    f.read_to_end(&mut buffer)
-        .expect("Failed to load wasm blob into memory");
-    buffer
 }
 
 pub trait Decoder {
