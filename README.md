@@ -17,7 +17,7 @@ The `test/` directory contains tests for the following components from different
 
 - SCALE Codec
 - State Trie
-- Polkadot Runtime Environment API (PDRE API)
+- Polkadot Host API
 
 The goal is to make sure that the different implementations behave the same and produce the identical output.
 
@@ -89,9 +89,9 @@ Each of those tests defines how the final executable tests are called and pass d
 
 *...*
 
-### PDRE API
+### Polkadot Host API
 
-Those testers call functions that call the PDRE API. Currently, NOT all PDRE APIs are fully implemented. Some "expected results" will be adjusted.
+Those testers call functions that call the Polkadot Host API.
 
 ```
 +--------------------+
@@ -120,7 +120,7 @@ Those testers call functions that call the PDRE API. Currently, NOT all PDRE API
 
 ```
 
-Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the PDRE API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
+Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the Polkadot Host API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
 
 Relevant files:
 

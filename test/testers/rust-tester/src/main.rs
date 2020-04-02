@@ -22,7 +22,7 @@ extern crate clap;
 extern crate data_encoding;
 extern crate base64;
 
-// For PDRE API
+// For Polkadot Host API
 extern crate hex;
 extern crate substrate_executor;
 extern crate substrate_primitives;

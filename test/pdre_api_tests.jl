@@ -3,7 +3,7 @@ include("./fixtures/pdre_api_results.jl")
 
 using Test
 
-@testset "PDRE API Tests" begin
+@testset "Polkadot Host API Tests" begin
     script_dir = @__DIR__
     root_dir = script_dir * "/.."
     cd(root_dir)
