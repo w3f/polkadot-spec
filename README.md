@@ -22,7 +22,7 @@ The `test/` directory contains tests for different components from different imp
 - State Trie
 - Polkadot Host API
 
-This ensures that the different implementations behave the same and produce the identical output. See `test/README.md` for more.
+This ensures that the different implementations behave the same and produce the identical output. See [test/README.md](./test/README.md) for more.
 
 ## Genesis files
 
