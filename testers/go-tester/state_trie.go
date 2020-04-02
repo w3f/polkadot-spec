@@ -23,9 +23,8 @@ import (
 	"encoding/hex"
 	"flag"
 	"fmt"
-	"github.com/ChainSafe/gossamer/common"
-	"github.com/ChainSafe/gossamer/polkadb"
-	"github.com/ChainSafe/gossamer/trie"
+	"github.com/ChainSafe/gossamer/lib/common"
+	"github.com/ChainSafe/gossamer/lib/trie"
 	"github.com/go-yaml/yaml"
 	"io/ioutil"
 	"log"
@@ -85,15 +84,13 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			log.Fatal(err)
 		}
 
-		db := trie.Database{
-			Db: polkadb.NewMemDatabase(),
-		}
-		test_trie := trie.NewEmptyTrie(&db)
+		test_trie := trie.NewEmptyTrie()
 
 		var trieHash common.Hash
 
 		for i, key := range key_value_data.Keys {
 			var keyBytes []byte
+			
 			if *keysInHexPtr {
 				keyBytes, err = hex.DecodeString(key)
 				if err != nil {
@@ -102,30 +99,35 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			} else {
 				keyBytes = []byte(key)
 			}
+			
 			key_list = append(key_list, keyBytes)
 			err = test_trie.Put(keyBytes, []byte(key_value_data.Values[i]))
 			if err != nil {
-				return
+				log.Fatal(err)
 			}
+
 			if command_args[0] == "insert-and-delete" {
 				trieHash, err = test_trie.Hash()
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Printf("state root: %x\n", trieHash)
+				fmt.Printf("state root: %x\n", trieHash[:])
 			}
 		}
 
 		if command_args[0] == "insert-and-delete" {
 			for len(key_list) > 0 {
 				key_index_to_drop := int(trieHash[0]) % len(key_list)
-				test_trie.Delete(key_list[key_index_to_drop])
-
+				err = test_trie.Delete(key_list[key_index_to_drop])
+				if err != nil {
+					log.Fatal(err)
+				}
+			
 				trieHash, err = test_trie.Hash()
 				if err != nil {
 					log.Fatal(err)
 				}
-				fmt.Printf("state root: %x\n", trieHash)
+				fmt.Printf("state root: %x\n", trieHash[:])
 
 				key_list = append(key_list[:key_index_to_drop], key_list[key_index_to_drop+1:]...)
 			}
@@ -135,7 +137,7 @@ func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []s
 			if err != nil {
 				log.Fatal(err)
 			}
-			fmt.Printf("state root: %x\n", trieHash)
+			fmt.Printf("state root: %x\n", trieHash[:])
 		}
 	}
 

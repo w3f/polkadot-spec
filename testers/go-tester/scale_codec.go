@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"github.com/ChainSafe/gossamer/codec"
+	"github.com/ChainSafe/gossamer/lib/scale"
 	"os"
 )
 
@@ -65,7 +65,7 @@ func ProcessScaleCodecCommand(scale_codec_command *flag.FlagSet, scale_codec_arg
 
 		//Encode by scale codec and then base64
 		buffer := bytes.Buffer{}
-		se := codec.Encoder{&buffer}
+		se := scale.Encoder{&buffer}
 		_, err := se.Encode(*inputTextPtr)
 		if err != nil {
 			os.Exit(1)
