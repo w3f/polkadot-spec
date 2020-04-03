@@ -1,7 +1,7 @@
-name: "Polkadot RE CLI tester"
+name: "Polkadot Host CLI tester"
 version: "0.2"
 author: Web3 Technologies Foundation
-about: "CLI tester for various Polkadot RE Tests"
+about: "CLI tester for various Polkadot Host Tests"
 args:
     - verbose:
         short: v
