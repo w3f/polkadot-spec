@@ -1,13 +1,12 @@
 \documentclass{book}
 \usepackage[english]{babel}
-\usepackage{geometry,amsmath,amssymb,hyperref,calc,ifthen,alltt,theorem,capt-of,makeidx}
+\usepackage{geometry,amsmath,amssymb,calc,ifthen,expdlist,alltt,theorem,capt-of,makeidx}
 \makeindex
 \geometry{letterpaper}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
 \newcommand{\cdummy}{\cdot}
-\newcommand{\glossaryentry}[3]{\item[{#1}\hfill]#2\dotfill#3}
 \newcommand{\nin}{\not\in}
 \newcommand{\nobracket}{}
 \newcommand{\nosymbol}{}
@@ -25,11 +24,15 @@
 \newcommand{\tmtextsc}[1]{{\scshape{#1}}}
 \newcommand{\tmtextsf}[1]{{\sffamily{#1}}}
 \newcommand{\tmtexttt}[1]{{\ttfamily{#1}}}
+\newcommand{\tmtextup}[1]{{\upshape{#1}}}
 \newcommand{\tmverbatim}[1]{{\ttfamily{#1}}}
 \newenvironment{itemizedot}{\begin{itemize} \renewcommand{\labelitemi}{$\bullet$}\renewcommand{\labelitemii}{$\bullet$}\renewcommand{\labelitemiii}{$\bullet$}\renewcommand{\labelitemiv}{$\bullet$}}{\end{itemize}}
 \newenvironment{itemizeminus}{\begin{itemize} \renewcommand{\labelitemi}{$-$}\renewcommand{\labelitemii}{$-$}\renewcommand{\labelitemiii}{$-$}\renewcommand{\labelitemiv}{$-$}}{\end{itemize}}
 \newenvironment{theglossary}[1]{\begin{list}{}{\setlength{\labelwidth}{6.5em}\setlength{\leftmargin}{7em}\small} }{\end{list}}
 \newenvironment{tmcode}[1][]{\begin{alltt} }{\end{alltt}}
+\newenvironment{tmindent}{\begin{tmparmod}{1.5em}{0pt}{0pt}}{\end{tmparmod}}
+\newenvironment{tmparmod}[3]{\begin{list}{}{\setlength{\topsep}{0pt}\setlength{\leftmargin}{#1}\setlength{\rightmargin}{#2}\setlength{\parindent}{#3}\setlength{\listparindent}{\parindent}\setlength{\itemindent}{\parindent}\setlength{\parsep}{\parskip}} \item[]}{\end{list}}
+\newenvironment{tmparsep}[1]{\begingroup\setlength{\parskip}{#1}}{\endgroup}
 \newcounter{tmcounter}
 \newcommand{\custombinding}[1]{%
   \setcounter{tmcounter}{#1}%
@@ -80,7 +83,7 @@
   {\Large Protocol Specification}
 }
 
-\date{January 31, 2020}
+\date{April 2, 2020}
 
 \maketitle
 
@@ -278,7 +281,8 @@ branches of the block tree.
   define \label{autolab17}$| C |$, the length of $C$as a path graph. If $B'$
   is another node on {\tmname{Chain($B$)}}, then by
   \label{autolab18}{\tmname{SubChain($B', B$)}} we refer to the subgraph of
-  {\tmname{Chain($B$)}} path graph which contains both $B$ and $B'$.
+  {\tmname{Chain($B$)}} path graph which contains both $B$ and $B'$ and by
+  {\tmname{\textbar SubChain($B', B$)\textbar}} we refer to its length.
   Accordingly, \label{autolab19}$\mathbb{C}_{B'} ((P) \tmop{BT})$ is the set
   of all subchains of $(P) \tmop{BT}$ rooted at $B'$. The set of all chains of
   $(P) \tmop{BT}$, $\mathbb{C}_G ((P) \tmop{BT})$ is denoted by
@@ -327,6 +331,13 @@ assumption either on the size of the key nor on the size of the data stored
 under them, besides the fact that they are byte arrays with specific upper
 limits on their length. The limit is imposed by the encoding algorithms to
 store the key and the value in the storage trie.
+
+\
+
+The state storage requires a mechanism to identify any changes made by each
+block, in case non-finalized blocks have to be reverted or a Changes Trie as
+described in section \ref{defn-changes-trie} needs to be created. This
+specification does not dictate how that mechanism must be implemented.
 
 \subsection{Accessing System Storage }
 
@@ -487,34 +498,16 @@ Assuming that $P_N$ is the path (see Definition \ref{defn-path-graph}) from
 the Trie root to node $N$, Algorithm \ref{algo-aggregate-key} rigorously
 demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
 
-\custombinding{1}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  1. }
-  \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : = (\tmop{TrieRoot}
-  = N_1, \ldots, N_j = N))$\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \phi$}}
-
-{\state{$i \leftarrow 1$}}
-
-{\state{{\WHILE{$(N_i \neq N)$}}}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{pk}_{N_i} $}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{Index}_{N_i} (N_{i + 1})$}}
-
-{\state{$i \leftarrow i + 1${\END}}}
-
-{\state{$\tmop{pk}^{\tmop{Agr}}_N \leftarrow \tmop{pk}^{\tmop{Agr}}_N | |
-\tmop{pk}_{N_i}$}}
-
-{\state{{\RETURN{$\tmop{pk}^{\tmop{Agr}}_N$}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{1}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{1}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-aggregate-key}{\tmname{Aggregate-Key}}$(P_N : =
+      (\tmop{TrieRoot} = N_1, \ldots, N_j = N))$
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \begin{definition}
   \label{defn-node-value}A node $N \in \mathcal{N}$ stores the {\tmstrong{node
@@ -589,48 +582,16 @@ demonstrates how to build $\tmop{pk}^{\tmop{Agr}}_N$ while traversing $P_N$.
   \ref{algo-pk-length}.
 \end{definition}
 
-\custombinding{2}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  2. }
-  \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
-  1}^{6 - 7}_{}, \tmop{pk}_N)$}}\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} \geqslant
-2^{16}$}}}}
-
-{\state{{\RETURN{Error{\END}}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow 64 \times \tmop{Head}_{N, 1}^{6 -
-7}_{}$}}
-
-{\state{{\IF{$\| \tmop{pk}_N \|_{\tmop{nib}} < 63$}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + \| \tmop{pk}_N
-\|_{\tmop{nib}}$}}
-
-{\state{{\RETURN{$\tmop{Head}_N \END$}}}}
-
-{\state{$\tmop{Head}_{N, 1} \leftarrow \tmop{Head}_{N, 1} + 63$}}
-
-{\state{$l \leftarrow \| \tmop{pk}_N \|_{\tmop{nib}} - 63$}}
-
-{\state{$i \leftarrow 2$}}
-
-{\state{{\WHILE{$(l > 255)$}}}}
-
-{\state{$\tmop{Head}_{N, i} \leftarrow 255$}}
-
-{\state{$l \leftarrow l - 255$}}
-
-{\state{$i \leftarrow i + 1 \END$}}
-
-{\state{$\tmop{Head}_{N, i} \leftarrow l$}}
-
-{\state{{\RETURN{$\tmop{Head}_N$}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{2}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{2}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-pk-length}{\tmname{Partial-Key-Length-Encoding$(\tmop{Head}_{N,
+      1}^{6 - 7}_{}, \tmop{pk}_N)$}}
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \subsection{Merkle Proof}\label{sect-merkl-proof}
 
@@ -714,16 +675,158 @@ occupies less space than its hash.
   hash}} of the Trie is defined to be $H (R)$.
 \end{definition}
 
-\chapter{State Transition}\label{chap-state-transit}
+\subsection{Changes Trie}\label{defn-changes-trie}
+
+Polkadot focuses on light client friendliness and therefore implements
+functionality which allows identifying changes in the blockchain without
+requiring to search through the entire chain. The {\tmstrong{Changes Trie}} is
+a datastructure maintained by the Polkadot node which tracks storage changes
+created by each block. The primary method of generating the Changes Trie is by
+calling the \tmverbatim{ext\_storage\_changes\_root} Host API as described in
+section \ref{sect-ext-storage-changes-root}. The Polkadot Host requires a
+mechanism to identify the changes created by a block, as mentioned in section
+\ref{sect-state-storage}.
+
+\
+
+The Changes Trie tracks changes in three different types of mappings (or
+search indices) which are differentiated by their key as defined in table
+\ref{table-changes-trie-key-types}. inside the trie. While the overall
+structure of each keys is almost identical, each mapping has it own prefix and
+could therefore be considered a \tmtextit{varying datatype} (as defined in
+\ref{defn-varrying-data-type}). In contrast to a \tmtextit{varying datatype}
+however, the type identifiers do not describes the type of the value following
+the it, but of the value contained in the trie itself. The format and use of
+these values are specified in more detail in their corresponding definitions
+\ref{defn-storage-key-to-extrinsics}, \ref{defn-storage-key-to-blocks} and
+\ref{defn-storage-key-to-child-tries} respectivly.{\hspace*{\fill}}
+
+\begin{table}[h]
+  \begin{tabular}{lll}
+    \hline
+    {\tmstrong{Id}} & {\tmstrong{Description}} & {\tmstrong{Followed by}}\\
+    \hline
+    1 & Mapping between storage key and extrinsics
+    (\ref{defn-storage-key-to-extrinsics}) & {\tmem{KeyIndex}}
+    (\ref{defn-key-index})\\
+    \hline
+    2 & Mapping between storage key and blocks
+    (\ref{defn-storage-key-to-blocks}) & {\tmem{KeyIndex}}
+    (\ref{defn-key-index})\\
+    \hline
+    3 & Mapping between storage key and child changes Trie
+    (\ref{defn-storage-key-to-child-tries}) & {\tmem{KeyIndex}}
+    (\ref{defn-key-index})\\
+    \hline
+  \end{tabular}
+  
+  \
+  \caption{\label{table-changes-trie-key-types}Possible types of keys of
+  mappings in the Changes Trie}
+\end{table}
+
+{\tmstrong{Note}}: Unlike the default encoding for varying data types, this
+structure starts its indexing at \tmverbatim{1}.
+
+\begin{definition}
+  \label{defn-key-index}The {\tmstrong{Key Index}} is a tuple containing the
+  following information:
+  
+  \begin{table}[h]
+    \begin{tabular}{lll}
+      \hline
+      {\tmstrong{Name}} & {\tmstrong{Description}} & {\tmstrong{Type}}\\
+      \hline
+      Block & Block number at which this key has been inserted in the trie &
+      Unsigned 32-bit integer\\
+      \hline
+      Key & The changed key & Byte array\\
+      \hline
+    \end{tabular}
+    \caption{Key structure inserted in the Changes Trie}
+  \end{table}
+\end{definition}
+
+\begin{definition}
+  \label{defn-storage-key-to-extrinsics}The {\tmstrong{storage key to
+  extrinsics mappings}} track any changes which occure in an individual block.
+  Its value is a SCALE encoded array containing the indices of the extrinsics
+  that caused any changes to its key. The indices are unsigned 32-bit integers
+  and their values is based on the order in which each extrinsic is appears in
+  the block. Additionally, a separate Changes Trie is created for each child
+  storage where changes occured.
+  
+  Keys that were modified outside of extrinsics, such as changes made by the
+  Runtime directly, have a \tmverbatim{0xffffffff} value as its indice.
+  
+  The Changes Trie is generated when the Runtime calls
+  \tmverbatim{ext\_storage\_changes\_root} as described in section
+  \ref{sect-ext-storage-changes-root}.
+\end{definition}
+
+\begin{definition}
+  \label{defn-storage-key-to-blocks}The {\tmstrong{storage key to blocks
+  mappings}} track any changes which occured in a certain range of blocks. Its
+  value is a SCALE encoded array containing block numbers where extrinsics
+  caused any changes to its key. The block numbers are represented as unsigned
+  32-bit integers.
+  
+  The Changes Trie is generated when the Runtime calls
+  \tmverbatim{ext\_storage\_changes\_root} as described in section
+  \ref{sect-ext-storage-changes-root}, but unlike the other mappings, they are
+  not generated on each block. The Runtime sets the key
+  \tmverbatim{:changes\_trie} in storage with its value being a tuple of two
+  32-bit integers:
+  \begin{itemizedot}
+    \item \tmverbatim{digest\_interval} - The interval (in blocks) at which
+    block mappings are created. Block mappings are not created when this is
+    less or equal to \tmverbatim{1}.
+    
+    \item \tmverbatim{digest\_levels} - Maximal number of ``levels'' in the
+    hierarchy. \tmverbatim{0} means that block mappings are not created at
+    all. \tmverbatim{1} means only the regular \tmverbatim{digest\_interval}
+    block mappings are created. Any other level means that the block mappings
+    are created every \tmverbatim{$\tmop{digest} \_
+    \tmop{interval}^{\tmop{level}}$} block for each level in \tmverbatim{1} to
+    \tmverbatim{digest\_levels}.
+  \end{itemizedot}
+  The Polkadot node must track the interval and levels, verify if conditions
+  apply and then generate those mappings when the Runtime calls
+  \tmverbatim{ext\_storage\_changes\_root}. The range spans from the last
+  block (where this kind of mappings were created) + 1 to the current block.
+  
+  Whenever the interval and level stored in \tmverbatim{:changes\_trie}
+  changes the current interval is reset and an new digest according to the
+  changed parameters is started.
+\end{definition}
+
+\begin{definition}
+  \label{defn-storage-key-to-child-tries}The {\tmstrong{storage key to child
+  changes tries mappings}} track any storage keys from child storages and
+  their corresponding Child Changes Trie. As described in Definition
+  \ref{defn-storage-key-to-extrinsics}, changes inside child storages are
+  inserted into their own Trie. The changed key is inserted into the main
+  Trie, where its value is the Merkle proof as desribed in section
+  \ref{sect-merkl-proof} of the corresponding Child Storage Trie, which stores
+  the mappings between the storage key and extrinsics.
+\end{definition}
+
+The Changes Trie itself is not part of the block, but a separately maintained
+database by the Polkadot node. The Merkle proof of the Changes Trie must be
+inlcuded in the block digest as described in Definition \ref{defn-digest} and
+gets calculated as described in section \ref{sect-merkl-proof}. The root
+calculation uses entries of a per-block basis (including block mappings when
+conditions apply on that block), not the whole changes spanning multiple
+blocks.\chapter{State Transition}\label{chap-state-transit}
 
 Like any transaction-based transition system, Polkadot state changes via
 executing an ordered set of instructions. These instructions are known as
 {\tmem{extrinsics}}. In Polkadot, the execution logic of the state-transition
 function is encapsulated in Runtime as defined in Definition
 \ref{defn-state-machine}. Runtime is presented as a Wasm blob in order to be
-easily upgradable. Nonetheless, the Polkadot Runtime Environment needs to be
-in constant interaction with Runtime. The detail of such interaction is
-further described in Section \ref{sect-entries-into-runtime}.
+easily upgradable. Nonetheless, the Polk{\nobreak}adot Runtime Environment
+needs to be in constant interaction with Runtime. The detail of such
+interaction is further described in Section \ref{sect-entries-into-runtime}.
 
 In Section \ref{sect-extrinsics}, we specify the procedure of the process
 where the extrinsics are submitted, pre-processed and validated by Runtime and
@@ -743,27 +846,20 @@ the Runtime easily upgradable without the need to upgrade the Polkadot RE
 itself. The general procedure to interact with Runtime is described in
 Algorithm \ref{algo-runtime-interaction}.
 
-\custombinding{3}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  3. }
-  \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$: the
-  runtime entry,
-  
-  $H_b (B)$: Block hash indicating the state at the end of $B$,
-  
-  $A_1, A_2, \ldots, A_n$: arguments to be passed to the runtime entry)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\tmname{$\mathcal{S}_B \leftarrow$Set-State-At($H_b
-(B)$)}}}}
-
-{\state{$A \leftarrow \tmop{Enc}_{\tmop{SC}} ((A_1, \ldots, A_n))$}}
-
-{\state{$\text{{\tmname{Call-Runtime-Entry}}} (R_B, \mathcal{R}\mathcal{E}_B,
-F, A, A_{\tmop{len}})$}}}}
-
-\hrulefill{\medskip}
+\custombinding{3}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{3}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-runtime-interaction}{\tmname{Interact-With-Runtime}}($F$:
+      the runtime entry,
+      
+      $H_b (B)$: Block hash indicating the state at the end of $B$,
+      
+      $A_1, A_2, \ldots, A_n$: arguments to be passed to the runtime entry)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 In this section, we describe the details upon which the Polkadot RE is
 interacting with the Runtime. In particular, {\tmname{Set-State-At}} and
@@ -939,48 +1035,16 @@ queue}}{\index{transaction queue}} defined as follows:
 Algorithm \ref{algo-validate-transactions} updates the transaction pool and
 the transaction queue according to the received message:
 
-\custombinding{4}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  4. }
-  \label{algo-validate-transactions}{\tmname{Validate-Transactions-and-Store}}($M_T
-  :$Transaction Message)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$L \leftarrow \tmop{Dec}_{\tmop{SC}} (M_T)$}}
-
-{\state{{\FORIN{$T$}{$L$}}{\tmstrong{such that}} $E \nin \tmop{TQ}$
-{\tmstrong{and}} $E \nin \tmop{TP}$:}}
-
-{\state{$B_d \leftarrow${\tmname{Head(Longest-Chain(($\tmop{BT}$))}}}}
-
-{\state{$N \leftarrow H_n (B_d)$}}
-
-{\state{$R \leftarrow${\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{TaggedTransactionQueue\_validate\_transaction}}, N, T
-\right)$}}
-
-{\state{{\IF{$R$ indicates $E$ is $\tmop{Valid} :$}}}}
-
-{\state{{\IF{$\tmop{Requires}$(R){\subset}}}
-
-\quad$\bigcup_{\forall T \in (\tmop{TQ})}${\tmname{Provided-Tags}}(T) {\cup}
-$\bigcup_{i < d, \forall T, T \in B_i}${\tmname{Provided-Tags(T)}}:}}
-
-{\state{{\tmname{Insert-At(}}$\tmop{TQ}, T, \tmop{Requires} (R),
-\tmop{Priority} (R)$){\END}}}
-
-{\state{{\ELSE{\ }}}}
-
-{\state{{\tmname{Add-To(TP,$T$)}}{\END}}}
-
-{\state{{\tmname{Maintain-Transaction-Pool}}}}
-
-{\state{{\IF{Propagate(R)={\tmstrong{True}}:}}}}
-
-{\state{{\tmname{Propagate(}}$T$){\END}{\END}{\END}}}}}
-
-\hrulefill{\medskip}
+\custombinding{4}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{4}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-validate-transactions}{\tmname{Validate-Transactions-and-Store}}($M_T
+      :$Transaction Message)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 In which
 \begin{itemizeminus}
@@ -1008,17 +1072,15 @@ In which
   message{\index{Transaction Message}}}} sent to all peers of Polkadot RE
   node.
 \end{itemizeminus}
-\custombinding{5}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  5. }
-  \label{algo-maintain-transaction-pool}{\tmname{Maintain-Transaction-Pool}}\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\todo{This is scaning the pool for ready transactions and
-moving them to the TQ and dropping transactions which are not valid}}}}
-
-\hrulefill{\medskip}
+\custombinding{5}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{5}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-maintain-transaction-pool}{\tmname{Maintain-Transaction-Pool}}
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \subsubsection{Inherents}
 
@@ -1143,8 +1205,9 @@ efficiency of the light clients. It is defined formally as follows:
   Where $E_{\tmop{id}}$ is the unique consensus engine identifier defined in
   Section \ref{sect-msg-consensus}. and
   \begin{itemizedot}
-    \item {\tmstrong{Changes trie root}} contains the root of changes trie at
-    block $B$.
+    \item [FUTURE-RESERVED, currently not used] {\tmstrong{Changes trie root}}
+    contains the root of changes trie at block $B$ as defined in Definition
+    \ref{defn-changes-trie}.
     
     \item {\tmstrong{Pre-runtime}} digest item represents messages produced by
     a consensus engine to the Runtime.
@@ -1225,34 +1288,16 @@ entry into the Runtime as a part of the validation process.
 Polkadot RE implements the following procedure to assure the validity of the
 block:
 
-\custombinding{6}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  6. } {\tmname{Import-and-Validate-Block($B, \tmop{Just}
-  (B)$)}}\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{{\tmname{Set-Storage-State-At($P (B)$)}}}}
-
-{\state{{\IF{$\tmop{Just} (B) \neq \emptyset$}}}}
-
-{\state{{\tmname{Verify-Block-Justification}}$(B, \tmop{Just} (B))$}}
-
-{\state{{\IF{$B$ {\tmstrong{is}} Finalized {\tmstrong{and}} $P (B)$
-{\tmstrong{is not}} Finalized}}}}
-
-{\state{{\tmname{Mark-as-Final}}$(P (B))${\END}{\END}}}
-
-{\state{{\IF{$H_p (B) \nin \tmop{PBT}$}}}}
-
-{\state{{\RETURN{{\END}}}}}
-
-{\state{{\tmname{Verify-Authorship-Right}}($\tmop{Head} (B)$)}}
-
-{\state{$S \leftarrow$ {\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{Core\_execute\_block}}, B \right)$}}}}
-
-\hrulefill{\medskip}
+\custombinding{6}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{6}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-import-and-validate-block}{\tmname{Import-and-Validate-Block($B,
+      \tmop{Just} (B)$)}}
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 For the definition of the finality and the finalized block see Section
 \ref{sect-finality}. $\tmop{PBT}$ is the pruned block tree defined in
@@ -1529,39 +1574,79 @@ which course of exectution the transition in the authority set has occured.
   {\center{\tmfloat{h}{small}{table}{\begin{tabular}{l|l|l}
     {\tmstrong{Type Id}} & {\tmstrong{Type}} & {\tmstrong{Sub-components}}\\
     \hline
-    1 & Scheduled Change & $(\tmop{Auth}_C, N_B)$\\
-    2 & [RESERVED] & [RESERVED]\\
+    1 & Scheduled Change & $(\tmop{Auth}_C, N_{\tmop{delay}})$\\
+    2 & ForcedChange & $(\tmop{Auth}_C, N_{\tmop{delay}})$\\
     3 & On Disabled & $\tmop{Auth}_{\tmop{ID}}$\\
-    4 & Pause & $N_B$\\
-    5 & Resume & N$_B$
+    4 & Pause & $N_{\tmop{delay}}$\\
+    5 & Resume & N$_{\tmop{delay}}$
   \end{tabular}}{\label{tabl-consensus-messages}The consensus digest item for
   GRANDPA authorities}}}
-  Where Auth$_C$ is defined in Definition \ref{defn-authority-list}, $N_B$ is
-  the number of blocks to delay the change. $\tmop{Auth}_{\tmop{ID}}$ is a 64
-  bit integer pointing to the authority list of the current block. Type Id 2
-  is reserved for future development {\todo{Spec Force Change}}.
+  Where:
+  \begin{itemizeminus}
+    \item Auth$_C$ is the authority list defined in Definition
+    \ref{defn-authority-list}.
+    
+    \item $N_{\tmop{delay}} \assign | \nobracket${\tmname{SubChain}}$(B, B') |
+    \nobracket$ is an unsigned 32 bit integer indicating the length of the
+    subchain starting at $B$, the block containing the consensus message in
+    its header digest and ending when it reaches $N_{\tmop{delay}}$ length as
+    a path graph. The last block in that subchain, $B'$, depending on the
+    message type, is either finalized or imported (and therefore validated by
+    the block production consensus engine according to Algorithm
+    \ref{algo-import-and-validate-block}. see below for details).
+    
+    \item $\tmop{Auth}_{\tmop{ID}}$ is an unsigned 64 bit integer pointing to
+    an individual authority in the current authority list.
+  \end{itemizeminus}
 \end{definition}
 
 Polkadot RE should inspect the digest header of each block and delegates
 consesus messages to their consensus engines. Consensus engine should react
 based on the type of consensus messages they receives as follows:
 \begin{itemizeminus}
-  \item {\tmstrong{Scheduled Change}}: Schedule an authority set change. The
+  \item {\tmstrong{Scheduled Change}}: Schedule an authority set change after
+  the given delay of $N_{\tmop{delay}} \assign |
+  \nobracket${\tmname{SubChain}}$(B, B') | \nobracket$ where $B'$ in the
+  definition of $N_{\tmop{delay}}$, is a block {\tmem{finalized}} by the
+  finality consensus engine. The earliest digest of this type in a single
+  block will be respected. No change should be scheduled if one is already and
+  the delay has not passed completely. If such an inconsitency occures, the
+  scheduled change should be ignored.
+  
+  \item {\tmstrong{Forced Change}}: Force an authority set change after the
+  given delay of $N_{\tmop{delay}} \assign |
+  \nobracket${\tmname{SubChain}}$(B, B') | \nobracket$ where $B'$ in the
+  definition of $N_{\tmop{delay}}$, is an {\tmem{imported}} block which has
+  been validated by the block production conensus engine. Hence, the authority
+  change set is valid for every subchain which contains {\tmem{B}} and where
+  the delay has been exceeded. If one or more blocks gets finalized before the
+  change takes effect, the authority set change should be disregarded. The
   earliest digest of this type in a single block will be respected. No change
   should be scheduled if one is already and the delay has not passed
   completely. If such an inconsitency occures, the scheduled change should be
   ignored.
   
-  \item {\tmstrong{On Disabled}}: The authority set index with given index is
-  disabled until the next change.
+  \item {\tmstrong{On Disabled}}: An index to the individual authority in the
+  current authority list that should be immediately disabled until the next
+  authority set change. When an authority gets disabled, the node should stop
+  performing any authority functionality from that authority, including
+  authoring blocks and casting GRANDPA votes for finalization. Similarly,
+  other nodes should ignore all messages from the indicated authority which
+  pretain to their authority role.
   
   \item {\tmstrong{Pause}}: A signal to pause the current authority set after
-  the given delay. After finalizing the block at delay the authorities should
-  stop voting.
+  the given delay of $N_{\tmop{delay}} \assign |
+  \nobracket${\tmname{SubChain}}$(B, B') | \nobracket$ where $B'$ in the
+  definition of $N_{\tmop{delay}}$, is a block {\tmem{finalized}} by the
+  finality consensus engine. After finalizing block $B'$, the authorities
+  should stop voting.
   
   \item {\tmstrong{Resume}}: A signal to resume the current authority set
-  after the given delay. After authoring the block at delay the authorities
-  should resume voting.
+  after the given delay of $N_{\tmop{delay}} \assign |
+  \nobracket${\tmname{SubChain}}$(B, B') | \nobracket$ where $B'$ in the
+  definition of $N_{\tmop{delay}}$, is an {\tmem{imported}} block and
+  validated by the block production consensus engine. After authoring the
+  block $B'$, the authorities should resume voting.
 \end{itemizeminus}
 The active GRANDPA authorities can only vote for blocks that occured after the
 finalized block in which they were selected. Any votes for blocks before the
@@ -1617,8 +1702,8 @@ not include the most recent finalized blocks according to Definition
   \label{note-slot}We refer to the number of slots in epoch $\mathcal{E}_n$ by
   $\tmop{sc}_n$. $\tmop{sc}_n$ is set to the \tmverbatim{duration} field in
   the returned data from the call of the Runtime entry
-  \tmverbatim{BabeApi\_epoch} (see \ref{sect-rte-babeapi-epoch}) at the
-  beginning of each epoch. For a given block $B$, we use the notation
+  \tmverbatim{BabeApi\_configuration} (see \ref{sect-rte-babeapi-epoch}) at
+  the beginning of each epoch. For a given block $B$, we use the notation
   {\tmstrong{$s_B$}} to refer to the slot during which $B$ has been produced.
   Conversely, for slot $s$, $\mathcal{B}_s$ is the set of Blocks generated at
   slot $s$.
@@ -1660,27 +1745,18 @@ build a block. The $\tmop{sk}$ is the block producer lottery secret key and
 $n$ is the index of epoch for whose slots the block producer is running the
 lottery.
 
-\custombinding{7}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  7. }
-  \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}($\tmop{sk}
-  :$session secret key of the producer,
-  
-  $n :$epoch index)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$r \leftarrow${\tmname{Epoch-Randomness$(n)$}}}}
-
-{\state{{\FORTO{$i \assign 1$}{$\tmop{sc}_n$}}}}
-
-{\state{$(\pi, d) \leftarrow${\tmem{{\tmname{VRF}}}}($r, i, \tmop{sk}$)}}
-
-{\state{$A [i] \leftarrow (d, \pi)${\END}}}
-
-{\state{{\RETURN{A}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{7}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{7}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-block-production-lottery}{\tmname{Block-production-lottery}}($\tmop{sk}
+      :$session secret key of the producer,
+      
+      $n :$epoch index)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 For any slot $i$ in epoch $n$ where $d < \tau$, the block producer is required
 to produce a block. For the definitions of {\tmname{Epoch-Randomness}} and
@@ -1728,28 +1804,16 @@ formalized in Definition \ref{defn-slot-offset}.
   {\tmname{Slot-Offset}}$(s_i, s_i) = 0$.
 \end{definition}
 
-\custombinding{8}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  8. } \label{algo-slot-time}{\tmname{Slot-Time}}($s$:
-  the slot number of the slot whose time needs to be determined)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$T_s \leftarrow \{ \}$}}
-
-{\state{$B_d \leftarrow${\tmname{Deepest-Leaf($\tmop{BT}$)}}}}
-
-{\state{{\FORIN{$B_i$}{{\tmname{SubChain}}($B_{H_n (B_d) - \tmop{SITL}}$,
-$B_d$)}}}}
-
-{\state{{\tmname{$s_t^{B_i} \leftarrow T^{}_{B_i}$+Slot-Offset($s_{B_i},
-s$)$\times \mathcal{T}_{}$}}}}
-
-{\state{$T_s \leftarrow T_s \cup s_t^{B_i}${\END}}}
-
-{\state{{\RETURN{Median($T_s$)}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{8}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{8}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-slot-time}{\tmname{Slot-Time}}($s$: the slot number of the
+      slot whose time needs to be determined)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 $\mathcal{T}$ is the slot duration defined in Definition
 \ref{defn-epoch-slot}.
@@ -1801,37 +1865,16 @@ digest items defined in Definition \ref{defn-babe-header} and
   \ 
 \end{definition}
 
-\custombinding{9}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  9. }
-  \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
-  pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$A
-\leftarrow${\tmname{Block-production-lottery($\tmop{sk}$, $n$)}}}}
-
-{\state{{\FORTO{$s \leftarrow 1$}{$\tmop{sc}_n$}}}}
-
-{\state{{\tmname{Wait}}({\tmstrong{until}} {\tmname{Slot-Time}}(s))}}
-
-{\state{$(d, \pi) \leftarrow A [s]$}}
-
-{\state{{\IF{$d < \tau$}}}}
-
-{\state{$C_{\tmop{Best}} \leftarrow${\tmname{Longest-Chain}}(BT)}}
-
-{\state{{\tmname{$B_s \leftarrow$Build-Block($C_{\tmop{Best}}$)}}}}
-
-{\state{{\tmname{Add-Digest-Item}}($B_s$,Pre-Runtime,$E_{\tmop{id}}
-(\tmop{BABE}), H_{\tmop{BABE}} (B_s)$)}}
-
-{\state{{\tmname{Add-Digest-Item}}($B_s$,Seal,$S_B$)}}
-
-{\state{{\tmname{Broadcast-Block}}($B_s$)}}}}
-
-\hrulefill{\medskip}
+\custombinding{9}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{9}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-block-production}\tmverbatim{}{\tmname{Invoke-Block-Authoring}}($\tmop{sk}$,
+      pk, $n$, $\tmop{BT} : \tmop{Current} \tmop{Block} \tmop{Tree}$)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 {\tmname{Add-Digest-Item}} appends a digest item to the end of the header
 digest $H_d (B)$ according to Definition \ref{defn-digest}.
@@ -1845,24 +1888,16 @@ is provided in the genesis state. The computation of the seed is described in
 Algorithm \ref{algo-epoch-randomness} which uses the concept of epoch subchain
 described in Definition \ref{defn-epoch-subchain}.
 
-\custombinding{10}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  10. }
-  \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
-  index)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$\rho \leftarrow \phi$}}
-
-{\state{{\FORIN{$B$}{}}{\tmem{{\tmname{SubChain($\mathcal{E}_{n - 2}$)}}}}}}
-
-{\state{$\rho \leftarrow \rho | | d_B${\END}}}
-
-{\state{{\RETURN{Blake2b({\tmname{Epoch-Randomness}}($n -
-2$)\textbar\textbar$n$\textbar\textbar$\rho$)}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{10}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{10}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-epoch-randomness}{\tmname{Epoch-Randomness}}($n > 2 :$epoch
+      index)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 In which value $d_B$ is the VRF output computed for slot $s_B$ by running
 Algorithm \ref{algo-block-production-lottery}.
@@ -1894,47 +1929,16 @@ Algorithm \ref{algo-verify-authorship-right} where:
   \item {\tmname{verify-Slot-Winner}} is defined in Algorithm
   \ref{algo-verify-slot-winner}.
 \end{itemizeminus}
-\custombinding{11}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  11. }
-  \label{algo-verify-authorship-right}{\tmname{Verify-Authorship-Right}}($\tmop{Head}_s
-  (B)$: The header of the block being verified) \\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$s
-\leftarrow${\tmname{Slot-Number-At-Given-Time}}($T_{B_{}}$)}}
-
-{\state{$\mathcal{E}_c \leftarrow${\tmname{Current-Epoch}}()}}
-
-{\state{$(D_1, \ldots, D_{\tmop{length} (H_d (B))}) \leftarrow H_d (B)$}}
-
-{\state{$D_s \leftarrow D_{\tmop{length} (H_d (B))}$}}
-
-{\state{$H_d (B) \leftarrow (D_1, \ldots, D_{\tmop{length} (H_d (B)) - 1})$
-//remove the seal from the digest}}
-
-{\state{($\tmop{id}, \tmop{Sig}_B$)$\leftarrow \tmop{Dec}_{\tmop{SC}} (D_s)$}}
-
-{\state{{\IF{$\tmop{id} \neq${\tmname{Seal-Id}}}}}}
-
-{\state{{\ERROR{``Seal missing''{\END}}}}}
-
-{\state{AuthorID $\leftarrow \tmop{AuthorityDirectory}^{\mathcal{E}_c}
-[H_{\tmop{BABE}} (B) . \tmop{SingerIndex}]$}}
-
-{\state{{\tmname{Verify-Signature}}($\tmop{AuthorID}, H_h (B),
-\tmop{Sig}_B$)}}
-
-{\state{{\IF{$\exists B' \in \tmop{BT} : H_h (B) \neq H_h (B)$
-{\tmstrong{and}} $s_B = s'_B$ {\tmstrong{and}} $\tmop{SignerIndex}_B =
-\tmop{SignerIndex}_{B'}$}}}}
-
-{\state{{\ERROR{``Block producer is equivocating''{\END}}}}}
-
-{\state{{\tmname{Verify-Slot-Winner}}($(d_B, \pi_B), s$,AuthorID)}}}}
-
-\hrulefill{\medskip}
+\custombinding{11}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{11}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-verify-authorship-right}{\tmname{Verify-Authorship-Right}}($\tmop{Head}_s
+      (B)$: The header of the block being verified) 
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 Algorithm \ref{algo-verify-slot-winner} is run as a part of the verification
 process, when a node is importing a block, in which:
@@ -1950,26 +1954,16 @@ process, when a node is importing a block, in which:
   \item $\tau$ is the winning threshold defined in
   \ref{defn-winning-threshold}.
 \end{itemizeminus}
-\custombinding{12}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  12. }
-  \label{algo-verify-slot-winner}{\tmname{Verify-Slot-Winner}}($B$: the block
-  whose winning status to be verified)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$\mathcal{E}_c \leftarrow${\tmname{Current-Epoch}}}}
-
-{\state{$\rho \leftarrow${\tmname{Epoch-Randomness}}$(c)$}}
-
-{\state{{\tmname{Verify-VRF}}($\rho, H_{\tmop{BABE}} (B) . (d_B, \pi_B),
-H_{\tmop{BABE}} (B) .s, c$)}}
-
-{\state{{\IF{$d_B \geqslant \tau$}}}}
-
-{\state{{\ERROR{``Block producer is not a winner of the slot''{\END}}}}}}}
-
-\hrulefill{\medskip}
+\custombinding{12}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{12}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-verify-slot-winner}{\tmname{Verify-Slot-Winner}}($B$: the
+      block whose winning status to be verified)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 $(d_B, \pi_B)$: Block Lottery Result for Block $B$,
 
@@ -1985,50 +1979,18 @@ The blocks building process is triggered by Algorithm
 \ref{algo-block-production} of the consensus engine which runs Alogrithm
 \ref{algo-build-block}.
 
-\custombinding{13}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  13. }
-  \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The chain
-  where at its head, the block to be constructed,
-  
-  s: Slot number)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$P_B \leftarrow_{}${\tmname{Head($C_{\tmop{Best}}$)}}}}
-
-{\state{$\tmop{Head} (B) \leftarrow$($H_p \leftarrow H_h (P_B), H_i \leftarrow
-H_i (P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow
-\phi$)}}
-
-{\state{{\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{Core\_initialize\_block}}, \tmop{Head} (_{} B) \right)$}}
-
-{\state{{\tmname{Call-Runtime-Entry}}$\left(
-\text{\tmverbatim{BlockBuilder\_inherent\_extrinsics}},
-\text{{\tmname{Inherent-Data}}} \right)${\END}}}
-
-{\state{{\WHILE{{\tmstrong{not}} {\tmname{End-Of-Slot(s)}}}}}}
-
-{\state{$E \leftarrow${\tmname{Next-Ready-Extrinsic()}}}}
-
-{\state{$R
-\leftarrow${\tmname{Call-Runtime-Entry(}}\tmverbatim{BlockBuilder\_apply\_extrinsics},
-{\tmem{E}})}}
-
-{\state{{\IF{{\tmstrong{not}} {\tmname{Block-Is-FULL($R$}})}}}}
-
-{\state{{\tmname{Drop(Ready-Extrinsics-Queue}}, {\tmem{E}}){\END}}}
-
-{\state{{\ELSE{\ }}}}
-
-{\state{{\BREAK}{\END}{\END}}}
-
-{\state{$\tmop{Head} (B)
-\leftarrow${\tmname{Call-Runtime-Entry(}}\tmverbatim{BlockBuilder\_finalize\_block},
-{\tmem{B}})}}}}
-
-\hrulefill{\medskip}
+\custombinding{13}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{13}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-build-block}{\tmname{Build-Block}}($C_{\tmop{Best}}$: The
+      chain where at its head, the block to be constructed,
+      
+      s: Slot number)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 \begin{itemizeminus}
   \item $\tmop{Head} (B)$ is defined in Definition \ref{defn-block-header}.
   
@@ -2290,76 +2252,31 @@ As instructed in Algorithm \ref{alg-join-leave-grandpa}, whenever the
 membership of GRANDPA voters changes, $r$ is set to 0 and $V_{\tmop{id}}$
 needs to be incremented.
 
-\custombinding{14}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  14. }
-  \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
-  ($\mathcal{V}$)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$r \leftarrow 0$}}
-
-{\state{$\mathcal{V}_{\tmop{id}} \leftarrow \tmop{ReadState} ('
-\tmop{AUTHORITY} \_ \tmop{SET} \_ \tmop{KEY}')$}}
-
-{\state{$\mathcal{V}_{\tmop{id}} \leftarrow \mathcal{V}_{\tmop{id}} + 1$}}
-
-{\state{{\tmname{Execute-One-Grandpa-Round}}$(r)$}}}}
-
-\hrulefill{\medskip}
+\custombinding{14}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{14}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{alg-join-leave-grandpa}{\tmname{Join-Leave-Grandpa-Voters}}
+      ($\mathcal{V}$)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \subsection{Voting Process in Round $r$}
 
 For each round $r$, an honest voter $v$ must participate in the voting process
 by following Algorithm \ref{algo-grandpa-round}.
 
-\custombinding{15}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  15. }
-  \label{algo-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$t_{r, v} \leftarrow$Time}}
-
-{\state{$\tmop{primary} \leftarrow${\tmname{Derive-Primary}}}}
-
-{\state{{\IF{$v = \tmop{primary}$}}}}
-
-{\state{{\tmname{Broadcast(}}\left.$M_{v_{\nosymbol}}^{r - 1,
-\tmop{Fin}}$({\tmname{Best-Final-Candidate}}($r$-1))\right){\END}}}
-
-{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} Time $\geqslant t_{r_,
-v} + 2 \times T$ {\tmstrong{or}} $r$ {\tmstrong{is}} completable){\END}}}
-
-{\state{$L \leftarrow${\tmname{Best-Final-Candidate}}($r$-1)}}
-
-{\state{{\IF{{\tmname{Received($M_{v_{\tmop{primary}}}^{r, \tmop{pv}} (B)$)}}
-{\tmstrong{and}} $B^{r, \tmop{pv}}_v \geqslant B > L$}}}}
-
-{\state{$N \leftarrow B${\END}}}
-
-{\state{{\ELSE{\ }}}}
-
-{\state{$N \leftarrow B' : H_n (B') = \max \{H_n (B') : B' > L\} \END$}}
-
-{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{pv}} (N)$)}}
-
-{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $B^{r,
-\tmop{pv}_{\nosymbol}}_v \geqslant L$ {\tmstrong{and}} (Time $\geqslant t_{r_,
-v} + 4 \times T${\tmstrong{ or }}$r$ {\tmstrong{is}} completable))}}
-
-{\state{{\tmname{Broadcast($M_v^{r, \tmop{pc}}$($B_v^{r, \tmop{pv}}$))}}}}
-
-{\state{{\tmname{Attempt-To-Finalize-Round}}($r$)}}
-
-{\state{{\tmname{Receive-Messages}}({\tmstrong{until}} $r$ {\tmstrong{is}}
-completable)}}
-
-{\state{{\tmname{Play-Grandpa-round}}($r + 1$)}}}}
-
-\hrulefill{\medskip}
+\custombinding{15}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{15}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-grandpa-round}{\tmname{Play-Grandpa-round}}$(r)$
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 The condition of {\tmem{completablitiy}} is defined in Definition
 \ref{defn-grandpa-completable}. {\tmname{Best-Final-Candidate}} function is
@@ -2367,54 +2284,25 @@ explained in Algorithm \ref{algo-grandpa-best-candidate} and
 {\tmname{{\tmname{Attempt-To-Finalize-Round}}($r$)}} is described in Algorithm
 \ref{algo-attempt-tofinalize}.
 
-\custombinding{16}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  16. }
-  \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)\\
-  \hline
-\end{tabular}
+\custombinding{16}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{16}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-grandpa-best-candidate}{\tmname{Best-Final-Candidate}}($r$)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
-{\algorithmic{{\state{$\mathcal{C}_{\nosymbol} \leftarrow \{B' |B' \leqslant
-B_v^{r, \tmop{pv}} : |V_v^{r, \tmop{pc}} | -\#V_v^{r, \tmop{pc}} (B')
-\leqslant 1 / 3|\mathbb{V}|\}$}}
-
-{\state{{\IF{$\mathcal{C}= \phi$}}}}
-
-{\state{{\RETURN{$\phi${\END}}}}}
-
-{\state{{\ELSE{\ }}}}
-
-{\state{{\RETURN{$E \in \mathcal{C}: H_n (E) = \max \{H_n (B') : B' \in
-\mathcal{C}\}${\END}}}}}}}
-
-\hrulefill{\medskip}
-
-\custombinding{17}{\noindent}\begin{tabular}{l}
-  \hline
-  \tmtextsc{Algorithm  17. }
-  \label{algo-attempt-tofinalize}{\tmname{Attempt-To-Finalize-Round}}($r$)\\
-  \hline
-\end{tabular}
-
-{\algorithmic{{\state{$L \leftarrow${\tmname{Last-Finalized-Block}}}}
-
-{\state{$E \leftarrow${\tmname{Best-Final-Candidate}}($r$)}}
-
-{\state{{\IF{$E \geqslant L$ {\tmstrong{and}} $V^{r, \tmop{pc}}_{\tmop{obs}
-(v)}^{\nosymbol}_{\nosymbol} (E) > 2 / 3 |\mathbb{V}|$}}}}
-
-{\state{{\tmname{Last-Finalized-Block}}$\leftarrow E$}}
-
-{\state{{\IF{$M_v^{r, \tmop{Fin}} (E) \nin${\tmname{Received-Messages}}}}}}
-
-{\state{{\tmname{Broadcast}}($M_v^{r, \tmop{Fin}} (E)$)}}
-
-{\state{{\RETURN{{\END}{\END}}}}}
-
-{\state{{\tmstrong{schedule-call}} {\tmname{Attempt-To-Finalize-Round}}($r$)
-{\tmstrong{when}} {\tmname{Receive-Messages}} }}}}
-
-\hrulefill{\medskip}
+\custombinding{17}{\noindent}\begin{tmparmod}{0pt}{0pt}{0em}%
+  \begin{tmparsep}{0em}%
+    \tmtextbf{Algorithm \tmtextup{17}}{\smallskip}
+    
+    \begin{tmindent}
+      \label{algo-attempt-tofinalize}{\tmname{Attempt-To-Finalize-Round}}($r$)
+    \end{tmindent}
+  \end{tmparsep}
+\end{tmparmod}{\medskip}
 
 \section{Block Finalization}\label{sect-block-finalization}
 
@@ -2623,15 +2511,32 @@ that information from the context where the encoding/decoding is happenning.
   \[ \mathcal{T}= \{ T_1, \ldots, T_n \} \]
   A value $\tmmathbf{A}$ of varying date type is a pair $(A_{\tmop{Type}},
   A_{\tmop{Value}})$ where $A_{\tmop{Type}} = T_i$ for some $T_i \in
-  \mathcal{T}$ and $A_{\tmop{Value}}$ is its value of type $T_i$. We define
-  $\tmop{idx} (T_i) = i - 1.$
-  
-  In particular, we define {\tmstrong{optional type}} to be $\mathcal{O}= \{
-  \tmop{None}, T_2 \}$ for some data type $T_2$ where $\tmop{idx}
-  (\tmop{None}) = 0$ $(\tmop{None}, \phi)$ is the only possible value, when
-  the data is of type None and a codec value is one byte of 0 value.
-  
-  
+  \mathcal{T}$ and $A_{\tmop{Value}}$ is its value of type $T_i$, which can be
+  empty. We define $\tmop{idx} (T_i) = i - 1$, unless it is explicitly defined
+  as another value in the definition of a particular varying data type.
+\end{definition}
+
+In particular, we define two specific varying data which are frequently used
+in various part of Polkadot Protocol.
+
+\begin{definition}
+  $\label{defn-option-type}$The {\tmstrong{Option}} type is a varying data
+  type of $\{\tmop{None}, T_2 \}$ which indicates if data of $T_2$ type is
+  available (referred to as ``some'' state) or not (referred to as ``empty'',
+  ``none'' or ``null'' state). The presence of type None, indicated by
+  $\tmop{idx} (T_{\tmop{None}}) = 0$, implies that the data corresponding to
+  $T_2$ type is not available and contains no additional data. Where as the
+  presence of type $T_2$ indicated by $\tmop{idx} (T_2) = 1$ implies that the
+  data is available.
+\end{definition}
+
+\begin{definition}
+  \label{defn-result-type}The {\tmstrong{Result}} type is a varying data type
+  of $\{ T_1, T_2 \}$ which is used to indicate if a certain operation or
+  function was executed successfully (referred to as ``ok'' state) or not
+  (referred to as ``err'' state). $T_1$ implies success, $T_2$ implies
+  failure. Both types can either contain additional data or are defined as
+  empty type otherwise.
 \end{definition}
 
 \begin{definition}
@@ -2688,13 +2593,19 @@ to decode the data.
 \end{definition}
 
 \begin{definition}
-  The {\tmstrong{SCALE codec, $\tmop{Enc}_{\tmop{SC}}$}} for other types such
-  as fixed length integers not defined here otherwise, is equal to little
-  endian encoding of those values defined in Definition
-  \ref{defn-little-endian}. 
+  \label{defn-scale-fixed-length}The {\tmstrong{SCALE codec,
+  $\tmop{Enc}_{\tmop{SC}}$}} for other types such as fixed length integers not
+  defined here otherwise, is equal to little endian encoding of those values
+  defined in Definition \ref{defn-little-endian}. 
 \end{definition}
 
-\subsection{Length Encoding}\label{sect-int-encoding}
+\begin{definition}
+  \label{defn-scale-empty}The {\tmstrong{SCALE codec,
+  $\tmop{Enc}_{\tmop{SC}}$}} for an empty type is defined to a byte array of
+  zero length and depicted as {\tmstrong{$\phi$}}.
+\end{definition}
+
+\subsection{Length and Compact Encoding}\label{sect-int-encoding}
 
 {\tmem{SCALE Length encoding}} is used to encode integer numbers of variying
 sizes prominently in an encoding length of arrays:
@@ -2737,20 +2648,6 @@ sizes prominently in an encoding length of arrays:
   such that:
   \[ k^7_1 \ldots k^3_1 k^2_1 : = m - 4 \]
 \end{definition}
-
-\section{Frequently SCALEd Object}
-
-In this section, we will specify the objects which are frequently used in
-transmitting data between PDRE, \ Runtime and other clients and their SCALE
-encodings.
-
-\subsection{Result}
-
-{\todo{Spec Result Object}}
-
-\subsection{Error}
-
-{\todo{Spec Error Object}}
 
 \section{Hex Encoding}
 
@@ -3066,14 +2963,16 @@ in which
 The network agent should hand over $D$ to approperiate consensus engine which
 identified by $E_{\tmop{id}}$.
 
-\chapter{Runtime Environment API\label{sect-re-api}}
+\
+
+\chapter{Runtime Environment API}\label{appendix-e}
 
 The Runtime Environment API is a set of functions that Polkadot RE exposes to
 Runtime to access external functions needed for various reasons, such as the
 Storage of the content, access and manipulation, memory allocation, and also
-efficiency. We introduce Notation \ref{nota-re-api-at-state} to emphasize that
-the result of some of the API functions depends on the content of state
-storage.
+efficiency. The encoding of each data type is specified or referenced in this
+section. If the encoding is not mentioned, then the default Wasm encoding is
+used, such as little-endian byte ordering for integers.
 
 \begin{notation}
   \label{nota-re-api-at-state}By $\mathcal{R}\mathcal{E}_B$ we refer to the
@@ -3082,8 +2981,1736 @@ storage.
   $B$.
 \end{notation}
 
+\begin{definition}
+  \label{defn-runtime-pointer}The {\tmstrong{Runtime pointer-size}} type is an
+  \tmverbatim{i64} integer, representing two consecutive \tmverbatim{i32}
+  integers in which the least significant one indicates the pointer to the
+  memory buffer. The most significant one provides the size of the buffer.
+  This pointer is the primary way to exchange data of arbitrary sizes between
+  the Runtime and the Runtime Environment.
+\end{definition}
+
 The functions are specified in each subsequent subsection for each category
 of those functions.
+
+\section{Storage}
+
+Interface for accessing the storage from within the runtime.
+
+\subsection{\tmverbatim{ext\_storage\_set}}
+
+Sets the value under a given key into storage.
+
+\subsubsection{Version 1 - Prototype}
+
+
+\begin{alltt}
+(func $ext_storage_set_version_1 (param $key i64) (param $value i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} containing the key.
+  
+  \item \tmverbatim{value}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} containing the value.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_get}}
+
+Retrieves the value associated with the given key from storage.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_get_version_1 (param $key i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} containing the key.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} returning the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the value.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_read}}
+
+Gets the given key from storage, placing the value into a buffer and returning
+the number of bytes that the entry in storage has beyond the offset.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_read_version_1
+  (param $key i64) (param $value_out i64) (param $offset i32) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} containing the key.
+  
+  \item \tmverbatim{value\_out}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} containing the buffer to which the value will be
+  written to. This function will never write more then the length of the
+  buffer, even if the value's length is bigger.
+  
+  \item \tmverbatim{offset}: an i32 integer containing the offset beyond the
+  value should be read from.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the number of
+  bytes written into the \tmverbatim{value\_out} buffer. Returns
+  \tmverbatim{None} if the entry does not exists.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_clear}}
+
+Clears the storage of the given key and its value.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_clear_version_1 (param $key_data i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} containing the key.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_exists}}
+
+Checks whether the given key exists in storage.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_exists_version_1 (param $key_data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} containing the key.
+  
+  \item \tmverbatim{return}: an i32 integer value equal to \tmverbatim{1} if
+  the key exists or a value equal to \tmverbatim{0} if otherwise.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_clear\_prefix}}
+
+Clear the storage of each key/value pair where the key starts with the given
+prefix.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_clear_prefix_version_1 (param $prefix i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{prefix}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} containing the prefix.
+\end{itemize}
+\subsection{\tmverbatim{ext\_storage\_root}}\label{sect-ext-storage-root}
+
+Computes the resulting storage root as described in section
+\ref{sect-merkl-proof}.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_root_version_1 (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded storage root.
+\end{itemize}
+\subsection{\tmverbatim{ext\_storage\_changes\_root}}\label{sect-ext-storage-changes-root}
+
+Generates the resulting changes root as defined in Definition
+\ref{defn-changes-trie}. The parent hash is a SCALE encoded block hash.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_changes_root_version_1 (param $parent_hash i64) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{parent\_hash}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the SCALE encoded block
+  hash.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the changes root
+  as defined in Definition \ref{defn-changes-trie}.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_next\_key}}
+
+Gets the next key in storage after the given one in lexicographic order.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_next_key_version_1 (param $key i64) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the next key in
+  lexicographic order.
+\end{itemize}
+
+\section{Child Storage}
+
+Interface for accessing the child storage from within the runtime.
+
+\begin{definition}
+  \label{defn-child-storage-type}{\tmstrong{Child storage}} key is the
+  identifier for the child storage. Multiple child storages are possible,
+  where it's corresponding entries are separated based on the identifier. The
+  prefix \tmverbatim{:child\_storage:default:} must be prepended to the
+  identiefier.
+\end{definition}
+
+\begin{definition}
+  {\tmstrong{\label{defn-child-storage-definition}Child storage definition}}
+  allows for further separation from within the child storage, behaving like a
+  prefix. When a key gets set in the child storage using a certain definition,
+  the same definition must be used in order to fetch the key or perform other
+  operations on it. The value of the definition is undefined and set by the
+  Runtime.
+\end{definition}
+
+\begin{definition}
+  \label{defn-child-type}{\tmstrong{Child type}} is a future-reserved feature
+  which allows the usage of different child storage types. The currently
+  allowed value is an i32 integer equal to {\tmstrong{1}}.
+\end{definition}
+
+\subsection{\tmverbatim{ext\_storage\_child\_set}}
+
+Sets the value under a given key into the child storage.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_set_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32)
+  (param $key i64) (param $value i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Definition \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child definition as
+  described in Definition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in \ref{defn-child-type}.
+  
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{value}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the value.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_child\_get}}
+
+Retrieves the value associated with the given key from the child storage.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_get_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32)
+  (param $key i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Definition \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child definition as
+  described in Defnition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in Definition \ref{defn-child-type}.
+  
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the value.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_child\_read}}
+
+Gets the given key from storage, placing the value into a buffer and returning
+the number of bytes that the entry in storage has beyond the offset.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_read_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32)
+  (param $key i64) (param $value_out i64) (param $offset i32) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Definition \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer as defined in Defintion
+  \ref{defn-runtime-pointer} indicating the child definition as described in
+  Definition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in Definition \ref{defn-child-type}.
+  
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{value\_out}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the buffer to which the value will be
+  written to. This function will never write more then the length of the
+  buffer, even if the value's length is bigger.
+  
+  \item \tmverbatim{offset}: an i32 integer containing the offset beyond the
+  value should be read from.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the number of
+  bytes written into the {\tmstrong{value\_out}} buffer. Returns
+  \tmverbatim{None} if the entry does not exists.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_child\_clear}}
+
+Clears the storage of the given key and its value from the child storage.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_clear_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32)
+  (param $key i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Definition \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child definition as
+  described in Definition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in \ref{defn-child-type}.
+  
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_child\_storage\_kill}}
+
+Clears an entire child storage.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_storage_kill_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Definition \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child definition as
+  described in Definition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in Definition \ref{defn-child-type}.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_child\_exists}}
+
+Checks whether the given key exists in the child storage.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_exists_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32)
+  (param $key_data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Defintion \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child definition as
+  described in Definition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in Defintion \ref{defn-child-type}.
+  
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{return}: an i32 integer value equal to \tmverbatim{1} if
+  the key exists or a value equal to \tmverbatim{0} if otherwise.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_child\_clear\_prefix}}
+
+Clears the child storage of each key/value pair where the key starts with the
+given prefix.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_clear_prefix_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32)
+  (param $prefix i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Definition \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child definition as
+  described in Definition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in Definition \ref{defn-child-type}.
+  
+  \item \tmverbatim{prefix}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the prefix.
+\end{itemize}
+\subsection{\tmverbatim{ext\_storage\_child\_root}}\label{sect-ext-storage-child-root}
+
+Computes the resulting child storage root as described in section
+\ref{sect-merkl-proof}.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_root_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32)
+  (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Definition \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child definition as
+  described in Definition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in Definition \ref{defn-child-type}.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded storage root.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_storage\_child\_next\_key}}
+
+Gets the next key in storage after the given one in lexicographic order.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_storage_child_next_key_version_1
+  (param $child_storage_key i64) (param $child_definition i64) (param $child_type i32)
+  (param $key i64) (return i64))
+\end{alltt}
+
+
+{\tmstrong{\tmverbatim{}Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{child\_storage\_key}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the child storage key as
+  defined in Definition \ref{defn-child-storage-type}.
+  
+  \item \tmverbatim{child\_definition}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicting the child definition as
+  described in Definition \ref{defn-child-storage-definition}.
+  
+  \item \tmverbatim{child\_type}: an i32 integer specifying the child storage
+  type as defined in Definition \ref{defn-child-type}.
+  
+  \item {\tmstrong{}}\tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the next key in
+  lexicographic order. Returns \tmverbatim{None} if the entry cannot be found.
+\end{itemize}
+
+\section{Crypto}
+
+Interfaces for working with crypto related types from within the runtime.
+
+\begin{definition}
+  \label{defn-key-type-id}Cryptographic keys are saved in their own storages
+  in order to avoid collision with each other. The storages are identified by
+  their 4-byte ASCII {\tmstrong{key type ID}}. The following known types are
+  available:
+  
+  \begin{table}[h]
+    \begin{tabular}{ll}
+      {\tmstrong{Id}} & {\tmstrong{Description}}\\
+      babe & Key type for the Babe module\\
+      gran & Key type for the Grandpa module\\
+      acco & Key type for the controlling accounts\\
+      imon & Key type for the ImOnline module\\
+      audi & Key type for the AuthorityDiscovery module
+    \end{tabular}
+    \caption{Table of known key type identifiers}
+  \end{table}
+\end{definition}
+
+\begin{definition}
+  \label{defn-ecdsa-verify-error}{\tmstrong{EcdsaVerifyError}} is a varying
+  data type as defined in Definition \ref{defn-varrying-data-type} and
+  specifies the error type when using ECDSA recovery functionality. Following
+  values are possible:
+  
+  \begin{table}[h]
+    \begin{tabular}{ll}
+      {\tmstrong{Id}} & {\tmstrong{Description}}\\
+      0 & Incorrect value of R or S\\
+      1 & Incorrect value of V\\
+      2 & Invalid signature
+    \end{tabular}
+    \caption{Table of error types in ECDSA recovery}
+  \end{table}
+\end{definition}
+
+\subsection{\tmverbatim{ext\_crypto\_ed25519\_public\_keys}}
+
+Returns all \tmverbatim{ed25519} public keys for the given key id from the
+keystore.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_ed25519_public_keys_version_1 (param $key_type_id i64) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{key\_type\_id}: an i32 integer indicating the
+  key type ID as defined in Defintion \ref{defn-key-type-id}.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded 32-byte public keys.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_ed25519\_generate}}
+
+Generates an \tmverbatim{ed25519} key for the given key type using an optional
+BIP-39 seed and stores it in the keystore.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_ed25519_generate_version_1
+  (param $key_type_id i32) (param $seed i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{key\_type\_id}: an i32 integer indicating the
+  key type ID as defined in Definition \ref{defn-key-type-id}.
+  
+  \item \tmverbatim{seed}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the BIP-39 seed
+  which must be valid UTF8.
+  
+  \item \tmverbatim{return}: a regular pointer to the buffer containing the
+  32-byte public key.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_ed25519\_sign}}
+
+Signs the given message with the ed25519 key that corresponds to the given
+public key and key type in the keystore.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_ed25519_sign_version_1
+  (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{key\_type\_id}: an i32 integer indicating the
+  key type ID as defined in Definition \ref{defn-key-type-id}.
+  
+  \item \tmverbatim{key}: a regular pointer to the buffer containing the
+  32-byte public key.
+  
+  \item \tmverbatim{msg}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the message that is to be signed.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the signature.
+  This function returns \tmverbatim{None} if the public key cannot be found in
+  the key store.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_ed25519\_verify}}
+
+Verifies an ed25519 signature.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_ed25519_verify_version_1
+  (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{sig}: a regular pointer to the buffer
+  containing the 64-byte signature.
+  
+  \item \tmverbatim{msg}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the message that is to be verified.
+  
+  \item \tmverbatim{key}: a regular pointer to the buffer containing the
+  32-byte public key.
+  
+  \item \tmverbatim{return}: a i32 integer value equal to \tmverbatim{1} if
+  the signature is valid or a value equal to \tmverbatim{0} if otherwise.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_sr25519\_public\_keys}}
+
+Returns all \tmverbatim{sr25519} public keys for the given key id from the
+keystore.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_sr25519_public_keys_version_1 (param $key_type_id i64) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{key\_type\_id}: an i32 integer containg the
+  key type ID as defined in \ref{defn-key-type-id}.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded 32-byte public keys.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_sr25519\_generate}}
+
+Generates an \tmverbatim{sr25519} key for the given key type using an optional
+BIP-39 seed and stores it in the keystore.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_sr25519_generate_version_1
+  (param $key_type_id i32) (param $seed i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{key\_type\_id}: an i32 integer containg the
+  key ID as defined in Definition \ref{defn-key-type-id}.
+  
+  \item \tmverbatim{seed}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the BIP-39 seed
+  which must be valid UTF8.
+  
+  \item \tmverbatim{return}: a regular pointer to the buffer containing the
+  32-byte public key.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_sr25519\_sign}}
+
+Signs the given message with the \tmverbatim{sr25519} key that corresponds to
+the given public key and key type in the keystore.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_sr25519_sign_version_1
+  (param $key_type_id i32) (param $key i32) (param $msg i64) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{key\_type\_id}: an i32 integer containg the
+  key ID as defined in Definition \ref{defn-key-type-id}
+  
+  \item \tmverbatim{key}: a regular pointer to the buffer containing the
+  32-byte public key.
+  
+  \item \tmverbatim{msg}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the message that is to be signed.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the signature.
+  This function returns \tmverbatim{None} if the public key cannot be found in
+  the key store.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_sr25519\_verify}}
+
+Verifies an \tmverbatim{sr25519} signature.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_sr25519_verify_version_1
+  (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{sig}: a regular pointer to the buffer
+  containing the 64-byte signature.
+  
+  \item \tmverbatim{msg}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the message that is to be verified.
+  
+  \item \tmverbatim{key}: a regular pointer to the buffer containing the
+  32-byte public key.
+  
+  \item \tmverbatim{return}: a i32 integer value equal to \tmverbatim{1} if
+  the signature is valid or a value equal to \tmverbatim{0} if otherwise.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_secp256k1\_ecdsa\_recover}}
+
+Verify and recover a SECP256k1 ECDSA signature.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_secp256k1_ecdsa_recover_version_1
+  (param $sig i32) (param $msg i32) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{sig}: a regular pointer to the buffer
+  containing the 65-byte signature in RSV format. V should be either
+  \tmverbatim{0/1} or \tmverbatim{27/28}.
+  
+  \item \tmverbatim{msg}: a regular pointer to the buffer containing the
+  32-byte Blake2 hash of the message.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Result}
+  as defined in Definition \ref{defn-result-type}. On success it contains the
+  64-byte recovered public key or an error type as defined in Definition
+  \ref{defn-ecdsa-verify-error} on failure.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_crypto\_secp256k1\_ecdsa\_recover\_compressed}}
+
+Verify and recover a SECP256k1 ECDSA signature.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_1
+  (param $sig i32) (param $msg i32) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{sig}: a regular pointer to the buffer
+  containing the 65-byte signature in RSV format. V should be either
+  \tmverbatim{0/1} or \tmverbatim{27/28}.
+  
+  \item \tmverbatim{msg}: a regular pointer to the buffer containing the
+  32-byte Blake2 hash of the message.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Result}
+  as defined in Definiton \ref{defn-result-type}. On success it contains the
+  33-byte recovered public key in compressed form on success or an error type
+  as defined in Definition \ref{defn-ecdsa-verify-error} on failure.
+\end{itemize}
+
+\section{Hashing}
+
+Interface that provides functions for hashing with different algorithms.
+
+\subsection{\tmverbatim{ext\_hashing\_keccak\_256}}
+
+Conducts a 256-bit Keccak hash.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_hashing_keccak_256_version_1
+  (param $data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{data}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the data to be hashed.
+  
+  \item \tmverbatim{return}: a reglar pointer to the buffer containing the
+  256-bit hash result.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_hashing\_sha2\_256}}
+
+Conducts a 256-bit Sha2 hash.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_hashing_sha2_256_version_1
+  (param $data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{data}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the data to be hashed.
+  
+  \item \tmverbatim{return}: a regular pointer to the buffer containing the
+  256-bit hash result.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_hashing\_blake2\_128}}
+
+Conducts a 128-bit Blake2 hash.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_hashing_blake2_128_version_1
+  (param $data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{data}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the data to be hashed.
+  
+  \item \tmverbatim{return}: a regular pointer to the buffer containing the
+  128-bit hash result.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_hashing\_blake2\_256}}
+
+Conducts a 256-bit Blake2 hash.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_hashing_blake2_256_version_1
+  (param $data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{data}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the data to be hashed.
+  
+  \item \tmverbatim{return}: a regular pointer to the buffer containing the
+  256-bit hash result.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_hashing\_twox\_64}}
+
+Conducts a 64-bit xxHash hash.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_hashing_twox_64_version_1
+  (param $data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{data}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the data to be hashed.
+  
+  \item \tmverbatim{return}: a regular pointer to the buffer containing the
+  64-bit hash result.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_hashing\_twox\_128}}
+
+Conducts a 128-bit xxHash hash.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_hashing_twox_128_version_1
+  (param $data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{data}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the data to be hashed.
+  
+  \item \tmverbatim{return}: a regular pointer to the buffer containing the
+  128-bit hash result.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_hashing\_twox\_256}}
+
+Conducts a 256-bit xxHash hash.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_hashing_twox_256_version_1
+  (param $data i64) (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item {\tmstrong{}}\tmverbatim{data}: a pointer-size as defined in
+  Definition \ref{defn-runtime-pointer} indicating the data to be hashed.
+  
+  \item \tmverbatim{return}: a regular pointer to the buffer containing the
+  256-bit hash result.
+\end{itemize}
+
+\section{Offchain}
+
+The Offchain Workers allow the execution of long-running and possibly
+non-deterministic tasks (e.g. web requests, encryption/decryption and signing
+of data, random number generation, CPU-intensive computations,
+enumeration/aggregation of on-chain data, etc.) which could otherwise require
+longer than the block execution time. Offchain Workers have their own
+execution environment. This separation of concerns is to make sure that the
+block production is not impacted by the long-running tasks.
+
+\
+
+All data and results generated by Offchain workers are unique per node and
+nondeterministic. Information can be propagated to other nodes by submitting a
+transaction that should be included in the next block. As Offchain workers
+runs on their own execution environment they have access to their own separate
+storage. There are two different types of storage available which are defined
+in Definitions F.1 and F.2.
+
+\begin{definition}
+  \label{defn-persistent-storage}{\tmstrong{Persistent storage}} is
+  non-revertible and not fork-aware. It means that any value set by the
+  offchain worker is persisted even if that block (at which the worker is
+  called) is reverted as non-canonical (meaning that the block was surpassed
+  by a longer chain). The value is available for the worker that is re-run at
+  the new (different block with the same block number) and future blocks. This
+  storage can be used by offchain workers to handle forks and coordinate
+  offchain workers running on different forks.
+\end{definition}
+
+\begin{definition}
+  \label{defn-local-storage}{\tmstrong{Local storage}} is revertible and
+  fork-aware. It means that any value set by the offchain worker triggered at
+  a certain block is reverted if that block is reverted as non-canonical. The
+  value is NOT available for the worker that is re-run at the next or any
+  future blocks.
+\end{definition}
+
+\begin{definition}
+  \label{defn-http-status-codes}{\tmstrong{HTTP status codes}} that can get
+  returned by certain Offchain HTTP functions.
+  \begin{itemizedot}
+    \item \tmverbatim{0}: the specified request identifier is invalid.
+  \end{itemizedot}
+  \begin{itemizedot}
+    \item \tmverbatim{10}: the deadline for the started request was reached.
+  \end{itemizedot}
+  \begin{itemizedot}
+    \item \tmverbatim{20}: an error has occurred during the request, e.g. a
+    timeout or the remote server has closed the connection. On returning this
+    error code, the request is considered destroyed and must be reconstructed
+    again.
+  \end{itemizedot}
+  \begin{itemizedot}
+    \item \tmverbatim{100-999}: the request has finished with the given HTTP
+    status code.
+  \end{itemizedot}
+\end{definition}
+
+\begin{definition}
+  \label{defn-http-error}{\tmstrong{HTTP error}} is a varying data type as
+  defined in Definition \ref{defn-varrying-data-type} and specifies the error
+  types of certain HTTP functions. Following values are possible:
+  
+  \begin{table}[h]
+    \begin{tabular}{ll}
+      {\tmstrong{Id}} & {\tmstrong{Description}}\\
+      0 & The deadline was reached\\
+      1 & There was an IO error while processing the request\\
+      2 & The ID of the request is invalid
+    \end{tabular}
+    \caption{Table of possible HTTP error types}
+  \end{table}
+\end{definition}
+
+\subsection{\tmverbatim{ext\_offchain\_is\_validator}}
+
+Verifies if the local node is a potential validator. Even if this function
+returns true, it does not mean that any keys are configured or that the
+validator is registered in the chain.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_is_validator_version_1 (return i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{return}: a i32 integer which is equal to \tmverbatim{1} if
+  the local node is a potential validator or a integer equal to \tmverbatim{0}
+  if it is not.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_submit\_transaction}}
+
+Given an extrinsic as a SALE encoded byte array, the system decodes the byte
+array and submits the extrinsic in the inherent pool as an extrinsic to be
+included in the next produced block.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_submit_transaction_version_1 (param $data i64) (return i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the byte array storing the encoded
+  extrinsic.
+  
+  \item \tmverbatim{return}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Result}
+  as defined in Definition \ref{defn-result-type}. Neither on success or
+  failure is there any additional data provided.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_network\_state}}
+
+Returns the SCALE encoded, opaque information about the local node's network
+state. This information is fetched by calling into \tmverbatim{libp2p}, which
+{\tmem{might}} include the \tmverbatim{PeerId} and possible
+\tmverbatim{Multiaddress(-es)} by which the node is publicly known by. Those
+values are unique and have to be known by the node individually. Due to its
+opaque nature, it's unknown whether that information is available prior to
+execution.
+
+{\tmstrong{\subsubsection{Version 1 - Prototype}}}
+\begin{alltt}
+(func $ext_offchain_network_state_version_1 (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Result}
+  as defined in Definition \ref{defn-result-type}. On success it contains the
+  SCALE encoded network state. This includes none or one \tmverbatim{PeerId}
+  followed by none, one or more IPv4 or IPv6 \tmverbatim{Multiaddress(-es)} by
+  which the node is publicly known by. On failure no additional data is
+  provided.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_timestamp}}
+
+Returns current timestamp.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_timestamp_version_1 (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{result}: an i64 integer indicating the current UNIX
+  timestamp as defined in Definition \ref{defn-unix-time}.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_sleep\_until}}
+
+Pause the execution until `deadline` is reached.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_sleep_until_version_1 (param $deadline i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{deadline}: an i64 integer specifying the UNIX timestamp as
+  defined in Definition \ref{defn-unix-time}.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_random\_seed}}
+
+Generates a random seed. This is a truly random non deterministic seed
+generated by the host environment.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_random_seed_version_1 (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{result}: a pointer to the buffer containing the 32-byte
+  seed.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_local\_storage\_set}}
+
+Sets a value in the local storage. This storage is not part of the consensus,
+it's only accessible by the offchain worker tasks running on the same machine
+and is persisted between runs.
+
+{\tmstrong{\subsubsection{Version 1 - Prototype}}}
+\begin{alltt}
+(func $ext_offchain_local_storage_set_version_1
+  (param $kind i32) (param $key i64) (param $value i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{kind}: an i32 integer indicating the storage kind. A value
+  equal to 1 is used for a persistent storage as defined in Definition
+  \ref{defn-offchain-persistent-storage} and a value equal to 2 for local
+  storage as defined in Definition \ref{defn-offchain-local-storage}.
+  
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{value}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the value.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_local\_storage\_compare\_and\_set}}
+
+Sets a new value in the local storage if the condition matches the current
+value.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_local_storage_compare_and_set_version_1
+  (param $kind i32) (param $key i64) (param $old_value i64) (param $new_value i64)
+  (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{kind}: an i32 integer indicating the storage kind. A value
+  equal to 1 is used for a persistent storage as defined in Definition
+  \ref{defn-offchain-persistent-storage} and a value equal to 2 for local
+  storage as defined in Definition \ref{defn-offchain-local-storage}.
+  
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{old\_value}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the old key.
+  
+  \item \tmverbatim{new\_value}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the new value.
+  
+  \item \tmverbatim{result}: an i32 integer equal to \tmverbatim{1} if the new
+  value has been set or a value equal to \tmverbatim{0} if otherwise.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_local\_storage\_get}}
+
+Gets a value from the local storage.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_local_storage_get_version_1
+  (param $kind i32) (param $key i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{kind}: an i32 integer indicating the storage kind. A value
+  equal to 1 is used for a persistent storage as defined in Definition
+  \ref{defn-offchain-persistent-storage} and a value equal to 2 for local
+  storage as defined in Definition \ref{defn-offchain-local-storage}.
+  
+  \item \tmverbatim{key}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the key.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the value or the
+  corresponding key.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_http\_request\_start}}
+
+Initiates a HTTP request given by the HTTP method and the URL. Returns the id
+of a newly started request.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_http_request_start_version_1
+  (param $method i64) (param $uri i64) (param $meta i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{method}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the HTTP method. Possible values are
+  \tmverbatim{``GET''} and \tmverbatim{``POST''}.
+  
+  \item \tmverbatim{urli}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the URI.
+  
+  \item \tmverbatim{meta}: a future-reserved field containing additional,
+  SCALE encoded parameters. Currently, an empty array should be passed.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Result}
+  as defined in Definition \ref{defn-result-type} containing the i16 ID of the
+  newly started request. On failure no additionally data is provided.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_offchain\_http\_request\_add\_header}}
+
+Append header to the request. Returns an error if the request identifier is
+invalid, \tmverbatim{http\_response\_wait} has already been called on the
+specified request identifier, the deadline is reached or an I/O error has
+happened (e.g. the remote has closed the connection).
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_http_request_add_header_version_1
+  (param $request_id i32) (param $name i64) (param $value i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{request\_id}: an i32 integer indicating the ID of the
+  started request.
+  
+  \item \tmverbatim{name}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the HTTP header name.
+  
+  \item \tmverbatim{value}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the HTTP header value.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Result}
+  as defined in Definition \ref{defn-result-type}. Neither on success or
+  failure is there any additional data provided.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_http\_request\_write\_body}}
+
+Writes a chunk of the request body. Returns a non-zero value in case the
+deadline is reached or the chunk could not be written.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_http_request_write_body_version_1
+  (param $request_id i32) (param $chunk i64) (param $deadline i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{request\_id}: an i32 integer indicating the ID of the
+  started request.
+  
+  \item \tmverbatim{chunk}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the chunk of bytes. Writing an empty
+  chunk finalizes the request.
+  
+  \item \tmverbatim{deadline}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the UNIX
+  timestamp as defined in Definition \ref{defn-unix-time}. Passing
+  \tmverbatim{None} blocks indefinitely.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Result}
+  as defined Definition \ref{defn-result-type}. On success, no additional data
+  is provided. On error it contains the HTTP error type as defined in
+  Definition \ref{defn-http-error}.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_http\_response\_wait}}
+
+Returns an array of request statuses (the length is the same as IDs). Note
+that if deadline is not provided the method will block indefinitely, otherwise
+unready responses will produce \tmverbatim{DeadlineReached} status.
+
+{\tmstrong{\subsubsection{Version 1- Prototype}}}
+\begin{alltt}
+(func $ext_offchain_http_response_wait_version_1
+  (param $ids i64) (param $deadline i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{ids}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded array of started
+  request IDs.
+  
+  \item \tmverbatim{deadline}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the UNIX
+  timestamp as defined in Definition 1.10. Passing \tmverbatim{None} blocks
+  indefinitely.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded array of request
+  statuses as defined in Definition \ref{defn-http-status-codes}.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_http\_response\_headers}}
+
+Read all HTTP response headers. Returns an array of key/value pairs. Response
+headers must be read before the response body.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_http_response_headers_version_1
+  (param $request_id i32) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{request\_id}: an i32 integer indicating the ID of the
+  started request.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating a SCALE encoded array of key/value
+  pairs.
+\end{itemize}
+
+\subsection{\tmverbatim{ext\_http\_response\_read\_body}}
+
+Reads a chunk of body response to the given buffer. Returns the number of
+bytes written or an error in case a deadline is reached or the server closed
+the connection. If \tmverbatim{0} is returned it means that the response has
+been fully consumed and the \tmverbatim{request\_id} is now invalid. This
+implies that response headers must be read before draining the body.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_offchain_http_response_read_body_version_1
+  (param $request_id i32) (param $buffer i64) (param $deadline i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{request\_id}: an i32 integer indicating the ID of the
+  started request.
+  
+  \item \tmverbatim{buffer}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the buffer where the body gets written
+  to.
+  
+  \item \tmverbatim{deadline}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the UNIX
+  timestamp as defined in Definition \ref{defn-unix-time}. Passing
+  \tmverbatim{None} will block indefinitely.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Result}
+  as defined in Definition \ref{defn-result-type}. On success it contains an
+  i32 integer specifying the number of bytes written or a HTTP error type as
+  defined in Definition \ref{defn-http-error} on faiure.
+\end{itemize}
+
+\section{Trie}
+
+Interface that provides trie related functionality.
+
+\subsection{\tmverbatim{blake2\_256\_root}}
+
+Conducts a 256-bit Blake2 trie root formed from the iterated items.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_trie_blake2_256_root_version_1
+  (param $data i64) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the iterated items from which the trie
+  root gets formed. The items consist of a SCALE encoded array containing
+  arbitrary key/value pairs.
+  
+  \item \tmverbatim{result}: a regular pointer to the buffer containing the
+  256-bit trie root result.
+\end{itemize}
+
+\subsection{\tmverbatim{blake2\_256\_ordered\_root}}
+
+Conducts a 256-bit Blake2 trie root formed from the enumerated items.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_trie_blake2_256_ordered_root_version_1
+  (param $data i64) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the enumerated items from which the
+  trie root gets formed. The items consist of a SCALE encoded array containing
+  only values, where the corresponding key of each value is the index of the
+  item in the array, starting at 0. The keys are little-endian, fixed-size
+  integers.
+  
+  \item \tmverbatim{result}: a regular pointer to the buffer containing the
+  256-bit trie root result.
+\end{itemize}
+
+\section{miscellaneous}
+
+Interface that provides miscellaneous functions for communicating between the
+runtime and the node.
+
+\subsection{\tmverbatim{chain\_id}}
+
+Returns the current relay chain identifier.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_misc_chain_id_version_1 (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{result}: the current relay chain identifier.
+\end{itemize}
+
+\subsection{\tmverbatim{print\_num}}
+
+Print a number.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_misc_print_num_version_1 (param $value i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{value}: the number to be printed.
+\end{itemize}
+
+\subsection{\tmverbatim{print\_utf8}}
+
+Print a valid \tmverbatim{UTF8} buffer.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_misc_print_utf8_version_1 (param $data i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the valid \tmverbatim{UTF8} buffer to
+  be printed.
+\end{itemize}
+
+\subsection{\tmverbatim{print\_hex}}
+
+Print any buffer in hexadecimal representation.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_misc_print_hex_version_1 (param $data i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the buffer to be printed.
+\end{itemize}
+
+\subsection{\tmverbatim{runtime\_version}}
+
+Extract the Runtime version of the given Wasm blob by calling
+\tmverbatim{Core\_version} as defined in Definition
+\ref{defn-rt-core-version}. Returns the SCALE encoded runtime version or
+\tmverbatim{None} as defined in Definition \ref{defn-option-type} if the call
+fails. This function gets primarily used when upgrading Runtimes.
+
+\
+
+{\tmstrong{Warning}}: Calling this function is very expensive and should only
+be done very occasionally. For getting the runtime version, it requires
+instantiating the Wasm blob as described in Section
+\ref{sect-loading-runtime-code} and calling a function in this blob.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_misc_runtime_version_version_1 (param $data i64) (result i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{data}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the Wasm blob.
+  
+  \item \tmverbatim{result}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the SCALE encoded \tmverbatim{Option}
+  as defined in Definition \ref{defn-option-type} containing the Runtime
+  version of the given Wasm blob.
+\end{itemize}
+
+\section{Allocator}
+
+Provides functionality for calling into the memory allocator.
+
+\subsection{\tmverbatim{malloc}}
+
+Allocates the given number of bytes and returns the pointer to that memory
+location.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_allocator_malloc_version_1 (param $size i32) (result i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{size}: the size of the buffer to be allocated.
+  
+  \item \tmverbatim{result}: a regular pointer to the allocated buffer.
+\end{itemize}
+
+\subsection{\tmverbatim{free}}
+
+Free the given pointer.
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_allocator_free_version_1 (param $ptr i32))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{ptr}: a regular pointer to the memory buffer to be freed.
+\end{itemize}
+
+\section{Logging}
+
+Interface that provides functions for logging from within the runtime.
+
+\begin{definition}
+  \label{defn-logging-log-level}{\tmstrong{Log Level}} is a varying data type
+  as defined in Definition \ref{defn-varrying-data-type} and implies the
+  emergency of the log. Possible levels and it's identifiers are defined in
+  the following table.
+  
+  \begin{table}[h]
+    \begin{tabular}{ll}
+      {\tmstrong{Id}} & {\tmstrong{Level}} \\
+      \hline
+      0 & Error = 1\\
+      1 & Warn = 2\\
+      2 & Info = 3\\
+      3 & Debug = 4\\
+      4 & Trace = 5
+    \end{tabular}
+    \caption{Log Levels for the logging interface}
+  \end{table}
+\end{definition}
+
+\subsection{\tmverbatim{log}}
+
+Request to print a log message on the host. Note that this will be only
+displayed if the host is enabled to display log messages with given level and
+target.
+
+\
+
+\subsubsection{Version 1 - Prototype}
+
+\begin{alltt}
+(func $ext_logging_log_version_1
+  (param $level i32) (param $target i64) (param $message i64))
+\end{alltt}
+
+
+{\tmstrong{Arguments}}:
+\begin{itemize}
+  \item \tmverbatim{level}: the log level as defined in Definition
+  \ref{defn-logging-log-level}.
+  
+  \item \tmverbatim{target}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the string which contains the path,
+  module or location from where the log was executed.
+  
+  \item \tmverbatim{message}: a pointer-size as defined in Definition
+  \ref{defn-runtime-pointer} indicating the log message.
+\end{itemize}
+
+\chapter{Legacy Runtime Environment API\label{sect-re-api}}
+
+\
+
+The Legacy Runtime Environments APIs were exceeded and replaces by the
+current API as described in Appendix \ref{appendix-e}. Those legacy functions
+are only required for executing Runtimes prior the official Polkadot Runtime,
+such as the Kusama test network.
+
+\
+
+{\tmstrong{Note}}: This section will be removed in the future.
 
 \section{Storage}
 
@@ -4010,7 +5637,7 @@ Gets a value from the local storage.
 
 {\tmstrong{Prototype:}}
 \begin{alltt}
-(func $ext_local_storage_set
+(func $ext_local_storage_get
       (param $kind i32) (param $key i32) (param $key_len i32)
       (param $value_len i32) (result i32))
 \end{alltt}
@@ -4350,8 +5977,7 @@ the Runtime Wasm blob and have been exported as shown in Snippet
   (export "GrandpaApi_grandpa_forced_change" 
           (func $GrandpaApi_grandpa_forced_change))
   (export "GrandpaApi_grandpa_authorities" (func $GrandpaApi_grandpa_authorities))
-  (export "BabeApi_startup_data" (func $BabeApi_startup_data))
-  (export "BabeApi_epoch" (func $BabeApi_epoch))
+  (export "BabeApi_configuration" (func $BabeApi_configuration))
   (export "SessionKeys_generate_session_keys" 
           (func $SessionKeys_generate_session_keys))
 
@@ -4383,7 +6009,7 @@ In this section, we describe the function of each of the entries alongside
 with the details of the arguments and the return values for each one of these
 enteries.
 
-\subsection{\tmverbatim{Core\_version}}
+\subsection{\tmverbatim{Core\_version}}\label{defn-rt-core-version}
 
 This entry receives no argument; it returns the version data encoded in ABI
 format described in Section \ref{sect-runtime-return-value} containing the
@@ -4411,7 +6037,7 @@ following information:
   \tmverbatim{version} function.}
 \end{center}
 
-\subsection{\tmverbatim{Core\_execute\_block}}
+\subsection{\tmverbatim{Core\_execute\_block}}\label{sect-core-execute-block}
 
 Executes a full block by executing all exctrinsics included in it and update
 the state accordingly. Additionally, some integrity checks are executed such
@@ -4477,7 +6103,7 @@ An auxilarry function which returns hash and encoding length of an extrinsics.
   \item Pair of Blake2Hash of the blob as element of $\mathbb{B}_{32}$ and its
   length as 64 bit integer.
 \end{itemizedot}
-\subsection{\tmverbatim{BabeApi\_epoch}}\label{sect-rte-babeapi-epoch}
+\subsection{\tmverbatim{BabeApi\_configuration}}\label{sect-rte-babeapi-epoch}
 
 This entry is called to obtain the current configuration of BABE consensus
 protocol.
@@ -4486,38 +6112,52 @@ protocol.
 
 {\tmstrong{Arguments}}:
 \begin{itemize}
-  \item $H_n (B)$: the block number at whose final state the epoch
-  configuration should be obtained.
+  \item None
 \end{itemize}
 
 
 {\tmstrong{Return}}:
 
-A tuple
-\[ (\mathcal{E}_n, s^n_0, \tmop{sc}_n, A, \rho, \tmop{Sec}) \]
+A tuple containing configuration data used by the Babe consensus engine.
 
-
-where:
-{\center{\begin{tabular}{rll}
-  $\mathcal{E}_n$: & epoch index (see Definition \ref{defn-epoch-slot}) &
-  64-bit integer\\
-  $s^n_0 :$ & The index of the starting slot of $\mathcal{E}_n$ & 64-bit
-  integer\\
-  $\tmop{sc}_n$: & Slot count of $\mathcal{E}_n$ (see Definition
-  \ref{defn-epoch-slot}) & 1 byte\\
-  $A$: & The list of authorities and their weights & Array of $(P_A, W_A)$\\
-  $\rho$ & Randomness used in $\mathcal{E}_n$ (see Section
-  \ref{sect-epoch-randomness}) & $\mathbb{B}_{32}$\\
-  Sec & To be specced & Boolean
-\end{tabular}}}
-
-
-in which:
-{\center{\begin{tabular}{rll}
-  $P_A$: & The public key of authority A & $\mathbb{B}_{32}$\\
-  $W_A :$ & The weight of the authority A & 64 bit integer
-\end{tabular}}}
-
+\begin{table}[h]
+  \begin{tabular}{lll}
+    \hline
+    {\tmstrong{Name}} & {\tmstrong{Description}} & {\tmstrong{Type}}\\
+    \hline
+    SlotDuration & The slot duration in milliseconds. Currently, only the
+    value provided & Unsigned 64bit\\
+    & by this type at genesis will be used. Dynamic slot duration may be &
+    integer\\
+    & supported in the future. & \\
+    \hline
+    EpochLength & The duration of epochs in slots. & Unsigned 64bit\\
+    &  & integer\\
+    \hline
+    Constant & A constant value that is used in the threshold calculation
+    formula. & Tuple containing\\
+    & Expressed as a rational where the first number of the tuple is the &
+    two unsigned\\
+    & numerator and the seconds is the denominator. The rational should &
+    64bit integers\\
+    & represent a value between 0 and 1. & \\
+    \hline
+    Genesis & The authority list for the genesis epoch as defined in
+    Definition \ref{defn-authority-list}.  & Array of tuples\\
+    Authorities &  & containing a 256-bit\\
+    &  & byte array and a\\
+    &  & unsigned 64bit\\
+    &  & integer\\
+    \hline
+    Randomness & The randomness for the genesis epoch & 32-byte array\\
+    \hline
+    SecondarySlot & Whether this chain should run with secondary slots, which
+    are & Boolean\\
+    & assigned in a round-robin manner. & \\
+    \hline
+  \end{tabular}
+  \caption{The tuple provided by {\tmstrong{BabeApi\_configuration}}.}
+\end{table}
 
 \subsection{\tmverbatim{GrandpaApi\_grandpa\_authorities}}\label{sect-rte-grandpa-auth}
 
@@ -4533,80 +6173,139 @@ This entry is invoked against extrinsics submitted through the Transaction
 network message \ref{sect-msg-transactions} and indicates if the submitted
 blob represents a valid extrinsics applied to the specified block.
 
+\
+
 {\tmstrong{Arguments}}:
 \begin{itemize}
-  \item $H_n (B)$: the block number whose final state is where the transaction
-  should apply the system state.
-  
   \item UTX: A byte array that contains the transaction.
 \end{itemize}
 
 
 {\tmstrong{Return}}:
 
-A varying type Result object which has type of {\tmem{TransactionValidity}} in
-case no error occurs in course of its execution. TransactionValidity is of
-varying type described in the Table \ref{tabl-transaction-validity}:
+This function returns a \tmverbatim{Result} as defined in Definition
+\ref{defn-result-type} which contains the type {\tmem{ValidTransaction}} as
+defined in Definition \ref{defn-valid-transaction} on success and the type
+{\tmem{TransactionValidityError}} as defined in Definition
+\ref{defn-transaction-validity-error} on failure.
 
-\
-
-\tmfloat{h}{small}{table}{\begin{tabular}{lll}
-  \hline
-  {\tmstrong{Type Index}} & {\tmstrong{Data type}} &
-  {\tmstrong{Descri{\tmstrong{}}ption}}\\
-  \hline
-  0 & Byte & Indicating invalid extrinsic and bearing the error code
-  concerning\\
-  &  & the cause of invalidity of the transaction.\\
-  1 & A Quin-tuple & Indicating whether the extrinsic is valid and providing
-  guidance for \\
-  &  & Polkadot RE on how to proceed with the extrinsic (see below)\\
-  2 & Byte & The Validity of the extrinsic cannot be determined
-\end{tabular}}{\label{tabl-transaction-validity}Type variation for the return
-value of \tmverbatim{TaggedTransactionQueue\_transaction\_validity}.}
-
-\
-
-In which the quintuple of type for valid extrinsics consists of the following
-parts:
-\[ (\tmop{priority}, \tmop{requires}, \tmop{provides}, \tmop{longevity},
-   \tmop{propagate}) \]
-
-
-\tmfloat{h}{small}{table}{\begin{tabular}{|lll|}
-  \hline
-  {\tmstrong{Name}} & {\tmstrong{Description}} & {\tmstrong{Type}}\\
-  Priority & Determines the ordering of two transactions that have & 64bit
-  integer\\
-  & all their dependencies (required tags) satisfied. & \\
-  \hline
-  Requires & List of tags specifying extrinsics which should be applied  &
-  Array of \\
-  & before the current exrinsics can be applied. & Transaction Tags\\
-  \hline
-  Provides & Informs Runtime of the extrinsics depending on the tags in &
-  Array of \\
-  & the list that can be applied after current extrinsics are being applied.
-  & Transaction Tags\\
-  & Describes the minimum number of blocks for the validity to be correct &
-  \\
-  \hline
-  Longevity & After this period, the transaction should be removed from the  &
-  64 bit integer\\
-  & pool or revalidated. & \\
-  \hline
-  Propagate & A flag indicating if the transaction should be propagated to  &
-  Boolean\\
-  & other peers. & 
-\end{tabular}}{The quintuple provided by
-\tmverbatim{TaggedTransactionQueue\_transaction\_validity}
-in the case the transaction is judged to be valid.}
-
-\
+\begin{definition}
+  \label{defn-valid-transaction}{\tmstrong{ValidTransaction}} is a tuple which
+  contains information concerning a valid transaction.
+  
+  \
+  
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    \hline
+    {\tmstrong{Name}} & {\tmstrong{Description}} & {\tmstrong{Type}}\\
+    \hline
+    Priority & Determines the ordering of two transactions that have &
+    Unsigned 64bit\\
+    & all their dependencies (required tags) satisfied. & integer\\
+    \hline
+    Requires & List of tags specifying extrinsics which should be applied  &
+    Array containing\\
+    & before the current exrinsics can be applied. & inner arrays\\
+    \hline
+    Provides & Informs Runtime of the extrinsics depending on the tags in &
+    Array containing\\
+    & the list that can be applied after current extrinsics are being
+    applied. & inner arrays\\
+    & Describes the minimum number of blocks for the validity to be correct &
+    \\
+    \hline
+    Longevity & After this period, the transaction should be removed from the 
+    & Unsigned 64bit\\
+    & pool or revalidated. & integer\\
+    \hline
+    Propagate & A flag indicating if the transaction should be propagated to 
+    & Boolean\\
+    & other peers. & \\
+    \hline
+  \end{tabular}}{The tuple provided by
+  \tmverbatim{TaggedTransactionQueue\_transaction\_validity}
+  in the case the transaction is judged to be valid.}
+\end{definition}
 
 Note that if {\tmem{Propagate}} is set to \tmverbatim{false} the transaction
 will still be considered for including in blocks that are authored on the
 current node, but will never be sent to other peers.
+
+\begin{definition}
+  \label{defn-transaction-validity-error}{\tmstrong{TransactionValidityError}}
+  is a varying data type as defined in Definition
+  \ref{defn-varrying-data-type}, where following values are possible:
+  
+  \
+  
+  \tmfloat{h}{small}{table}{\begin{tabular}{lll}
+    \hline
+    {\tmstrong{{\tmstrong{}}Id}} & {\tmstrong{Descri{\tmstrong{}}ption}} &
+    {\tmstrong{Appended}}\\
+    \hline
+    0 & The transaction is invalid. & InvalidTransaction
+    (\ref{defn-invalid-transaction})\\
+    1 & The transaction validity can't be determined. & UnknownTransaction
+    (\ref{defn-unknown-transaction})\\
+    \hline
+  \end{tabular}}{Type variation for the return value of
+  \tmverbatim{TaggedTransactionQueue\_transaction\_validity}.}
+  
+  \begin{definition}
+    \label{defn-invalid-transaction}{\tmstrong{InvalidTransaction}} is a
+    varying data type as defined in Definition \ref{defn-varrying-data-type}
+    which can get appended to TransactionValidityError and describes the
+    invalid transaction in more precise detail. The following values are
+    possible:
+    
+    \begin{table}[h]
+      \begin{tabular}{lll}
+        \hline
+        {\tmstrong{Id}} & {\tmstrong{Description}} & {\tmstrong{Appended}}\\
+        \hline
+        0 & Call: The call of the transaction is not expected & \\
+        1 & Payment: Inability to pay some fees (e.g. balance too low) & \\
+        2 & Future: Transaction not yet valid (e.g. nonce too high) & \\
+        3 & Stale: Transaction is outdated (e.g. nonce too low) & \\
+        4 & BadProof: Bad transaction proof (e.g. bad signature) & \\
+        5 & AncientBirthBlock: Transaction birth block is ancient. & \\
+        6 & ExhaustsResources: Transaction would exhaus the resources of the
+        current block & \\
+        7 & Custom: Any other custom message not covered by this type.  & one
+        byte\\
+        \hline
+      \end{tabular}
+      \caption{Type variant whichs gets appended to Id 0 of
+      {\tmstrong{TransactionValidityError}}.}
+    \end{table}
+  \end{definition}
+  
+  \begin{definition}
+    \label{defn-unknown-transaction}{\tmstrong{UnknownTransacion}} is a
+    varying data type as defined in Definition \ref{defn-varrying-data-type}
+    which can get appended to TransactionValidityError and describes the
+    unknown transaction validity in more precise detail. The following values
+    are possible:
+    
+    \begin{table}[h]
+      \begin{tabular}{lll}
+        \hline
+        {\tmstrong{Id}} & {\tmstrong{Description}} & {\tmstrong{Appended}}\\
+        0 & CannotLookup: Could not lookup some info that is required for the
+        transaction & \\
+        1 & NoUnsignedValidator: No validator found for the given unsigned
+        transaction. & \\
+        2 & Custom: Any other custom message not covered by this type & one
+        byte\\
+        \hline
+      \end{tabular}
+      \caption{Type variant whichs gets appended to Id 1 of
+      {\tmstrong{TransactionValidityError}}.}
+    \end{table}
+  \end{definition}
+  
+  \ 
+\end{definition}
 
 \subsection{\tmverbatim{BlockBuilder\_apply\_extrinsic}}
 
@@ -4681,7 +6380,7 @@ transaction hashes.
   \end{tabular}}{Identifiers of the Apply error type}
 \end{itemizedot}
 
-\subsection{{\tmstrong{{\tmstrong{\tmverbatim{BlockBuilder\_inherent\_extrinsics}}}}}}
+\subsection{\tmverbatim{BlockBuilder\_inherent\_extrinsics}}
 
 Generate inherent extrinsics. The inherent data will vary from chain to chain.
 
@@ -4698,8 +6397,7 @@ Generate inherent extrinsics. The inherent data will vary from chain to chain.
 \begin{itemizedot}
   \item An array of extrinisic where each extrinsic is a variable byte array.
 \end{itemizedot}
-
-\subsection{\tmverbatim{BlockBuilder\_finalize\_block}}
+\subsection{\tmverbatim{BlockBuilder\_finalize\_block}}\label{sect-blockbuilder-finalize-block}
 
 Finalize the block - it is up to the caller to ensure that all header fields
 are valid except for the state root.
@@ -4707,155 +6405,11 @@ are valid except for the state root.
 \chapter*{Glossary}
 
 \begin{theglossary}{gly}
-  \glossaryentry{\tmtextbf{$P_n$}}{a path graph or a path of n nodes, can be
-  represented by sequences of $(v_1, \ldots, v_n)$ where $e_i = (v_i, v_{i +
-  1})$ for $1 \leqslant i \leqslant n - 1$ is the edge which connect $v_i$ and
-  $v_{i + 1}$}{\pageref{autolab1}}
-  
-  \glossaryentry{$\mathbb{B}_n$}{a set of all byte arrays of length
-  n}{\pageref{autolab2}}
-  
-  \glossaryentry{I}{the little-endian representation of a non-negative
-  interger, represented as $I = (B_n \ldots B_0)_{256}$}{\pageref{autolab3}}
-  
-  \glossaryentry{$B$}{a byte array $B = (b_0, b_1, \ldots, b_n)$ such that
-  $b_i \assign B_i$}{\pageref{autolab4}}
-  
-  \glossaryentry{$\tmop{Enc}_{\tmop{LE}}$}{$\begin{array}{lll}
-    \mathbb{Z}^+ & \rightarrow & \mathbb{B}\\
-    (B_n \ldots B_0)_{256} & \mapsto & (B_{0,} B_1, \ldots_{}, B_n)
-  \end{array}$}{\pageref{autolab5}}
-  
-  \glossaryentry{C, blockchain}{a blockchain C is a directed path
-  graph.}{\pageref{autolab6}}
-  
-  \glossaryentry{Block}{a node of the graph in blockchain C and indicated by
-  $B$}{\pageref{autolab7}}
-  
-  \glossaryentry{Genesis Block}{the unique sink of blockchain
-  C}{\pageref{autolab8}}
-  
-  \glossaryentry{Head}{the source of blockchain C}{\pageref{autolab9}}
-  
-  \glossaryentry{P}{for any vertex $(B_1, B_2)$ where $B_1 \rightarrow B_2$ we
-  say $B_2$ is the parent of $B_1$ and we indicate it by $B_2 \assign P
-  (B_1)$}{\pageref{autolab10}}
-  
-  \glossaryentry{BT, block tree}{is the union of all different versions of the
-  blockchain observed by all the nodes in the system such as every such block
-  is a node in the graph and $B_1$ is connected to $B_2$ if $B_1$ is a parent
-  of $B_2$}{\pageref{autolab11}}
-  
-  \glossaryentry{PBT, Pruned BT}{Pruned Block Tree refers to a subtree of the
-  block tree obtained by eliminating all branches which do not contain the
-  most recent finalized blocks, as defined in Definition
-  \ref{defn-finalized-block}.}{\pageref{autolab12}}
-  
-  \glossaryentry{pruning}{}{\pageref{autolab13}}
-  
-  \glossaryentry{G}{is the root of the block tree and B is one of its
-  nodes.}{\pageref{autolab14}}
-  
-  \glossaryentry{CHAIN(B)}{refers to the path graph from $G$ to $B$ in
-  (P)$\tmop{BT}$.}{\pageref{autolab15}}
-  
-  \glossaryentry{head of C}{defines the head of C to be $B$, formally noted as
-  $B \assign$\tmtextsc{Head($C$)}.}{\pageref{autolab16}}
-  
-  \glossaryentry{$| C |$}{defines he length of $C$as a path
-  graph}{\pageref{autolab17}}
-  
-  \glossaryentry{SubChain($B', B$)}{If $B'$ is another node on
-  \tmtextsc{Chain($B$)}, then by \tmtextsc{SubChain($B', B$)} we refer to the
-  subgraph of \tmtextsc{Chain($B$)} path graph which contains both $B$ and
-  $B'$.}{\pageref{autolab18}}
-  
-  \glossaryentry{$\mathbb{C}_{B'} ((P) \tmop{BT})$}{is the set of all
-  subchains of $(P) \tmop{BT}$ rooted at $B'$.}{\pageref{autolab19}}
-  
-  \glossaryentry{$\mathbb{C}$}{the set of all chains of $(P) \tmop{BT}$,
-  $\mathbb{C}_G ((P) \tmop{BT})$ is denoted by $\mathbb{C}$((P)BT) or simply
-  $\mathbb{C}$}{\pageref{autolab20}}
-  
-  \glossaryentry{LONGEST-CHAIN(BT)}{the maximum chain given by the complete
-  order over $\mathbb{C}$}{\pageref{autolab21}}
-  
-  \glossaryentry{LONGEST-PATH(BT)}{the path graph of $(P) \tmop{BT}$ which is
-  the longest among all paths in $(P) \tmop{BT}$ and has the earliest block
-  arrival time as defined in Definition
-  \ref{defn-block-time}.}{\pageref{autolab22}}
-  
-  \glossaryentry{DEEPEST-LEAF(BT)}{the head of
-  LONGEST-PATH(BT)}{\pageref{autolab23}}
-  
-  \glossaryentry{StoredValue}{the function retrieves the value stored under a
-  specific key in the state storage and is formally defined as
-  $\begin{array}{l}
-    \mathcal{K} \rightarrow \mathcal{V}\\
-    k \mapsto \left\{ \begin{array}{cc}
-      v & \text{if (k,v) exists in state storage}\\
-      \phi & \tmop{otherwise}
-    \end{array} \right.
-  \end{array}$. Here $\mathcal{K} \subset \mathbb{B}$ and $\mathcal{V} \subset
-  \mathbb{B}$ are respectively the set of all keys and values stored in the
-  state storage.}{\pageref{autolab24}}
+  \listpart{}
 \end{theglossary}
 
-\begin{thebibliography}{DGKR18}
-  \bibitem[Bur19]{burdges_schnorr_2019}Jeff Burdges. {\newblock}Schnorr VRFs
-  and signatures on the Ristretto group. {\newblock}Technical Report,
-  2019.{\newblock}
-  
-  \bibitem[Col19]{collet_extremely_2019}Yann Collet. {\newblock}Extremely fast
-  non-cryptographic hash algorithm. {\newblock}Technical Report, -,
-  \url{http://cyan4973.github.io/xxHash/}, 2019.{\newblock}
-  
-  \bibitem[DGKR18]{david_ouroboros_2018}Bernardo David, Peter Ga{\v z}i,
-  Aggelos Kiayias, and  Alexander Russell. {\newblock}Ouroboros praos: An
-  adaptively-secure, semi-synchronous proof-of-stake blockchain. {\newblock}In
-  \tmtextit{Annual International Conference on the Theory and Applications of
-  Cryptographic Techniques},  pages  66--98. Springer, 2018.{\newblock}
-  
-  \bibitem[Fou20]{web3.0_technologies_foundation_polkadot_2020}Web3.0~Technologies
-  Foundation. {\newblock}Polkadot Genisis State. {\newblock}Technical Report,
-  \url{https://github.com/w3f/polkadot-spec/blob/master/genesis-state/},
-  2020.{\newblock}
-  
-  \bibitem[Gro19]{w3f_research_group_blind_2019}W3F~Research Group.
-  {\newblock}Blind Assignment for Blockchain Extension. {\newblock}Technical
-  {\keepcase{Specification}}, Web 3.0 Foundation,
-  \url{http://research.web3.foundation/en/latest/polkadot/BABE/Babe/},
-  2019.{\newblock}
-  
-  \bibitem[JL17]{josefsson_edwards-curve_2017}Simon Josefsson  and  Ilari
-  Liusvaara. {\newblock}Edwards-curve digital signature algorithm (EdDSA).
-  {\newblock}In \tmtextit{Internet Research Task Force, Crypto Forum Research
-  Group, RFC},  volume  8032. 2017.{\newblock}
-  
-  \bibitem[lab19]{protocol_labs_libp2p_2019}Protocol labs. {\newblock}Libp2p
-  Specification. {\newblock}Technical Report, Protocol labs,
-  \url{https://github.com/libp2p/specs}, 2019.{\newblock}
-  
-  \bibitem[LJ17]{liusvaara_edwards-curve_2017}Ilari Liusvaara  and  Simon
-  Josefsson. {\newblock}Edwards-Curve Digital Signature Algorithm (EdDSA).
-  {\newblock}2017.{\newblock}
-  
-  \bibitem[Per18]{perrin_noise_2018}Trevor Perrin. {\newblock}The Noise
-  Protocol Framework. {\newblock}Technical Report,
-  \url{https://noiseprotocol.org/noise.html}, 2018.{\newblock}
-  
-  \bibitem[SA15]{saarinen_blake2_2015}Markku~Juhani Saarinen  and 
-  Jean-Philippe Aumasson. {\newblock}The BLAKE2 cryptographic hash and message
-  authentication code (MAC). {\newblock}{\keepcase{RFC}} 7693, -,
-  \url{https://tools.ietf.org/html/rfc7693}, 2015.{\newblock}
-  
-  \bibitem[Ste19]{stewart_grandpa:_2019}Alistair Stewart. {\newblock}GRANDPA:
-  A Byzantine Finality Gadget. {\newblock}2019.{\newblock}
-  
-  \bibitem[Tec19]{parity_technologies_substrate_2019}Parity Technologies.
-  {\newblock}Substrate Reference Documentation. {\newblock}Rust
-  {\keepcase{Doc}}, Parity Technologies,
-  \url{https://substrate.dev/rustdocs/}, 2019.{\newblock}
+\begin{thebibliography}{}
+  \ 
 \end{thebibliography}
 
 \printindex
