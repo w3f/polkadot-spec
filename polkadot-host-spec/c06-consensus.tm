@@ -1390,29 +1390,27 @@
   <subsubsection|Sending catch-up request><label|sect-sending-catchup-request>
 
   When a Polkadot node has the same authority list as a peer node who is
-  reporting a higher number of finalized round they may use the Algorithm
-  <reference|algo-catchup-request> to send a catch-up request message in
-  order to catch-up to the more advanced finalized round.
+  reporting a higher number for the \Pfinalized round\Q field, they should
+  send a catch-up request message as specified in Definition
+  <reference|defn-grandpa-catchup-request-msg> to the reporting peer in order
+  to catch-up to the more advanced finalized round, provided that the
+  following criteria holds:
 
-  <\algorithm>
-    <label|algo-catchup-request><name|Send-Catch-up-Request>(<math|M<rsub|i><rsup|NP>:Neighbour>
-    Packet sent by peer <math|i>
+  <\itemize-minus>
+    <item>the peer node is a GRANDPA voter.
 
-    )
-  <|algorithm>
-    <\algorithmic>
-      \;
-    </algorithmic>
-  </algorithm>
+    <item>The last known finalized round for the Polkadot node is at least 2
+    rounds behind the finalized round by the peer.\ 
+  </itemize-minus>
+
+  \;
 
   \;
 </body>
 
 <\initial>
   <\collection>
-    <associate|page-height|auto>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
+    <associate|page-medium|papyrus>
   </collection>
 </initial>
 
