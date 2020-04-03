@@ -1,7 +1,7 @@
 default:
   image: nixos/nix:2.3
   before_script:
-   - nix-env -iA cachix -f https://cachix.org/api/v1/install
+   - nix-env --quiet -f https://cachix.org/api/v1/install -iA cachix
    - cachix use w3fpkgs
 
 
@@ -10,34 +10,35 @@ stages:
    - test
 
 
-rust-tester:
+.build:
   stage: build
-  script: nix-build release.nix -A rust-tester | cachix push w3fpkgs
+  script: nix-build release.nix -A ${CI_JOB_NAME} | cachix push w3fpkgs
+  timeout: 15m
+
+rust-tester:
+  extends: .build
   timeout: 2h
 
 go-tester:
-  stage: build
-  script: nix-build release.nix -A go-tester | cachix push w3fpkgs
-  timeout: 15m
+  extends: .build
 
 cpp-tester:
-  stage: build
-  script: nix-build release.nix -A cpp-tester | cachix push w3fpkgs
+  extends: .build
+
+
+.test:
+  stage: test
+  script: nix-shell release-shell.nix --quiet --pure --run "./run_${CI_JOB_NAME}_tests.jl verbose"
   timeout: 15m
 
+scale_codec:
+  extends: .test
 
-scale-codec:
-  stage: test
-  script: nix-shell release-shell.nix --pure --run "./run_scale_codec_tests.jl verbose"
+state_trie:
+  extends: .test
 
-state-trie:
-  stage: test
-  script: nix-shell release-shell.nix --pure --run "./run_state_trie_tests.jl verbose"
+pdre_api:
+  extends: .test
 
-pdre-api:
-  stage: test
-  script: nix-shell release-shell.nix --pure --run "./run_pdre_api_tests.jl vebose"
-
-pdre-api-legacy:
-  stage: test
-  script: nix-shell release-shell.nix --pure --run "./run_pdre_api_tests_legacy.jl verbose"
+pdre_api_legacy:
+  extends: .test
