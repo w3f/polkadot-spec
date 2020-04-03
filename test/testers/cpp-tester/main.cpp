@@ -7,7 +7,7 @@
 namespace po = boost::program_options;
 
 /**
- * Implementation of Polkadot RE compatibility tests
+ * Implementation of Polkadot Host compatibility tests
  * Contains tests for SCALE codec and Merkle-Patricia Tree
  */
 

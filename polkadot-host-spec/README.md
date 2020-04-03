@@ -1,5 +1,5 @@
 # Polkadot Runtime Environment Spec
-Incubator for Polkadot RE spec
+Incubator for Polkadot Host spec
 
 Here your can find the latest version of ![Polkadot Runtime Environment Specification](./polkadot_re_spec.pdf)
 
