@@ -1,6 +1,6 @@
 <TeXmacs|1.99.12>
 
-<project|polkadot_re_spec.tm>
+<project|polkadot_host_spec.tm>
 
 <style|book>
 
@@ -297,9 +297,9 @@
   The network agent should hand over <math|D> to approperiate consensus
   engine which identified by <math|E<rsub|id>>.
 
-  \;
+  <subsection|Neighbor Packet><label|sect-msg-neighbor-packet>
 
-  \;
+  <todo|Place holder for speccing Neighbor Packet message>
 </body>
 
 <\initial>
@@ -313,29 +313,31 @@
 
 <\references>
   <\collection>
-    <associate|auto-1|<tuple|A|?|c01-background.tm>>
-    <associate|auto-10|<tuple|A.1.5|?|c01-background.tm>>
-    <associate|auto-11|<tuple|A.1.6|?|c01-background.tm>>
-    <associate|auto-2|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-3|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-4|<tuple|A.1.1|?|c01-background.tm>>
-    <associate|auto-5|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-6|<tuple|A.1.2|?|c01-background.tm>>
-    <associate|auto-7|<tuple|A.3|?|c01-background.tm>>
-    <associate|auto-8|<tuple|A.1.3|?|c01-background.tm>>
-    <associate|auto-9|<tuple|A.1.4|?|c01-background.tm>>
-    <associate|defn-block-data|<tuple|A.2|?|c01-background.tm>>
-    <associate|sect-message-detail|<tuple|A.1|?|c01-background.tm>>
-    <associate|sect-msg-block-announce|<tuple|A.1.4|?|c01-background.tm>>
-    <associate|sect-msg-block-request|<tuple|A.1.2|?|c01-background.tm>>
-    <associate|sect-msg-block-response|<tuple|A.1.3|?|c01-background.tm>>
-    <associate|sect-msg-consensus|<tuple|A.1.6|?|c01-background.tm>>
-    <associate|sect-msg-status|<tuple|A.1.1|?|c01-background.tm>>
-    <associate|sect-msg-transactions|<tuple|A.1.5|?|c01-background.tm>>
-    <associate|sect-network-messages|<tuple|A|?|c01-background.tm>>
-    <associate|tabl-block-attributes|<tuple|A.3|?|c01-background.tm>>
-    <associate|tabl-message-types|<tuple|A.1|?|c01-background.tm>>
-    <associate|tabl-node-role|<tuple|A.2|?|c01-background.tm>>
+    <associate|auto-1|<tuple|A|?>>
+    <associate|auto-10|<tuple|A.1.5|?>>
+    <associate|auto-11|<tuple|A.1.6|?>>
+    <associate|auto-12|<tuple|A.1.7|?>>
+    <associate|auto-2|<tuple|A.1|?>>
+    <associate|auto-3|<tuple|A.1|?>>
+    <associate|auto-4|<tuple|A.1.1|?>>
+    <associate|auto-5|<tuple|A.2|?>>
+    <associate|auto-6|<tuple|A.1.2|?>>
+    <associate|auto-7|<tuple|A.3|?>>
+    <associate|auto-8|<tuple|A.1.3|?>>
+    <associate|auto-9|<tuple|A.1.4|?>>
+    <associate|defn-block-data|<tuple|A.2|?>>
+    <associate|sect-message-detail|<tuple|A.1|?>>
+    <associate|sect-msg-block-announce|<tuple|A.1.4|?>>
+    <associate|sect-msg-block-request|<tuple|A.1.2|?>>
+    <associate|sect-msg-block-response|<tuple|A.1.3|?>>
+    <associate|sect-msg-consensus|<tuple|A.1.6|?>>
+    <associate|sect-msg-neighbor-packet|<tuple|A.1.7|?>>
+    <associate|sect-msg-status|<tuple|A.1.1|?>>
+    <associate|sect-msg-transactions|<tuple|A.1.5|?>>
+    <associate|sect-network-messages|<tuple|A|?>>
+    <associate|tabl-block-attributes|<tuple|A.3|?>>
+    <associate|tabl-message-types|<tuple|A.1|?>>
+    <associate|tabl-node-role|<tuple|A.2|?>>
   </collection>
 </references>
 

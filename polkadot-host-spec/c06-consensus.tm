@@ -1,6 +1,6 @@
 <TeXmacs|1.99.12>
 
-<project|polkadot_re_spec.tm>
+<project|polkadot_host_spec.tm>
 
 <style|book>
 
@@ -839,10 +839,11 @@
 
     where:
 
-    <math|\<bbb-V\>>: is the set of voters.
+    <math|<math-bf|\<bbb-V\>>>: is the set of voters.
 
-    <strong|<math|\<bbb-V\><rsub|id>>>: is an incremental counter tracking
-    <verbatim|>membership, which changes in V.
+    <math|<math-bf|id<rsub|\<bbb-V\>>>>: is an incremental counter tracking
+    <verbatim|>membership, which changes in V.<todo|redefine as authority set
+    id>
 
     <strong|r>: is the votin<verbatim|>g round number.
   </definition>
@@ -995,7 +996,9 @@
 
   \;
 
-  <subsection|Voting Messages Specification>
+  <subsection|GRANDPA Messages Specification>
+
+  <subsubsection|Vote Messages>
 
   Voting is done by means of broadcasting voting messages to the network.
   Validators inform their peers about the block finalized in round <math|r>
@@ -1009,7 +1012,7 @@
     <math|v> with the following structure:
 
     <\equation*>
-      M<rsup|r,stage><rsub|v>\<assign\>Enc<rsub|SC><around|(|r,id<rsub|\<bbb-V\>>,Enc<rsub|SC><around|(|stage,V<rsub|v><rsup|r,stage>|\<nobracket\>>,Sig<rsub|ED25519><around|(|Enc<rsub|SC><around|(|stage,V<rsub|v><rsup|r,stage>|\<nobracket\>>,r,V<rsub|id>|)>,v<rsub|id>|)>
+      M<rsup|r,stage><rsub|v>\<assign\>Enc<rsub|SC><around|(|stage,r,id<rsub|\<bbb-V\>>,Enc<rsub|SC><around|(|stage,V<rsub|v><rsup|r,stage>|\<nobracket\>>,Sig<rsub|ED25519><around|(|Enc<rsub|SC><around|(|stage,V<rsub|v><rsup|r,stage>|\<nobracket\>>,r,V<rsub|id>|)>,v<rsub|id>|)>
     </equation*>
 
     Where:
@@ -1028,13 +1031,15 @@
     \;
   </definition>
 
+  <subsubsection|Finalizing Message>
+
   <\definition>
     <label|defn-grandpa-justification>The <strong|justification for block B
     in round <math|r>> of GRANDPA protocol defined
-    <math|J<rsup|r><around*|(|B|)>> is a vector of pairs of the type:
+    <math|J<rsup|r,stage><around*|(|B|)>> is a vector of pairs of the type:
 
     <\equation*>
-      <around*|(|V<around*|(|B<rprime|'>|)>,<around*|(|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>|)>
+      <around*|(|V<around*|(|B<rprime|'>|)>,<around*|(|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>|)>
     </equation*>
 
     in which either
@@ -1046,13 +1051,17 @@
     or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
     equivocatory vote.
 
-    In all cases, <math|Sign<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
-    is the signature of voter <math|v<rsub|i>> broadcasted during the
-    pre-commit sub-round of round r.
+    In all cases, <math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
+    is the signature of voter <math|v<rsub|i>> broadcasted during either the
+    pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round
+    r. A valid Justification must not contain more than two equivocatory vote
+    from each voter.\ 
 
-    We say <math|J<rsup|r><around*|(|B|)>> <strong|justifies the
+    \;
+
+    We say <math|J<rsup|r,pc><around*|(|B|)>> <strong|justifies the
     finalization> of <math|B> if the number of valid signatures in
-    <math|J<rsup|r><around*|(|B|)>> is greater than
+    <math|J<rsup|r,pc><around*|(|B|)>> is greater than
     <math|<frac|2|3><around|\||\<bbb-V\><rsub|B>|\|>>.
   </definition>
 
@@ -1064,11 +1073,48 @@
     following structure:
 
     <\equation*>
-      M<rsup|r,Fin><rsub|v><around*|(|B|)>\<assign\>Enc<rsub|SC><around|(|r,V<around*|(|B|)>,J<rsup|r><around*|(|B|)>|)>
+      M<rsup|r,Fin><rsub|v><around*|(|B|)>\<assign\>Enc<rsub|SC><around|(|r,V<around*|(|B|)>,J<rsup|r,pc><around*|(|B|)>|)>
     </equation*>
 
     in which <math|J<rsup|r><around*|(|B|)>> in the justification defined in
     Definition <reference|defn-grandpa-justification>.
+  </definition>
+
+  <subsubsection|Catch-up Messages><label|sect-grandpa-catchup-messages>
+
+  Whenever a Polkadot node detects likely by means of neighbor packet network
+  message (see Section <reference|sect-msg-neighbor-packet>) that it is
+  lagging behind the finality procedure and therefore needs to initiate a
+  catch-up procedure explained in Section <reference|sect-grandpa-catchup> by
+  means of sending <em|catch-up request> and processing <em|catch-up
+  response> as specified here:
+
+  <\definition>
+    <label|defn-grandpa-catchup-request-msg><strong|GRANDPA catch-up request
+    message for round r> represented as <strong|<math|M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>>>
+    is a message sent from node <math|i> to its voting peer node <math|v>
+    requesting the latest status of a GRANDPA round
+    <math|r<rprime|'>\<gtr\>r> of of authority set <math|\<bbb-V\><rsub|id>>
+    along with the justification of the status and has the followin
+    structure:
+
+    <\equation*>
+      M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>\<assign\>Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>|)>
+    </equation*>
+  </definition>
+
+  <\definition>
+    <label|defn-grandpa-catchup-response-msg><strong|GRANDPA catch-up
+    response message for round r> formally denoted as
+    \ <strong|<math|M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>>>
+    is a message sent by a node <math|v> to node i in response of a catch up
+    request <math|M<rsub|v,i><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r<rprime|'>|)>>
+    in which <math|r\<geqslant\>r<rprime|'>> is the latest GRNADPA round
+    which v has prove of its finalization and has the following structure:
+
+    <\equation*>
+      M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>\<assign\>Enc<rsub|SC><around*|(|id<rsub|\<bbb-V\>>,r,J<rsup|r,pv><around*|(|B|)>,J<rsup|r,pc><around*|(|B|)>,H<rsub|h><around*|(|B<rprime|'>|)>,H<rsub|i><around*|(|B<rprime|'>|)>|)>
+    </equation*>
   </definition>
 
   <subsection|Initiating the GRANDPA State>
@@ -1079,34 +1125,50 @@
   voting is assigned a unique sequential round number <math|r<rsub|v>>, it
   needs to determine and set its round counter <math|r> in accordance with
   the current voting round <math|r<rsub|n>>, which is currently undergoing in
-  the network.
-
-  As instructed in Algorithm <reference|alg-join-leave-grandpa>, whenever the
-  membership of GRANDPA voters changes, <math|r> is set to 0 and
-  <math|V<rsub|id>> needs to be incremented.
+  the network. Algorithm <reference|algo-initiate-grandpa>\ 
 
   <\algorithm>
-    <label|alg-join-leave-grandpa><name|Join-Leave-Grandpa-Voters>
-    (<math|\<cal-V\>>)
+    <label|algo-initiate-grandpa><name|Initiate-Grandpa>(<math|r<rsub|last>>:
+    last round number or 0 if the voter starting a new authority set,
+
+    , <math|B<rsub|last>>: the last block which has been finalized on the
+    chain)
   <|algorithm>
     <\algorithmic>
       <\state>
-        <math|r\<leftarrow\>0>
+        <name|Last-Finalized-Block><math|\<leftarrow\>><math|B<rsub|last>>
       </state>
 
       <\state>
-        <math|\<cal-V\><rsub|id>\<leftarrow\>ReadState<around|(|<rprime|'>AUTHORITY_SET_KEY<rprime|'>|)>>
+        <\IF>
+          <math|r<rsub|last>=0>
+        </IF>
       </state>
 
       <\state>
-        <math|\<cal-V\><rsub|id>\<leftarrow\>\<cal-V\><rsub|id>+1>
+        <name|Last-Round-Estimate><math|=B<rsub|last>><END>
+
+        <name|Last-Round-Prevote-GHOST><math|=B<rsub|last>><END>
       </state>
 
       <\state>
-        <name|Execute-One-Grandpa-Round><math|<around|(|r|)>>
+        <math|r<rsub|n>\<leftarrow\>r<rsub|last+1>>
+      </state>
+
+      <\state>
+        <name|Play-Grandpa-round>(<math|r<rsub|n>>)
       </state>
     </algorithmic>
   </algorithm>
+
+  <subsubsection|Voter Set Changes>
+
+  Voter set changes are signaled by Runtime via a consensus engine message as
+  described in Section <reference|sect-consensus-message-digest>. When
+  Authorities process such messages they must not vote on any block with
+  higher number than the block at which the change is supposed to happen. The
+  new authority set should reinitiate GRANDPA protocol by exectutig Algorithm
+  <reference|algo-initiate-grandpa>.
 
   <subsection|Voting Process in Round <math|r>>
 
@@ -1313,6 +1375,37 @@
 
   Note that all Polkadot relay chain nodes are supposed to listen to GRANDPA
   finalizing messages regardless if they are GRANDPA voters.
+
+  <subsection|Catching up><label|sect-grandpa-catchup>
+
+  When a Polkadot node (re)joins the network during the process described in
+  Chapter <reference|chap-bootstrapping>, it requests the history of state
+  transition which it is missing in form of blocks. Each finalized block
+  comes with the Justification of its finalization as defined in Definition
+  <reference|defn-grandpa-justification> <todo|Verify: you can't trust your
+  neigbour for their set, you need to get it from the chain>. Through this
+  process they can synchronize the authority list which is currently
+  performing the finalization process.
+
+  <subsubsection|Sending catch-up request><label|sect-sending-catchup-request>
+
+  When a Polkadot node has the same authority list as a peer node who is
+  reporting a higher number of finalized round they may use the Algorithm
+  <reference|algo-catchup-request> to send a catch-up request message in
+  order to catch-up to the more advanced finalized round.
+
+  <\algorithm>
+    <label|algo-catchup-request><name|Send-Catch-up-Request>(<math|M<rsub|i><rsup|NP>:Neighbour>
+    Packet sent by peer <math|i>
+
+    )
+  <|algorithm>
+    <\algorithmic>
+      \;
+    </algorithmic>
+  </algorithm>
+
+  \;
 </body>
 
 <\initial>
@@ -1325,63 +1418,75 @@
 
 <\references>
   <\collection>
-    <associate|alg-join-leave-grandpa|<tuple|1.8|?|c01-background.tm>>
-    <associate|algo-attempt-to\Ufinalize|<tuple|1.11|?|c01-background.tm>>
-    <associate|algo-block-production|<tuple|1.3|?|c01-background.tm>>
-    <associate|algo-block-production-lottery|<tuple|1.1|?|c01-background.tm>>
-    <associate|algo-build-block|<tuple|1.7|?|c01-background.tm>>
-    <associate|algo-epoch-randomness|<tuple|1.4|?|c01-background.tm>>
-    <associate|algo-grandpa-best-candidate|<tuple|1.10|?|c01-background.tm>>
-    <associate|algo-grandpa-round|<tuple|1.9|?|c01-background.tm>>
-    <associate|algo-slot-time|<tuple|1.2|?|c01-background.tm>>
-    <associate|algo-verify-authorship-right|<tuple|1.5|?|c01-background.tm>>
-    <associate|algo-verify-slot-winner|<tuple|1.6|?|c01-background.tm>>
-    <associate|auto-1|<tuple|1|?|c01-background.tm>>
-    <associate|auto-10|<tuple|1.2.4|?|c01-background.tm>>
-    <associate|auto-11|<tuple|1.2.5|?|c01-background.tm>>
-    <associate|auto-12|<tuple|1.2.6|?|c01-background.tm>>
-    <associate|auto-13|<tuple|1.2.7|?|c01-background.tm>>
-    <associate|auto-14|<tuple|1.3|?|c01-background.tm>>
-    <associate|auto-15|<tuple|1.3.1|?|c01-background.tm>>
-    <associate|auto-16|<tuple|1.3.2|?|c01-background.tm>>
-    <associate|auto-17|<tuple|1.3.3|?|c01-background.tm>>
-    <associate|auto-18|<tuple|1.3.4|?|c01-background.tm>>
-    <associate|auto-19|<tuple|1.4|?|c01-background.tm>>
-    <associate|auto-2|<tuple|1.1|?|c01-background.tm>>
-    <associate|auto-3|<tuple|1.1.1|?|c01-background.tm>>
-    <associate|auto-4|<tuple|1.1.2|?|c01-background.tm>>
-    <associate|auto-5|<tuple|1.1|?|c01-background.tm>>
-    <associate|auto-6|<tuple|1.2|?|c01-background.tm>>
-    <associate|auto-7|<tuple|1.2.1|?|c01-background.tm>>
-    <associate|auto-8|<tuple|1.2.2|?|c01-background.tm>>
-    <associate|auto-9|<tuple|1.2.3|?|c01-background.tm>>
-    <associate|chap-consensu|<tuple|1|?|c01-background.tm>>
-    <associate|defn-authority-list|<tuple|1.1|?|c01-background.tm>>
-    <associate|defn-babe-header|<tuple|1.12|?|c01-background.tm>>
-    <associate|defn-babe-seal|<tuple|1.13|?|c01-background.tm>>
-    <associate|defn-block-signature|<tuple|1.13|?|c01-background.tm>>
-    <associate|defn-block-time|<tuple|1.10|?|c01-background.tm>>
-    <associate|defn-consensus-message-digest|<tuple|1.2|?|c01-background.tm>>
-    <associate|defn-epoch-slot|<tuple|1.5|?|c01-background.tm>>
-    <associate|defn-epoch-subchain|<tuple|1.7|?|c01-background.tm>>
-    <associate|defn-finalized-block|<tuple|1.27|?|c01-background.tm>>
-    <associate|defn-grandpa-completable|<tuple|1.23|?|c01-background.tm>>
-    <associate|defn-grandpa-justification|<tuple|1.25|?|c01-background.tm>>
-    <associate|defn-slot-offset|<tuple|1.11|?|c01-background.tm>>
-    <associate|defn-vote|<tuple|1.16|?|c01-background.tm>>
-    <associate|defn-winning-threshold|<tuple|1.8|?|c01-background.tm>>
-    <associate|note-slot|<tuple|1.6|?|c01-background.tm>>
-    <associate|sect-authority-set|<tuple|1.1.1|?|c01-background.tm>>
-    <associate|sect-babe|<tuple|1.2|?|c01-background.tm>>
-    <associate|sect-block-building|<tuple|1.2.7|?|c01-background.tm>>
-    <associate|sect-block-finalization|<tuple|1.4|?|c01-background.tm>>
-    <associate|sect-block-production|<tuple|1.2|?|c01-background.tm>>
-    <associate|sect-consensus-message-digest|<tuple|1.1.2|?|c01-background.tm>>
-    <associate|sect-epoch-randomness|<tuple|1.2.5|?|c01-background.tm>>
-    <associate|sect-finality|<tuple|1.3|?|c01-background.tm>>
-    <associate|sect-verifying-authorship|<tuple|1.2.6|?|c01-background.tm>>
-    <associate|slot-time-cal-tail|<tuple|1.9|?|c01-background.tm>>
-    <associate|tabl-consensus-messages|<tuple|1.1|?|c01-background.tm>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|1.11|?>>
+    <associate|algo-block-production|<tuple|1.3|?>>
+    <associate|algo-block-production-lottery|<tuple|1.1|?>>
+    <associate|algo-build-block|<tuple|1.7|?>>
+    <associate|algo-catchup-request|<tuple|1.12|?>>
+    <associate|algo-epoch-randomness|<tuple|1.4|?>>
+    <associate|algo-grandpa-best-candidate|<tuple|1.10|?>>
+    <associate|algo-grandpa-round|<tuple|1.9|?>>
+    <associate|algo-initiate-grandpa|<tuple|1.8|?>>
+    <associate|algo-slot-time|<tuple|1.2|?>>
+    <associate|algo-verify-authorship-right|<tuple|1.5|?>>
+    <associate|algo-verify-slot-winner|<tuple|1.6|?>>
+    <associate|auto-1|<tuple|1|?>>
+    <associate|auto-10|<tuple|1.2.4|?>>
+    <associate|auto-11|<tuple|1.2.5|?>>
+    <associate|auto-12|<tuple|1.2.6|?>>
+    <associate|auto-13|<tuple|1.2.7|?>>
+    <associate|auto-14|<tuple|1.3|?>>
+    <associate|auto-15|<tuple|1.3.1|?>>
+    <associate|auto-16|<tuple|1.3.2|?>>
+    <associate|auto-17|<tuple|1.3.2.1|?>>
+    <associate|auto-18|<tuple|1.3.2.2|?>>
+    <associate|auto-19|<tuple|1.3.2.3|?>>
+    <associate|auto-2|<tuple|1.1|?>>
+    <associate|auto-20|<tuple|1.3.3|?>>
+    <associate|auto-21|<tuple|1.3.3.1|?>>
+    <associate|auto-22|<tuple|1.3.4|?>>
+    <associate|auto-23|<tuple|1.4|?>>
+    <associate|auto-24|<tuple|1.4.1|?>>
+    <associate|auto-25|<tuple|1.4.1.1|?>>
+    <associate|auto-3|<tuple|1.1.1|?>>
+    <associate|auto-4|<tuple|1.1.2|?>>
+    <associate|auto-5|<tuple|1.1|?>>
+    <associate|auto-6|<tuple|1.2|?>>
+    <associate|auto-7|<tuple|1.2.1|?>>
+    <associate|auto-8|<tuple|1.2.2|?>>
+    <associate|auto-9|<tuple|1.2.3|?>>
+    <associate|chap-consensu|<tuple|1|?>>
+    <associate|defn-authority-list|<tuple|1.1|?>>
+    <associate|defn-babe-header|<tuple|1.12|?>>
+    <associate|defn-babe-seal|<tuple|1.13|?>>
+    <associate|defn-block-signature|<tuple|1.13|?>>
+    <associate|defn-block-time|<tuple|1.10|?>>
+    <associate|defn-consensus-message-digest|<tuple|1.2|?>>
+    <associate|defn-epoch-slot|<tuple|1.5|?>>
+    <associate|defn-epoch-subchain|<tuple|1.7|?>>
+    <associate|defn-finalized-block|<tuple|1.29|?>>
+    <associate|defn-grandpa-catchup-request-msg|<tuple|1.27|?>>
+    <associate|defn-grandpa-catchup-response-msg|<tuple|1.28|?>>
+    <associate|defn-grandpa-completable|<tuple|1.23|?>>
+    <associate|defn-grandpa-justification|<tuple|1.25|?>>
+    <associate|defn-slot-offset|<tuple|1.11|?>>
+    <associate|defn-vote|<tuple|1.16|?>>
+    <associate|defn-winning-threshold|<tuple|1.8|?>>
+    <associate|note-slot|<tuple|1.6|?>>
+    <associate|sect-authority-set|<tuple|1.1.1|?>>
+    <associate|sect-babe|<tuple|1.2|?>>
+    <associate|sect-block-building|<tuple|1.2.7|?>>
+    <associate|sect-block-finalization|<tuple|1.4|?>>
+    <associate|sect-block-production|<tuple|1.2|?>>
+    <associate|sect-consensus-message-digest|<tuple|1.1.2|?>>
+    <associate|sect-epoch-randomness|<tuple|1.2.5|?>>
+    <associate|sect-finality|<tuple|1.3|?>>
+    <associate|sect-grandpa-catchup|<tuple|1.4.1|?>>
+    <associate|sect-grandpa-catchup-messages|<tuple|1.3.2.3|?>>
+    <associate|sect-sending-catchup-request|<tuple|1.4.1.1|?>>
+    <associate|sect-verifying-authorship|<tuple|1.2.6|?>>
+    <associate|slot-time-cal-tail|<tuple|1.9|?>>
+    <associate|tabl-consensus-messages|<tuple|1.1|?>>
   </collection>
 </references>
 
@@ -1454,20 +1559,44 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-15>>
 
-      <with|par-left|<quote|1tab>|1.3.2<space|2spc>Voting Messages
+      <with|par-left|<quote|1tab>|1.3.2<space|2spc>GRANDPA Messages
       Specification <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-16>>
 
+      <with|par-left|<quote|2tab>|1.3.2.1<space|2spc>Vote Messages
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-17>>
+
+      <with|par-left|<quote|2tab>|1.3.2.2<space|2spc>Finalizing Message
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-18>>
+
+      <with|par-left|<quote|2tab>|1.3.2.3<space|2spc>Catch-up Messages
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-19>>
+
       <with|par-left|<quote|1tab>|1.3.3<space|2spc>Initiating the GRANDPA
       State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-17>>
+      <no-break><pageref|auto-20>>
+
+      <with|par-left|<quote|2tab>|1.3.3.1<space|2spc>Voter Set Changes
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-21>>
 
       <with|par-left|<quote|1tab>|1.3.4<space|2spc>Voting Process in Round
       <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-18>>
+      <no-break><pageref|auto-22>>
 
       1.4<space|2spc>Block Finalization <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-19>
+      <no-break><pageref|auto-23>
+
+      <with|par-left|<quote|1tab>|1.4.1<space|2spc>Catching up
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-24>>
+
+      <with|par-left|<quote|2tab>|1.4.1.1<space|2spc>Sending catch-up request
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-25>>
     </associate>
   </collection>
 </auxiliary>
