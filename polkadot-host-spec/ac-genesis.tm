@@ -1,6 +1,6 @@
 <TeXmacs|1.99.12>
 
-<project|polkadot_re_spec.tm>
+<project|polkadot_host_spec.tm>
 
 <style|book>
 
