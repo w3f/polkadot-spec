@@ -526,6 +526,7 @@ GossipValidator -> Inner ++ : handle_catch_up_request
   else if last completed round < request.round 
      note over Inner: reject-catchup-request
   else construct a catchup response
+     note over Inner: construct catch-up
   end /' verify the catchup is legit '/
 #+end_src
 
