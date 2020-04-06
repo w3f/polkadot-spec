@@ -31,6 +31,7 @@ return
 #+results:
 [[file:grandpa_high_level.png]]
 
+
 * grandpa voter
 #+begin_src plantuml :file grandpa_voter.png
 autoactivate off
@@ -511,3 +512,22 @@ return precommit ghost
 
 #+results:
 [[file:grandpa_votes.png]]
+
+* GRANDPA Catchup
+#+begin_src plantuml :file grandpa_votes.png
+
+/'/////////// Process catchup request //////////'/
+/' finality-grandpa/src/communication/gossip.rs::handle_catch_up_request'/
+GossipValidator -> Inner ++ : handle_catch_up_request
+  alt request.set_id is not equal to our voter set_id:
+     note over Inner: reject-catchup-request
+  else if the requester node is not one of our peers
+     note over Inner: reject-catchup-request
+  else if last completed round < request.round 
+     note over Inner: reject-catchup-request
+  else construct a catchup response
+  end /' verify the catchup is legit '/
+#+end_src
+
+#+results:
+[[file:grandpa_catchup.png]
