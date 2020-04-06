@@ -41,134 +41,14 @@ Network -> Voter ++ : poll
     loop for all messages in global queue
       note over Voter: Only possible message types are Commit and Catchup
       alt it is a Commit message
-        Voter -> PastRounds ++ : import_commit
-        return
-        alt was the commit for a background round
-          note over Voter: we are actively voting on this round
-          Voter -> Network ++ : process_commit_outcome(for good commit)
-              note over Voter: this a customized function defines consequences for good commit.
-          return
-        else the commit does not belong to any active background round
-          note over Voter
-            we are not actively voting on this round
-            just validate the signature and accept the block as finalized.
-          end note
-          Voter -> Voter ++ : validate_commit 
-            loop for each precommit in all precommits in the commit
-              alt  precommit.block !=> commit.target
-                break
-                end
-              end
-            end /' loop '/
-            alt all precommited blocks >=  commited block
-              Voter -> Round ++ : new(no round number and with commit voters and votes)
-              return new Round
-              loop for each precommit in the commit
-                Voter -> Round ++ : import_precommit
-                return
-                alt if it is an equivocation and the voter has equivocated more than 1
-                  note over Voter: result ← bad commit
-                  break
-                  end
-                else 
-                  alt if it is a duplication
-                    note over Voter: result.#duplicate_vote ← result.#duplicate_vote + 1
-                  end
-                  alt if the voter is not in voters set
-                    note over Voter: result.#invalid voters ← result.#invalid voters + 1
-                  end
-                end /'if equivocation '/
-              end /'loop'/
-              alt any voter equivocated more than 1
-                note over Voter: result ← bad commit
-              else all voters equivocated max once
-                Voter -> Round ++ : precommit_ghost
-                return
-                note over Voter: result.ghost ← new Round precommit-ghost
-              end /'max 1 equivocation pre voter '/
-            else a precommited block !(>=) than commited block
-              note over Voter: result ← bad commit message
-            end  /'!(>=) of target '/
-          return result
-          alt the commit message is valid
-            alt the finalized block number > last finalized block number
-              note over Voter: last finalized block ← the new finalized block
-              Voter -> Enviornment ++ : finalize the new finalized block
-              return
-            end
-            Voter -> Network ++ : process_commit_outcome(for good commit)
-              note over Voter: this a customized function defines consequences for good commit.
-            return
-  
-           else the commit message is invalid
-             Voter -> Catchup ++ : process_commit_outcome(for bad commit)
-               note over Voter: this a customized function defines consequences for bad commit.
-             return
-           end
-        end
+        Voter -> Voter ++ : process_commit
+          note over Voter: see grandpa_catchup_and_commit.png
+        end 
+        note over Voter: Only possible message types are Commit and Catchup
       else it is a Catchup message
-        Voter -> Voter ++ : vaidate_catchup
-          alt catch_up.round_number > best_round_number
-            alt all voters in the catch_up belong to the voter set
-              alt more than 2/3 of voter prevoted  and more than 2/3 of voter precommited
-                Voter -> Round ++ : new(catchup round number and voters)
-                return new Round
-                loop over all prevotes in catcup round
-                  Voter -> Round ++ : import_prevote
-                  return
-                  alt bad prevote
-                    note over Voter: result ← bad catchup
-                    break
-                    end
-                  end
-                end
-                
-                loop over all precommits in catcup round
-                  Voter -> Round ++ : import_precommit
-                  return
-                  alt bad precommit
-                    note over Voter: result ← bad catchup
-                    break
-                  end
-                end
-
-                alt if there is no bad prevote or precommit
-                  Voter -> Round ++ : state
-                  return
-                  alt Round state is completable
-                    note over Voter: result ← Round
-                  else Round state is not completable
-                    note over Voter: result ← bad catchup
-                  end
-                else if there is a bad prevote or precommit
-                  note over Voter: result ← bad catchup
-                end
-
-              else either less than 2/3 prevoted or less than 2/3 precommited 
-                note over Voter: result ← bad catchup
-              end
-            else catch_up contains voter not in the voting set
-              note over Voter: result ← bad catchup
-            end 
-          else catch_up.round_number <= best_round_numbre
-            note over Voter: result ← bad catchup
-          end
-        return result
-        alt result = Good CatchUp 
-           note over Voter: catchup_round ← the round the catchup belong to 
-           Voter -> VotingRound ++ : make a completed round
-           return completed round
-           Voter -> VotingRound ++ : new round whose last round to be the completed round 
-           return new round
-           note over Voter: last_finalized_round ← completed round
-           Voter -> Environment ++ : completed (completed round)
-           return
-           Voter -> Network ++ : process_catchup_outcome(for good catchup)
-           return
-        else result = Bad Catchup
-          Voter -> Network ++ : process_catchup_outcome(for bad catchup)
-          return
-        end /' good/bad catchup '/
+        Voter -> Voter ++ : process_catchup 
+          note over Voter: see grandpa_catchup_and_commit.png
+        end 
       end /' alt message type '/
     end  /' loop over all messages '/
   return /' process_incoming '/
@@ -528,7 +408,139 @@ GossipValidator -> Inner ++ : handle_catch_up_request
   else construct a catchup response
      note over Inner: construct catch-up
   end /' verify the catchup is legit '/
+
+  /'/////////// process Commit //////////'/
+  Voter -> Voter ++: process_commit
+    Voter -> PastRounds ++ : import_commit
+    return
+    alt was the commit for a background round
+      note over Voter: we are actively voting on this round
+      Voter -> Network ++ : process_commit_outcome(for good commit)
+          note over Voter: this a customized function defines consequences for good commit.
+      return
+    else the commit does not belong to any active background round
+      note over Voter
+        we are not actively voting on this round
+        just validate the signature and accept the block as finalized.
+      end note
+      Voter -> Voter ++ : validate_commit 
+        loop for each precommit in all precommits in the commit
+          alt  precommit.block !=> commit.target
+            break
+            end
+          end
+        end /' loop '/
+        alt all precommited blocks >=  commited block
+          Voter -> Round ++ : new(no round number and with commit voters and votes)
+          return new Round
+          loop for each precommit in the commit
+            Voter -> Round ++ : import_precommit
+            return
+            alt if it is an equivocation and the voter has equivocated more than 1
+              note over Voter: result ← bad commit
+              break
+              end
+            else 
+              alt if it is a duplication
+                note over Voter: result.#duplicate_vote ← result.#duplicate_vote + 1
+              end
+              alt if the voter is not in voters set
+                note over Voter: result.#invalid voters ← result.#invalid voters + 1
+              end
+            end /'if equivocation '/
+          end /'loop'/
+          alt any voter equivocated more than 1
+            note over Voter: result ← bad commit
+          else all voters equivocated max once
+            Voter -> Round ++ : precommit_ghost
+            return
+            note over Voter: result.ghost ← new Round precommit-ghost
+          end /'max 1 equivocation pre voter '/
+        else a precommited block !(>=) than commited block
+          note over Voter: result ← bad commit message
+        end  /'!(>=) of target '/
+      return result
+      alt the commit message is valid
+        alt the finalized block number > last finalized block number
+          note over Voter: last finalized block ← the new finalized block
+          Voter -> Enviornment ++ : finalize the new finalized block
+          return
+        end
+        Voter -> Network ++ : process_commit_outcome(for good commit)
+          note over Voter: this a customized function defines consequences for good commit.
+        return
+      else the commit message is invalid
+        Voter -> Catchup ++ : process_commit_outcome(for bad commit)
+           note over Voter: this a customized function defines consequences for bad commit.
+        return
+      end
+    end
+  end /'process_commit'/
+
+  /'/////////// process catchup //////////'/
+  Voter -> Voter ++: process_catchup
+    Voter -> Voter ++ : vaidate_catchup
+      alt catch_up.round_number > best_round_number
+        alt all voters in the catch_up belong to the voter set
+          alt more than 2/3 of voter prevoted  and more than 2/3 of voter precommited
+            Voter -> Round ++ : new(catchup round number and voters)
+            return new Round
+            loop over all prevotes in catcup round
+              Voter -> Round ++ : import_prevote
+              return
+              alt bad prevote
+                note over Voter: result ← bad catchup
+                break
+                end
+              end
+            end
+            
+            loop over all precommits in catcup round
+              Voter -> Round ++ : import_precommit
+              return
+              alt bad precommit
+                note over Voter: result ← bad catchup
+                break
+              end
+            end
+             alt if there is no bad prevote or precommit
+              Voter -> Round ++ : state
+              return
+              alt Round state is completable
+                note over Voter: result ← Round
+              else Round state is not completable
+                note over Voter: result ← bad catchup
+              end
+            else if there is a bad prevote or precommit
+              note over Voter: result ← bad catchup
+            end
+           else either less than 2/3 prevoted or less than 2/3 precommited 
+            note over Voter: result ← bad catchup
+          end
+        else catch_up contains voter not in the voting set
+          note over Voter: result ← bad catchup
+        end 
+      else catch_up.round_number <= best_round_numbre
+        note over Voter: result ← bad catchup
+      end
+    return result
+    alt result = Good CatchUp 
+       note over Voter: catchup_round ← the round the catchup belong to 
+       Voter -> VotingRound ++ : make a completed round
+       return completed round
+       Voter -> VotingRound ++ : new round whose last round to be the completed round 
+       return new round
+       note over Voter: last_finalized_round ← completed round
+       Voter -> Environment ++ : completed (completed round)
+       return
+       Voter -> Network ++ : process_catchup_outcome(for good catchup)
+       return
+    else result = Bad Catchup
+      Voter -> Network ++ : process_catchup_outcome(for bad catchup)
+      return
+    end /' good/bad catchup '/
+  end /'process catchup'/
 #+end_src
 
 #+results:
-[[file:grandpa_catchup.png]
+[[file:grandpa_catchup_and_commit.png]
