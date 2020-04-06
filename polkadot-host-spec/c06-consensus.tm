@@ -1403,8 +1403,6 @@
     rounds behind the finalized round by the peer.\ 
   </itemize-minus>
 
-  \;
-
   \ <subsubsection|Processing catch-up request>
 
   Only GRANDPA voter nodes are required to respond to the catch up responses.
@@ -1412,7 +1410,7 @@
   executes Algorithm <reference|algo-process-catchup-request>.
 
   <\algorithm>
-    <label|algo-process-catchup-request><name|ProcessCatchup>Request(
+    <label|algo-process-catchup-request><name|ProcessCatchupRequest>(
 
     <math|M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>>: The
     catch-up message received from peer <math|i> (See Definition
@@ -1423,19 +1421,63 @@
     <\algorithmic>
       <\state>
         <\IF>
-          \;
+          <math|M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>.id<rsub|\<bbb-V\>>\<neq\>id<rsub|\<bbb-V\>>>
         </IF>
+      </state>
+
+      <\state>
+        <\ERROR>
+          \PCatching up on different set\Q<END>
+        </ERROR>
+      </state>
+
+      <\state>
+        <\IF>
+          <math|i\<nin\>\<bbb-P\>>
+        </IF>
+      </state>
+
+      <\state>
+        <\ERROR>
+          \PRequesting catching up from a non-peer\Q<END>
+        </ERROR>
+      </state>
+
+      <\state>
+        <\IF>
+          <math|r\<gtr\>><name|Last-Completed-Round>
+        </IF>
+      </state>
+
+      <\state>
+        <\ERROR>
+          \PCatching up on a round in the future\Q<END>
+        </ERROR>
+      </state>
+
+      <\state>
+        <name|Send(<math|i>,><math|M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>>)
       </state>
     </algorithmic>
   </algorithm>
 
-  \;
-
-  In which\ 
+  In which:
 
   <\itemize-minus>
     <item><math|id<rsub|\<bbb-V\>>> is the voter set id which the serving
     node is operation
+
+    <item><math|r> is the round number for which the catch-up is requested
+    for.
+
+    <item><math|\<bbb-P\>> is the set of immediate peers of node <math|v>.
+
+    <item><name|Last-Completed-Round> is <todo|define:
+    https://github.com/w3f/polkadot-spec/issues/161>
+
+    <item><math|M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>> is
+    the catch-up response defined in Definition
+    <reference|defn-grandpa-catchup-response-msg>.
   </itemize-minus>
 
   \;
@@ -1443,11 +1485,7 @@
 
 <\initial>
   <\collection>
-    <associate|chapter-nr|5>
-    <associate|page-first|37>
     <associate|page-medium|papyrus>
-    <associate|section-nr|0<uninit>>
-    <associate|subsection-nr|2>
   </collection>
 </initial>
 
