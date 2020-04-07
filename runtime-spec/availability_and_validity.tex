@@ -313,8 +313,8 @@ In the case of a relay chain equivocation, i.e. a validator produces two blocks 
 \label{sect-approval-checking}
 \subsubsection{Retrieval}
 \label{sect-retrieval-of-erasure-pieces}
-TBS
 
+Assigned appoval checker $v$ must retrieve enough erasure pieces of the block they are verifying to be able to reconstruct the block and the erasure pieces tree. To that aim the 
 %%We never consider substructure of $B$ to be meaningful, so $V$ must {\em retrieve} the full {\em candidate proof-of-validity blob} $\blobB$ before checking.  Now $V$ knows which which nodes have their individual pieces, thanks to their availability announcements.  It thus follows from our 2/3rd honest assumption that $V$ could always reconstruct $\blobB$ by obtaining enough pieces $\pieces_B$ from nodes known to posses them.  
 
 %We note however that $V$ also knows that all pieces are known by the preliminary backing validity checkers aka parachain validators who approved $\blobB$, as well as approval checkers who already approved $\blobB$.  So $V$ could first contact some node that possesses all of $\blobB$, and only then begin a full reconstruction process. 
