@@ -130,19 +130,12 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \end{algorithmic}
 \end{algorithm}
 
-\subsction{Inclusion of PoV proposal on the relay chain}
+\subsection{Inclusion of candidate receipt on the relay chain}
 
 \begin{definition}
-  \label{defn-pov-proposal}
-        {\b PoV Proposal} from parachain $\rho$ is a $\blobB$ whose candidate receipt has been confirmed by at least 2/3 of $mathcal{V}_\rho$ 
+  \label{defn-para-proposal}
+        {\b Parachain Block Proposal} is a candidate receipt for a parachain block for a parachain $\rho$ along with signatures for at least 2/3 of $mathcal{V}_\rho$ 
 
-\end{definition}
-
-A block producer $p$ when receive a PoV Proposal as defined in Definition \ref{defn-pov-proposal} \syed{need to/must include the receipt in the next block as a transaction in the following format}{please make this accurate.
-
-\begin{definition}
-  \label{defn-candidate-receipt-transaction}
-        {\b }
 \end{definition}
 
 \subsection{Primary Validation Disagreement}
@@ -162,7 +155,7 @@ A block producer $p$ when receive a PoV Proposal as defined in Definition \ref{d
 
 \section{Availability}
 
-When a $v \in \para-valid-set$ observes that a block containing PoV Proposal is included in a relay chain block $R_p$ then it must invoke Algorithm \ref{algo-erasure-encode}.
+When a $v \in \paraValidSet$ observes that a block containing PoV Proposal is included in a relay chain block $R_p$ then it must invoke Algorithm \ref{algo-erasure-encode}.
 
 \begin{definition}
   \label{defn-erasure-encoder-decoder}
@@ -194,7 +187,7 @@ Following the computation of $Er_B$, $v$ must construct the $\blobB$ Avalailabil
 
 \begin{definition}
   \label{defn-pov-erasure-piece-message}
-        {\b PoV erasure piece message} $M_{PoV_\blobB}(i)$ is TBS
+        {\b PoV erasure piece message} $M_{PoV_{\blobB}}(i)$ is TBS
 \end{definition}
 
 \section{Announcing Availability}\label{sect-voting-on-availability}
@@ -252,9 +245,9 @@ These signatures go into a relay chain block and are processed as follows:
 \end{enumerate}
 
 \begin{definition}
-  \label{defn-available-pov-proposal}
-        {\b }
-        PoV blocks that are noted on the relay chain to be available, meaning that the candidate receipt has been voted to be available by 2/3 validators.
+  \label{defn-available-parablock-proposal}
+        %{\b}
+        Parachain blocks blocks for which the corresponding blob is  noted on the relay chain to be available, meaning that the candidate receipt has been voted to be available by 2/3 validators.
 \end{definition}
 
 \section{Unavailability}
@@ -268,11 +261,11 @@ TBS
 \section{Approval Checker Assignment}
 \label{sect-shot-assignment}
 
-Validators assign themselves to PoV proposals as defined in Definition \ref{defn-pov-proposal}. The assignment needs to be random. Validators use their own VRF to sign the VRF output from the current relay chain block. Each validator takes the output of this VRF mod the number of parachain blocks that we were decided to be available in this relay chain block and executed. This will give them the index of the PoV block they are assigned to and need to check.
+Validators assign themselves to parachain block proposals as defined in Definition \ref{defn-para-proposal}. The assignment needs to be random. Validators use their own VRF to sign the VRF output from the current relay chain block. Each validator takes the output of this VRF mod the number of parachain blocks that we were decided to be available in this relay chain block and executed. This will give them the index of the PoV block they are assigned to and need to check.
 
 Now in addition to this assignment some extra validators are assigned to every PoV block as follows .
 
-No for each PoV block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constat like $2$.  We set
+No for each parachain block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constat like $2$.  We set
 
 $$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$
 where $c_f$ is some factor we use to weight fishermen reports. Reports from fishermen about this 
