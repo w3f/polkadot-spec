@@ -236,14 +236,18 @@ where the $i$th bit of $b_v$ is $1$ if and only if
 
 These signatures go into a relay chain block and are processed as follows:
 
-\begin{enumerate}
-\item We store the last vote from each validator on chain. For each new signature, we check if it is for a block in this chain later than the last vote we stored from this validator. If it is we update it and store the bitfield $b_v$ and block number of the vote.
+\begin{algorithm}
+  \caption[]{Relay chain's signature processing}
+  \label{algo-singnature-processing}
+  
+%\begin{enumerate}
+\State We store the last vote from each validator on chain. For each new signature, we check if it is for a block in this chain later than the last vote we stored from this validator. If it is we update it and store the bitfield $b_v$ and block number of the vote.
 
-\item For each block within the last $t$ blocks where $t$ is some timeout period, we compute a bitmask $bm_n$ ($n$ is block number). This bitmask is a bitfield that represents whether the candidate considered in that block is still relevant. That is the $i$th bit of $bm_n$ is $1$ if and only if for the $i$th parachain, 
+\State For each block within the last $t$ blocks where $t$ is some timeout period, we compute a bitmask $bm_n$ ($n$ is block number). This bitmask is a bitfield that represents whether the candidate considered in that block is still relevant. That is the $i$th bit of $bm_n$ is $1$ if and only if for the $i$th parachain, 
     (a) the availability status is to be determined and
     (b) candidate block number <= n  
     
-\item We initialize a vector of counts with one entry for each parachain to zero. After executing the following algorithm we end up with a vector of counts  of the number of validators who think the latest candidates is available. 
+\State We initialise a vector of counts with one entry for each parachain to zero. After executing the following algorithm we end up with a vector of counts  of the number of validators who think the latest candidates is available. 
 	\begin{enumerate}
     \item We compute 
     $b_v$ and $bm_n$ 
@@ -254,10 +258,11 @@ These signatures go into a relay chain block and are processed as follows:
         \end{itemize}
 	\end{enumerate}
 		
-\item For each count that is $>2/3$ of the number of validators, we set the candidates status to "available". Otherwise, if the candidate is at least $t$ blocks old, then we set its status to "unavailable".
+\State For each count that is $>2/3$ of the number of validators, we set the candidates status to "available". Otherwise, if the candidate is at least $t$ blocks old, then we set its status to "unavailable".
 
-\item We act on available candidates and discard unavailable ones, and then clear the record, setting the availability status to no candidate. Then we accept new candidate receipts for these parachains, with any such new candidate receipts having their availability status as to be determined.
-\end{enumerate}
+\State We act on available candidates and discard unavailable ones, and then clear the record, setting the availability status to no candidate. Then we accept new candidate receipts for these parachains, with any such new candidate receipts having their availability status as to be determined.
+%\end{enumerate}
+\end{algorithm}
 
 \begin{definition}
   \label{defn-available-parablock-proposal}
@@ -267,7 +272,7 @@ These signatures go into a relay chain block and are processed as follows:
 
 \section{Unavailability}
 \label{sect-unavailability}
-After a certain time-out in blocks since we first put the candidate receipt on the relay chain if there is not enough votes of availability the relay chain logic decides that a parachain block is unavailable. 
+After a certain time-out in blocks since we first put the candidate receipt on the relay chain if there is not enough votes of availability the relay chain logic decides that a parachain block is unavailable, see \ref{algo-singnature-processing}. 
 
 \section{Publishing Attestations}
 \label{sect-publishing-attestations}
@@ -280,7 +285,7 @@ Validators assign themselves to parachain block proposals as defined in Definiti
 
 Now in addition to this assignment some extra validators are assigned to every PoV block as follows .
 
-No for each parachain block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constat like $2$.  We set
+No for each parachain block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constant like $2$.  We set
 
 $$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$
 where $c_f$ is some factor we use to weight fishermen reports. Reports from fishermen about this 
