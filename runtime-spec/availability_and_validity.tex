@@ -13,7 +13,7 @@ Once validators have received erasure-coded pieces for several PoV blocks for th
 
 As soon as $>2/3$ of validators have made this announcement for any parachain block we act on the parachain block i.e., we update the relay chain state based on the the candidate receipt and considered the parachain block to have happened on this relay chain fork. 
 
-After a certain time, if a candidate receipt for a parachain block is not discovered to be available we decide it is unavailable and allow alternative blocks to be built on its parent parachain block. 
+After a certain time, if a candidate receipt for a parachain block is not discovered to be available we decide it is unavailable and allow alternative blocks to be built on its parent parachain block, see \ref{sect-unavailability}. 
 
 The secondary check described in Section \ref{sect-approval-checking}, is done by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV block that is invalid and not keeping it available to avoid the possibility of being punished for the attack.
 %The security analysis at the end of this document dives deeper into the incentives of the necessity of the secondary checking validity/availability checking. 
@@ -267,7 +267,7 @@ These signatures go into a relay chain block and are processed as follows:
 
 \section{Unavailability}
 \label{sect-unavailability}
-TBS
+After a certain time-out in blocks since we first put the candidate receipt on the relay chain if there is not enough votes of availability the relay chain logic decides that a parachain block is unavailable. 
 
 \section{Publishing Attestations}
 \label{sect-publishing-attestations}
@@ -374,7 +374,7 @@ Then they recreate the entirety of the erasure code and they execute the PoV blo
 If the erasure code does not have the claimed Merkle root, the validation function says that the PoV block is invalid or the result is inconsistent with the candidate receipt on the relay chain, then we declare the block as invalid. 
 Otherwise if everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF. 
 
-These attestations are included in the relay chain, which must also verify the VRF and may need to judge when enough time has passed. Reports of unavailability and invalidty go onto the relay chain as well.
+These attestations are included in the relay chain, which must also verify the VRF and may need to judge when enough time has passed. Collators reports of unavailability and invalidty go onto the relay chain as well.
 
 \subsection{Invalidity Escalation}\label{escalation}
 
