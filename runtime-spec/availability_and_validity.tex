@@ -342,7 +342,7 @@ There are two fundamental ways to retrieve a parachain block for checking validi
 
 \subsubsection{Reconstruction}
 \label{}
-After receiving $2f+1$ of erasure pieces every assigned approval checker $v$ needs to recreate the entirety of the erasure code and they execute the PoV block, hence every $v$ will run Algorithm \ref{algo-reconstruct-pov} to make sure that the code is complete and the subsequently recover the original $\blobB$.
+After receiving $2f+1$ of erasure pieces every assigned approval checker $v$ needs to recreate the entirety of the erasure code, hence every $v$ will run Algorithm \ref{algo-reconstruct-pov} to make sure that the code is complete and the subsequently recover the original $\blobB$.
 
 \begin{algorithm}
   \caption[Reconstruct-PoV-Erasure]{\sc Reconstruct-PoV-Erasure($S_{Er_B}$)}
@@ -372,7 +372,7 @@ After receiving $2f+1$ of erasure pieces every assigned approval checker $v$ nee
 %%      \State {\sc Announce-Failure}
 %%      \State \Return
 %%    \EndIf
-
+Once the parachain bock has been obtained or reconstructed the secondary checker needs to execute the PoV block.
 While reconstructing if the erasure code does not have the claimed Merkle root, the validation function says that the PoV block is invalid or the result is inconsistent with the candidate receipt on the relay chain, then we declare the block as invalid. 
 Otherwise if everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF. 
 
