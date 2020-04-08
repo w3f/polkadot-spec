@@ -477,15 +477,16 @@
   </definition>
 
   \;
+
+  <\with|par-mode|right>
+    <qed>
+  </with>
+
+  \;
 </body>
 
-<\initial>
-  <\collection>
-    <associate|page-height|auto>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
-  </collection>
-</initial>
+<initial|<\collection>
+</collection>>
 
 <\references>
   <\collection>

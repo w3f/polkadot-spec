@@ -1980,8 +1980,12 @@
     <reference|defn-runtime-pointer> indicating the log message.
   </itemize>
 
-  \;
 
+  \;
+  
+  <\with|par-mode|right>
+    <qed>
+  </with>
   \;
 </body>
 
