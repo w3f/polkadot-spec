@@ -321,6 +321,9 @@ In the case of a relay chain equivocation, i.e. a validator produces two blocks 
 
 \section{The Approval Check}
 \label{sect-approval-checking}
+Once a validator has a VRF which tells them to check a block, they announce this VRF and attempt to obtain the block. 
+It is unclear yet whether this is best done by requesting the PoV block from parachain validators or by announcing that they want erasure coded pieces. 
+
 \subsubsection{Retrieval}
 \label{sect-retrieval-of-erasure-pieces}
 There are two fundamental ways to retrieve a parachain block for checking validity. One is to request the whole block from any validator who has attested to its validity or invalidity. The second method is to retrieve enough erasure coded pieces to reconstruct the block from them. In the latter cases an announcement has to be gossiped to all validators indicating that one needs the erasure coded pieces.
@@ -338,7 +341,7 @@ There are two fundamental ways to retrieve a parachain block for checking validi
 %In fact, our retrieval component could be engineered to avoid requests entirely:  After obtaining $\pi_{V,\cdot}$, another validator $V'$ could simply compute its own priority for sending its piece from $\pieces_B$ to $V$.  We caution that doing do might become inefficient, either because $V$ winds up rejecting sends, or when many nodes go offline.  
 
 \subsubsection{Reconstruction}
-\label
+\label{}
 After receiving $2f+1$ of erasure pieces, every assigned approval checker $v$ will run Algorithm \ref{algo-reconstruct-pov} to make sure that the code is complete and the subsequently recover the original $\blobB$.
 
 \begin{algorithm}
@@ -370,8 +373,6 @@ After receiving $2f+1$ of erasure pieces, every assigned approval checker $v$ wi
 %%      \State \Return
 %%    \EndIf
 
-Once a validator has a VRF which tells them to check a block, they announce this VRF and attempt to obtain the block. 
-It is unclear yet whether this is best done by requesting the PoV block from parachain validators or by announcing that they want erasure coded pieces. 
 Then they recreate the entirety of the erasure code and they execute the PoV block. 
 If the erasure code does not have the claimed Merkle root, the validation function says that the PoV block is invalid or the result is inconsistent with the candidate receipt on the relay chain, then we declare the block as invalid. 
 Otherwise if everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF. 
