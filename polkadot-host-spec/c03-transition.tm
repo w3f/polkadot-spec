@@ -669,16 +669,19 @@
   </definition>
 
   For the definition of the state storage see Section
-  <reference|sect-state-storage>.
+  <reference|sect-state-storage>. 
+
+  \;
+
+  <\with|par-mode|right>
+    <qed>
+  </with>
+
+  \;
 </body>
 
-<\initial>
-  <\collection>
-    <associate|page-height|auto>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
-  </collection>
-</initial>
+<initial|<\collection>
+</collection>>
 
 <\references>
   <\collection>

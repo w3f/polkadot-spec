@@ -477,6 +477,12 @@
   fields are valid except for the state root.
 
   \;
+  
+  <\with|par-mode|right>
+    <qed>
+  </with>
+
+  \;
 </body>
 
 <\initial>

@@ -231,6 +231,12 @@
   </definition>
 
   \;
+  
+  <\with|par-mode|right>
+    <qed>
+  </with>
+
+  \;
 </body>
 
 <\initial>

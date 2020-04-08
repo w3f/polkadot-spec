@@ -1313,15 +1313,18 @@
 
   Note that all Polkadot relay chain nodes are supposed to listen to GRANDPA
   finalizing messages regardless if they are GRANDPA voters.
+
+  \;
+  
+  <\with|par-mode|right>
+    <qed>
+  </with>
+  
+  \;
 </body>
 
-<\initial>
-  <\collection>
-    <associate|page-height|auto>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
-  </collection>
-</initial>
+<initial|<\collection>
+</collection>>
 
 <\references>
   <\collection>
