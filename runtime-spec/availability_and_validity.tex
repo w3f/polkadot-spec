@@ -44,7 +44,7 @@ In the remainder of this chapter we assume that $\rho$ is a Polkadot Parachain a
 \end{definition}
 
 \begin{definition}  \label{defn-extra-validation-data}
-  {\b The extra validation data} $v_B$  is an extra input to the validation function in case the additional data from the relay chain state that.
+  {\b The extra validation data} $v_B$  is an extra input to the validation function, i.e. additional data from the relay chain state that is needed.
 \end{definition}
 
 There may be different validation data for the same $B$ as it depends on the relay chain state at the time the parachain validators attempted to get the corresponding candidate receipt into the relay chain. The validation data includes things like the previous parachain block header, likely including the previous state root.
@@ -66,10 +66,25 @@ Primary validity checking refers to the process of parachain validators as defin
   \caption[]{\sc PrimaryValidation}
   \label{algo-primary-validation}
   \begin{algorithmic}[1]
-    \Require{}
+    \Require{$B$, $\pi_B$, relay chain parent block $B_{relay parent}$}
     %%  \Ensure{}
     
-    \State TBS
+    \State Retrieve $v_B$ from the relay chain state at $B_{relay parent}$
+    \State Run Algorithm \ref{algo-validate-block} usinf $B, \pi_B, v_B$
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+  \caption[]{\sc ValidateBlock}
+  \label{algo-validate-block}
+  \begin{algorithmic}[1]
+    \Require{$B, \pi_B, v_B$}
+    %%  \Ensure{}
+    \State retrieve the runtime code $R_\rho$ that is specified by $v_B$ from the relay chain state.
+    \State check that the initial state in $\pi_B$ is the one claimed in $v_B$
+    \State Execute $R_\rho$ on $B$ using $\pi_B$ to simulate the state.    
+    \State If the execution fails, return fail.
+    \State Else return success, the new header data $h_B$ and the outgoing messages $M$.
   \end{algorithmic}
 \end{algorithm}
 
