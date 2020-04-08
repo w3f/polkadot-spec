@@ -372,8 +372,10 @@ After receiving $2f+1$ of erasure pieces every assigned approval checker $v$ nee
 %%      \State {\sc Announce-Failure}
 %%      \State \Return
 %%    \EndIf
+
 Once the parachain bock has been obtained or reconstructed the secondary checker needs to execute the PoV block.
-While reconstructing if the erasure code does not have the claimed Merkle root, the validation function says that the PoV block is invalid or the result is inconsistent with the candidate receipt on the relay chain, then we declare the block as invalid. 
+We declare a the candidate receipt as invalid if one one the following three conditions hold: 1) While reconstructing if the erasure code does not have the claimed Merkle root, 2) the validation function says that the PoV block is invalid, or 3) the result  of executing the block is inconsistent with the candidate receipt on the relay chain.
+
 Otherwise if everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF. 
 
 These attestations are included in the relay chain, which must also verify the VRF and may need to judge when enough time has passed. Collators reports of unavailability and invalidty go onto the relay chain as well.
