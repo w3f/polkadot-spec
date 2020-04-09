@@ -340,7 +340,7 @@ VotingRound -> Round ++ : import_prevote
                 end
              end /' estimate isn't ghost '/
           else if we do not have an estimate
-                note over Round: completable ← Fa            
+                note over Round: completable ← False            
           end /' no estimate '/
         end /' more than 2/3 pre-commited '/
       end /' we have a ghost '/
@@ -479,7 +479,7 @@ GossipValidator -> Inner ++ : handle_catch_up_request
 
   /'/////////// process catchup //////////'/
   Voter -> Voter ++: process_catchup
-    Voter -> Voter ++ : vaidate_catchup
+    Voter -> Voter ++ : validate_catchup
       alt catch_up.round_number > best_round_number
         alt all voters in the catch_up belong to the voter set
           alt more than 2/3 of voter prevoted  and more than 2/3 of voter precommited
