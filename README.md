@@ -11,7 +11,7 @@ In this repo you will find:
 
 ## Polkadot Runtime Environment Specification
 
-Here your can find the latest version of [Polkadot Runtime Environment Specification](./runtime-environment-spec/polkadot_re_spec.pdf)
+Here your can find the latest version of [Polkadot Runtime Environment Specification](./polkadot-host-spec/polkadot_host_spec.pdf)
 
 Please refer to [Change log](./runtime-environment-spec/pdre_change_log.org) to review the history of changes to the spec.
 
