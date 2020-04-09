@@ -817,16 +817,18 @@
     <math|k<rsub|v><rsup|pr>> represents its private key which is an
     <math|ED25519> private key, is a node running GRANDPA protocol, and
     broadcasts votes to finalize blocks in a Polkadot Host - based chain. The
-    <strong|set of all GRANDPA voters> is indicated by <math|\<bbb-V\>>. For
-    a given block B, we have <todo|change function name, only call at
-    genesis, adjust V_B over the sections>
+    <strong|set of all GRANDPA voters> for a given block B is indicated by
+    <math|\<bbb-V\><rsub|B>>. In that regard we have <todo|change function
+    name, only call at genesis, adjust V_B over the sections>
 
     <\equation*>
       \<bbb-V\><rsub|B>=<text|<verbatim|grandpa_authorities>><around*|(|B|)>
     </equation*>
 
     where <math|<math-tt|grandpa_authorities>> is the entry into runtime
-    described in Section <reference|sect-rte-grandpa-auth>.
+    described in Section <reference|sect-rte-grandpa-auth>. We refer to
+    <math|\<bbb-V\><rsub|B> > as <math|B> whene there is no chance of
+    ambeguity.
   </definition>
 
   <\definition>
@@ -982,7 +984,7 @@
 
   <\definition>
     <label|defn-grandpa-completable>We say that round <math|r> is
-    <strong|completable> if <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>+\<cal-E\><rsup|r,pc><rsub|obs<around*|(|v|)>>\<gtr\><frac|2|3>\<bbb-V\>>
+    <strong|weakly completable> if <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>+\<cal-E\><rsup|r,pc><rsub|obs<around*|(|v|)>>\<gtr\><frac|2|3>\<bbb-V\>>
     and for all <math|B<rprime|'>\<gtr\>B<rsub|v><rsup|r,pv>>:
 
     <\equation*>
@@ -1052,17 +1054,18 @@
     equivocatory vote.
 
     In all cases, <math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
-    is the signature of voter <math|v<rsub|i>> broadcasted during either the
-    pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round
-    r. A valid Justification must not contain more than two equivocatory vote
-    from each voter.\ 
-
-    \;
+    is the signature of voter <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>>
+    broadcasted during either the pre-vote (stage = pv) or the pre-commit
+    (stage = pc) sub-round of round r. A <strong|valid Justification> must
+    only contain up-to one valid vote from each voter and must not contain
+    more than two equivocatory vote from each voter.
 
     We say <math|J<rsup|r,pc><around*|(|B|)>> <strong|justifies the
-    finalization> of <math|B> if the number of valid signatures in
-    <math|J<rsup|r,pc><around*|(|B|)>> is greater than
-    <math|<frac|2|3><around|\||\<bbb-V\><rsub|B>|\|>>.
+    finalization> of <math|B<rprime|'>\<geqslant\>B> if the number of valid
+    signatures in <math|J<rsup|r,pc><around*|(|B|)>> for <math|B<rprime|'>>
+    is greater than <math|<frac|2|3><around|\||\<bbb-V\><rsub|B>|\|>>.
+    <todo|It should be either the estimate of last round or estimate of this
+    round>
   </definition>
 
   <\definition>
@@ -1198,7 +1201,7 @@
       <\state>
         <name|Receive-Messages>(<strong|until> Time
         <math|\<geqslant\>t<rsub|r<rsub|,>*v>+2\<times\>T> <strong|or>
-        <math|r> <strong|is> completable)<END>
+        <name|Completable>(<math|r>))<END>
       </state>
 
       <\state>
@@ -1257,9 +1260,9 @@
     </algorithmic>
   </algorithm>
 
-  The condition of <em|completablitiy> is defined in Definition
-  <reference|defn-grandpa-completable>. <name|Best-Final-Candidate> function
-  is explained in Algorithm <reference|algo-grandpa-best-candidate> and
+  <name|Completable> is defined in Algorithm <reference|algo-completable>.
+  <name|Best-Final-Candidate> function is explained in Algorithm
+  <reference|algo-grandpa-best-candidate> and
   <name|<name|Attempt-To-Finalize-Round>(<math|r>)> is described in Algorithm
   <reference|algo-attempt-to\Ufinalize>.
 
@@ -1295,6 +1298,84 @@
       </state>
     </algorithmic>
   </algorithm>
+
+  <\algorithm>
+    <todo|<name|GRANDPA-GHOST>>
+  </algorithm|>
+
+  <algorithm|<todo|<name|Round-Estimate>>|>
+
+  <\algorithm|<label|algo-completable><name|Completable>(<math|r:>voting
+  round)>
+    <\algorithmic>
+      <\state>
+        <\IF>
+          <math|r> <strong|is not> weakly completable
+        </IF>
+      </state>
+
+      <\state>
+        <\RETURN>
+          <\strong>
+            False<END>
+          </strong>
+        </RETURN>
+      </state>
+
+      <\state>
+        <math|G\<leftarrow\>><name|GRANDPA-GHOST>(<math|J<rsup|r,pv><around*|(|B|)>>)
+      </state>
+
+      <\state>
+        <\IF>
+          <math|G=\<phi\>>
+        </IF>
+      </state>
+
+      <\state>
+        <\RETURN>
+          <\strong>
+            False<END>
+          </strong>
+        </RETURN>
+      </state>
+
+      <\state>
+        <math|E<rsub|r>\<leftarrow\>><name|Round-Estimate>(<math|r,G>)
+      </state>
+
+      <\state>
+        <\IF>
+          <math|E<rsub|r>=\<phi\>>
+        </IF>
+      </state>
+
+      <\state>
+        <\RETURN>
+          <\strong>
+            False<END>
+          </strong>
+        </RETURN>
+      </state>
+
+      <\state>
+        <\IF>
+          <math|E<rsub|r-1>\<leqslant\>E<rsub|r><rsub|>\<leqslant\>G>
+        </IF>
+      </state>
+
+      <\state>
+        <\RETURN>
+          <\strong>
+            True
+          </strong>
+        </RETURN>
+      </state>
+    </algorithmic>
+  </algorithm>
+
+  The condition of <em|weak completablitiy> is defined in Definition
+  <reference|defn-grandpa-completable>.
 
   <\algorithm|<label|algo-attempt-to\Ufinalize><name|Attempt-To-Finalize-Round>(<math|r>)>
     <\algorithmic>
@@ -1528,7 +1609,68 @@
       </state>
 
       <\state>
-        TBS
+        <\IF>
+          <math|J<rsup|r,pv><around*|(|B|)>> is not valid<math|>
+        </IF>
+      </state>
+
+      <\state>
+        <\ERROR>
+          \PInvalid pre-vote justification\Q<END>
+        </ERROR>
+      </state>
+
+      <\state>
+        <\IF>
+          <math|J<rsup|r,pc><around*|(|B|)>> is not valid<math|>
+        </IF>
+      </state>
+
+      <\state>
+        <\ERROR>
+          \PInvalid pre-commit justification\Q<END>
+        </ERROR>
+      </state>
+
+      <\state>
+        <math|G\<leftarrow\>><name|GRANDPA-GHOST>(<math|J<rsup|r,pv><around*|(|B|)>>)
+      </state>
+
+      <\state>
+        <\IF>
+          <math|G=\<phi\>>
+        </IF>
+      </state>
+
+      <\state>
+        <\ERROR>
+          \PGHOST-less Catch-up\Q<END>
+        </ERROR>
+      </state>
+
+      <\state>
+        <\IF>
+          <name|Completable(<math|r>)>
+        </IF>
+      </state>
+
+      <\state>
+        <\ERROR>
+          \PCatch-up round is not completable\Q<END>
+        </ERROR>
+      </state>
+
+      <\state>
+        <\IF>
+          <math|J<rsup|r,pc><around*|(|B|)>> justifies <math|B<rprime|'>>
+          finalization
+        </IF>
+      </state>
+
+      <\state>
+        <\ERROR>
+          \PUnjustified Catch-up target finalization\Q<END>
+        </ERROR>
       </state>
 
       <\state>
@@ -1542,7 +1684,7 @@
       </state>
 
       <\state>
-        <name|Play-Grandpa-round><math|<around|(|r|)>><END>
+        <name|Play-Grandpa-round><math|<around|(|r+1|)>><END>
       </state>
     </algorithmic>
   </algorithm>
@@ -1562,15 +1704,18 @@
 
 <\references>
   <\collection>
-    <associate|algo-attempt-to\Ufinalize|<tuple|6.11|?>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|6.13|?>>
     <associate|algo-block-production|<tuple|6.3|?>>
     <associate|algo-block-production-lottery|<tuple|6.1|?>>
     <associate|algo-build-block|<tuple|6.7|?>>
     <associate|algo-epoch-randomness|<tuple|6.4|?>>
     <associate|algo-grandpa-best-candidate|<tuple|6.10|?>>
+    <associate|algo-grandpa-ghost|<tuple|6.14|?>>
     <associate|algo-grandpa-round|<tuple|6.9|?>>
     <associate|algo-initiate-grandpa|<tuple|6.8|?>>
-    <associate|algo-process-catchup-request|<tuple|6.12|?>>
+    <associate|algo-justified-justification|<tuple|6.14|?>>
+    <associate|algo-process-catchup-request|<tuple|6.14|?>>
+    <associate|algo-process-catchup-response|<tuple|6.15|?>>
     <associate|algo-slot-time|<tuple|6.2|?>>
     <associate|algo-verify-authorship-right|<tuple|6.5|?>>
     <associate|algo-verify-slot-winner|<tuple|6.6|?>>
@@ -1593,6 +1738,7 @@
     <associate|auto-24|<tuple|6.4.1|?>>
     <associate|auto-25|<tuple|6.4.1.1|?>>
     <associate|auto-26|<tuple|6.4.1.2|?>>
+    <associate|auto-27|<tuple|6.4.1.3|?>>
     <associate|auto-3|<tuple|6.1.1|?>>
     <associate|auto-4|<tuple|6.1.2|?>>
     <associate|auto-5|<tuple|6.1|?>>
@@ -1746,6 +1892,10 @@
       <with|par-left|<quote|2tab>|6.4.1.2<space|2spc>Processing catch-up
       request <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-26>>
+
+      <with|par-left|<quote|2tab>|6.4.1.3<space|2spc>Processing catch-up
+      response <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-27>>
     </associate>
   </collection>
 </auxiliary>
