@@ -1368,6 +1368,7 @@
     <associate|page-screen-right|5mm>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|par-first|0>
     <associate|tex-even-side-margin|5mm>
     <associate|tex-odd-side-margin|5mm>
     <associate|tex-text-width|170mm>
