@@ -980,11 +980,11 @@
 
   Finally, we define when a voter <math|v> see a round as completable, that
   is when they are confident that <math|B<rsub|v><rsup|r,pv>> is an upper
-  bound for what is going to be finalised in this round. \ 
+  bound for what is going to be finalised in this round.
 
   <\definition>
     <label|defn-grandpa-completable>We say that round <math|r> is
-    <strong|weakly completable> if <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>+\<cal-E\><rsup|r,pc><rsub|obs<around*|(|v|)>>\<gtr\><frac|2|3>\<bbb-V\>>
+    <strong|completable> if <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)>>|\|>+\<cal-E\><rsup|r,pc><rsub|obs<around*|(|v|)>>\<gtr\><frac|2|3>\<bbb-V\>>
     and for all <math|B<rprime|'>\<gtr\>B<rsub|v><rsup|r,pv>>:
 
     <\equation*>
@@ -995,8 +995,6 @@
   Note that in practice we only need to check the inequality for those
   <math|B<rprime|'>\<gtr\>B<rsub|v><rsup|r,pv>> where
   <math|<around|\||V<rsup|r,pc><rsub|obs<around|(|v|)><rsub|\<nosymbol\>>><around|(|B<rprime|'>|)>|\|>\<gtr\>0>.\ 
-
-  \;
 
   <subsection|GRANDPA Messages Specification>
 
@@ -1201,7 +1199,7 @@
       <\state>
         <name|Receive-Messages>(<strong|until> Time
         <math|\<geqslant\>t<rsub|r<rsub|,>*v>+2\<times\>T> <strong|or>
-        <name|Completable>(<math|r>))<END>
+        <math|r> <strong|is> completable)<END>
       </state>
 
       <\state>
@@ -1251,7 +1249,9 @@
 
       <\state>
         <name|Receive-Messages>(<strong|until> <math|r> <strong|is>
-        completable)
+        completable <strong|and> <name|Finalizable>(<math|r-1>)
+
+        <space|2em><strong|and> \ <name|Last-Finalized-Block><math|\<geqslant\>><name|Best-Final-Candidate>(<math|r>-1))
       </state>
 
       <\state>
@@ -1260,11 +1260,12 @@
     </algorithmic>
   </algorithm>
 
-  <name|Completable> is defined in Algorithm <reference|algo-completable>.
-  <name|Best-Final-Candidate> function is explained in Algorithm
-  <reference|algo-grandpa-best-candidate> and
+  The condition of <em|completablitiy> is defined in Definition
+  <reference|defn-grandpa-completable>. <name|Best-Final-Candidate> function
+  is explained in Algorithm <reference|algo-grandpa-best-candidate>.
   <name|<name|Attempt-To-Finalize-Round>(<math|r>)> is described in Algorithm
-  <reference|algo-attempt-to\Ufinalize>.
+  <reference|algo-attempt-to\Ufinalize> and <name|Finalizabl> is defined in
+  Algorithm <reference|algo-finalizable>.
 
   <\algorithm|<label|algo-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)>
     <\algorithmic>
@@ -1301,16 +1302,18 @@
 
   <\algorithm>
     <todo|<name|GRANDPA-GHOST>>
-  </algorithm|>
+  <|algorithm>
+    <\algorithmic>
+      \;
+    </algorithmic>
+  </algorithm>
 
-  <algorithm|<todo|<name|Round-Estimate>>|>
-
-  <\algorithm|<label|algo-completable><name|Completable>(<math|r:>voting
+  <\algorithm|<label|algo-finalizable><name|Finalizable>(<math|r:>voting
   round)>
     <\algorithmic>
       <\state>
         <\IF>
-          <math|r> <strong|is not> weakly completable
+          <math|r> <strong|is not> Completable
         </IF>
       </state>
 
@@ -1341,25 +1344,12 @@
       </state>
 
       <\state>
-        <math|E<rsub|r>\<leftarrow\>><name|Round-Estimate>(<math|r,G>)
+        <math|E<rsub|r>\<leftarrow\>><name|Best-Final-Candidate>(<math|r>)
       </state>
 
       <\state>
         <\IF>
-          <math|E<rsub|r>=\<phi\>>
-        </IF>
-      </state>
-
-      <\state>
-        <\RETURN>
-          <\strong>
-            False<END>
-          </strong>
-        </RETURN>
-      </state>
-
-      <\state>
-        <\IF>
+          <math|E<rsub|r>\<neq\>\<phi\>> <strong|and>
           <math|E<rsub|r-1>\<leqslant\>E<rsub|r><rsub|>\<leqslant\>G>
         </IF>
       </state>
@@ -1367,14 +1357,28 @@
       <\state>
         <\RETURN>
           <\strong>
-            True
+            True<END>
+          </strong>
+        </RETURN>
+      </state>
+
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
+      </state>
+
+      <\state>
+        <\RETURN>
+          <\strong>
+            False
           </strong>
         </RETURN>
       </state>
     </algorithmic>
   </algorithm>
 
-  The condition of <em|weak completablitiy> is defined in Definition
+  The condition of <em|completablitiy> is defined in Definition
   <reference|defn-grandpa-completable>.
 
   <\algorithm|<label|algo-attempt-to\Ufinalize><name|Attempt-To-Finalize-Round>(<math|r>)>
@@ -1650,7 +1654,7 @@
 
       <\state>
         <\IF>
-          <name|Completable(<math|r>)>
+          <name|<math|r>> <strong|is not> completable
         </IF>
       </state>
 
@@ -1698,7 +1702,16 @@
 
 <\initial>
   <\collection>
+    <associate|info-flag|minimal>
+    <associate|page-height|auto>
     <associate|page-medium|papyrus>
+    <associate|page-screen-margin|true>
+    <associate|page-screen-right|5mm>
+    <associate|page-type|letter>
+    <associate|page-width|auto>
+    <associate|tex-even-side-margin|5mm>
+    <associate|tex-odd-side-margin|5mm>
+    <associate|tex-text-width|170mm>
   </collection>
 </initial>
 
