@@ -14,5 +14,6 @@ rustWasmPlatform.buildRustPackage {
   PROTOC_INCLUDE = "${protobuf}/include";
 
   # Fix to allows direct use of wasm-builder for no_std binaries
-  cargoBuildFlags = [ "-Z features=build_dep" ];
+  # https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#features
+  cargoBuildFlags = [ "-Zfeatures=build_dep" ];
 }
