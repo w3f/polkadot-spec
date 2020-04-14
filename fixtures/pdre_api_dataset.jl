@@ -7,7 +7,8 @@ end
 module PdreApiTestBinariesLegacy
 	const cli_testers = [
     "rust-tester-legacy",
-	]
+    "cpp-tester"
+  ]
 end
 
 # Module which contains the names of the functions that need to be tested.

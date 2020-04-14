@@ -1,3 +1,4 @@
+#include "extension.hpp"
 #include "scale_codec.hpp"
 #include "subcommand_router.hpp"
 #include "trie.hpp"
@@ -18,6 +19,9 @@ int main(int argc, char **argv) {
   });
   router.addSubcommand("state-trie", [](int argc, char **argv) {
     processTrieCommand(extractTrieArgs(argc, argv));
+  });
+  router.addSubcommand("pdre-api", [](int argc, char **argv) {
+    processExtensionsCommands(extractExtensionArgs(argc, argv));
   });
 
   std::string commands_list = "Valid subcommands are: ";

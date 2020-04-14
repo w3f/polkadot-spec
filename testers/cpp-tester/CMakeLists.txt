@@ -18,6 +18,8 @@ find_package(xxhash REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(libp2p REQUIRED)
 
+find_package(binaryen REQUIRED)
+
 
 # Compile and link tester
 add_executable(cpp-tester
@@ -27,6 +29,18 @@ add_executable(cpp-tester
   trie.cpp
   subcommand_router.hpp
   trie.hpp
+  extension.cpp
+  extension.hpp
+  extension/storage.cpp
+  extension/storage.hpp
+  extension/network.cpp
+  extension/network.hpp
+  extension/child_storage.cpp
+  extension/child_storage.hpp
+  extension/crypto.cpp
+  extension/crypto.hpp
+  extension/helpers.cpp
+  extension/helpers.hpp
 )
 
 # FIXME This should not be necessary (needed to find "outcome/outcome.hpp")
@@ -35,12 +49,13 @@ target_include_directories(cpp-tester PUBLIC ${kagome_INCLUDE_DIRS})
 target_link_libraries(cpp-tester
   Boost::program_options
   yaml-cpp
-  kagome::hexutil
-  kagome::buffer
-  kagome::hexutil
-  kagome::in_memory_storage
-  kagome::trie_db_backend
-  kagome::polkadot_trie
+  ${kagome_LIBRARIES}
+
+  # FIXME Missing CMake Interface dependency
+  binaryen::binaryen
+
+  # FIXME Patched-in export required for testing
+  kagome::binaryen_wasm_memory
 )
 
 # Install result
