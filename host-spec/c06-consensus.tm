@@ -308,22 +308,41 @@
 
   <subsection|Slot Number Calculation>
 
-  It is essential for a block producer to calculate and validate the slot
-  number at a certain point in time. Slots are dividing the time continuum in
-  an overlapping interval. At a given time, the block producer should be able
-  to determine the set of slots which can be associated to a valid block
-  generated at that time. We formalize the notion of validity in the
-  following definitions:
+  It is imperative for the security of the network that each block producer
+  is able to correctly determine the set of slots which can be associated to
+  a valid block generated at a given time without relying on any external
+  clock source (e.g. through the <with|font-shape|italic|Network Time
+  Protocol> or the <with|font-shape|italic|Global Positioning System>). To
+  stay in synchronization each producer is therefore required to periodically
+  estimate its local clock offset in relation to the rest of the network.\ 
+
+  This estimation depends on the two fixed parameters
+  <with|font-series|bold|<math|k>> (def. <reference|defn-prunned-best>) and
+  <math|<with|font-series|bold|s<rsub|cq>>> (def.
+  <reference|defn-chain-quality>). These are choosen based on the results of
+  simulation parameterized to meet certain security bounds, currently
+  assuming a <math|1 s \ >clock drift per day and targeting a probability
+  lower than <math|0.5%> for an adversary to break BABE in 3 years with a
+  resistance against network delay up to <math|<frac*|1|3>> of the slot time.
 
   <\definition>
-    <label|slot-time-cal-tail>The <strong|slot tail>, formally referred to by
-    <math|SlTl> represents the number of on-chain blocks that are used to
-    estimate the slot time of a given slot. This number is set to be 1200.
+    <label|defn-prunned-best>The <with|font-series|bold|prunned best chain>
+    <math|C<rsup|\<#250C\>k>> is the best chain selected according to the
+    best chain selection rule with the last k Blocks prunned. Based on
+    simulation results, we choose <math|k=312>. The
+    <with|font-series|bold|last (probabilistically) finalized block>
+    describes the last block in this prunned best chain.
   </definition>
 
-  Algorithm <reference|algo-slot-time> determines the slot time for a future
-  slot based on the <em|block arrival time> associated with blocks in the
-  slot tail defined in Definition <reference|defn-block-time>.
+  <\definition>
+    <label|defn-chain-quality>The <with|font-series|bold|chain quality>
+    <math|s<rsub|cq>> represents the number of slots hat are used to estimate
+    the local clock offset. Based on simulation results, we choose
+    <math|s<rsub|cq>=7200>.
+  </definition>
+
+  The prerequisite for such a calculation is that each producer stores the
+  arrival time of each block (def. <reference|defn-block-time>).\ 
 
   <\definition>
     <label|defn-block-time>The <strong|block arrival time> of block <math|B>
@@ -335,6 +354,25 @@
     produced. The index <math|j> in <math|T<rsup|j><rsub|B>> notation may be
     dropped and B's arrival time is referred to by <math|T<rsub|B>> when
     there is no ambiguity about the underlying node.
+  </definition>
+
+  At the end of each sync-epoch (def. <reference|defn-sync-epoch>) these
+  block arrivel times are used to update the current clock offset using the
+  median algorithm (alg. <reference|algo-slot-time>).
+
+  <\definition>
+    <label|defn-sync-epoch>A <with|font-series|bold|sync epoch> (unrelated to
+    the epoch defined in <reference|defn-epoch-slot>) is the inteval at which
+    each validator (re-)evaluates its local clock offsets. The first
+    sync-epoch <math|\<varepsilon\><rsub|1>> starts just after the genesis
+    block is released. The other sync-epochs <math|\<varepsilon\><rsub|i>>
+    start when the slot number of the last (probabilistically) finalized
+    block is <math|<wide|s|\<bar\>><rsub|i>> which is the smallest slot
+    number such that <math|<wide|s|\<bar\>><rsub|i><rsub|>-<wide|s|\<bar\>><rsub|i-1>\<geq\>s<rsub|cq>>
+    where <math|<wide|s|\<bar\>><rsub|i-1>> is the slot number of the last
+    (probabilistically) finalized block in the previous sync-epoch
+    <math|\<varepsilon\><rsub|i-1>>. If the previous epoch is the first epoch
+    <math|\<varepsilon\><rsub|1>> then <math|<wide|s|\<bar\>><rsub|i-1>=<wide|s|\<bar\>><rsub|i>=0>.
   </definition>
 
   In addition to the arrival time of block <math|B>, the block producer also
@@ -351,8 +389,8 @@
   </definition>
 
   <\algorithm>
-    <label|algo-slot-time><name|Slot-Time>(<math|s>: the slot number of the
-    slot whose time needs to be determined)
+    <label|algo-slot-time><name|Median-Algorithm>(<math|\<varepsilon\><rsub|j>>:
+    the current sync-epoch)
   <|algorithm>
     <\algorithmic>
       <\state>
@@ -360,16 +398,11 @@
       </state>
 
       <\state>
-        <math|B<rsub|d>\<leftarrow\>><name|Deepest-Leaf(<math|BT>)>
+        <FOR-IN|<math|B<rsub|i>>|<math|\<varepsilon\><rsub|j>><name|>>
       </state>
 
       <\state>
-        <FOR-IN|<math|B<rsub|i>>|<name|SubChain>(<math|B<rsub|H<rsub|n><around*|(|B<rsub|d>|)>-SITL>>,
-        <math|B<rsub|d>>)>
-      </state>
-
-      <\state>
-        <name|<math|s<rsub|t><rsup|B<rsub|i>>\<leftarrow\>T<rsup|><rsub|B<rsub|i>>>+Slot-Offset(<math|s<rsub|B<rsub|i>>,s>)<math|\<times\>\<cal-T\><rsub|>>>
+        <name|<math|s<rsub|t><rsup|B<rsub|i>>\<leftarrow\>T<rsup|><rsub|B<rsub|i>>>+Slot-Offset(<math|s<rsub|B<rsub|i>>,<wide|s|\<bar\>><rsub|j>>)<math|\<times\>\<cal-T\><rsub|>>>
       </state>
 
       <\state>
@@ -386,6 +419,11 @@
 
   \ <math|\<cal-T\>> is the slot duration defined in Definition
   <reference|defn-epoch-slot>.
+
+  <\big-figure|<image|figures/babe_time_sync.eps|1par|||>>
+    Examplary result of Median Algorithm in first sync epoch with
+    <math|s<rsub|cq>=9> and <math|k=1>.
+  </big-figure>
 
   <subsection|Block Production>
 
