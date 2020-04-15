@@ -1,8 +1,8 @@
 let
   w3fpkgs = builtins.fetchTarball {
-    name = "w3fpks-2020-03-29";
-    url = https://gitlab.w3f.tech/florian/w3fpkgs/-/archive/58ce02e73380b9b5dae78fb6f4ec87dec9241add.tar.gz;
-    sha256 = "09067ga7b88v9h0jk8dvxpl9x28wvgh52xk7sfwj4a61hl8h8nzh";
+    name = "w3fpks-2020-04-15";
+    url = https://gitlab.w3f.tech/florian/w3fpkgs/-/archive/c4fffd253eb3804847b0fe7f36facaf6bb2401cf.tar.gz;
+    sha256 = "1slzzn8rw1n26d7nc7ypnk1d4vfjrflk0yiff14nxwwx9a91qadw";
   };
 in
   import "${w3fpkgs}/release.nix"
