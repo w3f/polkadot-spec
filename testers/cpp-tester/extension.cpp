@@ -3,14 +3,19 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+#define BOOST_ENABLE_ASSERT_HANDLER
+#include <boost/assert.hpp>
+
+#include <boost/optional.hpp>
+#include <boost/program_options.hpp>
+
 #include "extension.hpp"
 #include "extension/storage.hpp"
 #include "extension/network.hpp"
 #include "extension/crypto.hpp"
 #include "extension/child_storage.hpp"
+
 #include "subcommand_router.hpp"
-#include <boost/optional.hpp>
-#include <boost/program_options.hpp>
 
 namespace po = boost::program_options;
 
@@ -153,6 +158,6 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
   }
   auto e1 = "function is not provided\n" + commands_list;
   auto e2 = "Invalid function\n" + commands_list;
-  BOOST_ASSERT_MSG(router.executeSubcommand(args.function, args.input),
+  BOOST_VERIFY_MSG(router.executeSubcommand(args.function, args.input),
                    "Invalid function");
 }

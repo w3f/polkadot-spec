@@ -7,11 +7,15 @@
 
 #include <iostream>
 
-#include "kagome/common/hexutil.hpp"
-#include "kagome/common/logger.hpp"
-#include "kagome/scale/scale.hpp"
+#define BOOST_ENABLE_ASSERT_HANDLER
+#include <boost/assert.hpp>
+
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
+
+#include <kagome/common/hexutil.hpp>
+#include <kagome/common/logger.hpp>
+#include <kagome/scale/scale.hpp>
 
 #include "subcommand_router.hpp"
 
@@ -63,7 +67,7 @@ void processScaleCodecCommand(ScaleCommandArgs args) {
     std::cout << "]\n";
   });
 
-  BOOST_ASSERT_MSG(
+  BOOST_VERIFY_MSG(
       router.executeSubcommand(args.subcommand,
                                args.input),
       "Invalid subcommand");

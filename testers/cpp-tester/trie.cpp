@@ -7,12 +7,16 @@
 
 #include <iostream>
 
+#define BOOST_ENABLE_ASSERT_HANDLER
+#include <boost/assert.hpp>
+
 #include <boost/program_options.hpp>
+
+#include <yaml-cpp/yaml.h>
+
 #include <kagome/storage/in_memory/in_memory_storage.hpp>
 #include <kagome/storage/trie/impl/polkadot_trie_db.hpp>
 #include <kagome/storage/trie/impl/trie_db_backend_impl.hpp>
-#include <spdlog/sinks/stdout_sinks.h>
-#include <yaml-cpp/yaml.h>
 
 #include "subcommand_router.hpp"
 
@@ -139,7 +143,7 @@ void processTrieCommand(const TrieCommandArgs &args) {
   auto [keys, values] =
       parseYamlStateFile(args.state_file_name, args.keys_in_hex);
 
-  BOOST_ASSERT_MSG(router.executeSubcommand(args.subcommand, std::move(keys),
+  BOOST_VERIFY_MSG(router.executeSubcommand(args.subcommand, std::move(keys),
                                             std::move(values)),
                    "Invalid subcommand");
 }
