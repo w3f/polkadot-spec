@@ -11,14 +11,14 @@ As soon as the proposal of a PoV block is on-chain, the parachain validators bre
 	 
 Once validators have received erasure-coded pieces for several PoV blocks for the current relay chain block (that might have been proposed a couple of blocks earlier on the relay chain), they announce that they have received the erasure coded pieces on the relay chain by voting on the received pieces, see Section \ref{sect-voting-on-availability} for more details. 
 
-As soon as $>2/3$ of validators have made this announcement for any parachain block we act on the parachain block i.e., we update the relay chain state based on the the candidate receipt and considered the parachain block to have happened on this relay chain fork. 
+As soon as $>2/3$ of validators have made this announcement for any parachain block we act on the parachain block i.e., we update the relay chain state based on the candidate receipt and considered the parachain block to have happened on this relay chain fork. 
 
 After a certain time, if a candidate receipt for a parachain block is not discovered to be available we decide it is unavailable and allow alternative blocks to be built on its parent parachain block, see \ref{sect-unavailability}. 
 
 The secondary check described in Section \ref{sect-approval-checking}, is done by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV block that is invalid and not keeping it available to avoid the possibility of being punished for the attack.
 %The security analysis at the end of this document dives deeper into the incentives of the necessity of the secondary checking validity/availability checking. 
 
-Once a parachain block is acted on we carry the secondary validity/availability checks as follows. A scheme assigns every validator to one or more PoV blocks to check its validity, see Section \ref{sect-shot-assignment} for details. An assigned validator acquires the PoV block (see Section \ref{sect-obtaining-block}) and checks its validity by comparing it to the candidate receipt. If validators notices that an equivocation has happened an additional validity/availability assignments will be made that is described in Section\ref{sect-equivocation-case}. 
+Once a parachain block is acted on we carry the secondary validity/availability checks as follows. A scheme assigns every validator to one or more PoV blocks to check its validity, see Section \ref{sect-shot-assignment} for details. An assigned validator acquires the PoV block (see Section \ref{sect-obtaining-block}) and checks its validity by comparing it to the candidate receipt. If validators notice that an equivocation has happened, additional validity/availability assignments will be made that is described in Section\ref{sect-equivocation-case}. 
 During any of the phases, if any validator announces that a parachain block is invalid then all validators obtain the parachain block and check its validity, see Section \ref{sect-escalation} for more details. 
 
 All validity and invalidity attestations go onto the relay chain, see Section \ref{sect-publishing-attestations} for details. If a parachain block has been checked at least by certain number of validators, the rest of the validators continue with voting on that relay chain block in the GRANDPA protocol. Note that the block might be challenged later. 
@@ -70,7 +70,7 @@ Primary validity checking refers to the process of parachain validators as defin
     %%  \Ensure{}
     
     \State Retrieve $v_B$ from the relay chain state at $B_{relay parent}$
-    \State Run Algorithm \ref{algo-validate-block} usinf $B, \pi_B, v_B$
+    \State Run Algorithm \ref{algo-validate-block} using $B, \pi_B, v_B$
   \end{algorithmic}
 \end{algorithm}
 
@@ -92,8 +92,7 @@ Primary validity checking refers to the process of parachain validators as defin
 \label{sect-primary-validaty-announcement}
 Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
 
-In case that validation has been successful, the announcement will either in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt}, to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}
-o
+In case that validation has been successful, the announcement will either be in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt} to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}.
 However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
 
 \begin{definition}
@@ -149,13 +148,13 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-para-proposal}
-        {\b Parachain Block Proposal} is a candidate receipt for a parachain block for a parachain $\rho$ along with signatures for at least 2/3 of $mathcal{V}_\rho$ 
+        {\b Parachain Block Proposal} is a candidate receipt for a parachain block for a parachain $\rho$ along with signatures for at least 2/3 of $\mathcal{V}_\rho$ 
 
 \end{definition}
 
 \subsection{Primary Validation Disagreement}
 \label{sect-primary-validation-disagreemnt}
-\syed{Parachain}{verify} validators need to keep track of candidate receipts (see Definition \ref{defn-candidate-receipt}) and validation failure messages of their peer. In case, there is a disagreement among the parachain validators about $\blobB$, all parachain validators must invoke Algorithm \ref{algo-primary-validation-disagreemnt}
+\syed{Parachain}{verify} validators need to keep track of candidate receipts (see Definition \ref{defn-candidate-receipt}) and validation failure messages of their peers. In case, there is a disagreement among the parachain validators about $\blobB$, all parachain validators must invoke Algorithm \ref{algo-primary-validation-disagreemnt}
 
 \begin{algorithm}
   \caption[]{\sc PrimaryValidationDisagreement}
