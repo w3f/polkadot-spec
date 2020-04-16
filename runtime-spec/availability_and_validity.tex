@@ -98,7 +98,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-candidate-receipt}
-        {\b TBS} is a proposal for $B$,
+        {\b Candidate Receipt} is a proposal for $B$, \TBS.
 \end{definition}
 
 \begin{algorithm}
@@ -141,7 +141,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
     \Require{}
     %%  \Ensure{}
     
-    \State
+    \State TBS
   \end{algorithmic}
 \end{algorithm}
 
@@ -149,9 +149,22 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-para-proposal}
-        {\b Parachain Block Proposal} is a candidate receipt for a parachain block for a parachain $\rho$ along with signatures for at least 2/3 of $mathcal{V}_\rho$ 
-
+        {\b Parachain Block Proposal}, noted by $P^B_{rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $mathcal{V}_\rho$  \syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}.
 \end{definition}
+
+A block producer which observe a Parachain Block Proposal as defined in definition \ref{defn-para-proposal} \syed{may/should}{?} include the proposal in the block they are producing according to Algorithm \ref{algo-include-parachain-proposal} during block production procedure.
+
+\begin{algorithm}
+  \caption[]{\sc IncludeParachainProposal($P^B_{rho}$)}
+  \label{algo-include-parachain-proposal}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+    
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
+
 
 \subsection{Primary Validation Disagreement}
 \label{sect-primary-validation-disagreemnt}
