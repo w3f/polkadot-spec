@@ -10,6 +10,8 @@
 
 namespace helpers {
 
+  wasm::ShellExternalInterface GLOBAL_WASM_SHELL;
+
 std::pair<
   std::shared_ptr<kagome::runtime::WasmMemory>,
   std::unique_ptr<kagome::extensions::Extension>
@@ -21,10 +23,8 @@ std::pair<
     )
   );
 
-  wasm::ShellExternalInterface interface;
-
   std::shared_ptr<kagome::runtime::WasmMemory> memory =
-    std::make_shared<kagome::runtime::binaryen::WasmMemoryImpl>(&interface.memory, 4096);
+    std::make_shared<kagome::runtime::binaryen::WasmMemoryImpl>(&GLOBAL_WASM_SHELL.memory, 4096);
 
   std::unique_ptr<kagome::extensions::Extension> extension =
     std::make_unique<kagome::extensions::ExtensionImpl>(memory, std::move(trie));
