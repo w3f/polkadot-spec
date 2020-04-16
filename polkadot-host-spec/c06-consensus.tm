@@ -806,8 +806,7 @@
   consecutive rounds of voting by validator nodes. Validators execute GRANDPA
   finality process in parallel to Block Production as an independent service.
   In this section, we describe the different functions that GRANDPA service
-  is supposed to perform to successfully participate in the block
-  finalization process.
+  performs to successfully participate in the block-finalization process.
 
   <subsection|Preliminaries>
 
@@ -815,20 +814,20 @@
     A <strong|GRANDPA Voter>, <math|v>, is represented by a key pair
     <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
     <math|k<rsub|v><rsup|pr>> represents its private key which is an
-    <math|ED25519> private key, is a node running GRANDPA protocol, and
-    broadcasts votes to finalize blocks in a Polkadot Host - based chain. The
+    <math|ED25519> private key, is a node running GRANDPA protocol and
+    broadcasts votes to finalize blocks in a Polkadot Host-based chain. The
     <strong|set of all GRANDPA voters> for a given block B is indicated by
-    <math|\<bbb-V\><rsub|B>>. In that regard we have <todo|change function
+    <math|\<bbb-V\><rsub|B>>. In that regard, we have <todo|change function
     name, only call at genesis, adjust V_B over the sections>
 
     <\equation*>
       \<bbb-V\><rsub|B>=<text|<verbatim|grandpa_authorities>><around*|(|B|)>
     </equation*>
 
-    where <math|<math-tt|grandpa_authorities>> is the entry into runtime
+    where <math|<math-tt|grandpa_authorities>> is the entry into Runtime
     described in Section <reference|sect-rte-grandpa-auth>. We refer to
-    <math|\<bbb-V\><rsub|B> > as <math|B> whene there is no chance of
-    ambeguity.
+    <math|\<bbb-V\><rsub|B> > as <math|B> when there is no chance of
+    ambiguity.
   </definition>
 
   <\definition>
@@ -880,7 +879,7 @@
 
   The GRANDPA protocol dictates how an honest voter should vote in each
   sub-round, which is described in Algorithm <reference|algo-grandpa-round>.
-  After defining what constitues a vote in GRANDPA, we define how GRANDPA
+  After defining what constitutes a vote in GRANDPA, we define how GRANDPA
   counts votes.
 
   <\definition>
@@ -888,7 +887,7 @@
     votes to blocks not residing on the same branch of the block tree during
     one voting sub-round. In such a situation, we say that <math|v> is an
     <strong|equivocator> and any vote <math|V<rsub|v><rsup|r,stage><around*|(|B|)>>
-    cast by <math|v> in that round is an <strong|equivocatory vote> and
+    cast by <math|v> in that round is an <strong|equivocatory vote>, and
 
     <\equation*>
       \<cal-E\><rsup|r,stage>
@@ -948,8 +947,8 @@
     The <strong|set of all observed votes by <math|v> in the sub-round stage
     of round <math|r> for block <math|B>>,
     <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>>> is
-    equal to all of the observed direct votes casted for block <math|B> and
-    all of the <math|B>'s descendents defined formally as:
+    equal to all of the observed direct votes cast for block <math|B> and all
+    of the <math|B>'s descendants defined formally as:
 
     <\equation*>
       V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>\<assign\><big|cup><rsub|v<rsub|i>\<in\>\<bbb-V\>,B\<geqslant\>B<rprime|'>>VD<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B<rprime|'>|)><rsub|\<nosymbol\>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>
@@ -957,7 +956,7 @@
 
     The <strong|total number of observed votes for Block <math|B> in round
     <math|r>> is defined to be the size of that set plus the total number of
-    equivocators voters:
+    equivocator voters:
 
     <\equation*>
       #V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>=<around|\||V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>|\|>+<around*|\||\<cal-E\><rsup|r,stage><rsub|obs<around*|(|v|)>>|\|>
@@ -978,7 +977,7 @@
 
   \;
 
-  Finally, we define when a voter <math|v> see a round as completable, that
+  Finally, we define when a voter <math|v> sees a round as completable, that
   is when they are confident that <math|B<rsub|v><rsup|r,pv>> is an upper
   bound for what is going to be finalised in this round.
 
@@ -1056,7 +1055,7 @@
     broadcasted during either the pre-vote (stage = pv) or the pre-commit
     (stage = pc) sub-round of round r. A <strong|valid Justification> must
     only contain up-to one valid vote from each voter and must not contain
-    more than two equivocatory vote from each voter.
+    more than two equivocatory votes from each voter.
 
     We say <math|J<rsup|r,pc><around*|(|B|)>> <strong|justifies the
     finalization> of <math|B<rprime|'>\<geqslant\>B> if the number of valid
@@ -1469,30 +1468,30 @@
   comes with the Justification of its finalization as defined in Definition
   <reference|defn-grandpa-justification> <todo|Verify: you can't trust your
   neigbour for their set, you need to get it from the chain>. Through this
-  process they can synchronize the authority list which is currently
-  performing the finalization process.
+  process, they can synchronize the authority list currently performing the
+  finalization process.
 
-  <subsubsection|Sending catch-up request><label|sect-sending-catchup-request>
+  <subsubsection|Sending catch-up requests><label|sect-sending-catchup-request>
 
   When a Polkadot node has the same authority list as a peer node who is
-  reporting a higher number for the \Pfinalized round\Q field, they should
-  send a catch-up request message as specified in Definition
+  reporting a higher number for the \Pfinalized round\Q field, it should send
+  a catch-up request message as specified in Definition
   <reference|defn-grandpa-catchup-request-msg> to the reporting peer in order
   to catch-up to the more advanced finalized round, provided that the
   following criteria holds:
 
   <\itemize-minus>
-    <item>the peer node is a GRANDPA voter.
+    <item>the peer node is a GRANDPA voter, and
 
-    <item>The last known finalized round for the Polkadot node is at least 2
-    rounds behind the finalized round by the peer.\ 
+    <item>the last known finalized round for the Polkadot node is at least 2
+    rounds behind the finalized round for the peer.\ 
   </itemize-minus>
 
-  \ <subsubsection|Processing catch-up request>
+  \ <subsubsection|Processing catch-up requests>
 
-  Only GRANDPA voter nodes are required to respond to the catch up responses.
-  When a GRANDPA voter node receive a catch-up request message it needs to
-  executes Algorithm <reference|algo-process-catchup-request>.
+  Only GRANDPA voter nodes are required to respond to the catch-up responses.
+  When a GRANDPA voter node receives a catch-up request message it needs to
+  execute Algorithm <reference|algo-process-catchup-request>.
 
   <\algorithm>
     <label|algo-process-catchup-request><name|ProcessCatchupRequest>(
@@ -1550,7 +1549,7 @@
 
   <\itemize-minus>
     <item><math|id<rsub|\<bbb-V\>>> is the voter set id which the serving
-    node is operation
+    node is operating
 
     <item><math|r> is the round number for which the catch-up is requested
     for.
@@ -1565,7 +1564,7 @@
     <reference|defn-grandpa-catchup-response-msg>.
   </itemize-minus>
 
-  <subsubsection|Processing catch-up response>
+  <subsubsection|Processing catch-up responses>
 
   A Catch-up response message contains critical information for the requester
   node to update their view on the active rounds which are being voted on by
@@ -1702,13 +1701,17 @@
 
 <\initial>
   <\collection>
+    <associate|chapter-nr|5>
     <associate|info-flag|minimal>
+    <associate|page-first|37>
     <associate|page-height|auto>
     <associate|page-medium|papyrus>
     <associate|page-screen-margin|true>
     <associate|page-screen-right|5mm>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|section-nr|0<uninit>>
+    <associate|subsection-nr|2>
     <associate|tex-even-side-margin|5mm>
     <associate|tex-odd-side-margin|5mm>
     <associate|tex-text-width|170mm>
@@ -1722,11 +1725,10 @@
     <associate|algo-block-production-lottery|<tuple|6.1|?>>
     <associate|algo-build-block|<tuple|6.7|?>>
     <associate|algo-epoch-randomness|<tuple|6.4|?>>
+    <associate|algo-finalizable|<tuple|6.12|?>>
     <associate|algo-grandpa-best-candidate|<tuple|6.10|?>>
-    <associate|algo-grandpa-ghost|<tuple|6.14|?>>
     <associate|algo-grandpa-round|<tuple|6.9|?>>
     <associate|algo-initiate-grandpa|<tuple|6.8|?>>
-    <associate|algo-justified-justification|<tuple|6.14|?>>
     <associate|algo-process-catchup-request|<tuple|6.14|?>>
     <associate|algo-process-catchup-response|<tuple|6.15|?>>
     <associate|algo-slot-time|<tuple|6.2|?>>
@@ -1898,16 +1900,19 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-24>>
 
-      <with|par-left|<quote|2tab>|6.4.1.1<space|2spc>Sending catch-up request
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|2tab>|6.4.1.1<space|2spc>Sending catch-up
+      <with|color|<quote|dark red>|request><with|color|<quote|dark
+      green>|requests> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-25>>
 
       <with|par-left|<quote|2tab>|6.4.1.2<space|2spc>Processing catch-up
-      request <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|color|<quote|dark red>|request><with|color|<quote|dark
+      green>|requests> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-26>>
 
       <with|par-left|<quote|2tab>|6.4.1.3<space|2spc>Processing catch-up
-      response <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|color|<quote|dark red>|response><with|color|<quote|dark
+      green>|responses> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
     </associate>
   </collection>
