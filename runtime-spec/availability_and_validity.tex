@@ -370,7 +370,7 @@ More fisherman reports can increase $\#VCheck$ and require new checks. We should
   \end{algorithmic}
 \end{algorithm}
 
-\syed{}{\todo{so assignees are not annoucing their assignment just the result of the approval check I assume}
+\syed{}{\todo{so assignees are not announcing their assignment just the result of the approval check I assume}}
   
 \subsection{Additional Checking in Case of Equivocation}\label{sect-equivocation-case}
 In the case of a relay chain equivocation, i.e. a validator produces two blocks with the same VRF, we do not want the secondary checkers for the second block to be predictable. To this end we use the block hash as well as the VRF as input for secondary checkers VRF. So each secondary checker is going to produce twice as many VRFs for each relay chain block that was equivocated. If either of these VRFs is small enough then the validator is assigned to perform a secondary check on the PoV block. The process is formalized in Algorithm \ref{algo-equivocation-assigment}
