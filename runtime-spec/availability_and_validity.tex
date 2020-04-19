@@ -11,7 +11,7 @@ As soon as the proposal of a PoV block is on-chain, the parachain validators bre
 	 
 Once validators have received erasure-coded pieces for several PoV blocks for the current relay chain block (that might have been proposed a couple of blocks earlier on the relay chain), they announce that they have received the erasure coded pieces on the relay chain by voting on the received pieces, see Section \ref{sect-voting-on-availability} for more details. 
 
-As soon as $>2/3$ of validators have made this announcement for any parachain block we act on the parachain block i.e., we update the relay chain state based on the the candidate receipt and considered the parachain block to have happened on this relay chain fork. 
+As soon as $>2/3$ of validators have made this announcement for any parachain block we \emph{act on} the parachain block. Acting on parachain blocks means we update the relay chain state based on the candidate receipt and considered the parachain block to have happened on this relay chain fork. 
 
 After a certain time, if we did not collect enough signatures approving the availability of the parachain data associated with a certain candidate receipt we decide this parachain block is unavailable and allow alternative blocks to be built on its parent parachain block, see \ref{sect-unavailability}. 
 
@@ -149,7 +149,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-para-proposal}
-        {\b Parachain Block Proposal}, noted by $P^B_{rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $mathcal{V}_\rho$  \syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}.
+        {\b Parachain Block Proposal}, noted by $P^B_{rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $mathcal{V}_\rho$.  %\syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}. We still include the proposal if a parachain validator attests to its invalidity, Any primary invalidity attestation or late primary validity attestation are handled just like secondary attestations.
 \end{definition}
 
 A block producer which observe a Parachain Block Proposal as defined in definition \ref{defn-para-proposal} \syed{may/should}{?} include the proposal in the block they are producing according to Algorithm \ref{algo-include-parachain-proposal} during block production procedure.
@@ -211,7 +211,7 @@ When a $v \in \paraValidSet$ observes that a block containing parachain block ca
 \end{definition}
 
 \section{Distribution of Pieces}\label{sect-distribute-piece}
-Following the computation of $Er_B$, $v$ must construct the $\blobB$ Avalailability message defined in Definition \ref{defn-pov-erasure-piece-message}. And distribute them to target validators designated by the Availability Networking Specification \cite{??}.
+Following the computation of $Er_B$, $v$ must construct the $\blobB$ Availability message defined in Definition \ref{defn-pov-erasure-piece-message}. And distribute them to target validators designated by the Availability Networking Specification \cite{??}.
 
 \begin{definition}
   \label{defn-pov-erasure-piece-message}
@@ -226,13 +226,13 @@ When validator $v$ receives its designated piece for \blobB it needs to broadcas
         {\b Availability vote message} $M_{PoV}^{Avail,v_i}$ TBS
 \end{definition}
 
-Some parachains have blocks that we need to vote on the availability of, that is decided by > 2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations as follows.}{this is not really relevant to the spec}
+Some parachains have blocks that we need to vote on the availability of, that is decided by > 2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations that will be very efficient. We describe next what operations the relay chain runtime uses to process these availability votes.}{this is not really relevant to the spec}
 
-For each parachain, /syed{we store}{what does it mean we store? this need to be clear. Is it a transaction \TBS?}:
+For each parachain, the relay chain stores the following data: %/syed{we store}{what does it mean we store? this need to be clear. Is it a transaction \TBS?}: no its not a tx, its in the relay chain state
 
-\textbf{1) availability status, 2) candidate receipt, 3) candidate relay chain block no}
+\textbf{1) availability status, 2) candidate receipt, 3) candidate relay chain block number}
 
-where availability status if one of \{no candidate, to be determined, unavailable, available\} .
+where availability status is one of \{no candidate, to be determined, unavailable, available\} .
 
 For each block, each validator $v$ signs a message
 
@@ -248,22 +248,21 @@ where the $i$th bit of $b_v$ is $1$ if and only if
 
 These signatures go into a relay chain block.
 
-\subsection{Processing on-chain avaialbility data}
-This section explains how the availabalitiy attestations stored on the relay chain as described in Section \ref{se
-and are processed as follows:
+\subsection{Processing on-chain availability data}
+This section explains how the availability attestations stored on the relay chain, as described in Section ??, are processed as follows:
 
 \begin{algorithm}
   \caption[]{Relay chain's signature processing}
   \label{algo-singnature-processing} 
   \begin{algorithmic}[1]
 %\begin{enumerate}
-\State We store the last vote from each validator on chain. For each new signature, we check if it is for a block in this chain later than the last vote we stored from this validator. If it is we update it and store the bitfield $b_v$ and block number of the vote.
-\State For each block within the last $t$ blocks where $t$ is some timeout period, we compute a bitmask $bm_n$ ($n$ is block number). This bitmask is a bitfield that represents whether the candidate considered in that block is still relevant. That is the $i$th bit of $bm_n$ is $1$ if and only if for the $i$th parachain, 
+\State The relay chain stores the last vote from each validator on chain. For each new signature, the relay chain checks if it is for a block in this chain later than the last vote stored from this validator. If it is the relay chain updates the stored vote and updates the bitfield $b_v$ and block number of the vote.
+\State For each block within the last $t$ blocks where $t$ is some timeout period, the relay chain computes a bitmask $bm_n$ ($n$ is block number). This bitmask is a bitfield that represents whether the candidate considered in that block is still relevant. That is the $i$th bit of $bm_n$ is $1$ if and only if for the $i$th parachain, 
     (a) the availability status is to be determined and
-    (b) candidate block number <= n   
-\State We initialise a vector of counts with one entry for each parachain to zero. After executing the following algorithm we end up with a vector of counts  of the number of validators who think the latest candidates is available. 
+    (b) candidate block number $\leq n$   
+\State The relay chain initialises a vector of counts with one entry for each parachain to zero. After executing the following algorithm it ends up with a vector of counts  of the number of validators who think the latest candidates is available. 
 	\begin{enumerate}
-    \item We compute 
+    \item The relay chain computes 
     $b_v$ and $bm_n$ 
     where $n$ is the block number of the validator's last vote
    \item For each bit in $b_v$ and $bm_n$
@@ -271,8 +270,8 @@ and are processed as follows:
         \item add the $i$th bit to the $i$th count.
         \end{itemize}
 	\end{enumerate}	
-\State For each count that is $>2/3$ of the number of validators, /syed{we set the candidates status to "available"}{what is the outside world implication of this setting, is there a message or just grandpa vote?}. Otherwise, if the candidate is at least $t$ blocks old, then we set its status to "unavailable".
-\State We act on available candidates and discard unavailable ones, and then clear the record, setting the availability status to no candidate. Then we accept new candidate receipts for these parachains, with any such new candidate receipts having their availability status as to be determined.
+\State For each count that is $>2/3$ of the number of validators, the relay chain sets the candidates status to "available". Otherwise, if the candidate is at least $t$ blocks old, then it sets its status to "unavailable".
+\State The relay chain acts on available candidates and discards unavailable ones, and then clears the record, setting the availability status to "no candidate". Then the relay chain accepts new candidate receipts for parachains that have "no candidate: status and once any such new candidate receipts is included on the relay chain it sets their availability status as "to be determined".
 %\end{enumerate}
 \end{algorithmic}
 \end{algorithm}
@@ -290,17 +289,17 @@ After a certain time-out in blocks since we first put the candidate receipt on t
        An {\b unavailabile parachain block} is \TBS
 \end{definition}
 
-/syed{}{So to be clear we are not annoucing unavailability we just keep it for grand pa vote}
+/syed{}{So to be clear we are not announcing unavailability we just keep it for grand pa vote}
 
 \section{Publishing Attestations}
 \label{sect-publishing-attestations}
-\syed{}{this is out of place. We can mentioned that we have two type of (validity) attestetions in the intro but we just need to spec each attetstion in its relevant section (which we did with the canadidate receipt).
+\syed{}{this is out of place. We can mentioned that we have two type of (validity) attestations in the intro but we just need to spec each attestation in its relevant section (which we did with the candidate receipt).
   \todo{move this to intro}
 We have two type of attestations, primary and secondary. Primary attestations are signed by the parachain validators and secondary attestations are signed by secondary checkers and include the VRF that assigned them as a secondary checker into the attestation. Both types of attestations are included in the relay chain block as a transaction. For each parachain block candidate the relay chain keeps track of which validators have attested to its validity or invalidity. 
 
 \section{Secondary Approval checking}
 \label{sect-approval-checking}
-Once a parachain block is \syed{acted on}{\todo{define acting on, is it the same as ``deemed available? then let's call it that and refer to the definition}}? we carry the secondary validity/availability checks as follows. A scheme assigns every validator to one or more PoV blocks to check its validity, see Section \ref{sect-shot-assignment} for details. An assigned validator acquires the PoV block (see Section \ref{sect-obtaining-block}) and checks its validity by comparing it to the candidate receipt. If validators notices that an equivocation has happened an additional validity/availability assignments will be made that is described in Section\ref{sect-equivocation-case}.
+Once a parachain block is acted on we carry the secondary validity/availability checks as follows. A scheme assigns every validator to one or more PoV blocks to check its validity, see Section \ref{sect-shot-assignment} for details. An assigned validator acquires the PoV block (see Section \ref{sect-obtaining-block}) and checks its validity by comparing it to the candidate receipt. If validators notices that an equivocation has happened an additional validity/availability assignments will be made that is described in Section\ref{sect-equivocation-case}.
 
 \subsection{Approval Checker Assignment}
 
