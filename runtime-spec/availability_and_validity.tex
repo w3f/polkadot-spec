@@ -16,9 +16,7 @@ As soon as $>2/3$ of validators have made this announcement for any parachain bl
 After a certain time, if we did not collect enough signatures approving the availability of the parachain data associated with a certain candidate receipt we decide this parachain block is unavailable and allow alternative blocks to be built on its parent parachain block, see \ref{sect-unavailability}. 
 
 The secondary check described in Section \ref{sect-approval-checking}, is done by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV block that is invalid and not keeping it available to avoid the possibility of being punished for the attack.
-%The security analysis at the end of this document dives deeper into the incentives of the necessity of the secondary checking validity/availability checking. 
 
-Once a parachain block is acted on we carry the secondary validity/availability checks as follows. A scheme assigns every validator to one or more PoV blocks to check its validity, see Section \ref{sect-shot-assignment} for details. An assigned validator acquires the PoV block (see Section \ref{sect-obtaining-block}) and checks its validity by comparing it to the candidate receipt. If validators notices that an equivocation has happened an additional validity/availability assignments will be made that is described in Section\ref{sect-equivocation-case}. 
 During any of the phases, if any validator announces that a parachain block is invalid then all validators obtain the parachain block and check its validity, see Section \ref{sect-escalation} for more details. 
 
 All validity and invalidity attestations go onto the relay chain, see Section \ref{sect-publishing-attestations} for details. If a parachain block has been checked at least by certain number of validators, the rest of the validators continue with voting on that relay chain block in the GRANDPA protocol. Note that the block might be challenged later. 
@@ -95,7 +93,7 @@ Primary validity checking refers to the process of parachain validators as defin
 Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
 
 In case that validation has been successful, the announcement will either in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt}, to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}
-o
+
 However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
 
 \begin{definition}
@@ -147,7 +145,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \end{algorithmic}
 \end{algorithm}
 
-\subsection{Inclusion of candidate receipt on the relay chain}
+\subsection{Inclusion of candidate receipt on the relay chain}\label{sect-inclusion-of-candidate-receipt}
 
 \begin{definition}
   \label{defn-para-proposal}
@@ -228,10 +226,9 @@ When validator $v$ receives its designated piece for \blobB it needs to broadcas
         {\b Availability vote message} $M_{PoV}^{Avail,v_i}$ TBS
 \end{definition}
 
+Some parachains have blocks that we need to vote on the availability of, that is decided by > 2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations as follows.}{this is not really relevant to the spec}
 
-Some parachains have blocks that we need to vote on the availability of, that is decided by >2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations as follows.}{this is not really relevant to the spec}
-
-For each parachain, we store:
+For each parachain, /syed{we store}{what does it mean we store? this need to be clear. Is it a transaction \TBS?}:
 
 \textbf{1) availability status, 2) candidate receipt, 3) candidate relay chain block no}
 
@@ -249,7 +246,11 @@ where the $i$th bit of $b_v$ is $1$ if and only if
 \item $v$ has the erasure coded piece of the corresponding parachain block to this candidate receipt.
 \end{enumerate}
 
-These signatures go into a relay chain block and are processed as follows:
+These signatures go into a relay chain block.
+
+\subsection{Processing on-chain avaialbility data}
+This section explains how the availabalitiy attestations stored on the relay chain as described in Section \ref{se
+and are processed as follows:
 
 \begin{algorithm}
   \caption[]{Relay chain's signature processing}
@@ -270,45 +271,45 @@ These signatures go into a relay chain block and are processed as follows:
         \item add the $i$th bit to the $i$th count.
         \end{itemize}
 	\end{enumerate}	
-\State For each count that is $>2/3$ of the number of validators, we set the candidates status to "available". Otherwise, if the candidate is at least $t$ blocks old, then we set its status to "unavailable".
+\State For each count that is $>2/3$ of the number of validators, /syed{we set the candidates status to "available"}{what is the outside world implication of this setting, is there a message or just grandpa vote?}. Otherwise, if the candidate is at least $t$ blocks old, then we set its status to "unavailable".
 \State We act on available candidates and discard unavailable ones, and then clear the record, setting the availability status to no candidate. Then we accept new candidate receipts for these parachains, with any such new candidate receipts having their availability status as to be determined.
 %\end{enumerate}
 \end{algorithmic}
 \end{algorithm}
 
+Based on the result of Algorithm~\ref{algo-signature-processing} the validator node should mark a parachain block as either available or eventually unavailable according to definitions \ref{defn-available-parablock-proposal} and \ref{defn-unavailable-parablock-proposal}
 \begin{definition}
   \label{defn-available-parablock-proposal}
-        %{\b}
-        Parachain blocks blocks for which the corresponding blob is  noted on the relay chain to be available, meaning that the candidate receipt has been voted to be available by 2/3 validators.
+        Parachain blocks blocks for which the corresponding blob is  noted on the relay chain to be {\b available}, meaning that the candidate receipt has been voted to be available by 2/3 validators.
 \end{definition}
 
-\section{Unavailability}
-\label{sect-unavailability}
-After a certain time-out in blocks since we first put the candidate receipt on the relay chain if there is not enough votes of availability the relay chain logic decides that a parachain block is unavailable, see \ref{algo-singnature-processing}. 
+After a certain time-out in blocks since we first put the candidate receipt on the relay chain if there is not enough votes of availability the relay chain logic decides that a parachain block is unavailable, see \ref{algo-singnature-processing}.
+
+\begin{definition}
+  \label{defn-unavailable-parachain-block}
+       An {\b unavailabile parachain block} is \TBS
+\end{definition}
+
+/syed{}{So to be clear we are not annoucing unavailability we just keep it for grand pa vote}
 
 \section{Publishing Attestations}
 \label{sect-publishing-attestations}
+\syed{}{this is out of place. We can mentioned that we have two type of (validity) attestetions in the intro but we just need to spec each attetstion in its relevant section (which we did with the canadidate receipt).
+  \todo{move this to intro}
 We have two type of attestations, primary and secondary. Primary attestations are signed by the parachain validators and secondary attestations are signed by secondary checkers and include the VRF that assigned them as a secondary checker into the attestation. Both types of attestations are included in the relay chain block as a transaction. For each parachain block candidate the relay chain keeps track of which validators have attested to its validity or invalidity. 
 
-\section{Approval Checker Assignment}
-\label{sect-shot-assignment}
+\section{Secondary Approval checking}
+\label{sect-approval-checking}
+Once a parachain block is \syed{acted on}{\todo{define acting on, is it the same as ``deemed available? then let's call it that and refer to the definition}}? we carry the secondary validity/availability checks as follows. A scheme assigns every validator to one or more PoV blocks to check its validity, see Section \ref{sect-shot-assignment} for details. An assigned validator acquires the PoV block (see Section \ref{sect-obtaining-block}) and checks its validity by comparing it to the candidate receipt. If validators notices that an equivocation has happened an additional validity/availability assignments will be made that is described in Section\ref{sect-equivocation-case}.
 
-Validators assign themselves to parachain block proposals as defined in Definition \ref{defn-para-proposal}. The assignment needs to be random. Validators use their own VRF to sign the VRF output from the current relay chain block. Each validator takes the output of this VRF mod the number of parachain blocks that we were decided to be available in this relay chain block and executed. This will give them the index of the PoV block they are assigned to and need to check.
+\subsection{Approval Checker Assignment}
 
-Now in addition to this assignment some extra validators are assigned to every PoV block as follows .
+Validators assign themselves to parachain block proposals as defined in Definition \ref{defn-para-proposal}. The assignment needs to be random. Validators use their own VRF to sign the VRF output from the current relay chain block as described in Section \ref{sect-vrf-comp}. Each validator uses the output of the VRF to decide the block(s) they are revalidating as a secondary checker. See Section \ref{one-shot-assigment} for the detail.
 
-No for each parachain block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constant like $2$.  We set
-
-$$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$
-where $c_f$ is some factor we use to weight fishermen reports. Reports from fishermen about this 
-
-Now each validator computes for each PoV block a VRF with the input being the relay chain block VRF concatenated with the parachain index. 
-
-For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immediately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validators of this PoV block 2) or assigned during the assignment procedure or 3) had a smaller VRF output than us during this time.
-
-More fisherman reports can increase $\#VCheck$ and require new checks. We should carry on doing secondary checks for the entire fishing period if more are required. A validator need to keep track of which blocks have $\#VCheck$ smaller than the number of higher priority checks performed. A new report can make us check straight away, no matter the number of current checks, or mean that we need to put this block back into this set. If we later decide to prune some of this data, such as who has checked the block, then we'll need a new approach here.
+In addition to this assignment some extra validators are assigned to every PoV block which is descirbed in Section \ref{sect-extra-validation assignment}.
 
 \subsection{VRF computation}
+\label{sect-vrf-comp}
 
 Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assignments. \todo{Fix this. It is incorrect so far.} 
 
@@ -331,19 +332,92 @@ Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachai
 
 Where {\sc VRF} function is defined in \cite{polkadot-crypto-spec}.
 
+\subsection{One-Shot Approval Checker Assignemnt}
+\label{sect-shot-assignment}
+Every validator $v$ takes the output of this VRF computed by \ref{algo-checker-vrf} mod the number of parachain blocks that we were decided to be available in this relay chain block according to Definition \ref{defn-available-parablock-proposal} and executed. This will give them the index of the PoV block they are assigned to and need to check. The procedure is formalised in \ref{algo-one-shot-assignment}.
+
+\begin{algorithm}
+  \caption[]{\sc OneShotAssignment}
+  \label{algo-one-shot-assignment}
+  \begin{algorithmic}[1]
+    \Require{}
+    %\Ensure{}
+    
+    \State \TBS
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Extra Approval Checker Assigment}
+\label{sect-extra-validation}
+Now for each parachain block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constant like $2$.  We set
+
+$$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$
+where $c_f$ is some factor we use to weight fishermen reports. Reports from fishermen about this 
+
+Now each validator computes for each PoV block a VRF with the input being the relay chain block VRF concatenated with the parachain index. 
+
+For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immediately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validators of this PoV block 2) or assigned during the assignment procedure or 3) had a smaller VRF output than us during this time.
+
+More fisherman reports can increase $\#VCheck$ and require new checks. We should carry on doing secondary checks for the entire fishing period if more are required. A validator need to keep track of which blocks have $\#VCheck$ smaller than the number of higher priority checks performed. A new report can make us check straight away, no matter the number of current checks, or mean that we need to put this block back into this set. If we later decide to prune some of this data, such as who has checked the block, then we'll need a new approach here.
+
+\begin{algorithm}
+  \caption[]{\sc OneShotAssignment}
+  \label{algo-extra-assignment}
+  \begin{algorithmic}[1]
+    \Require{}
+    %\Ensure{}
+    
+    \State \TBS
+  \end{algorithmic}
+\end{algorithm}
+
+\syed{}{\todo{so assignees are not annoucing their assignment just the result of the approval check I assume}
+  
 \subsection{Additional Checking in Case of Equivocation}\label{sect-equivocation-case}
-In the case of a relay chain equivocation, i.e. a validator produces two blocks with the same VRF, we do not want the secondary checkers for the second block to be predictable. To this end we use the block hash as well as the VRF as input for secondary checkers VRF. So each secondary checker is going to produce twice as many VRFs for each relay chain block that was equivocated. If either of these VRFs is small enough then the validator is assigned to perform a secondary check on the PoV block.
+In the case of a relay chain equivocation, i.e. a validator produces two blocks with the same VRF, we do not want the secondary checkers for the second block to be predictable. To this end we use the block hash as well as the VRF as input for secondary checkers VRF. So each secondary checker is going to produce twice as many VRFs for each relay chain block that was equivocated. If either of these VRFs is small enough then the validator is assigned to perform a secondary check on the PoV block. The process is formalized in Algorithm \ref{algo-equivocation-assigment}
+
+\begin{algorithm}
+  \caption[]{\sc EquivocatedAssignment}
+  \label{algo-equivocation-assigment}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+    
+    \State \TBS
+  \end{algorithmic}
+\end{algorithm}
+
 
 \section{The Approval Check}
-\label{sect-approval-checking}
 Once a validator has a VRF which tells them to check a block, they announce this VRF and attempt to obtain the block. 
 It is unclear yet whether this is best done by requesting the PoV block from parachain validators or by announcing that they want erasure coded pieces. 
 
 \subsubsection{Retrieval}
 \label{sect-retrieval-of-erasure-pieces}
-There are two fundamental ways to retrieve a parachain block for checking validity. One is to request the whole block from any validator who has attested to its validity or invalidity. The second method is to retrieve enough erasure coded pieces to reconstruct the block from them. In the latter cases an announcement has to be gossiped to all validators indicating that one needs the erasure coded pieces.
+There are two fundamental ways to retrieve a parachain block for checking validity. One is to request the whole block from any validator who has attested to its validity or invalidity. Assigned appoval checker $v$ sends RequestWholeBlock message specified in Definition \ref{defn-msg-request-whole-block} to \syed{}{any/all} parachain validator in order to receive the specific parachain block. Any parachain validator receiving must reply with PoVBlockRespose message defined in Definition \ref{defn-pov-block-response}
 
-Assigned appoval checker $v$ must retrieve enough erasure pieces of the block they are verifying to be able to reconstruct the block and the erasure pieces tree. To that aim the 
+\begin{definition}
+  \label{defn-pov-block-response}
+        {\b PoV Block Respose} Message \TBS
+\end{definition}
+
+The second method is to retrieve enough erasure coded pieces to reconstruct the block from them. In the latter cases an announcement of the form specified in Definition has to be gossiped to all validators indicating that one needs the erasure coded pieces.
+
+\begin{definition}
+  \label{defn-erasure-coded-pieces-request}
+        {\b Erasure coded pieces request message} \TBS
+\end{definition}
+
+On their part, when a validator  receive a erasure coded pieces request message it response with the message specified in Definition \ref{defn-erasure-coded-pieces-response}.
+
+\begin{definition}
+  \label{defn-erasure-coded-pieces-response}
+        {\b Erasure coded pieces response message} \TBS
+\end{definition}
+
+Assigned appoval checker $v$ must retrieve enough erasure pieces of the block they are verifying to be able to reconstruct the block and the erasure pieces tree.
+
+%%To that aim the 
 %%We never consider substructure of $B$ to be meaningful, so $V$ must {\em retrieve} the full {\em candidate proof-of-validity blob} $\blobB$ before checking.  Now $V$ knows which which nodes have their individual pieces, thanks to their availability announcements.  It thus follows from our 2/3rd honest assumption that $V$ could always reconstruct $\blobB$ by obtaining enough pieces $\pieces_B$ from nodes known to posses them.  
 
 %We note however that $V$ also knows that all pieces are known by the preliminary backing validity checkers aka parachain validators who approved $\blobB$, as well as approval checkers who already approved $\blobB$.  So $V$ could first contact some node that possesses all of $\blobB$, and only then begin a full reconstruction process. 
@@ -390,15 +464,69 @@ After receiving $2f+1$ of erasure pieces every assigned approval checker $v$ nee
 %%    \EndIf
 
 Once the parachain bock has been obtained or reconstructed the secondary checker needs to execute the PoV block.
-We declare a the candidate receipt as invalid if one one the following three conditions hold: 1) While reconstructing if the erasure code does not have the claimed Merkle root, 2) the validation function says that the PoV block is invalid, or 3) the result  of executing the block is inconsistent with the candidate receipt on the relay chain.
+We declare a the candidate receipt as invalid if one one the following three conditions hold: 1) While reconstructing if the erasure code does not have the claimed Merkle root, 2) the validation function says that the PoV block is invalid, or 3) the result  of executing the block is inconsistent with the candidate receipt on the relay chain. 
 
-Otherwise if everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF. 
+The procedure is formalized in Algorithm
 
-These attestations are included in the relay chain, which must also verify the VRF and may need to judge when enough time has passed. Collators reports of unavailability and invalidty go onto the relay chain as well.
+
+\begin{algorithm}
+  \caption[]{\sc RevalidatingReconstructedPoV}
+  \label{algo-revalidating-reconstructed-pov}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+    
+    \State \TBS
+  \end{algorithmic}
+\end{algorithm}
+
+If everything checks out correctly, we declare the block is valid. This means gossiping an attestation, including a reference that identifies candidate receipt and our VRF as specified in Definition \ref{defn-secondary-appoval-attestation}.
+
+\begin{definition}
+  \label{defn-secondary-appoval-attestation}
+        {\b Secondary approval attetstion message} \TBS
+\end{definition}
+
+
+\subsection{Process validity and invalidity messages}
+When a Black produced receive a Secondary approval attetstion message, it execute Algorithm \ref{algo-verify-approval-attestation} to verify the VRF and may need to judge when enough time has passed.
+
+\begin{algorithm}
+  \caption[]{\sc VerifyApprovalAttestation}
+  \label{algo-verify-approval-attestation}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+    
+    \State \TBS
+  \end{algorithmic}
+\end{algorithm}
+
+These attestations are included in the relay chain as a transaction specified in
+
+\begin{definition}
+  \label{defn-approval-attestation-transaction}
+        {\b Approval Attestation Transaction} \TBS
+\end{definition}
+
+Collators reports of unavailability and invalidty specified in Definition \todo{Define these messages} also  go onto the relay chain as well in the format specified in Definition
+
+\begin{definition}
+  \label{defn-collator-invalidity-transaction}
+        {\b Collator Invalidity Transaction}
+        \TBS
+\end{definition}
+
+\begin{definition}
+  \label{defn-collator-unavailability-transaction}
+        {\b Collator unavailability Transaction}
+\end{definition}
 
 \subsection{Invalidity Escalation}\label{escalation}
 
-When for any candidate receipt, there are attestations for both its validity and invalidity, then all validators acquire and validate the blob, irrespective of the assignments from section. We do not vote in GRANDPA for a chain were the candidate receipt is executed until it his vote is resolved. If we have $n$ validators, we wait for $>2n/3$ of them to attest to the blob and then the outcome of this vote is one of the following:
+When for any candidate receipt, there are attestations for both its validity and invalidity, then all validators acquire and validate the blob, irrespective of the assignments from section by executing Algorithm \ref{algo-reconstruct-pov} and \ref{algo-revalidating-reconstructed-pov}.
+
+We do not vote in GRANDPA for a chain were the candidate receipt is executed until its vote is resolved. If we have $n$ validators, we wait for $>2n/3$ of them to attest to the blob and then the outcome of this vote is one of the following:
 
 If $>n/3$ validators attest to the validity of the blob and $\leq n/3$ attest to its invalidity, then we can vote on the chain in GRANDPA again and slash validators who attested to its invalidity.
 
