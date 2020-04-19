@@ -98,7 +98,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-candidate-receipt}
-        {\b Candidate Receipt} is a proposal for $B$, \TBS.
+        {\b Candidate Receipt} is a proposal for $B$, TBS.
 \end{definition}
 
 \begin{algorithm}
@@ -183,7 +183,7 @@ A block producer which observe a Parachain Block Proposal as defined in definiti
 
 \section{Availability}
 
-When a $v \in \paraValidSet$ observes that a block containing parachain block candidate receipt is included in a relay chain block $RB_p}$ then it must invoke Algorithm \ref{algo-erasure-encode}.
+When a $v \in \paraValidSet$ observes that a block containing parachain block candidate receipt is included in a relay chain block $RB_p$ then it must invoke Algorithm \ref{algo-erasure-encode}.
 
 \begin{definition}
   \label{defn-erasure-encoder-decoder}
@@ -286,7 +286,7 @@ After a certain time-out in blocks since we first put the candidate receipt on t
 
 \begin{definition}
   \label{defn-unavailable-parachain-block}
-       An {\b unavailabile parachain block} is \TBS
+       An {\b unavailabile parachain block} is TBS
 \end{definition}
 
 /syed{}{So to be clear we are not announcing unavailability we just keep it for grand pa vote}
