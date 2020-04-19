@@ -227,7 +227,7 @@ When validator $v$ receives its designated piece for \blobB it needs to broadcas
 
 Some parachains have blocks that we need to vote on the availability of, that is decided by > 2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations that will be very efficient. We describe next what operations the relay chain runtime uses to process these availability votes.}{this is not really relevant to the spec}
 
-For each parachain, the relay chain stores the following data: %/syed{we store}{what does it mean we store? this need to be clear. Is it a transaction \TBS?}: no its not a tx, its in the relay chain state
+For each parachain, the relay chain stores the following data: %/syed{we store}{what does it mean we store? this need to be clear. Is it a transaction TBS?}: no its not a tx, its in the relay chain state
 
 \textbf{1) availability status, 2) candidate receipt, 3) candidate relay chain block number}
 
@@ -347,7 +347,7 @@ Every validator $v$ takes the output of this VRF computed by \ref{algo-checker-v
 
 \subsection{Extra Approval Checker Assigment}
 \label{sect-extra-validation}
-Now for each parachain block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constant like $2$.  We set
+Now for each parachain block, let us assume we want $\#VCheck$ validators to check every PoV block during the secondary checking. Note that $\#VCheck$ is not a fixed number but depends on reports from collators or fishermen. Lets us $\#VDefault$ be the minimum number of validator we want to check the block, which should be the number of parachain validators plus some constant like $2$.  We set
 
 $$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$
 where $c_f$ is some factor we use to weight fishermen reports. Reports from fishermen about this 
@@ -365,7 +365,7 @@ More fisherman reports can increase $\#VCheck$ and require new checks. We should
     \Require{}
     %\Ensure{}
     
-    \State \TBS
+    \State TBS
   \end{algorithmic}
 \end{algorithm}
 
@@ -381,7 +381,7 @@ In the case of a relay chain equivocation, i.e. a validator produces two blocks 
     \Require{}
     %%  \Ensure{}
     
-    \State \TBS
+    \State TBS
   \end{algorithmic}
 \end{algorithm}
 
@@ -396,21 +396,21 @@ There are two fundamental ways to retrieve a parachain block for checking validi
 
 \begin{definition}
   \label{defn-pov-block-response}
-        {\b PoV Block Respose} Message \TBS
+        {\b PoV Block Respose} Message TBS
 \end{definition}
 
 The second method is to retrieve enough erasure coded pieces to reconstruct the block from them. In the latter cases an announcement of the form specified in Definition has to be gossiped to all validators indicating that one needs the erasure coded pieces.
 
 \begin{definition}
   \label{defn-erasure-coded-pieces-request}
-        {\b Erasure coded pieces request message} \TBS
+        {\b Erasure coded pieces request message} TBS
 \end{definition}
 
 On their part, when a validator  receive a erasure coded pieces request message it response with the message specified in Definition \ref{defn-erasure-coded-pieces-response}.
 
 \begin{definition}
   \label{defn-erasure-coded-pieces-response}
-        {\b Erasure coded pieces response message} \TBS
+        {\b Erasure coded pieces response message} TBS
 \end{definition}
 
 Assigned appoval checker $v$ must retrieve enough erasure pieces of the block they are verifying to be able to reconstruct the block and the erasure pieces tree.
@@ -474,7 +474,7 @@ The procedure is formalized in Algorithm
     \Require{}
     %%  \Ensure{}
     
-    \State \TBS
+    \State TBS
   \end{algorithmic}
 \end{algorithm}
 
@@ -482,7 +482,7 @@ If everything checks out correctly, we declare the block is valid. This means go
 
 \begin{definition}
   \label{defn-secondary-appoval-attestation}
-        {\b Secondary approval attetstion message} \TBS
+        {\b Secondary approval attetstion message} TBS
 \end{definition}
 
 
@@ -496,7 +496,7 @@ When a Black produced receive a Secondary approval attetstion message, it execut
     \Require{}
     %%  \Ensure{}
     
-    \State \TBS
+    \State TBS
   \end{algorithmic}
 \end{algorithm}
 
@@ -504,7 +504,7 @@ These attestations are included in the relay chain as a transaction specified in
 
 \begin{definition}
   \label{defn-approval-attestation-transaction}
-        {\b Approval Attestation Transaction} \TBS
+        {\b Approval Attestation Transaction} TBS
 \end{definition}
 
 Collators reports of unavailability and invalidty specified in Definition \todo{Define these messages} also  go onto the relay chain as well in the format specified in Definition
@@ -512,7 +512,7 @@ Collators reports of unavailability and invalidty specified in Definition \todo{
 \begin{definition}
   \label{defn-collator-invalidity-transaction}
         {\b Collator Invalidity Transaction}
-        \TBS
+        TBS
 \end{definition}
 
 \begin{definition}
