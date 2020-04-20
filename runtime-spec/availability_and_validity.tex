@@ -70,7 +70,7 @@ Primary validity checking refers to the process of parachain validators as defin
     %%  \Ensure{}
     
     \State Retrieve $v_B$ from the relay chain state at $B_{relay parent}$
-    \State Run Algorithm \ref{algo-validate-block} usinf $B, \pi_B, v_B$
+    \State Run Algorithm \ref{algo-validate-block} using $B, \pi_B, v_B$
   \end{algorithmic}
 \end{algorithm}
 
@@ -92,8 +92,7 @@ Primary validity checking refers to the process of parachain validators as defin
 \label{sect-primary-validaty-announcement}
 Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
 
-In case that validation has been successful, the announcement will either in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt}, to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}
-
+In case that validation has been successful, the announcement will either be in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt} to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}.
 However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
 
 \begin{definition}
@@ -148,7 +147,8 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-para-proposal}
-        {\b Parachain Block Proposal}, noted by $P^B_{rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $mathcal{V}_\rho$.  %\syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}. We still include the proposal if a parachain validator attests to its invalidity, Any primary invalidity attestation or late primary validity attestation are handled just like secondary attestations.
+        {\b Parachain Block Proposal}, noted by $P^B_{rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $\mathcal{V}_\rho$.  %\syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}. We still include the proposal if a parachain validator attests to its invalidity, Any primary invalidity attestation or late primary validity attestation are handled just like secondary attestations.
+
 \end{definition}
 
 A block producer which observe a Parachain Block Proposal as defined in definition \ref{defn-para-proposal} \syed{may/should}{?} include the proposal in the block they are producing according to Algorithm \ref{algo-include-parachain-proposal} during block production procedure.
@@ -167,7 +167,7 @@ A block producer which observe a Parachain Block Proposal as defined in definiti
 
 \subsection{Primary Validation Disagreement}
 \label{sect-primary-validation-disagreemnt}
-\syed{Parachain}{verify} validators need to keep track of candidate receipts (see Definition \ref{defn-candidate-receipt}) and validation failure messages of their peer. In case, there is a disagreement among the parachain validators about $\blobB$, all parachain validators must invoke Algorithm \ref{algo-primary-validation-disagreemnt}
+\syed{Parachain}{verify} validators need to keep track of candidate receipts (see Definition \ref{defn-candidate-receipt}) and validation failure messages of their peers. In case, there is a disagreement among the parachain validators about $\blobB$, all parachain validators must invoke Algorithm \ref{algo-primary-validation-disagreemnt}
 
 \begin{algorithm}
   \caption[]{\sc PrimaryValidationDisagreement}
