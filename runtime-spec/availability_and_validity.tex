@@ -213,7 +213,7 @@ When validator $v$ receives its designated piece for \blobB it needs to broadcas
 \end{definition}
 
 
-Some parachains have blocks that we need to vote on the availability of, that is decided by >2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations as follows.}{this is not really relevant to the spec}
+Some parachains have blocks that we need to vote on the availability of, that is decided by > 2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations as follows.}{this is not really relevant to the spec}
 
 For each parachain, we store:
 
@@ -263,7 +263,7 @@ These signatures go into a relay chain block and are processed as follows:
 \begin{definition}
   \label{defn-available-parablock-proposal}
         %{\b}
-        Parachain blocks blocks for which the corresponding blob is  noted on the relay chain to be available, meaning that the candidate receipt has been voted to be available by 2/3 validators.
+        Parachain blocks for which the corresponding blob is noted on the relay chain to be available, meaning that the candidate receipt has been voted to be available by 2/3 validators.
 \end{definition}
 
 \section{Unavailability}
