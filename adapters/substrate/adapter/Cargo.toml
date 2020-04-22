@@ -1,5 +1,5 @@
 [package]
-name = "rust-tester"
+name = "substrate-adapter"
 version = "0.1.0"
 authors = ["Skalman <skalman@riseup.net>"]
 edition = "2018"
@@ -37,8 +37,8 @@ sc-offchain = "2.0.0-alpha.5"
 sp-serializer = "2.0.0-alpha.5"
 
 # Wasm Blob
-wasm-blob = { package = "wasm-blob", path = "./wasm-blob" }
+wasm-adapter = { path = "./wasm-adapter" }
 
 [[bin]]
-name = "rust-tester"
+name = "substrate-adapter"
 path = "src/main.rs"

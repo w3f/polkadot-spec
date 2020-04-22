@@ -26,7 +26,7 @@ namespace boost {
               << "' in file '" << file
               << "' on line '" << line
               << "' when evaluating '" << expr
-              << "':" << msg << std::endl;
+              << "': " << msg << std::endl;
   }
 }
 

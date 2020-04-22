@@ -1,7 +1,6 @@
 [package]
-name = "wasm-blob"
+name = "wasm-adapter"
 version = "0.1.0"
-authors = ["Web3 Foundations <hello@web3.foundation>"]
 edition = "2018"
 build = "build.rs"
 

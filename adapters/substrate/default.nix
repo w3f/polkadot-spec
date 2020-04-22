@@ -1,11 +1,11 @@
-{ rustWasmPlatform, protobuf }:
+{ lib, rustWasmPlatform, protobuf }:
 
 rustWasmPlatform.buildRustPackage {
-  name = "rust_tester";
+  name = "substrate-adapter";
 
-  src = ./.;
+  src = lib.cleanSource ./.;
 
-  cargoSha256 = "1v3z912cn1blyhjh2shcya3xdfvhd5piwi4bxm1b1wnwbw62a8fc";
+  cargoSha256 = "0xzg2x4j7wcdmjf5b91aapld18x6whx92s85dnd26ckhs03xqy48";
 
   buildInputs = [ protobuf ];
 

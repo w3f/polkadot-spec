@@ -1,9 +1,9 @@
-{ stdenv, cmake, kagome, libyamlcpp }:
+{ lib, stdenv, cmake, kagome, libyamlcpp }:
 
 stdenv.mkDerivation {
-  name = "cpp-tester";
+  name = "kagome-adapter";
 
-  src = ./.;
+  src = lib.cleanSource ./.;
 
   nativeBuildInputs = [ cmake ];
 

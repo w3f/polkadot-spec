@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(cpp-tester LANGUAGES CXX)
+project(kagome-adapter LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -22,7 +22,7 @@ find_package(binaryen REQUIRED)
 
 
 # Compile and link tester
-add_executable(cpp-tester
+add_executable(kagome-adapter
   main.cpp
   scale_codec.cpp
   scale_codec.hpp
@@ -44,9 +44,9 @@ add_executable(cpp-tester
 )
 
 # FIXME This should not be necessary (needed to find "outcome/outcome.hpp")
-target_include_directories(cpp-tester PUBLIC ${kagome_INCLUDE_DIRS})
+target_include_directories(kagome-adapter PUBLIC ${kagome_INCLUDE_DIRS})
 
-target_link_libraries(cpp-tester
+target_link_libraries(kagome-adapter
   Boost::program_options
   yaml-cpp
   ${kagome_LIBRARIES}
@@ -61,6 +61,6 @@ target_link_libraries(cpp-tester
 # Install result
 include(GNUInstallDirs)
 
-install(TARGETS cpp-tester
+install(TARGETS kagome-adapter
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

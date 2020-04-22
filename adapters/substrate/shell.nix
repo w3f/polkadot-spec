@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {} }:
  
 with pkgs; mkShell {
-  name = "rust-tester";
+  name = "substrate-adapter";
 
   nativeBuildInputs = [ rustWasmPlatform.rust.cargo ];
   buildInputs = [ protobuf ];

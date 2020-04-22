@@ -1,8 +1,8 @@
 { pkgs ? import <nixpkgs> {} }:
 
 with pkgs; {
-  # Derivations of tester binaries used by test suite 
-  rust-tester = callPackage ./testers/rust-tester {};
-  go-tester   = callPackage ./testers/go-tester {};
-  cpp-tester  = callPackage ./testers/cpp-tester {};
+  # Derivations of adapter binaries used by test suite 
+  substrate-adapter = callPackage ./adapters/substrate {};
+  gossamer-adapter  = callPackage ./adapters/gossamer {};
+  kagome-adapter    = callPackage ./adapters/kagome {};
 }

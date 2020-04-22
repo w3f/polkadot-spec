@@ -1,5 +1,5 @@
 [package]
-name = "rust-tester-legacy"
+name = "substrate-adapter-legacy"
 version = "0.1.0"
 authors = ["Skalman <skalman@riseup.net>"]
 edition = "2018"
@@ -23,8 +23,8 @@ sp-state-machine = { git = "https://github.com/paritytech/substrate", rev = "605
 sp-offchain = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
 
 # Wasm Blob
-wasm-blob-legacy = { package = "wasm-blob-legacy", path = "./wasm-blob" }
+wasm-adapter-legacy = { path = "./wasm-adapter" }
 
 [[bin]]
-name = "rust-tester-legacy"
+name = "substrate-adapter-legacy"
 path = "src/main.rs"

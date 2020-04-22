@@ -1,5 +1,5 @@
 [package]
-name = "wasm-blob-legacy"
+name = "wasm-adapter-legacy"
 version = "0.1.0"
 authors = ["Web3 Foundations <hello@web3.foundation>"]
 edition = "2018"

@@ -241,12 +241,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b41b7ea54a0c9d92199de89e20e58d49f02f8e699814ef3fdf266f6f748d15c7"
 
 [[package]]
-name = "base64"
-version = "0.12.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7d5ca2cd0adc3f48f9e9ea5a6bbdf9ccc0bfade884847e484d452414c7ccffb3"
-
-[[package]]
 name = "bitflags"
 version = "0.9.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2888,58 +2882,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-tester"
-version = "0.1.0"
-dependencies = [
- "base64 0.12.0",
- "blake2-rfc",
- "clap",
- "data-encoding",
- "hash-db",
- "hash256-std-hasher 0.12.4",
- "hex",
- "keccak-hasher",
- "memory-db 0.20.0",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "primitive-types 0.2.4",
- "reference-trie",
- "sc-executor 0.8.0-alpha.5",
- "sc-offchain",
- "serde_yaml",
- "sp-core 2.0.0-alpha.5",
- "sp-externalities 0.8.0-alpha.5",
- "sp-io 2.0.0-alpha.5",
- "sp-serializer 2.0.0-alpha.5",
- "sp-state-machine 0.8.0-alpha.5",
- "trie-db 0.20.0",
- "trie-root 0.16.0",
- "wasm-blob",
- "wasmi 0.5.1",
-]
-
-[[package]]
-name = "rust-tester-legacy"
-version = "0.1.0"
-dependencies = [
- "base64 0.10.1",
- "clap",
- "data-encoding",
- "hex",
- "parity-scale-codec",
- "parking_lot 0.9.0",
- "sc-executor 2.0.0",
- "serde_yaml",
- "sp-core 2.0.0",
- "sp-externalities 2.0.0",
- "sp-io 2.0.0",
- "sp-offchain 2.0.0",
- "sp-state-machine 2.0.0",
- "wasm-blob-legacy",
- "wasmi 0.5.1",
-]
-
-[[package]]
 name = "rustc-demangle"
 version = "0.1.16"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4446,6 +4388,58 @@ dependencies = [
 ]
 
 [[package]]
+name = "substrate-adapter"
+version = "0.1.0"
+dependencies = [
+ "base64 0.10.1",
+ "blake2-rfc",
+ "clap",
+ "data-encoding",
+ "hash-db",
+ "hash256-std-hasher 0.12.4",
+ "hex",
+ "keccak-hasher",
+ "memory-db 0.20.0",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "primitive-types 0.2.4",
+ "reference-trie",
+ "sc-executor 0.8.0-alpha.5",
+ "sc-offchain",
+ "serde_yaml",
+ "sp-core 2.0.0-alpha.5",
+ "sp-externalities 0.8.0-alpha.5",
+ "sp-io 2.0.0-alpha.5",
+ "sp-serializer 2.0.0-alpha.5",
+ "sp-state-machine 0.8.0-alpha.5",
+ "trie-db 0.20.0",
+ "trie-root 0.16.0",
+ "wasm-adapter",
+ "wasmi 0.5.1",
+]
+
+[[package]]
+name = "substrate-adapter-legacy"
+version = "0.1.0"
+dependencies = [
+ "base64 0.10.1",
+ "clap",
+ "data-encoding",
+ "hex",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "sc-executor 2.0.0",
+ "serde_yaml",
+ "sp-core 2.0.0",
+ "sp-externalities 2.0.0",
+ "sp-io 2.0.0",
+ "sp-offchain 2.0.0",
+ "sp-state-machine 2.0.0",
+ "wasm-adapter-legacy",
+ "wasmi 0.5.1",
+]
+
+[[package]]
 name = "substrate-bip39"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4971,6 +4965,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
 
 [[package]]
+name = "wasm-adapter"
+version = "0.1.0"
+dependencies = [
+ "parity-scale-codec",
+ "sp-core 2.0.0-alpha.5",
+ "substrate-wasm-builder",
+]
+
+[[package]]
+name = "wasm-adapter-legacy"
+version = "0.1.0"
+dependencies = [
+ "sp-core 2.0.0",
+ "substrate-wasm-builder",
+]
+
+[[package]]
 name = "wasm-bindgen"
 version = "0.2.60"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5035,23 +5046,6 @@ name = "wasm-bindgen-shared"
 version = "0.2.60"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "daf76fe7d25ac79748a37538b7daeed1c7a6867c92d3245c12c6222e4a20d639"
-
-[[package]]
-name = "wasm-blob"
-version = "0.1.0"
-dependencies = [
- "parity-scale-codec",
- "sp-core 2.0.0-alpha.5",
- "substrate-wasm-builder",
-]
-
-[[package]]
-name = "wasm-blob-legacy"
-version = "0.1.0"
-dependencies = [
- "sp-core 2.0.0",
- "substrate-wasm-builder",
-]
 
 [[package]]
 name = "wasm-gc-api"
