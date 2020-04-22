@@ -1,3 +1,24 @@
+module HostAPITests
+
+using ..Config
+
+export run_dataset
+
+"Maps supported implementations to correct adapter"
+const SUPPORTED_IMPLEMENTATIONS = Dict(
+  "substrate"        => "substrate-adapter",
+  "substrate-legacy" => "substrate-adapter-legacy",
+  "kagome-legacy"    => "kagome-adapter"
+)
+
+"Return adapter to implementation if it is supported"
+function supported(implementation::String, legacy=false)
+    name = implementation * (legacy ? "-legacy" : "")
+    get(SUPPORTED_IMPLEMENTATIONS, name, "")
+end
+
+using Test
+
 #=
 # Description
 Combines the inner arrays of the different test data types, iterates over them,
@@ -40,8 +61,12 @@ end
 Parses the test data and passes it on to the test functions.
 The returned values gets captured, optionally compared to
 the expected results and optionally printed.
+
+# Keyword Arguments
+strip    Boolean   Strip newline characters
+legacy   Boolean   Call legacy adapter
 =#
-function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
+function run_dataset(func_list, data_list, result_list; strip=true, legacy=false)
     # Basic parameters for testing CLIs
     sub_cmd = "pdre-api"
     func_arg = "--function"
@@ -68,34 +93,54 @@ function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
                 end
             end
 
-            for cli in cli_list
+            for implementation in Config.implementations
+                adapter = supported(implementation, legacy)
+
+                if isempty(adapter)
+                    # Warn: not supported
+                    continue
+                end
+
                 # create first part of the command
-                cmdparams = [cli, sub_cmd, func_arg, func, input_arg]
+                cmdparams = [adapter, sub_cmd, func_arg, func, input_arg]
                 cmd = join(cmdparams, " ")
 
                 # append input
                 cmd = string(cmd, " \"", input, "\"")
 
-                if print_verbose
+                if Config.verbose
                     println("[> RUNNING]: ", cmd)
                 end
 
                 # Run command
-                if strip_newline
-                    output = replace(read(`sh -c $cmd`, String), "\n" => "") # remove newline
-                else
-                    output = read(`sh -c $cmd`, String)
+                output = ""
+                try
+                    output = read(`sh -c $cmd`, String);
+                catch e
+                    # TODO: Warn about failing adapter
+                    @test_broken e
+                    continue
                 end
 
-                #println(output)
+                if strip
+                    output = replace(output, "\n" => "")
+                end
 
                 if result_list != false
-                    @test output == result_list[counter]
+                    result = result_list[counter]
+
+                    if isempty(output) && !isempty(result)
+                        # TODO: Warn about missing implementations
+                        @test_skip false
+                    else
+                        @test output == result
+                    end
                 else
+                    # TODO Warn about missing result?
                     @test true
                 end
 
-                if output != "" && print_verbose
+                if !isempty(output) && Config.verbose
                     println("  [OUTPUT]: ", output)
                 end
             end
@@ -103,3 +148,5 @@ function run_dataset(func_list, data_list, cli_list, result_list, strip_newline)
         end
     end
 end
+
+end # module

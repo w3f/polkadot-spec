@@ -15,30 +15,53 @@ stages:
   script: nix-build release.nix -A ${CI_JOB_NAME} | cachix push w3fpkgs
   timeout: 15m
 
-rust-tester:
+substrate-adapter:
   extends: .build
   timeout: 2h
 
-go-tester:
+gossamer-adapter:
   extends: .build
 
-cpp-tester:
+kagome-adapter:
   extends: .build
 
 
 .test:
   stage: test
-  script: nix-shell release-shell.nix --quiet --pure --run "./run_${CI_JOB_NAME}_tests.jl verbose"
+  script: nix-shell release-shell.nix --quiet --pure --run "./check.jl ${CI_JOB_NAME}"
   timeout: 15m
 
-scale_codec:
-  extends: .test
 
-state_trie:
+substrate hostapi:
   extends: .test
+  #  needs: ["substrate-adapter"]
 
-pdre_api:
+substrate hostapi-legacy:
   extends: .test
+  #  needs: ["substrate-adapter"]
 
-pdre_api_legacy:
+
+kagome hostapi:
   extends: .test
+  #  needs: ["kagome-adapter"]
+
+kagome hostapi-legacy:
+  extends: .test
+  #  needs: ["kagome-adapter"]
+
+kagome scale-codec:
+  extends: .test
+  #  needs: ["substrate-adapter", "kagome-adapter"]
+
+kagome state-trie:
+  extends: .test
+  #  needs: ["substrate-adapter", "kagome-adapter"]
+
+
+gossamer scale-codec:
+  extends: .test
+  #  needs: ["substrate-adapter", "gossamer-adapter"]
+
+gossamer state-trie:
+  extends: .test
+  #  needs: ["substrate-adapter", "gossamer-adapter"]

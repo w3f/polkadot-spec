@@ -1,22 +1,22 @@
-include("pdre_api_helpers.jl")
-include("./fixtures/pdre_api_dataset.jl")
-include("./fixtures/pdre_api_results.jl")
+include("./inputs.jl")
+include("./outputs.jl")
+
+using .HostAPITests
 
 using Test
 
-@testset "PDRE API Tests" begin
-    script_dir = @__DIR__
-    root_dir = script_dir * "/.."
-    cd(root_dir)
+
+@testset "Host API" begin
+#    script_dir = @__DIR__
+#    root_dir = script_dir * "/.."
+#    cd(root_dir)
 
     run_dataset(
         PdreApiTestFunctions.value,
         [
             PdreApiTestData.value_1,
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.value,
-        true # strip newline
     )
 
     run_dataset(
@@ -26,9 +26,7 @@ using Test
             PdreApiTestData.child_def_child_type,
             PdreApiTestData.key_value_1,
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_def_type_key_value,
-        true # strip newline
     )
 
     run_dataset(
@@ -40,9 +38,7 @@ using Test
             PdreApiTestData.offset,
             PdreApiTestData.buffer_size,
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_value_offset_buffer_size, # result can be reused
-        true # strip newline
     )
 
     run_dataset(
@@ -52,9 +48,7 @@ using Test
             PdreApiTestData.child_def_child_type,
             PdreApiTestData.prefix_key_value_key_value,
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value,
-        true # strip newline
     )
 
     run_dataset(
@@ -65,9 +59,7 @@ using Test
             PdreApiTestData.key_value_1,
             PdreApiTestData.key_value_2,
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.child_child_def_type_key_value_key_value,
-        true # strip newline
     )
 
     run_dataset(
@@ -75,9 +67,7 @@ using Test
         [
             PdreApiTestData.key_value_1,
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_value,
-        true # strip newline
     )
 
     run_dataset(
@@ -87,9 +77,7 @@ using Test
             PdreApiTestData.offset,
             PdreApiTestData.buffer_size
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_value_offset_buffer_size,
-        true # strip newline
     )
 
     run_dataset(
@@ -97,9 +85,7 @@ using Test
         [
             PdreApiTestData.prefix_key_value_key_value
         ],
-        PdreApiTestBinaries.cli_testers,
         false,
-        true # strip newline
     )
 
     run_dataset(
@@ -108,9 +94,7 @@ using Test
             PdreApiTestData.key_value_1,
             PdreApiTestData.key_value_2
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_value_key_value,
-        true # strip newline
     )
 
     run_dataset(
@@ -118,9 +102,7 @@ using Test
         [
             PdreApiTestData.seed_1,
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.seed,
-        true # strip newline
     )
 
     run_dataset(
@@ -129,9 +111,8 @@ using Test
             PdreApiTestData.seed_1,
             PdreApiTestData.seed_2
         ],
-        PdreApiTestBinaries.cli_testers,
         false,
-        false # strip newline
+        strip=false
     )
 
     run_dataset(
@@ -140,9 +121,8 @@ using Test
             PdreApiTestData.seed_1,
             PdreApiTestData.value_1
         ],
-        PdreApiTestBinaries.cli_testers,
         false,
-        false # strip newline
+        strip=false
     )
 
     run_dataset(
@@ -152,9 +132,7 @@ using Test
             PdreApiTestData.key_value_2,
             PdreApiTestData.key_value_3
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.key_value_key_value_key_value,
-        true # strip newline
     )
 
     run_dataset(
@@ -164,10 +142,8 @@ using Test
             PdreApiTestData.value_2,
             PdreApiTestData.value_3,
         ],
-        PdreApiTestBinaries.cli_testers,
         PdreApiExpectedResults.value_value_value,
-        true # strip newline
     )
 
-    cd(root_dir)
+#    cd(root_dir)
 end
