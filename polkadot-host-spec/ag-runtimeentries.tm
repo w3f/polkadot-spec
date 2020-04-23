@@ -94,6 +94,17 @@
   The following sections describe the standard based on which the Polkadot
   Host communicates with each runtime entry.
 
+  <section|Managing state changes>
+
+  Only the two runtime functions <verbatim|Core_execute_block> as described
+  in secion <reference|defn-rt-core-execute-block> and
+  <verbatim|BlockBuilder_finalize_block> as described in section
+  <reference|defn-rt-blockbuilder-finalize-block> keep persistant storage.
+  Any state changes created by directly calling the to other functions
+  conducted by the Polkadot Host must be disregarded and thrown away after
+  execution. It is therefore the responsibility of the Polkadot Host to wipe
+  any changes created after the those calls.
+
   <section|Argument Specification>
 
   As a wasm functions, all runtime entries have the following prototype
@@ -283,7 +294,7 @@
 
   If this function gets called manually in order to validate a transaction
   received from peers, all state changes after validation are disregarded and
-  thown away.
+  thrown away.
 
   \;
 
@@ -479,7 +490,7 @@
     array.
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_finalize_block>>
+  <subsection|<verbatim|BlockBuilder_finalize_block>><label|defn-rt-blockbuilder-finalize-block>
 
   Finalize the block - it is up to the caller to ensure that all header
   fields are valid except for the state root.
@@ -508,38 +519,40 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|A|?>>
-    <associate|auto-10|<tuple|A.2.5|?>>
-    <associate|auto-11|<tuple|A.2|?>>
-    <associate|auto-12|<tuple|A.2.6|?>>
-    <associate|auto-13|<tuple|A.2.7|?>>
-    <associate|auto-14|<tuple|A.3|?>>
-    <associate|auto-15|<tuple|A.4|?>>
-    <associate|auto-16|<tuple|A.5|?>>
-    <associate|auto-17|<tuple|A.6|?>>
-    <associate|auto-18|<tuple|A.2.8|?>>
-    <associate|auto-19|<tuple|A.7|?>>
+    <associate|auto-10|<tuple|A.3.4|?>>
+    <associate|auto-11|<tuple|A.3.5|?>>
+    <associate|auto-12|<tuple|A.2|?>>
+    <associate|auto-13|<tuple|A.3.6|?>>
+    <associate|auto-14|<tuple|A.3.7|?>>
+    <associate|auto-15|<tuple|A.3|?>>
+    <associate|auto-16|<tuple|A.4|?>>
+    <associate|auto-17|<tuple|A.5|?>>
+    <associate|auto-18|<tuple|A.6|?>>
+    <associate|auto-19|<tuple|A.3.8|?>>
     <associate|auto-2|<tuple|A.1|?>>
-    <associate|auto-20|<tuple|A.8|?>>
-    <associate|auto-21|<tuple|A.2.9|?>>
-    <associate|auto-22|<tuple|A.2.10|?>>
+    <associate|auto-20|<tuple|A.7|?>>
+    <associate|auto-21|<tuple|A.8|?>>
+    <associate|auto-22|<tuple|A.3.9|?>>
+    <associate|auto-23|<tuple|A.3.10|?>>
     <associate|auto-3|<tuple|A.1|?>>
     <associate|auto-4|<tuple|A.2|?>>
-    <associate|auto-5|<tuple|A.2.1|?>>
-    <associate|auto-6|<tuple|A.1|?>>
-    <associate|auto-7|<tuple|A.2.2|?>>
-    <associate|auto-8|<tuple|A.2.3|?>>
-    <associate|auto-9|<tuple|A.2.4|?>>
+    <associate|auto-5|<tuple|A.3|?>>
+    <associate|auto-6|<tuple|A.3.1|?>>
+    <associate|auto-7|<tuple|A.1|?>>
+    <associate|auto-8|<tuple|A.3.2|?>>
+    <associate|auto-9|<tuple|A.3.3|?>>
     <associate|defn-invalid-transaction|<tuple|A.3|?>>
-    <associate|defn-rt-core-execute-block|<tuple|A.2.2|?>>
-    <associate|defn-rt-core-version|<tuple|A.2.1|?>>
+    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.3.10|?>>
+    <associate|defn-rt-core-execute-block|<tuple|A.3.2|?>>
+    <associate|defn-rt-core-version|<tuple|A.3.1|?>>
     <associate|defn-transaction-validity-error|<tuple|A.2|?>>
     <associate|defn-unknown-transaction|<tuple|A.4|?>>
     <associate|defn-valid-transaction|<tuple|A.1|?>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|?>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|?>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|?>>
-    <associate|sect-rte-hash-and-length|<tuple|A.2.4|?>>
-    <associate|sect-rte-validate-transaction|<tuple|A.2.7|?>>
+    <associate|sect-rte-babeapi-epoch|<tuple|A.3.5|?>>
+    <associate|sect-rte-grandpa-auth|<tuple|A.3.6|?>>
+    <associate|sect-rte-hash-and-length|<tuple|A.3.4|?>>
+    <associate|sect-rte-validate-transaction|<tuple|A.3.7|?>>
     <associate|sect-runtime-entries|<tuple|A|?>>
     <associate|snippet-runtime-enteries|<tuple|A.1|?>>
   </collection>
