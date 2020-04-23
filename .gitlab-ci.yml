@@ -41,10 +41,6 @@ substrate hostapi-legacy:
   needs: ["substrate-adapter"]
 
 
-kagome hostapi:
-  extends: .test
-  needs: ["kagome-adapter"]
-
 kagome hostapi-legacy:
   extends: .test
   needs: ["kagome-adapter"]
