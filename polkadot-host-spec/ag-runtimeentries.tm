@@ -100,10 +100,10 @@
   in secion <reference|defn-rt-core-execute-block> and
   <verbatim|BlockBuilder_finalize_block> as described in section
   <reference|defn-rt-blockbuilder-finalize-block> keep persistant storage.
-  Any state changes created by directly calling the to other functions
-  conducted by the Polkadot Host must be disregarded and thrown away after
-  execution. It is therefore the responsibility of the Polkadot Host to wipe
-  any changes created after the those calls.
+  Any state changes created by directly calling the other functions conducted
+  by the Polkadot Host must be disregarded and thrown away after execution.
+  It is therefore the responsibility of the Polkadot Host to wipe any changes
+  created after the those calls.
 
   <section|Argument Specification>
 
