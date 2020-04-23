@@ -5,7 +5,11 @@
 \usepackage{algpseudocode}
 %%\usepackage{algorithmic}
 \usepackage{xargs}
+\usepackage{plantuml} %%digarams
+%\usepackage[LGR,T1]{fontenc}
+%\usepackage[utf8]{luainputenc}   % utf8 is required
 
+\newcommand{\textgreek}[1]{\begingroup\fontencoding{LGR}\selectfont#1\endgroup}
 
 \makeindex
 \geometry{letterpaper}
@@ -116,3 +120,7 @@
 \end{appendix}
 
 \end{document}
+%%% Local Variables: 
+%%% mode: LaTeX
+%%% latex-run-command: "lualatex -shell-escape \\nonstopmode\\input runtime-spec.tex"
+%%% End:

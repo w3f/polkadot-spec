@@ -57,6 +57,39 @@ Parachain validators get this extra validation data from the current relay chain
   \]
 \end{definition}
 
+\section{Overal process}
+
+The Diagrams \ref{diag-anv-overal} demonestrate the overal process of assuring availability and validity in Polkadot.
+
+\begin{plantuml}
+\label{diag-anv-overal}
+
+@startuml
+
+
+(*) --> "Parachain Collator C_ρ Generates B and PoV"
+    --> "C_ρ sends PoV_B to ρ's validator V_ρ"
+
+    --> "V_{rho} runs Rho's runtime on PoV"
+    if "PoV is valid" then     
+    -->[true] if  "V_{rho} have seen the CandidateReceipt for PoV" then
+    -->[true] Sign CandidateReceipt
+    -->[Ending process] (*)
+
+    else
+    --> [False] "Gerenate CandiateReceipt"
+    -->[Ending process] (*)
+
+    endif
+    else
+    -->[false] "Broadcast message of invalidity for PoV"
+    end if
+
+  -->[Ending process] (*)
+
+@enduml
+\end{plantuml}
+
 \section{Primary Validation}
 \label{sect-primary-validation}
 
@@ -531,4 +564,3 @@ If $>n/3$ validators attest to the validity of the blob and $\leq n/3$ attest to
 If $>n/3$ validators attest to the invalidity of the blob and $\leq n/3$ attest to its validity, then we consider the blob as invalid. If the rely chain block where the corresponding candidate receipt was executed was not finalised, then we never vote on it or build on it. We slash the validators who attested to its validity.
 
 If $>n/3$ validators attest to the validity of the blob and $>n/3$ attest to its invalidity then we consider the blob to be invalid as above but we do not slash validators who attest either way. We want to leave a reasonable length of time in the first two cases to slash anyone to see if this happens.
-
