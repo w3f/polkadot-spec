@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -138,7 +138,7 @@
     <verbatim|version> function.>
   </with>
 
-  <subsection|<verbatim|Core_execute_block>>
+  <subsection|<verbatim|Core_execute_block>><label|defn-rt-core-execute-block>
 
   Executes a full block by executing all exctrinsics included in it and
   update the state accordingly. Additionally, some integrity checks are
@@ -272,10 +272,18 @@
 
   <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
-  This entry is invoked against extrinsics submitted through the Transaction
+  This entry is invoked against extrinsics submitted through the transaction
   network message <reference|sect-msg-transactions> and indicates if the
   submitted blob represents a valid extrinsics applied to the specified
-  block.
+  block. This function gets called internally when executing blocks with the
+  <verbatim|Core_execute_block> runtime function as described in section
+  <reference|defn-rt-core-execute-block>.
+
+  \;
+
+  If this function gets called manually in order to validate a transaction
+  received from peers, all state changes after execution are disregarded and
+  thown away.
 
   \;
 
@@ -477,7 +485,7 @@
   fields are valid except for the state root.
 
   \;
-  
+
   <\with|par-mode|right>
     <qed>
   </with>
@@ -487,49 +495,53 @@
 
 <\initial>
   <\collection>
-    <associate|page-first|?>
+    <associate|chapter-nr|5>
+    <associate|page-first|101>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|section-nr|2<uninit>>
+    <associate|subsection-nr|0>
   </collection>
 </initial>
 
 <\references>
   <\collection>
-    <associate|auto-1|<tuple|A|?|c01-background.tm>>
-    <associate|auto-10|<tuple|A.2.5|?|c01-background.tm>>
-    <associate|auto-11|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-12|<tuple|A.2.6|?|c01-background.tm>>
-    <associate|auto-13|<tuple|A.2.7|?|c01-background.tm>>
-    <associate|auto-14|<tuple|A.3|?|c01-background.tm>>
-    <associate|auto-15|<tuple|A.4|?|c01-background.tm>>
-    <associate|auto-16|<tuple|A.5|?|c01-background.tm>>
-    <associate|auto-17|<tuple|A.6|?|c01-background.tm>>
-    <associate|auto-18|<tuple|A.2.8|?|c01-background.tm>>
-    <associate|auto-19|<tuple|A.7|?|c01-background.tm>>
-    <associate|auto-2|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-20|<tuple|A.8|?|c01-background.tm>>
-    <associate|auto-21|<tuple|A.2.9|?|c01-background.tm>>
-    <associate|auto-22|<tuple|A.2.10|?|c01-background.tm>>
-    <associate|auto-3|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-4|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-5|<tuple|A.2.1|?|c01-background.tm>>
-    <associate|auto-6|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-7|<tuple|A.2.2|?|c01-background.tm>>
-    <associate|auto-8|<tuple|A.2.3|?|c01-background.tm>>
-    <associate|auto-9|<tuple|A.2.4|?|c01-background.tm>>
-    <associate|defn-invalid-transaction|<tuple|A.3|?|c01-background.tm>>
-    <associate|defn-rt-core-version|<tuple|A.2.1|?|c01-background.tm>>
-    <associate|defn-transaction-validity-error|<tuple|A.2|?|c01-background.tm>>
-    <associate|defn-unknown-transaction|<tuple|A.4|?|c01-background.tm>>
-    <associate|defn-valid-transaction|<tuple|A.1|?|c01-background.tm>>
-    <associate|sect-list-of-runtime-entries|<tuple|A.1|?|c01-background.tm>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|?|c01-background.tm>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|?|c01-background.tm>>
-    <associate|sect-rte-hash-and-length|<tuple|A.2.4|?|c01-background.tm>>
-    <associate|sect-rte-validate-transaction|<tuple|A.2.7|?|c01-background.tm>>
-    <associate|sect-runtime-entries|<tuple|A|?|c01-background.tm>>
-    <associate|snippet-runtime-enteries|<tuple|A.1|?|c01-background.tm>>
+    <associate|auto-1|<tuple|A|?>>
+    <associate|auto-10|<tuple|A.2.5|?>>
+    <associate|auto-11|<tuple|A.2|?>>
+    <associate|auto-12|<tuple|A.2.6|?>>
+    <associate|auto-13|<tuple|A.2.7|?>>
+    <associate|auto-14|<tuple|A.3|?>>
+    <associate|auto-15|<tuple|A.4|?>>
+    <associate|auto-16|<tuple|A.5|?>>
+    <associate|auto-17|<tuple|A.6|?>>
+    <associate|auto-18|<tuple|A.2.8|?>>
+    <associate|auto-19|<tuple|A.7|?>>
+    <associate|auto-2|<tuple|A.1|?>>
+    <associate|auto-20|<tuple|A.8|?>>
+    <associate|auto-21|<tuple|A.2.9|?>>
+    <associate|auto-22|<tuple|A.2.10|?>>
+    <associate|auto-3|<tuple|A.1|?>>
+    <associate|auto-4|<tuple|A.2|?>>
+    <associate|auto-5|<tuple|A.2.1|?>>
+    <associate|auto-6|<tuple|A.1|?>>
+    <associate|auto-7|<tuple|A.2.2|?>>
+    <associate|auto-8|<tuple|A.2.3|?>>
+    <associate|auto-9|<tuple|A.2.4|?>>
+    <associate|defn-invalid-transaction|<tuple|A.3|?>>
+    <associate|defn-rt-core-execute-block|<tuple|A.2.2|?>>
+    <associate|defn-rt-core-version|<tuple|A.2.1|?>>
+    <associate|defn-transaction-validity-error|<tuple|A.2|?>>
+    <associate|defn-unknown-transaction|<tuple|A.4|?>>
+    <associate|defn-valid-transaction|<tuple|A.1|?>>
+    <associate|sect-list-of-runtime-entries|<tuple|A.1|?>>
+    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|?>>
+    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|?>>
+    <associate|sect-rte-hash-and-length|<tuple|A.2.4|?>>
+    <associate|sect-rte-validate-transaction|<tuple|A.2.7|?>>
+    <associate|sect-runtime-entries|<tuple|A|?>>
+    <associate|snippet-runtime-enteries|<tuple|A.1|?>>
   </collection>
 </references>
 
