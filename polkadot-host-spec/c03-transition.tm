@@ -576,8 +576,8 @@
   production consensus protocol. The latter can be verified by the Polkadot
   Host invoking <verbatim|Core_execute_block> entry into the Runtime as
   defined in section <reference|defn-rt-core-execute-block> as a part of the
-  validation process. Any state changes created by this function are
-  persisted.
+  validation process. Any state changes created by this function on
+  successfull execution are persisted.
 
   \;
 
@@ -628,8 +628,12 @@
       </state>
 
       <\state>
-        <math|S\<leftarrow\>> <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_execute_block>>,B|)>>
+        <math|R\<leftarrow\>> <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_execute_block>>,B|)>>
       </state>
+
+      <space|1em>10:<space|1em>if <em|R> = <name|True>
+
+      <space|1em>11:<space|3em><name|Persist-state>
     </algorithmic>
   </algorithm>
 
