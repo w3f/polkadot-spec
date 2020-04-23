@@ -577,7 +577,7 @@
   Host invoking <verbatim|Core_execute_block> entry into the Runtime as
   defined in section <reference|defn-rt-core-execute-block> as a part of the
   validation process. Any state changes created by this function on
-  successfull execution are persisted.
+  successful execution are persisted.
 
   \;
 

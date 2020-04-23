@@ -164,7 +164,8 @@
 
   This function should be called when a fully complete block is available
   that is not actively being built on, such as blocks received from other
-  peers. Any state changes created by this function are persisted.
+  peers. Any state changes created by this function on successful execution
+  are persisted.
 
   \;
 
@@ -494,7 +495,7 @@
 
   Finalize the block - it is up to the caller to ensure that all header
   fields are valid except for the state root. Any state changes created by
-  this function are persisted.
+  this function on successful execution are persisted.
 
   \;
 
