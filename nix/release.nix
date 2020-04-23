@@ -1,3 +1,3 @@
-import ./default.nix {
+import ../default.nix {
   pkgs = import ./w3fpkgs.nix;
 }
