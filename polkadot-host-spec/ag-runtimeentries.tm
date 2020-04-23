@@ -282,7 +282,7 @@
   \;
 
   If this function gets called manually in order to validate a transaction
-  received from peers, all state changes after execution are disregarded and
+  received from peers, all state changes after validation are disregarded and
   thown away.
 
   \;
