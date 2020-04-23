@@ -14,7 +14,7 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.value,
         [
-            PdreApiTestData.value_1
+            PdreApiTestDataLegacy.value_1
         ],
         PdreApiExpectedResultsLegacy.value,
         legacy=true
@@ -23,7 +23,7 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.value_no_output,
         [
-            PdreApiTestData.value_1
+            PdreApiTestDataLegacy.value_1
         ],
         false,
         legacy=true
@@ -32,7 +32,7 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value,
         [
-            PdreApiTestData.key_value_1
+            PdreApiTestDataLegacy.key_value_1
         ],
         PdreApiExpectedResultsLegacy.key_value,
         legacy=true
@@ -41,8 +41,8 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value_offset,
         [
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.offset
+            PdreApiTestDataLegacy.key_value_1,
+            PdreApiTestDataLegacy.offset
         ],
         PdreApiExpectedResultsLegacy.key_value_offset,
         legacy=true
@@ -51,8 +51,8 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.key_value_key_value,
         [
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.key_value_2
+            PdreApiTestDataLegacy.key_value_1,
+            PdreApiTestDataLegacy.key_value_2
         ],
         PdreApiExpectedResultsLegacy.key_value_key_value,
         legacy=true
@@ -61,8 +61,8 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.key_key_value,
         [
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.value_1
+            PdreApiTestDataLegacy.key_value_1,
+            PdreApiTestDataLegacy.value_1
         ],
         PdreApiExpectedResultsLegacy.key_key_value,
         legacy=true
@@ -71,7 +71,7 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.prefix_key_value_key_value,
         [
-            PdreApiTestData.prefix_key_value_key_value
+            PdreApiTestDataLegacy.prefix_key_value_key_value
         ],
         false,
         strip=false,
@@ -81,8 +81,8 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value,
         [
-            PdreApiTestData.child_child,
-            PdreApiTestData.key_value_1
+            PdreApiTestDataLegacy.child_child,
+            PdreApiTestDataLegacy.key_value_1
         ],
         PdreApiExpectedResultsLegacy.child_child_key_value,
         legacy=true
@@ -91,9 +91,9 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value_key_value,
         [
-            PdreApiTestData.child_child,
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.key_value_2
+            PdreApiTestDataLegacy.child_child,
+            PdreApiTestDataLegacy.key_value_1,
+            PdreApiTestDataLegacy.key_value_2
         ],
         PdreApiExpectedResultsLegacy.child_child_key_value_key_value,
         legacy=true
@@ -102,8 +102,8 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.prefix_child_child_key_value_key_value,
         [
-            PdreApiTestData.child_child,
-            PdreApiTestData.prefix_key_value_key_value
+            PdreApiTestDataLegacy.child_child,
+            PdreApiTestDataLegacy.prefix_key_value_key_value
         ],
         false, 
         strip=false,
@@ -114,9 +114,9 @@ using Test
     run_dataset(
         PdreApiTestFunctionsLegacy.child_child_key_value_offset,
         [
-            PdreApiTestData.child_child,
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.offset
+            PdreApiTestDataLegacy.child_child,
+            PdreApiTestDataLegacy.key_value_1,
+            PdreApiTestDataLegacy.offset
         ],
         PdreApiExpectedResultsLegacy.child_child_key_value_offset,
         legacy=true
