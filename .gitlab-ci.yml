@@ -12,7 +12,7 @@ stages:
 
 .build:
   stage: build
-  script: nix-build release.nix -A ${CI_JOB_NAME} | cachix push w3fpkgs
+  script: nix-build nix/release.nix -A ${CI_JOB_NAME} | cachix push w3fpkgs
   timeout: 15m
 
 substrate-adapter:
@@ -28,40 +28,40 @@ kagome-adapter:
 
 .test:
   stage: test
-  script: nix-shell release-shell.nix --quiet --pure --run "./check.jl ${CI_JOB_NAME}"
+  script: nix-shell nix/ci-shell.nix --quiet --pure --argstr jobid "${CI_JOB_NAME}" --run "./check.jl ${CI_JOB_NAME}"
   timeout: 15m
 
 
 substrate hostapi:
   extends: .test
-  #  needs: ["substrate-adapter"]
+  needs: ["substrate-adapter"]
 
 substrate hostapi-legacy:
   extends: .test
-  #  needs: ["substrate-adapter"]
+  needs: ["substrate-adapter"]
 
 
 kagome hostapi:
   extends: .test
-  #  needs: ["kagome-adapter"]
+  needs: ["kagome-adapter"]
 
 kagome hostapi-legacy:
   extends: .test
-  #  needs: ["kagome-adapter"]
+  needs: ["kagome-adapter"]
 
 kagome scale-codec:
   extends: .test
-  #  needs: ["substrate-adapter", "kagome-adapter"]
+  needs: ["substrate-adapter", "kagome-adapter"]
 
 kagome state-trie:
   extends: .test
-  #  needs: ["substrate-adapter", "kagome-adapter"]
+  needs: ["substrate-adapter", "kagome-adapter"]
 
 
 gossamer scale-codec:
   extends: .test
-  #  needs: ["substrate-adapter", "gossamer-adapter"]
+  needs: ["substrate-adapter", "gossamer-adapter"]
 
 gossamer state-trie:
   extends: .test
-  #  needs: ["substrate-adapter", "gossamer-adapter"]
+  needs: ["substrate-adapter", "gossamer-adapter"]
