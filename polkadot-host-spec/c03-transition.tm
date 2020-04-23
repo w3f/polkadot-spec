@@ -1,8 +1,8 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
-<style|book>
+<style|<tuple|book|algorithmacs-style>>
 
 <\body>
   <chapter|State Transition><label|chap-state-transit>
@@ -574,8 +574,10 @@
   the transactions in the block constitute a valid transition of states. The
   former criterion is validated by the Polkadot Host according to the block
   production consensus protocol. The latter can be verified by the Polkadot
-  Host invoking <verbatim|execute_block> entry into the Runtime as a part of
-  the validation process.
+  Host invoking <verbatim|Core_execute_block> entry into the Runtime as
+  defined in section <reference|defn-rt-core-execute-block> as a part of the
+  validation process. Any state changes created by this function are
+  persisted.
 
   \;
 
@@ -669,7 +671,7 @@
   </definition>
 
   For the definition of the state storage see Section
-  <reference|sect-state-storage>. 
+  <reference|sect-state-storage>.
 
   \;
 
@@ -680,105 +682,78 @@
   \;
 </body>
 
-<initial|<\collection>
-</collection>>
+<\initial>
+  <\collection>
+    <associate|chapter-nr|2>
+    <associate|page-first|23>
+    <associate|section-nr|1<uninit>>
+    <associate|subsection-nr|4>
+  </collection>
+</initial>
 
 <\references>
   <\collection>
-    <associate|algo-aggregate-key|<tuple|2.1|?|c01-background.tm>>
-    <associate|algo-import-and-validate-block|<tuple|1.4|?|c01-background.tm>>
-    <associate|algo-maintain-transaction-pool|<tuple|1.3|?|c01-background.tm>>
-    <associate|algo-pk-length|<tuple|2.2|?|c01-background.tm>>
-    <associate|algo-runtime-interaction|<tuple|1.1|?|c01-background.tm>>
-    <associate|algo-validate-transactions|<tuple|1.2|?|c01-background.tm>>
-    <associate|auto-1|<tuple|1|?|c01-background.tm>>
-    <associate|auto-10|<tuple|1.2.2|?|c01-background.tm>>
-    <associate|auto-11|<tuple|1.2.2.1|?|c01-background.tm>>
-    <associate|auto-12|<tuple|1.2.3|?|c01-background.tm>>
-    <associate|auto-13|<tuple|1.2.3|?|c01-background.tm>>
-    <associate|auto-14|<tuple|1.2.3|?|c01-background.tm>>
-    <associate|auto-15|<tuple|1.2.3|?|c01-background.tm>>
-    <associate|auto-16|<tuple|<with|mode|<quote|math>|<rigid|->>|?|c01-background.tm>>
-    <associate|auto-17|<tuple|1.2.3.1|?|c01-background.tm>>
-    <associate|auto-18|<tuple|1.1|?|c01-background.tm>>
-    <associate|auto-19|<tuple|1.3|?|c01-background.tm>>
-    <associate|auto-2|<tuple|1.1|?|c01-background.tm>>
-    <associate|auto-20|<tuple|1.3.1|?|c01-background.tm>>
-    <associate|auto-21|<tuple|1.3.1.1|?|c01-background.tm>>
-    <associate|auto-22|<tuple|1.2|?|c01-background.tm>>
-    <associate|auto-23|<tuple|1.3.1.2|?|c01-background.tm>>
-    <associate|auto-24|<tuple|1.3.1.3|?|c01-background.tm>>
-    <associate|auto-25|<tuple|1.3.2|?|c01-background.tm>>
-    <associate|auto-26|<tuple|1.3.3|?|c01-background.tm>>
-    <associate|auto-27|<tuple|1.3.4|?|c01-background.tm>>
-    <associate|auto-28|<tuple|2|?|c01-background.tm>>
-    <associate|auto-29|<tuple|2.1|?|c01-background.tm>>
-    <associate|auto-3|<tuple|1.1.1|?|c01-background.tm>>
-    <associate|auto-30|<tuple|2.1.1|?|c01-background.tm>>
-    <associate|auto-31|<tuple|2.1|?|c01-background.tm>>
-    <associate|auto-32|<tuple|2.1.2|?|c01-background.tm>>
-    <associate|auto-33|<tuple|2.1.3|?|c01-background.tm>>
-    <associate|auto-34|<tuple|2.1.4|?|c01-background.tm>>
-    <associate|auto-4|<tuple|1.1.2|?|c01-background.tm>>
-    <associate|auto-5|<tuple|1.1.2.1|?|c01-background.tm>>
-    <associate|auto-6|<tuple|1.1.2.2|?|c01-background.tm>>
-    <associate|auto-7|<tuple|1.1.2.3|?|c01-background.tm>>
-    <associate|auto-8|<tuple|1.2|?|c01-background.tm>>
-    <associate|auto-9|<tuple|1.2.1|?|c01-background.tm>>
-    <associate|block|<tuple|1.3.1.1|?|c01-background.tm>>
-    <associate|chap-state-spec|<tuple|2|?|c01-background.tm>>
-    <associate|chap-state-transit|<tuple|1|?|c01-background.tm>>
-    <associate|defn-block-body|<tuple|1.9|?|c01-background.tm>>
-    <associate|defn-block-header|<tuple|1.6|?|c01-background.tm>>
-    <associate|defn-block-header-hash|<tuple|1.8|?|c01-background.tm>>
-    <associate|defn-children-bitmap|<tuple|2.10|?|c01-background.tm>>
-    <associate|defn-digest|<tuple|1.7|?|c01-background.tm>>
-    <associate|defn-index-function|<tuple|2.7|?|c01-background.tm>>
-    <associate|defn-inherent-data|<tuple|1.5|?|c01-background.tm>>
-    <associate|defn-merkle-value|<tuple|2.12|?|c01-background.tm>>
-    <associate|defn-node-header|<tuple|2.9|?|c01-background.tm>>
-    <associate|defn-node-key|<tuple|2.6|?|c01-background.tm>>
-    <associate|defn-node-subvalue|<tuple|2.11|?|c01-background.tm>>
-    <associate|defn-node-value|<tuple|2.8|?|c01-background.tm>>
-    <associate|defn-nodetype|<tuple|2.4|?|c01-background.tm>>
-    <associate|defn-set-state-at|<tuple|1.10|?|c01-background.tm>>
-    <associate|defn-stored-value|<tuple|2.1|?|c01-background.tm>>
-    <associate|defn-transaction-queue|<tuple|1.4|?|c01-background.tm>>
-    <associate|key-encode-in-trie|<tuple|2.1|?|c01-background.tm>>
-    <associate|nota-call-into-runtime|<tuple|1.2|?|c01-background.tm>>
-    <associate|nota-runtime-code-at-state|<tuple|1.1|?|c01-background.tm>>
-    <associate|sect-block-body|<tuple|1.3.1.3|?|c01-background.tm>>
-    <associate|sect-block-format|<tuple|1.3.1|?|c01-background.tm>>
-    <associate|sect-block-submission|<tuple|1.3.2|?|c01-background.tm>>
-    <associate|sect-block-validation|<tuple|1.3.3|?|c01-background.tm>>
-    <associate|sect-entries-into-runtime|<tuple|1.1|?|c01-background.tm>>
-    <associate|sect-extrinsics|<tuple|1.2|?|c01-background.tm>>
-    <associate|sect-justified-block-header|<tuple|1.3.1.2|?|c01-background.tm>>
-    <associate|sect-loading-runtime-code|<tuple|1.1.1|?|c01-background.tm>>
-    <associate|sect-managing-multiple-states|<tuple|1.3.4|?|c01-background.tm>>
-    <associate|sect-merkl-proof|<tuple|2.1.4|?|c01-background.tm>>
-    <associate|sect-runtime-return-value|<tuple|1.1.2.3|?|c01-background.tm>>
-    <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|1.1.2.2|?|c01-background.tm>>
-    <associate|sect-state-replication|<tuple|1.3|?|c01-background.tm>>
-    <associate|sect-state-storage|<tuple|2.1|?|c01-background.tm>>
-    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|?|c01-background.tm>>
-    <associate|tabl-digest-items|<tuple|1.2|?|c01-background.tm>>
-    <associate|tabl-inherent-data|<tuple|1.1|?|c01-background.tm>>
+    <associate|algo-import-and-validate-block|<tuple|3.4|?>>
+    <associate|algo-maintain-transaction-pool|<tuple|3.3|?>>
+    <associate|algo-runtime-interaction|<tuple|3.1|?>>
+    <associate|algo-validate-transactions|<tuple|3.2|?>>
+    <associate|auto-1|<tuple|3|?>>
+    <associate|auto-10|<tuple|3.2.2|?>>
+    <associate|auto-11|<tuple|3.2.2.1|?>>
+    <associate|auto-12|<tuple|3.2.3|?>>
+    <associate|auto-13|<tuple|3.2.3|?>>
+    <associate|auto-14|<tuple|3.2.3|?>>
+    <associate|auto-15|<tuple|3.2.3|?>>
+    <associate|auto-16|<tuple|<with|mode|<quote|math>|<rigid|->>|?>>
+    <associate|auto-17|<tuple|3.2.3.1|?>>
+    <associate|auto-18|<tuple|3.1|?>>
+    <associate|auto-19|<tuple|3.3|?>>
+    <associate|auto-2|<tuple|3.1|?>>
+    <associate|auto-20|<tuple|3.3.1|?>>
+    <associate|auto-21|<tuple|3.3.1.1|?>>
+    <associate|auto-22|<tuple|3.2|?>>
+    <associate|auto-23|<tuple|3.3.1.2|?>>
+    <associate|auto-24|<tuple|3.3.1.3|?>>
+    <associate|auto-25|<tuple|3.3.2|?>>
+    <associate|auto-26|<tuple|3.3.3|?>>
+    <associate|auto-27|<tuple|3.3.4|?>>
+    <associate|auto-3|<tuple|3.1.1|?>>
+    <associate|auto-4|<tuple|3.1.2|?>>
+    <associate|auto-5|<tuple|3.1.2.1|?>>
+    <associate|auto-6|<tuple|3.1.2.2|?>>
+    <associate|auto-7|<tuple|3.1.2.3|?>>
+    <associate|auto-8|<tuple|3.2|?>>
+    <associate|auto-9|<tuple|3.2.1|?>>
+    <associate|block|<tuple|3.3.1.1|?>>
+    <associate|chap-state-transit|<tuple|3|?>>
+    <associate|defn-block-body|<tuple|3.9|?>>
+    <associate|defn-block-header|<tuple|3.6|?>>
+    <associate|defn-block-header-hash|<tuple|3.8|?>>
+    <associate|defn-digest|<tuple|3.7|?>>
+    <associate|defn-inherent-data|<tuple|3.5|?>>
+    <associate|defn-set-state-at|<tuple|3.10|?>>
+    <associate|defn-transaction-queue|<tuple|3.4|?>>
+    <associate|nota-call-into-runtime|<tuple|3.2|?>>
+    <associate|nota-runtime-code-at-state|<tuple|3.1|?>>
+    <associate|sect-block-body|<tuple|3.3.1.3|?>>
+    <associate|sect-block-format|<tuple|3.3.1|?>>
+    <associate|sect-block-submission|<tuple|3.3.2|?>>
+    <associate|sect-block-validation|<tuple|3.3.3|?>>
+    <associate|sect-entries-into-runtime|<tuple|3.1|?>>
+    <associate|sect-extrinsics|<tuple|3.2|?>>
+    <associate|sect-justified-block-header|<tuple|3.3.1.2|?>>
+    <associate|sect-loading-runtime-code|<tuple|3.1.1|?>>
+    <associate|sect-managing-multiple-states|<tuple|3.3.4|?>>
+    <associate|sect-runtime-return-value|<tuple|3.1.2.3|?>>
+    <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|?>>
+    <associate|sect-state-replication|<tuple|3.3|?>>
+    <associate|tabl-digest-items|<tuple|3.2|?>>
+    <associate|tabl-inherent-data|<tuple|3.1|?>>
   </collection>
 </references>
 
 <\auxiliary>
   <\collection>
-    <\associate|gly>
-      <tuple|normal|StoredValue|the function retrieves the value stored under
-      a specific key in the state storage and is formally defined as
-      <with|mode|<quote|math>|<tformat|<tformat|<table|<row|<cell|\<cal-K\>\<rightarrow\>\<cal-V\>>>|<row|<cell|k\<mapsto\><around*|{|<tformat|<cwith|1|-1|1|-1|cell-halign|c>|<tformat|<table|<row|<cell|v>|<cell|<with|mode|<quote|text>|if
-      (k,v) exists in state storage>>>|<row|<cell|\<phi\>>|<cell|otherwise>>>>>|\<nobracket\>>>>>>>>.
-      Here <with|mode|<quote|math>|\<cal-K\>\<subset\>\<bbb-B\>> and
-      <with|mode|<quote|math>|\<cal-V\>\<subset\>\<bbb-B\>> are respectively
-      the set of all keys and values stored in the state
-      storage.|<pageref|auto-31>>
-    </associate>
     <\associate|idx>
       <tuple|<tuple|Transaction Message>|<pageref|auto-13>>
 
@@ -789,119 +764,95 @@
       <tuple|<tuple|Transaction Message>|<pageref|auto-16>>
     </associate>
     <\associate|table>
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|1.1>|>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|3.1>|>
         List of inherent data
       </surround>|<pageref|auto-18>>
 
-      <tuple|normal|<surround|<hidden-binding|<tuple>|1.2>||The detail of the
+      <tuple|normal|<surround|<hidden-binding|<tuple>|3.2>||The detail of the
       varying type that a digest item can hold.>|<pageref|auto-22>>
     </associate>
     <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>State
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>State
       Transition> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      1.1<space|2spc>Interactions with Runtime
+      3.1<space|2spc>Interactions with Runtime
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      <with|par-left|<quote|1tab>|1.1.1<space|2spc>Loading the Runtime Code
+      <with|par-left|<quote|1tab>|3.1.1<space|2spc>Loading the Runtime Code
       \ \ \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>>
 
-      <with|par-left|<quote|1tab>|1.1.2<space|2spc>Code Executor
+      <with|par-left|<quote|1tab>|3.1.2<space|2spc>Code Executor
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>>
 
-      <with|par-left|<quote|2tab>|1.1.2.1<space|2spc>Access to Runtime API
+      <with|par-left|<quote|2tab>|3.1.2.1<space|2spc>Access to Runtime API
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
-      <with|par-left|<quote|2tab>|1.1.2.2<space|2spc>Sending Arguments to
+      <with|par-left|<quote|2tab>|3.1.2.2<space|2spc>Sending Arguments to
       Runtime \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|2tab>|1.1.2.3<space|2spc>The Return Value from a
+      <with|par-left|<quote|2tab>|3.1.2.3<space|2spc>The Return Value from a
       Runtime Entry <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      1.2<space|2spc>Extrinsics <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      3.2<space|2spc>Extrinsics <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>
 
-      <with|par-left|<quote|1tab>|1.2.1<space|2spc>Preliminaries
+      <with|par-left|<quote|1tab>|3.2.1<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|1.2.2<space|2spc>Transactions
+      <with|par-left|<quote|1tab>|3.2.2<space|2spc>Transactions
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|2tab>|1.2.2.1<space|2spc>Transaction Submission
+      <with|par-left|<quote|2tab>|3.2.2.1<space|2spc>Transaction Submission
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-11>>
 
-      <with|par-left|<quote|1tab>|1.2.3<space|2spc>Transaction Queue
+      <with|par-left|<quote|1tab>|3.2.3<space|2spc>Transaction Queue
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-12>>
 
-      <with|par-left|<quote|2tab>|1.2.3.1<space|2spc>Inherents
+      <with|par-left|<quote|2tab>|3.2.3.1<space|2spc>Inherents
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-17>>
 
-      1.3<space|2spc>State Replication <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      3.3<space|2spc>State Replication <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-19>
 
-      <with|par-left|<quote|1tab>|1.3.1<space|2spc>Block Format
+      <with|par-left|<quote|1tab>|3.3.1<space|2spc>Block Format
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20>>
 
-      <with|par-left|<quote|2tab>|1.3.1.1<space|2spc>Block Header
+      <with|par-left|<quote|2tab>|3.3.1.1<space|2spc>Block Header
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-21>>
 
-      <with|par-left|<quote|2tab>|1.3.1.2<space|2spc>Justified Block Header
+      <with|par-left|<quote|2tab>|3.3.1.2<space|2spc>Justified Block Header
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-23>>
 
-      <with|par-left|<quote|2tab>|1.3.1.3<space|2spc>Block Body
+      <with|par-left|<quote|2tab>|3.3.1.3<space|2spc>Block Body
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-24>>
 
-      <with|par-left|<quote|1tab>|1.3.2<space|2spc>Block Submission
+      <with|par-left|<quote|1tab>|3.3.2<space|2spc>Block Submission
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-25>>
 
-      <with|par-left|<quote|1tab>|1.3.3<space|2spc>Block Validation
+      <with|par-left|<quote|1tab>|3.3.3<space|2spc>Block Validation
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-26>>
 
-      <with|par-left|<quote|1tab>|1.3.4<space|2spc>Managaing Multiple
+      <with|par-left|<quote|1tab>|3.3.4<space|2spc>Managaing Multiple
       Variants of State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
-
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>State
-      Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-28><vspace|0.5fn>
-
-      2.1<space|2spc>State Storage and Storage Trie
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-29>
-
-      <with|par-left|<quote|1tab>|2.1.1<space|2spc>Accessing System Storage
-      \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-30>>
-
-      <with|par-left|<quote|1tab>|2.1.2<space|2spc>The General Tree Structure
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-32>>
-
-      <with|par-left|<quote|1tab>|2.1.3<space|2spc>Trie Structure
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-33>>
-
-      <with|par-left|<quote|1tab>|2.1.4<space|2spc>Merkle Proof
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-34>>
     </associate>
   </collection>
 </auxiliary>
