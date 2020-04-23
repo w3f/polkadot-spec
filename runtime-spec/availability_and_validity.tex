@@ -67,12 +67,12 @@ The Diagrams \ref{diag-anv-overal} demonestrate the overal process of assuring a
 @startuml
 
 
-(*) --> "Parachain Collator C_ρ Generates B and PoV"
-    --> "C_ρ sends PoV_B to ρ's validator V_ρ"
+(*) --> "Parachain Collator $C_\rho$ Generates B and PoV"
+    --> "$C_\rho$ sends $PoV_B$ to $\rho$'s validator $V_\rho$"
 
-    --> "V_{rho} runs Rho's runtime on PoV"
+    --> "$V_{\rho}$ runs $\rho$'s runtime on PoV"
     if "PoV is valid" then     
-    -->[true] if  "V_{rho} have seen the CandidateReceipt for PoV" then
+    -->[true] if  "$V_{\rho}$ have seen the CandidateReceipt for PoV" then
     -->[true] Sign CandidateReceipt
     -->[Ending process] (*)
 
