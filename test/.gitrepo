@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@gitlab.w3f.tech:florian/spectest.git
 	branch = master
-	commit = 
+	commit = a4e96288110ed0dc10cbd33b0c8d940a4e7a97f7
 	method = merge
 	cmdver = 0.4.1
