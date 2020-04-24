@@ -9,10 +9,28 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Setup rust and cargo 
+      run: |
+        rustup default nightly
+        rustup target add wasm32-unknown-unknown --toolchain nightly
+
     - name: Build substrate adapter
       run: |
         cd test/adapters/substrate
         cargo build --release -Zfeatures=build_dep
+
+    - name: Upload substrate adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: Adapter Substrate
+        path: test/adapters/substrate/target/release/substrate-adapter
+
+    - name: Upload substrate legacy adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: Adapter Substrate Legacy
+        path: test/adapters/substrate/target/release/substrate-adapter-legacy
+
 
   kagome-adapter:
     runs-on: ubuntu-latest
@@ -24,7 +42,14 @@ jobs:
       run: |
         mkdir test/adapters/kagome/target
         cd test/adapters/kagome/target
-        cmake --build ..
+        cmake .. && cmake --build .
+
+    - name: Upload kagome adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: Adapter Kagome
+        path: test/adapters/kagome/target/kagome-adapter
+
 
   gossamer-adapter:
     runs-on: ubuntu-latest
@@ -36,3 +61,10 @@ jobs:
       run: |
         cd test/adapters/gossamer
         go build
+
+    - name: Upload gossamer adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: Adapter Gossamer
+        path: test/adapters/gossamer/gossamer-adapter
+
