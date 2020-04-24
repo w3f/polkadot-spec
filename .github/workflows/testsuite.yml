@@ -1,0 +1,38 @@
+name: Polkadot Specification Testsuite
+
+on: [push, pull_request]
+
+jobs:
+  substrate-adapter:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build substrate adapter
+      run: |
+        cd test/adapters/substrate
+        cargo build --release -Zfeatures=build_dep
+
+  kagome-adapter:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build kagome adapter
+      run: |
+        mkdir test/adapters/kagome/target
+        cd test/adapters/kagome/target
+        cmake --build ..
+
+  gossamer-adapter:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build gossamer adapter
+      run: |
+        cd test/adapters/gossamer
+        go build
