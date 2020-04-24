@@ -1,13 +1,13 @@
 \documentclass{book}
-\usepackage[english]{babel}
 \usepackage{geometry,amsmath,amssymb,hyperref,calc,ifthen,alltt,theorem,capt-of,makeidx}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 %%\usepackage{algorithmic}
 \usepackage{xargs}
 \usepackage{plantuml} %%digarams
-%\usepackage[LGR,T1]{fontenc}
-%\usepackage[utf8]{luainputenc}   % utf8 is required
+
+\usepackage{fontspec} %%for greek letters in plant uml
+\setmainfont{CMU Serif}
 
 \newcommand{\textgreek}[1]{\begingroup\fontencoding{LGR}\selectfont#1\endgroup}
 
