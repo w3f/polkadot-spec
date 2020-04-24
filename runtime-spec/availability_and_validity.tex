@@ -5,7 +5,7 @@
 Validators are responsible for guaranteeing the validity and availability of PoV blocks. 
 There are two phases of validation that takes place in the AnV protocol. 
 
-The primary validation check is carried out by parachain validators who are assigned to the parachain which has produced the PoV block as described in Section \ref{sect-primary-validation}. Once parachain validators have validated a parachain's PoV block successfully, they have to announce that according to the procedure described in Section \ref{sect-primary-validaty-announcement} where they generate a candidate receipt that includes the parachain header with the new state root and the XCMP message root. This candidate receipt and attentions, which care signatures from other parachain validators is put on the relay chain. 
+The primary validation check is carried out by parachain validators who are assigned to the parachain which has produced the PoV block as described in Section \ref{sect-primary-validation}. Once parachain validators have validated a parachain's PoV block successfully, they have to announce that according to the procedure described in Section \ref{sect-primary-validaty-announcement} where they generate a candidate receipt that includes the parachain header with the new state root and the XCMP message root. This candidate receipt and attestations, which carries signatures from other parachain validators is put on the relay chain. 
 
 As soon as the proposal of a PoV block is on-chain, the parachain validators break the PoV block into erasure-coded pieces as described in Section \ref{sect-erasure-code-pov} and distribute them among all validators. See Section \ref{sect-distribute-pieces} for details on how this distribution takes place.
 	 
@@ -56,6 +56,8 @@ Parachain validators get this extra validation data from the current relay chain
   (B, \pi_B, v_B)
   \]
 \end{definition}
+
+Note that in the code the blob is referred to as "AvailableData".
 
 \section{Primary Validation}
 \label{sect-primary-validation}
