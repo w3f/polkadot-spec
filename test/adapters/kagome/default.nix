@@ -8,4 +8,6 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ kagome libyamlcpp ];
+
+  cmakeFlags = [ "-DHUNTER_ENABLED=OFF" ];
 }
