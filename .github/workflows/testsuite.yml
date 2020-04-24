@@ -6,13 +6,29 @@ jobs:
   substrate-adapter:
     runs-on: ubuntu-latest
 
+    env:
+      RUST_TOOLCHAIN: nightly-2020-04-15
+
     steps:
     - uses: actions/checkout@v2
 
+    - name: Cache cargo binaries, registry and indices
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo
+        key: cargo-env-adapter-substrate-${{ env.RUST_TOOLCHAIN }}
+
     - name: Setup rust and cargo 
       run: |
-        rustup default nightly
+        rustup default $RUST_TOOLCHAIN
         rustup target add wasm32-unknown-unknown --toolchain nightly
+
+    - name: Cache cargo outputs
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/substrate/target
+        key: cargo-build-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}-${{ env.RUST_TOOLCHAIN  }}
+        restore-keys: cargo-build-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}-
 
     - name: Build substrate adapter
       run: |
@@ -38,6 +54,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    - name: Cache hunter packages
+      uses: actions/cache@v1
+      with:
+        path: ~/.hunter
+        key: hunter-adapter-kagome-${{ hashFiles('test/adapters/kagome/CMakeLists.txt') }}
+        restore-key: hunter-adapter-kagome-
+
     - name: Build kagome adapter
       run: |
         mkdir test/adapters/kagome/target
@@ -56,6 +79,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Cache go modules
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: go-mod-adapter-gossamer-${{ hashFiles('test/adapters/gossamer/go.sum') }}
+        restore-key: go-mod-adapter-gossamer--
 
     - name: Build gossamer adapter
       run: |
