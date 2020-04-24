@@ -6,10 +6,9 @@
 \usepackage{xargs}
 \usepackage{plantuml} %%digarams
 
-\usepackage{fontspec} %%for greek letters in plant uml
-\setmainfont{CMU Serif}
+%\usepackage{fontspec} %%for greek letters in plant uml in case you don't use math
+%\setmainfont{CMU Serif}
 
-\newcommand{\textgreek}[1]{\begingroup\fontencoding{LGR}\selectfont#1\endgroup}
 
 \makeindex
 \geometry{letterpaper}
@@ -124,3 +123,6 @@
 %%% mode: LaTeX
 %%% latex-run-command: "lualatex -shell-escape \\nonstopmode\\input runtime-spec.tex"
 %%% End:
+
+%% needs plantuml and jlatexmath or asciimath
+%% PlANTUML_JAR should point to plantuml.jar binary.
