@@ -6,50 +6,65 @@ jobs:
   substrate-adapter:
     runs-on: ubuntu-latest
 
-    env:
-      RUST_TOOLCHAIN: nightly-2020-04-15
+    defaults:
+      run:
+        working-directory: test/adapters/substrate
 
     steps:
     - uses: actions/checkout@v2
 
-    - name: Cache cargo binaries, registry and indices
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15 
+        target: wasm32-unknown-unknown 
+        default: true
+        profile: minimal
+
+    - name: Cache cargo registry
       uses: actions/cache@v1
       with:
-        path: ~/.cargo
-        key: cargo-env-adapter-substrate-${{ env.RUST_TOOLCHAIN }}
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-substrate-${{ hashFiles('Cargo.lock') }}
+        restore-key: cargo-registry-adapter-substrate-
 
-    - name: Setup rust and cargo 
-      run: |
-        rustup default $RUST_TOOLCHAIN
-        rustup target add wasm32-unknown-unknown --toolchain nightly
-
-    - name: Cache cargo outputs
+    - name: Cache cargo index
       uses: actions/cache@v1
       with:
-        path: test/adapters/substrate/target
-        key: cargo-build-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}-${{ env.RUST_TOOLCHAIN  }}
-        restore-keys: cargo-build-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}-
+        path: ~/.cargo/git
+        key: cargo-index-adapter-substrate-${{ hashFiles('Cargo.lock') }}
+        restore-key: cargo-index-adapter-substrate-
+
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: target
+        key: cargo-build-adapter-substrate-${{ hashFiles('Cargo.lock') }}-${{ steps.rustup.outputs.rustc_hash }}
+        restore-keys: cargo-build-adapter-substrate-${{ hashFiles('Cargo.lock') }}-
 
     - name: Build substrate adapter
-      run: |
-        cd test/adapters/substrate
-        cargo build --release -Zfeatures=build_dep
+      run: cargo build --release -Zfeatures=build_dep
 
     - name: Upload substrate adapter
       uses: actions/upload-artifact@v1
       with:
         name: Adapter Substrate
-        path: test/adapters/substrate/target/release/substrate-adapter
+        path: target/release/substrate-adapter
 
     - name: Upload substrate legacy adapter
       uses: actions/upload-artifact@v1
       with:
         name: Adapter Substrate Legacy
-        path: test/adapters/substrate/target/release/substrate-adapter-legacy
+        path: target/release/substrate-adapter-legacy
 
 
   kagome-adapter:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: test/adapters/kagome
 
     steps:
     - uses: actions/checkout@v2
@@ -58,24 +73,30 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.hunter
-        key: hunter-adapter-kagome-${{ hashFiles('test/adapters/kagome/CMakeLists.txt') }}
+        key: hunter-adapter-kagome-${{ hashFiles('CMakeLists.txt') }}
         restore-key: hunter-adapter-kagome-
 
     - name: Build kagome adapter
+      env:
+        CC: gcc-9
+        CXX: g++-9
       run: |
-        mkdir test/adapters/kagome/target
-        cd test/adapters/kagome/target
+        mkdir build && cd build
         cmake .. && cmake --build .
 
     - name: Upload kagome adapter
       uses: actions/upload-artifact@v1
       with:
         name: Adapter Kagome
-        path: test/adapters/kagome/target/kagome-adapter
+        path: build/kagome-adapter
 
 
   gossamer-adapter:
     runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: test/adapters/gossamer
 
     steps:
     - uses: actions/checkout@v2
@@ -84,17 +105,15 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/go/pkg/mod
-        key: go-mod-adapter-gossamer-${{ hashFiles('test/adapters/gossamer/go.sum') }}
-        restore-key: go-mod-adapter-gossamer--
+        key: go-mod-adapter-gossamer-${{ hashFiles('go.sum') }}
+        restore-key: go-mod-adapter-gossamer-
 
     - name: Build gossamer adapter
-      run: |
-        cd test/adapters/gossamer
-        go build
+      run: go build
 
     - name: Upload gossamer adapter
       uses: actions/upload-artifact@v1
       with:
         name: Adapter Gossamer
-        path: test/adapters/gossamer/gossamer-adapter
+        path: gossamer-adapter
 
