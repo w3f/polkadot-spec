@@ -1,0 +1,168 @@
+name: Polkadot Specification Testsuite
+
+on: [push, pull_request]
+
+jobs:
+  build-adapter-substrate:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: test/adapters/substrate
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15 
+        target: wasm32-unknown-unknown 
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-substrate-${{ hashFiles('Cargo.lock') }}
+        restore-key: cargo-registry-adapter-substrate-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-adapter-substrate-${{ hashFiles('Cargo.lock') }}
+        restore-key: cargo-index-adapter-substrate-
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/substrate/target
+        key: cargo-build-adapter-substrate-${{ hashFiles('Cargo.lock') }}-${{ steps.rustup.outputs.rustc_hash }}
+        restore-keys: cargo-build-adapter-substrate-${{ hashFiles('Cargo.lock') }}-
+    - name: Build substrate adapters
+      run: cargo build --release -Zfeatures=build_dep
+    - name: Upload substrate adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/adapters/substrate/target/release/substrate-adapter
+    - name: Upload substrate legacy adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: substrate-adapter-legacy
+        path: test/adapters/substrate/target/release/substrate-adapter-legacy
+
+  build-adapter-kagome:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: test/adapters/kagome
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache hunter packages
+      uses: actions/cache@v1
+      with:
+        path: ~/.hunter
+        key: hunter-adapter-kagome-${{ hashFiles('CMakeLists.txt') }}
+        restore-key: hunter-adapter-kagome-
+    - name: Build kagome adapter
+      env:
+        CC: gcc-9
+        CXX: g++-9
+      run: |
+        mkdir build && cd build
+        cmake -DCMAKE_BUILD_TYPE=Release  .. && cmake --build .
+    - name: Upload kagome adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-adapter
+        path: test/adapters/kagome/build/kagome-adapter
+
+  build-adapter-gossamer:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: test/adapters/gossamer
+    steps:
+    - uses: actions/checkout@v2
+    - name: Cache go modules
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: go-mod-adapter-gossamer-${{ hashFiles('go.sum') }}
+        restore-key: go-mod-adapter-gossamer-
+    - name: Build gossamer adapter
+      run: go build
+    - name: Upload gossamer adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: gossamer-adapter
+        path: test/adapters/gossamer/gossamer-adapter
+
+
+  test-kagome:
+    needs: [ build-adapter-substrate, build-adapter-kagome ]
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture: [ scale-codec, state-trie ]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: /usr/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter
+        path: /usr/bin
+    - name: Run test fixture
+      run: test/check.jl ${{ matrix.implementation }} ${{ matrix.fixture }}
+
+  test-gossamer:
+    needs: [ build-adapter-substrate, build-adapter-gossamer ]
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture: [ scale-codec, state-trie ]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: /usr/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: gossamer-adapter
+        path: /usr/bin
+    - name: Run test fixture
+      run: test/check.jl ${{ matrix.implementation }} ${{ matrix.fixture }}
+
+  test-substrate:
+    needs: build-adapter-substrate
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: /usr/bin
+    - name: Run test fixture
+      run: test/check.jl substrate hostapi
+
+
+  test-hostapi-legacy:
+    needs: [ build-adapter-substrate, build-adapter-kagome ]
+    strategy:
+      fail-fast: false
+      matrix:
+        implementation: [ substrate, kagome ]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: ${{ matrix.implementation }}-adapter
+        path: /usr/bin
+    - name: Run test fixture
+      run: test/check.jl ${{ matrix.implementation }} hostapi-legacy
+
