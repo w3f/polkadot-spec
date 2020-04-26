@@ -71,6 +71,14 @@ println("Implementations: " * join(Config.implementations, ", "))
 println("Fixtures:        " * join(Config.fixtures, ", "))
 println()
 
+# Provide fallback path for locally or ci build adapters
+ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate/target/release"
+ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate/target/debug"
+ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate"
+ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome/build"
+ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome"
+ENV["PATH"] *= ":$(@__DIR__)/adapters/gossamer"
+
 # Execute config
 println("EXECUTION:")
 execute()

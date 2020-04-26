@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 # Setup toolchain (required by kagome and libp2p)
 set(CMAKE_TOOLCHAIN_FILE
-  "${CMAKE_SOURCE_DIR}/CMakeToolchain.cmake"
+  "${CMAKE_SOURCE_DIR}/CMakeToolchain.txt"
   CACHE FILEPATH "Default toolchain"
 )
 
