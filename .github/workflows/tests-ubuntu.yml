@@ -109,13 +109,13 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: /usr/bin
+        path: test/adapters/substrate
     - uses: actions/download-artifact@v1
       with:
         name: kagome-adapter
-        path: /usr/bin
+        path: test/adapters/kagome
     - name: Run test fixture
-      run: test/check.jl ${{ matrix.implementation }} ${{ matrix.fixture }}
+      run: test/check.jl kagome ${{ matrix.fixture }}
 
   test-gossamer:
     needs: [ build-adapter-substrate, build-adapter-gossamer ]
@@ -129,13 +129,13 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: /usr/bin
+        path: test/adapters/substrate
     - uses: actions/download-artifact@v1
       with:
         name: gossamer-adapter
-        path: /usr/bin
+        path: test/adapters/gossamer
     - name: Run test fixture
-      run: test/check.jl ${{ matrix.implementation }} ${{ matrix.fixture }}
+      run: test/check.jl gossamer ${{ matrix.fixture }}
 
   test-substrate:
     needs: build-adapter-substrate
@@ -145,7 +145,7 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: /usr/bin
+        path: test/adapters/substrate
     - name: Run test fixture
       run: test/check.jl substrate hostapi
 
@@ -162,7 +162,7 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: ${{ matrix.implementation }}-adapter
-        path: /usr/bin
+        path: test/adapters/${{ matrix.implementation }}
     - name: Run test fixture
       run: test/check.jl ${{ matrix.implementation }} hostapi-legacy
 
