@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.14)
 
+# Setup toolchain (required by kagome and libp2p)
+set(CMAKE_TOOLCHAIN_FILE
+  "${CMAKE_SOURCE_DIR}/CMakeToolchain.cmake"
+  CACHE FILEPATH "Default toolchain"
+)
+
 # Setup hunter
 set(HUNTER_URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu3.tar.gz")
 set(HUNTER_SHA1 "a5dcae9a2a6a37e214fae20655cfb24e3c0a660e")
@@ -15,10 +21,6 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${HUNTER_ENABLED})
 
 # General config
 project(kagome-adapter LANGUAGES CXX)
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
 
 
 # Find dependencies
