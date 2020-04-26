@@ -28,13 +28,13 @@ trie-root      = "0.16"
 # Polkadot Host API
 wasmi = "0.5.1"
 parking_lot = "0.9.0"
-sp-core = { version = "2.0.0-alpha.5", default-features = false, features = ["full_crypto"] }
-sp-io = { version = "2.0.0-alpha.5", default-features = false }
-sp-externalities = "0.8.0-alpha.5"
-sc-executor = "0.8.0-alpha.5"
-sp-state-machine = "0.8.0-alpha.5"
-sc-offchain = "2.0.0-alpha.5"
-sp-serializer = "2.0.0-alpha.5"
+sp-core = { version = "2.0.0-alpha", default-features = false, features = ["full_crypto"] }
+sp-io = { version = "2.0.0-alpha", default-features = false }
+sp-externalities = "0.8.0-alpha"
+sc-executor = "0.8.0-alpha"
+sp-state-machine = "0.8.0-alpha"
+sc-offchain = "2.0.0-alpha"
+sp-serializer = "2.0.0-alpha"
 
 # Wasm Blob
 wasm-adapter = { path = "./wasm-adapter" }
