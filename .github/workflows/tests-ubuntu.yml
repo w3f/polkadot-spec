@@ -114,6 +114,7 @@ jobs:
       with:
         name: kagome-adapter
         path: test/adapters/kagome
+    - run: cd test/adapters && chmod +x substrate/substrate-adapter kagome/kagome-adapter
     - name: Run test fixture
       run: test/check.jl kagome ${{ matrix.fixture }}
 
@@ -134,6 +135,7 @@ jobs:
       with:
         name: gossamer-adapter
         path: test/adapters/gossamer
+    - run: cd test/adapters && chmod +x substrate/substrate-adapter gossamer/gossamer-adapter
     - name: Run test fixture
       run: test/check.jl gossamer ${{ matrix.fixture }}
 
@@ -146,6 +148,7 @@ jobs:
       with:
         name: substrate-adapter
         path: test/adapters/substrate
+    - run: chmod +x test/adapters/substrate/substrate-adapter
     - name: Run test fixture
       run: test/check.jl substrate hostapi
 
@@ -161,8 +164,18 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
+        name: ${{ matrix.implementation }}-adapter-legacy
+        path: test/adapters/${{ matrix.implementation }}
+      if: matrix.implementation == 'substrate'
+    - uses: actions/download-artifact@v1
+      with:
         name: ${{ matrix.implementation }}-adapter
         path: test/adapters/${{ matrix.implementation }}
+      if: matrix.implementation == 'kagome'
+    - run: chmod +x test/adapters/substrate/substrate-adapter-legacy
+      if: matrix.implementation == 'substrate'
+    - run: chmod +x test/adapters/kagome/kagome-adapter
+      if: matrix.implementation == 'kagome'
     - name: Run test fixture
       run: test/check.jl ${{ matrix.implementation }} hostapi-legacy
 
