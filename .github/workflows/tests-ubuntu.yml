@@ -34,8 +34,8 @@ jobs:
       uses: actions/cache@v1
       with:
         path: test/adapters/substrate/target
-        key: cargo-build-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}-${{ steps.rustup.outputs.rustc_hash }}
-        restore-keys: cargo-build-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}-
+        key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build substrate adapters
       run: cargo build --release
     - name: Upload substrate adapter
