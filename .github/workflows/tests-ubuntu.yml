@@ -62,6 +62,7 @@ jobs:
         path: ~/.hunter
         key: hunter-adapter-kagome-${{ hashFiles('test/adapters/kagome/CMakeLists.txt') }}
         restore-key: hunter-adapter-kagome-
+      if: always()
     - name: Build kagome adapter
       env:
         CC: gcc-9

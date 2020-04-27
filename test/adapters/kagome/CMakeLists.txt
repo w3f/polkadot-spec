@@ -31,6 +31,21 @@ project(kagome-adapter LANGUAGES CXX)
 find_package(kagome REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
+if(kagome_FOUND)
+  message(STATUS "kagome CMake package found: ${kagome_DIR}")
+  message(STATUS "kagome include dirs: ${kagome_INCLUDE_DIRS}")
+
+  message(STATUS "kagome_LIBRARIES contains:")
+  include(CMakePrintHelpers)
+  cmake_print_properties(TARGETS ${kagome_LIBRARIES} kagome::binaryen_wasm_memory
+    PROPERTIES 
+      #LOCATION
+      INTERFACE_INCLUDE_DIRECTORIES
+      INTERFACE_LINK_LIBRARIES
+  )
+endif()
+
+
 # FIXME Kagome's package config should do all this!
 find_package(ed25519 REQUIRED)
 find_package(sr25519 REQUIRED)
@@ -65,16 +80,13 @@ add_executable(kagome-adapter
   src/extension/helpers.hpp
 )
 
-# FIXME This should not be necessary (needed to find "outcome/outcome.hpp")
+# FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")
 target_include_directories(kagome-adapter PUBLIC ${kagome_INCLUDE_DIRS})
 
 target_link_libraries(kagome-adapter
   Boost::program_options
   yaml-cpp
   ${kagome_LIBRARIES}
-
-  # FIXME Missing CMake Interface dependency
-  binaryen::binaryen
 
   # FIXME Patched-in export required for testing
   kagome::binaryen_wasm_memory
