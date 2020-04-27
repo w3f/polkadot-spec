@@ -9,5 +9,5 @@ stdenv.mkDerivation {
 
   buildInputs = [ kagome libyamlcpp ];
 
-  cmakeFlags = [ "-DHUNTER_ENABLED=OFF" ];
+  cmakeFlags = [ "-DHUNTER_ENABLED=ON" ];
 }
