@@ -8,19 +8,21 @@ set(CMAKE_TOOLCHAIN_FILE
 )
 
 
-# Setup hunter
-set(HUNTER_URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu3.tar.gz")
-set(HUNTER_SHA1 "a5dcae9a2a6a37e214fae20655cfb24e3c0a660e")
+# Setup hunter (if avoids git dependency)
+if(HUNTER_ENABLED)
+  set(HUNTER_URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu3.tar.gz")
+  set(HUNTER_SHA1 "a5dcae9a2a6a37e214fae20655cfb24e3c0a660e")
 
-set(HUNTER_FILEPATH_CONFIG ${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake)
+  set(HUNTER_FILEPATH_CONFIG ${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake)
 
-set(HUNTER_PACKAGES kagome yaml-cpp)
+  set(HUNTER_PACKAGES kagome yaml-cpp)
 
-include(FetchContent)
-FetchContent_Declare(SetupHunter GIT_REPOSITORY https://github.com/cpp-pm/gate)
-FetchContent_MakeAvailable(SetupHunter)
+  include(FetchContent)
+  FetchContent_Declare(SetupHunter GIT_REPOSITORY https://github.com/cpp-pm/gate)
+  FetchContent_MakeAvailable(SetupHunter)
 
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${HUNTER_ENABLED})
+  set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
+endif()
 
 
 # General config
@@ -88,7 +90,7 @@ target_link_libraries(kagome-adapter
   yaml-cpp
   ${kagome_LIBRARIES}
 
-  # FIXME Patched-in export required for testing
+  # FIXME Patched-in export required for hostapi testing
   kagome::binaryen_wasm_memory
 )
 

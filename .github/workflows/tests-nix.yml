@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         implementation: [ substrate, kagome, gossamer ]
     runs-on: ubuntu-latest
@@ -26,6 +27,7 @@ jobs:
   test:
     needs: build
     strategy:
+      fail-fast: false
       matrix:
         implementation: [ kagome, gossamer ]
         fixture: [ scale-codec, state-trie ]
@@ -58,6 +60,7 @@ jobs:
   test-hostapi-legacy:
     needs: build
     strategy:
+      fail-fast: false
       matrix:
         implementation: [ substrate, kagome ]
     runs-on: ubuntu-latest
