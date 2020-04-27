@@ -8,21 +8,15 @@ set(CMAKE_TOOLCHAIN_FILE
 )
 
 
-# Setup hunter (if avoids git dependency)
-if(HUNTER_ENABLED)
-  set(HUNTER_URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu3.tar.gz")
-  set(HUNTER_SHA1 "a5dcae9a2a6a37e214fae20655cfb24e3c0a660e")
+# Setup hunter
+include(cmake/HunterGate.cmake)
+HunterGate(
+    URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu3.tar.gz"
+    SHA1 "a5dcae9a2a6a37e214fae20655cfb24e3c0a660e"
+    FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
+)
 
-  set(HUNTER_FILEPATH_CONFIG ${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake)
-
-  set(HUNTER_PACKAGES kagome yaml-cpp)
-
-  include(FetchContent)
-  FetchContent_Declare(SetupHunter GIT_REPOSITORY https://github.com/cpp-pm/gate)
-  FetchContent_MakeAvailable(SetupHunter)
-
-  set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
-endif()
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
 
 
 # General config
@@ -30,6 +24,9 @@ project(kagome-adapter LANGUAGES CXX)
 
 
 # Find dependencies
+hunter_add_package(kagome)
+hunter_add_package(yaml-cpp)
+
 find_package(kagome REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
