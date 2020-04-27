@@ -116,9 +116,9 @@ function run_dataset(func_list, data_list, result_list; strip=true, legacy=false
                 output = ""
                 try
                     output = read(`sh -c $cmd`, String);
-                catch e
-                    # TODO: Warn about failing adapter
-                    @test_broken e
+                catch err
+                    @error "Adapter failed: $err"
+                    @test_broken false
                     continue
                 end
 
@@ -130,7 +130,7 @@ function run_dataset(func_list, data_list, result_list; strip=true, legacy=false
                     result = result_list[counter]
 
                     if isempty(output) && !isempty(result)
-                        # TODO: Warn about missing implementations
+                        @warn "Missing adaption: $cmd"
                         @test_skip false
                     else
                         @test output == result

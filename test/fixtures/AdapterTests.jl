@@ -114,7 +114,7 @@ function run(self::Builder, adapter::String)
             result = read(`sh -c $cmd`, String)
 
             if isempty(result) && !isempty(self.outputs[i])
-                # TOOD: Warn about not implemented test
+                @warn "Missing adaption: $cmd"
                 @test_skip false
             else
                 @test result == self.outputs[i]
@@ -123,8 +123,8 @@ function run(self::Builder, adapter::String)
             if Config.verbose
                 println("[OUTPUT]: ", result)
             end
-        catch
-            # TODO: Warn of failing adapter
+        catch err
+            @error "Adapter failed: $err"
             @test_broken false
         end # try-catch
     end # for inputs
