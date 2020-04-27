@@ -5,7 +5,7 @@ rustWasmPlatform.buildRustPackage {
 
   src = lib.cleanSource ./.;
 
-  cargoSha256 = "0xzg2x4j7wcdmjf5b91aapld18x6whx92s85dnd26ckhs03xqy48";
+  cargoSha256 = "0x8q51nx7zdi7gn2a0c2fl97b5kdzrnacvh0ins5h98r1ign4mhm";
 
   buildInputs = [ protobuf ];
 
@@ -13,7 +13,7 @@ rustWasmPlatform.buildRustPackage {
   PROTOC         = "${protobuf}/bin/protoc";
   PROTOC_INCLUDE = "${protobuf}/include";
 
-  # Fix to allows direct use of wasm-builder for no_std binaries
+  # Fix to allows direct use of wasm-builder for no_std binaries (broken? does not do anything under nix)
   # https://doc.rust-lang.org/nightly/cargo/reference/unstable.html#features
-  cargoBuildFlags = [ "-Zfeatures=build_dep" ];
+  #cargoBuildFlags = [ "-Zfeatures=build_dep" ];
 }
