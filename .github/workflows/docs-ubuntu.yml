@@ -1,0 +1,23 @@
+name: Polkadot Specification Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-key add .github/apt-texmacs.asc
+        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
+        sudo apt-get update
+        sudo apt-get install -y xvfb texmacs
+    - name: Build host specification
+      run: xvfb-run texmacs --convert polkadot-host-spec/polkadot_host_spec.tm polkadot_host_spec.pdf --quit
+    - name: Upload host specification
+      uses: actions/upload-artifact@v1
+      with:
+        name: polkadot_host_spec.pdf
+        path: polkadot_host_spec.pdf
+
