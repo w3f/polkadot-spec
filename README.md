@@ -1,6 +1,8 @@
-[![CircleCI](https://circleci.com/gh/w3f/polkadot-re-tests.svg?style=svg)](https://circleci.com/gh/w3f/polkadot-re-tests)
-
 #  Polkadot Protocol Specification and Conformance Tests
+
+![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)
+![Specification Testsuite on Ubuntu](https://github.com/w3f/polkadot-spec/workflows/Specification%20Testsuite%20on%20Ubuntu/badge.svg)
+![Specification Testsuite on Nix](https://github.com/w3f/polkadot-spec/workflows/Specification%20Testsuite%20on%20Nix/badge.svg)
 
 In this repo you will find:
 
