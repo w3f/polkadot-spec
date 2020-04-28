@@ -1,6 +1,16 @@
-name: Polkadot Specification Build
+name: Specification Publication
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+    - '.github/workflows/docs-ubuntu.yml'
+    - ',github/apt-texmacs.asc'
+    - 'polkadot-host-spec/**'
+  pull_request:
+    paths:
+    - '.github/workflows/docs-ubuntu.yml'
+    - ',github/apt-texmacs.asc'
+    - 'polkadot-host-spec/**'
 
 jobs:
   build:

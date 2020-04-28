@@ -1,6 +1,16 @@
-name: Polkadot Specification Testsuite on Nix
+name: Specification Testsuite on Nix
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+    - '.github/workflows/tests-nix.yml'
+    - 'test/**'
+    - '!test/README.md'
+  pull_request:
+    paths:
+    - '.github/workflows/tests-nix.yml'
+    - 'test/**'
+    - '!test/README.md'
 
 jobs:
   build:
