@@ -54,7 +54,7 @@ jobs:
       with:
         name: pdspec
         skipPush: true
-    - name: Run test fixture
+    - name: Run hostapi fixture against substrate
       run: nix-shell test/nix/ci-shell.nix --quiet --pure --argstr jobid "substrate hostapi" --run "test/check.jl substrate hostapi"
 
   test-hostapi-legacy:
