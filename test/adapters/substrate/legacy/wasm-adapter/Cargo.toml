@@ -1,0 +1,16 @@
+[package]
+name = "wasm-adapter-legacy"
+version = "0.1.0"
+authors = ["Web3 Foundations <hello@web3.foundation>"]
+edition = "2018"
+build = "build.rs"
+
+[dependencies]
+sp-core = { git = "https://github.com/paritytech/substrate", rev = "605f5c1", default-features = false }
+
+[build-dependencies]
+substrate-wasm-builder = "1.0.9"
+
+[features]
+default = [ "std" ]
+std = [ "sp-core/std" ]

@@ -1,14 +1,25 @@
-# Testing
+# Polkadot Protocol Specification Tests
 
-The `test/` directory contains tests for different components from different implementations such as Rust, C++ and Golang:
+This `test/` directory contains specification tests of the differen components of Polkadot, which are run against the different implementations (i.e in Rust, C++ and Golang).
 
-- SCALE Codec
-- State Trie
-- Polkadot Host API
+Currently the testsuite contains the following tests:
 
-This ensures that the different implementations behave the same and produce the identical output.
+- SCALE Codec Encoding (scale-codec)
+- State Trie Hashing (stat-trie)
+- Polkadot Host API (hostapi and hostapi-legacy)
 
-## Local container (CircleCI)
+This ensures that the different implementations behave in the same way and produce the identical output.
+
+# Dependencies
+
+The test suite depends on the following components
+
+- _julia_ to run the testsuite
+- _rust-nightly_ (with wasm target) to build substrate
+- _cmake_ to build Kagome
+- _go_ to build gossamer and adapters
+
+## Through local CircleCI container (deprecated)
 
 The easiest way to run those tests is by using `docker` via the [local-ci tool](https://circleci.com/docs/2.0/local-cli/). No API tokens are required for running the suite.
 
@@ -18,9 +29,7 @@ cd polkadot-spec/
 circleci local execute -c .circleci/config.yml --job runTests
 ```
 
-## Manual install
-
-### Installing toolchains and dependencies
+## On system with aptitude 
 
 Install the required software in order to run all the tests.
 
@@ -56,22 +65,28 @@ ln -sf /usr/bin/gcc-8 /usr/bin/gcc
 ln -sf /usr/bin/g++-8 /usr/bin/g++
 ```
 
-### Running tests
+## On systems with nix
 
-By running `./run_tests.sh` the automated tests get executed. With `./run_tests.sh verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths.
+This is an experimental fork with a prove of concept implementation of the test harness under Nix.
+
+The ```default.nix``` and ```shell.nix``` assumes that nixpkgs is ovelayed with a recent version of w3fpkgs. 
+
+Alternativly there is a ```release.nix``` that uses a pinned version of w3fpkgs ```release.nix``` and ```release-shell.nix```  to maximise the cache hits on the w3fpkgs cachix binary cache.
+
+
+# Running tests
+
+By running `./check.jl` the automated tests get executed. With `./check.jl --verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths. Use `./check.jl --help` to learn how to run individual tests.
+
+By running `nix-shell --run ./runtests.jl` the automated tests get executed. With `nix-shell --run "./runtests.jl verbose"` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths.
+
 
 # Structure
 
-Inside the testing directory, the tests are executed in the following way:
+All fixtures are written in julia and can be found in the fixtures folder. Each subfolder contains a seperate fixtures. To add a new fixture it is enough to add a new subfolder containing a `include.jl` file. 
 
-```bash
-runtests.jl
-|-- scale_codec_tests.jl
-|-- state_trie_tests.jl
-|-- pdre_api_tests.jl
-```
 
-Each of those tests defines how the final executable tests are called and pass data to it. The function names, testing data and results can be found in the *test/fixtures* directory.
+Each of those tests defines how the final executable tests are called and pass data to it. The function names, testing data and results can be found in each fixtures subfolder.
 
 ## Structure of Polkadot Host API tests
 
@@ -79,48 +94,51 @@ Those testers call functions that call the Polkadot Host API.
 
 ```text
 +--------------------+
-| pdre_api_tests.jl  |
+| hostapi/include.jl |
 |                    |
-+----------+---------+
-           |                  +----------------+
-           +----------------->+Wasm Executor   |    *call runtime function*
-           | rust_tester      |                +---------------------------+
-           |                  |                |                           |
-           |                  |                |                           v
-           |                  |  +-------------+                 +---------+---------+
-           |                  |  |Polkadot     |    *call API*   |Wasm Runtime blob  |
-           |                  |  |Runtme       +<----------------+                   |
-           |                  |  |Environment  |                 |                   |
-           |                  |  |             |                 |                   |
-           |                  +--+-------------+                 +-------------------+
++----------|---------+
+           |                      +----------------+
+           +--------------------->+Wasm Executor   |    *call runtime function*
+           | substrate-adapter    |                +---------------------------+
+           |                      |                |                           |
+           |                      |                |                           v
+           |                      |  +-------------+                 +---------|---------+
+           |                      |  |Polkadot     |    *call API*   | wasm-adapter      |
+           |                      |  |Runtme       +<----------------+                   |
+           |                      |  |Environment  |                 |                   |
+           |                      |  |             |                 |                   |
+           |                      +--|-------------+                 +-------------------+
            |
            |
-           +-----------------> ...
-           | go_tester
+           +---------------------> ...
+           | gossamer-adapter
            |
            |
-           +-----------------> ...
-             cpp_tester
+           +---------------------> ...
+             kagome-tester
 
 ```
 
 Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the Polkadot Host API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
 
+Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the PDRE API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
+
 Relevant files:
 
-|Directory/File                     |Description                                        |
-|-----------------------------------|---------------------------------------------------|
-|*test/pdre_api_tests.jl*           |Runs the different testers and passes data to it   |
-|*test/fixtures/pdre_api_dataset.jl*|Contains names of testers, functions and input data|
-|*test/fixtures/pdre_api_result.jl* |Contains the outputs/results of the tester         |
+|Directory/File                     |Description                                          |
+|-----------------------------------|-----------------------------------------------------|
+|*fixtures/HostAPITests.jl*         | Runs the different testers and passes data to it    |
+|*fixtures/hostapi/include.jl*      | Runs the different testers and passes data to it    |
+|*fixtures/hostapi/inputs.jl*       | Contains names of testers, functions and input data |
+|*fixtures/hostapi/outputs.jl*      | Contains the outputs/results of the tester          |
 
 The tests are executed in the following way:
 
-`<tester> pdre-api --function <function> --input <data>`
+`<adapter> pdre-api --function <function> --input <data>`
 
 Example:
 
-`rust_tester pdre-api --function test_blake2_128 --input "Horizontal"`
+`substrate-adapter pdre-api --function test_blake2_128 --input "Horizontal"`
 
 Each function gets tested with multiple inputs and then goes on to the next function.
 
