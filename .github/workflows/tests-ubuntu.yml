@@ -19,9 +19,6 @@ on:
 jobs:
   build-adapter-substrate:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: test/adapters/substrate
     steps:
     - uses: actions/checkout@v2
     - name: Setup rust toolchain
@@ -51,6 +48,7 @@ jobs:
         key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
         restore-keys: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build substrate adapters
+      working-directory: test/adapters/substrate
       run: cargo build --release
     - name: Upload substrate adapter
       uses: actions/upload-artifact@v1
@@ -65,9 +63,6 @@ jobs:
 
   build-adapter-kagome:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: test/adapters/kagome
     steps:
     - uses: actions/checkout@v2
     - name: Cache hunter packages
@@ -76,14 +71,14 @@ jobs:
         path: ~/.hunter
         key: hunter-adapter-kagome-${{ hashFiles('test/adapters/kagome/CMakeLists.txt') }}
         restore-key: hunter-adapter-kagome-
-      if: always()
     - name: Build kagome adapter
+      working-directory: test/adapters/kagome
       env:
         CC: gcc-9
         CXX: g++-9
       run: |
-        mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
+        cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
+        cmake --build build
     - name: Upload kagome adapter
       uses: actions/upload-artifact@v1
       with:
