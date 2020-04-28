@@ -20,7 +20,7 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
 
 
 # General config
-project(kagome-adapter LANGUAGES CXX)
+project(kagome-adapter)
 
 
 # Find dependencies
