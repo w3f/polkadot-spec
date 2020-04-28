@@ -1,6 +1,20 @@
-name: Polkadot Specification Testsuite
+name: Specification Testsuite on Ubuntu
 
-on: [push, pull_request]
+on:
+  push:
+    paths:
+    - '.github/workflows/tests-ubuntu.yml'
+    - 'test/**'
+    - '!test/nix/**'
+    - '!test/README.md'
+    - '!test/**.nix'
+  pull_request:
+    paths:
+    - '.github/workflows/tests-ubuntu.yml'
+    - 'test/**'
+    - '!test/nix/**'
+    - '!test/README.md'
+    - '!test/**.nix'
 
 jobs:
   build-adapter-substrate:
@@ -69,7 +83,7 @@ jobs:
         CXX: g++-9
       run: |
         mkdir build && cd build
-        cmake -DCMAKE_BUILD_TYPE=Release  .. && cmake --build .
+        cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .
     - name: Upload kagome adapter
       uses: actions/upload-artifact@v1
       with:
