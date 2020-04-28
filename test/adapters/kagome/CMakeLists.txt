@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.12)
 
 
 # Setup toolchain (required by kagome and libp2p)
@@ -20,8 +20,7 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
 
 
 # General config
-project(kagome-adapter)
-
+project(kagome-adapter LANGUAGES CXX C)
 
 # Find dependencies
 hunter_add_package(kagome)
@@ -80,7 +79,7 @@ add_executable(kagome-adapter
 )
 
 # FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")
-target_include_directories(kagome-adapter PUBLIC ${kagome_INCLUDE_DIRS})
+target_include_directories(kagome-adapter SYSTEM PRIVATE ${kagome_INCLUDE_DIRS})
 
 target_link_libraries(kagome-adapter
   Boost::program_options
