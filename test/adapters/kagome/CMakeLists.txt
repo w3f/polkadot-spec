@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.12)
 
 
 # Setup toolchain (required by kagome and libp2p)
@@ -20,8 +20,7 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
 
 
 # General config
-project(kagome-adapter)
-
+project(kagome-adapter LANGUAGES CXX C)
 
 # Find dependencies
 hunter_add_package(kagome)
@@ -29,21 +28,6 @@ hunter_add_package(yaml-cpp)
 
 find_package(kagome REQUIRED)
 find_package(yaml-cpp REQUIRED)
-
-if(kagome_FOUND)
-  message(STATUS "kagome CMake package found: ${kagome_DIR}")
-  message(STATUS "kagome include dirs: ${kagome_INCLUDE_DIRS}")
-
-  message(STATUS "kagome_LIBRARIES contains:")
-  include(CMakePrintHelpers)
-  cmake_print_properties(TARGETS ${kagome_LIBRARIES} kagome::binaryen_wasm_memory
-    PROPERTIES 
-      #LOCATION
-      INTERFACE_INCLUDE_DIRECTORIES
-      INTERFACE_LINK_LIBRARIES
-  )
-endif()
-
 
 # FIXME Kagome's package config should do all this!
 find_package(ed25519 REQUIRED)
@@ -80,7 +64,7 @@ add_executable(kagome-adapter
 )
 
 # FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")
-target_include_directories(kagome-adapter PUBLIC ${kagome_INCLUDE_DIRS})
+target_include_directories(kagome-adapter PRIVATE ${kagome_INCLUDE_DIRS})
 
 target_link_libraries(kagome-adapter
   Boost::program_options
