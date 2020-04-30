@@ -1,4 +1,4 @@
-name: Run Specification Testsuits
+name: Conformance Tests
 
 on:
   push:
@@ -14,6 +14,7 @@ on:
 
 jobs:
   build-adapter-substrate:
+    name: Build substrate adapter
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -58,6 +59,7 @@ jobs:
         path: test/adapters/substrate/target/release/substrate-adapter-legacy
 
   build-adapter-kagome:
+    name: Build kagome adapter
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -82,6 +84,7 @@ jobs:
         path: test/adapters/kagome/build/kagome-adapter
 
   build-adapter-gossamer:
+    name: Build gossamer adapter
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -109,6 +112,7 @@ jobs:
       fail-fast: false
       matrix:
         fixture: [ scale-codec, state-trie ]
+    name: Test kagome against ${{ matrix.fixture }} fixture
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -130,6 +134,7 @@ jobs:
       fail-fast: false
       matrix:
         fixture: [ scale-codec, state-trie ]
+    name: Test gossamer against ${{ matrix.fixture }} fixture
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -147,6 +152,7 @@ jobs:
 
   test-substrate:
     needs: build-adapter-substrate
+    name: Test substrate against hostapi fixture
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -165,6 +171,7 @@ jobs:
       fail-fast: false
       matrix:
         implementation: [ substrate, kagome ]
+    name: Test ${{ matrix.implementation }} against hostapi-legacy fixture
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2

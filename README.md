@@ -1,8 +1,7 @@
 #  Polkadot Protocol Specification and Conformance Tests
 
-![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)
-![Specification Testsuite on Ubuntu](https://github.com/w3f/polkadot-spec/workflows/Specification%20Testsuite%20on%20Ubuntu/badge.svg)
-![Specification Testsuite on Nix](https://github.com/w3f/polkadot-spec/workflows/Specification%20Testsuite%20on%20Nix/badge.svg)
+![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publiction/badge.svg)
+![Specification Testsuite](https://github.com/w3f/polkadot-spec/workflows/Conformance%20Tests/badge.svg)
 
 In this repo you will find:
 
