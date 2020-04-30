@@ -165,7 +165,9 @@
   This function should be called when a fully complete block is available
   that is not actively being built on, such as blocks received from other
   peers. Any state changes created by this function on successful execution
-  are persisted.
+  are persisted. Additionally, the seal digest in the block header as
+  described in section <reference|defn-digest> must be removed manually
+  before submitting the block.
 
   \;
 
