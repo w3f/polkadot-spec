@@ -14,9 +14,9 @@
 
 #include <yaml-cpp/yaml.h>
 
-#include <kagome/storage/in_memory/in_memory_storage.hpp>
-#include <kagome/storage/trie/impl/polkadot_trie_db.hpp>
-#include <kagome/storage/trie/impl/trie_db_backend_impl.hpp>
+#include <storage/in_memory/in_memory_storage.hpp>
+#include <storage/trie/impl/polkadot_trie_db.hpp>
+#include <storage/trie/impl/trie_db_backend_impl.hpp>
 
 #include "subcommand_router.hpp"
 

@@ -2,11 +2,11 @@
 
 #include <binaryen/shell-interface.h>
 
-#include <kagome/storage/trie/impl/polkadot_trie_db.hpp>
-#include <kagome/storage/trie/impl/trie_db_backend_impl.hpp>
-#include <kagome/storage/in_memory/in_memory_storage.hpp>
-#include <kagome/runtime/binaryen/wasm_memory_impl.hpp>
-#include <kagome/extensions/impl/extension_impl.hpp>
+#include <storage/trie/impl/polkadot_trie_db.hpp>
+#include <storage/trie/impl/trie_db_backend_impl.hpp>
+#include <storage/in_memory/in_memory_storage.hpp>
+#include <runtime/binaryen/wasm_memory_impl.hpp>
+#include <extensions/impl/extension_impl.hpp>
 
 namespace helpers {
 

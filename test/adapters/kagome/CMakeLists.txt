@@ -11,8 +11,8 @@ set(CMAKE_TOOLCHAIN_FILE
 # Setup hunter
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu3.tar.gz"
-    SHA1 "a5dcae9a2a6a37e214fae20655cfb24e3c0a660e"
+    URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu4.tar.gz"
+    SHA1 "e55ec201201d1e5726b0c849c1c8e2fee003ab9f"
     FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
 )
 
@@ -36,13 +36,12 @@ if(kagome_FOUND)
   message(STATUS "kagome_LIBRARIES contains:")
   include(CMakePrintHelpers)
   cmake_print_properties(TARGETS ${kagome_LIBRARIES} kagome::binaryen_wasm_memory
-    PROPERTIES 
+    PROPERTIES
       #LOCATION
       INTERFACE_INCLUDE_DIRECTORIES
       INTERFACE_LINK_LIBRARIES
   )
 endif()
-
 
 # FIXME Kagome's package config should do all this!
 find_package(ed25519 REQUIRED)
@@ -54,7 +53,6 @@ find_package(xxhash REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(libp2p REQUIRED)
 find_package(binaryen REQUIRED)
-
 
 # Compile and link tester
 add_executable(kagome-adapter
@@ -83,7 +81,7 @@ target_include_directories(kagome-adapter SYSTEM PRIVATE ${kagome_INCLUDE_DIRS})
 
 target_link_libraries(kagome-adapter
   Boost::program_options
-  yaml-cpp
+  yaml-cpp::yaml-cpp
   ${kagome_LIBRARIES}
 
   # FIXME Patched-in export required for hostapi testing

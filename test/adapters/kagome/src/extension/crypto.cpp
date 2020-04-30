@@ -7,8 +7,8 @@
 
 #include "helpers.hpp"
 
-#include <kagome/common/buffer.hpp>
-#include <kagome/common/hexutil.hpp>
+#include <common/buffer.hpp>
+#include <common/hexutil.hpp>
 
 #include <iostream>
 
