@@ -1,20 +1,16 @@
-name: Specification Testsuite on Ubuntu
+name: Run Specification Testsuits
 
 on:
   push:
     paths:
-    - '.github/workflows/tests-ubuntu.yml'
+    - '.github/workflows/tests.yml'
     - 'test/**'
-    - '!test/nix/**'
     - '!test/README.md'
-    - '!test/**.nix'
   pull_request:
     paths:
-    - '.github/workflows/tests-ubuntu.yml'
+    - '.github/workflows/tests.yml'
     - 'test/**'
-    - '!test/nix/**'
     - '!test/README.md'
-    - '!test/**.nix'
 
 jobs:
   build-adapter-substrate:
