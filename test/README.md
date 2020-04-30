@@ -19,21 +19,11 @@ The test suite depends on the following components
 - _cmake_ to build Kagome
 - _go_ to build gossamer and adapters
 
-## Through local CircleCI container (deprecated)
-
-The easiest way to run those tests is by using `docker` via the [local-ci tool](https://circleci.com/docs/2.0/local-cli/). No API tokens are required for running the suite.
-
-```bash
-git clone https://github.com/w3f/polkadot-spec.git
-cd polkadot-spec/
-circleci local execute -c .circleci/config.yml --job runTests
-```
-
 ## On system with aptitude 
 
 Install the required software in order to run all the tests.
 
-**Note:** The test suite requires CMake version 3.16 or higher and gcc/g++ version 8. It is not recommended to run those tests on the main workstation, since changing gcc/g++ versions can lead to issues.
+**Note:** The test suite requires CMake version 3.12 or higher and gcc/g++ version 8. It is not recommended to run those tests on the main workstation, since changing gcc/g++ versions can lead to issues.
 
 ```bash
 apt update && apt install -y --no-install-recommends \
@@ -65,15 +55,6 @@ ln -sf /usr/bin/gcc-8 /usr/bin/gcc
 ln -sf /usr/bin/g++-8 /usr/bin/g++
 ```
 
-## On systems with nix
-
-This is an experimental fork with a prove of concept implementation of the test harness under Nix.
-
-The ```default.nix``` and ```shell.nix``` assumes that nixpkgs is ovelayed with a recent version of w3fpkgs. 
-
-Alternativly there is a ```release.nix``` that uses a pinned version of w3fpkgs ```release.nix``` and ```release-shell.nix```  to maximise the cache hits on the w3fpkgs cachix binary cache.
-
-
 # Running tests
 
 By running `./check.jl` the automated tests get executed. With `./check.jl --verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths. Use `./check.jl --help` to learn how to run individual tests.
@@ -90,7 +71,7 @@ Each of those tests defines how the final executable tests are called and pass d
 
 ## Structure of Polkadot Host API tests
 
-Those testers call functions that call the Polkadot Host API.
+Those adapters call functions that call the Polkadot Host API.
 
 ```text
 +--------------------+
@@ -115,22 +96,22 @@ Those testers call functions that call the Polkadot Host API.
            |
            |
            +---------------------> ...
-             kagome-tester
+             kagome-adapter
 
 ```
 
-Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the Polkadot Host API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
+Each adapter will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the Polkadot Host API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
 
-Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the PDRE API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
+Each adapter will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the PDRE API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
 
 Relevant files:
 
 |Directory/File                     |Description                                          |
 |-----------------------------------|-----------------------------------------------------|
-|*fixtures/HostAPITests.jl*         | Runs the different testers and passes data to it    |
-|*fixtures/hostapi/include.jl*      | Runs the different testers and passes data to it    |
-|*fixtures/hostapi/inputs.jl*       | Contains names of testers, functions and input data |
-|*fixtures/hostapi/outputs.jl*      | Contains the outputs/results of the tester          |
+|*fixtures/HostAPITests.jl*         | Runs the different adapters and passes data to it    |
+|*fixtures/hostapi/include.jl*      | Runs the different adapters and passes data to it    |
+|*fixtures/hostapi/inputs.jl*       | Contains names of adapters, functions and input data |
+|*fixtures/hostapi/outputs.jl*      | Contains the outputs/results of the adapter          |
 
 The tests are executed in the following way:
 

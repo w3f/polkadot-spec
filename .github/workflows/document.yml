@@ -1,14 +1,14 @@
-name: Specification Publication
+name: Publish Specification Documents
 
 on:
   push:
     paths:
-    - '.github/workflows/docs-ubuntu.yml'
+    - '.github/workflows/documents.yml'
     - ',github/apt-texmacs.asc'
     - 'polkadot-host-spec/**'
   pull_request:
     paths:
-    - '.github/workflows/docs-ubuntu.yml'
+    - '.github/workflows/documents.yml'
     - ',github/apt-texmacs.asc'
     - 'polkadot-host-spec/**'
 
