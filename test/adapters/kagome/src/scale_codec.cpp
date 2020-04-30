@@ -13,9 +13,9 @@
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
-#include <kagome/common/hexutil.hpp>
-#include <kagome/common/logger.hpp>
-#include <kagome/scale/scale.hpp>
+#include <common/hexutil.hpp>
+#include <common/logger.hpp>
+#include <scale/scale.hpp>
 
 #include "subcommand_router.hpp"
 

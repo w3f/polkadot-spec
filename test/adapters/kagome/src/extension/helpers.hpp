@@ -1,7 +1,7 @@
 #pragma once
 
-#include <kagome/runtime/wasm_memory.hpp>
-#include <kagome/extensions/extension.hpp>
+#include <runtime/wasm_memory.hpp>
+#include <extensions/extension.hpp>
 
 namespace helpers {
 
