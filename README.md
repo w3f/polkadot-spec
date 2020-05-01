@@ -6,7 +6,7 @@
 In this repo you will find:
 
 - The official [Polkadot Host Specification](./polkadot-host-spec/)
-- The official [Polkadot Protocol Conformance Testsuite](./test/)
+- The official [Polkadot Conformance Testsuite](./test/)
 - Various other files used by the Polkadot spec team
 
 ## Polkadot Host Specification

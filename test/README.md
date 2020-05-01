@@ -1,4 +1,4 @@
-# Polkadot Protocol Conformance Testsuite
+# Polkadot Conformance Testsuite
 
 This `test/` directory contains specification tests of the different components of Polkadot, which are run against the different implementations (i.e in Rust, C++ and Golang) of Polkadot
 
