@@ -6,8 +6,8 @@
 In this repo you will find:
 
 - The official [Polkadot Host Specification](./polkadot-host-spec/)
-- The official [Polkadot Host Conformance Testsuite](./test/)
-- Various other files used in the work of the Polkadot spec team 
+- The official [Polkadot Protocol Conformance Testsuite](./test/)
+- Various other files used by the Polkadot spec team
 
 ## Polkadot Host Specification
 
@@ -17,11 +17,11 @@ Please refer to the [Change Log](./polkadot-host-spec/pdre_change_log.org) and [
 
 For more details please refer [README.md](./polkadot-host-spec/README.md) to the specification.
 
-## Polkadot Host Conformance Tests
+## Polkadot Protocol Conformance Testsuite
 
 The `test/` directory contains tests of different components for the different implementations of the Polkadot protocol.
 
-This ensures that the different implementations behave the same and produce the identical output.
+This ensures that the different implementations behave the same and produce identical output, which is the necessary basis for the interoperability of all Polkadot clients.
 
 For more details plese see the [README.md](./test/README.md) of the testsuite.
 
