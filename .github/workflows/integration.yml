@@ -1,0 +1,108 @@
+name: Integration Testsuite
+
+on:
+  push:
+    paths:
+    - '.github/workflows/integration.yml'
+    - 'test/**'
+    - '!test/adapters/**'
+    - '!test/README.md'
+  pull_request:
+    paths:
+    - '.github/workflows/integration.yml'
+    - 'test/**'
+    - '!test/adapters/**'
+    - '!test/README.md'
+
+jobs:
+  build-substrate:
+    name: Build substrate
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download substrate
+      uses: actions/checkout@v2
+      with:
+        repository: paritytech/polkadot
+        ref: v0.7.32
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-implementation-substrate-${{ hashFiles('Cargo.lock') }}
+        restore-key: cargo-registry-implementation-substrate-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-implementation-substrate-${{ hashFiles('Cargo.lock') }}
+        restore-key: cargo-index-implementation-substrate-
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: target
+        key: cargo-build-implementation-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('Cargo.lock') }}
+        restore-keys: cargo-build-implementation-substrate-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build substrate
+      run: cargo build --release
+    - name: Upload substrate
+      uses: actions/upload-artifact@v1
+      with:
+        name: substrate
+        path: target/release/polkadot
+
+  build-kagome:
+    name: Build kagome
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: soramitsu/kagome
+        ref: 988bc6d93314ca58b320a9d83dcbc4cd3b87b7bb
+    - name: Cache hunter outputs
+      uses: actions/cache@v1
+      with:
+        path: ~/.hunter
+        key: hunter-implementation-kagome-${{ hashFiles('CMakeLists.txt') }}
+        restore-key: hunter-implementation-kagome-
+    - name: Build kagome
+      env:
+        CC: gcc-9
+        CXX: g++-9
+      run: |
+        cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
+        cmake --build build
+    - name: Upload kagome
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome
+        path: build/node/kagome_full/kagome_full
+
+  build-gossamer:
+    name: Build gossamer
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: ChainSafe/gossamer
+        ref: 6988ec67556e1cf4aeaaa342469d132e9fb29882
+    - name: Cache go modules
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: go-mod-implementation-gossamer-${{ hashFiles('go.sum') }}
+        restore-key: go-mod-implementation-gossamer-
+    - name: Build gossamer
+      run: make gossamer
+    - name: Upload gossamer
+      uses: actions/upload-artifact@v1
+      with:
+        name: gossamer
+        path: bin/gossamer
