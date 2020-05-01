@@ -1,14 +1,14 @@
-name: Conformance Tests
+name: Conformance Testsuite
 
 on:
   push:
     paths:
-    - '.github/workflows/tests.yml'
+    - '.github/workflows/testsuite.yml'
     - 'test/**'
     - '!test/README.md'
   pull_request:
     paths:
-    - '.github/workflows/tests.yml'
+    - '.github/workflows/testsuite.yml'
     - 'test/**'
     - '!test/README.md'
 

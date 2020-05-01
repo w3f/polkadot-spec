@@ -1,29 +1,29 @@
-#  Polkadot Protocol Specification and Conformance Tests
+# Polkadot Protocol Specification and Conformance Tests
 
-![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publiction/badge.svg)
-![Specification Testsuite](https://github.com/w3f/polkadot-spec/workflows/Conformance%20Tests/badge.svg)
+![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)
+![Conformance Testsuite](https://github.com/w3f/polkadot-spec/workflows/Conformance%20Testsuite/badge.svg)
 
 In this repo you will find:
 
-- Polkadot Runtime Environment Spec
-- Specification Conformance Tests for various implementation of Polkadot Runtime Enviornment
-- Tests
+- The official [Polkadot Host Specification](./polkadot-host-spec/)
+- The official [Polkadot Host Conformance Testsuite](./test/)
+- Various other files used in the work of the Polkadot spec team 
 
-## Polkadot Runtime Environment Specification
+## Polkadot Host Specification
 
-Here your can find the latest version of [Polkadot Runtime Environment Specification](./polkadot-host-spec/polkadot_host_spec.pdf)
+Here your can find the latest version of the [Polkadot Host Specification](./polkadot-host-spec/polkadot_host_spec.pdf)
 
-Please refer to [Change log](./runtime-environment-spec/pdre_change_log.org) to review the history of changes to the spec.
+Please refer to the [Change Log](./polkadot-host-spec/pdre_change_log.org) and [PDF Diff](./polkadot-host-spec/polkadot_host_spec-diffed-updates.pdf) to review the history of changes to the specification.
 
-## Testing
+For more details please refer [README.md](./polkadot-host-spec/README.md) to the specification.
 
-The `test/` directory contains tests for different components from different implementations such as Rust, C++ and Golang:
+## Polkadot Host Conformance Tests
 
-- SCALE Codec
-- State Trie
-- Polkadot Host API
+The `test/` directory contains tests of different components for the different implementations of the Polkadot protocol.
 
-This ensures that the different implementations behave the same and produce the identical output. See [test/README.md](./test/README.md) for more.
+This ensures that the different implementations behave the same and produce the identical output.
+
+For more details plese see the [README.md](./test/README.md) of the testsuite.
 
 ## Genesis files
 

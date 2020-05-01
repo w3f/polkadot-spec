@@ -1,6 +1,6 @@
-# Polkadot Protocol Specification Tests
+# Polkadot Protocol Conformance Testsuite
 
-This `test/` directory contains specification tests of the differen components of Polkadot, which are run against the different implementations (i.e in Rust, C++ and Golang).
+This `test/` directory contains specification tests of the different components of Polkadot, which are run against the different implementations (i.e in Rust, C++ and Golang) of Polkadot
 
 Currently the testsuite contains the following tests:
 
@@ -8,22 +8,57 @@ Currently the testsuite contains the following tests:
 - State Trie Hashing (stat-trie)
 - Polkadot Host API (hostapi and hostapi-legacy)
 
-This ensures that the different implementations behave in the same way and produce the identical output.
+This ensures that the different implementations behave in the same way and produce the identical output. 
 
 # Dependencies
 
-The test suite depends on the following components
+The test suite depends on the following components:
 
 - _julia_ to run the testsuite
-- _rust-nightly_ (with wasm target) to build substrate
-- _cmake_ to build Kagome
-- _go_ to build gossamer and adapters
+- _rust-nightly_ (with wasm target) to build substrate 
+- _cmake_ to build kagome
+- _go_ to build gossamer
 
-## On system with aptitude 
+While the official target of our testsuite are currently only debian-based systems, there is in general no reason for it to not be able to run on  any recent GNU/Linux or even UNIX-based OS, like OS X.
+
+## General Build
+
+Each of the API adapters has to be build (see [adapters subfolder](./adapters/)), before the testsuite can be run.
+
+### Substrate API Adapter
+
+Needs Rust Nightly with WASM toolchain (and potentially libclang?)
+
+```
+cargo build --release
+```
+
+### Kagome API Adapter
+
+Needs CMake, GCC or Clang >= 8, Rust, Perl.
+
+```
+cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
+cmake --build build
+```
+
+### Gossamer API Adapter
+
+Needs recent version of Go.
+
+```
+go build
+```
+
+## On Debian-based systems
+
+### Install dependencies
 
 Install the required software in order to run all the tests.
 
-**Note:** The test suite requires CMake version 3.12 or higher and gcc/g++ version 8. It is not recommended to run those tests on the main workstation, since changing gcc/g++ versions can lead to issues.
+**Note:** The test suite requires CMake version 3.12 or higher and gcc/g++ or clang version 8. However it is not recommended to change your default gcc/g++ versions for your whole installation, as that can lead to issues down the road. Please use the environment variables `CC` and `CXX` to temporally change the used compiler instead.
+
+For example on 18.04, something like this should get you started:
 
 ```bash
 apt update && apt install -y --no-install-recommends \
@@ -40,19 +75,31 @@ apt update && apt install -y --no-install-recommends \
   julia \
   python
 
-# Install CMake 3.16.0
-wget https://github.com/Kitware/CMake/releases/download/v3.16.0-rc4/cmake-3.16.0-rc4-Linux-x86_64.sh
-chmod +x cmake-3.16.0-rc4-Linux-x86_64.sh
-./cmake-3.16.0-rc4-Linux-x86_64.sh --skip-license --prefix=/usr/local
+### Install recent CMake
 
-# Install Rust and toolchains required for Wasm
-curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly
-rustup target add wasm32-unknown-unknown --toolchain nightly
-cargo install --git https://github.com/alexcrichton/wasm-gc
+This can be skipped on Ubunut 20.04, as a recent version of CMake can be installed through aptitude. See the official [cmake homepage](https://cmake.org/download) for a recent version:
 
-# Set default gcc and g++ binaries to version 8
-ln -sf /usr/bin/gcc-8 /usr/bin/gcc
-ln -sf /usr/bin/g++-8 /usr/bin/g++
+```bash
+wget https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2-Linux-x86_64.sh
+chmod +x cmake-3.17.2-Linux-x86_64.sh
+./cmake-3.17.2-Linux-x86_64.sh --skip-license --prefix=/usr/local
+```
+
+### Install Rust
+
+While kagome only needs a recent version of rust, substrate depends on nightly and the wasm32 toolchain to build its nostd wasm targets.
+
+```
+curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly --target wasm32-unknown-unknown
+```
+
+### Force a recent C/C++ compiler
+
+This is only needed before you build kagome (adapter). GCC 9, Clang 8 or Clang 9 work as well. Change example accordingly:
+
+```
+export CC=gcc-8
+export CXX=g++-8
 ```
 
 # Running tests

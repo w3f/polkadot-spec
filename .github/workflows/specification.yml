@@ -3,12 +3,12 @@ name: Specification Publication
 on:
   push:
     paths:
-    - '.github/workflows/documents.yml'
+    - '.github/workflows/specification.yml'
     - '.github/apt-texmacs.asc'
     - 'polkadot-host-spec/**'
   pull_request:
     paths:
-    - '.github/workflows/documents.yml'
+    - '.github/workflows/specification.yml'
     - '.github/apt-texmacs.asc'
     - 'polkadot-host-spec/**'
 
