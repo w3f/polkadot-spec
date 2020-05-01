@@ -1,7 +1,7 @@
 # Polkadot Protocol Specification and Conformance Tests
 
-![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)
-![Conformance Testsuite](https://github.com/w3f/polkadot-spec/workflows/Conformance%20Testsuite/badge.svg)
+[![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Specification+Publication%22)
+[![Conformance Testsuite](https://github.com/w3f/polkadot-spec/workflows/Conformance%20Testsuite/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Conformance+Testsuite%22)
 
 In this repo you will find:
 
