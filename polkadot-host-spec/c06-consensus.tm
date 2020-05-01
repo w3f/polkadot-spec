@@ -811,9 +811,9 @@
   <subsection|Preliminaries>
 
   <\definition>
-    A <strong|GRANDPA Voter>, <math|v>, is represented by a key pair
-    <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
-    <math|k<rsub|v><rsup|pr>> represents its private key which is an
+    <label|defn-grandpa-voter>A <strong|GRANDPA Voter>, <math|v>, is
+    represented by a key pair <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>>
+    where <math|k<rsub|v><rsup|pr>> represents its private key which is an
     <math|ED25519> private key, is a node running GRANDPA protocol and
     broadcasts votes to finalize blocks in a Polkadot Host-based chain. The
     <strong|set of all GRANDPA voters> for a given block B is indicated by
@@ -826,7 +826,7 @@
 
     where <math|<math-tt|grandpa_authorities>> is the entry into Runtime
     described in Section <reference|sect-rte-grandpa-auth>. We refer to
-    <math|\<bbb-V\><rsub|B> > as <math|B> when there is no chance of
+    <math|\<bbb-V\><rsub|B> > as <math|\<bbb-V\>> when there is no chance of
     ambiguity.
   </definition>
 
@@ -1082,12 +1082,16 @@
 
   <subsubsection|Catch-up Messages><label|sect-grandpa-catchup-messages>
 
-  Whenever a Polkadot node detects likely by means of neighbor packet network
-  message (see Section <reference|sect-msg-neighbor-packet>) that it is
-  lagging behind the finality procedure and therefore needs to initiate a
-  catch-up procedure explained in Section <reference|sect-grandpa-catchup> by
-  means of sending <em|catch-up request> and processing <em|catch-up
-  response> as specified here:
+  Whenever a Polkadot node detects that it is lagging behind the finality
+  procedure and therefore needs to initiate a catch-up procedure. Neighbor
+  packet network message (see Section <reference|sect-msg-neighbor-packet>)
+  the round number for the last finalized GRANDPA round which the sending
+  peer has observed. This provides a mean to identifys such a descrepency and
+  to initiate the catch-up procedure explained in Section
+  <reference|sect-grandpa-catchup>.
+
+  This procedure involves sending <em|catch-up request> and processing
+  <em|catch-up response> messages specified here:
 
   <\definition>
     <label|defn-grandpa-catchup-request-msg><strong|GRANDPA catch-up request
@@ -1115,6 +1119,11 @@
     <\equation*>
       M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>\<assign\>Enc<rsub|SC><around*|(|id<rsub|\<bbb-V\>>,r,J<rsup|r,pv><around*|(|B|)>,J<rsup|r,pc><around*|(|B|)>,H<rsub|h><around*|(|B<rprime|'>|)>,H<rsub|i><around*|(|B<rprime|'>|)>|)>
     </equation*>
+
+    Where B is the highest block which <math|v> believes to be finalized in
+    round <math|r>. <math|B<rprime|'>> is the highest anscestor of all blocks
+    voted on in <math|J<rsup|r,pc><around*|(|B|)>> with the exception of the
+    equivocationary votes.
   </definition>
 
   <subsection|Initiating the GRANDPA State>
@@ -1182,7 +1191,7 @@
       </state>
 
       <\state>
-        <math|primary\<leftarrow\>><name|Derive-Primary>
+        <math|primary\<leftarrow\>><name|Derive-Primary>(<math|r>)
       </state>
 
       <\state>
@@ -1259,12 +1268,28 @@
     </algorithmic>
   </algorithm>
 
-  The condition of <em|completablitiy> is defined in Definition
-  <reference|defn-grandpa-completable>. <name|Best-Final-Candidate> function
-  is explained in Algorithm <reference|algo-grandpa-best-candidate>.
+  <name|Derive-Primary> is described in Algorithm
+  <reference|algo-derive-primary>. The condition of <em|completablitiy> is
+  defined in Definition <reference|defn-grandpa-completable>.
+  <name|Best-Final-Candidate> function is explained in Algorithm
+  <reference|algo-grandpa-best-candidate>.
   <name|<name|Attempt-To-Finalize-Round>(<math|r>)> is described in Algorithm
   <reference|algo-attempt-to\Ufinalize> and <name|Finalizabl> is defined in
   Algorithm <reference|algo-finalizable>.
+
+  <\algorithm|<label|algo-derive-primary><name|Derive-Primary>(<math|r>: the
+  GRANDPA round whose primary to be determined)>
+    <\algorithmic>
+      <\state>
+        <\RETURN>
+          <math|r mod<around*|\||\<bbb-V\>|\|>>
+        </RETURN>
+      </state>
+    </algorithmic>
+  </algorithm>
+
+  <math|\<bbb-V\>> is the GRANDPA voter set as defined in Definition
+  <reference|defn-grandpa-voter>.
 
   <\algorithm|<label|algo-grandpa-best-candidate><name|Best-Final-Candidate>(<math|r>)>
     <\algorithmic>
@@ -1720,17 +1745,18 @@
 
 <\references>
   <\collection>
-    <associate|algo-attempt-to\Ufinalize|<tuple|6.13|?>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|6.14|?>>
     <associate|algo-block-production|<tuple|6.3|?>>
     <associate|algo-block-production-lottery|<tuple|6.1|?>>
     <associate|algo-build-block|<tuple|6.7|?>>
+    <associate|algo-derive-primary|<tuple|6.10|?>>
     <associate|algo-epoch-randomness|<tuple|6.4|?>>
-    <associate|algo-finalizable|<tuple|6.12|?>>
-    <associate|algo-grandpa-best-candidate|<tuple|6.10|?>>
+    <associate|algo-finalizable|<tuple|6.13|?>>
+    <associate|algo-grandpa-best-candidate|<tuple|6.11|?>>
     <associate|algo-grandpa-round|<tuple|6.9|?>>
     <associate|algo-initiate-grandpa|<tuple|6.8|?>>
-    <associate|algo-process-catchup-request|<tuple|6.14|?>>
-    <associate|algo-process-catchup-response|<tuple|6.15|?>>
+    <associate|algo-process-catchup-request|<tuple|6.15|?>>
+    <associate|algo-process-catchup-response|<tuple|6.16|?>>
     <associate|algo-slot-time|<tuple|6.2|?>>
     <associate|algo-verify-authorship-right|<tuple|6.5|?>>
     <associate|algo-verify-slot-winner|<tuple|6.6|?>>
@@ -1775,6 +1801,7 @@
     <associate|defn-grandpa-catchup-response-msg|<tuple|6.28|?>>
     <associate|defn-grandpa-completable|<tuple|6.23|?>>
     <associate|defn-grandpa-justification|<tuple|6.25|?>>
+    <associate|defn-grandpa-voter|<tuple|6.14|?>>
     <associate|defn-slot-offset|<tuple|6.11|?>>
     <associate|defn-vote|<tuple|6.16|?>>
     <associate|defn-winning-threshold|<tuple|6.8|?>>
@@ -1901,18 +1928,15 @@
       <no-break><pageref|auto-24>>
 
       <with|par-left|<quote|2tab>|6.4.1.1<space|2spc>Sending catch-up
-      <with|color|<quote|dark red>|request><with|color|<quote|dark
-      green>|requests> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-25>>
 
       <with|par-left|<quote|2tab>|6.4.1.2<space|2spc>Processing catch-up
-      <with|color|<quote|dark red>|request><with|color|<quote|dark
-      green>|requests> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-26>>
 
       <with|par-left|<quote|2tab>|6.4.1.3<space|2spc>Processing catch-up
-      <with|color|<quote|dark red>|response><with|color|<quote|dark
-      green>|responses> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      responses <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
     </associate>
   </collection>
