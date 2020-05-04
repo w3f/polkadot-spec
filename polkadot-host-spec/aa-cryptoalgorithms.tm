@@ -134,6 +134,14 @@
   needs to create a certificate by signing a session public key and
   broadcastg this certificate via an extrinsic. <todo|spec the detail of the
   data structure of the certificate etc.>
+
+ \;
+ 
+ <\with|par-mode|right>
+    <qed>
+  </with>
+
+  \;
 </body>
 
 <\initial>
