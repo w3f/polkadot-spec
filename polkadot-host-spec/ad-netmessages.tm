@@ -300,6 +300,15 @@
   <subsection|Neighbor Packet><label|sect-msg-neighbor-packet>
 
   <todo|Place holder for speccing Neighbor Packet message>
+
+\;
+  
+  <\with|par-mode|right>
+    <qed>
+  </with>
+
+  \;
+
 </body>
 
 <\initial>

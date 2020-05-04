@@ -1717,6 +1717,8 @@
     </algorithmic>
   </algorithm>
 
+  \;
+
   <\with|par-mode|right>
     <qed>
   </with>
