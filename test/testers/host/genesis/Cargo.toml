@@ -1,0 +1,23 @@
+[package]
+name = 'host-tester-genesis'
+version = '2.0.0-alpha.5'
+authors = ['Florian Franzen']
+edition = '2018'
+
+
+[dependencies.host-tester-runtime]
+path = '../runtime'
+version = '2.0.0-alpha.5'
+
+
+[dependencies.sc-service]
+version = '0.8.0-alpha.5'
+default-features = false
+
+[dependencies.sp-core]
+version = '2.0.0-alpha.5'
+default-features = false
+
+[dependencies.sp-runtime]
+version = '2.0.0-alpha.5'
+default-features = false
