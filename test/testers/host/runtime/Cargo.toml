@@ -1,12 +1,13 @@
 [package]
 name = 'host-tester-runtime'
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha.6'
 edition = '2018'
+
 
 [dependencies.balances]
 default-features = false
 package = 'pallet-balances'
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.codec]
 default-features = false
@@ -16,16 +17,16 @@ version = '1.2.0'
 
 [dependencies.frame-executive]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.frame-support]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.randomness-collective-flip]
 default-features = false
 package = 'pallet-randomness-collective-flip'
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.serde]
 features = ['derive']
@@ -34,49 +35,74 @@ version = '1.0.101'
 
 [dependencies.sp-api]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.sp-block-builder]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.sp-core]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.sp-inherents]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.sp-io]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.sp-runtime]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.sp-std]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.sp-transaction-pool]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.sp-version]
 default-features = false
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
+
+[dependencies.timestamp]
+default-features = false
+package = 'pallet-timestamp'
+version = '2.0.0-alpha'
+
+[dependencies.sp-babe]
+default-features = false
+package = 'sp-consensus-babe'
+version = '0.8.0-alpha'
+
+[dependencies.babe]
+default-features = false
+package = 'pallet-babe'
+version = '2.0.0-alpha'
+
+[dependencies.sp-grandpa]
+default-features = false
+package = 'sp-finality-grandpa'
+version = '2.0.0-alpha'
+
+[dependencies.grandpa]
+default-features = false
+package = 'pallet-grandpa'
+version = '2.0.0-alpha'
 
 [dependencies.sudo]
 default-features = false
 package = 'pallet-sudo'
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 [dependencies.system]
 default-features = false
 package = 'frame-system'
-version = '2.0.0-alpha.5'
+version = '2.0.0-alpha'
 
 
 [build-dependencies.wasm-builder-runner]
@@ -102,6 +128,10 @@ std = [
     'sp-std/std',
     'sp-transaction-pool/std',
     'sp-version/std',
+    'sp-babe/std',
+    'babe/std',
+    'sp-grandpa/std',
+    'grandpa/std',
     'sudo/std',
     'system/std',
 ]

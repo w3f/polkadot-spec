@@ -3,11 +3,11 @@ use host_tester_runtime::{
 	AccountId, BalancesConfig, GenesisConfig,
 	SudoConfig, SystemConfig, WASM_BINARY, Signature
 };
-use sc_service;
+use sc_service::{GenericChainSpec, ChainType};
 use sp_runtime::traits::{Verify, IdentifyAccount};
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
-type ChainSpec = sc_service::GenericChainSpec<GenesisConfig>;
+type ChainSpec = GenericChainSpec<GenesisConfig>;
 
 /// Helper function to generate a crypto pair from seed
 fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {
@@ -30,6 +30,7 @@ fn default_chain_spec() -> ChainSpec {
   ChainSpec::from_genesis(
 	  "Specification Test Runtime",
 		"spectest",
+    ChainType::Local,
 	  || GenesisConfig {
 		  system: Some(SystemConfig {
 			  code: WASM_BINARY.to_vec(),
@@ -43,6 +44,8 @@ fn default_chain_spec() -> ChainSpec {
 				  get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
 			  ].iter().cloned().map(|k|(k, 1 << 60)).collect(),
 		  }),
+      babe: Some(Default::default()),
+      grandpa: Some(Default::default()),
 		  sudo: Some(SudoConfig {
 			  key: get_account_id_from_seed::<sr25519::Public>("Alice"),
 		  }),

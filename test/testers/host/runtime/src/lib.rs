@@ -1,5 +1,3 @@
-//! The Substrate Node Template runtime. This can be compiled with `#[no_std]`, ready for Wasm.
-
 #![cfg_attr(not(feature = "std"), no_std)]
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit="256"]
@@ -11,13 +9,15 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 use sp_std::prelude::*;
 use sp_core::OpaqueMetadata;
 use sp_runtime::{
-	ApplyExtrinsicResult, transaction_validity::TransactionValidity, generic, create_runtime_str,
-	MultiSignature, print,
+    generic, create_runtime_str, print, impl_opaque_keys,
+	  ApplyExtrinsicResult, MultiSignature,
+    transaction_validity::{TransactionValidity, TransactionSource},
 };
 use sp_runtime::traits::{
 	BlakeTwo256, Block as BlockT, IdentityLookup, Verify, IdentifyAccount
 };
 use sp_api::impl_runtime_apis;
+use grandpa::AuthorityList as GrandpaAuthorityList;
 use sp_version::RuntimeVersion;
 
 // A few exports that help ease life for downstream crates.
@@ -33,6 +33,9 @@ pub use frame_support::{
 
 /// An index to a block.
 pub type BlockNumber = u32;
+
+/// A timestamp or duration.
+pub type Moment = u64;
 
 /// Alias to 512-bit hash when used in the context of a transaction signature on the chain.
 pub type Signature = MultiSignature;
@@ -73,6 +76,12 @@ pub mod opaque {
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
 
+  impl_opaque_keys! {
+    pub struct SessionKeys {
+		  pub babe: Babe,
+		  pub grandpa: Grandpa,
+	  }
+  }
 }
 
 /// This runtime version.
@@ -85,14 +94,22 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	apis: RUNTIME_API_VERSIONS,
 };
 
-pub const MILLISECS_PER_BLOCK: u64 = 6000;
+/// Targeted block time.
+pub const MILLISECS_PER_BLOCK: Moment = 6000;
 
-pub const SLOT_DURATION: u64 = MILLISECS_PER_BLOCK;
+/// Babe slot duration.
+pub const SLOT_DURATION: Moment = MILLISECS_PER_BLOCK;
 
 // These time units are defined in number of blocks.
 pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 pub const HOURS: BlockNumber = MINUTES * 60;
 pub const DAYS: BlockNumber = HOURS * 24;
+
+/// Babe epoch duration.
+pub const EPOCH_DURATION_IN_BLOCKS: BlockNumber = 4 * HOURS;
+
+/// 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
+pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
 
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
@@ -146,7 +163,30 @@ impl system::Trait for Runtime {
 }
 
 parameter_types! {
-	pub const MinimumPeriod: u64 = SLOT_DURATION / 2;
+	  pub const MinimumPeriod: Moment = SLOT_DURATION / 2;
+}
+
+impl timestamp::Trait for Runtime {
+	  type Moment = Moment;
+	  type OnTimestampSet = Babe;
+	  type MinimumPeriod = MinimumPeriod;
+}
+
+parameter_types! {
+	  pub const EpochDuration: u64 = EPOCH_DURATION_IN_BLOCKS as u64;
+	  pub const ExpectedBlockTime: Moment = MILLISECS_PER_BLOCK;
+}
+
+impl babe::Trait for Runtime {
+	  type EpochDuration = EpochDuration;
+	  type ExpectedBlockTime = ExpectedBlockTime;
+
+	  // session module is the trigger
+	  type EpochChangeTrigger = babe::ExternalTrigger;
+}
+
+impl grandpa::Trait for Runtime {
+	  type Event = Event;
 }
 
 parameter_types! {
@@ -176,6 +216,9 @@ construct_runtime!(
 	{
 		System: system::{Module, Call, Config, Storage, Event<T>},
 		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
+		Timestamp: timestamp::{Module, Call, Storage, Inherent},
+		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
+		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 	}
@@ -256,10 +299,36 @@ impl_runtime_apis! {
 	}
 
 	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
-		fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
-      print("[wasm-tester] validate_transaction");
-			Executive::validate_transaction(tx)
+		fn validate_transaction(
+      source: TransactionSource,
+      tx: <Block as BlockT>::Extrinsic
+    ) -> TransactionValidity {
+      print("[host-tester] validate_transaction");
+			Executive::validate_transaction(source, tx)
 		}
 	}
 
+	impl sp_grandpa::GrandpaApi<Block> for Runtime {
+	  fn grandpa_authorities() -> GrandpaAuthorityList {
+      print("[host-tester] grandpa_authorities");
+		  Grandpa::grandpa_authorities()
+		}
+  }
+
+  impl sp_babe::BabeApi<Block> for Runtime {
+	  fn configuration() -> sp_babe::BabeConfiguration {
+	    sp_babe::BabeConfiguration {
+		    slot_duration: Babe::slot_duration(),
+				epoch_length: EpochDuration::get(),
+				c: PRIMARY_PROBABILITY,
+				genesis_authorities: Babe::authorities(),
+				randomness: Babe::randomness(),
+			  secondary_slots: true,
+			}
+		}
+
+		fn current_epoch_start() -> sp_babe::SlotNumber {
+		  Babe::current_epoch_start()
+		}
+	}
 }
