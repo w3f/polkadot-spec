@@ -21,3 +21,13 @@ default-features = false
 [dependencies.sp-runtime]
 version = '2.0.0-alpha'
 default-features = false
+
+[dependencies.sp-babe]
+package = 'sp-consensus-babe'
+version = '0.8.0-alpha'
+default-features = false
+
+[dependencies.sp-grandpa]
+package = 'sp-finality-grandpa'
+version = '2.0.0-alpha'
+default-features = false

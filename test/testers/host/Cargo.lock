@@ -1241,7 +1241,9 @@ version = "2.0.0-alpha.6"
 dependencies = [
  "host-tester-runtime",
  "sc-service",
+ "sp-consensus-babe",
  "sp-core",
+ "sp-finality-grandpa",
  "sp-runtime",
 ]
 
@@ -1268,6 +1270,7 @@ dependencies = [
  "sp-inherents",
  "sp-io",
  "sp-runtime",
+ "sp-session",
  "sp-std",
  "sp-transaction-pool",
  "sp-version",

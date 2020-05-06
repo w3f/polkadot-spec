@@ -3,11 +3,11 @@ name = 'host-tester-runtime'
 version = '2.0.0-alpha.6'
 edition = '2018'
 
-
-[dependencies.balances]
-default-features = false
-package = 'pallet-balances'
-version = '2.0.0-alpha'
+# Base dependencies
+[dependencies.serde]
+features = ['derive']
+optional = true
+version = '1.0.101'
 
 [dependencies.codec]
 default-features = false
@@ -15,96 +15,112 @@ features = ['derive']
 package = 'parity-scale-codec'
 version = '1.2.0'
 
+
+# Substrate FRAME is the basis
 [dependencies.frame-executive]
-default-features = false
 version = '2.0.0-alpha'
+default-features = false
 
 [dependencies.frame-support]
-default-features = false
 version = '2.0.0-alpha'
-
-[dependencies.randomness-collective-flip]
 default-features = false
-package = 'pallet-randomness-collective-flip'
-version = '2.0.0-alpha'
 
-[dependencies.serde]
-features = ['derive']
-optional = true
-version = '1.0.101'
 
-[dependencies.sp-api]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.sp-block-builder]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.sp-core]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.sp-inherents]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.sp-io]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.sp-runtime]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.sp-std]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.sp-transaction-pool]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.sp-version]
-default-features = false
-version = '2.0.0-alpha'
-
-[dependencies.timestamp]
-default-features = false
-package = 'pallet-timestamp'
-version = '2.0.0-alpha'
-
-[dependencies.sp-babe]
-default-features = false
-package = 'sp-consensus-babe'
-version = '0.8.0-alpha'
-
-[dependencies.babe]
-default-features = false
-package = 'pallet-babe'
-version = '2.0.0-alpha'
-
-[dependencies.sp-grandpa]
-default-features = false
-package = 'sp-finality-grandpa'
-version = '2.0.0-alpha'
-
-[dependencies.grandpa]
-default-features = false
-package = 'pallet-grandpa'
-version = '2.0.0-alpha'
-
-[dependencies.sudo]
-default-features = false
-package = 'pallet-sudo'
-version = '2.0.0-alpha'
-
+# Substrate pallet to provide runtime basics
 [dependencies.system]
-default-features = false
 package = 'frame-system'
 version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.collective-flip]
+package = 'pallet-randomness-collective-flip'
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.timestamp]
+package = 'pallet-timestamp'
+version = '2.0.0-alpha'
+default-features = false
 
 
+# Polkadot consensus and finality
+[dependencies.babe]
+package = 'pallet-babe'
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.grandpa]
+package = 'pallet-grandpa'
+version = '2.0.0-alpha'
+default-features = false
+
+
+# TODO Only enabled via feature flag?
+[dependencies.balances]
+default-features = false
+package = 'pallet-balances'
+version = '2.0.0-alpha'
+
+# TODO Only enabled via feature flag?
+[dependencies.sudo]
+package = 'pallet-sudo'
+version = '2.0.0-alpha'
+default-features = false
+
+
+# List of required substrate primitives (sp)
+[dependencies.sp-api]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-block-builder]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-core]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-inherents]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-io]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-runtime]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-std]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-transaction-pool]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-version]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-session]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-babe]
+package = 'sp-consensus-babe'
+version = '0.8.0-alpha'
+default-features = false
+
+[dependencies.sp-grandpa]
+package = 'sp-finality-grandpa'
+version = '2.0.0-alpha'
+default-features = false
+
+
+# TODO: Drop runner, use builder instead with -Zfeatures=build_dep cargo flag
 [build-dependencies.wasm-builder-runner]
 package = 'substrate-wasm-builder-runner'
 version = '1.0.5'
@@ -112,13 +128,18 @@ version = '1.0.5'
 
 [features]
 default = ['std']
+# Propagate std flag if set
 std = [
-    'balances/std',
+    'serde',
     'codec/std',
     'frame-executive/std',
     'frame-support/std',
-    'randomness-collective-flip/std',
-    'serde',
+    'system/std',
+    'collective-flip/std',
+    'babe/std',
+    'grandpa/std',
+    'balances/std',
+    'sudo/std',
     'sp-api/std',
     'sp-block-builder/std',
     'sp-core/std',
@@ -128,10 +149,7 @@ std = [
     'sp-std/std',
     'sp-transaction-pool/std',
     'sp-version/std',
+    'sp-session/std',
     'sp-babe/std',
-    'babe/std',
     'sp-grandpa/std',
-    'grandpa/std',
-    'sudo/std',
-    'system/std',
 ]

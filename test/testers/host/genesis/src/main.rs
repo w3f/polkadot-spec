@@ -1,10 +1,14 @@
 use sp_core::{Pair, Public, sr25519};
 use host_tester_runtime::{
-	AccountId, BalancesConfig, GenesisConfig,
-	SudoConfig, SystemConfig, WASM_BINARY, Signature
+  AccountId, BabeConfig, BalancesConfig, GenesisConfig,
+	GrandpaConfig, SudoConfig, SystemConfig, Signature,
+  WASM_BINARY,
 };
 use sc_service::{GenericChainSpec, ChainType};
 use sp_runtime::traits::{Verify, IdentifyAccount};
+
+use sp_babe::AuthorityId as BabeId;
+use sp_grandpa::AuthorityId as GrandpaId;
 
 /// Specialized `ChainSpec`. This is a specialization of the general Substrate ChainSpec type.
 type ChainSpec = GenericChainSpec<GenesisConfig>;
@@ -30,7 +34,7 @@ fn default_chain_spec() -> ChainSpec {
   ChainSpec::from_genesis(
 	  "Specification Test Runtime",
 		"spectest",
-    ChainType::Local,
+    ChainType::Development,
 	  || GenesisConfig {
 		  system: Some(SystemConfig {
 			  code: WASM_BINARY.to_vec(),
@@ -44,8 +48,18 @@ fn default_chain_spec() -> ChainSpec {
 				  get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
 			  ].iter().cloned().map(|k|(k, 1 << 60)).collect(),
 		  }),
-      babe: Some(Default::default()),
-      grandpa: Some(Default::default()),
+      babe: Some(BabeConfig {
+        authorities: vec![
+          (get_from_seed::<BabeId>("Alice"), 1),
+          (get_from_seed::<BabeId>("Bob")  , 1),
+        ],
+      }),
+      grandpa: Some(GrandpaConfig {
+        authorities: vec![
+          (get_from_seed::<GrandpaId>("Alice"), 1),
+          (get_from_seed::<GrandpaId>("Bob")  , 1),
+        ],
+      }),
 		  sudo: Some(SudoConfig {
 			  key: get_account_id_from_seed::<sr25519::Public>("Alice"),
 		  }),

@@ -9,12 +9,12 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 use sp_std::prelude::*;
 use sp_core::OpaqueMetadata;
 use sp_runtime::{
-    generic, create_runtime_str, print, impl_opaque_keys,
-	  ApplyExtrinsicResult, MultiSignature,
-    transaction_validity::{TransactionValidity, TransactionSource},
+  generic, create_runtime_str, print, impl_opaque_keys,
+	ApplyExtrinsicResult, MultiSignature,
+  transaction_validity::{TransactionValidity, TransactionSource},
 };
 use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentityLookup, Verify, IdentifyAccount
+	BlakeTwo256, Block as BlockT, IdentityLookup, Verify, IdentifyAccount,
 };
 use sp_api::impl_runtime_apis;
 use grandpa::AuthorityList as GrandpaAuthorityList;
@@ -27,8 +27,7 @@ pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
 pub use frame_support::{
 	StorageValue, construct_runtime, parameter_types,
-	traits::Randomness,
-	weights::Weight,
+	traits::Randomness, weights::Weight,
 };
 
 /// An index to a block.
@@ -86,8 +85,8 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("wasm-tester"),
-	impl_name: create_runtime_str!("wasm-tester"),
+	spec_name: create_runtime_str!("host-tester"),
+	impl_name: create_runtime_str!("host-tester"),
 	authoring_version: 1,
 	spec_version: 1,
 	impl_version: 1,
@@ -180,9 +179,7 @@ parameter_types! {
 impl babe::Trait for Runtime {
 	  type EpochDuration = EpochDuration;
 	  type ExpectedBlockTime = ExpectedBlockTime;
-
-	  // session module is the trigger
-	  type EpochChangeTrigger = babe::ExternalTrigger;
+	  type EpochChangeTrigger = babe::SameAuthoritiesForever;
 }
 
 impl grandpa::Trait for Runtime {
@@ -215,10 +212,10 @@ construct_runtime!(
 		UncheckedExtrinsic = UncheckedExtrinsic
 	{
 		System: system::{Module, Call, Config, Storage, Event<T>},
-		RandomnessCollectiveFlip: randomness_collective_flip::{Module, Call, Storage},
-		Timestamp: timestamp::{Module, Call, Storage, Inherent},
+		CollectiveFlip: collective_flip::{Module, Call, Storage},
 		Babe: babe::{Module, Call, Storage, Config, Inherent(Timestamp)},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
+		Timestamp: timestamp::{Module, Call, Storage, Inherent},
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
 		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
 	}
@@ -294,7 +291,7 @@ impl_runtime_apis! {
 		}
 
 		fn random_seed() -> <Block as BlockT>::Hash {
-			RandomnessCollectiveFlip::random_seed()
+			CollectiveFlip::random_seed()
 		}
 	}
 
@@ -305,6 +302,18 @@ impl_runtime_apis! {
     ) -> TransactionValidity {
       print("[host-tester] validate_transaction");
 			Executive::validate_transaction(source, tx)
+		}
+	}
+
+  impl sp_session::SessionKeys<Block> for Runtime {
+	  fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
+		  opaque::SessionKeys::generate(seed)
+		}
+
+		fn decode_session_keys(
+		  encoded: Vec<u8>,
+		) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
+		  opaque::SessionKeys::decode_into_raw_public_keys(&encoded)
 		}
 	}
 
