@@ -27,7 +27,8 @@ pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
 pub use frame_support::{
 	StorageValue, construct_runtime, parameter_types,
-	traits::Randomness, weights::Weight,
+	traits::Randomness,
+  weights::{Weight, RuntimeDbWeight},
 };
 
 /// An index to a block.
@@ -85,12 +86,13 @@ pub mod opaque {
 
 /// This runtime version.
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-	spec_name: create_runtime_str!("host-tester"),
+	spec_name: create_runtime_str!("polkadot"),
 	impl_name: create_runtime_str!("host-tester"),
-	authoring_version: 1,
+	authoring_version: 2,
 	spec_version: 1,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
+  transaction_version: 1,
 };
 
 /// Targeted block time.
@@ -113,8 +115,17 @@ pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
 	pub const MaximumBlockWeight: Weight = 1_000_000_000;
-	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
+
+  pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
+
+	pub const DbWeight: RuntimeDbWeight = RuntimeDbWeight {
+    read: 60_000_000,
+		write: 200_000_000,
+	};
+  pub const ExtrinsicBaseWeight: Weight = 100_000_000;
+	pub const BlockExecutionWeight: Weight = 1_000_000_000;
+
 	pub const Version: RuntimeVersion = VERSION;
 }
 
@@ -143,6 +154,11 @@ impl system::Trait for Runtime {
 	type BlockHashCount = BlockHashCount;
 	/// Maximum weight of each block.
 	type MaximumBlockWeight = MaximumBlockWeight;
+
+  type DbWeight = DbWeight;
+	type BlockExecutionWeight = BlockExecutionWeight;
+	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
+
 	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
 	type MaximumBlockLength = MaximumBlockLength;
 	/// Portion of the block weight that is available to all normal transactions.
@@ -325,14 +341,14 @@ impl_runtime_apis! {
   }
 
   impl sp_babe::BabeApi<Block> for Runtime {
-	  fn configuration() -> sp_babe::BabeConfiguration {
-	    sp_babe::BabeConfiguration {
+	  fn configuration() -> sp_babe::BabeGenesisConfiguration {
+	    sp_babe::BabeGenesisConfiguration {
 		    slot_duration: Babe::slot_duration(),
 				epoch_length: EpochDuration::get(),
 				c: PRIMARY_PROBABILITY,
 				genesis_authorities: Babe::authorities(),
 				randomness: Babe::randomness(),
-			  secondary_slots: true,
+				allowed_slots: sp_babe::AllowedSlots::PrimaryAndSecondaryPlainSlots,
 			}
 		}
 
