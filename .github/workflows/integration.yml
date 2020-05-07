@@ -126,28 +126,28 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: cargo-registry-tester-host-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        key: cargo-registry-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-key: cargo-registry-tester-host-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
-        key: cargo-index-tester-host-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        key: cargo-index-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-key: cargo-index-tester-host-
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
-        path: test/tester/host/target
-        key: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        path: test/testers/host/target
+        key: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-keys: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester genesis
-      working-directory: test/tester/host
-      run: cargo run --relese > genesis.json
+      working-directory: test/testers/host
+      run: cargo run > genesis.json
     - name: Upload host tester genesis
       uses: actions/upload-artifact@v1
       with:
         name: genesis
-        path: test/tester/host/genesis.json
+        path: test/testers/host/genesis.json
 
   build-tester-host-legacy:
     name: Build host tester legacy
@@ -167,26 +167,26 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: cargo-registry-tester-host-legacy-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        key: cargo-registry-tester-host-legacy-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-key: cargo-registry-tester-host-legacy-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
-        key: cargo-index-tester-host-legacy-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        key: cargo-index-tester-host-legacy-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-key: cargo-index-tester-host-legacy-
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
-        path: test/tester/host-legacy/target
-        key: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        path: test/testers/host-legacy/target
+        key: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-keys: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester legacy genesis
-      working-directory: test/tester/host-legacy
-      run: cargo run --relese > genesis.json
+      working-directory: test/testers/host-legacy
+      run: cargo run > genesis-legacy.json
     - name: Upload host tester legacy genesis
       uses: actions/upload-artifact@v1
       with:
         name: genesis-legacy
-        path: test/tester/host/genesis.json
+        path: test/testers/host-legacy/genesis-legacy.json
 
