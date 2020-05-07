@@ -149,10 +149,44 @@ jobs:
         name: genesis
         path: test/tester/host/genesis.json
 
-
-
-
-
-
-
+  build-tester-host-legacy:
+    name: Build host tester legacy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Download host tester legacy
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-tester-host-legacy-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        restore-key: cargo-registry-tester-host-legacy-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-tester-host-legacy-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        restore-key: cargo-index-tester-host-legacy-
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: test/tester/host-legacy/target
+        key: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/tester/host/Cargo.lock') }}
+        restore-keys: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build and generate host tester legacy genesis
+      working-directory: test/tester/host-legacy
+      run: cargo run --relese > genesis.json
+    - name: Upload host tester legacy genesis
+      uses: actions/upload-artifact@v1
+      with:
+        name: genesis-legacy
+        path: test/tester/host/genesis.json
 
