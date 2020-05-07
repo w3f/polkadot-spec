@@ -29,41 +29,47 @@ fn get_account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
 	AccountPublic::from(get_from_seed::<TPublic>(seed)).into_account()
 }
 
+/// Create default genesis config
+fn default_genesis_config() -> GenesisConfig {
+  GenesisConfig {
+	  system: Some(SystemConfig {
+	    code: WASM_BINARY.to_vec(),
+			changes_trie_config: Default::default(),
+		}),
+		balances: Some(BalancesConfig {
+			balances: vec![
+			  get_account_id_from_seed::<sr25519::Public>("Alice"),
+				get_account_id_from_seed::<sr25519::Public>("Bob"),
+				get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
+				get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
+			].iter().cloned().map(|k|(k, 1 << 60)).collect(),
+		}),
+    babe: Some(BabeConfig {
+      authorities: vec![
+        (get_from_seed::<BabeId>("Alice"), 1),
+        (get_from_seed::<BabeId>("Bob")  , 1),
+      ],
+    }),
+    grandpa: Some(GrandpaConfig {
+      authorities: vec![
+        (get_from_seed::<GrandpaId>("Alice"), 1),
+        (get_from_seed::<GrandpaId>("Bob")  , 1),
+      ],
+    }),
+		sudo: Some(SudoConfig {
+			key: get_account_id_from_seed::<sr25519::Public>("Alice"),
+	  }),
+	}
+}
+
+
 /// Create default chain specification
 fn default_chain_spec() -> ChainSpec {
   ChainSpec::from_genesis(
-	  "Specification Test Runtime",
+	  "Specification Conformance Test Runtime",
 		"spectest",
     ChainType::Development,
-	  || GenesisConfig {
-		  system: Some(SystemConfig {
-			  code: WASM_BINARY.to_vec(),
-			  changes_trie_config: Default::default(),
-		  }),
-		  balances: Some(BalancesConfig {
-			  balances: vec![
-			    get_account_id_from_seed::<sr25519::Public>("Alice"),
-				  get_account_id_from_seed::<sr25519::Public>("Bob"),
-				  get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
-				  get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
-			  ].iter().cloned().map(|k|(k, 1 << 60)).collect(),
-		  }),
-      babe: Some(BabeConfig {
-        authorities: vec![
-          (get_from_seed::<BabeId>("Alice"), 1),
-          (get_from_seed::<BabeId>("Bob")  , 1),
-        ],
-      }),
-      grandpa: Some(GrandpaConfig {
-        authorities: vec![
-          (get_from_seed::<GrandpaId>("Alice"), 1),
-          (get_from_seed::<GrandpaId>("Bob")  , 1),
-        ],
-      }),
-		  sudo: Some(SudoConfig {
-			  key: get_account_id_from_seed::<sr25519::Public>("Alice"),
-		  }),
-	  },
+    default_genesis_config,
 		vec![], // Bootnodes
  		None,   // Telemetry
 		None,   // Protocol Id
@@ -73,10 +79,10 @@ fn default_chain_spec() -> ChainSpec {
 }
 
 fn main() {
-    let raw = true;
+  let raw = true;
 
-    match default_chain_spec().as_json(raw) {
-        Ok(json) => println!("{}", json),
-        Err(err) => eprintln!("Error: {}", err),
-    }
+  match default_chain_spec().as_json(raw) {
+    Ok(json) => println!("{}", json),
+    Err(err) => eprintln!("Error: {}", err),
+  }
 }

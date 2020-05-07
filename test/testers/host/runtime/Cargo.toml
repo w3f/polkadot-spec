@@ -1,7 +1,11 @@
 [package]
 name = 'host-tester-runtime'
-version = '2.0.0-alpha.6'
+version = '2.0.0-alpha.7'
 edition = '2018'
+
+[profile.release]
+panic = 'unwind'
+
 
 # Base dependencies
 [dependencies.serde]

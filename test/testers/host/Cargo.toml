@@ -1,8 +1,32 @@
-[profile.release]
-panic = 'unwind'
+[package]
+name = 'host-tester'
+version = '2.0.0-alpha.7'
+edition = '2018'
 
-[workspace]
-members = [
-    'runtime',
-    'genesis',
-]
+
+[dependencies.host-tester-runtime]
+path = 'runtime'
+version = '2.0.0-alpha'
+
+
+[dependencies.sc-service]
+version = '0.8.0-alpha'
+default-features = false
+
+[dependencies.sp-core]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-runtime]
+version = '2.0.0-alpha'
+default-features = false
+
+[dependencies.sp-babe]
+package = 'sp-consensus-babe'
+version = '0.8.0-alpha'
+default-features = false
+
+[dependencies.sp-grandpa]
+package = 'sp-finality-grandpa'
+version = '2.0.0-alpha'
+default-features = false

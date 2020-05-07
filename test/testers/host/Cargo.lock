@@ -1211,8 +1211,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "host-tester-genesis"
-version = "2.0.0-alpha.6"
+name = "host-tester"
+version = "2.0.0-alpha.7"
 dependencies = [
  "host-tester-runtime",
  "sc-service",
@@ -1224,7 +1224,7 @@ dependencies = [
 
 [[package]]
 name = "host-tester-runtime"
-version = "2.0.0-alpha.6"
+version = "2.0.0-alpha.7"
 dependencies = [
  "frame-executive",
  "frame-support",
