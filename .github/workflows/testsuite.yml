@@ -52,11 +52,46 @@ jobs:
       with:
         name: substrate-adapter
         path: test/adapters/substrate/target/release/substrate-adapter
+
+  build-adapter-substrate-legacy:
+    name: Build substrate legacy adapter
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
+        restore-key: cargo-registry-adapter-substrate-legacy-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
+        restore-key: cargo-index-adapter-substrate-legacy-
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/substrate-legacy/target
+        key: cargo-build-adapter-substrate-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
+        restore-keys: cargo-build-adapter-substrate-legacy-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build substrate legacy adapters
+      working-directory: test/adapters/substrate-legacy
+      run: cargo build --release
     - name: Upload substrate legacy adapter
       uses: actions/upload-artifact@v1
       with:
         name: substrate-adapter-legacy
-        path: test/adapters/substrate/target/release/substrate-adapter-legacy
+        path: test/adapters/substrate-legacy/target/release/substrate-adapter-legacy
 
   build-adapter-kagome:
     name: Build kagome adapter
@@ -166,7 +201,7 @@ jobs:
 
 
   test-hostapi-legacy:
-    needs: [ build-adapter-substrate, build-adapter-kagome ]
+    needs: [ build-adapter-substrate-legacy, build-adapter-kagome ]
     strategy:
       fail-fast: false
       matrix:

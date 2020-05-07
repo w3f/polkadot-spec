@@ -5,7 +5,7 @@ use sp_core::offchain::testing::TestOffchainExt;
 use sp_core::{offchain::OffchainExt, testing::KeyStore, traits::KeystoreExt, Blake2Hasher};
 use sp_state_machine::TestExternalities as CoreTestExternalities;
 
-use wasm_adapter_legacy::WASM_BINARY;
+use runtime::WASM_BINARY;
 
 type TestExternalities<H> = CoreTestExternalities<H, u64>;
 

@@ -10,21 +10,12 @@ clap = {version = "~2.27.0", features = ["yaml"]}
 data-encoding = "*"
 hex = "*"
 parity-scale-codec = "1.3"
-serde_yaml="*"
 
 # Legacy Polkadot Host API (pinned)
-wasmi = "0.5.1"
-parking_lot = "0.9.0"
 sp-core = { git = "https://github.com/paritytech/substrate", default-features = false, rev = "605f5c1" }
 sp-io = { git = "https://github.com/paritytech/substrate", default-features = false, rev = "605f5c1" }
-sp-externalities = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
 sc-executor = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
 sp-state-machine = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
-sp-offchain = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
 
 # Wasm Blob
-wasm-adapter-legacy = { path = "./wasm-adapter" }
-
-[[bin]]
-name = "substrate-adapter-legacy"
-path = "src/main.rs"
+runtime = { package = "substrate-adapter-legacy-runtime",  path = "runtime" }
