@@ -9,9 +9,9 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 use sp_std::prelude::*;
 use sp_core::OpaqueMetadata;
 use sp_runtime::{
-  generic, create_runtime_str, print, impl_opaque_keys,
+	generic, create_runtime_str, print, impl_opaque_keys,
 	ApplyExtrinsicResult, MultiSignature,
-  transaction_validity::{TransactionValidity, TransactionSource},
+	transaction_validity::{TransactionValidity, TransactionSource},
 };
 use sp_runtime::traits::{
 	BlakeTwo256, Block as BlockT, IdentityLookup, Verify, IdentifyAccount,
@@ -28,7 +28,7 @@ pub use sp_runtime::{Permill, Perbill};
 pub use frame_support::{
 	StorageValue, construct_runtime, parameter_types,
 	traits::Randomness,
-  weights::{Weight, RuntimeDbWeight},
+	weights::{Weight, RuntimeDbWeight},
 };
 
 /// An index to a block.
@@ -76,12 +76,12 @@ pub mod opaque {
 	/// Opaque block identifier type.
 	pub type BlockId = generic::BlockId<Block>;
 
-  impl_opaque_keys! {
-    pub struct SessionKeys {
-		  pub babe: Babe,
-		  pub grandpa: Grandpa,
-	  }
-  }
+	impl_opaque_keys! {
+		pub struct SessionKeys {
+			pub babe: Babe,
+			pub grandpa: Grandpa,
+		}
+	}
 }
 
 /// This runtime version.
@@ -92,7 +92,7 @@ pub const VERSION: RuntimeVersion = RuntimeVersion {
 	spec_version: 1,
 	impl_version: 1,
 	apis: RUNTIME_API_VERSIONS,
-  transaction_version: 1,
+	transaction_version: 1,
 };
 
 /// Targeted block time.
@@ -116,14 +116,15 @@ parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
 	pub const MaximumBlockWeight: Weight = 1_000_000_000;
 
-  pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
+	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
 	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
 
 	pub const DbWeight: RuntimeDbWeight = RuntimeDbWeight {
-    read: 60_000_000,
+		read: 60_000_000,
 		write: 200_000_000,
 	};
-  pub const ExtrinsicBaseWeight: Weight = 100_000_000;
+
+	pub const ExtrinsicBaseWeight: Weight = 100_000_000;
 	pub const BlockExecutionWeight: Weight = 1_000_000_000;
 
 	pub const Version: RuntimeVersion = VERSION;
@@ -155,7 +156,7 @@ impl system::Trait for Runtime {
 	/// Maximum weight of each block.
 	type MaximumBlockWeight = MaximumBlockWeight;
 
-  type DbWeight = DbWeight;
+	type DbWeight = DbWeight;
 	type BlockExecutionWeight = BlockExecutionWeight;
 	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
 
@@ -178,28 +179,28 @@ impl system::Trait for Runtime {
 }
 
 parameter_types! {
-	  pub const MinimumPeriod: Moment = SLOT_DURATION / 2;
+	pub const MinimumPeriod: Moment = SLOT_DURATION / 2;
 }
 
 impl timestamp::Trait for Runtime {
-	  type Moment = Moment;
-	  type OnTimestampSet = Babe;
-	  type MinimumPeriod = MinimumPeriod;
+	type Moment = Moment;
+	type OnTimestampSet = Babe;
+	type MinimumPeriod = MinimumPeriod;
 }
 
 parameter_types! {
-	  pub const EpochDuration: u64 = EPOCH_DURATION_IN_BLOCKS as u64;
-	  pub const ExpectedBlockTime: Moment = MILLISECS_PER_BLOCK;
+	pub const EpochDuration: u64 = EPOCH_DURATION_IN_BLOCKS as u64;
+	pub const ExpectedBlockTime: Moment = MILLISECS_PER_BLOCK;
 }
 
 impl babe::Trait for Runtime {
-	  type EpochDuration = EpochDuration;
-	  type ExpectedBlockTime = ExpectedBlockTime;
-	  type EpochChangeTrigger = babe::SameAuthoritiesForever;
+	type EpochDuration = EpochDuration;
+	type ExpectedBlockTime = ExpectedBlockTime;
+	type EpochChangeTrigger = babe::SameAuthoritiesForever;
 }
 
 impl grandpa::Trait for Runtime {
-	  type Event = Event;
+	type Event = Event;
 }
 
 parameter_types! {
@@ -265,37 +266,41 @@ pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainCon
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
+			print("@@version()@@");
 			VERSION
 		}
 
 		fn execute_block(block: Block) {
-      print("[wasm-tester] execute_block");
+			print("@@execute_block()@@");
 			Executive::execute_block(block)
 		}
 
 		fn initialize_block(header: &<Block as BlockT>::Header) {
-      print("[wasm-tester] initialize_block");
+			print("@@initialize_block()@@");
 			Executive::initialize_block(header)
 		}
 	}
 
 	impl sp_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
+			print("@@metadata()@@");
 			Runtime::metadata().into()
 		}
 	}
 
 	impl sp_block_builder::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyExtrinsicResult {
+			print("@@apply_extrinsics()@@");
 			Executive::apply_extrinsic(extrinsic)
 		}
 
 		fn finalize_block() -> <Block as BlockT>::Header {
-      print("[wasm-tester] finalize_block");
+			print("@@finalize_block()@@");
 			Executive::finalize_block()
 		}
 
 		fn inherent_extrinsics(data: sp_inherents::InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+			print("@@inherent_extrinsics()@@");
 			data.create_extrinsics()
 		}
 
@@ -303,47 +308,52 @@ impl_runtime_apis! {
 			block: Block,
 			data: sp_inherents::InherentData,
 		) -> sp_inherents::CheckInherentsResult {
+			print("@@check_inherents()@@");
 			data.check_extrinsics(&block)
 		}
 
 		fn random_seed() -> <Block as BlockT>::Hash {
+			print("@@random_seed()@@");
 			CollectiveFlip::random_seed()
 		}
 	}
 
 	impl sp_transaction_pool::runtime_api::TaggedTransactionQueue<Block> for Runtime {
 		fn validate_transaction(
-      source: TransactionSource,
-      tx: <Block as BlockT>::Extrinsic
-    ) -> TransactionValidity {
-      print("[host-tester] validate_transaction");
+			source: TransactionSource,
+			tx: <Block as BlockT>::Extrinsic
+		) -> TransactionValidity {
+			print("@@validate_transaction()@@");
 			Executive::validate_transaction(source, tx)
 		}
 	}
 
   impl sp_session::SessionKeys<Block> for Runtime {
 	  fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
-		  opaque::SessionKeys::generate(seed)
+			print("@@generate_session_keys()@@");
+			opaque::SessionKeys::generate(seed)
 		}
 
 		fn decode_session_keys(
 		  encoded: Vec<u8>,
 		) -> Option<Vec<(Vec<u8>, sp_core::crypto::KeyTypeId)>> {
-		  opaque::SessionKeys::decode_into_raw_public_keys(&encoded)
+			print("@@decode_session_keys()@@");
+			opaque::SessionKeys::decode_into_raw_public_keys(&encoded)
 		}
 	}
 
 	impl sp_grandpa::GrandpaApi<Block> for Runtime {
-	  fn grandpa_authorities() -> GrandpaAuthorityList {
-      print("[host-tester] grandpa_authorities");
-		  Grandpa::grandpa_authorities()
+		fn grandpa_authorities() -> GrandpaAuthorityList {
+			print("@@grandpa_authorities()@@");
+			Grandpa::grandpa_authorities()
 		}
   }
 
-  impl sp_babe::BabeApi<Block> for Runtime {
-	  fn configuration() -> sp_babe::BabeGenesisConfiguration {
-	    sp_babe::BabeGenesisConfiguration {
-		    slot_duration: Babe::slot_duration(),
+	impl sp_babe::BabeApi<Block> for Runtime {
+		fn configuration() -> sp_babe::BabeGenesisConfiguration {
+			print("@@configuration()@@");
+			sp_babe::BabeGenesisConfiguration {
+				slot_duration: Babe::slot_duration(),
 				epoch_length: EpochDuration::get(),
 				c: PRIMARY_PROBABILITY,
 				genesis_authorities: Babe::authorities(),
@@ -353,7 +363,8 @@ impl_runtime_apis! {
 		}
 
 		fn current_epoch_start() -> sp_babe::SlotNumber {
-		  Babe::current_epoch_start()
+			print("@@current_epoch_start()@@");
+			Babe::current_epoch_start()
 		}
 	}
 }

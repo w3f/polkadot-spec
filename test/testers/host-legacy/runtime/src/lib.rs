@@ -23,8 +23,6 @@ use client::{
 use grandpa::AuthorityList as GrandpaAuthorityList;
 use grandpa::fg_primitives as grandpa_primitives;
 use version::RuntimeVersion;
-#[cfg(feature = "std")]
-use version::NativeVersion;
 
 // A few exports that help ease life for downstream crates.
 #[cfg(any(feature = "std", test))]
@@ -32,7 +30,7 @@ pub use sr_primitives::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
 pub use sr_primitives::{Permill, Perbill};
-pub use support::{StorageValue, construct_runtime, parameter_types, traits::Randomness};
+pub use support::{StorageValue, construct_runtime, parameter_types, print, traits::Randomness};
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -106,17 +104,13 @@ pub const MINUTES: BlockNumber = 60_000 / (MILLISECS_PER_BLOCK as BlockNumber);
 pub const HOURS: BlockNumber = MINUTES * 60;
 pub const DAYS: BlockNumber = HOURS * 24;
 
-/// Babe epoch duration.
-pub const EPOCH_DURATION_IN_SLOTS: BlockNumber = 4 * HOURS;
+pub const EPOCH_DURATION_IN_BLOCKS: BlockNumber = 10 * MINUTES;
+pub const EPOCH_DURATION_IN_SLOTS: u64 = {
+	const SLOT_FILL_RATE: f64 = MILLISECS_PER_BLOCK as f64 / SLOT_DURATION as f64;
 
-/// The version infromation used to identify this runtime when compiled natively.
-#[cfg(feature = "std")]
-pub fn native_version() -> NativeVersion {
-	NativeVersion {
-		runtime_version: VERSION,
-		can_author_with: Default::default(),
-	}
-}
+	(EPOCH_DURATION_IN_BLOCKS as f64 * SLOT_FILL_RATE) as u64
+};
+
 
 parameter_types! {
 	pub const BlockHashCount: BlockNumber = 250;
@@ -256,54 +250,65 @@ pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<R
 impl_runtime_apis! {
 	impl client_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
+			print("@@version()@@");
 			VERSION
 		}
 
 		fn execute_block(block: Block) {
+			print("@@execute_block()@@");
 			Executive::execute_block(block)
 		}
 
 		fn initialize_block(header: &<Block as BlockT>::Header) {
+			print("@@initialize_block()@@");
 			Executive::initialize_block(header)
 		}
 	}
 
 	impl client_api::Metadata<Block> for Runtime {
 		fn metadata() -> OpaqueMetadata {
+			print("@@metadata()@@");
 			Runtime::metadata().into()
 		}
 	}
 
 	impl block_builder_api::BlockBuilder<Block> for Runtime {
 		fn apply_extrinsic(extrinsic: <Block as BlockT>::Extrinsic) -> ApplyResult {
+			print("@@apply_extrinsic()@@");
 			Executive::apply_extrinsic(extrinsic)
 		}
 
 		fn finalize_block() -> <Block as BlockT>::Header {
+			print("@@finalize_block()@@");
 			Executive::finalize_block()
 		}
 
 		fn inherent_extrinsics(data: InherentData) -> Vec<<Block as BlockT>::Extrinsic> {
+			print("@@inherent_extrinsics()@@");
 			data.create_extrinsics()
 		}
 
 		fn check_inherents(block: Block, data: InherentData) -> CheckInherentsResult {
+			print("@@check_extrinsics()@@");
 			data.check_extrinsics(&block)
 		}
 
 		fn random_seed() -> <Block as BlockT>::Hash {
+			print("@@random_seed()@@");
 			RandomnessCollectiveFlip::random_seed()
 		}
 	}
 
 	impl client_api::TaggedTransactionQueue<Block> for Runtime {
 		fn validate_transaction(tx: <Block as BlockT>::Extrinsic) -> TransactionValidity {
+			print("@@validate_transaction()@@");
 			Executive::validate_transaction(tx)
 		}
 	}
 
 	impl session_primitive::SessionKeys<Block> for Runtime {
 		fn generate_session_keys(seed: Option<Vec<u8>>) -> Vec<u8> {
+			print("@@generate_session_keys()@@");
 			let seed = seed.as_ref().map(|s| rstd::str::from_utf8(&s).expect("Seed is an utf8 string"));
 			opaque::SessionKeys::generate(seed)
 		}
@@ -311,6 +316,7 @@ impl_runtime_apis! {
 
 	impl babe_primitives::BabeApi<Block> for Runtime {
 		fn configuration() -> babe_primitives::BabeConfiguration {
+			print("@@configuration()@@");
 			// The choice of `c` parameter (where `1 - c` represents the
 			// probability of a slot being empty), is done in accordance to the
 			// slot duration and expected target block time, for safely
@@ -329,6 +335,7 @@ impl_runtime_apis! {
 
 	impl grandpa_primitives::GrandpaApi<Block> for Runtime {
 		fn grandpa_authorities() -> GrandpaAuthorityList {
+			print("@@grandpa_authorities()@@");
 			Grandpa::grandpa_authorities()
 		}
 	}
