@@ -1,8 +1,8 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <project|polkadot_host_spec.tm>
 
-<style|book>
+<style|<tuple|book|old-dots>>
 
 <\body>
   <appendix|Runtime Entries><label|sect-runtime-entries>
@@ -149,7 +149,7 @@
     <verbatim|version> function.>
   </with>
 
-  <subsection|<verbatim|Core_execute_block>><label|defn-rt-core-execute-block>
+  <subsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
 
   Executes a full block by executing all exctrinsics included in it and
   update the state accordingly. Additionally, some integrity checks are
@@ -291,7 +291,7 @@
   submitted blob represents a valid extrinsics applied to the specified
   block. This function gets called internally when executing blocks with the
   <verbatim|Core_execute_block> runtime function as described in section
-  <reference|defn-rt-core-execute-block>.
+  <reference|sect-rte-core-execute-block>.
 
   \;
 
@@ -549,11 +549,13 @@
     <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.3.10|?>>
     <associate|defn-rt-core-execute-block|<tuple|A.3.2|?>>
     <associate|defn-rt-core-version|<tuple|A.3.1|?>>
+    <associate|defn-rte-core-execute-block|<tuple|A.3.2|?>>
     <associate|defn-transaction-validity-error|<tuple|A.2|?>>
     <associate|defn-unknown-transaction|<tuple|A.4|?>>
     <associate|defn-valid-transaction|<tuple|A.1|?>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|?>>
     <associate|sect-rte-babeapi-epoch|<tuple|A.3.5|?>>
+    <associate|sect-rte-core-execute-block|<tuple|A.3.2|?>>
     <associate|sect-rte-grandpa-auth|<tuple|A.3.6|?>>
     <associate|sect-rte-hash-and-length|<tuple|A.3.4|?>>
     <associate|sect-rte-validate-transaction|<tuple|A.3.7|?>>
