@@ -1,8 +1,8 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <project|polkadot_host_spec.tm>
 
-<style|<tuple|book|algorithmacs-style>>
+<style|<tuple|book|algorithmacs-style|old-dots>>
 
 <\body>
   <chapter|State Transition><label|chap-state-transit>
@@ -179,6 +179,28 @@
   least significant one indicates the pointer to the offset of the result
   returned by the entry encoded in SCALE codec in the memory buffer. The most
   significant one provides the size of the blob.
+
+  <subsubsection|Handling Runtimes update to the
+  State><label|sect-handling-runtime-state-update>
+
+  In order for the runtime to carry on various tasks Runtimes manipulate the
+  current state, by means of executing calls to various Polkadot Host APIs
+  (See Appendix <reference|sect-re-api>). It is the duty of Host APIs to
+  determine the context in which these changes should persist. For example,
+  if Polkdot Host needs to validate a transaction using
+  <verbatim|TaggedTransactionQueue_validate_transaction> entry (see Section
+  <reference|sect-rte-validate-transaction>), it needs to sandbox the changes
+  to the state just for that Runtime call and prevent the global state of the
+  system from being influence by the call to such a Runtime entery.\ 
+
+  As a rule of thumb, any state changes resulting from Runtime enteries are
+  not persistant with the exception of state changes resulting from calling
+  <verbatim|Core_execute_block> (see Section
+  <reference|sect-rte-core-execute-block>while Polkadot Host is importing a
+  block (see Section <reference|sect-block-validation>).
+
+  For more information on managing multiple variant of state see Section
+  <reference|sect-managing-multiple-states>.
 
   <section|Extrinsics><label|sect-extrinsics>
 
@@ -555,7 +577,7 @@
     Where each <math|E<rsub|i>\<in\>\<bbb-B\>> is a SCALE encoded extrinsic.
   </definition>
 
-  <subsection|Block Submission><label|sect-block-submission>
+  <subsection|Importing and Validating Block><label|sect-block-validation><label|sect-block-submission>
 
   Block validation is the process by which the client asserts that a block is
   fit to be added to the blockchain. This means that the block is consistent
@@ -572,7 +594,7 @@
   former criterion is validated by the Polkadot Host according to the block
   production consensus protocol. The latter can be verified by the Polkadot
   Host invoking <verbatim|Core_execute_block> entry into the Runtime as
-  defined in section <reference|defn-rt-core-execute-block> as a part of the
+  defined in section <reference|sect-rte-core-execute-block> as a part of the
   validation process. Any state changes created by this function on
   successful execution are persisted.
 
@@ -699,32 +721,32 @@
     <associate|algo-runtime-interaction|<tuple|3.1|?>>
     <associate|algo-validate-transactions|<tuple|3.2|?>>
     <associate|auto-1|<tuple|3|?>>
-    <associate|auto-10|<tuple|3.2.2|?>>
-    <associate|auto-11|<tuple|3.2.2.1|?>>
-    <associate|auto-12|<tuple|3.2.3|?>>
+    <associate|auto-10|<tuple|3.2.1|?>>
+    <associate|auto-11|<tuple|3.2.2|?>>
+    <associate|auto-12|<tuple|3.2.2.1|?>>
     <associate|auto-13|<tuple|3.2.3|?>>
     <associate|auto-14|<tuple|3.2.3|?>>
     <associate|auto-15|<tuple|3.2.3|?>>
-    <associate|auto-16|<tuple|<with|mode|<quote|math>|<rigid|->>|?>>
-    <associate|auto-17|<tuple|3.2.3.1|?>>
-    <associate|auto-18|<tuple|3.1|?>>
-    <associate|auto-19|<tuple|3.3|?>>
+    <associate|auto-16|<tuple|3.2.3|?>>
+    <associate|auto-17|<tuple|<with|mode|<quote|math>|<rigid|->>|?>>
+    <associate|auto-18|<tuple|3.2.3.1|?>>
+    <associate|auto-19|<tuple|3.1|?>>
     <associate|auto-2|<tuple|3.1|?>>
-    <associate|auto-20|<tuple|3.3.1|?>>
-    <associate|auto-21|<tuple|3.3.1.1|?>>
-    <associate|auto-22|<tuple|3.2|?>>
-    <associate|auto-23|<tuple|3.3.1.2|?>>
-    <associate|auto-24|<tuple|3.3.1.3|?>>
-    <associate|auto-25|<tuple|3.3.2|?>>
-    <associate|auto-26|<tuple|3.3.3|?>>
-    <associate|auto-27|<tuple|3.3.4|?>>
+    <associate|auto-20|<tuple|3.3|?>>
+    <associate|auto-21|<tuple|3.3.1|?>>
+    <associate|auto-22|<tuple|3.3.1.1|?>>
+    <associate|auto-23|<tuple|3.2|?>>
+    <associate|auto-24|<tuple|3.3.1.2|?>>
+    <associate|auto-25|<tuple|3.3.1.3|?>>
+    <associate|auto-26|<tuple|3.3.2|?>>
+    <associate|auto-27|<tuple|3.3.3|?>>
     <associate|auto-3|<tuple|3.1.1|?>>
     <associate|auto-4|<tuple|3.1.2|?>>
     <associate|auto-5|<tuple|3.1.2.1|?>>
     <associate|auto-6|<tuple|3.1.2.2|?>>
     <associate|auto-7|<tuple|3.1.2.3|?>>
-    <associate|auto-8|<tuple|3.2|?>>
-    <associate|auto-9|<tuple|3.2.1|?>>
+    <associate|auto-8|<tuple|3.1.2.4|?>>
+    <associate|auto-9|<tuple|3.2|?>>
     <associate|block|<tuple|3.3.1.1|?>>
     <associate|chap-state-transit|<tuple|3|?>>
     <associate|defn-block-body|<tuple|3.9|?>>
@@ -739,12 +761,13 @@
     <associate|sect-block-body|<tuple|3.3.1.3|?>>
     <associate|sect-block-format|<tuple|3.3.1|?>>
     <associate|sect-block-submission|<tuple|3.3.2|?>>
-    <associate|sect-block-validation|<tuple|3.3.3|?>>
+    <associate|sect-block-validation|<tuple|3.3.2|?>>
     <associate|sect-entries-into-runtime|<tuple|3.1|?>>
     <associate|sect-extrinsics|<tuple|3.2|?>>
+    <associate|sect-handling-runtime-state-update|<tuple|3.1.2.4|?>>
     <associate|sect-justified-block-header|<tuple|3.3.1.2|?>>
     <associate|sect-loading-runtime-code|<tuple|3.1.1|?>>
-    <associate|sect-managing-multiple-states|<tuple|3.3.4|?>>
+    <associate|sect-managing-multiple-states|<tuple|3.3.3|?>>
     <associate|sect-runtime-return-value|<tuple|3.1.2.3|?>>
     <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|?>>
     <associate|sect-state-replication|<tuple|3.3|?>>
@@ -756,21 +779,21 @@
 <\auxiliary>
   <\collection>
     <\associate|idx>
-      <tuple|<tuple|Transaction Message>|<pageref|auto-13>>
+      <tuple|<tuple|Transaction Message>|<pageref|auto-14>>
 
-      <tuple|<tuple|transaction pool>|<pageref|auto-14>>
+      <tuple|<tuple|transaction pool>|<pageref|auto-15>>
 
-      <tuple|<tuple|transaction queue>|<pageref|auto-15>>
+      <tuple|<tuple|transaction queue>|<pageref|auto-16>>
 
-      <tuple|<tuple|Transaction Message>|<pageref|auto-16>>
+      <tuple|<tuple|Transaction Message>|<pageref|auto-17>>
     </associate>
     <\associate|table>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|3.1>|>
         List of inherent data
-      </surround>|<pageref|auto-18>>
+      </surround>|<pageref|auto-19>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|3.2>||The detail of the
-      varying type that a digest item can hold.>|<pageref|auto-22>>
+      varying type that a digest item can hold.>|<pageref|auto-23>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>State
@@ -801,57 +824,57 @@
       Runtime Entry <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
+      <with|par-left|<quote|2tab>|3.1.2.4<space|2spc>Handling Runtimes update
+      to the State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>>
+
       3.2<space|2spc>Extrinsics <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>
+      <no-break><pageref|auto-9>
 
       <with|par-left|<quote|1tab>|3.2.1<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
+      <no-break><pageref|auto-10>>
 
       <with|par-left|<quote|1tab>|3.2.2<space|2spc>Transactions
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
+      <no-break><pageref|auto-11>>
 
       <with|par-left|<quote|2tab>|3.2.2.1<space|2spc>Transaction Submission
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-12>>
 
       <with|par-left|<quote|1tab>|3.2.3<space|2spc>Transaction Queue
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <no-break><pageref|auto-13>>
 
       <with|par-left|<quote|2tab>|3.2.3.1<space|2spc>Inherents
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-17>>
+      <no-break><pageref|auto-18>>
 
       3.3<space|2spc>State Replication <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-19>
+      <no-break><pageref|auto-20>
 
       <with|par-left|<quote|1tab>|3.3.1<space|2spc>Block Format
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
+      <no-break><pageref|auto-21>>
 
       <with|par-left|<quote|2tab>|3.3.1.1<space|2spc>Block Header
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
+      <no-break><pageref|auto-22>>
 
       <with|par-left|<quote|2tab>|3.3.1.2<space|2spc>Justified Block Header
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
+      <no-break><pageref|auto-24>>
 
       <with|par-left|<quote|2tab>|3.3.1.3<space|2spc>Block Body
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24>>
-
-      <with|par-left|<quote|1tab>|3.3.2<space|2spc>Block Submission
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-25>>
 
-      <with|par-left|<quote|1tab>|3.3.3<space|2spc>Block Validation
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|3.3.2<space|2spc>Importing and Validating
+      Block <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-26>>
 
-      <with|par-left|<quote|1tab>|3.3.4<space|2spc>Managaing Multiple
+      <with|par-left|<quote|1tab>|3.3.3<space|2spc>Managaing Multiple
       Variants of State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
     </associate>
