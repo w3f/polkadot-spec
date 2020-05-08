@@ -15,7 +15,7 @@ subcommands:
           - encode:
               index: 1
               requires: input
-                
+
           - input:
               long: input
               short: i
@@ -28,16 +28,21 @@ subcommands:
           - trie-subcommand:
               index: 1
               requires: state-file
-              
+
           - keys-in-hex:
               long: keys-in-hex
               help: regard the keys in the trie file as hex values and convert them to binary before inserting into the trie
+
+          - values-in-hex:
+              long: values-in-hex
+              help: regard the values in the trie file as hex values and convert them to binary before inserting into the trie
 
           - state-file:
               long: state-file
               short: i
               help: the file containing the key value data defining the state
               value_name: INPUT_VALUE
+
     - pdre-api:
         about: host API related tests 
         args:

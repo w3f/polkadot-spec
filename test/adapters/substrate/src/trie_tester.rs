@@ -53,8 +53,8 @@ use crate::hasher::blake2::Blake2Hasher;
 
 ///An object to perform various tests on a trie
 pub struct TrieTester {
-    processed_key_list: Vec<Vec<u8>>,
-    value_list: Vec<String>,
+    keys: Vec<Vec<u8>>,
+    values: Vec<Vec<u8>>,
 }
 
 impl TrieTester {
@@ -68,27 +68,20 @@ impl TrieTester {
         // We are deserializing the state data in a BTree
         let key_value_map: BTreeMap<String, Vec<String>> = serde_yaml::from_reader(f).unwrap();
 
-        let mut new_tester: TrieTester = TrieTester {
-            value_list: key_value_map["values"].clone(),
-            processed_key_list: Vec::new(),
-        };
-
-        let key_list = &key_value_map["keys"];
-        if !(matches.is_present("keys-in-hex")) {
-            for cur_key_str in key_list.iter() {
-                new_tester
-                    .processed_key_list
-                    .push(cur_key_str.clone().into_bytes());
-            }
-        } else {
-            for cur_key_str in key_list.iter() {
-                new_tester
-                    .processed_key_list
-                    .push(hex::decode(cur_key_str).expect("Decoding failed"));
-            }
+        TrieTester {
+            keys: key_value_map["keys"].iter().map(
+                |k| if matches.is_present("keys-in-hex") {
+                        hex::decode(k).expect("Decoding failed")
+                    } else {
+                        k.clone().into_bytes()
+                    }).collect(),
+            values: key_value_map["values"].iter().map(
+                |v| if matches.is_present("values-in-hex") {
+                        hex::decode(v).expect("Decoding failed")
+                    } else {
+                        v.clone().into_bytes()
+                    }).collect(),
         }
-
-        new_tester
     }
 
     ///read a yaml file containig key value pairs and return a list of key
@@ -102,9 +95,9 @@ impl TrieTester {
     fn compute_state_root(&self, _matches: &ArgMatches) {
         //let trie_value =  key_value_map["data"];
         let trie_vec: Vec<_> = self
-            .processed_key_list
+            .keys
             .iter()
-            .zip(self.value_list.iter())
+            .zip(self.values.iter())
             .collect();
 
         let state_trie_root =
@@ -126,22 +119,22 @@ impl TrieTester {
             trie_db::TrieDBMut<'a, GenericNoExtensionLayout<Blake2Hasher>>;
         let mut memtrie = RefPolkadotTrieDBMutNoExt::new(&mut memdb, &mut root);
 
-        for i in 0..self.processed_key_list.len() {
-            let key: &[u8] = &self.processed_key_list[i];
-            let val: &[u8] = &self.value_list[i].as_bytes();
+        for i in 0..self.keys.len() {
+            let key: &[u8] = &self.keys[i];
+            let val: &[u8] = &self.values[i];
             memtrie.insert(key, val).unwrap();
             memtrie.commit();
             println!("state root: {:x}", memtrie.root());
         }
 
         //now we randomly drop nodes
-        while self.processed_key_list.len() > 0 {
-            let key_index_to_drop = memtrie.root()[0] as usize % self.processed_key_list.len();
-            let key_to_drop = &self.processed_key_list[key_index_to_drop];
+        while self.keys.len() > 0 {
+            let key_index_to_drop = memtrie.root()[0] as usize % self.keys.len();
+            let key_to_drop = &self.keys[key_index_to_drop];
             memtrie.remove(key_to_drop).unwrap();
             memtrie.commit();
             println!("state root: {:x}", memtrie.root());
-            self.processed_key_list.remove(key_index_to_drop);
+            self.keys.remove(key_index_to_drop);
         }
     }
 
