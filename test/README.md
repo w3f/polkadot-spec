@@ -52,9 +52,11 @@ go build
 
 ## On Debian-based systems
 
+There is a simple Makefile in the main directory, that will build all the required API adapters when you run `make`.
+
 ### Install dependencies
 
-Install the required software in order to run all the tests.
+Install the required software in order to run build all adapter and to be able to run all tests.
 
 **Note:** The test suite requires CMake version 3.12 or higher and gcc/g++ or clang version 8. However it is not recommended to change your default gcc/g++ versions for your whole installation, as that can lead to issues down the road. Please use the environment variables `CC` and `CXX` to temporally change the used compiler instead.
 
@@ -77,7 +79,7 @@ apt update && apt install -y --no-install-recommends \
 
 ### Install recent CMake
 
-This can be skipped on Ubunut 20.04, as a recent version of CMake can be installed through aptitude. See the official [cmake homepage](https://cmake.org/download) for a recent version:
+This can be skipped on Ubunut 20.04, as a recent version of CMake can be installed through aptitude. Also see the official [cmake homepage](https://cmake.org/download) for the most recent version:
 
 ```bash
 wget https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2-Linux-x86_64.sh
