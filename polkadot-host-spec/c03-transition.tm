@@ -660,6 +660,15 @@
     </algorithmic>
   </algorithm>
 
+  In which
+
+  <\itemize-minus>
+    <item><name|Persist-State> implies the persistence of any state changes
+    created by <verbatim|Core_execute_block> on successful execution.
+  </itemize-minus>
+
+  \;
+
   For the definition of the finality and the finalized block see Section
   <reference|sect-finality>. <math|PBT> is the pruned block tree defined in
   Definition <reference|defn-block-tree>. <name|Verify-Authorship-Right> is
