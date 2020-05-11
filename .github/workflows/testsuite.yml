@@ -14,10 +14,11 @@ on:
 
 jobs:
   build-adapter-substrate:
-    name: Build substrate adapter
-    runs-on: ubuntu-latest
+    name: "[build] substrate-adapter"
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - name: Setup rust toolchain
       id: rustup
       uses: actions-rs/toolchain@v1
@@ -38,7 +39,7 @@ jobs:
         path: ~/.cargo/git
         key: cargo-index-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
         restore-key: cargo-index-adapter-substrate-
-    - name: Cache cargo build
+    - name: Cache cargo build ouput
       uses: actions/cache@v1
       with:
         path: test/adapters/substrate/target
@@ -54,10 +55,11 @@ jobs:
         path: test/adapters/substrate/target/release/substrate-adapter
 
   build-adapter-substrate-legacy:
-    name: Build substrate legacy adapter
-    runs-on: ubuntu-latest
+    name: "[build] substrate-adapter-legacy"
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - name: Setup rust toolchain
       id: rustup
       uses: actions-rs/toolchain@v1
@@ -78,7 +80,7 @@ jobs:
         path: ~/.cargo/git
         key: cargo-index-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
         restore-key: cargo-index-adapter-substrate-legacy-
-    - name: Cache cargo build
+    - name: Cache cargo build output
       uses: actions/cache@v1
       with:
         path: test/adapters/substrate-legacy/target
@@ -94,10 +96,11 @@ jobs:
         path: test/adapters/substrate-legacy/target/release/substrate-adapter-legacy
 
   build-adapter-kagome:
-    name: Build kagome adapter
-    runs-on: ubuntu-latest
+    name: "[build] kagome-adapter"
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - name: Cache hunter packages
       uses: actions/cache@v1
       with:
@@ -119,13 +122,14 @@ jobs:
         path: test/adapters/kagome/build/kagome-adapter
 
   build-adapter-gossamer:
-    name: Build gossamer adapter
-    runs-on: ubuntu-latest
+    name: "[build] gossamer-adapter"
+    runs-on: ubuntu-18.04
     defaults:
       run:
         working-directory: test/adapters/gossamer
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - name: Cache go modules
       uses: actions/cache@v1
       with:
@@ -141,16 +145,32 @@ jobs:
         path: test/adapters/gossamer/gossamer-adapter
 
 
+  test-substrate:
+    needs: build-adapter-substrate
+    name: "[test-hostapi] substrate"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/adapters/substrate
+    - run: chmod +x test/adapters/substrate/substrate-adapter
+    - name: Run test fixture
+      run: test/runtests.jl substrate hostapi
+
   test-kagome:
     needs: [ build-adapter-substrate, build-adapter-kagome ]
     strategy:
       fail-fast: false
       matrix:
         fixture: [ scale-codec, state-trie ]
-    name: Test kagome against ${{ matrix.fixture }} fixture
-    runs-on: ubuntu-latest
+    name: "[test-${{ matrix.fixture }}] kagome"
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
@@ -169,10 +189,11 @@ jobs:
       fail-fast: false
       matrix:
         fixture: [ scale-codec, state-trie ]
-    name: Test gossamer against ${{ matrix.fixture }} fixture
-    runs-on: ubuntu-latest
+    name: "[test-${{ matrix.fixture }}] gossamer"
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
@@ -185,20 +206,6 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
-  test-substrate:
-    needs: build-adapter-substrate
-    name: Test substrate against hostapi fixture
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
-      with:
-        name: substrate-adapter
-        path: test/adapters/substrate
-    - run: chmod +x test/adapters/substrate/substrate-adapter
-    - name: Run test fixture
-      run: test/runtests.jl substrate hostapi
-
 
   test-hostapi-legacy:
     needs: [ build-adapter-substrate-legacy, build-adapter-kagome ]
@@ -206,21 +213,22 @@ jobs:
       fail-fast: false
       matrix:
         implementation: [ substrate, kagome ]
-    name: Test ${{ matrix.implementation }} against hostapi-legacy fixture
-    runs-on: ubuntu-latest
+    name: "[test-hostapi-legacy] ${{ matrix.implementation }}"
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
         name: ${{ matrix.implementation }}-adapter-legacy
-        path: test/adapters/${{ matrix.implementation }}
+        path: test/adapters/${{ matrix.implementation }}-legacy
       if: matrix.implementation == 'substrate'
     - uses: actions/download-artifact@v1
       with:
         name: ${{ matrix.implementation }}-adapter
         path: test/adapters/${{ matrix.implementation }}
       if: matrix.implementation == 'kagome'
-    - run: chmod +x test/adapters/substrate/substrate-adapter-legacy
+    - run: chmod +x test/adapters/substrate-legacy/substrate-adapter-legacy
       if: matrix.implementation == 'substrate'
     - run: chmod +x test/adapters/kagome/kagome-adapter
       if: matrix.implementation == 'kagome'
