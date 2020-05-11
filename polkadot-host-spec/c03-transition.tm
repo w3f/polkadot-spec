@@ -183,7 +183,7 @@
   <subsubsection|Handling Runtimes update to the
   State><label|sect-handling-runtime-state-update>
 
-  In order for the runtime to carry on various tasks, it manipulates the
+  In order for the Runtime to carry on various tasks, it manipulates the
   current state by means of executing calls to various Polkadot Host APIs
   (see Appendix <reference|sect-re-api>). It is the duty of Host APIs to
   determine the context in which these changes should persist. For example,
@@ -662,9 +662,13 @@
         <em|B> \<leftarrow\> <name|Add-Seal>(<em|B>)
       </state>
 
-      <space|1em>10:<space|1em>if <em|R> = <name|True>
+      <\state>
+        if <em|R> = <name|True>
+      </state>
 
-      <space|1em>11:<space|3em><name|Persist-state>
+      <\state>
+        <name|<space|2em>Persist-State>
+      </state>
     </algorithmic>
   </algorithm>
 
