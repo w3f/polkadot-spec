@@ -104,10 +104,7 @@ export CXX=g++-8
 
 # Running tests
 
-By running `./check.jl` the automated tests get executed. With `./check.jl --verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths. Use `./check.jl --help` to learn how to run individual tests.
-
-By running `nix-shell --run ./runtests.jl` the automated tests get executed. With `nix-shell --run "./runtests.jl verbose"` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths.
-
+By running `./runtests.jl` the automated tests get executed. With `./runtests.jl --verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths. Use `./runtests.jl --help` to learn how to run individual tests.
 
 # Structure
 
