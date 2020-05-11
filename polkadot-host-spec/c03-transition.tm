@@ -185,7 +185,7 @@
 
   In order for the runtime to carry on various tasks, it manipulates the
   current state by means of executing calls to various Polkadot Host APIs
-  (See Appendix <reference|sect-re-api>). It is the duty of Host APIs to
+  (see Appendix <reference|sect-re-api>). It is the duty of Host APIs to
   determine the context in which these changes should persist. For example,
   if Polkdot Host needs to validate a transaction using
   <verbatim|TaggedTransactionQueue_validate_transaction> entry (see Section
@@ -526,7 +526,7 @@
       <item><strong|Seal> is the data produced by the consensus engine and
       proving the authorship of the block producer. In particular, the Seal
       digest item must be the last item in the digest array and must be
-      stripped off before the block is submitted to the Runtime for
+      stripped off manually before the block is submitted to the Runtime for
       validation and be added back to the digest afterward. The detail of the
       Seal digest item is laid out in Definition <reference|defn-babe-seal>.
     </itemize-dot>
@@ -651,7 +651,15 @@
       </state>
 
       <\state>
+        <em|B> \<leftarrow\> <name|Remove-Seal>(<em|B>)
+      </state>
+
+      <\state>
         <math|R\<leftarrow\>> <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|Core_execute_block>>,B|)>>
+      </state>
+
+      <\state>
+        <em|B> \<leftarrow\> <name|Add-Seal>(<em|B>)
       </state>
 
       <space|1em>10:<space|1em>if <em|R> = <name|True>
@@ -663,6 +671,13 @@
   In which
 
   <\itemize-minus>
+    <item><name|Remove-Seal> removes the Seal digest from the block as
+    described in Definition <reference|defn-digest> before submitting it to
+    the Runtime.
+
+    <item><name|Add-Seal> adds the Seal digest back to the block as described
+    in Definition <reference|defn-digest> for later propagation.
+
     <item><name|Persist-State> implies the persistence of any state changes
     created by <verbatim|Core_execute_block> on successful execution.
   </itemize-minus>
