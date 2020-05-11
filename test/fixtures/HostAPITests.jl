@@ -118,7 +118,8 @@ function run_dataset(func_list, data_list, result_list; strip=true, legacy=false
                     output = read(`sh -c $cmd`, String);
                 catch err
                     @error "Adapter failed: $err"
-                    @test_broken false
+                    # Should be @test_broken, but does not fail CI
+                    @test false
                     continue
                 end
 

@@ -125,7 +125,8 @@ function run(self::Builder, adapter::String)
             end
         catch err
             @error "Adapter failed: $err"
-            @test_broken false
+            # Should be @test_broken, but does not fail CI
+            @test false
         end # try-catch
     end # for inputs
 end
