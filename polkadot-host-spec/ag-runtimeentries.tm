@@ -158,9 +158,13 @@
 
   This function should be called when a fully complete block is available
   that is not actively being built on, such as blocks received from other
-  peers. Additionally, the seal digest in the block header as described in
-  section <reference|defn-digest> must be removed manually before submitting
-  the block.
+  peers.
+
+  \;
+
+  Additionally, the seal digest in the block header as described in section
+  <reference|defn-digest> must be removed manually before submitting the
+  block.
 
   \;
 
