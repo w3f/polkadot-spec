@@ -92,18 +92,10 @@
   <assign|figure-text|<macro|Figure>>
 
   The following sections describe the standard based on which the Polkadot
-  Host communicates with each runtime entry.
-
-  <section|Managing state changes>
-
-  Only the two runtime functions <verbatim|Core_execute_block> as described
-  in secion <reference|defn-rt-core-execute-block> and
-  <verbatim|BlockBuilder_finalize_block> as described in section
-  <reference|defn-rt-blockbuilder-finalize-block> keep persistant storage.
-  Any state changes created by directly calling the other functions conducted
-  by the Polkadot Host must be disregarded and thrown away after execution.
-  It is therefore the responsibility of the Polkadot Host to wipe any changes
-  created after the those calls.
+  Host communicates with each runtime entry. Do note that any state changes
+  created by calling any of the Runtime functions are not necessarily
+  persisted. See Section <reference|sect-handling-runtime-state-update> for
+  more information.
 
   <section|Argument Specification>
 
@@ -115,7 +107,7 @@
   <\verbatim>
     \ \ \ \ (func $generic_runtime_entry
 
-    \ \ \ \ \ \ (param $data i32) (parm $len i32) (reslut i64))
+    \ \ \ \ \ \ (param $data i32) (parm $len i32) (result i64))
   </verbatim>
 
   \;
@@ -125,6 +117,8 @@
   can similarly either point to the SCALE encoded data the function returns
   (See Sections <reference|sect-runtime-send-args-to-runtime-enteries> and
   <reference|sect-runtime-return-value>).
+
+  \;
 
   In this section, we describe the function of each of the entries alongside
   with the details of the arguments and the return values for each one of
@@ -164,10 +158,9 @@
 
   This function should be called when a fully complete block is available
   that is not actively being built on, such as blocks received from other
-  peers. Any state changes created by this function on successful execution
-  are persisted. Additionally, the seal digest in the block header as
-  described in section <reference|defn-digest> must be removed manually
-  before submitting the block.
+  peers. Additionally, the seal digest in the block header as described in
+  section <reference|defn-digest> must be removed manually before submitting
+  the block.
 
   \;
 
@@ -292,12 +285,6 @@
   block. This function gets called internally when executing blocks with the
   <verbatim|Core_execute_block> runtime function as described in section
   <reference|sect-rte-core-execute-block>.
-
-  \;
-
-  If this function gets called manually in order to validate a transaction
-  received from peers, all state changes after validation are disregarded and
-  thrown away.
 
   \;
 
@@ -496,8 +483,7 @@
   <subsection|<verbatim|BlockBuilder_finalize_block>><label|defn-rt-blockbuilder-finalize-block>
 
   Finalize the block - it is up to the caller to ensure that all header
-  fields are valid except for the state root. Any state changes created by
-  this function on successful execution are persisted.
+  fields are valid except for the state root.
 
   \;
 
@@ -523,42 +509,42 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|A|?>>
-    <associate|auto-10|<tuple|A.3.4|?>>
-    <associate|auto-11|<tuple|A.3.5|?>>
-    <associate|auto-12|<tuple|A.2|?>>
-    <associate|auto-13|<tuple|A.3.6|?>>
-    <associate|auto-14|<tuple|A.3.7|?>>
-    <associate|auto-15|<tuple|A.3|?>>
-    <associate|auto-16|<tuple|A.4|?>>
-    <associate|auto-17|<tuple|A.5|?>>
-    <associate|auto-18|<tuple|A.6|?>>
-    <associate|auto-19|<tuple|A.3.8|?>>
+    <associate|auto-10|<tuple|A.2.5|?>>
+    <associate|auto-11|<tuple|A.2|?>>
+    <associate|auto-12|<tuple|A.2.6|?>>
+    <associate|auto-13|<tuple|A.2.7|?>>
+    <associate|auto-14|<tuple|A.3|?>>
+    <associate|auto-15|<tuple|A.4|?>>
+    <associate|auto-16|<tuple|A.5|?>>
+    <associate|auto-17|<tuple|A.6|?>>
+    <associate|auto-18|<tuple|A.2.8|?>>
+    <associate|auto-19|<tuple|A.7|?>>
     <associate|auto-2|<tuple|A.1|?>>
-    <associate|auto-20|<tuple|A.7|?>>
-    <associate|auto-21|<tuple|A.8|?>>
-    <associate|auto-22|<tuple|A.3.9|?>>
+    <associate|auto-20|<tuple|A.8|?>>
+    <associate|auto-21|<tuple|A.2.9|?>>
+    <associate|auto-22|<tuple|A.2.10|?>>
     <associate|auto-23|<tuple|A.3.10|?>>
     <associate|auto-3|<tuple|A.1|?>>
     <associate|auto-4|<tuple|A.2|?>>
-    <associate|auto-5|<tuple|A.3|?>>
-    <associate|auto-6|<tuple|A.3.1|?>>
-    <associate|auto-7|<tuple|A.1|?>>
-    <associate|auto-8|<tuple|A.3.2|?>>
-    <associate|auto-9|<tuple|A.3.3|?>>
+    <associate|auto-5|<tuple|A.2.1|?>>
+    <associate|auto-6|<tuple|A.1|?>>
+    <associate|auto-7|<tuple|A.2.2|?>>
+    <associate|auto-8|<tuple|A.2.3|?>>
+    <associate|auto-9|<tuple|A.2.4|?>>
     <associate|defn-invalid-transaction|<tuple|A.3|?>>
-    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.3.10|?>>
-    <associate|defn-rt-core-execute-block|<tuple|A.3.2|?>>
-    <associate|defn-rt-core-version|<tuple|A.3.1|?>>
+    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|?>>
+    <associate|defn-rt-core-execute-block|<tuple|A.2.2|?>>
+    <associate|defn-rt-core-version|<tuple|A.2.1|?>>
     <associate|defn-transaction-validity-error|<tuple|A.2|?>>
     <associate|defn-unknown-transaction|<tuple|A.4|?>>
     <associate|defn-valid-transaction|<tuple|A.1|?>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|?>>
     <associate|sect-rt-core-execute-block|<tuple|A.3.2|?>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.3.5|?>>
+    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|?>>
     <associate|sect-rte-core-execute-block|<tuple|A.3.2|?>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.3.6|?>>
-    <associate|sect-rte-hash-and-length|<tuple|A.3.4|?>>
-    <associate|sect-rte-validate-transaction|<tuple|A.3.7|?>>
+    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|?>>
+    <associate|sect-rte-hash-and-length|<tuple|A.2.4|?>>
+    <associate|sect-rte-validate-transaction|<tuple|A.2.7|?>>
     <associate|sect-runtime-entries|<tuple|A|?>>
     <associate|snippet-runtime-enteries|<tuple|A.1|?>>
   </collection>
