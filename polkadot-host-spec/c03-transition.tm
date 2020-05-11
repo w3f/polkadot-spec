@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -183,21 +183,25 @@
   <subsubsection|Handling Runtimes update to the
   State><label|sect-handling-runtime-state-update>
 
-  In order for the runtime to carry on various tasks Runtimes manipulate the
-  current state, by means of executing calls to various Polkadot Host APIs
+  In order for the runtime to carry on various tasks, it manipulates the
+  current state by means of executing calls to various Polkadot Host APIs
   (See Appendix <reference|sect-re-api>). It is the duty of Host APIs to
   determine the context in which these changes should persist. For example,
   if Polkdot Host needs to validate a transaction using
   <verbatim|TaggedTransactionQueue_validate_transaction> entry (see Section
   <reference|sect-rte-validate-transaction>), it needs to sandbox the changes
   to the state just for that Runtime call and prevent the global state of the
-  system from being influence by the call to such a Runtime entery.\ 
+  system from being influence by the call to such a Runtime entery.
+
+  \ 
 
   As a rule of thumb, any state changes resulting from Runtime enteries are
   not persistant with the exception of state changes resulting from calling
   <verbatim|Core_execute_block> (see Section
-  <reference|sect-rte-core-execute-block>while Polkadot Host is importing a
+  <reference|sect-rte-core-execute-block>) while Polkadot Host is importing a
   block (see Section <reference|sect-block-validation>).
+
+  \;
 
   For more information on managing multiple variant of state see Section
   <reference|sect-managing-multiple-states>.
