@@ -36,7 +36,7 @@ This witness proof consists of light client proofs of state data that are genera
 
 \begin{definition}
   \label{defn-pov-block}
-  Accordingly we define the {\bf proof of validity block} or {\bf PoV} block in short, %{\bf $\PoVB$},
+  Accordingly we define the {\bf proof of validity block} or {\bf PoV} block in short, {\bf $\PoVB$},
   to be the tuple:
   \[
   (B, \pi_B)
@@ -62,11 +62,11 @@ Note that in the code the blob is referred to as "AvailableData".
 
 \section{Overal process}
 
-The Diagrams \ref{diag-anv-overal} demonestrate the overal process of assuring availability and validity in Polkadot.
+The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring availability and validity in Polkadot \todo{complete the Diagram}.
 
+\begin{figure}[h!]
+\label{diag-anv-overall}
 \begin{plantuml}
-\label{diag-anv-overal}
-
 %%    
 @startuml
 
@@ -91,6 +91,8 @@ The Diagrams \ref{diag-anv-overal} demonestrate the overal process of assuring a
 
 @enduml
 \end{plantuml}
+\caption{Overall process to acheive availability and validity in Polkadot}
+\end{figure}
 
 \section{Primary Validation}
 \label{sect-primary-validation}
