@@ -16,14 +16,14 @@ on:
 
 jobs:
   build-substrate:
-    name: Build substrate
-    runs-on: ubuntu-latest
+    name: "[build] substrate"
+    runs-on: ubuntu-18.04
     steps:
-    - name: Download substrate
+    - name: Checkout substrate
       uses: actions/checkout@v2
       with:
         repository: paritytech/polkadot
-        ref: v0.7.32
+        ref: v0.7.33
     - name: Setup rust toolchain
       id: rustup
       uses: actions-rs/toolchain@v1
@@ -44,7 +44,7 @@ jobs:
         path: ~/.cargo/git
         key: cargo-index-implementation-substrate-${{ hashFiles('Cargo.lock') }}
         restore-key: cargo-index-implementation-substrate-
-    - name: Cache cargo build
+    - name: Cache cargo build output
       uses: actions/cache@v1
       with:
         path: target
@@ -59,10 +59,11 @@ jobs:
         path: target/release/polkadot
 
   build-kagome:
-    name: Build kagome
-    runs-on: ubuntu-latest
+    name: "[build] kagome"
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout kagome
+      uses: actions/checkout@v2
       with:
         repository: soramitsu/kagome
         ref: 988bc6d93314ca58b320a9d83dcbc4cd3b87b7bb
@@ -86,10 +87,11 @@ jobs:
         path: build/node/kagome_full/kagome_full
 
   build-gossamer:
-    name: Build gossamer
-    runs-on: ubuntu-latest
+    name: "[build] gossamer"
+    runs-on: ubuntu-18.04
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout gossamer
+      uses: actions/checkout@v2
       with:
         repository: ChainSafe/gossamer
         ref: 6988ec67556e1cf4aeaaa342469d132e9fb29882
@@ -109,10 +111,10 @@ jobs:
 
 
   build-tester-host:
-    name: Build host tester
-    runs-on: ubuntu-latest
+    name: "[build] host-tester"
+    runs-on: ubuntu-18.04
     steps:
-    - name: Download host tester
+    - name: Checkout repository
       uses: actions/checkout@v2
     - name: Setup rust toolchain
       id: rustup
@@ -134,7 +136,7 @@ jobs:
         path: ~/.cargo/git
         key: cargo-index-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-key: cargo-index-tester-host-
-    - name: Cache cargo build
+    - name: Cache cargo build output
       uses: actions/cache@v1
       with:
         path: test/testers/host/target
@@ -142,16 +144,16 @@ jobs:
         restore-keys: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester genesis
       working-directory: test/testers/host
-      run: cargo run > genesis.json
+      run: cargo run --release > genesis.json
     - name: Upload host tester genesis
       uses: actions/upload-artifact@v1
       with:
-        name: genesis
+        name: genesis.json
         path: test/testers/host/genesis.json
 
   build-tester-host-legacy:
-    name: Build host tester legacy
-    runs-on: ubuntu-latest
+    name: "[build] host-tester-legacy"
+    runs-on: ubuntu-18.04
     steps:
     - name: Download host tester legacy
       uses: actions/checkout@v2
@@ -183,10 +185,10 @@ jobs:
         restore-keys: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester legacy genesis
       working-directory: test/testers/host-legacy
-      run: cargo run > genesis-legacy.json
+      run: cargo run --release > genesis.legacy.json
     - name: Upload host tester legacy genesis
       uses: actions/upload-artifact@v1
       with:
-        name: genesis-legacy
-        path: test/testers/host-legacy/genesis-legacy.json
+        name: genesis.legacy.json
+        path: test/testers/host-legacy/genesis.legacy.json
 
