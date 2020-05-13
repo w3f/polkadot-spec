@@ -526,9 +526,10 @@
       <item><strong|Seal> is the data produced by the consensus engine and
       proving the authorship of the block producer. In particular, the Seal
       digest item must be the last item in the digest array and must be
-      stripped off manually before the block is submitted to the Runtime for
-      validation and be added back to the digest afterward. The detail of the
-      Seal digest item is laid out in Definition <reference|defn-babe-seal>.
+      stripped off by the Polkadot Host before the block is submitted to any
+      Runtime function including for validation. The Seal must be added back
+      to the digest afterward. The detail of the Seal digest item is laid out
+      in Definition <reference|defn-babe-seal>.
     </itemize-dot>
   </definition>
 
