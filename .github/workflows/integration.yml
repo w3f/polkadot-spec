@@ -144,12 +144,12 @@ jobs:
         restore-keys: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester genesis
       working-directory: test/testers/host
-      run: cargo run --release > genesis.json
+      run: cargo run --release > genesis.host-tester.json
     - name: Upload host tester genesis
       uses: actions/upload-artifact@v1
       with:
-        name: genesis.json
-        path: test/testers/host/genesis.json
+        name: genesis.host-tester.json
+        path: test/testers/host/genesis.host-tester.json
 
   build-tester-host-legacy:
     name: "[build] host-tester-legacy"
@@ -185,10 +185,9 @@ jobs:
         restore-keys: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester legacy genesis
       working-directory: test/testers/host-legacy
-      run: cargo run --release > genesis.legacy.json
+      run: cargo run --release > genesis.host-tester-legacy.json
     - name: Upload host tester legacy genesis
       uses: actions/upload-artifact@v1
       with:
-        name: genesis.legacy.json
-        path: test/testers/host-legacy/genesis.legacy.json
-
+        name: genesis.host-tester-legacy.json
+        path: test/testers/host-legacy/genesis.host-tester-legacy.json
