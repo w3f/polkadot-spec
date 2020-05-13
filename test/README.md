@@ -23,7 +23,9 @@ While the official target of our testsuite are currently only debian-based syste
 
 ## General Build
 
-Each of the API adapters has to be build (see [adapters subfolder](./adapters/)), before the testsuite can be run.
+There is a simple Makefile in the [main test directory](./), that will build all the required API adapters when you run `make`.
+
+Alternately, each of the API adapters can be built separately (see [adapters subfolder](./adapters/)), before running the testsuite.
 
 ### Substrate API Adapter
 
@@ -49,10 +51,6 @@ Needs recent version of Go.
 ```
 go build
 ```
-
-## On Debian-based systems
-
-There is a simple Makefile in the main directory, that will build all the required API adapters when you run `make`.
 
 ### Install dependencies
 
