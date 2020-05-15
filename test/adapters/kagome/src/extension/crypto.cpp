@@ -15,7 +15,25 @@
 namespace crypto {
 
   // Input: data
-  void processExtBlake2_128(const std::vector<std::string> &args){}
+  void processExtBlake2_128(const std::vector<std::string> &args){
+      std::string data = args[0];
+
+      auto [memory, extension] = helpers::initialize_environment();
+
+      kagome::common::Buffer buffer;
+
+      buffer.put(data);
+      kagome::runtime::SizeType valueSize = buffer.size();
+      kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
+      memory->storeBuffer(valuePtr, buffer);
+      buffer.clear();
+
+      auto resultPtr = memory->allocate(16);
+      extension->ext_blake2_128(valuePtr, valueSize, resultPtr);
+      auto hash = memory->loadN(resultPtr, 16);
+
+      std::cout << kagome::common::hex_lower(hash) << "\n";
+  }
 
   // Input: data
   void processExtBlake2_256(const std::vector<std::string> &args){
@@ -66,7 +84,25 @@ namespace crypto {
   void processExtSr25519(const std::vector<std::string> &args){}
 
   // Input: data
-  void processExtTwox64(const std::vector<std::string> &args){}
+  void processExtTwox64(const std::vector<std::string> &args){
+      std::string data = args[0];
+
+      auto [memory, extension] = helpers::initialize_environment();
+
+      kagome::common::Buffer buffer;
+
+      buffer.put(data);
+      kagome::runtime::SizeType valueSize = buffer.size();
+      kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
+      memory->storeBuffer(valuePtr, buffer);
+      buffer.clear();
+
+      auto resultPtr = memory->allocate(8);
+      extension->ext_twox_64(valuePtr, valueSize, resultPtr);
+      auto hash = memory->loadN(resultPtr, 8);
+
+      std::cout << kagome::common::hex_lower(hash) << "\n";
+  }
 
   // Input: data
   void processExtTwox128(const std::vector<std::string> &args){
