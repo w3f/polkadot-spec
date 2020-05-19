@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-include("fixtures/include.jl")
+include("helpers/SpecificationTestsuite.jl")
 
 using .SpecificationTestsuite
 
