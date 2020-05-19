@@ -34,13 +34,13 @@ jobs:
       with:
         path: ~/.cargo/registry
         key: cargo-registry-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
-        restore-key: cargo-registry-adapter-substrate-
+        restore-keys: cargo-registry-adapter-substrate-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
         key: cargo-index-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
-        restore-key: cargo-index-adapter-substrate-
+        restore-keys: cargo-index-adapter-substrate-
     - name: Cache cargo build ouput
       uses: actions/cache@v1
       with:
@@ -75,13 +75,13 @@ jobs:
       with:
         path: ~/.cargo/registry
         key: cargo-registry-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
-        restore-key: cargo-registry-adapter-substrate-legacy-
+        restore-keys: cargo-registry-adapter-substrate-legacy-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
         key: cargo-index-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
-        restore-key: cargo-index-adapter-substrate-legacy-
+        restore-keys: cargo-index-adapter-substrate-legacy-
     - name: Cache cargo build output
       uses: actions/cache@v1
       with:
@@ -108,7 +108,7 @@ jobs:
       with:
         path: ~/.hunter
         key: hunter-adapter-kagome-${{ hashFiles('test/adapters/kagome/CMakeLists.txt') }}
-        restore-key: hunter-adapter-kagome-
+        restore-keys: hunter-adapter-kagome-
     - name: Build kagome adapter
       working-directory: test/adapters/kagome
       env:
@@ -137,7 +137,7 @@ jobs:
       with:
         path: ~/go/pkg/mod
         key: go-mod-adapter-gossamer-${{ hashFiles('test/adapters/gossamer/go.sum') }}
-        restore-key: go-mod-adapter-gossamer-
+        restore-keys: go-mod-adapter-gossamer-
     - name: Build gossamer adapter
       run: go build
     - name: Upload gossamer adapter
