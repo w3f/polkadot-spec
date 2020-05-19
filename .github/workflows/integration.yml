@@ -37,13 +37,13 @@ jobs:
       with:
         path: ~/.cargo/registry
         key: cargo-registry-implementation-substrate-${{ hashFiles('Cargo.lock') }}
-        restore-key: cargo-registry-implementation-substrate-
+        restore-keys: cargo-registry-implementation-substrate-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
         key: cargo-index-implementation-substrate-${{ hashFiles('Cargo.lock') }}
-        restore-key: cargo-index-implementation-substrate-
+        restore-keys: cargo-index-implementation-substrate-
     - name: Cache cargo build output
       uses: actions/cache@v1
       with:
@@ -72,7 +72,7 @@ jobs:
       with:
         path: ~/.hunter
         key: hunter-implementation-kagome-${{ hashFiles('CMakeLists.txt') }}
-        restore-key: hunter-implementation-kagome-
+        restore-keys: hunter-implementation-kagome-
     - name: Build kagome
       env:
         CC: gcc-9
@@ -100,7 +100,7 @@ jobs:
       with:
         path: ~/go/pkg/mod
         key: go-mod-implementation-gossamer-${{ hashFiles('go.sum') }}
-        restore-key: go-mod-implementation-gossamer-
+        restore-keys: go-mod-implementation-gossamer-
     - name: Build gossamer
       run: make gossamer
     - name: Upload gossamer
@@ -129,13 +129,13 @@ jobs:
       with:
         path: ~/.cargo/registry
         key: cargo-registry-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-key: cargo-registry-tester-host-
+        restore-keys: cargo-registry-tester-host-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
         key: cargo-index-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-key: cargo-index-tester-host-
+        restore-keys: cargo-index-tester-host-
     - name: Cache cargo build output
       uses: actions/cache@v1
       with:
@@ -170,13 +170,13 @@ jobs:
       with:
         path: ~/.cargo/registry
         key: cargo-registry-tester-host-legacy-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-key: cargo-registry-tester-host-legacy-
+        restore-keys: cargo-registry-tester-host-legacy-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
         key: cargo-index-tester-host-legacy-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-key: cargo-index-tester-host-legacy-
+        restore-keys: cargo-index-tester-host-legacy-
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
