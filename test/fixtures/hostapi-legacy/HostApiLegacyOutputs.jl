@@ -1,4 +1,4 @@
-module PdreApiExpectedResultsLegacy
+module HostApiLegacyOutputs
     const value = [
         # test_blake2_128
         "440973e4e50902f1d0ec97de357eb2fd",

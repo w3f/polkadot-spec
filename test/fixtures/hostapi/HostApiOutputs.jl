@@ -1,4 +1,4 @@
-module PdreApiExpectedResults
+module HostApiOutputs
     const value = [
         # ext_hashing_keccak_256_version_1
         "d517392f8119f79c1623774b9346e00104a1d193f1fa641e6e659bf323c37967",

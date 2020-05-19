@@ -1,5 +1,6 @@
-include("./inputs.jl")
-include("./outputs.jl")
+include("./HostApiFunctions.jl")
+include("./HostApiInputs.jl")
+include("./HostApiOutputs.jl")
 
 using .StringHelper
 using .AdapterFixture
@@ -8,109 +9,109 @@ tests = AdapterFixture.Builder("Host API", "pdre-api")
 
 HOSTAPI_FIXTURE_DATASETS = [
     [
-        PdreApiTestFunctions.value,
+        HostApiFunctions.value,
         [
-            PdreApiTestData.value_1,
+            HostApiInputs.value_1,
         ],
-        PdreApiExpectedResults.value .* "\n",
+        HostApiOutputs.value .* "\n",
     ],[
-        PdreApiTestFunctions.child_child_def_type_key_value,
+        HostApiFunctions.child_child_def_type_key_value,
         [
-            PdreApiTestData.child_child,
-            PdreApiTestData.child_def_child_type,
-            PdreApiTestData.key_value_1,
+            HostApiInputs.child_child,
+            HostApiInputs.child_def_child_type,
+            HostApiInputs.key_value_1,
         ],
-        PdreApiExpectedResults.child_child_def_type_key_value .* "\n",
+        HostApiOutputs.child_child_def_type_key_value .* "\n",
     ],[
-        PdreApiTestFunctions.child_def_type_key_value_offset_buffer_size,
+        HostApiFunctions.child_def_type_key_value_offset_buffer_size,
         [
-            PdreApiTestData.child_child,
-            PdreApiTestData.child_def_child_type,
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.offset,
-            PdreApiTestData.buffer_size,
+            HostApiInputs.child_child,
+            HostApiInputs.child_def_child_type,
+            HostApiInputs.key_value_1,
+            HostApiInputs.offset,
+            HostApiInputs.buffer_size,
         ],
-        PdreApiExpectedResults.key_value_offset_buffer_size .* "\n",
+        HostApiOutputs.key_value_offset_buffer_size .* "\n",
     ],[
-        PdreApiTestFunctions.child_child_def_type_prefix_key_value_key_value,
+        HostApiFunctions.child_child_def_type_prefix_key_value_key_value,
         [
-            PdreApiTestData.child_child,
-            PdreApiTestData.child_def_child_type,
-            PdreApiTestData.prefix_key_value_key_value,
+            HostApiInputs.child_child,
+            HostApiInputs.child_def_child_type,
+            HostApiInputs.prefix_key_value_key_value,
         ],
-        PdreApiExpectedResults.child_child_def_type_prefix_key_value_key_value,
+        HostApiOutputs.child_child_def_type_prefix_key_value_key_value,
     ],[
-        PdreApiTestFunctions.child_child_def_type_key_value_key_value,
+        HostApiFunctions.child_child_def_type_key_value_key_value,
         [
-            PdreApiTestData.child_child,
-            PdreApiTestData.child_def_child_type,
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.key_value_2,
+            HostApiInputs.child_child,
+            HostApiInputs.child_def_child_type,
+            HostApiInputs.key_value_1,
+            HostApiInputs.key_value_2,
         ],
-        PdreApiExpectedResults.child_child_def_type_key_value_key_value .* "\n",
+        HostApiOutputs.child_child_def_type_key_value_key_value .* "\n",
     ],[
-        PdreApiTestFunctions.key_value,
+        HostApiFunctions.key_value,
         [
-            PdreApiTestData.key_value_1,
+            HostApiInputs.key_value_1,
         ],
-        PdreApiExpectedResults.key_value .* "\n",
+        HostApiOutputs.key_value .* "\n",
     ],[
-        PdreApiTestFunctions.key_value_offset_buffer_size,
+        HostApiFunctions.key_value_offset_buffer_size,
         [
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.offset,
-            PdreApiTestData.buffer_size,
+            HostApiInputs.key_value_1,
+            HostApiInputs.offset,
+            HostApiInputs.buffer_size,
         ],
-        PdreApiExpectedResults.key_value_offset_buffer_size .* "\n",
+        HostApiOutputs.key_value_offset_buffer_size .* "\n",
     ],[
-        PdreApiTestFunctions.prefix_key_value_key_value,
+        HostApiFunctions.prefix_key_value_key_value,
         [
-            PdreApiTestData.prefix_key_value_key_value,
+            HostApiInputs.prefix_key_value_key_value,
         ],
         nothing,
     ],[
-        PdreApiTestFunctions.key_value_key_value,
+        HostApiFunctions.key_value_key_value,
         [
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.key_value_2,
+            HostApiInputs.key_value_1,
+            HostApiInputs.key_value_2,
         ],
-        PdreApiExpectedResults.key_value_key_value .* "\n",
+        HostApiOutputs.key_value_key_value .* "\n",
     ],[
-        PdreApiTestFunctions.seed,
+        HostApiFunctions.seed,
         [
-            PdreApiTestData.seed_1,
+            HostApiInputs.seed_1,
         ],
-        PdreApiExpectedResults.seed .* "\n",
+        HostApiOutputs.seed .* "\n",
     ],[
-        PdreApiTestFunctions.seed_seed,
+        HostApiFunctions.seed_seed,
         [
-            PdreApiTestData.seed_1,
-            PdreApiTestData.seed_2,
+            HostApiInputs.seed_1,
+            HostApiInputs.seed_2,
         ],
         nothing,
     ],[
-        PdreApiTestFunctions.seed_msg,
+        HostApiFunctions.seed_msg,
         [
-            PdreApiTestData.seed_1,
-            PdreApiTestData.value_1[1:6],
+            HostApiInputs.seed_1,
+            HostApiInputs.value_1[1:6],
         ],
         nothing,
     ],[
-        PdreApiTestFunctions.key_value_key_value_key_value,
+        HostApiFunctions.key_value_key_value_key_value,
         [
-            PdreApiTestData.key_value_1,
-            PdreApiTestData.key_value_2,
-            PdreApiTestData.key_value_3,
+            HostApiInputs.key_value_1,
+            HostApiInputs.key_value_2,
+            HostApiInputs.key_value_3,
         ],
-        PdreApiExpectedResults.key_value_key_value_key_value .* "\n",
+        HostApiOutputs.key_value_key_value_key_value .* "\n",
     ],[
-        PdreApiTestFunctions.value_value_value,
+        HostApiFunctions.value_value_value,
         [
-            PdreApiTestData.value_1,
-            PdreApiTestData.value_2,
-            PdreApiTestData.value_3,
+            HostApiInputs.value_1,
+            HostApiInputs.value_2,
+            HostApiInputs.value_3,
         ],
-        PdreApiExpectedResults.value_value_value .* "\n",
+        HostApiOutputs.value_value_value .* "\n",
     ]
 ]
 
