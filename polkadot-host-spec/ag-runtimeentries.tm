@@ -1,4 +1,4 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <project|polkadot_host_spec.tm>
 
@@ -93,9 +93,9 @@
 
   The following sections describe the standard based on which the Polkadot
   Host communicates with each runtime entry. Do note that any state changes
-  created by calling any of the Runtime functions are not necessarily
-  persisted. See Section <reference|sect-handling-runtime-state-update> for
-  more information.
+  created by calling any of the Runtime functions are not necessarily to be
+  persisted after the call is ended. See Section
+  <reference|sect-handling-runtime-state-update> for more information.
 
   <section|Argument Specification>
 
@@ -143,7 +143,7 @@
     <verbatim|version> function.>
   </with>
 
-  <subsection|<verbatim|Core_execute_block>><label|defn-rt-core-execute-block>
+  <subsection|<verbatim|Core_execute_block>><version-both|<label|sect-rte-core-execute-block>|<label|defn-rt-core-execute-block>>
 
   Executes a full block by executing all exctrinsics included in it and
   update the state accordingly. Additionally, some integrity checks are
@@ -158,13 +158,14 @@
 
   This function should be called when a fully complete block is available
   that is not actively being built on, such as blocks received from other
-  peers.
+  peers. State changes resulted from calling this function are usually meant
+  to persist when the block is imported successfully.\ 
 
   \;
 
   Additionally, the seal digest in the block header as described in section
-  <reference|defn-digest> must be removed manually before submitting the
-  block.
+  <reference|defn-digest> must be removed by the Polkadot host before
+  submitting the block.
 
   \;
 
@@ -398,9 +399,15 @@
     \;
   </definition>
 
+  Note that when this function gets called by the Polkadot host in order to
+  validate a transaction received from peers, Polkadot host usually
+  disregards and rewinds state changes resulting for such a call.
+
+  \;
+
   <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
 
-  Apply the extrinsic outside of the block execution function. This doesn't
+  Apply the extrinsic outside of the block execution function. This does not
   attempt to validate anything regarding the block, but it builds a list of
   transaction hashes.
 
@@ -487,9 +494,9 @@
   <subsection|<verbatim|BlockBuilder_finalize_block>><label|defn-rt-blockbuilder-finalize-block>
 
   Finalize the block - it is up to the caller to ensure that all header
-  fields are valid except for the state root.
-
-  \;
+  fields are valid except for the state root. State changes resulting from
+  calling this function are usually meant to persist upon successful
+  execution of the function and appending of the block to the chain
 
   <\with|par-mode|right>
     <qed>
@@ -500,8 +507,8 @@
 
 <\initial>
   <\collection>
-    <associate|chapter-nr|6>
-    <associate|page-first|107>
+    <associate|chapter-nr|5>
+    <associate|page-first|101>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
@@ -527,7 +534,6 @@
     <associate|auto-20|<tuple|A.8|?>>
     <associate|auto-21|<tuple|A.2.9|?>>
     <associate|auto-22|<tuple|A.2.10|?>>
-    <associate|auto-23|<tuple|A.3.10|?>>
     <associate|auto-3|<tuple|A.1|?>>
     <associate|auto-4|<tuple|A.2|?>>
     <associate|auto-5|<tuple|A.2.1|?>>
@@ -543,9 +549,8 @@
     <associate|defn-unknown-transaction|<tuple|A.4|?>>
     <associate|defn-valid-transaction|<tuple|A.1|?>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|?>>
-    <associate|sect-rt-core-execute-block|<tuple|A.3.2|?>>
     <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|?>>
-    <associate|sect-rte-core-execute-block|<tuple|A.3.2|?>>
+    <associate|sect-rte-core-execute-block|<tuple|A.2.2|?>>
     <associate|sect-rte-grandpa-auth|<tuple|A.2.6|?>>
     <associate|sect-rte-hash-and-length|<tuple|A.2.4|?>>
     <associate|sect-rte-validate-transaction|<tuple|A.2.7|?>>
@@ -564,36 +569,36 @@
       <tuple|normal|<surround|<hidden-binding|<tuple>|A.1>||Detail of the
       version data type returns from runtime
       <with|font-family|<quote|tt>|language|<quote|verbatim>|version>
-      function.>|<pageref|auto-7>>
+      function.>|<pageref|auto-6>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.2>|>
         The tuple provided by <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BabeApi_configuration>.
-      </surround>|<pageref|auto-12>>
+      </surround>|<pageref|auto-11>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.3>|>
         The tuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
 
         in the case the transaction is judged to be valid.
-      </surround>|<pageref|auto-15>>
+      </surround>|<pageref|auto-14>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|A.4>||Type variation
-      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-16>>
+      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-15>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.5>|>
         Type variant whichs gets appended to Id 0 of
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-17>>
+      </surround>|<pageref|auto-16>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.6>|>
         Type variant whichs gets appended to Id 1 of
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-18>>
+      </surround>|<pageref|auto-17>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|A.7>||Data format of
-      the Dispatch error type>|<pageref|auto-20>>
+      the Dispatch error type>|<pageref|auto-19>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|A.8>||Identifiers of
-      the Apply error type>|<pageref|auto-21>>
+      the Apply error type>|<pageref|auto-20>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
@@ -604,53 +609,49 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      A.2<space|2spc>Managing state changes
+      A.2<space|2spc>Argument Specification
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>
 
-      A.3<space|2spc>Argument Specification
+      <with|par-left|<quote|1tab>|A.2.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>
+      <no-break><pageref|auto-5>>
 
-      <with|par-left|<quote|1tab>|A.3.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
+      <with|par-left|<quote|1tab>|A.2.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>>
+      <no-break><pageref|auto-7>>
 
-      <with|par-left|<quote|1tab>|A.3.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
+      <with|par-left|<quote|1tab>|A.2.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|A.3.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialize_block>
+      <with|par-left|<quote|1tab>|A.2.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|hash_and_length>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|A.3.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|hash_and_length>
+      <with|par-left|<quote|1tab>|A.2.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|A.3.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
+      <with|par-left|<quote|1tab>|A.2.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-12>>
 
-      <with|par-left|<quote|1tab>|A.3.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
+      <with|par-left|<quote|1tab>|A.2.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-13>>
 
-      <with|par-left|<quote|1tab>|A.3.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
+      <with|par-left|<quote|1tab>|A.2.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>>
+      <no-break><pageref|auto-18>>
 
-      <with|par-left|<quote|1tab>|A.3.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
+      <with|par-left|<quote|1tab>|A.2.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-19>>
+      <no-break><pageref|auto-21>>
 
-      <with|par-left|<quote|1tab>|A.3.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
+      <with|par-left|<quote|1tab>|A.2.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-22>>
-
-      <with|par-left|<quote|1tab>|A.3.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
     </associate>
   </collection>
 </auxiliary>
