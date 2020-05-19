@@ -1,75 +1,49 @@
-# Module which contains the names of the LEGACY functions that need to be tested.
-# Thoses names get passed on to the CLI as`--function <NAME>`.
-# The functions are grouped into arrays based on the expected (same) input data.
-module PdreApiTestFunctionsLegacy
-	# Input: data
-	const value = [
-	  "test_blake2_128",
-	  "test_blake2_256",
-	  "test_keccak_256",
-	  "test_twox_64",
-	  "test_twox_128",
-	  "test_twox_256"
+module HostApiInputs
+    # Only used by new APIs, not legacy
+	const child_def_child_type = [
+	  [
+		"Ameliorated", # child key definition
+		1 # child type
+	  ],
+	  [
+		"radical",
+		1
+	  ],
+	  [
+		"forecast",
+		1
+	  ],
+	  [
+		"well-modulated",
+		1
+	  ],
+	  [
+		"Vision-oriented",
+		1
+	  ],
+	  [
+		"needs-based",
+		1
+	  ],
+	  [
+		"heuristic",
+		1
+	  ],
+	  [
+		"system engine",
+		1
+	  ],
+	  [
+		"paradigm",
+		1
+	  ],
+	  [
+		"Devolved",
+		1
+	  ]
 	]
 
-	const value_no_output = [
-	  "test_ed25519",
-	  "test_sr25519"
-	]
-
-	const key_value = [
-	  "test_set_get_storage",
-	  "test_exists_storage",
-	  "test_clear_storage",
-	  "test_set_get_local_storage",
-	  "test_blake2_256_enumerated_trie_root"
-	]
-
-	const key_value_offset = [
-		"test_set_get_storage_into"
-	]
-
-	const key_value_key_value = [
-		"test_storage_root"
-	]
-
-	const key_key_value = [
-		"test_local_storage_compare_and_set"
-	]
-
-	const prefix_key_value_key_value = [
-	  "test_clear_prefix"
-	]
-
-	const child_child_key_value = [
-	  "test_set_get_child_storage",
-	  "test_exists_child_storage",
-	  "test_clear_child_storage",
-	  "test_kill_child_storage"
-	]
-
-	const prefix_child_child_key_value_key_value = [
-	  "test_clear_child_prefix"
-	]
-
-	const child_child_key_value_offset = [
-	  "test_get_child_storage_into"
-	]
-
-	const child_child_key_value_key_value = [
-	  "test_child_storage_root"
-	]
-
-	const fn_network = [
-	  "test_http",
-	  "test_network_state"
-	]
-
-end
-
-
-module PdreApiTestDataLegacy
-		# Contains (mostly valid) prefixes of the corresponding keys
+	# Contains (mostly valid) prefixes of the corresponding keys
     const prefix_key_value_key_value = [
       [
         "stat", # prefix
@@ -229,6 +203,49 @@ module PdreApiTestDataLegacy
 	  ]
 	]
 
+    const key_value_3 = [
+      [
+        "static", # value1
+        "even-keeled", # value2
+      ],
+      [
+        "function",
+        "Face to face",
+      ],
+      [
+        "Integrated",
+        "budgetary management",
+      ],
+      [
+        "non-based",
+        "non-volatile",
+      ],
+      [
+        "productivity",
+        "Total",
+      ],
+      [
+        "Exclusive",
+        "concept",
+      ],
+      [
+        "disintermediate",
+        "policy",
+      ],
+      [
+        "contingency",
+        "context-sensitive",
+      ],
+      [
+        "human-resource",
+        "hardware",
+      ],
+      [
+        "Optional",
+        "object-oriented",
+      ]
+    ]
+
 	const value_1 = [
 	  [
 	    "static", # value
@@ -295,6 +312,39 @@ module PdreApiTestDataLegacy
       ]
     ]
 
+    const value_3 = [
+      [
+        "Future-proofed" # value
+      ],
+      [
+        "Expanded"
+      ],
+      [
+        "pricing structure"
+      ],
+      [
+        "emulation"
+      ],
+      [
+        "Visionary"
+      ],
+      [
+        "approach"
+      ],
+      [
+        "function"
+      ],
+      [
+        "Configurable"
+      ],
+      [
+        "Automated"
+      ],
+      [
+        "toolset"
+      ]
+    ]
+
 	const offset = [
 	  [
 		3 # offset
@@ -322,6 +372,39 @@ module PdreApiTestDataLegacy
 	  ],
 	  [
 		2
+	  ],
+	  [
+		9
+	  ],
+	]
+
+	const buffer_size = [
+	  [
+		3 # buffer size
+	  ],
+	  [
+		6
+	  ],
+	  [
+		0
+	  ],
+	  [
+		20
+	  ],
+	  [
+		10
+	  ],
+	  [
+		8
+	  ],
+	  [
+		6
+	  ],
+	  [
+		30
+	  ],
+	  [
+		11
 	  ],
 	  [
 		9
@@ -371,4 +454,45 @@ module PdreApiTestDataLegacy
 	  ]
 	]
 
+	const seed_1 = [
+		[
+			"twist sausage october vivid neglect swear crumble hawk beauty fabric egg fragile"
+		],
+		[
+			"ethics love economy wage plunge boring stove escape enrich fork language material"
+		],
+		[
+			"anxiety story donor noodle north stadium together glare reunion method lazy ring grass laundry world excess green civil utility injury roof dolphin math derive"
+		],
+		[
+			"depth sustain ostrich song solve bright abuse unlock gossip judge apology polar absorb blood abandon skin cheese shrimp lunch equal swarm juice detail right"
+		],
+		[
+			"soda make bunker relax ladder civil desk text marine attract zoo electric punch fantasy claw"
+		],
+		[
+			"kind gate rocket bright march lottery large ritual ignore glory nut pipe left hand roast"
+		],
+	]
+
+	const seed_2 = [
+		[
+			"poet exile company mimic pony timber general toilet catalog cheese siren much"
+		],
+		[
+			"gate believe knock boring ethics misery coast stumble grace angle sword gather"
+		],
+		[
+			"limb arrive alert depth poet able disease coach hill orchard edge flight enable anchor awkward cute hunt club"
+		],
+		[
+			"comic behind stomach super never book behind keep alien length cloth potato estate chair puppy match rookie prize"
+		],
+		[
+			"bundle exchange anger dumb market waste maple attract sibling cargo weird phrase soon surge admit okay follow insane number among label"
+		],
+		[
+			"scorpion six useless front start crawl axis win auto bird genuine sort fee convince entire minute cost village miracle hotel country"
+		],
+	]
 end

@@ -1,5 +1,6 @@
-include("./inputs.jl")
-include("./outputs.jl")
+include("./HostApiLegacyFunctions.jl")
+include("./HostApiLegacyInputs.jl")
+include("./HostApiLegacyOutputs.jl")
 
 using .StringHelper
 using .AdapterFixture
@@ -20,101 +21,101 @@ function run_dataset(func, input, output)
 end
 
 run_dataset(
-    PdreApiTestFunctionsLegacy.value,
+    HostApiLegacyFunctions.value,
     [
-        PdreApiTestDataLegacy.value_1
+        HostApiLegacyInputs.value_1
     ],
-    PdreApiExpectedResultsLegacy.value .* "\n",
+    HostApiLegacyOutputs.value .* "\n",
 )
 
 run_dataset(
-    PdreApiTestFunctionsLegacy.value_no_output,
+    HostApiLegacyFunctions.value_no_output,
     [
-        PdreApiTestDataLegacy.value_1
-    ],
-    nothing,
-)
-
-run_dataset(
-    PdreApiTestFunctionsLegacy.key_value,
-    [
-        PdreApiTestDataLegacy.key_value_1
-    ],
-    PdreApiExpectedResultsLegacy.key_value .* "\n",
-)
-
-run_dataset(
-    PdreApiTestFunctionsLegacy.key_value_offset,
-    [
-        PdreApiTestDataLegacy.key_value_1,
-        PdreApiTestDataLegacy.offset
-    ],
-    PdreApiExpectedResultsLegacy.key_value_offset .* "\n",
-)
-
-run_dataset(
-    PdreApiTestFunctionsLegacy.key_value_key_value,
-    [
-        PdreApiTestDataLegacy.key_value_1,
-        PdreApiTestDataLegacy.key_value_2
-    ],
-    PdreApiExpectedResultsLegacy.key_value_key_value .* "\n",
-)
-
-run_dataset(
-    PdreApiTestFunctionsLegacy.key_key_value,
-    [
-        PdreApiTestDataLegacy.key_value_1,
-        PdreApiTestDataLegacy.value_1
-    ],
-    PdreApiExpectedResultsLegacy.key_key_value .* "\n",
-)
-
-run_dataset(
-    PdreApiTestFunctionsLegacy.prefix_key_value_key_value,
-    [
-        PdreApiTestDataLegacy.prefix_key_value_key_value
+        HostApiLegacyInputs.value_1
     ],
     nothing,
 )
 
 run_dataset(
-    PdreApiTestFunctionsLegacy.child_child_key_value,
+    HostApiLegacyFunctions.key_value,
     [
-        PdreApiTestDataLegacy.child_child,
-        PdreApiTestDataLegacy.key_value_1
+        HostApiLegacyInputs.key_value_1
     ],
-    PdreApiExpectedResultsLegacy.child_child_key_value .* "\n",
+    HostApiLegacyOutputs.key_value .* "\n",
 )
 
 run_dataset(
-    PdreApiTestFunctionsLegacy.child_child_key_value_key_value,
+    HostApiLegacyFunctions.key_value_offset,
     [
-        PdreApiTestDataLegacy.child_child,
-        PdreApiTestDataLegacy.key_value_1,
-        PdreApiTestDataLegacy.key_value_2
+        HostApiLegacyInputs.key_value_1,
+        HostApiLegacyInputs.offset
     ],
-    PdreApiExpectedResultsLegacy.child_child_key_value_key_value .* "\n",
+    HostApiLegacyOutputs.key_value_offset .* "\n",
 )
 
 run_dataset(
-    PdreApiTestFunctionsLegacy.prefix_child_child_key_value_key_value,
+    HostApiLegacyFunctions.key_value_key_value,
     [
-        PdreApiTestDataLegacy.child_child,
-        PdreApiTestDataLegacy.prefix_key_value_key_value
+        HostApiLegacyInputs.key_value_1,
+        HostApiLegacyInputs.key_value_2
+    ],
+    HostApiLegacyOutputs.key_value_key_value .* "\n",
+)
+
+run_dataset(
+    HostApiLegacyFunctions.key_key_value,
+    [
+        HostApiLegacyInputs.key_value_1,
+        HostApiLegacyInputs.value_1
+    ],
+    HostApiLegacyOutputs.key_key_value .* "\n",
+)
+
+run_dataset(
+    HostApiLegacyFunctions.prefix_key_value_key_value,
+    [
+        HostApiLegacyInputs.prefix_key_value_key_value
+    ],
+    nothing,
+)
+
+run_dataset(
+    HostApiLegacyFunctions.child_child_key_value,
+    [
+        HostApiLegacyInputs.child_child,
+        HostApiLegacyInputs.key_value_1
+    ],
+    HostApiLegacyOutputs.child_child_key_value .* "\n",
+)
+
+run_dataset(
+    HostApiLegacyFunctions.child_child_key_value_key_value,
+    [
+        HostApiLegacyInputs.child_child,
+        HostApiLegacyInputs.key_value_1,
+        HostApiLegacyInputs.key_value_2
+    ],
+    HostApiLegacyOutputs.child_child_key_value_key_value .* "\n",
+)
+
+run_dataset(
+    HostApiLegacyFunctions.prefix_child_child_key_value_key_value,
+    [
+        HostApiLegacyInputs.child_child,
+        HostApiLegacyInputs.prefix_key_value_key_value
     ],
     nothing,
 )
 
 # Test storage functions with offsets
 run_dataset(
-    PdreApiTestFunctionsLegacy.child_child_key_value_offset,
+    HostApiLegacyFunctions.child_child_key_value_offset,
     [
-        PdreApiTestDataLegacy.child_child,
-        PdreApiTestDataLegacy.key_value_1,
-        PdreApiTestDataLegacy.offset
+        HostApiLegacyInputs.child_child,
+        HostApiLegacyInputs.key_value_1,
+        HostApiLegacyInputs.offset
     ],
-    PdreApiExpectedResultsLegacy.child_child_key_value_offset .* "\n",
+    HostApiLegacyOutputs.child_child_key_value_offset .* "\n",
 )
 
 AdapterFixture.execute(tests, legacy=true)
