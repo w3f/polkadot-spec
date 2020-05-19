@@ -1,6 +1,7 @@
-using .AdapterTests
+using .AdapterFixture
 
-const TEST_DIR = String(@__DIR__) * "/"
+
+const TEST_DIR = string(@__DIR__, "/")
 
 const TEST_FILES = "'" .* TEST_DIR .* [
   "1c1.yaml",
@@ -18,7 +19,7 @@ const TEST_FILES_HEX = "'" .* TEST_DIR .* [
 ] .* "'"
 
 
-tests = AdapterTests.Builder("State Trie", "state-trie")
+tests = AdapterFixture.Builder("State Trie", "state-trie")
 
 sub!(tests) do t
   arg!(t, "trie-root --state-file")
@@ -38,6 +39,6 @@ sub!(tests) do t
   commit!(t)
 end
 
-AdapterTests.prepare!(tests)
+prepare!(tests)
 
-AdapterTests.execute(tests)
+AdapterFixture.execute(tests)

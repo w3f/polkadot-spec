@@ -12,23 +12,23 @@ module SpecificationTestsuite
     module Config
         import ..SpecificationTestsuite: ALL_IMPLEMENTATIONS
 
-        "By default we log on a warning level"
+        "By default we log on a warning level."
         verbose = false
 
-        "By default all implementations are enabled"
+        "By default all implementations are enabled."
         implementations = ALL_IMPLEMENTATIONS
 
-        "Path of folder containing all fixtures (and this file)"
+        "Path of folder containing all fixtures."
         function fixdir()
-            return @__DIR__
+            return String(@__DIR__) * "/../fixtures"
         end
 
-        "All subfolders of the fixture folder (i.e. all available fixtures)"
+        "All subfolders of the fixture folder (i.e. all available fixtures)."
         function fixsubdirs()
             return first(walkdir(fixdir()))[2]
         end
-  
-        "By default all fixtures are enabled"
+
+        "By default all fixtures are enabled."
         fixtures = fixsubdirs()
 
         function set_verbose(v)
@@ -43,14 +43,14 @@ module SpecificationTestsuite
             global fixtures = fixs
         end
     end
-  
+
     "List of all available fixtures"
     const ALL_FIXTURES = Config.fixsubdirs()
 
     # Include helpers
-    include("AdapterTests.jl")
-    include("HostAPITests.jl")
- 
+    include("StringHelper.jl")
+    include("AdapterFixture.jl")
+
     "Run specific fixture for configure implementations"
     function run(fixture::String)
         if !(fixture in ALL_FIXTURES)

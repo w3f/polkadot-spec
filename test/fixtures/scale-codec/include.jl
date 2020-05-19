@@ -1,4 +1,4 @@
-using .AdapterTests
+using .AdapterFixture
 
 
 const TEST_DATA = "\"" .* [
@@ -25,7 +25,7 @@ const TEST_DATA = "\"" .* [
 ] .* "\""
 
 
-tests = AdapterTests.Builder("Scale Codec", "scale-codec")
+tests = AdapterFixture.Builder("Scale Codec", "scale-codec")
 
 sub!(tests) do t
   arg!(t, "encode --input")
@@ -33,6 +33,6 @@ sub!(tests) do t
   commit!(t)
 end
 
-AdapterTests.prepare!(tests)
+prepare!(tests)
 
-AdapterTests.execute(tests)
+AdapterFixture.execute(tests)

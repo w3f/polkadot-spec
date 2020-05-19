@@ -209,16 +209,16 @@ module PdreApiExpectedResults
     ]
 
     const child_child_def_type_prefix_key_value_key_value = [
-        "Future-proofed",
-        "Horizontal",
-        "pricing structure",
+        "Future-proofed\n",
+        "Horizontal\n",
+        "pricing structure\n",
         "",
-        "secondaryVisionary",
-        "next generation",
-        "Grass-rootsfunction",
+        "secondary\nVisionary\n",
+        "next generation\n",
+        "Grass-roots\nfunction\n",
         "",
-        "ReactiveAutomated",
-        "secondarytoolset"
+        "Reactive\nAutomated\n",
+        "secondary\ntoolset\n"
     ]
 
     const child_child_def_type_key_value_key_value = [
