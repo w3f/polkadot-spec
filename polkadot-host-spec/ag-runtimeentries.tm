@@ -2,7 +2,7 @@
 
 <project|polkadot_host_spec.tm>
 
-<style|book>
+<style|<tuple|book|old-dots>>
 
 <\body>
   <appendix|Runtime Entries><label|sect-runtime-entries>
@@ -92,7 +92,10 @@
   <assign|figure-text|<macro|Figure>>
 
   The following sections describe the standard based on which the Polkadot
-  Host communicates with each runtime entry.
+  Host communicates with each runtime entry. Do note that any state changes
+  created by calling any of the Runtime functions are not necessarily to be
+  persisted after the call is ended. See Section
+  <reference|sect-handling-runtime-state-update> for more information.
 
   <section|Argument Specification>
 
@@ -104,7 +107,7 @@
   <\verbatim>
     \ \ \ \ (func $generic_runtime_entry
 
-    \ \ \ \ \ \ (param $data i32) (parm $len i32) (reslut i64))
+    \ \ \ \ \ \ (param $data i32) (parm $len i32) (result i64))
   </verbatim>
 
   \;
@@ -114,6 +117,8 @@
   can similarly either point to the SCALE encoded data the function returns
   (See Sections <reference|sect-runtime-send-args-to-runtime-enteries> and
   <reference|sect-runtime-return-value>).
+
+  \;
 
   In this section, we describe the function of each of the entries alongside
   with the details of the arguments and the return values for each one of
@@ -138,7 +143,7 @@
     <verbatim|version> function.>
   </with>
 
-  <subsection|<verbatim|Core_execute_block>>
+  <subsection|<verbatim|Core_execute_block>><version-both|<label|sect-rte-core-execute-block>|<label|defn-rt-core-execute-block>>
 
   Executes a full block by executing all exctrinsics included in it and
   update the state accordingly. Additionally, some integrity checks are
@@ -153,7 +158,14 @@
 
   This function should be called when a fully complete block is available
   that is not actively being built on, such as blocks received from other
-  peers.
+  peers. State changes resulted from calling this function are usually meant
+  to persist when the block is imported successfully.\ 
+
+  \;
+
+  Additionally, the seal digest in the block header as described in section
+  <reference|defn-digest> must be removed by the Polkadot host before
+  submitting the block.
 
   \;
 
@@ -272,10 +284,12 @@
 
   <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
-  This entry is invoked against extrinsics submitted through the Transaction
+  This entry is invoked against extrinsics submitted through the transaction
   network message <reference|sect-msg-transactions> and indicates if the
   submitted blob represents a valid extrinsics applied to the specified
-  block.
+  block. This function gets called internally when executing blocks with the
+  <verbatim|Core_execute_block> runtime function as described in section
+  <reference|sect-rte-core-execute-block>.
 
   \;
 
@@ -385,9 +399,15 @@
     \;
   </definition>
 
+  Note that when this function gets called by the Polkadot host in order to
+  validate a transaction received from peers, Polkadot host usually
+  disregards and rewinds state changes resulting for such a call.
+
+  \;
+
   <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
 
-  Apply the extrinsic outside of the block execution function. This doesn't
+  Apply the extrinsic outside of the block execution function. This does not
   attempt to validate anything regarding the block, but it builds a list of
   transaction hashes.
 
@@ -471,13 +491,13 @@
     array.
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_finalize_block>>
+  <subsection|<verbatim|BlockBuilder_finalize_block>><label|defn-rt-blockbuilder-finalize-block>
 
   Finalize the block - it is up to the caller to ensure that all header
-  fields are valid except for the state root.
+  fields are valid except for the state root. State changes resulting from
+  calling this function are usually meant to persist upon successful
+  execution of the function and appending of the block to the chain
 
-  \;
-  
   <\with|par-mode|right>
     <qed>
   </with>
@@ -487,49 +507,55 @@
 
 <\initial>
   <\collection>
-    <associate|page-first|?>
+    <associate|chapter-nr|5>
+    <associate|page-first|101>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|section-nr|2<uninit>>
+    <associate|subsection-nr|0>
   </collection>
 </initial>
 
 <\references>
   <\collection>
-    <associate|auto-1|<tuple|A|?|c01-background.tm>>
-    <associate|auto-10|<tuple|A.2.5|?|c01-background.tm>>
-    <associate|auto-11|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-12|<tuple|A.2.6|?|c01-background.tm>>
-    <associate|auto-13|<tuple|A.2.7|?|c01-background.tm>>
-    <associate|auto-14|<tuple|A.3|?|c01-background.tm>>
-    <associate|auto-15|<tuple|A.4|?|c01-background.tm>>
-    <associate|auto-16|<tuple|A.5|?|c01-background.tm>>
-    <associate|auto-17|<tuple|A.6|?|c01-background.tm>>
-    <associate|auto-18|<tuple|A.2.8|?|c01-background.tm>>
-    <associate|auto-19|<tuple|A.7|?|c01-background.tm>>
-    <associate|auto-2|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-20|<tuple|A.8|?|c01-background.tm>>
-    <associate|auto-21|<tuple|A.2.9|?|c01-background.tm>>
-    <associate|auto-22|<tuple|A.2.10|?|c01-background.tm>>
-    <associate|auto-3|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-4|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-5|<tuple|A.2.1|?|c01-background.tm>>
-    <associate|auto-6|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-7|<tuple|A.2.2|?|c01-background.tm>>
-    <associate|auto-8|<tuple|A.2.3|?|c01-background.tm>>
-    <associate|auto-9|<tuple|A.2.4|?|c01-background.tm>>
-    <associate|defn-invalid-transaction|<tuple|A.3|?|c01-background.tm>>
-    <associate|defn-rt-core-version|<tuple|A.2.1|?|c01-background.tm>>
-    <associate|defn-transaction-validity-error|<tuple|A.2|?|c01-background.tm>>
-    <associate|defn-unknown-transaction|<tuple|A.4|?|c01-background.tm>>
-    <associate|defn-valid-transaction|<tuple|A.1|?|c01-background.tm>>
-    <associate|sect-list-of-runtime-entries|<tuple|A.1|?|c01-background.tm>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|?|c01-background.tm>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|?|c01-background.tm>>
-    <associate|sect-rte-hash-and-length|<tuple|A.2.4|?|c01-background.tm>>
-    <associate|sect-rte-validate-transaction|<tuple|A.2.7|?|c01-background.tm>>
-    <associate|sect-runtime-entries|<tuple|A|?|c01-background.tm>>
-    <associate|snippet-runtime-enteries|<tuple|A.1|?|c01-background.tm>>
+    <associate|auto-1|<tuple|A|?>>
+    <associate|auto-10|<tuple|A.2.5|?>>
+    <associate|auto-11|<tuple|A.2|?>>
+    <associate|auto-12|<tuple|A.2.6|?>>
+    <associate|auto-13|<tuple|A.2.7|?>>
+    <associate|auto-14|<tuple|A.3|?>>
+    <associate|auto-15|<tuple|A.4|?>>
+    <associate|auto-16|<tuple|A.5|?>>
+    <associate|auto-17|<tuple|A.6|?>>
+    <associate|auto-18|<tuple|A.2.8|?>>
+    <associate|auto-19|<tuple|A.7|?>>
+    <associate|auto-2|<tuple|A.1|?>>
+    <associate|auto-20|<tuple|A.8|?>>
+    <associate|auto-21|<tuple|A.2.9|?>>
+    <associate|auto-22|<tuple|A.2.10|?>>
+    <associate|auto-3|<tuple|A.1|?>>
+    <associate|auto-4|<tuple|A.2|?>>
+    <associate|auto-5|<tuple|A.2.1|?>>
+    <associate|auto-6|<tuple|A.1|?>>
+    <associate|auto-7|<tuple|A.2.2|?>>
+    <associate|auto-8|<tuple|A.2.3|?>>
+    <associate|auto-9|<tuple|A.2.4|?>>
+    <associate|defn-invalid-transaction|<tuple|A.3|?>>
+    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|?>>
+    <associate|defn-rt-core-execute-block|<tuple|A.2.2|?>>
+    <associate|defn-rt-core-version|<tuple|A.2.1|?>>
+    <associate|defn-transaction-validity-error|<tuple|A.2|?>>
+    <associate|defn-unknown-transaction|<tuple|A.4|?>>
+    <associate|defn-valid-transaction|<tuple|A.1|?>>
+    <associate|sect-list-of-runtime-entries|<tuple|A.1|?>>
+    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|?>>
+    <associate|sect-rte-core-execute-block|<tuple|A.2.2|?>>
+    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|?>>
+    <associate|sect-rte-hash-and-length|<tuple|A.2.4|?>>
+    <associate|sect-rte-validate-transaction|<tuple|A.2.7|?>>
+    <associate|sect-runtime-entries|<tuple|A|?>>
+    <associate|snippet-runtime-enteries|<tuple|A.1|?>>
   </collection>
 </references>
 
