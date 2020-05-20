@@ -831,6 +831,15 @@
   </definition>
 
   <\definition>
+    <label|defn-authority-set-id>The <strong|authority set ID>
+    (<math|id<rsub|\<bbb-V\>>>) is an incremental counter which tracks the
+    amount of authority list (Definition <reference|defn-consensus-message-digest>)
+    changes occured. Starting with the value of zero at genesis, the Polkadot
+    Host increments this value by one every time a <strong|Scheduled Change>
+    or <strong|Forced Change> occurs.
+  </definition>
+
+  <\definition>
     <strong|GRANDPA state>, <math|GS>, is defined as <todo|verify V_id and
     id_V usage, unify>
 
@@ -842,9 +851,8 @@
 
     <math|<math-bf|\<bbb-V\>>>: is the set of voters.
 
-    <math|<math-bf|id<rsub|\<bbb-V\>>>>: is an incremental counter tracking
-    <verbatim|>membership, which changes in V.<todo|redefine as authority set
-    id>
+    <math|<math-bf|id<rsub|\<bbb-V\>>>>: is the authority set ID as defined
+    in Definition <reference|defn-authority-set-id>.
 
     <strong|r>: is the votin<verbatim|>g round number.
   </definition>
@@ -1018,8 +1026,8 @@
 
     <\center>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|r:>|<cell|round
-      number>|<cell|64 bit integer>>|<row|<cell|<math|Id<rsub|\<bbb-V\>>>>|<cell|incremental
-      change tracker counter>|<cell|64 bit
+      number>|<cell|64 bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
+      set ID (Definition <reference|defn-authority-set-id>)>|<cell|64 bit
       integer>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
       public key of <math|v>>|<cell|32 byte
       array>>|<row|<cell|netstage>|<cell|0 if it's a vote message>|<cell|1
@@ -1752,14 +1760,14 @@
   <\collection>
     <associate|algo-attempt-to\Ufinalize|<tuple|6.14|48>>
     <associate|algo-block-production|<tuple|6.3|41>>
-    <associate|algo-block-production-lottery|<tuple|6.1|39>>
+    <associate|algo-block-production-lottery|<tuple|6.1|40>>
     <associate|algo-build-block|<tuple|6.7|43>>
-    <associate|algo-derive-primary|<tuple|6.10|47>>
+    <associate|algo-derive-primary|<tuple|6.10|48>>
     <associate|algo-epoch-randomness|<tuple|6.4|41>>
     <associate|algo-finalizable|<tuple|6.13|48>>
-    <associate|algo-grandpa-best-candidate|<tuple|6.11|47>>
+    <associate|algo-grandpa-best-candidate|<tuple|6.11|48>>
     <associate|algo-grandpa-round|<tuple|6.9|47>>
-    <associate|algo-initiate-grandpa|<tuple|6.8|46>>
+    <associate|algo-initiate-grandpa|<tuple|6.8|47>>
     <associate|algo-process-catchup-request|<tuple|6.15|49>>
     <associate|algo-process-catchup-response|<tuple|6.16|50>>
     <associate|algo-slot-time|<tuple|6.2|40>>
@@ -1771,20 +1779,20 @@
     <associate|auto-12|<tuple|6.2.6|42>>
     <associate|auto-13|<tuple|6.2.7|43>>
     <associate|auto-14|<tuple|6.3|43>>
-    <associate|auto-15|<tuple|6.3.1|43>>
+    <associate|auto-15|<tuple|6.3.1|44>>
     <associate|auto-16|<tuple|6.3.2|45>>
     <associate|auto-17|<tuple|6.3.2.1|45>>
-    <associate|auto-18|<tuple|6.3.2.2|45>>
+    <associate|auto-18|<tuple|6.3.2.2|46>>
     <associate|auto-19|<tuple|6.3.2.3|46>>
     <associate|auto-2|<tuple|6.1|37>>
-    <associate|auto-20|<tuple|6.3.3|46>>
+    <associate|auto-20|<tuple|6.3.3|47>>
     <associate|auto-21|<tuple|6.3.3.1|47>>
     <associate|auto-22|<tuple|6.3.4|47>>
     <associate|auto-23|<tuple|6.4|48>>
     <associate|auto-24|<tuple|6.4.1|49>>
     <associate|auto-25|<tuple|6.4.1.1|49>>
     <associate|auto-26|<tuple|6.4.1.2|49>>
-    <associate|auto-27|<tuple|6.4.1.3|49>>
+    <associate|auto-27|<tuple|6.4.1.3|50>>
     <associate|auto-3|<tuple|6.1.1|37>>
     <associate|auto-4|<tuple|6.1.2|37>>
     <associate|auto-5|<tuple|6.1|38>>
@@ -1794,21 +1802,23 @@
     <associate|auto-9|<tuple|6.2.3|40>>
     <associate|chap-consensu|<tuple|6|37>>
     <associate|defn-authority-list|<tuple|6.1|37>>
-    <associate|defn-babe-header|<tuple|6.12|40>>
+    <associate|defn-authority-set|<tuple|6.15|?>>
+    <associate|defn-authority-set-id|<tuple|6.15|44>>
+    <associate|defn-babe-header|<tuple|6.12|41>>
     <associate|defn-babe-seal|<tuple|6.13|41>>
     <associate|defn-block-signature|<tuple|6.13|41>>
     <associate|defn-block-time|<tuple|6.10|40>>
     <associate|defn-consensus-message-digest|<tuple|6.2|37>>
     <associate|defn-epoch-slot|<tuple|6.5|39>>
     <associate|defn-epoch-subchain|<tuple|6.7|39>>
-    <associate|defn-finalized-block|<tuple|6.29|48>>
-    <associate|defn-grandpa-catchup-request-msg|<tuple|6.27|46>>
-    <associate|defn-grandpa-catchup-response-msg|<tuple|6.28|46>>
-    <associate|defn-grandpa-completable|<tuple|6.23|45>>
-    <associate|defn-grandpa-justification|<tuple|6.25|45>>
-    <associate|defn-grandpa-voter|<tuple|6.14|43>>
+    <associate|defn-finalized-block|<tuple|6.30|48>>
+    <associate|defn-grandpa-catchup-request-msg|<tuple|6.28|46>>
+    <associate|defn-grandpa-catchup-response-msg|<tuple|6.29|46>>
+    <associate|defn-grandpa-completable|<tuple|6.24|45>>
+    <associate|defn-grandpa-justification|<tuple|6.26|46>>
+    <associate|defn-grandpa-voter|<tuple|6.14|44>>
     <associate|defn-slot-offset|<tuple|6.11|40>>
-    <associate|defn-vote|<tuple|6.16|44>>
+    <associate|defn-vote|<tuple|6.17|44>>
     <associate|defn-winning-threshold|<tuple|6.8|39>>
     <associate|note-slot|<tuple|6.6|39>>
     <associate|sect-authority-set|<tuple|6.1.1|37>>
