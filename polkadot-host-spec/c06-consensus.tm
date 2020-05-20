@@ -1007,12 +1007,12 @@
 
   <\definition>
     <label|defn-gossip-message><strong|GossipMessage> is a variant as defined
-    in Definition X which identifies the message type that is casted by a
-    voter. This type, followed by the sub-component, is sent to other
-    validators.
+    in Definition <reference|defn-varrying-data-type> which identifies the
+    message type that is casted by a voter. This type, followed by the
+    sub-component, is sent to other validators.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Grandpa
-    pre-vote>>|<row|<cell|1>|<cell|Grandpa
+    message (vote)>>|<row|<cell|1>|<cell|Grandpa
     pre-commit>>|<row|<cell|2>|<cell|Grandpa neighbor
     packet>>|<row|3|<cell|Grandpa catch up request
     message>>|<row|<cell|4>|<cell|Grandpa catch up message>>>>>>
@@ -1788,7 +1788,7 @@
   <\collection>
     <associate|algo-attempt-to\Ufinalize|<tuple|6.14|48>>
     <associate|algo-block-production|<tuple|6.3|41>>
-    <associate|algo-block-production-lottery|<tuple|6.1|40>>
+    <associate|algo-block-production-lottery|<tuple|6.1|39>>
     <associate|algo-build-block|<tuple|6.7|43>>
     <associate|algo-derive-primary|<tuple|6.10|48>>
     <associate|algo-epoch-randomness|<tuple|6.4|41>>
@@ -1807,21 +1807,21 @@
     <associate|auto-12|<tuple|6.2.6|42>>
     <associate|auto-13|<tuple|6.2.7|43>>
     <associate|auto-14|<tuple|6.3|43>>
-    <associate|auto-15|<tuple|6.3.1|44>>
+    <associate|auto-15|<tuple|6.3.1|43>>
     <associate|auto-16|<tuple|6.3.2|45>>
     <associate|auto-17|<tuple|6.2|45>>
-    <associate|auto-18|<tuple|6.3.2.1|46>>
+    <associate|auto-18|<tuple|6.3.2.1|45>>
     <associate|auto-19|<tuple|6.3.2.2|46>>
     <associate|auto-2|<tuple|6.1|37>>
-    <associate|auto-20|<tuple|6.3.2.3|47>>
+    <associate|auto-20|<tuple|6.3.2.3|46>>
     <associate|auto-21|<tuple|6.3.3|47>>
     <associate|auto-22|<tuple|6.3.3.1|47>>
-    <associate|auto-23|<tuple|6.3.4|48>>
+    <associate|auto-23|<tuple|6.3.4|47>>
     <associate|auto-24|<tuple|6.4|49>>
     <associate|auto-25|<tuple|6.4.1|49>>
     <associate|auto-26|<tuple|6.4.1.1|49>>
-    <associate|auto-27|<tuple|6.4.1.2|50>>
-    <associate|auto-28|<tuple|6.4.1.3|?>>
+    <associate|auto-27|<tuple|6.4.1.2|49>>
+    <associate|auto-28|<tuple|6.4.1.3|50>>
     <associate|auto-3|<tuple|6.1.1|37>>
     <associate|auto-4|<tuple|6.1.2|37>>
     <associate|auto-5|<tuple|6.1|38>>
@@ -1833,20 +1833,20 @@
     <associate|defn-authority-list|<tuple|6.1|37>>
     <associate|defn-authority-set|<tuple|6.15|?>>
     <associate|defn-authority-set-id|<tuple|6.15|44>>
-    <associate|defn-babe-header|<tuple|6.12|41>>
+    <associate|defn-babe-header|<tuple|6.12|40>>
     <associate|defn-babe-seal|<tuple|6.13|41>>
     <associate|defn-block-signature|<tuple|6.13|41>>
     <associate|defn-block-time|<tuple|6.10|40>>
     <associate|defn-consensus-message-digest|<tuple|6.2|37>>
     <associate|defn-epoch-slot|<tuple|6.5|39>>
     <associate|defn-epoch-subchain|<tuple|6.7|39>>
-    <associate|defn-finalized-block|<tuple|6.31|48>>
-    <associate|defn-gossip-message|<tuple|6.25|?>>
+    <associate|defn-finalized-block|<tuple|6.31|49>>
+    <associate|defn-gossip-message|<tuple|6.25|45>>
     <associate|defn-grandpa-catchup-request-msg|<tuple|6.29|46>>
     <associate|defn-grandpa-catchup-response-msg|<tuple|6.30|46>>
     <associate|defn-grandpa-completable|<tuple|6.24|45>>
     <associate|defn-grandpa-justification|<tuple|6.27|46>>
-    <associate|defn-grandpa-voter|<tuple|6.14|44>>
+    <associate|defn-grandpa-voter|<tuple|6.14|43>>
     <associate|defn-slot-offset|<tuple|6.11|40>>
     <associate|defn-vote|<tuple|6.17|44>>
     <associate|defn-winning-threshold|<tuple|6.8|39>>
@@ -1854,7 +1854,7 @@
     <associate|sect-authority-set|<tuple|6.1.1|37>>
     <associate|sect-babe|<tuple|6.2|39>>
     <associate|sect-block-building|<tuple|6.2.7|43>>
-    <associate|sect-block-finalization|<tuple|6.4|48>>
+    <associate|sect-block-finalization|<tuple|6.4|49>>
     <associate|sect-block-production|<tuple|6.2|39>>
     <associate|sect-consensus-message-digest|<tuple|6.1.2|37>>
     <associate|sect-epoch-randomness|<tuple|6.2.5|41>>
@@ -1881,6 +1881,10 @@
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.1>|>
         The consensus digest item for GRANDPA authorities
       </surround>|<pageref|auto-5>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|6.2>|>
+        \;
+      </surround>|<pageref|auto-17>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Consensus>
@@ -1943,46 +1947,46 @@
 
       <with|par-left|<quote|2tab>|6.3.2.1<space|2spc>Vote Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-17>>
+      <no-break><pageref|auto-18>>
 
       <with|par-left|<quote|2tab>|6.3.2.2<space|2spc>Finalizing Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-18>>
+      <no-break><pageref|auto-19>>
 
       <with|par-left|<quote|2tab>|6.3.2.3<space|2spc>Catch-up Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-19>>
+      <no-break><pageref|auto-20>>
 
       <with|par-left|<quote|1tab>|6.3.3<space|2spc>Initiating the GRANDPA
       State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
+      <no-break><pageref|auto-21>>
 
       <with|par-left|<quote|2tab>|6.3.3.1<space|2spc>Voter Set Changes
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
+      <no-break><pageref|auto-22>>
 
       <with|par-left|<quote|1tab>|6.3.4<space|2spc>Voting Process in Round
       <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
+      <no-break><pageref|auto-23>>
 
       6.4<space|2spc>Block Finalization <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>
+      <no-break><pageref|auto-24>
 
       <with|par-left|<quote|1tab>|6.4.1<space|2spc>Catching up
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24>>
+      <no-break><pageref|auto-25>>
 
       <with|par-left|<quote|2tab>|6.4.1.1<space|2spc>Sending catch-up
       requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-25>>
+      <no-break><pageref|auto-26>>
 
       <with|par-left|<quote|2tab>|6.4.1.2<space|2spc>Processing catch-up
       requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26>>
+      <no-break><pageref|auto-27>>
 
       <with|par-left|<quote|2tab>|6.4.1.3<space|2spc>Processing catch-up
       responses <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27>>
+      <no-break><pageref|auto-28>>
     </associate>
   </collection>
 </auxiliary>
