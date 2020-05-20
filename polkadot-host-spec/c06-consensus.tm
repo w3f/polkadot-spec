@@ -831,12 +831,12 @@
   </definition>
 
   <\definition>
-    <label|defn-authority-set-id>The <strong|authority set ID>
+    <label|defn-authority-set-id>The <strong|authority set Id>
     (<math|id<rsub|\<bbb-V\>>>) is an incremental counter which tracks the
     amount of authority list (Definition <reference|defn-consensus-message-digest>)
-    changes occured. Starting with the value of zero at genesis, the Polkadot
-    Host increments this value by one every time a <strong|Scheduled Change>
-    or <strong|Forced Change> occurs.
+    changes that occured. Starting with the value of zero at genesis, the
+    Polkadot Host increments this value by one every time a <strong|Scheduled
+    Change> or <strong|Forced Change> occurs.
   </definition>
 
   <\definition>
@@ -1005,6 +1005,24 @@
 
   <subsection|GRANDPA Messages Specification>
 
+  <\definition>
+    <label|defn-gossip-message><strong|GossipMessage> is a variant as defined
+    in Definition X which identifies the message type that is casted by a
+    voter. This type, followed by the sub-component, is sent to other
+    validators.
+
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Grandpa
+    pre-vote>>|<row|<cell|1>|<cell|Grandpa
+    pre-commit>>|<row|<cell|2>|<cell|Grandpa neighbor
+    packet>>|<row|3|<cell|Grandpa catch up request
+    message>>|<row|<cell|4>|<cell|Grandpa catch up message>>>>>>
+      \;
+    </big-table>
+  </definition>
+
+  The sub-components are the individual messages types described in this
+  section.
+
   <subsubsection|Vote Messages>
 
   Voting is done by means of broadcasting voting messages to the network.
@@ -1019,7 +1037,7 @@
     <math|v> with the following structure:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsup|r,stage><rsub|v>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|netstage,r,id<rsub|\<bbb-V\>>,<math-it|SigMsg>|)>>>|<row|<cell|<math-it|SigMsg>>|<cell|\<assign\>>|<cell|<math-it|Msg>,Sig<rsub|ED25519><around*|(|<math-it|Msg>,r,id<rsub|\<bbb-V\>>|)>,v<rsub|id>>>|<row|<cell|<math-it|Msg>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|stage,V<rsup|r,stage><rsub|v>|)>>>>>
+      <tformat|<table|<row|<cell|M<rsup|r,stage><rsub|v>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>,<math-it|SigMsg>|)>>>|<row|<cell|<math-it|SigMsg>>|<cell|\<assign\>>|<cell|<math-it|Msg>,Sig<rsub|ED25519><around*|(|<math-it|Msg>,r,id<rsub|\<bbb-V\>>|)>,v<rsub|id>>>|<row|<cell|<math-it|Msg>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|stage,V<rsup|r,stage><rsub|v>|)>>>>>
     </eqnarray*>
 
     Where:
@@ -1027,16 +1045,21 @@
     <\center>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|r:>|<cell|round
       number>|<cell|64 bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
-      set ID (Definition <reference|defn-authority-set-id>)>|<cell|64 bit
+      set Id (Definition <reference|defn-authority-set-id>)>|<cell|64 bit
       integer>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
       public key of <math|v>>|<cell|32 byte
-      array>>|<row|<cell|netstage>|<cell|0 if it's a vote message>|<cell|1
-      byte>>|<row|<cell|>|<cell|1 if it's a commit
-      message>|<cell|>>|<row|<cell|<right-aligned|><math|stage>:>|<cell|0 if
-      it's a pre-vote sub-round>|<cell|1 byte>>|<row|<cell|>|<cell|1 if it's
-      a pre-commit sub-round>|<cell|>>|<row|<cell|>|<cell|2 if it's a primary
+      array>>|<row|<cell|<right-aligned|><math|stage>:>|<cell|0 if it's a
+      pre-vote sub-round>|<cell|1 byte>>|<row|<cell|>|<cell|1 if it's a
+      pre-commit sub-round>|<cell|>>|<row|<cell|>|<cell|2 if it's a primary
       proposal message>|<cell|>>>>>
     </center>
+
+    \;
+
+    \;
+
+    This message is the sub-component of the Gossip Message as defined in
+    Definition <reference|defn-gossip-message> of type Id 0 and 1.
 
     \;
   </definition>
@@ -1116,6 +1139,9 @@
     <\equation*>
       M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>\<assign\>Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>|)>
     </equation*>
+
+    This message is the sub-component of the Gossip Message as defined in
+    Definition <reference|defn-gossip-message> of type Id 3.
   </definition>
 
   <\definition>
@@ -1134,7 +1160,9 @@
     Where B is the highest block which <math|v> believes to be finalized in
     round <math|r>. <math|B<rprime|'>> is the highest anscestor of all blocks
     voted on in <math|J<rsup|r,pc><around*|(|B|)>> with the exception of the
-    equivocationary votes.
+    equivocationary votes. This message is the sub-component of the Gossip
+    Message as defined in Definition <reference|defn-gossip-message> of type
+    Id 4.
   </definition>
 
   <subsection|Initiating the GRANDPA State>
@@ -1781,18 +1809,19 @@
     <associate|auto-14|<tuple|6.3|43>>
     <associate|auto-15|<tuple|6.3.1|44>>
     <associate|auto-16|<tuple|6.3.2|45>>
-    <associate|auto-17|<tuple|6.3.2.1|45>>
-    <associate|auto-18|<tuple|6.3.2.2|46>>
-    <associate|auto-19|<tuple|6.3.2.3|46>>
+    <associate|auto-17|<tuple|6.2|45>>
+    <associate|auto-18|<tuple|6.3.2.1|46>>
+    <associate|auto-19|<tuple|6.3.2.2|46>>
     <associate|auto-2|<tuple|6.1|37>>
-    <associate|auto-20|<tuple|6.3.3|47>>
-    <associate|auto-21|<tuple|6.3.3.1|47>>
-    <associate|auto-22|<tuple|6.3.4|47>>
-    <associate|auto-23|<tuple|6.4|48>>
-    <associate|auto-24|<tuple|6.4.1|49>>
-    <associate|auto-25|<tuple|6.4.1.1|49>>
-    <associate|auto-26|<tuple|6.4.1.2|49>>
-    <associate|auto-27|<tuple|6.4.1.3|50>>
+    <associate|auto-20|<tuple|6.3.2.3|47>>
+    <associate|auto-21|<tuple|6.3.3|47>>
+    <associate|auto-22|<tuple|6.3.3.1|47>>
+    <associate|auto-23|<tuple|6.3.4|48>>
+    <associate|auto-24|<tuple|6.4|49>>
+    <associate|auto-25|<tuple|6.4.1|49>>
+    <associate|auto-26|<tuple|6.4.1.1|49>>
+    <associate|auto-27|<tuple|6.4.1.2|50>>
+    <associate|auto-28|<tuple|6.4.1.3|?>>
     <associate|auto-3|<tuple|6.1.1|37>>
     <associate|auto-4|<tuple|6.1.2|37>>
     <associate|auto-5|<tuple|6.1|38>>
@@ -1811,11 +1840,12 @@
     <associate|defn-consensus-message-digest|<tuple|6.2|37>>
     <associate|defn-epoch-slot|<tuple|6.5|39>>
     <associate|defn-epoch-subchain|<tuple|6.7|39>>
-    <associate|defn-finalized-block|<tuple|6.30|48>>
-    <associate|defn-grandpa-catchup-request-msg|<tuple|6.28|46>>
-    <associate|defn-grandpa-catchup-response-msg|<tuple|6.29|46>>
+    <associate|defn-finalized-block|<tuple|6.31|48>>
+    <associate|defn-gossip-message|<tuple|6.25|?>>
+    <associate|defn-grandpa-catchup-request-msg|<tuple|6.29|46>>
+    <associate|defn-grandpa-catchup-response-msg|<tuple|6.30|46>>
     <associate|defn-grandpa-completable|<tuple|6.24|45>>
-    <associate|defn-grandpa-justification|<tuple|6.26|46>>
+    <associate|defn-grandpa-justification|<tuple|6.27|46>>
     <associate|defn-grandpa-voter|<tuple|6.14|44>>
     <associate|defn-slot-offset|<tuple|6.11|40>>
     <associate|defn-vote|<tuple|6.17|44>>
