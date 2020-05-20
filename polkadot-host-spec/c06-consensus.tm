@@ -1006,10 +1006,10 @@
   <subsection|GRANDPA Messages Specification>
 
   <\definition>
-    <label|defn-gossip-message><strong|GossipMessage> is a variant as defined
-    in Definition <reference|defn-varrying-data-type> which identifies the
-    message type that is casted by a voter. This type, followed by the
-    sub-component, is sent to other validators.
+    <label|defn-gossip-message><strong|Gossip Message> is a variant as
+    defined in Definition <reference|defn-varrying-data-type> which
+    identifies the message type that is casted by a voter. This type,
+    followed by the sub-component, is sent to other validators.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Grandpa
     message (vote)>>|<row|<cell|1>|<cell|Grandpa
