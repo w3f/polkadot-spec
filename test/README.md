@@ -1,30 +1,67 @@
-# Testing
+# Polkadot Conformance Testsuite
 
-The `test/` directory contains tests for different components from different implementations such as Rust, C++ and Golang:
+This `test/` directory contains specification tests of the different components of Polkadot, which are run against the different implementations (i.e in Rust, C++ and Golang) of Polkadot
 
-- SCALE Codec
-- State Trie
-- Polkadot Host API
+Currently the testsuite contains the following tests:
 
-This ensures that the different implementations behave the same and produce the identical output.
+- SCALE Codec Encoding (scale-codec)
+- State Trie Hashing (stat-trie)
+- Polkadot Host API (hostapi and hostapi-legacy)
 
-## Local container (CircleCI)
+This ensures that the different implementations behave in the same way and produce the identical output. 
 
-The easiest way to run those tests is by using `docker` via the [local-ci tool](https://circleci.com/docs/2.0/local-cli/). No API tokens are required for running the suite.
+# Dependencies
 
-```bash
-git clone https://github.com/w3f/polkadot-spec.git
-cd polkadot-spec/
-circleci local execute -c .circleci/config.yml --job runTests
+The test suite depends on the following components:
+
+- _julia_ to run the testsuite
+- _rust-nightly_ (with wasm target) to build substrate 
+- _cmake_ to build kagome
+- _go_ to build gossamer
+
+While the official target of our testsuite are currently only debian-based systems, there is in general no reason for it to not be able to run on  any recent GNU/Linux or even UNIX-based OS, like OS X.
+
+## General Build
+
+There is a simple Makefile in the [main test directory](./), that will build all the required API adapters when you run `make`.
+
+Alternately, each of the API adapters can be built separately (see [adapters subfolder](./adapters/)), before running the testsuite.
+
+### Substrate API Adapter
+
+Needs Rust Nightly with WASM toolchain (and potentially libclang?)
+
+```
+cargo build --release
 ```
 
-## Manual install
+### Kagome API Adapter
 
-### Installing toolchains and dependencies
+Needs CMake, GCC or Clang >= 8, Rust, Perl.
 
-Install the required software in order to run all the tests.
+```
+cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
+cmake --build build
+```
 
-**Note:** The test suite requires CMake version 3.16 or higher and gcc/g++ version 8. It is not recommended to run those tests on the main workstation, since changing gcc/g++ versions can lead to issues.
+### Gossamer API Adapter
+
+Needs recent version of Go.
+
+```
+go build
+```
+## On Debian-based systems
+
+If you are on a debian-based system, here are some more concrete pointers to help you to set up your environment.
+
+### Install dependencies
+
+Install the required software in order to run build all adapter and to be able to run all tests.
+
+**Note:** The test suite requires CMake version 3.12 or higher and gcc/g++ or clang version 8. However it is not recommended to change your default gcc/g++ versions for your whole installation, as that can lead to issues down the road. Please use the environment variables `CC` and `CXX` to temporally change the used compiler instead.
+
+For example on 18.04, something like this should get you started:
 
 ```bash
 apt update && apt install -y --no-install-recommends \
@@ -41,86 +78,95 @@ apt update && apt install -y --no-install-recommends \
   julia \
   python
 
-# Install CMake 3.16.0
-wget https://github.com/Kitware/CMake/releases/download/v3.16.0-rc4/cmake-3.16.0-rc4-Linux-x86_64.sh
-chmod +x cmake-3.16.0-rc4-Linux-x86_64.sh
-./cmake-3.16.0-rc4-Linux-x86_64.sh --skip-license --prefix=/usr/local
+### Install recent CMake
 
-# Install Rust and toolchains required for Wasm
-curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly
-rustup target add wasm32-unknown-unknown --toolchain nightly
-cargo install --git https://github.com/alexcrichton/wasm-gc
+This can be skipped on Ubunut 20.04, as a recent version of CMake can be installed through aptitude. Also see the official [cmake homepage](https://cmake.org/download) for the most recent version:
 
-# Set default gcc and g++ binaries to version 8
-ln -sf /usr/bin/gcc-8 /usr/bin/gcc
-ln -sf /usr/bin/g++-8 /usr/bin/g++
+```bash
+wget https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2-Linux-x86_64.sh
+chmod +x cmake-3.17.2-Linux-x86_64.sh
+./cmake-3.17.2-Linux-x86_64.sh --skip-license --prefix=/usr/local
 ```
 
-### Running tests
+### Install Rust
 
-By running `./run_tests.sh` the automated tests get executed. With `./run_tests.sh verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths.
+While kagome only needs a recent version of rust, substrate depends on nightly and the wasm32 toolchain to build its nostd wasm targets.
+
+```
+curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly --target wasm32-unknown-unknown
+```
+
+### Force a recent C/C++ compiler
+
+This is only needed before you build kagome (adapter). GCC 9, Clang 8 or Clang 9 work as well. Change example accordingly:
+
+```
+export CC=gcc-8
+export CXX=g++-8
+```
+
+# Running tests
+
+By running `./runtests.jl` the automated tests get executed. With `./runtests.jl --verbose` the CLI parameters including the outputs can be displayed. Do note that this script must be run from this repos root directory, since it uses relative paths. Use `./runtests.jl --help` to learn how to run individual tests.
 
 # Structure
 
-Inside the testing directory, the tests are executed in the following way:
+All fixtures are written in julia and can be found in the fixtures folder. Each subfolder contains a seperate fixtures. To add a new fixture it is enough to add a new subfolder containing a `include.jl` file. 
 
-```bash
-runtests.jl
-|-- scale_codec_tests.jl
-|-- state_trie_tests.jl
-|-- pdre_api_tests.jl
-```
 
-Each of those tests defines how the final executable tests are called and pass data to it. The function names, testing data and results can be found in the *test/fixtures* directory.
+Each of those tests defines how the final executable tests are called and pass data to it. The function names, testing data and results can be found in each fixtures subfolder.
 
 ## Structure of Polkadot Host API tests
 
-Those testers call functions that call the Polkadot Host API.
+Those adapters call functions that call the Polkadot Host API.
 
 ```text
 +--------------------+
-| pdre_api_tests.jl  |
+| hostapi/include.jl |
 |                    |
-+----------+---------+
-           |                  +----------------+
-           +----------------->+Wasm Executor   |    *call runtime function*
-           | rust_tester      |                +---------------------------+
-           |                  |                |                           |
-           |                  |                |                           v
-           |                  |  +-------------+                 +---------+---------+
-           |                  |  |Polkadot     |    *call API*   |Wasm Runtime blob  |
-           |                  |  |Runtme       +<----------------+                   |
-           |                  |  |Environment  |                 |                   |
-           |                  |  |             |                 |                   |
-           |                  +--+-------------+                 +-------------------+
++----------|---------+
+           |                      +----------------+
+           +--------------------->+Wasm Executor   |    *call runtime function*
+           | substrate-adapter    |                +---------------------------+
+           |                      |                |                           |
+           |                      |                |                           v
+           |                      |  +-------------+                 +---------|---------+
+           |                      |  |Polkadot     |    *call API*   | wasm-adapter      |
+           |                      |  |Runtme       +<----------------+                   |
+           |                      |  |Environment  |                 |                   |
+           |                      |  |             |                 |                   |
+           |                      +--|-------------+                 +-------------------+
            |
            |
-           +-----------------> ...
-           | go_tester
+           +---------------------> ...
+           | gossamer-adapter
            |
            |
-           +-----------------> ...
-             cpp_tester
+           +---------------------> ...
+             kagome-adapter
 
 ```
 
-Each tester will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the Polkadot Host API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
+Each adapter will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the Polkadot Host API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
+
+Each adapter will use the custom Polkadot Runtime to call functions on the Wasm blob, which in return call the PDRE API. The return values are then returned to the tester which will optionally print those values and compare them against the expected results.
 
 Relevant files:
 
-|Directory/File                     |Description                                        |
-|-----------------------------------|---------------------------------------------------|
-|*test/pdre_api_tests.jl*           |Runs the different testers and passes data to it   |
-|*test/fixtures/pdre_api_dataset.jl*|Contains names of testers, functions and input data|
-|*test/fixtures/pdre_api_result.jl* |Contains the outputs/results of the tester         |
+|Directory/File                     |Description                                          |
+|-----------------------------------|-----------------------------------------------------|
+|*fixtures/HostAPITests.jl*         | Runs the different adapters and passes data to it    |
+|*fixtures/hostapi/include.jl*      | Runs the different adapters and passes data to it    |
+|*fixtures/hostapi/inputs.jl*       | Contains names of adapters, functions and input data |
+|*fixtures/hostapi/outputs.jl*      | Contains the outputs/results of the adapter          |
 
 The tests are executed in the following way:
 
-`<tester> pdre-api --function <function> --input <data>`
+`<adapter> pdre-api --function <function> --input <data>`
 
 Example:
 
-`rust_tester pdre-api --function test_blake2_128 --input "Horizontal"`
+`substrate-adapter pdre-api --function test_blake2_128 --input "Horizontal"`
 
 Each function gets tested with multiple inputs and then goes on to the next function.
 

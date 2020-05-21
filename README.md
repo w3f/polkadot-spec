@@ -1,28 +1,30 @@
-[![CircleCI](https://circleci.com/gh/w3f/polkadot-re-tests.svg?style=svg)](https://circleci.com/gh/w3f/polkadot-re-tests)
+# Polkadot Protocol Specification and Conformance Tests
 
-#  Polkadot Protocol Specification and Conformance Tests
+[![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Specification+Publication%22)
+[![Conformance Testsuite](https://github.com/w3f/polkadot-spec/workflows/Conformance%20Testsuite/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Conformance+Testsuite%22)
 
-In this repo you will find:
+Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository serves as the point of reference for Polkadot Protocol. In this repo you will find:
 
-- Polkadot Runtime Environment Spec
-- Specification Conformance Tests for various implementation of Polkadot Runtime Enviornment
-- Tests
+- The official [Polkadot Host Specification](./polkadot-host-spec/)
+- The official [Polkadot Conformance Testsuite](./test/)
+- A florishing [Polkadot Runtime Specification](./runtime-spec/)
+- Various other files used by the Polkadot spec team
 
-## Polkadot Runtime Environment Specification
+## Polkadot Host Specification
 
-Here your can find the latest version of [Polkadot Runtime Environment Specification](./runtime-environment-spec/polkadot_re_spec.pdf)
+Here your can find the latest version of the [Polkadot Host Specification](./polkadot-host-spec/polkadot_host_spec.pdf)
 
-Please refer to [Change log](./runtime-environment-spec/pdre_change_log.org) to review the history of changes to the spec.
+Please refer to the [Change Log](./polkadot-host-spec/pdre_change_log.org) and [PDF Diff](./polkadot-host-spec/polkadot_host_spec-diffed-updates.pdf) to review the history of changes to the specification.
 
-## Testing
+For more details please refer [README.md](./polkadot-host-spec/README.md) to the specification.
 
-The `test/` directory contains tests for different components from different implementations such as Rust, C++ and Golang:
+## Polkadot Protocol Conformance Testsuite
 
-- SCALE Codec
-- State Trie
-- Polkadot Host API
+The `test/` directory contains tests of different components for the different implementations of the Polkadot protocol.
 
-This ensures that the different implementations behave the same and produce the identical output. See [test/README.md](./test/README.md) for more.
+This ensures that the different implementations behave the same and produce identical output, which is the necessary basis for the interoperability of all Polkadot clients.
+
+For more details plese see the [README.md](./test/README.md) of the testsuite.
 
 ## Genesis files
 
