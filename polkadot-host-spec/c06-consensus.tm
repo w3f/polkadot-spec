@@ -1206,9 +1206,11 @@
       </state>
 
       <\state>
-        <name|Last-Round-Estimate><math|\<leftarrow\>B<rsub|last>><END>
+        <name|Best-Final-Candidate(0)><math|\<leftarrow\>B<rsub|last>>
+      </state>
 
-        <name|Last-Round-Prevote-GHOST><math|\<leftarrow\>B<rsub|last>><END>
+      <\state>
+        <name|Grandpa-GHOST(0)><math|\<leftarrow\>B<rsub|last>><END>
       </state>
 
       <\state>
@@ -1368,16 +1370,29 @@
   Definition <reference|defn-total-potential-votes>.
 
   <\algorithm>
-    <todo|<name|GRANDPA-GHOST>>
+    <todo|<name|GRANDPA-GHOST>><todo|is highest vot is equal ghost?>
   <|algorithm>
     <\algorithmic>
-      \;
+      <\state>
+        <\RETURN>
+          <math|B<rprime|'>:H<rsub|n><around|(|B<rprime|'>|)>=max
+          <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<gtr\>L|}><END>>
+        </RETURN>
+      </state>
     </algorithmic>
   </algorithm>
 
   <\algorithm|<name|Best-PreVote-Candidate(<math|r>:> voting round to cast
   the pre-vote in)<todo|imporve/fix me>>
     <\algorithmic>
+      <\state>
+        <math|L\<leftarrow\>><name|Best-Final-Candidate>(<math|r-1>)
+      </state>
+
+      <\state>
+        <math|B<rsup|r,pv><rsub|v>\<leftarrow\>><name|GRANDPA-GHOST><math|<around*|(|r|)>><END>
+      </state>
+
       <\state>
         <\IF>
           <name|Received(<math|M<rsub|v<rsub|primary>><rsup|r,prim><around|(|B|)>>)>
@@ -1396,8 +1411,7 @@
       </state>
 
       <\state>
-        <math|N\<leftarrow\>B<rprime|'>:H<rsub|n><around|(|B<rprime|'>|)>=max
-        <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<gtr\>L|}><END>>
+        <math|N\<leftarrow\>><math|B<rsup|r,pv><rsub|v>>
       </state>
     </algorithmic>
   </algorithm>
@@ -1518,6 +1532,55 @@
       </state>
     </algorithmic>
   </algorithm>
+
+  Note that we might not always succeed in finalizing our best final
+  candidate due to possibility of equivocation. Example
+  <reference|exmp-candid-unfinalized> to demonestrate such a situation:
+
+  <\example>
+    <label|exmp-candid-unfinalized>Let us assume that we have 100 voters and
+    there are two block in the chain (<math|B<rsub|1>\<less\>B<rsub|2>>). At
+    round 1 we get 67 prevotes for <math|B<rsub|2>> which means that
+    <name|GRANDPA-GHOST(1) = <math|B<rsub|2>>>.
+
+    We then receive 66 precommits for <math|B<rsub|1>> and 1 precommit for
+    <math|B<rsub|2>>. Hencefore, we finalize <math|B<rsub|1>> since we have
+    threshold commit (67 votes) for <math|B<rsub|1>>.
+
+    At this point though we have <name|Best-Final-Candidate>(<math|r>)<math|=B<rsub|2>>
+    as <math|#V<rsup|r,stage><rsub|obv<around|(|v|)>,pot><around|(|B<rsub|2>|)>=67>
+    and <math|2\<gtr\>1>.
+
+    However, the round is already completable at this point as we know that
+    have <name|GRANDPA-GHOST(1) = <math|B<rsub|2>>> as an upper limit on what
+    we can finalize and nothing greater than <math|B<rsub|2>> can be
+    finalized at <math|r=1>. Therefore the condition of Algorithm
+    <reference|algo-grandpa-round>:14 is satisfied and we must proceed to
+    round 2.
+
+    \ Nonetheless, We must continue to attempting to finalize round 1 in the
+    background as the condition of <reference|algo-attempt-to\Ufinalize>:3
+    has not been fulfilled.\ 
+
+    This prevent us from proceeding to round 3 until either:
+
+    <\itemize-minus>
+      <item>We finalize <math|B<rsub|2>> in round 2,
+
+      <item>or we receive an extra pre-commit vote for <math|B<rsub|1>> in
+      round 1. This will make it impossible to finalize <math|B<rsub|2>> in
+      round 1, no matter to whom the remaining precommits are going to be
+      casted for (even with considering the possibility of 1/3 of voter
+      equivocating) and therefore we have
+      <name|Best-Final-Candidate>(<math|r>)<math|=B<rsub|1>>.
+    </itemize-minus>
+
+    Both scenarios unblock the Algorithm <reference|algo-grandpa-round>:14
+    <name|Last-Finalized-Block><math|\<geqslant\>><name|Best-Final-Candidate>(<math|r>-1))
+    albeit in different ways: the former with increasing the
+    <name|Last-Finalized-Block> and the latter with decreasing
+    <name|Best-Final-Candidate>(<math|r>-1).
+  </example>
 
   <section|Block Finalization><label|sect-block-finalization>
 
@@ -1870,7 +1933,7 @@
     <associate|defn-consensus-message-digest|<tuple|6.2|37>>
     <associate|defn-epoch-slot|<tuple|6.5|39>>
     <associate|defn-epoch-subchain|<tuple|6.7|39>>
-    <associate|defn-finalized-block|<tuple|6.32|49>>
+    <associate|defn-finalized-block|<tuple|6.33|49>>
     <associate|defn-gossip-message|<tuple|6.26|45>>
     <associate|defn-grandpa-catchup-request-msg|<tuple|6.30|46>>
     <associate|defn-grandpa-catchup-response-msg|<tuple|6.31|46>>
@@ -1881,6 +1944,8 @@
     <associate|defn-total-potential-votes|<tuple|6.23|?>>
     <associate|defn-vote|<tuple|6.17|44>>
     <associate|defn-winning-threshold|<tuple|6.8|39>>
+    <associate|exmp|<tuple|6.32|?>>
+    <associate|exmp-candid-unfinalized|<tuple|6.32|?>>
     <associate|note-slot|<tuple|6.6|39>>
     <associate|sect-authority-set|<tuple|6.1.1|37>>
     <associate|sect-babe|<tuple|6.2|39>>
