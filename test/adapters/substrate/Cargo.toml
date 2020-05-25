@@ -28,11 +28,11 @@ primitive-types = { version = "0.2", default-features = false, features = ["code
 hash256-std-hasher = { version = "0.12", default-features = false }
 blake2-rfc = "*"
 
-# hostapi
+# host-api
 sp-core = { version = "2.0.0-alpha", default-features = false, features = ["full_crypto"] }
 sp-io = { version = "2.0.0-alpha", default-features = false }
 sc-executor = "0.8.0-alpha"
 sp-state-machine = "0.8.0-alpha"
 
-# hostapi shim wasm blob
+# host-api shim wasm blob
 runtime = { package="substrate-adapter-runtime", path = "runtime" }

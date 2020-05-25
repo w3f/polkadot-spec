@@ -149,7 +149,7 @@ jobs:
 
   test-substrate:
     needs: build-adapter-substrate
-    name: "[test-hostapi] substrate"
+    name: "[test-host-api] substrate"
     runs-on: ubuntu-18.04
     steps:
     - name: Checkout repository
@@ -160,7 +160,7 @@ jobs:
         path: test/adapters/substrate
     - run: chmod +x test/adapters/substrate/substrate-adapter
     - name: Run test fixture
-      run: test/runtests.jl substrate hostapi
+      run: test/runtests.jl substrate host-api
 
   test-kagome:
     needs: [ build-adapter-substrate, build-adapter-kagome ]
@@ -209,13 +209,13 @@ jobs:
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
 
-  test-hostapi-legacy:
+  test-host-api-legacy:
     needs: [ build-adapter-substrate-legacy, build-adapter-kagome ]
     strategy:
       fail-fast: false
       matrix:
         implementation: [ substrate, kagome ]
-    name: "[test-hostapi-legacy] ${{ matrix.implementation }}"
+    name: "[test-host-api-legacy] ${{ matrix.implementation }}"
     runs-on: ubuntu-18.04
     steps:
     - name: Checkout repository
@@ -235,5 +235,5 @@ jobs:
     - run: chmod +x test/adapters/kagome/kagome-adapter
       if: matrix.implementation == 'kagome'
     - name: Run test fixture
-      run: test/runtests.jl ${{ matrix.implementation }} hostapi-legacy
+      run: test/runtests.jl ${{ matrix.implementation }} host-api-legacy
 
