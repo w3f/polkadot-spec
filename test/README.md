@@ -6,7 +6,7 @@ Currently the testsuite contains the following tests:
 
 - SCALE Codec Encoding (scale-codec)
 - State Trie Hashing (stat-trie)
-- Polkadot Host API (hostapi and hostapi-legacy)
+- Polkadot Host API (host-api and host-api-legacy)
 
 This ensures that the different implementations behave in the same way and produce the identical output. 
 
@@ -121,10 +121,10 @@ Each of those tests defines how the final executable tests are called and pass d
 Those adapters call functions that call the Polkadot Host API.
 
 ```text
-+--------------------+
-| hostapi/include.jl |
-|                    |
-+----------|---------+
++---------------------+
+| host-api/include.jl |
+|                     |
++----------|----------+
            |                      +----------------+
            +--------------------->+Wasm Executor   |    *call runtime function*
            | substrate-adapter    |                +---------------------------+
@@ -153,12 +153,12 @@ Each adapter will use the custom Polkadot Runtime to call functions on the Wasm 
 
 Relevant files:
 
-|Directory/File                     |Description                                          |
-|-----------------------------------|-----------------------------------------------------|
-|*fixtures/HostAPITests.jl*         | Runs the different adapters and passes data to it    |
-|*fixtures/hostapi/include.jl*      | Runs the different adapters and passes data to it    |
-|*fixtures/hostapi/inputs.jl*       | Contains names of adapters, functions and input data |
-|*fixtures/hostapi/outputs.jl*      | Contains the outputs/results of the adapter          |
+|Directory/File                          |Description                        |
+|----------------------------------------|-----------------------------------|
+|*fixtures/host-api/include.jl*          | Passes data to different adapters |
+|*fixtures/host-api/HostApiFunctions.jl* | Contains functions names          |
+|*fixtures/host-api/HostApiInputs.jl*    | Contains input data               |
+|*fixtures/host-api/HostApiOutputs.jl*   | Contains the outputs/results      |
 
 The tests are executed in the following way:
 
