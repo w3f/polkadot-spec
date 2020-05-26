@@ -1,6 +1,6 @@
 <TeXmacs|1.99.12>
 
-<style|<tuple|book|std-latex|algorithmacs-style|old-dots>>
+<style|<tuple|tmbook|std-latex|algorithmacs-style|old-dots>>
 
 <\body>
   <\hide-preamble>
