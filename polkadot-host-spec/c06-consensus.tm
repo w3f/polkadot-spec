@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -1018,7 +1018,7 @@
   <subsection|GRANDPA Messages Specification>
 
   <\definition>
-    <label|defn-gossip-message><strong|Gossip Message> is a variant, as
+    <label|defn-gossip-message><strong|GRANDPA Gossip> is a variant, as
     defined in Definition <reference|defn-varrying-data-type>, which
     identifies the message type that is casted by a voter. This type,
     followed by the sub-component, is sent to other validators.
@@ -1070,7 +1070,7 @@
 
     \;
 
-    This message is the sub-component of the Gossip Message as defined in
+    This message is the sub-component of the GRANDPA Gossip as defined in
     Definition <reference|defn-gossip-message> of type Id 0 and 1.
 
     \;
@@ -1152,7 +1152,7 @@
       M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>\<assign\>Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>|)>
     </equation*>
 
-    This message is the sub-component of the Gossip Message as defined in
+    This message is the sub-component of the GRANDPA Gossip as defined in
     Definition <reference|defn-gossip-message> of type Id 3.
   </definition>
 
@@ -1172,8 +1172,8 @@
     Where B is the highest block which <math|v> believes to be finalized in
     round <math|r>. <math|B<rprime|'>> is the highest anscestor of all blocks
     voted on in <math|J<rsup|r,pc><around*|(|B|)>> with the exception of the
-    equivocationary votes. This message is the sub-component of the Gossip
-    Message as defined in Definition <reference|defn-gossip-message> of type
+    equivocationary votes. This message is the sub-component of the GRANDPA
+    Gossip as defined in Definition <reference|defn-gossip-message> of type
     Id 4.
   </definition>
 
