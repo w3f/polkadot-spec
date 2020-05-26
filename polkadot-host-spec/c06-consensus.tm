@@ -834,9 +834,9 @@
     <label|defn-authority-set-id>The <strong|authority set Id>
     (<math|id<rsub|\<bbb-V\>>>) is an incremental counter which tracks the
     amount of authority list (Definition <reference|defn-consensus-message-digest>)
-    changes that occured. Starting with the value of zero at genesis, the
+    changes that occurred. Starting with the value of zero at genesis, the
     Polkadot Host increments this value by one every time a <strong|Scheduled
-    Change> or <strong|Forced Change> occurs.
+    Change> or a <strong|Forced Change> occurs.
   </definition>
 
   <\definition>
@@ -857,8 +857,8 @@
     <strong|r>: is the votin<verbatim|>g round number.
   </definition>
 
-  Now we need to define how the Polkadot Host counts the number of votes for
-  block <math|B>. First a vote is defined as:
+  Following, we need to define how the Polkadot Host counts the number of
+  votes for block <math|B>. First a vote is defined as:
 
   <\definition>
     <label|defn-vote>A <strong|GRANDPA vote >or simply a vote for block
@@ -1018,8 +1018,8 @@
   <subsection|GRANDPA Messages Specification>
 
   <\definition>
-    <label|defn-gossip-message><strong|Gossip Message> is a variant as
-    defined in Definition <reference|defn-varrying-data-type> which
+    <label|defn-gossip-message><strong|Gossip Message> is a variant, as
+    defined in Definition <reference|defn-varrying-data-type>, which
     identifies the message type that is casted by a voter. This type,
     followed by the sub-component, is sent to other validators.
 
@@ -1032,7 +1032,7 @@
     </big-table>
   </definition>
 
-  The sub-components are the individual messages types described in this
+  The sub-components are the individual message types described in this
   section.
 
   <subsubsection|Vote Messages>
@@ -1534,43 +1534,43 @@
   </algorithm>
 
   Note that we might not always succeed in finalizing our best final
-  candidate due to possibility of equivocation. Example
-  <reference|exmp-candid-unfinalized> to demonestrate such a situation:
+  candidate due to the possibility of equivocation. Example
+  <reference|exmp-candid-unfinalized> serves to demonstrate such a situation:
 
   <\example>
     <label|exmp-candid-unfinalized>Let us assume that we have 100 voters and
-    there are two block in the chain (<math|B<rsub|1>\<less\>B<rsub|2>>). At
-    round 1 we get 67 prevotes for <math|B<rsub|2>> which means that
+    there are two blocks in the chain (<math|B<rsub|1>\<less\>B<rsub|2>>). At
+    round 1, we get 67 prevotes for <math|B<rsub|2>> which means that
     <name|GRANDPA-GHOST(1) = <math|B<rsub|2>>>.
 
     We then receive 66 precommits for <math|B<rsub|1>> and 1 precommit for
-    <math|B<rsub|2>>. Hencefore, we finalize <math|B<rsub|1>> since we have
-    threshold commit (67 votes) for <math|B<rsub|1>>.
+    <math|B<rsub|2>>. Henceforth, we finalize <math|B<rsub|1>> since we have
+    a threshold commit (67 votes) for <math|B<rsub|1>>.
 
-    At this point though we have <name|Best-Final-Candidate>(<math|r>)<math|=B<rsub|2>>
+    At this point, though, we have <name|Best-Final-Candidate>(<math|r>)<math|=B<rsub|2>>
     as <math|#V<rsup|r,stage><rsub|obv<around|(|v|)>,pot><around|(|B<rsub|2>|)>=67>
     and <math|2\<gtr\>1>.
 
-    However, the round is already completable at this point as we know that
-    have <name|GRANDPA-GHOST(1) = <math|B<rsub|2>>> as an upper limit on what
-    we can finalize and nothing greater than <math|B<rsub|2>> can be
-    finalized at <math|r=1>. Therefore the condition of Algorithm
+    However, at this point, the round is already completable as we know that
+    we have <name|GRANDPA-GHOST(1) = <math|B<rsub|2>>> as an upper limit on
+    what we can finalize and nothing greater than <math|B<rsub|2>> can be
+    finalized at <math|r=1>. Therefore, the condition of Algorithm
     <reference|algo-grandpa-round>:14 is satisfied and we must proceed to
     round 2.
 
-    \ Nonetheless, We must continue to attempting to finalize round 1 in the
+    \ Nonetheless, we must continue to attempt to finalize round 1 in the
     background as the condition of <reference|algo-attempt-to\Ufinalize>:3
     has not been fulfilled.\ 
 
-    This prevent us from proceeding to round 3 until either:
+    This prevents us from proceeding to round 3 until either:
 
     <\itemize-minus>
-      <item>We finalize <math|B<rsub|2>> in round 2,
+      <item>We finalize <math|B<rsub|2>> in round 2, or
 
-      <item>or we receive an extra pre-commit vote for <math|B<rsub|1>> in
-      round 1. This will make it impossible to finalize <math|B<rsub|2>> in
-      round 1, no matter to whom the remaining precommits are going to be
-      casted for (even with considering the possibility of 1/3 of voter
+      <item>We receive an extra pre-commit vote for <math|B<rsub|1>> in round
+      1. This will make it impossible to finalize <math|B<rsub|2>> in round
+      1, no matter to whom the remaining precommits are going to be casted
+      for (even with considering the possibility of 1/3 of voter
       equivocating) and therefore we have
       <name|Best-Final-Candidate>(<math|r>)<math|=B<rsub|1>>.
     </itemize-minus>
@@ -1944,7 +1944,6 @@
     <associate|defn-total-potential-votes|<tuple|6.23|?>>
     <associate|defn-vote|<tuple|6.17|44>>
     <associate|defn-winning-threshold|<tuple|6.8|39>>
-    <associate|exmp|<tuple|6.32|?>>
     <associate|exmp-candid-unfinalized|<tuple|6.32|?>>
     <associate|note-slot|<tuple|6.6|39>>
     <associate|sect-authority-set|<tuple|6.1.1|37>>
