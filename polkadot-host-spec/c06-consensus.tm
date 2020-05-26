@@ -836,7 +836,8 @@
     amount of authority list (Definition <reference|defn-consensus-message-digest>)
     changes that occurred. Starting with the value of zero at genesis, the
     Polkadot Host increments this value by one every time a <strong|Scheduled
-    Change> or a <strong|Forced Change> occurs.
+    Change> or a <strong|Forced Change> occurs. The authority set Id is an
+    unsigned 64bit integer.
   </definition>
 
   <\definition>
@@ -1056,9 +1057,9 @@
 
     <\center>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|r:>|<cell|round
-      number>|<cell|64 bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
-      set Id (Definition <reference|defn-authority-set-id>)>|<cell|64 bit
-      integer>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
+      number>|<cell|unsigned 64 bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
+      set Id (Definition <reference|defn-authority-set-id>)>|<cell|unsigned
+      64 bit integer>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
       public key of <math|v>>|<cell|32 byte
       array>>|<row|<cell|<right-aligned|><math|stage>:>|<cell|0 if it's a
       pre-vote sub-round>|<cell|1 byte>>|<row|<cell|>|<cell|1 if it's a
