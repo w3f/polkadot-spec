@@ -52,7 +52,7 @@ module SpecificationTestsuite
     include("AdapterFixture.jl")
 
     "Run specific fixture for configure implementations"
-    function run(fixture::String)
+    function run_fixture(fixture::String)
         if !(fixture in ALL_FIXTURES)
             error("Unknown fixture: " * fixture)
         end
@@ -63,7 +63,7 @@ module SpecificationTestsuite
     "Run all configured fixtures"
     function execute()
         for fixture in Config.fixtures
-            run(fixture)
+            run_fixture(fixture)
         end
     end
 end
