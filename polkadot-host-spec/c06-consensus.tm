@@ -1240,7 +1240,7 @@
   <\algorithm|<label|algo-grandpa-round><name|Play-Grandpa-round><math|<around|(|r|)>>>
     <\algorithmic>
       <\state>
-        <math|t<rsub|r,v>\<leftarrow\>>Time
+        <math|t<rsub|r,v>\<leftarrow\>>Current local time
       </state>
 
       <\state>
@@ -1314,14 +1314,30 @@
     </algorithmic>
   </algorithm>
 
-  <name|Derive-Primary> is described in Algorithm
-  <reference|algo-derive-primary>. The condition of <em|completablitiy> is
-  defined in Definition <reference|defn-grandpa-completable>.
-  <name|Best-Final-Candidate> function is explained in Algorithm
-  <reference|algo-grandpa-best-candidate>.
-  <name|<name|Attempt-To-Finalize-Round>(<math|r>)> is described in Algorithm
-  <reference|algo-attempt-to\Ufinalize> and <name|Finalizabl> is defined in
-  Algorithm <reference|algo-finalizable>.
+  Where:
+
+  <\itemize-minus>
+    <item><math|T> is sampled from a log normal distribution whose mean and
+    standard deviation are equal to the average network delay for a message
+    to be sent and received from one validator to another.
+
+    <item><name|Derive-Primary> is described in Algorithm
+    <reference|algo-derive-primary>.
+
+    <item>The condition of <em|completablitiy> is defined in Definition
+    <reference|defn-grandpa-completable>.
+
+    <item><name|Best-Final-Candidate> function is explained in Algorithm
+    <reference|algo-grandpa-best-candidate>.
+
+    <item><name|<name|Attempt-To-Finalize-Round>(<math|r>)> is described in
+    Algorithm <reference|algo-attempt-to\Ufinalize>.
+
+    <item><name|Finalizabl> is defined in Algorithm
+    <reference|algo-finalizable>.
+  </itemize-minus>
+
+  \ \ \ \ 
 
   <\algorithm|<label|algo-derive-primary><name|Derive-Primary>(<math|r>: the
   GRANDPA round whose primary to be determined)>
@@ -1540,10 +1556,14 @@
   <\example>
     <label|exmp-candid-unfinalized>Let us assume that we have 100 voters and
     there are two blocks in the chain (<math|B<rsub|1>\<less\>B<rsub|2>>). At
-    round 1, we get 67 prevotes for <math|B<rsub|2>> which means that
-    <name|GRANDPA-GHOST(1) = <math|B<rsub|2>>>.
+    round 1, we get 67 prevotes for <math|B<rsub|2>> and at least one prevote
+    for <math|B<rsub|1>> which means that <name|GRANDPA-GHOST(1) =
+    <math|B<rsub|2>>>.\ 
 
-    We then receive 66 precommits for <math|B<rsub|1>> and 1 precommit for
+    Subsequently potentially honest voters who could claim not seeing all the
+    prevotes for <math|B<rsub|2>> but receiving the prevotes for
+    <math|B<rsub|1>> would precommit to <math|B<rsub|1>>. In this way, we
+    receive 66 precommits for <math|B<rsub|1>> and 1 precommit for
     <math|B<rsub|2>>. Henceforth, we finalize <math|B<rsub|1>> since we have
     a threshold commit (67 votes) for <math|B<rsub|1>>.
 
