@@ -81,6 +81,7 @@ ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate-legacy"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome/build"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/gossamer"
+ENV["PATH"] *= ":$(@__DIR__)"
 
 # Execute config
 println("EXECUTION:")

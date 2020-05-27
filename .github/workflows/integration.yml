@@ -124,6 +124,12 @@ jobs:
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
+    - name: Setup python toolchain
+      uses: actions/setup-python@v2
+    - name: Install yq
+      run: |
+        python -m pip install wheel
+        python -m pip install yq
     - name: Cache cargo registry
       uses: actions/cache@v1
       with:
@@ -144,18 +150,24 @@ jobs:
         restore-keys: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester genesis
       working-directory: test/testers/host
-      run: cargo run --release > genesis.host-tester.json
-    - name: Upload host tester genesis
+      run: make
+    - name: Upload host tester genesis file
       uses: actions/upload-artifact@v1
       with:
-        name: genesis.host-tester.json
-        path: test/testers/host/genesis.host-tester.json
+        name: genesis.json
+        path: test/testers/host/genesis.json
+    - name: Upload host tester state file
+      uses: actions/upload-artifact@v1
+      with:
+        name: genesis.yaml
+        path: test/testers/host/genesis.yaml
+
 
   build-tester-host-legacy:
     name: "[build] host-tester-legacy"
     runs-on: ubuntu-18.04
     steps:
-    - name: Download host tester legacy
+    - name: Checkout repository
       uses: actions/checkout@v2
     - name: Setup rust toolchain
       id: rustup
@@ -165,6 +177,12 @@ jobs:
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
+    - name: Setup python toolchain
+      uses: actions/setup-python@v2
+    - name: Install yq
+      run: |
+        python -m pip install wheel
+        python -m pip install yq
     - name: Cache cargo registry
       uses: actions/cache@v1
       with:
@@ -185,9 +203,89 @@ jobs:
         restore-keys: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester legacy genesis
       working-directory: test/testers/host-legacy
-      run: cargo run --release > genesis.host-tester-legacy.json
-    - name: Upload host tester legacy genesis
+      run: make
+    - name: Upload host tester legacy genesis file
       uses: actions/upload-artifact@v1
       with:
-        name: genesis.host-tester-legacy.json
-        path: test/testers/host-legacy/genesis.host-tester-legacy.json
+        name: genesis-legacy.json
+        path: test/testers/host-legacy/genesis-legacy.json
+    - name: Upload host tester legacy state file
+      uses: actions/upload-artifact@v1
+      with:
+        name: genesis-legacy.yaml
+        path: test/testers/host-legacy/genesis-legacy.yaml
+    - name: Upload host tester legacy genesis file for kagome
+      uses: actions/upload-artifact@v1
+      with:
+        name: genesis-legacy.kagome.json
+        path: test/testers/host-legacy/genesis-legacy.kagome.json
+
+
+  test-substrate:
+    needs: [ build-substrate, build-tester-host ]
+    name: "[test-genesis] substrate"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate
+        path: test
+    - run: chmod +x test/polkadot
+    - uses: actions/download-artifact@v1
+      with:
+        name: genesis.json
+        path: test/testers/host
+    - uses: actions/download-artifact@v1
+      with:
+        name: genesis.yaml
+        path: test/testers/host
+    - name: Run substrate with tester genesis
+      run: test/runtests.jl substrate genesis
+
+  test-kagome:
+    needs: [ build-kagome, build-tester-host-legacy ]
+    name: "[test-genesis] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome
+        path: test
+    - run: chmod +x test/kagome_full
+    - uses: actions/download-artifact@v1
+      with:
+        name: genesis-legacy.kagome.json
+        path: test/testers/host-legacy
+    - uses: actions/download-artifact@v1
+      with:
+        name: genesis-legacy.yaml
+        path: test/testers/host-legacy
+    - name: Run kagome with tester genesis
+      run: test/runtests.jl kagome genesis
+
+  test-gossamer:
+    needs: [ build-gossamer, build-tester-host-legacy ]
+    name: "[test-genesis] gossamer"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: gossamer
+        path: test
+    - run: chmod +x test/gossamer
+    - uses: actions/download-artifact@v1
+      with:
+        name: genesis-legacy.json
+        path: test/testers/host-legacy
+    - uses: actions/download-artifact@v1
+      with:
+        name: genesis-legacy.yaml
+        path: test/testers/host-legacy
+    - name: Run gossamer with tester genesis
+      run: test/runtests.jl gossamer genesis

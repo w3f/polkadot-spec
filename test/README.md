@@ -18,6 +18,7 @@ The test suite depends on the following components:
 - _rust-nightly_ (with wasm target) to build substrate 
 - _cmake_ to build kagome
 - _go_ to build gossamer
+- _jq_ and _yq_ to build the host-tester
 
 While the official target of our testsuite are currently only debian-based systems, there is in general no reason for it to not be able to run on  any recent GNU/Linux or even UNIX-based OS, like OS X.
 
