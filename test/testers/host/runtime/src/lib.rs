@@ -7,7 +7,7 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use sp_std::prelude::*;
-use sp_core::OpaqueMetadata;
+use sp_core::{Decode, OpaqueMetadata};
 use sp_runtime::{
 	generic, create_runtime_str, print, impl_opaque_keys,
 	ApplyExtrinsicResult, MultiSignature,
@@ -26,10 +26,14 @@ pub use sp_runtime::BuildStorage;
 pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
 pub use frame_support::{
-	StorageValue, construct_runtime, parameter_types,
+	construct_runtime, parameter_types, storage_root,
 	traits::Randomness,
 	weights::{Weight, RuntimeDbWeight},
 };
+
+// Add String support, needed by tests
+extern crate alloc;
+use alloc::string::String;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -263,10 +267,31 @@ pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExt
 /// Executive: handles dispatch to the various modules.
 pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
+
+/// Print hex encoded hash, prefixed and suffixed with '##'
+fn print_hash(hash: sp_core::H256) {
+	let mut output = String::with_capacity(68);
+
+	output.push_str("##");
+	output.push_str(hex::encode(hash).as_str());
+	output.push_str("##");
+
+	print(output.as_str());
+}
+
+/// Print current storage root
+fn print_storage_root() {
+	let storage_root = Hash::decode(&mut &storage_root()[..])
+		.expect("`storage_root` is a valid hash");
+	print_hash(storage_root);
+}
+
+
 impl_runtime_apis! {
 	impl sp_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
 			print("@@version()@@");
+			print_storage_root();
 			VERSION
 		}
 

@@ -7,6 +7,11 @@ edition = '2018'
 panic = 'unwind'
 
 
+[dependencies.hex]
+version = '0.4.2'
+default-features = false
+
+
 # Base dependencies
 [dependencies.serde]
 features = ['derive']

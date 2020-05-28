@@ -922,6 +922,7 @@ dependencies = [
 name = "host-tester-legacy-runtime"
 version = "2.0.0"
 dependencies = [
+ "hex",
  "parity-scale-codec",
  "safe-mix",
  "serde",

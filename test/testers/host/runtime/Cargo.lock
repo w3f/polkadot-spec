@@ -757,6 +757,7 @@ dependencies = [
  "frame-executive",
  "frame-support",
  "frame-system",
+ "hex",
  "pallet-babe",
  "pallet-balances",
  "pallet-grandpa",

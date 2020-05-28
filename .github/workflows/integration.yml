@@ -110,6 +110,48 @@ jobs:
         path: bin/gossamer
 
 
+  build-adapter-substrate:
+    name: "[build] substrate-adapter"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-registry-adapter-substrate-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-index-adapter-substrate-
+    - name: Cache cargo build ouput
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/substrate/target
+        key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build substrate adapters
+      working-directory: test/adapters/substrate
+      run: make
+    - name: Upload substrate adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/adapters/substrate/target/release/substrate-adapter
+
+
   build-tester-host:
     name: "[build] host-tester"
     runs-on: ubuntu-18.04
@@ -222,7 +264,7 @@ jobs:
 
 
   test-substrate:
-    needs: [ build-substrate, build-tester-host ]
+    needs: [ build-substrate, build-adapter-substrate, build-tester-host ]
     name: "[test-genesis] substrate"
     runs-on: ubuntu-18.04
     steps:
@@ -235,6 +277,11 @@ jobs:
     - run: chmod +x test/polkadot
     - uses: actions/download-artifact@v1
       with:
+        name: substrate-adapter
+        path: test/adapters/substrate
+    - run: chmod +x test/adapters/substrate/substrate-adapter
+    - uses: actions/download-artifact@v1
+      with:
         name: genesis.json
         path: test/testers/host
     - uses: actions/download-artifact@v1
@@ -245,7 +292,7 @@ jobs:
       run: test/runtests.jl substrate genesis
 
   test-kagome:
-    needs: [ build-kagome, build-tester-host-legacy ]
+    needs: [ build-kagome, build-adapter-substrate, build-tester-host-legacy ]
     name: "[test-genesis] kagome"
     runs-on: ubuntu-18.04
     steps:
@@ -258,6 +305,11 @@ jobs:
     - run: chmod +x test/kagome_full
     - uses: actions/download-artifact@v1
       with:
+        name: substrate-adapter
+        path: test/adapters/substrate
+    - run: chmod +x test/adapters/substrate/substrate-adapter
+    - uses: actions/download-artifact@v1
+      with:
         name: genesis-legacy.kagome.json
         path: test/testers/host-legacy
     - uses: actions/download-artifact@v1
@@ -268,9 +320,10 @@ jobs:
       run: test/runtests.jl kagome genesis
 
   test-gossamer:
-    needs: [ build-gossamer, build-tester-host-legacy ]
+    needs: [ build-gossamer, build-adapter-substrate, build-tester-host-legacy ]
     name: "[test-genesis] gossamer"
     runs-on: ubuntu-18.04
+    continue-on-error: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -279,6 +332,11 @@ jobs:
         name: gossamer
         path: test
     - run: chmod +x test/gossamer
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/adapters/substrate
+    - run: chmod +x test/adapters/substrate/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
         name: genesis-legacy.json
