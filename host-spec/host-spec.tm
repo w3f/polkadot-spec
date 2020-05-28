@@ -1318,7 +1318,7 @@
     all keys and values stored in the state storage.|<pageref|auto-31>>
   </the-glossary>
 
-  <\bibliography|bib|tm-alpha|polkadot_host_spec>
+  <\bibliography|bib|tm-alpha|host-spec>
     <\bib-list|12>
       <bibitem*|Bur19><label|bib-burdges_schnorr_2019>Jeff Burdges.
       <newblock>Schnorr VRFs and signatures on the Ristretto group.
