@@ -1223,6 +1223,7 @@ dependencies = [
 name = "host-tester-legacy-runtime"
 version = "2.0.0"
 dependencies = [
+ "hex 0.4.2",
  "parity-scale-codec",
  "safe-mix",
  "serde",

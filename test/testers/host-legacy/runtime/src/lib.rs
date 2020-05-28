@@ -7,7 +7,7 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use rstd::prelude::*;
-use primitives::OpaqueMetadata;
+use primitives::{Decode, OpaqueMetadata};
 use sr_primitives::{
 	ApplyResult, transaction_validity::TransactionValidity, generic, create_runtime_str,
 	impl_opaque_keys, MultiSignature
@@ -30,7 +30,11 @@ pub use sr_primitives::BuildStorage;
 pub use timestamp::Call as TimestampCall;
 pub use balances::Call as BalancesCall;
 pub use sr_primitives::{Permill, Perbill};
-pub use support::{StorageValue, construct_runtime, parameter_types, print, traits::Randomness};
+pub use support::{construct_runtime, parameter_types, print, storage_root, traits::Randomness};
+
+// Basic string support
+extern crate alloc;
+use alloc::string::String;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -247,6 +251,26 @@ pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExt
 /// Executive: handles dispatch to the various modules.
 pub type Executive = executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
+
+/// Print hex encoded hash, prefixed and suffixed with '##'
+fn print_hash(hash: primitives::H256) {
+	let mut output = String::with_capacity(68);
+
+	output.push_str("##");
+	output.push_str(hex::encode(hash).as_str());
+	output.push_str("##");
+
+	print(output.as_str());
+}
+
+/// Print current storage root
+fn print_storage_root() {
+	let storage_root = Hash::decode(&mut &storage_root()[..])
+		.expect("`storage_root` is a valid hash");
+	print_hash(storage_root);
+}
+
+
 impl_runtime_apis! {
 	impl client_api::Core<Block> for Runtime {
 		fn version() -> RuntimeVersion {
@@ -336,6 +360,7 @@ impl_runtime_apis! {
 	impl grandpa_primitives::GrandpaApi<Block> for Runtime {
 		fn grandpa_authorities() -> GrandpaAuthorityList {
 			print("@@grandpa_authorities()@@");
+			print_storage_root();
 			Grandpa::grandpa_authorities()
 		}
 	}

@@ -1,10 +1,10 @@
 "Compute trie root hash from yaml state file"
-function root_tester_host(legacy=false)
+function root_tester_host(implementation)
 
-    state_file = if legacy
-        "$(@__DIR__)/../../testers/host-legacy/genesis-legacy.yaml"
-    else
+    state_file = if implementation == "substrate"
         "$(@__DIR__)/../../testers/host/genesis.yaml"
+    else
+        "$(@__DIR__)/../../testers/host-legacy/genesis-legacy.yaml"
     end
 
     cmd = `substrate-adapter state-trie trie-root --keys-in-hex --values-in-hex --state-file $state_file`
@@ -21,8 +21,8 @@ function run_tester_host(implementation, seconds)
     genesis_legacy = "$(@__DIR__)/../../testers/host-legacy/genesis-legacy.json"
     genesis_kagome = "$(@__DIR__)/../../testers/host-legacy/genesis-legacy.kagome.json"
 
-    keystore = string(@__DIR__, "/kagome.keystore.json")
-    config   = string(@__DIR__, "/gossamer.config.toml")
+    keystore = "$(@__DIR__)/kagome.keystore.json"
+    config   = "$(@__DIR__)/gossamer.config.toml"
 
     # Prepare command and environment based on command
     cmd = ``
@@ -42,7 +42,7 @@ function run_tester_host(implementation, seconds)
     cd("$(@__DIR__)/../..")
 
     if Config.verbose
-      println("[> RUNNING] ", cmd)
+        println("[> RUNNING] ", cmd)
     end
 
     # Run for specified time
@@ -52,15 +52,18 @@ function run_tester_host(implementation, seconds)
     kill(proc)
     close(stream.in)
 
-    # TODO Check if killed by signal or error
-
     # Reset path
     cd(current_path)
- 
+
     result = read(stream, String)
 
+    # Make sure implementation stopped because of signal
+    if !Base.process_signaled(proc)
+        @error "Failed to run implementation '$implementation':\n$result"
+    end
+
     if Config.verbose
-      println("[OUTPUT]: ", result)
+        println("[OUTPUT]: ", result)
     end
 
     return result
@@ -73,15 +76,27 @@ using Test
 
 @testset "Genesis" begin
     for implementation in Config.implementations
+        # Compute expected storage root
+        storage_root = root_tester_host(implementation)
 
-        result = run_tester_host(implementation, 10)
+        # Run implementation long enough to load genesis
+        result = run_tester_host(implementation, 5)
 
+
+        # Extract all hashes returned from log
+        hashes = map(m -> m[1], eachmatch(r"##([^#\n]+)##", result)) 
+
+        # Check state root hash
+        @test storage_root == hashes[1]
+
+
+        # Extract all calls made from log
         calls = map(m -> m[1], eachmatch(r"@@([^@\n]+)@@", result))
 
-        if length(calls) == 0
-          @error "Failed to run implementation '$implementation':\n$result"
-        end
+        # Check that grandpa config is requested
+        @test "grandpa_authorities()" in calls
 
-        @test length(calls) > 0
+        # Check that babe configuration is requested
+        @test "configuration()" in calls
     end
 end
