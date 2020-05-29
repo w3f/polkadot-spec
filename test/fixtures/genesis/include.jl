@@ -1,3 +1,6 @@
+using .Config
+using Test
+
 "Compute trie root hash from yaml state file"
 function root_tester_host(implementation)
 
@@ -32,7 +35,7 @@ function run_tester_host(implementation, seconds)
     elseif implementation == "kagome"
         cmd = `kagome_full --genesis $genesis_kagome --keystore $keystore --leveldb $tempdir`
     elseif implementation == "gossamer"
-        cmd = `gossamer --key=alice --config $config --datadir $tempdir`
+        cmd = `gossamer --key=alice --config $config --basepath $tempdir --log debug`
     else
         error("Unknown implementation: ", implementation)
     end
@@ -58,8 +61,10 @@ function run_tester_host(implementation, seconds)
     result = read(stream, String)
 
     # Make sure implementation stopped because of signal
+    @test Base.process_signaled(proc)
+
     if !Base.process_signaled(proc)
-        @error "Failed to run implementation '$implementation':\n$result"
+        @warn "Implementation '$implementation' aborted unexpectedly:\n$result"
     end
 
     if Config.verbose
@@ -68,10 +73,6 @@ function run_tester_host(implementation, seconds)
 
     return result
 end
-
-
-using .Config
-using Test
 
 
 @testset "Genesis" begin
