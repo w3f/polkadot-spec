@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -296,7 +296,11 @@
       </state>
 
       <\state>
-        <math|R\<leftarrow\>><name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|TaggedTransactionQueue_validate_transaction>>,N,T|)>>
+        <math|R\<leftarrow\>><name|Call-Runtime-Entry>(
+
+        <space|1em><math|<text|<verbatim|TaggedTransactionQueue_validate_transaction>>,N,T>
+
+        )
       </state>
 
       <\state>
@@ -334,7 +338,7 @@
 
       <\state>
         <\IF>
-          Propagate(R)=<strong|True>:
+          <name|ShouldPropagate(R)>:
         </IF>
       </state>
 
@@ -347,6 +351,9 @@
   In which
 
   <\itemize-minus>
+    <item><math|<text|<name|Dec<rsub|Sc>>>> decodes the SCALE encoded
+    message.
+
     <item><name|Longest-Chain> is defined in Definition
     <reference|defn-longest-chain>.
 
@@ -367,6 +374,12 @@
 
     <item><name|Maintain-Transaction-Pool> is described in Algorithm
     <reference|algo-maintain-transaction-pool>.
+
+    <item><name|ShouldPropagate> indictes whether the transaction should be
+    propagated based on the <verbatim|propagate> field in the
+    <verbatim|ValidTransaction> type as defined in Definition
+    <reference|defn-valid-transaction>, which is returned by
+    <verbatim|TaggedTransactionQueue_validate_transaction>.
 
     <item><name|Propagate(><math|T>) include <math|T> in the next
     <em|transactions message<index|Transaction Message>> sent to all peers of
@@ -749,63 +762,63 @@
 
 <\references>
   <\collection>
-    <associate|algo-import-and-validate-block|<tuple|3.4|?>>
-    <associate|algo-maintain-transaction-pool|<tuple|3.3|?>>
-    <associate|algo-runtime-interaction|<tuple|3.1|?>>
-    <associate|algo-validate-transactions|<tuple|3.2|?>>
-    <associate|auto-1|<tuple|3|?>>
-    <associate|auto-10|<tuple|3.2.1|?>>
-    <associate|auto-11|<tuple|3.2.2|?>>
-    <associate|auto-12|<tuple|3.2.2.1|?>>
-    <associate|auto-13|<tuple|3.2.3|?>>
-    <associate|auto-14|<tuple|3.2.3|?>>
-    <associate|auto-15|<tuple|3.2.3|?>>
-    <associate|auto-16|<tuple|3.2.3|?>>
-    <associate|auto-17|<tuple|<with|mode|<quote|math>|<rigid|->>|?>>
-    <associate|auto-18|<tuple|3.2.3.1|?>>
-    <associate|auto-19|<tuple|3.1|?>>
-    <associate|auto-2|<tuple|3.1|?>>
-    <associate|auto-20|<tuple|3.3|?>>
-    <associate|auto-21|<tuple|3.3.1|?>>
-    <associate|auto-22|<tuple|3.3.1.1|?>>
-    <associate|auto-23|<tuple|3.2|?>>
-    <associate|auto-24|<tuple|3.3.1.2|?>>
-    <associate|auto-25|<tuple|3.3.1.3|?>>
-    <associate|auto-26|<tuple|3.3.2|?>>
-    <associate|auto-27|<tuple|3.3.3|?>>
-    <associate|auto-3|<tuple|3.1.1|?>>
-    <associate|auto-4|<tuple|3.1.2|?>>
-    <associate|auto-5|<tuple|3.1.2.1|?>>
-    <associate|auto-6|<tuple|3.1.2.2|?>>
-    <associate|auto-7|<tuple|3.1.2.3|?>>
-    <associate|auto-8|<tuple|3.1.2.4|?>>
-    <associate|auto-9|<tuple|3.2|?>>
-    <associate|block|<tuple|3.3.1.1|?>>
-    <associate|chap-state-transit|<tuple|3|?>>
-    <associate|defn-block-body|<tuple|3.9|?>>
-    <associate|defn-block-header|<tuple|3.6|?>>
-    <associate|defn-block-header-hash|<tuple|3.8|?>>
-    <associate|defn-digest|<tuple|3.7|?>>
-    <associate|defn-inherent-data|<tuple|3.5|?>>
-    <associate|defn-set-state-at|<tuple|3.10|?>>
-    <associate|defn-transaction-queue|<tuple|3.4|?>>
-    <associate|nota-call-into-runtime|<tuple|3.2|?>>
-    <associate|nota-runtime-code-at-state|<tuple|3.1|?>>
-    <associate|sect-block-body|<tuple|3.3.1.3|?>>
-    <associate|sect-block-format|<tuple|3.3.1|?>>
-    <associate|sect-block-submission|<tuple|3.3.2|?>>
-    <associate|sect-block-validation|<tuple|3.3.2|?>>
-    <associate|sect-entries-into-runtime|<tuple|3.1|?>>
-    <associate|sect-extrinsics|<tuple|3.2|?>>
-    <associate|sect-handling-runtime-state-update|<tuple|3.1.2.4|?>>
-    <associate|sect-justified-block-header|<tuple|3.3.1.2|?>>
-    <associate|sect-loading-runtime-code|<tuple|3.1.1|?>>
-    <associate|sect-managing-multiple-states|<tuple|3.3.3|?>>
-    <associate|sect-runtime-return-value|<tuple|3.1.2.3|?>>
-    <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|?>>
-    <associate|sect-state-replication|<tuple|3.3|?>>
-    <associate|tabl-digest-items|<tuple|3.2|?>>
-    <associate|tabl-inherent-data|<tuple|3.1|?>>
+    <associate|algo-import-and-validate-block|<tuple|3.4|29>>
+    <associate|algo-maintain-transaction-pool|<tuple|3.3|26>>
+    <associate|algo-runtime-interaction|<tuple|3.1|23>>
+    <associate|algo-validate-transactions|<tuple|3.2|26>>
+    <associate|auto-1|<tuple|3|23>>
+    <associate|auto-10|<tuple|3.2.1|25>>
+    <associate|auto-11|<tuple|3.2.2|25>>
+    <associate|auto-12|<tuple|3.2.2.1|25>>
+    <associate|auto-13|<tuple|3.2.3|25>>
+    <associate|auto-14|<tuple|3.2.3|25>>
+    <associate|auto-15|<tuple|3.2.3|25>>
+    <associate|auto-16|<tuple|3.2.3|25>>
+    <associate|auto-17|<tuple|<with|mode|<quote|math>|<rigid|->>|26>>
+    <associate|auto-18|<tuple|3.2.3.1|27>>
+    <associate|auto-19|<tuple|3.1|27>>
+    <associate|auto-2|<tuple|3.1|23>>
+    <associate|auto-20|<tuple|3.3|27>>
+    <associate|auto-21|<tuple|3.3.1|27>>
+    <associate|auto-22|<tuple|3.3.1.1|27>>
+    <associate|auto-23|<tuple|3.2|28>>
+    <associate|auto-24|<tuple|3.3.1.2|28>>
+    <associate|auto-25|<tuple|3.3.1.3|28>>
+    <associate|auto-26|<tuple|3.3.2|29>>
+    <associate|auto-27|<tuple|3.3.3|29>>
+    <associate|auto-3|<tuple|3.1.1|23>>
+    <associate|auto-4|<tuple|3.1.2|24>>
+    <associate|auto-5|<tuple|3.1.2.1|24>>
+    <associate|auto-6|<tuple|3.1.2.2|24>>
+    <associate|auto-7|<tuple|3.1.2.3|24>>
+    <associate|auto-8|<tuple|3.1.2.4|25>>
+    <associate|auto-9|<tuple|3.2|25>>
+    <associate|block|<tuple|3.3.1.1|27>>
+    <associate|chap-state-transit|<tuple|3|23>>
+    <associate|defn-block-body|<tuple|3.9|28>>
+    <associate|defn-block-header|<tuple|3.6|27>>
+    <associate|defn-block-header-hash|<tuple|3.8|28>>
+    <associate|defn-digest|<tuple|3.7|28>>
+    <associate|defn-inherent-data|<tuple|3.5|27>>
+    <associate|defn-set-state-at|<tuple|3.10|30>>
+    <associate|defn-transaction-queue|<tuple|3.4|26>>
+    <associate|nota-call-into-runtime|<tuple|3.2|24>>
+    <associate|nota-runtime-code-at-state|<tuple|3.1|24>>
+    <associate|sect-block-body|<tuple|3.3.1.3|28>>
+    <associate|sect-block-format|<tuple|3.3.1|27>>
+    <associate|sect-block-submission|<tuple|3.3.2|29>>
+    <associate|sect-block-validation|<tuple|3.3.2|29>>
+    <associate|sect-entries-into-runtime|<tuple|3.1|23>>
+    <associate|sect-extrinsics|<tuple|3.2|25>>
+    <associate|sect-handling-runtime-state-update|<tuple|3.1.2.4|25>>
+    <associate|sect-justified-block-header|<tuple|3.3.1.2|28>>
+    <associate|sect-loading-runtime-code|<tuple|3.1.1|23>>
+    <associate|sect-managing-multiple-states|<tuple|3.3.3|29>>
+    <associate|sect-runtime-return-value|<tuple|3.1.2.3|24>>
+    <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.2|24>>
+    <associate|sect-state-replication|<tuple|3.3|27>>
+    <associate|tabl-digest-items|<tuple|3.2|28>>
+    <associate|tabl-inherent-data|<tuple|3.1|27>>
   </collection>
 </references>
 
