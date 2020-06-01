@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -1569,7 +1569,7 @@
     Neither on success or failure is there any additional data provided.
   </itemize>
 
-  <subsection|<verbatim|ext_http_request_write_body>>
+  <subsection|<verbatim|ext_offchain_http_request_write_body>>
 
   Writes a chunk of the request body. Returns a non-zero value in case the
   deadline is reached or the chunk could not be written.
@@ -1608,7 +1608,7 @@
     error type as defined in Definition <reference|defn-http-error>.
   </itemize>
 
-  <subsection|<verbatim|ext_http_response_wait>>
+  <subsection|<verbatim|ext_offchain_http_response_wait>>
 
   Returns an array of request statuses (the length is the same as IDs). Note
   that if deadline is not provided the method will block indefinitely,
@@ -1643,7 +1643,7 @@
     <reference|defn-http-status-codes>.
   </itemize>
 
-  <subsection|<verbatim|ext_http_response_headers>>
+  <subsection|<verbatim|ext_offchain_http_response_headers>>
 
   Read all HTTP response headers. Returns an array of key/value pairs.
   Response headers must be read before the response body.
@@ -1669,7 +1669,7 @@
     key/value pairs.
   </itemize>
 
-  <subsection|<verbatim|ext_http_response_read_body>>
+  <subsection|<verbatim|ext_offchain_http_response_read_body>>
 
   Reads a chunk of body response to the given buffer. Returns the number of
   bytes written or an error in case a deadline is reached or the server
@@ -1718,7 +1718,7 @@
 
   Interface that provides trie related functionality.
 
-  <subsection|<verbatim|blake2_256_root>>
+  <subsection|<verbatim|ext_trie_blake2_256_root>>
 
   Conducts a 256-bit Blake2 trie root formed from the iterated items.
 
@@ -1744,7 +1744,7 @@
     256-bit trie root result.
   </itemize>
 
-  <subsection|<verbatim|blake2_256_ordered_root>>
+  <subsection|<verbatim|ext_trie_blake2_256_ordered_root>>
 
   Conducts a 256-bit Blake2 trie root formed from the enumerated items.
 
@@ -1772,12 +1772,12 @@
     256-bit trie root result.
   </itemize>
 
-  <section|miscellaneous>
+  <section|Miscellaneous>
 
   Interface that provides miscellaneous functions for communicating between
   the runtime and the node.
 
-  <subsection|<verbatim|chain_id>>
+  <subsection|<verbatim|ext_misc_chain_id>>
 
   Returns the current relay chain identifier.
 
@@ -1795,7 +1795,7 @@
     <item><verbatim|result>: the current relay chain identifier.
   </itemize>
 
-  <subsection|<verbatim|print_num>>
+  <subsection|<verbatim|ext_misc_print_num>>
 
   Print a number.
 
@@ -1813,7 +1813,7 @@
     <item><verbatim|value>: the number to be printed.
   </itemize>
 
-  <subsection|<verbatim|print_utf8>>
+  <subsection|<verbatim|ext_misc_print_utf8>>
 
   Print a valid <verbatim|UTF8> buffer.
 
@@ -1833,7 +1833,7 @@
     buffer to be printed.
   </itemize>
 
-  <subsection|<verbatim|print_hex>>
+  <subsection|<verbatim|ext_misc_print_hex>>
 
   Print any buffer in hexadecimal representation.
 
@@ -1852,7 +1852,7 @@
     <reference|defn-runtime-pointer> indicating the buffer to be printed.
   </itemize>
 
-  <subsection|<verbatim|runtime_version>>
+  <subsection|<verbatim|ext_misc_runtime_version>>
 
   Extract the Runtime version of the given Wasm blob by calling
   <verbatim|Core_version> as defined in Definition
@@ -1891,7 +1891,7 @@
 
   Provides functionality for calling into the memory allocator.
 
-  <subsection|<verbatim|malloc>>
+  <subsection|<verbatim|ext_allocator_malloc>>
 
   Allocates the given number of bytes and returns the pointer to that memory
   location.
@@ -1912,7 +1912,7 @@
     <item><verbatim|result>: a regular pointer to the allocated buffer.
   </itemize>
 
-  <subsection|<verbatim|free>>
+  <subsection|<verbatim|ext_allocator_free>>
 
   Free the given pointer.
 
@@ -1948,7 +1948,7 @@
     </big-table>
   </definition>
 
-  <subsection|<verbatim|log>>
+  <subsection|<verbatim|ext_logging_log>>
 
   Request to print a log message on the host. Note that this will be only
   displayed if the host is enabled to display log messages with given level
@@ -1980,174 +1980,175 @@
     <reference|defn-runtime-pointer> indicating the log message.
   </itemize>
 
-
   \;
-  
+
   <\with|par-mode|right>
     <qed>
-  </with>
-  \;
+  </with>\ 
 </body>
 
 <\initial>
   <\collection>
-    <associate|page-first|?>
+    <associate|chapter-nr|6>
+    <associate|page-first|65>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|section-nr|1<uninit>>
+    <associate|subsection-nr|7>
   </collection>
 </initial>
 
 <\references>
   <\collection>
-    <associate|appendix-e|<tuple|A|?|c01-background.tm>>
-    <associate|auto-1|<tuple|A|?|c01-background.tm>>
-    <associate|auto-10|<tuple|A.1.4.1|?|c01-background.tm>>
-    <associate|auto-100|<tuple|A.5.10.1|?|c01-background.tm>>
-    <associate|auto-101|<tuple|A.5.11|?|c01-background.tm>>
-    <associate|auto-102|<tuple|A.5.11.1|?|c01-background.tm>>
-    <associate|auto-103|<tuple|A.5.12|?|c01-background.tm>>
-    <associate|auto-104|<tuple|A.5.12.1|?|c01-background.tm>>
-    <associate|auto-105|<tuple|A.5.13|?|c01-background.tm>>
-    <associate|auto-106|<tuple|A.5.13.1|?|c01-background.tm>>
-    <associate|auto-107|<tuple|A.5.14|?|c01-background.tm>>
-    <associate|auto-108|<tuple|A.5.14.1|?|c01-background.tm>>
-    <associate|auto-109|<tuple|A.5.15|?|c01-background.tm>>
-    <associate|auto-11|<tuple|A.1.5|?|c01-background.tm>>
-    <associate|auto-110|<tuple|A.5.15.1|?|c01-background.tm>>
-    <associate|auto-111|<tuple|A.6|?|c01-background.tm>>
-    <associate|auto-112|<tuple|A.6.1|?|c01-background.tm>>
-    <associate|auto-113|<tuple|A.6.1.1|?|c01-background.tm>>
-    <associate|auto-114|<tuple|A.6.2|?|c01-background.tm>>
-    <associate|auto-115|<tuple|A.6.2.1|?|c01-background.tm>>
-    <associate|auto-116|<tuple|A.7|?|c01-background.tm>>
-    <associate|auto-117|<tuple|A.7.1|?|c01-background.tm>>
-    <associate|auto-118|<tuple|A.7.1.1|?|c01-background.tm>>
-    <associate|auto-119|<tuple|A.7.2|?|c01-background.tm>>
-    <associate|auto-12|<tuple|A.1.5.1|?|c01-background.tm>>
-    <associate|auto-120|<tuple|A.7.2.1|?|c01-background.tm>>
-    <associate|auto-121|<tuple|A.7.3|?|c01-background.tm>>
-    <associate|auto-122|<tuple|A.7.3.1|?|c01-background.tm>>
-    <associate|auto-123|<tuple|A.7.4|?|c01-background.tm>>
-    <associate|auto-124|<tuple|A.7.4.1|?|c01-background.tm>>
-    <associate|auto-125|<tuple|A.7.5|?|c01-background.tm>>
-    <associate|auto-126|<tuple|A.7.5.1|?|c01-background.tm>>
-    <associate|auto-127|<tuple|A.8|?|c01-background.tm>>
-    <associate|auto-128|<tuple|A.8.1|?|c01-background.tm>>
-    <associate|auto-129|<tuple|A.8.1.1|?|c01-background.tm>>
-    <associate|auto-13|<tuple|A.1.6|?|c01-background.tm>>
-    <associate|auto-130|<tuple|A.8.2|?|c01-background.tm>>
-    <associate|auto-131|<tuple|A.8.2.1|?|c01-background.tm>>
-    <associate|auto-132|<tuple|A.9|?|c01-background.tm>>
-    <associate|auto-133|<tuple|A.4|?|c01-background.tm>>
-    <associate|auto-134|<tuple|A.9.1|?|c01-background.tm>>
-    <associate|auto-135|<tuple|A.9.1.1|?|c01-background.tm>>
-    <associate|auto-14|<tuple|A.1.6.1|?|c01-background.tm>>
-    <associate|auto-15|<tuple|A.1.7|?|c01-background.tm>>
-    <associate|auto-16|<tuple|A.1.7.1|?|c01-background.tm>>
-    <associate|auto-17|<tuple|A.1.8|?|c01-background.tm>>
-    <associate|auto-18|<tuple|A.1.8.1|?|c01-background.tm>>
-    <associate|auto-19|<tuple|A.1.9|?|c01-background.tm>>
-    <associate|auto-2|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-20|<tuple|A.1.9.1|?|c01-background.tm>>
-    <associate|auto-21|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-22|<tuple|A.2.1|?|c01-background.tm>>
-    <associate|auto-23|<tuple|A.2.1.1|?|c01-background.tm>>
-    <associate|auto-24|<tuple|A.2.2|?|c01-background.tm>>
-    <associate|auto-25|<tuple|A.2.2.1|?|c01-background.tm>>
-    <associate|auto-26|<tuple|A.2.3|?|c01-background.tm>>
-    <associate|auto-27|<tuple|A.2.3.1|?|c01-background.tm>>
-    <associate|auto-28|<tuple|A.2.4|?|c01-background.tm>>
-    <associate|auto-29|<tuple|A.2.4.1|?|c01-background.tm>>
-    <associate|auto-3|<tuple|A.1.1|?|c01-background.tm>>
-    <associate|auto-30|<tuple|A.2.5|?|c01-background.tm>>
-    <associate|auto-31|<tuple|A.2.5.1|?|c01-background.tm>>
-    <associate|auto-32|<tuple|A.2.6|?|c01-background.tm>>
-    <associate|auto-33|<tuple|A.2.6.1|?|c01-background.tm>>
-    <associate|auto-34|<tuple|A.2.7|?|c01-background.tm>>
-    <associate|auto-35|<tuple|A.2.7.1|?|c01-background.tm>>
-    <associate|auto-36|<tuple|A.2.8|?|c01-background.tm>>
-    <associate|auto-37|<tuple|A.2.8.1|?|c01-background.tm>>
-    <associate|auto-38|<tuple|A.2.9|?|c01-background.tm>>
-    <associate|auto-39|<tuple|A.2.9.1|?|c01-background.tm>>
-    <associate|auto-4|<tuple|A.1.1.1|?|c01-background.tm>>
-    <associate|auto-40|<tuple|A.3|?|c01-background.tm>>
-    <associate|auto-41|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-42|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-43|<tuple|A.3.1|?|c01-background.tm>>
-    <associate|auto-44|<tuple|A.3.1.1|?|c01-background.tm>>
-    <associate|auto-45|<tuple|A.3.2|?|c01-background.tm>>
-    <associate|auto-46|<tuple|A.3.2.1|?|c01-background.tm>>
-    <associate|auto-47|<tuple|A.3.3|?|c01-background.tm>>
-    <associate|auto-48|<tuple|A.3.3.1|?|c01-background.tm>>
-    <associate|auto-49|<tuple|A.3.4|?|c01-background.tm>>
-    <associate|auto-5|<tuple|A.1.2|?|c01-background.tm>>
-    <associate|auto-50|<tuple|A.3.4.1|?|c01-background.tm>>
-    <associate|auto-51|<tuple|A.3.5|?|c01-background.tm>>
-    <associate|auto-52|<tuple|A.3.5.1|?|c01-background.tm>>
-    <associate|auto-53|<tuple|A.3.6|?|c01-background.tm>>
-    <associate|auto-54|<tuple|A.3.6.1|?|c01-background.tm>>
-    <associate|auto-55|<tuple|A.3.7|?|c01-background.tm>>
-    <associate|auto-56|<tuple|A.3.7.1|?|c01-background.tm>>
-    <associate|auto-57|<tuple|A.3.8|?|c01-background.tm>>
-    <associate|auto-58|<tuple|A.3.8.1|?|c01-background.tm>>
-    <associate|auto-59|<tuple|A.3.8.2|?|c01-background.tm>>
-    <associate|auto-6|<tuple|A.1.2.1|?|c01-background.tm>>
-    <associate|auto-60|<tuple|A.3.9|?|c01-background.tm>>
-    <associate|auto-61|<tuple|A.3.9.1|?|c01-background.tm>>
-    <associate|auto-62|<tuple|A.3.10|?|c01-background.tm>>
-    <associate|auto-63|<tuple|A.3.10.1|?|c01-background.tm>>
-    <associate|auto-64|<tuple|A.4|?|c01-background.tm>>
-    <associate|auto-65|<tuple|A.4.1|?|c01-background.tm>>
-    <associate|auto-66|<tuple|A.4.1.1|?|c01-background.tm>>
-    <associate|auto-67|<tuple|A.4.2|?|c01-background.tm>>
-    <associate|auto-68|<tuple|A.4.2.1|?|c01-background.tm>>
-    <associate|auto-69|<tuple|A.4.3|?|c01-background.tm>>
-    <associate|auto-7|<tuple|A.1.3|?|c01-background.tm>>
-    <associate|auto-70|<tuple|A.4.3.1|?|c01-background.tm>>
-    <associate|auto-71|<tuple|A.4.4|?|c01-background.tm>>
-    <associate|auto-72|<tuple|A.4.4.1|?|c01-background.tm>>
-    <associate|auto-73|<tuple|A.4.5|?|c01-background.tm>>
-    <associate|auto-74|<tuple|A.4.5.1|?|c01-background.tm>>
-    <associate|auto-75|<tuple|A.4.6|?|c01-background.tm>>
-    <associate|auto-76|<tuple|A.4.6.1|?|c01-background.tm>>
-    <associate|auto-77|<tuple|A.4.7|?|c01-background.tm>>
-    <associate|auto-78|<tuple|A.4.7.1|?|c01-background.tm>>
-    <associate|auto-79|<tuple|A.5|?|c01-background.tm>>
-    <associate|auto-8|<tuple|A.1.3.1|?|c01-background.tm>>
-    <associate|auto-80|<tuple|A.3|?|c01-background.tm>>
-    <associate|auto-81|<tuple|A.5.1|?|c01-background.tm>>
-    <associate|auto-82|<tuple|A.5.1.1|?|c01-background.tm>>
-    <associate|auto-83|<tuple|A.5.2|?|c01-background.tm>>
-    <associate|auto-84|<tuple|A.5.2.1|?|c01-background.tm>>
-    <associate|auto-85|<tuple|A.5.3|?|c01-background.tm>>
-    <associate|auto-86|<tuple|A.5.3.1|?|c01-background.tm>>
-    <associate|auto-87|<tuple|A.5.4|?|c01-background.tm>>
-    <associate|auto-88|<tuple|A.5.4.1|?|c01-background.tm>>
-    <associate|auto-89|<tuple|A.5.5|?|c01-background.tm>>
-    <associate|auto-9|<tuple|A.1.4|?|c01-background.tm>>
-    <associate|auto-90|<tuple|A.5.5.1|?|c01-background.tm>>
-    <associate|auto-91|<tuple|A.5.6|?|c01-background.tm>>
-    <associate|auto-92|<tuple|A.5.6.1|?|c01-background.tm>>
-    <associate|auto-93|<tuple|A.5.7|?|c01-background.tm>>
-    <associate|auto-94|<tuple|A.5.7.1|?|c01-background.tm>>
-    <associate|auto-95|<tuple|A.5.8|?|c01-background.tm>>
-    <associate|auto-96|<tuple|A.5.8.1|?|c01-background.tm>>
-    <associate|auto-97|<tuple|A.5.9|?|c01-background.tm>>
-    <associate|auto-98|<tuple|A.5.9.1|?|c01-background.tm>>
-    <associate|auto-99|<tuple|A.5.10|?|c01-background.tm>>
-    <associate|defn-child-storage-definition|<tuple|A.4|?|c01-background.tm>>
-    <associate|defn-child-storage-type|<tuple|A.3|?|c01-background.tm>>
-    <associate|defn-child-type|<tuple|A.5|?|c01-background.tm>>
-    <associate|defn-ecdsa-verify-error|<tuple|A.7|?|c01-background.tm>>
-    <associate|defn-http-error|<tuple|A.11|?|c01-background.tm>>
-    <associate|defn-http-status-codes|<tuple|A.10|?|c01-background.tm>>
-    <associate|defn-key-type-id|<tuple|A.6|?|c01-background.tm>>
-    <associate|defn-local-storage|<tuple|A.9|?|c01-background.tm>>
-    <associate|defn-logging-log-level|<tuple|A.12|?|c01-background.tm>>
-    <associate|defn-persistent-storage|<tuple|A.8|?|c01-background.tm>>
-    <associate|defn-runtime-pointer|<tuple|A.2|?|c01-background.tm>>
-    <associate|nota-re-api-at-state|<tuple|A.1|?|c01-background.tm>>
+    <associate|appendix-e|<tuple|A|?>>
+    <associate|auto-1|<tuple|A|?>>
+    <associate|auto-10|<tuple|A.1.4.1|?>>
+    <associate|auto-100|<tuple|A.5.10.1|?>>
+    <associate|auto-101|<tuple|A.5.11|?>>
+    <associate|auto-102|<tuple|A.5.11.1|?>>
+    <associate|auto-103|<tuple|A.5.12|?>>
+    <associate|auto-104|<tuple|A.5.12.1|?>>
+    <associate|auto-105|<tuple|A.5.13|?>>
+    <associate|auto-106|<tuple|A.5.13.1|?>>
+    <associate|auto-107|<tuple|A.5.14|?>>
+    <associate|auto-108|<tuple|A.5.14.1|?>>
+    <associate|auto-109|<tuple|A.5.15|?>>
+    <associate|auto-11|<tuple|A.1.5|?>>
+    <associate|auto-110|<tuple|A.5.15.1|?>>
+    <associate|auto-111|<tuple|A.6|?>>
+    <associate|auto-112|<tuple|A.6.1|?>>
+    <associate|auto-113|<tuple|A.6.1.1|?>>
+    <associate|auto-114|<tuple|A.6.2|?>>
+    <associate|auto-115|<tuple|A.6.2.1|?>>
+    <associate|auto-116|<tuple|A.7|?>>
+    <associate|auto-117|<tuple|A.7.1|?>>
+    <associate|auto-118|<tuple|A.7.1.1|?>>
+    <associate|auto-119|<tuple|A.7.2|?>>
+    <associate|auto-12|<tuple|A.1.5.1|?>>
+    <associate|auto-120|<tuple|A.7.2.1|?>>
+    <associate|auto-121|<tuple|A.7.3|?>>
+    <associate|auto-122|<tuple|A.7.3.1|?>>
+    <associate|auto-123|<tuple|A.7.4|?>>
+    <associate|auto-124|<tuple|A.7.4.1|?>>
+    <associate|auto-125|<tuple|A.7.5|?>>
+    <associate|auto-126|<tuple|A.7.5.1|?>>
+    <associate|auto-127|<tuple|A.8|?>>
+    <associate|auto-128|<tuple|A.8.1|?>>
+    <associate|auto-129|<tuple|A.8.1.1|?>>
+    <associate|auto-13|<tuple|A.1.6|?>>
+    <associate|auto-130|<tuple|A.8.2|?>>
+    <associate|auto-131|<tuple|A.8.2.1|?>>
+    <associate|auto-132|<tuple|A.9|?>>
+    <associate|auto-133|<tuple|A.4|?>>
+    <associate|auto-134|<tuple|A.9.1|?>>
+    <associate|auto-135|<tuple|A.9.1.1|?>>
+    <associate|auto-14|<tuple|A.1.6.1|?>>
+    <associate|auto-15|<tuple|A.1.7|?>>
+    <associate|auto-16|<tuple|A.1.7.1|?>>
+    <associate|auto-17|<tuple|A.1.8|?>>
+    <associate|auto-18|<tuple|A.1.8.1|?>>
+    <associate|auto-19|<tuple|A.1.9|?>>
+    <associate|auto-2|<tuple|A.1|?>>
+    <associate|auto-20|<tuple|A.1.9.1|?>>
+    <associate|auto-21|<tuple|A.2|?>>
+    <associate|auto-22|<tuple|A.2.1|?>>
+    <associate|auto-23|<tuple|A.2.1.1|?>>
+    <associate|auto-24|<tuple|A.2.2|?>>
+    <associate|auto-25|<tuple|A.2.2.1|?>>
+    <associate|auto-26|<tuple|A.2.3|?>>
+    <associate|auto-27|<tuple|A.2.3.1|?>>
+    <associate|auto-28|<tuple|A.2.4|?>>
+    <associate|auto-29|<tuple|A.2.4.1|?>>
+    <associate|auto-3|<tuple|A.1.1|?>>
+    <associate|auto-30|<tuple|A.2.5|?>>
+    <associate|auto-31|<tuple|A.2.5.1|?>>
+    <associate|auto-32|<tuple|A.2.6|?>>
+    <associate|auto-33|<tuple|A.2.6.1|?>>
+    <associate|auto-34|<tuple|A.2.7|?>>
+    <associate|auto-35|<tuple|A.2.7.1|?>>
+    <associate|auto-36|<tuple|A.2.8|?>>
+    <associate|auto-37|<tuple|A.2.8.1|?>>
+    <associate|auto-38|<tuple|A.2.9|?>>
+    <associate|auto-39|<tuple|A.2.9.1|?>>
+    <associate|auto-4|<tuple|A.1.1.1|?>>
+    <associate|auto-40|<tuple|A.3|?>>
+    <associate|auto-41|<tuple|A.1|?>>
+    <associate|auto-42|<tuple|A.2|?>>
+    <associate|auto-43|<tuple|A.3.1|?>>
+    <associate|auto-44|<tuple|A.3.1.1|?>>
+    <associate|auto-45|<tuple|A.3.2|?>>
+    <associate|auto-46|<tuple|A.3.2.1|?>>
+    <associate|auto-47|<tuple|A.3.3|?>>
+    <associate|auto-48|<tuple|A.3.3.1|?>>
+    <associate|auto-49|<tuple|A.3.4|?>>
+    <associate|auto-5|<tuple|A.1.2|?>>
+    <associate|auto-50|<tuple|A.3.4.1|?>>
+    <associate|auto-51|<tuple|A.3.5|?>>
+    <associate|auto-52|<tuple|A.3.5.1|?>>
+    <associate|auto-53|<tuple|A.3.6|?>>
+    <associate|auto-54|<tuple|A.3.6.1|?>>
+    <associate|auto-55|<tuple|A.3.7|?>>
+    <associate|auto-56|<tuple|A.3.7.1|?>>
+    <associate|auto-57|<tuple|A.3.8|?>>
+    <associate|auto-58|<tuple|A.3.8.1|?>>
+    <associate|auto-59|<tuple|A.3.8.2|?>>
+    <associate|auto-6|<tuple|A.1.2.1|?>>
+    <associate|auto-60|<tuple|A.3.9|?>>
+    <associate|auto-61|<tuple|A.3.9.1|?>>
+    <associate|auto-62|<tuple|A.3.10|?>>
+    <associate|auto-63|<tuple|A.3.10.1|?>>
+    <associate|auto-64|<tuple|A.4|?>>
+    <associate|auto-65|<tuple|A.4.1|?>>
+    <associate|auto-66|<tuple|A.4.1.1|?>>
+    <associate|auto-67|<tuple|A.4.2|?>>
+    <associate|auto-68|<tuple|A.4.2.1|?>>
+    <associate|auto-69|<tuple|A.4.3|?>>
+    <associate|auto-7|<tuple|A.1.3|?>>
+    <associate|auto-70|<tuple|A.4.3.1|?>>
+    <associate|auto-71|<tuple|A.4.4|?>>
+    <associate|auto-72|<tuple|A.4.4.1|?>>
+    <associate|auto-73|<tuple|A.4.5|?>>
+    <associate|auto-74|<tuple|A.4.5.1|?>>
+    <associate|auto-75|<tuple|A.4.6|?>>
+    <associate|auto-76|<tuple|A.4.6.1|?>>
+    <associate|auto-77|<tuple|A.4.7|?>>
+    <associate|auto-78|<tuple|A.4.7.1|?>>
+    <associate|auto-79|<tuple|A.5|?>>
+    <associate|auto-8|<tuple|A.1.3.1|?>>
+    <associate|auto-80|<tuple|A.3|?>>
+    <associate|auto-81|<tuple|A.5.1|?>>
+    <associate|auto-82|<tuple|A.5.1.1|?>>
+    <associate|auto-83|<tuple|A.5.2|?>>
+    <associate|auto-84|<tuple|A.5.2.1|?>>
+    <associate|auto-85|<tuple|A.5.3|?>>
+    <associate|auto-86|<tuple|A.5.3.1|?>>
+    <associate|auto-87|<tuple|A.5.4|?>>
+    <associate|auto-88|<tuple|A.5.4.1|?>>
+    <associate|auto-89|<tuple|A.5.5|?>>
+    <associate|auto-9|<tuple|A.1.4|?>>
+    <associate|auto-90|<tuple|A.5.5.1|?>>
+    <associate|auto-91|<tuple|A.5.6|?>>
+    <associate|auto-92|<tuple|A.5.6.1|?>>
+    <associate|auto-93|<tuple|A.5.7|?>>
+    <associate|auto-94|<tuple|A.5.7.1|?>>
+    <associate|auto-95|<tuple|A.5.8|?>>
+    <associate|auto-96|<tuple|A.5.8.1|?>>
+    <associate|auto-97|<tuple|A.5.9|?>>
+    <associate|auto-98|<tuple|A.5.9.1|?>>
+    <associate|auto-99|<tuple|A.5.10|?>>
+    <associate|defn-child-storage-definition|<tuple|A.4|?>>
+    <associate|defn-child-storage-type|<tuple|A.3|?>>
+    <associate|defn-child-type|<tuple|A.5|?>>
+    <associate|defn-ecdsa-verify-error|<tuple|A.7|?>>
+    <associate|defn-http-error|<tuple|A.11|?>>
+    <associate|defn-http-status-codes|<tuple|A.10|?>>
+    <associate|defn-key-type-id|<tuple|A.6|?>>
+    <associate|defn-local-storage|<tuple|A.9|?>>
+    <associate|defn-logging-log-level|<tuple|A.12|?>>
+    <associate|defn-persistent-storage|<tuple|A.8|?>>
+    <associate|defn-runtime-pointer|<tuple|A.2|?>>
+    <associate|nota-re-api-at-state|<tuple|A.1|?>>
   </collection>
 </references>
 
