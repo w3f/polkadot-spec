@@ -797,8 +797,8 @@
 
     <item><name|Ok-Result> indicates whether the result of
     <verbatim|BlockBuilder_apply_extrinsics> is successfull. The error type
-    of the Runtime function is defined in Definition <todo|define error
-    type>.
+    of the Runtime function is defined in section
+    <reference|sect-rte-apply-extrinsic>.
 
     <item><name|Ready-Extrinsics-Queue> indicates picking an extrinsics from
     the extrinsics queue (Definition <reference|defn-transaction-queue>).
