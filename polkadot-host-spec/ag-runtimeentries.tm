@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -405,7 +405,7 @@
 
   \;
 
-  <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
+  <subsection|<verbatim|BlockBuilder_apply_extrinsic>><label|sect-rte-apply-extrinsic>
 
   Apply the extrinsic outside of the block execution function. This does not
   attempt to validate anything regarding the block, but it builds a list of
@@ -470,8 +470,13 @@
 
   <subsection|<verbatim|BlockBuilder_inherent_extrinsics>>
 
-  Generate inherent extrinsics. The inherent data will vary from chain to
-  chain.
+  Generates the inherent extrinsics, which are explained in more detail in
+  section <reference|sect-inherents>.This function takes a SCALE encoded
+  hashtable as defined in section <reference|defn-scale-list> and returns an
+  array of extrinsics. The Polkadot Host must submit each of those to
+  <verbatim|BlockBuilder_apply_extrinsic>, described in section
+  <reference|sect-rte-apply-extrinsic>. This procedure is outlined in
+  algorithm <reference|algo-build-block>.
 
   \;
 
@@ -507,8 +512,8 @@
 
 <\initial>
   <\collection>
-    <associate|chapter-nr|5>
-    <associate|page-first|101>
+    <associate|chapter-nr|6>
+    <associate|page-first|107>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
@@ -519,43 +524,44 @@
 
 <\references>
   <\collection>
-    <associate|auto-1|<tuple|A|?>>
-    <associate|auto-10|<tuple|A.2.5|?>>
-    <associate|auto-11|<tuple|A.2|?>>
-    <associate|auto-12|<tuple|A.2.6|?>>
-    <associate|auto-13|<tuple|A.2.7|?>>
-    <associate|auto-14|<tuple|A.3|?>>
-    <associate|auto-15|<tuple|A.4|?>>
-    <associate|auto-16|<tuple|A.5|?>>
-    <associate|auto-17|<tuple|A.6|?>>
-    <associate|auto-18|<tuple|A.2.8|?>>
-    <associate|auto-19|<tuple|A.7|?>>
-    <associate|auto-2|<tuple|A.1|?>>
-    <associate|auto-20|<tuple|A.8|?>>
-    <associate|auto-21|<tuple|A.2.9|?>>
-    <associate|auto-22|<tuple|A.2.10|?>>
-    <associate|auto-3|<tuple|A.1|?>>
-    <associate|auto-4|<tuple|A.2|?>>
-    <associate|auto-5|<tuple|A.2.1|?>>
-    <associate|auto-6|<tuple|A.1|?>>
-    <associate|auto-7|<tuple|A.2.2|?>>
-    <associate|auto-8|<tuple|A.2.3|?>>
-    <associate|auto-9|<tuple|A.2.4|?>>
-    <associate|defn-invalid-transaction|<tuple|A.3|?>>
-    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|?>>
-    <associate|defn-rt-core-execute-block|<tuple|A.2.2|?>>
-    <associate|defn-rt-core-version|<tuple|A.2.1|?>>
-    <associate|defn-transaction-validity-error|<tuple|A.2|?>>
-    <associate|defn-unknown-transaction|<tuple|A.4|?>>
-    <associate|defn-valid-transaction|<tuple|A.1|?>>
-    <associate|sect-list-of-runtime-entries|<tuple|A.1|?>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|?>>
-    <associate|sect-rte-core-execute-block|<tuple|A.2.2|?>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|?>>
-    <associate|sect-rte-hash-and-length|<tuple|A.2.4|?>>
-    <associate|sect-rte-validate-transaction|<tuple|A.2.7|?>>
-    <associate|sect-runtime-entries|<tuple|A|?>>
-    <associate|snippet-runtime-enteries|<tuple|A.1|?>>
+    <associate|auto-1|<tuple|A|107>>
+    <associate|auto-10|<tuple|A.2.5|109>>
+    <associate|auto-11|<tuple|A.2|109>>
+    <associate|auto-12|<tuple|A.2.6|109>>
+    <associate|auto-13|<tuple|A.2.7|109>>
+    <associate|auto-14|<tuple|A.3|110>>
+    <associate|auto-15|<tuple|A.4|110>>
+    <associate|auto-16|<tuple|A.5|110>>
+    <associate|auto-17|<tuple|A.6|111>>
+    <associate|auto-18|<tuple|A.2.8|111>>
+    <associate|auto-19|<tuple|A.7|111>>
+    <associate|auto-2|<tuple|A.1|107>>
+    <associate|auto-20|<tuple|A.8|111>>
+    <associate|auto-21|<tuple|A.2.9|112>>
+    <associate|auto-22|<tuple|A.2.10|112>>
+    <associate|auto-3|<tuple|A.1|107>>
+    <associate|auto-4|<tuple|A.2|107>>
+    <associate|auto-5|<tuple|A.2.1|108>>
+    <associate|auto-6|<tuple|A.1|108>>
+    <associate|auto-7|<tuple|A.2.2|108>>
+    <associate|auto-8|<tuple|A.2.3|108>>
+    <associate|auto-9|<tuple|A.2.4|109>>
+    <associate|defn-invalid-transaction|<tuple|A.3|110>>
+    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|112>>
+    <associate|defn-rt-core-execute-block|<tuple|A.2.2|108>>
+    <associate|defn-rt-core-version|<tuple|A.2.1|108>>
+    <associate|defn-transaction-validity-error|<tuple|A.2|110>>
+    <associate|defn-unknown-transaction|<tuple|A.4|110>>
+    <associate|defn-valid-transaction|<tuple|A.1|110>>
+    <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
+    <associate|sect-rte-apply-extrinsic|<tuple|A.2.8|111>>
+    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|109>>
+    <associate|sect-rte-core-execute-block|<tuple|A.2.2|108>>
+    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|109>>
+    <associate|sect-rte-hash-and-length|<tuple|A.2.4|109>>
+    <associate|sect-rte-validate-transaction|<tuple|A.2.7|109>>
+    <associate|sect-runtime-entries|<tuple|A|107>>
+    <associate|snippet-runtime-enteries|<tuple|A.1|107>>
   </collection>
 </references>
 
