@@ -471,7 +471,7 @@
   <subsection|<verbatim|BlockBuilder_inherent_extrinsics>>
 
   Generates the inherent extrinsics, which are explained in more detail in
-  section <reference|sect-inherents>.This function takes a SCALE encoded
+  section <reference|sect-inherents>. This function takes a SCALE encoded
   hashtable as defined in section <reference|defn-scale-list> and returns an
   array of extrinsics. The Polkadot Host must submit each of those to
   <verbatim|BlockBuilder_apply_extrinsic>, described in section
