@@ -484,7 +484,8 @@
 
   <\itemize>
     <item>A <name|Inherents-Data> structure as defined in
-    <reference|defn-inherent-data>.
+    <reference|defn-inherent-data>. This function does not generate an
+    extrinsic for <verbatim|babeslot>.
   </itemize>
 
   \;
