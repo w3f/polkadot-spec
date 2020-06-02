@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -724,7 +724,15 @@
       </state>
 
       <\state>
-        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_inherent_extrinsics>>,<text|<name|Inherent-Data>>|)>><END>
+        <name|<em|I-D>> \<leftarrow\> <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_inherent_extrinsics>>,<text|<name|Inherent-Data>>|)>><END>
+      </state>
+
+      <\state>
+        <strong|for> <em|E> <strong|in> <em|I-D>
+      </state>
+
+      <\state>
+        <space|2em><name|Call-Runtime-Entry>(<verbatim|BlockBuilder_apply_extrinsics,E>)
       </state>
 
       <\state>
