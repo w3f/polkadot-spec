@@ -19,15 +19,12 @@ babe = { package = "srml-babe", git = "https://github.com/paritytech/substrate",
 babe-primitives = { package = "substrate-consensus-babe-primitives", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 grandpa = { package = "srml-grandpa", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 executive = { package = "srml-executive", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
-#indices = { package = "srml-indices", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 randomness-collective-flip = { package = "srml-randomness-collective-flip", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 system = { package = "srml-system", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 timestamp = { package = "srml-timestamp", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 sudo = { package = "srml-sudo", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
-#transaction-payment = { package = "srml-transaction-payment", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 sr-primitives = { git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 client = { package = "substrate-client", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
-#offchain-primitives = { package = "substrate-offchain-primitives", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default-features = false }
 
 [build-dependencies]
 wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4" }
@@ -45,17 +42,13 @@ std = [
 	"babe-primitives/std",
 	"grandpa/std",
 	"executive/std",
-#	"indices/std",
 	"primitives/std",
 	"sr-primitives/std",
 	"randomness-collective-flip/std",
 	"system/std",
 	"timestamp/std",
 	"sudo/std",
-#	"transaction-payment/std",
 	"version/std",
 	"serde",
 	"safe-mix/std",
-#	"offchain-primitives/std",
-#	"substrate-session/std",
 ]
