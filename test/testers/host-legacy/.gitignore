@@ -1,3 +1,4 @@
+runtime/Cargo.lock
 target/
 genesis-legacy.json
 genesis-legacy.yaml
