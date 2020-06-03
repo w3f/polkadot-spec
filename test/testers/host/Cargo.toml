@@ -35,4 +35,4 @@ default-features = false
 # Vendoring support by including unspecified dependency of runtime
 [build-dependencies.wasm-builder]
 package = 'substrate-wasm-builder'
-version = '1.0.11'
+version = '=1.0.11'
