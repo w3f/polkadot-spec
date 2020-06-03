@@ -53,6 +53,11 @@ function run_tester_host(implementation, seconds)
     proc = run(pipeline(cmd, stdout=stream, stderr=stream), wait=false)
     sleep(seconds)
     kill(proc)
+
+    while(process_running(proc))
+        sleep(0.1)
+    end
+
     close(stream.in)
 
     # Reset path
