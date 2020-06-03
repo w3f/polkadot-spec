@@ -14,4 +14,4 @@ runtime = { package = "host-tester-legacy-runtime", path = "runtime" }
 
 # Vendoring support by including unspecified dependency of runtime
 [build-dependencies]
-wasm-builder = { package = "substrate-wasm-builder", version = "1.0.8" }
+wasm-builder = { package = "substrate-wasm-builder", version = "1.0.11" }

@@ -27,7 +27,7 @@ sr-primitives = { git = "https://github.com/paritytech/substrate", rev = "c37bb0
 client = { package = "substrate-client", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default_features = false }
 
 [build-dependencies]
-wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.4" }
+wasm-builder-runner = { package = "substrate-wasm-builder-runner", version = "1.0.6" }
 
 [features]
 default = ["std"]
