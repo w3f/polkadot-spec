@@ -346,6 +346,18 @@ dependencies = [
 
 [[package]]
 name = "ed25519-dalek"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "2d07e8b8a8386c3b89a7a4b329fdfa4cb545de2545e9e2ebbc3dd3929253e426"
+dependencies = [
+ "clear_on_drop",
+ "curve25519-dalek 1.2.3",
+ "failure",
+ "rand 0.6.5",
+]
+
+[[package]]
+name = "ed25519-dalek"
 version = "1.0.0-pre.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "978710b352437433c97b2bff193f2fb1dfd58a093f863dd95e225a19baa599a2"
@@ -817,6 +829,12 @@ dependencies = [
 
 [[package]]
 name = "parity-wasm"
+version = "0.40.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1e39faaa292a687ea15120b1ac31899b13586446521df6c149e46f1584671e0f"
+
+[[package]]
+name = "parity-wasm"
 version = "0.41.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ddfc878dac00da22f8f61e7af3157988424567ab01d9920b962ef7dcbd7cd865"
@@ -1205,7 +1223,7 @@ dependencies = [
  "sp-trie",
  "sp-version",
  "sp-wasm-interface",
- "wasmi",
+ "wasmi 0.6.2",
 ]
 
 [[package]]
@@ -1347,7 +1365,7 @@ dependencies = [
  "base58",
  "blake2-rfc",
  "byteorder",
- "ed25519-dalek",
+ "ed25519-dalek 1.0.0-pre.3",
  "hash-db",
  "hash256-std-hasher",
  "hex",
@@ -1372,9 +1390,9 @@ dependencies = [
  "sp-storage",
  "substrate-bip39",
  "tiny-bip39",
- "tiny-keccak",
+ "tiny-keccak 2.0.2",
  "twox-hash",
- "wasmi",
+ "wasmi 0.6.2",
  "zeroize 1.1.0",
 ]
 
@@ -1558,7 +1576,15 @@ version = "2.0.0"
 source = "git+https://github.com/paritytech/substrate?rev=605f5c1#605f5c1b89616d14b0c401fb14eb899f5772d266"
 dependencies = [
  "impl-trait-for-tuples",
- "wasmi",
+ "wasmi 0.6.2",
+]
+
+[[package]]
+name = "sr-std"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate?rev=c37bb08#c37bb08535c49a12320af7facfd555ce05cce2e8"
+dependencies = [
+ "rustc_version",
 ]
 
 [[package]]
@@ -1599,6 +1625,76 @@ dependencies = [
  "pbkdf2",
  "schnorrkel",
  "sha2",
+]
+
+[[package]]
+name = "substrate-debug-derive"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate?rev=c37bb08#c37bb08535c49a12320af7facfd555ce05cce2e8"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "substrate-externalities"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate?rev=c37bb08#c37bb08535c49a12320af7facfd555ce05cce2e8"
+dependencies = [
+ "environmental",
+ "primitive-types",
+ "sr-std",
+ "substrate-primitives-storage",
+]
+
+[[package]]
+name = "substrate-primitives"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate?rev=c37bb08#c37bb08535c49a12320af7facfd555ce05cce2e8"
+dependencies = [
+ "base58",
+ "blake2-rfc",
+ "byteorder",
+ "ed25519-dalek 0.9.1",
+ "hash-db",
+ "hash256-std-hasher",
+ "hex",
+ "impl-serde 0.2.3",
+ "lazy_static",
+ "libsecp256k1",
+ "log",
+ "num-traits",
+ "parity-scale-codec",
+ "parking_lot 0.9.0",
+ "primitive-types",
+ "rand 0.7.3",
+ "regex",
+ "rustc-hex",
+ "schnorrkel",
+ "serde",
+ "sha2",
+ "sr-std",
+ "substrate-bip39",
+ "substrate-debug-derive",
+ "substrate-externalities",
+ "substrate-primitives-storage",
+ "tiny-bip39",
+ "tiny-keccak 1.5.0",
+ "twox-hash",
+ "wasmi 0.5.1",
+ "zeroize 0.10.1",
+]
+
+[[package]]
+name = "substrate-primitives-storage"
+version = "2.0.0"
+source = "git+https://github.com/paritytech/substrate?rev=c37bb08#c37bb08535c49a12320af7facfd555ce05cce2e8"
+dependencies = [
+ "impl-serde 0.2.3",
+ "serde",
+ "sr-std",
+ "substrate-debug-derive",
 ]
 
 [[package]]
@@ -1698,6 +1794,15 @@ dependencies = [
  "pbkdf2",
  "rand 0.6.5",
  "sha2",
+]
+
+[[package]]
+name = "tiny-keccak"
+version = "1.5.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d8a021c69bb74a44ccedb824a046447e2c84a01df9e5c20779750acb38e11b2"
+dependencies = [
+ "crunchy",
 ]
 
 [[package]]
@@ -1806,7 +1911,7 @@ checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
 name = "wasm-adapter-legacy"
 version = "0.1.0"
 dependencies = [
- "sp-core",
+ "substrate-primitives",
  "substrate-wasm-builder",
 ]
 
@@ -1823,6 +1928,20 @@ dependencies = [
 
 [[package]]
 name = "wasmi"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f31d26deb2d9a37e6cfed420edce3ed604eab49735ba89035e13c98f9a528313"
+dependencies = [
+ "libc",
+ "memory_units",
+ "num-rational",
+ "num-traits",
+ "parity-wasm 0.40.3",
+ "wasmi-validation 0.2.0",
+]
+
+[[package]]
+name = "wasmi"
 version = "0.6.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf617d864d25af3587aa745529f7aaa541066c876d57e050c0d0c85c61c92aff"
@@ -1832,7 +1951,16 @@ dependencies = [
  "num-rational",
  "num-traits",
  "parity-wasm 0.41.0",
- "wasmi-validation",
+ "wasmi-validation 0.3.0",
+]
+
+[[package]]
+name = "wasmi-validation"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6bc0356e3df56e639fc7f7d8a99741915531e27ed735d911ed83d7e1339c8188"
+dependencies = [
+ "parity-wasm 0.40.3",
 ]
 
 [[package]]
@@ -1886,6 +2014,12 @@ name = "zeroize"
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "45af6a010d13e4cf5b54c94ba5a2b2eba5596b9e46bf5875612d332a1f2b3f86"
+
+[[package]]
+name = "zeroize"
+version = "0.10.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4090487fa66630f7b166fba2bbb525e247a5449f41c468cc1d98f8ae6ac03120"
 
 [[package]]
 name = "zeroize"
