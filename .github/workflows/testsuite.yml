@@ -227,7 +227,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: wasm-adapter-legacy.compact.wasm
-        path: test/adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy/wasm_adapter-legacy.compact.wasm
+        path: test/adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy/wasm_adapter_legacy.compact.wasm
 
 
   test-substrate:
