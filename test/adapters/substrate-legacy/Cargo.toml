@@ -19,3 +19,7 @@ sp-state-machine = { git = "https://github.com/paritytech/substrate", rev = "605
 
 # Wasm Blob
 runtime = { package = "wasm-adapter-legacy",  path = "../wasm-legacy" }
+
+[features]
+default = [ "std" ]
+std = [ "runtime/std" ]

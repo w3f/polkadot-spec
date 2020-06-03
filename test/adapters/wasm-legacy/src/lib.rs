@@ -2,7 +2,7 @@
 #![allow(unused_imports)]
 use std::slice;
 
-use sp_core::wasm_export_functions;
+use primitives::wasm_export_functions;
 
 #[cfg(not(target_arch = "wasm32"))]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
