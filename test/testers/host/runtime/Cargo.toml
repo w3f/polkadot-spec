@@ -132,7 +132,7 @@ default-features = false
 # TODO: Drop runner, use builder instead with -Zfeatures=build_dep cargo flag
 [build-dependencies.wasm-builder-runner]
 package = 'substrate-wasm-builder-runner'
-version = '1.0.5'
+version = '1.0.6'
 
 
 [features]
