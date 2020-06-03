@@ -35,4 +35,4 @@ sc-executor = "0.8.0-alpha"
 sp-state-machine = "0.8.0-alpha"
 
 # host-api shim wasm blob
-runtime = { package="substrate-adapter-runtime", path = "runtime" }
+runtime = { package="wasm-adapter", path = "../wasm" }
