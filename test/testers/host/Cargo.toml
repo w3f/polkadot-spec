@@ -30,3 +30,9 @@ default-features = false
 package = 'sp-finality-grandpa'
 version = '2.0.0-alpha'
 default-features = false
+
+
+# Vendoring support by including unspecified dependency of runtime
+[build-dependencies.wasm-builder]
+package = 'substrate-wasm-builder'
+version = '1.0.9'
