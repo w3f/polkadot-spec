@@ -18,4 +18,4 @@ sc-executor = { git = "https://github.com/paritytech/substrate", rev = "605f5c1"
 sp-state-machine = { git = "https://github.com/paritytech/substrate", rev = "605f5c1" }
 
 # Wasm Blob
-runtime = { package = "substrate-adapter-legacy-runtime",  path = "runtime" }
+runtime = { package = "wasm-adapter-legacy",  path = "../wasm-legacy" }
