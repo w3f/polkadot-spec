@@ -155,7 +155,7 @@
 
     <math|Enc<rsup|Amt><rsub|SC>> is encoded the same way as
     <math|Enc<rsup|Len><rsub|SC>> but refers to the amount of key-value pairs
-    rather than the lenght.
+    rather than the length.
 
     <\equation*>
       \;
