@@ -134,7 +134,7 @@
     as:
 
     <\equation*>
-      Enc<rsub|SC><around|(|S|)>\<assign\>Enc<rsup|Len><rsub|SC><around*|(|<around*|\<\|\|\>|S|\<\|\|\>>|)>Enc<rsub|SC><around|(|A<rsub|1>|)>\|Enc<rsub|SC><around|(|A<rsub|2>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|A<rsub|n>|)>
+      Enc<rsub|SC><around|(|S|)>\<assign\>Enc<rsup|Len><rsub|SC><around*|(|<around*|\<\|\|\>|S|\<\|\|\>>|)><mid|\|>Enc<rsub|SC><around|(|A<rsub|1>|)>\|Enc<rsub|SC><around|(|A<rsub|2>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|A<rsub|n>|)>
     </equation*>
 
     where <math|Enc<rsub|SC><rsup|Len>> is defined in Definition
@@ -150,7 +150,7 @@
     (as tuples):
 
     <\equation*>
-      Enc<rsub|SC><around|(|D|)>\<assign\>Enc<rsup|Amt><rsub|SC><mid|\|>Enc<rsub|SC><around|(|<around*|(|k<rsub|1>,v<rsub|1>|)><rsub|>|)>\|Enc<rsub|SC><around|(|<around*|(|k<rsub|2>,v<rsub|2>|)>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|<around*|(|k<rsub|n>,v<rsub|n>|)>|)>
+      Enc<rsub|SC><around|(|D|)>\<assign\>Enc<rsup|Amt><rsub|SC><around*|(|<around*|\|||\|>D<around*|\|||\|>|)><mid|\|>Enc<rsub|SC><around|(|<around*|(|k<rsub|1>,v<rsub|1>|)><rsub|>|)>\|Enc<rsub|SC><around|(|<around*|(|k<rsub|2>,v<rsub|2>|)>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|<around*|(|k<rsub|n>,v<rsub|n>|)>|)>
     </equation*>
 
     <math|Enc<rsup|Amt><rsub|SC>> is encoded the same way as
