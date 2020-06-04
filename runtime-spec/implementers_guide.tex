@@ -611,3 +611,48 @@ broken due to bad initialization order}
 
 \todo{Diagram: order of runtime operations (initialization, session change)}
 
+\subsection{The Initializer Module}
+
+\subsubsection{Description}
+
+This module is responsible for initializing the other modules in a deterministic
+order. It also has one other purpose as described above: accepting and
+forwarding session change notifications.
+
+\subsubsection{Storage}
+
+\begin{verbnobox}[\small] HasInitialized: bool
+\end{verbnobox}
+
+\subsubsection{Initialization}
+
+The other modules are initialized in this order:
+
+\begin{enumerate}
+    \item Configuration
+    \item Paras
+    \item Scheduler
+    \item Inclusion
+    \item Validity
+\end{enumerate}
+
+The configuration module is first, since all other modules need to operate under
+the same configuration as each other. It would lead to inconsistency if, for
+example, the scheduler ran first and then the configuration was updated before
+the Inclusion module.
+
+Set \verb|HasInitialized| to true.
+
+\subsubsection{Session Change}
+
+If \verb|HasInitialized| is true, throw an unrecoverable error (panic).
+Otherwise, forward the session change notification to other modules in
+initialization order.
+
+\subsubsection{Finalization}
+
+Finalization order is less important in this case than initialization order, so
+we finalize the modules in the reverse order from initialization.
+
+Set \verb|HasInitialized| to false.
+
