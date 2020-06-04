@@ -2,11 +2,10 @@
 #![allow(unused_imports)]
 use std::slice;
 
-use primitives::wasm_export_functions;
-
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(not(feature = "runtime-wasm"))]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+#[cfg(feature = "runtime-wasm")]
 extern "C" {
     fn ext_print_utf8(utf8_data: *const u8, utf8_len: u32);
     fn ext_print_hex(data: *const u8, len: u32);
@@ -219,7 +218,8 @@ extern "C" {
 }
 
 
-wasm_export_functions! {
+#[cfg(feature = "runtime-wasm")]
+sp_core::wasm_export_functions! {
     fn rtm_ext_twox_64(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 8] = [0; 8];
         unsafe {
@@ -880,6 +880,7 @@ wasm_export_functions! {
     }
 }
 
+#[cfg(feature = "runtime-wasm")]
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_instantiate(
     dispatch_thunk_idx: u32,
@@ -901,6 +902,7 @@ pub extern "C" fn rtm_ext_sandbox_instantiate(
     }
 }
 
+#[cfg(feature = "runtime-wasm")]
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_instance_teardown(instance_idx: u32) {
     unsafe {
@@ -908,6 +910,7 @@ pub extern "C" fn rtm_ext_sandbox_instance_teardown(instance_idx: u32) {
     }
 }
 
+#[cfg(feature = "runtime-wasm")]
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_invoke(
     instance_idx: u32,
@@ -933,11 +936,13 @@ pub extern "C" fn rtm_ext_sandbox_invoke(
     }
 }
 
+#[cfg(feature = "runtime-wasm")]
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_memory_new(initial: u32, maximum: u32) -> u32 {
     unsafe { ext_sandbox_memory_new(initial, maximum) }
 }
 
+#[cfg(feature = "runtime-wasm")]
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_memory_get(
     memory_idx: u32,
@@ -948,6 +953,7 @@ pub extern "C" fn rtm_ext_sandbox_memory_get(
     unsafe { ext_sandbox_memory_get(memory_idx, offset, buf_ptr, buf_len) }
 }
 
+#[cfg(feature = "runtime-wasm")]
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_memory_set(
     memory_idx: u32,
@@ -958,6 +964,7 @@ pub extern "C" fn rtm_ext_sandbox_memory_set(
     unsafe { ext_sandbox_memory_set(memory_idx, offset, val_ptr, val_len) }
 }
 
+#[cfg(feature = "runtime-wasm")]
 #[no_mangle]
 pub extern "C" fn rtm_ext_sandbox_memory_teardown(memory_idx: u32) {
     unsafe {
