@@ -2,12 +2,13 @@
 #![allow(unused_imports)]
 use std::slice;
 
+#[cfg(feature = "runtime-wasm")]
 use parity_scale_codec::{Decode, Encode};
-use sp_core::wasm_export_functions;
 
-#[cfg(not(target_arch = "wasm32"))]
+#[cfg(not(feature = "runtime-wasm"))]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
+#[cfg(feature = "runtime-wasm")]
 extern "C" {
     fn ext_storage_get_version_1(key: u64) -> u64;
     fn ext_storage_child_get_version_1(child_key: u64, def: u64, child_type: u32, key: u64) -> u64;
@@ -76,23 +77,27 @@ extern "C" {
     fn ext_trie_blake2_256_ordered_root_version_1(data: u64) -> u32;
 }
 
+#[cfg(feature = "runtime-wasm")]
 fn from_mem(value: u64) -> Vec<u8> {
     let ptr = value as u32;
     let len = (value >> 32) as usize;
     unsafe { std::slice::from_raw_parts(ptr as *mut u8, len).to_vec() }
 }
 
+#[cfg(feature = "runtime-wasm")]
 trait AsRePtr {
     fn as_re_ptr(&self) -> u64;
 }
 
+#[cfg(feature = "runtime-wasm")]
 impl AsRePtr for Vec<u8> {
     fn as_re_ptr(&self) -> u64 {
         (self.len() as u64) << 32 | self.as_ptr() as u64
     }
 }
 
-wasm_export_functions! {
+#[cfg(feature = "runtime-wasm")]
+sp_core::wasm_export_functions! {
     fn rtm_ext_storage_get_version_1(
         key_data: Vec<u8>
     ) -> Vec<u8> {

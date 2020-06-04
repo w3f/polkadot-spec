@@ -5,11 +5,11 @@ authors = ["Skalman <skalman@riseup.net>"]
 edition = "2018"
 
 [dependencies]
-base64 = "*"
-clap = {version = "~2.27.0", features = ["yaml"]}
+base64        = "*"
+clap          = {version = "~2.27.0", features = ["yaml"]}
 data-encoding = "*"
-hex = "*"
-serde_yaml="*"
+hex           = "*"
+serde_yaml    = "*"
 
 # scale-codec
 parity-scale-codec = "1.3"
@@ -23,16 +23,16 @@ trie-db        = "0.20"
 trie-root      = "0.16"
 
 # state-trie blake2 hashing (TODO: Use substrate implementation?)
-sp-serializer = "2.0.0-alpha"
-primitive-types = { version = "0.2", default-features = false, features = ["codec"] }
+sp-serializer      = "2.0.0-alpha"
+primitive-types    = { version = "0.2",  default-features = false, features = ["codec"] }
 hash256-std-hasher = { version = "0.12", default-features = false }
-blake2-rfc = "*"
+blake2-rfc         = "*"
 
 # host-api
-sp-core = { version = "2.0.0-alpha", default-features = false, features = ["full_crypto"] }
-sp-io = { version = "2.0.0-alpha", default-features = false }
-sc-executor = "0.8.0-alpha"
+sp-core          = { version = "2.0.0-alpha", default-features = false, features = ["full_crypto"] }
+sp-io            = { version = "2.0.0-alpha", default-features = false }
+sc-executor      = "0.8.0-alpha"
 sp-state-machine = "0.8.0-alpha"
 
 # host-api shim wasm blob
-runtime = { package="wasm-adapter", path = "../wasm" }
+runtime = { package = "wasm-adapter", path = "../wasm" }
