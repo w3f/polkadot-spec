@@ -850,12 +850,14 @@ OutgoingParas: Vec<ParaId>;
     \item \verb|schedule_code_upgrade(ParaId, ValidationCode, expected_at: BlockNumber)|:
     Schedule a future code upgrade of the given parachain, to be
     applied after inclusion of a block of the same parachain executed in the
-    context of a relay-chain block with number >= \verb|expected_at|.
+    context of a relay-chain block with number $\leq$ \verb|expected_at|.
     \item \verb|note_new_head(ParaId, HeadData, BlockNumber)|: note that a para
     has progressed to a new head, where the new head was executed in the context
     of a relay-chain block with given number. This will apply pending code
     upgrades based on the block number provided.
-    \item \verb|validation_code_at(ParaId, at: BlockNumber, assume_intermediate: Option<BlockNumber>)|:
+    \item \verb|validation_code_at(ParaId, at: BlockNumber, assume_intermediate:|
+    \newline
+    \verb|Option<BlockNumber>)|:
     Fetches the validation code to be used when
     validating a block in the context of the given relay-chain height. A second
     block number parameter may be used to tell the lookup to proceed as if an
