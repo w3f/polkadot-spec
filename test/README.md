@@ -32,7 +32,7 @@ Alternately, each of the API adapters can be built separately (see [adapters sub
 
 Needs Rust Nightly with WASM toolchain (and potentially libclang?)
 
-```
+```sh
 cargo build --release
 ```
 
@@ -40,7 +40,7 @@ cargo build --release
 
 Needs CMake, GCC or Clang >= 8, Rust, Perl.
 
-```
+```sh
 cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
 cmake --build build
 ```
@@ -49,7 +49,7 @@ cmake --build build
 
 Needs recent version of Go.
 
-```
+```sh
 go build
 ```
 ## On Debian-based systems
@@ -64,7 +64,7 @@ Install the required software in order to run build all adapter and to be able t
 
 For example on 18.04, something like this should get you started:
 
-```bash
+```sh
 apt update && apt install -y --no-install-recommends \
   build-essential \
   make \
@@ -78,12 +78,13 @@ apt update && apt install -y --no-install-recommends \
   golang \
   julia \
   python
+```
 
 ### Install recent CMake
 
 This can be skipped on Ubunut 20.04, as a recent version of CMake can be installed through aptitude. Also see the official [cmake homepage](https://cmake.org/download) for the most recent version:
 
-```bash
+```sh
 wget https://github.com/Kitware/CMake/releases/download/v3.17.2/cmake-3.17.2-Linux-x86_64.sh
 chmod +x cmake-3.17.2-Linux-x86_64.sh
 ./cmake-3.17.2-Linux-x86_64.sh --skip-license --prefix=/usr/local
@@ -93,7 +94,7 @@ chmod +x cmake-3.17.2-Linux-x86_64.sh
 
 While kagome only needs a recent version of rust, substrate depends on nightly and the wasm32 toolchain to build its nostd wasm targets.
 
-```
+```sh
 curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly --target wasm32-unknown-unknown
 ```
 
@@ -101,7 +102,7 @@ curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly --target w
 
 This is only needed before you build kagome (adapter). GCC 9, Clang 8 or Clang 9 work as well. Change example accordingly:
 
-```
+```sh
 export CC=gcc-8
 export CXX=g++-8
 ```
@@ -188,3 +189,11 @@ This table shows the relationship between the lists.
 |fn_storage_child_2x_kv  |prefix_child_key_value_data |res_child_storage_root  |
 |fn_storage_prefix_child |prefix_child_key_value_data |                        |
 |fn_network              |                            |                        |
+
+## Internals
+
+Most of the internal logic of the testsuite can be found in the [helpers](./helpers) subfolder. 
+
+The main module to configure and run the testsuite is called [`SpecificationTestsuite`](./helpers/SpecificationTestsuite.jl), which is also what [`runtests.jl`](./runtests.jl) uses to execute the suite after parsing any supplied command line arguments and extending PATH to include any local builds of adapters.
+
+All the fixtures are located in their respective folder in the [`fixtures`](./fixtures) subfolder, while the fixture specific logic is contained in a file called `include.jl` for each of them.

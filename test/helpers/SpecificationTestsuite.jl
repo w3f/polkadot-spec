@@ -48,7 +48,7 @@ module SpecificationTestsuite
     const ALL_FIXTURES = Config.fixsubdirs()
 
     # Include helpers
-    include("StringHelper.jl")
+    include("StringHelpers.jl")
     include("AdapterFixture.jl")
 
     "Run specific fixture for configure implementations"
