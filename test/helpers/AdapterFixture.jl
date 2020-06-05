@@ -5,7 +5,7 @@ export sub!, arg!, foreach!, commit!, reset!, clear!, prepare!
 
 using Test
 
-using ..StringHelper
+using ..StringHelpers
 using ..Config
 
 "Structure used behind the scene to collect test cases"

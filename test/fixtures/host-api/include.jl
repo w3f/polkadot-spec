@@ -2,7 +2,7 @@ include("./HostApiFunctions.jl")
 include("./HostApiInputs.jl")
 include("./HostApiOutputs.jl")
 
-using .StringHelper
+using .StringHelpers
 using .AdapterFixture
 
 tests = AdapterFixture.Builder("Host API", "pdre-api")

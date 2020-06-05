@@ -1,4 +1,4 @@
-module StringHelper
+module StringHelpers
 
 export StringList, stringify, combine, inquotes, commajoin, flatzip
 
