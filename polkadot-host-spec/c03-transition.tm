@@ -161,7 +161,7 @@
   array <math|B> using the procedure defined in Definition
   <reference|sect-scale-codec>.
 
-  The Executor then needs to retrieve the Wam memory buffer of the Runtime
+  The Executor then needs to retrieve the Wasm memory buffer of the Runtime
   Wasm module and extend it to fit the size of the byte array. Afterwards, it
   needs to copy the byte array <math|B> value in the correct offset of the
   extended buffer. Finally, when the Wasm method <verbatim|runtime_entry>,
