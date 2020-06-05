@@ -1097,6 +1097,8 @@ bitfield.
 
 Actions:
 
+\todo{@lamafab: adjust subitems}
+
 \begin{enumerate}
     \item Set \verb|SessionStartBlock| to current block number.
     \item Clear all \verb|Some| members of \verb|AvailabilityCores|. Return all
@@ -1108,27 +1110,27 @@ Actions:
     \verb|configuration.parathread_cores with all None| entries.
     \item Compute new validator groups by shuffling using a secure randomness
     beacon.
-    \SubItem{We need a total of \verb|N = Paras::parathreads().len() +|
-    \verb|configuration.parathread_cores| validator groups.}
-    \SubItem{The total number of validators \verb|V| in the \verb|SessionChangeNotification|'s
-    \verb|validators| may not be evenly divided by \verb|V|.}
-    \SubItem{First, we obtain
+    \item We need a total of \verb|N = Paras::parathreads().len() +|
+    \verb|configuration.parathread_cores| validator groups.
+    \item The total number of validators \verb|V| in the \verb|SessionChangeNotification|'s
+    \verb|validators| may not be evenly divided by \verb|V|.
+    \item First, we obtain
     "shuffled validators" \verb|SV| by shuffling the validators using the
-    \verb|SessionChangeNotification|'s random seed.}
-    \SubItem{The groups are selected
+    \verb|SessionChangeNotification|'s random seed.
+    \item The groups are selected
     by partitioning \verb|SV|. The first V \% N groups will have (V / N) + 1 members,
-    while the remaining groups will have (V / N) members each.} \todo{@lamafab: adjust math}
+    while the remaining groups will have (V / N) members each. \todo{@lamafab: adjust math}
     \item Prune the parathread queue to remove all retries beyond
     \verb|configuration.parathread_retries.|
-    \SubItem{All pruned claims should have
-    their entry removed from the parathread index.}
-    \SubItem{Assign all
+    \item All pruned claims should have
+    their entry removed from the parathread index.
+    \item Assign all
     non-pruned claims to new cores if the number of parathread cores has changed
-    between the \verb|new_config| and \verb|old_config| of the \verb|SessionChangeNotification|.}
-    \SubItem{Assign claims in equal balance across all cores if rebalancing, and
+    between the \verb|new_config| and \verb|old_config| of the \verb|SessionChangeNotification|.
+    \item Assign claims in equal balance across all cores if rebalancing, and
     set the \verb|next_core| of the \verb|ParathreadQueue| by incrementing the relative index
     of the last assigned core and taking it modulo the number of parathread
-    cores.}
+    cores.
 \end{enumerate}
 
 \subsubsection{Initialization}
@@ -1148,45 +1150,47 @@ Actions:
 
 \subsubsection{Routines}
 
+\todo{@lamafab: adjust subitems}
+
 \begin{itemize}
     \item \verb|add_parathread_claim(ParathreadClaim)|: Add a parathread claim to the
     queue.
-    \SubItem{Fails if any parathread claim on the same parathread is
-    currently indexed.}
-    \SubItem{Fails if the queue length is >=
-    \verb|config.scheduling_lookahead * config.parathread_cores|.}
-    \SubItem{The core
+    \item Fails if any parathread claim on the same parathread is
+    currently indexed.
+    \item Fails if the queue length is >=
+    \verb|config.scheduling_lookahead * config.parathread_cores|.
+    \item The core
     used for the parathread claim is the \verb|next_core| field of the \verb|ParathreadQueue|
-    and adding \verb|Paras::parachains().len()| to it.}
-    \SubItem{\verb|next_core| is then
-    updated by adding 1 and taking it modulo \verb|config.parathread_cores|.}
-    \SubItem{The claim is then added to the claim index.}
+    and adding \verb|Paras::parachains().len()| to it.
+    \item \verb|next_core| is then
+    updated by adding 1 and taking it modulo \verb|config.parathread_cores|.
+    \item The claim is then added to the claim index.
     \item \verb|schedule(Vec<CoreIndex>)|: schedule new core assignments, with a
     parameter indicating previously-occupied cores which are to be considered
     returned.
-    \SubItem{All freed parachain cores should be assigned to their
-    respective parachain}
-    \SubItem{All freed parathread cores should have the
-    claim removed from the claim index.}
-    \SubItem{All freed parathread cores
-    should take the next parathread entry from the queue.}
-    \SubItem{The i'th
+    \item All freed parachain cores should be assigned to their
+    respective parachain
+    \item All freed parathread cores should have the
+    claim removed from the claim index.
+    \item All freed parathread cores
+    should take the next parathread entry from the queue.
+    \item The i'th
     validator group will be assigned to the (i+k)\%n'th core at any point in
     time, where \verb|k| is the number of rotations that have occurred in the session,
     and \verb|n| is the total number of cores. This makes upcoming rotations within the
-    same session predictable.}\todo{@lamafab: adjust math}
+    same session predictable. \todo{@lamafab: adjust math}
     \item scheduled() -> Vec<CoreAssignment>: Get currently scheduled core
     assignments.
     \item occupied(Vec). Note that the given cores have become occupied.
-    \SubItem{Fails if any given cores were not scheduled.} 
-    \SubItem{Fails if the
-    given cores are not sorted ascending by core index.}
-    \SubItem{This clears
+    \item Fails if any given cores were not scheduled.
+    \item Fails if the
+    given cores are not sorted ascending by core index.
+    \item This clears
     them from Scheduled and marks each corresponding core in the
-    AvailabilityCores as occupied.}
-    \SubItem{Since both the availability cores
+    AvailabilityCores as occupied.
+    \item Since both the availability cores
     and the newly-occupied cores lists are sorted ascending, this method can be
-    implemented efficiently.}
+    implemented efficiently.
     \item \verb|core_para(CoreIndex) -> ParaId|: return the currently-scheduled or
     occupied ParaId for the given core.
     \item \verb|group_validators(GroupIndex) -> Option<Vec<ValidatorIndex>>|: return
