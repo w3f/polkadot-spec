@@ -2151,3 +2151,76 @@ struct BackedCandidate {
 
 struct BackedCandidates(Vec<BackedCandidate>); // sorted by para-id.
 \end{verbnobox}
+
+\section{Glossary}
+
+Here you can find definitions of a bunch of jargon, usually specific to the
+Polkadot project.
+
+\todo{@lamafab: link reference}
+\begin{itemize}
+    \item BABE: (Blind Assignment for Blockchain Extension). The algorithm
+    validators use to safely extend the Relay Chain. See the Polkadot wiki for
+    more information.
+    \item Backable Candidate: A Parachain Candidate which is backed by a
+    majority of validators assigned to a given parachain.
+    \item Backed Candidate: A Backable Candidate noted in a relay-chain block.
+    \item Backing: A set of statements proving that a Parachain Candidate is
+    backable.
+    \item Collator: A node who generates Proofs-of-Validity (PoV) for blocks of
+    a specific parachain.
+    \item Extrinsic: An element of a relay-chain block which triggers a specific
+    entry-point of a runtime module with given arguments.
+    \item GRANDPA: (Ghost-based Recursive ANcestor Deriving Prefix Agreement).
+    The algorithm validators use to guarantee finality of the Relay Chain.
+    \item Inclusion Pipeline: The set of steps taken to carry a Parachain
+    Candidate from authoring, to backing, to availability and full inclusion in
+    an active fork of its parachain.
+    \item Module: A component of the Runtime logic, encapsulating storage,
+    routines, and entry-points.
+    \item Module Entry Point: A recipient of new information presented to the
+    Runtime. This may trigger routines.
+    \item Module Routine: A piece of code executed within a module by block
+    initialization, closing, or upon an entry point being triggered. This may
+    execute computation, and read or write storage.
+    \item Node: A participant in the Polkadot network, who follows the protocols
+    of communication and connection to other nodes. Nodes form a peer-to-peer
+    network topology without a central authority.
+    \item Parachain Candidate, or Candidate: A proposed block for inclusion into
+    a parachain.
+    \item Parablock: A block in a parachain.
+    \item Parachain: A constituent chain secured by the Relay Chain's
+    validators.
+    \item Parachain Validators: A subset of validators assigned during a period
+    of time to back candidates for a specific parachain.
+    \item Parathread: A parachain which is scheduled on a pay-as-you-go basis.
+    \item Proof-of-Validity (PoV): A stateless-client proof that a parachain
+    candidate is valid, with respect to some validation function.
+    \item Relay Parent: A block in the relay chain, referred to in a context
+    where work is being done in the context of the state at this block.
+    \item Runtime: The relay-chain state machine.
+    \item Runtime Module: See Module.
+    \item Runtime API: A means for the node-side behavior to access structured
+    information based on the state of a fork of the blockchain.
+    \item Secondary Checker: A validator who has been randomly selected to
+    perform secondary approval checks on a parablock which is pending approval.
+    \item Subsystem: A long-running task which is responsible for carrying out a
+    particular category of work.
+    \item Validator: Specially-selected node in the network who is responsible
+    for validating parachain blocks and issuing attestations about their
+    validity.
+    \item Validation Function: A piece of Wasm code that describes the
+    state-transition function of a parachain.
+\end{itemize}
+
+Also of use is the Substrate Glossary.
+
+\section{Index}
+
+\todo{@lamafab: link reference}
+\begin{itemize}
+    \item Polkadot Wiki on Consensus:
+    https://wiki.polkadot.network/docs/en/learn-consensus
+    \item Polkadot Runtime Spec:
+    https://github.com/w3f/polkadot-spec/tree/spec-rt-anv-vrf-gen-and-announcement/runtime-spec
+\end{itemize}
