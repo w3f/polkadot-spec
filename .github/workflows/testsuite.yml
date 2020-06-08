@@ -5,12 +5,14 @@ on:
     paths:
     - '.github/workflows/testsuite.yml'
     - 'test/**'
+    - '!test/fixtures/genesis/**'
     - '!test/testers/**'
     - '!test/README.md'
   pull_request:
     paths:
     - '.github/workflows/testsuite.yml'
     - 'test/**'
+    - '!test/fixtures/genesis/**'
     - '!test/testers/**'
     - '!test/README.md'
 
