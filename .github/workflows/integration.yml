@@ -5,12 +5,16 @@ on:
     paths:
     - '.github/workflows/integration.yml'
     - 'test/**'
+    - '!test/fixtures/**'
+    - 'test/fixtures/genesis/**'
     - '!test/adapters/**'
     - '!test/README.md'
   pull_request:
     paths:
     - '.github/workflows/integration.yml'
     - 'test/**'
+    - '!test/fixtures/**'
+    - 'test/fixtures/genesis/**'
     - '!test/adapters/**'
     - '!test/README.md'
 
