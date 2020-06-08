@@ -255,7 +255,7 @@
     containing the next key in lexicographic order.
   </itemize>
 
-  <section|Child Storage>
+  <section|Child Storage><label|sect-child-storages>
 
   Interface for accessing the child storage from within the runtime. Child
   storages work the same way that regular storages do, but use two keys for
@@ -2153,6 +2153,7 @@
     <associate|defn-persistent-storage|<tuple|A.8|77>>
     <associate|defn-runtime-pointer|<tuple|A.2|65>>
     <associate|nota-re-api-at-state|<tuple|A.1|65>>
+    <associate|sect-child-storages|<tuple|A.2|?>>
   </collection>
 </references>
 
