@@ -261,7 +261,7 @@
   storages work the same way that regular storages do, but use two keys for
   each value instead of just one. This allows for the functionality of having
   identical keys with different values based on certain contextes, such as
-  Parachains, separated by the preceeding key.
+  Parachains, separated by the preceding key.
 
   <\definition>
     <label|defn-child-storage-type><strong|Child storage> key is the
