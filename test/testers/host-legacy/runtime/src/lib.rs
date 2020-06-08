@@ -341,6 +341,7 @@ impl_runtime_apis! {
 	impl babe_primitives::BabeApi<Block> for Runtime {
 		fn configuration() -> babe_primitives::BabeConfiguration {
 			print("@@configuration()@@");
+			print_storage_root();
 			// The choice of `c` parameter (where `1 - c` represents the
 			// probability of a slot being empty), is done in accordance to the
 			// slot duration and expected target block time, for safely
@@ -360,7 +361,6 @@ impl_runtime_apis! {
 	impl grandpa_primitives::GrandpaApi<Block> for Runtime {
 		fn grandpa_authorities() -> GrandpaAuthorityList {
 			print("@@grandpa_authorities()@@");
-			print_storage_root();
 			Grandpa::grandpa_authorities()
 		}
 	}
