@@ -121,7 +121,7 @@ function run(self::Builder, adapter::String)
             cmd = "$adapter $input"
 
             if Config.verbose
-                println("[> RUNNING] ", cmd)
+                println("┌ [COMMAND] ", cmd)
             end
 
             result = read(`sh -c $cmd`, String)
@@ -138,7 +138,7 @@ function run(self::Builder, adapter::String)
                 @test result == output
 
                 if Config.verbose
-                    println("[OUTPUT]: ", result)
+                    println("└ [OUTPUTS] ", result)
                 end
             end
         catch err

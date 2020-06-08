@@ -12,7 +12,17 @@ function root_tester_host(implementation)
 
     cmd = `substrate-adapter state-trie trie-root --keys-in-hex --values-in-hex --state-file $state_file`
 
-    return read(cmd, String)[13:end-1]
+    if Config.verbose
+        println("┌ [COMMAND] ", cmd)
+    end
+
+    result = read(cmd, String)
+
+    if Config.verbose
+        println("└ [OUTPUTS] ", result)
+    end
+
+    return result[13:end-1]
 end
 
 "Run implementation with host-tester genesis for certain time"
@@ -45,36 +55,41 @@ function run_tester_host(implementation, seconds)
     cd("$(@__DIR__)/../..")
 
     if Config.verbose
-        println("[> RUNNING] ", cmd)
+        println("┌ [COMMAND] ", cmd)
     end
 
     # Run for specified time
     stream = Pipe()
     proc = run(pipeline(cmd, stdout=stream, stderr=stream), wait=false)
     sleep(seconds)
-    kill(proc)
 
-    while(process_running(proc))
-        sleep(0.1)
+    # Stop process if necessary
+    crashed = !process_running(proc) 
+    if !crashed
+        kill(proc)
+
+        while(process_running(proc))
+            sleep(0.1)
+        end
     end
 
+    # Retrieve result
     close(stream.in)
-
-    # Reset path
-    cd(current_path)
-
     result = read(stream, String)
 
-    # Make sure implementation stopped because of signal
-    @test Base.process_signaled(proc)
-
-    if !Base.process_signaled(proc)
+    # Check and warn about unexpected crashes
+    if crashed
         @warn "Implementation '$implementation' aborted unexpectedly:\n$result"
     end
 
+    @test !crashed
+
     if Config.verbose
-        println("[OUTPUT]: ", result)
+        println("└ [OUTPUTS] ", result)
     end
+
+    # Reset path
+    cd(current_path)
 
     return result
 end
