@@ -1317,3 +1317,60 @@ invalid.
     }
     \end{verbnobox}
 \end{itemize}
+
+\subsection{The InclusionInherent Module}
+
+\subsubsection{Description}
+
+This module is responsible for all the logic carried by the \verb|Inclusion|
+entry-point. This entry-point is mandatory, in that it must be invoked exactly
+once within every block, and it is also "inherent", in that it is provided with
+no origin by the block author. The data within it carries its own
+authentication. If any of the steps within fails, the entry-point is considered
+as having failed and the block will be invalid.
+\newline
+
+This module does not have the same initialization/finalization concerns as the
+others, as it only requires that entry points be triggered after all modules
+have initialized and that finalization happens after entry points are triggered.
+Both of these are assumptions we have already made about the runtime's order of
+operations, so this module doesn't need to be initialized or finalized by the
+\verb|Initializer|.
+
+\subsubsection{Storage}
+
+\begin{verbnobox}
+Included: Option<()>,
+\end{verbnobox}
+
+\subsubsection{Finalization}
+
+\begin{enumerate}
+    \item Take (get and clear) the value of \verb|Included|. If it is not
+    \verb|Some|, throw an unrecoverable error.
+\end{enumerate}
+
+\subsubsection{Entry Points}
+
+\todo{@lamafab: Link sections}
+\begin{itemize}
+    \item \verb|inclusion|: This entry-point accepts two parameters: \verb|Bitfields| and
+    \verb|BackedCandidates|.
+    \begin{enumerate}
+        \item The \verb|Bitfields| are first forwarded to the
+        \verb|process_bitfields| routine, returning a set of freed cores.
+        Provide a \verb|Scheduler::core_para| as a core-lookup to the
+        \verb|process_bitfields| routine.
+        \item If \verb|Scheduler::availability_timeout_predicate| is
+        \verb|Some|, invoke \verb|Inclusion::collect_pending| using it, and add
+        timed-out cores to the free cores.
+        \item Invoke \verb|Scheduler::schedule(freed)|.
+        \item Pass the \verb|BackedCandidates| along with the output of
+        \verb|Scheduler::scheduled| to the \verb|Inclusion::process_candidates|
+        routine, getting a list of all newly-occupied cores.
+        \item Call \verb|Scheduler::occupied| for all scheduled cores where a
+        backed candidate was submitted.
+        \item If all of the above succeeds, set \verb|Included| to
+        \verb|Some(())|.
+    \end{enumerate}
+\end{itemize}
