@@ -94,7 +94,7 @@ jobs:
       uses: actions/checkout@v2
       with:
         repository: ChainSafe/gossamer
-        ref: a3efcd58533cb57f35e55a919d5b430a386d12aa
+        ref: b929e565c965133e3eb9b66bf31012401f4a78af
     - name: Cache go modules
       uses: actions/cache@v1
       with:
