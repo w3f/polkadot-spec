@@ -31,8 +31,8 @@ jobs:
     - name: Upload host specification
       uses: actions/upload-artifact@v1
       with:
-        name: host-spec.pdf
-        path: host-spec/host-spec.pdf
+        name: polkadot-host-spec.pdf
+        path: host-spec/polkadot-host-spec.pdf
 
   build-spec-runtime:
     name: Compile runtime specification
@@ -48,6 +48,6 @@ jobs:
     - name: Upload runtime specification
       uses: actions/upload-artifact@v1
       with:
-        name: runtime-spec.pdf
-        path: runtime-spec/runtime-spec.pdf
+        name: polkadot-runtime-spec.pdf
+        path: runtime-spec/polkadot-runtime-spec.pdf
 
