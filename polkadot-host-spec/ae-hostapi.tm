@@ -261,7 +261,15 @@
   storages work the same way that regular storages do, but use two keys for
   each value instead of just one. This allows for the functionality of having
   identical keys with different values based on certain contextes, such as
-  Parachains, separated by the preceding key.
+  separate storages for each Smart Contract and or Parachain, identified by
+  the preceding key. In case of Smart Contracts, the identifier could be an
+  address while for Parachain it could be the Parachain ID.
+
+  \;
+
+  Child storages are more performant than simply using prefixes, since the
+  storage space can quickly be identified and does not require filtering the
+  entire database based on prefixes.
 
   <\definition>
     <label|defn-child-storage-type><strong|Child storage> key is the
@@ -2011,21 +2019,21 @@
     <associate|auto-100|<tuple|A.5.10.1|80>>
     <associate|auto-101|<tuple|A.5.11|80>>
     <associate|auto-102|<tuple|A.5.11.1|80>>
-    <associate|auto-103|<tuple|A.5.12|80>>
-    <associate|auto-104|<tuple|A.5.12.1|80>>
+    <associate|auto-103|<tuple|A.5.12|81>>
+    <associate|auto-104|<tuple|A.5.12.1|81>>
     <associate|auto-105|<tuple|A.5.13|81>>
     <associate|auto-106|<tuple|A.5.13.1|81>>
     <associate|auto-107|<tuple|A.5.14|81>>
     <associate|auto-108|<tuple|A.5.14.1|81>>
-    <associate|auto-109|<tuple|A.5.15|81>>
+    <associate|auto-109|<tuple|A.5.15|82>>
     <associate|auto-11|<tuple|A.1.5|66>>
-    <associate|auto-110|<tuple|A.5.15.1|81>>
+    <associate|auto-110|<tuple|A.5.15.1|82>>
     <associate|auto-111|<tuple|A.6|82>>
     <associate|auto-112|<tuple|A.6.1|82>>
     <associate|auto-113|<tuple|A.6.1.1|82>>
     <associate|auto-114|<tuple|A.6.2|82>>
     <associate|auto-115|<tuple|A.6.2.1|82>>
-    <associate|auto-116|<tuple|A.7|82>>
+    <associate|auto-116|<tuple|A.7|83>>
     <associate|auto-117|<tuple|A.7.1|83>>
     <associate|auto-118|<tuple|A.7.1.1|83>>
     <associate|auto-119|<tuple|A.7.2|83>>
@@ -2035,8 +2043,8 @@
     <associate|auto-122|<tuple|A.7.3.1|83>>
     <associate|auto-123|<tuple|A.7.4|83>>
     <associate|auto-124|<tuple|A.7.4.1|83>>
-    <associate|auto-125|<tuple|A.7.5|83>>
-    <associate|auto-126|<tuple|A.7.5.1|83>>
+    <associate|auto-125|<tuple|A.7.5|84>>
+    <associate|auto-126|<tuple|A.7.5.1|84>>
     <associate|auto-127|<tuple|A.8|84>>
     <associate|auto-128|<tuple|A.8.1|84>>
     <associate|auto-129|<tuple|A.8.1.1|84>>
@@ -2044,8 +2052,8 @@
     <associate|auto-130|<tuple|A.8.2|84>>
     <associate|auto-131|<tuple|A.8.2.1|84>>
     <associate|auto-132|<tuple|A.9|84>>
-    <associate|auto-133|<tuple|A.4|84>>
-    <associate|auto-134|<tuple|A.9.1|84>>
+    <associate|auto-133|<tuple|A.4|85>>
+    <associate|auto-134|<tuple|A.9.1|85>>
     <associate|auto-135|<tuple|A.9.1.1|85>>
     <associate|auto-14|<tuple|A.1.6.1|66>>
     <associate|auto-15|<tuple|A.1.7|67>>
@@ -2060,7 +2068,7 @@
     <associate|auto-23|<tuple|A.2.1.1|68>>
     <associate|auto-24|<tuple|A.2.2|68>>
     <associate|auto-25|<tuple|A.2.2.1|68>>
-    <associate|auto-26|<tuple|A.2.3|68>>
+    <associate|auto-26|<tuple|A.2.3|69>>
     <associate|auto-27|<tuple|A.2.3.1|69>>
     <associate|auto-28|<tuple|A.2.4|69>>
     <associate|auto-29|<tuple|A.2.4.1|69>>
@@ -2078,16 +2086,16 @@
     <associate|auto-4|<tuple|A.1.1.1|65>>
     <associate|auto-40|<tuple|A.3|71>>
     <associate|auto-41|<tuple|A.1|71>>
-    <associate|auto-42|<tuple|A.2|71>>
+    <associate|auto-42|<tuple|A.2|72>>
     <associate|auto-43|<tuple|A.3.1|72>>
     <associate|auto-44|<tuple|A.3.1.1|72>>
     <associate|auto-45|<tuple|A.3.2|72>>
     <associate|auto-46|<tuple|A.3.2.1|72>>
     <associate|auto-47|<tuple|A.3.3|72>>
     <associate|auto-48|<tuple|A.3.3.1|72>>
-    <associate|auto-49|<tuple|A.3.4|72>>
+    <associate|auto-49|<tuple|A.3.4|73>>
     <associate|auto-5|<tuple|A.1.2|65>>
-    <associate|auto-50|<tuple|A.3.4.1|72>>
+    <associate|auto-50|<tuple|A.3.4.1|73>>
     <associate|auto-51|<tuple|A.3.5|73>>
     <associate|auto-52|<tuple|A.3.5.1|73>>
     <associate|auto-53|<tuple|A.3.6|73>>
@@ -2100,8 +2108,8 @@
     <associate|auto-6|<tuple|A.1.2.1|65>>
     <associate|auto-60|<tuple|A.3.9|74>>
     <associate|auto-61|<tuple|A.3.9.1|74>>
-    <associate|auto-62|<tuple|A.3.10|74>>
-    <associate|auto-63|<tuple|A.3.10.1|74>>
+    <associate|auto-62|<tuple|A.3.10|75>>
+    <associate|auto-63|<tuple|A.3.10.1|75>>
     <associate|auto-64|<tuple|A.4|75>>
     <associate|auto-65|<tuple|A.4.1|75>>
     <associate|auto-66|<tuple|A.4.1.1|75>>
@@ -2122,7 +2130,7 @@
     <associate|auto-8|<tuple|A.1.3.1|66>>
     <associate|auto-80|<tuple|A.3|77>>
     <associate|auto-81|<tuple|A.5.1|77>>
-    <associate|auto-82|<tuple|A.5.1.1|77>>
+    <associate|auto-82|<tuple|A.5.1.1|78>>
     <associate|auto-83|<tuple|A.5.2|78>>
     <associate|auto-84|<tuple|A.5.2.1|78>>
     <associate|auto-85|<tuple|A.5.3|78>>
@@ -2131,18 +2139,18 @@
     <associate|auto-88|<tuple|A.5.4.1|78>>
     <associate|auto-89|<tuple|A.5.5|78>>
     <associate|auto-9|<tuple|A.1.4|66>>
-    <associate|auto-90|<tuple|A.5.5.1|78>>
-    <associate|auto-91|<tuple|A.5.6|78>>
+    <associate|auto-90|<tuple|A.5.5.1|79>>
+    <associate|auto-91|<tuple|A.5.6|79>>
     <associate|auto-92|<tuple|A.5.6.1|79>>
     <associate|auto-93|<tuple|A.5.7|79>>
     <associate|auto-94|<tuple|A.5.7.1|79>>
     <associate|auto-95|<tuple|A.5.8|79>>
     <associate|auto-96|<tuple|A.5.8.1|79>>
-    <associate|auto-97|<tuple|A.5.9|79>>
-    <associate|auto-98|<tuple|A.5.9.1|79>>
+    <associate|auto-97|<tuple|A.5.9|80>>
+    <associate|auto-98|<tuple|A.5.9.1|80>>
     <associate|auto-99|<tuple|A.5.10|80>>
     <associate|defn-child-storage-definition|<tuple|A.4|68>>
-    <associate|defn-child-storage-type|<tuple|A.3|67>>
+    <associate|defn-child-storage-type|<tuple|A.3|68>>
     <associate|defn-child-type|<tuple|A.5|68>>
     <associate|defn-ecdsa-verify-error|<tuple|A.7|71>>
     <associate|defn-http-error|<tuple|A.11|77>>
@@ -2153,7 +2161,7 @@
     <associate|defn-persistent-storage|<tuple|A.8|77>>
     <associate|defn-runtime-pointer|<tuple|A.2|65>>
     <associate|nota-re-api-at-state|<tuple|A.1|65>>
-    <associate|sect-child-storages|<tuple|A.2|?>>
+    <associate|sect-child-storages|<tuple|A.2|67>>
   </collection>
 </references>
 
