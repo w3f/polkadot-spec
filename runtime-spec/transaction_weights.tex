@@ -1,0 +1,678 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{geometry}
+\geometry{
+    a4paper,
+    total={170mm,257mm},
+    left=20mm,
+    top=20mm,
+}
+\usepackage{color}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage[ruled,vlined]{algorithm2e}
+\setlength\parindent{0pt}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+\newcommand{\SubItem}[1]{
+    {\setlength\itemindent{15pt} \item[-] #1}
+}
+
+\begin{document}
+\title{Polkadot Weights}
+\author{Web3 Foundation}
+\date{May 2020}
+\maketitle
+
+\section{Motivation}
+Polkadot has a limited time window for block producers to create a block,
+including limitations on block size which can make the selection and execution
+of certain extrinsics too expensive and decelerate the network. The weight
+system introduces a mechanism for block producers to measure the expense of
+extrinsics and determine how "heavy" it is. With this mechanism, block producers
+can select a set of extrinsics and saturate the block to it's fullest potential
+without exceeding any limitations (as described in section \ref{sec:limitations}).
+\newline
+
+Polkadot also introduces a specified block ratio (as defined in section \ref{sec:limitations}),
+ensuring that only a certain portion of the total block size gets used for regular extrinsics.
+The remaining space is reserved for critical, operational extrinsics required for the functionality
+by Polkadot itself.
+
+\section{Fundamentals}
+Weights are just a numeric value and Runtime functions may use complex structures to express those
+values. Therefore, the following requirements must apply for implementing weight calculations:
+\begin{itemize}
+\item Computations of weights must be determined before execution of that extrinsic.
+\item Due to the limited time window, computations of weights must be done quickly and consume
+      few resources themselves.
+\item Weights must be self contained and must not require I/O on the chain state. Weights are
+      fixed measurements and are based solely on the Runtime function and its parameters.
+\item Weights serve three functions: measurements used to calculate transaction fees, to prevent
+      the block being filled with too many extrinsics and to avoid extrinsics where its execution
+      takes too long.
+\end{itemize}
+
+\section{Limitations}\label{sec:limitations}
+The assigned weights should be relative to each others execution time and "heaviness",
+although weights can be assigned depending on the priorities the chain is supposed to endorse.
+Following limitations must be considered when assigning weights, which vary on the Runtime.
+
+\subsection{Considerable limitations}
+\begin{itemize}
+\item Maximum block length
+\item Maximum block weight
+\item Targeted time per block
+\item Available block ration reserved for normal, none-operational transactions
+\end{itemize}
+
+\subsection{Considerable limitations in Polkadot}
+As of the official Polkadot Runtime, the limitations are set as follows:
+
+\begin{itemize}
+\item Maximum block length: $5 \times 1'024 \times 1'024 = 5'242'880$ Bytes
+\item Maximum block weight: 2'000'000'000'000
+\item Targeted time per block: 6 seconds
+\item Available block ratio: 75\%
+\end{itemize}
+
+The values of the assigned weight itself is not relevant. It must only fulfill the requirements
+as noted by the fundamentals and limitations, and can be assigned as the author sees fit.
+As a simple example, consider a maximum block weight of 1'000'000'000, an available ratio of
+75\% and a targeted transaction throughput of 500 transactions, we could assign the weight
+for each transaction at about 1'500'000.
+\newline
+
+Do note that the smallest, non-zero weight in Polkadot is set at 10'000.
+
+\section{Runtime Primitives}
+The Runtime functions must be studied in order to determine which parts of the code will excessively
+increase execution time. Potential indicators like loops, IO operations and data manipulation must
+be considered. Based on those observations, Weights should be applied on operations
+that could have heavy implications on those design choices. The final assigned Weights are calculated
+by benchmarking the Runtime functions, which is described in section \ref{sect:benchmarking}.
+\newline
+
+Section \ref{sect:examples-runtime-analysis} walks through two practical examples of Runtime function
+analysis.
+Not every possible outcome can be caused with input parameters to the Runtime function.
+In some circumstances, preliminary work regarding
+storage is required before a specific benchmark can be reliably measured.
+Two of such examples are described in section \ref{sect:examples-preliminary-work}.
+
+\subsection{Primitive Types}\label{sect:primitive-types}
+The Runtime reuses components/primitives to interact with the state storage. The behavior and
+the execution cost of those primitives can be studied and a Weight should be applied for each use
+within the Runtime code.
+\newline
+
+For storage, Polkadot uses three different types of storage types across its modules, depending on the
+context:
+
+\begin{itemize}
+  \item \textbf{Value}: Operations on a single value.
+  \newline\newline
+  The final key-value pair is stored under the key:\newline
+  \verb|hash(module_prefix) + hash(storage_prefix)|.
+  \item \textbf{Map}: Operations on mulitple values, datasets, where each entry has its
+  corresponding, unique key.
+  \newline\newline
+  The final key-value pair is stored under the key:\newline
+  \verb|hash(module_prefix) + hash(storage_prefix) + hash(encode(key))|.
+  \newpage
+  \item \textbf{Double map}: Just like \textbf{Map}, but uses two keys instead of one 
+  (child storages).
+  \newline\newline
+  The final key-value pair is stored under the key:\newline
+  \begin{verbatim}
+  hash(module_prefix) + hash(storage_prefix)
+    + hash(encode(key1)) + hash(encode(key2))
+  \end{verbatim}
+\end{itemize}
+
+Which type to use depends on the functionality of the Runtime module (or its sub-processes, rather).
+In some cases only a single value is required. In others, multiple values need to be operated on.
+\newline
+
+Those lower level types get abstracted over in each individual Runtime module using the \verb|decl_storage!|
+macro. Therefore, each module specifies its own types that are used as input and output values.
+The abstractions do give indicators on what operations must be closely observed and where potential
+performance penalties and attack vectors are possible.
+
+\subsubsection{Considerations}\label{sect:primitive-types-considerations}
+
+The storage layout is mostly the same for every primitive type, primarily differentiated
+by using special prefixes for the storage key. Big differences arise on how the primitive
+types are used in the Runtime function, on whether single values are operated on or entire
+datasets. Single value operations are generally quite cheap and its execution time does
+not vary depending on the data that's being processed. However, excessive IO overhead can appear
+when IO operations are executed repeatedly, such as loops. Especially, when the amount of loop
+iterations can be influenced by the caller of the function or by certain conditions in the
+state storage.
+\newline
+
+Maps, in contrast, have additional overhead when inserting or retrieving
+datasets, which vary in sizes. Additionally, the Runtime function has to process each item inside
+that list.
+\newline
+
+Indicators for performance penalties:
+
+\begin{itemize}
+  \item \textbf{Fixed iterations and datasets} -
+  Fixed iterations and datasets can increase the overall cost of the Runtime functions,
+  but the execution time
+  does not vary depending on the input parameters or storage entries.
+  A base Weight is appropriate in this case.
+  \item \textbf{Adjustable iterations and datasets} -
+  If the amount of iterations or datasets depend on the input parameters of the caller or
+  specific entries in storage,
+  then a certain Weight should be applied for each (additional) iteration or item.
+  The Runtime defines the maximum value for such cases. If it doesn't, it unconditionally has to
+  and the Runtime module must be adjusted.
+  \newline\newline
+  When selecting parameters
+  for benchmarking, the benchmarks should range from the minimum value to the maximum value, as described
+  in paragraph \ref{para:max-value}.
+  \item \textbf{Input parameters} -
+  Input parameters that users pass on to the Runtime function can result in expensive operations.
+  Depending on the data type, it can be appropriate to add additional Weights based on certain properties,
+  such as data size, assuming the data type allows varying sizes.
+  The Runtime must define limits on those properties. If it doesn't, it unconditionally
+  has to and the Runtime module must be adjusted.
+  \newline\newline
+  When selecting parameters for benchmarking, the benchmarks should range from the minimum values to the
+  maximum value, as described in paragraph \ref{para:max-value}.
+\end{itemize}
+
+\label{para:max-value} What the maximum value should be really depends on the functionality that the Runtime function
+is trying to provide. If the choice for that value is not obvious, then it's advised to run
+benchmarks on a big range of values and pick a conservative value below the \verb|targeted time per block|
+limit as described in section \ref{sec:limitations}.
+
+\section{Benchmarking}\label{sect:benchmarking}
+Assigning weights based on theoretical performance can be
+unreliable and too complex due to imprecision in back-end systems, internal communication
+within the Runtime and design choices in the software. Therefore, all available Runtime 
+functions, which create and execute extrinsics, have to be benchmarked with a large
+collection of input parameters.
+\newline
+
+In order to select useful parameters, the Runtime functions have to be analysed to fully
+understand which behaviors or conditions can result in expensive execution times,
+which is described closer in section \ref{sect:primitive-types}.
+
+\subsection{Parameters}
+The inputs parameters highly vary depending on the Runtime function and must therefore
+be carefully selected. The benchmarks should use input parameters which will most likely be
+used in regular cases, as intended by the authors, but must also consider worst case
+scenarios and inputs which might decelerate or heavily impact performance of the function.
+The input parameters should be randomized in order to cause various effects in behaviors
+on certain values, such as memory relocations and other outcomes that can impact performance.
+\newline
+
+It's not possible to benchmark every single value. However, one should select a range
+of inputs to benchmark, spanning from the minimum value
+to the maximum value which will most likely exceed the expected usage of that function.
+This is described in more detail in section \ref{sect:primitive-types-considerations}.
+\newline
+
+The benchmarks should run individual executions/iterations within that range, where the chosen parameters
+should give insight on the execution time and resource cost. Selecting imprecise parameters
+or too extreme ranges might indicate an inaccurate result of the function as it will be used in production.
+Therefore, when a range of input parameters gets benchmarked, the result of each individual parameter
+should be recorded and ideally visualized. The author should then decide on the most probable average
+execution time, basing that decision on the limitations of the Runtime and expected usage of the network.
+\newline
+
+Additionally, given the distinction theoretical and practical usage, the author reserves the right
+to make adjustments to the input parameters and assigned weights according to observed behavior
+of the actual, real-world network.
+
+\subsection{Blockchain State}
+The benchmarks should be performed on blockchain states that already polluted and contain a history of
+extrinsics and storage changes. Runtime functions that require I/O on structures
+such as Tries will therefore produce more realistic results that will reflect the real-world
+performance of the Runtime.
+
+\subsection{Environment}
+The benchmarks should be executed on clean systems without interference of other processes
+or software. Additionally, the benchmarks should be executed on multiple machines with different
+system resources, such as CPU performance, CPU cores, RAM and storage speed.
+
+\section{Practical examples}
+
+\subsection{Runtime function analysis}\label{sect:examples-runtime-analysis}
+
+This section walks through Runtime functions available in the Polkadot Runtime to
+demonstrate the analysis process as described in section \ref{sect:primitive-types}.
+
+\subsubsection{Practical example \#1}
+
+\subsubsection*{Analysis}
+
+In Polkadot, accounts can save information about themselves onchain, known as the "Identity Info".
+This includes information such as display name, legal name, email address and so on. Polkadot selects
+a set of registrars which can judge identities and therefore incentivizes a reputation model. The judgement itself
+is done offchain. The registrars rating, however, is saved onchain, directly in the corresponding 
+Identity Info. It's also note worthy that Identiy Info can contain additional fields, set manually by
+the corresponding account holder.
+\newline
+
+The function \verb|request_judgement| from the \verb|identity| Pallet allows users to request a judgement
+from a specific registrar. Studying this function reveals multiple design choices that can impact performance.
+\newline
+
+First, it fetches a list of current registrars from storage and then searches that list for the specified
+registrar index.
+
+\begin{verbatim}
+let registrars = <Registrars<T>>::get();
+let registrar = registrars.get(reg_index as usize).and_then(Option::as_ref)
+  .ok_or(Error::<T>::EmptyIndex)?;
+\end{verbatim}
+
+Then, it searches for the Identity Info from storage, based on the sender of the transaction.
+
+\begin{verbatim}
+let mut id = <IdentityOf<T>>::get(&sender).ok_or(Error::<T>::NoIdentity)?;
+\end{verbatim}
+
+The Identity Info contains the entirety of entries, in an ordered form. It then proceeds the search all
+those entries for the specified registrar index. If an entry can be found, the value is updated
+(assuming the registrar is not "stickied", which implies it cannot be changed). In the context of registrars,
+this update implies that the Identity Info should be rejudged. If the entry cannot 
+be found, the value is inserted into the index where a matching element could be inserted while maintaining
+sorted order. This results in memory reallocation.
+
+\begin{verbatim}
+match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
+  Ok(i) => if id.judgements[i].1.is_sticky() {
+    Err(Error::<T>::StickyJudgement)?
+  } else {
+    id.judgements[i] = item
+  },
+  Err(i) => id.judgements.insert(i, item),
+}
+\end{verbatim}
+
+After that, it proceeds to reserve the registrar fee, inserts the newly updated identity info into storage
+and deposits the event into the scheduler.
+
+\begin{verbatim}
+T::Currency::reserve(&sender, registrar.fee)?;
+<IdentityOf<T>>::insert(&sender, id);
+Self::deposit_event(RawEvent::JudgementRequested(sender, reg_index));
+\end{verbatim}
+
+\subsubsection*{Considerations}
+
+Based on the considerations described in section \ref{sect:primitive-types-considerations},
+the analysis reveals multiple, critical points. Those must be covered in the benchmarking
+processes described in section \ref{sect:benchmarking} and require preliminary work as
+described in section \ref{sect:examples-preliminary-work}.
+\newline
+
+Key points:
+\begin{itemize}
+  \item Varying amount of registrars.
+  \item Varying amount of preexisting accounts in storage.
+  \item The specified registrar is searched for in the Identity Info. Additionally, if a new value gets
+  inserted into the byte array, memory get reallocated. Depending on the size of the Identity Info, the
+  execution time can vary.
+  \item Varying sizes of Identity Info, including additional fields.
+  \item Inserting new registrars into Identity Info results in memory reallocation.
+  \item It is legitimate to introduce additional Weights for changes the sender has influence over,
+  such the additional fields in the Identity Info.
+\end{itemize}
+
+\subsubsection{Practical example \#2}
+
+\subsubsection*{Analysis}
+
+The function \verb|payout_stakers| from the \verb|staking| Pallet can be called by a single account in order
+to payout the reward for all nominators who back a particular validator. The reward also covers the validator's
+share. This function is interesting because it iterators over a range of nominators, which varies, and does
+IO operation for each of them.
+\newline
+
+First, this function makes some basic checks to verify if the specified era is not higher then the current era
+(future) and is within the allowed range ("history depth"), specified by the Runtime.
+After that, it fetches the era payout from storage
+and additionally verifies whether the specified account is indeed a validator and receives the corresponding
+"Ledger".
+
+\begin{verbatim}
+let era_payout = <ErasValidatorReward<T>>::get(&era)
+  .ok_or_else(|| Error::<T>::InvalidEraToReward)?;
+
+let controller = Self::bonded(&validator_stash).ok_or(Error::<T>::NotStash)?;
+let mut ledger = <Ledger<T>>::get(&controller).ok_or_else(|| Error::<T>::NotController)?;
+\end{verbatim}
+
+The Ledger keeps a list of tracked rewards. The function only retains the entries of the "history depth",
+and conducts a binary search for the specified era.
+
+\begin{verbatim}
+ledger.claimed_rewards.retain(|&x| x >= current_era.saturating_sub(history_depth));
+match ledger.claimed_rewards.binary_search(&era) {
+  Ok(_) => Err(Error::<T>::AlreadyClaimed)?,
+  Err(pos) => ledger.claimed_rewards.insert(pos, era),
+}
+\end{verbatim}
+
+The retained claimed rewards are inserted back into storage.
+
+\begin{verbatim}
+<Ledger<T>>::insert(&controller, &ledger);
+\end{verbatim}
+
+The Runtime is actually optimized to some degree: it only fetches a list of the highest staked nominators,
+a maximum of 64. The rest gets no reward.
+
+\begin{verbatim}
+let exposure = <ErasStakersClipped<T>>::get(&era, &ledger.stash);
+\end{verbatim}
+
+Next, the function gets the era reward points from storage.
+
+\begin{verbatim}
+let era_reward_points = <ErasRewardPoints<T>>::get(&era);
+\end{verbatim}
+
+After that, the payout is split among the validator and its nominators. The validators receives the payment
+first, creating an insertion into storage and sending a deposit event to the scheduler.
+
+\begin{verbatim}
+if let Some(imbalance) = Self::make_payout(
+  &ledger.stash,
+  validator_staking_payout + validator_commission_payout
+) {
+  Self::deposit_event(RawEvent::Reward(ledger.stash, imbalance.peek()));
+}
+\end{verbatim}
+
+Then, the nominators receive a payout. The functions loops through the nominator list, conducting
+a insertion into storage and a creation of a deposit event for each of the nominators.
+
+\begin{verbatim}
+for nominator in exposure.others.iter() {
+  let nominator_exposure_part = Perbill::from_rational_approximation(
+    nominator.value,
+    exposure.total,
+  );
+
+  let nominator_reward: BalanceOf<T> = nominator_exposure_part * validator_leftover_payout;
+  // We can now make nominator payout:
+  if let Some(imbalance) = Self::make_payout(&nominator.who, nominator_reward) {
+    Self::deposit_event(RawEvent::Reward(nominator.who.clone(), imbalance.peek()));
+  }
+}
+\end{verbatim}
+
+\subsubsection*{Considerations}
+
+Based on the considerations described in section \ref{sect:primitive-types-considerations},
+the analysis reveals multiple, critical points. Those must be covered in the benchmarking
+processes described in section \ref{sect:benchmarking} and require preliminary work as
+described in section \ref{sect:examples-preliminary-work}.
+\newline
+
+Key points:
+
+\begin{itemize}
+  \item The Ledger contains a varying list of claimed rewards. Fetching, retaining and searching through it can affect execution
+  time. The retained list is inserted back into storage.
+  \item The function searches the database for the reward points of the specified validator. If there are a lot of validators
+  in the network, the search becomes more expensive.
+  \item Looping through a list of nominators and creating IO operations for each heavily increases execution time.
+  The Runtime fetches up to 64 nominators.
+\end{itemize}
+
+\subsection{Preliminary Work}\label{sect:examples-preliminary-work}
+In order for certain benchmarks to produce conditions where resource heavy computation or excessive
+I/O can be observed, the benchmarks might require some preliminary work on the environment, since those
+conditions cannot be created with simply selected parameters.
+As practical examples, this section describes the specifically designed benchmarks for the \verb|transfer|
+and \verb|withdraw_unbonded| functions available in the Polkadot Runtime.
+
+\subsubsection{Practical example \#1}
+The $transfer$ function of the \textit{balances} module is designed to move the specified balance by the sender to the receiver.
+The benchmark is configured to measure the function's worst possible condition:
+
+\begin{itemize}
+  \item Transfer will kill the sender account (by completely depleting the balance to zero).
+  \item Transfer will create the recipient account (the recipient account doesn't have a balance yet).
+\end{itemize}
+
+\subsubsection*{Parameters}
+The following parameters are selected:
+
+\begin{center}
+  \begin{tabular}{ l|r l l l }
+    \textbf{Type} && \textbf{From} & \textbf{To} & \textbf{Description}\\
+    \hline
+    Account index & \verb|index| in... & 1 & 1000 & Used as a seed for account creation \\
+    Balance & \verb|balance| in... & 2 & 1000 & Sender balance and transfer amount \\
+  \end{tabular}
+\end{center}
+
+Executing a benchmark for each balance increment within the balance range for each index increment
+within the index range will generate too many variants ($1000 \times 999$) and highly increase
+execution time. Therefore, this benchmark is configured to first set the balance at value 1'000
+and then to iterate from 1 to 1'000 for the index value. Once the index value reaches 1'000, the
+balance value will reset to 2 and iterate to 1'000 (see algorithm \ref{sec:algo-benchmark-transfer}
+for more detail):
+
+\begin{itemize}
+  \item \verb|index|: 1, \verb|balance|: 1000
+  \item \verb|index|: 2, \verb|balance|: 1000
+  \item \verb|index|: 3, \verb|balance|: 1000
+  \item ...
+  \item \verb|index|: 1000, \verb|balance|: 1000
+  \item \verb|index|: 1000, \verb|balance|: 2
+  \item \verb|index|: 1000, \verb|balance|: 3
+  \item \verb|index|: 1000, \verb|balance|: 4
+  \item ...
+\end{itemize}
+
+The parameters itself do not influence or trigger the two worst conditions and must be handled by
+the implemented benchmarking tool. The $transfer$ benchmark is implemented as defined in algorithm
+\ref{sec:algo-benchmark-transfer}.
+
+\subsubsection*{Implementation}
+The benchmarking implementation for the Polkadot Runtime function $transfer$ is defined as
+follows (starting with the \textsc{Main} function):
+\newline
+
+\SetKw{KwInit}{Init:}
+\SetKw{KwBy}{increment by}
+\SetKwProg{Fn}{Function}{ is}{end}
+
+\begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
+  \caption{Run multiple benchmark iterations for $transfer$ Runtime function}
+  \SetAlgoLined
+  \KwResult{$collection$: a collection of time measurements of all benchmark iterations}
+  \BlankLine
+  \Fn{\textsc{Main}}{
+    \KwInit{collection = \{\}\;}
+    \KwInit{$balance = 1'000$\;}
+    \For{$index\gets1$ \KwTo $1'000$ \KwBy $1$}{
+      $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
+      \textsc{Add-To($collection$, $time$)}\;
+    }
+    \BlankLine
+    \KwInit{$index = 1'000$\;}
+    \For{$balance\gets2$ \KwTo $1'000$ \KwBy $1$}{
+      $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
+      \textsc{Add-To($collection$, $time$)}\;
+    }
+  }
+  \BlankLine
+  \Fn{\textsc{Run-Benchmark($index$, $balance$)}}{
+    $sender \leftarrow$ \textsc{Create-Account(\textit{"caller"}, $index$)}\;
+    $recipient \leftarrow$ \textsc{Create-Account(\textit{"recipient"}, $index$)}\;
+    \textsc{Set-Balance($sender$, $balance$)}\;
+    \BlankLine
+    $time \leftarrow$\textsc{Timer(Transfer($sender$, $recipient$, $balance$))}\;
+    \Return $time$
+  }
+\end{algorithm}
+
+\begin{itemize}
+  \item \textsc{Create-Account($name$, $index$)}
+      \SubItem{Creates a Blake2 hash of the concatenated input of $name$ and $index$ representing
+      the address of a account. This function only creates an address and does not conduct any I/O.}
+  \item \textsc{Set-Balance($account$, $balance$)}
+      \SubItem{Sets a initial $balance$ for the specified $account$ in the storage state.}
+  \item \textsc{Transfer($sender$, $recipient$, $balance$)}
+      \SubItem{Transfers the specified $balance$ from $sender$ to $recipient$ by calling the
+      corresponding Runtime function. This represents the target Runtime function to be benchmarked.}
+  \item \textsc{Add-To($collection$, $time$)}
+      \SubItem{Adds a returned time measurement ($time$) to $collection$.}
+  \item \textsc{Timer($function$)}
+      \SubItem{Measures the time from the start of the specified $function$ to its completion.}
+\end{itemize}
+
+\subsubsection{Practical example \#2}
+The $withdraw\_unbonded$ function of the \textit{staking} module is designed to move any unlocked
+funds from the staking management system to be ready for transfer. The benchmark requires a couple
+of I/O operations:
+
+\begin{itemize}
+  \item Create stash account and set initial balance.
+  \item Create controller account and set initial balance.
+  \item Bond a certain amount of the funds.
+  \item Unbond full amount of the funds.
+  \item Withdraw unbonded amount, making it ready for transfer.
+\end{itemize}
+
+\subsubsection*{Parameters}
+The following parameters are selected:
+
+\begin{center}
+  \begin{tabular}{ l|r l l l }
+    \textbf{Type} && \textbf{From} & \textbf{To} & \textbf{Description}\\
+    \hline
+    Account index & \verb|index| in... & 0 & 1000 & Used as a seed for account creation \\
+  \end{tabular}
+\end{center}
+
+This benchmark does not require complex parameters. The values is use solely for account generation.
+
+\subsubsection*{Implementation}
+The benchmarking implementation for the Polkadot Runtime function $withdraw\_unbonded$ is defined as follows:
+\newline
+
+\SetKw{KwInit}{Init:}
+\SetKw{KwBy}{increment by}
+\SetKwProg{Fn}{Function}{ is}{end}
+
+\begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
+  \caption{Run multiple benchmark iterations for $transfer$ Runtime function}
+  \SetAlgoLined
+  \KwResult{$collection$: a collection of time measurements of all benchmark iterations}
+  \BlankLine
+  \Fn{\textsc{Main}}{
+    \KwInit{collection = \{\}\;}
+    \For{$index\gets0$ \KwTo $1'000$ \KwBy $1$}{
+      $stash \leftarrow$ \textsc{Create-Account(\textit{"stash"}, $index$)}\;
+      $controller \leftarrow$ \textsc{Create-Account(\textit{"controller"}, $index$)}\;
+      \textsc{Set-Balance($stash$, 100)}\;
+      \textsc{Set-Balance($controller$, 100)}\;
+      \textsc{Bond($stash$, $controller$, 10)}\;
+      \textsc{UnBond($controller$, 10)}\;
+      $time \leftarrow$\textsc{Timer(Withdraw-Unbonded($controller$))}\;
+      \textsc{Add-To($collection$, $time$)}\;
+    }
+  }
+  \BlankLine
+\end{algorithm}
+
+\begin{itemize}
+  \item \textsc{Create-Account($name$, $index$)}
+    \SubItem{Creates a Blake2 hash of the concatenated input of $name$ and $index$ representing
+    the address of a account. This function only creates an address and does not conduct any I/O.}
+  \item \textsc{Set-Balance($account$, $balance$)}
+      \SubItem{Sets a initial $balance$ for the specified $account$ in the storage state.}
+  \item \textsc{Bond($stash$, $controller$, $amount$)}
+    \SubItem{Bonds the specified $amount$ for the $stash$ and $controller$ pair.}
+  \item \textsc{UnBond($account$, $amount$)}
+    \SubItem{Unbonds the specified $amount$ for the given $account$.}
+  \item \textsc{Withdraw-Unbonded($controller$)}
+    \SubItem{Withdraws the the full unbonded amount of the specified $controller$ account.
+    This represents the target Runtime function to be benchmarked}
+  \item \textsc{Add-To($collection$, $time$)}
+    \SubItem{Adds a returned time measurement ($time$) to $collection$.}
+  \item \textsc{Timer($function$)}
+    \SubItem{Measures the time from the start of the specified $function$ to its completion.}
+\end{itemize}
+
+\section{Fees}
+Block producers charge a fee in order to be economically sustainable. That fee must always
+be covered by the sender of the transaction. Polkadot has a flexible mechanism to determine
+the minimum cost to include transactions in a block.
+
+\subsection{Fee Calculation}
+Polkadot fees consists of three parts:
+
+\begin{itemize}
+\item Base fee: a fixed fee that is applied to every transaction and set by the Runtime.
+\item Length fee: a fee that gets multiplied by the length of the transaction, in bytes.
+\item Weight fee: a fee for each, varying Runtime function. Runtime implementers need to
+      implement a conversion mechanism which determines the corresponding currency amount
+      for the calculated weight.
+\end{itemize}
+
+The final fee can be summarized as:
+\begin{eqnarray*}
+\lefteqn{fee = base\ fee}\\
+      &&{} + length\ of\ transaction\ in\ bytes \times length\ fee\\
+      &&{} + weight\ to\ fee\\
+\end{eqnarray*}
+
+\subsection{Definitions in Polkadot}
+The Polkadot Runtime defines the following values:
+\begin{itemize}
+\item Base fee: 100 uDOTs
+\item Length fee: 0.1 uDOTs
+\item Weight to fee conversion:
+      $$
+            weight\ fee = weight \times (100\ uDOTs \div (10 \times 10'000))
+      $$
+      A weight of 10'000 (the smallest non-zero weight) is mapped to $\frac{1}{10}$ of 100 uDOT.
+      \newline
+      This fee will never exceed the max size of an unsigned 128 bit integer.
+\end{itemize}
+
+\subsection{Fee Multiplier}
+Polkadot can add a additional fee to transactions if the network becomes too busy and starts to
+decelerate the system. This fees can create incentive to avoid the production of
+low priority or insignificant transactions. In contrast, those additional fees will decrease if
+the network calms down and it can execute transactions without much difficulties.
+\newline
+
+That additional fee is known as the \verb|Fee Multiplier| and its value is defined
+by the Polkadot Runtime. The multiplier works by comparing the saturation of blocks; if the previous 
+block is less saturated than the current block (implying an uptrend), the fee is slightly increased.
+Similarly, if the previous block is more saturated than the current block (implying a downtrend), the
+fee is slightly decreased.
+\newline
+
+The final fee is calculated as:
+$$
+      final\ fee = fee \times Fee\ Multiplier
+$$
+
+\subsubsection{Update Multiplier}
+The \verb|Update Multiplier| defines how the multiplier can change. The Polkadot Runtime internally
+updates the multiplier after each block according the following formula:
+
+\begin{eqnarray*}
+diff &=& (target\ weight - previous\ block\ weight)\\
+v &=& 0.00004\\
+next\ weight &=& weight \times (1 + (v \times diff) + (v \times diff)^2 / 2)\\
+\end{eqnarray*}
+
+Polkadot defines the \verb|target_weight| as 0.25 (25\%). More information about this algorithm is described
+in the Web3 Foundation research paper: \url{https://research.web3.foundation/en/latest/polkadot/Token%20Economics.html#relay-chain-transaction-fees-and-per-block-transaction-limits}.
+
+\end{document}
