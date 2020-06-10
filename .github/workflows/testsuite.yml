@@ -234,7 +234,11 @@ jobs:
 
   test-substrate:
     needs: build-adapter-substrate
-    name: "[test-host-api] substrate"
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture: [ host-api, scale-codec, state-trie ]
+    name: "[test-${{ matrix.fixture }}] substrate"
     runs-on: ubuntu-18.04
     steps:
     - name: Checkout repository
@@ -245,7 +249,7 @@ jobs:
         path: test/adapters/substrate
     - run: chmod +x test/adapters/substrate/substrate-adapter
     - name: Run test fixture
-      run: test/runtests.jl substrate host-api
+      run: test/runtests.jl substrate ${{ matrix.fixture }}
 
   test-kagome:
     needs: [ build-adapter-substrate, build-adapter-kagome ]
