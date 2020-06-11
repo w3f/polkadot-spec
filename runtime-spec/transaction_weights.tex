@@ -10,6 +10,11 @@
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage[ruled,vlined]{algorithm2e}
+\usepackage{xargs}                      % Use more than one optional parameter in a new commands
+\usepackage{xcolor}  % Coloured text etc.
+
+\newcommandx{\syed}[2]{{\uline{#1}}\textcolor{orange}{(#2)}}
+
 \setlength\parindent{0pt}
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 \newcommand{\SubItem}[1]{
@@ -23,16 +28,19 @@
 \maketitle
 
 \section{Motivation}
-Polkadot has a limited time window for block producers to create a block,
-including limitations on block size which can make the selection and execution
-of certain extrinsics too expensive and decelerate the network. The weight
+Polkadot network like any other permissionless system need to implement a mechanism to measure and to limit usage in order to prevent the network overload and to mitigate DoS vulnerabilities. In particular, Polkadot enforces a limited time-window for block producers to create a block, including limitations on block size which can make the selection and execution
+of certain extrinsics too expensive and decelerate the network.
+
+In contrast to some other systems such a Ethereum which implement fine measurement of each low level operation know as gas metering, Polkadot takes a more relaxed approach by implementing a measuring system of coarser granularity called transaction weight system.
+
+The weight
 system introduces a mechanism for block producers to measure the expense of
 extrinsics and determine how "heavy" it is. With this mechanism, block producers
 can select a set of extrinsics and saturate the block to it's fullest potential
 without exceeding any limitations (as described in section \ref{sec:limitations}).
 \newline
 
-Polkadot also introduces a specified block ratio (as defined in section \ref{sec:limitations}),
+Additionally, Polkadot also introduces a specified block ratio (as defined in section \ref{sec:limitations}),
 ensuring that only a certain portion of the total block size gets used for regular extrinsics.
 The remaining space is reserved for critical, operational extrinsics required for the functionality
 by Polkadot itself.
