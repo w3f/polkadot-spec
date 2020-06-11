@@ -45,6 +45,8 @@ ensuring that only a certain portion of the total block size gets used for regul
 The remaining space is reserved for critical, operational extrinsics required for the functionality
 by Polkadot itself.
 
+We start this document with introducing the fundamental upon which the polkadot system is designed. In Section \ref{sec:limitation} We discuss the limitation Polkadot needs to enforce on Block size. In Section \ref{sec:runtime-primitives}, we describe in detail the procedure upon which the weight of any transaction should be calculated. In Section \ref{sec:practical-examples}, we present how we apply this procedure to compute the weight of particular runtime functions.
+
 \section{Fundamentals}
 Weights are just a numeric value and Runtime functions may use complex structures to express those
 values. Therefore, the following requirements must apply for implementing weight calculations:
@@ -92,6 +94,7 @@ for each transaction at about 1'500'000.
 Do note that the smallest, non-zero weight in Polkadot is set at 10'000.
 
 \section{Runtime Primitives}
+\label{sec:runtime-primitives}
 The Runtime functions must be studied in order to determine which parts of the code will excessively
 increase execution time. Potential indicators like loops, IO operations and data manipulation must
 be considered. Based on those observations, Weights should be applied on operations
@@ -246,7 +249,7 @@ The benchmarks should be executed on clean systems without interference of other
 or software. Additionally, the benchmarks should be executed on multiple machines with different
 system resources, such as CPU performance, CPU cores, RAM and storage speed.
 
-\section{Practical examples}
+\section{Practical examples}\label{sec:practical-examples}
 
 \subsection{Runtime function analysis}\label{sect:examples-runtime-analysis}
 
