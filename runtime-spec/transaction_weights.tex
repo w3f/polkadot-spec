@@ -52,7 +52,7 @@ We start this document with introducing the assumption upon which the polkadot t
 
 \section{Assumptions}\label{sec:assumption}
 
-In this section we define the concept of weight and we discuss the considerations need to be accounted for when assigning weight to transactions. These considerations are essentials in order for the weight system to delivering its fundamental mission, i.e. fair distribution of network resource and preventing a network overload, listed as follows:
+In this section we define the concept of weight and we discuss the considerations need to be accounted for when assigning weight to transactions. These considerations are essentials in order for the weight system to deliver its fundamental mission, i.e. fair distribution of network resource and preventing a network overload. More formally weight system should:
 
 \begin{itemize}
 \item to prevent the block being filled with too many extrinsics
@@ -76,11 +76,12 @@ In the remainder of this section we discuss the requirements to which the weight
 \begin{itemize}
 
 \item Computations of function $\mathcal{W}(E)$  must be determined before execution of that $E$.
+
 \item Due to the limited time window, computations of $\TWF$ must be done quickly and consume
       few resources themselves.
 \item $\TWF$ must be self contained and must not require I/O on the chain state. $\TWF(E)$
 must depends solely on the Runtime function representing $E$ and its parameters.
-  
+
 \end{itemize}
 
 \section{Limitations}\label{sec:limitations}
