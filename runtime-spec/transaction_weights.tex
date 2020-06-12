@@ -59,6 +59,36 @@ In this section we define the concept of weight and we discuss the consideration
 \item to avoid extrinsics where its execution takes too long, by assigning a transaction fees to each extrinsic proportional to their resource consumption.
 \end{itemize}
 
+These concepts are formalized in Definitions \ref{def:block-length} and \ref{def:polkadot-block-limits}:
+
+\begin{definition}
+  \label{def:block-length}
+       For a Block $B$ with $Head(B)$ and $Body(B)$ the {\b block length of $B$}, $Len(B)$ is defined as \todo{define length with what encoding head or no head seal or no seal etc0}
+\end{definition}
+
+\begin{definition}
+  \label{def:target-time-per-block}
+  {\b Targeted time per block} denoted by $T(B)$ \todo{TBD}.
+\end{definition}
+
+\begin{definition}
+  \label{def:block-target-time}
+  Available block ration reserved for normal, noted by $R(B)$ is defined to maximum length none-operational transactions encoded as
+  \todo{TBD} in the Body of $B$ divided by $Len(B)$.
+\end{definition}
+
+\begin{definition}
+  \label{def:polkadot-block-limits}
+        {\b Polkadot block limits} as defined here should be respected by each block producer for the produced block $B$ to be deemed valid:
+        
+        \begin{enumerate}
+         \item $Len(B) \le 5 \times 1'024 \times 1'024 = 5'242'880$ Bytes
+         \item $T(B) = 6 seconds$
+         \item $R(B) \le 0.75$
+        \end{enumerate}
+        
+\end{definition}
+
 \begin{definition}
   \label{defn:weight-function}
   The {\b Polkadot transaction weight function} denoted by $\mathcal{W}$ as follows:
@@ -84,28 +114,19 @@ must depends solely on the Runtime function representing $E$ and its parameters.
 
 \end{itemize}
 
-\section{Limitations}\label{sec:limitations}
-The assigned weights should be relative to each others execution time and "heaviness",
-although weights can be assigned depending on the priorities the chain is supposed to endorse.
-Following limitations must be considered when assigning weights, which vary on the Runtime.
+Heuristically, "heaviness" corresponds to resources consumption of an extrinsic. In that way the \TWF value for various extrinsics should be proportional to their execution time and consumption of other system resources such as memory and amount I/O operation. Nonetheless $\TWF(E)$ can be manipulated depending on the priority of $E$ the chain is supposed to endorse.
 
-\subsection{Considerable limitations}
-\begin{itemize}
-\item Maximum block length
-\item Maximum block weight
-\item Targeted time per block
-\item Available block ration reserved for normal, none-operational transactions
-\end{itemize}
+\subsection{Limitations}\label{sec:limitations}
+In this section we discuss how applying the limitation defined in Definition \ref{def:polkadot-block-limits} can translated to limitation $\TWF$. In order to be able to translate those into concrete number, we need to an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume  a maximum on it block length in Definition \ref{def:block-weight}:
 
-\subsection{Considerable limitations in Polkadot}
-As of the official Polkadot Runtime, the limitations are set as follows:
+\begin{definition}
+  \label{def:block-weight} We define the {\b block weight} of block $B$, formally denoted as  $\TWF(B)$, to be \todo{the sum of transaction weight? extrinsics weight?}. 
+  We require that
+  \[
+\TWF(B) < 2'000'000'000'000
+\]
 
-\begin{itemize}
-\item Maximum block length: $5 \times 1'024 \times 1'024 = 5'242'880$ Bytes
-\item Maximum block weight: 2'000'000'000'000
-\item Targeted time per block: 6 seconds
-\item Available block ratio: 75\%
-\end{itemize}
+\end{definition}
 
 The values of the assigned weight itself is not relevant. It must only fulfill the requirements
 as noted by the fundamentals and limitations, and can be assigned as the author sees fit.
@@ -114,7 +135,7 @@ As a simple example, consider a maximum block weight of 1'000'000'000, an availa
 for each transaction at about 1'500'000.
 \newline
 
-Do note that the smallest, non-zero weight in Polkadot is set at 10'000.
+\syed{Do note that the smallest, non-zero weight in Polkadot is set at 10'000.}{why do we need this, we need to justify having a minimum}
 
 \section{Runtime Primitives}
 \label{sec:runtime-primitives}
