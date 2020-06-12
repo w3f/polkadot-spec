@@ -9,6 +9,7 @@
 \usepackage{color}
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage[ruled,vlined]{algorithm2e}
 \usepackage{xargs}                      % Use more than one optional parameter in a new commands
 \usepackage{xcolor}  % Coloured text etc.
@@ -20,6 +21,8 @@
 \newcommand{\SubItem}[1]{
     {\setlength\itemindent{15pt} \item[-] #1}
 }
+
+\newcommand{\TWF}{\ensuremath{\mathcal{W}}}
 
 \begin{document}
 \title{Polkadot Weights}
@@ -45,20 +48,39 @@ ensuring that only a certain portion of the total block size gets used for regul
 The remaining space is reserved for critical, operational extrinsics required for the functionality
 by Polkadot itself.
 
-We start this document with introducing the fundamental upon which the polkadot system is designed. In Section \ref{sec:limitation} We discuss the limitation Polkadot needs to enforce on Block size. In Section \ref{sec:runtime-primitives}, we describe in detail the procedure upon which the weight of any transaction should be calculated. In Section \ref{sec:practical-examples}, we present how we apply this procedure to compute the weight of particular runtime functions.
+We start this document with introducing the assumption upon which the polkadot transaction weight system is designed in Section \ref{sec:assumptions}. In Section \ref{sec:limitation} We discuss the limitation Polkadot needs to enforce on Block size. In Section \ref{sec:runtime-primitives}, we describe in detail the procedure upon which the weight of any transaction should be calculated. In Section \ref{sec:practical-examples}, we present how we apply this procedure to compute the weight of particular runtime functions.
 
-\section{Fundamentals}
-Weights are just a numeric value and Runtime functions may use complex structures to express those
-values. Therefore, the following requirements must apply for implementing weight calculations:
+\section{Assumptions}\label{sec:assumption}
+
+In this section we define the concept of weight and we discuss the considerations need to be accounted for when assigning weight to transactions. These considerations are essentials in order for the weight system to delivering its fundamental mission, i.e. fair distribution of network resource and preventing a network overload, listed as follows:
+
 \begin{itemize}
-\item Computations of weights must be determined before execution of that extrinsic.
-\item Due to the limited time window, computations of weights must be done quickly and consume
+\item to prevent the block being filled with too many extrinsics
+\item to avoid extrinsics where its execution takes too long, by assigning a transaction fees to each extrinsic proportional to their resource consumption.
+\end{itemize}
+
+\begin{definition}
+  \label{defn:weight-function}
+  The {\b Polkadot transaction weight function} denoted by $\mathcal{W}$ as follows:
+  \[
+  \mathcal{W}: \mathcal{E}\rightarrow \mathbb{N}
+  \mathcal{W}: E \mapsto w
+  \]
+
+  where $w$ is a positive integer representing the weight of the extrinsic $E$.
+  
+\end{definition}
+
+In the remainder of this section we discuss the requirements to which the weight function needs to comply to.
+
+\begin{itemize}
+
+\item Computations of function $\mathcal{W}(E)$  must be determined before execution of that $E$.
+\item Due to the limited time window, computations of $\TWF$ must be done quickly and consume
       few resources themselves.
-\item Weights must be self contained and must not require I/O on the chain state. Weights are
-      fixed measurements and are based solely on the Runtime function and its parameters.
-\item Weights serve three functions: measurements used to calculate transaction fees, to prevent
-      the block being filled with too many extrinsics and to avoid extrinsics where its execution
-      takes too long.
+\item $\TWF$ must be self contained and must not require I/O on the chain state. $\TWF(E)$
+must depends solely on the Runtime function representing $E$ and its parameters.
+  
 \end{itemize}
 
 \section{Limitations}\label{sec:limitations}
