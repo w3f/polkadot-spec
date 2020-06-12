@@ -5,18 +5,18 @@
 
 Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository serves as the point of reference for Polkadot Protocol. In this repo you will find:
 
-- The official [Polkadot Host Specification](./polkadot-host-spec/)
+- The official [Polkadot Host Specification](./host-spec/)
 - The official [Polkadot Conformance Testsuite](./test/)
 - A florishing [Polkadot Runtime Specification](./runtime-spec/)
 - Various other files used by the Polkadot spec team
 
 ## Polkadot Host Specification
 
-Here your can find the latest version of the [Polkadot Host Specification](./polkadot-host-spec/polkadot_host_spec.pdf)
+Here your can find the latest version of the [Polkadot Host Specification](./host-spec/host-spec.pdf)
 
-Please refer to the [Change Log](./polkadot-host-spec/pdre_change_log.org) and [PDF Diff](./polkadot-host-spec/polkadot_host_spec-diffed-updates.pdf) to review the history of changes to the specification.
+Please refer to the [Change Log](./host-spec/CHANGELOG.org) and [PDF Diff](./host-spec/host-spec-diffed-updates.pdf) to review the history of changes to the specification.
 
-For more details please refer [README.md](./polkadot-host-spec/README.md) to the specification.
+For more details please refer [README.md](./host-spec/README.md) to the specification.
 
 ## Polkadot Protocol Conformance Testsuite
 

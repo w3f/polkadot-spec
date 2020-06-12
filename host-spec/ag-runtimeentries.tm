@@ -1,6 +1,6 @@
 <TeXmacs|1.99.12>
 
-<project|polkadot_host_spec.tm>
+<project|host-spec.tm>
 
 <style|<tuple|book|old-dots>>
 
