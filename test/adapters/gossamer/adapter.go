@@ -30,6 +30,7 @@ func main() {
 	// Subcommands
 	codecCommand := flag.NewFlagSet("scale-codec", flag.ExitOnError)
 	trieCommand := flag.NewFlagSet("state-trie", flag.ExitOnError)
+	trieCommand := flag.NewFlagSet("host-api", flag.ExitOnError)
 
 	// Verify that a subcommand has been provided
 	// os.Arg[0] is the main command
