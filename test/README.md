@@ -164,11 +164,11 @@ Relevant files:
 
 The tests are executed in the following way:
 
-`<adapter> pdre-api --function <function> --input <data>`
+`<adapter> host-api --function <function> --input <data>`
 
 Example:
 
-`substrate-adapter pdre-api --function test_blake2_128 --input "Horizontal"`
+`substrate-adapter host-api --function test_blake2_128 --input "Horizontal"`
 
 Each function gets tested with multiple inputs and then goes on to the next function.
 
