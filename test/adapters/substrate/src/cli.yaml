@@ -43,7 +43,7 @@ subcommands:
               help: the file containing the key value data defining the state
               value_name: INPUT_VALUE
 
-    - pdre-api:
+    - host-api:
         about: host API related tests 
         args:
           - function:

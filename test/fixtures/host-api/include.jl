@@ -5,7 +5,7 @@ include("./HostApiOutputs.jl")
 using .StringHelpers
 using .AdapterFixture
 
-tests = AdapterFixture.Builder("Host API", "pdre-api")
+tests = AdapterFixture.Builder("Host API", "host-api")
 
 HOSTAPI_FIXTURE_DATASETS = [
     [
