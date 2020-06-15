@@ -62,7 +62,7 @@ int main(int argc, char **argv) {
   router.addSubcommand("state-trie", [](int argc, char **argv) {
     processTrieCommand(extractTrieArgs(argc, argv));
   });
-  router.addSubcommand("pdre-api", [](int argc, char **argv) {
+  router.addSubcommand("host-api", [](int argc, char **argv) {
     processExtensionsCommands(extractExtensionArgs(argc, argv));
   });
 

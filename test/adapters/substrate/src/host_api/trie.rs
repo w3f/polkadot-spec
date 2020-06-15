@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{Decoder, ParsedInput, Runtime};
+use crate::host_api::utils::{Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 pub fn ext_trie_blake2_256_root_version_1(input: ParsedInput) {
