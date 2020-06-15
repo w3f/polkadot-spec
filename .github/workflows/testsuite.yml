@@ -298,31 +298,52 @@ jobs:
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
 
-  test-host-api-legacy:
-    needs: [ build-adapter-substrate-legacy, build-adapter-kagome ]
-    strategy:
-      fail-fast: false
-      matrix:
-        implementation: [ substrate, kagome ]
-    name: "[test-host-api-legacy] ${{ matrix.implementation }}"
+  test-host-api-legacy-substrate:
+    needs: [ build-adapter-substrate-legacy ]
+    name: "[test-host-api-legacy] substrate"
     runs-on: ubuntu-18.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
-        name: ${{ matrix.implementation }}-adapter-legacy
-        path: test/adapters/${{ matrix.implementation }}-legacy
-      if: matrix.implementation == 'substrate'
+        name: substrate-adapter-legacy
+        path: test/adapters/substrate-legacy
+    - run: chmod +x test/adapters/substrate-legacy/substrate-adapter-legacy
+    - name: Run test fixture
+      run: test/runtests.jl substrate host-api-legacy
+
+  test-host-api-legacy-kagome:
+    needs: [ build-adapter-kagome ]
+    name: "[test-host-api-legacy] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
-        name: ${{ matrix.implementation }}-adapter
-        path: test/adapters/${{ matrix.implementation }}
-      if: matrix.implementation == 'kagome'
-    - run: chmod +x test/adapters/substrate-legacy/substrate-adapter-legacy
-      if: matrix.implementation == 'substrate'
+        name: kagome-adapter
+        path: test/adapters/kagome
     - run: chmod +x test/adapters/kagome/kagome-adapter
-      if: matrix.implementation == 'kagome'
     - name: Run test fixture
-      run: test/runtests.jl ${{ matrix.implementation }} host-api-legacy
+      run: test/runtests.jl kagome host-api-legacy
+
+  test-host-api-legacy-gossamer:
+    needs: [ build-adapter-wasm-legacy, build-adapter-gossamer ]
+    name: "[test-host-api-legacy] gossamer"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter-legacy
+        path: test/adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy
+    - uses: actions/download-artifact@v1
+      with:
+        name: gossamer-adapter
+        path: test/adapters/gossamer
+    - run: chmod +x test/adapters/gossamer/gossamer-adapter
+    - name: Run test fixture
+      run: test/runtests.jl gossamer host-api-legacy
 

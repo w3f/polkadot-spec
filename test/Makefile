@@ -1,4 +1,4 @@
-ADAPTERS = substrate substrate-legacy kagome gossamer
+ADAPTERS = substrate substrate-legacy kagome gossamer wasm-legacy
 TESTERS  = host host-legacy
 
 .PHONY: test adapters testers $(ADAPTERS) $(TESTERS)
