@@ -31,8 +31,7 @@ import (
 	"os"
 )
 
-func ProcessStateTrieCommand(scale_codec_command *flag.FlagSet, command_args []string) {
-	//here we need to parse the args related to scale_codec
+func ProcessStateTrieCommand(command_args []string) {
 
 	// Subcommands
 	stateRootCommand := flag.NewFlagSet("trie-root", flag.ExitOnError)
