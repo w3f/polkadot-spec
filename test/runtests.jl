@@ -91,6 +91,15 @@ else
     ENV["LD_LIBRARY_PATH"] = "$(@__DIR__)/lib"
 end
 
+# wasmer go extension does not support static linking yet
+# This makes us pickup libwasmer.so used by gossamers libs
+# https://github.com/wasmerio/go-ext-wasm/pull/40
+if haskey(ENV, "LD_LIBRARY_PATH")
+    ENV["LD_LIBRARY_PATH"] *= ":$(@__DIR__)/adapters/gossamer:$(@__DIR__)"
+else
+    ENV["LD_LIBRARY_PATH"] = "$(@__DIR__)/adapters/gossamer:$(@__DIR__)"
+end
+
 # Run from this subfolder (to allow relative paths in suite)
 previous_path = pwd()
 cd("$(@__DIR__)")
