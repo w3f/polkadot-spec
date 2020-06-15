@@ -9,7 +9,7 @@ args:
         help: Sets the level of verbosity
 
 subcommands:
-    - pdre-api:
+    - host-api:
         about: host API related tests 
         args:
           - function:

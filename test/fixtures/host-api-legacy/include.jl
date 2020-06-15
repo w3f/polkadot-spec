@@ -5,7 +5,7 @@ include("./HostApiLegacyOutputs.jl")
 using .StringHelpers
 using .AdapterFixture
 
-tests = AdapterFixture.Builder("Host API Legacy", "pdre-api")
+tests = AdapterFixture.Builder("Host API Legacy", "host-api")
 
 "Wrapper around new API to support old convention"
 function run_dataset(func, input, output)

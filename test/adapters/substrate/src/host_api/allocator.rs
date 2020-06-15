@@ -1,4 +1,4 @@
-use crate::pdre_api::utils::{str, Decoder, ParsedInput, Runtime};
+use crate::host_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 /// The Wasm function tests both the allocation and freeing of the buffer
