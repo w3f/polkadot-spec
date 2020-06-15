@@ -83,8 +83,15 @@ ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/gossamer"
 ENV["PATH"] *= ":$(@__DIR__)"
 
+# Run from this subfolder (to allow relative paths in suite)
+previous_path = pwd()
+cd("$(@__DIR__)")
+
 # Execute config
 println("EXECUTION:")
 execute()
+
+# Reset path
+cd(previous_path)
 
 exit()
