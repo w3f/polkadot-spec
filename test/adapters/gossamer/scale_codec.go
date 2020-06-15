@@ -27,7 +27,7 @@ import (
 	"os"
 )
 
-func ProcessScaleCodecCommand(scale_codec_command *flag.FlagSet, scale_codec_args []string) {
+func ProcessScaleCodecCommand(scale_codec_args []string) {
 	//here we need to parse the args related to scale_codec
 
 	// Subcommands
