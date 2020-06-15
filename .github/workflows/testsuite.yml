@@ -160,10 +160,15 @@ jobs:
     - name: Build gossamer adapter
       run: make -C test gossamer-adapter 
     - name: Upload gossamer adapter
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: gossamer-adapter
         path: test/bin/gossamer-adapter
+    - name: Upload libwasmer.so
+      uses: actions/upload-artifact@v2
+      with:
+        name: gossamer-adapter
+        path: test/lib/libwasmer.so
 
 
   build-adapter-wasm:
@@ -366,3 +371,22 @@ jobs:
     - run: cd test/bin && chmod +x substrate-adapter gossamer-adapter
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
+
+  test-gossamer-legacy:
+    needs: [ build-adapter-gossamer, build-adapter-wasm-legacy]
+    name: "[test-host-api-legacy] gossamer"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: gossamer-adapter
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter-legacy.compact.wasm
+        path: test/bin
+    - run: chmod +x test/bin/gossamer-adapter
+    - name: Run test fixture
+      run: test/runtests.jl gossamer host-api-legacy
