@@ -143,10 +143,15 @@ jobs:
     - name: Build gossamer adapter
       run: go build
     - name: Upload gossamer adapter
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: gossamer-adapter
         path: test/adapters/gossamer/gossamer-adapter
+    - name: Upload libwasmer.so
+      uses: actions/upload-artifact@v2
+      with:
+        name: gossamer-adapter
+        path: ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@**/wasmer/libwasmer.so
 
 
   build-adapter-wasm:
