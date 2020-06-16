@@ -4,22 +4,31 @@
 
 Validators are responsible for guaranteeing the validity and availability of PoV blocks.
 There are two phases of validation that takes place in the AnV protocol.
+\newline
 
 The primary validation check is carried out by parachain validators who are assigned to the parachain which has produced the PoV block as described in Section \ref{sect-primary-validation}. Once parachain validators have validated a parachain's PoV block successfully, they have to announce that according to the procedure described in Section \ref{sect-primary-validaty-announcement} where they generate a candidate receipt that includes the parachain header with the new state root and the XCMP message root. This candidate receipt and attestations, which carries signatures from other parachain validators is put on the relay chain.
+\newline
 
 As soon as the proposal of a PoV block is on-chain, the parachain validators break the PoV block into erasure-coded pieces as described in Section \ref{sect-erasure-code-pov} and distribute them among all validators. See Section \ref{sect-distribute-pieces} for details on how this distribution takes place.
+\newline
 
 Once validators have received erasure-coded pieces for several PoV blocks for the current relay chain block (that might have been proposed a couple of blocks earlier on the relay chain), they announce that they have received the erasure coded pieces on the relay chain by voting on the received pieces, see Section \ref{sect-voting-on-availability} for more details.
+\newline
 
 As soon as $>2/3$ of validators have made this announcement for any parachain block we \emph{act on} the parachain block. Acting on parachain blocks means we update the relay chain state based on the candidate receipt and considered the parachain block to have happened on this relay chain fork.
+\newline
 
 After a certain time, if we did not collect enough signatures approving the availability of the parachain data associated with a certain candidate receipt we decide this parachain block is unavailable and allow alternative blocks to be built on its parent parachain block, see \ref{sect-unavailability}.
+\newline
 
 The secondary check described in Section \ref{sect-approval-checking}, is done by one or more randomly assigned validators to make sure colluding parachain validators may not get away with validating a PoV block that is invalid and not keeping it available to avoid the possibility of being punished for the attack.
+\newline
 
 During any of the phases, if any validator announces that a parachain block is invalid then all validators obtain the parachain block and check its validity, see Section \ref{sect-escalation} for more details.
+\newline
 
 All validity and invalidity attestations go onto the relay chain, see Section \ref{sect-publishing-attestations} for details. If a parachain block has been checked at least by certain number of validators, the rest of the validators continue with voting on that relay chain block in the GRANDPA protocol. Note that the block might be challenged later.
+\newline
 
 \section{Preliminaries}
 
@@ -263,6 +272,7 @@ When validator $v$ receives its designated piece for \blobB it needs to broadcas
 \end{definition}
 
 Some parachains have blocks that we need to vote on the availability of, that is decided by > 2/3 of validators voting for availability. \syed{For 100 parachain and 1000 validators this will involve putting 100k items of data and processing them on-chain for every relay chain block, hence we want to use bit operations that will be very efficient. We describe next what operations the relay chain runtime uses to process these availability votes.}{this is not really relevant to the spec}
+\newline
 
 For each parachain, the relay chain stores the following data: %/syed{we store}{what does it mean we store? this need to be clear. Is it a transaction TBS?}: no its not a tx, its in the relay chain state
 
@@ -340,6 +350,7 @@ Once a parachain block is acted on we carry the secondary validity/availability 
 \subsection{Approval Checker Assignment}
 
 Validators assign themselves to parachain block proposals as defined in Definition \ref{defn-para-proposal}. The assignment needs to be random. Validators use their own VRF to sign the VRF output from the current relay chain block as described in Section \ref{sect-vrf-comp}. Each validator uses the output of the VRF to decide the block(s) they are revalidating as a secondary checker. See Section \ref{one-shot-assigment} for the detail.
+\newline
 
 In addition to this assignment some extra validators are assigned to every PoV block which is descirbed in Section \ref{sect-extra-validation assignment}.
 
@@ -360,12 +371,13 @@ Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachai
 
     $s_k$: session secret key of validator planning to participate in approval
 
-    \State $(\pi, d) \leftarrow {\sc VRF}(H_h(B),sk(z))$
+    \State $(\pi, d) \leftarrow {VRF}(H_h(B),sk(z))$
     \State \Return $(\pi,d)$
   \end{algorithmic}
 \end{algorithm}
 
 Where {\sc VRF} function is defined in \cite{polkadot-crypto-spec}.
+\newline
 
 \subsection{One-Shot Approval Checker Assignemnt}
 \label{sect-shot-assignment}
@@ -388,10 +400,13 @@ Now for each parachain block, let us assume we want $\#VCheck$ validators to che
 
 $$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$
 where $c_f$ is some factor we use to weight fishermen reports. Reports from fishermen about this
+\newline
 
 Now each validator computes for each PoV block a VRF with the input being the relay chain block VRF concatenated with the parachain index.
+\newline
 
 For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the output of this VRF and if the VRF output is small enough than the validator checks this PoV blocks immediately otherwise depending on their difference waits for some time and only perform a check if it has not seen $\#VCheck$ checks from validators who either 1) parachain validators of this PoV block 2) or assigned during the assignment procedure or 3) had a smaller VRF output than us during this time.
+\newline
 
 More fisherman reports can increase $\#VCheck$ and require new checks. We should carry on doing secondary checks for the entire fishing period if more are required. A validator need to keep track of which blocks have $\#VCheck$ smaller than the number of higher priority checks performed. A new report can make us check straight away, no matter the number of current checks, or mean that we need to put this block back into this set. If we later decide to prune some of this data, such as who has checked the block, then we'll need a new approach here.
 
@@ -560,11 +575,15 @@ Collators reports of unavailability and invalidty specified in Definition \todo{
 \subsection{Invalidity Escalation}\label{escalation}
 
 When for any candidate receipt, there are attestations for both its validity and invalidity, then all validators acquire and validate the blob, irrespective of the assignments from section by executing Algorithm \ref{algo-reconstruct-pov} and \ref{algo-revalidating-reconstructed-pov}.
+\newline
 
 We do not vote in GRANDPA for a chain were the candidate receipt is executed until its vote is resolved. If we have $n$ validators, we wait for $>2n/3$ of them to attest to the blob and then the outcome of this vote is one of the following:
+\newline
 
 If $>n/3$ validators attest to the validity of the blob and $\leq n/3$ attest to its invalidity, then we can vote on the chain in GRANDPA again and slash validators who attested to its invalidity.
+\newline
 
 If $>n/3$ validators attest to the invalidity of the blob and $\leq n/3$ attest to its validity, then we consider the blob as invalid. If the rely chain block where the corresponding candidate receipt was executed was not finalised, then we never vote on it or build on it. We slash the validators who attested to its validity.
+\newline
 
 If $>n/3$ validators attest to the validity of the blob and $>n/3$ attest to its invalidity then we consider the blob to be invalid as above but we do not slash validators who attest either way. We want to leave a reasonable length of time in the first two cases to slash anyone to see if this happens.
