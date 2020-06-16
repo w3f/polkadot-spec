@@ -9,7 +9,7 @@ There are two phases of validation that takes place in the AnV protocol.
 The primary validation check is carried out by parachain validators who are assigned to the parachain which has produced the PoV block as described in Section \ref{sect-primary-validation}. Once parachain validators have validated a parachain's PoV block successfully, they have to announce that according to the procedure described in Section \ref{sect-primary-validaty-announcement} where they generate a candidate receipt that includes the parachain header with the new state root and the XCMP message root. This candidate receipt and attestations, which carries signatures from other parachain validators is put on the relay chain.
 \newline
 
-As soon as the proposal of a PoV block is on-chain, the parachain validators break the PoV block into erasure-coded pieces as described in Section \ref{sect-erasure-code-pov} and distribute them among all validators. See Section \ref{sect-distribute-pieces} for details on how this distribution takes place.
+As soon as the proposal of a PoV block is on-chain, the parachain validators break the PoV block into erasure-coded pieces as described in Section \ref{defn-erasure-coded-pieces} and distribute them among all validators. See Section \ref{sect-distribute-pieces} for details on how this distribution takes place.
 \newline
 
 Once validators have received erasure-coded pieces for several PoV blocks for the current relay chain block (that might have been proposed a couple of blocks earlier on the relay chain), they announce that they have received the erasure coded pieces on the relay chain by voting on the received pieces, see Section \ref{sect-voting-on-availability} for more details.
@@ -255,7 +255,7 @@ When a $v \in \paraValidSet$ observes that a block containing parachain block ca
    is defined to be the output of the Algorithm \ref{algo-erasure-encode}.
 \end{definition}
 
-\section{Distribution of Pieces}\label{sect-distribute-piece}
+\section{Distribution of Pieces}\label{sect-distribute-pieces}
 Following the computation of $Er_B$, $v$ must construct the $\blobB$ Availability message defined in Definition \ref{defn-pov-erasure-piece-message}. And distribute them to target validators designated by the Availability Networking Specification \cite{??}.
 
 \begin{definition}
@@ -325,7 +325,7 @@ This section explains how the availability attestations stored on the relay chai
 Based on the result of Algorithm~\ref{algo-signature-processing} the validator node should mark a parachain block as either available or eventually unavailable according to definitions \ref{defn-available-parablock-proposal} and \ref{defn-unavailable-parablock-proposal}
 \begin{definition}
   \label{defn-available-parablock-proposal}
-        Parachain blocks blocks for which the corresponding blob is  noted on the relay chain to be {\b available}, meaning that the candidate receipt has been voted to be available by 2/3 validators.
+        Parachain blocks for which the corresponding blob is  noted on the relay chain to be {\b available}, meaning that the candidate receipt has been voted to be available by 2/3 validators.
 \end{definition}
 
 After a certain time-out in blocks since we first put the candidate receipt on the relay chain if there is not enough votes of availability the relay chain logic decides that a parachain block is unavailable, see \ref{algo-singnature-processing}.
