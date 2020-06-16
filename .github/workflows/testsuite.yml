@@ -151,7 +151,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: gossamer-adapter
-        path: ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@**/wasmer/libwasmer.so
+        path: ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@*/wasmer/libwasmer.so
 
 
   build-adapter-wasm:
@@ -298,8 +298,13 @@ jobs:
       with:
         name: gossamer-adapter
         path: test/adapters/gossamer
-    - run: cd test/adapters && chmod +x substrate/substrate-adapter gossamer/gossamer-adapter
+    - working-directory: test/adapters
+      run: |
+        chmod +x substrate/substrate-adapter gossamer/gossamer-adapter
+        mv gossamer/go-ext-wasm@*/wasmer/libwasmer.so gossamer
     - name: Run test fixture
+      env:
+        LD_LIBRARY_PATH: ${{ github.workspace }}/test/adapters/gossamer
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
 
@@ -337,18 +342,24 @@ jobs:
     needs: [ build-adapter-wasm-legacy, build-adapter-gossamer ]
     name: "[test-host-api-legacy] gossamer"
     runs-on: ubuntu-18.04
+    continue-on-error: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
-        name: wasm-adapter-legacy
+        name: wasm-adapter-legacy.compact.wasm
         path: test/adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy
     - uses: actions/download-artifact@v1
       with:
         name: gossamer-adapter
         path: test/adapters/gossamer
-    - run: chmod +x test/adapters/gossamer/gossamer-adapter
+    - working-directory: test/adapters/gossamer
+      run: |
+        chmod +x gossamer-adapter
+        mv go-ext-wasm@*/wasmer/libwasmer.so .
     - name: Run test fixture
+      env:
+        LD_LIBRARY_PATH: ${{ github.workspace }}/test/adapters/gossamer
       run: test/runtests.jl gossamer host-api-legacy
 
