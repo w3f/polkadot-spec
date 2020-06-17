@@ -219,7 +219,7 @@ extern "C" {
 
 
 #[cfg(feature = "runtime-wasm")]
-sp_core::wasm_export_functions! {
+primitives::wasm_export_functions! {
     fn rtm_ext_twox_64(input: Vec<u8>) -> Vec<u8> {
         let mut api_output : [u8; 8] = [0; 8];
         unsafe {

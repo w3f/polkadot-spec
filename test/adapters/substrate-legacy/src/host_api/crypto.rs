@@ -1,7 +1,7 @@
 use crate::host_api::utils::{Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
-use sp_core::hashing::{twox_128, twox_256, twox_64};
+use primitives::hashing::{twox_128, twox_256, twox_64};
 
 // Input: data
 pub fn test_blake2_128(input: ParsedInput) {
