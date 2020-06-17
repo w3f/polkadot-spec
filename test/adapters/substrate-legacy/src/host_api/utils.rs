@@ -1,9 +1,9 @@
 use clap::Values;
 use parity_scale_codec::Decode;
-use sc_executor::{call_in_wasm, WasmExecutionMethod};
-use sp_core::offchain::testing::TestOffchainExt;
-use sp_core::{offchain::OffchainExt, testing::KeyStore, traits::KeystoreExt, Blake2Hasher};
-use sp_state_machine::TestExternalities as CoreTestExternalities;
+use executor::{call_in_wasm, WasmExecutionMethod};
+use primitives::{offchain::OffchainExt, testing::KeyStore, traits::KeystoreExt, Blake2Hasher};
+use state_machine::TestExternalities as CoreTestExternalities;
+use offchain::testing::TestOffchainExt;
 
 use runtime::WASM_BINARY;
 
@@ -60,13 +60,7 @@ impl Runtime {
     }
     pub fn call(&mut self, method: &str, data: &[u8]) -> Vec<u8> {
         let mut extext = self.ext.ext();
-        call_in_wasm::<
-            _,
-            (
-                sp_io::SubstrateHostFunctions,
-                sc_executor::deprecated_host_interface::SubstrateExternals,
-            ),
-        >(
+        call_in_wasm(
             method,
             data,
             WasmExecutionMethod::Interpreted,

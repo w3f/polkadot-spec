@@ -24,9 +24,9 @@ extern crate data_encoding;
 
 // For PDRE API
 extern crate hex;
-extern crate sc_executor;
-extern crate sp_core;
-extern crate sp_state_machine;
+extern crate executor;
+extern crate primitives;
+extern crate state_machine;
 
 use clap::App;
 
