@@ -9,13 +9,15 @@ const TEST_FILES = "'" .* TEST_DIR .* [
   "random_state_80.yaml",
   "pk_branch.yaml",
   "pk_branch2.yaml",
-  "hex_limit.yaml"
+  "hex_limit.yaml",
+  "hex_long.yaml",
 ] .* "'"
 
 const TEST_FILES_HEX = "'" .* TEST_DIR .* [
   "hex_1c1.yaml",
   "hex_limit.yaml",
-  "10000_node.yaml"
+  "hex_long.yaml",
+  "10000_node.yaml",
 ] .* "'"
 
 
