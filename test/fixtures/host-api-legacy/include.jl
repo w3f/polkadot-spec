@@ -5,17 +5,17 @@ include("./HostApiLegacyOutputs.jl")
 using .StringHelpers
 using .AdapterFixture
 
-tests = AdapterFixture.Builder("Host API Legacy", "host-api")
+tests = AdapterFixture.Builder("Host API Legacy", `host-api`)
 
 "Wrapper around new API to support old convention"
 function run_dataset(func, input, output)
     global tests
 
     sub!(tests) do t
-        arg!(t, "--function")
+        arg!(t, `--function`)
         foreach!(t, func),
-        arg!(t, "--input")
-        foreach!(t, inquotes(commajoin(flatzip(input...))))
+        arg!(t, `--input`)
+        foreach!(t, commajoin(flatzip(input...)))
         commit!(t, output)
     end
 end
