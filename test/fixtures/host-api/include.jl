@@ -5,7 +5,7 @@ include("./HostApiOutputs.jl")
 using .StringHelpers
 using .AdapterFixture
 
-tests = AdapterFixture.Builder("Host API", "host-api")
+tests = AdapterFixture.Builder("Host API", `host-api`)
 
 HOSTAPI_FIXTURE_DATASETS = [
     [
@@ -117,10 +117,10 @@ HOSTAPI_FIXTURE_DATASETS = [
 
 for (func, input, output) in HOSTAPI_FIXTURE_DATASETS
     sub!(tests) do t
-        arg!(t, "--function")
+        arg!(t, `--function`)
         foreach!(t, func),
-        arg!(t, "--input")
-        foreach!(t, inquotes(commajoin(flatzip(input...))))
+        arg!(t, `--input`)
+        foreach!(t, commajoin(flatzip(input...)))
         commit!(t, output)
     end
 end

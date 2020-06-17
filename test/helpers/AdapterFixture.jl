@@ -14,19 +14,19 @@ mutable struct Builder
     name::String
 
     "Value to which to reset"
-    default::String
+    default::Cmd
 
     "Command currently being constructed"
-    current::StringList
+    current::CmdList
 
     "Collection of all commands to run"
-    inputs::StringList
+    inputs::CmdList
 
     "Expected output generated with reference implementations"
     outputs::StringList
 
     "Constructor: Only allow to set name on construction"
-    Builder(name, default="") = new(name, default, [default], [], [])
+    Builder(name, default=``) = new(name, default, [default], [], [])
 end
 
 
@@ -48,13 +48,13 @@ function sub!(context!::Function, self::Builder)
 end
 
 "Add arguments to commands currently being build"
-function arg!(self::Builder, arg::AbstractString)
-    self.current = combine(self.current, " " * arg)
+function arg!(self::Builder, arg::CmdString)
+    self.current = cmdcombine(self.current, arg)
 end
 
 "Add each argument to commands currently being build"
-function foreach!(self::Builder, args::StringList)
-    self.current = combine(self.current, " " .* args)
+function foreach!(self::Builder, args::CmdStringList)
+    self.current = cmdcombine(self.current, args)
 end
 
 """
@@ -102,8 +102,8 @@ function prepare!(self::Builder, implementation="substrate")
     self.outputs = []
     for (i, args) in enumerate(self.inputs)
         try
-            cmd = "$implementation-adapter $args"
-            push!(self.outputs, read(`sh -c $cmd`, String))
+            cmd = `$(implementation)-adapter $args`
+            push!(self.outputs, read(cmd, String))
         catch e
             error("Failed to cache reference output: $e")
         end
@@ -111,20 +111,21 @@ function prepare!(self::Builder, implementation="substrate")
 end
 
 "Run all commited test for specified adapter."
-function run(self::Builder, adapter::String)
+function run(self::Builder, adapter::CmdString)
     if length(self.inputs) != length(self.outputs)
         error("Missing or outdated cached reference outputs")
     end
 
     for (input, output) in zip(self.inputs, self.outputs)
+
+        cmd = cmdjoin(adapter, input)
+
+        if Config.verbose
+            println("┌ [COMMAND] ", cmd)
+        end
+
         try
-            cmd = "$adapter $input"
-
-            if Config.verbose
-                println("┌ [COMMAND] ", cmd)
-            end
-
-            result = read(`sh -c $cmd`, String)
+            result = read(cmd, String)
 
             if output in ["", "\n"]
                 # Empty outputs are used to disable comparison
@@ -148,7 +149,7 @@ function run(self::Builder, adapter::String)
                 if Config.verbose
                     println("└ [OUTPUTS] ", result)
                 end
-            end
+             end
         catch err
             @error "Adapter failed: $err"
             # Should be @test_broken, but does not fail CI

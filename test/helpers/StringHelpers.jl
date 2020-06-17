@@ -1,5 +1,6 @@
 module StringHelpers
 
+export CmdList, CmdString, CmdStringList, CmdStringTuple, cmdjoin, cmdcombine
 export StringList, stringify, combine, inquotes, commajoin, flatzip
 
 using Base.Iterators
@@ -15,23 +16,51 @@ ListList{T} = List{List{T}}
 # Cmd collections and helper functions
 
 Thin wrapper around Julia's Cmd handeling _idioms_ for lists of commands and
-collections of those.
+collections of those, as well as for the interaction with strings.
 """
 
 "Simple command list abstraction."
 CmdList = List{Cmd}
 
-"Ordered collection of command lists."
-CmdListList = List{CmdList}
+"A command or string"
+CmdString = Union{Cmd, String}
 
-"Helper to append each member of an other list to all entries of current list."
-function combine(self::CmdList, other::CmdList)::CmdList
+"A list of command and strings"
+CmdStringList = Union{List{Cmd}, List{String}, List{CmdString}}
+
+"Any tuple of commands or strings"
+CmdStringTuple = Tuple{CmdString,Vararg{CmdString}}
+
+
+"Join two commands or strings with a space to a command"
+function cmdjoin(self::CmdString, other::CmdString)::Cmd
+    return `$self $other`
+end
+
+"Combine all commands and strings in vector to single command, seperated by spaces."
+function cmdjoin(commands::CmdStringList)::Cmd
+    return reduce(cmdjoin, commands)
+end
+
+"Combine all commands and strings in tuple to single command, seperated by spaces."
+function cmdjoin(commands::CmdStringTuple)::Cmd
+    return reduce(cmdjoin, commands)
+end
+
+
+"Helper to append commands or strings to all entries of a list."
+function cmdcombine(self::CmdStringList, suffix::CmdString)::CmdList
+    return map((x)->cmdjoin(x, suffix), self)
+end
+
+"Helper to append each member of another list to all entries of current list."
+function cmdcombine(self::CmdStringList, other::CmdStringList)::CmdList
     # For the resulting vector to be in the user expected order the two
     # lists are multiplied in reversed order, while the string are joined
     # in the correct order.
     # Could be replace by transpose operation but Julia seems to be lacking
     # transpose(Matrix{String}), though onw could use `permutedims`.
-    return vec(map(join ∘ reverse, product(other, self)))
+    return vec(map(cmdjoin ∘ reverse, product(other, self)))
 end
 
 
@@ -87,6 +116,11 @@ end
 function commajoin(self::ListList{<:Any})::StringList
     self |> stringify |> commajoin
 end
+
+
+"""
+# General collection helper functions
+"""
 
 """
     flatzip(dataset_1, dataset_2, ...)

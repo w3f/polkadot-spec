@@ -1,7 +1,7 @@
 using .AdapterFixture
 
 
-const TEST_DATA = "\"" .* [
+const TEST_DATA = [
   "1",
   "22",
   "333",
@@ -22,13 +22,13 @@ const TEST_DATA = "\"" .* [
       wave your towel in emergencies  as  a  distress  signal,  and  of 
       course  dry  yourself  off  with it if it still seems to be clean 
       enough."""
-] .* "\""
+]
 
 
-tests = AdapterFixture.Builder("Scale Codec", "scale-codec")
+tests = AdapterFixture.Builder("Scale Codec", `scale-codec`)
 
 sub!(tests) do t
-  arg!(t, "encode --input")
+  arg!(t, `encode --input`)
   foreach!(t, TEST_DATA)
   commit!(t)
 end
