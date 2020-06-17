@@ -127,8 +127,16 @@ function run(self::Builder, adapter::String)
             result = read(`sh -c $cmd`, String)
 
             if output in ["", "\n"]
-                # Empty output is used to disable output comparison
+                # Empty outputs are used to disable comparison
                 @test true
+
+                if Config.verbose
+                    println("└ [IGNORED] ", result)
+
+                    if isempty(result)
+                        println()
+                    end
+                end
             elseif isempty(result)
                 # Empty test result are interpretted as missing adaption
                 @warn "Missing adaption: $cmd"
