@@ -121,10 +121,6 @@ function run_tester(self::Tester, implementation::String, duration::Number)
 
     cmd = `$exec $args`
 
-    # Run from test subfolder (required by gossamer to find genesis)
-    current_path = pwd()
-    cd("$(@__DIR__)/..")
-
     if Config.verbose
         println("┌ [COMMAND] ", cmd)
     end
@@ -158,9 +154,6 @@ function run_tester(self::Tester, implementation::String, duration::Number)
     if Config.verbose
         println("└ [OUTPUTS] ", result)
     end
-
-    # Reset path
-    cd(current_path)
 
     return result
 end
