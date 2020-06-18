@@ -160,15 +160,36 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-gossip-statement}
-  A \textbf{Gossip Statement} is a tuple of the following format:
+  A \textbf{Signed Statement Type} is a tuple of the following format:
   \[
-  (h_b, (Stmt, Sig_{SR25519}, id_{\mathbb{V}}))
+  (Stmt, id_{\mathbb{V}}, Sig_{SR25519})
   \]
   where $h_b$ is the block hash of the relay chain being referred to. $Stmt$ is a statement
   as defined in Definition X. \todo{@fabio: define Statement} $Sig_{SR25519}$ is the signature
   of the validator and $id_{\mathbb{V}}$ reffers to the index of validator according to the
   authority set. \todo{@fabio: define authority set}
+  \newline
+
+  $Stmt$ refers to a statement the validator wants to make about a certain candidate.
+  $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} can be one of the
+  following values:
+
+  \begin{equation}
+    Stmt =
+    \begin{cases}
+      0, & \text{New candidate being seconded, followed by \textbf{Candidate Receipt}} \\
+      1, & \text{Validity of a candidate, followed by 32-byte hash} \\
+      2, & \text{Invalidity of a candidate, followed by 32-byte hash}
+    \end{cases}
+  \end{equation}
 \end{definition}
+
+A statement about a new candidate being seconded by a validator. This is an implicit validity vote.
+\newline
+
+The main semantic difference between `Seconded` and `Valid` comes from the fact that every validator may
+second only one candidate; this places an upper bound on the total number of candidates whose validity
+needs to be checked. A validator who seconds more than 1 parachain candidate per relay head is subject
 
 \begin{algorithm}
   \caption[PrimaryValidationAnnouncement]{\sc PrimaryValidationAnnouncement}
@@ -217,7 +238,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-para-proposal}
-        {\b Parachain Block Proposal}, noted by $P^B_{rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $\mathcal{V}_\rho$.  %\syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}. We still include the proposal if a parachain validator attests to its invalidity, Any primary invalidity attestation or late primary validity attestation are handled just like secondary attestations.
+        {\b Parachain Block Proposal}, noted by $P^B_{\rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $\mathcal{V}_\rho$.  %\syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}. We still include the proposal if a parachain validator attests to its invalidity, Any primary invalidity attestation or late primary validity attestation are handled just like secondary attestations.
 
 \end{definition}
 
