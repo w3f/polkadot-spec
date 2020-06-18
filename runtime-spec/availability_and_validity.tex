@@ -113,16 +113,39 @@ PoV block as explained in Algorithm \ref{algo-primary-validation}.
 \newline
 
 The validator ensures the that every candidate considered for inclusion has at least
-one other validator backing it. Candidates without backing are discarded. Backed candidates 
+one other Validator backing it. Candidates without backing are discarded. Backed candidates 
 which later prove to be invalid qualify the backer for slashing.
+
+\subsection{Candidate Receipt}
+
+Collators vouch for a candidate by issuing a Candidate Receipt, as defined in
+Definition \todo{@fabio}. Validators verify the validity of the received Candidate Receipt
+from collators as described in Algorithm \ref{algo-primary-validation}.
+validators do the same with candidates received from other validators.
 \newline
 
-Validators first validate the candidate received from Collators as described in
-Algorithm \ref{algo-primary-validation}. It does the same thing with candidates
-received from other peers. It's note worthy that validators do not dictate which
-candidates are priorities for inclusion. Each Validator decides for itself - on whatever
-metric - which \textit{valid} candidate to include
+It's note worthy that validators do not dictate which candidates are prioritized
+for inclusion. Each validator decides for itself - on whatever metric - which
+\textit{valid} candidates to include.
 
+\begin{definition}
+  A \textbf{Candidate Receipt} is a tuple of the following format:
+  \[
+  (p_{id}, h_{B_{relayparent}}, Head_p, C_{id}, Sig^{Collator}_{SR25519}, h_{PoV}, Commit)
+  \]
+
+  where each value represents:
+  \begin{itemize}
+    \item $p_{id}$: the Parachain this candidate is for.
+    \item $h_{B_{relayparent}}$: the hash of the relay-chain block this candidate should be executed in the context of.
+    \item $Head_p$: the head-data as defined in Definition \todo{@fabio}.
+    \item $C_{id}$: the Collator relay-chain account ID as defined in Definition \todo{@fabio}.
+    \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash of the block data by the collator.
+    \item $h_{PoV}$: the hash of the PoV block
+    \item $Commit$: Commitments made as a result of validation, as described in \todo{@fabio}.
+  \end{itemize}
+
+\end{definition}
 
 \begin{algorithm}
   \caption[]{\sc PrimaryValidation}
@@ -178,7 +201,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \label{defn-gossip-statement}
   A \textbf{Signed Statement Type} is a tuple of the following format:
   \[
-  (Stmt, id_{\mathbb{V}}, Sig_{SR25519})
+  (Stmt, id_{\mathbb{V}}, Sig^{Valdator}_{SR25519})
   \]
   where $h_b$ is the block hash of the relay chain being referred to. $Stmt$ is a statement
   as defined in Definition X. \todo{@fabio: define Statement} $Sig_{SR25519}$ is the signature
