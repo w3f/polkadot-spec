@@ -142,6 +142,7 @@ jobs:
         restore-keys: go-mod-adapter-gossamer-
     - name: Build gossamer adapter
       run: go build
+    - run: cp ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@*/wasmer/libwasmer.so .
     - name: Upload gossamer adapter
       uses: actions/upload-artifact@v2
       with:
@@ -151,7 +152,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: gossamer-adapter
-        path: ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@*/wasmer/libwasmer.so
+        path: test/adapters/gossamer/libwasmer.so
 
 
   build-adapter-wasm:
@@ -298,13 +299,8 @@ jobs:
       with:
         name: gossamer-adapter
         path: test/adapters/gossamer
-    - working-directory: test/adapters
-      run: |
-        chmod +x substrate/substrate-adapter gossamer/gossamer-adapter
-        mv gossamer/go-ext-wasm@*/wasmer/libwasmer.so gossamer
+    - run: cd test/adapters && chmod +x substrate/substrate-adapter gossamer/gossamer-adapter
     - name: Run test fixture
-      env:
-        LD_LIBRARY_PATH: ${{ github.workspace }}/test/adapters/gossamer
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
 
@@ -354,12 +350,7 @@ jobs:
       with:
         name: gossamer-adapter
         path: test/adapters/gossamer
-    - working-directory: test/adapters/gossamer
-      run: |
-        chmod +x gossamer-adapter
-        mv go-ext-wasm@*/wasmer/libwasmer.so .
+    - run: chmod +x test/adapters/gossamer/gossamer-adapter
     - name: Run test fixture
-      env:
-        LD_LIBRARY_PATH: ${{ github.workspace }}/test/adapters/gossamer
       run: test/runtests.jl gossamer host-api-legacy
 
