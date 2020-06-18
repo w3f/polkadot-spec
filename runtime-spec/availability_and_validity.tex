@@ -33,12 +33,12 @@ All validity and invalidity attestations go onto the relay chain, see Section \r
 \section{Preliminaries}
 
 \begin{definition}
-In the remainder of this chapter we assume that $\rho$ is a Polkadot Parachain and $B$ is a block which has been produced by $\rho$ and is supposed to be approved to be $\rho$'s next block. By $R_{rho}$ we refer to runtime code of parachain $\rho$  as a WASM Blob.
+In the remainder of this chapter we assume that $\rho$ is a Polkadot Parachain and $B$ is a block which has been produced by $\rho$ and is supposed to be approved to be $\rho$'s next block. By $R_{\rho}$ we refer to runtime code of parachain $\rho$  as a WASM Blob.
 \end{definition}
 
 \begin{definition}
   \label{defn-witness-proof}
-  The {\b witness proof} of block $B$, denoted by {\bf $\pi_B$}, is the set of all the external data which has gathered while the $\rho$ runtime executes block $B$. The data suffices to re-execute $R_{rho}$ against $B$ and achieve the final state indicated in the $H(B)$.
+  The {\b witness proof} of block $B$, denoted by {\bf $\pi_B$}, is the set of all the external data which has gathered while the $\rho$ runtime executes block $B$. The data suffices to re-execute $R_{\rho}$ against $B$ and achieve the final state indicated in the $H(B)$.
 \end{definition}
 
 This witness proof consists of light client proofs of state data that are generally Merkle proofs for the parachain state trie.  We need this because validators do not have access to the parachain state, but only have the state root of it.
@@ -106,7 +106,23 @@ The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring a
 \section{Primary Validation}
 \label{sect-primary-validation}
 
-Primary validity checking refers to the process of parachain validators as defined in Definition \ref{defn-parachain-validator} validating a parachain's PoV block as explained in Algorithm \ref{algo-primary-validation}.
+\todo{@fabio: delete this paragraph}
+Primary validity checking refers to the process of parachain validators as
+defined in Definition \ref{defn-parachain-validator} validating a parachain's
+PoV block as explained in Algorithm \ref{algo-primary-validation}.
+\newline
+
+The validator ensures the that every candidate considered for inclusion has at least
+one other validator backing it. Candidates without backing are discarded. Backed candidates 
+which later prove to be invalid qualify the backer for slashing.
+\newline
+
+Validators first validate the candidate received from Collators as described in
+Algorithm \ref{algo-primary-validation}. It does the same thing with candidates
+received from other peers. It's note worthy that validators do not dictate which
+candidates are priorities for inclusion. Each Validator decides for itself - on whatever
+metric - which \textit{valid} candidate to include
+
 
 \begin{algorithm}
   \caption[]{\sc PrimaryValidation}
@@ -150,11 +166,11 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \label{defn-pov-block}
   A \textbf{Gossip PoV block} is a tuple of the following format:
   \[
-  (h_b, h_bc, (B, \pi_B))
+  (h_b, h_bc, B)
   \]
   where $h_b$ is the block hash of the relay chain being referred to and $h_bc$ is the
   hash of some candidate localized to the same Relay chain block, whose PoV block is $h_bc$.
-  $(B, \pi_B)$ is the PoV block itself.
+  $B$ is the PoV block itself.
   \todo{@fabio: adjust sentencing}
 \end{definition}
 
@@ -245,7 +261,7 @@ needs to be checked. A validator who seconds more than 1 parachain candidate per
 A block producer which observe a Parachain Block Proposal as defined in definition \ref{defn-para-proposal} \syed{may/should}{?} include the proposal in the block they are producing according to Algorithm \ref{algo-include-parachain-proposal} during block production procedure.
 
 \begin{algorithm}
-  \caption[]{\sc IncludeParachainProposal($P^B_{rho}$)}
+  \caption[]{\sc IncludeParachainProposal($P^B_{\rho}$)}
   \label{algo-include-parachain-proposal}
   \begin{algorithmic}[1]
     \Require{}
