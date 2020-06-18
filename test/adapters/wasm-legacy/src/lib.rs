@@ -88,7 +88,6 @@ extern "C" {
         lens_len: u32,
         result: *mut u8,
     );
-    fn ext_chain_id() -> u64;
     fn ext_twox_64(data: *const u8, len: u32, out: *mut u8);
     fn ext_twox_128(data: *const u8, len: u32, out: *mut u8);
     fn ext_twox_256(data: *const u8, len: u32, out: *mut u8);
@@ -133,9 +132,6 @@ extern "C" {
     fn ext_is_validator() -> u32;
     fn ext_submit_transaction(msg_data: *const u8, len: u32) -> u32;
     fn ext_network_state(written_out: *mut u32) -> *mut u8;
-    fn ext_timestamp() -> u64;
-    fn ext_sleep_until(deadline: u64);
-    fn ext_random_seed(seed_data: *mut u8);
     fn ext_local_storage_set(
         kind: u32,
         key: *const u8,
@@ -157,35 +153,6 @@ extern "C" {
         old_value_len: u32,
         new_value: *const u8,
         new_value_len: u32,
-    ) -> u32;
-    fn ext_http_request_start(
-        method: *const u8,
-        method_len: u32,
-        url: *const u8,
-        url_len: u32,
-        meta: *const u8,
-        meta_len: u32,
-    ) -> u32;
-    fn ext_http_request_add_header(
-        request_id: u32,
-        name: *const u8,
-        name_len: u32,
-        value: *const u8,
-        value_len: u32,
-    ) -> u32;
-    fn ext_http_request_write_body(
-        request_id: u32,
-        chunk: *const u8,
-        chunk_len: u32,
-        deadline: u64,
-    ) -> u32;
-    fn ext_http_response_wait(ids: *const u32, ids_len: u32, statuses: *mut u32, deadline: u64);
-    fn ext_http_response_headers(request_id: u32, written_out: *mut u32) -> *mut u8;
-    fn ext_http_response_read_body(
-        request_id: u32,
-        buffer: *mut u8,
-        buffer_len: u32,
-        deadline: u64,
     ) -> u32;
     fn ext_sandbox_instantiate(
         dispatch_thunk_idx: u32,
@@ -528,10 +495,6 @@ primitives::wasm_export_functions! {
         result
     }
 
-    fn rtm_ext_chain_id() -> u64 {
-        unsafe { ext_chain_id() }
-    }
-
     fn rtm_ext_ed25519_public_keys(
         id_data: Vec<u8>,
     ) -> Vec<u8> {
@@ -702,24 +665,6 @@ primitives::wasm_export_functions! {
         }
     }
 
-    fn rtm_ext_timestamp() -> u64 {
-        unsafe { ext_timestamp() }
-    }
-
-    fn rtm_ext_sleep_until(deadline: u64) {
-        unsafe {
-            ext_sleep_until(deadline);
-        }
-    }
-
-    fn rtm_ext_random_seed(seed_data: Vec<u8>) -> Vec<u8> {
-        let mut seed_data = seed_data;
-        unsafe {
-            ext_random_seed(seed_data.as_mut_ptr());
-        }
-        seed_data
-    }
-
     fn rtm_ext_local_storage_set(
         kind: u32,
         key: Vec<u8>,
@@ -774,109 +719,6 @@ primitives::wasm_export_functions! {
                 new_value.len() as u32,
             )
         }
-    }
-
-    fn rtm_ext_http_request_start(
-        method: Vec<u8>,
-        url: Vec<u8>,
-        meta: Vec<u8>,
-    ) -> u32 {
-        unsafe {
-            ext_http_request_start(
-                method.as_ptr(),
-                method.len() as u32,
-                url.as_ptr(),
-                url.len() as u32,
-                meta.as_ptr(),
-                meta.len() as u32,
-            )
-        }
-    }
-
-    fn rtm_ext_http_request_add_header(
-        request_id: u32,
-        name: Vec<u8>,
-        _name_len: u32,
-        value: Vec<u8>,
-        _value_len: u32,
-    ) -> u32 {
-        unsafe {
-            ext_http_request_add_header(
-                request_id,
-                name.as_ptr(),
-                name.len() as u32,
-                value.as_ptr(),
-                value.len() as u32,
-            )
-        }
-    }
-
-    fn rtm_ext_http_request_write_body(
-        request_id: u32,
-        chunk: Vec<u8>,
-        deadline: u64,
-    ) -> u32 {
-        unsafe {
-            ext_http_request_write_body(
-                request_id,
-                chunk.as_ptr(),
-                chunk.len() as u32,
-                deadline
-            )
-        }
-    }
-
-    fn rtm_ext_http_response_wait(
-        ids: u32,
-        ids_len: u32,
-        statuses: u32,
-        deadline: u64,
-    ) {
-        let mut statuses = statuses;
-        unsafe {
-            ext_http_response_wait(
-                &ids,
-                ids_len,
-                &mut statuses,
-                deadline
-            );
-        }
-    }
-
-    fn rtm_ext_http_response_headers(
-        request_id: u32,
-    ) -> Vec<u8> {
-        let mut written_out = 0;
-        unsafe {
-            let ptr = ext_http_response_headers(
-                request_id,
-                &mut written_out,
-            );
-
-            if ptr.is_null() {
-                vec![]
-            } else {
-                slice::from_raw_parts(ptr, written_out as usize).to_vec()
-            }
-        }
-    }
-
-    fn rtm_ext_http_response_read_body(
-        request_id: u32,
-        buffer: Vec<u8>,
-        _buffer_len: u32,
-        deadline: u64,
-    ) -> Vec<u8> {
-        let mut buffer = buffer;
-        unsafe {
-            ext_http_response_read_body(
-                request_id,
-                buffer.as_mut_ptr(),
-                buffer.len() as u32,
-                deadline,
-            );
-        }
-        buffer
     }
 }
 
