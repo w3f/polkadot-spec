@@ -2,7 +2,7 @@ module w3f/gossamer-adapter
 
 require (
 	github.com/ChainSafe/chaindb v0.0.1
-	github.com/ChainSafe/gossamer v0.1.1-0.20200615204208-759e66ed3a06
+	github.com/ChainSafe/gossamer v0.1.1-0.20200618150610-7440a8ffaa93
 	github.com/DataDog/zstd v1.4.5 // indirect
 	github.com/OneOfOne/xxhash v1.2.8 // indirect
 	github.com/btcsuite/btcutil v1.0.2 // indirect

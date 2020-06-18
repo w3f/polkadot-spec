@@ -26,15 +26,14 @@ import (
 	"path"
 	"github.com/ChainSafe/gossamer/lib/runtime"
 	"github.com/ChainSafe/gossamer/lib/keystore"
+	"github.com/ChainSafe/gossamer/lib/scale"
 	"github.com/ChainSafe/gossamer/lib/trie"
 	"github.com/ChainSafe/gossamer/dot/state"
 
 	database "github.com/ChainSafe/chaindb"
 )
 
-
-const RELATIVE_WASM_ADAPTER_PATH = "adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy/wasm_adapter_legacy.compact.wasm"
-
+var RELATIVE_WASM_ADAPTER_PATH = "../../adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy/wasm_adapter_legacy.compact.wasm"
 
 func GetRuntimePath() string {
 	dir, err := os.Getwd()
@@ -50,7 +49,7 @@ func GetTestStorage() *state.StorageState {
 	s, err := state.NewStorageState(db, trie.NewEmptyTrie())
 	if err != nil {
 		fmt.Println("Failed initialize storage: ", err)
-		os.Exit(1)
+		os.Exit(5)
 	}
 
 	return s
@@ -73,7 +72,7 @@ func ProcessHostApiCommand(args []string) {
 	// Verify that a required flags are provided
 	if (*functionTextPtr == "") || (*inputTextPtr == "") {
 		flag.PrintDefaults()
-		os.Exit(1)
+		os.Exit(2)
 	}
 
 	r, err := runtime.NewRuntimeFromFile(
@@ -84,15 +83,30 @@ func ProcessHostApiCommand(args []string) {
 
 	if err != nil {
 		fmt.Println("Failed initialize runtime: ", err)
-		os.Exit(1)
+		os.Exit(3)
 	}
 
-	output, err := r.Exec(*functionTextPtr, nil)
+	switch *functionTextPtr {
+	case "test_blake2_128":
+		test_blake2_128(r, *inputTextPtr)
+	default:
+		// do nothing
+	}
+
+	os.Exit(0)
+}
+
+func test_blake2_128(r *runtime.Runtime, input string) {
+	enc, err := scale.Encode([]byte(input))
+	if err != nil {
+		panic(err)
+	}
+
+	output, err := r.Exec("rtm_ext_blake2_128", enc)
 	if err != nil {
 		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		os.Exit(4)
 	}
 
 	println(output)
-	os.Exit(0)
 }
