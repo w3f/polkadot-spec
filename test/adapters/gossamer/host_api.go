@@ -34,7 +34,7 @@ import (
 	database "github.com/ChainSafe/chaindb"
 )
 
-var RELATIVE_WASM_ADAPTER_PATH = "../../adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy/wasm_adapter_legacy.compact.wasm"
+var RELATIVE_WASM_ADAPTER_PATH = "adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy/wasm_adapter_legacy.compact.wasm"
 
 func GetRuntimePath() string {
 	dir, err := os.Getwd()
