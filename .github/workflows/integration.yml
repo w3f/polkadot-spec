@@ -197,6 +197,11 @@ jobs:
     - name: Build and generate host tester genesis
       working-directory: test/testers/host
       run: make
+    - name: Upload host tester runtime
+      uses: actions/upload-artifact@v1
+      with:
+        name: host_tester_runtime.compact.wasm
+        path: test/testers/host/target/release/wbuild/host-tester-runtime/host_tester_runtime.compact.wasm
     - name: Upload host tester genesis file
       uses: actions/upload-artifact@v1
       with:
@@ -250,6 +255,11 @@ jobs:
     - name: Build and generate host tester legacy genesis
       working-directory: test/testers/host-legacy
       run: make
+    - name: Upload host tester legacy runtime
+      uses: actions/upload-artifact@v1
+      with:
+        name: host_tester_legacy_runtime.compact.wasm
+        path: test/testers/host-legacy/target/release/wbuild/host-tester-legacy-runtime/host_tester_legacy_runtime.compact.wasm
     - name: Upload host tester legacy genesis file
       uses: actions/upload-artifact@v1
       with:
