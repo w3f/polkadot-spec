@@ -20,15 +20,16 @@
 package main
 
 import (
-	"os"
-	"fmt"
 	"flag"
+	"fmt"
+	"os"
 	"path"
-	"github.com/ChainSafe/gossamer/lib/runtime"
+
+	"github.com/ChainSafe/gossamer/dot/state"
 	"github.com/ChainSafe/gossamer/lib/keystore"
+	"github.com/ChainSafe/gossamer/lib/runtime"
 	"github.com/ChainSafe/gossamer/lib/scale"
 	"github.com/ChainSafe/gossamer/lib/trie"
-	"github.com/ChainSafe/gossamer/dot/state"
 
 	database "github.com/ChainSafe/chaindb"
 )
@@ -49,7 +50,7 @@ func GetTestStorage() *state.StorageState {
 	s, err := state.NewStorageState(db, trie.NewEmptyTrie())
 	if err != nil {
 		fmt.Println("Failed initialize storage: ", err)
-		os.Exit(5)
+		os.Exit(1)
 	}
 
 	return s
@@ -57,9 +58,9 @@ func GetTestStorage() *state.StorageState {
 
 func ProcessHostApiCommand(args []string) {
 
-	// List of expected flags 
+	// List of expected flags
 	functionTextPtr := flag.String("function", "", "Function to call (required).")
-	inputTextPtr    := flag.String("input",    "", "Input to pass on call (required).")
+	inputTextPtr := flag.String("input", "", "Input to pass on call (required).")
 
 	// Parse provided argument list
 	flag.CommandLine.Parse(args)
@@ -72,7 +73,7 @@ func ProcessHostApiCommand(args []string) {
 	// Verify that a required flags are provided
 	if (*functionTextPtr == "") || (*inputTextPtr == "") {
 		flag.PrintDefaults()
-		os.Exit(2)
+		os.Exit(1)
 	}
 
 	r, err := runtime.NewRuntimeFromFile(
@@ -83,7 +84,7 @@ func ProcessHostApiCommand(args []string) {
 
 	if err != nil {
 		fmt.Println("Failed initialize runtime: ", err)
-		os.Exit(3)
+		os.Exit(1)
 	}
 
 	switch *functionTextPtr {
@@ -99,13 +100,14 @@ func ProcessHostApiCommand(args []string) {
 func test_blake2_128(r *runtime.Runtime, input string) {
 	enc, err := scale.Encode([]byte(input))
 	if err != nil {
-		panic(err)
+		fmt.Println("Encoding failed: ", err)
+		os.Exit(1)
 	}
 
 	output, err := r.Exec("rtm_ext_blake2_128", enc)
 	if err != nil {
 		fmt.Println("Execution failed: ", err)
-		os.Exit(4)
+		os.Exit(1)
 	}
 
 	println(output)

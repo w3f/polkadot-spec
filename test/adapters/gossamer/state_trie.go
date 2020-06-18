@@ -23,12 +23,13 @@ import (
 	"encoding/hex"
 	"flag"
 	"fmt"
-	"github.com/ChainSafe/gossamer/lib/common"
-	"github.com/ChainSafe/gossamer/lib/trie"
-	"github.com/go-yaml/yaml"
 	"io/ioutil"
 	"log"
 	"os"
+
+	"github.com/ChainSafe/gossamer/lib/common"
+	"github.com/ChainSafe/gossamer/lib/trie"
+	"github.com/go-yaml/yaml"
 )
 
 func ProcessStateTrieCommand(command_args []string) {
@@ -89,7 +90,7 @@ func ProcessStateTrieCommand(command_args []string) {
 
 		for i, key := range key_value_data.Keys {
 			var keyBytes []byte
-			
+
 			if *keysInHexPtr {
 				keyBytes, err = hex.DecodeString(key)
 				if err != nil {
@@ -98,7 +99,7 @@ func ProcessStateTrieCommand(command_args []string) {
 			} else {
 				keyBytes = []byte(key)
 			}
-			
+
 			key_list = append(key_list, keyBytes)
 			err = test_trie.Put(keyBytes, []byte(key_value_data.Values[i]))
 			if err != nil {
@@ -121,7 +122,7 @@ func ProcessStateTrieCommand(command_args []string) {
 				if err != nil {
 					log.Fatal(err)
 				}
-			
+
 				trieHash, err = test_trie.Hash()
 				if err != nil {
 					log.Fatal(err)
