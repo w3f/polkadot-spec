@@ -148,18 +148,26 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-pov-block}
-  A PoV block is a tuple of the following format:
-  \begin{center}
-    \begin{tabular}{p{20mm} p{90mm} p{30mm}}
-      \textbf{Name} & \textbf{Description} & \textbf{Type} \\
-      \hline
-      relay\_chain & The block hash of the relay chain being referred to. In context, this shoudl be a leaf. & 32-byte array \\
-      \hline
-      candidate\_hash & The hash of some candidate localized to the same relay-chain leaf, whose PoV block is this block & 32-byte array \\
-      \hline
-      pov\_block & The PoV block itself. & SCALE encoded \newline array\\
-    \end{tabular}
-  \end{center}
+  A \textbf{Gossip PoV block} is a tuple of the following format:
+  \[
+  (h_b, h_bc, (B, \pi_B))
+  \]
+  where $h_b$ is the block hash of the relay chain being referred to and $h_bc$ is the
+  hash of some candidate localized to the same Relay chain block, whose PoV block is $h_bc$.
+  $(B, \pi_B)$ is the PoV block itself.
+  \todo{@fabio: adjust sentencing}
+\end{definition}
+
+\begin{definition}
+  \label{defn-gossip-statement}
+  A \textbf{Gossip Statement} is a tuple of the following format:
+  \[
+  (h_b, (Stmt, Sig_{SR25519}, id_{\mathbb{V}}))
+  \]
+  where $h_b$ is the block hash of the relay chain being referred to. $Stmt$ is a statement
+  as defined in Definition X. \todo{@fabio: define Statement} $Sig_{SR25519}$ is the signature
+  of the validator and $id_{\mathbb{V}}$ reffers to the index of validator according to the
+  authority set. \todo{@fabio: define authority set}
 \end{definition}
 
 \begin{algorithm}
