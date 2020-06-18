@@ -146,6 +146,22 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
         {\b Candidate Receipt} is a proposal for $B$, TBS.
 \end{definition}
 
+\begin{definition}
+  \label{defn-pov-block}
+  A PoV block is a tuple of the following format:
+  \begin{center}
+    \begin{tabular}{p{20mm} p{90mm} p{30mm}}
+      \textbf{Name} & \textbf{Description} & \textbf{Type} \\
+      \hline
+      relay\_chain & The block hash of the relay chain being referred to. In context, this shoudl be a leaf. & 32-byte array \\
+      \hline
+      candidate\_hash & The hash of some candidate localized to the same relay-chain leaf, whose PoV block is this block & 32-byte array \\
+      \hline
+      pov\_block & The PoV block itself. & SCALE encoded \newline array\\
+    \end{tabular}
+  \end{center}
+\end{definition}
+
 \begin{algorithm}
   \caption[PrimaryValidationAnnouncement]{\sc PrimaryValidationAnnouncement}
   \label{algo-primary-validation-announcement}
