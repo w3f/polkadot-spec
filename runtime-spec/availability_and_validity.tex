@@ -45,8 +45,8 @@ This witness proof consists of light client proofs of state data that are genera
 
 \begin{definition}
   \label{defn-pov-block}
-  Accordingly we define the {\bf proof of validity block} or {\bf PoV} block in short, {\bf $\PoVB$},
-  to be the tuple:
+  Accordingly we define the {\bf proof of validity block} or {\bf PoV} block in
+  short, {\bf $\PoVB$}, to be the tuple:
   \[
   (B, \pi_B)
   \]
@@ -106,20 +106,13 @@ The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring a
 \section{Primary Validation}
 \label{sect-primary-validation}
 
-\todo{@fabio: delete this paragraph}
-Primary validity checking refers to the process of parachain validators as
-defined in Definition \ref{defn-parachain-validator} validating a parachain's
-PoV block as explained in Algorithm \ref{algo-primary-validation}.
-\newline
-
 The validator ensures the that every candidate considered for inclusion has at least
 one other Validator backing it. Candidates without backing are discarded. Backed candidates 
 which later prove to be invalid qualify the backer for slashing.
+\newline
 
-\subsection{Candidate Receipt}
-
-Collators vouch for a candidate by issuing a Candidate Receipt, as defined in
-Definition \todo{@fabio}. Validators verify the validity of the received Candidate Receipt
+Collators vouch for a candidate by issuing a Candidate Receipt as defined in
+Definition \ref{defn-candidate-receipt}. Validators verify the validity of the received Candidate Receipt
 from collators as described in Algorithm \ref{algo-primary-validation}.
 validators do the same with candidates received from other validators.
 \newline
@@ -127,25 +120,6 @@ validators do the same with candidates received from other validators.
 It's note worthy that validators do not dictate which candidates are prioritized
 for inclusion. Each validator decides for itself - on whatever metric - which
 \textit{valid} candidates to include.
-
-\begin{definition}
-  A \textbf{Candidate Receipt} is a tuple of the following format:
-  \[
-  (p_{id}, h_{B_{relayparent}}, Head_p, C_{id}, Sig^{Collator}_{SR25519}, h_{PoV}, Commit)
-  \]
-
-  where each value represents:
-  \begin{itemize}
-    \item $p_{id}$: the Parachain this candidate is for.
-    \item $h_{B_{relayparent}}$: the hash of the relay-chain block this candidate should be executed in the context of.
-    \item $Head_p$: the head-data as defined in Definition \todo{@fabio}.
-    \item $C_{id}$: the Collator relay-chain account ID as defined in Definition \todo{@fabio}.
-    \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash of the block data by the collator.
-    \item $h_{PoV}$: the hash of the PoV block
-    \item $Commit$: Commitments made as a result of validation, as described in \todo{@fabio}.
-  \end{itemize}
-
-\end{definition}
 
 \begin{algorithm}
   \caption[]{\sc PrimaryValidation}
@@ -182,19 +156,37 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-candidate-receipt}
-        {\b Candidate Receipt} is a proposal for $B$, TBS.
+  A \textbf{Candidate Receipt} is a tuple of the following format:
+  \[
+  (p_{id}, h_b({B_{^{relay}_{parent}}}), Head_p, C_{id}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), \mathbb{C})
+  \]
+
+  where each value represents:
+  \begin{itemize}
+    \item $p_{id}$: the Parachain this candidate is for.
+    \item $h_{B_{^{relay}_{parent}}}$: the hash of the relay-chain block this
+    candidate should be executed in the context of.
+    \item $Head_p$: the head-data as defined in Definition \todo{@fabio}.
+    \item $C_{id}$: the Collator relay-chain account ID as defined in Definition
+    \todo{@fabio}.
+    \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
+    of the block data by the collator.
+    \item $h_{PoV}$: the hash of the PoV block
+    \item $\mathbb{C}$: Commitments made as a result of validation, as described in
+    \todo{@fabio}.
+  \end{itemize}
+
 \end{definition}
 
 \begin{definition}
   \label{defn-pov-block}
   A \textbf{Gossip PoV block} is a tuple of the following format:
   \[
-  (h_b, h_bc, B)
+  (h_b(B_{^{relay}_{parent}}), h_b(candidate), PoV_B)
   \]
-  where $h_b$ is the block hash of the relay chain being referred to and $h_bc$ is the
-  hash of some candidate localized to the same Relay chain block, whose PoV block is $h_bc$.
-  $B$ is the PoV block itself.
-  \todo{@fabio: adjust sentencing}
+  where $h_b(B_{^{relay}_{parent}})$ is the block hash of the relay chain being
+  referred to and $h_b(candidate)$ is the hash of some candidate localized to
+  the same Relay chain block, whose PoV block is $h_b(candidate)$.
 \end{definition}
 
 \begin{definition}
@@ -216,19 +208,22 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \begin{equation}
     Stmt =
     \begin{cases}
-      0, & \text{New candidate being seconded, followed by \textbf{Candidate Receipt}} \\
-      1, & \text{Validity of a candidate, followed by 32-byte hash} \\
-      2, & \text{Invalidity of a candidate, followed by 32-byte hash}
+      0, & \text{Seconded, followed by Candidate Receipt (\ref{defn-candidate-receipt})} \\
+      1, & \text{Validity, followed by 32-byte hash} \\
+      2, & \text{Invalidity, followed by 32-byte hash}
     \end{cases}
   \end{equation}
 \end{definition}
 
-A statement about a new candidate being seconded by a validator. This is an implicit validity vote.
+A statement about a new candidate being seconded by a validator. This is an
+implicit validity vote.
 \newline
 
-The main semantic difference between `Seconded` and `Valid` comes from the fact that every validator may
-second only one candidate; this places an upper bound on the total number of candidates whose validity
-needs to be checked. A validator who seconds more than 1 parachain candidate per relay head is subject
+The main semantic difference between `Seconded` and `Valid` comes from the fact
+that every validator may second only one candidate; this places an upper bound
+on the total number of candidates whose validity needs to be checked. A
+validator who seconds more than one parachain candidate per relay head is
+subject to slashing.
 
 \begin{algorithm}
   \caption[PrimaryValidationAnnouncement]{\sc PrimaryValidationAnnouncement}
