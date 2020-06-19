@@ -106,29 +106,58 @@ The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring a
 \section{Primary Validation}
 \label{sect-primary-validation}
 
-The validator ensures the that every candidate considered for inclusion has at least
-one other Validator backing it. Candidates without backing are discarded. Backed candidates 
-which later prove to be invalid qualify the backer for slashing.
+Collators produce a candidate by issuing a Collation as defined in Definition
+\ref{defn-collation}. Validators verify the validity of the received Collation
+as described in Algorithm \ref{algo-primary-validation}.
+\todo{@fabio: confirm this} Validators back the validity respectively the
+invalidity by extending the Collation into a Candidate Receipt as defined in
+Definition \ref{defn-candidate-receipt} and communicate it by issuing a
+Statement as defined in Definition \ref{defn-gossip-statement}.
 \newline
 
-Collators vouch for a candidate by issuing a Candidate Receipt as defined in
-Definition \ref{defn-candidate-receipt}. Validators verify the validity of the received Candidate Receipt
-from collators as described in Algorithm \ref{algo-primary-validation}.
-validators do the same with candidates received from other validators.
+The validator ensures the that every candidate considered for inclusion has at least
+one other validator backing it. Candidates without backing are discarded. Backed candidates 
+which later prove to be invalid qualify the backer for slashing.
 \newline
 
 It's note worthy that validators do not dictate which candidates are prioritized
 for inclusion. Each validator decides for itself - on whatever metric - which
 \textit{valid} candidates to include.
 
+\begin{definition}
+  \label{defn-collation}
+  A \textbf{Collation} contains the PoV block and enough data in order for any
+  validator to verify its validity. A Collation is a tuple of the following
+  format:
+  \[
+  (id_p, h_b({B_{^{relay}_{parent}}}), id_{C}, Sig^{Collator}_{SR25519}, Head_p, h_b({PoV_B}))
+  \]
+
+  where each value represents:
+  \begin{itemize}
+    \item $id_p$: the Parachain Id this candidate is for.
+    \item $h_b({B_{^{relay}_{parent}}})$: the hash of the relay chain block that this
+    candidate should be executed in the context of.
+    \item $id_C$: the Collator relay-chain account ID as defined in Definition
+    \todo{@fabio}.
+    \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
+    of the block data by the collator.
+    \item $Head_p$: the head-data as defined in Definition
+    \todo{@fabio (collator module relevant?)}.
+    \item $h_b({PoV_B})$: the hash of the PoV block
+    \todo{@fabio}.
+  \end{itemize}
+
+\end{definition}
+
 \begin{algorithm}
   \caption[]{\sc PrimaryValidation}
   \label{algo-primary-validation}
   \begin{algorithmic}[1]
-    \Require{$B$, $\pi_B$, relay chain parent block $B_{relay parent}$}
+    \Require{$B$, $\pi_B$, relay chain parent block $B^{relay}_{parent}$}
     %%  \Ensure{}
 
-    \State Retrieve $v_B$ from the relay chain state at $B_{relay parent}$
+    \State Retrieve $v_B$ from the relay chain state at $B^{relay}_{parent}$
     \State Run Algorithm \ref{algo-validate-block} using $B, \pi_B, v_B$
   \end{algorithmic}
 \end{algorithm}
@@ -157,10 +186,12 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-candidate-receipt}
-  A \textbf{Candidate Receipt} is sent to peers in order to back a specific
-  candidate. It contains enough information for validators to verify the candidate
-  in order to create a statement backing it's validity, as defined in Definition
-  \ref{defn-gossip-statement}. This type is a tuple of the following format:
+  A \textbf{Candidate Receipt} is an extension of a Collation as defined in Definition \ref{defn-collation}
+  which includes additional information about the validator which verified the PoV block.
+  The Candidate Receipt is communicated to other validators by issuing a Statement as defined in Definition \ref{defn-gossip-statement}.
+  \newline
+
+  This type is a tuple of the following format:
   \[
   (id_p, h_b({B_{^{relay}_{parent}}}), Head_p, id_{C}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), \mathbb{C})
   \]
@@ -170,7 +201,8 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
     \item $id_p$: the Parachain Id this candidate is for.
     \item $h_b({B_{^{relay}_{parent}}})$: the hash of the relay chain block that this
     candidate should be executed in the context of.
-    \item $Head_p$: the head-data as defined in Definition \todo{@fabio}.
+    \item $Head_p$: the head-data as defined in Definition
+    \todo{@fabio (collator module relevant?)}.
     \item $id_C$: the Collator relay-chain account ID as defined in Definition
     \todo{@fabio}.
     \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
@@ -179,7 +211,6 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
     \item $\mathbb{C}$: Commitments made as a result of validation, as described in
     \todo{@fabio}.
   \end{itemize}
-
 \end{definition}
 
 \begin{definition}
@@ -195,7 +226,8 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-gossip-statement}
-  A \textbf{Signed Statement Type} is a tuple of the following format:
+  A \textbf{Statement} notifies other validators about the validity of a PoV block.
+  This type is a tuple of the following format:
   \[
   (Stmt, id_{\mathbb{V}}, Sig^{Valdator}_{SR25519})
   \]
@@ -216,14 +248,10 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \end{equation}
 \end{definition}
 
-A statement about a new candidate being seconded by a validator. This is an
-implicit validity vote.
-\newline
-
 The main semantic difference between `Seconded` and `Valid` comes from the fact
 that every validator may second only one candidate; this places an upper bound
 on the total number of candidates whose validity needs to be checked. A
-validator who seconds more than one parachain candidate per relay head is
+validator who seconds more than one parachain candidate per relay chain block is
 subject to slashing.
 
 \begin{algorithm}
