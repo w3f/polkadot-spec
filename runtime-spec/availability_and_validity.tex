@@ -142,12 +142,26 @@ for inclusion. Each validator decides for itself - on whatever metric - which
     \todo{@fabio}.
     \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
     of the block data by the collator.
-    \item $Head_p$: the head-data as defined in Definition
+    \item $Head_p$: the Head Data as defined in Definition \ref{defn-head-data}.
     \todo{@fabio (collator module relevant?)}.
     \item $h_b({PoV_B})$: the hash of the PoV block
     \todo{@fabio}.
   \end{itemize}
 
+\end{definition}
+
+\begin{definition}
+  \label{defn-head-data}
+  The \textbf{Head Data} of a parachain is a tuple of the following format:
+  \[
+    (H_i(B), H_p(B), H_r(B))
+  \]
+
+  Where $H_i(B)$ is the block number of parachain block $B$, $H_p(B)$ the 32-byte Blake2 hash of
+  the parent block header of $B$ and $H_r(B)$ represents the root of the post-execution
+  state.
+  \todo{@fabio: clarify if $H_p$ is the hash of the header or full block}
+  \todo{@fabio: maybe define those symbols at the start (already defined in the Host spec)?}
 \end{definition}
 
 \begin{algorithm}
@@ -201,7 +215,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
     \item $id_p$: the Parachain Id this candidate is for.
     \item $h_b({B_{^{relay}_{parent}}})$: the hash of the relay chain block that this
     candidate should be executed in the context of.
-    \item $Head_p$: the head-data as defined in Definition
+    \item $Head_p$: the Head Data as defined in Definition \ref{defn-head-data}.
     \todo{@fabio (collator module relevant?)}.
     \item $id_C$: the Collator relay-chain account ID as defined in Definition
     \todo{@fabio}.
