@@ -106,12 +106,12 @@ The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring a
 \section{Primary Validation}
 \label{sect-primary-validation}
 
-Collators produce a candidate  as defined in Definition \ref{defn-candidate}.
-Validators verify the validity of the received candidate as described in
+Collators produce candidates as defined in Definition \ref{defn-candidate}.
+Validators verify the validity of the received candidates as described in
 Algorithm \ref{algo-primary-validation}. \todo{@fabio: confirm this} Validators
-back the validity respectively the invalidity by extending the candidate into a
-candidate receipt as defined in Definition \ref{defn-candidate-receipt} and
-communicate it by issuing a statement as defined in Definition
+back the validity respectively the invalidity by extending the candidates into 
+candidate receipts as defined in Definition \ref{defn-candidate-receipt} and
+communicate it by issuing statements as defined in Definition
 \ref{defn-gossip-statement}.
 \newline
 
@@ -122,7 +122,7 @@ which later prove to be invalid qualify the backer for slashing.
 
 It's note worthy that validators do not dictate which candidates are prioritized
 for inclusion. Each validator decides for itself - on whatever metric - which
-\textit{valid} candidate to include.
+\textit{valid} candidates to include.
 
 \begin{definition}
   \label{defn-candidate}
@@ -186,7 +186,7 @@ for inclusion. Each validator decides for itself - on whatever metric - which
     \State check that the initial state root in $\pi_B$ is the one claimed in $v_B$
     \State Execute $R_\rho$ on $B$ using $\pi_B$ to simulate the state.
     \State If the execution fails, return fail.
-    \State Else return success, the new header data $h_B$ and the outgoing messages $M$.
+    \State Else return success, the new header data $h_B$ and the outgoing messages $M$. \todo{@fabio: same as Head Data?}
   \end{algorithmic}
 \end{algorithm}
 
