@@ -106,13 +106,13 @@ The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring a
 \section{Primary Validation}
 \label{sect-primary-validation}
 
-Collators produce a candidate by issuing a Collation as defined in Definition
-\ref{defn-collation}. Validators verify the validity of the received Collation
-as described in Algorithm \ref{algo-primary-validation}.
-\todo{@fabio: confirm this} Validators back the validity respectively the
-invalidity by extending the Collation into a Candidate Receipt as defined in
-Definition \ref{defn-candidate-receipt} and communicate it by issuing a
-Statement as defined in Definition \ref{defn-gossip-statement}.
+Collators produce a candidate  as defined in Definition \ref{defn-candidate}.
+Validators verify the validity of the received candidate as described in
+Algorithm \ref{algo-primary-validation}. \todo{@fabio: confirm this} Validators
+back the validity respectively the invalidity by extending the candidate into a
+candidate receipt as defined in Definition \ref{defn-candidate-receipt} and
+communicate it by issuing a statement as defined in Definition
+\ref{defn-gossip-statement}.
 \newline
 
 The validator ensures the that every candidate considered for inclusion has at least
@@ -122,12 +122,12 @@ which later prove to be invalid qualify the backer for slashing.
 
 It's note worthy that validators do not dictate which candidates are prioritized
 for inclusion. Each validator decides for itself - on whatever metric - which
-\textit{valid} candidates to include.
+\textit{valid} candidate to include.
 
 \begin{definition}
-  \label{defn-collation}
-  A \textbf{Collation} contains the PoV block and enough data in order for any
-  validator to verify its validity. A Collation is a tuple of the following
+  \label{defn-candidate}
+  A \textbf{candidate} contains the PoV block and enough data in order for any
+  validator to verify its validity. A candidate is a tuple of the following
   format:
   \[
   (id_p, h_b({B_{^{relay}_{parent}}}), id_{C}, Sig^{Collator}_{SR25519}, Head_p, h_b({PoV_B}))
@@ -200,9 +200,9 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-candidate-receipt}
-  A \textbf{Candidate Receipt} is an extension of a Collation as defined in Definition \ref{defn-collation}
+  A \textbf{candidate receipt} is an extension of a candidate as defined in Definition \ref{defn-candidate}
   which includes additional information about the validator which verified the PoV block.
-  The Candidate Receipt is communicated to other validators by issuing a Statement as defined in Definition \ref{defn-gossip-statement}.
+  The candidate receipt is communicated to other validators by issuing a statement as defined in Definition \ref{defn-gossip-statement}.
   \newline
 
   This type is a tuple of the following format:
@@ -240,7 +240,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
 
 \begin{definition}
   \label{defn-gossip-statement}
-  A \textbf{Statement} notifies other validators about the validity of a PoV block.
+  A \textbf{statement} notifies other validators about the validity of a PoV block.
   This type is a tuple of the following format:
   \[
   (Stmt, id_{\mathbb{V}}, Sig^{Valdator}_{SR25519})
@@ -255,7 +255,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \begin{equation}
     Stmt =
     \begin{cases}
-      0, & \text{Seconded, followed by Candidate Receipt (\ref{defn-candidate-receipt})} \\
+      0, & \text{Seconded, followed by candidate receipt (\ref{defn-candidate-receipt})} \\
       1, & \text{Validity, followed by 32-byte hash} \\
       2, & \text{Invalidity, followed by 32-byte hash}
     \end{cases}
