@@ -150,28 +150,32 @@ for inclusion. Each validator decides for itself - on whatever metric - which
 \subsection{Primary validity announcement}
 \label{sect-primary-validaty-announcement}
 Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
+\newline
 
 In case that validation has been successful, the announcement will either be in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt} to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}.
 However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
 
 \begin{definition}
   \label{defn-candidate-receipt}
-  A \textbf{Candidate Receipt} is a tuple of the following format:
+  A \textbf{Candidate Receipt} is sent to peers in order to back a specific
+  candidate. It contains enough information for validators to verify the candidate
+  in order to create a statement backing it's validity, as defined in Definition
+  \ref{defn-gossip-statement}. This type is a tuple of the following format:
   \[
-  (p_{id}, h_b({B_{^{relay}_{parent}}}), Head_p, C_{id}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), \mathbb{C})
+  (id_p, h_b({B_{^{relay}_{parent}}}), Head_p, id_{C}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), \mathbb{C})
   \]
 
   where each value represents:
   \begin{itemize}
-    \item $p_{id}$: the Parachain this candidate is for.
-    \item $h_{B_{^{relay}_{parent}}}$: the hash of the relay-chain block this
+    \item $id_p$: the Parachain Id this candidate is for.
+    \item $h_b({B_{^{relay}_{parent}}})$: the hash of the relay chain block that this
     candidate should be executed in the context of.
     \item $Head_p$: the head-data as defined in Definition \todo{@fabio}.
-    \item $C_{id}$: the Collator relay-chain account ID as defined in Definition
+    \item $id_C$: the Collator relay-chain account ID as defined in Definition
     \todo{@fabio}.
     \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
     of the block data by the collator.
-    \item $h_{PoV}$: the hash of the PoV block
+    \item $h_b({PoV_B})$: the hash of the PoV block
     \item $\mathbb{C}$: Commitments made as a result of validation, as described in
     \todo{@fabio}.
   \end{itemize}
@@ -195,15 +199,12 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
   \[
   (Stmt, id_{\mathbb{V}}, Sig^{Valdator}_{SR25519})
   \]
-  where $h_b$ is the block hash of the relay chain being referred to. $Stmt$ is a statement
-  as defined in Definition X. \todo{@fabio: define Statement} $Sig_{SR25519}$ is the signature
-  of the validator and $id_{\mathbb{V}}$ reffers to the index of validator according to the
-  authority set. \todo{@fabio: define authority set}
-  \newline
-
-  $Stmt$ refers to a statement the validator wants to make about a certain candidate.
-  $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} can be one of the
-  following values:
+  where $Sig^{Validator}_{SR25519}$ is the signature of the validator and
+  $id_{\mathbb{V}}$ refers to the index of validator according to the authority
+  set. \todo{@fabio: define authority set (specified in the Host spec)}. $Stmt$
+  refers to a statement the validator wants to make about a certain candidate.
+  $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} can be one
+  of the following values:
 
   \begin{equation}
     Stmt =
