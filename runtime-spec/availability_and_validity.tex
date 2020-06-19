@@ -267,6 +267,10 @@ that every validator may second only one candidate; this places an upper bound
 on the total number of candidates whose validity needs to be checked. A
 validator who seconds more than one parachain candidate per relay chain block is
 subject to slashing.
+\newline
+
+Validation does not directly create a seconded statement, but is rather upgraded
+by the validator when it choses to back a valid candidate.
 
 \begin{algorithm}
   \caption[PrimaryValidationAnnouncement]{\sc PrimaryValidationAnnouncement}
