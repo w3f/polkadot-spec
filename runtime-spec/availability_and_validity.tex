@@ -259,9 +259,54 @@ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
     \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
     of the block data by the collator.
     \item $h_b({PoV_B})$: the hash of the PoV block.
-    \item $\mathbb{C}$: Commitments made as a result of validation, as described in
+    \item $\mathbb{C}(PoV_B)$: Commitments made as a result of validation, as described in
     \todo{@fabio}.
   \end{itemize}
+\end{definition}
+
+\begin{definition}
+  \label{defn-candidate-commitments}
+  \textbf{Candidate commitments}, $\mathbb{C}(PoV_B)$, are results of the execution and validation of
+  parachain (or parathread) candidates whose produced values must be committed
+  to the relay chain. A candidate commitments is represented as a tuple of the following format:
+  \begin{alignat*}{2}
+    \mathbb{C}(PoV_B) &:= (fees, Enc_{SC}(Msg_0, .., Msg_n), H_r(B), \mathbb{U}(R_\rho)) \\
+    Msg &:= (\mathbb{P}, Enc_{SC}(b_0,.. b_n))
+  \end{alignat*}
+
+  where each value represents:
+  \begin{itemize}
+    \item $fees$: fees paid from the chain to the relay chain validators.
+    \item $Msg$: parachain messages to the relay chain. $\mathbb{P}$ identifies
+    the origin of the messages and is a varying data type as defined in
+    Definition \todo{@fabio} and can be one of the following values:
+    \begin{equation*}
+      \mathbb{P} =
+      \begin{cases}
+        0, & \text{Signed} \\
+        1, & \text{Parachain} \\
+        2, & \text{Root}
+      \end{cases}
+    \end{equation*}
+    \todo{@fabio: define the concept of "origin"}
+
+    The following SCALE encoded array, $Enc_{SC}(b_0,.. b_n)$, contains the
+    raw bytes of the message which varies in sizes.
+    \item $H_r(B)$: the root of a block's erase encoding Merkle tree
+    \todo{@fabio: use different symbol for this?}.
+    \item $\mathbb{U(R_\rho)}$: A varying datatype as defined in Definition
+    \todo{@fabio} and can contain one of the following values:
+    \begin{equation*}
+      \mathbb{P} =
+      \begin{cases}
+        0, & \text{None} \\
+        1, & \text{followed by: } R_\rho\\
+      \end{cases}
+    \end{equation*}
+    where $R_\rho$ is a SCALE encoded array containing the new runtime code for
+    the parachain. \todo{@fabio: clarify further}
+  \end{itemize}
+  
 \end{definition}
 
 \begin{definition}
