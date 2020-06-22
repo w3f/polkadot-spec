@@ -164,7 +164,7 @@ for inclusion. Each validator decides for itself - on whatever metric - which
   \todo{@fabio: maybe define those symbols at the start (already defined in the Host spec)?}
 \end{definition}
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc PrimaryValidation}
   \label{algo-primary-validation}
   \begin{algorithmic}[1]
@@ -176,7 +176,7 @@ for inclusion. Each validator decides for itself - on whatever metric - which
   \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc ValidateBlock}
   \label{algo-validate-block}
   \begin{algorithmic}[1]
@@ -276,28 +276,31 @@ subject to slashing.
 Validation does not directly create a seconded statement, but is rather upgraded
 by the validator when it choses to back a valid candidate.
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[PrimaryValidationAnnouncement]{\sc PrimaryValidationAnnouncement}
   \label{algo-primary-validation-announcement}
   \begin{algorithmic}[1]
     \Require{}
-    %%  \Ensure{}
-     \State TBS
+      \State \textbf{Init} $Stmt$;
+      \If {\textsc{ValidateBlock($PoV_B$)} is \textbf{valid}}
+        \State $Stmt \leftarrow$ \textsc{SetValid($B, \pi_B$)}
+      \Else
+        \State $Stmt \leftarrow$ \textsc{SetInvalid}
+      \EndIf
+      \State \textsc{Propagate}($Stmt$)
   \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
-  \caption[]{\sc SendPoVCandidateReceipt}
-  \label{algo-send-candidate-receipt}
-  \begin{algorithmic}[1]
-    \Require{}
-    %%  \Ensure{}
+\begin{itemize}
+  \item \textsc{ValidateBlock}: Validates $PoV_B$ as defined in Algorithm
+  \ref{algo-validate-block}.
+  \item \textsc{SetValid}: Creates a valid statement as defined in Definition
+  \ref{defn-gossip-statement}.
+  \item \textsc{SetInvalid}: Creates an invalid statement as defined in
+  Definition \ref{defn-gossip-statement}.
+\end{itemize}
 
-    \State TBS
-  \end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc ConfirmCandidateReceipt}
   \label{algo-endorse-candidate-receipt}
   \begin{algorithmic}[1]
@@ -326,12 +329,13 @@ by the validator when it choses to back a valid candidate.
   \item \textsc{SetValid}: Creates a valid statement as defined in Definition
   \ref{defn-gossip-statement}.
   \item \textsc{SetSeconded}: Creates a seconded statement as defined in
-  Definition \ref{defn-gossip-statement}.
+  Definition \ref{defn-gossip-statement}. Seconding a block should ensure that
+  the next call to \textsc{AlreadySeconded} reliably affirms this action.
   \item \textsc{SetInvalid}: Creates an invalid statement as defined in
   Definition \ref{defn-gossip-statement}.
 \end{itemize}
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc AnnouncePrimaryValidationFailure}
   \label{algo-announce-primary-validation-failure}
   \begin{algorithmic}[1]
@@ -352,7 +356,7 @@ by the validator when it choses to back a valid candidate.
 
 A block producer which observe a Parachain Block Proposal as defined in definition \ref{defn-para-proposal} \syed{may/should}{?} include the proposal in the block they are producing according to Algorithm \ref{algo-include-parachain-proposal} during block production procedure.
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc IncludeParachainProposal($P^B_{\rho}$)}
   \label{algo-include-parachain-proposal}
   \begin{algorithmic}[1]
@@ -368,7 +372,7 @@ A block producer which observe a Parachain Block Proposal as defined in definiti
 \label{sect-primary-validation-disagreemnt}
 \syed{Parachain}{verify} validators need to keep track of candidate receipts (see Definition \ref{defn-candidate-receipt}) and validation failure messages of their peers. In case, there is a disagreement among the parachain validators about $\blobB$, all parachain validators must invoke Algorithm \ref{algo-primary-validation-disagreemnt}
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc PrimaryValidationDisagreement}
   \label{algo-primary-validation-disagreemnt}
   \begin{algorithmic}[1]
@@ -388,7 +392,7 @@ When a $v \in \paraValidSet$ observes that a block containing parachain block ca
   The {\bf erasure encoder/decoder} {\bf $encode_{k,n}/decoder_{k,n}$ } is defined to be the Reed-Solomon encoder defined in \cite{??}.
 \end{definition}
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc Erasure-Encode($\blobB$, $n$}
   \label{algo-erasure-encode}
   \begin{algorithmic}[1]
@@ -450,7 +454,7 @@ These signatures go into a relay chain block.
 \subsection{Processing on-chain availability data}
 This section explains how the availability attestations stored on the relay chain, as described in Section ??, are processed as follows:
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{Relay chain's signature processing}
   \label{algo-singnature-processing}
   \begin{algorithmic}[1]
@@ -512,7 +516,7 @@ In addition to this assignment some extra validators are assigned to every PoV b
 
 Every validator needs to run Algorithm \ref{algo-checker-vrf} for every Parachain $\rho$ to determines assignments. \todo{Fix this. It is incorrect so far.}
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[VRF-for-Approval]{\sc VRF-for-Approval($B$, $z$, $s_k$)}
   \label{algo-checker-vrf}
   \begin{algorithmic}[1]
@@ -536,7 +540,7 @@ Where {\sc VRF} function is defined in \cite{polkadot-crypto-spec}.
 \label{sect-shot-assignment}
 Every validator $v$ takes the output of this VRF computed by \ref{algo-checker-vrf} mod the number of parachain blocks that we were decided to be available in this relay chain block according to Definition \ref{defn-available-parablock-proposal} and executed. This will give them the index of the PoV block they are assigned to and need to check. The procedure is formalised in \ref{algo-one-shot-assignment}.
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc OneShotAssignment}
   \label{algo-one-shot-assignment}
   \begin{algorithmic}[1]
@@ -563,7 +567,7 @@ For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the outp
 
 More fisherman reports can increase $\#VCheck$ and require new checks. We should carry on doing secondary checks for the entire fishing period if more are required. A validator need to keep track of which blocks have $\#VCheck$ smaller than the number of higher priority checks performed. A new report can make us check straight away, no matter the number of current checks, or mean that we need to put this block back into this set. If we later decide to prune some of this data, such as who has checked the block, then we'll need a new approach here.
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc OneShotAssignment}
   \label{algo-extra-assignment}
   \begin{algorithmic}[1]
@@ -579,7 +583,7 @@ More fisherman reports can increase $\#VCheck$ and require new checks. We should
 \subsection{Additional Checking in Case of Equivocation}\label{sect-equivocation-case}
 In the case of a relay chain equivocation, i.e. a validator produces two blocks with the same VRF, we do not want the secondary checkers for the second block to be predictable. To this end we use the block hash as well as the VRF as input for secondary checkers VRF. So each secondary checker is going to produce twice as many VRFs for each relay chain block that was equivocated. If either of these VRFs is small enough then the validator is assigned to perform a secondary check on the PoV block. The process is formalized in Algorithm \ref{algo-equivocation-assigment}
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc EquivocatedAssignment}
   \label{algo-equivocation-assigment}
   \begin{algorithmic}[1]
@@ -637,7 +641,7 @@ Assigned appoval checker $v$ must retrieve enough erasure pieces of the block th
 \label{}
 After receiving $2f+1$ of erasure pieces every assigned approval checker $v$ needs to recreate the entirety of the erasure code, hence every $v$ will run Algorithm \ref{algo-reconstruct-pov} to make sure that the code is complete and the subsequently recover the original $\blobB$.
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[Reconstruct-PoV-Erasure]{\sc Reconstruct-PoV-Erasure($S_{Er_B}$)}
   \label{algo-reconstruct-pov-erasure}
   \begin{algorithmic}[1]
@@ -672,7 +676,7 @@ We declare a the candidate receipt as invalid if one one the following three con
 The procedure is formalized in Algorithm
 
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc RevalidatingReconstructedPoV}
   \label{algo-revalidating-reconstructed-pov}
   \begin{algorithmic}[1]
@@ -694,7 +698,7 @@ If everything checks out correctly, we declare the block is valid. This means go
 \subsection{Process validity and invalidity messages}
 When a Black produced receive a Secondary approval attetstion message, it execute Algorithm \ref{algo-verify-approval-attestation} to verify the VRF and may need to judge when enough time has passed.
 
-\begin{algorithm}
+\begin{algorithm}[H]
   \caption[]{\sc VerifyApprovalAttestation}
   \label{algo-verify-approval-attestation}
   \begin{algorithmic}[1]
