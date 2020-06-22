@@ -144,7 +144,7 @@ for inclusion. Each validator decides for itself - on whatever metric - which
     of the block data by the collator.
     \item $Head_p$: the Head Data as defined in Definition \ref{defn-head-data}.
     \todo{@fabio (collator module relevant?)}.
-    \item $h_b({PoV_B})$: the hash of the PoV block
+    \item $h_b({PoV_B})$: the hash of the PoV block.
     \todo{@fabio}.
   \end{itemize}
 
@@ -195,8 +195,12 @@ for inclusion. Each validator decides for itself - on whatever metric - which
 Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
 \newline
 
-In case that validation has been successful, the announcement will either be in the form of sending the candidate receipt for block $B$ as defined in Definition \ref{defn-candidate-receipt} to the relay chain or confirm a candidate receipt sent in from another parachain validators for this block according to Algorithm \ref{algo-endorse-candidate-receipt}.
-However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
+In case that validation has been successful, the announcement will either be in
+the form of sending the candidate receipt for block $B$ as defined in Definition
+\ref{defn-candidate-receipt} to the relay chain or confirm a candidate receipt
+sent in from another parachain validators for this block according to Algorithm
+\ref{algo-endorse-candidate-receipt}. However, if the validation fails, $v$
+reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
 
 \begin{definition}
   \label{defn-candidate-receipt}
@@ -221,7 +225,7 @@ However, if the validation fails, $v$ reacts by executing Algorithm \ref{algo-an
     \todo{@fabio}.
     \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
     of the block data by the collator.
-    \item $h_b({PoV_B})$: the hash of the PoV block
+    \item $h_b({PoV_B})$: the hash of the PoV block.
     \item $\mathbb{C}$: Commitments made as a result of validation, as described in
     \todo{@fabio}.
   \end{itemize}
@@ -298,6 +302,7 @@ by the validator when it choses to back a valid candidate.
   \label{algo-endorse-candidate-receipt}
   \begin{algorithmic}[1]
     \Require{}
+      \State if algorithm \ref{algo-primary-validation} success
     %%  \Ensure{}
 
     \State TBS
