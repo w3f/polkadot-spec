@@ -256,14 +256,14 @@ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
   $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} can be one
   of the following values:
 
-  \begin{equation}
-    Stmt =
-    \begin{cases}
-      0, & \text{Seconded, followed by candidate receipt (\ref{defn-candidate-receipt})} \\
-      1, & \text{Validity, followed by 32-byte hash} \\
-      2, & \text{Invalidity, followed by 32-byte hash}
-    \end{cases}
-  \end{equation}
+\begin{equation}
+  Stmt =
+  \begin{cases}
+    0, & \text{Seconded, followed by candidate receipt (\ref{defn-candidate-receipt})} \\
+    1, & \text{Validity, followed by 32-byte hash} \\
+    2, & \text{Invalidity, followed by 32-byte hash}
+  \end{cases}
+\end{equation}
 \end{definition}
 
 The main semantic difference between `Seconded` and `Valid` comes from the fact
@@ -301,13 +301,35 @@ by the validator when it choses to back a valid candidate.
   \caption[]{\sc ConfirmCandidateReceipt}
   \label{algo-endorse-candidate-receipt}
   \begin{algorithmic}[1]
-    \Require{}
-      \State if algorithm \ref{algo-primary-validation} success
-    %%  \Ensure{}
-
-    \State TBS
+    \Require{$PoV_B$}
+      \State \textbf{Init} $Stmt$;
+      \If {\textsc{ValidateBlock($PoV_B$)} is \textbf{valid}}
+        \If {\textsc{AlreadySeconded($B^{relay}_{chain}$)}}
+          \State $Stmt \leftarrow$ \textsc{SetValid($B, \pi_B$)}
+        \Else
+          \State $Stmt \leftarrow$ \textsc{SetSeconded($B, \pi_B$)}
+        \EndIf
+      \Else
+        \State $Stmt \leftarrow$ \textsc{SetInvalid}
+      \EndIf
+      \State \textsc{Propagate}($Stmt$)
   \end{algorithmic}
 \end{algorithm}
+
+\begin{itemize}
+  \item \textsc{ValidateBlock}: Validates $PoV_B$ as defined in Algorithm
+  \ref{algo-validate-block}.
+  \item \textsc{AlreadySeconded}: Verifies if a block has already been seconded
+  for the given Relay Chain block. Validators that second more than one (1)
+  block per Relay chain block are subject to slashing. More information is
+  available in Definition \ref{defn-gossip-statement}.
+  \item \textsc{SetValid}: Creates a valid statement as defined in Definition
+  \ref{defn-gossip-statement}.
+  \item \textsc{SetSeconded}: Creates a seconded statement as defined in
+  Definition \ref{defn-gossip-statement}.
+  \item \textsc{SetInvalid}: Creates an invalid statement as defined in
+  Definition \ref{defn-gossip-statement}.
+\end{itemize}
 
 \begin{algorithm}
   \caption[]{\sc AnnouncePrimaryValidationFailure}
