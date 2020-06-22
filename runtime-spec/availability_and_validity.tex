@@ -53,10 +53,41 @@ This witness proof consists of light client proofs of state data that are genera
 \end{definition}
 
 \begin{definition}  \label{defn-extra-validation-data}
-  {\b The extra validation data} $v_B$  is an extra input to the validation function, i.e. additional data from the relay chain state that is needed.
+  The \textbf{extra validation data} $v_B$  is an extra input to the validation
+  function, i.e. additional data from the relay chain state that is needed.
+  It's a tuple of the following format:
+  \[
+  (Head_p, balance, Blake2b(R_\rho), R_u)
+  \]
+
+  Where $Head_p$ refers to the head data as defined in Definition
+  \ref{defn-head-data}, $balance$ refers to the balance of the parachain at the
+  moment of validation \todo{@fabio: clarify} and $Blake2b(R_\rho)$ is the
+  32-byte Blake2 hash of the Runtime code of the parachain. $R_u$ is a varying
+  data type as defined in Definition X \todo{@fabio} and can be one of the
+  following values:
+
+  \begin{equation}
+    R_u =
+    \begin{cases}
+      0, & \text{None} \\
+      1, & \text{followed by: } H_i(B_n)
+    \end{cases}
+  \end{equation}
+
+  $R_u$ implies whether the parachain is allowed to upgrade its validation code.
+  If it's of type $1$, it contains the number of the minimum relay chain height
+  at which the upgrade will be applied, assuming a upgrade is currently signaled
+  \todo{@fabio: where is this signaled?}
+  \newline
+
+  Parachain validators get this extra validation data from the current relay
+  chain state. Note that a PoV block can be paired with different extra
+  validation data depending on when and which relay chain fork it is included
+  in. Future validators would need this extra validation data because since the
+  candidate receipt was included on the relay chain the needed relay chain state
+  may have changed.
 \end{definition}
-This extra validation data includes things like the previous parachain block header, likely including the previous state root.
-Parachain validators get this extra validation data from the current relay chain state. Note that a PoV block can be paired with different extra validation data depending on when and which relay chain fork it is included in. Future validators would need this extra validation data because since the candidate receipt was included on the relay chain the needed relay chain state may have changed.
 
 \begin{definition}
   \label{defn-blob}
@@ -239,7 +270,7 @@ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
   \]
   where $h_b(B_{^{relay}_{parent}})$ is the block hash of the relay chain being
   referred to and $h_b(candidate)$ is the hash of some candidate localized to
-  the same Relay chain block, whose PoV block is $h_b(candidate)$.
+  the same Relay chain block, whose PoV block is $_b(candidate)$.
 \end{definition}
 
 \begin{definition}
@@ -253,34 +284,35 @@ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
   $id_{\mathbb{V}}$ refers to the index of validator according to the authority
   set. \todo{@fabio: define authority set (specified in the Host spec)}. $Stmt$
   refers to a statement the validator wants to make about a certain candidate.
-  $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} can be one
+  $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} and can be one
   of the following values:
 
 \begin{equation}
   Stmt =
   \begin{cases}
     0, & \text{Seconded, followed by candidate receipt (\ref{defn-candidate-receipt})} \\
-    1, & \text{Validity, followed by 32-byte hash} \\
-    2, & \text{Invalidity, followed by 32-byte hash}
+    1, & \text{Validity, followed by 32-byte Blake hash of candidate} \\
+    2, & \text{Invalidity, followed by 32-byte Blake hash of candidate}
   \end{cases}
 \end{equation}
 \end{definition}
 
 The main semantic difference between `Seconded` and `Valid` comes from the fact
-that every validator may second only one candidate; this places an upper bound
-on the total number of candidates whose validity needs to be checked. A
-validator who seconds more than one parachain candidate per relay chain block is
-subject to slashing.
+that every validator may second only one candidate per relay chain block; this
+places an upper bound on the total number of candidates whose validity needs to
+be checked. A validator who seconds more than one parachain candidate per relay
+chain block is subject to slashing.
 \newline
 
 Validation does not directly create a seconded statement, but is rather upgraded
-by the validator when it choses to back a valid candidate.
+by the validator when it choses to back a valid candidate as described in
+Algorithm \ref{algo-primary-validation-announcement}.
 
 \begin{algorithm}[H]
   \caption[PrimaryValidationAnnouncement]{\sc PrimaryValidationAnnouncement}
   \label{algo-primary-validation-announcement}
   \begin{algorithmic}[1]
-    \Require{}
+    \Require{$PoV_B$}
       \State \textbf{Init} $Stmt$;
       \If {\textsc{ValidateBlock($PoV_B$)} is \textbf{valid}}
         \State $Stmt \leftarrow$ \textsc{SetValid($B, \pi_B$)}
