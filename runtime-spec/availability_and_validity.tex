@@ -257,7 +257,27 @@ verify a PoV block, it can request the chunk for one of its peers.
   \begin{itemize}
     \item $Enc_{SC}(b_0, .. b_n)$: the erasure-encoded chunk of data belonging
     to the candidate block.
-    \item $\mathbb{I}$: 
+
+    First, the extra validation data, $v_B$ is split into "shards", based on the
+    amount of validators the the validator set. There are two types of shards;
+    data shards and parity shards.
+    \begin{alignat*}{2}
+      f &= (|\paraValidSet| - 1) \div 3 \\
+      Shard_{data} &= f + 1 \\
+      Shard_{parity} &= |\paraValidSet| - f - 1
+    \end{alignat*}
+
+    Additionally:
+    \begin{alignat*}{2}
+      r &= \frac{|Enc_{SC}(v_B)|}{Shard_{data}} +
+      \begin{cases}
+        0 & if |\paraValidSet| \bmod{Shard_{data}} = 0 \\
+        1 & if |\paraValidSet| \bmod{Shard_{data}} \neq 0 \\
+      \end{cases} \\
+      Shard_{len} &= r + r \bmod{2}
+    \end{alignat*}
+
+    \item $\mathbb{I}$: the index of this erasure-encoded chunk of data.
     \item $\mathbb{P}$: is of type $Enc_{SC}(Enc_{SC}(b_0, .. b_n))$ ...
   \end{itemize}
 \end{definition}
