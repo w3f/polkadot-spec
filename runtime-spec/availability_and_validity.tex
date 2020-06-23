@@ -11,10 +11,10 @@ assigned to the parachain which has produced the PoV block as described in
 Section \ref{sect-primary-validation}. Once parachain validators have validated
 a parachain's PoV block successfully, they have to announce that according to
 the procedure described in Section \ref{sect-primary-validaty-announcement}
-where they generate a candidate receipt that includes the parachain header with
-the new state root and the XCMP message root. This candidate receipt and
-attestations, which carries signatures from other parachain validators is put on
-the relay chain.
+where they generate a statement that includes the parachain header with the new
+state root and the XCMP message root. This candidate receipt and attestations,
+which carries signatures from other parachain validators is put on the relay
+chain.
 \newline
 
 As soon as the proposal of a PoV block is on-chain, the parachain validators
@@ -132,7 +132,7 @@ root of it.
 \begin{definition}
   \label{defn-blob}
   Accordingly we define the {\bf erasure coding blob} or {\bf blob} in short,
-  {\bf $\blobB$} to be the tuple:
+  {\bf $\bar{B}$} to be the tuple:
   \[
   (B, \pi_B, v_B)
   \]
@@ -183,7 +183,7 @@ availability and validity in Polkadot \todo{complete the Diagram}.
 \syed{Parachain}{verify} validators need to keep track of candidate receipts
 (see Definition \ref{defn-candidate-receipt}) and validation failure messages of
 their peers. In case, there is a disagreement among the parachain validators
-about $\blobB$, all parachain validators must invoke Algorithm
+about $\bar{B}$, all parachain validators must invoke Algorithm
 \ref{algo-primary-validation-disagreemnt}
 
 \begin{algorithm}[H]
@@ -199,9 +199,17 @@ about $\blobB$, all parachain validators must invoke Algorithm
 
 \section{Availability}
 
+\todo{@fabio: remove this paragraph}
 When a $v \in \paraValidSet$ observes that a block containing parachain block
 candidate receipt is included in a relay chain block $RB_p$ then it must invoke
 Algorithm \ref{algo-erasure-encode}.
+\newline
+
+Backed candidates must be widely available for the entire, elected validators
+set without requiring each of those to maintain a full copy. PoV blocks get
+broken up into erasure-encoded chunks and each validators keep track of how
+those chunks are distributed among the validator set. When a validator has to
+verify a PoV block, it can request the chunk for one of its peers.
 
 \begin{definition}
   \label{defn-erasure-encoder-decoder}
@@ -210,11 +218,11 @@ Algorithm \ref{algo-erasure-encode}.
 \end{definition}
 
 \begin{algorithm}[H]
-  \caption[]{\sc Erasure-Encode($\blobB$, $n$}
+  \caption[]{\sc Erasure-Encode($\bar{B}$, $n$}
   \label{algo-erasure-encode}
   \begin{algorithmic}[1]
   \Require
-    $\blobB$: blob defined in Definition \ref{defn-blob}
+    $\bar{B}$: blob defined in Definition \ref{defn-blob}
 
     \State TBS
   \end{algorithmic}
@@ -222,7 +230,7 @@ Algorithm \ref{algo-erasure-encode}.
 
 \begin{definition}
   \label{defn-erasure-coded-pieces}
-  The {\bf set of erasure encode pieces} of $\blobB$, denoted by:
+  The {\bf set of erasure encode pieces} of $\bar{B}$, denoted by:
   \[
    Er_B := {(e_1, m_1),...,(e_n,m_n)}
    \]
@@ -230,19 +238,19 @@ Algorithm \ref{algo-erasure-encode}.
 \end{definition}
 
 \section{Distribution of Pieces}\label{sect-distribute-pieces} Following the
-computation of $Er_B$, $v$ must construct the $\blobB$ Availability message
+computation of $Er_B$, $v$ must construct the $\bar{B}$ Availability message
 defined in Definition \ref{defn-pov-erasure-piece-message}. And distribute them
 to target validators designated by the Availability Networking Specification
 \cite{??}.
 
 \begin{definition}
   \label{defn-pov-erasure-piece-message}
-        {\b PoV erasure piece message} $M_{PoV_{\blobB}}(i)$ is TBS
+        {\b PoV erasure piece message} $M_{PoV_{\bar{B}}}(i)$ is TBS
 \end{definition}
 
 \section{Announcing Availability}\label{sect-voting-on-availability}
 
-When validator $v$ receives its designated piece for \blobB it needs to
+When validator $v$ receives its designated piece for $\bar{B}$ it needs to
 broadcast Availability vote message as defined in
 Definition\ref{defn-availability-vote-message}
 \begin{definition}
@@ -251,7 +259,7 @@ Definition\ref{defn-availability-vote-message}
 \end{definition}
 
 Some parachains have blocks that we need to vote on the availability of, that is
-decided by > 2/3 of validators voting for availability. \syed{For 100 parachain
+decided by $> 2/3$ of validators voting for availability. \syed{For 100 parachain
 and 1000 validators this will involve putting 100k items of data and processing
 them on-chain for every relay chain block, hence we want to use bit operations
 that will be very efficient. We describe next what operations the relay chain
@@ -539,23 +547,23 @@ tree.
 
 %%To that aim the %We never consider substructure of $B$ to be meaningful, so
 %$V$ must {\em retrieve} the full {\em candidate proof-of-validity blob}
-%$\blobB$ before checking.  Now $V$ knows which which nodes have their
+%$\bar{B}$ before checking.  Now $V$ knows which which nodes have their
 %individual pieces, thanks to their availability announcements.  It thus follows
-%from our 2/3rd honest assumption that $V$ could always reconstruct $\blobB$ by
+%from our 2/3rd honest assumption that $V$ could always reconstruct $\bar{B}$ by
 %obtaining enough pieces $\pieces_B$ from nodes known to posses them.
 
 %We note however that $V$ also knows that all pieces are known by the
 %preliminary backing validity checkers aka parachain validators who approved
-%$\blobB$, as well as approval checkers who already approved $\blobB$.  So $V$
-%could first contact some node that possesses all of $\blobB$, and only then
+%$\bar{B}$, as well as approval checkers who already approved $\bar{B}$.  So $V$
+%could first contact some node that possesses all of $\bar{B}$, and only then
 %begin a full reconstruction process.
 
 %In both cases, $V$ must recompute $\pieces_B$ to verify $\receipt_{B,\cdot}$.
 %We therefore cannot see much computational difference between $V$
-%reconstructing $\pieces_B$ from arbitrary pieces or from $\blobB$ itself.  It
-%remains plausible $V$ avoids some networking overhead by asking for $\blobB$
+%reconstructing $\pieces_B$ from arbitrary pieces or from $\bar{B}$ itself.  It
+%remains plausible $V$ avoids some networking overhead by asking for $\bar{B}$
 %though.  We think a first implementation could reasonably target reconstructing
-%$\pieces_B$ from arbitrary pieces, while leaving requests for the full $\blobB$
+%$\pieces_B$ from arbitrary pieces, while leaving requests for the full $\bar{B}$
 %to future optimisations.
 
 %Ideally $V$ might retrieve the pieces in $\pieces_B$ only using its existing
@@ -579,7 +587,7 @@ tree.
 After receiving $2f+1$ of erasure pieces every assigned approval checker $v$
 needs to recreate the entirety of the erasure code, hence every $v$ will run
 Algorithm \ref{algo-reconstruct-pov} to make sure that the code is complete and
-the subsequently recover the original $\blobB$.
+the subsequently recover the original $\bar{B}$.
 
 \begin{algorithm}[H]
   \caption[Reconstruct-PoV-Erasure]{\sc Reconstruct-PoV-Erasure($S_{Er_B}$)}
@@ -589,23 +597,23 @@ the subsequently recover the original $\blobB$.
     $S_{Er_B} := {(e_{j_1}, m_{j_1}),\cdot,(e_{j_k}, m_{j_k}))}$ such that $k > 2f$
 
   %%  \Ensure{}
-    \State $\blobB \rightarrow$ {\sc Erasure-Decoder}(${e_{j_1},\cdots, e_{j_k}}$)
+    \State $\bar{B} \rightarrow$ {\sc Erasure-Decoder}(${e_{j_1},\cdots, e_{j_k}}$)
     \If {{\sc Erasure-Decoder} {\bf failed}}
         \State {\sc Announce-Failure}
         \State \Return
     \EndIf
-    \State $Er_B \rightarrow$ {\sc Erasure-Encoder}($\blobB$)
+    \State $Er_B \rightarrow$ {\sc Erasure-Encoder}($\bar{B}$)
     \If {{\sc Verify-Merkle-Proof}($S_{Er_B}$, $Er_B$) {\bf failed}}
       \State {\sc Announce-Failure}
       \State \Return
     \EndIf
-    \State \Return $\blobB$
+    \State \Return $\bar{B}$
   \end{algorithmic}
 \end{algorithm}
 
 \subsection{Verification}
 %%Verify
-%%\If {{\sc Execute}($R_{\rho}$, $\blobB$) {\bf failed}}
+%%\If {{\sc Execute}($R_{\rho}$, $\bar{B}$) {\bf failed}}
 %%      \State {\sc Announce-Failure}
 %%      \State \Return
 %%    \EndIf
