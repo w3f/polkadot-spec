@@ -11,6 +11,7 @@ function print_usage()
     println("OPTIONS:")
     println("  --help       Display this message")
     println("  --verbose    Print debug information")
+    println("  --docker     Use docker containers instead of local builds.")
     println()
     println("FILTERS:")
     println("A filter can be used to run specific implementations or fixtures.")
@@ -25,8 +26,8 @@ end
 
 
 # Collect filters
-implementations = []
-fixtures = []
+implementations = Vector{String}()
+fixtures = Vector{String}()
 
 # Process all command line arguments
 for arg in ARGS
@@ -34,8 +35,14 @@ for arg in ARGS
         print_usage()
         exit()
     end
+
     if arg == "--verbose"
         Config.set_verbose(true)
+        continue
+    end
+
+    if arg == "--docker"
+        Config.set_docker(true)
         continue
     end
 
@@ -66,7 +73,8 @@ end
 
 # Display config
 println("CONFIGURATION:")
-println("Loglevel:        " * (Config.verbose ? "verbose" : "info"))
+println("Loglevel:        " * (Config.verbose ? "verbose"   : "info"))
+println("Binaries:        " * (Config.docker  ? "container" : "local"))
 println("Implementations: " * join(Config.implementations, ", "))
 println("Fixtures:        " * join(Config.fixtures, ", "))
 println()
