@@ -96,7 +96,7 @@ function run_tester(self::Tester, implementation::String, duration::Number)
         args = `--alice --chain $genesis -d $datadir`
         ENV["RUST_LOG"] = "runtime=debug"
     elseif implementation == "kagome"
-        exec = `kagome_full`
+        exec = `kagome_validating`
         args = `--genesis $genesis --keystore $keystore --leveldb $datadir`
     elseif implementation == "gossamer"
         exec = `gossamer`

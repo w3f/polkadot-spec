@@ -83,13 +83,25 @@ println()
 ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate/target/release"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate/target/debug"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate"
+
 ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate-legacy/target/release"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate-legacy/target/debug"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate-legacy"
+
 ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome/build"
 ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome"
+
 ENV["PATH"] *= ":$(@__DIR__)/adapters/gossamer"
-ENV["PATH"] *= ":$(@__DIR__)"
+
+# Provide fallback path for locally or ci build hosts
+ENV["PATH"] *= ":$(@__DIR__)/hosts/substrate/target/release"
+ENV["PATH"] *= ":$(@__DIR__)/hosts/substrate/target/debug"
+
+ENV["PATH"] *= ":$(@__DIR__)/hosts/kagome/build/node/kagome_validating"
+
+ENV["PATH"] *= ":$(@__DIR__)/hosts/gossamer"
+
+ENV["PATH"] *= ":$(@__DIR__)/hosts"
 
 # Run from this subfolder (to allow relative paths in suite)
 previous_path = pwd()

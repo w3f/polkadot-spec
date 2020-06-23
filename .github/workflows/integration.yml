@@ -19,20 +19,19 @@ on:
     - '!test/README.md'
 
 jobs:
-  build-substrate:
-    name: "[build] substrate"
+  build-host-substrate:
+    name: "[build] substrate-host"
     runs-on: ubuntu-18.04
     steps:
-    - name: Checkout substrate
+    - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        repository: paritytech/polkadot
-        ref: v0.7.33
+        submodules: true
     - name: Setup rust toolchain
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2020-04-15
+        toolchain: nightly-2020-06-15
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
@@ -40,78 +39,84 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: cargo-registry-implementation-substrate-${{ hashFiles('Cargo.lock') }}
-        restore-keys: cargo-registry-implementation-substrate-
+        key: cargo-registry-host-substrate-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
+        restore-keys: cargo-registry-host-substrate-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
-        key: cargo-index-implementation-substrate-${{ hashFiles('Cargo.lock') }}
-        restore-keys: cargo-index-implementation-substrate-
+        key: cargo-index-host-substrate-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
+        restore-keys: cargo-index-host-substrate-
     - name: Cache cargo build output
       uses: actions/cache@v1
       with:
-        path: target
-        key: cargo-build-implementation-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('Cargo.lock') }}
-        restore-keys: cargo-build-implementation-substrate-${{ steps.rustup.outputs.rustc_hash }}-
+        path: test/hosts/substrate/target
+        key: cargo-build-host-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
+        restore-keys: cargo-build-host-substrate-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build substrate
-      run: cargo build --release
+      run: make -C test substrate-host
     - name: Upload substrate
       uses: actions/upload-artifact@v1
       with:
-        name: substrate
-        path: target/release/polkadot
+        name: substrate-host
+        path: test/hosts/substrate/target/release/polkadot
 
-  build-kagome:
-    name: "[build] kagome"
+  build-host-kagome:
+    name: "[build] kagome-host"
     runs-on: ubuntu-18.04
     steps:
-    - name: Checkout kagome
+    - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        repository: soramitsu/kagome
-        ref: 988bc6d93314ca58b320a9d83dcbc4cd3b87b7bb
+        submodules: true
     - name: Cache hunter outputs
       uses: actions/cache@v1
       with:
         path: ~/.hunter
-        key: hunter-implementation-kagome-${{ hashFiles('CMakeLists.txt') }}
-        restore-keys: hunter-implementation-kagome-
+        key: hunter-host-kagome-${{ hashFiles('test/hosts/kagome/CMakeLists.txt') }}
+        restore-keys: hunter-host-kagome-
     - name: Build kagome
       env:
         CC: gcc-9
         CXX: g++-9
-      run: |
-        cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
-        cmake --build build
-    - name: Upload kagome
+      run: make -C test kagome-host
+    - name: Upload kagome_validating
       uses: actions/upload-artifact@v1
       with:
-        name: kagome
-        path: build/node/kagome_full/kagome_full
+        name: kagome-host
+        path: test/hosts/kagome/build/node/kagome_validating/kagome_validating
+    - name: Upload kagome_full_syncing
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-host
+        path: test/hosts/kagome/build/node/kagome_full_syncing/kagome_full_syncing
+    - name: Upload kagome_block_producing
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-host
+        path: test/hosts/kagome/build/node/kagome_block_producing/kagome_block_producing
 
-  build-gossamer:
-    name: "[build] gossamer"
+  build-host-gossamer:
+    name: "[build] gossamer-host"
     runs-on: ubuntu-18.04
     steps:
-    - name: Checkout gossamer
+    - name: Checkout repository
       uses: actions/checkout@v2
       with:
-        repository: ChainSafe/gossamer
-        ref: b929e565c965133e3eb9b66bf31012401f4a78af
+        submodules: true
     - name: Cache go modules
       uses: actions/cache@v1
       with:
         path: ~/go/pkg/mod
-        key: go-mod-implementation-gossamer-${{ hashFiles('go.sum') }}
-        restore-keys: go-mod-implementation-gossamer-
+        key: go-mod-host-gossamer-${{ hashFiles('test/hosts/gossamer/go.sum') }}
+        restore-keys: go-mod-host-gossamer-
     - name: Build gossamer
-      run: make gossamer
+      run: make -C test gossamer-host
     - name: Upload gossamer
       uses: actions/upload-artifact@v1
       with:
-        name: gossamer
-        path: bin/gossamer
+        name: gossamer-host
+        path: test/hosts/gossamer/gossamer
 
 
   build-adapter-substrate:
@@ -124,7 +129,7 @@ jobs:
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2020-04-15
+        toolchain: nightly-2020-06-15
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
@@ -147,8 +152,7 @@ jobs:
         key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
         restore-keys: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build substrate adapters
-      working-directory: test/adapters/substrate
-      run: make
+      run: make -C test substrate-adapter
     - name: Upload substrate adapter
       uses: actions/upload-artifact@v1
       with:
@@ -166,7 +170,7 @@ jobs:
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2020-04-15
+        toolchain: nightly-2020-06-15
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
@@ -195,8 +199,7 @@ jobs:
         key: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-keys: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester genesis
-      working-directory: test/testers/host
-      run: make
+      run: make -C test host-tester
     - name: Upload host tester runtime
       uses: actions/upload-artifact@v1
       with:
@@ -224,7 +227,7 @@ jobs:
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2020-04-15
+        toolchain: nightly-2020-06-15
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
@@ -253,8 +256,7 @@ jobs:
         key: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/testers/host/Cargo.lock') }}
         restore-keys: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester legacy genesis
-      working-directory: test/testers/host-legacy
-      run: make
+      run: make -C test host-tester-legacy
     - name: Upload host tester legacy runtime
       uses: actions/upload-artifact@v1
       with:
@@ -278,7 +280,7 @@ jobs:
 
 
   test-substrate:
-    needs: [ build-substrate, build-adapter-substrate, build-tester-host ]
+    needs: [ build-host-substrate, build-adapter-substrate, build-tester-host ]
     name: "[test-genesis] substrate"
     runs-on: ubuntu-18.04
     steps:
@@ -286,9 +288,9 @@ jobs:
       uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
-        name: substrate
-        path: test
-    - run: chmod +x test/polkadot
+        name: substrate-host
+        path: test/hosts
+    - run: chmod +x test/hosts/polkadot
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
@@ -306,7 +308,7 @@ jobs:
       run: test/runtests.jl substrate genesis
 
   test-kagome:
-    needs: [ build-kagome, build-adapter-substrate, build-tester-host-legacy ]
+    needs: [ build-host-kagome, build-adapter-substrate, build-tester-host-legacy ]
     name: "[test-genesis] kagome"
     runs-on: ubuntu-18.04
     steps:
@@ -314,9 +316,9 @@ jobs:
       uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
-        name: kagome
-        path: test
-    - run: chmod +x test/kagome_full
+        name: kagome-host
+        path: test/hosts
+    - run: chmod +x test/hosts/kagome_validating
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
@@ -334,7 +336,7 @@ jobs:
       run: test/runtests.jl kagome genesis
 
   test-gossamer:
-    needs: [ build-gossamer, build-adapter-substrate, build-tester-host-legacy ]
+    needs: [ build-host-gossamer, build-adapter-substrate, build-tester-host-legacy ]
     name: "[test-genesis] gossamer"
     runs-on: ubuntu-18.04
     continue-on-error: true
@@ -345,12 +347,12 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/go/pkg/mod
-        key: go-mod-implementation-gossamer-
+        key: go-mod-host-gossamer-
     - uses: actions/download-artifact@v1
       with:
-        name: gossamer
-        path: test
-    - run: chmod +x test/gossamer
+        name: gossamer-host
+        path: test/hosts
+    - run: chmod +x test/hosts/gossamer
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
