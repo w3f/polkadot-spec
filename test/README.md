@@ -4,27 +4,30 @@ This `test/` directory contains specification tests of the different components 
 
 Currently the testsuite contains the following tests:
 
-- SCALE Codec Encoding (scale-codec)
-- State Trie Hashing (stat-trie)
-- Polkadot Host API (host-api and host-api-legacy)
+- SCALE Codec Encoding ([scale-codec](fixtures/state-trie))
+- State Trie Hashing ([state-trie](fixtures/state-trie))
+- Polkadot Host API ([host-api](fixtures/host-api) and [host-api-legacy](fixtures/host-api-legacy))
+- Genesis Import ([genesis](fixtures/genesis))
 
-This ensures that the different implementations behave in the same way and produce the identical output. 
+The goal is to ensures that the different implementations behave in the same way and produce the identical output.
 
 # Dependencies
 
-The test suite depends on the following components:
+To run the test against various implementation, the suite utilizes mutliple binaries that have to be compiled or downloaded before the test suite can be run.
+
+To build and run the test suite from source, it depends on the following components:
 
 - _julia_ to run the testsuite
-- _rust-nightly_ (with wasm target) to build substrate 
-- _cmake_ to build kagome
-- _go_ to build gossamer
-- _jq_ and _yq_ to build the host-tester
+- _rust-nightly_ (with wasm target) to build substrate host and adpater (as well as testers and wasm-adapter)
+- _cmake_ and _gcc_ or _clang_ (version 8 or 9 of either) to build kagome host and adapter
+- _go_ to build gossamer host and adapter
+- _jq_ and _yq_ to convert the host-tester genesis
 
-While the official target of our testsuite are currently only debian-based systems, there is in general no reason for it to not be able to run on  any recent GNU/Linux or even UNIX-based OS, like OS X.
+While the official target of our testsuite are currently only debian-based systems, there is in general no reason for it to not be able to run on any recent GNU/Linux or even UNIX-based OS, like OS X.
 
 ## General Build
 
-There is a simple Makefile in the [main test directory](./), that will build all the required API adapters when you run `make`.
+There is a simple Makefile in the [main test directory](./), that will build all the required API adapters, testers and hosts when you run `make`.
 
 Alternately, each of the API adapters can be built separately (see [adapters subfolder](./adapters/)), before running the testsuite.
 
@@ -38,7 +41,7 @@ cargo build --release
 
 ### Kagome API Adapter
 
-Needs CMake, GCC or Clang >= 8, Rust, Perl.
+Needs CMake, GCC or Clang >= 8 (GCC 10 currently broken), Rust, Perl, Python
 
 ```sh
 cmake -DCMAKE_BUILD_TYPE=Release -B build -S .

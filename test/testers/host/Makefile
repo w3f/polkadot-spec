@@ -1,8 +1,11 @@
-.PHONY: all clean
+.PHONY: all build clean
 
 all: genesis.json genesis.yaml
 
-genesis.json:
+build:
+	cargo build --release
+
+genesis.json: build
 	cargo run --release > $@
 
 genesis.yaml: genesis.json
