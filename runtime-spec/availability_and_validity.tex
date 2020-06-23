@@ -67,13 +67,13 @@ This witness proof consists of light client proofs of state data that are genera
   parachain. $R_u$ is a varying data type as defined in Definition X
   \todo{@fabio} and can be one of the following values:
 
-  \begin{equation}
+  \begin{equation*}
     R_u =
     \begin{cases}
       0, & \text{None} \\
       1, & \text{followed by: } H_i(B_n)
     \end{cases}
-  \end{equation}
+  \end{equation*}
 
   $R_u$ implies whether the parachain is allowed to upgrade its validation code.
   If it's of type $1$, it contains the number of the minimum relay chain height
@@ -135,8 +135,6 @@ The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring a
 \end{figure}
 
 \input{anv_candidate.tex}
-\input{anv_backing.tex}
-
 
 \subsection{Primary Validation Disagreement}
 \label{sect-primary-validation-disagreemnt}

@@ -3,21 +3,11 @@
 
 Collators produce candidates as defined in Definition \ref{defn-candidate}.
 Validators verify the validity of the received candidates as described in
-Algorithm \ref{algo-primary-validation}. \todo{@fabio: confirm this} Validators
-back the validity respectively the invalidity by extending the candidates into 
-candidate receipts as defined in Definition \ref{defn-candidate-receipt} and
-communicate it by issuing statements as defined in Definition
-\ref{defn-gossip-statement}.
+Algorithm \ref{algo-primary-validation}. The validator ensures the that every
+candidate considered for inclusion has at least one other validator backing it.
+Candidates without backing are discarded. Backed candidates which later prove to
+be invalid qualify the backer for slashing.
 \newline
-
-The validator ensures the that every candidate considered for inclusion has at least
-one other validator backing it. Candidates without backing are discarded. Backed candidates 
-which later prove to be invalid qualify the backer for slashing.
-\newline
-
-It's note worthy that validators do not dictate which candidates are prioritized
-for inclusion. Each validator decides for itself - on whatever metric - which
-\textit{valid} candidates to include.
 
 \begin{definition}
   \label{defn-candidate}
@@ -39,8 +29,7 @@ for inclusion. Each validator decides for itself - on whatever metric - which
     of the block data by the collator.
     \item $Head_p(B)$: the head data of parachain block $B$ as defined in
     Definition \ref{defn-head-data}.
-    \item $h_b({PoV_B})$: the hash of the PoV block.
-    \todo{@fabio}.
+    \item $h_b({PoV_B})$: the 32-byte Blake2 hash of the PoV block.
   \end{itemize}
 
 \end{definition}
@@ -86,17 +75,27 @@ for inclusion. Each validator decides for itself - on whatever metric - which
 \end{algorithm}
 
 \subsection{Candidate Backing}
-
 \label{sect-primary-validaty-announcement}
-Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
+
+Validators back the validity respectively the invalidity of candidates by
+extending those into candidate receipts as defined in Definition
+\ref{defn-candidate-receipt} and communicate it by issuing statements as defined
+in Definition \ref{defn-gossip-statement}. Validator $v$ needs to perform
+Algorithm \ref{algo-primary-validation-announcement} to announce the result of
+primary validation to the Polkadot network. If the validator receiver a
+statement from another validator, the candidate is confirmed based on algorithm
+\ref{algo-endorse-candidate-receipt}.
 \newline
 
-In case that validation has been successful, the announcement will either be in
-the form of sending the candidate receipt for block $B$ as defined in Definition
-\ref{defn-candidate-receipt} to the relay chain or confirm a candidate receipt
-sent in from another parachain validators for this block according to Algorithm
-\ref{algo-endorse-candidate-receipt}. However, if the validation fails, $v$
-reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
+As algorithm \ref{algo-primary-validation-announcement} and
+\ref{algo-endorse-candidate-receipt} clarifies, the validator should blacklist
+collators which send invalid candidates. If the invalid candidate originated from
+another validator, a misbehavior must be announced as defined in \todo{@fabio}.
+\newline
+
+The validator tries to back as many candidates as it can, but does not attempt to prioritize
+specific candidates. Each validators decided on its own - on whatever metric - which candidate
+will ultimately get included in the block.
 
 \begin{definition}
   \label{defn-candidate-receipt}
@@ -199,26 +198,26 @@ reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
   $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} and can be one
   of the following values:
 
-\begin{equation}
-  Stmt =
-  \begin{cases}
-    0, & \text{Seconded, followed by: } C_{receipt}(PoV_B) \\
-    1, & \text{Validity, followed by: } Blake2(C_{coll}(PoV_B)) \\
-    2, & \text{Invalidity, followed by: } Blake2(C_{coll}(PoV_B))
-  \end{cases}
-\end{equation}
+  \begin{equation*}
+    Stmt =
+    \begin{cases}
+      0, & \text{Seconded, followed by: } C_{receipt}(PoV_B) \\
+      1, & \text{Validity, followed by: } Blake2(C_{coll}(PoV_B)) \\
+      2, & \text{Invalidity, followed by: } Blake2(C_{coll}(PoV_B))
+    \end{cases}
+  \end{equation*}
+
+  The main semantic difference between `Seconded` and `Valid` comes from the fact
+  that every validator may second only one candidate per relay chain block; this
+  places an upper bound on the total number of candidates whose validity needs to
+  be checked. A validator who seconds more than one parachain candidate per relay
+  chain block is subject to slashing.
+  \newline
+
+  Validation does not directly create a seconded statement, but is rather upgraded
+  by the validator when it choses to back a valid candidate as described in
+  Algorithm \ref{algo-primary-validation-announcement}.
 \end{definition}
-
-The main semantic difference between `Seconded` and `Valid` comes from the fact
-that every validator may second only one candidate per relay chain block; this
-places an upper bound on the total number of candidates whose validity needs to
-be checked. A validator who seconds more than one parachain candidate per relay
-chain block is subject to slashing.
-\newline
-
-Validation does not directly create a seconded statement, but is rather upgraded
-by the validator when it choses to back a valid candidate as described in
-Algorithm \ref{algo-primary-validation-announcement}.
 
 \begin{algorithm}[H]
   \caption[PrimaryValidationAnnouncement]{\sc PrimaryValidationAnnouncement}
@@ -230,6 +229,7 @@ Algorithm \ref{algo-primary-validation-announcement}.
         \State $Stmt \leftarrow$ \textsc{SetValid($PoV_B$)}
       \Else
         \State $Stmt \leftarrow$ \textsc{SetInvalid($PoV_B$)}
+        \State \textsc{BlacklistCollatorOf}($PoV_B$)
       \EndIf
       \State \textsc{Propagate}($Stmt$)
   \end{algorithmic}
@@ -258,6 +258,7 @@ Algorithm \ref{algo-primary-validation-announcement}.
         \EndIf
       \Else
         \State $Stmt \leftarrow$ \textsc{SetInvalid($PoV_B$)}
+        \State \textsc{AnnouncMisbehaviorOf}($PoV_B$)
       \EndIf
       \State \textsc{Propagate}($Stmt$)
   \end{algorithmic}
@@ -278,17 +279,6 @@ Algorithm \ref{algo-primary-validation-announcement}.
   \item \textsc{SetInvalid}: Creates an invalid statement as defined in
   Definition \ref{defn-gossip-statement}.
 \end{itemize}
-
-\begin{algorithm}[H]
-  \caption[]{\sc AnnouncePrimaryValidationFailure}
-  \label{algo-announce-primary-validation-failure}
-  \begin{algorithmic}[1]
-    \Require{}
-    %%  \Ensure{}
-
-    \State TBS
-  \end{algorithmic}
-\end{algorithm}
 
 \subsection{Inclusion of candidate receipt on the relay chain}\label{sect-inclusion-of-candidate-receipt}
 
