@@ -58,8 +58,8 @@ function foreach!(self::Builder, args::StringList)
 end
 
 """
-Commit commands currently being build to inputs list, expects ``prepare!``
-to be run before execution to generate expected ouputs."
+Commit commands currently being build to inputs list, expects `prepare!`
+to be run before execution to generate expected ouputs.
 """
 function commit!(self::Builder)
     append!(self.inputs, self.current)

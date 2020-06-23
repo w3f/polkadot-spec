@@ -1,123 +1,23 @@
-using .Config
+using .ImplementationFixture
 using Test
 
-"Compute trie root hash from yaml state file"
-function root_tester_host(implementation)
 
-    state_file = if implementation == "substrate"
-        "$(@__DIR__)/../../testers/host/genesis.yaml"
-    else
-        "$(@__DIR__)/../../testers/host-legacy/genesis-legacy.yaml"
-    end
+tester = ImplementationFixture.Tester("Genesis", "host")
 
-    cmd = `substrate-adapter state-trie trie-root --keys-in-hex --values-in-hex --state-file $state_file`
+ImplementationFixture.execute(tester, 5) do (root, result)
+    # Extract all hashes returned from log
+    hashes = map(m -> m[1], eachmatch(r"##([^#\n]+)##", result)) 
 
-    if Config.verbose
-        println("┌ [COMMAND] ", cmd)
-    end
-
-    result = read(cmd, String)
-
-    if Config.verbose
-        println("└ [OUTPUTS] ", result)
-    end
-
-    return result[13:end-1]
-end
-
-"Run implementation with host-tester genesis for certain time"
-function run_tester_host(implementation, seconds)
-    # Locations of needed files and folders
-    tempdir = mktempdir()
-
-    genesis        = "$(@__DIR__)/../../testers/host/genesis.json"
-    genesis_legacy = "$(@__DIR__)/../../testers/host-legacy/genesis-legacy.json"
-    genesis_kagome = "$(@__DIR__)/../../testers/host-legacy/genesis-legacy.kagome.json"
-
-    keystore = "$(@__DIR__)/kagome.keystore.json"
-    config   = "$(@__DIR__)/gossamer.config.toml"
-
-    # Prepare command and environment based on command
-    cmd = ``
-    if implementation == "substrate"
-        ENV["RUST_LOG"] = "runtime=debug"
-        cmd = `polkadot --alice --chain $genesis -d $tempdir`
-    elseif implementation == "kagome"
-        cmd = `kagome_full --genesis $genesis_kagome --keystore $keystore --leveldb $tempdir`
-    elseif implementation == "gossamer"
-        cmd = `gossamer --key=alice --config $config --basepath $tempdir --log debug`
-    else
-        error("Unknown implementation: ", implementation)
-    end
-
-    # Run from test subfolder (required by gossamer to find genesis)
-    current_path = pwd()
-    cd("$(@__DIR__)/../..")
-
-    if Config.verbose
-        println("┌ [COMMAND] ", cmd)
-    end
-
-    # Run for specified time
-    stream = Pipe()
-    proc = run(pipeline(cmd, stdout=stream, stderr=stream), wait=false)
-    sleep(seconds)
-
-    # Stop process if necessary
-    crashed = !process_running(proc) 
-    if !crashed
-        kill(proc)
-
-        while(process_running(proc))
-            sleep(0.1)
-        end
-    end
-
-    # Retrieve result
-    close(stream.in)
-    result = read(stream, String)
-
-    # Check and warn about unexpected crashes
-    if crashed
-        @warn "Implementation '$implementation' aborted unexpectedly:\n$result"
-    end
-
-    @test !crashed
-
-    if Config.verbose
-        println("└ [OUTPUTS] ", result)
-    end
-
-    # Reset path
-    cd(current_path)
-
-    return result
-end
+    # Check state root hash
+    @test root == hashes[1]
 
 
-@testset "Genesis" begin
-    for implementation in Config.implementations
-        # Compute expected storage root
-        storage_root = root_tester_host(implementation)
+    # Extract all calls made from log
+    calls = map(m -> m[1], eachmatch(r"@@([^@\n]+)@@", result))
 
-        # Run implementation long enough to load genesis
-        result = run_tester_host(implementation, 5)
+    # Check that grandpa config is requested
+    @test "grandpa_authorities()" in calls
 
-
-        # Extract all hashes returned from log
-        hashes = map(m -> m[1], eachmatch(r"##([^#\n]+)##", result)) 
-
-        # Check state root hash
-        @test storage_root == hashes[1]
-
-
-        # Extract all calls made from log
-        calls = map(m -> m[1], eachmatch(r"@@([^@\n]+)@@", result))
-
-        # Check that grandpa config is requested
-        @test "grandpa_authorities()" in calls
-
-        # Check that babe configuration is requested
-        @test "configuration()" in calls
-    end
+    # Check that babe configuration is requested
+    @test "configuration()" in calls
 end

@@ -10,10 +10,35 @@ List = Vector
 "List of lists"
 ListList{T} = List{List{T}}
 
+
+"""
+# Cmd collections and helper functions
+
+Thin wrapper around Julia's Cmd handeling _idioms_ for lists of commands and
+collections of those.
+"""
+
+"Simple command list abstraction."
+CmdList = List{Cmd}
+
+"Ordered collection of command lists."
+CmdListList = List{CmdList}
+
+"Helper to append each member of an other list to all entries of current list."
+function combine(self::CmdList, other::CmdList)::CmdList
+    # For the resulting vector to be in the user expected order the two
+    # lists are multiplied in reversed order, while the string are joined
+    # in the correct order.
+    # Could be replace by transpose operation but Julia seems to be lacking
+    # transpose(Matrix{String}), though onw could use `permutedims`.
+    return vec(map(join ∘ reverse, product(other, self)))
+end
+
+
 """
 # String collections and helper functions
 
-Thin wrapper around Julia's String handeling "idioms" for lists of strings and
+Thin wrapper around Julia's String handeling _idioms_ for lists of strings and
 collections of those.
 """
 
