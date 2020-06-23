@@ -1,8 +1,11 @@
-.PHONY: all clean
+.PHONY: all build clean
 
 all: genesis-legacy.json genesis-legacy.yaml genesis-legacy.kagome.json
 
-genesis-legacy.json:
+build:
+	cargo build --release
+
+genesis-legacy.json: build
 	cargo run --release > $@
 
 genesis-legacy.yaml: genesis-legacy.json

@@ -1,18 +1,42 @@
-ADAPTERS = substrate substrate-legacy kagome gossamer
-TESTERS  = host host-legacy
+SUBDIRS = adapters hosts testers
 
-.PHONY: test adapters testers $(ADAPTERS) $(TESTERS)
+# As we use pattern matching to forward build request to the right subfolder, phony will not work.
+PHONIES := $(strip $(wildcard *-adapter) $(wildcard *-adapter-legacy) $(wildcard *-tester) $(wildcard *-tester-legacy) $(wildcard *-host))
+ifdef PHONIES
+  $(error Conflicting file(s) detected: $(PHONIES))
+endif
 
-test: adapters testers
+
+.PHONY: all $(SUBDIRS)
+
+all: $(SUBDIRS)
+
+
+$(SUBDIRS):
+	$(MAKE) -C $@
+
+
+%-adapter:
+	make -C adapters $@
+
+%-adapter-legacy:
+	make -C adapters $@
+
+
+%-tester:
+	make -C testers $@
+
+%-tester-legacy:
+	make -C testers $@
+
+
+%-host:
+	make -C hosts $@
+
+
+test: all
 	./runtests.jl
 
-adapters: $(ADAPTERS)
 
-testers: $(TESTERS)
-
-$(ADAPTERS):
-	@$(MAKE) -C adapters/$@
-
-$(TESTERS):
-	@$(MAKE) -C testers/$@
-
+clean:
+	for d in $(SUBDIRS); do $(MAKE) -C $$d $@; done
