@@ -227,13 +227,45 @@ verify a PoV block, it can request the chunk for one of its peers.
 \end{definition}
 
 \begin{algorithm}[H]
-  \caption[]{\sc Erasure-Encode($\bar{B}$, $n$}
+  \caption[]{\sc Erasure-Encode}
   \label{algo-erasure-encode}
   \begin{algorithmic}[1]
-  \Require
+    \Require
     $\bar{B}$: blob defined in Definition \ref{defn-blob}
+    \State $|Shards| = Shard_{data} + {parity}$
+    \For{$chunk \in Enc_{SC}(v_B)$}
+      \State $len \leftarrow$ \textsc{Min}($Shard_{len}, |chunk|$)
+      \State $data \leftarrow$ \textsc{CopyFrom}($chunk, len$)
+      \State \textsc{Add}($Shards, data$)
+    \EndFor
+  \end{algorithmic}
+\end{algorithm}
 
-    \State TBS
+\begin{algorithm}[H]
+  \caption[]{\sc Make-Shards}
+  \label{algo-make-shards}
+  \begin{algorithmic}[1]
+    \Require{}
+    \State \textbf{Init} $Shard_{data} = \frac{(|\paraValidSet| - 1)}{3} + 1$
+    \State \textbf{Init} $Shard_{parity} = |\paraValidSet| - \frac{(|\paraValidSet| - 1)}{3} - 1$
+    \State $\vcenter{
+      \begin{flalign*}
+        &\textbf{Init } len =
+        \begin{cases}
+          0 & if |\paraValidSet| \bmod{Shard_{data}} = 0 \\
+          1 & if |\paraValidSet| \bmod{Shard_{data}} \neq 0
+        \end{cases}&
+      \end{flalign*}
+    }$
+    \State \textbf{Init} $Shard_{len} = len + (len \bmod{2})$
+    \State \textbf{Init} $Shards$
+    \State $|Shards| = Shard_{data} + Shard_{parity}$
+    \For{$chunk \in Enc_{SC}(v_B)$}
+      \State $len \leftarrow$ \textsc{Min}($Shard_{len}, |chunk|$)
+      \State $data \leftarrow$ \textsc{CopyFrom}($chunk, len$)
+      \State \textsc{Add}($Shards, data$)
+    \EndFor
+    \Return $Shards$
   \end{algorithmic}
 \end{algorithm}
 
@@ -262,7 +294,7 @@ verify a PoV block, it can request the chunk for one of its peers.
     amount of validators the the validator set. There are two types of shards;
     data shards and parity shards.
     \begin{alignat*}{2}
-      f &= (|\paraValidSet| - 1) \div 3 \\
+      f &= \frac{(|\paraValidSet| - 1)}{3} \\
       Shard_{data} &= f + 1 \\
       Shard_{parity} &= |\paraValidSet| - f - 1
     \end{alignat*}
@@ -274,7 +306,7 @@ verify a PoV block, it can request the chunk for one of its peers.
         0 & if |\paraValidSet| \bmod{Shard_{data}} = 0 \\
         1 & if |\paraValidSet| \bmod{Shard_{data}} \neq 0 \\
       \end{cases} \\
-      Shard_{len} &= r + r \bmod{2}
+      Shard_{len} &= r + (r \bmod{2})
     \end{alignat*}
 
     \item $\mathbb{I}$: the index of this erasure-encoded chunk of data.
