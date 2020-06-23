@@ -242,14 +242,19 @@ will ultimately get included in the block.
   \ref{defn-gossip-statement}.
   \item \textsc{SetInvalid}: Creates an invalid statement as defined in
   Definition \ref{defn-gossip-statement}.
+  \item \textsc{BlacklistCollatorOf}: blacklists the collator which sent the
+  invalid PoV block, preventing any new PoV blocks from being received. The
+  amount of time for blacklisting is unspecified.
+  \item \textsc{Propagate} Sends the statement to the connected peers.
 \end{itemize}
 
 \begin{algorithm}[H]
   \caption[]{\sc ConfirmCandidateReceipt}
   \label{algo-endorse-candidate-receipt}
   \begin{algorithmic}[1]
-    \Require{$PoV_B$}
+    \Require{$Stmt_{peer}$}
       \State \textbf{Init} $Stmt$;
+      \State $PoV_B \leftarrow$ \textsc{Retrieve}($Stmt_{peer}$)
       \If {\textsc{ValidateBlock($PoV_B$)} is \textbf{valid}}
         \If {\textsc{AlreadySeconded($B^{relay}_{chain}$)}}
           \State $Stmt \leftarrow$ \textsc{SetValid($PoV_B$)}
@@ -258,18 +263,20 @@ will ultimately get included in the block.
         \EndIf
       \Else
         \State $Stmt \leftarrow$ \textsc{SetInvalid($PoV_B$)}
-        \State \textsc{AnnouncMisbehaviorOf}($PoV_B$)
+        \State \textsc{AnnounceMisbehaviorOf}($PoV_B$)
       \EndIf
       \State \textsc{Propagate}($Stmt$)
   \end{algorithmic}
 \end{algorithm}
 
 \begin{itemize}
+  \item $Stmt_{peer}$: a statement received from another validator.
+  \item \textsc{Retrieve}: Retrieves the PoV block from the statement (\ref{defn-gossip-statement}).
   \item \textsc{ValidateBlock}: Validates $PoV_B$ as defined in Algorithm
   \ref{algo-validate-block}.
-  \item \textsc{AlreadySeconded}: Verifies if a block has already been seconded
-  for the given Relay Chain block. Validators that second more than one (1)
-  block per Relay chain block are subject to slashing. More information is
+  \item \textsc{AlreadySeconded}: Verifies if a parachain block has already been
+  seconded for the given Relay Chain block. Validators that second more than one
+  (1) block per Relay chain block are subject to slashing. More information is
   available in Definition \ref{defn-gossip-statement}.
   \item \textsc{SetValid}: Creates a valid statement as defined in Definition
   \ref{defn-gossip-statement}.
@@ -278,6 +285,11 @@ will ultimately get included in the block.
   the next call to \textsc{AlreadySeconded} reliably affirms this action.
   \item \textsc{SetInvalid}: Creates an invalid statement as defined in
   Definition \ref{defn-gossip-statement}.
+  \item \textsc{BlacklistCollatorOf}: blacklists the collator which sent the
+  invalid PoV block, preventing any new PoV blocks from being received. The
+  amount of time for blacklisting is unspecified.
+  \item \textsc{AnnounceMisbehaviorOf}: Announces the misbehavior of the validator who claimed a valid statement of invalid PoV block as described in algorithm \todo{@fabio}.
+  \item \textsc{Propagate} Sends the statement to the connected peers.
 \end{itemize}
 
 \subsection{Inclusion of candidate receipt on the relay chain}\label{sect-inclusion-of-candidate-receipt}
