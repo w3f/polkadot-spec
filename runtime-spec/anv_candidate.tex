@@ -245,7 +245,7 @@ will ultimately get included in the block.
   \item \textsc{BlacklistCollatorOf}: blacklists the collator which sent the
   invalid PoV block, preventing any new PoV blocks from being received. The
   amount of time for blacklisting is unspecified.
-  \item \textsc{Propagate} Sends the statement to the connected peers.
+  \item \textsc{Propagate}: sends the statement to the connected peers.
 \end{itemize}
 
 \begin{algorithm}[H]
@@ -271,7 +271,8 @@ will ultimately get included in the block.
 
 \begin{itemize}
   \item $Stmt_{peer}$: a statement received from another validator.
-  \item \textsc{Retrieve}: Retrieves the PoV block from the statement (\ref{defn-gossip-statement}).
+  \item \textsc{Retrieve}: Retrieves the PoV block from the statement
+  (\ref{defn-gossip-statement}).
   \item \textsc{ValidateBlock}: Validates $PoV_B$ as defined in Algorithm
   \ref{algo-validate-block}.
   \item \textsc{AlreadySeconded}: Verifies if a parachain block has already been
@@ -288,8 +289,10 @@ will ultimately get included in the block.
   \item \textsc{BlacklistCollatorOf}: blacklists the collator which sent the
   invalid PoV block, preventing any new PoV blocks from being received. The
   amount of time for blacklisting is unspecified.
-  \item \textsc{AnnounceMisbehaviorOf}: Announces the misbehavior of the validator who claimed a valid statement of invalid PoV block as described in algorithm \todo{@fabio}.
-  \item \textsc{Propagate} Sends the statement to the connected peers.
+  \item \textsc{AnnounceMisbehaviorOf}: announces the misbehavior of the
+  validator who claimed a valid statement of invalid PoV block as described in
+  algorithm \todo{@fabio}.
+  \item \textsc{Propagate}: sends the statement to the connected peers.
 \end{itemize}
 
 \subsection{Inclusion of candidate receipt on the relay chain}\label{sect-inclusion-of-candidate-receipt}
