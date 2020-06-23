@@ -1,0 +1,86 @@
+\subsection{Candidate Selection}
+\label{sect-primary-validation}
+
+Collators produce candidates as defined in Definition \ref{defn-candidate}.
+Validators verify the validity of the received candidates as described in
+Algorithm \ref{algo-primary-validation}. \todo{@fabio: confirm this} Validators
+back the validity respectively the invalidity by extending the candidates into 
+candidate receipts as defined in Definition \ref{defn-candidate-receipt} and
+communicate it by issuing statements as defined in Definition
+\ref{defn-gossip-statement}.
+\newline
+
+The validator ensures the that every candidate considered for inclusion has at least
+one other validator backing it. Candidates without backing are discarded. Backed candidates 
+which later prove to be invalid qualify the backer for slashing.
+\newline
+
+It's note worthy that validators do not dictate which candidates are prioritized
+for inclusion. Each validator decides for itself - on whatever metric - which
+\textit{valid} candidates to include.
+
+\begin{definition}
+  \label{defn-candidate}
+  A \textbf{candidate}, $C_{coll}(PoV_B)$, is issues by collators and contains the PoV
+  block and enough data in order for any validator to verify its validity. A
+  candidate is a tuple of the following format:
+  \[
+  C_{coll}(PoV_B) := (id_p, h_b({B_{^{relay}_{parent}}}), id_{C}, Sig^{Collator}_{SR25519}, Head_p(B), h_b({PoV_B}))
+  \]
+
+  where each value represents:
+  \begin{itemize}
+    \item $id_p$: the Parachain Id this candidate is for.
+    \item $h_b({B_{^{relay}_{parent}}})$: the hash of the relay chain block that this
+    candidate should be executed in the context of.
+    \item $id_C$: the Collator relay-chain account ID as defined in Definition
+    \todo{@fabio}.
+    \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
+    of the block data by the collator.
+    \item $Head_p(B)$: the head data of parachain block $B$ as defined in
+    Definition \ref{defn-head-data}.
+    \item $h_b({PoV_B})$: the hash of the PoV block.
+    \todo{@fabio}.
+  \end{itemize}
+
+\end{definition}
+
+\begin{definition}
+  \label{defn-head-data}
+  The \textbf{head data}, $Head_p(B)$, of a parachain block is a tuple of the following format:
+  \[
+    (H_i(B), H_p(B), H_r(B))
+  \]
+
+  Where $H_i(B)$ is the block number of parachain block $B$, $H_p(B)$ is the
+  32-byte Blake2 hash of the parent block header and $H_r(B)$ represents the
+  root of the post-execution state.
+  \todo{@fabio: clarify if $H_p$ is the hash of the header or full block}
+  \todo{@fabio: maybe define those symbols at the start (already defined in the Host spec)?}
+\end{definition}
+
+\begin{algorithm}[H]
+  \caption[]{\sc PrimaryValidation}
+  \label{algo-primary-validation}
+  \begin{algorithmic}[1]
+    \Require{$B$, $\pi_B$, relay chain parent block $B^{relay}_{parent}$}
+    %%  \Ensure{}
+
+    \State Retrieve $v_B$ from the relay chain state at $B^{relay}_{parent}$
+    \State Run Algorithm \ref{algo-validate-block} using $B, \pi_B, v_B$
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+  \caption[]{\sc ValidateBlock}
+  \label{algo-validate-block}
+  \begin{algorithmic}[1]
+    \Require{$B, \pi_B, v_B$}
+    %%  \Ensure{}
+    \State retrieve the runtime code $R_\rho$ that is specified by $v_B$ from the relay chain state.
+    \State check that the initial state root in $\pi_B$ is the one claimed in $v_B$
+    \State Execute $R_\rho$ on $B$ using $\pi_B$ to simulate the state.
+    \State If the execution fails, return fail.
+    \State Else return success, the new header data $h_B$ and the outgoing messages $M$. \todo{@fabio: same as head data?}
+  \end{algorithmic}
+\end{algorithm}

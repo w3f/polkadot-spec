@@ -1,0 +1,225 @@
+\subsection{Candidate Backing}
+
+\label{sect-primary-validaty-announcement}
+Validator $v$ needs to perform Algorithm \ref{algo-primary-validation-announcement} to announce the result of primary validation to the Polkadot network.
+\newline
+
+In case that validation has been successful, the announcement will either be in
+the form of sending the candidate receipt for block $B$ as defined in Definition
+\ref{defn-candidate-receipt} to the relay chain or confirm a candidate receipt
+sent in from another parachain validators for this block according to Algorithm
+\ref{algo-endorse-candidate-receipt}. However, if the validation fails, $v$
+reacts by executing Algorithm \ref{algo-announce-primary-validation-failure}.
+
+\begin{definition}
+  \label{defn-candidate-receipt}
+  A \textbf{candidate receipt}, $C_{receipt}(PoV_B)$, is an extension of a candidate
+  as defined in Definition \ref{defn-candidate} which includes additional
+  information about the validator which verified the PoV block. The candidate
+  receipt is communicated to other validators by issuing a statement as defined
+  in Definition \ref{defn-gossip-statement}.
+  \newline
+
+  This type is a tuple of the following format:
+  \[
+  C_{receipt}(PoV_B) := (id_p, h_b({B_{^{relay}_{parent}}}), Head_p(B), id_{C}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), CC)
+  \]
+
+  where each value represents:
+  \begin{itemize}
+    \item $id_p$: the Parachain Id this candidate is for.
+    \item $h_b({B_{^{relay}_{parent}}})$: the hash of the relay chain block that this
+    candidate should be executed in the context of.
+    \item $Head_p(B)$: the head data of parachain block $B$ as defined in Definition \ref{defn-head-data}.
+    \todo{@fabio (collator module relevant?)}.
+    \item $id_C$: the Collator relay-chain account ID as defined in Definition
+    \todo{@fabio}.
+    \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
+    of the block data by the collator.
+    \item $h_b({PoV_B})$: the hash of the PoV block.
+    \item $CC(PoV_B)$: Commitments made as a result of validation, as defined in
+    Definition \ref{defn-candidate-commitments}.
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  \label{defn-candidate-commitments}
+  \textbf{Candidate commitments}, $CC(PoV_B)$, are results of the execution and validation of
+  parachain (or parathread) candidates whose produced values must be committed
+  to the relay chain. A candidate commitments is represented as a tuple of the following format:
+  \begin{alignat*}{2}
+    CC(PoV_B) &:= (\mathbb{F}, Enc_{SC}(Msg_0, .., Msg_n), H_r(B), \mathbb{U}(R_\rho)) \\
+    Msg &:= (\mathbb{O}, Enc_{SC}(b_0,.. b_n))
+  \end{alignat*}
+
+  where each value represents:
+  \begin{itemize}
+    \item $\mathbb{F}$: fees paid from the chain to the relay chain validators.
+    \item $Msg$: parachain messages to the relay chain. $\mathbb{O}$ identifies
+    the origin of the messages and is a varying data type as defined in
+    Definition \todo{@fabio} and can be one of the following values:
+    \begin{equation*}
+      \mathbb{O} =
+      \begin{cases}
+        0, & \text{Signed} \\
+        1, & \text{Parachain} \\
+        2, & \text{Root}
+      \end{cases}
+    \end{equation*}
+    \todo{@fabio: define the concept of "origin"}
+
+    The following SCALE encoded array, $Enc_{SC}(b_0,.. b_n)$, contains the
+    raw bytes of the message which varies in size.
+    \item $H_r(B)$: the root of a block's erasure encoding Merkle tree
+    \todo{@fabio: use different symbol for this?}.
+    \item $\mathbb{U}(R_\rho)$: A varying datatype as defined in Definition
+    \todo{@fabio} and can contain one of the following values:
+    \begin{equation*}
+      \mathbb{P} =
+      \begin{cases}
+        0, & \text{None} \\
+        1, & \text{followed by: } R_\rho\\
+      \end{cases}
+    \end{equation*}
+    where $R_\rho$ is a SCALE encoded array containing the new runtime code for
+    the parachain. \todo{@fabio: clarify further}
+  \end{itemize}
+  
+\end{definition}
+
+\begin{definition}
+  \label{defn-pov-block}
+  A \textbf{Gossip PoV block} is a tuple of the following format:
+  \[
+  (h_b(B_{^{relay}_{parent}}), h_b(candidate), PoV_B)
+  \]
+  where $h_b(B_{^{relay}_{parent}})$ is the block hash of the relay chain being
+  referred to and $h_b(candidate)$ is the hash of some candidate localized to
+  the same Relay chain block, whose PoV block is $_b(candidate)$.
+\end{definition}
+
+\begin{definition}
+  \label{defn-gossip-statement}
+  A \textbf{statement} notifies other validators about the validity of a PoV block.
+  This type is a tuple of the following format:
+  \[
+  (Stmt, id_{\mathbb{V}}, Sig^{Valdator}_{SR25519})
+  \]
+  where $Sig^{Validator}_{SR25519}$ is the signature of the validator and
+  $id_{\mathbb{V}}$ refers to the index of validator according to the authority
+  set. \todo{@fabio: define authority set (specified in the Host spec)}. $Stmt$
+  refers to a statement the validator wants to make about a certain candidate.
+  $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} and can be one
+  of the following values:
+
+\begin{equation}
+  Stmt =
+  \begin{cases}
+    0, & \text{Seconded, followed by: } C_{receipt}(PoV_B) \\
+    1, & \text{Validity, followed by: } Blake2(C_{coll}(PoV_B)) \\
+    2, & \text{Invalidity, followed by: } Blake2(C_{coll}(PoV_B))
+  \end{cases}
+\end{equation}
+\end{definition}
+
+The main semantic difference between `Seconded` and `Valid` comes from the fact
+that every validator may second only one candidate per relay chain block; this
+places an upper bound on the total number of candidates whose validity needs to
+be checked. A validator who seconds more than one parachain candidate per relay
+chain block is subject to slashing.
+\newline
+
+Validation does not directly create a seconded statement, but is rather upgraded
+by the validator when it choses to back a valid candidate as described in
+Algorithm \ref{algo-primary-validation-announcement}.
+
+\begin{algorithm}[H]
+  \caption[PrimaryValidationAnnouncement]{\sc PrimaryValidationAnnouncement}
+  \label{algo-primary-validation-announcement}
+  \begin{algorithmic}[1]
+    \Require{$PoV_B$}
+      \State \textbf{Init} $Stmt$;
+      \If {\textsc{ValidateBlock($PoV_B$)} is \textbf{valid}}
+        \State $Stmt \leftarrow$ \textsc{SetValid($PoV_B$)}
+      \Else
+        \State $Stmt \leftarrow$ \textsc{SetInvalid($PoV_B$)}
+      \EndIf
+      \State \textsc{Propagate}($Stmt$)
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{itemize}
+  \item \textsc{ValidateBlock}: Validates $PoV_B$ as defined in Algorithm
+  \ref{algo-validate-block}.
+  \item \textsc{SetValid}: Creates a valid statement as defined in Definition
+  \ref{defn-gossip-statement}.
+  \item \textsc{SetInvalid}: Creates an invalid statement as defined in
+  Definition \ref{defn-gossip-statement}.
+\end{itemize}
+
+\begin{algorithm}[H]
+  \caption[]{\sc ConfirmCandidateReceipt}
+  \label{algo-endorse-candidate-receipt}
+  \begin{algorithmic}[1]
+    \Require{$PoV_B$}
+      \State \textbf{Init} $Stmt$;
+      \If {\textsc{ValidateBlock($PoV_B$)} is \textbf{valid}}
+        \If {\textsc{AlreadySeconded($B^{relay}_{chain}$)}}
+          \State $Stmt \leftarrow$ \textsc{SetValid($PoV_B$)}
+        \Else
+          \State $Stmt \leftarrow$ \textsc{SetSeconded($PoV_B$)}
+        \EndIf
+      \Else
+        \State $Stmt \leftarrow$ \textsc{SetInvalid($PoV_B$)}
+      \EndIf
+      \State \textsc{Propagate}($Stmt$)
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{itemize}
+  \item \textsc{ValidateBlock}: Validates $PoV_B$ as defined in Algorithm
+  \ref{algo-validate-block}.
+  \item \textsc{AlreadySeconded}: Verifies if a block has already been seconded
+  for the given Relay Chain block. Validators that second more than one (1)
+  block per Relay chain block are subject to slashing. More information is
+  available in Definition \ref{defn-gossip-statement}.
+  \item \textsc{SetValid}: Creates a valid statement as defined in Definition
+  \ref{defn-gossip-statement}.
+  \item \textsc{SetSeconded}: Creates a seconded statement as defined in
+  Definition \ref{defn-gossip-statement}. Seconding a block should ensure that
+  the next call to \textsc{AlreadySeconded} reliably affirms this action.
+  \item \textsc{SetInvalid}: Creates an invalid statement as defined in
+  Definition \ref{defn-gossip-statement}.
+\end{itemize}
+
+\begin{algorithm}[H]
+  \caption[]{\sc AnnouncePrimaryValidationFailure}
+  \label{algo-announce-primary-validation-failure}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Inclusion of candidate receipt on the relay chain}\label{sect-inclusion-of-candidate-receipt}
+
+\begin{definition}
+  \label{defn-para-proposal}
+        {\b Parachain Block Proposal}, noted by $P^B_{\rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $\mathcal{V}_\rho$.  %\syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}. We still include the proposal if a parachain validator attests to its invalidity, Any primary invalidity attestation or late primary validity attestation are handled just like secondary attestations.
+
+\end{definition}
+
+A block producer which observe a Parachain Block Proposal as defined in definition \ref{defn-para-proposal} \syed{may/should}{?} include the proposal in the block they are producing according to Algorithm \ref{algo-include-parachain-proposal} during block production procedure.
+
+\begin{algorithm}[H]
+  \caption[]{\sc IncludeParachainProposal($P^B_{\rho}$)}
+  \label{algo-include-parachain-proposal}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
