@@ -97,23 +97,32 @@ root of it.
   function, i.e. additional data from the relay chain state that is needed.
   It's a tuple of the following format:
   \[
-  (Head_p(B), \mathbb{B}, Blake2b(R_\rho), R_u)
+  (Max^{R}_{size}, Max^{head}_{size}, H_i(B^{relay}_{chain}), Head_p(B), \mathbb{B}, Blake2b(R_\rho), R_u)
   \]
 
-  Where $Head_p(B)$ refers to the head data of parachain block $B$ as defined in
-  Definition \ref{defn-head-data}, $\mathbb{B}$ refers to the balance of the
-  parachain at the moment of validation \todo{@fabio: clarify} and
-  $Blake2b(R_\rho)$ is the 32-byte Blake2 hash of the Runtime code of the
-  parachain. $R_u$ is a varying data type as defined in Definition X
-  \todo{@fabio} and can be one of the following values:
+  where each value represents:
 
-  \begin{equation*}
-    R_u =
-    \begin{cases}
-      0, & \text{None} \\
-      1, & \text{followed by: } H_i(B_n)
-    \end{cases}
-  \end{equation*}
+  \begin{itemize}
+    \item $Max^{R}_{size}$: the maximum amount of bytes of the parachain Wasm code
+    permitted.
+    \item $Max^{head}_{size}$: the maximum amount of bytes of the head data
+    (Def. \ref{defn-head-data}) permitted.
+    \item $H_i(B^{relay}_{chain})$: the relay chain block number this is in the
+    context of.
+    \item $Head_p(B)$: the head data (Def. \ref{defn-head-data}) of the parachain.
+    \item $\mathbb{B}$: the balance of the parachain at the moment of validation \todo{@fabio: clarify}.
+    \item $Blake2b(R_\rho)$: the 32-byte Blake2 hash of the parachain Wasm code.
+    \item $R_u$: the  is a varying data type as defined in Definition X
+    \todo{@fabio} and can be one of the following values:
+
+    \begin{equation*}
+      R_u =
+      \begin{cases}
+        0, & \text{None} \\
+        1, & \text{followed by: } H_i(B_n)
+      \end{cases}
+    \end{equation*}
+  \end{itemize}
 
   $R_u$ implies whether the parachain is allowed to upgrade its validation code.
   If it's of type $1$, it contains the number of the minimum relay chain height
@@ -235,6 +244,22 @@ verify a PoV block, it can request the chunk for one of its peers.
    Er_B := {(e_1, m_1),...,(e_n,m_n)}
    \]
    is defined to be the output of the Algorithm \ref{algo-erasure-encode}.
+\end{definition}
+
+\begin{definition}
+  \label{defn-erasure-chunk}
+  A \textbf{chunk of erasure-encoded block} data is a tuple of the following format:
+  \[
+    (Enc_{SC}(b_0, .. b_n), \mathbb{I}, \mathbb{P})
+  \]
+
+  where each value represents:
+  \begin{itemize}
+    \item $Enc_{SC}(b_0, .. b_n)$: the erasure-encoded chunk of data belonging
+    to the candidate block.
+    \item $\mathbb{I}$: 
+    \item $\mathbb{P}$: is of type $Enc_{SC}(Enc_{SC}(b_0, .. b_n))$ ...
+  \end{itemize}
 \end{definition}
 
 \section{Distribution of Pieces}\label{sect-distribute-pieces} Following the
