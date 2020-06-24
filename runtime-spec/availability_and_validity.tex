@@ -234,7 +234,7 @@ verify a PoV block, it can request the chunk for one of its peers.
     $\bar{B}$: blob defined in Definition \ref{defn-blob}
     \State \textbf{Init} $Shards \leftarrow$ \textsc{Make-Shards}($\paraValidSet, v_B$)
     \Statex
-    \Statex // Create a trie from the chunks/shards in order generate the trie nodes
+    \Statex // Create a trie from the shards in order generate the trie nodes
     \Statex // which are required to verify each chunk with a Merkle root.
     \State \textbf{Init} $Trie$
     \State \textbf{Init} $counter = 0$
@@ -243,24 +243,24 @@ verify a PoV block, it can request the chunk for one of its peers.
       \State $counter = counter + 1$
     \EndFor
     \Statex
-    \Statex // Results in an array of tuples, as defined in \ref{defn-erasure-chunk}.
-    \State \textbf{Init} $Pieces$
+    \Statex // Insert individual chunks into collection.
+    \State \textbf{Init} $Chunks$
     \State \textbf{Init} $counter = 0$
     \For{$shard \in Shards$}
       \State \textbf{Init} $nodes \leftarrow$ \textsc{Get-Nodes}($Trie, counter$)
-      \State \textsc{Add}($Pieces, (shard, counter, nodes$))
+      \State \textsc{Add}($Chunks, (shard, counter, nodes$))
       \State $counter = counter + 1$
     \EndFor
     \Statex
-    \Statex \todo{@fabio: SCALE encode?}
-    \State \Return $Pieces$
+    \Statex // $Chunks$ is a collection of individual erasure-encoded chunks (def. \ref{defn-erasure-coded-pieces}).
+    \State \Return $Enc_{SC}(Chunks)$
   \end{algorithmic}
 \end{algorithm}
 
 \begin{itemize}
-  \item \textsc{Make-Shards(..)}: return shards/chunks for each validator as
+  \item \textsc{Make-Shards(..)}: return shards for each validator as
   described in algorithm \ref{algo-make-shards}.
-  \item \textsc{Insert($trie,key,val$)}: inserter the given $key$ and $value$ into the $trie$.
+  \item \textsc{Insert($trie,key,val$)}: insert the given $key$ and $value$ into the $trie$.
   \item \textsc{Get-Nodes($trie,key$)}: based on the $key$, return all required $trie$ nodes in
   order to verify the corresponding value for a (unspecified) Merkle root.
   \item \textsc{Add($sequence, item$)}: add the given $item$ to the $sequence$.
@@ -272,6 +272,7 @@ verify a PoV block, it can request the chunk for one of its peers.
   \begin{algorithmic}[1]
     \Require{$\paraValidSet, v_B$}
     \Statex // Calculate the required values for Reed-Solomon.
+    \Statex // Calculate the required lengths.
     \State \textbf{Init} $Shard_{data} = \frac{(|\paraValidSet| - 1)}{3} + 1$
     \State \textbf{Init} $Shard_{parity} = |\paraValidSet| - \frac{(|\paraValidSet| - 1)}{3} - 1$
     \State $\vcenter{
@@ -285,21 +286,20 @@ verify a PoV block, it can request the chunk for one of its peers.
     }$
     \State \textbf{Init} $Shard_{len} = base_{len} + (base_{len} \bmod{2})$
     \Statex
-    \Statex // Results in an array of arrays,
-    \Statex // each inner array is blanked with zeroes.
+    \Statex // Prepare shard pieces, each padded with zeroes.
     \State \textbf{Init} $Shards$
     \For{$n \in (Shard_{data} + Shard_{partiy})$}
       \State \textsc{Add}($Shards, (0_0, ..0_{Shard_{len}})$)
     \EndFor
     \Statex
-    \Statex // As soon as one collection has been fully iterated over,
-    \Statex // both loops exit.
-    \For{$(chunk, blank) \in$ (\textsc{Take}$(Enc_{SC}(v_B), Shard_{len}), Shards)$}
+    \Statex // Copy pieces of $v_b$ into each shard.
+    \For{$(chunk, shard) \in$ (\textsc{Take}$(Enc_{SC}(v_B), Shard_{len}), Shards)$}
       \State \textbf{Init} $len \leftarrow$ \textsc{Min}($Shard_{len}, |chunk|$)
-      \State $blank \leftarrow$ \textsc{Copy-From}($chunk, len$)
+      \State $shard \leftarrow$ \textsc{Copy-From}($chunk, len$)
     \EndFor
     \Statex
-    \State \Return $Enc_{Sc}(Shards)$
+    \Statex // $Shards$ contains split pieces of $v_B$.
+    \State \Return $Shards$
   \end{algorithmic}
 \end{algorithm}
 
@@ -318,25 +318,23 @@ verify a PoV block, it can request the chunk for one of its peers.
   \label{defn-erasure-coded-pieces}
   The {\bf set of erasure encode pieces} of $\bar{B}$, denoted by:
   \[
-   Er_B := {(e_1, m_1),...,(e_n,m_n)}
-   \]
-   is defined to be the output of the Algorithm \ref{algo-erasure-encode}.
-\end{definition}
+   Er_B := (e_1,...,e_n)
+  \]
 
-\begin{definition}
-  \label{defn-erasure-chunk}
-  A \textbf{chunk of erasure-encoded block} data is a tuple of the following format:
+  is defined to be the output of the Algorithm \ref{algo-erasure-encode}.
+  Each chunk is a tuple of the following format:
+
   \[
-    (Enc_{SC}(b_0, .. b_n), u32, Enc_{SC}(Enc_{SC}(b_0, .. b_n)))
+    e := (A, u32, A(A_0,...,A_n))
   \]
 
   where each value represents:
   \begin{itemize}
-    \item $Enc_{SC}(b_0, .. b_n)$: the erasure-encoded chunk of data.
+    \item $A$: SCALE-encoded byte array containg the erasure-encoded chunk of data.
     \item $u32$: the unsigned 32-bit integer representing the index of this
     erasure-encoded chunk of data.
-    \item $Enc_{SC}(Enc_{SC}(b_0, .. b_n))$: contains all the nodes of the Trie
-    in order to verify the chunk based on the Merkle root.
+    \item $A(A_0,...,A_n)$: SCALE-encoded array of inner array, each containing
+    the nodes of the Trie in order to verify the chunk based on the Merkle root.
   \end{itemize}
 
   The algorithm \ref{algo-erasure-encode} specifies how those values can be
