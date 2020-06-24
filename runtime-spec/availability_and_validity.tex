@@ -18,16 +18,16 @@ chain.
 \newline
 
 As soon as the proposal of a PoV block is on-chain, the parachain validators
-break the PoV block into erasure-coded pieces as described in Section
-\ref{defn-erasure-coded-pieces} and distribute them among all validators. See
-Section \ref{sect-distribute-pieces} for details on how this distribution takes
+break the PoV block into erasure-coded chunks as described in Section
+\ref{defn-erasure-coded-chunks} and distribute them among all validators. See
+Section \ref{sect-distribute-chunks} for details on how this distribution takes
 place.
 \newline
 
-Once validators have received erasure-coded pieces for several PoV blocks for
+Once validators have received erasure-coded chunks for several PoV blocks for
 the current relay chain block (that might have been proposed a couple of blocks
 earlier on the relay chain), they announce that they have received the erasure
-coded pieces on the relay chain by voting on the received pieces, see Section
+coded chunks on the relay chain by voting on the received chunks, see Section
 \ref{sect-voting-on-availability} for more details.
 \newline
 
@@ -252,7 +252,7 @@ verify a PoV block, it can request the chunk for one of its peers.
       \State $counter = counter + 1$
     \EndFor
     \Statex
-    \Statex // $Chunks$ is a collection of individual erasure-encoded chunks (def. \ref{defn-erasure-coded-pieces}).
+    \Statex // $Chunks$ is a collection of individual erasure-encoded chunks (def. \ref{defn-erasure-coded-chunks}).
     \State \Return $Enc_{SC}(Chunks)$
   \end{algorithmic}
 \end{algorithm}
@@ -286,19 +286,19 @@ verify a PoV block, it can request the chunk for one of its peers.
     }$
     \State \textbf{Init} $Shard_{len} = base_{len} + (base_{len} \bmod{2})$
     \Statex
-    \Statex // Prepare shard pieces, each padded with zeroes.
+    \Statex // Prepare shards, each padded with zeroes.
     \State \textbf{Init} $Shards$
     \For{$n \in (Shard_{data} + Shard_{partiy})$}
       \State \textsc{Add}($Shards, (0_0, ..0_{Shard_{len}})$)
     \EndFor
     \Statex
-    \Statex // Copy pieces of $v_b$ into each shard.
+    \Statex // Copy shards of $v_b$ into each shard.
     \For{$(chunk, shard) \in$ (\textsc{Take}$(Enc_{SC}(v_B), Shard_{len}), Shards)$}
       \State \textbf{Init} $len \leftarrow$ \textsc{Min}($Shard_{len}, |chunk|$)
       \State $shard \leftarrow$ \textsc{Copy-From}($chunk, len$)
     \EndFor
     \Statex
-    \Statex // $Shards$ contains split pieces of $v_B$.
+    \Statex // $Shards$ contains split shards of $v_B$.
     \State \Return $Shards$
   \end{algorithmic}
 \end{algorithm}
@@ -315,8 +315,8 @@ verify a PoV block, it can request the chunk for one of its peers.
 \end{itemize}
 
 \begin{definition}
-  \label{defn-erasure-coded-pieces}
-  The {\bf set of erasure encode pieces} of $\bar{B}$, denoted by:
+  \label{defn-erasure-coded-chunks}
+  The {\bf collection of erasure-encoded chunks} of $\bar{B}$, denoted by:
   \[
    Er_B := (e_1,...,e_n)
   \]
@@ -341,20 +341,20 @@ verify a PoV block, it can request the chunk for one of its peers.
   calculated.
 \end{definition}
 
-\section{Distribution of Pieces}\label{sect-distribute-pieces} Following the
+\section{Distribution of Chunks}\label{sect-distribute-chunks} Following the
 computation of $Er_B$, $v$ must construct the $\bar{B}$ Availability message
-defined in Definition \ref{defn-pov-erasure-piece-message}. And distribute them
+defined in Definition \ref{defn-pov-erasure-chunk-message}. And distribute them
 to target validators designated by the Availability Networking Specification
 \cite{??}.
 
 \begin{definition}
-  \label{defn-pov-erasure-piece-message}
-        {\b PoV erasure piece message} $M_{PoV_{\bar{B}}}(i)$ is TBS
+  \label{defn-pov-erasure-chunk-message}
+        {\b PoV erasure chunk message} $M_{PoV_{\bar{B}}}(i)$ is TBS
 \end{definition}
 
 \section{Announcing Availability}\label{sect-voting-on-availability}
 
-When validator $v$ receives its designated piece for $\bar{B}$ it needs to
+When validator $v$ receives its designated chunk for $\bar{B}$ it needs to
 broadcast Availability vote message as defined in
 Definition\ref{defn-availability-vote-message}
 \begin{definition}
@@ -389,7 +389,7 @@ where the $i$th bit of $b_v$ is $1$ if and only if
 \item the availability status of the candidate receipt is "to be determined" on
 the relay chain at block hash $h_b$ \textbf{and}
 
-\item $v$ has the erasure coded piece of the corresponding parachain block to
+\item $v$ has the erasure coded chunk of the corresponding parachain block to
 this candidate receipt.
 \end{enumerate}
 
@@ -603,15 +603,14 @@ process is formalized in Algorithm \ref{algo-equivocation-assigment}
   \end{algorithmic}
 \end{algorithm}
 
-
 \section{The Approval Check}
 Once a validator has a VRF which tells them to check a block, they announce this
 VRF and attempt to obtain the block. It is unclear yet whether this is best done
 by requesting the PoV block from parachain validators or by announcing that they
-want erasure coded pieces.
+want erasure-encoded chunks.
 
 \subsubsection{Retrieval}
-\label{sect-retrieval-of-erasure-pieces}
+\label{sect-retrieval-of-erasure-chunks}
 There are two fundamental ways to retrieve a parachain block for checking
 validity. One is to request the whole block from any validator who has attested
 to its validity or invalidity. Assigned appoval checker $v$ sends
@@ -626,54 +625,54 @@ must reply with PoVBlockRespose message defined in Definition
         {\b PoV Block Respose} Message TBS
 \end{definition}
 
-The second method is to retrieve enough erasure coded pieces to reconstruct the
+The second method is to retrieve enough erasure-encoded chunks to reconstruct the
 block from them. In the latter cases an announcement of the form specified in
 Definition has to be gossiped to all validators indicating that one needs the
-erasure coded pieces.
+erasure-encoded chunks.
 
 \begin{definition}
-  \label{defn-erasure-coded-pieces-request}
-        {\b Erasure coded pieces request message} TBS
+  \label{defn-erasure-coded-chunks-request}
+        {\b Erasuree-coded chunks request message} TBS
 \end{definition}
 
-On their part, when a validator  receive a erasure coded pieces request message
+On their part, when a validator  receive a erasuree-coded chunks request message
 it response with the message specified in Definition
-\ref{defn-erasure-coded-pieces-response}.
+\ref{defn-erasure-coded-chunks-response}.
 
 \begin{definition}
-  \label{defn-erasure-coded-pieces-response}
-        {\b Erasure coded pieces response message} TBS
+  \label{defn-erasure-coded-chunks-response}
+        {\b Erasuree-coded chunks response message} TBS
 \end{definition}
 
-Assigned appoval checker $v$ must retrieve enough erasure pieces of the block
-they are verifying to be able to reconstruct the block and the erasure pieces
+Assigned appoval checker $v$ must retrieve enough erasure-encoded chunks of the block
+they are verifying to be able to reconstruct the block and the erasure chunks 
 tree.
 
 %%To that aim the %We never consider substructure of $B$ to be meaningful, so
 %$V$ must {\em retrieve} the full {\em candidate proof-of-validity blob}
 %$\bar{B}$ before checking.  Now $V$ knows which which nodes have their
-%individual pieces, thanks to their availability announcements.  It thus follows
+%individual chunks, thanks to their availability announcements.  It thus follows
 %from our 2/3rd honest assumption that $V$ could always reconstruct $\bar{B}$ by
-%obtaining enough pieces $\pieces_B$ from nodes known to posses them.
+%obtaining enough chunks $\chunks_B$ from nodes known to posses them.
 
-%We note however that $V$ also knows that all pieces are known by the
+%We note however that $V$ also knows that all chunks are known by the
 %preliminary backing validity checkers aka parachain validators who approved
 %$\bar{B}$, as well as approval checkers who already approved $\bar{B}$.  So $V$
 %could first contact some node that possesses all of $\bar{B}$, and only then
 %begin a full reconstruction process.
 
-%In both cases, $V$ must recompute $\pieces_B$ to verify $\receipt_{B,\cdot}$.
+%In both cases, $V$ must recompute $\chunks_B$ to verify $\receipt_{B,\cdot}$.
 %We therefore cannot see much computational difference between $V$
-%reconstructing $\pieces_B$ from arbitrary pieces or from $\bar{B}$ itself.  It
+%reconstructing $\chunks_B$ from arbitrary chunks or from $\bar{B}$ itself.  It
 %remains plausible $V$ avoids some networking overhead by asking for $\bar{B}$
 %though.  We think a first implementation could reasonably target reconstructing
-%$\pieces_B$ from arbitrary pieces, while leaving requests for the full $\bar{B}$
+%$\chunks_B$ from arbitrary chunks, while leaving requests for the full $\bar{B}$
 %to future optimisations.
 
-%Ideally $V$ might retrieve the pieces in $\pieces_B$ only using its existing
+%Ideally $V$ might retrieve the chunks in $\chunks_B$ only using its existing
 %connections in our topology specified above, except these intentionally do not
 %include 1/3rd of validators.  Also, $V$ need not connect to any node with all
-%of $\pieces_B$.  Yet, $V$ should connect to at least one prachain validators in
+%of $\chunks_B$.  Yet, $V$ should connect to at least one prachain validators in
 %$\vals_\rho$ who ideally should check $B$ first.
 
 %We strongly caution against abandoning approval checkers over topology concerns
@@ -682,13 +681,13 @@ tree.
 
 %In fact, our retrieval component could be engineered to avoid requests
 %entirely:  After obtaining $\pi_{V,\cdot}$, another validator $V'$ could simply
-%compute its own priority for sending its piece from $\pieces_B$ to $V$.  We
+%compute its own priority for sending its chunk from $\chunks_B$ to $V$.  We
 %caution that doing do might become inefficient, either because $V$ winds up
 %rejecting sends, or when many nodes go offline.
 
 \subsubsection{Reconstruction}
 \label{}
-After receiving $2f+1$ of erasure pieces every assigned approval checker $v$
+After receiving $2f+1$ of erasure chunks every assigned approval checker $v$
 needs to recreate the entirety of the erasure code, hence every $v$ will run
 Algorithm \ref{algo-reconstruct-pov} to make sure that the code is complete and
 the subsequently recover the original $\bar{B}$.
