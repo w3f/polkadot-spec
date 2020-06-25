@@ -18,7 +18,7 @@ kagome:
 gossamer:
 	cd gossamer && go build -v ./cmd/gossamer
 	cp gossamer/gossamer ../bin/
-
+	cp ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@*/wasmer/libwasmer.so ../lib/
 
 clean:
 	rm -rf substrate/target
