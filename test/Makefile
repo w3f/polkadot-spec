@@ -1,37 +1,44 @@
-SUBDIRS = adapters hosts testers
+HOSTS    = substrate kagome gossamer
+ADAPTERS = substrate-legacy wasm wasm-legacy
+TESTERS  = host host-legacy
 
-# As we use pattern matching to forward build request to the right subfolder, phony will not work.
-PHONIES := $(strip $(wildcard *-adapter) $(wildcard *-adapter-legacy) $(wildcard *-tester) $(wildcard *-tester-legacy) $(wildcard *-host))
-ifdef PHONIES
-  $(error Conflicting file(s) detected: $(PHONIES))
-endif
-
-
-.PHONY: all $(SUBDIRS)
-
-all: $(SUBDIRS)
+ALIASES_ADAPTER := $(patsubst %-legacy-adapter,%-adapter-legacy, $(patsubst %,%-adapter,$(HOSTS) $(ADAPTERS)))
+ALIASES_TESTER  := $(patsubst %-legacy-tester,%-tester-legacy, $(patsubst %,%-tester,$(TESTERS)))
+ALIASES_HOST    := $(patsubst %,%-host,$(HOSTS))
 
 
-$(SUBDIRS):
-	$(MAKE) -C $@
+.PHONY: all adapters $(ALIASES_ADAPTER) testers $(ALIASES_TESTER) hosts $(ALIASES_HOST) test clean
 
 
-%-adapter:
-	make -C adapters $@
-
-%-adapter-legacy:
-	make -C adapters $@
+all: adapters testers hosts
 
 
-%-tester:
-	make -C testers $@
-
-%-tester-legacy:
-	make -C testers $@
+bin:
+	mkdir -p bin/
 
 
-%-host:
-	make -C hosts $@
+adapters: $(ALIASES_ADAPTER)
+
+$(filter %-adapter,$(ALIASES_ADAPTER)): %-adapter: bin
+	make -C adapters/$*
+
+$(filter %-legacy,$(ALIASES_ADAPTER)): %-adapter-legacy: bin
+	make -C adapters/$*-legacy
+
+
+testers: $(ALIASES_TESTER)
+
+$(filter %-tester,$(ALIASES_TESTER)): %-tester: bin
+	make -C testers/$*
+
+$(filter %-legacy,$(ALIASES_TESTER)): %-tester-legacy: bin
+	make -C testers/$*-legacy
+
+
+hosts: $(ALIASES_HOST)
+
+$(ALIASES_HOST): %-host: bin
+	make -C hosts $*
 
 
 test: all
@@ -39,4 +46,7 @@ test: all
 
 
 clean:
-	for d in $(SUBDIRS); do $(MAKE) -C $$d $@; done
+	for a in $(HOSTS) $(ADAPTERS); do $(MAKE) -C adapters/$$a $@; done
+	for t in $(TESTERS); do $(MAKE) -C testers/$$t $@; done
+	make -C hosts clean
+	rm -rf bin/

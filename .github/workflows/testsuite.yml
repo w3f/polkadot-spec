@@ -50,13 +50,12 @@ jobs:
         key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
         restore-keys: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build substrate adapters
-      working-directory: test/adapters/substrate
-      run: cargo build --release
+      run: make -C test substrate-adapter
     - name: Upload substrate adapter
       uses: actions/upload-artifact@v1
       with:
         name: substrate-adapter
-        path: test/adapters/substrate/target/release/substrate-adapter
+        path: test/bin/substrate-adapter
 
   build-adapter-substrate-legacy:
     name: "[build] substrate-adapter-legacy"
@@ -91,13 +90,12 @@ jobs:
         key: cargo-build-adapter-substrate-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
         restore-keys: cargo-build-adapter-substrate-legacy-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build substrate legacy adapters
-      working-directory: test/adapters/substrate-legacy
-      run: cargo build --release
+      run: make -C test substrate-adapter-legacy
     - name: Upload substrate legacy adapter
       uses: actions/upload-artifact@v1
       with:
         name: substrate-adapter-legacy
-        path: test/adapters/substrate-legacy/target/release/substrate-adapter-legacy
+        path: test/bin/substrate-adapter-legacy
 
   build-adapter-kagome:
     name: "[build] kagome-adapter"
@@ -112,25 +110,19 @@ jobs:
         key: hunter-adapter-kagome-${{ hashFiles('test/adapters/kagome/CMakeLists.txt') }}
         restore-keys: hunter-adapter-kagome-
     - name: Build kagome adapter
-      working-directory: test/adapters/kagome
       env:
         CC: gcc-9
         CXX: g++-9
-      run: |
-        cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
-        cmake --build build
+      run: make -C test kagome-adapter 
     - name: Upload kagome adapter
       uses: actions/upload-artifact@v1
       with:
         name: kagome-adapter
-        path: test/adapters/kagome/build/kagome-adapter
+        path: test/bin/kagome-adapter
 
   build-adapter-gossamer:
     name: "[build] gossamer-adapter"
     runs-on: ubuntu-18.04
-    defaults:
-      run:
-        working-directory: test/adapters/gossamer
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -141,12 +133,12 @@ jobs:
         key: go-mod-adapter-gossamer-${{ hashFiles('test/adapters/gossamer/go.sum') }}
         restore-keys: go-mod-adapter-gossamer-
     - name: Build gossamer adapter
-      run: go build
+      run: make -C test gossamer-adapter 
     - name: Upload gossamer adapter
       uses: actions/upload-artifact@v1
       with:
         name: gossamer-adapter
-        path: test/adapters/gossamer/gossamer-adapter
+        path: test/bin/gossamer-adapter
 
 
   build-adapter-wasm:
@@ -182,13 +174,12 @@ jobs:
         key: cargo-build-adapter-wasm-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/wasm/Cargo.lock') }}
         restore-keys: cargo-build-adapter-wasm-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build wasm adapters
-      working-directory: test/adapters/wasm
-      run: cargo build --release
+      run: make -C test wasm-adapter
     - name: Upload wasm adapter
       uses: actions/upload-artifact@v1
       with:
         name: wasm-adapter.compact.wasm
-        path: test/adapters/wasm/target/release/wbuild/wasm-adapter/wasm_adapter.compact.wasm
+        path: test/bin/wasm_adapter.compact.wasm
 
   build-adapter-wasm-legacy:
     name: "[build] wasm-adapter-legacy"
@@ -223,13 +214,12 @@ jobs:
         key: cargo-build-adapter-wasm-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/wasm-legacy/Cargo.lock') }}
         restore-keys: cargo-build-adapter-wasm-legacy-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build wasm legacy adapters
-      working-directory: test/adapters/wasm-legacy
-      run: cargo build --release
+      run: make -C test wasm-adapter-legacy
     - name: Upload wasm legacy adapter
       uses: actions/upload-artifact@v1
       with:
         name: wasm-adapter-legacy.compact.wasm
-        path: test/adapters/wasm-legacy/target/release/wbuild/wasm-adapter-legacy/wasm_adapter_legacy.compact.wasm
+        path: test/bin/wasm_adapter_legacy.compact.wasm
 
 
   test-substrate:
@@ -246,8 +236,8 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: test/adapters/substrate
-    - run: chmod +x test/adapters/substrate/substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
     - name: Run test fixture
       run: test/runtests.jl substrate ${{ matrix.fixture }}
 
@@ -265,12 +255,12 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: test/adapters/substrate
+        path: test/bin
     - uses: actions/download-artifact@v1
       with:
         name: kagome-adapter
-        path: test/adapters/kagome
-    - run: cd test/adapters && chmod +x substrate/substrate-adapter kagome/kagome-adapter
+        path: test/bin
+    - run: cd test/bin && chmod +x substrate-adapter kagome-adapter
     - name: Run test fixture
       run: test/runtests.jl kagome ${{ matrix.fixture }}
 
@@ -288,12 +278,12 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: test/adapters/substrate
+        path: test/bin
     - uses: actions/download-artifact@v1
       with:
         name: gossamer-adapter
-        path: test/adapters/gossamer
-    - run: cd test/adapters && chmod +x substrate/substrate-adapter gossamer/gossamer-adapter
+        path: test/bin
+    - run: cd test/bin && chmod +x substrate-adapter gossamer-adapter
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
@@ -312,16 +302,16 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: ${{ matrix.implementation }}-adapter-legacy
-        path: test/adapters/${{ matrix.implementation }}-legacy
+        path: test/bin
       if: matrix.implementation == 'substrate'
     - uses: actions/download-artifact@v1
       with:
         name: ${{ matrix.implementation }}-adapter
-        path: test/adapters/${{ matrix.implementation }}
+        path: test/bin
       if: matrix.implementation == 'kagome'
-    - run: chmod +x test/adapters/substrate-legacy/substrate-adapter-legacy
+    - run: chmod +x test/bin/substrate-adapter-legacy
       if: matrix.implementation == 'substrate'
-    - run: chmod +x test/adapters/kagome/kagome-adapter
+    - run: chmod +x test/bin/kagome-adapter
       if: matrix.implementation == 'kagome'
     - name: Run test fixture
       run: test/runtests.jl ${{ matrix.implementation }} host-api-legacy
