@@ -331,7 +331,6 @@ jobs:
     needs: [ build-host-gossamer, build-adapter-substrate, build-tester-host-legacy ]
     name: "[test-genesis] gossamer"
     runs-on: ubuntu-18.04
-    continue-on-error: true
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
