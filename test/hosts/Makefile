@@ -6,7 +6,7 @@ all: substrate kagome gossamer
 
 substrate:
 	cd substrate && cargo build --release
-	cp targer/release/polkadot ../bin/
+	cp target/release/polkadot ../bin/
 
 kagome:
 	cmake -DCMAKE_BUILD_TYPE=Release -S kagome -B kagome/build
