@@ -7,7 +7,9 @@ build:
 
 install: build
 	cp gossamer-adapter ../../bin/
-	cp ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@*/wasmer/libwasmer.so ../../lib/
+
+# After host-api implementation, add:
+# cp ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@*/wasmer/libwasmer.so ../../lib/
 
 clean:
 	rm -f gossammer-adapter
