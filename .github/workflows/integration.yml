@@ -8,6 +8,7 @@ on:
     - '!test/fixtures/**'
     - 'test/fixtures/genesis/**'
     - '!test/adapters/**'
+    - 'test/adapters/substrate/**'
     - '!test/README.md'
   pull_request:
     paths:
@@ -16,6 +17,7 @@ on:
     - '!test/fixtures/**'
     - 'test/fixtures/genesis/**'
     - '!test/adapters/**'
+    - 'test/adapters/substrate/**'
     - '!test/README.md'
 
 jobs:
