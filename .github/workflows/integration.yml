@@ -119,6 +119,12 @@ jobs:
       with:
         name: gossamer-host
         path: test/bin/gossamer
+    - name: Upload libwasmer.so
+      uses: actions/upload-artifact@v1
+      with:
+        name: gossamer-host
+        path: test/lib/libwasmer.so
+
 
 
   build-adapter-substrate:
@@ -336,16 +342,14 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - name: Provide libwasmer.so
-      uses: actions/cache@v1
-      with:
-        path: ~/go/pkg/mod
-        key: go-mod-host-gossamer-
     - uses: actions/download-artifact@v1
       with:
         name: gossamer-host
         path: test/bin
-    - run: chmod +x test/bin/gossamer
+    - run: |
+        chmod +x test/bin/gossamer
+        mkdir -p test/lib
+        mv test/bin/libwasmer.so test/lib/
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter

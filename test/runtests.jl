@@ -82,6 +82,15 @@ println()
 # Add locally build or downloaded adapters, testers and hosts to PATH
 ENV["PATH"] *= ":$(@__DIR__)/bin"
 
+# Add locally build libaries, because gossamer wasmer go extension does not
+# support static linking yet and depends on libwasmer.so.
+# https://github.com/wasmerio/go-ext-wasm/pull/40
+if haskey(ENV, "LD_LIBRARY_PATH")
+    ENV["LD_LIBRARY_PATH"] *= ":$(@__DIR__)/lib"
+else
+    ENV["LD_LIBRARY_PATH"] = "$(@__DIR__)/lib"
+end
+
 # Run from this subfolder (to allow relative paths in suite)
 previous_path = pwd()
 cd("$(@__DIR__)")
