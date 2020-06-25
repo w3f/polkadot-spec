@@ -1,7 +1,12 @@
-.PHONY: build clean
+.PHONY: all build install clean
+
+all: install
 
 build:
-	go build
+	go build -v
+
+install: build
+	cp gossamer-adapter ../../bin/
 
 clean:
-	rm gossammer-adapter
+	rm -f gossammer-adapter

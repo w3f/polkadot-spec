@@ -59,7 +59,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: substrate-host
-        path: test/hosts/substrate/target/release/polkadot
+        path: test/bin/polkadot
 
   build-host-kagome:
     name: "[build] kagome-host"
@@ -84,17 +84,17 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: kagome-host
-        path: test/hosts/kagome/build/node/kagome_validating/kagome_validating
+        path: test/bin/kagome_validating
     - name: Upload kagome_full_syncing
       uses: actions/upload-artifact@v1
       with:
         name: kagome-host
-        path: test/hosts/kagome/build/node/kagome_full_syncing/kagome_full_syncing
+        path: test/bin/kagome_full_syncing
     - name: Upload kagome_block_producing
       uses: actions/upload-artifact@v1
       with:
         name: kagome-host
-        path: test/hosts/kagome/build/node/kagome_block_producing/kagome_block_producing
+        path: test/bin/kagome_block_producing
 
   build-host-gossamer:
     name: "[build] gossamer-host"
@@ -116,7 +116,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: gossamer-host
-        path: test/hosts/gossamer/gossamer
+        path: test/bin/gossamer
 
 
   build-adapter-substrate:
@@ -157,7 +157,7 @@ jobs:
       uses: actions/upload-artifact@v1
       with:
         name: substrate-adapter
-        path: test/adapters/substrate/target/release/substrate-adapter
+        path: test/bin/substrate-adapter
 
 
   build-tester-host:
@@ -208,12 +208,12 @@ jobs:
     - name: Upload host tester genesis file
       uses: actions/upload-artifact@v1
       with:
-        name: genesis.json
+        name: host-tester-genesis
         path: test/testers/host/genesis.json
     - name: Upload host tester state file
       uses: actions/upload-artifact@v1
       with:
-        name: genesis.yaml
+        name: host-tester-genesis
         path: test/testers/host/genesis.yaml
 
 
@@ -265,17 +265,17 @@ jobs:
     - name: Upload host tester legacy genesis file
       uses: actions/upload-artifact@v1
       with:
-        name: genesis-legacy.json
+        name: host-tester-legacy-genesis
         path: test/testers/host-legacy/genesis-legacy.json
     - name: Upload host tester legacy state file
       uses: actions/upload-artifact@v1
       with:
-        name: genesis-legacy.yaml
+        name: host-tester-legacy-genesis
         path: test/testers/host-legacy/genesis-legacy.yaml
     - name: Upload host tester legacy genesis file for kagome
       uses: actions/upload-artifact@v1
       with:
-        name: genesis-legacy.kagome.json
+        name: host-tester-legacy-genesis
         path: test/testers/host-legacy/genesis-legacy.kagome.json
 
 
@@ -289,20 +289,16 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: substrate-host
-        path: test/hosts
-    - run: chmod +x test/hosts/polkadot
+        path: test/bin
+    - run: chmod +x test/bin/polkadot
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: test/adapters/substrate
-    - run: chmod +x test/adapters/substrate/substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
-        name: genesis.json
-        path: test/testers/host
-    - uses: actions/download-artifact@v1
-      with:
-        name: genesis.yaml
+        name: host-tester-genesis
         path: test/testers/host
     - name: Run substrate with tester genesis
       run: test/runtests.jl substrate genesis
@@ -317,20 +313,16 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: kagome-host
-        path: test/hosts
-    - run: chmod +x test/hosts/kagome_validating
+        path: test/bin
+    - run: chmod +x test/bin/kagome_validating
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: test/adapters/substrate
-    - run: chmod +x test/adapters/substrate/substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
-        name: genesis-legacy.kagome.json
-        path: test/testers/host-legacy
-    - uses: actions/download-artifact@v1
-      with:
-        name: genesis-legacy.yaml
+        name: host-tester-legacy-genesis
         path: test/testers/host-legacy
     - name: Run kagome with tester genesis
       run: test/runtests.jl kagome genesis
@@ -351,20 +343,16 @@ jobs:
     - uses: actions/download-artifact@v1
       with:
         name: gossamer-host
-        path: test/hosts
-    - run: chmod +x test/hosts/gossamer
+        path: test/bin
+    - run: chmod +x test/bin/gossamer
     - uses: actions/download-artifact@v1
       with:
         name: substrate-adapter
-        path: test/adapters/substrate
-    - run: chmod +x test/adapters/substrate/substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
-        name: genesis-legacy.json
-        path: test/testers/host-legacy
-    - uses: actions/download-artifact@v1
-      with:
-        name: genesis-legacy.yaml
+        name: host-tester-legacy-genesis
         path: test/testers/host-legacy
     - name: Run gossamer with tester genesis
       run: test/runtests.jl gossamer genesis

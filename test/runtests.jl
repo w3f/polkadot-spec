@@ -79,29 +79,8 @@ println("Implementations: " * join(Config.implementations, ", "))
 println("Fixtures:        " * join(Config.fixtures, ", "))
 println()
 
-# Provide fallback path for locally or ci build adapters
-ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate/target/release"
-ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate/target/debug"
-ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate"
-
-ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate-legacy/target/release"
-ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate-legacy/target/debug"
-ENV["PATH"] *= ":$(@__DIR__)/adapters/substrate-legacy"
-
-ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome/build"
-ENV["PATH"] *= ":$(@__DIR__)/adapters/kagome"
-
-ENV["PATH"] *= ":$(@__DIR__)/adapters/gossamer"
-
-# Provide fallback path for locally or ci build hosts
-ENV["PATH"] *= ":$(@__DIR__)/hosts/substrate/target/release"
-ENV["PATH"] *= ":$(@__DIR__)/hosts/substrate/target/debug"
-
-ENV["PATH"] *= ":$(@__DIR__)/hosts/kagome/build/node/kagome_validating"
-
-ENV["PATH"] *= ":$(@__DIR__)/hosts/gossamer"
-
-ENV["PATH"] *= ":$(@__DIR__)/hosts"
+# Add locally build or downloaded adapters, testers and hosts to PATH
+ENV["PATH"] *= ":$(@__DIR__)/bin"
 
 # Run from this subfolder (to allow relative paths in suite)
 previous_path = pwd()

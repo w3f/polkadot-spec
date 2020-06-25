@@ -1,18 +1,26 @@
-.PHONY: all substrate-host kagome-host gossamer-host
+.PHONY: all substrate kagome gossamer clean
 
-all: substrate-host kagome-host gossamer-host
 
-substrate-host:
+all: substrate kagome gossamer
+
+
+substrate:
 	cd substrate && cargo build --release
+	cp targer/release/polkadot ../bin/
 
-kagome-host:
+kagome:
 	cmake -DCMAKE_BUILD_TYPE=Release -S kagome -B kagome/build
 	cmake --build kagome/build
+	cp kagome/build/node/kagome_validating/kagome_validating           ../bin/
+	cp kagome/build/node/kagome_full_syncing/kagome_full_syncing       ../bin/
+	cp kagome/build/node/kagome_block_producing/kagome_block_producing ../bin/
 
-gossamer-host:
+gossamer:
 	cd gossamer && go build -v ./cmd/gossamer
+	cp gossamer/gossamer ../bin/
+
 
 clean:
 	rm -rf substrate/target
 	rm -rf kagome/build
-	rm -f gossamer/gossamer
+	rm  -f gossamer/gossamer
