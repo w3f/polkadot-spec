@@ -8,7 +8,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "substrate-adapter: "
+      prefix: "substrate-a:"
     open-pull-requests-limit: 0
 
   - package-ecosystem: "cargo"
@@ -16,7 +16,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "substrate-adapter-legacy: "
+      prefix: "substrate-a-l:"
     open-pull-requests-limit: 0
 
   # kagome/hunter currently not supported
@@ -26,7 +26,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "gossamer-adapter: "
+      prefix: "gossamer-a:"
     open-pull-requests-limit: 0
 
 
@@ -35,7 +35,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "wasm-adapter: "
+      prefix: "wasm-a:"
     open-pull-requests-limit: 0
 
   - package-ecosystem: "cargo"
@@ -43,7 +43,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "wasm-adapter-legacy: "
+      prefix: "wasm-a-l:"
     open-pull-requests-limit: 0
 
 
@@ -54,7 +54,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "host-tester: "
+      prefix: "host-t:"
     open-pull-requests-limit: 0
 
   - package-ecosystem: "cargo"
@@ -62,7 +62,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "host-tester-legacy: "
+      prefix: "host-t-l:"
     open-pull-requests-limit: 0
 
 
@@ -73,7 +73,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "substrate-host: "
+      prefix: "substrate-h:"
     open-pull-requests-limit: 0
 
   - package-ecosystem: "gitsubmodule"
@@ -81,7 +81,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "kagome-host: "
+      prefix: "kagome-h:"
     open-pull-requests-limit: 0
 
   - package-ecosystem: "gitsubmodule"
@@ -89,7 +89,7 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "gossamer-host: "
+      prefix: "gossamer-h:"
     open-pull-requests-limit: 0
 
 
@@ -100,5 +100,5 @@ updates:
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "ci: "
+      prefix: "ci:"
     open-pull-requests-limit: 0
