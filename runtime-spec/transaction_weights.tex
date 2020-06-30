@@ -49,10 +49,13 @@ extrinsic.
 \end{itemize}
 
 \section{Limitations}\label{sec:limitations} The assigned weights should be
-relative to each others execution time and "heaviness", although weights can be
-assigned depending on the priorities the chain is supposed to endorse. Following
-limitations must be considered when assigning weights, which vary on the
-Runtime.
+proportional to each others execution time and "heaviness". For example, if
+Extrinsic A takes three times longer to execute than Extrinsic B, then Extrinsic
+A should have three times the amount of weight than Extrinsic B.
+\newline
+
+Following limitations must be considered when assigning weights, which vary on
+the Runtime.
 
 \subsection{Considerable limitations}
 \begin{itemize}
