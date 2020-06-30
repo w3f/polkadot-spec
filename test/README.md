@@ -27,16 +27,19 @@ While the official target of our testsuite are currently only debian-based syste
 
 ## General Build
 
-There is a simple Makefile in the [main test directory](./), that will build all the required API adapters, testers and hosts when you run `make`.
+There is a simple Makefile in the [main test directory](./), that will build all the required API adapters, testers and hosts when you run `make`. Any successful build will lead to the resulting binary being copied into the `bin`  subfolder. This should allow you to run any of the fixtures in the test suite afterwards. The Makefile additionally allows you only build specific binaries or groups by providing a seperate target for each (e.g. `make kagome-adapter gossamer-host` or `make adapters`).
 
-Alternately, each of the API adapters can be built separately (see [adapters subfolder](./adapters/)), before running the testsuite.
+If you only want to run a certain fixture or only test a specific implementation, you might therefore not need to build all adapters, testers and hosts. The only binary needed for most tests is the `substrate-adapter` (as it is used as the reference implementation). Furthermore you only need to build any of the hosts if you want to run any `host-tester` based fixture (i.e. only `genesis` at the moment).
+It should also be noted that the testsuite will pick up any hosts (or adapters) in your `PATH` first, so if you already have any of those installed you can run the test suite against the binaries in your `PATH` instead.
+
+To build any of the hosts, please make sure to initialized the corresponding submodules in the [hosts subfolder](./hosts), e.g. with `git submodule update --init`.
 
 ### Substrate API Adapter
 
 Needs Rust Nightly with WASM toolchain (and potentially libclang?)
 
 ```sh
-cargo build --release
+make substrate-adapter substrate-adapter-legacy
 ```
 
 ### Kagome API Adapter
@@ -44,8 +47,7 @@ cargo build --release
 Needs CMake, GCC or Clang >= 8 (GCC 10 currently broken), Rust, Perl, Python
 
 ```sh
-cmake -DCMAKE_BUILD_TYPE=Release -B build -S .
-cmake --build build
+make kagome-adapter
 ```
 
 ### Gossamer API Adapter
@@ -53,8 +55,9 @@ cmake --build build
 Needs recent version of Go.
 
 ```sh
-go build
+make gossamer-adapter
 ```
+
 ## On Debian-based systems
 
 If you are on a debian-based system, here are some more concrete pointers to help you to set up your environment.
@@ -80,8 +83,11 @@ apt update && apt install -y --no-install-recommends \
   g++-8 \
   golang \
   julia \
-  python
+  python \
+  jq
 ```
+
+You will also have to install [`yq`](https://github.com/mikefarah/yq) which can be done via pip, apt, snap and even go. For more details please refer to its official documentation.
 
 ### Install recent CMake
 
