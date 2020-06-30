@@ -88,7 +88,7 @@ Do note that the smallest, non-zero weight in Polkadot is set at 10'000.
 \section{Runtime Primitives}
 The Runtime functions must be studied in order to determine which parts of the
 code will excessively increase execution time. Potential indicators like loops,
-IO operations and data manipulation must be considered. Based on those
+I/O operations and data manipulation must be considered. Based on those
 observations, Weights should be applied on operations that could have heavy
 implications on those design choices. The final assigned Weights are calculated
 by benchmarking the Runtime functions, which is described in section
@@ -151,7 +151,7 @@ differentiated by using special prefixes for the storage key. Big differences
 arise on how the primitive types are used in the Runtime function, on whether
 single values are operated on or entire datasets. Single value operations are
 generally quite cheap and its execution time does not vary depending on the data
-that's being processed. However, excessive IO overhead can appear when IO
+that's being processed. However, excessive I/O overhead can appear when I/O
 operations are executed repeatedly, such as loops. Especially, when the amount
 of loop iterations can be influenced by the caller of the function or by certain
 conditions in the state storage.
@@ -354,7 +354,7 @@ The function \verb|payout_stakers| from the \verb|staking| Pallet can be called
 by a single account in order to payout the reward for all nominators who back a
 particular validator. The reward also covers the validator's share. This
 function is interesting because it iterators over a range of nominators, which
-varies, and does IO operation for each of them.
+varies, and does I/O operation for each of them.
 \newline
 
 First, this function makes some basic checks to verify if the specified era is
@@ -452,7 +452,7 @@ Key points:
   \item The function searches the database for the reward points of the
   specified validator. If there are a lot of validators in the network, the
   search becomes more expensive.
-  \item Looping through a list of nominators and creating IO operations for each
+  \item Looping through a list of nominators and creating I/O operations for each
   heavily increases execution time. The Runtime fetches up to 64 nominators.
 \end{itemize}
 
