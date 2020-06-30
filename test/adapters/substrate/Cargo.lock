@@ -194,9 +194,9 @@ checksum = "08c48aae112d48ed9f069b33538ea9e3e90aa263cfa3d1c24309612b1f7472de"
 
 [[package]]
 name = "cargo_metadata"
-version = "0.9.1"
+version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46e3374c604fb39d1a2f35ed5e4a4e30e60d01fab49446e08f1b3e9a90aef202"
+checksum = "b8de60b887edf6d74370fc8eb177040da4847d971d6234c7b13a6da324ef0caf"
 dependencies = [
  "semver 0.9.0",
  "serde",
@@ -1754,18 +1754,9 @@ dependencies = [
  "sp-io",
  "sp-serializer",
  "sp-state-machine",
- "substrate-adapter-runtime",
  "trie-db",
  "trie-root",
-]
-
-[[package]]
-name = "substrate-adapter-runtime"
-version = "2.0.0-alpha.6"
-dependencies = [
- "parity-scale-codec",
- "sp-core",
- "substrate-wasm-builder",
+ "wasm-adapter",
 ]
 
 [[package]]
@@ -1782,9 +1773,9 @@ dependencies = [
 
 [[package]]
 name = "substrate-wasm-builder"
-version = "1.0.10"
+version = "1.0.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "db9851b42c2f13549b4bddfae7dae79ea1fc6766e9e1077bfa03acc165d46810"
+checksum = "f3a6aee05262f0b8339bd4b4ce4f99ffdd0264eb5eba2432e72b4688c1f1bb47"
 dependencies = [
  "atty",
  "build-helper",
@@ -2010,6 +2001,13 @@ name = "wasi"
 version = "0.9.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cccddf32554fecc6acb585f82a32a72e28b48f8c4c1883ddfeeeaa96f7d8e519"
+
+[[package]]
+name = "wasm-adapter"
+version = "2.0.0-alpha.6"
+dependencies = [
+ "substrate-wasm-builder",
+]
 
 [[package]]
 name = "wasm-gc-api"

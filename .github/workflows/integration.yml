@@ -1,0 +1,363 @@
+name: Integration Testsuite
+
+on:
+  push:
+    paths:
+    - '.github/workflows/integration.yml'
+    - 'test/**'
+    - '!test/fixtures/**'
+    - 'test/fixtures/genesis/**'
+    - '!test/adapters/**'
+    - 'test/adapters/substrate/**'
+    - '!test/README.md'
+  pull_request:
+    paths:
+    - '.github/workflows/integration.yml'
+    - 'test/**'
+    - '!test/fixtures/**'
+    - 'test/fixtures/genesis/**'
+    - '!test/adapters/**'
+    - 'test/adapters/substrate/**'
+    - '!test/README.md'
+
+jobs:
+  build-host-substrate:
+    name: "[build] substrate-host"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-06-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-host-substrate-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
+        restore-keys: cargo-registry-host-substrate-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-host-substrate-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
+        restore-keys: cargo-index-host-substrate-
+    - name: Cache cargo build output
+      uses: actions/cache@v1
+      with:
+        path: test/hosts/substrate/target
+        key: cargo-build-host-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
+        restore-keys: cargo-build-host-substrate-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build substrate
+      run: make -C test substrate-host
+    - name: Upload substrate
+      uses: actions/upload-artifact@v1
+      with:
+        name: substrate-host
+        path: test/bin/polkadot
+
+  build-host-kagome:
+    name: "[build] kagome-host"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Cache hunter outputs
+      uses: actions/cache@v1
+      with:
+        path: ~/.hunter
+        key: hunter-host-kagome-${{ hashFiles('test/hosts/kagome/CMakeLists.txt') }}
+        restore-keys: hunter-host-kagome-
+    - name: Build kagome
+      env:
+        CC: gcc-9
+        CXX: g++-9
+      run: make -C test kagome-host
+    - name: Upload kagome_validating
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-host
+        path: test/bin/kagome_validating
+    - name: Upload kagome_full_syncing
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-host
+        path: test/bin/kagome_full_syncing
+    - name: Upload kagome_block_producing
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-host
+        path: test/bin/kagome_block_producing
+
+  build-host-gossamer:
+    name: "[build] gossamer-host"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Cache go modules
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: go-mod-host-gossamer-${{ hashFiles('test/hosts/gossamer/go.sum') }}
+        restore-keys: go-mod-host-gossamer-
+    - name: Build gossamer
+      run: make -C test gossamer-host
+    - name: Upload gossamer
+      uses: actions/upload-artifact@v1
+      with:
+        name: gossamer-host
+        path: test/bin/gossamer
+    - name: Upload libwasmer.so
+      uses: actions/upload-artifact@v1
+      with:
+        name: gossamer-host
+        path: test/lib/libwasmer.so
+
+
+
+  build-adapter-substrate:
+    name: "[build] substrate-adapter"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-06-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-registry-adapter-substrate-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-index-adapter-substrate-
+    - name: Cache cargo build ouput
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/substrate/target
+        key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build substrate adapters
+      run: make -C test substrate-adapter
+    - name: Upload substrate adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/bin/substrate-adapter
+
+
+  build-tester-host:
+    name: "[build] host-tester"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-06-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Setup python toolchain
+      uses: actions/setup-python@v2
+    - name: Install yq
+      run: |
+        python -m pip install wheel
+        python -m pip install yq
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
+        restore-keys: cargo-registry-tester-host-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
+        restore-keys: cargo-index-tester-host-
+    - name: Cache cargo build output
+      uses: actions/cache@v1
+      with:
+        path: test/testers/host/target
+        key: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/testers/host/Cargo.lock') }}
+        restore-keys: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build and generate host tester genesis
+      run: make -C test host-tester
+    - name: Upload host tester runtime
+      uses: actions/upload-artifact@v1
+      with:
+        name: host_tester_runtime.compact.wasm
+        path: test/testers/host/target/release/wbuild/host-tester-runtime/host_tester_runtime.compact.wasm
+    - name: Upload host tester genesis file
+      uses: actions/upload-artifact@v1
+      with:
+        name: host-tester-genesis
+        path: test/testers/host/genesis.json
+    - name: Upload host tester state file
+      uses: actions/upload-artifact@v1
+      with:
+        name: host-tester-genesis
+        path: test/testers/host/genesis.yaml
+
+
+  build-tester-host-legacy:
+    name: "[build] host-tester-legacy"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-06-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Setup python toolchain
+      uses: actions/setup-python@v2
+    - name: Install yq
+      run: |
+        python -m pip install wheel
+        python -m pip install yq
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-tester-host-legacy-${{ hashFiles('test/testers/host/Cargo.lock') }}
+        restore-keys: cargo-registry-tester-host-legacy-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-tester-host-legacy-${{ hashFiles('test/testers/host/Cargo.lock') }}
+        restore-keys: cargo-index-tester-host-legacy-
+    - name: Cache cargo build
+      uses: actions/cache@v1
+      with:
+        path: test/testers/host-legacy/target
+        key: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/testers/host/Cargo.lock') }}
+        restore-keys: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build and generate host tester legacy genesis
+      run: make -C test host-tester-legacy
+    - name: Upload host tester legacy runtime
+      uses: actions/upload-artifact@v1
+      with:
+        name: host_tester_legacy_runtime.compact.wasm
+        path: test/testers/host-legacy/target/release/wbuild/host-tester-legacy-runtime/host_tester_legacy_runtime.compact.wasm
+    - name: Upload host tester legacy genesis file
+      uses: actions/upload-artifact@v1
+      with:
+        name: host-tester-legacy-genesis
+        path: test/testers/host-legacy/genesis-legacy.json
+    - name: Upload host tester legacy state file
+      uses: actions/upload-artifact@v1
+      with:
+        name: host-tester-legacy-genesis
+        path: test/testers/host-legacy/genesis-legacy.yaml
+    - name: Upload host tester legacy genesis file for kagome
+      uses: actions/upload-artifact@v1
+      with:
+        name: host-tester-legacy-genesis
+        path: test/testers/host-legacy/genesis-legacy.kagome.json
+
+
+  test-substrate:
+    needs: [ build-host-substrate, build-adapter-substrate, build-tester-host ]
+    name: "[test-genesis] substrate"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-host
+        path: test/bin
+    - run: chmod +x test/bin/polkadot
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
+    - uses: actions/download-artifact@v1
+      with:
+        name: host-tester-genesis
+        path: test/testers/host
+    - name: Run substrate with tester genesis
+      run: test/runtests.jl substrate genesis
+
+  test-kagome:
+    needs: [ build-host-kagome, build-adapter-substrate, build-tester-host-legacy ]
+    name: "[test-genesis] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-host
+        path: test/bin
+    - run: chmod +x test/bin/kagome_validating
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
+    - uses: actions/download-artifact@v1
+      with:
+        name: host-tester-legacy-genesis
+        path: test/testers/host-legacy
+    - name: Run kagome with tester genesis
+      run: test/runtests.jl kagome genesis
+
+  test-gossamer:
+    needs: [ build-host-gossamer, build-adapter-substrate, build-tester-host-legacy ]
+    name: "[test-genesis] gossamer"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: gossamer-host
+        path: test/bin
+    - run: |
+        chmod +x test/bin/gossamer
+        mkdir -p test/lib
+        mv test/bin/libwasmer.so test/lib/
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
+    - uses: actions/download-artifact@v1
+      with:
+        name: host-tester-legacy-genesis
+        path: test/testers/host-legacy
+    - name: Run gossamer with tester genesis
+      run: test/runtests.jl gossamer genesis
