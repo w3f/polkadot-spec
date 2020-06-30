@@ -27,30 +27,32 @@ Certain transactions (referred to as "extrinsics") require more execution time
 and computation resources than others. In order to establish sustainable
 economic incentives, authors of extrinsics must pay a fee to block producers.
 The Polkadot weight system introduces a mechanism for block producers to measure
-the expense of extrinsics and determine how "heavy" (in terms of computation
-cost) it is. With this mechanism, block producers can select a set of extrinsics
-and saturate the block to it's fullest potential without exceeding any
-limitations (as described in section \ref{sec:limitations}).
+the expense of extrinsics and determine how "heavy" it is, in terms of
+computational cost. With this mechanism, block producers can select a set of
+extrinsics and saturate the block to it's fullest potential without exceeding
+any limitations (as described in section \ref{sec:limitations}). Therefore,
+weights serve also as an indicator on whether a block is considered full and how
+much space there's left for remaining, pending extrinsics.
 \newline
 
-Polkadot also introduces a specified block ratio (as defined in section
-\ref{sec:limitations}), ensuring that only a certain portion of the total block
-size gets used for regular extrinsics. The remaining space is reserved for
-critical, operational extrinsics required for the functionality by Polkadot
-itself.
-
-\section{Fundamentals}
-Weights are just a numeric value and Runtime functions may use complex structures to express those
-values. Therefore, the following requirements must apply for implementing weight calculations:
+Weights are just numeric values and Runtime functions may use complex
+structures to express those values. Therefore, the following requirements must
+apply for implementing weight calculations:
 \begin{itemize}
-\item Computations of weights must be determined before execution of that extrinsic.
-\item Due to the limited time window, computations of weights must be done quickly and consume
-      few resources themselves.
-\item Weights must be self contained and must not require I/O on the chain state. Weights are
-      fixed measurements and are based solely on the Runtime function and its parameters.
-\item Weights serve three functions: measurements used to calculate transaction fees, to prevent
-      the block being filled with too many extrinsics and to avoid extrinsics where its execution
-      takes too long.
+\item Computations of weights must be determined before execution of that
+extrinsic.
+\item Due to the limited time window, computations of weights must be done
+      quickly and consume few resources themselves.
+\item Weights must be self contained and must not require I/O on the chain
+      state. Weights are fixed measurements and are based solely on the Runtime
+      function and its parameters.
+\item Weights serve four functions:
+  \begin{itemize}
+    \item Measurement used to calculate transaction fees.
+    \item Selection of extrinsics to saturate a block to its fullest potential.
+    \item Indicator on whether a block is considered full.
+    \item Avoid extrinsics where its execution takes too long.
+  \end{itemize}
 \end{itemize}
 
 \section{Limitations}\label{sec:limitations}
