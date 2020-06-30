@@ -96,11 +96,11 @@ by benchmarking the Runtime functions, which is described in section
 \newline
 
 Section \ref{sect:examples-runtime-analysis} walks through two practical
-examples of Runtime function analysis. Not every possible outcome can be caused
-with input parameters to the Runtime function. In some circumstances,
-preliminary work is required before a specific benchmark can be reliably
-measured, such as creating certain preexisting entries in the storage or other
-changes to the environment. This is explained in more detail in section
+examples of Runtime function analysis. Not every possible benchmarking outcome
+can be caused with input parameters to the Runtime function. In some
+circumstances, preliminary work is required before a specific benchmark can be
+reliably measured, such as creating certain preexisting entries in the storage
+or other changes to the environment. This is explained in more detail in section
 \ref{sect:examples-preliminary-work}.
 
 \subsection{Primitive Types}\label{sect:primitive-types} The Runtime reuses
@@ -134,9 +134,9 @@ modules, depending on the context:
   \end{verbatim}
 \end{itemize}
 
-Which type to use depends on the functionality of the Runtime module (or its
-sub-processes, rather). In some cases only a single value is required. In
-others, multiple values need to be operated on.
+It depends on the functionality of the Runtime module (or its sub-processes,
+rather) which storage type to use. In some cases only a single value is
+required. In others, multiple values need to be operated on.
 \newline
 
 Those lower level types get abstracted over in each individual Runtime module
