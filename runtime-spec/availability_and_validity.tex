@@ -371,6 +371,16 @@ runtime uses to process these availability votes.}{this is not really relevant
 to the spec}
 \newline
 
+\begin{definition}
+  \label{defn-availability-bitfield}
+  An \textbf{availability bitfield} is signed by a particular validator about the availability
+  of pending candidates. It's a tuple of the following format:
+  \[
+    (u32, ...)
+  \]
+  \todo{@fabio}
+\end{definition}
+
 For each parachain, the relay chain stores the following data:
 %/syed{we store}{what does it mean we store? this need to be clear. Is it a transaction TBS?}: no its not a tx, its in the relay chain state
 
