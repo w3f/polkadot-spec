@@ -17,10 +17,9 @@
 
 ///This file is an interface to run various Polkadot RE functions
 
+// Command line arg parser
 #[macro_use]
 extern crate clap;
-extern crate base64;
-extern crate data_encoding;
 
 // For PDRE API
 extern crate hex;
