@@ -17,34 +17,38 @@
 
 // this file provide a command line interface to call scale codec go library
 
-package main
+package host_api
 
 import (
 	"fmt"
 	"os"
+
+	"github.com/ChainSafe/gossamer/lib/runtime"
+	"github.com/ChainSafe/gossamer/lib/scale"
 )
 
-func usage() {
-	fmt.Println("usage: ", os.Args[0], " <scale-codec|state-trie|host-api> <subcommand-args>")
-}
-
-func main() {
-	// Verify that a subcommand has been provided
-	if len(os.Args) < 2 {
-		usage()
+// Simple wrapper to test hash function that input and output byte arrays
+func test_crypto_hash(r *runtime.Runtime, name string, input string) {
+	enc, err := scale.Encode([]byte(input))
+	if err != nil {
+		fmt.Println("Encoding failed: ", err)
 		os.Exit(1)
 	}
 
-	// Parse subcommand and call it with all remaining args
-	switch os.Args[1] {
-	case "scale-codec":
-		ProcessScaleCodecCommand(os.Args[2:])
-	case "state-trie":
-		ProcessStateTrieCommand(os.Args[2:])
-	case "host-api":
-		ProcessHostApiCommand(os.Args[2:])
-	default:
-		usage()
+	output, err := r.Exec("rtm_ext_" + name, enc)
+	if err != nil {
+		fmt.Println("Execution failed: ", err)
 		os.Exit(1)
 	}
+
+	dec, err := scale.Decode(output, []byte{}) 
+	if err != nil {
+		fmt.Println("Decoding failed: ", err)
+		os.Exit(1)
+	}
+
+	fmt.Printf("%x\n", dec.([]byte)[:])
 }
+
+
+
