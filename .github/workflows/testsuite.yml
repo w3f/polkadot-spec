@@ -368,7 +368,10 @@ jobs:
       with:
         name: gossamer-adapter
         path: test/bin
-    - run: cd test/bin && chmod +x substrate-adapter gossamer-adapter
+    - run: |
+        chmod +x test/bin/substrate-adapter test/bin/gossamer-adapter
+        mkdir -p test/lib
+        mv test/bin/libwasmer.so test/lib/
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
@@ -387,6 +390,9 @@ jobs:
       with:
         name: wasm-adapter-legacy.compact.wasm
         path: test/bin
-    - run: chmod +x test/bin/gossamer-adapter
+    - run: |
+        chmod +x test/bin/gossamer-adapter
+        mkdir -p test/lib
+        mv test/bin/libwasmer.so test/lib/
     - name: Run test fixture
       run: test/runtests.jl gossamer host-api-legacy
