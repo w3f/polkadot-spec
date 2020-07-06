@@ -48,10 +48,11 @@ extrinsic.
   \end{itemize}
 \end{itemize}
 
-\section{Limitations}\label{sec:limitations} The assigned weights should be
-proportional to each others execution time and "heaviness". For example, if
-Extrinsic A takes three times longer to execute than Extrinsic B, then Extrinsic
-A should have three times the amount of weight than Extrinsic B.
+\section{Limitations}\label{sec:limitations}
+The assigned weights should be proportional to each others execution time and
+"heaviness". For example, if Extrinsic A takes three times longer to execute
+than Extrinsic B, then Extrinsic A should have three times the amount of weight
+than Extrinsic B.
 \newline
 
 Following limitations must be considered when assigning weights, which vary on
@@ -75,12 +76,15 @@ As of the official Polkadot Runtime, the limitations are set as follows:
 \item Available block ratio: 75\%
 \end{itemize}
 
-The values of the assigned weight itself is not relevant. It must only fulfill
-the requirements as noted by the fundamentals and limitations, and can be
-assigned as the author sees fit. As a simple example, consider a maximum block
-weight of 1'000'000'000, an available ratio of 75\% and a targeted transaction
-throughput of 500 transactions, we could assign the weight for each transaction
-at about 1'500'000.
+The limitations are configurable and are directly set in the source code of the
+Polkadot Runtime.
+\newline
+
+The weights must fulfill the requirements as noted by the fundamentals and
+limitations, and can be assigned as the author sees fit. As a simple example,
+consider a maximum block weight of 1'000'000'000, an available ratio of 75\% and
+a targeted transaction throughput of 500 transactions, we could assign the
+(average) weight for each transaction at about 1'500'000.
 \newline
 
 Do note that the smallest, non-zero weight in Polkadot is set at 10'000.
