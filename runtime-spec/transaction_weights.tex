@@ -36,7 +36,7 @@ the expense of extrinsics and to determine how "heavy" it is, in terms of
 computational cost. With this mechanism, block producers can select a set of
 extrinsics and saturate the block to it's fullest potential without exceeding
 any limitations, including calculating a fee based on that weight (as described
-in section \ref{sec:fee-calculation}). Therefore, weights serve also as an
+in section \ref{sec:fee-calculation}). Therefore, weights also serve as an
 indicator on whether a block is considered full and how much space there's left
 for remaining, pending extrinsics. Extrinsics which require too many resources
 are discarded. 
@@ -48,8 +48,8 @@ implementing weight calculations:
 \begin{itemize}
   \item Computations of weights must be determined before execution of that
   extrinsic.
-  \item Due to the limited time window, computations of weights must be done
-        quickly and consume few resources themselves.
+  \item Due to the limited time window, computations of weights must be
+  efficient and consume few resources themselves.
   \item Weights must be self contained and must not require I/O on the chain
         state. Weights are fixed measurements and are based solely on the Runtime
         function and its parameters.
@@ -94,7 +94,7 @@ The limitations are configurable and are directly set in the source code of the
 Polkadot Runtime.
 \newline
 
-The weights must fulfill the requirements as noted by the fundamentals and
+The weights must fulfil the requirements as noted by the fundamentals and
 limitations, and can be assigned as the author sees fit. As a simple example,
 consider a maximum block weight of 1'000'000'000, an available ratio of 75\% and
 a targeted transaction throughput of 500 transactions, we could assign the
@@ -120,6 +120,7 @@ circumstances, preliminary work is required before a specific benchmark can be
 reliably measured, such as creating certain preexisting entries in the storage
 or other changes to the environment. This is explained in more detail in section
 \ref{sect:examples-preliminary-work}.
+\newpage
 
 \subsection{Primitive Types}\label{sect:primitive-types}
 The Runtime reuses components, known as "primitives", to interact with the state
@@ -142,7 +143,6 @@ modules, depending on the context:
   \begin{verbatim}
     hash(module_prefix) + hash(storage_prefix) + hash(encode(key))
   \end{verbatim}
-  \newpage
   \item \textbf{Double map}: Just like \textbf{Map}, but uses two keys instead
   of one. This type is also known as "child storage", where the first key is the
   "parent key" and the second key is the "child key". This is useful in order to
@@ -221,12 +221,12 @@ that value is not obvious, then it's advised to run benchmarks on a big range of
 values and pick a conservative value below the \verb|targeted time per block|
 limit as described in section \ref{sec:limitations}.
 
-\section{Benchmarking}\label{sect:benchmarking} Assigning weights based on
-theoretical performance can be unreliable and too complex due to imprecision in
-back-end systems, internal communication within the Runtime and design choices
-in the software. Therefore, all available Runtime functions, which create and
-execute extrinsics, have to be benchmarked with a large collection of input
-parameters.
+\section{Benchmarking}\label{sect:benchmarking}
+Assigning weights based on theoretical performance can be unreliable and too
+complex due to imprecision in back-end systems, internal communication within
+the Runtime and design choices in the software. Therefore, all available Runtime
+functions, which create and execute extrinsics, have to be benchmarked with a
+large collection of input parameters.
 \newline
 
 In order to select useful parameters, the Runtime functions have to be analysed
@@ -240,7 +240,7 @@ therefore be carefully selected. The benchmarks should use input parameters
 which will most likely be used in regular cases, as intended by the authors, but
 must also consider worst case scenarios and inputs which might decelerate or
 heavily impact performance of the function. The input parameters should be
-randomized in order to cause various effects in behaviors on certain values,
+randomised in order to cause various effects in behaviors on certain values,
 such as memory relocations and other outcomes that can impact performance.
 \newline
 
