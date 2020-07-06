@@ -107,10 +107,10 @@ reliably measured, such as creating certain preexisting entries in the storage
 or other changes to the environment. This is explained in more detail in section
 \ref{sect:examples-preliminary-work}.
 
-\subsection{Primitive Types}\label{sect:primitive-types} The Runtime reuses
-components/primitives to interact with the state storage. The behavior and the
-execution cost of those primitives can be studied and a Weight should be applied
-for each use within the Runtime code.
+\subsection{Primitive Types}\label{sect:primitive-types}
+The Runtime reuses components, known as "primitives", to interact with the state
+storage. The execution cost of those primitives can be measured and a weight
+should be applied for each occurrence within the Runtime code.
 \newline
 
 For storage, Polkadot uses three different types of storage types across its
@@ -130,7 +130,12 @@ modules, depending on the context:
   \end{verbatim}
   \newpage
   \item \textbf{Double map}: Just like \textbf{Map}, but uses two keys instead
-  of one (child storages). \newline\newline
+  of one. This type is also known as "child storage", where the first key is the
+  "parent key" and the second key is the "child key". This is useful in order to
+  scope storage entries (child keys) under a certain \verb|context| (parent
+  key), which is arbitrary. Therefore, one can have separated storage entries
+  based on the context.
+  \newline\newline
   The final key-value pair is stored under the key:\newline
   \begin{verbatim}
     hash(module_prefix) + hash(storage_prefix)
