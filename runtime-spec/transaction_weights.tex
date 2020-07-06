@@ -98,7 +98,11 @@ The weights must fulfil the requirements as noted by the fundamentals and
 limitations, and can be assigned as the author sees fit. As a simple example,
 consider a maximum block weight of 1'000'000'000, an available ratio of 75\% and
 a targeted transaction throughput of 500 transactions, we could assign the
-(average) weight for each transaction at about 1'500'000.
+(average) weight for each transaction at about 1'500'000. Block producers should
+include as many extrinsics as possible (without exceeding limitations) into a
+block before reaching the targeted block time. Weights give indicators to block
+producers on which extrinsics to include in order to reach the blocks fullest
+potential.
 \newline
 
 Do note that the smallest, non-zero weight in Polkadot is set at 10'000.
