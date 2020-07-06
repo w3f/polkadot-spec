@@ -12,7 +12,7 @@
 \begin{document}
 \title{Polkadot Weights}
 \author{Web3 Foundation}
-\date{May 2020}
+\date{July 2020}
 \maketitle
 
 \section{Motivation}
@@ -46,14 +46,14 @@ Weights are just numeric values and Runtime functions may use complex structures
 to express those values. Therefore, the following requirements must apply for
 implementing weight calculations:
 \begin{itemize}
-\item Computations of weights must be determined before execution of that
-extrinsic.
-\item Due to the limited time window, computations of weights must be done
-      quickly and consume few resources themselves.
-\item Weights must be self contained and must not require I/O on the chain
-      state. Weights are fixed measurements and are based solely on the Runtime
-      function and its parameters.
-\item Weights serve four functions:
+  \item Computations of weights must be determined before execution of that
+  extrinsic.
+  \item Due to the limited time window, computations of weights must be done
+        quickly and consume few resources themselves.
+  \item Weights must be self contained and must not require I/O on the chain
+        state. Weights are fixed measurements and are based solely on the Runtime
+        function and its parameters.
+  \item Weights serve four functions:
   \begin{itemize}
     \item Measurement used to calculate transaction fees.
     \item Selection of extrinsics to saturate a block to its fullest potential.
