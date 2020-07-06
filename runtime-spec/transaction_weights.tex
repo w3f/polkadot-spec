@@ -139,8 +139,9 @@ modules, depending on the context:
 \end{itemize}
 
 It depends on the functionality of the Runtime module (or its sub-processes,
-rather) which storage type to use. In some cases only a single value is
-required. In others, multiple values need to be operated on.
+rather) which storage type to use. In some cases, only a single value is
+required. In others, multiple values need to be fetched or inserted from/into
+the database.
 \newline
 
 Those lower level types get abstracted over in each individual Runtime module
@@ -154,10 +155,10 @@ performance penalties and attack vectors are possible.
 The storage layout is mostly the same for every primitive type, primarily
 differentiated by using special prefixes for the storage key. Big differences
 arise on how the primitive types are used in the Runtime function, on whether
-single values are operated on or entire datasets. Single value operations are
-generally quite cheap and its execution time does not vary depending on the data
-that's being processed. However, excessive I/O overhead can appear when I/O
-operations are executed repeatedly, such as loops. Especially, when the amount
+single values or entire datasets are being worked on. Single value operations
+are generally quite cheap and its execution time does not vary depending on the
+data that's being processed. However, excessive overhead can appear when I/O
+operations are executed repeatedly, such as in loops. Especially, when the amount
 of loop iterations can be influenced by the caller of the function or by certain
 conditions in the state storage.
 \newline
