@@ -396,11 +396,9 @@
   <reference|tabl-inherent-data> lists these inherent data, identifiers, and
   types. <todo|define uncles>
 
-  <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Value
+  <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|Identifier>|<cell|Value
   type >|<cell|Description>>|<row|<cell|timstap0>|<cell|u64>|<cell|Unix epoch
-  time in number of milliseconds>>|<row|<cell|babeslot>|<cell|u64>|<cell|Babe
-  Slot Number<rsup|<reference|defn-epoch-slot>> of the current building
-  block>>|<row|<cell|finalnum>|<cell|compact
+  time in number of milliseconds>>|<row|<cell|finalnum>|<cell|compact
   integer<math|<rsup|<reference|defn-sc-len-encoding>>>>|<cell|Header
   number<math|<rsup|<reference|defn-block-header>>> of the last finalized
   block>>|<row|<cell|uncles00>|<cell|array of block
