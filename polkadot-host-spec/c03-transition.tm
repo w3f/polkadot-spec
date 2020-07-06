@@ -257,8 +257,12 @@
   transactions in the transactions message into individual transactions and
   passes them to the Runtime by executing Algorithm
   <reference|algo-validate-transactions> to validate and store them for
-  inclusion into future blocks. To that aim, the Polkadot Host should keep a
-  <em|transaction pool<index|transaction pool>> and a <em|transaction
+  inclusion into future blocks. Valid transactions are propagated to
+  connected peers of the Polkadot Host. Additionally, the Polkadot Host
+  should keep track of which transactions were sent to each peer in order to
+  avoid resending duplicates and unnecessarily overloading the network. To
+  that aim, the Polkadot Host should keep a <em|transaction
+  pool<index|transaction pool>> and a <em|transaction
   queue><index|transaction queue> defined as follows:
 
   <\definition>
@@ -376,14 +380,15 @@
     <reference|algo-maintain-transaction-pool>.
 
     <item><name|ShouldPropagate> indictes whether the transaction should be
-    propagated based on the <verbatim|propagate> field in the
+    propagated based on the <verbatim|Propagate> field in the
     <verbatim|ValidTransaction> type as defined in Definition
     <reference|defn-valid-transaction>, which is returned by
     <verbatim|TaggedTransactionQueue_validate_transaction>.
 
-    <item><name|Propagate(><math|T>) include <math|T> in the next
-    <em|transactions message<index|Transaction Message>> sent to all peers of
-    the Polkadot Host node.
+    <item><name|Propagate(><math|T>) sends <math|T> to all connected peers of
+    the Polkadot Host. The Polkadot Host should keep track of which
+    transactions were sent to each peer in order to avoid resending
+    duplicates.
   </itemize-minus>
 
   <\algorithm|<label|algo-maintain-transaction-pool><name|Maintain-Transaction-Pool>>
@@ -774,17 +779,17 @@
     <associate|auto-14|<tuple|3.2.3|25>>
     <associate|auto-15|<tuple|3.2.3|25>>
     <associate|auto-16|<tuple|3.2.3|25>>
-    <associate|auto-17|<tuple|<with|mode|<quote|math>|<rigid|->>|26>>
-    <associate|auto-18|<tuple|3.2.3.1|27>>
-    <associate|auto-19|<tuple|3.1|27>>
+    <associate|auto-17|<tuple|3.2.3.1|26>>
+    <associate|auto-18|<tuple|3.1|27>>
+    <associate|auto-19|<tuple|3.3|27>>
     <associate|auto-2|<tuple|3.1|23>>
-    <associate|auto-20|<tuple|3.3|27>>
-    <associate|auto-21|<tuple|3.3.1|27>>
-    <associate|auto-22|<tuple|3.3.1.1|27>>
-    <associate|auto-23|<tuple|3.2|28>>
-    <associate|auto-24|<tuple|3.3.1.2|28>>
-    <associate|auto-25|<tuple|3.3.1.3|28>>
-    <associate|auto-26|<tuple|3.3.2|29>>
+    <associate|auto-20|<tuple|3.3.1|27>>
+    <associate|auto-21|<tuple|3.3.1.1|27>>
+    <associate|auto-22|<tuple|3.2|27>>
+    <associate|auto-23|<tuple|3.3.1.2|28>>
+    <associate|auto-24|<tuple|3.3.1.3|28>>
+    <associate|auto-25|<tuple|3.3.2|28>>
+    <associate|auto-26|<tuple|3.3.3|29>>
     <associate|auto-27|<tuple|3.3.3|29>>
     <associate|auto-3|<tuple|3.1.1|23>>
     <associate|auto-4|<tuple|3.1.2|24>>
