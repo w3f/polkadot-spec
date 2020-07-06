@@ -1,4 +1,4 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <project|polkadot_host_spec.tm>
 
@@ -143,7 +143,7 @@
     <verbatim|version> function.>
   </with>
 
-  <subsection|<verbatim|Core_execute_block>><version-both|<label|sect-rte-core-execute-block>|<label|defn-rt-core-execute-block>>
+  <subsection|<verbatim|Core_execute_block>><label|defn-rt-core-execute-block>
 
   Executes a full block by executing all exctrinsics included in it and
   update the state accordingly. Additionally, some integrity checks are
@@ -557,7 +557,6 @@
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
     <associate|sect-rte-apply-extrinsic|<tuple|A.2.8|111>>
     <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|109>>
-    <associate|sect-rte-core-execute-block|<tuple|A.2.2|108>>
     <associate|sect-rte-grandpa-auth|<tuple|A.2.6|109>>
     <associate|sect-rte-hash-and-length|<tuple|A.2.4|109>>
     <associate|sect-rte-validate-transaction|<tuple|A.2.7|109>>
