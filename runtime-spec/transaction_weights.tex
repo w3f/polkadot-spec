@@ -16,16 +16,30 @@
 \maketitle
 
 \section{Motivation}
-Certain transactions (referred to as "extrinsics") require more execution time
-and computation resources than others. In order to establish sustainable
-economic incentives, authors of extrinsics must pay a fee to block producers.
+
+The Polkadot network needs to implement a mechanism to measure and to limit
+usage in order to prevent the network to overload and to mitigate DoS
+vulnerabilities. In particular, Polkadot enforces a limited time-window for
+block producers to create a block, including limitations on block size (as
+described in section \ref{sec:limitations}).
+\newline
+
+In contrast to some other systems such as Ethereum, which implement measurments
+for each executed operation by smart contracts, Polkadot takes a more relaxed
+approach by implementing a measuring system where the cost of transactions
+(referred to as "extrinsics") are determined before execution, known as the
+weight system.
+\newline
+
 The Polkadot weight system introduces a mechanism for block producers to measure
-the expense of extrinsics and determine how "heavy" it is, in terms of
+the expense of extrinsics and to determine how "heavy" it is, in terms of
 computational cost. With this mechanism, block producers can select a set of
 extrinsics and saturate the block to it's fullest potential without exceeding
-any limitations (as described in section \ref{sec:limitations}). Therefore,
-weights serve also as an indicator on whether a block is considered full and how
-much space there's left for remaining, pending extrinsics.
+any limitations, including calculating a fee based on that weight (as described
+in section \ref{sec:fee-calculation}). Therefore, weights serve also as an
+indicator on whether a block is considered full and how much space there's left
+for remaining, pending extrinsics. Extrinsics which require too many resources
+are discarded. 
 \newline
 
 Weights are just numeric values and Runtime functions may use complex structures
@@ -642,7 +656,7 @@ Block producers charge a fee in order to be economically sustainable. That fee
 must always be covered by the sender of the transaction. Polkadot has a flexible
 mechanism to determine the minimum cost to include transactions in a block.
 
-\subsection{Fee Calculation}
+\subsection{Fee Calculation}\label{sec:fee-calculation}
 Polkadot fees consists of three parts:
 
 \begin{itemize}
