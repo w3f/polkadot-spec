@@ -1,4 +1,4 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <project|polkadot_host_spec.tm>
 
@@ -797,7 +797,7 @@
 
     <item><name|Ok-Result> indicates whether the result of
     <verbatim|BlockBuilder_apply_extrinsics> is successfull. The error type
-    of the Runtime function is defined in section
+    of the Runtime function is defined in Section
     <reference|sect-rte-apply-extrinsic>.
 
     <item><name|Ready-Extrinsics-Queue> indicates picking an extrinsics from

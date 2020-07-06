@@ -1,8 +1,8 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <project|polkadot_host_spec.tm>
 
-<style|book>
+<style|<tuple|book|old-dots>>
 
 <\body>
   <appendix|Auxiliary Encodings><label|sect-encoding>
@@ -138,9 +138,10 @@
     </equation*>
 
     where <math|Enc<rsub|SC><rsup|Len>> is defined in Definition
-    <reference|defn-sc-len-encoding>. SCALE codec for <strong|dictionary> or
-    <strong|hashtable> D with key-value pairs
-    <math|<around*|(|k<rsub|i>,v<rsub|i>|)>>s such that:
+    <reference|defn-sc-len-encoding>.\ 
+
+    SCALE codec for <strong|dictionary> or <strong|hashtable> D with
+    key-value pairs <math|<around*|(|k<rsub|i>,v<rsub|i>|)>>s such that:
 
     <\equation*>
       D\<assign\><around*|{|<around*|(|k<rsub|1>,v<rsub|1>|)>,\<ldots\>,<around*|(|k<rsub|1>,v<rsub|n>|)>|}>
@@ -150,12 +151,12 @@
     (as tuples):
 
     <\equation*>
-      Enc<rsub|SC><around|(|D|)>\<assign\>Enc<rsup|Amt><rsub|SC><around*|(|<around*|\|||\|>D<around*|\|||\|>|)><mid|\|>Enc<rsub|SC><around|(|<around*|(|k<rsub|1>,v<rsub|1>|)><rsub|>|)>\|Enc<rsub|SC><around|(|<around*|(|k<rsub|2>,v<rsub|2>|)>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|<around*|(|k<rsub|n>,v<rsub|n>|)>|)>
+      Enc<rsub|SC><around|(|D|)>\<assign\>Enc<rsup|Size><rsub|SC><around*|(|<around*|\|||\|>D<around*|\|||\|>|)><mid|\|>Enc<rsub|SC><around|(|<around*|(|k<rsub|1>,v<rsub|1>|)><rsub|>|)>\|Enc<rsub|SC><around|(|<around*|(|k<rsub|2>,v<rsub|2>|)>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|<around*|(|k<rsub|n>,v<rsub|n>|)>|)>
     </equation*>
 
-    <math|Enc<rsup|Amt><rsub|SC>> is encoded the same way as
-    <math|Enc<rsup|Len><rsub|SC>> but refers to the amount of key-value pairs
-    rather than the length.
+    <math|Enc<rsup|Size><rsub|SC>> is encoded the same way as
+    <math|Enc<rsup|Len><rsub|SC>> but argument <math|size> refers to the
+    number of key-value pairs rather than the length.
 
     <\equation*>
       \;
