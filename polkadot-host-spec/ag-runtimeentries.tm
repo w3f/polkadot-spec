@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -484,8 +484,7 @@
 
   <\itemize>
     <item>A <name|Inherents-Data> structure as defined in
-    <reference|defn-inherent-data>. This function does not generate an
-    extrinsic for <verbatim|babeslot>.
+    <reference|defn-inherent-data>.
   </itemize>
 
   \;
