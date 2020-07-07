@@ -18,28 +18,24 @@
 \section{Motivation}
 
 The Polkadot network needs to implement a mechanism to measure and to limit
-usage in order to prevent the network to overload and to mitigate DoS
-vulnerabilities. In particular, Polkadot enforces a limited time-window for
-block producers to create a block, including limitations on block size (as
-described in section \ref{sec:limitations}).
-\newline
-
-In contrast to some other systems such as Ethereum, which implement measurments
-for each executed operation by smart contracts, Polkadot takes a more relaxed
-approach by implementing a measuring system where the cost of transactions
-(referred to as "extrinsics") are determined before execution, known as the
-weight system.
+usage in order to establish an economic incentive structure, to prevent the
+network to overload and to mitigate DoS vulnerabilities. In contrast to some
+other systems such as Ethereum, which implement measurments for each executed
+operation by smart contracts, Polkadot takes a more relaxed approach by
+implementing a measuring system where the cost of transactions (referred to as
+"extrinsics") are determined before execution, known as the weight system.
 \newline
 
 The Polkadot weight system introduces a mechanism for block producers to measure
 the expense of extrinsics and to determine how "heavy" it is, in terms of
 computational cost. With this mechanism, block producers can select a set of
 extrinsics and saturate the block to it's fullest potential without exceeding
-any limitations, including calculating a fee based on that weight (as described
-in section \ref{sec:fee-calculation}). Therefore, weights also serve as an
-indicator on whether a block is considered full and how much space there's left
-for remaining, pending extrinsics. Extrinsics which require too many resources
-are discarded. 
+any limitations (as described in section \ref{sec:limitations}), including
+calculating a fee based on that weight (as described in section
+\ref{sec:fee-calculation}). Therefore, weights also serve as an indicator on
+whether a block is considered full and how much space there's left for
+remaining, pending extrinsics. Extrinsics which require too many resources are
+discarded.
 \newline
 
 Weights are just numeric values and Runtime functions may use complex structures
@@ -111,8 +107,8 @@ Do note that the smallest, non-zero weight in Polkadot is set at 10'000.
 The Runtime functions must be studied in order to determine which parts of the
 code will excessively increase execution time. Potential indicators like loops,
 I/O operations and data manipulation must be considered. Based on those
-observations, Weights should be applied on operations that could have heavy
-implications on those design choices. The final assigned Weights are calculated
+observations, weights should be applied on operations that could have heavy
+implications on those design choices. The final assigned weights are calculated
 by benchmarking the Runtime functions, which is described in section
 \ref{sect:benchmarking}.
 \newline
@@ -200,7 +196,7 @@ Indicators for performance penalties:
   Weight is appropriate in this case.
   \item \textbf{Adjustable iterations and datasets} - If the amount of
   iterations or datasets depend on the input parameters of the caller or
-  specific entries in storage, then a certain Weight should be applied for each
+  specific entries in storage, then a certain weight should be applied for each
   (additional) iteration or item. The Runtime defines the maximum value for such
   cases. If it doesn't, it unconditionally has to and the Runtime module must be
   adjusted. \newline\newline
@@ -209,7 +205,7 @@ Indicators for performance penalties:
   \ref{para:max-value}.
   \item \textbf{Input parameters} - Input parameters that users pass on to the
   Runtime function can result in expensive operations. Depending on the data
-  type, it can be appropriate to add additional Weights based on certain
+  type, it can be appropriate to add additional weights based on certain
   properties, such as data size, assuming the data type allows varying sizes.
   The Runtime must define limits on those properties. If it doesn't, it
   unconditionally has to and the Runtime module must be adjusted.
@@ -371,7 +367,7 @@ Key points:
   \item Varying sizes of Identity Info, including additional fields.
   \item Inserting new registrars into Identity Info results in memory
   reallocation.
-  \item It is legitimate to introduce additional Weights for changes the sender
+  \item It is legitimate to introduce additional weights for changes the sender
   has influence over, such the additional fields in the Identity Info.
 \end{itemize}
 
