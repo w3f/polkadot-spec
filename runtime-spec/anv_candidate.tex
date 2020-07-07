@@ -1,3 +1,5 @@
+\section{Candidate}
+
 \subsection{Candidate Selection}
 \label{sect-primary-validation}
 
@@ -184,6 +186,8 @@ will ultimately get included in the block.
   the same Relay chain block, whose PoV block is $_b(candidate)$.
 \end{definition}
 
+\subsection{Statement Distribution}
+
 \begin{definition}
   \label{defn-gossip-statement}
   A \textbf{statement} notifies other validators about the validity of a PoV block.
@@ -297,6 +301,8 @@ will ultimately get included in the block.
 
 \subsection{Inclusion of candidate receipt on the relay chain}\label{sect-inclusion-of-candidate-receipt}
 
+\todo{@fabio: should this be a subsection?}
+
 \begin{definition}
   \label{defn-para-proposal}
         {\b Parachain Block Proposal}, noted by $P^B_{\rho}$is a candidate receipt for a parachain block $B$ for a parachain $\rho$ along with signatures for at least 2/3 of $\mathcal{V}_\rho$.  %\syed{and no invalidity for it}{TBS how to deal with message of invalidity announcement}. We still include the proposal if a parachain validator attests to its invalidity, Any primary invalidity attestation or late primary validity attestation are handled just like secondary attestations.
@@ -315,3 +321,6 @@ A block producer which observe a Parachain Block Proposal as defined in definiti
     \State TBS
   \end{algorithmic}
 \end{algorithm}
+
+\subsection{PoV distribution}
+
