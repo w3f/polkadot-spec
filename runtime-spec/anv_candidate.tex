@@ -1,15 +1,11 @@
-\section{Candidate}
-
-\subsection{Candidate Selection}
+\section{Candidate Selection}
 \label{sect-primary-validation}
 
-Collators produce candidates as defined in Definition \ref{defn-candidate}.
-Validators verify the validity of the received candidates as described in
-Algorithm \ref{algo-primary-validation}. The validator ensures the that every
-candidate considered for inclusion has at least one other validator backing it.
-Candidates without backing are discarded. Backed candidates which later prove to
-be invalid qualify the backer for slashing.
-\newline
+Collators produce candidates as defined in Definition \ref{defn-candidate} and
+send network messages to validators
+\todo{@fabio}. Validators receive (Algo. \ref{algo-validate-block}) those
+messages and consider those for inclusion (Sect.
+\ref{sect-primary-validaty-announcement})
 
 \begin{definition}
   \label{defn-candidate}
@@ -76,7 +72,7 @@ be invalid qualify the backer for slashing.
   \end{algorithmic}
 \end{algorithm}
 
-\subsection{Candidate Backing}
+\section{Candidate Backing}
 \label{sect-primary-validaty-announcement}
 
 Validators back the validity respectively the invalidity of candidates by
@@ -96,7 +92,7 @@ another validator, a misbehavior must be announced as defined in \todo{@fabio}.
 \newline
 
 The validator tries to back as many candidates as it can, but does not attempt to prioritize
-specific candidates. Each validators decided on its own - on whatever metric - which candidate
+specific candidates. Each validator decides on its own - on whatever metric - which candidate
 will ultimately get included in the block.
 
 \begin{definition}
@@ -185,8 +181,6 @@ will ultimately get included in the block.
   referred to and $h_b(candidate)$ is the hash of some candidate localized to
   the same Relay chain block, whose PoV block is $_b(candidate)$.
 \end{definition}
-
-\subsection{Statement Distribution}
 
 \begin{definition}
   \label{defn-gossip-statement}
@@ -322,5 +316,5 @@ A block producer which observe a Parachain Block Proposal as defined in definiti
   \end{algorithmic}
 \end{algorithm}
 
-\subsection{PoV distribution}
+\section{PoV distribution}
 
