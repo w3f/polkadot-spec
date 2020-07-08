@@ -117,13 +117,13 @@ verify a PoV block, it can request the chunk for one of its peers.
   Each chunk is a tuple of the following format:
 
   \[
-    e := (A, u32, A(A_0,...,A_n))
+    e := (A, I, A(A_0,...,A_n))
   \]
 
   where each value represents:
   \begin{itemize}
     \item $A$: SCALE-encoded byte array containg the erasure-encoded chunk of data.
-    \item $u32$: the unsigned 32-bit integer representing the index of this
+    \item $I$: the unsigned 32-bit integer representing the index of this
     erasure-encoded chunk of data.
     \item $A(A_0,...,A_n)$: SCALE-encoded array of inner array, each containing
     the nodes of the Trie in order to verify the chunk based on the Merkle root.
