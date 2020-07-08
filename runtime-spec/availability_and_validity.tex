@@ -97,7 +97,7 @@ root of it.
   function, i.e. additional data from the relay chain state that is needed.
   It's a tuple of the following format:
   \[
-  (Max^{R}_{size}, Max^{head}_{size}, H_i(B^{relay}_{chain}), Head_p(B), \mathbb{B}, Blake2b(R_\rho), R_u)
+  (Max^{R}_{size}, Max^{head}_{size}, H_i(B^{relay}_{chain}), Head_p(B), \mathbb{B}, R_u)
   \]
 
   where each value represents:
@@ -152,18 +152,7 @@ root of it.
 
 Note that in the code the blob is referred to as "AvailableData".
 
-
 \section{Overal process}
-
-Collators produce candidates (Def. \ref{defn-candidate}) and send network
-messages to validators \todo{@fabio}. Validators verify the validity of the
-received candidates (Algo. \ref{algo-primary-validation}) and issue statements
-(Def. \ref{defn-gossip-statement}) about the candidates. The validator ensures
-the that every candidate considered for inclusion has at least one other
-validator backing it. Candidates without backing are discarded. Backed
-candidates which later prove to be invalid qualify the backer for slashing.
-\todo{@fabio}
-\newline
 
 The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring
 availability and validity in Polkadot \todo{complete the Diagram}.

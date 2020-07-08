@@ -1,11 +1,18 @@
 \section{Candidate Selection}
 \label{sect-primary-validation}
 
-Collators produce candidates as defined in Definition \ref{defn-candidate} and
-send network messages to validators
-\todo{@fabio}. Validators receive (Algo. \ref{algo-validate-block}) those
-messages and consider those for inclusion (Sect.
-\ref{sect-primary-validaty-announcement})
+Collators produce candidates (Def. \ref{defn-candidate}) and send those to
+validators. Validators verify the validity of the received candidates (Algo.
+\ref{algo-primary-validation}) and issue statements (Def.
+\ref{defn-gossip-statement}) about the candidates. The validator ensures the
+that every candidate considered for inclusion has at least one other validator
+backing it. Candidates without backing are discarded.
+\newline
+
+The validator must keep track of which candidates were submitted by collators, including
+which validators back those candidates in order to penalize bad behavior. This is described
+in more detail in section \ref{sect-primary-validaty-announcement}
+\newline
 
 \begin{definition}
   \label{defn-candidate}
@@ -77,18 +84,19 @@ messages and consider those for inclusion (Sect.
 
 Validators back the validity respectively the invalidity of candidates by
 extending those into candidate receipts as defined in Definition
-\ref{defn-candidate-receipt} and communicate it by issuing statements as defined
-in Definition \ref{defn-gossip-statement}. Validator $v$ needs to perform
-Algorithm \ref{algo-primary-validation-announcement} to announce the result of
-primary validation to the Polkadot network. If the validator receiver a
-statement from another validator, the candidate is confirmed based on algorithm
-\ref{algo-endorse-candidate-receipt}.
+\ref{defn-candidate-receipt} and communicate those receipts by issuing
+statements as defined in Definition \ref{defn-gossip-statement}. Validator $v$
+needs to perform Algorithm \ref{algo-primary-validation-announcement} to
+announce the statement of primary validation to the Polkadot network. If the
+validator receives a statement from another validator, the candidate is
+confirmed based on algorithm \ref{algo-endorse-candidate-receipt}.
 \newline
 
 As algorithm \ref{algo-primary-validation-announcement} and
 \ref{algo-endorse-candidate-receipt} clarifies, the validator should blacklist
-collators which send invalid candidates. If the invalid candidate originated from
-another validator, a misbehavior must be announced as defined in \todo{@fabio}.
+collators which send invalid candidates and announce this misbehavior. If
+another validator claims that an invalid candidates is actually valid, that
+misbehavior must be announced, too. \todo{@fabio}
 \newline
 
 The validator tries to back as many candidates as it can, but does not attempt to prioritize
@@ -175,11 +183,11 @@ will ultimately get included in the block.
   \label{defn-pov-block}
   A \textbf{Gossip PoV block} is a tuple of the following format:
   \[
-  (h_b(B_{^{relay}_{parent}}), h_b(candidate), PoV_B)
+  (h_b(B_{^{relay}_{parent}}), h_b(C_{coll}(PoV_B)), PoV_B)
   \]
   where $h_b(B_{^{relay}_{parent}})$ is the block hash of the relay chain being
-  referred to and $h_b(candidate)$ is the hash of some candidate localized to
-  the same Relay chain block, whose PoV block is $_b(candidate)$.
+  referred to and $h_b(C_{coll}(PoV_B))$ is the hash of some candidate localized
+  to the same Relay chain block.
 \end{definition}
 
 \begin{definition}
@@ -316,5 +324,7 @@ A block producer which observe a Parachain Block Proposal as defined in definiti
   \end{algorithmic}
 \end{algorithm}
 
-\section{PoV distribution}
+\section{PoV Distribution}
+
+\todo{@fabio}
 
