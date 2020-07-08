@@ -29,32 +29,35 @@ verify a PoV block, it can request the chunk for one of its peers.
     \Statex // Create a trie from the shards in order generate the trie nodes
     \Statex // which are required to verify each chunk with a Merkle root.
     \State \textbf{Init} $Trie$
-    \State \textbf{Init} $counter = 0$
+    \State \textbf{Init} $index = 0$
     \For{$shard \in Shards$}
-      \State \textsc{Insert}($Trie,counter$, \textsc{Blake2}($shard$))
-      \State $counter = counter + 1$
+      \State \textsc{Insert}($Trie,index$, \textsc{Blake2}($shard$))
+      \State $index = index + 1$
     \EndFor
     \Statex
-    \Statex // Insert individual chunks into collection.
-    \State \textbf{Init} $Chunks$
-    \State \textbf{Init} $counter = 0$
+    \Statex // Insert individual chunks into collection (def. \ref{defn-erasure-coded-chunks}).
+    \State \textbf{Init} $Er_B$
+    \State \textbf{Init} $index = 0$
     \For{$shard \in Shards$}
-      \State \textbf{Init} $nodes \leftarrow$ \textsc{Get-Nodes}($Trie, counter$)
-      \State \textsc{Add}($Chunks, (shard, counter, nodes$))
-      \State $counter = counter + 1$
+      \State \textbf{Init} $nodes \leftarrow$ \textsc{Get-Nodes}($Trie, index$)
+      \State \textsc{Add}($Er_B, (shard, index, nodes$))
+      \State $index = index + 1$
     \EndFor
     \Statex
-    \Statex // $Chunks$ is a collection of individual erasure-encoded chunks (def. \ref{defn-erasure-coded-chunks}).
-    \State \Return $Enc_{SC}(Chunks)$
+    \State \Return $Er_B$
   \end{algorithmic}
 \end{algorithm}
 
 \begin{itemize}
-  \item \textsc{Make-Shards(..)}: return shards for each validator as
-  described in algorithm \ref{algo-make-shards}.
-  \item \textsc{Insert($trie,key,val$)}: insert the given $key$ and $value$ into the $trie$.
-  \item \textsc{Get-Nodes($trie,key$)}: based on the $key$, return all required $trie$ nodes in
-  order to verify the corresponding value for a (unspecified) Merkle root.
+  \item \textsc{Make-Shards(..)}: return shards for each validator as described
+  in algorithm \ref{algo-make-shards}. Return value is defined as
+  $(\mathbb{S}_0,...,\mathbb{S}_n)$ where $\mathbb{S} := (b_0,...,b_n)$
+  \item \textsc{Insert($trie,key,val$)}: insert the given $key$ and $value$ into
+  the $trie$.
+  \item \textsc{Get-Nodes($trie,key$)}: based on the $key$, return all required
+  $trie$ nodes in order to verify the corresponding value for a (unspecified)
+  Merkle root. Return value is defined as $(\mathbb{N}_0,...,\mathbb{N}_n)$
+  where $\mathbb{N} := (b_0,...,b_n)$.
   \item \textsc{Add($sequence, item$)}: add the given $item$ to the $sequence$.
 \end{itemize}
 
@@ -79,6 +82,7 @@ verify a PoV block, it can request the chunk for one of its peers.
     \State \textbf{Init} $Shard_{len} = base_{len} + (base_{len} \bmod{2})$
     \Statex
     \Statex // Prepare shards, each padded with zeroes.
+    \Statex // $Shards := (\mathbb{S}_0,...,\mathbb{S}_n)$ where $\mathbb{S} := (b_0,...,b_n)$
     \State \textbf{Init} $Shards$
     \For{$n \in (Shard_{data} + Shard_{partiy})$}
       \State \textsc{Add}($Shards, (0_0, ..0_{Shard_{len}})$)
@@ -116,21 +120,22 @@ verify a PoV block, it can request the chunk for one of its peers.
   is defined to be the output of the Algorithm \ref{algo-erasure-encode}.
   Each chunk is a tuple of the following format:
 
-  \[
-    e := (A, I, A(A_0,...,A_n))
-  \]
+  \begin{alignat*}{2}
+    e &:= (\mathbb{S}, I, (\mathbb{N}_0,...,\mathbb{N}_n)) \\
+    \mathbb{S} &:= (b_0,...,b_n) \\
+    \mathbb{N} &:= (b_0,...,b_n)
+  \end{alignat*}
 
   where each value represents:
   \begin{itemize}
-    \item $A$: SCALE-encoded byte array containg the erasure-encoded chunk of data.
+    \item $\mathbb{S}$: a byte array containing the erasure-encoded shard of
+    data.
     \item $I$: the unsigned 32-bit integer representing the index of this
     erasure-encoded chunk of data.
-    \item $A(A_0,...,A_n)$: SCALE-encoded array of inner array, each containing
-    the nodes of the Trie in order to verify the chunk based on the Merkle root.
+    \item $(\mathbb{N}_0,...,\mathbb{N}_n)$: an array of inner byte arrays, each
+    containing the nodes of the Trie in order to verify the chunk based on the
+    Merkle root.
   \end{itemize}
-
-  The algorithm \ref{algo-erasure-encode} specifies how those values can be
-  calculated.
 \end{definition}
 
 \section{Distribution of Chunks}\label{sect-distribute-chunks} Following the
