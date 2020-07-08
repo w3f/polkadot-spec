@@ -109,9 +109,8 @@ root of it.
     (Def. \ref{defn-head-data}) permitted.
     \item $H_i(B^{relay}_{chain})$: the relay chain block number this is in the
     context of.
-    \item $Head_p(B)$: the head data (Def. \ref{defn-head-data}) of the parachain.
+    \item $Head_p(B)$: the parent head data (Def. \ref{defn-head-data}) of the parachain .
     \item $\mathbb{B}$: the balance of the parachain at the moment of validation \todo{@fabio: clarify}.
-    \item $Blake2b(R_\rho)$: the 32-byte Blake2 hash of the parachain Wasm code.
     \item $R_u$: the  is a varying data type as defined in Definition X
     \todo{@fabio} and can be one of the following values:
 
@@ -126,8 +125,12 @@ root of it.
 
   $R_u$ implies whether the parachain is allowed to upgrade its validation code.
   If it's of type $1$, it contains the number of the minimum relay chain height
-  at which the upgrade will be applied, assuming a upgrade is currently signaled
-  \todo{@fabio: where is this signaled?}
+  at which the upgrade will be applied, assuming an upgrade is currently
+  signaled \todo{@fabio: where is this signaled?}. A parachain should enact its
+  side of the upgrade at the end of the first parachain block executing in the
+  context of a relay-chain block with at least this height. This may be equal to
+  the current perceived relay-chain block height, in which case the code upgrade
+  should be applied at the end of the signaling block.
   \newline
 
   Parachain validators get this extra validation data from the current relay
