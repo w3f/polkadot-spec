@@ -989,54 +989,135 @@
     signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
-  <subsection|<verbatim|ext_crypto_start_batch_verify>><label|sect-ext-crypto-start-batch-verify>
+  <subsection|<verbatim|ext_crypto_ecdsa_public_keys>>
 
-  Starts the verification extension. This is used to parallel-verify
-  signatures which are pushed to the batch with
-  <verbatim|ext_crypto_ed25519_verify> (<reference|sect-ext-crypto-ed25519-verify>),
-  <verbatim|ext_crypto_sr25519_verify> (<reference|sect-ext-crypto-sr25519-verify>)
-  or <verbatim|ext_crypto_ecdsa_verify> (). Verification will start
-  immediatly in parallel and the Runtime can retrieve the result when calling
-  <verbatim|ext_crypto_finish_batch_verify> (). <todo|Implement missing APIs>
+  Returns all <verbatim|ecdsa> public keys for the given key id from the
+  keystore.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_crypto_start_batch_verify_version_1)
+    (func $ext_crypto_ecdsa_public_keys_version_1
+
+    (param $key_type_id i64) (return i64))
   </verbatim>
 
   \;
 
   <strong|Arguments>:
 
-  <\itemize-dot>
-    <item>None.
-  </itemize-dot>
+  <\itemize>
+    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key
+    type ID as defined in <reference|defn-key-type-id>.
 
-  <subsection|<verbatim|ext_crypto_finish_batch_verify>><label|sect-ext-crypto-finish-batch-verify>
+    <item><verbatim|return>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded 33-byte
+    compressed public keys.
+  </itemize>
 
-  Finish the verification batch of signatures since the last call. Panics if
-  the verification extension was not registered
-  <verbatim|(ext_crypto_start_batch_verify>
-  (<reference|sect-ext-crypto-start-batch-verify>) was not called).
+  <subsection|<verbatim|ext_crypto_ecdsa_generate>>
+
+  Generates an <verbatim|ecdsa> key for the given key type using an optional
+  BIP-39 seed and stores it in the keystore.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_crypto_finish_batch_verify_version_1
+    (func $ext_crypto_ecdsa_generate_version_1
 
-    (return i32))
+    \ \ (param $key_type_id i32) (param $seed i64) (return i32))
   </verbatim>
 
   \;
 
   <strong|Arguments>:
 
-  <\itemize-dot>
-    <item><verbatim|return>: an i32 integer value equal to 1 if all the
-    signatures are valid or a value equal to 0 if one or more of the
-    signatures are invalid.
-  </itemize-dot>
+  <\itemize>
+    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
+    as defined in Definition <reference|defn-key-type-id>.
+
+    <item><verbatim|seed>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the BIP-39 seed which must be valid UTF8.
+
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    33-byte compressed public key.
+  </itemize>
+
+  <subsection|<verbatim|ext_crypto_ecdsa_sign>>
+
+  Signs the given message with the <verbatim|ecdsa> key that corresponds to
+  the given public key and key type in the keystore.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_ecdsa_sign_version_1
+
+    \ \ (param $key_type_id i32) (param $key i32) (param $msg i64) (return
+    i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
+    as defined in Definition <reference|defn-key-type-id>
+
+    <item><verbatim|key>: a regular pointer to the buffer containing the
+    33-byte compressed public key.
+
+    <item><verbatim|msg>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the message that is to be
+    signed.
+
+    <item><verbatim|return>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <verbatim|Option> as defined in Definition <reference|defn-option-type>
+    containing the signature. The signature is 65-bytes in size, where the
+    first 512-bits represent the signature and the other 8 bits represent the
+    recovery ID. This function returns <verbatim|None> if the public key
+    cannot be found in the key store.
+  </itemize>
+
+  <subsection|<verbatim|ext_crypto_ecdsa_verify>><label|sect-ext-crypto-sr25519-verify>
+
+  Verifies an <verbatim|ecdsa> signature. Only version 1 of this function
+  supports deprecated Schnorr signatures introduced by the <em|schnorrkel>
+  Rust library version 0.1.1 and should only be used for backward
+  compatibility.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_ecdsa_verify_version_2
+
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    the 65-byte signature. The signature is 65-bytes in size, where the first
+    512-bits represent the signature and the other 8 bits represent the
+    recovery ID.
+
+    <item><verbatim|msg>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the message that is to be
+    verified.
+
+    <item><verbatim|key>: a regular pointer to the buffer containing the
+    33-byte compressed public key.
+
+    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
+    signature is valid or a value equal to <verbatim|0> if otherwise.
+  </itemize>
 
   <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover>>
 
@@ -1100,6 +1181,55 @@
     form on success or an error type as defined in Definition
     <reference|defn-ecdsa-verify-error> on failure.
   </itemize>
+
+  <subsection|<verbatim|ext_crypto_start_batch_verify>><label|sect-ext-crypto-start-batch-verify>
+
+  Starts the verification extension. This is used to parallel-verify
+  signatures which are pushed to the batch with
+  <verbatim|ext_crypto_ed25519_verify> (<reference|sect-ext-crypto-ed25519-verify>),
+  <verbatim|ext_crypto_sr25519_verify> (<reference|sect-ext-crypto-sr25519-verify>)
+  or <verbatim|ext_crypto_ecdsa_verify> (). Verification will start
+  immediatly in parallel and the Runtime can retrieve the result when calling
+  <verbatim|ext_crypto_finish_batch_verify> (). <todo|Implement missing APIs>
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_start_batch_verify_version_1)
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  <subsection|<verbatim|ext_crypto_finish_batch_verify>><label|sect-ext-crypto-finish-batch-verify>
+
+  Finish the verification batch of signatures since the last call. Panics if
+  the verification extension was not registered
+  <verbatim|(ext_crypto_start_batch_verify>
+  (<reference|sect-ext-crypto-start-batch-verify>) was not called).
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_finish_batch_verify_version_1
+
+    (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item><verbatim|return>: an i32 integer value equal to 1 if all the
+    signatures are valid or a value equal to 0 if one or more of the
+    signatures are invalid.
+  </itemize-dot>
 
   <section|Hashing>
 
@@ -2100,54 +2230,65 @@
     <associate|appendix-e|<tuple|A|?>>
     <associate|auto-1|<tuple|A|?>>
     <associate|auto-10|<tuple|A.1.4.1|?>>
-    <associate|auto-100|<tuple|A.5.7.1|?>>
-    <associate|auto-101|<tuple|A.5.8|?>>
-    <associate|auto-102|<tuple|A.5.8.1|?>>
-    <associate|auto-103|<tuple|A.5.9|?>>
-    <associate|auto-104|<tuple|A.5.9.1|?>>
-    <associate|auto-105|<tuple|A.5.10|?>>
-    <associate|auto-106|<tuple|A.5.10.1|?>>
-    <associate|auto-107|<tuple|A.5.11|?>>
-    <associate|auto-108|<tuple|A.5.11.1|?>>
-    <associate|auto-109|<tuple|A.5.12|?>>
+    <associate|auto-100|<tuple|A.5.3.1|?>>
+    <associate|auto-101|<tuple|A.5.4|?>>
+    <associate|auto-102|<tuple|A.5.4.1|?>>
+    <associate|auto-103|<tuple|A.5.5|?>>
+    <associate|auto-104|<tuple|A.5.5.1|?>>
+    <associate|auto-105|<tuple|A.5.6|?>>
+    <associate|auto-106|<tuple|A.5.6.1|?>>
+    <associate|auto-107|<tuple|A.5.7|?>>
+    <associate|auto-108|<tuple|A.5.7.1|?>>
+    <associate|auto-109|<tuple|A.5.8|?>>
     <associate|auto-11|<tuple|A.1.5|?>>
-    <associate|auto-110|<tuple|A.5.12.1|?>>
-    <associate|auto-111|<tuple|A.5.13|?>>
-    <associate|auto-112|<tuple|A.5.13.1|?>>
-    <associate|auto-113|<tuple|A.5.14|?>>
-    <associate|auto-114|<tuple|A.5.14.1|?>>
-    <associate|auto-115|<tuple|A.5.15|?>>
-    <associate|auto-116|<tuple|A.5.15.1|?>>
-    <associate|auto-117|<tuple|A.6|?>>
-    <associate|auto-118|<tuple|A.6.1|?>>
-    <associate|auto-119|<tuple|A.6.1.1|?>>
+    <associate|auto-110|<tuple|A.5.8.1|?>>
+    <associate|auto-111|<tuple|A.5.9|?>>
+    <associate|auto-112|<tuple|A.5.9.1|?>>
+    <associate|auto-113|<tuple|A.5.10|?>>
+    <associate|auto-114|<tuple|A.5.10.1|?>>
+    <associate|auto-115|<tuple|A.5.11|?>>
+    <associate|auto-116|<tuple|A.5.11.1|?>>
+    <associate|auto-117|<tuple|A.5.12|?>>
+    <associate|auto-118|<tuple|A.5.12.1|?>>
+    <associate|auto-119|<tuple|A.5.13|?>>
     <associate|auto-12|<tuple|A.1.5.1|?>>
-    <associate|auto-120|<tuple|A.6.2|?>>
-    <associate|auto-121|<tuple|A.6.2.1|?>>
-    <associate|auto-122|<tuple|A.7|?>>
-    <associate|auto-123|<tuple|A.7.1|?>>
-    <associate|auto-124|<tuple|A.7.1.1|?>>
-    <associate|auto-125|<tuple|A.7.2|?>>
-    <associate|auto-126|<tuple|A.7.2.1|?>>
-    <associate|auto-127|<tuple|A.7.3|?>>
-    <associate|auto-128|<tuple|A.7.3.1|?>>
-    <associate|auto-129|<tuple|A.7.4|?>>
+    <associate|auto-120|<tuple|A.5.13.1|?>>
+    <associate|auto-121|<tuple|A.5.14|?>>
+    <associate|auto-122|<tuple|A.5.14.1|?>>
+    <associate|auto-123|<tuple|A.5.15|?>>
+    <associate|auto-124|<tuple|A.5.15.1|?>>
+    <associate|auto-125|<tuple|A.6|?>>
+    <associate|auto-126|<tuple|A.6.1|?>>
+    <associate|auto-127|<tuple|A.6.1.1|?>>
+    <associate|auto-128|<tuple|A.6.2|?>>
+    <associate|auto-129|<tuple|A.6.2.1|?>>
     <associate|auto-13|<tuple|A.1.6|?>>
-    <associate|auto-130|<tuple|A.7.4.1|?>>
-    <associate|auto-131|<tuple|A.7.5|?>>
-    <associate|auto-132|<tuple|A.7.5.1|?>>
-    <associate|auto-133|<tuple|A.8|?>>
-    <associate|auto-134|<tuple|A.8.1|?>>
-    <associate|auto-135|<tuple|A.8.1.1|?>>
-    <associate|auto-136|<tuple|A.8.2|?>>
-    <associate|auto-137|<tuple|A.8.2.1|?>>
-    <associate|auto-138|<tuple|A.9|?>>
-    <associate|auto-139|<tuple|A.4|?>>
+    <associate|auto-130|<tuple|A.7|?>>
+    <associate|auto-131|<tuple|A.7.1|?>>
+    <associate|auto-132|<tuple|A.7.1.1|?>>
+    <associate|auto-133|<tuple|A.7.2|?>>
+    <associate|auto-134|<tuple|A.7.2.1|?>>
+    <associate|auto-135|<tuple|A.7.3|?>>
+    <associate|auto-136|<tuple|A.7.3.1|?>>
+    <associate|auto-137|<tuple|A.7.4|?>>
+    <associate|auto-138|<tuple|A.7.4.1|?>>
+    <associate|auto-139|<tuple|A.7.5|?>>
     <associate|auto-14|<tuple|A.1.6.1|?>>
-    <associate|auto-140|<tuple|A.9.1|?>>
-    <associate|auto-141|<tuple|A.9.1.1|?>>
-    <associate|auto-142|<tuple|A.9.1.1|?>>
+    <associate|auto-140|<tuple|A.7.5.1|?>>
+    <associate|auto-141|<tuple|A.8|?>>
+    <associate|auto-142|<tuple|A.8.1|?>>
+    <associate|auto-143|<tuple|A.8.1.1|?>>
+    <associate|auto-144|<tuple|A.8.2|?>>
+    <associate|auto-145|<tuple|A.8.2.1|?>>
+    <associate|auto-146|<tuple|A.9|?>>
+    <associate|auto-147|<tuple|A.4|?>>
+    <associate|auto-148|<tuple|A.9.1|?>>
+    <associate|auto-149|<tuple|A.9.1.1|?>>
     <associate|auto-15|<tuple|A.1.7|?>>
+    <associate|auto-150|<tuple|A.9|?>>
+    <associate|auto-151|<tuple|A.4|?>>
+    <associate|auto-152|<tuple|A.9.1|?>>
+    <associate|auto-153|<tuple|A.9.1.1|?>>
     <associate|auto-16|<tuple|A.1.7.1|?>>
     <associate|auto-17|<tuple|A.1.8|?>>
     <associate|auto-18|<tuple|A.1.8.1|?>>
@@ -2208,38 +2349,38 @@
     <associate|auto-68|<tuple|A.3.12|?>>
     <associate|auto-69|<tuple|A.3.12.1|?>>
     <associate|auto-7|<tuple|A.1.3|?>>
-    <associate|auto-70|<tuple|A.4|?>>
-    <associate|auto-71|<tuple|A.4.1|?>>
-    <associate|auto-72|<tuple|A.4.1.1|?>>
-    <associate|auto-73|<tuple|A.4.2|?>>
-    <associate|auto-74|<tuple|A.4.2.1|?>>
-    <associate|auto-75|<tuple|A.4.3|?>>
-    <associate|auto-76|<tuple|A.4.3.1|?>>
-    <associate|auto-77|<tuple|A.4.4|?>>
-    <associate|auto-78|<tuple|A.4.4.1|?>>
-    <associate|auto-79|<tuple|A.4.5|?>>
+    <associate|auto-70|<tuple|A.3.13|?>>
+    <associate|auto-71|<tuple|A.3.13.1|?>>
+    <associate|auto-72|<tuple|A.3.14|?>>
+    <associate|auto-73|<tuple|A.3.14.1|?>>
+    <associate|auto-74|<tuple|A.3.15|?>>
+    <associate|auto-75|<tuple|A.3.15.1|?>>
+    <associate|auto-76|<tuple|A.3.16|?>>
+    <associate|auto-77|<tuple|A.3.16.1|?>>
+    <associate|auto-78|<tuple|A.4|?>>
+    <associate|auto-79|<tuple|A.4.1|?>>
     <associate|auto-8|<tuple|A.1.3.1|?>>
-    <associate|auto-80|<tuple|A.4.5.1|?>>
-    <associate|auto-81|<tuple|A.4.6|?>>
-    <associate|auto-82|<tuple|A.4.6.1|?>>
-    <associate|auto-83|<tuple|A.4.7|?>>
-    <associate|auto-84|<tuple|A.4.7.1|?>>
-    <associate|auto-85|<tuple|A.5|?>>
-    <associate|auto-86|<tuple|A.3|?>>
-    <associate|auto-87|<tuple|A.5.1|?>>
-    <associate|auto-88|<tuple|A.5.1.1|?>>
-    <associate|auto-89|<tuple|A.5.2|?>>
+    <associate|auto-80|<tuple|A.4.1.1|?>>
+    <associate|auto-81|<tuple|A.4.2|?>>
+    <associate|auto-82|<tuple|A.4.2.1|?>>
+    <associate|auto-83|<tuple|A.4.3|?>>
+    <associate|auto-84|<tuple|A.4.3.1|?>>
+    <associate|auto-85|<tuple|A.4.4|?>>
+    <associate|auto-86|<tuple|A.4.4.1|?>>
+    <associate|auto-87|<tuple|A.4.5|?>>
+    <associate|auto-88|<tuple|A.4.5.1|?>>
+    <associate|auto-89|<tuple|A.4.6|?>>
     <associate|auto-9|<tuple|A.1.4|?>>
-    <associate|auto-90|<tuple|A.5.2.1|?>>
-    <associate|auto-91|<tuple|A.5.3|?>>
-    <associate|auto-92|<tuple|A.5.3.1|?>>
-    <associate|auto-93|<tuple|A.5.4|?>>
-    <associate|auto-94|<tuple|A.5.4.1|?>>
-    <associate|auto-95|<tuple|A.5.5|?>>
-    <associate|auto-96|<tuple|A.5.5.1|?>>
-    <associate|auto-97|<tuple|A.5.6|?>>
-    <associate|auto-98|<tuple|A.5.6.1|?>>
-    <associate|auto-99|<tuple|A.5.7|?>>
+    <associate|auto-90|<tuple|A.4.6.1|?>>
+    <associate|auto-91|<tuple|A.4.7|?>>
+    <associate|auto-92|<tuple|A.4.7.1|?>>
+    <associate|auto-93|<tuple|A.5|?>>
+    <associate|auto-94|<tuple|A.3|?>>
+    <associate|auto-95|<tuple|A.5.1|?>>
+    <associate|auto-96|<tuple|A.5.1.1|?>>
+    <associate|auto-97|<tuple|A.5.2|?>>
+    <associate|auto-98|<tuple|A.5.2.1|?>>
+    <associate|auto-99|<tuple|A.5.3|?>>
     <associate|defn-child-storage-definition|<tuple|A.4|?>>
     <associate|defn-child-storage-type|<tuple|A.3|?>>
     <associate|defn-child-type|<tuple|A.5|?>>
@@ -2253,9 +2394,9 @@
     <associate|defn-runtime-pointer|<tuple|A.2|?>>
     <associate|nota-re-api-at-state|<tuple|A.1|?>>
     <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|?>>
-    <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.10|?>>
-    <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.8|?>>
-    <associate|sect-ext-crypto-start-batch-verify|<tuple|A.3.9|?>>
+    <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.16|?>>
+    <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.12|?>>
+    <associate|sect-ext-crypto-start-batch-verify|<tuple|A.3.15|?>>
   </collection>
 </references>
 
