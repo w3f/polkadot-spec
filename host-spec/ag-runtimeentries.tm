@@ -195,7 +195,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A boolean value indicates if the execution was successful.
+    <item>None.
   </itemize-dot>
 
   <subsection|<verbatim|Core_initialize_block>>
