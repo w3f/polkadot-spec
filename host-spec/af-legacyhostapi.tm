@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|host-spec.tm>
 
@@ -1450,7 +1450,7 @@
   <section|Validation>
 
   \;
-  
+
   <\with|par-mode|right>
     <qed>
   </with>
@@ -1460,72 +1460,75 @@
 
 <\initial>
   <\collection>
-    <associate|page-first|?>
+    <associate|chapter-nr|6>
+    <associate|page-first|89>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|section-nr|9<uninit>>
+    <associate|subsection-nr|1>
   </collection>
 </initial>
 
 <\references>
   <\collection>
-    <associate|auto-1|<tuple|A|?|c01-background.tm>>
-    <associate|auto-10|<tuple|A.1.8|?|c01-background.tm>>
-    <associate|auto-11|<tuple|A.1.9|?|c01-background.tm>>
-    <associate|auto-12|<tuple|A.1.10|?|c01-background.tm>>
-    <associate|auto-13|<tuple|A.1.11|?|c01-background.tm>>
-    <associate|auto-14|<tuple|A.1.12|?|c01-background.tm>>
-    <associate|auto-15|<tuple|A.1.13|?|c01-background.tm>>
-    <associate|auto-16|<tuple|A.1.14|?|c01-background.tm>>
-    <associate|auto-17|<tuple|A.1.15|?|c01-background.tm>>
-    <associate|auto-18|<tuple|A.1.15.1|?|c01-background.tm>>
-    <associate|auto-19|<tuple|A.1.15.2|?|c01-background.tm>>
-    <associate|auto-2|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-20|<tuple|A.1.15.3|?|c01-background.tm>>
-    <associate|auto-21|<tuple|A.1.16|?|c01-background.tm>>
-    <associate|auto-22|<tuple|A.1.16.1|?|c01-background.tm>>
-    <associate|auto-23|<tuple|A.1.16.2|?|c01-background.tm>>
-    <associate|auto-24|<tuple|A.1.16.3|?|c01-background.tm>>
-    <associate|auto-25|<tuple|A.1.16.4|?|c01-background.tm>>
-    <associate|auto-26|<tuple|A.1.16.5|?|c01-background.tm>>
-    <associate|auto-27|<tuple|A.1.16.6|?|c01-background.tm>>
-    <associate|auto-28|<tuple|A.1.17|?|c01-background.tm>>
-    <associate|auto-29|<tuple|A.1.17.1|?|c01-background.tm>>
-    <associate|auto-3|<tuple|A.1.1|?|c01-background.tm>>
-    <associate|auto-30|<tuple|A.1.17.2|?|c01-background.tm>>
-    <associate|auto-31|<tuple|A.1.17.3|?|c01-background.tm>>
-    <associate|auto-32|<tuple|A.1.17.4|?|c01-background.tm>>
-    <associate|auto-33|<tuple|A.1.17.5|?|c01-background.tm>>
-    <associate|auto-34|<tuple|A.1.17.6|?|c01-background.tm>>
-    <associate|auto-35|<tuple|A.1.17.7|?|c01-background.tm>>
-    <associate|auto-36|<tuple|A.1.17.8|?|c01-background.tm>>
-    <associate|auto-37|<tuple|A.1.17.9|?|c01-background.tm>>
-    <associate|auto-38|<tuple|A.1.17.10|?|c01-background.tm>>
-    <associate|auto-39|<tuple|A.1.17.11|?|c01-background.tm>>
-    <associate|auto-4|<tuple|A.1.2|?|c01-background.tm>>
-    <associate|auto-40|<tuple|A.1.17.12|?|c01-background.tm>>
-    <associate|auto-41|<tuple|A.1.17.13|?|c01-background.tm>>
-    <associate|auto-42|<tuple|A.1.17.14|?|c01-background.tm>>
-    <associate|auto-43|<tuple|A.1.17.15|?|c01-background.tm>>
-    <associate|auto-44|<tuple|A.1.18|?|c01-background.tm>>
-    <associate|auto-45|<tuple|A.1.18.1|?|c01-background.tm>>
-    <associate|auto-46|<tuple|A.1.19|?|c01-background.tm>>
-    <associate|auto-47|<tuple|A.1.19.1|?|c01-background.tm>>
-    <associate|auto-48|<tuple|A.1.19.2|?|c01-background.tm>>
-    <associate|auto-49|<tuple|A.1.20|?|c01-background.tm>>
-    <associate|auto-5|<tuple|A.1.3|?|c01-background.tm>>
-    <associate|auto-50|<tuple|A.1.20.1|?|c01-background.tm>>
-    <associate|auto-51|<tuple|A.1.21|?|c01-background.tm>>
-    <associate|auto-52|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-6|<tuple|A.1.4|?|c01-background.tm>>
-    <associate|auto-7|<tuple|A.1.5|?|c01-background.tm>>
-    <associate|auto-8|<tuple|A.1.6|?|c01-background.tm>>
-    <associate|auto-9|<tuple|A.1.7|?|c01-background.tm>>
-    <associate|defn-http-return-value|<tuple|A.3|?|c01-background.tm>>
-    <associate|defn-offchain-local-storage|<tuple|A.2|?|c01-background.tm>>
-    <associate|defn-offchain-persistent-storage|<tuple|A.1|?|c01-background.tm>>
-    <associate|sect-re-api|<tuple|A|?|c01-background.tm>>
-    <associate|sect-set-storage|<tuple|A.1.1|?|c01-background.tm>>
+    <associate|auto-1|<tuple|A|?>>
+    <associate|auto-10|<tuple|A.1.8|?>>
+    <associate|auto-11|<tuple|A.1.9|?>>
+    <associate|auto-12|<tuple|A.1.10|?>>
+    <associate|auto-13|<tuple|A.1.11|?>>
+    <associate|auto-14|<tuple|A.1.12|?>>
+    <associate|auto-15|<tuple|A.1.13|?>>
+    <associate|auto-16|<tuple|A.1.14|?>>
+    <associate|auto-17|<tuple|A.1.15|?>>
+    <associate|auto-18|<tuple|A.1.15.1|?>>
+    <associate|auto-19|<tuple|A.1.15.2|?>>
+    <associate|auto-2|<tuple|A.1|?>>
+    <associate|auto-20|<tuple|A.1.15.3|?>>
+    <associate|auto-21|<tuple|A.1.16|?>>
+    <associate|auto-22|<tuple|A.1.16.1|?>>
+    <associate|auto-23|<tuple|A.1.16.2|?>>
+    <associate|auto-24|<tuple|A.1.16.3|?>>
+    <associate|auto-25|<tuple|A.1.16.4|?>>
+    <associate|auto-26|<tuple|A.1.16.5|?>>
+    <associate|auto-27|<tuple|A.1.16.6|?>>
+    <associate|auto-28|<tuple|A.1.17|?>>
+    <associate|auto-29|<tuple|A.1.17.1|?>>
+    <associate|auto-3|<tuple|A.1.1|?>>
+    <associate|auto-30|<tuple|A.1.17.2|?>>
+    <associate|auto-31|<tuple|A.1.17.3|?>>
+    <associate|auto-32|<tuple|A.1.17.4|?>>
+    <associate|auto-33|<tuple|A.1.17.5|?>>
+    <associate|auto-34|<tuple|A.1.17.6|?>>
+    <associate|auto-35|<tuple|A.1.17.7|?>>
+    <associate|auto-36|<tuple|A.1.17.8|?>>
+    <associate|auto-37|<tuple|A.1.17.9|?>>
+    <associate|auto-38|<tuple|A.1.17.10|?>>
+    <associate|auto-39|<tuple|A.1.17.11|?>>
+    <associate|auto-4|<tuple|A.1.2|?>>
+    <associate|auto-40|<tuple|A.1.17.12|?>>
+    <associate|auto-41|<tuple|A.1.17.13|?>>
+    <associate|auto-42|<tuple|A.1.17.14|?>>
+    <associate|auto-43|<tuple|A.1.17.15|?>>
+    <associate|auto-44|<tuple|A.1.18|?>>
+    <associate|auto-45|<tuple|A.1.18.1|?>>
+    <associate|auto-46|<tuple|A.1.19|?>>
+    <associate|auto-47|<tuple|A.1.19.1|?>>
+    <associate|auto-48|<tuple|A.1.19.2|?>>
+    <associate|auto-49|<tuple|A.1.20|?>>
+    <associate|auto-5|<tuple|A.1.3|?>>
+    <associate|auto-50|<tuple|A.1.20.1|?>>
+    <associate|auto-51|<tuple|A.1.21|?>>
+    <associate|auto-52|<tuple|A.2|?>>
+    <associate|auto-6|<tuple|A.1.4|?>>
+    <associate|auto-7|<tuple|A.1.5|?>>
+    <associate|auto-8|<tuple|A.1.6|?>>
+    <associate|auto-9|<tuple|A.1.7|?>>
+    <associate|defn-http-return-value|<tuple|A.3|?>>
+    <associate|defn-offchain-local-storage|<tuple|A.2|?>>
+    <associate|defn-offchain-persistent-storage|<tuple|A.1|?>>
+    <associate|sect-re-api|<tuple|A|?>>
+    <associate|sect-set-storage|<tuple|A.1.1|?>>
   </collection>
 </references>
 

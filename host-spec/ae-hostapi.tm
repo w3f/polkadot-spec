@@ -96,7 +96,7 @@
   <\verbatim>
     (func $ext_storage_read_version_1
 
-    \ \ (param $key i64) (param $value_out i64) (param $offset i32) (result
+    \ \ (param $key i64) (param $value_out i64) (param $offset u32) (result
     i64))
   </verbatim>
 
@@ -113,7 +113,7 @@
     will be written to. This function will never write more then the length
     of the buffer, even if the value's length is bigger.
 
-    <item><verbatim|offset>: an i32 integer containing the offset beyond the
+    <item><verbatim|offset>: an u32 integer containing the offset beyond the
     value should be read from.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
@@ -375,7 +375,7 @@
     \ \ (param $child_storage_key i64) (param $child_definition i64) (param
     $child_type i32)
 
-    \ \ (param $key i64) (param $value_out i64) (param $offset i32) (result
+    \ \ (param $key i64) (param $value_out i64) (param $offset u32) (result
     i64))
   </verbatim>
 
@@ -403,7 +403,7 @@
     will be written to. This function will never write more then the length
     of the buffer, even if the value's length is bigger.
 
-    <item><verbatim|offset>: an i32 integer containing the offset beyond the
+    <item><verbatim|offset>: an u32 integer containing the offset beyond the
     value should be read from.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
