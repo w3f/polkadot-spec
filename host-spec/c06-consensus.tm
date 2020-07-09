@@ -24,29 +24,30 @@
   Definition <reference|defn-authority-list>
 
   <\definition>
-    <label|defn-authority-list>The <strong|authority list> of block <math|B>
-    for consensus engine <math|C> noted as
-    <strong|<math|Auth<rsub|C><around*|(|B|)>>> \ is an array of pairs of
-    type:
+    <label|defn-authority-list>The <strong|authority list> of block
+    <math|<math-it|B>> for consensus engine <math|C> noted as
+    <strong|<math|Auth<rsub|C><around*|(|B|)>>> is an array which contains
+    the following pair of types for each of it authorities
+    <math|A\<in\>Auth<rsub|C><around*|(|B|)> >:
 
     <\equation*>
-      <around*|(|Pk<rsub|A>,W<rsub|A>|)>
+      <around*|(|pk<rsub|A>,w<rsub|A>|)>
     </equation*>
 
-    <math|P<rsub|A>> is the session public key of authority A as defined in
-    Definition <reference|defn-session-key>. And <math|W<rsub|A>> is a
-    <verbatim|u64> value, indicating the authority weight which is set to
-    equal to 1. The value of <math|Auth<rsub|C><around*|(|B|)>> is part of
-    the Polkadot state. The value for <math|Auth<rsub|C><around*|(|B<rsub|0>|)>>
-    is set in the genesis state (see Section <reference|sect-genesis-block>)
-    and can be retrieved using a runtime entery corresponding to consensus
-    engine <math|C>.
+    <math|pk<rsub|A>> is the session public key of authority A as defined in
+    Definition <reference|defn-session-key>. And <math|w<rsub|A>> is a
+    <verbatim|u64> value, indicating the authority weight. The value of
+    <math|Auth<rsub|C><around*|(|B|)>> is part of the Polkadot state. The
+    value for <math|Auth<rsub|C><around*|(|B<rsub|0>|)>> is set in the
+    genesis state (see Section <reference|sect-genesis-block>) and can be
+    retrieved using a runtime entery corresponding to consensus engine
+    <math|C>.
   </definition>
 
-  Note that in Polkadot, all authorities have the weight equal to 1. The
-  weight <math|W<rsub|A>> in Definition <reference|defn-authority-list>
-  exists for potential improvements in the protocol and could have a use-case
-  in the future.
+  Note that in Polkadot, all authorities have the weight
+  <math|w<rsub|A><rsub|>=1>. The weight <math|w<rsub|A>> in Definition
+  <reference|defn-authority-list> exists for potential improvements in the
+  protocol and could have a use-case in the future.
 
   <subsection|Runtime-to-Consensus Engine
   Message><label|sect-consensus-message-digest>
@@ -427,7 +428,7 @@
 
   <subsection|Block Production>
 
-  At each epoch, each block producer should run Algorithm
+  Throughout each epoch, each block producer should run Algorithm
   <reference|algo-block-production> to produce blocks during the slots it has
   been awarded during that epoch. The produced block needs to carry <em|BABE
   header> as well as the <em|block signature> \ as Pre-Runtime and Seal
@@ -458,7 +459,7 @@
 
     \;
 
-    <math|H<rsub|BABE><around*|(|B|)>> must be included as a diegst item of
+    <math|H<rsub|BABE><around*|(|B|)>> must be included as a digest item of
     Pre-Runtime type in the header digest <math|H<rsub|d><around*|(|B|)>> as
     defined in Definition <reference|defn-digest>.\ 
   </definition>
