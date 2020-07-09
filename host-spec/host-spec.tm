@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <style|<tuple|tmbook|std-latex|algorithmacs-style|old-dots>>
 
@@ -131,1053 +131,1109 @@
 
     <with|par-left|2tab|3.2.3.1.<space|2spc>Inherents
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-52>>
+    <no-break><pageref|auto-51>>
 
     3.3.<space|2spc>State Replication <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-54>
+    <no-break><pageref|auto-53>
 
     <with|par-left|1tab|3.3.1.<space|2spc>Block Format
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-55>>
+    <no-break><pageref|auto-54>>
 
     <with|par-left|2tab|3.3.1.1.<space|2spc>Block Header
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-56>>
+    <no-break><pageref|auto-55>>
 
     <with|par-left|2tab|3.3.1.2.<space|2spc>Justified Block Header
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-58>>
+    <no-break><pageref|auto-57>>
 
     <with|par-left|2tab|3.3.1.3.<space|2spc>Block Body
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-59>>
+    <no-break><pageref|auto-58>>
 
     <with|par-left|1tab|3.3.2.<space|2spc>Importing and Validating Block
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-60>>
+    <no-break><pageref|auto-59>>
 
     <with|par-left|1tab|3.3.3.<space|2spc>Managaing Multiple Variants of
     State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-61>>
+    <no-break><pageref|auto-60>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|4.<space|2spc>Network
     Protocol> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-62><vspace|0.5fn>
+    <pageref|auto-61><vspace|0.5fn>
 
     4.1.<space|2spc>Node Identities and Addresses
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-63>
+    <no-break><pageref|auto-62>
 
     4.2.<space|2spc>Discovery Mechanisms <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-64>
+    <no-break><pageref|auto-63>
 
     4.3.<space|2spc>Transport Protocol <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-65>
+    <no-break><pageref|auto-64>
 
     <with|par-left|1tab|4.3.1.<space|2spc>Encryption
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-66>>
+    <no-break><pageref|auto-65>>
 
     <with|par-left|1tab|4.3.2.<space|2spc>Multiplexing
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-67>>
+    <no-break><pageref|auto-66>>
 
     4.4.<space|2spc>Substreams <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-68>
+    <no-break><pageref|auto-67>
 
     <with|par-left|1tab|4.4.1.<space|2spc>Periodic Ephemeral Substreams
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-69>>
+    <no-break><pageref|auto-68>>
 
     <with|par-left|1tab|4.4.2.<space|2spc>Polkadot Communication Substream
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-70>>
+    <no-break><pageref|auto-69>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|5.<space|2spc>Bootstrapping>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-71><vspace|0.5fn>
+    <pageref|auto-70><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|6.<space|2spc>Consensus>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-72><vspace|0.5fn>
+    <pageref|auto-71><vspace|0.5fn>
 
     6.1.<space|2spc>Common Consensus Structures
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-73>
+    <no-break><pageref|auto-72>
 
     <with|par-left|1tab|6.1.1.<space|2spc>Consensus Authority Set
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-74>>
+    <no-break><pageref|auto-73>>
 
     <with|par-left|1tab|6.1.2.<space|2spc>Runtime-to-Consensus Engine Message
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-75>>
+    <no-break><pageref|auto-74>>
 
     6.2.<space|2spc>Block Production <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-77>
+    <no-break><pageref|auto-76>
 
     <with|par-left|1tab|6.2.1.<space|2spc>Preliminaries
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-78>>
+    <no-break><pageref|auto-77>>
 
     <with|par-left|1tab|6.2.2.<space|2spc>Block Production Lottery
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-79>>
+    <no-break><pageref|auto-78>>
 
     <with|par-left|1tab|6.2.3.<space|2spc>Slot Number Calculation
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-80>>
+    <no-break><pageref|auto-79>>
 
     <with|par-left|1tab|6.2.4.<space|2spc>Block Production
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-81>>
+    <no-break><pageref|auto-80>>
 
     <with|par-left|1tab|6.2.5.<space|2spc>Epoch Randomness
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-82>>
+    <no-break><pageref|auto-81>>
 
     <with|par-left|1tab|6.2.6.<space|2spc>Verifying Authorship Right
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-83>>
+    <no-break><pageref|auto-82>>
 
     <with|par-left|1tab|6.2.7.<space|2spc>Block Building Process
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-84>>
+    <no-break><pageref|auto-83>>
 
     6.3.<space|2spc>Finality <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-85>
+    <no-break><pageref|auto-84>
 
     <with|par-left|1tab|6.3.1.<space|2spc>Preliminaries
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-86>>
+    <no-break><pageref|auto-85>>
 
     <with|par-left|1tab|6.3.2.<space|2spc>GRANDPA Messages Specification
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-87>>
+    <no-break><pageref|auto-86>>
 
     <with|par-left|2tab|6.3.2.1.<space|2spc>Vote Messages
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-89>>
+    <no-break><pageref|auto-88>>
 
     <with|par-left|2tab|6.3.2.2.<space|2spc>Finalizing Message
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-90>>
+    <no-break><pageref|auto-89>>
 
     <with|par-left|2tab|6.3.2.3.<space|2spc>Catch-up Messages
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-91>>
+    <no-break><pageref|auto-90>>
 
     <with|par-left|1tab|6.3.3.<space|2spc>Initiating the GRANDPA State
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-92>>
+    <no-break><pageref|auto-91>>
 
     <with|par-left|2tab|6.3.3.1.<space|2spc>Voter Set Changes
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-93>>
+    <no-break><pageref|auto-92>>
 
     <with|par-left|1tab|6.3.4.<space|2spc>Voting Process in Round
     <with|mode|math|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-94>>
+    <no-break><pageref|auto-93>>
 
     6.4.<space|2spc>Block Finalization <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-95>
+    <no-break><pageref|auto-94>
 
     <with|par-left|1tab|6.4.1.<space|2spc>Catching up
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-96>>
+    <no-break><pageref|auto-95>>
 
     <with|par-left|2tab|6.4.1.1.<space|2spc>Sending catch-up requests
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-97>>
+    <no-break><pageref|auto-96>>
 
     <with|par-left|2tab|6.4.1.2.<space|2spc>Processing catch-up requests
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-98>>
+    <no-break><pageref|auto-97>>
 
     <with|par-left|2tab|6.4.1.3.<space|2spc>Processing catch-up responses
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-99>>
+    <no-break><pageref|auto-98>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
     A.<space|2spc>Cryptographic Algorithms>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-100><vspace|0.5fn>
+    <pageref|auto-99><vspace|0.5fn>
 
     A.1.<space|2spc>Hash Functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-101>
+    <no-break><pageref|auto-100>
 
     A.2.<space|2spc>BLAKE2 <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-102>
+    <no-break><pageref|auto-101>
 
     A.3.<space|2spc>Randomness <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-103>
+    <no-break><pageref|auto-102>
 
     A.4.<space|2spc>VRF <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-104>
+    <no-break><pageref|auto-103>
 
     A.5.<space|2spc>Cryptographic Keys <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-105>
+    <no-break><pageref|auto-104>
 
     <with|par-left|1tab|A.5.1.<space|2spc>Holding and staking funds
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-108>>
+    <no-break><pageref|auto-107>>
 
     <with|par-left|1tab|A.5.2.<space|2spc>Creating a Controller key
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-109>>
+    <no-break><pageref|auto-108>>
 
     <with|par-left|1tab|A.5.3.<space|2spc>Designating a proxy for voting
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-110>>
+    <no-break><pageref|auto-109>>
 
     <with|par-left|1tab|A.5.4.<space|2spc>Controller settings
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-111>>
+    <no-break><pageref|auto-110>>
 
     <with|par-left|1tab|A.5.5.<space|2spc>Certifying keys
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-112>>
+    <no-break><pageref|auto-111>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
     B.<space|2spc>Auxiliary Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-113><vspace|0.5fn>
+    <pageref|auto-112><vspace|0.5fn>
 
     B.1.<space|2spc>SCALE Codec <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-114>
+    <no-break><pageref|auto-113>
 
     <with|par-left|1tab|B.1.1.<space|2spc>Length and Compact Encoding
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-115>>
+    <no-break><pageref|auto-114>>
 
     B.2.<space|2spc>Hex Encoding <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-116>
+    <no-break><pageref|auto-115>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
     C.<space|2spc>Genesis State Specification>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-117><vspace|0.5fn>
+    <pageref|auto-116><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
     D.<space|2spc>Network Messages> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-119><vspace|0.5fn>
+    <pageref|auto-118><vspace|0.5fn>
 
     D.1.<space|2spc>Detailed Message Structure
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-121>
+    <no-break><pageref|auto-120>
 
     <with|par-left|1tab|D.1.1.<space|2spc>Status Message
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-122>>
+    <no-break><pageref|auto-121>>
 
     <with|par-left|1tab|D.1.2.<space|2spc>Block Request Message
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-124>>
+    <no-break><pageref|auto-123>>
 
     <with|par-left|1tab|D.1.3.<space|2spc>Block Response Message
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-126>>
+    <no-break><pageref|auto-125>>
 
     <with|par-left|1tab|D.1.4.<space|2spc>Block Announce Message
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-127>>
+    <no-break><pageref|auto-126>>
 
     <with|par-left|1tab|D.1.5.<space|2spc>Transactions
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-128>>
+    <no-break><pageref|auto-127>>
 
     <with|par-left|1tab|D.1.6.<space|2spc>Consensus Message
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-129>>
+    <no-break><pageref|auto-128>>
 
     <with|par-left|1tab|D.1.7.<space|2spc>Neighbor Packet
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-130>>
+    <no-break><pageref|auto-129>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
     E.<space|2spc>Polkadot Host API> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-131><vspace|0.5fn>
+    <pageref|auto-130><vspace|0.5fn>
 
     E.1.<space|2spc>Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-132>
+    <no-break><pageref|auto-131>
 
     <with|par-left|1tab|E.1.1.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-133>>
+    <no-break><pageref|auto-132>>
 
     <with|par-left|2tab|E.1.1.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-134>>
+    <no-break><pageref|auto-133>>
 
     <with|par-left|1tab|E.1.2.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_get>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-135>>
+    <no-break><pageref|auto-134>>
 
     <with|par-left|2tab|E.1.2.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-136>>
+    <no-break><pageref|auto-135>>
 
     <with|par-left|1tab|E.1.3.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_read>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-137>>
+    <no-break><pageref|auto-136>>
 
     <with|par-left|2tab|E.1.3.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-138>>
+    <no-break><pageref|auto-137>>
 
     <with|par-left|1tab|E.1.4.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_clear>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-139>>
+    <no-break><pageref|auto-138>>
 
     <with|par-left|2tab|E.1.4.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-140>>
+    <no-break><pageref|auto-139>>
 
     <with|par-left|1tab|E.1.5.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_exists>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-141>>
+    <no-break><pageref|auto-140>>
 
     <with|par-left|2tab|E.1.5.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-142>>
+    <no-break><pageref|auto-141>>
 
     <with|par-left|1tab|E.1.6.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_clear_prefix>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-143>>
+    <no-break><pageref|auto-142>>
 
     <with|par-left|2tab|E.1.6.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-144>>
+    <no-break><pageref|auto-143>>
 
-    <with|par-left|1tab|E.1.7.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_root>
+    <with|par-left|1tab|E.1.7.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_append>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-145>>
+    <no-break><pageref|auto-144>>
 
     <with|par-left|2tab|E.1.7.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-146>>
+    <no-break><pageref|auto-145>>
 
-    <with|par-left|1tab|E.1.8.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_changes_root>
+    <with|par-left|1tab|E.1.8.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-147>>
+    <no-break><pageref|auto-146>>
 
     <with|par-left|2tab|E.1.8.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-148>>
+    <no-break><pageref|auto-147>>
 
-    <with|par-left|1tab|E.1.9.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_next_key>
+    <with|par-left|1tab|E.1.9.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_changes_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-149>>
+    <no-break><pageref|auto-148>>
 
     <with|par-left|2tab|E.1.9.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-149>>
+
+    <with|par-left|1tab|E.1.10.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_next_key>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-150>>
 
+    <with|par-left|2tab|E.1.10.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-151>>
+
     E.2.<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-151>
+    <no-break><pageref|auto-152>
 
     <with|par-left|1tab|E.2.1.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-152>>
+    <no-break><pageref|auto-153>>
 
     <with|par-left|2tab|E.2.1.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-153>>
+    <no-break><pageref|auto-154>>
 
     <with|par-left|1tab|E.2.2.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_get>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-154>>
+    <no-break><pageref|auto-155>>
 
     <with|par-left|2tab|E.2.2.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-155>>
+    <no-break><pageref|auto-156>>
 
     <with|par-left|1tab|E.2.3.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_read>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-156>>
+    <no-break><pageref|auto-157>>
 
     <with|par-left|2tab|E.2.3.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-157>>
+    <no-break><pageref|auto-158>>
 
     <with|par-left|1tab|E.2.4.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_clear>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-158>>
+    <no-break><pageref|auto-159>>
 
     <with|par-left|2tab|E.2.4.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-159>>
+    <no-break><pageref|auto-160>>
 
     <with|par-left|1tab|E.2.5.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_storage_kill>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-160>>
+    <no-break><pageref|auto-161>>
 
     <with|par-left|2tab|E.2.5.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-161>>
+    <no-break><pageref|auto-162>>
 
     <with|par-left|1tab|E.2.6.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_exists>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-162>>
+    <no-break><pageref|auto-163>>
 
     <with|par-left|2tab|E.2.6.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-163>>
+    <no-break><pageref|auto-164>>
 
     <with|par-left|1tab|E.2.7.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_clear_prefix>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-164>>
+    <no-break><pageref|auto-165>>
 
     <with|par-left|2tab|E.2.7.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-165>>
+    <no-break><pageref|auto-166>>
 
     <with|par-left|1tab|E.2.8.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-166>>
+    <no-break><pageref|auto-167>>
 
     <with|par-left|2tab|E.2.8.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-167>>
+    <no-break><pageref|auto-168>>
 
     <with|par-left|1tab|E.2.9.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_child_next_key>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-168>>
+    <no-break><pageref|auto-169>>
 
     <with|par-left|2tab|E.2.9.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-169>>
+    <no-break><pageref|auto-170>>
 
     E.3.<space|2spc>Crypto <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-170>
+    <no-break><pageref|auto-171>
 
     <with|par-left|1tab|E.3.1.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ed25519_public_keys>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-173>>
+    <no-break><pageref|auto-174>>
 
     <with|par-left|2tab|E.3.1.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-174>>
+    <no-break><pageref|auto-175>>
 
     <with|par-left|1tab|E.3.2.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ed25519_generate>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-175>>
+    <no-break><pageref|auto-176>>
 
     <with|par-left|2tab|E.3.2.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-176>>
+    <no-break><pageref|auto-177>>
 
     <with|par-left|1tab|E.3.3.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ed25519_sign>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-177>>
+    <no-break><pageref|auto-178>>
 
     <with|par-left|2tab|E.3.3.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-178>>
+    <no-break><pageref|auto-179>>
 
     <with|par-left|1tab|E.3.4.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ed25519_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-179>>
+    <no-break><pageref|auto-180>>
 
     <with|par-left|2tab|E.3.4.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-180>>
+    <no-break><pageref|auto-181>>
 
     <with|par-left|1tab|E.3.5.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_sr25519_public_keys>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-181>>
+    <no-break><pageref|auto-182>>
 
     <with|par-left|2tab|E.3.5.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-182>>
+    <no-break><pageref|auto-183>>
 
     <with|par-left|1tab|E.3.6.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_sr25519_generate>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-183>>
+    <no-break><pageref|auto-184>>
 
     <with|par-left|2tab|E.3.6.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-184>>
+    <no-break><pageref|auto-185>>
 
     <with|par-left|1tab|E.3.7.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_sr25519_sign>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-185>>
+    <no-break><pageref|auto-186>>
 
     <with|par-left|2tab|E.3.7.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-186>>
+    <no-break><pageref|auto-187>>
 
     <with|par-left|1tab|E.3.8.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_sr25519_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-187>>
+    <no-break><pageref|auto-188>>
 
     <with|par-left|2tab|E.3.8.1.<space|2spc>Version 2 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-188>>
+    <no-break><pageref|auto-189>>
 
     <with|par-left|2tab|E.3.8.2.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-189>>
-
-    <with|par-left|1tab|E.3.9.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_secp256k1_ecdsa_recover>
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-190>>
 
-    <with|par-left|2tab|E.3.9.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.3.9.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ecdsa_public_keys>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-191>>
 
-    <with|par-left|1tab|E.3.10.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_secp256k1_ecdsa_recover_compressed>
+    <with|par-left|2tab|E.3.9.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-192>>
 
-    <with|par-left|2tab|E.3.10.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.3.10.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ecdsa_generate>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-193>>
 
-    E.4.<space|2spc>Hashing <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-194>
+    <with|par-left|2tab|E.3.10.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-194>>
 
-    <with|par-left|1tab|E.4.1.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_keccak_256>
+    <with|par-left|1tab|E.3.11.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ecdsa_sign>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-195>>
 
-    <with|par-left|2tab|E.4.1.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.3.11.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-196>>
 
-    <with|par-left|1tab|E.4.2.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_sha2_256>
+    <with|par-left|1tab|E.3.12.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_ecdsa_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-197>>
 
-    <with|par-left|2tab|E.4.2.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.3.12.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-198>>
 
-    <with|par-left|1tab|E.4.3.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_blake2_128>
+    <with|par-left|1tab|E.3.13.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_secp256k1_ecdsa_recover>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-199>>
 
-    <with|par-left|2tab|E.4.3.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.3.13.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-200>>
 
-    <with|par-left|1tab|E.4.4.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_blake2_256>
+    <with|par-left|1tab|E.3.14.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_secp256k1_ecdsa_recover_compressed>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-201>>
 
-    <with|par-left|2tab|E.4.4.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.3.14.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-202>>
 
-    <with|par-left|1tab|E.4.5.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_64>
+    <with|par-left|1tab|E.3.15.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_start_batch_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-203>>
 
-    <with|par-left|2tab|E.4.5.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.3.15.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-204>>
 
-    <with|par-left|1tab|E.4.6.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_128>
+    <with|par-left|1tab|E.3.16.<space|2spc><with|font-family|tt|language|verbatim|ext_crypto_finish_batch_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-205>>
 
-    <with|par-left|2tab|E.4.6.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.3.16.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-206>>
 
-    <with|par-left|1tab|E.4.7.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_256>
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-207>>
+    E.4.<space|2spc>Hashing <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-207>
 
-    <with|par-left|2tab|E.4.7.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.4.1.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_keccak_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-208>>
 
-    E.5.<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-209>
+    <with|par-left|2tab|E.4.1.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-209>>
 
-    <with|par-left|1tab|E.5.1.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_is_validator>
+    <with|par-left|1tab|E.4.2.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_sha2_256>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-210>>
+
+    <with|par-left|2tab|E.4.2.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-211>>
 
-    <with|par-left|2tab|E.5.1.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.4.3.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_blake2_128>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-212>>
 
-    <with|par-left|1tab|E.5.2.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_submit_transaction>
+    <with|par-left|2tab|E.4.3.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-213>>
 
-    <with|par-left|2tab|E.5.2.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.4.4.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_blake2_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-214>>
 
-    <with|par-left|1tab|E.5.3.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_network_state>
+    <with|par-left|2tab|E.4.4.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-215>>
 
-    <with|par-left|2tab|E.5.3.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.4.5.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_64>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-216>>
 
-    <with|par-left|1tab|E.5.4.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_timestamp>
+    <with|par-left|2tab|E.4.5.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-217>>
 
-    <with|par-left|2tab|E.5.4.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.4.6.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_128>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-218>>
 
-    <with|par-left|1tab|E.5.5.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_sleep_until>
+    <with|par-left|2tab|E.4.6.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-219>>
 
-    <with|par-left|2tab|E.5.5.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.4.7.<space|2spc><with|font-family|tt|language|verbatim|ext_hashing_twox_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-220>>
 
-    <with|par-left|1tab|E.5.6.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_random_seed>
+    <with|par-left|2tab|E.4.7.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-221>>
 
-    <with|par-left|2tab|E.5.6.1.<space|2spc>Version 1 - Prototype
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-222>>
+    E.5.<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-222>
 
-    <with|par-left|1tab|E.5.7.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_set>
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-223>>
-
-    <with|par-left|2tab|E.5.7.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.1.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_is_validator>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-224>>
 
-    <with|par-left|1tab|E.5.8.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_compare_and_set>
+    <with|par-left|2tab|E.5.1.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-225>>
 
-    <with|par-left|2tab|E.5.8.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.2.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_submit_transaction>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-226>>
 
-    <with|par-left|1tab|E.5.9.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_get>
+    <with|par-left|2tab|E.5.2.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-227>>
 
-    <with|par-left|2tab|E.5.9.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.3.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_network_state>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-228>>
 
-    <with|par-left|1tab|E.5.10.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_request_start>
+    <with|par-left|2tab|E.5.3.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-229>>
 
-    <with|par-left|2tab|E.5.10.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.4.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_timestamp>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-230>>
 
-    <with|par-left|1tab|E.5.11.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_request_add_header>
+    <with|par-left|2tab|E.5.4.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-231>>
 
-    <with|par-left|2tab|E.5.11.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.5.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_sleep_until>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-232>>
 
-    <with|par-left|1tab|E.5.12.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_request_write_body>
+    <with|par-left|2tab|E.5.5.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-233>>
 
-    <with|par-left|2tab|E.5.12.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.6.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_random_seed>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-234>>
 
-    <with|par-left|1tab|E.5.13.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_response_wait>
+    <with|par-left|2tab|E.5.6.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-235>>
 
-    <with|par-left|2tab|E.5.13.1.<space|2spc>Version 1- Prototype
+    <with|par-left|1tab|E.5.7.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-236>>
 
-    <with|par-left|1tab|E.5.14.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_response_headers>
+    <with|par-left|2tab|E.5.7.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-237>>
 
-    <with|par-left|2tab|E.5.14.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.8.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_compare_and_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-238>>
 
-    <with|par-left|1tab|E.5.15.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_response_read_body>
+    <with|par-left|2tab|E.5.8.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-239>>
 
-    <with|par-left|2tab|E.5.15.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.9.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_local_storage_get>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-240>>
 
-    E.6.<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-241>
+    <with|par-left|2tab|E.5.9.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-241>>
 
-    <with|par-left|1tab|E.6.1.<space|2spc><with|font-family|tt|language|verbatim|ext_trie_blake2_256_root>
+    <with|par-left|1tab|E.5.10.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_request_start>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-242>>
 
-    <with|par-left|2tab|E.6.1.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.5.10.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-243>>
 
-    <with|par-left|1tab|E.6.2.<space|2spc><with|font-family|tt|language|verbatim|ext_trie_blake2_256_ordered_root>
+    <with|par-left|1tab|E.5.11.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_request_add_header>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-244>>
 
-    <with|par-left|2tab|E.6.2.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.5.11.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-245>>
 
-    E.7.<space|2spc>Miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-246>
+    <with|par-left|1tab|E.5.12.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_request_write_body>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-246>>
 
-    <with|par-left|1tab|E.7.1.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_chain_id>
+    <with|par-left|2tab|E.5.12.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-247>>
 
-    <with|par-left|2tab|E.7.1.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.13.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_response_wait>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-248>>
 
-    <with|par-left|1tab|E.7.2.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_print_num>
+    <with|par-left|2tab|E.5.13.1.<space|2spc>Version 1- Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-249>>
 
-    <with|par-left|2tab|E.7.2.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.14.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_response_headers>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-250>>
 
-    <with|par-left|1tab|E.7.3.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_print_utf8>
+    <with|par-left|2tab|E.5.14.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-251>>
 
-    <with|par-left|2tab|E.7.3.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|1tab|E.5.15.<space|2spc><with|font-family|tt|language|verbatim|ext_offchain_http_response_read_body>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-252>>
 
-    <with|par-left|1tab|E.7.4.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_print_hex>
+    <with|par-left|2tab|E.5.15.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-253>>
 
-    <with|par-left|2tab|E.7.4.1.<space|2spc>Version 1 - Prototype
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-254>>
+    E.6.<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-254>
 
-    <with|par-left|1tab|E.7.5.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_runtime_version>
+    <with|par-left|1tab|E.6.1.<space|2spc><with|font-family|tt|language|verbatim|ext_trie_blake2_256_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-255>>
 
-    <with|par-left|2tab|E.7.5.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.6.1.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-256>>
 
-    E.8.<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-257>
+    <with|par-left|1tab|E.6.2.<space|2spc><with|font-family|tt|language|verbatim|ext_trie_blake2_256_ordered_root>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-257>>
 
-    <with|par-left|1tab|E.8.1.<space|2spc><with|font-family|tt|language|verbatim|ext_allocator_malloc>
+    <with|par-left|2tab|E.6.2.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-258>>
 
-    <with|par-left|2tab|E.8.1.1.<space|2spc>Version 1 - Prototype
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-259>>
+    E.7.<space|2spc>Miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-259>
 
-    <with|par-left|1tab|E.8.2.<space|2spc><with|font-family|tt|language|verbatim|ext_allocator_free>
+    <with|par-left|1tab|E.7.1.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_chain_id>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-260>>
 
-    <with|par-left|2tab|E.8.2.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.7.1.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-261>>
 
-    E.9.<space|2spc>Logging <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-262>
+    <with|par-left|1tab|E.7.2.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_print_num>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-262>>
 
-    <with|par-left|1tab|E.9.1.<space|2spc><with|font-family|tt|language|verbatim|ext_logging_log>
+    <with|par-left|2tab|E.7.2.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-263>>
+
+    <with|par-left|1tab|E.7.3.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_print_utf8>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-264>>
 
-    <with|par-left|2tab|E.9.1.1.<space|2spc>Version 1 - Prototype
+    <with|par-left|2tab|E.7.3.1.<space|2spc>Version 1 - Prototype
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-265>>
+
+    <with|par-left|1tab|E.7.4.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_print_hex>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-266>>
+
+    <with|par-left|2tab|E.7.4.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-267>>
+
+    <with|par-left|1tab|E.7.5.<space|2spc><with|font-family|tt|language|verbatim|ext_misc_runtime_version>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-268>>
+
+    <with|par-left|2tab|E.7.5.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-269>>
+
+    E.8.<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-270>
+
+    <with|par-left|1tab|E.8.1.<space|2spc><with|font-family|tt|language|verbatim|ext_allocator_malloc>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-271>>
+
+    <with|par-left|2tab|E.8.1.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-272>>
+
+    <with|par-left|1tab|E.8.2.<space|2spc><with|font-family|tt|language|verbatim|ext_allocator_free>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-273>>
+
+    <with|par-left|2tab|E.8.2.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-274>>
+
+    E.9.<space|2spc>Logging <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-275>
+
+    <with|par-left|1tab|E.9.1.<space|2spc><with|font-family|tt|language|verbatim|ext_logging_log>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-277>>
+
+    <with|par-left|2tab|E.9.1.1.<space|2spc>Version 1 - Prototype
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-278>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
     F.<space|2spc>Legacy Polkadot Host API>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-266><vspace|0.5fn>
+    <pageref|auto-279><vspace|0.5fn>
 
     F.1.<space|2spc>Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-267>
+    <no-break><pageref|auto-280>
 
     <with|par-left|1tab|F.1.1.<space|2spc><with|font-family|tt|language|verbatim|ext_set_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-268>>
+    <no-break><pageref|auto-281>>
 
     <with|par-left|1tab|F.1.2.<space|2spc><with|font-family|tt|language|verbatim|ext_storage_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-269>>
+    <no-break><pageref|auto-282>>
 
     <with|par-left|1tab|F.1.3.<space|2spc><with|font-family|tt|language|verbatim|ext_blake2_256_enumerated_trie_root>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-270>>
+    <no-break><pageref|auto-283>>
 
     <with|par-left|1tab|F.1.4.<space|2spc><with|font-family|tt|language|verbatim|ext_clear_prefix>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-271>>
+    <no-break><pageref|auto-284>>
 
     <with|par-left|1tab|F.1.5.<space|2spc><with|font-family|tt|language|verbatim|><with|font-family|tt|language|verbatim|ext_clear_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-272>>
+    <no-break><pageref|auto-285>>
 
     <with|par-left|1tab|F.1.6.<space|2spc><with|font-family|tt|language|verbatim|ext_exists_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-273>>
+    <no-break><pageref|auto-286>>
 
     <with|par-left|1tab|F.1.7.<space|2spc><with|font-family|tt|language|verbatim|ext_get_allocated_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-274>>
+    <no-break><pageref|auto-287>>
 
     <with|par-left|1tab|F.1.8.<space|2spc><with|font-family|tt|language|verbatim|ext_get_storage_into>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-275>>
+    <no-break><pageref|auto-288>>
 
     <with|par-left|1tab|F.1.9.<space|2spc><with|font-family|tt|language|verbatim|ext_set_child_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-276>>
+    <no-break><pageref|auto-289>>
 
     <with|par-left|1tab|F.1.10.<space|2spc><with|font-family|tt|language|verbatim|ext_clear_child_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-277>>
+    <no-break><pageref|auto-290>>
 
     <with|par-left|1tab|F.1.11.<space|2spc><with|font-family|tt|language|verbatim|ext_exists_child_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-278>>
+    <no-break><pageref|auto-291>>
 
     <with|par-left|1tab|F.1.12.<space|2spc><with|font-family|tt|language|verbatim|ext_get_allocated_child_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-279>>
+    <no-break><pageref|auto-292>>
 
     <with|par-left|1tab|F.1.13.<space|2spc><with|font-family|tt|language|verbatim|ext_get_child_storage_into>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-280>>
+    <no-break><pageref|auto-293>>
 
     <with|par-left|1tab|F.1.14.<space|2spc><with|font-family|tt|language|verbatim|ext_kill_child_storage>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-281>>
+    <no-break><pageref|auto-294>>
 
     <with|par-left|1tab|F.1.15.<space|2spc>Memory
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-282>>
+    <no-break><pageref|auto-295>>
 
     <with|par-left|2tab|F.1.15.1.<space|2spc><with|font-family|tt|language|verbatim|ext_malloc>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-283>>
+    <no-break><pageref|auto-296>>
 
     <with|par-left|2tab|F.1.15.2.<space|2spc><with|font-family|tt|language|verbatim|ext_free>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-284>>
+    <no-break><pageref|auto-297>>
 
     <with|par-left|2tab|F.1.15.3.<space|2spc>Input/Output
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-285>>
+    <no-break><pageref|auto-298>>
 
     <with|par-left|1tab|F.1.16.<space|2spc>Cryptograhpic Auxiliary Functions
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-286>>
+    <no-break><pageref|auto-299>>
 
     <with|par-left|2tab|F.1.16.1.<space|2spc><with|font-family|tt|language|verbatim|ext_blake2_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-287>>
+    <no-break><pageref|auto-300>>
 
     <with|par-left|2tab|F.1.16.2.<space|2spc><with|font-family|tt|language|verbatim|ext_keccak_256>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-288>>
+    <no-break><pageref|auto-301>>
 
     <with|par-left|2tab|F.1.16.3.<space|2spc><with|font-family|tt|language|verbatim|ext_twox_128>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-289>>
+    <no-break><pageref|auto-302>>
 
     <with|par-left|2tab|F.1.16.4.<space|2spc><with|font-family|tt|language|verbatim|ext_ed25519_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-290>>
+    <no-break><pageref|auto-303>>
 
     <with|par-left|2tab|F.1.16.5.<space|2spc><with|font-family|tt|language|verbatim|ext_sr25519_verify>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-291>>
+    <no-break><pageref|auto-304>>
 
     <with|par-left|2tab|F.1.16.6.<space|2spc>To be Specced
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-292>>
+    <no-break><pageref|auto-305>>
 
     <with|par-left|1tab|F.1.17.<space|2spc>Offchain Worker
     \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-293>>
+    <no-break><pageref|auto-306>>
 
     <with|par-left|2tab|F.1.17.1.<space|2spc><with|font-family|tt|language|verbatim|ext_is_validator>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-294>>
+    <no-break><pageref|auto-307>>
 
     <with|par-left|2tab|F.1.17.2.<space|2spc><with|font-family|tt|language|verbatim|ext_submit_transaction>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-295>>
+    <no-break><pageref|auto-308>>
 
     <with|par-left|2tab|F.1.17.3.<space|2spc><with|font-family|tt|language|verbatim|ext_network_state>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-296>>
+    <no-break><pageref|auto-309>>
 
     <with|par-left|2tab|F.1.17.4.<space|2spc><with|font-family|tt|language|verbatim|ext_timestamp>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-297>>
+    <no-break><pageref|auto-310>>
 
     <with|par-left|2tab|F.1.17.5.<space|2spc><with|font-family|tt|language|verbatim|ext_sleep_until>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-298>>
+    <no-break><pageref|auto-311>>
 
     <with|par-left|2tab|F.1.17.6.<space|2spc><with|font-family|tt|language|verbatim|ext_random_seed>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-299>>
+    <no-break><pageref|auto-312>>
 
     <with|par-left|2tab|F.1.17.7.<space|2spc><with|font-family|tt|language|verbatim|ext_local_storage_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-300>>
+    <no-break><pageref|auto-313>>
 
     <with|par-left|2tab|F.1.17.8.<space|2spc><with|font-family|tt|language|verbatim|ext_local_storage_compare_and_set>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-301>>
+    <no-break><pageref|auto-314>>
 
     <with|par-left|2tab|F.1.17.9.<space|2spc><with|font-family|tt|language|verbatim|ext_local_storage_get>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-302>>
+    <no-break><pageref|auto-315>>
 
     <with|par-left|2tab|F.1.17.10.<space|2spc><with|font-family|tt|language|verbatim|ext_http_request_start>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-303>>
+    <no-break><pageref|auto-316>>
 
     <with|par-left|2tab|F.1.17.11.<space|2spc><with|font-family|tt|language|verbatim|ext_http_request_add_header>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-304>>
+    <no-break><pageref|auto-317>>
 
     <with|par-left|2tab|F.1.17.12.<space|2spc><with|font-family|tt|language|verbatim|ext_http_request_write_body>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-305>>
+    <no-break><pageref|auto-318>>
 
     <with|par-left|2tab|F.1.17.13.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_wait>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-306>>
+    <no-break><pageref|auto-319>>
 
     <with|par-left|2tab|F.1.17.14.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_headers>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-307>>
+    <no-break><pageref|auto-320>>
 
     <with|par-left|2tab|F.1.17.15.<space|2spc><with|font-family|tt|language|verbatim|ext_http_response_read_body>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-308>>
+    <no-break><pageref|auto-321>>
 
     <with|par-left|1tab|F.1.18.<space|2spc>Sandboxing
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-309>>
+    <no-break><pageref|auto-322>>
 
     <with|par-left|2tab|F.1.18.1.<space|2spc>To be Specced
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-310>>
+    <no-break><pageref|auto-323>>
 
     <with|par-left|1tab|F.1.19.<space|2spc>Auxillary Debugging API
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-311>>
+    <no-break><pageref|auto-324>>
 
     <with|par-left|2tab|F.1.19.1.<space|2spc><with|font-family|tt|language|verbatim|ext_print_hex>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-312>>
+    <no-break><pageref|auto-325>>
 
     <with|par-left|2tab|F.1.19.2.<space|2spc><with|font-family|tt|language|verbatim|ext_print_utf8>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-313>>
+    <no-break><pageref|auto-326>>
 
     <with|par-left|1tab|F.1.20.<space|2spc>Misc
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-314>>
+    <no-break><pageref|auto-327>>
 
     <with|par-left|2tab|F.1.20.1.<space|2spc>To be Specced
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-315>>
+    <no-break><pageref|auto-328>>
 
     <with|par-left|1tab|F.1.21.<space|2spc>Block Production
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-316>>
+    <no-break><pageref|auto-329>>
 
     F.2.<space|2spc>Validation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-317>
+    <no-break><pageref|auto-330>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Appendix
     G.<space|2spc>Runtime Entries> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-318><vspace|0.5fn>
+    <pageref|auto-331><vspace|0.5fn>
 
     G.1.<space|2spc>List of Runtime Entries
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-319>
+    <no-break><pageref|auto-332>
 
     G.2.<space|2spc>Argument Specification
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-321>
+    <no-break><pageref|auto-334>
 
     <with|par-left|1tab|G.2.1.<space|2spc><with|font-family|tt|language|verbatim|Core_version>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-322>>
+    <no-break><pageref|auto-335>>
 
     <with|par-left|1tab|G.2.2.<space|2spc><with|font-family|tt|language|verbatim|Core_execute_block>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-324>>
+    <no-break><pageref|auto-337>>
 
     <with|par-left|1tab|G.2.3.<space|2spc><with|font-family|tt|language|verbatim|Core_initialize_block>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-325>>
+    <no-break><pageref|auto-338>>
 
     <with|par-left|1tab|G.2.4.<space|2spc><with|font-family|tt|language|verbatim|hash_and_length>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-326>>
+    <no-break><pageref|auto-339>>
 
     <with|par-left|1tab|G.2.5.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_configuration>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-327>>
+    <no-break><pageref|auto-340>>
 
     <with|par-left|1tab|G.2.6.<space|2spc><with|font-family|tt|language|verbatim|GrandpaApi_grandpa_authorities>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-329>>
+    <no-break><pageref|auto-342>>
 
     <with|par-left|1tab|G.2.7.<space|2spc><with|font-family|tt|language|verbatim|TaggedTransactionQueue_validate_transaction>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-330>>
+    <no-break><pageref|auto-343>>
 
     <with|par-left|1tab|G.2.8.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_apply_extrinsic>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-335>>
+    <no-break><pageref|auto-348>>
 
     <with|par-left|1tab|G.2.9.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_inherent_extrinsics>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-338>>
+    <no-break><pageref|auto-351>>
 
     <with|par-left|1tab|G.2.10.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_finalize_block>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-339>>
+    <no-break><pageref|auto-352>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Glossary>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-340><vspace|0.5fn>
+    <pageref|auto-353><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Bibliography>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-341><vspace|0.5fn>
+    <pageref|auto-354><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Index>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-342><vspace|0.5fn>
+    <pageref|auto-355><vspace|0.5fn>
   </table-of-contents>
 
   <include|c01-background.tm>
@@ -1393,11 +1449,11 @@
   </bibliography>
 
   <\the-index|idx>
-    <index+1|Transaction Message|<pageref|auto-48>, <pageref|auto-51>>
+    <index-1|Transaction Message|<pageref|auto-48>>
 
-    <index+1|transaction pool|<pageref|auto-49>>
+    <index-1|transaction pool|<pageref|auto-49>>
 
-    <index+1|transaction queue|<pageref|auto-50>>
+    <index-1|transaction queue|<pageref|auto-50>>
   </the-index>
 </body>
 
@@ -1442,276 +1498,289 @@
     <associate|appendix-e|<tuple|E|65|ae-hostapi.tm>>
     <associate|auto-1|<tuple|1|13|c01-background.tm>>
     <associate|auto-10|<tuple|1.9|15|c01-background.tm>>
-    <associate|auto-100|<tuple|A|51|aa-cryptoalgorithms.tm>>
-    <associate|auto-101|<tuple|A.1|51|aa-cryptoalgorithms.tm>>
-    <associate|auto-102|<tuple|A.2|51|aa-cryptoalgorithms.tm>>
-    <associate|auto-103|<tuple|A.3|51|aa-cryptoalgorithms.tm>>
-    <associate|auto-104|<tuple|A.4|52|aa-cryptoalgorithms.tm>>
-    <associate|auto-105|<tuple|A.5|52|aa-cryptoalgorithms.tm>>
-    <associate|auto-106|<tuple|A.1|52|aa-cryptoalgorithms.tm>>
-    <associate|auto-107|<tuple|A.2|52|aa-cryptoalgorithms.tm>>
-    <associate|auto-108|<tuple|A.5.1|53|aa-cryptoalgorithms.tm>>
-    <associate|auto-109|<tuple|A.5.2|53|aa-cryptoalgorithms.tm>>
+    <associate|auto-100|<tuple|A.1|51|aa-cryptoalgorithms.tm>>
+    <associate|auto-101|<tuple|A.2|51|aa-cryptoalgorithms.tm>>
+    <associate|auto-102|<tuple|A.3|51|aa-cryptoalgorithms.tm>>
+    <associate|auto-103|<tuple|A.4|51|aa-cryptoalgorithms.tm>>
+    <associate|auto-104|<tuple|A.5|52|aa-cryptoalgorithms.tm>>
+    <associate|auto-105|<tuple|A.1|52|aa-cryptoalgorithms.tm>>
+    <associate|auto-106|<tuple|A.2|52|aa-cryptoalgorithms.tm>>
+    <associate|auto-107|<tuple|A.5.1|52|aa-cryptoalgorithms.tm>>
+    <associate|auto-108|<tuple|A.5.2|53|aa-cryptoalgorithms.tm>>
+    <associate|auto-109|<tuple|A.5.3|53|aa-cryptoalgorithms.tm>>
     <associate|auto-11|<tuple|1.9|15|c01-background.tm>>
-    <associate|auto-110|<tuple|A.5.3|55|aa-cryptoalgorithms.tm>>
-    <associate|auto-111|<tuple|A.5.4|55|aa-cryptoalgorithms.tm>>
-    <associate|auto-112|<tuple|A.5.5|57|aa-cryptoalgorithms.tm>>
-    <associate|auto-113|<tuple|B|57|ab-encodings.tm>>
-    <associate|auto-114|<tuple|B.1|59|ab-encodings.tm>>
-    <associate|auto-115|<tuple|B.1.1|59|ab-encodings.tm>>
-    <associate|auto-116|<tuple|B.2|61|ab-encodings.tm>>
-    <associate|auto-117|<tuple|C|61|ac-genesis.tm>>
-    <associate|auto-118|<tuple|C.1|62|ac-genesis.tm>>
-    <associate|auto-119|<tuple|D|62|ad-netmessages.tm>>
+    <associate|auto-110|<tuple|A.5.4|55|aa-cryptoalgorithms.tm>>
+    <associate|auto-111|<tuple|A.5.5|55|aa-cryptoalgorithms.tm>>
+    <associate|auto-112|<tuple|B|57|ab-encodings.tm>>
+    <associate|auto-113|<tuple|B.1|57|ab-encodings.tm>>
+    <associate|auto-114|<tuple|B.1.1|59|ab-encodings.tm>>
+    <associate|auto-115|<tuple|B.2|59|ab-encodings.tm>>
+    <associate|auto-116|<tuple|C|61|ac-genesis.tm>>
+    <associate|auto-117|<tuple|C.1|61|ac-genesis.tm>>
+    <associate|auto-118|<tuple|D|62|ad-netmessages.tm>>
+    <associate|auto-119|<tuple|D.1|62|ad-netmessages.tm>>
     <associate|auto-12|<tuple|1.9|15|c01-background.tm>>
     <associate|auto-120|<tuple|D.1|62|ad-netmessages.tm>>
-    <associate|auto-121|<tuple|D.1|62|ad-netmessages.tm>>
-    <associate|auto-122|<tuple|D.1.1|63|ad-netmessages.tm>>
-    <associate|auto-123|<tuple|D.2|63|ad-netmessages.tm>>
-    <associate|auto-124|<tuple|D.1.2|64|ad-netmessages.tm>>
-    <associate|auto-125|<tuple|D.3|64|ad-netmessages.tm>>
-    <associate|auto-126|<tuple|D.1.3|64|ad-netmessages.tm>>
-    <associate|auto-127|<tuple|D.1.4|64|ad-netmessages.tm>>
-    <associate|auto-128|<tuple|D.1.5|65|ad-netmessages.tm>>
-    <associate|auto-129|<tuple|D.1.6|65|ad-netmessages.tm>>
+    <associate|auto-121|<tuple|D.1.1|62|ad-netmessages.tm>>
+    <associate|auto-122|<tuple|D.2|63|ad-netmessages.tm>>
+    <associate|auto-123|<tuple|D.1.2|63|ad-netmessages.tm>>
+    <associate|auto-124|<tuple|D.3|64|ad-netmessages.tm>>
+    <associate|auto-125|<tuple|D.1.3|64|ad-netmessages.tm>>
+    <associate|auto-126|<tuple|D.1.4|64|ad-netmessages.tm>>
+    <associate|auto-127|<tuple|D.1.5|64|ad-netmessages.tm>>
+    <associate|auto-128|<tuple|D.1.6|65|ad-netmessages.tm>>
+    <associate|auto-129|<tuple|D.1.7|65|ad-netmessages.tm>>
     <associate|auto-13|<tuple|1.9|15|c01-background.tm>>
-    <associate|auto-130|<tuple|D.1.7|65|ad-netmessages.tm>>
-    <associate|auto-131|<tuple|E|65|ae-hostapi.tm>>
-    <associate|auto-132|<tuple|E.1|65|ae-hostapi.tm>>
-    <associate|auto-133|<tuple|E.1.1|66|ae-hostapi.tm>>
-    <associate|auto-134|<tuple|E.1.1.1|66|ae-hostapi.tm>>
-    <associate|auto-135|<tuple|E.1.2|66|ae-hostapi.tm>>
-    <associate|auto-136|<tuple|E.1.2.1|66|ae-hostapi.tm>>
-    <associate|auto-137|<tuple|E.1.3|66|ae-hostapi.tm>>
-    <associate|auto-138|<tuple|E.1.3.1|66|ae-hostapi.tm>>
-    <associate|auto-139|<tuple|E.1.4|66|ae-hostapi.tm>>
+    <associate|auto-130|<tuple|E|65|ae-hostapi.tm>>
+    <associate|auto-131|<tuple|E.1|65|ae-hostapi.tm>>
+    <associate|auto-132|<tuple|E.1.1|65|ae-hostapi.tm>>
+    <associate|auto-133|<tuple|E.1.1.1|66|ae-hostapi.tm>>
+    <associate|auto-134|<tuple|E.1.2|66|ae-hostapi.tm>>
+    <associate|auto-135|<tuple|E.1.2.1|66|ae-hostapi.tm>>
+    <associate|auto-136|<tuple|E.1.3|66|ae-hostapi.tm>>
+    <associate|auto-137|<tuple|E.1.3.1|66|ae-hostapi.tm>>
+    <associate|auto-138|<tuple|E.1.4|66|ae-hostapi.tm>>
+    <associate|auto-139|<tuple|E.1.4.1|66|ae-hostapi.tm>>
     <associate|auto-14|<tuple|1.2.1|15|c01-background.tm>>
-    <associate|auto-140|<tuple|E.1.4.1|67|ae-hostapi.tm>>
-    <associate|auto-141|<tuple|E.1.5|67|ae-hostapi.tm>>
-    <associate|auto-142|<tuple|E.1.5.1|67|ae-hostapi.tm>>
-    <associate|auto-143|<tuple|E.1.6|67|ae-hostapi.tm>>
-    <associate|auto-144|<tuple|E.1.6.1|67|ae-hostapi.tm>>
-    <associate|auto-145|<tuple|E.1.7|67|ae-hostapi.tm>>
-    <associate|auto-146|<tuple|E.1.7.1|67|ae-hostapi.tm>>
-    <associate|auto-147|<tuple|E.1.8|68|ae-hostapi.tm>>
-    <associate|auto-148|<tuple|E.1.8.1|68|ae-hostapi.tm>>
-    <associate|auto-149|<tuple|E.1.9|68|ae-hostapi.tm>>
+    <associate|auto-140|<tuple|E.1.5|67|ae-hostapi.tm>>
+    <associate|auto-141|<tuple|E.1.5.1|67|ae-hostapi.tm>>
+    <associate|auto-142|<tuple|E.1.6|67|ae-hostapi.tm>>
+    <associate|auto-143|<tuple|E.1.6.1|67|ae-hostapi.tm>>
+    <associate|auto-144|<tuple|E.1.7|67|ae-hostapi.tm>>
+    <associate|auto-145|<tuple|E.1.7.1|67|ae-hostapi.tm>>
+    <associate|auto-146|<tuple|E.1.8|67|ae-hostapi.tm>>
+    <associate|auto-147|<tuple|E.1.8.1|68|ae-hostapi.tm>>
+    <associate|auto-148|<tuple|E.1.9|68|ae-hostapi.tm>>
+    <associate|auto-149|<tuple|E.1.9.1|68|ae-hostapi.tm>>
     <associate|auto-15|<tuple|1.11|15|c01-background.tm>>
-    <associate|auto-150|<tuple|E.1.9.1|68|ae-hostapi.tm>>
-    <associate|auto-151|<tuple|E.2|69|ae-hostapi.tm>>
-    <associate|auto-152|<tuple|E.2.1|69|ae-hostapi.tm>>
-    <associate|auto-153|<tuple|E.2.1.1|69|ae-hostapi.tm>>
-    <associate|auto-154|<tuple|E.2.2|69|ae-hostapi.tm>>
-    <associate|auto-155|<tuple|E.2.2.1|70|ae-hostapi.tm>>
-    <associate|auto-156|<tuple|E.2.3|70|ae-hostapi.tm>>
-    <associate|auto-157|<tuple|E.2.3.1|70|ae-hostapi.tm>>
-    <associate|auto-158|<tuple|E.2.4|70|ae-hostapi.tm>>
-    <associate|auto-159|<tuple|E.2.4.1|70|ae-hostapi.tm>>
+    <associate|auto-150|<tuple|E.1.10|68|ae-hostapi.tm>>
+    <associate|auto-151|<tuple|E.1.10.1|69|ae-hostapi.tm>>
+    <associate|auto-152|<tuple|E.2|69|ae-hostapi.tm>>
+    <associate|auto-153|<tuple|E.2.1|69|ae-hostapi.tm>>
+    <associate|auto-154|<tuple|E.2.1.1|69|ae-hostapi.tm>>
+    <associate|auto-155|<tuple|E.2.2|70|ae-hostapi.tm>>
+    <associate|auto-156|<tuple|E.2.2.1|70|ae-hostapi.tm>>
+    <associate|auto-157|<tuple|E.2.3|70|ae-hostapi.tm>>
+    <associate|auto-158|<tuple|E.2.3.1|70|ae-hostapi.tm>>
+    <associate|auto-159|<tuple|E.2.4|70|ae-hostapi.tm>>
     <associate|auto-16|<tuple|1.12|15|c01-background.tm>>
-    <associate|auto-160|<tuple|E.2.5|70|ae-hostapi.tm>>
-    <associate|auto-161|<tuple|E.2.5.1|71|ae-hostapi.tm>>
-    <associate|auto-162|<tuple|E.2.6|71|ae-hostapi.tm>>
-    <associate|auto-163|<tuple|E.2.6.1|71|ae-hostapi.tm>>
-    <associate|auto-164|<tuple|E.2.7|71|ae-hostapi.tm>>
-    <associate|auto-165|<tuple|E.2.7.1|72|ae-hostapi.tm>>
-    <associate|auto-166|<tuple|E.2.8|72|ae-hostapi.tm>>
-    <associate|auto-167|<tuple|E.2.8.1|72|ae-hostapi.tm>>
-    <associate|auto-168|<tuple|E.2.9|72|ae-hostapi.tm>>
-    <associate|auto-169|<tuple|E.2.9.1|73|ae-hostapi.tm>>
+    <associate|auto-160|<tuple|E.2.4.1|70|ae-hostapi.tm>>
+    <associate|auto-161|<tuple|E.2.5|71|ae-hostapi.tm>>
+    <associate|auto-162|<tuple|E.2.5.1|71|ae-hostapi.tm>>
+    <associate|auto-163|<tuple|E.2.6|71|ae-hostapi.tm>>
+    <associate|auto-164|<tuple|E.2.6.1|71|ae-hostapi.tm>>
+    <associate|auto-165|<tuple|E.2.7|72|ae-hostapi.tm>>
+    <associate|auto-166|<tuple|E.2.7.1|72|ae-hostapi.tm>>
+    <associate|auto-167|<tuple|E.2.8|72|ae-hostapi.tm>>
+    <associate|auto-168|<tuple|E.2.8.1|72|ae-hostapi.tm>>
+    <associate|auto-169|<tuple|E.2.9|73|ae-hostapi.tm>>
     <associate|auto-17|<tuple|1.12|15|c01-background.tm>>
-    <associate|auto-170|<tuple|E.3|73|ae-hostapi.tm>>
-    <associate|auto-171|<tuple|E.1|73|ae-hostapi.tm>>
-    <associate|auto-172|<tuple|E.2|73|ae-hostapi.tm>>
-    <associate|auto-173|<tuple|E.3.1|73|ae-hostapi.tm>>
-    <associate|auto-174|<tuple|E.3.1.1|73|ae-hostapi.tm>>
-    <associate|auto-175|<tuple|E.3.2|73|ae-hostapi.tm>>
-    <associate|auto-176|<tuple|E.3.2.1|74|ae-hostapi.tm>>
-    <associate|auto-177|<tuple|E.3.3|74|ae-hostapi.tm>>
-    <associate|auto-178|<tuple|E.3.3.1|74|ae-hostapi.tm>>
-    <associate|auto-179|<tuple|E.3.4|74|ae-hostapi.tm>>
+    <associate|auto-170|<tuple|E.2.9.1|73|ae-hostapi.tm>>
+    <associate|auto-171|<tuple|E.3|73|ae-hostapi.tm>>
+    <associate|auto-172|<tuple|E.1|73|ae-hostapi.tm>>
+    <associate|auto-173|<tuple|E.2|73|ae-hostapi.tm>>
+    <associate|auto-174|<tuple|E.3.1|73|ae-hostapi.tm>>
+    <associate|auto-175|<tuple|E.3.1.1|73|ae-hostapi.tm>>
+    <associate|auto-176|<tuple|E.3.2|74|ae-hostapi.tm>>
+    <associate|auto-177|<tuple|E.3.2.1|74|ae-hostapi.tm>>
+    <associate|auto-178|<tuple|E.3.3|74|ae-hostapi.tm>>
+    <associate|auto-179|<tuple|E.3.3.1|74|ae-hostapi.tm>>
     <associate|auto-18|<tuple|1.13|15|c01-background.tm>>
-    <associate|auto-180|<tuple|E.3.4.1|74|ae-hostapi.tm>>
-    <associate|auto-181|<tuple|E.3.5|74|ae-hostapi.tm>>
-    <associate|auto-182|<tuple|E.3.5.1|75|ae-hostapi.tm>>
-    <associate|auto-183|<tuple|E.3.6|75|ae-hostapi.tm>>
-    <associate|auto-184|<tuple|E.3.6.1|75|ae-hostapi.tm>>
-    <associate|auto-185|<tuple|E.3.7|75|ae-hostapi.tm>>
-    <associate|auto-186|<tuple|E.3.7.1|75|ae-hostapi.tm>>
-    <associate|auto-187|<tuple|E.3.8|76|ae-hostapi.tm>>
-    <associate|auto-188|<tuple|E.3.8.1|76|ae-hostapi.tm>>
-    <associate|auto-189|<tuple|E.3.8.2|76|ae-hostapi.tm>>
+    <associate|auto-180|<tuple|E.3.4|74|ae-hostapi.tm>>
+    <associate|auto-181|<tuple|E.3.4.1|74|ae-hostapi.tm>>
+    <associate|auto-182|<tuple|E.3.5|75|ae-hostapi.tm>>
+    <associate|auto-183|<tuple|E.3.5.1|75|ae-hostapi.tm>>
+    <associate|auto-184|<tuple|E.3.6|75|ae-hostapi.tm>>
+    <associate|auto-185|<tuple|E.3.6.1|75|ae-hostapi.tm>>
+    <associate|auto-186|<tuple|E.3.7|75|ae-hostapi.tm>>
+    <associate|auto-187|<tuple|E.3.7.1|76|ae-hostapi.tm>>
+    <associate|auto-188|<tuple|E.3.8|76|ae-hostapi.tm>>
+    <associate|auto-189|<tuple|E.3.8.1|76|ae-hostapi.tm>>
     <associate|auto-19|<tuple|1.13|15|c01-background.tm>>
-    <associate|auto-190|<tuple|E.3.9|76|ae-hostapi.tm>>
-    <associate|auto-191|<tuple|E.3.9.1|76|ae-hostapi.tm>>
-    <associate|auto-192|<tuple|E.3.10|77|ae-hostapi.tm>>
-    <associate|auto-193|<tuple|E.3.10.1|77|ae-hostapi.tm>>
-    <associate|auto-194|<tuple|E.4|77|ae-hostapi.tm>>
-    <associate|auto-195|<tuple|E.4.1|77|ae-hostapi.tm>>
-    <associate|auto-196|<tuple|E.4.1.1|77|ae-hostapi.tm>>
-    <associate|auto-197|<tuple|E.4.2|77|ae-hostapi.tm>>
-    <associate|auto-198|<tuple|E.4.2.1|77|ae-hostapi.tm>>
-    <associate|auto-199|<tuple|E.4.3|77|ae-hostapi.tm>>
+    <associate|auto-190|<tuple|E.3.8.2|76|ae-hostapi.tm>>
+    <associate|auto-191|<tuple|E.3.9|76|ae-hostapi.tm>>
+    <associate|auto-192|<tuple|E.3.9.1|77|ae-hostapi.tm>>
+    <associate|auto-193|<tuple|E.3.10|77|ae-hostapi.tm>>
+    <associate|auto-194|<tuple|E.3.10.1|77|ae-hostapi.tm>>
+    <associate|auto-195|<tuple|E.3.11|77|ae-hostapi.tm>>
+    <associate|auto-196|<tuple|E.3.11.1|77|ae-hostapi.tm>>
+    <associate|auto-197|<tuple|E.3.12|77|ae-hostapi.tm>>
+    <associate|auto-198|<tuple|E.3.12.1|77|ae-hostapi.tm>>
+    <associate|auto-199|<tuple|E.3.13|77|ae-hostapi.tm>>
     <associate|auto-2|<tuple|1.1|13|c01-background.tm>>
     <associate|auto-20|<tuple|1.13|15|c01-background.tm>>
-    <associate|auto-200|<tuple|E.4.3.1|78|ae-hostapi.tm>>
-    <associate|auto-201|<tuple|E.4.4|78|ae-hostapi.tm>>
-    <associate|auto-202|<tuple|E.4.4.1|78|ae-hostapi.tm>>
-    <associate|auto-203|<tuple|E.4.5|78|ae-hostapi.tm>>
-    <associate|auto-204|<tuple|E.4.5.1|78|ae-hostapi.tm>>
-    <associate|auto-205|<tuple|E.4.6|78|ae-hostapi.tm>>
-    <associate|auto-206|<tuple|E.4.6.1|79|ae-hostapi.tm>>
-    <associate|auto-207|<tuple|E.4.7|79|ae-hostapi.tm>>
-    <associate|auto-208|<tuple|E.4.7.1|79|ae-hostapi.tm>>
-    <associate|auto-209|<tuple|E.5|80|ae-hostapi.tm>>
+    <associate|auto-200|<tuple|E.3.13.1|78|ae-hostapi.tm>>
+    <associate|auto-201|<tuple|E.3.14|78|ae-hostapi.tm>>
+    <associate|auto-202|<tuple|E.3.14.1|78|ae-hostapi.tm>>
+    <associate|auto-203|<tuple|E.3.15|78|ae-hostapi.tm>>
+    <associate|auto-204|<tuple|E.3.15.1|78|ae-hostapi.tm>>
+    <associate|auto-205|<tuple|E.3.16|78|ae-hostapi.tm>>
+    <associate|auto-206|<tuple|E.3.16.1|79|ae-hostapi.tm>>
+    <associate|auto-207|<tuple|E.4|79|ae-hostapi.tm>>
+    <associate|auto-208|<tuple|E.4.1|79|ae-hostapi.tm>>
+    <associate|auto-209|<tuple|E.4.1.1|80|ae-hostapi.tm>>
     <associate|auto-21|<tuple|1.13|15|c01-background.tm>>
-    <associate|auto-210|<tuple|E.3|80|ae-hostapi.tm>>
-    <associate|auto-211|<tuple|E.5.1|80|ae-hostapi.tm>>
-    <associate|auto-212|<tuple|E.5.1.1|80|ae-hostapi.tm>>
-    <associate|auto-213|<tuple|E.5.2|80|ae-hostapi.tm>>
-    <associate|auto-214|<tuple|E.5.2.1|80|ae-hostapi.tm>>
-    <associate|auto-215|<tuple|E.5.3|80|ae-hostapi.tm>>
-    <associate|auto-216|<tuple|E.5.3.1|81|ae-hostapi.tm>>
-    <associate|auto-217|<tuple|E.5.4|81|ae-hostapi.tm>>
-    <associate|auto-218|<tuple|E.5.4.1|81|ae-hostapi.tm>>
-    <associate|auto-219|<tuple|E.5.5|81|ae-hostapi.tm>>
+    <associate|auto-210|<tuple|E.4.2|80|ae-hostapi.tm>>
+    <associate|auto-211|<tuple|E.4.2.1|80|ae-hostapi.tm>>
+    <associate|auto-212|<tuple|E.4.3|80|ae-hostapi.tm>>
+    <associate|auto-213|<tuple|E.4.3.1|80|ae-hostapi.tm>>
+    <associate|auto-214|<tuple|E.4.4|80|ae-hostapi.tm>>
+    <associate|auto-215|<tuple|E.4.4.1|80|ae-hostapi.tm>>
+    <associate|auto-216|<tuple|E.4.5|81|ae-hostapi.tm>>
+    <associate|auto-217|<tuple|E.4.5.1|81|ae-hostapi.tm>>
+    <associate|auto-218|<tuple|E.4.6|81|ae-hostapi.tm>>
+    <associate|auto-219|<tuple|E.4.6.1|81|ae-hostapi.tm>>
     <associate|auto-22|<tuple|1.13|15|c01-background.tm>>
-    <associate|auto-220|<tuple|E.5.5.1|81|ae-hostapi.tm>>
-    <associate|auto-221|<tuple|E.5.6|81|ae-hostapi.tm>>
-    <associate|auto-222|<tuple|E.5.6.1|81|ae-hostapi.tm>>
-    <associate|auto-223|<tuple|E.5.7|82|ae-hostapi.tm>>
-    <associate|auto-224|<tuple|E.5.7.1|82|ae-hostapi.tm>>
-    <associate|auto-225|<tuple|E.5.8|82|ae-hostapi.tm>>
-    <associate|auto-226|<tuple|E.5.8.1|82|ae-hostapi.tm>>
-    <associate|auto-227|<tuple|E.5.9|82|ae-hostapi.tm>>
-    <associate|auto-228|<tuple|E.5.9.1|83|ae-hostapi.tm>>
-    <associate|auto-229|<tuple|E.5.10|83|ae-hostapi.tm>>
+    <associate|auto-220|<tuple|E.4.7|81|ae-hostapi.tm>>
+    <associate|auto-221|<tuple|E.4.7.1|81|ae-hostapi.tm>>
+    <associate|auto-222|<tuple|E.5|81|ae-hostapi.tm>>
+    <associate|auto-223|<tuple|E.3|82|ae-hostapi.tm>>
+    <associate|auto-224|<tuple|E.5.1|82|ae-hostapi.tm>>
+    <associate|auto-225|<tuple|E.5.1.1|82|ae-hostapi.tm>>
+    <associate|auto-226|<tuple|E.5.2|82|ae-hostapi.tm>>
+    <associate|auto-227|<tuple|E.5.2.1|82|ae-hostapi.tm>>
+    <associate|auto-228|<tuple|E.5.3|83|ae-hostapi.tm>>
+    <associate|auto-229|<tuple|E.5.3.1|83|ae-hostapi.tm>>
     <associate|auto-23|<tuple|1.13|15|c01-background.tm>>
-    <associate|auto-230|<tuple|E.5.10.1|83|ae-hostapi.tm>>
-    <associate|auto-231|<tuple|E.5.11|83|ae-hostapi.tm>>
-    <associate|auto-232|<tuple|E.5.11.1|84|ae-hostapi.tm>>
-    <associate|auto-233|<tuple|E.5.12|84|ae-hostapi.tm>>
-    <associate|auto-234|<tuple|E.5.12.1|84|ae-hostapi.tm>>
-    <associate|auto-235|<tuple|E.5.13|84|ae-hostapi.tm>>
-    <associate|auto-236|<tuple|E.5.13.1|84|ae-hostapi.tm>>
-    <associate|auto-237|<tuple|E.5.14|84|ae-hostapi.tm>>
-    <associate|auto-238|<tuple|E.5.14.1|85|ae-hostapi.tm>>
-    <associate|auto-239|<tuple|E.5.15|85|ae-hostapi.tm>>
+    <associate|auto-230|<tuple|E.5.4|83|ae-hostapi.tm>>
+    <associate|auto-231|<tuple|E.5.4.1|83|ae-hostapi.tm>>
+    <associate|auto-232|<tuple|E.5.5|84|ae-hostapi.tm>>
+    <associate|auto-233|<tuple|E.5.5.1|84|ae-hostapi.tm>>
+    <associate|auto-234|<tuple|E.5.6|84|ae-hostapi.tm>>
+    <associate|auto-235|<tuple|E.5.6.1|84|ae-hostapi.tm>>
+    <associate|auto-236|<tuple|E.5.7|84|ae-hostapi.tm>>
+    <associate|auto-237|<tuple|E.5.7.1|84|ae-hostapi.tm>>
+    <associate|auto-238|<tuple|E.5.8|85|ae-hostapi.tm>>
+    <associate|auto-239|<tuple|E.5.8.1|85|ae-hostapi.tm>>
     <associate|auto-24|<tuple|1.13|15|c01-background.tm>>
-    <associate|auto-240|<tuple|E.5.15.1|85|ae-hostapi.tm>>
-    <associate|auto-241|<tuple|E.6|85|ae-hostapi.tm>>
-    <associate|auto-242|<tuple|E.6.1|85|ae-hostapi.tm>>
-    <associate|auto-243|<tuple|E.6.1.1|86|ae-hostapi.tm>>
-    <associate|auto-244|<tuple|E.6.2|86|ae-hostapi.tm>>
-    <associate|auto-245|<tuple|E.6.2.1|86|ae-hostapi.tm>>
-    <associate|auto-246|<tuple|E.7|86|ae-hostapi.tm>>
-    <associate|auto-247|<tuple|E.7.1|86|ae-hostapi.tm>>
-    <associate|auto-248|<tuple|E.7.1.1|86|ae-hostapi.tm>>
-    <associate|auto-249|<tuple|E.7.2|86|ae-hostapi.tm>>
+    <associate|auto-240|<tuple|E.5.9|85|ae-hostapi.tm>>
+    <associate|auto-241|<tuple|E.5.9.1|85|ae-hostapi.tm>>
+    <associate|auto-242|<tuple|E.5.10|85|ae-hostapi.tm>>
+    <associate|auto-243|<tuple|E.5.10.1|86|ae-hostapi.tm>>
+    <associate|auto-244|<tuple|E.5.11|86|ae-hostapi.tm>>
+    <associate|auto-245|<tuple|E.5.11.1|86|ae-hostapi.tm>>
+    <associate|auto-246|<tuple|E.5.12|86|ae-hostapi.tm>>
+    <associate|auto-247|<tuple|E.5.12.1|86|ae-hostapi.tm>>
+    <associate|auto-248|<tuple|E.5.13|86|ae-hostapi.tm>>
+    <associate|auto-249|<tuple|E.5.13.1|86|ae-hostapi.tm>>
     <associate|auto-25|<tuple|1.14|15|c01-background.tm>>
-    <associate|auto-250|<tuple|E.7.2.1|86|ae-hostapi.tm>>
-    <associate|auto-251|<tuple|E.7.3|86|ae-hostapi.tm>>
-    <associate|auto-252|<tuple|E.7.3.1|87|ae-hostapi.tm>>
-    <associate|auto-253|<tuple|E.7.4|87|ae-hostapi.tm>>
-    <associate|auto-254|<tuple|E.7.4.1|87|ae-hostapi.tm>>
-    <associate|auto-255|<tuple|E.7.5|87|ae-hostapi.tm>>
-    <associate|auto-256|<tuple|E.7.5.1|87|ae-hostapi.tm>>
-    <associate|auto-257|<tuple|E.8|87|ae-hostapi.tm>>
-    <associate|auto-258|<tuple|E.8.1|87|ae-hostapi.tm>>
-    <associate|auto-259|<tuple|E.8.1.1|88|ae-hostapi.tm>>
+    <associate|auto-250|<tuple|E.5.14|86|ae-hostapi.tm>>
+    <associate|auto-251|<tuple|E.5.14.1|86|ae-hostapi.tm>>
+    <associate|auto-252|<tuple|E.5.15|87|ae-hostapi.tm>>
+    <associate|auto-253|<tuple|E.5.15.1|87|ae-hostapi.tm>>
+    <associate|auto-254|<tuple|E.6|87|ae-hostapi.tm>>
+    <associate|auto-255|<tuple|E.6.1|87|ae-hostapi.tm>>
+    <associate|auto-256|<tuple|E.6.1.1|87|ae-hostapi.tm>>
+    <associate|auto-257|<tuple|E.6.2|87|ae-hostapi.tm>>
+    <associate|auto-258|<tuple|E.6.2.1|87|ae-hostapi.tm>>
+    <associate|auto-259|<tuple|E.7|88|ae-hostapi.tm>>
     <associate|auto-26|<tuple|1.15|16|c01-background.tm>>
-    <associate|auto-260|<tuple|E.8.2|88|ae-hostapi.tm>>
-    <associate|auto-261|<tuple|E.8.2.1|88|ae-hostapi.tm>>
-    <associate|auto-262|<tuple|E.9|88|ae-hostapi.tm>>
-    <associate|auto-263|<tuple|E.4|89|ae-hostapi.tm>>
-    <associate|auto-264|<tuple|E.9.1|89|ae-hostapi.tm>>
-    <associate|auto-265|<tuple|E.9.1.1|89|ae-hostapi.tm>>
-    <associate|auto-266|<tuple|F|89|af-legacyhostapi.tm>>
-    <associate|auto-267|<tuple|F.1|90|af-legacyhostapi.tm>>
-    <associate|auto-268|<tuple|F.1.1|90|af-legacyhostapi.tm>>
-    <associate|auto-269|<tuple|F.1.2|90|af-legacyhostapi.tm>>
+    <associate|auto-260|<tuple|E.7.1|88|ae-hostapi.tm>>
+    <associate|auto-261|<tuple|E.7.1.1|88|ae-hostapi.tm>>
+    <associate|auto-262|<tuple|E.7.2|88|ae-hostapi.tm>>
+    <associate|auto-263|<tuple|E.7.2.1|89|ae-hostapi.tm>>
+    <associate|auto-264|<tuple|E.7.3|89|ae-hostapi.tm>>
+    <associate|auto-265|<tuple|E.7.3.1|89|ae-hostapi.tm>>
+    <associate|auto-266|<tuple|E.7.4|89|ae-hostapi.tm>>
+    <associate|auto-267|<tuple|E.7.4.1|90|ae-hostapi.tm>>
+    <associate|auto-268|<tuple|E.7.5|90|ae-hostapi.tm>>
+    <associate|auto-269|<tuple|E.7.5.1|90|ae-hostapi.tm>>
     <associate|auto-27|<tuple|1.15|16|c01-background.tm>>
-    <associate|auto-270|<tuple|F.1.3|91|af-legacyhostapi.tm>>
-    <associate|auto-271|<tuple|F.1.4|91|af-legacyhostapi.tm>>
-    <associate|auto-272|<tuple|F.1.5|91|af-legacyhostapi.tm>>
-    <associate|auto-273|<tuple|F.1.6|92|af-legacyhostapi.tm>>
-    <associate|auto-274|<tuple|F.1.7|92|af-legacyhostapi.tm>>
-    <associate|auto-275|<tuple|F.1.8|93|af-legacyhostapi.tm>>
-    <associate|auto-276|<tuple|F.1.9|93|af-legacyhostapi.tm>>
-    <associate|auto-277|<tuple|F.1.10|94|af-legacyhostapi.tm>>
-    <associate|auto-278|<tuple|F.1.11|95|af-legacyhostapi.tm>>
-    <associate|auto-279|<tuple|F.1.12|95|af-legacyhostapi.tm>>
+    <associate|auto-270|<tuple|E.8|91|ae-hostapi.tm>>
+    <associate|auto-271|<tuple|E.8.1|91|ae-hostapi.tm>>
+    <associate|auto-272|<tuple|E.8.1.1|91|ae-hostapi.tm>>
+    <associate|auto-273|<tuple|E.8.2|92|ae-hostapi.tm>>
+    <associate|auto-274|<tuple|E.8.2.1|92|ae-hostapi.tm>>
+    <associate|auto-275|<tuple|E.9|93|ae-hostapi.tm>>
+    <associate|auto-276|<tuple|E.4|93|ae-hostapi.tm>>
+    <associate|auto-277|<tuple|E.9.1|94|ae-hostapi.tm>>
+    <associate|auto-278|<tuple|E.9.1.1|95|ae-hostapi.tm>>
+    <associate|auto-279|<tuple|F|95|af-legacyhostapi.tm>>
     <associate|auto-28|<tuple|2|17|c02-state.tm>>
-    <associate|auto-280|<tuple|F.1.13|95|af-legacyhostapi.tm>>
-    <associate|auto-281|<tuple|F.1.14|95|af-legacyhostapi.tm>>
-    <associate|auto-282|<tuple|F.1.15|95|af-legacyhostapi.tm>>
-    <associate|auto-283|<tuple|F.1.15.1|96|af-legacyhostapi.tm>>
-    <associate|auto-284|<tuple|F.1.15.2|96|af-legacyhostapi.tm>>
-    <associate|auto-285|<tuple|F.1.15.3|96|af-legacyhostapi.tm>>
-    <associate|auto-286|<tuple|F.1.16|96|af-legacyhostapi.tm>>
-    <associate|auto-287|<tuple|F.1.16.1|97|af-legacyhostapi.tm>>
-    <associate|auto-288|<tuple|F.1.16.2|97|af-legacyhostapi.tm>>
-    <associate|auto-289|<tuple|F.1.16.3|97|af-legacyhostapi.tm>>
+    <associate|auto-280|<tuple|F.1|95|af-legacyhostapi.tm>>
+    <associate|auto-281|<tuple|F.1.1|95|af-legacyhostapi.tm>>
+    <associate|auto-282|<tuple|F.1.2|95|af-legacyhostapi.tm>>
+    <associate|auto-283|<tuple|F.1.3|96|af-legacyhostapi.tm>>
+    <associate|auto-284|<tuple|F.1.4|96|af-legacyhostapi.tm>>
+    <associate|auto-285|<tuple|F.1.5|96|af-legacyhostapi.tm>>
+    <associate|auto-286|<tuple|F.1.6|96|af-legacyhostapi.tm>>
+    <associate|auto-287|<tuple|F.1.7|97|af-legacyhostapi.tm>>
+    <associate|auto-288|<tuple|F.1.8|97|af-legacyhostapi.tm>>
+    <associate|auto-289|<tuple|F.1.9|97|af-legacyhostapi.tm>>
     <associate|auto-29|<tuple|2.1|17|c02-state.tm>>
-    <associate|auto-290|<tuple|F.1.16.4|98|af-legacyhostapi.tm>>
-    <associate|auto-291|<tuple|F.1.16.5|98|af-legacyhostapi.tm>>
-    <associate|auto-292|<tuple|F.1.16.6|98|af-legacyhostapi.tm>>
-    <associate|auto-293|<tuple|F.1.17|99|af-legacyhostapi.tm>>
-    <associate|auto-294|<tuple|F.1.17.1|99|af-legacyhostapi.tm>>
-    <associate|auto-295|<tuple|F.1.17.2|99|af-legacyhostapi.tm>>
-    <associate|auto-296|<tuple|F.1.17.3|100|af-legacyhostapi.tm>>
-    <associate|auto-297|<tuple|F.1.17.4|100|af-legacyhostapi.tm>>
-    <associate|auto-298|<tuple|F.1.17.5|100|af-legacyhostapi.tm>>
-    <associate|auto-299|<tuple|F.1.17.6|101|af-legacyhostapi.tm>>
+    <associate|auto-290|<tuple|F.1.10|98|af-legacyhostapi.tm>>
+    <associate|auto-291|<tuple|F.1.11|98|af-legacyhostapi.tm>>
+    <associate|auto-292|<tuple|F.1.12|98|af-legacyhostapi.tm>>
+    <associate|auto-293|<tuple|F.1.13|99|af-legacyhostapi.tm>>
+    <associate|auto-294|<tuple|F.1.14|99|af-legacyhostapi.tm>>
+    <associate|auto-295|<tuple|F.1.15|99|af-legacyhostapi.tm>>
+    <associate|auto-296|<tuple|F.1.15.1|100|af-legacyhostapi.tm>>
+    <associate|auto-297|<tuple|F.1.15.2|100|af-legacyhostapi.tm>>
+    <associate|auto-298|<tuple|F.1.15.3|100|af-legacyhostapi.tm>>
+    <associate|auto-299|<tuple|F.1.16|101|af-legacyhostapi.tm>>
     <associate|auto-3|<tuple|1.2|13|c01-background.tm>>
     <associate|auto-30|<tuple|2.1.1|17|c02-state.tm>>
-    <associate|auto-300|<tuple|F.1.17.7|101|af-legacyhostapi.tm>>
-    <associate|auto-301|<tuple|F.1.17.8|102|af-legacyhostapi.tm>>
-    <associate|auto-302|<tuple|F.1.17.9|102|af-legacyhostapi.tm>>
-    <associate|auto-303|<tuple|F.1.17.10|103|af-legacyhostapi.tm>>
-    <associate|auto-304|<tuple|F.1.17.11|103|af-legacyhostapi.tm>>
-    <associate|auto-305|<tuple|F.1.17.12|103|af-legacyhostapi.tm>>
-    <associate|auto-306|<tuple|F.1.17.13|104|af-legacyhostapi.tm>>
-    <associate|auto-307|<tuple|F.1.17.14|104|af-legacyhostapi.tm>>
-    <associate|auto-308|<tuple|F.1.17.15|104|af-legacyhostapi.tm>>
-    <associate|auto-309|<tuple|F.1.18|104|af-legacyhostapi.tm>>
+    <associate|auto-300|<tuple|F.1.16.1|101|af-legacyhostapi.tm>>
+    <associate|auto-301|<tuple|F.1.16.2|102|af-legacyhostapi.tm>>
+    <associate|auto-302|<tuple|F.1.16.3|102|af-legacyhostapi.tm>>
+    <associate|auto-303|<tuple|F.1.16.4|103|af-legacyhostapi.tm>>
+    <associate|auto-304|<tuple|F.1.16.5|103|af-legacyhostapi.tm>>
+    <associate|auto-305|<tuple|F.1.16.6|103|af-legacyhostapi.tm>>
+    <associate|auto-306|<tuple|F.1.17|104|af-legacyhostapi.tm>>
+    <associate|auto-307|<tuple|F.1.17.1|104|af-legacyhostapi.tm>>
+    <associate|auto-308|<tuple|F.1.17.2|104|af-legacyhostapi.tm>>
+    <associate|auto-309|<tuple|F.1.17.3|104|af-legacyhostapi.tm>>
     <associate|auto-31|<tuple|2.1|17|c02-state.tm>>
-    <associate|auto-310|<tuple|F.1.18.1|104|af-legacyhostapi.tm>>
-    <associate|auto-311|<tuple|F.1.19|105|af-legacyhostapi.tm>>
-    <associate|auto-312|<tuple|F.1.19.1|105|af-legacyhostapi.tm>>
-    <associate|auto-313|<tuple|F.1.19.2|105|af-legacyhostapi.tm>>
-    <associate|auto-314|<tuple|F.1.20|105|af-legacyhostapi.tm>>
-    <associate|auto-315|<tuple|F.1.20.1|107|af-legacyhostapi.tm>>
-    <associate|auto-316|<tuple|F.1.21|107|af-legacyhostapi.tm>>
-    <associate|auto-317|<tuple|F.2|107|af-legacyhostapi.tm>>
-    <associate|auto-318|<tuple|G|108|ag-runtimeentries.tm>>
-    <associate|auto-319|<tuple|G.1|108|ag-runtimeentries.tm>>
+    <associate|auto-310|<tuple|F.1.17.4|104|af-legacyhostapi.tm>>
+    <associate|auto-311|<tuple|F.1.17.5|105|af-legacyhostapi.tm>>
+    <associate|auto-312|<tuple|F.1.17.6|105|af-legacyhostapi.tm>>
+    <associate|auto-313|<tuple|F.1.17.7|105|af-legacyhostapi.tm>>
+    <associate|auto-314|<tuple|F.1.17.8|105|af-legacyhostapi.tm>>
+    <associate|auto-315|<tuple|F.1.17.9|107|af-legacyhostapi.tm>>
+    <associate|auto-316|<tuple|F.1.17.10|107|af-legacyhostapi.tm>>
+    <associate|auto-317|<tuple|F.1.17.11|107|af-legacyhostapi.tm>>
+    <associate|auto-318|<tuple|F.1.17.12|108|af-legacyhostapi.tm>>
+    <associate|auto-319|<tuple|F.1.17.13|108|af-legacyhostapi.tm>>
     <associate|auto-32|<tuple|2.1.2|17|c02-state.tm>>
-    <associate|auto-320|<tuple|G.1|108|ag-runtimeentries.tm>>
-    <associate|auto-321|<tuple|G.2|108|ag-runtimeentries.tm>>
-    <associate|auto-322|<tuple|G.2.1|108|ag-runtimeentries.tm>>
-    <associate|auto-323|<tuple|G.1|109|ag-runtimeentries.tm>>
-    <associate|auto-324|<tuple|G.2.2|109|ag-runtimeentries.tm>>
-    <associate|auto-325|<tuple|G.2.3|109|ag-runtimeentries.tm>>
-    <associate|auto-326|<tuple|G.2.4|110|ag-runtimeentries.tm>>
-    <associate|auto-327|<tuple|G.2.5|110|ag-runtimeentries.tm>>
-    <associate|auto-328|<tuple|G.2|110|ag-runtimeentries.tm>>
-    <associate|auto-329|<tuple|G.2.6|110|ag-runtimeentries.tm>>
+    <associate|auto-320|<tuple|F.1.17.14|108|af-legacyhostapi.tm>>
+    <associate|auto-321|<tuple|F.1.17.15|108|af-legacyhostapi.tm>>
+    <associate|auto-322|<tuple|F.1.18|108|af-legacyhostapi.tm>>
+    <associate|auto-323|<tuple|F.1.18.1|109|af-legacyhostapi.tm>>
+    <associate|auto-324|<tuple|F.1.19|109|af-legacyhostapi.tm>>
+    <associate|auto-325|<tuple|F.1.19.1|109|af-legacyhostapi.tm>>
+    <associate|auto-326|<tuple|F.1.19.2|110|af-legacyhostapi.tm>>
+    <associate|auto-327|<tuple|F.1.20|110|af-legacyhostapi.tm>>
+    <associate|auto-328|<tuple|F.1.20.1|110|af-legacyhostapi.tm>>
+    <associate|auto-329|<tuple|F.1.21|110|af-legacyhostapi.tm>>
     <associate|auto-33|<tuple|2.1.3|18|c02-state.tm>>
-    <associate|auto-330|<tuple|G.2.7|111|ag-runtimeentries.tm>>
-    <associate|auto-331|<tuple|G.3|111|ag-runtimeentries.tm>>
-    <associate|auto-332|<tuple|G.4|111|ag-runtimeentries.tm>>
-    <associate|auto-333|<tuple|G.5|111|ag-runtimeentries.tm>>
-    <associate|auto-334|<tuple|G.6|112|ag-runtimeentries.tm>>
-    <associate|auto-335|<tuple|G.2.8|112|ag-runtimeentries.tm>>
-    <associate|auto-336|<tuple|G.7|112|ag-runtimeentries.tm>>
-    <associate|auto-337|<tuple|G.8|113|ag-runtimeentries.tm>>
-    <associate|auto-338|<tuple|G.2.9|115|ag-runtimeentries.tm>>
-    <associate|auto-339|<tuple|G.2.10|117|ag-runtimeentries.tm>>
+    <associate|auto-330|<tuple|F.2|111|af-legacyhostapi.tm>>
+    <associate|auto-331|<tuple|G|111|ag-runtimeentries.tm>>
+    <associate|auto-332|<tuple|G.1|111|ag-runtimeentries.tm>>
+    <associate|auto-333|<tuple|G.1|111|ag-runtimeentries.tm>>
+    <associate|auto-334|<tuple|G.2|112|ag-runtimeentries.tm>>
+    <associate|auto-335|<tuple|G.2.1|112|ag-runtimeentries.tm>>
+    <associate|auto-336|<tuple|G.1|112|ag-runtimeentries.tm>>
+    <associate|auto-337|<tuple|G.2.2|113|ag-runtimeentries.tm>>
+    <associate|auto-338|<tuple|G.2.3|115|ag-runtimeentries.tm>>
+    <associate|auto-339|<tuple|G.2.4|117|ag-runtimeentries.tm>>
     <associate|auto-34|<tuple|2.1.4|20|c02-state.tm>>
-    <associate|auto-340|<tuple|G.2.10|?>>
-    <associate|auto-341|<tuple|G.2.10|?>>
-    <associate|auto-342|<tuple|Tec19|?>>
+    <associate|auto-340|<tuple|G.2.5|?|ag-runtimeentries.tm>>
+    <associate|auto-341|<tuple|G.2|?|ag-runtimeentries.tm>>
+    <associate|auto-342|<tuple|G.2.6|?|ag-runtimeentries.tm>>
+    <associate|auto-343|<tuple|G.2.7|?|ag-runtimeentries.tm>>
+    <associate|auto-344|<tuple|G.3|?|ag-runtimeentries.tm>>
+    <associate|auto-345|<tuple|G.4|?|ag-runtimeentries.tm>>
+    <associate|auto-346|<tuple|G.5|?|ag-runtimeentries.tm>>
+    <associate|auto-347|<tuple|G.6|?|ag-runtimeentries.tm>>
+    <associate|auto-348|<tuple|G.2.8|?|ag-runtimeentries.tm>>
+    <associate|auto-349|<tuple|G.7|?|ag-runtimeentries.tm>>
     <associate|auto-35|<tuple|3|23|c03-transition.tm>>
+    <associate|auto-350|<tuple|G.8|?|ag-runtimeentries.tm>>
+    <associate|auto-351|<tuple|G.2.9|?|ag-runtimeentries.tm>>
+    <associate|auto-352|<tuple|G.2.10|?|ag-runtimeentries.tm>>
+    <associate|auto-353|<tuple|G.2.10|?>>
+    <associate|auto-354|<tuple|G.2.10|?>>
+    <associate|auto-355|<tuple|Tec19|?>>
     <associate|auto-36|<tuple|3.1|23|c03-transition.tm>>
     <associate|auto-37|<tuple|3.1.1|24|c03-transition.tm>>
     <associate|auto-38|<tuple|3.1.2|24|c03-transition.tm>>
@@ -1729,59 +1798,59 @@
     <associate|auto-49|<tuple|3.2.3|26|c03-transition.tm>>
     <associate|auto-5|<tuple|1.4|14|c01-background.tm>>
     <associate|auto-50|<tuple|3.2.3|27|c03-transition.tm>>
-    <associate|auto-51|<tuple|<with|mode|<quote|math>|<rigid|->>|27|c03-transition.tm>>
-    <associate|auto-52|<tuple|3.2.3.1|27|c03-transition.tm>>
-    <associate|auto-53|<tuple|3.1|27|c03-transition.tm>>
-    <associate|auto-54|<tuple|3.3|27|c03-transition.tm>>
-    <associate|auto-55|<tuple|3.3.1|27|c03-transition.tm>>
-    <associate|auto-56|<tuple|3.3.1.1|28|c03-transition.tm>>
-    <associate|auto-57|<tuple|3.2|29|c03-transition.tm>>
-    <associate|auto-58|<tuple|3.3.1.2|29|c03-transition.tm>>
-    <associate|auto-59|<tuple|3.3.1.3|29|c03-transition.tm>>
+    <associate|auto-51|<tuple|3.2.3.1|27|c03-transition.tm>>
+    <associate|auto-52|<tuple|3.1|27|c03-transition.tm>>
+    <associate|auto-53|<tuple|3.3|27|c03-transition.tm>>
+    <associate|auto-54|<tuple|3.3.1|27|c03-transition.tm>>
+    <associate|auto-55|<tuple|3.3.1.1|27|c03-transition.tm>>
+    <associate|auto-56|<tuple|3.2|28|c03-transition.tm>>
+    <associate|auto-57|<tuple|3.3.1.2|29|c03-transition.tm>>
+    <associate|auto-58|<tuple|3.3.1.3|29|c03-transition.tm>>
+    <associate|auto-59|<tuple|3.3.2|29|c03-transition.tm>>
     <associate|auto-6|<tuple|1.7|14|c01-background.tm>>
-    <associate|auto-60|<tuple|3.3.2|29|c03-transition.tm>>
-    <associate|auto-61|<tuple|3.3.3|30|c03-transition.tm>>
-    <associate|auto-62|<tuple|4|31|c04-networking.tm>>
-    <associate|auto-63|<tuple|4.1|31|c04-networking.tm>>
-    <associate|auto-64|<tuple|4.2|32|c04-networking.tm>>
-    <associate|auto-65|<tuple|4.3|32|c04-networking.tm>>
-    <associate|auto-66|<tuple|4.3.1|32|c04-networking.tm>>
-    <associate|auto-67|<tuple|4.3.2|32|c04-networking.tm>>
-    <associate|auto-68|<tuple|4.4|33|c04-networking.tm>>
-    <associate|auto-69|<tuple|4.4.1|33|c04-networking.tm>>
+    <associate|auto-60|<tuple|3.3.3|29|c03-transition.tm>>
+    <associate|auto-61|<tuple|4|30|c04-networking.tm>>
+    <associate|auto-62|<tuple|4.1|31|c04-networking.tm>>
+    <associate|auto-63|<tuple|4.2|31|c04-networking.tm>>
+    <associate|auto-64|<tuple|4.3|32|c04-networking.tm>>
+    <associate|auto-65|<tuple|4.3.1|32|c04-networking.tm>>
+    <associate|auto-66|<tuple|4.3.2|32|c04-networking.tm>>
+    <associate|auto-67|<tuple|4.4|32|c04-networking.tm>>
+    <associate|auto-68|<tuple|4.4.1|33|c04-networking.tm>>
+    <associate|auto-69|<tuple|4.4.2|33|c04-networking.tm>>
     <associate|auto-7|<tuple|1.7|14|c01-background.tm>>
-    <associate|auto-70|<tuple|4.4.2|33|c04-networking.tm>>
-    <associate|auto-71|<tuple|5|35|c05-bootstrapping.tm>>
-    <associate|auto-72|<tuple|6|37|c06-consensus.tm>>
-    <associate|auto-73|<tuple|6.1|37|c06-consensus.tm>>
-    <associate|auto-74|<tuple|6.1.1|37|c06-consensus.tm>>
-    <associate|auto-75|<tuple|6.1.2|37|c06-consensus.tm>>
-    <associate|auto-76|<tuple|6.1|38|c06-consensus.tm>>
-    <associate|auto-77|<tuple|6.2|39|c06-consensus.tm>>
-    <associate|auto-78|<tuple|6.2.1|39|c06-consensus.tm>>
-    <associate|auto-79|<tuple|6.2.2|40|c06-consensus.tm>>
+    <associate|auto-70|<tuple|5|33|c05-bootstrapping.tm>>
+    <associate|auto-71|<tuple|6|35|c06-consensus.tm>>
+    <associate|auto-72|<tuple|6.1|37|c06-consensus.tm>>
+    <associate|auto-73|<tuple|6.1.1|37|c06-consensus.tm>>
+    <associate|auto-74|<tuple|6.1.2|37|c06-consensus.tm>>
+    <associate|auto-75|<tuple|6.1|37|c06-consensus.tm>>
+    <associate|auto-76|<tuple|6.2|38|c06-consensus.tm>>
+    <associate|auto-77|<tuple|6.2.1|39|c06-consensus.tm>>
+    <associate|auto-78|<tuple|6.2.2|39|c06-consensus.tm>>
+    <associate|auto-79|<tuple|6.2.3|40|c06-consensus.tm>>
     <associate|auto-8|<tuple|1.7|14|c01-background.tm>>
-    <associate|auto-80|<tuple|6.2.3|40|c06-consensus.tm>>
-    <associate|auto-81|<tuple|6.2.4|41|c06-consensus.tm>>
-    <associate|auto-82|<tuple|6.2.5|42|c06-consensus.tm>>
-    <associate|auto-83|<tuple|6.2.6|42|c06-consensus.tm>>
-    <associate|auto-84|<tuple|6.2.7|43|c06-consensus.tm>>
-    <associate|auto-85|<tuple|6.3|44|c06-consensus.tm>>
-    <associate|auto-86|<tuple|6.3.1|44|c06-consensus.tm>>
-    <associate|auto-87|<tuple|6.3.2|46|c06-consensus.tm>>
-    <associate|auto-88|<tuple|6.2|46|c06-consensus.tm>>
-    <associate|auto-89|<tuple|6.3.2.1|47|c06-consensus.tm>>
+    <associate|auto-80|<tuple|6.2.4|40|c06-consensus.tm>>
+    <associate|auto-81|<tuple|6.2.5|41|c06-consensus.tm>>
+    <associate|auto-82|<tuple|6.2.6|42|c06-consensus.tm>>
+    <associate|auto-83|<tuple|6.2.7|42|c06-consensus.tm>>
+    <associate|auto-84|<tuple|6.3|43|c06-consensus.tm>>
+    <associate|auto-85|<tuple|6.3.1|44|c06-consensus.tm>>
+    <associate|auto-86|<tuple|6.3.2|44|c06-consensus.tm>>
+    <associate|auto-87|<tuple|6.2|46|c06-consensus.tm>>
+    <associate|auto-88|<tuple|6.3.2.1|46|c06-consensus.tm>>
+    <associate|auto-89|<tuple|6.3.2.2|47|c06-consensus.tm>>
     <associate|auto-9|<tuple|1.9|15|c01-background.tm>>
-    <associate|auto-90|<tuple|6.3.2.2|47|c06-consensus.tm>>
-    <associate|auto-91|<tuple|6.3.2.3|48|c06-consensus.tm>>
-    <associate|auto-92|<tuple|6.3.3|48|c06-consensus.tm>>
-    <associate|auto-93|<tuple|6.3.3.1|48|c06-consensus.tm>>
-    <associate|auto-94|<tuple|6.3.4|49|c06-consensus.tm>>
-    <associate|auto-95|<tuple|6.4|50|c06-consensus.tm>>
-    <associate|auto-96|<tuple|6.4.1|50|c06-consensus.tm>>
-    <associate|auto-97|<tuple|6.4.1.1|51|c06-consensus.tm>>
-    <associate|auto-98|<tuple|6.4.1.2|51|c06-consensus.tm>>
-    <associate|auto-99|<tuple|6.4.1.3|51|c06-consensus.tm>>
+    <associate|auto-90|<tuple|6.3.2.3|47|c06-consensus.tm>>
+    <associate|auto-91|<tuple|6.3.3|48|c06-consensus.tm>>
+    <associate|auto-92|<tuple|6.3.3.1|48|c06-consensus.tm>>
+    <associate|auto-93|<tuple|6.3.4|48|c06-consensus.tm>>
+    <associate|auto-94|<tuple|6.4|49|c06-consensus.tm>>
+    <associate|auto-95|<tuple|6.4.1|50|c06-consensus.tm>>
+    <associate|auto-96|<tuple|6.4.1.1|50|c06-consensus.tm>>
+    <associate|auto-97|<tuple|6.4.1.2|51|c06-consensus.tm>>
+    <associate|auto-98|<tuple|6.4.1.3|51|c06-consensus.tm>>
+    <associate|auto-99|<tuple|A|51|aa-cryptoalgorithms.tm>>
     <associate|bib-burdges_schnorr_2019|<tuple|Bur19|115>>
     <associate|bib-collet_extremely_2019|<tuple|Col19|115>>
     <associate|bib-david_ouroboros_2018|<tuple|DGKR18|115>>
@@ -1837,7 +1906,7 @@
     <associate|defn-http-status-codes|<tuple|E.10|79|ae-hostapi.tm>>
     <associate|defn-index-function|<tuple|2.7|19|c02-state.tm>>
     <associate|defn-inherent-data|<tuple|3.5|27|c03-transition.tm>>
-    <associate|defn-invalid-transaction|<tuple|G.3|111|ag-runtimeentries.tm>>
+    <associate|defn-invalid-transaction|<tuple|G.4|111|ag-runtimeentries.tm>>
     <associate|defn-key-type-id|<tuple|E.6|72|ae-hostapi.tm>>
     <associate|defn-little-endian|<tuple|1.7|14|c01-background.tm>>
     <associate|defn-local-storage|<tuple|E.9|79|ae-hostapi.tm>>
@@ -1857,6 +1926,7 @@
     <associate|defn-pruned-tree|<tuple|1.12|15|c01-background.tm>>
     <associate|defn-radix-tree|<tuple|1.3|14|c01-background.tm>>
     <associate|defn-result-type|<tuple|B.5|56|ab-encodings.tm>>
+    <associate|defn-rt-apisvec|<tuple|G.1|?|ag-runtimeentries.tm>>
     <associate|defn-rt-blockbuilder-finalize-block|<tuple|G.2.10|?|ag-runtimeentries.tm>>
     <associate|defn-rt-core-version|<tuple|G.2.1|108|ag-runtimeentries.tm>>
     <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|14|c01-background.tm>>
@@ -1876,10 +1946,10 @@
     <associate|defn-stored-value|<tuple|2.1|17|c02-state.tm>>
     <associate|defn-total-potential-votes|<tuple|6.23|?|c06-consensus.tm>>
     <associate|defn-transaction-queue|<tuple|3.4|26|c03-transition.tm>>
-    <associate|defn-transaction-validity-error|<tuple|G.2|110|ag-runtimeentries.tm>>
+    <associate|defn-transaction-validity-error|<tuple|G.3|110|ag-runtimeentries.tm>>
     <associate|defn-unix-time|<tuple|1.10|15|c01-background.tm>>
-    <associate|defn-unknown-transaction|<tuple|G.4|111|ag-runtimeentries.tm>>
-    <associate|defn-valid-transaction|<tuple|G.1|110|ag-runtimeentries.tm>>
+    <associate|defn-unknown-transaction|<tuple|G.5|111|ag-runtimeentries.tm>>
+    <associate|defn-valid-transaction|<tuple|G.2|110|ag-runtimeentries.tm>>
     <associate|defn-varrying-data-type|<tuple|B.3|55|ab-encodings.tm>>
     <associate|defn-vote|<tuple|6.17|45|c06-consensus.tm>>
     <associate|defn-winning-threshold|<tuple|6.8|40|c06-consensus.tm>>
@@ -1923,6 +1993,11 @@
     <associate|sect-encoding|<tuple|B|55|ab-encodings.tm>>
     <associate|sect-entries-into-runtime|<tuple|3.1|23|c03-transition.tm>>
     <associate|sect-epoch-randomness|<tuple|6.2.5|42|c06-consensus.tm>>
+    <associate|sect-ext-crypto-ecdsa-verify|<tuple|E.3.12|?|ae-hostapi.tm>>
+    <associate|sect-ext-crypto-ed25519-verify|<tuple|E.3.4|?|ae-hostapi.tm>>
+    <associate|sect-ext-crypto-finish-batch-verify|<tuple|E.3.16|?|ae-hostapi.tm>>
+    <associate|sect-ext-crypto-sr25519-verify|<tuple|E.3.8|?|ae-hostapi.tm>>
+    <associate|sect-ext-crypto-start-batch-verify|<tuple|E.3.15|?|ae-hostapi.tm>>
     <associate|sect-extrinsics|<tuple|3.2|25|c03-transition.tm>>
     <associate|sect-finality|<tuple|6.3|44|c06-consensus.tm>>
     <associate|sect-genesis-block|<tuple|C|59|ac-genesis.tm>>
@@ -2022,7 +2097,7 @@
     </associate>
     <\associate|figure>
       <tuple|normal|<surround|<hidden-binding|<tuple>|G.1>||Snippet to export
-      entries into tho Wasm runtime module.>|<pageref|auto-320>>
+      entries into tho Wasm runtime module.>|<pageref|auto-333>>
     </associate>
     <\associate|gly>
       <tuple|normal|<with|font-series|<quote|bold>|math-font-series|<quote|bold>|<with|mode|<quote|math>|P<rsub|n>>>|a
@@ -2136,8 +2211,6 @@
       <tuple|<tuple|transaction pool>|<pageref|auto-49>>
 
       <tuple|<tuple|transaction queue>|<pageref|auto-50>>
-
-      <tuple|<tuple|Transaction Message>|<pageref|auto-51>>
     </associate>
     <\associate|parts>
       <tuple|c01-background.tm|chapter-nr|0|section-nr|0<uninit>|subsection-nr|0>
@@ -2169,91 +2242,91 @@
     <\associate|table>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|3.1>|>
         List of inherent data
-      </surround>|<pageref|auto-53>>
+      </surround>|<pageref|auto-52>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|3.2>||The detail of the
-      varying type that a digest item can hold.>|<pageref|auto-57>>
+      varying type that a digest item can hold.>|<pageref|auto-56>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.1>|>
         The consensus digest item for GRANDPA authorities
-      </surround>|<pageref|auto-76>>
+      </surround>|<pageref|auto-75>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.2>|>
         \;
-      </surround>|<pageref|auto-88>>
+      </surround>|<pageref|auto-87>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.1>|>
         List of public key scheme which can be used for an account key
-      </surround>|<pageref|auto-106>>
+      </surround>|<pageref|auto-105>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.2>|>
         List of key schemes which are used for session keys depending on the
         protocol
-      </surround>|<pageref|auto-107>>
+      </surround>|<pageref|auto-106>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|C.1>|>
         Genesis header values
-      </surround>|<pageref|auto-118>>
+      </surround>|<pageref|auto-117>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|D.1>||List of possible
-      network message types.>|<pageref|auto-120>>
+      network message types.>|<pageref|auto-119>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|D.2>||Node role
-      representation in the status message.>|<pageref|auto-123>>
+      representation in the status message.>|<pageref|auto-122>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|D.3>||Bit values for
       block attribute <with|mode|<quote|math>|A<rsub|B>>, to indicate the
-      requested parts of the data.>|<pageref|auto-125>>
+      requested parts of the data.>|<pageref|auto-124>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.1>|>
         Table of known key type identifiers
-      </surround>|<pageref|auto-171>>
+      </surround>|<pageref|auto-172>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.2>|>
         Table of error types in ECDSA recovery
-      </surround>|<pageref|auto-172>>
+      </surround>|<pageref|auto-173>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.3>|>
         Table of possible HTTP error types
-      </surround>|<pageref|auto-210>>
+      </surround>|<pageref|auto-223>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.4>|>
         Log Levels for the logging interface
-      </surround>|<pageref|auto-263>>
+      </surround>|<pageref|auto-276>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|G.1>||Detail of the
       version data type returns from runtime
       <with|font-family|<quote|tt>|language|<quote|verbatim>|version>
-      function.>|<pageref|auto-323>>
+      function.>|<pageref|auto-336>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|G.2>|>
         The tuple provided by <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BabeApi_configuration>.
-      </surround>|<pageref|auto-328>>
+      </surround>|<pageref|auto-341>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|G.3>|>
         The tuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
 
         in the case the transaction is judged to be valid.
-      </surround>|<pageref|auto-331>>
+      </surround>|<pageref|auto-344>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|G.4>||Type variation
-      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-332>>
+      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-345>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|G.5>|>
         Type variant whichs gets appended to Id 0 of
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-333>>
+      </surround>|<pageref|auto-346>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|G.6>|>
         Type variant whichs gets appended to Id 1 of
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-334>>
+      </surround>|<pageref|auto-347>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|G.7>||Data format of
-      the Dispatch error type>|<pageref|auto-336>>
+      the Dispatch error type>|<pageref|auto-349>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|G.8>||Identifiers of
-      the Apply error type>|<pageref|auto-337>>
+      the Apply error type>|<pageref|auto-350>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|1.<space|2spc>Background>
@@ -2348,1054 +2421,1110 @@
 
       <with|par-left|<quote|2tab>|3.2.3.1.<space|2spc>Inherents
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-52>>
+      <no-break><pageref|auto-51>>
 
       3.3.<space|2spc>State Replication <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-54>
+      <no-break><pageref|auto-53>
 
       <with|par-left|<quote|1tab>|3.3.1.<space|2spc>Block Format
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-55>>
+      <no-break><pageref|auto-54>>
 
       <with|par-left|<quote|2tab>|3.3.1.1.<space|2spc>Block Header
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-56>>
+      <no-break><pageref|auto-55>>
 
       <with|par-left|<quote|2tab>|3.3.1.2.<space|2spc>Justified Block Header
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-58>>
+      <no-break><pageref|auto-57>>
 
       <with|par-left|<quote|2tab>|3.3.1.3.<space|2spc>Block Body
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-59>>
+      <no-break><pageref|auto-58>>
 
       <with|par-left|<quote|1tab>|3.3.2.<space|2spc>Importing and Validating
       Block <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-60>>
+      <no-break><pageref|auto-59>>
 
       <with|par-left|<quote|1tab>|3.3.3.<space|2spc>Managaing Multiple
       Variants of State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-61>>
+      <no-break><pageref|auto-60>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|4.<space|2spc>Network
       Protocol> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-62><vspace|0.5fn>
+      <pageref|auto-61><vspace|0.5fn>
 
       4.1.<space|2spc>Node Identities and Addresses
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-63>
+      <no-break><pageref|auto-62>
 
       4.2.<space|2spc>Discovery Mechanisms
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-64>
+      <no-break><pageref|auto-63>
 
       4.3.<space|2spc>Transport Protocol <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-65>
+      <no-break><pageref|auto-64>
 
       <with|par-left|<quote|1tab>|4.3.1.<space|2spc>Encryption
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-66>>
+      <no-break><pageref|auto-65>>
 
       <with|par-left|<quote|1tab>|4.3.2.<space|2spc>Multiplexing
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-67>>
+      <no-break><pageref|auto-66>>
 
       4.4.<space|2spc>Substreams <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-68>
+      <no-break><pageref|auto-67>
 
       <with|par-left|<quote|1tab>|4.4.1.<space|2spc>Periodic Ephemeral
       Substreams <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-69>>
+      <no-break><pageref|auto-68>>
 
       <with|par-left|<quote|1tab>|4.4.2.<space|2spc>Polkadot Communication
       Substream <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-70>>
+      <no-break><pageref|auto-69>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|5.<space|2spc>Bootstrapping>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-71><vspace|0.5fn>
+      <pageref|auto-70><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|6.<space|2spc>Consensus>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-72><vspace|0.5fn>
+      <pageref|auto-71><vspace|0.5fn>
 
       6.1.<space|2spc>Common Consensus Structures
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-73>
+      <no-break><pageref|auto-72>
 
       <with|par-left|<quote|1tab>|6.1.1.<space|2spc>Consensus Authority Set
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-74>>
+      <no-break><pageref|auto-73>>
 
       <with|par-left|<quote|1tab>|6.1.2.<space|2spc>Runtime-to-Consensus
       Engine Message <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-75>>
+      <no-break><pageref|auto-74>>
 
       6.2.<space|2spc>Block Production <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-77>
+      <no-break><pageref|auto-76>
 
       <with|par-left|<quote|1tab>|6.2.1.<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-78>>
+      <no-break><pageref|auto-77>>
 
       <with|par-left|<quote|1tab>|6.2.2.<space|2spc>Block Production Lottery
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-79>>
+      <no-break><pageref|auto-78>>
 
       <with|par-left|<quote|1tab>|6.2.3.<space|2spc>Slot Number Calculation
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-80>>
+      <no-break><pageref|auto-79>>
 
       <with|par-left|<quote|1tab>|6.2.4.<space|2spc>Block Production
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-81>>
+      <no-break><pageref|auto-80>>
 
       <with|par-left|<quote|1tab>|6.2.5.<space|2spc>Epoch Randomness
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-82>>
+      <no-break><pageref|auto-81>>
 
       <with|par-left|<quote|1tab>|6.2.6.<space|2spc>Verifying Authorship
       Right <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-83>>
+      <no-break><pageref|auto-82>>
 
       <with|par-left|<quote|1tab>|6.2.7.<space|2spc>Block Building Process
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-84>>
+      <no-break><pageref|auto-83>>
 
       6.3.<space|2spc>Finality <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-85>
+      <no-break><pageref|auto-84>
 
       <with|par-left|<quote|1tab>|6.3.1.<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-86>>
+      <no-break><pageref|auto-85>>
 
       <with|par-left|<quote|1tab>|6.3.2.<space|2spc>GRANDPA Messages
       Specification <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-87>>
+      <no-break><pageref|auto-86>>
 
       <with|par-left|<quote|2tab>|6.3.2.1.<space|2spc>Vote Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-89>>
+      <no-break><pageref|auto-88>>
 
       <with|par-left|<quote|2tab>|6.3.2.2.<space|2spc>Finalizing Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-90>>
+      <no-break><pageref|auto-89>>
 
       <with|par-left|<quote|2tab>|6.3.2.3.<space|2spc>Catch-up Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-91>>
+      <no-break><pageref|auto-90>>
 
       <with|par-left|<quote|1tab>|6.3.3.<space|2spc>Initiating the GRANDPA
       State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-92>>
+      <no-break><pageref|auto-91>>
 
       <with|par-left|<quote|2tab>|6.3.3.1.<space|2spc>Voter Set Changes
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-93>>
+      <no-break><pageref|auto-92>>
 
       <with|par-left|<quote|1tab>|6.3.4.<space|2spc>Voting Process in Round
       <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-94>>
+      <no-break><pageref|auto-93>>
 
       6.4.<space|2spc>Block Finalization <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-95>
+      <no-break><pageref|auto-94>
 
       <with|par-left|<quote|1tab>|6.4.1.<space|2spc>Catching up
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-96>>
+      <no-break><pageref|auto-95>>
 
       <with|par-left|<quote|2tab>|6.4.1.1.<space|2spc>Sending catch-up
       requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-97>>
+      <no-break><pageref|auto-96>>
 
       <with|par-left|<quote|2tab>|6.4.1.2.<space|2spc>Processing catch-up
       requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-98>>
+      <no-break><pageref|auto-97>>
 
       <with|par-left|<quote|2tab>|6.4.1.3.<space|2spc>Processing catch-up
       responses <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-99>>
+      <no-break><pageref|auto-98>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       A.<space|2spc>Cryptographic Algorithms>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-100><vspace|0.5fn>
+      <pageref|auto-99><vspace|0.5fn>
 
       A.1.<space|2spc>Hash Functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-101>
+      <no-break><pageref|auto-100>
 
       A.2.<space|2spc>BLAKE2 <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-102>
+      <no-break><pageref|auto-101>
 
       A.3.<space|2spc>Randomness <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-103>
+      <no-break><pageref|auto-102>
 
       A.4.<space|2spc>VRF <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-104>
+      <no-break><pageref|auto-103>
 
       A.5.<space|2spc>Cryptographic Keys <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-105>
+      <no-break><pageref|auto-104>
 
       <with|par-left|<quote|1tab>|A.5.1.<space|2spc>Holding and staking funds
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-108>>
+      <no-break><pageref|auto-107>>
 
       <with|par-left|<quote|1tab>|A.5.2.<space|2spc>Creating a Controller key
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-109>>
+      <no-break><pageref|auto-108>>
 
       <with|par-left|<quote|1tab>|A.5.3.<space|2spc>Designating a proxy for
       voting <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-110>>
+      <no-break><pageref|auto-109>>
 
       <with|par-left|<quote|1tab>|A.5.4.<space|2spc>Controller settings
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-111>>
+      <no-break><pageref|auto-110>>
 
       <with|par-left|<quote|1tab>|A.5.5.<space|2spc>Certifying keys
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-112>>
+      <no-break><pageref|auto-111>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       B.<space|2spc>Auxiliary Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-113><vspace|0.5fn>
+      <pageref|auto-112><vspace|0.5fn>
 
       B.1.<space|2spc>SCALE Codec <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-114>
+      <no-break><pageref|auto-113>
 
       <with|par-left|<quote|1tab>|B.1.1.<space|2spc>Length and Compact
       Encoding <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-115>>
+      <no-break><pageref|auto-114>>
 
       B.2.<space|2spc>Hex Encoding <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-116>
+      <no-break><pageref|auto-115>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       C.<space|2spc>Genesis State Specification>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-117><vspace|0.5fn>
+      <pageref|auto-116><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       D.<space|2spc>Network Messages> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-119><vspace|0.5fn>
+      <pageref|auto-118><vspace|0.5fn>
 
       D.1.<space|2spc>Detailed Message Structure
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-121>
+      <no-break><pageref|auto-120>
 
       <with|par-left|<quote|1tab>|D.1.1.<space|2spc>Status Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-122>>
+      <no-break><pageref|auto-121>>
 
       <with|par-left|<quote|1tab>|D.1.2.<space|2spc>Block Request Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-124>>
+      <no-break><pageref|auto-123>>
 
       <with|par-left|<quote|1tab>|D.1.3.<space|2spc>Block Response Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-126>>
+      <no-break><pageref|auto-125>>
 
       <with|par-left|<quote|1tab>|D.1.4.<space|2spc>Block Announce Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-127>>
+      <no-break><pageref|auto-126>>
 
       <with|par-left|<quote|1tab>|D.1.5.<space|2spc>Transactions
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-128>>
+      <no-break><pageref|auto-127>>
 
       <with|par-left|<quote|1tab>|D.1.6.<space|2spc>Consensus Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-129>>
+      <no-break><pageref|auto-128>>
 
       <with|par-left|<quote|1tab>|D.1.7.<space|2spc>Neighbor Packet
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-130>>
+      <no-break><pageref|auto-129>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       E.<space|2spc>Polkadot Host API> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-131><vspace|0.5fn>
+      <pageref|auto-130><vspace|0.5fn>
 
       E.1.<space|2spc>Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-132>
+      <no-break><pageref|auto-131>
 
       <with|par-left|<quote|1tab>|E.1.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-133>>
+      <no-break><pageref|auto-132>>
 
       <with|par-left|<quote|2tab>|E.1.1.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-134>>
+      <no-break><pageref|auto-133>>
 
       <with|par-left|<quote|1tab>|E.1.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-135>>
+      <no-break><pageref|auto-134>>
 
       <with|par-left|<quote|2tab>|E.1.2.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-136>>
+      <no-break><pageref|auto-135>>
 
       <with|par-left|<quote|1tab>|E.1.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_read>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-137>>
+      <no-break><pageref|auto-136>>
 
       <with|par-left|<quote|2tab>|E.1.3.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-138>>
+      <no-break><pageref|auto-137>>
 
       <with|par-left|<quote|1tab>|E.1.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_clear>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-139>>
+      <no-break><pageref|auto-138>>
 
       <with|par-left|<quote|2tab>|E.1.4.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-140>>
+      <no-break><pageref|auto-139>>
 
       <with|par-left|<quote|1tab>|E.1.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_exists>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-141>>
+      <no-break><pageref|auto-140>>
 
       <with|par-left|<quote|2tab>|E.1.5.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-142>>
+      <no-break><pageref|auto-141>>
 
       <with|par-left|<quote|1tab>|E.1.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_clear_prefix>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-143>>
+      <no-break><pageref|auto-142>>
 
       <with|par-left|<quote|2tab>|E.1.6.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-144>>
+      <no-break><pageref|auto-143>>
 
-      <with|par-left|<quote|1tab>|E.1.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_root>
+      <with|par-left|<quote|1tab>|E.1.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_append>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-145>>
+      <no-break><pageref|auto-144>>
 
       <with|par-left|<quote|2tab>|E.1.7.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-146>>
+      <no-break><pageref|auto-145>>
 
-      <with|par-left|<quote|1tab>|E.1.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_changes_root>
+      <with|par-left|<quote|1tab>|E.1.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-147>>
+      <no-break><pageref|auto-146>>
 
       <with|par-left|<quote|2tab>|E.1.8.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-148>>
+      <no-break><pageref|auto-147>>
 
-      <with|par-left|<quote|1tab>|E.1.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_next_key>
+      <with|par-left|<quote|1tab>|E.1.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_changes_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-149>>
+      <no-break><pageref|auto-148>>
 
       <with|par-left|<quote|2tab>|E.1.9.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-149>>
+
+      <with|par-left|<quote|1tab>|E.1.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_next_key>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-150>>
 
+      <with|par-left|<quote|2tab>|E.1.10.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-151>>
+
       E.2.<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-151>
+      <no-break><pageref|auto-152>
 
       <with|par-left|<quote|1tab>|E.2.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-152>>
+      <no-break><pageref|auto-153>>
 
       <with|par-left|<quote|2tab>|E.2.1.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-153>>
+      <no-break><pageref|auto-154>>
 
       <with|par-left|<quote|1tab>|E.2.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-154>>
+      <no-break><pageref|auto-155>>
 
       <with|par-left|<quote|2tab>|E.2.2.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-155>>
+      <no-break><pageref|auto-156>>
 
       <with|par-left|<quote|1tab>|E.2.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_read>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-156>>
+      <no-break><pageref|auto-157>>
 
       <with|par-left|<quote|2tab>|E.2.3.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-157>>
+      <no-break><pageref|auto-158>>
 
       <with|par-left|<quote|1tab>|E.2.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_clear>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-158>>
+      <no-break><pageref|auto-159>>
 
       <with|par-left|<quote|2tab>|E.2.4.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-159>>
+      <no-break><pageref|auto-160>>
 
       <with|par-left|<quote|1tab>|E.2.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_storage_kill>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-160>>
+      <no-break><pageref|auto-161>>
 
       <with|par-left|<quote|2tab>|E.2.5.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-161>>
+      <no-break><pageref|auto-162>>
 
       <with|par-left|<quote|1tab>|E.2.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_exists>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-162>>
+      <no-break><pageref|auto-163>>
 
       <with|par-left|<quote|2tab>|E.2.6.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-163>>
+      <no-break><pageref|auto-164>>
 
       <with|par-left|<quote|1tab>|E.2.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_clear_prefix>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-164>>
+      <no-break><pageref|auto-165>>
 
       <with|par-left|<quote|2tab>|E.2.7.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-165>>
+      <no-break><pageref|auto-166>>
 
       <with|par-left|<quote|1tab>|E.2.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-166>>
+      <no-break><pageref|auto-167>>
 
       <with|par-left|<quote|2tab>|E.2.8.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-167>>
+      <no-break><pageref|auto-168>>
 
       <with|par-left|<quote|1tab>|E.2.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_child_next_key>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-168>>
+      <no-break><pageref|auto-169>>
 
       <with|par-left|<quote|2tab>|E.2.9.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-169>>
+      <no-break><pageref|auto-170>>
 
       E.3.<space|2spc>Crypto <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-170>
+      <no-break><pageref|auto-171>
 
       <with|par-left|<quote|1tab>|E.3.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ed25519_public_keys>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-173>>
+      <no-break><pageref|auto-174>>
 
       <with|par-left|<quote|2tab>|E.3.1.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-174>>
+      <no-break><pageref|auto-175>>
 
       <with|par-left|<quote|1tab>|E.3.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ed25519_generate>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-175>>
+      <no-break><pageref|auto-176>>
 
       <with|par-left|<quote|2tab>|E.3.2.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-176>>
+      <no-break><pageref|auto-177>>
 
       <with|par-left|<quote|1tab>|E.3.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ed25519_sign>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-177>>
+      <no-break><pageref|auto-178>>
 
       <with|par-left|<quote|2tab>|E.3.3.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-178>>
+      <no-break><pageref|auto-179>>
 
       <with|par-left|<quote|1tab>|E.3.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ed25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-179>>
+      <no-break><pageref|auto-180>>
 
       <with|par-left|<quote|2tab>|E.3.4.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-180>>
+      <no-break><pageref|auto-181>>
 
       <with|par-left|<quote|1tab>|E.3.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_sr25519_public_keys>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-181>>
+      <no-break><pageref|auto-182>>
 
       <with|par-left|<quote|2tab>|E.3.5.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-182>>
+      <no-break><pageref|auto-183>>
 
       <with|par-left|<quote|1tab>|E.3.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_sr25519_generate>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-183>>
+      <no-break><pageref|auto-184>>
 
       <with|par-left|<quote|2tab>|E.3.6.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-184>>
+      <no-break><pageref|auto-185>>
 
       <with|par-left|<quote|1tab>|E.3.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_sr25519_sign>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-185>>
+      <no-break><pageref|auto-186>>
 
       <with|par-left|<quote|2tab>|E.3.7.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-186>>
+      <no-break><pageref|auto-187>>
 
       <with|par-left|<quote|1tab>|E.3.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_sr25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-187>>
+      <no-break><pageref|auto-188>>
 
       <with|par-left|<quote|2tab>|E.3.8.1.<space|2spc>Version 2 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-188>>
+      <no-break><pageref|auto-189>>
 
       <with|par-left|<quote|2tab>|E.3.8.2.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-189>>
-
-      <with|par-left|<quote|1tab>|E.3.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_secp256k1_ecdsa_recover>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-190>>
 
-      <with|par-left|<quote|2tab>|E.3.9.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.3.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ecdsa_public_keys>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-191>>
 
-      <with|par-left|<quote|1tab>|E.3.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_secp256k1_ecdsa_recover_compressed>
+      <with|par-left|<quote|2tab>|E.3.9.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-192>>
 
-      <with|par-left|<quote|2tab>|E.3.10.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.3.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ecdsa_generate>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-193>>
 
-      E.4.<space|2spc>Hashing <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-194>
+      <with|par-left|<quote|2tab>|E.3.10.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-194>>
 
-      <with|par-left|<quote|1tab>|E.4.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_keccak_256>
+      <with|par-left|<quote|1tab>|E.3.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ecdsa_sign>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-195>>
 
-      <with|par-left|<quote|2tab>|E.4.1.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.3.11.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-196>>
 
-      <with|par-left|<quote|1tab>|E.4.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_sha2_256>
+      <with|par-left|<quote|1tab>|E.3.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_ecdsa_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-197>>
 
-      <with|par-left|<quote|2tab>|E.4.2.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.3.12.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-198>>
 
-      <with|par-left|<quote|1tab>|E.4.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_128>
+      <with|par-left|<quote|1tab>|E.3.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_secp256k1_ecdsa_recover>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-199>>
 
-      <with|par-left|<quote|2tab>|E.4.3.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.3.13.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-200>>
 
-      <with|par-left|<quote|1tab>|E.4.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_256>
+      <with|par-left|<quote|1tab>|E.3.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_secp256k1_ecdsa_recover_compressed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-201>>
 
-      <with|par-left|<quote|2tab>|E.4.4.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.3.14.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-202>>
 
-      <with|par-left|<quote|1tab>|E.4.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_64>
+      <with|par-left|<quote|1tab>|E.3.15.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_start_batch_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-203>>
 
-      <with|par-left|<quote|2tab>|E.4.5.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.3.15.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-204>>
 
-      <with|par-left|<quote|1tab>|E.4.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_128>
+      <with|par-left|<quote|1tab>|E.3.16.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_crypto_finish_batch_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-205>>
 
-      <with|par-left|<quote|2tab>|E.4.6.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.3.16.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-206>>
 
-      <with|par-left|<quote|1tab>|E.4.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_256>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-207>>
+      E.4.<space|2spc>Hashing <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-207>
 
-      <with|par-left|<quote|2tab>|E.4.7.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.4.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_keccak_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-208>>
 
-      E.5.<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-209>
+      <with|par-left|<quote|2tab>|E.4.1.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-209>>
 
-      <with|par-left|<quote|1tab>|E.5.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_is_validator>
+      <with|par-left|<quote|1tab>|E.4.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_sha2_256>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-210>>
+
+      <with|par-left|<quote|2tab>|E.4.2.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-211>>
 
-      <with|par-left|<quote|2tab>|E.5.1.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.4.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-212>>
 
-      <with|par-left|<quote|1tab>|E.5.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_submit_transaction>
+      <with|par-left|<quote|2tab>|E.4.3.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-213>>
 
-      <with|par-left|<quote|2tab>|E.5.2.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.4.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-214>>
 
-      <with|par-left|<quote|1tab>|E.5.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_network_state>
+      <with|par-left|<quote|2tab>|E.4.4.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-215>>
 
-      <with|par-left|<quote|2tab>|E.5.3.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.4.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_64>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-216>>
 
-      <with|par-left|<quote|1tab>|E.5.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_timestamp>
+      <with|par-left|<quote|2tab>|E.4.5.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-217>>
 
-      <with|par-left|<quote|2tab>|E.5.4.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.4.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-218>>
 
-      <with|par-left|<quote|1tab>|E.5.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_sleep_until>
+      <with|par-left|<quote|2tab>|E.4.6.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-219>>
 
-      <with|par-left|<quote|2tab>|E.5.5.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.4.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-220>>
 
-      <with|par-left|<quote|1tab>|E.5.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_random_seed>
+      <with|par-left|<quote|2tab>|E.4.7.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-221>>
 
-      <with|par-left|<quote|2tab>|E.5.6.1.<space|2spc>Version 1 - Prototype
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-222>>
+      E.5.<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-222>
 
-      <with|par-left|<quote|1tab>|E.5.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_set>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-223>>
-
-      <with|par-left|<quote|2tab>|E.5.7.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_is_validator>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-224>>
 
-      <with|par-left|<quote|1tab>|E.5.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_compare_and_set>
+      <with|par-left|<quote|2tab>|E.5.1.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-225>>
 
-      <with|par-left|<quote|2tab>|E.5.8.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_submit_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-226>>
 
-      <with|par-left|<quote|1tab>|E.5.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_get>
+      <with|par-left|<quote|2tab>|E.5.2.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-227>>
 
-      <with|par-left|<quote|2tab>|E.5.9.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_network_state>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-228>>
 
-      <with|par-left|<quote|1tab>|E.5.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_start>
+      <with|par-left|<quote|2tab>|E.5.3.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-229>>
 
-      <with|par-left|<quote|2tab>|E.5.10.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_timestamp>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-230>>
 
-      <with|par-left|<quote|1tab>|E.5.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_add_header>
+      <with|par-left|<quote|2tab>|E.5.4.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-231>>
 
-      <with|par-left|<quote|2tab>|E.5.11.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_sleep_until>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-232>>
 
-      <with|par-left|<quote|1tab>|E.5.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_write_body>
+      <with|par-left|<quote|2tab>|E.5.5.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-233>>
 
-      <with|par-left|<quote|2tab>|E.5.12.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_random_seed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-234>>
 
-      <with|par-left|<quote|1tab>|E.5.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_wait>
+      <with|par-left|<quote|2tab>|E.5.6.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-235>>
 
-      <with|par-left|<quote|2tab>|E.5.13.1.<space|2spc>Version 1- Prototype
+      <with|par-left|<quote|1tab>|E.5.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-236>>
 
-      <with|par-left|<quote|1tab>|E.5.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_headers>
+      <with|par-left|<quote|2tab>|E.5.7.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-237>>
 
-      <with|par-left|<quote|2tab>|E.5.14.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_compare_and_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-238>>
 
-      <with|par-left|<quote|1tab>|E.5.15.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_read_body>
+      <with|par-left|<quote|2tab>|E.5.8.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-239>>
 
-      <with|par-left|<quote|2tab>|E.5.15.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-240>>
 
-      E.6.<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-241>
+      <with|par-left|<quote|2tab>|E.5.9.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-241>>
 
-      <with|par-left|<quote|1tab>|E.6.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_root>
+      <with|par-left|<quote|1tab>|E.5.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_start>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-242>>
 
-      <with|par-left|<quote|2tab>|E.6.1.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.5.10.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-243>>
 
-      <with|par-left|<quote|1tab>|E.6.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_ordered_root>
+      <with|par-left|<quote|1tab>|E.5.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_add_header>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-244>>
 
-      <with|par-left|<quote|2tab>|E.6.2.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.5.11.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-245>>
 
-      E.7.<space|2spc>Miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-246>
+      <with|par-left|<quote|1tab>|E.5.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_write_body>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-246>>
 
-      <with|par-left|<quote|1tab>|E.7.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_chain_id>
+      <with|par-left|<quote|2tab>|E.5.12.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-247>>
 
-      <with|par-left|<quote|2tab>|E.7.1.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_wait>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-248>>
 
-      <with|par-left|<quote|1tab>|E.7.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_num>
+      <with|par-left|<quote|2tab>|E.5.13.1.<space|2spc>Version 1- Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-249>>
 
-      <with|par-left|<quote|2tab>|E.7.2.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_headers>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-250>>
 
-      <with|par-left|<quote|1tab>|E.7.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_utf8>
+      <with|par-left|<quote|2tab>|E.5.14.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-251>>
 
-      <with|par-left|<quote|2tab>|E.7.3.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|1tab>|E.5.15.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_read_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-252>>
 
-      <with|par-left|<quote|1tab>|E.7.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_hex>
+      <with|par-left|<quote|2tab>|E.5.15.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-253>>
 
-      <with|par-left|<quote|2tab>|E.7.4.1.<space|2spc>Version 1 - Prototype
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-254>>
+      E.6.<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-254>
 
-      <with|par-left|<quote|1tab>|E.7.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_runtime_version>
+      <with|par-left|<quote|1tab>|E.6.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-255>>
 
-      <with|par-left|<quote|2tab>|E.7.5.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.6.1.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-256>>
 
-      E.8.<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-257>
+      <with|par-left|<quote|1tab>|E.6.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_ordered_root>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-257>>
 
-      <with|par-left|<quote|1tab>|E.8.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_malloc>
+      <with|par-left|<quote|2tab>|E.6.2.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-258>>
 
-      <with|par-left|<quote|2tab>|E.8.1.1.<space|2spc>Version 1 - Prototype
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-259>>
+      E.7.<space|2spc>Miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-259>
 
-      <with|par-left|<quote|1tab>|E.8.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_free>
+      <with|par-left|<quote|1tab>|E.7.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_chain_id>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-260>>
 
-      <with|par-left|<quote|2tab>|E.8.2.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.7.1.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-261>>
 
-      E.9.<space|2spc>Logging <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-262>
+      <with|par-left|<quote|1tab>|E.7.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_num>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-262>>
 
-      <with|par-left|<quote|1tab>|E.9.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_logging_log>
+      <with|par-left|<quote|2tab>|E.7.2.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-263>>
+
+      <with|par-left|<quote|1tab>|E.7.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_utf8>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-264>>
 
-      <with|par-left|<quote|2tab>|E.9.1.1.<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|E.7.3.1.<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-265>>
+
+      <with|par-left|<quote|1tab>|E.7.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_hex>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-266>>
+
+      <with|par-left|<quote|2tab>|E.7.4.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-267>>
+
+      <with|par-left|<quote|1tab>|E.7.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_runtime_version>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-268>>
+
+      <with|par-left|<quote|2tab>|E.7.5.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-269>>
+
+      E.8.<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-270>
+
+      <with|par-left|<quote|1tab>|E.8.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_malloc>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-271>>
+
+      <with|par-left|<quote|2tab>|E.8.1.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-272>>
+
+      <with|par-left|<quote|1tab>|E.8.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_free>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-273>>
+
+      <with|par-left|<quote|2tab>|E.8.2.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-274>>
+
+      E.9.<space|2spc>Logging <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-275>
+
+      <with|par-left|<quote|1tab>|E.9.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_logging_log>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-277>>
+
+      <with|par-left|<quote|2tab>|E.9.1.1.<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-278>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       F.<space|2spc>Legacy Polkadot Host API>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-266><vspace|0.5fn>
+      <pageref|auto-279><vspace|0.5fn>
 
       F.1.<space|2spc>Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-267>
+      <no-break><pageref|auto-280>
 
       <with|par-left|<quote|1tab>|F.1.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_set_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-268>>
+      <no-break><pageref|auto-281>>
 
       <with|par-left|<quote|1tab>|F.1.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_storage_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-269>>
+      <no-break><pageref|auto-282>>
 
       <with|par-left|<quote|1tab>|F.1.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256_enumerated_trie_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-270>>
+      <no-break><pageref|auto-283>>
 
       <with|par-left|<quote|1tab>|F.1.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_prefix>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-271>>
+      <no-break><pageref|auto-284>>
 
       <with|par-left|<quote|1tab>|F.1.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-272>>
+      <no-break><pageref|auto-285>>
 
       <with|par-left|<quote|1tab>|F.1.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_exists_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-273>>
+      <no-break><pageref|auto-286>>
 
       <with|par-left|<quote|1tab>|F.1.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_allocated_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-274>>
+      <no-break><pageref|auto-287>>
 
       <with|par-left|<quote|1tab>|F.1.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_storage_into>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-275>>
+      <no-break><pageref|auto-288>>
 
       <with|par-left|<quote|1tab>|F.1.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_set_child_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-276>>
+      <no-break><pageref|auto-289>>
 
       <with|par-left|<quote|1tab>|F.1.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_clear_child_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-277>>
+      <no-break><pageref|auto-290>>
 
       <with|par-left|<quote|1tab>|F.1.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_exists_child_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-278>>
+      <no-break><pageref|auto-291>>
 
       <with|par-left|<quote|1tab>|F.1.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_allocated_child_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-279>>
+      <no-break><pageref|auto-292>>
 
       <with|par-left|<quote|1tab>|F.1.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_get_child_storage_into>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-280>>
+      <no-break><pageref|auto-293>>
 
       <with|par-left|<quote|1tab>|F.1.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_kill_child_storage>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-281>>
+      <no-break><pageref|auto-294>>
 
       <with|par-left|<quote|1tab>|F.1.15.<space|2spc>Memory
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-282>>
+      <no-break><pageref|auto-295>>
 
       <with|par-left|<quote|2tab>|F.1.15.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_malloc>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-283>>
+      <no-break><pageref|auto-296>>
 
       <with|par-left|<quote|2tab>|F.1.15.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_free>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-284>>
+      <no-break><pageref|auto-297>>
 
       <with|par-left|<quote|2tab>|F.1.15.3.<space|2spc>Input/Output
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-285>>
+      <no-break><pageref|auto-298>>
 
       <with|par-left|<quote|1tab>|F.1.16.<space|2spc>Cryptograhpic Auxiliary
       Functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-286>>
+      <no-break><pageref|auto-299>>
 
       <with|par-left|<quote|2tab>|F.1.16.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_blake2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-287>>
+      <no-break><pageref|auto-300>>
 
       <with|par-left|<quote|2tab>|F.1.16.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_keccak_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-288>>
+      <no-break><pageref|auto-301>>
 
       <with|par-left|<quote|2tab>|F.1.16.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_twox_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-289>>
+      <no-break><pageref|auto-302>>
 
       <with|par-left|<quote|2tab>|F.1.16.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_ed25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-290>>
+      <no-break><pageref|auto-303>>
 
       <with|par-left|<quote|2tab>|F.1.16.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_sr25519_verify>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-291>>
+      <no-break><pageref|auto-304>>
 
       <with|par-left|<quote|2tab>|F.1.16.6.<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-292>>
+      <no-break><pageref|auto-305>>
 
       <with|par-left|<quote|1tab>|F.1.17.<space|2spc>Offchain Worker
       \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-293>>
+      <no-break><pageref|auto-306>>
 
       <with|par-left|<quote|2tab>|F.1.17.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_is_validator>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-294>>
+      <no-break><pageref|auto-307>>
 
       <with|par-left|<quote|2tab>|F.1.17.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_submit_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-295>>
+      <no-break><pageref|auto-308>>
 
       <with|par-left|<quote|2tab>|F.1.17.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_network_state>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-296>>
+      <no-break><pageref|auto-309>>
 
       <with|par-left|<quote|2tab>|F.1.17.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_timestamp>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-297>>
+      <no-break><pageref|auto-310>>
 
       <with|par-left|<quote|2tab>|F.1.17.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_sleep_until>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-298>>
+      <no-break><pageref|auto-311>>
 
       <with|par-left|<quote|2tab>|F.1.17.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_random_seed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-299>>
+      <no-break><pageref|auto-312>>
 
       <with|par-left|<quote|2tab>|F.1.17.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_local_storage_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-300>>
+      <no-break><pageref|auto-313>>
 
       <with|par-left|<quote|2tab>|F.1.17.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_local_storage_compare_and_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-301>>
+      <no-break><pageref|auto-314>>
 
       <with|par-left|<quote|2tab>|F.1.17.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_local_storage_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-302>>
+      <no-break><pageref|auto-315>>
 
       <with|par-left|<quote|2tab>|F.1.17.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_start>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-303>>
+      <no-break><pageref|auto-316>>
 
       <with|par-left|<quote|2tab>|F.1.17.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_add_header>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-304>>
+      <no-break><pageref|auto-317>>
 
       <with|par-left|<quote|2tab>|F.1.17.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_request_write_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-305>>
+      <no-break><pageref|auto-318>>
 
       <with|par-left|<quote|2tab>|F.1.17.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_wait>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-306>>
+      <no-break><pageref|auto-319>>
 
       <with|par-left|<quote|2tab>|F.1.17.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_headers>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-307>>
+      <no-break><pageref|auto-320>>
 
       <with|par-left|<quote|2tab>|F.1.17.15.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_http_response_read_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-308>>
+      <no-break><pageref|auto-321>>
 
       <with|par-left|<quote|1tab>|F.1.18.<space|2spc>Sandboxing
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-309>>
+      <no-break><pageref|auto-322>>
 
       <with|par-left|<quote|2tab>|F.1.18.1.<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-310>>
+      <no-break><pageref|auto-323>>
 
       <with|par-left|<quote|1tab>|F.1.19.<space|2spc>Auxillary Debugging API
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-311>>
+      <no-break><pageref|auto-324>>
 
       <with|par-left|<quote|2tab>|F.1.19.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_hex>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-312>>
+      <no-break><pageref|auto-325>>
 
       <with|par-left|<quote|2tab>|F.1.19.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_print_utf8>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-313>>
+      <no-break><pageref|auto-326>>
 
       <with|par-left|<quote|1tab>|F.1.20.<space|2spc>Misc
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-314>>
+      <no-break><pageref|auto-327>>
 
       <with|par-left|<quote|2tab>|F.1.20.1.<space|2spc>To be Specced
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-315>>
+      <no-break><pageref|auto-328>>
 
       <with|par-left|<quote|1tab>|F.1.21.<space|2spc>Block Production
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-316>>
+      <no-break><pageref|auto-329>>
 
       F.2.<space|2spc>Validation <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-317>
+      <no-break><pageref|auto-330>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Appendix
       G.<space|2spc>Runtime Entries> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-318><vspace|0.5fn>
+      <pageref|auto-331><vspace|0.5fn>
 
       G.1.<space|2spc>List of Runtime Entries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-319>
+      <no-break><pageref|auto-332>
 
       G.2.<space|2spc>Argument Specification
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-321>
+      <no-break><pageref|auto-334>
 
       <with|par-left|<quote|1tab>|G.2.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-322>>
+      <no-break><pageref|auto-335>>
 
       <with|par-left|<quote|1tab>|G.2.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-324>>
+      <no-break><pageref|auto-337>>
 
       <with|par-left|<quote|1tab>|G.2.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-325>>
+      <no-break><pageref|auto-338>>
 
       <with|par-left|<quote|1tab>|G.2.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|hash_and_length>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-326>>
+      <no-break><pageref|auto-339>>
 
       <with|par-left|<quote|1tab>|G.2.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-327>>
+      <no-break><pageref|auto-340>>
 
       <with|par-left|<quote|1tab>|G.2.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-329>>
+      <no-break><pageref|auto-342>>
 
       <with|par-left|<quote|1tab>|G.2.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-330>>
+      <no-break><pageref|auto-343>>
 
       <with|par-left|<quote|1tab>|G.2.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-335>>
+      <no-break><pageref|auto-348>>
 
       <with|par-left|<quote|1tab>|G.2.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-338>>
+      <no-break><pageref|auto-351>>
 
       <with|par-left|<quote|1tab>|G.2.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-339>>
+      <no-break><pageref|auto-352>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Glossary>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-340><vspace|0.5fn>
+      <pageref|auto-353><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-341><vspace|0.5fn>
+      <pageref|auto-354><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Index>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-342><vspace|0.5fn>
+      <pageref|auto-355><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
