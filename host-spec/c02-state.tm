@@ -440,7 +440,7 @@
 
     <\itemize>
       <\equation*>
-        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<table|<row|<cell|StoredValue<rsub|SC>>>|<row|<cell|\<nobracket\>*Enc<rsup|Len><rsub|SC><around*|(|ChildrenBitmap<around*|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around*|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>StoredValue<rsub|SC>*>>>>>|\<nobracket\>>>>|<row|<cell|>>|<row|<cell|<text|where
+        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<table|<row|<cell|StoredValue<rsub|SC>>>|<row|<cell|\<nobracket\>*Enc<rsup|><rsub|SC><around*|(|ChildrenBitmap<around*|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around*|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>StoredValue<rsub|SC>*>>>>>|\<nobracket\>>>>|<row|<cell|>>|<row|<cell|<text|where
         the first variant is a leaf node and the second variant is a branch
         node.>>>|<row|<cell|>>|<row|<cell|StoredValue<rsub|SC>\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|-1|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around*|(|StoredValue<around*|(|k<rsub|N>|)>|)>>|<cell|>|<cell|<text|if
         StoredValue(k_N)=v>>>|<row|<cell|\<b-phi\>>|<cell|>|<cell|<text|if

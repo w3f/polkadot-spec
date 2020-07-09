@@ -1228,8 +1228,8 @@
   (<reference|sect-ext-crypto-ed25519-verify>),
   <verbatim|ext_crypto_sr25519_verify> (<reference|sect-ext-crypto-sr25519-verify>)
   or <verbatim|ext_crypto_ecdsa_verify> (<reference|sect-ext-crypto-ecdsa-verify>).
-  Verification will start immediatly in parallel and the Runtime can retrieve
-  the result when calling <verbatim|ext_crypto_finish_batch_verify>
+  Verification will start immediatly and the Runtime can retrieve the result
+  when calling <verbatim|ext_crypto_finish_batch_verify>
   (<reference|sect-ext-crypto-finish-batch-verify>).
 
   <subsubsection|Version 1 - Prototype>
