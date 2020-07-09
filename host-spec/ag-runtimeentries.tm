@@ -114,8 +114,8 @@
 
   where <verbatim|data> points to the SCALE encoded paramaters sent to the
   function and <verbatim|len> is the length of the data. <verbatim|result>
-  can similarly either point to the SCALE encoded data the function returns
-  (See Sections <reference|sect-runtime-send-args-to-runtime-enteries> and
+  points to the SCALE encoded data the function returns (See Sections
+  <reference|sect-runtime-send-args-to-runtime-enteries> and
   <reference|sect-runtime-return-value>).
 
   \;
@@ -138,11 +138,24 @@
     name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|UINT32>|<cell|the
     version of the authorship interface>>|<row|<cell|<verbatim|spec_version>>|<cell|UINT32>|<cell|the
     version of the Runtime specification>>|<row|<cell|<verbatim|impl_version>>|<cell|UINT32>|<cell|the
-    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec>|<cell|List
-    of supported APIs>>|<row|<cell|<verbatim|transaction_version>>|<cell|UINT32>|<cell|the
+    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec
+    (<reference|defn-rt-apisvec>)>|<cell|List of supported APIs along with
+    their version>>|<row|<cell|<verbatim|transaction_version>>|<cell|UINT32>|<cell|the
     version of the transaction format>>>>>|Detail of the version data type
     returns from runtime <verbatim|version> function.>
   </with>
+
+  <\definition>
+    <label|defn-rt-apisvec><strong|ApisVec> is a specialised type for the
+    <verbatim|Core_version> (<reference|defn-rt-core-version>) function
+    entry. It represents an array of tuples, where the first value of the
+    tuple is an array of 8-bytes indicating the API name. The second value of
+    the tuple is the version number of the corresponding API.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|ApiVec>|<cell|\<assign\>>|<cell|<around*|(|T<rsub|0>,\<ldots\>,T<rsub|n>|)>>>|<row|<cell|T>|<cell|\<assign\>>|<cell|<around*|(|<around*|(|b<rsub|0>,\<ldots\>,b<rsub|7>|)>,UINT32|)>>>>>
+    </eqnarray*>
+  </definition>
 
   <subsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
 
@@ -547,12 +560,13 @@
     <associate|auto-7|<tuple|A.2.2|108>>
     <associate|auto-8|<tuple|A.2.3|108>>
     <associate|auto-9|<tuple|A.2.4|109>>
-    <associate|defn-invalid-transaction|<tuple|A.3|110>>
+    <associate|defn-invalid-transaction|<tuple|A.4|110>>
+    <associate|defn-rt-apisvec|<tuple|A.1|?>>
     <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|112>>
     <associate|defn-rt-core-version|<tuple|A.2.1|108>>
-    <associate|defn-transaction-validity-error|<tuple|A.2|110>>
-    <associate|defn-unknown-transaction|<tuple|A.4|110>>
-    <associate|defn-valid-transaction|<tuple|A.1|110>>
+    <associate|defn-transaction-validity-error|<tuple|A.3|110>>
+    <associate|defn-unknown-transaction|<tuple|A.5|110>>
+    <associate|defn-valid-transaction|<tuple|A.2|110>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
     <associate|sect-rte-apply-extrinsic|<tuple|A.2.8|111>>
     <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|109>>
