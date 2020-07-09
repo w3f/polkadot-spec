@@ -1083,7 +1083,7 @@
     cannot be found in the key store.
   </itemize>
 
-  <subsection|<verbatim|ext_crypto_ecdsa_verify>><label|sect-ext-crypto-sr25519-verify>
+  <subsection|<verbatim|ext_crypto_ecdsa_verify>><label|sect-ext-crypto-ecdsa-verify>
 
   Verifies an <verbatim|ecdsa> signature.
 
@@ -1185,9 +1185,10 @@
   signatures which are pushed to the batch with
   <verbatim|ext_crypto_ed25519_verify> (<reference|sect-ext-crypto-ed25519-verify>),
   <verbatim|ext_crypto_sr25519_verify> (<reference|sect-ext-crypto-sr25519-verify>)
-  or <verbatim|ext_crypto_ecdsa_verify> (). Verification will start
-  immediatly in parallel and the Runtime can retrieve the result when calling
-  <verbatim|ext_crypto_finish_batch_verify> (). <todo|Implement missing APIs>
+  or <verbatim|ext_crypto_ecdsa_verify> (<reference|sect-ext-crypto-ecdsa-verify>).
+  Verification will start immediatly in parallel and the Runtime can retrieve
+  the result when calling <verbatim|ext_crypto_finish_batch_verify> ().
+  <todo|Implement missing APIs>
 
   <subsubsection|Version 1 - Prototype>
 
@@ -2390,6 +2391,7 @@
     <associate|defn-persistent-storage|<tuple|A.8|?>>
     <associate|defn-runtime-pointer|<tuple|A.2|?>>
     <associate|nota-re-api-at-state|<tuple|A.1|?>>
+    <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|?>>
     <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|?>>
     <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.16|?>>
     <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.12|?>>
