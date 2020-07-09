@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|host-spec.tm>
 
@@ -195,8 +195,8 @@
 
   <\itemize>
     <item>The block header of the new block as defined in
-    <reference|defn-block-header>. The values <strong|<math|H<rsub|r>>>,
-    <strong|<math|H<rsub|e>>> and <strong|<math|H<rsub|d>>> are left empty.
+    <reference|defn-block-header>. The values <math|H<rsub|r>,H<rsub|e> and
+    H<rsub|d>> are left empty.
   </itemize>
 
   \;
@@ -548,7 +548,6 @@
     <associate|auto-9|<tuple|A.2.4|109>>
     <associate|defn-invalid-transaction|<tuple|A.3|110>>
     <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|112>>
-    <associate|defn-rt-core-execute-block|<tuple|A.2.2|108>>
     <associate|defn-rt-core-version|<tuple|A.2.1|108>>
     <associate|defn-transaction-validity-error|<tuple|A.2|110>>
     <associate|defn-unknown-transaction|<tuple|A.4|110>>
