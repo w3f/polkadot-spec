@@ -43,10 +43,10 @@
 
   <subsubsection|Version 1 - Prototype>
 
-  \;
-
   <\verbatim>
-    (func $ext_storage_set_version_1 (param $key i64) (param $value i64))
+    (func $ext_storage_set_version_1
+
+    (param $key i64) (param $value i64))
   </verbatim>
 
   \;
@@ -68,7 +68,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_get_version_1 (param $key i64) (result i64))
+    (func $ext_storage_get_version_1
+
+    (param $key i64) (result i64))
   </verbatim>
 
   \;
@@ -130,7 +132,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_clear_version_1 (param $key_data i64))
+    (func $ext_storage_clear_version_1
+
+    (param $key_data i64))
   </verbatim>
 
   \;
@@ -149,7 +153,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_exists_version_1 (param $key_data i64) (return i32))
+    (func $ext_storage_exists_version_1
+
+    (param $key_data i64) (return i32))
   </verbatim>
 
   \;
@@ -172,7 +178,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_clear_prefix_version_1 (param $prefix i64))
+    (func $ext_storage_clear_prefix_version_1
+
+    (param $prefix i64))
   </verbatim>
 
   \;
@@ -197,8 +205,11 @@
 
   <subsubsection|Version 1 - Prototype>
 
-  <verbatim|(func $ext_storage_append_version_1 (param $key i64) (param
-  $value i64))>
+  <\verbatim>
+    (func $ext_storage_append_version_1
+
+    (param $key i64) (param $value i64))
+  </verbatim>
 
   \;
 
@@ -219,7 +230,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_root_version_1 (return i64))
+    (func $ext_storage_root_version_1
+
+    (return i64))
   </verbatim>
 
   \;
@@ -240,8 +253,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_changes_root_version_1 (param $parent_hash i64)
-    (return i64))
+    (func $ext_storage_changes_root_version_1
+
+    (param $parent_hash i64) (return i64))
   </verbatim>
 
   \;
@@ -266,7 +280,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_next_key_version_1 (param $key i64) (return i64))
+    (func $ext_storage_next_key_version_1
+
+    (param $key i64) (return i64))
   </verbatim>
 
   \;
@@ -705,8 +721,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_crypto_ed25519_public_keys_version_1 (param $key_type_id i64)
-    (return i64))
+    (func $ext_crypto_ed25519_public_keys_version_1
+
+    (param $key_type_id i64) (return i64))
   </verbatim>
 
   \;
@@ -788,7 +805,7 @@
     public key cannot be found in the key store.
   </itemize>
 
-  <subsection|<verbatim|ext_crypto_ed25519_verify>>
+  <subsection|<verbatim|ext_crypto_ed25519_verify>><label|sect-ext-crypto-ed25519-verify>
 
   Verifies an ed25519 signature.
 
@@ -827,8 +844,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_crypto_sr25519_public_keys_version_1 (param $key_type_id i64)
-    (return i64))
+    (func $ext_crypto_sr25519_public_keys_version_1
+
+    (param $key_type_id i64) (return i64))
   </verbatim>
 
   \;
@@ -910,7 +928,7 @@
     public key cannot be found in the key store.
   </itemize>
 
-  <subsection|<verbatim|ext_crypto_sr25519_verify>>
+  <subsection|<verbatim|ext_crypto_sr25519_verify>><label|sect-ext-crypto-sr25519-verify>
 
   Verifies an <verbatim|sr25519> signature. Only version 1 of this function
   supports deprecated Schnorr signatures introduced by the <em|schnorrkel>
@@ -971,9 +989,58 @@
     signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
+  <subsection|<verbatim|ext_crypto_start_batch_verify>><label|sect-ext-crypto-start-batch-verify>
+
+  Starts the verification extension. This is used to parallel-verify
+  signatures which are pushed to the batch with
+  <verbatim|ext_crypto_ed25519_verify> (<reference|sect-ext-crypto-ed25519-verify>),
+  <verbatim|ext_crypto_sr25519_verify> (<reference|sect-ext-crypto-sr25519-verify>)
+  or <verbatim|ext_crypto_ecdsa_verify> (). Verification will start
+  immediatly in parallel and the Runtime can retrieve the result when calling
+  <verbatim|ext_crypto_finish_batch_verify> (). <todo|Implement missing APIs>
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_start_batch_verify_version_1)
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  <subsection|<verbatim|ext_crypto_finish_batch_verify>><label|sect-ext-crypto-finish-batch-verify>
+
+  Finish the verification batch of signatures since the last call. Panics if
+  the verification extension was not registered
+  <verbatim|(ext_crypto_start_batch_verify>
+  (<reference|sect-ext-crypto-start-batch-verify>) was not called).
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_finish_batch_verify_version_1
+
+    (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item><verbatim|return>: an i32 integer value equal to 1 if all the
+    signatures are valid or a value equal to 0 if one or more of the
+    signatures are invalid.
+  </itemize-dot>
+
   <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover>>
 
-  Verify and recover a SECP256k1 ECDSA signature.
+  Verify and recover a secp256k1 ECDSA signature.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1004,7 +1071,7 @@
 
   <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover_compressed>>
 
-  Verify and recover a SECP256k1 ECDSA signature.
+  Verify and recover a secp256k1 ECDSA signature.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -2033,48 +2100,53 @@
     <associate|appendix-e|<tuple|A|?>>
     <associate|auto-1|<tuple|A|?>>
     <associate|auto-10|<tuple|A.1.4.1|?>>
-    <associate|auto-100|<tuple|A.5.9.1|?>>
-    <associate|auto-101|<tuple|A.5.10|?>>
-    <associate|auto-102|<tuple|A.5.10.1|?>>
-    <associate|auto-103|<tuple|A.5.11|?>>
-    <associate|auto-104|<tuple|A.5.11.1|?>>
-    <associate|auto-105|<tuple|A.5.12|?>>
-    <associate|auto-106|<tuple|A.5.12.1|?>>
-    <associate|auto-107|<tuple|A.5.13|?>>
-    <associate|auto-108|<tuple|A.5.13.1|?>>
-    <associate|auto-109|<tuple|A.5.14|?>>
+    <associate|auto-100|<tuple|A.5.7.1|?>>
+    <associate|auto-101|<tuple|A.5.8|?>>
+    <associate|auto-102|<tuple|A.5.8.1|?>>
+    <associate|auto-103|<tuple|A.5.9|?>>
+    <associate|auto-104|<tuple|A.5.9.1|?>>
+    <associate|auto-105|<tuple|A.5.10|?>>
+    <associate|auto-106|<tuple|A.5.10.1|?>>
+    <associate|auto-107|<tuple|A.5.11|?>>
+    <associate|auto-108|<tuple|A.5.11.1|?>>
+    <associate|auto-109|<tuple|A.5.12|?>>
     <associate|auto-11|<tuple|A.1.5|?>>
-    <associate|auto-110|<tuple|A.5.14.1|?>>
-    <associate|auto-111|<tuple|A.5.15|?>>
-    <associate|auto-112|<tuple|A.5.15.1|?>>
-    <associate|auto-113|<tuple|A.6|?>>
-    <associate|auto-114|<tuple|A.6.1|?>>
-    <associate|auto-115|<tuple|A.6.1.1|?>>
-    <associate|auto-116|<tuple|A.6.2|?>>
-    <associate|auto-117|<tuple|A.6.2.1|?>>
-    <associate|auto-118|<tuple|A.7|?>>
-    <associate|auto-119|<tuple|A.7.1|?>>
+    <associate|auto-110|<tuple|A.5.12.1|?>>
+    <associate|auto-111|<tuple|A.5.13|?>>
+    <associate|auto-112|<tuple|A.5.13.1|?>>
+    <associate|auto-113|<tuple|A.5.14|?>>
+    <associate|auto-114|<tuple|A.5.14.1|?>>
+    <associate|auto-115|<tuple|A.5.15|?>>
+    <associate|auto-116|<tuple|A.5.15.1|?>>
+    <associate|auto-117|<tuple|A.6|?>>
+    <associate|auto-118|<tuple|A.6.1|?>>
+    <associate|auto-119|<tuple|A.6.1.1|?>>
     <associate|auto-12|<tuple|A.1.5.1|?>>
-    <associate|auto-120|<tuple|A.7.1.1|?>>
-    <associate|auto-121|<tuple|A.7.2|?>>
-    <associate|auto-122|<tuple|A.7.2.1|?>>
-    <associate|auto-123|<tuple|A.7.3|?>>
-    <associate|auto-124|<tuple|A.7.3.1|?>>
-    <associate|auto-125|<tuple|A.7.4|?>>
-    <associate|auto-126|<tuple|A.7.4.1|?>>
-    <associate|auto-127|<tuple|A.7.5|?>>
-    <associate|auto-128|<tuple|A.7.5.1|?>>
-    <associate|auto-129|<tuple|A.8|?>>
+    <associate|auto-120|<tuple|A.6.2|?>>
+    <associate|auto-121|<tuple|A.6.2.1|?>>
+    <associate|auto-122|<tuple|A.7|?>>
+    <associate|auto-123|<tuple|A.7.1|?>>
+    <associate|auto-124|<tuple|A.7.1.1|?>>
+    <associate|auto-125|<tuple|A.7.2|?>>
+    <associate|auto-126|<tuple|A.7.2.1|?>>
+    <associate|auto-127|<tuple|A.7.3|?>>
+    <associate|auto-128|<tuple|A.7.3.1|?>>
+    <associate|auto-129|<tuple|A.7.4|?>>
     <associate|auto-13|<tuple|A.1.6|?>>
-    <associate|auto-130|<tuple|A.8.1|?>>
-    <associate|auto-131|<tuple|A.8.1.1|?>>
-    <associate|auto-132|<tuple|A.8.2|?>>
-    <associate|auto-133|<tuple|A.8.2.1|?>>
-    <associate|auto-134|<tuple|A.9|?>>
-    <associate|auto-135|<tuple|A.4|?>>
-    <associate|auto-136|<tuple|A.9.1|?>>
-    <associate|auto-137|<tuple|A.9.1.1|?>>
+    <associate|auto-130|<tuple|A.7.4.1|?>>
+    <associate|auto-131|<tuple|A.7.5|?>>
+    <associate|auto-132|<tuple|A.7.5.1|?>>
+    <associate|auto-133|<tuple|A.8|?>>
+    <associate|auto-134|<tuple|A.8.1|?>>
+    <associate|auto-135|<tuple|A.8.1.1|?>>
+    <associate|auto-136|<tuple|A.8.2|?>>
+    <associate|auto-137|<tuple|A.8.2.1|?>>
+    <associate|auto-138|<tuple|A.9|?>>
+    <associate|auto-139|<tuple|A.4|?>>
     <associate|auto-14|<tuple|A.1.6.1|?>>
+    <associate|auto-140|<tuple|A.9.1|?>>
+    <associate|auto-141|<tuple|A.9.1.1|?>>
+    <associate|auto-142|<tuple|A.9.1.1|?>>
     <associate|auto-15|<tuple|A.1.7|?>>
     <associate|auto-16|<tuple|A.1.7.1|?>>
     <associate|auto-17|<tuple|A.1.8|?>>
@@ -2131,43 +2203,43 @@
     <associate|auto-63|<tuple|A.3.9.1|?>>
     <associate|auto-64|<tuple|A.3.10|?>>
     <associate|auto-65|<tuple|A.3.10.1|?>>
-    <associate|auto-66|<tuple|A.4|?>>
-    <associate|auto-67|<tuple|A.4.1|?>>
-    <associate|auto-68|<tuple|A.4.1.1|?>>
-    <associate|auto-69|<tuple|A.4.2|?>>
+    <associate|auto-66|<tuple|A.3.11|?>>
+    <associate|auto-67|<tuple|A.3.11.1|?>>
+    <associate|auto-68|<tuple|A.3.12|?>>
+    <associate|auto-69|<tuple|A.3.12.1|?>>
     <associate|auto-7|<tuple|A.1.3|?>>
-    <associate|auto-70|<tuple|A.4.2.1|?>>
-    <associate|auto-71|<tuple|A.4.3|?>>
-    <associate|auto-72|<tuple|A.4.3.1|?>>
-    <associate|auto-73|<tuple|A.4.4|?>>
-    <associate|auto-74|<tuple|A.4.4.1|?>>
-    <associate|auto-75|<tuple|A.4.5|?>>
-    <associate|auto-76|<tuple|A.4.5.1|?>>
-    <associate|auto-77|<tuple|A.4.6|?>>
-    <associate|auto-78|<tuple|A.4.6.1|?>>
-    <associate|auto-79|<tuple|A.4.7|?>>
+    <associate|auto-70|<tuple|A.4|?>>
+    <associate|auto-71|<tuple|A.4.1|?>>
+    <associate|auto-72|<tuple|A.4.1.1|?>>
+    <associate|auto-73|<tuple|A.4.2|?>>
+    <associate|auto-74|<tuple|A.4.2.1|?>>
+    <associate|auto-75|<tuple|A.4.3|?>>
+    <associate|auto-76|<tuple|A.4.3.1|?>>
+    <associate|auto-77|<tuple|A.4.4|?>>
+    <associate|auto-78|<tuple|A.4.4.1|?>>
+    <associate|auto-79|<tuple|A.4.5|?>>
     <associate|auto-8|<tuple|A.1.3.1|?>>
-    <associate|auto-80|<tuple|A.4.7.1|?>>
-    <associate|auto-81|<tuple|A.5|?>>
-    <associate|auto-82|<tuple|A.3|?>>
-    <associate|auto-83|<tuple|A.5.1|?>>
-    <associate|auto-84|<tuple|A.5.1.1|?>>
-    <associate|auto-85|<tuple|A.5.2|?>>
-    <associate|auto-86|<tuple|A.5.2.1|?>>
-    <associate|auto-87|<tuple|A.5.3|?>>
-    <associate|auto-88|<tuple|A.5.3.1|?>>
-    <associate|auto-89|<tuple|A.5.4|?>>
+    <associate|auto-80|<tuple|A.4.5.1|?>>
+    <associate|auto-81|<tuple|A.4.6|?>>
+    <associate|auto-82|<tuple|A.4.6.1|?>>
+    <associate|auto-83|<tuple|A.4.7|?>>
+    <associate|auto-84|<tuple|A.4.7.1|?>>
+    <associate|auto-85|<tuple|A.5|?>>
+    <associate|auto-86|<tuple|A.3|?>>
+    <associate|auto-87|<tuple|A.5.1|?>>
+    <associate|auto-88|<tuple|A.5.1.1|?>>
+    <associate|auto-89|<tuple|A.5.2|?>>
     <associate|auto-9|<tuple|A.1.4|?>>
-    <associate|auto-90|<tuple|A.5.4.1|?>>
-    <associate|auto-91|<tuple|A.5.5|?>>
-    <associate|auto-92|<tuple|A.5.5.1|?>>
-    <associate|auto-93|<tuple|A.5.6|?>>
-    <associate|auto-94|<tuple|A.5.6.1|?>>
-    <associate|auto-95|<tuple|A.5.7|?>>
-    <associate|auto-96|<tuple|A.5.7.1|?>>
-    <associate|auto-97|<tuple|A.5.8|?>>
-    <associate|auto-98|<tuple|A.5.8.1|?>>
-    <associate|auto-99|<tuple|A.5.9|?>>
+    <associate|auto-90|<tuple|A.5.2.1|?>>
+    <associate|auto-91|<tuple|A.5.3|?>>
+    <associate|auto-92|<tuple|A.5.3.1|?>>
+    <associate|auto-93|<tuple|A.5.4|?>>
+    <associate|auto-94|<tuple|A.5.4.1|?>>
+    <associate|auto-95|<tuple|A.5.5|?>>
+    <associate|auto-96|<tuple|A.5.5.1|?>>
+    <associate|auto-97|<tuple|A.5.6|?>>
+    <associate|auto-98|<tuple|A.5.6.1|?>>
+    <associate|auto-99|<tuple|A.5.7|?>>
     <associate|defn-child-storage-definition|<tuple|A.4|?>>
     <associate|defn-child-storage-type|<tuple|A.3|?>>
     <associate|defn-child-type|<tuple|A.5|?>>
@@ -2180,6 +2252,10 @@
     <associate|defn-persistent-storage|<tuple|A.8|?>>
     <associate|defn-runtime-pointer|<tuple|A.2|?>>
     <associate|nota-re-api-at-state|<tuple|A.1|?>>
+    <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|?>>
+    <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.10|?>>
+    <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.8|?>>
+    <associate|sect-ext-crypto-start-batch-verify|<tuple|A.3.9|?>>
   </collection>
 </references>
 
