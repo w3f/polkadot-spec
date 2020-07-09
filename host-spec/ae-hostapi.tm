@@ -1085,15 +1085,12 @@
 
   <subsection|<verbatim|ext_crypto_ecdsa_verify>><label|sect-ext-crypto-sr25519-verify>
 
-  Verifies an <verbatim|ecdsa> signature. Only version 1 of this function
-  supports deprecated Schnorr signatures introduced by the <em|schnorrkel>
-  Rust library version 0.1.1 and should only be used for backward
-  compatibility.
+  Verifies an <verbatim|ecdsa> signature.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_crypto_ecdsa_verify_version_2
+    (func $ext_crypto_ecdsa_verify_version_1
 
     \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
   </verbatim>
@@ -1121,7 +1118,7 @@
 
   <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover>>
 
-  Verify and recover a secp256k1 ECDSA signature.
+  Verify and recover a <verbatim|secp256k1> ECDSA signature.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1152,7 +1149,7 @@
 
   <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover_compressed>>
 
-  Verify and recover a secp256k1 ECDSA signature.
+  Verify and recover a <verbatim|secp256k1> ECDSA signature.
 
   <subsubsection|Version 1 - Prototype>
 
