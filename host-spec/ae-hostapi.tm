@@ -186,13 +186,13 @@
 
   <subsection|<verbatim|ext_storage_append>>
 
-  Append the SCALE encoded value to the SCALE encoded storage item at given
-  key.
+  Append the SCALE encoded value to the SCALE encoded storage item at the
+  given key.
 
   \;
 
-  <strong|Warning>: if the value does not exist, is not SCALE encoded or
-  something else fails at appending, the storage item will be set to the
+  <strong|Warning>: if the storage item does not exist, is not SCALE encoded
+  or something else fails at appending, the storage item will be set to the
   specified value.
 
   <subsubsection|Version 1 - Prototype>
