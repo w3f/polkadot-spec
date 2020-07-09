@@ -771,8 +771,8 @@
 
   <subsection|<verbatim|ext_crypto_ed25519_sign>>
 
-  Signs the given message with the ed25519 key that corresponds to the given
-  public key and key type in the keystore.
+  Signs the given message with the <verbatim|ed25519> key that corresponds to
+  the given public key and key type in the keystore.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -807,7 +807,19 @@
 
   <subsection|<verbatim|ext_crypto_ed25519_verify>><label|sect-ext-crypto-ed25519-verify>
 
-  Verifies an ed25519 signature.
+  Verifies an <verbatim|ed25519> signature. Returns <verbatim|true> when the
+  verification is either successful or batched. If no batching verification
+  extension is registered, this function will fully verify the signature and
+  return the result. If batching verification is registered, this function
+  will push the data to the batch and return immediately. The caller can then
+  get the result by calling <verbatim|ext_crypto_finish_batch_verify>
+  (<reference|sect-ext-crypto-finish-batch-verify>).
+
+  \;
+
+  The verification extension is explained more in detail in
+  <verbatim|ext_crypto_start_batch_verify>
+  (<reference|sect-ext-crypto-start-batch-verify>).
 
   <subsubsection|Version 1 - Prototype>
 
@@ -833,7 +845,8 @@
     32-byte public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
-    signature is valid or a value equal to <verbatim|0> if otherwise.
+    signature is valid or batched or a value equal to <verbatim|0> if
+    otherwise.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_sr25519_public_keys>>
@@ -934,6 +947,22 @@
   supports deprecated Schnorr signatures introduced by the <em|schnorrkel>
   Rust library version 0.1.1 and should only be used for backward
   compatibility.
+
+  \;
+
+  Returns <verbatim|true> when the verification is either successful or
+  batched. If no batching verification extension is registered, this function
+  will fully verify the signature and return the result. If batching
+  verification is registered, this function will push the data to the batch
+  and return immediately. The caller can then get the result by calling
+  <verbatim|ext_crypto_finish_batch_verify>
+  (<reference|sect-ext-crypto-finish-batch-verify>).
+
+  \;
+
+  The verification extension is explained more in detail in
+  <verbatim|ext_crypto_start_batch_verify>
+  (<reference|sect-ext-crypto-start-batch-verify>).
 
   <subsubsection|Version 2 - Prototype>
 
@@ -1085,7 +1114,19 @@
 
   <subsection|<verbatim|ext_crypto_ecdsa_verify>><label|sect-ext-crypto-ecdsa-verify>
 
-  Verifies an <verbatim|ecdsa> signature.
+  Verifies an <verbatim|ecdsa> signature. Returns <verbatim|true> when the
+  verification is either successful or batched. If no batching verification
+  extension is registered, this function will fully verify the signature and
+  return the result. If batching verification is registered, this function
+  will push the data to the batch and return immediately. The caller can then
+  get the result by calling <verbatim|ext_crypto_finish_batch_verify>
+  (<reference|sect-ext-crypto-finish-batch-verify>).
+
+  \;
+
+  The verification extension is explained more in detail in
+  <verbatim|ext_crypto_start_batch_verify>
+  (<reference|sect-ext-crypto-start-batch-verify>).
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1181,9 +1222,10 @@
 
   <subsection|<verbatim|ext_crypto_start_batch_verify>><label|sect-ext-crypto-start-batch-verify>
 
-  Starts the verification extension. This is used to parallel-verify
-  signatures which are pushed to the batch with
-  <verbatim|ext_crypto_ed25519_verify> (<reference|sect-ext-crypto-ed25519-verify>),
+  Starts the verification extension. The extension is a separate background
+  process and is used to parallel-verify signatures which are pushed to the
+  batch with <verbatim|ext_crypto_ed25519_verify>
+  (<reference|sect-ext-crypto-ed25519-verify>),
   <verbatim|ext_crypto_sr25519_verify> (<reference|sect-ext-crypto-sr25519-verify>)
   or <verbatim|ext_crypto_ecdsa_verify> (<reference|sect-ext-crypto-ecdsa-verify>).
   Verification will start immediatly in parallel and the Runtime can retrieve
@@ -1206,8 +1248,9 @@
 
   <subsection|<verbatim|ext_crypto_finish_batch_verify>><label|sect-ext-crypto-finish-batch-verify>
 
-  Finish the verification batch of signatures since the last call. Panics if
-  the verification extension was not registered
+  Finish verifying the batch of signatures since the last call to this
+  function. Blocks until all the signatures are verified. Panics if the
+  verification extension was not registered
   <verbatim|(ext_crypto_start_batch_verify>
   (<reference|sect-ext-crypto-start-batch-verify>) was not called).
 
@@ -1224,9 +1267,9 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item><verbatim|return>: an i32 integer value equal to 1 if all the
-    signatures are valid or a value equal to 0 if one or more of the
-    signatures are invalid.
+    <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
+    all the signatures are valid or a value equal to <verbatim|0> if one or
+    more of the signatures are invalid.
   </itemize-dot>
 
   <section|Hashing>
