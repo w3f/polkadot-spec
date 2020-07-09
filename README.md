@@ -13,7 +13,7 @@ Polkadot is a replicated sharded state machine designed to resolve the scalabili
 
 ## Polkadot Host Specification
 
-Here your can find the latest version of the [Polkadot Host Specification](./host-spec/host-spec.pdf)
+Here your can find the latest version of the [Polkadot Host Specification](./host-spec/polkadot-host-spec.pdf)
 
 Please refer to the [Change Log](./host-spec/CHANGELOG.org) and [PDF Diff](./host-spec/host-spec-diffed-updates.pdf) to review the history of changes to the specification.
 

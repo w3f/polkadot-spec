@@ -1,6 +1,6 @@
 # Polkadot Host Specification
 
-Here your can find the latest version of the ![Polkadot Host Specification](./host-spec.pdf)
+Here your can find the latest version of the ![Polkadot Host Specification](./polkadot-host-spec.pdf)
 
 Please refer to ![Change log](./CHANGELOG.org) to review the history of changes to the spec.
 
