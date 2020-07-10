@@ -124,7 +124,7 @@ will ultimately get included in the block.
     candidate should be executed in the context of.
     \item $Head_p(B)$: the head data of parachain block $B$ as defined in Definition \ref{defn-head-data}.
     \todo{@fabio (collator module relevant?)}.
-    \item $id_C$: the Collator relay-chain account ID as defined in Definition
+    \item $id_C$: the collator relay-chain account ID as defined in Definition
     \todo{@fabio}.
     \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
     of the block data by the collator.
@@ -328,3 +328,21 @@ A block producer which observe a Parachain Block Proposal as defined in definiti
 
 \todo{@fabio}
 
+\subsection{Primary Validation Disagreement}
+\label{sect-primary-validation-disagreemnt}
+\syed{Parachain}{verify} validators need to keep track of candidate receipts
+(see Definition \ref{defn-candidate-receipt}) and validation failure messages of
+their peers. In case, there is a disagreement among the parachain validators
+about $\bar{B}$, all parachain validators must invoke Algorithm
+\ref{algo-primary-validation-disagreemnt}
+
+\begin{algorithm}[H]
+  \caption[]{\sc PrimaryValidationDisagreement}
+  \label{algo-primary-validation-disagreemnt}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
