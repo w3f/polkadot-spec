@@ -248,3 +248,16 @@ logic decides that a parachain block is unavailable, see
 
 /syed{}{So to be clear we are not announcing unavailability we just keep it for
 grand pa vote}
+
+\section{Publishing Attestations}
+\label{sect-publishing-attestations}
+\syed{}{this is out of place. We can mentioned that we have two type of
+  (validity) attestations in the intro but we just need to spec each attestation
+  in its relevant section (which we did with the candidate receipt). \todo{move
+  this to intro}} We have two type of attestations, primary and secondary.
+  Primary attestations are signed by the parachain validators and secondary
+  attestations are signed by secondary checkers and include the VRF that
+  assigned them as a secondary checker into the attestation. Both types of
+  attestations are included in the relay chain block as a transaction. For each
+  parachain block candidate the relay chain keeps track of which validators have
+  attested to its validity or invalidity.
