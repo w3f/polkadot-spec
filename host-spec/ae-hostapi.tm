@@ -382,41 +382,20 @@
   Interface for accessing the child storage from within the runtime.
 
   <\definition>
-    <label|defn-child-storage-type><strong|Child storage> key is the
-    identifier for the child storage. Multiple child storages are possible,
-    where it's corresponding entries are separated based on the identifier.
-    The prefix <verbatim|:child_storage:default:> must be prepended to the
-    identiefier.
+    <label|defn-child-storage-type><strong|Child storage> key is a unprefixed
+    location of the root of the child trie under the parent trie.
   </definition>
 
-  <\definition>
-    <strong|<label|defn-child-storage-definition>Child storage definition>
-    allows for further separation from within the child storage, behaving
-    like a prefix. When a key gets set in the child storage using a certain
-    definition, the same definition must be used in order to fetch the key or
-    perform other operations on it. The value of the definition is undefined
-    and set by the Runtime.
-  </definition>
-
-  <\definition>
-    <label|defn-child-type><strong|Child type> is a future-reserved feature
-    which allows the usage of different child storage types. The currently
-    allowed value is an i32 integer equal to <strong|1>.
-  </definition>
-
-  <subsection|<verbatim|ext_storage_child_set>>
+  <subsection|<verbatim|ext_default_child_storage_set>>
 
   Sets the value under a given key into the child storage.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_set_version_1
+    (func $ext_default_child_storage_set_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32)
-
-    \ \ (param $key i64) (param $value i64))
+    (param $child_storage_key i64) (param $key i64) (param $value i64))
   </verbatim>
 
   \;
@@ -427,14 +406,6 @@
     <item><verbatim|child_storage_key>: a pointer-size as defined in
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Definition <reference|defn-child-storage-type>.
-
-    <item><verbatim|child_definition>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child
-    definition as described in Definition
-    <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in <reference|defn-child-type>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
@@ -443,19 +414,16 @@
     <reference|defn-runtime-pointer> indicating the value.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_child_get>>
+  <subsection|<verbatim|ext_default_child_storage_get>>
 
   Retrieves the value associated with the given key from the child storage.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_get_version_1
+    (func $ext_default_child_storage_get_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32)
-
-    \ \ (param $key i64) (result i64))
+    (param $child_storage_key i64) (param $key i64) (result i64))
   </verbatim>
 
   \;
@@ -466,13 +434,6 @@
     <item><verbatim|child_storage_key>: a pointer-size as defined in
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Definition <reference|defn-child-storage-type>.
-
-    <item><verbatim|child_definition>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child
-    definition as described in Defnition <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in Definition <reference|defn-child-type>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
@@ -483,7 +444,7 @@
     containing the value.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_child_read>>
+  <subsection|<verbatim|ext_default_child_storage_read>>
 
   Gets the given key from storage, placing the value into a buffer and
   returning the number of bytes that the entry in storage has beyond the
@@ -492,13 +453,11 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_read_version_1
+    (func $ext_default_child_storage_read_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32)
+    (param $child_storage_key i64) (param $key i64) (param $value_out i64)
 
-    \ \ (param $key i64) (param $value_out i64) (param $offset u32) (result
-    i64))
+    (param $offset u32) (result i64))
   </verbatim>
 
   \;
@@ -509,13 +468,6 @@
     <item><verbatim|child_storage_key>: a pointer-size as defined in
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Definition <reference|defn-child-storage-type>.
-
-    <item><verbatim|child_definition>: a pointer as defined in Defintion
-    <reference|defn-runtime-pointer> indicating the child definition as
-    described in Definition <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in Definition <reference|defn-child-type>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
@@ -535,19 +487,16 @@
     buffer. Returns <verbatim|None> if the entry does not exists.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_child_clear>>
+  <subsection|<verbatim|ext_default_child_storage_clear>>
 
   Clears the storage of the given key and its value from the child storage.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_clear_version_1
+    (func $ext_default_child_storage_clear_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32)
-
-    \ \ (param $key i64))
+    \ \ (param $child_storage_key i64) (param $key i64))
   </verbatim>
 
   \;
@@ -559,29 +508,20 @@
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_definition>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child
-    definition as described in Definition
-    <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in <reference|defn-child-type>.
-
     <item><verbatim|key>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_child_storage_kill>>
+  <subsection|<verbatim|ext_default_child_storage_storage_kill>>
 
   Clears an entire child storage.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_storage_kill_version_1
+    (func $ext_default_child_storage_storage_kill_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32))
+    (param $child_storage_key i64))
   </verbatim>
 
   \;
@@ -592,29 +532,18 @@
     <item><verbatim|child_storage_key>: a pointer-size as defined in
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Definition <reference|defn-child-storage-type>.
-
-    <item><verbatim|child_definition>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child
-    definition as described in Definition
-    <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in Definition <reference|defn-child-type>.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_child_exists>>
+  <subsection|<verbatim|ext_default_child_storage_exists>>
 
   Checks whether the given key exists in the child storage.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_exists_version_1
+    (func $ext_default_child_storage_exists_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32)
-
-    \ \ (param $key_data i64) (return i32))
+    \ \ (param $child_storage_key i64) (param $key i64) (return i32))
   </verbatim>
 
   \;
@@ -626,14 +555,6 @@
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Defintion <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_definition>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child
-    definition as described in Definition
-    <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in Defintion <reference|defn-child-type>.
-
     <item><verbatim|key>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
 
@@ -641,7 +562,7 @@
     the key exists or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_child_clear_prefix>>
+  <subsection|<verbatim|ext_default_child_storage_clear_prefix>>
 
   Clears the child storage of each key/value pair where the key starts with
   the given prefix.
@@ -649,12 +570,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_clear_prefix_version_1
+    (func $ext_default_child_storage_clear_prefix_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32)
-
-    \ \ (param $prefix i64))
+    \ \ (param $child_storage_key i64) (param $prefix i64))
   </verbatim>
 
   \;
@@ -666,19 +584,11 @@
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_definition>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child
-    definition as described in Definition
-    <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in Definition <reference|defn-child-type>.
-
     <item><verbatim|prefix>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the prefix.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_child_root>>
+  <subsection|<verbatim|ext_default_child_storage_root>>
 
   Commits all existing operations and computes the resulting child storage
   root.
@@ -686,12 +596,9 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_root_version_1
+    (func $ext_default_child_storage_root_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32)
-
-    \ \ (return i64))
+    \ \ (param $child_storage_key i64) (return i64))
   </verbatim>
 
   \;
@@ -703,32 +610,21 @@
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Definition <reference|defn-child-storage-type>.
 
-    <item><verbatim|child_definition>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child
-    definition as described in Definition
-    <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in Definition <reference|defn-child-type>.
-
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded storage
     root.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_child_next_key>>
+  <subsection|<verbatim|ext_default_child_storage_next_key>>
 
   Gets the next key in storage after the given one in lexicographic order.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_storage_child_next_key_version_1
+    (func $ext_default_child_storage_next_key_version_1
 
-    \ \ (param $child_storage_key i64) (param $child_definition i64) (param
-    $child_type i32)
-
-    \ \ (param $key i64) (return i64))
+    \ \ (param $child_storage_key i64) (param $key i64) (return i64))
   </verbatim>
 
   \;
@@ -739,14 +635,6 @@
     <item><verbatim|child_storage_key>: a pointer-size as defined in
     Definition <reference|defn-runtime-pointer> indicating the child storage
     key as defined in Definition <reference|defn-child-storage-type>.
-
-    <item><verbatim|child_definition>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicting the child
-    definition as described in Definition
-    <reference|defn-child-storage-definition>.
-
-    <item><verbatim|child_type>: an i32 integer specifying the child storage
-    type as defined in Definition <reference|defn-child-type>.
 
     <item><strong|><verbatim|key>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the key.
@@ -2564,13 +2452,13 @@
     <associate|defn-child-storage-definition|<tuple|A.4|?>>
     <associate|defn-child-storage-type|<tuple|A.3|?>>
     <associate|defn-child-type|<tuple|A.5|?>>
-    <associate|defn-ecdsa-verify-error|<tuple|A.7|?>>
-    <associate|defn-http-error|<tuple|A.11|?>>
-    <associate|defn-http-status-codes|<tuple|A.10|?>>
-    <associate|defn-key-type-id|<tuple|A.6|?>>
-    <associate|defn-local-storage|<tuple|A.9|?>>
-    <associate|defn-logging-log-level|<tuple|A.12|?>>
-    <associate|defn-persistent-storage|<tuple|A.8|?>>
+    <associate|defn-ecdsa-verify-error|<tuple|A.5|?>>
+    <associate|defn-http-error|<tuple|A.9|?>>
+    <associate|defn-http-status-codes|<tuple|A.8|?>>
+    <associate|defn-key-type-id|<tuple|A.4|?>>
+    <associate|defn-local-storage|<tuple|A.7|?>>
+    <associate|defn-logging-log-level|<tuple|A.10|?>>
+    <associate|defn-persistent-storage|<tuple|A.6|?>>
     <associate|defn-runtime-pointer|<tuple|A.2|?>>
     <associate|nota-re-api-at-state|<tuple|A.1|?>>
     <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|?>>
