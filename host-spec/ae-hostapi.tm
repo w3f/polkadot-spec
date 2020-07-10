@@ -195,13 +195,22 @@
   <subsection|<verbatim|ext_storage_append>>
 
   Append the SCALE encoded value to the SCALE encoded storage item at the
-  given key.
+  given key. This function loads the storage item with the given key, assumes
+  that the existing storage item is a SCALE encoded byte array and that the
+  given value is a SCALE encoded item (type) of that array. It then adds that
+  given value to the end of that byte array.
 
   \;
 
-  <strong|Warning>: if the storage item does not exist, is not SCALE encoded
-  or something else fails at appending, the storage item will be set to the
-  specified value.
+  For improved performance, implementers should avoid decoding the entire
+  byte array, but just append the value to the storage item and simply adjust
+  the length prefix <math|Enc<rsup|Len><rsub|SC>>.
+
+  \;
+
+  <strong|Warning>: If the storage item does not exist or is not SCALE
+  encoded, the storage item will be set to the specified value, represented
+  as a SCALE encoded byte array.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -2257,7 +2266,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|6>
-    <associate|page-first|65>
+    <associate|page-first|67>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
