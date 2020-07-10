@@ -138,8 +138,10 @@
     </equation*>
 
     where <math|Enc<rsub|SC><rsup|Len>> is defined in Definition
-    <reference|defn-sc-len-encoding>.\ 
+    <reference|defn-sc-len-encoding>.
+  </definition>
 
+  <\definition>
     SCALE codec for <strong|dictionary> or <strong|hashtable> D with
     key-value pairs <math|<around*|(|k<rsub|i>,v<rsub|i>|)>>s such that:
 
@@ -157,10 +159,6 @@
     <math|Enc<rsup|Size><rsub|SC>> is encoded the same way as
     <math|Enc<rsup|Len><rsub|SC>> but argument <math|size> refers to the
     number of key-value pairs rather than the length.
-
-    <\equation*>
-      \;
-    </equation*>
   </definition>
 
   <\definition>
