@@ -202,9 +202,9 @@
 
   \;
 
-  For improved performance, implementers should avoid decoding the entire
-  byte array, but just append the value to the storage item and simply adjust
-  the length prefix <math|Enc<rsup|Len><rsub|SC>>.
+  For improved performance, this function does not decode the entire SCALE
+  encoded byte array. Instead, it simply appends the value to the storage
+  item and adjusts the length prefix <math|Enc<rsup|Len><rsub|SC>>.
 
   \;
 
