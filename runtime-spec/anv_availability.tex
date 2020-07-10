@@ -1,0 +1,263 @@
+\section{Availability}
+
+Backed candidates must be widely available for the entire, elected validators
+set without requiring each of those to maintain a full copy. PoV blocks get
+broken up into erasure-encoded chunks and each validators keep track of how
+those chunks are distributed among the validator set. When a validator has to
+verify a PoV block, it can request the chunk for one of its peers.
+
+\begin{definition}
+  \label{defn-erasure-encoder-decoder}
+  The {\bf erasure encoder/decoder} {\bf $encode_{k,n}/decoder_{k,n}$ } is
+  defined to be the Reed-Solomon encoder defined in \cite{??}.
+\end{definition}
+
+\begin{algorithm}[H]
+  \caption[]{\sc Erasure-Encode}
+  \label{algo-erasure-encode}
+  \begin{algorithmic}[1]
+    \Require
+    $\bar{B}$: blob defined in Definition \ref{defn-blob}
+    \State \textbf{Init} $Shards \leftarrow$ \textsc{Make-Shards}($\paraValidSet, v_B$)
+    \Statex
+    \Statex // Create a trie from the shards in order generate the trie nodes
+    \Statex // which are required to verify each chunk with a Merkle root.
+    \State \textbf{Init} $Trie$
+    \State \textbf{Init} $index = 0$
+    \For{$shard \in Shards$}
+      \State \textsc{Insert}($Trie,index$, \textsc{Blake2}($shard$))
+      \State $index = index + 1$
+    \EndFor
+    \Statex
+    \Statex // Insert individual chunks into collection (def. \ref{defn-erasure-coded-chunks}).
+    \State \textbf{Init} $Er_B$
+    \State \textbf{Init} $index = 0$
+    \For{$shard \in Shards$}
+      \State \textbf{Init} $nodes \leftarrow$ \textsc{Get-Nodes}($Trie, index$)
+      \State \textsc{Add}($Er_B, (shard, index, nodes$))
+      \State $index = index + 1$
+    \EndFor
+    \Statex
+    \State \Return $Er_B$
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{itemize}
+  \item \textsc{Make-Shards(..)}: return shards for each validator as described
+  in algorithm \ref{algo-make-shards}. Return value is defined as
+  $(\mathbb{S}_0,...,\mathbb{S}_n)$ where $\mathbb{S} := (b_0,...,b_n)$
+  \item \textsc{Insert($trie,key,val$)}: insert the given $key$ and $value$ into
+  the $trie$.
+  \item \textsc{Get-Nodes($trie,key$)}: based on the $key$, return all required
+  $trie$ nodes in order to verify the corresponding value for a (unspecified)
+  Merkle root. Return value is defined as $(\mathbb{N}_0,...,\mathbb{N}_n)$
+  where $\mathbb{N} := (b_0,...,b_n)$.
+  \item \textsc{Add($sequence, item$)}: add the given $item$ to the $sequence$.
+\end{itemize}
+
+\begin{algorithm}[H]
+  \caption[]{\sc Make-Shards}
+  \label{algo-make-shards}
+  \begin{algorithmic}[1]
+    \Require{$\paraValidSet, v_B$}
+    \Statex // Calculate the required values for Reed-Solomon.
+    \Statex // Calculate the required lengths.
+    \State \textbf{Init} $Shard_{data} = \frac{(|\paraValidSet| - 1)}{3} + 1$
+    \State \textbf{Init} $Shard_{parity} = |\paraValidSet| - \frac{(|\paraValidSet| - 1)}{3} - 1$
+    \State $\vcenter{
+      \begin{flalign*}
+        &\textbf{Init } base_{len} =
+        \begin{cases}
+          0 & if |\paraValidSet| \bmod{Shard_{data}} = 0 \\
+          1 & if |\paraValidSet| \bmod{Shard_{data}} \neq 0
+        \end{cases}&
+      \end{flalign*}
+    }$
+    \State \textbf{Init} $Shard_{len} = base_{len} + (base_{len} \bmod{2})$
+    \Statex
+    \Statex // Prepare shards, each padded with zeroes.
+    \Statex // $Shards := (\mathbb{S}_0,...,\mathbb{S}_n)$ where $\mathbb{S} := (b_0,...,b_n)$
+    \State \textbf{Init} $Shards$
+    \For{$n \in (Shard_{data} + Shard_{partiy})$}
+      \State \textsc{Add}($Shards, (0_0, ..0_{Shard_{len}})$)
+    \EndFor
+    \Statex
+    \Statex // Copy shards of $v_b$ into each shard.
+    \For{$(chunk, shard) \in$ (\textsc{Take}$(Enc_{SC}(v_B), Shard_{len}), Shards)$}
+      \State \textbf{Init} $len \leftarrow$ \textsc{Min}($Shard_{len}, |chunk|$)
+      \State $shard \leftarrow$ \textsc{Copy-From}($chunk, len$)
+    \EndFor
+    \Statex
+    \Statex // $Shards$ contains split shards of $v_B$.
+    \State \Return $Shards$
+  \end{algorithmic}
+\end{algorithm}
+
+\begin{itemize}
+  \item \textsc{Add($sequence, item$)}: add the given $item$ to the $sequence$.
+  \item \textsc{Take($sequence, len$)}: iterate over $len$ amount of bytes from
+  $sequence$ on each iteration. If the $sequence$ does not provide $len$ number
+  of bytes, then it simply uses what's available.
+  \item \textsc{Min($num1, num2$)}: return the minimum value of $num1$ or
+  $num2$.
+  \item \textsc{Copy-From($source, len$)}: return $len$ amount of bytes from
+  $source$.
+\end{itemize}
+
+\begin{definition}
+  \label{defn-erasure-coded-chunks}
+  The {\bf collection of erasure-encoded chunks} of $\bar{B}$, denoted by:
+  \[
+   Er_B := (e_1,...,e_n)
+  \]
+
+  is defined to be the output of the Algorithm \ref{algo-erasure-encode}.
+  Each chunk is a tuple of the following format:
+
+  \begin{alignat*}{2}
+    e &:= (\mathbb{S}, I, (\mathbb{N}_0,...,\mathbb{N}_n)) \\
+    \mathbb{S} &:= (b_0,...,b_n) \\
+    \mathbb{N} &:= (b_0,...,b_n)
+  \end{alignat*}
+
+  where each value represents:
+  \begin{itemize}
+    \item $\mathbb{S}$: a byte array containing the erasure-encoded shard of
+    data.
+    \item $I$: the unsigned 32-bit integer representing the index of this
+    erasure-encoded chunk of data.
+    \item $(\mathbb{N}_0,...,\mathbb{N}_n)$: an array of inner byte arrays, each
+    containing the nodes of the Trie in order to verify the chunk based on the
+    Merkle root.
+  \end{itemize}
+\end{definition}
+
+\section{Distribution of Chunks}\label{sect-distribute-chunks} Following the
+computation of $Er_B$, $v$ must construct the $\bar{B}$ Availability message
+defined in Definition \ref{defn-pov-erasure-chunk-message}. And distribute them
+to target validators designated by the Availability Networking Specification
+\cite{??}.
+
+\begin{definition}
+  \label{defn-pov-erasure-chunk-message}
+        {\b PoV erasure chunk message} $M_{PoV_{\bar{B}}}(i)$ is TBS
+\end{definition}
+
+\section{Announcing Availability}\label{sect-voting-on-availability}
+
+When validator $v$ receives its designated chunk for $\bar{B}$ it needs to
+broadcast Availability vote message as defined in
+Definition\ref{defn-availability-vote-message}
+\begin{definition}
+  \label{defn-availability-vote-message}
+        {\b Availability vote message} $M_{PoV}^{Avail,v_i}$ TBS
+\end{definition}
+
+Some parachains have blocks that we need to vote on the availability of, that is
+decided by $> 2/3$ of validators voting for availability. \syed{For 100 parachain
+and 1000 validators this will involve putting 100k items of data and processing
+them on-chain for every relay chain block, hence we want to use bit operations
+that will be very efficient. We describe next what operations the relay chain
+runtime uses to process these availability votes.}{this is not really relevant
+to the spec}
+\newline
+
+\begin{definition}
+  \label{defn-availability-bitfield}
+  An \textbf{availability bitfield} is signed by a particular validator about the availability
+  of pending candidates. It's a tuple of the following format:
+  \[
+    (u32, ...)
+  \]
+  \todo{@fabio}
+\end{definition}
+
+For each parachain, the relay chain stores the following data:
+%/syed{we store}{what does it mean we store? this need to be clear. Is it a transaction TBS?}: no its not a tx, its in the relay chain state
+
+\textbf{1) availability status, 2) candidate receipt, 3) candidate relay chain block number}
+
+where availability status is one of \{no candidate, to be determined,
+unavailable, available\} .
+
+For each block, each validator $v$ signs a message
+
+Sign(bitfield $b_v$, block hash $h_b$)
+
+where the $i$th bit of $b_v$ is $1$ if and only if
+
+\begin{enumerate}
+\item the availability status of the candidate receipt is "to be determined" on
+the relay chain at block hash $h_b$ \textbf{and}
+
+\item $v$ has the erasure coded chunk of the corresponding parachain block to
+this candidate receipt.
+\end{enumerate}
+
+These signatures go into a relay chain block.
+
+\subsection{Processing on-chain availability data}
+This section explains how the availability attestations stored on the relay
+chain, as described in Section ??, are processed as follows:
+
+\begin{algorithm}[H]
+  \caption[]{Relay chain's signature processing}
+  \label{algo-singnature-processing}
+  \begin{algorithmic}[1]
+%\begin{enumerate}
+\State The relay chain stores the last vote from each validator on chain. For each new signature, the relay chain checks if it is for a block in this chain later than the last vote stored from this validator. If it is the relay chain updates the stored vote and updates the bitfield $b_v$ and block number of the vote.
+\State For each block within the last $t$ blocks where $t$ is some timeout period, the relay chain computes a bitmask $bm_n$ ($n$ is block number). This bitmask is a bitfield that represents whether the candidate considered in that block is still relevant. That is the $i$th bit of $bm_n$ is $1$ if and only if for the $i$th parachain,
+    (a) the availability status is to be determined and
+    (b) candidate block number $\leq n$
+\State The relay chain initialises a vector of counts with one entry for each parachain to zero. After executing the following algorithm it ends up with a vector of counts  of the number of validators who think the latest candidates is available.
+	\begin{enumerate}
+    \item The relay chain computes
+    $b_v$ and $bm_n$
+    where $n$ is the block number of the validator's last vote
+   \item For each bit in $b_v$ and $bm_n$
+		\begin{itemize}
+        \item add the $i$th bit to the $i$th count.
+        \end{itemize}
+	\end{enumerate}
+\State For each count that is $>2/3$ of the number of validators, the relay chain sets the candidates status to "available". Otherwise, if the candidate is at least $t$ blocks old, then it sets its status to "unavailable".
+\State The relay chain acts on available candidates and discards unavailable ones, and then clears the record, setting the availability status to "no candidate". Then the relay chain accepts new candidate receipts for parachains that have "no candidate: status and once any such new candidate receipts is included on the relay chain it sets their availability status as "to be determined".
+%\end{enumerate}
+\end{algorithmic}
+\end{algorithm}
+
+Based on the result of Algorithm~\ref{algo-signature-processing} the validator
+node should mark a parachain block as either available or eventually unavailable
+according to definitions \ref{defn-available-parablock-proposal} and
+\ref{defn-unavailable-parablock-proposal}
+\begin{definition}
+  \label{defn-available-parablock-proposal}
+        Parachain blocks for which the corresponding blob is  noted on the relay
+        chain to be {\b available}, meaning that the candidate receipt has been
+        voted to be available by 2/3 validators.
+\end{definition}
+
+After a certain time-out in blocks since we first put the candidate receipt on
+the relay chain if there is not enough votes of availability the relay chain
+logic decides that a parachain block is unavailable, see
+\ref{algo-singnature-processing}.
+
+\begin{definition}
+  \label{defn-unavailable-parachain-block}
+       An {\b unavailabile parachain block} is TBS
+\end{definition}
+
+/syed{}{So to be clear we are not announcing unavailability we just keep it for
+grand pa vote}
+
+\section{Publishing Attestations}
+\label{sect-publishing-attestations}
+\syed{}{this is out of place. We can mentioned that we have two type of
+  (validity) attestations in the intro but we just need to spec each attestation
+  in its relevant section (which we did with the candidate receipt). \todo{move
+  this to intro}} We have two type of attestations, primary and secondary.
+  Primary attestations are signed by the parachain validators and secondary
+  attestations are signed by secondary checkers and include the VRF that
+  assigned them as a secondary checker into the attestation. Both types of
+  attestations are included in the relay chain block as a transaction. For each
+  parachain block candidate the relay chain keeps track of which validators have
+  attested to its validity or invalidity.

@@ -1,0 +1,186 @@
+\section{Introduction}
+
+Validators are responsible for guaranteeing the validity and availability of PoV
+blocks. There are two phases of validation that takes place in the AnV protocol.
+\newline
+
+The primary validation check is carried out by parachain validators who are
+assigned to the parachain which has produced the PoV block as described in
+Section \ref{sect-primary-validation}. Once parachain validators have validated
+a parachain's PoV block successfully, they have to announce that according to
+the procedure described in Section \ref{sect-primary-validaty-announcement}
+where they generate a statement that includes the parachain header with the new
+state root and the XCMP message root. This candidate receipt and attestations,
+which carries signatures from other parachain validators is put on the relay
+chain.
+\newline
+
+As soon as the proposal of a PoV block is on-chain, the parachain validators
+break the PoV block into erasure-coded chunks as described in Section
+\ref{defn-erasure-coded-chunks} and distribute them among all validators. See
+Section \ref{sect-distribute-chunks} for details on how this distribution takes
+place.
+\newline
+
+Once validators have received erasure-coded chunks for several PoV blocks for
+the current relay chain block (that might have been proposed a couple of blocks
+earlier on the relay chain), they announce that they have received the erasure
+coded chunks on the relay chain by voting on the received chunks, see Section
+\ref{sect-voting-on-availability} for more details.
+\newline
+
+As soon as $>2/3$ of validators have made this announcement for any parachain
+block we \emph{act on} the parachain block. Acting on parachain blocks means we
+update the relay chain state based on the candidate receipt and considered the
+parachain block to have happened on this relay chain fork.
+\newline
+
+After a certain time, if we did not collect enough signatures approving the
+availability of the parachain data associated with a certain candidate receipt
+we decide this parachain block is unavailable and allow alternative blocks to be
+built on its parent parachain block, see \ref{sect-unavailability}.
+\newline
+
+The secondary check described in Section \ref{sect-approval-checking}, is done
+by one or more randomly assigned validators to make sure colluding parachain
+validators may not get away with validating a PoV block that is invalid and not
+keeping it available to avoid the possibility of being punished for the attack.
+\newline
+
+During any of the phases, if any validator announces that a parachain block is
+invalid then all validators obtain the parachain block and check its validity,
+see Section \ref{sect-escalation} for more details.
+\newline
+
+All validity and invalidity attestations go onto the relay chain, see Section
+\ref{sect-publishing-attestations} for details. If a parachain block has been
+checked at least by certain number of validators, the rest of the validators
+continue with voting on that relay chain block in the GRANDPA protocol. Note
+that the block might be challenged later.
+\newline
+
+\section{Preliminaries}
+
+\begin{definition}
+In the remainder of this chapter we assume that $\rho$ is a Polkadot Parachain
+and $B$ is a block which has been produced by $\rho$ and is supposed to be
+approved to be $\rho$'s next block. By $R_{\rho}$ we refer to runtime code of
+parachain $\rho$  as a WASM Blob.
+\end{definition}
+
+\begin{definition}
+  \label{defn-witness-proof}
+  The {\b witness proof} of block $B$, denoted by {\bf $\pi_B$}, is the set of
+  all the external data which has gathered while the $\rho$ runtime executes
+  block $B$. The data suffices to re-execute $R_{\rho}$ against $B$ and achieve
+  the final state indicated in the $H(B)$.
+\end{definition}
+
+This witness proof consists of light client proofs of state data that are
+generally Merkle proofs for the parachain state trie.  We need this because
+validators do not have access to the parachain state, but only have the state
+root of it.
+
+\begin{definition}
+  \label{defn-pov-block}
+  Accordingly we define the {\bf proof of validity block} or {\bf PoV} block in
+  short, {\bf $\PoVB$}, to be the tuple:
+  \[
+  (B, \pi_B)
+  \]
+\end{definition}
+
+\begin{definition}  \label{defn-extra-validation-data}
+  The \textbf{extra validation data}, $v_B$, is an extra input to the validation
+  function, i.e. additional data from the relay chain state that is needed.
+  It's a tuple of the following format:
+  \[
+  (Max^{R}_{size}, Max^{head}_{size}, H_i(B^{relay}_{chain}), Head_p(B), \mathbb{B}, R_u)
+  \]
+
+  where each value represents:
+
+  \begin{itemize}
+    \item $Max^{R}_{size}$: the maximum amount of bytes of the parachain Wasm code
+    permitted.
+    \item $Max^{head}_{size}$: the maximum amount of bytes of the head data
+    (Def. \ref{defn-head-data}) permitted.
+    \item $H_i(B^{relay}_{chain})$: the relay chain block number this is in the
+    context of.
+    \item $Head_p(B)$: the parent head data (Def. \ref{defn-head-data}) of the parachain .
+    \item $\mathbb{B}$: the balance of the parachain at the moment of validation \todo{@fabio: clarify}.
+    \item $R_u$: the  is a varying data type as defined in Definition X
+    \todo{@fabio} and can be one of the following values:
+
+    \begin{equation*}
+      R_u =
+      \begin{cases}
+        0, & \text{None} \\
+        1, & \text{followed by: } H_i(B_n)
+      \end{cases}
+    \end{equation*}
+  \end{itemize}
+
+  $R_u$ implies whether the parachain is allowed to upgrade its validation code.
+  If it's of type $1$, it contains the number of the minimum relay chain height
+  at which the upgrade will be applied, assuming an upgrade is currently
+  signaled \todo{@fabio: where is this signaled?}. A parachain should enact its
+  side of the upgrade at the end of the first parachain block executing in the
+  context of a relay-chain block with at least this height. This may be equal to
+  the current perceived relay-chain block height, in which case the code upgrade
+  should be applied at the end of the signaling block.
+  \newline
+
+  Parachain validators get this extra validation data from the current relay
+  chain state. Note that a PoV block can be paired with different extra
+  validation data depending on when and which relay chain fork it is included
+  in. Future validators would need this extra validation data because since the
+  candidate receipt as defined in Definition \ref{defn-candidate-receipt} was
+  included on the relay chain the needed relay chain state may have changed.
+\end{definition}
+
+\begin{definition}
+  \label{defn-blob}
+  Accordingly we define the {\bf erasure-encoded blob} or {\bf blob} in short,
+  {\bf $\bar{B}$}, to be the tuple:
+  \[
+  (B, \pi_B, v_B)
+  \]
+\end{definition}
+
+Note that in the code the blob is referred to as "AvailableData".
+
+\section{Overal process}
+
+The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring
+availability and validity in Polkadot \todo{complete the Diagram}.
+
+\begin{figure}[h!]
+\label{diag-anv-overall}
+\begin{plantuml}
+%%    
+@startuml
+
+(*) --> "<math>Parachain Collator $C_\rho$ Generates  $B$ and $PoV_B$</math>"
+    --> "<math>$C_\rho$ sends $PoV_B$ to $\rho$'s validator $V_\rho$</math>"
+    --> "<math>$V_{\rho}$ runs $\rho$'s runtime on PoV</math>"
+    if "<math>$PoV_B$ is valid</math>" then
+    -->[true] if  "<math>$V_{\rho}$ have seen the CandidateReceipt for $PoV_B$</math>" then
+    -->[true] Sign CandidateReceipt
+    -->[Ending process] (*)
+
+    else
+    --> [False] "Gerenate CandiateReceipt"
+    -->[Ending process] (*)
+
+    endif
+    else
+    -->[false] "<math>Broadcast message of invalidity for $PoV_B$</math>"
+    end if
+
+  -->[Ending process] (*)
+
+@enduml
+\end{plantuml}
+\caption{Overall process to acheive availability and validity in Polkadot}
+\end{figure}
