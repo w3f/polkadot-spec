@@ -719,7 +719,7 @@
   \;
 
   <strong|Warning>: Panics if the key cannot be generated, such as when an
-  invalid key type or seed was provided.
+  invalid key type or invalid seed was provided.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -860,7 +860,7 @@
   \;
 
   <strong|Warning>: Panics if the key cannot be generated, such as when an
-  invalid key type or seed was provided.
+  invalid key type or invalid seed was provided.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1034,7 +1034,7 @@
   \;
 
   <strong|Warning>: Panics if the key cannot be generated, such as when an
-  invalid key type or seed was provided.
+  invalid key type or invalid seed was provided.
 
   <subsubsection|Version 1 - Prototype>
 
