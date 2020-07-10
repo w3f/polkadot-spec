@@ -716,6 +716,11 @@
   Generates an <verbatim|ed25519> key for the given key type using an
   optional BIP-39 seed and stores it in the keystore.
 
+  \;
+
+  <strong|Warning>: Panics if the key cannot be generated, such as when an
+  invalid key type or seed was provided.
+
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
@@ -851,6 +856,11 @@
 
   Generates an <verbatim|sr25519> key for the given key type using an
   optional BIP-39 seed and stores it in the keystore.
+
+  \;
+
+  <strong|Warning>: Panics if the key cannot be generated, such as when an
+  invalid key type or seed was provided.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1020,6 +1030,11 @@
 
   Generates an <verbatim|ecdsa> key for the given key type using an optional
   BIP-39 seed and stores it in the keystore.
+
+  \;
+
+  <strong|Warning>: Panics if the key cannot be generated, such as when an
+  invalid key type or seed was provided.
 
   <subsubsection|Version 1 - Prototype>
 
