@@ -313,8 +313,8 @@
   (<reference|sect-ext-storage-rollback-transaction>) or
   <verbatim|ext_storage_commit_transaction>
   (<reference|sect-ext-storage-commit-transaction>). This is also effective
-  for all values manipulated using the child storage API. <todo|clarify child
-  storage API>
+  for all values manipulated using the child storage API
+  (<reference|sect-child-storage-api>).
 
   \;
 
@@ -377,13 +377,13 @@
     <item>None.
   </itemize-dot>
 
-  <section|Child Storage>
+  <section|Child Storage><label|sect-child-storage-api>
 
   Interface for accessing the child storage from within the runtime.
 
   <\definition>
     <label|defn-child-storage-type><strong|Child storage> key is a unprefixed
-    location of the root of the child trie under the parent trie.
+    location of the child trie in the main trie.
   </definition>
 
   <subsection|<verbatim|ext_default_child_storage_set>>
@@ -2461,6 +2461,8 @@
     <associate|defn-persistent-storage|<tuple|A.6|?>>
     <associate|defn-runtime-pointer|<tuple|A.2|?>>
     <associate|nota-re-api-at-state|<tuple|A.1|?>>
+    <associate|sect-child-storage|<tuple|A.2|?>>
+    <associate|sect-child-storage-api|<tuple|A.2|?>>
     <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|?>>
     <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|?>>
     <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.16|?>>
