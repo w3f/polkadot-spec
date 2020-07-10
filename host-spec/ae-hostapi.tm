@@ -234,14 +234,14 @@
 
   <subsection|<verbatim|ext_storage_root>>
 
-  Commits all existing operations and computes the resulting storage root.
+  Computes the storage root.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
     (func $ext_storage_root_version_1
 
-    (return i64))
+    (return i32))
   </verbatim>
 
   \;
@@ -249,22 +249,21 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded storage
-    root.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    32-byte Blake2 storage root.
   </itemize>
 
   <subsection|<verbatim|ext_storage_changes_root>>
 
-  Commits all existing operations and gets the resulting change root. The
-  parent hash is a SCALE encoded change root.
+  Computes the changes root. The parent hash is a SCALE encoded change root.
+  <todo|define changes root>
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
     (func $ext_storage_changes_root_version_1
 
-    (param $parent_hash i64) (return i64))
+    (param $parent_hash i64) (return i32))
   </verbatim>
 
   \;
@@ -276,10 +275,8 @@
     Definition <reference|defn-runtime-pointer> indicating the SCALE encoded
     block hash.
 
-    <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition <reference|defn-option-type>
-    containing the change root.
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    32-byte Blake2 changes root.
   </itemize>
 
   <subsection|<verbatim|ext_storage_next_key>>
