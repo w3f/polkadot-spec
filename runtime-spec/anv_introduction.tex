@@ -93,54 +93,97 @@ root of it.
   \todo{@fabio: clarif this}
 \end{definition}
 
-\begin{definition}  \label{defn-extra-validation-data}
-  The \textbf{extra validation data}, $v_B$, is an extra input to the validation
-  function, i.e. additional data from the relay chain state that is needed.
-  It's a tuple of the following format:
+\subsection{Extra Validation Data}
+
+Validators must submit extra validation data to Runtime $R_{\rho}$ in order to
+build candidates, to fully validate those and to vote on their availability.
+Depending on the context, different types of information must be used.
+\newline
+
+Parachain validators get this extra validation data from the current relay
+chain state. Note that a PoV block can be paired with different extra
+validation data depending on when and which relay chain fork it is included
+in. Future validators would need this extra validation data because since the
+candidate receipt as defined in Definition \ref{defn-candidate-receipt} was
+included on the relay chain the needed relay chain state may have changed.
+
+\begin{definition}
+  \label{defn-upgrade-indicator}
+  $R^{up}_{\rho}$ is an varying data type (Def. \todo{@fabio}) which implies
+  whether the parachain is allowed to upgrade its validation code.
   \[
-  v_B := (B, Head_p(B_p), Max^{R}_{size}, Max^{head}_{size}, H_i(B^{relay}_{chain}), R_u)
+    R^{up}_{\rho} := Option(H_i(B^{relay}_{chain})+n)
   \]
 
-  where each value represents:
+  \todo{@fabio: adjust formula?}
 
-  \begin{itemize}
-    \item $B$ the parachain block itself.
-    \item $Head_p(B_p)$: the parent head data (Def. \ref{defn-head-data}) of
-    block $B$ of the parachain.
-    \item $Max^{R}_{size}$: the maximum amount of bytes of the parachain Wasm
-    code permitted.
-    \item $Max^{head}_{size}$: the maximum amount of bytes of the head data
-    (Def. \ref{defn-head-data}) permitted.
-    \item $H_i(B^{relay}_{chain})$: the relay chain block number this is in the
-    context of.
-    \item $R_u$: the  is a varying data type as defined in Definition X
-    \todo{@fabio} and can be one of the following values:
-
-    \begin{equation*}
-      R_u =
-      \begin{cases}
-        0, & \text{None} \\
-        1, & \text{followed by: } H_i(B_n)
-      \end{cases}
-    \end{equation*}
-  \end{itemize}
-
-  $R_u$ implies whether the parachain is allowed to upgrade its validation code.
-  If it's of type $1$, it contains the number of the minimum relay chain height
+  If this is $Some$, it contains the number of the minimum relay chain height
   at which the upgrade will be applied, assuming an upgrade is currently
   signaled \todo{@fabio: where is this signaled?}. A parachain should enact its
   side of the upgrade at the end of the first parachain block executing in the
   context of a relay-chain block with at least this height. This may be equal to
   the current perceived relay-chain block height, in which case the code upgrade
   should be applied at the end of the signaling block.
-  \newline
+\end{definition}
 
-  Parachain validators get this extra validation data from the current relay
-  chain state. Note that a PoV block can be paired with different extra
-  validation data depending on when and which relay chain fork it is included
-  in. Future validators would need this extra validation data because since the
-  candidate receipt as defined in Definition \ref{defn-candidate-receipt} was
-  included on the relay chain the needed relay chain state may have changed.
+\begin{definition}  \label{defn-extra-validation-data}
+  The \textbf{validation parameters}, $v^{VP}_B$, is an extra input to the validation
+  function, i.e. additional data from the relay chain state that is needed.
+  It's a tuple of the following format:
+  \[
+  vp_B := (B, Head_p(B_p), v^{GVS}_B, R^{up}_{\rho})
+  \]
+
+  where each value represents:
+
+  \begin{itemize}
+    \item $B$: the parachain block itself.
+    \item $Head_p(B_p)$: the parachain parent head data (Def.
+    \ref{defn-head-data}) of block $B$.
+    \item $v^{GVP}_B$: the global validation parameters
+    (\ref{defn-global-validation-parameters}).
+    \item $R^{up}_{\rho}$: implies whether the parachain is allowed to upgrade
+    its validation code (Def. \ref{defn-upgrade-indicator}).
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  \label{defn-global-validation-parameters}
+  The \textbf{global validation parameters}, $v^{GVP}_B$, defines global data 
+  that apply to all candidates in a block.
+  \[
+    v^{GVS}_B := (Max^{R}_{size}, Max^{head}_{size}, H_i(B^{relay}_{chain}))
+  \]
+
+  where each value represents:
+
+  \begin{itemize}
+    \item $Max^{R}_{size}$: the maximum amount of bytes of the parachain Wasm
+    code permitted.
+    \item $Max^{head}_{size}$: the maximum amount of bytes of the head data
+    (Def. \ref{defn-head-data}) permitted.
+    \item $H_i(B^{relay}_{chain})$: the relay chain block number this is in the
+    context of.
+  \end{itemize}
+\end{definition}
+
+\begin{definition}
+  \label{defn-local-validation-parameters}
+  The \textbf{local validation parameters}, $v^{LVP}_B$, defines parachain-specific
+  data required to fully validate a block. It is a tuple of the following format:
+  \[
+    v^{LVP}_B := (Head_p(B_p), UINT128, Blake2b(R_{\rho}), R^{up}_{\rho})
+  \]
+
+  where each value represents:
+  \begin{itemize}
+    \item $Head_p(B_p)$: the parent head data (Def. \ref{defn-head-data}).
+    \item $UINT128$: the balance of the parachain at the moment of validation.
+    \item $Blake2b(R_{\rho})$: the Blake2b hash of the validation code used to
+    execute the candidate.
+    \item $R^{up}_{\rho}$: implies whether the parachain is allowed to upgrade
+    its validation code (Def. \ref{defn-upgrade-indicator}).
+  \end{itemize}
 \end{definition}
 
 \begin{definition}
@@ -182,8 +225,17 @@ root of it.
   Accordingly we define the {\bf erasure-encoded blob} or {\bf blob} in short,
   {\bf $\bar{B}$}, to be the tuple:
   \[
-  (B, \pi_B, v_B)
+  (B, \pi_B, v^{GVP}_B, v^{LVP}_B)
   \]
+
+  where each value represents:
+
+  \begin{itemize}
+    \item $B$: the parachain block.
+    \item $\pi_B$: the witness data.
+    \item $v^{GVP}_B$: the global validation parameters (Def. \ref{defn-global-validation-parameters}).
+    \item $v^{LVP}_B$: the local validation parameters (Def. \ref{defn-local-validation-parameters}).
+  \end{itemize}
 \end{definition}
 
 Note that in the code the blob is referred to as "AvailableData".
