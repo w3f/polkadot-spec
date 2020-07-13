@@ -3,10 +3,11 @@
 
 Collators produce candidates (Def. \ref{defn-candidate}) and send those to
 validators. Validators verify the validity of the received candidates (Algo.
-\ref{algo-primary-validation}) and issue statements (Def.
-\ref{defn-gossip-statement}) about the candidates. The validator ensures the
-that every candidate considered for inclusion has at least one other validator
-backing it. Candidates without backing are discarded.
+\ref{algo-primary-validation}) by executing the validation code, $R_{\rho}$, and
+issue statements (Def. \ref{defn-gossip-statement}) about the candidates to
+connected peers. The validator ensures the that every candidate considered for
+inclusion has at least one other validator backing it. Candidates without
+backing are discarded.
 \newline
 
 The validator must keep track of which candidates were submitted by collators, including
@@ -43,7 +44,7 @@ in more detail in section \ref{sect-primary-validaty-announcement}
   \label{defn-head-data}
   The \textbf{head data}, $Head_p(B)$, of a parachain block is a tuple of the following format:
   \[
-    (H_i(B), H_p(B), H_r(B))
+    Head_p(B) := (H_i(B), H_p(B), H_r(B))
   \]
 
   Where $H_i(B)$ is the block number of parachain block $B$, $H_p(B)$ is the
@@ -114,7 +115,7 @@ will ultimately get included in the block.
 
   This type is a tuple of the following format:
   \[
-  C_{receipt}(PoV_B) := (id_p, h_b({B_{^{relay}_{parent}}}), Head_p(B), id_{C}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), CC(PoV_B))
+  C_{receipt}(PoV_B) := (id_p, h_b({B_{^{relay}_{parent}}}), Head_p(B), id_{C}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), Blake2b(CC(PoV_B)))
   \]
 
   where each value represents:
@@ -129,8 +130,8 @@ will ultimately get included in the block.
     \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
     of the block data by the collator.
     \item $h_b({PoV_B})$: the hash of the PoV block.
-    \item $CC(PoV_B)$: Commitments made as a result of validation, as defined in
-    Definition \ref{defn-candidate-commitments}.
+    \item $Blake2b(CC(PoV_B))$: The hash of the commitments made as a result of
+    validation, as defined in Definition \ref{defn-candidate-commitments}.
   \end{itemize}
 \end{definition}
 

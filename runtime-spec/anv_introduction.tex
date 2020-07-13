@@ -98,20 +98,20 @@ root of it.
   function, i.e. additional data from the relay chain state that is needed.
   It's a tuple of the following format:
   \[
-  (Max^{R}_{size}, Max^{head}_{size}, H_i(B^{relay}_{chain}), Head_p(B), \mathbb{B}, R_u)
+  v_B := (B, Head_p(B), Max^{R}_{size}, Max^{head}_{size}, H_i(B^{relay}_{chain}), R_u)
   \]
 
   where each value represents:
 
   \begin{itemize}
+    \item $B$ the parachain block itself.
+    \item $Head_p(B)$: the parent head data (Def. \ref{defn-head-data}) of the parachain .
     \item $Max^{R}_{size}$: the maximum amount of bytes of the parachain Wasm code
     permitted.
     \item $Max^{head}_{size}$: the maximum amount of bytes of the head data
     (Def. \ref{defn-head-data}) permitted.
     \item $H_i(B^{relay}_{chain})$: the relay chain block number this is in the
     context of.
-    \item $Head_p(B)$: the parent head data (Def. \ref{defn-head-data}) of the parachain .
-    \item $\mathbb{B}$: the balance of the parachain at the moment of validation \todo{@fabio: clarify}.
     \item $R_u$: the  is a varying data type as defined in Definition X
     \todo{@fabio} and can be one of the following values:
 
