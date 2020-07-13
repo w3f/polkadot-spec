@@ -64,8 +64,9 @@ that the block might be challenged later.
 \begin{definition}
 In the remainder of this chapter we assume that $\rho$ is a Polkadot Parachain
 and $B$ is a block which has been produced by $\rho$ and is supposed to be
-approved to be $\rho$'s next block. By $R_{\rho}$ we refer to runtime code of
-parachain $\rho$  as a WASM Blob.
+approved to be $\rho$'s next block. By $R_{\rho}$ we refer to the
+\textbf{validation code} of parachain $\rho$ as a WASM blob, which is
+responsible for validating the corresponding Parachain's blocks.
 \end{definition}
 
 \begin{definition}
@@ -88,6 +89,8 @@ root of it.
   \[
   (B, \pi_B)
   \]
+  A PoV block is an extracted Merkle subtree, attached to the block.
+  \todo{@fabio: clarif this}
 \end{definition}
 
 \begin{definition}  \label{defn-extra-validation-data}
