@@ -149,8 +149,8 @@ will ultimately get included in the block.
   \begin{itemize}
     \item $\mathbb{F}$: fees paid from the chain to the relay chain validators.
     \item $Msg$: parachain messages to the relay chain. $\mathbb{O}$ identifies
-    the origin of the messages and is a varying data type as defined in
-    Definition \todo{@fabio} and can be one of the following values:
+    the origin of the messages and is a varying data type (Def.
+    \ref{defn-scale-codec}) and can be one of the following values:
     \begin{equation*}
       \mathbb{O} =
       \begin{cases}
@@ -165,8 +165,8 @@ will ultimately get included in the block.
     raw bytes of the message which varies in size.
     \item $H_r(B)$: the root of a block's erasure encoding Merkle tree
     \todo{@fabio: use different symbol for this?}.
-    \item $\mathbb{U}(R_\rho)$: A varying datatype as defined in Definition
-    \todo{@fabio} and can contain one of the following values:
+    \item $\mathbb{U}(R_\rho)$: A varying datatype (Def. \ref{defn-scale-codec})
+    and can contain one of the following values:
     \begin{equation*}
       \mathbb{P} =
       \begin{cases}
@@ -202,8 +202,8 @@ will ultimately get included in the block.
   $id_{\mathbb{V}}$ refers to the index of validator according to the authority
   set. \todo{@fabio: define authority set (specified in the Host spec)}. $Stmt$
   refers to a statement the validator wants to make about a certain candidate.
-  $Stmt$ is a varying datatype as defined in X \todo{@fabio: define} and can be one
-  of the following values:
+  $Stmt$ is a varying data type (Def. \ref{defn-scale-codec}) and can be one of
+  the following values:
 
   \begin{equation*}
     Stmt =
