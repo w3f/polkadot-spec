@@ -62,6 +62,15 @@ that the block might be challenged later.
 \section{Preliminaries}
 
 \begin{definition}
+  \label{defn-scale-codec}
+  The Polkadot project uses the \textbf{SCALE codec} to encode common data types
+  such as integers, byte arrays, varying data types as well as other data
+  structure. The SCALE codec is defined in a separate document known as
+  \textit{"The Polkadot Host - Protocol Specification"}.
+  \todo{@fabio: link to document}
+\end{definition}
+
+\begin{definition}
 In the remainder of this chapter we assume that $\rho$ is a Polkadot Parachain
 and $B$ is a block which has been produced by $\rho$ and is supposed to be
 approved to be $\rho$'s next block. By $R_{\rho}$ we refer to the
@@ -109,8 +118,8 @@ included on the relay chain the needed relay chain state may have changed.
 
 \begin{definition}
   \label{defn-upgrade-indicator}
-  $R^{up}_{\rho}$ is an varying data type (Def. \todo{@fabio}) which implies
-  whether the parachain is allowed to upgrade its validation code.
+  $R^{up}_{\rho}$ is an varying data type (Def. \ref{defn-scale-codec}) which
+  implies whether the parachain is allowed to upgrade its validation code.
   \[
     R^{up}_{\rho} := Option(H_i(B^{relay}_{chain})+n)
   \]
@@ -198,11 +207,12 @@ included on the relay chain the needed relay chain state may have changed.
   \begin{itemize}
     \item $Head_p(B_p)$: the new head data (Def. \ref{defn-head-data}) of
     block $B$ of the parachain.
-    \item $Option(P^B_{\rho})$: a varying data (\todo{@fabio}) containing an update
-    to the validation code that should be scheduled in the relay chain.
-    \item $Msg$: parachain "upward messages" to the relay chain. $\mathbb{O}$ identifies
-    the origin of the messages and is a varying data type as defined in
-    Definition \todo{@fabio} and can be one of the following values:
+    \item $Option(P^B_{\rho})$: a varying data (Def. \ref{defn-scale-codec})
+    containing an update to the validation code that should be scheduled in the
+    relay chain.
+    \item $Msg$: parachain "upward messages" to the relay chain. $\mathbb{O}$
+    identifies the origin of the messages and is a varying data type (Def.
+    \ref{defn-scale-codec}) and can be one of the following values:
     \begin{equation*}
       \mathbb{O} =
       \begin{cases}
