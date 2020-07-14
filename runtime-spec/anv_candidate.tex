@@ -21,7 +21,7 @@ in more detail in section \ref{sect-primary-validaty-announcement}
   block and enough data in order for any validator to verify its validity. A
   candidate is a tuple of the following format:
   \[
-  C_{coll}(PoV_B) := (id_p, h_b({B_{^{relay}_{parent}}}), id_{C}, Sig^{Collator}_{SR25519}, Head_p(B), h_b({PoV_B}))
+  C_{coll}(PoV_B) := (id_p, h_b({B_{^{relay}_{parent}}}), id_{C}, Sig^{Collator}_{SR25519}, head(B), h_b({PoV_B}))
   \]
 
   where each value represents:
@@ -33,8 +33,7 @@ in more detail in section \ref{sect-primary-validaty-announcement}
     \todo{@fabio}.
     \item $Sig^{Collator}_{SR25519}$: the signature on the 256-bit Blake2 hash
     of the block data by the collator.
-    \item $Head_p(B)$: the head data of parachain block $B$ as defined in
-    Definition \ref{defn-head-data}.
+    \item $head(B)$: the head data (Def. \ref{defn-head-data}) of block $B$.
     \item $h_b({PoV_B})$: the 32-byte Blake2 hash of the PoV block.
   \end{itemize}
 
@@ -42,9 +41,9 @@ in more detail in section \ref{sect-primary-validaty-announcement}
 
 \begin{definition}
   \label{defn-head-data}
-  The \textbf{head data}, $Head_p(B)$, of a parachain block is a tuple of the following format:
+  The \textbf{head data}, $head(B)$, of a parachain block is a tuple of the following format:
   \[
-    Head_p(B) := (H_i(B), H_p(B), H_r(B))
+    head(B) := (H_i(B), H_p(B), H_r(B))
   \]
 
   Where $H_i(B)$ is the block number of parachain block $B$, $H_p(B)$ is the
@@ -115,7 +114,7 @@ will ultimately get included in the block.
 
   This type is a tuple of the following format:
   \[
-  C_{receipt}(PoV_B) := (id_p, h_b({B_{^{relay}_{parent}}}), Head_p(B), id_{C}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), Blake2b(CC(PoV_B)))
+  C_{receipt}(PoV_B) := (id_p, h_b({B_{^{relay}_{parent}}}), head(B), id_{C}, Sig^{Collator}_{SR25519}, h_b({PoV_B}), Blake2b(CC(PoV_B)))
   \]
 
   where each value represents:
@@ -123,7 +122,7 @@ will ultimately get included in the block.
     \item $id_p$: the Parachain Id this candidate is for.
     \item $h_b({B_{^{relay}_{parent}}})$: the hash of the relay chain block that this
     candidate should be executed in the context of.
-    \item $Head_p(B)$: the head data of parachain block $B$ as defined in Definition \ref{defn-head-data}.
+    \item $head(B)$: the head data (Def. \ref{defn-head-data}) of block $B$.
     \todo{@fabio (collator module relevant?)}.
     \item $id_C$: the collator relay-chain account ID as defined in Definition
     \todo{@fabio}.
@@ -141,7 +140,7 @@ will ultimately get included in the block.
   parachain (or parathread) candidates whose produced values must be committed
   to the relay chain. A candidate commitments is represented as a tuple of the following format:
   \begin{alignat*}{2}
-    CC(PoV_B) &:= (\mathbb{F}, Enc_{SC}(Msg_0, .., Msg_n), H_r(B), \mathbb{U}(R_\rho)) \\
+    CC(PoV_B) &:= (\mathbb{F}, Enc_{SC}(Msg_0, .., Msg_n), H_r(B), Option(R_\rho)) \\
     Msg &:= (\mathbb{O}, Enc_{SC}(b_0,.. b_n))
   \end{alignat*}
 
@@ -161,21 +160,13 @@ will ultimately get included in the block.
     \end{equation*}
     \todo{@fabio: define the concept of "origin"}
 
-    The following SCALE encoded array, $Enc_{SC}(b_0,.. b_n)$, contains the
-    raw bytes of the message which varies in size.
+    The following SCALE encoded array, $Enc_{SC}(b_0,.. b_n)$, contains the raw
+    bytes of the message which varies in size.
     \item $H_r(B)$: the root of a block's erasure encoding Merkle tree
     \todo{@fabio: use different symbol for this?}.
-    \item $\mathbb{U}(R_\rho)$: A varying datatype (Def. \ref{defn-scale-codec})
-    and can contain one of the following values:
-    \begin{equation*}
-      \mathbb{P} =
-      \begin{cases}
-        0, & \text{None} \\
-        1, & \text{followed by: } R_\rho\\
-      \end{cases}
-    \end{equation*}
-    where $R_\rho$ is a SCALE encoded array containing the new runtime code for
-    the parachain. \todo{@fabio: clarify further}
+    \item $Option(R_\rho)$: A varying datatype (Def. \ref{defn-scale-codec})
+    containing the new runtime code for the parachain.
+    \todo{@fabio: clarify further}
   \end{itemize}
   
 \end{definition}

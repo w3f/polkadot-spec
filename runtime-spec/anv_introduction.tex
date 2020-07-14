@@ -140,15 +140,15 @@ included on the relay chain the needed relay chain state may have changed.
   function, i.e. additional data from the relay chain state that is needed.
   It's a tuple of the following format:
   \[
-  vp_B := (B, Head_p(B_p), v^{GVS}_B, R^{up}_{\rho})
+  vp_B := (B, head(B_p), v^{GVS}_B, R^{up}_{\rho})
   \]
 
   where each value represents:
 
   \begin{itemize}
     \item $B$: the parachain block itself.
-    \item $Head_p(B_p)$: the parachain parent head data (Def.
-    \ref{defn-head-data}) of block $B$.
+    \item $head(B_p)$: the parent head data (Def. \ref{defn-head-data}) of block
+    $B$.
     \item $v^{GVP}_B$: the global validation parameters
     (\ref{defn-global-validation-parameters}).
     \item $R^{up}_{\rho}$: implies whether the parachain is allowed to upgrade
@@ -181,12 +181,13 @@ included on the relay chain the needed relay chain state may have changed.
   The \textbf{local validation parameters}, $v^{LVP}_B$, defines parachain-specific
   data required to fully validate a block. It is a tuple of the following format:
   \[
-    v^{LVP}_B := (Head_p(B_p), UINT128, Blake2b(R_{\rho}), R^{up}_{\rho})
+    v^{LVP}_B := (head(B_p), UINT128, Blake2b(R_{\rho}), R^{up}_{\rho})
   \]
 
   where each value represents:
   \begin{itemize}
-    \item $Head_p(B_p)$: the parent head data (Def. \ref{defn-head-data}).
+    \item $head(B_p)$: the parent head data (Def. \ref{defn-head-data}) of block
+    $B$.
     \item $UINT128$: the balance of the parachain at the moment of validation.
     \item $Blake2b(R_{\rho})$: the Blake2b hash of the validation code used to
     execute the candidate.
@@ -199,14 +200,14 @@ included on the relay chain the needed relay chain state may have changed.
   The \textbf{validation result}, $r_B$, is returned by the validation code $R_{\rho}$
   if the provided candidate is is valid. It is a tuple of the following format:
   \begin{alignat*}{2}
-    r_B &:= (Head_p(B), Option(P^B_{\rho}), (Msg_0, ..., Msg_n), UINT32) \\
+    r_B &:= (head(B), Option(P^B_{\rho}), (Msg_0, ..., Msg_n), UINT32) \\
     Msg &:= (\mathbb{O}, Enc_{SC}(b_0,.. b_n))
   \end{alignat*}
 
   where each value represents:
   \begin{itemize}
-    \item $Head_p(B_p)$: the new head data (Def. \ref{defn-head-data}) of
-    block $B$ of the parachain.
+    \item $head(B)$: the new head data (Def. \ref{defn-head-data}) of
+    block $B$.
     \item $Option(P^B_{\rho})$: a varying data (Def. \ref{defn-scale-codec})
     containing an update to the validation code that should be scheduled in the
     relay chain.
