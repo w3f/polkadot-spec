@@ -129,6 +129,12 @@
     encoding described in Section <reference|sect-runtime-send-args-to-runtime-enteries>.
   </notation>
 
+  It is acceptable behavior that the Runtime panics during execution of a
+  function in order to indicate an error. The Polkadot Host must be able to
+  catch that panic and recover from it.
+
+  \;
+
   In this section, we specify the general setup for an Executor call into the
   Runtime. In Section <reference|sect-runtime-entries> we specify the
   parameters and the return values of each Runtime entry separately.
@@ -191,7 +197,9 @@
   <verbatim|TaggedTransactionQueue_validate_transaction> entry (see Section
   <reference|sect-rte-validate-transaction>), it needs to sandbox the changes
   to the state just for that Runtime call and prevent the global state of the
-  system from being influence by the call to such a Runtime entery.
+  system from being influence by the call to such a Runtime entery. This
+  includes reverting the state of function calls which return errors or
+  panic.
 
   \ 
 
@@ -205,25 +213,6 @@
 
   For more information on managing multiple variant of state see Section
   <reference|sect-managing-multiple-states>.
-
-  <subsubsection|Handling of Runtime panics>
-
-  The Polkadot Runtime has a tendency to panic in an acceptable manner if a
-  certain execution fails. The Polkadot Host must catch the panic and
-  interpret it as an error. The Host must then be able to continue with its
-  operations by reinitializing the Runtime. Whether the panic is considered
-  minor or fatal depends on the context of its occurence.
-
-  \;
-
-  For example, the Runtime function <verbatim|Core_execute_block>
-  (<reference|sect-rte-core-execute-block>) can panic if the block is
-  malformed or invalid in an other way. In such a case, the Polkadot Host
-  must simply interpret that panic as an execution of an invalid block,
-  discard that block and continue with the processing of other blocks. As
-  section <reference|sect-handling-runtime-state-update> clarifies, the
-  Polkadot Host must sandbox and revert those functions. Changes committed by
-  functions which panic must not persist.
 
   <section|Extrinsics><label|sect-extrinsics>
 
@@ -799,24 +788,24 @@
     <associate|algo-runtime-interaction|<tuple|3.1|?>>
     <associate|algo-validate-transactions|<tuple|3.2|?>>
     <associate|auto-1|<tuple|3|?>>
-    <associate|auto-10|<tuple|3.2|?>>
-    <associate|auto-11|<tuple|3.2.1|?>>
-    <associate|auto-12|<tuple|3.2.2|?>>
-    <associate|auto-13|<tuple|3.2.2.1|?>>
+    <associate|auto-10|<tuple|3.2.1|?>>
+    <associate|auto-11|<tuple|3.2.2|?>>
+    <associate|auto-12|<tuple|3.2.2.1|?>>
+    <associate|auto-13|<tuple|3.2.3|?>>
     <associate|auto-14|<tuple|3.2.3|?>>
     <associate|auto-15|<tuple|3.2.3|?>>
     <associate|auto-16|<tuple|3.2.3|?>>
-    <associate|auto-17|<tuple|3.2.3|?>>
-    <associate|auto-18|<tuple|3.2.3.1|?>>
-    <associate|auto-19|<tuple|3.1|?>>
+    <associate|auto-17|<tuple|3.2.3.1|?>>
+    <associate|auto-18|<tuple|3.1|?>>
+    <associate|auto-19|<tuple|3.3|?>>
     <associate|auto-2|<tuple|3.1|?>>
-    <associate|auto-20|<tuple|3.3|?>>
-    <associate|auto-21|<tuple|3.3.1|?>>
-    <associate|auto-22|<tuple|3.3.1.1|?>>
-    <associate|auto-23|<tuple|3.2|?>>
-    <associate|auto-24|<tuple|3.3.1.2|?>>
-    <associate|auto-25|<tuple|3.3.1.3|?>>
-    <associate|auto-26|<tuple|3.3.2|?>>
+    <associate|auto-20|<tuple|3.3.1|?>>
+    <associate|auto-21|<tuple|3.3.1.1|?>>
+    <associate|auto-22|<tuple|3.2|?>>
+    <associate|auto-23|<tuple|3.3.1.2|?>>
+    <associate|auto-24|<tuple|3.3.1.3|?>>
+    <associate|auto-25|<tuple|3.3.2|?>>
+    <associate|auto-26|<tuple|3.3.3|?>>
     <associate|auto-27|<tuple|3.3.3|?>>
     <associate|auto-3|<tuple|3.1.1|?>>
     <associate|auto-4|<tuple|3.1.2|?>>
@@ -824,7 +813,7 @@
     <associate|auto-6|<tuple|3.1.2.2|?>>
     <associate|auto-7|<tuple|3.1.2.3|?>>
     <associate|auto-8|<tuple|3.1.2.4|?>>
-    <associate|auto-9|<tuple|3.1.2.5|?>>
+    <associate|auto-9|<tuple|3.2|?>>
     <associate|block|<tuple|3.3.1.1|?>>
     <associate|chap-state-transit|<tuple|3|?>>
     <associate|defn-block-body|<tuple|3.9|?>>
