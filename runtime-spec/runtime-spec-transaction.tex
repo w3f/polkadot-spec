@@ -1,0 +1,25 @@
+\newpage
+\section{Transaction}
+
+A transactions is a SCALE encoded array containing varying data types, including
+the parameters required for the transaction (function) to execute.
+\newline
+
+The first item of the array, $M_i$, is an indicator the Runtime to which
+Polkadot \textit{module} the transaction should be forwarded to. The second
+item, $T_i$, indicates which \textit{function} (the actual transaction) of the
+specified module should be executed.
+\newline
+
+$M_i$ is a varying data types pointing to every module exposed to the network.
+
+\[
+M_i :=
+\begin{cases}
+0, & \text{System} \\
+1, & \text{Utility} \\
+... & \\
+7, & \text{Balances} \\
+... &
+\end{cases}
+\]
