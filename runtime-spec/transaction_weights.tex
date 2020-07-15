@@ -85,7 +85,13 @@ These concepts are formalized in Definitions \ref{def:block-length} and \ref{def
   \mathcal{W}: E \mapsto w
   \]
 
-  where $w$ is a positive integer representing the weight of the extrinsic $E$.
+  where $w$ is a non-negative integer representing the weight of the extrinsic $E$. We define the weight of all inherent extrinsics as defined in \cite[Definition~3.3]{web30_technologies_foundation_polkadot_2020} to be equal to 0.
+
+  we extend the definition of \TWF function to compute the weight of the block as sum of weight of all extrinsics its includes:
+  \[
+  \mathcal{W}: \mathcal{B}\rightarrow \mathbb{N}
+  \mathcal{W}: B \mapsto \sum_{E\in B}(W(E))
+  \]
   
 \end{definition}
 
@@ -128,18 +134,17 @@ potential.
 
 \syed{Do note that the smallest, non-zero weight in Polkadot is set at 10'000.}{why do we need this, we need to justify having a minimum}
 
-\section{Runtime Primitives}
+\section{Calculation of the weight function}
 \label{sec:runtime-primitives}
-The Runtime functions must be studied in order to determine which parts of the code will excessively increase the execution time. This icluded considering the potential indicators like loops, I/O operations, and data manipulation. Based on those observations, weights should be applied on operations that could have heavy implications on those design choices. The final assigned weights are calculated by benchmarking the Runtime functions, which is described in section \ref{sect:benchmarking}.
+In order to calculate weight of block $B$, $TWF(B)$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as  loops, I/O operations, and data manipulation. Subsequently the performance and resource consumption of each part will be evaluated based on variaty of input parameters. Based on those observations, weights is assigned be to those operations \syed{that could have heavy implications on those design choices}{this doesn't make much sense to me, perhaps needs clarification}. These sub component of the code are discussed in Section \ref{sect:primitive-types}.
+
+\syed{The final assigned weights are calculated by benchmarking the Runtime functions, which is described in section \ref{sect:benchmarking}.}{this needs to relate the computation of final weight to the primitive otherwise the paragraph looks disconnected}.
 \newline
 
-Section \ref{sect:examples-runtime-analysis} walks through two practical
-examples of Runtime function analysis. Not every possible benchmarking outcome
-can be caused with input parameters to the Runtime function. In some
-circumstances, preliminary work is required before a specific benchmark can be
-reliably measured, such as creating certain preexisting entries in the storage
-or other changes to the environment. This is explained in more detail in section
-\ref{sect:examples-preliminary-work}.
+Section \ref{sect:examples-runtime-analysis} walks through two practical examples of Runtime function analysis.
+
+Not every possible benchmarking outcome can be invoked by varying input parameters \syed{to}{of} the Runtime function. In some 
+circumstances, preliminary work is required before a specific benchmark can be reliably measured, such as creating certain preexisting entries in the storage or other changes to the environment. This is explained in more detail in section \ref{sect:examples-preliminary-work}.
 \newpage
 
 \subsection{Primitive Types}\label{sect:primitive-types}
