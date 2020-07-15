@@ -7,7 +7,7 @@ the parameters required for the transaction (function) to execute.
 
 The first item of the array, $M_i$, is an indicator the Runtime to which
 Polkadot \textit{module} the transaction should be forwarded to. The second
-item, $T_i$, indicates which \textit{function} (the actual transaction) of the
+item, $F(m)_i$, indicates which \textit{function} (the actual transaction) of the
 specified module should be executed.
 \newline
 
@@ -23,3 +23,18 @@ M_i :=
 ... &
 \end{cases}
 \]
+
+The $F(m)_i$ indicator varies for each module, since every module has different
+functions. As an example, the \verb|Balances| module offers the following
+functions:
+
+\[
+F(Balances)_i :=
+\begin{cases}
+0, & \text{transfer} \\
+1, & \text{set\_balance} \\
+2 & \text{force\_transfer} \\
+3 & \text{transfer\_keep\_alive} \\
+\end{cases}
+\]
+
