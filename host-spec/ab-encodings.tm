@@ -2,7 +2,7 @@
 
 <project|host-spec.tm>
 
-<style|book>
+<style|<tuple|book|old-dots>>
 
 <\body>
   <appendix|Auxiliary Encodings><label|sect-encoding>
@@ -134,13 +134,14 @@
     as:
 
     <\equation*>
-      Enc<rsub|SC><around|(|S|)>\<assign\>Enc<rsup|Len><rsub|SC><around*|(|<around*|\<\|\|\>|S|\<\|\|\>>|)>Enc<rsub|SC><around|(|A<rsub|1>|)>\|Enc<rsub|SC><around|(|A<rsub|2>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|A<rsub|n>|)>
+      Enc<rsub|SC><around|(|S|)>\<assign\>Enc<rsup|Len><rsub|SC><around*|(|<around*|\<\|\|\>|S|\<\|\|\>>|)><mid|\|>Enc<rsub|SC><around|(|A<rsub|1>|)>\|Enc<rsub|SC><around|(|A<rsub|2>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|A<rsub|n>|)>
     </equation*>
 
     where <math|Enc<rsub|SC><rsup|Len>> is defined in Definition
-    <reference|defn-sc-len-encoding>. SCALE codec for <strong|dictionary> or
-    <strong|hashtable> D with key-value pairs
-    <math|<around*|(|k<rsub|i>,v<rsub|i>|)>>s such that:
+    <reference|defn-sc-len-encoding>.\ 
+
+    SCALE codec for <strong|dictionary> or <strong|hashtable> D with
+    key-value pairs <math|<around*|(|k<rsub|i>,v<rsub|i>|)>>s such that:
 
     <\equation*>
       D\<assign\><around*|{|<around*|(|k<rsub|1>,v<rsub|1>|)>,\<ldots\>,<around*|(|k<rsub|1>,v<rsub|n>|)>|}>
@@ -150,8 +151,12 @@
     (as tuples):
 
     <\equation*>
-      Enc<rsub|SC><around|(|D|)>\<assign\>Enc<rsup|Len><rsub|SC><around*|(|<around*|\<\|\|\>|D|\<\|\|\>>|)>Enc<rsub|SC><around|(|<around*|(|k<rsub|1>,v<rsub|1>|)><rsub|>|)>\|Enc<rsub|SC><around|(|<around*|(|k<rsub|2>,v<rsub|2>|)>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|<around*|(|k<rsub|n>,v<rsub|n>|)>|)>
+      Enc<rsub|SC><around|(|D|)>\<assign\>Enc<rsup|Size><rsub|SC><around*|(|<around*|\|||\|>D<around*|\|||\|>|)><mid|\|>Enc<rsub|SC><around|(|<around*|(|k<rsub|1>,v<rsub|1>|)><rsub|>|)>\|Enc<rsub|SC><around|(|<around*|(|k<rsub|2>,v<rsub|2>|)>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|<around*|(|k<rsub|n>,v<rsub|n>|)>|)>
     </equation*>
+
+    <math|Enc<rsup|Size><rsub|SC>> is encoded the same way as
+    <math|Enc<rsup|Len><rsub|SC>> but argument <math|size> refers to the
+    number of key-value pairs rather than the length.
 
     <\equation*>
       \;
@@ -231,7 +236,7 @@
   </definition>
 
   \;
-  
+
   <\with|par-mode|right>
     <qed>
   </with>
@@ -241,123 +246,55 @@
 
 <\initial>
   <\collection>
+    <associate|chapter-nr|6>
+    <associate|page-first|55>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|section-nr|5<uninit>>
+    <associate|subsection-nr|5>
   </collection>
 </initial>
 
 <\references>
   <\collection>
-    <associate|auto-1|<tuple|A|?|c01-background.tm>>
-    <associate|auto-10|<tuple|B.5|?|c01-background.tm>>
-    <associate|auto-11|<tuple|B.1|?|c01-background.tm>>
-    <associate|auto-12|<tuple|B.2|?|c01-background.tm>>
-    <associate|auto-13|<tuple|B.5.1|?|c01-background.tm>>
-    <associate|auto-14|<tuple|B.5.2|?|c01-background.tm>>
-    <associate|auto-15|<tuple|B.5.3|?|c01-background.tm>>
-    <associate|auto-16|<tuple|B.5.4|?|c01-background.tm>>
-    <associate|auto-17|<tuple|B.5.5|?|c01-background.tm>>
-    <associate|auto-2|<tuple|A.1|?|c01-background.tm>>
-    <associate|auto-3|<tuple|A.1.1|?|c01-background.tm>>
-    <associate|auto-4|<tuple|A.2|?|c01-background.tm>>
-    <associate|auto-5|<tuple|B|?|c01-background.tm>>
-    <associate|auto-6|<tuple|B.1|?|c01-background.tm>>
-    <associate|auto-7|<tuple|B.2|?|c01-background.tm>>
-    <associate|auto-8|<tuple|B.3|?|c01-background.tm>>
-    <associate|auto-9|<tuple|B.4|?|c01-background.tm>>
-    <associate|defn-account-key|<tuple|B.1|?|c01-background.tm>>
-    <associate|defn-controller-key|<tuple|B.3|?|c01-background.tm>>
-    <associate|defn-hex-encoding|<tuple|A.12|?|c01-background.tm>>
-    <associate|defn-option-type|<tuple|A.4|?|c01-background.tm>>
-    <associate|defn-result-type|<tuple|A.5|?|c01-background.tm>>
-    <associate|defn-sc-len-encoding|<tuple|A.11|?|c01-background.tm>>
-    <associate|defn-scale-byte-array|<tuple|A.1|?|c01-background.tm>>
-    <associate|defn-scale-empty|<tuple|A.10|?|c01-background.tm>>
-    <associate|defn-scale-fixed-length|<tuple|A.9|?|c01-background.tm>>
-    <associate|defn-scale-list|<tuple|A.7|?|c01-background.tm>>
-    <associate|defn-scale-tuple|<tuple|A.2|?|c01-background.tm>>
-    <associate|defn-scale-variable-type|<tuple|A.6|?|c01-background.tm>>
-    <associate|defn-session-key|<tuple|B.4|?|c01-background.tm>>
-    <associate|defn-stash-key|<tuple|B.2|?|c01-background.tm>>
-    <associate|defn-varrying-data-type|<tuple|A.3|?|c01-background.tm>>
-    <associate|sect-blake2|<tuple|B.2|?|c01-background.tm>>
-    <associate|sect-certifying-keys|<tuple|B.5.5|?|c01-background.tm>>
-    <associate|sect-controller-settings|<tuple|B.5.4|?|c01-background.tm>>
-    <associate|sect-creating-controller-key|<tuple|B.5.2|?|c01-background.tm>>
-    <associate|sect-cryptographic-keys|<tuple|B.5|?|c01-background.tm>>
-    <associate|sect-designating-proxy|<tuple|B.5.3|?|c01-background.tm>>
-    <associate|sect-encoding|<tuple|A|?|c01-background.tm>>
-    <associate|sect-hash-functions|<tuple|B.1|?|c01-background.tm>>
-    <associate|sect-int-encoding|<tuple|A.1.1|?|c01-background.tm>>
-    <associate|sect-randomness|<tuple|B.3|?|c01-background.tm>>
-    <associate|sect-scale-codec|<tuple|A.1|?|c01-background.tm>>
-    <associate|sect-staking-funds|<tuple|B.5.1|?|c01-background.tm>>
-    <associate|sect-vrf|<tuple|B.4|?|c01-background.tm>>
-    <associate|tabl-account-key-schemes|<tuple|B.1|?|c01-background.tm>>
-    <associate|tabl-session-keys|<tuple|B.2|?|c01-background.tm>>
+    <associate|auto-1|<tuple|A|55>>
+    <associate|auto-2|<tuple|A.1|55>>
+    <associate|auto-3|<tuple|A.1.1|56>>
+    <associate|auto-4|<tuple|A.2|57>>
+    <associate|defn-hex-encoding|<tuple|A.12|57>>
+    <associate|defn-option-type|<tuple|A.4|55>>
+    <associate|defn-result-type|<tuple|A.5|55>>
+    <associate|defn-sc-len-encoding|<tuple|A.11|56>>
+    <associate|defn-scale-byte-array|<tuple|A.1|55>>
+    <associate|defn-scale-empty|<tuple|A.10|56>>
+    <associate|defn-scale-fixed-length|<tuple|A.9|56>>
+    <associate|defn-scale-list|<tuple|A.7|56>>
+    <associate|defn-scale-tuple|<tuple|A.2|55>>
+    <associate|defn-scale-variable-type|<tuple|A.6|56>>
+    <associate|defn-varrying-data-type|<tuple|A.3|55>>
+    <associate|sect-encoding|<tuple|A|55>>
+    <associate|sect-int-encoding|<tuple|A.1.1|56>>
+    <associate|sect-scale-codec|<tuple|A.1|55>>
   </collection>
 </references>
 
 <\auxiliary>
   <\collection>
-    <\associate|bib>
-      saarinen_blake2_2015
-
-      burdges_schnorr_2019
-
-      josefsson_edwards-curve_2017
-    </associate>
-    <\associate|table>
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.1>|>
-        List of public key scheme which can be used for an account key
-      </surround>|<pageref|auto-7>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.2>|>
-        List of key schemes which are used for session keys depending on the
-        protocol
-      </surround>|<pageref|auto-8>>
-    </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
-      A<space|2spc>Cryptographic Algorithms>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      A<space|2spc>Auxiliary Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      A.1<space|2spc>Hash Functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      A.1<space|2spc>SCALE Codec <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      A.2<space|2spc>BLAKE2 <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-3>
+      <with|par-left|<quote|1tab>|A.1.1<space|2spc>Length and Compact
+      Encoding <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-3>>
 
-      A.3<space|2spc>Randomness <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      A.2<space|2spc>Hex Encoding <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>
-
-      A.4<space|2spc>VRF <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>
-
-      A.5<space|2spc>Cryptographic Keys <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>
-
-      <with|par-left|<quote|1tab>|A.5.1<space|2spc>Holding and staking funds
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
-
-      <with|par-left|<quote|1tab>|A.5.2<space|2spc>Creating a Controller key
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
-
-      <with|par-left|<quote|1tab>|A.5.3<space|2spc>Designating a proxy for
-      voting <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
-
-      <with|par-left|<quote|1tab>|A.5.4<space|2spc>Controller settings
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
-
-      <with|par-left|<quote|1tab>|A.5.5<space|2spc>Certifying keys
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13>>
     </associate>
   </collection>
 </auxiliary>

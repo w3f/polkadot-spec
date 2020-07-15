@@ -1,0 +1,104 @@
+version: 2
+updates:
+
+  # Adapters
+
+  - package-ecosystem: "cargo"
+    directory: "/test/adapters/substrate"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "substrate-a:"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "cargo"
+    directory: "/test/adapters/substrate-legacy"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "substrate-a-l:"
+    open-pull-requests-limit: 0
+
+  # kagome/hunter currently not supported
+
+  - package-ecosystem: "gomod"
+    directory: "/test/adapters/gossamer"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "gossamer-a:"
+    open-pull-requests-limit: 0
+
+
+  - package-ecosystem: "cargo"
+    directory: "/test/adapters/wasm"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "wasm-a:"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "cargo"
+    directory: "/test/adapters/wasm-legacy"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "wasm-a-l:"
+    open-pull-requests-limit: 0
+
+
+  # Testers
+
+  - package-ecosystem: "cargo"
+    directory: "/test/testers/host"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "host-t:"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "cargo"
+    directory: "/test/testers/host-legacy"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "host-t-l:"
+    open-pull-requests-limit: 0
+
+
+  # Hosts
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/test/hosts/substrate"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "substrate-h:"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/test/hosts/kagome"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "kagome-h:"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/test/hosts/gossamer"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "gossamer-h:"
+    open-pull-requests-limit: 0
+
+
+  # GitHub Actions
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "ci:"
+    open-pull-requests-limit: 0

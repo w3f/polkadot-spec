@@ -32,7 +32,7 @@ use clap::App;
 
 pub mod hash;
 pub mod hasher;
-mod pdre_api;
+mod host_api;
 pub mod scale_codec;
 pub mod trie_tester;
 
@@ -47,7 +47,7 @@ fn main() {
     } else if let Some(matches) = matches.subcommand_matches("state-trie") {
         let mut trie_tryer: TrieTester = TrieTester::new(matches);
         trie_tryer.process_state_trie_command(matches);
-    } else if let Some(matches) = matches.subcommand_matches("pdre-api") {
-        pdre_api::process_pdre_api_tests(matches);
+    } else if let Some(matches) = matches.subcommand_matches("host-api") {
+        host_api::process_host_api_tests(matches);
     }
 }

@@ -2,6 +2,7 @@
 
 [![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Specification+Publication%22)
 [![Conformance Testsuite](https://github.com/w3f/polkadot-spec/workflows/Conformance%20Testsuite/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Conformance+Testsuite%22)
+[![Integration Testsuite](https://github.com/w3f/polkadot-spec/workflows/Integration%20Testsuite/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Integration+Testsuite%22)
 
 Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository serves as the point of reference for Polkadot Protocol. In this repo you will find:
 
@@ -12,7 +13,7 @@ Polkadot is a replicated sharded state machine designed to resolve the scalabili
 
 ## Polkadot Host Specification
 
-Here your can find the latest version of the [Polkadot Host Specification](./host-spec/host-spec.pdf)
+Here your can find the latest version of the [Polkadot Host Specification](./host-spec/polkadot-host-spec.pdf)
 
 Please refer to the [Change Log](./host-spec/CHANGELOG.org) and [PDF Diff](./host-spec/host-spec-diffed-updates.pdf) to review the history of changes to the specification.
 

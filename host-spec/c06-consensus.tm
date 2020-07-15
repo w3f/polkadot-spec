@@ -724,7 +724,15 @@
       </state>
 
       <\state>
-        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_inherent_extrinsics>>,<text|<name|Inherent-Data>>|)>><END>
+        <name|<em|I-D>> \<leftarrow\> <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_inherent_extrinsics>>,<text|<name|Inherent-Data>>|)>><END>
+      </state>
+
+      <\state>
+        <strong|for> <em|E> <strong|in> <em|I-D>
+      </state>
+
+      <\state>
+        <space|2em><name|Call-Runtime-Entry>(<verbatim|BlockBuilder_apply_extrinsics,E>)
       </state>
 
       <\state>
@@ -789,8 +797,8 @@
 
     <item><name|Ok-Result> indicates whether the result of
     <verbatim|BlockBuilder_apply_extrinsics> is successfull. The error type
-    of the Runtime function is defined in Definition <todo|define error
-    type>.
+    of the Runtime function is defined in Section
+    <reference|sect-rte-apply-extrinsic>.
 
     <item><name|Ready-Extrinsics-Queue> indicates picking an extrinsics from
     the extrinsics queue (Definition <reference|defn-transaction-queue>).

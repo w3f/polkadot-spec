@@ -24,19 +24,19 @@ extern crate data_encoding;
 
 // For PDRE API
 extern crate hex;
-extern crate sc_executor;
-extern crate sp_core;
-extern crate sp_state_machine;
+extern crate executor;
+extern crate primitives;
+extern crate state_machine;
 
 use clap::App;
 
-mod pdre_api;
+mod host_api;
 
 fn main() {
     let yaml_data = load_yaml!("cli.yaml");
     let matches = App::from_yaml(yaml_data).get_matches();
 
-    if let Some(matches) = matches.subcommand_matches("pdre-api") {
-        pdre_api::process_pdre_api_tests(matches);
+    if let Some(matches) = matches.subcommand_matches("host-api") {
+        host_api::process_host_api_tests(matches);
     }
 }
