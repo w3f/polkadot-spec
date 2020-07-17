@@ -1,15 +1,67 @@
 \newpage
 \section{Transaction}
 
-A transaction is a SCALE encoded array containing varying data types indicating
-the resulting Runtime function to be called, including the parameters required
-for that function to be executed.
+A transaction is a SCALE encoded array consisting of a version number,
+signature, and varying data types indicating the resulting Runtime function to
+be called, including the parameters required for that function to be executed.
 \newline
 
-The first item of the array, $M_i$, is an indicator to the Runtime to which
-Polkadot \textit{module}, $m$, the transaction should be forwarded to. The second
-item, $F(m)_i$, indicates which \textit{function} (the actual transaction) of the
-specified module should be executed.
+\[
+    tx := (T_v, P)
+\]
+
+$T_v$ defines the transaction version. The Runtime handles transactions and its
+validity differently based on this value and the requirements for the
+transaction format depends on the definitions set by the Runtime. This allows
+Polkadot to evolve the transaction format, while still being able to correctly
+execute older transaction formats.
+\newline
+
+Each transaction versions gets manipulated with bitwise operators before it gets
+set as $T_v$, in order to indicate whether the transaction is signed or
+unsigned.
+\newline
+
+If the transaction is \textbf{signed}, $T_v$ is defined as:
+
+\[
+    T_v := v \ | \ 1000 \ 0000
+\]
+
+... where \verb|\|| implies a bitwise OR operator.
+\newline
+
+If the transaction is \textbf{unsigned}, $T_v$ is defined as:
+
+\[
+    T_v :=v \ \& \ 0111 \ 1111
+\]
+
+... where \verb|\&| implies a bitwise AND operator.
+\newline
+
+As an example, for transaction format version 4, an unsigned transaction
+represents $T_v$ as \verb|4| while a signed transaction represents it as
+\verb|132|.
+\newline
+
+\todo{@fabio: explain why/when are unsigned transactions used}
+
+\subsection{Version 4}
+
+Version 4 of the Polkadot transaction format is defined as follows:
+
+\[
+    P := Sig, M_i, F_i(m)
+\]
+
+$Sig$ can ...
+\newline
+
+$M_i$ is an indicator for the Runtime to which Polkadot \textit{module}, $m$,
+the transaction should be forwarded to. The second item, $F_i(m)$, indicates
+which \textit{function} (the actual transaction) of the specified module should
+be executed.
 \newline
 
 $M_i$ is a varying data types pointing to every module exposed to the network.
@@ -25,7 +77,7 @@ M_i :=
 \end{cases}
 \]
 
-The $F(m)_i$ indicator varies for each module, since every module has different
+The $F_i(m)$ indicator varies for each module, since every module has different
 functions. As an example, the \verb|Balances| module offers the following
 functions:
 
