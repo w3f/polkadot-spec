@@ -84,23 +84,55 @@
     </equation*>
 
     and CM is of varying data type which can hold one of the type described
-    in Table <reference|tabl-consensus-messages>:
+    in Table <reference|tabl-consensus-messages-babe> or
+    <reference|tabl-consensus-messages-grandpa>:
 
     <\center>
       <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<table|<row|<cell|<strong|Type
-      Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Scheduled
-      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|delay>|)>>>>|<row|<cell|2>|<cell|ForcedChange>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|delay>|)>>>>|<row|<cell|3>|<cell|On
-      Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|delay>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|delay>>>>>>>>
-        <label|tabl-consensus-messages>The consensus digest item for GRANDPA
-        authorities
+      Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Next
+      Epoch Data>|<cell|<math|<around*|(|Auth<rsub|C>,\<cal-R\>|)>>>>|<row|<cell|2>|<cell|On
+      Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|3>|<cell|Next Config
+      Data>|<cell|<math|<around*|(|c,s<rsub|2nd><rsup|>|)>>>>>>>>
+        <label|tabl-consensus-messages-babe>The consensus digest item for
+        BABE authorities
       </small-table>
     </center>
 
     Where:
 
     <\itemize-minus>
-      <item>Auth<math|<rsub|C>> is the authority list defined in Definition
-      <reference|defn-authority-list>.
+      <item>Auth<math|<rsub|C>> is the authority list, as defined in
+      definition <reference|defn-authority-list>.
+
+      <item><math|\<cal-R\>> is the 32 byte randomness seed, as defined in
+      definition <reference|defn-epoch-randomness>
+
+      <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to an
+      individual authority in the current authority list.
+
+      <item><math|c> is the probability that a slot will not be empty, as
+      defined in definition <reference|defn-babe-constant>.
+
+      <item><math|s<rsub|2nd>> is the the second slot configuration encoded
+      as a 8 bit enum.\ 
+    </itemize-minus>
+
+    <\center>
+      <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<table|<row|<cell|<strong|Type
+      Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Scheduled
+      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|delay>|)>>>>|<row|<cell|2>|<cell|Forced
+      Change>|<cell|<math|<around*|(|Auth<rsub|C>,N<rsub|delay>|)>>>>|<row|<cell|3>|<cell|On
+      Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|4>|<cell|Pause>|<cell|<math|N<rsub|delay>>>>|<row|<cell|5>|<cell|Resume>|<cell|N<math|<rsub|delay>>>>>>>>
+        <label|tabl-consensus-messages-grandpa>The consensus digest item for
+        GRANDPA authorities
+      </small-table>
+    </center>
+
+    Where:
+
+    <\itemize-minus>
+      <item>Auth<math|<rsub|C>> is the authority list as defined in
+      definition <reference|defn-authority-list>.
 
       <item><math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
       is an unsigned 32 bit integer indicating the length of the subchain
@@ -118,12 +150,34 @@
   </definition>
 
   The Polkadot Host should inspect the digest header of each block and
-  delegates consesus messages to their consensus engines. Consensus engine
-  should react based on the type of consensus messages they receives as
-  follows:
+  delegates consesus messages to their consensus engines.
+
+  The BABE consensus engine should react based on the type of consensus
+  messages they receives as follows:
 
   <\itemize-minus>
-    <item><strong|Scheduled Change>: Schedule an authority set change after
+    <item><with|font-series|bold|Next Epoch Data:> The runtime issues this
+    message on every first block of an epoch. The supplied authority set and
+    randomness is intended to be used in next epoch. \ 
+
+    <item><strong|On Disabled>: An index to the individual authority in the
+    current authority list that should be immediately disabled until the next
+    authority set change. When an authority gets disabled, the node should
+    stop performing any authority functionality for that authority, including
+    authoring blocks. Similarly, other nodes should ignore all messages from
+    the indicated authority which pretain to their authority role.\ 
+
+    <item><with|font-series|bold|Next Config Data:> These messages are only
+    issued on configuration change and in the first block of an epoch. The
+    supplied configuration data are intended to be used from the next epoch
+    onwards.\ 
+  </itemize-minus>
+
+  The GRANDPA consensus engine should react based on the type of consensus
+  messages they receives as follows:
+
+  <\itemize-minus>
+    \ <item><strong|Scheduled Change>: Schedule an authority set change after
     the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
     where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is a
     block <em|finalized> by the finality consensus engine. The earliest
@@ -221,11 +275,11 @@
     <math|\<cal-E\><rsub|n>> by <math|sc<rsub|n>>. <math|sc<rsub|n>> is set
     to the <verbatim|duration> field in the returned data from the call of
     the Runtime entry <verbatim|BabeApi_configuration> (see
-    <reference|sect-rte-babeapi-epoch>) at the beginning of each epoch. For a
-    given block <math|B>, we use the notation <strong|<math|s<rsub|B>>> to
-    refer to the slot during which <math|B> has been produced. Conversely,
-    for slot <math|s>, <math|\<cal-B\><rsub|s>> is the set of Blocks
-    generated at slot <math|s>.
+    <reference|sect-rte-babeapi-epoch>) at genesis. For a given block
+    <math|B>, we use the notation <strong|<math|s<rsub|B>>> to refer to the
+    slot during which <math|B> has been produced. Conversely, for slot
+    <math|s>, <math|\<cal-B\><rsub|s>> is the set of Blocks generated at slot
+    <math|s>.
   </notation>
 
   Definition <reference|defn-epoch-subchain> provides an iterator over the
@@ -243,6 +297,20 @@
   <subsection|Block Production Lottery>
 
   <\definition>
+    <label|defn-babe-constant>The <with|font-series|bold|BABE constant>
+    <math|<with|font-series|medium|c>\<in\><around*|(|0,1<rsub|>|)>> is the
+    probability that a slot will be not be empty. It is initialized at
+    genesis using the value returned by a call
+    <verbatim|BabeApi_configuration>(see <reference|sect-rte-babeapi-epoch>)
+    and then can be updated by the runtime for the next epoch through the
+    \PNext Config Data\Q consensus message digest (see def.
+    <reference|defn-consensus-message-digest>) in the first block of each
+    epoch. It is encoded as a tuple of two unsigned 64 bit integers
+    <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>> which are used
+    to compute the rational <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>.
+    </definition>
+
+  <\definition>
     <label|defn-winning-threshold><strong|Winning threshold> denoted by
     <strong|<math|\<tau\><rsub|\<varepsilon\><rsub|n>>>> is the threshold
     which is used alongside with the result of Algorirthm
@@ -256,10 +324,8 @@
 
     where <math|AuthorityDirectory<rsup|\<cal-E\><rsub|n>>> is the set of
     BABE authorities for epoch <math|\<varepsilon\><rsub|n>> and
-    <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>. The pair
-    <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>> can be
-    retrieve part of the data returned by a call into runtime entry
-    <verbatim|BabeApi_configuration>.
+    <math|c\<in\><around*|(|0,1|)>> is the BABE constant as defined in
+    definition <reference|defn-babe-constant>.
   </definition>
 
   \ A block producer aiming to produce a block during
@@ -303,8 +369,8 @@
 
   For any slot <math|i> in epoch <math|n> where <math|d\<less\>\<tau\>>, the
   block producer is required to produce a block. For the definitions of
-  <name|Epoch-Randomness<math|>> and <em|<name|VRF>> functions, see Algorithm
-  <reference|algo-epoch-randomness> and Section <reference|sect-vrf>
+  <name|Epoch-Randomness<math|>> and <em|<name|VRF>> functions, see Section
+  <reference|sect-epoch-randomness> and Section <reference|sect-vrf>
   respectively.
 
   <subsection|Slot Number Calculation>
@@ -544,41 +610,35 @@
 
   <subsection|Epoch Randomness><label|sect-epoch-randomness>
 
-  At the end of epoch <math|\<cal-E\><rsub|n>>, each block producer is able
-  to compute the randomness seed it needs in order to participate in the
-  block production lottery in epoch <math|\<cal-E\><rsub|n+2>>. For epoch 0
-  and 1, the randomness seed is provided in the genesis state. The
-  computation of the seed is described in Algorithm
-  <reference|algo-epoch-randomness> which uses the concept of epoch subchain
-  described in Definition <reference|defn-epoch-subchain>.
+  In the beginning of each epoch <math|\<cal-E\><rsub|n>> the host will
+  receives the randomness seed <math|\<cal-R\><rsub|\<cal-E\><rsub|n+1>>>(def.
+  <reference|defn-epoch-randomness>) necessary to participate in the block
+  production lottery in the next epoch <math|\<cal-E\><rsub|n+1>> from the
+  runtime, through a consesus message in the digest (def.
+  <reference|defn-consensus-message-digest>) of the first block.
 
-  <\algorithm>
-    <label|algo-epoch-randomness><name|Epoch-Randomness>(<math|n\<gtr\>2:>epoch
-    index)
-  <|algorithm>
-    <\algorithmic>
-      <\state>
-        <math|\<rho\>\<leftarrow\>\<phi\>>
-      </state>
+  <\definition>
+    <label|defn-epoch-randomness>For epoch <math|\<cal-E\>> there is a 32-byte
+    <with|font-series|bold|randomness seed> <math|\<cal-R\><rsub|\<cal-E\>>>
+    computed based on the previous epochs VRF outputs. For
+    <math|\<cal-E\><rsub|0>> and <math|\<cal-E\><rsub|1>>, the randomness
+    seed is provided in the genesis state.
+  </definition>
 
-      <\state>
-        <FOR-IN|<math|B>|><em|<name|SubChain(<math|\<cal-E\><rsub|n-2>>)>>
-      </state>
+  \;
 
-      <\state>
-        <math|\<rho\>\<leftarrow\>\<rho\><around*|\|||\|>d<rsub|B>><END>
-      </state>
+  <\definition>
+    The <with|font-series|bold|Next Epoch Descriptor> for epoch
+    <math|\<cal-E\><rsub|n>> is announce in the first block of epoch
+    <math|\<cal-E\><rsub|<rsub|n+1>>>as a consensus message as defined in
+    definition <reference|defn-consensus-message-digest>:
 
-      <\state>
-        <\RETURN>
-          Blake2b(<name|Epoch-Randomness>(<math|n-1>)\|\|<math|n>\|\|<math|\<rho\>>)
-        </RETURN>
-      </state>
-    </algorithmic>
-  </algorithm>
+    <\equation*>
+      <around*|(|Auth<rsub|BABE><around*|(||)>,\<cal-R\><rsub|\<cal-E\><rsub|n+1>><rsub|<rsub|>>|)>
+    </equation*>
 
-  In which value <math|d<rsub|B>> is the VRF output computed for slot
-  <math|s<rsub|B>> by running Algorithm <reference|algo-block-production-lottery>.
+    \;
+  </definition>
 
   \;
 
@@ -1954,17 +2014,13 @@
 
 <\initial>
   <\collection>
-    <associate|chapter-nr|5>
     <associate|info-flag|minimal>
-    <associate|page-first|37>
     <associate|page-height|auto>
     <associate|page-medium|papyrus>
     <associate|page-screen-margin|true>
     <associate|page-screen-right|5mm>
     <associate|page-type|letter>
     <associate|page-width|auto>
-    <associate|section-nr|0<uninit>>
-    <associate|subsection-nr|2>
     <associate|tex-even-side-margin|5mm>
     <associate|tex-odd-side-margin|5mm>
     <associate|tex-text-width|170mm>
@@ -2019,11 +2075,12 @@
     <associate|auto-9|<tuple|6.2.3|40>>
     <associate|chap-consensu|<tuple|6|37>>
     <associate|defn-authority-list|<tuple|6.1|37>>
-    <associate|defn-authority-set-id|<tuple|6.15|44>>
-    <associate|defn-babe-header|<tuple|6.12|40>>
-    <associate|defn-babe-seal|<tuple|6.13|41>>
-    <associate|defn-block-signature|<tuple|6.13|41>>
-    <associate|defn-block-time|<tuple|6.10|40>>
+    <associate|defn-authority-set-id|<tuple|6.17|44>>
+    <associate|defn-babe-header|<tuple|6.14|40>>
+    <associate|defn-babe-seal|<tuple|6.15|41>>
+    <associate|defn-block-signature|<tuple|6.15|41>>
+    <associate|defn-block-time|<tuple|6.11|40>>
+    <associate|defn-chain-quality|<tuple|6.10|?>>
     <associate|defn-consensus-message-digest|<tuple|6.2|37>>
     <associate|defn-epoch-slot|<tuple|6.5|39>>
     <associate|defn-epoch-subchain|<tuple|6.7|39>>
@@ -2053,7 +2110,6 @@
     <associate|sect-grandpa-catchup-messages|<tuple|6.3.2.3|46>>
     <associate|sect-sending-catchup-request|<tuple|6.4.1.1|49>>
     <associate|sect-verifying-authorship|<tuple|6.2.6|42>>
-    <associate|slot-time-cal-tail|<tuple|6.9|40>>
     <associate|tabl-consensus-messages|<tuple|6.1|38>>
   </collection>
 </references>
@@ -2067,6 +2123,13 @@
 
       stewart_grandpa:_2019
     </associate>
+    <\associate|figure>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|6.1>|>
+        Examplary result of Median Algorithm in first sync epoch with
+        <with|mode|<quote|math>|s<rsub|cq>=9> and
+        <with|mode|<quote|math>|k=1>.
+      </surround>|<pageref|auto-10>>
+    </associate>
     <\associate|table>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.1>|>
         The consensus digest item for GRANDPA authorities
@@ -2078,7 +2141,7 @@
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.3>|>
         Signature for a message in a round.
-      </surround>|<pageref|auto-19>>
+      </surround>|<pageref|auto-18>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Consensus>
@@ -2114,34 +2177,34 @@
 
       <with|par-left|<quote|1tab>|6.2.4<space|2spc>Block Production
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
+      <no-break><pageref|auto-11>>
 
       <with|par-left|<quote|1tab>|6.2.5<space|2spc>Epoch Randomness
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-12>>
 
       <with|par-left|<quote|1tab>|6.2.6<space|2spc>Verifying Authorship Right
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <no-break><pageref|auto-13>>
 
       <with|par-left|<quote|1tab>|6.2.7<space|2spc>Block Building Process
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13>>
+      <no-break><pageref|auto-14>>
 
       6.3<space|2spc>Finality <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>
+      <no-break><pageref|auto-15>
 
       <with|par-left|<quote|1tab>|6.3.1<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-15>>
+      <no-break><pageref|auto-16>>
 
       <with|par-left|<quote|1tab>|6.3.2<space|2spc>GRANDPA Messages
       Specification <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-16>>
+      <no-break><pageref|auto-17>>
 
       <with|par-left|<quote|2tab>|6.3.2.1<space|2spc>Vote Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-18>>
+      <no-break><pageref|auto-19>>
 
       <with|par-left|<quote|2tab>|6.3.2.2<space|2spc>Finalizing Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
