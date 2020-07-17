@@ -242,17 +242,8 @@
   \;
 </body>
 
-<\initial>
-  <\collection>
-    <associate|chapter-nr|6>
-    <associate|page-first|55>
-    <associate|page-height|auto>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
-    <associate|section-nr|5<uninit>>
-    <associate|subsection-nr|5>
-  </collection>
-</initial>
+<initial|<\collection>
+</collection>>
 
 <\references>
   <\collection>

@@ -271,12 +271,11 @@
   future.>|<cell|>>|<row|<cell|EpochLength>|<cell|The duration of epochs in
   slots.>|<cell|Unsigned 64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Constant>|<cell|A
   constant value that is used in the threshold calculation
-  formula.>|<cell|Tuple containing>>|<row|<cell|>|<cell|Expressed as a
-  rational where the first number of the tuple is the>|<cell|two
-  unsigned>>|<row|<cell|>|<cell|numerator and the seconds is the denominator.
-  The rational should>|<cell|64bit integers>>|<row|<cell|>|<cell|represent a
-  value between 0 and 1.>|<cell|>>|<row|<cell|Genesis>|<cell|The authority
-  list for the genesis epoch as defined in Definition
+  formula>|<cell|Tuple containing>>|<row|<cell|>|<cell|as defined in
+  definition <reference|defn-babe-constant>.>|<cell|two
+  unsigned>>|<row|<cell|>|<cell|>|<cell|64bit
+  integers>>|<row|<cell|>|<cell|>|<cell|>>|<row|<cell|Genesis>|<cell|The
+  authority list for the genesis epoch as defined in Definition
   <reference|defn-authority-list>. >|<cell|Array of
   tuples>>|<row|<cell|Authorities>|<cell|>|<cell|containing a
   256-bit>>|<row|<cell|>|<cell|>|<cell|byte array and
@@ -284,8 +283,8 @@
   64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Randomness>|<cell|The
   randomness for the genesis epoch>|<cell|32-byte
   array>>|<row|<cell|SecondarySlot>|<cell|Whether this chain should run with
-  secondary slots, which are>|<cell|Boolean>>|<row|<cell|>|<cell|assigned in
-  a round-robin manner.>|<cell|>>>>>>
+  secondary slots and wether>|<cell|8bit enum>>|<row|<cell|>|<cell|they are
+  assigned in a round-robin manner or via a second VRF.>|<cell|>>>>>>
     The tuple provided by <strong|BabeApi_configuration>.
   </big-table>
 
@@ -622,8 +621,6 @@
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
-    <associate|section-nr|2<uninit>>
-    <associate|subsection-nr|0>
   </collection>
 </initial>
 
