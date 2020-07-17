@@ -69,21 +69,46 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 
 \begin{definition}
     The signature, $Sig$, is a varying data type indicating support for three
-    different signature types:
+    different signature types, followed by the signature itself:
 
     \[
         Sig :=
         \begin{cases}
-        0, & \text{Ed25519} \\
-        1, & \text{Sr25519} \\
-        2, & \text{Ecdsa}
+        0, & \text{Ed25519, followed by: } (b_0, ...,b_{63}) \\
+        1, & \text{Sr25519, followed by: } (b_0, ...,b_{63}) \\
+        2, & \text{Ecdsa, followed by: } (b_0, ...,b_{64})
         \end{cases}
     \]
 
-    Each signature type can vary in size, but each individual type is always
-    fixed-size and therefore does not contain a length prefix as specified by
-    the SCALE codec. \verb|Ed25519| and \verb|Sr25519| are 512-bit while
+    Signature types vary in sizes, but each individual type is always fixed-size
+    and therefore does not contain a length prefix as specified by the SCALE
+    codec. \verb|Ed25519| and \verb|Sr25519| signatures are 512-bit while
     \verb|Ecdsa| is 560-bit, where the last 8 bits are the recovery ID.
+\end{definition}
+
+\begin{definition}
+    Extra data, $E$, is a tuple containing additional meta data about the
+    transaction and the system it is meant to be executed in. 
+
+    \[
+        E := (S_v, Tx_v, G, M, N, W, C, L, DR, ER, PA)
+    \]
+
+    where each value represents:
+    \begin{itemize}
+        \item $S_v$: \todo{Not used?}
+        \item $Tx_v$: \todo{Not used?}
+        \item $G$: \todo{Not used?}
+        \item $M$: Contains the Era.
+        \item $N$: A compact integer containing the Nonce.
+        \item $W$: \todo{Not used?}
+        \item $C$: A compact integer containing the transactor pay including tip.
+        \item $L$: \todo{Not used?}
+        \item $DR$: \todo{Not used?}
+        \item $ER$: \todo{Not used?}
+        \item $PA$: \todo{Not used?}
+    \end{itemize}
+
 \end{definition}
 
 $M_i$ is an indicator for the Runtime to which Polkadot \textit{module}, $m$,
