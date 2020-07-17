@@ -396,7 +396,7 @@
     <label|defn-prunned-best>The <with|font-series|bold|prunned best chain>
     <math|C<rsup|\<#250C\>k>> is the best chain selected according to the
     best chain selection rule with the last k Blocks prunned. Based on
-    simulation results, we choose <math|k=312>. The
+    simulation results, we choose <math|k=140>. The
     <with|font-series|bold|last (probabilistically) finalized block>
     describes the last block in this prunned best chain.
   </definition>
@@ -405,7 +405,7 @@
     <label|defn-chain-quality>The <with|font-series|bold|chain quality>
     <math|s<rsub|cq>> represents the number of slots hat are used to estimate
     the local clock offset. Based on simulation results, we choose
-    <math|s<rsub|cq>=7200>.
+    <math|s<rsub|cq>=3000>.
   </definition>
 
   The prerequisite for such a calculation is that each producer stores the
@@ -431,15 +431,15 @@
     <label|defn-sync-epoch>A <with|font-series|bold|sync epoch> (unrelated to
     the epoch defined in <reference|defn-epoch-slot>) is the inteval at which
     each validator (re-)evaluates its local clock offsets. The first
-    sync-epoch <math|\<varepsilon\><rsub|1>> starts just after the genesis
-    block is released. The other sync-epochs <math|\<varepsilon\><rsub|i>>
-    start when the slot number of the last (probabilistically) finalized
-    block is <math|<wide|s|\<bar\>><rsub|i>> which is the smallest slot
-    number such that <math|<wide|s|\<bar\>><rsub|i><rsub|>-<wide|s|\<bar\>><rsub|i-1>\<geq\>s<rsub|cq>>
+    sync-epoch <math|\<frak-E\><rsub|1>> starts just after the genesis block
+    is released. The other sync-epochs <math|\<frak-E\><rsub|i>> start when
+    the slot number of the last (probabilistically) finalized block is
+    <math|<wide|s|\<bar\>><rsub|i>> which is the smallest slot number such
+    that <math|<wide|s|\<bar\>><rsub|i><rsub|>-<wide|s|\<bar\>><rsub|i-1>\<geq\>s<rsub|cq>>
     where <math|<wide|s|\<bar\>><rsub|i-1>> is the slot number of the last
     (probabilistically) finalized block in the previous sync-epoch
-    <math|\<varepsilon\><rsub|i-1>>. If the previous epoch is the first epoch
-    <math|\<varepsilon\><rsub|1>> then <math|<wide|s|\<bar\>><rsub|i-1>=<wide|s|\<bar\>><rsub|i>=0>.
+    <math|\<frak-E\><rsub|i-1>>. If the previous epoch is the first epoch
+    <math|\<frak-E\><rsub|1>> then <math|<wide|s|\<bar\>><rsub|i-1>=<wide|s|\<bar\>><rsub|i>=0>.
   </definition>
 
   In addition to the arrival time of block <math|B>, the block producer also
@@ -456,7 +456,7 @@
   </definition>
 
   <\algorithm>
-    <label|algo-slot-time><name|Median-Algorithm>(<math|\<varepsilon\><rsub|j>>:
+    <label|algo-slot-time><name|Median-Algorithm>(<math|\<frak-E\><rsub|j>>:
     the current sync-epoch)
   <|algorithm>
     <\algorithmic>
@@ -465,7 +465,7 @@
       </state>
 
       <\state>
-        <FOR-IN|<math|B<rsub|i>>|<math|\<varepsilon\><rsub|j>><name|>>
+        <FOR-IN|<math|B<rsub|i>>|<math|\<frak-E\><rsub|j>><name|>>
       </state>
 
       <\state>
