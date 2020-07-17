@@ -1,7 +1,7 @@
 \newpage
-\section{Transaction}
+\section{Extrinsics}
 
-A transaction is a SCALE encoded array consisting of a version number,
+An extrinsic is a SCALE encoded array consisting of a version number,
 signature, and varying data types indicating the resulting Runtime function to
 be called, including the parameters required for that function to be executed.
 \newline
@@ -15,23 +15,21 @@ Type $P$ is different for each version.
 \subsection{Preliminaries}
 
 \begin{definition}
-    \label{defn-transaction-version}
-    $T_v$ defines the transaction version. The Runtime handles transactions and
-    its validity differently based on the version, where the transaction format
+    \label{defn-extrinsic-version}
+    $T_v$ defines the extrinsic version. The Runtime handles extrinsics and
+    its validity differently based on the version, where the extrinsic format
     of each version is dictated by the Runtime. This allows Polkadot to evolve
-    with new and more advanced transaction formats, while still being able to
+    with new and more advanced extrinsic formats, while still being able to
     correctly execute older formats.
     \newline
 
     $T_v$ does not consist of the version number directly, rather the version
     number is manipulated with bitwise operators in order to indicate whether
-    the transaction is signed or unsigned.
+    the extrinsic is signed ("transaction") or unsigned ("inherent").
     \newline
 
-    \todo{@fabio: explain why/when are unsigned transactions used}
-    \newline
-
-    If the transaction is \textbf{signed}, $T_v$ is defined as:
+    If the extrinsic is \textbf{signed}, and therefore a transaction, $T_v$ is
+    defined as:
 
     \[
         T_v := n \ | \ 1000 \ 0000
@@ -40,7 +38,8 @@ Type $P$ is different for each version.
     where $n$ is the version number and $|$ implies a bitwise OR operator.
     \newline
 
-    If the transaction is \textbf{unsigned}, $T_v$ is defined as:
+    If the extrinsic is \textbf{unsigned}, and therefore an inherent, $T_v$ is
+    defined as:
 
     \[
         T_v := n \ \& \ 0111 \ 1111
@@ -49,14 +48,14 @@ Type $P$ is different for each version.
     where $n$ is the version number and $\&$ implies a bitwise AND operator.
     \newline
 
-    As an example, for transaction format version 4, an unsigned transaction
-    represents $T_v$ as \verb|4| while a signed transaction represents it as
-    \verb|132|.
+    As an example, for extrinsic format version 4, an signed extrinsic
+    represents $T_v$ as \verb|132| while a unsigned extrinsic represents it as
+    \verb|4|.
 \end{definition}
 
 \subsection{Version 4}
 
-Version 4 of the Polkadot transaction format is defined as follows:
+Version 4 of the Polkadot extrinsic format is defined as follows:
 
 \[
     P := Sig, M_i, F_i(m)
@@ -66,8 +65,8 @@ $Sig$ can ...
 \newline
 
 $M_i$ is an indicator for the Runtime to which Polkadot \textit{module}, $m$,
-the transaction should be forwarded to. The second item, $F_i(m)$, indicates
-which \textit{function} (the actual transaction) of the specified module should
+the extrinsic should be forwarded to. The second item, $F_i(m)$, indicates
+which \textit{function} (the actual extrinsic) of the specified module should
 be executed.
 \newline
 
