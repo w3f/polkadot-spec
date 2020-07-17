@@ -58,11 +58,33 @@ Type $P$ is different for each version.
 Version 4 of the Polkadot extrinsic format is defined as follows:
 
 \[
-    P := Sig, M_i, F_i(m)
+    P := A_i, Sig, E, M_i, F_i(m)
 \]
 
-$Sig$ can ...
-\newline
+\begin{definition}
+    Account Id, $A_i$, is an opaque 256-bit identifier for the sender of the
+    extrinsic.
+    \todo{@fabio: clarify how a valid/invalid Id is determined}
+\end{definition}
+
+\begin{definition}
+    The signature, $Sig$, is a varying data type indicating support for three
+    different signature types:
+
+    \[
+        Sig :=
+        \begin{cases}
+        0, & \text{Ed25519} \\
+        1, & \text{Sr25519} \\
+        2, & \text{Ecdsa}
+        \end{cases}
+    \]
+
+    Each signature type can vary in size, but each individual type is always
+    fixed-size and therefore does not contain a length prefix as specified by
+    the SCALE codec. \verb|Ed25519| and \verb|Sr25519| are 512-bit while
+    \verb|Ecdsa| is 560-bit, where the last 8 bits are the recovery ID.
+\end{definition}
 
 $M_i$ is an indicator for the Runtime to which Polkadot \textit{module}, $m$,
 the extrinsic should be forwarded to. The second item, $F_i(m)$, indicates
