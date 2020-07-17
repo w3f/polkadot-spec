@@ -10,42 +10,49 @@ be called, including the parameters required for that function to be executed.
     tx := (T_v, P)
 \]
 
-$T_v$ defines the transaction version. The Runtime handles transactions and its
-validity differently based on this value and the requirements for the
-transaction format depends on the definitions set by the Runtime. This allows
-Polkadot to evolve the transaction format, while still being able to correctly
-execute older transaction formats.
-\newline
+Type $P$ is different for each version.
 
-Each transaction versions gets manipulated with bitwise operators before it gets
-set as $T_v$, in order to indicate whether the transaction is signed or
-unsigned.
-\newline
+\subsection{Preliminaries}
 
-If the transaction is \textbf{signed}, $T_v$ is defined as:
+\begin{definition}
+    \label{defn-transaction-version}
+    $T_v$ defines the transaction version. The Runtime handles transactions and
+    its validity differently based on the version, where the transaction format
+    of each version is dictated by the Runtime. This allows Polkadot to evolve
+    with new and more advanced transaction formats, while still being able to
+    correctly execute older formats.
+    \newline
 
-\[
-    T_v := v \ | \ 1000 \ 0000
-\]
+    $T_v$ does not consist of the version number directly, rather the version
+    number is manipulated with bitwise operators in order to indicate whether
+    the transaction is signed or unsigned.
+    \newline
 
-... where \verb|\|| implies a bitwise OR operator.
-\newline
+    \todo{@fabio: explain why/when are unsigned transactions used}
+    \newline
 
-If the transaction is \textbf{unsigned}, $T_v$ is defined as:
+    If the transaction is \textbf{signed}, $T_v$ is defined as:
 
-\[
-    T_v :=v \ \& \ 0111 \ 1111
-\]
+    \[
+        T_v := n \ | \ 1000 \ 0000
+    \]
 
-... where \verb|\&| implies a bitwise AND operator.
-\newline
+    where $n$ is the version number and $|$ implies a bitwise OR operator.
+    \newline
 
-As an example, for transaction format version 4, an unsigned transaction
-represents $T_v$ as \verb|4| while a signed transaction represents it as
-\verb|132|.
-\newline
+    If the transaction is \textbf{unsigned}, $T_v$ is defined as:
 
-\todo{@fabio: explain why/when are unsigned transactions used}
+    \[
+        T_v := n \ \& \ 0111 \ 1111
+    \]
+
+    where $n$ is the version number and $\&$ implies a bitwise AND operator.
+    \newline
+
+    As an example, for transaction format version 4, an unsigned transaction
+    represents $T_v$ as \verb|4| while a signed transaction represents it as
+    \verb|132|.
+\end{definition}
 
 \subsection{Version 4}
 
