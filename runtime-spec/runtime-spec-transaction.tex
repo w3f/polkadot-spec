@@ -62,14 +62,17 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 \]
 
 \begin{definition}
-    Account Id, $A_i$, is an opaque 256-bit identifier for the sender of the
-    extrinsic.
-    \todo{@fabio: clarify how a valid/invalid Id is determined}
+    Account Id, $A_i$, is the 32-byte address of the sender of the extrinsic as
+    described by the
+    \href{https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)}{SS58
+    format}.
 \end{definition}
 
 \begin{definition}
+    \label{defn-extrinsic-signature}
     The signature, $Sig$, is a varying data type indicating support for three
-    different signature types, followed by the signature itself:
+    different signature types, followed by the signature created by the
+    extrinsic author:
 
     \[
         Sig :=
@@ -104,7 +107,7 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
         \item $F_i(m)$: the function indicator of the module (\ref{defn-function-indicator}).
         \item $E$: the extra data (\ref{defn-extra-data}).
         \item $R_v$: a UINT32 containing the Runtime version.
-        \item $T_v$: a UINT32 containing the transaction version.
+        \item $T_v$: a UINT32 containing the extrinsic version, which currently is \verb|2|.
         \item $H_h(G)$: a 32-byte array containing the genesis hash.
         \item $H_h(Era_0)$: a 32-byte array containing the hash of the block which started the specified Era.
     \end{itemize}
@@ -113,19 +116,45 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 \begin{definition}
     \label{defn-extra-data}
     Extra data, $E$, is a tuple containing additional meta data about the
-    transaction and the system it is meant to be executed in. 
+    extrinsic and the system it is meant to be executed in.
 
     \[
-        E := (M, N, C)
+        E := (M, N, P_t)
     \]
 
     where each value represents:
     \begin{itemize}
-        \item $M$: Contains the Era.
-        \item $N$: A compact integer containing the nonce.
-        \item $C$: A compact integer containing the transactor pay including tip.
+        \item $M$: contains the mortality of the extrinsic (\ref{defn-extrinsic-mortality}).
+        \item $N$: a compact integer containing the nonce of the sender. The
+        nonce must be incremented by one for each extrinsic created, otherwise
+        the Polkadot network will reject the extrinsic.
+        \item $P_t$: a compact integer containing the transactor pay including tip.
     \end{itemize}
 
+\end{definition}
+
+\begin{definition}
+    \label{defn-extrinsic-mortality}
+    The \textbf{mortality}, $M$, specifies for how long an extrinsic is considered to
+    be valid for inclusion into the block. $M$ is a UINT32 consisting of two concatenated
+    UINT16 sub-components.
+
+    \[
+        M := M_{per} | M_{pha}
+    \]
+
+    where each value represents:
+
+    \begin{itemize}
+        \item $M_{per}$: the period of validity from the block hash
+        specified as $H_h(Era_0)$ in definition \ref{defn-extrinsic-signature}.
+        \item $M_{pha}$: the phase in the period that this extrinsic's lifetime begins.
+    \end{itemize}
+
+    If $M$ is equal to zero, then the extrinsic is considered immortal and can
+    be included at any time.
+
+    \todo{@fabio: waiting for clarification from Parity}
 \end{definition}
 
 \begin{definition}
