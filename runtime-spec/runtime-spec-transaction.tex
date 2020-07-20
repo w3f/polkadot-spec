@@ -7,10 +7,10 @@ be called, including the parameters required for that function to be executed.
 \newline
 
 \[
-    tx := (T_v, P)
+    tx := (T_v, T_b)
 \]
 
-Type $P$ is different for each version.
+Type $T_b$ is different for each version.
 
 \subsection{Preliminaries}
 
@@ -58,7 +58,7 @@ Type $P$ is different for each version.
 Version 4 of the Polkadot extrinsic format is defined as follows:
 
 \[
-    P := A_i, Sig, E, M_i, F_i(m)
+    T_b := (A_i, Sig, E, M_i, F_i(m))
 \]
 
 \begin{definition}
@@ -86,11 +86,17 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
     \verb|Ecdsa| is 560-bit, where the last 8 bits are the recovery ID.
     \newline
 
-    The signature is created by signing the following payload:
+    The signature is created by signing payload $P$.
 
-    \[
-        (M_i, F_i(m), E, R_v, T_v, H(G), H(Era_0))
-    \]
+    \begin{equation}
+        \begin{aligned}
+        P &:= \begin{cases}
+            Raw, & \text{if } |Raw| \leq 256\\
+            Blake2(Raw), & \text{if } |Raw| > 256\\
+        \end{cases}\\
+        Raw &:= (M_i, F_i(m), E, R_v, T_v, H_h(G), H_h(Era_0))\\
+        \end{aligned}
+    \end{equation}
 
     where each value represents:
     \begin{itemize}
@@ -99,9 +105,27 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
         \item $E$: the extra data (\ref{defn-extra-data}).
         \item $R_v$: a UINT32 containing the Runtime version.
         \item $T_v$: a UINT32 containing the transaction version.
-        \item $H(G)$: a 32-byte array containing the genesis hash.
-        \item $H(Era_0)$: a 32-byte array containing the hash of the block which started the specified Era.
+        \item $H_h(G)$: a 32-byte array containing the genesis hash.
+        \item $H_h(Era_0)$: a 32-byte array containing the hash of the block which started the specified Era.
     \end{itemize}
+\end{definition}
+
+\begin{definition}
+    \label{defn-extra-data}
+    Extra data, $E$, is a tuple containing additional meta data about the
+    transaction and the system it is meant to be executed in. 
+
+    \[
+        E := (M, N, C)
+    \]
+
+    where each value represents:
+    \begin{itemize}
+        \item $M$: Contains the Era.
+        \item $N$: A compact integer containing the nonce.
+        \item $C$: A compact integer containing the transactor pay including tip.
+    \end{itemize}
+
 \end{definition}
 
 \begin{definition}
@@ -134,7 +158,7 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
     following functions:
 
     \[
-    F(Balances)_i :=
+    F_i(Balances) :=
     \begin{cases}
     0, & \text{transfer} \\
     1, & \text{set\_balance} \\
@@ -145,22 +169,4 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 
     The concatenated and SCALE encoded parameters for each functions are
     appended to $F_i(m)$.
-\end{definition}
-
-\begin{definition}
-    \label{defn-extra-data}
-    Extra data, $E$, is a tuple containing additional meta data about the
-    transaction and the system it is meant to be executed in. 
-
-    \[
-        E := (M, N, C)
-    \]
-
-    where each value represents:
-    \begin{itemize}
-        \item $M$: Contains the Era.
-        \item $N$: A compact integer containing the Nonce.
-        \item $C$: A compact integer containing the transactor pay including tip.
-    \end{itemize}
-
 \end{definition}
