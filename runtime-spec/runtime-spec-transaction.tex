@@ -1,5 +1,7 @@
 \newpage
-\section{Extrinsics}
+\chapter{Extrinsics}
+
+\section{Introduction}
 
 An extrinsic is a SCALE encoded array consisting of a version number,
 signature, and varying data types indicating the resulting Runtime function to
@@ -10,7 +12,8 @@ be called, including the parameters required for that function to be executed.
     tx := (T_v, T_b)
 \]
 
-Type $T_b$ is different for each version.
+Type $T_b$ varies for each version and is specified in the corresponding
+section.
 
 \subsection{Preliminaries}
 
@@ -37,6 +40,7 @@ Type $T_b$ is different for each version.
 
     where $n$ is the version number and $|$ implies a bitwise OR operator.
     \newline
+    \newpage
 
     If the extrinsic is \textbf{unsigned}, and therefore an inherent, $T_v$ is
     defined as:
@@ -61,18 +65,28 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
     T_b := (A_i, Sig, E, M_i, F_i(m))
 \]
 
+where each values represents:
+\begin{itemize}
+    \item $A_i$: the 32-byte address of the sender (\ref{defn-extrinsic-address}).
+    \item $Sig$: the signature of the sender (\ref{defn-extrinsic-signature}).
+    \item $E$: the extra data for the extrinsic (\ref{defn-extra-data}).
+    \item $M_i$: the indicator of the Polkadot module (\ref{defn-module-indicator}).
+    \item $F_i(m)$: the indicator of the function of the Polkadot module (\ref{defn-function-indicator}).
+\end{itemize}
+
 \begin{definition}
+    \label{defn-extrinsic-address}
     Account Id, $A_i$, is the 32-byte address of the sender of the extrinsic as
-    described by the
-    \href{https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)}{SS58
-    format}.
+    described in the
+    \href{https://github.com/paritytech/substrate/wiki/External-Address-Format-(SS58)}{external
+    SS58 address format}.
 \end{definition}
 
 \begin{definition}
     \label{defn-extrinsic-signature}
-    The signature, $Sig$, is a varying data type indicating support for three
-    different signature types, followed by the signature created by the
-    extrinsic author:
+    The signature, $Sig$, is a varying data type indicating the used signature
+    type, followed by the signature created by the extrinsic author. The
+    following types are supported:
 
     \[
         Sig :=
@@ -154,7 +168,7 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 
     \begin{itemize}
         \item $M_{per}$: the period of validity from the block hash
-        specified as $H_h(Era_0)$ in definition \ref{defn-extrinsic-signature}.
+        specified as $H_h(B)$ in Definition \ref{defn-extrinsic-signature}.
         \item $M_{pha}$: the phase in the period that this extrinsic's lifetime begins.
     \end{itemize}
 
@@ -162,7 +176,7 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
     be included at any time.
     \newline
 
-    \todo{@fabio: waiting for clarification from Parity}
+    \todo{@fabio: WIP, waiting for clarification from Parity}
 \end{definition}
 
 \begin{definition}
