@@ -136,14 +136,26 @@ potential.
 
 \section{Calculation of the weight function}
 \label{sec:runtime-primitives}
-In order to calculate weight of block $B$, $TWF(B)$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as  loops, I/O operations, and data manipulation. Subsequently the performance and resource consumption of each part will be evaluated based on variaty of input parameters. Based on those observations, weights is assigned be to those operations \syed{that could have heavy implications on those design choices}{this doesn't make much sense to me, perhaps needs clarification}. These sub component of the code are discussed in Section \ref{sect:primitive-types}.
+In order to calculate weight of block $B$, $TWF(B)$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as  loops, I/O operations, and data manipulation. Subsequently the performance and resource consumption of each part will be evaluated based on variaty of input parameters. Based on those observations, weights is assigned be to those operations.\syed{that could have heavy implications on those design choices}{this sentence doesn't make much sense to me, perhaps needs clarification}. These sub component of the code are discussed in Section \ref{sect:primitive-types}.
+
+The general algorithm to calculate $\TWF(E)$ is described in the Section \ref{sect:benchmarking}.
 
 \syed{The final assigned weights are calculated by benchmarking the Runtime functions, which is described in section \ref{sect:benchmarking}.}{this needs to relate the computation of final weight to the primitive otherwise the paragraph looks disconnected}.
 \newline
 
 Section \ref{sect:examples-runtime-analysis} walks through two practical examples of Runtime function analysis.
 
-Not every possible benchmarking outcome can be invoked by varying input parameters \syed{to}{of} the Runtime function. In some 
+\section{Benchmarking}\label{sect:benchmarking}
+Calculating the extrinsic weight solely based on theoretical complexity of the underlying implementation proves to be too complicated and unreliable at the same time. Naunces such as {imprecision in back-end systems}{what does this exactly mean? more detail}, internal communication within the Runtime and design choices in the software could add enough overhead to make the asymtotic complexity practically meaningless.
+
+On the other benchmarking an extrinsics as black box could (using random parameters) most centainly results in missing corner cases and worst case senarios.
+
+Instead, we benchmark all available Runtime functions, which are invoked in the course \syed{create and}{functions do not create extrinsics} execution an extrinsic over a with a large collection of carefully selected input parameters and use the result of the benchmarking process to evaluate $\TWF(E)$.
+\newline
+
+In order to select useful parameters, the Runtime functions have to be analysed to fully understand which behaviors or conditions can result in expensive execution times, which is described closer in section \ref{sect:primitive-types}.
+
+\todo{review after reading the examples} Not every possible benchmarking outcome can be invoked by varying input parameters \syed{to}{of} the Runtime function. In some 
 circumstances, preliminary work is required before a specific benchmark can be reliably measured, such as creating certain preexisting entries in the storage or other changes to the environment. This is explained in more detail in section \ref{sect:examples-preliminary-work}.
 \newpage
 
@@ -245,19 +257,6 @@ functionality that the Runtime function is trying to provide. If the choice for
 that value is not obvious, then it's advised to run benchmarks on a big range of
 values and pick a conservative value below the \verb|targeted time per block|
 limit as described in section \ref{sec:limitations}.
-
-\section{Benchmarking}\label{sect:benchmarking}
-Assigning weights based on theoretical performance can be unreliable and too
-complex due to imprecision in back-end systems, internal communication within
-the Runtime and design choices in the software. Therefore, all available Runtime
-functions, which create and execute extrinsics, have to be benchmarked with a
-large collection of input parameters.
-\newline
-
-In order to select useful parameters, the Runtime functions have to be analysed
-to fully understand which behaviors or conditions can result in expensive
-execution times, which is described closer in section
-\ref{sect:primitive-types}.
 
 \subsection{Parameters}
 The inputs parameters highly vary depending on the Runtime function and must
