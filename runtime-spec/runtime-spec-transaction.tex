@@ -83,6 +83,9 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
         \end{cases}
     \]
 
+    \todo{@fabio: clarify whether Polkadot actually allows different signature types}.
+    \newline
+
     Signature types vary in sizes, but each individual type is always fixed-size
     and therefore does not contain a length prefix as specified by the SCALE
     codec. \verb|Ed25519| and \verb|Sr25519| signatures are 512-bit while
@@ -97,19 +100,23 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
             Raw, & \text{if } |Raw| \leq 256\\
             Blake2(Raw), & \text{if } |Raw| > 256\\
         \end{cases}\\
-        Raw &:= (M_i, F_i(m), E, R_v, T_v, H_h(G), H_h(Era_0))\\
+        Raw &:= (M_i, F_i(m), E, R_v, T_v, H_h(G), H_h(B))\\
         \end{aligned}
     \end{equation}
 
     where each value represents:
     \begin{itemize}
         \item $M_i$: the module indicator (\ref{defn-module-indicator}).
-        \item $F_i(m)$: the function indicator of the module (\ref{defn-function-indicator}).
+        \item $F_i(m)$: the function indicator of the module
+        (\ref{defn-function-indicator}).
         \item $E$: the extra data (\ref{defn-extra-data}).
-        \item $R_v$: a UINT32 containing the Runtime version.
-        \item $T_v$: a UINT32 containing the extrinsic version, which currently is \verb|2|.
+        \item $R_v$: a UINT32 containing the specification version of \verb|14|.
+        \item $T_v$: a UINT32 containing the extrinsic version.
+        \todo{@fabio: the source code seems to specify two types of extrinsic versions, one in Polkadot and one in Substrate... clarify}.
         \item $H_h(G)$: a 32-byte array containing the genesis hash.
-        \item $H_h(Era_0)$: a 32-byte array containing the hash of the block which started the specified Era.
+        \item $H_h(B)$: a 32-byte array containing the hash of the block which
+        starts the mortality period, as described in Definition
+        \ref{defn-extrinsic-mortality}.
     \end{itemize}
 \end{definition}
 
@@ -153,6 +160,7 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 
     If $M$ is equal to zero, then the extrinsic is considered immortal and can
     be included at any time.
+    \newline
 
     \todo{@fabio: waiting for clarification from Parity}
 \end{definition}
@@ -160,12 +168,10 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 \begin{definition}
     \label{defn-module-indicator}
     $M_i$ is an indicator for the Runtime to which Polkadot \textit{module},
-    $m$, the extrinsic should be forwarded to. The second item, $F_i(m)$,
-    indicates which \textit{function} (the actual extrinsic) of the specified
-    module should be executed.
+    $m$, the extrinsic should be forwarded to.
     \newline
 
-    $M_i$ is a varying data types pointing to every module exposed to the
+    $M_i$ is a varying data type pointing to every module exposed to the
     network.
 
     \[
@@ -182,20 +188,27 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 
 \begin{definition}
     \label{defn-function-indicator}
-    The $F_i(m)$ indicator varies for each module, since every module has
-    different functions. As an example, the \verb|Balances| module offers the
-    following functions:
+    $F_i(m)$ is a tuple which contains an indicator, $m_i$, for the Runtime to
+    which \textit{function} within the Polkadot \textit{module}, $m$, the
+    extrinsic should be forwarded to. This indicator is followed by the
+    concatenated and SCALE encoded parameters of the corresponding function,
+    $params$.
 
     \[
-    F_i(Balances) :=
-    \begin{cases}
-    0, & \text{transfer} \\
-    1, & \text{set\_balance} \\
-    2 & \text{force\_transfer} \\
-    3 & \text{transfer\_keep\_alive} \\
-    \end{cases}
+        F_i(m) := (m_i, params)
     \]
 
-    The concatenated and SCALE encoded parameters for each functions are
-    appended to $F_i(m)$.
+    The value of $m_i$ varies for each Polkadot module, since every module
+    offers different functions. As an example, the \verb|Balances| module has
+    the following functions:
+
+    \[
+        Balances_i :=
+        \begin{cases}
+        0, & \text{transfer} \\
+        1, & \text{set\_balance} \\
+        2 & \text{force\_transfer} \\
+        3 & \text{transfer\_keep\_alive} \\
+        \end{cases}
+    \]
 \end{definition}
