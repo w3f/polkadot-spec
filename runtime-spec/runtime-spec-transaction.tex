@@ -67,11 +67,11 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 
 where each values represents:
 \begin{itemize}
-    \item $A_i$: the 32-byte address of the sender (\ref{defn-extrinsic-address}).
-    \item $Sig$: the signature of the sender (\ref{defn-extrinsic-signature}).
-    \item $E$: the extra data for the extrinsic (\ref{defn-extra-data}).
-    \item $M_i$: the indicator of the Polkadot module (\ref{defn-module-indicator}).
-    \item $F_i(m)$: the indicator of the function of the Polkadot module (\ref{defn-function-indicator}).
+    \item $A_i$: the 32-byte address of the sender (Def. \ref{defn-extrinsic-address}).
+    \item $Sig$: the signature of the sender (Def. \ref{defn-extrinsic-signature}).
+    \item $E$: the extra data for the extrinsic (Def. \ref{defn-extra-data}).
+    \item $M_i$: the indicator of the Polkadot module (Def. \ref{defn-module-indicator}).
+    \item $F_i(m)$: the indicator of the function of the Polkadot module (Def. \ref{defn-function-indicator}).
 \end{itemize}
 
 \begin{definition}
@@ -120,10 +120,10 @@ where each values represents:
 
     where each value represents:
     \begin{itemize}
-        \item $M_i$: the module indicator (\ref{defn-module-indicator}).
+        \item $M_i$: the module indicator (Def. \ref{defn-module-indicator}).
         \item $F_i(m)$: the function indicator of the module
-        (\ref{defn-function-indicator}).
-        \item $E$: the extra data (\ref{defn-extra-data}).
+        (Def. \ref{defn-function-indicator}).
+        \item $E$: the extra data (Def. \ref{defn-extra-data}).
         \item $R_v$: a UINT32 containing the specification version of \verb|14|.
         \item $T_v$: a UINT32 containing the extrinsic version.
         \todo{@fabio: the source code seems to specify two types of extrinsic versions, one in Polkadot and one in Substrate... clarify}.
@@ -145,7 +145,7 @@ where each values represents:
 
     where each value represents:
     \begin{itemize}
-        \item $M$: contains the mortality of the extrinsic (\ref{defn-extrinsic-mortality}).
+        \item $M$: contains the mortality of the extrinsic (Def. \ref{defn-extrinsic-mortality}).
         \item $N$: a compact integer containing the nonce of the sender. The
         nonce must be incremented by one for each extrinsic created, otherwise
         the Polkadot network will reject the extrinsic.
