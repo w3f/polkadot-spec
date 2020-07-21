@@ -8,7 +8,7 @@ signature, and varying data types indicating the resulting Runtime function to
 be called, including the parameters required for that function to be executed.
 \newline
 
-\subsection{Preliminaries}
+\section{Preliminaries}
 
 \begin{definition}
     A transaction, $tx$, is a tuple consisting of the transaction version,
@@ -18,17 +18,15 @@ be called, including the parameters required for that function to be executed.
         tx := (T_v, T_b)
     \]
 
-    Type $T_b$ varies for each version and is specified in the corresponding
-    section.
+    The value of $T_b$ varies for each version. The current version 4 is
+    described in section \ref{sect-version-four}.
 \end{definition}
 
 \begin{definition}
     \label{defn-extrinsic-version}
-    $T_v$ is a single byte and defines the extrinsic version. The Runtime
-    handles extrinsics and its validity differently based on the version, where
-    the extrinsic format of each version is dictated by the Runtime. This allows
-    Polkadot to evolve with new and more advanced extrinsic formats, while still
-    being able to correctly execute older formats.
+    $T_v$ is a single byte and defines the extrinsic version. The required
+    format of an extrinsic is dictated by the Runtime. Older or unsupported
+    version are rejected.
     \newline
 
     $T_v$ does not consist of the version number directly, rather the version
@@ -62,7 +60,10 @@ be called, including the parameters required for that function to be executed.
     \verb|4|.
 \end{definition}
 
+\section{Extrinsics Body}
+
 \subsection{Version 4}
+\label{sect-version-four}
 
 Version 4 of the Polkadot extrinsic format is defined as follows:
 
