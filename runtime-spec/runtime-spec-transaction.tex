@@ -156,12 +156,14 @@ where each values represents:
 
 \begin{definition}
     \label{defn-extrinsic-mortality}
-    The \textbf{mortality}, $M$, specifies for how long an extrinsic is considered to
-    be valid for inclusion into the block. $M$ is a UINT32 consisting of two concatenated
-    UINT16 sub-components.
+    The \textbf{mortality}, $M$, is a mechanism which ensures that a transaction
+    is only valid within certain periods of the ongoing Polkadot lifetime.
+    \newline
+
+    $M$ is a UINT16 and formally defined as:
 
     \[
-        M := M_{per} | M_{pha}
+        M := Enc_{SC}(M_{per}, M_{pha})
     \]
 
     where each value represents:
@@ -176,7 +178,33 @@ where each values represents:
     be included at any time.
     \newline
 
-    \todo{@fabio: WIP, waiting for clarification from Parity}
+    The SCALE encoded representation of mortality $M$ deviates from most other
+    types. $M_{per}$ and $M_{pha}$ are encoded by using bitwise operators in
+    order to keep the required information as compact as possible.
+
+    \begin{algorithm}
+        \caption[]{\sc Encode Mortality}
+        \label{algo-encode-mortality}
+        \begin{algorithmic}[1]
+            \Require{$M_{per}, M_{pha}$}
+            \State \textbf{Init} $factor = \textsc{Max}(M_{per} >> 12, 1)$
+            \State \textbf{Init} $left = \textsc{Min}(\textsc{Max}(\textsc{TZ}(M_{per})-1,\ 1),\ 15)\ as\ UINT16$
+            \State \textbf{Init} $right = (\frac{M_{pha}}{factor} << 4)\ as\ UINT16$
+            \State \Return $left|right$
+        \end{algorithmic}
+
+        \begin{itemize}
+            \item {\sc Min(..)}: returns the minimum of two values.
+            \item {\sc Max(..)}: returns the maximum of two values.
+            \item {\sc TZ($num$)}: returns the number of trailing zeros in the
+            binary representation of $num$. For example, the binary
+            representation of \verb|40| is \verb|0010 1000|, which has three
+            trailing zeros.
+            \item $>>$: performs a binary right shift operation.
+            \item $<<$: performs a binary left shift operation.
+            \item $|$ : performs a bitwise OR operation.
+        \end{itemize}
+    \end{algorithm}
 \end{definition}
 
 \begin{definition}
