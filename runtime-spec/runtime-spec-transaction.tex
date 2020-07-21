@@ -8,22 +8,27 @@ signature, and varying data types indicating the resulting Runtime function to
 be called, including the parameters required for that function to be executed.
 \newline
 
-\[
-    tx := (T_v, T_b)
-\]
-
-Type $T_b$ varies for each version and is specified in the corresponding
-section.
-
 \subsection{Preliminaries}
 
 \begin{definition}
+    A transaction, $tx$, is a tuple consisting of the transaction version,
+    $T_v$ (Def. \ref{defn-extrinsic-version}), and the body of the transaction, $T_b$.
+
+    \[
+        tx := (T_v, T_b)
+    \]
+
+    Type $T_b$ varies for each version and is specified in the corresponding
+    section.
+\end{definition}
+
+\begin{definition}
     \label{defn-extrinsic-version}
-    $T_v$ defines the extrinsic version. The Runtime handles extrinsics and
-    its validity differently based on the version, where the extrinsic format
-    of each version is dictated by the Runtime. This allows Polkadot to evolve
-    with new and more advanced extrinsic formats, while still being able to
-    correctly execute older formats.
+    $T_v$ is a single byte and defines the extrinsic version. The Runtime
+    handles extrinsics and its validity differently based on the version, where
+    the extrinsic format of each version is dictated by the Runtime. This allows
+    Polkadot to evolve with new and more advanced extrinsic formats, while still
+    being able to correctly execute older formats.
     \newline
 
     $T_v$ does not consist of the version number directly, rather the version
@@ -140,12 +145,12 @@ where each values represents:
     extrinsic and the system it is meant to be executed in.
 
     \[
-        E := (M, N, P_t)
+        E := (T_m, N, P_t)
     \]
 
     where each value represents:
     \begin{itemize}
-        \item $M$: contains the mortality of the extrinsic (Def. \ref{defn-extrinsic-mortality}).
+        \item $T_m$: contains the mortality of the extrinsic (Def. \ref{defn-extrinsic-mortality}).
         \item $N$: a compact integer containing the nonce of the sender. The
         nonce must be incremented by one for each extrinsic created, otherwise
         the Polkadot network will reject the extrinsic.
@@ -156,55 +161,102 @@ where each values represents:
 
 \begin{definition}
     \label{defn-extrinsic-mortality}
-    The \textbf{mortality}, $M$, is a mechanism which ensures that a transaction
-    is only valid within certain periods of the ongoing Polkadot lifetime.
+    Transaction \textbf{mortality} is a mechanism which ensures that a
+    transaction is only valid within certain periods of the ongoing Polkadot
+    lifetime.
     \newline
 
-    $M$ is a UINT16 and formally defined as:
-
-    \[
-        M := Enc_{SC}(M_{per}, M_{pha})
-    \]
-
-    where each value represents:
+    The mortality mechanism works with two related values:
 
     \begin{itemize}
-        \item $M_{per}$: the period of validity from the block hash
-        specified as $H_h(B)$ in Definition \ref{defn-extrinsic-signature}.
-        \item $M_{pha}$: the phase in the period that this extrinsic's lifetime begins.
+        \item $M_{per}$: the period of validity from the block hash specified as
+        $H_h(B)$ in Definition \ref{defn-extrinsic-signature}.
+        \item $M_{pha}$: the phase in the period that this extrinsic's lifetime
+        begins.
     \end{itemize}
 
-    If $M$ is equal to zero, then the extrinsic is considered immortal and can
-    be included at any time.
-    \newline
 
-    The SCALE encoded representation of mortality $M$ deviates from most other
-    types. $M_{per}$ and $M_{pha}$ are encoded by using bitwise operators in
-    order to keep the required information as compact as possible.
+    $T_m$ refers to the SCALE encoded form of type $M_{per}$ and $M_{pha}$.
+    $T_m$ is the size of two bytes if the transaction is considered mortal,
+    or simply one bytes with the value equal to zero if the transaction is
+    considered immortal.
 
-    \begin{algorithm}
+    \[
+        T_m := Enc_{SC}(M_{per}, M_{pha})
+    \]
+
+    The SCALE encoded representation of mortality $T_m$ deviates from most
+    other types, as it's specialized to be the smallest possible value, as
+    described in Algorithm \ref{algo-encode-mortality} and
+    \ref{algo-decode-mortality}.
+
+    \begin{algorithm}[H]
         \caption[]{\sc Encode Mortality}
         \label{algo-encode-mortality}
         \begin{algorithmic}[1]
             \Require{$M_{per}, M_{pha}$}
+            \Statex // If the transaction is immortal, specify
+            \Statex // a single byte with the value equal to zero.
+            \State $\vcenter{
+                \begin{flalign*}
+                    \Return & 
+                    \begin{cases}
+                    0 & if\ transaction\ is\ immortal 
+                    \end{cases}&
+                \end{flalign*}
+            }$
             \State \textbf{Init} $factor = \textsc{Max}(M_{per} >> 12, 1)$
-            \State \textbf{Init} $left = \textsc{Min}(\textsc{Max}(\textsc{TZ}(M_{per})-1,\ 1),\ 15)\ as\ UINT16$
-            \State \textbf{Init} $right = (\frac{M_{pha}}{factor} << 4)\ as\ UINT16$
+            \State \textbf{Init} $left = \textsc{Min}(\textsc{Max}(\textsc{TZ}(M_{per})-1,\ 1),\ 15)$
+            \State \textbf{Init} $right = \frac{M_{pha}}{factor} << 4$
+            \Statex
+            \Statex // Returns a two byte value
             \State \Return $left|right$
         \end{algorithmic}
-
-        \begin{itemize}
-            \item {\sc Min(..)}: returns the minimum of two values.
-            \item {\sc Max(..)}: returns the maximum of two values.
-            \item {\sc TZ($num$)}: returns the number of trailing zeros in the
-            binary representation of $num$. For example, the binary
-            representation of \verb|40| is \verb|0010 1000|, which has three
-            trailing zeros.
-            \item $>>$: performs a binary right shift operation.
-            \item $<<$: performs a binary left shift operation.
-            \item $|$ : performs a bitwise OR operation.
-        \end{itemize}
     \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption[]{\sc Decode Mortality}
+        \label{algo-decode-mortality}
+        \begin{algorithmic}[1]
+            \Require{$T_m$}
+            \State $\vcenter{
+                \begin{flalign*}
+                    \Return & 
+                    \begin{cases}
+                    \textit{Immortal} & if\ T^{b0}_{mort} = 0
+                    \end{cases}&
+                \end{flalign*}
+            }$
+            \Statex 
+            \State \textbf{Init} $enc = T^{b0}_{mort} + (T^{b1}_{mort} << 8)$
+            \State \textbf{Init} $M_{per} = 2 << (enc\ mod\ (1 << 4))$
+            \State \textbf{Init} $factor = \textsc{Max}(M_{per} >> 12, 1)$
+            \State \textbf{Init} $M_{pha} = (enc >> 4) * factor$
+            \State $\vcenter{
+                \begin{flalign*}
+                    \Return & 
+                    \begin{cases}
+                    (M_{per}, M_{pha}) & if\ M_{per} \geq 4\ \textbf{and}\ M_{pha} < M_{per} \\
+                    Error & else
+                    \end{cases}&
+                \end{flalign*}
+            }$
+        \end{algorithmic}
+    \end{algorithm}
+
+    \begin{itemize}
+        \item $T^{b0}_{mort}$: the first byte of $T_m$.
+        \item $T^{b1}_{mort}$: the second byte of $T_m$.
+        \item {\sc Min(..)}: returns the minimum of two values.
+        \item {\sc Max(..)}: returns the maximum of two values.
+        \item {\sc TZ($num$)}: returns the number of trailing zeros in the
+        binary representation of $num$. For example, the binary
+        representation of \verb|40| is \verb|0010 1000|, which has three
+        trailing zeros.
+        \item $>>$: performs a binary right shift operation.
+        \item $<<$: performs a binary left shift operation.
+        \item $|$ : performs a bitwise OR operation.
+    \end{itemize}
 \end{definition}
 
 \begin{definition}
