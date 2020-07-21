@@ -314,7 +314,7 @@ to demonstrate the analysis process as described in section
 
 In Polkadot, accounts can save information about themselves onchain, known as
 the "Identity Info". This includes information such as display name, legal name,
-email address and so on. Polkadot selects a set of registrars which can judge
+email address and so on. Polkadot selects a set of \syed{registrars}{could we unfold this term in more detail what kind of entities are these registerar?} which can judge 
 identities and therefore incentivizes a reputation model. The judgement itself
 is done offchain. The registrars rating, however, is saved onchain, directly in
 the corresponding Identity Info. It's also note worthy that Identiy Info can
@@ -323,7 +323,7 @@ contain additional fields, set manually by the corresponding account holder.
 
 The function \verb|request_judgement| from the \verb|identity| Pallet allows
 users to request a judgement from a specific registrar. Studying this function
-reveals multiple design choices that can impact performance.
+reveals \syed{multiple design choices}{which design choice} that can impact performance.
 \newline
 
 First, it fetches a list of current registrars from storage and then searches
@@ -343,11 +343,11 @@ let mut id = <IdentityOf<T>>::get(&sender).ok_or(Error::<T>::NoIdentity)?;
 \end{verbatim}
 
 The Identity Info contains the entirety of entries, in an ordered form. It then
-proceeds the search all those entries for the specified registrar index. If an
-entry can be found, the value is updated (assuming the registrar is not
-"stickied", which implies it cannot be changed). In the context of registrars,
-this update implies that the Identity Info should be rejudged. If the entry
-cannot be found, the value is inserted into the index where a matching element
+proceeds the search all those entries for the specified registrar index. \syed{If an
+entry}{corresponding to the specific registerar?} can be found, the value \syed{is updated}{wasn't this a request for judgement or was is a request for judgment change?} (assuming the registrar is not
+"stickied", which implies it cannot be changed). \syed{In the context of registrars,
+this update implies that the Identity Info should be rejudged}{I'd bring that earlier not to confuse the reader}. If the entry
+cannot be found, \syed{the value}{perhaps be more explicit here, what value?} is inserted into the index where a matching element
 could be inserted while maintaining sorted order. This results in memory
 reallocation.
 
@@ -362,8 +362,8 @@ match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
 }
 \end{verbatim}
 
-After that, it proceeds to reserve the registrar fee, inserts the newly updated
-identity info into storage and deposits the event into the scheduler.
+\syed{After that, it proceeds to reserve the registrar fee, inserts the newly updated
+identity info into storage and deposits the event into the scheduler.}{these introduce hole lots of things, could we explain this in more details, what is registerar fee, how is it being reserved, what is the updated identity, what is the update, what does it mean to deposit the event into scheduler}
 
 \begin{verbatim}
 T::Currency::reserve(&sender, registrar.fee)?;
