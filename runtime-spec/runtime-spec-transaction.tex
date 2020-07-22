@@ -163,22 +163,27 @@ where each values represents:
 \begin{definition}
     \label{defn-extrinsic-mortality}
     Extrinsic \textbf{mortality} is a mechanism which ensures that an extrinsic
-    is only valid within certain periods of the ongoing Polkadot lifetime. The
-    extrinsic is not constrained to a specific block number, but is also valid
-    for many different blocks where conditions apply.
+    is only valid within a certain period of the ongoing Polkadot lifetime.
+    Extrinsics can also be immortal, as clarified in Section
+    \ref{sect-mortality-encoding}.
     \newline
 
     The mortality mechanism works with two related values:
 
     \begin{itemize}
-        \item $M_{per}$: the period of validity from the block hash specified as
-        $H_h(B)$ in Definition \ref{defn-extrinsic-signature}.
+        \item $M_{per}$: the period of validity in terms of block numbers from
+        the block hash specified as $H_h(B)$ in the payload (Def.
+        \ref{defn-extrinsic-signature}). The period must be the power of two,
+        such as \verb|32|, \verb|64|, \verb|128|, etc.
         \item $M_{pha}$: the phase in the period that this extrinsic's lifetime
-        begins.
+        begins. This value is calculated with a formula and validators can use
+        this value in order to determine which block hash is included in the
+        payload.
     \end{itemize}
 
-    The extrinsic author uses the number of the most recent block, $H_i(B)$,
-    and specifies the desired period in order the calculate the phase:
+    The extrinsic author uses the number of the block which starts the mortality
+    period, $H_i(B)$, and specifies the desired period in order the calculate
+    the phase:
 
     \[
         M_{pha} = H_i(B)\ mod\ M_{per}
@@ -186,29 +191,16 @@ where each values represents:
 
     $M_{per}$ and $M_{pha}$ are then included in the extrinsic, as clarified in
     Definition \ref{defn-extra-data}, in the SCALE encoded form of $T_m$ (Sect.
-    \ref{sect-mortality-encoding}). When a Polkadot validator tries to verify
-    the extrinsic, it will check the mortality by validating whether the
-    following condition applies:
-
-    \[
-        if\ H_i(B')\ mod\ M_{per} = M_{pha}
-    \]
-
-    where $H_i(B')$ is the number of the most recent block of the Polkadot
-    validator. If the condition is true then the extrinsic is valid.
+    \ref{sect-mortality-encoding}). Polkadot validators can use $M_{pha}$
+    to figure out the block hash included in the payload, which will therefore
+    result in a valid signature if the extrinsic is within the specified period 
+    or an invalid signature if the extrinsic "died".
 
     \subsubsection*{Example}
 
     The extrinsic author choses $M_{per} = 256$ at block \verb|10'000|,
-    resulting with $M_{pha} = 16$. The extrinsic is then valid for blocks:
-
-    \begin{itemize}
-        \item 10'000, since $10'000\ mod\ 256 = 16$
-        \item 10'256, since $10'256\ mod\ 256 = 16$
-        \item 10'512, since $10'512\ mod\ 256 = 16$
-        \item 10'768, since $10'768\ mod\ 256 = 16$
-        \item ...
-    \end{itemize}
+    resulting with $M_{pha} = 16$. The extrinsic is then valid for blocks
+    ranging from \verb|10'000| to \verb|10'256|.
 
     \subsubsection*{Encoding}\label{sect-mortality-encoding}
 
