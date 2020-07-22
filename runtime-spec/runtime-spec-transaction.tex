@@ -11,8 +11,8 @@ be called, including the parameters required for that function to be executed.
 \section{Preliminaries}
 
 \begin{definition}
-    A transaction, $tx$, is a tuple consisting of the transaction version,
-    $T_v$ (Def. \ref{defn-extrinsic-version}), and the body of the transaction, $T_b$.
+    An extrinsic , $tx$, is a tuple consisting of the extrinsic version,
+    $T_v$ (Def. \ref{defn-extrinsic-version}), and the body of the extrinsic, $T_b$.
 
     \[
         tx := (T_v, T_b)
@@ -107,9 +107,9 @@ where each values represents:
     \newline
 
     Signature types vary in sizes, but each individual type is always fixed-size
-    and therefore does not contain a length prefix as specified by the SCALE
-    codec. \verb|Ed25519| and \verb|Sr25519| signatures are 512-bit while
-    \verb|Ecdsa| is 560-bit, where the last 8 bits are the recovery ID.
+    and therefore does not contain a length prefix. \verb|Ed25519| and
+    \verb|Sr25519| signatures are 512-bit while \verb|Ecdsa| is 560-bit, where
+    the last 8 bits are the recovery ID.
     \newline
 
     The signature is created by signing payload $P$.
@@ -120,7 +120,7 @@ where each values represents:
             Raw, & \text{if } |Raw| \leq 256\\
             Blake2(Raw), & \text{if } |Raw| > 256\\
         \end{cases}\\
-        Raw &:= (M_i, F_i(m), E, R_v, T_v, H_h(G), H_h(B))\\
+        Raw &:= (M_i, F_i(m), E, R_v, F_v, H_h(G), H_h(B))\\
         \end{aligned}
     \end{equation}
 
@@ -131,8 +131,7 @@ where each values represents:
         (Def. \ref{defn-function-indicator}).
         \item $E$: the extra data (Def. \ref{defn-extra-data}).
         \item $R_v$: a UINT32 containing the specification version of \verb|14|.
-        \item $T_v$: a UINT32 containing the extrinsic version.
-        \todo{@fabio: the source code seems to specify two types of extrinsic versions, one in Polkadot and one in Substrate... clarify}.
+        \item $F_v$: a UINT32 containing the format version of \verb|2|.
         \item $H_h(G)$: a 32-byte array containing the genesis hash.
         \item $H_h(B)$: a 32-byte array containing the hash of the block which
         starts the mortality period, as described in Definition
@@ -151,7 +150,8 @@ where each values represents:
 
     where each value represents:
     \begin{itemize}
-        \item $T_m$: contains the mortality of the extrinsic (Def. \ref{defn-extrinsic-mortality}).
+        \item $T_m$: contains the SCALE encoded mortality of the extrinsic (Def.
+        \ref{defn-extrinsic-mortality}).
         \item $N$: a compact integer containing the nonce of the sender. The
         nonce must be incremented by one for each extrinsic created, otherwise
         the Polkadot network will reject the extrinsic.
@@ -162,9 +162,10 @@ where each values represents:
 
 \begin{definition}
     \label{defn-extrinsic-mortality}
-    Transaction \textbf{mortality} is a mechanism which ensures that a
-    transaction is only valid within certain periods of the ongoing Polkadot
-    lifetime.
+    Extrinsic \textbf{mortality} is a mechanism which ensures that an extrinsic
+    is only valid within certain periods of the ongoing Polkadot lifetime. The
+    extrinsic is not constrained to a specific block number, but is also valid
+    for many different blocks where conditions apply.
     \newline
 
     The mortality mechanism works with two related values:
@@ -176,10 +177,44 @@ where each values represents:
         begins.
     \end{itemize}
 
+    The extrinsic author uses the number of the most recent block, $H_i(B)$,
+    and specifies the desired period in order the calculate the phase:
+
+    \[
+        M_{pha} = H_i(B)\ mod\ M_{per}
+    \]
+
+    $M_{per}$ and $M_{pha}$ are then included in the extrinsic, as clarified in
+    Definition \ref{defn-extra-data}, in the SCALE encoded form of $T_m$ (Sect.
+    \ref{sect-mortality-encoding}). When a Polkadot validator tries to verify
+    the extrinsic, it will check the mortality by validating whether the
+    following condition applies:
+
+    \[
+        if\ H_i(B')\ mod\ M_{per} = M_{pha}
+    \]
+
+    where $H_i(B')$ is the number of the most recent block of the Polkadot
+    validator. If the condition is true then the extrinsic is valid.
+
+    \subsubsection*{Example}
+
+    The extrinsic author choses $M_{per} = 256$ at block \verb|10'000|,
+    resulting with $M_{pha} = 16$. The extrinsic is then valid for blocks:
+
+    \begin{itemize}
+        \item 10'000, since $10'000\ mod\ 256 = 16$
+        \item 10'256, since $10'256\ mod\ 256 = 16$
+        \item 10'512, since $10'512\ mod\ 256 = 16$
+        \item 10'768, since $10'768\ mod\ 256 = 16$
+        \item ...
+    \end{itemize}
+
+    \subsubsection*{Encoding}\label{sect-mortality-encoding}
 
     $T_m$ refers to the SCALE encoded form of type $M_{per}$ and $M_{pha}$.
-    $T_m$ is the size of two bytes if the transaction is considered mortal,
-    or simply one bytes with the value equal to zero if the transaction is
+    $T_m$ is the size of two bytes if the extrinsic is considered mortal,
+    or simply one bytes with the value equal to zero if the extrinsic is
     considered immortal.
 
     \[
@@ -196,13 +231,13 @@ where each values represents:
         \label{algo-encode-mortality}
         \begin{algorithmic}[1]
             \Require{$M_{per}, M_{pha}$}
-            \Statex // If the transaction is immortal, specify
+            \Statex // If the extrinsic is immortal, specify
             \Statex // a single byte with the value equal to zero.
             \State $\vcenter{
                 \begin{flalign*}
                     \Return & 
                     \begin{cases}
-                    0 & if\ transaction\ is\ immortal 
+                    0 & if\ extrinsic\ is\ immortal 
                     \end{cases}&
                 \end{flalign*}
             }$
