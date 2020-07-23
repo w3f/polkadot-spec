@@ -53,23 +53,28 @@ jobs:
 
 
   diff-spec-host:
-    name: Diff host specification
+    name: Compare host specification
     runs-on: ubuntu-18.04
     steps:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 2
+      if: github.event_name == 'push'
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+      if: github.event_name == 'pull_request'
     - name: Install dependencies
       run: |
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
         sudo apt-get update
         sudo apt-get install -y xvfb texmacs
-    - name: Diff host specification
+    - name: Compare host specification
       run: make -C host-spec diff REV=${GITHUB_BASE_REF:-HEAD~1}
     - name: Upload host specification diffs
       uses: actions/upload-artifact@v2
       with:
         name: polkadot-host-spec.diff.pdf
-        path: host-spec/*.diff.pdf
+        path: host-spec/polkadot-host-spec.diff.pdf
 
