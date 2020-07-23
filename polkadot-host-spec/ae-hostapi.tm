@@ -257,13 +257,8 @@
 
   <section|Child Storage><label|sect-child-storages>
 
-  Interface for accessing the child storage from within the runtime. Child
-  storages work the same way that regular storages do, but use two keys for
-  each value instead of just one. This allows for the functionality of having
-  identical keys with different values based on certain contextes, such as
-  separate storages for each Smart Contract and or Parachain, identified by
-  the preceding key. In case of Smart Contracts, the identifier could be an
-  address while for Parachain it could be the Parachain ID.
+  Interface for accessing the child storage from within the runtime, as
+  defined in Section <reference|sect-child-trie-structure>.
 
   <\definition>
     <label|defn-child-storage-type><strong|Child storage> key is the
@@ -2049,7 +2044,6 @@
     <associate|auto-133|<tuple|A.4|85>>
     <associate|auto-134|<tuple|A.9.1|85>>
     <associate|auto-135|<tuple|A.9.1.1|85>>
-    <associate|auto-136|<tuple|A.9.1.1|?>>
     <associate|auto-14|<tuple|A.1.6.1|66>>
     <associate|auto-15|<tuple|A.1.7|67>>
     <associate|auto-16|<tuple|A.1.7.1|67>>
