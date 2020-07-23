@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|polkadot_host_spec.tm>
 
@@ -396,6 +396,42 @@
     </algorithmic>
   </algorithm>
 
+  <subsection|Child Tries><label|sect-child-trie-structure>
+
+  Child tries are trie structures as defined Section
+  <reference|sect-state-storage-trie-structure>, but are saved as
+  subcomponents within the Polkadot state trie. Child tries are in their own
+  isolated environment and the main Polkadot state trie only links to an
+  individual child trie by its corresponding Merkle proof, as described in
+  Section <reference|sect-merkl-proof>
+
+  \;
+
+  Child tries are used in situations where duplicate keys must be able to
+  exist within the Polkadot state trie. This applies to utilities such as
+  Parachains or Smart Contracts, where this additional isolation prevents any
+  undesired interference between the separated states. The Polkadot Host
+  makes no assumptions about how child tries are used, but only provides the
+  functionality for it. This is described in more detail in the Host API,
+  Section <reference|sect-child-storages>.
+
+  \;
+
+  A node <math|N> in child trie <math|\<cal-N\><rsub|child>> is not available
+  in Polkadot state trie <math|\<cal-N\>>, hence <math|N
+  \<in\>\<cal-N\><rsub|child> <mid|\|>N\<nin\>\<cal-N\>> and
+  <math|N\<in\>\<cal-N\><mid|\|>N\<nin\>\<cal-N\><rsub|child>>.
+  <math|\<cal-N\>> links to <math|\<cal-N\><rsub|child>> by using
+  <math|<around*|(|k<rsub|N>,H<around*|(|\<cal-N\><rsub|child>|)>|)>> as its
+  key/value pair. The Polkadot Host APIs as defined in
+  <reference|sect-child-storages> provides the key <math|k<rsub|N>> in order
+  to identify the child trie, followed by a second key in order to identify
+  the value within that child trie. Every time a child trie is modified, the
+  Merkle proof of the child trie in <math|\<cal-N\>> must be updated first.
+  After that, the final Merkle proof of the Polkadot state <math|\<cal-N\>>
+  can be calculated. This mechanism provides a proof of the full Polkadot
+  state including all its child states.
+
   <subsection|Merkle Proof><label|sect-merkl-proof>
 
   To prove the consistency of the state storage across the network and its
@@ -404,10 +440,14 @@
   be computed rigorously to make the inter-implementation data integrity
   possible.
 
+  \;
+
   The Merkle value of each node should depend on the Merkle value of all its
   children as well as on its corresponding data in the state storage. This
   recursive dependancy is encompassed into the subvalue part of the node
   value which recursively depends on the Merkle value of its children.
+
+  \;
 
   We use the auxilary function introduced in Definition
   <reference|defn-children-bitmap> to encode and decode information stored in
@@ -478,41 +518,52 @@
 
   \;
 
+  \;
+
   <\with|par-mode|right>
-    <qed>
+    \;
   </with>
 
   \;
 </body>
 
-<initial|<\collection>
-</collection>>
+<\initial>
+  <\collection>
+    <associate|chapter-nr|1>
+    <associate|page-first|17>
+    <associate|section-nr|2<uninit>>
+    <associate|subsection-nr|1>
+  </collection>
+</initial>
 
 <\references>
   <\collection>
-    <associate|algo-aggregate-key|<tuple|1.1|?>>
-    <associate|algo-pk-length|<tuple|1.2|?>>
-    <associate|auto-1|<tuple|1|?>>
-    <associate|auto-2|<tuple|1.1|?>>
-    <associate|auto-3|<tuple|1.1.1|?>>
-    <associate|auto-4|<tuple|1.1|?>>
-    <associate|auto-5|<tuple|1.1.2|?>>
-    <associate|auto-6|<tuple|1.1.3|?>>
-    <associate|auto-7|<tuple|1.1.4|?>>
-    <associate|chap-state-spec|<tuple|1|?>>
-    <associate|defn-children-bitmap|<tuple|1.10|?>>
-    <associate|defn-index-function|<tuple|1.7|?>>
-    <associate|defn-merkle-value|<tuple|1.12|?>>
-    <associate|defn-node-header|<tuple|1.9|?>>
-    <associate|defn-node-key|<tuple|1.6|?>>
-    <associate|defn-node-subvalue|<tuple|1.11|?>>
-    <associate|defn-node-value|<tuple|1.8|?>>
-    <associate|defn-nodetype|<tuple|1.4|?>>
-    <associate|defn-stored-value|<tuple|1.1|?>>
-    <associate|key-encode-in-trie|<tuple|1.1|?>>
-    <associate|sect-merkl-proof|<tuple|1.1.4|?>>
-    <associate|sect-state-storage|<tuple|1.1|?>>
-    <associate|sect-state-storage-trie-structure|<tuple|1.1.3|?>>
+    <associate|algo-aggregate-key|<tuple|2.1|?>>
+    <associate|algo-pk-length|<tuple|2.2|?>>
+    <associate|auto-1|<tuple|2|?>>
+    <associate|auto-2|<tuple|2.1|?>>
+    <associate|auto-3|<tuple|2.1.1|?>>
+    <associate|auto-4|<tuple|2.1|?>>
+    <associate|auto-5|<tuple|2.1.2|?>>
+    <associate|auto-6|<tuple|2.1.3|?>>
+    <associate|auto-7|<tuple|2.1.4|?>>
+    <associate|auto-8|<tuple|2.1.5|?>>
+    <associate|auto-9|<tuple|2.1.6|?>>
+    <associate|chap-state-spec|<tuple|2|?>>
+    <associate|defn-children-bitmap|<tuple|2.10|?>>
+    <associate|defn-index-function|<tuple|2.7|?>>
+    <associate|defn-merkle-value|<tuple|2.12|?>>
+    <associate|defn-node-header|<tuple|2.9|?>>
+    <associate|defn-node-key|<tuple|2.6|?>>
+    <associate|defn-node-subvalue|<tuple|2.11|?>>
+    <associate|defn-node-value|<tuple|2.8|?>>
+    <associate|defn-nodetype|<tuple|2.4|?>>
+    <associate|defn-stored-value|<tuple|2.1|?>>
+    <associate|key-encode-in-trie|<tuple|2.1|?>>
+    <associate|sect-child-trie-structure|<tuple|2.1.4|?>>
+    <associate|sect-merkl-proof|<tuple|2.1.5|?>>
+    <associate|sect-state-storage|<tuple|2.1|?>>
+    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|?>>
   </collection>
 </references>
 
@@ -529,27 +580,27 @@
       storage.|<pageref|auto-4>>
     </associate>
     <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|1<space|2spc>State
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>State
       Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-1><vspace|0.5fn>
 
-      1.1<space|2spc>State Storage and Storage Trie
+      2.1<space|2spc>State Storage and Storage Trie
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      <with|par-left|<quote|1tab>|1.1.1<space|2spc>Accessing System Storage
+      <with|par-left|<quote|1tab>|2.1.1<space|2spc>Accessing System Storage
       \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>>
 
-      <with|par-left|<quote|1tab>|1.1.2<space|2spc>The General Tree Structure
+      <with|par-left|<quote|1tab>|2.1.2<space|2spc>The General Tree Structure
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
-      <with|par-left|<quote|1tab>|1.1.3<space|2spc>Trie Structure
+      <with|par-left|<quote|1tab>|2.1.3<space|2spc>Trie Structure
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|1.1.4<space|2spc>Merkle Proof
+      <with|par-left|<quote|1tab>|2.1.4<space|2spc>Merkle Proof
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
     </associate>

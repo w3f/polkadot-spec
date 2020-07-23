@@ -20,8 +20,9 @@
 
   <section|Storage>
 
-  Interface for accessing the child storage from within the runtime. Child
-  Storages are defined in section <reference|sect-child-storages>.
+  Interface for accessing the storage utilities from within the runtime,
+  including child storages. Child storages are defined in section
+  <reference|sect-child-storages>.
 
   <subsection|<verbatim|ext_set_storage>><label|sect-set-storage>
 

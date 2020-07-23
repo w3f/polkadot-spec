@@ -265,12 +265,6 @@
   the preceding key. In case of Smart Contracts, the identifier could be an
   address while for Parachain it could be the Parachain ID.
 
-  \;
-
-  Child storages are more performant than simply using prefixes, since the
-  storage space can quickly be identified and does not require filtering the
-  entire database based on prefixes.
-
   <\definition>
     <label|defn-child-storage-type><strong|Child storage> key is the
     identifier for the child storage. Multiple child storages are possible,
@@ -2055,6 +2049,7 @@
     <associate|auto-133|<tuple|A.4|85>>
     <associate|auto-134|<tuple|A.9.1|85>>
     <associate|auto-135|<tuple|A.9.1.1|85>>
+    <associate|auto-136|<tuple|A.9.1.1|?>>
     <associate|auto-14|<tuple|A.1.6.1|66>>
     <associate|auto-15|<tuple|A.1.7|67>>
     <associate|auto-16|<tuple|A.1.7.1|67>>
