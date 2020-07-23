@@ -10,7 +10,8 @@ polkadot-host-spec.pdf: host-spec.tm $(CHAPTERS) $(APPENDICES) $(FIGURES)
 REV  ?= HEAD
 HASH := $(shell git rev-parse $(REV))
 
-REVDIR := $(TEMPDIR)/host-spec-$(HASH)
+TMPDIR ?= /tmp
+REVDIR := $(TMPDIR)/host-spec-$(HASH)
 
 DIFF_SRCS := $(patsubst %.tm,$(REVDIR)/%.tm,$(CHAPTERS) $(APPENDICES))
 DIFF_PDFS := $(patsubst %.tm,%.diff.pdf,$(CHAPTERS) $(APPENDICES))
