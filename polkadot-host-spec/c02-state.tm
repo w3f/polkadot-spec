@@ -445,7 +445,10 @@
   The Merkle value of each node should depend on the Merkle value of all its
   children as well as on its corresponding data in the state storage. This
   recursive dependancy is encompassed into the subvalue part of the node
-  value which recursively depends on the Merkle value of its children.
+  value which recursively depends on the Merkle value of its children. As
+  Section <reference|sect-child-trie-structure> clarifies, the Merkle proof
+  of each <strong|child trie> must be updated first before the final Polkadot
+  state root can be calculated.
 
   \;
 
@@ -548,7 +551,6 @@
     <associate|auto-6|<tuple|2.1.3|?>>
     <associate|auto-7|<tuple|2.1.4|?>>
     <associate|auto-8|<tuple|2.1.5|?>>
-    <associate|auto-9|<tuple|2.1.6|?>>
     <associate|chap-state-spec|<tuple|2|?>>
     <associate|defn-children-bitmap|<tuple|2.10|?>>
     <associate|defn-index-function|<tuple|2.7|?>>
@@ -600,9 +602,13 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|2.1.4<space|2spc>Merkle Proof
+      <with|par-left|<quote|1tab>|2.1.4<space|2spc>Child Tries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
+
+      <with|par-left|<quote|1tab>|2.1.5<space|2spc>Merkle Proof
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>>
     </associate>
   </collection>
 </auxiliary>
