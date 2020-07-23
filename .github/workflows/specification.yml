@@ -51,3 +51,25 @@ jobs:
         name: polkadot-runtime-spec.pdf
         path: runtime-spec/polkadot-runtime-spec.pdf
 
+
+  diff-spec-host:
+    name: Diff host specification
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+    - name: Install dependencies
+      run: |
+        sudo apt-key add .github/apt-texmacs.asc
+        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
+        sudo apt-get update
+        sudo apt-get install -y xvfb texmacs
+    - name: Diff host specification
+      run: make -C host-spec diff REV=${GITHUB_BASE_REF:-HEAD~1}
+    - name: Upload host specification diffs
+      uses: actions/upload-artifact@v2
+      with:
+        name: polkadot-host-spec.diff.pdf
+        path: host-spec/*.diff.pdf
+
