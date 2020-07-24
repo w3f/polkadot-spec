@@ -69,4 +69,37 @@ base-layer protocols:
 After a base-layer protocol is established, the Polkadot Host will apply the
 Noise protocol.
 
+\subsection{Substreams}
+
+After the node establishes a connection with a peer, the use of multiplexing
+allows the Polkadot Host to open substreams. Substreams allow the negotiation of
+\textit{application-specific protocols}, where each protocol servers a specific
+utility.
+
+The Polkadot Host adoptes the following, standardized \verb|libp2p|
+application-specific protocols:
+
+\begin{itemize}
+    \item \verb|/ipfs/ping/1.0.0| - Open a substream to a peer and initialize a
+    ping to verify if a connection is till alive. If the peer does not respond,
+    the connection is dropped.
+    \item \verb|/ipfs/id/1.0.0| - Open a substream to a peer to ask information
+    about that peer.
+    \item \verb|/<protocol_id>/kad/| - Open a substream for Kademlia
+    \verb|FIND_NODE| requests.
+\end{itemize}
+
+Additional, non-standardized protocols:
+
+\begin{itemize}
+    \item \verb|/<protocol-id>/sync/2| - a request and response protocol that
+    allows the Polkadot Host to perform information about blocks.
+    \item \verb|/<protocol-id>/light/2| - a request and response protocol that
+    allows a light client to perform information about the state.
+    \item \verb|/<protocol-id>/transactions/1| - a notification protocol which
+    sends transactions to connected peers.
+    \item \verb|/<protocol-id>/block-announces/1| - a notification protocol
+    which sends blocks to connected peers.
+\end{itemize}
+
 \end{document}
