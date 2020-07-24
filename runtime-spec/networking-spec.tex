@@ -10,10 +10,8 @@
 \geometry{letterpaper}
 
 \begin{document}
-\title{
-    {\Huge Polkadot Networking}\\
-    {\Large Protocol Specification}
-}
+\title{{\Huge Polkadot Networking}\\
+    {\Large Protocol Specification}}
 
 \date{}
 \maketitle
@@ -49,5 +47,26 @@ The Polkadot Host uses various mechanism for peer dicovery.
     \item Kademlia requests - Kademlia supports \verb|FIND_NODE| requests, where
     nodes respond with their list of available peers.
 \end{itemize}
+
+\subsection{Connection establishment}
+
+The Polkadot Host can establish a connection with any peer it knows the address.
+\verb|libp2p| uses the \verb|multistream-select| protocol in order to establish
+an encryption and multiplexing layer. The Polkadot Host supports multiple
+base-layer protocols:
+
+\begin{itemize}
+    \item TCP/IP - addresses in the form of \verb|/ip4/1.2.3.4/tcp/| establish a
+    TCP connection and negotiate a encryption and multiplexing layer.
+    \item Websockets - addresses in the form of \verb|/ip4/1.2.3.4/ws/|
+    establish a TCP connection and negotiate the Websocket protocol within the
+    connection. Additionally, a encryption and multiplexing layer is negotiated
+    within the Websocket connection.
+    \item DNS - addresses in form of \verb|/dns/website.domain/tcp/| and
+    \verb|/dns/website.domain/ws/|.
+\end{itemize}
+
+After a base-layer protocol is established, the Polkadot Host will apply the
+Noise protocol.
 
 \end{document}
