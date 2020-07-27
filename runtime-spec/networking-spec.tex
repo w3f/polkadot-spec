@@ -119,6 +119,30 @@ Additional, non-standardized protocols:
     \end{itemize}
 \end{definition}
 
+\begin{definition}
+    \label{defn-block-attributes}
+    The block attributes, $B_{attr}$, is a 8-bit unsigned integer indicating the
+    artifacts to request.
+
+    \begin{itemize}
+        \item \verb|1|: include block header.
+        \item \verb|2|: include block body
+        \item \verb|4|: include block receipt
+        \item \verb|8|: include block message queue.
+        \item \verb|16|: include block justification.
+    \end{itemize}
+\end{definition}
+
+\begin{definition}
+    \label{defn-sequence-direction}
+    Block enumeration direction which can be one of the following values:
+
+    \begin{itemize}
+        \item \verb|0|: enumerate in ascending order (from child to parent).
+        \item \verb|1|: enumerate in descending order (from parent to canonical child).
+    \end{itemize}
+\end{definition}
+
 \subsection{Status Packets}
 
 A status message sent on connection.
@@ -139,6 +163,27 @@ where each value represents:
 \end{itemize}
 
 \subsection{Block Request}
+
+Request block from a peer.
+
+\[
+    M^B_R := (R_{id}, B_{attr}, B_s, Option(B_e), S_d, Option(|\mathbb{B}|))
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
+    \item $B_{attr}$: block attributes to request (Def.
+    \ref{defn-block-attributes}).
+    \item $B_s$: indicates the starting point from this block, which can either
+    be 32-byte block hash or a UINT32 block number.
+    \item $Option(B_e)$: an \verb|Option| indicating the ending to the 32-byte
+    hash. An implementation defined maximum is used when unspecified.
+    \item $S_d$: sequence direction (Def. \ref{defn-sequence-direction}). 
+    \item $Option(|\mathbb{B}|)$: maximum number of blocks to return. An implementation
+    defined maximum is used when unspecified.
+\end{itemize}
 
 \subsection{Block Response}
 
