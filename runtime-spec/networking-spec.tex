@@ -347,7 +347,34 @@ where each value represents:
 
 \subsection{Remote Header Request}
 
+Remote header request.
+
+\[
+    M^{RHR}_{Req} := (R_{id}, B_{nr})
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
+    \item $B_{nr}$: a UINT32 indicating the block number the header is for.
+\end{itemize}
+
 \subsection{Remote Header Response}
+
+\[
+    M^{RHR}_{Res} := (R_{id}, Option(H), S_p)
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
+    made for.
+    \item $Option(H)$: the block header. This is \verb|None| if proof generation
+    has failed (e.g. header is unknown)
+    \item $S_p$: a storage proof (Def. \ref{defn-storage-proof}).
+\end{itemize}
 
 \subsection{Remote Changes Request}
 
