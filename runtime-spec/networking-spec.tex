@@ -378,6 +378,29 @@ where each value represents:
 
 \subsection{Remote Changes Request}
 
+Remote changes request.
+
+\[
+    M^{RCR}_{Req} := (R_{id}, B_s, B_e, B_{min}, B_{max}, Option(k_c), k)
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
+    \item $B_s$: a 32-byte block hash indicating the starting point.
+    \item $B_e$: . a 32-byte block hash indicating the ending point.
+    \item $B_{min}$: a 32-byte block hash indicating the first block for which
+    the requester has the changes trie root. All other affected roots must be
+    proved.
+    \item $B_{max}$: a 32-byte block hash indicating the last block that we can
+    use when querying changes.
+    \item $Option(k_c)$: a byte slice containing the child storage key which
+    changes are requested for.
+    \item $k$: a byte slice containing the storage key which changes are
+    requested for.
+\end{itemize}
+
 \subsection{Remote Changes Response}
 
 \subsection{Remote Child Storage Read Request}
