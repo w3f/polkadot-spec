@@ -162,7 +162,7 @@ where each value represents:
     \item $G_h$: a 32-byte indicating the genesis block hash.
 \end{itemize}
 
-\subsection{Block Request}
+\subsection{Block Request}\label{sect-block-request}
 
 Request block from a peer.
 
@@ -186,6 +186,21 @@ where each value represents:
 \end{itemize}
 
 \subsection{Block Response}
+
+Response to block request (Sect. \ref{sect-block-request}).
+
+\[
+    M^B_R := (R_{id}, \mathbb{B})
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
+    made for.
+    \item $\mathbb{B}$: an array containing the block data for the requested
+    sequence.
+\end{itemize}
 
 \subsection{Block Announce}
 
