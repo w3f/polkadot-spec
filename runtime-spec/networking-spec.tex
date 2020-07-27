@@ -239,7 +239,27 @@ where each value represents:
 
 \subsection{Transactions}
 
+A collection of transactions, where each transaction is a byte array.
+
+\begin{alignat*}{2}
+    M^T &:= (T_0, ... T_n) \\
+    T &:= (b_0, ... b_n)
+\end{alignat*}
+
 \subsection{Consensus Protocol}
+
+A consensus message.
+
+\[
+    M^C_P := (e_{id}, D)
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $e_{id}$: a 4-byte unique ID of the consensus engine.
+    \item $D$: a byte array containing the message payload.
+\end{itemize}
 
 \subsection{Remote Method Call Request}
 
