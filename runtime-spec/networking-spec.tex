@@ -182,12 +182,11 @@ Additional, non-standardized protocols:
     the keys covered by the proof. Verifying the proof requires constructing the partial trie from
     the serialized nodes and performing the key lookups
 
-    \begin{alignat*}{2}
-        S_p &:= (N_0, ... N_n) \\
-        N &:= (b_0, ... b_n)
-    \end{alignat*}
+    \[
+        S_p := (A_0, ... A_n)
+    \]
 
-    where $N$ represents the node.
+    where $A$ is a byte array containing the trie proofs.
 \end{definition}
 
 \subsection{Status Packets}
@@ -195,7 +194,7 @@ Additional, non-standardized protocols:
 A status message sent on connection.
 
 \[
-    M^S := (P_v, Min_v, R, B_n, H_h(B), G_h)
+    M^S := (P_v, Min_v, R, H_i(B), H_h(B), H_h(B_{gen}))
 \]
 
 where each value represents:
@@ -204,17 +203,17 @@ where each value represents:
     \item $P_v$: a UINT32 indicating the Protocol version.
     \item $Min_v$: a UINT32 indicating the minimum supported version.
     \item $R$: Supported roles (Def. \ref{defn-roles}).
-    \item $B_n$: a UINT32 indicating the best block number.
+    \item $H_i(B)$: a UINT32 indicating the best block number.
     \item $H_h(B)$: a 32-byte indicating the best block hash.
-    \item $G_h$: a 32-byte indicating the genesis block hash.
+    \item $H_h(B_{gen})$: a 32-byte indicating the genesis block hash.
 \end{itemize}
 
 \subsection{Block Request}\label{sect-block-request}
 
-Request block from a peer.
+Request blocks from a peer.
 
 \[
-    M^B_Req := (R_{id}, B_{attr}, B_s, Option(B_e), S_d, Option(|\mathbb{B}|))
+    M^B_Req := (R_{id}, B_{attr}, H_h(B_s), Option(H_h(B_e)), S_d, Option(|\mathbb{B}|))
 \]
 
 where each value represents:
@@ -223,13 +222,13 @@ where each value represents:
     \item $R_{id}$: a UINT64 indicating the unique ID of a request.
     \item $B_{attr}$: block attributes to request (Def.
     \ref{defn-block-attributes}).
-    \item $B_s$: indicates the starting point from this block, which can either
+    \item $H_h(B_s)$: indicates the starting point from this block, which can either
     be 32-byte block hash or a UINT32 block number.
-    \item $Option(B_e)$: indicates the ending to the 32-byte hash. An
-    implementation defined maximum is used when unspecified.
+    \item $Option(H_h(B_e))$: indicates the ending point to the 32-byte block
+    hash. An implementation defined maximum is used when unspecified.
     \item $S_d$: sequence direction (Def. \ref{defn-sequence-direction}). 
-    \item $Option(|\mathbb{B}|)$: maximum number of blocks to return. An implementation
-    defined maximum is used when unspecified.
+    \item $Option(|A|)$: maximum number of blocks to return. An
+    implementation defined maximum is used when unspecified.
 \end{itemize}
 
 \subsection{Block Response}
@@ -237,7 +236,7 @@ where each value represents:
 Response to block request (Sect. \ref{sect-block-request}).
 
 \[
-    M^B_Res := (R_{id}, \mathbb{B})
+    M^B_{Res} := (R_{id}, A)
 \]
 
 where each value represents:
@@ -245,7 +244,7 @@ where each value represents:
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the ID of the request this response was
     made for.
-    \item $\mathbb{B}$: an array containing the block data for the requested
+    \item $A$: an array containing the block data for the requested
     sequence.
 \end{itemize}
 
@@ -254,7 +253,7 @@ where each value represents:
 Announce a new complete relay chain block on the network.
 
 \[
-    M^B_A := (H_b, Option(S_b), Option(D))
+    M^B_A := (H_b, Option(S_b), Option(A))
 \]
 
 where each value represents:
@@ -262,7 +261,7 @@ where each value represents:
 \begin{itemize}
     \item $H_b$: the new block header (Def. \todo{fabio}).
     \item $Option(S_b)$: block state (Def. \ref{defn-block-state}).
-    \item $Option(D)$: a byte array containing the data associated with this
+    \item $Option(A)$: a byte array containing the data associated with this
     block announcement. For example a candidate message.
 \end{itemize}
 
@@ -270,17 +269,16 @@ where each value represents:
 
 A collection of transactions, where each transaction is a byte array.
 
-\begin{alignat*}{2}
-    M^{Tx} &:= (T_0, ... T_n) \\
-    T &:= (b_0, ... b_n)
-\end{alignat*}
+\[
+    M^{Tx} := (A_0, ... A_n)
+\]
 
 \subsection{Consensus Protocol}\label{sect-consensus-protocol}
 
 A consensus message.
 
 \[
-    M^C_P := (e_{id}, D)
+    M^C_P := (e_{id}, A)
 \]
 
 where each value represents:
@@ -295,7 +293,7 @@ where each value represents:
 Remote call request.
 
 \[
-    M^{RMC}_{Req} := (R_{id}, H_h(B), M, D)
+    M^{RMC}_{Req} := (R_{id}, H_h(B), A^1, A^2)
 \]
 
 where each value represents:
@@ -303,9 +301,9 @@ where each value represents:
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the unique ID of a request.
     \item $H_h(B)$: a 32-byte block hash at which to perform this call.
-    \item $M$: a byte array containing a valid UTF-8 sequence indicating the
+    \item $A^1$: a byte array containing a valid UTF-8 sequence indicating the
     method name.
-    \item $D$: a byte array containing the call data.
+    \item $A^2$: a byte array containing the call data.
 \end{itemize}
 
 \subsection{Remote Method Call Response}
@@ -359,14 +357,14 @@ where each value represents:
 Remote header request.
 
 \[
-    M^{RHR}_{Req} := (R_{id}, B_{nr})
+    M^{RHR}_{Req} := (R_{id}, H_i(B))
 \]
 
 where each value represents:
 
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $B_{nr}$: a UINT32 indicating the block number the header is for.
+    \item $H_i(B)$: a UINT32 indicating the block number the header is for.
 \end{itemize}
 
 \subsection{Remote Header Response}
@@ -390,23 +388,23 @@ where each value represents:
 Remote changes request.
 
 \[
-    M^{RCR}_{Req} := (R_{id}, B_s, B_e, B_{min}, B_{max}, Option(k_c), k)
+    M^{RCR}_{Req} := (R_{id}, H_h(B_s), H_h(B_e), B_{min}, B_{max}, Option(A^1), A^2)
 \]
 
 where each value represents:
 
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $B_s$: a 32-byte block hash indicating the starting point.
-    \item $B_e$: . a 32-byte block hash indicating the ending point.
+    \item $H_h(B_s)$: a 32-byte block hash indicating the starting point.
+    \item $H_h(B_e)$: . a 32-byte block hash indicating the ending point.
     \item $B_{min}$: a 32-byte block hash indicating the first block for which
     the requester has the changes trie root. All other affected roots must be
     proved.
     \item $B_{max}$: a 32-byte block hash indicating the last block that we can
     use when querying changes.
-    \item $Option(k_c)$: a byte slice containing the child storage key which
+    \item $Option(A^1)$: a byte array containing the child storage key which
     changes are requested for.
-    \item $k$: a byte slice containing the storage key which changes are
+    \item $A^2$: a byte array containing the storage key which changes are
     requested for.
 \end{itemize}
 
@@ -415,9 +413,9 @@ where each value represents:
 Remote changes response.
 
 \begin{alignat*}{2}
-    M^{RCR}_{Res} &:= (R_{id}, B_{max}, C_p, R, S_p) \\
+    M^{RCR}_{Res} &:= (R_{id}, B_{max}, C_p, (R_0, ..., R_n), S_p) \\
     C_p &:= (A_0, ...,A_n) \\
-    R &:= ((UINT32, H(N)))
+    R &:= (UINT32, H(N))
 \end{alignat*}
 
 where each value represents:
@@ -431,7 +429,7 @@ where each value represents:
     \item $C_p$: a byte array containing changes proofs.
     \item $A$: a byte array containing the 32-byte proof. The byte array does
     not have a length prefix.
-    \item $R$: changes tries roots missing on the requesters node.
+    \item $R$: changes trie root missing on the requesters node. \todo{@fabio}
     \item $S_p$: missing changes tries roots proof (Def.
     \ref{defn-storage-proof}).
 \end{itemize}
@@ -441,7 +439,7 @@ where each value represents:
 Remote storage read child request.
 
 \[
-    M^{RCSR}_{Req} := (R_{id}, H_h(B), c_k, k)
+    M^{RCSR}_{Req} := (R_{id}, H_h(B), A^1, A^2)
 \]
 
 where each value represents:
@@ -449,8 +447,8 @@ where each value represents:
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the unique ID of a request.
     \item $H_h(B)$: a 32-byte block hash at which to perform the call.
-    \item $c_k$: byte array containing the child storage key.
-    \item $k$: byte array containing the storage key.
+    \item $A^1$: byte array containing the child storage key.
+    \item $A^2$: byte array containing the storage key.
 \end{itemize}
 
 \subsection{Remote Child Storage Read Response}
