@@ -109,6 +109,16 @@ Additional, non-standardized protocols:
 \section{Network Messages}
 
 \begin{definition}
+    \label{defn-blake2b}
+    $B2b(..)$ ...
+\end{definition}
+
+\begin{definition}
+    \label{defn-byte-array}
+    $A(..)$ ...
+\end{definition}
+
+\begin{definition}
     \label{defn-roles}
     The roles type, $R$, is a 8-bit unsigned integer indicating the role of the
     node. Following options are available: \todo{verify bitmask}
@@ -376,7 +386,7 @@ where each value represents:
     \item $S_p$: a storage proof (Def. \ref{defn-storage-proof}).
 \end{itemize}
 
-\subsection{Remote Changes Request}
+\subsection{Remote Changes Request}\label{sect-remote-changes-request}
 
 Remote changes request.
 
@@ -402,6 +412,29 @@ where each value represents:
 \end{itemize}
 
 \subsection{Remote Changes Response}
+
+Remote changes response.
+
+\begin{alignat*}{2}
+    M^{RCR}_{Res} &:= (R_{id}, B_{max}, C_p, R, S_p) \\
+    C_p &:= (P_0, ...,P_n) \\
+    P &:= (b_0, ..., b_n) \\
+    R &:= ((UINT32, H(N)))
+\end{alignat*}
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
+    made for.
+    \item $max$: a UINT32 indicating the max block number the proof has been
+    generated with. Should be less than or equal to the block number of
+    $B_{max}$ as defined in Section \ref{sect-remote-changes-request}.
+    \item $C_p$: a byte array containing 32-byte changes proofs.
+    \item $R$: changes tries roots missing on the requesters node.
+    \item $S_p$: missing changes tries roots proof (Def.
+    \ref{defn-storage-proof}).
+\end{itemize}
 
 \subsection{Remote Child Storage Read Request}
 
