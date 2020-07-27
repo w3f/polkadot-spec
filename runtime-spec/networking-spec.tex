@@ -185,7 +185,7 @@ where each value represents:
 Request block from a peer.
 
 \[
-    M^B_R := (R_{id}, B_{attr}, B_s, Option(B_e), S_d, Option(|\mathbb{B}|))
+    M^B_Req := (R_{id}, B_{attr}, B_s, Option(B_e), S_d, Option(|\mathbb{B}|))
 \]
 
 where each value represents:
@@ -208,7 +208,7 @@ where each value represents:
 Response to block request (Sect. \ref{sect-block-request}).
 
 \[
-    M^B_R := (R_{id}, \mathbb{B})
+    M^B_Res := (R_{id}, \mathbb{B})
 \]
 
 where each value represents:
@@ -242,7 +242,7 @@ where each value represents:
 A collection of transactions, where each transaction is a byte array.
 
 \begin{alignat*}{2}
-    M^T &:= (T_0, ... T_n) \\
+    M^{Tx} &:= (T_0, ... T_n) \\
     T &:= (b_0, ... b_n)
 \end{alignat*}
 
@@ -262,6 +262,21 @@ where each value represents:
 \end{itemize}
 
 \subsection{Remote Method Call Request}
+
+Remote call request.
+
+\[
+    M^{RMC}_{Req} := (R_{id}, B_h, M, D)
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
+    \item $B_h$: a 32-byte indicating the block at which to perform this call.
+    \item $M$: a byte array containing a valid UTF-8 sequence.
+    \item $D$: a byte array containing the call data.
+\end{itemize}
 
 \subsection{Remote Method Call Response}
 
