@@ -7,6 +7,8 @@
 \usepackage{tikz}
 
 \newtheorem{definition}{Definition}
+\newcommand{\todo}[1]{}
+\renewcommand{\todo}[1]{{\color{red} TODO: {#1}}}
 
 \makeindex
 \geometry{letterpaper}
@@ -109,7 +111,7 @@ Additional, non-standardized protocols:
 \begin{definition}
     \label{defn-roles}
     The roles type, $R$, is a 8-bit unsigned integer indicating the role of the
-    node. Following options are available:
+    node. Following options are available: \todo{verify bitmask}
 
     \begin{itemize}
         \item \verb|0|: no network.
@@ -122,7 +124,7 @@ Additional, non-standardized protocols:
 \begin{definition}
     \label{defn-block-attributes}
     The block attributes, $B_{attr}$, is a 8-bit unsigned integer indicating the
-    artifacts to request.
+    artifacts to request. \todo{verify bitmask}
 
     \begin{itemize}
         \item \verb|1|: include block header.
@@ -135,12 +137,28 @@ Additional, non-standardized protocols:
 
 \begin{definition}
     \label{defn-sequence-direction}
-    Block enumeration direction which can be one of the following values:
+    Block enumeration direction is a varying data type of the following values:
 
-    \begin{itemize}
-        \item \verb|0|: enumerate in ascending order (from child to parent).
-        \item \verb|1|: enumerate in descending order (from parent to canonical child).
-    \end{itemize}
+    \begin{equation*}
+      S_d =
+      \begin{cases}
+        0, & \text{enumerate in ascending order (from child to parent)} \\
+        1, & \text{enumerate in descending order (from parent to canonical child}
+      \end{cases}
+    \end{equation*}
+\end{definition}
+
+\begin{definition}
+    \label{defn-block-state}
+    Block state in the chain is a varying data type of the following values:
+
+    \begin{equation*}
+      S_b =
+      \begin{cases}
+        0, & \text{Block is not part of the best chain} \\
+        1, & \text{Latest best block}
+      \end{cases}
+    \end{equation*}
 \end{definition}
 
 \subsection{Status Packets}
@@ -178,8 +196,8 @@ where each value represents:
     \ref{defn-block-attributes}).
     \item $B_s$: indicates the starting point from this block, which can either
     be 32-byte block hash or a UINT32 block number.
-    \item $Option(B_e)$: an \verb|Option| indicating the ending to the 32-byte
-    hash. An implementation defined maximum is used when unspecified.
+    \item $Option(B_e)$: indicates the ending to the 32-byte hash. An
+    implementation defined maximum is used when unspecified.
     \item $S_d$: sequence direction (Def. \ref{defn-sequence-direction}). 
     \item $Option(|\mathbb{B}|)$: maximum number of blocks to return. An implementation
     defined maximum is used when unspecified.
@@ -203,6 +221,21 @@ where each value represents:
 \end{itemize}
 
 \subsection{Block Announce}
+
+Announce a new complete relay chain block on the network.
+
+\[
+    M^B_A := (H_b, Option(S_b), Option(D))
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $H_b$: the new block header (Def. \todo{fabio}).
+    \item $Option(S_b)$: block state (Def. \ref{defn-block-state}).
+    \item $Option(D)$: a byte array containing the data associated with this
+    block announcement. For example a candidate message.
+\end{itemize}
 
 \subsection{Transactions}
 
