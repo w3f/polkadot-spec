@@ -6,6 +6,8 @@
 \usepackage{xargs}
 \usepackage{tikz}
 
+\newtheorem{definition}{Definition}
+
 \makeindex
 \geometry{letterpaper}
 
@@ -104,7 +106,37 @@ Additional, non-standardized protocols:
 
 \section{Network Messages}
 
+\begin{definition}
+    \label{defn-roles}
+    The roles type, $R$, is a 8-bit unsigned integer indicating the role of the
+    node. Following options are available:
+
+    \begin{itemize}
+        \item \verb|0|: no network.
+        \item \verb|1|: full node, does not participate in consensus.
+        \item \verb|2|: light client node.
+        \item \verb|4|: authory node.
+    \end{itemize}
+\end{definition}
+
 \subsection{Status Packets}
+
+A status message sent on connection.
+
+\[
+    M^S := (P_v, Min_v, R, B_n, B_h, G_h)
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $P_v$: a UINT32 indicating the Protocol version.
+    \item $Min_v$: a UINT32 indicating the minimum supported version.
+    \item $R$: Supported roles (Def. \ref{defn-roles}).
+    \item $B_n$: a UINT32 indicating the best block number.
+    \item $B_h$: a 32-byte indicating the best block hash.
+    \item $G_h$: a 32-byte indicating the genesis block hash.
+\end{itemize}
 
 \subsection{Block Request}
 
