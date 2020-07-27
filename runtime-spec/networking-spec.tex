@@ -109,16 +109,6 @@ Additional, non-standardized protocols:
 \section{Network Messages}
 
 \begin{definition}
-    \label{defn-blake2b}
-    $B2b(..)$ ...
-\end{definition}
-
-\begin{definition}
-    \label{defn-byte-array}
-    $A(..)$ ...
-\end{definition}
-
-\begin{definition}
     \label{defn-roles}
     The roles type, $R$, is a 8-bit unsigned integer indicating the role of the
     node. Following options are available: \todo{verify bitmask}
@@ -204,8 +194,8 @@ where each value represents:
     \item $Min_v$: a UINT32 indicating the minimum supported version.
     \item $R$: Supported roles (Def. \ref{defn-roles}).
     \item $H_i(B)$: a UINT32 indicating the best block number.
-    \item $H_h(B)$: a 32-byte indicating the best block hash.
-    \item $H_h(B_{gen})$: a 32-byte indicating the genesis block hash.
+    \item $H_h(B)$: a 32-byte array indicating the best block hash.
+    \item $H_h(B_{gen})$: a 32-byte array indicating the genesis block hash.
 \end{itemize}
 
 \subsection{Block Request}\label{sect-block-request}
@@ -236,7 +226,7 @@ where each value represents:
 Response to block request (Sect. \ref{sect-block-request}).
 
 \[
-    M^B_{Res} := (R_{id}, A)
+    M^B_{Res} := (R_{id}, (B^{data}_0, ..., B^{data}_n))
 \]
 
 where each value represents:
@@ -244,22 +234,35 @@ where each value represents:
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the ID of the request this response was
     made for.
-    \item $A$: an array containing the block data for the requested
-    sequence.
+    \item $B^{data}_n$: the block data (Def. \ref{defn-block-data})
 \end{itemize}
+
+\begin{definition}
+    \label{defn-block-data}
+    The block data sent in response.
+
+    \[
+        B^{data} := (H_h(B), B_{head}, B_{body}, B_{reci}, B_{msg}, B_{just})
+    \]
+
+    \begin{itemize}
+        \item $H_h(B)$: a 32-byte block hash.
+        \item ... \todo{@fabio}
+    \end{itemize}
+\end{definition}
 
 \subsection{Block Announce}
 
 Announce a new complete relay chain block on the network.
 
 \[
-    M^B_A := (H_b, Option(S_b), Option(A))
+    M^B_A := (B_{head}, Option(S_b), Option(A))
 \]
 
 where each value represents:
 
 \begin{itemize}
-    \item $H_b$: the new block header (Def. \todo{fabio}).
+    \item $H_b$: the new block header.
     \item $Option(S_b)$: block state (Def. \ref{defn-block-state}).
     \item $Option(A)$: a byte array containing the data associated with this
     block announcement. For example a candidate message.
@@ -285,7 +288,7 @@ where each value represents:
 
 \begin{itemize}
     \item $e_{id}$: a 4-byte unique ID of the consensus engine.
-    \item $D$: a byte array containing the message payload.
+    \item $A$: a byte array containing the message payload.
 \end{itemize}
 
 \subsection{Remote Method Call Request}
