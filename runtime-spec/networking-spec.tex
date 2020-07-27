@@ -241,13 +241,20 @@ where each value represents:
     \label{defn-block-data}
     The block data sent in response.
 
-    \[
-        B^{data} := (H_h(B), B_{head}, B_{body}, B_{reci}, B_{msg}, B_{just})
-    \]
+    \begin{alignat*}{2}
+        B^{data} &:= (P^1, P^2) \\
+        P^1 &:= (H_h(B), Option(B_{head}), Option(B_{body})) \\
+        P^1 &:= (Option(B_{reci}), Option(B_{msg}), Option(B_{just}))\\
+    \end{alignat*}
 
+    \todo{@fabio: define/link those types}
     \begin{itemize}
-        \item $H_h(B)$: a 32-byte block hash.
-        \item ... \todo{@fabio}
+        \item $H_h(B)$: the 32-byte block hash.
+        \item $Option(B_{head})$: the block header, if requested.
+        \item $Option(B_{body})$: the block body, if requested.
+        \item $Option(B_{reci})$: the block receipt, if requested.
+        \item $Option(B_{msg})$: the block message, if requested.
+        \item $Option(B_{just})$: the justification, if requested.
     \end{itemize}
 \end{definition}
 
