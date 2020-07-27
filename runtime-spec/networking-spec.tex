@@ -195,7 +195,7 @@ Additional, non-standardized protocols:
 A status message sent on connection.
 
 \[
-    M^S := (P_v, Min_v, R, B_n, B_h, G_h)
+    M^S := (P_v, Min_v, R, B_n, H_h(B), G_h)
 \]
 
 where each value represents:
@@ -205,7 +205,7 @@ where each value represents:
     \item $Min_v$: a UINT32 indicating the minimum supported version.
     \item $R$: Supported roles (Def. \ref{defn-roles}).
     \item $B_n$: a UINT32 indicating the best block number.
-    \item $B_h$: a 32-byte indicating the best block hash.
+    \item $H_h(B)$: a 32-byte indicating the best block hash.
     \item $G_h$: a 32-byte indicating the genesis block hash.
 \end{itemize}
 
@@ -275,7 +275,7 @@ A collection of transactions, where each transaction is a byte array.
     T &:= (b_0, ... b_n)
 \end{alignat*}
 
-\subsection{Consensus Protocol}
+\subsection{Consensus Protocol}\label{sect-consensus-protocol}
 
 A consensus message.
 
@@ -295,14 +295,14 @@ where each value represents:
 Remote call request.
 
 \[
-    M^{RMC}_{Req} := (R_{id}, B_h, M, D)
+    M^{RMC}_{Req} := (R_{id}, H_h(B), M, D)
 \]
 
 where each value represents:
 
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $B_h$: a 32-byte block hash at which to perform this call.
+    \item $H_h(B)$: a 32-byte block hash at which to perform this call.
     \item $M$: a byte array containing a valid UTF-8 sequence indicating the
     method name.
     \item $D$: a byte array containing the call data.
@@ -326,17 +326,16 @@ Remote call response.
 
 Remote storage read request.
 
-\begin{alignat*}{2}
-    M^{RSR}_{Req} &:= (R_{id}, B_h, (k_0, ..., k_n)) \\
-    k &:= (b_0, ... b_n)
-\end{alignat*}
+\[
+    M^{RSR}_{Req} := (R_{id}, H_h(B), (A_0, ..., A_n))
+\]
 
 where each value represents:
 
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $B_h$: a 32-byte block hash at which to perform this call.
-    \item $(k_0, ..., k_n)$: an array containing the storage keys.
+    \item $H_h(B)$: a 32-byte block hash at which to perform this call.
+    \item $A$: a byte array containing the storage key.
 \end{itemize}
 
 \subsection{Remote Storage Read Response}
@@ -373,7 +372,7 @@ where each value represents:
 \subsection{Remote Header Response}
 
 \[
-    M^{RHR}_{Res} := (R_{id}, Option(H), S_p)
+    M^{RHR}_{Res} := (R_{id}, Option(B_{head}), S_p)
 \]
 
 where each value represents:
@@ -381,7 +380,7 @@ where each value represents:
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the ID of the request this response was
     made for.
-    \item $Option(H)$: the block header. This is \verb|None| if proof generation
+    \item $Option(B_{head})$: the block header. This is \verb|None| if proof generation
     has failed (e.g. header is unknown)
     \item $S_p$: a storage proof (Def. \ref{defn-storage-proof}).
 \end{itemize}
@@ -417,8 +416,7 @@ Remote changes response.
 
 \begin{alignat*}{2}
     M^{RCR}_{Res} &:= (R_{id}, B_{max}, C_p, R, S_p) \\
-    C_p &:= (P_0, ...,P_n) \\
-    P &:= (b_0, ..., b_n) \\
+    C_p &:= (A_0, ...,A_n) \\
     R &:= ((UINT32, H(N)))
 \end{alignat*}
 
@@ -430,7 +428,9 @@ where each value represents:
     \item $max$: a UINT32 indicating the max block number the proof has been
     generated with. Should be less than or equal to the block number of
     $B_{max}$ as defined in Section \ref{sect-remote-changes-request}.
-    \item $C_p$: a byte array containing 32-byte changes proofs.
+    \item $C_p$: a byte array containing changes proofs.
+    \item $A$: a byte array containing the 32-byte proof. The byte array does
+    not have a length prefix.
     \item $R$: changes tries roots missing on the requesters node.
     \item $S_p$: missing changes tries roots proof (Def.
     \ref{defn-storage-proof}).
@@ -438,12 +438,62 @@ where each value represents:
 
 \subsection{Remote Child Storage Read Request}
 
+Remote storage read child request.
+
+\[
+    M^{RCSR}_{Req} := (R_{id}, H_h(B), c_k, k)
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
+    \item $H_h(B)$: a 32-byte block hash at which to perform the call.
+    \item $c_k$: byte array containing the child storage key.
+    \item $k$: byte array containing the storage key.
+\end{itemize}
+
 \subsection{Remote Child Storage Read Response}
 
-\subsection{Finality Proof Request}
+\todo{Seems to be missing in the code? Unless another type gets reused.}
+
+\subsection{Finality Proof Request}\label{sect-finality-proof-request}
+
+Finality proof request.
+
+\[
+    M^{FP}_{Req} := (R_{id}, H_h(B), A)
+\]
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
+    \item $H_h(B)$: a 32-byte hash of the block to request proof for.
+    \item $A$: a byte array containing additional data required for proving finality.
+\end{itemize}
 
 \subsection{Finality Proof Response}
 
+Finality proof response.
+
+\[
+    M^{FP}_{Res} := (R_{id}, H_h(B), Option(A_0, ..., A_n))
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
+    made for.
+    \item $H_h(B)$: a 32-byte hash of the block (the same hash as specified in the request (Sect. \ref{sect-finality-proof-request}))
+    \item $A$: a byte array containing the finality proof, if available.
+\end{itemize}
+
 \subsection{Batch of Conensus Protocol Messages}
+
+\[
+    bM^C_P := (M^C_{P0}, ..., M^C_{P1})
+\]
+
+$bM^C_P$ is an array containing multiple consensus messages (Sect. \ref{sect-consensus-protocol})
 
 \end{document}
