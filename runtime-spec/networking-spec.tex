@@ -331,6 +331,20 @@ where each value represents:
 
 \subsection{Remote Storage Read Response}
 
+Remote storage read response.
+
+\[
+    M^{RSR}_{Res} := (R_{id}, S_p)
+\]
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
+    made for.
+    \item $S_p$: a storage proof (Def. \ref{defn-storage-proof}).
+\end{itemize}
+
 \subsection{Remote Header Request}
 
 \subsection{Remote Header Response}
