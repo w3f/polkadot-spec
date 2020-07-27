@@ -161,6 +161,25 @@ Additional, non-standardized protocols:
     \end{equation*}
 \end{definition}
 
+\begin{definition}
+    \label{defn-storage-proof}
+    A proof that some set of key-value pairs are included in the storage trie. The proof contains
+    the storage values so that the partial storage backend can be reconstructed by a verifier that
+    does not already have access to the key-value pairs.
+    \newline
+
+    The proof consists of the set of serialized nodes in the storage trie accessed when looking up
+    the keys covered by the proof. Verifying the proof requires constructing the partial trie from
+    the serialized nodes and performing the key lookups
+
+    \begin{alignat*}{2}
+        S_p &:= (N_0, ... N_n) \\
+        N &:= (b_0, ... b_n)
+    \end{alignat*}
+
+    where $N$ represents the node.
+\end{definition}
+
 \subsection{Status Packets}
 
 A status message sent on connection.
@@ -273,14 +292,42 @@ where each value represents:
 
 \begin{itemize}
     \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $B_h$: a 32-byte indicating the block at which to perform this call.
-    \item $M$: a byte array containing a valid UTF-8 sequence.
+    \item $B_h$: a 32-byte block hash at which to perform this call.
+    \item $M$: a byte array containing a valid UTF-8 sequence indicating the
+    method name.
     \item $D$: a byte array containing the call data.
 \end{itemize}
 
 \subsection{Remote Method Call Response}
 
+Remote call response.
+
+\[
+    M^{RMC}_{Res} := (R_{id}, S_p)
+\]
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
+    made for.
+    \item $S_p$: a storage proof (Def. \ref{defn-storage-proof}).
+\end{itemize}
+
 \subsection{Remote Storage Read Request}
+
+Remote storage read request.
+
+\begin{alignat*}{2}
+    M^{RSR}_{Req} &:= (R_{id}, B_h, (k_0, ..., k_n)) \\
+    k &:= (b_0, ... b_n)
+\end{alignat*}
+
+where each value represents:
+
+\begin{itemize}
+    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
+    \item $B_h$: a 32-byte block hash at which to perform this call.
+    \item $(k_0, ..., k_n)$: an array containing the storage keys.
+\end{itemize}
 
 \subsection{Remote Storage Read Response}
 
