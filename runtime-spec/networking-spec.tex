@@ -90,7 +90,7 @@ application-specific protocols:
     the connection is dropped.
     \item \verb|/ipfs/id/1.0.0| - Open a substream to a peer to ask information
     about that peer.
-    \item \verb|/<protocol_id>/kad/| - Open a substream for Kademlia
+    \item \verb|/dot/kad/| - Open a substream for Kademlia
     \verb|FIND_NODE| requests.
 \end{itemize}
 
@@ -114,7 +114,7 @@ Additional, non-standardized protocols:
 syntax = "proto3";
 package api.v1;
 
-\subsubsection{Block Request}
+\subsubsection{BlockRequest}
 
 Request block data from a peer.
 
@@ -150,7 +150,7 @@ enum Direction {
 }
 \end{lstlisting}
 
-\subsubsection{Block Response}
+\subsubsection{BlockResponse}
 
 Response to Block Request.
 
@@ -187,8 +187,9 @@ message BlockData {
 
 \subsubsection{Request}
 
+Enumerate all possible light client request messages.
+
 \begin{lstlisting}[frame=single]
-// Enumerate all possible light client request messages.
 message Request {
 	oneof request {
 		RemoteCallRequest remote_call_request = 1;
@@ -202,8 +203,9 @@ message Request {
 
 \subsubsection{Response}
 
+Enumerate all possible light client response messages.
+
 \begin{lstlisting}[frame=single]
-// Enumerate all possible light client response messages.
 message Response {
 	oneof response {
 		RemoteCallResponse remote_call_response = 1;
@@ -214,10 +216,11 @@ message Response {
 }
 \end{lstlisting}
 
-\subsubsection{Remote Call Request}
+\subsubsection{RemoteCallRequest}
+
+Remote call request.
 
 \begin{lstlisting}[frame=single]
-// Remote call request.
 message RemoteCallRequest {
 	// Block at which to perform call.
 	bytes block = 2;
@@ -228,20 +231,22 @@ message RemoteCallRequest {
 }
 \end{lstlisting}
 
-\subsubsection{Remote Call Response}
+\subsubsection{RemoteCallResponse}
+
+Remote call response.
 
 \begin{lstlisting}[frame=single]
-// Remote call response.
 message RemoteCallResponse {
 	// Execution proof.
 	bytes proof = 2;
 }
 \end{lstlisting}
 
-\subsubsection{Remote Read Request}
+\subsubsection{RemoteReadRequest}
+
+Remote storage read request.
 
 \begin{lstlisting}[frame=single]
-// Remote storage read request.
 message RemoteReadRequest {
 	// Block at which to perform call.
 	bytes block = 2;
@@ -250,20 +255,22 @@ message RemoteReadRequest {
 }
 \end{lstlisting}
 
-\subsubsection{Remote Read Response}
+\subsubsection{RemoteReadResponse}
+
+Remote read response.
 
 \begin{lstlisting}[frame=single]
-// Remote read response.
 message RemoteReadResponse {
 	// Read proof.
 	bytes proof = 2;
 }
 \end{lstlisting}
 
-\subsubsection{Remote Read Child Request}
+\subsubsection{RemoteReadChildRequest}
+
+Remote storage read child request.
 
 \begin{lstlisting}[frame=single]
-// Remote storage read child request.
 message RemoteReadChildRequest {
 	// Block at which to perform call.
 	bytes block = 2;
@@ -275,20 +282,22 @@ message RemoteReadChildRequest {
 }
 \end{lstlisting}
 
-\subsubsection{Remote Header Request}
+\subsubsection{RemoteHeaderRequest}
+
+Remote header request.
 
 \begin{lstlisting}[frame=single]
-// Remote header request.
 message RemoteHeaderRequest {
 	// Block number to request header for.
 	bytes block = 2;
 }
 \end{lstlisting}
 
-\subsubsection{Remote Header Response}
+\subsubsection{RemoteHeaderResponse}
+
+Remote header response.
 
 \begin{lstlisting}[frame=single]
-// Remote header response.
 message RemoteHeaderResponse {
     // Header. None if proof generation has failed
     // (e.g. header is unknown).
@@ -298,10 +307,11 @@ message RemoteHeaderResponse {
 }
 \end{lstlisting}
 
-\subsubsection{Remote Changes Request}
+\subsubsection{RemoteChangesRequest}
+
+Remote changes request.
 
 \begin{lstlisting}[frame=single]
-/// Remote changes request.
 message RemoteChangesRequest {
     // Hash of the first block of the range (including first)
     // where changes are requested.
@@ -323,10 +333,11 @@ message RemoteChangesRequest {
 }
 \end{lstlisting}
 
-\subsubsection{Remote Changes Response}
+\subsubsection{RemoteChangesResponse}
+
+Remote changes response.
 
 \begin{lstlisting}[frame=single]
-// Remote changes response.
 message RemoteChangesResponse {
     // Proof has been generated using block with this number
     // as a max block. Should be less than or equal to the
