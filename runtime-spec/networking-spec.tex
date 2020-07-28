@@ -349,4 +349,31 @@ message Pair {
 }
 \end{lstlisting}
 
+\subsection{Finality Package}
+
+\subsubsection{FinalityProofRequest}
+
+Request a finality proof from a peer.
+
+\begin{lstlisting}[frame=single]
+message FinalityProofRequest {
+	// SCALE-encoded hash of the block to request.
+	bytes block_hash = 1;
+	// Opaque chain-specific additional request data.
+	bytes request = 2;
+}
+\end{lstlisting}
+
+\subsubsection{FinalityProofResponse}
+
+Response to a finality proof request.
+
+\begin{lstlisting}[frame=single]
+message FinalityProofResponse {
+    // Opaque chain-specific finality proof.
+    // Empty if no such proof exists.
+	bytes proof = 1; // optional
+}
+\end{lstlisting}
+
 \end{document}
