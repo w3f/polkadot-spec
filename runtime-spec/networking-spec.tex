@@ -2,6 +2,7 @@
 \usepackage{geometry,amsmath,amssymb,hyperref,calc,ifthen,alltt,theorem,capt-of,makeidx}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{listings}
 %%\usepackage{algorithmic}
 \usepackage{xargs}
 \usepackage{tikz}
@@ -96,412 +97,90 @@ application-specific protocols:
 Additional, non-standardized protocols:
 
 \begin{itemize}
-    \item \verb|/<protocol-id>/sync/2| - a request and response protocol that
+    \item \verb|/dot/sync/2| - a request and response protocol that
     allows the Polkadot Host to perform information about blocks.
-    \item \verb|/<protocol-id>/light/2| - a request and response protocol that
+    \item \verb|/dot/light/2| - a request and response protocol that
     allows a light client to perform information about the state.
-    \item \verb|/<protocol-id>/transactions/1| - a notification protocol which
+    \item \verb|/dot/transactions/1| - a notification protocol which
     sends transactions to connected peers.
-    \item \verb|/<protocol-id>/block-announces/1| - a notification protocol
+    \item \verb|/dot/block-announces/1| - a notification protocol
     which sends blocks to connected peers.
 \end{itemize}
 
 \section{Network Messages}
 
-\begin{definition}
-    \label{defn-roles}
-    The roles type, $R$, is a 8-bit unsigned integer indicating the role of the
-    node. Following options are available: \todo{verify bitmask}
-
-    \begin{itemize}
-        \item \verb|0|: no network.
-        \item \verb|1|: full node, does not participate in consensus.
-        \item \verb|2|: light client node.
-        \item \verb|4|: authory node.
-    \end{itemize}
-\end{definition}
-
-\begin{definition}
-    \label{defn-block-attributes}
-    The block attributes, $B_{attr}$, is a 8-bit unsigned integer indicating the
-    artifacts to request. \todo{verify bitmask}
-
-    \begin{itemize}
-        \item \verb|1|: include block header.
-        \item \verb|2|: include block body
-        \item \verb|4|: include block receipt
-        \item \verb|8|: include block message queue.
-        \item \verb|16|: include block justification.
-    \end{itemize}
-\end{definition}
-
-\begin{definition}
-    \label{defn-sequence-direction}
-    Block enumeration direction is a varying data type of the following values:
-
-    \begin{equation*}
-      S_d =
-      \begin{cases}
-        0, & \text{enumerate in ascending order (from child to parent)} \\
-        1, & \text{enumerate in descending order (from parent to canonical child}
-      \end{cases}
-    \end{equation*}
-\end{definition}
-
-\begin{definition}
-    \label{defn-block-state}
-    Block state in the chain is a varying data type of the following values:
-
-    \begin{equation*}
-      S_b =
-      \begin{cases}
-        0, & \text{Block is not part of the best chain} \\
-        1, & \text{Latest best block}
-      \end{cases}
-    \end{equation*}
-\end{definition}
-
-\begin{definition}
-    \label{defn-storage-proof}
-    A proof that some set of key-value pairs are included in the storage trie. The proof contains
-    the storage values so that the partial storage backend can be reconstructed by a verifier that
-    does not already have access to the key-value pairs.
-    \newline
-
-    The proof consists of the set of serialized nodes in the storage trie accessed when looking up
-    the keys covered by the proof. Verifying the proof requires constructing the partial trie from
-    the serialized nodes and performing the key lookups
-
-    \[
-        S_p := (A_0, ... A_n)
-    \]
-
-    where $A$ is a byte array containing the trie proofs.
-\end{definition}
-
-\subsection{Status Packets}
-
-A status message sent on connection.
-
-\[
-    M^S := (P_v, Min_v, R, H_i(B), H_h(B), H_h(B_{gen}))
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $P_v$: a UINT32 indicating the Protocol version.
-    \item $Min_v$: a UINT32 indicating the minimum supported version.
-    \item $R$: Supported roles (Def. \ref{defn-roles}).
-    \item $H_i(B)$: a UINT32 indicating the best block number.
-    \item $H_h(B)$: a 32-byte array indicating the best block hash.
-    \item $H_h(B_{gen})$: a 32-byte array indicating the genesis block hash.
-\end{itemize}
-
-\subsection{Block Request}\label{sect-block-request}
-
-Request blocks from a peer.
-
-\[
-    M^B_Req := (R_{id}, B_{attr}, H_h(B_s), Option(H_h(B_e)), S_d, Option(|\mathbb{B}|))
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $B_{attr}$: block attributes to request (Def.
-    \ref{defn-block-attributes}).
-    \item $H_h(B_s)$: indicates the starting point from this block, which can either
-    be 32-byte block hash or a UINT32 block number.
-    \item $Option(H_h(B_e))$: indicates the ending point to the 32-byte block
-    hash. An implementation defined maximum is used when unspecified.
-    \item $S_d$: sequence direction (Def. \ref{defn-sequence-direction}). 
-    \item $Option(|A|)$: maximum number of blocks to return. An
-    implementation defined maximum is used when unspecified.
-\end{itemize}
-
-\subsection{Block Response}
-
-Response to block request (Sect. \ref{sect-block-request}).
-
-\[
-    M^B_{Res} := (R_{id}, (B^{data}_0, ..., B^{data}_n))
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
-    made for.
-    \item $B^{data}_n$: the block data (Def. \ref{defn-block-data})
-\end{itemize}
-
-\begin{definition}
-    \label{defn-block-data}
-    The block data sent in response.
-
-    \begin{alignat*}{2}
-        B^{data} &:= (P^1, P^2) \\
-        P^1 &:= (H_h(B), Option(B_{head}), Option(B_{body})) \\
-        P^1 &:= (Option(B_{reci}), Option(B_{msg}), Option(B_{just}))\\
-    \end{alignat*}
-
-    \todo{@fabio: define/link those types}
-    \begin{itemize}
-        \item $H_h(B)$: the 32-byte block hash.
-        \item $Option(B_{head})$: the block header, if requested.
-        \item $Option(B_{body})$: the block body, if requested.
-        \item $Option(B_{reci})$: the block receipt, if requested.
-        \item $Option(B_{msg})$: the block message, if requested.
-        \item $Option(B_{just})$: the justification, if requested.
-    \end{itemize}
-\end{definition}
-
-\subsection{Block Announce}
-
-Announce a new complete relay chain block on the network.
-
-\[
-    M^B_A := (B_{head}, Option(S_b), Option(A))
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $H_b$: the new block header.
-    \item $Option(S_b)$: block state (Def. \ref{defn-block-state}).
-    \item $Option(A)$: a byte array containing the data associated with this
-    block announcement. For example a candidate message.
-\end{itemize}
-
-\subsection{Transactions}
-
-A collection of transactions, where each transaction is a byte array.
-
-\[
-    M^{Tx} := (A_0, ... A_n)
-\]
-
-\subsection{Consensus Protocol}\label{sect-consensus-protocol}
-
-A consensus message.
-
-\[
-    M^C_P := (e_{id}, A)
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $e_{id}$: a 4-byte unique ID of the consensus engine.
-    \item $A$: a byte array containing the message payload.
-\end{itemize}
-
-\subsection{Remote Method Call Request}
-
-Remote call request.
-
-\[
-    M^{RMC}_{Req} := (R_{id}, H_h(B), A^1, A^2)
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $H_h(B)$: a 32-byte block hash at which to perform this call.
-    \item $A^1$: a byte array containing a valid UTF-8 sequence indicating the
-    method name.
-    \item $A^2$: a byte array containing the call data.
-\end{itemize}
-
-\subsection{Remote Method Call Response}
-
-Remote call response.
-
-\[
-    M^{RMC}_{Res} := (R_{id}, S_p)
-\]
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
-    made for.
-    \item $S_p$: a storage proof (Def. \ref{defn-storage-proof}).
-\end{itemize}
-
-\subsection{Remote Storage Read Request}
-
-Remote storage read request.
-
-\[
-    M^{RSR}_{Req} := (R_{id}, H_h(B), (A_0, ..., A_n))
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $H_h(B)$: a 32-byte block hash at which to perform this call.
-    \item $A$: a byte array containing the storage key.
-\end{itemize}
-
-\subsection{Remote Storage Read Response}
-
-Remote storage read response.
-
-\[
-    M^{RSR}_{Res} := (R_{id}, S_p)
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
-    made for.
-    \item $S_p$: a storage proof (Def. \ref{defn-storage-proof}).
-\end{itemize}
-
-\subsection{Remote Header Request}
-
-Remote header request.
-
-\[
-    M^{RHR}_{Req} := (R_{id}, H_i(B))
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $H_i(B)$: a UINT32 indicating the block number the header is for.
-\end{itemize}
-
-\subsection{Remote Header Response}
-
-\[
-    M^{RHR}_{Res} := (R_{id}, Option(B_{head}), S_p)
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
-    made for.
-    \item $Option(B_{head})$: the block header. This is \verb|None| if proof generation
-    has failed (e.g. header is unknown)
-    \item $S_p$: a storage proof (Def. \ref{defn-storage-proof}).
-\end{itemize}
-
-\subsection{Remote Changes Request}\label{sect-remote-changes-request}
-
-Remote changes request.
-
-\[
-    M^{RCR}_{Req} := (R_{id}, H_h(B_s), H_h(B_e), B_{min}, B_{max}, Option(A^1), A^2)
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $H_h(B_s)$: a 32-byte block hash indicating the starting point.
-    \item $H_h(B_e)$: . a 32-byte block hash indicating the ending point.
-    \item $B_{min}$: a 32-byte block hash indicating the first block for which
-    the requester has the changes trie root. All other affected roots must be
-    proved.
-    \item $B_{max}$: a 32-byte block hash indicating the last block that we can
-    use when querying changes.
-    \item $Option(A^1)$: a byte array containing the child storage key which
-    changes are requested for.
-    \item $A^2$: a byte array containing the storage key which changes are
-    requested for.
-\end{itemize}
-
-\subsection{Remote Changes Response}
-
-Remote changes response.
-
-\begin{alignat*}{2}
-    M^{RCR}_{Res} &:= (R_{id}, B_{max}, C_p, (R_0, ..., R_n), S_p) \\
-    C_p &:= (A_0, ...,A_n) \\
-    R &:= (UINT32, H(N))
-\end{alignat*}
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
-    made for.
-    \item $max$: a UINT32 indicating the max block number the proof has been
-    generated with. Should be less than or equal to the block number of
-    $B_{max}$ as defined in Section \ref{sect-remote-changes-request}.
-    \item $C_p$: a byte array containing changes proofs.
-    \item $A$: a byte array containing the 32-byte proof. The byte array does
-    not have a length prefix.
-    \item $R$: changes trie root missing on the requesters node. \todo{@fabio}
-    \item $S_p$: missing changes tries roots proof (Def.
-    \ref{defn-storage-proof}).
-\end{itemize}
-
-\subsection{Remote Child Storage Read Request}
-
-Remote storage read child request.
-
-\[
-    M^{RCSR}_{Req} := (R_{id}, H_h(B), A^1, A^2)
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $H_h(B)$: a 32-byte block hash at which to perform the call.
-    \item $A^1$: byte array containing the child storage key.
-    \item $A^2$: byte array containing the storage key.
-\end{itemize}
-
-\subsection{Remote Child Storage Read Response}
-
-\todo{Seems to be missing in the code? Unless another type gets reused.}
-
-\subsection{Finality Proof Request}\label{sect-finality-proof-request}
-
-Finality proof request.
-
-\[
-    M^{FP}_{Req} := (R_{id}, H_h(B), A)
-\]
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the unique ID of a request.
-    \item $H_h(B)$: a 32-byte hash of the block to request proof for.
-    \item $A$: a byte array containing additional data required for proving finality.
-\end{itemize}
-
-\subsection{Finality Proof Response}
-
-Finality proof response.
-
-\[
-    M^{FP}_{Res} := (R_{id}, H_h(B), Option(A_0, ..., A_n))
-\]
-
-where each value represents:
-
-\begin{itemize}
-    \item $R_{id}$: a UINT64 indicating the ID of the request this response was
-    made for.
-    \item $H_h(B)$: a 32-byte hash of the block (the same hash as specified in the request (Sect. \ref{sect-finality-proof-request}))
-    \item $A$: a byte array containing the finality proof, if available.
-\end{itemize}
-
-\subsection{Batch of Conensus Protocol Messages}
-
-\[
-    bM^C_P := (M^C_{P0}, ..., M^C_{P1})
-\]
-
-$bM^C_P$ is an array containing multiple consensus messages (Sect. \ref{sect-consensus-protocol})
+\subsection{API Package}
+
+syntax = "proto3";
+package api.v1;
+
+\subsubsection{Block Request}
+
+Request block data from a peer.
+
+\begin{lstlisting}[frame=single]
+message BlockRequest {
+    // Bits of block data to request.
+    uint32 fields = 1;
+    // Start from this block.
+    oneof from_block {
+        // Start with given hash.
+        bytes hash = 2;
+        // Start with given block number.
+        bytes number = 3;
+    }
+    // End at this block. An implementation defined
+    // maximum is used when unspecified.
+    bytes to_block = 4; // optional
+    // Sequence direction.
+    Direction direction = 5;
+    // Maximum number of blocks to return. An implementation 
+    // defined maximum is used when unspecified.
+    uint32 max_blocks = 6; // optional
+}
+
+// Block enumeration direction
+enum Direction {
+    // Enumerate in ascending order
+    // (from child to parent).
+    Ascending = 0;
+    // Enumerate in descending order 
+    // (from parent to canonical child).
+    Descending = 1;
+}
+\end{lstlisting}
+
+\subsubsection{Block Response}
+
+Response to Block Request.
+
+\begin{lstlisting}[frame=single]
+message BlockResponse {
+    // Block data for the requested sequence.
+    repeated BlockData blocks = 1;
+} 
+
+// Block data sent in the response.
+message BlockData {
+    // Block header hash.
+    bytes hash = 1;
+    // Block header if requested.
+    bytes header = 2; // optional
+    // Block body if requested.
+    repeated bytes body = 3; // optional
+    // Block receipt if requested.
+    bytes receipt = 4; // optional
+    // Block message queue if requested.
+    bytes message_queue = 5; // optional
+    // Justification if requested.
+    bytes justification = 6; // optional
+    // True if justification should be treated as present but
+    // empty. This hack is unfortunately necessary because 
+    // shortcomings in the protobuf format otherwise doesn't
+    // make it possible to differentiate between a lack of 
+    // justification and an empty justification.
+    bool is_empty_justification = 7; // optional, false if absent
+}
+\end{lstlisting}
 
 \end{document}
