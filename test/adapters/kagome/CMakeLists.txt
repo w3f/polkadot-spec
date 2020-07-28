@@ -26,12 +26,7 @@ set(CMAKE_TOOLCHAIN_FILE
 
 
 # Setup hunter
-include(cmake/HunterGate.cmake)
-HunterGate(
-    URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu4.tar.gz"
-    SHA1 "e55ec201201d1e5726b0c849c1c8e2fee003ab9f"
-    FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
-)
+include(cmake/HunterInit.cmake)
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
 
