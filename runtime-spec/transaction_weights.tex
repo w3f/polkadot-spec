@@ -68,19 +68,29 @@ compute the weight of particular runtime functions.
 
 \section{Assumptions}\label{sec:assumptions}
 
-In this section, we define the concept of weight and we discuss the considerations that need to be accounted for when assigning weight to transactions. These considerations are essential in order for the weight system to deliver its fundamental mission, i.e. the fair distribution of network resources and preventing a network overload. In this regard, weights serve as an indicator on whether a block is considered full and how much space is left for remaining, pending extrinsics. Extrinsics which require too many resources are
+In this section, we define the concept of weight and we discuss the
+considerations that need to be accounted for when assigning weight to
+transactions. These considerations are essential in order for the weight system
+to deliver its fundamental mission, i.e. the fair distribution of network
+resources and preventing a network overload. In this regard, weights serve as an
+indicator on whether a block is considered full and how much space is left for
+remaining, pending extrinsics. Extrinsics which require too many resources are
 discarded. More formally, the weight system should:
 
 \begin{itemize}
 \item prevent the block from being filled with too many extrinsics
-\item avoid extrinsics where its execution takes too long, by assigning a transaction fee to each extrinsic proportional to their resource consumption.
+\item avoid extrinsics where its execution takes too long, by assigning a
+transaction fee to each extrinsic proportional to their resource consumption.
 \end{itemize}
 
-These concepts are formalized in Definitions \ref{def:block-length} and \ref{def:polkadot-block-limits}:
+These concepts are formalized in Definitions \ref{def:block-length} and
+\ref{def:polkadot-block-limits}:
 
 \begin{definition}
   \label{def:block-length}
-  For a Block $B$ with $Head(B)$ and $Body(B)$ the {\b block length of $B$}, $Len(B)$ is defined as \todo{define length with what encoding head or no head seal or no seal etc0}
+  For a Block $B$ with $Head(B)$ and $Body(B)$ the {\b block length of $B$},
+  $Len(B)$ is defined as \todo{define length with what encoding head or no head
+  seal or no seal etc0}
 \end{definition}
 
 \begin{definition}
@@ -90,13 +100,15 @@ These concepts are formalized in Definitions \ref{def:block-length} and \ref{def
 
 \begin{definition}
   \label{def:block-target-time}
-  Available block ration reserved for normal, noted by $R(B)$ is defined to maximum length none-operational transactions encoded as
-  \todo{TBD} in the Body of $B$ divided by $Len(B)$.
+  Available block ration reserved for normal, noted by $R(B)$ is defined to
+  maximum length none-operational transactions encoded as \todo{TBD} in the Body
+  of $B$ divided by $Len(B)$.
 \end{definition}
 
 \begin{definition}
   \label{def:polkadot-block-limits}
-        {\b Polkadot block limits} as defined here should be respected by each block producer for the produced block $B$ to be deemed valid:
+        {\b Polkadot block limits} as defined here should be respected by each
+        block producer for the produced block $B$ to be deemed valid:
         
         \begin{enumerate}
          \item $Len(B) \le 5 \times 1'024 \times 1'024 = 5'242'880$ Bytes
@@ -115,9 +127,13 @@ These concepts are formalized in Definitions \ref{def:block-length} and \ref{def
     \mathcal{W} &: E \mapsto w
   \end{alignat*}
 
-  where $w$ is a non-negative integer representing the weight of the extrinsic $E$. We define the weight of all inherent extrinsics as defined in \cite[Definition~3.3]{web30_technologies_foundation_polkadot_2020} to be equal to 0.
+  where $w$ is a non-negative integer representing the weight of the extrinsic
+  $E$. We define the weight of all inherent extrinsics as defined in
+  \cite[Definition~3.3]{web30_technologies_foundation_polkadot_2020} to be equal
+  to 0.
 
-  we extend the definition of \TWF function to compute the weight of the block as sum of weight of all extrinsics its includes:
+  we extend the definition of \TWF function to compute the weight of the block
+  as sum of weight of all extrinsics its includes:
 
   \begin{alignat*}{2}
     \mathcal{W} &: \mathcal{B}\rightarrow \mathbb{N} \\
@@ -126,20 +142,29 @@ These concepts are formalized in Definitions \ref{def:block-length} and \ref{def
   
 \end{definition}
 
-In the remainder of this section, we discuss the requirements to which the weight function needs to comply to.
+In the remainder of this section, we discuss the requirements to which the
+weight function needs to comply to.
 
 \begin{itemize}
 
-\item Computations of function $\mathcal{W}(E)$  must be determined before execution of that $E$.
+\item Computations of function $\mathcal{W}(E)$  must be determined before
+execution of that $E$.
 
-\item Due to the limited time window, computations of $\TWF$ must be done quickly and consume
-      few resources themselves.
-\item $\TWF$ must be self contained and must not require I/O on the chain state. $\TWF(E)$
-must depend solely on the Runtime function representing $E$ and its parameters.
+\item Due to the limited time window, computations of $\TWF$ must be done
+      quickly and consume few resources themselves.
+\item $\TWF$ must be self contained and must not require I/O on the chain state.
+$\TWF(E)$ must depend solely on the Runtime function representing $E$ and its
+parameters.
 
 \end{itemize}
 
-Heuristically, "heaviness" corresponds to the resources consumption of an extrinsic. In that way, the \TWF value for various extrinsics should be proportional to their execution time and consumption of other system resources such as memory and amount I/O operation. For example, if Extrinsic A takes three times longer to execute than Extrinsic B while both Extrinsics consumes require similar amount of memory and I/O operations, then Extrinsic A should roughly weighs 3 times of Extrinsic B. Or
+Heuristically, "heaviness" corresponds to the resources consumption of an
+extrinsic. In that way, the \TWF value for various extrinsics should be
+proportional to their execution time and consumption of other system resources
+such as memory and amount I/O operation. For example, if Extrinsic A takes three
+times longer to execute than Extrinsic B while both Extrinsics consumes require
+similar amount of memory and I/O operations, then Extrinsic A should roughly
+weighs 3 times of Extrinsic B. Or
 
 \[
 \TWF(A)~3\times \TWF(B)
@@ -159,35 +184,74 @@ In this section we discuss how applying the limitation defined in Definition \re
 
 \end{definition}
 
-The weights must fulfil the requirements as noted by the fundamentals and limitations, and can be assigned as the author sees fit. As a simple example, consider a maximum block weight of 1'000'000'000, an available ratio of 75\% and a targeted transaction throughput of 500 transactions, we could assign the (average) weight for each transaction at about 1'500'000. Block producers \syed{should}{is this ``should'' or ``recommended'' or they are naturally  motivated to do so} include as many extrinsics as possible (without exceeding limitations) into a block before reaching the targeted block time. Weights give indicators to block producers on which extrinsics to include in order to reach the blocks fullest
-potential.
+The weights must fulfil the requirements as noted by the fundamentals and
+limitations, and can be assigned as the author sees fit. As a simple example,
+consider a maximum block weight of 1'000'000'000, an available ratio of 75\% and
+a targeted transaction throughput of 500 transactions, we could assign the
+(average) weight for each transaction at about 1'500'000. Block producers have
+economic incentive to include as many extrinsics as possible (without exceeding
+limitations) into a block before reaching the targeted block time. Weights give
+indicators to block producers on which extrinsics to include in order to reach
+the blocks fullest potential.
 \newline
 
 \syed{Do note that the smallest, non-zero weight in Polkadot is set at 10'000.}{why do we need this, we need to justify having a minimum}
 
 \section{Calculation of the weight function}
 \label{sec:runtime-primitives}
-In order to calculate weight of block $B$, $TWF(B)$, one needs to evaluate the weight of each transaction included in the block. Each transaction causes the execution certain Runtime functions. As such, to calculate the weight of a transaction, those functions must be analyzed in order to determine parts of the code which can significantly contribute to the execution time and consume resources such as  loops, I/O operations, and data manipulation. Subsequently the performance and resource consumption of each part will be evaluated based on variaty of input parameters. Based on those observations, weights is assigned be to those operations.\syed{that could have heavy implications on those design choices}{this sentence doesn't make much sense to me, perhaps needs clarification}. These sub component of the code are discussed in Section \ref{sect:primitive-types}.
+In order to calculate weight of block $B$, $TWF(B)$, one needs to evaluate the
+weight of each transaction included in the block. Each transaction causes the
+execution certain Runtime functions. As such, to calculate the weight of a
+transaction, those functions must be analyzed in order to determine parts of the
+code which can significantly contribute to the execution time and consume
+resources such as  loops, I/O operations, and data manipulation. Subsequently
+the performance and resource consumption of each part will be evaluated based on
+variaty of input parameters. Based on those observations, weights are assigned
+Runtime functions or parameters which contribute to heavy resource consumption.
+These sub component of the code are discussed in Section
+\ref{sect:primitive-types}.
 
-The general algorithm to calculate $\TWF(E)$ is described in the Section \ref{sect:benchmarking}.
+The general algorithm to calculate $\TWF(E)$ is described in the Section
+\ref{sect:benchmarking}.
 
-\syed{The final assigned weights are calculated by benchmarking the Runtime functions, which is described in section \ref{sect:benchmarking}.}{this needs to relate the computation of final weight to the primitive otherwise the paragraph looks disconnected}.
+\syed{The final assigned weights are calculated by benchmarking the Runtime
+functions, which is described in section \ref{sect:benchmarking}.}{this needs to
+relate the computation of final weight to the primitive otherwise the paragraph
+looks disconnected}.
 \newline
 
-Section \ref{sec:practical-examples} walks through two practical examples of Runtime function analysis.
+Section \ref{sec:practical-examples} walks through two practical examples of
+Runtime function analysis.
 
-\section{Benchmarking}\label{sect:benchmarking}
-Calculating the extrinsic weight solely based on theoretical complexity of the underlying implementation proves to be too complicated and unreliable at the same time. Naunces such as {imprecision in back-end systems}{what does this exactly mean? more detail}, internal communication within the Runtime and design choices in the software could add enough overhead to make the asymtotic complexity practically meaningless.
+\section{Benchmarking}\label{sect:benchmarking} Calculating the extrinsic weight
+solely based on theoretical complexity of the underlying implementation proves
+to be too complicated and unreliable at the same time. Naunces such as
+{imprecision in back-end systems}{what does this exactly mean? more detail},
+internal communication within the Runtime and design choices in the software
+could add enough overhead to make the asymtotic complexity practically
+meaningless.
 
-On the other benchmarking an extrinsics as black box could (using random parameters) most centainly results in missing corner cases and worst case senarios.
+On the other benchmarking an extrinsics as black box could (using random
+parameters) most centainly results in missing corner cases and worst case
+senarios.
 
-Instead, we benchmark all available Runtime functions, which are invoked in the course \syed{create and}{functions do not create extrinsics} execution an extrinsic over a with a large collection of carefully selected input parameters and use the result of the benchmarking process to evaluate $\TWF(E)$.
+Instead, we benchmark all available Runtime functions, which are invoked in the
+course \syed{create and}{functions do not create extrinsics} execution an
+extrinsic over a with a large collection of carefully selected input parameters
+and use the result of the benchmarking process to evaluate $\TWF(E)$.
 \newline
 
-In order to select useful parameters, the Runtime functions have to be analysed to fully understand which behaviors or conditions can result in expensive execution times, which is described closer in section \ref{sect:primitive-types}.
+In order to select useful parameters, the Runtime functions have to be analysed
+to fully understand which behaviors or conditions can result in expensive
+execution times, which is described closer in section
+\ref{sect:primitive-types}.
 
-\todo{review after reading the examples} Not every possible benchmarking outcome can be invoked by varying input parameters \syed{to}{of} the Runtime function. In some 
-circumstances, preliminary work is required before a specific benchmark can be reliably measured, such as creating certain preexisting entries in the storage or other changes to the environment. This is explained in more detail in section \ref{sect:examples-preliminary-work}.
+\todo{review after reading the examples} Not every possible benchmarking outcome
+can be invoked by varying input parameters \syed{to}{of} the Runtime function.
+In some circumstances, preliminary work is required before a specific benchmark
+can be reliably measured, such as creating certain preexisting entries in the
+storage or other changes to the environment. This is explained in more detail in
+section \ref{sect:examples-preliminary-work}.
 \newpage
 
 \subsection{Primitive Types}\label{sect:primitive-types}
