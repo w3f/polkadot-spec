@@ -459,8 +459,11 @@ match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
 }
 \end{verbatim}
 
-\syed{After that, it proceeds to reserve the registrar fee, inserts the newly updated
-identity info into storage and deposits the event into the scheduler.}{these introduce hole lots of things, could we explain this in more details, what is registerar fee, how is it being reserved, what is the updated identity, what is the update, what does it mean to deposit the event into scheduler}
+In the end, the function ensures that the sender of the extrinsic has the
+required balance in order to pay the fee, a balance that is adjustable and
+determined by the Runtime itself. Then, an event is created to insert the
+Identity Info into storage. The creation of events is lightweight, but its
+execution is what will actually commit the state changes.
 
 \begin{verbatim}
 T::Currency::reserve(&sender, registrar.fee)?;
