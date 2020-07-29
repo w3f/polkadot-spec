@@ -1,8 +1,8 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <project|polkadot_host_spec.tm>
 
-<style|book>
+<style|<tuple|book|old-dots>>
 
 <\body>
   <appendix|Polkadot Host API><label|appendix-e>
