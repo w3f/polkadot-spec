@@ -61,7 +61,7 @@ itself.
 To begin, we introduce in Section \ref{sec:assumptions} the assumption upon
 which the Polkadot transaction weight system is designed. In Section
 \ref{sec:limitations}, we discuss the limitation Polkadot needs to enforce on
-the Block size. In Section \ref{sec:runtime-primitives}, we describe in detail
+the block size. In Section \ref{sec:runtime-primitives}, we describe in detail
 the procedure upon which the weight of any transaction should be calculated. In
 Section \ref{sec:practical-examples}, we present how we apply this procedure to
 compute the weight of particular runtime functions.
@@ -88,9 +88,8 @@ These concepts are formalized in Definitions \ref{def:block-length} and
 
 \begin{definition}
   \label{def:block-length}
-  For a Block $B$ with $Head(B)$ and $Body(B)$ the {\b block length of $B$},
-  $Len(B)$ is defined as \todo{define length with what encoding head or no head
-  seal or no seal etc0}
+  For a block $B$ with $Head(B)$ and $Body(B)$ the {\b block length of $B$},
+  $Len(B)$, is defined as the amount of raw bytes of $B$.
 \end{definition}
 
 \begin{definition}
@@ -100,9 +99,9 @@ These concepts are formalized in Definitions \ref{def:block-length} and
 
 \begin{definition}
   \label{def:block-target-time}
-  Available block ration reserved for normal, noted by $R(B)$ is defined to
-  maximum length none-operational transactions encoded as \todo{TBD} in the Body
-  of $B$ divided by $Len(B)$.
+  Available block ration reserved for normal, noted by $R(B)$, is defined as the
+  maximum weight of none-operational transactions in the Body of $B$ divided by
+  $Len(B)$.
 \end{definition}
 
 \begin{definition}
@@ -112,7 +111,7 @@ These concepts are formalized in Definitions \ref{def:block-length} and
         
         \begin{enumerate}
          \item $Len(B) \le 5 \times 1'024 \times 1'024 = 5'242'880$ Bytes
-         \item $T(B) = 6 seconds$
+         \item $T(B) = 6\ seconds$
          \item $R(B) \le 0.75$
         \end{enumerate}
         
@@ -130,10 +129,8 @@ These concepts are formalized in Definitions \ref{def:block-length} and
   where $w$ is a non-negative integer representing the weight of the extrinsic
   $E$. We define the weight of all inherent extrinsics as defined in
   \cite[Definition~3.3]{web30_technologies_foundation_polkadot_2020} to be equal
-  to 0.
-
-  we extend the definition of \TWF function to compute the weight of the block
-  as sum of weight of all extrinsics its includes:
+  to 0. we extend the definition of \TWF\ function to compute the weight of the
+  block as sum of weight of all extrinsics its includes:
 
   \begin{alignat*}{2}
     \mathcal{W} &: \mathcal{B}\rightarrow \mathbb{N} \\
@@ -159,7 +156,7 @@ parameters.
 \end{itemize}
 
 Heuristically, "heaviness" corresponds to the resources consumption of an
-extrinsic. In that way, the \TWF value for various extrinsics should be
+extrinsic. In that way, the \TWF\ value for various extrinsics should be
 proportional to their execution time and consumption of other system resources
 such as memory and amount I/O operation. For example, if Extrinsic A takes three
 times longer to execute than Extrinsic B while both Extrinsics consumes require
@@ -170,18 +167,31 @@ weighs 3 times of Extrinsic B. Or
 \TWF(A)~3\times \TWF(B)
 \]
 
-Nonetheless, $\TWF(E)$ can be manipulated depending on the priority of $E$ the chain is supposed to endorse.
+Nonetheless, $\TWF(E)$ can be manipulated depending on the priority of $E$ the
+chain is supposed to endorse.
 
 \subsection{Limitations}\label{sec:limitations}
-In this section we discuss how applying the limitation defined in Definition \ref{def:polkadot-block-limits} can be translated to limitation $\TWF$. In order to be able to translate those into concrete numbers, we need to identify an arbitrary maximum weight to which we scale all other computations. For that we first define the block weight and then assume a maximum on it block length in Definition \ref{def:block-weight}:
+
+In this section we discuss how applying the limitation defined in Definition
+\ref{def:polkadot-block-limits} can be translated to limitation $\TWF$. In order
+to be able to translate those into concrete numbers, we need to identify an
+arbitrary maximum weight to which we scale all other computations. For that we
+first define the block weight and then assume a maximum on it block length in
+Definition \ref{def:block-weight}:
 
 \begin{definition}
-  \label{def:block-weight} We define the {\b block weight} of block $B$, formally denoted as  $\TWF(B)$, to be \todo{the sum of transaction weight? extrinsics weight?}. 
-  We require that
-  \[
-\TWF(B) < 2'000'000'000'000
-\]
+  \label{def:block-weight} We define the {\b block weight} of block $B$,
+  formally denoted as  $\TWF(B)$, to be:
 
+  \[
+    \TWF(B) = \sum^{|\mathcal{E}|}_{n = 0} (W(E_n))
+  \]
+
+  We require that:
+
+  \[
+    \TWF(B) < 2'000'000'000'000
+  \]
 \end{definition}
 
 The weights must fulfil the requirements as noted by the fundamentals and
