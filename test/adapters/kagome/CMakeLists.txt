@@ -87,7 +87,7 @@ target_link_libraries(kagome-adapter
   yaml-cpp::yaml-cpp
   ${kagome_LIBRARIES}
 
-  # FIXME Patched-in export required for hostapi testing
+  # FIXME Patched-in export required for host-api testing
   kagome::binaryen_wasm_memory
 )
 

@@ -1,0 +1,9 @@
+[submodule "test/hosts/kagome"]
+	path = test/hosts/kagome
+	url = https://github.com/soramitsu/kagome.git
+[submodule "test/hosts/gossamer"]
+	path = test/hosts/gossamer
+	url = https://github.com/ChainSafe/gossamer.git
+[submodule "test/hosts/substrate"]
+	path = test/hosts/substrate
+	url = https://github.com/paritytech/polkadot.git
