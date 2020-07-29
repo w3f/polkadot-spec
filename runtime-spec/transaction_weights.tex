@@ -206,13 +206,15 @@ transaction, those functions must be analyzed in order to determine parts of the
 code which can significantly contribute to the execution time and consume
 resources such as  loops, I/O operations, and data manipulation. Subsequently
 the performance and resource consumption of each part will be evaluated based on
-variaty of input parameters. Based on those observations, weights are assigned
+variety of input parameters. Based on those observations, weights are assigned
 Runtime functions or parameters which contribute to heavy resource consumption.
 These sub component of the code are discussed in Section
 \ref{sect:primitive-types}.
+\newline
 
 The general algorithm to calculate $\TWF(E)$ is described in the Section
 \ref{sect:benchmarking}.
+\newline
 
 \syed{The final assigned weights are calculated by benchmarking the Runtime
 functions, which is described in section \ref{sect:benchmarking}.}{this needs to
@@ -225,20 +227,18 @@ Runtime function analysis.
 
 \section{Benchmarking}\label{sect:benchmarking} Calculating the extrinsic weight
 solely based on theoretical complexity of the underlying implementation proves
-to be too complicated and unreliable at the same time. Naunces such as
-{imprecision in back-end systems}{what does this exactly mean? more detail},
-internal communication within the Runtime and design choices in the software
-could add enough overhead to make the asymtotic complexity practically
-meaningless.
+to be too complicated and unreliable at the same time. Certain decisions in the
+source code architecture, internal communication within the Runtime or other
+design choices could add enough overhead to make the asymptotic complexity
+practically meaningless.
+\newline
 
-On the other benchmarking an extrinsics as black box could (using random
-parameters) most centainly results in missing corner cases and worst case
-senarios.
-
-Instead, we benchmark all available Runtime functions, which are invoked in the
-course \syed{create and}{functions do not create extrinsics} execution an
-extrinsic over a with a large collection of carefully selected input parameters
-and use the result of the benchmarking process to evaluate $\TWF(E)$.
+On the other hand, benchmarking an extrinsics in a black-box fashion could
+(using random parameters) most centainly results in missing corner cases and
+worst case senarios. Instead, we benchmark all available Runtime functions which
+are invoked in the course of execution of extrinsics with a large collection of
+carefully selected input parameters and use the result of the benchmarking
+process to evaluate $\TWF(E)$.
 \newline
 
 In order to select useful parameters, the Runtime functions have to be analysed
@@ -247,11 +247,11 @@ execution times, which is described closer in section
 \ref{sect:primitive-types}.
 
 \todo{review after reading the examples} Not every possible benchmarking outcome
-can be invoked by varying input parameters \syed{to}{of} the Runtime function.
-In some circumstances, preliminary work is required before a specific benchmark
-can be reliably measured, such as creating certain preexisting entries in the
-storage or other changes to the environment. This is explained in more detail in
-section \ref{sect:examples-preliminary-work}.
+can be invoked by varying input parameters of the Runtime function. In some
+circumstances, preliminary work is required before a specific benchmark can be
+reliably measured, such as creating certain preexisting entries in the storage
+or other changes to the environment. This is explained in more detail in section
+\ref{sect:examples-preliminary-work}.
 \newpage
 
 \subsection{Primitive Types}\label{sect:primitive-types}
@@ -409,16 +409,19 @@ to demonstrate the analysis process as described in section
 
 In Polkadot, accounts can save information about themselves onchain, known as
 the "Identity Info". This includes information such as display name, legal name,
-email address and so on. Polkadot selects a set of \syed{registrars}{could we unfold this term in more detail what kind of entities are these registerar?} which can judge 
-identities and therefore incentivizes a reputation model. The judgement itself
-is done offchain. The registrars rating, however, is saved onchain, directly in
-the corresponding Identity Info. It's also note worthy that Identiy Info can
-contain additional fields, set manually by the corresponding account holder.
+email address and so on. Polkadot selects a set of registrars, entities elected
+by the Polkadot public referendum, which can judge identities and therefore
+incentivizes a reputation model. The judgement itself is done offchain. The
+registrars rating, however, is saved onchain, directly in the corresponding
+Identity Info. It's also note worthy that Identiy Info can contain additional
+fields, set manually by the corresponding account holder.
 \newline
 
-The function \verb|request_judgement| from the \verb|identity| Pallet allows
-users to request a judgement from a specific registrar. Studying this function
-reveals \syed{multiple design choices}{which design choice} that can impact performance.
+The function \verb|request_judgement| from the \verb|identity| pallet allows
+users to request judgement from a specific registrar. If this function is called
+by a previously judged user it implies that the Identity Info should be
+rejudged. Studying this function reveals multiple design choices that can impact
+performance, as it will be revealed by this analysis.
 \newline
 
 First, it fetches a list of current registrars from storage and then searches
@@ -437,14 +440,13 @@ transaction.
 let mut id = <IdentityOf<T>>::get(&sender).ok_or(Error::<T>::NoIdentity)?;
 \end{verbatim}
 
-The Identity Info contains the entirety of entries, in an ordered form. It then
-proceeds the search all those entries for the specified registrar index. \syed{If an
-entry}{corresponding to the specific registerar?} can be found, the value \syed{is updated}{wasn't this a request for judgement or was is a request for judgment change?} (assuming the registrar is not
-"stickied", which implies it cannot be changed). \syed{In the context of registrars,
-this update implies that the Identity Info should be rejudged}{I'd bring that earlier not to confuse the reader}. If the entry
-cannot be found, \syed{the value}{perhaps be more explicit here, what value?} is inserted into the index where a matching element
-could be inserted while maintaining sorted order. This results in memory
-reallocation.
+The Identity Info contains all fields that have a value set, in an ordered form.
+It then proceeds the search all those entries for the specified registrar index.
+If the field can be found, the corresponding value is updated to the value
+passed on as the function parameters (assuming the registrar is not "stickied",
+which implies it cannot be changed). If the entry cannot be found, the value is
+inserted into the index where a matching element can be inserted while
+maintaining sorted order. This results in memory reallocation.
 
 \begin{verbatim}
 match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
