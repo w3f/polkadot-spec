@@ -9,7 +9,8 @@
 \usepackage{xargs}   % Use more than one optional parameter in new commands
 \usepackage{xcolor}  % Coloured terxt etc.
 
-\newcommandx{\syed}[2]{{\uline{#1}}\textcolor{orange}{(#2)}}
+\newtheorem{definition}{Definition}
+\newcommand{\syed}[2]{{\underline{#1}}\textcolor{orange}{(#2)}}
 
 \setlength\parindent{0pt}
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
@@ -27,17 +28,45 @@
 \maketitle
 
 \section{Motivation}
-The Polkadot network, like any other permissionless system, needs to implement a mechanism to measure and to limit the usage in order to establish an economic incentive structure, to prevent the network overload, and to mitigate DoS vulnerabilities. In particular, Polkadot enforces a limited time-window for block producers to create a block, including limitations on block size, which can make the selection and execution of certain extrinsics too expensive and decelerate the network.
+The Polkadot network, like any other permissionless system, needs to implement a
+mechanism to measure and to limit the usage in order to establish an economic
+incentive structure, to prevent the network overload, and to mitigate DoS
+vulnerabilities. In particular, Polkadot enforces a limited time-window for
+block producers to create a block, including limitations on block size, which
+can make the selection and execution of certain extrinsics too expensive and
+decelerate the network.
+\newline
 
-In contrast to some other systems such as Ethereum which implement fine measurement for each executed low-level operation by smart contracts, known as gas metering, Polkadot takes a more relaxed approach by implementing a measuring system where the cost of the transactions (referred to as 'extrinsics') are determined before execution and are known as the weight system.
+In contrast to some other systems such as Ethereum which implement fine
+measurement for each executed low-level operation by smart contracts, known as
+gas metering, Polkadot takes a more relaxed approach by implementing a measuring
+system where the cost of the transactions (referred to as 'extrinsics') are
+determined before execution and are known as the weight system.
 
-The Polkadot weight system introduces a mechanism for block producers to measure the cost of running the extrinsics and determine how "heavy" it is in terms of computational cost. Within this mechanism, block producers can select a set of extrinsics and saturate the block to its fullest potential without exceeding any limitations (as described in section \ref{sec:limitations}). Moreover, the weight system can be used to calculate a fee for executing each extrinsics according to its weight (as described in section \ref{sec:fee-calculation}).
+The Polkadot weight system introduces a mechanism for block producers to measure
+the cost of running the extrinsics and determine how "heavy" it is in terms of
+computational cost. Within this mechanism, block producers can select a set of
+extrinsics and saturate the block to its fullest potential without exceeding any
+limitations (as described in section \ref{sec:limitations}). Moreover, the
+weight system can be used to calculate a fee for executing each extrinsics
+according to its weight (as described in section \ref{sec:fee-calculation}).
+\newline
 
-Additionally, Polkadot introduces a specified block ratio (as defined in section \ref{sec:limitations}), ensuring that only a certain portion of the total block size gets used for regular extrinsics. The remaining space is reserved for critical, operational extrinsics required for the functionality by Polkadot itself.
+Additionally, Polkadot introduces a specified block ratio (as defined in section
+\ref{sec:limitations}), ensuring that only a certain portion of the total block
+size gets used for regular extrinsics. The remaining space is reserved for
+critical, operational extrinsics required for the functionality by Polkadot
+itself.
 
-To begin, we introduce in Section \ref{sec:Assumptions} the assumption upon which the Polkadot transaction weight system is designed. In Section \ref{sec:Limitations}, we discuss the limitation Polkadot needs to enforce on the Block size. In Section \ref{sec:Runtime-Primitives}, we describe in detail the procedure upon which the weight of any transaction should be calculated. In Section \ref{sec:practical-examples}, we present how we apply this procedure to compute the weight of particular runtime functions.
+To begin, we introduce in Section \ref{sec:assumptions} the assumption upon
+which the Polkadot transaction weight system is designed. In Section
+\ref{sec:limitations}, we discuss the limitation Polkadot needs to enforce on
+the Block size. In Section \ref{sec:runtime-primitives}, we describe in detail
+the procedure upon which the weight of any transaction should be calculated. In
+Section \ref{sec:practical-examples}, we present how we apply this procedure to
+compute the weight of particular runtime functions.
 
-\section{Assumptions}\label{sec:assumption}
+\section{Assumptions}\label{sec:assumptions}
 
 In this section, we define the concept of weight and we discuss the considerations that need to be accounted for when assigning weight to transactions. These considerations are essential in order for the weight system to deliver its fundamental mission, i.e. the fair distribution of network resources and preventing a network overload. In this regard, weights serve as an indicator on whether a block is considered full and how much space is left for remaining, pending extrinsics. Extrinsics which require too many resources are
 discarded. More formally, the weight system should:
@@ -80,18 +109,20 @@ These concepts are formalized in Definitions \ref{def:block-length} and \ref{def
 \begin{definition}
   \label{defn:weight-function}
   The {\b Polkadot transaction weight function} denoted by $\mathcal{W}$ as follows:
-  \[
-  \mathcal{W}: \mathcal{E}\rightarrow \mathbb{N}
-  \mathcal{W}: E \mapsto w
-  \]
+
+  \begin{alignat*}{2}
+    \mathcal{W} &: \mathcal{E} \rightarrow \mathbb{N} \\
+    \mathcal{W} &: E \mapsto w
+  \end{alignat*}
 
   where $w$ is a non-negative integer representing the weight of the extrinsic $E$. We define the weight of all inherent extrinsics as defined in \cite[Definition~3.3]{web30_technologies_foundation_polkadot_2020} to be equal to 0.
 
   we extend the definition of \TWF function to compute the weight of the block as sum of weight of all extrinsics its includes:
-  \[
-  \mathcal{W}: \mathcal{B}\rightarrow \mathbb{N}
-  \mathcal{W}: B \mapsto \sum_{E\in B}(W(E))
-  \]
+
+  \begin{alignat*}{2}
+    \mathcal{W} &: \mathcal{B}\rightarrow \mathbb{N} \\
+    \mathcal{W} &: B \mapsto \sum_{E\in B}(W(E))
+  \end{alignat*}
   
 \end{definition}
 
@@ -143,7 +174,7 @@ The general algorithm to calculate $\TWF(E)$ is described in the Section \ref{se
 \syed{The final assigned weights are calculated by benchmarking the Runtime functions, which is described in section \ref{sect:benchmarking}.}{this needs to relate the computation of final weight to the primitive otherwise the paragraph looks disconnected}.
 \newline
 
-Section \ref{sect:examples-runtime-analysis} walks through two practical examples of Runtime function analysis.
+Section \ref{sec:practical-examples} walks through two practical examples of Runtime function analysis.
 
 \section{Benchmarking}\label{sect:benchmarking}
 Calculating the extrinsic weight solely based on theoretical complexity of the underlying implementation proves to be too complicated and unreliable at the same time. Naunces such as {imprecision in back-end systems}{what does this exactly mean? more detail}, internal communication within the Runtime and design choices in the software could add enough overhead to make the asymtotic complexity practically meaningless.
@@ -300,9 +331,9 @@ processes or software. Additionally, the benchmarks should be executed on
 multiple machines with different system resources, such as CPU performance, CPU
 cores, RAM and storage speed.
 
-\section{Practical examples}
+\section{Practical examples}\label{sec:practical-examples}
 
-\subsection{Runtime function analysis}\label{sect:examples-runtime-analysis}
+\subsection{Runtime function analysis}
 
 This section walks through Runtime functions available in the Polkadot Runtime
 to demonstrate the analysis process as described in section
