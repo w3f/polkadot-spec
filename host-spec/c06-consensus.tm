@@ -1,6 +1,6 @@
 <TeXmacs|1.99.12>
 
-<project|polkadot_host_spec.tm>
+<project|host-spec.tm>
 
 <style|<tuple|book|algorithmacs-style|old-dots>>
 
@@ -724,7 +724,15 @@
       </state>
 
       <\state>
-        <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_inherent_extrinsics>>,<text|<name|Inherent-Data>>|)>><END>
+        <name|<em|I-D>> \<leftarrow\> <name|Call-Runtime-Entry><math|<around*|(|<text|<verbatim|BlockBuilder_inherent_extrinsics>>,<text|<name|Inherent-Data>>|)>><END>
+      </state>
+
+      <\state>
+        <strong|for> <em|E> <strong|in> <em|I-D>
+      </state>
+
+      <\state>
+        <space|2em><name|Call-Runtime-Entry>(<verbatim|BlockBuilder_apply_extrinsics,E>)
       </state>
 
       <\state>
@@ -789,8 +797,8 @@
 
     <item><name|Ok-Result> indicates whether the result of
     <verbatim|BlockBuilder_apply_extrinsics> is successfull. The error type
-    of the Runtime function is defined in Definition <todo|define error
-    type>.
+    of the Runtime function is defined in Section
+    <reference|sect-rte-apply-extrinsic>.
 
     <item><name|Ready-Extrinsics-Queue> indicates picking an extrinsics from
     the extrinsics queue (Definition <reference|defn-transaction-queue>).
@@ -893,16 +901,16 @@
 
   <\definition>
     Voter <math|v> <strong|equivocates> if they broadcast two or more valid
-    votes to blocks not residing on the same branch of the block tree during
-    one voting sub-round. In such a situation, we say that <math|v> is an
-    <strong|equivocator> and any vote <math|V<rsub|v><rsup|r,stage><around*|(|B|)>>
-    cast by <math|v> in that round is an <strong|equivocatory vote>, and
+    votes to blocks during one voting sub-round. In such a situation, we say
+    that <math|v> is an <strong|equivocator> and any vote
+    <math|V<rsub|v><rsup|r,stage><around*|(|B|)>> cast by <math|v> in that
+    sub-round is an <strong|equivocatory vote>, and
 
     <\equation*>
       \<cal-E\><rsup|r,stage>
     </equation*>
 
-    \ represents the set of all equivocators voters in sub-round
+    represents the set of all equivocators voters in sub-round
     \P<math|stage>\Q of round <math|r>. When we want to refer to the number
     of<verbatim|> equivocators whose equivocation has been observed by voter
     <math|v> we refer to it by:
