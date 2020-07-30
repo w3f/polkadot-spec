@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|host-spec.tm>
 
@@ -485,30 +485,17 @@
 
   <section|Child Storage>
 
-  <todo|I would first explain what is the state storage (as a key value
-  table) is (moving some of the material from next section) (similar to
-  section <reference|sect-state-storage>) and then describe the trie
-  structure in the next section.>
-
-  <subsection|Child Tries><label|sect-child-trie-structure>
-
-  Child tries are trie structures which are used to track the changes in the
-  child storages (See Definition <reference|defn-child-storage-definition> in
-  the same way that the state trie is used to track and verify changes in the
-  State storage. As a trie they exactly have the same structrure as the state
-  trie as defined Section <reference|sect-state-storage-trie-structure>.
-  However child trie, are stored as a separate trie from the Polkadot state
-  trie. Child tries have \ their own isolated environment and the main
-  Polkadot state trie depends on them by storing a node
-  (<math|K<rsub|N>,V<rsub|N>>) corresponding to an individual child trie in
-  which <math|K<rsub|N>> is the child storage key and <math|V<rsub|N>> is the
-  Merkle value of its corresponding child trie, as described in Section
-  <reference|sect-merkl-proof>
+  As clarified in Section <reference|sect-state-storage>, the state storage
+  implements a hash table for inserting and reading key-value entries. The
+  child storage works the exact same way, but is stored in a separate and
+  isolated environment. Entries in the child storage are not available in the
+  main state storage.
 
   \;
 
-  Child tries are usually used in situations where Runtime deals with
-  multiple instances of certain type of objects such as as Parachains or
+  The Polkadot Host supports as many child storages as required by the
+  Runtime. Child storages are usually used in situations where Runtime deals
+  with multiple instances of certain type of objects such as as Parachains or
   Smart Contracts. In such situation the execution of the Runtime entry might
   result in generating duplicate keys across multiple instances of certain
   objects, and all such instances of key-value must be able to be stored
@@ -520,26 +507,30 @@
   prevents any undesired interference between the separated states. The
   Polkadot Host makes no assumptions about how child tries are used, but only
   provides the functionality for it. This is described in more detail in the
-  Host API, Section <reference|sect-child-storages>.
+  Host API, as described in Section <reference|sect-child-storages>.
+
+  <subsection|Child Tries><label|sect-child-trie-structure>
+
+  The state trie is used to track and verify changes in the state storage,
+  which is the exact same way that changes are tracked and verified in the
+  child storage, as defined in Section <reference|sect-state-storage-trie-structure>.
+  Child tries have their own isolated environment and the main Polkadot state
+  trie depends on them by storing a node (<math|K<rsub|N>,V<rsub|N>>)
+  corresponding to an individual child trie in which <math|K<rsub|N>> is the
+  child storage key and <math|V<rsub|N>> is the Merkle value of its
+  corresponding child trie, as described in Section
+  <reference|sect-merkl-proof>
 
   \;
 
-  A node <math|N> in child trie <math|\<cal-N\><rsub|child>> is not available
-  in Polkadot state trie <math|\<cal-N\>>, hence <math|N
-  \<in\>\<cal-N\><rsub|child> <mid|\|>N\<nin\>\<cal-N\>> and
-  <math|N\<in\>\<cal-N\><mid|\|>N\<nin\>\<cal-N\><rsub|child>> <todo|I don't
-  understand this expression>. <math|\<cal-N\>> links to
-  <math|\<cal-N\><rsub|child>> by using <math|<around*|(|k<rsub|N>,H<around*|(|\<cal-N\><rsub|child>|)>|)>>
-  as its key/value pair. The Polkadot Host APIs as defined in
-  <reference|sect-child-storages> provides <todo|does the Polkadot Host API
-  provides the key k_n or we choose one ourself like the name of the
-  parachain for example> the key <math|k<rsub|N>> in order to identify the
+  The Polkadot Host APIs as defined in <reference|sect-child-storages> allows
+  the Runtime to provide the key <math|K<rsub|N>> in order to identify the
   child trie, followed by a second key in order to identify the value within
-  that child trie. Every time a child trie is modified, the Merkle proof of
-  the child trie stored in <math|\<cal-N\>> must be updated first. After
-  that, the final Merkle proof of the Polkadot state <math|\<cal-N\>> can be
-  calculated. This mechanism provides a proof of the full Polkadot state
-  including all its child states.
+  that child trie. Every time a child trie is modified, the Merkle proof
+  <math|V<rsub|N>> of the child trie stored in <math|\<cal-N\>> must be
+  updated first. After that, the final Merkle proof of the Polkadot state
+  <math|\<cal-N\>> can be calculated. This mechanism provides a proof of the
+  full Polkadot state including all its child states.
 
   \;
 
@@ -623,13 +614,16 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|2.1.4<space|2spc>Child Tries
+      <with|par-left|<quote|1tab>|2.1.4<space|2spc>Merkle Proof
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      <with|par-left|<quote|1tab>|2.1.5<space|2spc>Merkle Proof
+      2.2<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>
+
+      <with|par-left|<quote|1tab>|2.2.1<space|2spc>Child Tries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
+      <no-break><pageref|auto-9>>
     </associate>
   </collection>
 </auxiliary>
