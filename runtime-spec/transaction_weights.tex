@@ -508,9 +508,10 @@ Key points:
 
 \subsubsection{Preliminary Work}
 
-The Polkadot Runtime specifies a \verb|MaxRegistrars| value, which will prevent the
-list of registrars of reaching an undesired length.
-\newline
+The Polkadot Runtime specifies a \verb|MaxRegistrars| constant, which will
+prevent the list of registrars of reaching an undesired length. The benchmarking
+implementation of the Polkadot Runtime function $request_judgement$ can be
+defined as follows:
 
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $request_judgement$ Runtime function}
@@ -523,14 +524,35 @@ list of registrars of reaching an undesired length.
     \textsc{Pollute-Storage;}\\
     \For{$amount \leftarrow 1$ \KwTo $MaxRegistrars$ \KwBy $1$}{
       \textsc{Generate-Registrars($amount$)};\\
-      $caller \leftarrow$ \textsc{Create-Account("caller", $index$)};\\
+      $caller \leftarrow$ \textsc{Create-Account("caller", $1$)};\\
       \textsc{Set-Balance($caller$, 100)};\\
-      $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), Random(100)))};\\
+      $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), 100))};\\
       \textsc{Add-To($collection$, $time$)};
     }
     \Return{$collection$}
   }
 \end{algorithm}
+
+\begin{itemize}
+  \item \textsc{Generate-Registrars($amount$)}
+  \SubItem{Creates $amount$ of registrars and inserts those records into storage.}
+  \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
+      of the concatenated input of $name$ and $index$ representing the address
+      of a account. This function only creates an address and does not conduct
+      any I/O.}
+  \item \textsc{Set-Balance($account$, $balance$)}
+  \SubItem{Sets a initial $balance$ for the specified $account$ in the storage state.}
+  \item \textsc{Timer($function$)}
+  \SubItem{Measures the time from the start of the specified $function$ to its completion.}
+  \item \textsc{Request-Judgement($registrar\_index$, $max\_fee$)}
+  \SubItem{Calls the corresponding $request\_judgement$ Runtime function and passes on
+  the required parameters.}
+  \item \textsc{Random($num$)}
+  \SubItem{Picks a random number between 0 and $num$. This should be used when the benchmark
+  should account for unpredictable values.}
+  \item \textsc{Add-To($collection$, $time$)}
+  \SubItem{Adds a returned time measurement ($time$) to $collection$.}
+\end{itemize}
 
 \subsubsection{Practical example \#2}
 
@@ -635,14 +657,14 @@ Key points:
   \item The Ledger contains a varying list of claimed rewards. Fetching,
   retaining and searching through it can affect execution time. The retained
   list is inserted back into storage.
-  \item The function searches the database for the reward points of the
-  specified validator. If there are a lot of validators in the network, the
-  search becomes more expensive.
-  \item Looping through a list of nominators and creating I/O operations for each
-  heavily increases execution time. The Runtime fetches up to 64 nominators.
+  \item Looping through a list of nominators and creating I/O operations for
+  each increases execution time. The Runtime fetches up to 64 nominators.
 \end{itemize}
 
 \subsubsection{Preliminary Work}
+
+\verb|MaxNominatorRewardedPerValidator|
+HistoryDepth
 
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $payout_stakers$ Runtime function}
@@ -652,17 +674,40 @@ Key points:
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
-    \textsc{Pollute-Storage;}\\
-    \For{$amount \leftarrow 1$ \KwTo $MaxRegistrars$ \KwBy $1$}{
-      \textsc{Generate-Registrars($amount$)};\\
-      $caller \leftarrow$ \textsc{Create-Account("caller", $index$)};\\
-      \textsc{Set-Balance($caller$, 100)};\\
-      $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), Random(100)))};\\
-      \textsc{Add-To($collection$, $time$)};
+    \textsc{Pollute-Storage()};\\
+    \For{$amount \leftarrow 1$ \KwTo $MaxNominators$ \KwBy $1$}{
+      \For{$era\_depth \leftarrow 1$ \KwTo $HistoryDepth$ \KwBy $1$}{
+        $validator \leftarrow$ \textsc{Generate-Validator()};\\
+        \textsc{Validate($validator$)};\\
+        $nominators \leftarrow$ \textsc{Generate-Nominators($amount$)};\\
+        \For{$nominator \in nominators$}{
+          \textsc{Nominate($validator$, $nominator$)}
+        }
+        $era\_index \leftarrow$ \textsc{Create-Rewards($validator$, $nominators$, $era\_depth$)};\\
+        $time \leftarrow$ \textsc{Timer(Payout-Stakers($validator$), $era\_index$))};\\
+        \textsc{Add-To($collection$, $time$)};
+      }
     }
     \Return{$collection$}
   }
 \end{algorithm}
+
+\begin{itemize}
+  \item \textsc{Generate-Validator()}
+  \SubItem{Creates a validators with some unbonded balances.}
+  \item \textsc{Validate($validator$)}
+  \SubItem{Bonds balances of $validator$ and bonds balances.}
+  \item \textsc{Generate-Nominators($amount$)}
+  \SubItem{Creates the $amount$ of nominators with some unbonded balances.}
+  \item \textsc{Nominate($validator$, $nominator$)}
+  \SubItem{Starts nomination of $nominator$ for $validator$ by bonding balances.}
+  \item \textsc{Create-Rewards($validator$, $nominators$, $era\_depth$)}
+  \SubItem{Starts an Era and creates pending rewards for $validator$ and $nominators$}
+  \item \textsc{Timer($function$)} \SubItem{Measures the time from the start of
+      the specified $function$ to its completion.}
+  \item \textsc{Add-To($collection$, $time$)} \SubItem{Adds a returned time
+      measurement ($time$) to $collection$.}
+\end{itemize}
 
 \subsection{Preliminary Work}\label{sect:examples-preliminary-work}
 In order for certain benchmarks to produce conditions where resource heavy
