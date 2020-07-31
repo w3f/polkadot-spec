@@ -508,13 +508,16 @@ Key points:
 
 \subsubsection{Preliminary Work}
 
-The Polkadot Runtime specifies a \verb|MaxRegistrars| constant, which will
-prevent the list of registrars of reaching an undesired length. The benchmarking
-implementation of the Polkadot Runtime function $request_judgement$ can be
+The Polkadot Runtime specifies the \verb|MaxRegistrars| constant, which will
+prevent the list of registrars of reaching an undesired length. This value
+should have some influence on the benchmarking process.
+\newline
+
+The benchmarking implementation of for the function $request\_judgement$ can be
 defined as follows:
 
 \begin{algorithm}[H]
-  \caption{Run multiple benchmark iterations for $request_judgement$ Runtime function}
+  \caption{Run multiple benchmark iterations for $request\_judgement$ Runtime function}
   \SetAlgoLined
   \KwResult{\textit{collection:} a collection of time measurements of all
   benchmark iterations}
@@ -663,11 +666,19 @@ Key points:
 
 \subsubsection{Preliminary Work}
 
-\verb|MaxNominatorRewardedPerValidator|
-HistoryDepth
+The Polkadot Runtime defines the \verb|HistoryDepth| constant, which dictates
+the amount of Eras the reward system takes under consideration. Additionally,
+the constant \verb|MaxNominatorRewardedPerValidator| specifies the maximum
+amount of the highest-staked nominators which will get a reward. Those values
+should have some influence in the benchmarking process.
+\newline
+
+The benchmarking implementation for the function $payout\_stakers$ can be
+defined as follows:
+\newline
 
 \begin{algorithm}[H]
-  \caption{Run multiple benchmark iterations for $payout_stakers$ Runtime function}
+  \caption{Run multiple benchmark iterations for $payout\_stakers$ Runtime function}
   \SetAlgoLined
   \KwResult{\textit{collection:} a collection of time measurements of all
   benchmark iterations}
@@ -675,7 +686,7 @@ HistoryDepth
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
     \textsc{Pollute-Storage()};\\
-    \For{$amount \leftarrow 1$ \KwTo $MaxNominators$ \KwBy $1$}{
+    \For{$amount \leftarrow 1$ \KwTo $MaxNominatorRewardedPerValidator$ \KwBy $1$}{
       \For{$era\_depth \leftarrow 1$ \KwTo $HistoryDepth$ \KwBy $1$}{
         $validator \leftarrow$ \textsc{Generate-Validator()};\\
         \textsc{Validate($validator$)};\\
