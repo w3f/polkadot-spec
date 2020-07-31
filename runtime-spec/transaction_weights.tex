@@ -728,10 +728,28 @@ with simply selected parameters. As practical examples, this section describes
 the specifically designed benchmarks for the \verb|transfer| and
 \verb|withdraw_unbonded| functions available in the Polkadot Runtime.
 
-\subsubsection{Practical example \#1}
+\subsubsection*{Analysis}
+
 The $transfer$ function of the \textit{balances} module is designed to move the
-specified balance by the sender to the receiver. The benchmark is configured to
-measure the function's worst possible condition:
+specified balance by the sender to the receiver.
+\newline
+
+The source code of this function is quite short:
+
+\begin{verbatim}
+let transactor = ensure_signed(origin)?;
+let dest = T::Lookup::lookup(dest)?;
+<Self as Currency<_>>::transfer(
+  &transactor,
+  &dest,
+  value,
+  ExistenceRequirement::AllowDeath
+)?;
+\end{verbatim}
+
+However, what's interesting about this function, especially regarding the
+property \verb|AllowDeath|, is how it manages (non-)existing accounts. Two types
+of behaviors are to consider:
 
 \begin{itemize}
   \item Transfer will kill the sender account (by completely depleting the
@@ -740,8 +758,11 @@ measure the function's worst possible condition:
   doesn't have a balance yet).
 \end{itemize}
 
-\subsubsection*{Parameters}
-The following parameters are selected:
+\subsubsection*{Considerations}
+
+Specific parameters can could have a big impact for this specific function. In
+order to trigger the two behaviors mentioned above, the following parameters are
+selected:
 
 \begin{center}
   \begin{tabular}{ l|r l l l }
