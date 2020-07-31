@@ -20,6 +20,8 @@
 \flushbottom
 
 \newcommand{\TWF}{\ensuremath{\mathcal{W}}}
+\SetKw{KwInit}{Init:} \SetKw{KwBy}{increment by} \SetKwProg{Fn}{Function}{
+is}{end}
 
 \begin{document}
 \title{Polkadot Weights}
@@ -28,6 +30,7 @@
 \maketitle
 
 \section{Motivation}
+
 The Polkadot network, like any other permissionless system, needs to implement a
 mechanism to measure and to limit the usage in order to establish an economic
 incentive structure, to prevent the network overload, and to mitigate DoS
@@ -451,8 +454,8 @@ let mut id = <IdentityOf<T>>::get(&sender).ok_or(Error::<T>::NoIdentity)?;
 \end{verbatim}
 
 The Identity Info contains all fields that have a value set, in an ordered form.
-It then proceeds the search all those entries for the specified registrar index.
-If the field can be found, the corresponding value is updated to the value
+It then proceeds to search all those entries for the specified registrar index.
+If the entry can be found, the corresponding value is updated to the value
 passed on as the function parameters (assuming the registrar is not "stickied",
 which implies it cannot be changed). If the entry cannot be found, the value is
 inserted into the index where a matching element can be inserted while
@@ -499,11 +502,35 @@ Key points:
   reallocated. Depending on the size of the Identity Info, the execution time
   can vary.
   \item Varying sizes of Identity Info, including additional fields.
-  \item Inserting new registrars into Identity Info results in memory
-  reallocation.
   \item It is legitimate to introduce additional weights for changes the sender
   has influence over, such the additional fields in the Identity Info.
 \end{itemize}
+
+\subsubsection{Preliminary Work}
+
+The Polkadot Runtime specifies a \verb|MaxRegistrars| value, which will prevent the
+list of registrars of reaching an undesired length.
+\newline
+
+\begin{algorithm}[H]
+  \caption{Run multiple benchmark iterations for $request_judgement$ Runtime function}
+  \SetAlgoLined
+  \KwResult{\textit{collection:} a collection of time measurements of all
+  benchmark iterations}
+  \BlankLine
+  \Fn{\textsc{Main}}{
+    \KwInit{collection = \{\};}\\
+    \textsc{Pollute-Storage;}\\
+    \For{$amount \leftarrow 1$ \KwTo $MaxRegistrars$ \KwBy $1$}{
+      \textsc{Generate-Registrars($amount$)};\\
+      $caller \leftarrow$ \textsc{Create-Account("caller", $index$)};\\
+      \textsc{Set-Balance($caller$, 100)};\\
+      $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), Random(100)))};\\
+      \textsc{Add-To($collection$, $time$)};
+    }
+    \Return{$collection$}
+  }
+\end{algorithm}
 
 \subsubsection{Practical example \#2}
 
@@ -615,12 +642,34 @@ Key points:
   heavily increases execution time. The Runtime fetches up to 64 nominators.
 \end{itemize}
 
-\subsection{Preliminary Work}\label{sect:examples-preliminary-work} In order for
-certain benchmarks to produce conditions where resource heavy computation or
-excessive I/O can be observed, the benchmarks might require some preliminary
-work on the environment, since those conditions cannot be created with simply
-selected parameters. As practical examples, this section describes the
-specifically designed benchmarks for the \verb|transfer| and
+\subsubsection{Preliminary Work}
+
+\begin{algorithm}[H]
+  \caption{Run multiple benchmark iterations for $payout_stakers$ Runtime function}
+  \SetAlgoLined
+  \KwResult{\textit{collection:} a collection of time measurements of all
+  benchmark iterations}
+  \BlankLine
+  \Fn{\textsc{Main}}{
+    \KwInit{collection = \{\};}\\
+    \textsc{Pollute-Storage;}\\
+    \For{$amount \leftarrow 1$ \KwTo $MaxRegistrars$ \KwBy $1$}{
+      \textsc{Generate-Registrars($amount$)};\\
+      $caller \leftarrow$ \textsc{Create-Account("caller", $index$)};\\
+      \textsc{Set-Balance($caller$, 100)};\\
+      $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), Random(100)))};\\
+      \textsc{Add-To($collection$, $time$)};
+    }
+    \Return{$collection$}
+  }
+\end{algorithm}
+
+\subsection{Preliminary Work}\label{sect:examples-preliminary-work}
+In order for certain benchmarks to produce conditions where resource heavy
+computation or excessive I/O can be observed, the benchmarks might require some
+preliminary work on the environment, since those conditions cannot be created
+with simply selected parameters. As practical examples, this section describes
+the specifically designed benchmarks for the \verb|transfer| and
 \verb|withdraw_unbonded| functions available in the Polkadot Runtime.
 
 \subsubsection{Practical example \#1}
@@ -677,9 +726,6 @@ is implemented as defined in algorithm \ref{sec:algo-benchmark-transfer}.
 The benchmarking implementation for the Polkadot Runtime function $transfer$ is
 defined as follows (starting with the \textsc{Main} function):
 \newline
-
-\SetKw{KwInit}{Init:} \SetKw{KwBy}{increment by} \SetKwProg{Fn}{Function}{
-is}{end}
 
 \begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
   \caption{Run multiple benchmark iterations for $transfer$ Runtime function}
@@ -749,11 +795,8 @@ The benchmarking implementation for the Polkadot Runtime function
 $withdraw\_unbonded$ is defined as follows:
 \newline
 
-\SetKw{KwInit}{Init:} \SetKw{KwBy}{increment by} \SetKwProg{Fn}{Function}{
-is}{end}
-
 \begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
-  \caption{Run multiple benchmark iterations for $transfer$ Runtime function}
+  \caption{Run multiple benchmark iterations for $withdraw_unbonded$ Runtime function}
   \SetAlgoLined \KwResult{$collection$: a collection of time measurements of all
   benchmark iterations} \BlankLine \Fn{\textsc{Main}}{\KwInit{collection =
   \{\}\;} \For{$index\gets0$ \KwTo $1'000$ \KwBy $1$}{$stash \leftarrow$
