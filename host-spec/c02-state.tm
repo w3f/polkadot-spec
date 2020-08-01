@@ -485,43 +485,41 @@
 
   <section|Child Storage>
 
-  As clarified in Section <reference|sect-state-storage>, the state storage
-  implements a hash table for inserting and reading key-value entries. The
-  child storage works the exact same way, but is stored in a separate and
-  isolated environment. Entries in the child storage are not directly
+  As clarified in Section <reference|sect-state-storage>, the Polkadot state
+  storage implements a hash table for inserting and reading key-value
+  entries. The child storage works the same way but is stored in a separate
+  and isolated environment. Entries in the child storage are not directly
   accessible via querying the main state storage.
 
   \;
 
-  The Polkadot Host supports as many child storages as required by the
-  Runtime and identifies each separate child storage by its unique identifyng
-  key. Child storages are usually used in situations where Runtime deals with
-  multiple instances of certain type of objects such as as Parachains or
-  Smart Contracts. <todo|improve this sentence-\<gtr\>>In such a situation
-  the execution of the Runtime entry might result in generating duplicate
-  keys across multiple instances of certain objects, while all such instances
-  of key-value pairs must be able to be stored within the Polkadot state.\ 
+  The Polkadot Host supports as many child storages as required by Runtime
+  and identifies each separate child storage by its unique identifying key.
+  Child storages are usually used in situations where Runtime deals with
+  multiple instances of a certain type of objects such as Parachains or Smart
+  Contracts. In such cases, the execution of the Runtime entry might result
+  in generating repeated keys across multiple instances of certain objects.
+  Even with repeated keys, all such instances of key-value pairs must be able
+  to be stored within the Polkadot state.\ 
 
-  \;
-
-  In these situations, the additional isolation provided by the child
-  storage, prevents any undesired interference between the separated states.
-  The Polkadot Host makes no assumptions about how child storages are used,
-  but only provides the functionality for it. This is described in more
-  detail in the Host API, as described in Section
+  In these situations, the child storage can be used to provide the isolation
+  necessary to prevent any undesired interference between the state of
+  separated instances. The Polkadot Host makes no assumptions about how child
+  storages are used, but provides the functionality for it. This is described
+  in more detail in the Host API, as described in Section
   <reference|sect-child-storages>.
 
   <subsection|Child Tries><label|sect-child-trie-structure>
 
   In the exact way that the state trie is used to track and verify changes in
   the state storage, the changes in the child storage are tracked and
-  verified. Therefore the child trie specification is the same as one
+  verified. Therefore, the child trie specification is the same as the one
   described in Section <reference|sect-state-storage-trie-structure>. Child
   tries have their own isolated environment. Nonetheless, the main Polkadot
   state trie depends on them by storing a node (<math|K<rsub|N>,V<rsub|N>>)
-  which corresponds to an individual child trie in which <math|K<rsub|N>> is
-  the child storage key associated to the child trie and <math|V<rsub|N>> is
-  the Merkle value of its corresponding child trie, computed according to the
+  which corresponds to an individual child trie. Here, <math|K<rsub|N>> is
+  the child storage key associated to the child trie, and <math|V<rsub|N>> is
+  the Merkle value of its corresponding child trie computed according to the
   procedure described in Section <reference|sect-merkl-proof>
 
   \;
@@ -535,7 +533,7 @@
   <math|\<cal-N\>> can be calculated. This mechanism provides a proof of the
   full Polkadot state including all its child states.
 
-  \;
+  <verbatim|>
 
   <\with|par-mode|right>
     <qed>
