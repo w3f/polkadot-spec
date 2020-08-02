@@ -1,5 +1,5 @@
 HOSTS    = substrate kagome gossamer
-ADAPTERS = substrate-legacy wasm wasm-legacy
+ADAPTERS = substrate-legacy kagome-legacy wasm wasm-legacy
 TESTERS  = host host-legacy
 
 ALIASES_ADAPTER := $(patsubst %-legacy-adapter,%-adapter-legacy, $(patsubst %,%-adapter,$(HOSTS) $(ADAPTERS)))
