@@ -24,6 +24,16 @@ set(CMAKE_TOOLCHAIN_FILE
   CACHE FILEPATH "Default toolchain"
 )
 
+# Setup but disable binary cache by default
+set(
+  HUNTER_USE_CACHE_SERVERS "NO"
+  CACHE STRING "Binary cache server"
+)
+
+set(
+  HUNTER_CACHE_SERVERS "https://github.com/soramitsu/hunter-binary-cache;"
+  CACHE STRING "Binary cache server"
+)
 
 # Setup hunter
 include(cmake/HunterGate.cmake)
