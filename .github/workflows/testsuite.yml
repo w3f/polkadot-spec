@@ -122,6 +122,29 @@ jobs:
         name: kagome-adapter
         path: test/bin/kagome-adapter
 
+  build-adapter-kagome-legacy:
+    name: "[build] kagome-adapter-legacy"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Cache hunter packages
+      uses: actions/cache@v1
+      with:
+        path: ~/.hunter
+        key: hunter-adapter-kagome-legacy-${{ hashFiles('test/adapters/kagome-legacy/CMakeLists.txt') }}
+        restore-keys: hunter-adapter-kagome-legacy-
+    - name: Build kagome legacy adapter
+      env:
+        CC: gcc-9
+        CXX: g++-9
+      run: make -C test kagome-adapter-legacy
+    - name: Upload kagome adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-adapter-legacy
+        path: test/bin/kagome-adapter-legacy
+
   build-adapter-gossamer:
     name: "[build] gossamer-adapter"
     runs-on: ubuntu-18.04
