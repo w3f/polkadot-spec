@@ -32,12 +32,13 @@ namespace crypto {
   void processExtBlake2_128(const std::vector<std::string> &args){
       std::string data = args[0];
 
-      auto [memory, extension] = helpers::initialize_environment();
+      auto extension = helpers::initialize_extension();
+      auto memory = extension->memory();
 
       kagome::common::Buffer buffer;
 
       buffer.put(data);
-      kagome::runtime::SizeType valueSize = buffer.size();
+      kagome::runtime::WasmSize valueSize = buffer.size();
       kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
       memory->storeBuffer(valuePtr, buffer);
       buffer.clear();
@@ -53,12 +54,13 @@ namespace crypto {
   void processExtBlake2_256(const std::vector<std::string> &args){
     std::string data = args[0];
 
-    auto [memory, extension] = helpers::initialize_environment();
+    auto extension = helpers::initialize_extension();
+    auto memory = extension->memory();
 
     kagome::common::Buffer buffer;
 
     buffer.put(data);
-    kagome::runtime::SizeType valueSize = buffer.size();
+    kagome::runtime::WasmSize valueSize = buffer.size();
     kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
     memory->storeBuffer(valuePtr, buffer);
     buffer.clear();
@@ -77,12 +79,13 @@ namespace crypto {
   void processExtKeccak256(const std::vector<std::string> &args){
     std::string data = args[0];
 
-    auto [memory, extension] = helpers::initialize_environment();
+    auto extension = helpers::initialize_extension();
+    auto memory = extension->memory();
 
     kagome::common::Buffer buffer;
 
     buffer.put(data);
-    kagome::runtime::SizeType valueSize = buffer.size();
+    kagome::runtime::WasmSize valueSize = buffer.size();
     kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
     memory->storeBuffer(valuePtr, buffer);
     buffer.clear();
@@ -101,12 +104,13 @@ namespace crypto {
   void processExtTwox64(const std::vector<std::string> &args){
       std::string data = args[0];
 
-      auto [memory, extension] = helpers::initialize_environment();
+      auto extension = helpers::initialize_extension();
+      auto memory = extension->memory();
 
       kagome::common::Buffer buffer;
 
       buffer.put(data);
-      kagome::runtime::SizeType valueSize = buffer.size();
+      kagome::runtime::WasmSize valueSize = buffer.size();
       kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
       memory->storeBuffer(valuePtr, buffer);
       buffer.clear();
@@ -122,12 +126,13 @@ namespace crypto {
   void processExtTwox128(const std::vector<std::string> &args){
     std::string data = args[0];
 
-    auto [memory, extension] = helpers::initialize_environment();
+    auto extension = helpers::initialize_extension();
+    auto memory = extension->memory();
 
     kagome::common::Buffer buffer;
 
     buffer.put(data);
-    kagome::runtime::SizeType valueSize = buffer.size();
+    kagome::runtime::WasmSize valueSize = buffer.size();
     kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
     memory->storeBuffer(valuePtr, buffer);
     buffer.clear();
@@ -143,12 +148,13 @@ namespace crypto {
   void processExtTwox256(const std::vector<std::string> &args){
     std::string data = args[0];
 
-    auto [memory, extension] = helpers::initialize_environment();
+    auto extension = helpers::initialize_extension();
+    auto memory = extension->memory();
 
     kagome::common::Buffer buffer;
 
     buffer.put(data);
-    kagome::runtime::SizeType valueSize = buffer.size();
+    kagome::runtime::WasmSize valueSize = buffer.size();
     kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
     memory->storeBuffer(valuePtr, buffer);
     buffer.clear();

@@ -29,8 +29,11 @@
 #include <yaml-cpp/yaml.h>
 
 #include <storage/in_memory/in_memory_storage.hpp>
-#include <storage/trie/impl/polkadot_trie_db.hpp>
-#include <storage/trie/impl/trie_db_backend_impl.hpp>
+#include <storage/trie/polkadot_trie/polkadot_trie_factory_impl.hpp>
+#include <storage/trie/serialization/polkadot_codec.hpp>
+#include <storage/trie/serialization/trie_serializer_impl.hpp>
+#include <storage/trie/impl/trie_storage_backend_impl.hpp>
+#include <storage/trie/impl/trie_storage_impl.hpp>
 
 #include "subcommand_router.hpp"
 
@@ -39,6 +42,14 @@ namespace po = boost::program_options;
 using kagome::common::Buffer;
 using kagome::common::hex_lower;
 using kagome::common::unhex;
+
+using kagome::storage::InMemoryStorage;
+using kagome::storage::trie::PolkadotCodec;
+using kagome::storage::trie::PolkadotTrieFactoryImpl;
+using kagome::storage::trie::PolkadotTrieImpl;
+using kagome::storage::trie::TrieSerializerImpl;
+using kagome::storage::trie::TrieStorageImpl;
+using kagome::storage::trie::TrieStorageBackendImpl;
 
 TrieCommandArgs extractTrieArgs(int argc, char **argv) {
   po::options_description desc("Trie codec related tests\nAllowed options:");
@@ -117,13 +128,25 @@ parseYamlStateFile(const std::string &filename, bool keys_in_hex) {
 }
 
 void processTrieCommand(const TrieCommandArgs &args) {
-  auto trie = kagome::storage::trie::PolkadotTrieDb::createEmpty(
-    std::make_shared<kagome::storage::trie::TrieDbBackendImpl>(
-      std::make_shared<kagome::storage::InMemoryStorage>(),
-      kagome::common::Buffer{}
-    )
+  // Initialize empty trie
+  auto backend = std::make_shared<TrieStorageBackendImpl>(
+    std::make_shared<InMemoryStorage>(),
+    kagome::common::Buffer{}
   );
 
+  auto trie_factory = std::make_shared<PolkadotTrieFactoryImpl>();
+  auto codec        = std::make_shared<PolkadotCodec>();
+  auto serializer   = std::make_shared<TrieSerializerImpl>(
+    trie_factory, codec, backend
+  );
+
+  auto trie_db = TrieStorageImpl::createEmpty(
+    trie_factory, codec, serializer, boost::none
+  ).value();
+
+  auto trie = trie_db->getPersistentBatch().value();
+
+  // Execute requested command
   SubcommandRouter<std::vector<Buffer>, std::vector<Buffer>> router;
   router.addSubcommand("insert-and-delete", [&trie, &args](
                                                 std::vector<Buffer> keys,
@@ -132,15 +155,15 @@ void processTrieCommand(const TrieCommandArgs &args) {
          keys_it != keys.end(); keys_it++, values_it++) {
       auto res = trie->put(*keys_it, *values_it);
       BOOST_ASSERT_MSG(res, "Error inserting to Trie");
-      std::cout << "state root: " << hex_lower(trie->getRootHash()) << "\n";
+      std::cout << "state root: " << hex_lower(trie->commit().value()) << "\n";
     }
     // drop random nodes
     while (not keys.empty()) {
-      auto key_index_to_drop = trie->getRootHash()[0] % keys.size();
+      auto key_index_to_drop = trie->commit().value()[0] % keys.size();
       auto key_to_drop = keys.begin();
       std::advance(key_to_drop, key_index_to_drop);
       BOOST_ASSERT_MSG(trie->remove(*key_to_drop), "Error removing from Trie");
-      std::cout << "state root: " << hex_lower(trie->getRootHash()) << "\n";
+      std::cout << "state root: " << hex_lower(trie->commit().value()) << "\n";
       keys.erase(key_to_drop);
     }
   });
@@ -151,7 +174,7 @@ void processTrieCommand(const TrieCommandArgs &args) {
       BOOST_ASSERT_MSG(trie->put(*keys_it, *values_it),
                        "Error inserting to Trie");
     }
-    std::cout << "state root: " << hex_lower(trie->getRootHash()) << "\n";
+    std::cout << "state root: " << hex_lower(trie->commit().value()) << "\n";
   });
 
   auto [keys, values] =
