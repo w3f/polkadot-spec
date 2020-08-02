@@ -314,30 +314,21 @@ jobs:
 
 
   test-host-api-legacy:
-    needs: [ build-adapter-substrate-legacy, build-adapter-kagome ]
+    needs: [ build-adapter-substrate-legacy, build-adapter-kagome-legacy ]
     strategy:
       fail-fast: false
       matrix:
-        implementation: [ substrate, kagome ]
-    name: "[test-host-api-legacy] ${{ matrix.implementation }}"
+        host: [ substrate, kagome ]
+    name: "[test-host-api-legacy] ${{ matrix.host }}"
     runs-on: ubuntu-18.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
     - uses: actions/download-artifact@v1
       with:
-        name: ${{ matrix.implementation }}-adapter-legacy
+        name: ${{ matrix.host }}-adapter-legacy
         path: test/bin
-      if: matrix.implementation == 'substrate'
-    - uses: actions/download-artifact@v1
-      with:
-        name: ${{ matrix.implementation }}-adapter
-        path: test/bin
-      if: matrix.implementation == 'kagome'
-    - run: chmod +x test/bin/substrate-adapter-legacy
-      if: matrix.implementation == 'substrate'
-    - run: chmod +x test/bin/kagome-adapter
-      if: matrix.implementation == 'kagome'
+    - run: chmod +x test/bin/${{ matrix.host }}-adapter-legacy
     - name: Run test fixture
-      run: test/runtests.jl ${{ matrix.implementation }} host-api-legacy
+      run: test/runtests.jl ${{ matrix.host }} host-api-legacy
 
