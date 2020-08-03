@@ -399,7 +399,7 @@ Additionally, given the distinction theoretical and practical usage, the author
 reserves the right to make adjustments to the input parameters and assigned
 weights according to observed behavior of the actual, real-world network.
 
-\subsection{Blockchain State}
+\subsection{Blockchain State}\label{sec:blockchain-state}
 The benchmarks should be performed on blockchain states that already polluted
 and contain a history of extrinsics and storage changes. Runtime functions that
 require I/O on structures such as Tries will therefore produce more realistic
@@ -526,7 +526,7 @@ defined as follows:
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
-    \textsc{Pollute-Storage;}\\
+    \textsc{Pollute-Storage();}\\
     \For{$amount \leftarrow 1$ \KwTo $MaxRegistrars$ \KwBy $1$}{
       \textsc{Generate-Registrars($amount$)};\\
       $caller \leftarrow$ \textsc{Create-Account("caller", $1$)};\\
@@ -539,6 +539,10 @@ defined as follows:
 \end{algorithm}
 
 \begin{itemize}
+  \item \textsc{Pollute-Storage} \SubItem{As clarified in Section
+  \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
+  storage states. From (mostly) empty databases to database with a (longer)
+  history.}
   \item \textsc{Generate-Registrars($amount$)}
   \SubItem{Creates $amount$ of registrars and inserts those records into storage.}
   \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
@@ -699,6 +703,10 @@ defined as follows:
 \end{algorithm}
 
 \begin{itemize}
+  \item \textsc{Pollute-Storage} \SubItem{As clarified in Section
+  \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
+  storage states. From (mostly) empty databases to database with a (longer)
+  history.}
   \item \textsc{Generate-Validator()}
   \SubItem{Creates a validators with some unbonded balances.}
   \item \textsc{Validate($validator$)}
@@ -795,23 +803,38 @@ defined as follows (starting with the \textsc{Main} function):
 
 \begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
   \caption{Run multiple benchmark iterations for $transfer$ Runtime function}
-  \SetAlgoLined \KwResult{$collection$: a collection of time measurements of all
-  benchmark iterations} \BlankLine \Fn{\textsc{Main}}{\KwInit{collection =
-  \{\}\;} \KwInit{$balance = 1'000$\;} \For{$index\gets1$ \KwTo $1'000$ \KwBy
-  $1$}{$time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
-  \textsc{Add-To($collection$, $time$)}\;} \BlankLine \KwInit{$index = 1'000$\;}
-  \For{$balance\gets2$ \KwTo $1'000$ \KwBy $1$}{$time \leftarrow$
-  \textsc{Run-Benchmark($index$, $balance$)}\; \textsc{Add-To($collection$,
-  $time$)}\;}} \BlankLine \Fn{\textsc{Run-Benchmark($index$,
-  $balance$)}}{$sender \leftarrow$ \textsc{Create-Account(\textit{"caller"},
-  $index$)}\; $recipient \leftarrow$
-  \textsc{Create-Account(\textit{"recipient"}, $index$)}\;
-  \textsc{Set-Balance($sender$, $balance$)}\; \BlankLine $time
-  \leftarrow$\textsc{Timer(Transfer($sender$, $recipient$, $balance$))}\;
+  \SetAlgoLined
+  \KwResult{$collection$: a collection of time measurements of all
+  benchmark iterations}
+  \BlankLine
+  \Fn{\textsc{Main}}{
+    \KwInit{collection = \{\}\;}
+    \textsc{Pollute-Storage();}\\
+    \KwInit{$balance = 1'000$\;}
+    \For{$index\gets1$ \KwTo $1'000$ \KwBy $1$}{
+      $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
+      \textsc{Add-To($collection$, $time$)}\;
+    }
+    \BlankLine \KwInit{$index = 1'000$\;}
+    \For{$balance\gets2$ \KwTo $1'000$ \KwBy $1$}{
+      $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
+      \textsc{Add-To($collection$, $time$)}\;
+    }
+  }
+  \BlankLine
+  \Fn{\textsc{Run-Benchmark($index$,$balance$)}}{
+    $sender \leftarrow$ \textsc{Create-Account(\textit{"caller"}, $index$)}\;
+    $recipient \leftarrow$ \textsc{Create-Account(\textit{"recipient"}, $index$)}\;
+    \textsc{Set-Balance($sender$, $balance$)}\;
+    \BlankLine $time \leftarrow$\textsc{Timer(Transfer($sender$, $recipient$, $balance$))}\;
   \Return $time$}
 \end{algorithm}
 
 \begin{itemize}
+  \item \textsc{Pollute-Storage} \SubItem{As clarified in Section
+  \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
+  storage states. From (mostly) empty databases to database with a (longer)
+  history.}
   \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
       of the concatenated input of $name$ and $index$ representing the address
       of a account. This function only creates an address and does not conduct
@@ -945,15 +968,16 @@ The benchmarking implementation for the Polkadot Runtime function
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\}\;}
+    \textsc{Pollute-Storage();}\\
     \For{$balance\gets1$ \KwTo $100$ \KwBy $1$}{
       $stash \leftarrow$ \textsc{Create-Account(\textit{"stash"}, 1)}\;
       $controller \leftarrow$ \textsc{Create-Account(\textit{"controller"}, 1)}\;
       \textsc{Set-Balance($stash$, 100)}\;
       \textsc{Set-Balance($controller$, 1)}\;
       \textsc{Bond($stash$, $controller$, $balance$)}\;
-      \textsc{Pass-Era}\;
+      \textsc{Pass-Era()}\;
       \textsc{UnBond($controller$, $balance$)}\;
-      \textsc{Pass-Era}\;
+      \textsc{Pass-Era()}\;
       $time \leftarrow$\textsc{Timer(Withdraw-Unbonded($controller$))}\;
       \textsc{Add-To($collection$, $time$)}\;
     }
@@ -962,6 +986,10 @@ The benchmarking implementation for the Polkadot Runtime function
 \end{algorithm}
 
 \begin{itemize}
+  \item \textsc{Pollute-Storage} \SubItem{As clarified in Section
+  \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
+  storage states. From (mostly) empty databases to database with a (longer)
+  history.}
   \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
     of the concatenated input of $name$ and $index$ representing the address of
     a account. This function only creates an address and does not conduct any
@@ -972,7 +1000,7 @@ The benchmarking implementation for the Polkadot Runtime function
     specified $amount$ for the $stash$ and $controller$ pair.}
   \item \textsc{UnBond($account$, $amount$)} \SubItem{Unbonds the specified
     $amount$ for the given $account$.}
-  \item \textsc{Pass-Era}
+  \item \textsc{Pass-Era()}
   \SubItem{Pass one era. Forces the funtion $withdraw\_unbonded$ to update the ledger
   and eventually delete information.}
   \item \textsc{Withdraw-Unbonded($controller$)} \SubItem{Withdraws the the full
