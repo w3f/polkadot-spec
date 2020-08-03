@@ -935,7 +935,8 @@ for account generation.
 
 \subsubsection{Considerations}
 
-Two points in the $withdraw\_unbonded$ function must be considered.
+Two important points in the $withdraw\_unbonded$ function must be considered.
+The benchmarks should trigger both conditions
 
 \begin{itemize}
   \item The updated ledger is inserted back into storage.
@@ -943,7 +944,7 @@ Two points in the $withdraw\_unbonded$ function must be considered.
   performed in the storage.
 \end{itemize}
 
-\subsubsection*{Implementation}
+\subsubsection{Implementation}
 The benchmarking implementation for the Polkadot Runtime function
 $withdraw\_unbonded$ is defined as follows:
 \newline
@@ -956,13 +957,15 @@ $withdraw\_unbonded$ is defined as follows:
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\}\;}
-    \For{$index\gets0$ \KwTo $1'000$ \KwBy $1$}{
-      $stash \leftarrow$ \textsc{Create-Account(\textit{"stash"}, $index$)}\;
-      $controller \leftarrow$ \textsc{Create-Account(\textit{"controller"}, $index$)}\;
+    \For{$balance\gets1$ \KwTo $100$ \KwBy $1$}{
+      $stash \leftarrow$ \textsc{Create-Account(\textit{"stash"}, 1)}\;
+      $controller \leftarrow$ \textsc{Create-Account(\textit{"controller"}, 1)}\;
       \textsc{Set-Balance($stash$, 100)}\;
-      \textsc{Set-Balance($controller$, 100)}\;
-      \textsc{Bond($stash$, $controller$, 10)}\;
-      \textsc{UnBond($controller$, 10)}\;
+      \textsc{Set-Balance($controller$, 1)}\;
+      \textsc{Bond($stash$, $controller$, $balance$)}\;
+      \textsc{Pass-Era}\;
+      \textsc{UnBond($controller$, $balance$)}\;
+      \textsc{Pass-Era}\;
       $time \leftarrow$\textsc{Timer(Withdraw-Unbonded($controller$))}\;
       \textsc{Add-To($collection$, $time$)}\;
     }
@@ -981,6 +984,9 @@ $withdraw\_unbonded$ is defined as follows:
     specified $amount$ for the $stash$ and $controller$ pair.}
   \item \textsc{UnBond($account$, $amount$)} \SubItem{Unbonds the specified
     $amount$ for the given $account$.}
+  \item \textsc{Pass-Era}
+  \SubItem{Pass one era. Forces the funtion $withdraw\_unbonded$ to update the ledger
+  and eventually delete information.}
   \item \textsc{Withdraw-Unbonded($controller$)} \SubItem{Withdraws the the full
     unbonded amount of the specified $controller$ account. This represents the
     target Runtime function to be benchmarked}
