@@ -418,7 +418,7 @@ to demonstrate the analysis process as described in section
 
 \subsubsection{Practical example \#1}
 
-\subsubsection*{Analysis}
+\subsubsection{Analysis}
 
 In Polkadot, accounts can save information about themselves onchain, known as
 the "Identity Info". This includes information such as display name, legal name,
@@ -484,7 +484,7 @@ T::Currency::reserve(&sender, registrar.fee)?;
 Self::deposit_event(RawEvent::JudgementRequested(sender, reg_index));
 \end{verbatim}
 
-\subsubsection*{Considerations}
+\subsubsection{Considerations}
 
 Based on the considerations described in section
 \ref{sect:primitive-types-considerations}, the analysis reveals multiple,
@@ -559,7 +559,7 @@ defined as follows:
 
 \subsubsection{Practical example \#2}
 
-\subsubsection*{Analysis}
+\subsubsection{Analysis}
 
 The function \verb|payout_stakers| from the \verb|staking| Pallet can be called
 by a single account in order to payout the reward for all nominators who back a
@@ -582,9 +582,9 @@ let controller = Self::bonded(&validator_stash).ok_or(Error::<T>::NotStash)?;
 let mut ledger = <Ledger<T>>::get(&controller).ok_or_else(|| Error::<T>::NotController)?;
 \end{verbatim}
 
-The Ledger keeps a list of tracked rewards. The function only retains the
-entries of the "history depth", and conducts a binary search for the specified
-era.
+The Ledger keeps information about the stash, such as actively bonded balance
+and a list of tracked rewards. The function only retains the entries of the
+"history depth", and conducts a binary search for the specified era.
 
 \begin{verbatim}
 ledger.claimed_rewards.retain(|&x| x >= current_era.saturating_sub(history_depth));
@@ -645,7 +645,7 @@ for nominator in exposure.others.iter() {
 }
 \end{verbatim}
 
-\subsubsection*{Considerations}
+\subsubsection{Considerations}
 
 Based on the considerations described in section
 \ref{sect:primitive-types-considerations}, the analysis reveals multiple,
@@ -728,7 +728,7 @@ with simply selected parameters. As practical examples, this section describes
 the specifically designed benchmarks for the \verb|transfer| and
 \verb|withdraw_unbonded| functions available in the Polkadot Runtime.
 
-\subsubsection*{Analysis}
+\subsubsection{Analysis}
 
 The $transfer$ function of the \textit{balances} module is designed to move the
 specified balance by the sender to the receiver.
@@ -840,17 +840,83 @@ defined as follows (starting with the \textsc{Main} function):
 \end{itemize}
 
 \subsubsection{Practical example \#2}
+
+\subsubsection{Analysis}
+
 The $withdraw\_unbonded$ function of the \textit{staking} module is designed to
 move any unlocked funds from the staking management system to be ready for
-transfer. The benchmark requires a couple of I/O operations:
+transfer. It contains some operations which have some I/O overhead.
+\newline
 
-\begin{itemize}
-  \item Create stash account and set initial balance.
-  \item Create controller account and set initial balance.
-  \item Bond a certain amount of the funds.
-  \item Unbond full amount of the funds.
-  \item Withdraw unbonded amount, making it ready for transfer.
-\end{itemize}
+Similarly to the $payout\_stakers$ function (\todo{ref}), this function fetches
+the Ledger which contains information about the stash, such as bonded balance
+and unlocking balance (balance that will eventually be freed and can be
+withdrawn).
+
+\begin{verbatim}
+if let Some(current_era) = Self::current_era() {
+  ledger = ledger.consolidate_unlocked(current_era)
+}
+\end{verbatim}
+
+The function $consolidate\_unlocked$ does some cleaning up on the ledger, where
+it removes outdated entries from the unlocking balance (which implies that
+balance is now free and is no longer awaiting unlock).
+
+\begin{verbatim}
+let mut total = self.total;
+let unlocking = self.unlocking.into_iter()
+  .filter(|chunk| if chunk.era > current_era {
+    true
+  } else {
+    total = total.saturating_sub(chunk.value);
+    false
+  })
+  .collect();
+\end{verbatim}
+
+This function does a check on wether the updated ledger has any balance left in
+regards to staking, both in terms of locked, staking balance and unlocking balance.
+If not amount is left, the all information related to the stash will be deleted.
+This results in multiple I/O calls.
+
+\begin{verbatim}
+if ledger.unlocking.is_empty() && ledger.active.is_zero() {
+  // This account must have called `unbond()` with some value that caused the active
+  // portion to fall below existential deposit + will have no more unlocking chunks
+  // left. We can now safely remove all staking-related information.
+  Self::kill_stash(&stash, num_slashing_spans)?;
+  // remove the lock.
+  T::Currency::remove_lock(STAKING_ID, &stash);
+  // This is worst case scenario, so we use the full weight and return None
+  None
+\end{verbatim}
+
+The resulting call to $Self::kill_stash()$ triggers:
+
+\begin{verbatim}
+slashing::clear_stash_metadata::<T>(stash, num_slashing_spans)?;
+<Bonded<T>>::remove(stash);
+<Ledger<T>>::remove(&controller);
+<Payee<T>>::remove(stash);
+<Validators<T>>::remove(stash);
+<Nominators<T>>::remove(stash);
+\end{verbatim}
+
+Alternatively, if there's some balance left, the adjusted ledger simply gets
+updated back into storage.
+
+\begin{verbatim}
+// This was the consequence of a partial unbond. just update the ledger and move on.
+Self::update_ledger(&controller, &ledger);
+\end{verbatim}
+
+Finally, it withdraws the unlocked balance, making it ready for transfer:
+
+\begin{verbatim}
+let value = old_total - ledger.total;
+Self::deposit_event(RawEvent::Withdrawn(stash, value));
+\end{verbatim}
 
 \subsubsection*{Parameters}
 The following parameters are selected:
