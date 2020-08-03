@@ -559,7 +559,7 @@ defined as follows:
   \SubItem{Adds a returned time measurement ($time$) to $collection$.}
 \end{itemize}
 
-\subsection{Practical Example \#2}
+\subsection{Practical Example \#2}\label{sec:practical-example-payout-stakers}
 
 \subsubsection{Analysis}
 
@@ -719,7 +719,6 @@ defined as follows:
 
 The $transfer$ function of the \textit{balances} module is designed to move the
 specified balance by the sender to the receiver.
-\newline
 
 \subsubsection{Analysis}
 
@@ -831,16 +830,16 @@ defined as follows (starting with the \textsc{Main} function):
 
 \subsection{Practical Example \#4}
 
-The $withdraw\_unbonded$ function of the \textit{staking} module is designed to
+The \verb|withdraw_unbonded| function of the \verb|staking| module is designed to
 move any unlocked funds from the staking management system to be ready for
 transfer. It contains some operations which have some I/O overhead.
 
 \subsubsection{Analysis}
 
-Similarly to the $payout\_stakers$ function (\todo{ref}), this function fetches
-the Ledger which contains information about the stash, such as bonded balance
-and unlocking balance (balance that will eventually be freed and can be
-withdrawn).
+Similarly to the \verb|payout_stakers| function
+(\ref{sec:practical-example-payout-stakers}), this function fetches the Ledger
+which contains information about the stash, such as bonded balance and unlocking
+balance (balance that will eventually be freed and can be withdrawn).
 
 \begin{verbatim}
 if let Some(current_era) = Self::current_era() {
@@ -848,7 +847,7 @@ if let Some(current_era) = Self::current_era() {
 }
 \end{verbatim}
 
-The function $consolidate\_unlocked$ does some cleaning up on the ledger, where
+The function \verb|consolidate_unlocked| does some cleaning up on the ledger, where
 it removes outdated entries from the unlocking balance (which implies that
 balance is now free and is no longer awaiting unlock).
 
@@ -881,7 +880,7 @@ if ledger.unlocking.is_empty() && ledger.active.is_zero() {
   None
 \end{verbatim}
 
-The resulting call to $Self::kill_stash()$ triggers:
+The resulting call to \verb|Self::kill_stash()| triggers:
 
 \begin{verbatim}
 slashing::clear_stash_metadata::<T>(stash, num_slashing_spans)?;
@@ -924,7 +923,7 @@ for account generation.
 
 \subsubsection{Considerations}
 
-Two important points in the $withdraw\_unbonded$ function must be considered.
+Two important points in the \verb|withdraw_unbonded| function must be considered.
 The benchmarks should trigger both conditions
 
 \begin{itemize}
@@ -935,7 +934,7 @@ The benchmarks should trigger both conditions
 
 \subsubsection{Preliminary Work}
 The benchmarking implementation for the Polkadot Runtime function
-$withdraw\_unbonded$ is defined as follows:
+\verb|withdraw_unbonded| is defined as follows:
 \newline
 
 \begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
