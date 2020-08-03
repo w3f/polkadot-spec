@@ -36,6 +36,7 @@
 #include <storage/trie/serialization/trie_serializer_impl.hpp>
 #include <storage/trie/impl/trie_storage_backend_impl.hpp>
 #include <storage/trie/impl/trie_storage_impl.hpp>
+#include <storage/changes_trie/impl/storage_changes_tracker_impl.hpp>
 
 #include <runtime/common/trie_storage_provider_impl.hpp>
 #include <runtime/binaryen/wasm_memory_impl.hpp>
@@ -57,7 +58,7 @@ using kagome::crypto::SR25519ProviderImpl;
 using kagome::runtime::TrieStorageProvider;
 using kagome::runtime::TrieStorageProviderImpl;
 
-using kagome::storage::changes_trie::ChangesTracker;
+using kagome::storage::changes_trie::StorageChangesTrackerImpl;
 using kagome::storage::trie::PolkadotCodec;
 using kagome::storage::trie::PolkadotTrieFactoryImpl;
 using kagome::storage::trie::PolkadotTrieImpl;
@@ -93,9 +94,12 @@ namespace helpers {
     auto storage_provider = std::make_shared<TrieStorageProviderImpl>(
       std::move(trie_db)
     );
+    storage_provider->setToPersistent(); // Remove when using runtime manager
 
-    // Dummy change tracker
-    std::shared_ptr<ChangesTracker> tracker(nullptr);
+    // Build change tracker
+    auto tracker = std::make_shared<StorageChangesTrackerImpl>(
+      trie_factory, codec
+    );
 
     // Build crypto providers
     auto pbkdf2_provider    = std::make_shared<Pbkdf2ProviderImpl>();
