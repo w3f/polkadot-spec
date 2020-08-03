@@ -29,6 +29,9 @@ is}{end}
 \date{July 2020}
 \maketitle
 
+\tableofcontents
+\newpage
+
 \section{Motivation}
 
 The Polkadot network, like any other permissionless system, needs to implement a
@@ -258,14 +261,14 @@ In order to select useful parameters, the Runtime functions have to be analysed
 to fully understand which behaviors or conditions can result in expensive
 execution times, which is described closer in section
 \ref{sect:primitive-types}.
+\newline
 
-\todo{review after reading the examples} Not every possible benchmarking outcome
-can be invoked by varying input parameters of the Runtime function. In some
-circumstances, preliminary work is required before a specific benchmark can be
-reliably measured, such as creating certain preexisting entries in the storage
-or other changes to the environment. This is explained in more detail in section
-\ref{sect:examples-preliminary-work}.
-\newpage
+Not every possible benchmarking outcome can be invoked by varying input
+parameters of the Runtime function. In some circumstances, preliminary work is
+required before a specific benchmark can be reliably measured, such as creating
+certain preexisting entries in the storage or other changes to the environment.
+The Practical Examples Section \ref{sec:practical-examples} covers this in some
+more detail.
 
 \subsection{Primitive Types}\label{sect:primitive-types}
 The Runtime reuses components, known as "primitives", to interact with the state
@@ -410,15 +413,18 @@ cores, RAM and storage speed.
 
 \section{Practical examples}\label{sec:practical-examples}
 
-\subsection{Runtime function analysis}
-
 This section walks through Runtime functions available in the Polkadot Runtime
 to demonstrate the analysis process as described in section
 \ref{sect:primitive-types}.
+\newline
 
-\subsubsection{Practical example \#1}
+In order for certain benchmarks to produce conditions where resource heavy
+computation or excessive I/O can be observed, the benchmarks might require some
+preliminary work on the environment, since those conditions cannot be created
+with simply selected parameters. The analysis process shows indicators on how
+the preliminary work should be implemented.
 
-\subsubsection{Analysis}
+\subsection{Practical Example \#1}
 
 In Polkadot, accounts can save information about themselves onchain, known as
 the "Identity Info". This includes information such as display name, legal name,
@@ -436,6 +442,8 @@ by a previously judged user it implies that the Identity Info should be
 rejudged. Studying this function reveals multiple design choices that can impact
 performance, as it will be revealed by this analysis.
 \newline
+
+\subsubsection{Analysis}
 
 First, it fetches a list of current registrars from storage and then searches
 that list for the specified registrar index.
@@ -486,14 +494,8 @@ Self::deposit_event(RawEvent::JudgementRequested(sender, reg_index));
 
 \subsubsection{Considerations}
 
-Based on the considerations described in section
-\ref{sect:primitive-types-considerations}, the analysis reveals multiple,
-critical points. Those must be covered in the benchmarking processes described
-in section \ref{sect:benchmarking} and require preliminary work as described in
-section \ref{sect:examples-preliminary-work}.
-\newline
+The following points must be considered:
 
-Key points:
 \begin{itemize}
   \item Varying amount of registrars.
   \item Varying amount of preexisting accounts in storage.
@@ -557,7 +559,7 @@ defined as follows:
   \SubItem{Adds a returned time measurement ($time$) to $collection$.}
 \end{itemize}
 
-\subsubsection{Practical example \#2}
+\subsection{Practical Example \#2}
 
 \subsubsection{Analysis}
 
@@ -647,14 +649,7 @@ for nominator in exposure.others.iter() {
 
 \subsubsection{Considerations}
 
-Based on the considerations described in section
-\ref{sect:primitive-types-considerations}, the analysis reveals multiple,
-critical points. Those must be covered in the benchmarking processes described
-in section \ref{sect:benchmarking} and require preliminary work as described in
-section \ref{sect:examples-preliminary-work}.
-\newline
-
-Key points:
+The following points must be considered:
 
 \begin{itemize}
   \item The Ledger contains a varying list of claimed rewards. Fetching,
@@ -720,19 +715,13 @@ defined as follows:
       measurement ($time$) to $collection$.}
 \end{itemize}
 
-\subsection{Preliminary Work}\label{sect:examples-preliminary-work}
-In order for certain benchmarks to produce conditions where resource heavy
-computation or excessive I/O can be observed, the benchmarks might require some
-preliminary work on the environment, since those conditions cannot be created
-with simply selected parameters. As practical examples, this section describes
-the specifically designed benchmarks for the \verb|transfer| and
-\verb|withdraw_unbonded| functions available in the Polkadot Runtime.
-
-\subsubsection{Analysis}
+\subsection{Practical Example \#3}
 
 The $transfer$ function of the \textit{balances} module is designed to move the
 specified balance by the sender to the receiver.
 \newline
+
+\subsubsection{Analysis}
 
 The source code of this function is quite short:
 
@@ -758,7 +747,7 @@ of behaviors are to consider:
   doesn't have a balance yet).
 \end{itemize}
 
-\subsubsection*{Considerations}
+\subsubsection{Considerations}
 
 Specific parameters can could have a big impact for this specific function. In
 order to trigger the two behaviors mentioned above, the following parameters are
@@ -799,7 +788,8 @@ The parameters itself do not influence or trigger the two worst conditions and
 must be handled by the implemented benchmarking tool. The $transfer$ benchmark
 is implemented as defined in algorithm \ref{sec:algo-benchmark-transfer}.
 
-\subsubsection*{Implementation}
+\subsubsection{Preliminary Work}
+
 The benchmarking implementation for the Polkadot Runtime function $transfer$ is
 defined as follows (starting with the \textsc{Main} function):
 \newline
@@ -839,14 +829,13 @@ defined as follows (starting with the \textsc{Main} function):
       the specified $function$ to its completion.}
 \end{itemize}
 
-\subsubsection{Practical example \#2}
-
-\subsubsection{Analysis}
+\subsection{Practical Example \#4}
 
 The $withdraw\_unbonded$ function of the \textit{staking} module is designed to
 move any unlocked funds from the staking management system to be ready for
 transfer. It contains some operations which have some I/O overhead.
-\newline
+
+\subsubsection{Analysis}
 
 Similarly to the $payout\_stakers$ function (\todo{ref}), this function fetches
 the Ledger which contains information about the stash, such as bonded balance
@@ -944,7 +933,7 @@ The benchmarks should trigger both conditions
   performed in the storage.
 \end{itemize}
 
-\subsubsection{Implementation}
+\subsubsection{Preliminary Work}
 The benchmarking implementation for the Polkadot Runtime function
 $withdraw\_unbonded$ is defined as follows:
 \newline
