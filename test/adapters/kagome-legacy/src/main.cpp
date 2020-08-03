@@ -25,6 +25,8 @@
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
+#include <common/logger.hpp>
+
 #include "subcommand_router.hpp"
 
 #include "extension.hpp"
@@ -53,6 +55,8 @@ namespace boost {
  * Tree compatibility tests
  */
 int main(int argc, char **argv) {
+  kagome::common::setLogLevel(kagome::common::LogLevel::off);
+
   SubcommandRouter<int, char **> router;
   router.addSubcommand("host-api", [](int argc, char **argv) {
     processExtensionsCommands(extractExtensionArgs(argc, argv));

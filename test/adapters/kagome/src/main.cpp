@@ -25,6 +25,8 @@
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
+#include <common/logger.hpp>
+
 #include "subcommand_router.hpp"
 
 #include "scale_codec.hpp"
@@ -55,6 +57,8 @@ namespace boost {
  * Tree compatibility tests
  */
 int main(int argc, char **argv) {
+  kagome::common::setLogLevel(kagome::common::LogLevel::off);
+
   SubcommandRouter<int, char **> router;
   router.addSubcommand("scale-codec", [](int argc, char **argv) {
     processScaleCodecCommand(extractScaleArgs(argc, argv));
