@@ -15,8 +15,8 @@
 #You should have received a copy of the GNU General Public License
 #along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
 
-# TODO: Move away from commit with special CMake version fix
+# TODO: Replace custom fork with master, once fixes are merged
 hunter_config(kagome
-  URL https://github.com/soramitsu/kagome/archive/219d46ff77ae8b77974373653ce25e720ef0645f.tar.gz
-  SHA1 1a0827b729b4dc1e40e37887df53f05bbcac3607
+  URL https://github.com/soramitsu/kagome/archive/9ba165fb3c49d8d13c7b42226e9ac7039497eddb.tar.gz
+  SHA1 1be8dd54e8b75f138a6a9baf4cf15d0bb3882afb
 )
