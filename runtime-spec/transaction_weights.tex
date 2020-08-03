@@ -100,7 +100,11 @@ These concepts are formalized in Definitions \ref{def:block-length} and
 
 \begin{definition}
   \label{def:target-time-per-block}
-  {\b Targeted time per block} denoted by $T(B)$ \todo{TBD}.
+  {\b Targeted time per block} denoted by $T(B)$ implies the amount of seconds
+  that a new block should be produced by a validator. The transaction weights
+  must consider $T(B)$ in order to set restrictions on time intensive
+  transactions in order to saturate the block to its fullest potential until
+  $T(B)$ is reached.
 \end{definition}
 
 \begin{definition}
@@ -209,9 +213,6 @@ economic incentive to include as many extrinsics as possible (without exceeding
 limitations) into a block before reaching the targeted block time. Weights give
 indicators to block producers on which extrinsics to include in order to reach
 the blocks fullest potential.
-\newline
-
-\syed{Do note that the smallest, non-zero weight in Polkadot is set at 10'000.}{why do we need this, we need to justify having a minimum}
 
 \section{Calculation of the weight function}
 \label{sec:runtime-primitives}
@@ -230,16 +231,6 @@ These sub component of the code are discussed in Section
 
 The general algorithm to calculate $\TWF(E)$ is described in the Section
 \ref{sect:benchmarking}.
-\newline
-
-\syed{The final assigned weights are calculated by benchmarking the Runtime
-functions, which is described in section \ref{sect:benchmarking}.}{this needs to
-relate the computation of final weight to the primitive otherwise the paragraph
-looks disconnected}.
-\newline
-
-Section \ref{sec:practical-examples} walks through two practical examples of
-Runtime function analysis.
 
 \section{Benchmarking}\label{sect:benchmarking} Calculating the extrinsic weight
 solely based on theoretical complexity of the underlying implementation proves
@@ -260,15 +251,15 @@ process to evaluate $\TWF(E)$.
 In order to select useful parameters, the Runtime functions have to be analysed
 to fully understand which behaviors or conditions can result in expensive
 execution times, which is described closer in section
-\ref{sect:primitive-types}.
+\ref{sect:primitive-types}. Not every possible benchmarking outcome can be
+invoked by varying input parameters of the Runtime function. In some
+circumstances, preliminary work is required before a specific benchmark can be
+reliably measured, such as creating certain preexisting entries in the storage
+or other changes to the environment.
 \newline
 
-Not every possible benchmarking outcome can be invoked by varying input
-parameters of the Runtime function. In some circumstances, preliminary work is
-required before a specific benchmark can be reliably measured, such as creating
-certain preexisting entries in the storage or other changes to the environment.
-The Practical Examples Section \ref{sec:practical-examples} covers this in some
-more detail.
+The Practical Examples Section \ref{sec:practical-examples} covers the analysis
+process and the implementation of preliminary work in more detail.
 
 \subsection{Primitive Types}\label{sect:primitive-types}
 The Runtime reuses components, known as "primitives", to interact with the state
