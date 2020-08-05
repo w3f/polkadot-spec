@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|host-spec.tm>
 
@@ -114,8 +114,8 @@
 
   where <verbatim|data> points to the SCALE encoded paramaters sent to the
   function and <verbatim|len> is the length of the data. <verbatim|result>
-  can similarly either point to the SCALE encoded data the function returns
-  (See Sections <reference|sect-runtime-send-args-to-runtime-enteries> and
+  points to the SCALE encoded data the function returns (See Sections
+  <reference|sect-runtime-send-args-to-runtime-enteries> and
   <reference|sect-runtime-return-value>).
 
   \;
@@ -133,15 +133,29 @@
   <verbatim|>
 
   <\with|par-mode|center>
-    <small-table|<tabular|<tformat|<cwith|1|7|1|1|cell-halign|l>|<cwith|1|7|1|1|cell-lborder|0ln>|<cwith|1|7|2|2|cell-halign|l>|<cwith|1|7|3|3|cell-halign|l>|<cwith|1|7|3|3|cell-rborder|0ln>|<cwith|1|7|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|7|7|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
+    <small-table|<tabular|<tformat|<cwith|1|8|1|1|cell-halign|l>|<cwith|1|8|1|1|cell-lborder|0ln>|<cwith|1|8|2|2|cell-halign|l>|<cwith|1|8|3|3|cell-halign|l>|<cwith|1|8|3|3|cell-rborder|0ln>|<cwith|1|8|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|8|8|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
     identifier>>|<row|<cell|<verbatim|impl_name>>|<cell|String>|<cell|the
     name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|UINT32>|<cell|the
     version of the authorship interface>>|<row|<cell|<verbatim|spec_version>>|<cell|UINT32>|<cell|the
     version of the Runtime specification>>|<row|<cell|<verbatim|impl_version>>|<cell|UINT32>|<cell|the
-    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec>|<cell|List
-    of supported AP>>>>>|Detail of the version data type returns from runtime
-    <verbatim|version> function.>
+    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec
+    (<reference|defn-rt-apisvec>)>|<cell|List of supported APIs along with
+    their version>>|<row|<cell|<verbatim|transaction_version>>|<cell|UINT32>|<cell|the
+    version of the transaction format>>>>>|Detail of the version data type
+    returns from runtime <verbatim|version> function.>
   </with>
+
+  <\definition>
+    <label|defn-rt-apisvec><strong|ApisVec> is a specialised type for the
+    <verbatim|Core_version> (<reference|defn-rt-core-version>) function
+    entry. It represents an array of tuples, where the first value of the
+    tuple is an array of 8-bytes indicating the API name. The second value of
+    the tuple is the version number of the corresponding API.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|ApiVec>|<cell|\<assign\>>|<cell|<around*|(|T<rsub|0>,\<ldots\>,T<rsub|n>|)>>>|<row|<cell|T>|<cell|\<assign\>>|<cell|<around*|(|<around*|(|b<rsub|0>,\<ldots\>,b<rsub|7>|)>,UINT32|)>>>>>
+    </eqnarray*>
+  </definition>
 
   <subsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
 
@@ -181,7 +195,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A boolean value indicates if the execution was successful.
+    <item>None.
   </itemize-dot>
 
   <subsection|<verbatim|Core_initialize_block>>
@@ -195,8 +209,8 @@
 
   <\itemize>
     <item>The block header of the new block as defined in
-    <reference|defn-block-header>. The values <strong|<math|H<rsub|r>>>,
-    <strong|<math|H<rsub|e>>> and <strong|<math|H<rsub|d>>> are left empty.
+    <reference|defn-block-header>. The values <math|H<rsub|r>,H<rsub|e> and
+    H<rsub|d>> are left empty.
   </itemize>
 
   \;
@@ -546,13 +560,13 @@
     <associate|auto-7|<tuple|A.2.2|108>>
     <associate|auto-8|<tuple|A.2.3|108>>
     <associate|auto-9|<tuple|A.2.4|109>>
-    <associate|defn-invalid-transaction|<tuple|A.3|110>>
+    <associate|defn-invalid-transaction|<tuple|A.4|110>>
+    <associate|defn-rt-apisvec|<tuple|A.1|?>>
     <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|112>>
-    <associate|defn-rt-core-execute-block|<tuple|A.2.2|108>>
     <associate|defn-rt-core-version|<tuple|A.2.1|108>>
-    <associate|defn-transaction-validity-error|<tuple|A.2|110>>
-    <associate|defn-unknown-transaction|<tuple|A.4|110>>
-    <associate|defn-valid-transaction|<tuple|A.1|110>>
+    <associate|defn-transaction-validity-error|<tuple|A.3|110>>
+    <associate|defn-unknown-transaction|<tuple|A.5|110>>
+    <associate|defn-valid-transaction|<tuple|A.2|110>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
     <associate|sect-rte-apply-extrinsic|<tuple|A.2.8|111>>
     <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|109>>

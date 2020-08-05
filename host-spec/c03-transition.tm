@@ -129,6 +129,12 @@
     encoding described in Section <reference|sect-runtime-send-args-to-runtime-enteries>.
   </notation>
 
+  It is acceptable behavior that the Runtime panics during execution of a
+  function in order to indicate an error. The Polkadot Host must be able to
+  catch that panic and recover from it.
+
+  \;
+
   In this section, we specify the general setup for an Executor call into the
   Runtime. In Section <reference|sect-runtime-entries> we specify the
   parameters and the return values of each Runtime entry separately.
@@ -191,7 +197,9 @@
   <verbatim|TaggedTransactionQueue_validate_transaction> entry (see Section
   <reference|sect-rte-validate-transaction>), it needs to sandbox the changes
   to the state just for that Runtime call and prevent the global state of the
-  system from being influence by the call to such a Runtime entery.
+  system from being influence by the call to such a Runtime entery. This
+  includes reverting the state of function calls which return errors or
+  panic.
 
   \ 
 
@@ -767,7 +775,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|2>
-    <associate|page-first|23>
+    <associate|page-first|21>
     <associate|section-nr|1<uninit>>
     <associate|subsection-nr|4>
   </collection>
@@ -787,17 +795,17 @@
     <associate|auto-14|<tuple|3.2.3|?>>
     <associate|auto-15|<tuple|3.2.3|?>>
     <associate|auto-16|<tuple|3.2.3|?>>
-    <associate|auto-17|<tuple|<with|mode|<quote|math>|<rigid|->>|?>>
-    <associate|auto-18|<tuple|3.2.3.1|?>>
-    <associate|auto-19|<tuple|3.1|?>>
+    <associate|auto-17|<tuple|3.2.3.1|?>>
+    <associate|auto-18|<tuple|3.1|?>>
+    <associate|auto-19|<tuple|3.3|?>>
     <associate|auto-2|<tuple|3.1|?>>
-    <associate|auto-20|<tuple|3.3|?>>
-    <associate|auto-21|<tuple|3.3.1|?>>
-    <associate|auto-22|<tuple|3.3.1.1|?>>
-    <associate|auto-23|<tuple|3.2|?>>
-    <associate|auto-24|<tuple|3.3.1.2|?>>
-    <associate|auto-25|<tuple|3.3.1.3|?>>
-    <associate|auto-26|<tuple|3.3.2|?>>
+    <associate|auto-20|<tuple|3.3.1|?>>
+    <associate|auto-21|<tuple|3.3.1.1|?>>
+    <associate|auto-22|<tuple|3.2|?>>
+    <associate|auto-23|<tuple|3.3.1.2|?>>
+    <associate|auto-24|<tuple|3.3.1.3|?>>
+    <associate|auto-25|<tuple|3.3.2|?>>
+    <associate|auto-26|<tuple|3.3.3|?>>
     <associate|auto-27|<tuple|3.3.3|?>>
     <associate|auto-3|<tuple|3.1.1|?>>
     <associate|auto-4|<tuple|3.1.2|?>>
