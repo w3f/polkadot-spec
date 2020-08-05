@@ -509,7 +509,7 @@
   </definition>
 
   <\version-old>
-    <section|Child Storage>
+    <section|Child Storage><label|sect-child-storages>
 
     As clarified in Section <reference|sect-state-storage>, the Polkadot
     state storage implements a hash table for inserting and reading key-value
@@ -575,7 +575,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|1>
-    <associate|page-first|15>
+    <associate|page-first|17>
     <associate|section-nr|2<uninit>>
     <associate|subsection-nr|1>
   </collection>
@@ -586,8 +586,6 @@
     <associate|algo-aggregate-key|<tuple|2.1|19>>
     <associate|algo-pk-length|<tuple|2.2|19>>
     <associate|auto-1|<tuple|2|17>>
-    <associate|auto-10|<tuple|2.3|?>>
-    <associate|auto-11|<tuple|2.3.1|?>>
     <associate|auto-2|<tuple|2.1|17>>
     <associate|auto-3|<tuple|2.1.1|17>>
     <associate|auto-4|<tuple|2.1|17>>
@@ -607,6 +605,7 @@
     <associate|defn-nodetype|<tuple|2.4|18>>
     <associate|defn-stored-value|<tuple|2.1|17>>
     <associate|key-encode-in-trie|<tuple|2.1|18>>
+    <associate|sect-child-storages|<tuple|2.2|?>>
     <associate|sect-child-trie-structure|<tuple|2.2.1|?>>
     <associate|sect-merkl-proof|<tuple|2.1.4|19>>
     <associate|sect-state-storage|<tuple|2.1|17>>
@@ -651,12 +650,12 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      2.3<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>
+      2.2<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-8>
 
-      <with|par-left|<quote|1tab>|2.3.1<space|2spc>Child Tries
+      <with|par-left|<quote|1tab>|2.2.1<space|2spc>Child Tries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-9>>
     </associate>
   </collection>
 </auxiliary>
