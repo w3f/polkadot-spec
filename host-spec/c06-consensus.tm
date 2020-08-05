@@ -901,16 +901,16 @@
 
   <\definition>
     Voter <math|v> <strong|equivocates> if they broadcast two or more valid
-    votes to blocks not residing on the same branch of the block tree during
-    one voting sub-round. In such a situation, we say that <math|v> is an
-    <strong|equivocator> and any vote <math|V<rsub|v><rsup|r,stage><around*|(|B|)>>
-    cast by <math|v> in that round is an <strong|equivocatory vote>, and
+    votes to blocks during one voting sub-round. In such a situation, we say
+    that <math|v> is an <strong|equivocator> and any vote
+    <math|V<rsub|v><rsup|r,stage><around*|(|B|)>> cast by <math|v> in that
+    sub-round is an <strong|equivocatory vote>, and
 
     <\equation*>
       \<cal-E\><rsup|r,stage>
     </equation*>
 
-    \ represents the set of all equivocators voters in sub-round
+    represents the set of all equivocators voters in sub-round
     \P<math|stage>\Q of round <math|r>. When we want to refer to the number
     of<verbatim|> equivocators whose equivocation has been observed by voter
     <math|v> we refer to it by:

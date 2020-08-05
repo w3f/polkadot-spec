@@ -2,7 +2,7 @@
 
 <project|host-spec.tm>
 
-<style|book>
+<style|<tuple|book|old-dots>>
 
 <\body>
   <appendix|Legacy Polkadot Host API<label|sect-re-api>>
@@ -19,6 +19,10 @@
   <strong|Note>: This section will be removed in the future.
 
   <section|Storage>
+
+  Interface for accessing the storage utilities from within the runtime,
+  including child storages. Child storages are described in Section
+  <reference|sect-child-trie-structure>.
 
   <subsection|<verbatim|ext_set_storage>><label|sect-set-storage>
 
