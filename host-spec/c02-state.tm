@@ -404,10 +404,26 @@
   be computed rigorously to make the inter-implementation data integrity
   possible.
 
+  <\version-old>
+    \;
+  <|version-old>
+    <version-suppressed>
+  </version-old>
+
   The Merkle value of each node should depend on the Merkle value of all its
   children as well as on its corresponding data in the state storage. This
   recursive dependancy is encompassed into the subvalue part of the node
-  value which recursively depends on the Merkle value of its children.
+  value which recursively depends on the Merkle value of its
+  children.<version-old| Additionally, as Section
+  <reference|sect-child-trie-structure> clarifies, the Merkle proof of each
+  <strong|child trie> must be updated first before the final Polkadot state
+  root can be calculated.|<version-suppressed>>
+
+  <\version-old>
+    \;
+  <|version-old>
+    <version-suppressed>
+  </version-old>
 
   We use the auxilary function introduced in Definition
   <reference|defn-children-bitmap> to encode and decode information stored in
@@ -440,24 +456,38 @@
 
     <\itemize>
       <\equation*>
-        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<table|<row|<cell|StoredValue<rsub|SC>>>|<row|<cell|\<nobracket\>*Enc<rsup|><rsub|SC><around*|(|ChildrenBitmap<around*|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around*|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>StoredValue<rsub|SC>*>>>>>|\<nobracket\>>>>|<row|<cell|>>|<row|<cell|<text|where
+        <tabular*|<version-new|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around|(|StoredValue<around*|(|k<rsub|N>|)>|)>>|<cell|<text|N
+        is a leaf node>>>|<row|<cell|\<nobracket\>*ChildrenBitmap<around|(|N|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around*|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>Enc<rsub|SC><around*|(|StoredValue<around*|(|k<rsub|N>|)>|)>*>|<cell|<text|N
+        is a branch node>>>>>>|\<nobracket\>>>>>>|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<table|<row|<cell|StoredValue<rsub|SC>>>|<row|<cell|\<nobracket\>*Enc<rsup|><rsub|SC><around*|(|ChildrenBitmap<around*|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around*|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>StoredValue<rsub|SC>*>>>>>|\<nobracket\>>>>|<row|<cell|>>|<row|<cell|<text|where
         the first variant is a leaf node and the second variant is a branch
         node.>>>|<row|<cell|>>|<row|<cell|StoredValue<rsub|SC>\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|-1|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around*|(|StoredValue<around*|(|k<rsub|N>|)>|)>>|<cell|>|<cell|<text|if
         StoredValue(k_N)=v>>>|<row|<cell|\<b-phi\>>|<cell|>|<cell|<text|if
-        StoredValue(k_N)=\<b-phi\>>>>>>>|\<nobracket\>>>>>>>
+        StoredValue(k_N)=\<b-phi\>>>>>>>|\<nobracket\>>>>>>>>
       </equation*>
     </itemize>
   </definition>
 
-  <math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
-  <math|n\<leqslant\>16> are the children nodes of the branch node <math|N>
-  and Enc<rsub|SC>, <math|StoredValue>, <math|H>, and
-  <math|*ChildrenBitmap<around|(|N|)>> are defined in Definitions
-  <reference|sect-scale-codec>,<reference|defn-stored-value>,
-  <reference|defn-merkle-value> and <reference|defn-children-bitmap>
-  respectively.
+  <\version-new>
+    Where <math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
+    <math|n\<leqslant\>16> are the children nodes of the branch node <math|N>
+    and Enc<rsub|SC>, <math|StoredValue>, <math|H>, and
+    <math|*ChildrenBitmap<around|(|N|)>> are defined in Definitions
+    <reference|sect-scale-codec>,<reference|defn-stored-value>,
+    <reference|defn-merkle-value> and <reference|defn-children-bitmap>
+    respectively.
 
-  \;
+    \;
+  <|version-new>
+    <math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
+    <math|n\<leqslant\>16> are the children nodes of the branch node <math|N>
+    and Enc<rsub|SC>, <math|StoredValue>, <math|H>, and
+    <math|*ChildrenBitmap<around|(|N|)>> are defined in Definitions
+    <reference|sect-scale-codec>,<reference|defn-stored-value>,
+    <reference|defn-merkle-value> and <reference|defn-children-bitmap>
+    respectively.
+
+    \;
+  </version-new>
 
   The Trie deviates from a traditional Merkle tree where node value,
   <math|v<rsub|N>> (see Definition <reference|defn-node-value>) is presented
@@ -478,7 +508,62 @@
     <math|H<around*|(|R|)>>.
   </definition>
 
-  \;
+  <\version-old>
+    <section|Child Storage>
+
+    As clarified in Section <reference|sect-state-storage>, the Polkadot
+    state storage implements a hash table for inserting and reading key-value
+    entries. The child storage works the same way but is stored in a separate
+    and isolated environment. Entries in the child storage are not directly
+    accessible via querying the main state storage.
+
+    \;
+
+    The Polkadot Host supports as many child storages as required by Runtime
+    and identifies each separate child storage by its unique identifying key.
+    Child storages are usually used in situations where Runtime deals with
+    multiple instances of a certain type of objects such as Parachains or
+    Smart Contracts. In such cases, the execution of the Runtime entry might
+    result in generating repeated keys across multiple instances of certain
+    objects. Even with repeated keys, all such instances of key-value pairs
+    must be able to be stored within the Polkadot state.\ 
+
+    In these situations, the child storage can be used to provide the
+    isolation necessary to prevent any undesired interference between the
+    state of separated instances. The Polkadot Host makes no assumptions
+    about how child storages are used, but provides the functionality for it.
+    This is described in more detail in the Host API, as described in Section
+    <reference|sect-child-storages>.
+
+    <subsection|Child Tries><label|sect-child-trie-structure>
+
+    In the exact way that the state trie is used to track and verify changes
+    in the state storage, the changes in the child storage are tracked and
+    verified. Therefore, the child trie specification is the same as the one
+    described in Section <reference|sect-state-storage-trie-structure>. Child
+    tries have their own isolated environment. Nonetheless, the main Polkadot
+    state trie depends on them by storing a node (<math|K<rsub|N>,V<rsub|N>>)
+    which corresponds to an individual child trie. Here, <math|K<rsub|N>> is
+    the child storage key associated to the child trie, and <math|V<rsub|N>>
+    is the Merkle value of its corresponding child trie computed according to
+    the procedure described in Section <reference|sect-merkl-proof>
+
+    \;
+
+    The Polkadot Host APIs as defined in <reference|sect-child-storages>
+    allows the Runtime to provide the key <math|K<rsub|N>> in order to
+    identify the child trie, followed by a second key in order to identify
+    the value within that child trie. Every time a child trie is modified,
+    the Merkle proof <math|V<rsub|N>> of the child trie stored in
+    <math|\<cal-N\>> must be updated first. After that, the final Merkle
+    proof of the Polkadot state <math|\<cal-N\>> can be calculated. This
+    mechanism provides a proof of the full Polkadot state including all its
+    child states.
+
+    <verbatim|>
+  <|version-old>
+    \;
+  </version-old>
 
   <\with|par-mode|right>
     <qed>
@@ -490,7 +575,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|1>
-    <associate|page-first|17>
+    <associate|page-first|15>
     <associate|section-nr|2<uninit>>
     <associate|subsection-nr|1>
   </collection>
@@ -501,12 +586,16 @@
     <associate|algo-aggregate-key|<tuple|2.1|19>>
     <associate|algo-pk-length|<tuple|2.2|19>>
     <associate|auto-1|<tuple|2|17>>
+    <associate|auto-10|<tuple|2.3|?>>
+    <associate|auto-11|<tuple|2.3.1|?>>
     <associate|auto-2|<tuple|2.1|17>>
     <associate|auto-3|<tuple|2.1.1|17>>
     <associate|auto-4|<tuple|2.1|17>>
     <associate|auto-5|<tuple|2.1.2|17>>
     <associate|auto-6|<tuple|2.1.3|18>>
     <associate|auto-7|<tuple|2.1.4|19>>
+    <associate|auto-8|<tuple|2.2|?>>
+    <associate|auto-9|<tuple|2.2.1|?>>
     <associate|chap-state-spec|<tuple|2|17>>
     <associate|defn-children-bitmap|<tuple|2.10|20>>
     <associate|defn-index-function|<tuple|2.7|19>>
@@ -518,6 +607,7 @@
     <associate|defn-nodetype|<tuple|2.4|18>>
     <associate|defn-stored-value|<tuple|2.1|17>>
     <associate|key-encode-in-trie|<tuple|2.1|18>>
+    <associate|sect-child-trie-structure|<tuple|2.2.1|?>>
     <associate|sect-merkl-proof|<tuple|2.1.4|19>>
     <associate|sect-state-storage|<tuple|2.1|17>>
     <associate|sect-state-storage-trie-structure|<tuple|2.1.3|18>>
@@ -560,6 +650,13 @@
       <with|par-left|<quote|1tab>|2.1.4<space|2spc>Merkle Proof
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
+
+      2.3<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-10>
+
+      <with|par-left|<quote|1tab>|2.3.1<space|2spc>Child Tries
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-11>>
     </associate>
   </collection>
 </auxiliary>
