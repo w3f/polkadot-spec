@@ -1,8 +1,8 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|old-dots>>
+<style|book>
 
 <\body>
   <chapter|State Specification><label|chap-state-spec>
@@ -409,12 +409,17 @@
   The Merkle value of each node should depend on the Merkle value of all its
   children as well as on its corresponding data in the state storage. This
   recursive dependancy is encompassed into the subvalue part of the node
-  value which recursively depends on the Merkle value of its children.
-  Additionally, as Section <reference|sect-child-trie-structure> clarifies,
-  the Merkle proof of each <strong|child trie> must be updated first before
-  the final Polkadot state root can be calculated.
+  value which recursively depends on the Merkle value of its
+  children.<version-old| Additionally, as Section
+  <reference|sect-child-trie-structure> clarifies, the Merkle proof of each
+  <strong|child trie> must be updated first before the final Polkadot state
+  root can be calculated.|<version-suppressed>>
 
-  \;
+  <\version-old>
+    \;
+  <|version-old>
+    <version-suppressed>
+  </version-old>
 
   We use the auxilary function introduced in Definition
   <reference|defn-children-bitmap> to encode and decode information stored in
@@ -447,14 +452,16 @@
 
     <\itemize>
       <\equation*>
-        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around|(|StoredValue<around*|(|k<rsub|N>|)>|)>>|<cell|<text|N
-        is a leaf node>>>|<row|<cell|\<nobracket\>*ChildrenBitmap<around|(|N|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around*|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>Enc<rsub|SC><around*|(|StoredValue<around*|(|k<rsub|N>|)>|)>*>|<cell|<text|N
-        is a branch node>>>>>>|\<nobracket\>>>>>>>
+        <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<table|<row|<cell|StoredValue<rsub|SC>>>|<row|<cell|\<nobracket\>*Enc<rsup|><rsub|SC><around*|(|ChildrenBitmap<around*|(|N|)>|)>\<\|\|\>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around*|(|N<rsub|C<rsub|n>>|)>|)><around*|\|||\|>StoredValue<rsub|SC>*>>>>>|\<nobracket\>>>>|<row|<cell|>>|<row|<cell|<text|where
+        the first variant is a leaf node and the second variant is a branch
+        node.>>>|<row|<cell|>>|<row|<cell|StoredValue<rsub|SC>\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|-1|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around*|(|StoredValue<around*|(|k<rsub|N>|)>|)>>|<cell|>|<cell|<text|if
+        StoredValue(k_N)=v>>>|<row|<cell|\<b-phi\>>|<cell|>|<cell|<text|if
+        StoredValue(k_N)=\<b-phi\>>>>>>>|\<nobracket\>>>>>>>
       </equation*>
     </itemize>
   </definition>
 
-  Where <math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
+  <math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
   <math|n\<leqslant\>16> are the children nodes of the branch node <math|N>
   and Enc<rsub|SC>, <math|StoredValue>, <math|H>, and
   <math|*ChildrenBitmap<around|(|N|)>> are defined in Definitions
@@ -483,7 +490,7 @@
     <math|H<around*|(|R|)>>.
   </definition>
 
-  <section|Child Storage>
+  <section|Child Storage><label|sect-child-storages>
 
   As clarified in Section <reference|sect-state-storage>, the Polkadot state
   storage implements a hash table for inserting and reading key-value
@@ -553,32 +560,33 @@
 
 <\references>
   <\collection>
-    <associate|algo-aggregate-key|<tuple|2.1|?>>
-    <associate|algo-pk-length|<tuple|2.2|?>>
-    <associate|auto-1|<tuple|2|?>>
-    <associate|auto-2|<tuple|2.1|?>>
-    <associate|auto-3|<tuple|2.1.1|?>>
-    <associate|auto-4|<tuple|2.1|?>>
-    <associate|auto-5|<tuple|2.1.2|?>>
-    <associate|auto-6|<tuple|2.1.3|?>>
-    <associate|auto-7|<tuple|2.1.4|?>>
+    <associate|algo-aggregate-key|<tuple|2.1|19>>
+    <associate|algo-pk-length|<tuple|2.2|19>>
+    <associate|auto-1|<tuple|2|17>>
+    <associate|auto-2|<tuple|2.1|17>>
+    <associate|auto-3|<tuple|2.1.1|17>>
+    <associate|auto-4|<tuple|2.1|17>>
+    <associate|auto-5|<tuple|2.1.2|17>>
+    <associate|auto-6|<tuple|2.1.3|18>>
+    <associate|auto-7|<tuple|2.1.4|19>>
     <associate|auto-8|<tuple|2.2|?>>
     <associate|auto-9|<tuple|2.2.1|?>>
-    <associate|chap-state-spec|<tuple|2|?>>
-    <associate|defn-children-bitmap|<tuple|2.10|?>>
-    <associate|defn-index-function|<tuple|2.7|?>>
-    <associate|defn-merkle-value|<tuple|2.12|?>>
-    <associate|defn-node-header|<tuple|2.9|?>>
-    <associate|defn-node-key|<tuple|2.6|?>>
-    <associate|defn-node-subvalue|<tuple|2.11|?>>
-    <associate|defn-node-value|<tuple|2.8|?>>
-    <associate|defn-nodetype|<tuple|2.4|?>>
-    <associate|defn-stored-value|<tuple|2.1|?>>
-    <associate|key-encode-in-trie|<tuple|2.1|?>>
+    <associate|chap-state-spec|<tuple|2|17>>
+    <associate|defn-children-bitmap|<tuple|2.10|20>>
+    <associate|defn-index-function|<tuple|2.7|19>>
+    <associate|defn-merkle-value|<tuple|2.12|20>>
+    <associate|defn-node-header|<tuple|2.9|19>>
+    <associate|defn-node-key|<tuple|2.6|18>>
+    <associate|defn-node-subvalue|<tuple|2.11|20>>
+    <associate|defn-node-value|<tuple|2.8|19>>
+    <associate|defn-nodetype|<tuple|2.4|18>>
+    <associate|defn-stored-value|<tuple|2.1|17>>
+    <associate|key-encode-in-trie|<tuple|2.1|18>>
+    <associate|sect-child-storages|<tuple|2.2|?>>
     <associate|sect-child-trie-structure|<tuple|2.2.1|?>>
-    <associate|sect-merkl-proof|<tuple|2.1.4|?>>
-    <associate|sect-state-storage|<tuple|2.1|?>>
-    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|?>>
+    <associate|sect-merkl-proof|<tuple|2.1.4|19>>
+    <associate|sect-state-storage|<tuple|2.1|17>>
+    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|18>>
   </collection>
 </references>
 
