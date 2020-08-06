@@ -167,7 +167,7 @@
   array <math|B> using the procedure defined in Definition
   <reference|sect-scale-codec>.
 
-  The Executor then needs to retrieve the Wam memory buffer of the Runtime
+  The Executor then needs to retrieve the Wasm memory buffer of the Runtime
   Wasm module and extend it to fit the size of the byte array. Afterwards, it
   needs to copy the byte array <math|B> value in the correct offset of the
   extended buffer. Finally, when the Wasm method <verbatim|runtime_entry>,
@@ -776,8 +776,8 @@
   <\collection>
     <associate|chapter-nr|2>
     <associate|page-first|21>
-    <associate|section-nr|1<uninit>>
-    <associate|subsection-nr|4>
+    <associate|section-nr|2<uninit>>
+    <associate|subsection-nr|1>
   </collection>
 </initial>
 
@@ -806,7 +806,6 @@
     <associate|auto-24|<tuple|3.3.1.3|?>>
     <associate|auto-25|<tuple|3.3.2|?>>
     <associate|auto-26|<tuple|3.3.3|?>>
-    <associate|auto-27|<tuple|3.3.3|?>>
     <associate|auto-3|<tuple|3.1.1|?>>
     <associate|auto-4|<tuple|3.1.2|?>>
     <associate|auto-5|<tuple|3.1.2.1|?>>
