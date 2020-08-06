@@ -186,8 +186,9 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>The entry accepts the <em|block data> defined in Definition
-    <reference|defn-block-data> as the only argument.
+    <item>The entry accepts a block, represented as a tuple consisting of a
+    block header as described in section <reference|defn-block-header> and
+    the block body as described in section <reference|defn-block-body>.
   </itemize>
 
   \;
@@ -527,7 +528,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|6>
-    <associate|page-first|107>
+    <associate|page-first|113>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
