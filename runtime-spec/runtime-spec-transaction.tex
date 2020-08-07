@@ -24,38 +24,14 @@ be called, including the parameters required for that function to be executed.
 
 \begin{definition}
     \label{defn-extrinsic-version}
-    $T_v$ is a single byte and defines the extrinsic version. The required
-    format of an extrinsic is dictated by the Runtime. Older or unsupported
-    version are rejected.
+    $T_v$ is a 8-bit bitfield and defines the extrinsic version. The required
+    format of an extrinsic body, $T_b$, is dictated by the Runtime. Older or
+    unsupported version are rejected.
     \newline
 
-    $T_v$ does not consist of the version number directly, rather the version
-    number is manipulated with bitwise operators in order to indicate whether
-    the extrinsic is signed ("transaction") or unsigned ("inherent").
-    \newline
-
-    If the extrinsic is \textbf{signed}, and therefore a transaction, $T_v$ is
-    defined as:
-
-    \[
-        T_v := n \ | \ 1000 \ 0000
-    \]
-
-    where $n$ is the version number and $|$ implies a bitwise OR operator.
-    \newline
-    \newpage
-
-    If the extrinsic is \textbf{unsigned}, and therefore an inherent, $T_v$ is
-    defined as:
-
-    \[
-        T_v := n \ \& \ 0111 \ 1111
-    \]
-
-    where $n$ is the version number and $\&$ implies a bitwise AND operator.
-    \newline
-
-    As an example, for extrinsic format version 4, an signed extrinsic
+    The first bit of $T_v$ indicates whether the transaction is \textbf{signed}
+    ($1$) or \textbf{unsigned} ($0$). The remaining 7-bits represent the version
+    number. As an example, for extrinsic format version 4, an signed extrinsic
     represents $T_v$ as \verb|132| while a unsigned extrinsic represents it as
     \verb|4|.
 \end{definition}
