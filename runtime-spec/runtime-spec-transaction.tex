@@ -155,9 +155,10 @@ where each values represents:
         payload. The requirement is $M_{pha} < M_{per}$.
     \end{itemize}
 
-    The extrinsic author uses the number of the block which starts the mortality
-    period, $H_i(B)$, and specifies the desired period in order the calculate
-    the phase:
+    In order to tie a transaction's lifetime to a certain block ($H_i(B)$) after
+    it was issued, without wasting precious space for block hashes, block
+    numbers are divided into regular periods and the lifetime is instead
+    expressed as a "phase" ($M_{pha}$) from these regular boundaries:
 
     \[
         M_{pha} = H_i(B)\ mod\ M_{per}
