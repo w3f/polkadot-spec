@@ -206,8 +206,8 @@ where each values represents:
                     \end{cases}&
                 \end{flalign*}
             }$
-            \State \textbf{Init} $factor = \textsc{Max}(M_{per} >> 12, 1)$
-            \State \textbf{Init} $left = \textsc{Min}(\textsc{Max}(\textsc{TZ}(M_{per})-1,\ 1),\ 15)$
+            \State \textbf{Init} $factor = \textsc{Limit}(M_{per} >> 12,\ 1,\ \phi)$
+            \State \textbf{Init} $left = \textsc{Limit}(\textsc{TZ}(M_{per})-1,\ 1,\ 15)$
             \State \textbf{Init} $right = \frac{M_{pha}}{factor} << 4$
             \Statex
             \Statex // Returns a two byte value
@@ -231,7 +231,7 @@ where each values represents:
             \Statex 
             \State \textbf{Init} $enc = T^{b0}_{mort} + (T^{b1}_{mort} << 8)$
             \State \textbf{Init} $M_{per} = 2 << (enc\ mod\ (1 << 4))$
-            \State \textbf{Init} $factor = \textsc{Max}(M_{per} >> 12, 1)$
+            \State \textbf{Init} $factor = \textsc{Limit}(M_{per} >> 12,\ 1,\ \phi)$
             \State \textbf{Init} $M_{pha} = (enc >> 4) * factor$
             \State $\vcenter{
                 \begin{flalign*}
@@ -248,8 +248,9 @@ where each values represents:
     \begin{itemize}
         \item $T^{b0}_{mort}$: the first byte of $T_m$.
         \item $T^{b1}_{mort}$: the second byte of $T_m$.
-        \item {\sc Min(..)}: returns the minimum of two values.
-        \item {\sc Max(..)}: returns the maximum of two values.
+        \item {\sc Limit($num$, $min$, $max$)}: Ensures that $num$ is between
+        $min$ and $max$. If $min$ or $max$ is defined as $\phi$, then there is
+        no requirement for the specified minimum/maximum.
         \item {\sc TZ($num$)}: returns the number of trailing zeros in the
         binary representation of $num$. For example, the binary
         representation of \verb|40| is \verb|0010 1000|, which has three
