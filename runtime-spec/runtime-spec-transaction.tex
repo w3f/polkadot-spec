@@ -118,12 +118,12 @@ where each values represents:
     extrinsic and the system it is meant to be executed in.
 
     \[
-        E := (T_m, N, P_t)
+        E := (T_{mor}, N, P_t)
     \]
 
     where each value represents:
     \begin{itemize}
-        \item $T_m$: contains the SCALE encoded mortality of the extrinsic (Def.
+        \item $T_{mor}$: contains the SCALE encoded mortality of the extrinsic (Def.
         \ref{defn-extrinsic-mortality}).
         \item $N$: a compact integer containing the nonce of the sender. The
         nonce must be incremented by one for each extrinsic created, otherwise
@@ -164,7 +164,7 @@ where each values represents:
     \]
 
     $M_{per}$ and $M_{pha}$ are then included in the extrinsic, as clarified in
-    Definition \ref{defn-extra-data}, in the SCALE encoded form of $T_m$ (Sect.
+    Definition \ref{defn-extra-data}, in the SCALE encoded form of $T_{mor}$ (Sect.
     \ref{sect-mortality-encoding}). Polkadot validators can use $M_{pha}$
     to figure out the block hash included in the payload, which will therefore
     result in a valid signature if the extrinsic is within the specified period 
@@ -178,16 +178,16 @@ where each values represents:
 
     \subsubsection*{Encoding}\label{sect-mortality-encoding}
 
-    $T_m$ refers to the SCALE encoded form of type $M_{per}$ and $M_{pha}$.
-    $T_m$ is the size of two bytes if the extrinsic is considered mortal,
+    $T_{mor}$ refers to the SCALE encoded form of type $M_{per}$ and $M_{pha}$.
+    $T_{mor}$ is the size of two bytes if the extrinsic is considered mortal,
     or simply one bytes with the value equal to zero if the extrinsic is
     considered immortal.
 
     \[
-        T_m := Enc_{SC}(M_{per}, M_{pha})
+        T_{mor} := Enc_{SC}(M_{per}, M_{pha})
     \]
 
-    The SCALE encoded representation of mortality $T_m$ deviates from most
+    The SCALE encoded representation of mortality $T_{mor}$ deviates from most
     other types, as it's specialized to be the smallest possible value, as
     described in Algorithm \ref{algo-encode-mortality} and
     \ref{algo-decode-mortality}.
@@ -220,17 +220,17 @@ where each values represents:
         \caption[]{\sc Decode Mortality}
         \label{algo-decode-mortality}
         \begin{algorithmic}[1]
-            \Require{$T_m$}
+            \Require{$T_{mor}$}
             \State $\vcenter{
                 \begin{flalign*}
                     \Return & 
                     \begin{cases}
-                    \textit{Immortal} & if\ T^{b0}_{mort} = 0
+                    \textit{Immortal} & if\ T^{b0}_{mor} = 0
                     \end{cases}&
                 \end{flalign*}
             }$
             \Statex 
-            \State \textbf{Init} $enc = T^{b0}_{mort} + (T^{b1}_{mort} << 8)$
+            \State \textbf{Init} $enc = T^{b0}_{mor} + (T^{b1}_{mor} << 8)$
             \State \textbf{Init} $M_{per} = 2 << (enc\ mod\ (1 << 4))$
             \State \textbf{Init} $factor = \textsc{Limit}(M_{per} >> 12,\ 1,\ \phi)$
             \State \textbf{Init} $M_{pha} = (enc >> 4) * factor$
@@ -239,8 +239,8 @@ where each values represents:
     \end{algorithm}
 
     \begin{itemize}
-        \item $T^{b0}_{mort}$: the first byte of $T_m$.
-        \item $T^{b1}_{mort}$: the second byte of $T_m$.
+        \item $T^{b0}_{mor}$: the first byte of $T_{mor}$.
+        \item $T^{b1}_{mor}$: the second byte of $T_{mor}$.
         \item {\sc Limit($num$, $min$, $max$)}: Ensures that $num$ is between
         $min$ and $max$. If $min$ or $max$ is defined as $\phi$, then there is
         no requirement for the specified minimum/maximum.
