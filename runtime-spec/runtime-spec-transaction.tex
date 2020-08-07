@@ -146,12 +146,13 @@ where each values represents:
     \begin{itemize}
         \item $M_{per}$: the period of validity in terms of block numbers from
         the block hash specified as $H_h(B)$ in the payload (Def.
-        \ref{defn-extrinsic-signature}). The period must be the power of two,
-        such as \verb|32|, \verb|64|, \verb|128|, etc.
+        \ref{defn-extrinsic-signature}). The requirement is $M_{per} \geq 4$ and
+        $M_{per}$ must be the power of two, such as \verb|32|, \verb|64|,
+        \verb|128|, etc.
         \item $M_{pha}$: the phase in the period that this extrinsic's lifetime
         begins. This value is calculated with a formula and validators can use
         this value in order to determine which block hash is included in the
-        payload.
+        payload. The requirement is $M_{pha} < M_{per}$.
     \end{itemize}
 
     The extrinsic author uses the number of the block which starts the mortality
@@ -233,15 +234,7 @@ where each values represents:
             \State \textbf{Init} $M_{per} = 2 << (enc\ mod\ (1 << 4))$
             \State \textbf{Init} $factor = \textsc{Limit}(M_{per} >> 12,\ 1,\ \phi)$
             \State \textbf{Init} $M_{pha} = (enc >> 4) * factor$
-            \State $\vcenter{
-                \begin{flalign*}
-                    \Return & 
-                    \begin{cases}
-                    (M_{per}, M_{pha}) & if\ M_{per} \geq 4\ \textbf{and}\ M_{pha} < M_{per} \\
-                    Error & else
-                    \end{cases}&
-                \end{flalign*}
-            }$
+            \State \Return $(M_{per}, M_{pha})$
         \end{algorithmic}
     \end{algorithm}
 
