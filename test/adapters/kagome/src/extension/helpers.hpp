@@ -19,12 +19,55 @@
 
 #pragma once
 
-#include <runtime/wasm_memory.hpp>
-#include <extensions/extension.hpp>
+#include "../assert.hpp"
+
+
+#include <blockchain/impl/key_value_block_header_repository.hpp>
+
+#include <runtime/binaryen/runtime_api/runtime_api.hpp>
 
 namespace helpers {
 
-// Helper to intialize in memory testing environment
-std::unique_ptr<kagome::extensions::Extension> initialize_extension();
+  using kagome::common::Buffer;
+
+  using kagome::runtime::binaryen::RuntimeManager;
+  using kagome::runtime::binaryen::RuntimeApi;
+
+  using kagome::blockchain::KeyValueBlockHeaderRepository;
+
+  class RuntimeEnvironment {
+
+    public:
+      // Initialize a runtime environment
+      RuntimeEnvironment();
+
+      // Call function with provided arguments in wasm adapter
+      template <typename R, typename... Args>
+      R execute(std::string_view name, Args &&... args) {
+        auto result = runtime_->execute<R>(
+          name, RuntimeApi::CallPersistency::PERSISTENT, std::forward<Args>(args)...
+        );
+
+        BOOST_ASSERT_MSG(result, result.error().message().data());
+
+        return result.value();
+      }
+
+    private:
+      // Needed by 
+      std::shared_ptr<KeyValueBlockHeaderRepository> repo_;
+      
+      // Needed by
+      std::shared_ptr<RuntimeManager> manager_;
+
+      // Overwrite to get access to protected function
+      struct RawRuntimeApi : public RuntimeApi {
+        using RuntimeApi::RuntimeApi;
+        using RuntimeApi::execute;
+      };
+
+      // Main object used to execute calls
+      std::shared_ptr<RawRuntimeApi> runtime_;
+  };
 
 }

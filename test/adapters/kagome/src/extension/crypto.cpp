@@ -25,145 +25,54 @@
 #include <common/hexutil.hpp>
 
 #include <iostream>
+#include <sstream>
+#include <numeric>
 
 namespace crypto {
 
   // Input: data
-  void processExtBlake2_128(const std::vector<std::string> &args){
+  void processHashFunctionTest(std::string_view name, uint32_t size, const std::vector<std::string>& args) {
+      helpers::RuntimeEnvironment environment;
+
+      // Allocate input
       std::string data = args[0];
 
-      auto extension = helpers::initialize_extension();
-      auto memory = extension->memory();
+      // Call hash function
+      std::stringstream function;
+      function << "rtm_ext_" << name << "_" << size * 8;
 
-      kagome::common::Buffer buffer;
+      auto hash = environment.execute<helpers::Buffer>(function.str(), data);
 
-      buffer.put(data);
-      kagome::runtime::WasmSize valueSize = buffer.size();
-      kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-      memory->storeBuffer(valuePtr, buffer);
-      buffer.clear();
+      BOOST_ASSERT_MSG(hash.size() == size, "Incorrect hash size.");
 
-      auto resultPtr = memory->allocate(16);
-      extension->ext_blake2_128(valuePtr, valueSize, resultPtr);
-      auto hash = memory->loadN(resultPtr, 16);
-
-      std::cout << kagome::common::hex_lower(hash) << "\n";
+      // Print result
+      std::cout << hash.toHex() << std::endl;
   }
 
-  // Input: data
-  void processExtBlake2_256(const std::vector<std::string> &args){
-    std::string data = args[0];
+  // Input: value1, value2
+  void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args) {
+    helpers::RuntimeEnvironment environment;
 
-    auto extension = helpers::initialize_extension();
-    auto memory = extension->memory();
+    // Parse input arguments
+    std::string values = std::accumulate(args.cbegin(), args.cend(), std::string(""));
 
-    kagome::common::Buffer buffer;
+    std::vector<uint32_t> lengths;
+    std::transform(args.cbegin(), args.cend(), std::back_inserter(lengths),
+      [](const std::string& s) { return s.length(); }
+    );
 
-    buffer.put(data);
-    kagome::runtime::WasmSize valueSize = buffer.size();
-    kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-    memory->storeBuffer(valuePtr, buffer);
-    buffer.clear();
+    // Compute enumerated trie root
+    auto hash = environment.execute<helpers::Buffer>(
+      "rtm_ext_blake2_256_enumerated_trie_root", values, lengths
+    );
 
-    auto resultPtr = memory->allocate(32);
-    extension->ext_blake2_256(valuePtr, valueSize, resultPtr);
-    auto hash = memory->loadN(resultPtr, 32);
-
-    std::cout << kagome::common::hex_lower(hash) << "\n";
+    // Print result
+    std::cout << hash.toHex() << std::endl;
   }
 
-  // Input: data
+  // TODO: Implement
   void processExtEd25519(const std::vector<std::string> &args){}
 
-  // Input: data
-  void processExtKeccak256(const std::vector<std::string> &args){
-    std::string data = args[0];
-
-    auto extension = helpers::initialize_extension();
-    auto memory = extension->memory();
-
-    kagome::common::Buffer buffer;
-
-    buffer.put(data);
-    kagome::runtime::WasmSize valueSize = buffer.size();
-    kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-    memory->storeBuffer(valuePtr, buffer);
-    buffer.clear();
-
-    auto resultPtr = memory->allocate(32);
-    extension->ext_keccak_256(valuePtr, valueSize, resultPtr);
-    auto hash = memory->loadN(resultPtr, 32);
-
-    std::cout << kagome::common::hex_lower(hash) << "\n";
-  }
-
-  // Input: data
+  // TODO: Implement
   void processExtSr25519(const std::vector<std::string> &args){}
-
-  // Input: data
-  void processExtTwox64(const std::vector<std::string> &args){
-      std::string data = args[0];
-
-      auto extension = helpers::initialize_extension();
-      auto memory = extension->memory();
-
-      kagome::common::Buffer buffer;
-
-      buffer.put(data);
-      kagome::runtime::WasmSize valueSize = buffer.size();
-      kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-      memory->storeBuffer(valuePtr, buffer);
-      buffer.clear();
-
-      auto resultPtr = memory->allocate(8);
-      extension->ext_twox_64(valuePtr, valueSize, resultPtr);
-      auto hash = memory->loadN(resultPtr, 8);
-
-      std::cout << kagome::common::hex_lower(hash) << "\n";
-  }
-
-  // Input: data
-  void processExtTwox128(const std::vector<std::string> &args){
-    std::string data = args[0];
-
-    auto extension = helpers::initialize_extension();
-    auto memory = extension->memory();
-
-    kagome::common::Buffer buffer;
-
-    buffer.put(data);
-    kagome::runtime::WasmSize valueSize = buffer.size();
-    kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-    memory->storeBuffer(valuePtr, buffer);
-    buffer.clear();
-
-    auto resultPtr = memory->allocate(16);
-    extension->ext_twox_128(valuePtr, valueSize, resultPtr);
-    auto hash = memory->loadN(resultPtr, 16);
-
-    std::cout << kagome::common::hex_lower(hash) << "\n";
-  }
-
-  // Input: data
-  void processExtTwox256(const std::vector<std::string> &args){
-    std::string data = args[0];
-
-    auto extension = helpers::initialize_extension();
-    auto memory = extension->memory();
-
-    kagome::common::Buffer buffer;
-
-    buffer.put(data);
-    kagome::runtime::WasmSize valueSize = buffer.size();
-    kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-    memory->storeBuffer(valuePtr, buffer);
-    buffer.clear();
-
-    auto resultPtr = memory->allocate(32);
-    extension->ext_twox_256(valuePtr, valueSize, resultPtr);
-    auto hash = memory->loadN(resultPtr, 32);
-
-    std::cout << kagome::common::hex_lower(hash) << "\n";
-  }
-
 }

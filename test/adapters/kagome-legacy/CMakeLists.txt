@@ -70,6 +70,8 @@ find_package(binaryen REQUIRED)
 # Compile and link tester
 add_executable(kagome-adapter-legacy
   src/main.cpp
+  src/assert.cpp
+  src/assert.hpp
   src/subcommand_router.hpp
   src/extension.cpp
   src/extension.hpp

@@ -19,7 +19,6 @@
 
 #include "helpers.hpp"
 
-#include <binaryen/shell-interface.h>
 
 #include <crypto/pbkdf2/impl/pbkdf2_provider_impl.hpp>
 #include <crypto/random_generator/boost_generator.hpp>
@@ -39,12 +38,24 @@
 #include <storage/changes_trie/impl/storage_changes_tracker_impl.hpp>
 
 #include <runtime/common/trie_storage_provider_impl.hpp>
-#include <runtime/binaryen/wasm_memory_impl.hpp>
+#include <runtime/binaryen/runtime_manager.hpp>
+#include <runtime/binaryen/module/wasm_module_factory_impl.hpp>
+#include <runtime/binaryen/runtime_api/core_factory_impl.hpp>
 
-#include <extensions/impl/extension_impl.hpp>
+#include <extensions/impl/extension_factory_impl.hpp>
 
 
-using kagome::common::Buffer;
+using kagome::api::Session;
+
+using kagome::primitives::BlockHash;
+using kagome::primitives::BlockHeader;
+using kagome::primitives::BlockId;
+using kagome::primitives::BlockNumber;
+
+using kagome::blockchain::BlockHeaderRepository;
+using kagome::blockchain::BlockStatus;
+
+using kagome::common::Hash256;
 
 using kagome::crypto::Bip39ProviderImpl;
 using kagome::crypto::BoostRandomGenerator;
@@ -55,9 +66,17 @@ using kagome::crypto::Pbkdf2ProviderImpl;
 using kagome::crypto::Secp256k1ProviderImpl;
 using kagome::crypto::SR25519ProviderImpl;
 
+using kagome::extensions::ExtensionFactoryImpl;
+
 using kagome::runtime::TrieStorageProvider;
 using kagome::runtime::TrieStorageProviderImpl;
+using kagome::runtime::WasmProvider;
 
+using kagome::runtime::binaryen::CoreFactoryImpl;
+using kagome::runtime::binaryen::RuntimeManager;
+using kagome::runtime::binaryen::WasmModuleFactoryImpl;
+
+using kagome::storage::InMemoryStorage;
 using kagome::storage::changes_trie::StorageChangesTrackerImpl;
 using kagome::storage::trie::PolkadotCodec;
 using kagome::storage::trie::PolkadotTrieFactoryImpl;
@@ -65,20 +84,46 @@ using kagome::storage::trie::PolkadotTrieImpl;
 using kagome::storage::trie::TrieSerializerImpl;
 using kagome::storage::trie::TrieStorage;
 using kagome::storage::trie::TrieStorageImpl;
+using kagome::storage::trie::TrieStorageBackendImpl;
 
+using kagome::subscription::SubscriptionEngine;
 
 namespace helpers {
 
-  // Global instance of wasm shell (probably not thread safe)
-  wasm::ShellExternalInterface GLOBAL_WASM_SHELL;
+  // Path to wasm adapter shim runtime
+  const char* WASM_ADAPTER_RUNTIME_PATH = "bin/wasm_adapter_legacy.compact.wasm";
 
-  // Initialize kagome wasm host extensions
-  std::unique_ptr<kagome::extensions::Extension> initialize_extension() {
+  // Simple wasm provider to provide wasm adapter runtime shim to kagome
+  class WasmAdapterProvider : public WasmProvider {
+    public:
+      WasmAdapterProvider() {
+        // Open file and determine size (ios::ate jumps to end on open)
+        std::ifstream file(WASM_ADAPTER_RUNTIME_PATH, std::ios::binary | std::ios::ate);
+        int size = file.tellg();
+        file.seekg(0, std::ios::beg);
+
+        // Load code into buffer
+        code_.resize(size);
+        file.read(reinterpret_cast<char*>(code_.data()), size);
+      }
+
+      const Buffer& getStateCode() const {
+        return code_;
+      }
+ 
+    private:
+      Buffer code_;
+  };
+
+
+  RuntimeEnvironment::RuntimeEnvironment() {
+    // Load wasm adapter shim
+    auto wasm_provider = std::make_shared<WasmAdapterProvider>();
 
     // Build storage provider
-    auto backend = std::make_shared<kagome::storage::trie::TrieStorageBackendImpl>(
-      std::make_shared<kagome::storage::InMemoryStorage>(),
-      kagome::common::Buffer{}
+    auto backend = std::make_shared<TrieStorageBackendImpl>(
+      std::make_shared<InMemoryStorage>(),
+      Buffer{}
     );
 
     auto trie_factory = std::make_shared<PolkadotTrieFactoryImpl>();
@@ -87,18 +132,22 @@ namespace helpers {
       trie_factory, codec, backend
     );
 
-    auto trie_db = kagome::storage::trie::TrieStorageImpl::createEmpty(
+    auto trie_db = TrieStorageImpl::createEmpty(
       trie_factory, codec, serializer, boost::none
     ).value();
 
     auto storage_provider = std::make_shared<TrieStorageProviderImpl>(
       std::move(trie_db)
     );
-    storage_provider->setToPersistent(); // Remove when using runtime manager
 
     // Build change tracker
+    using SessionPtr = std::shared_ptr<Session>;
+    using SubscriptionEngineType =
+      SubscriptionEngine<Buffer, SessionPtr, Buffer, BlockHash>;
+
+    auto sub_engine = std::make_shared<SubscriptionEngineType>();
     auto tracker = std::make_shared<StorageChangesTrackerImpl>(
-      trie_factory, codec
+      trie_factory, codec, sub_engine
     );
 
     // Build crypto providers
@@ -120,25 +169,43 @@ namespace helpers {
       bip39_provider,
       random_generator
     );
+    
+    repo_ = std::make_shared<KeyValueBlockHeaderRepository>(
+      std::make_shared<InMemoryStorage>(), std::make_shared<HasherImpl>()
+    );
 
-    // Initialize Wasm memory
-    std::shared_ptr<kagome::runtime::WasmMemory> memory =
-      std::make_shared<kagome::runtime::binaryen::WasmMemoryImpl>(
-        &GLOBAL_WASM_SHELL.memory, 4096
+    // Probably needed to update runtime
+    auto factory_method = [this, tracker](std::shared_ptr<WasmProvider> wasm_provider) {
+      CoreFactoryImpl factory(
+          manager_,
+          tracker,
+          repo_
       );
+      return factory.createWithCode(std::move(wasm_provider));
+    };
 
-    // Final assembly
-    return std::make_unique<kagome::extensions::ExtensionImpl>(
-      memory,
-      storage_provider,
+    // Assemble  extension factory
+    auto extension_factory = std::make_shared<ExtensionFactoryImpl>(
       tracker,
       sr25519_provider,
       ed25519_provider,
       secp256k1_provider,
       hasher,
       crypto_store,
-      bip39_provider
+      bip39_provider,
+      factory_method
     );
+
+    auto module_factory = std::make_shared<WasmModuleFactoryImpl>();
+
+    manager_ = std::make_shared<RuntimeManager>(
+      extension_factory,
+      module_factory,
+      storage_provider,
+      hasher
+    );
+
+    runtime_ = std::make_shared<RawRuntimeApi>(wasm_provider, manager_);
   }
 
 } // namespace helper

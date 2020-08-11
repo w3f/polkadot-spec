@@ -25,420 +25,227 @@
 #include <common/hexutil.hpp>
 
 #include <iostream>
+
+
 namespace storage {
 
 // Input: prefix, key1, value1, key2, value2
 void processExtClearPrefix(const std::vector<std::string> &args) {
-  std::string prefix = args[0];
-  std::string key1 = args[1];
-  std::string value1 = args[2];
-  std::string key2 = args[3];
-  std::string value2 = args[4];
+  helpers::RuntimeEnvironment environment;
 
-  auto extension = helpers::initialize_extension();
-  auto memory = extension->memory();
+  // Parse arguments
+  auto prefix = args[0];
 
-  kagome::common::Buffer buffer;
+  auto key1   = args[1];
+  auto value1 = args[2];
 
-  buffer.put(key1);
-  kagome::runtime::WasmSize key1Size = buffer.size();
-  memory->resize(memory->size() + buffer.size());
-  kagome::runtime::WasmPointer key1Ptr = memory->allocate(key1Size);
-  memory->storeBuffer(key1Ptr, buffer);
-  buffer.clear();
+  auto key2   = args[3];
+  auto value2 = args[4];
 
-  buffer.put(value1);
-  kagome::runtime::WasmSize value1Size = buffer.size();
-  memory->resize(memory->size() + buffer.size());
-  kagome::runtime::WasmPointer value1Ptr = memory->allocate(value1Size);
-  memory->storeBuffer(value1Ptr, buffer);
-  buffer.clear();
+  // Parse config from arguments
+  bool shouldClear1 = (prefix == key1.substr(0, prefix.size()));
+  bool shouldClear2 = (prefix == key2.substr(0, prefix.size()));
 
-  extension->ext_set_storage(key1Ptr, key1Size, value1Ptr, value1Size);
+  // Insert first key value pair
+  environment.execute<void>("rtm_ext_set_storage", key1, value1);
 
-  buffer.put(key2);
-  kagome::runtime::WasmSize key2Size = buffer.size();
-  memory->resize(memory->size() + buffer.size());
-  kagome::runtime::WasmPointer key2Ptr = memory->allocate(key2Size);
-  memory->storeBuffer(key2Ptr, buffer);
-  buffer.clear();
+  // Insert second key value pair
+  environment.execute<void>("rtm_ext_set_storage", key2, value2);
 
-  buffer.put(value2);
-  kagome::runtime::WasmSize value2Size = buffer.size();
-  memory->resize(memory->size() + buffer.size());
-  kagome::runtime::WasmPointer value2Ptr = memory->allocate(value2Size);
-  memory->storeBuffer(value2Ptr, buffer);
-  buffer.clear();
+  // Clear prefix
+  environment.execute<void>("rtm_ext_clear_prefix", prefix);
 
-  extension->ext_set_storage(key2Ptr, key2Size, value2Ptr, value2Size);
+  // Retrieve first key 
+  auto result = environment.execute<helpers::Buffer>(
+    "rtm_ext_get_allocated_storage", key1
+  );
 
-  buffer.put(prefix);
-  kagome::runtime::WasmSize prefixSize = buffer.size();
-  kagome::runtime::WasmPointer prefixPtr = memory->allocate(prefixSize);
-  memory->storeBuffer(prefixPtr, buffer);
-  buffer.clear();
+  // Check first key
+  if (shouldClear1) {
+    // Check if key1 was deleted
+    BOOST_ASSERT_MSG(result.empty(), "Value1 wasn't deleted");
 
-  extension->ext_clear_prefix(prefixPtr, prefixSize);
-
-  kagome::runtime::WasmSize sizePtrSize = sizeof(kagome::runtime::WasmSize);
-  kagome::runtime::WasmPointer sizePtr = memory->allocate(sizePtrSize);
-  auto res = extension->ext_get_allocated_storage(key1Ptr, key1Size, sizePtr);
-  kagome::runtime::WasmSize written_out = memory->load32u(sizePtr);
-  if (prefix == key1.substr(0, prefix.size())) {
-    BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
-                     "Value 1 wasn't deleted");
-    BOOST_ASSERT_MSG(res == 0, "Value 1 wasn't deleted");
+    //Print result
     std::cout << "Key '" + key1 + "' was deleted\n";
   } else {
-    BOOST_ASSERT_MSG(written_out == value1Size, "Value 1 was deleted");
-    BOOST_ASSERT_MSG(memory->loadN(res, written_out) ==
-                         memory->loadN(value1Ptr, written_out),
-                     "Value1 does not match");
+    BOOST_ASSERT_MSG(result.toString() == value1, "Value1 was deleted");
+
+    // Print result
     std::cout << "Key '" + key1 + "' remains\n";
   }
 
-  res = extension->ext_get_allocated_storage(key2Ptr, key2Size, sizePtr);
-  written_out = memory->load32u(sizePtr);
-  if (prefix == key2.substr(0, prefix.size())) {
-    BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
-                     "Value 2 wasn't deleted");
-    BOOST_ASSERT_MSG(res == 0, "Value 2 wasn't deleted");
+  // Retrieve second key
+  result = environment.execute<helpers::Buffer>(
+    "rtm_ext_get_allocated_storage", key2
+  );
+
+  // Check second key
+  if (shouldClear2) {
+    // Check if key2 was deleted
+    BOOST_ASSERT_MSG(result.empty(), "Value2 wasn't deleted");
+
+    // Print result
     std::cout << "Key '" + key2 + "' was deleted\n";
   } else {
-    BOOST_ASSERT_MSG(written_out == value2Size, "Value 2 was deleted");
-    BOOST_ASSERT_MSG(memory->loadN(res, written_out) ==
-                         memory->loadN(value2Ptr, written_out),
-                     "Value2 does not match");
+    // Check if key2 was stored correctly
+    BOOST_ASSERT_MSG(result.toString() == value2, "Value2 was deleted");
+
+    // Print result
     std::cout << "Key '" + key2 + "' remains\n";
   }
-
-  BOOST_ASSERT_MSG(memory->deallocate(key1Ptr) == key1Size,
-                   "Memory Leak: Key1");
-  BOOST_ASSERT_MSG(memory->deallocate(value1Ptr) == value1Size,
-                   "Memory Leak: Value1");
-  BOOST_ASSERT_MSG(memory->deallocate(key2Ptr) == key2Size,
-                   "Memory Leak: Key2");
-  BOOST_ASSERT_MSG(memory->deallocate(value2Ptr) == value2Size,
-                   "Memory Leak: Value 2");
-  BOOST_ASSERT_MSG(memory->deallocate(sizePtr) == sizePtrSize,
-                   "Memory Leak: Size");
-  BOOST_ASSERT_MSG(memory->deallocate(prefixPtr) == prefixSize,
-                   "Memory Leak: Prefix");
 }
 
 // Input: key, value
 void processExtClearStorage(const std::vector<std::string> &args) {
-  std::string key = args[0];
-  std::string value = args[1];
+  helpers::RuntimeEnvironment environment;
 
-  auto extension = helpers::initialize_extension();
-  auto memory = extension->memory();
+  // Parse input arguments
+  auto key   = args[0];
+  auto value = args[1];
 
-  kagome::common::Buffer buffer;
+  // Insert data
+  environment.execute<void>("rtm_ext_set_storage", key, value);
 
-  buffer.put(key);
-  kagome::runtime::WasmSize keySize = buffer.size();
-  kagome::runtime::WasmPointer keyPtr = memory->allocate(keySize);
-  memory->storeBuffer(keyPtr, buffer);
-  buffer.clear();
+  // Retrieve stored data
+  auto stored = environment.execute<helpers::Buffer>(
+    "rtm_ext_get_allocated_storage", key
+  );
 
-  buffer.put(value);
-  kagome::runtime::WasmSize valueSize = buffer.size();
-  kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-  memory->storeBuffer(valuePtr, buffer);
-  buffer.clear();
+  // Check data
+  BOOST_ASSERT_MSG(!stored.empty(), "No value");
+  BOOST_ASSERT_MSG(stored.toString() == value, "Values are different");
 
-  extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
-  kagome::runtime::WasmSize sizePtrSize = sizeof(kagome::runtime::WasmSize);
-  kagome::runtime::WasmPointer sizePtr = memory->allocate(sizePtrSize);
-  auto res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
-  kagome::runtime::WasmSize written_out = memory->load32u(sizePtr);
-  BOOST_ASSERT_MSG(written_out == valueSize, "No value");
-  BOOST_ASSERT_MSG(memory->loadN(res, written_out) ==
-                       memory->loadN(valuePtr, written_out),
-                   "Values are different");
+  // Clear data
+  environment.execute<void>("rtm_ext_clear_storage", key);
 
-  extension->ext_clear_storage(keyPtr, keySize);
+  // Retrieve cleared
+  auto cleared = environment.execute<helpers::Buffer>(
+    "rtm_ext_get_allocated_storage", key
+  );
 
-  res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
-  written_out = memory->load32u(sizePtr);
-  BOOST_ASSERT_MSG(res == 0, "Value wasn't deleted");
-  BOOST_ASSERT_MSG(written_out == memory->kMaxMemorySize,
-                   "Value wasn't deleted");
-
-  BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
-  BOOST_ASSERT_MSG(memory->deallocate(valuePtr) == valueSize,
-                   "Memory Leak: Value ");
-  BOOST_ASSERT_MSG(memory->deallocate(sizePtr) == sizePtrSize,
-                   "Memory Leak: Size");
+  // Check removal
+  BOOST_ASSERT_MSG(cleared.empty(), "Value wasn't deleted");
 }
 
 // Input: key, value
 void processExtExistsStorage(const std::vector<std::string> &args) {
-  std::string key = args[0];
-  std::string value = args[1];
+  helpers::RuntimeEnvironment environment;
 
-  auto extension = helpers::initialize_extension();
-  auto memory = extension->memory();
+  // Parse input arguments
+  auto key   = args[0];
+  auto value = args[1];
+  
+  // Check for no data
+  auto exists = environment.execute<uint32_t>("rtm_ext_exists_storage", key);
 
-  kagome::common::Buffer buffer;
+  BOOST_ASSERT_MSG(exists == 0, "Storage exists");
 
-  buffer.put(key);
-  kagome::runtime::WasmSize keySize = buffer.size();
-  kagome::runtime::WasmPointer keyPtr = memory->allocate(keySize);
-  memory->storeBuffer(keyPtr, buffer);
-  buffer.clear();
+  // Insert data
+  environment.execute<void>("rtm_ext_set_storage", key, value);
 
-  buffer.put(value);
-  kagome::runtime::WasmSize valueSize = buffer.size();
-  kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-  memory->storeBuffer(valuePtr, buffer);
-  buffer.clear();
+  // Check for data
+  exists = environment.execute<uint32_t>("rtm_ext_exists_storage", key);
 
-  kagome::runtime::WasmSize storageSize =
-      extension->ext_exists_storage(keyPtr, keySize);
-  BOOST_ASSERT_MSG(storageSize == 0, "Storage exists");
+  BOOST_ASSERT_MSG(exists == 1, "Storage does not exists");
 
-  extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
-
-  storageSize = extension->ext_exists_storage(keyPtr, keySize);
-  BOOST_ASSERT_MSG(storageSize == 1, "Storage exists");
-
-  BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
-  BOOST_ASSERT_MSG(memory->deallocate(valuePtr) == valueSize,
-                   "Memory Leak: Value");
-
-  std::cout << "true\n";
+  // Print result
+  std::cout << "true" << std::endl;
 }
 
 // Input: key, value
 void processExtGetAllocatedStorage(const std::vector<std::string> &args) {
-  std::string key = args[0];
-  std::string value = args[1];
+  helpers::RuntimeEnvironment environment;
 
-  auto extension = helpers::initialize_extension();
-  auto memory = extension->memory();
+  // Parse input arguments
+  auto key   = args[0];
+  auto value = args[1];
 
-  kagome::common::Buffer buffer;
+  // Check that key has not been set
+  auto result = environment.execute<helpers::Buffer>(
+    "rtm_ext_get_allocated_storage", key
+  );
 
-  buffer.put(key);
-  kagome::runtime::WasmSize keySize = buffer.size();
-  kagome::runtime::WasmPointer keyPtr = memory->allocate(keySize);
-  memory->storeBuffer(keyPtr, buffer);
-  buffer.clear();
+  BOOST_ASSERT_MSG(result.empty(), "Data exists");
 
-  buffer.put(value);
-  kagome::runtime::WasmSize valueSize = buffer.size();
-  kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-  memory->storeBuffer(valuePtr, buffer);
-  buffer.clear();
+  // Add data to storage
+  environment.execute<void>("rtm_ext_set_storage", key, value);
 
-  kagome::runtime::WasmSize sizePtrSize = sizeof(kagome::runtime::WasmSize);
-  kagome::runtime::WasmPointer sizePtr = memory->allocate(sizePtrSize);
-  auto res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
-  kagome::runtime::WasmSize written_out = memory->load32u(sizePtr);
-  BOOST_ASSERT_MSG(written_out == kagome::runtime::WasmMemory::kMaxMemorySize,
-                   "Data exists");
-  BOOST_ASSERT_MSG(res == 0, "Data exists");
+  // Retrieve data from storage
+  result = environment.execute<helpers::Buffer>(
+    "rtm_ext_get_allocated_storage", key
+  );
 
-  extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
+  // Check returned data
+  BOOST_ASSERT_MSG(!result.empty(), "No value");
+  BOOST_ASSERT_MSG(result.toString() == value, "Values are different");
 
-  res = extension->ext_get_allocated_storage(keyPtr, keySize, sizePtr);
-  written_out = memory->load32u(sizePtr);
-  BOOST_ASSERT_MSG(written_out == valueSize, "Value not preserved");
-  auto resultBuffer = memory->loadN(res, written_out);
-  BOOST_ASSERT_MSG(resultBuffer == memory->loadN(valuePtr, written_out),
-                   "Values are different");
-
-  BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
-  BOOST_ASSERT_MSG(memory->deallocate(valuePtr) == valueSize,
-                   "Memory Leak: Value");
-  BOOST_ASSERT_MSG(memory->deallocate(sizePtr) == sizePtrSize,
-                   "Memory Leak: Size");
-
-  std::string message(reinterpret_cast<const char *>(resultBuffer.data()),
-                      written_out);
-  std::cout << message << "\n";
+  // Print result
+  std::cout << result.toString() << std::endl;
 }
+
 
 // Input: key, value, offset
 void processExtGetAllocatedStorageInto(const std::vector<std::string> &args) {
-  std::string key = args[0];
-  std::string value = args[1];
+  helpers::RuntimeEnvironment environment;
+
+  // Allocate and parse input data
+  auto key   = args[0];
+  auto value = args[1];
+
   uint32_t offset = static_cast<uint32_t>(std::stoul(args[2]));
 
-  auto extension = helpers::initialize_extension();
-  auto memory = extension->memory();
+  // Allocate output data
+  uint32_t expected = value.length() <  offset ? 0 : value.length() - offset;
 
-  kagome::common::Buffer buffer;
+  helpers::Buffer into(expected, 0);
 
-  buffer.put(key);
-  kagome::runtime::WasmSize keySize = buffer.size();
-  kagome::runtime::WasmPointer keyPtr = memory->allocate(keySize);
-  memory->storeBuffer(keyPtr, buffer);
-  buffer.clear();
+  // Ensure key does not exist in storage yet
+  auto result = environment.execute<helpers::Buffer>(
+    "rtm_ext_get_storage_into", key, into
+  );
 
-  buffer.put(value);
-  kagome::runtime::WasmSize valueSize = buffer.size();
-  kagome::runtime::WasmPointer valuePtr = memory->allocate(valueSize);
-  memory->storeBuffer(valuePtr, buffer);
-  buffer.clear();
+  BOOST_ASSERT_MSG(result.empty(), "Data exists");
 
-  kagome::runtime::WasmSize resultSize =
-      valueSize < offset ? 0 : valueSize - offset;
-  kagome::runtime::WasmPointer resultPtr = memory->allocate(resultSize);
+  // Insert test data into storage
+  environment.execute<void>("rtm_ext_set_storage", key, value); 
 
-  auto res = extension->ext_get_storage_into(keyPtr, keySize, resultPtr,
-                                             resultSize, offset);
-  BOOST_ASSERT_MSG(res == kagome::runtime::WasmMemory::kMaxMemorySize,
-                   "Data exists");
+  // Retrieve test data from storage
+  result = environment.execute<helpers::Buffer>(
+    "rtm_ext_get_storage_into", key, into
+  );
 
-  extension->ext_set_storage(keyPtr, keySize, valuePtr, valueSize);
+  BOOST_ASSERT_MSG(!result.empty(), "No value");
+  BOOST_ASSERT_MSG(result.toString() == value, "Values are different");
 
-  res = extension->ext_get_storage_into(keyPtr, keySize, resultPtr, resultSize,
-                                        offset);
-  BOOST_ASSERT_MSG(res == resultSize, "Values are different");
-  auto resultBuffer = memory->loadN(resultPtr, res);
-  BOOST_ASSERT_MSG(resultBuffer == memory->loadN(valuePtr + offset, resultSize),
-                   "Values are different");
-
-  BOOST_ASSERT_MSG(memory->deallocate(keyPtr) == keySize, "Memory Leak: Key");
-  BOOST_ASSERT_MSG(memory->deallocate(valuePtr) == valueSize,
-                   "Memory Leak: Value");
-  if (resultSize == 0) {
-    BOOST_ASSERT_MSG(memory->deallocate(resultPtr) == boost::none,
-                     "Memory Leak: Result");
-  } else {
-    BOOST_ASSERT_MSG(memory->deallocate(resultPtr) == resultSize,
-                     "Memory Leak: Result");
-  }
-
-  std::string message(reinterpret_cast<const char *>(resultBuffer.data()), res);
-  std::cout << message << "\n";
+  // Print result
+  std::cout << result.toString() << std::endl;
 }
 
-// Input: key1, value1, key2, value2
+
+// Input: key1, value1, key2, valueudo
 void processExtStorageRoot(const std::vector<std::string> &args) {
-  std::string key1 = args[0];
-  std::string value1 = args[1];
-  std::string key2 = args[2];
-  std::string value2 = args[3];
+  helpers::RuntimeEnvironment environment;
 
-  auto extension = helpers::initialize_extension();
-  auto memory = extension->memory();
+  // Parse input parameters
+  auto key1   = args[0];
+  auto value1 = args[1];
 
-  kagome::common::Buffer buffer;
+  auto key2   = args[2];
+  auto value2 = args[3];
 
-  buffer.put(key1);
-  kagome::runtime::WasmSize key1Size = buffer.size();
-  kagome::runtime::WasmPointer key1Ptr = memory->allocate(key1Size);
-  memory->storeBuffer(key1Ptr, buffer);
-  buffer.clear();
+  // Prepare environment
+  environment.execute<void>("rtm_ext_set_storage", ":code", "");
+  environment.execute<void>("rtm_ext_set_storage", ":heappages", uint64_t(8));
 
-  buffer.put(value1);
-  kagome::runtime::WasmSize value1Size = buffer.size();
-  kagome::runtime::WasmPointer value1Ptr = memory->allocate(value1Size);
-  memory->storeBuffer(value1Ptr, buffer);
-  buffer.clear();
+  // Insert data
+  environment.execute<void>("rtm_ext_set_storage", key1, value1);
+  environment.execute<void>("rtm_ext_set_storage", key2, value2);
 
-  buffer.put(key2);
-  kagome::runtime::WasmSize key2Size = buffer.size();
-  kagome::runtime::WasmPointer key2Ptr = memory->allocate(key2Size);
-  memory->storeBuffer(key2Ptr, buffer);
-  buffer.clear();
+  // Compute storage root hash
+  auto hash = environment.execute<helpers::Buffer>("rtm_ext_storage_root");
 
-  buffer.put(value2);
-  kagome::runtime::WasmSize value2Size = buffer.size();
-  kagome::runtime::WasmPointer value2Ptr = memory->allocate(value2Size);
-  memory->storeBuffer(value2Ptr, buffer);
-  buffer.clear();
-
-  buffer.put(":code");
-  kagome::runtime::WasmSize prepareKey1Size = buffer.size();
-  kagome::runtime::WasmPointer prepareKey1Ptr =
-      memory->allocate(prepareKey1Size);
-  memory->storeBuffer(prepareKey1Ptr, buffer);
-  buffer.clear();
-
-  buffer.put("");
-  kagome::runtime::WasmSize prepareValue1Size = buffer.size();
-  kagome::runtime::WasmPointer prepareValue1Ptr =
-      memory->allocate(prepareValue1Size);
-  memory->storeBuffer(prepareValue1Ptr, buffer);
-  buffer.clear();
-
-  buffer.put(":heappages");
-  kagome::runtime::WasmSize prepareKey2Size = buffer.size();
-  kagome::runtime::WasmPointer prepareKey2Ptr =
-      memory->allocate(prepareKey2Size);
-  memory->storeBuffer(prepareKey2Ptr, buffer);
-  buffer.clear();
-
-  kagome::runtime::WasmSize prepareValue2Size = 8;
-  kagome::runtime::WasmPointer prepareValue2Ptr =
-      memory->allocate(prepareValue2Size);
-  memory->store64(prepareValue2Ptr, 8);
-  buffer.clear();
-
-  extension->ext_set_storage(prepareKey1Ptr, prepareKey1Size, prepareValue1Ptr,
-                             prepareValue1Size);
-  extension->ext_set_storage(prepareKey2Ptr, prepareKey2Size, prepareValue2Ptr,
-                             prepareValue2Size);
-  extension->ext_set_storage(key1Ptr, key1Size, value1Ptr, value1Size);
-  extension->ext_set_storage(key2Ptr, key2Size, value2Ptr, value2Size);
-
-  auto resultPtr = memory->allocate(32);
-  extension->ext_storage_root(resultPtr);
-  auto rootHash = memory->loadN(resultPtr, 32);
-
-  std::cout << kagome::common::hex_lower(rootHash) << "\n";
-}
-
-// Input: value1, value2
-void processExtBlake2_256EnumeratedTrieRoot(
-    const std::vector<std::string> &args) {
-  std::string value1 = args[0];
-  std::string value2 = args[1];
-
-  auto extension = helpers::initialize_extension();
-  auto memory = extension->memory();
-
-  kagome::runtime::WasmPointer valuesLenPtr = memory->allocate(8);
-
-  kagome::common::Buffer buffer1;
-
-  buffer1.put(value1);
-  kagome::runtime::WasmSize value1Size = buffer1.size();
-  memory->store32(valuesLenPtr, value1Size);
-
-  kagome::common::Buffer buffer2;
-
-  buffer2.put(value2);
-  kagome::runtime::WasmSize value2Size = buffer2.size();
-  memory->store32(valuesLenPtr + 4, value2Size);
-
-  kagome::runtime::WasmPointer valuesPtr =
-      memory->allocate(value1Size + value2Size);
-  memory->storeBuffer(valuesPtr, buffer1);
-  memory->storeBuffer(valuesPtr + value1Size, buffer2);
-
-  auto resultPtr = memory->allocate(32);
-  extension->ext_blake2_256_enumerated_trie_root(valuesPtr, valuesLenPtr, 2,
-                                                 resultPtr);
-  auto hash = memory->loadN(resultPtr, 32);
-
-  std::cout << kagome::common::hex_lower(hash) << "\n";
-}
-void processExtAllocatedStorage(const std::vector<std::string> &args) {
-
-  auto extension = helpers::initialize_extension();
-  auto memory = extension->memory();
-
-  auto pointer = extension->ext_malloc(44);
-
-  // TODO
-
-  extension->ext_free(pointer);
+  // Print hash
+  std::cout << hash.toHex() << std::endl;
 }
 
 } // namespace storage

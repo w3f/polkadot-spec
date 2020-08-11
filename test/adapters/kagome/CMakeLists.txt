@@ -71,10 +71,12 @@ find_package(binaryen REQUIRED)
 # Compile and link tester
 add_executable(kagome-adapter
   src/main.cpp
+  src/assert.cpp
+  src/assert.hpp
+  src/subcommand_router.hpp
   src/scale_codec.cpp
   src/scale_codec.hpp
   src/trie.cpp
-  src/subcommand_router.hpp
   src/trie.hpp
   src/extension.cpp
   src/extension.hpp
