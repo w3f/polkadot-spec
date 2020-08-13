@@ -271,7 +271,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fixture: [ scale-codec, state-trie ]
+        fixture: [ host-api, scale-codec, state-trie ]
     name: "[test-${{ matrix.fixture }}] kagome"
     runs-on: ubuntu-18.04
     steps:
