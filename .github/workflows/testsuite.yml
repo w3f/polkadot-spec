@@ -271,7 +271,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fixture: [ host-api, scale-codec, state-trie ]
+        fixture: [ scale-codec, state-trie ]
     name: "[test-${{ matrix.fixture }}] kagome"
     runs-on: ubuntu-18.04
     steps:
@@ -312,6 +312,24 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
+  test-host-api:
+    needs: [ build-adapter-kagome, build-adapter-wasm ]
+    name: "[test-host-api] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter.compact.wasm
+        path: test/bin
+    - run: chmod +x test/bin/kagome-adapter
+    - name: Run test fixture
+      run: test/runtests.jl kagome host-api
 
   test-host-api-legacy:
     needs: [ build-adapter-substrate-legacy, build-adapter-kagome-legacy ]
