@@ -281,7 +281,9 @@ sp_core::wasm_export_functions! {
     }
     fn rtm_ext_storage_child_root_version_1(child_key: Vec<u8>) -> Vec<u8> {
         unsafe {
-            let value = ext_storage_root_version_1();
+            let value = ext_storage_child_root_version_1(
+                child_key.as_re_ptr(),
+            );
             from_mem(value)
         }
     }
