@@ -17,22 +17,18 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef KAGOMECROSSTESTCLI_NETWORK_EXTENSION_HPP
-#define KAGOMECROSSTESTCLI_NETWORK_EXTENSION_HPP
+#pragma once
 
+#include <memory>
 #include <string>
 #include <vector>
 
-namespace network {
-  // executes ext_http tests according to provided args
-  // Input:
-  // not implemented
-  void processExtHttp(const std::vector<std::string> &args);
+struct HostApiCommandArgs {
+  std::string function;
+  std::vector<std::string> input;
+};
 
-  // executes ext_network_state tests according to provided args
-  // Input:
-  // not implemented
-  void processExtNetworkState(const std::vector<std::string> &args);
-} // namespace network
+// parses CLI input
+HostApiCommandArgs extractHostApiArgs(int argc, char **argv);
 
-#endif // KAGOMECROSSTESTCLI_NETWORK_EXTENSION_HPP
+void processHostApiCommands(const HostApiCommandArgs& args);

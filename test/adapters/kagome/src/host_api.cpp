@@ -22,19 +22,17 @@
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
-#include "subcommand_router.hpp"
+#include "subcommand.hpp"
 
-#include "extension.hpp"
-#include "extension/storage.hpp"
-#include "extension/network.hpp"
-#include "extension/crypto.hpp"
-#include "extension/child_storage.hpp"
-
+#include "host_api.hpp"
+#include "host_api/crypto.hpp"
+#include "host_api/storage.hpp"
+#include "host_api/child_storage.hpp"
 
 namespace po = boost::program_options;
 
-ExtensionCommandArgs extractExtensionArgs(int argc, char **argv){
-  po::options_description desc("Extension codec related tests\nAllowed options:");
+HostApiCommandArgs extractHostApiArgs(int argc, char **argv){
+  po::options_description desc("HostApi codec related tests\nAllowed options:");
   boost::optional<std::string> function;
   boost::optional<std::string> inputStr;
 
@@ -59,7 +57,7 @@ ExtensionCommandArgs extractExtensionArgs(int argc, char **argv){
   BOOST_ASSERT_MSG(function, "Function is not stated");
   BOOST_ASSERT_MSG(inputStr, "Input data is not provided");
 
-  ExtensionCommandArgs args;
+  HostApiCommandArgs args;
 
   args.function = *function;
 
@@ -73,7 +71,7 @@ ExtensionCommandArgs extractExtensionArgs(int argc, char **argv){
   return std::move(args);
 }
 
-void processExtensionsCommands(const ExtensionCommandArgs& args){
+void processHostApiCommands(const HostApiCommandArgs& args){
   SubcommandRouter<const std::vector<std::string>&> router;
 
   // test storage functions

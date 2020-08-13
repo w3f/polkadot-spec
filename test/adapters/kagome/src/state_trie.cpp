@@ -17,12 +17,9 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "trie.hpp"
+#include "state_trie.hpp"
 
-#include <iostream>
-
-#define BOOST_ENABLE_ASSERT_HANDLER
-#include <boost/assert.hpp>
+#include "assert.hpp"
 
 #include <boost/program_options.hpp>
 
@@ -35,7 +32,10 @@
 #include <storage/trie/impl/trie_storage_backend_impl.hpp>
 #include <storage/trie/impl/trie_storage_impl.hpp>
 
-#include "subcommand_router.hpp"
+#include "subcommand.hpp"
+
+#include <iostream>
+
 
 namespace po = boost::program_options;
 

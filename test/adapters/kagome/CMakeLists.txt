@@ -73,23 +73,21 @@ add_executable(kagome-adapter
   src/main.cpp
   src/assert.cpp
   src/assert.hpp
-  src/subcommand_router.hpp
+  src/subcommand.hpp
   src/scale_codec.cpp
   src/scale_codec.hpp
-  src/trie.cpp
-  src/trie.hpp
-  src/extension.cpp
-  src/extension.hpp
-  src/extension/storage.cpp
-  src/extension/storage.hpp
-  src/extension/network.cpp
-  src/extension/network.hpp
-  src/extension/child_storage.cpp
-  src/extension/child_storage.hpp
-  src/extension/crypto.cpp
-  src/extension/crypto.hpp
-  src/extension/helpers.cpp
-  src/extension/helpers.hpp
+  src/state_trie.cpp
+  src/state_trie.hpp
+  src/host_api.cpp
+  src/host_api.hpp
+  src/host_api/helpers.cpp
+  src/host_api/helpers.hpp
+  src/host_api/crypto.cpp
+  src/host_api/crypto.hpp
+  src/host_api/storage.cpp
+  src/host_api/storage.hpp
+  src/host_api/child_storage.cpp
+  src/host_api/child_storage.hpp
 )
 
 # FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")

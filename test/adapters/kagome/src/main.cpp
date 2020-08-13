@@ -24,11 +24,11 @@
 
 #include <common/logger.hpp>
 
-#include "subcommand_router.hpp"
+#include "subcommand.hpp"
 
 #include "scale_codec.hpp"
-#include "trie.hpp"
-#include "extension.hpp"
+#include "state_trie.hpp"
+#include "host_api.hpp"
 
 /**
  * Implementation of Polkadot Host API, SCALE codec and Merkle-Patricia
@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
     processTrieCommand(extractTrieArgs(argc, argv));
   });
   router.addSubcommand("host-api", [](int argc, char **argv) {
-    processExtensionsCommands(extractExtensionArgs(argc, argv));
+    processHostApiCommands(extractHostApiArgs(argc, argv));
   });
 
   std::string commands_list = "Valid subcommands are: ";
