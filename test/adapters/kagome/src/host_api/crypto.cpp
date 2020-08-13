@@ -21,55 +21,7 @@
 
 #include "helpers.hpp"
 
-#include <common/buffer.hpp>
-#include <common/hexutil.hpp>
-
-#include <iostream>
-#include <sstream>
-#include <numeric>
-
 namespace crypto {
-
-  // Input: data
-  void processHashFunctionTest(std::string_view name, uint32_t size, const std::vector<std::string>& args) {
-      helpers::RuntimeEnvironment environment;
-
-      // Allocate input
-      std::string data = args[0];
-
-      // Call hash function
-      std::stringstream function;
-      function << "rtm_ext_" << name << "_" << size * 8;
-
-      auto hash = environment.execute<helpers::Buffer>(function.str(), data);
-
-      BOOST_ASSERT_MSG(hash.size() == size, "Incorrect hash size.");
-
-      // Print result
-      std::cout << hash.toHex() << std::endl;
-  }
-
-  // Input: value1, value2
-  void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args) {
-    helpers::RuntimeEnvironment environment;
-
-    // Parse input arguments
-    std::string values = std::accumulate(args.cbegin(), args.cend(), std::string(""));
-
-    std::vector<uint32_t> lengths;
-    std::transform(args.cbegin(), args.cend(), std::back_inserter(lengths),
-      [](const std::string& s) { return s.length(); }
-    );
-
-    // Compute enumerated trie root
-    auto hash = environment.execute<helpers::Buffer>(
-      "rtm_ext_blake2_256_enumerated_trie_root", values, lengths
-    );
-
-    // Print result
-    std::cout << hash.toHex() << std::endl;
-  }
-
   // TODO: Implement
   void processExtEd25519(const std::vector<std::string> &args){}
 

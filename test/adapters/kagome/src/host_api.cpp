@@ -26,8 +26,10 @@
 
 #include "host_api.hpp"
 #include "host_api/crypto.hpp"
+#include "host_api/hashing.hpp"
 #include "host_api/storage.hpp"
 #include "host_api/child_storage.hpp"
+#include "host_api/trie.hpp"
 
 namespace po = boost::program_options;
 
@@ -74,98 +76,124 @@ HostApiCommandArgs extractHostApiArgs(int argc, char **argv){
 void processHostApiCommands(const HostApiCommandArgs& args){
   SubcommandRouter<const std::vector<std::string>&> router;
 
-  // test storage functions
-  router.addSubcommand("test_clear_prefix", [](const std::vector<std::string>& args) {
-    storage::processExtClearPrefix(args);
+  // test storage
+  router.addSubcommand("ext_storage_set_version_1", [](const std::vector<std::string>& args) {
+    storage::processSetGet(args[0], args[1]);
   });
-  router.addSubcommand("test_clear_storage", [](const std::vector<std::string>& args) {
-    storage::processExtClearStorage(args);
+  router.addSubcommand("ext_storage_get_version_1", [](const std::vector<std::string>& args) {
+    storage::processSetGet(args[0], args[1]);
   });
-  router.addSubcommand("test_exists_storage", [](const std::vector<std::string>& args) {
-    storage::processExtExistsStorage(args);
+  router.addSubcommand("ext_storage_read_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl; // TODO not implemented
   });
-  router.addSubcommand("test_set_get_storage", [](const std::vector<std::string>& args) {
-    storage::processExtGetAllocatedStorage(args);
+  router.addSubcommand("ext_storage_clear_version_1", [](const std::vector<std::string>& args) {
+    storage::processClear(args[0], args[1]);
   });
-  router.addSubcommand("test_set_get_storage_into", [](const std::vector<std::string>& args) {
-    storage::processExtGetAllocatedStorageInto(args);
+  router.addSubcommand("ext_storage_exists_version_1", [](const std::vector<std::string>& args) {
+    storage::processExists(args[0], args[1]);
   });
-  router.addSubcommand("test_storage_root", [](const std::vector<std::string>& args) {
-    storage::processExtStorageRoot(args);
+  router.addSubcommand("ext_storage_clear_prefix_version_1", [](const std::vector<std::string>& args) {
+    storage::processClearPrefix(args[0], args[1], args[2], args[3], args[4]);
   });
-  router.addSubcommand("test_storage_changes_root", [](const std::vector<std::string>& args) {
-    //storage::processExtStorageChangesRoot(args); TODO: not implemented
+  router.addSubcommand("ext_storage_root_version_1", [](const std::vector<std::string>& args) {
+    storage::processRoot(args[0], args[1], args[2], args[3]);
   });
-
-  // test local storage
-  router.addSubcommand("test_set_get_local_storage", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args); TODO: not implemented
-  });
-  router.addSubcommand("test_local_storage_compare_and_set", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args); TODO: not implemented
+  router.addSubcommand("ext_storage_next_key_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl; // TODO not implemented
   });
 
-  // test crypto hash functions
-  router.addSubcommand("test_blake2_128", [](const std::vector<std::string>& args) {
-    crypto::processHashFunctionTest("blake2", 16, args);
+  // test child storage TODO: all not implemented
+  router.addSubcommand("ext_storage_child_set_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_blake2_256", [](const std::vector<std::string>& args) {
-    crypto::processHashFunctionTest("blake2", 32, args);
+  router.addSubcommand("ext_storage_child_get_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_keccak_256", [](const std::vector<std::string>& args) {
-    crypto::processHashFunctionTest("keccak", 32, args);
+  router.addSubcommand("ext_storage_child_read_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_twox_64", [](const std::vector<std::string>& args) {
-    crypto::processHashFunctionTest("twox", 8, args);
+  router.addSubcommand("ext_storage_child_clear_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_twox_128", [](const std::vector<std::string>& args) {
-    crypto::processHashFunctionTest("twox", 16, args);
+  router.addSubcommand("ext_storage_child_storage_kill_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_twox_256", [](const std::vector<std::string>& args) {
-    crypto::processHashFunctionTest("twox", 32, args);
+  router.addSubcommand("ext_storage_child_exists_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-
-  router.addSubcommand("test_blake2_256_enumerated_trie_root", [](const std::vector<std::string>& args) {
-    crypto::processExtBlake2_256EnumeratedTrieRoot(args);
+  router.addSubcommand("ext_storage_child_clear_prefix_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-
-  // test crypto functions
-  router.addSubcommand("test_ed25519", [](const std::vector<std::string>& args) {
-    crypto::processExtEd25519(args);
+  router.addSubcommand("ext_storage_child_root_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_sr25519", [](const std::vector<std::string>& args) {
-    crypto::processExtSr25519(args);
+  router.addSubcommand("ext_storage_child_next_key_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
 
-  //test child storage functions
-  router.addSubcommand("test_clear_child_prefix", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+  // test crypto TODO: all not implemented
+  router.addSubcommand("ext_crypto_ed25519_public_keys_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_child_storage_root", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+  router.addSubcommand("ext_crypto_ed25519_generate_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_get_child_storage_into", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+  router.addSubcommand("ext_crypto_ed25519_sign_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_clear_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildStorage(args);
+  router.addSubcommand("ext_crypto_ed25519_verify_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_exists_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtExistsChildStorage(args);
+  router.addSubcommand("ext_crypto_sr25519_public_keys_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_kill_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtKillChildStorage(args);
+  router.addSubcommand("ext_crypto_sr25519_generate_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
-  router.addSubcommand("test_set_get_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtSetGetChildStorage(args);
+  router.addSubcommand("ext_crypto_sr25519_sign_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
+  });
+  router.addSubcommand("ext_crypto_sr25519_verify_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
   });
 
-  // test network functions
-  router.addSubcommand("test_http", [](const std::vector<std::string>& args) {
-    network::processExtHttp(args);
+  // test hashing
+  router.addSubcommand("ext_hashing_blake2_128_version_1", [](const std::vector<std::string>& args) {
+    hashing::processHashFunction("blake2", 16, args[0]);
   });
-  router.addSubcommand("test_network_state", [](const std::vector<std::string>& args) {
-    network::processExtNetworkState(args);
+  router.addSubcommand("ext_hashing_blake2_256_version_1", [](const std::vector<std::string>& args) {
+    hashing::processHashFunction("blake2", 32, args[0]);
+  });
+  router.addSubcommand("ext_hashing_keccak_256_version_1", [](const std::vector<std::string>& args) {
+    hashing::processHashFunction("keccak", 32, args[0]);
+  });
+  router.addSubcommand("ext_hashing_sha2_256_version_1", [](const std::vector<std::string>& args) {
+    hashing::processHashFunction("sha2", 32, args[0]);
+  });
+  router.addSubcommand("ext_hashing_twox_64_version_1", [](const std::vector<std::string>& args) {
+    hashing::processHashFunction("twox", 8, args[0]);
+  });
+  router.addSubcommand("ext_hashing_twox_128_version_1", [](const std::vector<std::string>& args) {
+    hashing::processHashFunction("twox", 16, args[0]);
+  });
+  router.addSubcommand("ext_hashing_twox_256_version_1", [](const std::vector<std::string>& args) {
+    hashing::processHashFunction("twox", 32, args[0]);
+  });
+
+  // test allocator TODO: all not implemented
+  router.addSubcommand("ext_allocator_malloc_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
+  });
+  router.addSubcommand("ext_allocator_free_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl;
+  });
+
+  // test trie hashes
+  router.addSubcommand("ext_trie_blake2_256_root_version_1", [](const std::vector<std::string>& args) {
+    std::cout << "unknown" << std::endl; // TODO: not implemented
+  });
+  router.addSubcommand("ext_trie_blake2_256_ordered_root_version_1", [](const std::vector<std::string>& args) {
+    trie::processOrderedRoot(args[0], args[1], args[2]);
   });
 
   std::string commands_list = "Valid function are: ";

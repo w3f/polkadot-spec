@@ -23,19 +23,8 @@
 #include <string>
 #include <vector>
 
+// TODO update and implement module
 namespace crypto {
-
-// execute hash function test by calling the select hash function
-// and target hash size with provided input.
-//
-// @param name is the name of the hash (i.e. blake2, keccak or twox)
-// @param size is the expected size of the hash output
-// @param the first entry of args is passed as input to the function
-void processHashFunctionTest(std::string_view name, uint32_t size, const std::vector<std::string>& args);
-
-// executes ext_blake2_256_enumerated_trie_root tests according to provided args
-// Input: value1, value2
-void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args);
 
 // executes ext_ed25519 tests according to provided args
 // Input: data
