@@ -2,6 +2,7 @@ module StringHelpers
 
 export CmdList, CmdString, CmdStringList, CmdStringTuple, cmdjoin, cmdcombine
 export StringList, stringify, combine, inquotes, commajoin, flatzip
+export MaybeString, MaybeStringList
 
 using Base.Iterators
 
@@ -77,6 +78,7 @@ StringList = List{String}
 "Ordered collection of string lists."
 StringListList = List{StringList}
 
+
 "Turn parameter set into a pure string representation."
 function stringify(self::ListList{<:Any})::StringListList
     map(xs -> map(string, xs), self)
@@ -116,6 +118,31 @@ end
 function commajoin(self::ListList{<:Any})::StringList
     self |> stringify |> commajoin
 end
+
+
+"""
+# String-or-nothing collections
+"""
+
+"A string (even empty) or nothing"
+MaybeString = Union{String, Nothing}
+
+"Simple string-or-nothing list abstraction."
+MaybeStringList = Union{List{MaybeString}, List{String}, List{Nothing}}
+
+
+"Convert StringList to MaybeStringList"
+Base.convert(::Type{MaybeStringList}, from::List{String}) = List{MaybeString}(from)
+
+"Convert NothingList to MaybeStringList"
+Base.convert(::Type{MaybeStringList}, from::List{Nothing}) = List{MaybeString}(from)
+
+
+#"Construct MaybeStringList from empty list"
+Union{List{MaybeString}, List{String}, List{Nothing}}(list::List{Any}) = List{MaybeString}(list)
+
+#"Construct MaybeStringList by filling it with MaybeString"
+Union{List{MaybeString}, List{String}, List{Nothing}}(v::MaybeString, n::Int64) = List{MaybeString}(v, n)
 
 
 """
