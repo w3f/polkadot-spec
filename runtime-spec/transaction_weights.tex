@@ -415,22 +415,30 @@ preliminary work on the environment, since those conditions cannot be created
 with simply selected parameters. The analysis process shows indicators on how
 the preliminary work should be implemented.
 
-\subsection{Practical Example \#1}
+\subsection{Practical Example \#1: {\texttt request\_judgement}}
 
 In Polkadot, accounts can save information about themselves onchain, known as
 the "Identity Info". This includes information such as display name, legal name,
 email address and so on. Polkadot selects a set of registrars, entities elected
-by the Polkadot public referendum, which can judge identities and therefore
+by \syed{the}{a?} Polkadot public referendum, which can \syed{judge}{could you explain
+  judge here more, is it just validating true false for all fields? some fields?} identities and therefore
 incentivizes a reputation model. The judgement itself is done offchain. The
-registrars rating, however, is saved onchain, directly in the corresponding
+registrars \syed{rating}{what rating}, however, is saved onchain, directly in the corresponding
 Identity Info. It's also note worthy that Identiy Info can contain additional
-fields, set manually by the corresponding account holder.
+fields, set manually by the corresponding account holder. \syed{}{maybe an example of identity fields corresponding to an account clear things up}
 \newline
 
 The function \verb|request_judgement| from the \verb|identity| pallet allows
-users to request judgement from a specific registrar. If this function is called
-by a previously judged user it implies that the Identity Info should be
-rejudged. Studying this function reveals multiple design choices that can impact
+users to request judgement from a specific registrar.
+
+\syed{}{I would put the signature/prototype of the function here so the reader knows which parameter you
+send to the function. This applies to all examples please.}
+
+If this function is called
+by a \syed{previously judged user}{ by a specific registerar} it implies that the Identity Info should be
+rejudged.
+
+Studying this function reveals multiple design choices that can impact
 performance, as it will be revealed by this analysis.
 \newline
 
@@ -452,13 +460,13 @@ transaction.
 let mut id = <IdentityOf<T>>::get(&sender).ok_or(Error::<T>::NoIdentity)?;
 \end{verbatim}
 
-The Identity Info contains all fields that have a value set, in an ordered form.
-It then proceeds to search all those entries for the specified registrar index.
-If the entry can be found, the corresponding value is updated to the value
+The Identity Info contains all fields that have a \syed{value set}{what is a value set}, in an ordered form.
+It then proceeds to search all \syed{those entries}{which entries/clarify} for the specified registrar index. \syed{}{so the identity info is read from the state storage right? then maybe clarify that as well}
+If the entry can be found, the corresponding value is \syed{updated}{ isn't there any kind of authentication of the registerar judgement?} to the value
 passed on as the function parameters (assuming the registrar is not "stickied",
 which implies it cannot be changed). If the entry cannot be found, the value is
 inserted into the index where a matching element can be inserted while
-maintaining sorted order. This results in memory reallocation.
+maintaining sorted order. \syed{This results in memory reallocation}{ which results in considerable resource consumption?}.
 
 \begin{verbatim}
 match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
@@ -471,11 +479,9 @@ match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
 }
 \end{verbatim}
 
-In the end, the function ensures that the sender of the extrinsic has the
+\syed{In the end, the function ensures that the sender of the extrinsic has the
 required balance in order to pay the fee, a balance that is adjustable and
-determined by the Runtime itself. Then, an event is created to insert the
-Identity Info into storage. The creation of events is lightweight, but its
-execution is what will actually commit the state changes.
+determined by the Runtime itself}{what if an attacker submit lots of zero balanace account for judgement, while the transaction fails still they succeed in wasting the runtime time}. Then, an event is created to insert the Identity Info into storage. The creation of events is lightweight, but its execution is what will actually commit the state chgnanges.
 
 \begin{verbatim}
 T::Currency::reserve(&sender, registrar.fee)?;
@@ -487,19 +493,26 @@ Self::deposit_event(RawEvent::JudgementRequested(sender, reg_index));
 
 The following points must be considered:
 
+\syed{}
+     {
+   Usage: The use of a plural noun after amount of (an amount of
+   bananas; the amount of refugees) should be avoided: a quantity of
+   bananas; the number of refugees
+   http://thefreedictionary.com/amount
+}
 \begin{itemize}
-  \item Varying amount of registrars.
-  \item Varying amount of preexisting accounts in storage.
-  \item The specified registrar is searched for in the Identity Info.
+  \item Varying \syed{amount}{ does this mean number/count? } of registrars.
+  \item Varying \syed{amount}{ same as above }  of preexisting accounts in storage.
+  \item \syed{The specified registrar}{why does it matter} is searched for in the Identity Info.
   Additionally, if a new value gets inserted into the byte array, memory get
   reallocated. Depending on the size of the Identity Info, the execution time
-  can vary.
-  \item Varying sizes of Identity Info, including additional fields.
+  can vary.}
+  \item \syed{Varying sizes of Identity Info, including additional fields.}{ maybe we can be more accurate here }
   \item It is legitimate to introduce additional weights for changes the sender
-  has influence over, such the additional fields in the Identity Info.
+  has influence over, such as the additional fields in the Identity Info.\syed{}{could you explain more, I don't get it why.}
 \end{itemize}
 
-\subsubsection{Preliminary Work}
+\subsubsection{\syed{Preliminary Work}{I would call it Benchmarking Framework instead}}
 
 The Polkadot Runtime specifies the \verb|MaxRegistrars| constant, which will
 prevent the list of registrars of reaching an undesired length. This value
@@ -512,8 +525,8 @@ defined as follows:
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $request\_judgement$ Runtime function}
   \SetAlgoLined
-  \KwResult{\textit{collection:} a collection of time measurements of all
-  benchmark iterations}
+  \KwResult{\syed{\textit{collection:} a collection of time measurements of all
+  benchmark iterations}{the algorithm should return $\TWF$ be average or worst case of the collection to keep the document consistent}}
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
@@ -525,17 +538,17 @@ defined as follows:
       $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), 100))};\\
       \textsc{Add-To($collection$, $time$)};
     }
-    \Return{$collection$}
+    \Return{\syed{$collection$}{$\TWF$}}
   }
 \end{algorithm}
 
 \begin{itemize}
-  \item \textsc{Pollute-Storage} \SubItem{As clarified in Section
-  \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
+  \item \textsc{\syed{Pollute-Storage}{I would explain this process in the general section before going into example as it seems is just a condition for all test which touch storage} \SubItem{As clarified in Section
+  \ref{sec:blockchain-state}, the benchmarks should be run on a diverse range of
   storage states. From (mostly) empty databases to database with a (longer)
   history.}
   \item \textsc{Generate-Registrars($amount$)}
-  \SubItem{Creates $amount$ of registrars and inserts those records into storage.}
+  \SubItem{Creates \syed{$amount$ of registrars}{no ``amount of'' before plural names} and inserts those records into storage.}
   \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
       of the concatenated input of $name$ and $index$ representing the address
       of a account. This function only creates an address and does not conduct
@@ -547,29 +560,29 @@ defined as follows:
   \item \textsc{Request-Judgement($registrar\_index$, $max\_fee$)}
   \SubItem{Calls the corresponding $request\_judgement$ Runtime function and passes on
   the required parameters.}
-  \item \textsc{Random($num$)}
+  \item \textsc{\syed{Random($num$)}{same here, I'd move the explanation of super general functions before the example section}}
   \SubItem{Picks a random number between 0 and $num$. This should be used when the benchmark
   should account for unpredictable values.}
   \item \textsc{Add-To($collection$, $time$)}
   \SubItem{Adds a returned time measurement ($time$) to $collection$.}
 \end{itemize}
 
-\subsection{Practical Example \#2}\label{sec:practical-example-payout-stakers}
+\subsection{Practical Example \#2 {\texttt payout\_stakers}}\label{sec:practical-example-payout-stakers}
 
 \subsubsection{Analysis}
 
 The function \verb|payout_stakers| from the \verb|staking| Pallet can be called
 by a single account in order to payout the reward for all nominators who back a
 particular validator. The reward also covers the validator's share. This
-function is interesting because it iterators over a range of nominators, which
+function is interesting because it iterates over a range of nominators, which
 varies, and does I/O operation for each of them.
 \newline
 
-First, this function makes some basic checks to verify if the specified era is
-not higher then the current era (future) and is within the allowed range
-("history depth"), specified by the Runtime. After that, it fetches the era
+First, this function makes few basic checks to verify if the specified era is
+not higher then the current era (as it is not in the future) and is within the allowed range 
+also known as "history depth", as specified by the Runtime. After that, it fetches the era
 payout from storage and additionally verifies whether the specified account is
-indeed a validator and receives the corresponding "Ledger".
+indeed a validator and receives the corresponding \syed{"Ledger"}{perhaps don't drop jurgen without explanation, does this mean account?}.
 
 \begin{verbatim}
 let era_payout = <ErasValidatorReward<T>>::get(&era)
@@ -579,9 +592,9 @@ let controller = Self::bonded(&validator_stash).ok_or(Error::<T>::NotStash)?;
 let mut ledger = <Ledger<T>>::get(&controller).ok_or_else(|| Error::<T>::NotController)?;
 \end{verbatim}
 
-The Ledger keeps information about the stash, such as actively bonded balance
+\syed{The Ledger keeps information about the stash, such as actively bonded balance
 and a list of tracked rewards. The function only retains the entries of the
-"history depth", and conducts a binary search for the specified era.
+history depth, and conducts a binary search for the specified era.}{could you decrypt this for people who are not familiar with Runtime jurgen}
 
 \begin{verbatim}
 ledger.claimed_rewards.retain(|&x| x >= current_era.saturating_sub(history_depth));
@@ -597,8 +610,7 @@ The retained claimed rewards are inserted back into storage.
 <Ledger<T>>::insert(&controller, &ledger);
 \end{verbatim}
 
-The Runtime is actually optimized to some degree: it only fetches a list of the
-highest staked nominators, a maximum of 64. The rest gets no reward.
+As an optimizition, Runtime only fetches a list of the 64 highest staked nominators. Accordingly, any lower staked nominator gets no reward. 
 
 \begin{verbatim}
 let exposure = <ErasStakersClipped<T>>::get(&era, &ledger.stash);
@@ -623,8 +635,7 @@ if let Some(imbalance) = Self::make_payout(
 }
 \end{verbatim}
 
-Then, the nominators receive a payout. The functions loops through the nominator
-list, conducting a insertion into storage and a creation of a deposit event for
+Then, the nominators receive \syed{a}{is payout countable} payout. The functions loops over the nominator list, conducting an insertion into storage and a creation of a deposit event for
 each of the nominators.
 
 \begin{verbatim}
@@ -653,14 +664,21 @@ The following points must be considered:
   \item Looping through a list of nominators and creating I/O operations for
   each increases execution time. The Runtime fetches up to 64 nominators.
 \end{itemize}
+\syed{}{I'm surprised only 64 nominator per validotor get paid, what is the incentive of others
+  to nominate then?}
 
-\subsubsection{Preliminary Work}
+\subsubsection{\syed{Preliminary Work}{better naming}}
 
-The Polkadot Runtime defines the \verb|HistoryDepth| constant, which dictates
-the amount of Eras the reward system takes under consideration. Additionally,
-the constant \verb|MaxNominatorRewardedPerValidator| specifies the maximum
+\begin{definition}
+  \label{defn-history-depth} {\b History Depth} indicated as {\textt MaxNominatorRewardedPerValidator} is a constant \syed{specified by the Polkadot Runtime}{so it is hard-coded or there is a algorithm to compute it/in that case I'd use calculated by?} which dictates the amount of Eras the reward system takes under consideration. \syed{}{I think consideration need to be defined}.
+\end{definition}
+
+\begin{definition}
+  \label{defn-max_nominator_reward_per_validator}
+        {\b Maximum Nominator Rewarded Per Validator} indicated as {\textt MaxNominatorRewardedPerValidator}, specifies the maximum
 amount of the highest-staked nominators which will get a reward. Those values
 should have some influence in the benchmarking process.
+\end{definition}
 \newline
 
 The benchmarking implementation for the function $payout\_stakers$ can be
@@ -670,8 +688,8 @@ defined as follows:
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $payout\_stakers$ Runtime function}
   \SetAlgoLined
-  \KwResult{\textit{collection:} a collection of time measurements of all
-  benchmark iterations}
+  \KwResult{\syed{\textit{collection:} a collection of time measurements of all
+  benchmark iterations}{$\TWF$}}
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
@@ -684,12 +702,12 @@ defined as follows:
         \For{$nominator \in nominators$}{
           \textsc{Nominate($validator$, $nominator$)}
         }
-        $era\_index \leftarrow$ \textsc{Create-Rewards($validator$, $nominators$, $era\_depth$)};\\
+        $era\_indenx \leftarrow$ \textsc{Create-Rewards($validator$, $nominators$, $era\_depth$)};\\
         $time \leftarrow$ \textsc{Timer(Payout-Stakers($validator$), $era\_index$))};\\
         \textsc{Add-To($collection$, $time$)};
       }
     }
-    \Return{$collection$}
+    \Return{\syed{$collection$}{$\TWF$}}
   }
 \end{algorithm}
 
@@ -708,16 +726,15 @@ defined as follows:
   \SubItem{Starts nomination of $nominator$ for $validator$ by bonding balances.}
   \item \textsc{Create-Rewards($validator$, $nominators$, $era\_depth$)}
   \SubItem{Starts an Era and creates pending rewards for $validator$ and $nominators$}
-  \item \textsc{Timer($function$)} \SubItem{Measures the time from the start of
-      the specified $function$ to its completion.}
+  \item \textsc{Timer($function$)} \syed{\SubItem{Measures the time from the start of
+      the specified $function$ to its completion.}}{just refer to its original definition}
   \item \textsc{Add-To($collection$, $time$)} \SubItem{Adds a returned time
       measurement ($time$) to $collection$.}
 \end{itemize}
 
-\subsection{Practical Example \#3}
+\subsection{Practical Example \#3: \texttt{balances}}
 
-The $transfer$ function of the \textit{balances} module is designed to move the
-specified balance by the sender to the receiver.
+The $transfer$ function of the \syed{\textit{balances}}{texttt or textit let be consistent} module is designed to move the specified balance by the sender to the receiver.
 
 \subsubsection{Analysis}
 
@@ -734,20 +751,18 @@ let dest = T::Lookup::lookup(dest)?;
 )?;
 \end{verbatim}
 
-However, what's interesting about this function, especially regarding the
-property \verb|AllowDeath|, is how it manages (non-)existing accounts. Two types
-of behaviors are to consider:
+However, one need to pay close attention to the property \verb|AllowDeath| and to how the function treat existingand non-existing accounts differently. Two types of behaviors are to consider:
 
 \begin{itemize}
-  \item Transfer will kill the sender account (by completely depleting the
-  balance to zero).
-  \item Transfer will create the recipient account (the recipient account
-  doesn't have a balance yet).
+  \item If the transfer completely deplete the
+  sender account balance to zero, it \syed{kill}{you need to define kill or use delete/remove from storage} as well.
+  \item If recipient account
+    has no balance, the transfer also needs to create the recipient account.
 \end{itemize}
 
 \subsubsection{Considerations}
 
-Specific parameters can could have a big impact for this specific function. In
+Specific parameters can could have a significant impact for this specific function. In
 order to trigger the two behaviors mentioned above, the following parameters are
 selected:
 
