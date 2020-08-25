@@ -421,6 +421,7 @@
   \;
 
   <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
+  <label|sect-rte-apply-extrinsic>
 
   Apply the extrinsic outside of the block execution function. This does not
   attempt to validate anything regarding the block, but it builds a list of
