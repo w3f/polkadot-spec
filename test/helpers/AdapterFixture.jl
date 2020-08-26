@@ -23,7 +23,7 @@ mutable struct Builder
     inputs::CmdList
 
     "Expected output generated with reference implementations"
-    outputs::StringList
+    outputs::MaybeStringList
 
     "Constructor: Only allow to set name on construction"
     Builder(name, default=``) = new(name, default, [default], [], [])
@@ -66,13 +66,11 @@ function commit!(self::Builder)
 end
 
 """
-Commit commands currently being build to inputs list together with expected
-output. Pass empty list to ignore output checks.
+Commit commands currently being build to inputs list together with list 
+of expected output. Use nothing entries to disable output checks.
 """
-function commit!(self::Builder, outputs::StringList)
-    if isempty(outputs)
-        outputs = fill("", length(self.current))
-    elseif length(outputs) != length(self.current)
+function commit!(self::Builder, outputs::MaybeStringList)
+    if length(outputs) != length(self.current)
         error("Different count of Inputs and expected outputs.")
     end
 
@@ -80,9 +78,12 @@ function commit!(self::Builder, outputs::StringList)
     append!(self.inputs,  self.current)
 end
 
-"Commit commands currently being build to inputs list, disabling output check."
-function commit!(self::Builder, _::Nothing)
-    commit!(self, StringList())
+"""
+Commit commands currently being build to inputs list together with a single
+expected output for all of them. Use nothing to disable output checks.
+"""
+function commit!(self::Builder, output::MaybeString)
+    commit!(self, MaybeStringList(output, length(self.current)))
 end
 
 "Reset current command being build to default"
@@ -127,9 +128,9 @@ function run(self::Builder, adapter::CmdString)
         try
             result = read(cmd, String)
 
-            if output in ["", "\n"]
+            if output == nothing
                 # Empty outputs are used to disable comparison
-                @test true
+                @test output == nothing
 
                 if Config.verbose
                     println("└ [IGNORED] ", result)
