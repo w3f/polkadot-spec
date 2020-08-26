@@ -8,6 +8,11 @@ using Test
 using ..StringHelpers
 using ..Config
 
+
+"Exit code to state outcome of adapter test, based on errno"
+@enum AdapterExitCode Success Failure NotSupported=95
+
+
 "Structure used behind the scene to collect test cases"
 mutable struct Builder
     "Name of the testsuite"
@@ -119,44 +124,56 @@ function run(self::Builder, adapter::CmdString)
 
     for (input, output) in zip(self.inputs, self.outputs)
 
+        # Execute adapter and collect output and exit code
         cmd = cmdjoin(adapter, input)
 
         if Config.verbose
             println("┌ [COMMAND] ", cmd)
         end
 
-        try
-            result = read(cmd, String)
+        stream = Pipe()
+        proc = Base.run(pipeline(ignorestatus(cmd), stdout=stream, stderr=stream))
+        close(stream.in)
+        result = read(stream, String)
 
-            if output == nothing
-                # Empty outputs are used to disable comparison
-                @test output == nothing
+        # Check if adapter is missing adaption (special case)
+        if proc.exitcode == Int(NotSupported)
+            @warn "Missing adaption: $cmd"
+            @test_skip AdapterExitCode(proc.exitcode) == NotSupported
+            continue
+        end
 
-                if Config.verbose
-                    println("└ [IGNORED] ", result)
-
-                    if isempty(result)
-                        println()
-                    end
-                end
-            elseif isempty(result)
-                # Empty test result are interpretted as missing adaption
-                @warn "Missing adaption: $cmd"
-                @test_skip false
-            else
+        # Check exit code and result
+        if success(proc)
+            if output != nothing
                 # Default: Compare result against expected result
                 @test result == output
+            else
+                # Empty outputs are used to disable comparison
+                @test output == nothing
+            end
 
-                if Config.verbose
+        else
+            @error "Adapter failed running $cmd:\n$result"
+            @test success(proc)
+        end
+
+        if Config.verbose
+            if success(proc)
+                if output != nothing
                     println("└ [OUTPUTS] ", result)
+                else
+                    println("└ [IGNORED] ", result)
                 end
-             end
-        catch err
-            @error "Adapter failed: $err"
-            # Should be @test_broken, but does not fail CI
-            @test false
-        end # try-catch
-    end # for inputs
+            else
+                println("└ [FAILED] (", proc.exitcode, ") ", result)
+            end
+
+            if isempty(result)
+                println()
+            end
+        end
+   end # for inputs
 end
 
 "List of implementations with legacy adapter"
