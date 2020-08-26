@@ -96,15 +96,15 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
     storage::processExtStorageRoot(args);
   });
   router.addSubcommand("test_storage_changes_root", [](const std::vector<std::string>& args) {
-    //storage::processExtStorageChangesRoot(args); TODO: not implemented
+    throw NotImplemented(); // TODO: not implemented
   });
 
   // test local storage
   router.addSubcommand("test_set_get_local_storage", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args); TODO: not implemented
+    throw NotImplemented(); // TODO: not implemented
   });
   router.addSubcommand("test_local_storage_compare_and_set", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args); TODO: not implemented
+    throw NotImplemented(); // TODO: not implemented
   });
 
   // test crypto hash functions
@@ -141,25 +141,25 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
 
   //test child storage functions
   router.addSubcommand("test_clear_child_prefix", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+    child_storage::processExtClearChildPrefix(args);
   });
   router.addSubcommand("test_child_storage_root", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+    throw NotImplemented(); // TODO: not implemented
   });
   router.addSubcommand("test_get_child_storage_into", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+    throw NotImplemented(); // TODO: not implemented
   });
   router.addSubcommand("test_clear_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildStorage(args);
+    child_storage::processExtClearChildStorage(args);
   });
   router.addSubcommand("test_exists_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtExistsChildStorage(args);
+    child_storage::processExtExistsChildStorage(args);
   });
   router.addSubcommand("test_kill_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtKillChildStorage(args);
+    child_storage::processExtKillChildStorage(args);
   });
   router.addSubcommand("test_set_get_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtSetGetChildStorage(args);
+    child_storage::processExtSetGetChildStorage(args);
   });
 
   // test network functions

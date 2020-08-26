@@ -19,13 +19,19 @@
 
 #include "network.hpp"
 
+#include "helpers.hpp"
+
 namespace network {
 
   // Input:
-  void processExtHttp(const std::vector<std::string> &args){}
+  void processExtHttp(const std::vector<std::string> &args) {
+    throw NotImplemented(); // TODO: not implemented
+  }
 
 
   // Input:
-  void processExtNetworkState(const std::vector<std::string> &args){}
+  void processExtNetworkState(const std::vector<std::string> &args) {
+    throw NotImplemented(); // TODO: not implemented
+  }
 
 }

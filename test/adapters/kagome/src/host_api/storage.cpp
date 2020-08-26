@@ -148,8 +148,8 @@ namespace storage {
     helpers::RuntimeEnvironment environment;
 
     // Prepare environment
-    //environment.execute<void>("rtm_ext_storage_set_version_1", ":code", "");
-    //environment.execute<void>("rtm_ext_storage_set_version_1", ":heappages", uint64_t(8));
+    environment.execute<void>("rtm_ext_storage_set_version_1", ":code", "");
+    environment.execute<void>("rtm_ext_storage_set_version_1", ":heappages", uint64_t(8));
 
     // Insert data
     environment.execute<void>("rtm_ext_storage_set_version_1", key1, value1);
