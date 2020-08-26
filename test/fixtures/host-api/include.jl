@@ -21,7 +21,7 @@ HOSTAPI_FIXTURE_DATASETS = [
             HostApiInputs.child_def_child_type,
             HostApiInputs.key_value_1,
         ],
-        HostApiOutputs.child_child_def_type_key_value .* "\n",
+        HostApiOutputs.child_child_def_type_key_value,
     ],[
         HostApiFunctions.child_def_type_key_value_offset_buffer_size,
         [
@@ -48,13 +48,13 @@ HOSTAPI_FIXTURE_DATASETS = [
             HostApiInputs.key_value_1,
             HostApiInputs.key_value_2,
         ],
-        HostApiOutputs.child_child_def_type_key_value_key_value .* "\n",
+        HostApiOutputs.child_child_def_type_key_value_key_value,
     ],[
         HostApiFunctions.key_value,
         [
             HostApiInputs.key_value_1,
         ],
-        HostApiOutputs.key_value .* "\n",
+        HostApiOutputs.key_value,
     ],[
         HostApiFunctions.key_value_offset_buffer_size,
         [
