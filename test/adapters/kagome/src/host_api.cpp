@@ -84,7 +84,7 @@ void processHostApiCommands(const HostApiCommandArgs& args){
     storage::processSetGet(args[0], args[1]);
   });
   router.addSubcommand("ext_storage_read_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl; // TODO not implemented
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_clear_version_1", [](const std::vector<std::string>& args) {
     storage::processClear(args[0], args[1]);
@@ -99,62 +99,62 @@ void processHostApiCommands(const HostApiCommandArgs& args){
     storage::processRoot(args[0], args[1], args[2], args[3]);
   });
   router.addSubcommand("ext_storage_next_key_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl; // TODO not implemented
+    throw NotImplemented(); // TODO not implemented
   });
 
   // test child storage TODO: all not implemented
   router.addSubcommand("ext_storage_child_set_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_child_get_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_child_read_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_child_clear_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_child_storage_kill_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_child_exists_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_child_clear_prefix_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_child_root_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_storage_child_next_key_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
 
   // test crypto TODO: all not implemented
   router.addSubcommand("ext_crypto_ed25519_public_keys_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_crypto_ed25519_generate_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_crypto_ed25519_sign_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_crypto_ed25519_verify_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_crypto_sr25519_public_keys_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_crypto_sr25519_generate_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_crypto_sr25519_sign_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_crypto_sr25519_verify_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
 
   // test hashing
@@ -182,15 +182,15 @@ void processHostApiCommands(const HostApiCommandArgs& args){
 
   // test allocator TODO: all not implemented
   router.addSubcommand("ext_allocator_malloc_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_allocator_free_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl;
+    throw NotImplemented(); // TODO not implemented
   });
 
   // test trie hashes
   router.addSubcommand("ext_trie_blake2_256_root_version_1", [](const std::vector<std::string>& args) {
-    std::cout << "unknown" << std::endl; // TODO: not implemented
+    throw NotImplemented(); // TODO not implemented
   });
   router.addSubcommand("ext_trie_blake2_256_ordered_root_version_1", [](const std::vector<std::string>& args) {
     trie::processOrderedRoot(args[0], args[1], args[2]);

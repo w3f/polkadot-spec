@@ -76,9 +76,6 @@ namespace storage {
     );
 
     BOOST_ASSERT_MSG(cleared.empty(), "Value wasn't deleted");
-
-    // Print result
-    std::cout << "true" << std::endl;
   }
 
 
@@ -141,8 +138,6 @@ namespace storage {
       // Check if key2 was stored correctly
       BOOST_ASSERT_MSG(result.toString() == value2, "Value2 was deleted");
     }
-
-    std::cout << "true" << std::endl;
   }
 
 

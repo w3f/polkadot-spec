@@ -30,6 +30,7 @@
 #include "state_trie.hpp"
 #include "host_api.hpp"
 
+#include <cerrno>
 /**
  * Implementation of Polkadot Host API, SCALE codec and Merkle-Patricia
  * Tree compatibility tests
@@ -56,10 +57,14 @@ int main(int argc, char **argv) {
   }
 
   auto e1 = "Subcommand is not provided\n" + commands_list;
-  auto e2 = "Invalid subcommand\n" + commands_list;
   BOOST_ASSERT_MSG(argc > 1, e1.data());
-  BOOST_VERIFY_MSG(router.executeSubcommand(argv[1], argc - 1, argv + 1),
-                   e2.data());
+
+  try {
+    auto e2 = "Invalid subcommand\n" + commands_list;
+    BOOST_VERIFY_MSG(router.executeSubcommand(argv[1], argc - 1, argv + 1), e2.data());
+  } catch (const NotImplemented &e) {
+    return EOPNOTSUPP;
+  }
 
   return 0;
 }
