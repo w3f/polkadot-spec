@@ -48,4 +48,10 @@ namespace storage {
     const std::string_view key2, const std::string_view value2
   );
 
+  // executes ext_storage_next_key_version_1 test
+  void processNextKey(
+    const std::string_view key1, const std::string_view value1,
+    const std::string_view key2, const std::string_view value2
+  );
+
 } // namespace storage

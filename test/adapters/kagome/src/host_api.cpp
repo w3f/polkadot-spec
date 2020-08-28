@@ -104,7 +104,7 @@ void processHostApiCommands(const HostApiCommandArgs& args){
     storage::processRoot(args[0], args[1], args[2], args[3]);
   });
   router.addSubcommand("ext_storage_next_key_version_1", [](const std::vector<std::string>& args) {
-    throw NotImplemented(); // TODO not implemented
+    storage::processNextKey(args[0], args[1], args[2], args[3]);
   });
 
   // test child storage TODO: all not implemented

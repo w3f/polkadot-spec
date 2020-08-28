@@ -166,4 +166,41 @@ namespace storage {
     std::cout << hash.toHex() << std::endl;
   }
 
+
+  void processNextKey(
+    const std::string_view key1, const std::string_view value1,
+    const std::string_view key2, const std::string_view value2
+  ) {
+    helpers::RuntimeEnvironment environment;
+
+    // No next key available
+    auto next = environment.execute<helpers::Buffer>("rtm_ext_storage_next_key_version_1", key1);
+    BOOST_ASSERT_MSG(next.empty(), "Next is empty");
+
+    next = environment.execute<helpers::Buffer>("rtm_ext_storage_next_key_version_1", key2);
+    BOOST_ASSERT_MSG(next.empty(), "Next is empty");
+
+    // Insert data
+    environment.execute<void>("rtm_ext_storage_set_version_1", key1, value1);
+    environment.execute<void>("rtm_ext_storage_set_version_1", key2, value2);
+
+    // Try to read next key
+    next = environment.execute<helpers::Buffer>("rtm_ext_storage_next_key_version_1", key1);
+    if (key1.compare(key2) < 0) {
+        BOOST_ASSERT_MSG(next.toString() == key2, "Next is Key2");
+        std::cout << next.toString() << std::endl;
+    } else {
+        BOOST_ASSERT_MSG(next.empty(), "Next is empty");
+    }
+
+    // Try to read next key
+    next = environment.execute<helpers::Buffer>("rtm_ext_storage_next_key_version_1", key2);
+    if (key2.compare(key1) < 0) {
+        BOOST_ASSERT_MSG(next.toString() == key1, "Next is Key2");
+        std::cout << next.toString() << std::endl;
+    } else {
+        BOOST_ASSERT_MSG(next.empty(), "Next is empty");
+    }
+  }
+
 } // namespace storage
