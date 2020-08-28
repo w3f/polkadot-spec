@@ -147,18 +147,12 @@ namespace storage {
   ) {
     helpers::RuntimeEnvironment environment;
 
-    // Prepare environment
-    environment.execute<void>("rtm_ext_storage_set_version_1", ":code", "");
-    environment.execute<void>("rtm_ext_storage_set_version_1", ":heappages", uint64_t(8));
-
     // Insert data
     environment.execute<void>("rtm_ext_storage_set_version_1", key1, value1);
     environment.execute<void>("rtm_ext_storage_set_version_1", key2, value2);
 
-    // Compute storage root hash
+    // Compute and print storage root hash
     auto hash = environment.execute<helpers::Buffer>("rtm_ext_storage_root_version_1");
-
-    // Print hash
     std::cout << hash.toHex() << std::endl;
   }
 
