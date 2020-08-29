@@ -78,6 +78,9 @@ void processHostApiCommands(const HostApiCommandArgs& args){
   SubcommandRouter<const std::vector<std::string>&> router;
 
   // test storage
+  router.addSubcommand("test_storage_init", [](const std::vector<std::string>& args) {
+    storage::processInit();
+  });
   router.addSubcommand("ext_storage_set_version_1", [](const std::vector<std::string>& args) {
     storage::processSetGet(args[0], args[1]);
   });

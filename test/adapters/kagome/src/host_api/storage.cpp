@@ -26,6 +26,16 @@
 
 namespace storage {
 
+
+  void processInit() {
+    helpers::RuntimeEnvironment environment;
+
+    // Compute and print storage root hash
+    auto hash = environment.execute<helpers::Buffer>("rtm_ext_storage_root_version_1");
+    std::cout << hash.toHex() << std::endl;
+  }
+
+
   void processSetGet(const std::string_view key, const std::string_view value) {
     helpers::RuntimeEnvironment environment;
 

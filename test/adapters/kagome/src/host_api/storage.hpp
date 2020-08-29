@@ -24,6 +24,9 @@
 
 namespace storage {
 
+  // executes ext_storage_init test
+  void processInit();
+
   // executes ext_storage_set_version_1/ext_storage_get_version_1 test
   void processSetGet(const std::string_view key, const std::string_view value);
 
