@@ -57,17 +57,18 @@ HostApiCommandArgs extractHostApiArgs(int argc, char **argv){
   po::notify(vm);
 
   BOOST_ASSERT_MSG(function, "Function is not stated");
-  BOOST_ASSERT_MSG(inputStr, "Input data is not provided");
-
+  
   HostApiCommandArgs args;
-
+  
   args.function = *function;
+  
+  if(inputStr) {
 
-  std::stringstream inputStream(*inputStr);
-  std::string inputElement;
-  while(std::getline(inputStream, inputElement, ','))
-  {
-    args.input.push_back(inputElement);
+    std::stringstream inputStream(*inputStr);
+    std::string inputElement;
+    while(std::getline(inputStream, inputElement, ',')) {
+      args.input.push_back(inputElement);
+    }
   }
 
   return std::move(args);
