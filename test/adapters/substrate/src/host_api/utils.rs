@@ -50,6 +50,15 @@ impl<'a> From<Values<'a>> for ParsedInput<'a> {
     }
 }
 
+impl<'a> From<Option<Values<'a>>> for ParsedInput<'a> {
+    fn from(input: Option<Values<'a>>) -> Self {
+        match input {
+            Some(v) => ParsedInput(v.collect()),
+            None => ParsedInput(Vec::new()),
+        }
+    }
+}
+
 pub struct Runtime {
     blob: Vec<u8>,
     ext: TestExternalities<Blake2Hasher>,

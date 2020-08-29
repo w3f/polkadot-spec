@@ -1,7 +1,7 @@
 name: "Polkadot Host CLI tester"
 version: "0.2"
 author: Web3 Technologies Foundation
-about: "CLI tester for various Polkadot Host Tests"
+about: "CLI adapter for various Polkadot Host Tests"
 args:
     - verbose:
         short: v
@@ -50,7 +50,6 @@ subcommands:
               long: function  
               takes_value: true
               value_name: FUNCTION
-              requires: input
           - input:
               long: input
               takes_value: true
