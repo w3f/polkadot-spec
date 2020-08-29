@@ -1,4 +1,9 @@
 module HostApiOutputs
+    const none = [
+        # test_storage_init
+        "2747ab7c0dc38b7f2afba82bd5e2d6acef8c31e09800f660b75ec84a7005099f\n"
+    ]
+
     const value = [
         # ext_hashing_keccak_256_version_1
         "d517392f8119f79c1623774b9346e00104a1d193f1fa641e6e659bf323c37967",

@@ -2,6 +2,10 @@
 # Thoses names get passed on to the CLI as`--function <NAME>`.
 # The functions are grouped into arrays based on the expected (same) input data.
 module HostApiFunctions
+	const none = [
+		"test_storage_init"
+	]
+	
 	const value = [
 		"ext_hashing_keccak_256_version_1",
 		"ext_hashing_sha2_256_version_1",
@@ -80,5 +84,5 @@ module HostApiFunctions
 
 	const value_value_value = [
 		"ext_trie_blake2_256_ordered_root_version_1"
-	]
+	]	
 end

@@ -9,6 +9,10 @@ tests = AdapterFixture.Builder("Host API", `host-api`)
 
 HOSTAPI_FIXTURE_DATASETS = [
     [
+        HostApiFunctions.none,
+        nothing,
+        HostApiOutputs.none,
+    ],[
         HostApiFunctions.value,
         [
             HostApiInputs.value_1,
@@ -118,9 +122,13 @@ HOSTAPI_FIXTURE_DATASETS = [
 for (func, input, output) in HOSTAPI_FIXTURE_DATASETS
     sub!(tests) do t
         arg!(t, `--function`)
-        foreach!(t, func),
-        arg!(t, `--input`)
-        foreach!(t, commajoin(flatzip(input...)))
+        foreach!(t, func)
+
+        if input != nothing
+            arg!(t, `--input`)
+            foreach!(t, commajoin(flatzip(input...)))
+        end
+
         commit!(t, output)
     end
 end
