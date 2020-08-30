@@ -33,6 +33,8 @@ import (
 	database "github.com/ChainSafe/chaindb"
 )
 
+// #include <errno.h>
+import "C"
 
 var RELATIVE_WASM_ADAPTER_PATH = "bin/wasm_adapter_legacy.compact.wasm"
 
@@ -131,7 +133,7 @@ func ProcessHostApiCommand(args []string) {
 
 	default:
 		fmt.Println("Not implemented: ", function)
-		os.Exit(1)
+		os.Exit(C.EOPNOTSUPP)
 	}
 
 	os.Exit(0)
