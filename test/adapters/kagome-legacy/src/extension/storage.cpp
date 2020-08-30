@@ -195,27 +195,29 @@ void processExtGetAllocatedStorageInto(const std::vector<std::string> &args) {
   uint32_t offset = static_cast<uint32_t>(std::stoul(args[2]));
 
   // Allocate output data
-  uint32_t expected = value.length() <  offset ? 0 : value.length() - offset;
+  uint32_t expected = offset > value.length() ? 0 : value.length() - offset;
 
   helpers::Buffer into(expected, 0);
 
   // Ensure key does not exist in storage yet
   auto result = environment.execute<helpers::Buffer>(
-    "rtm_ext_get_storage_into", key, into
+    "rtm_ext_get_storage_into", key, into, offset
   );
 
-  BOOST_ASSERT_MSG(result.empty(), "Data exists");
+  BOOST_ASSERT_MSG(result == into, "Data exists");
 
   // Insert test data into storage
   environment.execute<void>("rtm_ext_set_storage", key, value); 
 
   // Retrieve test data from storage
   result = environment.execute<helpers::Buffer>(
-    "rtm_ext_get_storage_into", key, into
+    "rtm_ext_get_storage_into", key, into, offset
   );
 
-  BOOST_ASSERT_MSG(!result.empty(), "No value");
-  BOOST_ASSERT_MSG(result.toString() == value, "Values are different");
+  if (offset > value.length())
+    BOOST_ASSERT_MSG(result.empty(), "Value not empty");
+  else
+    BOOST_ASSERT_MSG(result.toString() == value.substr(offset), "Values are different");
 
   // Print result
   std::cout << result.toString() << std::endl;
