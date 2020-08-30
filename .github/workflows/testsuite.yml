@@ -266,6 +266,22 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl substrate ${{ matrix.fixture }}
 
+  test-substrate-legacy:
+    needs: build-adapter-substrate-legacy
+    name: "[test-host-api-legacy] substrate"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter-legacy
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter-legacy
+    - name: Run test fixture
+      run: test/runtests.jl substrate host-api-legacy
+
+
   test-kagome:
     needs: [ build-adapter-substrate, build-adapter-kagome ]
     strategy:
@@ -289,6 +305,45 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl kagome ${{ matrix.fixture }}
 
+  test-kagome-wasm:
+    needs: [ build-adapter-kagome, build-adapter-wasm ]
+    name: "[test-host-api] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter.compact.wasm
+        path: test/bin
+    - run: chmod +x test/bin/kagome-adapter
+    - name: Run test fixture
+      run: test/runtests.jl kagome host-api
+
+  test-kagome-legacy:
+    needs: [ build-adapter-kagome-legacy, build-adapter-wasm-legacy]
+    name: "[test-host-api-legacy] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter-legacy
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter-legacy.compact.wasm
+        path: test/bin
+    - run: chmod +x test/bin/kagome-adapter-legacy
+    - name: Run test fixture
+      run: test/runtests.jl kagome host-api-legacy
+
+
   test-gossamer:
     needs: [ build-adapter-substrate, build-adapter-gossamer ]
     strategy:
@@ -311,42 +366,3 @@ jobs:
     - run: cd test/bin && chmod +x substrate-adapter gossamer-adapter
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
-
-  test-host-api:
-    needs: [ build-adapter-kagome, build-adapter-wasm ]
-    name: "[test-host-api] kagome"
-    runs-on: ubuntu-18.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
-      with:
-        name: kagome-adapter
-        path: test/bin
-    - uses: actions/download-artifact@v1
-      with:
-        name: wasm-adapter.compact.wasm
-        path: test/bin
-    - run: chmod +x test/bin/kagome-adapter
-    - name: Run test fixture
-      run: test/runtests.jl kagome host-api
-
-  test-host-api-legacy:
-    needs: [ build-adapter-substrate-legacy, build-adapter-kagome-legacy ]
-    strategy:
-      fail-fast: false
-      matrix:
-        host: [ substrate, kagome ]
-    name: "[test-host-api-legacy] ${{ matrix.host }}"
-    runs-on: ubuntu-18.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
-      with:
-        name: ${{ matrix.host }}-adapter-legacy
-        path: test/bin
-    - run: chmod +x test/bin/${{ matrix.host }}-adapter-legacy
-    - name: Run test fixture
-      run: test/runtests.jl ${{ matrix.host }} host-api-legacy
-
