@@ -233,10 +233,6 @@ void processExtStorageRoot(const std::vector<std::string> &args) {
   auto key2   = args[2];
   auto value2 = args[3];
 
-  // Prepare environment
-  environment.execute<void>("rtm_ext_set_storage", ":code", "");
-  environment.execute<void>("rtm_ext_set_storage", ":heappages", uint64_t(8));
-
   // Insert data
   environment.execute<void>("rtm_ext_set_storage", key1, value1);
   environment.execute<void>("rtm_ext_set_storage", key2, value2);

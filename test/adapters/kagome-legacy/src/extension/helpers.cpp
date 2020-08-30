@@ -206,6 +206,12 @@ namespace helpers {
     );
 
     runtime_ = std::make_shared<RawRuntimeApi>(wasm_provider, manager_);
+
+    // Set expected defaults in storage
+    auto eight_64bit = std::string("\x08\0\0\0\0\0\0\0", 8);
+
+    execute<void>("rtm_ext_set_storage", ":code",      "");
+    execute<void>("rtm_ext_set_storage", ":heappages", eight_64bit);
   }
 
 } // namespace helper
