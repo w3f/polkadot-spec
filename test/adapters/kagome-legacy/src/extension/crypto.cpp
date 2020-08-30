@@ -51,6 +51,8 @@ namespace crypto {
 
   // Input: value1, value2
   void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args) {
+    throw NotImplemented();
+
     helpers::RuntimeEnvironment environment;
 
     // Parse input arguments
