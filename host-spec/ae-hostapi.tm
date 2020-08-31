@@ -30,6 +30,15 @@
     between the Runtime and the Polkadot Host.
   </definition>
 
+  <\definition>
+    <label|defn-lexicographic-ordering><strong|Lexicographic ordering> refers
+    to ascending ordering of bytes or byte arrays, such as:
+
+    <\equation*>
+      <around*|[|0,0,2|]>\<less\><around*|[|0,1,1|]>\<less\><around*|[|0,2,0|]>\<less\><around*|[|1|]>\<less\><around*|[|1,1,0|]>\<less\><around*|[|2|]>\<less\><around*|[|\<ldots\>|]>
+    </equation*>
+  </definition>
+
   \ The functions are specified in each subsequent subsection for each
   category of those functions.
 
@@ -281,7 +290,9 @@
 
   <subsection|<verbatim|ext_storage_next_key>>
 
-  Get the next key in storage after the given one in lexicographic order.
+  Get the next key in storage after the given one in lexicographic order
+  (Def. <reference|defn-lexicographic-ordering>). The key provided to this
+  function may or may not be exist in storage.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -623,7 +634,9 @@
 
   <subsection|<verbatim|ext_default_child_storage_next_key>>
 
-  Gets the next key in storage after the given one in lexicographic order.
+  Gets the next key in storage after the given one in lexicographic order
+  (Def. <reference|defn-lexicographic-ordering>). The key provided to this
+  function may or may not exist in storage.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -2305,7 +2318,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|6>
-    <associate|page-first|69>
+    <associate|page-first|67>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
@@ -2476,15 +2489,18 @@
     <associate|auto-97|<tuple|A.4.7|?>>
     <associate|auto-98|<tuple|A.4.7.1|?>>
     <associate|auto-99|<tuple|A.5|?>>
-    <associate|defn-child-storage-type|<tuple|A.3|?>>
-    <associate|defn-ecdsa-verify-error|<tuple|A.5|?>>
-    <associate|defn-http-error|<tuple|A.9|?>>
-    <associate|defn-http-status-codes|<tuple|A.8|?>>
-    <associate|defn-key-type-id|<tuple|A.4|?>>
-    <associate|defn-local-storage|<tuple|A.7|?>>
-    <associate|defn-logging-log-level|<tuple|A.10|?>>
-    <associate|defn-persistent-storage|<tuple|A.6|?>>
+    <associate|defn-child-storage-type|<tuple|A.4|?>>
+    <associate|defn-ecdsa-verify-error|<tuple|A.6|?>>
+    <associate|defn-http-error|<tuple|A.10|?>>
+    <associate|defn-http-status-codes|<tuple|A.9|?>>
+    <associate|defn-key-type-id|<tuple|A.5|?>>
+    <associate|defn-lexicographic-order|<tuple|A.3|?>>
+    <associate|defn-lexicographic-ordering|<tuple|A.3|?>>
+    <associate|defn-local-storage|<tuple|A.8|?>>
+    <associate|defn-logging-log-level|<tuple|A.11|?>>
+    <associate|defn-persistent-storage|<tuple|A.7|?>>
     <associate|defn-runtime-pointer|<tuple|A.2|?>>
+    <associate|lexicographic-order|<tuple|A.3|?>>
     <associate|nota-re-api-at-state|<tuple|A.1|?>>
     <associate|sect-child-storage-api|<tuple|A.2|?>>
     <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|?>>
