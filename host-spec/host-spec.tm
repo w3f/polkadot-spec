@@ -1264,23 +1264,23 @@
 
     <with|par-left|1tab|G.2.9.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_inherent_extrinsics>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-363>>
+    <no-break><pageref|auto-368>>
 
     <with|par-left|1tab|G.2.10.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_finalize_block>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-364>>
+    <no-break><pageref|auto-369>>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Glossary>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-365><vspace|0.5fn>
+    <pageref|auto-370><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Bibliography>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-366><vspace|0.5fn>
+    <pageref|auto-371><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Index>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-367><vspace|0.5fn>
+    <pageref|auto-372><vspace|0.5fn>
   </table-of-contents>
 
   <include|c01-background.tm>
@@ -1838,12 +1838,17 @@
     <associate|auto-360|<tuple|G.2.8|118|ag-runtimeentries.tm>>
     <associate|auto-361|<tuple|G.7|118|ag-runtimeentries.tm>>
     <associate|auto-362|<tuple|G.8|119|ag-runtimeentries.tm>>
-    <associate|auto-363|<tuple|G.2.9|119|ag-runtimeentries.tm>>
-    <associate|auto-364|<tuple|G.2.10|119|ag-runtimeentries.tm>>
-    <associate|auto-365|<tuple|G.2.10|121>>
-    <associate|auto-366|<tuple|G.2.10|123>>
-    <associate|auto-367|<tuple|Tec19|125>>
+    <associate|auto-363|<tuple|G.9|119|ag-runtimeentries.tm>>
+    <associate|auto-364|<tuple|G.10|119|ag-runtimeentries.tm>>
+    <associate|auto-365|<tuple|G.11|121|ag-runtimeentries.tm>>
+    <associate|auto-366|<tuple|G.12|123|ag-runtimeentries.tm>>
+    <associate|auto-367|<tuple|G.13|125|ag-runtimeentries.tm>>
+    <associate|auto-368|<tuple|G.2.9|?|ag-runtimeentries.tm>>
+    <associate|auto-369|<tuple|G.2.10|?|ag-runtimeentries.tm>>
     <associate|auto-37|<tuple|3|21|c03-transition.tm>>
+    <associate|auto-370|<tuple|G.2.10|?>>
+    <associate|auto-371|<tuple|G.2.10|?>>
+    <associate|auto-372|<tuple|Tec19|?>>
     <associate|auto-38|<tuple|3.1|21|c03-transition.tm>>
     <associate|auto-39|<tuple|3.1.1|21|c03-transition.tm>>
     <associate|auto-4|<tuple|1.2|12|c01-background.tm>>
@@ -1943,12 +1948,12 @@
     <associate|defn-block-time|<tuple|6.10|40|c06-consensus.tm>>
     <associate|defn-block-tree|<tuple|1.11|13|c01-background.tm>>
     <associate|defn-chain-subchain|<tuple|1.13|13|c01-background.tm>>
-    <associate|defn-child-storage-type|<tuple|E.3|71|ae-hostapi.tm>>
+    <associate|defn-child-storage-type|<tuple|E.4|71|ae-hostapi.tm>>
     <associate|defn-children-bitmap|<tuple|2.10|19|c02-state.tm>>
     <associate|defn-consensus-message-digest|<tuple|6.2|37|c06-consensus.tm>>
     <associate|defn-controller-key|<tuple|A.3|56|aa-cryptoalgorithms.tm>>
     <associate|defn-digest|<tuple|3.7|26|c03-transition.tm>>
-    <associate|defn-ecdsa-verify-error|<tuple|E.5|75|ae-hostapi.tm>>
+    <associate|defn-ecdsa-verify-error|<tuple|E.6|75|ae-hostapi.tm>>
     <associate|defn-epoch-slot|<tuple|6.5|39|c06-consensus.tm>>
     <associate|defn-epoch-subchain|<tuple|6.7|39|c06-consensus.tm>>
     <associate|defn-finalized-block|<tuple|6.33|51|c06-consensus.tm>>
@@ -1960,16 +1965,17 @@
     <associate|defn-grandpa-justification|<tuple|6.28|47|c06-consensus.tm>>
     <associate|defn-grandpa-voter|<tuple|6.14|44|c06-consensus.tm>>
     <associate|defn-hex-encoding|<tuple|B.12|59|ab-encodings.tm>>
-    <associate|defn-http-error|<tuple|E.9|84|ae-hostapi.tm>>
+    <associate|defn-http-error|<tuple|E.10|84|ae-hostapi.tm>>
     <associate|defn-http-return-value|<tuple|F.3|104|af-legacyhostapi.tm>>
-    <associate|defn-http-status-codes|<tuple|E.8|84|ae-hostapi.tm>>
+    <associate|defn-http-status-codes|<tuple|E.9|84|ae-hostapi.tm>>
     <associate|defn-index-function|<tuple|2.7|17|c02-state.tm>>
     <associate|defn-inherent-data|<tuple|3.5|26|c03-transition.tm>>
     <associate|defn-invalid-transaction|<tuple|G.4|117|ag-runtimeentries.tm>>
-    <associate|defn-key-type-id|<tuple|E.4|74|ae-hostapi.tm>>
+    <associate|defn-key-type-id|<tuple|E.5|74|ae-hostapi.tm>>
+    <associate|defn-lexicographic-ordering|<tuple|E.3|?|ae-hostapi.tm>>
     <associate|defn-little-endian|<tuple|1.7|12|c01-background.tm>>
-    <associate|defn-local-storage|<tuple|E.7|84|ae-hostapi.tm>>
-    <associate|defn-logging-log-level|<tuple|E.10|92|ae-hostapi.tm>>
+    <associate|defn-local-storage|<tuple|E.8|84|ae-hostapi.tm>>
+    <associate|defn-logging-log-level|<tuple|E.11|92|ae-hostapi.tm>>
     <associate|defn-longest-chain|<tuple|1.14|13|c01-background.tm>>
     <associate|defn-merkle-value|<tuple|2.12|19|c02-state.tm>>
     <associate|defn-node-header|<tuple|2.9|17|c02-state.tm>>
@@ -1981,13 +1987,20 @@
     <associate|defn-offchain-persistent-storage|<tuple|F.1|104|af-legacyhostapi.tm>>
     <associate|defn-option-type|<tuple|B.4|57|ab-encodings.tm>>
     <associate|defn-path-graph|<tuple|1.2|12|c01-background.tm>>
-    <associate|defn-persistent-storage|<tuple|E.6|83|ae-hostapi.tm>>
+    <associate|defn-persistent-storage|<tuple|E.7|83|ae-hostapi.tm>>
     <associate|defn-pruned-tree|<tuple|1.12|13|c01-background.tm>>
     <associate|defn-radix-tree|<tuple|1.3|12|c01-background.tm>>
     <associate|defn-result-type|<tuple|B.5|58|ab-encodings.tm>>
     <associate|defn-rt-apisvec|<tuple|G.1|114|ag-runtimeentries.tm>>
     <associate|defn-rt-blockbuilder-finalize-block|<tuple|G.2.10|119|ag-runtimeentries.tm>>
     <associate|defn-rt-core-version|<tuple|G.2.1|114|ag-runtimeentries.tm>>
+    <associate|defn-rte-apply-extrinsic-result|<tuple|G.6|?|ag-runtimeentries.tm>>
+    <associate|defn-rte-custom-module-error|<tuple|G.9|?|ag-runtimeentries.tm>>
+    <associate|defn-rte-dispatch-error|<tuple|G.8|?|ag-runtimeentries.tm>>
+    <associate|defn-rte-dispatch-outcome|<tuple|G.7|?|ag-runtimeentries.tm>>
+    <associate|defn-rte-invalid-transaction|<tuple|G.11|?|ag-runtimeentries.tm>>
+    <associate|defn-rte-transaction-validity-error|<tuple|G.10|?|ag-runtimeentries.tm>>
+    <associate|defn-rte-unknown-transaction|<tuple|G.12|?|ag-runtimeentries.tm>>
     <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|12|c01-background.tm>>
     <associate|defn-runtime-pointer|<tuple|E.2|67|ae-hostapi.tm>>
     <associate|defn-sc-len-encoding|<tuple|B.11|59|ab-encodings.tm>>
@@ -2387,11 +2400,40 @@
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
       </surround>|<pageref|auto-359>>
 
-      <tuple|normal|<surround|<hidden-binding|<tuple>|G.7>||Data format of
-      the Dispatch error type>|<pageref|auto-361>>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.7>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|ApplyExtrinsicResult>.
+      </surround>|<pageref|auto-361>>
 
-      <tuple|normal|<surround|<hidden-binding|<tuple>|G.8>||Identifiers of
-      the Apply error type>|<pageref|auto-362>>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.8>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchOutcome>.
+      </surround>|<pageref|auto-362>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.9>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchError>.
+      </surround>|<pageref|auto-363>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.10>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|CustomModuleError>.
+      </surround>|<pageref|auto-364>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.11>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
+      </surround>|<pageref|auto-365>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.12>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|InvalidTransaction>.
+      </surround>|<pageref|auto-366>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|G.13>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|UnknownTransaction>.
+      </surround>|<pageref|auto-367>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|1.<space|2spc>Background>
@@ -3620,23 +3662,23 @@
 
       <with|par-left|<quote|1tab>|G.2.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-363>>
+      <no-break><pageref|auto-368>>
 
       <with|par-left|<quote|1tab>|G.2.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-364>>
+      <no-break><pageref|auto-369>>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Glossary>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-365><vspace|0.5fn>
+      <pageref|auto-370><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-366><vspace|0.5fn>
+      <pageref|auto-371><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Index>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-367><vspace|0.5fn>
+      <pageref|auto-372><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
