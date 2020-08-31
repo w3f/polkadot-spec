@@ -19,7 +19,7 @@ disable-hunter:
 	cmake -DHUNTER_ENABLED=false -S . -B build
 
 install: build
-	cp build/kagome-adapter ../../bin/
+	cp build/kagome-adapter-legacy ../../bin/
 
 clean:
 	rm -rf build

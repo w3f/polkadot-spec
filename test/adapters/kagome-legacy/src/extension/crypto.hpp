@@ -24,41 +24,28 @@
 #include <vector>
 
 namespace crypto {
-// executes ext_blake2_128 tests according to provided args
-// Input: data
-// not implemented
-void processExtBlake2_128(const std::vector<std::string> &args);
 
-// executes ext_blake2_256 tests according to provided args
-// Input: data
-void processExtBlake2_256(const std::vector<std::string> &args);
+// execute hash function test by calling the select hash function
+// and target hash size with provided input.
+//
+// @param name is the name of the hash (i.e. blake2, keccak or twox)
+// @param size is the expected size of the hash output
+// @param the first entry of args is passed as input to the function
+void processHashFunctionTest(std::string_view name, uint32_t size, const std::vector<std::string>& args);
+
+// executes ext_blake2_256_enumerated_trie_root tests according to provided args
+// Input: value1, value2
+void processExtBlake2_256EnumeratedTrieRoot(const std::vector<std::string> &args);
 
 // executes ext_ed25519 tests according to provided args
 // Input: data
 // not implemented
 void processExtEd25519(const std::vector<std::string> &args);
 
-// executes ext_keccak_256 tests according to provided args
-// Input: data
-void processExtKeccak256(const std::vector<std::string> &args);
-
 // executes ext_sr25519 tests according to provided args
 // Input: data
 // not implemented
 void processExtSr25519(const std::vector<std::string> &args);
-
-// executes ext_twox_64 tests according to provided args
-// Input: data
-// not implemented
-void processExtTwox64(const std::vector<std::string> &args);
-
-// executes ext_twox_128 tests according to provided args
-// Input: data
-void processExtTwox128(const std::vector<std::string> &args);
-
-// executes ext_twox_256 tests according to provided args
-// Input: data
-void processExtTwox256(const std::vector<std::string> &args);
 
 } // namespace crypto
 

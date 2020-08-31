@@ -17,15 +17,18 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "network.hpp"
+#pragma once
 
-namespace network {
+#include <memory>
+#include <string>
+#include <vector>
 
-  // Input:
-  void processExtHttp(const std::vector<std::string> &args){}
+struct HostApiCommandArgs {
+  std::string function;
+  std::vector<std::string> input;
+};
 
+// parses CLI input
+HostApiCommandArgs extractHostApiArgs(int argc, char **argv);
 
-  // Input:
-  void processExtNetworkState(const std::vector<std::string> &args){}
-
-}
+void processHostApiCommands(const HostApiCommandArgs& args);

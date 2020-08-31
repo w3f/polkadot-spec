@@ -19,10 +19,7 @@
 
 #include "scale_codec.hpp"
 
-#include <iostream>
-
-#define BOOST_ENABLE_ASSERT_HANDLER
-#include <boost/assert.hpp>
+#include "assert.hpp"
 
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
@@ -31,7 +28,10 @@
 #include <common/logger.hpp>
 #include <scale/scale.hpp>
 
-#include "subcommand_router.hpp"
+#include "subcommand.hpp"
+
+#include <iostream>
+
 
 namespace po = boost::program_options;
 

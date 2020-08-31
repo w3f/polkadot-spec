@@ -17,11 +17,12 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#define BOOST_ENABLE_ASSERT_HANDLER
-#include <boost/assert.hpp>
+#include "assert.hpp"
 
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
+
+#include "subcommand_router.hpp"
 
 #include "extension.hpp"
 #include "extension/storage.hpp"
@@ -29,7 +30,6 @@
 #include "extension/crypto.hpp"
 #include "extension/child_storage.hpp"
 
-#include "subcommand_router.hpp"
 
 namespace po = boost::program_options;
 
@@ -89,72 +89,77 @@ void processExtensionsCommands(const ExtensionCommandArgs& args){
   router.addSubcommand("test_set_get_storage", [](const std::vector<std::string>& args) {
     storage::processExtGetAllocatedStorage(args);
   });
-  router.addSubcommand("test_allocate_storage", [](const std::vector<std::string>& args) {
-    storage::processExtAllocatedStorage(args);
-  });
-  router.addSubcommand("test_set_get_local_storage", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args); TODO: not implemented
-  });
   router.addSubcommand("test_set_get_storage_into", [](const std::vector<std::string>& args) {
     storage::processExtGetAllocatedStorageInto(args);
   });
   router.addSubcommand("test_storage_root", [](const std::vector<std::string>& args) {
     storage::processExtStorageRoot(args);
   });
-  router.addSubcommand("test_local_storage_compare_and_set", [](const std::vector<std::string>& args) {
-    //storage::processExtGetAllocatedStorage(args); TODO: not implemented
+  router.addSubcommand("test_storage_changes_root", [](const std::vector<std::string>& args) {
+    throw NotImplemented(); // TODO: not implemented
   });
+
+  // test local storage
+  router.addSubcommand("test_set_get_local_storage", [](const std::vector<std::string>& args) {
+    throw NotImplemented(); // TODO: not implemented
+  });
+  router.addSubcommand("test_local_storage_compare_and_set", [](const std::vector<std::string>& args) {
+    throw NotImplemented(); // TODO: not implemented
+  });
+
+  // test crypto hash functions
+  router.addSubcommand("test_blake2_128", [](const std::vector<std::string>& args) {
+    crypto::processHashFunctionTest("blake2", 16, args);
+  });
+  router.addSubcommand("test_blake2_256", [](const std::vector<std::string>& args) {
+    crypto::processHashFunctionTest("blake2", 32, args);
+  });
+  router.addSubcommand("test_keccak_256", [](const std::vector<std::string>& args) {
+    crypto::processHashFunctionTest("keccak", 32, args);
+  });
+  router.addSubcommand("test_twox_64", [](const std::vector<std::string>& args) {
+    crypto::processHashFunctionTest("twox", 8, args);
+  });
+  router.addSubcommand("test_twox_128", [](const std::vector<std::string>& args) {
+    crypto::processHashFunctionTest("twox", 16, args);
+  });
+  router.addSubcommand("test_twox_256", [](const std::vector<std::string>& args) {
+    crypto::processHashFunctionTest("twox", 32, args);
+  });
+
   router.addSubcommand("test_blake2_256_enumerated_trie_root", [](const std::vector<std::string>& args) {
-    storage::processExtBlake2_256EnumeratedTrieRoot(args);
+    crypto::processExtBlake2_256EnumeratedTrieRoot(args);
   });
 
   // test crypto functions
-  router.addSubcommand("test_blake2_128", [](const std::vector<std::string>& args) {
-    crypto::processExtBlake2_128(args);
-  });
-  router.addSubcommand("test_blake2_256", [](const std::vector<std::string>& args) {
-    crypto::processExtBlake2_256(args);
-  });
   router.addSubcommand("test_ed25519", [](const std::vector<std::string>& args) {
     crypto::processExtEd25519(args);
-  });
-  router.addSubcommand("test_keccak_256", [](const std::vector<std::string>& args) {
-    crypto::processExtKeccak256(args);
   });
   router.addSubcommand("test_sr25519", [](const std::vector<std::string>& args) {
     crypto::processExtSr25519(args);
   });
-  router.addSubcommand("test_twox_64", [](const std::vector<std::string>& args) {
-    crypto::processExtTwox64(args);
-  });
-  router.addSubcommand("test_twox_128", [](const std::vector<std::string>& args) {
-    crypto::processExtTwox128(args);
-  });
-  router.addSubcommand("test_twox_256", [](const std::vector<std::string>& args) {
-    crypto::processExtTwox256(args);
-  });
 
   //test child storage functions
   router.addSubcommand("test_clear_child_prefix", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+    child_storage::processExtClearChildPrefix(args);
   });
   router.addSubcommand("test_child_storage_root", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+    throw NotImplemented(); // TODO: not implemented
   });
   router.addSubcommand("test_get_child_storage_into", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildPrefix(args);
+    throw NotImplemented(); // TODO: not implemented
   });
   router.addSubcommand("test_clear_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtClearChildStorage(args);
+    child_storage::processExtClearChildStorage(args);
   });
   router.addSubcommand("test_exists_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtExistsChildStorage(args);
+    child_storage::processExtExistsChildStorage(args);
   });
   router.addSubcommand("test_kill_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtKillChildStorage(args);
+    child_storage::processExtKillChildStorage(args);
   });
   router.addSubcommand("test_set_get_child_storage", [](const std::vector<std::string>& args) {
-    //child_storage::processExtSetGetChildStorage(args);
+    child_storage::processExtSetGetChildStorage(args);
   });
 
   // test network functions

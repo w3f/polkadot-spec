@@ -19,15 +19,15 @@
 
 #pragma once
 
-#include <runtime/wasm_memory.hpp>
-#include <extensions/extension.hpp>
+#include <string>
 
-namespace helpers {
+namespace trie {
 
-// Helper to intialize in memory testing environment
-std::pair<
-  std::shared_ptr<kagome::runtime::WasmMemory>,
-  std::unique_ptr<kagome::extensions::Extension>
-> initialize_environment();
+  // executes ext_trie_blake2_256_ordered_root_version_1 test
+  void processOrderedRoot(
+    const std::string_view value1,
+    const std::string_view value2,
+    const std::string_view value3
+  );
 
-}
+} // namespace trie

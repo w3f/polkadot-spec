@@ -15,19 +15,6 @@
 #You should have received a copy of the GNU General Public License
 #along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
 
-# Might be worth to go back to this?
-#hunter_config(kagome GIT_SUBMODULE ../../../hosts/kagome)
-
-# Should point to the version of kagome to be tested (currently a custom fork with small fixes atop master)
-hunter_config(kagome
-  URL https://github.com/soramitsu/kagome/archive/27ee11c78767e72f0ecd2c515c77bebc2ff5758d.tar.gz
-  SHA1 a53689530361e12066ae8752a2b60150f7f5164a
-  CMAKE_ARGS TESTING=OFF
-)
-
-# Fixes an hunter assert in libsecp256k1. Can be removed once fixed in soramitsu-hunter.
-hunter_config(libsecp256k1
-  URL https://github.com/soramitsu/soramitsu-libsecp256k1/archive/c7630e1bac638c0f16ee66d4dce7b5c49eecbaa5.zip
-  SHA1 179e316b0fe5150f1b05ca70ec2ac1490fe2cb3b
-  CMAKE_ARGS SECP256K1_BUILD_TEST=OFF
-)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)

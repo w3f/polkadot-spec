@@ -24,7 +24,8 @@ set(CMAKE_TOOLCHAIN_FILE
   CACHE FILEPATH "Default toolchain"
 )
 
-# Setup but disable binary cache by default
+
+# Setup but disable hunter binary cache by default
 set(
   HUNTER_USE_CACHE_SERVERS "NO"
   CACHE STRING "Binary cache server"
@@ -47,20 +48,18 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
 
 
 # General config
-project(kagome-adapter LANGUAGES CXX C)
+project(kagome-adapter-legacy LANGUAGES CXX C)
 
 # Find dependencies
 hunter_add_package(kagome)
-hunter_add_package(yaml-cpp)
 
 find_package(kagome REQUIRED)
-find_package(yaml-cpp REQUIRED)
 
 # FIXME Kagome's package config should do all this!
-find_package(Boost REQUIRED COMPONENTS filesystem program_options random)
 find_package(ed25519 REQUIRED)
 find_package(sr25519 REQUIRED)
 find_package(libsecp256k1 REQUIRED)
+find_package(Boost REQUIRED COMPONENTS filesystem program_options random)
 find_package(leveldb REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(xxhash REQUIRED)
@@ -69,37 +68,30 @@ find_package(libp2p REQUIRED)
 find_package(binaryen REQUIRED)
 
 # Compile and link tester
-add_executable(kagome-adapter
+add_executable(kagome-adapter-legacy
   src/main.cpp
   src/assert.cpp
   src/assert.hpp
-  src/subcommand.hpp
-  src/scale_codec.cpp
-  src/scale_codec.hpp
-  src/state_trie.cpp
-  src/state_trie.hpp
-  src/host_api.cpp
-  src/host_api.hpp
-  src/host_api/helpers.cpp
-  src/host_api/helpers.hpp
-  src/host_api/crypto.cpp
-  src/host_api/crypto.hpp
-  src/host_api/hashing.cpp
-  src/host_api/hashing.hpp
-  src/host_api/trie.cpp
-  src/host_api/trie.hpp
-  src/host_api/storage.cpp
-  src/host_api/storage.hpp
-  src/host_api/child_storage.cpp
-  src/host_api/child_storage.hpp
+  src/subcommand_router.hpp
+  src/extension.cpp
+  src/extension.hpp
+  src/extension/storage.cpp
+  src/extension/storage.hpp
+  src/extension/network.cpp
+  src/extension/network.hpp
+  src/extension/child_storage.cpp
+  src/extension/child_storage.hpp
+  src/extension/crypto.cpp
+  src/extension/crypto.hpp
+  src/extension/helpers.cpp
+  src/extension/helpers.hpp
 )
 
 # FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")
-target_include_directories(kagome-adapter PRIVATE ${kagome_INCLUDE_DIRS})
+target_include_directories(kagome-adapter-legacy PRIVATE ${kagome_INCLUDE_DIRS})
 
-target_link_libraries(kagome-adapter
+target_link_libraries(kagome-adapter-legacy
   Boost::program_options
-  yaml-cpp::yaml-cpp
   ${kagome_LIBRARIES}
 
   # FIXME Patched-in export required for host-api testing
@@ -110,6 +102,6 @@ target_link_libraries(kagome-adapter
 # Install result
 include(GNUInstallDirs)
 
-install(TARGETS kagome-adapter
+install(TARGETS kagome-adapter-legacy
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

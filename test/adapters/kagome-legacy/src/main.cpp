@@ -24,13 +24,12 @@
 
 #include <common/logger.hpp>
 
-#include "subcommand.hpp"
+#include "subcommand_router.hpp"
 
-#include "scale_codec.hpp"
-#include "state_trie.hpp"
-#include "host_api.hpp"
+#include "extension.hpp"
 
 #include <cerrno>
+
 /**
  * Implementation of Polkadot Host API, SCALE codec and Merkle-Patricia
  * Tree compatibility tests
@@ -40,14 +39,8 @@ int main(int argc, char **argv) {
   kagome::common::setLogLevel(kagome::common::LogLevel::off);
 
   SubcommandRouter<int, char **> router;
-  router.addSubcommand("scale-codec", [](int argc, char **argv) {
-    processScaleCodecCommand(extractScaleArgs(argc, argv));
-  });
-  router.addSubcommand("state-trie", [](int argc, char **argv) {
-    processTrieCommand(extractTrieArgs(argc, argv));
-  });
   router.addSubcommand("host-api", [](int argc, char **argv) {
-    processHostApiCommands(extractHostApiArgs(argc, argv));
+    processExtensionsCommands(extractExtensionArgs(argc, argv));
   });
 
   std::string commands_list = "Valid subcommands are: ";

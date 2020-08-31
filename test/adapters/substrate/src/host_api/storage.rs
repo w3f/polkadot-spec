@@ -1,6 +1,15 @@
 use crate::host_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
+pub fn test_storage_init() {
+    let mut rtm = Runtime::new();
+
+    // Compute and print storage root on init
+    let res = rtm.call("rtm_ext_storage_root_version_1", &[]).decode_val();
+
+    println!("{}", hex::encode(res));
+}
+
 pub fn ext_storage_set_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
