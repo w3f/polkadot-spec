@@ -262,10 +262,11 @@
     256-bit Blake2 storage root.
   </itemize>
 
-  <subsection|<verbatim|ext_storage_changes_root>>
+  <subsection|<verbatim|ext_storage_changes_root>><label|sect-ext-storage-changes-root>
 
-  Compute the changes root. The parent hash is a SCALE encoded change root.
-  <todo|define changes root>
+  Compute the root of the Changes Trie as described in Section
+  <reference|sect-changes-trie>. The parent hash is a SCALE encoded block
+  hash.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -2494,13 +2495,11 @@
     <associate|defn-http-error|<tuple|A.10|82>>
     <associate|defn-http-status-codes|<tuple|A.9|82>>
     <associate|defn-key-type-id|<tuple|A.5|74>>
-    <associate|defn-lexicographic-order|<tuple|A.3|?>>
     <associate|defn-lexicographic-ordering|<tuple|A.3|67>>
     <associate|defn-local-storage|<tuple|A.8|82>>
     <associate|defn-logging-log-level|<tuple|A.11|90>>
     <associate|defn-persistent-storage|<tuple|A.7|82>>
     <associate|defn-runtime-pointer|<tuple|A.2|67>>
-    <associate|lexicographic-order|<tuple|A.3|?>>
     <associate|nota-re-api-at-state|<tuple|A.1|67>>
     <associate|sect-child-storage-api|<tuple|A.2|71>>
     <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|78>>
@@ -2508,6 +2507,7 @@
     <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.16|79>>
     <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.8|76>>
     <associate|sect-ext-crypto-start-batch-verify|<tuple|A.3.15|79>>
+    <associate|sect-ext-storage-changes-root|<tuple|A.1.9|?>>
     <associate|sect-ext-storage-commit-transaction|<tuple|A.1.13|70>>
     <associate|sect-ext-storage-rollback-transaction|<tuple|A.1.12|70>>
     <associate|sect-ext-storage-start-transaction|<tuple|A.1.11|70>>
