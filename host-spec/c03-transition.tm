@@ -545,8 +545,10 @@
     in Section <reference|sect-msg-consensus>. and
 
     <\itemize-dot>
-      <item><strong|Changes trie root> contains the root of changes trie at
-      block <math|B>.
+      <item><strong|Changes trie root> contains the root of the Changes Trie
+      at block <math|B>, as described in Section
+      <reference|sect-changes-trie><math|>. Note that this is future-reserved
+      and currently <strong|not> used in Polkadot.
 
       <item><strong|Pre-runtime> digest item represents messages produced by
       a consensus engine to the Runtime.
@@ -1090,6 +1092,10 @@
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|3.2>||The detail of the
       varying type that a digest item can hold.>|<pageref|auto-22>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|3.3>|>
+        Possible types of keys of mappings in the Changes Trie
+      </surround>|<pageref|auto-28>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|3<space|2spc>State
@@ -1173,6 +1179,22 @@
       <with|par-left|<quote|1tab>|3.3.3<space|2spc>Managaing Multiple
       Variants of State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-26>>
+
+      <with|par-left|<quote|1tab>|3.3.4<space|2spc>Changes Trie
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-27>>
+
+      <with|par-left|<quote|2tab>|3.3.4.1<space|2spc>Key to extrinsics pairs
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-29>>
+
+      <with|par-left|<quote|2tab>|3.3.4.2<space|2spc>Key to block pairs
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-30>>
+
+      <with|par-left|<quote|2tab>|3.3.4.3<space|2spc>Key to Child Changes
+      Trie pairs <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-31>>
     </associate>
   </collection>
 </auxiliary>
