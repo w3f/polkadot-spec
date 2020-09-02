@@ -1,37 +1,40 @@
 CHAPTERS   := $(wildcard c??-*.tm)
 APPENDICES := $(wildcard a?-*.tm)
+
+SOURCES := host-spec.tm $(CHAPTERS) $(APPENDICES)
+
 FIGURES    := $(wildcard figures/*.eps)
 
-
-polkadot-host-spec.pdf: host-spec.tm $(CHAPTERS) $(APPENDICES) $(FIGURES)
+polkadot-host-spec.pdf: $(SOURCES) $(FIGURES)
 	xvfb-run texmacs --convert $< $@ --quit
 
 
-REV  ?= HEAD
-HASH := $(shell git rev-parse $(REV))
+REV     ?= HEAD
+GITHASH := $(shell git rev-parse $(REV))
 
 TMPDIR ?= /tmp
-REVDIR := $(TMPDIR)/host-spec-$(HASH)
+REVDIR := $(TMPDIR)/host-spec-$(GITHASH)
 
-DIFF_SRCS := $(patsubst %.tm,$(REVDIR)/%.tm,$(CHAPTERS) $(APPENDICES))
-DIFF_PDFS := $(patsubst %.tm,%.diff.pdf,$(CHAPTERS) $(APPENDICES))
+DIFF_SOURCES := $(patsubst %.tm,$(REVDIR)/%.tm,$(SOURCES))
 
 $(REVDIR):
 	mkdir -p $@
+	git archive --format=tar $(GITHASH) | (cd $@ && tar xf -)
 
-$(DIFF_SRCS) $(REVDIR)/host-spec.tm: $(REVDIR)/%.tm: $(REVDIR)
-	git show $(REV):host-spec/$*.tm > $@
+$(DIFF_SOURCES): $(REVDIR)
 
-$(DIFF_PDFS): %.diff.pdf: $(REVDIR)/%.tm %.tm
-	xvfb-run texmacs -x "(load-buffer \"$$PWD/$*.tm\" :strict) (compare-with-older \"$(REVDIR)/$*.tm\") (export-buffer \"$$PWD/$@\")" -q
+polkadot-host-spec.diff.pdf: $(SOURCES) $(DIFF_SOURCES) host-spec.scm
+	xvfb-run texmacs -b host-spec.scm  -x "(compare-versions-expanded \"$(REVDIR)/host-spec.tm\" \"$$PWD/host-spec.tm\") (export-buffer \"$$PWD/$@\")" -q
 
-host-spec.diff.pdf: $(DIFF_SRCS) $(REVDIR)/host-spec.tm
-	xvfb-run texmacs -x "(load-buffer \"$$PWD/host-spec.tm\" :strict) (compare-with-older \"$(REVDIR)/host-spec.tm\") (export-buffer \"$$PWD/$@\")" -q
 
-diff: $(DIFF_PDFS)
+all: build
 
+build: polkadot-host-spec.pdf
+
+diff: polkadot-host-spec.diff.pdf
 
 clean:
-	rm -rf $(REVDIR)
+	rm -rf $(REVDIR) polkadot-host-spec.pdf polkadot-host-spec.diff.pdf
 
-.PHONY: diff clean
+
+.PHONY: all build diff clean
