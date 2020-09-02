@@ -1,0 +1,368 @@
+name: Conformance Testsuite
+
+on:
+  push:
+    paths:
+    - '.github/workflows/testsuite.yml'
+    - 'test/**'
+    - '!test/fixtures/genesis/**'
+    - '!test/testers/**'
+    - '!test/hosts/**'
+    - '!test/README.md'
+  pull_request:
+    paths:
+    - '.github/workflows/testsuite.yml'
+    - 'test/**'
+    - '!test/fixtures/genesis/**'
+    - '!test/testers/**'
+    - '!test/hosts/**'
+    - '!test/README.md'
+
+jobs:
+  build-adapter-substrate:
+    name: "[build] substrate-adapter"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-registry-adapter-substrate-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-index-adapter-substrate-
+    - name: Cache cargo build ouput
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/substrate/target
+        key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build substrate adapters
+      run: make -C test substrate-adapter
+    - name: Upload substrate adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/bin/substrate-adapter
+
+  build-adapter-substrate-legacy:
+    name: "[build] substrate-adapter-legacy"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
+        restore-keys: cargo-registry-adapter-substrate-legacy-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
+        restore-keys: cargo-index-adapter-substrate-legacy-
+    - name: Cache cargo build output
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/substrate-legacy/target
+        key: cargo-build-adapter-substrate-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
+        restore-keys: cargo-build-adapter-substrate-legacy-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build substrate legacy adapters
+      run: make -C test substrate-adapter-legacy
+    - name: Upload substrate legacy adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: substrate-adapter-legacy
+        path: test/bin/substrate-adapter-legacy
+
+  build-adapter-kagome:
+    name: "[build] kagome-adapter"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Cache hunter packages
+      uses: actions/cache@v1
+      with:
+        path: ~/.hunter
+        key: hunter-adapter-kagome-${{ hashFiles('test/adapters/kagome/CMakeLists.txt') }}
+        restore-keys: hunter-adapter-kagome-
+    - name: Build kagome adapter
+      env:
+        CC: gcc-9
+        CXX: g++-9
+      run: make -C test kagome-adapter 
+    - name: Upload kagome adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-adapter
+        path: test/bin/kagome-adapter
+
+  build-adapter-kagome-legacy:
+    name: "[build] kagome-adapter-legacy"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Cache hunter packages
+      uses: actions/cache@v1
+      with:
+        path: ~/.hunter
+        key: hunter-adapter-kagome-legacy-${{ hashFiles('test/adapters/kagome-legacy/CMakeLists.txt') }}
+        restore-keys: hunter-adapter-kagome-legacy-
+    - name: Build kagome legacy adapter
+      env:
+        CC: gcc-9
+        CXX: g++-9
+      run: make -C test kagome-adapter-legacy
+    - name: Upload kagome adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-adapter-legacy
+        path: test/bin/kagome-adapter-legacy
+
+  build-adapter-gossamer:
+    name: "[build] gossamer-adapter"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Cache go modules
+      uses: actions/cache@v1
+      with:
+        path: ~/go/pkg/mod
+        key: go-mod-adapter-gossamer-${{ hashFiles('test/adapters/gossamer/go.sum') }}
+        restore-keys: go-mod-adapter-gossamer-
+    - name: Build gossamer adapter
+      run: make -C test gossamer-adapter 
+    - name: Upload gossamer adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: gossamer-adapter
+        path: test/bin/gossamer-adapter
+
+
+  build-adapter-wasm:
+    name: "[build] wasm-adapter"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-wasm-${{ hashFiles('test/adapters/wasm/Cargo.lock') }}
+        restore-keys: cargo-registry-adapter-wasm-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-adapter-wasm-${{ hashFiles('test/adapters/wasm/Cargo.lock') }}
+        restore-keys: cargo-index-adapter-wasm-
+    - name: Cache cargo build ouput
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/wasm/target
+        key: cargo-build-adapter-wasm-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/wasm/Cargo.lock') }}
+        restore-keys: cargo-build-adapter-wasm-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build wasm adapters
+      run: make -C test wasm-adapter
+    - name: Upload wasm adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: wasm-adapter.compact.wasm
+        path: test/bin/wasm_adapter.compact.wasm
+
+  build-adapter-wasm-legacy:
+    name: "[build] wasm-adapter-legacy"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Setup rust toolchain
+      id: rustup
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: nightly-2020-04-15
+        target: wasm32-unknown-unknown
+        default: true
+        profile: minimal
+    - name: Cache cargo registry
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/registry
+        key: cargo-registry-adapter-wasm-legacy-${{ hashFiles('test/adapters/wasm-legacy/Cargo.lock') }}
+        restore-keys: cargo-registry-adapter-wasm-legacy-
+    - name: Cache cargo index
+      uses: actions/cache@v1
+      with:
+        path: ~/.cargo/git
+        key: cargo-index-adapter-wasm-legacy-${{ hashFiles('test/adapters/wasm-legacy/Cargo.lock') }}
+        restore-keys: cargo-index-adapter-wasm-legacy-
+    - name: Cache cargo build output
+      uses: actions/cache@v1
+      with:
+        path: test/adapters/wasm-legacy/target
+        key: cargo-build-adapter-wasm-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/wasm-legacy/Cargo.lock') }}
+        restore-keys: cargo-build-adapter-wasm-legacy-${{ steps.rustup.outputs.rustc_hash }}-
+    - name: Build wasm legacy adapters
+      run: make -C test wasm-adapter-legacy
+    - name: Upload wasm legacy adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: wasm-adapter-legacy.compact.wasm
+        path: test/bin/wasm_adapter_legacy.compact.wasm
+
+
+  test-substrate:
+    needs: build-adapter-substrate
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture: [ host-api, scale-codec, state-trie ]
+    name: "[test-${{ matrix.fixture }}] substrate"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
+    - name: Run test fixture
+      run: test/runtests.jl substrate ${{ matrix.fixture }}
+
+  test-substrate-legacy:
+    needs: build-adapter-substrate-legacy
+    name: "[test-host-api-legacy] substrate"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter-legacy
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter-legacy
+    - name: Run test fixture
+      run: test/runtests.jl substrate host-api-legacy
+
+
+  test-kagome:
+    needs: [ build-adapter-substrate, build-adapter-kagome ]
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture: [ scale-codec, state-trie ]
+    name: "[test-${{ matrix.fixture }}] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter
+        path: test/bin
+    - run: cd test/bin && chmod +x substrate-adapter kagome-adapter
+    - name: Run test fixture
+      run: test/runtests.jl kagome ${{ matrix.fixture }}
+
+  test-kagome-wasm:
+    needs: [ build-adapter-kagome, build-adapter-wasm ]
+    name: "[test-host-api] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter.compact.wasm
+        path: test/bin
+    - run: chmod +x test/bin/kagome-adapter
+    - name: Run test fixture
+      run: test/runtests.jl kagome host-api
+
+  test-kagome-legacy:
+    needs: [ build-adapter-kagome-legacy, build-adapter-wasm-legacy]
+    name: "[test-host-api-legacy] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter-legacy
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter-legacy.compact.wasm
+        path: test/bin
+    - run: chmod +x test/bin/kagome-adapter-legacy
+    - name: Run test fixture
+      run: test/runtests.jl kagome host-api-legacy
+
+
+  test-gossamer:
+    needs: [ build-adapter-substrate, build-adapter-gossamer ]
+    strategy:
+      fail-fast: false
+      matrix:
+        fixture: [ scale-codec, state-trie ]
+    name: "[test-${{ matrix.fixture }}] gossamer"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: gossamer-adapter
+        path: test/bin
+    - run: cd test/bin && chmod +x substrate-adapter gossamer-adapter
+    - name: Run test fixture
+      run: test/runtests.jl gossamer ${{ matrix.fixture }}

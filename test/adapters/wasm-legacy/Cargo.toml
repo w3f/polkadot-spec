@@ -1,0 +1,14 @@
+[package]
+name = "wasm-adapter-legacy"
+version = "0.6.0"
+edition = "2018"
+build = "build.rs"
+
+[dependencies]
+primitives = { package = "substrate-primitives", git = "https://github.com/paritytech/substrate", rev = "c37bb08", default-features = false, optional = true }
+
+[build-dependencies]
+substrate-wasm-builder = "1.0.11"
+
+[features]
+runtime-wasm = [ "primitives" ]

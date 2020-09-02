@@ -5,6 +5,9 @@
 %%\usepackage{algorithmic}
 \usepackage{xargs}
 \usepackage{plantuml} %%digarams
+\usepackage{tikz}
+\tikzset{
+  font={\fontsize{16pt}{20}\selectfont}}
 
 %\usepackage{fontspec} %%for greek letters in plant uml in case you don't use math
 %\setmainfont{CMU Serif}
@@ -113,7 +116,7 @@
 \maketitle
 
 {\tableofcontents}
-% \input{availability_and_validity.tex}
+\input{runtime-spec-transaction.tex}
 \bibliographystyle{plain}
 \bibliography{references,crypto,rt,grandpa}
 \begin{appendix}

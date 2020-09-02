@@ -1,14 +1,9 @@
-[submodule "implementations/rust/parity-codec"]
-	path = implementations/rust/parity-codec
-	url = https://github.com/paritytech/parity-scale-codec
-[submodule "implementations/go/gossamer"]
-	path = implementations/go/gossamer
-	url = https://github.com/ChainSafeSystems/gossamer
-	branch = development
-[submodule "parity-trie"]
-	path = implementations/rust/trie
-	url = https://github.com/cheme/trie
-	branch = n_ext_trie
-[submodule "implementations/cpp/kagome"]
-	path = implementations/cpp/kagome
-	url = https://github.com/soramitsu/kagome
+[submodule "test/hosts/kagome"]
+	path = test/hosts/kagome
+	url = https://github.com/soramitsu/kagome.git
+[submodule "test/hosts/gossamer"]
+	path = test/hosts/gossamer
+	url = https://github.com/ChainSafe/gossamer.git
+[submodule "test/hosts/substrate"]
+	path = test/hosts/substrate
+	url = https://github.com/paritytech/polkadot.git
