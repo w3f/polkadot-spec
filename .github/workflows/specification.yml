@@ -1,0 +1,53 @@
+name: Specification Publication
+
+on:
+  push:
+    paths:
+    - '.github/workflows/specification.yml'
+    - '.github/apt-texmacs.asc'
+    - 'host-spec/**'
+    - 'runtime-spec/**'
+  pull_request:
+    paths:
+    - '.github/workflows/specification.yml'
+    - '.github/apt-texmacs.asc'
+    - 'host-spec/**'
+    - 'runtime-spec/**'
+
+jobs:
+  build-spec-host:
+    name: Compile host specification
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-key add .github/apt-texmacs.asc
+        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
+        sudo apt-get update
+        sudo apt-get install -y xvfb texmacs
+    - name: Build host specification
+      run: make -C host-spec
+    - name: Upload host specification
+      uses: actions/upload-artifact@v1
+      with:
+        name: polkadot-host-spec.pdf
+        path: host-spec/polkadot-host-spec.pdf
+
+  build-spec-runtime:
+    name: Compile runtime specification
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y texlive-luatex 
+    - name: Build runtime specification
+      run: make -C runtime-spec
+    - name: Upload runtime specification
+      uses: actions/upload-artifact@v1
+      with:
+        name: polkadot-runtime-spec.pdf
+        path: runtime-spec/polkadot-runtime-spec.pdf
+

@@ -6,9 +6,6 @@ build/
 target/
 .idea/
 
-#executables
-test/testers/go-tester/scale_codec/scale_codec
-
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
@@ -256,5 +253,3 @@ TSWLatexianTemp*
 *~
 \#*\#
 \.\#*
-
-runtime-environment-spec/deleted_material.tm
