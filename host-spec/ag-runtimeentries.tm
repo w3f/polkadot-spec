@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|host-spec.tm>
 
@@ -114,8 +114,8 @@
 
   where <verbatim|data> points to the SCALE encoded paramaters sent to the
   function and <verbatim|len> is the length of the data. <verbatim|result>
-  can similarly either point to the SCALE encoded data the function returns
-  (See Sections <reference|sect-runtime-send-args-to-runtime-enteries> and
+  points to the SCALE encoded data the function returns (See Sections
+  <reference|sect-runtime-send-args-to-runtime-enteries> and
   <reference|sect-runtime-return-value>).
 
   \;
@@ -133,15 +133,29 @@
   <verbatim|>
 
   <\with|par-mode|center>
-    <small-table|<tabular|<tformat|<cwith|1|7|1|1|cell-halign|l>|<cwith|1|7|1|1|cell-lborder|0ln>|<cwith|1|7|2|2|cell-halign|l>|<cwith|1|7|3|3|cell-halign|l>|<cwith|1|7|3|3|cell-rborder|0ln>|<cwith|1|7|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|7|7|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
+    <small-table|<tabular|<tformat|<cwith|1|8|1|1|cell-halign|l>|<cwith|1|8|1|1|cell-lborder|0ln>|<cwith|1|8|2|2|cell-halign|l>|<cwith|1|8|3|3|cell-halign|l>|<cwith|1|8|3|3|cell-rborder|0ln>|<cwith|1|8|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|8|8|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
     identifier>>|<row|<cell|<verbatim|impl_name>>|<cell|String>|<cell|the
     name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|UINT32>|<cell|the
     version of the authorship interface>>|<row|<cell|<verbatim|spec_version>>|<cell|UINT32>|<cell|the
     version of the Runtime specification>>|<row|<cell|<verbatim|impl_version>>|<cell|UINT32>|<cell|the
-    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec>|<cell|List
-    of supported AP>>>>>|Detail of the version data type returns from runtime
-    <verbatim|version> function.>
+    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec
+    (<reference|defn-rt-apisvec>)>|<cell|List of supported APIs along with
+    their version>>|<row|<cell|<verbatim|transaction_version>>|<cell|UINT32>|<cell|the
+    version of the transaction format>>>>>|Detail of the version data type
+    returns from runtime <verbatim|version> function.>
   </with>
+
+  <\definition>
+    <label|defn-rt-apisvec><strong|ApisVec> is a specialised type for the
+    <verbatim|Core_version> (<reference|defn-rt-core-version>) function
+    entry. It represents an array of tuples, where the first value of the
+    tuple is an array of 8-bytes indicating the API name. The second value of
+    the tuple is the version number of the corresponding API.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|ApiVec>|<cell|\<assign\>>|<cell|<around*|(|T<rsub|0>,\<ldots\>,T<rsub|n>|)>>>|<row|<cell|T>|<cell|\<assign\>>|<cell|<around*|(|<around*|(|b<rsub|0>,\<ldots\>,b<rsub|7>|)>,UINT32|)>>>>>
+    </eqnarray*>
+  </definition>
 
   <subsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
 
@@ -172,8 +186,9 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>The entry accepts the <em|block data> defined in Definition
-    <reference|defn-block-data> as the only argument.
+    <item>The entry accepts a block, represented as a tuple consisting of a
+    block header as described in section <reference|defn-block-header> and
+    the block body as described in section <reference|defn-block-body>.
   </itemize>
 
   \;
@@ -181,7 +196,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A boolean value indicates if the execution was successful.
+    <item>None.
   </itemize-dot>
 
   <subsection|<verbatim|Core_initialize_block>>
@@ -195,8 +210,8 @@
 
   <\itemize>
     <item>The block header of the new block as defined in
-    <reference|defn-block-header>. The values <strong|<math|H<rsub|r>>>,
-    <strong|<math|H<rsub|e>>> and <strong|<math|H<rsub|d>>> are left empty.
+    <reference|defn-block-header>. The values <math|H<rsub|r>,H<rsub|e> and
+    H<rsub|d>> are left empty.
   </itemize>
 
   \;
@@ -405,7 +420,8 @@
 
   \;
 
-  <subsection|<verbatim|BlockBuilder_apply_extrinsic>><label|sect-rte-apply-extrinsic>
+  <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
+  <label|sect-rte-apply-extrinsic>
 
   Apply the extrinsic outside of the block execution function. This does not
   attempt to validate anything regarding the block, but it builds a list of
@@ -424,49 +440,138 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>The result from the attempt to apply extrinsic. On success, it
-    returns an array of zero length (one byte zero value). On failure, it
-    either returns a Dispatch error or an Apply error. An Apply error uses
-    identifiers to indicate the specific error type.
+    <item>Returns the varying datatype <strong|<em|ApplyExtrinsicResult>> as
+    defined in Definition <reference|defn-rte-apply-extrinsic-result>.
 
     \;
-
-    Dispatch error (<verbatim|0x0001> prefix) byte array, contains the
-    following information:
-
-    <small-table|<tabular|<tformat|<table|<row|<cell|<strong|Name>>|<cell|<strong|Type>>|<cell|<strong|Description>>>|<row|<cell|module>|<cell|unsigned
-    8 bit integer>|<cell|Module index, matching the metadata module
-    index>>|<row|<cell|error>|<cell|unsigend 8 bit integer>|<cell|Module
-    specific error value>>>>>|Data format of the Dispatch error type>
-
-    \;
-
-    Apply error (<verbatim|0x01> prefix). A Validity error type contains
-    additional data for specific error types.
-
-    <small-table|<tabular|<tformat|<table|<row|<cell|<strong|Identifier>>|<cell|<strong|Type>>|<cell|<strong|Description>>>|<row|<cell|<verbatim|0x00>>|<cell|NoPermission>|<cell|General
-    error to do wth the permissions of the
-    sender>>|<row|<cell|<verbatim|0x01>>|<cell|BadState>|<cell|General error
-    to do with the state of the system in
-    general>>|<row|<cell|<verbatim|0x02>>|<cell|Validity>|<cell|Any error to
-    do with the transaction validity>>|<row|<cell|<verbatim|0x020000>>|<cell|Call>|<cell|The
-    call of the transaction is not expected>>|<row|<cell|<verbatim|0x020001>>|<cell|Payment>|<cell|Inability
-    to pay fees (e.g. account balance too
-    low)>>|<row|<cell|<verbatim|0x020002>>|<cell|Future>|<cell|Transaction
-    not yet being valid (e.g. nonce too high)>>|<row|<cell|<verbatim|0x020003>>|<cell|Stale>|<cell|Transaction
-    being outdated (e.g. nonce too low)>>|<row|<cell|<verbatim|0x020004>>|<cell|BadProof>|<cell|Invalid
-    transaction proofs (e.g. bad signature)>>|<row|<cell|<verbatim|0x020005>>|<cell|AncientBirthBlock>|<cell|The
-    transaction birth block is ancient>>|<row|<cell|<verbatim|0x020006>>|<cell|ExhaustsResources>|<cell|Would
-    exhaust the resources of current block>>|<row|<cell|>|<cell|>|<cell|the
-    transaction might be valid>>|<row|<cell|<verbatim|0x020007>>|<cell|Custom>|<cell|Any
-    other custom invalidity of unknown size>>|<row|<cell|<verbatim|0x020100>>|<cell|CannotLookup>|<cell|Could
-    not lookup some information that is required>>|<row|<cell|>|<cell|>|<cell|to
-    validate the transaction>>|<row|<cell|<verbatim|0x020101>>|<cell|NoUnsignedValidator>|<cell|No
-    validator found for the given unsigned
-    transaction>>|<row|<cell|<verbatim|0x020102>>|<cell|Custom>|<cell|Any
-    other custom invalidity of unknown size>>>>>|Identifiers of the Apply
-    error type>
   </itemize-dot>
+
+  <\definition>
+    <label|defn-rte-apply-extrinsic-result><strong|ApplyExtrinsicResult> is
+    the varying data type <strong|Result> as defined in Definition
+    <reference|defn-result-type>. This structure can contain multiple nested
+    structures, indicating either module dispatch outcomes or transaction
+    invalidity errors.
+
+    <\big-table|<tabular|<tformat|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Outcome
+    of dispatching the extrinsic.>|<cell|DispatchOutcome
+    (<reference|defn-rte-dispatch-outcome>)>>|<row|<cell|1>|<cell|Possible
+    errors while checking the>|<cell|TransactionValidityError
+    (<reference|defn-rte-transaction-validity-error>)>>|<row|<cell|>|<cell|validity
+    of a transaction.>|<cell|>>>>>>
+      Possible values of varying data type <strong|ApplyExtrinsicResult>.
+    </big-table>
+  </definition>
+
+  <\definition>
+    <label|defn-rte-dispatch-outcome><strong|DispatchOutcome> is the varying
+    data type <strong|Result> as defined in Definition
+    <reference|defn-result-type>.
+
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Extrinsic
+    is valid and was submitted successfully.>|<cell|None>>|<row|<cell|1>|<cell|Possible
+    errors while dispatching the extrinsic.>|<cell|DispatchError
+    (<reference|defn-rte-dispatch-error>)>>>>>>
+      Possible values of varying data type <strong|DispatchOutcome>.
+    </big-table>
+  </definition>
+
+  <\definition>
+    <label|defn-rte-dispatch-error><strong|DispatchError> is a varying data
+    type as defined in Definition <reference|defn-varrying-data-type>.
+    Indicates various reasons why a dispatch call failed.
+
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|1|cell-lborder|0ln>|<cwith|5|5|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Some
+    unknown error occured.>|<cell|SCALE encoded byte array
+    contain->>|<row|<cell|>|<cell|>|<cell|ing a valid UTF-8
+    sequence.>>|<row|<cell|1>|<cell|Failed to lookup some
+    data.>|<cell|None>>|<row|<cell|2>|<cell|A bad
+    origin.>|<cell|None>>|<row|<cell|3>|<cell|A custom error in a
+    module.>|<cell|CustomModuleError (<reference|defn-rte-custom-module-error>)>>>>>>
+      Possible values of varying data type <strong|DispatchError>.
+    </big-table>
+  </definition>
+
+  <\definition>
+    <label|defn-rte-custom-module-error><strong|CustomModuleError> is a tuple
+    appended after a possible error in <strong|DispatchError> as defined in
+    Defintion <reference|defn-rte-dispatch-error>.
+
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|1|cell-lborder|0ln>|<cwith|5|5|3|3|cell-rborder|0ln>|<cwith|9|9|1|-1|cell-tborder|0ln>|<cwith|8|8|1|-1|cell-bborder|0ln>|<cwith|9|9|1|-1|cell-bborder|1ln>|<cwith|9|9|1|1|cell-lborder|0ln>|<cwith|9|9|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Index>|<cell|Module
+    index matching the>|<cell|Unsigned 8-bit
+    integer.>>|<row|<cell|>|<cell|metadata module
+    index.>|<cell|>>|<row|<cell|Error>|<cell|Module specific error
+    value.>|<cell|Unsigned 8-bit integer>>|<row|<cell|>|<cell|>|<cell|>>|<row|<cell|Message>|<cell|Optional
+    error message.>|<cell|Varying data type <strong|Option>
+    (<reference|defn-option-type>).>>|<row|<cell|>|<cell|>|<cell|The optional
+    value is a SCALE>>|<row|<cell|>|<cell|>|<cell|encoded byte array
+    containing a>>|<row|<cell|>|<cell|>|<cell|valid UTF-8 sequence.>>>>>>
+      Possible values of varying data type <strong|CustomModuleError>.
+    </big-table>
+  </definition>
+
+  <\definition>
+    <label|defn-rte-transaction-validity-error><strong|TransactionValidityError>
+    is a varying data type as defined in Definition
+    <reference|defn-varrying-data-type>. It indicates possible errors that
+    can occur while checking the validity of a transaction.
+
+    <\big-table|<tabular|<tformat|<cwith|1|-1|1|-1|cell-tborder|1ln>|<cwith|1|-1|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Transaction
+    is invalid.>|<cell|InvalidTransaction
+    (<reference|defn-rte-invalid-transaction>)>>|<row|<cell|1>|<cell|Transaction
+    validity can't be determined.>|<cell|UnknownTransaction
+    (<reference|defn-rte-unknown-transaction>)>>>>>>
+      Possible values of varying data type <strong|TransactionValidityError>.
+    </big-table>
+  </definition>
+
+  <\definition>
+    <label|defn-rte-invalid-transaction><strong|InvalidTransaction> is a
+    varying data type as defined in Definition
+    <reference|defn-varrying-data-type>. Specifies the invalidity of the
+    transaction in more detail.
+
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|0ln>|<cwith|5|5|1|-1|cell-bborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|7|7|1|-1|cell-tborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|8|8|1|-1|cell-tborder|0ln>|<cwith|7|7|1|-1|cell-bborder|0ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|1|cell-lborder|0ln>|<cwith|8|8|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-bborder|1ln>|<cwith|12|12|1|-1|cell-tborder|1ln>|<cwith|11|11|1|1|cell-lborder|0ln>|<cwith|11|11|3|3|cell-rborder|0ln>|<cwith|13|13|1|-1|cell-tborder|0ln>|<cwith|12|12|1|-1|cell-bborder|0ln>|<cwith|13|13|1|-1|cell-bborder|1ln>|<cwith|14|14|1|-1|cell-tborder|1ln>|<cwith|13|13|1|1|cell-lborder|0ln>|<cwith|13|13|3|3|cell-rborder|0ln>|<cwith|15|15|1|-1|cell-tborder|0ln>|<cwith|14|14|1|-1|cell-bborder|0ln>|<cwith|15|15|1|-1|cell-bborder|1ln>|<cwith|16|16|1|-1|cell-tborder|1ln>|<cwith|15|15|1|1|cell-lborder|0ln>|<cwith|15|15|3|3|cell-rborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|1|cell-lborder|0ln>|<cwith|10|10|3|3|cell-rborder|0ln>|<cwith|17|17|1|-1|cell-tborder|0ln>|<cwith|16|16|1|-1|cell-bborder|0ln>|<cwith|17|17|1|1|cell-lborder|0ln>|<cwith|17|17|3|3|cell-rborder|0ln>|<cwith|19|19|1|-1|cell-bborder|1ln>|<cwith|18|19|1|1|cell-lborder|0ln>|<cwith|18|19|3|3|cell-rborder|0ln>|<cwith|18|18|1|-1|cell-tborder|1ln>|<cwith|17|17|1|-1|cell-bborder|1ln>|<cwith|18|18|1|-1|cell-bborder|0ln>|<cwith|19|19|1|-1|cell-tborder|0ln>|<cwith|18|18|1|1|cell-lborder|0ln>|<cwith|18|18|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Call
+    of the transaction is not expected.>|<cell|None>>|<row|<cell|1>|<cell|General
+    error to do with the inability to pay>|<cell|None>>|<row|<cell|>|<cell|some
+    fees (e.g. account balance too low).>|<cell|>>|<row|<cell|2>|<cell|General
+    error to do with the transaction>|<cell|None>>|<row|<cell|>|<cell|not
+    being valid (e.g. nonce too high).>|<cell|>>|<row|<cell|3>|<cell|General
+    error to do with the transaction being>|<cell|None>>|<row|<cell|>|<cell|outdated
+    (e.g. nonce too low).>|<cell|>>|<row|<cell|4>|<cell|General error to do
+    with the transactions's>|<cell|None>>|<row|<cell|>|<cell|proof (e.g.
+    signature)>|<cell|>>|<row|<cell|5>|<cell|The transaction birth block is
+    ancient.>|<cell|None>>|<row|<cell|6>|<cell|The transaction would exhaust
+    the resources>|<cell|None>>|<row|<cell|>|<cell|of the current
+    block.>|<cell|>>|<row|<cell|7>|<cell|Some unknown error
+    occured.>|<cell|Unsigned>>|<row|<cell|>|<cell|>|<cell|8-bit
+    integer>>|<row|<cell|8>|<cell|An extrinsic with mandatory dispatch
+    resulted>|<cell|None>>|<row|<cell|>|<cell|in an
+    error.>|<cell|>>|<row|<cell|9>|<cell|A transaction with a mandatory
+    dispatch (only in->|<cell|None>>|<row|<cell|>|<cell|herents are allowed
+    to have mandatory dispatch).>|<cell|>>>>>>
+      Possible values of varying data type <strong|InvalidTransaction>.
+    </big-table>
+  </definition>
+
+  <\definition>
+    <label|defn-rte-unknown-transaction><strong|UnknownTransaction> is a
+    varying data type as defined in Definition
+    <reference|defn-varrying-data-type>. Specifies the unknown invalidity of
+    the transaction in more detail.
+
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|0ln>|<cwith|5|5|1|-1|cell-bborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Could
+    not lookup some information that is required
+    to>|<cell|None>>|<row|<cell|>|<cell|validate the
+    transaction.>|<cell|>>|<row|<cell|1>|<cell|No validator found for the
+    given unsigned transaction.>|<cell|None>>|<row|<cell|2>|<cell|Any other
+    custom unknown validity that is not covered>|<cell|Unsigned>>|<row|<cell|>|<cell|by
+    this enum.>|<cell|8-bit integer>>>>>>
+      Possible values of varying data type <strong|UnknownTransaction>.
+    </big-table>
+  </definition>
+
+  \;
 
   <subsection|<verbatim|BlockBuilder_inherent_extrinsics>>
 
@@ -513,7 +618,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|6>
-    <associate|page-first|107>
+    <associate|page-first|113>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
@@ -537,8 +642,13 @@
     <associate|auto-19|<tuple|A.7|111>>
     <associate|auto-2|<tuple|A.1|107>>
     <associate|auto-20|<tuple|A.8|111>>
-    <associate|auto-21|<tuple|A.2.9|112>>
-    <associate|auto-22|<tuple|A.2.10|112>>
+    <associate|auto-21|<tuple|A.9|112>>
+    <associate|auto-22|<tuple|A.10|112>>
+    <associate|auto-23|<tuple|A.11|?>>
+    <associate|auto-24|<tuple|A.12|?>>
+    <associate|auto-25|<tuple|A.13|?>>
+    <associate|auto-26|<tuple|A.2.9|?>>
+    <associate|auto-27|<tuple|A.2.10|?>>
     <associate|auto-3|<tuple|A.1|107>>
     <associate|auto-4|<tuple|A.2|107>>
     <associate|auto-5|<tuple|A.2.1|108>>
@@ -546,15 +656,21 @@
     <associate|auto-7|<tuple|A.2.2|108>>
     <associate|auto-8|<tuple|A.2.3|108>>
     <associate|auto-9|<tuple|A.2.4|109>>
-    <associate|defn-invalid-transaction|<tuple|A.3|110>>
+    <associate|defn-invalid-transaction|<tuple|A.4|110>>
+    <associate|defn-rt-apisvec|<tuple|A.1|?>>
     <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|112>>
-    <associate|defn-rt-core-execute-block|<tuple|A.2.2|108>>
     <associate|defn-rt-core-version|<tuple|A.2.1|108>>
-    <associate|defn-transaction-validity-error|<tuple|A.2|110>>
-    <associate|defn-unknown-transaction|<tuple|A.4|110>>
-    <associate|defn-valid-transaction|<tuple|A.1|110>>
+    <associate|defn-rte-apply-extrinsic-result|<tuple|A.6|?>>
+    <associate|defn-rte-custom-module-error|<tuple|A.9|?>>
+    <associate|defn-rte-dispatch-error|<tuple|A.8|?>>
+    <associate|defn-rte-dispatch-outcome|<tuple|A.7|?>>
+    <associate|defn-rte-invalid-transaction|<tuple|A.11|?>>
+    <associate|defn-rte-transaction-validity-error|<tuple|A.10|?>>
+    <associate|defn-rte-unknown-transaction|<tuple|A.12|?>>
+    <associate|defn-transaction-validity-error|<tuple|A.3|110>>
+    <associate|defn-unknown-transaction|<tuple|A.5|110>>
+    <associate|defn-valid-transaction|<tuple|A.2|110>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
-    <associate|sect-rte-apply-extrinsic|<tuple|A.2.8|111>>
     <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|109>>
     <associate|sect-rte-core-execute-block|<tuple|A.2.2|?>>
     <associate|sect-rte-grandpa-auth|<tuple|A.2.6|109>>
@@ -600,11 +716,40 @@
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
       </surround>|<pageref|auto-17>>
 
-      <tuple|normal|<surround|<hidden-binding|<tuple>|A.7>||Data format of
-      the Dispatch error type>|<pageref|auto-19>>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.7>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|ApplyExtrinsicResult>.
+      </surround>|<pageref|auto-19>>
 
-      <tuple|normal|<surround|<hidden-binding|<tuple>|A.8>||Identifiers of
-      the Apply error type>|<pageref|auto-20>>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.8>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchOutcome>.
+      </surround>|<pageref|auto-20>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.9>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchError>.
+      </surround>|<pageref|auto-21>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.10>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|CustomModuleError>.
+      </surround>|<pageref|auto-22>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.11>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
+      </surround>|<pageref|auto-23>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.12>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|InvalidTransaction>.
+      </surround>|<pageref|auto-24>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.13>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|UnknownTransaction>.
+      </surround>|<pageref|auto-25>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
@@ -653,11 +798,11 @@
 
       <with|par-left|<quote|1tab>|A.2.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
+      <no-break><pageref|auto-26>>
 
       <with|par-left|<quote|1tab>|A.2.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
+      <no-break><pageref|auto-27>>
     </associate>
   </collection>
 </auxiliary>

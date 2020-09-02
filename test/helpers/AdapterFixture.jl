@@ -8,6 +8,11 @@ using Test
 using ..StringHelpers
 using ..Config
 
+
+"Exit code to state outcome of adapter test, based on errno"
+@enum AdapterExitCode Success Failure NotSupported=95
+
+
 "Structure used behind the scene to collect test cases"
 mutable struct Builder
     "Name of the testsuite"
@@ -23,7 +28,7 @@ mutable struct Builder
     inputs::CmdList
 
     "Expected output generated with reference implementations"
-    outputs::StringList
+    outputs::MaybeStringList
 
     "Constructor: Only allow to set name on construction"
     Builder(name, default=``) = new(name, default, [default], [], [])
@@ -66,13 +71,11 @@ function commit!(self::Builder)
 end
 
 """
-Commit commands currently being build to inputs list together with expected
-output. Pass empty list to ignore output checks.
+Commit commands currently being build to inputs list together with list 
+of expected output. Use nothing entries to disable output checks.
 """
-function commit!(self::Builder, outputs::StringList)
-    if isempty(outputs)
-        outputs = fill("", length(self.current))
-    elseif length(outputs) != length(self.current)
+function commit!(self::Builder, outputs::MaybeStringList)
+    if length(outputs) != length(self.current)
         error("Different count of Inputs and expected outputs.")
     end
 
@@ -80,9 +83,12 @@ function commit!(self::Builder, outputs::StringList)
     append!(self.inputs,  self.current)
 end
 
-"Commit commands currently being build to inputs list, disabling output check."
-function commit!(self::Builder, _::Nothing)
-    commit!(self, StringList())
+"""
+Commit commands currently being build to inputs list together with a single
+expected output for all of them. Use nothing to disable output checks.
+"""
+function commit!(self::Builder, output::MaybeString)
+    commit!(self, MaybeStringList(output, length(self.current)))
 end
 
 "Reset current command being build to default"
@@ -118,48 +124,60 @@ function run(self::Builder, adapter::CmdString)
 
     for (input, output) in zip(self.inputs, self.outputs)
 
+        # Execute adapter and collect output and exit code
         cmd = cmdjoin(adapter, input)
 
         if Config.verbose
             println("┌ [COMMAND] ", cmd)
         end
 
-        try
-            result = read(cmd, String)
+        stream = Pipe()
+        proc = Base.run(pipeline(ignorestatus(cmd), stdout=stream, stderr=stream))
+        close(stream.in)
+        result = read(stream, String)
 
-            if output in ["", "\n"]
-                # Empty outputs are used to disable comparison
-                @test true
+        # Check if adapter is missing adaption (special case)
+        if proc.exitcode == Int(NotSupported)
+            @warn "Missing adaption: $cmd"
+            @test_skip AdapterExitCode(proc.exitcode) == NotSupported
+            continue
+        end
 
-                if Config.verbose
-                    println("└ [IGNORED] ", result)
-
-                    if isempty(result)
-                        println()
-                    end
-                end
-            elseif isempty(result)
-                # Empty test result are interpretted as missing adaption
-                @warn "Missing adaption: $cmd"
-                @test_skip false
-            else
+        # Check exit code and result
+        if success(proc)
+            if output != nothing
                 # Default: Compare result against expected result
                 @test result == output
+            else
+                # Empty outputs are used to disable comparison
+                @test output == nothing
+            end
 
-                if Config.verbose
+        else
+            @error "Adapter failed running $cmd:\n$result"
+            @test success(proc)
+        end
+
+        if Config.verbose
+            if success(proc)
+                if output != nothing
                     println("└ [OUTPUTS] ", result)
+                else
+                    println("└ [IGNORED] ", result)
                 end
-             end
-        catch err
-            @error "Adapter failed: $err"
-            # Should be @test_broken, but does not fail CI
-            @test false
-        end # try-catch
-    end # for inputs
+            else
+                println("└ [FAILED] (", proc.exitcode, ") ", result)
+            end
+
+            if isempty(result)
+                println()
+            end
+        end
+   end # for inputs
 end
 
 "List of implementations with legacy adapter"
-IMPLEMENTATIONS_WITH_LEGACY_ADAPTER = [ "substrate" ]
+IMPLEMENTATIONS_WITH_LEGACY_ADAPTER = [ "substrate" "kagome" ]
 
 "Run fixture for each configured implementation, optional flag to use legacy version if available."
 function execute(self::Builder; legacy::Bool=false)

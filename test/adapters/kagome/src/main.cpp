@@ -17,44 +17,28 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
-
-#define BOOST_ENABLE_ASSERT_HANDLER
-#include <boost/assert.hpp>
+#include "assert.hpp"
 
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
-#include "subcommand_router.hpp"
+#include <common/logger.hpp>
+
+#include "subcommand.hpp"
 
 #include "scale_codec.hpp"
-#include "trie.hpp"
-#include "extension.hpp"
+#include "state_trie.hpp"
+#include "host_api.hpp"
 
-//! Helpers to print asserts and associated messages
-namespace boost {
-  void assertion_failed(char const * expr, char const * function, char const * file, long line) {
-    std::cout << "Assert inside function '" << function
-              << "' in file '" << file
-              << "' on line '" << line
-              << "' when evaluating '" << expr
-              << "'" << std::endl;
-  }
-  void assertion_failed_msg(char const * expr, char const * msg, char const * function, char const * file, long line) {
-    std::cout << "Error inside function '" << function
-              << "' in file '" << file
-              << "' on line '" << line
-              << "' when evaluating '" << expr
-              << "': " << msg << std::endl;
-  }
-}
-
-
+#include <cerrno>
 /**
  * Implementation of Polkadot Host API, SCALE codec and Merkle-Patricia
  * Tree compatibility tests
  */
 int main(int argc, char **argv) {
+  // Disable all logging
+  kagome::common::setLogLevel(kagome::common::LogLevel::off);
+
   SubcommandRouter<int, char **> router;
   router.addSubcommand("scale-codec", [](int argc, char **argv) {
     processScaleCodecCommand(extractScaleArgs(argc, argv));
@@ -63,7 +47,7 @@ int main(int argc, char **argv) {
     processTrieCommand(extractTrieArgs(argc, argv));
   });
   router.addSubcommand("host-api", [](int argc, char **argv) {
-    processExtensionsCommands(extractExtensionArgs(argc, argv));
+    processHostApiCommands(extractHostApiArgs(argc, argv));
   });
 
   std::string commands_list = "Valid subcommands are: ";
@@ -73,10 +57,14 @@ int main(int argc, char **argv) {
   }
 
   auto e1 = "Subcommand is not provided\n" + commands_list;
-  auto e2 = "Invalid subcommand\n" + commands_list;
   BOOST_ASSERT_MSG(argc > 1, e1.data());
-  BOOST_VERIFY_MSG(router.executeSubcommand(argv[1], argc - 1, argv + 1),
-                   e2.data());
+
+  try {
+    auto e2 = "Invalid subcommand\n" + commands_list;
+    BOOST_VERIFY_MSG(router.executeSubcommand(argv[1], argc - 1, argv + 1), e2.data());
+  } catch (const NotImplemented &e) {
+    return EOPNOTSUPP;
+  }
 
   return 0;
 }

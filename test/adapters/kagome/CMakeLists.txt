@@ -24,13 +24,23 @@ set(CMAKE_TOOLCHAIN_FILE
   CACHE FILEPATH "Default toolchain"
 )
 
+# Setup but disable binary cache by default
+set(
+  HUNTER_USE_CACHE_SERVERS "NO"
+  CACHE STRING "Binary cache server"
+)
+
+set(
+  HUNTER_CACHE_SERVERS "https://github.com/soramitsu/hunter-binary-cache;"
+  CACHE STRING "Binary cache server"
+)
 
 # Setup hunter
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.253-soramitsu4.tar.gz"
-    SHA1 "e55ec201201d1e5726b0c849c1c8e2fee003ab9f"
-    FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
+  URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.254-soramitsu1.tar.gz"
+  SHA1 "7819e7dd14f58b6df2fd7f2bc835265d60add3f5"
+  FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
 )
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
@@ -47,9 +57,10 @@ find_package(kagome REQUIRED)
 find_package(yaml-cpp REQUIRED)
 
 # FIXME Kagome's package config should do all this!
+find_package(Boost REQUIRED COMPONENTS filesystem program_options random)
 find_package(ed25519 REQUIRED)
 find_package(sr25519 REQUIRED)
-find_package(Boost REQUIRED COMPONENTS program_options random)
+find_package(libsecp256k1 REQUIRED)
 find_package(leveldb REQUIRED)
 find_package(OpenSSL REQUIRED)
 find_package(xxhash REQUIRED)
@@ -60,23 +71,27 @@ find_package(binaryen REQUIRED)
 # Compile and link tester
 add_executable(kagome-adapter
   src/main.cpp
+  src/assert.cpp
+  src/assert.hpp
+  src/subcommand.hpp
   src/scale_codec.cpp
   src/scale_codec.hpp
-  src/trie.cpp
-  src/subcommand_router.hpp
-  src/trie.hpp
-  src/extension.cpp
-  src/extension.hpp
-  src/extension/storage.cpp
-  src/extension/storage.hpp
-  src/extension/network.cpp
-  src/extension/network.hpp
-  src/extension/child_storage.cpp
-  src/extension/child_storage.hpp
-  src/extension/crypto.cpp
-  src/extension/crypto.hpp
-  src/extension/helpers.cpp
-  src/extension/helpers.hpp
+  src/state_trie.cpp
+  src/state_trie.hpp
+  src/host_api.cpp
+  src/host_api.hpp
+  src/host_api/helpers.cpp
+  src/host_api/helpers.hpp
+  src/host_api/crypto.cpp
+  src/host_api/crypto.hpp
+  src/host_api/hashing.cpp
+  src/host_api/hashing.hpp
+  src/host_api/trie.cpp
+  src/host_api/trie.hpp
+  src/host_api/storage.cpp
+  src/host_api/storage.hpp
+  src/host_api/child_storage.cpp
+  src/host_api/child_storage.hpp
 )
 
 # FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")

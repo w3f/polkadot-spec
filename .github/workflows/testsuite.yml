@@ -122,6 +122,29 @@ jobs:
         name: kagome-adapter
         path: test/bin/kagome-adapter
 
+  build-adapter-kagome-legacy:
+    name: "[build] kagome-adapter-legacy"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - name: Cache hunter packages
+      uses: actions/cache@v1
+      with:
+        path: ~/.hunter
+        key: hunter-adapter-kagome-legacy-${{ hashFiles('test/adapters/kagome-legacy/CMakeLists.txt') }}
+        restore-keys: hunter-adapter-kagome-legacy-
+    - name: Build kagome legacy adapter
+      env:
+        CC: gcc-9
+        CXX: g++-9
+      run: make -C test kagome-adapter-legacy
+    - name: Upload kagome adapter
+      uses: actions/upload-artifact@v1
+      with:
+        name: kagome-adapter-legacy
+        path: test/bin/kagome-adapter-legacy
+
   build-adapter-gossamer:
     name: "[build] gossamer-adapter"
     runs-on: ubuntu-18.04
@@ -243,6 +266,22 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl substrate ${{ matrix.fixture }}
 
+  test-substrate-legacy:
+    needs: build-adapter-substrate-legacy
+    name: "[test-host-api-legacy] substrate"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: substrate-adapter-legacy
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter-legacy
+    - name: Run test fixture
+      run: test/runtests.jl substrate host-api-legacy
+
+
   test-kagome:
     needs: [ build-adapter-substrate, build-adapter-kagome ]
     strategy:
@@ -266,6 +305,45 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl kagome ${{ matrix.fixture }}
 
+  test-kagome-wasm:
+    needs: [ build-adapter-kagome, build-adapter-wasm ]
+    name: "[test-host-api] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter.compact.wasm
+        path: test/bin
+    - run: chmod +x test/bin/kagome-adapter
+    - name: Run test fixture
+      run: test/runtests.jl kagome host-api
+
+  test-kagome-legacy:
+    needs: [ build-adapter-kagome-legacy, build-adapter-wasm-legacy]
+    name: "[test-host-api-legacy] kagome"
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: kagome-adapter-legacy
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: wasm-adapter-legacy.compact.wasm
+        path: test/bin
+    - run: chmod +x test/bin/kagome-adapter-legacy
+    - name: Run test fixture
+      run: test/runtests.jl kagome host-api-legacy
+
+
   test-gossamer:
     needs: [ build-adapter-substrate, build-adapter-gossamer ]
     strategy:
@@ -288,33 +366,3 @@ jobs:
     - run: cd test/bin && chmod +x substrate-adapter gossamer-adapter
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
-
-
-  test-host-api-legacy:
-    needs: [ build-adapter-substrate-legacy, build-adapter-kagome ]
-    strategy:
-      fail-fast: false
-      matrix:
-        implementation: [ substrate, kagome ]
-    name: "[test-host-api-legacy] ${{ matrix.implementation }}"
-    runs-on: ubuntu-18.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
-      with:
-        name: ${{ matrix.implementation }}-adapter-legacy
-        path: test/bin
-      if: matrix.implementation == 'substrate'
-    - uses: actions/download-artifact@v1
-      with:
-        name: ${{ matrix.implementation }}-adapter
-        path: test/bin
-      if: matrix.implementation == 'kagome'
-    - run: chmod +x test/bin/substrate-adapter-legacy
-      if: matrix.implementation == 'substrate'
-    - run: chmod +x test/bin/kagome-adapter
-      if: matrix.implementation == 'kagome'
-    - name: Run test fixture
-      run: test/runtests.jl ${{ matrix.implementation }} host-api-legacy
-

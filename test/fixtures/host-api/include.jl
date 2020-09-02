@@ -9,6 +9,10 @@ tests = AdapterFixture.Builder("Host API", `host-api`)
 
 HOSTAPI_FIXTURE_DATASETS = [
     [
+        HostApiFunctions.none,
+        nothing,
+        HostApiOutputs.none,
+    ],[
         HostApiFunctions.value,
         [
             HostApiInputs.value_1,
@@ -21,7 +25,7 @@ HOSTAPI_FIXTURE_DATASETS = [
             HostApiInputs.child_def_child_type,
             HostApiInputs.key_value_1,
         ],
-        HostApiOutputs.child_child_def_type_key_value .* "\n",
+        HostApiOutputs.child_child_def_type_key_value,
     ],[
         HostApiFunctions.child_def_type_key_value_offset_buffer_size,
         [
@@ -48,13 +52,13 @@ HOSTAPI_FIXTURE_DATASETS = [
             HostApiInputs.key_value_1,
             HostApiInputs.key_value_2,
         ],
-        HostApiOutputs.child_child_def_type_key_value_key_value .* "\n",
+        HostApiOutputs.child_child_def_type_key_value_key_value,
     ],[
         HostApiFunctions.key_value,
         [
             HostApiInputs.key_value_1,
         ],
-        HostApiOutputs.key_value .* "\n",
+        HostApiOutputs.key_value,
     ],[
         HostApiFunctions.key_value_offset_buffer_size,
         [
@@ -118,9 +122,13 @@ HOSTAPI_FIXTURE_DATASETS = [
 for (func, input, output) in HOSTAPI_FIXTURE_DATASETS
     sub!(tests) do t
         arg!(t, `--function`)
-        foreach!(t, func),
-        arg!(t, `--input`)
-        foreach!(t, commajoin(flatzip(input...)))
+        foreach!(t, func)
+
+        if input != nothing
+            arg!(t, `--input`)
+            foreach!(t, commajoin(flatzip(input...)))
+        end
+
         commit!(t, output)
     end
 end

@@ -50,6 +50,8 @@ Needs CMake, GCC or Clang >= 8 (GCC 10 currently broken), Rust, Perl, Python
 make kagome-adapter
 ```
 
+Set `HUNTER_USE_CACHE_SERVERS` to `YES` to use Soramitsu's binary cache. The adapter specific Makefile has the `enable-bincache` target to do exactly that.
+
 ### Gossamer API Adapter
 
 Needs recent version of Go.

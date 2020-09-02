@@ -41,7 +41,7 @@ run_dataset(
     [
         HostApiLegacyInputs.key_value_1
     ],
-    HostApiLegacyOutputs.key_value .* "\n",
+    HostApiLegacyOutputs.key_value,
 )
 
 run_dataset(
@@ -85,7 +85,7 @@ run_dataset(
         HostApiLegacyInputs.child_child,
         HostApiLegacyInputs.key_value_1
     ],
-    HostApiLegacyOutputs.child_child_key_value .* "\n",
+    HostApiLegacyOutputs.child_child_key_value,
 )
 
 run_dataset(
