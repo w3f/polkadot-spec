@@ -90,7 +90,7 @@
     <\center>
       <\small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|-1|2|2|cell-lborder|1ln>|<cwith|1|-1|1|1|cell-rborder|1ln>|<cwith|1|-1|2|2|cell-rborder|1ln>|<table|<row|<cell|<strong|Type
       Id>>|<cell|<strong|Type>>|<cell|<strong|Sub-components>>>|<row|<cell|1>|<cell|Next
-      Epoch Data>|<cell|<math|<around*|(|Auth<rsub|C>,\<cal-R\>|)>>>>|<row|<cell|2>|<cell|On
+      Epoch Data>|<cell|<math|<around*|(|Auth<rsub|BABE>,\<cal-R\>|)>>>>|<row|<cell|2>|<cell|On
       Disabled>|<cell|<math|Auth<rsub|ID>>>>|<row|<cell|3>|<cell|Next Config
       Data>|<cell|<math|<around*|(|c,s<rsub|2nd><rsup|>|)>>>>>>>>
         <label|tabl-consensus-messages-babe>The consensus digest item for
@@ -101,20 +101,20 @@
     Where:
 
     <\itemize-minus>
-      <item>Auth<math|<rsub|C>> is the authority list, as defined in
-      definition <reference|defn-authority-list>.
+      <item>Auth<math|<rsub|BABE>> is the authority list for the next epoch,
+      as defined in definition <reference|defn-authority-list>.
 
-      <item><math|\<cal-R\>> is the 32 byte randomness seed, as defined in
-      definition <reference|defn-epoch-randomness>
+      <item><math|\<cal-R\>> is the 32-byte randomness seed for the next
+      epoch, as defined in definition <reference|defn-epoch-randomness>
 
-      <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to an
+      <item><math|Auth<rsub|ID>> is an unsigned 64-bit integer pointing to an
       individual authority in the current authority list.
 
       <item><math|c> is the probability that a slot will not be empty, as
       defined in definition <reference|defn-babe-constant>.
 
       <item><math|s<rsub|2nd>> is the the second slot configuration encoded
-      as a 8 bit enum.\ 
+      as a 8-bit enum.\ 
     </itemize-minus>
 
     <\center>
@@ -135,7 +135,7 @@
       definition <reference|defn-authority-list>.
 
       <item><math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
-      is an unsigned 32 bit integer indicating the length of the subchain
+      is an unsigned 32-bit integer indicating the length of the subchain
       starting at <math|B>, the block containing the consensus message in its
       header digest and ending when it reaches <math|N<rsub|delay>> length as
       a path graph. The last block in that subchain, <math|B<rprime|'>>,
@@ -144,7 +144,7 @@
       to Algorithm <reference|algo-import-and-validate-block>. see below for
       details).
 
-      <item><math|Auth<rsub|ID>> is an unsigned 64 bit integer pointing to an
+      <item><math|Auth<rsub|ID>> is an unsigned 64-bit integer pointing to an
       individual authority in the current authority list.
     </itemize-minus>
   </definition>
@@ -157,8 +157,9 @@
 
   <\itemize-minus>
     <item><with|font-series|bold|Next Epoch Data:> The runtime issues this
-    message on every first block of an epoch. The supplied authority set and
-    randomness is intended to be used in next epoch. \ 
+    message on every first block of an epoch <math|\<cal-E\><rsub|n>>. The
+    supplied authority set and randomness is intended to be used in next
+    epoch <math|\<cal-E\><rsub|n+1>>. \ 
 
     <item><strong|On Disabled>: An index to the individual authority in the
     current authority list that should be immediately disabled until the next
@@ -308,7 +309,7 @@
     epoch. It is encoded as a tuple of two unsigned 64 bit integers
     <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>> which are used
     to compute the rational <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>.
-    </definition>
+  </definition>
 
   <\definition>
     <label|defn-winning-threshold><strong|Winning threshold> denoted by
@@ -610,37 +611,21 @@
 
   <subsection|Epoch Randomness><label|sect-epoch-randomness>
 
+  <\definition>
+    <label|defn-epoch-randomness>For epoch <math|\<cal-E\>> there is a
+    32-byte <with|font-series|bold|randomness seed>
+    <math|\<cal-R\><rsub|\<cal-E\>>> computed based on the previous epochs
+    VRF outputs. For <math|\<cal-E\><rsub|0>> and <math|\<cal-E\><rsub|1>>,
+    the randomness seed is provided in the genesis state.
+  </definition>
+
   In the beginning of each epoch <math|\<cal-E\><rsub|n>> the host will
   receives the randomness seed <math|\<cal-R\><rsub|\<cal-E\><rsub|n+1>>>(def.
   <reference|defn-epoch-randomness>) necessary to participate in the block
   production lottery in the next epoch <math|\<cal-E\><rsub|n+1>> from the
-  runtime, through a consesus message in the digest (def.
-  <reference|defn-consensus-message-digest>) of the first block.
-
-  <\definition>
-    <label|defn-epoch-randomness>For epoch <math|\<cal-E\>> there is a 32-byte
-    <with|font-series|bold|randomness seed> <math|\<cal-R\><rsub|\<cal-E\>>>
-    computed based on the previous epochs VRF outputs. For
-    <math|\<cal-E\><rsub|0>> and <math|\<cal-E\><rsub|1>>, the randomness
-    seed is provided in the genesis state.
-  </definition>
-
-  \;
-
-  <\definition>
-    The <with|font-series|bold|Next Epoch Descriptor> for epoch
-    <math|\<cal-E\><rsub|n>> is announce in the first block of epoch
-    <math|\<cal-E\><rsub|<rsub|n+1>>>as a consensus message as defined in
-    definition <reference|defn-consensus-message-digest>:
-
-    <\equation*>
-      <around*|(|Auth<rsub|BABE><around*|(||)>,\<cal-R\><rsub|\<cal-E\><rsub|n+1>><rsub|<rsub|>>|)>
-    </equation*>
-
-    \;
-  </definition>
-
-  \;
+  runtime, through the <with|font-shape|italic|Next Epoch Data> consesus
+  message (def. <reference|defn-consensus-message-digest>) in the digest of
+  the first block.
 
   <subsection|Verifying Authorship Right><label|sect-verifying-authorship>
 
@@ -745,8 +730,8 @@
   verification process, when a node is importing a block, in which:
 
   <\itemize-minus>
-    <item><name|Epoch-Randomness> is defined in Algorithm
-    <reference|algo-epoch-randomness>.
+    <item><name|Epoch-Randomness> is defined in Definition
+    <reference|defn-epoch-randomness>.
 
     <item><math|H<rsub|BABE><around*|(|B|)>> is the BABE header defined in
     Definition <reference|defn-babe-header>.
@@ -2014,16 +1999,7 @@
 
 <\initial>
   <\collection>
-    <associate|info-flag|minimal>
-    <associate|page-height|auto>
     <associate|page-medium|papyrus>
-    <associate|page-screen-margin|true>
-    <associate|page-screen-right|5mm>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
-    <associate|tex-even-side-margin|5mm>
-    <associate|tex-odd-side-margin|5mm>
-    <associate|tex-text-width|170mm>
   </collection>
 </initial>
 
