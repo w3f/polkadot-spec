@@ -71,7 +71,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y xvfb texmacs
     - name: Compare host specification
-      run: make -C host-spec diff REV=${GITHUB_BASE_REF:-HEAD~1}
+      run: make -C host-spec diff REV=origin/${GITHUB_BASE_REF:-HEAD~1}
     - name: Upload host specification diffs
       uses: actions/upload-artifact@v2
       with:
