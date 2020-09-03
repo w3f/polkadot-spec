@@ -13,6 +13,8 @@ on:
     - '.github/apt-texmacs.asc'
     - 'host-spec/**'
     - 'runtime-spec/**'
+  release:
+    types: [published]
 
 jobs:
   build-spec-host:
@@ -33,6 +35,14 @@ jobs:
       with:
         name: polkadot-host-spec.pdf
         path: host-spec/polkadot-host-spec.pdf
+    - name: Release host specification
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: host-spec/polkadot-host-spec.pdf
+        asset_name: polkadot-host-spec-${{ github.event.release.tag_name }}.pdf
+        asset_content_type: application/pdf
+      if: github.event_name == 'release'
 
   build-spec-runtime:
     name: Compile runtime specification
@@ -50,6 +60,14 @@ jobs:
       with:
         name: polkadot-runtime-spec.pdf
         path: runtime-spec/polkadot-runtime-spec.pdf
+    - name: Release runtime specification
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: runtime-spec/polkadot-runtime-spec.pdf
+        asset_name: polkadot-runtime-spec-${{ github.event.release.tag_name }}.pdf
+        asset_content_type: application/pdf
+      if: github.event_name == 'release'
 
 
   diff-spec-host:
@@ -63,18 +81,34 @@ jobs:
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request' || github.event_name == 'release'
     - name: Install dependencies
       run: |
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
         sudo apt-get update
         sudo apt-get install -y xvfb texmacs
+    - name: Determine comparison target
+      run: echo "::set-env name=REV::HEAD~1"
+      if: github.event_name == 'push'
+    - name: Determine comparison target
+      run: echo "::set-env name=REV::origin/${GITHUB_BASE_REF}"
+      if: github.event_name == 'pull_request'
+    - name: Determine comparison target
+      run: echo "::set-env name=REV::origin/$(git describe --tags --abbrev=0 HEAD~1)"
+      if: github.event_name == 'release'
     - name: Compare host specification
-      run: make -C host-spec diff REV=origin/${GITHUB_BASE_REF:-HEAD~1}
-    - name: Upload host specification diffs
+      run: make -C host-spec diff
+    - name: Upload host specification diff
       uses: actions/upload-artifact@v2
       with:
         name: polkadot-host-spec.diff.pdf
         path: host-spec/polkadot-host-spec.diff.pdf
-
+    - name: Release host specification diff
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: host-spec/polkadot-host-spec.diff.pdf
+        asset_name: polkadot-host-spec-${{ github.event.release.tag_name }}.diff.pdf
+        asset_content_type: application/pdf
+      if: github.event_name == 'release'
