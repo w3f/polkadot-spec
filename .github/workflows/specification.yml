@@ -37,10 +37,12 @@ jobs:
         path: host-spec/polkadot-host-spec.pdf
     - name: Release host specification
       uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: host-spec/polkadot-host-spec.pdf
-        asset_name: polkadot-host-spec-${{ github.event.release.tag_name }}.pdf
+        asset_name: polkadot-host-spec_${{ github.event.release.tag_name }}.pdf
         asset_content_type: application/pdf
       if: github.event_name == 'release'
 
@@ -62,10 +64,12 @@ jobs:
         path: runtime-spec/polkadot-runtime-spec.pdf
     - name: Release runtime specification
       uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: runtime-spec/polkadot-runtime-spec.pdf
-        asset_name: polkadot-runtime-spec-${{ github.event.release.tag_name }}.pdf
+        asset_name: polkadot-runtime-spec_${{ github.event.release.tag_name }}.pdf
         asset_content_type: application/pdf
       if: github.event_name == 'release'
 
@@ -95,7 +99,7 @@ jobs:
       run: echo "::set-env name=REV::origin/${GITHUB_BASE_REF}"
       if: github.event_name == 'pull_request'
     - name: Determine comparison target
-      run: echo "::set-env name=REV::origin/$(git describe --tags --abbrev=0 HEAD~1)"
+      run: echo "::set-env name=REV::$(git describe --tags --abbrev=0 HEAD~1)"
       if: github.event_name == 'release'
     - name: Compare host specification
       run: make -C host-spec diff
@@ -106,9 +110,11 @@ jobs:
         path: host-spec/polkadot-host-spec.diff.pdf
     - name: Release host specification diff
       uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
         asset_path: host-spec/polkadot-host-spec.diff.pdf
-        asset_name: polkadot-host-spec-${{ github.event.release.tag_name }}.diff.pdf
+        asset_name: polkadot-host-spec_${{ github.event.release.tag_name }}.diff_${{ env.REV }}.pdf
         asset_content_type: application/pdf
       if: github.event_name == 'release'
