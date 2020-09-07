@@ -196,9 +196,9 @@ understanding of the message type or format itself. Consensus on message format
 must be established between to communicating parachains.
 
 Messages intended to be read by other Parachains are inserted into
-`horizontal_messages` of the candidate commitments (`CandidateCommitments`).
-Message which are only intended to be read by the relay chain are inserted into
-`upward_messages`.
+`horizontal_messages` of the candidate commitments (`CandidateCommitments`),
+while message which are only intended to be read by the relay chain are inserted
+into `upward_messages`.
 
 The messages are included by collators into the committed candidate receipt (`CommittedCandidateReceipt`), which contains the following fields:
 
@@ -286,6 +286,8 @@ fields:
 - `message_hash`: The hash of the message itself.
 - `number`: The relay block number at which the message was sent.
 
+![MQC Overview](mqc.svg)
+
 A MQC is always specific to one channel. Additional channels require its own,
 individual MQC. The MQC is not saved on the relay chain, only the last triple of
 the MQC is inserted into the CST. This way, all messages sent can be verified
@@ -305,38 +307,22 @@ item was last updated in the CST. This provides a mechanism for receiving
 parachains to easily verify messages sent from a specific source.
 
 ```
-ParaId#1 => (
-    (ParaId#2, (
-        Relay block Nr,
-        MerkleRoot
-    )),
-    (ParaId#3, (
-        Relay block Nr,
-        MerkleRoot
-    ))
-    ...
-),
-ParaId#2 => (
-    ...
-),
-...
+cst: map ParaId => [ChannelState]
+
+ChannelState {
+  last_updated: BlockNumber,
+  mqc_head: Hash | null,
+}
 ```
+
+The `mqc_head` is `null` iin case there is no prior message.
 
 Besides the CST, there's also a CST Root, which is an additional map construct
 and contains an entry for every sending parachain and the corresponding Merkle
-root of all its pairs inserted into the CST.
+root of each `ChannelState` in the CST.
 
 ```
-ParaId#1 => MerkleRoot(
-    (ParaId#2, (
-        Relay block Nr,
-        MerkleRoot
-    ),
-    (ParaId#3, (...)),
-    ...
-),
-ParaId#2 => Hash,
-...
+cst_roots: map ParaId => Hash
 ```
 
 When a PoV block on the receiving parachain is created, the collator which
@@ -359,6 +345,10 @@ Collators of the receiving parachain insert the messages into their parablock as
 Inherents and publish the parablock to the relay chain. Once included, the
 watermark is updated and points to the relay chain block number where the
 inclusion ocurred.
+
+```
+watermark: map ParaId => (BlockNumber, ParaId)
+```
 
 ## SPREE
 
