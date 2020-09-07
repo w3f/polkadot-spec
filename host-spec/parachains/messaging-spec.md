@@ -19,7 +19,7 @@ and horizontal passing.
 
 Implementation wise, upward messages are inserted into candidate commitments,
 which the validators send to the relay chain. Parachains can call into the
-`downward_messagess` Runtime function in order to receive messages.
+`downward_messages` Runtime function in order to receive messages.
 
 For horizontal passing, Polkadot currently implements the mechanism known as
 Horizontal Relay-routed Message Passing (HRMP), which fully relies on vertical
@@ -78,8 +78,8 @@ to the relay chain. The request is a construct containing the following fields:
 
 `ChOpenRequest`:
 
-- `sender: int`: the ParaId of the sending parachain.
-- `recipient: int`: the ParaId of the receiving parachain.
+- `sender: ParaId`: the ParaId of the sending parachain.
+- `recipient: ParaId`: the ParaId of the receiving parachain.
 - `confirmed: bool`: indicated whether the recipient has accepted the channel.
   On request creation, this value is `false`.
 - `age: int`: the age of this request, which start at `0` and is incremented by
@@ -163,8 +163,8 @@ fields:
 
 - `initiator: int`: the ParaId of the parachain which initiated this request,
   either the sender or the receiver.
-- `sender: int`: the ParaId of the sending parachain.
-- `recipient: int`: the ParaId of the receiving parachain.
+- `sender: ParaId`: the ParaId of the sending parachain.
+- `recipient: ParaId`: the ParaId of the receiving parachain.
 
 The Runtime appends those requests to an array, which the Runtime processes in
 an ordered form (FIFO):
@@ -180,8 +180,8 @@ Both the sending and receiving parachain can close a channel by calling into the
 
 Params:
 
-* `sender` - the ParaId of the sending parachain.
-* `recipient` - the ParaId of the recipient parachain.
+* `sender: ParaId` - the ParaId of the sending parachain.
+* `recipient: ParaId` - the ParaId of the recipient parachain.
 
 The Runtime function checks the following conditions in order for the function
 call to succeed:
@@ -253,6 +253,15 @@ The candidate commitments contains the following fields:
   DMQ.
 * `hrmp_watermark: BlockNumber`: the mark which specifies the block number up to
   which all inbound HRMP messages are processed.
+
+### Receiving Messages
+
+A receiving parachain can check for unread messages by calling into the `downward_messages` Runtime function.
+
+Params:
+- `id: ParaId`: the ParaId of the sender.
+
+On success, it returns a SCALE encoded array of messages.
 
 ## XCMP
 
