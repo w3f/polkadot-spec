@@ -41,7 +41,10 @@ communication line between a sending parachain and a receiving parachain,
 including information about how the channel is being used. A channel construct
 is created for each, individual communication line.
 
-A channel (`Channel`) contains the following fields:
+A channel contains the following fields:
+
+`Channel`:
+
 - `sender_deposit: int`: staked balances of sending parachain.
 - `recipient_deposit: int`: staked balances of receiving parachain.
 - `used_places: int`: number of messages used by the sending parachain in this
@@ -71,8 +74,9 @@ Polkadot places a certain limit on the amount of channels that can be opened
 between parachains. Only the the sending parachain can open a channel.
 
 In order to open a channel, the sending parachain must send an opening request
-(`ChOpenRequest`) to the relay chain. The request is a construct
-containing the following fields:
+to the relay chain. The request is a construct containing the following fields:
+
+`ChOpenRequest`:
 
 - `sender: int`: the ParaId of the sending parachain.
 - `recipient: int`: the ParaId of the receiving parachain.
@@ -150,8 +154,10 @@ If one of those conditions is false, this function call returns with an error
 
 ### Closing Channels
 
-A close channel request `ChCloseRequest` is a construct containing the following
+A close channel request is a construct containing the following
 fields:
+
+`ChCloseRequest`:
 
 - `initiator: int`: the ParaId of the parachain which initiated this request,
   either the sender or the receiver.
@@ -200,12 +206,17 @@ Messages intended to be read by other Parachains are inserted into
 while message which are only intended to be read by the relay chain are inserted
 into `upward_messages`.
 
-The messages are included by collators into the committed candidate receipt (`CommittedCandidateReceipt`), which contains the following fields:
+The messages are included by collators into the committed candidate receipt (),
+which contains the following fields:
+
+`CommittedCandidateReceipt`:
 
 * `descriptor: CandidateDescriptor`: the descriptor of the candidate.
 * `commitments: CandidateCommitments`: the commitments of the candidate receipt.
 
 The candidate descriptor contains the following fields:
+
+`CandidateDescriptor`:
 
 * `para_id: ParaId`: the ID of the para this is a candidate for.
 * `relay_parent: Hash`: the hash of the relay chain block this is executed in
@@ -223,7 +234,9 @@ The candidate descriptor contains the following fields:
   * `persisted_validation_data_hash`
   * `pov_hash`
 
-The candidate commitments, `CandidateCommitments`, contains the following fields:
+The candidate commitments contains the following fields:
+
+`CandidateCommitments`:
 
 * `fees: int`: fees paid from the chain to the relay chian validators
 * `horizontal_message: []`: a SCALE encoded arrary containing the messages
@@ -282,6 +295,7 @@ any messages sent from a sending parachain to an individual, receiving
 parachain. Each block within the MQC is a triple containing the following
 fields:
 
+`Triple:`
 - `parent_hash`: The hash of the previous triple.
 - `message_hash`: The hash of the message itself.
 - `number`: The relay block number at which the message was sent.
@@ -308,12 +322,13 @@ parachains to easily verify messages sent from a specific source.
 
 ```
 cst: map ParaId => [ChannelState]
-
-ChannelState {
-  last_updated: BlockNumber,
-  mqc_head: Hash | null,
-}
 ```
+
+`ChannelState`:
+
+* `last_updated: BlockNumber`: the block number where the CST was last updated.
+* `mqc_head: Hash | null`: The MQC head. This item is `null` in case there is no
+  prior message.
 
 The `mqc_head` is `null` iin case there is no prior message.
 
