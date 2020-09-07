@@ -1,5 +1,8 @@
 # Polkadot Message Passing
 
+> [!!] Disclaimer: this document is work-in-progress and will change a lot until
+> finalization.
+
 ## Overview
 
 Polkadot implements two types of message passing mechanisms; vertical passing
@@ -19,16 +22,12 @@ and horizontal passing.
 
 ## HRMP
 
-Upward messages are inserted into candidate commitments, which the validators
-send to the relay chain. Parachains can call into the `downward_messages`
-Runtime function in order to receive messages.
-
 Polkadot currently implements the mechanism known as Horizontal Relay-routed
 Message Passing (HRMP), which fully relies on vertical message passing in order
 to communicate between parachains. Consequently, this goes against the entire
 idea of horizontal passing in the first place, since now every message has to be
 inserted into the relay chain itself, therefore heavily increasing footprint and
-resource requirements. However, HRMP should currently serve as a fast track to
+resource requirements. However, HRMP currently serves as a fast track to
 implementing cross-chain interoperability. The upcoming replacement of HRMP is
 Cross-Chain Message Passing (XCMP), which, as intended, exchanges messages
 directly between parachains and only updates proofs and read-confirmations on
@@ -266,10 +265,11 @@ On success, it returns a SCALE encoded array of messages.
 
 ## XCMP
 
-XCMP is a mechanism of Polkadot which allows Parachains to communicate with each
-other and to prove that messages have been sent. A core principle is that the
-relay chain remains as thin as possible in regards to messaging and only
-contains the required information for the validity of message processing.
+XCMP is a horizontal message passing mechanism of Polkadot which allows
+Parachains to communicate with each other and to prove that messages have been
+sent. A core principle is that the relay chain remains as thin as possible in
+regards to messaging and only contains the required information for the validity
+of message processing.
 
 ![Parachain XCMP Overview](parachain_xcmp_overview.svg)
 
@@ -378,5 +378,3 @@ watermark: map ParaId => (BlockNumber, ParaId)
 ```
 
 ## SPREE
-
-
