@@ -82,6 +82,8 @@ add_executable(kagome-adapter
   src/host_api.hpp
   src/host_api/helpers.cpp
   src/host_api/helpers.hpp
+  src/host_api/allocator.cpp
+  src/host_api/allocator.hpp
   src/host_api/crypto.cpp
   src/host_api/crypto.hpp
   src/host_api/hashing.cpp

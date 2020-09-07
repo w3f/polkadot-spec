@@ -17,30 +17,25 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "hashing.hpp"
+#include "allocator.hpp"
 
 #include "helpers.hpp"
 
 #include <iostream>
-#include <sstream>
 
-namespace hashing {
+namespace allocator {
 
-  void processHashFunction(
-    const std::string_view name, uint32_t size, const std::string_view input
-  ) {
+  void processMallocFree(const std::string_view value) {
     helpers::RuntimeEnvironment environment;
 
-    // Call hash function
-    std::stringstream function;
-    function << "rtm_ext_hashing_" << name << "_" << size * 8 << "_version_1";
+    // The Wasm function tests both the allocation and freeing of the buffer
+    auto result = environment.execute<helpers::Buffer>(
+      "rtm_ext_allocator_malloc_version_1", value
+    );
 
-    auto hash = environment.execute<helpers::Buffer>(function.str(), input);
+    BOOST_ASSERT_MSG(result.toString() == value, "Values are different");
 
-    BOOST_ASSERT_MSG(hash.size() == size, "Incorrect hash size.");
-
-    // Print result
-    std::cout << hash.toHex() << std::endl;
+    std::cout << result.toString() << std::endl;
   }
 
 }
