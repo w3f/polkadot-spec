@@ -125,6 +125,8 @@ success, the following steps are executed:
 
 ### Accepting Channels
 
+Open channel requests must be accepted by the other parachain.
+
 TODO: How does a Parachain decide which channels should be accepted? Probably
 off-chain consensus/agreement?
 
