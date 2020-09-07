@@ -17,22 +17,23 @@ and horizontal passing.
 
 ![Parachain Message Passing Overviewwj](parachain_message_passing_overview.svg)
 
-Implementation wise, upward messages are inserted into candidate commitments,
-which the validators send to the relay chain. Parachains can call into the
-`downward_messages` Runtime function in order to receive messages.
-
-For horizontal passing, Polkadot currently implements the mechanism known as
-Horizontal Relay-routed Message Passing (HRMP), which fully relies on vertical
-message passing in order to communicate between parachains. Consequently, this
-obviously goes against the entire idea of horizontal passing in the first place,
-since now every message has to be inserted into the relay chain itself,
-therefore heavily increasing footprint and resource requirements. However, the
-upcoming replacement of HRMP is Cross-Chain Message Passing (XCMP), which, as
-intended, exchanges messages directly between parachains and only updates proofs
-and read-confirmations on chain. With XCMP, vertical message processing is only
-used for opening and closing channels.
-
 ## HRMP
+
+Upward messages are inserted into candidate commitments, which the validators
+send to the relay chain. Parachains can call into the `downward_messages`
+Runtime function in order to receive messages.
+
+Polkadot currently implements the mechanism known as Horizontal Relay-routed
+Message Passing (HRMP), which fully relies on vertical message passing in order
+to communicate between parachains. Consequently, this goes against the entire
+idea of horizontal passing in the first place, since now every message has to be
+inserted into the relay chain itself, therefore heavily increasing footprint and
+resource requirements. However, HRMP should currently serve as a fast track to
+implementing cross-chain interoperability. The upcoming replacement of HRMP is
+Cross-Chain Message Passing (XCMP), which, as intended, exchanges messages
+directly between parachains and only updates proofs and read-confirmations on
+chain. With XCMP, vertical message processing is only used for opening and
+closing channels.
 
 ### Channels
 
