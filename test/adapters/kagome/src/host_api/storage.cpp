@@ -41,26 +41,26 @@ namespace storage {
     helpers::RuntimeEnvironment environment;
 
     // Check that key has not been set
-    auto result = environment.execute<helpers::Buffer>(
+    auto result = environment.execute<helpers::MaybeBuffer>(
       "rtm_ext_storage_get_version_1", key
     );
 
-    BOOST_ASSERT_MSG(result.empty(), "Data exists");
+    BOOST_ASSERT_MSG(!result, "Data exists");
 
     // Add data to storage
     environment.execute<void>("rtm_ext_storage_set_version_1", key, value);
 
     // Retrieve data from storage
-    result = environment.execute<helpers::Buffer>(
+    result = environment.execute<helpers::MaybeBuffer>(
       "rtm_ext_storage_get_version_1", key
     );
 
     // Check returned data
-    BOOST_ASSERT_MSG(!result.empty(), "No value");
-    BOOST_ASSERT_MSG(result.toString() == value, "Values are different");
+    BOOST_ASSERT_MSG(result.has_value(), "No value");
+    BOOST_ASSERT_MSG(result.value().toString() == value, "Values are different");
 
     // Print result
-    std::cout << result.toString() << std::endl;
+    std::cout << result.value().toString() << std::endl;
   }
 
 
