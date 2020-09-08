@@ -29,10 +29,9 @@ idea of horizontal passing in the first place, since now every message has to be
 inserted into the relay chain itself, therefore heavily increasing footprint and
 resource requirements. However, HRMP currently serves as a fast track to
 implementing cross-chain interoperability. The upcoming replacement of HRMP is
-Cross-Chain Message Passing (XCMP), which, as intended, exchanges messages
-directly between parachains and only updates proofs and read-confirmations on
-chain. With XCMP, vertical message processing is only used for opening and
-closing channels.
+Cross-Chain Message Passing (XCMP), which exchanges messages directly between
+parachains and only updates proofs and read-confirmations on chain. With XCMP,
+vertical message processing is only used for opening and closing channels.
 
 ### Channels
 
@@ -117,15 +116,23 @@ succeed:
 * The caller of this function (`sender`) has enough funds to cover the deposit.
 
 If one of those conditions is false, the function call returns with an error. On
-success, the following steps are executed:
+success, the PVF:
 
-* Reserve a deposit for the caller of this function (`sender`) (TODO: how
+* Creates a `ChOpenRequest` message and inserts it into the `upward_messages`
+  list of the candidate commitments.
+
+Once a candidate block is inserted into the relay chain, the relay runtime:
+
+* Reads the message from `upward_messages` of the candidate commitments.
+* Reserves a deposit for the caller of this function (`sender`) (TODO: how
   much?).
-* Append the `ChOpenRequest` request to the pending request list (`open_requests`).
+* Appends the `ChOpenRequest` request to the pending request list
+  (`open_requests`).
 
 ### Accepting Channels
 
-Open channel requests must be accepted by the other parachain.
+Open channel requests must be accepted by the other parachain. Requests can be
+fetched from the PVF (see [Receiving Messages](#Receiving-Messages)).
 
 TODO: How does a Parachain decide which channels should be accepted? Probably
 off-chain consensus/agreement?
@@ -139,7 +146,8 @@ Params:
 
 * `index: int`: the index of the open request list.
 
-The Runtime check the following conditions in order for the function call to succeed:
+The PVF checks the following conditions in order for the function call to
+succeed:
 
 * The `index` is valid (the value is within range of the list).
 * The `recipient` ParaId corresponds to the ParaId of the caller of this
@@ -148,7 +156,13 @@ The Runtime check the following conditions in order for the function call to suc
   the deposit.
 
 If one of those conditions is false, this function call returns with an error
-(TODO: or panics). On success, the following steps are executed:
+(TODO: or panics). On success, the PVF executes:
+
+* Generates a `ChAcceptRequest` message and inserts it into the
+  `upward_messages` list of the candidate commitments.
+
+Once a candidate block is inserted into the relay chain, the relay runtime reads
+the messages and executes:
 
 * Reserve a deposit for the caller of this function (`recipient`).
 * Confirm the open channel request in the request list by setting the
