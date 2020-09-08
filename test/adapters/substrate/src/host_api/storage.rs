@@ -208,6 +208,11 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
         .decode_option();
     assert!(res.is_none());
 
+    let res = rtm
+        .call("rtm_ext_storage_next_key_version_1", &key2.encode())
+        .decode_option();
+    assert!(res.is_none());
+
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set_version_1", &(key1, value1).encode());
     let _ = rtm.call("rtm_ext_storage_set_version_1", &(key2, value2).encode());
