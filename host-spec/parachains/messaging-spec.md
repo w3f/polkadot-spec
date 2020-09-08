@@ -84,6 +84,23 @@ to the relay chain. The request is a construct containing the following fields:
 - `age: int`: the age of this request, which start at `0` and is incremented by
   1 on every session start.
 
+TEMP:
+
+```rust
+struct ChOpenRequest {
+  // The ParaId of the sending parachain.
+  sender: ParaId,
+  // The ParaId of the receiving parachain.
+  recipient: ParaId,
+  // indicated whether the recipient has accepted the channel.
+  // On request creation, this value is `false`.
+  confirmed: bool,
+  // the age of this request, which start at `0` and is incremented by
+  // 1 on every session start.
+  age: int,
+}
+```
+
 TODO: Shouldn't `ChOpenRequest` also have an `initiator` field? Or can only the
 sender open an channel?
 
