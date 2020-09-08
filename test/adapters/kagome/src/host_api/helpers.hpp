@@ -29,6 +29,7 @@
 namespace helpers {
 
   using kagome::common::Buffer;
+  using MaybeBuffer = boost::optional<Buffer>;
 
   using kagome::runtime::binaryen::RuntimeManager;
   using kagome::runtime::binaryen::RuntimeApi;

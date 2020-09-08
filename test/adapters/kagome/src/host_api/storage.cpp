@@ -174,32 +174,42 @@ namespace storage {
     helpers::RuntimeEnvironment environment;
 
     // No next key available
-    auto next = environment.execute<helpers::Buffer>("rtm_ext_storage_next_key_version_1", key1);
-    BOOST_ASSERT_MSG(next.empty(), "Next is empty");
+    auto next = environment.execute<helpers::MaybeBuffer>("rtm_ext_storage_next_key_version_1", key1);
+    BOOST_ASSERT_MSG(!next, "Next is not empty");
 
-    next = environment.execute<helpers::Buffer>("rtm_ext_storage_next_key_version_1", key2);
-    BOOST_ASSERT_MSG(next.empty(), "Next is empty");
+    next = environment.execute<helpers::MaybeBuffer>("rtm_ext_storage_next_key_version_1", key2);
+    BOOST_ASSERT_MSG(!next, "Next is not empty");
 
     // Insert data
     environment.execute<void>("rtm_ext_storage_set_version_1", key1, value1);
     environment.execute<void>("rtm_ext_storage_set_version_1", key2, value2);
 
     // Try to read next key
-    next = environment.execute<helpers::Buffer>("rtm_ext_storage_next_key_version_1", key1);
+    next = environment.execute<helpers::MaybeBuffer>("rtm_ext_storage_next_key_version_1", key1);
     if (key1.compare(key2) < 0) {
-        BOOST_ASSERT_MSG(next.toString() == key2, "Next is Key2");
-        std::cout << next.toString() << std::endl;
+        BOOST_ASSERT_MSG(next, "Next is empty");
+
+        auto result = next.value().toString();
+
+        BOOST_ASSERT_MSG(result == key2, "Next is not Key2");
+
+        std::cout << result << std::endl;
     } else {
-        BOOST_ASSERT_MSG(next.empty(), "Next is empty");
+        BOOST_ASSERT_MSG(!next, "Next is not empty");
     }
 
     // Try to read next key
-    next = environment.execute<helpers::Buffer>("rtm_ext_storage_next_key_version_1", key2);
+    next = environment.execute<helpers::MaybeBuffer>("rtm_ext_storage_next_key_version_1", key2);
     if (key2.compare(key1) < 0) {
-        BOOST_ASSERT_MSG(next.toString() == key1, "Next is Key2");
-        std::cout << next.toString() << std::endl;
+        BOOST_ASSERT_MSG(next, "Next is empty");
+
+        auto result = next.value().toString();
+
+        BOOST_ASSERT_MSG(result == key1, "Next is not Key1");
+
+        std::cout << result << std::endl;
     } else {
-        BOOST_ASSERT_MSG(next.empty(), "Next is empty");
+        BOOST_ASSERT_MSG(!next, "Next is not empty");
     }
   }
 
