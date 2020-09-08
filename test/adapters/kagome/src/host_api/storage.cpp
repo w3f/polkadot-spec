@@ -32,6 +32,7 @@ namespace storage {
 
     // Compute and print storage root hash
     auto hash = environment.execute<helpers::Buffer>("rtm_ext_storage_root_version_1");
+
     std::cout << hash.toHex() << std::endl;
   }
 
@@ -93,7 +94,7 @@ namespace storage {
     helpers::RuntimeEnvironment environment;
 
     // Check for no data
-    auto exists = environment.execute<uint32_t>("rtm_ext_storage_exists_version_1", key);
+    auto exists = environment.execute<bool>("rtm_ext_storage_exists_version_1", key);
 
     BOOST_ASSERT_MSG(exists == 0, "Storage exists");
 
@@ -101,7 +102,7 @@ namespace storage {
     environment.execute<void>("rtm_ext_storage_set_version_1", key, value);
 
     // Check for data
-    exists = environment.execute<uint32_t>("rtm_ext_storage_exists_version_1", key);
+    exists = environment.execute<bool>("rtm_ext_storage_exists_version_1", key);
 
     BOOST_ASSERT_MSG(exists == 1, "Storage does not exists");
 
