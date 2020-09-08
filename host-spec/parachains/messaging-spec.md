@@ -84,32 +84,8 @@ to the relay chain. The request is a construct containing the following fields:
 - `age: int`: the age of this request, which start at `0` and is incremented by
   1 on every session start.
 
-TEMP:
-
-```rust
-struct ChOpenRequest {
-  // The ParaId of the sending parachain.
-  sender: ParaId,
-  // The ParaId of the receiving parachain.
-  recipient: ParaId,
-  // indicated whether the recipient has accepted the channel.
-  // On request creation, this value is `false`.
-  confirmed: bool,
-  // the age of this request, which start at `0` and is incremented by
-  // 1 on every session start.
-  age: int,
-}
-```
-
 TODO: Shouldn't `ChOpenRequest` also have an `initiator` field? Or can only the
 sender open an channel?
-
-The Runtime appends those requests to an array, which the Runtime processes in
-an ordered form (FIFO):
-
-```
-open_requests: [ChOpenRequest]
-```
 
 #### Workflow
 
@@ -120,7 +96,7 @@ Params:
   opened with.
 
 The Runtime checks the following conditions in order for the function call to
-succeed:
+succeed.
 
 * The `sender` and the `recipient` exist.
 * `sender` is not the `recipient`.
@@ -132,10 +108,11 @@ succeed:
   request counts towards the capacity (TODO: where is this defined?).
 * The caller of this function (`sender`) has enough funds to cover the deposit.
 
-If one of those conditions is false, the function call returns with an error. On
-success, the PVF:
+If the validation is omitted, the message might fail on inclusion in the relay
+chain, therefore invalidating the candidate. On success, the PVF executes the
+following steps:
 
-* Creates a `ChOpenRequest` message and inserts it into the `upward_messages`
+* Create a `ChOpenRequest` message and inserts it into the `upward_messages`
   list of the candidate commitments.
 
 Once a candidate block is inserted into the relay chain, the relay runtime:
@@ -154,6 +131,11 @@ fetched from the PVF (see [Receiving Messages](#Receiving-Messages)).
 TODO: How does a Parachain decide which channels should be accepted? Probably
 off-chain consensus/agreement?
 
+The accept message contains the following fields:
+
+`ChAccept`:
+* `index: int`: the index of the open request list.
+
 #### Workflow
 
 The receiving parachain can except a channel by calling into the
@@ -164,22 +146,22 @@ Params:
 * `index: int`: the index of the open request list.
 
 The PVF checks the following conditions in order for the function call to
-succeed:
+succeed.
 
 * The `index` is valid (the value is within range of the list).
 * The `recipient` ParaId corresponds to the ParaId of the caller of this
   function.
-* The caller of this function (`recipient`) has enough funds to cover
-  the deposit.
+* The caller of this function (`recipient`) has enough funds to cover the
+  deposit.
 
-If one of those conditions is false, this function call returns with an error
-(TODO: or panics). On success, the PVF executes:
+If the validation is omitted, the message might fail on inclusion in the relay
+chain. On success, the PVF executes the following steps:
 
-* Generates a `ChAcceptRequest` message and inserts it into the
+* Generates a `ChAccept` message and inserts it into the
   `upward_messages` list of the candidate commitments.
 
 Once a candidate block is inserted into the relay chain, the relay runtime reads
-the messages and executes:
+the messages and executes the following steps:
 
 * Reserve a deposit for the caller of this function (`recipient`).
 * Confirm the open channel request in the request list by setting the
