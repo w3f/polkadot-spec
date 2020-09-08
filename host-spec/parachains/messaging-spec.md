@@ -214,15 +214,18 @@ error. On success, the following steps are executed:
 
 The Runtime treats messages as SCALE encoded byte arrays and has no concept or
 understanding of the message type or format itself. Consensus on message format
-must be established between to communicating parachains.
+must be established between the two communicating parachains.
 
 Messages intended to be read by other Parachains are inserted into
 `horizontal_messages` of the candidate commitments (`CandidateCommitments`),
-while message which are only intended to be read by the relay chain are inserted
-into `upward_messages`.
+while message which are only intended to be read by the relay chain (such as
+when opening, accepting or closing channels) are inserted into
+`upward_messages`.
 
 The messages are included by collators into the committed candidate receipt (),
 which contains the following fields:
+
+TODO: This should be defined somewhere else, ideally in a backing/validation section.
 
 `CommittedCandidateReceipt`:
 
