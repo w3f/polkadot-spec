@@ -10,7 +10,7 @@ pub fn ext_allocator_malloc_version_1(input: ParsedInput) {
     // Get invalid key
     let res = rtm
         .call("rtm_ext_allocator_malloc_version_1", &value.encode())
-        .decode_val();
+        .decode_vec();
     assert_eq!(res, value);
 
     println!("{}", str(&res));

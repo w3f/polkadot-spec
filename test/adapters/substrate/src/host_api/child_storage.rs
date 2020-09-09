@@ -17,7 +17,7 @@ pub fn ext_storage_child_set_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 
     // Set key/value
@@ -32,7 +32,7 @@ pub fn ext_storage_child_set_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key2, child_definition, child_type, key).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 
     // Get valid key
@@ -41,9 +41,8 @@ pub fn ext_storage_child_set_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key).encode(),
         )
-        .decode_option()
-        .unwrap()
-        .decode_val();
+        .decode_ovec()
+        .unwrap();
     assert_eq!(res, value);
 
     println!("{}", str(&res));
@@ -79,7 +78,7 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
             )
                 .encode(),
         )
-        .decode_val();
+        .decode_vec();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Set key/value
@@ -100,9 +99,9 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
                 offset,
                 buffer_size,
             )
-                .encode(),
+            .encode(),
         )
-        .decode_val();
+        .decode_vec();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Get valid key
@@ -119,7 +118,7 @@ pub fn ext_storage_child_read_version_1(input: ParsedInput) {
             )
                 .encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     let offset = offset as usize;
     let buffer_size = buffer_size as usize;
@@ -174,9 +173,8 @@ pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key).encode(),
         )
-        .decode_option()
-        .unwrap()
-        .decode_val();
+        .decode_ovec()
+        .unwrap();
     assert_eq!(res, value);
 
     // Clear value
@@ -191,7 +189,7 @@ pub fn ext_storage_child_clear_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 }
 
@@ -231,9 +229,8 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key1).encode(),
         )
-        .decode_option()
-        .unwrap()
-        .decode_val();
+        .decode_ovec()
+        .unwrap();
     assert_eq!(res, value1);
 
     // Get valid value
@@ -242,9 +239,8 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key2).encode(),
         )
-        .decode_option()
-        .unwrap()
-        .decode_val();
+        .decode_ovec()
+        .unwrap();
     assert_eq!(res, value2);
 
     // Kill child
@@ -259,7 +255,7 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key1).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 
     // Get invalid killed value
@@ -268,7 +264,7 @@ pub fn ext_storage_child_storage_kill_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key2).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 }
 
@@ -361,11 +357,11 @@ pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key1).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     if key1.starts_with(prefix) {
         assert!(res.is_none());
     } else {
-        let val = res.unwrap().decode_val();
+        let val = res.unwrap();
         assert_eq!(val, value1);
         println!("{}", str(&val));
     }
@@ -376,11 +372,11 @@ pub fn ext_storage_child_clear_prefix_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_get_version_1",
             &(child_key1, child_definition, child_type, key2).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     if key2.starts_with(prefix) {
         assert!(res.is_none());
     } else {
-        let val = res.unwrap().decode_val();
+        let val = res.unwrap();
         assert_eq!(val, value2);
         println!("{}", str(&val));
     }
@@ -425,7 +421,7 @@ pub fn ext_storage_child_root_version_1(input: ParsedInput) {
     // Get root
     let res = rtm
         .call("rtm_ext_storage_child_root_version_1", &child_key1.encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -454,7 +450,7 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_next_key_version_1",
             &(child_key1, child_definition, child_type, key1).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 
     // Set key/value
@@ -473,9 +469,9 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_next_key_version_1",
             &(child_key1, child_definition, child_type, key1).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     if key1 == track[0] {
-        assert_eq!(res.unwrap().decode_val(), key2);
+        assert_eq!(res.unwrap(), key2);
         println!("{}", str(&key2));
     } else {
         assert!(res.is_none());
@@ -487,9 +483,9 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_next_key_version_1",
             &(child_key1, child_definition, child_type, key2).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     if key2 == track[0] {
-        assert_eq!(res.unwrap().decode_val(), key1);
+        assert_eq!(res.unwrap(), key1);
         println!("{}", str(&key1));
     } else {
         assert!(res.is_none());
@@ -501,7 +497,7 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_next_key_version_1",
             &(child_key2, child_definition, child_type, key1).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 
     // Get invalid next key (different child key)
@@ -510,6 +506,6 @@ pub fn ext_storage_child_next_key_version_1(input: ParsedInput) {
             "rtm_ext_storage_child_next_key_version_1",
             &(child_key2, child_definition, child_type, key2).encode(),
         )
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 }

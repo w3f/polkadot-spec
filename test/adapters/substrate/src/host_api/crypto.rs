@@ -14,7 +14,7 @@ pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed1)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     // Generate second key
     let pubkey2 = rtm
@@ -22,16 +22,16 @@ pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed2)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     let mut res = rtm
         .call(
             "rtm_ext_crypto_ed25519_public_keys_version_1",
             &DUMMY.0.encode(),
         )
-        .decode_val();
+        .decode_vec();
 
-    res.remove(0);
+    res.remove(0); // TODO: Check content
     assert_eq!(res.len(), 64);
     let res1 = &res[..32]; // first pubkey
     let res2 = &res[32..]; // second pubkey
@@ -58,7 +58,7 @@ pub fn ext_crypto_ed25519_generate_version_1(input: ParsedInput) {
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -75,16 +75,19 @@ pub fn ext_crypto_ed25519_sign_version_1(input: ParsedInput) {
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     // Sign message
-    let res = rtm
+    let mut res = rtm
         .call(
             "rtm_ext_crypto_ed25519_sign_version_1",
             &(DUMMY.0, &pubkey, msg).encode(),
         )
-        .decode_option()
-        .unwrap();
+        .decode_vec();
+
+    // Check option
+    assert_eq!(res[0], 1u8);
+    res.remove(0);
 
     println!("Message: {}", str(&msg));
     println!("Public key: {}", hex::encode(pubkey));
@@ -103,16 +106,19 @@ pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     // Sign message
-    let sig = rtm
+    let mut sig = rtm
         .call(
             "rtm_ext_crypto_ed25519_sign_version_1",
             &(DUMMY.0, &pubkey, &msg).encode(),
         )
-        .decode_option()
-        .unwrap();
+        .decode_vec();
+
+    // Check option
+    assert_eq!(sig[0], 1u8);
+    sig.remove(0);
 
     // Verify signature
     let verified = rtm
@@ -145,7 +151,7 @@ pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, Some(seed1)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     // Generate second key
     let pubkey2 = rtm
@@ -153,16 +159,16 @@ pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, Some(seed2)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     let mut res = rtm
         .call(
             "rtm_ext_crypto_sr25519_public_keys_version_1",
             &DUMMY.0.encode(),
         )
-        .decode_val();
+        .decode_vec();
 
-    res.remove(0);
+    res.remove(0); // TODO: Check content
     assert_eq!(res.len(), 64);
     let res1 = &res[..32]; // first pubkey
     let res2 = &res[32..]; // second pubkey
@@ -191,7 +197,7 @@ pub fn ext_crypto_sr25519_generate_version_1(input: ParsedInput) {
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, seed_opt).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -208,16 +214,19 @@ pub fn ext_crypto_sr25519_sign_version_1(input: ParsedInput) {
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     // Sign message
-    let res = rtm
+    let mut res = rtm
         .call(
             "rtm_ext_crypto_sr25519_sign_version_1",
             &(DUMMY.0, &pubkey, msg).encode(),
         )
-        .decode_option()
-        .unwrap();
+        .decode_vec();
+
+    // Check option
+    assert_eq!(res[0], 1u8);
+    res.remove(0);
 
     println!("Message: {}", str(&msg));
     println!("Public key: {}", hex::encode(pubkey));
@@ -236,16 +245,19 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     // Sign message
-    let sig = rtm
+    let mut sig = rtm
         .call(
             "rtm_ext_crypto_sr25519_sign_version_1",
             &(DUMMY.0, &pubkey, &msg).encode(),
         )
-        .decode_option()
-        .unwrap();
+        .decode_vec();
+
+    // Check option
+    assert_eq!(sig[0], 1u8);
+    sig.remove(0);
 
     let verified = rtm
         .call(
@@ -273,7 +285,7 @@ pub fn ext_hashing_keccak_256_version_1(input: ParsedInput) {
 
     let res = rtm
         .call("rtm_ext_hashing_keccak_256_version_1", &(data).encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -285,7 +297,7 @@ pub fn ext_hashing_sha2_256_version_1(input: ParsedInput) {
 
     let res = rtm
         .call("rtm_ext_hashing_sha2_256_version_1", &(data).encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -297,7 +309,7 @@ pub fn ext_hashing_blake2_128_version_1(input: ParsedInput) {
 
     let res = rtm
         .call("rtm_ext_hashing_blake2_128_version_1", &(data).encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -309,7 +321,7 @@ pub fn ext_hashing_blake2_256_version_1(input: ParsedInput) {
 
     let res = rtm
         .call("rtm_ext_hashing_blake2_256_version_1", &(data).encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -321,7 +333,7 @@ pub fn ext_hashing_twox_256_version_1(input: ParsedInput) {
 
     let res = rtm
         .call("rtm_ext_hashing_twox_256_version_1", &(data).encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -333,7 +345,7 @@ pub fn ext_hashing_twox_128_version_1(input: ParsedInput) {
 
     let res = rtm
         .call("rtm_ext_hashing_twox_128_version_1", &(data).encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -345,7 +357,7 @@ pub fn ext_hashing_twox_64_version_1(input: ParsedInput) {
 
     let res = rtm
         .call("rtm_ext_hashing_twox_64_version_1", &(data).encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
