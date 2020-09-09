@@ -25,6 +25,7 @@
 #include "subcommand.hpp"
 
 #include "host_api.hpp"
+#include "host_api/allocator.hpp"
 #include "host_api/crypto.hpp"
 #include "host_api/hashing.hpp"
 #include "host_api/storage.hpp"
@@ -184,12 +185,12 @@ void processHostApiCommands(const HostApiCommandArgs& args){
     hashing::processHashFunction("twox", 32, args[0]);
   });
 
-  // test allocator TODO: all not implemented
+  // test allocator
   router.addSubcommand("ext_allocator_malloc_version_1", [](const std::vector<std::string>& args) {
-    throw NotImplemented(); // TODO not implemented
+    allocator::processMallocFree(args[0]);
   });
   router.addSubcommand("ext_allocator_free_version_1", [](const std::vector<std::string>& args) {
-    throw NotImplemented(); // TODO not implemented
+    allocator::processMallocFree(args[0]);
   });
 
   // test trie hashes
