@@ -71,22 +71,22 @@ namespace storage {
     environment.execute<void>("rtm_ext_storage_set_version_1", key, value);
 
     // Retrieve and check stored data
-    auto stored = environment.execute<helpers::Buffer>(
+    auto stored = environment.execute<helpers::MaybeBuffer>(
       "rtm_ext_storage_get_version_1", key
     );
 
-    BOOST_ASSERT_MSG(!stored.empty(), "No value");
-    BOOST_ASSERT_MSG(stored.toString() == value, "Values are different");
+    BOOST_ASSERT_MSG(stored.has_value(), "No value");
+    BOOST_ASSERT_MSG(stored.value().toString() == value, "Values are different");
 
     // Clear data
     environment.execute<void>("rtm_ext_storage_clear_version_1", key);
 
     // Retrieve and check cleared data
-    auto cleared = environment.execute<helpers::Buffer>(
+    auto cleared = environment.execute<helpers::MaybeBuffer>(
       "rtm_ext_storage_get_version_1", key
     );
 
-    BOOST_ASSERT_MSG(cleared.empty(), "Value wasn't deleted");
+    BOOST_ASSERT_MSG(!cleared, "Value wasn't deleted");
   }
 
 
@@ -125,29 +125,29 @@ namespace storage {
     environment.execute<void>("rtm_ext_storage_clear_prefix_version_1", prefix);
 
     // Retrieve first key 
-    auto result = environment.execute<helpers::Buffer>(
+    auto result = environment.execute<helpers::MaybeBuffer>(
       "rtm_ext_storage_get_version_1", key1
     );
 
     // Check if first key was handled correctly
     if (prefix == key1.substr(0, prefix.size())) {
-      BOOST_ASSERT_MSG(result.empty(), "Value1 wasn't deleted");
+      BOOST_ASSERT_MSG(!result, "Value1 wasn't deleted");
     } else {
-      BOOST_ASSERT_MSG(result.toString() == value1, "Value1 was deleted");
+      BOOST_ASSERT_MSG(result.has_value(), "Value1 was deleted");
+      BOOST_ASSERT_MSG(result.value().toString() == value1, "Value1 was changed");
     }
 
     // Retrieve second key
-    result = environment.execute<helpers::Buffer>(
+    result = environment.execute<helpers::MaybeBuffer>(
       "rtm_ext_storage_get_version_1", key2
     );
 
     // Check if first key was handled correctly
     if (prefix == key2.substr(0, prefix.size())) {
-      // Check if key2 was deleted
-      BOOST_ASSERT_MSG(result.empty(), "Value2 wasn't deleted");
+      BOOST_ASSERT_MSG(!result, "Value2 wasn't deleted");
     } else {
-      // Check if key2 was stored correctly
-      BOOST_ASSERT_MSG(result.toString() == value2, "Value2 was deleted");
+      BOOST_ASSERT_MSG(result.has_value(), "Value2 was deleted");
+      BOOST_ASSERT_MSG(result.value().toString() == value2, "Value2 was changed");
     }
   }
 
