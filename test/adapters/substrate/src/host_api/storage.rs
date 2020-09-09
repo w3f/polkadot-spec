@@ -5,7 +5,7 @@ pub fn test_storage_init() {
     let mut rtm = Runtime::new();
 
     // Compute and print storage root on init
-    let res = rtm.call("rtm_ext_storage_root_version_1", &[]).decode_val();
+    let res = rtm.call("rtm_ext_storage_root_version_1", &[]).decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -19,7 +19,7 @@ pub fn ext_storage_set_version_1(input: ParsedInput) {
     // Get invalid key
     let res = rtm
         .call("rtm_ext_storage_get_version_1", &key.encode())
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 
     // Set key/value
@@ -28,9 +28,8 @@ pub fn ext_storage_set_version_1(input: ParsedInput) {
     // Get valid key
     let res = rtm
         .call("rtm_ext_storage_get_version_1", &key.encode())
-        .decode_option()
-        .unwrap()
-        .decode_val();
+        .decode_ovec()
+        .unwrap();
     assert_eq!(res, value);
 
     println!("{}", str(&res));
@@ -54,7 +53,7 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
             "rtm_ext_storage_read_version_1",
             &(key, offset, buffer_size).encode(),
         )
-        .decode_val();
+        .decode_vec();
     assert_eq!(res, vec![0u8; buffer_size as usize]);
 
     // Set key/value
@@ -66,7 +65,7 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
             "rtm_ext_storage_read_version_1",
             &(key, offset, buffer_size).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     let offset = offset as usize;
     let buffer_size = buffer_size as usize;
@@ -106,7 +105,7 @@ pub fn ext_storage_clear_version_1(input: ParsedInput) {
     // Get cleared value
     let res = rtm
         .call("rtm_ext_storage_get_version_1", &key.encode())
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 }
 
@@ -150,23 +149,21 @@ pub fn ext_storage_clear_prefix_version_1(input: ParsedInput) {
     // Check first key
     let res = rtm
         .call("rtm_ext_storage_get_version_1", &key1.encode())
-        .decode_option();
+        .decode_ovec();
     if key1.starts_with(prefix) {
         assert!(res.is_none());
     } else {
-        let val = res.unwrap().decode_val();
-        assert_eq!(val, value1);
+        assert_eq!(res.unwrap(), value1);
     }
 
     // Check second key
     let res = rtm
         .call("rtm_ext_storage_get_version_1", &key2.encode())
-        .decode_option();
+        .decode_ovec();
     if key2.starts_with(prefix) {
         assert!(res.is_none());
     } else {
-        let val = res.unwrap().decode_val();
-        assert_eq!(val, value2);
+        assert_eq!(res.unwrap(), value2);
     }
 }
 
@@ -183,7 +180,7 @@ pub fn ext_storage_root_version_1(input: ParsedInput) {
     let _ = rtm.call("rtm_ext_storage_set_version_1", &(key2, value2).encode());
 
     // Get root
-    let res = rtm.call("rtm_ext_storage_root_version_1", &[]).decode_val();
+    let res = rtm.call("rtm_ext_storage_root_version_1", &[]).decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -205,12 +202,12 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
     // No next key available
     let res = rtm
         .call("rtm_ext_storage_next_key_version_1", &key1.encode())
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 
     let res = rtm
         .call("rtm_ext_storage_next_key_version_1", &key2.encode())
-        .decode_option();
+        .decode_ovec();
     assert!(res.is_none());
 
     // Set key/value
@@ -220,9 +217,10 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
     // Try to read next key
     let res = rtm
         .call("rtm_ext_storage_next_key_version_1", &key1.encode())
-        .decode_option();
+        .decode_ovec();
+
     if key1 == track[0] {
-        assert_eq!(res.unwrap().decode_val(), key2);
+        assert_eq!(res.unwrap(), key2);
         println!("{}", str(&key2));
     } else {
         assert!(res.is_none());
@@ -231,9 +229,10 @@ pub fn ext_storage_next_key_version_1(input: ParsedInput) {
     // Try to read next key
     let res = rtm
         .call("rtm_ext_storage_next_key_version_1", &key2.encode())
-        .decode_option();
+        .decode_ovec();
+
     if key2 == track[0] {
-        assert_eq!(res.unwrap().decode_val(), key1);
+        assert_eq!(res.unwrap(), key1);
         println!("{}", str(&key1));
     } else {
         assert!(res.is_none());

@@ -16,7 +16,7 @@ pub fn ext_trie_blake2_256_root_version_1(input: ParsedInput) {
     // Get valid key
     let res = rtm
         .call("rtm_ext_trie_blake2_256_root_version_1", &(trie).encode())
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
@@ -36,7 +36,7 @@ pub fn ext_trie_blake2_256_ordered_root_version_1(input: ParsedInput) {
             "rtm_ext_trie_blake2_256_ordered_root_version_1",
             &(trie).encode(),
         )
-        .decode_val();
+        .decode_vec();
 
     println!("{}", hex::encode(res));
 }
