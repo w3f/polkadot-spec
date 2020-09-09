@@ -100,12 +100,12 @@ impl AsRePtr for Vec<u8> {
 sp_core::wasm_export_functions! {
     fn rtm_ext_storage_get_version_1(
         key_data: Vec<u8>
-    ) -> Vec<u8> {
+    ) -> Option<Vec<u8>> {
         unsafe {
             let value = ext_storage_get_version_1(
                 key_data.as_re_ptr(),
             );
-            from_mem(value)
+            Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
     fn rtm_ext_storage_child_get_version_1(
@@ -113,7 +113,7 @@ sp_core::wasm_export_functions! {
         child_definition: Vec<u8>,
         child_type: u32,
         key_data: Vec<u8>
-    ) -> Vec<u8> {
+    ) -> Option<Vec<u8>> {
         unsafe {
             let value = ext_storage_child_get_version_1(
                 child_key.as_re_ptr(),
@@ -121,7 +121,7 @@ sp_core::wasm_export_functions! {
                 child_type,
                 key_data.as_re_ptr(),
             );
-            from_mem(value)
+            Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
     fn rtm_ext_storage_read_version_1(
@@ -287,12 +287,12 @@ sp_core::wasm_export_functions! {
             from_mem(value)
         }
     }
-    fn rtm_ext_storage_next_key_version_1(key_data: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_storage_next_key_version_1(key_data: Vec<u8>) -> Option<Vec<u8>> {
         unsafe {
             let value = ext_storage_next_key_version_1(
                 key_data.as_re_ptr(),
             );
-            from_mem(value)
+            Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
     fn rtm_ext_storage_child_next_key_version_1(
@@ -300,7 +300,7 @@ sp_core::wasm_export_functions! {
         child_definition: Vec<u8>,
         child_type: u32,
         key_data: Vec<u8>
-    ) -> Vec<u8> {
+    ) -> Option<Vec<u8>> {
         unsafe {
             let value = ext_storage_child_next_key_version_1(
                 child_key.as_re_ptr(),
@@ -308,7 +308,7 @@ sp_core::wasm_export_functions! {
                 child_type,
                 key_data.as_re_ptr(),
             );
-            from_mem(value)
+            Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
     fn rtm_ext_crypto_ed25519_public_keys_version_1(id_data: [u8; 4]) -> Vec<u8> {
