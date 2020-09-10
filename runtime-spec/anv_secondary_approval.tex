@@ -1,0 +1,141 @@
+\section{Secondary Approval checking}
+\label{sect-approval-checking}
+Once a parachain block is acted on we carry the secondary validity/availability
+checks as follows. A scheme assigns every validator to one or more PoV blocks to
+check its validity, see Section \ref{sect-shot-assignment} for details. An
+assigned validator acquires the PoV block (see Section
+\ref{sect-obtaining-block}) and checks its validity by comparing it to the
+candidate receipt. If validators notices that an equivocation has happened an
+additional validity/availability assignments will be made that is described in
+Section\ref{sect-equivocation-case}.
+
+\subsection{Approval Checker Assignment}
+
+Validators assign themselves to parachain block proposals as defined in
+Definition \ref{defn-para-proposal}. The assignment needs to be random.
+Validators use their own VRF to sign the VRF output from the current relay chain
+block as described in Section \ref{sect-vrf-comp}. Each validator uses the
+output of the VRF to decide the block(s) they are revalidating as a secondary
+checker. See Section \ref{one-shot-assigment} for the detail.
+\newline
+
+In addition to this assignment some extra validators are assigned to every PoV
+block which is descirbed in Section \ref{sect-extra-validation assignment}.
+
+\subsection{VRF computation}
+\label{sect-vrf-comp}
+
+Every validator needs to run Algorithm \ref{algo-checker-vrf} for every
+Parachain $\rho$ to determines assignments. \todo{Fix this. It is incorrect so
+far.}
+
+\begin{algorithm}[H]
+  \caption[VRF-for-Approval]{\sc VRF-for-Approval($B$, $z$, $s_k$)}
+  \label{algo-checker-vrf}
+  \begin{algorithmic}[1]
+  \Require
+
+    $B$: the block to be approved
+
+    $z$: randomness for approval assignment
+
+    $s_k$: session secret key of validator planning to participate in approval
+
+    \State $(\pi, d) \leftarrow {VRF}(H_h(B),sk(z))$
+    \State \Return $(\pi,d)$
+  \end{algorithmic}
+\end{algorithm}
+
+Where {\sc VRF} function is defined in \cite{polkadot-crypto-spec}.
+\newline
+
+\subsection{One-Shot Approval Checker Assignemnt}
+\label{sect-shot-assignment}
+Every validator $v$ takes the output of this VRF computed by
+\ref{algo-checker-vrf} mod the number of parachain blocks that we were decided
+to be available in this relay chain block according to Definition
+\ref{defn-available-parablock-proposal} and executed. This will give them the
+index of the PoV block they are assigned to and need to check. The procedure is
+formalised in \ref{algo-one-shot-assignment}.
+
+\begin{algorithm}[H]
+  \caption[]{\sc OneShotAssignment}
+  \label{algo-one-shot-assignment}
+  \begin{algorithmic}[1]
+    \Require{}
+    %\Ensure{}
+
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
+
+\subsection{Extra Approval Checker Assigment}
+\label{sect-extra-validation}
+Now for each parachain block, let us assume we want $\#VCheck$ validators to
+check every PoV block during the secondary checking. Note that $\#VCheck$ is not
+a fixed number but depends on reports from collators or fishermen. Lets us
+$\#VDefault$ be the minimum number of validator we want to check the block,
+which should be the number of parachain validators plus some constant like $2$.
+We set
+
+$$\#VCheck = \#VDefault + c_f * \textrm{total fishermen stake}$$ where $c_f$ is
+some factor we use to weight fishermen reports. Reports from fishermen about
+this
+\newline
+
+Now each validator computes for each PoV block a VRF with the input being the
+relay chain block VRF concatenated with the parachain index.
+\newline
+
+For every PoV bock, every validator compares $\#VCheck - \#VDefault$ to the
+output of this VRF and if the VRF output is small enough than the validator
+checks this PoV blocks immediately otherwise depending on their difference waits
+for some time and only perform a check if it has not seen $\#VCheck$ checks from
+validators who either 1) parachain validators of this PoV block 2) or assigned
+during the assignment procedure or 3) had a smaller VRF output than us during
+this time.
+\newline
+
+More fisherman reports can increase $\#VCheck$ and require new checks. We should
+carry on doing secondary checks for the entire fishing period if more are
+required. A validator need to keep track of which blocks have $\#VCheck$ smaller
+than the number of higher priority checks performed. A new report can make us
+check straight away, no matter the number of current checks, or mean that we
+need to put this block back into this set. If we later decide to prune some of
+this data, such as who has checked the block, then we'll need a new approach
+here.
+
+\begin{algorithm}[H]
+  \caption[]{\sc OneShotAssignment}
+  \label{algo-extra-assignment}
+  \begin{algorithmic}[1]
+    \Require{}
+    %\Ensure{}
+
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
+
+\syed{}{\todo{so assignees are not announcing their assignment just the result
+of the approval check I assume}}
+
+\subsection{Additional Checking in Case of
+Equivocation}\label{sect-equivocation-case} In the case of a relay chain
+equivocation, i.e. a validator produces two blocks with the same VRF, we do not
+want the secondary checkers for the second block to be predictable. To this end
+we use the block hash as well as the VRF as input for secondary checkers VRF. So
+each secondary checker is going to produce twice as many VRFs for each relay
+chain block that was equivocated. If either of these VRFs is small enough then
+the validator is assigned to perform a secondary check on the PoV block. The
+process is formalized in Algorithm \ref{algo-equivocation-assigment}
+
+\begin{algorithm}[H]
+  \caption[]{\sc EquivocatedAssignment}
+  \label{algo-equivocation-assigment}
+  \begin{algorithmic}[1]
+    \Require{}
+    %%  \Ensure{}
+
+    \State TBS
+  \end{algorithmic}
+\end{algorithm}
