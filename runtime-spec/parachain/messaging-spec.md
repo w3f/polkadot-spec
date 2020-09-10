@@ -57,9 +57,9 @@ vertical message processing is only used for opening and closing channels.
 ### Channels
 
 A channel is a construct on the relay chain indicating an open, one-directional
-communication line between a sender and a recipient,
-including information about how the channel is being used. A channel construct
-is created for each, individual communication line.
+communication line between a sender and a recipient, including information about
+how the channel is being used. The channel itself does not contain any messages.
+A channel construct is created for each, individual communication line.
 
 A channel contains the following fields:
 
@@ -84,9 +84,9 @@ A channel contains the following fields:
 
 This structure is created or overwritten on every start of each session.
 Individual fields of this construct are updated for every message sent, such as
-`used_places` and `used_bytes`. If the channel is sealed and `used_places`
-reaches `0` (occurs when a new session begins), this construct is be removed on
-the *next* session start.
+`used_places`, `used_bytes` and `mqc_head`. If the channel is sealed and
+`used_places` reaches `0` (occurs when a new session begins), this construct is
+be removed on the *next* session start.
 
 The Runtime maintains a structure of the current, open channels in a map. The
 key is a tuple of the sender ParaId and the recipient ParaId, where the value is
@@ -118,14 +118,8 @@ sender open an channel?
 
 #### Workflow
 
-The sender calls into the `init_open_channel(recipient)` Runtime function.
-
-Params:
-- `recipient: int`: the ParaId of the recipient the channel should be
-  opened with.
-
-The Runtime checks the following conditions in order for the function call to
-succeed.
+Before execution, the following conditions must be valid, otherwise the
+candidate will be rejected.
 
 * The `sender` and the `recipient` exist.
 * `sender` is not the `recipient`.
@@ -137,25 +131,22 @@ succeed.
   request counts towards the capacity (TODO: where is this defined?).
 * The caller of this function (`sender`) has enough funds to cover the deposit.
 
-If the validation is omitted, the message might fail on inclusion in the relay
-chain, therefore invalidating the candidate. On success, the PVF executes the
-following steps:
+The PVF executes the following steps:
 
 * Create a `ChOpenRequest` message and inserts it into the `upward_messages`
   list of the candidate commitments.
 
-Once a candidate block is inserted into the relay chain, the relay runtime:
+Once the candidate is included in the relay chain, the runtime reads the
+message from `upward_messages` and executes the following steps:
 
 * Reads the message from `upward_messages` of the candidate commitments.
 * Reserves a deposit for the caller of this function (`sender`) (TODO: how
   much?).
-* Appends the `ChOpenRequest` request to the pending request list
-  (`open_requests`).
+* Appends the `ChOpenRequest` request to the pending open request queue.
 
 ### Accepting Channels
 
-Open channel requests must be accepted by the other parachain. Requests can be
-fetched from the PVF (see [Receiving Messages](#Receiving-Messages)).
+Open channel requests must be accepted by the other parachain.
 
 TODO: How does a Parachain decide which channels should be accepted? Probably
 off-chain consensus/agreement?
@@ -167,15 +158,8 @@ The accept message contains the following fields:
 
 #### Workflow
 
-The recipient can except a channel by calling into the
-`accept_open_channel(index)` Runtime function.
-
-Params:
-
-* `index: int`: the index of the open request list.
-
-The PVF checks the following conditions in order for the function call to
-succeed.
+Before execution, the following conditions must be valid, otherwise the
+candidate will be rejected.
 
 * The `index` is valid (the value is within range of the list).
 * The `recipient` ParaId corresponds to the ParaId of the caller of this
@@ -183,14 +167,13 @@ succeed.
 * The caller of this function (`recipient`) has enough funds to cover the
   deposit.
 
-If the validation is omitted, the message might fail on inclusion in the relay
-chain. On success, the PVF executes the following steps:
+The PVF executes the following steps:
 
 * Generates a `ChAccept` message and inserts it into the
   `upward_messages` list of the candidate commitments.
 
-Once a candidate block is inserted into the relay chain, the relay runtime reads
-the messages and executes the following steps:
+Once the candidate is included in the relay chain, the relay runtime reads the
+message from `upward_messages` and executes the following steps:
 
 * Reserve a deposit for the caller of this function (`recipient`).
 * Confirm the open channel request in the request list by setting the
@@ -211,16 +194,8 @@ the following fields:
 
 ### Workflow
 
-Both the sending and recipient can close a channel by calling into the
-`close_channel(sender, recipient)` Runtime function.
-
-Params:
-
-* `sender: ParaId` - the ParaId of the sender.
-* `recipient: ParaId` - the ParaId of the recipient parachain.
-
-The Runtime function checks the following conditions in order for the function
-call to succeed:
+Before execution, the following conditions must be valid, otherwise the
+candidate will be rejected.
 
 * There's currently and open channel or a pending open channel request between
   `sender` and `recipient`.
@@ -228,16 +203,21 @@ call to succeed:
 * The caller of the Runtime function is either the `sender` or `recipient`.
 * There is not existing close channel request.
 
-If one of the following conditions is wrong, this function call returns with an
-error. On success, the following steps are executed:
+The PVF executes the following steps:
 
-* Append the request `ChCloseRequest` to the request list (`close_requests`).
+* Generates a `ChCloseRequest` message and inserts it into the `upward_messages`
+  list of the candidate commitments.
+
+Once a candidate block is inserted into the relay chain, the relay runtime:
+
+* Reads the message from `upward_message` of the candidate commitments.
+* Appends the request `ChCloseRequest` to the pending close request queue.
 
 ### Sending messages
 
 The Runtime treats messages as SCALE encoded byte arrays and has no concept or
 understanding of the message type or format itself. Consensus on message format
-must be established between the two communicating parachains.
+must be established between the two communicating parachains (TODO: SPREE will handle this).
 
 Messages intended to be read by other Parachains are inserted into
 `horizontal_messages` of the candidate commitments (`CandidateCommitments`),
@@ -248,7 +228,8 @@ when opening, accepting or closing channels) are inserted into
 The messages are included by collators into the committed candidate receipt (),
 which contains the following fields:
 
-TODO: This should be defined somewhere else, ideally in a backing/validation section.
+TODO: This should be defined somewhere else, ideally in a backing/validation
+section (once this document is merged with AnV).
 
 `CommittedCandidateReceipt`:
 
@@ -295,7 +276,9 @@ The candidate commitments contains the following fields:
 
 ### Receiving Messages
 
-A recipient can check for unread messages by calling into the `downward_messages` Runtime function.
+A recipient can check for unread messages by calling into the
+`downward_messages` function of the relay runtime (TODO: currently it's not
+really clear how a recipient will check for new messages).
 
 Params:
 - `id: ParaId`: the ParaId of the sender.
@@ -342,11 +325,11 @@ Availabilty
 ### CST: Channel State Table
 
 The Channel State Table (CST) is a map construct on the relay chain which keeps
-track of every MQC generated by a single sender. The corresponding
-value is a list of pairs, where each pair contains the ParaId of the receiving
-parachain, the Merkle root of MQC heads and the relay block number where that
-item was last updated in the CST. This provides a mechanism for receiving
-parachains to easily verify messages sent from a specific source.
+track of every MQC generated by a single sender. The corresponding value is a
+list of pairs, where each pair contains the ParaId of the recipient, the Merkle
+root of MQC heads and the relay block number where that item was last updated in
+the CST. This provides a mechanism for receiving parachains to easily verify
+messages sent from a specific source.
 
 ```
 cst: map ParaId => [ChannelState]
@@ -354,11 +337,10 @@ cst: map ParaId => [ChannelState]
 
 `ChannelState`:
 
-* `last_updated: BlockNumber`: the block number where the CST was last updated.
-* `mqc_head: Hash | null`: The MQC head. This item is `null` in case there is no
-  prior message.
-
-The `mqc_head` is `null` iin case there is no prior message.
+* `last_updated: BlockNumber`: the relay block number where the CST was last
+  updated.
+* `mqc_root: Option<Hash>`: The Merkle root of all MQC heads where the parachain
+  is the sender. This item is `None` in case there is no prior message.
 
 Besides the CST, there's also a CST Root, which is an additional map construct
 and contains an entry for every sender and the corresponding Merkle
@@ -394,3 +376,5 @@ watermark: map ParaId => (BlockNumber, ParaId)
 ```
 
 ## SPREE
+
+...
