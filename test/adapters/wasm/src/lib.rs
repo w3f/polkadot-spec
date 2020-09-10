@@ -128,16 +128,19 @@ sp_core::wasm_export_functions! {
         key_data: Vec<u8>,
         offset: u32,
         buffer_size: u32 // not directly required for PDRE API, only used for testing
-    ) -> Vec<u8> {
+    ) -> Option<Vec<u8>> {
         let mut buffer = vec![0u8; buffer_size as usize];
         unsafe {
-            ext_storage_read_version_1(
+            let res = ext_storage_read_version_1(
                 key_data.as_re_ptr(),
                 buffer.as_re_ptr(),
                 offset
             );
+
+            Option::<u32>::decode(&mut from_mem(res).as_slice())
+                .unwrap()
+                .map(|n| buffer[..(n.min(buffer_size) as usize)].to_vec())
         }
-        buffer.to_vec()
     }
     fn rtm_ext_storage_child_read_version_1(
         child_key: Vec<u8>,
@@ -146,10 +149,10 @@ sp_core::wasm_export_functions! {
         key_data: Vec<u8>,
         offset: u32,
         buffer_size: u32 // not directly required for PDRE API, only used for testing
-    ) -> Vec<u8> {
+    ) -> Option<Vec<u8>> {
         let mut buffer = vec![0u8; buffer_size as usize];
         unsafe {
-            ext_storage_child_read_version_1(
+            let res = ext_storage_child_read_version_1(
                 child_key.as_re_ptr(),
                 child_definition.as_re_ptr(),
                 child_type,
@@ -157,8 +160,11 @@ sp_core::wasm_export_functions! {
                 buffer.as_re_ptr(),
                 offset
             );
+
+            Option::<u32>::decode(&mut from_mem(res).as_slice())
+                .unwrap()
+                .map(|n| buffer[..(n.min(buffer_size) as usize)].to_vec())
         }
-        buffer.to_vec()
     }
     fn rtm_ext_storage_set_version_1(
         key_data: Vec<u8>,
