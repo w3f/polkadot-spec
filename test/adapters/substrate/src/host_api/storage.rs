@@ -53,8 +53,8 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
             "rtm_ext_storage_read_version_1",
             &(key, offset, buffer_size).encode(),
         )
-        .decode_vec();
-    assert_eq!(res, vec![0u8; buffer_size as usize]);
+        .decode_ovec();
+    assert!(res.is_none());
 
     // Set key/value
     let _ = rtm.call("rtm_ext_storage_set_version_1", &(key, value).encode());
@@ -65,31 +65,21 @@ pub fn ext_storage_read_version_1(input: ParsedInput) {
             "rtm_ext_storage_read_version_1",
             &(key, offset, buffer_size).encode(),
         )
-        .decode_vec();
+        .decode_ovec()
+        .unwrap();
 
     let offset = offset as usize;
     let buffer_size = buffer_size as usize;
 
     if offset < value.len() {
-        // Make sure `to_compare` does not exceed the length of the actual value
-        let mut to_compare;
-        if offset + buffer_size > value.len() {
-            to_compare = value[(offset)..value.len()].to_vec();
-        } else {
-            to_compare = value[(offset)..(offset + buffer_size)].to_vec();
-        }
+        let end = std::cmp::min(offset + buffer_size, value.len());
 
-        // If the buffer is bigger than `to_compare`, fill the rest with zeroes
-        while to_compare.len() < buffer_size as usize {
-            to_compare.push(0);
-        }
-
-        assert_eq!(res, to_compare);
+        assert_eq!(res, value[offset..end].to_vec());
     } else {
-        assert_eq!(res, vec![0; buffer_size])
+        assert!(res.is_empty())
     }
 
-    println!("{}", str(&res).trim_matches(char::from(0)));
+    println!("{}", str(&res));
 }
 
 pub fn ext_storage_clear_version_1(input: ParsedInput) {
