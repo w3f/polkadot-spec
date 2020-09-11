@@ -89,7 +89,7 @@ void processHostApiCommands(const HostApiCommandArgs& args){
     storage::processSetGet(args[0], args[1]);
   });
   router.addSubcommand("ext_storage_read_version_1", [](const std::vector<std::string>& args) {
-    throw NotImplemented(); // TODO not implemented
+    storage::processRead(args[0], args[1], std::stoul(args[2]), std::stoul(args[3]));
   });
   router.addSubcommand("ext_storage_clear_version_1", [](const std::vector<std::string>& args) {
     storage::processClear(args[0], args[1]);
