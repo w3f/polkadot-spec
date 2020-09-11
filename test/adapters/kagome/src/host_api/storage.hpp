@@ -30,6 +30,14 @@ namespace storage {
   // executes ext_storage_set_version_1/ext_storage_get_version_1 test
   void processSetGet(const std::string_view key, const std::string_view value);
 
+  // executes ext_storage_set_version_1/ext_storage_get_version_1 test
+  void processRead(
+      const std::string_view key,
+      const std::string_view value,
+      const uint32_t offset,
+      const uint32_t length
+  );
+
   // executes ext_storage_clear_version_1 test
   void processClear(const std::string_view key, const std::string_view value);
 

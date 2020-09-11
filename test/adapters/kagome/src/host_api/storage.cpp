@@ -22,6 +22,7 @@
 #include "helpers.hpp"
 
 #include <iostream>
+#include <algorithm> // for min
 
 
 namespace storage {
@@ -63,6 +64,43 @@ namespace storage {
     std::cout << result.value().toString() << std::endl;
   }
 
+  void processRead(
+      const std::string_view key,
+      const std::string_view value,
+      const uint32_t offset,
+      const uint32_t length
+  ) {
+    helpers::RuntimeEnvironment environment;
+
+    // Check that key has not been set
+    auto result = environment.execute<helpers::MaybeBuffer>(
+      "rtm_ext_storage_read_version_1", key, offset, length
+    );
+ 
+    BOOST_ASSERT_MSG(!result, "Data exists");
+
+    // Add data to storage
+    environment.execute<void>("rtm_ext_storage_set_version_1", key, value);
+
+    // Retrieve data from storage
+    result = environment.execute<helpers::MaybeBuffer>(
+      "rtm_ext_storage_read_version_1", key, offset, length
+    );
+
+    // Check returned data
+    BOOST_ASSERT_MSG(result.has_value(), "No value");
+
+    if (offset < value.length()) {
+      auto expected_length = std::min(uint32_t(value.length() - offset), length); 
+      auto expected_value  = value.substr(offset, expected_length);
+
+      BOOST_ASSERT_MSG(result.value().toString() == expected_value, "Values are different");
+    } else {
+      BOOST_ASSERT_MSG(result.value().empty(), "Values are different");
+    }
+
+    std::cout << result.value().toString() << std::endl;
+  }
 
   void processClear(const std::string_view key, const std::string_view value) {
     helpers::RuntimeEnvironment environment;
