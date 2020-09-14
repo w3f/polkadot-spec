@@ -25,3 +25,10 @@
   (buffer-expand-includes)
   (export-buffer output))
 
+;; This is a custom convert function that updates the toc, bibliography,
+;; index and glossar before conversion.
+(tm-define (convert-updated input output)
+  (load-buffer input :strict)
+  (export-buffer output)
+  (generate-all-aux) (inclusions-gc) (update-current-buffer)
+  (export-buffer output))
