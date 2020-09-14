@@ -1,14 +1,36 @@
-CHAPTERS   := $(wildcard c??-*.tm)
+.PHONY: all build tex diff clean
+
+all: pdf
+
+
+pdf: polkadot-host-spec.pdf
+
+tex: polkadot-host-spec.tex
+
+diff: polkadot-host-spec.diff.pdf
+
+
+CHAPTERS   := $(wildcard c??-*.tm) $(wildcard c??-*.tex) $(wildcard c??-*.md)
+
+SECTIONS   := $(wildcard anv/s??-*.tex)
+
 APPENDICES := $(wildcard a?-*.tm)
 
-SOURCES := host-spec.tm $(CHAPTERS) $(APPENDICES)
+GENERATED  := c08-messaging.tmp.tex
 
-FIGURES    := $(wildcard figures/*.eps)
+SOURCES    := host-spec.tm  $(CHAPTERS) $(SECTIONS) $(APPENDICES) $(GENERATED)
 
-polkadot-host-spec.pdf: $(SOURCES) $(FIGURES)
-	xvfb-run texmacs --convert $< $@ --quit
+FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.svg)
 
-polkadot-host-spec.tex: $(SOURCES) $(FIGURES)
+
+c08-messaging.tmp.tex: c08-messaging.md
+	pandoc --top-level-division=chapter --from markdown-auto_identifiers $< -o $@
+
+
+polkadot-host-spec.pdf: $(SOURCES) $(FIGURES) host-spec.scm
+	xvfb-run texmacs -b host-spec.scm -x "(convert-updated \"$$PWD/$<\" \"$$PWD/$@\")" --quit
+
+polkadot-host-spec.tex: $(SOURCES) $(FIGURES) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm -x "(convert-expanded \"$$PWD/$<\" \"$$PWD/$@\")" --quit
 
 
@@ -18,28 +40,14 @@ GITHASH := $(shell git rev-parse $(REV))
 TMPDIR ?= /tmp
 REVDIR := $(TMPDIR)/host-spec-$(GITHASH)
 
-DIFF_SOURCES := $(patsubst %.tm,$(REVDIR)/%.tm,$(SOURCES))
-
 $(REVDIR):
 	mkdir -p $@
 	git archive --format=tar $(GITHASH) | (cd $@ && tar xf -)
 
-$(DIFF_SOURCES): $(REVDIR)
-
-polkadot-host-spec.diff.pdf: $(SOURCES) $(DIFF_SOURCES) host-spec.scm
+polkadot-host-spec.diff.pdf: $(SOURCES) $(REVDIR) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm  -x "(compare-versions-expanded \"$(REVDIR)/host-spec.tm\" \"$$PWD/host-spec.tm\") (export-buffer \"$$PWD/$@\")" -q
 
 
-all: build
-
-build: polkadot-host-spec.pdf
-
-tex: polkadot-host-spec.tex
-
-diff: polkadot-host-spec.diff.pdf
-
 clean:
-	rm -rf $(REVDIR) polkadot-host-spec.pdf polkadot-host-spec.tex polkadot-host-spec.diff.pdf
+	rm -rf $(REVDIR) polkadot-host-spec.pdf c08-messaging.tex polkadot-host-spec.tex polkadot-host-spec.diff.pdf
 
-
-.PHONY: all build diff clean
