@@ -1,15 +1,3 @@
-.PHONY: all build tex diff clean
-
-all: pdf
-
-
-pdf: polkadot-host-spec.pdf
-
-tex: polkadot-host-spec.tex
-
-diff: polkadot-host-spec.diff.pdf
-
-
 CHAPTERS   := $(wildcard c??-*.tm) $(wildcard c??-*.tex) $(wildcard c??-*.md)
 
 SECTIONS   := $(wildcard anv/s??-*.tex)
@@ -21,6 +9,20 @@ GENERATED  := c08-messaging.tmp.tex
 SOURCES    := host-spec.tm  $(CHAPTERS) $(SECTIONS) $(APPENDICES) $(GENERATED)
 
 FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.svg)
+
+
+.PHONY: all build tex diff clean
+
+all: pdf
+
+
+pdf: polkadot-host-spec.pdf
+
+tex: polkadot-host-spec.tex
+
+diff: polkadot-host-spec.diff.pdf
+
+temp: $(GENERATED)
 
 
 c08-messaging.tmp.tex: c08-messaging.md
@@ -43,11 +45,12 @@ REVDIR := $(TMPDIR)/host-spec-$(GITHASH)
 $(REVDIR):
 	mkdir -p $@
 	git archive --format=tar $(GITHASH) | (cd $@ && tar xf -)
+	# Will require next release: make -C $(REVDIR) temp
 
 polkadot-host-spec.diff.pdf: $(SOURCES) $(REVDIR) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm  -x "(compare-versions-expanded \"$(REVDIR)/host-spec.tm\" \"$$PWD/host-spec.tm\") (export-buffer \"$$PWD/$@\")" -q
 
 
 clean:
-	rm -rf $(REVDIR) polkadot-host-spec.pdf c08-messaging.tex polkadot-host-spec.tex polkadot-host-spec.diff.pdf
+	rm -rf $(REVDIR) $(GENERATED) polkadot-host-spec.pdf polkadot-host-spec.tex polkadot-host-spec.diff.pdf
 
