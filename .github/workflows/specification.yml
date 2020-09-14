@@ -28,6 +28,11 @@ jobs:
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
         sudo apt-get update
         sudo apt-get install -y xvfb texmacs
+    - name: Install TeXmacs pacakges
+      run: |
+        mkdir -p ~/.TeXmacs/packages
+        cd ~/.TeXmacs/packages
+        curl -OL https://raw.githubusercontent.com/w3f/algorithmacs/master/algorithmacs-style.ts
     - name: Build host specification
       run: make -C host-spec
     - name: Upload host specification
@@ -92,6 +97,11 @@ jobs:
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
         sudo apt-get update
         sudo apt-get install -y xvfb texmacs
+    - name: Install TeXmacs pacakges
+      run: |
+        mkdir -p ~/.TeXmacs/packages
+        cd ~/.TeXmacs/packages
+        curl -OL https://raw.githubusercontent.com/w3f/algorithmacs/master/algorithmacs-style.ts
     - name: Determine comparison target
       run: echo "::set-env name=REV::HEAD~1"
       if: github.event_name == 'push'
