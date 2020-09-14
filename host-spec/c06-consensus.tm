@@ -1058,7 +1058,7 @@
     is formally defined as:
 
     <\equation*>
-      Sign<rsup|r,stage><rsub|v<rsub|i>>=Sig<rsub|ED25519><around*|(|Msg,r,id<rsub|\<bbb-V\>>|)>
+      Sign<rsup|r,stage><rsub|v<rsub|i>>:=Sig<rsub|ED25519><around*|(|Msg,r,id<rsub|\<bbb-V\>>|)>
     </equation*>
 
     Where:
@@ -1972,7 +1972,6 @@
     <associate|auto-28|<tuple|6.4.1.2|50>>
     <associate|auto-29|<tuple|6.4.1.3|?>>
     <associate|auto-3|<tuple|6.1.1|37>>
-    <associate|auto-30|<tuple|6.4.1.3|?>>
     <associate|auto-4|<tuple|6.1.2|37>>
     <associate|auto-5|<tuple|6.1|38>>
     <associate|auto-6|<tuple|6.2|39>>
@@ -2037,6 +2036,10 @@
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.2>|>
         \;
       </surround>|<pageref|auto-17>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|6.3>|>
+        Signature for a message in a round.
+      </surround>|<pageref|auto-19>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Consensus>
@@ -2103,42 +2106,42 @@
 
       <with|par-left|<quote|2tab>|6.3.2.2<space|2spc>Finalizing Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-19>>
+      <no-break><pageref|auto-20>>
 
       <with|par-left|<quote|2tab>|6.3.2.3<space|2spc>Catch-up Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
+      <no-break><pageref|auto-21>>
 
       <with|par-left|<quote|1tab>|6.3.3<space|2spc>Initiating the GRANDPA
       State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
+      <no-break><pageref|auto-22>>
 
       <with|par-left|<quote|2tab>|6.3.3.1<space|2spc>Voter Set Changes
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
+      <no-break><pageref|auto-23>>
 
       <with|par-left|<quote|1tab>|6.3.4<space|2spc>Voting Process in Round
       <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
+      <no-break><pageref|auto-24>>
 
       6.4<space|2spc>Block Finalization <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24>
+      <no-break><pageref|auto-25>
 
       <with|par-left|<quote|1tab>|6.4.1<space|2spc>Catching up
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-25>>
+      <no-break><pageref|auto-26>>
 
       <with|par-left|<quote|2tab>|6.4.1.1<space|2spc>Sending catch-up
       requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26>>
+      <no-break><pageref|auto-27>>
 
       <with|par-left|<quote|2tab>|6.4.1.2<space|2spc>Processing catch-up
       requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27>>
+      <no-break><pageref|auto-28>>
 
       <with|par-left|<quote|2tab>|6.4.1.3<space|2spc>Processing catch-up
       responses <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-28>>
+      <no-break><pageref|auto-29>>
     </associate>
   </collection>
 </auxiliary>
