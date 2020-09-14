@@ -27,7 +27,7 @@ jobs:
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
         sudo apt-get update
-        sudo apt-get install -y xvfb texmacs
+        sudo apt-get install -y xvfb texmacs pandoc
     - name: Install TeXmacs pacakges
       run: |
         mkdir -p ~/.TeXmacs/packages
@@ -96,7 +96,7 @@ jobs:
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
         sudo apt-get update
-        sudo apt-get install -y xvfb texmacs
+        sudo apt-get install -y xvfb texmacs pandoc
     - name: Install TeXmacs pacakges
       run: |
         mkdir -p ~/.TeXmacs/packages
