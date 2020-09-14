@@ -1,4 +1,4 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.11>
 
 <project|host-spec.tm>
 
@@ -1053,26 +1053,50 @@
   specified in this section.
 
   <\definition>
+    <label|defn-sign-round-vote><strong|<math|Sign<rsup|r,stage><rsub|v<rsub|i>>>>
+    refers to the signature of a voter for a specific message in a round and
+    is formally defined as:
+
+    <\equation*>
+      Sign<rsup|r,stage><rsub|v<rsub|i>>=Sig<rsub|ED25519><around*|(|Msg,r,id<rsub|\<bbb-V\>>|)>
+    </equation*>
+
+    Where:
+
+    <\big-table|<tabular|<tformat|<cwith|2|3|1|1|cell-halign|r>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|2|2|cell-halign|l>|<cwith|2|3|3|3|cell-halign|l>|<cwith|2|3|3|3|cell-rborder|0ln>|<cwith|2|3|1|3|cell-valign|c>|<table|<row|<cell|Msg>|<cell|the
+    message to be signed>|<cell|arbitrary>>|<row|<cell|r:>|<cell|round
+    number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
+    set Id (Def. <reference|defn-authority-set-id>) of v>|<cell|unsigned
+    64-bit integer>>>>>>
+      Signature for a message in a round.
+    </big-table>
+
+    \;
+  </definition>
+
+  <\definition>
     A vote casted by voter <math|v> should be broadcasted as a
     <strong|message <math|M<rsup|r,stage><rsub|v>>> to the network by voter
     <math|v> with the following structure:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsup|r,stage><rsub|v>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>,<math-it|SigMsg>|)>>>|<row|<cell|<math-it|SigMsg>>|<cell|\<assign\>>|<cell|<math-it|Msg>,Sig<rsub|ED25519><around*|(|<math-it|Msg>,r,id<rsub|\<bbb-V\>>|)>,v<rsub|id>>>|<row|<cell|<math-it|Msg>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|stage,V<rsup|r,stage><rsub|v>|)>>>>>
+      <tformat|<table|<row|<cell|M<rsup|r,stage><rsub|v>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>,<math-it|SigMsg>|)>>>|<row|<cell|<math-it|SigMsg>>|<cell|\<assign\>>|<cell|<math-it|Msg>,Sig<rsup|r,stage><rsub|v<rsub|i>>,v<rsub|id>>>|<row|<cell|<math-it|Msg>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|stage,V<rsup|r,stage><rsub|v>|)>>>>>
     </eqnarray*>
 
     Where:
 
     <\center>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|r:>|<cell|round
-      number>|<cell|unsigned 64 bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
-      set Id (Definition <reference|defn-authority-set-id>)>|<cell|unsigned
-      64 bit integer>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
-      public key of <math|v>>|<cell|32 byte
+      number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
+      set Id (Def. <reference|defn-authority-set-id>)>|<cell|unsigned 64-bit
+      integer>>|<row|<cell|<math|Sig<rsup|r,stage><rsub|v<rsub|i>>>>|<cell|signature
+      (Def. <reference|defn-sign-round-vote>)>|<cell|512-bit
+      array>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
+      public key of <math|v>>|<cell|256-bit
       array>>|<row|<cell|<right-aligned|><math|stage>:>|<cell|0 if it's a
-      pre-vote sub-round>|<cell|1 byte>>|<row|<cell|>|<cell|1 if it's a
-      pre-commit sub-round>|<cell|>>|<row|<cell|>|<cell|2 if it's a primary
-      proposal message>|<cell|>>>>>
+      pre-vote sub-round>|<cell|8-bit integer>>|<row|<cell|>|<cell|1 if it's
+      a pre-commit sub-round>|<cell|8-bit integer>>|<row|<cell|>|<cell|2 if
+      it's a primary proposal message>|<cell|8-bit integer>>>>>
     </center>
 
     \;
@@ -1106,11 +1130,12 @@
     equivocatory vote.
 
     In all cases, <math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
-    is the signature of voter <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>>
-    broadcasted during either the pre-vote (stage = pv) or the pre-commit
-    (stage = pc) sub-round of round r. A <strong|valid Justification> must
-    only contain up-to one valid vote from each voter and must not contain
-    more than two equivocatory votes from each voter.
+    as defined in Definition <reference|defn-sign-round-vote> is the
+    signature of voter <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>> broadcasted
+    during either the pre-vote (stage = pv) or the pre-commit (stage = pc)
+    sub-round of round r. A <strong|valid Justification> must only contain
+    up-to one valid vote from each voter and must not contain more than two
+    equivocatory votes from each voter.
 
     We say <math|J<rsup|r,pc><around*|(|B|)>> <strong|justifies the
     finalization> of <math|B<rprime|'>\<geqslant\>B> if the number of valid
@@ -1934,18 +1959,20 @@
     <associate|auto-16|<tuple|6.3.2|45>>
     <associate|auto-17|<tuple|6.2|45>>
     <associate|auto-18|<tuple|6.3.2.1|45>>
-    <associate|auto-19|<tuple|6.3.2.2|46>>
+    <associate|auto-19|<tuple|6.3|46>>
     <associate|auto-2|<tuple|6.1|37>>
-    <associate|auto-20|<tuple|6.3.2.3|46>>
-    <associate|auto-21|<tuple|6.3.3|47>>
-    <associate|auto-22|<tuple|6.3.3.1|47>>
-    <associate|auto-23|<tuple|6.3.4|47>>
-    <associate|auto-24|<tuple|6.4|49>>
-    <associate|auto-25|<tuple|6.4.1|49>>
-    <associate|auto-26|<tuple|6.4.1.1|49>>
-    <associate|auto-27|<tuple|6.4.1.2|49>>
-    <associate|auto-28|<tuple|6.4.1.3|50>>
+    <associate|auto-20|<tuple|6.3.2.2|46>>
+    <associate|auto-21|<tuple|6.3.2.3|47>>
+    <associate|auto-22|<tuple|6.3.3|47>>
+    <associate|auto-23|<tuple|6.3.3.1|47>>
+    <associate|auto-24|<tuple|6.3.4|49>>
+    <associate|auto-25|<tuple|6.4|49>>
+    <associate|auto-26|<tuple|6.4.1|49>>
+    <associate|auto-27|<tuple|6.4.1.1|49>>
+    <associate|auto-28|<tuple|6.4.1.2|50>>
+    <associate|auto-29|<tuple|6.4.1.3|?>>
     <associate|auto-3|<tuple|6.1.1|37>>
+    <associate|auto-30|<tuple|6.4.1.3|?>>
     <associate|auto-4|<tuple|6.1.2|37>>
     <associate|auto-5|<tuple|6.1|38>>
     <associate|auto-6|<tuple|6.2|39>>
@@ -1962,18 +1989,19 @@
     <associate|defn-consensus-message-digest|<tuple|6.2|37>>
     <associate|defn-epoch-slot|<tuple|6.5|39>>
     <associate|defn-epoch-subchain|<tuple|6.7|39>>
-    <associate|defn-finalized-block|<tuple|6.33|49>>
+    <associate|defn-finalized-block|<tuple|6.34|49>>
     <associate|defn-gossip-message|<tuple|6.26|45>>
-    <associate|defn-grandpa-catchup-request-msg|<tuple|6.30|46>>
-    <associate|defn-grandpa-catchup-response-msg|<tuple|6.31|46>>
+    <associate|defn-grandpa-catchup-request-msg|<tuple|6.31|46>>
+    <associate|defn-grandpa-catchup-response-msg|<tuple|6.32|46>>
     <associate|defn-grandpa-completable|<tuple|6.25|45>>
-    <associate|defn-grandpa-justification|<tuple|6.28|46>>
+    <associate|defn-grandpa-justification|<tuple|6.29|46>>
     <associate|defn-grandpa-voter|<tuple|6.14|43>>
+    <associate|defn-sign-round-vote|<tuple|6.27|?>>
     <associate|defn-slot-offset|<tuple|6.11|40>>
     <associate|defn-total-potential-votes|<tuple|6.23|?>>
     <associate|defn-vote|<tuple|6.17|44>>
     <associate|defn-winning-threshold|<tuple|6.8|39>>
-    <associate|exmp-candid-unfinalized|<tuple|6.32|?>>
+    <associate|exmp-candid-unfinalized|<tuple|6.33|?>>
     <associate|note-slot|<tuple|6.6|39>>
     <associate|sect-authority-set|<tuple|6.1.1|37>>
     <associate|sect-babe|<tuple|6.2|39>>
