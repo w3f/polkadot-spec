@@ -8,6 +8,9 @@ FIGURES    := $(wildcard figures/*.eps)
 polkadot-host-spec.pdf: $(SOURCES) $(FIGURES)
 	xvfb-run texmacs --convert $< $@ --quit
 
+polkadot-host-spec.tex: $(SOURCES) $(FIGURES)
+	xvfb-run texmacs -b host-spec.scm -x "(convert-expanded \"$$PWD/$<\" \"$$PWD/$@\")" --quit
+
 
 REV     ?= HEAD
 GITHASH := $(shell git rev-parse $(REV))
@@ -31,10 +34,12 @@ all: build
 
 build: polkadot-host-spec.pdf
 
+tex: polkadot-host-spec.tex
+
 diff: polkadot-host-spec.diff.pdf
 
 clean:
-	rm -rf $(REVDIR) polkadot-host-spec.pdf polkadot-host-spec.diff.pdf
+	rm -rf $(REVDIR) polkadot-host-spec.pdf polkadot-host-spec.tex polkadot-host-spec.diff.pdf
 
 
 .PHONY: all build diff clean
