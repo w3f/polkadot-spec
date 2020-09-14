@@ -1,29 +1,6 @@
-\documentclass{book}
-\usepackage{geometry,amsmath,amssymb,hyperref,calc,ifthen,alltt,theorem,capt-of,makeidx}
-\usepackage{algorithm}
-\usepackage{algpseudocode}
-\usepackage{listings}
-%%\usepackage{algorithmic}
-\usepackage{xargs}
-\usepackage{tikz}
+\chapter{Networking}
 
-\newtheorem{definition}{Definition}
-\newcommand{\todo}[1]{}
-\renewcommand{\todo}[1]{{\color{red} TODO: {#1}}}
-
-\makeindex
-\geometry{letterpaper}
-
-\begin{document}
-\title{{\Huge Polkadot Networking}\\
-    {\Large Protocol Specification}}
-
-\date{}
-\maketitle
-\tableofcontents
-\newpage
-
-\textbf{Document Status:} This document in its current form is incomplete and
+\textbf{Chapter Status:} This document in its current form is incomplete and
 considered work in progress. Any reports regarding falseness or clarifications
 are appreciated.
 
@@ -424,5 +401,3 @@ message FinalityProofResponse {
     bytes proof = 1; // optional
 }
 \end{lstlisting}
-
-\end{document}
