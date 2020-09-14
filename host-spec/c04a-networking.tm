@@ -5,7 +5,7 @@
 <style|book>
 
 <\body>
-  <chapter|Network Protocol<label|sect-network-interactions>><label|network-protocol>
+  <section| To be migrated<label|sect-network-interactions>><label|network-protocol>
 
   <\warning>
     Polkadot network protocol is work-in-progress. The API specification and
@@ -36,7 +36,7 @@
   For more detailed specification of these modules and the Peer-to-Peer layer
   see libp2p specification document <cite|protocol_labs_libp2p_2019>.
 
-  <section|Node Identities and Addresses>
+  <subsection|Node Identities and Addresses>
 
   Similar to other decentralized networks, each Polkadot Host node possesses
   a network private key and a network public key representing an ED25519 key
@@ -62,7 +62,7 @@
 
   <todo|SPEC: p2p key derivation>
 
-  <section|Discovery Mechanisms>
+  <subsection|Discovery Mechanisms>
 
   \ In order for a Polkadot node to join a peer-to-peer network, it has to
   know a list of Polkadot nodes that already take part in the network. This
@@ -89,7 +89,7 @@
     network.
   </itemize>
 
-  <section|Transport Protocol><label|sect_transport_protocol>
+  <subsection|Transport Protocol><label|sect_transport_protocol>
 
   A Polkadot node can establish a connection with nodes in its peer list. All
   the connections must always use encryption and multiplexing. While some
@@ -114,7 +114,7 @@
     `/dns4/example.com/tcp/5/ws`. A node's address can contain a domain name.
   </itemize>
 
-  <subsection|Encryption>
+  <subsubsection|Encryption>
 
   \ The following encryption protocols from libp2p are supported by Polkadot
   protocol:
@@ -127,7 +127,7 @@
   the Diffie-Hellman key agreement <cite|perrin_noise_2018>. Support for
   noise is experimental and details may change in the future.
 
-  <subsection|Multiplexing>\ 
+  <subsubsection|Multiplexing>\ 
 
   The following multiplexing protocols are supported:
 
@@ -137,14 +137,14 @@
     <item><strong|Yamux>.
   </itemize>
 
-  <section|Substreams>
+  <subsection|Substreams>
 
   Once a connection has been established between two nodes and is able to use
   multiplexing, substreams can be opened. When a substream is open, the
   <em|multistream-select> protocol is used to negotiate which protocol to use
   on that given substream.\ 
 
-  <subsection|Periodic Ephemeral Substreams>
+  <subsubsection|Periodic Ephemeral Substreams>
 
   A Polkadot Host node should open several substreams. In particular, it
   should periodically open ephemeral substreams in order to:
@@ -163,7 +163,7 @@
     specified in <cite|protocol_labs_libp2p_2019>.
   </itemize>
 
-  <subsection|Polkadot Communication Substream><label|sect_polkadot_communication_substream>
+  <subsubsection|Polkadot Communication Substream><label|sect_polkadot_communication_substream>
 
   For the purposes of communicating Polkadot messages, the dailer of the
   connection opens a unique substream. Optionally, the node can keep a unique
