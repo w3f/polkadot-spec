@@ -17,3 +17,11 @@
            (rt (stree->tree mv)))
       (tree-set (buffer-tree) rt)
       (version-first-difference))))
+
+;; This is a custom convert function that expands any includes
+;; before conversion.
+(tm-define (convert-expanded input output)
+  (load-buffer input)
+  (buffer-expand-includes)
+  (export-buffer output))
+
