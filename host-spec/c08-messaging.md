@@ -1,3 +1,5 @@
+\providecommand{\tightlist}{\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}}
+
 # Message Passing
 
 > Disclaimer: this document is work-in-progress and will change a lot until
