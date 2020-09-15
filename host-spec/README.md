@@ -2,7 +2,7 @@
 
 Here your can find the latest version of the ![Polkadot Host Specification](./polkadot-host-spec.pdf)
 
-Please refer to the ![Change log](./CHANGELOG.org) to review the history of changes to the host specifiaction in the past.
+Please refer to the ![Change log](./CHANGELOG.org) to review the history of changes to the host specification in the past.
 
 Official releases of the specification can be found in [the release section](https://github.com/w3f/polkadot-spec/releases) of this repository.
 
@@ -15,4 +15,5 @@ Any other formats, like the `.tex` and `.pdf` files are exported from TeXmacs.
 
 ## Command line build and diff support
 
-There is a Makefile to simplify the generation of PDFs and diff PDFs. This feature requieres `xvfb` to be installed. To build the `polkadot-host-spec.pdf` just use `make` or `make build`. To generate `polkadot-host-spec.diff.pdf` use `make diff REV=<revision>` where `<revision>` can be any previous revision to which to compare, i.e. a branch, tag or commit.
+There is a Makefile to simplify the generation of PDFs and diff PDFs. This feature requires `xvfb` to be installed. To build the `polkadot-host-spec.pdf` just use `make` or `make build`. To generate `polkadot-host-spec.diff.pdf` use `make diff REV=<revision>` where `<revision>` can be any previous revision to which to compare, i.e. a branch, tag or commit. The resulting `polkadot-host-spec.diff.pdf` highlights the differences between the `<revision>` version of the specification with the current version using different colors (red indicates `<revision>` version and green refers to the current version of the text). 
+
