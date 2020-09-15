@@ -119,7 +119,7 @@ ProtoBuf details:
 
 Request block data from a peer.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message BlockRequest {
     // Bits of block data to request.
     uint32 fields = 1;
@@ -149,13 +149,13 @@ enum Direction {
     // (from parent to canonical child).
     Descending = 1;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{BlockResponse}
 
 Response to Block Request.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message BlockResponse {
     // Block data for the requested sequence.
     repeated BlockData blocks = 1;
@@ -182,7 +182,7 @@ message BlockData {
     // justification and an empty justification.
     bool is_empty_justification = 7; // optional, false if absent
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsection{Light Package}
 
@@ -197,7 +197,7 @@ ProtoBuf details:
 
 Enumerate all possible light client request messages.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message Request {
     oneof request {
         RemoteCallRequest remote_call_request = 1;
@@ -207,13 +207,13 @@ message Request {
         RemoteChangesRequest remote_changes_request = 5;
     }
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{Response}
 
 Enumerate all possible light client response messages.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message Response {
     oneof response {
         RemoteCallResponse remote_call_response = 1;
@@ -222,13 +222,13 @@ message Response {
         RemoteChangesResponse remote_changes_response = 4;
     }
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteCallRequest}
 
 Remote call request.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteCallRequest {
     // Block at which to perform call.
     bytes block = 2;
@@ -237,48 +237,48 @@ message RemoteCallRequest {
     // Call data.
     bytes data = 4;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteCallResponse}
 
 Remote call response.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteCallResponse {
     // Execution proof.
     bytes proof = 2;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteReadRequest}
 
 Remote storage read request.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteReadRequest {
     // Block at which to perform call.
     bytes block = 2;
     // Storage keys.
     repeated bytes keys = 3;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteReadResponse}
 
 Remote read response.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteReadResponse {
     // Read proof.
     bytes proof = 2;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteReadChildRequest}
 
 Remote storage read child request.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteReadChildRequest {
     // Block at which to perform call.
     bytes block = 2;
@@ -288,24 +288,24 @@ message RemoteReadChildRequest {
     // Storage keys.
     repeated bytes keys = 6;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteHeaderRequest}
 
 Remote header request.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteHeaderRequest {
     // Block number to request header for.
     bytes block = 2;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteHeaderResponse}
 
 Remote header response.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteHeaderResponse {
     // Header. None if proof generation has failed
     // (e.g. header is unknown).
@@ -313,13 +313,13 @@ message RemoteHeaderResponse {
     // Header proof.
     bytes proof = 3;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteChangesRequest}
 
 Remote changes request.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteChangesRequest {
     // Hash of the first block of the range (including first)
     // where changes are requested.
@@ -339,13 +339,13 @@ message RemoteChangesRequest {
     // Storage key which changes are requested.
     bytes key = 7;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{RemoteChangesResponse}
 
 Remote changes response.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message RemoteChangesResponse {
     // Proof has been generated using block with this number
     // as a max block. Should be less than or equal to the
@@ -366,7 +366,7 @@ message Pair {
     // The second element of the pair.
     bytes snd = 2;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsection{Finality Package}
 
@@ -381,23 +381,23 @@ ProtoBuf details:
 
 Request a finality proof from a peer.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message FinalityProofRequest {
     // SCALE-encoded hash of the block to request.
     bytes block_hash = 1;
     // Opaque chain-specific additional request data.
     bytes request = 2;
 }
-\end{lstlisting}
+\end{verbatim}
 
 \subsubsection{FinalityProofResponse}
 
 Response to a finality proof request.
 
-\begin{lstlisting}[frame=single]
+\begin{verbatim}
 message FinalityProofResponse {
     // Opaque chain-specific finality proof.
     // Empty if no such proof exists.
     bytes proof = 1; // optional
 }
-\end{lstlisting}
+\end{verbatim}
