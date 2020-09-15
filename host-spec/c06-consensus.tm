@@ -52,14 +52,14 @@
   <subsection|Runtime-to-Consensus Engine
   Message><label|sect-consensus-message-digest>
 
-  The authority lists (see Definition <reference|defn-authority-list>) is
-  part of Polkadot state and the Runtime has the authority of updating the
-  lists in the course of state transitions. The runtime inform the
+  The authority list (see Definition <reference|defn-authority-list>) is part
+  of the Polkadot state and the Runtime has the authority to update this list
+  in the course of any state transitions. The Runtime informs the
   corresponding consensus engine about the changes in the authority set by
-  means of setting a consensus message digest item as defined in Definition
-  <reference|defn-consensus-message-digest>, in the block header of block
-  <math|B> during which course of exectution the transition in the authority
-  set has occured.\ 
+  adding the appropiate consensus message as defined in Definition
+  <reference|defn-consensus-message-digest>, in form of a digest item to the
+  block header of the block <math|B> which caused the transition in the
+  authority set.\ 
 
   <\definition>
     <label|defn-consensus-message-digest> Consensus Message is digest item of
@@ -150,10 +150,10 @@
   </definition>
 
   The Polkadot Host should inspect the digest header of each block and
-  delegates consesus messages to their consensus engines.
+  delegate consesus messages to their consensus engines.
 
   The BABE consensus engine should react based on the type of consensus
-  messages they receives as follows:
+  messages it receives as follows:
 
   <\itemize-minus>
     <item><with|font-series|bold|Next Epoch Data:> The runtime issues this
@@ -175,7 +175,7 @@
   </itemize-minus>
 
   The GRANDPA consensus engine should react based on the type of consensus
-  messages they receives as follows:
+  messages it receives as follows:
 
   <\itemize-minus>
     \ <item><strong|Scheduled Change>: Schedule an authority set change after
@@ -284,7 +284,7 @@
   </notation>
 
   Definition <reference|defn-epoch-subchain> provides an iterator over the
-  blocks produced during an specific epoch.
+  blocks produced during a specific epoch.
 
   <\definition>
     <label|defn-epoch-subchain> By <name|SubChain(<math|\<cal-E\><rsub|n>>)>
@@ -300,15 +300,15 @@
   <\definition>
     <label|defn-babe-constant>The <with|font-series|bold|BABE constant>
     <math|<with|font-series|medium|c>\<in\><around*|(|0,1<rsub|>|)>> is the
-    probability that a slot will be not be empty. It is initialized at
-    genesis using the value returned by a call
-    <verbatim|BabeApi_configuration>(see <reference|sect-rte-babeapi-epoch>)
-    and then can be updated by the runtime for the next epoch through the
-    \PNext Config Data\Q consensus message digest (see def.
-    <reference|defn-consensus-message-digest>) in the first block of each
-    epoch. It is encoded as a tuple of two unsigned 64 bit integers
-    <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>> which are used
-    to compute the rational <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>.
+    probability that a slot will not be empty. It is initialized at genesis
+    using the value returned by a call <verbatim|BabeApi_configuration>(see
+    <reference|sect-rte-babeapi-epoch>) and then can be updated by the
+    runtime for the next epoch through the \PNext Config Data\Q consensus
+    message digest (see def. <reference|defn-consensus-message-digest>) in
+    the first block of each epoch. It is encoded as a tuple of two unsigned
+    64 bit integers <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>>
+    which are used to compute the rational
+    <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>.
   </definition>
 
   <\definition>
@@ -388,24 +388,24 @@
   <with|font-series|bold|<math|k>> (def. <reference|defn-prunned-best>) and
   <math|<with|font-series|bold|s<rsub|cq>>> (def.
   <reference|defn-chain-quality>). These are choosen based on the results of
-  simulation parameterized to meet certain security bounds, currently
-  assuming a <math|1 s \ >clock drift per day and targeting a probability
-  lower than <math|0.5%> for an adversary to break BABE in 3 years with a
-  resistance against network delay up to <math|<frac*|1|3>> of the slot time.
+  formal security analysis, currently assuming a <math|1 s \ >clock drift per
+  day and targeting a probability lower than <math|0.5%> for an adversary to
+  break BABE in 3 years with a resistance against network delay up to
+  <math|<frac*|1|3>> of the slot time and <math|c=0.38>.
 
   <\definition>
     <label|defn-prunned-best>The <with|font-series|bold|prunned best chain>
-    <math|C<rsup|\<#250C\>k>> is the best chain selected according to the
-    best chain selection rule with the last k Blocks prunned. Based on
-    simulation results, we choose <math|k=140>. The
-    <with|font-series|bold|last (probabilistically) finalized block>
-    describes the last block in this prunned best chain.
+    <math|<with|font-series|bold|C<rsup|\<#250C\>k>>> is the best chain
+    selected according to the best chain selection rule with the last k
+    Blocks prunned. We choose <math|k=140>. The <with|font-series|bold|last
+    (probabilistically) finalized block> describes the last block in this
+    prunned best chain.
   </definition>
 
   <\definition>
     <label|defn-chain-quality>The <with|font-series|bold|chain quality>
-    <math|s<rsub|cq>> represents the number of slots hat are used to estimate
-    the local clock offset. Based on simulation results, we choose
+    <math|<with|font-series|bold|s<rsub|cq>>> represents the number of slots
+    that are used to estimate the local clock offset. Currently it is set to
     <math|s<rsub|cq>=3000>.
   </definition>
 
@@ -425,13 +425,13 @@
   </definition>
 
   At the end of each sync-epoch (def. <reference|defn-sync-epoch>) these
-  block arrivel times are used to update the current clock offset using the
+  block arrival times are used to update the current clock offset using the
   median algorithm (alg. <reference|algo-slot-time>).
 
   <\definition>
     <label|defn-sync-epoch>A <with|font-series|bold|sync epoch> (unrelated to
-    the epoch defined in <reference|defn-epoch-slot>) is the inteval at which
-    each validator (re-)evaluates its local clock offsets. The first
+    the epoch defined in <reference|defn-epoch-slot>) is the interval at
+    which each validator (re-)evaluates its local clock offsets. The first
     sync-epoch <math|\<frak-E\><rsub|1>> starts just after the genesis block
     is released. The other sync-epochs <math|\<frak-E\><rsub|i>> start when
     the slot number of the last (probabilistically) finalized block is
@@ -620,7 +620,7 @@
   </definition>
 
   In the beginning of each epoch <math|\<cal-E\><rsub|n>> the host will
-  receives the randomness seed <math|\<cal-R\><rsub|\<cal-E\><rsub|n+1>>>(def.
+  receive the randomness seed <math|\<cal-R\><rsub|\<cal-E\><rsub|n+1>>>(def.
   <reference|defn-epoch-randomness>) necessary to participate in the block
   production lottery in the next epoch <math|\<cal-E\><rsub|n+1>> from the
   runtime, through the <with|font-shape|italic|Next Epoch Data> consesus
