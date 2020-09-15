@@ -2,5 +2,6 @@ output.log
 host-spec.tex
 polkadot-host-spec.pdf
 polkadot-host-spec.tex
+polkadot-host-spec-*.eps
 polkadot-host-spec.diff.pdf
 *.tmp.tex
