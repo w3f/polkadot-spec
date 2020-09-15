@@ -712,10 +712,10 @@ defined as follows:
 \end{algorithm}
 
 \begin{itemize}
-  \item \textsc{Pollute-Storage} \SubItem{As clarified in Section
+  \item \syed{\textsc{Pollute-Storage} \SubItem{As clarified in Section
   \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
   storage states. From (mostly) empty databases to database with a (longer)
-  history.}
+  history.}}{so this doesn't happens anymore better to remove it, they just count the number of read and write access and then they multiply it by a previously computed weight}
   \item \textsc{Generate-Validator()}
   \SubItem{Creates a validators with some unbonded balances.}
   \item \textsc{Validate($validator$)}
