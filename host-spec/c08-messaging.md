@@ -1,6 +1,6 @@
 # Message Passing
 
-> [!!] Disclaimer: this document is work-in-progress and will change a lot until
+> Disclaimer: this document is work-in-progress and will change a lot until
 > finalization.
 
 ## Overview
@@ -18,7 +18,7 @@ and horizontal passing.
   essentially only stores proofs that message where sent and whether the
   recipient has read those messages.
 
-![Parachain Message Passing Overview](figures/parachain_message_passing_overview.svg)
+![Parachain Message Passing Overview](figures/parachain_message_passing_overview.svg){ width=100% keepaspectration=true }
 
 ## Message Queue Chain (MQC)
 
@@ -33,7 +33,7 @@ Each block within the MQC is a triple containing the following fields:
 - `message_hash`: The hash of the message itself.
 - `number`: The relay block number at which the message was sent.
 
-![MQC Overview](figures/parachain_message_queue_chain.svg)
+![MQC Overview](figures/parachain_message_queue_chain.svg){ width=100% keepaspectration=true }
 
 A MQC is always specific to one channel. Additional channels require its own,
 individual MQC. The MQC itself is not saved anywhere, but only provides a final
@@ -86,7 +86,7 @@ This structure is created or overwritten on every start of each session.
 Individual fields of this construct are updated for every message sent, such as
 `used_places`, `used_bytes` and `mqc_head`. If the channel is sealed and
 `used_places` reaches `0` (occurs when a new session begins), this construct is
-be removed on the *next* session start.
+be removed on the _next_ session start.
 
 The Runtime maintains a structure of the current, open channels in a map. The
 key is a tuple of the sender ParaId and the recipient ParaId, where the value is
@@ -154,6 +154,7 @@ off-chain consensus/agreement?
 The accept message contains the following fields:
 
 `ChAccept`:
+
 * `index: int`: the index of the open request list.
 
 #### Workflow
@@ -281,6 +282,7 @@ A recipient can check for unread messages by calling into the
 really clear how a recipient will check for new messages).
 
 Params:
+
 - `id: ParaId`: the ParaId of the sender.
 
 On success, it returns a SCALE encoded array of messages.
@@ -293,7 +295,7 @@ sent. A core principle is that the relay chain remains as thin as possible in
 regards to messaging and only contains the required information for the validity
 of message processing.
 
-![Parachain XCMP Overview](figures/parachain_xcmp_overview.svg)
+![Parachain XCMP Overview](figures/parachain_xcmp_overview.svg){ width=100% keepaspectration=true }
 
 The entire XCMP process requires a couple of steps:
 
