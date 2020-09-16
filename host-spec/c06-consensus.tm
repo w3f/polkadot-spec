@@ -377,11 +377,11 @@
   <subsection|Slot Number Calculation>
 
   It is imperative for the security of the network that each block producer
-  is able to correctly determine the set of slots which can be associated to
-  a valid block generated at a given time without relying on any external
-  clock source (e.g. through the <with|font-shape|italic|Network Time
-  Protocol> or the <with|font-shape|italic|Global Positioning System>). To
-  stay in synchronization each producer is therefore required to periodically
+  is able to correctly determine the current slots number at a given time.
+  Polkadot does this without relying on any external clock source (e.g.
+  through the <with|font-shape|italic|Network Time Protocol> or the
+  <with|font-shape|italic|Global Positioning System>). To stay in
+  synchronization each producer is therefore required to periodically
   estimate its local clock offset in relation to the rest of the network.\ 
 
   This estimation depends on the two fixed parameters
@@ -391,7 +391,8 @@
   formal security analysis, currently assuming a <math|1 s \ >clock drift per
   day and targeting a probability lower than <math|0.5%> for an adversary to
   break BABE in 3 years with a resistance against network delay up to
-  <math|<frac*|1|3>> of the slot time and <math|c=0.38>.
+  <math|<frac*|1|3>> of the slot time and a Babe constant (def.
+  <reference|defn-babe-constant>) of <math|c=0.38>.
 
   <\definition>
     <label|defn-prunned-best>The <with|font-series|bold|prunned best chain>
@@ -410,7 +411,8 @@
   </definition>
 
   The prerequisite for such a calculation is that each producer stores the
-  arrival time of each block (def. <reference|defn-block-time>).\ 
+  arrival time of each block (def. <reference|defn-block-time>) measured by a
+  clock that is otherwise not adjusted by any external protocol.\ 
 
   <\definition>
     <label|defn-block-time>The <strong|block arrival time> of block <math|B>
@@ -533,7 +535,8 @@
 
   <\definition>
     <label|defn-block-signature><label|defn-babe-seal>The <strong|Block
-    Signature> noted by <math|S<rsub|B>> is computed as
+    Signature> <math|S<rsub|B>> is a signature of the block header hash (see
+    def.<reference|defn-block-header-hash>) and defined as
 
     <\equation*>
       Sig<rsub|SR25519,sk<rsup|s><rsub|j>><around*|(|H<rsub|h><around*|(|B|)>|)>
