@@ -36,6 +36,7 @@ set(
   CACHE STRING "Binary cache server"
 )
 
+
 # Setup hunter
 include(cmake/HunterGate.cmake)
 HunterGate(
@@ -44,16 +45,19 @@ HunterGate(
   FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
 )
 
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${HUNTER_ENABLED})
 
 
 # General config
 project(kagome-adapter-legacy LANGUAGES CXX C)
 
+
 # Find dependencies
 hunter_add_package(kagome)
 
 find_package(kagome REQUIRED)
+
+message(STATUS "Found kagome: ${kagome_INCLUDE_DIRS}")
 
 # FIXME Kagome's package config should do all this!
 find_package(ed25519 REQUIRED)
@@ -66,6 +70,7 @@ find_package(xxhash REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(libp2p REQUIRED)
 find_package(binaryen REQUIRED)
+
 
 # Compile and link tester
 add_executable(kagome-adapter-legacy
@@ -93,9 +98,6 @@ target_include_directories(kagome-adapter-legacy PRIVATE ${kagome_INCLUDE_DIRS})
 target_link_libraries(kagome-adapter-legacy
   Boost::program_options
   ${kagome_LIBRARIES}
-
-  # FIXME Patched-in export required for host-api testing
-  kagome::binaryen_wasm_memory
 )
 
 
