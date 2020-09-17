@@ -24,6 +24,7 @@ set(CMAKE_TOOLCHAIN_FILE
   CACHE FILEPATH "Default toolchain"
 )
 
+
 # Setup but disable binary cache by default
 set(
   HUNTER_USE_CACHE_SERVERS "NO"
@@ -35,6 +36,7 @@ set(
   CACHE STRING "Binary cache server"
 )
 
+
 # Setup hunter
 include(cmake/HunterGate.cmake)
 HunterGate(
@@ -43,11 +45,12 @@ HunterGate(
   FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
 )
 
-set(CMAKE_FIND_PACKAGE_PREFER_CONFIG HUNTER_ENABLED)
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${HUNTER_ENABLED})
 
 
 # General config
 project(kagome-adapter LANGUAGES CXX C)
+
 
 # Find dependencies
 hunter_add_package(kagome)
@@ -55,6 +58,14 @@ hunter_add_package(yaml-cpp)
 
 find_package(kagome REQUIRED)
 find_package(yaml-cpp REQUIRED)
+
+message(STATUS "Found kagome: ${kagome_INCLUDE_DIRS}")
+
+# Fix inconsistency between hunterized and upstream package (+ CMake oddity fix)
+if(NOT TARGET yaml-cpp)
+  set_target_properties(yaml-cpp::yaml-cpp PROPERTIES IMPORTED_GLOBAL true)
+  add_library(yaml-cpp ALIAS yaml-cpp::yaml-cpp)
+endif()
 
 # FIXME Kagome's package config should do all this!
 find_package(Boost REQUIRED COMPONENTS filesystem program_options random)
@@ -67,6 +78,7 @@ find_package(xxhash REQUIRED)
 find_package(spdlog REQUIRED)
 find_package(libp2p REQUIRED)
 find_package(binaryen REQUIRED)
+
 
 # Compile and link tester
 add_executable(kagome-adapter
@@ -101,11 +113,8 @@ target_include_directories(kagome-adapter PRIVATE ${kagome_INCLUDE_DIRS})
 
 target_link_libraries(kagome-adapter
   Boost::program_options
-  yaml-cpp::yaml-cpp
+  yaml-cpp
   ${kagome_LIBRARIES}
-
-  # FIXME Patched-in export required for host-api testing
-  kagome::binaryen_wasm_memory
 )
 
 
