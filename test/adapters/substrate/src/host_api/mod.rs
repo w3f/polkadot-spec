@@ -26,15 +26,15 @@ pub fn process_host_api_tests(subcmd_matches: &ArgMatches) {
             "ext_storage_next_key_version_1"     => storage::ext_storage_next_key_version_1(input),
 
             // child storage api
-            "ext_storage_child_set_version_1" => child_storage::ext_storage_child_set_version_1(input),
-            "ext_storage_child_get_version_1" => child_storage::ext_storage_child_get_version_1(input),
-            "ext_storage_child_read_version_1" => child_storage::ext_storage_child_read_version_1(input),
-            "ext_storage_child_clear_version_1" => child_storage::ext_storage_child_clear_version_1(input),
-            "ext_storage_child_storage_kill_version_1" => child_storage::ext_storage_child_storage_kill_version_1(input),
-            "ext_storage_child_exists_version_1" => child_storage::ext_storage_child_exists_version_1(input),
-            "ext_storage_child_clear_prefix_version_1" => child_storage::ext_storage_child_clear_prefix_version_1(input),
-            "ext_storage_child_root_version_1" => child_storage::ext_storage_child_root_version_1(input),
-            "ext_storage_child_next_key_version_1" => child_storage::ext_storage_child_next_key_version_1(input),
+            "ext_storage_child_set_version_1" => child_storage::ext_default_child_storage_set_version_1(input),
+            "ext_storage_child_get_version_1" => child_storage::ext_default_child_storage_get_version_1(input),
+            "ext_storage_child_read_version_1" => child_storage::ext_default_child_storage_read_version_1(input),
+            "ext_storage_child_clear_version_1" => child_storage::ext_default_child_storage_clear_version_1(input),
+            "ext_storage_child_storage_kill_version_1" => child_storage::ext_default_child_storage_storage_kill_version_1(input),
+            "ext_storage_child_exists_version_1" => child_storage::ext_default_child_storage_exists_version_1(input),
+            "ext_storage_child_clear_prefix_version_1" => child_storage::ext_default_child_storage_clear_prefix_version_1(input),
+            "ext_storage_child_root_version_1" => child_storage::ext_default_child_storage_root_version_1(input),
+            "ext_storage_child_next_key_version_1" => child_storage::ext_default_child_storage_next_key_version_1(input),
 
             // crypto api
             "ext_crypto_ed25519_public_keys_version_1" => crypto::ext_crypto_ed25519_public_keys_version_1(input),
