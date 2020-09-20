@@ -10,69 +10,56 @@ include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 #[cfg(feature = "runtime-wasm")]
 extern "C" {
-    fn ext_storage_get_version_1(key: u64) -> u64;
-    fn ext_storage_child_get_version_1(child_key: u64, def: u64, child_type: u32, key: u64) -> u64;
-    fn ext_storage_read_version_1(key: u64, out: u64, offset: u32) -> u64;
-    fn ext_storage_child_read_version_1(
-        child_key: u64,
-        def: u64,
-        child_type: u32,
-        key: u64,
-        out: u64,
-        offset: u32,
-    ) -> u64;
+    // Storage API
     fn ext_storage_set_version_1(key: u64, value: u64);
-    fn ext_storage_child_set_version_1(
-        child_key: u64,
-        def: u64,
-        child_type: u32,
-        key: u64,
-        value: u64,
-    );
+    fn ext_storage_get_version_1(key: u64) -> u64;
+    fn ext_storage_read_version_1(key: u64, out: u64, offset: u32) -> u64;
     fn ext_storage_clear_version_1(key: u64);
-    fn ext_storage_child_clear_version_1(child_key: u64, def: u64, child_type: u32, key: u64);
-    fn ext_storage_child_storage_kill_version_1(child_key: u64, def: u64, child_type: u32);
     fn ext_storage_exists_version_1(key: u64) -> i32;
-    fn ext_storage_child_exists_version_1(
-        child_key: u64,
-        def: u64,
-        child_type: u32,
-        key: u64,
-    ) -> i32;
     fn ext_storage_clear_prefix_version_1(key: u64);
-    fn ext_storage_child_clear_prefix_version_1(
-        child_key: u64,
-        def: u64,
-        child_type: u32,
-        key: u64,
-    );
     fn ext_storage_root_version_1() -> u64;
-    fn ext_storage_child_root_version_1(child_key: u64) -> u64;
     fn ext_storage_next_key_version_1(key: u64) -> u64;
-    fn ext_storage_child_next_key_version_1(
-        child_key: u64,
-        def: u64,
-        child_type: u32,
-        key: u64,
-    ) -> u64;
+
+    // Default child stoage API
+    fn ext_default_child_storage_set_version_1(child: u64, key: u64, value: u64);
+    fn ext_default_child_storage_get_version_1(child: u64, key: u64) -> u64;
+    fn ext_default_child_storage_read_version_1(child: u64, key: u64, out: u64, offset: u32) -> u64;
+    fn ext_default_child_storage_clear_version_1(child: u64, key: u64);
+    fn ext_default_child_storage_storage_kill_version_1(child: u64);
+    fn ext_default_child_storage_exists_version_1(child: u64, key: u64) -> i32;
+    fn ext_default_child_storage_clear_prefix_version_1(child: u64, key: u64);
+    fn ext_default_child_storage_root_version_1(child: u64) -> u64;
+    fn ext_default_child_storage_next_key_version_1(child: u64, key: u64) -> u64;
+
+    // Crypto API
     fn ext_crypto_ed25519_public_keys_version_1(id: u32) -> u64;
     fn ext_crypto_ed25519_generate_version_1(id: u32, seed: u64) -> u32;
     fn ext_crypto_ed25519_sign_version_1(id: u32, pubkey: u32, msg: u64) -> u64;
     fn ext_crypto_ed25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32;
+
     fn ext_crypto_sr25519_public_keys_version_1(id: u32) -> u64;
     fn ext_crypto_sr25519_generate_version_1(id: u32, seed: u64) -> u32;
     fn ext_crypto_sr25519_sign_version_1(id: u32, pubkey: u32, msg: u64) -> u64;
     fn ext_crypto_sr25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32;
+
     fn ext_crypto_secp256k1_ecdsa_recover_version_1(sig: u32, msg: u32) -> u64;
+
+    // Hashing API
     fn ext_hashing_keccak_256_version_1(data: u64) -> i32;
     fn ext_hashing_sha2_256_version_1(data: u64) -> i32;
+
     fn ext_hashing_blake2_128_version_1(data: u64) -> i32;
     fn ext_hashing_blake2_256_version_1(data: u64) -> i32;
+
     fn ext_hashing_twox_256_version_1(data: u64) -> i32;
     fn ext_hashing_twox_128_version_1(data: u64) -> i32;
     fn ext_hashing_twox_64_version_1(data: u64) -> i32;
+
+    // Allocator API
     fn ext_allocator_malloc_version_1(size: u32) -> u32;
     fn ext_allocator_free_version_1(ptr: u32);
+
+    // Trie API
     fn ext_trie_blake2_256_root_version_1(data: u64) -> u32;
     fn ext_trie_blake2_256_ordered_root_version_1(data: u64) -> u32;
 }
@@ -108,17 +95,13 @@ sp_core::wasm_export_functions! {
             Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
-    fn rtm_ext_storage_child_get_version_1(
+    fn rtm_ext_default_child_storage_get_version_1(
         child_key: Vec<u8>,
-        child_definition: Vec<u8>,
-        child_type: u32,
         key_data: Vec<u8>
     ) -> Option<Vec<u8>> {
         unsafe {
-            let value = ext_storage_child_get_version_1(
+            let value = ext_default_child_storage_get_version_1(
                 child_key.as_re_ptr(),
-                child_definition.as_re_ptr(),
-                child_type,
                 key_data.as_re_ptr(),
             );
             Decode::decode(&mut from_mem(value).as_slice()).unwrap()
@@ -142,20 +125,16 @@ sp_core::wasm_export_functions! {
                 .map(|n| buffer[..(n.min(buffer_size) as usize)].to_vec())
         }
     }
-    fn rtm_ext_storage_child_read_version_1(
+    fn rtm_ext_default_child_storage_read_version_1(
         child_key: Vec<u8>,
-        child_definition: Vec<u8>,
-        child_type: u32,
         key_data: Vec<u8>,
         offset: u32,
         buffer_size: u32 // not directly required for PDRE API, only used for testing
     ) -> Option<Vec<u8>> {
         let mut buffer = vec![0u8; buffer_size as usize];
         unsafe {
-            let res = ext_storage_child_read_version_1(
+            let res = ext_default_child_storage_read_version_1(
                 child_key.as_re_ptr(),
-                child_definition.as_re_ptr(),
-                child_type,
                 key_data.as_re_ptr(),
                 buffer.as_re_ptr(),
                 offset
@@ -177,18 +156,14 @@ sp_core::wasm_export_functions! {
             );
         }
     }
-    fn rtm_ext_storage_child_set_version_1(
+    fn rtm_ext_default_child_storage_set_version_1(
         child_key: Vec<u8>,
-        child_definition: Vec<u8>,
-        child_type: u32,
         key_data: Vec<u8>,
         value_data: Vec<u8>
     ) {
         unsafe {
-            let _ = ext_storage_child_set_version_1(
+            let _ = ext_default_child_storage_set_version_1(
                 child_key.as_re_ptr(),
-                child_definition.as_re_ptr(),
-                child_type,
                 key_data.as_re_ptr(),
                 value_data.as_re_ptr()
             );
@@ -203,31 +178,23 @@ sp_core::wasm_export_functions! {
             );
         }
     }
-    fn rtm_ext_storage_child_clear_version_1(
+    fn rtm_ext_default_child_storage_clear_version_1(
         child_key: Vec<u8>,
-        child_definition: Vec<u8>,
-        child_type: u32,
         key_data: Vec<u8>
     ) {
         unsafe {
-            let _ = ext_storage_child_clear_version_1(
+            let _ = ext_default_child_storage_clear_version_1(
                 child_key.as_re_ptr(),
-                child_definition.as_re_ptr(),
-                child_type,
                 key_data.as_re_ptr(),
             );
         }
     }
-    fn rtm_ext_storage_child_storage_kill_version_1(
+    fn rtm_ext_default_child_storage_storage_kill_version_1(
         child_key: Vec<u8>,
-        child_definition: Vec<u8>,
-        child_type: u32,
     ) {
         unsafe {
-            let _ = ext_storage_child_storage_kill_version_1(
+            let _ = ext_default_child_storage_storage_kill_version_1(
                 child_key.as_re_ptr(),
-                child_definition.as_re_ptr(),
-                child_type
             );
         }
     }
@@ -240,17 +207,13 @@ sp_core::wasm_export_functions! {
             ) as u32
         }
     }
-    fn rtm_ext_storage_child_exists_version_1(
+    fn rtm_ext_default_child_storage_exists_version_1(
         child_key: Vec<u8>,
-        child_definition: Vec<u8>,
-        child_type: u32,
         key_data: Vec<u8>
     ) -> u32 {
         unsafe {
-            ext_storage_child_exists_version_1(
+            ext_default_child_storage_exists_version_1(
                 child_key.as_re_ptr(),
-                child_definition.as_re_ptr(),
-                child_type,
                 key_data.as_re_ptr(),
             ) as u32
         }
@@ -264,17 +227,13 @@ sp_core::wasm_export_functions! {
             );
         }
     }
-    fn rtm_ext_storage_child_clear_prefix_version_1(
+    fn rtm_ext_default_child_storage_clear_prefix_version_1(
         child_key: Vec<u8>,
-        child_definition: Vec<u8>,
-        child_type: u32,
         key_data: Vec<u8>
     ) {
         unsafe {
-            let _ = ext_storage_child_clear_prefix_version_1(
+            let _ = ext_default_child_storage_clear_prefix_version_1(
                 child_key.as_re_ptr(),
-                child_definition.as_re_ptr(),
-                child_type,
                 key_data.as_re_ptr(),
             );
         }
@@ -285,9 +244,9 @@ sp_core::wasm_export_functions! {
             from_mem(value)
         }
     }
-    fn rtm_ext_storage_child_root_version_1(child_key: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_default_child_storage_root_version_1(child_key: Vec<u8>) -> Vec<u8> {
         unsafe {
-            let value = ext_storage_child_root_version_1(
+            let value = ext_default_child_storage_root_version_1(
                 child_key.as_re_ptr(),
             );
             from_mem(value)
@@ -301,17 +260,13 @@ sp_core::wasm_export_functions! {
             Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
-    fn rtm_ext_storage_child_next_key_version_1(
+    fn rtm_ext_default_child_storage_next_key_version_1(
         child_key: Vec<u8>,
-        child_definition: Vec<u8>,
-        child_type: u32,
         key_data: Vec<u8>
     ) -> Option<Vec<u8>> {
         unsafe {
-            let value = ext_storage_child_next_key_version_1(
+            let value = ext_default_child_storage_next_key_version_1(
                 child_key.as_re_ptr(),
-                child_definition.as_re_ptr(),
-                child_type,
                 key_data.as_re_ptr(),
             );
             Decode::decode(&mut from_mem(value).as_slice()).unwrap()
