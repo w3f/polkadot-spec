@@ -1,6 +1,6 @@
 [package]
 name = "substrate-adapter"
-version = "2.0.0-alpha.6"
+version = "2.0.0-rc6"
 authors = ["Skalman <skalman@riseup.net>"]
 edition = "2018"
 
@@ -23,16 +23,16 @@ trie-db        = "0.20"
 trie-root      = "0.16"
 
 # state-trie blake2 hashing (TODO: Use substrate implementation?)
-sp-serializer      = "2.0.0-alpha"
+sp-serializer      = "2.0.0-rc6"
 primitive-types    = { version = "0.2",  default-features = false, features = ["codec"] }
 hash256-std-hasher = { version = "0.12", default-features = false }
 blake2-rfc         = "*"
 
 # host-api
-sp-core          = { version = "2.0.0-alpha", default-features = false, features = ["full_crypto"] }
-sp-io            = { version = "2.0.0-alpha", default-features = false }
-sc-executor      = "0.8.0-alpha"
-sp-state-machine = "0.8.0-alpha"
+sp-core          = { version = "2.0.0-rc6", default-features = false, features = ["full_crypto"] }
+sp-io            = { version = "2.0.0-rc6", default-features = false }
+sc-executor      = "0.8.0-rc6"
+sp-state-machine = "0.8.0-rc6"
 
 # host-api shim wasm blob
 runtime = { package = "wasm-adapter", path = "../wasm" }

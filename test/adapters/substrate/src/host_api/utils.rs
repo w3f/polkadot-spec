@@ -12,7 +12,7 @@ use sp_core::{
     offchain::OffchainExt,
     testing::KeyStore,
     traits::KeystoreExt, 
-    //traits::MissingHostFunctions, // TODO for > alpha.6
+    traits::MissingHostFunctions,
     Blake2Hasher,
 };
 use sp_state_machine::TestExternalities as CoreTestExternalities;
@@ -98,7 +98,6 @@ impl Runtime {
             WasmExecutionMethod::Interpreted,
             Some(8), // heap_pages
             SubstrateHostFunctions::host_functions(),
-            false, // allow_missing_func_import // TODO Remove > alpha.6
             8 // max_runtime_instances
         ).call_in_wasm(
             &self.blob,
@@ -106,7 +105,7 @@ impl Runtime {
             method,
             data,
             &mut extext,
-            //MissingHostFunctions::Disallow // TODO Needed in > alpha.6
+            MissingHostFunctions::Disallow,
         ).unwrap()
     }
 }
