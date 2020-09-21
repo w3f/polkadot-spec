@@ -166,8 +166,8 @@ module HostApiOutputs
         "",
     ]
 
-    const child_child_def_type_key_value = [
-        # ext_storage_child_set_version_1
+    const child_key_value = [
+        # ext_default_child_storage_set_version_1
         "Inverse\n",
         "Horizontal\n",
         "portal\n",
@@ -178,7 +178,7 @@ module HostApiOutputs
         "value-added\n",
         "Reactive\n",
         "secondary\n",
-        # ext_storage_child_get_version_1
+        # ext_default_child_storage_get_version_1
         "Inverse\n",
         "Horizontal\n",
         "portal\n",
@@ -189,7 +189,7 @@ module HostApiOutputs
         "value-added\n",
         "Reactive\n",
         "secondary\n",
-        # ext_storage_child_clear_version_1
+        # ext_default_child_storage_clear_version_1
         nothing,
         nothing,
         nothing,
@@ -200,7 +200,7 @@ module HostApiOutputs
         nothing,
         nothing,
         nothing,
-        # ext_storage_child_exists_version_1
+        # ext_default_child_storage_exists_version_1
         "true\n",
         "true\n",
         "true\n",
@@ -213,7 +213,7 @@ module HostApiOutputs
         "true\n",
     ]
 
-    const child_child_def_type_prefix_key_value_key_value = [
+    const child_prefix_key_value_key_value = [
         "Future-proofed\n",
         "Horizontal\n",
         "pricing structure\n",
@@ -226,8 +226,8 @@ module HostApiOutputs
         "secondary\ntoolset\n"
     ]
 
-    const child_child_def_type_key_value_key_value = [
-        # ext_storage_child_storage_kill_version_1
+    const child_key_value_key_value = [
+        # ext_default_child_storage_storage_kill_version_1
         nothing,
         nothing,
         nothing,
@@ -238,7 +238,7 @@ module HostApiOutputs
         nothing,
         nothing,
         nothing,
-        # ext_storage_child_root_version_1
+        # ext_default_child_storage_root_version_1
         "e04eb753bc044436c6624b2062f7ad2be3bf19c62ed6f10aa2d7ee2586828cd5\n",
         "e563e5520daa936c3629783df1390428bf1a57bf2ea2e30d26efe54bd225e706\n",
         "10577651a2a8b02fa35d6aaed6e9cdceb26db2bf76746b4135401dd9fa4661d5\n",
@@ -249,7 +249,7 @@ module HostApiOutputs
         "803205f7b32b7aadcf4955a2f934a065060da645a45c817f26c90025f8e4a978\n",
         "41d7e4e8d2198d42c00a753db0f11dde0d2288ce0d148a83e9e774eafbf17584\n",
         "3b71375a64a94627d03b257d2d2538474ac0263c0a5e6872d848ce6889092e15\n",
-        # ext_storage_child_next_key_version
+        # ext_default_child_storage_next_key_version
         "static\n",
         "function\n",
         "budgetary management\n",

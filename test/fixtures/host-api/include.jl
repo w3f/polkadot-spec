@@ -19,40 +19,36 @@ HOSTAPI_FIXTURE_DATASETS = [
         ],
         HostApiOutputs.value .* "\n",
     ],[
-        HostApiFunctions.child_child_def_type_key_value,
+        HostApiFunctions.child_key_value,
         [
             HostApiInputs.child_child,
-            HostApiInputs.child_def_child_type,
             HostApiInputs.key_value_1,
         ],
-        HostApiOutputs.child_child_def_type_key_value,
+        HostApiOutputs.child_key_value,
     ],[
-        HostApiFunctions.child_def_type_key_value_offset_buffer_size,
+        HostApiFunctions.child_key_value_offset_buffer_size,
         [
             HostApiInputs.child_child,
-            HostApiInputs.child_def_child_type,
             HostApiInputs.key_value_1,
             HostApiInputs.offset,
             HostApiInputs.buffer_size,
         ],
         HostApiOutputs.key_value_offset_buffer_size .* "\n",
     ],[
-        HostApiFunctions.child_child_def_type_prefix_key_value_key_value,
+        HostApiFunctions.child_prefix_key_value_key_value,
         [
             HostApiInputs.child_child,
-            HostApiInputs.child_def_child_type,
             HostApiInputs.prefix_key_value_key_value,
         ],
-        HostApiOutputs.child_child_def_type_prefix_key_value_key_value,
+        HostApiOutputs.child_prefix_key_value_key_value,
     ],[
-        HostApiFunctions.child_child_def_type_key_value_key_value,
+        HostApiFunctions.child_key_value_key_value,
         [
             HostApiInputs.child_child,
-            HostApiInputs.child_def_child_type,
             HostApiInputs.key_value_1,
             HostApiInputs.key_value_2,
         ],
-        HostApiOutputs.child_child_def_type_key_value_key_value,
+        HostApiOutputs.child_key_value_key_value,
     ],[
         HostApiFunctions.key_value,
         [

@@ -6,8 +6,8 @@ pub fn ext_default_child_storage_set_version_1(input: ParsedInput) {
 
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
-    let key = input.get(4);
-    let value = input.get(5);
+    let key = input.get(2);
+    let value = input.get(3);
 
     // Get invalid key
     let res = rtm
@@ -55,10 +55,10 @@ pub fn ext_default_child_storage_read_version_1(input: ParsedInput) {
 
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
-    let key = input.get(4);
-    let value = input.get(5);
-    let offset = input.get_u32(6);
-    let buffer_size = input.get_u32(7);
+    let key = input.get(2);
+    let value = input.get(3);
+    let offset = input.get_u32(4);
+    let buffer_size = input.get_u32(5);
 
     // Get invalid key
     let res = rtm
@@ -130,8 +130,8 @@ pub fn ext_default_child_storage_clear_version_1(input: ParsedInput) {
 
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
-    let key = input.get(4);
-    let value = input.get(5);
+    let key = input.get(2);
+    let value = input.get(3);
 
     // Set key/value
     let _ = rtm.call(
@@ -176,10 +176,10 @@ pub fn ext_default_child_storage_storage_kill_version_1(input: ParsedInput) {
 
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
-    let key1 = input.get(4);
-    let value1 = input.get(5);
-    let key2 = input.get(6);
-    let value2 = input.get(7);
+    let key1 = input.get(2);
+    let value1 = input.get(3);
+    let key2 = input.get(4);
+    let value2 = input.get(5);
 
     // Set key/value
     let _ = rtm.call(
@@ -249,8 +249,8 @@ pub fn ext_default_child_storage_exists_version_1(input: ParsedInput) {
 
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
-    let key = input.get(4);
-    let value = input.get(5);
+    let key = input.get(2);
+    let value = input.get(3);
 
     // Check if key exists (invalid)
     let res = rtm
@@ -293,11 +293,11 @@ pub fn ext_default_child_storage_clear_prefix_version_1(input: ParsedInput) {
 
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
-    let prefix = input.get(4);
-    let key1 = input.get(5);
-    let value1 = input.get(6);
-    let key2 = input.get(7);
-    let value2 = input.get(8);
+    let prefix = input.get(2);
+    let key1 = input.get(3);
+    let value1 = input.get(4);
+    let key2 = input.get(5);
+    let value2 = input.get(6);
 
     // Set key/value
     let _ = rtm.call(
@@ -359,10 +359,10 @@ pub fn ext_default_child_storage_root_version_1(input: ParsedInput) {
 
     let child_key1 = input.get(0);
     let _child_key2 = input.get(1);
-    let key1 = input.get(4);
-    let value1 = input.get(5);
-    let key2 = input.get(6);
-    let value2 = input.get(7);
+    let key1 = input.get(2);
+    let value1 = input.get(3);
+    let key2 = input.get(4);
+    let value2 = input.get(5);
 
     // Set key/value
     let _ = rtm.call(
@@ -401,10 +401,10 @@ pub fn ext_default_child_storage_next_key_version_1(input: ParsedInput) {
 
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
-    let key1 = input.get(4);
-    let value1 = input.get(5);
-    let key2 = input.get(6);
-    let value2 = input.get(7);
+    let key1 = input.get(2);
+    let value1 = input.get(3);
+    let key2 = input.get(4);
+    let value2 = input.get(5);
 
     // Keep track of the ordering of the keys
     let mut track = vec![];

@@ -1,49 +1,6 @@
 module HostApiInputs
-    # Only used by new APIs, not legacy
-	const child_def_child_type = [
-	  [
-		"Ameliorated", # child key definition
-		1 # child type
-	  ],
-	  [
-		"radical",
-		1
-	  ],
-	  [
-		"forecast",
-		1
-	  ],
-	  [
-		"well-modulated",
-		1
-	  ],
-	  [
-		"Vision-oriented",
-		1
-	  ],
-	  [
-		"needs-based",
-		1
-	  ],
-	  [
-		"heuristic",
-		1
-	  ],
-	  [
-		"system engine",
-		1
-	  ],
-	  [
-		"paradigm",
-		1
-	  ],
-	  [
-		"Devolved",
-		1
-	  ]
-	]
 
-	# Contains (mostly valid) prefixes of the corresponding keys
+    # Contains (mostly valid) prefixes of the corresponding keys
     const prefix_key_value_key_value = [
       [
         "stat", # prefix
