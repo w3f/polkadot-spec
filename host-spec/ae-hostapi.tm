@@ -127,11 +127,12 @@
     <item><verbatim|offset>: an u32 integer containing the offset beyond the
     value should be read from.
 
-    <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
-    <verbatim|Option> as defined in Definition <reference|defn-option-type>
-    containing the number of bytes written into the <verbatim|value_out>
-    buffer. Returns <verbatim|None> if the entry does not exists.
+    <item><verbatim|result>: a pointer-size (def.
+    <reference|defn-runtime-pointer>) pointing to a SCALE encoded
+    <verbatim|Option> (def. <reference|defn-option-type>) containing an
+    unsinged 32-bit interger representing the number of bytes left at
+    supplied <verbatim|offset>. Returns <verbatim|None> if the entry does not
+    exists.
   </itemize>
 
   <subsection|<verbatim|ext_storage_clear>>
