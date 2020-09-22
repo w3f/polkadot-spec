@@ -157,6 +157,88 @@ pub fn ext_storage_clear_prefix_version_1(input: ParsedInput) {
     }
 }
 
+pub fn ext_storage_append_version_1(input: ParsedInput) {
+    let mut rtm = Runtime::new();
+
+    let key1 = input.get(0);
+    let value1 = input.get(1);
+    let key2 = input.get(2);
+    let value2 = input.get(3);
+
+    let value1_enc = &value1.encode();
+    let value2_enc = &value2.encode();
+
+    // Insert first key
+    let res = rtm
+        .call("rtm_ext_storage_get_version_1", &key1.encode())
+        .decode_ovec();
+    assert!(res.is_none());
+
+    let _ = rtm.call(
+        "rtm_ext_storage_append_version_1",
+        &(key1, value1_enc).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_storage_append_version_1",
+        &(key1, value2_enc).encode(),
+    );
+
+    // Insert second key
+    let res = rtm
+        .call("rtm_ext_storage_get_version_1", &key2.encode())
+        .decode_ovec();
+    assert!(res.is_none());
+
+    let _ = rtm.call(
+        "rtm_ext_storage_append_version_1",
+        &(key2, value2_enc).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_storage_append_version_1",
+        &(key2, value1_enc).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_storage_append_version_1",
+        &(key2, value2_enc).encode(),
+    );
+    let _ = rtm.call(
+        "rtm_ext_storage_append_version_1",
+        &(key2, value1_enc).encode(),
+    );
+
+    // Check first key
+    let res = rtm
+        .call("rtm_ext_storage_get_version_1", &key1.encode())
+        .decode_ovec()
+        .unwrap()
+        .decode_vecvec();
+
+    assert_eq!(res, vec![value1, value2]);
+    println!(
+        "{}",
+        res.iter()
+            .map(|v| String::from_utf8(v.to_vec()).unwrap())
+            .collect::<Vec::<String>>()
+            .join(";")
+    );
+
+    // Check second key
+    let res = rtm
+        .call("rtm_ext_storage_get_version_1", &key2.encode())
+        .decode_ovec()
+        .unwrap()
+        .decode_vecvec();
+
+    assert_eq!(res, vec![value2, value1, value2, value1]);
+    println!(
+        "{}",
+        res.iter()
+            .map(|v| String::from_utf8(v.to_vec()).unwrap())
+            .collect::<Vec::<String>>()
+            .join(";")
+    );
+}
+
 pub fn ext_storage_root_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 

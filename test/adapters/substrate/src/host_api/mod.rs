@@ -22,6 +22,7 @@ pub fn process_host_api_tests(subcmd_matches: &ArgMatches) {
             "ext_storage_clear_version_1"        => storage::ext_storage_clear_version_1(input),
             "ext_storage_exists_version_1"       => storage::ext_storage_exists_version_1(input),
             "ext_storage_clear_prefix_version_1" => storage::ext_storage_clear_prefix_version_1(input),
+            "ext_storage_append_version_1"       => storage::ext_storage_append_version_1(input),
             "ext_storage_root_version_1"         => storage::ext_storage_root_version_1(input),
             "ext_storage_next_key_version_1"     => storage::ext_storage_next_key_version_1(input),
 
