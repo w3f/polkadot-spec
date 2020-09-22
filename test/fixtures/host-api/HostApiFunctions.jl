@@ -55,6 +55,7 @@ module HostApiFunctions
 	]
 
 	const key_value_key_value = [
+		"ext_storage_append_version_1",
 		"ext_storage_root_version_1",
 		"ext_storage_next_key_version_1"
 	]
