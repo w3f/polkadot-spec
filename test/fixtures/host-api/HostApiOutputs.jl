@@ -263,6 +263,17 @@ module HostApiOutputs
     ]
 
     const key_value_key_value = [
+        # ext_storage_append_version_1
+        "Inverse;Future-proofed\nFuture-proofed;Inverse;Future-proofed;Inverse",
+        "Horizontal;Expanded\nExpanded;Horizontal;Expanded;Horizontal",
+        "portal;pricing structure\npricing structure;portal;pricing structure;portal",
+        "Monitored;emulation\nemulation;Monitored;emulation;Monitored",
+        "secondary;Visionary\nVisionary;secondary;Visionary;secondary",
+        "next generation;approach\napproach;next generation;approach;next generation",
+        "Grass-roots;function\nfunction;Grass-roots;function;Grass-roots",
+        "value-added;Configurable\nConfigurable;value-added;Configurable;value-added",
+        "Reactive;Automated\nAutomated;Reactive;Automated;Reactive",
+        "secondary;toolset\ntoolset;secondary;toolset;secondary",
         # ext_storage_root_version_1
         "88642528f17282b87fabd1f04e75228e2a167b847e6656c9b95beda1ffd24d87",
         "aba4e533d278005c1814c64ccb1f524d5eb425bdaf74870895ce4d0148ede0e9",
