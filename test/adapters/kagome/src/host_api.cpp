@@ -100,6 +100,9 @@ void processHostApiCommands(const HostApiCommandArgs& args){
   router.addSubcommand("ext_storage_clear_prefix_version_1", [](const std::vector<std::string>& args) {
     storage::processClearPrefix(args[0], args[1], args[2], args[3], args[4]);
   });
+  router.addSubcommand("ext_storage_append_version_1", [](const std::vector<std::string>& args) {
+    storage::processAppend(args[0], args[1], args[2], args[3]);
+  });
   router.addSubcommand("ext_storage_root_version_1", [](const std::vector<std::string>& args) {
     storage::processRoot(args[0], args[1], args[2], args[3]);
   });
