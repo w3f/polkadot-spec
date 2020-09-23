@@ -23,7 +23,9 @@
 
 #include <iostream>
 #include <algorithm> // for min
+#include <numeric> // for accumulate
 
+#include <scale/scale.hpp>
 
 namespace storage {
 
@@ -187,6 +189,77 @@ namespace storage {
       BOOST_ASSERT_MSG(result.has_value(), "Value2 was deleted");
       BOOST_ASSERT_MSG(result.value().toString() == value2, "Value2 was changed");
     }
+  }
+
+
+  void processAppend(
+    const std::string_view key1, const std::string_view value1,
+    const std::string_view key2, const std::string_view value2
+  ) {
+    helpers::RuntimeEnvironment environment;
+
+    auto value1_enc = kagome::scale::encode(value1).value();
+    auto value2_enc = kagome::scale::encode(value2).value();
+
+    // Check that key1 is unset
+    auto none = environment.execute<helpers::MaybeBuffer>(
+      "rtm_ext_storage_get_version_1", key1
+    );
+
+    BOOST_ASSERT_MSG(!none, "Data exists");
+
+    // Insert key1
+    environment.execute<void>("rtm_ext_storage_append_version_1", key1, value1_enc);
+    environment.execute<void>("rtm_ext_storage_append_version_1", key1, value2_enc);
+
+    // Check that key2 is unset
+    none = environment.execute<helpers::MaybeBuffer>(
+      "rtm_ext_storage_get_version_1", key2
+    );
+
+    BOOST_ASSERT_MSG(!none, "Data exists");
+
+    // Insert key2
+    environment.execute<void>("rtm_ext_storage_append_version_1", key2, value2_enc);
+    environment.execute<void>("rtm_ext_storage_append_version_1", key2, value1_enc);
+    environment.execute<void>("rtm_ext_storage_append_version_1", key2, value2_enc);
+    environment.execute<void>("rtm_ext_storage_append_version_1", key2, value1_enc);
+
+    // Check key1
+    auto result = environment.execute<helpers::MaybeBuffer>(
+      "rtm_ext_storage_get_version_1", key1
+    );
+
+    auto data = kagome::scale::decode<std::vector<std::string>>(result.value()).value();
+    auto expected = std::vector{ std::string(value1), std::string(value2)};
+
+    BOOST_ASSERT_MSG(result, "Data missing");
+    BOOST_ASSERT_MSG(data == expected, "Data different");
+
+    auto joined = std::accumulate(
+        std::next(data.cbegin()), data.cend(), data[0],
+        [](const std::string &a, const std::string &b) { return a + ";" + b; }
+    );
+    std::cout << joined << std::endl;
+
+    // Check key2
+    result = environment.execute<helpers::MaybeBuffer>(
+      "rtm_ext_storage_get_version_1", key2
+    );
+
+    data = kagome::scale::decode<std::vector<std::string>>(result.value()).value();
+    expected = std::vector{
+      std::string(value2), std::string(value1), std::string(value2), std::string(value1)
+    };
+
+    BOOST_ASSERT_MSG(result, "Data missing");
+    BOOST_ASSERT_MSG(data == expected, "Data different");
+
+    joined = std::accumulate(
+        std::next(data.cbegin()), data.cend(), data[0],
+        [](const std::string &a, const std::string &b) { return a + ";" + b; }
+    );
+    std::cout << joined << std::endl;
   }
 
 
