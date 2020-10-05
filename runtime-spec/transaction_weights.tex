@@ -1,4 +1,5 @@
 \documentclass[11pt,a4paper]{article}
+
 \usepackage{geometry}
 \geometry{a4paper, total={170mm,257mm}, left=20mm, top=20mm,}
 \usepackage{color}
@@ -20,8 +21,9 @@
 \flushbottom
 
 \newcommand{\TWF}{\ensuremath{\mathcal{W}}}
-\SetKw{KwInit}{Init:} \SetKw{KwBy}{increment by} \SetKwProg{Fn}{Function}{
-is}{end}
+\SetKw{KwInit}{Init:}
+\SetKw{KwBy}{increment by}
+\SetKwProg{Fn}{Function}{is}{end}
 
 \begin{document}
 \title{Polkadot Weights}
@@ -417,15 +419,20 @@ the preliminary work should be implemented.
 
 \subsection{Practical Example \#1: {\texttt request\_judgement}}
 
-In Polkadot, accounts can save information about themselves onchain, known as
+In Polkadot, accounts can save information about themselves on-chain, known as
 the "Identity Info". This includes information such as display name, legal name,
-email address and so on. Polkadot selects a set of registrars, entities elected
-by \syed{the}{a?} Polkadot public referendum, which can \syed{judge}{could you explain
-  judge here more, is it just validating true false for all fields? some fields?} identities and therefore
-incentivizes a reputation model. The judgement itself is done offchain. The
-registrars \syed{rating}{what rating}, however, is saved onchain, directly in the corresponding
-Identity Info. It's also note worthy that Identiy Info can contain additional
-fields, set manually by the corresponding account holder. \syed{}{maybe an example of identity fields corresponding to an account clear things up}
+email address and so on. Polkadot offers a set of trusted registrars, entities
+elected by a Polkadot public referendum, which can verify the specified contact
+addresses of the identities, such as Email, and vouch on whether the identity
+actually owns those accounts. This can be achieved, for example, by sending a
+challenge to the specified address and requesting a signature as a response. The
+verification is done off-chain, while the final judgement is saved onchain,
+directly in the corresponding Identity Info. It's also note worthy that Identity
+Info can contain additional fields, set manually by the corresponding account
+holder.
+
+Information such as legal name must be verified by ID card or passport
+submission.
 \newline
 
 The function \verb|request_judgement| from the \verb|identity| pallet allows
