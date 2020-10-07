@@ -74,7 +74,6 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "substrate-h:"
-    open-pull-requests-limit: 0
 
   - package-ecosystem: "gitsubmodule"
     directory: "/test/hosts/kagome"
@@ -82,7 +81,6 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "kagome-h:"
-    open-pull-requests-limit: 0
 
   - package-ecosystem: "gitsubmodule"
     directory: "/test/hosts/gossamer"
@@ -90,7 +88,6 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "gossamer-h:"
-    open-pull-requests-limit: 0
 
 
   # GitHub Actions
