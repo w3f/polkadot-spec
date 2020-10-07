@@ -444,7 +444,8 @@ users to request judgement from a specific registrar.
 
 \begin{itemize}
   \item \verb|req_index|: the index which is assigned to the registrar.
-  \item \verb|max_fee|: the maximum fee the requester is willing to pay. The judgement fee varies for each registrar.
+  \item \verb|max_fee|: the maximum fee the requester is willing to pay. The
+  judgement fee varies for each registrar.
 \end{itemize}
 
 Studying this function reveals multiple design choices that can impact
@@ -469,13 +470,15 @@ transaction.
 let mut id = <IdentityOf<T>>::get(&sender).ok_or(Error::<T>::NoIdentity)?;
 \end{verbatim}
 
-The Identity Info contains all fields that have a \syed{value set}{what is a value set}, in an ordered form.
-It then proceeds to search all \syed{those entries}{which entries/clarify} for the specified registrar index. \syed{}{so the identity info is read from the state storage right? then maybe clarify that as well}
-If the entry can be found, the corresponding value is \syed{updated}{ isn't there any kind of authentication of the registerar judgement?} to the value
-passed on as the function parameters (assuming the registrar is not "stickied",
-which implies it cannot be changed). If the entry cannot be found, the value is
-inserted into the index where a matching element can be inserted while
-maintaining sorted order. \syed{This results in memory reallocation}{ which results in considerable resource consumption?}.
+The Identity Info contains all fields that have a data in them, set by the
+corresponding owner of the identity, in an ordered form. It then proceeds to
+search for the specific field type that will be inserted or updated, such as
+email address. If the entry can be found, the corresponding value is to the
+value passed on as the function parameters (assuming the registrar is not
+"stickied", which implies it cannot be changed). If the entry cannot be found,
+the value is inserted into the index where a matching element can be inserted
+while maintaining sorted order. This results in memory reallocation, which
+increases resource consumption.
 
 \begin{verbatim}
 match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
@@ -488,9 +491,10 @@ match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
 }
 \end{verbatim}
 
-\syed{In the end, the function ensures that the sender of the extrinsic has the
-required balance in order to pay the fee, a balance that is adjustable and
-determined by the Runtime itself}{what if an attacker submit lots of zero balanace account for judgement, while the transaction fails still they succeed in wasting the runtime time}. Then, an event is created to insert the Identity Info into storage. The creation of events is lightweight, but its execution is what will actually commit the state chgnanges.
+In the end, the function deposits the specified \verb|max_fee| balance, which
+can later be redeemed by the registrar. Then, an event is created to insert the
+Identity Info into storage. The creation of events is lightweight, but its
+execution is what will actually commit the state changes.
 
 \begin{verbatim}
 T::Currency::reserve(&sender, registrar.fee)?;
@@ -510,15 +514,17 @@ The following points must be considered:
    http://thefreedictionary.com/amount
 }
 \begin{itemize}
-  \item Varying \syed{amount}{ does this mean number/count? } of registrars.
-  \item Varying \syed{amount}{ same as above }  of preexisting accounts in storage.
-  \item \syed{The specified registrar}{why does it matter} is searched for in the Identity Info.
+  \item Varying count of registrars.
+  \item Varying count of preexisting accounts in storage.
+  \item The specified registrar is searched for in the Identity Info. An
+  identity can be judged by as many registrars as the identity owner issues
+  requests for, therefore increase its footprint in the state storage.
   Additionally, if a new value gets inserted into the byte array, memory get
   reallocated. Depending on the size of the Identity Info, the execution time
-  can vary.}
-  \item \syed{Varying sizes of Identity Info, including additional fields.}{ maybe we can be more accurate here }
-  \item It is legitimate to introduce additional weights for changes the sender
-  has influence over, such as the additional fields in the Identity Info.\syed{}{could you explain more, I don't get it why.}
+  can vary.
+  \item The Identity Info can contain only a few fields or many. It is
+  legitimate to introduce additional weights for changes the owner/sender has
+  influence over, such as the additional fields in the Identity Info.
 \end{itemize}
 
 \subsubsection{\syed{Preliminary Work}{I would call it Benchmarking Framework instead}}
