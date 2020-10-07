@@ -15,13 +15,9 @@
 #You should have received a copy of the GNU General Public License
 #along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
 
-# Might be worth to go back to this?
-#hunter_config(kagome GIT_SUBMODULE ../../../hosts/kagome)
-
-# Version of kagome to be tested
+# The version of kagome to be tested
 hunter_config(kagome
-  URL https://github.com/soramitsu/kagome/archive/778583ac8ad9d55ac8f06f2b63b5d07cf7f2062c.zip
-  SHA1 05f5408a666e5716da085f2d15a1fbf9b49ce661
+  GIT_SUBMODULE ../../../hosts/kagome
   CMAKE_ARGS TESTING=OFF
 )
 
