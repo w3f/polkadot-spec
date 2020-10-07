@@ -506,13 +506,6 @@ Self::deposit_event(RawEvent::JudgementRequested(sender, reg_index));
 
 The following points must be considered:
 
-\syed{}
-     {
-   Usage: The use of a plural noun after amount of (an amount of
-   bananas; the amount of refugees) should be avoided: a quantity of
-   bananas; the number of refugees
-   http://thefreedictionary.com/amount
-}
 \begin{itemize}
   \item Varying count of registrars.
   \item Varying count of preexisting accounts in storage.
@@ -527,7 +520,7 @@ The following points must be considered:
   influence over, such as the additional fields in the Identity Info.
 \end{itemize}
 
-\subsubsection{\syed{Preliminary Work}{I would call it Benchmarking Framework instead}}
+\subsubsection{Benchmarking Framework}
 
 The Polkadot Runtime specifies the \verb|MaxRegistrars| constant, which will
 prevent the list of registrars of reaching an undesired length. This value
@@ -537,11 +530,14 @@ should have some influence on the benchmarking process.
 The benchmarking implementation of for the function $request\_judgement$ can be
 defined as follows:
 
+\syed{{collection: a collection of time measurements of all benchmark
+  iterations}{the algorithm should return $\TWF$ be average or worst case of the
+  collection to keep the document consistent}
+
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $request\_judgement$ Runtime function}
   \SetAlgoLined
-  \KwResult{\syed{\textit{collection:} a collection of time measurements of all
-  benchmark iterations}{the algorithm should return $\TWF$ be average or worst case of the collection to keep the document consistent}}
+  \KwResult{$\TWF$}
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
@@ -553,17 +549,20 @@ defined as follows:
       $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), 100))};\\
       \textsc{Add-To($collection$, $time$)};
     }
-    \Return{\syed{$collection$}{$\TWF$}}
+    \Return{$\TWF$}
   }
 \end{algorithm}
 
+\syed{Pollute-Storage}{I would explain this process in the general section before going into example as it seems is just a condition for all test which touch storage}
+
 \begin{itemize}
-  \item \textsc{\syed{Pollute-Storage}{I would explain this process in the general section before going into example as it seems is just a condition for all test which touch storage} \SubItem{As clarified in Section
+  \item \textsc{Pollute-Storage}
+  \SubItem{As clarified in Section
   \ref{sec:blockchain-state}, the benchmarks should be run on a diverse range of
   storage states. From (mostly) empty databases to database with a (longer)
   history.}
   \item \textsc{Generate-Registrars($amount$)}
-  \SubItem{Creates \syed{$amount$ of registrars}{no ``amount of'' before plural names} and inserts those records into storage.}
+  \SubItem{Creates $number$ of registrars and inserts those records into storage.}
   \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
       of the concatenated input of $name$ and $index$ representing the address
       of a account. This function only creates an address and does not conduct
@@ -575,7 +574,7 @@ defined as follows:
   \item \textsc{Request-Judgement($registrar\_index$, $max\_fee$)}
   \SubItem{Calls the corresponding $request\_judgement$ Runtime function and passes on
   the required parameters.}
-  \item \textsc{\syed{Random($num$)}{same here, I'd move the explanation of super general functions before the example section}}
+  \item \textsc{Random($num$)}
   \SubItem{Picks a random number between 0 and $num$. This should be used when the benchmark
   should account for unpredictable values.}
   \item \textsc{Add-To($collection$, $time$)}
@@ -594,10 +593,14 @@ varies, and does I/O operation for each of them.
 \newline
 
 First, this function makes few basic checks to verify if the specified era is
-not higher then the current era (as it is not in the future) and is within the allowed range 
-also known as "history depth", as specified by the Runtime. After that, it fetches the era
-payout from storage and additionally verifies whether the specified account is
-indeed a validator and receives the corresponding \syed{"Ledger"}{perhaps don't drop jurgen without explanation, does this mean account?}.
+not higher then the current era (as it is not in the future) and is within the
+allowed range also known as "history depth", as specified by the Runtime. After
+that, it fetches the era payout from storage and additionally verifies whether
+the specified account is indeed a validator and receives the corresponding
+"Ledger". The Ledger keeps information about the stash key, controller key and
+other informatin such as actively bonded balance and a list of tracked rewards.
+The function only retains the entries of the history depth, and conducts a
+binary search for the specified era.
 
 \begin{verbatim}
 let era_payout = <ErasValidatorReward<T>>::get(&era)
@@ -607,9 +610,8 @@ let controller = Self::bonded(&validator_stash).ok_or(Error::<T>::NotStash)?;
 let mut ledger = <Ledger<T>>::get(&controller).ok_or_else(|| Error::<T>::NotController)?;
 \end{verbatim}
 
-\syed{The Ledger keeps information about the stash, such as actively bonded balance
-and a list of tracked rewards. The function only retains the entries of the
-history depth, and conducts a binary search for the specified era.}{could you decrypt this for people who are not familiar with Runtime jurgen}
+
+\syed{}{could you decrypt this for people who are not familiar with Runtime jurgen}
 
 \begin{verbatim}
 ledger.claimed_rewards.retain(|&x| x >= current_era.saturating_sub(history_depth));
@@ -625,7 +627,9 @@ The retained claimed rewards are inserted back into storage.
 <Ledger<T>>::insert(&controller, &ledger);
 \end{verbatim}
 
-As an optimizition, Runtime only fetches a list of the 64 highest staked nominators. Accordingly, any lower staked nominator gets no reward. 
+As an optimization, Runtime only fetches a list of the 64 highest staked
+nominators, although this might be changed in the future. Accordingly, any lower
+staked nominator gets no reward. 
 
 \begin{verbatim}
 let exposure = <ErasStakersClipped<T>>::get(&era, &ledger.stash);
@@ -650,8 +654,9 @@ if let Some(imbalance) = Self::make_payout(
 }
 \end{verbatim}
 
-Then, the nominators receive \syed{a}{is payout countable} payout. The functions loops over the nominator list, conducting an insertion into storage and a creation of a deposit event for
-each of the nominators.
+Then, the nominators receive their payout rewards. The functions loops over the
+nominator list, conducting an insertion into storage and a creation of a deposit
+event for each of the nominators.
 
 \begin{verbatim}
 for nominator in exposure.others.iter() {
@@ -679,13 +684,14 @@ The following points must be considered:
   \item Looping through a list of nominators and creating I/O operations for
   each increases execution time. The Runtime fetches up to 64 nominators.
 \end{itemize}
-\syed{}{I'm surprised only 64 nominator per validotor get paid, what is the incentive of others
-  to nominate then?}
 
-\subsubsection{\syed{Preliminary Work}{better naming}}
+\subsubsection{Benchmarking Framework}
 
 \begin{definition}
-  \label{defn-history-depth} {\b History Depth} indicated as {\textt MaxNominatorRewardedPerValidator} is a constant \syed{specified by the Polkadot Runtime}{so it is hard-coded or there is a algorithm to compute it/in that case I'd use calculated by?} which dictates the amount of Eras the reward system takes under consideration. \syed{}{I think consideration need to be defined}.
+  \label{defn-history-depth} {\b History Depth} indicated as {\textt
+  MaxNominatorRewardedPerValidator} is a fixed constant specified by the
+  Polkadot Runtime which dictates the number of Eras the Runtime will reward
+  nominators and validators for.
 \end{definition}
 
 \begin{definition}
@@ -700,11 +706,13 @@ The benchmarking implementation for the function $payout\_stakers$ can be
 defined as follows:
 \newline
 
+\syed{collection: a collection of time measurements of all
+  benchmark iterations}{$\TWF$}
+
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $payout\_stakers$ Runtime function}
   \SetAlgoLined
-  \KwResult{\syed{\textit{collection:} a collection of time measurements of all
-  benchmark iterations}{$\TWF$}}
+  \KwResult{$\TWF$}
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
@@ -722,15 +730,18 @@ defined as follows:
         \textsc{Add-To($collection$, $time$)};
       }
     }
-    \Return{\syed{$collection$}{$\TWF$}}
+    \Return{$\TWF$}
   }
 \end{algorithm}
 
+\syed{Polute-Storage}{so this doesn't happens anymore better to remove it, they just count the number of read and write access and then they multiply it by a previously computed weight}
+\syed{Measures the time from the start of the specified $function$ to its completion.}{just refer to its original definition}
+
 \begin{itemize}
-  \item \syed{\textsc{Pollute-Storage} \SubItem{As clarified in Section
-  \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
-  storage states. From (mostly) empty databases to database with a (longer)
-  history.}}{so this doesn't happens anymore better to remove it, they just count the number of read and write access and then they multiply it by a previously computed weight}
+  \item \textsc{Pollute-Storage}
+  \SubItem{As clarified in Section \ref{sec:blockchain-state}, the benchmarks
+  should be run an a diverse range of storage states. From (mostly) empty
+  databases to database with a (longer) history.}
   \item \textsc{Generate-Validator()}
   \SubItem{Creates a validators with some unbonded balances.}
   \item \textsc{Validate($validator$)}
@@ -741,15 +752,16 @@ defined as follows:
   \SubItem{Starts nomination of $nominator$ for $validator$ by bonding balances.}
   \item \textsc{Create-Rewards($validator$, $nominators$, $era\_depth$)}
   \SubItem{Starts an Era and creates pending rewards for $validator$ and $nominators$}
-  \item \textsc{Timer($function$)} \syed{\SubItem{Measures the time from the start of
-      the specified $function$ to its completion.}}{just refer to its original definition}
+  \item \textsc{Timer($function$)}
+  \SubItem{Measures the time from the start of the specified $function$ to its
+  completion.}
   \item \textsc{Add-To($collection$, $time$)} \SubItem{Adds a returned time
       measurement ($time$) to $collection$.}
 \end{itemize}
 
 \subsection{Practical Example \#3: \texttt{balances}}
 
-The $transfer$ function of the \syed{\textit{balances}}{texttt or textit let be consistent} module is designed to move the specified balance by the sender to the receiver.
+The $transfer$ function of the \textt{balances} module is designed to move the specified balance by the sender to the receiver.
 
 \subsubsection{Analysis}
 
