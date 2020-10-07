@@ -438,12 +438,14 @@ submission.
 The function \verb|request_judgement| from the \verb|identity| pallet allows
 users to request judgement from a specific registrar.
 
-\syed{}{I would put the signature/prototype of the function here so the reader knows which parameter you
-send to the function. This applies to all examples please.}
+\begin{verbatim}
+  (func $request_judgement (param $req_index int) (param $max_fee int))
+\end{verbatim}
 
-If this function is called
-by a \syed{previously judged user}{ by a specific registerar} it implies that the Identity Info should be
-rejudged.
+\begin{itemize}
+  \item \verb|req_index|: the index which is assigned to the registrar.
+  \item \verb|max_fee|: the maximum fee the requester is willing to pay. The judgement fee varies for each registrar.
+\end{itemize}
 
 Studying this function reveals multiple design choices that can impact
 performance, as it will be revealed by this analysis.
