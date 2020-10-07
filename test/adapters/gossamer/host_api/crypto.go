@@ -49,6 +49,3 @@ func test_crypto_hash(r *runtime.Runtime, name string, input string) {
 
 	fmt.Printf("%x\n", dec.([]byte)[:])
 }
-
-
-
