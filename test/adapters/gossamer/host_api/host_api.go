@@ -15,8 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
 
-// this file provide a command line interface to call scale codec go library
-
 package host_api
 
 import (
@@ -24,6 +22,7 @@ import (
 	"fmt"
 	"os"
 	"path"
+	"strings"
 
 	"github.com/ChainSafe/gossamer/dot/state"
 	"github.com/ChainSafe/gossamer/lib/keystore"
@@ -80,7 +79,7 @@ func ProcessHostApiCommand(args []string) {
 	}
 
 	function := *functionTextPtr
-	input := *inputTextPtr
+	inputs   := strings.Split(*inputTextPtr, ",")
 
 	// Initialize runtime environment...
 	var rtm runtime.Instance
@@ -121,36 +120,37 @@ func ProcessHostApiCommand(args []string) {
 
 	// test crypto api
 	case "test_blake2_128",
-		"test_blake2_256",
-		"test_twox_64",
-		"test_twox_128",
-		"test_twox_256",
-		"test_keccak_256":
-		test_crypto_hash(rtm, function[5:], input)
-		//	case "test_blake2_256_enumerated_trie_root":
-		//	case "test_ed25519":
-		//	case "test_sr25519":
-		//	case "test_secp256k1_ecdsa_recover":
+	     "test_blake2_256",
+	     "test_twox_64",
+	     "test_twox_128",
+	     "test_twox_256",
+	     "test_keccak_256":
+		test_crypto_hash(rtm, function[5:], inputs[0])
+	//case "test_blake2_256_enumerated_trie_root":
+	//case "test_ed25519":
+	//case "test_sr25519":
+	//case "test_secp256k1_ecdsa_recover":
 
 	// test storage api
-	//	case "test_clear_prefix":
-	//	case "test_clear_storage":
-	//	case "test_exists_storage":
-	//	case "test_set_get_local_storage":
-	//	case "test_set_get_storage":
-	//	case "test_set_get_storage_into":
-	//	case "test_storage_root":
-	//	case "test_storage_changes_root":
-	//	case "test_local_storage_compare_and_set":
+	//case "test_clear_prefix":
+	//case "test_clear_storage":
+	//case "test_exists_storage":
+	//case "test_set_get_local_storage":
+	case "test_set_get_storage":
+		test_set_get_storage(rtm, inputs[0], inputs[1])
+	//case "test_set_get_storage_into":
+	//case "test_storage_root":
+	//case "test_storage_changes_root":
+	//case "test_local_storage_compare_and_set":
 
 	// test child storage api
-	//	case "test_clear_child_prefix":
-	//	case "test_clear_child_storage":
-	//	case "test_exists_child_storage":
-	//	case "test_kill_child_storage":
-	//	case "test_set_get_child_storage":
-	//	case "test_get_child_storage_into":
-	//	case "test_child_storage_root":
+	//case "test_clear_child_prefix":
+	//case "test_clear_child_storage":
+	//case "test_exists_child_storage":
+	//case "test_kill_child_storage":
+	//case "test_set_get_child_storage":
+	//case "test_get_child_storage_into":
+	//case "test_child_storage_root":
 
 	default:
 		fmt.Println("Not implemented: ", function)
