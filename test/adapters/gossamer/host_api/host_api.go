@@ -98,11 +98,13 @@ func ProcessHostApiCommand(args []string) {
 	// Run requested test function
 	switch function {
 
-	// test crypto api (broken: test_blake2_128, test_keccak_256)
-	case "test_blake2_256",
+	// test crypto api
+	case "test_blake2_128",
+	     "test_blake2_256",
 	     "test_twox_64",
 	     "test_twox_128",
-	     "test_twox_256":
+	     "test_twox_256",
+	     "test_keccak_256":
 		test_crypto_hash(rtm, function[5:], input)
 //	case "test_blake2_256_enumerated_trie_root":
 //	case "test_ed25519":
