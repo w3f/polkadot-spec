@@ -530,7 +530,7 @@ should have some influence on the benchmarking process.
 The benchmarking implementation of for the function $request\_judgement$ can be
 defined as follows:
 
-\syed{{collection: a collection of time measurements of all benchmark
+\syed{collection: a collection of time measurements of all benchmark
   iterations}{the algorithm should return $\TWF$ be average or worst case of the
   collection to keep the document consistent}
 
@@ -611,7 +611,7 @@ let mut ledger = <Ledger<T>>::get(&controller).ok_or_else(|| Error::<T>::NotCont
 \end{verbatim}
 
 
-\syed{}{could you decrypt this for people who are not familiar with Runtime jurgen}
+\syed{syed}{could you decrypt this for people who are not familiar with Runtime jurgen}
 
 \begin{verbatim}
 ledger.claimed_rewards.retain(|&x| x >= current_era.saturating_sub(history_depth));
@@ -688,19 +688,18 @@ The following points must be considered:
 \subsubsection{Benchmarking Framework}
 
 \begin{definition}
-  \label{defn-history-depth} {\b History Depth} indicated as {\textt
-  MaxNominatorRewardedPerValidator} is a fixed constant specified by the
+  \label{defn-history-depth} {\b History Depth} indicated as
+  \texttt{MaxNominatorRewardedPerValidator} is a fixed constant specified by the
   Polkadot Runtime which dictates the number of Eras the Runtime will reward
   nominators and validators for.
 \end{definition}
 
 \begin{definition}
   \label{defn-max_nominator_reward_per_validator}
-        {\b Maximum Nominator Rewarded Per Validator} indicated as {\textt MaxNominatorRewardedPerValidator}, specifies the maximum
+        {\b Maximum Nominator Rewarded Per Validator} indicated as {\texttt MaxNominatorRewardedPerValidator}, specifies the maximum
 amount of the highest-staked nominators which will get a reward. Those values
 should have some influence in the benchmarking process.
 \end{definition}
-\newline
 
 The benchmarking implementation for the function $payout\_stakers$ can be
 defined as follows:
@@ -761,7 +760,7 @@ defined as follows:
 
 \subsection{Practical Example \#3: \texttt{balances}}
 
-The $transfer$ function of the \textt{balances} module is designed to move the specified balance by the sender to the receiver.
+The $transfer$ function of the \texttt{balances} module is designed to move the specified balance by the sender to the receiver.
 
 \subsubsection{Analysis}
 
