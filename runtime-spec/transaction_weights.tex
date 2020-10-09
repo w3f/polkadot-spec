@@ -530,10 +530,6 @@ should have some influence on the benchmarking process.
 The benchmarking implementation of for the function $request\_judgement$ can be
 defined as follows:
 
-\syed{collection: a collection of time measurements of all benchmark
-  iterations}{the algorithm should return $\TWF$ be average or worst case of the
-  collection to keep the document consistent}
-
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $request\_judgement$ Runtime function}
   \SetAlgoLined
@@ -541,7 +537,6 @@ defined as follows:
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
-    \textsc{Pollute-Storage();}\\
     \For{$amount \leftarrow 1$ \KwTo $MaxRegistrars$ \KwBy $1$}{
       \textsc{Generate-Registrars($amount$)};\\
       $caller \leftarrow$ \textsc{Create-Account("caller", $1$)};\\
@@ -549,18 +544,13 @@ defined as follows:
       $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), 100))};\\
       \textsc{Add-To($collection$, $time$)};
     }
+    \BlankLine
+    $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};\\
     \Return{$\TWF$}
   }
 \end{algorithm}
 
-\syed{Pollute-Storage}{I would explain this process in the general section before going into example as it seems is just a condition for all test which touch storage}
-
 \begin{itemize}
-  \item \textsc{Pollute-Storage}
-  \SubItem{As clarified in Section
-  \ref{sec:blockchain-state}, the benchmarks should be run on a diverse range of
-  storage states. From (mostly) empty databases to database with a (longer)
-  history.}
   \item \textsc{Generate-Registrars($amount$)}
   \SubItem{Creates $number$ of registrars and inserts those records into storage.}
   \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
@@ -579,6 +569,9 @@ defined as follows:
   should account for unpredictable values.}
   \item \textsc{Add-To($collection$, $time$)}
   \SubItem{Adds a returned time measurement ($time$) to $collection$.}
+  \item \textsc{Compute-Weight($collection$)}
+  \SubItem{Computes the resulting weight based on the time measurements in the
+  $collection$. The worst case scenario should be chosen (the highest value).}
 \end{itemize}
 
 \subsection{Practical Example \#2 {\texttt payout\_stakers}}\label{sec:practical-example-payout-stakers}
@@ -715,7 +708,6 @@ defined as follows:
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
-    \textsc{Pollute-Storage()};\\
     \For{$amount \leftarrow 1$ \KwTo $MaxNominatorRewardedPerValidator$ \KwBy $1$}{
       \For{$era\_depth \leftarrow 1$ \KwTo $HistoryDepth$ \KwBy $1$}{
         $validator \leftarrow$ \textsc{Generate-Validator()};\\
@@ -729,18 +721,15 @@ defined as follows:
         \textsc{Add-To($collection$, $time$)};
       }
     }
+    \BlankLine
+    $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};\\
     \Return{$\TWF$}
   }
 \end{algorithm}
 
-\syed{Polute-Storage}{so this doesn't happens anymore better to remove it, they just count the number of read and write access and then they multiply it by a previously computed weight}
 \syed{Measures the time from the start of the specified $function$ to its completion.}{just refer to its original definition}
 
 \begin{itemize}
-  \item \textsc{Pollute-Storage}
-  \SubItem{As clarified in Section \ref{sec:blockchain-state}, the benchmarks
-  should be run an a diverse range of storage states. From (mostly) empty
-  databases to database with a (longer) history.}
   \item \textsc{Generate-Validator()}
   \SubItem{Creates a validators with some unbonded balances.}
   \item \textsc{Validate($validator$)}
@@ -754,8 +743,11 @@ defined as follows:
   \item \textsc{Timer($function$)}
   \SubItem{Measures the time from the start of the specified $function$ to its
   completion.}
-  \item \textsc{Add-To($collection$, $time$)} \SubItem{Adds a returned time
-      measurement ($time$) to $collection$.}
+  \item \textsc{Add-To($collection$, $time$)}
+  \SubItem{Adds a returned time measurement ($time$) to $collection$.}
+  \item \textsc{Compute-Weight($collection$)}
+  \SubItem{Computes the resulting weight based on the time measurements in the
+  $collection$. The worst case scenario should be chosen (the highest value).}
 \end{itemize}
 
 \subsection{Practical Example \#3: \texttt{balances}}
@@ -852,8 +844,10 @@ defined as follows (starting with the \textsc{Main} function):
       $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
       \textsc{Add-To($collection$, $time$)}\;
     }
+    \BlankLine
+    $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};\\
+    \Return $\TWF$
   }
-  \BlankLine
   \Fn{\textsc{Run-Benchmark($index$,$balance$)}}{
     $sender \leftarrow$ \textsc{Create-Account(\textit{"caller"}, $index$)}\;
     $recipient \leftarrow$ \textsc{Create-Account(\textit{"recipient"}, $index$)}\;
@@ -881,6 +875,9 @@ defined as follows (starting with the \textsc{Main} function):
       measurement ($time$) to $collection$.}
   \item \textsc{Timer($function$)} \SubItem{Measures the time from the start of
       the specified $function$ to its completion.}
+  \item \textsc{Compute-Weight($collection$)}
+  \SubItem{Computes the resulting weight based on the time measurements in the
+  $collection$. The worst case scenario should be chosen (the highest value).}
 \end{itemize}
 
 \subsection{Practical Example \#4}
@@ -996,12 +993,11 @@ The benchmarking implementation for the Polkadot Runtime function
 \begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
   \caption{Run multiple benchmark iterations for $withdraw_unbonded$ Runtime function}
   \SetAlgoLined
-  \KwResult{$collection$: a collection of time measurements of all
-  benchmark iterations}
+  \KwResult{$\TWF$}
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\}\;}
-    \textsc{Pollute-Storage();}\\
+    \BlankLine
     \For{$balance\gets1$ \KwTo $100$ \KwBy $1$}{
       $stash \leftarrow$ \textsc{Create-Account(\textit{"stash"}, 1)}\;
       $controller \leftarrow$ \textsc{Create-Account(\textit{"controller"}, 1)}\;
@@ -1014,6 +1010,9 @@ The benchmarking implementation for the Polkadot Runtime function
       $time \leftarrow$\textsc{Timer(Withdraw-Unbonded($controller$))}\;
       \textsc{Add-To($collection$, $time$)}\;
     }
+    \BlankLine
+    $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};\\
+    \Return $\TWF$
   }
   \BlankLine
 \end{algorithm}
@@ -1043,6 +1042,9 @@ The benchmarking implementation for the Polkadot Runtime function
     measurement ($time$) to $collection$.}
   \item \textsc{Timer($function$)} \SubItem{Measures the time from the start of
     the specified $function$ to its completion.}
+  \item \textsc{Compute-Weight($collection$)}
+  \SubItem{Computes the resulting weight based on the time measurements in the
+  $collection$. The worst case scenario should be chosen (the highest value).}
 \end{itemize}
 
 \section{Fees}
