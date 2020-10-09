@@ -531,6 +531,7 @@ defined as follows:
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
+    \BlankLine
     \For{$amount \leftarrow 1$ \KwTo $MaxRegistrars$ \KwBy $1$}{
       \textsc{Generate-Registrars($amount$)};\\
       $caller \leftarrow$ \textsc{Create-Account("caller", $1$)};\\
@@ -596,9 +597,6 @@ let era_payout = <ErasValidatorReward<T>>::get(&era)
 let controller = Self::bonded(&validator_stash).ok_or(Error::<T>::NotStash)?;
 let mut ledger = <Ledger<T>>::get(&controller).ok_or_else(|| Error::<T>::NotController)?;
 \end{verbatim}
-
-
-\syed{syed}{could you decrypt this for people who are not familiar with Runtime jurgen}
 
 \begin{verbatim}
 ledger.claimed_rewards.retain(|&x| x >= current_era.saturating_sub(history_depth));
@@ -699,6 +697,7 @@ defined as follows:
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\};}\\
+    \BlankLine
     \For{$amount \leftarrow 1$ \KwTo $MaxNominatorRewardedPerValidator$ \KwBy $1$}{
       \For{$era\_depth \leftarrow 1$ \KwTo $HistoryDepth$ \KwBy $1$}{
         $validator \leftarrow$ \textsc{Generate-Validator()};\\
