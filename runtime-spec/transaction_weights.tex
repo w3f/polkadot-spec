@@ -692,9 +692,6 @@ The benchmarking implementation for the function $payout\_stakers$ can be
 defined as follows:
 \newline
 
-\syed{collection: a collection of time measurements of all
-  benchmark iterations}{$\TWF$}
-
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $payout\_stakers$ Runtime function}
   \SetAlgoLined
@@ -720,8 +717,6 @@ defined as follows:
     \Return{$\TWF$}
   }
 \end{algorithm}
-
-\syed{Measures the time from the start of the specified $function$ to its completion.}{just refer to its original definition}
 
 \begin{itemize}
   \item \textsc{Generate-Validator()}
@@ -763,13 +758,16 @@ let dest = T::Lookup::lookup(dest)?;
 )?;
 \end{verbatim}
 
-However, one need to pay close attention to the property \verb|AllowDeath| and to how the function treat existingand non-existing accounts differently. Two types of behaviors are to consider:
+However, one need to pay close attention to the property \verb|AllowDeath| and
+to how the function treat existingand non-existing accounts differently. Two
+types of behaviors are to consider:
 
 \begin{itemize}
-  \item If the transfer completely deplete the
-  sender account balance to zero, it \syed{kill}{you need to define kill or use delete/remove from storage} as well.
-  \item If recipient account
-    has no balance, the transfer also needs to create the recipient account.
+  \item If the transfer completely depletes the sender account balance to zero
+  (or bellow the minimum "keep-alive" requirement), it removes the address and
+  all associated data from storage.
+  \item If recipient account has no balance, the transfer also needs to create
+    the recipient account.
 \end{itemize}
 
 \subsubsection{Considerations}
