@@ -392,12 +392,6 @@ Additionally, given the distinction theoretical and practical usage, the author
 reserves the right to make adjustments to the input parameters and assigned
 weights according to observed behavior of the actual, real-world network.
 
-\subsection{Blockchain State}\label{sec:blockchain-state}
-The benchmarks should be performed on blockchain states that already polluted
-and contain a history of extrinsics and storage changes. Runtime functions that
-require I/O on structures such as Tries will therefore produce more realistic
-results that will reflect the real-world performance of the Runtime.
-
 \subsection{Environment}
 The benchmarks should be executed on clean systems without interference of other
 processes or software. Additionally, the benchmarks should be executed on
@@ -833,8 +827,8 @@ defined as follows (starting with the \textsc{Main} function):
   \BlankLine
   \Fn{\textsc{Main}}{
     \KwInit{collection = \{\}\;}
-    \textsc{Pollute-Storage();}\\
     \KwInit{$balance = 1'000$\;}
+    \BlankLine
     \For{$index\gets1$ \KwTo $1'000$ \KwBy $1$}{
       $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
       \textsc{Add-To($collection$, $time$)}\;
@@ -857,10 +851,6 @@ defined as follows (starting with the \textsc{Main} function):
 \end{algorithm}
 
 \begin{itemize}
-  \item \textsc{Pollute-Storage} \SubItem{As clarified in Section
-  \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
-  storage states. From (mostly) empty databases to database with a (longer)
-  history.}
   \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
       of the concatenated input of $name$ and $index$ representing the address
       of a account. This function only creates an address and does not conduct
@@ -1018,10 +1008,6 @@ The benchmarking implementation for the Polkadot Runtime function
 \end{algorithm}
 
 \begin{itemize}
-  \item \textsc{Pollute-Storage} \SubItem{As clarified in Section
-  \ref{sec:blockchain-state}, the benchmarks should be run an a diverse range of
-  storage states. From (mostly) empty databases to database with a (longer)
-  history.}
   \item \textsc{Create-Account($name$, $index$)} \SubItem{Creates a Blake2 hash
     of the concatenated input of $name$ and $index$ representing the address of
     a account. This function only creates an address and does not conduct any
