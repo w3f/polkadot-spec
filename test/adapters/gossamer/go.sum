@@ -24,13 +24,14 @@ github.com/Azure/go-autorest/logger v0.1.0/go.mod h1:oExouG+K6PryycPJfVSxi/koC6L
 github.com/Azure/go-autorest/tracing v0.5.0/go.mod h1:r/s2XiOKccPW3HrqB+W0TQzfbtp2fGCgRFtBroKn4Dk=
 github.com/BurntSushi/toml v0.3.1 h1:WXkYYl6Yr3qBf1K79EBnL4mak0OimBfB0XUf9Vl28OQ=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
-github.com/ChainSafe/chaindb v0.0.1 h1:A+11ulFG6R/IE6pEBy6j6hTTHTA3BvCVK8jklogW0Uw=
-github.com/ChainSafe/chaindb v0.0.1/go.mod h1:FQQJbGzWe+rOa0aW/wSMz1qfIScauntW0HiynEIezuk=
+github.com/ChainSafe/chaindb v0.1.3/go.mod h1:FQQJbGzWe+rOa0aW/wSMz1qfIScauntW0HiynEIezuk=
+github.com/ChainSafe/chaindb v0.1.4 h1:cXaBIm21aGRijBDPSxkdeXIiuiuNQ4Yc5uV63HrjTg0=
+github.com/ChainSafe/chaindb v0.1.4/go.mod h1:FQQJbGzWe+rOa0aW/wSMz1qfIScauntW0HiynEIezuk=
 github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d/go.mod h1:URdX5+vg25ts3aCh8H5IFZybJYKWhJHYMTnf+ULtoC4=
 github.com/ChainSafe/go-schnorrkel v0.0.0-20200626160457-b38283118816 h1:X5jJ3e/jgFSnSoYOep/mf6pF1RuLZfvF1ts8NZIyzqE=
 github.com/ChainSafe/go-schnorrkel v0.0.0-20200626160457-b38283118816/go.mod h1:URdX5+vg25ts3aCh8H5IFZybJYKWhJHYMTnf+ULtoC4=
-github.com/ChainSafe/gossamer v0.1.1-0.20200818004221-5dbc019b77fe h1:ZOlImyh/7TLRF36TRAtX4zwirZnBF8bzycqTr5ZWFvg=
-github.com/ChainSafe/gossamer v0.1.1-0.20200818004221-5dbc019b77fe/go.mod h1:R8TkzNFYvETd79xG4AxKDTQWw6j54hQwsHOiGIruN94=
+github.com/ChainSafe/gossamer v0.1.1-0.20201010173722-47d7a5bb1b3e h1:u2wRhJVUAn7GetI3Xa1eNssxTF/sYJhf/GIso0DanwE=
+github.com/ChainSafe/gossamer v0.1.1-0.20201010173722-47d7a5bb1b3e/go.mod h1:DMI+cJ9zdLlgt4U3/fPymEow/8tybj41k0fpEGxtMlk=
 github.com/ChainSafe/log15 v1.0.0 h1:vRDVtWtVwIH5uSCBvgTTZh6FA58UBJ6+QiiypaZfBf8=
 github.com/ChainSafe/log15 v1.0.0/go.mod h1:5v1+ALHtdW0NfAeeoYyKmzCAMcAeqkdhIg4uxXWIgOg=
 github.com/DataDog/zstd v1.4.1/go.mod h1:1jcaCB/ufaK+sKp1NBhlGmpz41jOoPQ35bpF36t7BBo=
@@ -76,6 +77,8 @@ github.com/btcsuite/snappy-go v1.0.0/go.mod h1:8woku9dyThutzjeg+3xrA5iCpBRH8XEEg
 github.com/btcsuite/websocket v0.0.0-20150119174127-31079b680792/go.mod h1:ghJtEyQwv5/p4Mg4C0fgbePVuGr935/5ddU9Z3TmDRY=
 github.com/btcsuite/winsvc v1.0.0/go.mod h1:jsenWakMcC0zFBFurPLEAyrnc/teJEM1O46fmI40EZs=
 github.com/buger/jsonparser v0.0.0-20181115193947-bf1c66bbce23/go.mod h1:bbYlZJ7hK1yFx9hf58LP0zeX7UjIGs20ufpu3evjr+s=
+github.com/bytecodealliance/wasmtime-go v0.20.0 h1:omD0VY6IwL60E8YMM8rgcmyGT8O+pqabHAwoPi5il6k=
+github.com/bytecodealliance/wasmtime-go v0.20.0/go.mod h1:q320gUxqyI8yB+ZqRuaJOEnGkAnHh6WtJjMaT2CW4wI=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/cp v0.1.0/go.mod h1:SOGHArjBr4JWaSDEVpWpo/hNg6RoKrls6Oh40hiwW+s=
 github.com/cespare/xxhash v1.1.0 h1:a6HrQnmkObjyL+Gs60czilIUGqrzKutQD6XZog3p+ko=
