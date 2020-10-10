@@ -27,10 +27,8 @@ import (
 
 	"github.com/ChainSafe/gossamer/dot/state"
 	"github.com/ChainSafe/gossamer/lib/keystore"
-	"github.com/ChainSafe/gossamer/lib/runtime"
+	"github.com/ChainSafe/gossamer/lib/runtime/wasmtime"
 	"github.com/ChainSafe/gossamer/lib/trie"
-
-	database "github.com/ChainSafe/chaindb"
 )
 
 // #include <errno.h>
@@ -46,16 +44,8 @@ func GetRuntimePath() string {
 	return path.Join(dir, RELATIVE_WASM_ADAPTER_PATH)
 }
 
-func GetTestStorage() *state.StorageState {
-	db := database.NewMemDatabase()
-
-	s, err := state.NewStorageState(db, trie.NewEmptyTrie())
-	if err != nil {
-		fmt.Println("Failed initialize storage: ", err)
-		os.Exit(1)
-	}
-
-	return s
+func GetTestStorage() *state.TrieState {
+	return state.NewTrieState(trie.NewEmptyTrie())
 }
 
 func ProcessHostApiCommand(args []string) {
@@ -79,17 +69,17 @@ func ProcessHostApiCommand(args []string) {
 	}
 
 	function := *functionTextPtr
-	input    := *inputTextPtr
-	
-	// Initialize runtime environment
-	cfg := &runtime.Config{
-		Storage:  GetTestStorage(),
-		Keystore: keystore.NewKeystore(),
-		Imports:  runtime.RegisterImports_NodeRuntime,
-		LogLvl:   2, // log15.LvlWarn
-	}
+	input := *inputTextPtr
 
-	rtm, err := runtime.NewRuntimeFromFile(GetRuntimePath(), cfg)
+	// Initialize runtime environment
+	cfg := &wasmtime.Config{
+		Imports: wasmtime.ImportsHostAPITester,
+	}
+	cfg.Storage = GetTestStorage()
+	cfg.Keystore = keystore.NewGenericKeystore("test")
+	cfg.LogLvl = 2
+
+	rtm, err := wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
 	if err != nil {
 		fmt.Println("Failed initialize runtime: ", err)
 		os.Exit(1)
@@ -100,37 +90,36 @@ func ProcessHostApiCommand(args []string) {
 
 	// test crypto api
 	case "test_blake2_128",
-	     "test_blake2_256",
-	     "test_twox_64",
-	     "test_twox_128",
-	     "test_twox_256",
-	     "test_keccak_256":
+		"test_blake2_256",
+		"test_twox_64",
+		"test_twox_128",
+		"test_twox_256",
+		"test_keccak_256":
 		test_crypto_hash(rtm, function[5:], input)
-//	case "test_blake2_256_enumerated_trie_root":
-//	case "test_ed25519":
-//	case "test_sr25519":
-//	case "test_secp256k1_ecdsa_recover":
-
+		//	case "test_blake2_256_enumerated_trie_root":
+		//	case "test_ed25519":
+		//	case "test_sr25519":
+		//	case "test_secp256k1_ecdsa_recover":
 
 	// test storage api
-//	case "test_clear_prefix":
-//	case "test_clear_storage":
-//	case "test_exists_storage":
-//	case "test_set_get_local_storage":
-//	case "test_set_get_storage":
-//	case "test_set_get_storage_into":
-//	case "test_storage_root":
-//	case "test_storage_changes_root":
-//	case "test_local_storage_compare_and_set":
-  
+	//	case "test_clear_prefix":
+	//	case "test_clear_storage":
+	//	case "test_exists_storage":
+	//	case "test_set_get_local_storage":
+	//	case "test_set_get_storage":
+	//	case "test_set_get_storage_into":
+	//	case "test_storage_root":
+	//	case "test_storage_changes_root":
+	//	case "test_local_storage_compare_and_set":
+
 	// test child storage api
-//	case "test_clear_child_prefix":
-//	case "test_clear_child_storage":
-//	case "test_exists_child_storage":
-//	case "test_kill_child_storage":
-//	case "test_set_get_child_storage":
-//	case "test_get_child_storage_into":
-//	case "test_child_storage_root":
+	//	case "test_clear_child_prefix":
+	//	case "test_clear_child_storage":
+	//	case "test_exists_child_storage":
+	//	case "test_kill_child_storage":
+	//	case "test_set_get_child_storage":
+	//	case "test_get_child_storage_into":
+	//	case "test_child_storage_root":
 
 	default:
 		fmt.Println("Not implemented: ", function)
