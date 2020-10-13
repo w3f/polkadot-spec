@@ -264,15 +264,6 @@ or other changes to the environment.
 The Practical Examples Section \ref{sec:practical-examples} covers the analysis
 process and the implementation of preliminary work in more detail.
 
-\subsection{Weight Refunds}
-When assigning the final weight, the worst case scenario of each runtime
-function should be used. The runtime can then additional "refund" the amount of
-weights which were overestimated once the runtime function is actually executed.
-\newline
-
-The Polkadot runtime only returns weights if the difference between the assigned
-weight and the actual weight calculated during execution is greater than 20\%.
-
 \subsection{Primitive Types}\label{sect:primitive-types}
 The Runtime reuses components, known as "primitives", to interact with the state
 storage. The execution cost of those primitives can be measured and a weight
@@ -386,21 +377,28 @@ It's not possible to benchmark every single value. However, one should select a
 range of inputs to benchmark, spanning from the minimum value to the maximum
 value which will most likely exceed the expected usage of that function. This is
 described in more detail in section \ref{sect:primitive-types-considerations}.
-\newline
-
 The benchmarks should run individual executions/iterations within that range,
-where the chosen parameters should give insight on the execution time and
-resource cost. Selecting imprecise parameters or too extreme ranges might
-indicate an inaccurate result of the function as it will be used in production.
-Therefore, when a range of input parameters gets benchmarked, the result of each
-individual parameter should be recorded and ideally visualized. The author
-should then decide on the most probable average execution time, basing that
-decision on the limitations of the Runtime and expected usage of the network.
+where the chosen parameters should give insight on the execution time. Selecting
+imprecise parameters or too extreme ranges might indicate an inaccurate result
+of the function as it will be used in production. Therefore, when a range of
+input parameters gets benchmarked, the result of each individual parameter
+should be recorded and necessary adjustment can be made. Generally, the worst
+case scenario should be assigned as the weight value for the corresponding
+runtime function.
 \newline
 
 Additionally, given the distinction theoretical and practical usage, the author
 reserves the right to make adjustments to the input parameters and assigned
-weights according to observed behavior of the actual, real-world network.
+weights according to the observed behavior of the actual, real-world network.
+
+\subsubsection{Weight Refunds}
+When assigning the final weight, the worst case scenario of each runtime
+function should be used. The runtime can then additional "refund" the amount of
+weights which were overestimated once the runtime function is actually executed.
+\newline
+
+The Polkadot runtime only returns weights if the difference between the assigned
+weight and the actual weight calculated during execution is greater than 20\%.
 
 \subsection{Storage I/O cost}
 It is advised to benchmark the raw I/O operations of the database and assign
