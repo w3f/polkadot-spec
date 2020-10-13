@@ -50,10 +50,11 @@ measurement for each executed low-level operation by smart contracts, known as
 gas metering, Polkadot takes a more relaxed approach by implementing a measuring
 system where the cost of the transactions (referred to as 'extrinsics') are
 determined before execution and are known as the weight system.
+\newline
 
 The Polkadot weight system introduces a mechanism for block producers to measure
 the cost of running the extrinsics and determine how "heavy" it is in terms of
-computational cost. Within this mechanism, block producers can select a set of
+execution time. Within this mechanism, block producers can select a set of
 extrinsics and saturate the block to its fullest potential without exceeding any
 limitations (as described in section \ref{sec:limitations}). Moreover, the
 weight system can be used to calculate a fee for executing each extrinsics
@@ -65,6 +66,7 @@ Additionally, Polkadot introduces a specified block ratio (as defined in section
 size gets used for regular extrinsics. The remaining space is reserved for
 critical, operational extrinsics required for the functionality by Polkadot
 itself.
+\newline
 
 To begin, we introduce in Section \ref{sec:assumptions} the assumption upon
 which the Polkadot transaction weight system is designed. In Section
@@ -141,8 +143,8 @@ These concepts are formalized in Definitions \ref{def:block-length} and
   where $w$ is a non-negative integer representing the weight of the extrinsic
   $E$. We define the weight of all inherent extrinsics as defined in
   \cite[Definition~3.3]{web30_technologies_foundation_polkadot_2020} to be equal
-  to 0. we extend the definition of \TWF\ function to compute the weight of the
-  block as sum of weight of all extrinsics its includes:
+  to 0. We extend the definition of \TWF\ function to compute the weight of the
+  block as sum of weight of all extrinsics it includes:
 
   \begin{alignat*}{2}
     \mathcal{W} &: \mathcal{B}\rightarrow \mathbb{N} \\
@@ -167,13 +169,11 @@ parameters.
 
 \end{itemize}
 
-Heuristically, "heaviness" corresponds to the resources consumption of an
-extrinsic. In that way, the \TWF\ value for various extrinsics should be
-proportional to their execution time and consumption of other system resources
-such as memory and amount I/O operation. For example, if Extrinsic A takes three
-times longer to execute than Extrinsic B while both Extrinsics consumes require
-similar amount of memory and I/O operations, then Extrinsic A should roughly
-weighs 3 times of Extrinsic B. Or
+Heuristically, "heaviness" corresponds to the execution time of an extrinsic. In
+that way, the \TWF\ value for various extrinsics should be proportional to their
+execution time. For example, if Extrinsic A takes three times longer to execute
+than Extrinsic B, then Extrinsic A should roughly weighs 3 times of Extrinsic B.
+Or:
 
 \[
 \TWF(A)~3\times \TWF(B)
@@ -224,7 +224,7 @@ execution certain Runtime functions. As such, to calculate the weight of a
 transaction, those functions must be analyzed in order to determine parts of the
 code which can significantly contribute to the execution time and consume
 resources such as  loops, I/O operations, and data manipulation. Subsequently
-the performance and resource consumption of each part will be evaluated based on
+the performance and execution time of each part will be evaluated based on
 variety of input parameters. Based on those observations, weights are assigned
 Runtime functions or parameters which contribute to heavy resource consumption.
 These sub component of the code are discussed in Section
@@ -234,12 +234,12 @@ These sub component of the code are discussed in Section
 The general algorithm to calculate $\TWF(E)$ is described in the Section
 \ref{sect:benchmarking}.
 
-\section{Benchmarking}\label{sect:benchmarking} Calculating the extrinsic weight
-solely based on theoretical complexity of the underlying implementation proves
-to be too complicated and unreliable at the same time. Certain decisions in the
-source code architecture, internal communication within the Runtime or other
-design choices could add enough overhead to make the asymptotic complexity
-practically meaningless.
+\section{Benchmarking}\label{sect:benchmarking}
+Calculating the extrinsic weight solely based on theoretical complexity of the
+underlying implementation proves to be too complicated and unreliable at the
+same time. Certain decisions in the source code architecture, internal
+communication within the Runtime or other design choices could add enough
+overhead to make the asymptotic complexity practically meaningless.
 \newline
 
 On the other hand, benchmarking an extrinsics in a black-box fashion could
@@ -391,6 +391,13 @@ decision on the limitations of the Runtime and expected usage of the network.
 Additionally, given the distinction theoretical and practical usage, the author
 reserves the right to make adjustments to the input parameters and assigned
 weights according to observed behavior of the actual, real-world network.
+
+\subsection{Storage I/O cost}
+It is advised to benchmark the raw I/O operations of the database and assign
+"base weights" for each I/O operation type, such as insertion, deletion,
+querying, etc. When a runtime function is executed, the runtime can then add
+those base weights of each used operation in order to calculate the final
+weight.
 
 \subsection{Environment}
 The benchmarks should be executed on clean systems without interference of other
@@ -1072,7 +1079,7 @@ The Polkadot Runtime defines the following values:
 
 \subsection{Fee Multiplier}
 Polkadot can add a additional fee to transactions if the network becomes too
-busy and starts to decelerate the system. This fees can create incentive to
+busy and starts to decelerate the system. This fee can create an incentive to
 avoid the production of low priority or insignificant transactions. In contrast,
 those additional fees will decrease if the network calms down and it can execute
 transactions without much difficulties.
