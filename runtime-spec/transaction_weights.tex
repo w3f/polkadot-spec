@@ -226,7 +226,7 @@ code which can significantly contribute to the execution time and consume
 resources such as  loops, I/O operations, and data manipulation. Subsequently
 the performance and execution time of each part will be evaluated based on
 variety of input parameters. Based on those observations, weights are assigned
-Runtime functions or parameters which contribute to heavy resource consumption.
+Runtime functions or parameters which contribute to long execution times.
 These sub component of the code are discussed in Section
 \ref{sect:primitive-types}.
 \newline
@@ -262,6 +262,15 @@ or other changes to the environment.
 
 The Practical Examples Section \ref{sec:practical-examples} covers the analysis
 process and the implementation of preliminary work in more detail.
+
+\subsection{Weight Refunds}
+When assigning the final weight, the worst case scenario of each runtime
+function should be used. The runtime can then additional "refund" the amount of
+weights which were overestimated once the runtime function is actually executed.
+\newline
+
+The Polkadot runtime only returns weights if the difference between the assigned
+weight and the actual weight calculated during execution is greater than 20\%.
 
 \subsection{Primitive Types}\label{sect:primitive-types}
 The Runtime reuses components, known as "primitives", to interact with the state
