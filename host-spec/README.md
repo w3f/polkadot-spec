@@ -1,10 +1,10 @@
 # Polkadot Host Specification
 
-Here your can find the latest version of the ![Polkadot Host Specification](./polkadot-host-spec.pdf)
+Here your can find the source code of the *Polkadot Host Specification*.
 
 Please refer to the ![Change log](./CHANGELOG.org) to review the history of changes to the host specification in the past.
 
-Official releases of the specification can be found in [the release section](https://github.com/w3f/polkadot-spec/releases) of this repository.
+Official releases of the specification can be found on [the release page](https://github.com/w3f/polkadot-spec/releases) of this repository.
 
 ## Editing
 

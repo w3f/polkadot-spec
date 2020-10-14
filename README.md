@@ -11,13 +11,13 @@ Polkadot is a replicated sharded state machine designed to resolve the scalabili
 - A florishing [Polkadot Runtime Specification](./runtime-spec/)
 - Various other files used by the Polkadot spec team
 
-## Polkadot Host Specification
+## Polkadot Host and Runtime Specification
 
-Here your can find the latest version of the [Polkadot Host Specification](./host-spec/polkadot-host-spec.pdf)
+The latest releases of the *Polkadot Host and Runtime Specification* can be found on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
 
-Please refer to the [Change Log](./host-spec/CHANGELOG.org) and [PDF Diff](./host-spec/host-spec-diffed-updates.pdf) to review the history of changes to the specification.
+Each release also includes a PDF "diff" to the previous versions that highlights the history of changes to the specification.
 
-For more details please refer [README.md](./host-spec/README.md) to the specification.
+For more details please refer to the respective *README.md* in the [host-spec](./host-spec/README.md) or [runtime-spec](./runtime-spec/README.md) subfolders.
 
 ## Polkadot Protocol Conformance Testsuite
 
@@ -29,6 +29,8 @@ For more details plese see the [README.md](./test/README.md) of the testsuite.
 
 ## Genesis files
 
-This repository contains genesis parameters for different networks in the `genesis-state/` directory.
+This repository contains genesis parameters for different networks in the `chain-candidates/` directory.
 - The `alexander` test network
 - The `kusama` test network
+
+*Note: These files have not been updated in a while and are mostly kept around for historic reasons.*
