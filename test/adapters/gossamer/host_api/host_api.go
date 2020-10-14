@@ -27,8 +27,12 @@ import (
 
 	"github.com/ChainSafe/gossamer/dot/state"
 	"github.com/ChainSafe/gossamer/lib/keystore"
+	"github.com/ChainSafe/gossamer/lib/runtime"
+	"github.com/ChainSafe/gossamer/lib/runtime/wasmer"
 	"github.com/ChainSafe/gossamer/lib/runtime/wasmtime"
 	"github.com/ChainSafe/gossamer/lib/trie"
+
+	database "github.com/ChainSafe/chaindb"
 )
 
 // #include <errno.h>
@@ -45,7 +49,12 @@ func GetRuntimePath() string {
 }
 
 func GetTestStorage() *state.TrieState {
-	return state.NewTrieState(trie.NewEmptyTrie())
+	store, err := state.NewTrieState(database.NewMemDatabase(), trie.NewEmptyTrie())
+	if err != nil {
+		fmt.Println("Failed initialize storage: ", err)
+		os.Exit(1)
+	}
+	return store
 }
 
 func ProcessHostApiCommand(args []string) {
@@ -53,6 +62,8 @@ func ProcessHostApiCommand(args []string) {
 	// List of expected flags
 	functionTextPtr := flag.String("function", "", "Function to call (required).")
 	inputTextPtr := flag.String("input", "", "Input to pass on call (required).")
+	
+	wasmtimeBoolPtr := flag.Bool("wasmtime", false, "Use wasmtime instead of wasmer.")
 
 	// Parse provided argument list
 	flag.CommandLine.Parse(args)
@@ -71,18 +82,38 @@ func ProcessHostApiCommand(args []string) {
 	function := *functionTextPtr
 	input := *inputTextPtr
 
-	// Initialize runtime environment
-	cfg := &wasmtime.Config{
-		Imports: wasmtime.ImportsHostAPITester,
-	}
-	cfg.Storage = GetTestStorage()
-	cfg.Keystore = keystore.NewGenericKeystore("test")
-	cfg.LogLvl = 2
+	// Initialize runtime environment...
+	var rtm runtime.Instance
+	if *wasmtimeBoolPtr {
+		// ... using wasmtime
+		cfg := &wasmtime.Config{
+			Imports: wasmtime.ImportsHostAPITester,
+		}
+		cfg.Storage = GetTestStorage()
+		cfg.Keystore = keystore.NewGenericKeystore("test")
+		cfg.LogLvl = 2
 
-	rtm, err := wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
-	if err != nil {
-		fmt.Println("Failed initialize runtime: ", err)
-		os.Exit(1)
+		r, err := wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
+		if err != nil {
+			fmt.Println("Failed initialize runtime: ", err)
+			os.Exit(1)
+		}
+		rtm = r
+	} else {
+		// ... using wasmer
+		cfg := &wasmer.Config{
+			Imports: wasmer.RegisterImports_NodeRuntime,
+		}
+		cfg.Storage = GetTestStorage()
+		cfg.Keystore = keystore.NewGenericKeystore("test")
+		cfg.LogLvl = 2
+
+		r, err := wasmer.NewInstanceFromFile(GetRuntimePath(), cfg)
+		if err != nil {
+			fmt.Println("Failed initialize runtime: ", err)
+			os.Exit(1)
+		}
+		rtm = r
 	}
 
 	// Run requested test function
