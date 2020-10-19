@@ -20,6 +20,7 @@ package host_api
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"strings"
@@ -48,7 +49,15 @@ func GetRuntimePath() string {
 }
 
 func GetTestStorage() *state.TrieState {
-	store, err := state.NewTrieState(database.NewMemDatabase(), trie.NewEmptyTrie())
+	fp, _ := ioutil.TempDir("/tmp", "test-datadir-*")
+
+	db, err := database.NewBadgerDB(fp)
+	if err != nil {
+		fmt.Println("Failed to initialize database: ", err)
+		os.Exit(1)
+	}
+
+	store, err := state.NewTrieState(db, trie.NewEmptyTrie())
 	if err != nil {
 		fmt.Println("Failed initialize storage: ", err)
 		os.Exit(1)
@@ -61,7 +70,7 @@ func ProcessHostApiCommand(args []string) {
 	// List of expected flags
 	functionTextPtr := flag.String("function", "", "Function to call (required).")
 	inputTextPtr := flag.String("input", "", "Input to pass on call (required).")
-	
+
 	wasmtimeBoolPtr := flag.Bool("wasmtime", false, "Use wasmtime instead of wasmer.")
 
 	// Parse provided argument list
@@ -79,7 +88,7 @@ func ProcessHostApiCommand(args []string) {
 	}
 
 	function := *functionTextPtr
-	inputs   := strings.Split(*inputTextPtr, ",")
+	inputs := strings.Split(*inputTextPtr, ",")
 
 	// Initialize runtime environment...
 	var rtm runtime.Instance
@@ -90,7 +99,7 @@ func ProcessHostApiCommand(args []string) {
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
-		cfg.LogLvl = 2
+		cfg.LogLvl = 5
 
 		r, err := wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
 		if err != nil {
@@ -105,7 +114,7 @@ func ProcessHostApiCommand(args []string) {
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
-		cfg.LogLvl = 2
+		cfg.LogLvl = 5
 
 		r, err := wasmer.NewInstanceFromFile(GetRuntimePath(), cfg)
 		if err != nil {
@@ -120,11 +129,11 @@ func ProcessHostApiCommand(args []string) {
 
 	// test crypto api
 	case "test_blake2_128",
-	     "test_blake2_256",
-	     "test_twox_64",
-	     "test_twox_128",
-	     "test_twox_256",
-	     "test_keccak_256":
+		"test_blake2_256",
+		"test_twox_64",
+		"test_twox_128",
+		"test_twox_256",
+		"test_keccak_256":
 		test_crypto_hash(rtm, function[5:], inputs[0])
 	//case "test_blake2_256_enumerated_trie_root":
 	//case "test_ed25519":

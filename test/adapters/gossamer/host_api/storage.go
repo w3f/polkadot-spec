@@ -18,14 +18,13 @@
 package host_api
 
 import (
+	"bytes"
 	"fmt"
 	"os"
-	"bytes"
 
 	"github.com/ChainSafe/gossamer/lib/runtime"
 	"github.com/ChainSafe/gossamer/lib/scale"
 )
-
 
 func test_set_get_storage(r runtime.Instance, key string, value string) {
 
