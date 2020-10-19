@@ -29,8 +29,8 @@ github.com/ChainSafe/chaindb v0.1.4/go.mod h1:FQQJbGzWe+rOa0aW/wSMz1qfIScauntW0H
 github.com/ChainSafe/go-schnorrkel v0.0.0-20200405005733-88cbf1b4c40d/go.mod h1:URdX5+vg25ts3aCh8H5IFZybJYKWhJHYMTnf+ULtoC4=
 github.com/ChainSafe/go-schnorrkel v0.0.0-20200626160457-b38283118816 h1:X5jJ3e/jgFSnSoYOep/mf6pF1RuLZfvF1ts8NZIyzqE=
 github.com/ChainSafe/go-schnorrkel v0.0.0-20200626160457-b38283118816/go.mod h1:URdX5+vg25ts3aCh8H5IFZybJYKWhJHYMTnf+ULtoC4=
-github.com/ChainSafe/gossamer v0.1.1-0.20201014230016-9ebddb3ccf5f h1:PLFxkRZE9GjNhxT6TIZKH8t6VRVNOpZsxlCzdTMhgPk=
-github.com/ChainSafe/gossamer v0.1.1-0.20201014230016-9ebddb3ccf5f/go.mod h1:OhH5swWDjaic9lMUZy8+M2I5rcCJBGtdOS/TV3vgFys=
+github.com/ChainSafe/gossamer v0.1.1-0.20201030012803-12b09c7cdbc2 h1:CQ7LwMGDxZDIE7LtI7BOEHwzpRty3jDyN4HsXO+JAA0=
+github.com/ChainSafe/gossamer v0.1.1-0.20201030012803-12b09c7cdbc2/go.mod h1:OhH5swWDjaic9lMUZy8+M2I5rcCJBGtdOS/TV3vgFys=
 github.com/ChainSafe/log15 v1.0.0 h1:vRDVtWtVwIH5uSCBvgTTZh6FA58UBJ6+QiiypaZfBf8=
 github.com/ChainSafe/log15 v1.0.0/go.mod h1:5v1+ALHtdW0NfAeeoYyKmzCAMcAeqkdhIg4uxXWIgOg=
 github.com/DataDog/zstd v1.4.1/go.mod h1:1jcaCB/ufaK+sKp1NBhlGmpz41jOoPQ35bpF36t7BBo=
