@@ -99,7 +99,7 @@ func ProcessHostApiCommand(args []string) {
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
-		cfg.LogLvl = 5
+		cfg.LogLvl = 2
 
 		r, err := wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
 		if err != nil {
@@ -114,7 +114,7 @@ func ProcessHostApiCommand(args []string) {
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
-		cfg.LogLvl = 5
+		cfg.LogLvl = 2
 
 		r, err := wasmer.NewInstanceFromFile(GetRuntimePath(), cfg)
 		if err != nil {
