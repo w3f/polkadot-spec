@@ -21,7 +21,7 @@ on:
 jobs:
   build-adapter-substrate:
     name: "[build] substrate-adapter"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -61,7 +61,7 @@ jobs:
 
   build-adapter-substrate-legacy:
     name: "[build] substrate-adapter-legacy"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -101,7 +101,7 @@ jobs:
 
   build-adapter-kagome:
     name: "[build] kagome-adapter"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -124,7 +124,7 @@ jobs:
 
   build-adapter-kagome-legacy:
     name: "[build] kagome-adapter-legacy"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -147,7 +147,7 @@ jobs:
 
   build-adapter-gossamer:
     name: "[build] gossamer-adapter"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -173,7 +173,7 @@ jobs:
 
   build-adapter-wasm:
     name: "[build] wasm-adapter"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -213,7 +213,7 @@ jobs:
 
   build-adapter-wasm-legacy:
     name: "[build] wasm-adapter-legacy"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -259,7 +259,7 @@ jobs:
       matrix:
         fixture: [ host-api, scale-codec, state-trie ]
     name: "[test-${{ matrix.fixture }}] substrate"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -274,7 +274,7 @@ jobs:
   test-substrate-legacy:
     needs: build-adapter-substrate-legacy
     name: "[test-host-api-legacy] substrate"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -294,7 +294,7 @@ jobs:
       matrix:
         fixture: [ scale-codec, state-trie ]
     name: "[test-${{ matrix.fixture }}] kagome"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -313,7 +313,7 @@ jobs:
   test-kagome-wasm:
     needs: [ build-adapter-kagome, build-adapter-wasm ]
     name: "[test-host-api] kagome"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -332,7 +332,7 @@ jobs:
   test-kagome-legacy:
     needs: [ build-adapter-kagome-legacy, build-adapter-wasm-legacy]
     name: "[test-host-api-legacy] kagome"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -356,7 +356,7 @@ jobs:
       matrix:
         fixture: [ scale-codec, state-trie ]
     name: "[test-${{ matrix.fixture }}] gossamer"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -378,7 +378,7 @@ jobs:
   test-gossamer-legacy:
     needs: [ build-adapter-gossamer, build-adapter-wasm-legacy]
     name: "[test-host-api-legacy] gossamer"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
