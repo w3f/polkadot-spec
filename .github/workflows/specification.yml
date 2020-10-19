@@ -19,13 +19,13 @@ on:
 jobs:
   build-spec-host:
     name: Compile host specification
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
       run: |
         sudo apt-key add .github/apt-texmacs.asc
-        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
+        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
         sudo apt-get update
         sudo apt-get install -y xvfb texmacs
     - name: Install TeXmacs pacakges
@@ -53,7 +53,7 @@ jobs:
 
   build-spec-runtime:
     name: Compile runtime specification
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
     - name: Install dependencies
@@ -81,7 +81,7 @@ jobs:
 
   diff-spec-host:
     name: Compare host specification
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
       with:
@@ -94,7 +94,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-key add .github/apt-texmacs.asc
-        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ bionic universe"
+        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
         sudo apt-get update
         sudo apt-get install -y xvfb texmacs
     - name: Install TeXmacs pacakges
