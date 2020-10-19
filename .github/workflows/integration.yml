@@ -23,7 +23,7 @@ on:
 jobs:
   build-host-substrate:
     name: "[build] substrate-host"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -65,7 +65,7 @@ jobs:
 
   build-host-kagome:
     name: "[build] kagome-host"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -100,7 +100,7 @@ jobs:
 
   build-host-gossamer:
     name: "[build] gossamer-host"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -129,7 +129,7 @@ jobs:
 
   build-adapter-substrate:
     name: "[build] substrate-adapter"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -170,7 +170,7 @@ jobs:
 
   build-tester-host:
     name: "[build] host-tester"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -227,7 +227,7 @@ jobs:
 
   build-tester-host-legacy:
     name: "[build] host-tester-legacy"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -290,7 +290,7 @@ jobs:
   test-substrate:
     needs: [ build-host-substrate, build-adapter-substrate, build-tester-host ]
     name: "[test-genesis] substrate"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -314,7 +314,7 @@ jobs:
   test-kagome:
     needs: [ build-host-kagome, build-adapter-substrate, build-tester-host-legacy ]
     name: "[test-genesis] kagome"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
@@ -338,7 +338,7 @@ jobs:
   test-gossamer:
     needs: [ build-host-gossamer, build-adapter-substrate, build-tester-host-legacy ]
     name: "[test-genesis] gossamer"
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
