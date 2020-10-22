@@ -4,7 +4,7 @@ SECTIONS   := $(wildcard c??s??-*.tex)
 
 APPENDICES := $(wildcard a?-*.tm)
 
-GENERATED  := c08-messaging.tmp.tex figures/c07s01-overview.eps
+GENERATED  := c08-messaging.tmp.tex figures/c07-overview.eps
 
 SOURCES    := host-spec.tm  $(CHAPTERS) $(SECTIONS) $(APPENDICES) $(GENERATED)
 
@@ -29,7 +29,7 @@ c08-messaging.tmp.tex: c08-messaging.md
 	pandoc --top-level-division=chapter --from markdown-auto_identifiers $< -o $@
 
 
-figures/c07s01-overview.eps: figures/c07s01-overview.puml
+figures/c07-overview.eps: figures/c07-overview.puml
 	plantuml -teps $<
 
 
