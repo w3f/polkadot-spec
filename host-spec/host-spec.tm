@@ -1309,7 +1309,7 @@
 
   \;
 
-  <include|c04-networking.tex>
+  <include|c04-networking.tm>
 
   <include|c04a-networking.tm>
 
