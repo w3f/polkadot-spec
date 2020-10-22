@@ -20,7 +20,7 @@ and horizontal passing.
   essentially only stores proofs that message where sent and whether the
   recipient has read those messages.
 
-![Parachain Message Passing Overview](figures/parachain_message_passing_overview.svg){ width=100% keepaspectration=true }
+![Parachain Message Passing Overview](figures/c08-overview.svg){ width=100% keepaspectration=true }
 
 ## Message Queue Chain (MQC)
 
@@ -35,7 +35,7 @@ Each block within the MQC is a triple containing the following fields:
 - `message_hash`: The hash of the message itself.
 - `number`: The relay block number at which the message was sent.
 
-![MQC Overview](figures/parachain_message_queue_chain.svg){ width=100% keepaspectration=true }
+![MQC Overview](figures/c08-message_queue_chain.svg){ width=100% keepaspectration=true }
 
 A MQC is always specific to one channel. Additional channels require its own,
 individual MQC. The MQC itself is not saved anywhere, but only provides a final
@@ -297,7 +297,7 @@ sent. A core principle is that the relay chain remains as thin as possible in
 regards to messaging and only contains the required information for the validity
 of message processing.
 
-![Parachain XCMP Overview](figures/parachain_xcmp_overview.svg){ width=100% keepaspectration=true }
+![Parachain XCMP Overview](figures/c08-xcmp_overview.svg){ width=100% keepaspectration=true }
 
 The entire XCMP process requires a couple of steps:
 

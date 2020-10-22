@@ -1,14 +1,14 @@
 CHAPTERS   := $(wildcard c??-*.tm) $(wildcard c??-*.tex) $(wildcard c??-*.md)
 
-SECTIONS   := $(wildcard anv/s??-*.tex)
+SECTIONS   := $(wildcard c??s??-*.tex)
 
 APPENDICES := $(wildcard a?-*.tm)
 
-GENERATED  := c08-messaging.tmp.tex
+GENERATED  := c08-messaging.tmp.tex figures/c07s01-overview.eps
 
 SOURCES    := host-spec.tm  $(CHAPTERS) $(SECTIONS) $(APPENDICES) $(GENERATED)
 
-FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.svg)
+FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.puml) $(wildcard figures/*.svg)
 
 
 .PHONY: all build tex diff clean
@@ -27,6 +27,10 @@ temp: $(GENERATED)
 
 c08-messaging.tmp.tex: c08-messaging.md
 	pandoc --top-level-division=chapter --from markdown-auto_identifiers $< -o $@
+
+
+figures/c07s01-overview.eps: figures/c07s01-overview.puml
+	plantuml -teps $<
 
 
 polkadot-host-spec.pdf: $(SOURCES) $(FIGURES) host-spec.scm

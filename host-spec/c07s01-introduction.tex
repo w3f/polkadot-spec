@@ -256,32 +256,10 @@ Note that in the code the blob is referred to as "AvailableData".
 The Figure \ref{diag-anv-overall} demonstrates the overall process of assuring
 availability and validity in Polkadot \todo{complete the Diagram}.
 
-\begin{figure}[h!]
-\label{diag-anv-overall}
-\begin{plantuml}
-%%    
-@startuml
-
-(*) --> "<math>Parachain Collator $C_\rho$ Generates  $B$ and $PoV_B$</math>"
-    --> "<math>$C_\rho$ sends $PoV_B$ to $\rho$'s validator $V_\rho$</math>"
-    --> "<math>$V_{\rho}$ runs $\rho$'s runtime on PoV</math>"
-    if "<math>$PoV_B$ is valid</math>" then
-    -->[true] if  "<math>$V_{\rho}$ have seen the CandidateReceipt for $PoV_B$</math>" then
-    -->[true] Sign CandidateReceipt
-    -->[Ending process] (*)
-
-    else
-    --> [False] "Gerenate CandiateReceipt"
-    -->[Ending process] (*)
-
-    endif
-    else
-    -->[false] "<math>Broadcast message of invalidity for $PoV_B$</math>"
-    end if
-
-  -->[Ending process] (*)
-
-@enduml
-\end{plantuml}
-\caption{Overall process to acheive availability and validity in Polkadot}
+\begin{figure}
+  \centering
+  \label{diag-anv-overall}
+  \includegraphics[width=1\textwidth,height=\textheight]{figures/c07s01-overview.eps}
+  \caption{Overall process to acheive availability and validity in Polkadot}
 \end{figure}
+
