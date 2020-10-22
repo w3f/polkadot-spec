@@ -1325,7 +1325,7 @@
 
   <include|c07-anv.tm>
 
-  <include|c08-messaging.tmp.tex>
+  <include|c08-messaging.tm>
 
   \;
 

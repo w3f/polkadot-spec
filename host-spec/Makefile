@@ -4,7 +4,7 @@ SECTIONS   := $(wildcard c??s??-*.tex)
 
 APPENDICES := $(wildcard a?-*.tm)
 
-GENERATED  := c08-messaging.tmp.tex figures/c07-overview.eps
+GENERATED  := figures/c07-overview.eps
 
 SOURCES    := host-spec.tm  $(CHAPTERS) $(SECTIONS) $(APPENDICES) $(GENERATED)
 
@@ -23,10 +23,6 @@ tex: polkadot-host-spec.tex
 diff: polkadot-host-spec.diff.pdf
 
 temp: $(GENERATED)
-
-
-c08-messaging.tmp.tex: c08-messaging.md
-	pandoc --top-level-division=chapter --from markdown-auto_identifiers $< -o $@
 
 
 figures/c07-overview.eps: figures/c07-overview.puml
