@@ -1,14 +1,12 @@
-CHAPTERS   := $(wildcard c??-*.tm) $(wildcard c??-*.tex) $(wildcard c??-*.md)
-
-SECTIONS   := $(wildcard c??s??-*.tex)
+CHAPTERS   := $(wildcard c??-*.tm)
 
 APPENDICES := $(wildcard a?-*.tm)
 
+FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.puml) $(wildcard figures/*.svg)
+
 GENERATED  := figures/c07-overview.eps
 
-SOURCES    := host-spec.tm  $(CHAPTERS) $(SECTIONS) $(APPENDICES) $(GENERATED)
-
-FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.puml) $(wildcard figures/*.svg)
+SOURCES    := host-spec.tm $(CHAPTERS) $(APPENDICES) $(FIGURES) $(GENERATED)
 
 
 .PHONY: all build tex diff clean
@@ -29,10 +27,10 @@ figures/c07-overview.eps: figures/c07-overview.puml
 	plantuml -teps $<
 
 
-polkadot-host-spec.pdf: $(SOURCES) $(FIGURES) host-spec.scm
+polkadot-host-spec.pdf: $(SOURCES) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm -x "(convert-updated \"$$PWD/$<\" \"$$PWD/$@\")" --quit
 
-polkadot-host-spec.tex: $(SOURCES) $(FIGURES) host-spec.scm
+polkadot-host-spec.tex: $(SOURCES) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm -x "(convert-expanded \"$$PWD/$<\" \"$$PWD/$@\")" --quit
 
 
