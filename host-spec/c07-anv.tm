@@ -5,8 +5,9 @@
 <style|<tuple|generic|std-latex>>
 
 <\body>
-  <assign|blobB|<macro|<math|<wide|B|\<bar\>>>>><assign|PoVB|<macro|<math|PoV<rsub|B>>>><assign|paraValidSet|<macro|<math|\<cal-V\><rsub|\<rho\>>>>><chapter|Availability
-  & Validity>
+  <assign|blobB|<macro|<math|<wide|B|\<bar\>>>>><assign|PoVB|<macro|<math|PoV<rsub|B>>>><assign|paraValidSet|<macro|<math|\<cal-V\><rsub|\<rho\>>>>>
+
+  <chapter|Availability & Validity>
 
   <section|Introduction>
 
