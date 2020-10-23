@@ -1,12 +1,10 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.13>
 
 <project|host-spec.tm>
 
-<style|<tuple|generic|std-latex>>
+<style|<tuple|generic|std-latex|old-dots>>
 
 <\body>
-  <assign|tightlist|<macro|>>}}
-
   <chapter|Message Passing>
 
   <\quote-env>
@@ -38,15 +36,17 @@
   <section|Message Queue Chain (MQC)>
 
   The Message Queue Chain (MQC) is a general hash chain construct created by
-  validators which keeps track of any messages sent from a sender to an
-  individual recipient. The MQC is used by both HRMP and XCMP.
+  validators which keeps track of any messages and their order as sent from a
+  sender to an individual recipient. The MQC is used by both HRMP and XCMP.
 
   Each block within the MQC is a triple containing the following fields:
 
-  <with|font-family|tt|Triple:> - <with|font-family|tt|parent_hash>: The hash
-  of the previous triple. - <with|font-family|tt|message_hash>: The hash of
-  the message itself. - <with|font-family|tt|number>: The relay block number
-  at which the message was sent.
+  - <with|font-family|tt|parent_hash>: The hash of the previous triple.\ 
+
+  - <with|font-family|tt|message_hash>: The hash of the message itself.\ 
+
+  - <with|font-family|tt|number>: The relay block number at which the message
+  was sent.
 
   <big-figure|<with|par-mode|center|<image|figures/c08-message_queue_chain.svg|1par|1pag||>
   >|MQC Overview>
@@ -84,8 +84,6 @@
   <with|font-family|tt|HrmpChannel>:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|sender_deposit: int>: staked balances of
     sender.
 
@@ -130,8 +128,6 @@
     \;
 
     channels: map(ParaId, ParaId) =\<gtr\> Channel
-
-    \;
   </verbatim>
 
   <subsection|Opening Channels>
@@ -145,8 +141,6 @@
   <with|font-family|tt|ChOpenRequest>:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|sender: ParaId>: the ParaId of the sender.
 
     <item><with|font-family|tt|recipient: ParaId>: the ParaId of the
@@ -171,8 +165,6 @@
   candidate will be rejected.
 
   <\itemize>
-    <tightlist>
-
     <item>The <with|font-family|tt|sender> and the
     <with|font-family|tt|recipient> exist.
 
@@ -196,8 +188,6 @@
   The PVF executes the following steps:
 
   <\itemize>
-    <tightlist>
-
     <item>Create a <with|font-family|tt|ChOpenRequest> message and inserts it
     into the <with|font-family|tt|upward_messages> list of the candidate
     commitments.
@@ -208,8 +198,6 @@
   following steps:
 
   <\itemize>
-    <tightlist>
-
     <item>Reads the message from <with|font-family|tt|upward_messages> of the
     candidate commitments.
 
@@ -232,8 +220,6 @@
   <with|font-family|tt|ChAccept>:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|index: int>: the index of the open request
     list.
   </itemize>
@@ -244,8 +230,6 @@
   candidate will be rejected.
 
   <\itemize>
-    <tightlist>
-
     <item>The <with|font-family|tt|index> is valid (the value is within range
     of the list).
 
@@ -259,8 +243,6 @@
   The PVF executes the following steps:
 
   <\itemize>
-    <tightlist>
-
     <item>Generates a <with|font-family|tt|ChAccept> message and inserts it
     into the <with|font-family|tt|upward_messages> list of the candidate
     commitments.
@@ -271,8 +253,6 @@
   following steps:
 
   <\itemize>
-    <tightlist>
-
     <item>Reserve a deposit for the caller of this function
     (<with|font-family|tt|recipient>).
 
@@ -289,8 +269,6 @@
   <with|font-family|tt|ChCloseRequest>:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|initiator: int>: the ParaId of the parachain
     which initiated this request, either the sender or the receiver.
 
@@ -306,8 +284,6 @@
   candidate will be rejected.
 
   <\itemize>
-    <tightlist>
-
     <item>There's currently and open channel or a pending open channel
     request between <with|font-family|tt|sender> and
     <with|font-family|tt|recipient>.
@@ -323,8 +299,6 @@
   The PVF executes the following steps:
 
   <\itemize>
-    <tightlist>
-
     <item>Generates a <with|font-family|tt|ChCloseRequest> message and
     inserts it into the <with|font-family|tt|upward_messages> list of the
     candidate commitments.
@@ -333,8 +307,6 @@
   Once a candidate block is inserted into the relay chain, the relay runtime:
 
   <\itemize>
-    <tightlist>
-
     <item>Reads the message from <with|font-family|tt|upward_message> of the
     candidate commitments.
 
@@ -364,8 +336,6 @@
   <with|font-family|tt|CommittedCandidateReceipt>:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|descriptor: CandidateDescriptor>: the
     descriptor of the candidate.
 
@@ -378,8 +348,6 @@
   <with|font-family|tt|CandidateDescriptor>:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|para_id: ParaId>: the ID of the para this is a
     candidate for.
 
@@ -401,8 +369,6 @@
     Blake2 256-bit hash of the following components of this receipt:
 
     <\itemize>
-      <tightlist>
-
       <item><with|font-family|tt|para_id>
 
       <item><with|font-family|tt|relay_parent>
@@ -418,8 +384,6 @@
   <with|font-family|tt|CandidateCommitments>:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|fees: int>: fees paid from the chain to the
     relay chian validators
 
@@ -434,8 +398,8 @@
     erasure encoding Merkle tree.
 
     <item><with|font-family|tt|new_validation_code:
-    Option<textless|>ValidationCode<textgreater|>>: new validation code for
-    the parachain.
+    Option\<less\>ValidationCode\<gtr\>>: new validation code for the
+    parachain.
 
     <item><with|font-family|tt|head_data: HeadData>: the head-data produced
     as a result of execution.
@@ -458,8 +422,6 @@
   Params:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|id: ParaId>: the ParaId of the sender.
   </itemize>
 
@@ -527,14 +489,12 @@
   <with|font-family|tt|ChannelState>:
 
   <\itemize>
-    <tightlist>
-
     <item><with|font-family|tt|last_updated: BlockNumber>: the relay block
     number where the CST was last updated.
 
-    <item><with|font-family|tt|mqc_root: Option<textless|>Hash<textgreater|>>:
-    The Merkle root of all MQC heads where the parachain is the sender. This
-    item is <with|font-family|tt|None> in case there is no prior message.
+    <item><with|font-family|tt|mqc_root: Option\<less\>Hash\<gtr\>>: The
+    Merkle root of all MQC heads where the parachain is the sender. This item
+    is <with|font-family|tt|None> in case there is no prior message.
   </itemize>
 
   Besides the CST, there's also a CST Root, which is an additional map
@@ -582,3 +542,15 @@
 
   ...
 </body>
+
+<\initial>
+  <\collection>
+    <associate|preamble|false>
+  </collection>
+</initial>
+
+<references|<\collection>
+</collection>>
+
+<auxiliary|<\collection>
+</collection>>
