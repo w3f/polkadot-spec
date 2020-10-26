@@ -49,7 +49,7 @@
   availability of the parachain data associated with a certain candidate
   receipt we decide this parachain block is unavailable and allow alternative
   blocks to be built on its parent parachain block, see
-  <reference|sect-unavailability>.
+  <reference|sect-processing-availability>.
 
   The secondary check described in Section
   <reference|sect-approval-checking>, is done by one or more randomly
@@ -508,7 +508,7 @@
   </definition>
 
   <\definition>
-    <label|defn-pov-block>A <with|font-series|bold|Gossip PoV block> is a
+    <label|defn-gossip-pov-block>A <with|font-series|bold|Gossip PoV block> is a
     tuple of the following format:
 
     <\equation*>
@@ -941,13 +941,13 @@
 
   These signatures go into a relay chain block.
 
-  <subsection|Processing on-chain availability data>
+  <subsection|Processing on-chain availability data><label|sect-processing-availability>
 
   This section explains how the availability attestations stored on the relay
   chain, as described in Section ??, are processed as follows:
 
   <\algorithm>
-    \ <caption*||Relay chain's signature processing><label|algo-singnature-processing>
+    \ <caption*||Relay chain's signature processing><label|algo-signature-processing>
     <algo-state|The relay chain stores the last vote from each validator on
     chain. For each new signature, the relay chain checks if it is for a
     block in this chain later than the last vote stored from this validator.
@@ -1010,10 +1010,10 @@
   After a certain time-out in blocks since we first put the candidate receipt
   on the relay chain if there is not enough votes of availability the relay
   chain logic decides that a parachain block is unavailable, see
-  <reference|algo-singnature-processing>.
+  <reference|algo-signature-processing>.
 
   <\definition>
-    <label|defn-unavailable-parachain-block>An <b|u>navailabile parachain
+    <label|defn-unavailable-parablock-proposal>An <b|u>navailabile parachain
     block is TBS
   </definition>
 
@@ -1040,7 +1040,7 @@
   validity/availability checks as follows. A scheme assigns every validator
   to one or more PoV blocks to check its validity, see Section
   <reference|sect-shot-assignment> for details. An assigned validator
-  acquires the PoV block (see Section <reference|sect-obtaining-block>) and
+  acquires the PoV block (see Section <reference|sect-retrieval>) and
   checks its validity by comparing it to the candidate receipt. If validators
   notices that an equivocation has happened an additional
   validity/availability assignments will be made that is described in
@@ -1054,11 +1054,10 @@
   current relay chain block as described in Section
   <reference|sect-vrf-comp>. Each validator uses the output of the VRF to
   decide the block(s) they are revalidating as a secondary checker. See
-  Section <reference|one-shot-assigment> for the detail.
+  Section <reference|sect-shot-assignment> for the detail.
 
   In addition to this assignment some extra validators are assigned to every
-  PoV block which is descirbed in Section <reference|sect-extra-validation
-  assignment>.
+  PoV block which is descirbed in Section <reference|sect-extra-validation>.
 
   <subsection|VRF computation><label|sect-vrf-comp>
 
@@ -1089,7 +1088,7 @@
   Where <with|font-shape|small-caps|VRF> function is defined in
   <cite|polkadot-crypto-spec>.
 
-  <subsection|One-Shot Approval Checker Assignemnt><label|sect-shot-assignment>
+  <subsection|One-Shot Approval Checker Assignment><label|sect-shot-assignment>
 
   Every validator <math|v> takes the output of this VRF computed by
   <reference|algo-checker-vrf> mod the number of parachain blocks that we
@@ -1179,7 +1178,7 @@
   best done by requesting the PoV block from parachain validators or by
   announcing that they want erasure-encoded chunks.
 
-  <subsubsection|Retrieval><label|sect-retrieval-of-erasure-chunks>
+  <subsubsection|Retrieval><label|sect-retrieval>
 
   There are two fundamental ways to retrieve a parachain block for checking
   validity. One is to request the whole block from any validator who has
@@ -1189,6 +1188,10 @@
   validator in order to receive the specific parachain block. Any parachain
   validator receiving must reply with PoVBlockRespose message defined in
   Definition <reference|defn-pov-block-response>
+
+  <\definition>
+    <label|defn-msg-request-whole-block> Request Whole Block Message TBS
+  </definition>
 
   <\definition>
     <label|defn-pov-block-response><b|P>oV Block Respose Message TBS
@@ -1226,7 +1229,7 @@
   <math|<wide|B|\<bar\>>>.
 
   <\algorithm>
-    \ <caption*|Reconstruct-PoV-Erasure|<with|font-shape|small-caps|Reconstruct-PoV-Erasure(<math|S<rsub|E*r<rsub|B>>>)>><label|algo-reconstruct-pov-erasure>
+    \ <caption*|Reconstruct-PoV-Erasure|<with|font-shape|small-caps|Reconstruct-PoV-Erasure(<math|S<rsub|E*r<rsub|B>>>)>><label|algo-reconstruct-pov>
     <algo-require|<math|S<rsub|E*r<rsub|B>>\<assign\><around|(|e<rsub|j<rsub|1>>,m<rsub|j<rsub|1>>|)>,\<cdot\>,<around|(|e<rsub|j<rsub|k>>,m<rsub|j<rsub|k>>|)>)>
     such that <math|k\<gtr\>2*f>>
 
@@ -1323,7 +1326,7 @@
     unavailability Transaction
   </definition>
 
-  <subsection|Invalidity Escalation><label|escalation>
+  <subsection|Invalidity Escalation><label|sect-escalation>
 
   When for any candidate receipt, there are attestations for both its
   validity and invalidity, then all validators acquire and validate the blob,
