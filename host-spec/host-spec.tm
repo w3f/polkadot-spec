@@ -487,7 +487,7 @@
     <no-break><pageref|auto-149>>
 
     <with|par-left|1tab|7.11.3.<space|2spc>One-Shot Approval Checker
-    Assignemnt <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    Assignment <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-150>>
 
     <with|par-left|1tab|7.11.4.<space|2spc>Extra Approval Checker Assigment
@@ -1832,10 +1832,10 @@
     <associate|algo-primary-validation-disagreemnt|<tuple|7.6|74|c07-anv.tm>>
     <associate|algo-process-catchup-request|<tuple|6.16|62|c06-consensus.tm>>
     <associate|algo-process-catchup-response|<tuple|6.17|63|c06-consensus.tm>>
-    <associate|algo-reconstruct-pov-erasure|<tuple|7.14|80|c07-anv.tm>>
+    <associate|algo-reconstruct-pov|<tuple|7.14|80|c07-anv.tm>>
     <associate|algo-revalidating-reconstructed-pov|<tuple|7.15|81|c07-anv.tm>>
     <associate|algo-runtime-interaction|<tuple|3.1|23|c03-transition.tm>>
-    <associate|algo-singnature-processing|<tuple|7.9|77|c07-anv.tm>>
+    <associate|algo-signature-processing|<tuple|7.9|77|c07-anv.tm>>
     <associate|algo-slot-time|<tuple|6.2|50|c06-consensus.tm>>
     <associate|algo-validate-block|<tuple|7.2|70|c07-anv.tm>>
     <associate|algo-validate-transactions|<tuple|3.2|26|c03-transition.tm>>
@@ -2312,7 +2312,7 @@
     <associate|chap-state-spec|<tuple|2|17|c02-state.tm>>
     <associate|chap-state-transit|<tuple|3|23|c03-transition.tm>>
     <associate|defn-account-key|<tuple|A.1|95|aa-cryptoalgorithms.tm>>
-    <associate|defn-approval-attestation-transaction|<tuple|7.29|81|c07-anv.tm>>
+    <associate|defn-approval-attestation-transaction|<tuple|7.30|81|c07-anv.tm>>
     <associate|defn-authority-list|<tuple|6.1|47|c06-consensus.tm>>
     <associate|defn-authority-set-id|<tuple|6.15|54|c06-consensus.tm>>
     <associate|defn-availability-bitfield|<tuple|7.22|77|c07-anv.tm>>
@@ -2335,8 +2335,8 @@
     <associate|defn-chain-subchain|<tuple|1.13|15|c01-background.tm>>
     <associate|defn-child-storage-type|<tuple|E.4|111|ae-hostapi.tm>>
     <associate|defn-children-bitmap|<tuple|2.10|21|c02-state.tm>>
-    <associate|defn-collator-invalidity-transaction|<tuple|7.30|81|c07-anv.tm>>
-    <associate|defn-collator-unavailability-transaction|<tuple|7.31|81|c07-anv.tm>>
+    <associate|defn-collator-invalidity-transaction|<tuple|7.31|81|c07-anv.tm>>
+    <associate|defn-collator-unavailability-transaction|<tuple|7.32|81|c07-anv.tm>>
     <associate|defn-consensus-message-digest|<tuple|6.2|47|c06-consensus.tm>>
     <associate|defn-controller-key|<tuple|A.3|96|aa-cryptoalgorithms.tm>>
     <associate|defn-digest|<tuple|3.7|28|c03-transition.tm>>
@@ -2344,14 +2344,15 @@
     <associate|defn-epoch-slot|<tuple|6.5|49|c06-consensus.tm>>
     <associate|defn-epoch-subchain|<tuple|6.7|49|c06-consensus.tm>>
     <associate|defn-erasure-coded-chunks|<tuple|7.19|76|c07-anv.tm>>
-    <associate|defn-erasure-coded-chunks-request|<tuple|7.26|80|c07-anv.tm>>
-    <associate|defn-erasure-coded-chunks-response|<tuple|7.27|80|c07-anv.tm>>
+    <associate|defn-erasure-coded-chunks-request|<tuple|7.27|80|c07-anv.tm>>
+    <associate|defn-erasure-coded-chunks-response|<tuple|7.28|80|c07-anv.tm>>
     <associate|defn-erasure-encoder-decoder|<tuple|7.18|74|c07-anv.tm>>
     <associate|defn-extra-validation-data|<tuple|7.6|67|c07-anv.tm>>
     <associate|defn-finalized-block|<tuple|6.33|61|c06-consensus.tm>>
     <associate|defn-genesis-header|<tuple|C.1|101|ac-genesis.tm>>
     <associate|defn-global-validation-parameters|<tuple|7.7|67|c07-anv.tm>>
     <associate|defn-gossip-message|<tuple|6.26|56|c06-consensus.tm>>
+    <associate|defn-gossip-pov-block|<tuple|7.15|72|c07-anv.tm>>
     <associate|defn-gossip-statement|<tuple|7.16|72|c07-anv.tm>>
     <associate|defn-grandpa-catchup-request-msg|<tuple|6.30|58|c06-consensus.tm>>
     <associate|defn-grandpa-catchup-response-msg|<tuple|6.31|58|c06-consensus.tm>>
@@ -2374,6 +2375,7 @@
     <associate|defn-logging-log-level|<tuple|E.11|133|ae-hostapi.tm>>
     <associate|defn-longest-chain|<tuple|1.14|15|c01-background.tm>>
     <associate|defn-merkle-value|<tuple|2.12|21|c02-state.tm>>
+    <associate|defn-msg-request-whole-block|<tuple|7.25|80|c07-anv.tm>>
     <associate|defn-node-header|<tuple|2.9|19|c02-state.tm>>
     <associate|defn-node-key|<tuple|2.6|18|c02-state.tm>>
     <associate|defn-node-subvalue|<tuple|2.11|21|c02-state.tm>>
@@ -2385,8 +2387,8 @@
     <associate|defn-para-proposal|<tuple|7.17|74|c07-anv.tm>>
     <associate|defn-path-graph|<tuple|1.2|14|c01-background.tm>>
     <associate|defn-persistent-storage|<tuple|E.7|124|ae-hostapi.tm>>
-    <associate|defn-pov-block|<tuple|7.15|72|c07-anv.tm>>
-    <associate|defn-pov-block-response|<tuple|7.25|80|c07-anv.tm>>
+    <associate|defn-pov-block|<tuple|7.4|66|c07-anv.tm>>
+    <associate|defn-pov-block-response|<tuple|7.26|80|c07-anv.tm>>
     <associate|defn-pov-erasure-chunk-message|<tuple|7.20|76|c07-anv.tm>>
     <associate|defn-pruned-tree|<tuple|1.12|15|c01-background.tm>>
     <associate|defn-radix-tree|<tuple|1.3|14|c01-background.tm>>
@@ -2411,7 +2413,7 @@
     <associate|defn-scale-list|<tuple|B.7|98|ab-encodings.tm>>
     <associate|defn-scale-tuple|<tuple|B.2|97|ab-encodings.tm>>
     <associate|defn-scale-variable-type|<tuple|B.6|98|ab-encodings.tm>>
-    <associate|defn-secondary-appoval-attestation|<tuple|7.28|81|c07-anv.tm>>
+    <associate|defn-secondary-appoval-attestation|<tuple|7.29|81|c07-anv.tm>>
     <associate|defn-session-key|<tuple|A.4|96|aa-cryptoalgorithms.tm>>
     <associate|defn-set-state-at|<tuple|3.10|31|c03-transition.tm>>
     <associate|defn-slot-offset|<tuple|6.11|50|c06-consensus.tm>>
@@ -2421,7 +2423,7 @@
     <associate|defn-total-potential-votes|<tuple|6.23|56|c06-consensus.tm>>
     <associate|defn-transaction-queue|<tuple|3.4|26|c03-transition.tm>>
     <associate|defn-transaction-validity-error|<tuple|G.3|157|ag-runtimeentries.tm>>
-    <associate|defn-unavailable-parachain-block|<tuple|7.24|77|c07-anv.tm>>
+    <associate|defn-unavailable-parablock-proposal|<tuple|7.24|77|c07-anv.tm>>
     <associate|defn-unix-time|<tuple|1.10|15|c01-background.tm>>
     <associate|defn-unknown-transaction|<tuple|G.5|158|ag-runtimeentries.tm>>
     <associate|defn-upgrade-indicator|<tuple|7.5|66|c07-anv.tm>>
@@ -2431,7 +2433,6 @@
     <associate|defn-winning-threshold|<tuple|6.8|49|c06-consensus.tm>>
     <associate|defn-witness-proof|<tuple|7.3|66|c07-anv.tm>>
     <associate|diag-anv-overall|<tuple|7.1|69|c07-anv.tm>>
-    <associate|escalation|<tuple|7.12.3|81|c07-anv.tm>>
     <associate|exmp-candid-unfinalized|<tuple|6.32|61|c06-consensus.tm>>
     <associate|key-encode-in-trie|<tuple|2.1|18|c02-state.tm>>
     <associate|network-protocol|<tuple|4.3|42|c04a-networking.tm>>
@@ -2453,8 +2454,8 @@
     <associate|part:c04a-networking.tm|<tuple|4.2.3.2|42>>
     <associate|part:c05-bootstrapping.tm|<tuple|<with|mode|<quote|math>|\<bullet\>>|45>>
     <associate|part:c06-consensus.tm|<tuple|5|47>>
-    <associate|part:c07-anv.tm|<tuple|19|65>>
-    <associate|part:c08-messaging.tm|<tuple|7.12.3|82>>
+    <associate|part:c07-anv.tm|<tuple|19|63>>
+    <associate|part:c08-messaging.tm|<tuple|7.12.3|83>>
     <associate|sect-approval-checking|<tuple|7.11|78|c07-anv.tm>>
     <associate|sect-authority-set|<tuple|6.1.1|47|c06-consensus.tm>>
     <associate|sect-babe|<tuple|6.2|49|c06-consensus.tm>>
@@ -2485,6 +2486,7 @@
     <associate|sect-entries-into-runtime|<tuple|3.1|23|c03-transition.tm>>
     <associate|sect-epoch-randomness|<tuple|6.2.5|52|c06-consensus.tm>>
     <associate|sect-equivocation-case|<tuple|7.11.5|79|c07-anv.tm>>
+    <associate|sect-escalation|<tuple|7.12.3|81|c07-anv.tm>>
     <associate|sect-ext-crypto-ecdsa-verify|<tuple|E.3.12|119|ae-hostapi.tm>>
     <associate|sect-ext-crypto-ed25519-verify|<tuple|E.3.4|116|ae-hostapi.tm>>
     <associate|sect-ext-crypto-finish-batch-verify|<tuple|E.3.16|121|ae-hostapi.tm>>
@@ -2523,10 +2525,11 @@
     <associate|sect-primary-validation|<tuple|7.4|70|c07-anv.tm>>
     <associate|sect-primary-validation-disagreemnt|<tuple|7.6.1|74|c07-anv.tm>>
     <associate|sect-primary-validaty-announcement|<tuple|7.5|71|c07-anv.tm>>
+    <associate|sect-processing-availability|<tuple|7.9.1|77|c07-anv.tm>>
     <associate|sect-publishing-attestations|<tuple|7.10|78|c07-anv.tm>>
     <associate|sect-randomness|<tuple|A.3|95|aa-cryptoalgorithms.tm>>
     <associate|sect-re-api|<tuple|F|135|af-legacyhostapi.tm>>
-    <associate|sect-retrieval-of-erasure-chunks|<tuple|7.12.0.1|80|c07-anv.tm>>
+    <associate|sect-retrieval|<tuple|7.12.0.1|80|c07-anv.tm>>
     <associate|sect-rte-apply-extrinsic|<tuple|G.2.8|158|ag-runtimeentries.tm>>
     <associate|sect-rte-babeapi-epoch|<tuple|G.2.5|155|ag-runtimeentries.tm>>
     <associate|sect-rte-core-execute-block|<tuple|G.2.2|154|ag-runtimeentries.tm>>
@@ -3342,7 +3345,7 @@
       <no-break><pageref|auto-149>>
 
       <with|par-left|<quote|1tab>|7.11.3.<space|2spc>One-Shot Approval
-      Checker Assignemnt <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      Checker Assignment <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-150>>
 
       <with|par-left|<quote|1tab>|7.11.4.<space|2spc>Extra Approval Checker
