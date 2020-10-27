@@ -1,38 +1,4 @@
-\documentclass[11pt,a4paper]{article}
-
-\usepackage{geometry}
-\geometry{a4paper, total={170mm,257mm}, left=20mm, top=20mm,}
-\usepackage{color}
-\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage[ruled,vlined]{algorithm2e}
-\usepackage{xargs}   % Use more than one optional parameter in new commands
-\usepackage{xcolor}  % Coloured terxt etc.
-
-\newtheorem{definition}{Definition}
-\newcommand{\syed}[2]{{\underline{#1}}\textcolor{orange}{(#2)}}
-
-\setlength\parindent{0pt}
-\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
-\newcommand{\SubItem}[1]{
-    {\setlength\itemindent{15pt} \item[-] #1}
-}
-\flushbottom
-
-\newcommand{\TWF}{\ensuremath{\mathcal{W}}}
-\SetKw{KwInit}{Init:}
-\SetKw{KwBy}{increment by}
-\SetKwProg{Fn}{Function}{is}{end}
-
-\begin{document}
-\title{Polkadot Weights}
-\author{Web3 Foundation}
-\date{October 2020}
-\maketitle
-
-\tableofcontents
-\newpage
+\chapter{Weights}
 
 \section{Motivation}
 
@@ -1120,5 +1086,3 @@ next\ weight &=& weight \times (1 + (v \times diff) + (v \times diff)^2 / 2)\\
 Polkadot defines the \verb|target_weight| as 0.25 (25\%). More information about
 this algorithm is described in the Web3 Foundation research paper:
 \url{https://research.web3.foundation/en/latest/polkadot/Token%20Economics.html#relay-chain-transaction-fees-and-per-block-transaction-limits}.
-
-\end{document}
