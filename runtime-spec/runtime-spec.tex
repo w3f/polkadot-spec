@@ -1,9 +1,25 @@
-\documentclass{book}
-\usepackage{geometry,amsmath,amssymb,hyperref,calc,ifthen,alltt,theorem,capt-of,makeidx}
-\usepackage{algorithm}
+\documentclass[11pt,a4paper]{book}
+
+\usepackage{geometry}
+\geometry{a4paper}
+\usepackage{color}
+\PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[ruled,vlined]{algorithm2e}
 \usepackage{algpseudocode}
-%%\usepackage{algorithmic}
-\usepackage{xargs}
+\usepackage{xargs}   % Use more than one optional parameter in new commands
+\usepackage{xcolor}  % Coloured terxt etc.
+\usepackage{calc,ifthen,alltt,theorem,capt-of,makeidx}
+
+\setlength\parindent{0pt}
+\newcommand{\SubItem}[1]{
+    {\setlength\itemindent{15pt} \item[-] #1}
+}
+\flushbottom
+
+\makeindex
+
 \usepackage{plantuml} %%digarams
 \usepackage{tikz}
 \tikzset{
@@ -11,10 +27,6 @@
 
 %\usepackage{fontspec} %%for greek letters in plant uml in case you don't use math
 %\setmainfont{CMU Serif}
-
-\raggedbottom
-\makeindex
-\geometry{letterpaper}
 
 %%%%%%%%%% Start TeXmacs macros
 \newcommand{\assign}{:=}
@@ -80,15 +92,12 @@
 \providecommand{\tmtextbf}[1]{\tmtextbf{#1}}
 \providecommand{\tmtextit}[1]{\tmtextit{#1}}
 \providecommand{\tmverbatim}[1]{\tmtexttt{#1}}
-%\newtheorem{definition}{Definition}
-%
 
 \newcommand{\figuretext}{Snippet}
 
 %%Review commands
-\newcommandx{\syed}[2]{{#1}{}}
+\newcommand{\syed}[2]{{\underline{#1}}\textcolor{orange}{(#2)}}
 
-\usepackage{color}
 %% \todo{} command.
 %
 % Outputs red TODOs in the document. Requires \usepackage{color}.
@@ -99,10 +108,16 @@
 \newcommand{\todo}[1]{}
 \renewcommand{\todo}[1]{{\color{red} TODO: {#1}}}
 
-%%AnV commands
+%% AnV commands
 \newcommand{\blobB}{\ensuremath{\bar{B}}} %blob
 \newcommand{\PoVB}{\ensuremath{PoV_B}} %pov
 \newcommand{\paraValidSet}{\ensuremath{\mathcal{V}_\rho}} %parachin validator set
+
+%% Weights commands
+\newcommand{\TWF}{\ensuremath{\mathcal{W}}}
+\SetKw{KwInit}{Init:}
+\SetKw{KwBy}{increment by}
+\SetKwProg{Fn}{Function}{is}{end}
 
 \begin{document}
 
@@ -110,15 +125,21 @@
   {\Huge Polkadot Runtime}\\
   {\Large Protocol Specification}
 }
+\author{Web3 Foundation}
 
 \date{}
 
 \maketitle
 
-{\tableofcontents}
-\input{runtime-spec-transaction.tex}
+\tableofcontents
+\newpage
+
+\input{c01-extrinsics.tex}
+\input{c02-weights.tex}
+
 \bibliographystyle{plain}
 \bibliography{references,crypto,rt,grandpa}
+
 \begin{appendix}
 \end{appendix}
 
