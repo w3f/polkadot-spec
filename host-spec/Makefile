@@ -49,6 +49,9 @@ polkadot-host-spec.diff.pdf: $(SOURCES) $(REVDIR) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm  -x "(compare-versions-expanded \"$(REVDIR)/host-spec.tm\" \"$$PWD/host-spec.tm\") (export-buffer \"$$PWD/$@\")" -q
 
 
+update: $(SOURCES) host-spec.scm
+	xvfb-run texmacs -b host-spec.scm -x "(update-all \"$$PWD/$<\" \"$(TMPDIR)\")" --quit
+
 clean:
 	rm -rf $(REVDIR) $(GENERATED) polkadot-host-spec.pdf polkadot-host-spec.tex polkadot-host-spec.diff.pdf
 

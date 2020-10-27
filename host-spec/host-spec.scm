@@ -32,3 +32,11 @@
   (export-buffer output)
   (generate-all-aux) (inclusions-gc) (update-current-buffer)
   (export-buffer output))
+
+;; This function updates/rebuilds the toc, bibliography, index and glossar
+;; of the document specified. Requires a tempdir to which it triggers a export.
+(tm-define (update-all input tmpdir)
+  (load-buffer input :strict)
+  (buffer-export (current-buffer) (string-append tmpdir "/update-all.export.tmp") "pdf")
+  (generate-all-aux) (inclusions-gc) (update-current-buffer)
+  (buffer-save (current-buffer)))
