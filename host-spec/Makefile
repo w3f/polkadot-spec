@@ -9,9 +9,9 @@ GENERATED  := figures/c07-overview.eps
 SOURCES    := host-spec.tm $(CHAPTERS) $(APPENDICES) $(FIGURES) $(GENERATED)
 
 
-.PHONY: all build tex diff clean
+.PHONY: build pdf tex diff temp update clean
 
-all: pdf
+build: pdf
 
 
 pdf: polkadot-host-spec.pdf
