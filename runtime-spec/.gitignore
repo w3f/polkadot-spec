@@ -39,3 +39,6 @@ runtime-spec-plantuml.txt
 
 ## the final pdf shouldn't be commited here
 *.pdf
+
+## temp diff files
+polkadot-runtime-spec.diff.tex
