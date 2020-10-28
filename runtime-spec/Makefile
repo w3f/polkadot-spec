@@ -10,11 +10,29 @@ build: pdf
 
 pdf: polkadot-runtime-spec.pdf
 
+diff: polkadot-runtime-spec.diff.pdf
+
 
 polkadot-runtime-spec.pdf: $(SOURCES)
 	latexmk -jobname=$(basename $@) -pdflua $<
 
 
+REV     ?= HEAD
+GITHASH := $(shell git rev-parse $(REV))
+
+TMPDIR ?= /tmp
+REVDIR := $(TMPDIR)/runtime-spec-$(GITHASH)
+
+$(REVDIR):
+	mkdir -p $@
+	git archive --format=tar $(GITHASH) | (cd $@ && tar xf -)
+
+polkadot-runtime-spec.diff.tex: $(SOURCES) $(REVDIR)
+	latexdiff --flatten "$(REVDIR)/runtime-spec.tex" "$$PWD/runtime-spec.tex" > $@
+
+polkadot-runtime-spec.diff.pdf: polkadot-runtime-spec.diff.tex
+	latexmk -pdflua $<
+
+
 clean:
-	latexmk -jobname=polkadot-runtime-spec -C runtime-spec.tex
-	rm -f polkadot-runtime-spec.pytxcode
+	rm -rf $(REVDIR) polkadot-runtime-spec{,.diff}.{aux,fdb_latexmk,fls,idx,ilg,ind,log,out,pdf,pytxcode,tex,toc}
