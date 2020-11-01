@@ -735,6 +735,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "hostapi-runtime"
+version = "2.0.0-rc6"
+dependencies = [
+ "substrate-wasm-builder",
+]
+
+[[package]]
 name = "impl-codec"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2024,6 +2031,7 @@ dependencies = [
  "hash-db",
  "hash256-std-hasher 0.12.4",
  "hex",
+ "hostapi-runtime",
  "keccak-hasher",
  "memory-db 0.20.1",
  "parity-scale-codec",
@@ -2037,7 +2045,6 @@ dependencies = [
  "sp-state-machine",
  "trie-db 0.20.1",
  "trie-root",
- "wasm-adapter",
 ]
 
 [[package]]
@@ -2377,13 +2384,6 @@ name = "wasi"
 version = "0.10.0+wasi-snapshot-preview1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1a143597ca7c7793eff794def352d41792a93c481eb1042423ff7ff72ba2c31f"
-
-[[package]]
-name = "wasm-adapter"
-version = "2.0.0-rc6"
-dependencies = [
- "substrate-wasm-builder",
-]
 
 [[package]]
 name = "wasm-gc-api"

@@ -1,16 +1,15 @@
 HOSTS    = substrate kagome gossamer
-ADAPTERS = substrate-legacy kagome-legacy wasm wasm-legacy
-TESTERS  = host host-legacy
+RUNTIMES = hostapi tester
 
-ALIASES_ADAPTER := $(patsubst %-legacy-adapter,%-adapter-legacy, $(patsubst %,%-adapter,$(HOSTS) $(ADAPTERS)))
-ALIASES_TESTER  := $(patsubst %-legacy-tester,%-tester-legacy, $(patsubst %,%-tester,$(TESTERS)))
+ALIASES_ADAPTER := $(patsubst %,%-adapter,$(HOSTS))    $(patsubst %,%-adapter-legacy,$(HOSTS))
+ALIASES_RUNTIME := $(patsubst %,%-runtime,$(RUNTIMES)) $(patsubst %,%-runtime-legacy,$(RUNTIMES))
 ALIASES_HOST    := $(patsubst %,%-host,$(HOSTS))
 
 
-.PHONY: all init adapters $(ALIASES_ADAPTER) testers $(ALIASES_TESTER) hosts $(ALIASES_HOST) test clean
+.PHONY: all init adapters $(ALIASES_ADAPTER) runtimes $(ALIASES_RUNTIME) hosts $(ALIASES_HOST) test clean
 
 
-all: adapters testers hosts
+all: adapters runtimes hosts
 
 
 bin lib:
@@ -28,13 +27,13 @@ $(filter %-legacy,$(ALIASES_ADAPTER)): %-adapter-legacy: init
 	make -C adapters/$*-legacy
 
 
-testers: $(ALIASES_TESTER)
+runtimes: $(ALIASES_RUNTIMES)
 
-$(filter %-tester,$(ALIASES_TESTER)): %-tester: init
-	make -C testers/$*
+$(filter %-runtime,$(ALIASES_RUNTIME)): %-runtime: init
+	make -C runtimes/$*
 
-$(filter %-legacy,$(ALIASES_TESTER)): %-tester-legacy: init
-	make -C testers/$*-legacy
+$(filter %-legacy,$(ALIASES_RUNTIME)): %-runtime-legacy: init
+	make -C runtimes/$*-legacy
 
 
 hosts: $(ALIASES_HOST)
@@ -48,7 +47,9 @@ test: all
 
 
 clean:
-	for a in $(HOSTS) $(ADAPTERS); do $(MAKE) -C adapters/$$a $@; done
-	for t in $(TESTERS); do $(MAKE) -C testers/$$t $@; done
-	make -C hosts clean
+	for a in $(HOSTS); do $(MAKE) -C adapters/$$a $@; done
+	for a in $(HOSTS); do $(MAKE) -C adapters/$$a-legacy $@; done
+	for t in $(RUNTIMES); do $(MAKE) -C runtimes/$$t $@; done
+	for t in $(RUNTIMES); do $(MAKE) -C runtimes/$$t-legacy $@; done
+	make -C hosts $@
 	rm -rf bin/ lib/
