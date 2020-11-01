@@ -4,7 +4,7 @@ version = '2.0.0-alpha.7'
 edition = '2018'
 
 
-[dependencies.host-tester-runtime]
+[dependencies.tester-runtime]
 path = 'runtime'
 version = '2.0.0-alpha'
 

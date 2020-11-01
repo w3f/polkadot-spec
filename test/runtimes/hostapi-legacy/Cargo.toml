@@ -1,5 +1,5 @@
 [package]
-name = "wasm-adapter-legacy"
+name = "hostapi-runtime-legacy"
 version = "0.6.0"
 edition = "2018"
 build = "build.rs"

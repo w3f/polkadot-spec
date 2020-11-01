@@ -1,7 +1,7 @@
 use sp_core::{Pair, Public, sr25519};
-use host_tester_runtime::{
+use tester_runtime::{
   AccountId, BabeConfig, BalancesConfig, GenesisConfig,
-	GrandpaConfig, SudoConfig, SystemConfig, Signature,
+  GrandpaConfig, SudoConfig, SystemConfig, Signature,
   WASM_BINARY,
 };
 use sc_service::{GenericChainSpec, ChainType};

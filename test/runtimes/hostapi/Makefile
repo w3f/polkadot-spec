@@ -6,7 +6,7 @@ build:
 	cargo build --release
 
 install: build
-	cp target/release/wbuild/wasm-adapter/wasm_adapter.compact.wasm ../../bin/
+	cp target/release/wbuild/hostapi-runtime/hostapi_runtime.compact.wasm ../../bin/
 
 clean:
 	rm -rf target

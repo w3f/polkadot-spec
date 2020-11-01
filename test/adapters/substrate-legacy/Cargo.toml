@@ -18,4 +18,4 @@ state-machine = { package = "substrate-state-machine", git = "https://github.com
 offchain      = { package = "substrate-offchain",      git = "https://github.com/paritytech/substrate", rev = "c37bb08", default-features = false }
 
 # Wasm Blob
-runtime = { package = "wasm-adapter-legacy",  path = "../wasm-legacy" }
+runtime = { package = "hostapi-runtime-legacy",  path = "../../runtimes/hostapi-legacy" }

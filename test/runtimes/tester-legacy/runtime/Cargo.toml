@@ -1,5 +1,5 @@
 [package]
-name = "host-tester-legacy-runtime"
+name = "tester-runtime-legacy"
 version = "2.0.0"
 edition = "2018"
 

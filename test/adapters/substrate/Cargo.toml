@@ -35,4 +35,4 @@ sc-executor       = { git = "https://github.com/paritytech/substrate", branch = 
 sp-state-machine  = { git = "https://github.com/paritytech/substrate", branch = "master" }
 
 # host-api shim wasm blob
-runtime = { package = "wasm-adapter", path = "../wasm" }
+runtime = { package = "hostapi-runtime", path = "../../runtimes/hostapi" }

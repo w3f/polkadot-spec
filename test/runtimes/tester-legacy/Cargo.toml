@@ -10,7 +10,7 @@ grandpa-primitives = { package = "substrate-finality-grandpa-primitives", git = 
 sr-primitives = { git = "https://github.com/paritytech/substrate", rev = "c37bb08" }
 substrate-service = { git = "https://github.com/paritytech/substrate", rev = "c37bb08" }
 
-runtime = { package = "host-tester-legacy-runtime", path = "runtime" }
+runtime = { package = "tester-runtime-legacy", path = "runtime" }
 
 # Vendoring support by including unspecified dependency of runtime
 [build-dependencies]
