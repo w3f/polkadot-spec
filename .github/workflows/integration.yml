@@ -168,8 +168,8 @@ jobs:
         path: test/bin/substrate-adapter
 
 
-  build-tester-host:
-    name: "[build] host-tester"
+  build-runtime-tester:
+    name: "[build] tester-runtime"
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
@@ -192,41 +192,41 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: cargo-registry-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-keys: cargo-registry-tester-host-
+        key: cargo-registry-runtime-tester-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
+        restore-keys: cargo-registry-runtime-tester-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
-        key: cargo-index-tester-host-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-keys: cargo-index-tester-host-
+        key: cargo-index-runtime-tester-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
+        restore-keys: cargo-index-runtime-tester-
     - name: Cache cargo build output
       uses: actions/cache@v1
       with:
-        path: test/testers/host/target
-        key: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-keys: cargo-build-tester-host-${{ steps.rustup.outputs.rustc_hash }}-
+        path: test/runtimes/tester/target
+        key: cargo-build-runtime-tester-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
+        restore-keys: cargo-build-runtime-tester-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester genesis
-      run: make -C test host-tester
+      run: make -C test tester-runtime
     - name: Upload host tester runtime
       uses: actions/upload-artifact@v1
       with:
-        name: host_tester_runtime.compact.wasm
-        path: test/testers/host/target/release/wbuild/host-tester-runtime/host_tester_runtime.compact.wasm
+        name: tester_runtime.compact.wasm
+        path: test/runtimes/tester/target/release/wbuild/tester-runtime/tester_runtime.compact.wasm
     - name: Upload host tester genesis file
       uses: actions/upload-artifact@v1
       with:
-        name: host-tester-genesis
-        path: test/testers/host/genesis.json
+        name: tester-runtime-genesis
+        path: test/runtimes/tester/genesis.json
     - name: Upload host tester state file
       uses: actions/upload-artifact@v1
       with:
-        name: host-tester-genesis
-        path: test/testers/host/genesis.yaml
+        name: tester-runtime-genesis
+        path: test/runtimes/tester/genesis.yaml
 
 
-  build-tester-host-legacy:
-    name: "[build] host-tester-legacy"
+  build-runtime-tester-legacy:
+    name: "[build] tester-runtime-legacy"
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
@@ -249,46 +249,46 @@ jobs:
       uses: actions/cache@v1
       with:
         path: ~/.cargo/registry
-        key: cargo-registry-tester-host-legacy-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-keys: cargo-registry-tester-host-legacy-
+        key: cargo-registry-runtime-tester-legacy-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
+        restore-keys: cargo-registry-runtime-tester-legacy-
     - name: Cache cargo index
       uses: actions/cache@v1
       with:
         path: ~/.cargo/git
-        key: cargo-index-tester-host-legacy-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-keys: cargo-index-tester-host-legacy-
+        key: cargo-index-runtime-tester-legacy-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
+        restore-keys: cargo-index-runtime-tester-legacy-
     - name: Cache cargo build
       uses: actions/cache@v1
       with:
-        path: test/testers/host-legacy/target
-        key: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/testers/host/Cargo.lock') }}
-        restore-keys: cargo-build-tester-host-legacy-${{ steps.rustup.outputs.rustc_hash }}-
+        path: test/runtimes/tester-legacy/target
+        key: cargo-build-runtime-tester-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
+        restore-keys: cargo-build-runtime-tester-legacy-${{ steps.rustup.outputs.rustc_hash }}-
     - name: Build and generate host tester legacy genesis
-      run: make -C test host-tester-legacy
+      run: make -C test tester-runtime-legacy
     - name: Upload host tester legacy runtime
       uses: actions/upload-artifact@v1
       with:
-        name: host_tester_legacy_runtime.compact.wasm
-        path: test/testers/host-legacy/target/release/wbuild/host-tester-legacy-runtime/host_tester_legacy_runtime.compact.wasm
+        name: tester_runtime_legacy.compact.wasm
+        path: test/runtimes/tester-legacy/target/release/wbuild/tester-runtime-legacy/tester_runtime_legacy.compact.wasm
     - name: Upload host tester legacy genesis file
       uses: actions/upload-artifact@v1
       with:
-        name: host-tester-legacy-genesis
-        path: test/testers/host-legacy/genesis-legacy.json
+        name: tester-runtime-legacy-genesis
+        path: test/runtimes/tester-legacy/genesis-legacy.json
     - name: Upload host tester legacy state file
       uses: actions/upload-artifact@v1
       with:
-        name: host-tester-legacy-genesis
-        path: test/testers/host-legacy/genesis-legacy.yaml
+        name: tester-runtime-legacy-genesis
+        path: test/runtimes/tester-legacy/genesis-legacy.yaml
     - name: Upload host tester legacy genesis file for kagome
       uses: actions/upload-artifact@v1
       with:
-        name: host-tester-legacy-genesis
-        path: test/testers/host-legacy/genesis-legacy.kagome.json
+        name: tester-runtime-legacy-genesis
+        path: test/runtimes/tester-legacy/genesis-legacy.kagome.json
 
 
   test-substrate:
-    needs: [ build-host-substrate, build-adapter-substrate, build-tester-host ]
+    needs: [ build-host-substrate, build-adapter-substrate, build-runtime-tester ]
     name: "[test-genesis] substrate"
     runs-on: ubuntu-20.04
     steps:
@@ -306,13 +306,13 @@ jobs:
     - run: chmod +x test/bin/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
-        name: host-tester-genesis
-        path: test/testers/host
+        name: tester-runtime-genesis
+        path: test/runtimes/tester
     - name: Run substrate with tester genesis
       run: test/runtests.jl substrate genesis
 
   test-kagome:
-    needs: [ build-host-kagome, build-adapter-substrate, build-tester-host-legacy ]
+    needs: [ build-host-kagome, build-adapter-substrate, build-runtime-tester-legacy ]
     name: "[test-genesis] kagome"
     runs-on: ubuntu-20.04
     steps:
@@ -330,13 +330,13 @@ jobs:
     - run: chmod +x test/bin/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
-        name: host-tester-legacy-genesis
-        path: test/testers/host-legacy
+        name: tester-runtime-legacy-genesis
+        path: test/runtimes/tester-legacy
     - name: Run kagome with tester genesis
       run: test/runtests.jl kagome genesis
 
   test-gossamer:
-    needs: [ build-host-gossamer, build-adapter-substrate, build-tester-host-legacy ]
+    needs: [ build-host-gossamer, build-adapter-substrate, build-runtime-tester-legacy ]
     name: "[test-genesis] gossamer"
     runs-on: ubuntu-20.04
     steps:
@@ -357,7 +357,7 @@ jobs:
     - run: chmod +x test/bin/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
-        name: host-tester-legacy-genesis
-        path: test/testers/host-legacy
+        name: tester-runtime-legacy-genesis
+        path: test/runtimes/tester-legacy
     - name: Run gossamer with tester genesis
       run: test/runtests.jl gossamer genesis
