@@ -176,16 +176,13 @@ function run(self::Builder, adapter::CmdString)
    end # for inputs
 end
 
-"List of implementations with legacy adapter"
-IMPLEMENTATIONS_WITH_LEGACY_ADAPTER = [ "substrate" "kagome" ]
-
 "Run fixture for each configured implementation, optional flag to use legacy version if available."
 function execute(self::Builder; legacy::Bool=false)
     @testset "$(self.name)" begin
         for implementation in Config.implementations
             adapter = "$implementation-adapter"
 
-            if legacy && implementation in IMPLEMENTATIONS_WITH_LEGACY_ADAPTER
+            if legacy
                 adapter *= "-legacy"
             end
 
