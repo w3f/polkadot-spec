@@ -59,7 +59,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y texlive-luatex 
+        sudo apt-get install -y texlive texlive-luatex texlive-science texlive-latex-extra
     - name: Build runtime specification
       run: make -C runtime-spec
     - name: Upload runtime specification
