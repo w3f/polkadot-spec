@@ -3,8 +3,8 @@
  *
  * This file is part of Polkadot Host Test Suite
  *
- * Polkadot Host Test Suite is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * Polkadot Host Test Suite is free software: you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
@@ -26,18 +26,24 @@
 
 #include "subcommand.hpp"
 
+#include "host_api.hpp"
 #include "scale_codec.hpp"
 #include "state_trie.hpp"
-#include "host_api.hpp"
 
 #include <cerrno>
+
 /**
  * Implementation of Polkadot Host API, SCALE codec and Merkle-Patricia
  * Tree compatibility tests
  */
 int main(int argc, char **argv) {
-  // Disable all logging
-  kagome::common::setLogLevel(kagome::common::LogLevel::off);
+  if (argc > 1 and argv[1] == std::string_view ("-d")) {
+    kagome::common::setLogLevel(kagome::common::LogLevel::trace);
+    argc--;
+    argv++;
+  } else {
+    kagome::common::setLogLevel(kagome::common::LogLevel::err);
+  }
 
   SubcommandRouter<int, char **> router;
   router.addSubcommand("scale-codec", [](int argc, char **argv) {
@@ -61,7 +67,8 @@ int main(int argc, char **argv) {
 
   try {
     auto e2 = "Invalid subcommand\n" + commands_list;
-    BOOST_VERIFY_MSG(router.executeSubcommand(argv[1], argc - 1, argv + 1), e2.data());
+    BOOST_VERIFY_MSG(router.executeSubcommand(argv[1], argc - 1, argv + 1),
+                     e2.data());
   } catch (const NotImplemented &e) {
     return EOPNOTSUPP;
   }

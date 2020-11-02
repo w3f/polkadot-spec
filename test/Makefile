@@ -21,25 +21,25 @@ init: bin lib
 adapters: $(ALIASES_ADAPTER)
 
 $(filter %-adapter,$(ALIASES_ADAPTER)): %-adapter: init
-	make -C adapters/$*
+	$(MAKE) -C adapters/$*
 
 $(filter %-legacy,$(ALIASES_ADAPTER)): %-adapter-legacy: init
-	make -C adapters/$*-legacy
+	$(MAKE) -C adapters/$*-legacy
 
 
 runtimes: $(ALIASES_RUNTIMES)
 
 $(filter %-runtime,$(ALIASES_RUNTIME)): %-runtime: init
-	make -C runtimes/$*
+	$(MAKE) -C runtimes/$*
 
 $(filter %-legacy,$(ALIASES_RUNTIME)): %-runtime-legacy: init
-	make -C runtimes/$*-legacy
+	$(MAKE) -C runtimes/$*-legacy
 
 
 hosts: $(ALIASES_HOST)
 
 $(ALIASES_HOST): %-host: init
-	make -C hosts $*
+	$(MAKE) -C hosts $*
 
 
 test: all
@@ -59,5 +59,5 @@ clean:
 	for a in $(HOSTS); do $(MAKE) -C adapters/$$a-legacy $@; done
 	for t in $(RUNTIMES); do $(MAKE) -C runtimes/$$t $@; done
 	for t in $(RUNTIMES); do $(MAKE) -C runtimes/$$t-legacy $@; done
-	make -C hosts $@
+	$(MAKE) -C hosts $@
 	rm -rf bin/ lib/

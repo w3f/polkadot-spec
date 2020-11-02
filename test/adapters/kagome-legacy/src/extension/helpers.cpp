@@ -19,6 +19,7 @@
 
 #include "helpers.hpp"
 
+#include <filesystem>
 
 #include <crypto/pbkdf2/impl/pbkdf2_provider_impl.hpp>
 #include <crypto/random_generator/boost_generator.hpp>
@@ -60,11 +61,11 @@ using kagome::common::Hash256;
 using kagome::crypto::Bip39ProviderImpl;
 using kagome::crypto::BoostRandomGenerator;
 using kagome::crypto::CryptoStoreImpl;
-using kagome::crypto::ED25519ProviderImpl;
+using kagome::crypto::Ed25519ProviderImpl;
 using kagome::crypto::HasherImpl;
 using kagome::crypto::Pbkdf2ProviderImpl;
 using kagome::crypto::Secp256k1ProviderImpl;
-using kagome::crypto::SR25519ProviderImpl;
+using kagome::crypto::Sr25519ProviderImpl;
 
 using kagome::extensions::ExtensionFactoryImpl;
 
@@ -99,6 +100,7 @@ namespace helpers {
       WasmAdapterProvider() {
         // Open file and determine size (ios::ate jumps to end on open)
         std::ifstream file(WASM_ADAPTER_RUNTIME_PATH, std::ios::binary | std::ios::ate);
+        BOOST_ASSERT_MSG(file, "Wasm adapter runtime not found!\n");
         int size = file.tellg();
         file.seekg(0, std::ios::beg);
 
@@ -153,8 +155,8 @@ namespace helpers {
     // Build crypto providers
     auto pbkdf2_provider    = std::make_shared<Pbkdf2ProviderImpl>();
     auto random_generator   = std::make_shared<BoostRandomGenerator>();
-    auto ed25519_provider   = std::make_shared<ED25519ProviderImpl>();
-    auto sr25519_provider   = std::make_shared<SR25519ProviderImpl>(
+    auto ed25519_provider   = std::make_shared<Ed25519ProviderImpl>();
+    auto sr25519_provider   = std::make_shared<Sr25519ProviderImpl>(
       random_generator
     );
     auto secp256k1_provider = std::make_shared<Secp256k1ProviderImpl>();

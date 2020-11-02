@@ -54,12 +54,14 @@ namespace helpers {
         return result.value();
       }
 
+      std::shared_ptr<kagome::runtime::binaryen::RuntimeManager> getRuntimeManager();
+
     private:
       // Needed by 
       std::shared_ptr<KeyValueBlockHeaderRepository> repo_;
       
       // Needed by
-      std::shared_ptr<RuntimeManager> manager_;
+      std::shared_ptr<RuntimeManager> runtime_manager_;
 
       // Overwrite to get access to protected function
       struct RawRuntimeApi : public RuntimeApi {

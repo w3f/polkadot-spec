@@ -40,9 +40,9 @@ set(
 # Setup hunter
 include(cmake/HunterGate.cmake)
 HunterGate(
-  URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.254-soramitsu1.tar.gz"
-  SHA1 "7819e7dd14f58b6df2fd7f2bc835265d60add3f5"
-  FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
+    URL https://github.com/soramitsu/soramitsu-hunter/archive/1a759980a8cfc0fcef847a293dbb4aceb081071d.zip
+    SHA1 4c8fd5dcd7b02b2cbb6f4d711da779032bdc8e82
+    FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
 )
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${HUNTER_ENABLED})
@@ -51,65 +51,26 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${HUNTER_ENABLED})
 # General config
 project(kagome-adapter LANGUAGES CXX C)
 
-
-# Find dependencies
-hunter_add_package(kagome)
-hunter_add_package(yaml-cpp)
-
-find_package(kagome REQUIRED)
-find_package(yaml-cpp REQUIRED)
-
-message(STATUS "Found kagome: ${kagome_INCLUDE_DIRS}")
-
-# Fix inconsistency between hunterized and upstream package (+ CMake oddity fix)
-if(NOT TARGET yaml-cpp)
-  set_target_properties(yaml-cpp::yaml-cpp PROPERTIES IMPORTED_GLOBAL true)
-  add_library(yaml-cpp ALIAS yaml-cpp::yaml-cpp)
-endif()
-
-# FIXME Kagome's package config should do all this!
-find_package(Boost REQUIRED COMPONENTS filesystem program_options random)
-find_package(ed25519 REQUIRED)
-find_package(sr25519 REQUIRED)
-find_package(libsecp256k1 REQUIRED)
-find_package(leveldb REQUIRED)
-find_package(OpenSSL REQUIRED)
-find_package(xxhash REQUIRED)
-find_package(spdlog REQUIRED)
-find_package(libp2p REQUIRED)
-find_package(binaryen REQUIRED)
-
+include(cmake/dependencies.cmake)
 
 # Compile and link tester
 add_executable(kagome-adapter
   src/main.cpp
   src/assert.cpp
-  src/assert.hpp
-  src/subcommand.hpp
   src/scale_codec.cpp
-  src/scale_codec.hpp
   src/state_trie.cpp
-  src/state_trie.hpp
   src/host_api.cpp
-  src/host_api.hpp
   src/host_api/helpers.cpp
-  src/host_api/helpers.hpp
   src/host_api/allocator.cpp
-  src/host_api/allocator.hpp
   src/host_api/crypto.cpp
-  src/host_api/crypto.hpp
   src/host_api/hashing.cpp
-  src/host_api/hashing.hpp
   src/host_api/trie.cpp
-  src/host_api/trie.hpp
   src/host_api/storage.cpp
-  src/host_api/storage.hpp
   src/host_api/child_storage.cpp
-  src/host_api/child_storage.hpp
-)
+    src/kagome_prelude.hpp)
 
 # FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")
-target_include_directories(kagome-adapter PRIVATE ${kagome_INCLUDE_DIRS})
+# target_include_directories(kagome-adapter PRIVATE ../../hosts/kagome/core)
 
 target_link_libraries(kagome-adapter
   Boost::program_options

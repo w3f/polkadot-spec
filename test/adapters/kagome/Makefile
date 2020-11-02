@@ -3,8 +3,8 @@
 all: install
 
 build:
-	cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
-	cmake --build build
+	cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -DHUNTER_JOBS_NUMBER=10 -S . -B build
+	cmake --build build -- -j10
 
 enable-bincache:
 	cmake -DHUNTER_USE_CACHE_SERVERS=YES -S . -B build
