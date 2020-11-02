@@ -2,7 +2,7 @@ using .ImplementationFixture
 using Test
 
 
-tester = ImplementationFixture.Tester("Genesis", "host")
+tester = ImplementationFixture.Tester("Genesis", "tester")
 
 ImplementationFixture.execute(tester, 5) do (root, result)
     # Extract all hashes returned from log

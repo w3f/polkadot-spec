@@ -3,7 +3,7 @@ name = "Specification Test"
 id = "spectest"
 
 [init]
-genesis = "./testers/host-legacy/genesis-legacy.json"
+genesis = "./runtimes/tester-legacy/genesis-legacy.json"
 
 [core]
 authority = true
