@@ -3,13 +3,13 @@ module ImplementationFixture
 using ..Config
 using Test
 
-"Represensts a fixture based on a tester"
+"Represensts a fixture based on a tester runtime"
 struct Tester
     "Name of the testsuite"
     name::String
 
-    "Name of the tester to use"
-    tester::String
+    "Name of the runtime to use"
+    runtime::String
 end
 
 
@@ -17,9 +17,9 @@ end
 function compute_root(self::Tester, implementation::String)
 
     state_file = if implementation == "substrate"
-        "$(@__DIR__)/../testers/$(self.tester)/genesis.yaml"
+        "$(@__DIR__)/../runtimes/$(self.runtime)/genesis.yaml"
     else
-        "$(@__DIR__)/../testers/$(self.tester)-legacy/genesis-legacy.yaml"
+        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/genesis-legacy.yaml"
     end
 
     # Make sure state file is available
@@ -50,11 +50,11 @@ function run_tester(self::Tester, implementation::String, duration::Number)
 
     # Determine correct genesis based on implementation
     genesis = if implementation == "kagome"
-        "$(@__DIR__)/../testers/$(self.tester)-legacy/genesis-legacy.kagome.json"
+        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/genesis-legacy.kagome.json"
     elseif implementation == "gossamer"
-        "$(@__DIR__)/../testers/$(self.tester)-legacy/genesis-legacy.json"
+        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/genesis-legacy.json"
     else # default
-        "$(@__DIR__)/../testers/$(self.tester)/genesis.json"
+        "$(@__DIR__)/../runtimes/$(self.runtime)/genesis.json"
     end
     
     # Make sure genesis is available
@@ -66,11 +66,11 @@ function run_tester(self::Tester, implementation::String, duration::Number)
     datadir = tempdir
 
     # Helper files needed for some implementations
-    keystore = "$(@__DIR__)/../testers/$(self.tester)-legacy/kagome.keystore.json"
+    keystore = "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/kagome.keystore.json"
     config   = if Config.docker
-        "$(@__DIR__)/../testers/$(self.tester)-legacy/gossamer.docker.config.toml"
+        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/gossamer.docker.config.toml"
     else
-        "$(@__DIR__)/../testers/$(self.tester)-legacy/gossamer.config.toml"
+        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/gossamer.config.toml"
     end
 
     if Config.docker
