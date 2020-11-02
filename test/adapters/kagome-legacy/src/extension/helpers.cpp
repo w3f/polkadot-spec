@@ -91,7 +91,7 @@ using kagome::subscription::SubscriptionEngine;
 namespace helpers {
 
   // Path to wasm adapter shim runtime
-  const char* WASM_ADAPTER_RUNTIME_PATH = "bin/wasm_adapter_legacy.compact.wasm";
+  const char* WASM_ADAPTER_RUNTIME_PATH = "bin/hostapi_runtime_legacy.compact.wasm";
 
   // Simple wasm provider to provide wasm adapter runtime shim to kagome
   class WasmAdapterProvider : public WasmProvider {
