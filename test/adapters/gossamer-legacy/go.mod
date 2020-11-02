@@ -3,7 +3,7 @@ module w3f/gossamer-adapter-legacy
 require (
 	github.com/ChainSafe/chaindb v0.1.4
 	github.com/ChainSafe/go-schnorrkel v0.0.0-20200626160457-b38283118816 // indirect
-	github.com/ChainSafe/gossamer v0.1.1-0.20201014230016-9ebddb3ccf5f
+	github.com/ChainSafe/gossamer v0.1.1-0.20201030012803-12b09c7cdbc2
 	github.com/DataDog/zstd v1.4.5 // indirect
 	github.com/OneOfOne/xxhash v1.2.8 // indirect
 	github.com/btcsuite/btcd v0.21.0-beta // indirect
@@ -12,7 +12,6 @@ require (
 	github.com/dgraph-io/ristretto v0.0.3 // indirect
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
 	github.com/ethereum/go-ethereum v1.9.20 // indirect
-	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/mattn/go-colorable v0.1.7 // indirect
 	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
