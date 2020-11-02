@@ -1,4 +1,4 @@
-.PHONY: all build clean
+.PHONY: all build version clean
 
 all: genesis-legacy.json genesis-legacy.yaml genesis-legacy.kagome.json
 
@@ -13,6 +13,9 @@ genesis-legacy.yaml: genesis-legacy.json
 
 genesis-legacy.kagome.json: genesis-legacy.json
 	jq < $< '.genesis.raw = .genesis.raw[0]' > $@
+
+version:
+	@cargo metadata --format-version 1 | jq '.packages[] | select(.name=="substrate-primitives").id' | grep -o -E "[0-9a-f]{40}"
 
 clean:
 	rm -rf target genesis-legacy.json genesis-legacy.yaml genesis-legacy.kagome.json

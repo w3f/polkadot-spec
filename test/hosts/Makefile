@@ -1,4 +1,4 @@
-.PHONY: all substrate kagome gossamer clean
+.PHONY: all substrate kagome gossamer version clean
 
 
 all: substrate kagome gossamer
@@ -20,6 +20,11 @@ gossamer:
 	cp gossamer/gossamer ../bin/
 	cp ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@*/wasmer/libwasmer.so ../lib/
 	chmod u+w ../lib/libwasmer.so
+
+version:
+	@echo "substrate-host: $$(cd substrate && git describe)"
+	@echo "kagome-host: $$(cd kagome && git describe)"
+	@echo "gossamer-host: $$(cd gossamer && git describe --tags)"
 
 clean:
 	rm -rf substrate/target

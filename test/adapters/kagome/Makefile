@@ -1,4 +1,4 @@
-.PHONY: all build enable-bincache disable-bincache enable-hunter disable-hunter install clean
+.PHONY: all build enable-bincache disable-bincache enable-hunter disable-hunter install version clean
 
 all: install
 
@@ -20,6 +20,9 @@ disable-hunter:
 
 install: build
 	cp build/kagome-adapter ../../bin/
+
+version:
+	@grep "github.com/soramitsu/kagome" cmake/HunterConfig.cmake | grep -o -E "[0-9a-f]{40}"
 
 clean:
 	rm -rf build
