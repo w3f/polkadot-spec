@@ -46,6 +46,14 @@ test: all
 	./runtests.jl
 
 
+version:
+	@for a in $(HOSTS); do echo -n "$$a-adapter: "; $(MAKE) -sC adapters/$$a $@; done
+	@for a in $(HOSTS); do echo -n "$$a-adapter-legacy: "; $(MAKE) -sC adapters/$$a-legacy $@; done
+	@for r in $(RUNTIMES); do echo -n "$$r-runtime: "; $(MAKE) -sC runtimes/$$r $@; done
+	@for r in $(RUNTIMES); do echo -n "$$r-runtime-legacy: "; $(MAKE) -sC runtimes/$$r-legacy $@; done
+	@make -sC hosts $@
+
+
 clean:
 	for a in $(HOSTS); do $(MAKE) -C adapters/$$a $@; done
 	for a in $(HOSTS); do $(MAKE) -C adapters/$$a-legacy $@; done
