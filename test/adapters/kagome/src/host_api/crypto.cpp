@@ -22,9 +22,8 @@
 #include "helpers.hpp"
 
 namespace crypto {
-  // TODO: Implement
-  void processExtEd25519(const std::vector<std::string> &args){}
 
-  // TODO: Implement
-  void processExtSr25519(const std::vector<std::string> &args){}
+char kSrPrefix[] = "sr25519";
+char kEdPrefix[] = "ed25519";
+
 }

@@ -1,3 +1,6 @@
+#ifndef KAGOMECROSSTESTCLI_TRIE_HPP
+#define KAGOMECROSSTESTCLI_TRIE_HPP
+
 /*
  * Copyright (c) 2019 Web3 Technologies Foundation
  *
@@ -16,9 +19,6 @@
  * You should have received a copy of the GNU General Public License
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef KAGOMECROSSTESTCLI_TRIE_HPP
-#define KAGOMECROSSTESTCLI_TRIE_HPP
 
 #include <string>
 

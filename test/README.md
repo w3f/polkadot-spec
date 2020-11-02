@@ -27,7 +27,7 @@ While the official target of our testsuite are currently only debian-based syste
 
 ## General Build
 
-There is a simple Makefile in the [main test directory](./), that will build all the required API adapters, testers and hosts when you run `make`. Any successful build will lead to the resulting binary being copied into the `bin`  subfolder. This should allow you to run any of the fixtures in the test suite afterwards. The Makefile additionally allows you only build specific binaries or groups by providing a seperate target for each (e.g. `make kagome-adapter gossamer-host` or `make adapters`).
+There is a simple Makefile in the [main test directory](./), that will build all the required API adapters, testers and hosts when you run `make`. Any successful build will lead to the resulting binary being copied into the `bin`  subfolder. This should allow you to run any of the fixtures in the test suite afterwards. The Makefile additionally allows you only build specific binaries or groups by providing a separate target for each (e.g. `make kagome-adapter gossamer-host` or `make adapters`).
 
 If you only want to run a certain fixture or only test a specific implementation, you might therefore not need to build all adapters, testers and hosts. The only binary needed for most tests is the `substrate-adapter` (as it is used as the reference implementation). Furthermore you only need to build any of the hosts if you want to run any `host-tester` based fixture (i.e. only `genesis` at the moment).
 It should also be noted that the testsuite will pick up any hosts (or adapters) in your `PATH` first, so if you already have any of those installed you can run the test suite against the binaries in your `PATH` instead.
