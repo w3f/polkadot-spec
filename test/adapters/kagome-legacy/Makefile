@@ -3,8 +3,8 @@
 all: install
 
 build:
-	cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build
-	cmake --build build --
+	cmake -DCMAKE_BUILD_TYPE=Release -S . -B build
+	cmake --build build
 
 enable-bincache:
 	cmake -DHUNTER_USE_CACHE_SERVERS=YES -S . -B build
