@@ -67,10 +67,7 @@ add_executable(kagome-adapter
   src/host_api/trie.cpp
   src/host_api/storage.cpp
   src/host_api/child_storage.cpp
-    src/kagome_prelude.hpp)
-
-# FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")
-# target_include_directories(kagome-adapter PRIVATE ../../hosts/kagome/core)
+  src/kagome_prelude.hpp)
 
 target_link_libraries(kagome-adapter
   Boost::program_options
