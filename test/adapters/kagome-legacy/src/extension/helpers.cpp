@@ -155,7 +155,9 @@ namespace helpers {
     // Build crypto providers
     auto pbkdf2_provider    = std::make_shared<Pbkdf2ProviderImpl>();
     auto random_generator   = std::make_shared<BoostRandomGenerator>();
-    auto ed25519_provider   = std::make_shared<Ed25519ProviderImpl>();
+    auto ed25519_provider   = std::make_shared<Ed25519ProviderImpl>(
+      random_generator
+    );
     auto sr25519_provider   = std::make_shared<Sr25519ProviderImpl>(
       random_generator
     );

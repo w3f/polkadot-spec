@@ -40,8 +40,8 @@ set(
 # Setup hunter
 include(cmake/HunterGate.cmake)
 HunterGate(
-  URL "https://github.com/soramitsu/soramitsu-hunter/archive/v0.23.254-soramitsu1.tar.gz"
-  SHA1 "7819e7dd14f58b6df2fd7f2bc835265d60add3f5"
+  URL https://github.com/soramitsu/soramitsu-hunter/archive/1a759980a8cfc0fcef847a293dbb4aceb081071d.zip 
+  SHA1 4c8fd5dcd7b02b2cbb6f4d711da779032bdc8e82 
   FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
 )
 
@@ -60,8 +60,7 @@ find_package(kagome REQUIRED)
 message(STATUS "Found kagome: ${kagome_INCLUDE_DIRS}")
 
 # FIXME Kagome's package config should do all this!
-find_package(ed25519 REQUIRED)
-find_package(sr25519 REQUIRED)
+find_package(schnorrkel_crust REQUIRED)
 find_package(libsecp256k1 REQUIRED)
 find_package(Boost REQUIRED COMPONENTS filesystem program_options random)
 find_package(leveldb REQUIRED)
@@ -76,20 +75,12 @@ find_package(binaryen REQUIRED)
 add_executable(kagome-adapter-legacy
   src/main.cpp
   src/assert.cpp
-  src/assert.hpp
-  src/subcommand_router.hpp
   src/extension.cpp
-  src/extension.hpp
   src/extension/storage.cpp
-  src/extension/storage.hpp
   src/extension/network.cpp
-  src/extension/network.hpp
   src/extension/child_storage.cpp
-  src/extension/child_storage.hpp
   src/extension/crypto.cpp
-  src/extension/crypto.hpp
   src/extension/helpers.cpp
-  src/extension/helpers.hpp
 )
 
 # FIXME This should not be necessary, but not all public headers include from <kagome/..> (e.g. "outcome/outcome.hpp")
