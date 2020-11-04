@@ -37,7 +37,7 @@ import (
 // #include <errno.h>
 import "C"
 
-var RELATIVE_WASM_ADAPTER_PATH = "bin/hostapi_runtime_legacy.compact.wasm"
+var RELATIVE_WASM_ADAPTER_PATH = "bin/hostapi_runtime.compact.wasm"
 
 func GetRuntimePath() string {
 	dir, err := os.Getwd()
