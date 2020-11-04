@@ -60,7 +60,7 @@ func ProcessHostApiCommand(args []string) {
 
 	// List of expected flags
 	functionTextPtr := flag.String("function", "", "Function to call (required).")
-	inputTextPtr := flag.String("input", "", "Input to pass on call (required).")
+	inputTextPtr := flag.String("input", "", "Input to pass on call.")
 	
 	wasmtimeBoolPtr := flag.Bool("wasmtime", false, "Use wasmtime instead of wasmer.")
 
@@ -73,7 +73,7 @@ func ProcessHostApiCommand(args []string) {
 	}
 
 	// Verify that all required flags are provided
-	if (*functionTextPtr == "") || (*inputTextPtr == "") {
+	if (*functionTextPtr == "") {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
