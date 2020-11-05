@@ -39,6 +39,6 @@ fn main() {
 		get_manifest_dir().join("Cargo.toml").to_str().expect("Cargo uses valid paths; qed"),
 		// This instructs LLD to export __heap_base as a global variable, which is used by the
 		// external memory allocator.
-		"-Clink-arg=--export=__heap_base",
+		"-Clink-arg=--export=__heap_base -Clink-arg=--import-memory",
 	);
 }
