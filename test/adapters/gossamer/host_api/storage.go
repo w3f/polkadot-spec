@@ -22,12 +22,13 @@ import (
 	"os"
 	"bytes"
 
+	"github.com/ChainSafe/gossamer/lib/common/optional"
 	"github.com/ChainSafe/gossamer/lib/runtime"
 	"github.com/ChainSafe/gossamer/lib/scale"
 )
 
 
-func test_set_get_storage(r runtime.Instance, key string, value string) {
+func test_storage_set_get(r runtime.Instance, key string, value string) {
 
 	// Encode inputs
 	key_enc, err := scale.Encode([]byte(key))
@@ -43,47 +44,54 @@ func test_set_get_storage(r runtime.Instance, key string, value string) {
 	}
 
 	// Get invalid key
-	empty_enc, err := r.Exec("rtm_ext_get_allocated_storage", key_enc)
+	empty_enc, err := r.Exec("rtm_ext_storage_get_version_1", key_enc)
 	if err != nil {
 		fmt.Println("Execution failed: ", err)
 		os.Exit(1)
 	}
 
-	empty, err := scale.Decode(empty_enc, []byte{})
+	empty, err := scale.Decode(empty_enc, &optional.Bytes{})
 	if err != nil {
 		fmt.Println("Decoding value failed: ", err)
 		os.Exit(1)
 	}
+	none := empty.(*optional.Bytes)
 
-	if len(empty.([]byte)) != 0 {
-		fmt.Printf("Key already exists: %s\n", empty)
+	if none.Exists() {
+		fmt.Printf("Key already exists: %s\n", none.Value())
 		os.Exit(1)
 	}
 
 	// Set key/value
-	_, err = r.Exec("rtm_ext_set_storage", append(key_enc, value_enc...))
+	_, err = r.Exec("rtm_ext_storage_set_version_1", append(key_enc, value_enc...))
 	if err != nil {
 		fmt.Println("Execution failed: ", err)
 		os.Exit(1)
 	}
 
 	// Get valid key
-	result_enc, err := r.Exec("rtm_ext_get_allocated_storage", key_enc)
+	result_enc, err := r.Exec("rtm_ext_storage_get_version_1", key_enc)
 	if err != nil {
 		fmt.Println("Execution failed: ", err)
 		os.Exit(1)
 	}
 
-	result, err := scale.Decode(result_enc, []byte{})
+	result, err := scale.Decode(result_enc, &optional.Bytes{})
 	if err != nil {
 		fmt.Println("Decoding value failed: ", err)
 		os.Exit(1)
 	}
+	some := result.(*optional.Bytes)
 
-	if !bytes.Equal(result.([]byte), []byte(value)) {
-		fmt.Printf("Value is different: %s\n", result)
+	if !some.Exists() {
+		fmt.Println("Key is missing")
 		os.Exit(1)
 	}
 
-	fmt.Printf("%s\n", result)
+	if !bytes.Equal(some.Value(), []byte(value)) {
+		fmt.Printf("Value is different: %s\n", some.Value())
+		os.Exit(1)
+	}
+
+	fmt.Printf("%s\n", some.Value())
 }
