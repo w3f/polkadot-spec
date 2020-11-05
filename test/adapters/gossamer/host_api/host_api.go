@@ -86,7 +86,7 @@ func ProcessHostApiCommand(args []string) {
 	if *wasmtimeBoolPtr {
 		// ... using wasmtime
 		cfg := &wasmtime.Config{
-			Imports: wasmtime.ImportsHostAPITester,
+			Imports: wasmtime.ImportsNodeRuntime,
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
@@ -101,7 +101,7 @@ func ProcessHostApiCommand(args []string) {
 	} else {
 		// ... using wasmer
 		cfg := &wasmer.Config{
-			Imports: wasmer.RegisterImports_NodeRuntime,
+			Imports: wasmer.ImportsNodeRuntime,
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
@@ -117,40 +117,57 @@ func ProcessHostApiCommand(args []string) {
 
 	// Run requested test function
 	switch function {
-
-	// test crypto api
-	case "test_blake2_128",
-	     "test_blake2_256",
-	     "test_twox_64",
-	     "test_twox_128",
-	     "test_twox_256",
-	     "test_keccak_256":
-		test_crypto_hash(rtm, function[5:], inputs[0])
-	//case "test_blake2_256_enumerated_trie_root":
-	//case "test_ed25519":
-	//case "test_sr25519":
-	//case "test_secp256k1_ecdsa_recover":
-
-	// test storage api
-	//case "test_clear_prefix":
-	//case "test_clear_storage":
-	//case "test_exists_storage":
-	//case "test_set_get_local_storage":
-	case "test_set_get_storage":
-		test_set_get_storage(rtm, inputs[0], inputs[1])
-	//case "test_set_get_storage_into":
-	//case "test_storage_root":
-	//case "test_storage_changes_root":
-	//case "test_local_storage_compare_and_set":
+	// test allocator api
+	//case "ext_allocator_malloc_version_1":
+	//case "ext_allocator_free_version_1":
 
 	// test child storage api
-	//case "test_clear_child_prefix":
-	//case "test_clear_child_storage":
-	//case "test_exists_child_storage":
-	//case "test_kill_child_storage":
-	//case "test_set_get_child_storage":
-	//case "test_get_child_storage_into":
-	//case "test_child_storage_root":
+	//case "ext_default_child_storage_set_version_1":
+	//case "ext_default_child_storage_get_version_1":
+	//case "ext_default_child_storage_read_version_1":
+	//case "ext_default_child_storage_clear_version_1":
+	//case "ext_default_child_storage_storage_kill_version_1":
+	//case "ext_default_child_storage_exists_version_1":
+	//case "ext_default_child_storage_clear_prefix_version_1":
+	//case "ext_default_child_storage_root_version_1":
+	//case "ext_default_child_storage_next_key_version_1":
+
+	// test crypto api
+	//case "ext_crypto_ed25519_public_keys_version_1":
+	//case "ext_crypto_ed25519_generate_version_1":
+	//case "ext_crypto_ed25519_sign_version_1":
+	//case "ext_crypto_ed25519_verify_version_1":
+	//case "ext_crypto_sr25519_public_keys_version_1":
+	//case "ext_crypto_sr25519_generate_version_1":
+	//case "ext_crypto_sr25519_sign_version_1":
+	//case "ext_crypto_sr25519_verify_version_1":
+
+	// test hashing api
+	case "ext_hashing_blake2_128_version_1",
+	     "ext_hashing_blake2_256_version_1",
+	     "ext_hashing_keccak_256_version_1",
+	//     "ext_hashing_sha2_256_version_1",
+	     "ext_hashing_twox_64_version_1",
+	     "ext_hashing_twox_128_version_1",
+	     "ext_hashing_twox_256_version_1":
+		test_hashing(rtm, function, inputs[0])
+
+	// test storage api
+	//case "test_storage_init":
+	case "ext_storage_set_version_1",
+	     "ext_storage_get_version_1":
+		test_storage_set_get(rtm, inputs[0], inputs[1])
+	//case "ext_storage_read_version_1":
+	//case "ext_storage_clear_version_1":
+	//case "ext_storage_exists_version_1":
+	//case "ext_storage_clear_prefix_version_1":
+	//case "ext_storage_append_version_1":
+	//case "ext_storage_root_version_1":
+	//case "ext_storage_next_key_version_1":
+
+	// test trie api
+	//case "ext_trie_blake2_256_root_version_1":
+	//case "ext_trie_blake2_256_ordered_root_version_1":
 
 	default:
 		fmt.Println("Not implemented: ", function)

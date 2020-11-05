@@ -28,14 +28,15 @@ import (
 )
 
 // Simple wrapper to test hash function that input and output byte arrays
-func test_crypto_hash(r runtime.Instance, name string, input string) {
+func test_hashing(r runtime.Instance, name string, input string) {
+
 	enc, err := scale.Encode([]byte(input))
 	if err != nil {
 		fmt.Println("Encoding failed: ", err)
 		os.Exit(1)
 	}
 
-	output, err := r.Exec("rtm_ext_"+name, enc)
+	output, err := r.Exec("rtm_" + name, enc)
 	if err != nil {
 		fmt.Println("Execution failed: ", err)
 		os.Exit(1)
