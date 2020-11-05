@@ -400,6 +400,28 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
+  test-gossamer-wasm:
+    needs: [ build-adapter-gossamer, build-runtime-hostapi]
+    name: "[test-host-api] gossamer"
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v1
+      with:
+        name: gossamer-adapter
+        path: test/bin
+    - uses: actions/download-artifact@v1
+      with:
+        name: hostapi-runtime.compact.wasm
+        path: test/bin
+    - run: |
+        chmod +x test/bin/gossamer-adapter
+        mkdir -p test/lib
+        mv test/bin/libwasmer.so test/lib/
+    - name: Run test fixture
+      run: test/runtests.jl gossamer host-api
+
   test-gossamer-legacy:
     needs: [ build-adapter-gossamer-legacy, build-runtime-hostapi-legacy]
     name: "[test-host-api-legacy] gossamer"
