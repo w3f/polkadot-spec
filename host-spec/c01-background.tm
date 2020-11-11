@@ -60,7 +60,7 @@
       *<around*|(|\<Sigma\>,S,s<rsub|0>,\<delta\>|)>
     </equation*>
 
-    where
+    where<label|defn-runtime>
 
     <\itemize>
       <item><math|\<Sigma\>> is the countable set of all possible
@@ -71,8 +71,7 @@
       <item><math|s<rsub|0>\<in\>S> is the initial state.
 
       <item><math|\<delta\>> is the state-transition function, known as
-      <label|defn-runtime><strong|Runtime> in the Polkadot vocabulary, such
-      that
+      <strong|Runtime> in the Polkadot vocabulary, such that
 
       <\equation*>
         \<delta\>:S\<times\>\<Sigma\>\<rightarrow\>S
@@ -340,7 +339,7 @@
   </definition>
 
   \;
-  
+
   <\with|par-mode|right>
     <qed>
   </with>
