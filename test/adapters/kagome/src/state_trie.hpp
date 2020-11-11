@@ -1,6 +1,3 @@
-#ifndef KAGOMECROSSTESTCLI_TRIE_HPP
-#define KAGOMECROSSTESTCLI_TRIE_HPP
-
 /*
  * Copyright (c) 2019 Web3 Technologies Foundation
  *
@@ -20,6 +17,8 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#pragma once
+
 #include <string>
 
 // Trie test args
@@ -35,5 +34,3 @@ TrieCommandArgs extractTrieArgs(int argc, char **argv);
 
 // executes Trie tests according to provided args
 void processTrieCommand(const TrieCommandArgs& args);
-
-#endif //KAGOMECROSSTESTCLI_TRIE_HPP

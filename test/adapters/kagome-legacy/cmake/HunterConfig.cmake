@@ -18,6 +18,13 @@
 # Might be worth to go back to this?
 #hunter_config(kagome GIT_SUBMODULE ../../../hosts/kagome)
 
+# Version of kagome to be tested
+hunter_config(kagome
+  URL https://github.com/soramitsu/kagome/archive/778583ac8ad9d55ac8f06f2b63b5d07cf7f2062c.zip
+  SHA1 05f5408a666e5716da085f2d15a1fbf9b49ce661
+  CMAKE_ARGS TESTING=OFF
+)
+
 # Fixes an hunter assert in libsecp256k1. Can be removed once fixed in soramitsu-hunter.
 hunter_config(libsecp256k1
   URL https://github.com/soramitsu/soramitsu-libsecp256k1/archive/c7630e1bac638c0f16ee66d4dce7b5c49eecbaa5.zip
@@ -25,9 +32,3 @@ hunter_config(libsecp256k1
   CMAKE_ARGS SECP256K1_BUILD_TEST=OFF
 )
 
-
-hunter_config(kagome
-  URL https://github.com/soramitsu/kagome/archive/778583ac8ad9d55ac8f06f2b63b5d07cf7f2062c.zip
-  SHA1 05f5408a666e5716da085f2d15a1fbf9b49ce661
-  CMAKE_ARGS TESTING=OFF
-)

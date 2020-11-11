@@ -30,4 +30,14 @@ namespace trie {
     const std::string_view value3
   );
 
+  // executes ext_trie_blake2_256_root_version_1 test
+  void processRoot(
+    const std::string_view key1,
+    const std::string_view value1,
+    const std::string_view key2,
+    const std::string_view value2,
+    const std::string_view key3,
+    const std::string_view value3
+  );
+
 } // namespace trie

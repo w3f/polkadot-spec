@@ -21,12 +21,19 @@
 
 #include "../assert.hpp"
 
+#include <common/buffer.hpp>
+
+#include <scale/scale.hpp>
 
 #include <blockchain/impl/key_value_block_header_repository.hpp>
 
 #include <runtime/binaryen/runtime_api/runtime_api.hpp>
 
+namespace scale = kagome::scale;
+
 namespace helpers {
+
+  using kagome::common::hex_lower;
 
   using kagome::common::Buffer;
   using MaybeBuffer = boost::optional<Buffer>;
@@ -57,10 +64,9 @@ namespace helpers {
       std::shared_ptr<kagome::runtime::binaryen::RuntimeManager> getRuntimeManager();
 
     private:
-      // Needed by 
       std::shared_ptr<KeyValueBlockHeaderRepository> repo_;
-      
-      // Needed by
+
+      // Runtime environment manager
       std::shared_ptr<RuntimeManager> runtime_manager_;
 
       // Overwrite to get access to protected function
@@ -72,5 +78,4 @@ namespace helpers {
       // Main object used to execute calls
       std::shared_ptr<RawRuntimeApi> runtime_;
   };
-
 }
