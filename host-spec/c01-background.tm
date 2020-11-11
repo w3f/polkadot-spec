@@ -60,7 +60,7 @@
       *<around*|(|\<Sigma\>,S,s<rsub|0>,\<delta\>|)>
     </equation*>
 
-    where<label|defn-runtime>
+    where <label|defn-runtime>
 
     <\itemize>
       <item><math|\<Sigma\>> is the countable set of all possible
@@ -347,50 +347,56 @@
   \;
 </body>
 
-<initial|<\collection>
-</collection>>
+<\initial>
+  <\collection>
+    <associate|chapter-nr|0>
+    <associate|page-first|15>
+    <associate|section-nr|0<uninit>>
+    <associate|subsection-nr|0>
+  </collection>
+</initial>
 
 <\references>
   <\collection>
-    <associate|auto-1|<tuple|1|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-10|<tuple|1.9|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-11|<tuple|1.9|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-12|<tuple|1.9|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-13|<tuple|1.9|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-14|<tuple|1.2.1|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-15|<tuple|1.11|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-16|<tuple|1.12|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-17|<tuple|1.12|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-18|<tuple|1.13|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-19|<tuple|1.13|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-2|<tuple|1.1|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-20|<tuple|1.13|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-21|<tuple|1.13|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-22|<tuple|1.13|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-23|<tuple|1.13|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-24|<tuple|1.13|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-25|<tuple|1.14|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-26|<tuple|1.15|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-27|<tuple|1.15|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-3|<tuple|1.2|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-4|<tuple|1.2|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-5|<tuple|1.4|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-6|<tuple|1.7|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-7|<tuple|1.7|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-8|<tuple|1.7|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|auto-9|<tuple|1.9|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-bit-rep|<tuple|1.6|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-block-tree|<tuple|1.11|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-chain-subchain|<tuple|1.13|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-little-endian|<tuple|1.7|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-longest-chain|<tuple|1.14|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-path-graph|<tuple|1.2|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-pruned-tree|<tuple|1.12|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-radix-tree|<tuple|1.3|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-runtime|<tuple|<with|mode|<quote|math>|\<bullet\>>|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-state-machine|<tuple|1.1|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|defn-unix-time|<tuple|1.10|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
-    <associate|sect-defn-conv|<tuple|1.2|?|../../../../.TeXmacs/texts/scratch/no_name_18.tm>>
+    <associate|auto-1|<tuple|1|?>>
+    <associate|auto-10|<tuple|1.9|?>>
+    <associate|auto-11|<tuple|1.9|?>>
+    <associate|auto-12|<tuple|1.9|?>>
+    <associate|auto-13|<tuple|1.9|?>>
+    <associate|auto-14|<tuple|1.2.1|?>>
+    <associate|auto-15|<tuple|1.11|?>>
+    <associate|auto-16|<tuple|1.12|?>>
+    <associate|auto-17|<tuple|1.12|?>>
+    <associate|auto-18|<tuple|1.13|?>>
+    <associate|auto-19|<tuple|1.13|?>>
+    <associate|auto-2|<tuple|1.1|?>>
+    <associate|auto-20|<tuple|1.13|?>>
+    <associate|auto-21|<tuple|1.13|?>>
+    <associate|auto-22|<tuple|1.13|?>>
+    <associate|auto-23|<tuple|1.13|?>>
+    <associate|auto-24|<tuple|1.13|?>>
+    <associate|auto-25|<tuple|1.14|?>>
+    <associate|auto-26|<tuple|1.15|?>>
+    <associate|auto-27|<tuple|1.15|?>>
+    <associate|auto-3|<tuple|1.2|?>>
+    <associate|auto-4|<tuple|1.2|?>>
+    <associate|auto-5|<tuple|1.4|?>>
+    <associate|auto-6|<tuple|1.7|?>>
+    <associate|auto-7|<tuple|1.7|?>>
+    <associate|auto-8|<tuple|1.7|?>>
+    <associate|auto-9|<tuple|1.9|?>>
+    <associate|defn-bit-rep|<tuple|1.6|?>>
+    <associate|defn-block-tree|<tuple|1.11|?>>
+    <associate|defn-chain-subchain|<tuple|1.13|?>>
+    <associate|defn-little-endian|<tuple|1.7|?>>
+    <associate|defn-longest-chain|<tuple|1.14|?>>
+    <associate|defn-path-graph|<tuple|1.2|?>>
+    <associate|defn-pruned-tree|<tuple|1.12|?>>
+    <associate|defn-radix-tree|<tuple|1.3|?>>
+    <associate|defn-runtime|<tuple|1.1|?>>
+    <associate|defn-state-machine|<tuple|1.1|?>>
+    <associate|defn-unix-time|<tuple|1.10|?>>
+    <associate|sect-defn-conv|<tuple|1.2|?>>
   </collection>
 </references>
 

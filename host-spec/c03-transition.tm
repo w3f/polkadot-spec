@@ -1,4 +1,4 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.12>
 
 <project|host-spec.tm>
 
@@ -236,9 +236,10 @@
   </definition>
 
   The Polkadot Host does not specify or limit the internals of each
-  extrinsics and those are dealt with by the Runtime. From the Polkadot Host
-  point of view, each extrinsics is simply a SCALE-encoded blob (see Section
-  <reference|sect-scale-codec>).
+  extrinsics and those are defined and dealt with by the Runtime (defined in
+  Definition <reference|defn-runtime>). From the Polkadot Host point of view,
+  each extrinsics is simply a SCALE-encoded blob as defined in Section
+  <reference|sect-scale-codec>.
 
   <subsection|Transactions>
 
@@ -247,32 +248,32 @@
   Transaction submission is made by sending a <em|Transactions> network
   message. The structure of this message is specified in Section
   <reference|sect-msg-transactions>. Upon receiving a Transactions message,
-  the Polkadot Host decodes and decouples the transactions and calls
-  <verbatim|validate_trasaction> Runtime entry, defined in Section
-  <reference|sect-rte-validate-transaction>, to check the validity of each
-  received transaction. If <verbatim|validate_transaction> considers the
-  submitted transaction as a valid one, the Polkadot Host makes the
-  transaction available for the consensus engine for inclusion in future
-  blocks.
+  the Polkadot Host decodes the SCALE-encoded blob and decouples the
+  transactions into individually SCALE-encoded transactions. Afterward, it
+  should call <verbatim|validate_trasaction> Runtime entry on each individual
+  transaction, defined in Section <reference|sect-rte-validate-transaction>,
+  to check the validity of the received transaction. If
+  <verbatim|validate_transaction> considers the submitted transaction as a
+  valid one, the Polkadot Host makes the transaction available for the
+  consensus engine for inclusion in future blocks.
 
   <subsection|Transaction Queue>
 
   A Block producer node should listen to all transaction
-  messages<em|<index|Transaction Message>>. This is because the transactions
-  are submitted to the node through the <em|transactions> network message
-  specified in Section <reference|sect-msg-transactions>. Upon receiving a
-  transactions message, the Polkadot Host separates the submitted
-  transactions in the transactions message into individual transactions and
-  passes them to the Runtime by executing Algorithm
-  <reference|algo-validate-transactions> to validate and store them for
-  inclusion into future blocks. Valid transactions are propagated to
-  connected peers of the Polkadot Host. Additionally, the Polkadot Host
-  should keep track of peers already aware of each transaction. This includes
-  peers which have already gossiped the transaction to the node as well as
-  \ those to whom the transaction has already been sent. This behavior is
-  mandated to avoid resending duplicates and unnecessarily overloading the
-  network. To that aim, the Polkadot Host should keep a <em|transaction
-  pool<index|transaction pool>> and a <em|transaction
+  messages<em|<index|Transaction Message>>. The transactions are submitted to
+  the node through the <em|transactions> network message specified in Section
+  <reference|sect-msg-transactions>. Upon receiving a transactions message,
+  the Polkadot Host separates the submitted transactions in the transactions
+  message into individual transactions and passes them to the Runtime by
+  executing Algorithm <reference|algo-validate-transactions> to validate and
+  store them for inclusion into future blocks. Valid transactions are
+  propagated to connected peers of the Polkadot Host. Additionally, the
+  Polkadot Host should keep track of peers already aware of each transaction.
+  This includes peers which have already gossiped the transaction to the node
+  as well as \ those to whom the transaction has already been sent. This
+  behavior is mandated to avoid resending duplicates and unnecessarily
+  overloading the network. To that aim, the Polkadot Host should keep a
+  <em|transaction pool<index|transaction pool>> and a <em|transaction
   queue><index|transaction queue> defined as follows:
 
   <\definition>
@@ -998,7 +999,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|2>
-    <associate|page-first|21>
+    <associate|page-first|23>
     <associate|section-nr|2<uninit>>
     <associate|subsection-nr|1>
   </collection>
