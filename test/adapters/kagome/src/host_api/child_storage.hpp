@@ -17,8 +17,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef KAGOMECROSSTESTCLI_CHILD_STORAGE_EXTENSION_HPP
-#define KAGOMECROSSTESTCLI_CHILD_STORAGE_EXTENSION_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -50,5 +49,3 @@ namespace child_storage {
   // not implemented
   void processExtSetGetChildStorage(const std::vector<std::string> &args);
 } // namespace storage
-
-#endif // KAGOMECROSSTESTCLI_CHILD_STORAGE_EXTENSION_HPP

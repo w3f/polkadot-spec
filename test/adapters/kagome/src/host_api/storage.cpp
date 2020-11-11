@@ -198,8 +198,8 @@ namespace storage {
   ) {
     helpers::RuntimeEnvironment environment;
 
-    auto value1_enc = kagome::scale::encode(value1).value();
-    auto value2_enc = kagome::scale::encode(value2).value();
+    auto value1_enc = scale::encode(value1).value();
+    auto value2_enc = scale::encode(value2).value();
 
     // Check that key1 is unset
     auto none = environment.execute<helpers::MaybeBuffer>(
@@ -230,7 +230,7 @@ namespace storage {
       "rtm_ext_storage_get_version_1", key1
     );
 
-    auto data = kagome::scale::decode<std::vector<std::string>>(result.value()).value();
+    auto data = scale::decode<std::vector<std::string>>(result.value()).value();
     auto expected = std::vector{ std::string(value1), std::string(value2)};
 
     BOOST_ASSERT_MSG(result, "Data missing");
@@ -247,7 +247,7 @@ namespace storage {
       "rtm_ext_storage_get_version_1", key2
     );
 
-    data = kagome::scale::decode<std::vector<std::string>>(result.value()).value();
+    data = scale::decode<std::vector<std::string>>(result.value()).value();
     expected = std::vector{
       std::string(value2), std::string(value1), std::string(value2), std::string(value1)
     };

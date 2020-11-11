@@ -17,8 +17,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef KAGOMECROSSTESTCLI_SUBCOMMAND_ROUTER_HPP
-#define KAGOMECROSSTESTCLI_SUBCOMMAND_ROUTER_HPP
+#pragma once
 
 #include <functional>
 #include <list>
@@ -66,5 +65,3 @@ public:
 private:
   std::map<std::string, std::function<void(Args...)>> handlers;
 };
-
-#endif // KAGOMECROSSTESTCLI_SUBCOMMAND_ROUTER_HPP

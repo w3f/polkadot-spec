@@ -37,7 +37,7 @@
  * Tree compatibility tests
  */
 int main(int argc, char **argv) {
-  if (argc > 1 and argv[1] == std::string_view ("-d")) {
+  if (argc > 1 and argv[1] == std::string_view("--verbose")) {
     kagome::common::setLogLevel(kagome::common::LogLevel::trace);
     argc--;
     argv++;

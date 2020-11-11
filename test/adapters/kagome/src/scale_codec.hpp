@@ -17,8 +17,7 @@
  * along with Foobar.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef KAGOMECROSSTESTCLI_SCALE_CODEC_HPP
-#define KAGOMECROSSTESTCLI_SCALE_CODEC_HPP
+#pragma once
 
 #include <string>
 
@@ -33,5 +32,3 @@ ScaleCommandArgs extractScaleArgs(int argc, char **argv);
 
 // executes SCALE tests according to provided args
 void processScaleCodecCommand(ScaleCommandArgs args);
-
-#endif //KAGOMECROSSTESTCLI_SCALE_CODEC_HPP

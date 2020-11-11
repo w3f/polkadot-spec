@@ -40,9 +40,9 @@ set(
 # Setup hunter
 include(cmake/HunterGate.cmake)
 HunterGate(
-    URL https://github.com/soramitsu/soramitsu-hunter/archive/1a759980a8cfc0fcef847a293dbb4aceb081071d.zip
-    SHA1 4c8fd5dcd7b02b2cbb6f4d711da779032bdc8e82
-    FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
+  URL https://github.com/soramitsu/soramitsu-hunter/archive/1a759980a8cfc0fcef847a293dbb4aceb081071d.zip
+  SHA1 4c8fd5dcd7b02b2cbb6f4d711da779032bdc8e82
+  FILEPATH "${CMAKE_SOURCE_DIR}/cmake/HunterConfig.cmake"
 )
 
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG ${HUNTER_ENABLED})
@@ -67,7 +67,7 @@ add_executable(kagome-adapter
   src/host_api/trie.cpp
   src/host_api/storage.cpp
   src/host_api/child_storage.cpp
-  src/kagome_prelude.hpp)
+)
 
 target_link_libraries(kagome-adapter
   Boost::program_options

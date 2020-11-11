@@ -21,8 +21,6 @@
 
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
-#include <crypto/ed25519_types.hpp>
-#include <crypto/sr25519_types.hpp>
 
 #include "subcommand.hpp"
 
@@ -31,7 +29,6 @@
 #include "host_api/child_storage.hpp"
 #include "host_api/crypto.hpp"
 #include "host_api/hashing.hpp"
-#include "host_api/helpers.hpp"
 #include "host_api/storage.hpp"
 #include "host_api/trie.hpp"
 
@@ -42,22 +39,19 @@ HostApiCommandArgs extractHostApiArgs(int argc, char **argv) {
   boost::optional<std::string> function;
   boost::optional<std::string> inputStr;
 
-  // clang-format off
-    desc.add_options()
-            ("help", "produce help message")
-            ("function",
-             po::value(&function), "specify a fucntion")
-            ("input",
-             po::value(&inputStr), "specify a input");
-  // clang-format on
+  desc.add_options()
+    ("help", "produce help message")
+    ("function", po::value(&function), "specify a function")
+    ("input", po::value(&inputStr), "specify a input");
 
   po::positional_options_description pd;
   pd.add("function", 1);
 
   po::variables_map vm;
   po::store(
-      po::command_line_parser(argc, argv).options(desc).positional(pd).run(),
-      vm);
+    po::command_line_parser(argc, argv).options(desc).positional(pd).run(),
+    vm
+  );
   po::notify(vm);
 
   BOOST_ASSERT_MSG(function, "Function is not stated");
@@ -80,10 +74,12 @@ HostApiCommandArgs extractHostApiArgs(int argc, char **argv) {
 void processHostApiCommands(const HostApiCommandArgs &args) {
   SubcommandRouter<const std::vector<std::string> &> router;
 
-  // test storage
-  router.addSubcommand(
-      "test_storage_init",
-      [](const std::vector<std::string> &args) { storage::processInit(); });
+  // test storage api
+  router.addSubcommand("test_storage_init",
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 0);
+                         storage::processInit();
+                       });
   router.addSubcommand("ext_storage_set_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 2);
@@ -94,12 +90,11 @@ void processHostApiCommands(const HostApiCommandArgs &args) {
                          BOOST_ASSERT(args.size() == 2);
                          storage::processSetGet(args[0], args[1]);
                        });
-  router.addSubcommand(
-      "ext_storage_read_version_1", [](const std::vector<std::string> &args) {
-        BOOST_ASSERT(args.size() == 4);
-        storage::processRead(args[0], args[1], std::stoul(args[2]),
-                             std::stoul(args[3]));
-      });
+  router.addSubcommand("ext_storage_read_version_1",
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 4);
+                         storage::processRead(args[0], args[1], std::stoul(args[2]), std::stoul(args[3]));
+                       });
   router.addSubcommand("ext_storage_clear_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 2);
@@ -113,23 +108,22 @@ void processHostApiCommands(const HostApiCommandArgs &args) {
   router.addSubcommand("ext_storage_clear_prefix_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 5);
-                         storage::processClearPrefix(args[0], args[1], args[2],
-                                                     args[3], args[4]);
+                         storage::processClearPrefix(args[0], args[1], args[2], args[3], args[4]);
                        });
   router.addSubcommand("ext_storage_append_version_1",
-                       [](const std::vector<std::string>& args) {
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 4);
                          storage::processAppend(args[0], args[1], args[2], args[3]);
                        });
-  router.addSubcommand(
-      "ext_storage_root_version_1", [](const std::vector<std::string> &args) {
-        BOOST_ASSERT(args.size() == 4);
-        storage::processRoot(args[0], args[1], args[2], args[3]);
-      });
+  router.addSubcommand("ext_storage_root_version_1",
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 4);
+                         storage::processRoot(args[0], args[1], args[2], args[3]);
+                       });
   router.addSubcommand("ext_storage_next_key_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 4);
-                         storage::processNextKey(args[0], args[1], args[2],
-                                                 args[3]);
+                         storage::processNextKey(args[0], args[1], args[2], args[3]);
                        });
 
   // test child storage TODO: all not implemented
@@ -170,62 +164,50 @@ void processHostApiCommands(const HostApiCommandArgs &args) {
                          throw NotImplemented(); // TODO not implemented
                        });
 
-  auto suite = std::make_shared<crypto::CryptoExtensionTestSuite>(
-      std::make_shared<helpers::RuntimeEnvironment>(),
-      kagome::common::createLogger("crypto extension test"), std::cout);
-
+  // test crypto api
   router.addSubcommand("ext_crypto_ed25519_public_keys_version_1",
-                       [suite](const std::vector<std::string> &args) {
-                         auto seed1 = args[0];
-                         auto seed2 = args[1];
-                         suite->process_ext_public_keys<crypto::Ed25519Suite>(
-                             seed1, seed2);
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 2);
+                         crypto::processEd25519PublicKeys(args[0], args[1]);
                        });
   router.addSubcommand("ext_crypto_ed25519_generate_version_1",
-                       [suite](const std::vector<std::string> &args) {
-                         auto seed = args.at(0);
-                         suite->process_ext_generate<crypto::Ed25519Suite>(
-                             seed);
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 1);
+                         crypto::processEd25519Generate(args[0]);
                        });
   router.addSubcommand("ext_crypto_ed25519_sign_version_1",
-                       [suite](const std::vector<std::string> &args) {
-                         auto seed = args.at(0);
-                         suite->process_ext_sign<crypto::Ed25519Suite>(
-                             seed, args.at(1));
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 2);
+                         crypto::processEd25519Sign(args[0], args[1]);
                        });
   router.addSubcommand("ext_crypto_ed25519_verify_version_1",
-                       [suite](const std::vector<std::string> &args) {
-                         auto seed = args.at(0);
-                         suite->process_ext_verify<crypto::Ed25519Suite>(
-                             seed, args.at(1));
-                       });
-  router.addSubcommand("ext_crypto_sr25519_public_keys_version_1",
-                       [suite](const std::vector<std::string> &args) {
-                         auto seed1 = args[0];
-                         auto seed2 = args[1];
-                         suite->process_ext_public_keys<crypto::Sr25519Suite>(
-                             seed1, seed2);
-                       });
-  router.addSubcommand("ext_crypto_sr25519_generate_version_1",
-                       [suite](const std::vector<std::string> &args) {
-                         auto seed = args.at(0);
-                         suite->process_ext_generate<crypto::Sr25519Suite>(
-                             seed);
-                       });
-  router.addSubcommand("ext_crypto_sr25519_sign_version_1",
-                       [suite](const std::vector<std::string> &args) {
-                         auto seed = args.at(0);
-                         suite->process_ext_sign<crypto::Sr25519Suite>(
-                             seed, args.at(1));
-                       });
-  router.addSubcommand("ext_crypto_sr25519_verify_version_1",
-                       [suite](const std::vector<std::string> &args) {
-                         auto seed = args.at(0);
-                         suite->process_ext_verify<crypto::Sr25519Suite>(
-                             seed, args.at(1));
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 2);
+                         crypto::processEd25519Verify(args[0], args[1]);
                        });
 
-  // test hashing
+  router.addSubcommand("ext_crypto_sr25519_public_keys_version_1",
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 2);
+                         crypto::processSr25519PublicKeys(args[0], args[1]);
+                       });
+  router.addSubcommand("ext_crypto_sr25519_generate_version_1",
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 1);
+                         crypto::processSr25519Generate(args[0]);
+                       });
+  router.addSubcommand("ext_crypto_sr25519_sign_version_1",
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 2);
+                         crypto::processSr25519Sign(args[0], args[1]);
+                       });
+  router.addSubcommand("ext_crypto_sr25519_verify_version_1",
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 2);
+                         crypto::processSr25519Verify(args[0], args[1]);
+                       });
+
+  // test hashing api
   router.addSubcommand("ext_hashing_blake2_128_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 1);
@@ -262,7 +244,7 @@ void processHostApiCommands(const HostApiCommandArgs &args) {
                          hashing::processHashFunction("twox", 32, args[0]);
                        });
 
-  // test allocator
+  // test allocator api
   router.addSubcommand("ext_allocator_malloc_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 1);
@@ -274,30 +256,12 @@ void processHostApiCommands(const HostApiCommandArgs &args) {
                          allocator::processMallocFree(args[0]);
                        });
 
-  // test trie hashes
-  router.addSubcommand(
-      "ext_trie_blake2_256_root_version_1",
-      [](const std::vector<std::string> &args) {
-        helpers::RuntimeEnvironment environment;
-        std::vector<gsl::span<const uint8_t>> args_bytes;
-        args_bytes.reserve(args.size());
-        for (auto &str : args) {
-          args_bytes.push_back(gsl::span<const uint8_t>(
-              reinterpret_cast<const uint8_t *>(str.data()), str.size()));
-        }
-        std::vector<
-            std::pair<gsl::span<const uint8_t>, gsl::span<const uint8_t>>>
-            trie_entries = {{args_bytes.at(0), args_bytes.at(1)},
-                            {args_bytes.at(2), args_bytes.at(3)},
-                            {args_bytes.at(4), args_bytes.at(5)}};
-
-        // Compute ordered trie root
-        auto hash = environment.execute<helpers::Buffer>(
-            "rtm_ext_trie_blake2_256_root_version_1", trie_entries);
-
-        // Print result
-        std::cout << hash.toHex() << std::endl;
-      });
+  // test trie api
+  router.addSubcommand("ext_trie_blake2_256_root_version_1",
+                       [](const std::vector<std::string> &args) {
+                         BOOST_ASSERT(args.size() == 6);
+                         trie::processRoot(args[0], args[1], args[2], args[3], args[4], args[5]);
+                       });
   router.addSubcommand("ext_trie_blake2_256_ordered_root_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 3);

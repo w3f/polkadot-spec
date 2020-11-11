@@ -27,7 +27,6 @@
 
 namespace trie {
 
-  // Input: value1, value2
   void processOrderedRoot(
     const std::string_view value1,
     const std::string_view value2,
@@ -39,6 +38,30 @@ namespace trie {
     auto hash = environment.execute<helpers::Buffer>(
       "rtm_ext_trie_blake2_256_ordered_root_version_1",
       std::vector{ value1, value2, value3 }
+    );
+
+    // Print result
+    std::cout << hash.toHex() << std::endl;
+  }
+
+  void processRoot(
+    const std::string_view key1,
+    const std::string_view value1,
+    const std::string_view key2,
+    const std::string_view value2,
+    const std::string_view key3,
+    const std::string_view value3
+  ) {
+    helpers::RuntimeEnvironment environment;
+
+    // Compute trie root
+    auto hash = environment.execute<helpers::Buffer>(
+      "rtm_ext_trie_blake2_256_root_version_1",
+      std::vector{
+        std::pair{key1, value1},
+        std::pair{key2, value2},
+        std::pair{key3, value3},
+      }
     );
 
     // Print result
