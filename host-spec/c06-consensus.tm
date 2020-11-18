@@ -1,8 +1,8 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.14>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|algorithmacs-style|old-dots>>
+<style|<tuple|book|algorithmacs-style|old-dots|old-lengths>>
 
 <\body>
   <chapter|Consensus><label|chap-consensu>
@@ -428,23 +428,21 @@
     there is no ambiguity about the underlying node.
   </definition>
 
-  At the end of each sync-epoch (def. <reference|defn-sync-epoch>) these
-  block arrival times are used to update the current clock offset using the
-  median algorithm (alg. <reference|algo-slot-time>).
+  All validators are supposed to run Algorithm <reference|algo-slot-time>
+  using block arrival times of all blocks arriving in regular intervals in
+  term of slots, to update their current clock offset. The regular interval
+  of slots is called a sync period and is defined in Definition
+  <reference|defn-sync-epoch>.
 
   <\definition>
-    <label|defn-sync-epoch>A <with|font-series|bold|sync epoch> (unrelated to
-    the epoch defined in <reference|defn-epoch-slot>) is the interval at
-    which each validator (re-)evaluates its local clock offsets. The first
-    sync-epoch <math|\<frak-E\><rsub|1>> starts just after the genesis block
-    is released. The other sync-epochs <math|\<frak-E\><rsub|i>> start when
-    the slot number of the last (probabilistically) finalized block is
-    <math|<wide|s|\<bar\>><rsub|i>> which is the smallest slot number such
-    that <math|<wide|s|\<bar\>><rsub|i><rsub|>-<wide|s|\<bar\>><rsub|i-1>\<geq\>s<rsub|cq>>
-    where <math|<wide|s|\<bar\>><rsub|i-1>> is the slot number of the last
-    (probabilistically) finalized block in the previous sync-epoch
-    <math|\<frak-E\><rsub|i-1>>. If the previous epoch is the first epoch
-    <math|\<frak-E\><rsub|1>> then <math|<wide|s|\<bar\>><rsub|i-1>=<wide|s|\<bar\>><rsub|i>=0>.
+    <label|defn-sync-epoch>A <with|font-series|bold|sync period> is the
+    interval (expressed in number of slots) at which each validator
+    (re-)evaluates its local clock offsets. The first sync period
+    <math|\<frak-E\><rsub|1>> starts just after the genesis block is
+    released. Consequently each sync period <math|\<frak-E\><rsub|i>> starts
+    after <math|\<frak-E\><rsub|i-1>>. The length of sync period is equal to
+    <math|s<rsub|qc>> as defined in Definition
+    <reference|defn-chain-quality>.
   </definition>
 
   In addition to the arrival time of block <math|B>, the block producer also
@@ -462,7 +460,7 @@
 
   <\algorithm>
     <label|algo-slot-time><name|Median-Algorithm>(<math|\<frak-E\><rsub|j>>:
-    the current sync-epoch)
+    the current sync period)
   <|algorithm>
     <\algorithmic>
       <\state>
@@ -2004,81 +2002,90 @@
 
 <\initial>
   <\collection>
+    <associate|chapter-nr|5>
+    <associate|page-first|47>
     <associate|page-medium|papyrus>
+    <associate|section-nr|0<uninit>>
+    <associate|subsection-nr|4>
   </collection>
 </initial>
 
 <\references>
   <\collection>
-    <associate|algo-attempt-to\Ufinalize|<tuple|6.15|48>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|6.14|48>>
     <associate|algo-block-production|<tuple|6.3|41>>
     <associate|algo-block-production-lottery|<tuple|6.1|39>>
-    <associate|algo-build-block|<tuple|6.7|43>>
-    <associate|algo-derive-primary|<tuple|6.10|48>>
-    <associate|algo-epoch-randomness|<tuple|6.4|41>>
-    <associate|algo-finalizable|<tuple|6.14|48>>
-    <associate|algo-grandpa-best-candidate|<tuple|6.11|48>>
-    <associate|algo-grandpa-round|<tuple|6.9|47>>
-    <associate|algo-initiate-grandpa|<tuple|6.8|47>>
-    <associate|algo-process-catchup-request|<tuple|6.16|49>>
-    <associate|algo-process-catchup-response|<tuple|6.17|50>>
+    <associate|algo-build-block|<tuple|6.6|43>>
+    <associate|algo-derive-primary|<tuple|6.9|48>>
+    <associate|algo-finalizable|<tuple|6.13|48>>
+    <associate|algo-grandpa-best-candidate|<tuple|6.10|48>>
+    <associate|algo-grandpa-round|<tuple|6.8|47>>
+    <associate|algo-initiate-grandpa|<tuple|6.7|47>>
+    <associate|algo-process-catchup-request|<tuple|6.15|49>>
+    <associate|algo-process-catchup-response|<tuple|6.16|50>>
     <associate|algo-slot-time|<tuple|6.2|40>>
-    <associate|algo-verify-authorship-right|<tuple|6.5|42>>
-    <associate|algo-verify-slot-winner|<tuple|6.6|42>>
+    <associate|algo-verify-authorship-right|<tuple|6.4|42>>
+    <associate|algo-verify-slot-winner|<tuple|6.5|42>>
     <associate|auto-1|<tuple|6|37>>
-    <associate|auto-10|<tuple|6.2.4|40>>
-    <associate|auto-11|<tuple|6.2.5|41>>
-    <associate|auto-12|<tuple|6.2.6|42>>
-    <associate|auto-13|<tuple|6.2.7|43>>
-    <associate|auto-14|<tuple|6.3|43>>
-    <associate|auto-15|<tuple|6.3.1|43>>
-    <associate|auto-16|<tuple|6.3.2|45>>
-    <associate|auto-17|<tuple|6.2|45>>
-    <associate|auto-18|<tuple|6.3.2.1|45>>
+    <associate|auto-10|<tuple|6.2.3|40>>
+    <associate|auto-11|<tuple|6.1|41>>
+    <associate|auto-12|<tuple|6.2.4|42>>
+    <associate|auto-13|<tuple|6.2.5|43>>
+    <associate|auto-14|<tuple|6.2.6|43>>
+    <associate|auto-15|<tuple|6.2.7|43>>
+    <associate|auto-16|<tuple|6.3|45>>
+    <associate|auto-17|<tuple|6.3.1|45>>
+    <associate|auto-18|<tuple|6.3.2|45>>
     <associate|auto-19|<tuple|6.3|46>>
     <associate|auto-2|<tuple|6.1|37>>
-    <associate|auto-20|<tuple|6.3.2.2|46>>
-    <associate|auto-21|<tuple|6.3.2.3|47>>
-    <associate|auto-22|<tuple|6.3.3|47>>
-    <associate|auto-23|<tuple|6.3.3.1|47>>
-    <associate|auto-24|<tuple|6.3.4|49>>
-    <associate|auto-25|<tuple|6.4|49>>
-    <associate|auto-26|<tuple|6.4.1|49>>
-    <associate|auto-27|<tuple|6.4.1.1|49>>
-    <associate|auto-28|<tuple|6.4.1.2|50>>
-    <associate|auto-29|<tuple|6.4.1.3|?>>
+    <associate|auto-20|<tuple|6.3.2.1|46>>
+    <associate|auto-21|<tuple|6.4|47>>
+    <associate|auto-22|<tuple|6.3.2.2|47>>
+    <associate|auto-23|<tuple|6.3.2.3|47>>
+    <associate|auto-24|<tuple|6.3.3|49>>
+    <associate|auto-25|<tuple|6.3.3.1|49>>
+    <associate|auto-26|<tuple|6.3.4|49>>
+    <associate|auto-27|<tuple|6.4|49>>
+    <associate|auto-28|<tuple|6.4.1|50>>
+    <associate|auto-29|<tuple|6.4.1.1|?>>
     <associate|auto-3|<tuple|6.1.1|37>>
+    <associate|auto-30|<tuple|6.4.1.2|?>>
+    <associate|auto-31|<tuple|6.4.1.3|?>>
     <associate|auto-4|<tuple|6.1.2|37>>
     <associate|auto-5|<tuple|6.1|38>>
     <associate|auto-6|<tuple|6.2|39>>
-    <associate|auto-7|<tuple|6.2.1|39>>
-    <associate|auto-8|<tuple|6.2.2|39>>
-    <associate|auto-9|<tuple|6.2.3|40>>
+    <associate|auto-7|<tuple|6.2|39>>
+    <associate|auto-8|<tuple|6.2.1|39>>
+    <associate|auto-9|<tuple|6.2.2|40>>
     <associate|chap-consensu|<tuple|6|37>>
     <associate|defn-authority-list|<tuple|6.1|37>>
-    <associate|defn-authority-set-id|<tuple|6.17|44>>
-    <associate|defn-babe-header|<tuple|6.14|40>>
-    <associate|defn-babe-seal|<tuple|6.15|41>>
-    <associate|defn-block-signature|<tuple|6.15|41>>
-    <associate|defn-block-time|<tuple|6.11|40>>
-    <associate|defn-chain-quality|<tuple|6.10|?>>
-    <associate|defn-consensus-message-digest|<tuple|6.2|37>>
-    <associate|defn-epoch-slot|<tuple|6.5|39>>
-    <associate|defn-epoch-subchain|<tuple|6.7|39>>
-    <associate|defn-finalized-block|<tuple|6.34|49>>
-    <associate|defn-gossip-message|<tuple|6.26|45>>
-    <associate|defn-grandpa-catchup-request-msg|<tuple|6.31|46>>
-    <associate|defn-grandpa-catchup-response-msg|<tuple|6.32|46>>
-    <associate|defn-grandpa-completable|<tuple|6.25|45>>
-    <associate|defn-grandpa-justification|<tuple|6.29|46>>
-    <associate|defn-grandpa-voter|<tuple|6.14|43>>
-    <associate|defn-sign-round-vote|<tuple|6.27|?>>
-    <associate|defn-slot-offset|<tuple|6.11|40>>
-    <associate|defn-total-potential-votes|<tuple|6.23|?>>
-    <associate|defn-vote|<tuple|6.17|44>>
-    <associate|defn-winning-threshold|<tuple|6.8|39>>
-    <associate|exmp-candid-unfinalized|<tuple|6.33|?>>
-    <associate|note-slot|<tuple|6.6|39>>
+    <associate|defn-authority-set-id|<tuple|6.20|44>>
+    <associate|defn-babe-constant|<tuple|6.9|?>>
+    <associate|defn-babe-header|<tuple|6.16|40>>
+    <associate|defn-babe-seal|<tuple|6.17|41>>
+    <associate|defn-block-signature|<tuple|6.17|41>>
+    <associate|defn-block-time|<tuple|6.13|40>>
+    <associate|defn-chain-quality|<tuple|6.12|?>>
+    <associate|defn-consensus-message-digest|<tuple|6.3|37>>
+    <associate|defn-epoch-randomness|<tuple|6.18|?>>
+    <associate|defn-epoch-slot|<tuple|6.6|39>>
+    <associate|defn-epoch-subchain|<tuple|6.8|39>>
+    <associate|defn-finalized-block|<tuple|6.39|49>>
+    <associate|defn-gossip-message|<tuple|6.31|45>>
+    <associate|defn-grandpa-catchup-request-msg|<tuple|6.36|46>>
+    <associate|defn-grandpa-catchup-response-msg|<tuple|6.37|46>>
+    <associate|defn-grandpa-completable|<tuple|6.30|45>>
+    <associate|defn-grandpa-justification|<tuple|6.34|46>>
+    <associate|defn-grandpa-voter|<tuple|6.19|43>>
+    <associate|defn-prunned-best|<tuple|6.11|?>>
+    <associate|defn-sign-round-vote|<tuple|6.32|?>>
+    <associate|defn-slot-offset|<tuple|6.15|40>>
+    <associate|defn-sync-epoch|<tuple|6.14|?>>
+    <associate|defn-total-potential-votes|<tuple|6.28|?>>
+    <associate|defn-vote|<tuple|6.22|44>>
+    <associate|defn-winning-threshold|<tuple|6.10|39>>
+    <associate|exmp-candid-unfinalized|<tuple|6.38|?>>
+    <associate|note-slot|<tuple|6.7|39>>
     <associate|sect-authority-set|<tuple|6.1.1|37>>
     <associate|sect-babe|<tuple|6.2|39>>
     <associate|sect-block-building|<tuple|6.2.7|43>>
@@ -2091,7 +2098,8 @@
     <associate|sect-grandpa-catchup-messages|<tuple|6.3.2.3|46>>
     <associate|sect-sending-catchup-request|<tuple|6.4.1.1|49>>
     <associate|sect-verifying-authorship|<tuple|6.2.6|42>>
-    <associate|tabl-consensus-messages|<tuple|6.1|38>>
+    <associate|tabl-consensus-messages-babe|<tuple|6.1|?>>
+    <associate|tabl-consensus-messages-grandpa|<tuple|6.2|?>>
   </collection>
 </references>
 
@@ -2109,20 +2117,24 @@
         Examplary result of Median Algorithm in first sync epoch with
         <with|mode|<quote|math>|s<rsub|cq>=9> and
         <with|mode|<quote|math>|k=1>.
-      </surround>|<pageref|auto-10>>
+      </surround>|<pageref|auto-11>>
     </associate>
     <\associate|table>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.1>|>
-        The consensus digest item for GRANDPA authorities
+        The consensus digest item for BABE authorities
       </surround>|<pageref|auto-5>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.2>|>
-        \;
-      </surround>|<pageref|auto-17>>
+        The consensus digest item for GRANDPA authorities
+      </surround>|<pageref|auto-6>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6.3>|>
+        \;
+      </surround>|<pageref|auto-19>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|6.4>|>
         Signature for a message in a round.
-      </surround>|<pageref|auto-18>>
+      </surround>|<pageref|auto-21>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|6<space|2spc>Consensus>
@@ -2142,89 +2154,89 @@
       <no-break><pageref|auto-4>>
 
       6.2<space|2spc>Block Production <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>
+      <no-break><pageref|auto-7>
 
       <with|par-left|<quote|1tab>|6.2.1<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>>
+      <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|1tab>|6.2.2<space|2spc>Block Production Lottery
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
+      <no-break><pageref|auto-9>>
 
       <with|par-left|<quote|1tab>|6.2.3<space|2spc>Slot Number Calculation
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
+      <no-break><pageref|auto-10>>
 
       <with|par-left|<quote|1tab>|6.2.4<space|2spc>Block Production
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-12>>
 
       <with|par-left|<quote|1tab>|6.2.5<space|2spc>Epoch Randomness
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <no-break><pageref|auto-13>>
 
       <with|par-left|<quote|1tab>|6.2.6<space|2spc>Verifying Authorship Right
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13>>
+      <no-break><pageref|auto-14>>
 
       <with|par-left|<quote|1tab>|6.2.7<space|2spc>Block Building Process
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>>
+      <no-break><pageref|auto-15>>
 
       6.3<space|2spc>Finality <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-15>
+      <no-break><pageref|auto-16>
 
       <with|par-left|<quote|1tab>|6.3.1<space|2spc>Preliminaries
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-16>>
+      <no-break><pageref|auto-17>>
 
       <with|par-left|<quote|1tab>|6.3.2<space|2spc>GRANDPA Messages
       Specification <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-17>>
+      <no-break><pageref|auto-18>>
 
       <with|par-left|<quote|2tab>|6.3.2.1<space|2spc>Vote Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-19>>
+      <no-break><pageref|auto-20>>
 
       <with|par-left|<quote|2tab>|6.3.2.2<space|2spc>Finalizing Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
+      <no-break><pageref|auto-22>>
 
       <with|par-left|<quote|2tab>|6.3.2.3<space|2spc>Catch-up Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
+      <no-break><pageref|auto-23>>
 
       <with|par-left|<quote|1tab>|6.3.3<space|2spc>Initiating the GRANDPA
       State <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
+      <no-break><pageref|auto-24>>
 
       <with|par-left|<quote|2tab>|6.3.3.1<space|2spc>Voter Set Changes
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
+      <no-break><pageref|auto-25>>
 
       <with|par-left|<quote|1tab>|6.3.4<space|2spc>Voting Process in Round
       <with|mode|<quote|math>|r> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24>>
+      <no-break><pageref|auto-26>>
 
       6.4<space|2spc>Block Finalization <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-25>
+      <no-break><pageref|auto-27>
 
       <with|par-left|<quote|1tab>|6.4.1<space|2spc>Catching up
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26>>
+      <no-break><pageref|auto-28>>
 
       <with|par-left|<quote|2tab>|6.4.1.1<space|2spc>Sending catch-up
       requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27>>
+      <no-break><pageref|auto-29>>
 
       <with|par-left|<quote|2tab>|6.4.1.2<space|2spc>Processing catch-up
       requests <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-28>>
+      <no-break><pageref|auto-30>>
 
       <with|par-left|<quote|2tab>|6.4.1.3<space|2spc>Processing catch-up
       responses <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-29>>
+      <no-break><pageref|auto-31>>
     </associate>
   </collection>
 </auxiliary>
