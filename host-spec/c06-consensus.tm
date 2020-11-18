@@ -44,10 +44,12 @@
     <math|C>.
   </definition>
 
-  Note that in Polkadot, all authorities have the weight
-  <math|w<rsub|A><rsub|>=1>. The weight <math|w<rsub|A>> in Definition
-  <reference|defn-authority-list> exists for potential improvements in the
-  protocol and could have a use-case in the future.
+  <\remark>
+    In Polkadot, all authorities have the weight <math|w<rsub|A><rsub|>=1>.
+    The weight <math|w<rsub|A>> in Definition <reference|defn-authority-list>
+    exists for potential improvements in the protocol and could have a
+    use-case in the future.
+  </remark>
 
   <subsection|Runtime-to-Consensus Engine
   Message><label|sect-consensus-message-digest>
