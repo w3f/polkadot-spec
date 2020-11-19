@@ -306,7 +306,7 @@
     using the value returned by a call <verbatim|BabeApi_configuration>(see
     <reference|sect-rte-babeapi-epoch>) and then can be updated by the
     runtime for the next epoch through the \PNext Config Data\Q consensus
-    message digest (see def. <reference|defn-consensus-message-digest>) in
+    message digest (see Definition <reference|defn-consensus-message-digest>) in
     the first block of each epoch. It is encoded as a tuple of two unsigned
     64 bit integers <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>>
     which are used to compute the rational
@@ -387,13 +387,13 @@
   estimate its local clock offset in relation to the rest of the network.\ 
 
   This estimation depends on the two fixed parameters
-  <with|font-series|bold|<math|k>> (def. <reference|defn-prunned-best>) and
-  <math|<with|font-series|bold|s<rsub|cq>>> (def.
+  <with|font-series|bold|<math|k>> (Definition <reference|defn-prunned-best>) and
+  <math|<with|font-series|bold|s<rsub|cq>>> (Definition
   <reference|defn-chain-quality>). These are choosen based on the results of
   formal security analysis, currently assuming a <math|1 s \ >clock drift per
   day and targeting a probability lower than <math|0.5%> for an adversary to
   break BABE in 3 years with a resistance against network delay up to
-  <math|<frac*|1|3>> of the slot time and a Babe constant (def.
+  <math|<frac*|1|3>> of the slot time and a Babe constant (Definition
   <reference|defn-babe-constant>) of <math|c=0.38>.
 
   <\definition>
@@ -413,7 +413,7 @@
   </definition>
 
   The prerequisite for such a calculation is that each producer stores the
-  arrival time of each block (def. <reference|defn-block-time>) measured by a
+  arrival time of each block (Definition <reference|defn-block-time>) measured by a
   clock that is otherwise not adjusted by any external protocol.\ 
 
   <\definition>
@@ -536,7 +536,7 @@
   <\definition>
     <label|defn-block-signature><label|defn-babe-seal>The <strong|Block
     Signature> <math|S<rsub|B>> is a signature of the block header hash (see
-    def.<reference|defn-block-header-hash>) and defined as
+    Definition<reference|defn-block-header-hash>) and defined as
 
     <\equation*>
       Sig<rsub|SR25519,sk<rsup|s><rsub|j>><around*|(|H<rsub|h><around*|(|B|)>|)>
@@ -623,11 +623,11 @@
   </definition>
 
   In the beginning of each epoch <math|\<cal-E\><rsub|n>> the host will
-  receive the randomness seed <math|\<cal-R\><rsub|\<cal-E\><rsub|n+1>>>(def.
+  receive the randomness seed <math|\<cal-R\><rsub|\<cal-E\><rsub|n+1>>>(Definition
   <reference|defn-epoch-randomness>) necessary to participate in the block
   production lottery in the next epoch <math|\<cal-E\><rsub|n+1>> from the
   runtime, through the <with|font-shape|italic|Next Epoch Data> consesus
-  message (def. <reference|defn-consensus-message-digest>) in the digest of
+  message (Definition <reference|defn-consensus-message-digest>) in the digest of
   the first block.
 
   <subsection|Verifying Authorship Right><label|sect-verifying-authorship>
@@ -1153,7 +1153,7 @@
     <\big-table|<tabular|<tformat|<cwith|2|3|1|1|cell-halign|r>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|2|2|cell-halign|l>|<cwith|2|3|3|3|cell-halign|l>|<cwith|2|3|3|3|cell-rborder|0ln>|<cwith|2|3|1|3|cell-valign|c>|<table|<row|<cell|msg>|<cell|the
     message to be signed>|<cell|arbitrary>>|<row|<cell|r:>|<cell|round
     number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
-    set Id (Def. <reference|defn-authority-set-id>) of v>|<cell|unsigned
+    set Id (Definition <reference|defn-authority-set-id>) of v>|<cell|unsigned
     64-bit integer>>>>>>
       Signature for a message in a round.
     </big-table>
@@ -1175,9 +1175,9 @@
     <\center>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|r:>|<cell|round
       number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
-      set Id (Def. <reference|defn-authority-set-id>)>|<cell|unsigned 64-bit
+      set Id (Definition <reference|defn-authority-set-id>)>|<cell|unsigned 64-bit
       integer>>|<row|<cell|<math|Sig<rsup|r,stage><rsub|v<rsub|i>>>>|<cell|signature
-      (Def. <reference|defn-sign-round-vote>)>|<cell|512-bit
+      (Definition <reference|defn-sign-round-vote>)>|<cell|512-bit
       array>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
       public key of <math|v>>|<cell|256-bit
       array>>|<row|<cell|<right-aligned|><math|stage>:>|<cell|0 if it's a
