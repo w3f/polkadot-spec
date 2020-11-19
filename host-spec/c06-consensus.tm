@@ -378,6 +378,15 @@
 
   <subsection|Slot Number Calculation>
 
+  <\note>
+    <with|font-series|bold|The calculation described in this section is still
+    to be implemented and deployed.> Instead each block producer is required
+    to syncronize its local clock using NTP. The current slot is then
+    calculated by <math|s<rsub|current>=t<rsub|unix>/\<cal-T\>> where
+    <math|t<rsub|unix>> is the current unix time in seconds since 1970-01-01
+    00:00:00 UTC<line-break>.
+  </note>
+
   It is imperative for the security of the network that each block producer
   is able to correctly determine the current slots number at a given time.
   Polkadot does this without relying on any external clock source (e.g.
