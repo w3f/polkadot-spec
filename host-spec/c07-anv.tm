@@ -133,7 +133,7 @@
 
   <\definition>
     <label|defn-upgrade-indicator><math|R<rsup|u*p><rsub|\<rho\>>> is an
-    varying data type (Def. <reference|defn-scale-codec>) which implies
+    varying data type (Definition <reference|defn-scale-codec>) which implies
     whether the parachain is allowed to upgrade its validation code.
 
     <\equation*>
@@ -167,14 +167,14 @@
     <\itemize>
       <item><math|B>: the parachain block itself.
 
-      <item><math|h*e*a*d<around|(|B<rsub|p>|)>>: the parent head data (Def.
+      <item><math|h*e*a*d<around|(|B<rsub|p>|)>>: the parent head data (Definition
       <reference|defn-head-data>) of block <math|B>.
 
       <item><math|v<rsup|G*V*P><rsub|B>>: the global validation parameters
       (<reference|defn-global-validation-parameters>).
 
       <item><math|R<rsup|u*p><rsub|\<rho\>>>: implies whether the parachain
-      is allowed to upgrade its validation code (Def.
+      is allowed to upgrade its validation code (Definition
       <reference|defn-upgrade-indicator>).
     </itemize>
   </definition>
@@ -196,7 +196,7 @@
       of the parachain Wasm code permitted.
 
       <item><math|M*a*x<rsup|h*e*a*d><rsub|s*i*z*e>>: the maximum amount of
-      bytes of the head data (Def. <reference|defn-head-data>) permitted.
+      bytes of the head data (Definition <reference|defn-head-data>) permitted.
 
       <item><math|H<rsub|i><around|(|B<rsup|r*e*l*a*y><rsub|c*h*a*i*n>|)>>:
       the relay chain block number this is in the context of.
@@ -216,7 +216,7 @@
     where each value represents:
 
     <\itemize>
-      <item><math|h*e*a*d<around|(|B<rsub|p>|)>>: the parent head data (Def.
+      <item><math|h*e*a*d<around|(|B<rsub|p>|)>>: the parent head data (Definition
       <reference|defn-head-data>) of block <math|B>.
 
       <item><math|U*I*N*T*128>: the balance of the parachain at the moment of
@@ -226,7 +226,7 @@
       hash of the validation code used to execute the candidate.
 
       <item><math|R<rsup|u*p><rsub|\<rho\>>>: implies whether the parachain
-      is allowed to upgrade its validation code (Def.
+      is allowed to upgrade its validation code (Definition
       <reference|defn-upgrade-indicator>).
     </itemize>
   </definition>
@@ -242,16 +242,16 @@
     where each value represents:
 
     <\itemize>
-      <item><math|h*e*a*d<around|(|B|)>>: the new head data (Def.
+      <item><math|h*e*a*d<around|(|B|)>>: the new head data (Definition
       <reference|defn-head-data>) of block <math|B>.
 
       <item><math|O*p*t*i*o*n<around|(|P<rsup|B><rsub|\<rho\>>|)>>: a varying
-      data (Def. <reference|defn-scale-codec>) containing an update to the
+      data (Definition <reference|defn-scale-codec>) containing an update to the
       validation code that should be scheduled in the relay chain.
 
       <item><math|M*s*g>: parachain "upward messages" to the relay chain.
       <math|\<bbb-O\>> identifies the origin of the messages and is a varying
-      data type (Def. <reference|defn-scale-codec>) and can be one of the
+      data type (Definition <reference|defn-scale-codec>) and can be one of the
       following values:
 
       <\equation*>
@@ -287,10 +287,10 @@
       <item><math|\<pi\><rsub|B>>: the witness data.
 
       <item><math|v<rsup|G*V*P><rsub|B>>: the global validation parameters
-      (Def. <reference|defn-global-validation-parameters>).
+      (Definition <reference|defn-global-validation-parameters>).
 
       <item><math|v<rsup|L*V*P><rsub|B>>: the local validation parameters
-      (Def. <reference|defn-local-validation-parameters>).
+      (Definition <reference|defn-local-validation-parameters>).
     </itemize>
   </definition>
 
@@ -306,10 +306,10 @@
 
   <section|Candidate Selection><label|sect-primary-validation>
 
-  Collators produce candidates (Def. <reference|defn-candidate>) and send
+  Collators produce candidates (Definition <reference|defn-candidate>) and send
   those to validators. Validators verify the validity of the received
   candidates (Algo. <reference|algo-primary-validation>) by executing the
-  validation code, <math|R<rsub|\<rho\>>>, and issue statements (Def.
+  validation code, <math|R<rsub|\<rho\>>>, and issue statements (Definition
   <reference|defn-gossip-statement>) about the candidates to connected peers.
   The validator ensures the that every candidate considered for inclusion has
   at least one other validator backing it. Candidates without backing are
@@ -345,7 +345,7 @@
       <item><math|S*i*g<rsup|C*o*l*l*a*t*o*r><rsub|S*R*25519>>: the signature
       on the 256-bit Blake2 hash of the block data by the collator.
 
-      <item><math|h*e*a*d<around|(|B|)>>: the head data (Def.
+      <item><math|h*e*a*d<around|(|B|)>>: the head data (Definition
       <reference|defn-head-data>) of block <math|B>.
 
       <item><math|h<rsub|b>*<around|(|P*o*V<rsub|B>|)>>: the 32-byte Blake2
@@ -449,7 +449,7 @@
       the hash of the relay chain block that this candidate should be
       executed in the context of.
 
-      <item><math|h*e*a*d<around|(|B|)>>: the head data (Def.
+      <item><math|h*e*a*d<around|(|B|)>>: the head data (Definition
       <reference|defn-head-data>) of block <math|B>. <todo|@fabio (collator
       module relevant?)>.
 
@@ -486,7 +486,7 @@
 
       <item><math|M*s*g>: parachain messages to the relay chain.
       <math|\<bbb-O\>> identifies the origin of the messages and is a varying
-      data type (Def. <reference|defn-scale-codec>) and can be one of the
+      data type (Definition <reference|defn-scale-codec>) and can be one of the
       following values:
 
       <\equation*>
@@ -502,7 +502,7 @@
       encoding Merkle tree <todo|@fabio: use different symbol for this?>.
 
       <item><math|O*p*t*i*o*n<around|(|R<rsub|\<rho\>>|)>>: A varying
-      datatype (Def. <reference|defn-scale-codec>) containing the new runtime
+      datatype (Definition <reference|defn-scale-codec>) containing the new runtime
       code for the parachain. <todo|@fabio: clarify further>
     </itemize>
   </definition>
@@ -535,7 +535,7 @@
     index of validator according to the authority set. <todo|@fabio: define
     authority set (specified in the Host spec)>. <math|S*t*m*t> refers to a
     statement the validator wants to make about a certain candidate.
-    <math|S*t*m*t> is a varying data type (Def. <reference|defn-scale-codec>)
+    <math|S*t*m*t> is a varying data type (Definition <reference|defn-scale-codec>)
     and can be one of the following values:
 
     <\equation*>
@@ -737,7 +737,7 @@
       <algo-state|<math|i*n*d*e*x=i*n*d*e*x+1>>
     </algo-for>
 
-    <Statex> <Statex>// Insert individual chunks into collection (def.
+    <Statex> <Statex>// Insert individual chunks into collection (Definition
     <reference|defn-erasure-coded-chunks>).
     <algo-state|<with|font-series|bold|Init> <math|E*r<rsub|B>>>
 

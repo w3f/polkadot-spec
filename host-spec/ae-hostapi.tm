@@ -127,9 +127,9 @@
     <item><verbatim|offset>: an u32 integer containing the offset beyond the
     value should be read from.
 
-    <item><verbatim|result>: a pointer-size (def.
+    <item><verbatim|result>: a pointer-size (Definition
     <reference|defn-runtime-pointer>) pointing to a SCALE encoded
-    <verbatim|Option> (def. <reference|defn-option-type>) containing an
+    <verbatim|Option> (Definition <reference|defn-option-type>) containing an
     unsinged 32-bit interger representing the number of bytes left at
     supplied <verbatim|offset>. Returns <verbatim|None> if the entry does not
     exists.
@@ -293,7 +293,7 @@
   <subsection|<verbatim|ext_storage_next_key>>
 
   Get the next key in storage after the given one in lexicographic order
-  (Def. <reference|defn-lexicographic-ordering>). The key provided to this
+  (Definition <reference|defn-lexicographic-ordering>). The key provided to this
   function may or may not exist in storage.
 
   <subsubsection|Version 1 - Prototype>
@@ -637,7 +637,7 @@
   <subsection|<verbatim|ext_default_child_storage_next_key>>
 
   Gets the next key in storage after the given one in lexicographic order
-  (Def. <reference|defn-lexicographic-ordering>). The key provided to this
+  (Definition <reference|defn-lexicographic-ordering>). The key provided to this
   function may or may not exist in storage.
 
   <subsubsection|Version 1 - Prototype>
