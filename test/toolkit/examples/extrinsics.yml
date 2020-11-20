@@ -1,0 +1,21 @@
+- vars:
+    balance: 100
+
+- name: Extrinsic with variable
+  pallet_balances:
+    transfer:
+      from: alice
+      to: bob
+      balance: "{{ balance }}"
+
+- name: Extrinsics with loops
+  pallet_balances:
+    transfer:
+      from: "{{ item.from }}"
+      to: "{{ item.to }}"
+      balance: "{{ item.balance }}"
+  loop:
+    - { from: alice, to: bob, balance: 100 }
+    - { from: alice, to: dave, balance: 200 }
+    - { from: bob, to: alice, balance: 300 }
+    - { from: dave, to: bob, balance: 400 }

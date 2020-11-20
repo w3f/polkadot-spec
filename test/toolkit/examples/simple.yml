@@ -1,0 +1,6 @@
+- name: Simple extrinsic
+  pallet_balances:
+    transfer: 
+      from: alice
+      to: bob
+      balance: 100

@@ -1,0 +1,7 @@
+- name: Create genesis
+  genesis:
+    custom:
+      accounts:
+        - alice
+        - bob
+        - eve

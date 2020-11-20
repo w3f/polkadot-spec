@@ -1,0 +1,1 @@
+cargo run --bin node-template -- pallet-balances transfer --from 0x3cfb37bd2839129433d8f1b9471958a457572928f0cbb2efd9012e3b70119599 --to 14ShUZUYUR35RBZW6uVVt1zXDxmSQddkeDdXf1JkMA6P721N --balance 123
