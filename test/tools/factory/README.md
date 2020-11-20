@@ -1,21 +1,21 @@
-# Toolkit
+# Factory
 
-This toolkit is a work-in-progress utility in order to create a script polkadot transactions and test cases.
+This tool is a work-in-progress utility in order to create a script polkadot transactions and test cases.
 
 ## Building
 
 ```console
-$ cargo build --bin toolkit
+$ cargo build --bin factory
 ```
 
 ## Usage
 
-The toolkit can either be used directly via the command line or by using scriptable workflows defined in YAML files.
+The factory can either be used directly via the command line or by using scriptable workflows defined in YAML files.
 
 ### CLI
 
 ```console
-$ toolkit pallet-balances transfer --from alice --to bob --balance 100
+$ factory pallet-balances transfer --from alice --to bob --balance 100
 ```
 
 Output:
@@ -61,7 +61,7 @@ In the YAML file:
 In order to execute it:
 
 ```console
-$ toolkit path/to/file.yml
+$ factory path/to/file.yml
 ```
 
 Output:

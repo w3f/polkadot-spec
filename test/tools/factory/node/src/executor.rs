@@ -15,8 +15,8 @@ use std::convert::TryFrom;
 // Native executor instance.
 native_executor_instance!(
     pub Executor,
-    toolkit_runtime::api::dispatch,
-    toolkit_runtime::native_version,
+    factory_runtime::api::dispatch,
+    factory_runtime::native_version,
     frame_benchmarking::benchmarking::HostFunctions,
 );
 

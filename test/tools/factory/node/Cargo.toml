@@ -2,15 +2,15 @@
 authors = ['Substrate DevHub <https://github.com/substrate-developer-hub>']
 build = 'build.rs'
 edition = '2018'
-name = 'toolkit'
+name = 'factory'
 version = '2.0.0'
 
 [lib]
-name = 'toolkit'
+name = 'factory'
 path = 'src/lib.rs'
 
 [[bin]]
-name = 'toolkit'
+name = 'factory'
 path = 'src/bin/main.rs'
 
 [package.metadata.docs.rs]
@@ -31,7 +31,7 @@ rand = "0.7.3"
 serde_yaml = "0.8.14"
 
 # local dependencies
-toolkit-runtime = { path = '../runtime', version = '2.0.0' }
+factory-runtime = { path = '../runtime', version = '2.0.0' }
 
 # Substrate dependencies
 frame-benchmarking = '2.0.0'
@@ -69,4 +69,4 @@ substrate-frame-rpc-system = '2.0.0'
 
 [features]
 default = ['serde']
-runtime-benchmarks = ['toolkit-runtime/runtime-benchmarks']
+runtime-benchmarks = ['factory-runtime/runtime-benchmarks']

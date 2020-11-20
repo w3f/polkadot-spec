@@ -98,8 +98,8 @@ pub mod opaque {
 }
 
 pub const VERSION: RuntimeVersion = RuntimeVersion {
-    spec_name: create_runtime_str!("toolkit-runtime"),
-    impl_name: create_runtime_str!("toolkit-runtime"),
+    spec_name: create_runtime_str!("factory-runtime"),
+    impl_name: create_runtime_str!("factory-runtime"),
     authoring_version: 1,
     spec_version: 1,
     impl_version: 1,

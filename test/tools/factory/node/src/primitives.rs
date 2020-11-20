@@ -42,7 +42,7 @@ pub type SignedExtra = (
 
 pub mod runtime {
     // `AccountId` -> `sp_runtime::AccountId32`
-    pub use toolkit_runtime::{
+    pub use factory_runtime::{
         AccountId, Address, AuraConfig, Balance, BalancesConfig, Block, BlockId, BlockNumber,
         Call as RuntimeCall, CheckedExtrinsic, GenesisConfig, GrandpaConfig, Header, Runtime,
         RuntimeApi, RuntimeApiImpl, Signature, SignedExtra, SudoConfig, SystemConfig, Timestamp,
