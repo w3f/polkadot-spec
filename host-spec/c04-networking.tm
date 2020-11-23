@@ -27,7 +27,7 @@
   the usage of external documentation.
 
   <\itemize>
-    <item><hlink|lipp2p|https://github.com/libp2p/specs>
+    <item><hlink|libp2p|https://github.com/libp2p/specs>
 
     <item><hlink|Kademlia|https://en.wikipedia.org/wiki/Kademlia>
 
