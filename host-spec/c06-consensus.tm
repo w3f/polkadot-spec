@@ -113,7 +113,10 @@
       individual authority in the current authority list.
 
       <item><math|c> is the probability that a slot will not be empty, as
-      defined in definition <reference|defn-babe-constant>.
+      defined in definition <reference|defn-babe-constant>. It is encoded as
+      a tuple of two unsigned 64 bit integers
+      <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>> which are
+      used to compute the rational <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>.
 
       <item><math|s<rsub|2nd>> is the the second slot configuration encoded
       as a 8-bit enum.\ 
@@ -309,10 +312,7 @@
     <math|<with|font-series|medium|c>\<in\><around*|(|0,1<rsub|>|)>> is the
     probability that a slot will not be empty and used in the winning
     threshold calculation (see Definition
-    <reference|defn-winning-threshold>). It is encoded as a tuple of two
-    unsigned 64 bit integers <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>>
-    which are used to compute the rational
-    <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>.
+    <reference|defn-winning-threshold>).
   </definition>
 
   The babe constant (Definition <reference|defn-babe-constant>) is
@@ -452,11 +452,11 @@
 
   <\definition>
     <label|defn-prunned-best>The <with|font-series|bold|prunned best chain>
-    <math|<with|font-series|bold|C<rsup|\<#250C\>k>>> is the best chain
-    selected according to the best chain selection rule with the last k
-    Blocks prunned. We choose <math|k=140>. The <with|font-series|bold|last
-    (probabilistically) finalized block> describes the last block in this
-    prunned best chain.
+    <math|<with|font-series|bold|C<rsup|\<#250C\>k>>> is the longest chain
+    selected according to Definition <reference|defn-longest-chain> with the
+    last k Blocks prunned. We choose <math|k=140>. The
+    <with|font-series|bold|last (probabilistically) finalized block>
+    describes the last block in this prunned best chain.
   </definition>
 
   <\definition>
