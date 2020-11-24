@@ -302,16 +302,21 @@
   <\definition>
     <label|defn-babe-constant>The <with|font-series|bold|BABE constant>
     <math|<with|font-series|medium|c>\<in\><around*|(|0,1<rsub|>|)>> is the
-    probability that a slot will not be empty. It is initialized at genesis
-    using the value returned by a call <verbatim|BabeApi_configuration>(see
-    <reference|sect-rte-babeapi-epoch>) and then can be updated by the
-    runtime for the next epoch through the \PNext Config Data\Q consensus
-    message digest (see Definition <reference|defn-consensus-message-digest>) in
-    the first block of each epoch. It is encoded as a tuple of two unsigned
-    64 bit integers <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>>
+    probability that a slot will not be empty and used in the winning
+    threshold calculation (see Definition
+    <reference|defn-winning-threshold>). It is encoded as a tuple of two
+    unsigned 64 bit integers <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>>
     which are used to compute the rational
     <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>.
   </definition>
+
+  The babe constant (Definition <reference|defn-babe-constant>) is
+  initialized at genesis to the value returned by calling
+  <verbatim|BabeApi_configuration> (see <reference|sect-rte-babeapi-epoch>).
+  For efficiency reasons it is generally updated by the runtime through the
+  \PNext Config Data\Q consensus message (see Definition
+  <reference|defn-consensus-message-digest>) in the digest of the first block
+  of an epoch for the next epoch.\ 
 
   <\definition>
     <label|defn-winning-threshold><strong|Winning threshold> denoted by
@@ -378,32 +383,67 @@
 
   <subsection|Slot Number Calculation>
 
-  <\note>
-    <with|font-series|bold|The calculation described in this section is still
-    to be implemented and deployed.> Instead each block producer is required
-    to syncronize its local clock using NTP. The current slot is then
-    calculated by <math|s<rsub|current>=t<rsub|unix>/\<cal-T\>> where
-    <math|t<rsub|unix>> is the current unix time in seconds since 1970-01-01
-    00:00:00 UTC<line-break>.
-  </note>
+  <\definition>
+    <label|defn-slot-offset>Let <math|s<rsub|i>> and <math|s<rsub|j>> be two
+    slots belonging to epochs <math|\<cal-E\><rsub|k>> and
+    <math|\<cal-E\><rsub|l>>. By <with|font-series|bold|<name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|j>|)>>>
+    we refer to the function whose value is equal to the number of slots
+    between <math|s<rsub|i>> and <math|s<rsub|j>> (counting <math|s<rsub|j>>)
+    on time continuum. As such, we have <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|i>|)>=0>.
+  </definition>
 
   It is imperative for the security of the network that each block producer
-  is able to correctly determine the current slots number at a given time.
-  Polkadot does this without relying on any external clock source (e.g.
-  through the <with|font-shape|italic|Network Time Protocol> or the
-  <with|font-shape|italic|Global Positioning System>). To stay in
+  correctly determine the current slots number at a given time by regularly
+  estimating the local clock offset in relation to the network (Definition
+  <reference|defn-relative-syncronization>).\ 
+
+  <\definition>
+    <label|defn-relative-syncronization>The <with|font-series|bold|relative
+    time syncronization> is a tuple of a slot number and local clock
+    timestamp <math|<around*|(|s<rsub|sync>, t<rsub|sync>|)>> describing the
+    last point at which slot numbers have been syncronized with the local
+    clock.
+  </definition>
+
+  <\algorithm>
+    <with|font-shape|small-caps|Slot-Time(<with|font-shape|right|<math|s:>
+    slot number>)>
+  <|algorithm>
+    <\algorithmic>
+      <\state>
+        <\RETURN>
+          <with|font-shape|small-caps|<math|t<rsub|sync>+>Slot-Offset>(<math|><math|s<rsub|sync>>,
+          <math|s>)<math|\<times\>\<cal-T\>>
+        </RETURN>
+      </state>
+    </algorithmic>
+  </algorithm>
+
+  <\note>
+    <with|font-series|bold|The calculation described in this section is still
+    to be implemented and deployed.> For now each block producer is required
+    to syncronize its local clock using NTP instead. The current slot
+    <math|s> is then calculated by <math|s<rsub|>=t<rsub|unix>/\<cal-T\>>
+    where <math|t<rsub|unix>> is the current unix time in seconds since
+    1970-01-01 00:00:00 UTC. That also entails that slot numbers are
+    currently not reset at the beginning of each epoch.\ 
+  </note>
+
+  Polkadot does this syncronization without relying on any external clock
+  source (e.g. through the <with|font-shape|italic|Network Time Protocol> or
+  the <with|font-shape|italic|Global Positioning System>). To stay in
   synchronization each producer is therefore required to periodically
   estimate its local clock offset in relation to the rest of the network.\ 
 
   This estimation depends on the two fixed parameters
-  <with|font-series|bold|<math|k>> (Definition <reference|defn-prunned-best>) and
-  <math|<with|font-series|bold|s<rsub|cq>>> (Definition
+  <with|font-series|bold|<math|k>> (Definition <reference|defn-prunned-best>)
+  and <math|<with|font-series|bold|s<rsub|cq>>> (Definition
   <reference|defn-chain-quality>). These are choosen based on the results of
   formal security analysis, currently assuming a <math|1 s \ >clock drift per
   day and targeting a probability lower than <math|0.5%> for an adversary to
   break BABE in 3 years with a resistance against network delay up to
-  <math|<frac*|1|3>> of the slot time and a Babe constant (Definition
-  <reference|defn-babe-constant>) of <math|c=0.38>.
+  <math|<frac*|1|3>> of the slot time and a Babe constant
+  (Definit<line-break>wion <reference|defn-babe-constant>) of <math|c=0.38>.
 
   <\definition>
     <label|defn-prunned-best>The <with|font-series|bold|prunned best chain>
@@ -422,8 +462,9 @@
   </definition>
 
   The prerequisite for such a calculation is that each producer stores the
-  arrival time of each block (Definition <reference|defn-block-time>) measured by a
-  clock that is otherwise not adjusted by any external protocol.\ 
+  arrival time of each block (Definition <reference|defn-block-time>)
+  measured by a clock that is otherwise not adjusted by any external
+  protocol.\ 
 
   <\definition>
     <label|defn-block-time>The <strong|block arrival time> of block <math|B>
@@ -437,39 +478,30 @@
     there is no ambiguity about the underlying node.
   </definition>
 
-  All validators are supposed to run Algorithm <reference|algo-slot-time>
-  using block arrival times of all blocks arriving in regular intervals in
-  term of slots, to update their current clock offset. The regular interval
-  of slots is called a sync period and is defined in Definition
-  <reference|defn-sync-epoch>.
-
   <\definition>
-    <label|defn-sync-epoch>A <with|font-series|bold|sync period> is the
-    interval (expressed in number of slots) at which each validator
-    (re-)evaluates its local clock offsets. The first sync period
-    <math|\<frak-E\><rsub|1>> starts just after the genesis block is
-    released. Consequently each sync period <math|\<frak-E\><rsub|i>> starts
-    after <math|\<frak-E\><rsub|i-1>>. The length of sync period is equal to
-    <math|s<rsub|qc>> as defined in Definition
-    <reference|defn-chain-quality>.
+    <label|defn-sync-period>A <with|font-series|bold|sync period> is the
+    interval at which each validator (re-)evaluates its local clock offsets.
+    The first sync period <math|\<frak-E\><rsub|1>> starts just after the
+    genesis block is released. Consequently each sync period
+    <math|\<frak-E\><rsub|i>> starts after <math|\<frak-E\><rsub|i-1>>. The
+    length of sync period is equal to <math|s<rsub|qc>> as defined in
+    Definition <reference|defn-chain-quality> and expressed in number of
+    slots.
   </definition>
 
-  In addition to the arrival time of block <math|B>, the block producer also
-  needs to know how many slots have passed since the arrival of <math|B>.
-  This value is formalized in Definition <reference|defn-slot-offset>.
-
-  <\definition>
-    <label|defn-slot-offset>Let <math|s<rsub|i>> and <math|s<rsub|j>> be two
-    slots belonging to epochs <math|\<cal-E\><rsub|k>> and
-    <math|\<cal-E\><rsub|l>>. By <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|j>|)>>
-    we refer to the function whose value is equal to the number of slots
-    between <math|s<rsub|i>> and <math|s<rsub|j>> (counting <math|s<rsub|j>>)
-    on time continuum. As such, we have <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|i>|)>=0>.
-  </definition>
+  All validators are then required to run Algorithm
+  <reference|algo-slot-time> at beginning of each sync period (Definition
+  <reference|defn-sync-period>) to update their synchronization using all
+  block arrival times of the previous period. The algorithm should only be
+  run once all the blocks in this period have been finalized, even if only
+  probabilistically (Definition <reference|defn-prunned-best>). The target
+  slot to which to synchronize should be the first slot in the new sync
+  period.
 
   <\algorithm>
     <label|algo-slot-time><name|Median-Algorithm>(<math|\<frak-E\><rsub|j>>:
-    the current sync period)
+    sync period used for estimate, <math|s<rsub|sync>:> slot time to
+    estimate)
   <|algorithm>
     <\algorithmic>
       <\state>
@@ -481,11 +513,11 @@
       </state>
 
       <\state>
-        <name|<math|s<rsub|t><rsup|B<rsub|i>>\<leftarrow\>T<rsup|><rsub|B<rsub|i>>>+Slot-Offset(<math|s<rsub|B<rsub|i>>,<wide|s|\<bar\>><rsub|j>>)<math|\<times\>\<cal-T\><rsub|>>>
+        <name|<math|t<rsub|estimate><rsup|B<rsub|i>>\<leftarrow\>T<rsup|><rsub|B<rsub|i>>>+Slot-Offset(<math|s<rsub|B<rsub|i>>,s<rsub|sync>>)<math|\<times\>\<cal-T\><rsub|>>>
       </state>
 
       <\state>
-        <math|T<rsub|s>\<leftarrow\>T<rsub|s>\<cup\>><math|s<rsub|t><rsup|B<rsub|i>>><END>
+        <math|T<rsub|s>\<leftarrow\>T<rsub|s>\<cup\>><math|t<rsub|estimate><rsup|B<rsub|i>>><END>
       </state>
 
       <\state>
@@ -509,12 +541,12 @@
   Throughout each epoch, each block producer should run Algorithm
   <reference|algo-block-production> to produce blocks during the slots it has
   been awarded during that epoch. The produced block needs to carry <em|BABE
-  header> as well as the <em|block signature> \ as Pre-Runtime and Seal
-  digest items defined in Definition <reference|defn-babe-header> and
+  header> as well as the <em|block signature> as Pre-Runtime and Seal digest
+  items defined in Definition <reference|defn-babe-header> and
   <reference|defn-block-signature> respectively.
 
   <\definition>
-    The <label|defn-babe-header><strong|BABE Header> of block B, referred to
+    <label|defn-babe-header>The <strong|BABE Header> of block B, referred to
     formally by <strong|<math|H<rsub|BABE><around*|(|B|)>>> is a tuple that
     consists of the following components:
 
@@ -636,8 +668,8 @@
   <reference|defn-epoch-randomness>) necessary to participate in the block
   production lottery in the next epoch <math|\<cal-E\><rsub|n+1>> from the
   runtime, through the <with|font-shape|italic|Next Epoch Data> consesus
-  message (Definition <reference|defn-consensus-message-digest>) in the digest of
-  the first block.
+  message (Definition <reference|defn-consensus-message-digest>) in the
+  digest of the first block.
 
   <subsection|Verifying Authorship Right><label|sect-verifying-authorship>
 
@@ -1162,8 +1194,8 @@
     <\big-table|<tabular|<tformat|<cwith|2|3|1|1|cell-halign|r>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|2|2|cell-halign|l>|<cwith|2|3|3|3|cell-halign|l>|<cwith|2|3|3|3|cell-rborder|0ln>|<cwith|2|3|1|3|cell-valign|c>|<table|<row|<cell|msg>|<cell|the
     message to be signed>|<cell|arbitrary>>|<row|<cell|r:>|<cell|round
     number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
-    set Id (Definition <reference|defn-authority-set-id>) of v>|<cell|unsigned
-    64-bit integer>>>>>>
+    set Id (Definition <reference|defn-authority-set-id>) of
+    v>|<cell|unsigned 64-bit integer>>>>>>
       Signature for a message in a round.
     </big-table>
 
@@ -1184,8 +1216,8 @@
     <\center>
       <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|r:>|<cell|round
       number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
-      set Id (Definition <reference|defn-authority-set-id>)>|<cell|unsigned 64-bit
-      integer>>|<row|<cell|<math|Sig<rsup|r,stage><rsub|v<rsub|i>>>>|<cell|signature
+      set Id (Definition <reference|defn-authority-set-id>)>|<cell|unsigned
+      64-bit integer>>|<row|<cell|<math|Sig<rsup|r,stage><rsub|v<rsub|i>>>>|<cell|signature
       (Definition <reference|defn-sign-round-vote>)>|<cell|512-bit
       array>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
       public key of <math|v>>|<cell|256-bit
@@ -2011,11 +2043,8 @@
 
 <\initial>
   <\collection>
-    <associate|chapter-nr|5>
-    <associate|page-first|47>
     <associate|page-medium|papyrus>
-    <associate|section-nr|0<uninit>>
-    <associate|subsection-nr|4>
+    <associate|preamble|false>
   </collection>
 </initial>
 
