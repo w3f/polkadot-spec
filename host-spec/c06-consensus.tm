@@ -273,6 +273,11 @@
     during which they are allowed to generate a block.
   </definition>
 
+  <\remark>
+    Substrate refers to an epoch as \Psession\Q in some places, however epoch
+    should be the prefered and official name for these periods.
+  </remark>
+
   <\notation>
     <label|note-slot>We refer to the number of slots in epoch
     <math|\<cal-E\><rsub|n>> by <math|sc<rsub|n>>. <math|sc<rsub|n>> is set
