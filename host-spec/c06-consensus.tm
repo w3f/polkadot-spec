@@ -483,6 +483,10 @@
     there is no ambiguity about the underlying node.
   </definition>
 
+  <todo|Currently still lacks a clean definition of when block arrival times
+  are considered valid and how to differentiated imported block on intial
+  sync from \Pfresh\Q blocks that were just produced.>
+
   <\definition>
     <label|defn-sync-period>A <with|font-series|bold|sync period> is the
     interval at which each validator (re-)evaluates its local clock offsets.
