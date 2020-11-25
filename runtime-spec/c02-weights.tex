@@ -507,23 +507,22 @@ defined as follows:
 
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $request\_judgement$ Runtime function}
-  \SetAlgoLined
-  \KwResult{$\TWF$}
-  \BlankLine
-  \Fn{\textsc{Main}}{
-    \KwInit{collection = \{\};}\\
+  \begin{algorithmic}
+    \Ensure $\TWF$
     \BlankLine
-    \For{$amount \leftarrow 1$ \KwTo $MaxRegistrars$ \KwBy $1$}{
-      \textsc{Generate-Registrars($amount$)};\\
-      $caller \leftarrow$ \textsc{Create-Account("caller", $1$)};\\
-      \textsc{Set-Balance($caller$, 100)};\\
-      $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), 100))};\\
-      \textsc{Add-To($collection$, $time$)};
-    }
+    \State \Init collection = \{\}
     \BlankLine
-    $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};\\
-    \Return{$\TWF$}
-  }
+    \For{$amount \leftarrow 1,MaxRegistrars$}
+      \State \textsc{Generate-Registrars($amount$)}
+      \State $caller \leftarrow$ \textsc{Create-Account("caller", $1$)}
+      \State \textsc{Set-Balance($caller$, 100)}
+      \State $time \leftarrow$ \textsc{Timer(Request-Judgement(Random($amount$), 100))}
+      \State \textsc{Add-To($collection$, $time$)}
+    \EndFor
+    \BlankLine
+    \State $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};
+    \State \Return $\TWF$
+  \end{algorithmic}
 \end{algorithm}
 
 \begin{itemize}
@@ -673,29 +672,28 @@ defined as follows:
 
 \begin{algorithm}[H]
   \caption{Run multiple benchmark iterations for $payout\_stakers$ Runtime function}
-  \SetAlgoLined
-  \KwResult{$\TWF$}
-  \BlankLine
-  \Fn{\textsc{Main}}{
-    \KwInit{collection = \{\};}\\
+  \begin{algorithmic}
+    \Ensure $\TWF$
     \BlankLine
-    \For{$amount \leftarrow 1$ \KwTo $MaxNominatorRewardedPerValidator$ \KwBy $1$}{
-      \For{$era\_depth \leftarrow 1$ \KwTo $HistoryDepth$ \KwBy $1$}{
-        $validator \leftarrow$ \textsc{Generate-Validator()};\\
-        \textsc{Validate($validator$)};\\
-        $nominators \leftarrow$ \textsc{Generate-Nominators($amount$)};\\
-        \For{$nominator \in nominators$}{
-          \textsc{Nominate($validator$, $nominator$)}
-        }
-        $era\_indenx \leftarrow$ \textsc{Create-Rewards($validator$, $nominators$, $era\_depth$)};\\
-        $time \leftarrow$ \textsc{Timer(Payout-Stakers($validator$), $era\_index$))};\\
-        \textsc{Add-To($collection$, $time$)};
-      }
-    }
+    \State \Init collection = \{\}
     \BlankLine
-    $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};\\
-    \Return{$\TWF$}
-  }
+    \For{$amount \leftarrow 1,MaxNominatorRewardedPerValidator$}
+      \For{$era\_depth \leftarrow 1,HistoryDepth$}
+        \State $validator \leftarrow$ \textsc{Generate-Validator()}
+        \State \textsc{Validate($validator$)};
+        \State $nominators \leftarrow$ \textsc{Generate-Nominators($amount$)}
+        \For{$nominator \in nominators$}
+          \State \textsc{Nominate($validator$, $nominator$)}
+        \EndFor
+        \State $era\_index \leftarrow$ \textsc{Create-Rewards($validator$, $nominators$, $era\_depth$)}
+        \State $time \leftarrow$ \textsc{Timer(Payout-Stakers($validator$), $era\_index$))}
+        \State \textsc{Add-To($collection$, $time$)}
+      \EndFor
+    \EndFor
+    \BlankLine
+    \State $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)}
+    \State \Return $\TWF$
+  \end{algorithmic}
 \end{algorithm}
 
 \begin{itemize}
@@ -797,35 +795,40 @@ The benchmarking implementation for the Polkadot Runtime function $transfer$ is
 defined as follows (starting with the \textsc{Main} function):
 \newline
 
-\begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
+\begin{algorithm}[H]
+  \label{sec:algo-benchmark-transfer}
   \caption{Run multiple benchmark iterations for $transfer$ Runtime function}
-  \SetAlgoLined
-  \KwResult{$collection$: a collection of time measurements of all
-  benchmark iterations}
+  \begin{algorithmic}
+  \Ensure $collection$: a collection of time measurements of all benchmark iterations
   \BlankLine
-  \Fn{\textsc{Main}}{
-    \KwInit{collection = \{\}\;}
-    \KwInit{$balance = 1'000$\;}
+    \Function{\textsc{Main}}{}
+      \State \Init collection = \{\}
+      \State \Init $balance = 1'000$
+      \BlankLine
+      \For{$index\gets 1,1'000$}
+        \State $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}
+        \State \textsc{Add-To($collection$, $time$)}
+      \EndFor
+      \BlankLine
+      \State \Init $index = 1'000$
+      \For{$balance \gets 2,1'000$}
+        \State $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}
+        \State \textsc{Add-To($collection$, $time$)}
+      \EndFor
+      \BlankLine
+      \State $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)}
+      \State \Return $\TWF$
+    \EndFunction
     \BlankLine
-    \For{$index\gets1$ \KwTo $1'000$ \KwBy $1$}{
-      $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
-      \textsc{Add-To($collection$, $time$)}\;
-    }
-    \BlankLine \KwInit{$index = 1'000$\;}
-    \For{$balance\gets2$ \KwTo $1'000$ \KwBy $1$}{
-      $time \leftarrow$ \textsc{Run-Benchmark($index$, $balance$)}\;
-      \textsc{Add-To($collection$, $time$)}\;
-    }
-    \BlankLine
-    $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};\\
-    \Return $\TWF$
-  }
-  \Fn{\textsc{Run-Benchmark($index$,$balance$)}}{
-    $sender \leftarrow$ \textsc{Create-Account(\textit{"caller"}, $index$)}\;
-    $recipient \leftarrow$ \textsc{Create-Account(\textit{"recipient"}, $index$)}\;
-    \textsc{Set-Balance($sender$, $balance$)}\;
-    \BlankLine $time \leftarrow$\textsc{Timer(Transfer($sender$, $recipient$, $balance$))}\;
-  \Return $time$}
+    \Function{\textsc{Run-Benchmark}}{$index$, $balance$}
+      \State $sender \leftarrow$ \textsc{Create-Account(\textit{"caller"}, $index$)}
+      \State $recipient \leftarrow$ \textsc{Create-Account(\textit{"recipient"}, $index$)}
+      \State \textsc{Set-Balance($sender$, $balance$)}
+      \BlankLine
+      \State $time \leftarrow$\textsc{Timer(Transfer($sender$, $recipient$, $balance$))}
+      \State \Return $time$
+    \EndFunction
+  \end{algorithmic}
 \end{algorithm}
 
 \begin{itemize}
@@ -958,31 +961,32 @@ The benchmarking implementation for the Polkadot Runtime function
 \verb|withdraw_unbonded| is defined as follows:
 \newline
 
-\begin{algorithm}[H]\label{sec:algo-benchmark-transfer}
+\begin{algorithm}[H]
+  \label{sec:algo-benchmark-transfer}
   \caption{Run multiple benchmark iterations for $withdraw_unbonded$ Runtime function}
-  \SetAlgoLined
-  \KwResult{$\TWF$}
-  \BlankLine
-  \Fn{\textsc{Main}}{
-    \KwInit{collection = \{\}\;}
+  \begin{algorithmic}
+    \Ensure $\TWF$
     \BlankLine
-    \For{$balance\gets1$ \KwTo $100$ \KwBy $1$}{
-      $stash \leftarrow$ \textsc{Create-Account(\textit{"stash"}, 1)}\;
-      $controller \leftarrow$ \textsc{Create-Account(\textit{"controller"}, 1)}\;
-      \textsc{Set-Balance($stash$, 100)}\;
-      \textsc{Set-Balance($controller$, 1)}\;
-      \textsc{Bond($stash$, $controller$, $balance$)}\;
-      \textsc{Pass-Era()}\;
-      \textsc{UnBond($controller$, $balance$)}\;
-      \textsc{Pass-Era()}\;
-      $time \leftarrow$\textsc{Timer(Withdraw-Unbonded($controller$))}\;
-      \textsc{Add-To($collection$, $time$)}\;
-    }
-    \BlankLine
-    $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)};\\
-    \Return $\TWF$
-  }
-  \BlankLine
+    \Function{\textsc{Main}}{}
+      \State \Init collection = \{\}
+      \BlankLine
+      \For{$balance\gets 1,100$}
+        \State $stash \leftarrow$ \textsc{Create-Account(\textit{"stash"}, 1)}
+        \State $controller \leftarrow$ \textsc{Create-Account(\textit{"controller"}, 1)}
+        \State \textsc{Set-Balance($stash$, 100)}
+        \State \textsc{Set-Balance($controller$, 1)}
+        \State \textsc{Bond($stash$, $controller$, $balance$)}
+        \State \textsc{Pass-Era()}
+        \State \textsc{UnBond($controller$, $balance$)}
+        \State \textsc{Pass-Era()}
+        \State $time \leftarrow$\textsc{Timer(Withdraw-Unbonded($controller$))}
+        \State \textsc{Add-To($collection$, $time$)}
+      \EndFor
+      \BlankLine
+      \State $\TWF \leftarrow$ \textsc{Compute-Weight($collection$)}
+      \State \Return $\TWF$
+    \EndFunction
+  \end{algorithmic}
 \end{algorithm}
 
 \begin{itemize}
