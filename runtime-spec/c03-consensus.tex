@@ -1,0 +1,22 @@
+\chapter{Consensus}
+
+\section{BABE digest messages}
+
+The Runtime is required to provide the BABE authority list and randomness to the host via a consensus message in the header of the first block of each epoch.
+
+The digest published in Epoch $\mathcal{E}_n$ is enacted in $\mathcal{E}_{n+1}$. The randomness in this digest is computed based on the all the VRF outputs up to including Epoch $\mathcal{E}_{n-2}$ while the authority set is based on all transaction included up to Epoch $\mathcal{E}_{n-1}$.
+
+The computation of the randomeness seed is described in Algorithm \ref{algo-epoch-randomness} which uses the concept of epoch subchain as described in host specification and the value $d_B$, which is the VRF output computed for slot $s_B$.
+
+\begin{algorithm}[H]
+  \caption{\textsc{Epoch-Randomness}($n>2$: epoch index)}
+  \label{algo-epoch-randomness}
+  \begin{algorithmic}[1]
+    \State \Init $\rho \leftarrow \phi$
+    \For{$B$ in \textsc{SubChain}($\mathcal{E}_{n-2}$)}
+      \State $\rho \leftarrow \rho || d_B$
+    \EndFor
+    \State \Return $\textsc{Blake2b}(\textsc{Epoch-Randomness}(n-1)||n||\rho)$
+  \end{algorithmic}
+\end{algorithm}
+
