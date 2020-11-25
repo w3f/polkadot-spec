@@ -12,8 +12,9 @@ pdf: polkadot-runtime-spec.pdf
 
 
 polkadot-runtime-spec.pdf: $(SOURCES)
-	lualatex --jobname $(basename $@) --shell-escape $<
+	latexmk -jobname=$(basename $@) -pdflua $<
 
 
 clean:
-	rm -f polkadot-runtime-spec.{aux,idx,log,out,pdf,toc}
+	latexmk -jobname=polkadot-runtime-spec -C runtime-spec.tex
+	rm -f polkadot-runtime-spec.pytxcode
