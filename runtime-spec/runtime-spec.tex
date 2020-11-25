@@ -6,8 +6,8 @@
 \PassOptionsToPackage{hyphens}{url}\usepackage{hyperref}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage[ruled,vlined]{algorithm2e}
-\usepackage{algpseudocode}
+\usepackage[chapter]{algorithm}
+\usepackage{algpseudocode} % includes algorithmicx
 \usepackage{xargs}   % Use more than one optional parameter in new commands
 \usepackage{xcolor}  % Coloured terxt etc.
 \usepackage{calc,ifthen,alltt,theorem,capt-of,makeidx}
@@ -115,9 +115,9 @@
 
 %% Weights commands
 \newcommand{\TWF}{\ensuremath{\mathcal{W}}}
-\SetKw{KwInit}{Init:}
-\SetKw{KwBy}{increment by}
-\SetKwProg{Fn}{Function}{is}{end}
+\newcommand{\BlankLine}{\item[]}
+\newcommand{\Init}{\textbf{Init}~}
+
 
 \begin{document}
 
