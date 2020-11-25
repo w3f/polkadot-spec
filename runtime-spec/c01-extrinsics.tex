@@ -12,7 +12,7 @@ be called, including the parameters required for that function to be executed.
 
 \begin{definition}
     An extrinsic , $tx$, is a tuple consisting of the extrinsic version,
-    $T_v$ (Def. \ref{defn-extrinsic-version}), and the body of the extrinsic, $T_b$.
+    $T_v$ (Definition \ref{defn-extrinsic-version}), and the body of the extrinsic, $T_b$.
 
     \[
         tx := (T_v, T_b)
@@ -49,11 +49,11 @@ Version 4 of the Polkadot extrinsic format is defined as follows:
 
 where each values represents:
 \begin{itemize}
-    \item $A_i$: the 32-byte address of the sender (Def. \ref{defn-extrinsic-address}).
-    \item $Sig$: the signature of the sender (Def. \ref{defn-extrinsic-signature}).
-    \item $E$: the extra data for the extrinsic (Def. \ref{defn-extra-data}).
-    \item $M_i$: the indicator of the Polkadot module (Def. \ref{defn-module-indicator}).
-    \item $F_i(m)$: the indicator of the function of the Polkadot module (Def. \ref{defn-function-indicator}).
+    \item $A_i$: the 32-byte address of the sender (Definition \ref{defn-extrinsic-address}).
+    \item $Sig$: the signature of the sender (Definition \ref{defn-extrinsic-signature}).
+    \item $E$: the extra data for the extrinsic (Definition \ref{defn-extra-data}).
+    \item $M_i$: the indicator of the Polkadot module (Definition \ref{defn-module-indicator}).
+    \item $F_i(m)$: the indicator of the function of the Polkadot module (Definition \ref{defn-function-indicator}).
 \end{itemize}
 
 \begin{definition}
@@ -99,10 +99,10 @@ where each values represents:
 
     where each value represents:
     \begin{itemize}
-        \item $M_i$: the module indicator (Def. \ref{defn-module-indicator}).
+        \item $M_i$: the module indicator (Definition \ref{defn-module-indicator}).
         \item $F_i(m)$: the function indicator of the module
-        (Def. \ref{defn-function-indicator}).
-        \item $E$: the extra data (Def. \ref{defn-extra-data}).
+        (Definition \ref{defn-function-indicator}).
+        \item $E$: the extra data (Definition \ref{defn-extra-data}).
         \item $R_v$: a UINT32 containing the specification version of \verb|14|.
         \item $F_v$: a UINT32 containing the format version of \verb|2|.
         \item $H_h(G)$: a 32-byte array containing the genesis hash.
@@ -123,7 +123,7 @@ where each values represents:
 
     where each value represents:
     \begin{itemize}
-        \item $T_{mor}$: contains the SCALE encoded mortality of the extrinsic (Def.
+        \item $T_{mor}$: contains the SCALE encoded mortality of the extrinsic (Definition
         \ref{defn-extrinsic-mortality}).
         \item $N$: a compact integer containing the nonce of the sender. The
         nonce must be incremented by one for each extrinsic created, otherwise
@@ -145,7 +145,7 @@ where each values represents:
 
     \begin{itemize}
         \item $M_{per}$: the period of validity in terms of block numbers from
-        the block hash specified as $H_h(B)$ in the payload (Def.
+        the block hash specified as $H_h(B)$ in the payload (Definition
         \ref{defn-extrinsic-signature}). The requirement is $M_{per} \geq 4$ and
         $M_{per}$ must be the power of two, such as \verb|32|, \verb|64|,
         \verb|128|, etc.
