@@ -103,13 +103,13 @@ jobs:
         cd ~/.TeXmacs/packages
         curl -OL https://raw.githubusercontent.com/w3f/algorithmacs/master/algorithmacs-style.ts
     - name: Determine comparison target
-      run: echo "::set-env name=REV::HEAD~1"
+      run: echo "REV=HEAD~1" >> $GITHUB_ENV
       if: github.event_name == 'push'
     - name: Determine comparison target
-      run: echo "::set-env name=REV::origin/${GITHUB_BASE_REF}"
+      run: echo "REV=origin/${GITHUB_BASE_REF}" >> $GITHUB_ENV
       if: github.event_name == 'pull_request'
     - name: Determine comparison target
-      run: echo "::set-env name=REV::$(git describe --tags --abbrev=0 HEAD~1)"
+      run: echo "REV=$(git describe --tags --abbrev=0 HEAD~1)" >> $GITHUB_ENV
       if: github.event_name == 'release'
     - name: Compare host specification
       run: make -C host-spec diff
