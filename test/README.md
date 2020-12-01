@@ -208,3 +208,25 @@ Most of the internal logic of the testsuite can be found in the [helpers](./help
 The main module to configure and run the testsuite is called [`SpecificationTestsuite`](./helpers/SpecificationTestsuite.jl), which is also what [`runtests.jl`](./runtests.jl) uses to execute the suite after parsing any supplied command line arguments and extending PATH to include any local builds of adapters.
 
 All the fixtures are located in their respective folder in the [`fixtures`](./fixtures) subfolder, while the fixture specific logic is contained in a file called `include.jl` for each of them.
+
+# Update tested implementation
+
+## Substrate and Parity Polkadot
+
+The submodule in [hosts/substrate](./hosts/substrate) should always point to a recent [Parity Polkadot release](https://github.com/paritytech/polkadot/releases).
+
+After every update, `substrate-adapter` should be update to the same substrate commit used in the release.
+
+The `substrate-adapter-legacy` does not get updated, it is pinned to an early v0.7.x version, just before the legacy host api was removed.
+
+## Kagome
+
+The `kagome-adapter` and `kagome-adapter-legacy` are build against the submodule under [hosts/kagome](./hosts/kagome) which should always point to a recent commit or release of [Kagome](https://github.com/soramitsu/kagome).
+
+There are no special updates steps needed apart from fixing build and test failures.
+
+## Gossamer
+
+The `gossamer-adapter` and `gossamer-adapter-legacy` are build against the submodule under [hosts/gossamer](./hosts/gossamer) which should always point to a recent commit or release of [Gossamer](https://github.com/ChainSafe/gossamer).
+
+There are no special updates steps needed apart from fixing build and test failures.
