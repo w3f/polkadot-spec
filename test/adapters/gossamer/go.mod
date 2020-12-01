@@ -3,7 +3,7 @@ module w3f/gossamer-adapter
 require (
 	github.com/ChainSafe/chaindb v0.1.5-0.20201216022305-705e4f4f2f0d
 	github.com/ChainSafe/go-schnorrkel v0.0.0-20200626160457-b38283118816 // indirect
-	github.com/ChainSafe/gossamer v0.2.1-0.20210112165754-0767e0043e03
+	github.com/ChainSafe/gossamer v0.2.1-0.20201125161218-47524c8c3d93
 	github.com/DataDog/zstd v1.4.5 // indirect
 	github.com/OneOfOne/xxhash v1.2.8 // indirect
 	github.com/btcsuite/btcd v0.21.0-beta // indirect
@@ -13,13 +13,16 @@ require (
 	github.com/ethereum/go-ethereum v1.9.20 // indirect
 	github.com/go-yaml/yaml v2.1.0+incompatible
 	github.com/golang/protobuf v1.4.2 // indirect
-	github.com/mattn/go-colorable v0.1.7 // indirect
-	golang.org/x/crypto v0.0.0-20200820211705-5c72a883971a // indirect
+	github.com/mattn/go-colorable v0.1.8 // indirect
+	github.com/multiformats/go-multiaddr v0.3.1 // indirect
+	golang.org/x/crypto v0.0.0-20201002170205-7f63de1d35b0 // indirect
 	golang.org/x/net v0.0.0-20200822124328-c89045814202 // indirect
-	golang.org/x/sys v0.0.0-20200828194041-157a740278f4 // indirect
+	golang.org/x/sys v0.0.0-20201007082116-8445cc04cbdf // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )
 
-go 1.13
+replace github.com/ChainSafe/gossamer => ../../hosts/gossamer
+
+go 1.14
