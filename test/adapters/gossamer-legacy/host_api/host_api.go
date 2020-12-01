@@ -86,7 +86,7 @@ func ProcessHostApiCommand(args []string) {
 	if *wasmtimeBoolPtr {
 		// ... using wasmtime
 		cfg := &wasmtime.Config{
-			Imports: wasmtime.ImportsHostAPITester,
+			Imports: wasmtime.ImportLegacyNodeRuntime,
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
@@ -101,7 +101,7 @@ func ProcessHostApiCommand(args []string) {
 	} else {
 		// ... using wasmer
 		cfg := &wasmer.Config{
-			Imports: wasmer.RegisterImports_NodeRuntime,
+			Imports: wasmer.ImportsLegacyNodeRuntime,
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
