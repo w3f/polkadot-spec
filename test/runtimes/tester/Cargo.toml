@@ -1,38 +1,38 @@
 [package]
 name = 'host-tester'
-version = '2.0.0-alpha.7'
+version = '2.0.0'
 edition = '2018'
 
 
 [dependencies.tester-runtime]
 path = 'runtime'
-version = '2.0.0-alpha'
+version = '2.0.0'
 
 
 [dependencies.sc-service]
-version = '0.8.0-alpha'
+version = '0.8.0'
 default-features = false
 
 [dependencies.sp-core]
-version = '2.0.0-alpha'
+version = '2.0.0'
 default-features = false
 
 [dependencies.sp-runtime]
-version = '2.0.0-alpha'
+version = '2.0.0'
 default-features = false
 
 [dependencies.sp-babe]
 package = 'sp-consensus-babe'
-version = '0.8.0-alpha'
+version = '0.8.0'
 default-features = false
 
 [dependencies.sp-grandpa]
 package = 'sp-finality-grandpa'
-version = '2.0.0-alpha'
+version = '2.0.0'
 default-features = false
 
 
 # Vendoring support by including unspecified dependency of runtime
 [build-dependencies.wasm-builder]
 package = 'substrate-wasm-builder'
-version = '=1.0.11'
+version = '=2.0.1'
