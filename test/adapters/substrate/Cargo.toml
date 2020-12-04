@@ -1,6 +1,6 @@
 [package]
 name = "substrate-adapter"
-version = "0.8.24"
+version = "0.8.26-1"
 authors = ["Skalman <skalman@riseup.net>"]
 edition = "2018"
 
@@ -32,6 +32,7 @@ blake2-rfc         = "*"
 sp-core           = { git = "https://github.com/paritytech/substrate", branch = "master" }
 sp-io             = { git = "https://github.com/paritytech/substrate", branch = "master" }
 sc-executor       = { git = "https://github.com/paritytech/substrate", branch = "master" }
+sp-keystore       = { git = "https://github.com/paritytech/substrate", branch = "master" }
 sp-state-machine  = { git = "https://github.com/paritytech/substrate", branch = "master" }
 
 # host-api shim wasm blob

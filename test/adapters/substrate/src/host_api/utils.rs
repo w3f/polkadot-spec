@@ -1,4 +1,5 @@
 use clap::Values;
+use std::sync::Arc;
 use parity_scale_codec::Decode;
 use sc_executor::{
     WasmExecutor,
@@ -10,11 +11,10 @@ use sp_io::SubstrateHostFunctions;
 use sp_core::{
     offchain::testing::TestOffchainExt,
     offchain::OffchainExt,
-    testing::KeyStore,
-    traits::KeystoreExt, 
     traits::MissingHostFunctions,
     Blake2Hasher,
 };
+use sp_keystore::{KeystoreExt, testing::KeyStore};
 use sp_state_machine::TestExternalities as CoreTestExternalities;
 
 use runtime::WASM_BINARY;
@@ -73,7 +73,7 @@ impl Runtime {
     }
     pub fn new_keystore() -> Self {
         let mut ext = TestExternalities::default();
-        let key_store = KeystoreExt(KeyStore::new());
+        let key_store = KeystoreExt(Arc::new(KeyStore::new()));
         ext.register_extension(key_store);
         Runtime {
             blob: WASM_BINARY.to_vec(),
