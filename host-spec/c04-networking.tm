@@ -36,19 +36,35 @@
     <item><hlink|Protocol Buffers|https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>
   </itemize>
 
-  <subsection|Discovery mechanism>
+  <subsection|Node Identities>
 
-  The Polkadot Host uses varies mechanism to find peers within the network,
+  Each Polkadot Host node maintains a ED25519 key pair which is used to
+  identify the node. The public key is shared with the rest of the network.
+  This allows nodes to establish secure communication channels. Nodes are
+  discovered as described in the Discovery Mechanism Section
+  (<reference|sect-discovery-mechanism>), where each node can be identified
+  by their corresponding <verbatim|PeerId> (<reference|defn-peer-id>).
+
+  Each node must have its own unique ED25519 key pair. Using the same pair
+  among two or more nodes is interpreted as bad behavior.
+
+  <\definition>
+    <label|defn-peer-id>The Polkadot node's <verbatim|PeerId>, formally
+    referred to as <math|P<rsub|id>>, is derived from the ED25519 public key
+    and is structured as defined in the libp2p specification
+    (<slink|https://docs.libp2p.io/concepts/peer-id/>).
+  </definition>
+
+  <subsection|Discovery mechanism><label|sect-discovery-mechanism>
+
+  The Polkadot Host uses various mechanisms to find peers within the network,
   to establish and maintain a list of peers and to share that list with other
   peers from the network.
 
-  The Polkadot Host uses various mechanism for peer dicovery.
-
   <\itemize>
     <item>Bootstrap nodes - hard-coded node identities and addresses provided
-    by network configuration itself. Those addresses are selected an updated
-    by the developers of the Polkadot Host. Node addresses should be selected
-    based on a reputation metric, such as reliability and uptime.
+    by the genesis state specification as described in Appendix
+    <reference|sect-genesis-block>.
 
     <item>mDNS - performs a broadcast to the local network. Nodes that might
     be listing can respond the the broadcast.
@@ -132,7 +148,7 @@
   signed extrinsic, but it's the responsiblity of the Host to gossip that
   extrinsic to the rest of the network. When the Runtime decides to create
   the heartbeat, it will call the <verbatim|ext_offchain_submit_transaction>
-  Host API as described in section <todo|todo: define offchain Host APIs>.
+  Host API as described in Section <todo|todo: define offchain Host APIs>.
 
   The process of gossiping extrinsics is defined in section
   <reference|sect-extrinsics>.
@@ -660,31 +676,34 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|4|?>>
-    <associate|auto-10|<tuple|2.1.1|?>>
-    <associate|auto-11|<tuple|2.1.2|?>>
-    <associate|auto-12|<tuple|2.2|?>>
-    <associate|auto-13|<tuple|2.2.1|?>>
-    <associate|auto-14|<tuple|2.2.2|?>>
-    <associate|auto-15|<tuple|2.2.3|?>>
-    <associate|auto-16|<tuple|2.2.4|?>>
-    <associate|auto-17|<tuple|2.2.5|?>>
-    <associate|auto-18|<tuple|2.2.6|?>>
-    <associate|auto-19|<tuple|2.2.7|?>>
+    <associate|auto-10|<tuple|2.1|?>>
+    <associate|auto-11|<tuple|2.1.1|?>>
+    <associate|auto-12|<tuple|2.1.2|?>>
+    <associate|auto-13|<tuple|2.2|?>>
+    <associate|auto-14|<tuple|2.2.1|?>>
+    <associate|auto-15|<tuple|2.2.2|?>>
+    <associate|auto-16|<tuple|2.2.3|?>>
+    <associate|auto-17|<tuple|2.2.4|?>>
+    <associate|auto-18|<tuple|2.2.5|?>>
+    <associate|auto-19|<tuple|2.2.6|?>>
     <associate|auto-2|<tuple|1|?>>
-    <associate|auto-20|<tuple|2.2.8|?>>
-    <associate|auto-21|<tuple|2.2.9|?>>
-    <associate|auto-22|<tuple|2.2.10|?>>
-    <associate|auto-23|<tuple|2.2.11|?>>
-    <associate|auto-24|<tuple|2.3|?>>
-    <associate|auto-25|<tuple|2.3.1|?>>
-    <associate|auto-26|<tuple|2.3.2|?>>
+    <associate|auto-20|<tuple|2.2.7|?>>
+    <associate|auto-21|<tuple|2.2.8|?>>
+    <associate|auto-22|<tuple|2.2.9|?>>
+    <associate|auto-23|<tuple|2.2.10|?>>
+    <associate|auto-24|<tuple|2.2.11|?>>
+    <associate|auto-25|<tuple|2.3|?>>
+    <associate|auto-26|<tuple|2.3.1|?>>
+    <associate|auto-27|<tuple|2.3.2|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
     <associate|auto-6|<tuple|1.4|?>>
     <associate|auto-7|<tuple|1.5|?>>
-    <associate|auto-8|<tuple|2|?>>
-    <associate|auto-9|<tuple|2.1|?>>
+    <associate|auto-8|<tuple|1.6|?>>
+    <associate|auto-9|<tuple|2|?>>
+    <associate|defn-peer-id|<tuple|1|?>>
+    <associate|sect-discovery-mechanism|<tuple|1.3|?>>
   </collection>
 </references>
 
