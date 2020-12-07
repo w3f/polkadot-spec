@@ -67,7 +67,8 @@
     <reference|sect-genesis-block>.
 
     <item>mDNS - performs a broadcast to the local network. Nodes that might
-    be listing can respond the the broadcast.
+    be listing can respond the the broadcast. The libp2p mDNS specification
+    defines this process in more detail (<slink|><slink|https://github.com/libp2p/specs/blob/master/discovery/mdns.md>).
 
     <item>Kademlia requests - Kademlia supports <verbatim|FIND_NODE>
     requests, where nodes respond with their list of available peers.
@@ -96,6 +97,10 @@
 
   After a base-layer protocol is established, the Polkadot Host will apply
   the Noise protocol.
+
+  <subsection|Encryption>
+
+  <todo|todo>
 
   <subsection|Substreams>
 
@@ -676,32 +681,33 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|4|?>>
-    <associate|auto-10|<tuple|2.1|?>>
-    <associate|auto-11|<tuple|2.1.1|?>>
-    <associate|auto-12|<tuple|2.1.2|?>>
-    <associate|auto-13|<tuple|2.2|?>>
-    <associate|auto-14|<tuple|2.2.1|?>>
-    <associate|auto-15|<tuple|2.2.2|?>>
-    <associate|auto-16|<tuple|2.2.3|?>>
-    <associate|auto-17|<tuple|2.2.4|?>>
-    <associate|auto-18|<tuple|2.2.5|?>>
-    <associate|auto-19|<tuple|2.2.6|?>>
+    <associate|auto-10|<tuple|2|?>>
+    <associate|auto-11|<tuple|2.1|?>>
+    <associate|auto-12|<tuple|2.1.1|?>>
+    <associate|auto-13|<tuple|2.1.2|?>>
+    <associate|auto-14|<tuple|2.2|?>>
+    <associate|auto-15|<tuple|2.2.1|?>>
+    <associate|auto-16|<tuple|2.2.2|?>>
+    <associate|auto-17|<tuple|2.2.3|?>>
+    <associate|auto-18|<tuple|2.2.4|?>>
+    <associate|auto-19|<tuple|2.2.5|?>>
     <associate|auto-2|<tuple|1|?>>
-    <associate|auto-20|<tuple|2.2.7|?>>
-    <associate|auto-21|<tuple|2.2.8|?>>
-    <associate|auto-22|<tuple|2.2.9|?>>
-    <associate|auto-23|<tuple|2.2.10|?>>
-    <associate|auto-24|<tuple|2.2.11|?>>
-    <associate|auto-25|<tuple|2.3|?>>
-    <associate|auto-26|<tuple|2.3.1|?>>
-    <associate|auto-27|<tuple|2.3.2|?>>
+    <associate|auto-20|<tuple|2.2.6|?>>
+    <associate|auto-21|<tuple|2.2.7|?>>
+    <associate|auto-22|<tuple|2.2.8|?>>
+    <associate|auto-23|<tuple|2.2.9|?>>
+    <associate|auto-24|<tuple|2.2.10|?>>
+    <associate|auto-25|<tuple|2.2.11|?>>
+    <associate|auto-26|<tuple|2.3|?>>
+    <associate|auto-27|<tuple|2.3.1|?>>
+    <associate|auto-28|<tuple|2.3.2|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
     <associate|auto-6|<tuple|1.4|?>>
     <associate|auto-7|<tuple|1.5|?>>
     <associate|auto-8|<tuple|1.6|?>>
-    <associate|auto-9|<tuple|2|?>>
+    <associate|auto-9|<tuple|1.7|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|sect-discovery-mechanism|<tuple|1.3|?>>
   </collection>
