@@ -147,6 +147,75 @@
     sends blocks to connected peers.
   </itemize>
 
+  <subsection|Behavior for ougoing messages>
+
+  The Polkadot Host must actively communicate with the network in order to
+  participate in the validation process. This section describes the expected
+  behaviors of the node.
+
+  <subsubsection|Announcing blocks>
+
+  When the node creates a new block, it must be announced to the network.
+  Other nodes within the network will track this announcement and can request
+  information about this block. This process is described in Section
+  <todo|todo>.
+
+  <\definition>
+    The <verbatim|BlockAnnounceHandshake> initializes a substream to a remote
+    peer. Once established, all <verbatim|BlockAnnounce> messages created by
+    the node are sent to that substream.
+
+    The <verbatim|BlockAnnounceHandshake> is a SCALE encoded structure of the
+    following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|BA<rsub|h>>|<cell|=>|<cell|<around*|(|R,N<rsub|B>,h<rsub|B>,h<rsub|G>|)>>>>>
+    </eqnarray*>
+
+    where:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0
+      >|<cell|<math-it|The node is a full node>>>|<row|<cell|1
+      >|<cell|<math-it|The node is a light client>>>|<row|<cell|2
+      >|<cell|<math-it|The node is a validator>>>>>>>>|<row|<cell|N<rsub|B>>|<cell|=>|<cell|<math-it|Best
+      block number according to the node>>>|<row|<cell|h<rsub|B>>|<cell|=>|<cell|<math-it|Best
+      block hash according to the node>>>|<row|<cell|h<rsub|G>>|<cell|=>|<cell|<math-it|Genesis
+      block hash according to the node>>>>>
+    </eqnarray*>
+
+    \;
+  </definition>
+
+  <\definition>
+    The BlockAnnounce message is sent to the specified substream and
+    indicates to remote peers the that node has either created or received a
+    new block.
+
+    The <verbatim|BlockAnnounce> message is a SCALE encoded structure of the
+    following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|BA>|<cell|=>|<cell|<around*|(|Head<around*|(|B|)>,ib|)>>>>>
+    </eqnarray*>
+
+    where:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|Head<around*|(|B|)>>|<cell|=>|<cell|<math-it|Header
+      of the announced block>>>|<row|<cell|ib>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0>|<cell|<math-it|Is
+      the best block according to the node>>>|<row|<cell|1>|<cell|<math-it|Is
+      the best block according to node>>>>>>>>>>
+    </eqnarray*>
+  </definition>
+
+  <subsection|Behavior for incoming messages>
+
+  The Polkadot node can receive a handful of messages from its peers, by
+  which the Polkadot node is expected to act accordingly.
+
+  \;
+
   <subsection|I'm Online Heartbeat>
 
   The I'm Online heartbeat is a crucial part of the Polkadot validation
@@ -679,8 +748,8 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|3>
-    <associate|page-first|31>
-    <associate|section-nr|3<uninit>>
+    <associate|page-first|33>
+    <associate|section-nr|3>
     <associate|subsection-nr|4>
   </collection>
 </initial>
@@ -689,27 +758,30 @@
   <\collection>
     <associate|auto-1|<tuple|4|?>>
     <associate|auto-10|<tuple|1.7|?>>
-    <associate|auto-11|<tuple|2|?>>
-    <associate|auto-12|<tuple|2.1|?>>
-    <associate|auto-13|<tuple|2.1.1|?>>
-    <associate|auto-14|<tuple|2.1.2|?>>
-    <associate|auto-15|<tuple|2.2|?>>
-    <associate|auto-16|<tuple|2.2.1|?>>
-    <associate|auto-17|<tuple|2.2.2|?>>
-    <associate|auto-18|<tuple|2.2.3|?>>
-    <associate|auto-19|<tuple|2.2.4|?>>
+    <associate|auto-11|<tuple|1.7.1|?>>
+    <associate|auto-12|<tuple|1.8|?>>
+    <associate|auto-13|<tuple|1.9|?>>
+    <associate|auto-14|<tuple|2|?>>
+    <associate|auto-15|<tuple|2.1|?>>
+    <associate|auto-16|<tuple|2.1.1|?>>
+    <associate|auto-17|<tuple|2.1.2|?>>
+    <associate|auto-18|<tuple|2.2|?>>
+    <associate|auto-19|<tuple|2.2.1|?>>
     <associate|auto-2|<tuple|1|?>>
-    <associate|auto-20|<tuple|2.2.5|?>>
-    <associate|auto-21|<tuple|2.2.6|?>>
-    <associate|auto-22|<tuple|2.2.7|?>>
-    <associate|auto-23|<tuple|2.2.8|?>>
-    <associate|auto-24|<tuple|2.2.9|?>>
-    <associate|auto-25|<tuple|2.2.10|?>>
-    <associate|auto-26|<tuple|2.2.11|?>>
-    <associate|auto-27|<tuple|2.3|?>>
-    <associate|auto-28|<tuple|2.3.1|?>>
-    <associate|auto-29|<tuple|2.3.2|?>>
+    <associate|auto-20|<tuple|2.2.2|?>>
+    <associate|auto-21|<tuple|2.2.3|?>>
+    <associate|auto-22|<tuple|2.2.4|?>>
+    <associate|auto-23|<tuple|2.2.5|?>>
+    <associate|auto-24|<tuple|2.2.6|?>>
+    <associate|auto-25|<tuple|2.2.7|?>>
+    <associate|auto-26|<tuple|2.2.8|?>>
+    <associate|auto-27|<tuple|2.2.9|?>>
+    <associate|auto-28|<tuple|2.2.10|?>>
+    <associate|auto-29|<tuple|2.2.11|?>>
     <associate|auto-3|<tuple|1.1|?>>
+    <associate|auto-30|<tuple|2.3|?>>
+    <associate|auto-31|<tuple|2.3.1|?>>
+    <associate|auto-32|<tuple|2.3.2|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
     <associate|auto-6|<tuple|1.3.1|?>>
@@ -744,97 +816,105 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
-      <with|par-left|<quote|1tab>|1.4<space|2spc>Connection establishment
+      <with|par-left|<quote|2tab>|1.3.1<space|2spc>Protocol Identifier
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|1.5<space|2spc>Encryption
+      <with|par-left|<quote|1tab>|1.4<space|2spc>Connection establishment
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      <with|par-left|<quote|1tab>|1.6<space|2spc>Substreams
+      <with|par-left|<quote|1tab>|1.5<space|2spc>Encryption
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|1.7<space|2spc>I'm Online Heartbeat
+      <with|par-left|<quote|1tab>|1.6<space|2spc>Substreams
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Network
-      Messages> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10><vspace|0.5fn>
+      <with|par-left|<quote|1tab>|1.7<space|2spc>Behavior for incoming
+      messages <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|2.1<space|2spc>API Package
+      <with|par-left|<quote|1tab>|1.8<space|2spc>I'm Online Heartbeat
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-11>>
 
-      <with|par-left|<quote|2tab>|2.1.1<space|2spc>BlockRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Network
+      Messages> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-12><vspace|0.5fn>
 
-      <with|par-left|<quote|2tab>|2.1.2<space|2spc>BlockResponse
+      <with|par-left|<quote|1tab>|2.1<space|2spc>API Package
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-13>>
 
-      <with|par-left|<quote|1tab>|2.2<space|2spc>Light Package
+      <with|par-left|<quote|2tab>|2.1.1<space|2spc>BlockRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-14>>
 
-      <with|par-left|<quote|2tab>|2.2.1<space|2spc>Request
+      <with|par-left|<quote|2tab>|2.1.2<space|2spc>BlockResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-15>>
 
-      <with|par-left|<quote|2tab>|2.2.2<space|2spc>Response
+      <with|par-left|<quote|1tab>|2.2<space|2spc>Light Package
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-16>>
 
-      <with|par-left|<quote|2tab>|2.2.3<space|2spc>RemoteCallRequest
+      <with|par-left|<quote|2tab>|2.2.1<space|2spc>Request
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-17>>
 
-      <with|par-left|<quote|2tab>|2.2.4<space|2spc>RemoteCallResponse
+      <with|par-left|<quote|2tab>|2.2.2<space|2spc>Response
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-18>>
 
-      <with|par-left|<quote|2tab>|2.2.5<space|2spc>RemoteReadRequest
+      <with|par-left|<quote|2tab>|2.2.3<space|2spc>RemoteCallRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-19>>
 
-      <with|par-left|<quote|2tab>|2.2.6<space|2spc>RemoteReadResponse
+      <with|par-left|<quote|2tab>|2.2.4<space|2spc>RemoteCallResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20>>
 
-      <with|par-left|<quote|2tab>|2.2.7<space|2spc>RemoteReadChildRequest
+      <with|par-left|<quote|2tab>|2.2.5<space|2spc>RemoteReadRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-21>>
 
-      <with|par-left|<quote|2tab>|2.2.8<space|2spc>RemoteHeaderRequest
+      <with|par-left|<quote|2tab>|2.2.6<space|2spc>RemoteReadResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-22>>
 
-      <with|par-left|<quote|2tab>|2.2.9<space|2spc>RemoteHeaderResponse
+      <with|par-left|<quote|2tab>|2.2.7<space|2spc>RemoteReadChildRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-23>>
 
-      <with|par-left|<quote|2tab>|2.2.10<space|2spc>RemoteChangesRequest
+      <with|par-left|<quote|2tab>|2.2.8<space|2spc>RemoteHeaderRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-24>>
 
-      <with|par-left|<quote|2tab>|2.2.11<space|2spc>RemoteChangesResponse
+      <with|par-left|<quote|2tab>|2.2.9<space|2spc>RemoteHeaderResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-25>>
 
-      <with|par-left|<quote|1tab>|2.3<space|2spc>Finality Package
+      <with|par-left|<quote|2tab>|2.2.10<space|2spc>RemoteChangesRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-26>>
 
-      <with|par-left|<quote|2tab>|2.3.1<space|2spc>FinalityProofRequest
+      <with|par-left|<quote|2tab>|2.2.11<space|2spc>RemoteChangesResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
 
-      <with|par-left|<quote|2tab>|2.3.2<space|2spc>FinalityProofResponse
+      <with|par-left|<quote|1tab>|2.3<space|2spc>Finality Package
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-28>>
+
+      <with|par-left|<quote|2tab>|2.3.1<space|2spc>FinalityProofRequest
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-29>>
+
+      <with|par-left|<quote|2tab>|2.3.2<space|2spc>FinalityProofResponse
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-30>>
     </associate>
   </collection>
 </auxiliary>
