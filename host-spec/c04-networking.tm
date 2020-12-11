@@ -296,8 +296,6 @@
     </big-table>
   </definition>
 
-  \;
-
   <subsection|Behavior for incoming messages>
 
   The Polkadot node can receive a handful of messages from its peers, by
@@ -324,146 +322,6 @@
   <reference|sect-extrinsics>.
 
   <section|Network Messages>
-
-  <subsection|API Package>
-
-  ProtoBuf details:
-
-  <\itemize>
-    <item>syntax: proto3
-
-    <item>package: api.v1
-  </itemize>
-
-  <subsubsection|BlockRequest>
-
-  Request block data from a peer.
-
-  <\verbatim>
-    \;
-
-    message BlockRequest {
-
-    \ \ \ \ // Bits of block data to request.
-
-    \ \ \ \ uint32 fields = 1;
-
-    \ \ \ \ // Start from this block.
-
-    \ \ \ \ oneof from_block {
-
-    \ \ \ \ \ \ \ \ // Start with given hash.
-
-    \ \ \ \ \ \ \ \ bytes hash = 2;
-
-    \ \ \ \ \ \ \ \ // Start with given block number.
-
-    \ \ \ \ \ \ \ \ bytes number = 3;
-
-    \ \ \ \ }
-
-    \ \ \ \ // End at this block. An implementation defined
-
-    \ \ \ \ // maximum is used when unspecified.
-
-    \ \ \ \ bytes to_block = 4; // optional
-
-    \ \ \ \ // Sequence direction.
-
-    \ \ \ \ Direction direction = 5;
-
-    \ \ \ \ // Maximum number of blocks to return. An implementation
-
-    \ \ \ \ // defined maximum is used when unspecified.
-
-    \ \ \ \ uint32 max_blocks = 6; // optional
-
-    }
-
-    \;
-
-    // Block enumeration direction
-
-    enum Direction {
-
-    \ \ \ \ // Enumerate in ascending order
-
-    \ \ \ \ // (from child to parent).
-
-    \ \ \ \ Ascending = 0;
-
-    \ \ \ \ // Enumerate in descending order
-
-    \ \ \ \ // (from parent to canonical child).
-
-    \ \ \ \ Descending = 1;
-
-    }
-
-    \;
-  </verbatim>
-
-  <subsubsection|BlockResponse>
-
-  Response to Block Request.
-
-  <\verbatim>
-    \;
-
-    message BlockResponse {
-
-    \ \ \ \ // Block data for the requested sequence.
-
-    \ \ \ \ repeated BlockData blocks = 1;
-
-    }
-
-    \;
-
-    // Block data sent in the response.
-
-    message BlockData {
-
-    \ \ \ \ // Block header hash.
-
-    \ \ \ \ bytes hash = 1;
-
-    \ \ \ \ // Block header if requested.
-
-    \ \ \ \ bytes header = 2; // optional
-
-    \ \ \ \ // Block body if requested.
-
-    \ \ \ \ repeated bytes body = 3; // optional
-
-    \ \ \ \ // Block receipt if requested.
-
-    \ \ \ \ bytes receipt = 4; // optional
-
-    \ \ \ \ // Block message queue if requested.
-
-    \ \ \ \ bytes message_queue = 5; // optional
-
-    \ \ \ \ // Justification if requested.
-
-    \ \ \ \ bytes justification = 6; // optional
-
-    \ \ \ \ // True if justification should be treated as present but
-
-    \ \ \ \ // empty. This hack is unfortunately necessary because
-
-    \ \ \ \ // shortcomings in the protobuf format otherwise doesn't
-
-    \ \ \ \ // make it possible to differentiate between a lack of
-
-    \ \ \ \ // justification and an empty justification.
-
-    \ \ \ \ bool is_empty_justification = 7; // optional, false if absent
-
-    }
-
-    \;
-  </verbatim>
 
   <subsection|Light Package>
 
@@ -862,21 +720,21 @@
     <associate|auto-22|<tuple|2.1|?>>
     <associate|auto-23|<tuple|2.1.1|?>>
     <associate|auto-24|<tuple|2.1.2|?>>
-    <associate|auto-25|<tuple|2.2|?>>
-    <associate|auto-26|<tuple|2.2.1|?>>
-    <associate|auto-27|<tuple|2.2.2|?>>
-    <associate|auto-28|<tuple|2.2.3|?>>
-    <associate|auto-29|<tuple|2.2.4|?>>
+    <associate|auto-25|<tuple|2.1.3|?>>
+    <associate|auto-26|<tuple|2.1.4|?>>
+    <associate|auto-27|<tuple|2.1.5|?>>
+    <associate|auto-28|<tuple|2.1.6|?>>
+    <associate|auto-29|<tuple|2.1.7|?>>
     <associate|auto-3|<tuple|1.1|?>>
-    <associate|auto-30|<tuple|2.2.5|?>>
-    <associate|auto-31|<tuple|2.2.6|?>>
-    <associate|auto-32|<tuple|2.2.7|?>>
-    <associate|auto-33|<tuple|2.2.8|?>>
-    <associate|auto-34|<tuple|2.2.9|?>>
-    <associate|auto-35|<tuple|2.2.10|?>>
-    <associate|auto-36|<tuple|2.2.11|?>>
-    <associate|auto-37|<tuple|2.3|?>>
-    <associate|auto-38|<tuple|2.3.1|?>>
+    <associate|auto-30|<tuple|2.1.8|?>>
+    <associate|auto-31|<tuple|2.1.9|?>>
+    <associate|auto-32|<tuple|2.1.10|?>>
+    <associate|auto-33|<tuple|2.1.11|?>>
+    <associate|auto-34|<tuple|2.2|?>>
+    <associate|auto-35|<tuple|2.2.1|?>>
+    <associate|auto-36|<tuple|2.2.2|?>>
+    <associate|auto-37|<tuple|2.3.2|?>>
+    <associate|auto-38|<tuple|2.3.2|?>>
     <associate|auto-39|<tuple|2.3.2|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
