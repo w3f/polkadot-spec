@@ -240,7 +240,8 @@
         Bits of block data to be requested.
       </big-table>
 
-      <item><math|B<rsub|s>> is a varying data type of the following values:
+      <item><math|B<rsub|s>> is a Protobuf structure indicating a varying
+      data type of the following values:
 
       <\big-table|<tabular|<tformat|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Decription>>>|<row|<cell|bytes>|<cell|2>|<cell|The
       block hash>>|<row|<cell|bytes>|<cell|3>|<cell|The block number>>>>>>
@@ -250,6 +251,17 @@
       <item><math|B<rsub|e>> is either the block hash or block number
       depending on the value of <math|B<rsub|s>>. An implementation defined
       maximum is used when unspecified.
+
+      <item><verbatim|Direction> is a Protobuf structure indicating the
+      sequence direction of the requested blocks. The structure is a varying
+      data type of the following format:
+
+      <\big-table|<tabular|<tformat|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|2|2|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|4|5|1|1|cell-lborder|0ln>|<cwith|4|5|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>>|<row|<cell|0>|<cell|Enumerate
+      in ascending order>>|<row|<cell|>|<cell|(from child to
+      parent)>>|<row|<cell|1>|<cell|Enumerate in descending
+      order>>|<row|<cell|>|<cell|(from parent to cannonical child)>>>>>>
+        <verbatim|Direction> Protobuf structure.
+      </big-table>
 
       <item><math|B<rsub|m>> is the number of blocks to be returned. An
       implementation defined maximum is used when unspecified.
@@ -280,7 +292,7 @@
     (optional)>|<cell|>>|<row|<cell|bool>|<cell|7>|<cell|Indicates whether
     the justification>|<cell|>>|<row|<cell|>|<cell|>|<cell|is empty (i.e.
     should be ignored).>|<cell|>>>>>>
-      \;
+      <strong|BlockData> Protobuf structure.
     </big-table>
   </definition>
 
@@ -842,29 +854,30 @@
     <associate|auto-15|<tuple|3|?>>
     <associate|auto-16|<tuple|4|?>>
     <associate|auto-17|<tuple|5|?>>
-    <associate|auto-18|<tuple|1.8|?>>
-    <associate|auto-19|<tuple|1.9|?>>
+    <associate|auto-18|<tuple|6|?>>
+    <associate|auto-19|<tuple|1.8|?>>
     <associate|auto-2|<tuple|1|?>>
-    <associate|auto-20|<tuple|2|?>>
-    <associate|auto-21|<tuple|2.1|?>>
-    <associate|auto-22|<tuple|2.1.1|?>>
-    <associate|auto-23|<tuple|2.1.2|?>>
-    <associate|auto-24|<tuple|2.2|?>>
-    <associate|auto-25|<tuple|2.2.1|?>>
-    <associate|auto-26|<tuple|2.2.2|?>>
-    <associate|auto-27|<tuple|2.2.3|?>>
-    <associate|auto-28|<tuple|2.2.4|?>>
-    <associate|auto-29|<tuple|2.2.5|?>>
+    <associate|auto-20|<tuple|1.9|?>>
+    <associate|auto-21|<tuple|2|?>>
+    <associate|auto-22|<tuple|2.1|?>>
+    <associate|auto-23|<tuple|2.1.1|?>>
+    <associate|auto-24|<tuple|2.1.2|?>>
+    <associate|auto-25|<tuple|2.2|?>>
+    <associate|auto-26|<tuple|2.2.1|?>>
+    <associate|auto-27|<tuple|2.2.2|?>>
+    <associate|auto-28|<tuple|2.2.3|?>>
+    <associate|auto-29|<tuple|2.2.4|?>>
     <associate|auto-3|<tuple|1.1|?>>
-    <associate|auto-30|<tuple|2.2.6|?>>
-    <associate|auto-31|<tuple|2.2.7|?>>
-    <associate|auto-32|<tuple|2.2.8|?>>
-    <associate|auto-33|<tuple|2.2.9|?>>
-    <associate|auto-34|<tuple|2.2.10|?>>
-    <associate|auto-35|<tuple|2.2.11|?>>
-    <associate|auto-36|<tuple|2.3|?>>
-    <associate|auto-37|<tuple|2.3.1|?>>
-    <associate|auto-38|<tuple|2.3.2|?>>
+    <associate|auto-30|<tuple|2.2.5|?>>
+    <associate|auto-31|<tuple|2.2.6|?>>
+    <associate|auto-32|<tuple|2.2.7|?>>
+    <associate|auto-33|<tuple|2.2.8|?>>
+    <associate|auto-34|<tuple|2.2.9|?>>
+    <associate|auto-35|<tuple|2.2.10|?>>
+    <associate|auto-36|<tuple|2.2.11|?>>
+    <associate|auto-37|<tuple|2.3|?>>
+    <associate|auto-38|<tuple|2.3.1|?>>
+    <associate|auto-39|<tuple|2.3.2|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
     <associate|auto-6|<tuple|1.3.1|?>>
