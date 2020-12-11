@@ -183,14 +183,12 @@
       block hash according to the node>>>|<row|<cell|h<rsub|G>>|<cell|=>|<cell|<math-it|Genesis
       block hash according to the node>>>>>
     </eqnarray*>
-
-    \;
   </definition>
 
   <\definition>
-    The BlockAnnounce message is sent to the specified substream and
-    indicates to remote peers the that node has either created or received a
-    new block.
+    The <verbatim|BlockAnnounce> message is sent to the specified substream
+    and indicates to remote peers the that node has either created or
+    received a new block.
 
     The <verbatim|BlockAnnounce> message is a SCALE encoded structure of the
     following format:
@@ -208,6 +206,53 @@
       the best block according to node>>>>>>>>>>
     </eqnarray*>
   </definition>
+
+  <subsubsection|Requesting blocks>
+
+  Block requests can be used to retrieve a range of blocks from peers. The
+  BlockRequest message is a Protobuf serialized structure of the following
+  format:
+
+  <\big-table|<tabular|<tformat|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Value>>>|<row|<cell|uint32>|<cell|1>|<cell|Bits
+  of block data to request>|<cell|<math|B<rsub|f>>>>|<row|<cell|oneof>|<cell|>|<cell|Start
+  from this block>|<cell|<math|B<rsub|S>>>>|<row|<cell|bytes>|<cell|4>|<cell|End
+  at this block (optional)>|<cell|<math|B<rsub|e>>>>|<row|<cell|Direction>|<cell|5>|<cell|Sequence
+  direction>|<cell|>>|<row|<cell|uint32>|<cell|6>|<cell|Maximum amount
+  (optional)>|<cell|<math|B<rsub|m>>>>>>>>
+    \;
+  </big-table>
+
+  where
+
+  <\itemize-dot>
+    <item><math|B<rsub|f>> indictes all the fields should be included in the
+    request. It's big endian encoded bitmask which applies all desired fields
+    with bitwise OR operations. For example, the <math|B<rsub|f>> value for
+    <verbatim|Header> and <verbatim|Justification> is <verbatim|17>.
+
+    <\big-table|<tabular|<tformat|<table|<row|<cell|<strong|Field>>|<cell|<strong|Value>>>|<row|<cell|Header>|<cell|0000
+    0001>>|<row|<cell|Body>|<cell|0000 0010>>|<row|<cell|Receipt>|<cell|0000
+    0100>>|<row|<cell|Message Queue>|<cell|0000
+    1000>>|<row|<cell|Justification>|<cell|0001 0000>>>>>>
+      \;
+    </big-table>
+
+    <item><math|B<rsub|s>> is a varying data type of the following values:
+
+    <\big-table|<tabular|<tformat|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Decription>>>|<row|<cell|bytes>|<cell|2>|<cell|The
+    block hash>>|<row|<cell|bytes>|<cell|3>|<cell|The block number>>>>>>
+      \;
+    </big-table>
+
+    <item><math|B<rsub|e>> is either the block hash or block number depending
+    on the value of <math|B<rsub|s>>. An implementation defined maximum is
+    used when unspecified.
+
+    <item><math|B<rsub|m>> is the number of blocks to be returned. An
+    implementation defined maximum is used when unspecified.
+  </itemize-dot>
+
+  \;
 
   <subsection|Behavior for incoming messages>
 
@@ -759,29 +804,33 @@
     <associate|auto-1|<tuple|4|?>>
     <associate|auto-10|<tuple|1.7|?>>
     <associate|auto-11|<tuple|1.7.1|?>>
-    <associate|auto-12|<tuple|1.8|?>>
-    <associate|auto-13|<tuple|1.9|?>>
+    <associate|auto-12|<tuple|1.7.2|?>>
+    <associate|auto-13|<tuple|1|?>>
     <associate|auto-14|<tuple|2|?>>
-    <associate|auto-15|<tuple|2.1|?>>
-    <associate|auto-16|<tuple|2.1.1|?>>
-    <associate|auto-17|<tuple|2.1.2|?>>
-    <associate|auto-18|<tuple|2.2|?>>
-    <associate|auto-19|<tuple|2.2.1|?>>
+    <associate|auto-15|<tuple|3|?>>
+    <associate|auto-16|<tuple|1.8|?>>
+    <associate|auto-17|<tuple|1.9|?>>
+    <associate|auto-18|<tuple|2|?>>
+    <associate|auto-19|<tuple|2.1|?>>
     <associate|auto-2|<tuple|1|?>>
-    <associate|auto-20|<tuple|2.2.2|?>>
-    <associate|auto-21|<tuple|2.2.3|?>>
-    <associate|auto-22|<tuple|2.2.4|?>>
-    <associate|auto-23|<tuple|2.2.5|?>>
-    <associate|auto-24|<tuple|2.2.6|?>>
-    <associate|auto-25|<tuple|2.2.7|?>>
-    <associate|auto-26|<tuple|2.2.8|?>>
-    <associate|auto-27|<tuple|2.2.9|?>>
-    <associate|auto-28|<tuple|2.2.10|?>>
-    <associate|auto-29|<tuple|2.2.11|?>>
+    <associate|auto-20|<tuple|2.1.1|?>>
+    <associate|auto-21|<tuple|2.1.2|?>>
+    <associate|auto-22|<tuple|2.2|?>>
+    <associate|auto-23|<tuple|2.2.1|?>>
+    <associate|auto-24|<tuple|2.2.2|?>>
+    <associate|auto-25|<tuple|2.2.3|?>>
+    <associate|auto-26|<tuple|2.2.4|?>>
+    <associate|auto-27|<tuple|2.2.5|?>>
+    <associate|auto-28|<tuple|2.2.6|?>>
+    <associate|auto-29|<tuple|2.2.7|?>>
     <associate|auto-3|<tuple|1.1|?>>
-    <associate|auto-30|<tuple|2.3|?>>
-    <associate|auto-31|<tuple|2.3.1|?>>
-    <associate|auto-32|<tuple|2.3.2|?>>
+    <associate|auto-30|<tuple|2.2.8|?>>
+    <associate|auto-31|<tuple|2.2.9|?>>
+    <associate|auto-32|<tuple|2.2.10|?>>
+    <associate|auto-33|<tuple|2.2.11|?>>
+    <associate|auto-34|<tuple|2.3|?>>
+    <associate|auto-35|<tuple|2.3.1|?>>
+    <associate|auto-36|<tuple|2.3.2|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
     <associate|auto-6|<tuple|1.3.1|?>>
@@ -832,89 +881,97 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|1.7<space|2spc>Behavior for incoming
+      <with|par-left|<quote|1tab>|1.7<space|2spc>Behavior for ougoing
       messages <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|1.8<space|2spc>I'm Online Heartbeat
+      <with|par-left|<quote|2tab>|1.7.1<space|2spc>Announcing blocks
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-11>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Network
-      Messages> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12><vspace|0.5fn>
+      <with|par-left|<quote|1tab>|1.8<space|2spc>Behavior for incoming
+      messages <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-12>>
 
-      <with|par-left|<quote|1tab>|2.1<space|2spc>API Package
+      <with|par-left|<quote|1tab>|1.9<space|2spc>I'm Online Heartbeat
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-13>>
 
-      <with|par-left|<quote|2tab>|2.1.1<space|2spc>BlockRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-14>>
+      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Network
+      Messages> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-14><vspace|0.5fn>
 
-      <with|par-left|<quote|2tab>|2.1.2<space|2spc>BlockResponse
+      <with|par-left|<quote|1tab>|2.1<space|2spc>API Package
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-15>>
 
-      <with|par-left|<quote|1tab>|2.2<space|2spc>Light Package
+      <with|par-left|<quote|2tab>|2.1.1<space|2spc>BlockRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-16>>
 
-      <with|par-left|<quote|2tab>|2.2.1<space|2spc>Request
+      <with|par-left|<quote|2tab>|2.1.2<space|2spc>BlockResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-17>>
 
-      <with|par-left|<quote|2tab>|2.2.2<space|2spc>Response
+      <with|par-left|<quote|1tab>|2.2<space|2spc>Light Package
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-18>>
 
-      <with|par-left|<quote|2tab>|2.2.3<space|2spc>RemoteCallRequest
+      <with|par-left|<quote|2tab>|2.2.1<space|2spc>Request
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-19>>
 
-      <with|par-left|<quote|2tab>|2.2.4<space|2spc>RemoteCallResponse
+      <with|par-left|<quote|2tab>|2.2.2<space|2spc>Response
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20>>
 
-      <with|par-left|<quote|2tab>|2.2.5<space|2spc>RemoteReadRequest
+      <with|par-left|<quote|2tab>|2.2.3<space|2spc>RemoteCallRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-21>>
 
-      <with|par-left|<quote|2tab>|2.2.6<space|2spc>RemoteReadResponse
+      <with|par-left|<quote|2tab>|2.2.4<space|2spc>RemoteCallResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-22>>
 
-      <with|par-left|<quote|2tab>|2.2.7<space|2spc>RemoteReadChildRequest
+      <with|par-left|<quote|2tab>|2.2.5<space|2spc>RemoteReadRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-23>>
 
-      <with|par-left|<quote|2tab>|2.2.8<space|2spc>RemoteHeaderRequest
+      <with|par-left|<quote|2tab>|2.2.6<space|2spc>RemoteReadResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-24>>
 
-      <with|par-left|<quote|2tab>|2.2.9<space|2spc>RemoteHeaderResponse
+      <with|par-left|<quote|2tab>|2.2.7<space|2spc>RemoteReadChildRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-25>>
 
-      <with|par-left|<quote|2tab>|2.2.10<space|2spc>RemoteChangesRequest
+      <with|par-left|<quote|2tab>|2.2.8<space|2spc>RemoteHeaderRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-26>>
 
-      <with|par-left|<quote|2tab>|2.2.11<space|2spc>RemoteChangesResponse
+      <with|par-left|<quote|2tab>|2.2.9<space|2spc>RemoteHeaderResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
 
-      <with|par-left|<quote|1tab>|2.3<space|2spc>Finality Package
+      <with|par-left|<quote|2tab>|2.2.10<space|2spc>RemoteChangesRequest
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-28>>
 
-      <with|par-left|<quote|2tab>|2.3.1<space|2spc>FinalityProofRequest
+      <with|par-left|<quote|2tab>|2.2.11<space|2spc>RemoteChangesResponse
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-29>>
 
-      <with|par-left|<quote|2tab>|2.3.2<space|2spc>FinalityProofResponse
+      <with|par-left|<quote|1tab>|2.3<space|2spc>Finality Package
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-30>>
+
+      <with|par-left|<quote|2tab>|2.3.1<space|2spc>FinalityProofRequest
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-31>>
+
+      <with|par-left|<quote|2tab>|2.3.2<space|2spc>FinalityProofResponse
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-32>>
     </associate>
   </collection>
 </auxiliary>
