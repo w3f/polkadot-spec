@@ -147,7 +147,7 @@
     sends blocks to connected peers.
   </itemize>
 
-  <subsection|Behavior for ougoing messages>
+  <subsection|Network Messages>
 
   The Polkadot Host must actively communicate with the network in order to
   participate in the validation process. This section describes the expected
@@ -215,7 +215,7 @@
     The <verbatim|BlockRequest> message is a Protobuf serialized structure of
     the following format:
 
-    <\big-table|<tabular|<tformat|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Value>>>|<row|<cell|uint32>|<cell|1>|<cell|Bits
+    <\big-table|<tabular|<tformat|<cwith|2|-1|1|-1|cell-tborder|1ln>|<cwith|2|-1|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|cell-lborder|0ln>|<cwith|2|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Value>>>|<row|<cell|uint32>|<cell|1>|<cell|Bits
     of block data to request>|<cell|<math|B<rsub|f>>>>|<row|<cell|oneof>|<cell|>|<cell|Start
     from this block>|<cell|<math|B<rsub|S>>>>|<row|<cell|bytes>|<cell|4>|<cell|End
     at this block (optional)>|<cell|<math|B<rsub|e>>>>|<row|<cell|Direction>|<cell|5>|<cell|Sequence
@@ -233,7 +233,7 @@
       <math|B<rsub|f>> value to request <verbatim|Header> and
       <verbatim|Justification> is <verbatim|0001 0001> (17).
 
-      <\big-table|<tabular|<tformat|<table|<row|<cell|<strong|Field>>|<cell|<strong|Value>>>|<row|<cell|Header>|<cell|0000
+      <\big-table|<tabular|<tformat|<cwith|2|-1|1|-1|cell-tborder|1ln>|<cwith|2|-1|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|cell-lborder|0ln>|<cwith|2|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<table|<row|<cell|<strong|Field>>|<cell|<strong|Value>>>|<row|<cell|Header>|<cell|0000
       0001>>|<row|<cell|Body>|<cell|0000 0010>>|<row|<cell|Receipt>|<cell|0000
       0100>>|<row|<cell|Message Queue>|<cell|0000
       1000>>|<row|<cell|Justification>|<cell|0001 0000>>>>>>
@@ -243,7 +243,7 @@
       <item><math|B<rsub|s>> is a Protobuf structure indicating a varying
       data type of the following values:
 
-      <\big-table|<tabular|<tformat|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Decription>>>|<row|<cell|bytes>|<cell|2>|<cell|The
+      <\big-table|<tabular|<tformat|<cwith|2|-1|1|-1|cell-tborder|1ln>|<cwith|2|-1|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|cell-lborder|0ln>|<cwith|2|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Decription>>>|<row|<cell|bytes>|<cell|2>|<cell|The
       block hash>>|<row|<cell|bytes>|<cell|3>|<cell|The block number>>>>>>
         Protobuf message indicating the block to start from.
       </big-table>
@@ -284,24 +284,17 @@
     has the following format:
 
     <\big-table|<tabular|<tformat|<cwith|6|8|1|-1|cell-tborder|1ln>|<cwith|6|8|1|-1|cell-bborder|1ln>|<cwith|6|8|1|-1|cell-lborder|0ln>|<cwith|6|8|1|-1|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|1|3|1|-1|cell-tborder|1ln>|<cwith|1|3|1|-1|cell-bborder|1ln>|<cwith|1|3|1|-1|cell-lborder|0ln>|<cwith|1|3|1|-1|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|9|10|1|1|cell-lborder|0ln>|<cwith|9|10|4|4|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|4|4|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|4|4|cell-rborder|0ln>|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Value>>>|<row|<cell|bytes>|<cell|1>|<cell|Block
-    header hash>|<cell|>>|<row|<cell|bytes>|<cell|2>|<cell|Block header
-    (optional)>|<cell|>>|<row|<cell|repeated>|<cell|3>|<cell|Block body
-    (optional)>|<cell|>>|<row|<cell|bytes>|<cell|>|<cell|>|<cell|>>|<row|<cell|bytes>|<cell|4>|<cell|Block
+    header hash>|<cell|Sect. <reference|sect-blake2>>>|<row|<cell|bytes>|<cell|2>|<cell|Block
+    header (optional)>|<cell|Def. <reference|block>>>|<row|<cell|repeated>|<cell|3>|<cell|Block
+    body (optional)>|<cell|Def. <reference|sect-block-body>>>|<row|<cell|bytes>|<cell|>|<cell|>|<cell|>>|<row|<cell|bytes>|<cell|4>|<cell|Block
     receipt (optional)>|<cell|>>|<row|<cell|bytes>|<cell|5>|<cell|Block
     message queue (optional)>|<cell|>>|<row|<cell|bytes>|<cell|6>|<cell|Justification
-    (optional)>|<cell|>>|<row|<cell|bool>|<cell|7>|<cell|Indicates whether
-    the justification>|<cell|>>|<row|<cell|>|<cell|>|<cell|is empty (i.e.
-    should be ignored).>|<cell|>>>>>>
+    (optional)>|<cell|Def. <reference|defn-grandpa-justification>>>|<row|<cell|bool>|<cell|7>|<cell|Indicates
+    whether the justification>|<cell|>>|<row|<cell|>|<cell|>|<cell|is empty
+    (i.e. should be ignored).>|<cell|>>>>>>
       <strong|BlockData> Protobuf structure.
     </big-table>
   </definition>
-
-  <subsection|Behavior for incoming messages>
-
-  The Polkadot node can receive a handful of messages from its peers, by
-  which the Polkadot node is expected to act accordingly.
-
-  \;
 
   <subsection|I'm Online Heartbeat>
 
