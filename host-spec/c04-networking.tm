@@ -219,7 +219,7 @@
   at this block (optional)>|<cell|<math|B<rsub|e>>>>|<row|<cell|Direction>|<cell|5>|<cell|Sequence
   direction>|<cell|>>|<row|<cell|uint32>|<cell|6>|<cell|Maximum amount
   (optional)>|<cell|<math|B<rsub|m>>>>>>>>
-    \;
+    <verbatim|BlockRequest> Protobuf message.
   </big-table>
 
   where
@@ -234,14 +234,14 @@
     0001>>|<row|<cell|Body>|<cell|0000 0010>>|<row|<cell|Receipt>|<cell|0000
     0100>>|<row|<cell|Message Queue>|<cell|0000
     1000>>|<row|<cell|Justification>|<cell|0001 0000>>>>>>
-      \;
+      Bits of block data to be requested.
     </big-table>
 
     <item><math|B<rsub|s>> is a varying data type of the following values:
 
     <\big-table|<tabular|<tformat|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Decription>>>|<row|<cell|bytes>|<cell|2>|<cell|The
     block hash>>|<row|<cell|bytes>|<cell|3>|<cell|The block number>>>>>>
-      \;
+      Block hash or number to start from.
     </big-table>
 
     <item><math|B<rsub|e>> is either the block hash or block number depending
