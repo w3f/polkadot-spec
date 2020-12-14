@@ -33,6 +33,8 @@
 
     <item><hlink|Noise|https://noiseprotocol.org/>
 
+    <item><hlink|mplex|https://github.com/libp2p/specs/tree/master/mplex>
+
     <item><hlink|Protocol Buffers|https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>
   </itemize>
 
@@ -85,9 +87,9 @@
 
   Polkadot nodes connect to peers by establishing a TCP connection. Once
   established, the node initiates a handshake with the remote peer's
-  encryption layer. An additional layer, know as the multiplexing layer,
-  allows a connection to be split into substreams, either by the local or
-  remote node.
+  encryption layer. An additional layer, know as the multiplexing layer
+  (<slink|https://github.com/libp2p/specs/tree/master/mplex>), allows a
+  connection to be split into substreams, either by the local or remote node.
 
   The Polkadot node supports two kind of substream protocols:
 
