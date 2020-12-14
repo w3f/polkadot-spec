@@ -128,8 +128,9 @@
 
   <subsection|Noise Protocol>
 
-  The Noise protocol is a framework for bulding encryption protocols. lipp2p
-  utilizes that protocol for establishing encrypted communication channels.
+  The Noise protocol is a framework for bulding encryption protocols.
+  <verbatim|libp2p> utilizes that protocol for establishing encrypted
+  communication channels.
 
   Polkadot nodes use the XX handshake pattern
   (<slink|https://noiseexplorer.com/patterns/XX/>) to establish a connection
@@ -154,10 +155,15 @@
   the negotiation of <with|font-shape|italic|application-specific protocols>,
   where each protocol servers a specific utility.
 
-  The Polkadot Host adoptes the following, standardized <verbatim|libp2p>
-  application-specific protocols:
+  The Polkadot Host adoptes the following substreams:
 
   <\itemize>
+    <item><verbatim|/noise> - Open a substream for the Noise protocol to
+    establish a encryption layer.
+
+    <item><verbatim|/multistream/1.0.0> - Open a substream for handshakes to
+    negotiate a new protocol.
+
     <item><verbatim|/ipfs/ping/1.0.0> - Open a substream to a peer and
     initialize a ping to verify if a connection is till alive. If the peer
     does not respond, the connection is dropped.
@@ -168,8 +174,6 @@
     <item><verbatim|/dot/kad/> - Open a substream for Kademlia
     <verbatim|FIND_NODE> requests.
   </itemize>
-
-  Additional, non-standardized protocols:
 
   <\itemize>
     <item><verbatim|/dot/sync/2> - a request and response protocol that
@@ -339,6 +343,8 @@
   The Polkadot Host must send certain events to its peers, which is referred
   to as \Pgossiping\Q. This includes extrinsics, Grandpa votes,
   justifications and equivocations.
+
+  <todo|todo>
 
   <subsection|I'm Online Heartbeat>
 
