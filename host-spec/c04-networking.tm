@@ -87,9 +87,9 @@
 
   Polkadot nodes connect to peers by establishing a TCP connection. Once
   established, the node initiates a handshake with the remote peer's
-  encryption layer. An additional layer, know as the multiplexing layer
-  (<slink|https://github.com/libp2p/specs/tree/master/mplex>), allows a
-  connection to be split into substreams, either by the local or remote node.
+  encryption layer. An additional layer, know as the multiplexing layer,
+  allows a connection to be split into substreams, either by the local or
+  remote node.
 
   The Polkadot node supports two kind of substream protocols:
 
@@ -107,9 +107,7 @@
   </itemize-dot>
 
   The Polkadot Host can establish a connection with any peer it knows the
-  address. <verbatim|libp2p> uses the <verbatim|multistream-select> protocol
-  in order to establish an encryption and multiplexing layer. The Polkadot
-  Host supports multiple base-layer protocols:
+  address. The Polkadot Host supports multiple base-layer protocols:
 
   <\itemize>
     <item>TCP/IP - addresses in the form of <verbatim|/ip4/1.2.3.4/tcp/>
@@ -153,9 +151,11 @@
   <subsection|Substreams>
 
   After the node establishes a connection with a peer, the use of
-  multiplexing allows the Polkadot Host to open substreams. Substreams allow
-  the negotiation of <with|font-shape|italic|application-specific protocols>,
-  where each protocol servers a specific utility.
+  multiplexing allows the Polkadot Host to open substreams. <verbatim|libp2p>
+  uses the <verbatim|mplex> protocol (<slink|https://github.com/libp2p/specs/tree/master/mplex>)
+  to mange substream and to allow the negotiation of
+  <with|font-shape|italic|application-specific protocols>, where each
+  protocol servers a specific utility.
 
   The Polkadot Host adoptes the following substreams:
 
@@ -201,8 +201,8 @@
 
   When the node creates a new block, it must be announced to the network.
   Other nodes within the network will track this announcement and can request
-  information about this block. This process is described in Section
-  <todo|todo>.
+  information about this block. The mechanism for tracking announements and
+  requesting the required data is implementation specific.
 
   <\definition>
     The <verbatim|BlockAnnounceHandshake> initializes a substream to a remote
@@ -272,8 +272,8 @@
 
     <\itemize-dot>
       <item><math|B<rsub|f>> indictes all the fields that should be included
-      in the request. It's big endian encoded bitmask which applies all
-      desired fields with bitwise OR operations. For example, the
+      in the request. It's <strong|big endian> encoded bitmask which applies
+      all desired fields with bitwise OR operations. For example, the
       <math|B<rsub|f>> value to request <verbatim|Header> and
       <verbatim|Justification> is <verbatim|0001 0001> (17).
 
