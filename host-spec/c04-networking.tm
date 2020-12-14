@@ -126,9 +126,26 @@
   After a base-layer protocol is established, the Polkadot Host will apply
   the Noise protocol.
 
-  <subsection|Encryption>
+  <subsection|Noise Protocol>
 
-  <todo|todo>
+  The Noise protocol is a framework for bulding encryption protocols. lipp2p
+  utilizes that protocol for establishing encrypted communication channels.
+
+  Polkadot nodes use the XX handshake pattern
+  (<slink|https://noiseexplorer.com/patterns/XX/>) to establish a connection
+  between peers. Three steps are required to successfully complete the
+  handshake process:
+
+  <\enumerate-numeric>
+    <item>The initiator generates a keypair and sends the public key to the
+    responder.
+
+    <item>The responder generates its own keypair and sends its public key
+    back to the initiator.
+
+    <item>Both the initiator and the responder can derive a shared secret and
+    use it to encrypt all further communication.
+  </enumerate-numeric>
 
   <subsection|Substreams>
 
