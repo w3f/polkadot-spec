@@ -83,6 +83,27 @@
 
   <subsection|Connection establishment>
 
+  Polkadot nodes connect to peers by establishing a TCP connection. Once
+  established, the node initiates a handshake with the remote peer's
+  encryption layer. An additional layer, know as the multiplexing layer,
+  allows a connection to be split into substreams, either by the local or
+  remote node.
+
+  The Polkadot node supports two kind of substream protocols:
+
+  <\itemize-dot>
+    <item><strong|Request-Response substreams>. After the protocol is
+    negotiated, the opening node sends a single message containing a request.
+    The remote node then sends a response, after which the substream is then
+    immediately closed.
+
+    <item><strong|Notification substreams>. After the protocol is negotiated,
+    the opening node sends a single hand shake message. The remote node can
+    then either accept or reject the substream. After the substream has been
+    accepted, the opening node can send an unbound number of individual
+    messages.
+  </itemize-dot>
+
   The Polkadot Host can establish a connection with any peer it knows the
   address. <verbatim|libp2p> uses the <verbatim|multistream-select> protocol
   in order to establish an encryption and multiplexing layer. The Polkadot
@@ -296,6 +317,12 @@
     </big-table>
   </definition>
 
+  <subsection|Gossiping>
+
+  The Polkadot Host must send certain events to its peers, which is referred
+  to as \Pgossiping\Q. This includes extrinsics, Grandpa votes,
+  justifications and equivocations.
+
   <subsection|I'm Online Heartbeat>
 
   The I'm Online heartbeat is a crucial part of the Polkadot validation
@@ -339,26 +366,9 @@
     <associate|auto-19|<tuple|1.8|?>>
     <associate|auto-2|<tuple|1|?>>
     <associate|auto-20|<tuple|1.9|?>>
-    <associate|auto-21|<tuple|2|?>>
-    <associate|auto-22|<tuple|2.1|?>>
-    <associate|auto-23|<tuple|2.1.1|?>>
-    <associate|auto-24|<tuple|2.1.2|?>>
-    <associate|auto-25|<tuple|2.1.3|?>>
-    <associate|auto-26|<tuple|2.1.4|?>>
-    <associate|auto-27|<tuple|2.1.5|?>>
-    <associate|auto-28|<tuple|2.1.6|?>>
-    <associate|auto-29|<tuple|2.1.7|?>>
+    <associate|auto-21|<tuple|1.8|?>>
+    <associate|auto-22|<tuple|1.9|?>>
     <associate|auto-3|<tuple|1.1|?>>
-    <associate|auto-30|<tuple|2.1.8|?>>
-    <associate|auto-31|<tuple|2.1.9|?>>
-    <associate|auto-32|<tuple|2.1.10|?>>
-    <associate|auto-33|<tuple|2.1.11|?>>
-    <associate|auto-34|<tuple|2.2|?>>
-    <associate|auto-35|<tuple|2.2.1|?>>
-    <associate|auto-36|<tuple|2.2.2|?>>
-    <associate|auto-37|<tuple|2.3.2|?>>
-    <associate|auto-38|<tuple|2.3.2|?>>
-    <associate|auto-39|<tuple|2.3.2|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
     <associate|auto-6|<tuple|1.3.1|?>>
@@ -387,13 +397,19 @@
       </surround>|<pageref|auto-15>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|4>|>
-        <with|font-family|<quote|tt>|language|<quote|verbatim>|BlockResponse>
-        Protobuf message.
+        <with|font-family|<quote|tt>|language|<quote|verbatim>|Direction>
+        Protobuf structure.
       </surround>|<pageref|auto-16>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|5>|>
-        \;
+        <with|font-family|<quote|tt>|language|<quote|verbatim>|BlockResponse>
+        Protobuf message.
       </surround>|<pageref|auto-17>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|6>|>
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BlockData>
+        Protobuf structure.
+      </surround>|<pageref|auto-18>>
     </associate>
     <\associate|toc>
       <vspace*|2fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-size|<quote|1.19>|4<space|2spc>Networking>
@@ -432,8 +448,8 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|1.7<space|2spc>Behavior for ougoing
-      messages <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|1.7<space|2spc>Network Messages
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
       <with|par-left|<quote|2tab>|1.7.1<space|2spc>Announcing blocks
@@ -444,89 +460,13 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-12>>
 
-      <with|par-left|<quote|1tab>|1.8<space|2spc>Behavior for incoming
-      messages <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-18>>
-
-      <with|par-left|<quote|1tab>|1.9<space|2spc>I'm Online Heartbeat
+      <with|par-left|<quote|1tab>|1.8<space|2spc>Gossiping
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-19>>
 
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>Network
-      Messages> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20><vspace|0.5fn>
-
-      <with|par-left|<quote|1tab>|2.1<space|2spc>API Package
+      <with|par-left|<quote|1tab>|1.9<space|2spc>I'm Online Heartbeat
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
-
-      <with|par-left|<quote|2tab>|2.1.1<space|2spc>BlockRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
-
-      <with|par-left|<quote|2tab>|2.1.2<space|2spc>BlockResponse
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
-
-      <with|par-left|<quote|1tab>|2.2<space|2spc>Light Package
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-24>>
-
-      <with|par-left|<quote|2tab>|2.2.1<space|2spc>Request
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-25>>
-
-      <with|par-left|<quote|2tab>|2.2.2<space|2spc>Response
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26>>
-
-      <with|par-left|<quote|2tab>|2.2.3<space|2spc>RemoteCallRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27>>
-
-      <with|par-left|<quote|2tab>|2.2.4<space|2spc>RemoteCallResponse
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-28>>
-
-      <with|par-left|<quote|2tab>|2.2.5<space|2spc>RemoteReadRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-29>>
-
-      <with|par-left|<quote|2tab>|2.2.6<space|2spc>RemoteReadResponse
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-30>>
-
-      <with|par-left|<quote|2tab>|2.2.7<space|2spc>RemoteReadChildRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-31>>
-
-      <with|par-left|<quote|2tab>|2.2.8<space|2spc>RemoteHeaderRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-32>>
-
-      <with|par-left|<quote|2tab>|2.2.9<space|2spc>RemoteHeaderResponse
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-33>>
-
-      <with|par-left|<quote|2tab>|2.2.10<space|2spc>RemoteChangesRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-34>>
-
-      <with|par-left|<quote|2tab>|2.2.11<space|2spc>RemoteChangesResponse
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-35>>
-
-      <with|par-left|<quote|1tab>|2.3<space|2spc>Finality Package
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-36>>
-
-      <with|par-left|<quote|2tab>|2.3.1<space|2spc>FinalityProofRequest
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-37>>
-
-      <with|par-left|<quote|2tab>|2.3.2<space|2spc>FinalityProofResponse
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-38>>
+      <no-break><pageref|auto-20>>
     </associate>
   </collection>
 </auxiliary>
