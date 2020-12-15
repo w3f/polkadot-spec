@@ -2407,8 +2407,25 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>result: an unsigned 64-bit integer containing the current UNIX
-    timestamp in milliseconds.
+    <item><verbatim|result>: an unsigned 64-bit integer containing the
+    current UNIX timestamp in milliseconds.
+  </itemize-dot>
+
+  <subsection|offchain_sleep_until>
+
+  Pause the execution until the deadline is reached.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <verbatim|(func $offchain_sleep_until_version_1 (param $deadline u64))>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item><verbatim|deadline>: an unsigned 64-bit integer containing the UNIX
+    timestamp in milliseconds until the execution should pause to.
   </itemize-dot>
 </body>
 
@@ -2504,7 +2521,9 @@
     <associate|auto-166|<tuple|A.10.3.1|?>>
     <associate|auto-167|<tuple|A.10.4|?>>
     <associate|auto-168|<tuple|A.10.4.1|?>>
+    <associate|auto-169|<tuple|A.10.5|?>>
     <associate|auto-17|<tuple|A.1.8|69>>
+    <associate|auto-170|<tuple|A.10.5.1|?>>
     <associate|auto-18|<tuple|A.1.8.1|69>>
     <associate|auto-19|<tuple|A.1.9|69>>
     <associate|auto-2|<tuple|A.1|67>>
