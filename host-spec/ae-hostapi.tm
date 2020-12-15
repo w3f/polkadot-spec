@@ -1530,9 +1530,9 @@
 
   <subsection|<verbatim|ext_offchain_is_validator>>
 
-  Verifies if the local node is a potential validator. Even if this function
-  returns true, it does not mean that any keys are configured or that the
-  validator is registered in the chain.
+  Check whether the local node is a potential validator. Even if this
+  function returns <verbatim|1>, it does not mean that any keys are
+  configured or that the validator is registered in the chain.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1575,18 +1575,35 @@
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
-    Neither on success or failure is there any additional data provided.
+    Neither on success or failure is there any additional data provided. The
+    cause of a failure is implementation specific.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_network_state>>
 
   Returns the SCALE encoded, opaque information about the local node's
-  network state. This information is fetched by calling into
-  <verbatim|libp2p>, which <em|might> include the <verbatim|PeerId> and
-  possible <verbatim|Multiaddress(-es)> by which the node is publicly known
-  by. Those values are unique and have to be known by the node individually.
-  Due to its opaque nature, it's unknown whether that information is
-  available prior to execution.
+  network state.
+
+  <\definition>
+    <label|defn-opaque-network-state>The <verbatim|OpaqueNetworkState>
+    structure, <math|O<rsub|NS>>, is a SCALE encoded blob holding information
+    about the the PeerId, <math|P<rsub|id>>, of the local node and a list of
+    Multiaddresses, (<math|M<rsub|0>\<ldots\>M<rsub|n>>), the node knows it
+    can be reached at:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|O<rsub|NS>>|<cell|=>|<cell|<around*|(|P<rsub|id>,<around*|(|M<rsub|0>\<ldots\>M<rsub|n>|)><rsub|>|)>>>>>
+    </eqnarray*>
+
+    where:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|P<rsub|id>>|<cell|=>|<cell|<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>>|<row|<cell|M<rsub|>>|<cell|=>|<cell|<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>>>>
+    </eqnarray*>
+
+    The information contained in this structure is naturally opaque to the
+    caller of this function.
+  </definition>
 
   <strong|<subsubsection|Version 1 - Prototype>>
 
@@ -1602,10 +1619,9 @@
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
-    On success it contains the SCALE encoded network state. This includes
-    none or one <verbatim|PeerId> followed by none, one or more IPv4 or IPv6
-    <verbatim|Multiaddress(-es)> by which the node is publicly known by. On
-    failure no additional data is provided.
+    On success it contains the <verbatim|OpaqueNetworkState> structure as
+    defined in Definition <reference|defn-opaque-network-state>. On failure,
+    an empty value is yielded where its cause is implementation specific.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_timestamp>>
@@ -2309,144 +2325,6 @@
     <item><verbatim|message>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the log message.
   </itemize>
-
-  <section|Offchain>
-
-  Interface that provides functions for offchain functionality.
-
-  <subsection|offchain_is_validator>
-
-  Determines whether the local node is a running as a validator. Even if this
-  function returns <verbatim|true>, it does not mean that any keys are
-  configured and that the validators is registered in the chain. The
-  mechanism for determining this condition is implementation specific.
-
-  <subsubsection|Version 1 - Prototype>
-
-  <verbatim|(func $offchain_is_validator_version_1 (result bool))>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item><verbatim|result>: <verbatim|true> if the node is is running as a
-    validator or <verbatim|false> if otherwise.
-  </itemize-dot>
-
-  <subsection|offchain_submit_transaction>
-
-  Submits an encoded transaction to the pool.
-
-  <subsubsection|Version 1 - Prototype>
-
-  <verbatim|(func $offchain_submit_transaction_version_1 (result Result))>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item><verbatim|result>: a SCALE encoded <verbatim|Result> as defined in
-    Definition <reference|defn-result-type> yielding an empty value on both
-    success or failure. The cause of a failure is implementation specific.
-  </itemize-dot>
-
-  <subsection|offchain_network_state>
-
-  Returns information about the local node's network state.
-
-  <\definition>
-    <label|defn-opaque-network-state>The <verbatim|OpaqueNetworkState>
-    structure, <math|O<rsub|NS>>, is a SCALE encoded blob holding information
-    about the the PeerId, <math|P<rsub|id>>, of the local node and a list of
-    Multiaddresses, (<math|M<rsub|0>\<ldots\>M<rsub|n>>), the node knows it
-    can be reached at:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|O<rsub|NS>>|<cell|=>|<cell|<around*|(|P<rsub|id>,<around*|(|M<rsub|0>\<ldots\>M<rsub|n>|)><rsub|>|)>>>>>
-    </eqnarray*>
-
-    where:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|P<rsub|id>>|<cell|=>|<cell|<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>>|<row|<cell|M<rsub|>>|<cell|=>|<cell|<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>>>>
-    </eqnarray*>
-
-    The information contained in this structure is naturally opaque to the
-    caller of this function.
-  </definition>
-
-  <subsubsection|Version 1 - Prototype>
-
-  <verbatim|(func $offchain_network_state_version_1 (result i64))>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded Result as
-    defined in Definition <reference|defn-result-type> containing
-    <verbatim|OpaqueNetworkState> structure as defined in Definition
-    <reference|defn-opaque-network-state>. On failure no additional data is
-    provided, where its cause is implementation specific.
-  </itemize-dot>
-
-  <subsection|offchain_timestamp>
-
-  Returns the current UNIX timestamp in milliseconds.
-
-  <subsubsection|Version 1 - Prototype>
-
-  <verbatim|(func $offchain_timestamp_version_1 (result u64))>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item><verbatim|result>: an unsigned 64-bit integer containing the
-    current UNIX timestamp in milliseconds.
-  </itemize-dot>
-
-  <subsection|offchain_sleep_until>
-
-  Pause the execution until the deadline is reached.
-
-  <subsubsection|Version 1 - Prototype>
-
-  <verbatim|(func $offchain_sleep_until_version_1 (param $deadline u64))>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item><verbatim|deadline>: an unsigned 64-bit integer containing the UNIX
-    timestamp in milliseconds until the execution should pause to.
-  </itemize-dot>
-
-  <subsection|offchain_random_seed>
-
-  Returns a cryptographically safe, random and non-deterministic seed
-  generated by the host environment.
-
-  <subsubsection|Version 1 - Prototype>
-
-  <verbatim|(func $offchain_random_seed_version_1 (return i32))>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item><verbatim|return>: a regular pointer indicating the memory location
-    of the generated seed of 32 bytes.
-  </itemize-dot>
-
-  \;
 </body>
 
 <\initial>
@@ -2546,6 +2424,7 @@
     <associate|auto-170|<tuple|A.10.5.1|?>>
     <associate|auto-171|<tuple|A.10.6|?>>
     <associate|auto-172|<tuple|A.10.6.1|?>>
+    <associate|auto-173|<tuple|A.10.7|?>>
     <associate|auto-18|<tuple|A.1.8.1|69>>
     <associate|auto-19|<tuple|A.1.9|69>>
     <associate|auto-2|<tuple|A.1|67>>
@@ -2643,8 +2522,8 @@
     <associate|defn-key-type-id|<tuple|A.5|74>>
     <associate|defn-lexicographic-ordering|<tuple|A.3|67>>
     <associate|defn-local-storage|<tuple|A.8|82>>
-    <associate|defn-logging-log-level|<tuple|A.11|90>>
-    <associate|defn-opaque-network-state|<tuple|A.12|?>>
+    <associate|defn-logging-log-level|<tuple|A.12|90>>
+    <associate|defn-opaque-network-state|<tuple|A.11|?>>
     <associate|defn-persistent-storage|<tuple|A.7|82>>
     <associate|defn-runtime-pointer|<tuple|A.2|67>>
     <associate|nota-re-api-at-state|<tuple|A.1|67>>
@@ -3291,6 +3170,61 @@
       <with|par-left|<quote|2tab>|A.9.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-159>>
+
+      A.10<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-160>
+
+      <with|par-left|<quote|1tab>|A.10.1<space|2spc>offchain_is_validator
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-161>>
+
+      <with|par-left|<quote|2tab>|A.10.1.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-162>>
+
+      <with|par-left|<quote|1tab>|A.10.2<space|2spc>offchain_submit_transaction
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-163>>
+
+      <with|par-left|<quote|2tab>|A.10.2.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-164>>
+
+      <with|par-left|<quote|1tab>|A.10.3<space|2spc>offchain_network_state
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-165>>
+
+      <with|par-left|<quote|2tab>|A.10.3.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-166>>
+
+      <with|par-left|<quote|1tab>|A.10.4<space|2spc>offchain_timestamp
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-167>>
+
+      <with|par-left|<quote|2tab>|A.10.4.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-168>>
+
+      <with|par-left|<quote|1tab>|A.10.5<space|2spc>offchain_sleep_until
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-169>>
+
+      <with|par-left|<quote|2tab>|A.10.5.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-170>>
+
+      <with|par-left|<quote|1tab>|A.10.6<space|2spc>offchain_random_seed
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-171>>
+
+      <with|par-left|<quote|2tab>|A.10.6.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-172>>
+
+      <with|par-left|<quote|1tab>|A.10.7<space|2spc>offchain_local_storage_set
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-173>>
     </associate>
   </collection>
 </auxiliary>
