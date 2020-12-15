@@ -2393,6 +2393,23 @@
     <reference|defn-opaque-network-state>. On failure no additional data is
     provided, where its cause is implementation specific.
   </itemize-dot>
+
+  <subsection|offchain_timestamp>
+
+  Returns the current UNIX timestamp in milliseconds.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <verbatim|(func $offchain_timestamp_version_1 (result u64))>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>result: an unsigned 64-bit integer containing the current UNIX
+    timestamp in milliseconds.
+  </itemize-dot>
 </body>
 
 <\initial>
@@ -2485,6 +2502,8 @@
     <associate|auto-164|<tuple|A.10.2.1|?>>
     <associate|auto-165|<tuple|A.10.3|?>>
     <associate|auto-166|<tuple|A.10.3.1|?>>
+    <associate|auto-167|<tuple|A.10.4|?>>
+    <associate|auto-168|<tuple|A.10.4.1|?>>
     <associate|auto-17|<tuple|A.1.8|69>>
     <associate|auto-18|<tuple|A.1.8.1|69>>
     <associate|auto-19|<tuple|A.1.9|69>>
