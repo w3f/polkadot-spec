@@ -1631,7 +1631,7 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_offchain_timestamp_version_1 (result i64))
+    (func $ext_offchain_timestamp_version_1 (result u64))
   </verbatim>
 
   \ 
@@ -1639,7 +1639,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: an i64 integer indicating the current UNIX
+    <item><verbatim|result>: an u64 integer indicating the current UNIX
     timestamp as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
@@ -1650,7 +1650,7 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_offchain_sleep_until_version_1 (param $deadline i64))
+    (func $ext_offchain_sleep_until_version_1 (param $deadline u64))
   </verbatim>
 
   \ 
@@ -1658,7 +1658,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
+    <item><verbatim|deadline>: an u64 integer specifying the UNIX timestamp
     as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
@@ -1678,8 +1678,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: a pointer to the buffer containing the 256-bit
-    seed.
+    <item><verbatim|result>: a regular pointer to the buffer containing the
+    256-bit seed.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_local_storage_set>>
@@ -1702,9 +1702,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for a persistent storage as defined in
-    Definition <reference|defn-offchain-persistent-storage> and a value equal
-    to 2 for local storage as defined in Definition
+    value equal to <verbatim|1> is used for a persistent storage as defined
+    in Definition <reference|defn-offchain-persistent-storage> and a value
+    equal to <verbatim|2> for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
@@ -1713,6 +1713,33 @@
     <item><verbatim|value>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the value.
   </itemize>
+
+  <subsection|<verbatim|ext_offchain_local_storage_clear>>
+
+  Remove a value from the local storage.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_offchain_local_storage_clear_version_1
+
+    \ \ (param $kind i32) (param $key i64))
+  </verbatim>
+
+  \;
+
+  Arguments:
+
+  <\itemize-dot>
+    <item><verbatim|kind>: an i32 integer indicating the storage kind. A
+    value equal to <verbatim|1> is used for a persistent storage as defined
+    in Definition <reference|defn-offchain-persistent-storage> and a value
+    equal to <verbatim|2> for local storage as defined in Definition
+    <reference|defn-offchain-local-storage>.
+
+    <item>key: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
+  </itemize-dot>
 
   <subsection|<verbatim|ext_offchain_local_storage_compare_and_set>>
 
@@ -1736,9 +1763,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for a persistent storage as defined in
-    Definition <reference|defn-offchain-persistent-storage> and a value equal
-    to 2 for local storage as defined in Definition
+    value equal to <verbatim|1> is used for a persistent storage as defined
+    in Definition <reference|defn-offchain-persistent-storage> and a value
+    equal to <verbatim|2> for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
@@ -1774,9 +1801,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for a persistent storage as defined in
-    Definition <reference|defn-offchain-persistent-storage> and a value equal
-    to 2 for local storage as defined in Definition
+    value equal to <verbatim|1> is used for a persistent storage as defined
+    in Definition <reference|defn-offchain-persistent-storage> and a value
+    equal to <verbatim|2> for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
@@ -2378,40 +2405,40 @@
     <associate|auto-129|<tuple|A.5.15|86>>
     <associate|auto-13|<tuple|A.1.6|69>>
     <associate|auto-130|<tuple|A.5.15.1|86>>
-    <associate|auto-131|<tuple|A.6|87>>
-    <associate|auto-132|<tuple|A.6.1|87>>
-    <associate|auto-133|<tuple|A.6.1.1|87>>
-    <associate|auto-134|<tuple|A.6.2|87>>
-    <associate|auto-135|<tuple|A.6.2.1|87>>
-    <associate|auto-136|<tuple|A.6.3|87>>
-    <associate|auto-137|<tuple|A.6.3.1|87>>
-    <associate|auto-138|<tuple|A.6.4|88>>
-    <associate|auto-139|<tuple|A.6.4.1|88>>
+    <associate|auto-131|<tuple|A.5.16|87>>
+    <associate|auto-132|<tuple|A.5.16.1|87>>
+    <associate|auto-133|<tuple|A.6|87>>
+    <associate|auto-134|<tuple|A.6.1|87>>
+    <associate|auto-135|<tuple|A.6.1.1|87>>
+    <associate|auto-136|<tuple|A.6.2|87>>
+    <associate|auto-137|<tuple|A.6.2.1|87>>
+    <associate|auto-138|<tuple|A.6.3|88>>
+    <associate|auto-139|<tuple|A.6.3.1|88>>
     <associate|auto-14|<tuple|A.1.6.1|69>>
-    <associate|auto-140|<tuple|A.7|88>>
-    <associate|auto-141|<tuple|A.7.1|88>>
-    <associate|auto-142|<tuple|A.7.1.1|88>>
-    <associate|auto-143|<tuple|A.7.2|88>>
-    <associate|auto-144|<tuple|A.7.2.1|88>>
-    <associate|auto-145|<tuple|A.7.3|88>>
-    <associate|auto-146|<tuple|A.7.3.1|89>>
-    <associate|auto-147|<tuple|A.7.4|89>>
-    <associate|auto-148|<tuple|A.7.4.1|89>>
-    <associate|auto-149|<tuple|A.7.5|89>>
+    <associate|auto-140|<tuple|A.6.4|88>>
+    <associate|auto-141|<tuple|A.6.4.1|88>>
+    <associate|auto-142|<tuple|A.7|88>>
+    <associate|auto-143|<tuple|A.7.1|88>>
+    <associate|auto-144|<tuple|A.7.1.1|88>>
+    <associate|auto-145|<tuple|A.7.2|88>>
+    <associate|auto-146|<tuple|A.7.2.1|89>>
+    <associate|auto-147|<tuple|A.7.3|89>>
+    <associate|auto-148|<tuple|A.7.3.1|89>>
+    <associate|auto-149|<tuple|A.7.4|89>>
     <associate|auto-15|<tuple|A.1.7|69>>
-    <associate|auto-150|<tuple|A.7.5.1|89>>
-    <associate|auto-151|<tuple|A.8|89>>
-    <associate|auto-152|<tuple|A.8.1|89>>
-    <associate|auto-153|<tuple|A.8.1.1|89>>
-    <associate|auto-154|<tuple|A.8.2|90>>
-    <associate|auto-155|<tuple|A.8.2.1|90>>
-    <associate|auto-156|<tuple|A.9|90>>
-    <associate|auto-157|<tuple|A.4|90>>
-    <associate|auto-158|<tuple|A.9.1|90>>
-    <associate|auto-159|<tuple|A.9.1.1|90>>
+    <associate|auto-150|<tuple|A.7.4.1|89>>
+    <associate|auto-151|<tuple|A.7.5|89>>
+    <associate|auto-152|<tuple|A.7.5.1|89>>
+    <associate|auto-153|<tuple|A.8|89>>
+    <associate|auto-154|<tuple|A.8.1|90>>
+    <associate|auto-155|<tuple|A.8.1.1|90>>
+    <associate|auto-156|<tuple|A.8.2|90>>
+    <associate|auto-157|<tuple|A.8.2.1|90>>
+    <associate|auto-158|<tuple|A.9|90>>
+    <associate|auto-159|<tuple|A.4|90>>
     <associate|auto-16|<tuple|A.1.7.1|69>>
-    <associate|auto-160|<tuple|A.10|?>>
-    <associate|auto-161|<tuple|A.10.1|?>>
+    <associate|auto-160|<tuple|A.9.1|?>>
+    <associate|auto-161|<tuple|A.9.1.1|?>>
     <associate|auto-162|<tuple|A.10.1.1|?>>
     <associate|auto-163|<tuple|A.10.2|?>>
     <associate|auto-164|<tuple|A.10.2.1|?>>
