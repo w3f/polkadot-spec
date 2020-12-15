@@ -1587,9 +1587,10 @@
   <\definition>
     <label|defn-opaque-network-state>The <verbatim|OpaqueNetworkState>
     structure, <math|O<rsub|NS>>, is a SCALE encoded blob holding information
-    about the the PeerId, <math|P<rsub|id>>, of the local node and a list of
-    Multiaddresses, (<math|M<rsub|0>\<ldots\>M<rsub|n>>), the node knows it
-    can be reached at:
+    about the the <verbatim|libp2p> <verbatim|PeerId>, <math|P<rsub|id>>, of
+    the local node and a list of <verbatim|libp2p> <verbatim|Multiaddresses,>
+    (<math|M<rsub|0>\<ldots\>M<rsub|n>>), the node knows it can be reached
+    at:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|O<rsub|NS>>|<cell|=>|<cell|<around*|(|P<rsub|id>,<around*|(|M<rsub|0>\<ldots\>M<rsub|n>|)><rsub|>|)>>>>>
@@ -2033,6 +2034,36 @@
     <reference|defn-http-error> on faiure.
   </itemize>
 
+  <subsection|<verbatim|ext_offchain_set_authorized_nodes>>
+
+  Set the authorized nodes which are allowed to connect to the local node.
+  This function is primarily used for private blockchains and is not
+  necessarily required for the public and open Polkadot protocol.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_offchain_set_authorized_nodes_version_1
+
+    \ \ (param $nodes i64) (param $authorized_only i32)
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item><verbatim|nodes>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the buffer of the SCALE
+    encoded array of <verbatim|libp2p> <verbatim|PeerId>'s. Invalid
+    <verbatim|PeerId>'s are silently ignored.
+
+    <item><verbatim|authorized_only>: If set to <verbatim|1>, then only the
+    authorized nodes are allowed to connect to the local node (whitelist).
+    All other nodes are rejected. If set to <verbatim|0>, then no such
+    restriction is placed.
+  </itemize-dot>
+
   <section|Trie>
 
   Interface that provides trie related functionality.
@@ -2409,40 +2440,40 @@
     <associate|auto-130|<tuple|A.5.15.1|86>>
     <associate|auto-131|<tuple|A.5.16|87>>
     <associate|auto-132|<tuple|A.5.16.1|87>>
-    <associate|auto-133|<tuple|A.6|87>>
-    <associate|auto-134|<tuple|A.6.1|87>>
-    <associate|auto-135|<tuple|A.6.1.1|87>>
-    <associate|auto-136|<tuple|A.6.2|87>>
-    <associate|auto-137|<tuple|A.6.2.1|87>>
-    <associate|auto-138|<tuple|A.6.3|88>>
-    <associate|auto-139|<tuple|A.6.3.1|88>>
+    <associate|auto-133|<tuple|A.5.17|87>>
+    <associate|auto-134|<tuple|A.5.17.1|87>>
+    <associate|auto-135|<tuple|A.6|87>>
+    <associate|auto-136|<tuple|A.6.1|87>>
+    <associate|auto-137|<tuple|A.6.1.1|87>>
+    <associate|auto-138|<tuple|A.6.2|88>>
+    <associate|auto-139|<tuple|A.6.2.1|88>>
     <associate|auto-14|<tuple|A.1.6.1|69>>
-    <associate|auto-140|<tuple|A.6.4|88>>
-    <associate|auto-141|<tuple|A.6.4.1|88>>
-    <associate|auto-142|<tuple|A.7|88>>
-    <associate|auto-143|<tuple|A.7.1|88>>
-    <associate|auto-144|<tuple|A.7.1.1|88>>
-    <associate|auto-145|<tuple|A.7.2|88>>
-    <associate|auto-146|<tuple|A.7.2.1|89>>
-    <associate|auto-147|<tuple|A.7.3|89>>
-    <associate|auto-148|<tuple|A.7.3.1|89>>
-    <associate|auto-149|<tuple|A.7.4|89>>
+    <associate|auto-140|<tuple|A.6.3|88>>
+    <associate|auto-141|<tuple|A.6.3.1|88>>
+    <associate|auto-142|<tuple|A.6.4|88>>
+    <associate|auto-143|<tuple|A.6.4.1|88>>
+    <associate|auto-144|<tuple|A.7|88>>
+    <associate|auto-145|<tuple|A.7.1|88>>
+    <associate|auto-146|<tuple|A.7.1.1|89>>
+    <associate|auto-147|<tuple|A.7.2|89>>
+    <associate|auto-148|<tuple|A.7.2.1|89>>
+    <associate|auto-149|<tuple|A.7.3|89>>
     <associate|auto-15|<tuple|A.1.7|69>>
-    <associate|auto-150|<tuple|A.7.4.1|89>>
-    <associate|auto-151|<tuple|A.7.5|89>>
-    <associate|auto-152|<tuple|A.7.5.1|89>>
-    <associate|auto-153|<tuple|A.8|89>>
-    <associate|auto-154|<tuple|A.8.1|90>>
-    <associate|auto-155|<tuple|A.8.1.1|90>>
-    <associate|auto-156|<tuple|A.8.2|90>>
-    <associate|auto-157|<tuple|A.8.2.1|90>>
-    <associate|auto-158|<tuple|A.9|90>>
-    <associate|auto-159|<tuple|A.4|90>>
+    <associate|auto-150|<tuple|A.7.3.1|89>>
+    <associate|auto-151|<tuple|A.7.4|89>>
+    <associate|auto-152|<tuple|A.7.4.1|89>>
+    <associate|auto-153|<tuple|A.7.5|89>>
+    <associate|auto-154|<tuple|A.7.5.1|90>>
+    <associate|auto-155|<tuple|A.8|90>>
+    <associate|auto-156|<tuple|A.8.1|90>>
+    <associate|auto-157|<tuple|A.8.1.1|90>>
+    <associate|auto-158|<tuple|A.8.2|90>>
+    <associate|auto-159|<tuple|A.8.2.1|90>>
     <associate|auto-16|<tuple|A.1.7.1|69>>
-    <associate|auto-160|<tuple|A.9.1|?>>
-    <associate|auto-161|<tuple|A.9.1.1|?>>
-    <associate|auto-162|<tuple|A.10.1.1|?>>
-    <associate|auto-163|<tuple|A.10.2|?>>
+    <associate|auto-160|<tuple|A.9|?>>
+    <associate|auto-161|<tuple|A.4|?>>
+    <associate|auto-162|<tuple|A.9.1|?>>
+    <associate|auto-163|<tuple|A.9.1.1|?>>
     <associate|auto-164|<tuple|A.10.2.1|?>>
     <associate|auto-165|<tuple|A.10.3|?>>
     <associate|auto-166|<tuple|A.10.3.1|?>>
