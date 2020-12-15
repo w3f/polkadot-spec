@@ -163,7 +163,7 @@
   After the node establishes a connection with a peer, the use of
   multiplexing allows the Polkadot Host to open substreams. <verbatim|libp2p>
   uses the <verbatim|mplex> protocol (<slink|https://github.com/libp2p/specs/tree/master/mplex>)
-  to mange substream and to allow the negotiation of
+  to manage substream and to allow the negotiation of
   <with|font-shape|italic|application-specific protocols>, where each
   protocol servers a specific utility.
 
@@ -214,6 +214,9 @@
   information about this block. The mechanism for tracking announements and
   requesting the required data is implementation specific.
 
+  Block announcements and requests are conducted on the
+  <verbatim|/dot/block-annou nces/1> substream.
+
   <\definition>
     The <verbatim|BlockAnnounceHandshake> initializes a substream to a remote
     peer. Once established, all <verbatim|BlockAnnounce> messages created by
@@ -223,7 +226,7 @@
     following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|BA<rsub|h>>|<cell|=>|<cell|<around*|(|R,N<rsub|B>,h<rsub|B>,h<rsub|G>|)>>>>>
+      <tformat|<table|<row|<cell|BA<rsub|h>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|R,N<rsub|B>,h<rsub|B>,h<rsub|G>|)>>>>>
     </eqnarray*>
 
     where:
@@ -248,7 +251,7 @@
     following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|BA>|<cell|=>|<cell|<around*|(|Head<around*|(|B|)>,ib|)>>>>>
+      <tformat|<table|<row|<cell|BA>|<cell|=>|<cell|Enc<rsub|SC><around*|(|Head<around*|(|B|)>,ib|)>>>>>
     </eqnarray*>
 
     where:
@@ -350,13 +353,67 @@
     </big-table>
   </definition>
 
-  <subsection|Gossiping>
+  <subsubsection|Transactions><label|sect-msg-transactions>
 
-  The Polkadot Host must send certain events to its peers, which is referred
-  to as \Pgossiping\Q. This includes extrinsics, Grandpa votes,
-  justifications and equivocations.
+  Transactions are sent directly in its full form to connected peers. It's
+  considered good behavior to implement a mechanism which only sends a
+  transaction once to each peer and avoids sending duplicates. Such a
+  mechanism is implementation specific and any absence of such a mechanism
+  can result in consequences which are undefined.
 
-  <todo|todo>
+  The transactions message is represented by <math|M<rsub|T>> and is defined
+  as follows:
+
+  <\equation*>
+    M<rsub|T>\<assign\>Enc<rsub|SC><around*|(|C<rsub|1>,\<ldots\>,C<rsub|n>|)>
+  </equation*>
+
+  in which:
+
+  <\equation*>
+    C<rsub|i>\<assign\>Enc<rsub|SC><around*|(|E<rsub|i>|)>
+  </equation*>
+
+  Where each <math|E<rsub|i>> is a byte array and represents a sepearate
+  extrinsic. The Polkadot Host is indifferent about the content of an
+  extrinsic and treats it as a blob of data.
+
+  The exchange of transactions is conducted on the
+  <verbatim|/dot/transactions/1> substream.
+
+  <subsubsection|Consensus Message><label|sect-msg-consensus>
+
+  A <em|consensus message> represented by <math|M<rsub|C>> is sent to
+  communicate messages related to consensus process:
+
+  <\equation*>
+    M<rsub|C>\<assign\>Enc<rsub|SC><around*|(|E<rsub|id>,D|)>
+  </equation*>
+
+  Wh<verbatim|>ere:
+
+  <\center>
+    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|E<rsub|id>>:>|<cell|The
+    consensus engine unique identifier>|<cell|<math|\<bbb-B\><rsub|4>>>>|<row|<cell|<math|D>>|<cell|Consensus
+    message payload>|<cell|<math|\<bbb-B\>>>>>>>
+  </center>
+
+  \;
+
+  in which
+
+  <\equation*>
+    E<rsub|id>\<assign\><around*|{|<tabular*|<tformat|<table|<row|<cell|<rprime|''>BABE<rprime|''>>|<cell|>|<cell|For
+    messages related to BABE protocol refered to as
+    E<rsub|id><around*|(|BABE|)>>>|<row|<cell|<rprime|''>FRNK<rprime|''>>|<cell|>|<cell|For
+    messages related to GRANDPA protocol referred to as
+    E<rsub|id><around*|(|FRNK|)>>>>>>|\<nobracket\>>
+  </equation*>
+
+  \;
+
+  The network agent should hand over <math|D> to approperiate consensus
+  engine which identified by <math|E<rsub|id>>.
 
   <subsection|I'm Online Heartbeat>
 
@@ -398,9 +455,12 @@
     <associate|auto-16|<tuple|4|?>>
     <associate|auto-17|<tuple|5|?>>
     <associate|auto-18|<tuple|6|?>>
-    <associate|auto-19|<tuple|1.8|?>>
+    <associate|auto-19|<tuple|1.7.3|?>>
     <associate|auto-2|<tuple|1|?>>
-    <associate|auto-20|<tuple|1.9|?>>
+    <associate|auto-20|<tuple|1.7.4|?>>
+    <associate|auto-21|<tuple|1.8|?>>
+    <associate|auto-22|<tuple|1.9|?>>
+    <associate|auto-23|<tuple|1.11|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
@@ -410,6 +470,8 @@
     <associate|auto-9|<tuple|1.6|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|sect-discovery-mechanism|<tuple|1.3|?>>
+    <associate|sect-msg-consensus|<tuple|1.7.4|?>>
+    <associate|sect-msg-transactions|<tuple|1.7.3|?>>
   </collection>
 </references>
 
