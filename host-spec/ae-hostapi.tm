@@ -2352,7 +2352,47 @@
     success or failure. The cause of a failure is implementation specific.
   </itemize-dot>
 
+  <subsection|offchain_network_state>
+
+  Returns information about the local node's network state.
+
+  <\definition>
+    <label|defn-opaque-network-state>The <verbatim|OpaqueNetworkState>
+    structure, <math|O<rsub|NS>>, is a SCALE encoded blob holding information
+    about the the PeerId, <math|P<rsub|id>>, of the local node and a list of
+    Multiaddresses, (<math|M<rsub|0>\<ldots\>M<rsub|n>>), the node knows it
+    can be reached at:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|O<rsub|NS>>|<cell|=>|<cell|<around*|(|P<rsub|id>,<around*|(|M<rsub|0>\<ldots\>M<rsub|n>|)><rsub|>|)>>>>>
+    </eqnarray*>
+
+    where:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|P<rsub|id>>|<cell|=>|<cell|<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>>|<row|<cell|M<rsub|>>|<cell|=>|<cell|<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>>>>
+    </eqnarray*>
+
+    The information contained in this structure is naturally opaque to the
+    caller of this function.
+  </definition>
+
+  <subsubsection|Version 1 - Prototype>
+
+  <verbatim|(func $offchain_network_state_version_1 (result i64))>
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item><verbatim|result>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the SCALE encoded Result as
+    defined in Definition <reference|defn-result-type> containing
+    <verbatim|OpaqueNetworkState> structure as defined in Definition
+    <reference|defn-opaque-network-state>. On failure no additional data is
+    provided, where its cause is implementation specific.
+  </itemize-dot>
 </body>
 
 <\initial>
@@ -2443,6 +2483,8 @@
     <associate|auto-162|<tuple|A.10.1.1|?>>
     <associate|auto-163|<tuple|A.10.2|?>>
     <associate|auto-164|<tuple|A.10.2.1|?>>
+    <associate|auto-165|<tuple|A.10.3|?>>
+    <associate|auto-166|<tuple|A.10.3.1|?>>
     <associate|auto-17|<tuple|A.1.8|69>>
     <associate|auto-18|<tuple|A.1.8.1|69>>
     <associate|auto-19|<tuple|A.1.9|69>>
@@ -2542,6 +2584,7 @@
     <associate|defn-lexicographic-ordering|<tuple|A.3|67>>
     <associate|defn-local-storage|<tuple|A.8|82>>
     <associate|defn-logging-log-level|<tuple|A.11|90>>
+    <associate|defn-opaque-network-state|<tuple|A.12|?>>
     <associate|defn-persistent-storage|<tuple|A.7|82>>
     <associate|defn-runtime-pointer|<tuple|A.2|67>>
     <associate|nota-re-api-at-state|<tuple|A.1|67>>
