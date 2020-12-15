@@ -359,7 +359,9 @@
   considered good behavior to implement a mechanism which only sends a
   transaction once to each peer and avoids sending duplicates. Such a
   mechanism is implementation specific and any absence of such a mechanism
-  can result in consequences which are undefined.
+  can result in consequences which are undefined. The Polkadot Host much be
+  able to handle duplicate transactions received from its peers in order to
+  prevent the inclusion of duplicate transactions in multiple blocks.
 
   The transactions message is represented by <math|M<rsub|T>> and is defined
   as follows:
@@ -428,7 +430,7 @@
   signed extrinsic, but it's the responsiblity of the Host to gossip that
   extrinsic to the rest of the network. When the Runtime decides to create
   the heartbeat, it will call the <verbatim|ext_offchain_submit_transaction>
-  Host API as described in Section <todo|todo: define offchain Host APIs>.
+  Host API as described in Section <reference|sect-ext-offchain-submit-transaction>.
 
   The process of gossiping extrinsics is defined in section
   <reference|sect-extrinsics>.
@@ -459,8 +461,6 @@
     <associate|auto-2|<tuple|1|?>>
     <associate|auto-20|<tuple|1.7.4|?>>
     <associate|auto-21|<tuple|1.8|?>>
-    <associate|auto-22|<tuple|1.9|?>>
-    <associate|auto-23|<tuple|1.11|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
@@ -555,13 +555,17 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-12>>
 
-      <with|par-left|<quote|1tab>|1.8<space|2spc>Gossiping
+      <with|par-left|<quote|2tab>|1.7.3<space|2spc>Transactions
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-19>>
 
-      <with|par-left|<quote|1tab>|1.9<space|2spc>I'm Online Heartbeat
+      <with|par-left|<quote|2tab>|1.7.4<space|2spc>Consensus Message
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20>>
+
+      <with|par-left|<quote|1tab>|1.8<space|2spc>I'm Online Heartbeat
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-21>>
     </associate>
   </collection>
 </auxiliary>
