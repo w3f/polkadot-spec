@@ -154,8 +154,8 @@
   </enumerate-numeric>
 
   After these three steps, both the initiator and responder derive a new
-  shared<space|1em>secret using the static and session-defined Noise keys,
-  which is used to encrypt all further communication. The Noise specification
+  shared secret using the static and session-defined Noise keys, which are
+  used to encrypt all further communication. The Noise specification
   describes this process in detail.
 
   <subsection|Substreams>
