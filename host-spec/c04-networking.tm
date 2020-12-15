@@ -142,11 +142,21 @@
     responder.
 
     <item>The responder generates its own keypair and sends its public key
-    back to the initiator.
+    back to the initiator. After that, the responder derives a shared secret
+    and uses it to encrypt all further communication. The responder now sends
+    its static Noise public key (which is non-persistant and generated on
+    every node startup), its <verbatim|libp2p> public key and a signature of
+    the static Noise public key signed with the <verbatim|libp2p> public key.
 
-    <item>Both the initiator and the responder can derive a shared secret and
-    use it to encrypt all further communication.
+    <item>The initiator derives a shared secret and uses it to encrypt all
+    further communication. It also sends its static Noise public key,
+    <verbatim|libp2p> public key and a signature to the responder.
   </enumerate-numeric>
+
+  After these three steps, both the initiator and responder derive a new
+  shared<space|1em>secret using the static and session-defined Noise keys,
+  which is used to encrypt all further communication. The Noise specification
+  describes this process in detail.
 
   <subsection|Substreams>
 
@@ -391,8 +401,6 @@
     <associate|auto-19|<tuple|1.8|?>>
     <associate|auto-2|<tuple|1|?>>
     <associate|auto-20|<tuple|1.9|?>>
-    <associate|auto-21|<tuple|1.8|?>>
-    <associate|auto-22|<tuple|1.9|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
@@ -465,7 +473,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      <with|par-left|<quote|1tab>|1.5<space|2spc>Encryption
+      <with|par-left|<quote|1tab>|1.5<space|2spc>Noise Protocol
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
