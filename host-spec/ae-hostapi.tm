@@ -1847,7 +1847,8 @@
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>
     containing the i16 ID of the newly started request. On failure no
-    additionally data is provided.
+    additionally data is provided. The cause of failure is implementation
+    specific.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_http_request_add_header>>
@@ -1883,7 +1884,8 @@
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
-    Neither on success or failure is there any additional data provided.
+    Neither on success or failure is there any additional data provided. The
+    cause of failure is implemenation specific.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_http_request_write_body>>
