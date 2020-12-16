@@ -17,9 +17,9 @@
   authority or entity in order to achieve a its fullest potential of provided
   functionality. Each node with the network can authenticate itself and its
   peers by using cryptographic keys, including establishing fully encrypted
-  connections. The networking protocol is based on the open and standardized
-  <verbatim|libp2p> protocol, including the usage of the distributed Kademlia
-  hash table for peer discovery.
+  connections. The networking protocol is based on a family of open
+  protocols, including the usage of the distributed Kademlia hash table for
+  peer discovery.
 
   <subsection|External Documentation>
 
@@ -74,10 +74,12 @@
 
     <item>Kademlia requests - Kademlia is a distributed hash table for
     decentralized networks and supports <verbatim|FIND_NODE> requests, where
-    nodes respond with their list of available peers.
+    nodes respond with their list of available peers. Kademlia requests must
+    also contain protocol identifiers as described in Section
+    <reference|sect-protocol-identifier>.
   </itemize>
 
-  <subsubsection|Protocol Identifier>
+  <subsubsection|Protocol Identifier><label|sect-protocol-identifier>
 
   Kademlia nodes only communicate with other nodes using the same protocol
   identifier. The Polkadot network is identified by <verbatim|dot>
@@ -389,42 +391,11 @@
   The exchange of transactions is conducted on the
   <verbatim|/dot/transactions/1> substream.
 
-  <subsubsection|Consensus Message><label|sect-msg-consensus>
+  <subsubsection|Grandpa Votes><label|sect-msg-grandpa>
 
-  A <em|consensus message> represented by <math|M<rsub|C>> is sent to
-  communicate messages related to consensus process:
-
-  <\equation*>
-    M<rsub|C>\<assign\>Enc<rsub|SC><around*|(|E<rsub|id>,D|)>
-  </equation*>
-
-  Wh<verbatim|>ere:
-
-  <\center>
-    <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|E<rsub|id>>:>|<cell|The
-    consensus engine unique identifier>|<cell|<math|\<bbb-B\><rsub|4>>>>|<row|<cell|<math|D>>|<cell|Consensus
-    message payload>|<cell|<math|\<bbb-B\>>>>>>>
-  </center>
-
-  \;
-
-  in which
-
-  <\equation*>
-    E<rsub|id>\<assign\><around*|{|<tabular*|<tformat|<table|<row|<cell|<rprime|''>BABE<rprime|''>>|<cell|>|<cell|For
-    messages related to BABE protocol refered to as
-    E<rsub|id><around*|(|BABE|)>>>|<row|<cell|<rprime|''>FRNK<rprime|''>>|<cell|>|<cell|For
-    messages related to GRANDPA protocol referred to as
-    E<rsub|id><around*|(|FRNK|)>>>>>>|\<nobracket\>>
-  </equation*>
-
-  \;
-
-  The network agent should hand over <math|D> to approperiate consensus
-  engine which identified by <math|E<rsub|id>>.
-
-  The exchange of consensus messages is conducted on the
-  <verbatim|/paritytech/grandpa/1> substream
+  The exchange of GRANDPA messages is conducted on the
+  <verbatim|/paritytech/grandpa/1> substream. The process for the creation of
+  such votes is described in Section <reference|sect-finality>.
 
   <subsection|I'm Online Heartbeat>
 
@@ -479,8 +450,12 @@
     <associate|auto-9|<tuple|1.6|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|sect-discovery-mechanism|<tuple|1.3|?>>
+    <associate|sect-grandpa-gossiping|<tuple|1.7.4|?>>
+    <associate|sect-grandpa-votes|<tuple|1.7.4|?>>
     <associate|sect-msg-consensus|<tuple|1.7.4|?>>
+    <associate|sect-msg-grandpa|<tuple|1.7.4|?>>
     <associate|sect-msg-transactions|<tuple|1.7.3|?>>
+    <associate|sect-protocol-identifier|<tuple|1.3.1|?>>
   </collection>
 </references>
 
