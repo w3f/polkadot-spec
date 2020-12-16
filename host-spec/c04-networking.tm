@@ -423,6 +423,9 @@
   The network agent should hand over <math|D> to approperiate consensus
   engine which identified by <math|E<rsub|id>>.
 
+  The exchange of consensus messages is conducted on the
+  <verbatim|/paritytech/grandpa/1> substream
+
   <subsection|I'm Online Heartbeat>
 
   The I'm Online heartbeat is a crucial part of the Polkadot validation
