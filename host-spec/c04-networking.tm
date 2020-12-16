@@ -158,7 +158,7 @@
   used to encrypt all further communication. The Noise specification
   describes this process in detail.
 
-  <subsection|Substreams>
+  <subsection|Protocols and Substreams>
 
   After the node establishes a connection with a peer, the use of
   multiplexing allows the Polkadot Host to open substreams. <verbatim|libp2p>
@@ -170,11 +170,14 @@
   The Polkadot Host adoptes the following substreams:
 
   <\itemize>
-    <item><verbatim|/noise> - Open a substream for the Noise protocol to
-    establish a encryption layer.
+    <item><verbatim|/noise> - a protol that is announced when a connection to
+    a peer is established.
 
-    <item><verbatim|/multistream/1.0.0> - Open a substream for handshakes to
-    negotiate a new protocol.
+    <item><verbatim|/multistream/1.0.0> - a protocol that is announced when
+    negotiating an encryption protocol or a substream.
+
+    <item><verbatim|/yamux/1.0.0> - a protocol used during the
+    <verbatim|mplex> negotiation.
 
     <item><verbatim|/ipfs/ping/1.0.0> - Open a substream to a peer and
     initialize a ping to verify if a connection is till alive. If the peer
@@ -183,7 +186,7 @@
     <item><verbatim|/ipfs/id/1.0.0> - Open a substream to a peer to ask
     information about that peer.
 
-    <item><verbatim|/dot/kad/> - Open a substream for Kademlia
+    <item><verbatim|/dot/kad> - Open a substream for Kademlia
     <verbatim|FIND_NODE> requests.
   </itemize>
 
@@ -194,11 +197,14 @@
     <item><verbatim|/dot/light/2> - a request and response protocol that
     allows a light client to perform request information about the state.
 
-    <item><verbatim|/dot/transactions/1> - a notification protocol which
-    sends transactions to connected peers.
+    <item><verbatim|/dot/transactions/1> - a substream/notification protocol
+    which sends transactions to connected peers.
 
-    <item><verbatim|/dot/block-announces/1> - a notification protocol which
-    sends blocks to connected peers.
+    <item><verbatim|/dot/block-announces/1> - a substream/notification
+    protocol which sends blocks to connected peers.
+
+    <item><verbatim|/paritytech/grandpa/1> - a substream/notification
+    protocol which sends Grandpa votes to connected peers.
   </itemize>
 
   <subsection|Network Messages>
