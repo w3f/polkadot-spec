@@ -212,15 +212,14 @@
   <subsection|Network Messages>
 
   The Polkadot Host must actively communicate with the network in order to
-  participate in the validation process. This section describes the expected
-  behaviors of the node.
+  participate in the validation process or act as a full node.
 
   <subsubsection|Announcing blocks>
 
-  When the node creates a new block, it must be announced to the network.
-  Other nodes within the network will track this announcement and can request
-  information about this block. The mechanism for tracking announements and
-  requesting the required data is implementation specific.
+  When the node creates or receives a new block, it must be announced to the
+  network. Other nodes within the network will track this announcement and
+  can request information about this block. The mechanism for tracking
+  announcement and requesting the required data is implementation specific.
 
   Block announcements and requests are conducted on the
   <verbatim|/dot/block-annou nces/1> substream.
