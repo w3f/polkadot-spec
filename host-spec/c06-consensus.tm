@@ -1270,7 +1270,7 @@
     as defined in Definition <reference|defn-sign-round-vote> is the
     signature of voter <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>> broadcasted
     during either the pre-vote (stage = pv) or the pre-commit (stage = pc)
-    sub-round of round r. A <strong|valid Justification> must only contain
+    sub-round of round r. A <strong|valid justification> must only contain
     up-to one valid vote from each voter and must not contain more than two
     equivocatory votes from each voter.
 
@@ -1351,8 +1351,8 @@
 
   <subsection|Initiating the GRANDPA State>
 
-  In order to participate coherently in the voting process, a validator must initiate
-  its state and sync it with other active validators. In particular,
+  In order to participate coherently in the voting process, a validator must
+  initiate its state and sync it with other active validators. In particular,
   considering that voting is happening in different distinct rounds where
   each round of voting is assigned a unique sequential round number
   <math|r<rsub|v>>, it needs to determine and set its round counter <math|r>
@@ -1361,11 +1361,14 @@
   initialization procedure for GRANDPA protocol for a joining validator.
 
   <\algorithm>
-    <label|algo-initiate-grandpa><name|Initiate-Grandpa>(<math|r<rsub|last>>:
-    last round number or 0 if the voter starting a new authority set,
+    <label|algo-initiate-grandpa><name|Initiate-Grandpa>(
 
-    , <math|B<rsub|last>>: the last block which has been finalized on the
-    chain)
+    <math|r<rsub|last>>: <math|>last round number (See the following),
+
+    ,<math|B<rsub|last>>: the last block which has been finalized on the
+    chain
+
+    )
   <|algorithm>
     <\algorithmic>
       <\state>
@@ -1395,6 +1398,15 @@
       </state>
     </algorithmic>
   </algorithm>
+
+  <math|r<rsub|last>> is equal to the latest round the voter has observed
+  that other voters are voting on. The voter obtains this information through
+  various gossiped messages including those mentioned in Definition
+  <reference|defn-finalized-block>.
+
+  <math|r<rsub|last>> is set to 0 if the GRANDPA node is initiating the
+  GRANDPA voting process as a part of a new authority set. This is because
+  the GRANDPA round number reset to 0 for every authority set change.
 
   <subsubsection|Voter Set Changes>
 
@@ -1817,10 +1829,9 @@
   Chapter <reference|chap-bootstrapping>, it requests the history of state
   transition which it is missing in form of blocks. Each finalized block
   comes with the Justification of its finalization as defined in Definition
-  <reference|defn-grandpa-justification> <todo|Verify: you can't trust your
-  neigbour for their set, you need to get it from the chain>. Through this
-  process, they can synchronize the authority list currently performing the
-  finalization process.
+  <reference|defn-grandpa-justification>. Through this process, they can
+  synchronize the authority list currently performing the finalization
+  process.
 
   <subsubsection|Sending catch-up requests><label|sect-sending-catchup-request>
 
