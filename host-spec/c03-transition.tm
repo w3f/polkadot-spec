@@ -1,8 +1,8 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.14>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|algorithmacs-style|old-dots>>
+<style|<tuple|book|algorithmacs-style|old-dots|old-lengths>>
 
 <\body>
   <chapter|State Transition><label|chap-state-transit>
@@ -590,8 +590,8 @@
     <math|Head<around|(|B|)>>.
 
     <item><strong|<samp|justification>>: as defined by the consensus
-    specification indicated by <math|Just<around|(|B|)>> <todo|link this to
-    its definition from consensus>.
+    specification indicated by <math|Just<around|(|B|)>> as defined in
+    Definition <reference|defn-grandpa-justification>.
 
     <item><strong|<samp|authority Ids>>: This is the list of the Ids of
     authorities, which have voted for the block to be stored and<verbatim|>
@@ -999,7 +999,7 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|2>
-    <associate|page-first|23>
+    <associate|page-first|21>
     <associate|section-nr|2<uninit>>
     <associate|subsection-nr|1>
   </collection>
