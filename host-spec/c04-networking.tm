@@ -97,19 +97,19 @@
 
   <\itemize-dot>
     <item><strong|Request-Response substreams>. After the protocol is
-    negotiated, the opening node sends a single message containing a request.
-    The remote node then sends a response, after which the substream is then
+    negotiated, the initiator sends a single message containing a request.
+    The responder then sends a response, after which the substream is then
     immediately closed.
 
     <item><strong|Notification substreams>. After the protocol is negotiated,
-    the opening node sends a single hand shake message. The remote node can
-    then either accept or reject the substream. After the substream has been
-    accepted, the opening node can send an unbound number of individual
+    the initiator sends a single hand shake message. The responder can then
+    either accept or reject the substream. After the substream has been
+    accepted, the initiator can send an unbound number of individual
     messages.
   </itemize-dot>
 
   The Polkadot Host can establish a connection with any peer it knows the
-  address. The Polkadot Host supports multiple base-layer protocols:
+  address of. The Polkadot Host supports multiple base-layer protocols:
 
   <\itemize>
     <item>TCP/IP - addresses in the form of <verbatim|/ip4/1.2.3.4/tcp/>
