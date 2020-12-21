@@ -61,7 +61,7 @@ func ProcessHostApiCommand(args []string) {
 	// List of expected flags
 	functionTextPtr := flag.String("function", "", "Function to call (required).")
 	inputTextPtr := flag.String("input", "", "Input to pass on call.")
-	
+
 	wasmtimeBoolPtr := flag.Bool("wasmtime", false, "Use wasmtime instead of wasmer.")
 
 	// Parse provided argument list
@@ -86,7 +86,7 @@ func ProcessHostApiCommand(args []string) {
 	if *wasmtimeBoolPtr {
 		// ... using wasmtime
 		cfg := &wasmtime.Config{
-			Imports: wasmtime.ImportsNodeRuntime,
+			Imports: wasmtime.ImportNodeRuntime,
 		}
 		cfg.Storage = GetTestStorage()
 		cfg.Keystore = keystore.NewGenericKeystore("test")
@@ -167,7 +167,8 @@ func ProcessHostApiCommand(args []string) {
 
 	// test trie api
 	//case "ext_trie_blake2_256_root_version_1":
-	//case "ext_trie_blake2_256_ordered_root_version_1":
+	case "ext_trie_blake2_256_ordered_root_version_1":
+		test_trie_ordered_root(rtm, inputs[0], inputs[1], inputs[2])
 
 	default:
 		fmt.Println("Not implemented: ", function)
