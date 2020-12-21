@@ -1,14 +1,13 @@
 module w3f/gossamer-adapter
 
 require (
-	github.com/ChainSafe/chaindb v0.1.4
+	github.com/ChainSafe/chaindb v0.1.5-0.20201216022305-705e4f4f2f0d
 	github.com/ChainSafe/go-schnorrkel v0.0.0-20200626160457-b38283118816 // indirect
-	github.com/ChainSafe/gossamer v0.1.1-0.20201109205301-61a9ed757ab3
+	github.com/ChainSafe/gossamer v0.2.1-0.20201221145038-bcbb8561fa24
 	github.com/DataDog/zstd v1.4.5 // indirect
 	github.com/OneOfOne/xxhash v1.2.8 // indirect
 	github.com/btcsuite/btcd v0.21.0-beta // indirect
 	github.com/cosmos/go-bip39 v0.0.0-20200817134856-d632e0d11689 // indirect
-	github.com/dgraph-io/badger/v2 v2.2007.1 // indirect
 	github.com/dgraph-io/ristretto v0.0.3 // indirect
 	github.com/dgryski/go-farm v0.0.0-20200201041132-a6ae2369ad13 // indirect
 	github.com/ethereum/go-ethereum v1.9.20 // indirect
