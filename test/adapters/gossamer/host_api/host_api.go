@@ -166,7 +166,8 @@ func ProcessHostApiCommand(args []string) {
 	//case "ext_storage_next_key_version_1":
 
 	// test trie api
-	//case "ext_trie_blake2_256_root_version_1":
+	case "ext_trie_blake2_256_root_version_1":
+		test_trie_root(rtm, inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5])
 	case "ext_trie_blake2_256_ordered_root_version_1":
 		test_trie_ordered_root(rtm, inputs[0], inputs[1], inputs[2])
 
