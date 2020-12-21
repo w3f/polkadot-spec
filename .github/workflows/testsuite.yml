@@ -29,7 +29,6 @@ jobs:
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2020-04-15
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
@@ -69,7 +68,6 @@ jobs:
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2020-04-15
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
@@ -206,7 +204,6 @@ jobs:
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2020-04-15
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
@@ -246,7 +243,6 @@ jobs:
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
-        toolchain: nightly-2020-04-15
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
