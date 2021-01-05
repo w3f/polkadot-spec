@@ -1,6 +1,6 @@
 [package]
 name = 'tester-runtime'
-version = '2.0.0'
+version = '0.8.26-1'
 edition = '2018'
 
 [profile.release]
@@ -14,125 +14,145 @@ default-features = false
 
 # Base dependencies
 [dependencies.serde]
+version = '1.0.101'
 features = ['derive']
 optional = true
-version = '1.0.101'
 
 [dependencies.codec]
-default-features = false
-features = ['derive']
 package = 'parity-scale-codec'
 version = '1.2.0'
+default-features = false
+features = ['derive']
 
 
 # Substrate FRAME is the basis
 [dependencies.frame-executive]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.frame-support]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 
 # Substrate pallet to provide runtime basics
 [dependencies.system]
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 package = 'frame-system'
-version = '2.0.0'
 default-features = false
 
 [dependencies.collective-flip]
 package = 'pallet-randomness-collective-flip'
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.timestamp]
 package = 'pallet-timestamp'
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 
 # Polkadot consensus and finality
 [dependencies.babe]
 package = 'pallet-babe'
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.grandpa]
 package = 'pallet-grandpa'
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 
 # TODO Only enabled via feature flag?
 [dependencies.balances]
-default-features = false
 package = 'pallet-balances'
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
+default-features = false
 
 # TODO Only enabled via feature flag?
 [dependencies.sudo]
 package = 'pallet-sudo'
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 
 # List of required substrate primitives (sp)
 [dependencies.sp-api]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-block-builder]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-core]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-inherents]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-io]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-runtime]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-std]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-transaction-pool]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-version]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-session]
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-babe]
 package = 'sp-consensus-babe'
-version = '0.8.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 [dependencies.sp-grandpa]
 package = 'sp-finality-grandpa'
-version = '2.0.0'
+git = "https://github.com/paritytech/substrate"
+branch = "master"
 default-features = false
 
 
-# TODO: Drop runner, use builder instead with -Zfeatures=build_dep cargo flag
-[build-dependencies.wasm-builder-runner]
-package = 'substrate-wasm-builder-runner'
-version = '1.0.6'
+[build-dependencies.wasm-builder]
+package = 'substrate-wasm-builder'
+version = '3.0.0'
 
 
 [features]
