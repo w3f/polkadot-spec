@@ -33,7 +33,7 @@ fn get_account_id_from_seed<TPublic: Public>(seed: &str) -> AccountId where
 fn default_genesis_config() -> GenesisConfig {
   GenesisConfig {
 	  system: Some(SystemConfig {
-	    code: WASM_BINARY.to_vec(),
+	    code: WASM_BINARY.unwrap().to_vec(),
 			changes_trie_config: Default::default(),
 		}),
 		balances: Some(BalancesConfig {
