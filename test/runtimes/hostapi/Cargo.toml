@@ -1,15 +1,15 @@
 [package]
 name = "hostapi-runtime"
-version = "2.0.0-rc6"
+version = "2.0.0"
 edition = "2018"
 build = "build.rs"
 
 [dependencies]
-sp-core            = { version = "2.0.0-rc6", default-features = false, optional = true }
+sp-core            = { version = "2.0.0", default-features = false, optional = true }
 parity-scale-codec = { version = "1.3",       default-features = false, optional = true }
 
 [build-dependencies]
-substrate-wasm-builder = "1.0.11"
+substrate-wasm-builder = "2.0.1"
 
 [features]
 runtime-wasm = [ "sp-core", "parity-scale-codec" ]

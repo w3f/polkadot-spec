@@ -67,7 +67,7 @@ pub struct Runtime {
 impl Runtime {
     pub fn new() -> Self {
         Runtime {
-            blob: WASM_BINARY.to_vec(),
+            blob: WASM_BINARY.unwrap().to_vec(),
             ext: TestExternalities::default(),
         }
     }
@@ -76,7 +76,7 @@ impl Runtime {
         let key_store = KeystoreExt(Arc::new(KeyStore::new()));
         ext.register_extension(key_store);
         Runtime {
-            blob: WASM_BINARY.to_vec(),
+            blob: WASM_BINARY.unwrap().to_vec(),
             ext: ext,
         }
     }
@@ -87,7 +87,7 @@ impl Runtime {
         ext.register_extension(OffchainExt::new(offchain));
 
         Runtime {
-            blob: WASM_BINARY.to_vec(),
+            blob: WASM_BINARY.unwrap().to_vec(),
             ext: ext,
         }
     }
