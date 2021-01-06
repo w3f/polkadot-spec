@@ -1,4 +1,5 @@
 #![cfg_attr(not(feature = "std"), no_std)]
+
 // `construct_runtime!` does a lot of recursion and requires us to increase the limit to 256.
 #![recursion_limit="256"]
 
@@ -28,14 +29,10 @@ pub use sp_runtime::BuildStorage;
 pub use balances::Call as BalancesCall;
 pub use sp_runtime::{Permill, Perbill};
 pub use frame_support::{
-	construct_runtime, parameter_types, storage_root,
+	construct_runtime, parameter_types, storage_root, runtime_print,
 	traits::{KeyOwnerProofSystem, Randomness},
 	weights::{Weight, RuntimeDbWeight, constants::WEIGHT_PER_SECOND},
 };
-
-// Add String support, needed by tests
-extern crate alloc;
-use alloc::string::String;
 
 /// An index to a block.
 pub type BlockNumber = u32;
@@ -323,22 +320,11 @@ pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExt
 pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
 
 
-/// Print hex encoded hash, prefixed and suffixed with '##'
-fn print_hash(hash: sp_core::H256) {
-	let mut output = String::with_capacity(68);
-
-	output.push_str("##");
-	output.push_str(hex::encode(hash).as_str());
-	output.push_str("##");
-
-	print(output.as_str());
-}
-
 /// Print current storage root
 fn print_storage_root() {
 	let storage_root = Hash::decode(&mut &storage_root()[..])
 		.expect("`storage_root` is a valid hash");
-	print_hash(storage_root);
+	runtime_print!("##{:x}##", storage_root);
 }
 
 
