@@ -1,13 +1,23 @@
 [global]
-name = "Specification Test"
+name = "Specification Conformance Test Runtime"
 id = "spectest"
 
+[log]
+core = ""
+network = ""
+rpc = ""
+state = ""
+runtime = ""
+babe = ""
+grandpa = ""
+
 [init]
-genesis = "/config/genesis-legacy.json"
+genesis-raw = "./runtimes/tester/genesis.json"
 
 [core]
-authority = true
 roles = 4
+babe-authority = true
+grandpa-authority = true
 
 [network]
 port = 7001

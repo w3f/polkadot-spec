@@ -16,11 +16,7 @@ end
 "Compute trie root hash from yaml state file"
 function compute_root(self::Tester, implementation::String)
 
-    state_file = if implementation == "substrate"
-        "$(@__DIR__)/../runtimes/$(self.runtime)/genesis.yaml"
-    else
-        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/genesis-legacy.yaml"
-    end
+    state_file = "$(@__DIR__)/../runtimes/$(self.runtime)/genesis.yaml"
 
     # Make sure state file is available
     if !isfile(state_file)
@@ -48,15 +44,9 @@ function run_tester(self::Tester, implementation::String, duration::Number)
     # Locations of needed files and folders
     tempdir = mktempdir() * "/"
 
-    # Determine correct genesis based on implementation
-    genesis = if implementation == "kagome"
-        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/genesis-legacy.kagome.json"
-    elseif implementation == "gossamer"
-        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/genesis-legacy.json"
-    else # default
-        "$(@__DIR__)/../runtimes/$(self.runtime)/genesis.json"
-    end
-    
+    # Determine correct genesis of runtime
+    genesis = "$(@__DIR__)/../runtimes/$(self.runtime)/genesis.json"
+
     # Make sure genesis is available
     if !isfile(genesis)
         @error "Failed to locate genesis: $genesis"
@@ -66,11 +56,11 @@ function run_tester(self::Tester, implementation::String, duration::Number)
     datadir = tempdir
 
     # Helper files needed for some implementations
-    keystore = "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/kagome.keystore.json"
+    keystore = "$(@__DIR__)/../runtimes/$(self.runtime)/kagome.keystore.json"
     config   = if Config.docker
-        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/gossamer.docker.config.toml"
+        "$(@__DIR__)/../runtimes/$(self.runtime)/gossamer.docker.config.toml"
     else
-        "$(@__DIR__)/../runtimes/$(self.runtime)-legacy/gossamer.config.toml"
+        "$(@__DIR__)/../runtimes/$(self.runtime)/gossamer.config.toml"
     end
 
     if Config.docker
