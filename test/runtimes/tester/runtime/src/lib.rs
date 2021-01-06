@@ -411,6 +411,7 @@ impl_runtime_apis! {
 	impl sp_babe::BabeApi<Block> for Runtime {
 		fn configuration() -> sp_babe::BabeGenesisConfiguration {
 			print("@@configuration()@@");
+			print_storage_root();
 			sp_babe::BabeGenesisConfiguration {
 				slot_duration: Babe::slot_duration(),
 				epoch_length: EpochDuration::get(),
