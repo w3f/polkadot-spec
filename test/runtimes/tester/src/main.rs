@@ -66,7 +66,7 @@ fn default_genesis_config() -> GenesisConfig {
 /// Create default chain specification
 fn default_chain_spec() -> ChainSpec {
   ChainSpec::from_genesis(
-	  "Specification Conformance Test Runtime",
+		"Specification Conformance Test",
 		"spectest",
     ChainType::Development,
     default_genesis_config,
