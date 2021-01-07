@@ -129,7 +129,6 @@ jobs:
         path: test/lib/libwasmer.so
 
 
-
   build-adapter-substrate:
     name: "[build] substrate-adapter"
     runs-on: ubuntu-20.04

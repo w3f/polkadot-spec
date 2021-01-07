@@ -60,45 +60,6 @@ jobs:
         name: substrate-adapter
         path: test/bin/substrate-adapter
 
-  build-adapter-substrate-legacy:
-    name: "[build] substrate-adapter-legacy"
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Setup rust toolchain
-      id: rustup
-      uses: actions-rs/toolchain@v1
-      with:
-        target: wasm32-unknown-unknown
-        default: true
-        profile: minimal
-    - name: Cache cargo registry
-      uses: actions/cache@v1
-      with:
-        path: ~/.cargo/registry
-        key: cargo-registry-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
-        restore-keys: cargo-registry-adapter-substrate-legacy-
-    - name: Cache cargo index
-      uses: actions/cache@v1
-      with:
-        path: ~/.cargo/git
-        key: cargo-index-adapter-substrate-legacy-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
-        restore-keys: cargo-index-adapter-substrate-legacy-
-    - name: Cache cargo build output
-      uses: actions/cache@v1
-      with:
-        path: test/adapters/substrate-legacy/target
-        key: cargo-build-adapter-substrate-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate-legacy/Cargo.lock') }}
-        restore-keys: cargo-build-adapter-substrate-legacy-${{ steps.rustup.outputs.rustc_hash }}-
-    - name: Build substrate legacy adapters
-      run: make -C test substrate-adapter-legacy
-    - name: Upload substrate legacy adapter
-      uses: actions/upload-artifact@v1
-      with:
-        name: substrate-adapter-legacy
-        path: test/bin/substrate-adapter-legacy
-
   build-adapter-kagome:
     name: "[build] kagome-adapter"
     runs-on: ubuntu-20.04
@@ -123,31 +84,6 @@ jobs:
       with:
         name: kagome-adapter
         path: test/bin/kagome-adapter
-
-  build-adapter-kagome-legacy:
-    name: "[build] kagome-adapter-legacy"
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-        submodules: true
-    - name: Cache hunter packages
-      uses: actions/cache@v1
-      with:
-        path: ~/.hunter
-        key: hunter-adapter-kagome-legacy-${{ hashFiles('test/adapters/kagome-legacy/CMakeLists.txt') }}
-        restore-keys: hunter-adapter-kagome-legacy-
-    - name: Build kagome legacy adapter
-      env:
-        CC: gcc-9
-        CXX: g++-9
-      run: make -C test kagome-adapter-legacy
-    - name: Upload kagome adapter
-      uses: actions/upload-artifact@v1
-      with:
-        name: kagome-adapter-legacy
-        path: test/bin/kagome-adapter-legacy
 
   build-adapter-gossamer:
     name: "[build] gossamer-adapter"
@@ -174,33 +110,6 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: gossamer-adapter
-        path: test/lib/libwasmer.so
-
-  build-adapter-gossamer-legacy:
-    name: "[build] gossamer-adapter-legacy"
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-      with:
-        submodules: true
-    - name: Cache go modules
-      uses: actions/cache@v1
-      with:
-        path: ~/go/pkg/mod
-        key: go-mod-adapter-gossamer-legacy-${{ hashFiles('test/adapters/gossamer-legacy/go.sum') }}
-        restore-keys: go-mod-adapter-gossamer-legacy-
-    - name: Build gossamer legacy adapter
-      run: make -C test gossamer-adapter-legacy
-    - name: Upload gossamer legacy adapter
-      uses: actions/upload-artifact@v2
-      with:
-        name: gossamer-adapter-legacy
-        path: test/bin/gossamer-adapter-legacy
-    - name: Upload libwasmer.so
-      uses: actions/upload-artifact@v2
-      with:
-        name: gossamer-adapter-legacy
         path: test/lib/libwasmer.so
 
 
@@ -243,45 +152,6 @@ jobs:
         name: hostapi-runtime.compact.wasm
         path: test/bin/hostapi_runtime.compact.wasm
 
-  build-runtime-hostapi-legacy:
-    name: "[build] hostapi-runtime-legacy"
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Setup rust toolchain
-      id: rustup
-      uses: actions-rs/toolchain@v1
-      with:
-        target: wasm32-unknown-unknown
-        default: true
-        profile: minimal
-    - name: Cache cargo registry
-      uses: actions/cache@v1
-      with:
-        path: ~/.cargo/registry
-        key: cargo-registry-runtime-hostapi-legacy-${{ hashFiles('test/runtimes/hostapi-legacy/Cargo.lock') }}
-        restore-keys: cargo-registry-runtime-hostapi-legacy-
-    - name: Cache cargo index
-      uses: actions/cache@v1
-      with:
-        path: ~/.cargo/git
-        key: cargo-index-runtime-hostapi-legacy-${{ hashFiles('test/runtimes/hostapi-legacy/Cargo.lock') }}
-        restore-keys: cargo-index-runtime-hostapi-legacy-
-    - name: Cache cargo build output
-      uses: actions/cache@v1
-      with:
-        path: test/runtimes/hostapi-legacy/target
-        key: cargo-build-runtime-hostapi-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/runtimes/hostapi-legacy/Cargo.lock') }}
-        restore-keys: cargo-build-runtime-hostapi-legacy-${{ steps.rustup.outputs.rustc_hash }}-
-    - name: Build hostapi legacy runtimes
-      run: make -C test hostapi-runtime-legacy
-    - name: Upload hostapi legacy runtime
-      uses: actions/upload-artifact@v1
-      with:
-        name: hostapi-runtime-legacy.compact.wasm
-        path: test/bin/hostapi_runtime_legacy.compact.wasm
-
 
   test-substrate:
     needs: build-adapter-substrate
@@ -301,21 +171,6 @@ jobs:
     - run: chmod +x test/bin/substrate-adapter
     - name: Run test fixture
       run: test/runtests.jl substrate ${{ matrix.fixture }}
-
-  test-substrate-legacy:
-    needs: build-adapter-substrate-legacy
-    name: "[test-host-api-legacy] substrate"
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
-      with:
-        name: substrate-adapter-legacy
-        path: test/bin
-    - run: chmod +x test/bin/substrate-adapter-legacy
-    - name: Run test fixture
-      run: test/runtests.jl substrate host-api-legacy
 
 
   test-kagome:
@@ -341,7 +196,7 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl kagome ${{ matrix.fixture }}
 
-  test-kagome-wasm:
+  test-kagome-hostapi:
     needs: [ build-adapter-kagome, build-runtime-hostapi ]
     name: "[test-host-api] kagome"
     runs-on: ubuntu-20.04
@@ -359,25 +214,6 @@ jobs:
     - run: chmod +x test/bin/kagome-adapter
     - name: Run test fixture
       run: test/runtests.jl kagome host-api
-
-  test-kagome-legacy:
-    needs: [ build-adapter-kagome-legacy, build-runtime-hostapi-legacy]
-    name: "[test-host-api-legacy] kagome"
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
-      with:
-        name: kagome-adapter-legacy
-        path: test/bin
-    - uses: actions/download-artifact@v1
-      with:
-        name: hostapi-runtime-legacy.compact.wasm
-        path: test/bin
-    - run: chmod +x test/bin/kagome-adapter-legacy
-    - name: Run test fixture
-      run: test/runtests.jl kagome host-api-legacy
 
 
   test-gossamer:
@@ -406,7 +242,7 @@ jobs:
     - name: Run test fixture
       run: test/runtests.jl gossamer ${{ matrix.fixture }}
 
-  test-gossamer-wasm:
+  test-gossamer-hostapi:
     needs: [ build-adapter-gossamer, build-runtime-hostapi]
     name: "[test-host-api] gossamer"
     runs-on: ubuntu-20.04
@@ -427,25 +263,3 @@ jobs:
         mv test/bin/libwasmer.so test/lib/
     - name: Run test fixture
       run: test/runtests.jl gossamer host-api
-
-  test-gossamer-legacy:
-    needs: [ build-adapter-gossamer-legacy, build-runtime-hostapi-legacy]
-    name: "[test-host-api-legacy] gossamer"
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
-      with:
-        name: gossamer-adapter-legacy
-        path: test/bin
-    - uses: actions/download-artifact@v1
-      with:
-        name: hostapi-runtime-legacy.compact.wasm
-        path: test/bin
-    - run: |
-        chmod +x test/bin/gossamer-adapter-legacy
-        mkdir -p test/lib
-        mv test/bin/libwasmer.so test/lib/
-    - name: Run test fixture
-      run: test/runtests.jl gossamer host-api-legacy
