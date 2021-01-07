@@ -6,7 +6,8 @@ on:
     - '.github/workflows/testsuite.yml'
     - 'test/**'
     - '!test/fixtures/genesis/**'
-    - '!test/runtimes/**'
+    - '!test/helpers/ImplementationFixture.jl'
+    - '!test/runtimes/tester/**'
     - '!test/hosts/**'
     - '!test/README.md'
   pull_request:
@@ -14,7 +15,8 @@ on:
     - '.github/workflows/testsuite.yml'
     - 'test/**'
     - '!test/fixtures/genesis/**'
-    - '!test/runtimes/**'
+    - '!test/helpers/ImplementationFixture.jl'
+    - '!test/runtimes/tester/**'
     - '!test/hosts/**'
     - '!test/README.md'
 
