@@ -16,7 +16,6 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "kagome:"
-    open-pull-requests-limit: 0
 
   - package-ecosystem: "gitsubmodule"
     directory: "/test/hosts/gossamer"
