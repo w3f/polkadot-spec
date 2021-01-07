@@ -222,67 +222,6 @@ jobs:
         path: test/runtimes/tester/genesis.yaml
 
 
-  build-runtime-tester-legacy:
-    name: "[build] tester-runtime-legacy"
-    runs-on: ubuntu-20.04
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-    - name: Setup rust toolchain
-      id: rustup
-      uses: actions-rs/toolchain@v1
-      with:
-        target: wasm32-unknown-unknown
-        default: true
-        profile: minimal
-    - name: Setup python toolchain
-      uses: actions/setup-python@v2
-    - name: Install yq
-      run: |
-        python -m pip install wheel
-        python -m pip install yq
-    - name: Cache cargo registry
-      uses: actions/cache@v1
-      with:
-        path: ~/.cargo/registry
-        key: cargo-registry-runtime-tester-legacy-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
-        restore-keys: cargo-registry-runtime-tester-legacy-
-    - name: Cache cargo index
-      uses: actions/cache@v1
-      with:
-        path: ~/.cargo/git
-        key: cargo-index-runtime-tester-legacy-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
-        restore-keys: cargo-index-runtime-tester-legacy-
-    - name: Cache cargo build
-      uses: actions/cache@v1
-      with:
-        path: test/runtimes/tester-legacy/target
-        key: cargo-build-runtime-tester-legacy-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
-        restore-keys: cargo-build-runtime-tester-legacy-${{ steps.rustup.outputs.rustc_hash }}-
-    - name: Build and generate host tester legacy genesis
-      run: make -C test tester-runtime-legacy
-    - name: Upload host tester legacy runtime
-      uses: actions/upload-artifact@v1
-      with:
-        name: tester_runtime_legacy.compact.wasm
-        path: test/runtimes/tester-legacy/target/release/wbuild/tester-runtime-legacy/tester_runtime_legacy.compact.wasm
-    - name: Upload host tester legacy genesis file
-      uses: actions/upload-artifact@v1
-      with:
-        name: tester-runtime-legacy-genesis
-        path: test/runtimes/tester-legacy/genesis-legacy.json
-    - name: Upload host tester legacy state file
-      uses: actions/upload-artifact@v1
-      with:
-        name: tester-runtime-legacy-genesis
-        path: test/runtimes/tester-legacy/genesis-legacy.yaml
-    - name: Upload host tester legacy genesis file for kagome
-      uses: actions/upload-artifact@v1
-      with:
-        name: tester-runtime-legacy-genesis
-        path: test/runtimes/tester-legacy/genesis-legacy.kagome.json
-
-
   test-substrate:
     needs: [ build-host-substrate, build-adapter-substrate, build-runtime-tester ]
     name: "[test-genesis] substrate"
@@ -308,7 +247,7 @@ jobs:
       run: test/runtests.jl substrate genesis
 
   test-kagome:
-    needs: [ build-host-kagome, build-adapter-substrate, build-runtime-tester-legacy ]
+    needs: [ build-host-kagome, build-adapter-substrate, build-runtime-tester ]
     name: "[test-genesis] kagome"
     runs-on: ubuntu-20.04
     steps:
@@ -326,13 +265,13 @@ jobs:
     - run: chmod +x test/bin/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
-        name: tester-runtime-legacy-genesis
-        path: test/runtimes/tester-legacy
+        name: tester-runtime-genesis
+        path: test/runtimes/tester
     - name: Run kagome with tester genesis
       run: test/runtests.jl kagome genesis
 
   test-gossamer:
-    needs: [ build-host-gossamer, build-adapter-substrate, build-runtime-tester-legacy ]
+    needs: [ build-host-gossamer, build-adapter-substrate, build-runtime-tester ]
     name: "[test-genesis] gossamer"
     runs-on: ubuntu-20.04
     steps:
@@ -353,7 +292,7 @@ jobs:
     - run: chmod +x test/bin/substrate-adapter
     - uses: actions/download-artifact@v1
       with:
-        name: tester-runtime-legacy-genesis
-        path: test/runtimes/tester-legacy
+        name: tester-runtime-genesis
+        path: test/runtimes/tester
     - name: Run gossamer with tester genesis
       run: test/runtests.jl gossamer genesis
