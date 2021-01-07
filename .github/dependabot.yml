@@ -1,7 +1,31 @@
 version: 2
 updates:
 
-  # Adapters
+  # Submodules (hosts and some adapters)
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/test/hosts/substrate"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "substrate:"
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/test/hosts/kagome"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "kagome:"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "gitsubmodule"
+    directory: "/test/hosts/gossamer"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "gossamer:"
+
+  # Adapters (not handled by submodules)
 
   - package-ecosystem: "cargo"
     directory: "/test/adapters/substrate"
@@ -19,76 +43,32 @@ updates:
       prefix: "substrate-a-l:"
     open-pull-requests-limit: 0
 
-  # kagome/hunter currently not supported
+  # Runtimes (not handled by submodules)
 
-  - package-ecosystem: "gomod"
-    directory: "/test/adapters/gossamer"
+  - package-ecosystem: "cargo"
+    directory: "/test/runtimes/hostapi"
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "gossamer-a:"
+      prefix: "hostapi-rt:"
+    open-pull-requests-limit: 0
+
+  - package-ecosystem: "cargo"
+    directory: "/test/runtimes/hostapi-legacy"
+    schedule:
+      interval: "weekly"
+    commit-message:
+      prefix: "hostapi-rt-l:"
     open-pull-requests-limit: 0
 
 
   - package-ecosystem: "cargo"
-    directory: "/test/adapters/wasm"
+    directory: "/test/runtimes/tester"
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "wasm-a:"
+      prefix: "tester-rt:"
     open-pull-requests-limit: 0
-
-  - package-ecosystem: "cargo"
-    directory: "/test/adapters/wasm-legacy"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "wasm-a-l:"
-    open-pull-requests-limit: 0
-
-
-  # Testers
-
-  - package-ecosystem: "cargo"
-    directory: "/test/testers/host"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "host-t:"
-    open-pull-requests-limit: 0
-
-  - package-ecosystem: "cargo"
-    directory: "/test/testers/host-legacy"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "host-t-l:"
-    open-pull-requests-limit: 0
-
-
-  # Hosts
-
-  - package-ecosystem: "gitsubmodule"
-    directory: "/test/hosts/substrate"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "substrate-h:"
-
-  - package-ecosystem: "gitsubmodule"
-    directory: "/test/hosts/kagome"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "kagome-h:"
-
-  - package-ecosystem: "gitsubmodule"
-    directory: "/test/hosts/gossamer"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "gossamer-h:"
-
 
   # GitHub Actions
 
@@ -98,4 +78,3 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "ci:"
-    open-pull-requests-limit: 0
