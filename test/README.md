@@ -6,7 +6,7 @@ Currently the testsuite contains the following tests:
 
 - SCALE Codec Encoding ([scale-codec](fixtures/state-trie))
 - State Trie Hashing ([state-trie](fixtures/state-trie))
-- Polkadot Host API ([host-api](fixtures/host-api) and [host-api-legacy](fixtures/host-api-legacy))
+- Polkadot Host API ([host-api](fixtures/host-api))
 - Genesis Import ([genesis](fixtures/genesis))
 
 The goal is to ensures that the different implementations behave in the same way and produce the identical output.
@@ -39,7 +39,7 @@ To build any of the hosts, please make sure to initialized the corresponding sub
 Needs Rust Nightly with WASM toolchain (and potentially libclang?)
 
 ```sh
-make substrate-adapter substrate-adapter-legacy
+make substrate-adapter
 ```
 
 ### Kagome API Adapter
@@ -138,17 +138,16 @@ Those adapters call functions that call the Polkadot Host API.
 | host-api/include.jl |
 |                     |
 +----------|----------+
-           |                      +----------------+
-           +--------------------->+Wasm Executor   |    *call runtime function*
-           | substrate-adapter    |                +---------------------------+
-           |                      |                |                           |
-           |                      |                |                           v
-           |                      |  +-------------+                 +---------|---------+
-           |                      |  |Polkadot     |    *call API*   | wasm-adapter      |
-           |                      |  |Runtme       +<----------------+                   |
-           |                      |  |Environment  |                 |                   |
-           |                      |  |             |                 |                   |
-           |                      +--|-------------+                 +-------------------+
+           |                      +------------------+
+           +--------------------->+  Wasm Executor   |    *call runtime function*
+           | substrate-adapter    |                  +---------------------------+
+           |                      |                  |                           |
+           |                      |                  |                           v
+           |                      |  +---------------+                 +---------|-------+
+           |                      |  | Polkadot Host |    *call API*   | hostapi-runtime |
+           |                      |  |               +<----------------+                 |
+           |                      |  |               |                 |                 |
+           |                      +--|---------------+                 +-----------------+
            |
            |
            +---------------------> ...
@@ -217,16 +216,15 @@ The submodule in [hosts/substrate](./hosts/substrate) should always point to a r
 
 After every update, `substrate-adapter` should be update to the same substrate commit used in the release.
 
-The `substrate-adapter-legacy` does not get updated, it is pinned to an early v0.7.x version, just before the legacy host api was removed.
 
 ## Kagome
 
-The `kagome-adapter` and `kagome-adapter-legacy` are build against the submodule under [hosts/kagome](./hosts/kagome) which should always point to a recent commit or release of [Kagome](https://github.com/soramitsu/kagome).
+The `kagome-adapter` are build against the submodule under [hosts/kagome](./hosts/kagome) which should always point to a recent commit or release of [Kagome](https://github.com/soramitsu/kagome).
 
 There are no special updates steps needed apart from fixing build and test failures.
 
 ## Gossamer
 
-The `gossamer-adapter` and `gossamer-adapter-legacy` are build against the submodule under [hosts/gossamer](./hosts/gossamer) which should always point to a recent commit or release of [Gossamer](https://github.com/ChainSafe/gossamer).
+The `gossamer-adapter` are build against the submodule under [hosts/gossamer](./hosts/gossamer) which should always point to a recent commit or release of [Gossamer](https://github.com/ChainSafe/gossamer).
 
 There are no special updates steps needed apart from fixing build and test failures.
