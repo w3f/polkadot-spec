@@ -176,17 +176,11 @@ function run(self::Builder, adapter::CmdString)
    end # for inputs
 end
 
-"Run fixture for each configured implementation, optional flag to use legacy version if available."
-function execute(self::Builder; legacy::Bool=false)
+"Run fixture for each configured implementation"
+function execute(self::Builder)
     @testset "$(self.name)" begin
         for implementation in Config.implementations
-            adapter = "$implementation-adapter"
-
-            if legacy
-                adapter *= "-legacy"
-            end
-
-            run(self, adapter)
+            run(self, "$implementation-adapter")
         end
     end # testset
 end
