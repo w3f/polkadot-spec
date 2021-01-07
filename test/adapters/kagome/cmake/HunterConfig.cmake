@@ -17,7 +17,7 @@
 
 # The version of kagome to be tested
 hunter_config(kagome
-  GIT_SUBMODULE ../../../hosts/kagome
+  GIT_SUBMODULE test/hosts/kagome
   CMAKE_ARGS TESTING=OFF
 )
 
