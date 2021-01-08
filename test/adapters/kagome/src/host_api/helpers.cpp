@@ -55,11 +55,14 @@ using kagome::blockchain::BlockHeaderRepository;
 using kagome::crypto::Bip39ProviderImpl;
 using kagome::crypto::BoostRandomGenerator;
 using kagome::crypto::CryptoStoreImpl;
+using kagome::crypto::Ed25519Suite;
+using kagome::crypto::Sr25519Suite;
 using kagome::crypto::Ed25519ProviderImpl;
+using kagome::crypto::Sr25519ProviderImpl;
+using kagome::crypto::KeyFileStorage;
 using kagome::crypto::HasherImpl;
 using kagome::crypto::Pbkdf2ProviderImpl;
 using kagome::crypto::Secp256k1ProviderImpl;
-using kagome::crypto::Sr25519ProviderImpl;
 
 using kagome::extensions::ExtensionFactoryImpl;
 
@@ -152,14 +155,14 @@ namespace helpers {
     auto secp256k1_provider = std::make_shared<Secp256k1ProviderImpl>();
     auto hasher = std::make_shared<HasherImpl>();
     auto bip39_provider = std::make_shared<Bip39ProviderImpl>(pbkdf2_provider);
+
+    auto keystore_path = boost::filesystem::temp_directory_path() / "kagome-adapter-host-api";
     auto crypto_store = std::make_shared<CryptoStoreImpl>(
-      ed25519_provider,
-      sr25519_provider,
-      secp256k1_provider,
+      std::make_shared<Ed25519Suite>(ed25519_provider),
+      std::make_shared<Sr25519Suite>(sr25519_provider),
       bip39_provider,
-      random_generator
+      KeyFileStorage::createAt(keystore_path).value()
     );
-    crypto_store->initialize("keystore").assume_value();
 
     repo_ = std::make_shared<KeyValueBlockHeaderRepository>(
       std::make_shared<InMemoryStorage>(), std::make_shared<HasherImpl>()
