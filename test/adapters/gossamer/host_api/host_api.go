@@ -53,6 +53,10 @@ func GetTestStorage() *state.TrieState {
 		fmt.Println("Failed initialize storage: ", err)
 		os.Exit(1)
 	}
+
+	store.Set([]byte(":code"), []byte{})
+	store.Set([]byte(":heappages"), []byte{8, 0, 0, 0, 0, 0, 0, 0})
+
 	return store
 }
 
@@ -154,7 +158,8 @@ func ProcessHostApiCommand(args []string) {
 		test_hashing(rtm, function, inputs[0])
 
 	// test storage api
-	//case "test_storage_init":
+	case "test_storage_init":
+		test_storage_init(rtm)
 	case "ext_storage_set_version_1",
 	     "ext_storage_get_version_1":
 		test_storage_set_get(rtm, inputs[0], inputs[1])
