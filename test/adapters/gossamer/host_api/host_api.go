@@ -23,6 +23,7 @@ import (
 	"os"
 	"path"
 	"strings"
+	"strconv"
 
 	"github.com/ChainSafe/gossamer/dot/state"
 	"github.com/ChainSafe/gossamer/lib/keystore"
@@ -37,8 +38,20 @@ import (
 // #include <errno.h>
 import "C"
 
+// Configuration
 var RELATIVE_WASM_ADAPTER_PATH = "bin/hostapi_runtime.compact.wasm"
 
+// String to Integer conversion helper
+func ToUint32(input string) uint32 {
+	output, err := strconv.ParseUint(input, 10, 32)
+	if err != nil {
+		fmt.Println("Failed parse integer: ", err)
+		os.Exit(1)
+	}
+	return uint32(output)
+}
+
+// Return absolute runtime patch
 func GetRuntimePath() string {
 	dir, err := os.Getwd()
 	if err != nil {
@@ -47,6 +60,7 @@ func GetRuntimePath() string {
 	return path.Join(dir, RELATIVE_WASM_ADAPTER_PATH)
 }
 
+// Create in-memory trie storage
 func GetTestStorage() *state.TrieState {
 	store, err := state.NewTrieState(database.NewMemDatabase(), trie.NewEmptyTrie())
 	if err != nil {
@@ -60,6 +74,7 @@ func GetTestStorage() *state.TrieState {
 	return store
 }
 
+// Main hostapi test argument parser and executor
 func ProcessHostApiCommand(args []string) {
 
 	// List of expected flags
@@ -101,6 +116,7 @@ func ProcessHostApiCommand(args []string) {
 			fmt.Println("Failed initialize runtime: ", err)
 			os.Exit(1)
 		}
+
 		rtm = r
 	} else {
 		// ... using wasmer
@@ -116,6 +132,7 @@ func ProcessHostApiCommand(args []string) {
 			fmt.Println("Failed initialize runtime: ", err)
 			os.Exit(1)
 		}
+
 		rtm = r
 	}
 
@@ -163,7 +180,8 @@ func ProcessHostApiCommand(args []string) {
 	case "ext_storage_set_version_1",
 	     "ext_storage_get_version_1":
 		test_storage_set_get(rtm, inputs[0], inputs[1])
-	//case "ext_storage_read_version_1":
+	case "ext_storage_read_version_1":
+		test_storage_read(rtm, inputs[0], inputs[1], ToUint32(inputs[2]), ToUint32(inputs[2]))
 	case "ext_storage_clear_version_1":
 		test_storage_clear(rtm, inputs[0], inputs[1])
 	case "ext_storage_exists_version_1":
