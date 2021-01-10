@@ -77,6 +77,44 @@ func storage_get(r runtime.Instance, key []byte) *optional.Bytes {
 	return value_opt.(*optional.Bytes)
 }
 
+// Helper function to call rtm_ext_storage_read_version_1
+func storage_read(r runtime.Instance, key []byte, offset uint32, length uint32) *optional.Bytes {
+	// Encode inputs
+	key_enc, err := scale.Encode([]byte(key))
+	if err != nil {
+		fmt.Println("Encoding key failed: ", err)
+		os.Exit(1)
+	}
+
+	offset_enc, err := scale.Encode(offset)
+	if err != nil {
+		fmt.Println("Encoding offset failed: ", err)
+		os.Exit(1)
+	}
+
+	length_enc, err := scale.Encode(length)
+	if err != nil {
+		fmt.Println("Encoding length failed: ", err)
+		os.Exit(1)
+	}
+
+	args_enc := append(append(key_enc, offset_enc...), length_enc...)
+
+	// Check that key has not been set
+	value_enc, err := r.Exec("rtm_ext_storage_read_version_1", args_enc)
+	if err != nil {
+		fmt.Println("Execution failed: ", err)
+		os.Exit(1)
+	}
+
+	value_opt, err := scale.Decode(value_enc, &optional.Bytes{})
+	if err != nil {
+		fmt.Println("Decoding value failed: ", err)
+		os.Exit(1)
+	}
+	return value_opt.(*optional.Bytes)
+}
+
 // Helper function to call rtm_ext_storage_clear_version_1
 func storage_clear(r runtime.Instance, key []byte) {
 	// Encode inputs
@@ -172,6 +210,46 @@ func test_storage_set_get(r runtime.Instance, key string, value string) {
 	}
 
 	// Print result
+	fmt.Printf("%s\n", some.Value())
+}
+
+// Test for rtm_ext_storage_read_version_1
+func test_storage_read(r runtime.Instance, key string, value string, offset uint32, length uint32) {
+	// Check that key has not been set
+	none := storage_read(r, []byte(key), offset, length)
+
+	if none.Exists() {
+		fmt.Printf("Key already exists: %s\n", none.Value())
+		os.Exit(1)
+	}
+
+	// Add data to storage
+	storage_set(r, []byte(key), []byte(value))
+
+	// Retrieve and check returned data
+	some := storage_read(r, []byte(key), offset, length)
+
+	if !some.Exists() {
+		fmt.Println("Key is missing")
+		os.Exit(1)
+	}
+
+	if int(offset) < len(value) {
+		expected_length := len(value) - int(offset)
+		if expected_length > int(length) {
+			expected_length = int(length)
+		}
+		expected_value := value[offset:int(offset)+expected_length];
+
+		if !bytes.Equal(some.Value(), []byte(expected_value)) {
+			fmt.Printf("Value is different: %s\n", some.Value())
+			os.Exit(1)
+		}
+	} else if len(some.Value()) != 0 {
+		fmt.Printf("Value is different: %s\n", some.Value())
+		os.Exit(1)
+	}
+
 	fmt.Printf("%s\n", some.Value())
 }
 
