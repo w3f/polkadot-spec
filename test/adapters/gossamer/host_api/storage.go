@@ -27,61 +27,72 @@ import (
 	"github.com/ChainSafe/gossamer/lib/scale"
 )
 
+// -- Helpers --
 
-func test_storage_set_get(r runtime.Instance, key string, value string) {
-
+// Helper function to call rtm_ext_storage_set_version_1
+func storage_set(r runtime.Instance, key []byte, value []byte) {
 	// Encode inputs
-	key_enc, err := scale.Encode([]byte(key))
+	key_enc, err := scale.Encode(key)
 	if err != nil {
 		fmt.Println("Encoding key failed: ", err)
 		os.Exit(1)
 	}
 
-	value_enc, err := scale.Encode([]byte(value))
+	value_enc, err := scale.Encode(value)
 	if err != nil {
 		fmt.Println("Encoding value failed: ", err)
 		os.Exit(1)
 	}
 
-	// Get invalid key
-	empty_enc, err := r.Exec("rtm_ext_storage_get_version_1", key_enc)
+	// Set key to value
+	_, err = r.Exec("rtm_ext_storage_set_version_1", append(key_enc, value_enc...))
+	if err != nil {
+		fmt.Println("Execution failed: ", err)
+		os.Exit(1)
+	}
+}
+
+// Helper function to call rtm_ext_storage_get_version_1
+func storage_get(r runtime.Instance, key []byte) *optional.Bytes {
+	// Encode inputs
+	key_enc, err := scale.Encode(key)
+	if err != nil {
+		fmt.Println("Encoding key failed: ", err)
+		os.Exit(1)
+	}
+
+	// Retrieve key
+	value_enc, err := r.Exec("rtm_ext_storage_get_version_1", key_enc)
 	if err != nil {
 		fmt.Println("Execution failed: ", err)
 		os.Exit(1)
 	}
 
-	empty, err := scale.Decode(empty_enc, &optional.Bytes{})
+	value_opt, err := scale.Decode(value_enc, &optional.Bytes{})
 	if err != nil {
 		fmt.Println("Decoding value failed: ", err)
 		os.Exit(1)
 	}
-	none := empty.(*optional.Bytes)
+	return value_opt.(*optional.Bytes)
+}
+
+// -- Tests --
+
+// Test for rtm_ext_storage_set_version_1 and rtm_ext_storage_get_version_1
+func test_storage_set_get(r runtime.Instance, key string, value string) {
+	// Get invalid key
+	none := storage_get(r, []byte(key))
 
 	if none.Exists() {
 		fmt.Printf("Key already exists: %s\n", none.Value())
 		os.Exit(1)
 	}
 
-	// Set key/value
-	_, err = r.Exec("rtm_ext_storage_set_version_1", append(key_enc, value_enc...))
-	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
-	}
+	// Set key to value
+	storage_set(r, []byte(key), []byte(value))
 
 	// Get valid key
-	result_enc, err := r.Exec("rtm_ext_storage_get_version_1", key_enc)
-	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
-	}
-
-	result, err := scale.Decode(result_enc, &optional.Bytes{})
-	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
-	}
-	some := result.(*optional.Bytes)
+	some := storage_get(r, []byte(key))
 
 	if !some.Exists() {
 		fmt.Println("Key is missing")
@@ -93,5 +104,6 @@ func test_storage_set_get(r runtime.Instance, key string, value string) {
 		os.Exit(1)
 	}
 
+	// Print result
 	fmt.Printf("%s\n", some.Value())
 }
