@@ -289,3 +289,15 @@ func test_storage_clear_prefix(r runtime.Instance, prefix string, key1 string, v
 		}
 	}
 }
+
+// Test for rtm_ext_storage_root_version_1
+func test_storage_root(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) {
+	// Insert data
+	storage_set(r, []byte(key1), []byte(value1))
+	storage_set(r, []byte(key2), []byte(value2))
+
+	// Compute and print storage root hash
+	hash := storage_root(r)
+
+	fmt.Printf("%x\n", hash[:])
+}
