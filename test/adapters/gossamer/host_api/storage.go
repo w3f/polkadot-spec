@@ -76,6 +76,23 @@ func storage_get(r runtime.Instance, key []byte) *optional.Bytes {
 	return value_opt.(*optional.Bytes)
 }
 
+// Helper function to call rtm_ext_storage_clear_version_1
+func storage_clear(r runtime.Instance, key []byte) {
+	// Encode inputs
+	key_enc, err := scale.Encode([]byte(key))
+	if err != nil {
+		fmt.Println("Encoding key failed: ", err)
+		os.Exit(1)
+	}
+
+	// Clear storage key
+	_, err = r.Exec("rtm_ext_storage_clear_version_1", key_enc)
+	if err != nil {
+		fmt.Println("Execution failed: ", err)
+		os.Exit(1)
+	}
+}
+
 // -- Tests --
 
 // Test for rtm_ext_storage_set_version_1 and rtm_ext_storage_get_version_1
@@ -106,4 +123,34 @@ func test_storage_set_get(r runtime.Instance, key string, value string) {
 
 	// Print result
 	fmt.Printf("%s\n", some.Value())
+}
+
+// Test for rtm_ext_storage_clear_version_1
+func test_storage_clear(r runtime.Instance, key string, value string) {
+	// Insert data
+	storage_set(r, []byte(key), []byte(value))
+
+	// Retrieve and check stored data
+	some := storage_get(r, []byte(key))
+
+	if !some.Exists() {
+		fmt.Println("Key is missing")
+		os.Exit(1)
+	}
+
+	if !bytes.Equal(some.Value(), []byte(value)) {
+		fmt.Printf("Value is different: %s\n", some.Value())
+		os.Exit(1)
+	}
+
+	// Clear data
+	storage_clear(r, []byte(key))
+
+	// Retrieve and check cleared data
+	none := storage_get(r, []byte(key))
+
+	if none.Exists() {
+		fmt.Printf("Key was not cleared: %s\n", none.Value())
+		os.Exit(1)
+	}
 }
