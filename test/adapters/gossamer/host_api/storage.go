@@ -118,7 +118,32 @@ func storage_exists(r runtime.Instance, key []byte) uint32 {
 	return exists.(uint32)
 }
 
+// Helper function to call rtm_ext_storage_root_version_1
+func storage_root(r runtime.Instance) []byte {
+	// Retrieve current root
+	root_enc, err := r.Exec("rtm_ext_storage_root_version_1", []byte{})
+	if err != nil {
+		fmt.Println("Execution failed: ", err)
+		os.Exit(1)
+	}
+
+	root, err := scale.Decode(root_enc, []byte{})
+	if err != nil {
+		fmt.Println("Decoding failed: ", err)
+		os.Exit(1)
+	}
+	return root.([]byte)
+}
+
 // -- Tests --
+
+// Test for initial state of storage
+func test_storage_init(r runtime.Instance) {
+	// Retrieve and print storage root
+	hash := storage_root(r)
+
+	fmt.Printf("%x\n", hash[:])
+}
 
 // Test for rtm_ext_storage_set_version_1 and rtm_ext_storage_get_version_1
 func test_storage_set_get(r runtime.Instance, key string, value string) {
