@@ -27,10 +27,8 @@ This ensures that the different implementations behave the same and produce iden
 
 For more details plese see the [README.md](./test/README.md) of the testsuite.
 
-## Genesis files
+## Genesis and Runtime files
 
-This repository contains genesis parameters for different networks in the `chain-candidates/` directory.
-- The `alexander` test network
-- The `kusama` test network
+The latest genesis files can be retrieved from the official polkadot repository [here](https://github.com/paritytech/polkadot/tree/master/node/service/res).
 
-*Note: These files have not been updated in a while and are mostly kept around for historic reasons.*
+All runtime releases can be found on the official [Polkadot Releases page](https://github.com/paritytech/polkadot/releases).
