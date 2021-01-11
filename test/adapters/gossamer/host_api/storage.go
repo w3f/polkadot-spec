@@ -156,6 +156,29 @@ func storage_exists(r runtime.Instance, key []byte) uint32 {
 	return exists.(uint32)
 }
 
+// Helper function to call rtm_ext_storage_append_version_1
+func storage_append(r runtime.Instance, key []byte, value []byte) {
+	// Encode inputs
+	key_enc, err := scale.Encode(key)
+	if err != nil {
+		fmt.Println("Encoding key failed: ", err)
+		os.Exit(1)
+	}
+
+	value_enc, err := scale.Encode(value)
+	if err != nil {
+		fmt.Println("Encoding value failed: ", err)
+		os.Exit(1)
+	}
+
+	// Append value to key
+	_, err = r.Exec("rtm_ext_storage_append_version_1", append(key_enc, value_enc...))
+	if err != nil {
+		fmt.Println("Execution failed: ", err)
+		os.Exit(1)
+	}
+}
+
 // Helper function to call rtm_ext_storage_root_version_1
 func storage_root(r runtime.Instance) []byte {
 	// Retrieve current root
@@ -390,6 +413,92 @@ func test_storage_clear_prefix(r runtime.Instance, prefix string, key1 string, v
 			os.Exit(1)
 		}
 	}
+}
+
+// Test for rtm_ext_storage_append_version_1
+func test_storage_append(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) {
+	// Encode inputs
+	value1_enc, err := scale.Encode(value1)
+	if err != nil {
+		fmt.Println("Encoding value1 failed: ", err)
+		os.Exit(1)
+	}
+
+	value2_enc, err := scale.Encode(value2)
+	if err != nil {
+		fmt.Println("Encoding value2 failed: ", err)
+		os.Exit(1)
+	}
+
+	// Check that key1 is unset
+	none1 := storage_get(r, []byte(key1))
+
+	if none1.Exists() {
+		fmt.Printf("Key1 already exists: %s\n", none1.Value())
+		os.Exit(1)
+	}
+
+	// Insert key1
+	storage_append(r, []byte(key1), []byte(value1_enc))
+	storage_append(r, []byte(key1), []byte(value2_enc))
+
+	// Check that key2 is unset
+	none2 := storage_get(r, []byte(key2))
+
+	if none2.Exists() {
+		fmt.Printf("Key2 already exists: %s\n", none2.Value())
+		os.Exit(1)
+	}
+
+	// Insert key2
+	storage_append(r, []byte(key2), []byte(value2_enc))
+	storage_append(r, []byte(key2), []byte(value1_enc))
+	storage_append(r, []byte(key2), []byte(value2_enc))
+	storage_append(r, []byte(key2), []byte(value1_enc))
+
+	// Check key1
+	some1_opt := storage_get(r, []byte(key1))
+
+	if !some1_opt.Exists() {
+		fmt.Println("Key1 not set")
+		os.Exit(1)
+	}
+
+	some1_dec, err := scale.Decode(some1_opt.Value(), []string{})
+	if err != nil {
+		fmt.Println("Decoding value failed: ", err)
+		os.Exit(1)
+	}
+	some1 := some1_dec.([]string)
+
+	if some1[0] != value1 || some1[1] != value2 {
+		fmt.Println("Value is different")
+		os.Exit(1)
+	}
+
+	fmt.Println(strings.Join(some1, ","))
+
+	// Check key2
+	some2_opt := storage_get(r, []byte(key2))
+
+	if !some2_opt.Exists() {
+		fmt.Println("Key2 not set")
+		os.Exit(1)
+	}
+
+	some2_dec, err := scale.Decode(some2_opt.Value(), []string{})
+	if err != nil {
+		fmt.Println("Decoding value failed: ", err)
+		os.Exit(1)
+	}
+	some2 := some2_dec.([]string)
+
+	if some2[0] != value2 || some2[1] != value1 || some2[2] != value2 || some2[3] != value1 {
+		fmt.Printf("Key2 not set: %s\n", some2_opt.Value())
+		os.Exit(1)
+	}
+
+	fmt.Println(strings.Join(some2, ","))
 }
 
 // Test for rtm_ext_storage_root_version_1
