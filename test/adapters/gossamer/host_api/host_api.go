@@ -188,7 +188,8 @@ func ProcessHostApiCommand(args []string) {
 		test_storage_exists(rtm, inputs[0], inputs[1])
 	case "ext_storage_clear_prefix_version_1":
 		test_storage_clear_prefix(rtm, inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
-	//case "ext_storage_append_version_1":
+	case "ext_storage_append_version_1":
+		test_storage_append(rtm, inputs[0], inputs[1], inputs[2], inputs[3])
 	case "ext_storage_root_version_1":
 		test_storage_root(rtm, inputs[0], inputs[1], inputs[2], inputs[3])
 	case "ext_storage_next_key_version_1":
