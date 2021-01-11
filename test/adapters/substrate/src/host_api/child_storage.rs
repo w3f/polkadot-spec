@@ -358,35 +358,35 @@ pub fn ext_default_child_storage_root_version_1(input: ParsedInput) {
     let mut rtm = Runtime::new();
 
     let child_key1 = input.get(0);
-    let _child_key2 = input.get(1);
+    let child_key2 = input.get(1);
     let key1 = input.get(2);
     let value1 = input.get(3);
     let key2 = input.get(4);
     let value2 = input.get(5);
 
-    // Set key/value
+    // Set key1 to value1
     let _ = rtm.call(
         "rtm_ext_default_child_storage_set_version_1",
         &(child_key1, key1, value1).encode(),
     );
 
-    // Set key/value
+    // Set key2 to value2
     let _ = rtm.call(
         "rtm_ext_default_child_storage_set_version_1",
         &(child_key1, key2, value2).encode(),
     );
 
-    // Set key/value (different child key)
-    /* TODO: Inserting this will cause the root hash to change.
-                Wait for new changes before testing again.
-    let _ = rtm.call("rtm_ext_default_child_storage_set_version_1", &(
-        child_key2,
-        child_definition,
-        child_type,
-        key2,
-        value1
-    ).encode());
-    */
+    // Set key1 to value2 (different child key)
+    let _ = rtm.call(
+        "rtm_ext_default_child_storage_set_version_1",
+        &(child_key2, key1, value2).encode()
+    );
+
+    // Set key2 to value1 (different child key)
+    let _ = rtm.call(
+        "rtm_ext_default_child_storage_set_version_1",
+        &(child_key2, key2, value1).encode()
+    );
 
     // Get root
     let res = rtm
