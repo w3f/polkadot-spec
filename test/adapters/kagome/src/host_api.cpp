@@ -129,11 +129,13 @@ void processHostApiCommands(const HostApiCommandArgs &args) {
   // test child storage TODO: all not implemented
   router.addSubcommand("ext_default_child_storage_set_version_1",
                        [](const std::vector<std::string> &args) {
-                         throw NotImplemented(); // TODO not implemented
+                         BOOST_ASSERT(args.size() == 4);
+                         child_storage::processSetGet(args[0], args[1], args[2], args[3]);
                        });
   router.addSubcommand("ext_default_child_storage_get_version_1",
                        [](const std::vector<std::string> &args) {
-                         throw NotImplemented(); // TODO not implemented
+                         BOOST_ASSERT(args.size() == 4);
+                         child_storage::processSetGet(args[0], args[1], args[2], args[3]);
                        });
   router.addSubcommand("ext_default_child_storage_read_version_1",
                        [](const std::vector<std::string> &args) {
