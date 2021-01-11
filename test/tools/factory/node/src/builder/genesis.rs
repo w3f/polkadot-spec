@@ -74,9 +74,9 @@ pub fn authority_keys_from_seed(s: &str) -> (AuraId, GrandpaId) {
 
 pub fn gen_chain_spec_default() -> Result<ChainSpec> {
     gen_chain_spec_with_accounts(vec![
-        get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>("//alice"),
-        get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>("//bob"),
-        get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>("//dave"),
+        get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>("alice"),
+        get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>("bob"),
+        get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>("dave"),
     ])
 }
 

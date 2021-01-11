@@ -123,13 +123,10 @@ impl TryFrom<SpecAccountSeed> for ExtrinsicSigner {
         let input = value.0.to_ascii_lowercase();
         if SAMPLE_ACCOUNTS.contains(&input.as_str()) {
             Ok(ExtrinsicSigner::from_string(&format!("//{}", input), None)
-                .map_err(|_| failure::err_msg(format!("Invalid seed phrase")))?)
+                .map_err(|_| failure::err_msg("Invalid seed phrase"))?)
         } else {
-            Ok(ExtrinsicSigner::from_seed(
-                &hex::decode(input)?
-                    .try_into()
-                    .map_err(|_| failure::err_msg("Invalid seed phrase"))?,
-            ))
+            Ok(ExtrinsicSigner::from_string(&input, None)
+                .map_err(|_| failure::err_msg("Invalid seed phrase"))?)
         }
     }
 }
@@ -185,7 +182,10 @@ impl TryFrom<SpecHash> for H256 {
     type Error = failure::Error;
 
     fn try_from(val: SpecHash) -> Result<Self> {
-        Ok(H256::from_slice(&<[u8; 32]>::try_from(hex::decode(&val.0.replace("0x", ""))?).map_err(|_| failure::err_msg("Failed to convert value into 256-bit hash"))?))
+        Ok(H256::from_slice(
+            &<[u8; 32]>::try_from(hex::decode(&val.0.replace("0x", ""))?)
+                .map_err(|_| failure::err_msg("Failed to convert value into 256-bit hash"))?,
+        ))
     }
 }
 

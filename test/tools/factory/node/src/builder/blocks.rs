@@ -67,8 +67,6 @@ module!(
                             } else {
                                 return Err(failure::err_msg(format!("Invalid transaction: {}", <TransactionValidityError as Into<&'static str>>::into(validity))));
                             }
-                        } else {
-                            return Err(failure::err_msg("Apply extrinsic dispatch error"));
                         }
                     }
 

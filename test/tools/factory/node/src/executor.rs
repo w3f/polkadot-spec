@@ -20,7 +20,7 @@ native_executor_instance!(
     frame_benchmarking::benchmarking::HostFunctions,
 );
 
-type ClientInMemDef = Client<
+pub type ClientInMemDef = Client<
     Backend<Block>,
     LocalCallExecutor<Backend<Block>, NativeExecutor<Executor>>,
     Block,
@@ -80,5 +80,8 @@ impl ClientInMem {
     }
     pub fn runtime_api<'a>(&'a self) -> ApiRef<'a, RuntimeApiImpl<Block, ClientInMemDef>> {
         self.client.runtime_api()
+    }
+    pub fn raw(&self) -> &ClientInMemDef {
+        &self.client
     }
 }

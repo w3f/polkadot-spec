@@ -1,12 +1,15 @@
 use super::Result;
-use crate::primitives::runtime::{AccountId, RuntimeCall, SignedExtra, UncheckedExtrinsic};
+use crate::executor::ClientInMemDef;
+use crate::primitives::runtime::{
+    AccountId, BlockId, RuntimeCall, SignedExtra, UncheckedExtrinsic,
+};
 use crate::tool_spec::TaskOutcome;
 use codec::Encode;
+use sc_client_api::BlockBackend;
 use serde::de::DeserializeOwned;
 use serde::ser::Serialize;
 use sp_core::crypto::Pair;
 use sp_runtime::generic::{Era, SignedPayload};
-use sp_runtime::traits::SignedExtension;
 use sp_runtime::MultiSignature;
 
 pub mod balances;
@@ -60,15 +63,16 @@ pub trait Builder: Sized + ModuleInfo {
     }
 }
 
-fn create_tx<P: Pair>(pair: P, function: RuntimeCall, nonce: u32) -> Result<UncheckedExtrinsic>
+fn create_tx<P: Pair>(
+    pair: P,
+    function: RuntimeCall,
+    nonce: u32,
+    client: &ClientInMemDef,
+) -> Result<UncheckedExtrinsic>
 where
     AccountId: From<<P as Pair>::Public>,
     MultiSignature: From<<P as Pair>::Signature>,
 {
-    fn extra_err() -> failure::Error {
-        failure::err_msg("Failed to retrieve additionally signed extra")
-    }
-
     let check_spec_version = frame_system::CheckSpecVersion::new();
     let check_tx_version = frame_system::CheckTxVersion::new();
     let check_genesis = frame_system::CheckGenesis::new();
@@ -76,17 +80,6 @@ where
     let check_nonce = frame_system::CheckNonce::from(nonce);
     let check_weight = frame_system::CheckWeight::new();
     let payment = pallet_transaction_payment::ChargeTransactionPayment::from(0);
-
-    #[rustfmt::skip]
-    let additional_extra = (
-        check_spec_version.additional_signed().map_err(|_| extra_err())?,
-        check_tx_version.additional_signed().map_err(|_| extra_err())?,
-        check_genesis.additional_signed().map_err(|_| extra_err())?,
-        check_era.additional_signed().map_err(|_| extra_err())?,
-        check_nonce.additional_signed().map_err(|_| extra_err())?,
-        check_weight.additional_signed().map_err(|_| extra_err())?,
-        payment.additional_signed().map_err(|_| extra_err())?,
-    );
 
     let extra: SignedExtra = (
         check_spec_version,
@@ -98,8 +91,51 @@ where
         payment,
     );
 
-    let payload = SignedPayload::from_raw(function, extra, additional_extra);
+    // *** ***
+    // *
 
+    // Additionally signed fields.
+    let best_block_id = BlockId::number(client.chain_info().best_number);
+    let (spec_version, transaction_version) = {
+        let version = client.runtime_version_at(&best_block_id).unwrap();
+        (version.spec_version, version.transaction_version)
+    };
+    let genesis_hash = client.block_hash(0).unwrap().unwrap();
+
+    let additional_extra = (
+        spec_version,
+        transaction_version,
+        genesis_hash,
+        genesis_hash,
+        (),
+        (),
+        (),
+    );
+
+    // *** OR ***
+
+    /*
+    use sp_runtime::traits::SignedExtension;
+    
+    fn extra_err() -> failure::Error {
+        failure::err_msg("Failed to retrieve additionally signed extra")
+    }
+
+    let additional_extra = (
+        check_spec_version.additional_signed().map_err(|_| extra_err())?,
+        check_tx_version.additional_signed().map_err(|_| extra_err())?,
+        check_genesis.additional_signed().map_err(|_| extra_err())?,
+        check_era.additional_signed().map_err(|_| extra_err())?,
+        check_nonce.additional_signed().map_err(|_| extra_err())?,
+        check_weight.additional_signed().map_err(|_| extra_err())?,
+        payment.additional_signed().map_err(|_| extra_err())?,
+    );
+    */
+
+    // *
+    // *** ***
+
+    let payload = SignedPayload::from_raw(function, extra, additional_extra);
     let signature = payload.using_encoded(|payload| pair.sign(payload));
 
     let (function, extra, _) = payload.deconstruct();

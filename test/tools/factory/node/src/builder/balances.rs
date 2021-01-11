@@ -6,7 +6,7 @@ use crate::primitives::{ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecChai
 use crate::Result;
 use pallet_balances::Call as BalancesCall;
 use sp_core::crypto::Pair;
-use std::convert::TryInto;
+use std::convert::{TryFrom, TryInto};
 use std::str::FromStr;
 use structopt::StructOpt;
 
@@ -67,15 +67,16 @@ module!(
                     client
                         .exec_context(&BlockId::Number(0), || {
                             create_tx::<ExtrinsicSigner>(
-                                from.try_into()?,
+                                ExtrinsicSigner::try_from(from.clone())?,
                                 RuntimeCall::Balances(BalancesCall::transfer(
                                     get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>(
-                                        to.as_str(),
+                                        &format!("//{}", to.as_str()),
                                     )
                                     .into(),
                                     balance as Balance,
                                 )),
-                                0,
+                                1,
+                                &client.raw(),
                             )
                             .map(|t| RawExtrinsic::from(t))
                             .map(Some)
