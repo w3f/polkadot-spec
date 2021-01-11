@@ -173,6 +173,30 @@ func storage_root(r runtime.Instance) []byte {
 	return root.([]byte)
 }
 
+// Helper function to call rtm_ext_storage_next_key_version_1
+func storage_next_key(r runtime.Instance, key []byte) *optional.Bytes {
+	// Encode inputs
+	key_enc, err := scale.Encode(key)
+	if err != nil {
+		fmt.Println("Encoding key failed: ", err)
+		os.Exit(1)
+	}
+
+	// Retrieve key
+	value_enc, err := r.Exec("rtm_ext_storage_next_key_version_1", key_enc)
+	if err != nil {
+		fmt.Println("Execution failed: ", err)
+		os.Exit(1)
+	}
+
+	value_opt, err := scale.Decode(value_enc, &optional.Bytes{})
+	if err != nil {
+		fmt.Println("Decoding next key failed: ", err)
+		os.Exit(1)
+	}
+	return value_opt.(*optional.Bytes)
+}
+
 // -- Tests --
 
 // Test for initial state of storage
@@ -378,4 +402,73 @@ func test_storage_root(r runtime.Instance, key1 string, value1 string, key2 stri
 	hash := storage_root(r)
 
 	fmt.Printf("%x\n", hash[:])
+}
+
+// Test for rtm_ext_storage_next_key_version_1
+func test_storage_next_key(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) {
+
+	// No next key available
+	none1 := storage_next_key(r, []byte(key1))
+
+	if none1.Exists() {
+		fmt.Println("Next1 is not empty")
+		os.Exit(1)
+	}
+
+	none2 := storage_next_key(r, []byte(key2))
+
+	if none2.Exists() {
+		fmt.Println("Next2 is not empty")
+		os.Exit(1)
+	}
+
+	// Insert test data
+	storage_set(r, []byte(key1), []byte(value1))
+	storage_set(r, []byte(key2), []byte(value2))
+
+	// Check next key after key1
+	some1 := storage_next_key(r, []byte(key1))
+
+	if strings.Compare(key1, key2) < 0 {
+		if !some1.Exists() {
+			fmt.Println("Key2 is missing")
+			os.Exit(1)
+		}
+		next := some1.Value();
+
+		if !bytes.Equal(next, []byte(key2)) {
+			fmt.Printf("Next is not key2: %s\n", next)
+			os.Exit(1)
+		}
+
+		fmt.Printf("%s\n", next);
+	} else {
+		if some1.Exists() {
+			fmt.Println("Next is not empty");
+			os.Exit(1)
+		}
+	}
+
+	// Check next key after key2
+	some2 := storage_next_key(r, []byte(key2))
+
+	if strings.Compare(key2, key1) < 0 {
+		if !some2.Exists() {
+			fmt.Println("Key1 is missing")
+			os.Exit(1)
+		}
+		next := some2.Value();
+
+		if !bytes.Equal(next, []byte(key1)) {
+			fmt.Printf("Next is not key1: %s\n", next)
+			os.Exit(1)
+		}
+
+		fmt.Printf("%s\n", next);
+	} else {
+		if some2.Exists() {
+			fmt.Println("Next is not empty");
+			os.Exit(1)
+		}
+	}
 }
