@@ -24,6 +24,14 @@
 
 // TODO update and implement module
 namespace child_storage {
+  // executes ext_default_child_storage_set_version_1 and
+  // ext_default_child storage_get_version_1 test
+  void processSetGet(
+    const std::string_view child1, const std::string_view child2,
+    const std::string_view key, const std::string_view value
+  );
+
+
   // executes ext_clear_child_prefix tests according to provided args
   // Input: prefix, child1, child2, key1, value1, key2, value2
   // not implemented
@@ -43,9 +51,4 @@ namespace child_storage {
   // Input: child1, child2, key, value
   // not implemented
   void processExtKillChildStorage(const std::vector<std::string> &args);
-
-  // executes ext_get_allocated_child_storage and ext_set_child_storage tests according to provided args
-  // Input: child1, child2, key, value
-  // not implemented
-  void processExtSetGetChildStorage(const std::vector<std::string> &args);
 } // namespace storage
