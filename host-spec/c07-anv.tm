@@ -371,35 +371,30 @@
     spec)?>
   </definition>
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|PrimaryValidation>><label|algo-primary-validation>
-    <algo-require|<math|B>, <math|\<pi\><rsub|B>>, relay chain parent block
-    <math|B<rsup|r*e*l*a*y><rsub|p*a*r*e*n*t>>>
+  <\algorithm|<label|algo-primary-validation><name|PrimaryValidation>(<math|B>, <math|\<pi\><rsub|B>>, relay chain parent block <math|B<rsup|r*e*l*a*y><rsub|p*a*r*e*n*t>>)>
+    <\algorithmic>
+      <\state>
+        Retrieve <math|v<rsub|B>> from the relay chain state at <math|B<rsup|r*e*l*a*y><rsub|p*a*r*e*n*t>>
+      </state>
 
-    <algo-state|Retrieve <math|v<rsub|B>> from the relay chain state at
-    <math|B<rsup|r*e*l*a*y><rsub|p*a*r*e*n*t>>>
-
-    <algo-state|Run Algorithm <reference|algo-validate-block> using
-    <math|B,\<pi\><rsub|B>,v<rsub|B>>>
+      <\state>
+        Run Algorithm <reference|algo-validate-block> using <math|B,\<pi\><rsub|B>,v<rsub|B>>
+      </state>
+    </algorithmic>
   </algorithm>
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|ValidateBlock>><label|algo-validate-block>
-    <algo-require|<math|B,\<pi\><rsub|B>,v<rsub|B>>>
+  <\algorithm|<label|algo-validate-block><name|ValidateBlock>(<math|B,\<pi\><rsub|B>,v<rsub|B>>)>
+    <\algorithmic>
+      <state|retrieve the runtime code <math|R<rsub|\<rho\>>> that is specified by <math|v<rsub|B>> from the relay chain state.>
 
-    <algo-state|retrieve the runtime code <math|R<rsub|\<rho\>>> that is
-    specified by <math|v<rsub|B>> from the relay chain state.>
+      <state|check that the initial state root in <math|\<pi\><rsub|B>> is the one claimed in <math|v<rsub|B>>>
 
-    <algo-state|check that the initial state root in <math|\<pi\><rsub|B>> is
-    the one claimed in <math|v<rsub|B>>>
+      <state|Execute <math|R<rsub|\<rho\>>> on <math|B> using <math|\<pi\><rsub|B>> to simulate the state.>
 
-    <algo-state|Execute <math|R<rsub|\<rho\>>> on <math|B> using
-    <math|\<pi\><rsub|B>> to simulate the state.>
+      <state|If the execution fails, return fail.>
 
-    <algo-state|If the execution fails, return fail.>
-
-    <algo-state|Else return success, the new header data <math|h<rsub|B>> and
-    the outgoing messages <math|M>. <todo|@fabio: same as head data?>>
+      <state|Else return success, the new header data <math|h<rsub|B>> and the outgoing messages <math|M>. <todo|@fabio: same as head data?>>
+    </algorithmic>
   </algorithm>
 
   <section|Candidate Backing><label|sect-primary-validaty-announcement>
@@ -556,22 +551,25 @@
     described in Algorithm <reference|algo-primary-validation-announcement>.
   </definition>
 
-  <\algorithm>
-    \ <caption*|PrimaryValidationAnnouncement|<with|font-shape|small-caps|PrimaryValidationAnnouncement>><label|algo-primary-validation-announcement>
-    <algo-require|<math|P*o*V<rsub|B>>>
+  <\algorithm|<label|algo-primary-validation-announcement><name|PrimaryValidationAnnouncement>(<math|P*o*V<rsub|B>>)>
+    <\algorithmic>
+      <state|<with|font-series|bold|Init> <math|S*t*m*t>;>
 
-    <algo-state|<with|font-series|bold|Init> <math|S*t*m*t>;>
+      <\algo-if-else-if|<with|font-shape|small-caps|ValidateBlock>(<math|P*o*V<rsub|B>>) is <with|font-series|bold|valid>>
 
-    <\algo-if-else-if|<with|font-shape|small-caps|ValidateBlock(<math|P*o*V<rsub|B>>)>
-    is <with|font-series|bold|valid>|<algo-state|<math|S*t*m*t\<leftarrow\>>
-    <with|font-shape|small-caps|SetValid(<math|P*o*V<rsub|B>>)>>>
-      <algo-state|<math|S*t*m*t\<leftarrow\>>
-      <with|font-shape|small-caps|SetInvalid(<math|P*o*V<rsub|B>>)>>
+        <state|<math|S*t*m*t\<leftarrow\>><with|font-shape|small-caps|SetValid>(<math|P*o*V<rsub|B>>)>
 
-      <algo-state|<with|font-shape|small-caps|BlacklistCollatorOf>(<math|P*o*V<rsub|B>>)>
-    </algo-if-else-if>
+      <|algo-if-else-if>
 
-    <algo-state|<with|font-shape|small-caps|Propagate>(<math|S*t*m*t>)>
+        <state|<math|S*t*m*t\<leftarrow\>><with|font-shape|small-caps|SetInvalid>(<math|P*o*V<rsub|B>>)>
+
+        <state|<with|font-shape|small-caps|BlacklistCollatorOf>(<math|P*o*V<rsub|B>>)>
+
+      </algo-if-else-if>
+
+      <state|<with|font-shape|small-caps|Propagate>(<math|S*t*m*t>)>
+
+    </algorithmic>
   </algorithm>
 
   <\itemize>
@@ -593,26 +591,37 @@
     connected peers.
   </itemize>
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|ConfirmCandidateReceipt>><label|algo-endorse-candidate-receipt>
-    <algo-require|<math|S*t*m*t<rsub|p*e*e*r>>>
+  <\algorithm|<label|algo-endorse-candidate-receipt><name|ConfirmCandidateReceipt>(<math|S*t*m*t<rsub|p*e*e*r>>)>
 
-    <algo-state|<with|font-series|bold|Init> <math|S*t*m*t>;>
+    <\algorithmic>
 
-    <algo-state|<math|P*o*V<rsub|B>\<leftarrow\>>
-    <with|font-shape|small-caps|Retrieve>(<math|S*t*m*t<rsub|p*e*e*r>>)>
+      <state|<with|font-series|bold|Init> <math|S*t*m*t>;>
 
-    <\algo-if-else-if|<with|font-shape|small-caps|ValidateBlock(<math|P*o*V<rsub|B>>)>
-    is <with|font-series|bold|valid>|<algo-if-else-if|<with|font-shape|small-caps|AlreadySeconded(<math|B<rsup|r*e*l*a*y><rsub|c*h*a*i*n>>)>|<algo-state|<math|S*t*m*t\<leftarrow\>>
-    <with|font-shape|small-caps|SetValid(<math|P*o*V<rsub|B>>)>>|<algo-state|<math|S*t*m*t\<leftarrow\>>
-    <with|font-shape|small-caps|SetSeconded(<math|P*o*V<rsub|B>>)>>>>
-      <algo-state|<math|S*t*m*t\<leftarrow\>>
-      <with|font-shape|small-caps|SetInvalid(<math|P*o*V<rsub|B>>)>>
+      <state|<math|P*o*V<rsub|B>\<leftarrow\>> <with|font-shape|small-caps|Retrieve>(<math|S*t*m*t<rsub|p*e*e*r>>)>
 
-      <algo-state|<with|font-shape|small-caps|AnnounceMisbehaviorOf>(<math|P*o*V<rsub|B>>)>
-    </algo-if-else-if>
+      <\algo-if-else-if|<with|font-shape|small-caps|ValidateBlock>(<math|P*o*V<rsub|B>>) is <with|font-series|bold|valid>>
 
-    <algo-state|<with|font-shape|small-caps|Propagate>(<math|S*t*m*t>)>
+        <\algo-if-else-if|<with|font-shape|small-caps|AlreadySeconded>(<math|B<rsup|r*e*l*a*y><rsub|c*h*a*i*n>>)>
+
+          <state|<math|S*t*m*t\<leftarrow\>><with|font-shape|small-caps|SetValid>(<math|P*o*V<rsub|B>>)>|
+
+        <|algo-if-else-if>
+
+          <state|<math|S*t*m*t\<leftarrow\>><with|font-shape|small-caps|SetSeconded>(<math|P*o*V<rsub|B>>)>
+
+        </algo-if-else-if>
+
+      <|algo-if-else-if>
+
+        <state|<math|S*t*m*t\<leftarrow\>><with|font-shape|small-caps|SetInvalid>(<math|P*o*V<rsub|B>>)>
+
+        <state|<with|font-shape|small-caps|AnnounceMisbehaviorOf>(<math|P*o*V<rsub|B>>)>
+
+      </algo-if-else-if>
+
+      <state|<with|font-shape|small-caps|Propagate>(<math|S*t*m*t>)>
+
+    </algorithmic>
   </algorithm>
 
   <\itemize>
@@ -674,11 +683,10 @@
   <reference|algo-include-parachain-proposal> during block production
   procedure.
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|IncludeParachainProposal(<math|P<rsup|B><rsub|\<rho\>>>)>><label|algo-include-parachain-proposal>
-    <algo-require|>
-
-    <algo-state|TBS>
+  <\algorithm|<label|algo-include-parachain-proposal><name|IncludeParachainProposal>(<math|P<rsup|B><rsub|\<rho\>>>)>
+    <\algorithmic>
+      <state|TBS>
+    </algorithmic>
   </algorithm>
 
   <section|PoV Distribution>
@@ -693,11 +701,10 @@
   parachain validators about <math|<wide|B|\<bar\>>>, all parachain
   validators must invoke Algorithm <reference|algo-primary-validation-disagreemnt>
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|PrimaryValidationDisagreement>><label|algo-primary-validation-disagreemnt>
-    <algo-require|>
-
-    <algo-state|TBS>
+  <\algorithm|<label|algo-primary-validation-disagreemnt><name|PrimaryValidationDisagreement>>
+    <\algorithmic>
+      <state|TBS>
+    </algorithmic>
   </algorithm>
 
   <section|Availability>
@@ -715,46 +722,47 @@
     >is defined to be the Reed-Solomon encoder defined in <cite|??>.
   </definition>
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|Erasure-Encode>><label|algo-erasure-encode>
-    <algo-require|<math|<wide|B|\<bar\>>>: blob defined in Definition
-    <reference|defn-blob>>
+  <\algorithm|<label|algo-erasure-encode><name|Erasure-Encode>(<math|<wide|B|\<bar\>>>: blob defined in Definition <reference|defn-blob>)>
+    <\algorithmic>
 
-    <algo-state|<with|font-series|bold|Init> <math|S*h*a*r*d*s\<leftarrow\>>
-    <with|font-shape|small-caps|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)
-    <Statex> <Statex>// Create a trie from the shards in order generate the
-    trie nodes <Statex>// which are required to verify each chunk with a
-    Merkle root.>
+      <state|TBS>
 
-    <algo-state|<with|font-series|bold|Init> <math|T*r*i*e>>
+      <state|<with|font-series|bold|Init> <math|S*h*a*r*d*s\<leftarrow\>> <with|font-shape|small-caps|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
 
-    <algo-state|<with|font-series|bold|Init> <math|i*n*d*e*x=0>>
+      <statex|// Create a trie from the shards in order generate the trie nodes>
 
-    <\algo-for|<math|s*h*a*r*d\<in\>S*h*a*r*d*s>>
-      <algo-state|<with|font-shape|small-caps|Insert>(<math|T*r*i*e,i*n*d*e*x>,
-      <with|font-shape|small-caps|Blake2>(<math|s*h*a*r*d>))>
+      <statex|// which are required to verify each chunk with a Merkle root>
 
-      <algo-state|<math|i*n*d*e*x=i*n*d*e*x+1>>
-    </algo-for>
+      <state|<with|font-series|bold|Init> <math|T*r*i*e>>
 
-    <Statex> <Statex>// Insert individual chunks into collection (Definition
-    <reference|defn-erasure-coded-chunks>).
-    <algo-state|<with|font-series|bold|Init> <math|E*r<rsub|B>>>
+      <state|<with|font-series|bold|Init> <math|i*n*d*e*x=0>>
 
-    <algo-state|<with|font-series|bold|Init> <math|i*n*d*e*x=0>>
+      <\algo-for|<math|s*h*a*r*d\<in\>S*h*a*r*d*s>>
 
-    <\algo-for|<math|s*h*a*r*d\<in\>S*h*a*r*d*s>>
-      <algo-state|<with|font-series|bold|Init> <math|n*o*d*e*s\<leftarrow\>>
-      <with|font-shape|small-caps|Get-Nodes>(<math|T*r*i*e,i*n*d*e*x>)>
+        <state|<with|font-shape|small-caps|Insert>(<math|T*r*i*e,i*n*d*e*x>, <with|font-shape|small-caps|Blake2>(<math|s*h*a*r*d>))>
 
-      <algo-state|<with|font-shape|small-caps|Add>(<math|E*r<rsub|B>,<around|(|s*h*a*r*d,i*n*d*e*x,n*o*d*e*s|)>>)>
+        <state|<math|i*n*d*e*x=i*n*d*e*x+1>>
 
-      <algo-state|<math|i*n*d*e*x=i*n*d*e*x+1>>
-    </algo-for>
+      </algo-for>
 
-    <Statex> <algo-state|>
+      <statex|// Insert individual chunks into collection (Definition <reference|defn-erasure-coded-chunks>).>
 
-    <algo-return|<math|E*r<rsub|B>>>
+      <state|<with|font-series|bold|Init> <math|E*r<rsub|B>>>
+
+      <state|<with|font-series|bold|Init> <math|i*n*d*e*x=0>>
+
+      <\algo-for|<math|s*h*a*r*d\<in\>S*h*a*r*d*s>>
+
+        <state|<with|font-series|bold|Init> <math|n*o*d*e*s\<leftarrow\>> <with|font-shape|small-caps|Get-Nodes>(<math|T*r*i*e,i*n*d*e*x>)>
+
+        <state|<with|font-shape|small-caps|Add>(<math|E*r<rsub|B>,<around|(|s*h*a*r*d,i*n*d*e*x,n*o*d*e*s|)>>)>
+
+        <state|<math|i*n*d*e*x=i*n*d*e*x+1>>
+      </algo-for>
+
+      <algo-return|<math|E*r<rsub|B>>>
+
+    </algorithmic>
   </algorithm>
 
   <\itemize>
@@ -777,54 +785,51 @@
     add the given <math|i*t*e*m> to the <math|s*e*q*u*e*n*c*e>.
   </itemize>
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|Make-Shards>><label|algo-make-shards>
-    <algo-require|<math|<paraValidSet>,v<rsub|B>> <Statex>// Calculate the
-    required values for Reed-Solomon. <Statex>// Calculate the required
-    lengths.>
+  <\algorithm|<label|algo-make-shards><name|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
+    <\algorithmic>
 
-    <algo-state|<with|font-series|bold|Init>
-    <math|S*h*a*r*d<rsub|d*a*t*a>=<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>+1>>
+      <statex| // Calculate the required values for Reed-Solomon.>
 
-    <algo-state|<with|font-series|bold|Init>
-    <math|S*h*a*r*d<rsub|p*a*r*i*t*y>=<around|\||<paraValidSet>|\|>-<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>-1>>
+      <statex| // Calculate the required lengths.>
 
-    <\algo-state>
-      <\math>
-        <\vcenter>
-          <flalign*|<tformat|<table|<row|<cell|>|<cell|<text|<with|font-series|bold|Init
-          >>b*a*s*e<rsub|l*e*n>=<choice|<tformat|<table|<row|<cell|0>|<cell|i*f<around|\||<paraValidSet>|\|><bmod>S*h*a*r*d<rsub|d*a*t*a>=0>>|<row|<cell|1>|<cell|i*f<around|\||<paraValidSet>|\|><bmod>S*h*a*r*d<rsub|d*a*t*a>\<neq\>0>>>>>>|<cell|>>>>>
-        </vcenter>
-      </math>
-    </algo-state>
+      <state|<with|font-series|bold|Init> <math|Shard<rsub|data>=<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>+1>>
 
-    <algo-state|<with|font-series|bold|Init>
-    <math|S*h*a*r*d<rsub|l*e*n>=b*a*s*e<rsub|l*e*n>+<around|(|b*a*s*e<rsub|l*e*n><bmod>2|)>>
-    <Statex> <Statex>// Prepare shards, each padded with zeroes. <Statex>//
-    <math|S*h*a*r*d*s\<assign\><around|(|\<bbb-S\><rsub|0>,...,\<bbb-S\><rsub|n>|)>>
-    where <math|\<bbb-S\>\<assign\><around|(|b<rsub|0>,...,b<rsub|n>|)>>>
+      <state|<with|font-series|bold|Init> <math|Shard<rsub|parity>=<around|\||<paraValidSet>|\|>-<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>-1>>
 
-    <algo-state|<with|font-series|bold|Init> <math|S*h*a*r*d*s>>
+      <\state>
+        <\math>
+          <with|font-series|bold|Init>base<rsub|len> = <choice|<tformat|<table|<row|<cell|0>|<cell|if<around|\||<paraValidSet>|\|><bmod>S*h*a*r*d<rsub|d*a*t*a>=0>>|<row|<cell|1>|<cell|if<around|\||<paraValidSet>|\|><bmod>S*h*a*r*d<rsub|d*a*t*a>\<neq\>0>>>>>
+        </math>
+      </state>
 
-    <\algo-for|<math|n\<in\><around|(|S*h*a*r*d<rsub|d*a*t*a>+S*h*a*r*d<rsub|p*a*r*t*i*y>|)>>>
-      <algo-state|<with|font-shape|small-caps|Add>(<math|S*h*a*r*d*s,<around|(|0<rsub|0>,..*0<rsub|S*h*a*r*d<rsub|l*e*n>>|)>>)>
-    </algo-for>
+      <state|<with|font-series|bold|Init> <math|Shard<rsub|len> = base<rsub|len> + <around|(|base<rsub|len><bmod>2|)>>>
 
-    <Statex> <Statex>// Copy shards of <math|v<rsub|b>> into each shard.
+      <statex|// Prepare shards, each padded with zeroes.>
 
-    <\algo-for|<math|<around|(|c*h*u*n*k,s*h*a*r*d|)>\<in\>>
-    (<with|font-shape|small-caps|Take><math|<around|(|E*n*c<rsub|S*C><around|(|v<rsub|B>|)>,S*h*a*r*d<rsub|l*e*n>|)>,S*h*a*r*d*s>)>
-      <algo-state|<with|font-series|bold|Init> <math|l*e*n\<leftarrow\>>
-      <with|font-shape|small-caps|Min>(<math|S*h*a*r*d<rsub|l*e*n>,<around|\||c*h*u*n*k|\|>>)>
+      <statex|// <math|Shards\<assign\><around|(|\<bbb-S\><rsub|0>,...,\<bbb-S\><rsub|n>|)>> where <math|\<bbb-S\>\<assign\><around|(|b<rsub|0>,...,b<rsub|n>|)>>>
 
-      <algo-state|<math|s*h*a*r*d\<leftarrow\>>
-      <with|font-shape|small-caps|Copy-From>(<math|c*h*u*n*k,l*e*n>)>
-    </algo-for>
+      <state|<with|font-series|bold|Init> <math|Shards>>
 
-    <Statex> <Statex>// <math|S*h*a*r*d*s> contains split shards of
-    <math|v<rsub|B>>. <algo-state|>
+      <\algo-for|<math|n\<in\><around|(|Shard<rsub|data>+Shard<rsub|partiy>|)>>>
 
-    <algo-return|<math|S*h*a*r*d*s>>
+        <state|<with|font-shape|small-caps|Add>(<math|Shards,<around|(|0<rsub|0>,.. 0<rsub|Shard<rsub|len>>|)>>)>
+
+      </algo-for>
+
+      <statex|// Copy shards of <math|v<rsub|b>> into each shard.>
+
+      <\algo-for|<math|<around|(|chunk, shard|)>\<in\>>(<with|font-shape|small-caps|Take><math|<around|(|Enc<rsub|SC><around|(|v<rsub|B>|)>,Shard<rsub|len>|)>,Shards>)>
+
+        <state|<with|font-series|bold|Init> <math|len\<leftarrow\>><with|font-shape|small-caps|Min>(<math|Shard<rsub|len>,<around|\||chunk|\|>>)>
+
+        <state|<math|shard\<leftarrow\>> <with|font-shape|small-caps|Copy-From>(<math|chunk,len>)>
+
+      </algo-for>
+
+      <statex|// <math|Shards> contains split shards of <math|v<rsub|B>>.>
+
+      <algo-return|<math|Shards>>
+    </algorithmic>
   </algorithm>
 
   <\itemize>
@@ -946,15 +951,16 @@
   This section explains how the availability attestations stored on the relay
   chain, as described in Section ??, are processed as follows:
 
-  <\algorithm>
-    \ <caption*||Relay chain's signature processing><label|algo-signature-processing>
-    <algo-state|The relay chain stores the last vote from each validator on
-    chain. For each new signature, the relay chain checks if it is for a
-    block in this chain later than the last vote stored from this validator.
-    If it is the relay chain updates the stored vote and updates the bitfield
+  <\algorithm|<label|algo-signature-processing>Relay chain's signature processing>
+    <\algorithmic>
+
+    <state|The relay chain stores the last vote from each validator on \
+    chain. For each new signature, the relay chain checks if it is for a \
+    block in this chain later than the last vote stored from this validator. \
+    If it is the relay chain updates the stored vote and updates the bitfield \
     <math|b<rsub|v>> and block number of the vote.>
 
-    <algo-state|For each block within the last <math|t> blocks where <math|t>
+    <state|For each block within the last <math|t> blocks where <math|t>
     is some timeout period, the relay chain computes a bitmask
     <math|b*m<rsub|n>> (<math|n> is block number). This bitmask is a bitfield
     that represents whether the candidate considered in that block is still
@@ -962,7 +968,7 @@
     and only if for the <math|i>th parachain, (a) the availability status is
     to be determined and (b) candidate block number <math|\<leq\>n>>
 
-    <\algo-state>
+    <\state>
       The relay chain initialises a vector of counts with one entry for each
       parachain to zero. After executing the following algorithm it ends up
       with a vector of counts of the number of validators who think the
@@ -979,19 +985,21 @@
           <item>add the <math|i>th bit to the <math|i>th count.
         </itemize>
       </enumerate>
-    </algo-state>
+    </state>
 
-    <algo-state|For each count that is <math|\<gtr\>2/3> of the number of
+    <state|For each count that is <math|\<gtr\>2/3> of the number of
     validators, the relay chain sets the candidates status to "available".
     Otherwise, if the candidate is at least <math|t> blocks old, then it sets
     its status to "unavailable".>
 
-    <algo-state|The relay chain acts on available candidates and discards
+    <state|The relay chain acts on available candidates and discards
     unavailable ones, and then clears the record, setting the availability
     status to "no candidate". Then the relay chain accepts new candidate
     receipts for parachains that have "no candidate: status and once any such
     new candidate receipts is included on the relay chain it sets their
     availability status as "to be determined".>
+
+    </algoritmic>
   </algorithm>
 
   Based on the result of Algorithm<nbsp><reference|algo-signature-processing>
@@ -1065,24 +1073,18 @@
   every Parachain <math|\<rho\>> to determines assignments. <todo|Fix this.
   It is incorrect so far.>
 
-  <\algorithm>
-    \ <caption*|VRF-for-Approval|<with|font-shape|small-caps|VRF-for-Approval(<math|B>,
-    <math|z>, <math|s<rsub|k>>)>><label|algo-checker-vrf>
+  <\algorithm|<label|algo-checker-vrf><name|VRF-for-Approval>(<math|B>,<math|z>, <math|s<rsub|k>>)>
+    <\algorithmic>
 
-    <\algo-require>
-      <math|B>: the block to be approved
+      <algo-require|<math|B>: the block to be approved>
+      <algo-require|<math|z>: randomness for approval assignment>
+      <algo-require|<math|s<rsub|k>>: session secret key of validator planning to participate in approval>
 
-      <math|z>: randomness for approval assignment
+      <state|<math|<around|(|\<pi\>,d|)>\<leftarrow\>V*R*F*<around|(|H<rsub|h><around|(|B|)>,s*k<around|(|z|)>|)>>>
 
-      <math|s<rsub|k>>: session secret key of validator planning to
-      participate in approval
-    </algo-require>
+      <algo-return|<math|<around|(|\<pi\>,d|)>>>
 
-    <algo-state|<math|<around|(|\<pi\>,d|)>\<leftarrow\>V*R*F*<around|(|H<rsub|h><around|(|B|)>,s*k<around|(|z|)>|)>>>
-
-    <algo-state|>
-
-    <algo-return|<math|<around|(|\<pi\>,d|)>>>
+    </algorithmic>
   </algorithm>
 
   Where <with|font-shape|small-caps|VRF> function is defined in
@@ -1097,11 +1099,10 @@
   will give them the index of the PoV block they are assigned to and need to
   check. The procedure is formalised in <reference|algo-one-shot-assignment>.
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|OneShotAssignment>><label|algo-one-shot-assignment>
-    <algo-require|>
-
-    <algo-state|TBS>
+  <\algorithm|<label|algo-one-shot-assignment><name|OneShotAssignment>>
+    <\algorithmic>
+      <state|TBS>
+    </algorithmic>
   </algorithm>
 
   <subsection|Extra Approval Checker Assigment><label|sect-extra-validation>
@@ -1142,11 +1143,10 @@
   this set. If we later decide to prune some of this data, such as who has
   checked the block, then we'll need a new approach here.
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|OneShotAssignment>><label|algo-extra-assignment>
-    <algo-require|>
-
-    <algo-state|TBS>
+  <\algorithm|<label|algo-extra-assignment><name|OneShotAssignment>>
+    <\algorithmic>
+      <state|TBS>
+    </algorithmic>
   </algorithm>
 
   <syed||<todo|so assignees are not announcing their assignment just the
@@ -1164,11 +1164,10 @@
   assigned to perform a secondary check on the PoV block. The process is
   formalized in Algorithm <reference|algo-equivocation-assigment>
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|EquivocatedAssignment>><label|algo-equivocation-assigment>
-    <algo-require|>
-
-    <algo-state|TBS>
+  <\algorithm|<label|algo-equivocation-assigment><name|EquivocatedAssignment>>
+    <\algorithmic>
+      <state|TBS>
+    </algorithmic>
   </algorithm>
 
   <section|The Approval Check>
@@ -1228,38 +1227,35 @@
   sure that the code is complete and the subsequently recover the original
   <math|<wide|B|\<bar\>>>.
 
-  <\algorithm>
-    \ <caption*|Reconstruct-PoV-Erasure|<with|font-shape|small-caps|Reconstruct-PoV-Erasure(<math|S<rsub|E*r<rsub|B>>>)>><label|algo-reconstruct-pov>
+  <\algorithm|<label|algo-reconstruct-pov><name|Reconstruct-PoV-Erasure>(<math|S<rsub|E*r<rsub|B>>>)>
+    <\algorithmic>
+
     <algo-require|<math|S<rsub|E*r<rsub|B>>\<assign\><around|(|e<rsub|j<rsub|1>>,m<rsub|j<rsub|1>>|)>,\<cdot\>,<around|(|e<rsub|j<rsub|k>>,m<rsub|j<rsub|k>>|)>)>
     such that <math|k\<gtr\>2*f>>
 
-    <algo-state|<math|<wide|B|\<bar\>>\<rightarrow\>>
-    <with|font-shape|small-caps|Erasure-Decoder>(<math|e<rsub|j<rsub|1>>,\<cdots\>,e<rsub|j<rsub|k>>>)>
+    <state|<math|<wide|B|\<bar\>>\<rightarrow\>> <with|font-shape|small-caps|Erasure-Decoder>(<math|e<rsub|j<rsub|1>>,\<cdots\>,e<rsub|j<rsub|k>>>)>
 
-    <\algo-if-else-if|<with|font-shape|small-caps|Erasure-Decoder>
-    <with|font-series|bold|failed>>
-      <algo-state|<with|font-shape|small-caps|Announce-Failure>>
+    <\algo-if-else-if|<with|font-shape|small-caps|Erasure-Decoder> <with|font-series|bold|failed>>
 
-      <algo-state|>
+      <state|<with|font-shape|small-caps|Announce-Failure>>
 
       <algo-return|>
+
     </algo-if-else-if>
 
-    <algo-state|<math|E*r<rsub|B>\<rightarrow\>>
-    <with|font-shape|small-caps|Erasure-Encoder>(<math|<wide|B|\<bar\>>>)>
+    <state|<math|E*r<rsub|B>\<rightarrow\>> <with|font-shape|small-caps|Erasure-Encoder>(<math|<wide|B|\<bar\>>>)>
 
-    <\algo-if-else-if|<with|font-shape|small-caps|Verify-Merkle-Proof>(<math|S<rsub|E*r<rsub|B>>>,
-    <math|E*r<rsub|B>>) <with|font-series|bold|failed>>
-      <algo-state|<with|font-shape|small-caps|Announce-Failure>>
+    <\algo-if-else-if|<with|font-shape|small-caps|Verify-Merkle-Proof>(<math|S<rsub|E*r<rsub|B>>>,<math|E*r<rsub|B>>) <with|font-series|bold|failed>>
 
-      <algo-state|>
+      <state|<with|font-shape|small-caps|Announce-Failure>>
 
       <algo-return|>
-    </algo-if-else-if>
 
-    <algo-state|>
+    </algo-if-else-if>
 
     <algo-return|<math|<wide|B|\<bar\>>>>
+
+    </algorithmic>
   </algorithm>
 
   <subsection|Verification>
@@ -1274,11 +1270,10 @@
 
   The procedure is formalized in Algorithm
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|RevalidatingReconstructedPoV>><label|algo-revalidating-reconstructed-pov>
-    <algo-require|>
-
-    <algo-state|TBS>
+  <\algorithm|<label|algo-revalidating-reconstructed-pov><name|RevalidatingReconstructedPoV>>
+    <\algorithmic>
+      <state|TBS>
+    </algorithmic>
   </algorithm>
 
   If everything checks out correctly, we declare the block is valid. This
@@ -1297,11 +1292,10 @@
   execute Algorithm <reference|algo-verify-approval-attestation> to verify
   the VRF and may need to judge when enough time has passed.
 
-  <\algorithm>
-    \ <caption*||<with|font-shape|small-caps|VerifyApprovalAttestation>><label|algo-verify-approval-attestation>
-    <algo-require|>
-
-    <algo-state|TBS>
+  <\algorithm|<label|algo-verify-approval-attestation><name|VerifyApprovalAttestation>>
+    <\algorithmic>
+      <state|TBS>
+    </algorithmic>
   </algorithm>
 
   These attestations are included in the relay chain as a transaction
