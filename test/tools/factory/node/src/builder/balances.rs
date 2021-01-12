@@ -85,7 +85,7 @@ module!(
                         }
                         ExtraSigned::FromChainSpec(source) => {
                             let chain_spec = match source {
-                                SpecGenesisSource::FromChainSpec { ref path } => {
+                                SpecGenesisSource::FromChainSpecFile(path) => {
                                     SpecChainSpec::from_str(&fs::read_to_string(&path)?)?
                                 }
                                 SpecGenesisSource::Default => {
