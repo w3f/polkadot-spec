@@ -1,8 +1,10 @@
 use super::create_tx;
-use crate::builder::genesis::get_account_id_from_seed;
+use crate::builder::genesis::{get_account_id_from_seed, GenesisCmd};
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Balance, BlockId, RuntimeCall};
-use crate::primitives::{ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecChainSpec, SpecHash};
+use crate::primitives::{
+    ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecChainSpec, SpecGenesisSource, SpecHash,
+};
 use crate::Result;
 use pallet_balances::Call as BalancesCall;
 use sc_client_api::BlockBackend;
@@ -39,7 +41,7 @@ impl FromStr for RawPrivateKey {
 #[serde(untagged)]
 enum ExtraSigned {
     ManualParams(ManualParams),
-    FromChainSpec(FromChainSpec),
+    FromChainSpec(SpecGenesisSource),
 }
 
 #[derive(Debug, StructOpt, Serialize, Deserialize)]
@@ -50,13 +52,6 @@ struct ManualParams {
     transaction_version: u32,
     #[structopt(long)]
     genesis_hash: SpecHash,
-}
-
-// Temporary work-around for structopt. This will be adjusted to make the CLI
-// prettier.
-#[derive(Debug, StructOpt, Serialize, Deserialize)]
-struct FromChainSpec {
-    from_chain_spec: String,
 }
 
 module!(
@@ -97,9 +92,17 @@ module!(
                                 params.genesis_hash.try_into()?,
                             )
                         }
-                        ExtraSigned::FromChainSpec(spec) => {
-                            let raw = fs::read_to_string(&spec.from_chain_spec)?;
-                            let client = ClientInMem::new_with_genesis(SpecChainSpec::from_str(&raw)?.try_into()?)?;
+                        ExtraSigned::FromChainSpec(source) => {
+                            let chain_spec = match source {
+                                SpecGenesisSource::FromChainSpecFile { ref path } => {
+                                    SpecChainSpec::from_str(&fs::read_to_string(&path)?)?
+                                }
+                                SpecGenesisSource::Default => {
+                                    GenesisCmd::default().run()?
+                                }
+                            };
+
+                            let client = ClientInMem::new_with_genesis(chain_spec.try_into()?)?;
                             let client = client.raw();
 
                             let best_block_id = BlockId::number(client.chain_info().best_number);

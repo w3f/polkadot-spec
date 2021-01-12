@@ -215,10 +215,10 @@ impl TryFrom<SpecExtrinsic> for UncheckedExtrinsic {
     }
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, StructOpt)]
+#[derive(Debug, Clone, Serialize, Deserialize, StructOpt)]
 pub struct SpecBlock {
-    #[structopt(short, long)]
-    pub genesis: Option<SpecChainSpec>,
+    #[structopt(subcommand)]
+    pub genesis: SpecGenesisSource,
     #[structopt(flatten)]
     pub header: SpecHeader,
     #[structopt(short, long)]
@@ -253,6 +253,18 @@ impl TryFrom<SpecBlock> for Block {
                 .collect::<Result<Vec<UncheckedExtrinsic>>>()?,
         })
     }
+}
+
+// Temporary work-around for structopt. This will be adjusted to make the CLI
+// prettier.
+#[derive(Debug, Clone, StructOpt, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SpecGenesisSource {
+    Default,
+    FromChainSpecFile {
+        //#[serde(flatten)]
+        path: String,
+    },
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize, StructOpt)]

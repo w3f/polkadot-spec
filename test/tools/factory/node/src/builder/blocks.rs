@@ -1,13 +1,15 @@
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Block, BlockId, Timestamp};
-use crate::primitives::{RawBlock, SpecBlock};
+use crate::primitives::{RawBlock, SpecBlock, SpecChainSpec, SpecGenesisSource};
 use crate::Result;
 use sp_api::Core;
 use sp_block_builder::BlockBuilder;
 use sp_inherents::InherentData;
 use sp_runtime::transaction_validity::TransactionValidityError;
 use std::convert::{TryFrom, TryInto};
+use std::fs;
 use std::mem::take;
+use std::str::FromStr;
 use structopt::StructOpt;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,12 +42,15 @@ module!(
         fn run(self) -> Result<BlockCmdResult> {
             match self.call {
                 CallCmd::BuildBlock { mut spec_block } => {
-                    // Create the block by calling the runtime APIs.
-                    let client = if let Some(chain_spec) = take(&mut spec_block.genesis) {
-                        ClientInMem::new_with_genesis(chain_spec.try_into()?)
-                    } else {
-                        ClientInMem::new()
-                    }?;
+                    let client = match spec_block.genesis {
+                        SpecGenesisSource::FromChainSpecFile { ref path } => {
+                            let chain_spec = SpecChainSpec::from_str(&fs::read_to_string(&path)?)?.try_into()?;
+                            ClientInMem::new_with_genesis(chain_spec)?
+                        }
+                        SpecGenesisSource::Default => {
+                            ClientInMem::new()?
+                        }
+                    };
 
                     // Convert into runtime types.
                     let (at, header, extrinsics) = spec_block.prep()?;

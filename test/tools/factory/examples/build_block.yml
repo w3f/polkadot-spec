@@ -11,9 +11,7 @@
       balance: "{{ item.balance }}"
       nonce: "{{ item.nonce }}"
       extra_signed:
-        spec_version: "{{ spec_version }}"
-        transaction_version: "{{ transaction_version }}"
-        genesis_hash: "{{ genesis_hash }}"
+          default
   loop:
     - { from: alice, to: bob, balance: 100, nonce: 0 }
     - { from: bob, to: alice, balance: 200, nonce: 0 }
@@ -23,6 +21,8 @@
 - name: Build block
   block:
     build:
+      genesis: 
+          default
       header:
         parent_hash: "0x70e03454cf8f9056fdf7c9a9c9921444017f0515712283e2498f5a2331cb638a"
         number: "0x1"
