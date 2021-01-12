@@ -393,7 +393,10 @@
 
       <state|If the execution fails, return fail.>
 
-      <state|Else return success, the new header data <math|h<rsub|B>> and the outgoing messages <math|M>. <todo|@fabio: same as head data?>>
+      <state|Else return success, the new header data <math|h<rsub|B>> and
+      the outgoing messages <math|M>.>
+
+      <todo|@fabio: same as head data?>
     </algorithmic>
   </algorithm>
 
@@ -951,55 +954,55 @@
   This section explains how the availability attestations stored on the relay
   chain, as described in Section ??, are processed as follows:
 
-  <\algorithm|<label|algo-signature-processing>Relay chain's signature processing>
-    <\algorithmic>
+  <\enumerate-numeric>
+    <item>The relay chain stores the last vote from each validator on
+      chain. For each new signature, the relay chain checks if it is for a
+      block in this chain later than the last vote stored from this
+      validator. If it is the relay chain updates the stored vote and updates
+      the bitfield <math|b<rsub|v>> and block number of the vote.
 
-    <state|The relay chain stores the last vote from each validator on
-    chain. For each new signature, the relay chain checks if it is for a
-    block in this chain later than the last vote stored from this validator.
-    If it is the relay chain updates the stored vote and updates the bitfield
-    <math|b<rsub|v>> and block number of the vote.>
+    <item>For each block within the last <math|t> blocks where <math|t> is
+      some timeout period, the relay chain computes a bitmask
+      <math|bm<rsub|n>> (<math|n> is block number). This bitmask is a
+      bitfield that represents whether the candidate considered in that block
+      is still relevant. That is the <math|i>th bit of <math|bm<rsub|n>> is
+      <math|1> if and only if for the <math|i>th parachain, (a) the
+      availability status is to be determined and (b) candidate block number
+      <math|\<leq\>n>
 
-    <state|For each block within the last <math|t> blocks where <math|t>
-    is some timeout period, the relay chain computes a bitmask
-    <math|bm<rsub|n>> (<math|n> is block number). This bitmask is a bitfield
-    that represents whether the candidate considered in that block is still
-    relevant. That is the <math|i>th bit of <math|bm<rsub|n>> is <math|1> if
-    and only if for the <math|i>th parachain, (a) the availability status is
-    to be determined and (b) candidate block number <math|\<leq\>n>>
-
-    <\state>
-      The relay chain initialises a vector of counts with one entry for each
-      parachain to zero. After executing the following algorithm it ends up
-      with a vector of counts of the number of validators who think the
-      latest candidates is available.
+    <item>The relay chain initialises a vector of counts with one entry for
+      each parachain to zero. After executing the following algorithm it
+      ends up with a vector of counts of the number of validators who think
+      the latest candidates is available.
 
       <\enumerate>
         <item>The relay chain computes <math|b<rsub|v>> and
         <math|bm<rsub|n>> where <math|n> is the block number of the
         validator's last vote
 
-        <item>For each bit in <math|b<rsub|v>> and <math|bm<rsub|n>>
-
-        <\itemize>
-          <item>add the <math|i>th bit to the <math|i>th count.
-        </itemize>
+        <item>For each bit in <math|b<rsub|v>> and <math|bm<rsub|n>> 
+        add the <math|i>th bit to the <math|i>th count.
       </enumerate>
-    </state>
 
-    <state|For each count that is <math|\<gtr\>2/3> of the number of
-    validators, the relay chain sets the candidates status to "available".
-    Otherwise, if the candidate is at least <math|t> blocks old, then it sets
-    its status to "unavailable".>
+    <item>For each count that is <math|\<gtr\>2/3> of the number of
+      validators, the relay chain sets the candidates status to
+      \\"available\\". Otherwise, if the candidate is at least <math|t>
+      blocks old, then it sets its status to \\"unavailable\\".
 
-    <state|The relay chain acts on available candidates and discards
-    unavailable ones, and then clears the record, setting the availability
-    status to "no candidate". Then the relay chain accepts new candidate
-    receipts for parachains that have "no candidate: status and once any such
-    new candidate receipts is included on the relay chain it sets their
-    availability status as "to be determined".>
+    <item>The relay chain acts on available candidates and discards
+      unavailable ones, and then clears the record, setting the availability
+      status to \\"no candidate\\". Then the relay chain accepts new
+      candidate receipts for parachains that have \\"no candidate: status and
+      once any such new candidate receipts is included on the relay chain it
+      sets their availability status as \\"to be determined\\".
 
-    </algoritmic>
+  </enumerate-numeric>
+
+  <\algorithm|<label|algo-signature-processing>Relay chain's signature
+  processing>
+    <\algorithmic>
+      <state|TBD (from text above)>
+    </algorithmic>
   </algorithm>
 
   Based on the result of Algorithm<nbsp><reference|algo-signature-processing>
