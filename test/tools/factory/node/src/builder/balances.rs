@@ -46,6 +46,8 @@ module!(
             to: SpecAccountSeed,
             #[structopt(short, long)]
             balance: u64,
+            #[structopt(short, long)]
+            nonce: u32,
         },
     }
 
@@ -57,6 +59,7 @@ module!(
                     from,
                     to,
                     balance,
+                    nonce,
                 } => {
                     let client = if let Some(chain_spec) = genesis {
                         ClientInMem::new_with_genesis(chain_spec.try_into()?)
@@ -73,7 +76,7 @@ module!(
                             .into(),
                             balance as Balance,
                         )),
-                        0,
+                        nonce,
                         &client.raw(),
                     )
                     .map(|t| RawExtrinsic::from(t))

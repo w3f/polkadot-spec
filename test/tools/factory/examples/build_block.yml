@@ -4,9 +4,11 @@
       from: "{{ item.from }}"
       to: "{{ item.to }}"
       balance: "{{ item.balance }}"
+      nonce: "{{ item.nonce }}"
   loop:
-    - { from: alice, to: bob, balance: 100 }
-    - { from: bob, to: alice, balance: 200 }
+    - { from: alice, to: bob, balance: 100, nonce: 0 }
+    - { from: bob, to: alice, balance: 200, nonce: 0 }
+    - { from: bob, to: eve, balance: 300, nonce: 1 }
   register: transactions
 
 - name: Build block
