@@ -229,8 +229,7 @@ impl SpecBlock {
     // Convert relevant fields into runtime native types.
     pub fn prep(mut self) -> Result<(BlockId, Header, Vec<UncheckedExtrinsic>)> {
         // Convert into runtime types.
-        let at =
-            BlockId::Number(BlockNumber::try_from(self.header.number.clone())?.saturating_sub(1));
+        let at = BlockId::Hash(self.header.parent_hash.clone().try_into()?);
         let header = mem::take(&mut self.header).try_into()?;
         let extrinsics = mem::take(&mut self.extrinsics)
             .into_iter()

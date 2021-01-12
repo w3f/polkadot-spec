@@ -64,25 +64,19 @@ module!(
                         ClientInMem::new()
                     }?;
 
-                    client
-                        .exec_context(&BlockId::Number(0), || {
-                            create_tx::<ExtrinsicSigner>(
-                                ExtrinsicSigner::try_from(from.clone())?,
-                                RuntimeCall::Balances(BalancesCall::transfer(
-                                    get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>(
-                                        &format!("//{}", to.as_str()),
-                                    )
-                                    .into(),
-                                    balance as Balance,
-                                )),
-                                1,
-                                &client.raw(),
+                    create_tx::<ExtrinsicSigner>(
+                        ExtrinsicSigner::try_from(from.clone())?,
+                        RuntimeCall::Balances(BalancesCall::transfer(
+                            get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>(
+                                &format!("//{}", to.as_str()),
                             )
-                            .map(|t| RawExtrinsic::from(t))
-                            .map(Some)
-                        })
-                        // Is always `Some` in this case.
-                        .map(|extr| extr.unwrap())
+                            .into(),
+                            balance as Balance,
+                        )),
+                        0,
+                        &client.raw(),
+                    )
+                    .map(|t| RawExtrinsic::from(t))
                 }
             }
         }

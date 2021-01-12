@@ -112,9 +112,6 @@ where
         (),
     );
 
-    println!(" EXTRA >>> {:?}", extra);
-    println!(" ADDITIONAL-EXTRA >>> {:?}", additional_extra);
-
     // *** OR ***
 
     /*
