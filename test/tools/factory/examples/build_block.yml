@@ -10,9 +10,10 @@
       to: "{{ item.to }}"
       balance: "{{ item.balance }}"
       nonce: "{{ item.nonce }}"
-      spec_version: "{{ spec_version }}"
-      transaction_version: "{{ transaction_version }}"
-      genesis_hash: "{{ genesis_hash }}"
+      extra_signed:
+        spec_version: "{{ spec_version }}"
+        transaction_version: "{{ transaction_version }}"
+        genesis_hash: "{{ genesis_hash }}"
   loop:
     - { from: alice, to: bob, balance: 100, nonce: 0 }
     - { from: bob, to: alice, balance: 200, nonce: 0 }
