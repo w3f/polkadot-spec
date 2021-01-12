@@ -126,16 +126,18 @@ void processHostApiCommands(const HostApiCommandArgs &args) {
                          storage::processNextKey(args[0], args[1], args[2], args[3]);
                        });
 
-  // test child storage TODO: all not implemented
+  // test child storage (currentyl no upstream support)
   router.addSubcommand("ext_default_child_storage_set_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 4);
-                         child_storage::processSetGet(args[0], args[1], args[2], args[3]);
+                         //child_storage::processSetGet(args[0], args[1], args[2], args[3]);
+                         throw NotImplemented(); // Child storage not implemented upstream
                        });
   router.addSubcommand("ext_default_child_storage_get_version_1",
                        [](const std::vector<std::string> &args) {
                          BOOST_ASSERT(args.size() == 4);
-                         child_storage::processSetGet(args[0], args[1], args[2], args[3]);
+                         //child_storage::processSetGet(args[0], args[1], args[2], args[3]);
+                         throw NotImplemented(); // Child storage not implemented upstream
                        });
   router.addSubcommand("ext_default_child_storage_read_version_1",
                        [](const std::vector<std::string> &args) {
