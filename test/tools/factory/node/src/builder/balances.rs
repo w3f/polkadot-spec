@@ -3,7 +3,8 @@ use crate::builder::genesis::{get_account_id_from_seed, GenesisCmd};
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Balance, BlockId, RuntimeCall};
 use crate::primitives::{
-    ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecChainSpec, SpecGenesisSource, SpecHash,
+    ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecChainSpec, SpecChainSpecRaw,
+    SpecGenesisSource, SpecHash,
 };
 use crate::Result;
 use pallet_balances::Call as BalancesCall;
@@ -40,7 +41,7 @@ impl FromStr for RawPrivateKey {
 #[serde(untagged)]
 enum ExtraSigned {
     ManualParams(ManualParams),
-    FromChainSpec(SpecGenesisSource),
+    FromChainSpec(SpecChainSpec),
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -83,10 +84,10 @@ module!(
                                 params.genesis_hash.try_into()?,
                             )
                         }
-                        ExtraSigned::FromChainSpec(source) => {
-                            let chain_spec = match source {
-                                SpecGenesisSource::FromChainSpecFile(path) => {
-                                    SpecChainSpec::from_str(&fs::read_to_string(&path)?)?
+                        ExtraSigned::FromChainSpec(cs) => {
+                            let chain_spec = match cs.chain_spec {
+                                SpecGenesisSource::FromFile(path) => {
+                                    SpecChainSpecRaw::from_str(&fs::read_to_string(&path)?)?
                                 }
                                 SpecGenesisSource::Default => {
                                     GenesisCmd::default().run()?

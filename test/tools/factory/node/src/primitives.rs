@@ -59,21 +59,21 @@ pub type ChainSpec = GenericChainSpec<runtime::GenesisConfig>;
 pub struct GenericJson(HashMap<String, serde_json::Value>);
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SpecChainSpec(GenericJson);
+pub struct SpecChainSpecRaw(GenericJson);
 
-impl FromStr for SpecChainSpec {
+impl FromStr for SpecChainSpecRaw {
     type Err = failure::Error;
 
     fn from_str(s: &str) -> Result<Self> {
-        Ok(SpecChainSpec(serde_json::from_str(s)?))
+        Ok(SpecChainSpecRaw(serde_json::from_str(s)?))
     }
 }
 
-impl TryFrom<ChainSpec> for SpecChainSpec {
+impl TryFrom<ChainSpec> for SpecChainSpecRaw {
     type Error = failure::Error;
 
     fn try_from(value: ChainSpec) -> Result<Self> {
-        Ok(SpecChainSpec(serde_json::from_str(
+        Ok(SpecChainSpecRaw(serde_json::from_str(
             &value.as_json(false).map_err(|err| {
                 failure::err_msg(format!("Failed to parse chain spec as json: {}", err))
             })?,
@@ -81,10 +81,10 @@ impl TryFrom<ChainSpec> for SpecChainSpec {
     }
 }
 
-impl TryFrom<SpecChainSpec> for ChainSpec {
+impl TryFrom<SpecChainSpecRaw> for ChainSpec {
     type Error = failure::Error;
 
-    fn try_from(value: SpecChainSpec) -> Result<Self> {
+    fn try_from(value: SpecChainSpecRaw) -> Result<Self> {
         ChainSpec::from_json_bytes(serde_json::to_vec(&value.0)?).map_err(|err| {
             failure::err_msg(format!("Failed to convert bytes into chain spec: {}", err))
         })
@@ -224,7 +224,7 @@ impl TryFrom<SpecExtrinsic> for UncheckedExtrinsic {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpecBlock {
-    pub genesis: SpecGenesisSource,
+    pub chain_spec: SpecGenesisSource,
     pub header: SpecHeader,
     pub extrinsics: Vec<SpecExtrinsic>,
 }
@@ -236,7 +236,7 @@ impl SpecBlock {
         client: &ClientInMem,
     ) -> Result<(BlockId, Header, Vec<UncheckedExtrinsic>)> {
         // Convert into runtime types.
-        let at = match self.header.parent_hash {
+        let at = match self.header.parent_block {
             SpecParentHash::GenesisHash => {
                 let genesis_hash = client
                     .raw()
@@ -245,7 +245,7 @@ impl SpecBlock {
                     .ok_or(failure::err_msg("No genesis hash available in chain spec"))?;
 
                 // Set the actual hash directly in the header.
-                self.header.parent_hash = SpecParentHash::Hash(genesis_hash.into());
+                self.header.parent_block = SpecParentHash::Hash(genesis_hash.into());
                 BlockId::Hash(genesis_hash)
             }
 
@@ -279,14 +279,20 @@ impl TryFrom<SpecBlock> for Block {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
+pub struct SpecChainSpec {
+    pub chain_spec: SpecGenesisSource,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum SpecGenesisSource {
     Default,
-    FromChainSpecFile(String),
+    FromFile(String),
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SpecHeader {
-    pub parent_hash: SpecParentHash,
+    pub parent_block: SpecParentHash,
     pub number: SpecBlockNumber,
     pub digest: SpecDigest,
 }
@@ -328,7 +334,7 @@ impl TryFrom<SpecHeader> for Header {
 
     fn try_from(val: SpecHeader) -> Result<Self> {
         Ok(Header {
-            parent_hash: val.parent_hash.try_into()?,
+            parent_hash: val.parent_block.try_into()?,
             number: val.number.try_into()?,
             state_root: SpecHash::from_str(
                 "0x0000000000000000000000000000000000000000000000000000000000000000",

@@ -1,6 +1,6 @@
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Block, BlockId, Timestamp};
-use crate::primitives::{RawBlock, SpecBlock, SpecChainSpec, SpecGenesisSource};
+use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource};
 use crate::Result;
 use sp_api::Core;
 use sp_block_builder::BlockBuilder;
@@ -39,9 +39,9 @@ module!(
         fn run(self) -> Result<BlockCmdResult> {
             match self.call {
                 CallCmd::BuildBlock { mut spec_block } => {
-                    let client = match spec_block.genesis {
-                        SpecGenesisSource::FromChainSpecFile(ref path) => {
-                            let chain_spec = SpecChainSpec::from_str(&fs::read_to_string(&path)?)?.try_into()?;
+                    let client = match spec_block.chain_spec {
+                        SpecGenesisSource::FromFile(ref path) => {
+                            let chain_spec = SpecChainSpecRaw::from_str(&fs::read_to_string(&path)?)?.try_into()?;
                             ClientInMem::new_with_genesis(chain_spec)?
                         }
                         SpecGenesisSource::Default => {
