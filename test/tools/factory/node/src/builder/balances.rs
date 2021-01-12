@@ -1,8 +1,7 @@
 use super::create_tx;
 use crate::builder::genesis::get_account_id_from_seed;
-use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Balance, RuntimeCall};
-use crate::primitives::{ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecChainSpec};
+use crate::primitives::{ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecHash};
 use crate::Result;
 use pallet_balances::Call as BalancesCall;
 use sp_core::crypto::Pair;
@@ -38,16 +37,20 @@ module!(
     enum CallCmd {
         #[serde(rename = "transfer")]
         Transfer {
-            #[structopt(short, long)]
-            genesis: Option<SpecChainSpec>,
-            #[structopt(short, long)]
+            #[structopt(long)]
             from: SpecAccountSeed,
-            #[structopt(short, long)]
+            #[structopt(long)]
             to: SpecAccountSeed,
-            #[structopt(short, long)]
+            #[structopt(long)]
             balance: u64,
-            #[structopt(short, long)]
+            #[structopt(long)]
             nonce: u32,
+            #[structopt(long)]
+            spec_version: u32,
+            #[structopt(long)]
+            transaction_version: u32,
+            #[structopt(long)]
+            genesis_hash: SpecHash,
         },
     }
 
@@ -55,18 +58,14 @@ module!(
         fn run(self) -> Result<RawExtrinsic> {
             match self.call {
                 CallCmd::Transfer {
-                    genesis,
                     from,
                     to,
                     balance,
                     nonce,
+                    spec_version,
+                    transaction_version,
+                    genesis_hash,
                 } => {
-                    let client = if let Some(chain_spec) = genesis {
-                        ClientInMem::new_with_genesis(chain_spec.try_into()?)
-                    } else {
-                        ClientInMem::new()
-                    }?;
-
                     create_tx::<ExtrinsicSigner>(
                         ExtrinsicSigner::try_from(from.clone())?,
                         RuntimeCall::Balances(BalancesCall::transfer(
@@ -77,7 +76,9 @@ module!(
                             balance as Balance,
                         )),
                         nonce,
-                        &client.raw(),
+                        spec_version,
+                        transaction_version,
+                        genesis_hash.try_into()?,
                     )
                     .map(|t| RawExtrinsic::from(t))
                 }

@@ -81,7 +81,4 @@ impl ClientInMem {
     pub fn runtime_api<'a>(&'a self) -> ApiRef<'a, RuntimeApiImpl<Block, ClientInMemDef>> {
         self.client.runtime_api()
     }
-    pub fn raw(&self) -> &ClientInMemDef {
-        &self.client
-    }
 }

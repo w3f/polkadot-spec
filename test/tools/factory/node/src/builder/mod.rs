@@ -1,16 +1,15 @@
 use super::Result;
-use crate::executor::ClientInMemDef;
 use crate::primitives::runtime::{
-    AccountId, BlockId, RuntimeCall, SignedExtra, UncheckedExtrinsic,
+    AccountId, RuntimeCall, SignedExtra, UncheckedExtrinsic,
 };
 use crate::tool_spec::TaskOutcome;
 use codec::Encode;
-use sc_client_api::BlockBackend;
 use serde::de::DeserializeOwned;
 use serde::ser::Serialize;
 use sp_core::crypto::Pair;
 use sp_runtime::generic::{Era, SignedPayload};
 use sp_runtime::MultiSignature;
+use sp_core::H256;
 
 pub mod balances;
 pub mod blocks;
@@ -67,7 +66,9 @@ fn create_tx<P: Pair>(
     pair: P,
     function: RuntimeCall,
     nonce: u32,
-    client: &ClientInMemDef,
+    spec_version: u32,
+    transaction_version: u32,
+    genesis_hash: H256,
 ) -> Result<UncheckedExtrinsic>
 where
     AccountId: From<<P as Pair>::Public>,
@@ -90,14 +91,6 @@ where
         check_weight,
         payment,
     );
-
-    // Additionally signed fields.
-    let best_block_id = BlockId::number(client.chain_info().best_number);
-    let (spec_version, transaction_version) = {
-        let version = client.runtime_version_at(&best_block_id).unwrap();
-        (version.spec_version, version.transaction_version)
-    };
-    let genesis_hash = client.block_hash(0).unwrap().unwrap();
 
     let additional_extra = (
         spec_version,
