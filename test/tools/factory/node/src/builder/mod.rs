@@ -112,11 +112,14 @@ where
         (),
     );
 
+    println!(" EXTRA >>> {:?}", extra);
+    println!(" ADDITIONAL-EXTRA >>> {:?}", additional_extra);
+
     // *** OR ***
 
     /*
     use sp_runtime::traits::SignedExtension;
-    
+
     fn extra_err() -> failure::Error {
         failure::err_msg("Failed to retrieve additionally signed extra")
     }
