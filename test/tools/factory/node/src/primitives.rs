@@ -261,7 +261,7 @@ impl TryFrom<SpecBlock> for Block {
 #[serde(rename_all = "snake_case")]
 pub enum SpecGenesisSource {
     Default,
-    FromChainSpecFile {
+    FromChainSpec {
         //#[serde(flatten)]
         path: String,
     },

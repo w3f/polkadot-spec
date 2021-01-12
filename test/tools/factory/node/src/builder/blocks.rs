@@ -43,7 +43,7 @@ module!(
             match self.call {
                 CallCmd::BuildBlock { mut spec_block } => {
                     let client = match spec_block.genesis {
-                        SpecGenesisSource::FromChainSpecFile { ref path } => {
+                        SpecGenesisSource::FromChainSpec { ref path } => {
                             let chain_spec = SpecChainSpec::from_str(&fs::read_to_string(&path)?)?.try_into()?;
                             ClientInMem::new_with_genesis(chain_spec)?
                         }
