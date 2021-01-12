@@ -89,7 +89,7 @@
   </definition>
 
   <\definition>
-    <label|defn-witness-proof>The <b|w>itness proof of block <math|B>,
+    <label|defn-witness-proof>The <with|font-series|bold|witness proof> of block <math|B>,
     denoted by <with|font-series|bold|mode|math|\<pi\><rsub|B>>, is the set
     of all the external data which has gathered while the <math|\<rho\>>
     runtime executes block <math|B>. The data suffices to re-execute
@@ -674,7 +674,7 @@
   <todo|@fabio: should this be a subsection?>
 
   <\definition>
-    <label|defn-para-proposal><b|P>arachain Block Proposal, noted by
+    <label|defn-para-proposal><with|font-series|bold|Parachain Block Proposal>, noted by
     <math|P<rsup|B><rsub|\<rho\>>>is a candidate receipt for a parachain
     block <math|B> for a parachain <math|\<rho\>> along with signatures for
     at least 2/3 of <math|\<cal-V\><rsub|\<rho\>>>.
@@ -889,7 +889,7 @@
   <cite|??>.
 
   <\definition>
-    <label|defn-pov-erasure-chunk-message><b|P>oV erasure chunk message
+    <label|defn-pov-erasure-chunk-message><with|font-series|bold|PoV erasure chunk message>
     <math|M<rsub|PoV<rsub|<wide|B|\<bar\>>>><around|(|i|)>> is TBS
   </definition>
 
@@ -900,7 +900,7 @@
   defined in Definition<reference|defn-availability-vote-message>
 
   <\definition>
-    <label|defn-availability-vote-message><b|A>vailability vote message
+    <label|defn-availability-vote-message><with|font-series|bold|Availability vote message>
     <math|M<rsub|PoV><rsup|Avail,v<rsub|i>>> TBS
   </definition>
 
@@ -1013,7 +1013,7 @@
 
   <\definition>
     <label|defn-available-parablock-proposal>Parachain blocks for which the
-    corresponding blob is noted on the relay chain to be <b|a>vailable,
+    corresponding blob is noted on the relay chain to be <with|font-series|bold|available>,
     meaning that the candidate receipt has been voted to be available by 2/3
     validators.
   </definition>
@@ -1024,7 +1024,7 @@
   <reference|algo-signature-processing>.
 
   <\definition>
-    <label|defn-unavailable-parablock-proposal>An <b|u>navailabile parachain
+    <label|defn-unavailable-parablock-proposal>An <with|font-series|bold|unavailabile> parachain
     block is TBS
   </definition>
 
@@ -1196,7 +1196,7 @@
   </definition>
 
   <\definition>
-    <label|defn-pov-block-response><b|P>oV Block Respose Message TBS
+    <label|defn-pov-block-response><with|font-series|bold|PoV Block Respose Message> TBS
   </definition>
 
   The second method is to retrieve enough erasure-encoded chunks to
@@ -1205,8 +1205,8 @@
   indicating that one needs the erasure-encoded chunks.
 
   <\definition>
-    <label|defn-erasure-coded-chunks-request><b|E>rasuree-coded chunks
-    request message TBS
+    <label|defn-erasure-coded-chunks-request><with|font-series|bold|Erasuree-coded chunks
+    request message> TBS
   </definition>
 
   On their part, when a validator receive a erasuree-coded chunks request
@@ -1214,8 +1214,8 @@
   <reference|defn-erasure-coded-chunks-response>.
 
   <\definition>
-    <label|defn-erasure-coded-chunks-response><b|E>rasuree-coded chunks
-    response message TBS
+    <label|defn-erasure-coded-chunks-response><with|font-series|bold|Erasuree-coded chunks
+    response message> TBS
   </definition>
 
   Assigned appoval checker <math|v> must retrieve enough erasure-encoded
@@ -1285,8 +1285,8 @@
   <reference|defn-secondary-appoval-attestation>.
 
   <\definition>
-    <label|defn-secondary-appoval-attestation><b|S>econdary approval
-    attetstion message TBS
+    <label|defn-secondary-appoval-attestation><with|font-series|bold|Secondary approval
+    attetstion message> TBS
   </definition>
 
   <subsection|Process validity and invalidity messages>
@@ -1305,8 +1305,8 @@
   specified in
 
   <\definition>
-    <label|defn-approval-attestation-transaction><b|A>pproval Attestation
-    Transaction TBS
+    <label|defn-approval-attestation-transaction><with|font-series|bold|Approval Attestation
+    Transaction> TBS
   </definition>
 
   Collators reports of unavailability and invalidty specified in Definition
@@ -1314,13 +1314,13 @@
   format specified in Definition
 
   <\definition>
-    <label|defn-collator-invalidity-transaction><b|C>ollator Invalidity
-    Transaction TBS
+    <label|defn-collator-invalidity-transaction><with|font-series|bold|Collator Invalidity
+    Transaction> TBS
   </definition>
 
   <\definition>
-    <label|defn-collator-unavailability-transaction><b|C>ollator
-    unavailability Transaction
+    <label|defn-collator-unavailability-transaction><with|font-series|bold|Collator
+    unavailability Transaction> TBS
   </definition>
 
   <subsection|Invalidity Escalation><label|sect-escalation>
