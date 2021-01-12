@@ -89,12 +89,12 @@
   </definition>
 
   <\definition>
-    <label|defn-witness-proof>The <with|font-series|bold|witness proof> of block <math|B>,
-    denoted by <with|font-series|bold|mode|math|\<pi\><rsub|B>>, is the set
-    of all the external data which has gathered while the <math|\<rho\>>
-    runtime executes block <math|B>. The data suffices to re-execute
-    <math|R<rsub|\<rho\>>> against <math|B> and achieve the final state
-    indicated in the <math|H<around|(|B|)>>.
+    <label|defn-witness-proof>The <with|font-series|bold|witness proof> of
+    block <math|B>, denoted by <with|font-series|bold|mode|math|\<pi\><rsub|B>>,
+    is the set of all the external data which has gathered while the
+    <math|\<rho\>> runtime executes block <math|B>. The data suffices to
+    re-execute <math|R<rsub|\<rho\>>> against <math|B> and achieve the final
+    state indicated in the <math|H<around|(|B|)>>.
   </definition>
 
   This witness proof consists of light client proofs of state data that are
@@ -142,8 +142,8 @@
 
     <todo|@fabio: adjust formula?>
 
-    If this is <math|Some>, it contains the number of the minimum relay
-    chain height at which the upgrade will be applied, assuming an upgrade is
+    If this is <math|Some>, it contains the number of the minimum relay chain
+    height at which the upgrade will be applied, assuming an upgrade is
     currently signaled <todo|@fabio: where is this signaled?>. A parachain
     should enact its side of the upgrade at the end of the first parachain
     block executing in the context of a relay-chain block with at least this
@@ -167,14 +167,14 @@
     <\itemize>
       <item><math|B>: the parachain block itself.
 
-      <item><math|head<around|(|B<rsub|p>|)>>: the parent head data (Definition
-      <reference|defn-head-data>) of block <math|B>.
+      <item><math|head<around|(|B<rsub|p>|)>>: the parent head data
+      (Definition <reference|defn-head-data>) of block <math|B>.
 
       <item><math|v<rsup|GVP><rsub|B>>: the global validation parameters
       (<reference|defn-global-validation-parameters>).
 
-      <item><math|R<rsup|up><rsub|\<rho\>>>: implies whether the parachain
-      is allowed to upgrade its validation code (Definition
+      <item><math|R<rsup|up><rsub|\<rho\>>>: implies whether the parachain is
+      allowed to upgrade its validation code (Definition
       <reference|defn-upgrade-indicator>).
     </itemize>
   </definition>
@@ -192,14 +192,14 @@
     where each value represents:
 
     <\itemize>
-      <item><math|Max<rsup|R><rsub|size>>: the maximum amount of bytes
-      of the parachain Wasm code permitted.
+      <item><math|Max<rsup|R><rsub|size>>: the maximum amount of bytes of the
+      parachain Wasm code permitted.
 
-      <item><math|Max<rsup|head><rsub|size>>: the maximum amount of
-      bytes of the head data (Definition <reference|defn-head-data>) permitted.
+      <item><math|Max<rsup|head><rsub|size>>: the maximum amount of bytes of
+      the head data (Definition <reference|defn-head-data>) permitted.
 
-      <item><math|H<rsub|i><around|(|B<rsup|relay><rsub|chain>|)>>:
-      the relay chain block number this is in the context of.
+      <item><math|H<rsub|i><around|(|B<rsup|relay><rsub|chain>|)>>: the relay
+      chain block number this is in the context of.
     </itemize>
   </definition>
 
@@ -216,17 +216,17 @@
     where each value represents:
 
     <\itemize>
-      <item><math|head<around|(|B<rsub|p>|)>>: the parent head data (Definition
-      <reference|defn-head-data>) of block <math|B>.
+      <item><math|head<around|(|B<rsub|p>|)>>: the parent head data
+      (Definition <reference|defn-head-data>) of block <math|B>.
 
       <item><math|UINT128>: the balance of the parachain at the moment of
       validation.
 
-      <item><math|Blake2b<around|(|R<rsub|\<rho\>>|)>>: the Blake2b
-      hash of the validation code used to execute the candidate.
+      <item><math|Blake2b<around|(|R<rsub|\<rho\>>|)>>: the Blake2b hash of
+      the validation code used to execute the candidate.
 
-      <item><math|R<rsup|up><rsub|\<rho\>>>: implies whether the parachain
-      is allowed to upgrade its validation code (Definition
+      <item><math|R<rsup|up><rsub|\<rho\>>>: implies whether the parachain is
+      allowed to upgrade its validation code (Definition
       <reference|defn-upgrade-indicator>).
     </itemize>
   </definition>
@@ -245,27 +245,27 @@
       <item><math|head<around|(|B|)>>: the new head data (Definition
       <reference|defn-head-data>) of block <math|B>.
 
-      <item><math|Option<around|(|P<rsup|B><rsub|\<rho\>>|)>>: a varying
-      data (Definition <reference|defn-scale-codec>) containing an update to the
+      <item><math|Option<around|(|P<rsup|B><rsub|\<rho\>>|)>>: a varying data
+      (Definition <reference|defn-scale-codec>) containing an update to the
       validation code that should be scheduled in the relay chain.
 
-      <item><math|Msg>: parachain "upward messages" to the relay chain.
+      <item><math|Msg>: parachain \Pupward messages\Q to the relay chain.
       <math|\<bbb-O\>> identifies the origin of the messages and is a varying
-      data type (Definition <reference|defn-scale-codec>) and can be one of the
-      following values:
+      data type (Definition <reference|defn-scale-codec>) and can be one of
+      the following values:
 
       <\equation*>
         \<bbb-O\>=<choice|<tformat|<table|<row|<cell|0,>|<cell|<text|Signed>>>|<row|<cell|1,>|<cell|<text|Parachain>>>|<row|<cell|2,>|<cell|<text|Root>>>>>>
       </equation*>
 
-      <todo|@fabio: define the concept of "origin">
+      <todo|@fabio: define the concept of \Porigin\Q>
 
       The following SCALE encoded array, <math|Enc<rsub|SC><around|(|b<rsub|0>,..b<rsub|n>|)>>,
       contains the raw bytes of the message which varies in size.
 
-      <item><math|UINT32>: number of downward messages that were
-      processed by the Parachain. It is expected that the Parachain processes
-      them from first to last.
+      <item><math|UINT32>: number of downward messages that were processed by
+      the Parachain. It is expected that the Parachain processes them from
+      first to last.
     </itemize>
   </definition>
 
@@ -306,8 +306,8 @@
 
   <section|Candidate Selection><label|sect-primary-validation>
 
-  Collators produce candidates (Definition <reference|defn-candidate>) and send
-  those to validators. Validators verify the validity of the received
+  Collators produce candidates (Definition <reference|defn-candidate>) and
+  send those to validators. Validators verify the validity of the received
   candidates (Algo. <reference|algo-primary-validation>) by executing the
   validation code, <math|R<rsub|\<rho\>>>, and issue statements (Definition
   <reference|defn-gossip-statement>) about the candidates to connected peers.
@@ -322,8 +322,8 @@
 
   <\definition>
     <label|defn-candidate>A <with|font-series|bold|candidate>,
-    <math|C<rsub|coll><around|(|PoV<rsub|B>|)>>, is issues by collators
-    and contains the PoV block and enough data in order for any validator to
+    <math|C<rsub|coll><around|(|PoV<rsub|B>|)>>, is issues by collators and
+    contains the PoV block and enough data in order for any validator to
     verify its validity. A candidate is a tuple of the following format:
 
     <\equation*>
@@ -339,17 +339,17 @@
       the hash of the relay chain block that this candidate should be
       executed in the context of.
 
-      <item><math|id<rsub|C>>: the Collator relay-chain account ID as
-      defined in Definition <todo|@fabio>.
+      <item><math|id<rsub|C>>: the Collator relay-chain account ID as defined
+      in Definition <todo|@fabio>.
 
-      <item><math|Sig<rsup|Collator><rsub|SR25519>>: the signature
-      on the 256-bit Blake2 hash of the block data by the collator.
+      <item><math|Sig<rsup|Collator><rsub|SR25519>>: the signature on the
+      256-bit Blake2 hash of the block data by the collator.
 
       <item><math|head<around|(|B|)>>: the head data (Definition
       <reference|defn-head-data>) of block <math|B>.
 
-      <item><math|h<rsub|b><around|(|PoV<rsub|B>|)>>: the 32-byte Blake2
-      hash of the PoV block.
+      <item><math|h<rsub|b><around|(|PoV<rsub|B>|)>>: the 32-byte Blake2 hash
+      of the PoV block.
     </itemize>
   </definition>
 
@@ -371,25 +371,32 @@
     spec)?>
   </definition>
 
-  <\algorithm|<label|algo-primary-validation><name|PrimaryValidation>(<math|B>, <math|\<pi\><rsub|B>>, relay chain parent block <math|B<rsup|relay><rsub|parent>>)>
+  <\algorithm|<label|algo-primary-validation><name|PrimaryValidation>(<math|B>,
+  <math|\<pi\><rsub|B>>, relay chain parent block
+  <math|B<rsup|relay><rsub|parent>>)>
     <\algorithmic>
       <\state>
-        Retrieve <math|v<rsub|B>> from the relay chain state at <math|B<rsup|relay><rsub|parent>>
+        Retrieve <math|v<rsub|B>> from the relay chain state at
+        <math|B<rsup|relay><rsub|parent>>
       </state>
 
       <\state>
-        Run Algorithm <reference|algo-validate-block> using <math|B,\<pi\><rsub|B>,v<rsub|B>>
+        Run Algorithm <reference|algo-validate-block> using
+        <math|B,\<pi\><rsub|B>,v<rsub|B>>
       </state>
     </algorithmic>
   </algorithm>
 
   <\algorithm|<label|algo-validate-block><name|ValidateBlock>(<math|B,\<pi\><rsub|B>,v<rsub|B>>)>
     <\algorithmic>
-      <state|retrieve the runtime code <math|R<rsub|\<rho\>>> that is specified by <math|v<rsub|B>> from the relay chain state.>
+      <state|retrieve the runtime code <math|R<rsub|\<rho\>>> that is
+      specified by <math|v<rsub|B>> from the relay chain state.>
 
-      <state|check that the initial state root in <math|\<pi\><rsub|B>> is the one claimed in <math|v<rsub|B>>>
+      <state|check that the initial state root in <math|\<pi\><rsub|B>> is
+      the one claimed in <math|v<rsub|B>>>
 
-      <state|Execute <math|R<rsub|\<rho\>>> on <math|B> using <math|\<pi\><rsub|B>> to simulate the state.>
+      <state|Execute <math|R<rsub|\<rho\>>> on <math|B> using
+      <math|\<pi\><rsub|B>> to simulate the state.>
 
       <state|If the execution fails, return fail.>
 
@@ -425,12 +432,12 @@
 
   <\definition>
     <label|defn-candidate-receipt>A <with|font-series|bold|candidate
-    receipt>, <math|C<rsub|receipt><around|(|PoV<rsub|B>|)>>, is an
-    extension of a candidate as defined in Definition
-    <reference|defn-candidate> which includes additional information about
-    the validator which verified the PoV block. The candidate receipt is
-    communicated to other validators by issuing a statement as defined in
-    Definition <reference|defn-gossip-statement>.
+    receipt>, <math|C<rsub|receipt><around|(|PoV<rsub|B>|)>>, is an extension
+    of a candidate as defined in Definition <reference|defn-candidate> which
+    includes additional information about the validator which verified the
+    PoV block. The candidate receipt is communicated to other validators by
+    issuing a statement as defined in Definition
+    <reference|defn-gossip-statement>.
 
     This type is a tuple of the following format:
 
@@ -451,18 +458,18 @@
       <reference|defn-head-data>) of block <math|B>. <todo|@fabio (collator
       module relevant?)>.
 
-      <item><math|id<rsub|C>>: the collator relay-chain account ID as
-      defined in Definition <todo|@fabio>.
+      <item><math|id<rsub|C>>: the collator relay-chain account ID as defined
+      in Definition <todo|@fabio>.
 
-      <item><math|Sig<rsup|Collator><rsub|SR25519>>: the signature
-      on the 256-bit Blake2 hash of the block data by the collator.
+      <item><math|Sig<rsup|Collator><rsub|SR25519>>: the signature on the
+      256-bit Blake2 hash of the block data by the collator.
 
       <item><math|h<rsub|b><around|(|PoV<rsub|B>|)>>: the hash of the PoV
       block.
 
-      <item><math|Blake2b<around|(|CC<around|(|PoV<rsub|B>|)>|)>>:
-      The hash of the commitments made as a result of validation, as defined
-      in Definition <reference|defn-candidate-commitments>.
+      <item><math|Blake2b<around|(|CC<around|(|PoV<rsub|B>|)>|)>>: The hash
+      of the commitments made as a result of validation, as defined in
+      Definition <reference|defn-candidate-commitments>.
     </itemize>
   </definition>
 
@@ -484,8 +491,8 @@
 
       <item><math|Msg>: parachain messages to the relay chain.
       <math|\<bbb-O\>> identifies the origin of the messages and is a varying
-      data type (Definition <reference|defn-scale-codec>) and can be one of the
-      following values:
+      data type (Definition <reference|defn-scale-codec>) and can be one of
+      the following values:
 
       <\equation*>
         \<bbb-O\>=<choice|<tformat|<table|<row|<cell|0,>|<cell|<text|Signed>>>|<row|<cell|1,>|<cell|<text|Parachain>>>|<row|<cell|2,>|<cell|<text|Root>>>>>>
@@ -499,24 +506,24 @@
       <item><math|H<rsub|r><around|(|B|)>>: the root of a block's erasure
       encoding Merkle tree <todo|@fabio: use different symbol for this?>.
 
-      <item><math|Option<around|(|R<rsub|\<rho\>>|)>>: A varying
-      datatype (Definition <reference|defn-scale-codec>) containing the new runtime
+      <item><math|Option<around|(|R<rsub|\<rho\>>|)>>: A varying datatype
+      (Definition <reference|defn-scale-codec>) containing the new runtime
       code for the parachain. <todo|@fabio: clarify further>
     </itemize>
   </definition>
 
   <\definition>
-    <label|defn-gossip-pov-block>A <with|font-series|bold|Gossip PoV block> is a
-    tuple of the following format:
+    <label|defn-gossip-pov-block>A <with|font-series|bold|Gossip PoV block>
+    is a tuple of the following format:
 
     <\equation*>
       <around|(|h<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>,h<rsub|b><around|(|C<rsub|coll><around|(|PoV<rsub|B>|)>|)>,PoV<rsub|B>|)>
     </equation*>
 
-    where <math|h<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>>
-    is the block hash of the relay chain being referred to and
-    <math|h<rsub|b><around|(|C<rsub|coll><around|(|PoV<rsub|B>|)>|)>>
-    is the hash of some candidate localized to the same Relay chain block.
+    where <math|h<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>> is
+    the block hash of the relay chain being referred to and
+    <math|h<rsub|b><around|(|C<rsub|coll><around|(|PoV<rsub|B>|)>|)>> is the
+    hash of some candidate localized to the same Relay chain block.
   </definition>
 
   <\definition>
@@ -528,13 +535,13 @@
       <around|(|Stmt,id<rsub|\<bbb-V\>>,Sig<rsup|Valdator><rsub|SR25519>|)>
     </equation*>
 
-    where <math|Sig<rsup|Validator><rsub|SR25519>> is the
-    signature of the validator and <math|id<rsub|\<bbb-V\>>> refers to the
-    index of validator according to the authority set. <todo|@fabio: define
-    authority set (specified in the Host spec)>. <math|Stmt> refers to a
-    statement the validator wants to make about a certain candidate.
-    <math|Stmt> is a varying data type (Definition <reference|defn-scale-codec>)
-    and can be one of the following values:
+    where <math|Sig<rsup|Validator><rsub|SR25519>> is the signature of the
+    validator and <math|id<rsub|\<bbb-V\>>> refers to the index of validator
+    according to the authority set. <todo|@fabio: define authority set
+    (specified in the Host spec)>. <math|Stmt> refers to a statement the
+    validator wants to make about a certain candidate. <math|Stmt> is a
+    varying data type (Definition <reference|defn-scale-codec>) and can be
+    one of the following values:
 
     <\equation*>
       Stmt=<choice|<tformat|<table|<row|<cell|0,>|<cell|<text|Seconded,
@@ -558,20 +565,16 @@
     <\algorithmic>
       <state|<with|font-series|bold|Init> <math|Stmt>;>
 
-      <\algo-if-else-if|<with|font-shape|small-caps|ValidateBlock>(<math|PoV<rsub|B>>) is <with|font-series|bold|valid>>
-
+      <\algo-if-else-if|<with|font-shape|small-caps|ValidateBlock>(<math|PoV<rsub|B>>)
+      is <with|font-series|bold|valid>>
         <state|<math|Stmt\<leftarrow\>><with|font-shape|small-caps|SetValid>(<math|PoV<rsub|B>>)>
-
       <|algo-if-else-if>
-
         <state|<math|Stmt\<leftarrow\>><with|font-shape|small-caps|SetInvalid>(<math|PoV<rsub|B>>)>
 
         <state|<with|font-shape|small-caps|BlacklistCollatorOf>(<math|PoV<rsub|B>>)>
-
       </algo-if-else-if>
 
       <state|<with|font-shape|small-caps|Propagate>(<math|Stmt>)>
-
     </algorithmic>
   </algorithm>
 
@@ -595,35 +598,26 @@
   </itemize>
 
   <\algorithm|<label|algo-endorse-candidate-receipt><name|ConfirmCandidateReceipt>(<math|Stmt<rsub|peer>>)>
-
     <\algorithmic>
-
       <state|<with|font-series|bold|Init> <math|Stmt>;>
 
-      <state|<math|PoV<rsub|B>\<leftarrow\>> <with|font-shape|small-caps|Retrieve>(<math|Stmt<rsub|peer>>)>
+      <state|<math|PoV<rsub|B>\<leftarrow\>>
+      <with|font-shape|small-caps|Retrieve>(<math|Stmt<rsub|peer>>)>
 
-      <\algo-if-else-if|<with|font-shape|small-caps|ValidateBlock>(<math|PoV<rsub|B>>) is <with|font-series|bold|valid>>
-
+      <\algo-if-else-if|<with|font-shape|small-caps|ValidateBlock>(<math|PoV<rsub|B>>)
+      is <with|font-series|bold|valid>>
         <\algo-if-else-if|<with|font-shape|small-caps|AlreadySeconded>(<math|B<rsup|relay><rsub|chain>>)>
-
-          <state|<math|Stmt\<leftarrow\>><with|font-shape|small-caps|SetValid>(<math|PoV<rsub|B>>)>|
-
-        <|algo-if-else-if>
-
+          <state|<math|Stmt\<leftarrow\>><with|font-shape|small-caps|SetValid>(<math|PoV<rsub|B>>)>
+        <|algo-if-else-if|>
           <state|<math|Stmt\<leftarrow\>><with|font-shape|small-caps|SetSeconded>(<math|PoV<rsub|B>>)>
-
         </algo-if-else-if>
-
       <|algo-if-else-if>
-
         <state|<math|Stmt\<leftarrow\>><with|font-shape|small-caps|SetInvalid>(<math|PoV<rsub|B>>)>
 
         <state|<with|font-shape|small-caps|AnnounceMisbehaviorOf>(<math|PoV<rsub|B>>)>
-
       </algo-if-else-if>
 
       <state|<with|font-shape|small-caps|Propagate>(<math|Stmt>)>
-
     </algorithmic>
   </algorithm>
 
@@ -674,10 +668,10 @@
   <todo|@fabio: should this be a subsection?>
 
   <\definition>
-    <label|defn-para-proposal><with|font-series|bold|Parachain Block Proposal>, noted by
-    <math|P<rsup|B><rsub|\<rho\>>>is a candidate receipt for a parachain
-    block <math|B> for a parachain <math|\<rho\>> along with signatures for
-    at least 2/3 of <math|\<cal-V\><rsub|\<rho\>>>.
+    <label|defn-para-proposal><with|font-series|bold|Parachain Block
+    Proposal>, noted by <math|P<rsup|B><rsub|\<rho\>>>is a candidate receipt
+    for a parachain block <math|B> for a parachain <math|\<rho\>> along with
+    signatures for at least 2/3 of <math|\<cal-V\><rsub|\<rho\>>>.
   </definition>
 
   A block producer which observe a Parachain Block Proposal as defined in
@@ -725,14 +719,16 @@
     >is defined to be the Reed-Solomon encoder defined in <cite|??>.
   </definition>
 
-  <\algorithm|<label|algo-erasure-encode><name|Erasure-Encode>(<math|<wide|B|\<bar\>>>: blob defined in Definition <reference|defn-blob>)>
+  <\algorithm|<label|algo-erasure-encode><name|Erasure-Encode>(<math|<wide|B|\<bar\>>>:
+  blob defined in Definition <reference|defn-blob>)>
     <\algorithmic>
-
       <state|TBS>
 
-      <state|<with|font-series|bold|Init> <math|Shards\<leftarrow\>> <with|font-shape|small-caps|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
+      <state|<with|font-series|bold|Init> <math|Shards\<leftarrow\>>
+      <with|font-shape|small-caps|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
 
-      <statex|// Create a trie from the shards in order generate the trie nodes>
+      <statex|// Create a trie from the shards in order generate the trie
+      nodes>
 
       <statex|// which are required to verify each chunk with a Merkle root>
 
@@ -741,22 +737,22 @@
       <state|<with|font-series|bold|Init> <math|index=0>>
 
       <\algo-for|<math|shard\<in\>Shards>>
-
-        <state|<with|font-shape|small-caps|Insert>(<math|Trie,index>, <with|font-shape|small-caps|Blake2>(<math|shard>))>
+        <state|<with|font-shape|small-caps|Insert>(<math|Trie,index>,
+        <with|font-shape|small-caps|Blake2>(<math|shard>))>
 
         <state|<math|index=index+1>>
-
       </algo-for>
 
-      <statex|// Insert individual chunks into collection (Definition <reference|defn-erasure-coded-chunks>).>
+      <statex|// Insert individual chunks into collection (Definition
+      <reference|defn-erasure-coded-chunks>).>
 
       <state|<with|font-series|bold|Init> <math|Er<rsub|B>>>
 
       <state|<with|font-series|bold|Init> <math|index=0>>
 
       <\algo-for|<math|shard\<in\>Shards>>
-
-        <state|<with|font-series|bold|Init> <math|nodes\<leftarrow\>> <with|font-shape|small-caps|Get-Nodes>(<math|Trie,index>)>
+        <state|<with|font-series|bold|Init> <math|nodes\<leftarrow\>>
+        <with|font-shape|small-caps|Get-Nodes>(<math|Trie,index>)>
 
         <state|<with|font-shape|small-caps|Add>(<math|Er<rsub|B>,<around|(|shard,index,nodes|)>>)>
 
@@ -764,7 +760,6 @@
       </algo-for>
 
       <algo-return|<math|Er<rsub|B>>>
-
     </algorithmic>
   </algorithm>
 
@@ -774,59 +769,60 @@
     Return value is defined as <math|<around|(|\<bbb-S\><rsub|0>,...,\<bbb-S\><rsub|n>|)>>
     where <math|\<bbb-S\>\<assign\><around|(|b<rsub|0>,...,b<rsub|n>|)>>
 
-    <item><with|font-shape|small-caps|Insert(<math|trie,key,val>)>:
-    insert the given <math|key> and <math|value> into the
-    <math|trie>.
+    <item><with|font-shape|small-caps|Insert(<math|trie,key,val>)>: insert
+    the given <math|key> and <math|value> into the <math|trie>.
 
-    <item><with|font-shape|small-caps|Get-Nodes(<math|trie,key>)>: based
-    on the <math|key>, return all required <math|trie> nodes in order to
-    verify the corresponding value for a (unspecified) Merkle root. Return
-    value is defined as <math|<around|(|\<bbb-N\><rsub|0>,...,\<bbb-N\><rsub|n>|)>>
+    <item><with|font-shape|small-caps|Get-Nodes(<math|trie,key>)>: based on
+    the <math|key>, return all required <math|trie> nodes in order to verify
+    the corresponding value for a (unspecified) Merkle root. Return value is
+    defined as <math|<around|(|\<bbb-N\><rsub|0>,...,\<bbb-N\><rsub|n>|)>>
     where <math|\<bbb-N\>\<assign\><around|(|b<rsub|0>,...,b<rsub|n>|)>>.
 
-    <item><with|font-shape|small-caps|Add(<math|sequence,item>)>:
-    add the given <math|item> to the <math|sequence>.
+    <item><with|font-shape|small-caps|Add(<math|sequence,item>)>: add the
+    given <math|item> to the <math|sequence>.
   </itemize>
 
   <\algorithm|<label|algo-make-shards><name|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
     <\algorithmic>
-
       <statex| // Calculate the required values for Reed-Solomon.>
 
       <statex| // Calculate the required lengths.>
 
-      <state|<with|font-series|bold|Init> <math|Shard<rsub|data>=<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>+1>>
+      <state|<with|font-series|bold|Init>
+      <math|Shard<rsub|data>=<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>+1>>
 
-      <state|<with|font-series|bold|Init> <math|Shard<rsub|parity>=<around|\||<paraValidSet>|\|>-<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>-1>>
+      <state|<with|font-series|bold|Init>
+      <math|Shard<rsub|parity>=<around|\||<paraValidSet>|\|>-<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>-1>>
 
       <\state>
         <\math>
-          <with|font-series|bold|Init>base<rsub|len> = <choice|<tformat|<table|<row|<cell|0>|<cell|if<around|\||<paraValidSet>|\|><bmod>Shard<rsub|data>=0>>|<row|<cell|1>|<cell|if<around|\||<paraValidSet>|\|><bmod>Shard<rsub|data>\<neq\>0>>>>>
+          <with|font-series|bold|Init>base<rsub|len> =
+          <choice|<tformat|<table|<row|<cell|0>|<cell|if<around|\||<paraValidSet>|\|><bmod>Shard<rsub|data>=0>>|<row|<cell|1>|<cell|if<around|\||<paraValidSet>|\|><bmod>Shard<rsub|data>\<neq\>0>>>>>
         </math>
       </state>
 
-      <state|<with|font-series|bold|Init> <math|Shard<rsub|len> = base<rsub|len> + <around|(|base<rsub|len><bmod>2|)>>>
+      <state|<with|font-series|bold|Init> <math|Shard<rsub|len> =
+      base<rsub|len> + <around|(|base<rsub|len><bmod>2|)>>>
 
       <statex|// Prepare shards, each padded with zeroes.>
 
-      <statex|// <math|Shards\<assign\><around|(|\<bbb-S\><rsub|0>,...,\<bbb-S\><rsub|n>|)>> where <math|\<bbb-S\>\<assign\><around|(|b<rsub|0>,...,b<rsub|n>|)>>>
+      <statex|// <math|Shards\<assign\><around|(|\<bbb-S\><rsub|0>,...,\<bbb-S\><rsub|n>|)>>
+      where <math|\<bbb-S\>\<assign\><around|(|b<rsub|0>,...,b<rsub|n>|)>>>
 
       <state|<with|font-series|bold|Init> <math|Shards>>
 
       <\algo-for|<math|n\<in\><around|(|Shard<rsub|data>+Shard<rsub|partiy>|)>>>
-
-        <state|<with|font-shape|small-caps|Add>(<math|Shards,<around|(|0<rsub|0>,.. 0<rsub|Shard<rsub|len>>|)>>)>
-
+        <state|<with|font-shape|small-caps|Add>(<math|Shards,<around|(|0<rsub|0>,..
+        0<rsub|Shard<rsub|len>>|)>>)>
       </algo-for>
 
       <statex|// Copy shards of <math|v<rsub|b>> into each shard.>
 
       <\algo-for|<math|<around|(|chunk, shard|)>\<in\>>(<with|font-shape|small-caps|Take><math|<around|(|Enc<rsub|SC><around|(|v<rsub|B>|)>,Shard<rsub|len>|)>,Shards>)>
-
-        <state|<with|font-series|bold|Init> <math|len\<leftarrow\>><with|font-shape|small-caps|Min>(<math|Shard<rsub|len>,<around|\||chunk|\|>>)>
+        <state|<with|font-series|bold|Init>
+        <math|len\<leftarrow\>><with|font-shape|small-caps|Min>(<math|Shard<rsub|len>,<around|\||chunk|\|>>)>
 
         <state|<math|shard\<leftarrow\>> <with|font-shape|small-caps|Copy-From>(<math|chunk,len>)>
-
       </algo-for>
 
       <statex|// <math|Shards> contains split shards of <math|v<rsub|B>>.>
@@ -836,19 +832,19 @@
   </algorithm>
 
   <\itemize>
-    <item><with|font-shape|small-caps|Add(<math|sequence,item>)>:
-    add the given <math|item> to the <math|sequence>.
+    <item><with|font-shape|small-caps|Add(<math|sequence,item>)>: add the
+    given <math|item> to the <math|sequence>.
 
-    <item><with|font-shape|small-caps|Take(<math|sequence,len>)>:
-    iterate over <math|len> amount of bytes from <math|sequence> on
-    each iteration. If the <math|sequence> does not provide
-    <math|len> number of bytes, then it simply uses what's available.
+    <item><with|font-shape|small-caps|Take(<math|sequence,len>)>: iterate
+    over <math|len> amount of bytes from <math|sequence> on each iteration.
+    If the <math|sequence> does not provide <math|len> number of bytes, then
+    it simply uses what's available.
 
-    <item><with|font-shape|small-caps|Min(<math|num1,num2>)>: return
-    the minimum value of <math|num1> or <math|num2>.
+    <item><with|font-shape|small-caps|Min(<math|num1,num2>)>: return the
+    minimum value of <math|num1> or <math|num2>.
 
-    <item><with|font-shape|small-caps|Copy-From(<math|source,len>)>:
-    return <math|len> amount of bytes from <math|source>.
+    <item><with|font-shape|small-caps|Copy-From(<math|source,len>)>: return
+    <math|len> amount of bytes from <math|source>.
   </itemize>
 
   <\definition>
@@ -882,15 +878,16 @@
 
   <section|Distribution of Chunks><label|sect-distribute-chunks>
 
-  Following the computation of <math|Er<rsub|B>>, <math|v> must construct
-  the <math|<wide|B|\<bar\>>> Availability message defined in Definition
+  Following the computation of <math|Er<rsub|B>>, <math|v> must construct the
+  <math|<wide|B|\<bar\>>> Availability message defined in Definition
   <reference|defn-pov-erasure-chunk-message>. And distribute them to target
   validators designated by the Availability Networking Specification
   <cite|??>.
 
   <\definition>
-    <label|defn-pov-erasure-chunk-message><with|font-series|bold|PoV erasure chunk message>
-    <math|M<rsub|PoV<rsub|<wide|B|\<bar\>>>><around|(|i|)>> is TBS
+    <label|defn-pov-erasure-chunk-message><with|font-series|bold|PoV erasure
+    chunk message> <math|M<rsub|PoV<rsub|<wide|B|\<bar\>>>><around|(|i|)>> is
+    TBS
   </definition>
 
   <section|Announcing Availability><label|sect-voting-on-availability>
@@ -900,8 +897,8 @@
   defined in Definition<reference|defn-availability-vote-message>
 
   <\definition>
-    <label|defn-availability-vote-message><with|font-series|bold|Availability vote message>
-    <math|M<rsub|PoV><rsup|Avail,v<rsub|i>>> TBS
+    <label|defn-availability-vote-message><with|font-series|bold|Availability
+    vote message> <math|M<rsub|PoV><rsup|Avail,v<rsub|i>>> TBS
   </definition>
 
   Some parachains have blocks that we need to vote on the availability of,
@@ -949,40 +946,39 @@
 
   These signatures go into a relay chain block.
 
-  <subsection|Processing on-chain availability data><label|sect-processing-availability>
+  <subsection|Processing on-chain availability
+  data><label|sect-processing-availability>
 
   This section explains how the availability attestations stored on the relay
   chain, as described in Section ??, are processed as follows:
 
   <\enumerate-numeric>
-    <item>The relay chain stores the last vote from each validator on
-      chain. For each new signature, the relay chain checks if it is for a
-      block in this chain later than the last vote stored from this
-      validator. If it is the relay chain updates the stored vote and updates
-      the bitfield <math|b<rsub|v>> and block number of the vote.
+    <item>The relay chain stores the last vote from each validator on chain.
+    For each new signature, the relay chain checks if it is for a block in
+    this chain later than the last vote stored from this validator. If it is
+    the relay chain updates the stored vote and updates the bitfield
+    <math|b<rsub|v>> and block number of the vote.
 
     <item>For each block within the last <math|t> blocks where <math|t> is
-      some timeout period, the relay chain computes a bitmask
-      <math|bm<rsub|n>> (<math|n> is block number). This bitmask is a
-      bitfield that represents whether the candidate considered in that block
-      is still relevant. That is the <math|i>th bit of <math|bm<rsub|n>> is
-      <math|1> if and only if for the <math|i>th parachain, (a) the
-      availability status is to be determined and (b) candidate block number
-      <math|\<leq\>n>
+    some timeout period, the relay chain computes a bitmask <math|bm<rsub|n>>
+    (<math|n> is block number). This bitmask is a bitfield that represents
+    whether the candidate considered in that block is still relevant. That is
+    the <math|i>th bit of <math|bm<rsub|n>> is <math|1> if and only if for
+    the <math|i>th parachain, (a) the availability status is to be determined
+    and (b) candidate block number <math|\<leq\>n>
 
     <item>The relay chain initialises a vector of counts with one entry for
-      each parachain to zero. After executing the following algorithm it
-      ends up with a vector of counts of the number of validators who think
-      the latest candidates is available.
+    each parachain to zero. After executing the following algorithm it ends
+    up with a vector of counts of the number of validators who think the
+    latest candidates is available.
 
-      <\enumerate>
-        <item>The relay chain computes <math|b<rsub|v>> and
-        <math|bm<rsub|n>> where <math|n> is the block number of the
-        validator's last vote
+    <\enumerate>
+      <item>The relay chain computes <math|b<rsub|v>> and <math|bm<rsub|n>>
+      where <math|n> is the block number of the validator's last vote
 
-        <item>For each bit in <math|b<rsub|v>> and <math|bm<rsub|n>> 
-        add the <math|i>th bit to the <math|i>th count.
-      </enumerate>
+      <item>For each bit in <math|b<rsub|v>> and <math|bm<rsub|n>> add the
+      <math|i>th bit to the <math|i>th count.
+    </enumerate>
 
     <item>For each count that is <math|\<gtr\>2/3> of the number of
     validators, the relay chain sets the candidates status to \Pavailable\Q.
@@ -1012,9 +1008,9 @@
 
   <\definition>
     <label|defn-available-parablock-proposal>Parachain blocks for which the
-    corresponding blob is noted on the relay chain to be <with|font-series|bold|available>,
-    meaning that the candidate receipt has been voted to be available by 2/3
-    validators.
+    corresponding blob is noted on the relay chain to be
+    <with|font-series|bold|available>, meaning that the candidate receipt has
+    been voted to be available by 2/3 validators.
   </definition>
 
   After a certain time-out in blocks since we first put the candidate receipt
@@ -1023,8 +1019,8 @@
   <reference|algo-signature-processing>.
 
   <\definition>
-    <label|defn-unavailable-parablock-proposal>An <with|font-series|bold|unavailabile> parachain
-    block is TBS
+    <label|defn-unavailable-parablock-proposal>An
+    <with|font-series|bold|unavailabile> parachain block is TBS
   </definition>
 
   /syedSo to be clear we are not announcing unavailability we just keep it
@@ -1050,8 +1046,8 @@
   validity/availability checks as follows. A scheme assigns every validator
   to one or more PoV blocks to check its validity, see Section
   <reference|sect-shot-assignment> for details. An assigned validator
-  acquires the PoV block (see Section <reference|sect-retrieval>) and
-  checks its validity by comparing it to the candidate receipt. If validators
+  acquires the PoV block (see Section <reference|sect-retrieval>) and checks
+  its validity by comparing it to the candidate receipt. If validators
   notices that an equivocation has happened an additional
   validity/availability assignments will be made that is described in
   Section<reference|sect-equivocation-case>.
@@ -1075,17 +1071,17 @@
   every Parachain <math|\<rho\>> to determines assignments. <todo|Fix this.
   It is incorrect so far.>
 
-  <\algorithm|<label|algo-checker-vrf><name|VRF-for-Approval>(<math|B>,<math|z>, <math|s<rsub|k>>)>
+  <\algorithm|<label|algo-checker-vrf><name|VRF-for-Approval>(<math|B>,<math|z>,
+  <math|s<rsub|k>>)>
     <\algorithmic>
-
       <algo-require|<math|B>: the block to be approved>
       <algo-require|<math|z>: randomness for approval assignment>
-      <algo-require|<math|s<rsub|k>>: session secret key of validator planning to participate in approval>
+      <algo-require|<math|s<rsub|k>>: session secret key of validator
+      planning to participate in approval>
 
       <state|<math|<around|(|\<pi\>,d|)>\<leftarrow\>VRF<around|(|H<rsub|h><around|(|B|)>,sk<around|(|z|)>|)>>>
 
       <algo-return|<math|<around|(|\<pi\>,d|)>>>
-
     </algorithmic>
   </algorithm>
 
@@ -1112,13 +1108,12 @@
   Now for each parachain block, let us assume we want <math|#VCheck>
   validators to check every PoV block during the secondary checking. Note
   that <math|#VCheck> is not a fixed number but depends on reports from
-  collators or fishermen. Lets us <math|#VDefault> be the minimum
-  number of validator we want to check the block, which should be the number
-  of parachain validators plus some constant like <math|2>. We set
+  collators or fishermen. Lets us <math|#VDefault> be the minimum number of
+  validator we want to check the block, which should be the number of
+  parachain validators plus some constant like <math|2>. We set
 
   <\equation*>
-    #VCheck=#VDefault+c<rsub|f>\<ast\><math-up|total fishermen
-    stake>
+    #VCheck=#VDefault+c<rsub|f>\<ast\><math-up|total fishermen stake>
   </equation*>
 
   where <math|c<rsub|f>> is some factor we use to weight fishermen reports.
@@ -1127,23 +1122,22 @@
   Now each validator computes for each PoV block a VRF with the input being
   the relay chain block VRF concatenated with the parachain index.
 
-  For every PoV bock, every validator compares
-  <math|#VCheck-#VDefault> to the output of this VRF and if the
-  VRF output is small enough than the validator checks this PoV blocks
-  immediately otherwise depending on their difference waits for some time and
-  only perform a check if it has not seen <math|#VCheck> checks from
-  validators who either 1) parachain validators of this PoV block 2) or
-  assigned during the assignment procedure or 3) had a smaller VRF output
-  than us during this time.
+  For every PoV bock, every validator compares <math|#VCheck-#VDefault> to
+  the output of this VRF and if the VRF output is small enough than the
+  validator checks this PoV blocks immediately otherwise depending on their
+  difference waits for some time and only perform a check if it has not seen
+  <math|#VCheck> checks from validators who either 1) parachain validators of
+  this PoV block 2) or assigned during the assignment procedure or 3) had a
+  smaller VRF output than us during this time.
 
-  More fisherman reports can increase <math|#VCheck> and require new
-  checks. We should carry on doing secondary checks for the entire fishing
-  period if more are required. A validator need to keep track of which blocks
-  have <math|#VCheck> smaller than the number of higher priority checks
-  performed. A new report can make us check straight away, no matter the
-  number of current checks, or mean that we need to put this block back into
-  this set. If we later decide to prune some of this data, such as who has
-  checked the block, then we'll need a new approach here.
+  More fisherman reports can increase <math|#VCheck> and require new checks.
+  We should carry on doing secondary checks for the entire fishing period if
+  more are required. A validator need to keep track of which blocks have
+  <math|#VCheck> smaller than the number of higher priority checks performed.
+  A new report can make us check straight away, no matter the number of
+  current checks, or mean that we need to put this block back into this set.
+  If we later decide to prune some of this data, such as who has checked the
+  block, then we'll need a new approach here.
 
   <\algorithm|<label|algo-extra-assignment><name|OneShotAssignment>>
     <\algorithmic>
@@ -1195,7 +1189,8 @@
   </definition>
 
   <\definition>
-    <label|defn-pov-block-response><with|font-series|bold|PoV Block Respose Message> TBS
+    <label|defn-pov-block-response><with|font-series|bold|PoV Block Respose
+    Message> TBS
   </definition>
 
   The second method is to retrieve enough erasure-encoded chunks to
@@ -1204,8 +1199,8 @@
   indicating that one needs the erasure-encoded chunks.
 
   <\definition>
-    <label|defn-erasure-coded-chunks-request><with|font-series|bold|Erasuree-coded chunks
-    request message> TBS
+    <label|defn-erasure-coded-chunks-request><with|font-series|bold|Erasuree-coded
+    chunks request message> TBS
   </definition>
 
   On their part, when a validator receive a erasuree-coded chunks request
@@ -1213,8 +1208,8 @@
   <reference|defn-erasure-coded-chunks-response>.
 
   <\definition>
-    <label|defn-erasure-coded-chunks-response><with|font-series|bold|Erasuree-coded chunks
-    response message> TBS
+    <label|defn-erasure-coded-chunks-response><with|font-series|bold|Erasuree-coded
+    chunks response message> TBS
   </definition>
 
   Assigned appoval checker <math|v> must retrieve enough erasure-encoded
@@ -1231,32 +1226,30 @@
 
   <\algorithm|<label|algo-reconstruct-pov><name|Reconstruct-PoV-Erasure>(<math|S<rsub|Er<rsub|B>>>)>
     <\algorithmic>
+      <algo-require|<math|S<rsub|Er<rsub|B>>\<assign\><around|(|e<rsub|j<rsub|1>>,m<rsub|j<rsub|1>>|)>,\<cdot\>,<around|(|e<rsub|j<rsub|k>>,m<rsub|j<rsub|k>>|)>)>
+      such that <math|k\<gtr\>2*f>>
 
-    <algo-require|<math|S<rsub|Er<rsub|B>>\<assign\><around|(|e<rsub|j<rsub|1>>,m<rsub|j<rsub|1>>|)>,\<cdot\>,<around|(|e<rsub|j<rsub|k>>,m<rsub|j<rsub|k>>|)>)>
-    such that <math|k\<gtr\>2*f>>
+      <state|<math|<wide|B|\<bar\>>\<rightarrow\>>
+      <with|font-shape|small-caps|Erasure-Decoder>(<math|e<rsub|j<rsub|1>>,\<cdots\>,e<rsub|j<rsub|k>>>)>
 
-    <state|<math|<wide|B|\<bar\>>\<rightarrow\>> <with|font-shape|small-caps|Erasure-Decoder>(<math|e<rsub|j<rsub|1>>,\<cdots\>,e<rsub|j<rsub|k>>>)>
+      <\algo-if-else-if|<with|font-shape|small-caps|Erasure-Decoder>
+      <with|font-series|bold|failed>>
+        <state|<with|font-shape|small-caps|Announce-Failure>>
 
-    <\algo-if-else-if|<with|font-shape|small-caps|Erasure-Decoder> <with|font-series|bold|failed>>
+        <algo-return|>
+      </algo-if-else-if>
 
-      <state|<with|font-shape|small-caps|Announce-Failure>>
+      <state|<math|Er<rsub|B>\<rightarrow\>>
+      <with|font-shape|small-caps|Erasure-Encoder>(<math|<wide|B|\<bar\>>>)>
 
-      <algo-return|>
+      <\algo-if-else-if|<with|font-shape|small-caps|Verify-Merkle-Proof>(<math|S<rsub|Er<rsub|B>>>,<math|Er<rsub|B>>)
+      <with|font-series|bold|failed>>
+        <state|<with|font-shape|small-caps|Announce-Failure>>
 
-    </algo-if-else-if>
+        <algo-return|>
+      </algo-if-else-if>
 
-    <state|<math|Er<rsub|B>\<rightarrow\>> <with|font-shape|small-caps|Erasure-Encoder>(<math|<wide|B|\<bar\>>>)>
-
-    <\algo-if-else-if|<with|font-shape|small-caps|Verify-Merkle-Proof>(<math|S<rsub|Er<rsub|B>>>,<math|Er<rsub|B>>) <with|font-series|bold|failed>>
-
-      <state|<with|font-shape|small-caps|Announce-Failure>>
-
-      <algo-return|>
-
-    </algo-if-else-if>
-
-    <algo-return|<math|<wide|B|\<bar\>>>>
-
+      <algo-return|<math|<wide|B|\<bar\>>>>
     </algorithmic>
   </algorithm>
 
@@ -1284,8 +1277,8 @@
   <reference|defn-secondary-appoval-attestation>.
 
   <\definition>
-    <label|defn-secondary-appoval-attestation><with|font-series|bold|Secondary approval
-    attetstion message> TBS
+    <label|defn-secondary-appoval-attestation><with|font-series|bold|Secondary
+    approval attetstion message> TBS
   </definition>
 
   <subsection|Process validity and invalidity messages>
@@ -1304,8 +1297,8 @@
   specified in
 
   <\definition>
-    <label|defn-approval-attestation-transaction><with|font-series|bold|Approval Attestation
-    Transaction> TBS
+    <label|defn-approval-attestation-transaction><with|font-series|bold|Approval
+    Attestation Transaction> TBS
   </definition>
 
   Collators reports of unavailability and invalidty specified in Definition
@@ -1313,8 +1306,8 @@
   format specified in Definition
 
   <\definition>
-    <label|defn-collator-invalidity-transaction><with|font-series|bold|Collator Invalidity
-    Transaction> TBS
+    <label|defn-collator-invalidity-transaction><with|font-series|bold|Collator
+    Invalidity Transaction> TBS
   </definition>
 
   <\definition>
