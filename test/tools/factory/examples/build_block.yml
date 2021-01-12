@@ -6,6 +6,7 @@
       balance: "{{ item.balance }}"
   loop:
     - { from: alice, to: bob, balance: 100 }
+    - { from: bob, to: alice, balance: 200 }
   register: transactions
 
 - name: Build block

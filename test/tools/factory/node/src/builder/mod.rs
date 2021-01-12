@@ -91,9 +91,6 @@ where
         payment,
     );
 
-    // *** ***
-    // *
-
     // Additionally signed fields.
     let best_block_id = BlockId::number(client.chain_info().best_number);
     let (spec_version, transaction_version) = {
@@ -111,29 +108,6 @@ where
         (),
         (),
     );
-
-    // *** OR ***
-
-    /*
-    use sp_runtime::traits::SignedExtension;
-
-    fn extra_err() -> failure::Error {
-        failure::err_msg("Failed to retrieve additionally signed extra")
-    }
-
-    let additional_extra = (
-        check_spec_version.additional_signed().map_err(|_| extra_err())?,
-        check_tx_version.additional_signed().map_err(|_| extra_err())?,
-        check_genesis.additional_signed().map_err(|_| extra_err())?,
-        check_era.additional_signed().map_err(|_| extra_err())?,
-        check_nonce.additional_signed().map_err(|_| extra_err())?,
-        check_weight.additional_signed().map_err(|_| extra_err())?,
-        payment.additional_signed().map_err(|_| extra_err())?,
-    );
-    */
-
-    // *
-    // *** ***
 
     let payload = SignedPayload::from_raw(function, extra, additional_extra);
     let signature = payload.using_encoded(|payload| pair.sign(payload));
