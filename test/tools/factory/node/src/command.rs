@@ -23,7 +23,11 @@ use std::fs;
 
 /// Parse and run command line arguments
 pub fn run() -> Result<()> {
-    run_tool_spec(&fs::read_to_string(args().nth(1).unwrap())?)?;
+    run_tool_spec(&fs::read_to_string(
+        args()
+            .nth(1)
+            .ok_or(failure::err_msg("Not input file specified"))?,
+    )?)?;
 
     Ok(())
 }
