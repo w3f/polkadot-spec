@@ -118,8 +118,9 @@ func ProcessHostApiCommand(args []string) {
 	// Run requested test function
 	switch function {
 	// test allocator api
-	//case "ext_allocator_malloc_version_1":
-	//case "ext_allocator_free_version_1":
+	case "ext_allocator_malloc_version_1",
+	     "ext_allocator_free_version_1":
+		test_allocator_malloc_free(rtm, inputs[0])
 
 	// test child storage api
 	//case "ext_default_child_storage_set_version_1":
