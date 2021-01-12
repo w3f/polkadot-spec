@@ -11,7 +11,6 @@ use std::collections::HashMap;
 use std::convert::{TryFrom, TryInto};
 use std::mem;
 use std::str::FromStr;
-use structopt::StructOpt;
 
 /*
 # RUNTIME TYPES
@@ -215,13 +214,10 @@ impl TryFrom<SpecExtrinsic> for UncheckedExtrinsic {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize, StructOpt)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpecBlock {
-    #[structopt(subcommand)]
     pub genesis: SpecGenesisSource,
-    #[structopt(flatten)]
     pub header: SpecHeader,
-    #[structopt(short, long)]
     pub extrinsics: Vec<SpecExtrinsic>,
 }
 
@@ -255,9 +251,7 @@ impl TryFrom<SpecBlock> for Block {
     }
 }
 
-// Temporary work-around for structopt. This will be adjusted to make the CLI
-// prettier.
-#[derive(Debug, Clone, StructOpt, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub enum SpecGenesisSource {
     Default,
@@ -267,17 +261,14 @@ pub enum SpecGenesisSource {
     },
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, StructOpt)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SpecHeader {
-    #[structopt(short, long)]
     pub parent_hash: SpecHash,
-    #[structopt(short, long)]
     pub number: SpecBlockNumber,
-    #[structopt(flatten)]
     pub digest: SpecDigest,
 }
 
-#[derive(Debug, Clone, Default, Serialize, Deserialize, StructOpt)]
+#[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SpecDigest {
     pub logs: Vec<String>,
 }

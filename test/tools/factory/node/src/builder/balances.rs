@@ -14,7 +14,6 @@ use std::convert::{TryFrom, TryInto};
 use std::fs;
 use std::path::Path;
 use std::str::FromStr;
-use structopt::StructOpt;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct RawPrivateKey(Vec<u8>);
@@ -37,20 +36,17 @@ impl FromStr for RawPrivateKey {
     }
 }
 
-#[derive(Debug, StructOpt, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
 enum ExtraSigned {
     ManualParams(ManualParams),
     FromChainSpec(SpecGenesisSource),
 }
 
-#[derive(Debug, StructOpt, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct ManualParams {
-    #[structopt(long)]
     spec_version: u32,
-    #[structopt(long)]
     transaction_version: u32,
-    #[structopt(long)]
     genesis_hash: SpecHash,
 }
 
@@ -61,15 +57,10 @@ module!(
     enum CallCmd {
         #[serde(rename = "transfer")]
         Transfer {
-            #[structopt(long)]
             from: SpecAccountSeed,
-            #[structopt(long)]
             to: SpecAccountSeed,
-            #[structopt(long)]
             balance: u64,
-            #[structopt(long)]
             nonce: u32,
-            #[structopt(subcommand)]
             extra_signed: ExtraSigned,
         },
     }

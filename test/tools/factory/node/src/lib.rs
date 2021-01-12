@@ -5,7 +5,6 @@ extern crate serde;
 mod macros;
 
 mod builder;
-mod cli;
 mod command;
 mod executor;
 mod primitives;

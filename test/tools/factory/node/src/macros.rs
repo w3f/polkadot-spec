@@ -16,14 +16,13 @@ macro_rules! module {
             fn run($self:ident) -> Result<$ret:ty> $run_body:block
         }
     ) => {
-        #[derive(Debug, StructOpt, Serialize, Deserialize)]
+        #[derive(Debug, Serialize, Deserialize)]
         #[serde(rename = $module_name)]
         pub struct $struct {
-            #[structopt(subcommand)]
             call: $enum,
         }
 
-        #[derive(Debug, StructOpt, Serialize, Deserialize)]
+        #[derive(Debug, Serialize, Deserialize)]
         pub enum $enum {
             $(
                 #[serde(rename = $func_name)]

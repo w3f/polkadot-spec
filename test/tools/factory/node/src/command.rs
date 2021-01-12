@@ -16,24 +16,14 @@
 // limitations under the License.
 
 use crate::builder::Builder;
-use crate::cli::{Cli, Subcommand};
 use crate::tool_spec::run_tool_spec;
 use crate::Result;
+use std::env::args;
 use std::fs;
-use structopt::StructOpt;
 
 /// Parse and run command line arguments
 pub fn run() -> Result<()> {
-    let cli = Cli::from_args();
-
-    if let Some(path) = cli.spec_path {
-        run_tool_spec(&fs::read_to_string(path)?)?;
-    }
-
-    match cli.subcommand {
-        Some(Subcommand::PalletBalances(cmd)) => cmd.run_and_print()?,
-        _ => {}
-    };
+    run_tool_spec(&fs::read_to_string(args().nth(1).unwrap())?)?;
 
     Ok(())
 }

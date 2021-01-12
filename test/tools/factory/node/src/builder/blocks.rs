@@ -10,7 +10,6 @@ use std::convert::{TryFrom, TryInto};
 use std::fs;
 use std::mem::take;
 use std::str::FromStr;
-use structopt::StructOpt;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
@@ -26,13 +25,11 @@ module!(
     enum CallCmd {
         #[serde(rename = "build")]
         BuildBlock {
-            #[structopt(flatten)]
             #[serde(flatten)]
             spec_block: SpecBlock,
         },
         #[serde(rename = "execute")]
         ExecuteBlocks {
-            #[structopt(short, long)]
             #[serde(flatten)]
             blocks: Vec<RawBlock>,
         },
