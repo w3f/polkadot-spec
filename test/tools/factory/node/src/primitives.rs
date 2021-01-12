@@ -1,7 +1,9 @@
+use crate::executor::ClientInMem;
 use crate::Result;
 use codec::Decode;
 use codec::Encode;
 use runtime::{Block, BlockId, BlockNumber, Header, UncheckedExtrinsic};
+use sc_client_api::BlockBackend;
 use sc_service::GenericChainSpec;
 use sp_core::crypto::Pair;
 use sp_core::sr25519;
@@ -188,6 +190,12 @@ impl TryFrom<SpecHash> for H256 {
     }
 }
 
+impl From<H256> for SpecHash {
+    fn from(val: H256) -> Self {
+        SpecHash(hex::encode(val.as_bytes()))
+    }
+}
+
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SpecBlockNumber(String);
 
@@ -223,9 +231,27 @@ pub struct SpecBlock {
 
 impl SpecBlock {
     // Convert relevant fields into runtime native types.
-    pub fn prep(mut self) -> Result<(BlockId, Header, Vec<UncheckedExtrinsic>)> {
+    pub fn prep(
+        mut self,
+        client: &ClientInMem,
+    ) -> Result<(BlockId, Header, Vec<UncheckedExtrinsic>)> {
         // Convert into runtime types.
-        let at = BlockId::Hash(self.header.parent_hash.clone().try_into()?);
+        let at = match self.header.parent_hash {
+            SpecParentHash::GenesisHash => {
+                let genesis_hash = client
+                    .raw()
+                    .block_hash(0)
+                    .map_err(|_| failure::err_msg("failed to fetch genesis hash from chain spec"))?
+                    .ok_or(failure::err_msg("No genesis hash available in chain spec"))?;
+
+                // Set the actual hash directly in the header.
+                self.header.parent_hash = SpecParentHash::Hash(genesis_hash.into());
+                BlockId::Hash(genesis_hash)
+            }
+
+            SpecParentHash::Hash(ref mut hash) => BlockId::Hash(hash.clone().try_into()?),
+        };
+
         let header = mem::take(&mut self.header).try_into()?;
         let extrinsics = mem::take(&mut self.extrinsics)
             .into_iter()
@@ -260,9 +286,36 @@ pub enum SpecGenesisSource {
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct SpecHeader {
-    pub parent_hash: SpecHash,
+    pub parent_hash: SpecParentHash,
     pub number: SpecBlockNumber,
     pub digest: SpecDigest,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum SpecParentHash {
+    GenesisHash,
+    Hash(SpecHash),
+}
+
+impl Default for SpecParentHash {
+    fn default() -> Self {
+        SpecParentHash::GenesisHash
+    }
+}
+
+impl TryFrom<SpecParentHash> for H256 {
+    type Error = failure::Error;
+
+    fn try_from(val: SpecParentHash) -> Result<Self> {
+        match val {
+            // This should never occur.
+            SpecParentHash::GenesisHash => Err(failure::err_msg(
+                "Cannot convert genesis hash indicator to an actual hash",
+            )),
+            SpecParentHash::Hash(hash) => hash.try_into(),
+        }
+    }
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]

@@ -50,7 +50,7 @@ module!(
                     };
 
                     // Convert into runtime types.
-                    let (at, header, extrinsics) = spec_block.prep()?;
+                    let (at, header, extrinsics) = spec_block.prep(&client)?;
 
                     let rt = client.runtime_api();
 
