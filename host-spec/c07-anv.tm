@@ -74,7 +74,7 @@
     <with|font-series|bold|SCALE codec> to encode common data types such as
     integers, byte arrays, varying data types as well as other data
     structure. The SCALE codec is defined in a separate document known as
-    "The Polkadot Host - Protocol Specification". <todo|@fabio: link to
+    \PThe Polkadot Host - Protocol Specification\Q. <todo|@fabio: link to
     document>
   </definition>
 
@@ -294,7 +294,7 @@
     </itemize>
   </definition>
 
-  Note that in the code the blob is referred to as "AvailableData".
+  Note that in the code the blob is referred to as \PAvailableData\Q.
 
   <section|Overal process>
 
@@ -491,7 +491,7 @@
         \<bbb-O\>=<choice|<tformat|<table|<row|<cell|0,>|<cell|<text|Signed>>>|<row|<cell|1,>|<cell|<text|Parachain>>>|<row|<cell|2,>|<cell|<text|Root>>>>>>
       </equation*>
 
-      <todo|@fabio: define the concept of "origin">
+      <todo|@fabio: define the concept of \Porigin\Q>
 
       The following SCALE encoded array, <math|Enc<rsub|SC><around|(|b<rsub|0>,..b<rsub|n>|)>>,
       contains the raw bytes of the message which varies in size.
@@ -939,8 +939,8 @@
   where the <math|i>th bit of <math|b<rsub|v>> is <math|1> if and only if
 
   <\enumerate>
-    <item>the availability status of the candidate receipt is "to be
-    determined" on the relay chain at block hash <math|h<rsub|b>>
+    <item>the availability status of the candidate receipt is \Pto be
+    determined\Q on the relay chain at block hash <math|h<rsub|b>>
     <with|font-series|bold|and>
 
     <item><math|v> has the erasure coded chunk of the corresponding parachain
@@ -985,17 +985,16 @@
       </enumerate>
 
     <item>For each count that is <math|\<gtr\>2/3> of the number of
-      validators, the relay chain sets the candidates status to
-      \\"available\\". Otherwise, if the candidate is at least <math|t>
-      blocks old, then it sets its status to \\"unavailable\\".
+    validators, the relay chain sets the candidates status to \Pavailable\Q.
+    Otherwise, if the candidate is at least <math|t> blocks old, then it sets
+    its status to \Punavailable\Q.
 
     <item>The relay chain acts on available candidates and discards
-      unavailable ones, and then clears the record, setting the availability
-      status to \\"no candidate\\". Then the relay chain accepts new
-      candidate receipts for parachains that have \\"no candidate: status and
-      once any such new candidate receipts is included on the relay chain it
-      sets their availability status as \\"to be determined\\".
-
+    unavailable ones, and then clears the record, setting the availability
+    status to \Pno candidate\Q. Then the relay chain accepts new
+    candidate receipts for parachains that have \Pno candidate\Q status
+    and once any such new candidate receipts is included on the relay chain
+    it sets their availability status as \Pto be determined\Q.
   </enumerate-numeric>
 
   <\algorithm|<label|algo-signature-processing>Relay chain's signature
