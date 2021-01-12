@@ -1,6 +1,6 @@
 use crate::executor::ClientInMem;
-use crate::primitives::runtime::{Block, BlockId, Timestamp};
-use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource};
+use crate::primitives::runtime::{Block, BlockId, Header, Timestamp};
+use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource, SpecHeader};
 use crate::Result;
 use sp_api::Core;
 use sp_block_builder::BlockBuilder;
@@ -14,8 +14,16 @@ use std::str::FromStr;
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(untagged)]
 pub enum BlockCmdResult {
-    BuildBlock(RawBlock),
+    BuildBlock(BuildBlockMeta),
     ExecuteBlocks,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BuildBlockMeta {
+    //chain_spec: SpecChainSpecRaw,
+    chain_spec: u32,
+    header: Header,
+    raw_block: RawBlock,
 }
 
 module!(
@@ -101,13 +109,18 @@ module!(
                         .finalize_block(&at)
                         .map_err(|_| failure::err_msg("Failed to finalize block"))?;
 
-                    Ok(BlockCmdResult::BuildBlock(
-                        Block {
-                            header: header,
-                            extrinsics: extrinsics,
-                        }
-                        .into(),
-                    ))
+                    Ok(
+                        BlockCmdResult::BuildBlock(
+                            BuildBlockMeta {
+                                chain_spec: 0,
+                                header: header.clone(),
+                                raw_block: Block {
+                                    header: header,
+                                    extrinsics: extrinsics,
+                                }.into()
+                            }
+                        )
+                    )
                 }
                 CallCmd::ExecuteBlocks { blocks } => {
                     // Create the block by calling the runtime APIs.
