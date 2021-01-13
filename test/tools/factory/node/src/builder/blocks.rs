@@ -1,6 +1,6 @@
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Block, BlockId, Header, Timestamp};
-use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource, SpecHeader};
+use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource};
 use crate::Result;
 use sp_api::Core;
 use sp_block_builder::BlockBuilder;
@@ -8,7 +8,6 @@ use sp_inherents::InherentData;
 use sp_runtime::transaction_validity::TransactionValidityError;
 use std::convert::{TryFrom, TryInto};
 use std::fs;
-use std::mem::take;
 use std::str::FromStr;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -46,7 +45,7 @@ module!(
     impl BlockCmd {
         fn run(self) -> Result<BlockCmdResult> {
             match self.call {
-                CallCmd::BuildBlock { mut spec_block } => {
+                CallCmd::BuildBlock { spec_block } => {
                     let client = match spec_block.chain_spec {
                         SpecGenesisSource::FromFile(ref path) => {
                             let chain_spec = SpecChainSpecRaw::from_str(&fs::read_to_string(&path)?)?.try_into()?;

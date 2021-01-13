@@ -1,4 +1,3 @@
-use crate::executor::ClientInMem;
 use crate::primitives::runtime::{
     AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig,
     SystemConfig, WASM_BINARY,
@@ -40,14 +39,6 @@ module!(
         }
     }
 );
-
-impl GenesisCmd {
-    pub fn default() -> Self {
-        GenesisCmd {
-            call: CallCmd::Default {},
-        }
-    }
-}
 
 /// Generate a crypto pair from seed.
 pub fn get_from_seed<TPublic: Public>(seed: &str) -> <TPublic::Pair as Pair>::Public {

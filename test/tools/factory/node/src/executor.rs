@@ -1,6 +1,5 @@
 use super::Result;
 use crate::builder::genesis::gen_chain_spec_default;
-use crate::builder::{Builder, GenesisCmd};
 use crate::primitives::runtime::{Block, BlockId, RuntimeApi, RuntimeApiImpl};
 use crate::primitives::ChainSpec;
 use sc_client_api::in_mem::Backend;

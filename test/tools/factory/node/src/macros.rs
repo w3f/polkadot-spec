@@ -58,7 +58,7 @@ macro_rules! module {
             type Input = $enum;
             type Output = $ret;
 
-            fn run($self, client: &crate::executor::ClientInMem) -> crate::Result<Self::Output> $run_body
+            fn run($self, _client: &crate::executor::ClientInMem) -> crate::Result<Self::Output> $run_body
         }
 
         impl From<$enum> for $struct {

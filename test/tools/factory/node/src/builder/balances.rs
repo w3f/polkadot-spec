@@ -1,20 +1,15 @@
 use super::create_tx;
-use crate::builder::genesis::{get_account_id_from_seed, GenesisCmd};
+use crate::builder::genesis::get_account_id_from_seed;
 use crate::builder::{Builder, FunctionName, ModuleInfo, ModuleName};
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Balance, BlockId, RuntimeCall};
-use crate::primitives::{
-    ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecChainSpec, SpecChainSpecRaw,
-    SpecGenesisSource, SpecHash,
-};
+use crate::primitives::{ExtrinsicSigner, RawExtrinsic, SpecAccountSeed, SpecChainSpec, SpecHash};
 use crate::Result;
 use pallet_balances::Call as BalancesCall;
 use sc_client_api::BlockBackend;
 use sp_core::crypto::Pair;
 use sp_core::H256;
 use std::convert::{TryFrom, TryInto};
-use std::fs;
-use std::path::Path;
 use std::str::FromStr;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -40,13 +35,13 @@ impl FromStr for RawPrivateKey {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
-enum ExtraSigned {
+pub enum ExtraSigned {
     ManualParams(ManualParams),
     FromChainSpec(SpecChainSpec),
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct ManualParams {
+pub struct ManualParams {
     spec_version: u32,
     transaction_version: u32,
     genesis_hash: SpecHash,
@@ -107,15 +102,8 @@ impl Builder for PalletBalancesCmd {
                             params.transaction_version,
                             params.genesis_hash.try_into()?,
                         ),
-                        ExtraSigned::FromChainSpec(cs) => {
-                            let chain_spec = match cs.chain_spec {
-                                SpecGenesisSource::FromFile(path) => {
-                                    SpecChainSpecRaw::from_str(&fs::read_to_string(&path)?)?
-                                }
-                                SpecGenesisSource::Default => GenesisCmd::default().run(client)?,
-                            };
-
-                            let client = ClientInMem::new_with_genesis(chain_spec.try_into()?)?;
+                        ExtraSigned::FromChainSpec(_) => {
+                            // Expose the raw client
                             let client = client.raw();
 
                             let best_block_id = BlockId::number(client.chain_info().best_number);
