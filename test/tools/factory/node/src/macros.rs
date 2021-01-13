@@ -94,10 +94,10 @@ macro_rules! mapping {
         }
 
         impl crate::tool_spec::Mapper for Mapping {
-            fn map(proc: &mut Processor<Mapping>, task: Task<Mapping>, client: &crate::executor::ClientInMem) -> Result<()> {
+            fn map(proc: &mut Processor<Mapping>, task: Task<Mapping>) -> Result<()> {
                 match task.task_type()? {
                     $(
-                        Mapping::$ident => proc.parse_task::<$cmd>(task, client)?,
+                        Mapping::$ident => proc.parse_task::<$cmd>(task)?,
                     )*
                 };
 

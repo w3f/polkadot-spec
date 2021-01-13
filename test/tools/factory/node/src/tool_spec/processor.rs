@@ -1,21 +1,26 @@
 use crate::builder::{Builder, FunctionName, ModuleInfo, ModuleName};
 use crate::executor::ClientInMem;
+use crate::primitives::{ChainSpec, SpecChainSpec, SpecChainSpecRaw, SpecGenesisSource};
 use crate::Result;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
 use std::cell::Cell;
 use std::cmp::PartialEq;
 use std::collections::HashMap;
+use std::convert::TryInto;
+use std::fs;
 use std::hash::Hash;
 use std::mem::{drop, take};
+use std::str::FromStr;
 
 pub trait Mapper: Sized + Eq + PartialEq + Hash {
-    fn map(proc: &mut Processor<Self>, task: Task<Self>, client: &ClientInMem) -> Result<()>;
+    fn map(proc: &mut Processor<Self>, task: Task<Self>) -> Result<()>;
 }
 
 pub struct Processor<TaskType: Eq + Hash> {
     global_var_pool: VarPool,
     tasks: Vec<Task<TaskType>>,
+    client: ClientInMem,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -29,26 +34,27 @@ pub struct TaskOutcome<Data> {
 
 impl<TaskType: Eq + PartialEq + Hash + Clone + DeserializeOwned + Mapper> Processor<TaskType> {
     pub fn new(input: &str) -> Result<Self> {
-        let (global_var_pool, tasks) = global_parser::<TaskType>(input)?;
+        let (global_var_pool, tasks, try_chain_spec) = global_parser::<TaskType>(input)?;
 
         Ok(Processor {
             global_var_pool: global_var_pool,
             tasks: tasks,
+            client: {
+                match try_chain_spec {
+                    Some(spec) => ClientInMem::new_with_genesis(spec)?,
+                    None => ClientInMem::new()?,
+                }
+            },
         })
     }
     pub fn process(mut self) -> Result<()> {
-        let client = ClientInMem::new()?;
         for task in take(&mut self.tasks) {
-            TaskType::map(&mut self, task, &client)?;
+            TaskType::map(&mut self, task)?;
         }
 
         Ok(())
     }
-    pub fn parse_task<Command>(
-        &mut self,
-        mut task: Task<TaskType>,
-        client: &ClientInMem,
-    ) -> Result<()>
+    pub fn parse_task<Command>(&mut self, mut task: Task<TaskType>) -> Result<()>
     where
         Command: Builder + From<<Command as Builder>::Input>,
         <Command as Builder>::Input: ModuleInfo,
@@ -67,7 +73,7 @@ impl<TaskType: Eq + PartialEq + Hash + Clone + DeserializeOwned + Mapper> Proces
             module_name = Some(task.module_name());
             function_name = Some(task.function_name());
 
-            results.push(Command::from(task).run(client)?);
+            results.push(Command::from(task).run(&self.client)?);
         }
 
         if let Some(var_name) = register {
@@ -95,12 +101,13 @@ impl<TaskType: Eq + PartialEq + Hash + Clone + DeserializeOwned + Mapper> Proces
 // variables). That job is done by the `task_parser`.
 fn global_parser<TaskType: Eq + PartialEq + Hash + DeserializeOwned>(
     input: &str,
-) -> Result<(VarPool, Vec<Task<TaskType>>)> {
+) -> Result<(VarPool, Vec<Task<TaskType>>, Option<ChainSpec>)> {
     let yaml_blocks: Vec<YamlItem<TaskType>> = serde_yaml::from_str(input)?;
 
     let mut tasks = vec![];
     let mut global_vars = None;
     let mut global_var_pool = VarPool::new();
+    let mut chain_spec = None;
 
     // A "local" variable pool is not relevant in this context.
     let converter = VariableProcessor::new(&global_var_pool, &global_var_pool, 0);
@@ -124,6 +131,13 @@ fn global_parser<TaskType: Eq + PartialEq + Hash + DeserializeOwned>(
                 }
             }
             YamlItem::Task(task) => tasks.push(task),
+            YamlItem::PrepEnv(prep) => match prep.prepare_env.chain_spec {
+                SpecGenesisSource::FromFile(path) => {
+                    chain_spec =
+                        Some(SpecChainSpecRaw::from_str(&fs::read_to_string(&path)?)?.try_into()?);
+                }
+                SpecGenesisSource::Default => {}
+            },
         }
     }
 
@@ -135,7 +149,7 @@ fn global_parser<TaskType: Eq + PartialEq + Hash + DeserializeOwned>(
         global_var_pool.insert(vars);
     }
 
-    Ok((global_var_pool, tasks))
+    Ok((global_var_pool, tasks, chain_spec))
 }
 
 // The `task_parser` "expands" each tasks, such as creating a new tasks for each
@@ -461,11 +475,17 @@ impl VarPool {
 enum YamlItem<TaskType: Eq + PartialEq + Hash> {
     Task(Task<TaskType>),
     Vars(Vars),
+    PrepEnv(PrepEnv),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 struct Vars {
     vars: VarType,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+struct PrepEnv {
+    prepare_env: SpecChainSpec,
 }
 
 #[derive(Debug, Clone, Default, Eq, PartialEq, Serialize, Deserialize)]
