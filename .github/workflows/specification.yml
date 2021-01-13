@@ -159,7 +159,7 @@ jobs:
     - name: Upload runtime specification diff
       uses: actions/upload-artifact@v1
       with:
-        name: polkadot-runtime-spec.pdf
+        name: polkadot-runtime-spec.diff.pdf
         path: runtime-spec/polkadot-runtime-spec.diff.pdf
     - name: Release runtime specification diff
       uses: actions/upload-release-asset@v1
