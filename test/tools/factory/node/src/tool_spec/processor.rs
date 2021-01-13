@@ -24,6 +24,7 @@ pub struct Processor<TaskType: Eq + Hash> {
 }
 
 #[derive(Debug, Clone, Serialize)]
+#[serde(rename_all = "snake_case")]
 pub struct TaskOutcome<Data> {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_name: Option<String>,
@@ -399,9 +400,6 @@ impl VariableChain {
         self.is_loop
     }
 }
-
-// struct VarType(HashMap<VariableName, serde_yaml::Value>);
-// struct LoopType(Vec<serde_yaml::Value>);
 
 struct VarPool {
     pool: VarType,

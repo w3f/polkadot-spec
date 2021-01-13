@@ -95,6 +95,7 @@ impl TryFrom<SpecChainSpecRaw> for ChainSpec {
 pub type ExtrinsicSigner = sr25519::Pair;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SpecAccountSeed(String);
 
 impl SpecAccountSeed {
@@ -133,6 +134,7 @@ impl TryFrom<SpecAccountSeed> for ExtrinsicSigner {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct RawExtrinsic(String);
 
 impl From<UncheckedExtrinsic> for RawExtrinsic {
@@ -142,6 +144,7 @@ impl From<UncheckedExtrinsic> for RawExtrinsic {
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct RawBlock(String);
 
 impl FromStr for RawBlock {
@@ -167,6 +170,7 @@ impl From<Block> for RawBlock {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SpecTestLayout<T> {
     pub name: String,
     #[serde(rename = "type")]
@@ -177,6 +181,7 @@ pub struct SpecTestLayout<T> {
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SpecHash(String);
 
 impl TryFrom<SpecHash> for H256 {
@@ -197,6 +202,7 @@ impl From<H256> for SpecHash {
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SpecBlockNumber(String);
 
 impl TryFrom<SpecBlockNumber> for BlockNumber {
@@ -208,6 +214,7 @@ impl TryFrom<SpecBlockNumber> for BlockNumber {
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SpecExtrinsic(String);
 
 impl TryFrom<SpecExtrinsic> for UncheckedExtrinsic {
@@ -223,6 +230,7 @@ impl TryFrom<SpecExtrinsic> for UncheckedExtrinsic {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SpecBlock {
     pub header: SpecHeader,
     pub extrinsics: Vec<SpecExtrinsic>,
@@ -290,6 +298,7 @@ pub enum SpecGenesisSource {
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SpecHeader {
     pub parent_block: SpecParentHash,
     pub number: SpecBlockNumber,
@@ -324,6 +333,7 @@ impl TryFrom<SpecParentHash> for H256 {
 }
 
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct SpecDigest {
     pub logs: Vec<String>,
 }

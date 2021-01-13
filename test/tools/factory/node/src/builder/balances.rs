@@ -34,13 +34,14 @@ impl FromStr for RawPrivateKey {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(untagged)]
+#[serde(untagged, rename_all = "snake_case")]
 pub enum ExtraSigned {
     ManualParams(ManualParams),
     FromChainSpec(SpecChainSpec),
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub struct ManualParams {
     spec_version: u32,
     transaction_version: u32,
@@ -53,6 +54,7 @@ pub struct PalletBalancesCmd {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
 pub enum CallCmd {
     #[serde(rename = "transfer")]
     Transfer {

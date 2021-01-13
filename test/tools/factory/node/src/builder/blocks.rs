@@ -20,8 +20,6 @@ pub enum BlockCmdResult {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuildBlockMeta {
-    //chain_spec: SpecChainSpecRaw,
-    chain_spec: u32,
     header: Header,
     raw_block: RawBlock,
 }
@@ -126,7 +124,6 @@ impl Builder for BlockCmd {
                     .map_err(|_| failure::err_msg("Failed to finalize block"))?;
 
                 Ok(BlockCmdResult::BuildBlock(BuildBlockMeta {
-                    chain_spec: 0,
                     header: header.clone(),
                     raw_block: Block {
                         header: header,
