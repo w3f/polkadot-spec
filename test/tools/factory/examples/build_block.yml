@@ -23,7 +23,6 @@
 - name: Build block
   block:
     build:
-      chain_spec: default
       header:
         parent_block:
           genesis_hash

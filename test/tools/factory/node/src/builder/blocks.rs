@@ -1,3 +1,4 @@
+use crate::builder::{Builder, FunctionName, ModuleInfo, ModuleName};
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Block, BlockId, Header, Timestamp};
 use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource};
@@ -25,124 +26,136 @@ pub struct BuildBlockMeta {
     raw_block: RawBlock,
 }
 
-module!(
-    #[serde(rename = "block")]
-    struct BlockCmd;
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct BlockCmd {
+    call: CallCmd,
+}
 
-    enum CallCmd {
-        #[serde(rename = "build")]
-        BuildBlock {
-            #[serde(flatten)]
-            spec_block: SpecBlock,
-        },
-        #[serde(rename = "execute")]
-        ExecuteBlocks {
-            #[serde(flatten)]
-            blocks: Vec<RawBlock>,
-        },
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub enum CallCmd {
+    #[serde(rename = "build")]
+    BuildBlock {
+        #[serde(flatten)]
+        spec_block: SpecBlock,
+    },
+    #[serde(rename = "execute")]
+    ExecuteBlocks {
+        #[serde(flatten)]
+        blocks: Vec<RawBlock>,
+    },
+}
+
+impl From<CallCmd> for BlockCmd {
+    fn from(val: CallCmd) -> Self {
+        BlockCmd { call: val }
     }
+}
 
-    impl BlockCmd {
-        fn run(self) -> Result<BlockCmdResult> {
-            match self.call {
-                CallCmd::BuildBlock { spec_block } => {
-                    let client = match spec_block.chain_spec {
-                        SpecGenesisSource::FromFile(ref path) => {
-                            let chain_spec = SpecChainSpecRaw::from_str(&fs::read_to_string(&path)?)?.try_into()?;
-                            ClientInMem::new_with_genesis(chain_spec)?
-                        }
-                        SpecGenesisSource::Default => {
-                            ClientInMem::new()?
-                        }
-                    };
+impl ModuleInfo for CallCmd {
+    fn module_name(&self) -> crate::builder::ModuleName {
+        ModuleName::from("block")
+    }
+    fn function_name(&self) -> crate::builder::FunctionName {
+        match self {
+            CallCmd::BuildBlock { .. } => FunctionName::from("build"),
+            CallCmd::ExecuteBlocks { .. } => FunctionName::from("execute"),
+        }
+    }
+}
 
-                    // Convert into runtime types.
-                    let (at, header, extrinsics) = spec_block.prep(&client)?;
+impl Builder for BlockCmd {
+    type Input = CallCmd;
+    type Output = BlockCmdResult;
 
-                    let rt = client.runtime_api();
+    fn run(self, client: &ClientInMem) -> Result<BlockCmdResult> {
+        match self.call {
+            CallCmd::BuildBlock { spec_block } => {
+                // Convert into runtime types.
+                let (at, header, extrinsics) = spec_block.prep(&client)?;
 
-                    rt.initialize_block(&at, &header).map_err(|err| {
-                        failure::err_msg(format!("Failed to initialize block: {}", err))
+                let rt = client.runtime_api();
+
+                rt.initialize_block(&at, &header).map_err(|err| {
+                    failure::err_msg(format!("Failed to initialize block: {}", err))
+                })?;
+
+                for extr in &extrinsics {
+                    let apply_result = rt.apply_extrinsic(&at, extr.clone()).map_err(|err| {
+                        failure::err_msg(format!("Failed to apply extrinsic: {}", err))
                     })?;
 
-                    for extr in &extrinsics {
-                        let apply_result = rt.apply_extrinsic(&at, extr.clone()).map_err(|err| {
-                            failure::err_msg(format!("Failed to apply extrinsic: {}", err))
-                        })?;
-
-                        if let Err(validity) = apply_result {
-                            if validity.exhausted_resources() {
-                                return Err(failure::err_msg("Resources exhausted"));
-                            } else {
-                                return Err(failure::err_msg(format!("Invalid transaction: {}", <TransactionValidityError as Into<&'static str>>::into(validity))));
-                            }
+                    if let Err(validity) = apply_result {
+                        if validity.exhausted_resources() {
+                            return Err(failure::err_msg("Resources exhausted"));
+                        } else {
+                            return Err(failure::err_msg(format!(
+                                "Invalid transaction: {}",
+                                <TransactionValidityError as Into<&'static str>>::into(validity)
+                            )));
                         }
                     }
-
-                    // Create timestamp in an externalities-provided environment.
-                    let timestamp = client
-                        .exec_context(&at, || Ok(Some(Timestamp::now())))
-                        .unwrap()
-                        .unwrap();
-
-                    // Include inherent.
-                    let x = rt
-                        .inherent_extrinsics(&at, {
-                            let mut inherent = InherentData::new();
-                            inherent.put_data(*b"timstap0", &timestamp).map_err(|err| {
-                                failure::err_msg(format!("Failed to create inherent: {}", err))
-                            })?;
-                            inherent
-                        })
-                        .map_err(|err| {
-                            failure::err_msg(format!("Failed to include inherent: {}", err))
-                        })?;
-
-                    for e in x {
-                        let _ = rt.apply_extrinsic(&at, e).map_err(|err| {
-                            failure::err_msg(format!("Failed to apply extrinsic: {}", err))
-                        })?;
-                    }
-
-                    let header = rt
-                        .finalize_block(&at)
-                        .map_err(|_| failure::err_msg("Failed to finalize block"))?;
-
-                    Ok(
-                        BlockCmdResult::BuildBlock(
-                            BuildBlockMeta {
-                                chain_spec: 0,
-                                header: header.clone(),
-                                raw_block: Block {
-                                    header: header,
-                                    extrinsics: extrinsics,
-                                }.into()
-                            }
-                        )
-                    )
                 }
-                CallCmd::ExecuteBlocks { blocks } => {
-                    // Create the block by calling the runtime APIs.
-                    let client = ClientInMem::new()?;
-                    let rt = client.runtime_api();
 
-                    // Convert into runtime native type.
-                    let blocks = blocks
-                        .into_iter()
-                        .map(|raw| Block::try_from(raw))
-                        .collect::<Result<Vec<Block>>>()?;
+                // Create timestamp in an externalities-provided environment.
+                let timestamp = client
+                    .exec_context(&at, || Ok(Some(Timestamp::now())))
+                    .unwrap()
+                    .unwrap();
 
-                    for block in blocks {
-                        let at = BlockId::Hash(block.header.parent_hash.clone().try_into()?);
-
-                        rt.execute_block(&at, block.try_into()?).map_err(|err| {
-                            failure::err_msg(format!("Failed to execute block: {}", err))
+                // Include inherent.
+                let x = rt
+                    .inherent_extrinsics(&at, {
+                        let mut inherent = InherentData::new();
+                        inherent.put_data(*b"timstap0", &timestamp).map_err(|err| {
+                            failure::err_msg(format!("Failed to create inherent: {}", err))
                         })?;
-                    }
+                        inherent
+                    })
+                    .map_err(|err| {
+                        failure::err_msg(format!("Failed to include inherent: {}", err))
+                    })?;
 
-                    Ok(BlockCmdResult::ExecuteBlocks)
+                for e in x {
+                    let _ = rt.apply_extrinsic(&at, e).map_err(|err| {
+                        failure::err_msg(format!("Failed to apply extrinsic: {}", err))
+                    })?;
                 }
+
+                let header = rt
+                    .finalize_block(&at)
+                    .map_err(|_| failure::err_msg("Failed to finalize block"))?;
+
+                Ok(BlockCmdResult::BuildBlock(BuildBlockMeta {
+                    chain_spec: 0,
+                    header: header.clone(),
+                    raw_block: Block {
+                        header: header,
+                        extrinsics: extrinsics,
+                    }
+                    .into(),
+                }))
+            }
+            CallCmd::ExecuteBlocks { blocks } => {
+                // Create the block by calling the runtime APIs.
+                let client = ClientInMem::new()?;
+                let rt = client.runtime_api();
+
+                // Convert into runtime native type.
+                let blocks = blocks
+                    .into_iter()
+                    .map(|raw| Block::try_from(raw))
+                    .collect::<Result<Vec<Block>>>()?;
+
+                for block in blocks {
+                    let at = BlockId::Hash(block.header.parent_hash.clone().try_into()?);
+
+                    rt.execute_block(&at, block.try_into()?).map_err(|err| {
+                        failure::err_msg(format!("Failed to execute block: {}", err))
+                    })?;
+                }
+
+                Ok(BlockCmdResult::ExecuteBlocks)
             }
         }
     }
-);
+}

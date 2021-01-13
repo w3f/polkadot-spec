@@ -224,7 +224,6 @@ impl TryFrom<SpecExtrinsic> for UncheckedExtrinsic {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct SpecBlock {
-    pub chain_spec: SpecGenesisSource,
     pub header: SpecHeader,
     pub extrinsics: Vec<SpecExtrinsic>,
 }

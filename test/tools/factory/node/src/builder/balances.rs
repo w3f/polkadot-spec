@@ -48,7 +48,6 @@ pub struct ManualParams {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename = "pallet_balances")]
 pub struct PalletBalancesCmd {
     call: CallCmd,
 }
