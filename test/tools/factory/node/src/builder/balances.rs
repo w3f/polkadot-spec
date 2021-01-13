@@ -1,5 +1,6 @@
 use super::create_tx;
 use crate::builder::genesis::{get_account_id_from_seed, GenesisCmd};
+use crate::builder::{Builder, FunctionName, ModuleInfo, ModuleName};
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Balance, BlockId, RuntimeCall};
 use crate::primitives::{
@@ -51,47 +52,67 @@ struct ManualParams {
     genesis_hash: SpecHash,
 }
 
-module!(
-    #[serde(rename = "pallet_balances")]
-    struct PalletBalancesCmd;
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename = "pallet_balances")]
+pub struct PalletBalancesCmd {
+    call: CallCmd,
+}
 
-    enum CallCmd {
-        #[serde(rename = "transfer")]
-        Transfer {
-            from: SpecAccountSeed,
-            to: SpecAccountSeed,
-            balance: u64,
-            nonce: u32,
-            extra_signed: ExtraSigned,
-        },
+#[derive(Debug, Serialize, Deserialize)]
+pub enum CallCmd {
+    #[serde(rename = "transfer")]
+    Transfer {
+        from: SpecAccountSeed,
+        to: SpecAccountSeed,
+        balance: u64,
+        nonce: u32,
+        extra_signed: ExtraSigned,
+    },
+}
+
+impl From<CallCmd> for PalletBalancesCmd {
+    fn from(val: CallCmd) -> Self {
+        PalletBalancesCmd { call: val }
     }
+}
 
-    impl PalletBalancesCmd {
-        fn run(self) -> Result<RawExtrinsic> {
-            match self.call {
-                CallCmd::Transfer {
-                    from,
-                    to,
-                    balance,
-                    nonce,
-                    extra_signed,
-                } => {
-                    let (spec_version, transaction_version, genesis_hash): (_, _, H256) = match extra_signed {
-                        ExtraSigned::ManualParams(params) => {
-                            (
-                                params.spec_version,
-                                params.transaction_version,
-                                params.genesis_hash.try_into()?,
-                            )
-                        }
+impl ModuleInfo for CallCmd {
+    fn module_name(&self) -> crate::builder::ModuleName {
+        ModuleName::from("pallet_balances")
+    }
+    fn function_name(&self) -> crate::builder::FunctionName {
+        match self {
+            CallCmd::Transfer { .. } => FunctionName::from("transfer"),
+        }
+    }
+}
+
+impl Builder for PalletBalancesCmd {
+    type Input = CallCmd;
+    type Output = RawExtrinsic;
+
+    fn run(self, client: &ClientInMem) -> Result<RawExtrinsic> {
+        match self.call {
+            CallCmd::Transfer {
+                from,
+                to,
+                balance,
+                nonce,
+                extra_signed,
+            } => {
+                let (spec_version, transaction_version, genesis_hash): (_, _, H256) =
+                    match extra_signed {
+                        ExtraSigned::ManualParams(params) => (
+                            params.spec_version,
+                            params.transaction_version,
+                            params.genesis_hash.try_into()?,
+                        ),
                         ExtraSigned::FromChainSpec(cs) => {
                             let chain_spec = match cs.chain_spec {
                                 SpecGenesisSource::FromFile(path) => {
                                     SpecChainSpecRaw::from_str(&fs::read_to_string(&path)?)?
                                 }
-                                SpecGenesisSource::Default => {
-                                    GenesisCmd::default().run()?
-                                }
+                                SpecGenesisSource::Default => GenesisCmd::default().run(client)?,
                             };
 
                             let client = ClientInMem::new_with_genesis(chain_spec.try_into()?)?;
@@ -99,36 +120,44 @@ module!(
 
                             let best_block_id = BlockId::number(client.chain_info().best_number);
                             let (spec_version, transaction_version) = {
-                                let version = client.runtime_version_at(&best_block_id).map_err(|_| failure::err_msg("failed to fetch runtime version from chain spec"))?;
+                                let version =
+                                    client.runtime_version_at(&best_block_id).map_err(|_| {
+                                        failure::err_msg(
+                                            "failed to fetch runtime version from chain spec",
+                                        )
+                                    })?;
                                 (version.spec_version, version.transaction_version)
                             };
-                            let genesis_hash = client.block_hash(0).map_err(|_| failure::err_msg("failed to fetch genesis hash from chain spec"))?.ok_or(failure::err_msg("No genesis hash available in chain spec"))?;
+                            let genesis_hash = client
+                                .block_hash(0)
+                                .map_err(|_| {
+                                    failure::err_msg("failed to fetch genesis hash from chain spec")
+                                })?
+                                .ok_or(failure::err_msg(
+                                    "No genesis hash available in chain spec",
+                                ))?;
 
-                            (
-                                spec_version,
-                                transaction_version,
-                                genesis_hash,
-                            )
+                            (spec_version, transaction_version, genesis_hash)
                         }
                     };
 
-                    create_tx::<ExtrinsicSigner>(
-                        ExtrinsicSigner::try_from(from.clone())?,
-                        RuntimeCall::Balances(BalancesCall::transfer(
-                            get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>(
-                                &format!("//{}", to.as_str()),
-                            )
-                            .into(),
-                            balance as Balance,
-                        )),
-                        nonce,
-                        spec_version,
-                        transaction_version,
-                        genesis_hash.try_into()?,
-                    )
-                    .map(|t| RawExtrinsic::from(t))
-                }
+                create_tx::<ExtrinsicSigner>(
+                    ExtrinsicSigner::try_from(from.clone())?,
+                    RuntimeCall::Balances(BalancesCall::transfer(
+                        get_account_id_from_seed::<<ExtrinsicSigner as Pair>::Public>(&format!(
+                            "//{}",
+                            to.as_str()
+                        ))
+                        .into(),
+                        balance as Balance,
+                    )),
+                    nonce,
+                    spec_version,
+                    transaction_version,
+                    genesis_hash.try_into()?,
+                )
+                .map(|t| RawExtrinsic::from(t))
             }
         }
     }
-);
+}

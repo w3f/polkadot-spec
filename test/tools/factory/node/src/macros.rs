@@ -58,7 +58,7 @@ macro_rules! module {
             type Input = $enum;
             type Output = $ret;
 
-            fn run($self) -> crate::Result<Self::Output> $run_body
+            fn run($self, client: &crate::executor::ClientInMem) -> crate::Result<Self::Output> $run_body
         }
 
         impl From<$enum> for $struct {
@@ -94,10 +94,10 @@ macro_rules! mapping {
         }
 
         impl crate::tool_spec::Mapper for Mapping {
-            fn map(proc: &mut Processor<Mapping>, task: Task<Mapping>) -> Result<()> {
+            fn map(proc: &mut Processor<Mapping>, task: Task<Mapping>, client: &crate::executor::ClientInMem) -> Result<()> {
                 match task.task_type()? {
                     $(
-                        Mapping::$ident => proc.parse_task::<$cmd>(task)?,
+                        Mapping::$ident => proc.parse_task::<$cmd>(task, client)?,
                     )*
                 };
 

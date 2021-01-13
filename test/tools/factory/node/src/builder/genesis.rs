@@ -1,3 +1,4 @@
+use crate::executor::ClientInMem;
 use crate::primitives::runtime::{
     AccountId, AuraConfig, BalancesConfig, GenesisConfig, GrandpaConfig, Signature, SudoConfig,
     SystemConfig, WASM_BINARY,

@@ -1,4 +1,5 @@
 use super::Result;
+use crate::executor::ClientInMem;
 use crate::primitives::runtime::{AccountId, RuntimeCall, SignedExtra, UncheckedExtrinsic};
 use crate::tool_spec::TaskOutcome;
 use codec::Encode;
@@ -40,24 +41,11 @@ impl FunctionName {
     }
 }
 
-pub trait Builder: Sized + ModuleInfo {
+pub trait Builder: Sized {
     type Input: DeserializeOwned;
     type Output: Serialize;
 
-    fn run(self) -> Result<Self::Output>;
-    fn run_and_print(self) -> Result<()> {
-        println!(
-            "{}",
-            serde_json::to_string_pretty(&TaskOutcome {
-                task_name: Option::<String>::None,
-                module: self.module_name(),
-                function: self.function_name(),
-                data: self.run()?,
-            })?
-        );
-
-        Ok(())
-    }
+    fn run(self, client: &ClientInMem) -> Result<Self::Output>;
 }
 
 fn create_tx<P: Pair>(

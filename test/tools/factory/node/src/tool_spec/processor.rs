@@ -1,4 +1,5 @@
 use crate::builder::{Builder, FunctionName, ModuleInfo, ModuleName};
+use crate::executor::ClientInMem;
 use crate::Result;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -9,7 +10,7 @@ use std::hash::Hash;
 use std::mem::{drop, take};
 
 pub trait Mapper: Sized + Eq + PartialEq + Hash {
-    fn map(proc: &mut Processor<Self>, task: Task<Self>) -> Result<()>;
+    fn map(proc: &mut Processor<Self>, task: Task<Self>, client: &ClientInMem) -> Result<()>;
 }
 
 pub struct Processor<TaskType: Eq + Hash> {
@@ -36,13 +37,18 @@ impl<TaskType: Eq + PartialEq + Hash + Clone + DeserializeOwned + Mapper> Proces
         })
     }
     pub fn process(mut self) -> Result<()> {
+        let client = ClientInMem::new()?;
         for task in take(&mut self.tasks) {
-            TaskType::map(&mut self, task)?;
+            TaskType::map(&mut self, task, &client)?;
         }
 
         Ok(())
     }
-    pub fn parse_task<Command>(&mut self, mut task: Task<TaskType>) -> Result<()>
+    pub fn parse_task<Command>(
+        &mut self,
+        mut task: Task<TaskType>,
+        client: &ClientInMem,
+    ) -> Result<()>
     where
         Command: Builder + From<<Command as Builder>::Input>,
         <Command as Builder>::Input: ModuleInfo,
@@ -61,7 +67,7 @@ impl<TaskType: Eq + PartialEq + Hash + Clone + DeserializeOwned + Mapper> Proces
             module_name = Some(task.module_name());
             function_name = Some(task.function_name());
 
-            results.push(Command::from(task).run()?);
+            results.push(Command::from(task).run(client)?);
         }
 
         if let Some(var_name) = register {
