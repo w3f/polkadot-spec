@@ -25,14 +25,12 @@ import (
 	"strings"
 	"strconv"
 
-	"github.com/ChainSafe/gossamer/dot/state"
 	"github.com/ChainSafe/gossamer/lib/keystore"
 	"github.com/ChainSafe/gossamer/lib/runtime"
+	"github.com/ChainSafe/gossamer/lib/runtime/storage"
 	"github.com/ChainSafe/gossamer/lib/runtime/wasmer"
 	"github.com/ChainSafe/gossamer/lib/runtime/wasmtime"
 	"github.com/ChainSafe/gossamer/lib/trie"
-
-	database "github.com/ChainSafe/chaindb"
 )
 
 // #include <errno.h>
@@ -61,8 +59,8 @@ func GetRuntimePath() string {
 }
 
 // Create in-memory trie storage
-func GetTestStorage() *state.TrieState {
-	store, err := state.NewTrieState(database.NewMemDatabase(), trie.NewEmptyTrie())
+func GetTestStorage() *storage.TrieState {
+	store, err := storage.NewTrieState(trie.NewEmptyTrie())
 	if err != nil {
 		fmt.Println("Failed initialize storage: ", err)
 		os.Exit(1)
