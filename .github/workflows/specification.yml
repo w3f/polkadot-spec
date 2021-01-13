@@ -171,3 +171,39 @@ jobs:
         asset_name: polkadot-runtime-spec_${{ github.event.release.tag_name }}.diff_${{ env.REV }}.pdf
         asset_content_type: application/pdf
       if: github.event_name == 'release'
+
+
+  release-pages:
+    needs: [ build-spec-host, build-spec-runtime ]
+    name: Publish release on GitHub Pages
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'release'
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+    - uses: actions/download-artifact@v1
+      with:
+        name: polkadot-host-spec.pdf
+        path: .
+    - uses: actions/download-artifact@v1
+      with:
+        name: polkadot-runtime-spec.pdf
+        path: .
+    - name: Replace latest release cache file
+      run: |
+        mv polkadot-host-spec.pdf spec/host/latest.pdf
+        mv polkadot-runtime-spec.pdf spec/runtime/latest.pdf
+      if: ${{ ! github.event.release.prerelease }}
+    - name: Replace latest pre-release cache file
+      run: |
+        mv polkadot-host-spec.pdf spec/host/nightly.pdf
+        mv polkadot-runtime-spec.pdf spec/runtime/nightly.pdf
+      if: ${{ github.event.release.prerelease }}
+    - name: Commit and push updated GitHub Pages branch
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add spec/
+        git commit --amend -m "Update specification cache"
+        git push -f
