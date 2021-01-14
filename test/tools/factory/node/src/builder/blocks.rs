@@ -3,7 +3,7 @@ use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Block, BlockId, Header, Timestamp};
 use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource, SpecHash};
 use crate::Result;
-use sp_api::Core;
+use sp_api::{ApiExt, Core};
 use sp_block_builder::BlockBuilder;
 use sp_inherents::InherentData;
 use sp_runtime::transaction_validity::TransactionValidityError;
@@ -124,6 +124,20 @@ impl Builder for BlockCmd {
                 let header = rt
                     .finalize_block(&at)
                     .map_err(|_| failure::err_msg("Failed to finalize block"))?;
+
+                // ***
+                // *
+                // Storage changes must be applied to the backend. CONTINUE HERE...
+
+                let state = client
+                    .raw()
+                    .state_at(&BlockId::Number(header.number))
+                    .unwrap();
+                let storage_changes = rt.into_storage_changes(&state, None, header.hash()).unwrap();
+                state.apply_transaction(storage_changes.transaction);
+
+                // *
+                // ***
 
                 Ok(BlockCmdResult::BuildBlock(BuildBlockMeta {
                     header_hash: header.hash().try_into()?,
