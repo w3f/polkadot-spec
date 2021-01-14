@@ -1,0 +1,52 @@
+- name: Extrinsics for block 1
+  pallet_balances:
+    transfer:
+      from: "{{ item.from }}"
+      to: "{{ item.to }}"
+      balance: "{{ item.balance }}"
+      nonce: "{{ item.nonce }}"
+      extra_signed:
+        chain_spec:
+          from_file: "/home/anon/genesis.json"
+  loop:
+    - { from: Alice, to: Bob, balance: 100, nonce: 0 }
+    - { from: Bob, to: Alice, balance: 200, nonce: 0 }
+  register: transactions
+
+- name: Build block 1
+  block:
+    build:
+      header:
+        parent_block: genesis_hash
+        number: "0x1"
+        digest:
+          logs: []
+      extrinsics: "{{ transactions }}"
+  register: block1
+
+- name: Extrinsics for block 2
+  pallet_balances:
+    transfer:
+      from: "{{ item.from }}"
+      to: "{{ item.to }}"
+      balance: "{{ item.balance }}"
+      nonce: "{{ item.nonce }}"
+      extra_signed:
+        chain_spec:
+          from_file: "/home/anon/genesis.json"
+  loop:
+    - { from: Alice, to: Bob, balance: 100, nonce: 1 }
+    - { from: Bob, to: Alice, balance: 200, nonce: 1 }
+  register: transactions
+
+- name: Build block 2
+  block:
+    build:
+      header:
+        parent_block:
+          hash: "{{ block1[0].header_hash }}"
+        number: "0x2"
+        digest:
+          logs: []
+      extrinsics: "{{ transactions }}"
+  register: block2
