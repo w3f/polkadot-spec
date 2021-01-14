@@ -128,6 +128,7 @@ impl Builder for BlockCmd {
                 // ***
                 // *
                 // Storage changes must be applied to the backend. CONTINUE HERE...
+                /*
 
                 let state = client
                     .raw()
@@ -136,6 +137,7 @@ impl Builder for BlockCmd {
                 let storage_changes = rt.into_storage_changes(&state, None, header.hash()).unwrap();
                 state.apply_transaction(storage_changes.transaction);
 
+                */
                 // *
                 // ***
 
