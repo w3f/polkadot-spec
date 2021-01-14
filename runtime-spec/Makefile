@@ -29,6 +29,8 @@ $(REVDIR):
 
 polkadot-runtime-spec.diff.tex: $(SOURCES) $(REVDIR)
 	latexdiff --flatten "$(REVDIR)/runtime-spec.tex" "$$PWD/runtime-spec.tex" > $@
+	# Remove diff on alignat column count (causes crash)
+	sed -i 's@\\begin{alignat\*}{\\DIFadd{\([0-9]\+\)}}@\\begin{alignat\*}{\1}@g' $@
 
 polkadot-runtime-spec.diff.pdf: polkadot-runtime-spec.diff.tex
 	latexmk -pdflua $<
