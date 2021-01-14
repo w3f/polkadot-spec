@@ -1,7 +1,7 @@
 use crate::builder::{Builder, FunctionName, ModuleInfo, ModuleName};
 use crate::executor::ClientInMem;
 use crate::primitives::runtime::{Block, BlockId, Header, Timestamp};
-use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource};
+use crate::primitives::{RawBlock, SpecBlock, SpecChainSpecRaw, SpecGenesisSource, SpecHash};
 use crate::Result;
 use sp_api::Core;
 use sp_block_builder::BlockBuilder;
@@ -20,6 +20,7 @@ pub enum BlockCmdResult {
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct BuildBlockMeta {
+    header_hash: SpecHash,
     header: Header,
     raw_block: RawBlock,
 }
@@ -119,11 +120,13 @@ impl Builder for BlockCmd {
                     })?;
                 }
 
+                // Finalize header.
                 let header = rt
                     .finalize_block(&at)
                     .map_err(|_| failure::err_msg("Failed to finalize block"))?;
 
                 Ok(BlockCmdResult::BuildBlock(BuildBlockMeta {
+                    header_hash: header.hash().try_into()?,
                     header: header.clone(),
                     raw_block: Block {
                         header: header,
@@ -134,7 +137,6 @@ impl Builder for BlockCmd {
             }
             CallCmd::ExecuteBlocks { blocks } => {
                 // Create the block by calling the runtime APIs.
-                let client = ClientInMem::new()?;
                 let rt = client.runtime_api();
 
                 // Convert into runtime native type.
