@@ -293,7 +293,7 @@ func test_storage_read(r runtime.Instance, key string, value string, offset uint
 			os.Exit(1)
 		}
 	} else if len(some.Value()) != 0 {
-		fmt.Printf("Value is different: %s\n", some.Value())
+		fmt.Printf("Value is not empty: %s\n", some.Value())
 		os.Exit(1)
 	}
 

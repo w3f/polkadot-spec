@@ -179,7 +179,7 @@ func ProcessHostApiCommand(args []string) {
 	     "ext_storage_get_version_1":
 		test_storage_set_get(rtm, inputs[0], inputs[1])
 	case "ext_storage_read_version_1":
-		test_storage_read(rtm, inputs[0], inputs[1], ToUint32(inputs[2]), ToUint32(inputs[2]))
+		test_storage_read(rtm, inputs[0], inputs[1], ToUint32(inputs[2]), ToUint32(inputs[3]))
 	case "ext_storage_clear_version_1":
 		test_storage_clear(rtm, inputs[0], inputs[1])
 	case "ext_storage_exists_version_1":
