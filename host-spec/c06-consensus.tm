@@ -1,4 +1,4 @@
-<TeXmacs|1.99.14>
+<TeXmacs|1.99.17>
 
 <project|host-spec.tm>
 
@@ -1094,9 +1094,9 @@
   </definition>
 
   <\definition>
-    We refer to <strong|the set of total votes observed by voter <math|v> in
-    sub-round \P<math|stage>\Q of round <math|r>> by
-    <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>>.
+    <label|defn-observed-votes>We refer to <strong|the set of total votes
+    observed by voter <math|v> in sub-round \P<math|stage>\Q of round
+    <math|r>> by <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>>.
 
     The <strong|set of all observed votes by <math|v> in the sub-round stage
     of round <math|r> for block <math|B>>,
@@ -1117,6 +1117,9 @@
     </equation*>
   </definition>
 
+  Note that for genesis state we always have
+  <math|#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>=<around*|\||\<bbb-V\>|\|>>.
+
   <\definition>
     <label|defn-total-potential-votes>Let
     <math|V<rsup|r,stage><rsub|unobs<around*|(|v|)>>> be the set of voters
@@ -1130,18 +1133,14 @@
   </definition>
 
   <\definition>
-    <todo|Replace with GHOST> The current <strong|pre-voted> block
-    <math|B<rsup|r,pv><rsub|v>> is the block with
+    The current <strong|pre-voted> block <strong|<math|B<rsup|r,pv><rsub|v>>>also
+    know as GRANDPA GHOST is the block chosen by Algorithm
+    <reference|algo-grandpa-ghost>:
 
     <\equation*>
-      H<rsub|n><around|(|B<rsup|r,pv><rsub|v>|)>=Max<around|(|<around|\<nobracket\>|H<rsub|n><around|(|B|)>|\|>*\<forall\>B:#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>\<geqslant\>2/3<around|\||\<bbb-V\>|\|>|)>
+      B<rsup|r,pv><rsub|v>\<assign\><text|<name|GRANDPA-GHOS\<#422\>>><around*|(|r|)>
     </equation*>
   </definition>
-
-  Note that for genesis state <math|Genesis> we always have
-  <math|#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>=<around*|\||\<bbb-V\>|\|>>.
-
-  \;
 
   Finally, we define when a voter <math|v> sees a round as completable, that
   is when they are confident that <math|B<rsub|v><rsup|r,pv>> is an upper
@@ -1366,7 +1365,7 @@
     <math|r<rsub|last>>: <math|>last round number (See the following),
 
     ,<math|B<rsub|last>>: the last block which has been finalized on the
-    chain
+    chain (see Definitin <reference|defn-finalized-block>)
 
     )
   <|algorithm>
@@ -1386,7 +1385,7 @@
       </state>
 
       <\state>
-        <name|Grandpa-GHOST(0)><math|\<leftarrow\>B<rsub|last>><END>
+        <name|GRANDPA-GHOST>(<math|0>)<math|\<leftarrow\>B<rsub|last>><END>
       </state>
 
       <\state>
@@ -1522,8 +1521,6 @@
     <reference|algo-finalizable>.
   </itemize-minus>
 
-  \ \ \ \ 
-
   <\algorithm|<label|algo-derive-primary><name|Derive-Primary>(<math|r>: the
   GRANDPA round whose primary to be determined)>
     <\algorithmic>
@@ -1545,6 +1542,24 @@
       </state>
 
       <\state>
+        <\IF>
+          <math|r=0>
+        </IF>
+      </state>
+
+      <\state>
+        <\RETURN>
+          <math|B<rsub|v><rsup|r,pv>><END>
+        </RETURN>
+      </state>
+
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
+      </state>
+
+      <\state>
         <math|\<cal-C\><rsub|\<nosymbol\>>\<leftarrow\><around|{|B<rprime|'>\|B<rprime|'>\<leqslant\>B<rsub|v><rsup|r,pv>:#V<rsup|r,pc><rsub|obv<around|(|v|)>,pot><around|(|B<rprime|'>|)>\<gtr\>2/3<around|\||\<bbb-V\>|\|>|}>>
       </state>
 
@@ -1555,13 +1570,21 @@
       </state>
 
       <\state>
-        <math|E\<leftarrow\>><name|GRANDPA-GHOST><math|<around*|(|r|)>><END>
+        <\RETURN>
+          <math|B<rsub|v><rsup|r,pv><END>>
+        </RETURN>
+      </state>
+
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
       </state>
 
       <\state>
         <\RETURN>
-          <math|><math|E\<in\>\<cal-C\>:H<rsub|n><around*|(|E|)>=max
-          <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<in\>\<cal-C\>|}>><END>
+          <math|><math|E\<in\>\<cal-C\>:H<rsub|n><around*|(|E|)>=Max
+          <around|(|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<in\>\<cal-C\>|)>><END>
         </RETURN>
       </state>
     </algorithmic>
@@ -1571,25 +1594,74 @@
   Definition <reference|defn-total-potential-votes>.
 
   <\algorithm>
-    <todo|<name|GRANDPA-GHOST>><todo|is highest vot is equal ghost?>
+    <label|algo-grandpa-ghost><name|GRANDPA-GHOST>(<math|r>)
   <|algorithm>
     <\algorithmic>
       <\state>
+        <\IF>
+          <math|r=0:>
+        </IF>
+      </state>
+
+      <\state>
+        <math|G\<leftarrow\>B<rsub|last><END>>
+      </state>
+
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
+      </state>
+
+      <\state>
+        <math|L\<leftarrow\>><name|Best-Final-Candidate>(<math|r-1>)
+      </state>
+
+      <\state>
+        <math|\<cal-G\>=<around*|{|\<forall\>B\<gtr\>L\|#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>\<geqslant\>2/3<around|\||\<bbb-V\>|\|>|}>>
+      </state>
+
+      <\state>
+        <\IF>
+          <math|\<cal-G\>=\<phi\>>
+        </IF>
+      </state>
+
+      <\state>
+        <math|G\<leftarrow\>L<END>>
+      </state>
+
+      <\state>
+        <\ELSE>
+          \;
+        </ELSE>
+      </state>
+
+      <\state>
+        <math|G\<in\>\<cal-G\>:<around*|\<nobracket\>|H<rsub|n><around*|(|G|)>=Max<around|(|H<rsub|n><around|(|B|)>|\|>*\<forall\>B\<in\>\<cal-G\>|)>><END><END>
+      </state>
+
+      <\state>
         <\RETURN>
-          <math|B<rprime|'>:H<rsub|n><around|(|B<rprime|'>|)>=max
-          <around|{|H<rsub|n><around|(|B<rprime|'>|)>:B<rprime|'>\<gtr\>L|}><END>>
+          <math|G>
         </RETURN>
       </state>
     </algorithmic>
   </algorithm>
 
-  <\algorithm|<name|Best-PreVote-Candidate(<math|r>:> voting round to cast
-  the pre-vote in)<todo|imporve/fix me>>
-    <\algorithmic>
-      <\state>
-        <math|L\<leftarrow\>><name|Best-Final-Candidate>(<math|r-1>)
-      </state>
+  Where\ 
 
+  <\itemize-minus>
+    <item><math|B<rsub|last>> is the last block which has been finalized on
+    the chain (see Definitin <reference|defn-finalized-block>)
+
+    <item><math|#V<rsub|obs<around|(|v|)>><rsup|r,pv><around|(|B|)>> is
+    defined in Definition <reference|defn-observed-votes>.
+  </itemize-minus>
+
+  <\algorithm|<name|Best-PreVote-Candidate(<math|r>:> voting round to cast
+  the pre-vote in)>
+    <\algorithmic>
       <\state>
         <math|B<rsup|r,pv><rsub|v>\<leftarrow\>><name|GRANDPA-GHOST><math|<around*|(|r|)>><END>
       </state>
@@ -2066,10 +2138,10 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|5>
-    <associate|page-first|43>
+    <associate|page-first|45>
     <associate|page-medium|papyrus>
     <associate|preamble|false>
-    <associate|section-nr|0<uninit>>
+    <associate|section-nr|0>
     <associate|subsection-nr|4>
   </collection>
 </initial>
@@ -2083,6 +2155,7 @@
     <associate|algo-derive-primary|<tuple|6.10|48>>
     <associate|algo-finalizable|<tuple|6.14|48>>
     <associate|algo-grandpa-best-candidate|<tuple|6.11|48>>
+    <associate|algo-grandpa-ghost|<tuple|6.12|?>>
     <associate|algo-grandpa-round|<tuple|6.9|47>>
     <associate|algo-initiate-grandpa|<tuple|6.8|47>>
     <associate|algo-process-catchup-request|<tuple|6.16|49>>
@@ -2141,6 +2214,7 @@
     <associate|defn-grandpa-completable|<tuple|6.33|45>>
     <associate|defn-grandpa-justification|<tuple|6.37|46>>
     <associate|defn-grandpa-voter|<tuple|6.22|43>>
+    <associate|defn-observed-votes|<tuple|6.30|?>>
     <associate|defn-prunned-best|<tuple|6.15|?>>
     <associate|defn-relative-syncronization|<tuple|6.13|?>>
     <associate|defn-sign-round-vote|<tuple|6.35|?>>
