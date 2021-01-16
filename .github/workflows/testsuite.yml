@@ -123,6 +123,8 @@ jobs:
       id: rustup
       uses: actions-rs/toolchain@v1
       with:
+        toolchain: nightly-2020-04-15
+        override: true
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
