@@ -2,11 +2,8 @@ name: Specification Publication
 
 on:
   push:
-    paths:
-    - '.github/workflows/specification.yml'
-    - '.github/apt-texmacs.asc'
-    - 'host-spec/**'
-    - 'runtime-spec/**'
+    branches:
+    - master
   pull_request:
     paths:
     - '.github/workflows/specification.yml'
