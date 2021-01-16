@@ -52,30 +52,31 @@ function run_tester(self::Tester, implementation::String, duration::Number)
         @error "Failed to locate genesis: $genesis"
     end
 
-    # Without docker the tempdir is used for local data
-    datadir = tempdir
-
     # Helper files needed for some implementations
-    keystore = "$(@__DIR__)/../runtimes/$(self.runtime)/kagome.keystore.json"
+    keystore = "$(@__DIR__)/../runtimes/$(self.runtime)/keystore"
     config   = if Config.docker
         "$(@__DIR__)/../runtimes/$(self.runtime)/gossamer.docker.config.toml"
     else
         "$(@__DIR__)/../runtimes/$(self.runtime)/gossamer.config.toml"
     end
 
+    # Copy prepopulated kagome keystore (TODO: Load chain id from genesis) 
+    mkpath(joinpath(tempdir, "spectest"))
+    cp(keystore, joinpath(tempdir, "spectest", "keystore"))
+
+    # By default the tempdir is used for local data
+    datadir = tempdir
+
     if Config.docker
         # Provide genesis and other files to container
         cp(genesis, joinpath(tempdir, basename(genesis)))
-        genesis = "/config/" * basename(genesis)
-
-        cp(keystore, joinpath(tempdir, basename(keystore)))
-        keystore = "/config/" * basename(keystore)
-
         cp(config, joinpath(tempdir, basename(config)))
-        config = "/config/" * basename(config)
 
         # Use fixed dir inside container
-        datadir = "/polkadot"
+        datadir = "/data"
+
+        genesis = joinpath(datadir, basename(genesis))
+        config = joinpath(datadir, basename(config))
     end
 
     # Prepare command and environment based on command
@@ -106,7 +107,7 @@ function run_tester(self::Tester, implementation::String, duration::Number)
         println("Caching/updating docker images of '$implementation':")
         run(`docker pull $image`)
 
-        exec = `docker run -e RUST_LOG=runtime=debug -v $tempdir:/config -v $datadir --rm -i $image`
+        exec = `docker run -e RUST_LOG=runtime=debug -v $tempdir:$datadir --rm -i $image`
     end
 
     cmd = `$exec $args`
