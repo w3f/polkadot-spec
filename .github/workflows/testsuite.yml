@@ -2,14 +2,8 @@ name: Conformance Testsuite
 
 on:
   push:
-    paths:
-    - '.github/workflows/testsuite.yml'
-    - 'test/**'
-    - '!test/fixtures/genesis/**'
-    - '!test/helpers/ImplementationFixture.jl'
-    - '!test/runtimes/tester/**'
-    - '!test/hosts/**'
-    - '!test/README.md'
+    branches:
+    - master
   pull_request:
     paths:
     - '.github/workflows/testsuite.yml'
