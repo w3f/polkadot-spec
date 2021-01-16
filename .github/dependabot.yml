@@ -34,14 +34,6 @@ updates:
       prefix: "substrate-a:"
     open-pull-requests-limit: 0
 
-  - package-ecosystem: "cargo"
-    directory: "/test/adapters/substrate-legacy"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "substrate-a-l:"
-    open-pull-requests-limit: 0
-
   # Runtimes (not handled by submodules)
 
   - package-ecosystem: "cargo"
@@ -51,15 +43,6 @@ updates:
     commit-message:
       prefix: "hostapi-rt:"
     open-pull-requests-limit: 0
-
-  - package-ecosystem: "cargo"
-    directory: "/test/runtimes/hostapi-legacy"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "hostapi-rt-l:"
-    open-pull-requests-limit: 0
-
 
   - package-ecosystem: "cargo"
     directory: "/test/runtimes/tester"
