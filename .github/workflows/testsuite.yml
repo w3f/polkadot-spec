@@ -55,7 +55,7 @@ jobs:
     - name: Build substrate adapters
       run: make -C test substrate-adapter
     - name: Upload substrate adapter
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: substrate-adapter
         path: test/bin/substrate-adapter
@@ -80,7 +80,7 @@ jobs:
         CXX: g++-9
       run: make -C test kagome-adapter 
     - name: Upload kagome adapter
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: kagome-adapter
         path: test/bin/kagome-adapter
@@ -149,7 +149,7 @@ jobs:
     - name: Build hostapi runtime
       run: make -C test hostapi-runtime
     - name: Upload hostapi runtime
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: hostapi-runtime.compact.wasm
         path: test/bin/hostapi_runtime.compact.wasm
