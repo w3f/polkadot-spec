@@ -210,17 +210,17 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: substrate-host
         path: test/bin
     - run: chmod +x test/bin/polkadot
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: substrate-adapter
         path: test/bin
     - run: chmod +x test/bin/substrate-adapter
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: tester-runtime-genesis
         path: test/runtimes/tester
@@ -234,17 +234,17 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: kagome-host
         path: test/bin
     - run: chmod +x test/bin/kagome_validating
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: substrate-adapter
         path: test/bin
     - run: chmod +x test/bin/substrate-adapter
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: tester-runtime-genesis
         path: test/runtimes/tester
@@ -258,7 +258,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: gossamer-host
         path: test/bin
@@ -266,12 +266,12 @@ jobs:
         chmod +x test/bin/gossamer
         mkdir -p test/lib
         mv test/bin/libwasmer.so test/lib/
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: substrate-adapter
         path: test/bin
     - run: chmod +x test/bin/substrate-adapter
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: tester-runtime-genesis
         path: test/runtimes/tester
