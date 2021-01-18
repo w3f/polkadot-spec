@@ -61,7 +61,7 @@ jobs:
     - name: Build substrate
       run: make -C test substrate-host
     - name: Upload substrate
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: substrate-host
         path: test/bin/polkadot
@@ -85,21 +85,14 @@ jobs:
         CC: gcc-9
         CXX: g++-9
       run: make -C test kagome-host
-    - name: Upload kagome_validating
-      uses: actions/upload-artifact@v1
+    - name: Upload kagome hosts
+      uses: actions/upload-artifact@v2
       with:
         name: kagome-host
-        path: test/bin/kagome_validating
-    - name: Upload kagome_full_syncing
-      uses: actions/upload-artifact@v1
-      with:
-        name: kagome-host
-        path: test/bin/kagome_full_syncing
-    - name: Upload kagome_block_producing
-      uses: actions/upload-artifact@v1
-      with:
-        name: kagome-host
-        path: test/bin/kagome_block_producing
+        path: |
+          test/bin/kagome_block_producing
+          test/bin/kagome_full_syncing
+          test/bin/kagome_validating
 
   build-host-gossamer:
     name: "[build] gossamer-host"
@@ -117,13 +110,13 @@ jobs:
         restore-keys: go-mod-host-gossamer-
     - name: Build gossamer
       run: make -C test gossamer-host
-    - name: Upload gossamer
-      uses: actions/upload-artifact@v1
+    - name: Upload gossamer and libwasmer
+      uses: actions/upload-artifact@v2
       with:
         name: gossamer-host
         path: test/bin/gossamer
     - name: Upload libwasmer.so
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: gossamer-host
         path: test/lib/libwasmer.so
@@ -163,7 +156,7 @@ jobs:
     - name: Build substrate adapters
       run: make -C test substrate-adapter
     - name: Upload substrate adapter
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: substrate-adapter
         path: test/bin/substrate-adapter
@@ -209,20 +202,17 @@ jobs:
     - name: Build and generate host tester genesis
       run: make -C test tester-runtime
     - name: Upload host tester runtime
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: tester_runtime.compact.wasm
         path: test/runtimes/tester/target/release/wbuild/tester-runtime/tester_runtime.compact.wasm
-    - name: Upload host tester genesis file
-      uses: actions/upload-artifact@v1
+    - name: Upload host tester genesis and state file
+      uses: actions/upload-artifact@v2
       with:
         name: tester-runtime-genesis
-        path: test/runtimes/tester/genesis.json
-    - name: Upload host tester state file
-      uses: actions/upload-artifact@v1
-      with:
-        name: tester-runtime-genesis
-        path: test/runtimes/tester/genesis.yaml
+        path: |
+          test/runtimes/tester/genesis.json
+          test/runtimes/tester/genesis.yaml
 
 
   test-substrate:
