@@ -166,7 +166,7 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: substrate-adapter
         path: test/bin
@@ -186,11 +186,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: substrate-adapter
         path: test/bin
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: kagome-adapter
         path: test/bin
@@ -205,11 +205,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: kagome-adapter
         path: test/bin
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: hostapi-runtime.compact.wasm
         path: test/bin
@@ -229,11 +229,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: substrate-adapter
         path: test/bin
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: gossamer-adapter
         path: test/bin
@@ -251,11 +251,11 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: gossamer-adapter
         path: test/bin
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: hostapi-runtime.compact.wasm
         path: test/bin

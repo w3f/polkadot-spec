@@ -182,11 +182,11 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: gh-pages
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: polkadot-host-spec.pdf
         path: .
-    - uses: actions/download-artifact@v1
+    - uses: actions/download-artifact@v2.0.8
       with:
         name: polkadot-runtime-spec.pdf
         path: .
