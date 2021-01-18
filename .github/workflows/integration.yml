@@ -40,20 +40,16 @@ jobs:
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
-    - name: Cache cargo registry
-      uses: actions/cache@v2.1.3
+    - name: Cache cargo registry and index
+      uses: actions/cache@v2
       with:
-        path: ~/.cargo/registry
-        key: cargo-registry-host-substrate-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
-        restore-keys: cargo-registry-host-substrate-
-    - name: Cache cargo index
-      uses: actions/cache@v2.1.3
-      with:
-        path: ~/.cargo/git
-        key: cargo-index-host-substrate-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
-        restore-keys: cargo-index-host-substrate-
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: cargo-cache-host-substrate-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
+        restore-keys: cargo-cache-host-substrate-
     - name: Cache cargo build output
-      uses: actions/cache@v2.1.3
+      uses: actions/cache@v2
       with:
         path: test/hosts/substrate/target
         key: cargo-build-host-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/hosts/substrate/Cargo.lock') }}
@@ -75,7 +71,7 @@ jobs:
       with:
         submodules: true
     - name: Cache hunter outputs
-      uses: actions/cache@v2.1.3
+      uses: actions/cache@v2
       with:
         path: ~/.hunter
         key: hunter-host-kagome-${{ hashFiles('test/hosts/kagome/CMakeLists.txt') }}
@@ -103,7 +99,7 @@ jobs:
       with:
         submodules: true
     - name: Cache go modules
-      uses: actions/cache@v2.1.3
+      uses: actions/cache@v2
       with:
         path: ~/go/pkg/mod
         key: go-mod-host-gossamer-${{ hashFiles('test/hosts/gossamer/go.sum') }}
@@ -135,20 +131,16 @@ jobs:
         target: wasm32-unknown-unknown
         default: true
         profile: minimal
-    - name: Cache cargo registry
-      uses: actions/cache@v2.1.3
+    - name: Cache cargo registry and index
+      uses: actions/cache@v2
       with:
-        path: ~/.cargo/registry
-        key: cargo-registry-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
-        restore-keys: cargo-registry-adapter-substrate-
-    - name: Cache cargo index
-      uses: actions/cache@v2.1.3
-      with:
-        path: ~/.cargo/git
-        key: cargo-index-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
-        restore-keys: cargo-index-adapter-substrate-
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: cargo-cache-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
+        restore-keys: cargo-cache-adapter-substrate-
     - name: Cache cargo build ouput
-      uses: actions/cache@v2.1.3
+      uses: actions/cache@v2
       with:
         path: test/adapters/substrate/target
         key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
@@ -181,20 +173,16 @@ jobs:
       run: |
         python -m pip install wheel
         python -m pip install yq
-    - name: Cache cargo registry
-      uses: actions/cache@v2.1.3
+    - name: Cache cargo registry and index
+      uses: actions/cache@v2
       with:
-        path: ~/.cargo/registry
-        key: cargo-registry-runtime-tester-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
-        restore-keys: cargo-registry-runtime-tester-
-    - name: Cache cargo index
-      uses: actions/cache@v2.1.3
-      with:
-        path: ~/.cargo/git
-        key: cargo-index-runtime-tester-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
-        restore-keys: cargo-index-runtime-tester-
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: cargo-cache-runtime-tester-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
+        restore-keys: cargo-cache-runtime-tester-
     - name: Cache cargo build output
-      uses: actions/cache@v2.1.3
+      uses: actions/cache@v2
       with:
         path: test/runtimes/tester/target
         key: cargo-build-runtime-tester-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/runtimes/tester/Cargo.lock') }}
