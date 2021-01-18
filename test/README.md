@@ -214,14 +214,13 @@ All the fixtures are located in their respective folder in the [`fixtures`](./fi
 
 The submodule in [hosts/substrate](./hosts/substrate) should always point to a recent [Parity Polkadot release](https://github.com/paritytech/polkadot/releases).
 
-After every update, `substrate-adapter` should be update to the same substrate commit used in the release.
-
+After every update, `substrate-adapter` and `tester-runtime` should be update to the same substrate commit used in the release.
 
 ## Kagome
 
 The `kagome-adapter` are build against the submodule under [hosts/kagome](./hosts/kagome) which should always point to a recent commit or release of [Kagome](https://github.com/soramitsu/kagome).
 
-There are no special updates steps needed apart from fixing build and test failures.
+There are no special updates steps needed apart from fixing build and test failures or updating the `soramitsu-hunter` repository used.
 
 ## Gossamer
 
