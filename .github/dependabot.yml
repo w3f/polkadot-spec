@@ -4,25 +4,11 @@ updates:
   # Submodules (hosts and some adapters)
 
   - package-ecosystem: "gitsubmodule"
-    directory: "/test/hosts/substrate"
+    directory: "/"
     schedule:
       interval: "weekly"
     commit-message:
-      prefix: "substrate:"
-
-  - package-ecosystem: "gitsubmodule"
-    directory: "/test/hosts/kagome"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "kagome:"
-
-  - package-ecosystem: "gitsubmodule"
-    directory: "/test/hosts/gossamer"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "gossamer:"
+      prefix: "submodule:"
 
   # Adapters (not handled by submodules)
 
