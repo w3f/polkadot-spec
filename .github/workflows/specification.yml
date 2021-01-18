@@ -36,7 +36,7 @@ jobs:
     - name: Build host specification
       run: make -C host-spec
     - name: Upload host specification
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: polkadot-host-spec.pdf
         path: host-spec/polkadot-host-spec.pdf
@@ -63,7 +63,7 @@ jobs:
     - name: Build runtime specification
       run: make -C runtime-spec
     - name: Upload runtime specification
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: polkadot-runtime-spec.pdf
         path: runtime-spec/polkadot-runtime-spec.pdf
@@ -157,7 +157,7 @@ jobs:
     - name: Compare runtime specification
       run: make -C runtime-spec diff
     - name: Upload runtime specification diff
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v2
       with:
         name: polkadot-runtime-spec.diff.pdf
         path: runtime-spec/polkadot-runtime-spec.diff.pdf
