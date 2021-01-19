@@ -1322,7 +1322,7 @@
 
   \;
 
-  Arguments:
+  <strong|Arguments>:
 
   <\itemize-dot>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
