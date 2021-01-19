@@ -78,7 +78,6 @@ jobs:
       with:
         name: kagome-host
         path: |
-          test/bin/kagome_block_producing
           test/bin/kagome_full_syncing
           test/bin/kagome_validating
 
