@@ -476,7 +476,7 @@ func test_storage_append(r runtime.Instance, key1 string, value1 string, key2 st
 		os.Exit(1)
 	}
 
-	fmt.Println(strings.Join(some1, ","))
+	fmt.Println(strings.Join(some1, ";"))
 
 	// Check key2
 	some2_opt := storage_get(r, []byte(key2))
@@ -498,7 +498,7 @@ func test_storage_append(r runtime.Instance, key1 string, value1 string, key2 st
 		os.Exit(1)
 	}
 
-	fmt.Println(strings.Join(some2, ","))
+	fmt.Println(strings.Join(some2, ";"))
 }
 
 // Test for rtm_ext_storage_root_version_1
