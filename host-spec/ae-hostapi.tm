@@ -1,8 +1,8 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
-<style|book>
+<style|<tuple|book|old-dots|old-lengths>>
 
 <\body>
   <appendix|Polkadot Host API><label|appendix-e>
@@ -293,8 +293,8 @@
   <subsection|<verbatim|ext_storage_next_key>>
 
   Get the next key in storage after the given one in lexicographic order
-  (Definition <reference|defn-lexicographic-ordering>). The key provided to this
-  function may or may not exist in storage.
+  (Definition <reference|defn-lexicographic-ordering>). The key provided to
+  this function may or may not exist in storage.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -637,8 +637,8 @@
   <subsection|<verbatim|ext_default_child_storage_next_key>>
 
   Gets the next key in storage after the given one in lexicographic order
-  (Definition <reference|defn-lexicographic-ordering>). The key provided to this
-  function may or may not exist in storage.
+  (Definition <reference|defn-lexicographic-ordering>). The key provided to
+  this function may or may not exist in storage.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1304,9 +1304,33 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a reglar pointer to the buffer containing the
+    <item><verbatim|return>: a regular pointer to the buffer containing the
     256-bit hash result.
   </itemize>
+
+  <subsection|<verbatim|ext_hashing_keccak_512>>
+
+  Conducts a 512-bit Keccak hash.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_hashing_keccak_512_version_1
+
+    \ \ (param $data i64) (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item><strong|><verbatim|data>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the data to be hashed.
+
+    <item><verbatim|return>: a regular pointer to the buffer containing the
+    512-bit hash result.
+  </itemize-dot>
 
   <subsection|<verbatim|ext_hashing_sha2_256>>
 
@@ -2319,8 +2343,8 @@
 
 <\initial>
   <\collection>
-    <associate|chapter-nr|6>
-    <associate|page-first|67>
+    <associate|chapter-nr|8>
+    <associate|page-first|101>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
@@ -2334,72 +2358,74 @@
     <associate|appendix-e|<tuple|A|67>>
     <associate|auto-1|<tuple|A|67>>
     <associate|auto-10|<tuple|A.1.4.1|68>>
-    <associate|auto-100|<tuple|A.3|82>>
-    <associate|auto-101|<tuple|A.5.1|82>>
-    <associate|auto-102|<tuple|A.5.1.1|82>>
-    <associate|auto-103|<tuple|A.5.2|82>>
-    <associate|auto-104|<tuple|A.5.2.1|82>>
-    <associate|auto-105|<tuple|A.5.3|83>>
-    <associate|auto-106|<tuple|A.5.3.1|83>>
-    <associate|auto-107|<tuple|A.5.4|83>>
-    <associate|auto-108|<tuple|A.5.4.1|83>>
-    <associate|auto-109|<tuple|A.5.5|83>>
+    <associate|auto-100|<tuple|A.4.8.1|82>>
+    <associate|auto-101|<tuple|A.5|82>>
+    <associate|auto-102|<tuple|A.3|82>>
+    <associate|auto-103|<tuple|A.5.1|82>>
+    <associate|auto-104|<tuple|A.5.1.1|82>>
+    <associate|auto-105|<tuple|A.5.2|83>>
+    <associate|auto-106|<tuple|A.5.2.1|83>>
+    <associate|auto-107|<tuple|A.5.3|83>>
+    <associate|auto-108|<tuple|A.5.3.1|83>>
+    <associate|auto-109|<tuple|A.5.4|83>>
     <associate|auto-11|<tuple|A.1.5|68>>
-    <associate|auto-110|<tuple|A.5.5.1|83>>
-    <associate|auto-111|<tuple|A.5.6|83>>
-    <associate|auto-112|<tuple|A.5.6.1|83>>
-    <associate|auto-113|<tuple|A.5.7|84>>
-    <associate|auto-114|<tuple|A.5.7.1|84>>
-    <associate|auto-115|<tuple|A.5.8|84>>
-    <associate|auto-116|<tuple|A.5.8.1|84>>
-    <associate|auto-117|<tuple|A.5.9|84>>
-    <associate|auto-118|<tuple|A.5.9.1|84>>
-    <associate|auto-119|<tuple|A.5.10|85>>
+    <associate|auto-110|<tuple|A.5.4.1|83>>
+    <associate|auto-111|<tuple|A.5.5|83>>
+    <associate|auto-112|<tuple|A.5.5.1|83>>
+    <associate|auto-113|<tuple|A.5.6|84>>
+    <associate|auto-114|<tuple|A.5.6.1|84>>
+    <associate|auto-115|<tuple|A.5.7|84>>
+    <associate|auto-116|<tuple|A.5.7.1|84>>
+    <associate|auto-117|<tuple|A.5.8|84>>
+    <associate|auto-118|<tuple|A.5.8.1|84>>
+    <associate|auto-119|<tuple|A.5.9|85>>
     <associate|auto-12|<tuple|A.1.5.1|68>>
-    <associate|auto-120|<tuple|A.5.10.1|85>>
-    <associate|auto-121|<tuple|A.5.11|85>>
-    <associate|auto-122|<tuple|A.5.11.1|85>>
-    <associate|auto-123|<tuple|A.5.12|85>>
-    <associate|auto-124|<tuple|A.5.12.1|85>>
-    <associate|auto-125|<tuple|A.5.13|86>>
-    <associate|auto-126|<tuple|A.5.13.1|86>>
-    <associate|auto-127|<tuple|A.5.14|86>>
-    <associate|auto-128|<tuple|A.5.14.1|86>>
-    <associate|auto-129|<tuple|A.5.15|86>>
+    <associate|auto-120|<tuple|A.5.9.1|85>>
+    <associate|auto-121|<tuple|A.5.10|85>>
+    <associate|auto-122|<tuple|A.5.10.1|85>>
+    <associate|auto-123|<tuple|A.5.11|85>>
+    <associate|auto-124|<tuple|A.5.11.1|85>>
+    <associate|auto-125|<tuple|A.5.12|86>>
+    <associate|auto-126|<tuple|A.5.12.1|86>>
+    <associate|auto-127|<tuple|A.5.13|86>>
+    <associate|auto-128|<tuple|A.5.13.1|86>>
+    <associate|auto-129|<tuple|A.5.14|86>>
     <associate|auto-13|<tuple|A.1.6|69>>
-    <associate|auto-130|<tuple|A.5.15.1|86>>
-    <associate|auto-131|<tuple|A.6|87>>
-    <associate|auto-132|<tuple|A.6.1|87>>
-    <associate|auto-133|<tuple|A.6.1.1|87>>
-    <associate|auto-134|<tuple|A.6.2|87>>
-    <associate|auto-135|<tuple|A.6.2.1|87>>
-    <associate|auto-136|<tuple|A.6.3|87>>
-    <associate|auto-137|<tuple|A.6.3.1|87>>
-    <associate|auto-138|<tuple|A.6.4|88>>
-    <associate|auto-139|<tuple|A.6.4.1|88>>
+    <associate|auto-130|<tuple|A.5.14.1|86>>
+    <associate|auto-131|<tuple|A.5.15|87>>
+    <associate|auto-132|<tuple|A.5.15.1|87>>
+    <associate|auto-133|<tuple|A.6|87>>
+    <associate|auto-134|<tuple|A.6.1|87>>
+    <associate|auto-135|<tuple|A.6.1.1|87>>
+    <associate|auto-136|<tuple|A.6.2|87>>
+    <associate|auto-137|<tuple|A.6.2.1|87>>
+    <associate|auto-138|<tuple|A.6.3|88>>
+    <associate|auto-139|<tuple|A.6.3.1|88>>
     <associate|auto-14|<tuple|A.1.6.1|69>>
-    <associate|auto-140|<tuple|A.7|88>>
-    <associate|auto-141|<tuple|A.7.1|88>>
-    <associate|auto-142|<tuple|A.7.1.1|88>>
-    <associate|auto-143|<tuple|A.7.2|88>>
-    <associate|auto-144|<tuple|A.7.2.1|88>>
-    <associate|auto-145|<tuple|A.7.3|88>>
-    <associate|auto-146|<tuple|A.7.3.1|89>>
-    <associate|auto-147|<tuple|A.7.4|89>>
-    <associate|auto-148|<tuple|A.7.4.1|89>>
-    <associate|auto-149|<tuple|A.7.5|89>>
+    <associate|auto-140|<tuple|A.6.4|88>>
+    <associate|auto-141|<tuple|A.6.4.1|88>>
+    <associate|auto-142|<tuple|A.7|88>>
+    <associate|auto-143|<tuple|A.7.1|88>>
+    <associate|auto-144|<tuple|A.7.1.1|88>>
+    <associate|auto-145|<tuple|A.7.2|88>>
+    <associate|auto-146|<tuple|A.7.2.1|89>>
+    <associate|auto-147|<tuple|A.7.3|89>>
+    <associate|auto-148|<tuple|A.7.3.1|89>>
+    <associate|auto-149|<tuple|A.7.4|89>>
     <associate|auto-15|<tuple|A.1.7|69>>
-    <associate|auto-150|<tuple|A.7.5.1|89>>
-    <associate|auto-151|<tuple|A.8|89>>
-    <associate|auto-152|<tuple|A.8.1|89>>
-    <associate|auto-153|<tuple|A.8.1.1|89>>
-    <associate|auto-154|<tuple|A.8.2|90>>
-    <associate|auto-155|<tuple|A.8.2.1|90>>
-    <associate|auto-156|<tuple|A.9|90>>
-    <associate|auto-157|<tuple|A.4|90>>
-    <associate|auto-158|<tuple|A.9.1|90>>
-    <associate|auto-159|<tuple|A.9.1.1|90>>
+    <associate|auto-150|<tuple|A.7.4.1|89>>
+    <associate|auto-151|<tuple|A.7.5|89>>
+    <associate|auto-152|<tuple|A.7.5.1|89>>
+    <associate|auto-153|<tuple|A.8|89>>
+    <associate|auto-154|<tuple|A.8.1|90>>
+    <associate|auto-155|<tuple|A.8.1.1|90>>
+    <associate|auto-156|<tuple|A.8.2|90>>
+    <associate|auto-157|<tuple|A.8.2.1|90>>
+    <associate|auto-158|<tuple|A.9|90>>
+    <associate|auto-159|<tuple|A.4|90>>
     <associate|auto-16|<tuple|A.1.7.1|69>>
+    <associate|auto-160|<tuple|A.9.1|?>>
+    <associate|auto-161|<tuple|A.9.1.1|?>>
     <associate|auto-17|<tuple|A.1.8|69>>
     <associate|auto-18|<tuple|A.1.8.1|69>>
     <associate|auto-19|<tuple|A.1.9|69>>
@@ -2490,7 +2516,7 @@
     <associate|auto-96|<tuple|A.4.6.1|81>>
     <associate|auto-97|<tuple|A.4.7|81>>
     <associate|auto-98|<tuple|A.4.7.1|81>>
-    <associate|auto-99|<tuple|A.5|81>>
+    <associate|auto-99|<tuple|A.4.8|81>>
     <associate|defn-child-storage-type|<tuple|A.4|71>>
     <associate|defn-ecdsa-verify-error|<tuple|A.6|74>>
     <associate|defn-http-error|<tuple|A.10|82>>
@@ -2528,11 +2554,11 @@
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.3>|>
         Table of possible HTTP error types
-      </surround>|<pageref|auto-100>>
+      </surround>|<pageref|auto-102>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.4>|>
         Log Levels for the logging interface
-      </surround>|<pageref|auto-157>>
+      </surround>|<pageref|auto-159>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
@@ -2867,7 +2893,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-86>>
 
-      <with|par-left|<quote|1tab>|A.4.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_sha2_256>
+      <with|par-left|<quote|1tab>|A.4.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_keccak_512>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-87>>
 
@@ -2875,7 +2901,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-88>>
 
-      <with|par-left|<quote|1tab>|A.4.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_128>
+      <with|par-left|<quote|1tab>|A.4.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_sha2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-89>>
 
@@ -2883,7 +2909,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-90>>
 
-      <with|par-left|<quote|1tab>|A.4.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_256>
+      <with|par-left|<quote|1tab>|A.4.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-91>>
 
@@ -2891,7 +2917,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-92>>
 
-      <with|par-left|<quote|1tab>|A.4.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_64>
+      <with|par-left|<quote|1tab>|A.4.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-93>>
 
@@ -2899,7 +2925,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-94>>
 
-      <with|par-left|<quote|1tab>|A.4.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_128>
+      <with|par-left|<quote|1tab>|A.4.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_64>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-95>>
 
@@ -2907,7 +2933,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-96>>
 
-      <with|par-left|<quote|1tab>|A.4.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_256>
+      <with|par-left|<quote|1tab>|A.4.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-97>>
 
@@ -2915,236 +2941,244 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-98>>
 
+      <with|par-left|<quote|1tab>|A.4.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_256>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-99>>
+
+      <with|par-left|<quote|2tab>|A.4.8.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-100>>
+
       A.5<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-99>
+      <no-break><pageref|auto-101>
 
       <with|par-left|<quote|1tab>|A.5.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_is_validator>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-101>>
+      <no-break><pageref|auto-103>>
 
       <with|par-left|<quote|2tab>|A.5.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-102>>
+      <no-break><pageref|auto-104>>
 
       <with|par-left|<quote|1tab>|A.5.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_submit_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-103>>
+      <no-break><pageref|auto-105>>
 
       <with|par-left|<quote|2tab>|A.5.2.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-104>>
+      <no-break><pageref|auto-106>>
 
       <with|par-left|<quote|1tab>|A.5.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_network_state>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-105>>
+      <no-break><pageref|auto-107>>
 
       <with|par-left|<quote|2tab>|A.5.3.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-106>>
+      <no-break><pageref|auto-108>>
 
       <with|par-left|<quote|1tab>|A.5.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_timestamp>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-107>>
+      <no-break><pageref|auto-109>>
 
       <with|par-left|<quote|2tab>|A.5.4.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-108>>
+      <no-break><pageref|auto-110>>
 
       <with|par-left|<quote|1tab>|A.5.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_sleep_until>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-109>>
+      <no-break><pageref|auto-111>>
 
       <with|par-left|<quote|2tab>|A.5.5.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-110>>
+      <no-break><pageref|auto-112>>
 
       <with|par-left|<quote|1tab>|A.5.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_random_seed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-111>>
+      <no-break><pageref|auto-113>>
 
       <with|par-left|<quote|2tab>|A.5.6.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-112>>
+      <no-break><pageref|auto-114>>
 
       <with|par-left|<quote|1tab>|A.5.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-113>>
+      <no-break><pageref|auto-115>>
 
       <with|par-left|<quote|2tab>|A.5.7.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-114>>
+      <no-break><pageref|auto-116>>
 
       <with|par-left|<quote|1tab>|A.5.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_compare_and_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-115>>
+      <no-break><pageref|auto-117>>
 
       <with|par-left|<quote|2tab>|A.5.8.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-116>>
+      <no-break><pageref|auto-118>>
 
       <with|par-left|<quote|1tab>|A.5.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-117>>
+      <no-break><pageref|auto-119>>
 
       <with|par-left|<quote|2tab>|A.5.9.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-118>>
+      <no-break><pageref|auto-120>>
 
       <with|par-left|<quote|1tab>|A.5.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_start>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-119>>
+      <no-break><pageref|auto-121>>
 
       <with|par-left|<quote|2tab>|A.5.10.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-120>>
+      <no-break><pageref|auto-122>>
 
       <with|par-left|<quote|1tab>|A.5.11<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_add_header>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-121>>
+      <no-break><pageref|auto-123>>
 
       <with|par-left|<quote|2tab>|A.5.11.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-122>>
+      <no-break><pageref|auto-124>>
 
       <with|par-left|<quote|1tab>|A.5.12<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_write_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-123>>
+      <no-break><pageref|auto-125>>
 
       <with|par-left|<quote|2tab>|A.5.12.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-124>>
+      <no-break><pageref|auto-126>>
 
       <with|par-left|<quote|1tab>|A.5.13<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_wait>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-125>>
+      <no-break><pageref|auto-127>>
 
       <with|par-left|<quote|2tab>|A.5.13.1<space|2spc>Version 1- Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-126>>
+      <no-break><pageref|auto-128>>
 
       <with|par-left|<quote|1tab>|A.5.14<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_headers>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-127>>
+      <no-break><pageref|auto-129>>
 
       <with|par-left|<quote|2tab>|A.5.14.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-128>>
+      <no-break><pageref|auto-130>>
 
       <with|par-left|<quote|1tab>|A.5.15<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_read_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-129>>
+      <no-break><pageref|auto-131>>
 
       <with|par-left|<quote|2tab>|A.5.15.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-130>>
+      <no-break><pageref|auto-132>>
 
       A.6<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-131>
+      <no-break><pageref|auto-133>
 
       <with|par-left|<quote|1tab>|A.6.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-132>>
+      <no-break><pageref|auto-134>>
 
       <with|par-left|<quote|2tab>|A.6.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-133>>
+      <no-break><pageref|auto-135>>
 
       <with|par-left|<quote|1tab>|A.6.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_ordered_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-134>>
+      <no-break><pageref|auto-136>>
 
       <with|par-left|<quote|2tab>|A.6.2.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-135>>
+      <no-break><pageref|auto-137>>
 
       <with|par-left|<quote|1tab>|A.6.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_keccak_256_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-136>>
+      <no-break><pageref|auto-138>>
 
       <with|par-left|<quote|2tab>|A.6.3.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-137>>
+      <no-break><pageref|auto-139>>
 
       <with|par-left|<quote|1tab>|A.6.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_keccak_256_ordered_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-138>>
+      <no-break><pageref|auto-140>>
 
       <with|par-left|<quote|2tab>|A.6.4.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-139>>
+      <no-break><pageref|auto-141>>
 
       A.7<space|2spc>Miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-140>
+      <no-break><pageref|auto-142>
 
       <with|par-left|<quote|1tab>|A.7.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_chain_id>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-141>>
+      <no-break><pageref|auto-143>>
 
       <with|par-left|<quote|2tab>|A.7.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-142>>
+      <no-break><pageref|auto-144>>
 
       <with|par-left|<quote|1tab>|A.7.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_num>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-143>>
+      <no-break><pageref|auto-145>>
 
       <with|par-left|<quote|2tab>|A.7.2.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-144>>
+      <no-break><pageref|auto-146>>
 
       <with|par-left|<quote|1tab>|A.7.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_utf8>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-145>>
+      <no-break><pageref|auto-147>>
 
       <with|par-left|<quote|2tab>|A.7.3.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-146>>
+      <no-break><pageref|auto-148>>
 
       <with|par-left|<quote|1tab>|A.7.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_hex>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-147>>
+      <no-break><pageref|auto-149>>
 
       <with|par-left|<quote|2tab>|A.7.4.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-148>>
+      <no-break><pageref|auto-150>>
 
       <with|par-left|<quote|1tab>|A.7.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_runtime_version>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-149>>
+      <no-break><pageref|auto-151>>
 
       <with|par-left|<quote|2tab>|A.7.5.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-150>>
+      <no-break><pageref|auto-152>>
 
       A.8<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-151>
+      <no-break><pageref|auto-153>
 
       <with|par-left|<quote|1tab>|A.8.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_malloc>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-152>>
+      <no-break><pageref|auto-154>>
 
       <with|par-left|<quote|2tab>|A.8.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-153>>
+      <no-break><pageref|auto-155>>
 
       <with|par-left|<quote|1tab>|A.8.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_free>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-154>>
+      <no-break><pageref|auto-156>>
 
       <with|par-left|<quote|2tab>|A.8.2.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-155>>
+      <no-break><pageref|auto-157>>
 
       A.9<space|2spc>Logging <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-156>
+      <no-break><pageref|auto-158>
 
       <with|par-left|<quote|1tab>|A.9.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_logging_log>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-158>>
+      <no-break><pageref|auto-160>>
 
       <with|par-left|<quote|2tab>|A.9.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-159>>
+      <no-break><pageref|auto-161>>
     </associate>
   </collection>
 </auxiliary>
