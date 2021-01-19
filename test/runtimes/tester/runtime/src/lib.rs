@@ -15,8 +15,8 @@ use sp_runtime::{
 	transaction_validity::{TransactionValidity, TransactionSource},
 };
 use sp_runtime::traits::{
-	BlakeTwo256, Block as BlockT, IdentityLookup, Verify,
-	IdentifyAccount, NumberFor, Saturating,
+	BlakeTwo256, Block as BlockT, IdentityLookup,
+	Verify, IdentifyAccount, NumberFor
 };
 use sp_api::impl_runtime_apis;
 use babe::{AuthorityId as BabeId};
@@ -115,34 +115,36 @@ pub const EPOCH_DURATION_IN_BLOCKS: BlockNumber = 4 * HOURS;
 /// 1 in 4 blocks (on average, not counting collisions) will be primary babe blocks.
 pub const PRIMARY_PROBABILITY: (u64, u64) = (1, 4);
 
+const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
+
 parameter_types! {
+	pub const Version: RuntimeVersion = VERSION;
+	
 	pub const BlockHashCount: BlockNumber = 2400;
 
 	/// We allow for 2 seconds of compute with a 6 second average block time.
-	pub const MaximumBlockWeight: Weight = 2 * WEIGHT_PER_SECOND;
-	pub const AvailableBlockRatio: Perbill = Perbill::from_percent(75);
-
-	/// Assume 10% of weight for average on_initialize calls.
-	pub MaximumExtrinsicWeight: Weight = AvailableBlockRatio::get()
-		.saturating_sub(Perbill::from_percent(10)) * MaximumBlockWeight::get();
-
-	pub const MaximumBlockLength: u32 = 5 * 1024 * 1024;
+	pub BlockWeights: system::limits::BlockWeights = system::limits::BlockWeights
+		::with_sensible_defaults(2 * WEIGHT_PER_SECOND, NORMAL_DISPATCH_RATIO);
+	
+	pub BlockLength: system::limits::BlockLength = system::limits::BlockLength
+		::max_with_normal_ratio(5 * 1024 * 1024, NORMAL_DISPATCH_RATIO);
 
 	pub const DbWeight: RuntimeDbWeight = RuntimeDbWeight {
 		read: 60_000_000,
 		write: 200_000_000,
 	};
 
-	pub const ExtrinsicBaseWeight: Weight = 100_000_000;
-	pub const BlockExecutionWeight: Weight = 1_000_000_000;
-
-	pub const Version: RuntimeVersion = VERSION;
+	pub const SS58Prefix: u8 = 42;
 }
 
 // Configure FRAME pallets to include in runtime.
-impl system::Trait for Runtime {
+impl system::Config for Runtime {
 	/// The basic call filter to use in dispatchable.
 	type BaseCallFilter = ();
+	/// Block & extrinsics weights: base values and limits.
+	type BlockWeights = BlockWeights;
+	/// The maximum length of a block (in bytes).
+	type BlockLength = BlockLength;
 	/// The identifier used to distinguish between accounts.
 	type AccountId = AccountId;
 	/// The aggregated dispatch type that is available for extrinsics.
@@ -165,24 +167,8 @@ impl system::Trait for Runtime {
 	type Origin = Origin;
 	/// Maximum number of block number to block hash mappings to keep (oldest pruned first).
 	type BlockHashCount = BlockHashCount;
-	/// Maximum weight of each block.
-	type MaximumBlockWeight = MaximumBlockWeight;
 	/// The weight of database operations that the runtime can invoke.
 	type DbWeight = DbWeight;
-	/// The weight of the overhead invoked on the block import process, independent of the
-	/// extrinsics included in that block.
-	type BlockExecutionWeight = BlockExecutionWeight;
-	/// The base weight of any extrinsic processed by the runtime, independent of the
-	/// logic of that extrinsic. (Signature verification, nonce increment, fee, etc...)
-	type ExtrinsicBaseWeight = ExtrinsicBaseWeight;
-	/// The maximum weight that a single extrinsic of `Normal` dispatch class can have,
-	/// idependent of the logic of that extrinsics. (Roughly max block weight - average on
-	/// initialize cost).
-	type MaximumExtrinsicWeight = MaximumExtrinsicWeight;
-	/// Maximum size of all encoded transactions (in bytes) that are allowed in one block.
-	type MaximumBlockLength = MaximumBlockLength;
-	/// Portion of the block weight that is available to all normal transactions.
-	type AvailableBlockRatio = AvailableBlockRatio;
 	/// Version of the runtime.
 	type Version = Version;
 	/// Converts a module to the index of the module in `construct_runtime!`.
@@ -197,13 +183,15 @@ impl system::Trait for Runtime {
 	type AccountData = balances::AccountData<Balance>;
 	/// Weight information for the extrinsics of this pallet.
 	type SystemWeightInfo = ();
+	/// This is used as an identifier of the chain. 42 is the generic substrate prefix.
+	type SS58Prefix = SS58Prefix;
 }
 
 parameter_types! {
 	pub const MinimumPeriod: Moment = SLOT_DURATION / 2;
 }
 
-impl timestamp::Trait for Runtime {
+impl timestamp::Config for Runtime {
 	type Moment = Moment;
 	type OnTimestampSet = Babe;
 	type MinimumPeriod = MinimumPeriod;
@@ -215,7 +203,7 @@ parameter_types! {
 	pub const ExpectedBlockTime: Moment = MILLISECS_PER_BLOCK;
 }
 
-impl babe::Trait for Runtime {
+impl babe::Config for Runtime {
 	type EpochDuration = EpochDuration;
 	type ExpectedBlockTime = ExpectedBlockTime;
 	type EpochChangeTrigger = babe::SameAuthoritiesForever; // TODO: Check authority change
@@ -235,7 +223,7 @@ impl babe::Trait for Runtime {
 	type WeightInfo = ();
 }
 
-impl grandpa::Trait for Runtime {
+impl grandpa::Config for Runtime {
 	type Event = Event;
 
 	type Call = Call;
@@ -260,7 +248,7 @@ parameter_types! {
 	pub const MaxLocks: u32 = 50;
 }
 
-impl balances::Trait for Runtime {
+impl balances::Config for Runtime {
 	type MaxLocks = MaxLocks;
 	/// The type for recording an account's balance.
 	type Balance = Balance;
@@ -272,7 +260,7 @@ impl balances::Trait for Runtime {
 	type WeightInfo = ();
 }
 
-impl sudo::Trait for Runtime {
+impl sudo::Config for Runtime {
 	type Event = Event;
 	type Call = Call;
 }
@@ -427,6 +415,15 @@ impl_runtime_apis! {
 			Babe::current_epoch_start()
 		}
 
+		fn current_epoch() -> sp_babe::Epoch {
+			print("@@current_epoch()@@");
+			Babe::current_epoch()
+		}
+
+		fn next_epoch() -> sp_babe::Epoch {
+			print("@@next_epoch()@@");
+			Babe::next_epoch()
+		}
 
 		fn generate_key_ownership_proof(
 			_slot_number: sp_babe::SlotNumber,
