@@ -11,7 +11,8 @@ on:
     - '!test/fixtures/genesis/**'
     - '!test/helpers/ImplementationFixture.jl'
     - '!test/runtimes/tester/**'
-    - '!test/hosts/**'
+    - '!test/hosts/Makefile'
+    - '!test/hosts/substrate'
     - '!test/README.md'
 
 jobs:
