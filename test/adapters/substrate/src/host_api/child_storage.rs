@@ -1,9 +1,8 @@
 use crate::host_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
-pub fn ext_default_child_storage_set_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_default_child_storage_set_version_1(mut rtm: Runtime, input: ParsedInput) {
+    // Parse inputs
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
     let key = input.get(2);
@@ -46,13 +45,12 @@ pub fn ext_default_child_storage_set_version_1(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
-pub fn ext_default_child_storage_get_version_1(input: ParsedInput) {
-    ext_default_child_storage_set_version_1(input)
+pub fn ext_default_child_storage_get_version_1(rtm: Runtime, input: ParsedInput) {
+    ext_default_child_storage_set_version_1(rtm, input)
 }
 
-pub fn ext_default_child_storage_read_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_default_child_storage_read_version_1(mut rtm: Runtime, input: ParsedInput) {
+    // Parse inputs
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
     let key = input.get(2);
@@ -125,9 +123,8 @@ pub fn ext_default_child_storage_read_version_1(input: ParsedInput) {
     println!("{}", str(&res));
 }
 
-pub fn ext_default_child_storage_clear_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_default_child_storage_clear_version_1(mut rtm: Runtime, input: ParsedInput) {
+    // Parse inputs
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
     let key = input.get(2);
@@ -171,9 +168,8 @@ pub fn ext_default_child_storage_clear_version_1(input: ParsedInput) {
     assert!(res.is_none());
 }
 
-pub fn ext_default_child_storage_storage_kill_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_default_child_storage_storage_kill_version_1(mut rtm: Runtime, input: ParsedInput) {
+    // Parse inputs
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
     let key1 = input.get(2);
@@ -244,9 +240,8 @@ pub fn ext_default_child_storage_storage_kill_version_1(input: ParsedInput) {
     assert!(res.is_none());
 }
 
-pub fn ext_default_child_storage_exists_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_default_child_storage_exists_version_1(mut rtm: Runtime, input: ParsedInput) {
+    // Parse inputs
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
     let key = input.get(2);
@@ -288,9 +283,8 @@ pub fn ext_default_child_storage_exists_version_1(input: ParsedInput) {
     println!("true");
 }
 
-pub fn ext_default_child_storage_clear_prefix_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_default_child_storage_clear_prefix_version_1(mut rtm: Runtime, input: ParsedInput) {
+    // Parse inputs
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
     let prefix = input.get(2);
@@ -354,9 +348,8 @@ pub fn ext_default_child_storage_clear_prefix_version_1(input: ParsedInput) {
     }
 }
 
-pub fn ext_default_child_storage_root_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_default_child_storage_root_version_1(mut rtm: Runtime, input: ParsedInput) {
+    // Parse inputs
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
     let key1 = input.get(2);
@@ -396,9 +389,8 @@ pub fn ext_default_child_storage_root_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_default_child_storage_next_key_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_default_child_storage_next_key_version_1(mut rtm: Runtime, input: ParsedInput) {
+    // Parse inputs
     let child_key1 = input.get(0);
     let child_key2 = input.get(1);
     let key1 = input.get(2);
