@@ -1,8 +1,8 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|old-dots>>
+<style|<tuple|book|old-dots|old-lengths>>
 
 <\body>
   <appendix|Runtime Entries><label|sect-runtime-entries>
@@ -220,6 +220,27 @@
 
   <\itemize-dot>
     <item>None.
+  </itemize-dot>
+
+  <subsection|<verbatim|Metadata_metadata>>
+
+  Returns native Runtime metadata in an opaque form.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A byte slice of unknown length containing the metadata in an opaque
+    form.
   </itemize-dot>
 
   <subsection|<verbatim|hash_and_length>><label|sect-rte-hash-and-length>
@@ -616,11 +637,13 @@
 
 <\initial>
   <\collection>
-    <associate|chapter-nr|6>
-    <associate|page-first|113>
+    <associate|chapter-nr|8>
+    <associate|page-first|139>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|section-nr|2<uninit>>
+    <associate|subsection-nr|0>
   </collection>
 </initial>
 
@@ -628,24 +651,25 @@
   <\collection>
     <associate|auto-1|<tuple|A|107>>
     <associate|auto-10|<tuple|A.2.5|109>>
-    <associate|auto-11|<tuple|A.2|109>>
-    <associate|auto-12|<tuple|A.2.6|109>>
+    <associate|auto-11|<tuple|A.2.6|109>>
+    <associate|auto-12|<tuple|A.2|109>>
     <associate|auto-13|<tuple|A.2.7|109>>
-    <associate|auto-14|<tuple|A.3|110>>
-    <associate|auto-15|<tuple|A.4|110>>
-    <associate|auto-16|<tuple|A.5|110>>
-    <associate|auto-17|<tuple|A.6|111>>
-    <associate|auto-18|<tuple|A.2.8|111>>
-    <associate|auto-19|<tuple|A.7|111>>
+    <associate|auto-14|<tuple|A.2.8|110>>
+    <associate|auto-15|<tuple|A.3|110>>
+    <associate|auto-16|<tuple|A.4|110>>
+    <associate|auto-17|<tuple|A.5|111>>
+    <associate|auto-18|<tuple|A.6|111>>
+    <associate|auto-19|<tuple|A.2.9|111>>
     <associate|auto-2|<tuple|A.1|107>>
-    <associate|auto-20|<tuple|A.8|111>>
-    <associate|auto-21|<tuple|A.9|112>>
-    <associate|auto-22|<tuple|A.10|112>>
-    <associate|auto-23|<tuple|A.11|?>>
-    <associate|auto-24|<tuple|A.12|?>>
-    <associate|auto-25|<tuple|A.13|?>>
-    <associate|auto-26|<tuple|A.2.9|?>>
+    <associate|auto-20|<tuple|A.7|111>>
+    <associate|auto-21|<tuple|A.8|112>>
+    <associate|auto-22|<tuple|A.9|112>>
+    <associate|auto-23|<tuple|A.10|?>>
+    <associate|auto-24|<tuple|A.11|?>>
+    <associate|auto-25|<tuple|A.12|?>>
+    <associate|auto-26|<tuple|A.13|?>>
     <associate|auto-27|<tuple|A.2.10|?>>
+    <associate|auto-28|<tuple|A.2.11|?>>
     <associate|auto-3|<tuple|A.1|107>>
     <associate|auto-4|<tuple|A.2|107>>
     <associate|auto-5|<tuple|A.2.1|108>>
@@ -655,7 +679,7 @@
     <associate|auto-9|<tuple|A.2.4|109>>
     <associate|defn-invalid-transaction|<tuple|A.4|110>>
     <associate|defn-rt-apisvec|<tuple|A.1|?>>
-    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.10|112>>
+    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.11|112>>
     <associate|defn-rt-core-version|<tuple|A.2.1|108>>
     <associate|defn-rte-apply-extrinsic-result|<tuple|A.6|?>>
     <associate|defn-rte-custom-module-error|<tuple|A.9|?>>
@@ -668,11 +692,12 @@
     <associate|defn-unknown-transaction|<tuple|A.5|110>>
     <associate|defn-valid-transaction|<tuple|A.2|110>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.2.5|109>>
+    <associate|sect-rte-apply-extrinsic|<tuple|A.2.9|?>>
+    <associate|sect-rte-babeapi-epoch|<tuple|A.2.6|109>>
     <associate|sect-rte-core-execute-block|<tuple|A.2.2|?>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.2.6|109>>
-    <associate|sect-rte-hash-and-length|<tuple|A.2.4|109>>
-    <associate|sect-rte-validate-transaction|<tuple|A.2.7|109>>
+    <associate|sect-rte-grandpa-auth|<tuple|A.2.7|109>>
+    <associate|sect-rte-hash-and-length|<tuple|A.2.5|109>>
+    <associate|sect-rte-validate-transaction|<tuple|A.2.8|109>>
     <associate|sect-runtime-entries|<tuple|A|107>>
     <associate|snippet-runtime-enteries|<tuple|A.1|107>>
   </collection>
