@@ -1,4 +1,4 @@
-<TeXmacs|1.99.14>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -596,7 +596,7 @@
     <item><strong|<samp|authority Ids>>: This is the list of the Ids of
     authorities, which have voted for the block to be stored and<verbatim|>
     is formally referred to as <math|A<around|(|B|)>>. An authority Id is
-    32bit.
+    256-bit.
   </itemize>
 
   <subsubsection|Block Body><label|sect-block-body>
@@ -999,8 +999,8 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|2>
-    <associate|page-first|21>
-    <associate|section-nr|2<uninit>>
+    <associate|page-first|23>
+    <associate|section-nr|2>
     <associate|subsection-nr|1>
   </collection>
 </initial>
@@ -1016,9 +1016,9 @@
     <associate|auto-11|<tuple|3.2.2|23>>
     <associate|auto-12|<tuple|3.2.2.1|23>>
     <associate|auto-13|<tuple|3.2.3|24>>
-    <associate|auto-14|<tuple|3.2.3|24>>
-    <associate|auto-15|<tuple|3.2.3|24>>
-    <associate|auto-16|<tuple|3.2.3|24>>
+    <associate|auto-14|<tuple|Transaction Message|24>>
+    <associate|auto-15|<tuple|transaction pool|24>>
+    <associate|auto-16|<tuple|transaction queue|24>>
     <associate|auto-17|<tuple|3.2.3.1|25>>
     <associate|auto-18|<tuple|3.1|25>>
     <associate|auto-19|<tuple|3.3|25>>

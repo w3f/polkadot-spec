@@ -701,7 +701,10 @@
 
   <strong|Return>:
 
-  A tuple containing configuration data used by the Babe consensus engine.
+  <\itemize-dot>
+    <item>A tuple containing configuration data used by the Babe consensus
+    engine.
+  </itemize-dot>
 
   <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|18|18|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|4|1|1|cell-lborder|0ln>|<cwith|2|4|3|3|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|6|1|1|cell-lborder|0ln>|<cwith|5|6|3|3|cell-rborder|0ln>|<cwith|7|7|1|-1|cell-tborder|1ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|7|10|1|1|cell-lborder|0ln>|<cwith|7|10|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|15|1|1|cell-lborder|0ln>|<cwith|11|15|3|3|cell-rborder|0ln>|<cwith|16|16|1|-1|cell-tborder|1ln>|<cwith|15|15|1|-1|cell-bborder|1ln>|<cwith|16|16|1|-1|cell-bborder|1ln>|<cwith|17|17|1|-1|cell-tborder|1ln>|<cwith|16|16|1|1|cell-lborder|0ln>|<cwith|16|16|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|SlotDuration>|<cell|The
   slot duration in milliseconds. Currently, only the value
@@ -730,7 +733,23 @@
 
   <subsection|<verbatim|BabeApi_current_epoch_start>>
 
+  Finds the start slot of the current epoch.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Returns>:
+
+  <\itemize-dot>
+    <item>A 64-bit integer representing the slot number.
+  </itemize-dot>
 
   <subsection|<verbatim|BabeApi_current_epoch>>
 
