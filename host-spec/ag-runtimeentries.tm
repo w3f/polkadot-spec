@@ -745,19 +745,83 @@
 
   \;
 
-  <strong|Returns>:
+  <strong|Return>:
 
   <\itemize-dot>
-    <item>A 64-bit integer representing the slot number.
+    <item>A unsigned 64-bit integer representing the slot number.
   </itemize-dot>
 
-  <subsection|<verbatim|BabeApi_current_epoch>>
+  <subsection|<verbatim|BabeApi_current_epoch>><label|sect-babeapi_current_epoch>
+
+  Produces information about the current epoch.
 
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A datastructure of the following format:
+
+    <\equation*>
+      <around*|(|E<rsub|i>,S<rsub|s>,d,A,r|)>
+    </equation*>
+
+    where:
+
+    <\itemize-dot>
+      <item><math|E<rsub|i>> is a unsigned 64-bit integer representing the
+      epoch index.
+
+      <item><math|S<rsub|s>> is a unsigned 64-bit integer representing the
+      starting slot of the epoch.
+
+      <item><math|d> is a unsigned 64-bit integer representing the duration
+      of the epoch.
+
+      <item><math|A> is an array of varying size containing tuple pairs of
+      the following format:
+
+      <\equation*>
+        <around*|(|A<rsub|id>,w|)>
+      </equation*>
+
+      where <math|A<rsub|id>> is the 256-bit public key of an authority and
+      <math|w> is a unsigned 64-bit integer representing the weight of an
+      authority. <todo|what does this weight indicate?>
+
+      <item><math|r> is an 256-bit array containing the randomness for the
+      epoch <todo|reference randomness>
+    </itemize-dot>
+  </itemize-dot>
 
   <subsection|<verbatim|BabeApi_next_epoch>>
 
+  Produces information about the next epoch.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>Returns the same datastructure as described in Section
+    <reference|sect-babeapi_current_epoch>.
+  </itemize-dot>
 
   <subsection|<verbatim|BabeApi_generate_key_ownership_proof>>
 
@@ -890,6 +954,7 @@
     <associate|defn-transaction-validity-error|<tuple|A.10|110>>
     <associate|defn-unknown-transaction|<tuple|A.12|110>>
     <associate|defn-valid-transaction|<tuple|A.9|110>>
+    <associate|sect-babeapi_current_epoch|<tuple|A.2.30|?>>
     <associate|sect-grandpaApi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
     <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|A.2.27|?>>
     <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
