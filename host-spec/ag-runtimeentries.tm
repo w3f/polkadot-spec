@@ -633,7 +633,7 @@
   get tracked via Runtiem-to-consensus engine messages as described in
   Section <reference|sect-consensus-message-digest>.
 
-  <subsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>>
+  <subsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>
 
   Submits a report about an observed equivocation as defined in Definition
   <reference|defn-equivocation>.
@@ -645,7 +645,8 @@
   <\itemize-dot>
     <item>The equivocation proof. <todo|reference that type>
 
-    <item>An opaque byte slice used to represent the key ownership proof.
+    <item>An proof of the key owner in an opaque form as described in Section
+    <reference|sect-grandpaapi_generate_key_ownership_proof>.
   </itemize-dot>
 
   \;
@@ -654,13 +655,34 @@
 
   <\itemize-dot>
     <item>A SCALE encoded <verbatim|Option> as defined in Definition
-    <reference|defn-option-type> containing an empty <verbatim|Some> value on
-    success or <verbatim|None> on failure.
+    <reference|defn-option-type> containing an empty value on success.
   </itemize-dot>
 
-  <subsection|<verbatim|GrandpaApi_generate_key_ownership_proof>>
+  <subsection|<verbatim|GrandpaApi_generate_key_ownership_proof>><label|sect-grandpaapi_generate_key_ownership_proof>
+
+  Generates a proof of the membership of a key owner in the specified block
+  state. The returned value is used to report equivocations as described in
+  Section <reference|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>.
 
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>The authority set Id as defined in Definition
+    <reference|defn-authority-set-id>.
+
+    <item>The 256-bit public key of the authority.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A SCALE encoded <verbatim|Option> as defined in Definition
+    <reference|defn-option-type> containing the proof in an opaque form.
+  </itemize-dot>
 
   <subsection|<verbatim|BabeApi_configuration>><label|sect-rte-babeapi-epoch>
 
@@ -849,6 +871,9 @@
     <associate|defn-transaction-validity-error|<tuple|A.10|110>>
     <associate|defn-unknown-transaction|<tuple|A.12|110>>
     <associate|defn-valid-transaction|<tuple|A.9|110>>
+    <associate|sect-grandpaApi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
+    <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|A.2.27|?>>
+    <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
     <associate|sect-rte-apply-extrinsic|<tuple|A.2.5|?>>
     <associate|sect-rte-babeapi-epoch|<tuple|A.2.28|109>>
