@@ -17,72 +17,83 @@
 
   <\small-figure>
     <\cpp-code>
-      \ \ (export "Core_version" (func $Core_version))
+      \ \ (export "Core_version")
 
-      \ \ (export "Core_execute_block" (func $Core_execute_block))
+      \ \ (export "Core_execute_block")
 
-      \ \ (export "Core_initialize_block" (func $Core_initialize_block))
+      \ \ (export "Core_initialize_block")
 
-      \ \ (export "Metadata_metadata" (func $Metadata_metadata))
+      \ \ (export "Metadata_metadata")
 
-      \ \ (export "BlockBuilder_apply_extrinsic" (func
-      $BlockBuilder_apply_extrinsic))
+      \ \ (export "BlockBuilder_apply_extrinsic")
 
-      \ \ (export "BlockBuilder_finalize_block" (func
-      $BlockBuilder_finalize_block))
+      \ \ (export "BlockBuilder_finalize_block")
 
-      \ \ (export "BlockBuilder_inherent_extrinsics"\ 
+      \ \ (export "BlockBuilder_inherent_extrinsics")
 
-      \ \ \ \ \ \ \ \ \ \ (func $BlockBuilder_inherent_extrinsics))
+      \ \ (export "BlockBuilder_check_inherents")
 
-      \ \ (export "BlockBuilder_check_inherents" (func
-      $BlockBuilder_check_inherents))
+      \ \ (export "BlockBuilder_random_seed")
 
-      \ \ (export "BlockBuilder_random_seed" (func
-      $BlockBuilder_random_seed))
+      \ \ (export "TaggedTransactionQueue_validate_transaction")
 
-      \ \ (export "TaggedTransactionQueue_validate_transaction"\ 
+      \ \ (export "OffchainWorkerApi_offchain_worker")
 
-      \ \ \ \ \ \ \ \ \ \ (func $TaggedTransactionQueue_validate_transaction))
+      \ \ (export "ParachainHost_validators")
 
-      \ \ (export "OffchainWorkerApi_offchain_worker"\ 
+      \ \ (export "ParachainHost_validator_groups")
 
-      \ \ \ \ \ \ \ \ \ \ (func $OffchainWorkerApi_offchain_worker))
+      \ \ (export "ParachainHost_availability_cores")
 
-      \ \ (export "ParachainHost_validators" (func
-      $ParachainHost_validators))
+      \ \ (export "ParachainHost_persisted_validation_data")
 
-      \ \ (export "ParachainHost_duty_roster" (func
-      $ParachainHost_duty_roster))
+      \ \ (export "ParachainHost_check_validation_outputs")
 
-      \ \ (export "ParachainHost_active_parachains"\ 
+      \ \ (export "ParachainHost_session_index_for_child")
 
-      \ \ \ \ \ \ \ \ \ \ (func $ParachainHost_active_parachains))
+      \ \ (export "ParachainHost_session_info")
 
-      \ \ (export "ParachainHost_parachain_status" (func
-      $ParachainHost_parachain_status))
+      \ \ (export "ParachainHost_validation_code")
 
-      \ \ (export "ParachainHost_parachain_code" (func
-      $ParachainHost_parachain_code))
+      \ \ (export "ParachainHost_historical_validation_code")
 
-      \ \ (export "ParachainHost_ingress" (func $ParachainHost_ingress))
+      \ \ (export "ParachainHost_candidate_pending_availability")
 
-      \ \ (export "GrandpaApi_grandpa_pending_change"\ 
+      \ \ (export "ParachainHost_candidate_events")
 
-      \ \ \ \ \ \ \ \ \ \ (func $GrandpaApi_grandpa_pending_change))
+      \ \ (export "ParachainHost_dmq_contents")
 
-      \ \ (export "GrandpaApi_grandpa_forced_change"\ 
+      \ \ (export "ParachainHost_inbound_hrmp_channels_contents")
 
-      \ \ \ \ \ \ \ \ \ \ (func $GrandpaApi_grandpa_forced_change))
+      \ \ (export "GrandpaApi_authorities")
 
-      \ \ (export "GrandpaApi_grandpa_authorities" (func
-      $GrandpaApi_grandpa_authorities))
+      \ \ (export "GrandpaApi_submit_report_equivocation_unsigned_extrinsic")
 
-      \ \ (export "BabeApi_configuration" (func $BabeApi_configuration))
+      \ \ (export "GrandpaApi_generate_key_ownership_proof")
 
-      \ \ (export "SessionKeys_generate_session_keys"\ 
+      \ \ (export "BabeApi_configuration")
 
-      \ \ \ \ \ \ \ \ \ \ (func $SessionKeys_generate_session_keys))
+      \ \ (export "BabeApi_current_epoch_start")
+
+      \ \ (export "BabeApi_current_epoch")
+
+      \ \ (export "BabeApi_next_epoch")
+
+      \ \ (export "BabeApi_generate_key_ownership_proof")
+
+      \ \ (export "BabeApi_submit_report_equivocation_unsigned_extrinsic")
+
+      \ \ (export "AuthorityDiscoveryApi_authorities")
+
+      \ \ (export "SessionKeys_generate_session_keys")
+
+      \ \ (export "SessionKeys_decode_session_keys")
+
+      \ \ (export "AccountNonceApi_account_nonce")
+
+      \ \ (export "TransactionPaymentApi_query_info")
+
+      \ \ (export "TransactionPaymentApi_query_fee_details")
 
       \;
     </cpp-code>
@@ -222,7 +233,7 @@
     <item>None.
   </itemize-dot>
 
-  <subsection|<verbatim|Metadata_metadata>>
+  <subsection|<verbatim|Metadata_metadatabb>>
 
   Returns native Runtime metadata in an opaque form.
 
