@@ -254,203 +254,6 @@
     form.
   </itemize-dot>
 
-  <subsection|<verbatim|hash_and_length>><label|sect-rte-hash-and-length>
-
-  An auxilarry function which returns hash and encoding length of an
-  extrinsics.
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize>
-    <item>A blob of an extrinsic.
-  </itemize>
-
-  <verbatim|>
-
-  <strong|Return>:
-
-  <\itemize-dot>
-    <item>Pair of Blake2Hash of the blob as element of
-    <math|\<bbb-B\><rsub|32>> and its length as 64 bit integer.
-  </itemize-dot>
-
-  <subsection|<verbatim|BabeApi_configuration>><label|sect-rte-babeapi-epoch>
-
-  This entry is called to obtain the current configuration of BABE consensus
-  protocol.
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize>
-    <item>None
-  </itemize>
-
-  \;
-
-  <strong|Return>:
-
-  A tuple containing configuration data used by the Babe consensus engine.
-
-  <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|18|18|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|4|1|1|cell-lborder|0ln>|<cwith|2|4|3|3|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|6|1|1|cell-lborder|0ln>|<cwith|5|6|3|3|cell-rborder|0ln>|<cwith|7|7|1|-1|cell-tborder|1ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|7|10|1|1|cell-lborder|0ln>|<cwith|7|10|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|15|1|1|cell-lborder|0ln>|<cwith|11|15|3|3|cell-rborder|0ln>|<cwith|16|16|1|-1|cell-tborder|1ln>|<cwith|15|15|1|-1|cell-bborder|1ln>|<cwith|16|16|1|-1|cell-bborder|1ln>|<cwith|17|17|1|-1|cell-tborder|1ln>|<cwith|16|16|1|1|cell-lborder|0ln>|<cwith|16|16|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|SlotDuration>|<cell|The
-  slot duration in milliseconds. Currently, only the value
-  provided>|<cell|Unsigned 64bit>>|<row|<cell|>|<cell|by this type at genesis
-  will be used. Dynamic slot duration may
-  be>|<cell|integer>>|<row|<cell|>|<cell|supported in the
-  future.>|<cell|>>|<row|<cell|EpochLength>|<cell|The duration of epochs in
-  slots.>|<cell|Unsigned 64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Constant>|<cell|A
-  constant value that is used in the threshold calculation
-  formula>|<cell|Tuple containing>>|<row|<cell|>|<cell|as defined in
-  definition <reference|defn-babe-constant>.>|<cell|two
-  unsigned>>|<row|<cell|>|<cell|>|<cell|64bit
-  integers>>|<row|<cell|>|<cell|>|<cell|>>|<row|<cell|Genesis>|<cell|The
-  authority list for the genesis epoch as defined in Definition
-  <reference|defn-authority-list>. >|<cell|Array of
-  tuples>>|<row|<cell|Authorities>|<cell|>|<cell|containing a
-  256-bit>>|<row|<cell|>|<cell|>|<cell|byte array and
-  a>>|<row|<cell|>|<cell|>|<cell|unsigned
-  64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Randomness>|<cell|The
-  randomness for the genesis epoch>|<cell|32-byte
-  array>>|<row|<cell|SecondarySlot>|<cell|Whether this chain should run with
-  secondary slots and wether>|<cell|8bit enum>>|<row|<cell|>|<cell|they are
-  assigned in a round-robin manner or via a second VRF.>|<cell|>>>>>>
-    The tuple provided by <strong|BabeApi_configuration>.
-  </big-table>
-
-  <subsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
-
-  This entry fetches the list of GRANDPA authorities according to the genesis
-  block and is used to initialize authority list defined in Definition
-  <reference|defn-authority-list>, at genisis. Any future authority changes
-  get tracked via Runtiem-to-consensus engine messages as described in
-  Section <reference|sect-consensus-message-digest>.
-
-  <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
-
-  This entry is invoked against extrinsics submitted through the transaction
-  network message <reference|sect-msg-transactions> and indicates if the
-  submitted blob represents a valid extrinsics applied to the specified
-  block. This function gets called internally when executing blocks with the
-  <verbatim|Core_execute_block> runtime function as described in section
-  <reference|sect-rte-core-execute-block>.
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize>
-    <item>UTX: A byte array that contains the transaction.
-  </itemize>
-
-  \;
-
-  <strong|Return>:
-
-  This function returns a <verbatim|Result> as defined in Definition
-  <reference|defn-result-type> which contains the type <em|ValidTransaction>
-  as defined in Definition <reference|defn-valid-transaction> on success and
-  the type <em|TransactionValidityError> as defined in Definition
-  <reference|defn-transaction-validity-error> on failure.
-
-  <\definition>
-    <label|defn-valid-transaction><strong|ValidTransaction> is a tuple which
-    contains information concerning a valid transaction.
-
-    \;
-
-    <\small-table|<tabular|<tformat|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-bborder|0ln>|<cwith|7|7|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-bborder|0ln>|<cwith|12|12|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|2|2|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|0ln>|<twith|table-rborder|1ln>|<twith|table-lborder|0ln>|<twith|table-tborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|12|12|1|1|cell-tborder|0ln>|<cwith|11|11|1|1|cell-bborder|0ln>|<cwith|12|12|2|2|cell-tborder|0ln>|<cwith|11|11|2|2|cell-bborder|0ln>|<cwith|12|12|2|2|cell-lborder|0ln>|<cwith|12|12|1|1|cell-rborder|0ln>|<cwith|12|12|3|3|cell-tborder|0ln>|<cwith|11|11|3|3|cell-bborder|0ln>|<cwith|2|-1|3|3|cell-lborder|0ln>|<cwith|2|-1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|12|12|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Priority>|<cell|Determines
-    the ordering of two transactions that have>|<cell|Unsigned
-    64bit>>|<row|<cell|>|<cell|all their dependencies (required tags)
-    satisfied.>|<cell|integer>>|<row|<cell|Requires>|<cell|List of tags
-    specifying extrinsics which should be applied >|<cell|Array
-    containing>>|<row|<cell|>|<cell|before the current exrinsics can be
-    applied.>|<cell|inner arrays>>|<row|<cell|Provides>|<cell|Informs Runtime
-    of the extrinsics depending on the tags in>|<cell|Array
-    containing>>|<row|<cell|>|<cell|the list that can be applied after
-    current extrinsics are being applied.>|<cell|inner
-    arrays>>|<row|<cell|>|<cell|Describes the minimum number of blocks for
-    the validity to be correct>|<cell|>>|<row|<cell|Longevity>|<cell|After
-    this period, the transaction should be removed from the >|<cell|Unsigned
-    64bit>>|<row|<cell|>|<cell|pool or revalidated.>|<cell|integer>>|<row|<cell|Propagate>|<cell|A
-    flag indicating if the transaction should be propagated to
-    >|<cell|Boolean>>|<row|<cell|>|<cell|other peers.>|<cell|>>>>>>
-      The tuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
-
-      in the case the transaction is judged to be valid.
-    </small-table>
-  </definition>
-
-  Note that if <em|Propagate> is set to <verbatim|false> the transaction will
-  still be considered for including in blocks that are authored on the
-  current node, but will never be sent to other peers.
-
-  <\definition>
-    <label|defn-transaction-validity-error><strong|TransactionValidityError>
-    is a varying data type as defined in Definition
-    <reference|defn-varrying-data-type>, where following values are possible:
-
-    \;
-
-    <small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|<strong|>Id>>|<cell|<strong|Descri<strong|>ption>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|The
-    transaction is invalid.>|<cell|InvalidTransaction
-    (<reference|defn-invalid-transaction>)>>|<row|<cell|1>|<cell|The
-    transaction validity can't be determined.>|<cell|UnknownTransaction
-    (<reference|defn-unknown-transaction>)>>>>>|Type variation for the return
-    value of <verbatim|TaggedTransactionQueue_transaction_validity>.>
-
-    <\definition>
-      <label|defn-invalid-transaction><strong|InvalidTransaction> is a
-      varying data type as defined in Definition
-      <reference|defn-varrying-data-type> which can get appended to
-      TransactionValidityError and describes the invalid transaction in more
-      precise detail. The following values are possible:
-
-      <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|Call:
-      The call of the transaction is not expected>|<cell|>>|<row|<cell|1>|<cell|Payment:
-      Inability to pay some fees (e.g. balance too
-      low)>|<cell|>>|<row|<cell|2>|<cell|Future: Transaction not yet valid
-      (e.g. nonce too high)>|<cell|>>|<row|<cell|3>|<cell|Stale: Transaction
-      is outdated (e.g. nonce too low)>|<cell|>>|<row|<cell|4>|<cell|BadProof:
-      Bad transaction proof (e.g. bad signature)>|<cell|>>|<row|<cell|5>|<cell|AncientBirthBlock:
-      Transaction birth block is ancient.>|<cell|>>|<row|<cell|6>|<cell|ExhaustsResources:
-      Transaction would exhaus the resources of the current
-      block>|<cell|>>|<row|<cell|7>|<cell|Custom: Any other custom message
-      not covered by this type. >|<cell|one byte>>>>>>
-        Type variant whichs gets appended to Id 0 of
-        <strong|TransactionValidityError>.
-      </big-table>
-    </definition>
-
-    <\definition>
-      <label|defn-unknown-transaction><strong|UnknownTransacion> is a varying
-      data type as defined in Definition <reference|defn-varrying-data-type>
-      which can get appended to TransactionValidityError and describes the
-      unknown transaction validity in more precise detail. The following
-      values are possible:
-
-      <\big-table|<tabular|<tformat|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|CannotLookup:
-      Could not lookup some info that is required for the
-      transaction>|<cell|>>|<row|<cell|1>|<cell|NoUnsignedValidator: No
-      validator found for the given unsigned
-      transaction.>|<cell|>>|<row|<cell|2>|<cell|Custom: Any other custom
-      message not covered by this type>|<cell|one byte>>>>>>
-        Type variant whichs gets appended to Id 1 of
-        <strong|TransactionValidityError>.
-      </big-table>
-    </definition>
-
-    \;
-  </definition>
-
-  Note that when this function gets called by the Polkadot host in order to
-  validate a transaction received from peers, Polkadot host usually
-  disregards and rewinds state changes resulting for such a call.
-
-  \;
-
   <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
   <label|sect-rte-apply-extrinsic>
 
@@ -602,7 +405,12 @@
     </big-table>
   </definition>
 
-  \;
+  <subsection|<verbatim|BlockBuilder_finalize_block>><label|defn-rt-blockbuilder-finalize-block>
+
+  Finalize the block - it is up to the caller to ensure that all header
+  fields are valid except for the state root. State changes resulting from
+  calling this function are usually meant to persist upon successful
+  execution of the function and appending of the block to the chain.
 
   <subsection|<verbatim|BlockBuilder_inherent_extrinsics>>
 
@@ -632,12 +440,306 @@
     array.
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_finalize_block>><label|defn-rt-blockbuilder-finalize-block>
+  <subsection|<verbatim|BlockBuilder_check_inherents>>
 
-  Finalize the block - it is up to the caller to ensure that all header
-  fields are valid except for the state root. State changes resulting from
-  calling this function are usually meant to persist upon successful
-  execution of the function and appending of the block to the chain
+  \;
+
+  <subsection|<verbatim|BlockBuilder_random_seed>>
+
+  \;
+
+  <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
+
+  This entry is invoked against extrinsics submitted through the transaction
+  network message <reference|sect-msg-transactions> and indicates if the
+  submitted blob represents a valid extrinsics applied to the specified
+  block. This function gets called internally when executing blocks with the
+  <verbatim|Core_execute_block> runtime function as described in section
+  <reference|sect-rte-core-execute-block>.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item>UTX: A byte array that contains the transaction.
+  </itemize>
+
+  \;
+
+  <strong|Return>:
+
+  This function returns a <verbatim|Result> as defined in Definition
+  <reference|defn-result-type> which contains the type <em|ValidTransaction>
+  as defined in Definition <reference|defn-valid-transaction> on success and
+  the type <em|TransactionValidityError> as defined in Definition
+  <reference|defn-transaction-validity-error> on failure.
+
+  <\definition>
+    <label|defn-valid-transaction><strong|ValidTransaction> is a tuple which
+    contains information concerning a valid transaction.
+
+    \;
+
+    <\small-table|<tabular|<tformat|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-bborder|0ln>|<cwith|7|7|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-bborder|0ln>|<cwith|12|12|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|2|2|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|0ln>|<twith|table-rborder|1ln>|<twith|table-lborder|0ln>|<twith|table-tborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|12|12|1|1|cell-tborder|0ln>|<cwith|11|11|1|1|cell-bborder|0ln>|<cwith|12|12|2|2|cell-tborder|0ln>|<cwith|11|11|2|2|cell-bborder|0ln>|<cwith|12|12|2|2|cell-lborder|0ln>|<cwith|12|12|1|1|cell-rborder|0ln>|<cwith|12|12|3|3|cell-tborder|0ln>|<cwith|11|11|3|3|cell-bborder|0ln>|<cwith|2|-1|3|3|cell-lborder|0ln>|<cwith|2|-1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|12|12|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Priority>|<cell|Determines
+    the ordering of two transactions that have>|<cell|Unsigned
+    64bit>>|<row|<cell|>|<cell|all their dependencies (required tags)
+    satisfied.>|<cell|integer>>|<row|<cell|Requires>|<cell|List of tags
+    specifying extrinsics which should be applied >|<cell|Array
+    containing>>|<row|<cell|>|<cell|before the current exrinsics can be
+    applied.>|<cell|inner arrays>>|<row|<cell|Provides>|<cell|Informs Runtime
+    of the extrinsics depending on the tags in>|<cell|Array
+    containing>>|<row|<cell|>|<cell|the list that can be applied after
+    current extrinsics are being applied.>|<cell|inner
+    arrays>>|<row|<cell|>|<cell|Describes the minimum number of blocks for
+    the validity to be correct>|<cell|>>|<row|<cell|Longevity>|<cell|After
+    this period, the transaction should be removed from the >|<cell|Unsigned
+    64bit>>|<row|<cell|>|<cell|pool or revalidated.>|<cell|integer>>|<row|<cell|Propagate>|<cell|A
+    flag indicating if the transaction should be propagated to
+    >|<cell|Boolean>>|<row|<cell|>|<cell|other peers.>|<cell|>>>>>>
+      The tuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
+
+      in the case the transaction is judged to be valid.
+    </small-table>
+  </definition>
+
+  Note that if <em|Propagate> is set to <verbatim|false> the transaction will
+  still be considered for including in blocks that are authored on the
+  current node, but will never be sent to other peers.
+
+  <\definition>
+    <label|defn-transaction-validity-error><strong|TransactionValidityError>
+    is a varying data type as defined in Definition
+    <reference|defn-varrying-data-type>, where following values are possible:
+
+    \;
+
+    <small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|<strong|>Id>>|<cell|<strong|Descri<strong|>ption>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|The
+    transaction is invalid.>|<cell|InvalidTransaction
+    (<reference|defn-invalid-transaction>)>>|<row|<cell|1>|<cell|The
+    transaction validity can't be determined.>|<cell|UnknownTransaction
+    (<reference|defn-unknown-transaction>)>>>>>|Type variation for the return
+    value of <verbatim|TaggedTransactionQueue_transaction_validity>.>
+
+    <\definition>
+      <label|defn-invalid-transaction><strong|InvalidTransaction> is a
+      varying data type as defined in Definition
+      <reference|defn-varrying-data-type> which can get appended to
+      TransactionValidityError and describes the invalid transaction in more
+      precise detail. The following values are possible:
+
+      <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|Call:
+      The call of the transaction is not expected>|<cell|>>|<row|<cell|1>|<cell|Payment:
+      Inability to pay some fees (e.g. balance too
+      low)>|<cell|>>|<row|<cell|2>|<cell|Future: Transaction not yet valid
+      (e.g. nonce too high)>|<cell|>>|<row|<cell|3>|<cell|Stale: Transaction
+      is outdated (e.g. nonce too low)>|<cell|>>|<row|<cell|4>|<cell|BadProof:
+      Bad transaction proof (e.g. bad signature)>|<cell|>>|<row|<cell|5>|<cell|AncientBirthBlock:
+      Transaction birth block is ancient.>|<cell|>>|<row|<cell|6>|<cell|ExhaustsResources:
+      Transaction would exhaus the resources of the current
+      block>|<cell|>>|<row|<cell|7>|<cell|Custom: Any other custom message
+      not covered by this type. >|<cell|one byte>>>>>>
+        Type variant whichs gets appended to Id 0 of
+        <strong|TransactionValidityError>.
+      </big-table>
+    </definition>
+
+    <\definition>
+      <label|defn-unknown-transaction><strong|UnknownTransacion> is a varying
+      data type as defined in Definition <reference|defn-varrying-data-type>
+      which can get appended to TransactionValidityError and describes the
+      unknown transaction validity in more precise detail. The following
+      values are possible:
+
+      <\big-table|<tabular|<tformat|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|CannotLookup:
+      Could not lookup some info that is required for the
+      transaction>|<cell|>>|<row|<cell|1>|<cell|NoUnsignedValidator: No
+      validator found for the given unsigned
+      transaction.>|<cell|>>|<row|<cell|2>|<cell|Custom: Any other custom
+      message not covered by this type>|<cell|one byte>>>>>>
+        Type variant whichs gets appended to Id 1 of
+        <strong|TransactionValidityError>.
+      </big-table>
+    </definition>
+
+    \;
+  </definition>
+
+  Note that when this function gets called by the Polkadot host in order to
+  validate a transaction received from peers, Polkadot host usually
+  disregards and rewinds state changes resulting for such a call.
+
+  <subsection|<verbatim|OffchainWorkerApi_offchain_worker>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_validators>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_validator_groups>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_availability_cores>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_persisted_validation_data>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_check_validation_outputs>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_session_index_for_child>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_session_info>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_validation_code>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_historical_validation_code>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_candidate_pending_availability>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_candidate_events>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_dmq_contents>>
+
+  \;
+
+  <subsection|<verbatim|ParachainHost_inbound_hrmp_channel_contents>>
+
+  \;
+
+  <subsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
+
+  This entry fetches the list of GRANDPA authorities according to the genesis
+  block and is used to initialize authority list defined in Definition
+  <reference|defn-authority-list>, at genisis. Any future authority changes
+  get tracked via Runtiem-to-consensus engine messages as described in
+  Section <reference|sect-consensus-message-digest>.
+
+  <subsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>>
+
+  \;
+
+  <subsection|<verbatim|GrandpaApi_generate_key_ownership_proof>>
+
+  \;
+
+  <subsection|<verbatim|BabeApi_configuration>><label|sect-rte-babeapi-epoch>
+
+  This entry is called to obtain the current configuration of BABE consensus
+  protocol.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item>None
+  </itemize>
+
+  \;
+
+  <strong|Return>:
+
+  A tuple containing configuration data used by the Babe consensus engine.
+
+  <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|18|18|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|4|1|1|cell-lborder|0ln>|<cwith|2|4|3|3|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|6|1|1|cell-lborder|0ln>|<cwith|5|6|3|3|cell-rborder|0ln>|<cwith|7|7|1|-1|cell-tborder|1ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|7|10|1|1|cell-lborder|0ln>|<cwith|7|10|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|15|1|1|cell-lborder|0ln>|<cwith|11|15|3|3|cell-rborder|0ln>|<cwith|16|16|1|-1|cell-tborder|1ln>|<cwith|15|15|1|-1|cell-bborder|1ln>|<cwith|16|16|1|-1|cell-bborder|1ln>|<cwith|17|17|1|-1|cell-tborder|1ln>|<cwith|16|16|1|1|cell-lborder|0ln>|<cwith|16|16|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|SlotDuration>|<cell|The
+  slot duration in milliseconds. Currently, only the value
+  provided>|<cell|Unsigned 64bit>>|<row|<cell|>|<cell|by this type at genesis
+  will be used. Dynamic slot duration may
+  be>|<cell|integer>>|<row|<cell|>|<cell|supported in the
+  future.>|<cell|>>|<row|<cell|EpochLength>|<cell|The duration of epochs in
+  slots.>|<cell|Unsigned 64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Constant>|<cell|A
+  constant value that is used in the threshold calculation
+  formula>|<cell|Tuple containing>>|<row|<cell|>|<cell|as defined in
+  definition <reference|defn-babe-constant>.>|<cell|two
+  unsigned>>|<row|<cell|>|<cell|>|<cell|64bit
+  integers>>|<row|<cell|>|<cell|>|<cell|>>|<row|<cell|Genesis>|<cell|The
+  authority list for the genesis epoch as defined in Definition
+  <reference|defn-authority-list>. >|<cell|Array of
+  tuples>>|<row|<cell|Authorities>|<cell|>|<cell|containing a
+  256-bit>>|<row|<cell|>|<cell|>|<cell|byte array and
+  a>>|<row|<cell|>|<cell|>|<cell|unsigned
+  64bit>>|<row|<cell|>|<cell|>|<cell|integer>>|<row|<cell|Randomness>|<cell|The
+  randomness for the genesis epoch>|<cell|32-byte
+  array>>|<row|<cell|SecondarySlot>|<cell|Whether this chain should run with
+  secondary slots and wether>|<cell|8bit enum>>|<row|<cell|>|<cell|they are
+  assigned in a round-robin manner or via a second VRF.>|<cell|>>>>>>
+    The tuple provided by <strong|BabeApi_configuration>.
+  </big-table>
+
+  <subsection|<verbatim|BabeApi_current_epoch_start>>
+
+  \;
+
+  <subsection|<verbatim|BabeApi_current_epoch>>
+
+  \;
+
+  <subsection|<verbatim|BabeApi_current_epoch>>
+
+  \;
+
+  <subsection|<verbatim|BabeApi_next_epoch>>
+
+  \;
+
+  <subsection|<verbatim|BabeApi_generate_key_ownership_proof>>
+
+  \;
+
+  <subsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>>
+
+  \;
+
+  <subsection|<verbatim|AuthorityDiscoveryApi_authorities>>
+
+  \;
+
+  <subsection|<verbatim|SessionKeys_generate_session_keys>>
+
+  \;
+
+  <subsection|<verbatim|SessionKeys_decode_session_keys>>
+
+  \;
+
+  <subsection|<verbatim|AccountNonceApi_account_nonce>>
+
+  \;
+
+  <subsection|<verbatim|TransactionPaymentApi_query_info>>
+
+  \;
+
+  <subsection|<verbatim|TransactionPaymentApi_query_fee_details>>
+
+  \;
+
+  \;
+
+  \;
+
+  \;
+
+  \;
 
   <\with|par-mode|right>
     <qed>
@@ -662,53 +764,83 @@
   <\collection>
     <associate|auto-1|<tuple|A|107>>
     <associate|auto-10|<tuple|A.2.5|109>>
-    <associate|auto-11|<tuple|A.2.6|109>>
-    <associate|auto-12|<tuple|A.2|109>>
-    <associate|auto-13|<tuple|A.2.7|109>>
-    <associate|auto-14|<tuple|A.2.8|110>>
-    <associate|auto-15|<tuple|A.3|110>>
-    <associate|auto-16|<tuple|A.4|110>>
-    <associate|auto-17|<tuple|A.5|111>>
-    <associate|auto-18|<tuple|A.6|111>>
-    <associate|auto-19|<tuple|A.2.9|111>>
+    <associate|auto-11|<tuple|A.2|109>>
+    <associate|auto-12|<tuple|A.3|109>>
+    <associate|auto-13|<tuple|A.4|109>>
+    <associate|auto-14|<tuple|A.5|110>>
+    <associate|auto-15|<tuple|A.6|110>>
+    <associate|auto-16|<tuple|A.7|110>>
+    <associate|auto-17|<tuple|A.8|111>>
+    <associate|auto-18|<tuple|A.2.6|111>>
+    <associate|auto-19|<tuple|A.2.7|111>>
     <associate|auto-2|<tuple|A.1|107>>
-    <associate|auto-20|<tuple|A.7|111>>
-    <associate|auto-21|<tuple|A.8|112>>
-    <associate|auto-22|<tuple|A.9|112>>
-    <associate|auto-23|<tuple|A.10|?>>
-    <associate|auto-24|<tuple|A.11|?>>
-    <associate|auto-25|<tuple|A.12|?>>
-    <associate|auto-26|<tuple|A.13|?>>
-    <associate|auto-27|<tuple|A.2.10|?>>
-    <associate|auto-28|<tuple|A.2.11|?>>
+    <associate|auto-20|<tuple|A.2.8|111>>
+    <associate|auto-21|<tuple|A.2.9|112>>
+    <associate|auto-22|<tuple|A.2.10|112>>
+    <associate|auto-23|<tuple|A.9|?>>
+    <associate|auto-24|<tuple|A.10|?>>
+    <associate|auto-25|<tuple|A.11|?>>
+    <associate|auto-26|<tuple|A.12|?>>
+    <associate|auto-27|<tuple|A.2.11|?>>
+    <associate|auto-28|<tuple|A.2.12|?>>
+    <associate|auto-29|<tuple|A.2.13|?>>
     <associate|auto-3|<tuple|A.1|107>>
+    <associate|auto-30|<tuple|A.2.14|?>>
+    <associate|auto-31|<tuple|A.2.15|?>>
+    <associate|auto-32|<tuple|A.2.16|?>>
+    <associate|auto-33|<tuple|A.2.17|?>>
+    <associate|auto-34|<tuple|A.2.18|?>>
+    <associate|auto-35|<tuple|A.2.19|?>>
+    <associate|auto-36|<tuple|A.2.20|?>>
+    <associate|auto-37|<tuple|A.2.21|?>>
+    <associate|auto-38|<tuple|A.2.22|?>>
+    <associate|auto-39|<tuple|A.2.23|?>>
     <associate|auto-4|<tuple|A.2|107>>
+    <associate|auto-40|<tuple|A.2.24|?>>
+    <associate|auto-41|<tuple|A.2.25|?>>
+    <associate|auto-42|<tuple|A.2.26|?>>
+    <associate|auto-43|<tuple|A.2.27|?>>
+    <associate|auto-44|<tuple|A.2.28|?>>
+    <associate|auto-45|<tuple|A.13|?>>
+    <associate|auto-46|<tuple|A.2.29|?>>
+    <associate|auto-47|<tuple|A.2.30|?>>
+    <associate|auto-48|<tuple|A.2.31|?>>
+    <associate|auto-49|<tuple|A.2.32|?>>
     <associate|auto-5|<tuple|A.2.1|108>>
+    <associate|auto-50|<tuple|A.2.33|?>>
+    <associate|auto-51|<tuple|A.2.34|?>>
+    <associate|auto-52|<tuple|A.2.35|?>>
+    <associate|auto-53|<tuple|A.2.36|?>>
+    <associate|auto-54|<tuple|A.2.37|?>>
+    <associate|auto-55|<tuple|A.2.38|?>>
+    <associate|auto-56|<tuple|A.2.39|?>>
+    <associate|auto-57|<tuple|A.2.40|?>>
+    <associate|auto-58|<tuple|A.2.41|?>>
     <associate|auto-6|<tuple|A.1|108>>
     <associate|auto-7|<tuple|A.2.2|108>>
     <associate|auto-8|<tuple|A.2.3|108>>
     <associate|auto-9|<tuple|A.2.4|109>>
-    <associate|defn-invalid-transaction|<tuple|A.4|110>>
+    <associate|defn-invalid-transaction|<tuple|A.11|110>>
     <associate|defn-rt-apisvec|<tuple|A.1|?>>
-    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.11|112>>
+    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.6|112>>
     <associate|defn-rt-core-version|<tuple|A.2.1|108>>
-    <associate|defn-rte-apply-extrinsic-result|<tuple|A.6|?>>
-    <associate|defn-rte-custom-module-error|<tuple|A.9|?>>
-    <associate|defn-rte-dispatch-error|<tuple|A.8|?>>
-    <associate|defn-rte-dispatch-outcome|<tuple|A.7|?>>
-    <associate|defn-rte-invalid-transaction|<tuple|A.11|?>>
-    <associate|defn-rte-transaction-validity-error|<tuple|A.10|?>>
-    <associate|defn-rte-unknown-transaction|<tuple|A.12|?>>
-    <associate|defn-transaction-validity-error|<tuple|A.3|110>>
-    <associate|defn-unknown-transaction|<tuple|A.5|110>>
-    <associate|defn-valid-transaction|<tuple|A.2|110>>
+    <associate|defn-rte-apply-extrinsic-result|<tuple|A.2|?>>
+    <associate|defn-rte-custom-module-error|<tuple|A.5|?>>
+    <associate|defn-rte-dispatch-error|<tuple|A.4|?>>
+    <associate|defn-rte-dispatch-outcome|<tuple|A.3|?>>
+    <associate|defn-rte-invalid-transaction|<tuple|A.7|?>>
+    <associate|defn-rte-transaction-validity-error|<tuple|A.6|?>>
+    <associate|defn-rte-unknown-transaction|<tuple|A.8|?>>
+    <associate|defn-transaction-validity-error|<tuple|A.10|110>>
+    <associate|defn-unknown-transaction|<tuple|A.12|110>>
+    <associate|defn-valid-transaction|<tuple|A.9|110>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
-    <associate|sect-rte-apply-extrinsic|<tuple|A.2.9|?>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.2.6|109>>
+    <associate|sect-rte-apply-extrinsic|<tuple|A.2.5|?>>
+    <associate|sect-rte-babeapi-epoch|<tuple|A.2.28|109>>
     <associate|sect-rte-core-execute-block|<tuple|A.2.2|?>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.2.7|109>>
+    <associate|sect-rte-grandpa-auth|<tuple|A.2.25|109>>
     <associate|sect-rte-hash-and-length|<tuple|A.2.5|109>>
-    <associate|sect-rte-validate-transaction|<tuple|A.2.8|109>>
+    <associate|sect-rte-validate-transaction|<tuple|A.2.10|109>>
     <associate|sect-runtime-entries|<tuple|A|107>>
     <associate|snippet-runtime-enteries|<tuple|A.1|107>>
   </collection>
