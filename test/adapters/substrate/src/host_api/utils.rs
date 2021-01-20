@@ -62,6 +62,7 @@ impl<'a> From<Option<Values<'a>>> for ParsedInput<'a> {
 pub struct Runtime {
     blob: Vec<u8>,
     ext: TestExternalities<Blake2Hasher>,
+    method: WasmExecutionMethod,
 }
 
 impl Runtime {
@@ -69,41 +70,37 @@ impl Runtime {
         Runtime {
             blob: WASM_BINARY.unwrap().to_vec(),
             ext: TestExternalities::default(),
+            method: WasmExecutionMethod::Interpreted,
         }
     }
-    pub fn new_keystore() -> Self {
-        let mut ext = TestExternalities::default();
+    pub fn using_wasmtime(mut self) -> Self {
+        self.method = WasmExecutionMethod::Compiled;
+        self
+    }
+    pub fn with_keystore(mut self) -> Self {
         let key_store = KeystoreExt(Arc::new(KeyStore::new()));
-        ext.register_extension(key_store);
-        Runtime {
-            blob: WASM_BINARY.unwrap().to_vec(),
-            ext: ext,
-        }
+        self.ext.register_extension(key_store);
+        self
     }
     #[allow(dead_code)]
-    pub fn new_offchain() -> Self {
-        let mut ext = TestExternalities::default();
+    pub fn with_offchain(mut self) -> Self {
         let (offchain, _) = TestOffchainExt::new();
-        ext.register_extension(OffchainExt::new(offchain));
-
-        Runtime {
-            blob: WASM_BINARY.unwrap().to_vec(),
-            ext: ext,
-        }
+        self.ext.register_extension(OffchainExt::new(offchain));
+        self
     }
-    pub fn call(&mut self, method: &str, data: &[u8]) -> Vec<u8> {
+    pub fn call(&mut self, func: &str, args: &[u8]) -> Vec<u8> {
         let mut extext = self.ext.ext();
 
         WasmExecutor::new(
-            WasmExecutionMethod::Interpreted,
+            self.method,
             Some(8), // heap_pages
             SubstrateHostFunctions::host_functions(),
             8 // max_runtime_instances
         ).call_in_wasm(
             &self.blob,
             None, // Optional<Hash>
-            method,
-            data,
+            func,
+            args,
             &mut extext,
             MissingHostFunctions::Disallow,
         ).unwrap()

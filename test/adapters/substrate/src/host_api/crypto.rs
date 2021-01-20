@@ -2,9 +2,10 @@ use crate::host_api::utils::{str, Decoder, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 use sp_core::crypto::key_types::DUMMY;
 
-pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
+pub fn ext_crypto_ed25519_public_keys_version_1(rtm: Runtime, input: ParsedInput) {
+    let mut rtm = rtm.with_keystore();
 
+    // Parse inputs
     let seed1 = input.get(0);
     let seed2 = input.get(1);
 
@@ -48,9 +49,10 @@ pub fn ext_crypto_ed25519_public_keys_version_1(input: ParsedInput) {
     println!("2. Public key: {}", hex::encode(res2));
 }
 
-pub fn ext_crypto_ed25519_generate_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
+pub fn ext_crypto_ed25519_generate_version_1(rtm: Runtime, input: ParsedInput) {
+    let mut rtm = rtm.with_keystore();
 
+    // Parse inputs
     let seed = input.get(0);
 
     let res = rtm
@@ -63,9 +65,10 @@ pub fn ext_crypto_ed25519_generate_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_crypto_ed25519_sign_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
+pub fn ext_crypto_ed25519_sign_version_1(rtm: Runtime, input: ParsedInput) {
+    let mut rtm = rtm.with_keystore();
 
+    // Parse inputs
     let seed = input.get(0);
     let msg = input.get(1);
 
@@ -94,9 +97,10 @@ pub fn ext_crypto_ed25519_sign_version_1(input: ParsedInput) {
     println!("Signature: {}", hex::encode(res));
 }
 
-pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
+pub fn ext_crypto_ed25519_verify_version_1(rtm: Runtime, input: ParsedInput) {
+    let mut rtm = rtm.with_keystore();
 
+    // Parse inputs
     let seed = input.get(0);
     let msg = input.get(1);
 
@@ -139,9 +143,10 @@ pub fn ext_crypto_ed25519_verify_version_1(input: ParsedInput) {
     }
 }
 
-pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
+pub fn ext_crypto_sr25519_public_keys_version_1(rtm: Runtime, input: ParsedInput) {
+    let mut rtm = rtm.with_keystore();
 
+    // Parse inputs
     let seed1 = input.get(0);
     let seed2 = input.get(1);
 
@@ -185,9 +190,10 @@ pub fn ext_crypto_sr25519_public_keys_version_1(input: ParsedInput) {
     println!("2. Public key: {}", hex::encode(res2));
 }
 
-pub fn ext_crypto_sr25519_generate_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
+pub fn ext_crypto_sr25519_generate_version_1(rtm: Runtime, input: ParsedInput) {
+    let mut rtm = rtm.with_keystore();
 
+    // Parse inputs
     let seed = input.get(0);
     let seed_opt = if seed.is_empty() { None } else { Some(seed) };
 
@@ -202,9 +208,10 @@ pub fn ext_crypto_sr25519_generate_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_crypto_sr25519_sign_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
+pub fn ext_crypto_sr25519_sign_version_1(rtm: Runtime, input: ParsedInput) {
+    let mut rtm = rtm.with_keystore();
 
+    // Parse inputs
     let seed = input.get(0);
     let msg = input.get(1);
 
@@ -233,9 +240,10 @@ pub fn ext_crypto_sr25519_sign_version_1(input: ParsedInput) {
     println!("Signature: {}", hex::encode(res));
 }
 
-pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new_keystore();
+pub fn ext_crypto_sr25519_verify_version_1(rtm: Runtime, input: ParsedInput) {
+    let mut rtm = rtm.with_keystore();
 
+    // Parse inputs
     let seed = input.get(0);
     let msg = input.get(1);
 
@@ -278,9 +286,7 @@ pub fn ext_crypto_sr25519_verify_version_1(input: ParsedInput) {
     }
 }
 
-pub fn ext_hashing_keccak_256_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_hashing_keccak_256_version_1(mut rtm: Runtime, input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
@@ -290,9 +296,7 @@ pub fn ext_hashing_keccak_256_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_hashing_sha2_256_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_hashing_sha2_256_version_1(mut rtm: Runtime, input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
@@ -302,9 +306,7 @@ pub fn ext_hashing_sha2_256_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_hashing_blake2_128_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_hashing_blake2_128_version_1(mut rtm: Runtime, input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
@@ -314,9 +316,7 @@ pub fn ext_hashing_blake2_128_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_hashing_blake2_256_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_hashing_blake2_256_version_1(mut rtm: Runtime, input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
@@ -326,9 +326,7 @@ pub fn ext_hashing_blake2_256_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_hashing_twox_256_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_hashing_twox_256_version_1(mut rtm: Runtime, input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
@@ -338,9 +336,7 @@ pub fn ext_hashing_twox_256_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_hashing_twox_128_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_hashing_twox_128_version_1(mut rtm: Runtime, input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm
@@ -350,9 +346,7 @@ pub fn ext_hashing_twox_128_version_1(input: ParsedInput) {
     println!("{}", hex::encode(res));
 }
 
-pub fn ext_hashing_twox_64_version_1(input: ParsedInput) {
-    let mut rtm = Runtime::new();
-
+pub fn ext_hashing_twox_64_version_1(mut rtm: Runtime, input: ParsedInput) {
     let data = input.get(0);
 
     let res = rtm

@@ -55,3 +55,5 @@ subcommands:
               takes_value: true
               use_delimiter: true
               value_name: TEST_DATA
+          - wasmtime:
+              long: wasmtime
