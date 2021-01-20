@@ -571,59 +571,59 @@
 
   <subsection|<verbatim|OffchainWorkerApi_offchain_worker>>
 
-  \;
+  \ <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_validators>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_validator_groups>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_availability_cores>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_persisted_validation_data>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_check_validation_outputs>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_session_index_for_child>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_session_info>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_validation_code>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_historical_validation_code>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_candidate_pending_availability>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_candidate_events>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_dmq_contents>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|ParachainHost_inbound_hrmp_channel_contents>>
 
-  \;
+  <todo|future-reserved>
 
   <subsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
 
@@ -635,7 +635,28 @@
 
   <subsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>>
 
+  Submits a report about an observed equivocation as defined in Definition
+  <reference|defn-equivocation>.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>The equivocation proof. <todo|reference that type>
+
+    <item>An opaque byte slice used to represent the key ownership proof.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A SCALE encoded <verbatim|Option> as defined in Definition
+    <reference|defn-option-type> containing an empty <verbatim|Some> value on
+    success or <verbatim|None> on failure.
+  </itemize-dot>
 
   <subsection|<verbatim|GrandpaApi_generate_key_ownership_proof>>
 
@@ -686,10 +707,6 @@
   </big-table>
 
   <subsection|<verbatim|BabeApi_current_epoch_start>>
-
-  \;
-
-  <subsection|<verbatim|BabeApi_current_epoch>>
 
   \;
 
@@ -814,8 +831,6 @@
     <associate|auto-54|<tuple|A.2.37|?>>
     <associate|auto-55|<tuple|A.2.38|?>>
     <associate|auto-56|<tuple|A.2.39|?>>
-    <associate|auto-57|<tuple|A.2.40|?>>
-    <associate|auto-58|<tuple|A.2.41|?>>
     <associate|auto-6|<tuple|A.1|108>>
     <associate|auto-7|<tuple|A.2.2|108>>
     <associate|auto-8|<tuple|A.2.3|108>>
@@ -839,7 +854,6 @@
     <associate|sect-rte-babeapi-epoch|<tuple|A.2.28|109>>
     <associate|sect-rte-core-execute-block|<tuple|A.2.2|?>>
     <associate|sect-rte-grandpa-auth|<tuple|A.2.25|109>>
-    <associate|sect-rte-hash-and-length|<tuple|A.2.5|109>>
     <associate|sect-rte-validate-transaction|<tuple|A.2.10|109>>
     <associate|sect-runtime-entries|<tuple|A|107>>
     <associate|snippet-runtime-enteries|<tuple|A.1|107>>
@@ -859,62 +873,62 @@
       function.>|<pageref|auto-6>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.2>|>
-        The tuple provided by <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BabeApi_configuration>.
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|ApplyExtrinsicResult>.
       </surround>|<pageref|auto-11>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.3>|>
-        The tuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchOutcome>.
+      </surround>|<pageref|auto-12>>
 
-        in the case the transaction is judged to be valid.
-      </surround>|<pageref|auto-14>>
-
-      <tuple|normal|<surround|<hidden-binding|<tuple>|A.4>||Type variation
-      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-15>>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.4>|>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchError>.
+      </surround>|<pageref|auto-13>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.5>|>
-        Type variant whichs gets appended to Id 0 of
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-16>>
+        Possible values of varying data type
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|CustomModuleError>.
+      </surround>|<pageref|auto-14>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.6>|>
-        Type variant whichs gets appended to Id 1 of
+        Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-17>>
+      </surround>|<pageref|auto-15>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.7>|>
         Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|ApplyExtrinsicResult>.
-      </surround>|<pageref|auto-19>>
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|InvalidTransaction>.
+      </surround>|<pageref|auto-16>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.8>|>
         Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchOutcome>.
-      </surround>|<pageref|auto-20>>
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|UnknownTransaction>.
+      </surround>|<pageref|auto-17>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.9>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchError>.
-      </surround>|<pageref|auto-21>>
+        The tuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
 
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.10>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|CustomModuleError>.
-      </surround>|<pageref|auto-22>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.11>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
+        in the case the transaction is judged to be valid.
       </surround>|<pageref|auto-23>>
 
+      <tuple|normal|<surround|<hidden-binding|<tuple>|A.10>||Type variation
+      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-24>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.11>|>
+        Type variant whichs gets appended to Id 0 of
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
+      </surround>|<pageref|auto-25>>
+
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.12>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|InvalidTransaction>.
-      </surround>|<pageref|auto-24>>
+        Type variant whichs gets appended to Id 1 of
+        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
+      </surround>|<pageref|auto-26>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.13>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|UnknownTransaction>.
-      </surround>|<pageref|auto-25>>
+        The tuple provided by <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BabeApi_configuration>.
+      </surround>|<pageref|auto-45>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
@@ -941,33 +955,149 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|A.2.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|hash_and_length>
+      <with|par-left|<quote|1tab>|A.2.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Metadata_metadatabb>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|A.2.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
+      <with|par-left|<quote|1tab>|A.2.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|A.2.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
-
-      <with|par-left|<quote|1tab>|A.2.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13>>
-
-      <with|par-left|<quote|1tab>|A.2.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
+      <with|par-left|<quote|1tab>|A.2.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-18>>
 
-      <with|par-left|<quote|1tab>|A.2.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
+      <with|par-left|<quote|1tab>|A.2.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-26>>
+      <no-break><pageref|auto-19>>
 
-      <with|par-left|<quote|1tab>|A.2.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
+      <with|par-left|<quote|1tab>|A.2.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_check_inherents>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-20>>
+
+      <with|par-left|<quote|1tab>|A.2.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_random_seed>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-21>>
+
+      <with|par-left|<quote|1tab>|A.2.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-22>>
+
+      <with|par-left|<quote|1tab>|A.2.11<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|OffchainWorkerApi_offchain_worker>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-27>>
+
+      <with|par-left|<quote|1tab>|A.2.12<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validators>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-28>>
+
+      <with|par-left|<quote|1tab>|A.2.13<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validator_groups>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-29>>
+
+      <with|par-left|<quote|1tab>|A.2.14<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_availability_cores>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-30>>
+
+      <with|par-left|<quote|1tab>|A.2.15<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_persisted_validation_data>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-31>>
+
+      <with|par-left|<quote|1tab>|A.2.16<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_check_validation_outputs>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-32>>
+
+      <with|par-left|<quote|1tab>|A.2.17<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_index_for_child>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-33>>
+
+      <with|par-left|<quote|1tab>|A.2.18<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_info>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-34>>
+
+      <with|par-left|<quote|1tab>|A.2.19<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validation_code>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-35>>
+
+      <with|par-left|<quote|1tab>|A.2.20<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_historical_validation_code>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-36>>
+
+      <with|par-left|<quote|1tab>|A.2.21<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_pending_availability>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-37>>
+
+      <with|par-left|<quote|1tab>|A.2.22<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_events>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-38>>
+
+      <with|par-left|<quote|1tab>|A.2.23<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_dmq_contents>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-39>>
+
+      <with|par-left|<quote|1tab>|A.2.24<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_inbound_hrmp_channel_contents>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-40>>
+
+      <with|par-left|<quote|1tab>|A.2.25<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-41>>
+
+      <with|par-left|<quote|1tab>|A.2.26<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-42>>
+
+      <with|par-left|<quote|1tab>|A.2.27<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_generate_key_ownership_proof>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-43>>
+
+      <with|par-left|<quote|1tab>|A.2.28<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-44>>
+
+      <with|par-left|<quote|1tab>|A.2.29<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch_start>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-46>>
+
+      <with|par-left|<quote|1tab>|A.2.30<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-47>>
+
+      <with|par-left|<quote|1tab>|A.2.31<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_next_epoch>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-48>>
+
+      <with|par-left|<quote|1tab>|A.2.32<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_generate_key_ownership_proof>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-49>>
+
+      <with|par-left|<quote|1tab>|A.2.33<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_submit_report_equivocation_unsigned_extrinsic>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-50>>
+
+      <with|par-left|<quote|1tab>|A.2.34<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AuthorityDiscoveryApi_authorities>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-51>>
+
+      <with|par-left|<quote|1tab>|A.2.35<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_generate_session_keys>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-52>>
+
+      <with|par-left|<quote|1tab>|A.2.36<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_decode_session_keys>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-53>>
+
+      <with|par-left|<quote|1tab>|A.2.37<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AccountNonceApi_account_nonce>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-54>>
+
+      <with|par-left|<quote|1tab>|A.2.38<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_info>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-55>>
+
+      <with|par-left|<quote|1tab>|A.2.39<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_fee_details>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-56>>
     </associate>
   </collection>
 </auxiliary>
