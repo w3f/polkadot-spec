@@ -825,7 +825,28 @@
 
   <subsection|<verbatim|BabeApi_generate_key_ownership_proof>>
 
+  Generates a proof of the membership of a key owner in the specified block
+  state. The returned value is used to report equivocations as described in
+  <todo|did we mention equivocation regarding Babe anywhere?>.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>The usigned 64-bit integer representing the slot number.
+
+    <item>The 256-bit public key of the authority.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A SCALE encoded <verbatim|Option> as defined in Definition
+    <reference|defn-option-type> containing the proof in an opaque form.
+  </itemize-dot>
 
   <subsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>>
 
