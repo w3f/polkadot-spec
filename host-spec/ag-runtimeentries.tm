@@ -220,7 +220,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>The block header of the new block as defined in
+    <item>The header of the new block as defined in
     <reference|defn-block-header>. The values <math|H<rsub|r>,H<rsub|e> and
     H<rsub|d>> are left empty.
   </itemize>
@@ -250,7 +250,8 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A array of varying size containing the metadata in an opaque form.
+    <item>A byte array of varying size containing the metadata in an opaque
+    form.
   </itemize-dot>
 
   <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
@@ -411,6 +412,23 @@
   calling this function are usually meant to persist upon successful
   execution of the function and appending of the block to the chain.
 
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>The header of the new block as defined in
+    <reference|defn-block-header>.
+  </itemize-dot>
+
   <subsection|<verbatim|BlockBuilder_inherent_extrinsics>>
 
   Generates the inherent extrinsics, which are explained in more detail in
@@ -435,8 +453,8 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>An array of extrinisic where each extrinsic is a variable byte
-    array.
+    <item>A byte array of varying size containing extrinisics. Each extrinsic
+    is a byte array of varying size.
   </itemize-dot>
 
   <subsection|<verbatim|BlockBuilder_check_inherents>>
@@ -633,7 +651,7 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>A block header
+    <item>The block header as defined in <reference|defn-block-header>.
   </itemize-dot>
 
   \;
@@ -844,7 +862,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A unsigned 64-bit integer representing the slot number.
+    <item>A unsigned 64-bit integer indicating the slot number.
   </itemize-dot>
 
   <subsection|<verbatim|BabeApi_current_epoch>><label|sect-babeapi_current_epoch>
@@ -986,7 +1004,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>An array of varying size containing 256-bit pulic keys of
+    <item>A byte array of varying size containing 256-bit pulic keys of the
     authorities.
   </itemize-dot>
 
@@ -1011,7 +1029,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>An array of varying size containg the encoded session keys.
+    <item>A byte array of varying size containg the encoded session keys.
   </itemize-dot>
 
   <subsection|<verbatim|SessionKeys_decode_session_keys>>
@@ -1033,7 +1051,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>An array of varying size containg tuple pairs of the following
+    <item>An array of varying size containing tuple pairs of the following
     format:
 
     <\equation*>
@@ -1076,7 +1094,7 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>An array of varying size containing the extrinsic.
+    <item>A byte array of varying size containing the extrinsic.
 
     <item>The length of the extrinsic. <todo|why is this needed?>
   </itemize-dot>
@@ -1121,7 +1139,7 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>An array of varying size containing the extrinsic.
+    <item>A byte array of varying size containing the extrinsic.
 
     <item>The length of the extrinsic.
   </itemize-dot>
