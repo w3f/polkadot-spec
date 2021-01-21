@@ -900,7 +900,24 @@
 
   <subsection|<verbatim|AuthorityDiscoveryApi_authorities>>
 
+  A function which helps to discover authorities.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>An array of varying size containing 256-bit pulic keys of
+    authorities.
+  </itemize-dot>
 
   <subsection|<verbatim|SessionKeys_generate_session_keys>>
 
