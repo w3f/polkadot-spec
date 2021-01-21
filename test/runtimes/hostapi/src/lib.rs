@@ -3,10 +3,34 @@
 use std::slice;
 
 #[cfg(feature = "runtime-wasm")]
+use core::alloc::{GlobalAlloc, Layout};
+
+#[cfg(feature = "runtime-wasm")]
 use parity_scale_codec::{Decode, Encode};
+
 
 #[cfg(not(feature = "runtime-wasm"))]
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
+
+
+#[cfg(feature = "runtime-wasm")]
+struct WasmAllocator;
+
+#[cfg(feature = "runtime-wasm")]
+#[global_allocator]
+static ALLOCATOR: WasmAllocator = WasmAllocator;
+
+#[cfg(feature = "runtime-wasm")]
+unsafe impl GlobalAlloc for WasmAllocator {
+    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+        ext_allocator_malloc_version_1(layout.size() as u32) as *mut u8
+    }
+
+    unsafe fn dealloc(&self, ptr: *mut u8, _: Layout) {
+        ext_allocator_free_version_1(ptr as u32)
+    }
+}
+
 
 #[cfg(feature = "runtime-wasm")]
 extern "C" {
@@ -65,6 +89,7 @@ extern "C" {
     fn ext_trie_blake2_256_ordered_root_version_1(data: u64) -> u32;
 }
 
+
 #[cfg(feature = "runtime-wasm")]
 fn from_mem(value: u64) -> Vec<u8> {
     let ptr = value as u32;
@@ -83,6 +108,7 @@ impl AsRePtr for Vec<u8> {
         (self.len() as u64) << 32 | self.as_ptr() as u64
     }
 }
+
 
 #[cfg(feature = "runtime-wasm")]
 sp_core::wasm_export_functions! {
