@@ -932,7 +932,7 @@
   <\itemize-dot>
     <item>A SCALE encoded <verbatim|Option> as defined in Definition
     <reference|defn-option-type> containing an array of varying size
-    representing the seed.
+    indicating the seed.
   </itemize-dot>
 
   \;
@@ -940,12 +940,38 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>An array of varying size containg the session keys.
+    <item>An array of varying size containg the encoded session keys.
   </itemize-dot>
 
   <subsection|<verbatim|SessionKeys_decode_session_keys>>
 
+  Decodes the given public session keys. Returns a list of raw public keys
+  including key type.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>An array of varying size containing the encoded public session
+    keys.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>An array of varying size containg tuple pairs of the following
+    format:
+
+    <\equation*>
+      <around*|(|k,k<rsub|id>|)>
+    </equation*>
+
+    where <math|k> is an array of varying size containg the raw public key
+    and <math|k<rsub|id>> is a 4-byte array indicating the key type.
+  </itemize-dot>
 
   <subsection|<verbatim|AccountNonceApi_account_nonce>>
 
@@ -1069,6 +1095,7 @@
     <associate|sect-rte-grandpa-auth|<tuple|A.2.25|109>>
     <associate|sect-rte-validate-transaction|<tuple|A.2.10|109>>
     <associate|sect-runtime-entries|<tuple|A|107>>
+    <associate|sect-sessionkeys_generate_session_keys|<tuple|A.2.35|?>>
     <associate|snippet-runtime-enteries|<tuple|A.1|107>>
   </collection>
 </references>
