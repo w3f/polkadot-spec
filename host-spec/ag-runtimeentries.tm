@@ -995,7 +995,51 @@
 
   <subsection|<verbatim|TransactionPaymentApi_query_info>>
 
+  Returns information about an extrinsic. This function is not aware of the
+  internals of an extrinsic, but only interprets the extrinsic as some
+  encoded value and accounts for its weight and length, the runtime's
+  extrinsic base weight and the current fee multiplier.
+
   \;
+
+  Arguments:
+
+  <\itemize-dot>
+    <item>The raw extrinsic.
+
+    <item>The length of the extrinsics <todo|why is this needed?>
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A datastructure of the following format:
+
+    <\equation*>
+      <around*|(|w,c,f|)>
+    </equation*>
+
+    where:
+
+    <\itemize-dot>
+      <item><math|w> is the weight of the extrinsic.
+
+      <item><math|c> is the \Pclass\Q of the extrinsic, where class is a
+      varying datatype defined as:
+
+      <\equation*>
+        c=<choice|<tformat|<table|<row|<cell|0<space|1em>Normal
+        extrinsic>>|<row|<cell|1<space|1em>Operational
+        extrinsic>>|<row|<cell|2<space|1em>Mandatory extrinsic,which is
+        always included>>>>>
+      </equation*>
+
+      <item><math|f> is the inclusion fee of this dispatch. This does not
+      include a tip or anything else that depends on the signature.
+    </itemize-dot>
+  </itemize-dot>
 
   <subsection|<verbatim|TransactionPaymentApi_query_fee_details>>
 
