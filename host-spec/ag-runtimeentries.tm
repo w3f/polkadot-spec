@@ -823,7 +823,7 @@
     <reference|sect-babeapi_current_epoch>.
   </itemize-dot>
 
-  <subsection|<verbatim|BabeApi_generate_key_ownership_proof>>
+  <subsection|<verbatim|BabeApi_generate_key_ownership_proof>><label|sect-babeapi_generate_key_ownership_proof>
 
   Generates a proof of the membership of a key owner in the specified block
   state. The returned value is used to report equivocations as described in
@@ -850,7 +850,28 @@
 
   <subsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>>
 
+  Submits a report about an observed equivocation as defined in <todo|spec
+  Babe equivocations>.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>The equivocation proof. <todo|reference that type>
+
+    <item>An proof of the key owner in an opaque form as described in Section
+    <reference|sect-babeapi_generate_key_ownership_proof>.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A SCALE encoded <verbatim|Option> as defined in Definition
+    <reference|defn-option-type> containing an empty value on success.
+  </itemize-dot>
 
   <subsection|<verbatim|AuthorityDiscoveryApi_authorities>>
 
@@ -976,6 +997,7 @@
     <associate|defn-unknown-transaction|<tuple|A.12|110>>
     <associate|defn-valid-transaction|<tuple|A.9|110>>
     <associate|sect-babeapi_current_epoch|<tuple|A.2.30|?>>
+    <associate|sect-babeapi_generate_key_ownership_proof|<tuple|A.2.32|?>>
     <associate|sect-grandpaApi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
     <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|A.2.27|?>>
     <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
