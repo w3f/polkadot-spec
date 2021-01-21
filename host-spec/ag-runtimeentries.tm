@@ -995,19 +995,19 @@
 
   <subsection|<verbatim|TransactionPaymentApi_query_info>>
 
-  Returns information about an extrinsic. This function is not aware of the
+  Returns information of a given extrinsic. This function is not aware of the
   internals of an extrinsic, but only interprets the extrinsic as some
   encoded value and accounts for its weight and length, the runtime's
   extrinsic base weight and the current fee multiplier.
 
   \;
 
-  Arguments:
+  <strong|Arguments>:
 
   <\itemize-dot>
-    <item>The raw extrinsic.
+    <item>An array of varying size containing the extrinsic.
 
-    <item>The length of the extrinsics <todo|why is this needed?>
+    <item>The length of the extrinsic. <todo|why is this needed?>
   </itemize-dot>
 
   \;
@@ -1036,12 +1036,64 @@
         always included>>>>>
       </equation*>
 
-      <item><math|f> is the inclusion fee of this dispatch. This does not
+      <item><math|f> is the inclusion fee of the extrinsic. This does not
       include a tip or anything else that depends on the signature.
     </itemize-dot>
   </itemize-dot>
 
   <subsection|<verbatim|TransactionPaymentApi_query_fee_details>>
+
+  Query the detailed fee of a given extrinsic.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>An array of varying size containing the extrinsic.
+
+    <item>The length of the extrinsic.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A datastructure of the following format:
+
+    <\equation*>
+      <around*|(|f,t|)>
+    </equation*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|f> is a SCALE encoded <verbatim|Option> as defined in
+      Definition <reference|defn-option-type> containing the following
+      datastructure:
+
+      <\equation*>
+        <around*|(|f<rsub|b>,f<rsub|l>,f<rsub|a>|)>
+      </equation*>
+
+      where
+
+      <\itemize-dot>
+        <item><math|f<rsub|b>> is the minimum amount a user pays for a
+        transaction.
+
+        <item><math|f<rsub|l>> is the length fee, the amount paid for the
+        encoded length (in bytes) of the transaction.
+
+        <item><math|f<rsub|a>> is the \Padjusted weight fee\Q, which is a
+        multiplication of the fee multiplier and the weight fee. The fee
+        multiplier varies depending on the usage of the network.
+      </itemize-dot>
+
+      <item><math|t> is the tip for the block author.
+    </itemize-dot>
+  </itemize-dot>
 
   \;
 
