@@ -197,9 +197,9 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>The entry accepts a block, represented as a tuple consisting of a
-    block header as described in section <reference|defn-block-header> and
-    the block body as described in section <reference|defn-block-body>.
+    <item>A block represented as a tuple consisting of a block header as
+    described in section <reference|defn-block-header> and the block body as
+    described in section <reference|defn-block-body>.
   </itemize>
 
   \;
@@ -233,7 +233,7 @@
     <item>None.
   </itemize-dot>
 
-  <subsection|<verbatim|Metadata_metadatabb>>
+  <subsection|<verbatim|Metadata_metadata>>
 
   Returns native Runtime metadata in an opaque form.
 
@@ -250,8 +250,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A byte slice of unknown length containing the metadata in an opaque
-    form.
+    <item>A array of varying size containing the metadata in an opaque form.
   </itemize-dot>
 
   <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
@@ -442,11 +441,66 @@
 
   <subsection|<verbatim|BlockBuilder_check_inherents>>
 
+  Checks whether the provided inherent is valid.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>A block represented as a tuple consisting of a block header as
+    described in section <reference|defn-block-header> and the block body as
+    described in section <reference|defn-block-body>.
+
+    <item>A <name|Inherents-Data> structure as defined in
+    <reference|defn-inherent-data>.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A datastructure of the following format:
+
+    <\equation*>
+      <around*|(|o,f<rsub|e>,e|)>
+    </equation*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|o> is a boolean indicating whether the check was
+      successful.
+
+      <item><math|f<rsub|e>> is a boolean indicating whether a fatal error
+      was encountered.
+
+      <item><math|e> is a <name|Inherents-Data> structure as defined in
+      <reference|defn-inherent-data> containing any errors created by this
+      Runtime function.
+    </itemize-dot>
+  </itemize-dot>
 
   <subsection|<verbatim|BlockBuilder_random_seed>>
 
+  Generates a random seed.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A 32-byte array containing the random seed.
+  </itemize-dot>
 
   <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
@@ -571,7 +625,24 @@
 
   <subsection|<verbatim|OffchainWorkerApi_offchain_worker>>
 
-  \ <todo|future-reserved>
+  Starts an offchain worker and generates extrinsics. <todo|when is this
+  called?>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>A block header
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
 
   <subsection|<verbatim|ParachainHost_validators>>
 
@@ -796,16 +867,16 @@
     <item>A datastructure of the following format:
 
     <\equation*>
-      <around*|(|E<rsub|i>,S<rsub|s>,d,A,r|)>
+      <around*|(|e<rsub|i>,s<rsub|s>,d,A,r|)>
     </equation*>
 
     where:
 
     <\itemize-dot>
-      <item><math|E<rsub|i>> is a unsigned 64-bit integer representing the
+      <item><math|e<rsub|i>> is a unsigned 64-bit integer representing the
       epoch index.
 
-      <item><math|S<rsub|s>> is a unsigned 64-bit integer representing the
+      <item><math|s<rsub|s>> is a unsigned 64-bit integer representing the
       starting slot of the epoch.
 
       <item><math|d> is a unsigned 64-bit integer representing the duration
@@ -823,7 +894,7 @@
       authority. <todo|what does this weight indicate?>
 
       <item><math|r> is an 256-bit array containing the randomness for the
-      epoch <todo|reference randomness>
+      epoch as defined in Definition <reference|defn-epoch-randomness>.
     </itemize-dot>
   </itemize-dot>
 
@@ -852,14 +923,14 @@
 
   Generates a proof of the membership of a key owner in the specified block
   state. The returned value is used to report equivocations as described in
-  <todo|did we mention equivocation regarding Babe anywhere?>.
+  <todo|spec Babe equivocation>.
 
   \;
 
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>The usigned 64-bit integer representing the slot number.
+    <item>The unsigned 64-bit integer indicating the slot number.
 
     <item>The 256-bit public key of the authority.
   </itemize-dot>
@@ -1080,11 +1151,10 @@
       where
 
       <\itemize-dot>
-        <item><math|f<rsub|b>> is the minimum amount a user pays for a
-        transaction.
+        <item><math|f<rsub|b>> is the minimum required fee for an extrinsic.
 
         <item><math|f<rsub|l>> is the length fee, the amount paid for the
-        encoded length (in bytes) of the transaction.
+        encoded length (in bytes) of the extrinsic.
 
         <item><math|f<rsub|a>> is the \Padjusted weight fee\Q, which is a
         multiplication of the fee multiplier and the weight fee. The fee
