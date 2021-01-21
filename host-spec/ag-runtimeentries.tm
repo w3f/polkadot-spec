@@ -921,7 +921,27 @@
 
   <subsection|<verbatim|SessionKeys_generate_session_keys>>
 
+  Generates a set of session keys with an optional seed. The keys should be
+  stored within the keystore exposed by the Host Api. The seed needs to be
+  valid UTF8 encoded.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>A SCALE encoded <verbatim|Option> as defined in Definition
+    <reference|defn-option-type> containing an array of varying size
+    representing the seed.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>An array of varying size containg the session keys.
+  </itemize-dot>
 
   <subsection|<verbatim|SessionKeys_decode_session_keys>>
 
