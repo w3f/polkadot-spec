@@ -975,7 +975,23 @@
 
   <subsection|<verbatim|AccountNonceApi_account_nonce>>
 
+  Get the current nonce of an account.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>The 256-bit public key of the account.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A 32-bit unsigned integer indicating the nonce of the account.
+  </itemize-dot>
 
   <subsection|<verbatim|TransactionPaymentApi_query_info>>
 
