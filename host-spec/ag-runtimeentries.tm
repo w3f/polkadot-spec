@@ -633,6 +633,31 @@
   get tracked via Runtiem-to-consensus engine messages as described in
   Section <reference|sect-consensus-message-digest>.
 
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>An array of variying size containg tuple pairs of the following
+    format:
+
+    <\equation*>
+      <around*|(|A<rsub|id>,w|)>
+    </equation*>
+
+    where <math|A<rsub|id>> is the 256-bit public key of an authority and
+    <math|w> is a unsigned 64-bit integer representing the weight of an
+    authority. <todo|what does this weight indicate?>
+  </itemize-dot>
+
   <subsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>
 
   Submits a report about an observed equivocation as defined in Definition
@@ -694,7 +719,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>None
+    <item>None.
   </itemize>
 
   \;
@@ -740,7 +765,7 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>None
+    <item>None.
   </itemize-dot>
 
   \;
@@ -760,7 +785,7 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>None
+    <item>None.
   </itemize-dot>
 
   \;
@@ -811,7 +836,7 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>None
+    <item>None.
   </itemize-dot>
 
   \;
@@ -998,7 +1023,6 @@
     <associate|defn-valid-transaction|<tuple|A.9|110>>
     <associate|sect-babeapi_current_epoch|<tuple|A.2.30|?>>
     <associate|sect-babeapi_generate_key_ownership_proof|<tuple|A.2.32|?>>
-    <associate|sect-grandpaApi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
     <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|A.2.27|?>>
     <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
