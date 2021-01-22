@@ -37,3 +37,6 @@ sp-state-machine  = { git = "https://github.com/paritytech/substrate", branch = 
 
 # host-api shim wasm blob
 runtime = { package = "hostapi-runtime", path = "../../runtimes/hostapi" }
+
+[features]
+export-memory = [ "runtime/export-memory" ]
