@@ -13,3 +13,4 @@ substrate-wasm-builder = "3.0.0"
 
 [features]
 runtime-wasm = [ "sp-core", "parity-scale-codec" ]
+export-memory = []

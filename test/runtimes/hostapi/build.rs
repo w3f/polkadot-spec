@@ -1,9 +1,13 @@
 use substrate_wasm_builder::WasmBuilder;
 
 fn main() {
-	WasmBuilder::new()
+	let mut b = WasmBuilder::new()
 		.with_current_project()
-		.export_heap_base()
-		.import_memory()
-		.build()
+		.export_heap_base();
+
+	if !cfg!(feature = "export-memory") {
+		b = b.import_memory();
+	}
+
+	b.build()
 }
