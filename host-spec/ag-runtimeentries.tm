@@ -266,7 +266,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>An extrinisic.
+    <item>A byte array of varying size containing the extrinsic.
   </itemize>
 
   \;
