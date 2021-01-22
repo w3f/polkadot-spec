@@ -275,7 +275,9 @@
 
   <\itemize-dot>
     <item>Returns the varying datatype <strong|<em|ApplyExtrinsicResult>> as
-    defined in Definition <reference|defn-rte-apply-extrinsic-result>.
+    defined in Definition <reference|defn-rte-apply-extrinsic-result>. This
+    structure let's the block builder know whether an extrinsic should be
+    included into the block or rejected.
 
     \;
   </itemize-dot>
@@ -286,6 +288,16 @@
     <reference|defn-result-type>. This structure can contain multiple nested
     structures, indicating either module dispatch outcomes or transaction
     invalidity errors.
+
+    \;
+
+    <strong|NOTE>: When applying an extrinsic returns a
+    <strong|DispatchOutcome> (<reference|defn-rte-dispatch-outcome>), the
+    extrinsic is always included into the block, even if the outcome is a
+    dispatch error. Dispatch errors do not invalidate the block and all state
+    changes are persisted. When applying an extrinsics returns
+    <strong|TransactionValidityError> (<reference|defn-rte-transaction-validity-error>),
+    the extrinsic must rejected.
 
     <\big-table|<tabular|<tformat|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Outcome
     of dispatching the extrinsic.>|<cell|DispatchOutcome
@@ -1295,7 +1307,6 @@
     <associate|sect-rte-grandpa-auth|<tuple|A.2.25|109>>
     <associate|sect-rte-validate-transaction|<tuple|A.2.10|109>>
     <associate|sect-runtime-entries|<tuple|A|107>>
-    <associate|sect-sessionkeys_generate_session_keys|<tuple|A.2.35|?>>
     <associate|snippet-runtime-enteries|<tuple|A.1|107>>
   </collection>
 </references>
@@ -1395,7 +1406,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|A.2.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Metadata_metadatabb>
+      <with|par-left|<quote|1tab>|A.2.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Metadata_metadata>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
