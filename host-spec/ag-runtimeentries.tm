@@ -125,15 +125,14 @@
 
   where <verbatim|data> points to the SCALE encoded paramaters sent to the
   function and <verbatim|len> is the length of the data. <verbatim|result>
-  points to the SCALE encoded data the function returns (See Sections
-  <reference|sect-runtime-send-args-to-runtime-enteries> and
-  <reference|sect-runtime-return-value>).
+  points to the SCALE encoded data the function returns. In this section, we
+  describe the function of each of the entries alongside with the details of
+  the arguments and the return values for each one of these enteries.
 
   \;
 
-  In this section, we describe the function of each of the entries alongside
-  with the details of the arguments and the return values for each one of
-  these enteries.
+  See Section <reference|sect-code-executor> for more information about the
+  behavior of the Wasm Runtime.
 
   <subsection|<verbatim|Core_version>><label|defn-rt-core-version>
 
