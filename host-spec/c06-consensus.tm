@@ -1,8 +1,8 @@
-<TeXmacs|1.99.17>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|algorithmacs-style|old-dots|old-lengths>>
+<style|<tuple|book|algorithmacs-style|old-dots|old-lengths|/home/anon/.TeXmacs/packages/algorithmacs-style.ts>>
 
 <\body>
   <chapter|Consensus><label|chap-consensu>
@@ -909,6 +909,10 @@
       <\state>
         <math|Head<around*|(|B|)>\<leftarrow\>><name|Call-Runtime-Entry(><verbatim|BlockBuilder_finalize_block>,<em|B>)
       </state>
+
+      <\state>
+        B \<leftarrow\> <name|Add-Seal>(B)
+      </state>
     </algorithmic>
   </algorithm>
 
@@ -942,6 +946,10 @@
 
     <item><name|Drop> indicates removing the extrinsic from the transaction
     queue (Definition <reference|defn-transaction-queue>).
+
+    <item><name|Add-Seal> adds the seal to the block as defined in Definition
+    <reference|defn-digest> before sending it to peers. The seal is removed
+    again before submitting it to the Runtime.
   </itemize-minus>
 
   <section|Finality><label|sect-finality>
@@ -2138,10 +2146,10 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|5>
-    <associate|page-first|45>
+    <associate|page-first|43>
     <associate|page-medium|papyrus>
     <associate|preamble|false>
-    <associate|section-nr|0>
+    <associate|section-nr|0<uninit>>
     <associate|subsection-nr|4>
   </collection>
 </initial>
