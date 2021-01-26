@@ -104,7 +104,7 @@
   storage API (see Section <reference|sect-re-api>) to insert a new Wasm blob
   into runtime storage slot to upgrade the runtime.
 
-  <subsection|Code Executor>
+  <subsection|Code Executor><label|sect-code-executor>
 
   The Polkadot Host provides a Wasm Virtual Machine (VM) to run the Runtime.
   The Wasm VM exposes the Polkadot Host API to the Runtime, which, on its
@@ -999,8 +999,8 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|2>
-    <associate|page-first|23>
-    <associate|section-nr|2>
+    <associate|page-first|21>
+    <associate|section-nr|2<uninit>>
     <associate|subsection-nr|1>
   </collection>
 </initial>
@@ -1061,6 +1061,7 @@
     <associate|sect-changes-trie-block-pairs|<tuple|3.3.4.2|29>>
     <associate|sect-changes-trie-child-trie-pair|<tuple|3.3.4.3|30>>
     <associate|sect-changes-trie-extrinsics-pairs|<tuple|3.3.4.1|29>>
+    <associate|sect-code-executor|<tuple|3.1.2|?>>
     <associate|sect-entries-into-runtime|<tuple|3.1|21>>
     <associate|sect-extrinsics|<tuple|3.2|23>>
     <associate|sect-handling-runtime-state-update|<tuple|3.1.2.4|23>>
