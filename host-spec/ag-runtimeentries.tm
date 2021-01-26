@@ -136,36 +136,51 @@
 
   <subsection|<verbatim|Core_version>><label|defn-rt-core-version>
 
-  This entry receives no argument; it returns the version data encoded in ABI
-  format described in Section <reference|sect-runtime-return-value>
-  containing the following information:
+  Returns the version identifiers of the Runtime. This function can be used
+  by the Polkadot Host implementation when it seems appropriate.
 
-  <verbatim|>
+  \;
 
-  <\with|par-mode|center>
-    <small-table|<tabular|<tformat|<cwith|1|8|1|1|cell-halign|l>|<cwith|1|8|1|1|cell-lborder|0ln>|<cwith|1|8|2|2|cell-halign|l>|<cwith|1|8|3|3|cell-halign|l>|<cwith|1|8|3|3|cell-rborder|0ln>|<cwith|1|8|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|8|8|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
-    identifier>>|<row|<cell|<verbatim|impl_name>>|<cell|String>|<cell|the
-    name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|UINT32>|<cell|the
-    version of the authorship interface>>|<row|<cell|<verbatim|spec_version>>|<cell|UINT32>|<cell|the
-    version of the Runtime specification>>|<row|<cell|<verbatim|impl_version>>|<cell|UINT32>|<cell|the
-    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec
-    (<reference|defn-rt-apisvec>)>|<cell|List of supported APIs along with
-    their version>>|<row|<cell|<verbatim|transaction_version>>|<cell|UINT32>|<cell|the
-    version of the transaction format>>>>>|Detail of the version data type
-    returns from runtime <verbatim|version> function.>
-  </with>
+  <strong|Arguments>:
 
-  <\definition>
-    <label|defn-rt-apisvec><strong|ApisVec> is a specialised type for the
-    <verbatim|Core_version> (<reference|defn-rt-core-version>) function
-    entry. It represents an array of tuples, where the first value of the
-    tuple is an array of 8-bytes indicating the API name. The second value of
-    the tuple is the version number of the corresponding API.
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
 
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|ApiVec>|<cell|\<assign\>>|<cell|<around*|(|T<rsub|0>,\<ldots\>,T<rsub|n>|)>>>|<row|<cell|T>|<cell|\<assign\>>|<cell|<around*|(|<around*|(|b<rsub|0>,\<ldots\>,b<rsub|7>|)>,UINT32|)>>>>>
-    </eqnarray*>
-  </definition>
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A datastructure of the following format:
+
+    \;
+
+    <\with|par-mode|center>
+      <small-table|<tabular|<tformat|<cwith|1|8|1|1|cell-halign|l>|<cwith|1|8|1|1|cell-lborder|0ln>|<cwith|1|8|2|2|cell-halign|l>|<cwith|1|8|3|3|cell-halign|l>|<cwith|1|8|3|3|cell-rborder|0ln>|<cwith|1|8|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|8|8|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
+      identifier>>|<row|<cell|<verbatim|impl_name>>|<cell|String>|<cell|the
+      name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|UINT32>|<cell|the
+      version of the authorship interface>>|<row|<cell|<verbatim|spec_version>>|<cell|UINT32>|<cell|the
+      version of the Runtime specification>>|<row|<cell|<verbatim|impl_version>>|<cell|UINT32>|<cell|the
+      v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec
+      (<reference|defn-rt-apisvec>)>|<cell|List of supported APIs along with
+      their version>>|<row|<cell|<verbatim|transaction_version>>|<cell|UINT32>|<cell|the
+      version of the transaction format>>>>>|Detail of the version data type
+      returns from runtime <verbatim|version> function.>
+    </with>
+
+    <\definition>
+      <label|defn-rt-apisvec><strong|ApisVec> is a specialised type for the
+      <verbatim|Core_version> (<reference|defn-rt-core-version>) function
+      entry. It represents an array of tuples, where the first value of the
+      tuple is an array of 8-bytes indicating the API name. The second value
+      of the tuple is the version number of the corresponding API.
+
+      <\eqnarray*>
+        <tformat|<table|<row|<cell|ApiVec>|<cell|\<assign\>>|<cell|<around*|(|T<rsub|0>,\<ldots\>,T<rsub|n>|)>>>|<row|<cell|T>|<cell|\<assign\>>|<cell|<around*|(|<around*|(|b<rsub|0>,\<ldots\>,b<rsub|7>|)>,UINT32|)>>>>>
+      </eqnarray*>
+    </definition>
+  </itemize-dot>
 
   <subsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
 
@@ -234,7 +249,8 @@
 
   <subsection|<verbatim|Metadata_metadata>>
 
-  Returns native Runtime metadata in an opaque form.
+  Returns native Runtime metadata in an opaque form. This function can be
+  used for logging purposes.
 
   \;
 
@@ -470,7 +486,9 @@
 
   <subsection|<verbatim|BlockBuilder_check_inherents>>
 
-  Checks whether the provided inherent is valid.
+  Checks whether the provided inherent is valid. This function can be used by
+  the Polkadot Host implementation when verifying the validaity of an
+  inherent seems appropriate, such as during a block building process.
 
   \;
 
@@ -513,7 +531,8 @@
 
   <subsection|<verbatim|BlockBuilder_random_seed>>
 
-  Generates a random seed.
+  Generates a random seed. <todo|there is currently no requirement for having
+  to call this function.>
 
   \;
 
@@ -1277,6 +1296,7 @@
     <associate|auto-54|<tuple|A.2.37|?>>
     <associate|auto-55|<tuple|A.2.38|?>>
     <associate|auto-56|<tuple|A.2.39|?>>
+    <associate|auto-57|<tuple|A.2.39|?>>
     <associate|auto-6|<tuple|A.1|108>>
     <associate|auto-7|<tuple|A.2.2|108>>
     <associate|auto-8|<tuple|A.2.3|108>>
