@@ -1,4 +1,4 @@
-.PHONY: all substrate kagome gossamer version clean
+.PHONY: all substrate kagome gossamer sync sync-adapter-substrate sync-runtime-tester version clean
 
 
 all: substrate kagome gossamer
@@ -19,6 +19,18 @@ gossamer:
 	cp gossamer/gossamer ../bin/
 	cp ~/go/pkg/mod/github.com/wasmerio/go-ext-wasm@*/wasmer/libwasmer.so ../lib/
 	chmod u+w ../lib/libwasmer.so
+
+
+sync: sync-adapter-substrate sync-runtime-tester
+
+sync-adapter-substrate:
+	cp substrate/Cargo.lock ../adapters/substrate/
+	cargo metadata --manifest-path ../adapters/substrate/Cargo.toml > /dev/null
+
+sync-runtime-tester:
+	cp substrate/Cargo.lock ../runtimes/tester
+	cargo metadata --manifest-path ../runtimes/tester/Cargo.toml > /dev/null
+
 
 version:
 	@echo "substrate-host: $$(cd substrate && git describe)"
