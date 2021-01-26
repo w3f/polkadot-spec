@@ -212,9 +212,9 @@ All the fixtures are located in their respective folder in the [`fixtures`](./fi
 
 ## Substrate and Parity Polkadot
 
-The submodule in [hosts/substrate](./hosts/substrate) should always point to a recent [Parity Polkadot release](https://github.com/paritytech/polkadot/releases).
+The submodule in [hosts/substrate](./hosts/substrate) should always point to a recent commit or release of [Parity Polkadot](https://github.com/paritytech/polkadot).
 
-After every update, `substrate-adapter` and `tester-runtime` should be update to the same substrate commit used in the release.
+After every update, `substrate-adapter` and `tester-runtime` should be update to the same substrate commit used by node in the submodule. This can be done by overwriting their `Cargo.lock` file with the one that comes with the submodule. You can use `make sync` in the the `hosts` subfolder which automates that process.
 
 ## Kagome
 
