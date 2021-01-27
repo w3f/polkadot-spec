@@ -1,4 +1,4 @@
-<TeXmacs|1.99.17>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -16,17 +16,9 @@
 
   The Polkadot network is decentralized and does not rely on any central
   authority or entity in order to achieve its fullest potential of provided
-  functionality.\ 
-
-  The networking protocol is based on a family of open protocols, including
-  the distributed Kademlia hash table which is used for peer discovery.
-
-  The nodes which constitute the network can authenticate to their peers
-  using cryptographic keys and subsequently establishing fully encrypted
-  connections. <todo| This seems out of its place, shouldn't it go to the
-  Noise section? you can also give a glimpse of what is coming in each
-  section but then you should write<space|1em>a sentence for each of the 9
-  sections>
+  functionality. The networking protocol is based on a family of open
+  protocols, including the distributed Kademlia hash table which is used for
+  peer discovery.
 
   <todo|could you add a sentence to say what are we going to do in this
   chapter>
@@ -64,12 +56,9 @@
   identify the node. The public key is shared with the rest of the network
   which allows nodes to establish secure communication channels.\ 
 
-  Each node must have its own unique ED25519 key pair. Using the same pair
-  among two or more nodes is prohibited by the protocol interpreted as bad
-  behavior <todo|I would use a more formal language instead of bad or naughty
-  behavoir. Something like what is used in RFC2119:
-  https://tools.ietf.org/html/rfc2119 >.
-
+  Each node must have its own unique ED25519 key pair. When two or more nodes
+  use the same key, the network will interpret those nodes as a single node,
+  which will result in undefined behavior and can result in equivocation.
   Furthermore, the node's <verbatim|PeerId> as defined in Definition
   <reference|defn-peer-id> is derived from its public key. <verbatim|PeerId>
   (<reference|defn-peer-id>) is used to identify each node when they are
@@ -147,15 +136,15 @@
   protocols over ip?> protocols:
 
   <\itemize>
-    <item><strong|TCP/IP> with addresses in<todo|of?> the form of
-    <verbatim|/ip4/1.2.3.4/tcp/> establish <todo|what is the subject of the
-    verb?> a TCP connection and negotiate an encryption and
+    <item><strong|TCP/IP> with addresses in the form of
+    <verbatim|/ip4/1.2.3.4/tcp/> to establish <todo|what is the subject of
+    the verb?> a TCP connection and negotiate an encryption and
     <todo|subsequently a?> multiplexing layer.
 
     <item><strong|Websockets> with addresses in the form of
-    <verbatim|/ip4/1.2.3.4/ws/> establish <todo|subject?>a TCP connection and
-    negotiate the Websocket protocol within the connection. Additionally, an
-    encryption and multiplexing layer is negotiated within the Websocket
+    <verbatim|/ip4/1.2.3.4/ws/> to establish <todo|subject?>a TCP connection
+    and negotiate the Websocket protocol within the connection. Additionally,
+    an encryption and multiplexing layer is negotiated within the Websocket
     connection.
 
     <item><strong|DNS> addresses in form of
@@ -593,7 +582,7 @@
 
       <with|par-left|<quote|1tab>|1.2<space|2spc><with|color|<quote|dark
       red>|<datoms|<macro|x|<resize|<tabular|<tformat|<cwith|1|1|1|1|cell-background|pastel
-      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-tborder|0ln>|<twith|table-width|>|<twith|table-hmode|auto>|<twith|table-block|no>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[libp2p
+      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[libp2p
       convention perhaps]>> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>>
 
@@ -615,7 +604,7 @@
 
       <with|par-left|<quote|1tab>|1.6<space|2spc>Noise Protocol
       <with|color|<quote|dark red>|<datoms|<macro|x|<resize|<tabular|<tformat|<cwith|1|1|1|1|cell-background|pastel
-      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-tborder|0ln>|<twith|table-width|>|<twith|table-hmode|auto>|<twith|table-block|no>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[encryption
+      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[encryption
       protocol/layer is a better name]>> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
@@ -645,7 +634,7 @@
 
       <with|par-left|<quote|1tab>|1.9<space|2spc>I'mOnline
       <with|color|<quote|dark red>|<datoms|<macro|x|<resize|<tabular|<tformat|<cwith|1|1|1|1|cell-background|pastel
-      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<cwith|1|-1|1|-1|cell-lborder|0ln>|<cwith|1|-1|1|-1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|-1|cell-tborder|0ln>|<twith|table-width|>|<twith|table-hmode|auto>|<twith|table-block|no>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[perhaps
+      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[perhaps
       <with|font-family|<quote|tt>|language|<quote|verbatim>|ImOnline>?]>>
       Heartbeat <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-22>>
