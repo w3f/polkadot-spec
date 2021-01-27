@@ -108,6 +108,15 @@
   persisted after the call is ended. See Section
   <reference|sect-handling-runtime-state-update> for more information.
 
+  <section|JSON-RPC API for external services><label|sect-json-rpc-api>
+
+  Polkadot Host implementers are encouraged to implement an API in order for
+  external, third-party services to interact with the node. The
+  <hlink|JSON-RPC Interface for Polkadot Nodes|https://github.com/w3f/PSPs/blob/master/PSPs/drafts/psp-6.md>
+  (PSP Number 006) is a Polkadot Standard Proposal for such an API and makes
+  it easier to integrate the node with exisiting tools available in the
+  Polkadot ecosystem, such as <hlink|polkadot.js.org|https://polkadot.js.org/>.\ 
+
   <section|Argument Specification>
 
   As a wasm functions, all runtime entries have the following prototype
@@ -137,7 +146,8 @@
   <subsection|<verbatim|Core_version>><label|defn-rt-core-version>
 
   Returns the version identifiers of the Runtime. This function can be used
-  by the Polkadot Host implementation when it seems appropriate.
+  by the Polkadot Host implementation when it seems appropriate, such as for
+  the JSON-RPC API as described in Section <reference|sect-json-rpc-api>.
 
   \;
 
@@ -250,7 +260,9 @@
   <subsection|<verbatim|Metadata_metadata>>
 
   Returns native Runtime metadata in an opaque form. This function can be
-  used for logging purposes.
+  used for logging purposes. This function can be used by the Polkadot Host
+  implementation when it seems appropriate, such as for the JSON-RPC API as
+  described in Section <reference|sect-json-rpc-api>.
 
   \;
 
@@ -1094,7 +1106,9 @@
 
   <subsection|<verbatim|AccountNonceApi_account_nonce>>
 
-  Get the current nonce of an account.
+  Get the current nonce of an account. This function can be used by the
+  Polkadot Host implementation when it seems appropriate, such as for the
+  JSON-RPC API as described in Section <reference|sect-json-rpc-api>.
 
   \;
 
@@ -1118,6 +1132,12 @@
   internals of an extrinsic, but only interprets the extrinsic as some
   encoded value and accounts for its weight and length, the runtime's
   extrinsic base weight and the current fee multiplier.
+
+  \;
+
+  This function can be used by the Polkadot Host implementation when it seems
+  appropriate, such as for the JSON-RPC API as described in Section
+  <reference|sect-json-rpc-api>.
 
   \;
 
@@ -1162,7 +1182,9 @@
 
   <subsection|<verbatim|TransactionPaymentApi_query_fee_details>>
 
-  Query the detailed fee of a given extrinsic.
+  Query the detailed fee of a given extrinsic. This function can be used by
+  the Polkadot Host implementation when it seems appropriate, such as for the
+  JSON-RPC API as described in Section <reference|sect-json-rpc-api>.
 
   \;
 
@@ -1233,11 +1255,11 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|8>
-    <associate|page-first|139>
+    <associate|page-first|133>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
-    <associate|section-nr|2<uninit>>
+    <associate|section-nr|2>
     <associate|subsection-nr|0>
   </collection>
 </initial>
@@ -1245,66 +1267,67 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|A|107>>
-    <associate|auto-10|<tuple|A.2.5|109>>
-    <associate|auto-11|<tuple|A.2|109>>
-    <associate|auto-12|<tuple|A.3|109>>
-    <associate|auto-13|<tuple|A.4|109>>
-    <associate|auto-14|<tuple|A.5|110>>
-    <associate|auto-15|<tuple|A.6|110>>
-    <associate|auto-16|<tuple|A.7|110>>
-    <associate|auto-17|<tuple|A.8|111>>
-    <associate|auto-18|<tuple|A.2.6|111>>
-    <associate|auto-19|<tuple|A.2.7|111>>
+    <associate|auto-10|<tuple|A.3.4|109>>
+    <associate|auto-11|<tuple|A.3.5|109>>
+    <associate|auto-12|<tuple|A.2|109>>
+    <associate|auto-13|<tuple|A.3|109>>
+    <associate|auto-14|<tuple|A.4|110>>
+    <associate|auto-15|<tuple|A.5|110>>
+    <associate|auto-16|<tuple|A.6|110>>
+    <associate|auto-17|<tuple|A.7|111>>
+    <associate|auto-18|<tuple|A.8|111>>
+    <associate|auto-19|<tuple|A.3.6|111>>
     <associate|auto-2|<tuple|A.1|107>>
-    <associate|auto-20|<tuple|A.2.8|111>>
-    <associate|auto-21|<tuple|A.2.9|112>>
-    <associate|auto-22|<tuple|A.2.10|112>>
-    <associate|auto-23|<tuple|A.9|?>>
-    <associate|auto-24|<tuple|A.10|?>>
-    <associate|auto-25|<tuple|A.11|?>>
-    <associate|auto-26|<tuple|A.12|?>>
-    <associate|auto-27|<tuple|A.2.11|?>>
-    <associate|auto-28|<tuple|A.2.12|?>>
-    <associate|auto-29|<tuple|A.2.13|?>>
+    <associate|auto-20|<tuple|A.3.7|111>>
+    <associate|auto-21|<tuple|A.3.8|112>>
+    <associate|auto-22|<tuple|A.3.9|112>>
+    <associate|auto-23|<tuple|A.3.10|?>>
+    <associate|auto-24|<tuple|A.9|?>>
+    <associate|auto-25|<tuple|A.10|?>>
+    <associate|auto-26|<tuple|A.11|?>>
+    <associate|auto-27|<tuple|A.12|?>>
+    <associate|auto-28|<tuple|A.3.11|?>>
+    <associate|auto-29|<tuple|A.3.12|?>>
     <associate|auto-3|<tuple|A.1|107>>
-    <associate|auto-30|<tuple|A.2.14|?>>
-    <associate|auto-31|<tuple|A.2.15|?>>
-    <associate|auto-32|<tuple|A.2.16|?>>
-    <associate|auto-33|<tuple|A.2.17|?>>
-    <associate|auto-34|<tuple|A.2.18|?>>
-    <associate|auto-35|<tuple|A.2.19|?>>
-    <associate|auto-36|<tuple|A.2.20|?>>
-    <associate|auto-37|<tuple|A.2.21|?>>
-    <associate|auto-38|<tuple|A.2.22|?>>
-    <associate|auto-39|<tuple|A.2.23|?>>
+    <associate|auto-30|<tuple|A.3.13|?>>
+    <associate|auto-31|<tuple|A.3.14|?>>
+    <associate|auto-32|<tuple|A.3.15|?>>
+    <associate|auto-33|<tuple|A.3.16|?>>
+    <associate|auto-34|<tuple|A.3.17|?>>
+    <associate|auto-35|<tuple|A.3.18|?>>
+    <associate|auto-36|<tuple|A.3.19|?>>
+    <associate|auto-37|<tuple|A.3.20|?>>
+    <associate|auto-38|<tuple|A.3.21|?>>
+    <associate|auto-39|<tuple|A.3.22|?>>
     <associate|auto-4|<tuple|A.2|107>>
-    <associate|auto-40|<tuple|A.2.24|?>>
-    <associate|auto-41|<tuple|A.2.25|?>>
-    <associate|auto-42|<tuple|A.2.26|?>>
-    <associate|auto-43|<tuple|A.2.27|?>>
-    <associate|auto-44|<tuple|A.2.28|?>>
-    <associate|auto-45|<tuple|A.13|?>>
-    <associate|auto-46|<tuple|A.2.29|?>>
-    <associate|auto-47|<tuple|A.2.30|?>>
-    <associate|auto-48|<tuple|A.2.31|?>>
-    <associate|auto-49|<tuple|A.2.32|?>>
-    <associate|auto-5|<tuple|A.2.1|108>>
-    <associate|auto-50|<tuple|A.2.33|?>>
-    <associate|auto-51|<tuple|A.2.34|?>>
-    <associate|auto-52|<tuple|A.2.35|?>>
-    <associate|auto-53|<tuple|A.2.36|?>>
-    <associate|auto-54|<tuple|A.2.37|?>>
-    <associate|auto-55|<tuple|A.2.38|?>>
-    <associate|auto-56|<tuple|A.2.39|?>>
-    <associate|auto-57|<tuple|A.2.39|?>>
-    <associate|auto-6|<tuple|A.1|108>>
-    <associate|auto-7|<tuple|A.2.2|108>>
-    <associate|auto-8|<tuple|A.2.3|108>>
-    <associate|auto-9|<tuple|A.2.4|109>>
+    <associate|auto-40|<tuple|A.3.23|?>>
+    <associate|auto-41|<tuple|A.3.24|?>>
+    <associate|auto-42|<tuple|A.3.25|?>>
+    <associate|auto-43|<tuple|A.3.26|?>>
+    <associate|auto-44|<tuple|A.3.27|?>>
+    <associate|auto-45|<tuple|A.3.28|?>>
+    <associate|auto-46|<tuple|A.13|?>>
+    <associate|auto-47|<tuple|A.3.29|?>>
+    <associate|auto-48|<tuple|A.3.30|?>>
+    <associate|auto-49|<tuple|A.3.31|?>>
+    <associate|auto-5|<tuple|A.3|108>>
+    <associate|auto-50|<tuple|A.3.32|?>>
+    <associate|auto-51|<tuple|A.3.33|?>>
+    <associate|auto-52|<tuple|A.3.34|?>>
+    <associate|auto-53|<tuple|A.3.35|?>>
+    <associate|auto-54|<tuple|A.3.36|?>>
+    <associate|auto-55|<tuple|A.3.37|?>>
+    <associate|auto-56|<tuple|A.3.38|?>>
+    <associate|auto-57|<tuple|A.3.39|?>>
+    <associate|auto-58|<tuple|1.39|?>>
+    <associate|auto-6|<tuple|A.3.1|108>>
+    <associate|auto-7|<tuple|A.1|108>>
+    <associate|auto-8|<tuple|A.3.2|108>>
+    <associate|auto-9|<tuple|A.3.3|109>>
     <associate|defn-invalid-transaction|<tuple|A.11|110>>
     <associate|defn-rt-apisvec|<tuple|A.1|?>>
-    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.2.6|112>>
-    <associate|defn-rt-core-version|<tuple|A.2.1|108>>
+    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.3.6|112>>
+    <associate|defn-rt-core-version|<tuple|A.3.1|108>>
     <associate|defn-rte-apply-extrinsic-result|<tuple|A.2|?>>
     <associate|defn-rte-custom-module-error|<tuple|A.5|?>>
     <associate|defn-rte-dispatch-error|<tuple|A.4|?>>
@@ -1315,16 +1338,17 @@
     <associate|defn-transaction-validity-error|<tuple|A.10|110>>
     <associate|defn-unknown-transaction|<tuple|A.12|110>>
     <associate|defn-valid-transaction|<tuple|A.9|110>>
-    <associate|sect-babeapi_current_epoch|<tuple|A.2.30|?>>
-    <associate|sect-babeapi_generate_key_ownership_proof|<tuple|A.2.32|?>>
-    <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|A.2.27|?>>
-    <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.2.26|?>>
+    <associate|sect-babeapi_current_epoch|<tuple|A.3.30|?>>
+    <associate|sect-babeapi_generate_key_ownership_proof|<tuple|A.3.32|?>>
+    <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|A.3.27|?>>
+    <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.3.26|?>>
+    <associate|sect-json-rpc-api|<tuple|A.2|?>>
     <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
-    <associate|sect-rte-apply-extrinsic|<tuple|A.2.5|?>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.2.28|109>>
-    <associate|sect-rte-core-execute-block|<tuple|A.2.2|?>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.2.25|109>>
-    <associate|sect-rte-validate-transaction|<tuple|A.2.10|109>>
+    <associate|sect-rte-apply-extrinsic|<tuple|A.3.5|?>>
+    <associate|sect-rte-babeapi-epoch|<tuple|A.3.28|109>>
+    <associate|sect-rte-core-execute-block|<tuple|A.3.2|?>>
+    <associate|sect-rte-grandpa-auth|<tuple|A.3.25|109>>
+    <associate|sect-rte-validate-transaction|<tuple|A.3.10|109>>
     <associate|sect-runtime-entries|<tuple|A|107>>
     <associate|snippet-runtime-enteries|<tuple|A.1|107>>
   </collection>
