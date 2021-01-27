@@ -127,10 +127,12 @@
     <hlink|LEB128|https://en.wikipedia.org/wiki/LEB128> encoded length.
 
     <item><strong|Notification substreams>. After the protocol is negotiated,
-    the initiator sends a single handshake message. The responder can then
-    either accept or reject the substream. After the substream has been
-    accepted, the initiator can send an unbound number of individual
-    messages.
+    the initiator sends a single handshake message. Handshakes are prefixed
+    with their <hlink|LEB128|https://en.wikipedia.org/wiki/LEB128> encoded
+    length. A handshake can be empty, in which case the length prefix would
+    be <verbatim|0>. The responder can then either accept or reject the
+    substream. After the substream has been accepted, the initiator can send
+    an unbound number of individual messages.
   </itemize-dot>
 
   The Polkadot Host can establish a connection with any peer it knows the
