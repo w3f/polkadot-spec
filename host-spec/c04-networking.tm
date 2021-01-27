@@ -291,9 +291,9 @@
     where:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0
-      >|<cell|<math-it|The node is a full node>>>|<row|<cell|1
-      >|<cell|<math-it|The node is a light client>>>|<row|<cell|2
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1
+      >|<cell|<math-it|The node is a full node>>>|<row|<cell|2
+      >|<cell|<math-it|The node is a light client>>>|<row|<cell|4
       >|<cell|<math-it|The node is a validator>>>>>>>>|<row|<cell|N<rsub|B>>|<cell|=>|<cell|<math-it|Best
       block number according to the node>>>|<row|<cell|h<rsub|B>>|<cell|=>|<cell|<math-it|Best
       block hash according to the node>>>|<row|<cell|h<rsub|G>>|<cell|=>|<cell|<math-it|Genesis
