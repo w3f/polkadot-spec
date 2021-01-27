@@ -123,7 +123,8 @@
     <item><strong|Request-Response substreams>: After the protocol is
     negotiated, the initiator sends a single message containing a request.
     The responder then sends a response, after which the substream is then
-    immediately closed.
+    immediately closed. The requests and responses are prefixed with their
+    <hlink|LEB128|https://en.wikipedia.org/wiki/LEB128> encoded length.
 
     <item><strong|Notification substreams>. After the protocol is negotiated,
     the initiator sends a single handshake message. The responder can then
