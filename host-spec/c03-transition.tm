@@ -1,4 +1,4 @@
-<TeXmacs|1.99.14>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -104,7 +104,7 @@
   storage API (see Section <reference|sect-re-api>) to insert a new Wasm blob
   into runtime storage slot to upgrade the runtime.
 
-  <subsection|Code Executor>
+  <subsection|Code Executor><label|sect-code-executor>
 
   The Polkadot Host provides a Wasm Virtual Machine (VM) to run the Runtime.
   The Wasm VM exposes the Polkadot Host API to the Runtime, which, on its
@@ -596,7 +596,7 @@
     <item><strong|<samp|authority Ids>>: This is the list of the Ids of
     authorities, which have voted for the block to be stored and<verbatim|>
     is formally referred to as <math|A<around|(|B|)>>. An authority Id is
-    32bit.
+    256-bit.
   </itemize>
 
   <subsubsection|Block Body><label|sect-block-body>
@@ -1016,9 +1016,9 @@
     <associate|auto-11|<tuple|3.2.2|23>>
     <associate|auto-12|<tuple|3.2.2.1|23>>
     <associate|auto-13|<tuple|3.2.3|24>>
-    <associate|auto-14|<tuple|3.2.3|24>>
-    <associate|auto-15|<tuple|3.2.3|24>>
-    <associate|auto-16|<tuple|3.2.3|24>>
+    <associate|auto-14|<tuple|Transaction Message|24>>
+    <associate|auto-15|<tuple|transaction pool|24>>
+    <associate|auto-16|<tuple|transaction queue|24>>
     <associate|auto-17|<tuple|3.2.3.1|25>>
     <associate|auto-18|<tuple|3.1|25>>
     <associate|auto-19|<tuple|3.3|25>>
@@ -1061,6 +1061,7 @@
     <associate|sect-changes-trie-block-pairs|<tuple|3.3.4.2|29>>
     <associate|sect-changes-trie-child-trie-pair|<tuple|3.3.4.3|30>>
     <associate|sect-changes-trie-extrinsics-pairs|<tuple|3.3.4.1|29>>
+    <associate|sect-code-executor|<tuple|3.1.2|?>>
     <associate|sect-entries-into-runtime|<tuple|3.1|21>>
     <associate|sect-extrinsics|<tuple|3.2|23>>
     <associate|sect-handling-runtime-state-update|<tuple|3.1.2.4|23>>

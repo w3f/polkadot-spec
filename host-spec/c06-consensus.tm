@@ -1045,11 +1045,11 @@
   counts votes.
 
   <\definition>
-    Voter <math|v> <strong|equivocates> if they broadcast two or more valid
-    votes to blocks during one voting sub-round. In such a situation, we say
-    that <math|v> is an <strong|equivocator> and any vote
-    <math|V<rsub|v><rsup|r,stage><around*|(|B|)>> cast by <math|v> in that
-    sub-round is an <strong|equivocatory vote>, and
+    <label|defn-equivocation>Voter <math|v> <strong|equivocates> if they
+    broadcast two or more valid votes to blocks during one voting sub-round.
+    In such a situation, we say that <math|v> is an <strong|equivocator> and
+    any vote <math|V<rsub|v><rsup|r,stage><around*|(|B|)>> cast by <math|v>
+    in that sub-round is an <strong|equivocatory vote>, and
 
     <\equation*>
       \<cal-E\><rsup|r,stage>
@@ -2215,6 +2215,7 @@
     <associate|defn-epoch-randomness|<tuple|6.21|?>>
     <associate|defn-epoch-slot|<tuple|6.6|39>>
     <associate|defn-epoch-subchain|<tuple|6.9|39>>
+    <associate|defn-equivocation|<tuple|6.27|?>>
     <associate|defn-finalized-block|<tuple|6.42|49>>
     <associate|defn-gossip-message|<tuple|6.34|45>>
     <associate|defn-grandpa-catchup-request-msg|<tuple|6.39|46>>
