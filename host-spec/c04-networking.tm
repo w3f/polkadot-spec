@@ -84,9 +84,12 @@
     Appendix <reference|sect-genesis-block>.
 
     <item><strong|mDNS> protocol which performs a broadcast to the local
-    network. Nodes that might be listing can respond the the broadcast. The
+    network. Nodes that might be listening can respond the the broadcast. The
     libp2p mDNS specification defines this process in more detail (<todo|move
     to reference section><slink|><slink|https://github.com/libp2p/specs/blob/master/discovery/mdns.md>).
+    This protocol is an optional implementation detail for Polkadot Host
+    implementers and is not required in order to participate in the Polkadot
+    network.
 
     <item><strong|Kademlia requests> invoking Kademlia <verbatim|FIND_NODE>
     requests, where nodes respond with their list of available peers.
