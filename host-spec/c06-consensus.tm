@@ -2,7 +2,7 @@
 
 <project|host-spec.tm>
 
-<style|<tuple|book|algorithmacs-style|old-dots|old-lengths|/home/anon/.TeXmacs/packages/algorithmacs-style.ts>>
+<style|<tuple|book|algorithmacs-style|old-dots|old-lengths>>
 
 <\body>
   <chapter|Consensus><label|chap-consensu>
