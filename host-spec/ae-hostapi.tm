@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|1.99.17>
 
 <project|host-spec.tm>
 
@@ -758,7 +758,7 @@
     containing the BIP-39 seed which must be valid UTF8.
 
     <item><verbatim|return>: a regular pointer to the buffer containing the
-    <version-new|32-byte |256-bit >public key.
+    256-bit public key.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_ed25519_sign>>
@@ -982,7 +982,7 @@
     verified.
 
     <item><verbatim|key>: a regular pointer to the buffer containing the
-    <version-new|32-byte |256-bit >public key.
+    256-bit public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
     signature is valid or a value equal to <verbatim|0> if otherwise.
@@ -1009,7 +1009,7 @@
     verified.
 
     <item><verbatim|key>: a regular pointer to the buffer containing the
-    <version-new|32-byte |256-bit >public key.
+    256-bit public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
     signature is valid or a value equal to <verbatim|0> if otherwise.
@@ -1181,7 +1181,7 @@
     <verbatim|27/28>.
 
     <item><verbatim|msg>: a regular pointer to the buffer containing the
-    <version-new|32-byte |256-bit >Blake2 hash of the message.
+    256-bit Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
@@ -1554,7 +1554,8 @@
 
   Given a SCALE encoded extrinsic, this function submits the extrinsic to the
   Host's transaction pool, ready to be propagated to remote peers. This
-  process is critical for issuing the I'm Online message.
+  process is critical for issuing the <verbatim|ImOnline> message
+  <todo|refer>.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1679,8 +1680,9 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: a regular pointer to the buffer containing the
-    256-bit seed.
+    <item><verbatim|result>: a regular <todo|What is a regular pointer? is it
+    a well know wasm concept>pointer to the buffer containing the 256-bit
+    seed.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_local_storage_set>>
@@ -2037,8 +2039,9 @@
   <subsection|<verbatim|ext_offchain_set_authorized_nodes>>
 
   Set the authorized nodes which are allowed to connect to the local node.
-  This function is primarily used for private blockchains and is not
-  necessarily required for the public and open Polkadot protocol.
+  This function is primarily used for private blockchains <todo|shouldn't we
+  give a context of what private blockchain means> and is not necessarily
+  required for the public and open Polkadot protocol.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -2385,209 +2388,216 @@
     <item><verbatim|message>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the log message.
   </itemize>
+
+  \;
+
+  <\with|par-mode|right>
+    <qed>
+  </with>\ 
 </body>
 
 <\initial>
   <\collection>
     <associate|chapter-nr|8>
-    <associate|page-first|97>
+    <associate|page-first|95>
     <associate|page-height|auto>
+    <associate|page-medium|papyrus>
     <associate|page-type|letter>
     <associate|page-width|auto>
-    <associate|section-nr|1>
-    <associate|subsection-nr|7>
+    <associate|section-nr|0>
+    <associate|subsection-nr|0>
   </collection>
 </initial>
 
 <\references>
   <\collection>
-    <associate|appendix-e|<tuple|A|67>>
-    <associate|auto-1|<tuple|A|67>>
-    <associate|auto-10|<tuple|A.1.4.1|68>>
-    <associate|auto-100|<tuple|A.3|82>>
-    <associate|auto-101|<tuple|A.5.1|82>>
-    <associate|auto-102|<tuple|A.5.1.1|82>>
-    <associate|auto-103|<tuple|A.5.2|82>>
-    <associate|auto-104|<tuple|A.5.2.1|82>>
-    <associate|auto-105|<tuple|A.5.3|83>>
-    <associate|auto-106|<tuple|A.5.3.1|83>>
-    <associate|auto-107|<tuple|A.5.4|83>>
-    <associate|auto-108|<tuple|A.5.4.1|83>>
-    <associate|auto-109|<tuple|A.5.5|83>>
-    <associate|auto-11|<tuple|A.1.5|68>>
-    <associate|auto-110|<tuple|A.5.5.1|83>>
-    <associate|auto-111|<tuple|A.5.6|83>>
-    <associate|auto-112|<tuple|A.5.6.1|83>>
-    <associate|auto-113|<tuple|A.5.7|84>>
-    <associate|auto-114|<tuple|A.5.7.1|84>>
-    <associate|auto-115|<tuple|A.5.8|84>>
-    <associate|auto-116|<tuple|A.5.8.1|84>>
-    <associate|auto-117|<tuple|A.5.9|84>>
-    <associate|auto-118|<tuple|A.5.9.1|84>>
-    <associate|auto-119|<tuple|A.5.10|85>>
-    <associate|auto-12|<tuple|A.1.5.1|68>>
-    <associate|auto-120|<tuple|A.5.10.1|85>>
-    <associate|auto-121|<tuple|A.5.11|85>>
-    <associate|auto-122|<tuple|A.5.11.1|85>>
-    <associate|auto-123|<tuple|A.5.12|85>>
-    <associate|auto-124|<tuple|A.5.12.1|85>>
-    <associate|auto-125|<tuple|A.5.13|86>>
-    <associate|auto-126|<tuple|A.5.13.1|86>>
-    <associate|auto-127|<tuple|A.5.14|86>>
-    <associate|auto-128|<tuple|A.5.14.1|86>>
-    <associate|auto-129|<tuple|A.5.15|86>>
-    <associate|auto-13|<tuple|A.1.6|69>>
-    <associate|auto-130|<tuple|A.5.15.1|86>>
-    <associate|auto-131|<tuple|A.5.16|87>>
-    <associate|auto-132|<tuple|A.5.16.1|87>>
-    <associate|auto-133|<tuple|A.5.17|87>>
-    <associate|auto-134|<tuple|A.5.17.1|87>>
-    <associate|auto-135|<tuple|A.6|87>>
-    <associate|auto-136|<tuple|A.6.1|87>>
-    <associate|auto-137|<tuple|A.6.1.1|87>>
-    <associate|auto-138|<tuple|A.6.2|88>>
-    <associate|auto-139|<tuple|A.6.2.1|88>>
-    <associate|auto-14|<tuple|A.1.6.1|69>>
-    <associate|auto-140|<tuple|A.6.3|88>>
-    <associate|auto-141|<tuple|A.6.3.1|88>>
-    <associate|auto-142|<tuple|A.6.4|88>>
-    <associate|auto-143|<tuple|A.6.4.1|88>>
-    <associate|auto-144|<tuple|A.7|88>>
-    <associate|auto-145|<tuple|A.7.1|88>>
-    <associate|auto-146|<tuple|A.7.1.1|89>>
-    <associate|auto-147|<tuple|A.7.2|89>>
-    <associate|auto-148|<tuple|A.7.2.1|89>>
-    <associate|auto-149|<tuple|A.7.3|89>>
-    <associate|auto-15|<tuple|A.1.7|69>>
-    <associate|auto-150|<tuple|A.7.3.1|89>>
-    <associate|auto-151|<tuple|A.7.4|89>>
-    <associate|auto-152|<tuple|A.7.4.1|89>>
-    <associate|auto-153|<tuple|A.7.5|89>>
-    <associate|auto-154|<tuple|A.7.5.1|90>>
-    <associate|auto-155|<tuple|A.8|90>>
-    <associate|auto-156|<tuple|A.8.1|90>>
-    <associate|auto-157|<tuple|A.8.1.1|90>>
-    <associate|auto-158|<tuple|A.8.2|90>>
-    <associate|auto-159|<tuple|A.8.2.1|90>>
-    <associate|auto-16|<tuple|A.1.7.1|69>>
-    <associate|auto-160|<tuple|A.9|?>>
-    <associate|auto-161|<tuple|A.4|?>>
-    <associate|auto-162|<tuple|A.9.1|?>>
-    <associate|auto-163|<tuple|A.9.1.1|?>>
-    <associate|auto-17|<tuple|A.1.8|69>>
-    <associate|auto-18|<tuple|A.1.8.1|69>>
-    <associate|auto-19|<tuple|A.1.9|69>>
-    <associate|auto-2|<tuple|A.1|67>>
-    <associate|auto-20|<tuple|A.1.9.1|69>>
-    <associate|auto-21|<tuple|A.1.10|70>>
-    <associate|auto-22|<tuple|A.1.10.1|70>>
-    <associate|auto-23|<tuple|A.1.11|70>>
-    <associate|auto-24|<tuple|A.1.11.1|70>>
-    <associate|auto-25|<tuple|A.1.12|70>>
-    <associate|auto-26|<tuple|A.1.12.1|70>>
-    <associate|auto-27|<tuple|A.1.13|70>>
-    <associate|auto-28|<tuple|A.1.13.1|71>>
-    <associate|auto-29|<tuple|A.2|71>>
-    <associate|auto-3|<tuple|A.1.1|67>>
-    <associate|auto-30|<tuple|A.2.1|71>>
-    <associate|auto-31|<tuple|A.2.1.1|71>>
-    <associate|auto-32|<tuple|A.2.2|71>>
-    <associate|auto-33|<tuple|A.2.2.1|71>>
-    <associate|auto-34|<tuple|A.2.3|71>>
-    <associate|auto-35|<tuple|A.2.3.1|72>>
-    <associate|auto-36|<tuple|A.2.4|72>>
-    <associate|auto-37|<tuple|A.2.4.1|72>>
-    <associate|auto-38|<tuple|A.2.5|72>>
-    <associate|auto-39|<tuple|A.2.5.1|72>>
-    <associate|auto-4|<tuple|A.1.1.1|67>>
-    <associate|auto-40|<tuple|A.2.6|72>>
-    <associate|auto-41|<tuple|A.2.6.1|72>>
-    <associate|auto-42|<tuple|A.2.7|73>>
-    <associate|auto-43|<tuple|A.2.7.1|73>>
-    <associate|auto-44|<tuple|A.2.8|73>>
-    <associate|auto-45|<tuple|A.2.8.1|73>>
-    <associate|auto-46|<tuple|A.2.9|73>>
-    <associate|auto-47|<tuple|A.2.9.1|73>>
-    <associate|auto-48|<tuple|A.3|74>>
-    <associate|auto-49|<tuple|A.1|74>>
-    <associate|auto-5|<tuple|A.1.2|67>>
-    <associate|auto-50|<tuple|A.2|74>>
-    <associate|auto-51|<tuple|A.3.1|74>>
-    <associate|auto-52|<tuple|A.3.1.1|74>>
-    <associate|auto-53|<tuple|A.3.2|74>>
-    <associate|auto-54|<tuple|A.3.2.1|74>>
-    <associate|auto-55|<tuple|A.3.3|75>>
-    <associate|auto-56|<tuple|A.3.3.1|75>>
-    <associate|auto-57|<tuple|A.3.4|75>>
-    <associate|auto-58|<tuple|A.3.4.1|75>>
-    <associate|auto-59|<tuple|A.3.5|75>>
-    <associate|auto-6|<tuple|A.1.2.1|67>>
-    <associate|auto-60|<tuple|A.3.5.1|75>>
-    <associate|auto-61|<tuple|A.3.6|76>>
-    <associate|auto-62|<tuple|A.3.6.1|76>>
-    <associate|auto-63|<tuple|A.3.7|76>>
-    <associate|auto-64|<tuple|A.3.7.1|76>>
-    <associate|auto-65|<tuple|A.3.8|76>>
-    <associate|auto-66|<tuple|A.3.8.1|76>>
-    <associate|auto-67|<tuple|A.3.8.2|77>>
-    <associate|auto-68|<tuple|A.3.9|77>>
-    <associate|auto-69|<tuple|A.3.9.1|77>>
-    <associate|auto-7|<tuple|A.1.3|68>>
-    <associate|auto-70|<tuple|A.3.10|77>>
-    <associate|auto-71|<tuple|A.3.10.1|77>>
-    <associate|auto-72|<tuple|A.3.11|78>>
-    <associate|auto-73|<tuple|A.3.11.1|78>>
-    <associate|auto-74|<tuple|A.3.12|78>>
-    <associate|auto-75|<tuple|A.3.12.1|78>>
-    <associate|auto-76|<tuple|A.3.13|78>>
-    <associate|auto-77|<tuple|A.3.13.1|78>>
-    <associate|auto-78|<tuple|A.3.14|79>>
-    <associate|auto-79|<tuple|A.3.14.1|79>>
-    <associate|auto-8|<tuple|A.1.3.1|68>>
-    <associate|auto-80|<tuple|A.3.15|79>>
-    <associate|auto-81|<tuple|A.3.15.1|79>>
-    <associate|auto-82|<tuple|A.3.16|79>>
-    <associate|auto-83|<tuple|A.3.16.1|79>>
-    <associate|auto-84|<tuple|A.4|80>>
-    <associate|auto-85|<tuple|A.4.1|80>>
-    <associate|auto-86|<tuple|A.4.1.1|80>>
-    <associate|auto-87|<tuple|A.4.2|80>>
-    <associate|auto-88|<tuple|A.4.2.1|80>>
-    <associate|auto-89|<tuple|A.4.3|80>>
-    <associate|auto-9|<tuple|A.1.4|68>>
-    <associate|auto-90|<tuple|A.4.3.1|80>>
-    <associate|auto-91|<tuple|A.4.4|80>>
-    <associate|auto-92|<tuple|A.4.4.1|80>>
-    <associate|auto-93|<tuple|A.4.5|81>>
-    <associate|auto-94|<tuple|A.4.5.1|81>>
-    <associate|auto-95|<tuple|A.4.6|81>>
-    <associate|auto-96|<tuple|A.4.6.1|81>>
-    <associate|auto-97|<tuple|A.4.7|81>>
-    <associate|auto-98|<tuple|A.4.7.1|81>>
-    <associate|auto-99|<tuple|A.5|81>>
-    <associate|defn-child-storage-type|<tuple|A.4|71>>
-    <associate|defn-ecdsa-verify-error|<tuple|A.6|74>>
-    <associate|defn-http-error|<tuple|A.10|82>>
-    <associate|defn-http-status-codes|<tuple|A.9|82>>
-    <associate|defn-key-type-id|<tuple|A.5|74>>
-    <associate|defn-lexicographic-ordering|<tuple|A.3|67>>
-    <associate|defn-local-storage|<tuple|A.8|82>>
-    <associate|defn-logging-log-level|<tuple|A.12|90>>
-    <associate|defn-opaque-network-state|<tuple|A.11|?>>
-    <associate|defn-persistent-storage|<tuple|A.7|82>>
-    <associate|defn-runtime-pointer|<tuple|A.2|67>>
-    <associate|nota-re-api-at-state|<tuple|A.1|67>>
-    <associate|sect-child-storage-api|<tuple|A.2|71>>
-    <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|78>>
-    <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|75>>
-    <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.16|79>>
-    <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.8|76>>
-    <associate|sect-ext-crypto-start-batch-verify|<tuple|A.3.15|79>>
-    <associate|sect-ext-offchain-submit-transaction|<tuple|A.5.2|?>>
-    <associate|sect-ext-storage-changes-root|<tuple|A.1.9|?>>
-    <associate|sect-ext-storage-commit-transaction|<tuple|A.1.13|70>>
-    <associate|sect-ext-storage-rollback-transaction|<tuple|A.1.12|70>>
-    <associate|sect-ext-storage-start-transaction|<tuple|A.1.11|70>>
+    <associate|appendix-e|<tuple|A|95>>
+    <associate|auto-1|<tuple|A|95>>
+    <associate|auto-10|<tuple|A.1.4.1|96>>
+    <associate|auto-100|<tuple|A.3|110>>
+    <associate|auto-101|<tuple|A.5.1|110>>
+    <associate|auto-102|<tuple|A.5.1.1|110>>
+    <associate|auto-103|<tuple|A.5.2|110>>
+    <associate|auto-104|<tuple|A.5.2.1|110>>
+    <associate|auto-105|<tuple|A.5.3|111>>
+    <associate|auto-106|<tuple|A.5.3.1|111>>
+    <associate|auto-107|<tuple|A.5.4|111>>
+    <associate|auto-108|<tuple|A.5.4.1|111>>
+    <associate|auto-109|<tuple|A.5.5|111>>
+    <associate|auto-11|<tuple|A.1.5|96>>
+    <associate|auto-110|<tuple|A.5.5.1|111>>
+    <associate|auto-111|<tuple|A.5.6|112>>
+    <associate|auto-112|<tuple|A.5.6.1|112>>
+    <associate|auto-113|<tuple|A.5.7|112>>
+    <associate|auto-114|<tuple|A.5.7.1|112>>
+    <associate|auto-115|<tuple|A.5.8|112>>
+    <associate|auto-116|<tuple|A.5.8.1|112>>
+    <associate|auto-117|<tuple|A.5.9|112>>
+    <associate|auto-118|<tuple|A.5.9.1|112>>
+    <associate|auto-119|<tuple|A.5.10|113>>
+    <associate|auto-12|<tuple|A.1.5.1|96>>
+    <associate|auto-120|<tuple|A.5.10.1|113>>
+    <associate|auto-121|<tuple|A.5.11|113>>
+    <associate|auto-122|<tuple|A.5.11.1|113>>
+    <associate|auto-123|<tuple|A.5.12|113>>
+    <associate|auto-124|<tuple|A.5.12.1|114>>
+    <associate|auto-125|<tuple|A.5.13|114>>
+    <associate|auto-126|<tuple|A.5.13.1|114>>
+    <associate|auto-127|<tuple|A.5.14|114>>
+    <associate|auto-128|<tuple|A.5.14.1|114>>
+    <associate|auto-129|<tuple|A.5.15|115>>
+    <associate|auto-13|<tuple|A.1.6|97>>
+    <associate|auto-130|<tuple|A.5.15.1|115>>
+    <associate|auto-131|<tuple|A.5.16|115>>
+    <associate|auto-132|<tuple|A.5.16.1|115>>
+    <associate|auto-133|<tuple|A.5.17|115>>
+    <associate|auto-134|<tuple|A.5.17.1|115>>
+    <associate|auto-135|<tuple|A.6|116>>
+    <associate|auto-136|<tuple|A.6.1|116>>
+    <associate|auto-137|<tuple|A.6.1.1|116>>
+    <associate|auto-138|<tuple|A.6.2|116>>
+    <associate|auto-139|<tuple|A.6.2.1|116>>
+    <associate|auto-14|<tuple|A.1.6.1|97>>
+    <associate|auto-140|<tuple|A.6.3|116>>
+    <associate|auto-141|<tuple|A.6.3.1|116>>
+    <associate|auto-142|<tuple|A.6.4|116>>
+    <associate|auto-143|<tuple|A.6.4.1|116>>
+    <associate|auto-144|<tuple|A.7|117>>
+    <associate|auto-145|<tuple|A.7.1|117>>
+    <associate|auto-146|<tuple|A.7.1.1|117>>
+    <associate|auto-147|<tuple|A.7.2|117>>
+    <associate|auto-148|<tuple|A.7.2.1|117>>
+    <associate|auto-149|<tuple|A.7.3|117>>
+    <associate|auto-15|<tuple|A.1.7|97>>
+    <associate|auto-150|<tuple|A.7.3.1|117>>
+    <associate|auto-151|<tuple|A.7.4|117>>
+    <associate|auto-152|<tuple|A.7.4.1|117>>
+    <associate|auto-153|<tuple|A.7.5|118>>
+    <associate|auto-154|<tuple|A.7.5.1|118>>
+    <associate|auto-155|<tuple|A.8|118>>
+    <associate|auto-156|<tuple|A.8.1|118>>
+    <associate|auto-157|<tuple|A.8.1.1|118>>
+    <associate|auto-158|<tuple|A.8.2|118>>
+    <associate|auto-159|<tuple|A.8.2.1|118>>
+    <associate|auto-16|<tuple|A.1.7.1|97>>
+    <associate|auto-160|<tuple|A.9|118>>
+    <associate|auto-161|<tuple|A.4|119>>
+    <associate|auto-162|<tuple|A.9.1|119>>
+    <associate|auto-163|<tuple|A.9.1.1|119>>
+    <associate|auto-17|<tuple|A.1.8|97>>
+    <associate|auto-18|<tuple|A.1.8.1|97>>
+    <associate|auto-19|<tuple|A.1.9|97>>
+    <associate|auto-2|<tuple|A.1|95>>
+    <associate|auto-20|<tuple|A.1.9.1|97>>
+    <associate|auto-21|<tuple|A.1.10|98>>
+    <associate|auto-22|<tuple|A.1.10.1|98>>
+    <associate|auto-23|<tuple|A.1.11|98>>
+    <associate|auto-24|<tuple|A.1.11.1|98>>
+    <associate|auto-25|<tuple|A.1.12|98>>
+    <associate|auto-26|<tuple|A.1.12.1|98>>
+    <associate|auto-27|<tuple|A.1.13|99>>
+    <associate|auto-28|<tuple|A.1.13.1|99>>
+    <associate|auto-29|<tuple|A.2|99>>
+    <associate|auto-3|<tuple|A.1.1|95>>
+    <associate|auto-30|<tuple|A.2.1|99>>
+    <associate|auto-31|<tuple|A.2.1.1|99>>
+    <associate|auto-32|<tuple|A.2.2|99>>
+    <associate|auto-33|<tuple|A.2.2.1|99>>
+    <associate|auto-34|<tuple|A.2.3|100>>
+    <associate|auto-35|<tuple|A.2.3.1|100>>
+    <associate|auto-36|<tuple|A.2.4|100>>
+    <associate|auto-37|<tuple|A.2.4.1|100>>
+    <associate|auto-38|<tuple|A.2.5|100>>
+    <associate|auto-39|<tuple|A.2.5.1|100>>
+    <associate|auto-4|<tuple|A.1.1.1|95>>
+    <associate|auto-40|<tuple|A.2.6|100>>
+    <associate|auto-41|<tuple|A.2.6.1|101>>
+    <associate|auto-42|<tuple|A.2.7|101>>
+    <associate|auto-43|<tuple|A.2.7.1|101>>
+    <associate|auto-44|<tuple|A.2.8|101>>
+    <associate|auto-45|<tuple|A.2.8.1|101>>
+    <associate|auto-46|<tuple|A.2.9|101>>
+    <associate|auto-47|<tuple|A.2.9.1|101>>
+    <associate|auto-48|<tuple|A.3|102>>
+    <associate|auto-49|<tuple|A.1|102>>
+    <associate|auto-5|<tuple|A.1.2|95>>
+    <associate|auto-50|<tuple|A.2|102>>
+    <associate|auto-51|<tuple|A.3.1|102>>
+    <associate|auto-52|<tuple|A.3.1.1|102>>
+    <associate|auto-53|<tuple|A.3.2|102>>
+    <associate|auto-54|<tuple|A.3.2.1|102>>
+    <associate|auto-55|<tuple|A.3.3|103>>
+    <associate|auto-56|<tuple|A.3.3.1|103>>
+    <associate|auto-57|<tuple|A.3.4|103>>
+    <associate|auto-58|<tuple|A.3.4.1|103>>
+    <associate|auto-59|<tuple|A.3.5|103>>
+    <associate|auto-6|<tuple|A.1.2.1|95>>
+    <associate|auto-60|<tuple|A.3.5.1|103>>
+    <associate|auto-61|<tuple|A.3.6|104>>
+    <associate|auto-62|<tuple|A.3.6.1|104>>
+    <associate|auto-63|<tuple|A.3.7|104>>
+    <associate|auto-64|<tuple|A.3.7.1|104>>
+    <associate|auto-65|<tuple|A.3.8|104>>
+    <associate|auto-66|<tuple|A.3.8.1|105>>
+    <associate|auto-67|<tuple|A.3.8.2|105>>
+    <associate|auto-68|<tuple|A.3.9|105>>
+    <associate|auto-69|<tuple|A.3.9.1|105>>
+    <associate|auto-7|<tuple|A.1.3|96>>
+    <associate|auto-70|<tuple|A.3.10|105>>
+    <associate|auto-71|<tuple|A.3.10.1|105>>
+    <associate|auto-72|<tuple|A.3.11|106>>
+    <associate|auto-73|<tuple|A.3.11.1|106>>
+    <associate|auto-74|<tuple|A.3.12|106>>
+    <associate|auto-75|<tuple|A.3.12.1|106>>
+    <associate|auto-76|<tuple|A.3.13|106>>
+    <associate|auto-77|<tuple|A.3.13.1|106>>
+    <associate|auto-78|<tuple|A.3.14|107>>
+    <associate|auto-79|<tuple|A.3.14.1|107>>
+    <associate|auto-8|<tuple|A.1.3.1|96>>
+    <associate|auto-80|<tuple|A.3.15|107>>
+    <associate|auto-81|<tuple|A.3.15.1|107>>
+    <associate|auto-82|<tuple|A.3.16|107>>
+    <associate|auto-83|<tuple|A.3.16.1|107>>
+    <associate|auto-84|<tuple|A.4|108>>
+    <associate|auto-85|<tuple|A.4.1|108>>
+    <associate|auto-86|<tuple|A.4.1.1|108>>
+    <associate|auto-87|<tuple|A.4.2|108>>
+    <associate|auto-88|<tuple|A.4.2.1|108>>
+    <associate|auto-89|<tuple|A.4.3|108>>
+    <associate|auto-9|<tuple|A.1.4|96>>
+    <associate|auto-90|<tuple|A.4.3.1|108>>
+    <associate|auto-91|<tuple|A.4.4|108>>
+    <associate|auto-92|<tuple|A.4.4.1|108>>
+    <associate|auto-93|<tuple|A.4.5|109>>
+    <associate|auto-94|<tuple|A.4.5.1|109>>
+    <associate|auto-95|<tuple|A.4.6|109>>
+    <associate|auto-96|<tuple|A.4.6.1|109>>
+    <associate|auto-97|<tuple|A.4.7|109>>
+    <associate|auto-98|<tuple|A.4.7.1|109>>
+    <associate|auto-99|<tuple|A.5|109>>
+    <associate|defn-child-storage-type|<tuple|A.4|99>>
+    <associate|defn-ecdsa-verify-error|<tuple|A.6|102>>
+    <associate|defn-http-error|<tuple|A.10|110>>
+    <associate|defn-http-status-codes|<tuple|A.9|110>>
+    <associate|defn-key-type-id|<tuple|A.5|102>>
+    <associate|defn-lexicographic-ordering|<tuple|A.3|95>>
+    <associate|defn-local-storage|<tuple|A.8|110>>
+    <associate|defn-logging-log-level|<tuple|A.12|119>>
+    <associate|defn-opaque-network-state|<tuple|A.11|111>>
+    <associate|defn-persistent-storage|<tuple|A.7|110>>
+    <associate|defn-runtime-pointer|<tuple|A.2|95>>
+    <associate|nota-re-api-at-state|<tuple|A.1|95>>
+    <associate|sect-child-storage-api|<tuple|A.2|99>>
+    <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|106>>
+    <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|103>>
+    <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.16|107>>
+    <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.8|104>>
+    <associate|sect-ext-crypto-start-batch-verify|<tuple|A.3.15|107>>
+    <associate|sect-ext-offchain-submit-transaction|<tuple|A.5.2|110>>
+    <associate|sect-ext-storage-changes-root|<tuple|A.1.9|97>>
+    <associate|sect-ext-storage-commit-transaction|<tuple|A.1.13|99>>
+    <associate|sect-ext-storage-rollback-transaction|<tuple|A.1.12|98>>
+    <associate|sect-ext-storage-start-transaction|<tuple|A.1.11|98>>
   </collection>
 </references>
 
