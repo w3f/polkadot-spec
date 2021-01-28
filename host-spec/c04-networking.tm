@@ -253,7 +253,9 @@
     protocol which sends blocks to connected peers.
 
     <item><verbatim|/paritytech/grandpa/1> - a substream/notification
-    protocol which sends GRANDPA votes to connected peers.
+    protocol which sends GRANDPA votes to connected peers. <todo|this
+    substream will change in the future. See <hlink|issue
+    #7252|https://github.com/paritytech/substrate/issues/7252>.>
   </itemize>
 
   <subsection|Network Messages>
