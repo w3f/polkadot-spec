@@ -37,7 +37,9 @@
 
     <item><hlink|Noise|https://noiseprotocol.org/>
 
-    <item><hlink|mplex|https://github.com/libp2p/specs/tree/master/mplex>
+    <item><hlink|mplex|https://docs.libp2p.io/concepts/stream-multiplexing/#mplex>
+
+    <item><hlink|yamux|https://docs.libp2p.io/concepts/stream-multiplexing/#yamux>
 
     <item><hlink|Protocol Buffers|https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>
   </itemize>
@@ -138,6 +140,20 @@
     <verbatim|0>.
   </itemize-dot>
 
+  Connections are established by using the following protocols:
+
+  <\itemize-dot>
+    <item><verbatim|/noise> - a protol that is announced when a connection to
+    a peer is established.
+
+    <item><verbatim|/multistream/1.0.0> - a protocol that is announced when
+    negotiating an encryption protocol or a substream.
+
+    <item><verbatim|/yamux/1.0.0> - a protocol used during the
+    <verbatim|mplex> or <verbatim|yamux> negotiation. See Section
+    <reference|sect-protocols-substreams> for more information.
+  </itemize-dot>
+
   The Polkadot Host can establish a connection with any peer it knows the
   address of<todo|I have mix feeling about ending sentence with
   \<#2018\>of\<#2019\>. A preposition is a very bad word to end a sentence
@@ -146,9 +162,8 @@
 
   <\itemize>
     <item><strong|TCP/IP> with addresses in the form of
-    <verbatim|/ip4/1.2.3.4/tcp/> to establish <todo|what is the subject of
-    the verb?> a TCP connection and negotiate an encryption and
-    <todo|subsequently a?> multiplexing layer.
+    <verbatim|/ip4/1.2.3.4/tcp/> to establish a TCP connection and negotiate
+    an encryption and a multiplexing layer.
 
     <item><strong|Websockets> with addresses in the form of
     <verbatim|/ip4/1.2.3.4/ws/> to establish <todo|subject?>a TCP connection
@@ -208,7 +223,7 @@
   used to encrypt all further communication. The Noise specification
   describes this process in detail. <todo|refer>
 
-  <subsection|Protocols and Substreams>
+  <subsection|Protocols and Substreams><label|sect-protocols-substreams>
 
   After the node establishes a connection with a peer, the use of
   multiplexing allows the Polkadot Host to open substreams. <verbatim|libp2p>
@@ -222,15 +237,6 @@
   here?> the following substreams:
 
   <\itemize>
-    <item><verbatim|/noise> - a protol that is announced when a connection to
-    a peer is established. <todo| purpose?>
-
-    <item><verbatim|/multistream/1.0.0> - a protocol that is announced when
-    negotiating an encryption protocol or a substream. <todo|purpose?>
-
-    <item><verbatim|/yamux/1.0.0> - a protocol used during the
-    <verbatim|mplex> negotiation.
-
     <item><verbatim|/ipfs/ping/1.0.0> - Open a substream to a peer and
     initialize a ping to verify if a connection is till alive. If the peer
     does not respond, the connection is dropped.
@@ -546,6 +552,7 @@
     <associate|sect-msg-grandpa|<tuple|1.8.4|?>>
     <associate|sect-msg-transactions|<tuple|1.8.3|?>>
     <associate|sect-protocol-identifier|<tuple|1.4.1|?>>
+    <associate|sect-protocols-substreams|<tuple|1.7|?>>
   </collection>
 </references>
 
