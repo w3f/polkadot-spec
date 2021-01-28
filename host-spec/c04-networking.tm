@@ -32,8 +32,7 @@
   <\itemize>
     <item><hlink|libp2p|https://github.com/libp2p/specs>
 
-    <item><hlink|Kademlia|https://en.wikipedia.org/wiki/Kademlia>: is a
-    distributed hash table for decentralized networks\ 
+    <item><hlink|Kademlia|https://en.wikipedia.org/wiki/Kademlia>\ 
 
     <item><hlink|Noise|https://noiseprotocol.org/>
 
@@ -98,12 +97,6 @@
     Kademlia requests must also contain protocol identifiers as described in
     Section <reference|sect-protocol-identifier>.
   </itemize>
-
-  <subsubsection|Protocol Identifier><label|sect-protocol-identifier>
-
-  Kademlia nodes only communicate with other nodes using the same protocol
-  identifier. The Polkadot network is identified by <verbatim|dot>
-  (respectively <verbatim|ksmcc3> for Kusama).
 
   <subsection|Connection establishment>
 
@@ -526,27 +519,27 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|4|?>>
-    <associate|auto-10|<tuple|1.7|?>>
-    <associate|auto-11|<tuple|1.8|?>>
-    <associate|auto-12|<tuple|1.8.1|?>>
-    <associate|auto-13|<tuple|1.8.2|?>>
-    <associate|auto-14|<tuple|1|?>>
-    <associate|auto-15|<tuple|2|?>>
-    <associate|auto-16|<tuple|3|?>>
-    <associate|auto-17|<tuple|4|?>>
-    <associate|auto-18|<tuple|5|?>>
-    <associate|auto-19|<tuple|6|?>>
+    <associate|auto-10|<tuple|1.8|?>>
+    <associate|auto-11|<tuple|1.8.1|?>>
+    <associate|auto-12|<tuple|1.8.2|?>>
+    <associate|auto-13|<tuple|1|?>>
+    <associate|auto-14|<tuple|2|?>>
+    <associate|auto-15|<tuple|3|?>>
+    <associate|auto-16|<tuple|4|?>>
+    <associate|auto-17|<tuple|5|?>>
+    <associate|auto-18|<tuple|6|?>>
+    <associate|auto-19|<tuple|1.8.3|?>>
     <associate|auto-2|<tuple|1|?>>
-    <associate|auto-20|<tuple|1.8.3|?>>
-    <associate|auto-21|<tuple|1.8.4|?>>
+    <associate|auto-20|<tuple|1.8.4|?>>
+    <associate|auto-21|<tuple|1.9|?>>
     <associate|auto-22|<tuple|1.9|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
     <associate|auto-6|<tuple|1.4|?>>
-    <associate|auto-7|<tuple|1.4.1|?>>
-    <associate|auto-8|<tuple|1.5|?>>
-    <associate|auto-9|<tuple|1.6|?>>
+    <associate|auto-7|<tuple|1.5|?>>
+    <associate|auto-8|<tuple|1.6|?>>
+    <associate|auto-9|<tuple|1.7|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|sect-discovery-mechanism|<tuple|1.4|?>>
     <associate|sect-msg-grandpa|<tuple|1.8.4|?>>
