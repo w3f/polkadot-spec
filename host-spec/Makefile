@@ -2,7 +2,7 @@ CHAPTERS   := $(wildcard c??-*.tm)
 
 APPENDICES := $(wildcard a?-*.tm)
 
-FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.puml) $(wildcard figures/*.svg)
+FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.puml) $(wildcard figures/*.pdf)
 
 GENERATED  := figures/c07-overview.eps
 
