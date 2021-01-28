@@ -357,9 +357,8 @@
       <verbatim|Justification> is <verbatim|0001 0001> (17).
 
       <\big-table|<tabular|<tformat|<cwith|2|-1|1|-1|cell-tborder|1ln>|<cwith|2|-1|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|cell-lborder|0ln>|<cwith|2|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<table|<row|<cell|<strong|Field>>|<cell|<strong|Value>>>|<row|<cell|Header>|<cell|0000
-      0001>>|<row|<cell|Body>|<cell|0000 0010>>|<row|<cell|Receipt>|<cell|0000
-      0100>>|<row|<cell|Message Queue>|<cell|0000
-      1000>>|<row|<cell|Justification>|<cell|0001 0000>>>>>>
+      0001>>|<row|<cell|Body>|<cell|0000 0010>>|<row|<cell|Justification>|<cell|0001
+      0000>>>>>>
         Bits of block data to be requested.
       </big-table>
 
@@ -530,8 +529,6 @@
     <associate|auto-20|<tuple|1.8.3|?>>
     <associate|auto-21|<tuple|1.8.4|?>>
     <associate|auto-22|<tuple|1.9|?>>
-    <associate|auto-23|<tuple|1.9|?>>
-    <associate|auto-24|<tuple|1.9|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
