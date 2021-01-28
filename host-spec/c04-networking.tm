@@ -212,7 +212,8 @@
 
   After the node establishes a connection with a peer, the use of
   multiplexing allows the Polkadot Host to open substreams. <verbatim|libp2p>
-  uses the <verbatim|mplex> protocol (<slink|https://github.com/libp2p/specs/tree/master/mplex>)
+  uses the <hlink|<verbatim|mplex> protocol|https://docs.libp2p.io/concepts/stream-multiplexing/#mplex>
+  or the <hlink|<verbatim|yamux> protocol|https://docs.libp2p.io/concepts/stream-multiplexing/#yamux>
   to manage substream and to allow the negotiation of
   <with|font-shape|italic|application-specific protocols>, where each
   protocol servers a specific utility.
