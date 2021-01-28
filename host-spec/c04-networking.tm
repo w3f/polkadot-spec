@@ -171,12 +171,14 @@
   Polkadot protocol uses the <samp|<verbatim|libp2p>> Noise framework to
   build an encryption protocol. The Noise protocol is a framework for bulding
   encryption protocols. <verbatim|libp2p> utilizes that protocol for
-  establishing encrypted communication channels.
+  establishing encrypted communication channels. Refer to the <hlink|libp2p
+  Secure Channel Handshake|https://github.com/libp2p/specs/tree/master/noise>
+  specification for a detailed description.
 
-  Polkadot nodes use the XX handshake pattern
-  (<slink|https://noiseexplorer.com/patterns/XX/><todo|move to references>)
-  to establish a connection between peers. Three following steps are required
-  to successfully complete the handshake process:
+  Polkadot nodes use the <hlink|XX handshake
+  pattern|https://noiseexplorer.com/patterns/XX/> to establish a connection
+  between peers. Three following steps are required to successfully complete
+  the handshake process:
 
   <\enumerate-numeric>
     <item>The initiator generates a keypair and sends the public key to the
