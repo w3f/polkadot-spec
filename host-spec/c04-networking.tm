@@ -26,8 +26,7 @@
   <subsection|External Documentation>
 
   The completeness of implementing the Polkadot networking protocol requires
-  the usage of external documentation. <todo|List them in the reference
-  section and refer to them here>
+  the usage of external documentation.
 
   <\itemize>
     <item><hlink|libp2p|https://github.com/libp2p/specs>
@@ -48,8 +47,6 @@
   <\todo>
     libp2p address format
   </todo>
-
-  <todo|libp2p protocol spec format like /dot/block-announces/1>
 
   <subsection|Node Identities>
 
@@ -183,9 +180,9 @@
 
   <\enumerate-numeric>
     <item>The initiator generates a keypair and sends the public key to the
-    responder. <todo|shouldn't we be more precise on the type of the key
-    pairs here or refer? are they ephemeral? is it a well established noise
-    practice which doesn't need further clarification>
+    responder. The <hlink|Noise specification|https://github.com/libp2p/specs/tree/master/noise>
+    and the <hlink|libp2p PeerId specification|https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md>
+    describe keypairs in more detail.
 
     <item>The responder generates its own keypair and sends its public key
     back to the initiator. After that, the responder derives a shared secret
@@ -201,13 +198,12 @@
     <verbatim|libp2p> public key and a signature to the responder.
   </enumerate-numeric>
 
-  <todo|if all these steps are done automagically by libp2p, maybe add a node
+  <todo|if all these steps are done automagically by libp2p, maybe add a note
   so an implementor doesn't despair reading unimplementable explanations>
 
   After these three steps, both the initiator and responder derive a new
   shared secret using the static and session-defined Noise keys, which are
-  used to encrypt all further communication. The Noise specification
-  describes this process in detail. <todo|refer>
+  used to encrypt all further communication.
 
   <subsection|Protocols and Substreams><label|sect-protocols-substreams>
 
@@ -219,8 +215,7 @@
   <with|font-shape|italic|application-specific protocols>, where each
   protocol servers a specific utility.
 
-  The Polkadot Host adoptes <todo|what does \<#2018\>adopt\<#2019\> mean
-  here?> the following substreams:
+  The Polkadot Host uses multiple substreams, each having a specific purpose:
 
   <\itemize>
     <item><verbatim|/ipfs/ping/1.0.0> - Open a substream to a peer and
@@ -258,13 +253,11 @@
   The Polkadot Host must actively communicate with the network in order to
   participate in the validation process or act as a full node.
 
-  <todo|I'd add a note on SCALE vs ProtoBuf fiasco here>
-
-  <todo|Here or in the intro libp2p section I'd drop a word on libp2p message
-  formats/standards, how you make and send them in libp2p>
-
-  <todo| in the encoding section describe or refer to ProtoBuf Spec then when
-  ever you use SCALE or ProtoBuf refer to their definition>
+  <strong|Note>: The Polkadot network originally only used SCALE encoding for
+  all message formats. Meanwhile, Protobuf has been adopted for certain
+  messages. The encoding of each message is explicitly mentioned in their
+  corresponding definition. Encoding and message formats are subject to
+  change.
 
   <subsubsection|Announcing blocks>
 
@@ -331,9 +324,8 @@
   Block requests can be used to retrieve a range of blocks from peers.
 
   <\definition>
-    The <verbatim|BlockRequest> message is a Protobuf serialized
-    structure<todo|what is a protobuf serialized structure> of the following
-    format:
+    The <verbatim|BlockRequest> message is a Protobuf serialized structure of
+    the following format:
 
     <\big-table|<tabular|<tformat|<cwith|2|-1|1|-1|cell-tborder|1ln>|<cwith|2|-1|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|cell-lborder|0ln>|<cwith|2|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<table|<row|<cell|<strong|Type>>|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Value>>>|<row|<cell|uint32>|<cell|1>|<cell|Bits
     of block data to request>|<cell|<math|B<rsub|f>>>>|<row|<cell|oneof>|<cell|>|<cell|Start
