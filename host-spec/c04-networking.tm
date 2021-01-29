@@ -273,16 +273,16 @@
   can request information about this block. The mechanism for tracking
   announcement and requesting the required data is implementation specific.
 
-  Block announcements and requests are conducted on the
-  <verbatim|/dot/block-annou nces/1> substream <todo| could you explain more
-  \<#2018\>conducted\<#2019\> and refe to def 2>
+  Block announcements, requests and responses are sent over the
+  <verbatim|/dot/block-announces/1> substream as defined in Definition
+  <reference|defn-block-announce-handshake>.
 
   <\definition>
-    The <verbatim|BlockAnnounceHandshake> initializes a substream to a remote
-    peer. Once established, all <verbatim|BlockAnnounce> <todo| you haven't
-    defined this message yet so refer to its definition>messages created by
-    the node are sent to that substream.<todo| shouldn't you refer to
-    /dot/block-annouces/1 here>
+    <label|defn-block-announce-handshake>The
+    <verbatim|BlockAnnounceHandshake> initializes a substream to a remote
+    peer. Once established, all <verbatim|BlockAnnounce> messages as defined
+    in Definition <reference|defn-block-announce> are created by the node are
+    sent to the <verbatim|/dot/block-announces/1> substream.
 
     The <verbatim|BlockAnnounceHandshake> is a SCALE encoded structure of the
     following format:
@@ -305,9 +305,9 @@
   </definition>
 
   <\definition>
-    The <verbatim|BlockAnnounce> message is sent to the specified substream
-    and indicates to remote peers the that node has either created or
-    received a new block.
+    <label|defn-block-announce>The <verbatim|BlockAnnounce> message is sent
+    to the specified substream and indicates to remote peers the that node
+    has either created or received a new block.
 
     The <verbatim|BlockAnnounce> message is a SCALE encoded structure of the
     following format:
@@ -501,6 +501,8 @@
     <associate|auto-7|<tuple|1.5|?>>
     <associate|auto-8|<tuple|1.6|?>>
     <associate|auto-9|<tuple|1.7|?>>
+    <associate|defn-block-announce|<tuple|3|?>>
+    <associate|defn-block-announce-handshake|<tuple|2|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|sect-discovery-mechanism|<tuple|1.4|?>>
     <associate|sect-encryption-layer|<tuple|1.6|?>>
