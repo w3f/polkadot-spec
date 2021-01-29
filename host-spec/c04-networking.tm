@@ -313,14 +313,14 @@
     following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|BA>|<cell|=>|<cell|Enc<rsub|SC><around*|(|Head<around*|(|B|)>,ib|)>>>>>
+      <tformat|<table|<row|<cell|BA>|<cell|=>|<cell|Enc<rsub|SC><around*|(|Head<around*|(|B|)>,b|)>>>>>
     </eqnarray*>
 
     where:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|Head<around*|(|B|)>>|<cell|=>|<cell|<math-it|Header
-      of the announced block>>>|<row|<cell|ib>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0>|<cell|<math-it|Is
+      of the announced block>>>|<row|<cell|b>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0>|<cell|<math-it|Is
       the best block according to the node>>>|<row|<cell|1>|<cell|<math-it|Is
       the best block according to node>>>>>>>>>>
     </eqnarray*>
@@ -373,7 +373,8 @@
 
       <item><verbatim|Direction> is a Protobuf structure indicating the
       sequence direction of the requested blocks. The structure is a varying
-      data type <todo|refer> of the following format:
+      data type as defined in Definition <reference|defn-varrying-data-type>
+      of the following format:
 
       <\big-table|<tabular|<tformat|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|2|2|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|4|5|1|1|cell-lborder|0ln>|<cwith|4|5|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>>|<row|<cell|0>|<cell|Enumerate
       in ascending order>>|<row|<cell|>|<cell|(from child to
@@ -417,42 +418,40 @@
 
   <subsubsection|Transactions><label|sect-msg-transactions>
 
-  Transactions as defined and explained in <todo|refer to transaction
-  section> are sent directly in its full form <todo|what is a full form> to
-  connected <todo|define connected peers>peers. It is considered good
-  behavior <todo|recommended? what is a good behavior, do you get dot? your
-  social rank increases?> to implement a mechanism which only sends a
-  transaction once to each peer and avoids sending duplicates. Such a
-  mechanism is implementation specific and any absence of such a mechanism
-  can result in consequences which are undefined <todo|I might be wrong but
-  that seems too vague instead maybe the receiving peer may choose to drop
-  the offending peer?>. On the othrer hand, the Polkadot host must be able to
-  handle duplicate transactions received from its peers and prevents the
-  inclusion of duplicate copies of a same transaction in
-  <strike-through|multiple blocks><todo|state transition? why multiple block
-  is important, why not the same block for that matter?>
+  Transactions as defined and described in Section
+  <reference|sect-transactions> are sent directly to peers with which the
+  Polkadot Host has an open transaction substream, as defined in Definition
+  <reference|defn-transactions-message>. Polkadot Host implementers should
+  implement a mechanism which only sends a transaction once to each peer and
+  avoids sending duplicates. Sending duplicate transactions might result in
+  undefined consequences such as being blocked for bad behavior by peers.
 
-  <todo|maybe deserve a definition?>The transactions message is represented
-  by <math|M<rsub|T>> and is defined as follows:
+  The mechanism for managing transactions is further described in Section
+  <reference|sect-extrinsics> respectively Section
+  <reference|sect-transaction-submission> and Section
+  <reference|sect-transaction-queue>.
 
-  <\equation*>
-    M<rsub|T>\<assign\>Enc<rsub|SC><around*|(|C<rsub|1>,\<ldots\>,C<rsub|n>|)>
-  </equation*>
+  <\definition>
+    <label|defn-transactions-message>The <strong|transactions message> is the
+    structure of how the transactions are sent over the network. It is
+    represented by <math|M<rsub|T>> and is defined as follows:
 
-  in which:
+    <\equation*>
+      M<rsub|T>\<assign\>Enc<rsub|SC><around*|(|C<rsub|1>,\<ldots\>,C<rsub|n>|)>
+    </equation*>
 
-  <\equation*>
-    C<rsub|i>\<assign\>Enc<rsub|SC><around*|(|E<rsub|i>|)>
-  </equation*>
+    in which:
 
-  Where each <math|E<rsub|i>> is a byte array and represents a sepearate
-  extrinsic. The Polkadot Host<todo|are we capitalizing H?> is
-  indifferent<todo|agnostic?> about the content of an extrinsic and treats it
-  as a blob of data. <todo|refer to transaction section discussing the same
-  fact>
+    <\equation*>
+      C<rsub|i>\<assign\>Enc<rsub|SC><around*|(|E<rsub|i>|)>
+    </equation*>
 
-  The exchange of transactions is conducted on the
-  <verbatim|/dot/transactions/1> substream.
+    Where each <math|E<rsub|i>> is a byte array and represents a sepearate
+    extrinsic. The Polkadot Host is agnostic about the content of an
+    extrinsic and treats it as a blob of data.
+
+    Transactions are sent over the <verbatim|/dot/transactions/1> substream.
+  </definition>
 
   <subsubsection|GRANDPA Votes><label|sect-msg-grandpa>
 
@@ -504,6 +503,7 @@
     <associate|defn-block-announce|<tuple|3|?>>
     <associate|defn-block-announce-handshake|<tuple|2|?>>
     <associate|defn-peer-id|<tuple|1|?>>
+    <associate|defn-transactions-message|<tuple|6|?>>
     <associate|sect-discovery-mechanism|<tuple|1.4|?>>
     <associate|sect-encryption-layer|<tuple|1.6|?>>
     <associate|sect-msg-grandpa|<tuple|1.8.4|?>>
