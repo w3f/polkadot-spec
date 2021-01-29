@@ -460,37 +460,6 @@
   <verbatim|/paritytech/grandpa/1> substream. The process for the creation of
   such votes is described in Section <reference|sect-finality>.
 
-  <subsection|I'mOnline <todo|perhaps <verbatim|ImOnline>?> Heartbeat>
-
-  <todo| you should as soon as possible make it clear that the Heartbeat is
-  an extrinsic because heartbeat is not a defined word and use of undefined
-  words makes spec tedious to read.>
-
-  <todo|I'm not sure if this should be in the networking chapter. It doesn't
-  have much to do with the networking. As far as it goes with network
-  messages, it is just a transaction, perhaps should be moved to the
-  consensus chapter as it is one of the duty of the validators>
-
-  The I'm Online heartbeat is a crucial part of the Polkadot validation
-  process, as it signals the active participation of the Polkadot validator
-  node and confirms its reachability. The Polkadot network punishes
-  unreachable validators which have been elected to an authority set by
-  slashing <todo|define? reduce?> their bonded funds <todo|define bonded fund
-  we haven't talk about it>. This is achieved by requiring validators to
-  issue a signed extrinsic known as I'm Online heartbeat, on <todo|at?> the
-  start of every Era <todo|have we defined Era? refer>.
-
-  The Polkadot Runtime fully <todo|why fully? does it have a precise
-  definition?> manages the creation and the timing of the <verbatim|ImOnline>
-  extrinsic, but it's the responsiblity of the Polkadot host to gossip that
-  extrinsic to the rest of the network. When the Runtime decides to create
-  and propagate the <verbatim|ImOnline >heartbeat extrinsic, it calls the
-  <verbatim|ext_offchain_submit_transaction> Host API function as described
-  in Section <reference|sect-ext-offchain-submit-transaction>.
-
-  The process of gossiping extrinsics is defined in section
-  <reference|sect-extrinsics>.
-
   \;
 
   <\with|par-mode|right>
