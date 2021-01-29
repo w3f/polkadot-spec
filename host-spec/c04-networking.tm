@@ -125,7 +125,10 @@
     the initiator sends a single handshake message. The responder can then
     either accept the substream by sending its own handshake, or reject it by
     closing the substream. After the substream has been accepted, the
-    initiator can send an unbound number of individual messages.
+    initiator can send an unbound number of individual messages. The
+    responder keeps its sending side of the substream open, despite not
+    sending anything anymore, and can later close it in order to signal to
+    the initiator that it no longer wishes to communicate.
 
     Handshakes and messages are prefixed with their
     <hlink|LEB128|https://en.wikipedia.org/wiki/LEB128> encoded lengths. A
@@ -532,7 +535,6 @@
     <associate|auto-2|<tuple|1|?>>
     <associate|auto-20|<tuple|1.8.4|?>>
     <associate|auto-21|<tuple|1.9|?>>
-    <associate|auto-22|<tuple|1.9|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
@@ -544,7 +546,6 @@
     <associate|sect-discovery-mechanism|<tuple|1.4|?>>
     <associate|sect-msg-grandpa|<tuple|1.8.4|?>>
     <associate|sect-msg-transactions|<tuple|1.8.3|?>>
-    <associate|sect-protocol-identifier|<tuple|1.4.1|?>>
     <associate|sect-protocols-substreams|<tuple|1.7|?>>
   </collection>
 </references>
@@ -555,30 +556,30 @@
       <tuple|normal|<\surround|<hidden-binding|<tuple>|1>|>
         <with|font-family|<quote|tt>|language|<quote|verbatim>|BlockRequest>
         Protobuf message.
-      </surround>|<pageref|auto-14>>
+      </surround>|<pageref|auto-13>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|2>|>
         Bits of block data to be requested.
-      </surround>|<pageref|auto-15>>
+      </surround>|<pageref|auto-14>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|3>|>
         Protobuf message indicating the block to start from.
-      </surround>|<pageref|auto-16>>
+      </surround>|<pageref|auto-15>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|4>|>
         <with|font-family|<quote|tt>|language|<quote|verbatim>|Direction>
         Protobuf structure.
-      </surround>|<pageref|auto-17>>
+      </surround>|<pageref|auto-16>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|5>|>
         <with|font-family|<quote|tt>|language|<quote|verbatim>|BlockResponse>
         Protobuf message.
-      </surround>|<pageref|auto-18>>
+      </surround>|<pageref|auto-17>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6>|>
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BlockData>
         Protobuf structure.
-      </surround>|<pageref|auto-19>>
+      </surround>|<pageref|auto-18>>
     </associate>
     <\associate|toc>
       <vspace*|2fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-size|<quote|1.19>|4<space|2spc>Networking>
@@ -607,50 +608,46 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|2tab>|1.4.1<space|2spc>Protocol Identifier
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>>
-
       <with|par-left|<quote|1tab>|1.5<space|2spc>Connection establishment
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
+      <no-break><pageref|auto-7>>
 
       <with|par-left|<quote|1tab>|1.6<space|2spc>Noise Protocol
       <with|color|<quote|dark red>|<datoms|<macro|x|<resize|<tabular|<tformat|<cwith|1|1|1|1|cell-background|pastel
       red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[encryption
       protocol/layer is a better name]>> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
+      <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|1tab>|1.7<space|2spc>Protocols and Substreams
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
+      <no-break><pageref|auto-9>>
 
       <with|par-left|<quote|1tab>|1.8<space|2spc>Network Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
+      <no-break><pageref|auto-10>>
 
       <with|par-left|<quote|2tab>|1.8.1<space|2spc>Announcing blocks
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <no-break><pageref|auto-11>>
 
       <with|par-left|<quote|2tab>|1.8.2<space|2spc>Requesting blocks
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-13>>
+      <no-break><pageref|auto-12>>
 
       <with|par-left|<quote|2tab>|1.8.3<space|2spc>Transactions
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
+      <no-break><pageref|auto-19>>
 
       <with|par-left|<quote|2tab>|1.8.4<space|2spc>GRANDPA Votes
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
+      <no-break><pageref|auto-20>>
 
       <with|par-left|<quote|1tab>|1.9<space|2spc>I'mOnline
       <with|color|<quote|dark red>|<datoms|<macro|x|<resize|<tabular|<tformat|<cwith|1|1|1|1|cell-background|pastel
       red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[perhaps
       <with|font-family|<quote|tt>|language|<quote|verbatim>|ImOnline>?]>>
       Heartbeat <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
+      <no-break><pageref|auto-21>>
     </associate>
   </collection>
 </auxiliary>
