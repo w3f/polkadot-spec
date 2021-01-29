@@ -85,12 +85,11 @@
     Appendix <reference|sect-genesis-block>.
 
     <item><strong|mDNS> protocol which performs a broadcast to the local
-    network. Nodes that might be listening can respond the the broadcast. The
-    libp2p mDNS specification defines this process in more detail (<todo|move
-    to reference section><slink|><slink|https://github.com/libp2p/specs/blob/master/discovery/mdns.md>).
-    This protocol is an optional implementation detail for Polkadot Host
-    implementers and is not required in order to participate in the Polkadot
-    network.
+    network. Nodes that might be listening can respond the the broadcast.
+    <hlink|The libp2p mDNS specification|https://github.com/libp2p/specs/blob/master/discovery/mdns.md>
+    defines this process in more detail. This protocol is an optional
+    implementation detail for Polkadot Host implementers and is not required
+    in order to participate in the Polkadot network.
 
     <item><strong|Kademlia requests> invoking Kademlia <verbatim|FIND_NODE>
     requests, where nodes respond with their list of available peers.
@@ -101,18 +100,13 @@
   <subsection|Connection establishment>
 
   Polkadot nodes connect to peers by establishing a TCP connection. Once
-  established, the node initiates a handshake with the remote peer's
-  encryption layer <todo|do you initiate a handshake with a layer?>. An
-  additional layer <todo|maybe specify if the layer is on the top or the
-  bottom of the encrypted link>, known as the multiplexing layer, allows a
-  connection to be split into substreams <todo|I would either define
-  substream or refer to its definition in libp2p docs>, either by the local
-  or remote node.
+  established, the node initiates a handshake with the remote peer's on the
+  encryption layer. An additional layer on top of the encryption layer, known
+  as the multiplexing layer, allows a connection to be split into substreams,
+  as described by the <hlink|yamux specification|https://docs.libp2p.io/concepts/stream-multiplexing/#yamux>,
+  either by the local or remote node.
 
-  The Polkadot node supports two types of substream protocols: <todo|my
-  feeling is that (and I might be wrong) that if I'm an implementor, with
-  this two paragraph I'm not able to implement the substream so if the detail
-  is described somewhere else maybe we should refer to it.>
+  The Polkadot node supports two types of substream protocols:
 
   <\itemize-dot>
     <item><strong|Request-Response substreams>: After the protocol is
@@ -150,11 +144,9 @@
     <reference|sect-protocols-substreams> for more information.
   </itemize-dot>
 
-  The Polkadot Host can establish a connection with any peer it knows the
-  address of<todo|I have mix feeling about ending sentence with
-  \<#2018\>of\<#2019\>. A preposition is a very bad word to end a sentence
-  with.>. The Polkadot Host supports multiple base-layer<todo|define perhaps?
-  protocols over ip?> protocols:
+  The Polkadot Host can establish a connection with any peer of which it
+  knows the address. The Polkadot Host supports multiple networking
+  protocols:
 
   <\itemize>
     <item><strong|TCP/IP> with addresses in the form of
@@ -162,10 +154,9 @@
     an encryption and a multiplexing layer.
 
     <item><strong|Websockets> with addresses in the form of
-    <verbatim|/ip4/1.2.3.4/ws/> to establish <todo|subject?>a TCP connection
-    and negotiate the Websocket protocol within the connection. Additionally,
-    an encryption and multiplexing layer is negotiated within the Websocket
-    connection.
+    <verbatim|/ip4/1.2.3.4/ws/> to establish a TCP connection and negotiate
+    the Websocket protocol within the connection. Additionally, an encryption
+    and multiplexing layer is negotiated within the Websocket connection.
 
     <item><strong|DNS> addresses in form of
     <verbatim|/dns/website.domain/tcp/> and
@@ -173,11 +164,10 @@
   </itemize>
 
   After a base-layer protocol is established, the Polkadot Host will apply
-  the Noise protocol <todo|so Noise is the encryption protocol? it need to be
-  made explicit>
+  the Noise protocol to establish the encryption layer as described in
+  Section <reference|sect-encryption-layer>.
 
-  <subsection|Noise Protocol <todo|encryption protocol/layer is a better
-  name>>
+  <subsection|Encryption Layer><label|sect-encryption-layer>
 
   Polkadot protocol uses the <samp|<verbatim|libp2p>> Noise framework to
   build an encryption protocol. The Noise protocol is a framework for bulding
@@ -544,8 +534,10 @@
     <associate|auto-9|<tuple|1.7|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|sect-discovery-mechanism|<tuple|1.4|?>>
+    <associate|sect-encryption-layer|<tuple|1.6|?>>
     <associate|sect-msg-grandpa|<tuple|1.8.4|?>>
     <associate|sect-msg-transactions|<tuple|1.8.3|?>>
+    <associate|sect-noise-protocol|<tuple|1.6|?>>
     <associate|sect-protocols-substreams|<tuple|1.7|?>>
   </collection>
 </references>
