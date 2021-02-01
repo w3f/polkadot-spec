@@ -30,8 +30,7 @@
     whether the recipient has read those messages.
   </itemize>
 
-  <big-figure|<with|par-mode|center|<image|figures/c08-overview.pdf|1par|1pag||>
-  >|Parachain Message Passing Overview>
+  <big-figure|<image|figures/c08-overview.pdf|1par|||>|Parachain Message Passing Overview>
 
   <section|Message Queue Chain (MQC)>
 
@@ -48,8 +47,7 @@
   - <with|font-family|tt|number>: The relay block number at which the message
   was sent.
 
-  <big-figure|<with|par-mode|center|<image|figures/c08-message_queue_chain.pdf|1par|1pag||>
-  >|MQC Overview>
+  <big-figure|<image|figures/c08-message_queue_chain.pdf|1par|||>|Message Queue Chain Overview>
 
   A MQC is always specific to one channel. Additional channels require its
   own, individual MQC. The MQC itself is not saved anywhere, but only
@@ -435,8 +433,7 @@
   possible in regards to messaging and only contains the required information
   for the validity of message processing.
 
-  <big-figure|<with|par-mode|center|<image|figures/c08-xcmp_overview.pdf|1par|1pag||>
-  >|Parachain XCMP Overview>
+  <big-figure|<image|figures/c08-xcmp_overview.pdf|1par|||>|Parachain XCMP Overview>
 
   The entire XCMP process requires a couple of steps:
 
