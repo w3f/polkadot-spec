@@ -20,10 +20,12 @@
   protocols, including the distributed Kademlia hash table which is used for
   peer discovery.
 
-  <todo|could you add a sentence to say what are we going to do in this
-  chapter>
+  This chapter walks through the behavior of the networking implemenation of
+  the Polkadot Host and defines the network messages. Implementation details
+  of the used <verbatim|libp2p> protocols are specified in external sources
+  as described in Section <reference|sect-networking-external-docs>.
 
-  <subsection|External Documentation>
+  <subsection|External Documentation><label|sect-networking-external-docs>
 
   The completeness of implementing the Polkadot networking protocol requires
   the usage of external documentation.
@@ -187,9 +189,8 @@
     <item>The responder generates its own keypair and sends its public key
     back to the initiator. After that, the responder derives a shared secret
     and uses it to encrypt all further communication. The responder now sends
-    its static Noise public key (which is non-persistent <todo|define
-    non-persistent and a note on how to trust a non-persistent identity>and
-    generated on every node startup), its <verbatim|libp2p> public key and a
+    its static Noise public key (which may change anytime and does not need
+    to be persisted on disk), its <verbatim|libp2p> public key and a
     signature of the static Noise public key signed with the
     <verbatim|libp2p> public key.
 
@@ -197,9 +198,6 @@
     further communication. It also sends its static Noise public key,
     <verbatim|libp2p> public key and a signature to the responder.
   </enumerate-numeric>
-
-  <todo|if all these steps are done automagically by libp2p, maybe add a note
-  so an implementor doesn't despair reading unimplementable explanations>
 
   After these three steps, both the initiator and responder derive a new
   shared secret using the static and session-defined Noise keys, which are
@@ -484,7 +482,6 @@
     <associate|auto-19|<tuple|1.8.3|?>>
     <associate|auto-2|<tuple|1|?>>
     <associate|auto-20|<tuple|1.8.4|?>>
-    <associate|auto-21|<tuple|1.9|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
@@ -500,7 +497,7 @@
     <associate|sect-encryption-layer|<tuple|1.6|?>>
     <associate|sect-msg-grandpa|<tuple|1.8.4|?>>
     <associate|sect-msg-transactions|<tuple|1.8.3|?>>
-    <associate|sect-noise-protocol|<tuple|1.6|?>>
+    <associate|sect-networking-external-docs|<tuple|1.1|?>>
     <associate|sect-protocols-substreams|<tuple|1.7|?>>
   </collection>
 </references>
@@ -567,10 +564,8 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      <with|par-left|<quote|1tab>|1.6<space|2spc>Noise Protocol
-      <with|color|<quote|dark red>|<datoms|<macro|x|<resize|<tabular|<tformat|<cwith|1|1|1|1|cell-background|pastel
-      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[encryption
-      protocol/layer is a better name]>> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|1.6<space|2spc>Encryption Layer
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
       <with|par-left|<quote|1tab>|1.7<space|2spc>Protocols and Substreams
@@ -596,13 +591,6 @@
       <with|par-left|<quote|2tab>|1.8.4<space|2spc>GRANDPA Votes
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20>>
-
-      <with|par-left|<quote|1tab>|1.9<space|2spc>I'mOnline
-      <with|color|<quote|dark red>|<datoms|<macro|x|<resize|<tabular|<tformat|<cwith|1|1|1|1|cell-background|pastel
-      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[perhaps
-      <with|font-family|<quote|tt>|language|<quote|verbatim>|ImOnline>?]>>
-      Heartbeat <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
     </associate>
   </collection>
 </auxiliary>
