@@ -8,10 +8,10 @@
 include!(concat!(env!("OUT_DIR"), "/wasm_binary.rs"));
 
 use sp_std::prelude::*;
-use sp_core::{Decode, crypto::KeyTypeId, OpaqueMetadata};
+use sp_core::{Decode, OpaqueMetadata};
 use sp_runtime::{
 	generic, create_runtime_str, print, impl_opaque_keys,
-	ApplyExtrinsicResult, MultiSignature,
+	ApplyExtrinsicResult, MultiSignature, KeyTypeId,
 	transaction_validity::{TransactionValidity, TransactionSource},
 };
 use sp_runtime::traits::{
@@ -410,7 +410,7 @@ impl_runtime_apis! {
 			}
 		}
 
-		fn current_epoch_start() -> sp_babe::SlotNumber {
+		fn current_epoch_start() -> sp_babe::Slot {
 			print("@@current_epoch_start()@@");
 			Babe::current_epoch_start()
 		}
@@ -426,7 +426,7 @@ impl_runtime_apis! {
 		}
 
 		fn generate_key_ownership_proof(
-			_slot_number: sp_babe::SlotNumber,
+			_slot_number: sp_babe::Slot,
 			_authority_id: sp_babe::AuthorityId,
 		) -> Option<sp_babe::OpaqueKeyOwnershipProof> {
 			None
