@@ -31,17 +31,39 @@
   the usage of external documentation.
 
   <\itemize>
-    <item><hlink|libp2p|https://github.com/libp2p/specs>
+    <item><hlink|libp2p|https://github.com/libp2p/specs> - <verbatim|libp2p>
+    is a modular peer-to-peer networking stack composed of many modules and
+    different parts. Included in libp2p are multiplexing protocols mplex and
+    yamux.
 
-    <item><hlink|Kademlia|https://en.wikipedia.org/wiki/Kademlia>\ 
+    <item><hlink|Kademlia|https://en.wikipedia.org/wiki/Kademlia> -
+    <verbatim|Kademlia> is a distributed hash table for decentralized
+    peer-to-peer networks. The Polkadot Host uses Kademlia for peer
+    discovery.
 
-    <item><hlink|Noise|https://noiseprotocol.org/>
+    <item><hlink|Noise|https://noiseprotocol.org/> - The Noise protocol is a
+    framework for building cryptographic protocols. The Polkadot Host uses
+    Noise to establish the encryption layer to remote peers.
 
     <item><hlink|mplex|https://docs.libp2p.io/concepts/stream-multiplexing/#mplex>
+    - <verbatim|mplex> is a multiplexing protocol developed by libp2p. The
+    protocol allows to divide a connection to a peer into multiple
+    substreams, each substream serving a specific purpose. Generally,
+    Polkadot Host implementers are encouraged to prioritize implementing
+    yamux, since it's the de facto standard in Polkadot. <verbatim|mplex> is
+    only required in order to communicate with
+    <hlink|js-lip2p|https://github.com/libp2p/js-libp2p>.
 
     <item><hlink|yamux|https://docs.libp2p.io/concepts/stream-multiplexing/#yamux>
+    - <verbatim|yamux> is a multiplexing protocol like <verbatim|mplex> and
+    the de facto standard for the Polkadot Host. This protocol should be
+    prioritzed over <verbatim|mplex>.
 
     <item><hlink|Protocol Buffers|https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>
+    - Protocol Buffers is a language-neutral, platform-neutral mechanism for
+    serializing structured data and is developed by Google. The Polkadot Host
+    uses Protocol Buffers to serialze specific messages, as clarified in
+    Section <reference|sect-network-messages>.
   </itemize>
 
   <subsection|<todo|libp2p convention perhaps>>
@@ -246,7 +268,7 @@
     #7252|https://github.com/paritytech/substrate/issues/7252>.>
   </itemize>
 
-  <subsection|Network Messages>
+  <subsection|Network Messages><label|sect-network-messages>
 
   The Polkadot Host must actively communicate with the network in order to
   participate in the validation process or act as a full node.
@@ -497,6 +519,7 @@
     <associate|sect-encryption-layer|<tuple|1.6|?>>
     <associate|sect-msg-grandpa|<tuple|1.8.4|?>>
     <associate|sect-msg-transactions|<tuple|1.8.3|?>>
+    <associate|sect-network-messages|<tuple|1.8|?>>
     <associate|sect-networking-external-docs|<tuple|1.1|?>>
     <associate|sect-protocols-substreams|<tuple|1.7|?>>
   </collection>
