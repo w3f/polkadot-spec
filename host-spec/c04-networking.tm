@@ -36,6 +36,10 @@
     different parts. Included in libp2p are multiplexing protocols mplex and
     yamux.
 
+    <item><hlink|libp2p adressing|https://docs.libp2p.io/concepts/addressing/>
+    - The Polkadot Host uses the <verbatim|libp2p> addressing system to
+    identity and connect to peers.
+
     <item><hlink|Kademlia|https://en.wikipedia.org/wiki/Kademlia> -
     <verbatim|Kademlia> is a distributed hash table for decentralized
     peer-to-peer networks. The Polkadot Host uses Kademlia for peer
@@ -65,12 +69,6 @@
     uses Protocol Buffers to serialze specific messages, as clarified in
     Section <reference|sect-network-messages>.
   </itemize>
-
-  <subsection|<todo|libp2p convention perhaps>>
-
-  <\todo>
-    libp2p address format
-  </todo>
 
   <subsection|Node Identities>
 
@@ -492,16 +490,16 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|4|?>>
-    <associate|auto-10|<tuple|1.8|?>>
-    <associate|auto-11|<tuple|1.8.1|?>>
-    <associate|auto-12|<tuple|1.8.2|?>>
-    <associate|auto-13|<tuple|1|?>>
-    <associate|auto-14|<tuple|2|?>>
-    <associate|auto-15|<tuple|3|?>>
-    <associate|auto-16|<tuple|4|?>>
-    <associate|auto-17|<tuple|5|?>>
-    <associate|auto-18|<tuple|6|?>>
-    <associate|auto-19|<tuple|1.8.3|?>>
+    <associate|auto-10|<tuple|1.7.1|?>>
+    <associate|auto-11|<tuple|1.7.2|?>>
+    <associate|auto-12|<tuple|1|?>>
+    <associate|auto-13|<tuple|2|?>>
+    <associate|auto-14|<tuple|3|?>>
+    <associate|auto-15|<tuple|4|?>>
+    <associate|auto-16|<tuple|5|?>>
+    <associate|auto-17|<tuple|6|?>>
+    <associate|auto-18|<tuple|1.7.3|?>>
+    <associate|auto-19|<tuple|1.7.4|?>>
     <associate|auto-2|<tuple|1|?>>
     <associate|auto-20|<tuple|1.8.4|?>>
     <associate|auto-3|<tuple|1.1|?>>
@@ -515,13 +513,13 @@
     <associate|defn-block-announce-handshake|<tuple|2|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|defn-transactions-message|<tuple|6|?>>
-    <associate|sect-discovery-mechanism|<tuple|1.4|?>>
-    <associate|sect-encryption-layer|<tuple|1.6|?>>
-    <associate|sect-msg-grandpa|<tuple|1.8.4|?>>
-    <associate|sect-msg-transactions|<tuple|1.8.3|?>>
-    <associate|sect-network-messages|<tuple|1.8|?>>
+    <associate|sect-discovery-mechanism|<tuple|1.3|?>>
+    <associate|sect-encryption-layer|<tuple|1.5|?>>
+    <associate|sect-msg-grandpa|<tuple|1.7.4|?>>
+    <associate|sect-msg-transactions|<tuple|1.7.3|?>>
+    <associate|sect-network-messages|<tuple|1.7|?>>
     <associate|sect-networking-external-docs|<tuple|1.1|?>>
-    <associate|sect-protocols-substreams|<tuple|1.7|?>>
+    <associate|sect-protocols-substreams|<tuple|1.6|?>>
   </collection>
 </references>
 
