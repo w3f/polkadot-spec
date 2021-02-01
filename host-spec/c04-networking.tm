@@ -32,9 +32,10 @@
 
   <\itemize>
     <item><hlink|libp2p|https://github.com/libp2p/specs> - <verbatim|libp2p>
-    is a modular peer-to-peer networking stack composed of many modules and
-    different parts. Included in libp2p are multiplexing protocols mplex and
-    yamux.
+    is a modular peer-to-<with-bib|bib|<with-bib|bib|>>peer networking stack
+    composed of many modules and different parts. Included in
+    <verbatim|libp2p> are multiplexing protocols <verbatim|mplex> and
+    <verbatim|yamux>.
 
     <item><hlink|libp2p adressing|https://docs.libp2p.io/concepts/addressing/>
     - The Polkadot Host uses the <verbatim|libp2p> addressing system to
@@ -50,18 +51,20 @@
     Noise to establish the encryption layer to remote peers.
 
     <item><hlink|mplex|https://docs.libp2p.io/concepts/stream-multiplexing/#mplex>
-    - <verbatim|mplex> is a multiplexing protocol developed by libp2p. The
-    protocol allows to divide a connection to a peer into multiple
-    substreams, each substream serving a specific purpose. Generally,
-    Polkadot Host implementers are encouraged to prioritize implementing
-    yamux, since it's the de facto standard in Polkadot. <verbatim|mplex> is
-    only required in order to communicate with
+    - <verbatim|mplex> is a multiplexing protocol developed by
+    <verbatim|libp2p>. The protocol allows to divide a connection to a peer
+    into multiple substreams, each substream serving a specific purpose.
+    Generally, Polkadot Host implementers are encouraged to prioritize
+    implementing <verbatim|yamux>, since it's the de facto standard in
+    Polkadot. <verbatim|mplex> is only required in order to communicate with
     <hlink|js-lip2p|https://github.com/libp2p/js-libp2p>.
 
     <item><hlink|yamux|https://docs.libp2p.io/concepts/stream-multiplexing/#yamux>
     - <verbatim|yamux> is a multiplexing protocol like <verbatim|mplex> and
-    the de facto standard for the Polkadot Host. This protocol should be
-    prioritzed over <verbatim|mplex>.
+    developed by HashiCorp. It's the de facto standard for the Polkadot Host.
+    This protocol should be prioritzed over <verbatim|mplex>. Section
+    <reference|sect-protocols-substreams> described the subprotocol in more
+    detail.
 
     <item><hlink|Protocol Buffers|https://developers.google.com/protocol-buffers/docs/reference/proto3-spec>
     - Protocol Buffers is a language-neutral, platform-neutral mechanism for
@@ -182,6 +185,8 @@
     <verbatim|/dns/website.domain/ws/>.
   </itemize>
 
+  The addressing system is described in the <hlink|libp2p
+  addressing|https://docs.libp2p.io/concepts/addressing/> specification.
   After a base-layer protocol is established, the Polkadot Host will apply
   the Noise protocol to establish the encryption layer as described in
   Section <reference|sect-encryption-layer>.
@@ -501,7 +506,6 @@
     <associate|auto-18|<tuple|1.7.3|?>>
     <associate|auto-19|<tuple|1.7.4|?>>
     <associate|auto-2|<tuple|1|?>>
-    <associate|auto-20|<tuple|1.8.4|?>>
     <associate|auto-3|<tuple|1.1|?>>
     <associate|auto-4|<tuple|1.2|?>>
     <associate|auto-5|<tuple|1.3|?>>
@@ -525,34 +529,37 @@
 
 <\auxiliary>
   <\collection>
+    <\associate|bib>
+      protocol_labs_libp2p_2019
+    </associate>
     <\associate|table>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|1>|>
         <with|font-family|<quote|tt>|language|<quote|verbatim>|BlockRequest>
         Protobuf message.
-      </surround>|<pageref|auto-13>>
+      </surround>|<pageref|auto-12>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|2>|>
         Bits of block data to be requested.
-      </surround>|<pageref|auto-14>>
+      </surround>|<pageref|auto-13>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|3>|>
         Protobuf message indicating the block to start from.
-      </surround>|<pageref|auto-15>>
+      </surround>|<pageref|auto-14>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|4>|>
         <with|font-family|<quote|tt>|language|<quote|verbatim>|Direction>
         Protobuf structure.
-      </surround>|<pageref|auto-16>>
+      </surround>|<pageref|auto-15>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|5>|>
         <with|font-family|<quote|tt>|language|<quote|verbatim>|BlockResponse>
         Protobuf message.
-      </surround>|<pageref|auto-17>>
+      </surround>|<pageref|auto-16>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|6>|>
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BlockData>
         Protobuf structure.
-      </surround>|<pageref|auto-18>>
+      </surround>|<pageref|auto-17>>
     </associate>
     <\associate|toc>
       <vspace*|2fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-size|<quote|1.19>|4<space|2spc>Networking>
@@ -567,51 +574,45 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-3>>
 
-      <with|par-left|<quote|1tab>|1.2<space|2spc><with|color|<quote|dark
-      red>|<datoms|<macro|x|<resize|<tabular|<tformat|<cwith|1|1|1|1|cell-background|pastel
-      red>|<cwith|1|1|1|1|cell-lsep|0fn>|<cwith|1|1|1|1|cell-rsep|0fn>|<cwith|1|1|1|1|cell-bsep|0.2fn>|<cwith|1|1|1|1|cell-tsep|0.2fn>|<table|<row|<cell|<arg|x>>>>>>|<plus|1l|0fn>|<plus|1b|0.2fn>|<minus|1r|0fn>|<minus|1t|0.2fn>>>|[libp2p
-      convention perhaps]>> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|1.2<space|2spc>Node Identities
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>>
 
-      <with|par-left|<quote|1tab>|1.3<space|2spc>Node Identities
+      <with|par-left|<quote|1tab>|1.3<space|2spc>Discovery mechanism
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-5>>
 
-      <with|par-left|<quote|1tab>|1.4<space|2spc>Discovery mechanism
+      <with|par-left|<quote|1tab>|1.4<space|2spc>Connection establishment
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|1.5<space|2spc>Connection establishment
+      <with|par-left|<quote|1tab>|1.5<space|2spc>Encryption Layer
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-7>>
 
-      <with|par-left|<quote|1tab>|1.6<space|2spc>Encryption Layer
+      <with|par-left|<quote|1tab>|1.6<space|2spc>Protocols and Substreams
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|1.7<space|2spc>Protocols and Substreams
+      <with|par-left|<quote|1tab>|1.7<space|2spc>Network Messages
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|1.8<space|2spc>Network Messages
+      <with|par-left|<quote|2tab>|1.7.1<space|2spc>Announcing blocks
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|2tab>|1.8.1<space|2spc>Announcing blocks
+      <with|par-left|<quote|2tab>|1.7.2<space|2spc>Requesting blocks
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-11>>
 
-      <with|par-left|<quote|2tab>|1.8.2<space|2spc>Requesting blocks
+      <with|par-left|<quote|2tab>|1.7.3<space|2spc>Transactions
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-12>>
+      <no-break><pageref|auto-18>>
 
-      <with|par-left|<quote|2tab>|1.8.3<space|2spc>Transactions
+      <with|par-left|<quote|2tab>|1.7.4<space|2spc>GRANDPA Votes
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-19>>
-
-      <with|par-left|<quote|2tab>|1.8.4<space|2spc>GRANDPA Votes
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
     </associate>
   </collection>
 </auxiliary>
