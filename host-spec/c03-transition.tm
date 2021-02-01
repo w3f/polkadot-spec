@@ -173,9 +173,9 @@
   extended buffer. Finally, when the Wasm method <verbatim|runtime_entry>,
   corresponding to the entry is invoked, two UINT32 integers are sent to the
   method as arguments. The first argument <verbatim|data> is set to the
-  offset where the byte array <math|B> is stored in the Wasm the extended
+  offset where the byte array <math|B> is stored in the Wasm extended
   shared memory buffer. The second argument <verbatim|len> sets the length of
-  the data stored in <math|B>., and the second one is the size of <math|B>.
+  the data stored in <math|B>.
 
   <subsubsection|The Return Value from a Runtime
   Entry><label|sect-runtime-return-value>
