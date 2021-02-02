@@ -2,7 +2,7 @@
 
 Here your can find the source code of the *Polkadot Host Specification*.
 
-Please refer to the ![Change log](./CHANGELOG.org) to review the history of changes to the host specification in the past.
+Please refer to the [Change log](./CHANGELOG.org) to review the history of changes to the host specification in the past.
 
 Official releases of the specification can be found on [the release page](https://github.com/w3f/polkadot-spec/releases) of this repository.
 
@@ -11,7 +11,7 @@ Official releases of the specification can be found on [the release page](https:
 The specification is edited with [TeXmacs](https://www.texmacs.org/) with an additional style package `algorithmacs-style.ts` (from https://github.com/w3f/algorithmacs) that must be copied or
 linked to your personal style package directory `$HOME/.TeXmacs/packages`.
 
-Any other formats, like the `.tex` and `.pdf` files are exported from TeXmacs.
+All figures can be found in the [`figures`](./figures) subdirectory. The `.eps` files should be edited with "Adobe Illustrator", the `.puml` files with [plantuml](https://www.plantuml.com) and the `.pdf` files with [diagrams.net](https://app.diagrams.net).
 
 ## Command line build and diff support
 
