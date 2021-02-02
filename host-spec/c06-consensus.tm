@@ -887,31 +887,21 @@
       </state>
 
       <\state>
-        <strong|if> <name|Should-Requeue(R)>
-      </state>
-
-      <\state>
-        <strong|<space|2em>continue>
-      </state>
-
-      <\state>
         <\IF>
-          <strong|not> <name|Block-Is-FULL(<math|R>>)
+          \ <name|Block-Is-FULL(<math|R>>)
         </IF>
       </state>
 
       <\state>
-        <name|Drop(><em|E>)<END>
-      </state>
-
-      <\state>
-        <\ELSE>
-          \;
-        </ELSE>
-      </state>
-
-      <\state>
         <BREAK><END><END>
+      </state>
+
+      <\state>
+        <space|2em><strong|if> <name|Should-Drop(R)>
+      </state>
+
+      <\state>
+        <space|4em><name|Drop(E)>
       </state>
 
       <\state>
@@ -944,13 +934,13 @@
     <item><name|Block-Is-Full> indicates that the maximum block size as been
     used.
 
-    <item><name|Should-Requeue> determines based on the result <em|R> whether
-    the extrinsic should remain in the extrinsics queue and scheduled for the
-    next block. The <verbatim|ApplyExtrinsicResult> as defined in Definition
-    <reference|defn-rte-apply-extrinsic-result> describes this behavior in
-    more detail.
+    <item><name|Should-Drop> determines based on the result <em|R> whether
+    the extrinsic should be dropped or remain in the extrinsics queue and
+    scheduled for the next block. The <verbatim|ApplyExtrinsicResult> as
+    defined in Definition <reference|defn-rte-apply-extrinsic-result>
+    describes this behavior in more detail.
 
-    <item><name|Drop> indicates removing the extrinsic from the transaction
+    <item><name|Drop> indicates removing the extrinsic from the extrinsic
     queue (Definition <reference|defn-transaction-queue>).
 
     <item><name|Add-Seal> adds the seal to the block as defined in Definition
