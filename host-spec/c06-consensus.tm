@@ -888,7 +888,7 @@
 
       <\state>
         <\IF>
-          \ <name|Block-Is-FULL(<math|R>>)
+          <name|Block-Is-FULL(<math|R>>)
         </IF>
       </state>
 
