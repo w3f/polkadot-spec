@@ -1,8 +1,8 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|old-dots>>
+<style|<tuple|book|old-dots|old-lengths>>
 
 <\body>
   <appendix|Auxiliary Encodings><label|sect-encoding>
@@ -54,6 +54,13 @@
   encoded even though it is necessary for decoding. The decoder needs to
   derive that information from the context where the encoding/decoding is
   happenning.
+
+  <\definition>
+    <math|<text|<text|><strong|Dec<rsub|SC><text|><around*|(|d|)>>>> refers
+    to the decoding of a blob of data. Since the SCALE codec is not
+    self-describing, it's up to the decoder to validate whether the blob of
+    data can be deserialized into the given type or datastructure.
+  </definition>
 
   <\definition>
     <label|defn-varrying-data-type>We define a <strong|varying data> type to
@@ -242,8 +249,14 @@
   \;
 </body>
 
-<initial|<\collection>
-</collection>>
+<\initial>
+  <\collection>
+    <associate|chapter-nr|8>
+    <associate|page-first|91>
+    <associate|section-nr|5<uninit>>
+    <associate|subsection-nr|5>
+  </collection>
+</initial>
 
 <\references>
   <\collection>
@@ -251,17 +264,17 @@
     <associate|auto-2|<tuple|A.1|55>>
     <associate|auto-3|<tuple|A.1.1|56>>
     <associate|auto-4|<tuple|A.2|57>>
-    <associate|defn-hex-encoding|<tuple|A.12|57>>
-    <associate|defn-option-type|<tuple|A.4|55>>
-    <associate|defn-result-type|<tuple|A.5|55>>
-    <associate|defn-sc-len-encoding|<tuple|A.11|56>>
+    <associate|defn-hex-encoding|<tuple|A.14|57>>
+    <associate|defn-option-type|<tuple|A.5|55>>
+    <associate|defn-result-type|<tuple|A.6|55>>
+    <associate|defn-sc-len-encoding|<tuple|A.13|56>>
     <associate|defn-scale-byte-array|<tuple|A.1|55>>
-    <associate|defn-scale-empty|<tuple|A.10|56>>
-    <associate|defn-scale-fixed-length|<tuple|A.9|56>>
-    <associate|defn-scale-list|<tuple|A.7|56>>
+    <associate|defn-scale-empty|<tuple|A.12|56>>
+    <associate|defn-scale-fixed-length|<tuple|A.11|56>>
+    <associate|defn-scale-list|<tuple|A.8|56>>
     <associate|defn-scale-tuple|<tuple|A.2|55>>
-    <associate|defn-scale-variable-type|<tuple|A.6|56>>
-    <associate|defn-varrying-data-type|<tuple|A.3|55>>
+    <associate|defn-scale-variable-type|<tuple|A.7|56>>
+    <associate|defn-varrying-data-type|<tuple|A.4|55>>
     <associate|sect-encoding|<tuple|A|55>>
     <associate|sect-int-encoding|<tuple|A.1.1|56>>
     <associate|sect-scale-codec|<tuple|A.1|55>>
