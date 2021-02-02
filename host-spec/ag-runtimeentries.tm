@@ -301,7 +301,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>Returns the varying datatype <strong|<em|ApplyExtrinsicResult>> as
+    <item>Returns the varying datatype <verbatim|ApplyExtrinsicResult> as
     defined in Definition <reference|defn-rte-apply-extrinsic-result>. This
     structure let's the block builder know whether an extrinsic should be
     included into the block or rejected.
@@ -310,8 +310,8 @@
   </itemize-dot>
 
   <\definition>
-    <label|defn-rte-apply-extrinsic-result><strong|ApplyExtrinsicResult> is
-    the varying data type <strong|Result> as defined in Definition
+    <label|defn-rte-apply-extrinsic-result><verbatim|ApplyExtrinsicResult> is
+    the varying data type <verbatim|Result> as defined in Definition
     <reference|defn-result-type>. This structure can contain multiple nested
     structures, indicating either module dispatch outcomes or transaction
     invalidity errors.
@@ -319,12 +319,15 @@
     \;
 
     <strong|NOTE>: When applying an extrinsic returns a
-    <strong|DispatchOutcome> (<reference|defn-rte-dispatch-outcome>), the
+    <verbatim|DispatchOutcome> (<reference|defn-rte-dispatch-outcome>), the
     extrinsic is always included into the block, even if the outcome is a
     dispatch error. Dispatch errors do not invalidate the block and all state
     changes are persisted. When applying an extrinsics returns
-    <strong|TransactionValidityError> (<reference|defn-rte-transaction-validity-error>),
-    the extrinsic must rejected.
+    <verbatim|TransactionValidityError> (<reference|defn-rte-transaction-validity-error>),
+    certain error types indicate whether an extrinsic should be outright
+    rejected or requeued for a later block. This behavior is clarified
+    further in Definition <reference|defn-rte-invalid-transaction>
+    respectively Definition <reference|defn-rte-unknown-transaction>.
 
     <\big-table|<tabular|<tformat|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Outcome
     of dispatching the extrinsic.>|<cell|DispatchOutcome
@@ -338,7 +341,7 @@
 
   <\definition>
     <label|defn-rte-dispatch-outcome><strong|DispatchOutcome> is the varying
-    data type <strong|Result> as defined in Definition
+    data type <verbatim|Result> as defined in Definition
     <reference|defn-result-type>.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Extrinsic
@@ -367,7 +370,7 @@
 
   <\definition>
     <label|defn-rte-custom-module-error><strong|CustomModuleError> is a tuple
-    appended after a possible error in <strong|DispatchError> as defined in
+    appended after a possible error in <verbatim|DispatchError> as defined in
     Defintion <reference|defn-rte-dispatch-error>.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|1|cell-lborder|0ln>|<cwith|5|5|3|3|cell-rborder|0ln>|<cwith|9|9|1|-1|cell-tborder|0ln>|<cwith|8|8|1|-1|cell-bborder|0ln>|<cwith|9|9|1|-1|cell-bborder|1ln>|<cwith|9|9|1|1|cell-lborder|0ln>|<cwith|9|9|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Index>|<cell|Module
@@ -401,28 +404,28 @@
   <\definition>
     <label|defn-rte-invalid-transaction><strong|InvalidTransaction> is a
     varying data type as defined in Definition
-    <reference|defn-varrying-data-type>. Specifies the invalidity of the
+    <reference|defn-varrying-data-type> and specifies the invalidity of the
     transaction in more detail.
 
-    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|0ln>|<cwith|5|5|1|-1|cell-bborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|7|7|1|-1|cell-tborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|8|8|1|-1|cell-tborder|0ln>|<cwith|7|7|1|-1|cell-bborder|0ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|1|cell-lborder|0ln>|<cwith|8|8|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-bborder|1ln>|<cwith|12|12|1|-1|cell-tborder|1ln>|<cwith|11|11|1|1|cell-lborder|0ln>|<cwith|11|11|3|3|cell-rborder|0ln>|<cwith|13|13|1|-1|cell-tborder|0ln>|<cwith|12|12|1|-1|cell-bborder|0ln>|<cwith|13|13|1|-1|cell-bborder|1ln>|<cwith|14|14|1|-1|cell-tborder|1ln>|<cwith|13|13|1|1|cell-lborder|0ln>|<cwith|13|13|3|3|cell-rborder|0ln>|<cwith|15|15|1|-1|cell-tborder|0ln>|<cwith|14|14|1|-1|cell-bborder|0ln>|<cwith|15|15|1|-1|cell-bborder|1ln>|<cwith|16|16|1|-1|cell-tborder|1ln>|<cwith|15|15|1|1|cell-lborder|0ln>|<cwith|15|15|3|3|cell-rborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|1|cell-lborder|0ln>|<cwith|10|10|3|3|cell-rborder|0ln>|<cwith|17|17|1|-1|cell-tborder|0ln>|<cwith|16|16|1|-1|cell-bborder|0ln>|<cwith|17|17|1|1|cell-lborder|0ln>|<cwith|17|17|3|3|cell-rborder|0ln>|<cwith|19|19|1|-1|cell-bborder|1ln>|<cwith|18|19|1|1|cell-lborder|0ln>|<cwith|18|19|3|3|cell-rborder|0ln>|<cwith|18|18|1|-1|cell-tborder|1ln>|<cwith|17|17|1|-1|cell-bborder|1ln>|<cwith|18|18|1|-1|cell-bborder|0ln>|<cwith|19|19|1|-1|cell-tborder|0ln>|<cwith|18|18|1|1|cell-lborder|0ln>|<cwith|18|18|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Call
-    of the transaction is not expected.>|<cell|None>>|<row|<cell|1>|<cell|General
-    error to do with the inability to pay>|<cell|None>>|<row|<cell|>|<cell|some
-    fees (e.g. account balance too low).>|<cell|>>|<row|<cell|2>|<cell|General
-    error to do with the transaction>|<cell|None>>|<row|<cell|>|<cell|not
-    being valid (e.g. nonce too high).>|<cell|>>|<row|<cell|3>|<cell|General
-    error to do with the transaction being>|<cell|None>>|<row|<cell|>|<cell|outdated
-    (e.g. nonce too low).>|<cell|>>|<row|<cell|4>|<cell|General error to do
-    with the transactions's>|<cell|None>>|<row|<cell|>|<cell|proof (e.g.
-    signature)>|<cell|>>|<row|<cell|5>|<cell|The transaction birth block is
-    ancient.>|<cell|None>>|<row|<cell|6>|<cell|The transaction would exhaust
-    the resources>|<cell|None>>|<row|<cell|>|<cell|of the current
-    block.>|<cell|>>|<row|<cell|7>|<cell|Some unknown error
-    occured.>|<cell|Unsigned>>|<row|<cell|>|<cell|>|<cell|8-bit
-    integer>>|<row|<cell|8>|<cell|An extrinsic with mandatory dispatch
-    resulted>|<cell|None>>|<row|<cell|>|<cell|in an
-    error.>|<cell|>>|<row|<cell|9>|<cell|A transaction with a mandatory
-    dispatch (only in->|<cell|None>>|<row|<cell|>|<cell|herents are allowed
-    to have mandatory dispatch).>|<cell|>>>>>>
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|0ln>|<cwith|5|5|1|-1|cell-bborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|7|7|1|-1|cell-tborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|8|8|1|-1|cell-tborder|0ln>|<cwith|7|7|1|-1|cell-bborder|0ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|1|cell-lborder|0ln>|<cwith|8|8|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-bborder|1ln>|<cwith|12|12|1|-1|cell-tborder|1ln>|<cwith|11|11|1|1|cell-lborder|0ln>|<cwith|11|11|3|3|cell-rborder|0ln>|<cwith|13|13|1|-1|cell-tborder|0ln>|<cwith|12|12|1|-1|cell-bborder|0ln>|<cwith|13|13|1|-1|cell-bborder|1ln>|<cwith|14|14|1|-1|cell-tborder|1ln>|<cwith|13|13|1|1|cell-lborder|0ln>|<cwith|13|13|3|3|cell-rborder|0ln>|<cwith|15|15|1|-1|cell-tborder|0ln>|<cwith|14|14|1|-1|cell-bborder|0ln>|<cwith|15|15|1|-1|cell-bborder|1ln>|<cwith|16|16|1|-1|cell-tborder|1ln>|<cwith|15|15|1|1|cell-lborder|0ln>|<cwith|15|15|3|3|cell-rborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|1|cell-lborder|0ln>|<cwith|10|10|3|3|cell-rborder|0ln>|<cwith|17|17|1|-1|cell-tborder|0ln>|<cwith|16|16|1|-1|cell-bborder|0ln>|<cwith|17|17|1|1|cell-lborder|0ln>|<cwith|17|17|3|3|cell-rborder|0ln>|<cwith|19|19|1|-1|cell-bborder|1ln>|<cwith|18|19|1|1|cell-lborder|0ln>|<cwith|18|19|3|3|cell-rborder|0ln>|<cwith|18|18|1|-1|cell-tborder|1ln>|<cwith|17|17|1|-1|cell-bborder|1ln>|<cwith|18|18|1|-1|cell-bborder|0ln>|<cwith|19|19|1|-1|cell-tborder|0ln>|<cwith|18|18|1|1|cell-lborder|0ln>|<cwith|18|18|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>|<cell|<strong|Reject>>>|<row|<cell|0>|<cell|Call
+    of the transaction is not expected.>|<cell|None>|<cell|Yes>>|<row|<cell|1>|<cell|General
+    error to do with the inability to pay>|<cell|None>|<cell|Yes>>|<row|<cell|>|<cell|some
+    fees (e.g. account balance too low).>|<cell|>|<cell|>>|<row|<cell|2>|<cell|General
+    error to do with the transaction>|<cell|None>|<cell|No>>|<row|<cell|>|<cell|not
+    yet being valid (e.g. nonce too high).>|<cell|>|<cell|>>|<row|<cell|3>|<cell|General
+    error to do with the transaction being>|<cell|None>|<cell|Yes>>|<row|<cell|>|<cell|outdated
+    (e.g. nonce too low).>|<cell|>|<cell|>>|<row|<cell|4>|<cell|General error
+    to do with the transactions's>|<cell|None>|<cell|Yes>>|<row|<cell|>|<cell|proof
+    (e.g. signature)>|<cell|>|<cell|>>|<row|<cell|5>|<cell|The transaction
+    birth block is ancient.>|<cell|None>|<cell|Yes>>|<row|<cell|6>|<cell|The
+    transaction would exhaust the resources>|<cell|None>|<cell|No>>|<row|<cell|>|<cell|of
+    the current block.>|<cell|>|<cell|>>|<row|<cell|7>|<cell|Some unknown
+    error occured.>|<cell|Unsigned>|<cell|Yes>>|<row|<cell|>|<cell|>|<cell|8-bit
+    integer>|<cell|>>|<row|<cell|8>|<cell|An extrinsic with mandatory
+    dispatch resulted>|<cell|None>|<cell|Yes>>|<row|<cell|>|<cell|in an
+    error.>|<cell|>|<cell|>>|<row|<cell|9>|<cell|A transaction with a
+    mandatory dispatch (only in->|<cell|None>|<cell|Yes>>|<row|<cell|>|<cell|herents
+    are allowed to have mandatory dispatch).>|<cell|>|<cell|>>>>>>
       Possible values of varying data type <strong|InvalidTransaction>.
     </big-table>
   </definition>
@@ -430,16 +433,17 @@
   <\definition>
     <label|defn-rte-unknown-transaction><strong|UnknownTransaction> is a
     varying data type as defined in Definition
-    <reference|defn-varrying-data-type>. Specifies the unknown invalidity of
-    the transaction in more detail.
+    <reference|defn-varrying-data-type> and specifies the unknown invalidity
+    of the transaction in more detail.
 
-    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|0ln>|<cwith|5|5|1|-1|cell-bborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Could
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|0ln>|<cwith|5|5|1|-1|cell-bborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>|<cell|<strong|Reject>>>|<row|<cell|0>|<cell|Could
     not lookup some information that is required
-    to>|<cell|None>>|<row|<cell|>|<cell|validate the
-    transaction.>|<cell|>>|<row|<cell|1>|<cell|No validator found for the
-    given unsigned transaction.>|<cell|None>>|<row|<cell|2>|<cell|Any other
-    custom unknown validity that is not covered>|<cell|Unsigned>>|<row|<cell|>|<cell|by
-    this enum.>|<cell|8-bit integer>>>>>>
+    to>|<cell|None>|<cell|Yes>>|<row|<cell|>|<cell|validate the
+    transaction.>|<cell|>|<cell|>>|<row|<cell|1>|<cell|No validator found for
+    the given unsigned transaction.>|<cell|None>|<cell|Yes>>|<row|<cell|2>|<cell|Any
+    other custom unknown validity that is not
+    covered>|<cell|Unsigned>|<cell|Yes>>|<row|<cell|>|<cell|by this
+    type.>|<cell|8-bit integer>|<cell|>>>>>>
       Possible values of varying data type <strong|UnknownTransaction>.
     </big-table>
   </definition>
@@ -584,10 +588,11 @@
   <strong|Return>:
 
   This function returns a <verbatim|Result> as defined in Definition
-  <reference|defn-result-type> which contains the type <em|ValidTransaction>
-  as defined in Definition <reference|defn-valid-transaction> on success and
-  the type <em|TransactionValidityError> as defined in Definition
-  <reference|defn-transaction-validity-error> on failure.
+  <reference|defn-result-type> which contains the type
+  <em|<verbatim|ValidTransaction>> as defined in Definition
+  <reference|defn-valid-transaction> on success and the type
+  <em|<verbatim|TransactionValidityError>> as defined in Definition
+  <reference|defn-rte-transaction-validity-error> on failure.
 
   <\definition>
     <label|defn-valid-transaction><strong|ValidTransaction> is a tuple which
@@ -617,71 +622,15 @@
     </small-table>
   </definition>
 
-  Note that if <em|Propagate> is set to <verbatim|false> the transaction will
-  still be considered for including in blocks that are authored on the
+  <strong|Note>: If <em|Propagate> is set to <verbatim|false> the transaction
+  will still be considered for including in blocks that are authored on the
   current node, but will never be sent to other peers.
 
-  <\definition>
-    <label|defn-transaction-validity-error><strong|TransactionValidityError>
-    is a varying data type as defined in Definition
-    <reference|defn-varrying-data-type>, where following values are possible:
+  \;
 
-    \;
-
-    <small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|<strong|>Id>>|<cell|<strong|Descri<strong|>ption>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|The
-    transaction is invalid.>|<cell|InvalidTransaction
-    (<reference|defn-invalid-transaction>)>>|<row|<cell|1>|<cell|The
-    transaction validity can't be determined.>|<cell|UnknownTransaction
-    (<reference|defn-unknown-transaction>)>>>>>|Type variation for the return
-    value of <verbatim|TaggedTransactionQueue_transaction_validity>.>
-
-    <\definition>
-      <label|defn-invalid-transaction><strong|InvalidTransaction> is a
-      varying data type as defined in Definition
-      <reference|defn-varrying-data-type> which can get appended to
-      TransactionValidityError and describes the invalid transaction in more
-      precise detail. The following values are possible:
-
-      <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|Call:
-      The call of the transaction is not expected>|<cell|>>|<row|<cell|1>|<cell|Payment:
-      Inability to pay some fees (e.g. balance too
-      low)>|<cell|>>|<row|<cell|2>|<cell|Future: Transaction not yet valid
-      (e.g. nonce too high)>|<cell|>>|<row|<cell|3>|<cell|Stale: Transaction
-      is outdated (e.g. nonce too low)>|<cell|>>|<row|<cell|4>|<cell|BadProof:
-      Bad transaction proof (e.g. bad signature)>|<cell|>>|<row|<cell|5>|<cell|AncientBirthBlock:
-      Transaction birth block is ancient.>|<cell|>>|<row|<cell|6>|<cell|ExhaustsResources:
-      Transaction would exhaus the resources of the current
-      block>|<cell|>>|<row|<cell|7>|<cell|Custom: Any other custom message
-      not covered by this type. >|<cell|one byte>>>>>>
-        Type variant whichs gets appended to Id 0 of
-        <strong|TransactionValidityError>.
-      </big-table>
-    </definition>
-
-    <\definition>
-      <label|defn-unknown-transaction><strong|UnknownTransacion> is a varying
-      data type as defined in Definition <reference|defn-varrying-data-type>
-      which can get appended to TransactionValidityError and describes the
-      unknown transaction validity in more precise detail. The following
-      values are possible:
-
-      <\big-table|<tabular|<tformat|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|CannotLookup:
-      Could not lookup some info that is required for the
-      transaction>|<cell|>>|<row|<cell|1>|<cell|NoUnsignedValidator: No
-      validator found for the given unsigned
-      transaction.>|<cell|>>|<row|<cell|2>|<cell|Custom: Any other custom
-      message not covered by this type>|<cell|one byte>>>>>>
-        Type variant whichs gets appended to Id 1 of
-        <strong|TransactionValidityError>.
-      </big-table>
-    </definition>
-
-    \;
-  </definition>
-
-  Note that when this function gets called by the Polkadot host in order to
-  validate a transaction received from peers, Polkadot host usually
-  disregards and rewinds state changes resulting for such a call.
+  <strong|Note>: If this function gets called by the Polkadot Host in order
+  to validate a transaction received from peers, the Polkadot Host disregards
+  and rewinds state changes resulting for such a call.
 
   <subsection|<verbatim|OffchainWorkerApi_offchain_worker>>
 
@@ -1104,7 +1053,7 @@
     and <math|k<rsub|id>> is a 4-byte array indicating the key type.
   </itemize-dot>
 
-  <subsection|<verbatim|AccountNonceApi_account_nonce>>
+  <subsection|<verbatim|AccountNonceApi_account_nonce>><label|sect-accountnonceapi-account-nonce>
 
   Get the current nonce of an account. This function can be used by the
   Polkadot Host implementation when it seems appropriate, such as for the
@@ -1255,11 +1204,11 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|8>
-    <associate|page-first|133>
+    <associate|page-first|139>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
-    <associate|section-nr|2>
+    <associate|section-nr|2<uninit>>
     <associate|subsection-nr|0>
   </collection>
 </initial>
@@ -1283,43 +1232,42 @@
     <associate|auto-22|<tuple|A.3.9|112>>
     <associate|auto-23|<tuple|A.3.10|?>>
     <associate|auto-24|<tuple|A.9|?>>
-    <associate|auto-25|<tuple|A.10|?>>
-    <associate|auto-26|<tuple|A.11|?>>
-    <associate|auto-27|<tuple|A.12|?>>
-    <associate|auto-28|<tuple|A.3.11|?>>
-    <associate|auto-29|<tuple|A.3.12|?>>
+    <associate|auto-25|<tuple|A.3.11|?>>
+    <associate|auto-26|<tuple|A.3.12|?>>
+    <associate|auto-27|<tuple|A.3.13|?>>
+    <associate|auto-28|<tuple|A.3.14|?>>
+    <associate|auto-29|<tuple|A.3.15|?>>
     <associate|auto-3|<tuple|A.1|107>>
-    <associate|auto-30|<tuple|A.3.13|?>>
-    <associate|auto-31|<tuple|A.3.14|?>>
-    <associate|auto-32|<tuple|A.3.15|?>>
-    <associate|auto-33|<tuple|A.3.16|?>>
-    <associate|auto-34|<tuple|A.3.17|?>>
-    <associate|auto-35|<tuple|A.3.18|?>>
-    <associate|auto-36|<tuple|A.3.19|?>>
-    <associate|auto-37|<tuple|A.3.20|?>>
-    <associate|auto-38|<tuple|A.3.21|?>>
-    <associate|auto-39|<tuple|A.3.22|?>>
+    <associate|auto-30|<tuple|A.3.16|?>>
+    <associate|auto-31|<tuple|A.3.17|?>>
+    <associate|auto-32|<tuple|A.3.18|?>>
+    <associate|auto-33|<tuple|A.3.19|?>>
+    <associate|auto-34|<tuple|A.3.20|?>>
+    <associate|auto-35|<tuple|A.3.21|?>>
+    <associate|auto-36|<tuple|A.3.22|?>>
+    <associate|auto-37|<tuple|A.3.23|?>>
+    <associate|auto-38|<tuple|A.3.24|?>>
+    <associate|auto-39|<tuple|A.3.25|?>>
     <associate|auto-4|<tuple|A.2|107>>
-    <associate|auto-40|<tuple|A.3.23|?>>
-    <associate|auto-41|<tuple|A.3.24|?>>
-    <associate|auto-42|<tuple|A.3.25|?>>
-    <associate|auto-43|<tuple|A.3.26|?>>
-    <associate|auto-44|<tuple|A.3.27|?>>
-    <associate|auto-45|<tuple|A.3.28|?>>
-    <associate|auto-46|<tuple|A.13|?>>
-    <associate|auto-47|<tuple|A.3.29|?>>
-    <associate|auto-48|<tuple|A.3.30|?>>
-    <associate|auto-49|<tuple|A.3.31|?>>
+    <associate|auto-40|<tuple|A.3.26|?>>
+    <associate|auto-41|<tuple|A.3.27|?>>
+    <associate|auto-42|<tuple|A.3.28|?>>
+    <associate|auto-43|<tuple|A.10|?>>
+    <associate|auto-44|<tuple|A.3.29|?>>
+    <associate|auto-45|<tuple|A.3.30|?>>
+    <associate|auto-46|<tuple|A.3.31|?>>
+    <associate|auto-47|<tuple|A.3.32|?>>
+    <associate|auto-48|<tuple|A.3.33|?>>
+    <associate|auto-49|<tuple|A.3.34|?>>
     <associate|auto-5|<tuple|A.3|108>>
-    <associate|auto-50|<tuple|A.3.32|?>>
-    <associate|auto-51|<tuple|A.3.33|?>>
-    <associate|auto-52|<tuple|A.3.34|?>>
-    <associate|auto-53|<tuple|A.3.35|?>>
-    <associate|auto-54|<tuple|A.3.36|?>>
+    <associate|auto-50|<tuple|A.3.35|?>>
+    <associate|auto-51|<tuple|A.3.36|?>>
+    <associate|auto-52|<tuple|A.3.37|?>>
+    <associate|auto-53|<tuple|A.3.38|?>>
+    <associate|auto-54|<tuple|A.3.39|?>>
     <associate|auto-55|<tuple|A.3.37|?>>
     <associate|auto-56|<tuple|A.3.38|?>>
     <associate|auto-57|<tuple|A.3.39|?>>
-    <associate|auto-58|<tuple|1.39|?>>
     <associate|auto-6|<tuple|A.3.1|108>>
     <associate|auto-7|<tuple|A.1|108>>
     <associate|auto-8|<tuple|A.3.2|108>>
@@ -1338,6 +1286,7 @@
     <associate|defn-transaction-validity-error|<tuple|A.10|110>>
     <associate|defn-unknown-transaction|<tuple|A.12|110>>
     <associate|defn-valid-transaction|<tuple|A.9|110>>
+    <associate|sect-accountnonceapi-account-nonce|<tuple|A.3.37|?>>
     <associate|sect-babeapi_current_epoch|<tuple|A.3.30|?>>
     <associate|sect-babeapi_generate_key_ownership_proof|<tuple|A.3.32|?>>
     <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|A.3.27|?>>
@@ -1364,65 +1313,65 @@
       <tuple|normal|<surround|<hidden-binding|<tuple>|A.1>||Detail of the
       version data type returns from runtime
       <with|font-family|<quote|tt>|language|<quote|verbatim>|version>
-      function.>|<pageref|auto-6>>
+      function.>|<pageref|auto-7>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.2>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|ApplyExtrinsicResult>.
-      </surround>|<pageref|auto-11>>
+      </surround>|<pageref|auto-12>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.3>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchOutcome>.
-      </surround>|<pageref|auto-12>>
+      </surround>|<pageref|auto-13>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.4>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchError>.
-      </surround>|<pageref|auto-13>>
+      </surround>|<pageref|auto-14>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.5>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|CustomModuleError>.
-      </surround>|<pageref|auto-14>>
+      </surround>|<pageref|auto-15>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.6>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-15>>
+      </surround>|<pageref|auto-16>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.7>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|InvalidTransaction>.
-      </surround>|<pageref|auto-16>>
+      </surround>|<pageref|auto-17>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.8>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|UnknownTransaction>.
-      </surround>|<pageref|auto-17>>
+      </surround>|<pageref|auto-18>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.9>|>
         The tuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
 
         in the case the transaction is judged to be valid.
-      </surround>|<pageref|auto-23>>
+      </surround>|<pageref|auto-24>>
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|A.10>||Type variation
-      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-24>>
+      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-25>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.11>|>
         Type variant whichs gets appended to Id 0 of
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-25>>
+      </surround>|<pageref|auto-26>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.12>|>
         Type variant whichs gets appended to Id 1 of
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-26>>
+      </surround>|<pageref|auto-27>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.13>|>
         The tuple provided by <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BabeApi_configuration>.
-      </surround>|<pageref|auto-45>>
+      </surround>|<pageref|auto-46>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
@@ -1433,165 +1382,169 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-2>
 
-      A.2<space|2spc>Argument Specification
+      A.2<space|2spc>JSON-RPC API for external services
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-4>
 
-      <with|par-left|<quote|1tab>|A.2.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
+      A.3<space|2spc>Argument Specification
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>>
+      <no-break><pageref|auto-5>
 
-      <with|par-left|<quote|1tab>|A.2.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
+      <with|par-left|<quote|1tab>|A.3.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>>
+      <no-break><pageref|auto-6>>
 
-      <with|par-left|<quote|1tab>|A.2.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialize_block>
+      <with|par-left|<quote|1tab>|A.3.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-8>>
 
-      <with|par-left|<quote|1tab>|A.2.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Metadata_metadata>
+      <with|par-left|<quote|1tab>|A.3.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-9>>
 
-      <with|par-left|<quote|1tab>|A.2.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
+      <with|par-left|<quote|1tab>|A.3.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Metadata_metadata>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-10>>
 
-      <with|par-left|<quote|1tab>|A.2.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
+      <with|par-left|<quote|1tab>|A.3.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-18>>
+      <no-break><pageref|auto-11>>
 
-      <with|par-left|<quote|1tab>|A.2.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
+      <with|par-left|<quote|1tab>|A.3.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-19>>
 
-      <with|par-left|<quote|1tab>|A.2.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_check_inherents>
+      <with|par-left|<quote|1tab>|A.3.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-20>>
 
-      <with|par-left|<quote|1tab>|A.2.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_random_seed>
+      <with|par-left|<quote|1tab>|A.3.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_check_inherents>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-21>>
 
-      <with|par-left|<quote|1tab>|A.2.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
+      <with|par-left|<quote|1tab>|A.3.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_random_seed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-22>>
 
-      <with|par-left|<quote|1tab>|A.2.11<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|OffchainWorkerApi_offchain_worker>
+      <with|par-left|<quote|1tab>|A.3.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-27>>
+      <no-break><pageref|auto-23>>
 
-      <with|par-left|<quote|1tab>|A.2.12<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validators>
+      <with|par-left|<quote|1tab>|A.3.11<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|OffchainWorkerApi_offchain_worker>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-28>>
 
-      <with|par-left|<quote|1tab>|A.2.13<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validator_groups>
+      <with|par-left|<quote|1tab>|A.3.12<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validators>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-29>>
 
-      <with|par-left|<quote|1tab>|A.2.14<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_availability_cores>
+      <with|par-left|<quote|1tab>|A.3.13<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validator_groups>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-30>>
 
-      <with|par-left|<quote|1tab>|A.2.15<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_persisted_validation_data>
+      <with|par-left|<quote|1tab>|A.3.14<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_availability_cores>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-31>>
 
-      <with|par-left|<quote|1tab>|A.2.16<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_check_validation_outputs>
+      <with|par-left|<quote|1tab>|A.3.15<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_persisted_validation_data>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-32>>
 
-      <with|par-left|<quote|1tab>|A.2.17<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_index_for_child>
+      <with|par-left|<quote|1tab>|A.3.16<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_check_validation_outputs>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-33>>
 
-      <with|par-left|<quote|1tab>|A.2.18<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_info>
+      <with|par-left|<quote|1tab>|A.3.17<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_index_for_child>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-34>>
 
-      <with|par-left|<quote|1tab>|A.2.19<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validation_code>
+      <with|par-left|<quote|1tab>|A.3.18<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_info>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-35>>
 
-      <with|par-left|<quote|1tab>|A.2.20<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_historical_validation_code>
+      <with|par-left|<quote|1tab>|A.3.19<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validation_code>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-36>>
 
-      <with|par-left|<quote|1tab>|A.2.21<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_pending_availability>
+      <with|par-left|<quote|1tab>|A.3.20<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_historical_validation_code>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-37>>
 
-      <with|par-left|<quote|1tab>|A.2.22<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_events>
+      <with|par-left|<quote|1tab>|A.3.21<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_pending_availability>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-38>>
 
-      <with|par-left|<quote|1tab>|A.2.23<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_dmq_contents>
+      <with|par-left|<quote|1tab>|A.3.22<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_events>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-39>>
 
-      <with|par-left|<quote|1tab>|A.2.24<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_inbound_hrmp_channel_contents>
+      <with|par-left|<quote|1tab>|A.3.23<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_dmq_contents>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-40>>
 
-      <with|par-left|<quote|1tab>|A.2.25<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
+      <with|par-left|<quote|1tab>|A.3.24<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_inbound_hrmp_channel_contents>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-41>>
 
-      <with|par-left|<quote|1tab>|A.2.26<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>
+      <with|par-left|<quote|1tab>|A.3.25<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-42>>
 
-      <with|par-left|<quote|1tab>|A.2.27<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_generate_key_ownership_proof>
+      <with|par-left|<quote|1tab>|A.3.26<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-43>>
 
-      <with|par-left|<quote|1tab>|A.2.28<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
+      <with|par-left|<quote|1tab>|A.3.27<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_generate_key_ownership_proof>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-44>>
 
-      <with|par-left|<quote|1tab>|A.2.29<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch_start>
+      <with|par-left|<quote|1tab>|A.3.28<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-46>>
+      <no-break><pageref|auto-45>>
 
-      <with|par-left|<quote|1tab>|A.2.30<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch>
+      <with|par-left|<quote|1tab>|A.3.29<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch_start>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-47>>
 
-      <with|par-left|<quote|1tab>|A.2.31<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_next_epoch>
+      <with|par-left|<quote|1tab>|A.3.30<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-48>>
 
-      <with|par-left|<quote|1tab>|A.2.32<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_generate_key_ownership_proof>
+      <with|par-left|<quote|1tab>|A.3.31<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_next_epoch>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-49>>
 
-      <with|par-left|<quote|1tab>|A.2.33<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_submit_report_equivocation_unsigned_extrinsic>
+      <with|par-left|<quote|1tab>|A.3.32<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_generate_key_ownership_proof>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-50>>
 
-      <with|par-left|<quote|1tab>|A.2.34<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AuthorityDiscoveryApi_authorities>
+      <with|par-left|<quote|1tab>|A.3.33<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_submit_report_equivocation_unsigned_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-51>>
 
-      <with|par-left|<quote|1tab>|A.2.35<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_generate_session_keys>
+      <with|par-left|<quote|1tab>|A.3.34<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AuthorityDiscoveryApi_authorities>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-52>>
 
-      <with|par-left|<quote|1tab>|A.2.36<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_decode_session_keys>
+      <with|par-left|<quote|1tab>|A.3.35<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_generate_session_keys>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-53>>
 
-      <with|par-left|<quote|1tab>|A.2.37<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AccountNonceApi_account_nonce>
+      <with|par-left|<quote|1tab>|A.3.36<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_decode_session_keys>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-54>>
 
-      <with|par-left|<quote|1tab>|A.2.38<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_info>
+      <with|par-left|<quote|1tab>|A.3.37<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AccountNonceApi_account_nonce>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-55>>
 
-      <with|par-left|<quote|1tab>|A.2.39<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_fee_details>
+      <with|par-left|<quote|1tab>|A.3.38<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_info>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-56>>
+
+      <with|par-left|<quote|1tab>|A.3.39<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_fee_details>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-57>>
     </associate>
   </collection>
 </auxiliary>
