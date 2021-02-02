@@ -2,7 +2,7 @@
 
 <project|host-spec.tm>
 
-<style|<tuple|book|algorithmacs-style|old-dots|old-lengths>>
+<style|<tuple|book|old-dots|old-lengths|algorithmacs-style>>
 
 <\body>
   <chapter|Consensus><label|chap-consensu>
@@ -887,13 +887,21 @@
       </state>
 
       <\state>
+        <strong|if> <name|Should-Requeue(R)>
+      </state>
+
+      <\state>
+        <strong|<space|2em>continue>
+      </state>
+
+      <\state>
         <\IF>
           <strong|not> <name|Block-Is-FULL(<math|R>>)
         </IF>
       </state>
 
       <\state>
-        <name|Drop(Ready-Extrinsics-Queue>,<em|E>)<END>
+        <name|Drop(><em|E>)<END>
       </state>
 
       <\state>
@@ -926,23 +934,21 @@
     <item><name|Inherent-Data> is defined in Definition
     <reference|defn-inherent-data>.
 
-    <item><name|Transaction-Queue> is defined in Definition
-    <reference|defn-transaction-queue>.
-
-    <item><name|Block-Is-Full> indicates that the maximum block size as been
-    used.
-
     <item><name|End-Of-Slot> indicates the end of the BABE slot as defined in
     Algorithm <reference|algo-slot-time> respectively Definition
     <reference|defn-epoch-slot>.
 
-    <item><name|Ok-Result> indicates whether the result of
-    <verbatim|BlockBuilder_apply_extrinsics> is successfull. The error type
-    of the Runtime function is defined in Section
-    <reference|sect-rte-apply-extrinsic>.
+    <item><name|Next-Ready-Extrinsic> indicates picking an extrinsic from the
+    extrinsics queue (Definition <reference|defn-transaction-queue>).
 
-    <item><name|Ready-Extrinsics-Queue> indicates picking an extrinsics from
-    the extrinsics queue (Definition <reference|defn-transaction-queue>).
+    <item><name|Block-Is-Full> indicates that the maximum block size as been
+    used.
+
+    <item><name|Should-Requeue> determines based on the result <em|R> whether
+    the extrinsic should remain in the extrinsics queue and scheduled for the
+    next block. The <verbatim|ApplyExtrinsicResult> as defined in Definition
+    <reference|defn-rte-apply-extrinsic-result> describes this behavior in
+    more detail.
 
     <item><name|Drop> indicates removing the extrinsic from the transaction
     queue (Definition <reference|defn-transaction-queue>).
