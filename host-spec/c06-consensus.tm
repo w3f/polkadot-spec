@@ -540,7 +540,7 @@
   \ <math|\<cal-T\>> is the slot duration defined in Definition
   <reference|defn-epoch-slot>.
 
-  <\big-figure|<image|figures/babe_time_sync.eps|1par|||>>
+  <\big-figure|<image|figures/c06-babe_time_sync.eps|1par|||>>
     Examplary result of Median Algorithm in first sync epoch with
     <math|s<rsub|cq>=9> and <math|k=1>.
   </big-figure>
