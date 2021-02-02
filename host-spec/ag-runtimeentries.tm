@@ -301,7 +301,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>Returns the varying datatype <strong|<em|ApplyExtrinsicResult>> as
+    <item>Returns the varying datatype <verbatim|ApplyExtrinsicResult> as
     defined in Definition <reference|defn-rte-apply-extrinsic-result>. This
     structure let's the block builder know whether an extrinsic should be
     included into the block or rejected.
@@ -310,8 +310,8 @@
   </itemize-dot>
 
   <\definition>
-    <label|defn-rte-apply-extrinsic-result><strong|ApplyExtrinsicResult> is
-    the varying data type <strong|Result> as defined in Definition
+    <label|defn-rte-apply-extrinsic-result><verbatim|ApplyExtrinsicResult> is
+    the varying data type <verbatim|Result> as defined in Definition
     <reference|defn-result-type>. This structure can contain multiple nested
     structures, indicating either module dispatch outcomes or transaction
     invalidity errors.
@@ -319,11 +319,11 @@
     \;
 
     <strong|NOTE>: When applying an extrinsic returns a
-    <strong|DispatchOutcome> (<reference|defn-rte-dispatch-outcome>), the
+    <verbatim|DispatchOutcome> (<reference|defn-rte-dispatch-outcome>), the
     extrinsic is always included into the block, even if the outcome is a
     dispatch error. Dispatch errors do not invalidate the block and all state
     changes are persisted. When applying an extrinsics returns
-    <strong|TransactionValidityError> (<reference|defn-rte-transaction-validity-error>),
+    <verbatim|TransactionValidityError> (<reference|defn-rte-transaction-validity-error>),
     certain error types indicate whether an extrinsic should be outright
     rejected or requeued for a later block. This behavior is clarified
     further in Definition <reference|defn-rte-invalid-transaction>
@@ -341,7 +341,7 @@
 
   <\definition>
     <label|defn-rte-dispatch-outcome><strong|DispatchOutcome> is the varying
-    data type <strong|Result> as defined in Definition
+    data type <verbatim|Result> as defined in Definition
     <reference|defn-result-type>.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Extrinsic
@@ -370,7 +370,7 @@
 
   <\definition>
     <label|defn-rte-custom-module-error><strong|CustomModuleError> is a tuple
-    appended after a possible error in <strong|DispatchError> as defined in
+    appended after a possible error in <verbatim|DispatchError> as defined in
     Defintion <reference|defn-rte-dispatch-error>.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|1|cell-lborder|0ln>|<cwith|5|5|3|3|cell-rborder|0ln>|<cwith|9|9|1|-1|cell-tborder|0ln>|<cwith|8|8|1|-1|cell-bborder|0ln>|<cwith|9|9|1|-1|cell-bborder|1ln>|<cwith|9|9|1|1|cell-lborder|0ln>|<cwith|9|9|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Index>|<cell|Module
@@ -404,7 +404,7 @@
   <\definition>
     <label|defn-rte-invalid-transaction><strong|InvalidTransaction> is a
     varying data type as defined in Definition
-    <reference|defn-varrying-data-type>. It specifies the invalidity of the
+    <reference|defn-varrying-data-type> and specifies the invalidity of the
     transaction in more detail.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|0ln>|<cwith|5|5|1|-1|cell-bborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|7|7|1|-1|cell-tborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|8|8|1|-1|cell-tborder|0ln>|<cwith|7|7|1|-1|cell-bborder|0ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|1|cell-lborder|0ln>|<cwith|8|8|3|3|cell-rborder|0ln>|<cwith|11|11|1|-1|cell-bborder|1ln>|<cwith|12|12|1|-1|cell-tborder|1ln>|<cwith|11|11|1|1|cell-lborder|0ln>|<cwith|11|11|3|3|cell-rborder|0ln>|<cwith|13|13|1|-1|cell-tborder|0ln>|<cwith|12|12|1|-1|cell-bborder|0ln>|<cwith|13|13|1|-1|cell-bborder|1ln>|<cwith|14|14|1|-1|cell-tborder|1ln>|<cwith|13|13|1|1|cell-lborder|0ln>|<cwith|13|13|3|3|cell-rborder|0ln>|<cwith|15|15|1|-1|cell-tborder|0ln>|<cwith|14|14|1|-1|cell-bborder|0ln>|<cwith|15|15|1|-1|cell-bborder|1ln>|<cwith|16|16|1|-1|cell-tborder|1ln>|<cwith|15|15|1|1|cell-lborder|0ln>|<cwith|15|15|3|3|cell-rborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|1|cell-lborder|0ln>|<cwith|10|10|3|3|cell-rborder|0ln>|<cwith|17|17|1|-1|cell-tborder|0ln>|<cwith|16|16|1|-1|cell-bborder|0ln>|<cwith|17|17|1|1|cell-lborder|0ln>|<cwith|17|17|3|3|cell-rborder|0ln>|<cwith|19|19|1|-1|cell-bborder|1ln>|<cwith|18|19|1|1|cell-lborder|0ln>|<cwith|18|19|3|3|cell-rborder|0ln>|<cwith|18|18|1|-1|cell-tborder|1ln>|<cwith|17|17|1|-1|cell-bborder|1ln>|<cwith|18|18|1|-1|cell-bborder|0ln>|<cwith|19|19|1|-1|cell-tborder|0ln>|<cwith|18|18|1|1|cell-lborder|0ln>|<cwith|18|18|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>|<cell|<strong|Reject>>>|<row|<cell|0>|<cell|Call
@@ -433,8 +433,8 @@
   <\definition>
     <label|defn-rte-unknown-transaction><strong|UnknownTransaction> is a
     varying data type as defined in Definition
-    <reference|defn-varrying-data-type>. Specifies the unknown invalidity of
-    the transaction in more detail.
+    <reference|defn-varrying-data-type> and specifies the unknown invalidity
+    of the transaction in more detail.
 
     <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|5|5|1|-1|cell-tborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|6|6|1|-1|cell-tborder|0ln>|<cwith|5|5|1|-1|cell-bborder|0ln>|<cwith|6|6|1|-1|cell-bborder|1ln>|<cwith|6|6|1|1|cell-lborder|0ln>|<cwith|6|6|3|3|cell-rborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>|<cell|<strong|Reject>>>|<row|<cell|0>|<cell|Could
     not lookup some information that is required
@@ -588,10 +588,11 @@
   <strong|Return>:
 
   This function returns a <verbatim|Result> as defined in Definition
-  <reference|defn-result-type> which contains the type <em|ValidTransaction>
-  as defined in Definition <reference|defn-valid-transaction> on success and
-  the type <em|TransactionValidityError> as defined in Definition
-  <reference|defn-transaction-validity-error> on failure.
+  <reference|defn-result-type> which contains the type
+  <em|<verbatim|ValidTransaction>> as defined in Definition
+  <reference|defn-valid-transaction> on success and the type
+  <em|<verbatim|TransactionValidityError>> as defined in Definition
+  <reference|defn-rte-transaction-validity-error> on failure.
 
   <\definition>
     <label|defn-valid-transaction><strong|ValidTransaction> is a tuple which
@@ -621,71 +622,15 @@
     </small-table>
   </definition>
 
-  Note that if <em|Propagate> is set to <verbatim|false> the transaction will
-  still be considered for including in blocks that are authored on the
+  <strong|Note>: If <em|Propagate> is set to <verbatim|false> the transaction
+  will still be considered for including in blocks that are authored on the
   current node, but will never be sent to other peers.
 
-  <\definition>
-    <label|defn-transaction-validity-error><strong|TransactionValidityError>
-    is a varying data type as defined in Definition
-    <reference|defn-varrying-data-type>, where following values are possible:
+  \;
 
-    \;
-
-    <small-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|<strong|>Id>>|<cell|<strong|Descri<strong|>ption>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|The
-    transaction is invalid.>|<cell|InvalidTransaction
-    (<reference|defn-invalid-transaction>)>>|<row|<cell|1>|<cell|The
-    transaction validity can't be determined.>|<cell|UnknownTransaction
-    (<reference|defn-unknown-transaction>)>>>>>|Type variation for the return
-    value of <verbatim|TaggedTransactionQueue_transaction_validity>.>
-
-    <\definition>
-      <label|defn-invalid-transaction><strong|InvalidTransaction> is a
-      varying data type as defined in Definition
-      <reference|defn-varrying-data-type> which can get appended to
-      TransactionValidityError and describes the invalid transaction in more
-      precise detail. The following values are possible:
-
-      <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|Call:
-      The call of the transaction is not expected>|<cell|>>|<row|<cell|1>|<cell|Payment:
-      Inability to pay some fees (e.g. balance too
-      low)>|<cell|>>|<row|<cell|2>|<cell|Future: Transaction not yet valid
-      (e.g. nonce too high)>|<cell|>>|<row|<cell|3>|<cell|Stale: Transaction
-      is outdated (e.g. nonce too low)>|<cell|>>|<row|<cell|4>|<cell|BadProof:
-      Bad transaction proof (e.g. bad signature)>|<cell|>>|<row|<cell|5>|<cell|AncientBirthBlock:
-      Transaction birth block is ancient.>|<cell|>>|<row|<cell|6>|<cell|ExhaustsResources:
-      Transaction would exhaus the resources of the current
-      block>|<cell|>>|<row|<cell|7>|<cell|Custom: Any other custom message
-      not covered by this type. >|<cell|one byte>>>>>>
-        Type variant whichs gets appended to Id 0 of
-        <strong|TransactionValidityError>.
-      </big-table>
-    </definition>
-
-    <\definition>
-      <label|defn-unknown-transaction><strong|UnknownTransacion> is a varying
-      data type as defined in Definition <reference|defn-varrying-data-type>
-      which can get appended to TransactionValidityError and describes the
-      unknown transaction validity in more precise detail. The following
-      values are possible:
-
-      <\big-table|<tabular|<tformat|<cwith|1|1|3|3|cell-bborder|1ln>|<cwith|2|2|3|3|cell-tborder|1ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Appended>>>|<row|<cell|0>|<cell|CannotLookup:
-      Could not lookup some info that is required for the
-      transaction>|<cell|>>|<row|<cell|1>|<cell|NoUnsignedValidator: No
-      validator found for the given unsigned
-      transaction.>|<cell|>>|<row|<cell|2>|<cell|Custom: Any other custom
-      message not covered by this type>|<cell|one byte>>>>>>
-        Type variant whichs gets appended to Id 1 of
-        <strong|TransactionValidityError>.
-      </big-table>
-    </definition>
-
-    \;
-  </definition>
-
-  Note that when this function gets called by the Polkadot host in order to
-  validate a transaction received from peers, Polkadot host usually
-  disregards and rewinds state changes resulting for such a call.
+  <strong|Note>: If this function gets called by the Polkadot Host in order
+  to validate a transaction received from peers, the Polkadot Host disregards
+  and rewinds state changes resulting for such a call.
 
   <subsection|<verbatim|OffchainWorkerApi_offchain_worker>>
 
@@ -1287,39 +1232,39 @@
     <associate|auto-22|<tuple|A.3.9|112>>
     <associate|auto-23|<tuple|A.3.10|?>>
     <associate|auto-24|<tuple|A.9|?>>
-    <associate|auto-25|<tuple|A.10|?>>
-    <associate|auto-26|<tuple|A.11|?>>
-    <associate|auto-27|<tuple|A.12|?>>
-    <associate|auto-28|<tuple|A.3.11|?>>
-    <associate|auto-29|<tuple|A.3.12|?>>
+    <associate|auto-25|<tuple|A.3.11|?>>
+    <associate|auto-26|<tuple|A.3.12|?>>
+    <associate|auto-27|<tuple|A.3.13|?>>
+    <associate|auto-28|<tuple|A.3.14|?>>
+    <associate|auto-29|<tuple|A.3.15|?>>
     <associate|auto-3|<tuple|A.1|107>>
-    <associate|auto-30|<tuple|A.3.13|?>>
-    <associate|auto-31|<tuple|A.3.14|?>>
-    <associate|auto-32|<tuple|A.3.15|?>>
-    <associate|auto-33|<tuple|A.3.16|?>>
-    <associate|auto-34|<tuple|A.3.17|?>>
-    <associate|auto-35|<tuple|A.3.18|?>>
-    <associate|auto-36|<tuple|A.3.19|?>>
-    <associate|auto-37|<tuple|A.3.20|?>>
-    <associate|auto-38|<tuple|A.3.21|?>>
-    <associate|auto-39|<tuple|A.3.22|?>>
+    <associate|auto-30|<tuple|A.3.16|?>>
+    <associate|auto-31|<tuple|A.3.17|?>>
+    <associate|auto-32|<tuple|A.3.18|?>>
+    <associate|auto-33|<tuple|A.3.19|?>>
+    <associate|auto-34|<tuple|A.3.20|?>>
+    <associate|auto-35|<tuple|A.3.21|?>>
+    <associate|auto-36|<tuple|A.3.22|?>>
+    <associate|auto-37|<tuple|A.3.23|?>>
+    <associate|auto-38|<tuple|A.3.24|?>>
+    <associate|auto-39|<tuple|A.3.25|?>>
     <associate|auto-4|<tuple|A.2|107>>
-    <associate|auto-40|<tuple|A.3.23|?>>
-    <associate|auto-41|<tuple|A.3.24|?>>
-    <associate|auto-42|<tuple|A.3.25|?>>
-    <associate|auto-43|<tuple|A.3.26|?>>
-    <associate|auto-44|<tuple|A.3.27|?>>
-    <associate|auto-45|<tuple|A.3.28|?>>
-    <associate|auto-46|<tuple|A.13|?>>
-    <associate|auto-47|<tuple|A.3.29|?>>
-    <associate|auto-48|<tuple|A.3.30|?>>
-    <associate|auto-49|<tuple|A.3.31|?>>
+    <associate|auto-40|<tuple|A.3.26|?>>
+    <associate|auto-41|<tuple|A.3.27|?>>
+    <associate|auto-42|<tuple|A.3.28|?>>
+    <associate|auto-43|<tuple|A.10|?>>
+    <associate|auto-44|<tuple|A.3.29|?>>
+    <associate|auto-45|<tuple|A.3.30|?>>
+    <associate|auto-46|<tuple|A.3.31|?>>
+    <associate|auto-47|<tuple|A.3.32|?>>
+    <associate|auto-48|<tuple|A.3.33|?>>
+    <associate|auto-49|<tuple|A.3.34|?>>
     <associate|auto-5|<tuple|A.3|108>>
-    <associate|auto-50|<tuple|A.3.32|?>>
-    <associate|auto-51|<tuple|A.3.33|?>>
-    <associate|auto-52|<tuple|A.3.34|?>>
-    <associate|auto-53|<tuple|A.3.35|?>>
-    <associate|auto-54|<tuple|A.3.36|?>>
+    <associate|auto-50|<tuple|A.3.35|?>>
+    <associate|auto-51|<tuple|A.3.36|?>>
+    <associate|auto-52|<tuple|A.3.37|?>>
+    <associate|auto-53|<tuple|A.3.38|?>>
+    <associate|auto-54|<tuple|A.3.39|?>>
     <associate|auto-55|<tuple|A.3.37|?>>
     <associate|auto-56|<tuple|A.3.38|?>>
     <associate|auto-57|<tuple|A.3.39|?>>
