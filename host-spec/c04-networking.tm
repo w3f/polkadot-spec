@@ -119,7 +119,7 @@
     Section <reference|sect-protocols-substreams>.
   </itemize>
 
-  <subsection|Connection establishment>
+  <subsection|Connection establishment><label|sect-connection-establishment>
 
   Polkadot nodes connect to peers by establishing a TCP connection. Once
   established, the node initiates a handshake with the remote peer's on the
@@ -128,7 +128,9 @@
   as described by the <hlink|yamux specification|https://docs.libp2p.io/concepts/stream-multiplexing/#yamux>,
   either by the local or remote node.
 
-  The Polkadot node supports two types of substream protocols:
+  The Polkadot node supports two types of substream protocols. Section
+  <reference|sect-protocols-substreams> describes the usage of each type in
+  more detail:
 
   <\itemize-dot>
     <item><strong|Request-Response substreams>: After the protocol is
@@ -239,38 +241,46 @@
   <with|font-shape|italic|application-specific protocols>, where each
   protocol servers a specific utility.
 
-  The Polkadot Host uses multiple substreams, each having a specific purpose:
+  The Polkadot Host uses multiple substreams, where its usage depends on a
+  specific purpose. Each substream is either a <em|Request-Response
+  substream> or a <em|Notification substream>, as described in Section
+  <reference|sect-connection-establishment>.
 
   <\itemize>
     <item><verbatim|/ipfs/ping/1.0.0> - Open a substream to a peer and
     initialize a ping to verify if a connection is till alive. If the peer
-    does not respond, the connection is dropped.
+    does not respond, the connection is dropped. This is a
+    <em|Request-Response substream>.
 
     <item><verbatim|/ipfs/id/1.0.0> - Open a substream to a peer to ask
-    information about that peer.
+    information about that peer. This is a <em|Request-Response substream>.
 
     <item><verbatim|/dot/kad> - Open a substream for Kademlia
-    <verbatim|FIND_NODE> requests.
+    <verbatim|FIND_NODE> requests. This is a <em|Request-Response substream>,
+    as defined by the <verbatim|libp2p> standard.
   </itemize>
 
   <\itemize>
     <item><verbatim|/dot/sync/2> - a request and response protocol that
-    allows the Polkadot Host to perform information about blocks.
+    allows the Polkadot Host to perform information about blocks. This is a
+    <em|Request-Response substream>.
 
     <item><verbatim|/dot/light/2> - a request and response protocol that
-    allows a light client to request information about the state. <todo|light
-    client requests are not documented as of now>
+    allows a light client to request information about the state. This is a
+    <em|Request-Response substream>.
 
     <item><verbatim|/dot/transactions/1> - a substream/notification protocol
-    which sends transactions to connected peers.
+    which sends transactions to connected peers. This is a <em|Notification
+    substream>.
 
     <item><verbatim|/dot/block-announces/1> - a substream/notification
-    protocol which sends blocks to connected peers.
+    protocol which sends blocks to connected peers. This is a
+    <em|Notification substream>.
 
     <item><verbatim|/paritytech/grandpa/1> - a substream/notification
-    protocol which sends GRANDPA votes to connected peers. <todo|this
-    substream will change in the future. See <hlink|issue
-    #7252|https://github.com/paritytech/substrate/issues/7252>.>
+    protocol which sends GRANDPA votes to connected peers. This is a
+    <em|Notification substream>. <todo|this substream will change in the
+    future. See <hlink|issue #7252|https://github.com/paritytech/substrate/issues/7252>.>
   </itemize>
 
   <strong|Note>: the <verbatim|/dot/> prefixes on those substreams are known
@@ -525,6 +535,7 @@
     <associate|defn-block-announce-handshake|<tuple|2|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|defn-transactions-message|<tuple|6|?>>
+    <associate|sect-connection-establishment|<tuple|1.4|?>>
     <associate|sect-discovery-mechanism|<tuple|1.3|?>>
     <associate|sect-encryption-layer|<tuple|1.5|?>>
     <associate|sect-msg-grandpa|<tuple|1.7.4|?>>
