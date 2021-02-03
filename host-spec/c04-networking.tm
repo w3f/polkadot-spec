@@ -115,8 +115,8 @@
 
     <item><strong|Kademlia requests> invoking Kademlia <verbatim|FIND_NODE>
     requests, where nodes respond with their list of available peers.
-    Kademlia requests must also contain protocol identifiers as described in
-    Section <reference|sect-protocol-identifier>.
+    Kademlia requests are performed on a specific substream as described in
+    Section <reference|sect-protocols-substreams>.
   </itemize>
 
   <subsection|Connection establishment>
@@ -132,10 +132,11 @@
 
   <\itemize-dot>
     <item><strong|Request-Response substreams>: After the protocol is
-    negotiated, the initiator sends a single message containing a request.
-    The responder then sends a response, after which the substream is then
-    immediately closed. The requests and responses are prefixed with their
-    <hlink|LEB128|https://en.wikipedia.org/wiki/LEB128> encoded length.
+    negotiated by the multiplexing layer, the initiator sends a single
+    message containing a request. The responder then sends a response, after
+    which the substream is then immediately closed. The requests and
+    responses are prefixed with their <hlink|LEB128|https://en.wikipedia.org/wiki/LEB128>
+    encoded length.
 
     <item><strong|Notification substreams>. After the protocol is negotiated,
     the initiator sends a single handshake message. The responder can then
@@ -257,7 +258,8 @@
     allows the Polkadot Host to perform information about blocks.
 
     <item><verbatim|/dot/light/2> - a request and response protocol that
-    allows a light client to perform request information about the state.
+    allows a light client to request information about the state. <todo|light
+    client requests are not documented as of now>
 
     <item><verbatim|/dot/transactions/1> - a substream/notification protocol
     which sends transactions to connected peers.
@@ -270,6 +272,12 @@
     substream will change in the future. See <hlink|issue
     #7252|https://github.com/paritytech/substrate/issues/7252>.>
   </itemize>
+
+  <strong|Note>: the <verbatim|/dot/> prefixes on those substreams are known
+  as protocol identifiers and are used to segregate communications to
+  specific networks. This prevents any interference with other networks.
+  <verbatim|/dot/> is used exclusively for Polkadot. Kusama, for example,
+  uses the <verbatim|/ksmcc3/> protocol identifier.
 
   <subsection|Network Messages><label|sect-network-messages>
 
@@ -337,8 +345,8 @@
     <\eqnarray*>
       <tformat|<table|<row|<cell|Head<around*|(|B|)>>|<cell|=>|<cell|<math-it|Header
       of the announced block>>>|<row|<cell|b>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0>|<cell|<math-it|Is
-      the best block according to the node>>>|<row|<cell|1>|<cell|<math-it|Is
-      the best block according to node>>>>>>>>>>
+      not part of the best chain>>>|<row|<cell|1>|<cell|<math-it|Is the best
+      block according to the node>>>>>>>>>>
     </eqnarray*>
   </definition>
 
@@ -529,9 +537,6 @@
 
 <\auxiliary>
   <\collection>
-    <\associate|bib>
-      protocol_labs_libp2p_2019
-    </associate>
     <\associate|table>
       <tuple|normal|<\surround|<hidden-binding|<tuple>|1>|>
         <with|font-family|<quote|tt>|language|<quote|verbatim>|BlockRequest>
