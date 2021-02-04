@@ -259,7 +259,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit Blake2 storage root.
   </itemize>
 
@@ -286,7 +286,7 @@
     Definition <reference|defn-runtime-pointer> indicating the SCALE encoded
     block hash.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit Blake2 changes root.
   </itemize>
 
@@ -757,7 +757,7 @@
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit public key.
   </itemize>
 
@@ -783,7 +783,7 @@
     <item><strong|><verbatim|key_type_id>: an i32 integer indicating the key
     type ID as defined in Definition <reference|defn-key-type-id>.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
@@ -826,14 +826,14 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the message that is to be
     verified.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
@@ -898,7 +898,7 @@
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit public key.
   </itemize>
 
@@ -924,7 +924,7 @@
     <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
     as defined in Definition <reference|defn-key-type-id>
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
@@ -974,14 +974,14 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the message that is to be
     verified.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
@@ -1001,14 +1001,14 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the message that is to be
     verified.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
@@ -1072,7 +1072,7 @@
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
   </itemize>
 
@@ -1098,7 +1098,7 @@
     <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
     as defined in Definition <reference|defn-key-type-id>
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
@@ -1143,7 +1143,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 65-byte signature. The signature is 65-bytes in size, where the first
     512-bits represent the signature and the other 8 bits represent the
     recovery ID.
@@ -1152,7 +1152,7 @@
     <reference|defn-runtime-pointer> indicating the message that is to be
     verified.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
@@ -1176,11 +1176,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 65-byte signature in RSV format. V should be either <verbatim|0/1> or
     <verbatim|27/28>.
 
-    <item><verbatim|msg>: a regular pointer to the buffer containing the
+    <item><verbatim|msg>: a 32-bit pointer to the buffer containing the
     256-bit Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
@@ -1207,11 +1207,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 65-byte signature in RSV format. V should be either <verbatim|0/1> or
     <verbatim|27/28>.
 
-    <item><verbatim|msg>: a regular pointer to the buffer containing the
+    <item><verbatim|msg>: a 32-bit pointer to the buffer containing the
     256-bit Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
@@ -1304,7 +1304,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
   </itemize>
 
@@ -1328,7 +1328,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     512-bit hash result.
   </itemize>
 
@@ -1352,7 +1352,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
   </itemize>
 
@@ -1376,7 +1376,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     128-bit hash result.
   </itemize>
 
@@ -1400,7 +1400,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
   </itemize>
 
@@ -1424,7 +1424,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     64-bit hash result.
   </itemize>
 
@@ -1448,7 +1448,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     128-bit hash result.
   </itemize>
 
@@ -1472,7 +1472,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
   </itemize>
 
@@ -1704,9 +1704,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: a regular <todo|What is a regular pointer? is it
-    a well know wasm concept>pointer to the buffer containing the 256-bit
-    seed.
+    <item><verbatim|result>: a 32-bit pointer to the buffer containing the
+    256-bit seed.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_local_storage_set>>
@@ -2117,7 +2116,7 @@
     the trie root gets formed. The items consist of a SCALE encoded array
     containing arbitrary key/value pairs.
 
-    <item><verbatim|result>: a regular pointer to the buffer containing the
+    <item><verbatim|result>: a 32-bit pointer to the buffer containing the
     256-bit trie root.
   </itemize>
 
@@ -2146,7 +2145,7 @@
     compact encoded integers as described in Definition
     <reference|defn-sc-len-encoding>.
 
-    <item><verbatim|result>: a regular pointer to the buffer containing the
+    <item><verbatim|result>: a 32-bit pointer to the buffer containing the
     256-bit trie root result.
   </itemize>
 
@@ -2172,7 +2171,7 @@
     the trie root gets formed. The items consist of a SCALE encoded array
     containing arbitrary key/value pairs.
 
-    <item>result: a regular pointer to the buffer containing the 256-bit trie
+    <item>result: a 32-bit pointer to the buffer containing the 256-bit trie
     root.
   </itemize-dot>
 
@@ -2201,7 +2200,7 @@
     compact encoded integers as described in Definition
     <reference|defn-sc-len-encoding>.
 
-    <item><verbatim|result>: a regular pointer to the buffer containing the
+    <item><verbatim|result>: a 32-bit pointer to the buffer containing the
     256-bit trie root result.
   </itemize>
 
@@ -2342,7 +2341,7 @@
   <\itemize>
     <item><verbatim|size>: the size of the buffer to be allocated.
 
-    <item><verbatim|result>: a regular pointer to the allocated buffer.
+    <item><verbatim|result>: a 32-bit pointer to the allocated buffer.
   </itemize>
 
   <subsection|<verbatim|ext_allocator_free>>
@@ -2360,7 +2359,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|ptr>: a regular pointer to the memory buffer to be freed.
+    <item><verbatim|ptr>: a 32-bit pointer to the memory buffer to be freed.
   </itemize>
 
   <section|Logging>
