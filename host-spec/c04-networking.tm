@@ -452,7 +452,7 @@
   <subsubsection|Transactions><label|sect-msg-transactions>
 
   Transactions as defined and described in Section
-  <reference|sect-transactions> are sent directly to peers with which the
+  <reference|sect-extrinsics> are sent directly to peers with which the
   Polkadot Host has an open transaction substream, as defined in Definition
   <reference|defn-transactions-message>. Polkadot Host implementers should
   implement a mechanism which only sends a transaction once to each peer and
@@ -460,9 +460,7 @@
   undefined consequences such as being blocked for bad behavior by peers.
 
   The mechanism for managing transactions is further described in Section
-  <reference|sect-extrinsics> respectively Section
-  <reference|sect-transaction-submission> and Section
-  <reference|sect-transaction-queue>.
+  <reference|sect-extrinsics>.
 
   <\definition>
     <label|defn-transactions-message>The <strong|transactions message> is the
