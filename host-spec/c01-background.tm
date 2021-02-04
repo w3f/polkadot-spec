@@ -1,8 +1,8 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
-<style|book>
+<style|<tuple|book|old-lengths>>
 
 <\body>
   <chapter|Background>
@@ -350,8 +350,8 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|0>
-    <associate|page-first|15>
-    <associate|section-nr|0<uninit>>
+    <associate|page-first|13>
+    <associate|section-nr|0>
     <associate|subsection-nr|0>
   </collection>
 </initial>
@@ -359,32 +359,32 @@
 <\references>
   <\collection>
     <associate|auto-1|<tuple|1|?>>
-    <associate|auto-10|<tuple|1.9|?>>
-    <associate|auto-11|<tuple|1.9|?>>
-    <associate|auto-12|<tuple|1.9|?>>
-    <associate|auto-13|<tuple|1.9|?>>
+    <associate|auto-10|<tuple|Block|?>>
+    <associate|auto-11|<tuple|Genesis Block|?>>
+    <associate|auto-12|<tuple|Head|?>>
+    <associate|auto-13|<tuple|P|?>>
     <associate|auto-14|<tuple|1.2.1|?>>
-    <associate|auto-15|<tuple|1.11|?>>
-    <associate|auto-16|<tuple|1.12|?>>
-    <associate|auto-17|<tuple|1.12|?>>
-    <associate|auto-18|<tuple|1.13|?>>
-    <associate|auto-19|<tuple|1.13|?>>
+    <associate|auto-15|<tuple|BT, block tree|?>>
+    <associate|auto-16|<tuple|PBT, Pruned BT|?>>
+    <associate|auto-17|<tuple|pruning|?>>
+    <associate|auto-18|<tuple|G|?>>
+    <associate|auto-19|<tuple|CHAIN(B)|?>>
     <associate|auto-2|<tuple|1.1|?>>
-    <associate|auto-20|<tuple|1.13|?>>
-    <associate|auto-21|<tuple|1.13|?>>
-    <associate|auto-22|<tuple|1.13|?>>
-    <associate|auto-23|<tuple|1.13|?>>
-    <associate|auto-24|<tuple|1.13|?>>
-    <associate|auto-25|<tuple|1.14|?>>
-    <associate|auto-26|<tuple|1.15|?>>
-    <associate|auto-27|<tuple|1.15|?>>
+    <associate|auto-20|<tuple|head of C|?>>
+    <associate|auto-21|<tuple|<with|mode|<quote|math>|<around*|\||C|\|>>|?>>
+    <associate|auto-22|<tuple|SubChain(<with|mode|<quote|math>|B<rprime|'>,B>)|?>>
+    <associate|auto-23|<tuple|<with|mode|<quote|math>|\<bbb-C\><rsub|B<rprime|'>><around*|(|<around*|(|P|)>BT|)>>|?>>
+    <associate|auto-24|<tuple|<with|mode|<quote|math>|\<bbb-C\>>|?>>
+    <associate|auto-25|<tuple|LONGEST-CHAIN(BT)|?>>
+    <associate|auto-26|<tuple|LONGEST-PATH(BT)|?>>
+    <associate|auto-27|<tuple|DEEPEST-LEAF(BT)|?>>
     <associate|auto-3|<tuple|1.2|?>>
-    <associate|auto-4|<tuple|1.2|?>>
-    <associate|auto-5|<tuple|1.4|?>>
-    <associate|auto-6|<tuple|1.7|?>>
-    <associate|auto-7|<tuple|1.7|?>>
-    <associate|auto-8|<tuple|1.7|?>>
-    <associate|auto-9|<tuple|1.9|?>>
+    <associate|auto-4|<tuple|<with|font-series|<quote|bold>|math-font-series|<quote|bold>|<with|mode|<quote|math>|P<rsub|n>>>|?>>
+    <associate|auto-5|<tuple|<with|mode|<quote|math>|\<bbb-B\><rsub|n>>|?>>
+    <associate|auto-6|<tuple|I|?>>
+    <associate|auto-7|<tuple|<with|mode|<quote|math>|B>|?>>
+    <associate|auto-8|<tuple|<with|mode|<quote|math>|Enc<rsub|LE>>|?>>
+    <associate|auto-9|<tuple|C, blockchain|?>>
     <associate|defn-bit-rep|<tuple|1.6|?>>
     <associate|defn-block-tree|<tuple|1.11|?>>
     <associate|defn-chain-subchain|<tuple|1.13|?>>
