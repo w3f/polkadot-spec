@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|1.99.17>
 
 <project|host-spec.tm>
 
@@ -977,6 +977,10 @@
     described in Section <reference|sect-rte-grandpa-auth>. We refer to
     <math|\<bbb-V\><rsub|B> > as <math|\<bbb-V\>> when there is no chance of
     ambiguity.
+
+    Analogously we say that a Polkadot node is a <strong|non-voter node >for
+    block <math|B>, if it does not own any of the key pairs in
+    <math|\<bbb-V\><rsub|B>>.
   </definition>
 
   <\definition>
@@ -1276,14 +1280,22 @@
     sub-round of round r. A <strong|valid justification> must only contain
     up-to one valid vote from each voter and must not contain more than two
     equivocatory votes from each voter.
-
-    We say <math|J<rsup|r,pc><around*|(|B|)>> <strong|justifies the
-    finalization> of <math|B<rprime|'>\<geqslant\>B> if the number of valid
-    signatures in <math|J<rsup|r,pc><around*|(|B|)>> for <math|B<rprime|'>>
-    is greater than <math|<frac|2|3><around|\||\<bbb-V\><rsub|B>|\|>>.
-    <todo|It should be either the estimate of last round or estimate of this
-    round>
   </definition>
+
+  <\definition>
+    <label|defn-finalizing-justification>We say
+    <math|J<rsup|r,pc><around*|(|B|)>> <strong|justifies the finalization> of
+    <math|B<rprime|'>\<geqslant\>B> <strong|for a non-voter node <math|n>> if
+    the number of valid signatures in <math|J<rsup|r,pc><around*|(|B|)>> for
+    <math|B<rprime|'>> is greater than <math|<frac|2|3><around|\||\<bbb-V\><rsub|B>|\|>>.
+  </definition>
+
+  Note that <math|J<rsup|r,pc><around*|(|B|)>> can only be used by a
+  non-voter node to finalize a block. In contrast, a voter node can only be
+  assured of the finality of block <math|B> by actively participating in the
+  voting process. That is by invoking Algorithm
+  <reference|algo-grandpa-round>. See Definition
+  <reference|defn-finalized-block> for more details.
 
   <\definition>
     <strong|<math|GRANDPA> finalizing message for block <math|B> in round
@@ -1694,7 +1706,7 @@
   </algorithm>
 
   <\algorithm|<label|algo-finalizable><name|Finalizable>(<math|r:>voting
-  round)>
+  round<verbatim|>)>
     <\algorithmic>
       <\state>
         <\IF>
@@ -1866,9 +1878,9 @@
   <section|Block Finalization><label|sect-block-finalization>
 
   <\definition>
-    <label|defn-finalized-block>A Polkadot relay chain node n should consider
-    block <math|B> as <strong|finalized> if any of the following criteria
-    holds for <math|B<rprime|'>\<geqslant\>B>:\ 
+    <label|defn-finalized-block>A Polkadot relay chain node <math|n> should
+    consider block <math|B> as <strong|finalized> if any of the following
+    criteria holds for <math|B<rprime|'>\<geqslant\>B>:\ 
 
     <\itemize>
       <item><math|V<rsup|r,pc><rsub|obs<around|(|n|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|B<rprime|'>|)>\<gtr\>2/3<around|\||\<bbb-V\><rsub|B<rprime|'>>|\|>>.
@@ -1896,8 +1908,9 @@
     voter.
   </itemize-dot>
 
-  Note that all Polkadot relay chain nodes are supposed to listen to GRANDPA
-  finalizing messages regardless if they are GRANDPA voters.
+  Note that all Polkadot relay chain nodes are supposed to listen to
+  \ GRANDPA finalizing messages and process them regardless if they are
+  GRANDPA voters.
 
   <subsection|Catching up><label|sect-grandpa-catchup>
 
@@ -1909,7 +1922,7 @@
   synchronize the authority list currently performing the finalization
   process.
 
-  <subsubsection|Sending catch-up requests><label|sect-sending-catchup-request>
+  <subsubsection|Sending catch-up requests><verbatim|><label|sect-sending-catchup-request>
 
   When a Polkadot node has the same authority list as a peer node who is
   reporting a higher number for the \Pfinalized round\Q field, it should send
@@ -2152,98 +2165,99 @@
 
 <\references>
   <\collection>
-    <associate|algo-attempt-to\Ufinalize|<tuple|6.15|48>>
-    <associate|algo-block-production|<tuple|6.4|41>>
-    <associate|algo-block-production-lottery|<tuple|6.1|39>>
-    <associate|algo-build-block|<tuple|6.7|43>>
-    <associate|algo-derive-primary|<tuple|6.10|48>>
-    <associate|algo-finalizable|<tuple|6.14|48>>
-    <associate|algo-grandpa-best-candidate|<tuple|6.11|48>>
-    <associate|algo-grandpa-ghost|<tuple|6.12|?>>
-    <associate|algo-grandpa-round|<tuple|6.9|47>>
-    <associate|algo-initiate-grandpa|<tuple|6.8|47>>
-    <associate|algo-process-catchup-request|<tuple|6.16|49>>
-    <associate|algo-process-catchup-response|<tuple|6.17|50>>
-    <associate|algo-slot-time|<tuple|6.3|40>>
-    <associate|algo-verify-authorship-right|<tuple|6.5|42>>
-    <associate|algo-verify-slot-winner|<tuple|6.6|42>>
-    <associate|auto-1|<tuple|6|37>>
-    <associate|auto-10|<tuple|6.2.3|40>>
-    <associate|auto-11|<tuple|6.1|41>>
-    <associate|auto-12|<tuple|6.2.4|42>>
-    <associate|auto-13|<tuple|6.2.5|43>>
-    <associate|auto-14|<tuple|6.2.6|43>>
-    <associate|auto-15|<tuple|6.2.7|43>>
-    <associate|auto-16|<tuple|6.3|45>>
-    <associate|auto-17|<tuple|6.3.1|45>>
-    <associate|auto-18|<tuple|6.3.2|45>>
-    <associate|auto-19|<tuple|6.3|46>>
-    <associate|auto-2|<tuple|6.1|37>>
-    <associate|auto-20|<tuple|6.3.2.1|46>>
-    <associate|auto-21|<tuple|6.4|47>>
-    <associate|auto-22|<tuple|6.3.2.2|47>>
-    <associate|auto-23|<tuple|6.3.2.3|47>>
-    <associate|auto-24|<tuple|6.3.3|49>>
-    <associate|auto-25|<tuple|6.3.3.1|49>>
-    <associate|auto-26|<tuple|6.3.4|49>>
-    <associate|auto-27|<tuple|6.4|49>>
-    <associate|auto-28|<tuple|6.4.1|50>>
-    <associate|auto-29|<tuple|6.4.1.1|?>>
-    <associate|auto-3|<tuple|6.1.1|37>>
-    <associate|auto-30|<tuple|6.4.1.2|?>>
-    <associate|auto-31|<tuple|6.4.1.3|?>>
-    <associate|auto-4|<tuple|6.1.2|37>>
-    <associate|auto-5|<tuple|6.1|38>>
-    <associate|auto-6|<tuple|6.2|39>>
-    <associate|auto-7|<tuple|6.2|39>>
-    <associate|auto-8|<tuple|6.2.1|39>>
-    <associate|auto-9|<tuple|6.2.2|40>>
-    <associate|chap-consensu|<tuple|6|37>>
-    <associate|defn-authority-list|<tuple|6.1|37>>
-    <associate|defn-authority-set-id|<tuple|6.23|44>>
-    <associate|defn-babe-constant|<tuple|6.10|?>>
-    <associate|defn-babe-header|<tuple|6.19|40>>
-    <associate|defn-babe-seal|<tuple|6.20|41>>
-    <associate|defn-block-signature|<tuple|6.20|41>>
-    <associate|defn-block-time|<tuple|6.17|40>>
-    <associate|defn-chain-quality|<tuple|6.16|?>>
-    <associate|defn-consensus-message-digest|<tuple|6.3|37>>
-    <associate|defn-epoch-randomness|<tuple|6.21|?>>
-    <associate|defn-epoch-slot|<tuple|6.6|39>>
-    <associate|defn-epoch-subchain|<tuple|6.9|39>>
-    <associate|defn-equivocation|<tuple|6.27|?>>
-    <associate|defn-finalized-block|<tuple|6.42|49>>
-    <associate|defn-gossip-message|<tuple|6.34|45>>
-    <associate|defn-grandpa-catchup-request-msg|<tuple|6.39|46>>
-    <associate|defn-grandpa-catchup-response-msg|<tuple|6.40|46>>
-    <associate|defn-grandpa-completable|<tuple|6.33|45>>
-    <associate|defn-grandpa-justification|<tuple|6.37|46>>
-    <associate|defn-grandpa-voter|<tuple|6.22|43>>
-    <associate|defn-observed-votes|<tuple|6.30|?>>
-    <associate|defn-prunned-best|<tuple|6.15|?>>
-    <associate|defn-relative-syncronization|<tuple|6.13|?>>
-    <associate|defn-sign-round-vote|<tuple|6.35|?>>
-    <associate|defn-slot-offset|<tuple|6.12|40>>
-    <associate|defn-sync-period|<tuple|6.18|?>>
-    <associate|defn-total-potential-votes|<tuple|6.31|?>>
-    <associate|defn-vote|<tuple|6.25|44>>
-    <associate|defn-winning-threshold|<tuple|6.11|39>>
-    <associate|exmp-candid-unfinalized|<tuple|6.41|?>>
-    <associate|note-slot|<tuple|6.8|39>>
-    <associate|sect-authority-set|<tuple|6.1.1|37>>
-    <associate|sect-babe|<tuple|6.2|39>>
-    <associate|sect-block-building|<tuple|6.2.7|43>>
-    <associate|sect-block-finalization|<tuple|6.4|49>>
-    <associate|sect-block-production|<tuple|6.2|39>>
-    <associate|sect-consensus-message-digest|<tuple|6.1.2|37>>
-    <associate|sect-epoch-randomness|<tuple|6.2.5|41>>
-    <associate|sect-finality|<tuple|6.3|43>>
-    <associate|sect-grandpa-catchup|<tuple|6.4.1|49>>
-    <associate|sect-grandpa-catchup-messages|<tuple|6.3.2.3|46>>
-    <associate|sect-sending-catchup-request|<tuple|6.4.1.1|49>>
-    <associate|sect-verifying-authorship|<tuple|6.2.6|42>>
-    <associate|tabl-consensus-messages-babe|<tuple|6.1|?>>
-    <associate|tabl-consensus-messages-grandpa|<tuple|6.2|?>>
+    <associate|algo-attempt-to\Ufinalize|<tuple|6.15|57>>
+    <associate|algo-block-production|<tuple|6.4|49>>
+    <associate|algo-block-production-lottery|<tuple|6.1|46>>
+    <associate|algo-build-block|<tuple|6.7|50>>
+    <associate|algo-derive-primary|<tuple|6.10|56>>
+    <associate|algo-finalizable|<tuple|6.14|57>>
+    <associate|algo-grandpa-best-candidate|<tuple|6.11|56>>
+    <associate|algo-grandpa-ghost|<tuple|6.12|57>>
+    <associate|algo-grandpa-round|<tuple|6.9|56>>
+    <associate|algo-initiate-grandpa|<tuple|6.8|55>>
+    <associate|algo-process-catchup-request|<tuple|6.16|59>>
+    <associate|algo-process-catchup-response|<tuple|6.17|59>>
+    <associate|algo-slot-time|<tuple|6.3|48>>
+    <associate|algo-verify-authorship-right|<tuple|6.5|49>>
+    <associate|algo-verify-slot-winner|<tuple|6.6|50>>
+    <associate|auto-1|<tuple|6|43>>
+    <associate|auto-10|<tuple|6.2.3|46>>
+    <associate|auto-11|<tuple|6.1|48>>
+    <associate|auto-12|<tuple|6.2.4|48>>
+    <associate|auto-13|<tuple|6.2.5|49>>
+    <associate|auto-14|<tuple|6.2.6|49>>
+    <associate|auto-15|<tuple|6.2.7|50>>
+    <associate|auto-16|<tuple|6.3|51>>
+    <associate|auto-17|<tuple|6.3.1|51>>
+    <associate|auto-18|<tuple|6.3.2|53>>
+    <associate|auto-19|<tuple|6.3|53>>
+    <associate|auto-2|<tuple|6.1|43>>
+    <associate|auto-20|<tuple|6.3.2.1|53>>
+    <associate|auto-21|<tuple|6.4|53>>
+    <associate|auto-22|<tuple|6.3.2.2|54>>
+    <associate|auto-23|<tuple|6.3.2.3|54>>
+    <associate|auto-24|<tuple|6.3.3|55>>
+    <associate|auto-25|<tuple|6.3.3.1|55>>
+    <associate|auto-26|<tuple|6.3.4|56>>
+    <associate|auto-27|<tuple|6.4|58>>
+    <associate|auto-28|<tuple|6.4.1|59>>
+    <associate|auto-29|<tuple|6.4.1.1|59>>
+    <associate|auto-3|<tuple|6.1.1|43>>
+    <associate|auto-30|<tuple|6.4.1.2|59>>
+    <associate|auto-31|<tuple|6.4.1.3|59>>
+    <associate|auto-4|<tuple|6.1.2|43>>
+    <associate|auto-5|<tuple|6.1|44>>
+    <associate|auto-6|<tuple|6.2|44>>
+    <associate|auto-7|<tuple|6.2|45>>
+    <associate|auto-8|<tuple|6.2.1|45>>
+    <associate|auto-9|<tuple|6.2.2|46>>
+    <associate|chap-consensu|<tuple|6|43>>
+    <associate|defn-authority-list|<tuple|6.1|43>>
+    <associate|defn-authority-set-id|<tuple|6.23|51>>
+    <associate|defn-babe-constant|<tuple|6.10|46>>
+    <associate|defn-babe-header|<tuple|6.19|48>>
+    <associate|defn-babe-seal|<tuple|6.20|48>>
+    <associate|defn-block-signature|<tuple|6.20|48>>
+    <associate|defn-block-time|<tuple|6.17|47>>
+    <associate|defn-chain-quality|<tuple|6.16|47>>
+    <associate|defn-consensus-message-digest|<tuple|6.3|43>>
+    <associate|defn-epoch-randomness|<tuple|6.21|49>>
+    <associate|defn-epoch-slot|<tuple|6.6|45>>
+    <associate|defn-epoch-subchain|<tuple|6.9|46>>
+    <associate|defn-equivocation|<tuple|6.27|52>>
+    <associate|defn-finalized-block|<tuple|6.43|58>>
+    <associate|defn-finalizing-justification|<tuple|6.38|?>>
+    <associate|defn-gossip-message|<tuple|6.34|53>>
+    <associate|defn-grandpa-catchup-request-msg|<tuple|6.40|55>>
+    <associate|defn-grandpa-catchup-response-msg|<tuple|6.41|55>>
+    <associate|defn-grandpa-completable|<tuple|6.33|53>>
+    <associate|defn-grandpa-justification|<tuple|6.37|54>>
+    <associate|defn-grandpa-voter|<tuple|6.22|51>>
+    <associate|defn-observed-votes|<tuple|6.30|52>>
+    <associate|defn-prunned-best|<tuple|6.15|47>>
+    <associate|defn-relative-syncronization|<tuple|6.13|47>>
+    <associate|defn-sign-round-vote|<tuple|6.35|53>>
+    <associate|defn-slot-offset|<tuple|6.12|46>>
+    <associate|defn-sync-period|<tuple|6.18|47>>
+    <associate|defn-total-potential-votes|<tuple|6.31|53>>
+    <associate|defn-vote|<tuple|6.25|52>>
+    <associate|defn-winning-threshold|<tuple|6.11|46>>
+    <associate|exmp-candid-unfinalized|<tuple|6.42|58>>
+    <associate|note-slot|<tuple|6.8|46>>
+    <associate|sect-authority-set|<tuple|6.1.1|43>>
+    <associate|sect-babe|<tuple|6.2|45>>
+    <associate|sect-block-building|<tuple|6.2.7|50>>
+    <associate|sect-block-finalization|<tuple|6.4|58>>
+    <associate|sect-block-production|<tuple|6.2|45>>
+    <associate|sect-consensus-message-digest|<tuple|6.1.2|43>>
+    <associate|sect-epoch-randomness|<tuple|6.2.5|49>>
+    <associate|sect-finality|<tuple|6.3|51>>
+    <associate|sect-grandpa-catchup|<tuple|6.4.1|59>>
+    <associate|sect-grandpa-catchup-messages|<tuple|6.3.2.3|54>>
+    <associate|sect-sending-catchup-request|<tuple|6.4.1.1|59>>
+    <associate|sect-verifying-authorship|<tuple|6.2.6|49>>
+    <associate|tabl-consensus-messages-babe|<tuple|6.1|44>>
+    <associate|tabl-consensus-messages-grandpa|<tuple|6.2|44>>
   </collection>
 </references>
 
