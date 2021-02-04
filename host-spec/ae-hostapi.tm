@@ -259,7 +259,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit Blake2 storage root.
   </itemize>
 
@@ -286,7 +286,7 @@
     Definition <reference|defn-runtime-pointer> indicating the SCALE encoded
     block hash.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit Blake2 changes root.
   </itemize>
 
@@ -757,8 +757,8 @@
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
-    <version-new|32-byte |256-bit >public key.
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
+    256-bit public key.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_ed25519_sign>>
@@ -783,7 +783,7 @@
     <item><strong|><verbatim|key_type_id>: an i32 integer indicating the key
     type ID as defined in Definition <reference|defn-key-type-id>.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
@@ -826,14 +826,14 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the message that is to be
     verified.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
@@ -898,7 +898,7 @@
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit public key.
   </itemize>
 
@@ -924,7 +924,7 @@
     <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
     as defined in Definition <reference|defn-key-type-id>
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
@@ -974,15 +974,15 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the message that is to be
     verified.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
-    <version-new|32-byte |256-bit >public key.
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
+    256-bit public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
     signature is valid or a value equal to <verbatim|0> if otherwise.
@@ -1001,15 +1001,15 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the message that is to be
     verified.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
-    <version-new|32-byte |256-bit >public key.
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
+    256-bit public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
     signature is valid or a value equal to <verbatim|0> if otherwise.
@@ -1072,7 +1072,7 @@
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
   </itemize>
 
@@ -1098,7 +1098,7 @@
     <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
     as defined in Definition <reference|defn-key-type-id>
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
@@ -1143,7 +1143,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 65-byte signature. The signature is 65-bytes in size, where the first
     512-bits represent the signature and the other 8 bits represent the
     recovery ID.
@@ -1152,7 +1152,7 @@
     <reference|defn-runtime-pointer> indicating the message that is to be
     verified.
 
-    <item><verbatim|key>: a regular pointer to the buffer containing the
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
 
     <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
@@ -1176,12 +1176,12 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 65-byte signature in RSV format. V should be either <verbatim|0/1> or
     <verbatim|27/28>.
 
-    <item><verbatim|msg>: a regular pointer to the buffer containing the
-    <version-new|32-byte |256-bit >Blake2 hash of the message.
+    <item><verbatim|msg>: a 32-bit pointer to the buffer containing the
+    256-bit Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
@@ -1207,11 +1207,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|sig>: a regular pointer to the buffer containing
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
     the 65-byte signature in RSV format. V should be either <verbatim|0/1> or
     <verbatim|27/28>.
 
-    <item><verbatim|msg>: a regular pointer to the buffer containing the
+    <item><verbatim|msg>: a 32-bit pointer to the buffer containing the
     256-bit Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
@@ -1304,7 +1304,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
   </itemize>
 
@@ -1324,13 +1324,13 @@
 
   <strong|Arguments>:
 
-  <\itemize-dot>
+  <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     512-bit hash result.
-  </itemize-dot>
+  </itemize>
 
   <subsection|<verbatim|ext_hashing_sha2_256>>
 
@@ -1352,7 +1352,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
   </itemize>
 
@@ -1376,7 +1376,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     128-bit hash result.
   </itemize>
 
@@ -1400,7 +1400,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
   </itemize>
 
@@ -1424,7 +1424,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     64-bit hash result.
   </itemize>
 
@@ -1448,7 +1448,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     128-bit hash result.
   </itemize>
 
@@ -1472,7 +1472,7 @@
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the data to be hashed.
 
-    <item><verbatim|return>: a regular pointer to the buffer containing the
+    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
   </itemize>
 
@@ -1554,9 +1554,9 @@
 
   <subsection|<verbatim|ext_offchain_is_validator>>
 
-  Verifies if the local node is a potential validator. Even if this function
-  returns true, it does not mean that any keys are configured or that the
-  validator is registered in the chain.
+  Check whether the local node is a potential validator. Even if this
+  function returns <verbatim|1>, it does not mean that any keys are
+  configured or that the validator is registered in the chain.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1574,11 +1574,12 @@
     <verbatim|0> if it is not.
   </itemize>
 
-  <subsection|<verbatim|ext_offchain_submit_transaction>>
+  <subsection|<verbatim|ext_offchain_submit_transaction>><label|sect-ext-offchain-submit-transaction>
 
-  Given an extrinsic as a SALE encoded byte array, the system decodes the
-  byte array and submits the extrinsic in the inherent pool as an extrinsic
-  to be included in the next produced block.
+  Given a SCALE encoded extrinsic, this function submits the extrinsic to the
+  Host's transaction pool, ready to be propagated to remote peers. This
+  process is critical for issuing the <verbatim|ImOnline> message
+  <todo|refer>.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -1599,18 +1600,36 @@
     <item><verbatim|return>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
-    Neither on success or failure is there any additional data provided.
+    Neither on success or failure is there any additional data provided. The
+    cause of a failure is implementation specific.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_network_state>>
 
   Returns the SCALE encoded, opaque information about the local node's
-  network state. This information is fetched by calling into
-  <verbatim|libp2p>, which <em|might> include the <verbatim|PeerId> and
-  possible <verbatim|Multiaddress(-es)> by which the node is publicly known
-  by. Those values are unique and have to be known by the node individually.
-  Due to its opaque nature, it's unknown whether that information is
-  available prior to execution.
+  network state.
+
+  <\definition>
+    <label|defn-opaque-network-state>The <verbatim|OpaqueNetworkState>
+    structure, <math|O<rsub|NS>>, is a SCALE encoded blob holding information
+    about the the <verbatim|libp2p> <verbatim|PeerId>, <math|P<rsub|id>>, of
+    the local node and a list of <verbatim|libp2p> <verbatim|Multiaddresses,>
+    (<math|M<rsub|0>\<ldots\>M<rsub|n>>), the node knows it can be reached
+    at:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|O<rsub|NS>>|<cell|=>|<cell|<around*|(|P<rsub|id>,<around*|(|M<rsub|0>\<ldots\>M<rsub|n>|)><rsub|>|)>>>>>
+    </eqnarray*>
+
+    where:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|P<rsub|id>>|<cell|=>|<cell|<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>>|<row|<cell|M<rsub|>>|<cell|=>|<cell|<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>>>>
+    </eqnarray*>
+
+    The information contained in this structure is naturally opaque to the
+    caller of this function.
+  </definition>
 
   <strong|<subsubsection|Version 1 - Prototype>>
 
@@ -1626,10 +1645,9 @@
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
-    On success it contains the SCALE encoded network state. This includes
-    none or one <verbatim|PeerId> followed by none, one or more IPv4 or IPv6
-    <verbatim|Multiaddress(-es)> by which the node is publicly known by. On
-    failure no additional data is provided.
+    On success it contains the <verbatim|OpaqueNetworkState> structure as
+    defined in Definition <reference|defn-opaque-network-state>. On failure,
+    an empty value is yielded where its cause is implementation specific.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_timestamp>>
@@ -1639,7 +1657,7 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_offchain_timestamp_version_1 (result i64))
+    (func $ext_offchain_timestamp_version_1 (result u64))
   </verbatim>
 
   \ 
@@ -1647,7 +1665,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: an i64 integer indicating the current UNIX
+    <item><verbatim|result>: an u64 integer indicating the current UNIX
     timestamp as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
@@ -1658,7 +1676,7 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_offchain_sleep_until_version_1 (param $deadline i64))
+    (func $ext_offchain_sleep_until_version_1 (param $deadline u64))
   </verbatim>
 
   \ 
@@ -1666,7 +1684,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|deadline>: an i64 integer specifying the UNIX timestamp
+    <item><verbatim|deadline>: an u64 integer specifying the UNIX timestamp
     as defined in Definition <reference|defn-unix-time>.
   </itemize>
 
@@ -1686,8 +1704,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|result>: a pointer to the buffer containing the 256-bit
-    seed.
+    <item><verbatim|result>: a 32-bit pointer to the buffer containing the
+    256-bit seed.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_local_storage_set>>
@@ -1710,9 +1728,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for a persistent storage as defined in
-    Definition <reference|defn-offchain-persistent-storage> and a value equal
-    to 2 for local storage as defined in Definition
+    value equal to <verbatim|1> is used for a persistent storage as defined
+    in Definition <reference|defn-offchain-persistent-storage> and a value
+    equal to <verbatim|2> for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
@@ -1721,6 +1739,33 @@
     <item><verbatim|value>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the value.
   </itemize>
+
+  <subsection|<verbatim|ext_offchain_local_storage_clear>>
+
+  Remove a value from the local storage.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_offchain_local_storage_clear_version_1
+
+    \ \ (param $kind i32) (param $key i64))
+  </verbatim>
+
+  \;
+
+  Arguments:
+
+  <\itemize-dot>
+    <item><verbatim|kind>: an i32 integer indicating the storage kind. A
+    value equal to <verbatim|1> is used for a persistent storage as defined
+    in Definition <reference|defn-offchain-persistent-storage> and a value
+    equal to <verbatim|2> for local storage as defined in Definition
+    <reference|defn-offchain-local-storage>.
+
+    <item>key: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the key.
+  </itemize-dot>
 
   <subsection|<verbatim|ext_offchain_local_storage_compare_and_set>>
 
@@ -1744,9 +1789,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for a persistent storage as defined in
-    Definition <reference|defn-offchain-persistent-storage> and a value equal
-    to 2 for local storage as defined in Definition
+    value equal to <verbatim|1> is used for a persistent storage as defined
+    in Definition <reference|defn-offchain-persistent-storage> and a value
+    equal to <verbatim|2> for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
@@ -1782,9 +1827,9 @@
 
   <\itemize>
     <item><verbatim|kind>: an i32 integer indicating the storage kind. A
-    value equal to 1 is used for a persistent storage as defined in
-    Definition <reference|defn-offchain-persistent-storage> and a value equal
-    to 2 for local storage as defined in Definition
+    value equal to <verbatim|1> is used for a persistent storage as defined
+    in Definition <reference|defn-offchain-persistent-storage> and a value
+    equal to <verbatim|2> for local storage as defined in Definition
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
@@ -1828,7 +1873,8 @@
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>
     containing the i16 ID of the newly started request. On failure no
-    additionally data is provided.
+    additionally data is provided. The cause of failure is implementation
+    specific.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_http_request_add_header>>
@@ -1864,7 +1910,8 @@
     <item><verbatim|result>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
-    Neither on success or failure is there any additional data provided.
+    Neither on success or failure is there any additional data provided. The
+    cause of failure is implemenation specific.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_http_request_write_body>>
@@ -2012,6 +2059,37 @@
     <reference|defn-http-error> on faiure.
   </itemize>
 
+  <subsection|<verbatim|ext_offchain_set_authorized_nodes>>
+
+  Set the authorized nodes which are allowed to connect to the local node.
+  This function is primarily used for private blockchains <todo|shouldn't we
+  give a context of what private blockchain means> and is not necessarily
+  required for the public and open Polkadot protocol.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_offchain_set_authorized_nodes_version_1
+
+    \ \ (param $nodes i64) (param $authorized_only i32)
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item><verbatim|nodes>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer> indicating the buffer of the SCALE
+    encoded array of <verbatim|libp2p> <verbatim|PeerId>'s. Invalid
+    <verbatim|PeerId>'s are silently ignored.
+
+    <item><verbatim|authorized_only>: If set to <verbatim|1>, then only the
+    authorized nodes are allowed to connect to the local node (whitelist).
+    All other nodes are rejected. If set to <verbatim|0>, then no such
+    restriction is placed.
+  </itemize-dot>
+
   <section|Trie>
 
   Interface that provides trie related functionality.
@@ -2038,7 +2116,7 @@
     the trie root gets formed. The items consist of a SCALE encoded array
     containing arbitrary key/value pairs.
 
-    <item><verbatim|result>: a regular pointer to the buffer containing the
+    <item><verbatim|result>: a 32-bit pointer to the buffer containing the
     256-bit trie root.
   </itemize>
 
@@ -2067,7 +2145,7 @@
     compact encoded integers as described in Definition
     <reference|defn-sc-len-encoding>.
 
-    <item><verbatim|result>: a regular pointer to the buffer containing the
+    <item><verbatim|result>: a 32-bit pointer to the buffer containing the
     256-bit trie root result.
   </itemize>
 
@@ -2093,7 +2171,7 @@
     the trie root gets formed. The items consist of a SCALE encoded array
     containing arbitrary key/value pairs.
 
-    <item>result: a regular pointer to the buffer containing the 256-bit trie
+    <item>result: a 32-bit pointer to the buffer containing the 256-bit trie
     root.
   </itemize-dot>
 
@@ -2122,7 +2200,7 @@
     compact encoded integers as described in Definition
     <reference|defn-sc-len-encoding>.
 
-    <item><verbatim|result>: a regular pointer to the buffer containing the
+    <item><verbatim|result>: a 32-bit pointer to the buffer containing the
     256-bit trie root result.
   </itemize>
 
@@ -2263,7 +2341,7 @@
   <\itemize>
     <item><verbatim|size>: the size of the buffer to be allocated.
 
-    <item><verbatim|result>: a regular pointer to the allocated buffer.
+    <item><verbatim|result>: a 32-bit pointer to the allocated buffer.
   </itemize>
 
   <subsection|<verbatim|ext_allocator_free>>
@@ -2281,7 +2359,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|ptr>: a regular pointer to the memory buffer to be freed.
+    <item><verbatim|ptr>: a 32-bit pointer to the memory buffer to be freed.
   </itemize>
 
   <section|Logging>
@@ -2344,200 +2422,207 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|8>
-    <associate|page-first|101>
+    <associate|page-first|87>
     <associate|page-height|auto>
+    <associate|page-medium|papyrus>
     <associate|page-type|letter>
     <associate|page-width|auto>
-    <associate|section-nr|1<uninit>>
-    <associate|subsection-nr|7>
+    <associate|section-nr|0>
+    <associate|subsection-nr|0>
   </collection>
 </initial>
 
 <\references>
   <\collection>
-    <associate|appendix-e|<tuple|A|67>>
-    <associate|auto-1|<tuple|A|67>>
-    <associate|auto-10|<tuple|A.1.4.1|68>>
-    <associate|auto-100|<tuple|A.4.8.1|82>>
-    <associate|auto-101|<tuple|A.5|82>>
-    <associate|auto-102|<tuple|A.3|82>>
-    <associate|auto-103|<tuple|A.5.1|82>>
-    <associate|auto-104|<tuple|A.5.1.1|82>>
-    <associate|auto-105|<tuple|A.5.2|83>>
-    <associate|auto-106|<tuple|A.5.2.1|83>>
-    <associate|auto-107|<tuple|A.5.3|83>>
-    <associate|auto-108|<tuple|A.5.3.1|83>>
-    <associate|auto-109|<tuple|A.5.4|83>>
-    <associate|auto-11|<tuple|A.1.5|68>>
-    <associate|auto-110|<tuple|A.5.4.1|83>>
-    <associate|auto-111|<tuple|A.5.5|83>>
-    <associate|auto-112|<tuple|A.5.5.1|83>>
-    <associate|auto-113|<tuple|A.5.6|84>>
-    <associate|auto-114|<tuple|A.5.6.1|84>>
-    <associate|auto-115|<tuple|A.5.7|84>>
-    <associate|auto-116|<tuple|A.5.7.1|84>>
-    <associate|auto-117|<tuple|A.5.8|84>>
-    <associate|auto-118|<tuple|A.5.8.1|84>>
-    <associate|auto-119|<tuple|A.5.9|85>>
-    <associate|auto-12|<tuple|A.1.5.1|68>>
-    <associate|auto-120|<tuple|A.5.9.1|85>>
-    <associate|auto-121|<tuple|A.5.10|85>>
-    <associate|auto-122|<tuple|A.5.10.1|85>>
-    <associate|auto-123|<tuple|A.5.11|85>>
-    <associate|auto-124|<tuple|A.5.11.1|85>>
-    <associate|auto-125|<tuple|A.5.12|86>>
-    <associate|auto-126|<tuple|A.5.12.1|86>>
-    <associate|auto-127|<tuple|A.5.13|86>>
-    <associate|auto-128|<tuple|A.5.13.1|86>>
-    <associate|auto-129|<tuple|A.5.14|86>>
-    <associate|auto-13|<tuple|A.1.6|69>>
-    <associate|auto-130|<tuple|A.5.14.1|86>>
-    <associate|auto-131|<tuple|A.5.15|87>>
-    <associate|auto-132|<tuple|A.5.15.1|87>>
-    <associate|auto-133|<tuple|A.6|87>>
-    <associate|auto-134|<tuple|A.6.1|87>>
-    <associate|auto-135|<tuple|A.6.1.1|87>>
-    <associate|auto-136|<tuple|A.6.2|87>>
-    <associate|auto-137|<tuple|A.6.2.1|87>>
-    <associate|auto-138|<tuple|A.6.3|88>>
-    <associate|auto-139|<tuple|A.6.3.1|88>>
-    <associate|auto-14|<tuple|A.1.6.1|69>>
-    <associate|auto-140|<tuple|A.6.4|88>>
-    <associate|auto-141|<tuple|A.6.4.1|88>>
-    <associate|auto-142|<tuple|A.7|88>>
-    <associate|auto-143|<tuple|A.7.1|88>>
-    <associate|auto-144|<tuple|A.7.1.1|88>>
-    <associate|auto-145|<tuple|A.7.2|88>>
-    <associate|auto-146|<tuple|A.7.2.1|89>>
-    <associate|auto-147|<tuple|A.7.3|89>>
-    <associate|auto-148|<tuple|A.7.3.1|89>>
-    <associate|auto-149|<tuple|A.7.4|89>>
-    <associate|auto-15|<tuple|A.1.7|69>>
-    <associate|auto-150|<tuple|A.7.4.1|89>>
-    <associate|auto-151|<tuple|A.7.5|89>>
-    <associate|auto-152|<tuple|A.7.5.1|89>>
-    <associate|auto-153|<tuple|A.8|89>>
-    <associate|auto-154|<tuple|A.8.1|90>>
-    <associate|auto-155|<tuple|A.8.1.1|90>>
-    <associate|auto-156|<tuple|A.8.2|90>>
-    <associate|auto-157|<tuple|A.8.2.1|90>>
-    <associate|auto-158|<tuple|A.9|90>>
-    <associate|auto-159|<tuple|A.4|90>>
-    <associate|auto-16|<tuple|A.1.7.1|69>>
-    <associate|auto-160|<tuple|A.9.1|?>>
-    <associate|auto-161|<tuple|A.9.1.1|?>>
-    <associate|auto-17|<tuple|A.1.8|69>>
-    <associate|auto-18|<tuple|A.1.8.1|69>>
-    <associate|auto-19|<tuple|A.1.9|69>>
-    <associate|auto-2|<tuple|A.1|67>>
-    <associate|auto-20|<tuple|A.1.9.1|69>>
-    <associate|auto-21|<tuple|A.1.10|70>>
-    <associate|auto-22|<tuple|A.1.10.1|70>>
-    <associate|auto-23|<tuple|A.1.11|70>>
-    <associate|auto-24|<tuple|A.1.11.1|70>>
-    <associate|auto-25|<tuple|A.1.12|70>>
-    <associate|auto-26|<tuple|A.1.12.1|70>>
-    <associate|auto-27|<tuple|A.1.13|70>>
-    <associate|auto-28|<tuple|A.1.13.1|71>>
-    <associate|auto-29|<tuple|A.2|71>>
-    <associate|auto-3|<tuple|A.1.1|67>>
-    <associate|auto-30|<tuple|A.2.1|71>>
-    <associate|auto-31|<tuple|A.2.1.1|71>>
-    <associate|auto-32|<tuple|A.2.2|71>>
-    <associate|auto-33|<tuple|A.2.2.1|71>>
-    <associate|auto-34|<tuple|A.2.3|71>>
-    <associate|auto-35|<tuple|A.2.3.1|72>>
-    <associate|auto-36|<tuple|A.2.4|72>>
-    <associate|auto-37|<tuple|A.2.4.1|72>>
-    <associate|auto-38|<tuple|A.2.5|72>>
-    <associate|auto-39|<tuple|A.2.5.1|72>>
-    <associate|auto-4|<tuple|A.1.1.1|67>>
-    <associate|auto-40|<tuple|A.2.6|72>>
-    <associate|auto-41|<tuple|A.2.6.1|72>>
-    <associate|auto-42|<tuple|A.2.7|73>>
-    <associate|auto-43|<tuple|A.2.7.1|73>>
-    <associate|auto-44|<tuple|A.2.8|73>>
-    <associate|auto-45|<tuple|A.2.8.1|73>>
-    <associate|auto-46|<tuple|A.2.9|73>>
-    <associate|auto-47|<tuple|A.2.9.1|73>>
-    <associate|auto-48|<tuple|A.3|74>>
-    <associate|auto-49|<tuple|A.1|74>>
-    <associate|auto-5|<tuple|A.1.2|67>>
-    <associate|auto-50|<tuple|A.2|74>>
-    <associate|auto-51|<tuple|A.3.1|74>>
-    <associate|auto-52|<tuple|A.3.1.1|74>>
-    <associate|auto-53|<tuple|A.3.2|74>>
-    <associate|auto-54|<tuple|A.3.2.1|74>>
-    <associate|auto-55|<tuple|A.3.3|75>>
-    <associate|auto-56|<tuple|A.3.3.1|75>>
-    <associate|auto-57|<tuple|A.3.4|75>>
-    <associate|auto-58|<tuple|A.3.4.1|75>>
-    <associate|auto-59|<tuple|A.3.5|75>>
-    <associate|auto-6|<tuple|A.1.2.1|67>>
-    <associate|auto-60|<tuple|A.3.5.1|75>>
-    <associate|auto-61|<tuple|A.3.6|76>>
-    <associate|auto-62|<tuple|A.3.6.1|76>>
-    <associate|auto-63|<tuple|A.3.7|76>>
-    <associate|auto-64|<tuple|A.3.7.1|76>>
-    <associate|auto-65|<tuple|A.3.8|76>>
-    <associate|auto-66|<tuple|A.3.8.1|76>>
-    <associate|auto-67|<tuple|A.3.8.2|77>>
-    <associate|auto-68|<tuple|A.3.9|77>>
-    <associate|auto-69|<tuple|A.3.9.1|77>>
-    <associate|auto-7|<tuple|A.1.3|68>>
-    <associate|auto-70|<tuple|A.3.10|77>>
-    <associate|auto-71|<tuple|A.3.10.1|77>>
-    <associate|auto-72|<tuple|A.3.11|78>>
-    <associate|auto-73|<tuple|A.3.11.1|78>>
-    <associate|auto-74|<tuple|A.3.12|78>>
-    <associate|auto-75|<tuple|A.3.12.1|78>>
-    <associate|auto-76|<tuple|A.3.13|78>>
-    <associate|auto-77|<tuple|A.3.13.1|78>>
-    <associate|auto-78|<tuple|A.3.14|79>>
-    <associate|auto-79|<tuple|A.3.14.1|79>>
-    <associate|auto-8|<tuple|A.1.3.1|68>>
-    <associate|auto-80|<tuple|A.3.15|79>>
-    <associate|auto-81|<tuple|A.3.15.1|79>>
-    <associate|auto-82|<tuple|A.3.16|79>>
-    <associate|auto-83|<tuple|A.3.16.1|79>>
-    <associate|auto-84|<tuple|A.4|80>>
-    <associate|auto-85|<tuple|A.4.1|80>>
-    <associate|auto-86|<tuple|A.4.1.1|80>>
-    <associate|auto-87|<tuple|A.4.2|80>>
-    <associate|auto-88|<tuple|A.4.2.1|80>>
-    <associate|auto-89|<tuple|A.4.3|80>>
-    <associate|auto-9|<tuple|A.1.4|68>>
-    <associate|auto-90|<tuple|A.4.3.1|80>>
-    <associate|auto-91|<tuple|A.4.4|80>>
-    <associate|auto-92|<tuple|A.4.4.1|80>>
-    <associate|auto-93|<tuple|A.4.5|81>>
-    <associate|auto-94|<tuple|A.4.5.1|81>>
-    <associate|auto-95|<tuple|A.4.6|81>>
-    <associate|auto-96|<tuple|A.4.6.1|81>>
-    <associate|auto-97|<tuple|A.4.7|81>>
-    <associate|auto-98|<tuple|A.4.7.1|81>>
-    <associate|auto-99|<tuple|A.4.8|81>>
-    <associate|defn-child-storage-type|<tuple|A.4|71>>
-    <associate|defn-ecdsa-verify-error|<tuple|A.6|74>>
-    <associate|defn-http-error|<tuple|A.10|82>>
-    <associate|defn-http-status-codes|<tuple|A.9|82>>
-    <associate|defn-key-type-id|<tuple|A.5|74>>
-    <associate|defn-lexicographic-ordering|<tuple|A.3|67>>
-    <associate|defn-local-storage|<tuple|A.8|82>>
-    <associate|defn-logging-log-level|<tuple|A.11|90>>
-    <associate|defn-persistent-storage|<tuple|A.7|82>>
-    <associate|defn-runtime-pointer|<tuple|A.2|67>>
-    <associate|nota-re-api-at-state|<tuple|A.1|67>>
-    <associate|sect-child-storage-api|<tuple|A.2|71>>
-    <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|78>>
-    <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|75>>
-    <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.16|79>>
-    <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.8|76>>
-    <associate|sect-ext-crypto-start-batch-verify|<tuple|A.3.15|79>>
-    <associate|sect-ext-storage-changes-root|<tuple|A.1.9|?>>
-    <associate|sect-ext-storage-commit-transaction|<tuple|A.1.13|70>>
-    <associate|sect-ext-storage-rollback-transaction|<tuple|A.1.12|70>>
-    <associate|sect-ext-storage-start-transaction|<tuple|A.1.11|70>>
+    <associate|appendix-e|<tuple|A|95>>
+    <associate|auto-1|<tuple|A|95>>
+    <associate|auto-10|<tuple|A.1.4.1|96>>
+    <associate|auto-100|<tuple|A.4.8.1|110>>
+    <associate|auto-101|<tuple|A.5|110>>
+    <associate|auto-102|<tuple|A.3|110>>
+    <associate|auto-103|<tuple|A.5.1|110>>
+    <associate|auto-104|<tuple|A.5.1.1|110>>
+    <associate|auto-105|<tuple|A.5.2|111>>
+    <associate|auto-106|<tuple|A.5.2.1|111>>
+    <associate|auto-107|<tuple|A.5.3|111>>
+    <associate|auto-108|<tuple|A.5.3.1|111>>
+    <associate|auto-109|<tuple|A.5.4|111>>
+    <associate|auto-11|<tuple|A.1.5|96>>
+    <associate|auto-110|<tuple|A.5.4.1|111>>
+    <associate|auto-111|<tuple|A.5.5|112>>
+    <associate|auto-112|<tuple|A.5.5.1|112>>
+    <associate|auto-113|<tuple|A.5.6|112>>
+    <associate|auto-114|<tuple|A.5.6.1|112>>
+    <associate|auto-115|<tuple|A.5.7|112>>
+    <associate|auto-116|<tuple|A.5.7.1|112>>
+    <associate|auto-117|<tuple|A.5.8|112>>
+    <associate|auto-118|<tuple|A.5.8.1|112>>
+    <associate|auto-119|<tuple|A.5.9|113>>
+    <associate|auto-12|<tuple|A.1.5.1|96>>
+    <associate|auto-120|<tuple|A.5.9.1|113>>
+    <associate|auto-121|<tuple|A.5.10|113>>
+    <associate|auto-122|<tuple|A.5.10.1|113>>
+    <associate|auto-123|<tuple|A.5.11|113>>
+    <associate|auto-124|<tuple|A.5.11.1|114>>
+    <associate|auto-125|<tuple|A.5.12|114>>
+    <associate|auto-126|<tuple|A.5.12.1|114>>
+    <associate|auto-127|<tuple|A.5.13|114>>
+    <associate|auto-128|<tuple|A.5.13.1|114>>
+    <associate|auto-129|<tuple|A.5.14|115>>
+    <associate|auto-13|<tuple|A.1.6|97>>
+    <associate|auto-130|<tuple|A.5.14.1|115>>
+    <associate|auto-131|<tuple|A.5.15|115>>
+    <associate|auto-132|<tuple|A.5.15.1|115>>
+    <associate|auto-133|<tuple|A.5.16|115>>
+    <associate|auto-134|<tuple|A.5.16.1|115>>
+    <associate|auto-135|<tuple|A.5.17|116>>
+    <associate|auto-136|<tuple|A.5.17.1|116>>
+    <associate|auto-137|<tuple|A.6|116>>
+    <associate|auto-138|<tuple|A.6.1|116>>
+    <associate|auto-139|<tuple|A.6.1.1|116>>
+    <associate|auto-14|<tuple|A.1.6.1|97>>
+    <associate|auto-140|<tuple|A.6.2|116>>
+    <associate|auto-141|<tuple|A.6.2.1|116>>
+    <associate|auto-142|<tuple|A.6.3|116>>
+    <associate|auto-143|<tuple|A.6.3.1|116>>
+    <associate|auto-144|<tuple|A.6.4|117>>
+    <associate|auto-145|<tuple|A.6.4.1|117>>
+    <associate|auto-146|<tuple|A.7|117>>
+    <associate|auto-147|<tuple|A.7.1|117>>
+    <associate|auto-148|<tuple|A.7.1.1|117>>
+    <associate|auto-149|<tuple|A.7.2|117>>
+    <associate|auto-15|<tuple|A.1.7|97>>
+    <associate|auto-150|<tuple|A.7.2.1|117>>
+    <associate|auto-151|<tuple|A.7.3|117>>
+    <associate|auto-152|<tuple|A.7.3.1|117>>
+    <associate|auto-153|<tuple|A.7.4|118>>
+    <associate|auto-154|<tuple|A.7.4.1|118>>
+    <associate|auto-155|<tuple|A.7.5|118>>
+    <associate|auto-156|<tuple|A.7.5.1|118>>
+    <associate|auto-157|<tuple|A.8|118>>
+    <associate|auto-158|<tuple|A.8.1|118>>
+    <associate|auto-159|<tuple|A.8.1.1|118>>
+    <associate|auto-16|<tuple|A.1.7.1|97>>
+    <associate|auto-160|<tuple|A.8.2|118>>
+    <associate|auto-161|<tuple|A.8.2.1|119>>
+    <associate|auto-162|<tuple|A.9|119>>
+    <associate|auto-163|<tuple|A.4|119>>
+    <associate|auto-164|<tuple|A.9.1|?>>
+    <associate|auto-165|<tuple|A.9.1.1|?>>
+    <associate|auto-17|<tuple|A.1.8|97>>
+    <associate|auto-18|<tuple|A.1.8.1|97>>
+    <associate|auto-19|<tuple|A.1.9|97>>
+    <associate|auto-2|<tuple|A.1|95>>
+    <associate|auto-20|<tuple|A.1.9.1|97>>
+    <associate|auto-21|<tuple|A.1.10|98>>
+    <associate|auto-22|<tuple|A.1.10.1|98>>
+    <associate|auto-23|<tuple|A.1.11|98>>
+    <associate|auto-24|<tuple|A.1.11.1|98>>
+    <associate|auto-25|<tuple|A.1.12|98>>
+    <associate|auto-26|<tuple|A.1.12.1|98>>
+    <associate|auto-27|<tuple|A.1.13|99>>
+    <associate|auto-28|<tuple|A.1.13.1|99>>
+    <associate|auto-29|<tuple|A.2|99>>
+    <associate|auto-3|<tuple|A.1.1|95>>
+    <associate|auto-30|<tuple|A.2.1|99>>
+    <associate|auto-31|<tuple|A.2.1.1|99>>
+    <associate|auto-32|<tuple|A.2.2|99>>
+    <associate|auto-33|<tuple|A.2.2.1|99>>
+    <associate|auto-34|<tuple|A.2.3|100>>
+    <associate|auto-35|<tuple|A.2.3.1|100>>
+    <associate|auto-36|<tuple|A.2.4|100>>
+    <associate|auto-37|<tuple|A.2.4.1|100>>
+    <associate|auto-38|<tuple|A.2.5|100>>
+    <associate|auto-39|<tuple|A.2.5.1|100>>
+    <associate|auto-4|<tuple|A.1.1.1|95>>
+    <associate|auto-40|<tuple|A.2.6|100>>
+    <associate|auto-41|<tuple|A.2.6.1|101>>
+    <associate|auto-42|<tuple|A.2.7|101>>
+    <associate|auto-43|<tuple|A.2.7.1|101>>
+    <associate|auto-44|<tuple|A.2.8|101>>
+    <associate|auto-45|<tuple|A.2.8.1|101>>
+    <associate|auto-46|<tuple|A.2.9|101>>
+    <associate|auto-47|<tuple|A.2.9.1|101>>
+    <associate|auto-48|<tuple|A.3|102>>
+    <associate|auto-49|<tuple|A.1|102>>
+    <associate|auto-5|<tuple|A.1.2|95>>
+    <associate|auto-50|<tuple|A.2|102>>
+    <associate|auto-51|<tuple|A.3.1|102>>
+    <associate|auto-52|<tuple|A.3.1.1|102>>
+    <associate|auto-53|<tuple|A.3.2|102>>
+    <associate|auto-54|<tuple|A.3.2.1|102>>
+    <associate|auto-55|<tuple|A.3.3|103>>
+    <associate|auto-56|<tuple|A.3.3.1|103>>
+    <associate|auto-57|<tuple|A.3.4|103>>
+    <associate|auto-58|<tuple|A.3.4.1|103>>
+    <associate|auto-59|<tuple|A.3.5|103>>
+    <associate|auto-6|<tuple|A.1.2.1|95>>
+    <associate|auto-60|<tuple|A.3.5.1|103>>
+    <associate|auto-61|<tuple|A.3.6|104>>
+    <associate|auto-62|<tuple|A.3.6.1|104>>
+    <associate|auto-63|<tuple|A.3.7|104>>
+    <associate|auto-64|<tuple|A.3.7.1|104>>
+    <associate|auto-65|<tuple|A.3.8|104>>
+    <associate|auto-66|<tuple|A.3.8.1|105>>
+    <associate|auto-67|<tuple|A.3.8.2|105>>
+    <associate|auto-68|<tuple|A.3.9|105>>
+    <associate|auto-69|<tuple|A.3.9.1|105>>
+    <associate|auto-7|<tuple|A.1.3|96>>
+    <associate|auto-70|<tuple|A.3.10|105>>
+    <associate|auto-71|<tuple|A.3.10.1|105>>
+    <associate|auto-72|<tuple|A.3.11|106>>
+    <associate|auto-73|<tuple|A.3.11.1|106>>
+    <associate|auto-74|<tuple|A.3.12|106>>
+    <associate|auto-75|<tuple|A.3.12.1|106>>
+    <associate|auto-76|<tuple|A.3.13|106>>
+    <associate|auto-77|<tuple|A.3.13.1|106>>
+    <associate|auto-78|<tuple|A.3.14|107>>
+    <associate|auto-79|<tuple|A.3.14.1|107>>
+    <associate|auto-8|<tuple|A.1.3.1|96>>
+    <associate|auto-80|<tuple|A.3.15|107>>
+    <associate|auto-81|<tuple|A.3.15.1|107>>
+    <associate|auto-82|<tuple|A.3.16|107>>
+    <associate|auto-83|<tuple|A.3.16.1|107>>
+    <associate|auto-84|<tuple|A.4|108>>
+    <associate|auto-85|<tuple|A.4.1|108>>
+    <associate|auto-86|<tuple|A.4.1.1|108>>
+    <associate|auto-87|<tuple|A.4.2|108>>
+    <associate|auto-88|<tuple|A.4.2.1|108>>
+    <associate|auto-89|<tuple|A.4.3|108>>
+    <associate|auto-9|<tuple|A.1.4|96>>
+    <associate|auto-90|<tuple|A.4.3.1|108>>
+    <associate|auto-91|<tuple|A.4.4|108>>
+    <associate|auto-92|<tuple|A.4.4.1|108>>
+    <associate|auto-93|<tuple|A.4.5|109>>
+    <associate|auto-94|<tuple|A.4.5.1|109>>
+    <associate|auto-95|<tuple|A.4.6|109>>
+    <associate|auto-96|<tuple|A.4.6.1|109>>
+    <associate|auto-97|<tuple|A.4.7|109>>
+    <associate|auto-98|<tuple|A.4.7.1|109>>
+    <associate|auto-99|<tuple|A.4.8|109>>
+    <associate|defn-child-storage-type|<tuple|A.4|99>>
+    <associate|defn-ecdsa-verify-error|<tuple|A.6|102>>
+    <associate|defn-http-error|<tuple|A.10|110>>
+    <associate|defn-http-status-codes|<tuple|A.9|110>>
+    <associate|defn-key-type-id|<tuple|A.5|102>>
+    <associate|defn-lexicographic-ordering|<tuple|A.3|95>>
+    <associate|defn-local-storage|<tuple|A.8|110>>
+    <associate|defn-logging-log-level|<tuple|A.12|119>>
+    <associate|defn-opaque-network-state|<tuple|A.11|111>>
+    <associate|defn-persistent-storage|<tuple|A.7|110>>
+    <associate|defn-runtime-pointer|<tuple|A.2|95>>
+    <associate|nota-re-api-at-state|<tuple|A.1|95>>
+    <associate|sect-child-storage-api|<tuple|A.2|99>>
+    <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|106>>
+    <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|103>>
+    <associate|sect-ext-crypto-finish-batch-verify|<tuple|A.3.16|107>>
+    <associate|sect-ext-crypto-sr25519-verify|<tuple|A.3.8|104>>
+    <associate|sect-ext-crypto-start-batch-verify|<tuple|A.3.15|107>>
+    <associate|sect-ext-offchain-submit-transaction|<tuple|A.5.2|110>>
+    <associate|sect-ext-storage-changes-root|<tuple|A.1.9|97>>
+    <associate|sect-ext-storage-commit-transaction|<tuple|A.1.13|99>>
+    <associate|sect-ext-storage-rollback-transaction|<tuple|A.1.12|98>>
+    <associate|sect-ext-storage-start-transaction|<tuple|A.1.11|98>>
   </collection>
 </references>
 
@@ -2554,11 +2639,11 @@
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.3>|>
         Table of possible HTTP error types
-      </surround>|<pageref|auto-102>>
+      </surround>|<pageref|auto-100>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|A.4>|>
         Log Levels for the logging interface
-      </surround>|<pageref|auto-159>>
+      </surround>|<pageref|auto-161>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
@@ -2893,7 +2978,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-86>>
 
-      <with|par-left|<quote|1tab>|A.4.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_keccak_512>
+      <with|par-left|<quote|1tab>|A.4.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_sha2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-87>>
 
@@ -2901,7 +2986,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-88>>
 
-      <with|par-left|<quote|1tab>|A.4.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_sha2_256>
+      <with|par-left|<quote|1tab>|A.4.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-89>>
 
@@ -2909,7 +2994,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-90>>
 
-      <with|par-left|<quote|1tab>|A.4.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_128>
+      <with|par-left|<quote|1tab>|A.4.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-91>>
 
@@ -2917,7 +3002,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-92>>
 
-      <with|par-left|<quote|1tab>|A.4.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_blake2_256>
+      <with|par-left|<quote|1tab>|A.4.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_64>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-93>>
 
@@ -2925,7 +3010,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-94>>
 
-      <with|par-left|<quote|1tab>|A.4.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_64>
+      <with|par-left|<quote|1tab>|A.4.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_128>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-95>>
 
@@ -2933,7 +3018,7 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-96>>
 
-      <with|par-left|<quote|1tab>|A.4.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_128>
+      <with|par-left|<quote|1tab>|A.4.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_256>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-97>>
 
@@ -2941,244 +3026,252 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-98>>
 
-      <with|par-left|<quote|1tab>|A.4.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_hashing_twox_256>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-99>>
-
-      <with|par-left|<quote|2tab>|A.4.8.1<space|2spc>Version 1 - Prototype
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-100>>
-
       A.5<space|2spc>Offchain <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-101>
+      <no-break><pageref|auto-99>
 
       <with|par-left|<quote|1tab>|A.5.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_is_validator>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-103>>
+      <no-break><pageref|auto-101>>
 
       <with|par-left|<quote|2tab>|A.5.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-104>>
+      <no-break><pageref|auto-102>>
 
       <with|par-left|<quote|1tab>|A.5.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_submit_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-105>>
+      <no-break><pageref|auto-103>>
 
       <with|par-left|<quote|2tab>|A.5.2.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-106>>
+      <no-break><pageref|auto-104>>
 
       <with|par-left|<quote|1tab>|A.5.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_network_state>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-107>>
+      <no-break><pageref|auto-105>>
 
       <with|par-left|<quote|2tab>|A.5.3.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-108>>
+      <no-break><pageref|auto-106>>
 
       <with|par-left|<quote|1tab>|A.5.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_timestamp>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-109>>
+      <no-break><pageref|auto-107>>
 
       <with|par-left|<quote|2tab>|A.5.4.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-110>>
+      <no-break><pageref|auto-108>>
 
       <with|par-left|<quote|1tab>|A.5.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_sleep_until>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-111>>
+      <no-break><pageref|auto-109>>
 
       <with|par-left|<quote|2tab>|A.5.5.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-112>>
+      <no-break><pageref|auto-110>>
 
       <with|par-left|<quote|1tab>|A.5.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_random_seed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-113>>
+      <no-break><pageref|auto-111>>
 
       <with|par-left|<quote|2tab>|A.5.6.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-114>>
+      <no-break><pageref|auto-112>>
 
       <with|par-left|<quote|1tab>|A.5.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-115>>
+      <no-break><pageref|auto-113>>
 
       <with|par-left|<quote|2tab>|A.5.7.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-116>>
+      <no-break><pageref|auto-114>>
 
-      <with|par-left|<quote|1tab>|A.5.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_compare_and_set>
+      <with|par-left|<quote|1tab>|A.5.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_clear>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-117>>
+      <no-break><pageref|auto-115>>
 
       <with|par-left|<quote|2tab>|A.5.8.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-118>>
+      <no-break><pageref|auto-116>>
 
-      <with|par-left|<quote|1tab>|A.5.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_get>
+      <with|par-left|<quote|1tab>|A.5.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_compare_and_set>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-119>>
+      <no-break><pageref|auto-117>>
 
       <with|par-left|<quote|2tab>|A.5.9.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-120>>
+      <no-break><pageref|auto-118>>
 
-      <with|par-left|<quote|1tab>|A.5.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_start>
+      <with|par-left|<quote|1tab>|A.5.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_local_storage_get>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-121>>
+      <no-break><pageref|auto-119>>
 
       <with|par-left|<quote|2tab>|A.5.10.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-122>>
+      <no-break><pageref|auto-120>>
 
-      <with|par-left|<quote|1tab>|A.5.11<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_add_header>
+      <with|par-left|<quote|1tab>|A.5.11<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_start>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-123>>
+      <no-break><pageref|auto-121>>
 
       <with|par-left|<quote|2tab>|A.5.11.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-124>>
+      <no-break><pageref|auto-122>>
 
-      <with|par-left|<quote|1tab>|A.5.12<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_write_body>
+      <with|par-left|<quote|1tab>|A.5.12<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_add_header>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-125>>
+      <no-break><pageref|auto-123>>
 
       <with|par-left|<quote|2tab>|A.5.12.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-124>>
+
+      <with|par-left|<quote|1tab>|A.5.13<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_request_write_body>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-125>>
+
+      <with|par-left|<quote|2tab>|A.5.13.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-126>>
 
-      <with|par-left|<quote|1tab>|A.5.13<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_wait>
+      <with|par-left|<quote|1tab>|A.5.14<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_wait>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-127>>
 
-      <with|par-left|<quote|2tab>|A.5.13.1<space|2spc>Version 1- Prototype
+      <with|par-left|<quote|2tab>|A.5.14.1<space|2spc>Version 1- Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-128>>
 
-      <with|par-left|<quote|1tab>|A.5.14<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_headers>
+      <with|par-left|<quote|1tab>|A.5.15<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_headers>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-129>>
 
-      <with|par-left|<quote|2tab>|A.5.14.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.5.15.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-130>>
 
-      <with|par-left|<quote|1tab>|A.5.15<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_read_body>
+      <with|par-left|<quote|1tab>|A.5.16<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_http_response_read_body>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-131>>
 
-      <with|par-left|<quote|2tab>|A.5.15.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.5.16.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-132>>
 
-      A.6<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-133>
+      <with|par-left|<quote|1tab>|A.5.17<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_offchain_set_authorized_nodes>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-133>>
 
-      <with|par-left|<quote|1tab>|A.6.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_root>
+      <with|par-left|<quote|2tab>|A.5.17.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-134>>
 
-      <with|par-left|<quote|2tab>|A.6.1.1<space|2spc>Version 1 - Prototype
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-135>>
+      A.6<space|2spc>Trie <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-135>
 
-      <with|par-left|<quote|1tab>|A.6.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_ordered_root>
+      <with|par-left|<quote|1tab>|A.6.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-136>>
 
-      <with|par-left|<quote|2tab>|A.6.2.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.6.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-137>>
 
-      <with|par-left|<quote|1tab>|A.6.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_keccak_256_root>
+      <with|par-left|<quote|1tab>|A.6.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_blake2_256_ordered_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-138>>
 
-      <with|par-left|<quote|2tab>|A.6.3.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.6.2.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-139>>
 
-      <with|par-left|<quote|1tab>|A.6.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_keccak_256_ordered_root>
+      <with|par-left|<quote|1tab>|A.6.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_keccak_256_root>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-140>>
 
-      <with|par-left|<quote|2tab>|A.6.4.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.6.3.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-141>>
 
-      A.7<space|2spc>Miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-142>
+      <with|par-left|<quote|1tab>|A.6.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_trie_keccak_256_ordered_root>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-142>>
 
-      <with|par-left|<quote|1tab>|A.7.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_chain_id>
+      <with|par-left|<quote|2tab>|A.6.4.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-143>>
 
-      <with|par-left|<quote|2tab>|A.7.1.1<space|2spc>Version 1 - Prototype
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-144>>
+      A.7<space|2spc>Miscellaneous <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-144>
 
-      <with|par-left|<quote|1tab>|A.7.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_num>
+      <with|par-left|<quote|1tab>|A.7.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_chain_id>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-145>>
 
-      <with|par-left|<quote|2tab>|A.7.2.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.7.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-146>>
 
-      <with|par-left|<quote|1tab>|A.7.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_utf8>
+      <with|par-left|<quote|1tab>|A.7.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_num>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-147>>
 
-      <with|par-left|<quote|2tab>|A.7.3.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.7.2.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-148>>
 
-      <with|par-left|<quote|1tab>|A.7.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_hex>
+      <with|par-left|<quote|1tab>|A.7.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_utf8>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-149>>
 
-      <with|par-left|<quote|2tab>|A.7.4.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.7.3.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-150>>
 
-      <with|par-left|<quote|1tab>|A.7.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_runtime_version>
+      <with|par-left|<quote|1tab>|A.7.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_print_hex>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-151>>
 
-      <with|par-left|<quote|2tab>|A.7.5.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.7.4.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-152>>
 
-      A.8<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-153>
+      <with|par-left|<quote|1tab>|A.7.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_misc_runtime_version>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-153>>
 
-      <with|par-left|<quote|1tab>|A.8.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_malloc>
+      <with|par-left|<quote|2tab>|A.7.5.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-154>>
 
-      <with|par-left|<quote|2tab>|A.8.1.1<space|2spc>Version 1 - Prototype
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-155>>
+      A.8<space|2spc>Allocator <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-155>
 
-      <with|par-left|<quote|1tab>|A.8.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_free>
+      <with|par-left|<quote|1tab>|A.8.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_malloc>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-156>>
 
-      <with|par-left|<quote|2tab>|A.8.2.1<space|2spc>Version 1 - Prototype
+      <with|par-left|<quote|2tab>|A.8.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-157>>
 
+      <with|par-left|<quote|1tab>|A.8.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_allocator_free>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-158>>
+
+      <with|par-left|<quote|2tab>|A.8.2.1<space|2spc>Version 1 - Prototype
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-159>>
+
       A.9<space|2spc>Logging <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-158>
+      <no-break><pageref|auto-160>
 
       <with|par-left|<quote|1tab>|A.9.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ext_logging_log>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-160>>
+      <no-break><pageref|auto-162>>
 
       <with|par-left|<quote|2tab>|A.9.1.1<space|2spc>Version 1 - Prototype
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-161>>
+      <no-break><pageref|auto-163>>
     </associate>
   </collection>
 </auxiliary>
