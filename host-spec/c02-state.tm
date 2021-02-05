@@ -410,16 +410,9 @@
   children as well as on its corresponding data in the state storage. This
   recursive dependancy is encompassed into the subvalue part of the node
   value which recursively depends on the Merkle value of its
-  children.<version-old| Additionally, as Section
-  <reference|sect-child-trie-structure> clarifies, the Merkle proof of each
-  <strong|child trie> must be updated first before the final Polkadot state
-  root can be calculated.|<version-suppressed>>
-
-  <\version-old>
-    \;
-  <|version-old>
-    <version-suppressed>
-  </version-old>
+  children. Additionally, as Section <reference|sect-child-trie-structure> 
+  clarifies, the Merkle proof of each <strong|child trie> must be updated first
+  before the final Polkadot state root can be calculated.
 
   We use the auxilary function introduced in Definition
   <reference|defn-children-bitmap> to encode and decode information stored in
