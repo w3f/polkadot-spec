@@ -30,7 +30,7 @@ jobs:
         default: true
         profile: minimal
     - name: Cache cargo registry and index
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.4
       with:
         path: |
           ~/.cargo/registry
@@ -38,7 +38,7 @@ jobs:
         key: cargo-cache-adapter-substrate-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
         restore-keys: cargo-cache-adapter-substrate-
     - name: Cache cargo build ouput
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.4
       with:
         path: test/adapters/substrate/target
         key: cargo-build-adapter-substrate-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/adapters/substrate/Cargo.lock') }}
@@ -60,7 +60,7 @@ jobs:
       with:
         submodules: true
     - name: Cache hunter packages
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.4
       with:
         path: ~/.hunter
         key: hunter-adapter-kagome-${{ hashFiles('test/adapters/kagome/CMakeLists.txt') }}
@@ -85,7 +85,7 @@ jobs:
       with:
         submodules: true
     - name: Cache go modules
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.4
       with:
         path: ~/go/pkg/mod
         key: go-mod-adapter-gossamer-${{ hashFiles('test/adapters/gossamer/go.sum') }}
@@ -118,7 +118,7 @@ jobs:
         default: true
         profile: minimal
     - name: Cache cargo registry and index
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.4
       with:
         path: |
           ~/.cargo/registry
@@ -126,7 +126,7 @@ jobs:
         key: cargo-cache-runtime-hostapi-${{ hashFiles('test/runtimes/hostapi/Cargo.lock') }}
         restore-keys: cargo-cache-runtime-hostapi-
     - name: Cache cargo build ouput
-      uses: actions/cache@v2
+      uses: actions/cache@v2.1.4
       with:
         path: test/runtimes/hostapi/target
         key: cargo-build-runtime-hostapi-${{ steps.rustup.outputs.rustc_hash }}-${{ hashFiles('test/runtimes/hostapi/Cargo.lock') }}
