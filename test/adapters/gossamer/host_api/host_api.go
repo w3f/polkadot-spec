@@ -20,17 +20,19 @@ package host_api
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 	"strconv"
+
+	"github.com/ChainSafe/chaindb"
 
 	"github.com/ChainSafe/gossamer/lib/keystore"
 	"github.com/ChainSafe/gossamer/lib/runtime"
 	"github.com/ChainSafe/gossamer/lib/runtime/storage"
 	"github.com/ChainSafe/gossamer/lib/runtime/wasmer"
 	"github.com/ChainSafe/gossamer/lib/runtime/wasmtime"
-	"github.com/ChainSafe/gossamer/lib/trie"
 )
 
 // #include <errno.h>
@@ -56,20 +58,6 @@ func GetRuntimePath() string {
 		panic("failed to get current working directory")
 	}
 	return path.Join(dir, RELATIVE_WASM_ADAPTER_PATH)
-}
-
-// Create in-memory trie storage
-func GetTestStorage() *storage.TrieState {
-	store, err := storage.NewTrieState(trie.NewEmptyTrie())
-	if err != nil {
-		fmt.Println("Failed initialize storage: ", err)
-		os.Exit(1)
-	}
-
-	store.Set([]byte(":code"), []byte{})
-	store.Set([]byte(":heappages"), []byte{8, 0, 0, 0, 0, 0, 0, 0})
-
-	return store
 }
 
 // Main hostapi test argument parser and executor
@@ -98,14 +86,42 @@ func ProcessHostApiCommand(args []string) {
 	function := *functionTextPtr
 	inputs   := strings.Split(*inputTextPtr, ",")
 
-	// Initialize runtime environment...
+	// Initialize storage
+	tempdir, err := ioutil.TempDir("", "gossamer-adapter-*")
+	if err != nil {
+		fmt.Println("Failed to initialize tempdir: ", err)
+		os.Exit(1)
+	}
+	defer os.RemoveAll(tempdir)
+
+	cfg := &chaindb.Config{
+		DataDir:  tempdir,
+		InMemory: true,
+	}
+
+	db, err := chaindb.NewBadgerDB(cfg)
+	if err != nil {
+		fmt.Println("Failed to initialize database: ", err)
+		os.Exit(1)
+	}
+
+	store, err := storage.NewTrieState(db, nil)
+	if err != nil {
+		fmt.Println("Failed to initialize storage: ", err)
+		os.Exit(1)
+	}
+
+	store.Set([]byte(":code"), []byte{})
+	store.Set([]byte(":heappages"), []byte{8, 0, 0, 0, 0, 0, 0, 0})
+
+	// Initialize runtime environment..
 	var rtm runtime.Instance
 	if *wasmtimeBoolPtr {
 		// ... using wasmtime
 		cfg := &wasmtime.Config{
 			Imports: wasmtime.ImportNodeRuntime,
 		}
-		cfg.Storage = GetTestStorage()
+		cfg.Storage = store
 		cfg.Keystore = keystore.NewGenericKeystore("test")
 		cfg.LogLvl = 2 // = Warn
 
@@ -121,7 +137,7 @@ func ProcessHostApiCommand(args []string) {
 		cfg := &wasmer.Config{
 			Imports: wasmer.ImportsNodeRuntime,
 		}
-		cfg.Storage = GetTestStorage()
+		cfg.Storage = store
 		cfg.Keystore = keystore.NewGenericKeystore("test")
 		cfg.LogLvl = 2 // = Warn
 
