@@ -19,7 +19,6 @@ package host_api
 
 import (
 	"fmt"
-	"os"
 	"bytes"
 
 	"github.com/ChainSafe/gossamer/lib/common/optional"
@@ -30,24 +29,21 @@ import (
 // -- Helpers --
 
 // Helper function to call rtm_ext_default_child_storage_set_version_1
-func child_storage_set(r runtime.Instance, child []byte, key []byte, value []byte) {
+func child_storage_set(r runtime.Instance, child []byte, key []byte, value []byte) error {
 	// Encode inputs
 	child_enc, err := scale.Encode(child)
 	if err != nil {
-		fmt.Println("Encoding child failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding child failed", err}
 	}
 
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding key failed", err}
 	}
 
 	value_enc, err := scale.Encode(value)
 	if err != nil {
-		fmt.Println("Encoding value failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding value failed", err}
 	}
 
 	args_enc := append(append(child_enc, key_enc...), value_enc...)
@@ -55,76 +51,83 @@ func child_storage_set(r runtime.Instance, child []byte, key []byte, value []byt
 	// Set key to value
 	_, err = r.Exec("rtm_ext_default_child_storage_set_version_1", args_enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed", err}
 	}
+
+	return nil
 }
 
 // Helper function to call rtm_ext_default_child_storage_get_version_1
-func child_storage_get(r runtime.Instance, child []byte, key []byte) *optional.Bytes {
+func child_storage_get(r runtime.Instance, child []byte, key []byte) (*optional.Bytes, error) {
 	// Encode inputs
 	child_enc, err := scale.Encode(child)
 	if err != nil {
-		fmt.Println("Encoding child failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Encoding child failed", err}
 	}
 
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Encoding key failed", err}
 	}
 
 	// Retrieve key
 	value_enc, err := r.Exec("rtm_ext_default_child_storage_get_version_1", append(child_enc, key_enc...))
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Execution failed", err}
 	}
 
 	value_opt, err := scale.Decode(value_enc, &optional.Bytes{})
 	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Decoding value failed", err}
 	}
-	return value_opt.(*optional.Bytes)
+	return value_opt.(*optional.Bytes), nil
 }
 
 // -- Tests --
 
 // Test for rtm_ext_child_storage_set_version_1 and rtm_ext_child_storage_get_version_1
-func test_child_storage_set_get(r runtime.Instance, child1 string, child2 string, key string, value string) {
+func test_child_storage_set_get(r runtime.Instance, child1 string, child2 string, key string, value string) error {
 	// Get invalid key
-	none1 := child_storage_get(r, []byte(child1), []byte(key))
+	none1, err := child_storage_get(r, []byte(child1), []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if none1.Exists() {
-		fmt.Println("Child1/Key is not empty")
-		os.Exit(1)
+		return newTestFailure("Child1/Key is not empty")
 	}
 
 	// Set key to value
-	child_storage_set(r, []byte(child1), []byte(key), []byte(value))
+	err = child_storage_set(r, []byte(child1), []byte(key), []byte(value))
+	if err != nil {
+		return err
+	}
 
 	// Get invalid key (wrong child key)
-	none2 := child_storage_get(r, []byte(child2), []byte(key))
+	none2, err := child_storage_get(r, []byte(child2), []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if none2.Exists() {
-		fmt.Println("Child2/Key is not empty")
-		os.Exit(1)
+		return newTestFailure("Child2/Key is not empty")
 	}
 
 	// Get valid key
-	some := child_storage_get(r, []byte(child1), []byte(key))
+	some, err := child_storage_get(r, []byte(child1), []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if !some.Exists() {
-		fmt.Println("Child1/Key is not set")
-		os.Exit(1)
+		return newTestFailure("Child1/Key is not set")
 	}
 
 	if !bytes.Equal(some.Value(), []byte(value)) {
-		fmt.Printf("Value is different: %s\n", some.Value())
-		os.Exit(1)
+		return newTestFailuref("Value is different: %s", some.Value())
 	}
 
 	fmt.Printf("%s\n", some.Value())
+
+	return nil
 }

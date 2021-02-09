@@ -20,7 +20,6 @@ package host_api
 import (
 	"bytes"
 	"fmt"
-	"os"
 	"strings"
 
 	"github.com/ChainSafe/gossamer/lib/common/optional"
@@ -31,71 +30,64 @@ import (
 // -- Helpers --
 
 // Helper function to call rtm_ext_storage_set_version_1
-func storage_set(r runtime.Instance, key []byte, value []byte) {
+func storage_set(r runtime.Instance, key []byte, value []byte) error {
 	// Encode inputs
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding key failed", err}
 	}
 
 	value_enc, err := scale.Encode(value)
 	if err != nil {
-		fmt.Println("Encoding value failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding value failed", err}
 	}
 
 	// Set key to value
 	_, err = r.Exec("rtm_ext_storage_set_version_1", append(key_enc, value_enc...))
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed", err}
 	}
+
+	return nil
 }
 
 // Helper function to call rtm_ext_storage_get_version_1
-func storage_get(r runtime.Instance, key []byte) *optional.Bytes {
+func storage_get(r runtime.Instance, key []byte) (*optional.Bytes, error) {
 	// Encode inputs
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Encoding key failed", err}
 	}
 
 	// Retrieve key
 	value_enc, err := r.Exec("rtm_ext_storage_get_version_1", key_enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Execution failed", err}
 	}
 
 	value_opt, err := scale.Decode(value_enc, &optional.Bytes{})
 	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Decoding value failed", err}
 	}
-	return value_opt.(*optional.Bytes)
+	return value_opt.(*optional.Bytes), nil
 }
 
 // Helper function to call rtm_ext_storage_read_version_1
-func storage_read(r runtime.Instance, key []byte, offset uint32, length uint32) *optional.Bytes {
+func storage_read(r runtime.Instance, key []byte, offset uint32, length uint32) (*optional.Bytes, error) {
 	// Encode inputs
 	key_enc, err := scale.Encode([]byte(key))
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Encoding key failed", err}
 	}
 
 	offset_enc, err := scale.Encode(offset)
 	if err != nil {
-		fmt.Println("Encoding offset failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Encoding offset failed", err}
 	}
 
 	length_enc, err := scale.Encode(length)
 	if err != nil {
-		fmt.Println("Encoding length failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Encoding length failed", err}
 	}
 
 	args_enc := append(append(key_enc, offset_enc...), length_enc...)
@@ -103,182 +95,191 @@ func storage_read(r runtime.Instance, key []byte, offset uint32, length uint32) 
 	// Check that key has not been set
 	value_enc, err := r.Exec("rtm_ext_storage_read_version_1", args_enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Execution failed", err}
 	}
 
 	value_opt, err := scale.Decode(value_enc, &optional.Bytes{})
 	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Decoding value failed", err}
 	}
-	return value_opt.(*optional.Bytes)
+	return value_opt.(*optional.Bytes), nil
 }
 
 // Helper function to call rtm_ext_storage_clear_version_1
-func storage_clear(r runtime.Instance, key []byte) {
+func storage_clear(r runtime.Instance, key []byte) error {
 	// Encode inputs
 	key_enc, err := scale.Encode([]byte(key))
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding key failed", err}
 	}
 
 	// Clear storage key
 	_, err = r.Exec("rtm_ext_storage_clear_version_1", key_enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed", err}
 	}
+
+	return nil
 }
 
 // Helper function to call rtm_ext_storage_exists_version_1
-func storage_exists(r runtime.Instance, key []byte) uint32 {
+func storage_exists(r runtime.Instance, key []byte) (uint32, error) {
 	// Encode inputs
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return 0, AdapterError{"Encoding key failed", err}
 	}
 
 	// Retrieve status
 	exists_enc, err := r.Exec("rtm_ext_storage_exists_version_1", key_enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return 0, AdapterError{"Execution failed", err}
 	}
 
 	exists, err := scale.Decode(exists_enc, uint32(0))
 	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
+		return 0, AdapterError{"Decoding value failed", err}
 	}
-	return exists.(uint32)
+	return exists.(uint32), nil
 }
 
 // Helper function to call rtm_ext_storage_append_version_1
-func storage_append(r runtime.Instance, key []byte, value []byte) {
+func storage_append(r runtime.Instance, key []byte, value []byte) error {
 	// Encode inputs
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding key failed", err}
 	}
 
 	value_enc, err := scale.Encode(value)
 	if err != nil {
-		fmt.Println("Encoding value failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding value failed", err}
 	}
 
 	// Append value to key
 	_, err = r.Exec("rtm_ext_storage_append_version_1", append(key_enc, value_enc...))
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed", err}
 	}
+
+	return nil
 }
 
 // Helper function to call rtm_ext_storage_root_version_1
-func storage_root(r runtime.Instance) []byte {
+func storage_root(r runtime.Instance) ([]byte, error) {
 	// Retrieve current root
 	root_enc, err := r.Exec("rtm_ext_storage_root_version_1", []byte{})
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Execution failed", err}
 	}
 
 	root, err := scale.Decode(root_enc, []byte{})
 	if err != nil {
-		fmt.Println("Decoding failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Decoding failed", err}
 	}
-	return root.([]byte)
+	return root.([]byte), nil
 }
 
 // Helper function to call rtm_ext_storage_next_key_version_1
-func storage_next_key(r runtime.Instance, key []byte) *optional.Bytes {
+func storage_next_key(r runtime.Instance, key []byte) (*optional.Bytes, error) {
 	// Encode inputs
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		fmt.Println("Encoding key failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Encoding key failed", err}
 	}
 
 	// Retrieve key
 	value_enc, err := r.Exec("rtm_ext_storage_next_key_version_1", key_enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Execution failed", err}
 	}
 
 	value_opt, err := scale.Decode(value_enc, &optional.Bytes{})
 	if err != nil {
-		fmt.Println("Decoding next key failed: ", err)
-		os.Exit(1)
+		return nil, AdapterError{"Decoding next key failed", err}
 	}
-	return value_opt.(*optional.Bytes)
+	return value_opt.(*optional.Bytes), nil
 }
 
 // -- Tests --
 
 // Test for initial state of storage
-func test_storage_init(r runtime.Instance) {
+func test_storage_init(r runtime.Instance) error {
 	// Retrieve and print storage root
-	hash := storage_root(r)
+	hash, err := storage_root(r)
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf("%x\n", hash[:])
+
+	return nil
 }
 
 // Test for rtm_ext_storage_set_version_1 and rtm_ext_storage_get_version_1
-func test_storage_set_get(r runtime.Instance, key string, value string) {
+func test_storage_set_get(r runtime.Instance, key string, value string) error {
 	// Get invalid key
-	none := storage_get(r, []byte(key))
+	none, err := storage_get(r, []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if none.Exists() {
-		fmt.Printf("Key already exists: %s\n", none.Value())
-		os.Exit(1)
+		return newTestFailuref("Key already exists: %s", none.Value())
 	}
 
 	// Set key to value
-	storage_set(r, []byte(key), []byte(value))
+	err = storage_set(r, []byte(key), []byte(value))
+	if err != nil {
+		return err
+	}
 
 	// Get valid key
-	some := storage_get(r, []byte(key))
+	some, err := storage_get(r, []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if !some.Exists() {
-		fmt.Println("Key is missing")
-		os.Exit(1)
+		return newTestFailure("Key is missing")
 	}
 
 	if !bytes.Equal(some.Value(), []byte(value)) {
-		fmt.Printf("Value is different: %s\n", some.Value())
-		os.Exit(1)
+		return newTestFailuref("Value is different: %s", some.Value())
 	}
 
 	// Print result
 	fmt.Printf("%s\n", some.Value())
+
+	return nil
 }
 
 // Test for rtm_ext_storage_read_version_1
-func test_storage_read(r runtime.Instance, key string, value string, offset uint32, length uint32) {
+func test_storage_read(r runtime.Instance, key string, value string, offset uint32, length uint32) error {
 	// Check that key has not been set
-	none := storage_read(r, []byte(key), offset, length)
+	none, err := storage_read(r, []byte(key), offset, length)
+	if err != nil {
+		return err
+	}
 
 	if none.Exists() {
-		fmt.Printf("Key already exists: %s\n", none.Value())
-		os.Exit(1)
+		return newTestFailuref("Key already exists: %s", none.Value())
 	}
 
 	// Add data to storage
-	storage_set(r, []byte(key), []byte(value))
+	err = storage_set(r, []byte(key), []byte(value))
+	if err != nil {
+		return err
+	}
 
 	// Retrieve and check returned data
-	some := storage_read(r, []byte(key), offset, length)
+	some, err := storage_read(r, []byte(key), offset, length)
+	if err != nil {
+		return err
+	}
 
 	if !some.Exists() {
-		fmt.Println("Key is missing")
-		os.Exit(1)
+		return newTestFailure("Key is missing")
 	}
 
 	if int(offset) < len(value) {
@@ -289,295 +290,366 @@ func test_storage_read(r runtime.Instance, key string, value string, offset uint
 		expected_value := value[offset:int(offset)+expected_length];
 
 		if !bytes.Equal(some.Value(), []byte(expected_value)) {
-			fmt.Printf("Value is different: %s\n", some.Value())
-			os.Exit(1)
+			return newTestFailuref("Value is different: %s", some.Value())
 		}
 	} else if len(some.Value()) != 0 {
-		fmt.Printf("Value is not empty: %s\n", some.Value())
-		os.Exit(1)
+		return newTestFailuref("Value is not empty: %s", some.Value())
 	}
 
 	fmt.Printf("%s\n", some.Value())
+
+	return nil
 }
 
 // Test for rtm_ext_storage_clear_version_1
-func test_storage_clear(r runtime.Instance, key string, value string) {
+func test_storage_clear(r runtime.Instance, key string, value string) error {
 	// Insert data
-	storage_set(r, []byte(key), []byte(value))
+	err := storage_set(r, []byte(key), []byte(value))
+	if err != nil {
+		return err
+	}
 
 	// Retrieve and check stored data
-	some := storage_get(r, []byte(key))
+	some, err := storage_get(r, []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if !some.Exists() {
-		fmt.Println("Key is missing")
-		os.Exit(1)
+		return newTestFailure("Key is missing")
 	}
 
 	if !bytes.Equal(some.Value(), []byte(value)) {
-		fmt.Printf("Value is different: %s\n", some.Value())
-		os.Exit(1)
+		return newTestFailuref("Value is different: %s", some.Value())
 	}
 
 	// Clear data
-	storage_clear(r, []byte(key))
+	err = storage_clear(r, []byte(key))
+	if err != nil {
+		return err
+	}
 
 	// Retrieve and check cleared data
-	none := storage_get(r, []byte(key))
+	none, err := storage_get(r, []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if none.Exists() {
-		fmt.Printf("Key was not cleared: %s\n", none.Value())
-		os.Exit(1)
+		return newTestFailuref("Key was not cleared: %s", none.Value())
 	}
+
+	return nil
 }
 
 // Test for rtm_ext_storage_exists_version_1
-func test_storage_exists(r runtime.Instance, key string, value string) {
+func test_storage_exists(r runtime.Instance, key string, value string) error {
 	// Check for no data
-	none := storage_exists(r, []byte(key))
+	none, err := storage_exists(r, []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if none != 0 {
-		fmt.Println("Key already exists")
-		os.Exit(1)
+		return newTestFailure("Key already exists")
 	}
 
 	// Insert data
-	storage_set(r, []byte(key), []byte(value))
+	err = storage_set(r, []byte(key), []byte(value))
+	if err != nil {
+		return err
+	}
 
 	// Check for data
-	some := storage_exists(r, []byte(key))
+	some, err := storage_exists(r, []byte(key))
+	if err != nil {
+		return err
+	}
 
 	if some != 1 {
-		fmt.Println("Key does not exists")
-		os.Exit(1)
+		return newTestFailure("Key does not exists")
 	}
 
 	// Print result
 	fmt.Println("true")
+
+	return nil
 }
 
 // Test for rtm_ext_storage_clear_prefix_version_1
-func test_storage_clear_prefix(r runtime.Instance, prefix string, key1 string, value1 string, key2 string, value2 string) {
+func test_storage_clear_prefix(r runtime.Instance, prefix string, key1 string, value1 string, key2 string, value2 string) error {
 	// Insert data
-	storage_set(r, []byte(key1), []byte(value1))
-	storage_set(r, []byte(key2), []byte(value2))
+	err := storage_set(r, []byte(key1), []byte(value1))
+	if err != nil {
+		return err
+	}
+	err = storage_set(r, []byte(key2), []byte(value2))
+	if err != nil {
+		return err
+	}
 
 	// Clear prefix
 	prefix_enc, err := scale.Encode([]byte(prefix))
 	if err != nil {
-		fmt.Println("Encoding prefix failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding prefix failed: ", err}
 	}
 
 	_, err = r.Exec("rtm_ext_storage_clear_prefix_version_1", prefix_enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed: ", err}
 	}
 
 	// Check if first key was handled correctly
-	result1 := storage_get(r, []byte(key1))
+	result1, err := storage_get(r, []byte(key1))
+	if err != nil {
+		return err
+	}
 
 	if strings.HasPrefix(key1, prefix) {
 		if result1.Exists() {
-			fmt.Println("Key1 was not deleted")
-			os.Exit(1)
+			return newTestFailure("Key1 was not deleted")
 		}
 	} else {
 		if !result1.Exists() {
-			fmt.Println("Key1 was deleted")
-			os.Exit(1)
+			return newTestFailure("Key1 was deleted")
 		}
 
 		if !bytes.Equal(result1.Value(), []byte(value1)) {
-			fmt.Printf("Value1 is different: %s\n", result1.Value())
-			os.Exit(1)
+			return newTestFailuref("Value1 is different: %s", result1.Value())
 		}
 	}
 
 	// Check if second key was handled correctly
-	result2 := storage_get(r, []byte(key2))
+	result2, err := storage_get(r, []byte(key2))
+	if err != nil {
+		return err
+	}
 
 	if strings.HasPrefix(key2, prefix) {
 		if result2.Exists() {
-			fmt.Println("Key2 was not deleted")
-			os.Exit(1)
+			return newTestFailure("Key2 was not deleted")
 		}
 	} else {
 		if !result2.Exists() {
-			fmt.Println("Key2 was deleted")
-			os.Exit(1)
+			return newTestFailure("Key2 was deleted")
 		}
 
 		if !bytes.Equal(result2.Value(), []byte(value2)) {
-			fmt.Printf("Value2 is different: %s\n", result2.Value())
-			os.Exit(1)
+			return newTestFailuref("Value2 is different: %s", result2.Value())
 		}
 	}
+
+	return nil
 }
 
 // Test for rtm_ext_storage_append_version_1
-func test_storage_append(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) {
+func test_storage_append(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) error {
 	// Encode inputs
 	value1_enc, err := scale.Encode(value1)
 	if err != nil {
-		fmt.Println("Encoding value1 failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding value1 failed", err}
 	}
 
 	value2_enc, err := scale.Encode(value2)
 	if err != nil {
-		fmt.Println("Encoding value2 failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding value2 failed", err}
 	}
 
 	// Check that key1 is unset
-	none1 := storage_get(r, []byte(key1))
+	none1, err := storage_get(r, []byte(key1))
+	if err != nil {
+		return err
+	}
 
 	if none1.Exists() {
-		fmt.Printf("Key1 already exists: %s\n", none1.Value())
-		os.Exit(1)
+		return newTestFailuref("Key1 already exists: %s", none1.Value())
 	}
 
 	// Insert key1
-	storage_append(r, []byte(key1), []byte(value1_enc))
-	storage_append(r, []byte(key1), []byte(value2_enc))
+	err = storage_append(r, []byte(key1), []byte(value1_enc))
+	if err != nil {
+		return err
+	}
+	err = storage_append(r, []byte(key1), []byte(value2_enc))
+	if err != nil {
+		return err
+	}
 
 	// Check that key2 is unset
-	none2 := storage_get(r, []byte(key2))
+	none2, err := storage_get(r, []byte(key2))
+	if err != nil {
+		return err
+	}
 
 	if none2.Exists() {
-		fmt.Printf("Key2 already exists: %s\n", none2.Value())
-		os.Exit(1)
+		return newTestFailuref("Key2 already exists: %s", none2.Value())
 	}
 
 	// Insert key2
-	storage_append(r, []byte(key2), []byte(value2_enc))
-	storage_append(r, []byte(key2), []byte(value1_enc))
-	storage_append(r, []byte(key2), []byte(value2_enc))
-	storage_append(r, []byte(key2), []byte(value1_enc))
+	err = storage_append(r, []byte(key2), []byte(value2_enc))
+	if err != nil {
+		return err
+	}
+	err = storage_append(r, []byte(key2), []byte(value1_enc))
+	if err != nil {
+		return err
+	}
+	err = storage_append(r, []byte(key2), []byte(value2_enc))
+	if err != nil {
+		return err
+	}
+	err = storage_append(r, []byte(key2), []byte(value1_enc))
+	if err != nil {
+		return err
+	}
 
 	// Check key1
-	some1_opt := storage_get(r, []byte(key1))
+	some1_opt, err := storage_get(r, []byte(key1))
+	if err != nil {
+		return err
+	}
 
 	if !some1_opt.Exists() {
-		fmt.Println("Key1 not set")
-		os.Exit(1)
+		return newTestFailure("Key1 not set")
 	}
 
 	some1_dec, err := scale.Decode(some1_opt.Value(), []string{})
 	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Decoding value failed", err}
 	}
 	some1 := some1_dec.([]string)
 
 	if some1[0] != value1 || some1[1] != value2 {
-		fmt.Println("Value is different")
-		os.Exit(1)
+		return newTestFailure("Value is different")
 	}
 
 	fmt.Println(strings.Join(some1, ";"))
 
 	// Check key2
-	some2_opt := storage_get(r, []byte(key2))
+	some2_opt, err := storage_get(r, []byte(key2))
+	if err != nil {
+		return err
+	}
 
 	if !some2_opt.Exists() {
-		fmt.Println("Key2 not set")
-		os.Exit(1)
+		return newTestFailure("Key2 not set")
 	}
 
 	some2_dec, err := scale.Decode(some2_opt.Value(), []string{})
 	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Decoding value failed", err}
 	}
 	some2 := some2_dec.([]string)
 
 	if some2[0] != value2 || some2[1] != value1 || some2[2] != value2 || some2[3] != value1 {
-		fmt.Printf("Key2 not set: %s\n", some2_opt.Value())
-		os.Exit(1)
+		return newTestFailuref("Key2 not set: %s", some2_opt.Value())
 	}
 
 	fmt.Println(strings.Join(some2, ";"))
+
+	return nil
 }
 
 // Test for rtm_ext_storage_root_version_1
-func test_storage_root(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) {
+func test_storage_root(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) error {
 	// Insert data
-	storage_set(r, []byte(key1), []byte(value1))
-	storage_set(r, []byte(key2), []byte(value2))
+	err := storage_set(r, []byte(key1), []byte(value1))
+	if err != nil {
+		return err
+	}
+	err = storage_set(r, []byte(key2), []byte(value2))
+	if err != nil {
+		return err
+	}
 
 	// Compute and print storage root hash
-	hash := storage_root(r)
+	hash, err := storage_root(r)
+	if err != nil {
+		return err
+	}
 
 	fmt.Printf("%x\n", hash[:])
+
+	return nil
 }
 
 // Test for rtm_ext_storage_next_key_version_1
-func test_storage_next_key(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) {
+func test_storage_next_key(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) error {
 
 	// No next key available
-	none1 := storage_next_key(r, []byte(key1))
-
-	if none1.Exists() {
-		fmt.Println("Next1 is not empty")
-		os.Exit(1)
+	none1, err := storage_next_key(r, []byte(key1))
+	if err != nil {
+		return err
 	}
 
-	none2 := storage_next_key(r, []byte(key2))
+	if none1.Exists() {
+		return newTestFailure("Next1 is not empty")
+	}
+
+	none2, err := storage_next_key(r, []byte(key2))
+	if err != nil {
+		return err
+	}
 
 	if none2.Exists() {
-		fmt.Println("Next2 is not empty")
-		os.Exit(1)
+		return newTestFailure("Next2 is not empty")
 	}
 
 	// Insert test data
-	storage_set(r, []byte(key1), []byte(value1))
-	storage_set(r, []byte(key2), []byte(value2))
+	err = storage_set(r, []byte(key1), []byte(value1))
+	if err != nil {
+		return err
+	}
+	err = storage_set(r, []byte(key2), []byte(value2))
+	if err != nil {
+		return err
+	}
 
 	// Check next key after key1
-	some1 := storage_next_key(r, []byte(key1))
+	some1, err := storage_next_key(r, []byte(key1))
+	if err != nil {
+		return err
+	}
 
 	if strings.Compare(key1, key2) < 0 {
 		if !some1.Exists() {
-			fmt.Println("Key2 is missing")
-			os.Exit(1)
+			return newTestFailure("Key2 is missing")
 		}
 		next := some1.Value();
 
 		if !bytes.Equal(next, []byte(key2)) {
-			fmt.Printf("Next is not key2: %s\n", next)
-			os.Exit(1)
+			return newTestFailuref("Next is not key2: %s", next)
 		}
 
 		fmt.Printf("%s\n", next);
 	} else {
 		if some1.Exists() {
-			fmt.Println("Next is not empty");
-			os.Exit(1)
+			return newTestFailure("Next is not empty")
 		}
 	}
 
 	// Check next key after key2
-	some2 := storage_next_key(r, []byte(key2))
+	some2, err := storage_next_key(r, []byte(key2))
+	if err != nil {
+		return err
+	}
 
 	if strings.Compare(key2, key1) < 0 {
 		if !some2.Exists() {
-			fmt.Println("Key1 is missing")
-			os.Exit(1)
+			return newTestFailure("Key1 is missing")
 		}
 		next := some2.Value();
 
 		if !bytes.Equal(next, []byte(key1)) {
-			fmt.Printf("Next is not key1: %s\n", next)
-			os.Exit(1)
+			return newTestFailuref("Next is not key1: %s", next)
 		}
 
 		fmt.Printf("%s\n", next);
 	} else {
 		if some2.Exists() {
-			fmt.Println("Next is not empty");
-			os.Exit(1)
+			return newTestFailure("Next is not empty")
 		}
 	}
+
+	return nil
 }

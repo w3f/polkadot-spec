@@ -21,32 +21,30 @@ package host_api
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/ChainSafe/gossamer/lib/runtime"
 	"github.com/ChainSafe/gossamer/lib/scale"
 )
 
 // Simple wrapper to test hash function that input and output byte arrays
-func test_hashing(r runtime.Instance, name string, input string) {
+func test_hashing(r runtime.Instance, name string, input string) error {
 
 	enc, err := scale.Encode([]byte(input))
 	if err != nil {
-		fmt.Println("Encoding failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding failed", err}
 	}
 
 	output, err := r.Exec("rtm_" + name, enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed", err}
 	}
 
 	dec, err := scale.Decode(output, []byte{})
 	if err != nil {
-		fmt.Println("Decoding failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Decoding failed", err}
 	}
 
 	fmt.Printf("%x\n", dec.([]byte)[:])
+
+	return nil
 }

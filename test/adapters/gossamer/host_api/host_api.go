@@ -85,12 +85,26 @@ func ProcessHostApiCommand(args []string) {
 
 	function := *functionTextPtr
 	inputs   := strings.Split(*inputTextPtr, ",")
+	useWasmtime := *wasmtimeBoolPtr
 
+	err := executeHostApiTest(function, inputs, useWasmtime)
+
+	if err != nil {
+		if _, ok := err.(MissingImplementation); ok {
+			fmt.Println("Not implemented: ", function)
+			os.Exit(C.EOPNOTSUPP)
+		}
+		fmt.Println(err)
+		os.Exit(1)
+	}
+}
+
+
+func executeHostApiTest(function string, inputs []string, useWasmtime bool) error {
 	// Initialize storage
 	tempdir, err := ioutil.TempDir("", "gossamer-adapter-*")
 	if err != nil {
-		fmt.Println("Failed to initialize tempdir: ", err)
-		os.Exit(1)
+		return AdapterError{"Failed to initialize tempdir", err}
 	}
 	defer os.RemoveAll(tempdir)
 
@@ -101,14 +115,12 @@ func ProcessHostApiCommand(args []string) {
 
 	db, err := chaindb.NewBadgerDB(cfg)
 	if err != nil {
-		fmt.Println("Failed to initialize database: ", err)
-		os.Exit(1)
+		return AdapterError{"Failed to initialize database", err}
 	}
 
 	store, err := storage.NewTrieState(db, nil)
 	if err != nil {
-		fmt.Println("Failed to initialize storage: ", err)
-		os.Exit(1)
+		return AdapterError{"Failed to initialize storage", err}
 	}
 
 	store.Set([]byte(":code"), []byte{})
@@ -116,7 +128,7 @@ func ProcessHostApiCommand(args []string) {
 
 	// Initialize runtime environment..
 	var rtm runtime.Instance
-	if *wasmtimeBoolPtr {
+	if useWasmtime {
 		// ... using wasmtime
 		cfg := &wasmtime.Config{
 			Imports: wasmtime.ImportNodeRuntime,
@@ -127,10 +139,8 @@ func ProcessHostApiCommand(args []string) {
 
 		r, err := wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
 		if err != nil {
-			fmt.Println("Failed initialize runtime: ", err)
-			os.Exit(1)
+			return AdapterError{"Failed to initialize runtime", err}
 		}
-
 		rtm = r
 	} else {
 		// ... using wasmer
@@ -143,10 +153,8 @@ func ProcessHostApiCommand(args []string) {
 
 		r, err := wasmer.NewInstanceFromFile(GetRuntimePath(), cfg)
 		if err != nil {
-			fmt.Println("Failed initialize runtime: ", err)
-			os.Exit(1)
+			return AdapterError{"Failed to initialize runtime", err}
 		}
-
 		rtm = r
 	}
 
@@ -155,7 +163,7 @@ func ProcessHostApiCommand(args []string) {
 	// test allocator api
 	case "ext_allocator_malloc_version_1",
 	     "ext_allocator_free_version_1":
-		test_allocator_malloc_free(rtm, inputs[0])
+		return test_allocator_malloc_free(rtm, inputs[0])
 
 	// test child storage api
 	//case "ext_default_child_storage_set_version_1":
@@ -187,39 +195,35 @@ func ProcessHostApiCommand(args []string) {
 	     "ext_hashing_twox_64_version_1",
 	     "ext_hashing_twox_128_version_1",
 	     "ext_hashing_twox_256_version_1":
-		test_hashing(rtm, function, inputs[0])
+		return test_hashing(rtm, function, inputs[0])
 
 	// test storage api
 	case "test_storage_init":
-		test_storage_init(rtm)
+		return test_storage_init(rtm)
 	case "ext_storage_set_version_1",
 	     "ext_storage_get_version_1":
-		test_storage_set_get(rtm, inputs[0], inputs[1])
+		return test_storage_set_get(rtm, inputs[0], inputs[1])
 	case "ext_storage_read_version_1":
-		test_storage_read(rtm, inputs[0], inputs[1], ToUint32(inputs[2]), ToUint32(inputs[3]))
+		return test_storage_read(rtm, inputs[0], inputs[1], ToUint32(inputs[2]), ToUint32(inputs[3]))
 	case "ext_storage_clear_version_1":
-		test_storage_clear(rtm, inputs[0], inputs[1])
+		return test_storage_clear(rtm, inputs[0], inputs[1])
 	case "ext_storage_exists_version_1":
-		test_storage_exists(rtm, inputs[0], inputs[1])
+		return test_storage_exists(rtm, inputs[0], inputs[1])
 	case "ext_storage_clear_prefix_version_1":
-		test_storage_clear_prefix(rtm, inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
+		return test_storage_clear_prefix(rtm, inputs[0], inputs[1], inputs[2], inputs[3], inputs[4])
 	case "ext_storage_append_version_1":
-		test_storage_append(rtm, inputs[0], inputs[1], inputs[2], inputs[3])
+		return test_storage_append(rtm, inputs[0], inputs[1], inputs[2], inputs[3])
 	case "ext_storage_root_version_1":
-		test_storage_root(rtm, inputs[0], inputs[1], inputs[2], inputs[3])
+		return test_storage_root(rtm, inputs[0], inputs[1], inputs[2], inputs[3])
 	case "ext_storage_next_key_version_1":
-		test_storage_next_key(rtm, inputs[0], inputs[1], inputs[2], inputs[3])
+		return test_storage_next_key(rtm, inputs[0], inputs[1], inputs[2], inputs[3])
 
 	// test trie api
 	case "ext_trie_blake2_256_root_version_1":
-		test_trie_root(rtm, inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5])
+		return test_trie_root(rtm, inputs[0], inputs[1], inputs[2], inputs[3], inputs[4], inputs[5])
 	case "ext_trie_blake2_256_ordered_root_version_1":
-		test_trie_ordered_root(rtm, inputs[0], inputs[1], inputs[2])
-
-	default:
-		fmt.Println("Not implemented: ", function)
-		os.Exit(C.EOPNOTSUPP)
+		return test_trie_ordered_root(rtm, inputs[0], inputs[1], inputs[2])
 	}
 
-	os.Exit(0)
+	return MissingImplementation{}
 }

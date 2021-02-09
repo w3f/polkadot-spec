@@ -19,21 +19,19 @@ package host_api
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/ChainSafe/gossamer/lib/runtime"
 	"github.com/ChainSafe/gossamer/lib/scale"
 )
 
 
-func test_trie_root(r runtime.Instance, key1 string, value1 string, key2 string, value2 string, key3 string, value3 string) {
+func test_trie_root(r runtime.Instance, key1 string, value1 string, key2 string, value2 string, key3 string, value3 string) error {
 	// Construct and encode input
 	trie := []string{key1, value1, key2, value2, key3, value3}
 
 	trie_enc, err := scale.Encode(trie)
 	if err != nil {
-		fmt.Println("Encoding input failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding input failed", err}
 	}
 
 	// Change encoding to key-value tuples by fixing encoded list length
@@ -43,45 +41,43 @@ func test_trie_root(r runtime.Instance, key1 string, value1 string, key2 string,
 	hash_enc, err := r.Exec("rtm_ext_trie_blake2_256_root_version_1", trie_enc)
 
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed", err}
 	}
 
 	// Decode and print result
 	hash, err := scale.Decode(hash_enc, []byte{})
 	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Decoding value failed", err}
 	}
 
 	fmt.Printf("%x\n", hash.([]byte)[:])
+
+	return nil
 }
 
-func test_trie_ordered_root(r runtime.Instance, value1 string, value2 string, value3 string) {
+func test_trie_ordered_root(r runtime.Instance, value1 string, value2 string, value3 string) error {
 	// Construct and encode input
 	trie := []string{value1, value2, value3}
 
 	trie_enc, err := scale.Encode(trie)
 	if err != nil {
-		fmt.Println("Encoding input failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding input failed", err}
 	}
-
 
 	// Compute ordered root hash
 	hash_enc, err := r.Exec("rtm_ext_trie_blake2_256_ordered_root_version_1", trie_enc)
 
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed", err}
 	}
 
 	// Decode and print result
 	hash, err := scale.Decode(hash_enc, []byte{})
 	if err != nil {
-		fmt.Println("Decoding value failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Decoding value failed", err}
 	}
 
 	fmt.Printf("%x\n", hash.([]byte)[:])
+
+	return nil
 }
