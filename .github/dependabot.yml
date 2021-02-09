@@ -1,7 +1,7 @@
 version: 2
 updates:
 
-  # Submodules (hosts and some adapters)
+  # Submodules (hosts and adapters)
 
   - package-ecosystem: "gitsubmodule"
     directory: "/"
@@ -10,17 +10,7 @@ updates:
     commit-message:
       prefix: "submodule:"
 
-  # Adapters (not handled by submodules)
-
-  - package-ecosystem: "cargo"
-    directory: "/test/adapters/substrate"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "substrate-a:"
-    open-pull-requests-limit: 0
-
-  # Runtimes (not handled by submodules)
+  # Runtimes (not synced with submodules)
 
   - package-ecosystem: "cargo"
     directory: "/test/runtimes/hostapi"
@@ -28,15 +18,6 @@ updates:
       interval: "weekly"
     commit-message:
       prefix: "hostapi-rt:"
-    open-pull-requests-limit: 0
-
-  - package-ecosystem: "cargo"
-    directory: "/test/runtimes/tester"
-    schedule:
-      interval: "weekly"
-    commit-message:
-      prefix: "tester-rt:"
-    open-pull-requests-limit: 0
 
   # GitHub Actions
 
