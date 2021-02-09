@@ -249,7 +249,13 @@ TSWLatexianTemp*
 # generated if using elsarticle.cls
 *.spl
 
-#emacs temp files
+# emacs temp files
 *~
 \#*\#
 \.\#*
+
+# direnv
+.envrc
+
+# nix shell files
+shell.nix
