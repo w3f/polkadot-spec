@@ -19,7 +19,6 @@ package host_api
 
 import (
 	"fmt"
-	"os"
 	"bytes"
 
 	"github.com/ChainSafe/gossamer/lib/runtime"
@@ -27,34 +26,32 @@ import (
 )
 
 // Test for ext_allocator_malloc_version_1 and ext_allocator_free_version_1
-func test_allocator_malloc_free(r runtime.Instance, value string) {
+func test_allocator_malloc_free(r runtime.Instance, value string) error {
 
 	// Encode inputs
 	value_enc, err := scale.Encode([]byte(value))
 	if err != nil {
-		fmt.Println("Encoding value failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Encoding value failed", err}
 	}
 
 	// The Wasm function tests both the allocation and freeing of the buffer
 	result_enc, err := r.Exec("rtm_ext_allocator_malloc_version_1", value_enc)
 	if err != nil {
-		fmt.Println("Execution failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Execution failed", err}
 	}
 
 	// Decode and print output
 	result_dec, err := scale.Decode(result_enc, []byte{})
 	if err != nil {
-		fmt.Println("Decoding result failed: ", err)
-		os.Exit(1)
+		return AdapterError{"Decoding result failed", err}
 	}
 	result := result_dec.([]byte)
 
 	if !bytes.Equal(result, []byte(value)) {
-		fmt.Printf("Value is different: %s\n", result)
-		os.Exit(1)
+		return newTestFailure("Value is different: %s", result)
 	}
 
 	fmt.Printf("%s\n", result)
+
+	return nil
 }
