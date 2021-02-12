@@ -14,22 +14,31 @@
   implementors with pointers to where the these steps are defined. In short
   the following steps should be taken by all bootstraping node:
 
-  <\itemize-dot>
+  <\enumerate>
     <item>The node needs to populate the state storage with the Genesis state
-    which can be obtained from <cite|??>
+    which can be obtained from <cite|??>.
 
-    <item>Using libp2p bootstraping protocol the node connects to the boot
-    nodes to get the address of new peers.
+    <item>Using available <verbatim|libp2p> discovery protocols described in
+    Section <reference|sect-discovery-mechanism> the node finds other peers
+    on Polkadot network. When a node finds a peer, it perform the following
+    steps simultanously:
 
-    <item>get connect to more peers.
+    <\enumerate-roman>
+      <item>The node opens a block annouce stream to each peer found in Step
+      2 as described in Section <reference|sect-annoucing-blocks>. Peers have
+      liberity to accept or reject node's request. It is recommended that the
+      node maintains an active stream counts of about 50 connections.
 
-    <item>The node needs to send block request to receive all blocks and
-    execute each blocks.
-  </itemize-dot>
+      <item>Block Request. The node needs to send block request to receive
+      all blocks and execute each blocks.
+
+      <item>Neighbor packets\ 
+    </enumerate-roman>
+  </enumerate>
 
   Voter node additionally should takes the following steps.\ 
 
-  <\itemize-dot>
+  <\enumerate>
     <item>Generate session keys and post them as a transaction described
     <inactive|<cite|??>>
 
@@ -44,7 +53,7 @@
     peers.
 
     <item>Run grandpa rounds protocol.
-  </itemize-dot>
+  </enumerate>
 
   \;
 
@@ -74,6 +83,9 @@
 
 <\auxiliary>
   <\collection>
+    <\associate|bib>
+      ??
+    </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Bootstrapping>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>

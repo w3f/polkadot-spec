@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|1.99.17>
 
 <project|host-spec.tm>
 
@@ -328,7 +328,7 @@
   corresponding definition. Encoding and message formats are subject to
   change.
 
-  <subsubsection|Announcing blocks><label|sect-msg-announcing-blocks>
+  <subsubsection|Announcing blocks><label|sect-annoucing-blocks>
 
   When the node creates or receives a new block, it must be announced to the
   network. Other nodes within the network will track this announcement and
@@ -531,8 +531,8 @@
 <\initial>
   <\collection>
     <associate|chapter-nr|3>
-    <associate|page-first|33>
-    <associate|section-nr|3>
+    <associate|page-first|31>
+    <associate|section-nr|3<uninit>>
     <associate|subsection-nr|4>
   </collection>
 </initial>
@@ -562,6 +562,7 @@
     <associate|defn-block-announce-handshake|<tuple|2|?>>
     <associate|defn-peer-id|<tuple|1|?>>
     <associate|defn-transactions-message|<tuple|6|?>>
+    <associate|sect-annoucing-blocks|<tuple|1.7.1|?>>
     <associate|sect-connection-establishment|<tuple|1.4|?>>
     <associate|sect-discovery-mechanism|<tuple|1.3|?>>
     <associate|sect-encryption-layer|<tuple|1.5|?>>
