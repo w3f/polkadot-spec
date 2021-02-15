@@ -9,7 +9,7 @@ sp-core            = { version = "2.0", default-features = false, optional = tru
 parity-scale-codec = { version = "2.0", default-features = false, optional = true }
 
 [build-dependencies]
-substrate-wasm-builder = "3.0"
+substrate-wasm-builder = "4.0"
 
 [features]
 runtime-wasm = [ "sp-core", "parity-scale-codec" ]
