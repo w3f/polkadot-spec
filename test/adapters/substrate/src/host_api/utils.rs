@@ -95,7 +95,8 @@ impl Runtime {
             self.method,
             Some(8), // heap_pages
             SubstrateHostFunctions::host_functions(),
-            8 // max_runtime_instances
+            8, // max_runtime_instances
+            None // cache_path
         ).call_in_wasm(
             &self.blob,
             None, // Optional<Hash>
