@@ -101,10 +101,7 @@ func ProcessStateTrieCommand(command_args []string) {
 			}
 
 			key_list = append(key_list, keyBytes)
-			err = test_trie.Put(keyBytes, []byte(key_value_data.Values[i]))
-			if err != nil {
-				log.Fatal(err)
-			}
+			test_trie.Put(keyBytes, []byte(key_value_data.Values[i]))
 
 			if command_args[0] == "insert-and-delete" {
 				trieHash, err = test_trie.Hash()

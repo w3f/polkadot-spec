@@ -20,13 +20,10 @@ package host_api
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path"
 	"strings"
 	"strconv"
-
-	"github.com/ChainSafe/chaindb"
 
 	"github.com/ChainSafe/gossamer/lib/keystore"
 	"github.com/ChainSafe/gossamer/lib/runtime"
@@ -101,24 +98,7 @@ func ProcessHostApiCommand(args []string) {
 
 
 func executeHostApiTest(function string, inputs []string, useWasmtime bool) error {
-	// Initialize storage
-	tempdir, err := ioutil.TempDir("", "gossamer-adapter-*")
-	if err != nil {
-		return AdapterError{"Failed to initialize tempdir", err}
-	}
-	defer os.RemoveAll(tempdir)
-
-	cfg := &chaindb.Config{
-		DataDir:  tempdir,
-		InMemory: true,
-	}
-
-	db, err := chaindb.NewBadgerDB(cfg)
-	if err != nil {
-		return AdapterError{"Failed to initialize database", err}
-	}
-
-	store, err := storage.NewTrieState(db, nil)
+	store, err := storage.NewTrieState(nil)
 	if err != nil {
 		return AdapterError{"Failed to initialize storage", err}
 	}
