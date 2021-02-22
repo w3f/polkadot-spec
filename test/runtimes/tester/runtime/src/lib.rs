@@ -273,7 +273,7 @@ construct_runtime!(
 	{
 		System: system::{Module, Call, Config, Storage, Event<T>},
 		CollectiveFlip: collective_flip::{Module, Call, Storage},
-		Babe: babe::{Module, Call, Storage, Config, Inherent},
+		Babe: babe::{Module, Call, Storage, Config},
 		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
 		Timestamp: timestamp::{Module, Call, Storage, Inherent},
 		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
