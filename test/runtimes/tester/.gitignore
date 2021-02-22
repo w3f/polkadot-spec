@@ -1,4 +1,4 @@
-runtime/Cargo.lock
-target/
+/runtime/Cargo.lock
+/target/
 genesis.json
 genesis.yaml
