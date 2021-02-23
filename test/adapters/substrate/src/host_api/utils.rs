@@ -113,6 +113,7 @@ pub trait Decoder {
     fn decode_vec(&self) -> Vec<u8>;
     fn decode_ovec(&self) -> Option<Vec<u8>>;
     fn decode_vecvec(&self) -> Vec<Vec<u8>>;
+    fn decode_oarr64(&self) -> Option<[u8; 64]>;
 }
 
 impl Decoder for Vec<u8> {
@@ -126,6 +127,9 @@ impl Decoder for Vec<u8> {
         Decode::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
     fn decode_vecvec(&self) -> Vec<Vec<u8>> {
+        Decode::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
+    }
+    fn decode_oarr64(&self) -> Option<[u8; 64]> {
         Decode::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
     }
 }
