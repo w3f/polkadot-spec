@@ -333,17 +333,17 @@ sp_core::wasm_export_functions! {
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
     }
-    fn rtm_ext_crypto_ed25519_sign_version_1(id_data: [u8; 4], pubkey_data: Vec<u8>, msg_data: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_crypto_ed25519_sign_version_1(id_data: [u8; 4], pubkey_data: Vec<u8>, msg_data: Vec<u8>) -> Option<[u8; 64]> {
         unsafe {
             let value = ext_crypto_ed25519_sign_version_1(
                 id_data.as_ptr() as u32,
                 pubkey_data.as_ptr() as u32,
                 msg_data.as_re_ptr()
             );
-            from_mem(value)
+            Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
-    fn rtm_ext_crypto_ed25519_verify_version_1(sig_data: Vec<u8>, msg_data: Vec<u8>, pubkey_data: Vec<u8>) -> u32 {
+    fn rtm_ext_crypto_ed25519_verify_version_1(sig_data: [u8; 64], msg_data: Vec<u8>, pubkey_data: Vec<u8>) -> u32 {
         unsafe {
             ext_crypto_ed25519_verify_version_1(
                 sig_data.as_ptr() as u32,
@@ -370,17 +370,17 @@ sp_core::wasm_export_functions! {
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
     }
-    fn rtm_ext_crypto_sr25519_sign_version_1(id_data: [u8; 4], pubkey_data: Vec<u8>, msg_data: Vec<u8>) -> Vec<u8> {
+    fn rtm_ext_crypto_sr25519_sign_version_1(id_data: [u8; 4], pubkey_data: Vec<u8>, msg_data: Vec<u8>) -> Option<[u8; 64]> {
         unsafe {
             let value = ext_crypto_sr25519_sign_version_1(
                 id_data.as_ptr() as u32,
                 pubkey_data.as_ptr() as u32,
                 msg_data.as_re_ptr()
             );
-            from_mem(value)
+            Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
-    fn rtm_ext_crypto_sr25519_verify_version_1(sig_data: Vec<u8>, msg_data: Vec<u8>, pubkey_data: Vec<u8>) -> u32 {
+    fn rtm_ext_crypto_sr25519_verify_version_1(sig_data: [u8; 64], msg_data: Vec<u8>, pubkey_data: Vec<u8>) -> u32 {
         unsafe {
             ext_crypto_sr25519_verify_version_1(
                 sig_data.as_ptr() as u32,
