@@ -290,7 +290,7 @@
     <em|Request-Response substream>.
 
     The messages are specified in Section
-    <reference|sect-msg-requesting-blocks>.
+    <reference|sect-msg-block-request>.
 
     <item><verbatim|/dot/transactions/1> - a substream/notification protocol
     which sends transactions to connected peers. This is a <em|Notification
@@ -328,7 +328,7 @@
   corresponding definition. Encoding and message formats are subject to
   change.
 
-  <subsubsection|Announcing blocks><label|sect-annoucing-blocks>
+  <subsubsection|Announcing blocks><label|sect-msg-block-announce>
 
   When the node creates or receives a new block, it must be announced to the
   network. Other nodes within the network will track this announcement and
@@ -388,7 +388,7 @@
     </eqnarray*>
   </definition>
 
-  <subsubsection|Requesting blocks><label|sect-requesting-blocks>
+  <subsubsection|Requesting blocks><label|sect-msg-block-request>
 
   Block requests can be used to retrieve a range of blocks from peers. Those
   messages are sent over the <verbatim|/dot/sync/2> substream.
@@ -568,7 +568,7 @@
     <associate|sect-encryption-layer|<tuple|1.5|?>>
     <associate|sect-msg-announcing-blocks|<tuple|1.7.1|?>>
     <associate|sect-msg-grandpa|<tuple|1.7.4|?>>
-    <associate|sect-msg-requesting-blocks|<tuple|1.7.2|?>>
+    <associate|sect-msg-block-request|<tuple|1.7.2|?>>
     <associate|sect-msg-transactions|<tuple|1.7.3|?>>
     <associate|sect-network-messages|<tuple|1.7|?>>
     <associate|sect-networking-external-docs|<tuple|1.1|?>>

@@ -5,7 +5,7 @@
 <style|<tuple|book|old-dots|old-lengths>>
 
 <\body>
-  <appendix|Polkadot Host API><label|appendix-e>
+  <appendix|Polkadot Host API><label|sect-host-api>
 
   The Polkadot Host API is a set of functions that the Polkadot Host exposes
   to Runtime to access external functions needed for various reasons, such as
@@ -15,7 +15,7 @@
   encoding is used, such as little-endian byte ordering for integers.
 
   <\notation>
-    <label|nota-re-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we refer
+    <label|nota-host-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we refer
     to the API exposed by the Polkadot Host which interact, manipulate and
     response based on the state storage whose state is set at the end of the
     execution of block <math|B>.
@@ -46,7 +46,7 @@
 
   Interface for accessing the storage from within the runtime.
 
-  <subsection|<verbatim|ext_storage_set>>
+  <subsection|<verbatim|ext_storage_set>><label|sect-storage-set>
 
   Sets the value under a given key into storage.
 
@@ -1496,7 +1496,7 @@
   available which are defined in Definitions F.1 and F.2.
 
   <\definition>
-    <label|defn-persistent-storage><strong|Persistent storage> is
+    <label|defn-offchain-persistent-storage><strong|Persistent storage> is
     non-revertible and not fork-aware. It means that any value set by the
     offchain worker is persisted even if that block (at which the worker is
     called) is reverted as non-canonical (meaning that the block was
@@ -1507,7 +1507,7 @@
   </definition>
 
   <\definition>
-    <label|defn-local-storage><strong|Local storage> is revertible and
+    <label|defn-offchain-local-storage><strong|Local storage> is revertible and
     fork-aware. It means that any value set by the offchain worker triggered
     at a certain block is reverted if that block is reverted as
     non-canonical. The value is NOT available for the worker that is re-run
@@ -2611,7 +2611,7 @@
     <associate|defn-opaque-network-state|<tuple|A.11|111>>
     <associate|defn-persistent-storage|<tuple|A.7|110>>
     <associate|defn-runtime-pointer|<tuple|A.2|95>>
-    <associate|nota-re-api-at-state|<tuple|A.1|95>>
+    <associate|nota-host-api-at-state|<tuple|A.1|95>>
     <associate|sect-child-storage-api|<tuple|A.2|99>>
     <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|106>>
     <associate|sect-ext-crypto-ed25519-verify|<tuple|A.3.4|103>>

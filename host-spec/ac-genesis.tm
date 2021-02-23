@@ -19,7 +19,7 @@
   are unspecifed and its usage depends on the chain respectively its
   corresponding Runtime. The data should be inserted into the state storage
   with the <verbatim|set_storage> Host API, as defined in Section
-  <reference|sect-set-storage>.
+  <reference|sect-storage-set>.
 
   As such, Polkadot does not defined a formal genesis block. Nonetheless for
   the complatibilty reasons in several algorithms, the Polkadot Host defines
