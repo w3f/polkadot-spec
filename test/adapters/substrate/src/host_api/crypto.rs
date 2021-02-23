@@ -62,6 +62,7 @@ pub fn ext_crypto_ed25519_generate_version_1(rtm: Runtime, input: ParsedInput) {
         )
         .decode_vec();
 
+    // Print result
     println!("{}", hex::encode(res));
 }
 
@@ -81,16 +82,13 @@ pub fn ext_crypto_ed25519_sign_version_1(rtm: Runtime, input: ParsedInput) {
         .decode_vec();
 
     // Sign message
-    let mut res = rtm
+    let res = rtm
         .call(
             "rtm_ext_crypto_ed25519_sign_version_1",
             &(DUMMY.0, &pubkey, msg).encode(),
         )
-        .decode_vec();
-
-    // Check option
-    assert_eq!(res[0], 1u8);
-    res.remove(0);
+        .decode_oarr64()
+        .unwrap();
 
     println!("Message: {}", str(&msg));
     println!("Public key: {}", hex::encode(pubkey));
@@ -113,16 +111,13 @@ pub fn ext_crypto_ed25519_verify_version_1(rtm: Runtime, input: ParsedInput) {
         .decode_vec();
 
     // Sign message
-    let mut sig = rtm
+    let sig = rtm
         .call(
             "rtm_ext_crypto_ed25519_sign_version_1",
             &(DUMMY.0, &pubkey, &msg).encode(),
         )
-        .decode_vec();
-
-    // Check option
-    assert_eq!(sig[0], 1u8);
-    sig.remove(0);
+        .decode_oarr64()
+        .unwrap();
 
     // Verify signature
     let verified = rtm
@@ -133,6 +128,7 @@ pub fn ext_crypto_ed25519_verify_version_1(rtm: Runtime, input: ParsedInput) {
         .decode_bool();
     assert_eq!(verified, true);
 
+    // Print result
     println!("Message: {}", str(&msg));
     println!("Public key: {}", hex::encode(&pubkey));
     println!("Signature: {}", hex::encode(&sig));
@@ -205,6 +201,7 @@ pub fn ext_crypto_sr25519_generate_version_1(rtm: Runtime, input: ParsedInput) {
         )
         .decode_vec();
 
+    // Print result
     println!("{}", hex::encode(res));
 }
 
@@ -224,17 +221,15 @@ pub fn ext_crypto_sr25519_sign_version_1(rtm: Runtime, input: ParsedInput) {
         .decode_vec();
 
     // Sign message
-    let mut res = rtm
+    let res = rtm
         .call(
             "rtm_ext_crypto_sr25519_sign_version_1",
             &(DUMMY.0, &pubkey, msg).encode(),
         )
-        .decode_vec();
+        .decode_oarr64()
+        .unwrap();
 
-    // Check option
-    assert_eq!(res[0], 1u8);
-    res.remove(0);
-
+    // Print result
     println!("Message: {}", str(&msg));
     println!("Public key: {}", hex::encode(pubkey));
     println!("Signature: {}", hex::encode(res));
@@ -256,17 +251,15 @@ pub fn ext_crypto_sr25519_verify_version_1(rtm: Runtime, input: ParsedInput) {
         .decode_vec();
 
     // Sign message
-    let mut sig = rtm
+    let sig = rtm
         .call(
             "rtm_ext_crypto_sr25519_sign_version_1",
             &(DUMMY.0, &pubkey, &msg).encode(),
         )
-        .decode_vec();
+        .decode_oarr64()
+        .unwrap();
 
-    // Check option
-    assert_eq!(sig[0], 1u8);
-    sig.remove(0);
-
+    // Verify signature
     let verified = rtm
         .call(
             "rtm_ext_crypto_sr25519_verify_version_1",
@@ -276,6 +269,7 @@ pub fn ext_crypto_sr25519_verify_version_1(rtm: Runtime, input: ParsedInput) {
 
     assert_eq!(verified, true);
 
+    // Print result
     println!("Message: {}", str(&msg));
     println!("Public key: {}", hex::encode(&pubkey));
     println!("Signature: {}", hex::encode(&sig));
