@@ -601,8 +601,8 @@
     </equation*>
 
     in which, <math|E<rsub|id><around*|(|BABE|)>> is the BABE consensus
-    engine unique identifier defined in Section
-    <reference|sect-msg-consensus>. The Seal digest item is referred to as
+    engine unique identifier defined in Definition
+    <reference|defn-consensus-message-digest>. The Seal digest item is referred to as
     <strong|BABE Seal>.
 
     \;
@@ -1316,7 +1316,7 @@
 
   Whenever a Polkadot node detects that it is lagging behind the finality
   procedure, it needs to initiate a <em|catch-up> procedure. Neighbor packet
-  network message (see Section <reference|sect-msg-neighbor-packet>) reveals
+  network message (see Section <reference|sect-msg-grandpa>) reveals
   the round number for the last finalized GRANDPA round which the sending
   peer has observed. This provides a means to identify a discrepancy in the
   latest finalized round number observed among the peers. If such a
