@@ -69,7 +69,7 @@
   code loaded from <math|\<cal-S\><rsub|B>>, as described in Notation
   <reference|nota-runtime-code-at-state>, and
   <math|\<cal-R\>\<cal-E\><rsub|B>> is the Polkadot Host API, as described in
-  Notation <reference|nota-re-api-at-state>.
+  Notation <reference|nota-host-api-at-state>.
 
   <subsection|Loading the Runtime Code \ \ ><label|sect-loading-runtime-code>
 
@@ -101,7 +101,9 @@
   <reference|sect-genesis-block>).
 
   Subsequent calls to the runtime have the ability to, in turn, call the
-  storage API (see Section <reference|sect-re-api>) to insert a new Wasm blob
+  storage API (see Section <reference|sect-host-api>) to insert a new Wasm
+  blob
+
   into runtime storage slot to upgrade the runtime.
 
   <subsection|Code Executor><label|sect-code-executor>
@@ -173,9 +175,9 @@
   extended buffer. Finally, when the Wasm method <verbatim|runtime_entry>,
   corresponding to the entry is invoked, two UINT32 integers are sent to the
   method as arguments. The first argument <verbatim|data> is set to the
-  offset where the byte array <math|B> is stored in the Wasm extended
-  shared memory buffer. The second argument <verbatim|len> sets the length of
-  the data stored in <math|B>.
+  offset where the byte array <math|B> is stored in the Wasm extended shared
+  memory buffer. The second argument <verbatim|len> sets the length of the
+  data stored in <math|B>.
 
   <subsubsection|The Return Value from a Runtime
   Entry><label|sect-runtime-return-value>
@@ -191,7 +193,7 @@
 
   In order for the Runtime to carry on various tasks, it manipulates the
   current state by means of executing calls to various Polkadot Host APIs
-  (see Appendix <reference|sect-re-api>). It is the duty of Host APIs to
+  (see Appendix <reference|sect-host-api>). It is the duty of Host APIs to
   determine the context in which these changes should persist. For example,
   if Polkdot Host needs to validate a transaction using
   <verbatim|TaggedTransactionQueue_validate_transaction> entry (see Section
@@ -543,7 +545,7 @@
     \;
 
     Where <math|E<rsub|id>> is the unique consensus engine identifier defined
-    in Section <reference|sect-msg-consensus>. and
+    in <reference|defn-consensus-message-digest> and
 
     <\itemize-dot>
       <item><strong|Changes trie root> contains the root of the Changes Trie
@@ -628,8 +630,8 @@
 
   Blocks can be handed to the Polkadot Host both from the network stack for
   example by means of Block response network message (see Section
-  <reference|sect-msg-block-response> ) and from the consensus engine.Both
-  the Runtime and the Polkadot Host need to work together to assure block
+  <reference|sect-block-request> ) and from the consensus engine. Both the
+  Runtime and the Polkadot Host need to work together to assure block
   validity. A block is deemed valid if the block author had the authorship
   right for the slot during which the slot was built as well as if the
   transactions in the block constitute a valid transition of states. The
@@ -996,14 +998,8 @@
   and every block.
 </body>
 
-<\initial>
-  <\collection>
-    <associate|chapter-nr|2>
-    <associate|page-first|21>
-    <associate|section-nr|2<uninit>>
-    <associate|subsection-nr|1>
-  </collection>
-</initial>
+<initial|<\collection>
+</collection>>
 
 <\references>
   <\collection>

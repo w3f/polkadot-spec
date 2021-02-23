@@ -107,7 +107,7 @@
   </definition>
 
   Session keys must be accessible by certain Polkadot Host APIs defined in
-  Appendix <reference|sect-re-api>. Session keys are <em|not> meant to
+  Appendix <reference|sect-host-api>. Session keys are <em|not> meant to
   control the majority of the users' funds and should only be used for their
   intended purpose. <todo|key managing fund need to be defined>
 
