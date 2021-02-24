@@ -15,7 +15,7 @@ pub fn ext_crypto_ed25519_public_keys_version_1(rtm: Runtime, input: ParsedInput
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed1)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     // Generate second key
     let pubkey2 = rtm
@@ -23,7 +23,7 @@ pub fn ext_crypto_ed25519_public_keys_version_1(rtm: Runtime, input: ParsedInput
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed2)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     let mut res = rtm
         .call(
@@ -60,7 +60,7 @@ pub fn ext_crypto_ed25519_generate_version_1(rtm: Runtime, input: ParsedInput) {
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     // Print result
     println!("{}", hex::encode(res));
@@ -79,7 +79,7 @@ pub fn ext_crypto_ed25519_sign_version_1(rtm: Runtime, input: ParsedInput) {
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     // Sign message
     let res = rtm
@@ -108,7 +108,7 @@ pub fn ext_crypto_ed25519_verify_version_1(rtm: Runtime, input: ParsedInput) {
             "rtm_ext_crypto_ed25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     // Sign message
     let sig = rtm
@@ -152,7 +152,7 @@ pub fn ext_crypto_sr25519_public_keys_version_1(rtm: Runtime, input: ParsedInput
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, Some(seed1)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     // Generate second key
     let pubkey2 = rtm
@@ -160,7 +160,7 @@ pub fn ext_crypto_sr25519_public_keys_version_1(rtm: Runtime, input: ParsedInput
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, Some(seed2)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     let mut res = rtm
         .call(
@@ -199,7 +199,7 @@ pub fn ext_crypto_sr25519_generate_version_1(rtm: Runtime, input: ParsedInput) {
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, seed_opt).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     // Print result
     println!("{}", hex::encode(res));
@@ -218,7 +218,7 @@ pub fn ext_crypto_sr25519_sign_version_1(rtm: Runtime, input: ParsedInput) {
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     // Sign message
     let res = rtm
@@ -248,7 +248,7 @@ pub fn ext_crypto_sr25519_verify_version_1(rtm: Runtime, input: ParsedInput) {
             "rtm_ext_crypto_sr25519_generate_version_1",
             &(DUMMY.0, Some(seed)).encode(),
         )
-        .decode_vec();
+        .decode_arr32();
 
     // Sign message
     let sig = rtm
