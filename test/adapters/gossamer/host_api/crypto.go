@@ -69,6 +69,35 @@ func crypto_public_keys(r runtime.Instance, suite string) ([]byte, error) {
 	return keys, nil
 }
 
+// Helper function to call rtm_ext_crypto_<suite>_sign_version_1
+func crypto_sign(r runtime.Instance, suite string, pubkey []byte, msg string) (*optional.Bytes, error) {
+	// Encode inputs
+	id_enc, err := scale.Encode(DUMY_KEY_ID)
+	if err != nil {
+		return nil, AdapterError{"Encoding key id failed", err}
+	}
+
+	msg_enc, err := scale.Encode([]byte(msg))
+	if err != nil {
+		return nil, AdapterError{"Encoding message failed", err}
+	}
+
+	args_enc := append(append(id_enc, pubkey...), msg_enc...)
+
+	// Request all know public keys
+	sig_enc, err := r.Exec("rtm_ext_crypto_" + suite + "_sign_version_1", args_enc)
+	if err != nil {
+		return nil, AdapterError{"Execution failed", err}
+	}
+
+	// Decode and return result
+	sig_opt, err := scale.Decode(sig_enc, &optional.Bytes{})
+	if err != nil {
+		return nil, AdapterError{"Decoding signature failed", err}
+	}
+	return sig_opt.(*optional.Bytes), nil
+}
+
 // -- Tests --
 
 // Test for ext_crypto_<suite>_generate_version_1
@@ -121,6 +150,32 @@ func test_crypto_public_keys(r runtime.Instance, suite string, seed1 string, see
 
 	fmt.Printf("1. Public key: %x\n", key1)
 	fmt.Printf("2. Public key: %x\n", key2)
+
+	return nil
+}
+
+// Test for ext_crypto_<suite>_sign_version_1
+func test_crypto_sign(r runtime.Instance, suite string, seed string, msg string) error {
+	// Generate a key
+	pk, err := crypto_generate(r, suite, seed)
+	if err != nil {
+		return err
+	}
+
+	// Sign message
+	sig, err := crypto_sign(r, suite, pk, msg)
+	if err != nil {
+		return err
+	}
+
+	// Check and print result
+	if !sig.Exists() {
+		return newTestFailure("No signature received")
+	}
+
+	fmt.Println("Message: ", msg)
+	fmt.Printf("Public key: %x\n", pk)
+	fmt.Printf("Signature: %x\n", sig.Value())
 
 	return nil
 }
