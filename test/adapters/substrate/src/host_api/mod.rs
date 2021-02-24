@@ -2,7 +2,6 @@ mod allocator;
 mod child_storage;
 mod crypto;
 mod hashing;
-mod network;
 mod storage;
 mod trie;
 mod utils;
