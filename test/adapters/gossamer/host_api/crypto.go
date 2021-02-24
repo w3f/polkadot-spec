@@ -98,6 +98,30 @@ func crypto_sign(r runtime.Instance, suite string, pubkey []byte, msg string) (*
 	return sig_opt.(*optional.Bytes), nil
 }
 
+// Helper function to call rtm_ext_crypto_<suite>_verify_version_1
+func crypto_verify(r runtime.Instance, suite string, sig []byte, msg string, pubkey []byte) (bool, error) {
+	// Encode inputs
+	msg_enc, err := scale.Encode([]byte(msg))
+	if err != nil {
+		return false, AdapterError{"Encoding message failed", err}
+	}
+
+	args_enc := append(append(sig, msg_enc...), pubkey...)
+
+	// Request all know public keys
+	res_enc, err := r.Exec("rtm_ext_crypto_" + suite + "_verify_version_1", args_enc)
+	if err != nil {
+		return false, AdapterError{"Execution failed", err}
+	}
+
+	// Decode and return result
+	res, err := scale.Decode(res_enc, false)
+	if err != nil {
+		return false, AdapterError{"Decoding result failed", err}
+	}
+	return res.(bool), nil
+}
+
 // -- Tests --
 
 // Test for ext_crypto_<suite>_generate_version_1
@@ -176,6 +200,45 @@ func test_crypto_sign(r runtime.Instance, suite string, seed string, msg string)
 	fmt.Println("Message: ", msg)
 	fmt.Printf("Public key: %x\n", pk)
 	fmt.Printf("Signature: %x\n", sig.Value())
+
+	return nil
+}
+
+// Test for ext_crypto_<suite>_verify_version_1
+func test_crypto_verify(r runtime.Instance, suite string, seed string, msg string) error {
+	// Generate a key
+	pk, err := crypto_generate(r, suite, seed)
+	if err != nil {
+		return err
+	}
+
+	// Sign message
+	sig, err := crypto_sign(r, suite, pk, msg)
+	if err != nil {
+		return err
+	}
+
+	if !sig.Exists() {
+		return newTestFailure("No signature received")
+	}
+
+	// Verify signature
+	valid, err := crypto_verify(r, suite, sig.Value(), msg, pk)
+
+	if !valid {
+		return newTestFailure("Verifying signature failed")
+	}
+
+	// Print result
+	fmt.Println("Message: ", msg)
+	fmt.Printf("Public key: %x\n", pk)
+	fmt.Printf("Signature: %x\n", sig.Value())
+
+	if valid {
+		fmt.Println("GOOD SIGNATURE");
+	} else {
+		fmt.Println("BAD SIGNATURE");
+	}
 
 	return nil
 }

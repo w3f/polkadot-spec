@@ -190,14 +190,16 @@ func executeHostApiTest(function string, inputs []string, environment, runtimePa
 		return test_crypto_generate(rtm, "ed25519", inputs[0])
 	case "ext_crypto_ed25519_sign_version_1":
 		return test_crypto_sign(rtm, "ed25519", inputs[0], inputs[1])
-	//case "ext_crypto_ed25519_verify_version_1":
+	case "ext_crypto_ed25519_verify_version_1":
+		return test_crypto_verify(rtm, "ed25519", inputs[0], inputs[1])
 	case "ext_crypto_sr25519_public_keys_version_1":
 		return test_crypto_public_keys(rtm, "sr25519", inputs[0], inputs[1])
 	case "ext_crypto_sr25519_generate_version_1":
 		return test_crypto_generate(rtm, "sr25519", inputs[0])
 	case "ext_crypto_sr25519_sign_version_1":
 		return test_crypto_sign(rtm, "sr25519", inputs[0], inputs[1])
-	//case "ext_crypto_sr25519_verify_version_1":
+	case "ext_crypto_sr25519_verify_version_1":
+		return test_crypto_verify(rtm, "sr25519", inputs[0], inputs[1])
 
 	// test hashing api
 	case "ext_hashing_blake2_128_version_1",
