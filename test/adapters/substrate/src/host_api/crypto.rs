@@ -32,11 +32,11 @@ pub fn ext_crypto_ed25519_public_keys_version_1(rtm: Runtime, input: ParsedInput
     assert_eq!(res.len(), 2);
 
     if pubkey1 != res[0] && pubkey1 != res[1] {
-        panic!("Return value does not include pubkey")
+        panic!("Keystore does not include pubkey 1")
     }
 
     if pubkey2 != res[0] && pubkey2 != res[1] {
-        panic!("Return value does not include pubkey")
+        panic!("Keystore does not include pubkey 2")
     }
 
     println!("1. Public key: {}", hex::encode(res[0]));
@@ -147,11 +147,11 @@ pub fn ext_crypto_sr25519_public_keys_version_1(rtm: Runtime, input: ParsedInput
     assert_eq!(res.len(), 2);
 
     if pubkey1 != res[0] && pubkey1 != res[1] {
-        panic!("Return value does not include pubkey 1")
+        panic!("Keystore does not include pubkey 1")
     }
 
     if pubkey2 != res[0] && pubkey2 != res[1] {
-        panic!("Return value does not include pubkey 2")
+        panic!("Keystore does not include pubkey 2")
     }
 
     println!("1. Public key: {}", hex::encode(res[0]));
