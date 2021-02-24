@@ -25,28 +25,25 @@ pub fn ext_crypto_ed25519_public_keys_version_1(rtm: Runtime, input: ParsedInput
         )
         .decode_arr32();
 
-    let mut res = rtm
+    let res = rtm
         .call(
             "rtm_ext_crypto_ed25519_public_keys_version_1",
             &DUMMY.0.encode(),
         )
-        .decode_vec();
+        .decode_vecarr32();
 
-    res.remove(0); // TODO: Check content
-    assert_eq!(res.len(), 64);
-    let res1 = &res[..32]; // first pubkey
-    let res2 = &res[32..]; // second pubkey
+    assert_eq!(res.len(), 2);
 
-    if pubkey1 != res1 && pubkey1 != res2 {
+    if pubkey1 != res[0] && pubkey1 != res[1] {
         panic!("Return value does not include pubkey")
     }
 
-    if pubkey2 != res1 && pubkey2 != res2 {
+    if pubkey2 != res[0] && pubkey2 != res[1] {
         panic!("Return value does not include pubkey")
     }
 
-    println!("1. Public key: {}", hex::encode(res1));
-    println!("2. Public key: {}", hex::encode(res2));
+    println!("1. Public key: {}", hex::encode(res[0]));
+    println!("2. Public key: {}", hex::encode(res[1]));
 }
 
 pub fn ext_crypto_ed25519_generate_version_1(rtm: Runtime, input: ParsedInput) {
@@ -162,28 +159,25 @@ pub fn ext_crypto_sr25519_public_keys_version_1(rtm: Runtime, input: ParsedInput
         )
         .decode_arr32();
 
-    let mut res = rtm
+    let res = rtm
         .call(
             "rtm_ext_crypto_sr25519_public_keys_version_1",
             &DUMMY.0.encode(),
         )
-        .decode_vec();
+        .decode_vecarr32();
 
-    res.remove(0); // TODO: Check content
-    assert_eq!(res.len(), 64);
-    let res1 = &res[..32]; // first pubkey
-    let res2 = &res[32..]; // second pubkey
+    assert_eq!(res.len(), 2);
 
-    if pubkey1 != res1 && pubkey1 != res2 {
-        panic!("Return value does not include pubkey")
+    if pubkey1 != res[0] && pubkey1 != res[1] {
+        panic!("Return value does not include pubkey 1")
     }
 
-    if pubkey2 != res1 && pubkey2 != res2 {
-        panic!("Return value does not include pubkey")
+    if pubkey2 != res[0] && pubkey2 != res[1] {
+        panic!("Return value does not include pubkey 2")
     }
 
-    println!("1. Public key: {}", hex::encode(res1));
-    println!("2. Public key: {}", hex::encode(res2));
+    println!("1. Public key: {}", hex::encode(res[0]));
+    println!("2. Public key: {}", hex::encode(res[1]));
 }
 
 pub fn ext_crypto_sr25519_generate_version_1(rtm: Runtime, input: ParsedInput) {
