@@ -55,13 +55,13 @@ pub fn process_host_api_tests(subcmd_matches: &ArgMatches) {
             "ext_crypto_sr25519_verify_version_1" => crypto::ext_crypto_sr25519_verify_version_1(rtm, input),
 
             // hashing api
-            "ext_hashing_keccak_256_version_1" => hashing::ext_hashing_keccak_256_version_1(rtm, input),
-            "ext_hashing_sha2_256_version_1" => hashing::ext_hashing_sha2_256_version_1(rtm, input),
-            "ext_hashing_blake2_128_version_1" => hashing::ext_hashing_blake2_128_version_1(rtm, input),
-            "ext_hashing_blake2_256_version_1" => hashing::ext_hashing_blake2_256_version_1(rtm, input),
-            "ext_hashing_twox_256_version_1" => hashing::ext_hashing_twox_256_version_1(rtm, input),
-            "ext_hashing_twox_128_version_1" => hashing::ext_hashing_twox_128_version_1(rtm, input),
-            "ext_hashing_twox_64_version_1" => hashing::ext_hashing_twox_64_version_1(rtm, input),
+            "ext_hashing_blake2_128_version_1" => hashing::ext_hashing_version_1(rtm, "blake2_128", input),
+            "ext_hashing_blake2_256_version_1" => hashing::ext_hashing_version_1(rtm, "blake2_256", input),
+            "ext_hashing_keccak_256_version_1" => hashing::ext_hashing_version_1(rtm, "keccak_256", input),
+            "ext_hashing_sha2_256_version_1"   => hashing::ext_hashing_version_1(rtm, "sha2_256", input),
+            "ext_hashing_twox_64_version_1"    => hashing::ext_hashing_version_1(rtm, "twox_64", input),
+            "ext_hashing_twox_128_version_1"   => hashing::ext_hashing_version_1(rtm, "twox_128", input),
+            "ext_hashing_twox_256_version_1"   => hashing::ext_hashing_version_1(rtm, "twox_256", input),
 
             // allocator api
             "ext_allocator_malloc_version_1" => allocator::ext_allocator_malloc_version_1(rtm, input),
