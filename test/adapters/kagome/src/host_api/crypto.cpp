@@ -55,39 +55,35 @@ namespace crypto {
   void processPublicKeys(const std::string_view seed1, const std::string_view seed2) {
     helpers::RuntimeEnvironment environment;
 
-    auto pk_bytes1 = environment.execute<helpers::Buffer>(
+    auto pk1 = environment.execute<typename Suite::PublicKey>(
       "rtm_ext_crypto_"s + Suite::Name + "_generate_version_1",
       TEST_KEY_TYPE, boost::make_optional(seed1)
     );
-    auto pk1 = Suite::PublicKey::fromSpan(pk_bytes1).value();
 
-    auto pk_bytes2 = environment.execute<helpers::Buffer>(
+    auto pk2 = environment.execute<typename Suite::PublicKey>(
       "rtm_ext_crypto_"s + Suite::Name + "_generate_version_1",
       TEST_KEY_TYPE, boost::make_optional(seed2)
     );
-    auto pk2 = Suite::PublicKey::fromSpan(pk_bytes2).value();
 
-    auto keys = environment.execute<helpers::Buffer>(
+    auto keys = environment.execute<std::vector<typename Suite::PublicKey>>(
       "rtm_ext_crypto_"s + Suite::Name + "_public_keys_version_1",
       TEST_KEY_TYPE
     );
-    auto dec_keys = scale::decode<std::vector<typename Suite::PublicKey>>(keys).value();
 
-    BOOST_ASSERT(dec_keys.size() == 2);
-    auto res1 = dec_keys.at(0);
-    auto res2 = dec_keys.at(1);
-    BOOST_ASSERT(pk1 == res1 or pk1 == res2);
-    BOOST_ASSERT(pk2 == res2 or pk2 == res1);
+    BOOST_ASSERT(keys.size() == 2);
 
-    std::cout << "1. Public key: " << helpers::hex_lower(res1) << std::endl;
-    std::cout << "2. Public key: " << helpers::hex_lower(res2) << std::endl;
+    BOOST_ASSERT(pk1 == keys.at(0) or pk1 == keys.at(1));
+    BOOST_ASSERT(pk2 == keys.at(0) or pk2 == keys.at(1));
+
+    std::cout << "1. Public key: " << keys.at(0).toHex() << std::endl;
+    std::cout << "2. Public key: " << keys.at(1).toHex() << std::endl;
   }
 
   template <typename Suite>
   void processGenerate(std::string_view seed) {
     helpers::RuntimeEnvironment environment;
 
-    auto key = environment.execute<helpers::Buffer>(
+    auto key = environment.execute<typename Suite::PublicKey>(
       "rtm_ext_crypto_"s + Suite::Name + "_generate_version_1",
       TEST_KEY_TYPE, boost::make_optional(seed));
 
@@ -98,20 +94,18 @@ namespace crypto {
   void processSign(std::string_view seed, std::string_view message) {
     helpers::RuntimeEnvironment environment;
 
-    auto pk_bytes = environment.execute<helpers::Buffer>(
+    auto pk = environment.execute<typename Suite::PublicKey>(
       "rtm_ext_crypto_"s + Suite::Name + "_generate_version_1",
       TEST_KEY_TYPE, boost::make_optional(seed)
     );
-    auto sig_bytes = environment.execute<helpers::Buffer>(
+
+    auto sig = environment.execute<boost::optional<typename Suite::Signature>>(
       "rtm_ext_crypto_"s + Suite::Name + "_sign_version_1",
-      TEST_KEY_TYPE, pk_bytes, message
-    );
-    auto sig = scale::decode<boost::optional<typename Suite::Signature>>(sig_bytes)
-      .value()  // result
-      .value(); // optional
+      TEST_KEY_TYPE, pk, message
+    ).value();
 
     std::cout << "Message: " << message << std::endl;
-    std::cout << "Public key: " << pk_bytes.toHex() << std::endl;
+    std::cout << "Public key: " << pk.toHex() << std::endl;
     std::cout << "Signature: " << sig.toHex() << std::endl;
   }
 
@@ -119,25 +113,22 @@ namespace crypto {
   void processVerify(std::string_view seed, std::string_view message) {
     helpers::RuntimeEnvironment environment;
 
-    auto pk_bytes = environment.execute<helpers::Buffer>(
+    auto pk = environment.execute<typename Suite::PublicKey>(
       "rtm_ext_crypto_"s + Suite::Name + "_generate_version_1",
       TEST_KEY_TYPE, boost::make_optional(seed)
     );
-    auto sig_bytes = environment.execute<helpers::Buffer>(
+    auto sig = environment.execute<boost::optional<typename Suite::Signature>>(
       "rtm_ext_crypto_"s + Suite::Name + "_sign_version_1",
-      TEST_KEY_TYPE, pk_bytes, message
-    );
-    auto sig = scale::decode<boost::optional<typename Suite::Signature>>(sig_bytes)
-      .value()  // result
-      .value(); // optional;
+      TEST_KEY_TYPE, pk, message
+    ).value();
 
-    auto verified = environment.execute<int32_t>(
+    auto verified = environment.execute<bool>(
       "rtm_ext_crypto_"s + Suite::Name + "_verify_version_1",
-      gsl::make_span(sig), message, pk_bytes
+      sig, message, pk
     );
 
     std::cout << "Message: " << message << std::endl;
-    std::cout << "Public key: " << pk_bytes.toHex() << std::endl;
+    std::cout << "Public key: " << pk.toHex() << std::endl;
     std::cout << "Signature: " << sig.toHex() << std::endl;
 
     if (verified) {
