@@ -1,72 +1,14 @@
-use crate::host_api::utils::{Decoder, ParsedInput, Runtime};
+use crate::host_api::utils::{ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
-pub fn ext_hashing_keccak_256_version_1(mut rtm: Runtime, input: ParsedInput) {
+
+pub fn ext_hashing_version_1(mut rtm: Runtime, func: &str, input: ParsedInput) {
     let data = input.get(0);
 
-    let res = rtm
-        .call("rtm_ext_hashing_keccak_256_version_1", &(data).encode())
-        .decode_vec();
+    let hash = rtm.call_and_decode::<Vec<u8>>(
+        &["rtm_ext_hashing_", func, "_version_1"].join(""),
+        &(data).encode()
+    );
 
-    println!("{}", hex::encode(res));
-}
-
-pub fn ext_hashing_sha2_256_version_1(mut rtm: Runtime, input: ParsedInput) {
-    let data = input.get(0);
-
-    let res = rtm
-        .call("rtm_ext_hashing_sha2_256_version_1", &(data).encode())
-        .decode_vec();
-
-    println!("{}", hex::encode(res));
-}
-
-pub fn ext_hashing_blake2_128_version_1(mut rtm: Runtime, input: ParsedInput) {
-    let data = input.get(0);
-
-    let res = rtm
-        .call("rtm_ext_hashing_blake2_128_version_1", &(data).encode())
-        .decode_vec();
-
-    println!("{}", hex::encode(res));
-}
-
-pub fn ext_hashing_blake2_256_version_1(mut rtm: Runtime, input: ParsedInput) {
-    let data = input.get(0);
-
-    let res = rtm
-        .call("rtm_ext_hashing_blake2_256_version_1", &(data).encode())
-        .decode_vec();
-
-    println!("{}", hex::encode(res));
-}
-
-pub fn ext_hashing_twox_256_version_1(mut rtm: Runtime, input: ParsedInput) {
-    let data = input.get(0);
-
-    let res = rtm
-        .call("rtm_ext_hashing_twox_256_version_1", &(data).encode())
-        .decode_vec();
-
-    println!("{}", hex::encode(res));
-}
-
-pub fn ext_hashing_twox_128_version_1(mut rtm: Runtime, input: ParsedInput) {
-    let data = input.get(0);
-
-    let res = rtm
-        .call("rtm_ext_hashing_twox_128_version_1", &(data).encode())
-        .decode_vec();
-
-    println!("{}", hex::encode(res));
-}
-
-pub fn ext_hashing_twox_64_version_1(mut rtm: Runtime, input: ParsedInput) {
-    let data = input.get(0);
-
-    let res = rtm
-        .call("rtm_ext_hashing_twox_64_version_1", &(data).encode())
-        .decode_vec();
-
-    println!("{}", hex::encode(res));
+    println!("{}", hex::encode(hash));
 }
