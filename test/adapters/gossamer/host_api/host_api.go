@@ -185,11 +185,13 @@ func executeHostApiTest(function string, inputs []string, environment, runtimePa
 
 	// test crypto api
 	//case "ext_crypto_ed25519_public_keys_version_1":
-	//case "ext_crypto_ed25519_generate_version_1":
+	case "ext_crypto_ed25519_generate_version_1":
+		return test_crypto_generate(rtm, "ed25519", inputs[0])
 	//case "ext_crypto_ed25519_sign_version_1":
 	//case "ext_crypto_ed25519_verify_version_1":
 	//case "ext_crypto_sr25519_public_keys_version_1":
-	//case "ext_crypto_sr25519_generate_version_1":
+	case "ext_crypto_sr25519_generate_version_1":
+		return test_crypto_generate(rtm, "sr25519", inputs[0])
 	//case "ext_crypto_sr25519_sign_version_1":
 	//case "ext_crypto_sr25519_verify_version_1":
 
