@@ -1,4 +1,4 @@
-use crate::host_api::utils::{Decoder, ParsedInput, Runtime};
+use crate::host_api::utils::{ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 pub fn ext_trie_blake2_256_root_version_1(mut rtm: Runtime, input: ParsedInput) {
@@ -13,9 +13,9 @@ pub fn ext_trie_blake2_256_root_version_1(mut rtm: Runtime, input: ParsedInput) 
     let trie = vec![(key1, value1), (key2, value2), (key3, value3)];
 
     // Get valid key
-    let res = rtm
-        .call("rtm_ext_trie_blake2_256_root_version_1", &(trie).encode())
-        .decode_vec();
+    let res = rtm.call_and_decode::<Vec<u8>>(
+        "rtm_ext_trie_blake2_256_root_version_1", &(trie).encode()
+    );
 
     println!("{}", hex::encode(res));
 }
@@ -29,12 +29,9 @@ pub fn ext_trie_blake2_256_ordered_root_version_1(mut rtm: Runtime, input: Parse
     let trie = vec![value1, value2, value3];
 
     // Get valid key
-    let res = rtm
-        .call(
-            "rtm_ext_trie_blake2_256_ordered_root_version_1",
-            &(trie).encode(),
-        )
-        .decode_vec();
+    let res = rtm.call_and_decode::<Vec<u8>>(
+        "rtm_ext_trie_blake2_256_ordered_root_version_1", &(trie).encode()
+    );
 
     println!("{}", hex::encode(res));
 }
