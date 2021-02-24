@@ -106,6 +106,10 @@ impl Runtime {
             MissingHostFunctions::Disallow,
         ).unwrap()
     }
+    pub fn call_and_decode<T: Decode>(&mut self, func: &str, args: &[u8]) -> T {
+        Decode::decode(&mut self.call(func, args).as_slice())
+            .expect("Failed to decode returned SCALE data")
+    }
 }
 
 pub trait Decoder {
