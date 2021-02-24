@@ -1,4 +1,4 @@
-use crate::host_api::utils::{str, Decoder, ParsedInput, Runtime};
+use crate::host_api::utils::{str, ParsedInput, Runtime};
 use parity_scale_codec::Encode;
 
 pub fn ext_default_child_storage_set_version_1(mut rtm: Runtime, input: ParsedInput) {
@@ -9,12 +9,10 @@ pub fn ext_default_child_storage_set_version_1(mut rtm: Runtime, input: ParsedIn
     let value = input.get(3);
 
     // Get invalid key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key).encode(),
+    );
     assert!(res.is_none());
 
     // Set key/value
@@ -24,22 +22,17 @@ pub fn ext_default_child_storage_set_version_1(mut rtm: Runtime, input: ParsedIn
     );
 
     // Get invalid key (wrong child key)
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key2, key).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key2, key).encode(),
+    );
     assert!(res.is_none());
 
     // Get valid key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key).encode(),
-        )
-        .decode_ovec()
-        .unwrap();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key).encode(),
+    ).unwrap();
     assert_eq!(res, value);
 
     println!("{}", str(&res));
@@ -59,18 +52,15 @@ pub fn ext_default_child_storage_read_version_1(mut rtm: Runtime, input: ParsedI
     let buffer_size = input.get_u32(5);
 
     // Get invalid key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_read_version_1",
-            &(
-                child_key1,
-                key,
-                offset,
-                buffer_size,
-            )
-            .encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_read_version_1",
+        &(
+            child_key1,
+            key,
+            offset,
+            buffer_size,
+        ).encode(),
+    );
     assert!(res.is_none());
 
     // Set key/value
@@ -80,34 +70,27 @@ pub fn ext_default_child_storage_read_version_1(mut rtm: Runtime, input: ParsedI
     );
 
     // Get invalid key (different child storage)
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_read_version_1",
-            &(
-                child_key2,
-                key,
-                offset,
-                buffer_size,
-            )
-            .encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_read_version_1",
+        &(
+            child_key2,
+            key,
+            offset,
+            buffer_size,
+        ).encode(),
+    );
     assert!(res.is_none());
 
     // Get valid key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_read_version_1",
-            &(
-                child_key1,
-                key,
-                offset,
-                buffer_size,
-            )
-                .encode(),
-        )
-        .decode_ovec()
-        .unwrap();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_read_version_1",
+        &(
+            child_key1,
+            key,
+            offset,
+            buffer_size,
+        ).encode(),
+    ).unwrap();
 
     let offset = offset as usize;
     let buffer_size = buffer_size as usize;
@@ -143,13 +126,10 @@ pub fn ext_default_child_storage_clear_version_1(mut rtm: Runtime, input: Parsed
     );
 
     // Get valid key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key).encode(),
-        )
-        .decode_ovec()
-        .unwrap();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key).encode(),
+    ).unwrap();
     assert_eq!(res, value);
 
     // Clear value
@@ -159,12 +139,10 @@ pub fn ext_default_child_storage_clear_version_1(mut rtm: Runtime, input: Parsed
     );
 
     // Get cleared value
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key).encode(),
+    );
     assert!(res.is_none());
 }
 
@@ -196,23 +174,17 @@ pub fn ext_default_child_storage_storage_kill_version_1(mut rtm: Runtime, input:
     );
 
     // Get valid value
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key1).encode(),
-        )
-        .decode_ovec()
-        .unwrap();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key1).encode(),
+    ).unwrap();
     assert_eq!(res, value1);
 
     // Get valid value
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key2).encode(),
-        )
-        .decode_ovec()
-        .unwrap();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key2).encode(),
+    ).unwrap();
     assert_eq!(res, value2);
 
     // Kill child
@@ -222,21 +194,17 @@ pub fn ext_default_child_storage_storage_kill_version_1(mut rtm: Runtime, input:
     );
 
     // Get invalid killed value
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key1).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key1).encode(),
+    );
     assert!(res.is_none());
 
     // Get invalid killed value
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key2).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key2).encode(),
+    );
     assert!(res.is_none());
 }
 
@@ -249,11 +217,10 @@ pub fn ext_default_child_storage_exists_version_1(mut rtm: Runtime, input: Parse
 
     // Check if key exists (invalid)
     let res = rtm
-        .call(
+        .call_and_decode::<bool>(
             "rtm_ext_default_child_storage_exists_version_1",
             &(child_key1, key).encode(),
-        )
-        .decode_bool();
+        );
     assert_eq!(res, false);
 
     // Set key/value
@@ -263,21 +230,17 @@ pub fn ext_default_child_storage_exists_version_1(mut rtm: Runtime, input: Parse
     );
 
     // Check if key exists (invalid, different child key)
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_exists_version_1",
-            &(child_key2, key).encode(),
-        )
-        .decode_bool();
+    let res = rtm.call_and_decode::<bool>(
+        "rtm_ext_default_child_storage_exists_version_1",
+        &(child_key2, key).encode(),
+    );
     assert_eq!(res, false);
 
     // Check if key exists
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_exists_version_1",
-            &(child_key1, key).encode(),
-        )
-        .decode_bool();
+    let res = rtm.call_and_decode::<bool>(
+        "rtm_ext_default_child_storage_exists_version_1",
+        &(child_key1, key).encode(),
+    );
     assert_eq!(res, true);
 
     println!("true");
@@ -318,12 +281,10 @@ pub fn ext_default_child_storage_clear_prefix_version_1(mut rtm: Runtime, input:
     );
 
     // Check first key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key1).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key1).encode(),
+    );
     if key1.starts_with(prefix) {
         assert!(res.is_none());
     } else {
@@ -333,12 +294,10 @@ pub fn ext_default_child_storage_clear_prefix_version_1(mut rtm: Runtime, input:
     }
 
     // Check second key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_get_version_1",
-            &(child_key1, key2).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_get_version_1",
+        &(child_key1, key2).encode(),
+    );
     if key2.starts_with(prefix) {
         assert!(res.is_none());
     } else {
@@ -382,9 +341,10 @@ pub fn ext_default_child_storage_root_version_1(mut rtm: Runtime, input: ParsedI
     );
 
     // Get root
-    let res = rtm
-        .call("rtm_ext_default_child_storage_root_version_1", &child_key1.encode())
-        .decode_vec();
+    let res = rtm.call_and_decode::<Vec<u8>>(
+        "rtm_ext_default_child_storage_root_version_1",
+        &child_key1.encode()
+    );
 
     println!("{}", hex::encode(res));
 }
@@ -405,12 +365,10 @@ pub fn ext_default_child_storage_next_key_version_1(mut rtm: Runtime, input: Par
     track.sort();
 
     // No next key available
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_next_key_version_1",
-            &(child_key1, key1).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_next_key_version_1",
+        &(child_key1, key1).encode(),
+    );
     assert!(res.is_none());
 
     // Set key/value
@@ -424,12 +382,10 @@ pub fn ext_default_child_storage_next_key_version_1(mut rtm: Runtime, input: Par
     );
 
     // Try to read next key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_next_key_version_1",
-            &(child_key1, key1).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_next_key_version_1",
+        &(child_key1, key1).encode(),
+    );
     if key1 == track[0] {
         assert_eq!(res.unwrap(), key2);
         println!("{}", str(&key2));
@@ -438,12 +394,10 @@ pub fn ext_default_child_storage_next_key_version_1(mut rtm: Runtime, input: Par
     }
 
     // Try to read next key
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_next_key_version_1",
-            &(child_key1, key2).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_next_key_version_1",
+        &(child_key1, key2).encode(),
+    );
     if key2 == track[0] {
         assert_eq!(res.unwrap(), key1);
         println!("{}", str(&key1));
@@ -452,20 +406,16 @@ pub fn ext_default_child_storage_next_key_version_1(mut rtm: Runtime, input: Par
     }
 
     // Get invalid next key (different child key)
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_next_key_version_1",
-            &(child_key2, key1).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_next_key_version_1",
+        &(child_key2, key1).encode(),
+    );
     assert!(res.is_none());
 
     // Get invalid next key (different child key)
-    let res = rtm
-        .call(
-            "rtm_ext_default_child_storage_next_key_version_1",
-            &(child_key2, key2).encode(),
-        )
-        .decode_ovec();
+    let res = rtm.call_and_decode::<Option<Vec<u8>>>(
+        "rtm_ext_default_child_storage_next_key_version_1",
+        &(child_key2, key2).encode(),
+    );
     assert!(res.is_none());
 }
