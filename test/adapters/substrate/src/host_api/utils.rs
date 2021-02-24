@@ -111,25 +111,3 @@ impl Runtime {
             .expect("Failed to decode returned SCALE data")
     }
 }
-
-pub trait Decoder {
-    fn decode_bool(&self) -> bool;
-    fn decode_vec(&self) -> Vec<u8>;
-    fn decode_ovec(&self) -> Option<Vec<u8>>;
-    fn decode_vecvec(&self) -> Vec<Vec<u8>>;
-}
-
-impl Decoder for Vec<u8> {
-    fn decode_bool(&self) -> bool {
-        Decode::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
-    }
-    fn decode_vec(&self) -> Vec<u8> {
-        Decode::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
-    }
-    fn decode_ovec(&self) -> Option<Vec<u8>> {
-        Decode::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
-    }
-    fn decode_vecvec(&self) -> Vec<Vec<u8>> {
-        Decode::decode(&mut self.as_slice()).expect("Failed to decode SCALE encoding")
-    }
-}
