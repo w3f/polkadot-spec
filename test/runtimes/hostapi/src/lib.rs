@@ -317,12 +317,12 @@ sp_core::wasm_export_functions! {
 
     // Crypto API
 
-    fn rtm_ext_crypto_ed25519_public_keys_version_1(id_data: [u8; 4]) -> Vec<u8> {
+    fn rtm_ext_crypto_ed25519_public_keys_version_1(id_data: [u8; 4]) -> Vec<[u8; 32]> {
         unsafe {
             let value = ext_crypto_ed25519_public_keys_version_1(
                 id_data.as_ptr() as u32,
             );
-            from_mem(value)
+            Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
     fn rtm_ext_crypto_ed25519_generate_version_1(id_data: [u8; 4], seed_data: Option<Vec<u8>>) -> [u8; 32] {
@@ -354,12 +354,12 @@ sp_core::wasm_export_functions! {
             ) as u32
         }
     }
-    fn rtm_ext_crypto_sr25519_public_keys_version_1(id_data: [u8; 4]) -> Vec<u8> {
+    fn rtm_ext_crypto_sr25519_public_keys_version_1(id_data: [u8; 4]) -> Vec<[u8; 32]> {
         unsafe {
             let value = ext_crypto_sr25519_public_keys_version_1(
                 id_data.as_ptr() as u32,
             );
-            from_mem(value)
+            Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
     fn rtm_ext_crypto_sr25519_generate_version_1(id_data: [u8; 4], seed_data: Option<Vec<u8>>) -> [u8; 32] {
