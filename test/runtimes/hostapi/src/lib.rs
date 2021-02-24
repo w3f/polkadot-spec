@@ -2,6 +2,8 @@
 #![allow(unused_imports)]
 use std::slice;
 
+use std::convert::TryInto;
+
 #[cfg(feature = "runtime-wasm")]
 use core::alloc::{GlobalAlloc, Layout};
 
@@ -323,17 +325,17 @@ sp_core::wasm_export_functions! {
             from_mem(value)
         }
     }
-    fn rtm_ext_crypto_ed25519_generate_version_1(id_data: [u8; 4], seed_data: Option<Vec<u8>>) -> Vec<u8> {
+    fn rtm_ext_crypto_ed25519_generate_version_1(id_data: [u8; 4], seed_data: Option<Vec<u8>>) -> [u8; 32] {
         let seed_data = seed_data.encode();
         unsafe {
             let value = ext_crypto_ed25519_generate_version_1(
                 id_data.as_ptr() as u32,
                 seed_data.as_re_ptr()
             );
-            std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
+            std::slice::from_raw_parts(value as *mut u8, 32).try_into().unwrap()
         }
     }
-    fn rtm_ext_crypto_ed25519_sign_version_1(id_data: [u8; 4], pubkey_data: Vec<u8>, msg_data: Vec<u8>) -> Option<[u8; 64]> {
+    fn rtm_ext_crypto_ed25519_sign_version_1(id_data: [u8; 4], pubkey_data: [u8; 32], msg_data: Vec<u8>) -> Option<[u8; 64]> {
         unsafe {
             let value = ext_crypto_ed25519_sign_version_1(
                 id_data.as_ptr() as u32,
@@ -343,7 +345,7 @@ sp_core::wasm_export_functions! {
             Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
-    fn rtm_ext_crypto_ed25519_verify_version_1(sig_data: [u8; 64], msg_data: Vec<u8>, pubkey_data: Vec<u8>) -> u32 {
+    fn rtm_ext_crypto_ed25519_verify_version_1(sig_data: [u8; 64], msg_data: Vec<u8>, pubkey_data: [u8; 32]) -> u32 {
         unsafe {
             ext_crypto_ed25519_verify_version_1(
                 sig_data.as_ptr() as u32,
@@ -360,17 +362,17 @@ sp_core::wasm_export_functions! {
             from_mem(value)
         }
     }
-    fn rtm_ext_crypto_sr25519_generate_version_1(id_data: [u8; 4], seed_data: Option<Vec<u8>>) -> Vec<u8> {
+    fn rtm_ext_crypto_sr25519_generate_version_1(id_data: [u8; 4], seed_data: Option<Vec<u8>>) -> [u8; 32] {
         let seed_data = seed_data.encode();
         unsafe {
             let value = ext_crypto_sr25519_generate_version_1(
                 id_data.as_ptr() as u32,
                 seed_data.as_re_ptr()
             );
-            std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
+            std::slice::from_raw_parts(value as *mut u8, 32).try_into().unwrap()
         }
     }
-    fn rtm_ext_crypto_sr25519_sign_version_1(id_data: [u8; 4], pubkey_data: Vec<u8>, msg_data: Vec<u8>) -> Option<[u8; 64]> {
+    fn rtm_ext_crypto_sr25519_sign_version_1(id_data: [u8; 4], pubkey_data: [u8; 32], msg_data: Vec<u8>) -> Option<[u8; 64]> {
         unsafe {
             let value = ext_crypto_sr25519_sign_version_1(
                 id_data.as_ptr() as u32,
@@ -380,7 +382,7 @@ sp_core::wasm_export_functions! {
             Decode::decode(&mut from_mem(value).as_slice()).unwrap()
         }
     }
-    fn rtm_ext_crypto_sr25519_verify_version_1(sig_data: [u8; 64], msg_data: Vec<u8>, pubkey_data: Vec<u8>) -> u32 {
+    fn rtm_ext_crypto_sr25519_verify_version_1(sig_data: [u8; 64], msg_data: Vec<u8>, pubkey_data: [u8; 32]) -> u32 {
         unsafe {
             ext_crypto_sr25519_verify_version_1(
                 sig_data.as_ptr() as u32,
