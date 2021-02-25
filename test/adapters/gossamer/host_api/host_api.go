@@ -18,8 +18,10 @@
 package host_api
 
 import (
+	"errors"
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"os"
 	"path"
 	"strings"
@@ -30,13 +32,14 @@ import (
 	"github.com/ChainSafe/gossamer/lib/runtime/storage"
 	"github.com/ChainSafe/gossamer/lib/runtime/wasmer"
 	"github.com/ChainSafe/gossamer/lib/runtime/wasmtime"
+	"github.com/ChainSafe/gossamer/lib/runtime/life"
 )
 
 // #include <errno.h>
 import "C"
 
 // Configuration
-var RELATIVE_WASM_ADAPTER_PATH = "bin/hostapi_runtime.compact.wasm"
+const RELATIVE_WASM_ADAPTER_PATH = "bin/hostapi_runtime.compact.wasm"
 
 // String to Integer conversion helper
 func ToUint32(input string) uint32 {
@@ -64,7 +67,7 @@ func ProcessHostApiCommand(args []string) {
 	functionTextPtr := flag.String("function", "", "Function to call (required).")
 	inputTextPtr := flag.String("input", "", "Input to pass on call.")
 
-	wasmtimeBoolPtr := flag.Bool("wasmtime", false, "Use wasmtime instead of wasmer.")
+	environmentTextPtr := flag.String("environment", "wasmer", "WASM environment to use:  wasmer, wasmtime or life")
 
 	// Parse provided argument list
 	flag.CommandLine.Parse(args)
@@ -81,10 +84,10 @@ func ProcessHostApiCommand(args []string) {
 	}
 
 	function := *functionTextPtr
-	inputs   := strings.Split(*inputTextPtr, ",")
-	useWasmtime := *wasmtimeBoolPtr
+	inputs := strings.Split(*inputTextPtr, ",")
+	environment := *environmentTextPtr
 
-	err := executeHostApiTest(function, inputs, useWasmtime)
+	err := executeHostApiTest(function, inputs, environment)
 
 	if err != nil {
 		if _, ok := err.(MissingImplementation); ok {
@@ -97,7 +100,8 @@ func ProcessHostApiCommand(args []string) {
 }
 
 
-func executeHostApiTest(function string, inputs []string, useWasmtime bool) error {
+func executeHostApiTest(function string, inputs []string, environment string) error {
+	// Initialize storage
 	store, err := storage.NewTrieState(nil)
 	if err != nil {
 		return AdapterError{"Failed to initialize storage", err}
@@ -108,21 +112,8 @@ func executeHostApiTest(function string, inputs []string, useWasmtime bool) erro
 
 	// Initialize runtime environment..
 	var rtm runtime.Instance
-	if useWasmtime {
-		// ... using wasmtime
-		cfg := &wasmtime.Config{
-			Imports: wasmtime.ImportNodeRuntime,
-		}
-		cfg.Storage = store
-		cfg.Keystore = keystore.NewGlobalKeystore()
-		cfg.LogLvl = 2 // = Warn
-
-		r, err := wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
-		if err != nil {
-			return AdapterError{"Failed to initialize runtime", err}
-		}
-		rtm = r
-	} else {
+	switch environment {
+	case "wasmer":
 		// ... using wasmer
 		cfg := &wasmer.Config{
 			Imports: wasmer.ImportsNodeRuntime,
@@ -131,11 +122,44 @@ func executeHostApiTest(function string, inputs []string, useWasmtime bool) erro
 		cfg.Keystore = keystore.NewGlobalKeystore()
 		cfg.LogLvl = 2 // = Warn
 
-		r, err := wasmer.NewInstanceFromFile(GetRuntimePath(), cfg)
+		rtm, err = wasmer.NewInstanceFromFile(GetRuntimePath(), cfg)
 		if err != nil {
-			return AdapterError{"Failed to initialize runtime", err}
+			return AdapterError{"Failed to intialize wasmer environment", err}
 		}
-		rtm = r
+	case "wasmtime":
+		// ... using wasmtime
+		cfg := &wasmtime.Config{
+			Imports: wasmtime.ImportNodeRuntime,
+		}
+		cfg.Storage = store
+		cfg.Keystore = keystore.NewGlobalKeystore()
+		cfg.LogLvl = 2 // = Warn
+
+		rtm, err = wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
+		if err != nil {
+			return AdapterError{"Failed to intialize wasmtime environment", err}
+		}
+	case "life":
+		// ... using life
+		cfg := &life.Config{
+			Resolver: new(life.Resolver),
+		}
+		cfg.Storage = store
+		cfg.Keystore = keystore.NewGlobalKeystore()
+		cfg.LogLvl = 2 // = Warn
+
+		code, err := ioutil.ReadFile(GetRuntimePath())
+		if err != nil {
+			return AdapterError{"Failed to load test runtime", err}
+		}
+
+		// create runtime executor
+		rtm, err = life.NewInstance(code, cfg)
+		if err != nil {
+			return AdapterError{"Failed to intialize life environment", err}
+		}
+	default:
+		return errors.New("Unknown runtime environment: " + environment)
 	}
 
 	// Run requested test function
