@@ -38,7 +38,7 @@ func crypto_generate(r runtime.Instance, suite string, seed string) ([]byte, err
 		return nil, AdapterError{"Encoding key id failed", err}
 	}
 
-	seed_enc, err := scale.Encode(optional.NewBytes(true, []byte(seed)))
+	seed_enc, err := optional.NewBytes(true, []byte(seed)).Encode()
 	if err != nil {
 		return nil, AdapterError{"Encoding seed failed", err}
 	}
