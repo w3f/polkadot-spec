@@ -472,7 +472,7 @@
     <reference|defn-block-header>.
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_inherent_extrinsics>>
+  <subsection|<verbatim|BlockBuilder_inherent_extrinsics>><label|defn-rt-builder-inherent-extrinsics>
 
   Generates the inherent extrinsics, which are explained in more detail in
   section <reference|sect-inherents>. This function takes a SCALE encoded
