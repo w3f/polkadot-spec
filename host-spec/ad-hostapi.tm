@@ -15,19 +15,26 @@
   encoding is used, such as little-endian byte ordering for integers.
 
   <\notation>
-    <label|nota-host-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we refer
-    to the API exposed by the Polkadot Host which interact, manipulate and
-    response based on the state storage whose state is set at the end of the
-    execution of block <math|B>.
+    <label|nota-host-api-at-state>By <math|\<cal-R\>\<cal-E\><rsub|B>> we
+    refer to the API exposed by the Polkadot Host which interact, manipulate
+    and response based on the state storage whose state is set at the end of
+    the execution of block <math|B>.
   </notation>
 
   <\definition>
-    <label|defn-runtime-pointer>The <strong|Runtime pointer-size> type is an
-    <verbatim|i64> integer, representing two consecutive <verbatim|i32>
-    integers in which the least significant one indicates the pointer to the
-    memory buffer. The most significant one provides the size of the buffer.
-    This pointer is the primary way to exchange data of arbitrary sizes
-    between the Runtime and the Polkadot Host.
+    <label|defn-runtime-pointer>The <with|font-series|bold|Runtime pointer
+    >type is a <verbatim|i32> integer representing a pointer to data in
+    memory. This pointer is the primary way to exchange data of fixed/known
+    size between the Runtime and Polkadot Host.
+  </definition>
+
+  <\definition>
+    <label|defn-runtime-pointer-size>The <strong|Runtime pointer-size> type
+    is an <verbatim|i64> integer, representing two consecutive <verbatim|i32>
+    integers. The least significant is a pointer to the data in memory. The
+    most significant provides the size of the data in bytes. This
+    representation is the primary way to exchange data of arbitrary/dynamic
+    sizes between the Runtime and the Polkadot Host.
   </definition>
 
   <\definition>
@@ -64,10 +71,10 @@
 
   <\itemize>
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the key.
+    <reference|defn-runtime-pointer-size> containing the key.
 
     <item><verbatim|value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the value.
+    <reference|defn-runtime-pointer-size> containing the value.
   </itemize>
 
   <subsection|<verbatim|ext_storage_get>>
@@ -88,10 +95,10 @@
 
   <\itemize>
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the key.
+    <reference|defn-runtime-pointer-size> containing the key.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> returning the SCALE encoded
+    <reference|defn-runtime-pointer-size> returning the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the value.
   </itemize>
@@ -117,18 +124,18 @@
 
   <\itemize>
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the key.
+    <reference|defn-runtime-pointer-size> containing the key.
 
     <item><verbatim|value_out>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the buffer to which the value
-    will be written to. This function will never write more then the length
-    of the buffer, even if the value's length is bigger.
+    <reference|defn-runtime-pointer-size> containing the buffer to which the
+    value will be written to. This function will never write more then the
+    length of the buffer, even if the value's length is bigger.
 
     <item><verbatim|offset>: an u32 integer containing the offset beyond the
     value should be read from.
 
     <item><verbatim|result>: a pointer-size (Definition
-    <reference|defn-runtime-pointer>) pointing to a SCALE encoded
+    <reference|defn-runtime-pointer-size>) pointing to a SCALE encoded
     <verbatim|Option> (Definition <reference|defn-option-type>) containing an
     unsinged 32-bit interger representing the number of bytes left at
     supplied <verbatim|offset>. Returns <verbatim|None> if the entry does not
@@ -153,7 +160,7 @@
 
   <\itemize>
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the key.
+    <reference|defn-runtime-pointer-size> containing the key.
   </itemize>
 
   <subsection|<verbatim|ext_storage_exists>>
@@ -174,7 +181,7 @@
 
   <\itemize>
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the key.
+    <reference|defn-runtime-pointer-size> containing the key.
 
     <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
     the key exists or a value equal to <verbatim|0> if otherwise.
@@ -199,22 +206,21 @@
 
   <\itemize>
     <item><verbatim|prefix>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the prefix.
+    <reference|defn-runtime-pointer-size> containing the prefix.
   </itemize>
 
   <subsection|<verbatim|ext_storage_append>>
 
-  Append the SCALE encoded value to the SCALE encoded storage item at the
-  given key. This function loads the storage item with the given key, assumes
-  that the existing storage item is a SCALE encoded byte array and that the
-  given value is a SCALE encoded item (type) of that array. It then adds that
-  given value to the end of that byte array.
+  Append the SCALE encoded value to a SCALE encoded collection at the given
+  key. This function assumes that the existing storage item is a SCALE
+  encoded collection and that the value to append is also SCALE encoded and
+  of the same type as the items in the existing collection.\ 
 
   \;
 
   For improved performance, this function does not decode the entire SCALE
   encoded byte array. Instead, it simply appends the value to the storage
-  item and adjusts the length prefix <math|Enc<rsup|Len><rsub|SC>>.
+  item and increments the length prefix <math|Enc<rsup|Len><rsub|SC>>.
 
   \;
 
@@ -236,10 +242,11 @@
 
   <\itemize-dot>
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the key.
+    <reference|defn-runtime-pointer-size> containing the key.
 
     <item><verbatim|value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> containing the value to be appended.
+    <reference|defn-runtime-pointer-size> containing the value to be
+    appended.
   </itemize-dot>
 
   <subsection|<verbatim|ext_storage_root>>
@@ -283,8 +290,8 @@
 
   <\itemize>
     <item><strong|><verbatim|parent_hash>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the SCALE encoded
-    block hash.
+    Definition <reference|defn-runtime-pointer-size> indicating the SCALE
+    encoded block hash.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit Blake2 changes root.
@@ -310,10 +317,10 @@
 
   <\itemize>
     <item><strong|><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the next key in lexicographic order.
   </itemize>
@@ -423,14 +430,14 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Definition <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the value.
+    <reference|defn-runtime-pointer-size> indicating the value.
   </itemize>
 
   <subsection|<verbatim|ext_default_child_storage_get>>
@@ -451,14 +458,14 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Definition <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the value.
   </itemize>
@@ -485,22 +492,22 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Definition <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|value_out>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the buffer to which the value
-    will be written to. This function will never write more then the length
-    of the buffer, even if the value's length is bigger.
+    <reference|defn-runtime-pointer-size> indicating the buffer to which the
+    value will be written to. This function will never write more then the
+    length of the buffer, even if the value's length is bigger.
 
     <item><verbatim|offset>: an u32 integer containing the offset beyond the
     value should be read from.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the number of bytes written into the <strong|value_out>
     buffer. Returns <verbatim|None> if the entry does not exists.
@@ -524,11 +531,11 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Definition <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
   </itemize>
 
   <subsection|<verbatim|ext_default_child_storage_storage_kill>>
@@ -549,8 +556,8 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Definition <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
   </itemize>
 
   <subsection|<verbatim|ext_default_child_storage_exists>>
@@ -571,11 +578,11 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Defintion <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Defintion <reference|defn-child-storage-type>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
     the key exists or a value equal to <verbatim|0> if otherwise.
@@ -600,11 +607,11 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Definition <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
 
     <item><verbatim|prefix>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the prefix.
+    <reference|defn-runtime-pointer-size> indicating the prefix.
   </itemize>
 
   <subsection|<verbatim|ext_default_child_storage_root>>
@@ -626,12 +633,12 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Definition <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded storage
-    root.
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
+    storage root.
   </itemize>
 
   <subsection|<verbatim|ext_default_child_storage_next_key>>
@@ -654,14 +661,14 @@
 
   <\itemize>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
-    Definition <reference|defn-runtime-pointer> indicating the child storage
-    key as defined in Definition <reference|defn-child-storage-type>.
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
 
     <item><strong|><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the next key in lexicographic order. Returns <verbatim|None>
     if the entry cannot be found.
@@ -672,17 +679,19 @@
   Interfaces for working with crypto related types from within the runtime.
 
   <\definition>
-    <label|defn-key-type-id>Cryptographic keys are saved in their own
-    storages in order to avoid collision with each other. The storages are
-    identified by their 4-byte ASCII <strong|key type ID>. The following
+    <label|defn-key-type-id>Cryptographic keys are stored in seperate key
+    stores based on their intended use case. The seperate key stores are
+    identified by a 4-byte ASCII <strong|key type identifier>. The following
     known types are available:
 
-    <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|1|2|2|cell-bborder|1ln>|<cwith|2|2|2|2|cell-tborder|1ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-bborder|1ln>|<cwith|2|2|1|1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>>|<row|<cell|babe>|<cell|Key
-    type for the Babe module>>|<row|<cell|gran>|<cell|Key type for the
-    Grandpa module>>|<row|<cell|acco>|<cell|Key type for the controlling
-    accounts>>|<row|<cell|imon>|<cell|Key type for the ImOnline
+    <\big-table|<tabular|<tformat|<cwith|1|1|2|2|cell-tborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|1|1|1|1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|2|2|2|2|cell-hyphen|n>|<cwith|2|2|1|1|cell-rborder|0ln>|<cwith|2|2|2|2|cell-lborder|0ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-bborder|0ln>|<cwith|3|3|1|-1|cell-tborder|0ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>>|<row|<cell|acco>|<cell|Key
+    type for the controlling accounts>>|<row|<cell|babe>|<cell|Key type for
+    the Babe module>>|<row|<cell|gran>|<cell|Key type for the Grandpa
+    module>>|<row|<cell|imon>|<cell|Key type for the ImOnline
     module>>|<row|<cell|audi>|<cell|Key type for the AuthorityDiscovery
-    module>>>>>>
+    module>>|<row|<cell|para>|<cell|Key type for the Parachain Validator
+    Key>>|<row|<cell|asgn>|<cell|Key type for the Parachain Assignment
+    Key>>>>>>
       Table of known key type identifiers
     </big-table>
   </definition>
@@ -702,15 +711,15 @@
 
   <subsection|<verbatim|ext_crypto_ed25519_public_keys>>
 
-  Returns all <verbatim|ed25519> public keys for the given key id from the
-  keystore.
+  Returns all <verbatim|ed25519> public keys for the given key identifier
+  from the keystore.
 
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
     (func $ext_crypto_ed25519_public_keys_version_1
 
-    (param $key_type_id i64) (return i64))
+    (param $key_type_id i32) (return i64))
   </verbatim>
 
   \;
@@ -718,11 +727,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer indicating the key
-    type ID as defined in Defintion <reference|defn-key-type-id>.
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key type
+    identifier as defined in Defintion <reference|defn-key-type-id>.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded 256-bit
+    <reference|defn-runtime-pointer-size> to an SCALE encoded \ 256-bit
     public keys.
   </itemize>
 
@@ -749,11 +758,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer indicating the key
-    type ID as defined in Definition <reference|defn-key-type-id>.
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key type
+    identifier as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|seed>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
@@ -780,21 +789,21 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer indicating the key
-    type ID as defined in Definition <reference|defn-key-type-id>.
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key type
+    identifier as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the message that is to be
-    signed.
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be signed.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
-    containing the signature. This function returns <verbatim|None> if the
-    public key cannot be found in the key store.
+    containing the 64-byte signature. This function returns <verbatim|None>
+    if the public key cannot be found in the key store.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_ed25519_verify>><label|sect-ext-crypto-ed25519-verify>
@@ -830,8 +839,8 @@
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the message that is to be
-    verified.
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
 
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
@@ -859,12 +868,12 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key
-    type ID as defined in <reference|defn-key-type-id>.
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key type
+    identifier as defined in <reference|defn-key-type-id>.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded 256-bit
-    public keys.
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
+    256-bit public keys.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_sr25519_generate>>
@@ -890,11 +899,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
-    as defined in Definition <reference|defn-key-type-id>.
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key
+    identifier as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|seed>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
@@ -921,21 +930,21 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
-    as defined in Definition <reference|defn-key-type-id>
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key
+    identifier as defined in Definition <reference|defn-key-type-id>
 
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the message that is to be
-    signed.
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be signed.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
-    containing the signature. This function returns <verbatim|None> if the
-    public key cannot be found in the key store.
+    containing the 64-byte signature. This function returns <verbatim|None>
+    if the public key cannot be found in the key store.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_sr25519_verify>><label|sect-ext-crypto-sr25519-verify>
@@ -978,8 +987,8 @@
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the message that is to be
-    verified.
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
 
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
@@ -1005,8 +1014,8 @@
     the 64-byte signature.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the message that is to be
-    verified.
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
 
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
@@ -1033,12 +1042,12 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key
-    type ID as defined in <reference|defn-key-type-id>.
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key type
+    identifier as defined in <reference|defn-key-type-id>.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded 33-byte
-    compressed public keys.
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
+    33-byte compressed public keys.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_ecdsa_generate>>
@@ -1064,11 +1073,11 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
-    as defined in Definition <reference|defn-key-type-id>.
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key
+    identifier as defined in Definition <reference|defn-key-type-id>.
 
     <item><verbatim|seed>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the BIP-39 seed which must be valid UTF8.
 
@@ -1095,18 +1104,18 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><strong|><verbatim|key_type_id>: an i32 integer containg the key ID
-    as defined in Definition <reference|defn-key-type-id>
+    <item><strong|><verbatim|key_type_id>: a 32-bit pointer to the key
+    identifier as defined in Definition <reference|defn-key-type-id>
 
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the message that is to be
-    signed.
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be signed.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the signature. The signature is 65-bytes in size, where the
     first 512-bits represent the signature and the other 8 bits represent the
@@ -1149,8 +1158,8 @@
     recovery ID.
 
     <item><verbatim|msg>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the message that is to be
-    verified.
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
 
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
@@ -1184,7 +1193,7 @@
     256-bit Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
     On success it contains the 64-byte recovered public key or an error type
     as defined in Definition <reference|defn-ecdsa-verify-error> on failure.
@@ -1215,7 +1224,7 @@
     256-bit Blake2 hash of the message.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Result> as defined in Definiton <reference|defn-result-type>.
     On success it contains the 33-byte recovered public key in compressed
     form on success or an error type as defined in Definition
@@ -1302,7 +1311,7 @@
 
   <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the data to be hashed.
+    <reference|defn-runtime-pointer-size> indicating the data to be hashed.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
@@ -1326,7 +1335,7 @@
 
   <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the data to be hashed.
+    <reference|defn-runtime-pointer-size> indicating the data to be hashed.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     512-bit hash result.
@@ -1350,7 +1359,7 @@
 
   <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the data to be hashed.
+    <reference|defn-runtime-pointer-size> indicating the data to be hashed.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
@@ -1374,7 +1383,7 @@
 
   <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the data to be hashed.
+    <reference|defn-runtime-pointer-size> indicating the data to be hashed.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     128-bit hash result.
@@ -1398,7 +1407,7 @@
 
   <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the data to be hashed.
+    <reference|defn-runtime-pointer-size> indicating the data to be hashed.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
@@ -1422,7 +1431,7 @@
 
   <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the data to be hashed.
+    <reference|defn-runtime-pointer-size> indicating the data to be hashed.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     64-bit hash result.
@@ -1446,7 +1455,7 @@
 
   <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the data to be hashed.
+    <reference|defn-runtime-pointer-size> indicating the data to be hashed.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     128-bit hash result.
@@ -1470,7 +1479,7 @@
 
   <\itemize>
     <item><strong|><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the data to be hashed.
+    <reference|defn-runtime-pointer-size> indicating the data to be hashed.
 
     <item><verbatim|return>: a 32-bit pointer to the buffer containing the
     256-bit hash result.
@@ -1507,9 +1516,9 @@
   </definition>
 
   <\definition>
-    <label|defn-offchain-local-storage><strong|Local storage> is revertible and
-    fork-aware. It means that any value set by the offchain worker triggered
-    at a certain block is reverted if that block is reverted as
+    <label|defn-offchain-local-storage><strong|Local storage> is revertible
+    and fork-aware. It means that any value set by the offchain worker
+    triggered at a certain block is reverted if that block is reverted as
     non-canonical. The value is NOT available for the worker that is re-run
     at the next or any future blocks.
   </definition>
@@ -1594,11 +1603,11 @@
 
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the byte array storing the
-    encoded extrinsic.
+    <reference|defn-runtime-pointer-size> indicating the byte array storing
+    the encoded extrinsic.
 
     <item><verbatim|return>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
     Neither on success or failure is there any additional data provided. The
     cause of a failure is implementation specific.
@@ -1643,7 +1652,7 @@
 
   <\itemize>
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
     On success it contains the <verbatim|OpaqueNetworkState> structure as
     defined in Definition <reference|defn-opaque-network-state>. On failure,
@@ -1734,10 +1743,10 @@
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the value.
+    <reference|defn-runtime-pointer-size> indicating the value.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_local_storage_clear>>
@@ -1764,7 +1773,7 @@
     <reference|defn-offchain-local-storage>.
 
     <item>key: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
   </itemize-dot>
 
   <subsection|<verbatim|ext_offchain_local_storage_compare_and_set>>
@@ -1795,15 +1804,15 @@
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|old_value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the old key.
 
     <item><verbatim|new_value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the new value.
+    <reference|defn-runtime-pointer-size> indicating the new value.
 
     <item><verbatim|result>: an i32 integer equal to <verbatim|1> if the new
     value has been set or a value equal to <verbatim|0> if otherwise.
@@ -1833,10 +1842,10 @@
     <reference|defn-offchain-local-storage>.
 
     <item><verbatim|key>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the key.
+    <reference|defn-runtime-pointer-size> indicating the key.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the value or the corresponding key.
   </itemize>
@@ -1860,17 +1869,17 @@
 
   <\itemize>
     <item><verbatim|method>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the HTTP method. Possible
-    values are <verbatim|\PGET\Q> and <verbatim|\PPOST\Q>.
+    <reference|defn-runtime-pointer-size> indicating the HTTP method.
+    Possible values are <verbatim|\PGET\Q> and <verbatim|\PPOST\Q>.
 
     <item><verbatim|urli>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the URI.
+    <reference|defn-runtime-pointer-size> indicating the URI.
 
     <item><verbatim|meta>: a future-reserved field containing additional,
     SCALE encoded parameters. Currently, an empty array should be passed.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>
     containing the i16 ID of the newly started request. On failure no
     additionally data is provided. The cause of failure is implementation
@@ -1902,13 +1911,13 @@
     started request.
 
     <item><verbatim|name>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the HTTP header name.
+    <reference|defn-runtime-pointer-size> indicating the HTTP header name.
 
     <item><verbatim|value>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the HTTP header value.
+    <reference|defn-runtime-pointer-size> indicating the HTTP header value.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
     Neither on success or failure is there any additional data provided. The
     cause of failure is implemenation specific.
@@ -1937,17 +1946,17 @@
     started request.
 
     <item><verbatim|chunk>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the chunk of bytes. Writing
-    an empty chunk finalizes the request.
+    <reference|defn-runtime-pointer-size> indicating the chunk of bytes.
+    Writing an empty chunk finalizes the request.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the UNIX timestamp as defined in Definition
     <reference|defn-unix-time>. Passing <verbatim|None> blocks indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Result> as defined Definition <reference|defn-result-type>. On
     success, no additional data is provided. On error it contains the HTTP
     error type as defined in Definition <reference|defn-http-error>.
@@ -1973,18 +1982,18 @@
 
   <\itemize>
     <item><verbatim|ids>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded array of
-    started request IDs.
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded array
+    of started request IDs.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the UNIX timestamp as defined in Definition 1.10. Passing
     <verbatim|None> blocks indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded array of
-    request statuses as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded array
+    of request statuses as defined in Definition
     <reference|defn-http-status-codes>.
   </itemize>
 
@@ -2010,7 +2019,7 @@
     started request.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating a SCALE encoded array of
+    <reference|defn-runtime-pointer-size> indicating a SCALE encoded array of
     key/value pairs.
   </itemize>
 
@@ -2041,18 +2050,18 @@
     started request.
 
     <item><verbatim|buffer>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the buffer where the body
-    gets written to.
+    <reference|defn-runtime-pointer-size> indicating the buffer where the
+    body gets written to.
 
     <item><verbatim|deadline>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the UNIX timestamp as defined in Definition
     <reference|defn-unix-time>. Passing <verbatim|None> will block
     indefinitely.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Result> as defined in Definition <reference|defn-result-type>.
     On success it contains an i32 integer specifying the number of bytes
     written or a HTTP error type as defined in Definition
@@ -2080,7 +2089,7 @@
 
   <\itemize-dot>
     <item><verbatim|nodes>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the buffer of the SCALE
+    <reference|defn-runtime-pointer-size> indicating the buffer of the SCALE
     encoded array of <verbatim|libp2p> <verbatim|PeerId>'s. Invalid
     <verbatim|PeerId>'s are silently ignored.
 
@@ -2112,9 +2121,9 @@
 
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the iterated items from which
-    the trie root gets formed. The items consist of a SCALE encoded array
-    containing arbitrary key/value pairs.
+    <reference|defn-runtime-pointer-size> indicating the iterated items from
+    which the trie root gets formed. The items consist of a SCALE encoded
+    array containing arbitrary key/value pairs.
 
     <item><verbatim|result>: a 32-bit pointer to the buffer containing the
     256-bit trie root.
@@ -2138,10 +2147,10 @@
 
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the enumerated items from
-    which the trie root gets formed. The items consist of a SCALE encoded
-    array containing only values, where the corresponding key of each value
-    is the index of the item in the array, starting at 0. The keys are
+    <reference|defn-runtime-pointer-size> indicating the enumerated items
+    from which the trie root gets formed. The items consist of a SCALE
+    encoded array containing only values, where the corresponding key of each
+    value is the index of the item in the array, starting at 0. The keys are
     compact encoded integers as described in Definition
     <reference|defn-sc-len-encoding>.
 
@@ -2167,9 +2176,9 @@
 
   <\itemize-dot>
     <item><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the iterated items from which
-    the trie root gets formed. The items consist of a SCALE encoded array
-    containing arbitrary key/value pairs.
+    <reference|defn-runtime-pointer-size> indicating the iterated items from
+    which the trie root gets formed. The items consist of a SCALE encoded
+    array containing arbitrary key/value pairs.
 
     <item>result: a 32-bit pointer to the buffer containing the 256-bit trie
     root.
@@ -2193,10 +2202,10 @@
 
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the enumerated items from
-    which the trie root gets formed. The items consist of a SCALE encoded
-    array containing only values, where the corresponding key of each value
-    is the index of the item in the array, starting at 0. The keys are
+    <reference|defn-runtime-pointer-size> indicating the enumerated items
+    from which the trie root gets formed. The items consist of a SCALE
+    encoded array containing only values, where the corresponding key of each
+    value is the index of the item in the array, starting at 0. The keys are
     compact encoded integers as described in Definition
     <reference|defn-sc-len-encoding>.
 
@@ -2261,8 +2270,8 @@
 
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the valid <verbatim|UTF8>
-    buffer to be printed.
+    <reference|defn-runtime-pointer-size> indicating the valid
+    <verbatim|UTF8> buffer to be printed.
   </itemize>
 
   <subsection|<verbatim|ext_misc_print_hex>>
@@ -2281,7 +2290,8 @@
 
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the buffer to be printed.
+    <reference|defn-runtime-pointer-size> indicating the buffer to be
+    printed.
   </itemize>
 
   <subsection|<verbatim|ext_misc_runtime_version>>
@@ -2311,10 +2321,10 @@
 
   <\itemize>
     <item><verbatim|data>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the Wasm blob.
+    <reference|defn-runtime-pointer-size> indicating the Wasm blob.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the SCALE encoded
+    <reference|defn-runtime-pointer-size> indicating the SCALE encoded
     <verbatim|Option> as defined in Definition <reference|defn-option-type>
     containing the Runtime version of the given Wasm blob.
   </itemize>
@@ -2405,11 +2415,11 @@
     <reference|defn-logging-log-level>.
 
     <item><verbatim|target>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the string which contains the
-    path, module or location from where the log was executed.
+    <reference|defn-runtime-pointer-size> indicating the string which
+    contains the path, module or location from where the log was executed.
 
     <item><verbatim|message>: a pointer-size as defined in Definition
-    <reference|defn-runtime-pointer> indicating the log message.
+    <reference|defn-runtime-pointer-size> indicating the log message.
   </itemize>
 
   \;
@@ -2610,7 +2620,7 @@
     <associate|defn-logging-log-level|<tuple|A.12|119>>
     <associate|defn-opaque-network-state|<tuple|A.11|111>>
     <associate|defn-persistent-storage|<tuple|A.7|110>>
-    <associate|defn-runtime-pointer|<tuple|A.2|95>>
+    <associate|defn-runtime-pointer-size|<tuple|A.2|95>>
     <associate|nota-host-api-at-state|<tuple|A.1|95>>
     <associate|sect-child-storage-api|<tuple|A.2|99>>
     <associate|sect-ext-crypto-ecdsa-verify|<tuple|A.3.12|106>>

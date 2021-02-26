@@ -1738,7 +1738,7 @@
     <associate|auto-205|<tuple|D.1.9|91|ad-hostapi.tm>>
     <associate|auto-206|<tuple|D.1.9.1|91|ad-hostapi.tm>>
     <associate|auto-207|<tuple|D.1.10|91|ad-hostapi.tm>>
-    <associate|auto-208|<tuple|D.1.10.1|91|ad-hostapi.tm>>
+    <associate|auto-208|<tuple|D.1.10.1|92|ad-hostapi.tm>>
     <associate|auto-209|<tuple|D.1.11|92|ad-hostapi.tm>>
     <associate|auto-21|<tuple|1.13|13|c01-background.tm>>
     <associate|auto-210|<tuple|D.1.11.1|92|ad-hostapi.tm>>
@@ -1746,7 +1746,7 @@
     <associate|auto-212|<tuple|D.1.12.1|92|ad-hostapi.tm>>
     <associate|auto-213|<tuple|D.1.13|92|ad-hostapi.tm>>
     <associate|auto-214|<tuple|D.1.13.1|92|ad-hostapi.tm>>
-    <associate|auto-215|<tuple|D.2|92|ad-hostapi.tm>>
+    <associate|auto-215|<tuple|D.2|93|ad-hostapi.tm>>
     <associate|auto-216|<tuple|D.2.1|93|ad-hostapi.tm>>
     <associate|auto-217|<tuple|D.2.1.1|93|ad-hostapi.tm>>
     <associate|auto-218|<tuple|D.2.2|93|ad-hostapi.tm>>
@@ -1754,7 +1754,7 @@
     <associate|auto-22|<tuple|1.13|13|c01-background.tm>>
     <associate|auto-220|<tuple|D.2.3|93|ad-hostapi.tm>>
     <associate|auto-221|<tuple|D.2.3.1|93|ad-hostapi.tm>>
-    <associate|auto-222|<tuple|D.2.4|93|ad-hostapi.tm>>
+    <associate|auto-222|<tuple|D.2.4|94|ad-hostapi.tm>>
     <associate|auto-223|<tuple|D.2.4.1|94|ad-hostapi.tm>>
     <associate|auto-224|<tuple|D.2.5|94|ad-hostapi.tm>>
     <associate|auto-225|<tuple|D.2.5.1|94|ad-hostapi.tm>>
@@ -1763,47 +1763,47 @@
     <associate|auto-228|<tuple|D.2.7|94|ad-hostapi.tm>>
     <associate|auto-229|<tuple|D.2.7.1|94|ad-hostapi.tm>>
     <associate|auto-23|<tuple|1.13|13|c01-background.tm>>
-    <associate|auto-230|<tuple|D.2.8|94|ad-hostapi.tm>>
-    <associate|auto-231|<tuple|D.2.8.1|94|ad-hostapi.tm>>
+    <associate|auto-230|<tuple|D.2.8|95|ad-hostapi.tm>>
+    <associate|auto-231|<tuple|D.2.8.1|95|ad-hostapi.tm>>
     <associate|auto-232|<tuple|D.2.9|95|ad-hostapi.tm>>
     <associate|auto-233|<tuple|D.2.9.1|95|ad-hostapi.tm>>
     <associate|auto-234|<tuple|D.3|95|ad-hostapi.tm>>
     <associate|auto-235|<tuple|D.1|95|ad-hostapi.tm>>
-    <associate|auto-236|<tuple|D.2|95|ad-hostapi.tm>>
-    <associate|auto-237|<tuple|D.3.1|95|ad-hostapi.tm>>
+    <associate|auto-236|<tuple|D.2|96|ad-hostapi.tm>>
+    <associate|auto-237|<tuple|D.3.1|96|ad-hostapi.tm>>
     <associate|auto-238|<tuple|D.3.1.1|96|ad-hostapi.tm>>
     <associate|auto-239|<tuple|D.3.2|96|ad-hostapi.tm>>
     <associate|auto-24|<tuple|1.13|13|c01-background.tm>>
     <associate|auto-240|<tuple|D.3.2.1|96|ad-hostapi.tm>>
     <associate|auto-241|<tuple|D.3.3|96|ad-hostapi.tm>>
     <associate|auto-242|<tuple|D.3.3.1|96|ad-hostapi.tm>>
-    <associate|auto-243|<tuple|D.3.4|96|ad-hostapi.tm>>
+    <associate|auto-243|<tuple|D.3.4|97|ad-hostapi.tm>>
     <associate|auto-244|<tuple|D.3.4.1|97|ad-hostapi.tm>>
     <associate|auto-245|<tuple|D.3.5|97|ad-hostapi.tm>>
     <associate|auto-246|<tuple|D.3.5.1|97|ad-hostapi.tm>>
     <associate|auto-247|<tuple|D.3.6|97|ad-hostapi.tm>>
     <associate|auto-248|<tuple|D.3.6.1|97|ad-hostapi.tm>>
-    <associate|auto-249|<tuple|D.3.7|97|ad-hostapi.tm>>
+    <associate|auto-249|<tuple|D.3.7|98|ad-hostapi.tm>>
     <associate|auto-25|<tuple|1.14|13|c01-background.tm>>
-    <associate|auto-250|<tuple|D.3.7.1|97|ad-hostapi.tm>>
+    <associate|auto-250|<tuple|D.3.7.1|98|ad-hostapi.tm>>
     <associate|auto-251|<tuple|D.3.8|98|ad-hostapi.tm>>
     <associate|auto-252|<tuple|D.3.8.1|98|ad-hostapi.tm>>
     <associate|auto-253|<tuple|D.3.8.2|98|ad-hostapi.tm>>
-    <associate|auto-254|<tuple|D.3.9|98|ad-hostapi.tm>>
-    <associate|auto-255|<tuple|D.3.9.1|98|ad-hostapi.tm>>
+    <associate|auto-254|<tuple|D.3.9|99|ad-hostapi.tm>>
+    <associate|auto-255|<tuple|D.3.9.1|99|ad-hostapi.tm>>
     <associate|auto-256|<tuple|D.3.10|99|ad-hostapi.tm>>
     <associate|auto-257|<tuple|D.3.10.1|99|ad-hostapi.tm>>
     <associate|auto-258|<tuple|D.3.11|99|ad-hostapi.tm>>
     <associate|auto-259|<tuple|D.3.11.1|99|ad-hostapi.tm>>
     <associate|auto-26|<tuple|1.15|13|c01-background.tm>>
-    <associate|auto-260|<tuple|D.3.12|99|ad-hostapi.tm>>
-    <associate|auto-261|<tuple|D.3.12.1|99|ad-hostapi.tm>>
+    <associate|auto-260|<tuple|D.3.12|100|ad-hostapi.tm>>
+    <associate|auto-261|<tuple|D.3.12.1|100|ad-hostapi.tm>>
     <associate|auto-262|<tuple|D.3.13|100|ad-hostapi.tm>>
     <associate|auto-263|<tuple|D.3.13.1|100|ad-hostapi.tm>>
     <associate|auto-264|<tuple|D.3.14|100|ad-hostapi.tm>>
     <associate|auto-265|<tuple|D.3.14.1|100|ad-hostapi.tm>>
-    <associate|auto-266|<tuple|D.3.15|100|ad-hostapi.tm>>
-    <associate|auto-267|<tuple|D.3.15.1|100|ad-hostapi.tm>>
+    <associate|auto-266|<tuple|D.3.15|101|ad-hostapi.tm>>
+    <associate|auto-267|<tuple|D.3.15.1|101|ad-hostapi.tm>>
     <associate|auto-268|<tuple|D.3.16|101|ad-hostapi.tm>>
     <associate|auto-269|<tuple|D.3.16.1|101|ad-hostapi.tm>>
     <associate|auto-27|<tuple|1.15|13|c01-background.tm>>
@@ -1811,9 +1811,9 @@
     <associate|auto-271|<tuple|D.4.1|101|ad-hostapi.tm>>
     <associate|auto-272|<tuple|D.4.1.1|101|ad-hostapi.tm>>
     <associate|auto-273|<tuple|D.4.2|101|ad-hostapi.tm>>
-    <associate|auto-274|<tuple|D.4.2.1|101|ad-hostapi.tm>>
-    <associate|auto-275|<tuple|D.4.3|101|ad-hostapi.tm>>
-    <associate|auto-276|<tuple|D.4.3.1|101|ad-hostapi.tm>>
+    <associate|auto-274|<tuple|D.4.2.1|102|ad-hostapi.tm>>
+    <associate|auto-275|<tuple|D.4.3|102|ad-hostapi.tm>>
+    <associate|auto-276|<tuple|D.4.3.1|102|ad-hostapi.tm>>
     <associate|auto-277|<tuple|D.4.4|102|ad-hostapi.tm>>
     <associate|auto-278|<tuple|D.4.4.1|102|ad-hostapi.tm>>
     <associate|auto-279|<tuple|D.4.5|102|ad-hostapi.tm>>
@@ -1821,20 +1821,20 @@
     <associate|auto-280|<tuple|D.4.5.1|102|ad-hostapi.tm>>
     <associate|auto-281|<tuple|D.4.6|102|ad-hostapi.tm>>
     <associate|auto-282|<tuple|D.4.6.1|102|ad-hostapi.tm>>
-    <associate|auto-283|<tuple|D.4.7|102|ad-hostapi.tm>>
-    <associate|auto-284|<tuple|D.4.7.1|102|ad-hostapi.tm>>
+    <associate|auto-283|<tuple|D.4.7|103|ad-hostapi.tm>>
+    <associate|auto-284|<tuple|D.4.7.1|103|ad-hostapi.tm>>
     <associate|auto-285|<tuple|D.4.8|103|ad-hostapi.tm>>
     <associate|auto-286|<tuple|D.4.8.1|103|ad-hostapi.tm>>
     <associate|auto-287|<tuple|D.5|103|ad-hostapi.tm>>
-    <associate|auto-288|<tuple|D.3|103|ad-hostapi.tm>>
+    <associate|auto-288|<tuple|D.3|104|ad-hostapi.tm>>
     <associate|auto-289|<tuple|D.5.1|104|ad-hostapi.tm>>
     <associate|auto-29|<tuple|2.1|15|c02-state.tm>>
     <associate|auto-290|<tuple|D.5.1.1|104|ad-hostapi.tm>>
     <associate|auto-291|<tuple|D.5.2|104|ad-hostapi.tm>>
     <associate|auto-292|<tuple|D.5.2.1|104|ad-hostapi.tm>>
     <associate|auto-293|<tuple|D.5.3|104|ad-hostapi.tm>>
-    <associate|auto-294|<tuple|D.5.3.1|104|ad-hostapi.tm>>
-    <associate|auto-295|<tuple|D.5.4|104|ad-hostapi.tm>>
+    <associate|auto-294|<tuple|D.5.3.1|105|ad-hostapi.tm>>
+    <associate|auto-295|<tuple|D.5.4|105|ad-hostapi.tm>>
     <associate|auto-296|<tuple|D.5.4.1|105|ad-hostapi.tm>>
     <associate|auto-297|<tuple|D.5.5|105|ad-hostapi.tm>>
     <associate|auto-298|<tuple|D.5.5.1|105|ad-hostapi.tm>>
@@ -1844,55 +1844,55 @@
     <associate|auto-300|<tuple|D.5.6.1|105|ad-hostapi.tm>>
     <associate|auto-301|<tuple|D.5.7|105|ad-hostapi.tm>>
     <associate|auto-302|<tuple|D.5.7.1|105|ad-hostapi.tm>>
-    <associate|auto-303|<tuple|D.5.8|105|ad-hostapi.tm>>
-    <associate|auto-304|<tuple|D.5.8.1|105|ad-hostapi.tm>>
+    <associate|auto-303|<tuple|D.5.8|106|ad-hostapi.tm>>
+    <associate|auto-304|<tuple|D.5.8.1|106|ad-hostapi.tm>>
     <associate|auto-305|<tuple|D.5.9|106|ad-hostapi.tm>>
     <associate|auto-306|<tuple|D.5.9.1|106|ad-hostapi.tm>>
     <associate|auto-307|<tuple|D.5.10|106|ad-hostapi.tm>>
     <associate|auto-308|<tuple|D.5.10.1|106|ad-hostapi.tm>>
-    <associate|auto-309|<tuple|D.5.11|106|ad-hostapi.tm>>
+    <associate|auto-309|<tuple|D.5.11|107|ad-hostapi.tm>>
     <associate|auto-31|<tuple|2.1|15|c02-state.tm>>
-    <associate|auto-310|<tuple|D.5.11.1|106|ad-hostapi.tm>>
+    <associate|auto-310|<tuple|D.5.11.1|107|ad-hostapi.tm>>
     <associate|auto-311|<tuple|D.5.12|107|ad-hostapi.tm>>
     <associate|auto-312|<tuple|D.5.12.1|107|ad-hostapi.tm>>
     <associate|auto-313|<tuple|D.5.13|107|ad-hostapi.tm>>
     <associate|auto-314|<tuple|D.5.13.1|107|ad-hostapi.tm>>
-    <associate|auto-315|<tuple|D.5.14|107|ad-hostapi.tm>>
-    <associate|auto-316|<tuple|D.5.14.1|107|ad-hostapi.tm>>
+    <associate|auto-315|<tuple|D.5.14|108|ad-hostapi.tm>>
+    <associate|auto-316|<tuple|D.5.14.1|108|ad-hostapi.tm>>
     <associate|auto-317|<tuple|D.5.15|108|ad-hostapi.tm>>
     <associate|auto-318|<tuple|D.5.15.1|108|ad-hostapi.tm>>
     <associate|auto-319|<tuple|D.5.16|108|ad-hostapi.tm>>
     <associate|auto-32|<tuple|2.1.2|15|c02-state.tm>>
-    <associate|auto-320|<tuple|D.5.16.1|108|ad-hostapi.tm>>
-    <associate|auto-321|<tuple|D.5.17|108|ad-hostapi.tm>>
+    <associate|auto-320|<tuple|D.5.16.1|109|ad-hostapi.tm>>
+    <associate|auto-321|<tuple|D.5.17|109|ad-hostapi.tm>>
     <associate|auto-322|<tuple|D.5.17.1|109|ad-hostapi.tm>>
     <associate|auto-323|<tuple|D.6|109|ad-hostapi.tm>>
     <associate|auto-324|<tuple|D.6.1|109|ad-hostapi.tm>>
     <associate|auto-325|<tuple|D.6.1.1|109|ad-hostapi.tm>>
     <associate|auto-326|<tuple|D.6.2|109|ad-hostapi.tm>>
-    <associate|auto-327|<tuple|D.6.2.1|109|ad-hostapi.tm>>
-    <associate|auto-328|<tuple|D.6.3|109|ad-hostapi.tm>>
-    <associate|auto-329|<tuple|D.6.3.1|109|ad-hostapi.tm>>
+    <associate|auto-327|<tuple|D.6.2.1|110|ad-hostapi.tm>>
+    <associate|auto-328|<tuple|D.6.3|110|ad-hostapi.tm>>
+    <associate|auto-329|<tuple|D.6.3.1|110|ad-hostapi.tm>>
     <associate|auto-33|<tuple|2.1.3|16|c02-state.tm>>
     <associate|auto-330|<tuple|D.6.4|110|ad-hostapi.tm>>
     <associate|auto-331|<tuple|D.6.4.1|110|ad-hostapi.tm>>
     <associate|auto-332|<tuple|D.7|110|ad-hostapi.tm>>
     <associate|auto-333|<tuple|D.7.1|110|ad-hostapi.tm>>
     <associate|auto-334|<tuple|D.7.1.1|110|ad-hostapi.tm>>
-    <associate|auto-335|<tuple|D.7.2|110|ad-hostapi.tm>>
-    <associate|auto-336|<tuple|D.7.2.1|110|ad-hostapi.tm>>
-    <associate|auto-337|<tuple|D.7.3|110|ad-hostapi.tm>>
-    <associate|auto-338|<tuple|D.7.3.1|110|ad-hostapi.tm>>
+    <associate|auto-335|<tuple|D.7.2|111|ad-hostapi.tm>>
+    <associate|auto-336|<tuple|D.7.2.1|111|ad-hostapi.tm>>
+    <associate|auto-337|<tuple|D.7.3|111|ad-hostapi.tm>>
+    <associate|auto-338|<tuple|D.7.3.1|111|ad-hostapi.tm>>
     <associate|auto-339|<tuple|D.7.4|111|ad-hostapi.tm>>
     <associate|auto-34|<tuple|2.1.4|18|c02-state.tm>>
     <associate|auto-340|<tuple|D.7.4.1|111|ad-hostapi.tm>>
     <associate|auto-341|<tuple|D.7.5|111|ad-hostapi.tm>>
     <associate|auto-342|<tuple|D.7.5.1|111|ad-hostapi.tm>>
     <associate|auto-343|<tuple|D.8|111|ad-hostapi.tm>>
-    <associate|auto-344|<tuple|D.8.1|111|ad-hostapi.tm>>
-    <associate|auto-345|<tuple|D.8.1.1|111|ad-hostapi.tm>>
-    <associate|auto-346|<tuple|D.8.2|111|ad-hostapi.tm>>
-    <associate|auto-347|<tuple|D.8.2.1|111|ad-hostapi.tm>>
+    <associate|auto-344|<tuple|D.8.1|112|ad-hostapi.tm>>
+    <associate|auto-345|<tuple|D.8.1.1|112|ad-hostapi.tm>>
+    <associate|auto-346|<tuple|D.8.2|112|ad-hostapi.tm>>
+    <associate|auto-347|<tuple|D.8.2.1|112|ad-hostapi.tm>>
     <associate|auto-348|<tuple|D.9|112|ad-hostapi.tm>>
     <associate|auto-349|<tuple|D.4|112|ad-hostapi.tm>>
     <associate|auto-35|<tuple|2.2|19|c02-state.tm>>
@@ -2113,14 +2113,14 @@
     <associate|defn-candidate-receipt|<tuple|7.13|62|c07-anv.tm>>
     <associate|defn-chain-quality|<tuple|6.16|43|c06-consensus.tm>>
     <associate|defn-chain-subchain|<tuple|1.13|13|c01-background.tm>>
-    <associate|defn-child-storage-type|<tuple|D.4|92|ad-hostapi.tm>>
+    <associate|defn-child-storage-type|<tuple|D.5|93|ad-hostapi.tm>>
     <associate|defn-children-bitmap|<tuple|2.10|18|c02-state.tm>>
     <associate|defn-collator-invalidity-transaction|<tuple|7.31|71|c07-anv.tm>>
     <associate|defn-collator-unavailability-transaction|<tuple|7.32|71|c07-anv.tm>>
     <associate|defn-consensus-message-digest|<tuple|6.3|39|c06-consensus.tm>>
     <associate|defn-controller-key|<tuple|A.3|81|aa-cryptoalgorithms.tm>>
     <associate|defn-digest|<tuple|3.7|26|c03-transition.tm>>
-    <associate|defn-ecdsa-verify-error|<tuple|D.6|95|ad-hostapi.tm>>
+    <associate|defn-ecdsa-verify-error|<tuple|D.7|96|ad-hostapi.tm>>
     <associate|defn-epoch-randomness|<tuple|6.21|45|c06-consensus.tm>>
     <associate|defn-epoch-slot|<tuple|6.6|41|c06-consensus.tm>>
     <associate|defn-epoch-subchain|<tuple|6.9|42|c06-consensus.tm>>
@@ -2144,17 +2144,17 @@
     <associate|defn-grandpa-voter|<tuple|6.22|47|c06-consensus.tm>>
     <associate|defn-head-data|<tuple|7.12|61|c07-anv.tm>>
     <associate|defn-hex-encoding|<tuple|B.14|85|ab-encodings.tm>>
-    <associate|defn-http-error|<tuple|D.10|103|ad-hostapi.tm>>
+    <associate|defn-http-error|<tuple|D.11|104|ad-hostapi.tm>>
     <associate|defn-http-return-value|<tuple|E.3|118|af-legacyhostapi.tm>>
-    <associate|defn-http-status-codes|<tuple|D.9|103|ad-hostapi.tm>>
+    <associate|defn-http-status-codes|<tuple|D.10|104|ad-hostapi.tm>>
     <associate|defn-index-function|<tuple|2.7|16|c02-state.tm>>
     <associate|defn-inherent-data|<tuple|3.5|25|c03-transition.tm>>
-    <associate|defn-key-type-id|<tuple|D.5|95|ad-hostapi.tm>>
-    <associate|defn-lexicographic-ordering|<tuple|D.3|89|ad-hostapi.tm>>
+    <associate|defn-key-type-id|<tuple|D.6|95|ad-hostapi.tm>>
+    <associate|defn-lexicographic-ordering|<tuple|D.4|89|ad-hostapi.tm>>
     <associate|defn-little-endian|<tuple|1.7|12|c01-background.tm>>
     <associate|defn-local-storage|<tuple|D.8|103|ad-hostapi.tm>>
     <associate|defn-local-validation-parameters|<tuple|7.8|59|c07-anv.tm>>
-    <associate|defn-logging-log-level|<tuple|D.12|112|ad-hostapi.tm>>
+    <associate|defn-logging-log-level|<tuple|D.13|112|ad-hostapi.tm>>
     <associate|defn-longest-chain|<tuple|1.14|13|c01-background.tm>>
     <associate|defn-merkle-value|<tuple|2.12|19|c02-state.tm>>
     <associate|defn-msg-request-whole-block|<tuple|7.25|70|c07-anv.tm>>
@@ -2164,9 +2164,9 @@
     <associate|defn-node-value|<tuple|2.8|17|c02-state.tm>>
     <associate|defn-nodetype|<tuple|2.4|16|c02-state.tm>>
     <associate|defn-observed-votes|<tuple|6.30|48|c06-consensus.tm>>
-    <associate|defn-offchain-local-storage|<tuple|E.2|118|af-legacyhostapi.tm>>
-    <associate|defn-offchain-persistent-storage|<tuple|E.1|118|af-legacyhostapi.tm>>
-    <associate|defn-opaque-network-state|<tuple|D.11|104|ad-hostapi.tm>>
+    <associate|defn-offchain-local-storage|<tuple|D.9|103|ad-hostapi.tm>>
+    <associate|defn-offchain-persistent-storage|<tuple|D.8|103|ad-hostapi.tm>>
+    <associate|defn-opaque-network-state|<tuple|D.12|104|ad-hostapi.tm>>
     <associate|defn-option-type|<tuple|B.5|83|ab-encodings.tm>>
     <associate|defn-para-proposal|<tuple|7.17|64|c07-anv.tm>>
     <associate|defn-path-graph|<tuple|1.2|11|c01-background.tm>>
@@ -2192,6 +2192,7 @@
     <associate|defn-rte-unknown-transaction|<tuple|E.8|117|ae-runtimeentries.tm>>
     <associate|defn-runtime|<tuple|1.1|11|c01-background.tm>>
     <associate|defn-runtime-pointer|<tuple|D.2|89|ad-hostapi.tm>>
+    <associate|defn-runtime-pointer-size|<tuple|D.3|89|ad-hostapi.tm>>
     <associate|defn-sc-len-encoding|<tuple|B.13|84|ab-encodings.tm>>
     <associate|defn-scale-byte-array|<tuple|B.1|83|ab-encodings.tm>>
     <associate|defn-scale-codec|<tuple|7.1|57|c07-anv.tm>>
@@ -2224,6 +2225,7 @@
     <associate|exmp-candid-unfinalized|<tuple|6.42|54|c06-consensus.tm>>
     <associate|key-encode-in-trie|<tuple|2.1|15|c02-state.tm>>
     <associate|nota-call-into-runtime|<tuple|3.2|22|c03-transition.tm>>
+    <associate|nota-host-api-at-state|<tuple|D.1|89|ad-hostapi.tm>>
     <associate|nota-re-api-at-state|<tuple|D.1|89|ad-hostapi.tm>>
     <associate|nota-runtime-code-at-state|<tuple|3.1|22|c03-transition.tm>>
     <associate|note-slot|<tuple|6.8|42|c06-consensus.tm>>
@@ -2257,6 +2259,7 @@
     <associate|sect-block-finalization|<tuple|6.4|54|c06-consensus.tm>>
     <associate|sect-block-format|<tuple|3.3.1|25|c03-transition.tm>>
     <associate|sect-block-production|<tuple|6.2|41|c06-consensus.tm>>
+    <associate|sect-block-request|<tuple|4.1.7.2|34|c04-networking.tm>>
     <associate|sect-block-submission|<tuple|3.3.2|27|c03-transition.tm>>
     <associate|sect-block-validation|<tuple|3.3.2|27|c03-transition.tm>>
     <associate|sect-certifying-keys|<tuple|A.5.5|82|aa-cryptoalgorithms.tm>>
@@ -2264,7 +2267,7 @@
     <associate|sect-changes-trie-block-pairs|<tuple|3.3.4.2|29|c03-transition.tm>>
     <associate|sect-changes-trie-child-trie-pair|<tuple|3.3.4.3|30|c03-transition.tm>>
     <associate|sect-changes-trie-extrinsics-pairs|<tuple|3.3.4.1|29|c03-transition.tm>>
-    <associate|sect-child-storage-api|<tuple|D.2|92|ad-hostapi.tm>>
+    <associate|sect-child-storage-api|<tuple|D.2|93|ad-hostapi.tm>>
     <associate|sect-child-storages|<tuple|2.2|19|c02-state.tm>>
     <associate|sect-child-trie-structure|<tuple|2.2.1|19|c02-state.tm>>
     <associate|sect-code-executor|<tuple|3.1.2|22|c03-transition.tm>>
@@ -2283,11 +2286,11 @@
     <associate|sect-epoch-randomness|<tuple|6.2.5|45|c06-consensus.tm>>
     <associate|sect-equivocation-case|<tuple|7.11.5|69|c07-anv.tm>>
     <associate|sect-escalation|<tuple|7.12.3|71|c07-anv.tm>>
-    <associate|sect-ext-crypto-ecdsa-verify|<tuple|D.3.12|99|ad-hostapi.tm>>
-    <associate|sect-ext-crypto-ed25519-verify|<tuple|D.3.4|96|ad-hostapi.tm>>
+    <associate|sect-ext-crypto-ecdsa-verify|<tuple|D.3.12|100|ad-hostapi.tm>>
+    <associate|sect-ext-crypto-ed25519-verify|<tuple|D.3.4|97|ad-hostapi.tm>>
     <associate|sect-ext-crypto-finish-batch-verify|<tuple|D.3.16|101|ad-hostapi.tm>>
     <associate|sect-ext-crypto-sr25519-verify|<tuple|D.3.8|98|ad-hostapi.tm>>
-    <associate|sect-ext-crypto-start-batch-verify|<tuple|D.3.15|100|ad-hostapi.tm>>
+    <associate|sect-ext-crypto-start-batch-verify|<tuple|D.3.15|101|ad-hostapi.tm>>
     <associate|sect-ext-offchain-submit-transaction|<tuple|D.5.2|104|ad-hostapi.tm>>
     <associate|sect-ext-storage-changes-root|<tuple|D.1.9|91|ad-hostapi.tm>>
     <associate|sect-ext-storage-commit-transaction|<tuple|D.1.13|92|ad-hostapi.tm>>
@@ -2303,6 +2306,7 @@
     <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|E.3.26|120|ae-runtimeentries.tm>>
     <associate|sect-handling-runtime-state-update|<tuple|3.1.2.4|23|c03-transition.tm>>
     <associate|sect-hash-functions|<tuple|A.1|81|aa-cryptoalgorithms.tm>>
+    <associate|sect-host-api|<tuple|D|89|ad-hostapi.tm>>
     <associate|sect-inclusion-of-candidate-receipt|<tuple|7.5.1|64|c07-anv.tm>>
     <associate|sect-inherents|<tuple|3.2.3.1|25|c03-transition.tm>>
     <associate|sect-int-encoding|<tuple|B.1.1|84|ab-encodings.tm>>
@@ -2341,6 +2345,7 @@
     <associate|sect-state-replication|<tuple|3.3|25|c03-transition.tm>>
     <associate|sect-state-storage|<tuple|2.1|15|c02-state.tm>>
     <associate|sect-state-storage-trie-structure|<tuple|2.1.3|16|c02-state.tm>>
+    <associate|sect-storage-set|<tuple|D.1.1|89|ad-hostapi.tm>>
     <associate|sect-verifying-authorship|<tuple|6.2.6|45|c06-consensus.tm>>
     <associate|sect-voting-on-availability|<tuple|7.9|66|c07-anv.tm>>
     <associate|sect-vrf|<tuple|A.4|81|aa-cryptoalgorithms.tm>>
