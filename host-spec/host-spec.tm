@@ -1414,7 +1414,7 @@
 
   <include|ad-hostapi.tm>
 
-  <include|ae-runtimeentries.tm>
+  <include|ae-runtimeapi.tm>
 
   \;
 

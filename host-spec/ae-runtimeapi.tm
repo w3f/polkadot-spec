@@ -5,9 +5,9 @@
 <style|<tuple|book|old-dots|old-lengths>>
 
 <\body>
-  <appendix|Runtime Entries><label|sect-runtime-entries>
+  <appendix|Polkadot Runtime API><label|sect-runtime-entries>
 
-  <section|List of Runtime Entries><label|sect-list-of-runtime-entries>
+  <section|List of Runtime Methods><label|sect-list-of-runtime-entries>
 
   The Polkadot Host assumes that at least the following functions are
   implemented in the Runtime Wasm blob and have been exported as shown in
