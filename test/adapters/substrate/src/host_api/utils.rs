@@ -73,6 +73,10 @@ impl Runtime {
             method: WasmExecutionMethod::Interpreted,
         }
     }
+    pub fn using_wasmi(mut self) -> Self {
+        self.method = WasmExecutionMethod::Interpreted;
+        self
+    }
     pub fn using_wasmtime(mut self) -> Self {
         self.method = WasmExecutionMethod::Compiled;
         self
