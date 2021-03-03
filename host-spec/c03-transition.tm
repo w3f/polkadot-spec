@@ -149,6 +149,18 @@
   another Wasm module alongside the runtime which imports these functions
   from the Polkadot Host as host functions.
 
+  <subsubsection|Memory Management>
+
+  The Polkadot Host is responsible for managing the WASM heap memory starting
+  at the exported symbol <verbatim|__heap_base> as a part of implementing the
+  allocator Host API (see Section <reference|sect-ext-allocator>)
+  and<space|1em>the same allocator should be used for any other heap
+  allocation.
+
+  Furthermore the initial size of the available WASM memory should be based
+  on the <verbatim|:heappages> storage key, where one page has the size of
+  64KB.
+
   <subsubsection|Sending Arguments to Runtime
   ><label|sect-runtime-send-args-to-runtime-enteries>
 
