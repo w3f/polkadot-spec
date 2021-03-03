@@ -108,6 +108,14 @@
   persisted after the call is ended. See Section
   <reference|sect-handling-runtime-state-update> for more information.
 
+  <section|List of Runtime Constants>
+
+  <subsection|<verbatim|__heap_base>>
+
+  This constant indicates the beginning of the heap in memory. The space
+  below is reserved for the stack and data section. For more details please
+  refer to Section <reference|sect-ext-allocator>.
+
   <section|JSON-RPC API for external services><label|sect-json-rpc-api>
 
   Polkadot Host implementers are encouraged to implement an API in order for
