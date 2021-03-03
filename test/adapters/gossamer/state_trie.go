@@ -115,10 +115,7 @@ func ProcessStateTrieCommand(command_args []string) {
 		if command_args[0] == "insert-and-delete" {
 			for len(key_list) > 0 {
 				key_index_to_drop := int(trieHash[0]) % len(key_list)
-				err = test_trie.Delete(key_list[key_index_to_drop])
-				if err != nil {
-					log.Fatal(err)
-				}
+				test_trie.Delete(key_list[key_index_to_drop])
 
 				trieHash, err = test_trie.Hash()
 				if err != nil {
