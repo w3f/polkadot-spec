@@ -15,8 +15,12 @@ pub fn process_host_api_tests(subcmd_matches: &ArgMatches) {
 
         let mut rtm = utils::Runtime::new();
 
-        if subcmd_matches.is_present("wasmtime") {
-            rtm = rtm.using_wasmtime();
+        if let Some(env) = subcmd_matches.value_of("environment") {
+            match env {
+                "wasmi" => rtm = rtm.using_wasmi(),
+                "wasmtime" => rtm = rtm.using_wasmtime(),
+                _ => unreachable!(), // Clap should not allow other values
+            }
         }
 
         match func {
