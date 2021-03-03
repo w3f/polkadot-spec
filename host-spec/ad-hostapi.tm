@@ -2329,9 +2329,16 @@
     containing the Runtime version of the given Wasm blob.
   </itemize>
 
-  <section|Allocator>
+  <section|Allocator><label|sect-ext-allocator>
 
-  Provides functionality for calling into the memory allocator.
+  The Polkadot Runtime does not include a memory allocator and relies on the
+  Host API for all heap allocations. The beginning of this heap is marked by
+  the <verbatim|__heap_base> symbol exported by the Polkadot Runtime. No
+  memory should be allocated below that address, to avoid clashes with the
+  stack and data section. The same allocator made accessible by this Host API
+  should be used for any other WASM memory allocations and deallocations
+  outside the runtime e.g. when passing the SCALE-encoded parameters to
+  Runtime API calls.
 
   <subsection|<verbatim|ext_allocator_malloc>>
 
