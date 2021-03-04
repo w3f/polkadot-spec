@@ -60,7 +60,7 @@ func GetRuntimePath() string {
 	return path.Join(dir, RELATIVE_WASM_ADAPTER_PATH)
 }
 
-// Main hostapi test argument parser and executor
+// Main hostapi test argument parser
 func ProcessHostApiCommand(args []string) {
 
 	// List of expected flags
@@ -68,6 +68,7 @@ func ProcessHostApiCommand(args []string) {
 	inputTextPtr := flag.String("input", "", "Input to pass on call.")
 
 	environmentTextPtr := flag.String("environment", "wasmer", "WASM environment to use:  wasmer, wasmtime or life")
+	runtimeTextPtr := flag.String("runtime", GetRuntimePath(), "Override path to hostapi test runtime to use.")
 
 	// Parse provided argument list
 	flag.CommandLine.Parse(args)
@@ -86,8 +87,9 @@ func ProcessHostApiCommand(args []string) {
 	function := *functionTextPtr
 	inputs := strings.Split(*inputTextPtr, ",")
 	environment := *environmentTextPtr
+	runtimePath := *runtimeTextPtr
 
-	err := executeHostApiTest(function, inputs, environment)
+	err := executeHostApiTest(function, inputs, environment, runtimePath)
 
 	if err != nil {
 		if _, ok := err.(MissingImplementation); ok {
@@ -99,8 +101,8 @@ func ProcessHostApiCommand(args []string) {
 	}
 }
 
-
-func executeHostApiTest(function string, inputs []string, environment string) error {
+// Main hostapi test executor
+func executeHostApiTest(function string, inputs []string, environment string, runtimePath string) error {
 	// Initialize storage
 	store, err := storage.NewTrieState(nil)
 	if err != nil {
@@ -122,7 +124,7 @@ func executeHostApiTest(function string, inputs []string, environment string) er
 		cfg.Keystore = keystore.NewGlobalKeystore()
 		cfg.LogLvl = 2 // = Warn
 
-		rtm, err = wasmer.NewInstanceFromFile(GetRuntimePath(), cfg)
+		rtm, err = wasmer.NewInstanceFromFile(runtimePath, cfg)
 		if err != nil {
 			return AdapterError{"Failed to intialize wasmer environment", err}
 		}
@@ -135,7 +137,7 @@ func executeHostApiTest(function string, inputs []string, environment string) er
 		cfg.Keystore = keystore.NewGlobalKeystore()
 		cfg.LogLvl = 2 // = Warn
 
-		rtm, err = wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
+		rtm, err = wasmtime.NewInstanceFromFile(runtimePath, cfg)
 		if err != nil {
 			return AdapterError{"Failed to intialize wasmtime environment", err}
 		}
@@ -148,7 +150,7 @@ func executeHostApiTest(function string, inputs []string, environment string) er
 		cfg.Keystore = keystore.NewGlobalKeystore()
 		cfg.LogLvl = 2 // = Warn
 
-		code, err := ioutil.ReadFile(GetRuntimePath())
+		code, err := ioutil.ReadFile(runtimePath)
 		if err != nil {
 			return AdapterError{"Failed to load test runtime", err}
 		}
