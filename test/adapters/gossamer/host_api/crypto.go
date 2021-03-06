@@ -28,7 +28,7 @@ import (
 
 // -- Helpers --
 
-const DUMY_KEY_ID int32 = 0x64756d79 // DUMY
+const DUMY_KEY_ID int32 = 0x796d7564 // DUMY (in ASCII, reversed to achieve same encoding as 4-byte static array)
 
 // Helper function to call rtm_ext_crypto_<suite>_generate_version_1
 func crypto_generate(r runtime.Instance, suite string, seed string) ([]byte, error) {
