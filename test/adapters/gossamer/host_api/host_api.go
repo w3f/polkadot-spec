@@ -114,7 +114,7 @@ func executeHostApiTest(function string, inputs []string, useWasmtime bool) erro
 			Imports: wasmtime.ImportNodeRuntime,
 		}
 		cfg.Storage = store
-		cfg.Keystore = keystore.NewGenericKeystore("test")
+		cfg.Keystore = keystore.NewGlobalKeystore()
 		cfg.LogLvl = 2 // = Warn
 
 		r, err := wasmtime.NewInstanceFromFile(GetRuntimePath(), cfg)
@@ -128,7 +128,7 @@ func executeHostApiTest(function string, inputs []string, useWasmtime bool) erro
 			Imports: wasmer.ImportsNodeRuntime,
 		}
 		cfg.Storage = store
-		cfg.Keystore = keystore.NewGenericKeystore("test")
+		cfg.Keystore = keystore.NewGlobalKeystore()
 		cfg.LogLvl = 2 // = Warn
 
 		r, err := wasmer.NewInstanceFromFile(GetRuntimePath(), cfg)
