@@ -2772,7 +2772,7 @@ checksum = "b4d15c810519a91cf877e7e36e63fe068815c678181439f2f29e2562147c3694"
 
 [[package]]
 name = "substrate-adapter"
-version = "0.8.28-69bb195"
+version = "0.8.28-6aa73f2"
 dependencies = [
  "base64",
  "blake2-rfc",
