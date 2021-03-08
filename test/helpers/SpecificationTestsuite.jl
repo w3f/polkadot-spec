@@ -4,13 +4,21 @@ module SpecificationTestsuite
     include("StringHelpers.jl")
 
 
-    export ALL_IMPLEMENTATIONS, ALL_FIXTURES, Config, execute
+    export ALL_IMPLEMENTATIONS, ALL_ENVIRONMENTS, ALL_FIXTURES, Config, execute
 
-    "List of all know implementations"
+    "List of all known implementations"
     const ALL_IMPLEMENTATIONS = [
       "substrate"
       "kagome"
       "gossamer"
+    ]
+
+    "List of all known environments"
+    const ALL_ENVIRONMENTS = [
+        "wasmi"
+        "wasmtime"
+        "wasmer"
+        "life"
     ]
 
     module Config
@@ -32,6 +40,9 @@ module SpecificationTestsuite
 
         "By default all implementations are enabled."
         implementations = ALL_IMPLEMENTATIONS
+
+        "By default no special environment is selected."
+        environments = []
 
         "Path of folder containing all fixtures."
         function fixdir()::String
@@ -59,6 +70,11 @@ module SpecificationTestsuite
         "Update selected fixtures in config"
         function set_fixtures(selected::StringList)
             global fixtures = selected
+        end
+
+        "Update selected fixtures in config"
+        function set_environments(selected::StringList)
+            global environments = selected
         end
 
         "Update docker settings in config"

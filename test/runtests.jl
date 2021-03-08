@@ -22,12 +22,16 @@ function print_usage()
     println()
     println("FIXTURES: ")
     println(join(ALL_FIXTURES, ", "))
+    println()
+    println("ENVIRONMENTS: (host-api only)")
+    println(join(ALL_ENVIRONMENTS, ", "))
 end
 
 
 # Collect filters
 implementations = Vector{String}()
 fixtures = Vector{String}()
+environments = Vector{String}()
 
 # Process all command line arguments
 for arg in ARGS
@@ -56,6 +60,11 @@ for arg in ARGS
         continue
     end
 
+    if arg in ALL_ENVIRONMENTS
+        push!(environments, arg)
+        continue
+    end
+
     println("Unknown argument: ", arg)
     println()
     print_usage()
@@ -71,12 +80,21 @@ if !isempty(fixtures)
     Config.set_fixtures(fixtures)
 end
 
+if !isempty(environments)
+    Config.set_environments(environments)
+end
+
 # Display config
 println("CONFIGURATION:")
 println("Loglevel:        " * (Config.verbose ? "verbose"   : "info"))
 println("Binaries:        " * (Config.docker  ? "container" : "local"))
 println("Implementations: " * join(Config.implementations, ", "))
 println("Fixtures:        " * join(Config.fixtures, ", "))
+if isempty(Config.environments)
+    println("Environments:    (default)")
+else
+    println("Environments:    " * join(Config.environments, ", "))
+end
 println()
 
 # Add locally build or downloaded adapters, testers and hosts to PATH
