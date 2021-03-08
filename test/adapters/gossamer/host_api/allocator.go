@@ -31,24 +31,24 @@ func test_allocator_malloc_free(r runtime.Instance, value string) error {
 	// Encode inputs
 	value_enc, err := scale.Encode([]byte(value))
 	if err != nil {
-		return AdapterError{"Encoding value failed", err}
+		return fmt.Errorf("Encoding value failed: %w", err)
 	}
 
 	// The Wasm function tests both the allocation and freeing of the buffer
 	result_enc, err := r.Exec("rtm_ext_allocator_malloc_version_1", value_enc)
 	if err != nil {
-		return AdapterError{"Execution failed", err}
+		return fmt.Errorf("Execution failed: %w", err)
 	}
 
 	// Decode and print output
 	result_dec, err := scale.Decode(result_enc, []byte{})
 	if err != nil {
-		return AdapterError{"Decoding result failed", err}
+		return fmt.Errorf("Decoding result failed: %w", err)
 	}
 	result := result_dec.([]byte)
 
 	if !bytes.Equal(result, []byte(value)) {
-		return newTestFailure("Value is different: %s", result)
+		return fmt.Errorf("Value is different: %s", result)
 	}
 
 	fmt.Printf("%s\n", result)

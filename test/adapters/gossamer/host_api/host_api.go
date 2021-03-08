@@ -106,7 +106,7 @@ func executeHostApiTest(function string, inputs []string, environment string, ru
 	// Initialize storage
 	store, err := storage.NewTrieState(nil)
 	if err != nil {
-		return AdapterError{"Failed to initialize storage", err}
+		return fmt.Errorf("Failed to initialize storage: %w", err)
 	}
 
 	store.Set([]byte(":code"), []byte{})
@@ -126,7 +126,7 @@ func executeHostApiTest(function string, inputs []string, environment string, ru
 
 		rtm, err = wasmer.NewInstanceFromFile(runtimePath, cfg)
 		if err != nil {
-			return AdapterError{"Failed to intialize wasmer environment", err}
+			return fmt.Errorf("Failed to intialize wasmer environment: %w", err)
 		}
 	case "wasmtime":
 		// ... using wasmtime
@@ -139,7 +139,7 @@ func executeHostApiTest(function string, inputs []string, environment string, ru
 
 		rtm, err = wasmtime.NewInstanceFromFile(runtimePath, cfg)
 		if err != nil {
-			return AdapterError{"Failed to intialize wasmtime environment", err}
+			return fmt.Errorf("Failed to intialize wasmtime environment: %w", err)
 		}
 	case "life":
 		// ... using life
@@ -152,13 +152,13 @@ func executeHostApiTest(function string, inputs []string, environment string, ru
 
 		code, err := ioutil.ReadFile(runtimePath)
 		if err != nil {
-			return AdapterError{"Failed to load test runtime", err}
+			return fmt.Errorf("Failed to load test runtime: %w", err)
 		}
 
 		// create runtime executor
 		rtm, err = life.NewInstance(code, cfg)
 		if err != nil {
-			return AdapterError{"Failed to intialize life environment", err}
+			return fmt.Errorf("Failed to intialize life environment: %w", err)
 		}
 	default:
 		return errors.New("Unknown runtime environment: " + environment)

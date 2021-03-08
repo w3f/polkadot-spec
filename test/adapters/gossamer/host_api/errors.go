@@ -17,36 +17,7 @@
 
 package host_api
 
-import "fmt"
-
 // Empty error to indicate missing implementation
 type MissingImplementation struct {}
 
 func (e MissingImplementation) Error() string { return "Not implemented" }
-
-// Simple string error to indicate test failure
-type TestFailure struct {
-	message string
-}
-
-func (e TestFailure) Error() string { return e.message }
-
-// Constructor using Sprint for message
-func newTestFailure(args ...interface{}) error {
-	message := fmt.Sprint(args...)
-	return TestFailure{message}
-}
-
-// Constructor using Sprintf for message
-func newTestFailuref(format string, args ...interface{}) error {
-	message := fmt.Sprintf(format, args...)
-	return TestFailure{message}
-}
-
-// Wrapped error to indicate adapter failure
-type AdapterError struct {
-	message string
-	wrapped error
-}
-
-func (e AdapterError) Error() string { return e.message + ": " + e.wrapped.Error() }

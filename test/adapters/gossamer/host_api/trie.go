@@ -31,7 +31,7 @@ func test_trie_root(r runtime.Instance, key1 string, value1 string, key2 string,
 
 	trie_enc, err := scale.Encode(trie)
 	if err != nil {
-		return AdapterError{"Encoding input failed", err}
+		return fmt.Errorf("Encoding input failed: %w", err)
 	}
 
 	// Change encoding to key-value tuples by fixing encoded list length
@@ -41,13 +41,13 @@ func test_trie_root(r runtime.Instance, key1 string, value1 string, key2 string,
 	hash_enc, err := r.Exec("rtm_ext_trie_blake2_256_root_version_1", trie_enc)
 
 	if err != nil {
-		return AdapterError{"Execution failed", err}
+		return fmt.Errorf("Execution failed: %w", err)
 	}
 
 	// Decode and print result
 	hash, err := scale.Decode(hash_enc, []byte{})
 	if err != nil {
-		return AdapterError{"Decoding value failed", err}
+		return fmt.Errorf("Decoding value failed: %w", err)
 	}
 
 	fmt.Printf("%x\n", hash.([]byte)[:])
@@ -61,20 +61,20 @@ func test_trie_ordered_root(r runtime.Instance, value1 string, value2 string, va
 
 	trie_enc, err := scale.Encode(trie)
 	if err != nil {
-		return AdapterError{"Encoding input failed", err}
+		return fmt.Errorf("Encoding input failed: %w", err)
 	}
 
 	// Compute ordered root hash
 	hash_enc, err := r.Exec("rtm_ext_trie_blake2_256_ordered_root_version_1", trie_enc)
 
 	if err != nil {
-		return AdapterError{"Execution failed", err}
+		return fmt.Errorf("Execution failed: %w", err)
 	}
 
 	// Decode and print result
 	hash, err := scale.Decode(hash_enc, []byte{})
 	if err != nil {
-		return AdapterError{"Decoding value failed", err}
+		return fmt.Errorf("Decoding value failed: %w", err)
 	}
 
 	fmt.Printf("%x\n", hash.([]byte)[:])
