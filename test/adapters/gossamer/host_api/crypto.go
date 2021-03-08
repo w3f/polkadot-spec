@@ -91,11 +91,7 @@ func crypto_sign(r runtime.Instance, suite string, pubkey []byte, msg string) (*
 	}
 
 	// Decode and return result
-	sig_opt, err := scale.Decode(sig_enc, &optional.Bytes{})
-	if err != nil {
-		return nil, AdapterError{"Decoding signature failed", err}
-	}
-	return sig_opt.(*optional.Bytes), nil
+	return optional.NewBytes(sig_enc[0] != 0, sig_enc[1:]), nil
 }
 
 // Helper function to call rtm_ext_crypto_<suite>_verify_version_1
