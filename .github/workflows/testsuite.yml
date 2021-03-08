@@ -145,7 +145,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        fixture: [ host-api, scale-codec, state-trie ]
+        fixture: [ scale-codec, state-trie ]
     name: "[test-${{ matrix.fixture }}] substrate"
     runs-on: ubuntu-20.04
     steps:
@@ -158,6 +158,25 @@ jobs:
     - run: chmod +x test/bin/substrate-adapter
     - name: Run test fixture
       run: test/runtests.jl substrate ${{ matrix.fixture }}
+
+  test-substrate-hostapi:
+    needs: build-adapter-substrate
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [ wasmi, wasmtime ]
+    name: "[test-host-api] substrate ${{ matrix.environment }}"
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+    - uses: actions/download-artifact@v2.0.8
+      with:
+        name: substrate-adapter
+        path: test/bin
+    - run: chmod +x test/bin/substrate-adapter
+    - name: Run test fixture
+      run: test/runtests.jl substrate host-api ${{ matrix.environment }}
 
 
   test-kagome:
@@ -231,7 +250,11 @@ jobs:
 
   test-gossamer-hostapi:
     needs: [ build-adapter-gossamer, build-runtime-hostapi]
-    name: "[test-host-api] gossamer"
+    strategy:
+      fail-fast: false
+      matrix:
+        environment: [ wasmer ]
+    name: "[test-host-api] gossamer ${{ matrix.environment }}"
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout repository
@@ -249,4 +272,4 @@ jobs:
         mkdir -p test/lib
         mv test/bin/libwasmer.so test/lib/
     - name: Run test fixture
-      run: test/runtests.jl gossamer host-api
+      run: test/runtests.jl gossamer host-api ${{ matrix.environment }}
