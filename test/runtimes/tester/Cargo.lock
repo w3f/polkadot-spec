@@ -1707,7 +1707,7 @@ dependencies = [
 
 [[package]]
 name = "host-tester"
-version = "0.8.28-69bb195"
+version = "0.8.28-6aa73f2"
 dependencies = [
  "sc-service",
  "sp-consensus-babe",
@@ -5958,7 +5958,7 @@ dependencies = [
 
 [[package]]
 name = "tester-runtime"
-version = "0.8.28-69bb195"
+version = "0.8.28-6aa73f2"
 dependencies = [
  "frame-executive",
  "frame-support",
