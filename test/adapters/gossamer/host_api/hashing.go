@@ -31,17 +31,17 @@ func test_hashing(r runtime.Instance, name string, input string) error {
 
 	enc, err := scale.Encode([]byte(input))
 	if err != nil {
-		return AdapterError{"Encoding failed", err}
+		return fmt.Errorf("Encoding failed: %w", err)
 	}
 
 	output, err := r.Exec("rtm_" + name, enc)
 	if err != nil {
-		return AdapterError{"Execution failed", err}
+		return fmt.Errorf("Execution failed: %w", err)
 	}
 
 	dec, err := scale.Decode(output, []byte{})
 	if err != nil {
-		return AdapterError{"Decoding failed", err}
+		return fmt.Errorf("Decoding failed: %w", err)
 	}
 
 	fmt.Printf("%x\n", dec.([]byte)[:])

@@ -18,6 +18,7 @@
 package host_api
 
 import (
+	"errors"
 	"fmt"
 	"bytes"
 
@@ -33,17 +34,17 @@ func child_storage_set(r runtime.Instance, child []byte, key []byte, value []byt
 	// Encode inputs
 	child_enc, err := scale.Encode(child)
 	if err != nil {
-		return AdapterError{"Encoding child failed", err}
+		return fmt.Errorf("Encoding child failed: %w", err)
 	}
 
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		return AdapterError{"Encoding key failed", err}
+		return fmt.Errorf("Encoding key failed: %w", err)
 	}
 
 	value_enc, err := scale.Encode(value)
 	if err != nil {
-		return AdapterError{"Encoding value failed", err}
+		return fmt.Errorf("Encoding value failed: %w", err)
 	}
 
 	args_enc := append(append(child_enc, key_enc...), value_enc...)
@@ -51,7 +52,7 @@ func child_storage_set(r runtime.Instance, child []byte, key []byte, value []byt
 	// Set key to value
 	_, err = r.Exec("rtm_ext_default_child_storage_set_version_1", args_enc)
 	if err != nil {
-		return AdapterError{"Execution failed", err}
+		return fmt.Errorf("Execution failed: %w", err)
 	}
 
 	return nil
@@ -62,23 +63,23 @@ func child_storage_get(r runtime.Instance, child []byte, key []byte) (*optional.
 	// Encode inputs
 	child_enc, err := scale.Encode(child)
 	if err != nil {
-		return nil, AdapterError{"Encoding child failed", err}
+		return nil, fmt.Errorf("Encoding child failed: %w", err)
 	}
 
 	key_enc, err := scale.Encode(key)
 	if err != nil {
-		return nil, AdapterError{"Encoding key failed", err}
+		return nil, fmt.Errorf("Encoding key failed: %w", err)
 	}
 
 	// Retrieve key
 	value_enc, err := r.Exec("rtm_ext_default_child_storage_get_version_1", append(child_enc, key_enc...))
 	if err != nil {
-		return nil, AdapterError{"Execution failed", err}
+		return nil, fmt.Errorf("Execution failed: %w", err)
 	}
 
 	value_opt, err := scale.Decode(value_enc, &optional.Bytes{})
 	if err != nil {
-		return nil, AdapterError{"Decoding value failed", err}
+		return nil, fmt.Errorf("Decoding value failed: %w", err)
 	}
 	return value_opt.(*optional.Bytes), nil
 }
@@ -94,7 +95,7 @@ func test_child_storage_set_get(r runtime.Instance, child1 string, child2 string
 	}
 
 	if none1.Exists() {
-		return newTestFailure("Child1/Key is not empty")
+		return errors.New("Child1/Key is not empty")
 	}
 
 	// Set key to value
@@ -110,7 +111,7 @@ func test_child_storage_set_get(r runtime.Instance, child1 string, child2 string
 	}
 
 	if none2.Exists() {
-		return newTestFailure("Child2/Key is not empty")
+		return errors.New("Child2/Key is not empty")
 	}
 
 	// Get valid key
@@ -120,11 +121,11 @@ func test_child_storage_set_get(r runtime.Instance, child1 string, child2 string
 	}
 
 	if !some.Exists() {
-		return newTestFailure("Child1/Key is not set")
+		return errors.New("Child1/Key is not set")
 	}
 
 	if !bytes.Equal(some.Value(), []byte(value)) {
-		return newTestFailuref("Value is different: %s", some.Value())
+		return fmt.Errorf("Value is different: %s", some.Value())
 	}
 
 	fmt.Printf("%s\n", some.Value())
