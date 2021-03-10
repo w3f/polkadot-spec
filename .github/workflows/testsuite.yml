@@ -253,7 +253,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        environment: [ wasmer ]
+        environment: [ wasmer, life ]
     name: "[test-host-api] gossamer ${{ matrix.environment }}"
     runs-on: ubuntu-20.04
     steps:
