@@ -25,7 +25,7 @@ import (
 )
 
 
-func test_trie_root(r runtime.Instance, key1 string, value1 string, key2 string, value2 string, key3 string, value3 string) error {
+func test_trie_root(r runtime.Instance, key1, value1, key2, value2, key3, value3 string) error {
 	// Construct and encode input
 	trie := []string{key1, value1, key2, value2, key3, value3}
 
@@ -55,7 +55,7 @@ func test_trie_root(r runtime.Instance, key1 string, value1 string, key2 string,
 	return nil
 }
 
-func test_trie_ordered_root(r runtime.Instance, value1 string, value2 string, value3 string) error {
+func test_trie_ordered_root(r runtime.Instance, value1, value2, value3 string) error {
 	// Construct and encode input
 	trie := []string{value1, value2, value3}
 

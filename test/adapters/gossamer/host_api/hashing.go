@@ -27,7 +27,7 @@ import (
 )
 
 // Simple wrapper to test hash function that input and output byte arrays
-func test_hashing(r runtime.Instance, name string, input string) error {
+func test_hashing(r runtime.Instance, name, input string) error {
 
 	enc, err := scale.Encode([]byte(input))
 	if err != nil {
