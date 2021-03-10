@@ -30,7 +30,7 @@ import (
 // -- Helpers --
 
 // Helper function to call rtm_ext_default_child_storage_set_version_1
-func child_storage_set(r runtime.Instance, child []byte, key []byte, value []byte) error {
+func child_storage_set(r runtime.Instance, child, key, value []byte) error {
 	// Encode inputs
 	child_enc, err := scale.Encode(child)
 	if err != nil {
@@ -59,7 +59,7 @@ func child_storage_set(r runtime.Instance, child []byte, key []byte, value []byt
 }
 
 // Helper function to call rtm_ext_default_child_storage_get_version_1
-func child_storage_get(r runtime.Instance, child []byte, key []byte) (*optional.Bytes, error) {
+func child_storage_get(r runtime.Instance, child, key []byte) (*optional.Bytes, error) {
 	// Encode inputs
 	child_enc, err := scale.Encode(child)
 	if err != nil {
@@ -87,7 +87,7 @@ func child_storage_get(r runtime.Instance, child []byte, key []byte) (*optional.
 // -- Tests --
 
 // Test for rtm_ext_child_storage_set_version_1 and rtm_ext_child_storage_get_version_1
-func test_child_storage_set_get(r runtime.Instance, child1 string, child2 string, key string, value string) error {
+func test_child_storage_set_get(r runtime.Instance, child1, child2, key, value string) error {
 	// Get invalid key
 	none1, err := child_storage_get(r, []byte(child1), []byte(key))
 	if err != nil {

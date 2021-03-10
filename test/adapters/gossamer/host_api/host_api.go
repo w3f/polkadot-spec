@@ -102,7 +102,7 @@ func ProcessHostApiCommand(args []string) {
 }
 
 // Main hostapi test executor
-func executeHostApiTest(function string, inputs []string, environment string, runtimePath string) error {
+func executeHostApiTest(function string, inputs []string, environment, runtimePath string) error {
 	// Initialize storage
 	store, err := storage.NewTrieState(nil)
 	if err != nil {

@@ -31,7 +31,7 @@ import (
 // -- Helpers --
 
 // Helper function to call rtm_ext_storage_set_version_1
-func storage_set(r runtime.Instance, key []byte, value []byte) error {
+func storage_set(r runtime.Instance, key, value []byte) error {
 	// Encode inputs
 	key_enc, err := scale.Encode(key)
 	if err != nil {
@@ -145,7 +145,7 @@ func storage_exists(r runtime.Instance, key []byte) (uint32, error) {
 }
 
 // Helper function to call rtm_ext_storage_append_version_1
-func storage_append(r runtime.Instance, key []byte, value []byte) error {
+func storage_append(r runtime.Instance, key, value []byte) error {
 	// Encode inputs
 	key_enc, err := scale.Encode(key)
 	if err != nil {
@@ -218,7 +218,7 @@ func test_storage_init(r runtime.Instance) error {
 }
 
 // Test for rtm_ext_storage_set_version_1 and rtm_ext_storage_get_version_1
-func test_storage_set_get(r runtime.Instance, key string, value string) error {
+func test_storage_set_get(r runtime.Instance, key, value string) error {
 	// Get invalid key
 	none, err := storage_get(r, []byte(key))
 	if err != nil {
@@ -256,7 +256,7 @@ func test_storage_set_get(r runtime.Instance, key string, value string) error {
 }
 
 // Test for rtm_ext_storage_read_version_1
-func test_storage_read(r runtime.Instance, key string, value string, offset uint32, length uint32) error {
+func test_storage_read(r runtime.Instance, key, value string, offset, length uint32) error {
 	// Check that key has not been set
 	none, err := storage_read(r, []byte(key), offset, length)
 	if err != nil {
@@ -303,7 +303,7 @@ func test_storage_read(r runtime.Instance, key string, value string, offset uint
 }
 
 // Test for rtm_ext_storage_clear_version_1
-func test_storage_clear(r runtime.Instance, key string, value string) error {
+func test_storage_clear(r runtime.Instance, key, value string) error {
 	// Insert data
 	err := storage_set(r, []byte(key), []byte(value))
 	if err != nil {
@@ -344,7 +344,7 @@ func test_storage_clear(r runtime.Instance, key string, value string) error {
 }
 
 // Test for rtm_ext_storage_exists_version_1
-func test_storage_exists(r runtime.Instance, key string, value string) error {
+func test_storage_exists(r runtime.Instance, key, value string) error {
 	// Check for no data
 	none, err := storage_exists(r, []byte(key))
 	if err != nil {
@@ -378,7 +378,7 @@ func test_storage_exists(r runtime.Instance, key string, value string) error {
 }
 
 // Test for rtm_ext_storage_clear_prefix_version_1
-func test_storage_clear_prefix(r runtime.Instance, prefix string, key1 string, value1 string, key2 string, value2 string) error {
+func test_storage_clear_prefix(r runtime.Instance, prefix, key1, value1, key2, value2 string) error {
 	// Insert data
 	err := storage_set(r, []byte(key1), []byte(value1))
 	if err != nil {
@@ -444,7 +444,7 @@ func test_storage_clear_prefix(r runtime.Instance, prefix string, key1 string, v
 }
 
 // Test for rtm_ext_storage_append_version_1
-func test_storage_append(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) error {
+func test_storage_append(r runtime.Instance, key1, value1, key2, value2 string) error {
 	// Encode inputs
 	value1_enc, err := scale.Encode(value1)
 	if err != nil {
@@ -552,7 +552,7 @@ func test_storage_append(r runtime.Instance, key1 string, value1 string, key2 st
 }
 
 // Test for rtm_ext_storage_root_version_1
-func test_storage_root(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) error {
+func test_storage_root(r runtime.Instance, key1, value1, key2, value2 string) error {
 	// Insert data
 	err := storage_set(r, []byte(key1), []byte(value1))
 	if err != nil {
@@ -575,7 +575,7 @@ func test_storage_root(r runtime.Instance, key1 string, value1 string, key2 stri
 }
 
 // Test for rtm_ext_storage_next_key_version_1
-func test_storage_next_key(r runtime.Instance, key1 string, value1 string, key2 string, value2 string) error {
+func test_storage_next_key(r runtime.Instance, key1, value1, key2, value2 string) error {
 
 	// No next key available
 	none1, err := storage_next_key(r, []byte(key1))
