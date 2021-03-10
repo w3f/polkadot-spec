@@ -128,6 +128,10 @@ func test_crypto_generate(r runtime.Instance, suite string, seed string) error {
 		return err
 	}
 
+	if len(pk) != 32 {
+		return fmt.Errorf("Public key has incorrect size: %d", len(pk))
+	}
+
 	fmt.Printf("%x\n", pk)
 
 	return nil
@@ -191,6 +195,10 @@ func test_crypto_sign(r runtime.Instance, suite string, seed string, msg string)
 	// Check and print result
 	if !sig.Exists() {
 		return newTestFailure("No signature received")
+	}
+
+	if len(sig.Value()) != 64 {
+		return fmt.Errorf("Signature has incorrect size: %d", len(sig.Value()))
 	}
 
 	fmt.Println("Message: ", msg)
