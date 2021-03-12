@@ -1095,7 +1095,7 @@ version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df170efa359aebdd5cb7fe78edcc67107748e4737bdca8a8fb40d15ea7a877ed"
 dependencies = [
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
 ]
 
 [[package]]
@@ -1502,14 +1502,14 @@ dependencies = [
 
 [[package]]
 name = "parity-scale-codec"
-version = "2.0.0"
+version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "75c823fdae1bb5ff5708ee61a62697e6296175dc671710876871c853f48592b3"
+checksum = "0cd3dab59b5cf4bc81069ade0fc470341a1ef3ad5fa73e5a8943bed2ec12b2e8"
 dependencies = [
  "arrayvec 0.5.2",
  "bitvec 0.20.1",
  "byte-slice-cast 1.0.0",
- "parity-scale-codec-derive 2.0.0",
+ "parity-scale-codec-derive 2.0.1",
  "serde",
 ]
 
@@ -1527,9 +1527,9 @@ dependencies = [
 
 [[package]]
 name = "parity-scale-codec-derive"
-version = "2.0.0"
+version = "2.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9029e65297c7fd6d7013f0579e193ec2b34ae78eabca854c9417504ad8a2d214"
+checksum = "fa04976a81fde04924b40cc4036c4d12841e8bb04325a5cf2ada75731a150a7d"
 dependencies = [
  "proc-macro-crate",
  "proc-macro2",
@@ -2124,7 +2124,7 @@ dependencies = [
  "lazy_static",
  "libsecp256k1",
  "log",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "parity-wasm 0.41.0",
  "parking_lot 0.11.1",
  "sc-executor-common",
@@ -2150,7 +2150,7 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "derive_more",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "parity-wasm 0.41.0",
  "sp-allocator",
  "sp-core",
@@ -2166,7 +2166,7 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "log",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "sc-executor-common",
  "sp-allocator",
  "sp-core",
@@ -2181,7 +2181,7 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "log",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "parity-wasm 0.41.0",
  "pwasm-utils",
  "sc-executor-common",
@@ -2423,7 +2423,7 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "hash-db",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "sp-api-proc-macro",
  "sp-core",
  "sp-runtime",
@@ -2450,7 +2450,7 @@ name = "sp-application-crypto"
 version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "serde",
  "sp-core",
  "sp-io",
@@ -2464,7 +2464,7 @@ source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd
 dependencies = [
  "integer-sqrt",
  "num-traits",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "serde",
  "sp-debug-derive",
  "sp-std",
@@ -2490,7 +2490,7 @@ dependencies = [
  "log",
  "merlin",
  "num-traits",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "parity-util-mem 0.9.0",
  "parking_lot 0.11.1",
  "primitive-types 0.9.0",
@@ -2530,7 +2530,7 @@ version = "0.9.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "environmental",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "sp-std",
  "sp-storage",
 ]
@@ -2544,7 +2544,7 @@ dependencies = [
  "hash-db",
  "libsecp256k1",
  "log",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "parking_lot 0.11.1",
  "sp-core",
  "sp-externalities",
@@ -2568,7 +2568,7 @@ dependencies = [
  "derive_more",
  "futures",
  "merlin",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "parking_lot 0.11.1",
  "schnorrkel",
  "serde",
@@ -2593,7 +2593,7 @@ dependencies = [
  "hash256-std-hasher 0.15.2",
  "impl-trait-for-tuples 0.2.1",
  "log",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "parity-util-mem 0.9.0",
  "paste",
  "rand 0.7.3",
@@ -2611,7 +2611,7 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "impl-trait-for-tuples 0.2.1",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "primitive-types 0.9.0",
  "sp-externalities",
  "sp-runtime-interface-proc-macro",
@@ -2651,7 +2651,7 @@ dependencies = [
  "hash-db",
  "log",
  "num-traits",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "parking_lot 0.11.1",
  "rand 0.7.3",
  "smallvec",
@@ -2676,7 +2676,7 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "impl-serde",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "ref-cast",
  "serde",
  "sp-debug-derive",
@@ -2702,7 +2702,7 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "log",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "sp-std",
  "tracing",
  "tracing-core",
@@ -2716,7 +2716,7 @@ source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd
 dependencies = [
  "hash-db",
  "memory-db 0.26.0",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "sp-core",
  "sp-std",
  "trie-db 0.22.3",
@@ -2729,7 +2729,7 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "impl-serde",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "serde",
  "sp-runtime",
  "sp-std",
@@ -2741,7 +2741,7 @@ version = "3.0.0"
 source = "git+https://github.com/paritytech/substrate#2dd569a96f54ccea20d0856acd5b41fd18d10324"
 dependencies = [
  "impl-trait-for-tuples 0.2.1",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "sp-std",
  "wasmi",
 ]
@@ -2784,7 +2784,7 @@ dependencies = [
  "hostapi-runtime",
  "keccak-hasher",
  "memory-db 0.20.1",
- "parity-scale-codec 2.0.0",
+ "parity-scale-codec 2.0.1",
  "primitive-types 0.2.4",
  "reference-trie",
  "sc-executor",
