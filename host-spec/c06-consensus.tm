@@ -16,7 +16,7 @@
 
   <subsection|Consensus Authority Set><label|sect-authority-set>
 
-  Because Polkadot is a proof-of-stake protocol, each of its consensus engine
+  Because Polkadot is a proof-of-stake protocol, each of its consensus engines
   has its own set of nodes, represented by known public keys which have the
   authority to influence the protocol in pre-defined ways explained in this
   section. In order to verifiy the validity of each block, Polkadot node must
