@@ -540,11 +540,11 @@
     following values:
 
     <\big-table>
-      <tabular|<tformat|<cwith|1|1|1|-1|font-series|bold>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|3|3|cell-tborder|0ln>|<cwith|3|3|3|3|cell-bborder|0ln>|<cwith|4|4|3|3|cell-bborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|4|4|1|2|cell-tborder|0ln>|<cwith|3|3|1|2|cell-bborder|0ln>|<cwith|4|4|1|2|cell-bborder|0ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|2|2|cell-rborder|0ln>|<cwith|4|4|3|3|cell-lborder|0ln>|<table|<row|<cell|Id>|<cell|Name>|<cell|Description>>|<row|<cell|0>|<cell|<with|font-shape|italic|<with|font-shape|italic|<with|font-shape|italic|InBlock>>>>|<cell|Transaction
+      <tabular|<tformat|<cwith|1|1|1|-1|font-series|bold>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|3|3|cell-bborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|4|4|1|2|cell-bborder|0ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|2|2|cell-rborder|0ln>|<cwith|4|4|3|3|cell-lborder|0ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|1|cell-lborder|0ln>|<cwith|3|3|3|3|cell-rborder|0ln>|<table|<row|<cell|Id>|<cell|Name>|<cell|Description>>|<row|<cell|0>|<cell|<with|font-shape|italic|<with|font-shape|italic|<with|font-shape|italic|InBlock>>>>|<cell|Transaction
       is already included in block.>>|<row|<cell|1>|<cell|<with|font-shape|italic|Loc<with|font-shape|right|>al>>|<cell|Transaction
       is coming from a local source, e.g. off-chain
-      worker>>|<row|<cell|2>|<cell|<with|font-shape|italic|<with|font-shape|italic|External<underline|>>>>|<cell|Transaction
-      has been received externally, e.g over the networ>>>>>
+      worker.>>|<row|<cell|2>|<cell|<with|font-shape|italic|<with|font-shape|italic|External<underline|>>>>|<cell|Transaction
+      has been received externally, e.g over the network,>>>>>
     <|big-table>
       The <verbatim|TransactionSource> enum\ 
     </big-table>
