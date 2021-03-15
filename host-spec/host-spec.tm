@@ -1209,193 +1209,238 @@
     E.<space|2spc>Polkadot Runtime API> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <pageref|auto-353><vspace|0.5fn>
 
-    E.1.<space|2spc>List of Runtime Methods
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    E.1.<space|2spc>General Information <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-354>
 
-    E.2.<space|2spc>List of Runtime Constants
+    <with|par-left|1tab|E.1.1.<space|2spc>JSON-RPC API for external services
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-355>>
+
+    E.2.<space|2spc>Runtime Constants <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-356>
 
     <with|par-left|1tab|E.2.1.<space|2spc><with|font-family|tt|language|verbatim|__heap_base>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-357>>
 
-    E.3.<space|2spc>JSON-RPC API for external services
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    E.3.<space|2spc>Runtime Functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-358>
 
-    E.4.<space|2spc>Argument Specification
+    <with|par-left|1tab|E.3.1.<space|2spc>Core Module (Version 3)
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-359>
+    <no-break><pageref|auto-359>>
 
-    <with|par-left|1tab|E.4.1.<space|2spc><with|font-family|tt|language|verbatim|Core_version>
+    <with|par-left|2tab|E.3.1.1.<space|2spc><with|font-family|tt|language|verbatim|Core_version>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-360>>
 
-    <with|par-left|1tab|E.4.2.<space|2spc><with|font-family|tt|language|verbatim|Core_execute_block>
+    <with|par-left|2tab|E.3.1.2.<space|2spc><with|font-family|tt|language|verbatim|Core_execute_block>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-362>>
 
-    <with|par-left|1tab|E.4.3.<space|2spc><with|font-family|tt|language|verbatim|Core_initialize_block>
+    <with|par-left|2tab|E.3.1.3.<space|2spc><with|font-family|tt|language|verbatim|Core_initialize_block>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-363>>
 
-    <with|par-left|1tab|E.4.4.<space|2spc><with|font-family|tt|language|verbatim|Metadata_metadata>
+    <with|par-left|1tab|E.3.2.<space|2spc>Metadata Module (Version 1)
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-364>>
 
-    <with|par-left|1tab|E.4.5.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_apply_extrinsic>
+    <with|par-left|2tab|E.3.2.1.<space|2spc><with|font-family|tt|language|verbatim|Metadata_metadata>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-365>>
 
-    <with|par-left|1tab|E.4.6.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_finalize_block>
+    <with|par-left|1tab|E.3.3.<space|2spc>BlockBuilder Module (Version 4)
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-373>>
+    <no-break><pageref|auto-366>>
 
-    <with|par-left|1tab|E.4.7.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_inherent_extrinsics>
+    <with|par-left|2tab|E.3.3.1.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_apply_extrinsic>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-374>>
+    <no-break><pageref|auto-367>>
 
-    <with|par-left|1tab|E.4.8.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_check_inherents>
+    <with|par-left|2tab|E.3.3.2.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_finalize_block>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-375>>
 
-    <with|par-left|1tab|E.4.9.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_random_seed>
+    <with|par-left|2tab|E.3.3.3.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_inherent_extrinsics>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-376>>
 
-    <with|par-left|1tab|E.4.10.<space|2spc><with|font-family|tt|language|verbatim|TaggedTransactionQueue_validate_transaction>
+    <with|par-left|2tab|E.3.3.4.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_check_inherents>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-377>>
 
-    <with|par-left|1tab|E.4.11.<space|2spc><with|font-family|tt|language|verbatim|OffchainWorkerApi_offchain_worker>
+    <with|par-left|2tab|E.3.3.5.<space|2spc><with|font-family|tt|language|verbatim|BlockBuilder_random_seed>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-378>>
+
+    <with|par-left|1tab|E.3.4.<space|2spc>TaggedTransactionQueue (Version 2)
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-379>>
 
-    <with|par-left|1tab|E.4.12.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_validators>
+    <with|par-left|2tab|E.3.4.1.<space|2spc><with|font-family|tt|language|verbatim|TaggedTransactionQueue_validate_transaction>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-380>>
 
-    <with|par-left|1tab|E.4.13.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_validator_groups>
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-381>>
-
-    <with|par-left|1tab|E.4.14.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_availability_cores>
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-382>>
-
-    <with|par-left|1tab|E.4.15.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_persisted_validation_data>
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <with|par-left|1tab|E.3.5.<space|2spc>OffchainWorkerApi Module (Version
+    2) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-383>>
 
-    <with|par-left|1tab|E.4.16.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_check_validation_outputs>
+    <with|par-left|2tab|E.3.5.1.<space|2spc><with|font-family|tt|language|verbatim|OffchainWorkerApi_offchain_worker>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-384>>
 
-    <with|par-left|1tab|E.4.17.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_session_index_for_child>
+    <with|par-left|1tab|E.3.6.<space|2spc>ParachainHost Module (Version 1)
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-385>>
 
-    <with|par-left|1tab|E.4.18.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_session_info>
+    <with|par-left|2tab|E.3.6.1.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_validators>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-386>>
 
-    <with|par-left|1tab|E.4.19.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_validation_code>
+    <with|par-left|2tab|E.3.6.2.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_validator_groups>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-387>>
 
-    <with|par-left|1tab|E.4.20.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_historical_validation_code>
+    <with|par-left|2tab|E.3.6.3.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_availability_cores>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-388>>
 
-    <with|par-left|1tab|E.4.21.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_candidate_pending_availability>
+    <with|par-left|2tab|E.3.6.4.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_persisted_validation_data>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-389>>
 
-    <with|par-left|1tab|E.4.22.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_candidate_events>
+    <with|par-left|2tab|E.3.6.5.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_check_validation_outputs>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-390>>
 
-    <with|par-left|1tab|E.4.23.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_dmq_contents>
+    <with|par-left|2tab|E.3.6.6.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_session_index_for_child>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-391>>
 
-    <with|par-left|1tab|E.4.24.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_inbound_hrmp_channel_contents>
+    <with|par-left|2tab|E.3.6.7.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_session_info>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-392>>
 
-    <with|par-left|1tab|E.4.25.<space|2spc><with|font-family|tt|language|verbatim|GrandpaApi_grandpa_authorities>
+    <with|par-left|2tab|E.3.6.8.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_validation_code>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-393>>
 
-    <with|par-left|1tab|E.4.26.<space|2spc><with|font-family|tt|language|verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>
+    <with|par-left|2tab|E.3.6.9.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_historical_validation_code>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-394>>
 
-    <with|par-left|1tab|E.4.27.<space|2spc><with|font-family|tt|language|verbatim|GrandpaApi_generate_key_ownership_proof>
+    <with|par-left|2tab|E.3.6.10.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_candidate_pending_availability>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-395>>
 
-    <with|par-left|1tab|E.4.28.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_configuration>
+    <with|par-left|2tab|E.3.6.11.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_candidate_events>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-396>>
 
-    <with|par-left|1tab|E.4.29.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_current_epoch_start>
+    <with|par-left|2tab|E.3.6.12.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_dmq_contents>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-397>>
+
+    <with|par-left|2tab|E.3.6.13.<space|2spc><with|font-family|tt|language|verbatim|ParachainHost_inbound_hrmp_channel_contents>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-398>>
 
-    <with|par-left|1tab|E.4.30.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_current_epoch>
+    <with|par-left|1tab|E.3.7.<space|2spc>GrandpaApi Module (Version 2)
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-399>>
 
-    <with|par-left|1tab|E.4.31.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_next_epoch>
+    <with|par-left|2tab|E.3.7.1.<space|2spc><with|font-family|tt|language|verbatim|GrandpaApi_grandpa_authorities>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-400>>
 
-    <with|par-left|1tab|E.4.32.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_generate_key_ownership_proof>
+    <with|par-left|2tab|E.3.7.2.<space|2spc><with|font-family|tt|language|verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-401>>
 
-    <with|par-left|1tab|E.4.33.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>
+    <with|par-left|2tab|E.3.7.3.<space|2spc><with|font-family|tt|language|verbatim|GrandpaApi_generate_key_ownership_proof>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-402>>
 
-    <with|par-left|1tab|E.4.34.<space|2spc><with|font-family|tt|language|verbatim|AuthorityDiscoveryApi_authorities>
+    <with|par-left|1tab|E.3.8.<space|2spc>BabeApi Module (Version 2)
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-403>>
 
-    <with|par-left|1tab|E.4.35.<space|2spc><with|font-family|tt|language|verbatim|SessionKeys_generate_session_keys>
+    <with|par-left|2tab|E.3.8.1.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_configuration>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-404>>
 
-    <with|par-left|1tab|E.4.36.<space|2spc><with|font-family|tt|language|verbatim|SessionKeys_decode_session_keys>
-    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <no-break><pageref|auto-405>>
-
-    <with|par-left|1tab|E.4.37.<space|2spc><with|font-family|tt|language|verbatim|AccountNonceApi_account_nonce>
+    <with|par-left|2tab|E.3.8.2.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_current_epoch_start>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-406>>
 
-    <with|par-left|1tab|E.4.38.<space|2spc><with|font-family|tt|language|verbatim|TransactionPaymentApi_query_info>
+    <with|par-left|2tab|E.3.8.3.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_current_epoch>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-407>>
 
-    <with|par-left|1tab|E.4.39.<space|2spc><with|font-family|tt|language|verbatim|TransactionPaymentApi_query_fee_details>
+    <with|par-left|2tab|E.3.8.4.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_next_epoch>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
     <no-break><pageref|auto-408>>
 
+    <with|par-left|2tab|E.3.8.5.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_generate_key_ownership_proof>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-409>>
+
+    <with|par-left|2tab|E.3.8.6.<space|2spc><with|font-family|tt|language|verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-410>>
+
+    <with|par-left|1tab|E.3.9.<space|2spc>AuthorityDiscoveryApi Module
+    (Version 1) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-411>>
+
+    <with|par-left|2tab|E.3.9.1.<space|2spc><with|font-family|tt|language|verbatim|AuthorityDiscoveryApi_authorities>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-412>>
+
+    <with|par-left|1tab|E.3.10.<space|2spc>SessionKeys Module (Version 1)
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-413>>
+
+    <with|par-left|2tab|E.3.10.1.<space|2spc><with|font-family|tt|language|verbatim|SessionKeys_generate_session_keys>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-414>>
+
+    <with|par-left|2tab|E.3.10.2.<space|2spc><with|font-family|tt|language|verbatim|SessionKeys_decode_session_keys>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-415>>
+
+    <with|par-left|1tab|E.3.11.<space|2spc>AccountNonceApi Module (Version 1)
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-416>>
+
+    <with|par-left|2tab|E.3.11.1.<space|2spc><with|font-family|tt|language|verbatim|AccountNonceApi_account_nonce>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-417>>
+
+    <with|par-left|1tab|E.3.12.<space|2spc>TransactionPaymentApi Module
+    (Version 1) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-418>>
+
+    <with|par-left|2tab|E.3.12.1.<space|2spc><with|font-family|tt|language|verbatim|TransactionPaymentApi_query_info>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-419>>
+
+    <with|par-left|2tab|E.3.12.2.<space|2spc><with|font-family|tt|language|verbatim|TransactionPaymentApi_query_fee_details>
+    <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+    <no-break><pageref|auto-420>>
+
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Glossary>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-409><vspace|0.5fn>
+    <pageref|auto-421><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Bibliography>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-410><vspace|0.5fn>
+    <pageref|auto-422><vspace|0.5fn>
 
     <vspace*|1fn><with|font-series|bold|math-font-series|bold|font-shape|small-caps|Index>
     <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-    <pageref|auto-411><vspace|0.5fn>
+    <pageref|auto-423><vspace|0.5fn>
   </table-of-contents>
 
   \;
@@ -1913,83 +1958,83 @@
     <associate|auto-352|<tuple|D.9.1.1|113|ad-hostapi.tm>>
     <associate|auto-353|<tuple|E|115|ae-runtimeapi.tm>>
     <associate|auto-354|<tuple|E.1|115|ae-runtimeapi.tm>>
-    <associate|auto-355|<tuple|E.1|115|ae-runtimeapi.tm>>
-    <associate|auto-356|<tuple|E.2|116|ae-runtimeapi.tm>>
-    <associate|auto-357|<tuple|E.2.1|116|ae-runtimeapi.tm>>
-    <associate|auto-358|<tuple|E.3|116|ae-runtimeapi.tm>>
-    <associate|auto-359|<tuple|E.4|116|ae-runtimeapi.tm>>
+    <associate|auto-355|<tuple|E.1.1|115|ae-runtimeapi.tm>>
+    <associate|auto-356|<tuple|E.2|115|ae-runtimeapi.tm>>
+    <associate|auto-357|<tuple|E.2.1|115|ae-runtimeapi.tm>>
+    <associate|auto-358|<tuple|E.3|115|ae-runtimeapi.tm>>
+    <associate|auto-359|<tuple|E.3.1|115|ae-runtimeapi.tm>>
     <associate|auto-36|<tuple|2.2.1|19|c02-state.tm>>
-    <associate|auto-360|<tuple|E.4.1|116|ae-runtimeapi.tm>>
+    <associate|auto-360|<tuple|E.3.1.1|115|ae-runtimeapi.tm>>
     <associate|auto-361|<tuple|E.1|116|ae-runtimeapi.tm>>
-    <associate|auto-362|<tuple|E.4.2|117|ae-runtimeapi.tm>>
-    <associate|auto-363|<tuple|E.4.3|117|ae-runtimeapi.tm>>
-    <associate|auto-364|<tuple|E.4.4|117|ae-runtimeapi.tm>>
-    <associate|auto-365|<tuple|E.4.5|117|ae-runtimeapi.tm>>
-    <associate|auto-366|<tuple|E.2|118|ae-runtimeapi.tm>>
-    <associate|auto-367|<tuple|E.3|118|ae-runtimeapi.tm>>
-    <associate|auto-368|<tuple|E.4|118|ae-runtimeapi.tm>>
-    <associate|auto-369|<tuple|E.5|118|ae-runtimeapi.tm>>
+    <associate|auto-362|<tuple|E.3.1.2|116|ae-runtimeapi.tm>>
+    <associate|auto-363|<tuple|E.3.1.3|116|ae-runtimeapi.tm>>
+    <associate|auto-364|<tuple|E.3.2|117|ae-runtimeapi.tm>>
+    <associate|auto-365|<tuple|E.3.2.1|117|ae-runtimeapi.tm>>
+    <associate|auto-366|<tuple|E.3.3|117|ae-runtimeapi.tm>>
+    <associate|auto-367|<tuple|E.3.3.1|117|ae-runtimeapi.tm>>
+    <associate|auto-368|<tuple|E.2|117|ae-runtimeapi.tm>>
+    <associate|auto-369|<tuple|E.3|117|ae-runtimeapi.tm>>
     <associate|auto-37|<tuple|3|21|c03-transition.tm>>
-    <associate|auto-370|<tuple|E.6|119|ae-runtimeapi.tm>>
-    <associate|auto-371|<tuple|E.7|119|ae-runtimeapi.tm>>
-    <associate|auto-372|<tuple|E.8|119|ae-runtimeapi.tm>>
-    <associate|auto-373|<tuple|E.4.6|119|ae-runtimeapi.tm>>
-    <associate|auto-374|<tuple|E.4.7|120|ae-runtimeapi.tm>>
-    <associate|auto-375|<tuple|E.4.8|120|ae-runtimeapi.tm>>
-    <associate|auto-376|<tuple|E.4.9|120|ae-runtimeapi.tm>>
-    <associate|auto-377|<tuple|E.4.10|120|ae-runtimeapi.tm>>
-    <associate|auto-378|<tuple|E.9|121|ae-runtimeapi.tm>>
-    <associate|auto-379|<tuple|E.4.11|121|ae-runtimeapi.tm>>
+    <associate|auto-370|<tuple|E.4|118|ae-runtimeapi.tm>>
+    <associate|auto-371|<tuple|E.5|118|ae-runtimeapi.tm>>
+    <associate|auto-372|<tuple|E.6|118|ae-runtimeapi.tm>>
+    <associate|auto-373|<tuple|E.7|118|ae-runtimeapi.tm>>
+    <associate|auto-374|<tuple|E.8|119|ae-runtimeapi.tm>>
+    <associate|auto-375|<tuple|E.3.3.2|119|ae-runtimeapi.tm>>
+    <associate|auto-376|<tuple|E.3.3.3|119|ae-runtimeapi.tm>>
+    <associate|auto-377|<tuple|E.3.3.4|119|ae-runtimeapi.tm>>
+    <associate|auto-378|<tuple|E.3.3.5|120|ae-runtimeapi.tm>>
+    <associate|auto-379|<tuple|E.3.4|120|ae-runtimeapi.tm>>
     <associate|auto-38|<tuple|3.1|21|c03-transition.tm>>
-    <associate|auto-380|<tuple|E.4.12|121|ae-runtimeapi.tm>>
-    <associate|auto-381|<tuple|E.4.13|121|ae-runtimeapi.tm>>
-    <associate|auto-382|<tuple|E.4.14|121|ae-runtimeapi.tm>>
-    <associate|auto-383|<tuple|E.4.15|121|ae-runtimeapi.tm>>
-    <associate|auto-384|<tuple|E.4.16|122|ae-runtimeapi.tm>>
-    <associate|auto-385|<tuple|E.4.17|122|ae-runtimeapi.tm>>
-    <associate|auto-386|<tuple|E.4.18|122|ae-runtimeapi.tm>>
-    <associate|auto-387|<tuple|E.4.19|122|ae-runtimeapi.tm>>
-    <associate|auto-388|<tuple|E.4.20|122|ae-runtimeapi.tm>>
-    <associate|auto-389|<tuple|E.4.21|122|ae-runtimeapi.tm>>
+    <associate|auto-380|<tuple|E.3.4.1|120|ae-runtimeapi.tm>>
+    <associate|auto-381|<tuple|E.9|120|ae-runtimeapi.tm>>
+    <associate|auto-382|<tuple|E.10|120|ae-runtimeapi.tm>>
+    <associate|auto-383|<tuple|E.3.5|121|ae-runtimeapi.tm>>
+    <associate|auto-384|<tuple|E.3.5.1|121|ae-runtimeapi.tm>>
+    <associate|auto-385|<tuple|E.3.6|121|ae-runtimeapi.tm>>
+    <associate|auto-386|<tuple|E.3.6.1|121|ae-runtimeapi.tm>>
+    <associate|auto-387|<tuple|E.3.6.2|121|ae-runtimeapi.tm>>
+    <associate|auto-388|<tuple|E.3.6.3|121|ae-runtimeapi.tm>>
+    <associate|auto-389|<tuple|E.3.6.4|121|ae-runtimeapi.tm>>
     <associate|auto-39|<tuple|3.1.1|21|c03-transition.tm>>
-    <associate|auto-390|<tuple|E.4.22|122|ae-runtimeapi.tm>>
-    <associate|auto-391|<tuple|E.4.23|122|ae-runtimeapi.tm>>
-    <associate|auto-392|<tuple|E.4.24|122|ae-runtimeapi.tm>>
-    <associate|auto-393|<tuple|E.4.25|122|ae-runtimeapi.tm>>
-    <associate|auto-394|<tuple|E.4.26|122|ae-runtimeapi.tm>>
-    <associate|auto-395|<tuple|E.4.27|123|ae-runtimeapi.tm>>
-    <associate|auto-396|<tuple|E.4.28|123|ae-runtimeapi.tm>>
-    <associate|auto-397|<tuple|E.10|123|ae-runtimeapi.tm>>
-    <associate|auto-398|<tuple|E.4.29|123|ae-runtimeapi.tm>>
-    <associate|auto-399|<tuple|E.4.30|124|ae-runtimeapi.tm>>
+    <associate|auto-390|<tuple|E.3.6.5|121|ae-runtimeapi.tm>>
+    <associate|auto-391|<tuple|E.3.6.6|121|ae-runtimeapi.tm>>
+    <associate|auto-392|<tuple|E.3.6.7|121|ae-runtimeapi.tm>>
+    <associate|auto-393|<tuple|E.3.6.8|121|ae-runtimeapi.tm>>
+    <associate|auto-394|<tuple|E.3.6.9|121|ae-runtimeapi.tm>>
+    <associate|auto-395|<tuple|E.3.6.10|121|ae-runtimeapi.tm>>
+    <associate|auto-396|<tuple|E.3.6.11|121|ae-runtimeapi.tm>>
+    <associate|auto-397|<tuple|E.3.6.12|122|ae-runtimeapi.tm>>
+    <associate|auto-398|<tuple|E.3.6.13|122|ae-runtimeapi.tm>>
+    <associate|auto-399|<tuple|E.3.7|122|ae-runtimeapi.tm>>
     <associate|auto-4|<tuple|1.2|11|c01-background.tm>>
     <associate|auto-40|<tuple|3.1.2|22|c03-transition.tm>>
-    <associate|auto-400|<tuple|E.4.31|124|ae-runtimeapi.tm>>
-    <associate|auto-401|<tuple|E.4.32|124|ae-runtimeapi.tm>>
-    <associate|auto-402|<tuple|E.4.33|125|ae-runtimeapi.tm>>
-    <associate|auto-403|<tuple|E.4.34|125|ae-runtimeapi.tm>>
-    <associate|auto-404|<tuple|E.4.35|125|ae-runtimeapi.tm>>
-    <associate|auto-405|<tuple|E.4.36|125|ae-runtimeapi.tm>>
-    <associate|auto-406|<tuple|E.4.37|125|ae-runtimeapi.tm>>
-    <associate|auto-407|<tuple|E.4.38|126|ae-runtimeapi.tm>>
-    <associate|auto-408|<tuple|E.4.39|126|ae-runtimeapi.tm>>
-    <associate|auto-409|<tuple|<with|mode|<quote|math>|\<bullet\>>|129>>
+    <associate|auto-400|<tuple|E.3.7.1|122|ae-runtimeapi.tm>>
+    <associate|auto-401|<tuple|E.3.7.2|122|ae-runtimeapi.tm>>
+    <associate|auto-402|<tuple|E.3.7.3|122|ae-runtimeapi.tm>>
+    <associate|auto-403|<tuple|E.3.8|122|ae-runtimeapi.tm>>
+    <associate|auto-404|<tuple|E.3.8.1|123|ae-runtimeapi.tm>>
+    <associate|auto-405|<tuple|E.11|123|ae-runtimeapi.tm>>
+    <associate|auto-406|<tuple|E.3.8.2|123|ae-runtimeapi.tm>>
+    <associate|auto-407|<tuple|E.3.8.3|123|ae-runtimeapi.tm>>
+    <associate|auto-408|<tuple|E.3.8.4|124|ae-runtimeapi.tm>>
+    <associate|auto-409|<tuple|E.3.8.5|124|ae-runtimeapi.tm>>
     <associate|auto-41|<tuple|3.1.2.1|22|c03-transition.tm>>
-    <associate|auto-410|<tuple|<with|mode|<quote|math>|\<bullet\>>|131>>
-    <associate|auto-411|<tuple|Ste19|133>>
-    <associate|auto-412|<tuple|F.3.5|127|ag-runtimeentries.tm>>
-    <associate|auto-413|<tuple|F.2|128|ag-runtimeentries.tm>>
-    <associate|auto-414|<tuple|F.3|128|ag-runtimeentries.tm>>
-    <associate|auto-415|<tuple|F.4|128|ag-runtimeentries.tm>>
-    <associate|auto-416|<tuple|F.5|128|ag-runtimeentries.tm>>
-    <associate|auto-417|<tuple|F.6|129|ag-runtimeentries.tm>>
-    <associate|auto-418|<tuple|F.7|129|ag-runtimeentries.tm>>
-    <associate|auto-419|<tuple|F.8|129|ag-runtimeentries.tm>>
+    <associate|auto-410|<tuple|E.3.8.6|124|ae-runtimeapi.tm>>
+    <associate|auto-411|<tuple|E.3.9|124|ae-runtimeapi.tm>>
+    <associate|auto-412|<tuple|E.3.9.1|124|ae-runtimeapi.tm>>
+    <associate|auto-413|<tuple|E.3.10|125|ae-runtimeapi.tm>>
+    <associate|auto-414|<tuple|E.3.10.1|125|ae-runtimeapi.tm>>
+    <associate|auto-415|<tuple|E.3.10.2|125|ae-runtimeapi.tm>>
+    <associate|auto-416|<tuple|E.3.11|125|ae-runtimeapi.tm>>
+    <associate|auto-417|<tuple|E.3.11.1|125|ae-runtimeapi.tm>>
+    <associate|auto-418|<tuple|E.3.12|125|ae-runtimeapi.tm>>
+    <associate|auto-419|<tuple|E.3.12.1|126|ae-runtimeapi.tm>>
     <associate|auto-42|<tuple|3.1.2.2|22|c03-transition.tm>>
-    <associate|auto-420|<tuple|F.3.6|129|ag-runtimeentries.tm>>
-    <associate|auto-421|<tuple|F.3.7|130|ag-runtimeentries.tm>>
-    <associate|auto-422|<tuple|F.3.8|130|ag-runtimeentries.tm>>
-    <associate|auto-423|<tuple|F.3.9|130|ag-runtimeentries.tm>>
+    <associate|auto-420|<tuple|E.3.12.2|126|ae-runtimeapi.tm>>
+    <associate|auto-421|<tuple|<with|mode|<quote|math>|\<bullet\>>|129>>
+    <associate|auto-422|<tuple|<with|mode|<quote|math>|\<bullet\>>|131>>
+    <associate|auto-423|<tuple|Ste19|133>>
     <associate|auto-424|<tuple|F.3.10|130|ag-runtimeentries.tm>>
     <associate|auto-425|<tuple|F.9|131|ag-runtimeentries.tm>>
     <associate|auto-426|<tuple|F.3.11|131|ag-runtimeentries.tm>>
@@ -2192,17 +2237,17 @@
     <associate|defn-radix-tree|<tuple|1.3|12|c01-background.tm>>
     <associate|defn-relative-syncronization|<tuple|6.13|43|c06-consensus.tm>>
     <associate|defn-result-type|<tuple|B.6|83|ab-encodings.tm>>
-    <associate|defn-rt-apisvec|<tuple|E.1|116|ae-runtimeapi.tm>>
-    <associate|defn-rt-blockbuilder-finalize-block|<tuple|E.4.6|119|ae-runtimeapi.tm>>
-    <associate|defn-rt-builder-inherent-extrinsics|<tuple|E.4.7|120|ae-runtimeapi.tm>>
-    <associate|defn-rt-core-version|<tuple|E.4.1|116|ae-runtimeapi.tm>>
-    <associate|defn-rte-apply-extrinsic-result|<tuple|E.2|118|ae-runtimeapi.tm>>
-    <associate|defn-rte-custom-module-error|<tuple|E.5|118|ae-runtimeapi.tm>>
-    <associate|defn-rte-dispatch-error|<tuple|E.4|118|ae-runtimeapi.tm>>
-    <associate|defn-rte-dispatch-outcome|<tuple|E.3|118|ae-runtimeapi.tm>>
-    <associate|defn-rte-invalid-transaction|<tuple|E.7|119|ae-runtimeapi.tm>>
-    <associate|defn-rte-transaction-validity-error|<tuple|E.6|119|ae-runtimeapi.tm>>
-    <associate|defn-rte-unknown-transaction|<tuple|E.8|119|ae-runtimeapi.tm>>
+    <associate|defn-rt-apisvec|<tuple|E.2|116|ae-runtimeapi.tm>>
+    <associate|defn-rt-blockbuilder-finalize-block|<tuple|E.3.3.2|119|ae-runtimeapi.tm>>
+    <associate|defn-rt-builder-inherent-extrinsics|<tuple|E.3.3.3|119|ae-runtimeapi.tm>>
+    <associate|defn-rt-core-version|<tuple|E.3.1.1|115|ae-runtimeapi.tm>>
+    <associate|defn-rte-apply-extrinsic-result|<tuple|E.3|117|ae-runtimeapi.tm>>
+    <associate|defn-rte-custom-module-error|<tuple|E.6|118|ae-runtimeapi.tm>>
+    <associate|defn-rte-dispatch-error|<tuple|E.5|118|ae-runtimeapi.tm>>
+    <associate|defn-rte-dispatch-outcome|<tuple|E.4|117|ae-runtimeapi.tm>>
+    <associate|defn-rte-invalid-transaction|<tuple|E.8|118|ae-runtimeapi.tm>>
+    <associate|defn-rte-transaction-validity-error|<tuple|E.7|118|ae-runtimeapi.tm>>
+    <associate|defn-rte-unknown-transaction|<tuple|E.9|119|ae-runtimeapi.tm>>
     <associate|defn-runtime|<tuple|1.1|11|c01-background.tm>>
     <associate|defn-runtime-pointer|<tuple|D.2|89|ad-hostapi.tm>>
     <associate|defn-runtime-pointer-size|<tuple|D.3|89|ad-hostapi.tm>>
@@ -2225,11 +2270,12 @@
     <associate|defn-sync-period|<tuple|6.18|43|c06-consensus.tm>>
     <associate|defn-total-potential-votes|<tuple|6.31|49|c06-consensus.tm>>
     <associate|defn-transaction-queue|<tuple|3.4|24|c03-transition.tm>>
+    <associate|defn-transaction-source|<tuple|E.10|120|ae-runtimeapi.tm>>
     <associate|defn-transactions-message|<tuple|4.6|36|c04-networking.tm>>
     <associate|defn-unavailable-parablock-proposal|<tuple|7.24|68|c07-anv.tm>>
     <associate|defn-unix-time|<tuple|1.10|12|c01-background.tm>>
     <associate|defn-upgrade-indicator|<tuple|7.5|58|c07-anv.tm>>
-    <associate|defn-valid-transaction|<tuple|E.9|121|ae-runtimeapi.tm>>
+    <associate|defn-valid-transaction|<tuple|E.11|120|ae-runtimeapi.tm>>
     <associate|defn-varrying-data-type|<tuple|B.4|83|ab-encodings.tm>>
     <associate|defn-vote|<tuple|6.25|48|c06-consensus.tm>>
     <associate|defn-winning-threshold|<tuple|6.11|42|c06-consensus.tm>>
@@ -2261,12 +2307,12 @@
     <associate|part:c06-consensus.tm|<tuple|5|39>>
     <associate|part:c07-anv.tm|<tuple|19|56>>
     <associate|part:c08-messaging.tm|<tuple|7.12.3|73>>
-    <associate|sect-accountnonceapi-account-nonce|<tuple|E.4.37|125|ae-runtimeapi.tm>>
+    <associate|sect-accountnonceapi-account-nonce|<tuple|E.3.11.1|125|ae-runtimeapi.tm>>
     <associate|sect-approval-checking|<tuple|7.11|68|c07-anv.tm>>
     <associate|sect-authority-set|<tuple|6.1.1|39|c06-consensus.tm>>
     <associate|sect-babe|<tuple|6.2|41|c06-consensus.tm>>
-    <associate|sect-babeapi_current_epoch|<tuple|E.4.30|124|ae-runtimeapi.tm>>
-    <associate|sect-babeapi_generate_key_ownership_proof|<tuple|E.4.32|124|ae-runtimeapi.tm>>
+    <associate|sect-babeapi_current_epoch|<tuple|E.3.8.3|123|ae-runtimeapi.tm>>
+    <associate|sect-babeapi_generate_key_ownership_proof|<tuple|E.3.8.5|124|ae-runtimeapi.tm>>
     <associate|sect-blake2|<tuple|A.2|81|aa-cryptoalgorithms.tm>>
     <associate|sect-block-body|<tuple|3.3.1.3|27|c03-transition.tm>>
     <associate|sect-block-building|<tuple|6.2.7|46|c06-consensus.tm>>
@@ -2317,15 +2363,15 @@
     <associate|sect-genesis-block|<tuple|C|87|ac-genesis.tm>>
     <associate|sect-grandpa-catchup|<tuple|6.4.1|55|c06-consensus.tm>>
     <associate|sect-grandpa-catchup-messages|<tuple|6.3.2.3|50|c06-consensus.tm>>
-    <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|E.4.27|123|ae-runtimeapi.tm>>
-    <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|E.4.26|122|ae-runtimeapi.tm>>
+    <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|E.3.7.3|122|ae-runtimeapi.tm>>
+    <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|E.3.7.2|122|ae-runtimeapi.tm>>
     <associate|sect-handling-runtime-state-update|<tuple|3.1.2.5|23|c03-transition.tm>>
     <associate|sect-hash-functions|<tuple|A.1|81|aa-cryptoalgorithms.tm>>
     <associate|sect-host-api|<tuple|D|89|ad-hostapi.tm>>
     <associate|sect-inclusion-of-candidate-receipt|<tuple|7.5.1|64|c07-anv.tm>>
     <associate|sect-inherents|<tuple|3.2.3.1|25|c03-transition.tm>>
     <associate|sect-int-encoding|<tuple|B.1.1|84|ab-encodings.tm>>
-    <associate|sect-json-rpc-api|<tuple|E.3|116|ae-runtimeapi.tm>>
+    <associate|sect-json-rpc-api|<tuple|E.1.1|115|ae-runtimeapi.tm>>
     <associate|sect-justified-block-header|<tuple|3.3.1.2|26|c03-transition.tm>>
     <associate|sect-list-of-runtime-entries|<tuple|E.1|115|ae-runtimeapi.tm>>
     <associate|sect-loading-runtime-code|<tuple|3.1.1|21|c03-transition.tm>>
@@ -2344,11 +2390,12 @@
     <associate|sect-randomness|<tuple|A.3|81|aa-cryptoalgorithms.tm>>
     <associate|sect-re-api|<tuple|Ste19|111>>
     <associate|sect-retrieval|<tuple|7.12.0.1|70|c07-anv.tm>>
-    <associate|sect-rte-apply-extrinsic|<tuple|E.4.5|117|ae-runtimeapi.tm>>
-    <associate|sect-rte-babeapi-epoch|<tuple|E.4.28|123|ae-runtimeapi.tm>>
-    <associate|sect-rte-core-execute-block|<tuple|E.4.2|117|ae-runtimeapi.tm>>
-    <associate|sect-rte-grandpa-auth|<tuple|E.4.25|122|ae-runtimeapi.tm>>
-    <associate|sect-rte-validate-transaction|<tuple|E.4.10|120|ae-runtimeapi.tm>>
+    <associate|sect-rte-apply-extrinsic|<tuple|E.3.3.1|117|ae-runtimeapi.tm>>
+    <associate|sect-rte-babeapi-epoch|<tuple|E.3.8.1|123|ae-runtimeapi.tm>>
+    <associate|sect-rte-core-execute-block|<tuple|E.3.1.2|116|ae-runtimeapi.tm>>
+    <associate|sect-rte-core-initialize-block|<tuple|E.3.1.3|116|ae-runtimeapi.tm>>
+    <associate|sect-rte-grandpa-auth|<tuple|E.3.7.1|122|ae-runtimeapi.tm>>
+    <associate|sect-rte-validate-transaction|<tuple|E.3.4.1|120|ae-runtimeapi.tm>>
     <associate|sect-runtime-entries|<tuple|E|115|ae-runtimeapi.tm>>
     <associate|sect-runtime-return-value|<tuple|3.1.2.4|23|c03-transition.tm>>
     <associate|sect-runtime-send-args-to-runtime-enteries|<tuple|3.1.2.3|22|c03-transition.tm>>
@@ -2418,9 +2465,6 @@
 
       <tuple|normal|<surround|<hidden-binding|<tuple>|8.3>||Parachain XCMP
       Overview>|<pageref|auto-164>>
-
-      <tuple|normal|<surround|<hidden-binding|<tuple>|E.1>||Snippet to export
-      entries into tho Wasm runtime module.>|<pageref|auto-355>>
     </associate>
     <\associate|gly>
       <tuple|normal|<with|font-series|<quote|bold>|math-font-series|<quote|bold>|<with|mode|<quote|math>|P<rsub|n>>>|a
@@ -2655,47 +2699,52 @@
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.2>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|ApplyExtrinsicResult>.
-      </surround>|<pageref|auto-366>>
+      </surround>|<pageref|auto-368>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.3>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchOutcome>.
-      </surround>|<pageref|auto-367>>
+      </surround>|<pageref|auto-369>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.4>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchError>.
-      </surround>|<pageref|auto-368>>
+      </surround>|<pageref|auto-370>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.5>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|CustomModuleError>.
-      </surround>|<pageref|auto-369>>
+      </surround>|<pageref|auto-371>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.6>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-370>>
+      </surround>|<pageref|auto-372>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.7>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|InvalidTransaction>.
-      </surround>|<pageref|auto-371>>
+      </surround>|<pageref|auto-373>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.8>|>
         Possible values of varying data type
         <with|font-series|<quote|bold>|math-font-series|<quote|bold>|UnknownTransaction>.
-      </surround>|<pageref|auto-372>>
+      </surround>|<pageref|auto-374>>
 
       <tuple|normal|<\surround|<hidden-binding|<tuple>|E.9>|>
+        The <with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionSource>
+        enum\ 
+      </surround>|<pageref|auto-381>>
+
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|E.10>|>
         The tuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
 
         in the case the transaction is judged to be valid.
-      </surround>|<pageref|auto-378>>
+      </surround>|<pageref|auto-382>>
 
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|E.10>|>
+      <tuple|normal|<\surround|<hidden-binding|<tuple>|E.11>|>
         The tuple provided by <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BabeApi_configuration>.
-      </surround>|<pageref|auto-397>>
+      </surround>|<pageref|auto-405>>
     </associate>
     <\associate|toc>
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|1.<space|2spc>Background>
@@ -3871,193 +3920,239 @@
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <pageref|auto-353><vspace|0.5fn>
 
-      E.1.<space|2spc>List of Runtime Methods
+      E.1.<space|2spc>General Information
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-354>
 
-      E.2.<space|2spc>List of Runtime Constants
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|E.1.1.<space|2spc>JSON-RPC API for external
+      services <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-355>>
+
+      E.2.<space|2spc>Runtime Constants <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-356>
 
       <with|par-left|<quote|1tab>|E.2.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|__heap_base>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-357>>
 
-      E.3.<space|2spc>JSON-RPC API for external services
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      E.3.<space|2spc>Runtime Functions <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-358>
 
-      E.4.<space|2spc>Argument Specification
+      <with|par-left|<quote|1tab>|E.3.1.<space|2spc>Core Module (Version 3)
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-359>
+      <no-break><pageref|auto-359>>
 
-      <with|par-left|<quote|1tab>|E.4.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
+      <with|par-left|<quote|2tab>|E.3.1.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-360>>
 
-      <with|par-left|<quote|1tab>|E.4.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
+      <with|par-left|<quote|2tab>|E.3.1.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-362>>
 
-      <with|par-left|<quote|1tab>|E.4.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialize_block>
+      <with|par-left|<quote|2tab>|E.3.1.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-363>>
 
-      <with|par-left|<quote|1tab>|E.4.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Metadata_metadata>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|E.3.2.<space|2spc>Metadata Module (Version
+      1) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-364>>
 
-      <with|par-left|<quote|1tab>|E.4.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
+      <with|par-left|<quote|2tab>|E.3.2.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Metadata_metadata>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-365>>
 
-      <with|par-left|<quote|1tab>|E.4.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-373>>
+      <with|par-left|<quote|1tab>|E.3.3.<space|2spc>BlockBuilder Module
+      (Version 4) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-366>>
 
-      <with|par-left|<quote|1tab>|E.4.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
+      <with|par-left|<quote|2tab>|E.3.3.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-374>>
+      <no-break><pageref|auto-367>>
 
-      <with|par-left|<quote|1tab>|E.4.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_check_inherents>
+      <with|par-left|<quote|2tab>|E.3.3.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-375>>
 
-      <with|par-left|<quote|1tab>|E.4.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_random_seed>
+      <with|par-left|<quote|2tab>|E.3.3.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-376>>
 
-      <with|par-left|<quote|1tab>|E.4.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
+      <with|par-left|<quote|2tab>|E.3.3.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_check_inherents>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-377>>
 
-      <with|par-left|<quote|1tab>|E.4.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|OffchainWorkerApi_offchain_worker>
+      <with|par-left|<quote|2tab>|E.3.3.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_random_seed>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-378>>
+
+      <with|par-left|<quote|1tab>|E.3.4.<space|2spc>TaggedTransactionQueue
+      (Version 2) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-379>>
 
-      <with|par-left|<quote|1tab>|E.4.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validators>
+      <with|par-left|<quote|2tab>|E.3.4.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-380>>
 
-      <with|par-left|<quote|1tab>|E.4.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validator_groups>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-381>>
-
-      <with|par-left|<quote|1tab>|E.4.14.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_availability_cores>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-382>>
-
-      <with|par-left|<quote|1tab>|E.4.15.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_persisted_validation_data>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|E.3.5.<space|2spc>OffchainWorkerApi Module
+      (Version 2) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-383>>
 
-      <with|par-left|<quote|1tab>|E.4.16.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_check_validation_outputs>
+      <with|par-left|<quote|2tab>|E.3.5.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|OffchainWorkerApi_offchain_worker>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-384>>
 
-      <with|par-left|<quote|1tab>|E.4.17.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_index_for_child>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|E.3.6.<space|2spc>ParachainHost Module
+      (Version 1) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-385>>
 
-      <with|par-left|<quote|1tab>|E.4.18.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_info>
+      <with|par-left|<quote|2tab>|E.3.6.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validators>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-386>>
 
-      <with|par-left|<quote|1tab>|E.4.19.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validation_code>
+      <with|par-left|<quote|2tab>|E.3.6.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validator_groups>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-387>>
 
-      <with|par-left|<quote|1tab>|E.4.20.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_historical_validation_code>
+      <with|par-left|<quote|2tab>|E.3.6.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_availability_cores>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-388>>
 
-      <with|par-left|<quote|1tab>|E.4.21.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_pending_availability>
+      <with|par-left|<quote|2tab>|E.3.6.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_persisted_validation_data>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-389>>
 
-      <with|par-left|<quote|1tab>|E.4.22.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_events>
+      <with|par-left|<quote|2tab>|E.3.6.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_check_validation_outputs>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-390>>
 
-      <with|par-left|<quote|1tab>|E.4.23.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_dmq_contents>
+      <with|par-left|<quote|2tab>|E.3.6.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_index_for_child>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-391>>
 
-      <with|par-left|<quote|1tab>|E.4.24.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_inbound_hrmp_channel_contents>
+      <with|par-left|<quote|2tab>|E.3.6.7.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_info>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-392>>
 
-      <with|par-left|<quote|1tab>|E.4.25.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
+      <with|par-left|<quote|2tab>|E.3.6.8.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validation_code>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-393>>
 
-      <with|par-left|<quote|1tab>|E.4.26.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>
+      <with|par-left|<quote|2tab>|E.3.6.9.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_historical_validation_code>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-394>>
 
-      <with|par-left|<quote|1tab>|E.4.27.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_generate_key_ownership_proof>
+      <with|par-left|<quote|2tab>|E.3.6.10.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_pending_availability>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-395>>
 
-      <with|par-left|<quote|1tab>|E.4.28.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
+      <with|par-left|<quote|2tab>|E.3.6.11.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_events>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-396>>
 
-      <with|par-left|<quote|1tab>|E.4.29.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch_start>
+      <with|par-left|<quote|2tab>|E.3.6.12.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_dmq_contents>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-397>>
+
+      <with|par-left|<quote|2tab>|E.3.6.13.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_inbound_hrmp_channel_contents>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-398>>
 
-      <with|par-left|<quote|1tab>|E.4.30.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|E.3.7.<space|2spc>GrandpaApi Module
+      (Version 2) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-399>>
 
-      <with|par-left|<quote|1tab>|E.4.31.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_next_epoch>
+      <with|par-left|<quote|2tab>|E.3.7.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-400>>
 
-      <with|par-left|<quote|1tab>|E.4.32.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_generate_key_ownership_proof>
+      <with|par-left|<quote|2tab>|E.3.7.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-401>>
 
-      <with|par-left|<quote|1tab>|E.4.33.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_submit_report_equivocation_unsigned_extrinsic>
+      <with|par-left|<quote|2tab>|E.3.7.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_generate_key_ownership_proof>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-402>>
 
-      <with|par-left|<quote|1tab>|E.4.34.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AuthorityDiscoveryApi_authorities>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <with|par-left|<quote|1tab>|E.3.8.<space|2spc>BabeApi Module (Version
+      2) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-403>>
 
-      <with|par-left|<quote|1tab>|E.4.35.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_generate_session_keys>
+      <with|par-left|<quote|2tab>|E.3.8.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-404>>
 
-      <with|par-left|<quote|1tab>|E.4.36.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_decode_session_keys>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-405>>
-
-      <with|par-left|<quote|1tab>|E.4.37.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AccountNonceApi_account_nonce>
+      <with|par-left|<quote|2tab>|E.3.8.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch_start>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-406>>
 
-      <with|par-left|<quote|1tab>|E.4.38.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_info>
+      <with|par-left|<quote|2tab>|E.3.8.3.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-407>>
 
-      <with|par-left|<quote|1tab>|E.4.39.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_fee_details>
+      <with|par-left|<quote|2tab>|E.3.8.4.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_next_epoch>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
       <no-break><pageref|auto-408>>
 
+      <with|par-left|<quote|2tab>|E.3.8.5.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_generate_key_ownership_proof>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-409>>
+
+      <with|par-left|<quote|2tab>|E.3.8.6.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_submit_report_equivocation_unsigned_extrinsic>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-410>>
+
+      <with|par-left|<quote|1tab>|E.3.9.<space|2spc>AuthorityDiscoveryApi
+      Module (Version 1) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-411>>
+
+      <with|par-left|<quote|2tab>|E.3.9.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AuthorityDiscoveryApi_authorities>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-412>>
+
+      <with|par-left|<quote|1tab>|E.3.10.<space|2spc>SessionKeys Module
+      (Version 1) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-413>>
+
+      <with|par-left|<quote|2tab>|E.3.10.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_generate_session_keys>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-414>>
+
+      <with|par-left|<quote|2tab>|E.3.10.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_decode_session_keys>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-415>>
+
+      <with|par-left|<quote|1tab>|E.3.11.<space|2spc>AccountNonceApi Module
+      (Version 1) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-416>>
+
+      <with|par-left|<quote|2tab>|E.3.11.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AccountNonceApi_account_nonce>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-417>>
+
+      <with|par-left|<quote|1tab>|E.3.12.<space|2spc>TransactionPaymentApi
+      Module (Version 1) <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-418>>
+
+      <with|par-left|<quote|2tab>|E.3.12.1.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_info>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-419>>
+
+      <with|par-left|<quote|2tab>|E.3.12.2.<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_fee_details>
+      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
+      <no-break><pageref|auto-420>>
+
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Glossary>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-409><vspace|0.5fn>
+      <pageref|auto-421><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Bibliography>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-410><vspace|0.5fn>
+      <pageref|auto-422><vspace|0.5fn>
 
       <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|font-shape|<quote|small-caps>|Index>
       <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <pageref|auto-411><vspace|0.5fn>
+      <pageref|auto-423><vspace|0.5fn>
     </associate>
   </collection>
 </auxiliary>
