@@ -584,7 +584,7 @@ func test_storage_next_key(r runtime.Instance, key1, value1, key2, value2 string
 	}
 
 	if none1.Exists() {
-		return errors.New("Next1 is not empty")
+		return fmt.Errorf("Next1 is not empty: %s", none1.Value())
 	}
 
 	none2, err := storage_next_key(r, []byte(key2))
@@ -593,7 +593,7 @@ func test_storage_next_key(r runtime.Instance, key1, value1, key2, value2 string
 	}
 
 	if none2.Exists() {
-		return errors.New("Next2 is not empty")
+		return fmt.Errorf("Next2 is not empty: %s", none2.Value())
 	}
 
 	// Insert test data
@@ -625,7 +625,7 @@ func test_storage_next_key(r runtime.Instance, key1, value1, key2, value2 string
 		fmt.Printf("%s\n", next);
 	} else {
 		if some1.Exists() {
-			return errors.New("Next is not empty")
+			return fmt.Errorf("Next is not empty: %s", some1.Value())
 		}
 	}
 
@@ -648,7 +648,7 @@ func test_storage_next_key(r runtime.Instance, key1, value1, key2, value2 string
 		fmt.Printf("%s\n", next);
 	} else {
 		if some2.Exists() {
-			return errors.New("Next is not empty")
+			return fmt.Errorf("Next is not empty: %s", some2.Value())
 		}
 	}
 
