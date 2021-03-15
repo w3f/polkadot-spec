@@ -36,7 +36,7 @@ sp-keystore       = { git = "https://github.com/paritytech/substrate", branch = 
 sp-state-machine  = { git = "https://github.com/paritytech/substrate", branch = "master" }
 
 # host-api shim wasm blob
-runtime = { package = "hostapi-runtime", path = "../../runtimes/hostapi" }
+runtime = { package = "hostapi-runtime", path = "../../runtimes/hostapi", features = ["std", "vendor-fix"] }
 
 [features]
 export-memory = [ "runtime/export-memory" ]
