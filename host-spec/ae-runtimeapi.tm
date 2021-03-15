@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|1.99.18>
 
 <project|host-spec.tm>
 
@@ -7,108 +7,30 @@
 <\body>
   <appendix|Polkadot Runtime API><label|sect-runtime-entries>
 
-  <section|List of Runtime Methods><label|sect-list-of-runtime-entries>
+  <section|General Information>
 
-  The Polkadot Host assumes that at least the following functions are
-  implemented in the Runtime Wasm blob and have been exported as shown in
-  Snippet <reference|snippet-runtime-enteries>:
+  The Polkadot Host assumes that at least the constants and functions
+  described in this chapter are implemented in the Runtime Wasm blob.\ 
 
-  <assign|figure-text|<macro|Snippet>>
+  It should be noted that the API can change through runtime updates.
+  Therefore a host should check the API versions of each module returned in
+  the <verbatim|api> field by <verbatim|Core_version> (Section
+  <reference|defn-rt-core-version>) after every runtime upgrade and warn if
+  an updated API is encountered and that this might require an update of the
+  host.
 
-  <\small-figure>
-    <\cpp-code>
-      \ \ (export "Core_version")
+  <subsection|JSON-RPC API for external services><label|sect-json-rpc-api>
 
-      \ \ (export "Core_execute_block")
+  Polkadot Host implementers are encouraged to implement an API in order for
+  external, third-party services to interact with the node. The
+  <hlink|JSON-RPC Interface for Polkadot Nodes|https://github.com/w3f/PSPs/blob/master/PSPs/drafts/psp-6.md>
+  (PSP Number 006) is a Polkadot Standard Proposal for such an API and makes
+  it easier to integrate the node with exisiting tools available in the
+  Polkadot ecosystem, such as <hlink|polkadot.js.org|https://polkadot.js.org/>.
+  The Runtime API has a few modules designed specifically for use in the
+  official RPC API.
 
-      \ \ (export "Core_initialize_block")
-
-      \ \ (export "Metadata_metadata")
-
-      \ \ (export "BlockBuilder_apply_extrinsic")
-
-      \ \ (export "BlockBuilder_finalize_block")
-
-      \ \ (export "BlockBuilder_inherent_extrinsics")
-
-      \ \ (export "BlockBuilder_check_inherents")
-
-      \ \ (export "BlockBuilder_random_seed")
-
-      \ \ (export "TaggedTransactionQueue_validate_transaction")
-
-      \ \ (export "OffchainWorkerApi_offchain_worker")
-
-      \ \ (export "ParachainHost_validators")
-
-      \ \ (export "ParachainHost_validator_groups")
-
-      \ \ (export "ParachainHost_availability_cores")
-
-      \ \ (export "ParachainHost_persisted_validation_data")
-
-      \ \ (export "ParachainHost_check_validation_outputs")
-
-      \ \ (export "ParachainHost_session_index_for_child")
-
-      \ \ (export "ParachainHost_session_info")
-
-      \ \ (export "ParachainHost_validation_code")
-
-      \ \ (export "ParachainHost_historical_validation_code")
-
-      \ \ (export "ParachainHost_candidate_pending_availability")
-
-      \ \ (export "ParachainHost_candidate_events")
-
-      \ \ (export "ParachainHost_dmq_contents")
-
-      \ \ (export "ParachainHost_inbound_hrmp_channels_contents")
-
-      \ \ (export "GrandpaApi_authorities")
-
-      \ \ (export "GrandpaApi_submit_report_equivocation_unsigned_extrinsic")
-
-      \ \ (export "GrandpaApi_generate_key_ownership_proof")
-
-      \ \ (export "BabeApi_configuration")
-
-      \ \ (export "BabeApi_current_epoch_start")
-
-      \ \ (export "BabeApi_current_epoch")
-
-      \ \ (export "BabeApi_next_epoch")
-
-      \ \ (export "BabeApi_generate_key_ownership_proof")
-
-      \ \ (export "BabeApi_submit_report_equivocation_unsigned_extrinsic")
-
-      \ \ (export "AuthorityDiscoveryApi_authorities")
-
-      \ \ (export "SessionKeys_generate_session_keys")
-
-      \ \ (export "SessionKeys_decode_session_keys")
-
-      \ \ (export "AccountNonceApi_account_nonce")
-
-      \ \ (export "TransactionPaymentApi_query_info")
-
-      \ \ (export "TransactionPaymentApi_query_fee_details")
-
-      \;
-    </cpp-code>
-  </small-figure|<label|snippet-runtime-enteries>Snippet to export entries
-  into tho Wasm runtime module.>
-
-  <assign|figure-text|<macro|Figure>>
-
-  The following sections describe the standard based on which the Polkadot
-  Host communicates with each runtime entry. Do note that any state changes
-  created by calling any of the Runtime functions are not necessarily to be
-  persisted after the call is ended. See Section
-  <reference|sect-handling-runtime-state-update> for more information.
-
-  <section|List of Runtime Constants>
+  <section|Runtime Constants>
 
   <subsection|<verbatim|__heap_base>>
 
@@ -116,42 +38,42 @@
   below is reserved for the stack and data section. For more details please
   refer to Section <reference|sect-ext-allocator>.
 
-  <section|JSON-RPC API for external services><label|sect-json-rpc-api>
+  <section|Runtime Functions>
 
-  Polkadot Host implementers are encouraged to implement an API in order for
-  external, third-party services to interact with the node. The
-  <hlink|JSON-RPC Interface for Polkadot Nodes|https://github.com/w3f/PSPs/blob/master/PSPs/drafts/psp-6.md>
-  (PSP Number 006) is a Polkadot Standard Proposal for such an API and makes
-  it easier to integrate the node with exisiting tools available in the
-  Polkadot ecosystem, such as <hlink|polkadot.js.org|https://polkadot.js.org/>.\ 
+  In this section, we describe all Runtime API functions alongside their
+  arguments and the return values. The functions are organzied into modules
+  with each being versioned independently.
 
-  <section|Argument Specification>
+  <\definition>
+    The <with|font-series|bold|Runtime API Call Convention> describes that
+    all functions receive and return SCALE encoded data and as a result have
+    the following prototype signature
 
-  As a wasm functions, all runtime entries have the following prototype
-  signature:
+    \;
 
-  \;
+    <\verbatim>
+      (func $generic_runtime_entry
 
-  <\verbatim>
-    \ \ \ \ (func $generic_runtime_entry
+      \ \ (param $ptr i32) (parm $len i32) (result i64))
+    </verbatim>
 
-    \ \ \ \ \ \ (param $data i32) (parm $len i32) (result i64))
-  </verbatim>
+    \;
 
-  \;
-
-  where <verbatim|data> points to the SCALE encoded paramaters sent to the
-  function and <verbatim|len> is the length of the data. <verbatim|result>
-  points to the SCALE encoded data the function returns. In this section, we
-  describe the function of each of the entries alongside with the details of
-  the arguments and the return values for each one of these enteries.
-
-  \;
+    where <verbatim|ptr> points to the SCALE encoded tuple of the paramaters
+    passed to the function and <verbatim|len> is the length of this data,
+    while <verbatim|result> is a pointer-size (Definition
+    <reference|defn-runtime-pointer-size>) to the SCALE encoded return data.
+  </definition>
 
   See Section <reference|sect-code-executor> for more information about the
-  behavior of the Wasm Runtime.
+  behavior of the Wasm Runtime. Do note that any state changes created by
+  calling any of the Runtime functions are not necessarily to be persisted
+  after the call is ended. See Section <reference|sect-handling-runtime-state-update>
+  for more information.
 
-  <subsection|<verbatim|Core_version>><label|defn-rt-core-version>
+  <subsection|Core Module (Version 3)>
+
+  <subsubsection|<verbatim|Core_version>><label|defn-rt-core-version>
 
   Returns the version identifiers of the Runtime. This function can be used
   by the Polkadot Host implementation when it seems appropriate, such as for
@@ -174,25 +96,24 @@
 
     \;
 
-    <\with|par-mode|center>
-      <small-table|<tabular|<tformat|<cwith|1|8|1|1|cell-halign|l>|<cwith|1|8|1|1|cell-lborder|0ln>|<cwith|1|8|2|2|cell-halign|l>|<cwith|1|8|3|3|cell-halign|l>|<cwith|1|8|3|3|cell-rborder|0ln>|<cwith|1|8|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|8|8|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
-      identifier>>|<row|<cell|<verbatim|impl_name>>|<cell|String>|<cell|the
-      name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|UINT32>|<cell|the
-      version of the authorship interface>>|<row|<cell|<verbatim|spec_version>>|<cell|UINT32>|<cell|the
-      version of the Runtime specification>>|<row|<cell|<verbatim|impl_version>>|<cell|UINT32>|<cell|the
-      v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec
-      (<reference|defn-rt-apisvec>)>|<cell|List of supported APIs along with
-      their version>>|<row|<cell|<verbatim|transaction_version>>|<cell|UINT32>|<cell|the
-      version of the transaction format>>>>>|Detail of the version data type
-      returns from runtime <verbatim|version> function.>
-    </with>
+    <big-table|<tabular|<tformat|<cwith|1|8|1|1|cell-halign|l>|<cwith|1|8|1|1|cell-lborder|0ln>|<cwith|1|8|2|2|cell-halign|l>|<cwith|1|8|3|3|cell-halign|l>|<cwith|1|8|3|3|cell-rborder|0ln>|<cwith|1|8|1|3|cell-valign|c>|<cwith|1|1|1|3|cell-tborder|1ln>|<cwith|1|1|1|3|cell-bborder|1ln>|<cwith|8|8|1|3|cell-bborder|1ln>|<cwith|2|-1|1|1|font-base-size|8>|<cwith|2|-1|2|-1|font-base-size|8>|<table|<row|<cell|Name>|<cell|Type>|<cell|Description>>|<row|<cell|<verbatim|spec_name>>|<cell|String>|<cell|Runtime
+    identifier>>|<row|<cell|<verbatim|impl_name>>|<cell|String>|<cell|the
+    name of the implementation (e.g. C++)>>|<row|<cell|<verbatim|authoring_version>>|<cell|UINT32>|<cell|the
+    version of the authorship interface>>|<row|<cell|<verbatim|spec_version>>|<cell|UINT32>|<cell|the
+    version of the Runtime specification>>|<row|<cell|<verbatim|impl_version>>|<cell|UINT32>|<cell|the
+    v<verbatim|>ersion of the Runtime implementation>>|<row|<cell|<verbatim|apis>>|<cell|ApisVec
+    (<reference|defn-rt-apisvec>)>|<cell|List of supported APIs along with
+    their version>>|<row|<cell|<verbatim|transaction_version>>|<cell|UINT32>|<cell|the
+    version of the transaction format>>>>>|Detail of the version data type
+    returns from runtime <verbatim|version> function.>
 
     <\definition>
       <label|defn-rt-apisvec><strong|ApisVec> is a specialised type for the
       <verbatim|Core_version> (<reference|defn-rt-core-version>) function
       entry. It represents an array of tuples, where the first value of the
-      tuple is an array of 8-bytes indicating the API name. The second value
-      of the tuple is the version number of the corresponding API.
+      tuple is an array of 8-bytes containing the Blake2b hash of the API
+      name. The second value of the tuple is the version number of the
+      corresponding API.
 
       <\eqnarray*>
         <tformat|<table|<row|<cell|ApiVec>|<cell|\<assign\>>|<cell|<around*|(|T<rsub|0>,\<ldots\>,T<rsub|n>|)>>>|<row|<cell|T>|<cell|\<assign\>>|<cell|<around*|(|<around*|(|b<rsub|0>,\<ldots\>,b<rsub|7>|)>,UINT32|)>>>>>
@@ -200,7 +121,9 @@
     </definition>
   </itemize-dot>
 
-  <subsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
+  Requires <verbatim|Core_intialize_block> to be called beforehand.
+
+  <subsubsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
 
   Executes a full block by executing all exctrinsics included in it and
   update the state accordingly. Additionally, some integrity checks are
@@ -242,7 +165,7 @@
     <item>None.
   </itemize-dot>
 
-  <subsection|<verbatim|Core_initialize_block>>
+  <subsubsection|<verbatim|Core_initialize_block>><label|sect-rte-core-initialize-block>
 
   Sets up the environment required for building a new block as described in
   Algorithm <reference|algo-build-block>.
@@ -265,12 +188,17 @@
     <item>None.
   </itemize-dot>
 
-  <subsection|<verbatim|Metadata_metadata>>
+  <subsection|Metadata Module (Version 1)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called first.
+
+  <subsubsection|<verbatim|Metadata_metadata>>
 
   Returns native Runtime metadata in an opaque form. This function can be
-  used for logging purposes. This function can be used by the Polkadot Host
-  implementation when it seems appropriate, such as for the JSON-RPC API as
-  described in Section <reference|sect-json-rpc-api>.
+  used by the Polkadot Host implementation when it seems appropriate, such as
+  for the JSON-RPC API as described in Section <reference|sect-json-rpc-api>.
+  and returns all the information necessary to build valid transactions.
 
   \;
 
@@ -289,7 +217,12 @@
     form.
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_apply_extrinsic>>
+  <subsection|BlockBuilder Module (Version 4)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|BlockBuilder_apply_extrinsic>>
   <label|sect-rte-apply-extrinsic>
 
   Apply the extrinsic outside of the block execution function. This does not
@@ -456,7 +389,7 @@
     </big-table>
   </definition>
 
-  <subsection|<verbatim|BlockBuilder_finalize_block>><label|defn-rt-blockbuilder-finalize-block>
+  <subsubsection|<verbatim|BlockBuilder_finalize_block>><label|defn-rt-blockbuilder-finalize-block>
 
   Finalize the block - it is up to the caller to ensure that all header
   fields are valid except for the state root. State changes resulting from
@@ -480,7 +413,7 @@
     <reference|defn-block-header>.
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_inherent_extrinsics>><label|defn-rt-builder-inherent-extrinsics>
+  <subsubsection|<verbatim|BlockBuilder_inherent_extrinsics>><label|defn-rt-builder-inherent-extrinsics>
 
   Generates the inherent extrinsics, which are explained in more detail in
   section <reference|sect-inherents>. This function takes a SCALE encoded
@@ -508,7 +441,7 @@
     is a byte array of varying size.
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_check_inherents>>
+  <subsubsection|<verbatim|BlockBuilder_check_inherents>>
 
   Checks whether the provided inherent is valid. This function can be used by
   the Polkadot Host implementation when verifying the validaity of an
@@ -553,7 +486,7 @@
     </itemize-dot>
   </itemize-dot>
 
-  <subsection|<verbatim|BlockBuilder_random_seed>>
+  <subsubsection|<verbatim|BlockBuilder_random_seed>>
 
   Generates a random seed. <todo|there is currently no requirement for having
   to call this function.>
@@ -574,7 +507,12 @@
     <item>A 32-byte array containing the random seed.
   </itemize-dot>
 
-  <subsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
+  <subsection|TaggedTransactionQueue (Version 2)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
   This entry is invoked against extrinsics submitted through the transaction
   network message <reference|sect-msg-transactions> and indicates if the
@@ -588,15 +526,32 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>UTX: A byte array that contains the transaction.
+    <item>The source of the transaction as defined in Definition
+    <reference|defn-transaction-source>.
+
+    <item>A byte array that contains the transaction.
+
+    \;
   </itemize>
 
-  \;
+  <\definition>
+    <label|defn-transaction-source><with|font-series|bold|TransactionSource>
+    is a enum describing the source of a transaciton and can have one of the
+    following values:
 
-  <strong|Return>:
+    <\big-table>
+      <tabular|<tformat|<cwith|1|1|1|-1|font-series|bold>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|1|cell-lborder|0ln>|<cwith|2|-1|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|3|3|cell-tborder|0ln>|<cwith|3|3|3|3|cell-bborder|0ln>|<cwith|4|4|3|3|cell-bborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<cwith|4|4|1|2|cell-tborder|0ln>|<cwith|3|3|1|2|cell-bborder|0ln>|<cwith|4|4|1|2|cell-bborder|0ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|2|2|cell-rborder|0ln>|<cwith|4|4|3|3|cell-lborder|0ln>|<table|<row|<cell|Id>|<cell|Name>|<cell|Description>>|<row|<cell|0>|<cell|<with|font-shape|italic|<with|font-shape|italic|<with|font-shape|italic|InBlock>>>>|<cell|Transaction
+      is already included in block.>>|<row|<cell|1>|<cell|<with|font-shape|italic|Loc<with|font-shape|right|>al>>|<cell|Transaction
+      is coming from a local source, e.g. off-chain
+      worker>>|<row|<cell|2>|<cell|<with|font-shape|italic|<with|font-shape|italic|External<underline|>>>>|<cell|Transaction
+      has been received externally, e.g over the networ>>>>>
+    <|big-table>
+      The <verbatim|TransactionSource> enum\ 
+    </big-table>
+  </definition>
 
-  This function returns a <verbatim|Result> as defined in Definition
-  <reference|defn-result-type> which contains the type
+  <strong|Return>:This function returns a <verbatim|Result> as defined in
+  Definition <reference|defn-result-type> which contains the type
   <em|<verbatim|ValidTransaction>> as defined in Definition
   <reference|defn-valid-transaction> on success and the type
   <em|<verbatim|TransactionValidityError>> as defined in Definition
@@ -608,7 +563,7 @@
 
     \;
 
-    <\small-table|<tabular|<tformat|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-bborder|0ln>|<cwith|7|7|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|11|11|1|-1|cell-bborder|0ln>|<cwith|12|12|1|-1|cell-tborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|2|2|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|0ln>|<twith|table-rborder|1ln>|<twith|table-lborder|0ln>|<twith|table-tborder|0ln>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|12|12|1|1|cell-tborder|0ln>|<cwith|11|11|1|1|cell-bborder|0ln>|<cwith|12|12|2|2|cell-tborder|0ln>|<cwith|11|11|2|2|cell-bborder|0ln>|<cwith|12|12|2|2|cell-lborder|0ln>|<cwith|12|12|1|1|cell-rborder|0ln>|<cwith|12|12|3|3|cell-tborder|0ln>|<cwith|11|11|3|3|cell-bborder|0ln>|<cwith|2|-1|3|3|cell-lborder|0ln>|<cwith|2|-1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|12|12|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Priority>|<cell|Determines
+    <\big-table|<tabular|<tformat|<cwith|4|4|1|-1|cell-tborder|1ln>|<cwith|3|3|1|-1|cell-bborder|1ln>|<cwith|4|4|1|-1|cell-bborder|0ln>|<cwith|5|5|1|-1|cell-tborder|0ln>|<cwith|6|6|1|-1|cell-tborder|1ln>|<cwith|5|5|1|-1|cell-bborder|1ln>|<cwith|6|6|1|-1|cell-bborder|0ln>|<cwith|7|7|1|-1|cell-tborder|0ln>|<cwith|9|9|1|-1|cell-tborder|1ln>|<cwith|8|8|1|-1|cell-bborder|1ln>|<cwith|9|9|1|-1|cell-bborder|0ln>|<cwith|10|10|1|-1|cell-tborder|0ln>|<cwith|11|11|1|-1|cell-tborder|1ln>|<cwith|10|10|1|-1|cell-bborder|1ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|2|2|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-rborder|>|<cwith|1|1|2|2|cell-lborder|0ln>|<cwith|1|1|1|1|cell-rborder|0ln>|<cwith|1|1|3|3|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|12|12|1|1|cell-tborder|0ln>|<cwith|11|11|1|1|cell-bborder|0ln>|<cwith|12|12|2|2|cell-tborder|0ln>|<cwith|11|11|2|2|cell-bborder|0ln>|<cwith|12|12|2|2|cell-lborder|0ln>|<cwith|12|12|1|1|cell-rborder|0ln>|<cwith|2|-1|3|3|cell-lborder|0ln>|<cwith|2|-1|2|2|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|12|12|3|3|cell-tborder|0ln>|<cwith|11|11|3|3|cell-bborder|0ln>|<cwith|12|12|3|3|cell-lborder|0ln>|<cwith|12|12|2|2|cell-rborder|0ln>|<cwith|12|12|1|-1|cell-bborder|0ln>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Name>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|Priority>|<cell|Determines
     the ordering of two transactions that have>|<cell|Unsigned
     64bit>>|<row|<cell|>|<cell|all their dependencies (required tags)
     satisfied.>|<cell|integer>>|<row|<cell|Requires>|<cell|List of tags
@@ -627,7 +582,7 @@
       The tuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
 
       in the case the transaction is judged to be valid.
-    </small-table>
+    </big-table>
   </definition>
 
   <strong|Note>: If <em|Propagate> is set to <verbatim|false> the transaction
@@ -640,7 +595,12 @@
   to validate a transaction received from peers, the Polkadot Host disregards
   and rewinds state changes resulting for such a call.
 
-  <subsection|<verbatim|OffchainWorkerApi_offchain_worker>>
+  <subsection|OffchainWorkerApi Module (Version 2)>
+
+  Does not require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|OffchainWorkerApi_offchain_worker>>
 
   Starts an offchain worker and generates extrinsics. <todo|when is this
   called?>
@@ -661,59 +621,66 @@
     <item>None.
   </itemize-dot>
 
-  <subsection|<verbatim|ParachainHost_validators>>
+  <subsection|ParachainHost Module (Version 1)>
+
+  <subsubsection|<verbatim|ParachainHost_validators>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_validator_groups>>
+  <subsubsection|<verbatim|ParachainHost_validator_groups>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_availability_cores>>
+  <subsubsection|<verbatim|ParachainHost_availability_cores>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_persisted_validation_data>>
+  <subsubsection|<verbatim|ParachainHost_persisted_validation_data>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_check_validation_outputs>>
+  <subsubsection|<verbatim|ParachainHost_check_validation_outputs>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_session_index_for_child>>
+  <subsubsection|<verbatim|ParachainHost_session_index_for_child>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_session_info>>
+  <subsubsection|<verbatim|ParachainHost_session_info>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_validation_code>>
+  <subsubsection|<verbatim|ParachainHost_validation_code>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_historical_validation_code>>
+  <subsubsection|<verbatim|ParachainHost_historical_validation_code>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_candidate_pending_availability>>
+  <subsubsection|<verbatim|ParachainHost_candidate_pending_availability>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_candidate_events>>
+  <subsubsection|<verbatim|ParachainHost_candidate_events>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_dmq_contents>>
+  <subsubsection|<verbatim|ParachainHost_dmq_contents>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|ParachainHost_inbound_hrmp_channel_contents>>
+  <subsubsection|<verbatim|ParachainHost_inbound_hrmp_channel_contents>>
 
   <todo|future-reserved>
 
-  <subsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
+  <subsection|GrandpaApi Module (Version 2)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|GrandpaApi_grandpa_authorities>><label|sect-rte-grandpa-auth>
 
   This entry fetches the list of GRANDPA authorities according to the genesis
   block and is used to initialize authority list defined in Definition
@@ -746,7 +713,7 @@
     authority. <todo|what does this weight indicate?>
   </itemize-dot>
 
-  <subsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>
+  <subsubsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>
 
   Submits a report about an observed equivocation as defined in Definition
   <reference|defn-equivocation>.
@@ -771,7 +738,7 @@
     <reference|defn-option-type> containing an empty value on success.
   </itemize-dot>
 
-  <subsection|<verbatim|GrandpaApi_generate_key_ownership_proof>><label|sect-grandpaapi_generate_key_ownership_proof>
+  <subsubsection|<verbatim|GrandpaApi_generate_key_ownership_proof>><label|sect-grandpaapi_generate_key_ownership_proof>
 
   Generates a proof of the membership of a key owner in the specified block
   state. The returned value is used to report equivocations as described in
@@ -797,7 +764,12 @@
     <reference|defn-option-type> containing the proof in an opaque form.
   </itemize-dot>
 
-  <subsection|<verbatim|BabeApi_configuration>><label|sect-rte-babeapi-epoch>
+  <subsection|BabeApi Module (Version 2)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|BabeApi_configuration>><label|sect-rte-babeapi-epoch>
 
   This entry is called to obtain the current configuration of BABE consensus
   protocol.
@@ -844,7 +816,7 @@
     The tuple provided by <strong|BabeApi_configuration>.
   </big-table>
 
-  <subsection|<verbatim|BabeApi_current_epoch_start>>
+  <subsubsection|<verbatim|BabeApi_current_epoch_start>>
 
   Finds the start slot of the current epoch.
 
@@ -864,7 +836,7 @@
     <item>A unsigned 64-bit integer indicating the slot number.
   </itemize-dot>
 
-  <subsection|<verbatim|BabeApi_current_epoch>><label|sect-babeapi_current_epoch>
+  <subsubsection|<verbatim|BabeApi_current_epoch>><label|sect-babeapi_current_epoch>
 
   Produces information about the current epoch.
 
@@ -915,7 +887,7 @@
     </itemize-dot>
   </itemize-dot>
 
-  <subsection|<verbatim|BabeApi_next_epoch>>
+  <subsubsection|<verbatim|BabeApi_next_epoch>>
 
   Produces information about the next epoch.
 
@@ -936,7 +908,7 @@
     <reference|sect-babeapi_current_epoch>.
   </itemize-dot>
 
-  <subsection|<verbatim|BabeApi_generate_key_ownership_proof>><label|sect-babeapi_generate_key_ownership_proof>
+  <subsubsection|<verbatim|BabeApi_generate_key_ownership_proof>><label|sect-babeapi_generate_key_ownership_proof>
 
   Generates a proof of the membership of a key owner in the specified block
   state. The returned value is used to report equivocations as described in
@@ -961,7 +933,7 @@
     <reference|defn-option-type> containing the proof in an opaque form.
   </itemize-dot>
 
-  <subsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>>
+  <subsubsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>>
 
   Submits a report about an observed equivocation as defined in <todo|spec
   Babe equivocations>.
@@ -986,7 +958,12 @@
     <reference|defn-option-type> containing an empty value on success.
   </itemize-dot>
 
-  <subsection|<verbatim|AuthorityDiscoveryApi_authorities>>
+  <subsection|AuthorityDiscoveryApi Module (Version 1)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|AuthorityDiscoveryApi_authorities>>
 
   A function which helps to discover authorities.
 
@@ -1007,7 +984,12 @@
     authorities.
   </itemize-dot>
 
-  <subsection|<verbatim|SessionKeys_generate_session_keys>>
+  <subsection|SessionKeys Module (Version 1)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|SessionKeys_generate_session_keys>>
 
   Generates a set of session keys with an optional seed. The keys should be
   stored within the keystore exposed by the Host Api. The seed needs to be
@@ -1031,7 +1013,7 @@
     <item>A byte array of varying size containg the encoded session keys.
   </itemize-dot>
 
-  <subsection|<verbatim|SessionKeys_decode_session_keys>>
+  <subsubsection|<verbatim|SessionKeys_decode_session_keys>>
 
   Decodes the given public session keys. Returns a list of raw public keys
   including key type.
@@ -1061,7 +1043,12 @@
     and <math|k<rsub|id>> is a 4-byte array indicating the key type.
   </itemize-dot>
 
-  <subsection|<verbatim|AccountNonceApi_account_nonce>><label|sect-accountnonceapi-account-nonce>
+  <subsection|AccountNonceApi Module (Version 1)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|AccountNonceApi_account_nonce>><label|sect-accountnonceapi-account-nonce>
 
   Get the current nonce of an account. This function can be used by the
   Polkadot Host implementation when it seems appropriate, such as for the
@@ -1083,7 +1070,12 @@
     <item>A 32-bit unsigned integer indicating the nonce of the account.
   </itemize-dot>
 
-  <subsection|<verbatim|TransactionPaymentApi_query_info>>
+  <subsection|TransactionPaymentApi Module (Version 1)>
+
+  All calls in this module require <verbatim|Core_intialize_block> (Section
+  <reference|sect-rte-core-initialize-block>) to be called beforehand.
+
+  <subsubsection|<verbatim|TransactionPaymentApi_query_info>>
 
   Returns information of a given extrinsic. This function is not aware of the
   internals of an extrinsic, but only interprets the extrinsic as some
@@ -1137,7 +1129,7 @@
     </itemize-dot>
   </itemize-dot>
 
-  <subsection|<verbatim|TransactionPaymentApi_query_fee_details>>
+  <subsubsection|<verbatim|TransactionPaymentApi_query_fee_details>>
 
   Query the detailed fee of a given extrinsic. This function can be used by
   the Polkadot Host implementation when it seems appropriate, such as for the
@@ -1211,348 +1203,18 @@
 
 <\initial>
   <\collection>
-    <associate|chapter-nr|8>
     <associate|page-first|139>
     <associate|page-height|auto>
     <associate|page-type|letter>
     <associate|page-width|auto>
+    <associate|preamble|false>
     <associate|section-nr|2<uninit>>
     <associate|subsection-nr|0>
   </collection>
 </initial>
 
-<\references>
-  <\collection>
-    <associate|auto-1|<tuple|A|107>>
-    <associate|auto-10|<tuple|A.3.4|109>>
-    <associate|auto-11|<tuple|A.3.5|109>>
-    <associate|auto-12|<tuple|A.2|109>>
-    <associate|auto-13|<tuple|A.3|109>>
-    <associate|auto-14|<tuple|A.4|110>>
-    <associate|auto-15|<tuple|A.5|110>>
-    <associate|auto-16|<tuple|A.6|110>>
-    <associate|auto-17|<tuple|A.7|111>>
-    <associate|auto-18|<tuple|A.8|111>>
-    <associate|auto-19|<tuple|A.3.6|111>>
-    <associate|auto-2|<tuple|A.1|107>>
-    <associate|auto-20|<tuple|A.3.7|111>>
-    <associate|auto-21|<tuple|A.3.8|112>>
-    <associate|auto-22|<tuple|A.3.9|112>>
-    <associate|auto-23|<tuple|A.3.10|?>>
-    <associate|auto-24|<tuple|A.9|?>>
-    <associate|auto-25|<tuple|A.3.11|?>>
-    <associate|auto-26|<tuple|A.3.12|?>>
-    <associate|auto-27|<tuple|A.3.13|?>>
-    <associate|auto-28|<tuple|A.3.14|?>>
-    <associate|auto-29|<tuple|A.3.15|?>>
-    <associate|auto-3|<tuple|A.1|107>>
-    <associate|auto-30|<tuple|A.3.16|?>>
-    <associate|auto-31|<tuple|A.3.17|?>>
-    <associate|auto-32|<tuple|A.3.18|?>>
-    <associate|auto-33|<tuple|A.3.19|?>>
-    <associate|auto-34|<tuple|A.3.20|?>>
-    <associate|auto-35|<tuple|A.3.21|?>>
-    <associate|auto-36|<tuple|A.3.22|?>>
-    <associate|auto-37|<tuple|A.3.23|?>>
-    <associate|auto-38|<tuple|A.3.24|?>>
-    <associate|auto-39|<tuple|A.3.25|?>>
-    <associate|auto-4|<tuple|A.2|107>>
-    <associate|auto-40|<tuple|A.3.26|?>>
-    <associate|auto-41|<tuple|A.3.27|?>>
-    <associate|auto-42|<tuple|A.3.28|?>>
-    <associate|auto-43|<tuple|A.10|?>>
-    <associate|auto-44|<tuple|A.3.29|?>>
-    <associate|auto-45|<tuple|A.3.30|?>>
-    <associate|auto-46|<tuple|A.3.31|?>>
-    <associate|auto-47|<tuple|A.3.32|?>>
-    <associate|auto-48|<tuple|A.3.33|?>>
-    <associate|auto-49|<tuple|A.3.34|?>>
-    <associate|auto-5|<tuple|A.3|108>>
-    <associate|auto-50|<tuple|A.3.35|?>>
-    <associate|auto-51|<tuple|A.3.36|?>>
-    <associate|auto-52|<tuple|A.3.37|?>>
-    <associate|auto-53|<tuple|A.3.38|?>>
-    <associate|auto-54|<tuple|A.3.39|?>>
-    <associate|auto-55|<tuple|A.3.37|?>>
-    <associate|auto-56|<tuple|A.3.38|?>>
-    <associate|auto-57|<tuple|A.3.39|?>>
-    <associate|auto-6|<tuple|A.3.1|108>>
-    <associate|auto-7|<tuple|A.1|108>>
-    <associate|auto-8|<tuple|A.3.2|108>>
-    <associate|auto-9|<tuple|A.3.3|109>>
-    <associate|defn-invalid-transaction|<tuple|A.11|110>>
-    <associate|defn-rt-apisvec|<tuple|A.1|?>>
-    <associate|defn-rt-blockbuilder-finalize-block|<tuple|A.3.6|112>>
-    <associate|defn-rt-core-version|<tuple|A.3.1|108>>
-    <associate|defn-rte-apply-extrinsic-result|<tuple|A.2|?>>
-    <associate|defn-rte-custom-module-error|<tuple|A.5|?>>
-    <associate|defn-rte-dispatch-error|<tuple|A.4|?>>
-    <associate|defn-rte-dispatch-outcome|<tuple|A.3|?>>
-    <associate|defn-rte-invalid-transaction|<tuple|A.7|?>>
-    <associate|defn-rte-transaction-validity-error|<tuple|A.6|?>>
-    <associate|defn-rte-unknown-transaction|<tuple|A.8|?>>
-    <associate|defn-transaction-validity-error|<tuple|A.10|110>>
-    <associate|defn-unknown-transaction|<tuple|A.12|110>>
-    <associate|defn-valid-transaction|<tuple|A.9|110>>
-    <associate|sect-accountnonceapi-account-nonce|<tuple|A.3.37|?>>
-    <associate|sect-babeapi_current_epoch|<tuple|A.3.30|?>>
-    <associate|sect-babeapi_generate_key_ownership_proof|<tuple|A.3.32|?>>
-    <associate|sect-grandpaapi_generate_key_ownership_proof|<tuple|A.3.27|?>>
-    <associate|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic|<tuple|A.3.26|?>>
-    <associate|sect-json-rpc-api|<tuple|A.2|?>>
-    <associate|sect-list-of-runtime-entries|<tuple|A.1|107>>
-    <associate|sect-rte-apply-extrinsic|<tuple|A.3.5|?>>
-    <associate|sect-rte-babeapi-epoch|<tuple|A.3.28|109>>
-    <associate|sect-rte-core-execute-block|<tuple|A.3.2|?>>
-    <associate|sect-rte-grandpa-auth|<tuple|A.3.25|109>>
-    <associate|sect-rte-validate-transaction|<tuple|A.3.10|109>>
-    <associate|sect-runtime-entries|<tuple|A|107>>
-    <associate|snippet-runtime-enteries|<tuple|A.1|107>>
-  </collection>
-</references>
+<references|<\collection>
+</collection>>
 
-<\auxiliary>
-  <\collection>
-    <\associate|figure>
-      <tuple|normal|<surround|<hidden-binding|<tuple>|A.1>||Snippet to export
-      entries into tho Wasm runtime module.>|<pageref|auto-3>>
-    </associate>
-    <\associate|table>
-      <tuple|normal|<surround|<hidden-binding|<tuple>|A.1>||Detail of the
-      version data type returns from runtime
-      <with|font-family|<quote|tt>|language|<quote|verbatim>|version>
-      function.>|<pageref|auto-7>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.2>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|ApplyExtrinsicResult>.
-      </surround>|<pageref|auto-12>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.3>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchOutcome>.
-      </surround>|<pageref|auto-13>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.4>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|DispatchError>.
-      </surround>|<pageref|auto-14>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.5>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|CustomModuleError>.
-      </surround>|<pageref|auto-15>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.6>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-16>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.7>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|InvalidTransaction>.
-      </surround>|<pageref|auto-17>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.8>|>
-        Possible values of varying data type
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|UnknownTransaction>.
-      </surround>|<pageref|auto-18>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.9>|>
-        The tuple provided by <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>
-
-        in the case the transaction is judged to be valid.
-      </surround>|<pageref|auto-24>>
-
-      <tuple|normal|<surround|<hidden-binding|<tuple>|A.10>||Type variation
-      for the return value of <with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_transaction_validity>.>|<pageref|auto-25>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.11>|>
-        Type variant whichs gets appended to Id 0 of
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-26>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.12>|>
-        Type variant whichs gets appended to Id 1 of
-        <with|font-series|<quote|bold>|math-font-series|<quote|bold>|TransactionValidityError>.
-      </surround>|<pageref|auto-27>>
-
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.13>|>
-        The tuple provided by <with|font-series|<quote|bold>|math-font-series|<quote|bold>|BabeApi_configuration>.
-      </surround>|<pageref|auto-46>>
-    </associate>
-    <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
-      A<space|2spc>Runtime Entries> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-1><vspace|0.5fn>
-
-      A.1<space|2spc>List of Runtime Entries
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-2>
-
-      A.2<space|2spc>JSON-RPC API for external services
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4>
-
-      A.3<space|2spc>Argument Specification
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>
-
-      <with|par-left|<quote|1tab>|A.3.1<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_version>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>>
-
-      <with|par-left|<quote|1tab>|A.3.2<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_execute_block>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>>
-
-      <with|par-left|<quote|1tab>|A.3.3<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Core_initialize_block>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
-
-      <with|par-left|<quote|1tab>|A.3.4<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|Metadata_metadata>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-10>>
-
-      <with|par-left|<quote|1tab>|A.3.5<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_apply_extrinsic>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-11>>
-
-      <with|par-left|<quote|1tab>|A.3.6<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_finalize_block>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-19>>
-
-      <with|par-left|<quote|1tab>|A.3.7<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_inherent_extrinsics>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-20>>
-
-      <with|par-left|<quote|1tab>|A.3.8<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_check_inherents>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-21>>
-
-      <with|par-left|<quote|1tab>|A.3.9<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BlockBuilder_random_seed>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-22>>
-
-      <with|par-left|<quote|1tab>|A.3.10<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TaggedTransactionQueue_validate_transaction>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-23>>
-
-      <with|par-left|<quote|1tab>|A.3.11<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|OffchainWorkerApi_offchain_worker>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-28>>
-
-      <with|par-left|<quote|1tab>|A.3.12<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validators>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-29>>
-
-      <with|par-left|<quote|1tab>|A.3.13<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validator_groups>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-30>>
-
-      <with|par-left|<quote|1tab>|A.3.14<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_availability_cores>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-31>>
-
-      <with|par-left|<quote|1tab>|A.3.15<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_persisted_validation_data>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-32>>
-
-      <with|par-left|<quote|1tab>|A.3.16<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_check_validation_outputs>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-33>>
-
-      <with|par-left|<quote|1tab>|A.3.17<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_index_for_child>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-34>>
-
-      <with|par-left|<quote|1tab>|A.3.18<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_session_info>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-35>>
-
-      <with|par-left|<quote|1tab>|A.3.19<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_validation_code>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-36>>
-
-      <with|par-left|<quote|1tab>|A.3.20<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_historical_validation_code>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-37>>
-
-      <with|par-left|<quote|1tab>|A.3.21<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_pending_availability>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-38>>
-
-      <with|par-left|<quote|1tab>|A.3.22<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_candidate_events>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-39>>
-
-      <with|par-left|<quote|1tab>|A.3.23<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_dmq_contents>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-40>>
-
-      <with|par-left|<quote|1tab>|A.3.24<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|ParachainHost_inbound_hrmp_channel_contents>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-41>>
-
-      <with|par-left|<quote|1tab>|A.3.25<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_grandpa_authorities>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-42>>
-
-      <with|par-left|<quote|1tab>|A.3.26<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-43>>
-
-      <with|par-left|<quote|1tab>|A.3.27<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|GrandpaApi_generate_key_ownership_proof>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-44>>
-
-      <with|par-left|<quote|1tab>|A.3.28<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_configuration>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-45>>
-
-      <with|par-left|<quote|1tab>|A.3.29<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch_start>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-47>>
-
-      <with|par-left|<quote|1tab>|A.3.30<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_current_epoch>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-48>>
-
-      <with|par-left|<quote|1tab>|A.3.31<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_next_epoch>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-49>>
-
-      <with|par-left|<quote|1tab>|A.3.32<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_generate_key_ownership_proof>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-50>>
-
-      <with|par-left|<quote|1tab>|A.3.33<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|BabeApi_submit_report_equivocation_unsigned_extrinsic>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-51>>
-
-      <with|par-left|<quote|1tab>|A.3.34<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AuthorityDiscoveryApi_authorities>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-52>>
-
-      <with|par-left|<quote|1tab>|A.3.35<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_generate_session_keys>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-53>>
-
-      <with|par-left|<quote|1tab>|A.3.36<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|SessionKeys_decode_session_keys>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-54>>
-
-      <with|par-left|<quote|1tab>|A.3.37<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|AccountNonceApi_account_nonce>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-55>>
-
-      <with|par-left|<quote|1tab>|A.3.38<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_info>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-56>>
-
-      <with|par-left|<quote|1tab>|A.3.39<space|2spc><with|font-family|<quote|tt>|language|<quote|verbatim>|TransactionPaymentApi_query_fee_details>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-57>>
-    </associate>
-  </collection>
-</auxiliary>
+<auxiliary|<\collection>
+</collection>>
