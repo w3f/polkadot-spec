@@ -1,25 +1,26 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
-<style|book>
+<style|<tuple|book|old-lengths>>
 
 <\body>
   <appendix|Genesis State Specification><label|sect-genesis-block>
 
   The genesis state represents the intial state of Polkadot state storage as
   a set of key-value pairs, which can be retrieved from
-  <cite|web3.0_technologies_foundation_polkadot_2020>. While each of those
-  key/value pairs offer important identifyable information which can be used
-  by the Runtime, from the Polkadot Host points of view, it is a set of
-  arbitrary key-value pair data as it is chain and network dependent.
-  \ Except for the <verbatim|:code> described in Section
-  <reference|sect-loading-runtime-code> which needs to be identified by the
-  Polkadot Host to load its content as the Runtime. The other keys and values
-  are unspecifed and its usage depends on the chain respectively its
-  corresponding Runtime. The data should be inserted into the state storage
-  with the <verbatim|set_storage> Host API, as defined in Section
-  <reference|sect-storage-set>.
+  <cite|paritytech_genesis_state>. While each of those key/value pairs offer
+  important identifyable information which can be used by the Runtime, from
+  the Polkadot Host points of view, it is a set of arbitrary key-value pair
+  data as it is chain and network dependent, except for the <verbatim|:code>
+  as described in Section <reference|sect-loading-runtime-code> which needs
+  to be identified by the Polkadot Host to load its content as the Runtime.
+  The other keys and values are unspecifed and its usage depends on the chain
+  respectively its corresponding Runtime. The data should be inserted into
+  the state storage with the <verbatim|set_storage> Host API, as defined in
+  Section <reference|sect-storage-set>.
+
+  \;
 
   As such, Polkadot does not defined a formal genesis block. Nonetheless for
   the complatibilty reasons in several algorithms, the Polkadot Host defines
@@ -52,4 +53,3 @@
   \;
 
 </body>
-
