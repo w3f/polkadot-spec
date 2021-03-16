@@ -1,10 +1,10 @@
-using .ImplementationFixture
+using .HostFixture
 using Test
 
 
-tester = ImplementationFixture.Tester("Genesis", "tester")
+tester = HostFixture.Tester("Genesis", "tester")
 
-ImplementationFixture.execute(tester, 5) do (root, result)
+HostFixture.execute(tester, 5) do (root, result)
     # Extract all hashes returned from log
     hashes = map(m -> m[1], eachmatch(r"##([^#\n]+)##", result)) 
 

@@ -1,4 +1,4 @@
-module ImplementationFixture
+module HostFixture
 
 using ..Config
 using Test
@@ -14,7 +14,7 @@ end
 
 
 "Compute trie root hash from yaml state file"
-function compute_root(self::Tester, implementation::String)
+function compute_root(self::Tester)
 
     state_file = "$(@__DIR__)/../runtimes/$(self.runtime)/genesis.yaml"
 
@@ -39,8 +39,8 @@ function compute_root(self::Tester, implementation::String)
 end
 
 
-"Run implementation with tester genesis for certain time in seconds"
-function run_tester(self::Tester, implementation::String, duration::Number)
+"Run host with tester genesis for certain time in seconds"
+function run_tester(self::Tester, host::String, duration::Number)
     # Locations of needed files and folders
     tempdir = mktempdir() * "/"
 
@@ -52,7 +52,7 @@ function run_tester(self::Tester, implementation::String, duration::Number)
         @error "Failed to locate genesis: $genesis"
     end
 
-    # Helper files needed for some implementations
+    # Helper files needed for some hosts
     keystore = "$(@__DIR__)/../runtimes/$(self.runtime)/keystore"
     config   = if Config.docker
         "$(@__DIR__)/../runtimes/$(self.runtime)/gossamer.docker.config.toml"
@@ -82,29 +82,29 @@ function run_tester(self::Tester, implementation::String, duration::Number)
     # Prepare command and environment based on command
     cmd  = ``
     args = ``
-    if implementation == "substrate"
+    if host == "substrate"
         exec = `polkadot`
         args = `--alice --chain $genesis -d $datadir`
         ENV["RUST_LOG"] = "runtime=debug"
-    elseif implementation == "kagome"
+    elseif host == "kagome"
         exec = `kagome_validating`
-        args = `--genesis $genesis -d $datadir`
-    elseif implementation == "gossamer"
+        args = `--genesis $genesis -d $datadir --bootnodes /dns/localhost/tcp/30363/p2p/12D3KooWEgUjBV5FJAuBSoNMRYFRHjV7PjZwRQ7b43EKX9g7D6xV`
+    elseif host == "gossamer"
         exec = `gossamer`
         args = `--key=alice --config $config --basepath $datadir --log debug`
     else
-        error("Unknown implementation: ", implementation)
+        error("Unknown host: ", host)
     end
 
     # Prepare container and overwrite command with docker invocation
     if Config.docker
-        image = Config.get_container(implementation)
+        image = Config.get_container(host)
 
         if isempty(image)
-            @error "Implementation '$implementation' has no default docker image."
+            @error "Host '$host' has no default docker image."
         end
 
-        println("Caching/updating docker images of '$implementation':")
+        println("Caching/updating docker images of '$host':")
         run(`docker pull $image`)
 
         exec = `docker run -e RUST_LOG=runtime=debug -v $tempdir:$datadir --rm -i $image`
@@ -137,7 +137,7 @@ function run_tester(self::Tester, implementation::String, duration::Number)
 
     # Check and warn about unexpected crashes
     if crashed
-        @warn "Implementation '$implementation' aborted unexpectedly:\n$result"
+        @warn "Host '$host' aborted unexpectedly:\n$result"
     end
 
     @test !crashed
@@ -149,15 +149,15 @@ function run_tester(self::Tester, implementation::String, duration::Number)
     return result
 end
 
-"Execute implementation and use supplied function to verify result."
+"Execute host and use supplied function to verify result."
 function execute(verify::Function, self::Tester, duration)
     @testset "$(self.name)" begin
-        for implementation in Config.implementations
+        for host in Config.implementations
             # Compute expected storage root
-            root = compute_root(self, implementation)
+            root = compute_root(self)
 
-            # Run implementation long enough to load genesis
-            result = run_tester(self, implementation, duration)
+            # Run host long enough to load genesis
+            result = run_tester(self, host, duration)
 
             verify((root, result))
         end

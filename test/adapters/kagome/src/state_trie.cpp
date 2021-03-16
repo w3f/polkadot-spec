@@ -108,7 +108,7 @@ parseYamlStateFile(const std::string &filename, bool keys_in_hex) {
       b_key = Buffer{res.value()};
     } else {
       std::copy(key_str.begin(), key_str.end(),
-                std::back_inserter(b_key.toVector()));
+                std::back_inserter(b_key.asVector()));
     }
     keys.push_back(b_key);
   }
@@ -119,7 +119,7 @@ parseYamlStateFile(const std::string &filename, bool keys_in_hex) {
     Buffer b_val;
     auto val_str = val_entry.as<std::string>();
     std::copy(val_str.begin(), val_str.end(),
-              std::back_inserter(b_val.toVector()));
+              std::back_inserter(b_val.asVector()));
     values.push_back(b_val);
   }
   BOOST_ASSERT_MSG(keys.size() == values.size(),
