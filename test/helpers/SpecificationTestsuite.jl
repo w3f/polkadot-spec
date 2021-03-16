@@ -80,7 +80,7 @@ module SpecificationTestsuite
 
     # Include fixture helpers
     include("AdapterFixture.jl")
-    include("ImplementationFixture.jl")
+    include("HostFixture.jl")
 
     "Run specific fixture for configure implementations"
     function run_fixture(fixture::String)
