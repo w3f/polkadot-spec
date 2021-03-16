@@ -1,4 +1,4 @@
-<TeXmacs|1.99.14>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -441,7 +441,7 @@
   <\definition>
     <label|defn-node-subvalue>For a given node <math|N>, the
     <strong|subvalue> of <math|N>, formally referred to as <math|sv<rsub|N>>,
-    is determined as follows: in a case which:
+    is determined as follows:
 
     <\itemize>
       <\equation*>
@@ -500,7 +500,9 @@
   Contracts. In such cases, the execution of the Runtime entry might result
   in generating repeated keys across multiple instances of certain objects.
   Even with repeated keys, all such instances of key-value pairs must be able
-  to be stored within the Polkadot state.\ 
+  to be stored within the Polkadot state.
+
+  \;
 
   In these situations, the child storage can be used to provide the isolation
   necessary to prevent any undesired interference between the state of
@@ -511,16 +513,14 @@
 
   <subsection|Child Tries><label|sect-child-trie-structure>
 
-  In the exact way that the state trie is used to track and verify changes in
-  the state storage, the changes in the child storage are tracked and
-  verified. Therefore, the child trie specification is the same as the one
-  described in Section <reference|sect-state-storage-trie-structure>. Child
-  tries have their own isolated environment. Nonetheless, the main Polkadot
-  state trie depends on them by storing a node (<math|K<rsub|N>,V<rsub|N>>)
-  which corresponds to an individual child trie. Here, <math|K<rsub|N>> is
-  the child storage key associated to the child trie, and <math|V<rsub|N>> is
-  the Merkle value of its corresponding child trie computed according to the
-  procedure described in Section <reference|sect-merkl-proof>
+  The child trie specification is the same as the one described in Section
+  <reference|sect-state-storage-trie-structure>. Child tries have their own
+  isolated environment. Nonetheless, the main Polkadot state trie depends on
+  them by storing a node (<math|K<rsub|N>,V<rsub|N>>) which corresponds to an
+  individual child trie. Here, <math|K<rsub|N>> is the child storage key
+  associated to the child trie, and <math|V<rsub|N>> is the Merkle value of
+  its corresponding child trie computed according to the procedure described
+  in Section <reference|sect-merkl-proof>
 
   \;
 
@@ -528,10 +528,10 @@
   the Runtime to provide the key <math|K<rsub|N>> in order to identify the
   child trie, followed by a second key in order to identify the value within
   that child trie. Every time a child trie is modified, the Merkle proof
-  <math|V<rsub|N>> of the child trie stored in <math|\<cal-N\>> must be
-  updated first. After that, the final Merkle proof of the Polkadot state
-  <math|\<cal-N\>> can be calculated. This mechanism provides a proof of the
-  full Polkadot state including all its child states.
+  <math|V<rsub|N>> of the child trie stored in the Polkadot state must be
+  updated first. After that, the final Merkle proof of the Polkadot state can
+  be computed. This mechanism provides a proof of the full Polkadot state
+  including all its child states.
 
   <verbatim|>
 
