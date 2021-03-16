@@ -252,8 +252,14 @@
     does not respond, the connection is dropped. This is a
     <em|Request-Response substream>.
 
+    Further specification and reference implementation is available in the
+    <hlink|libp2p documentation|https://docs.libp2p.io/concepts/protocols/#ping>.
+
     <item><verbatim|/ipfs/id/1.0.0> - Open a substream to a peer to ask
     information about that peer. This is a <em|Request-Response substream>.
+
+    Further specification and reference implementation is available in the
+    <hlink|libp2p documentation|https://docs.libp2p.io/concepts/protocols/#ping>.
 
     <item><verbatim|/dot/kad> - Open a substream for Kademlia
     <verbatim|FIND_NODE> requests. This is a <em|Request-Response substream>,
