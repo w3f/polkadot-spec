@@ -22,10 +22,11 @@
 
   From a more technical point of view, the Polkadot protocol has been divided
   into two parts, the <em|Runtime> and the <em|Host>. The Runtime comprises
-  most of the state transition logic for the Polkadot protocol and is
-  designed and expected to be upgradable as part of the state transition
-  process. The Polkadot Host consists of parts of the
-  protocol,<space|1em>shared mostly among peer-to-peer decentralized
+  the state transition logic for the Polkadot protocol and is designed and be
+  upgradable via the consensus engine without requiring hard forks of the
+  blockchain. The Polkadot Host provides the functionality for the Runtime to
+  execute its state transition logic, such as an execution environment, I/O
+  and consensus, shared mostly among peer-to-peer decentralized
   cryptographically-secured transaction systems, i.e. blockchains whose
   consensus system is based on the proof-of-stake. The Polkadot Host is
   planned to be stable and static for the lifetime duration of the Polkadot
@@ -41,13 +42,16 @@
   explaining the Polkadot state transition and discussing the detail based on
   which the Polkadot Host interacts with the state transition function, i.e.
   Runtime. Following, we specify the input messages triggering the state
-  transition and the system behaviour. In Chapter <reference|chap-consensu>,
-  we specify the consensus protocol, which is responsible for keeping all the
-  replica in the same state. Finally, the initial state of the machine is
-  identified and discussed in Appendix <reference|sect-genesis-block>. A
-  Polkadot Host implementation which conforms with this part of the
-  specification should successfully be able to sync its states with the
-  Polkadot network.
+  transition and the system behaviour. In Chapter
+  <reference|sect-networking>, we specify the communication protocols and
+  network messages required for the Polkadot Host to communicate with other
+  nodes in the network, such as exchanging blocks and consensus messages. In
+  Chapter <reference|chap-consensu>, we specify the consensus protocol, which
+  is responsible for keeping all the replica in the same state. Finally, the
+  initial state of the machine is identified and discussed in Appendix
+  <reference|sect-genesis-block>. A Polkadot Host implementation which
+  conforms with this part of the specification should successfully be able to
+  sync its states with the Polkadot network.
 
   <section|Definitions and Conventions><label|sect-defn-conv>
 
