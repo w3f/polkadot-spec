@@ -222,7 +222,7 @@
     little-endian encoded 64-bit integer which stores the number of
     <strong|milliseconds> that have elapsed since the Unix epoch, that is the
     time 00:00:00 UTC on 1 January 1970, minus leap seconds. Leap seconds are
-    ignored, and every day is treated as if it contained exactly 86400
+    ignored, and every day is treated as if it contained exactly 86'400
     seconds.
   </definition>
 
@@ -239,9 +239,9 @@
     <math|B<rsub|1>> is connected to <math|B<rsub|2>> if <math|B<rsub|1>> is
     a parent of <math|B<rsub|2>>><strong|block tree> of a blockchain, denoted
     by <math|BT> is the union of all different versions of the blockchain
-    observed by all the nodes in the system such as every such block is a
-    node in the graph and <math|B<rsub|1>> is connected to <math|B<rsub|2>>
-    if <math|B<rsub|1>> is a parent of <math|B<rsub|2>>.
+    observed by the Polkadot Host such that every block is a node in the
+    graph and <math|B<rsub|1>> is connected to <math|B<rsub|2>> if
+    <math|B<rsub|1>> is a parent of <math|B<rsub|2>>.
   </definition>
 
   When a block in the block tree gets finalized, there is an opportunity to
