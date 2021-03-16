@@ -10,7 +10,7 @@ use sc_executor::{
 use sp_io::SubstrateHostFunctions;
 use sp_core::{
     offchain::testing::TestOffchainExt,
-    offchain::OffchainExt,
+    offchain::OffchainWorkerExt,
     traits::MissingHostFunctions,
     Blake2Hasher,
 };
@@ -89,7 +89,7 @@ impl Runtime {
     #[allow(dead_code)]
     pub fn with_offchain(mut self) -> Self {
         let (offchain, _) = TestOffchainExt::new();
-        self.ext.register_extension(OffchainExt::new(offchain));
+        self.ext.register_extension(OffchainWorkerExt::new(offchain));
         self
     }
     pub fn call(&mut self, func: &str, args: &[u8]) -> Vec<u8> {
