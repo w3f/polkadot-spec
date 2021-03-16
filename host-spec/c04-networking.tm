@@ -5,7 +5,7 @@
 <style|<tuple|generic|std-latex|old-dots|old-lengths>>
 
 <\body>
-  <chapter|Networking>
+  <chapter|Networking><label|sect-networking>
 
   <with|font-series|bold|Chapter Status:> This document in its current form
   is incomplete and considered work in progress. Any reports regarding
