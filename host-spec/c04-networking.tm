@@ -247,46 +247,68 @@
   <reference|sect-connection-establishment>.
 
   <\itemize>
-    <item><verbatim|/ipfs/ping/1.0.0> - Open a substream to a peer and
-    initialize a ping to verify if a connection is till alive. If the peer
-    does not respond, the connection is dropped. This is a
+    <item><verbatim|/ipfs/ping/1.0.0> - Open a standardized <verbatim|libp2p>
+    substream to a peer and initialize a ping to verify if a connection is
+    till alive. If the peer does not respond, the connection is dropped. This
+    is a <em|Request-Response substream>.
+
+    Further specification and reference implementation is available in the
+    <hlink|libp2p documentation|https://docs.libp2p.io/concepts/protocols/#ping>.
+
+    <item><verbatim|/ipfs/id/1.0.0> - Open a standardized <verbatim|libp2p>
+    substream to a peer to ask information about that peer. This is a
     <em|Request-Response substream>.
 
     Further specification and reference implementation is available in the
     <hlink|libp2p documentation|https://docs.libp2p.io/concepts/protocols/#ping>.
 
-    <item><verbatim|/ipfs/id/1.0.0> - Open a substream to a peer to ask
-    information about that peer. This is a <em|Request-Response substream>.
-
-    Further specification and reference implementation is available in the
-    <hlink|libp2p documentation|https://docs.libp2p.io/concepts/protocols/#ping>.
-
-    <item><verbatim|/dot/kad> - Open a substream for Kademlia
+    <item><verbatim|/dot/kad> - Open a standardized substream for Kademlia
     <verbatim|FIND_NODE> requests. This is a <em|Request-Response substream>,
     as defined by the <verbatim|libp2p> standard.
+
+    Further specification and reference implementation is available on
+    <hlink|Wikipedia|https://en.wikipedia.org/wiki/Kademlia> respectively the
+    <hlink|golang Github repository|https://github.com/libp2p/go-libp2p-kad-dht>.
   </itemize>
 
   <\itemize>
-    <item><verbatim|/dot/sync/2> - a request and response protocol that
-    allows the Polkadot Host to perform information about blocks. This is a
-    <em|Request-Response substream>.
-
     <item><verbatim|/dot/light/2> - a request and response protocol that
     allows a light client to request information about the state. This is a
     <em|Request-Response substream>.
 
-    <item><verbatim|/dot/transactions/1> - a substream/notification protocol
-    which sends transactions to connected peers. This is a <em|Notification
-    substream>.
+    <todo|light client messages are currently not documented>
 
     <item><verbatim|/dot/block-announces/1> - a substream/notification
     protocol which sends blocks to connected peers. This is a
     <em|Notification substream>.
 
+    The messages are specified in Section
+    <reference|sect-msg-announcing-blocks>.
+
+    <item><verbatim|/dot/sync/2> - a request and response protocol that
+    allows the Polkadot Host to perform information about blocks. This is a
+    <em|Request-Response substream>.
+
+    The messages are specified in Section
+    <reference|sect-msg-requesting-blocks>.
+
+    <item><verbatim|/dot/transactions/1> - a substream/notification protocol
+    which sends transactions to connected peers. This is a <em|Notification
+    substream>.
+
+    The messages are specified in Section <reference|sect-msg-transactions>.
+
     <item><verbatim|/paritytech/grandpa/1> - a substream/notification
     protocol which sends GRANDPA votes to connected peers. This is a
-    <em|Notification substream>. <todo|this substream will change in the
-    future. See <hlink|issue #7252|https://github.com/paritytech/substrate/issues/7252>.>
+    <em|Notification substream>.
+
+    The messages are specified in Section <reference|defn-vote>.
+
+    <todo|Grandpa messages and Babe equivocations will be moved here. See
+    <hlink|#369|https://github.com/w3f/polkadot-spec/issues/369>>
+
+    <todo|This substream will change in the future. See <hlink|issue
+    #7252|https://github.com/paritytech/substrate/issues/7252>.>
   </itemize>
 
   <strong|Note>: the <verbatim|/dot/> prefixes on those substreams are known
@@ -306,7 +328,7 @@
   corresponding definition. Encoding and message formats are subject to
   change.
 
-  <subsubsection|Announcing blocks>
+  <subsubsection|Announcing blocks><label|sect-msg-announcing-blocks>
 
   When the node creates or receives a new block, it must be announced to the
   network. Other nodes within the network will track this announcement and
@@ -366,9 +388,10 @@
     </eqnarray*>
   </definition>
 
-  <subsubsection|Requesting blocks><verbatim|>
+  <subsubsection|Requesting blocks><label|sect-msg-requesting-blocks><verbatim|>
 
-  Block requests can be used to retrieve a range of blocks from peers.
+  Block requests can be used to retrieve a range of blocks from peers. Those
+  messages are sent over the <verbatim|/dot/sync/2> substream.
 
   <\definition>
     The <verbatim|BlockRequest> message is a Protobuf serialized structure of
@@ -542,7 +565,9 @@
     <associate|sect-connection-establishment|<tuple|1.4|?>>
     <associate|sect-discovery-mechanism|<tuple|1.3|?>>
     <associate|sect-encryption-layer|<tuple|1.5|?>>
+    <associate|sect-msg-announcing-blocks|<tuple|1.7.1|?>>
     <associate|sect-msg-grandpa|<tuple|1.7.4|?>>
+    <associate|sect-msg-requesting-blocks|<tuple|1.7.2|?>>
     <associate|sect-msg-transactions|<tuple|1.7.3|?>>
     <associate|sect-network-messages|<tuple|1.7|?>>
     <associate|sect-networking-external-docs|<tuple|1.1|?>>
