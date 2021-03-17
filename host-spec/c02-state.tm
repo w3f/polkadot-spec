@@ -153,7 +153,7 @@
     </equation*>
   </notation>
 
-  For each Node, part of <math|k<rsub|N>> is built while the trie is
+  For each node, part of <math|k<rsub|N>> is built while the trie is
   traversed from root to <math|N> part of <math|k<rsub|N>> is stored in
   <math|N> as formalized in Definition <reference|defn-node-key>.
 
