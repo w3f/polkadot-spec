@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|1.99.17>
 
 <project|host-spec.tm>
 
@@ -2435,5 +2435,8 @@
 
   <\with|par-mode|right>
     <qed>
-  </with>\ 
+  </with>
+
+  \;
+
 </body>
