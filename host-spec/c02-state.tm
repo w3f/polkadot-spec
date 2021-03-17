@@ -101,7 +101,7 @@
       16|)>
     </equation*>
 
-    , where mod is the remainder and / is the integer division operators.
+    where mod is the remainder and / is the integer division operators.
   </definition>
 
   By looking at <math|k<rsub|enc>> as a sequence of nibbles, one can walk the
