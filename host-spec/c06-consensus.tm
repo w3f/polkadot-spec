@@ -615,8 +615,8 @@
 
     in which, <math|E<rsub|id><around*|(|BABE|)>> is the BABE consensus
     engine unique identifier defined in Definition
-    <reference|defn-consensus-message-digest>. The Seal digest item is referred to as
-    <strong|BABE Seal>.
+    <reference|defn-consensus-message-digest>. The Seal digest item is
+    referred to as <strong|BABE Seal>.
 
     \;
   </definition>
