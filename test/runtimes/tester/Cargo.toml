@@ -4,8 +4,12 @@ version = "0.8.28-5b75542"
 edition = '2018'
 
 
+[workspace]
+members = [ "runtime" ]
+
+
 [dependencies.tester-runtime]
-path = 'runtime'
+path = "runtime"
 
 
 [dependencies.sc-service]
