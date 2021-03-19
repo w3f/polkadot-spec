@@ -1,4 +1,4 @@
-<TeXmacs|1.99.17>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -386,7 +386,7 @@
   <reference|sect-epoch-randomness> and Section <reference|sect-vrf>
   respectively.
 
-  <subsection|Slot Number Calculation>
+  <subsection|Slot Number Calculation><label|sect-slot-number-calculation>
 
   <\definition>
     <label|defn-slot-offset>Let <math|s<rsub|i>> and <math|s<rsub|j>> be two
@@ -2150,5 +2150,5 @@
   </with>
 
   \;
-</body>
 
+</body>
