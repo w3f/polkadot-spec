@@ -1015,20 +1015,6 @@
   votes for block <math|B>. First a vote is defined as:
 
   <\definition>
-    <label|defn-vote>A <strong|GRANDPA vote >or simply a vote for block
-    <math|B> is an ordered pair defined as
-
-    <\equation*>
-      V<rsub|\<nosymbol\>><around|(|B|)>\<assign\><around|(|H<rsub|h><around|(|B|)>,H<rsub|i><around|(|B|)>|)>
-    </equation*>
-
-    where <math|H<rsub|h><around|(|B|)>> and <math|H<rsub|i><around|(|B|)>>
-    are the block hash and the block number defined in Definitions
-    <reference|defn-block-header> and <reference|defn-block-header-hash>
-    respectively.
-  </definition>
-
-  <\definition>
     Voters engage in a maximum of two sub-rounds of voting for each round
     <math|r>. The first sub-round is called <strong|pre-vote> and<verbatim|>
     the second sub-round is called <strong|pre-commit>.
@@ -1063,6 +1049,9 @@
     <\equation*>
       \<cal-E\><rsup|r,stage><rsub|obs<around*|(|v|)>>
     </equation*>
+
+    Equivocations are submitted to the Runtime as described in Section
+    <reference|sect-grandpa-equivocation-proof>.
 
     \ 
   </definition>
