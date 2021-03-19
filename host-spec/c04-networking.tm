@@ -519,9 +519,40 @@
   <verbatim|/paritytech/grandpa/1> substream. The process for the creation of
   such votes is described in Section <reference|sect-finality>.
 
-  <subsubsection|GRANDPA Equivocations>
+  <subsubsection|GRANDPA Equivocation Proof><label|sect-grandpa-equivocation-proof>
 
-  \;
+  A GRANDPA equivocation occurs when a validator votes for multiple blocks
+  during one voting subround, as described further in Section
+  <reference|defn-equivocation>. The Polkadot Host is expected to identify
+  equivocators and report those to the Runtime as described in Section
+  <reference|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>.
+
+  A GRANDPA eqiovocation proof is a datastructure of the following format:
+
+  <\eqnarray*>
+    <tformat|<table|<row|<cell|G<rsub|Ep>>|<cell|=>|<cell|<around*|(|id<rsub|\<bbb-V\>>,e,r,A<rsub|id>,B<rsub|h>,B<rsub|n>,A<rsub|sig>|)>>>|<row|<cell|e>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><text|<em|Equivocation
+    at prevote stage.>>>>|<row|<cell|<text|1<space|1em><em|Equivocation at
+    precommit stage>>>>>>>>>>>
+  </eqnarray*>
+
+  where
+
+  <\itemize-dot>
+    <item><math|id<rsub|\<bbb-V\>>> is the authority set as defined in
+    Section <text-dots>
+
+    <item><math|e> indicates the stage at which the equivocation occurred.
+
+    <item><math|r> is the round number the equivocation occurred.
+
+    <item><math|A<rsub|id>> is the public key of the equivocator.
+
+    <item><math|B<rsub|h>> is the block hash the equivocator voted for.
+
+    <item><math|B<rsub|n>> is the block number the equivocator voted for.
+
+    <item><math|A<rsub|sig>> is the equivocators signature of the vote.
+  </itemize-dot>
 
   <subsubsection|BABE Equivocation Proof><label|sect-babe-equivocation-proof>
 
@@ -540,9 +571,7 @@
   where
 
   <\itemize-dot>
-    <item><math|A<rsub|id>> is the authority Id of the equivocator
-    represented as the index/position in the authority set as described in
-    Section <reference|sect-authority-set>.
+    <item><math|A<rsub|id>> is the public key of the equivocator.
 
     <item><math|s> is the slot as described in Section <reference|sect-babe>
     at which the equivocation occurred.
