@@ -912,7 +912,7 @@
 
   Generates a proof of the membership of a key owner in the specified block
   state. The returned value is used to report equivocations as described in
-  <todo|spec Babe equivocation>.
+  Section <reference|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>.
 
   \;
 
@@ -935,15 +935,15 @@
 
   <subsubsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>
 
-  Submits a report about an observed equivocation as defined in <todo|spec
-  Babe equivocations>.
+  Submits a report about an observed equivocation as described in Section
+  <reference|sect-babe-equivocation-proof>.
 
   \;
 
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>The equivocation proof. <todo|reference that type>
+    <item>The equivocation proof.
 
     <item>An proof of the key owner in an opaque form as described in Section
     <reference|sect-babeapi_generate_key_ownership_proof>.
