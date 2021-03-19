@@ -523,14 +523,13 @@
 
   \;
 
-  <subsubsection|BABE Equivocations>
+  <subsubsection|BABE Equivocation Proof><label|sect-babe-equivocation-proof>
 
   A BABE equivocation occurs when a validator produces more than one block at
   the same slot. The proof of equivocation are the given distinct headers
   that were signed by the validator and which include the slot number. The
-  Polkadot Host is expected to identify committed equivocations by peers and
-  report those to the Runtime as described in Section
-  <reference|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>.
+  Polkadot Host is expected to identify equivocators and report those to the
+  Runtime as described in Section <reference|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>.
 
   A BABE equivocation proof is datastructure of the following format:
 
@@ -542,7 +541,7 @@
 
   <\itemize-dot>
     <item><math|A<rsub|id>> is the authority Id of the equivocator
-    represented as the index/position in the authority set as defined in
+    represented as the index/position in the authority set as described in
     Section <reference|sect-authority-set>.
 
     <item><math|s> is the slot as described in Section <reference|sect-babe>
@@ -554,6 +553,10 @@
     <item><math|h<rsub|2>> is the block header of the second block produced
     by the equivocator.
   </itemize-dot>
+
+  Unlike during block execution, the Seal in both block headers is not
+  removed before submission. The block headers are submitted in its full
+  form.
 
   \;
 
