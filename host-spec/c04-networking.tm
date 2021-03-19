@@ -519,6 +519,42 @@
   <verbatim|/paritytech/grandpa/1> substream. The process for the creation of
   such votes is described in Section <reference|sect-finality>.
 
+  <subsubsection|GRANDPA Equivocations>
+
+  \;
+
+  <subsubsection|BABE Equivocations>
+
+  A BABE equivocation occurs when a validator produces more than one block at
+  the same slot. The proof of equivocation are the given distinct headers
+  that were signed by the validator and which include the slot number. The
+  Polkadot Host is expected to identify committed equivocations by peers and
+  report those to the Runtime as described in Section
+  <reference|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>.
+
+  A BABE equivocation proof is datastructure of the following format:
+
+  <\eqnarray*>
+    <tformat|<table|<row|<cell|B<rsub|Ep>>|<cell|=>|<cell|<around*|(|A<rsub|id>,s,h<rsub|1>,h<rsub|2>|)>>>>>
+  </eqnarray*>
+
+  where
+
+  <\itemize-dot>
+    <item><math|A<rsub|id>> is the authority Id of the equivocator
+    represented as the index/position in the authority set as defined in
+    Section <reference|sect-authority-set>.
+
+    <item><math|s> is the slot as described in Section <reference|sect-babe>
+    at which the equivocation occurred.
+
+    <item><math|h<rsub|1>> is the block header of the first block produced by
+    the equivocator.
+
+    <item><math|h<rsub|2>> is the block header of the second block produced
+    by the equivocator.
+  </itemize-dot>
+
   \;
 
   <\with|par-mode|right>
@@ -526,4 +562,5 @@
   </with>
 
   \;
+
 </body>

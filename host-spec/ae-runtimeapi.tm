@@ -933,7 +933,7 @@
     <reference|defn-option-type> containing the proof in an opaque form.
   </itemize-dot>
 
-  <subsubsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>>
+  <subsubsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>
 
   Submits a report about an observed equivocation as defined in <todo|spec
   Babe equivocations>.
@@ -1193,4 +1193,3 @@
   \;
 
 </body>
-
