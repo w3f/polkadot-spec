@@ -14,7 +14,7 @@
   assumption either on the size of the key nor on the size of the data stored
   under them, besides the fact that they are byte arrays with specific upper
   limits on their length. The limit is imposed by the encoding algorithms to
-  store the key and the value in the storage trie.
+  store the key and the value in the storage tree.
 
   <subsection|Accessing System Storage >
 
