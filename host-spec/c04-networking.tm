@@ -583,9 +583,11 @@
     by the equivocator.
   </itemize-dot>
 
-  Unlike during block execution, the Seal in both block headers is not
-  removed before submission. The block headers are submitted in its full
-  form.
+  If there are more than two blocks which cause an equivocation, the
+  equivocation only needs to be reported once i.e. no additional
+  equivocations must be reported for the same slot. Unlike during block
+  execution, the Seal in both block headers is not removed before submission.
+  The block headers are submitted in its full form.
 
   \;
 
