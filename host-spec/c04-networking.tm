@@ -539,7 +539,7 @@
 
   <\itemize-dot>
     <item><math|id<rsub|\<bbb-V\>>> is the authority set as defined in
-    Section <reference|sect-authority-set>.
+    Section <reference|defn-authority-set-id>.
 
     <item><math|e> indicates the stage at which the equivocation occurred.
 
