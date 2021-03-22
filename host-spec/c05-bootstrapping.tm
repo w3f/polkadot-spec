@@ -27,7 +27,7 @@
     (Section <reference|sect-protocols-substreams>) with each of its active
     peers.\ 
 
-    <item>Furhtermore, the node should send block requests (Section
+    <item>Furthermore, the node should send block requests (Section
     <reference|sect-requesting-blocks>) to these peers to receive all blocks
     in the chain and execute each of them.
 
