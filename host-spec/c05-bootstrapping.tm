@@ -7,52 +7,52 @@
 <\body>
   <chapter|Bootstrapping><label|chap-bootstrapping>
 
-  This chapter provide an overview of the tasks a node executing Polkadot
-  protocol need to performs in order to join the network and start
-  participating as Polkadot network node. While this chapter does not include
-  any new specification of the protocol, it has been included to help the
-  implementors with pointers to where the these steps are defined. In short
-  the following steps should be taken by all bootstraping node:
+  This chapter provides an overview over the tasks a Polkadot Host needs to
+  performs in order to join and participate in the Polkadot network. While
+  this chapter does not go into any new specifications of the protocol, it
+  has been included to provide implementors with an pointer to what these
+  steps are and where they are defined. In short the following steps should
+  be taken by all bootstraping node:
 
   <\enumerate>
-    <item>The node needs to populate the state storage with the Genesis state
-    which can be obtained from <cite|??>.
+    <item>The node needs to populate the state storage with the official
+    Genesis state which can be obtained from
+    <cite|paritytech_genesis_state\<gtr\>>.
 
-    <item>Using available <verbatim|libp2p> discovery protocols described in
-    Section <reference|sect-discovery-mechanism> the node finds other peers
-    on Polkadot network. When a node finds a peer, it perform the following
-    steps simultanously:
+    <item>The node should maintains a set of around 50 active peers at any
+    time. New peers can be found using the <verbatim|libp2p> discovery
+    protocols (Section <reference|sect-discovery-mechanism>)
 
-    <\enumerate-roman>
-      <item>The node opens a block annouce stream to each peer found in Step
-      2 as described in Section <reference|sect-annoucing-blocks>. Peers have
-      liberity to accept or reject node's request. It is recommended that the
-      node maintains an active stream counts of about 50 connections.
+    <item>The node should open and maitain the various rewquired streams
+    (Section <reference|sect-protocols-substreams>) with each of its active
+    peers.\ 
 
-      <item>Block Request. The node needs to send block request to receive
-      all blocks and execute each blocks.
+    <item>Furhtermore the node should send block requests (Section
+    <reference|sect-requesting-blocks>) to these peers to receive all blocks
+    in the chain and execute each of them.
 
-      <item>Neighbor packets\ 
-    </enumerate-roman>
+    <item>Exchange neighbor packets (Section <reference|sect-msg-grandpa>)
+
+    \;
   </enumerate>
 
-  Voter node additionally should takes the following steps.\ 
+  Validator and Voter node should takes the following additional steps.\ 
 
   <\enumerate>
-    <item>Generate session keys and post them as a transaction described
-    <inactive|<cite|??>>
+    <item>Verify the Host's session key is included in the current Epoch's
+    authority set (Section <reference|sect-authority-set>)
 
-    <item>Run catch up protocol to make sure that they are participating in
-    current round and not a past round.
+    <item>Run the BABE lottery (Section <reference|sect-block-production>)
+    and wait for the next assigned slot to produce a block.\ 
 
-    <item>Verify that their session key is included in the current Epoch.
+    <item>Gossip any produced blocks to all connected peers (Section
+    <reference|sect-announcing-block>)
 
-    <item>If so they should run the BABE lottery and wait for the slot they
-    have been chosen to produce block Babe block production protocol to
-    generate block in the slot they are give and gossip the block to their
-    peers.
+    <item>Run catch up protocol (Section <reference|sect-grandpa-messages>)
+    to make sure that they are participating in current round and not a past
+    round.
 
-    <item>Run grandpa rounds protocol.
+    <item>Run the grandpa rounds protocol (Section <reference|sect-finality>)
   </enumerate>
 
   \;
