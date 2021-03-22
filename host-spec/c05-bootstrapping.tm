@@ -49,7 +49,7 @@
     <reference|sect-announcing-block>)
 
     <item>Run catch up protocol (Section <reference|sect-grandpa-messages>)
-    to make sure that they are participating in the current round and not a past
+    to make sure that the node is participating in the current round and not a past
     round.
 
     <item>Run the grandpa rounds protocol (Section <reference|sect-finality>)
