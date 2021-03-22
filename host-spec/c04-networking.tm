@@ -388,7 +388,7 @@
     </eqnarray*>
   </definition>
 
-  <subsubsection|Requesting blocks><label|sect-msg-requesting-blocks><verbatim|>
+  <subsubsection|Requesting blocks><label|sect-requesting-blocks>
 
   Block requests can be used to retrieve a range of blocks from peers. Those
   messages are sent over the <verbatim|/dot/sync/2> substream.
