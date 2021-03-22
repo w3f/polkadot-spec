@@ -305,6 +305,19 @@
     <name|Longest-Chain(<math|BT>)>.
   </definition>
 
+  <\definition>
+    A block producer <strong|equivocates> if they produce more than one block
+    at the same slot. The proof of equivocation are the given distinct
+    headers that were signed by the validator and which include the slot
+    number.
+
+    \;
+
+    The Polkadot Host must detect equivocations committed by other validators
+    and submit those to the Runtime as described in Section
+    <reference|sect-babe-equivocation-proof>.
+  </definition>
+
   <subsection|Block Production Lottery>
 
   <\definition>
@@ -1050,7 +1063,8 @@
       \<cal-E\><rsup|r,stage><rsub|obs<around*|(|v|)>>
     </equation*>
 
-    Equivocations are submitted to the Runtime as described in Section
+    The Polkadot Host must detect equivocations committed by other validators
+    and submit those to the Runtime as described in Section
     <reference|sect-grandpa-equivocation-proof>.
 
     \ 
