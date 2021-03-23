@@ -50,42 +50,6 @@
   </with>
 
   \;
+
 </body>
 
-<\initial>
-  <\collection>
-    <associate|page-first|?>
-    <associate|page-height|auto>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
-  </collection>
-</initial>
-
-<\references>
-  <\collection>
-    <associate|auto-1|<tuple|A|?|c01-background.tm>>
-    <associate|auto-2|<tuple|A.1|?|c01-background.tm>>
-    <associate|defn-genesis-header|<tuple|A.1|?|c01-background.tm>>
-    <associate|sect-genesis-block|<tuple|A|?|c01-background.tm>>
-    <associate|tabl-genesis-header|<tuple|A.1|?|c01-background.tm>>
-  </collection>
-</references>
-
-<\auxiliary>
-  <\collection>
-    <\associate|bib>
-      web3.0_technologies_foundation_polkadot_2020
-    </associate>
-    <\associate|table>
-      <tuple|normal|<\surround|<hidden-binding|<tuple>|A.1>|>
-        Genesis header values
-      </surround>|<pageref|auto-2>>
-    </associate>
-    <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
-      A<space|2spc>Genesis State Specification>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-1><vspace|0.5fn>
-    </associate>
-  </collection>
-</auxiliary>

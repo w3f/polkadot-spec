@@ -1186,35 +1186,11 @@
 
   \;
 
-  \;
-
-  \;
-
-  \;
-
-  \;
-
   <\with|par-mode|right>
     <qed>
   </with>
 
   \;
+
 </body>
 
-<\initial>
-  <\collection>
-    <associate|page-first|139>
-    <associate|page-height|auto>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
-    <associate|preamble|false>
-    <associate|section-nr|2<uninit>>
-    <associate|subsection-nr|0>
-  </collection>
-</initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
