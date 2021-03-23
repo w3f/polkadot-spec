@@ -278,13 +278,13 @@ construct_runtime!(
 		NodeBlock = opaque::Block,
 		UncheckedExtrinsic = UncheckedExtrinsic
 	{
-		System: system::{Module, Call, Config, Storage, Event<T>},
-		CollectiveFlip: collective_flip::{Module, Call, Storage},
-		Babe: babe::{Module, Call, Storage, Config},
-		Grandpa: grandpa::{Module, Call, Storage, Config, Event},
-		Timestamp: timestamp::{Module, Call, Storage, Inherent},
-		Balances: balances::{Module, Call, Storage, Config<T>, Event<T>},
-		Sudo: sudo::{Module, Call, Config<T>, Storage, Event<T>},
+		System: system::{Pallet, Call, Config, Storage, Event<T>},
+		CollectiveFlip: collective_flip::{Pallet, Call, Storage},
+		Babe: babe::{Pallet, Call, Storage, Config},
+		Grandpa: grandpa::{Pallet, Call, Storage, Config, Event},
+		Timestamp: timestamp::{Pallet, Call, Storage, Inherent},
+		Balances: balances::{Pallet, Call, Storage, Config<T>, Event<T>},
+		Sudo: sudo::{Pallet, Call, Config<T>, Storage, Event<T>},
 	}
 );
 
@@ -312,7 +312,7 @@ pub type UncheckedExtrinsic = generic::UncheckedExtrinsic<Address, Call, Signatu
 /// Extrinsic type that has already been checked.
 pub type CheckedExtrinsic = generic::CheckedExtrinsic<AccountId, Call, SignedExtra>;
 /// Executive: handles dispatch to the various modules.
-pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllModules>;
+pub type Executive = frame_executive::Executive<Runtime, Block, system::ChainContext<Runtime>, Runtime, AllPallets>;
 
 
 /// Print current storage root
