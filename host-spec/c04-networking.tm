@@ -283,7 +283,7 @@
     <em|Notification substream>.
 
     The messages are specified in Section
-    <reference|sect-msg-announcing-blocks>.
+    <reference|sect-msg-block-announce>.
 
     <item><verbatim|/dot/sync/2> - a request and response protocol that
     allows the Polkadot Host to perform information about blocks. This is a

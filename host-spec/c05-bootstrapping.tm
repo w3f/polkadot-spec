@@ -17,7 +17,7 @@
   <\enumerate>
     <item>The node needs to populate the state storage with the official
     Genesis state which can be obtained from
-    <cite|paritytech_genesis_state\<gtr\>>.
+    <cite|paritytech_genesis_state>.
 
     <item>The node should maintains a set of around 50 active peers at any
     time. New peers can be found using the <verbatim|libp2p> discovery
@@ -28,7 +28,7 @@
     peers.\ 
 
     <item>Furthermore, the node should send block requests (Section
-    <reference|sect-requesting-blocks>) to these peers to receive all blocks
+    <reference|sect-msg-block-request>) to these peers to receive all blocks
     in the chain and execute each of them.
 
     <item>Exchange neighbor packets (Section <reference|sect-msg-grandpa>)
@@ -46,9 +46,9 @@
     and wait for the next assigned slot in order to produce a block.\ 
 
     <item>Gossip any produced blocks to all connected peers (Section
-    <reference|sect-announcing-block>).
+    <reference|sect-msg-block-announce>).
 
-    <item>Run the catch up protocol (Section <reference|sect-grandpa-messages>)
+    <item>Run the catch up protocol (Section <reference|sect-msg-grandpa>)
     to make sure that the node is participating in the current round and not a past
     round.
 

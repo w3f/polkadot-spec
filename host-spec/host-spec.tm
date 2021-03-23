@@ -2427,6 +2427,8 @@
 <\auxiliary>
   <\collection>
     <\associate|bib>
+      paritytech_genesis_state
+
       w3f_research_group_blind_2019
 
       david_ouroboros_2018
