@@ -7,23 +7,24 @@
 <\body>
   <appendix|Genesis State Specification><label|sect-genesis-block>
 
-  The genesis state represents the intial state of Polkadot state storage as
-  a set of key-value pairs, which can be retrieved from
-  <cite|paritytech_genesis_state>. While each of those key/value pairs offer
-  important identifyable information which can be used by the Runtime, from
-  the Polkadot Host points of view, it is a set of arbitrary key-value pair
-  data as it is chain and network dependent, except for the <verbatim|:code>
-  as described in Section <reference|sect-loading-runtime-code> which needs
-  to be identified by the Polkadot Host to load its content as the Runtime.
-  The other keys and values are unspecifed and its usage depends on the chain
-  respectively its corresponding Runtime. The data should be inserted into
-  the state storage with the <verbatim|set_storage> Host API, as defined in
-  Section <reference|sect-storage-set>.
+  The genesis state is a set of key-value pairs representing the intial state of
+  the Polkadot state storage. It can be retrieved from
+  <cite|paritytech_genesis_state>. While each of those key-value pairs offers
+  important identifyable information to the Runtime, to the Polkadot Host they
+  are a transparent set of arbitrary chain- and network-dependent keys and 
+  values. The only exception to this are the <verbatim|:code> and
+  <verbatim|:heappages> keys as described in Section
+  <reference|sect-loading-runtime-code> and <reference|sect-memory-management>,
+  which are used by the Polkadot Host to initialize the WASM environment and its
+  Runtime. The other keys and values are unspecifed and soley depends on the
+  chain and respectively its corresponding Runtime. On initialization the data
+  should be inserted into the state storage with the <verbatim|set_storage> Host
+  API, as defined in Section <reference|sect-storage-set>.
 
   \;
 
   As such, Polkadot does not defined a formal genesis block. Nonetheless for
-  the complatibilty reasons in several algorithms, the Polkadot Host defines
+  the compatibility reasons in several algorithms, the Polkadot Host defines
   the <em|genesis header> according to Definition
   <reference|defn-genesis-header>. By the abuse of terminalogy, \P<em|genesis
   block>\Q refers to the hypothetical parent of block number 1 which holds
