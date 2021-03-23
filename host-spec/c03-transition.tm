@@ -634,7 +634,7 @@
 
   Blocks can be handed to the Polkadot Host both from the network stack for
   example by means of Block response network message (see Section
-  <reference|sect-block-request> ) and from the consensus engine. Both the
+  <reference|sect-msg-block-request> ) and from the consensus engine. Both the
   Runtime and the Polkadot Host need to work together to assure block
   validity. A block is deemed valid if the block author had the authorship
   right for the slot during which the slot was built as well as if the
