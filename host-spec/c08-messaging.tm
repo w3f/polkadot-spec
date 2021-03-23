@@ -538,16 +538,13 @@
   <section|SPREE>
 
   ...
+
+  \;
+
+  <\with|par-mode|right>
+    <qed>
+  </with>
+
+  \;
+
 </body>
-
-<\initial>
-  <\collection>
-    <associate|preamble|false>
-  </collection>
-</initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>

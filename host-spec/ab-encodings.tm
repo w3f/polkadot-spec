@@ -247,56 +247,5 @@
   </with>
 
   \;
+
 </body>
-
-<\initial>
-  <\collection>
-    <associate|chapter-nr|8>
-    <associate|page-first|91>
-    <associate|section-nr|5<uninit>>
-    <associate|subsection-nr|5>
-  </collection>
-</initial>
-
-<\references>
-  <\collection>
-    <associate|auto-1|<tuple|A|55>>
-    <associate|auto-2|<tuple|A.1|55>>
-    <associate|auto-3|<tuple|A.1.1|56>>
-    <associate|auto-4|<tuple|A.2|57>>
-    <associate|defn-hex-encoding|<tuple|A.14|57>>
-    <associate|defn-option-type|<tuple|A.5|55>>
-    <associate|defn-result-type|<tuple|A.6|55>>
-    <associate|defn-sc-len-encoding|<tuple|A.13|56>>
-    <associate|defn-scale-byte-array|<tuple|A.1|55>>
-    <associate|defn-scale-empty|<tuple|A.12|56>>
-    <associate|defn-scale-fixed-length|<tuple|A.11|56>>
-    <associate|defn-scale-list|<tuple|A.8|56>>
-    <associate|defn-scale-tuple|<tuple|A.2|55>>
-    <associate|defn-scale-variable-type|<tuple|A.7|56>>
-    <associate|defn-varrying-data-type|<tuple|A.4|55>>
-    <associate|sect-encoding|<tuple|A|55>>
-    <associate|sect-int-encoding|<tuple|A.1.1|56>>
-    <associate|sect-scale-codec|<tuple|A.1|55>>
-  </collection>
-</references>
-
-<\auxiliary>
-  <\collection>
-    <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|Appendix
-      A<space|2spc>Auxiliary Encodings> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-1><vspace|0.5fn>
-
-      A.1<space|2spc>SCALE Codec <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-2>
-
-      <with|par-left|<quote|1tab>|A.1.1<space|2spc>Length and Compact
-      Encoding <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-3>>
-
-      A.2<space|2spc>Hex Encoding <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-4>
-    </associate>
-  </collection>
-</auxiliary>
