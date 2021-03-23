@@ -71,7 +71,7 @@
   <math|\<cal-R\>\<cal-E\><rsub|B>> is the Polkadot Host API, as described in
   Notation <reference|nota-host-api-at-state>.
 
-  <subsection|Loading the Runtime Code \ \ ><label|sect-loading-runtime-code>
+  <subsection|Loading the Runtime Code><label|sect-loading-runtime-code>
 
   The Polkadot Host expects to receive the code for the Runtime of the chain
   as a compiled WebAssembly (Wasm) Blob. The current runtime is stored in the
@@ -149,7 +149,7 @@
   another Wasm module alongside the runtime which imports these functions
   from the Polkadot Host as host functions.
 
-  <subsubsection|Memory Management>
+  <subsubsection|Memory Management><label|sect-memory-management>
 
   The Polkadot Host is responsible for managing the WASM heap memory starting
   at the exported symbol <verbatim|__heap_base> as a part of implementing the
