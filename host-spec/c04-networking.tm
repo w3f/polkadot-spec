@@ -527,10 +527,10 @@
   equivocators and report those to the Runtime as described in Section
   <reference|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>.
 
-  A GRANDPA eqiovocation proof is a datastructure of the following format:
+  A GRANDPA equivocation proof is a datastructure of the following format:
 
   <\eqnarray*>
-    <tformat|<table|<row|<cell|G<rsub|Ep>>|<cell|=>|<cell|<around*|(|id<rsub|\<bbb-V\>>,e,r,A<rsub|id>,B<rsub|h>,B<rsub|n>,A<rsub|sig>|)>>>|<row|<cell|e>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><text|<em|Equivocation
+    <tformat|<table|<row|<cell|G<rsub|Ep>>|<cell|=>|<cell|<around*|(|id<rsub|\<bbb-V\>>,e,r,A<rsub|id>,B<rsup|1><rsub|h>,B<rsup|1><rsub|n>A<rsup|1><rsub|sig>,B<rsup|2><rsub|h>,B<rsup|2><rsub|n>,A<rsup|2><rsub|sig>|)>>>|<row|<cell|e>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><text|<em|Equivocation
     at prevote stage.>>>>|<row|<cell|<text|1<space|1em><em|Equivocation at
     precommit stage>>>>>>>>>>>
   </eqnarray*>
@@ -547,11 +547,23 @@
 
     <item><math|A<rsub|id>> is the public key of the equivocator.
 
-    <item><math|B<rsub|h>> is the block hash the equivocator voted for.
+    <item><math|B<rsup|1><rsub|h>> is the block hash of the first block the
+    equivocator voted for.
 
-    <item><math|B<rsub|n>> is the block number the equivocator voted for.
+    <item><math|B<rsup|1><rsub|n>> is the block number of the first block the
+    equivocator voted for.
 
-    <item><math|A<rsub|sig>> is the equivocators signature of the vote.
+    <item><math|A<rsup|1><rsub|sig>> is the equivocators signature of the
+    first vote.
+
+    <item><math|B<rsup|2><rsub|h>> is the block hash of the second block the
+    equivocator voted for.
+
+    <item><math|B<rsup|2><rsub|n>> is the block number of the second block
+    the equivocator voted for.
+
+    <item><math|A<rsup|2><rsub|sig>> is the equivocators signature of the
+    second vote.
   </itemize-dot>
 
   <subsubsection|BABE Equivocation Proof><label|sect-babe-equivocation-proof>
