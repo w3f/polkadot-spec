@@ -16,7 +16,7 @@
   <verbatim|:heappages> keys as described in Section
   <reference|sect-loading-runtime-code> and <reference|sect-memory-management>,
   which are used by the Polkadot Host to initialize the WASM environment and its
-  Runtime. The other keys and values are unspecifed and soley depends on the
+  Runtime. The other keys and values are unspecifed and soley depend on the
   chain and respectively its corresponding Runtime. On initialization the data
   should be inserted into the state storage with the <verbatim|set_storage> Host
   API, as defined in Section <reference|sect-storage-set>.
