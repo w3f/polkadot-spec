@@ -1342,4 +1342,13 @@
   invalid as above but we do not slash validators who attest either way. We
   want to leave a reasonable length of time in the first two cases to slash
   anyone to see if this happens.
+
+  \;
+
+  <\with|par-mode|right>
+    <qed>
+  </with>
+
+  \;
+
 </body>

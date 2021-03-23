@@ -535,91 +535,11 @@
 
   <verbatim|>
 
+  \;
+
   <\with|par-mode|right>
     <qed>
   </with>
 
   \;
 </body>
-
-<initial|<\collection>
-</collection>>
-
-<\references>
-  <\collection>
-    <associate|algo-aggregate-key|<tuple|2.1|19>>
-    <associate|algo-pk-length|<tuple|2.2|19>>
-    <associate|auto-1|<tuple|2|17>>
-    <associate|auto-2|<tuple|2.1|17>>
-    <associate|auto-3|<tuple|2.1.1|17>>
-    <associate|auto-4|<tuple|2.1|17>>
-    <associate|auto-5|<tuple|2.1.2|17>>
-    <associate|auto-6|<tuple|2.1.3|18>>
-    <associate|auto-7|<tuple|2.1.4|19>>
-    <associate|auto-8|<tuple|2.2|?>>
-    <associate|auto-9|<tuple|2.2.1|?>>
-    <associate|chap-state-spec|<tuple|2|17>>
-    <associate|defn-children-bitmap|<tuple|2.10|20>>
-    <associate|defn-index-function|<tuple|2.7|19>>
-    <associate|defn-merkle-value|<tuple|2.12|20>>
-    <associate|defn-node-header|<tuple|2.9|19>>
-    <associate|defn-node-key|<tuple|2.6|18>>
-    <associate|defn-node-subvalue|<tuple|2.11|20>>
-    <associate|defn-node-value|<tuple|2.8|19>>
-    <associate|defn-nodetype|<tuple|2.4|18>>
-    <associate|defn-stored-value|<tuple|2.1|17>>
-    <associate|key-encode-in-trie|<tuple|2.1|18>>
-    <associate|sect-child-storages|<tuple|2.2|?>>
-    <associate|sect-child-trie-structure|<tuple|2.2.1|?>>
-    <associate|sect-merkl-proof|<tuple|2.1.4|19>>
-    <associate|sect-state-storage|<tuple|2.1|17>>
-    <associate|sect-state-storage-trie-structure|<tuple|2.1.3|18>>
-  </collection>
-</references>
-
-<\auxiliary>
-  <\collection>
-    <\associate|gly>
-      <tuple|normal|StoredValue|the function retrieves the value stored under
-      a specific key in the state storage and is formally defined as
-      <with|mode|<quote|math>|<tformat|<tformat|<table|<row|<cell|\<cal-K\>\<rightarrow\>\<cal-V\>>>|<row|<cell|k\<mapsto\><around*|{|<tformat|<cwith|1|-1|1|-1|cell-halign|c>|<tformat|<table|<row|<cell|v>|<cell|<with|mode|<quote|text>|if
-      (k,v) exists in state storage>>>|<row|<cell|\<phi\>>|<cell|otherwise>>>>>|\<nobracket\>>>>>>>>.
-      Here <with|mode|<quote|math>|\<cal-K\>\<subset\>\<bbb-B\>> and
-      <with|mode|<quote|math>|\<cal-V\>\<subset\>\<bbb-B\>> are respectively
-      the set of all keys and values stored in the state
-      storage.|<pageref|auto-4>>
-    </associate>
-    <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|2<space|2spc>State
-      Specification> <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-1><vspace|0.5fn>
-
-      2.1<space|2spc>State Storage and Storage Trie
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-2>
-
-      <with|par-left|<quote|1tab>|2.1.1<space|2spc>Accessing System Storage
-      \ <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-3>>
-
-      <with|par-left|<quote|1tab>|2.1.2<space|2spc>The General Tree Structure
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-5>>
-
-      <with|par-left|<quote|1tab>|2.1.3<space|2spc>Trie Structure
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-6>>
-
-      <with|par-left|<quote|1tab>|2.1.4<space|2spc>Merkle Proof
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-7>>
-
-      2.2<space|2spc>Child Storage <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-8>
-
-      <with|par-left|<quote|1tab>|2.2.1<space|2spc>Child Tries
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-9>>
-    </associate>
-  </collection>
-</auxiliary>

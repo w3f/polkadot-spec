@@ -57,39 +57,11 @@
 
   \;
 
-  \;
+  <\with|par-mode|right>
+    <qed>
+  </with>
 
   \;
+
 </body>
 
-<\initial>
-  <\collection>
-    <associate|chapter-nr|4>
-    <associate|page-first|41>
-    <associate|page-height|auto>
-    <associate|page-type|letter>
-    <associate|page-width|auto>
-    <associate|section-nr|3<uninit>>
-    <associate|subsection-nr|4>
-  </collection>
-</initial>
-
-<\references>
-  <\collection>
-    <associate|auto-1|<tuple|5|?>>
-    <associate|chap-bootstrapping|<tuple|5|?>>
-  </collection>
-</references>
-
-<\auxiliary>
-  <\collection>
-    <\associate|bib>
-      ??
-    </associate>
-    <\associate|toc>
-      <vspace*|1fn><with|font-series|<quote|bold>|math-font-series|<quote|bold>|5<space|2spc>Bootstrapping>
-      <datoms|<macro|x|<repeat|<arg|x>|<with|font-series|medium|<with|font-size|1|<space|0.2fn>.<space|0.2fn>>>>>|<htab|5mm>>
-      <no-break><pageref|auto-1><vspace|0.5fn>
-    </associate>
-  </collection>
-</auxiliary>
