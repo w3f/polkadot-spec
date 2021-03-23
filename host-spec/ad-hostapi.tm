@@ -211,16 +211,18 @@
 
   <subsection|<verbatim|ext_storage_append>>
 
-  Append the SCALE encoded value to a SCALE encoded collection at the given
-  key. This function assumes that the existing storage item is a SCALE
-  encoded collection and that the value to append is also SCALE encoded and
-  of the same type as the items in the existing collection.\ 
+  Append the SCALE encoded value to a SCALE encoded sequence (Definition
+  <reference|defn-scale-list>) at the given key. This function assumes that
+  the existing storage item is either empty or a SCALE encoded sequence and
+  that the value to append is also SCALE encoded and of the same type as the
+  items in the existing sequence.
 
   \;
 
-  For improved performance, this function does not decode the entire SCALE
-  encoded byte array. Instead, it simply appends the value to the storage
-  item and increments the length prefix <math|Enc<rsup|Len><rsub|SC>>.
+  To improve performance, this function is allowed to skip decoding the
+  entire SCALE encoded sequence and instead can just append the new item to
+  the end of the existing data and increment the length prefix
+  <math|Enc<rsup|Len><rsub|SC>>.
 
   \;
 
