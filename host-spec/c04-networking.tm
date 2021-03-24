@@ -7,28 +7,30 @@
 <\body>
   <chapter|Networking><label|sect-networking>
 
-  <with|font-series|bold|Chapter Status:> This document in its current form
-  is incomplete and considered work in progress. Any reports regarding
-  deviation from the current Polkadot network protocol or clarifications are
-  appreciated.
+  <with|font-series|bold|Chapter Status:> This chapter in its current form is
+  incomplete and considered work in progress. Authors appreciate receiving
+  request for clarification or any reports regarding deviation from the
+  current Polkadot network protocol. This can be done through filing an issue
+  in Polkadot Specification repository <cite|w3f_polkadot-spec>.
 
   <section|Introduction>
 
   The Polkadot network is decentralized and does not rely on any central
   authority or entity in order to achieve its fullest potential of provided
   functionality. The networking protocol is based on a family of open
-  protocols, including the distributed Kademlia hash table which is used for
-  peer discovery.
+  protocols, including protocol implemented <verbatim|libp2p> e.g. the
+  distributed Kademlia hash table which is used for peer discovery.
 
   This chapter walks through the behavior of the networking implemenation of
   the Polkadot Host and defines the network messages. Implementation details
-  of the used <verbatim|libp2p> protocols are specified in external sources
-  as described in Section <reference|sect-networking-external-docs>.
+  of the <verbatim|libp2p> protocols used in Polkadot protocol, are specified
+  in external sources as described in Section
+  <reference|sect-networking-external-docs>.
 
   <section|External Documentation><label|sect-networking-external-docs>
 
-  The completeness of implementing the Polkadot networking protocol requires
-  the usage of external documentation.
+  Complete specification of \ the Polkadot networking protocol relies on
+  \ the following external protocols:
 
   <\itemize>
     <item><hlink|libp2p|https://github.com/libp2p/specs> - <verbatim|libp2p>
@@ -37,7 +39,7 @@
     <verbatim|libp2p> are multiplexing protocols <verbatim|mplex> and
     <verbatim|yamux>.
 
-    <item><hlink|libp2p adressing|https://docs.libp2p.io/concepts/addressing/>
+    <item><hlink|libp2p addressing|https://docs.libp2p.io/concepts/addressing/>
     - The Polkadot Host uses the <verbatim|libp2p> addressing system to
     identity and connect to peers.
 
