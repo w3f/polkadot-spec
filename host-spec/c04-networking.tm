@@ -305,6 +305,13 @@
 
     <todo|This substream will change in the future. See <hlink|issue
     #7252|https://github.com/paritytech/substrate/issues/7252>.>
+
+    <item><verbatim|/paritytech/beefy/1> - a substream/notification protocol
+    which sends signed BEEFY statements, as described in Section
+    <reference|sect-grandpa-beefy>, to connected peers. This is a
+    <em|Notification> substream.
+
+    The messages are specified in Section <todo|TODO>
   </itemize>
 
   <strong|Note>: the <verbatim|/dot/> prefixes on those substreams are known
@@ -722,7 +729,42 @@
     defined in Definition <reference|defn-gossip-message> of type Id 4.
   </definition>
 
-  \;
+  <subsubsection|GRANDPA BEEFY><label|sect-msg-grandpa-beefy>
+
+  <\todo>
+    TODO
+  </todo>
+
+  <\definition>
+    A signed commitment is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M<rsub|BFY>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,S<rsub|n>|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|M<rsub|mr>,B<rsub|n>,id<rsub|\<bbb-V\>>|)>>>|<row|<cell|S<rsub|n>>|<cell|=>|<cell|<around*|(|V<rsup|sig><rsub|0>,\<ldots\>,V<rsup|sig><rsub|n>|)>>>>>
+    </eqnarray*>
+  </definition>
+
+  where
+
+  <\itemize-dot>
+    <item><math|M<rsub|mr>> is the MMR root of all the block header hashes
+    leading up to the latest, finalized block.
+
+    <item><math|B<rsub|n>> is the block number this commitment is for, namely
+    the latest, finalized block.
+
+    <item><math|id<rsub|\<bbb-V\>>> is the current authority set Id as
+    defined in Definition <reference|defn-authority-set-id>.
+
+    <item><math|S<rsub|n>> is an array where its exact size matches the
+    number of validators in the current authority set as specified in
+    <math|id<rsub|\<bbb-V\>>>. Individual items are of the type
+    <verbatim|Option> as defined in Definition <todo|TODO> which can contain
+    a signature of the same statement of a validator which is active in the
+    current authority set. It's critical that the signatures are sorted based
+    on their corresponding public key entry in the authority set.
+
+    See Section <todo|TODO> which explains this behavior in more detail.
+  </itemize-dot>
 
   <\with|par-mode|right>
     <qed>
