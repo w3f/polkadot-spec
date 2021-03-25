@@ -736,35 +736,83 @@
   </todo>
 
   <\definition>
-    A signed commitment is a datastructure of the following format:
+    <label|defn-grandpa-beefy-commitment>A commitment, <math|C>, contains the
+    information extracted from the finalized block at height <math|B<rsub|n>>
+    as specified in the message body. <todo|explain some more>
+
+    C is a datastructe of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsub|BFY>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,S<rsub|n>|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|M<rsub|mr>,B<rsub|n>,id<rsub|\<bbb-V\>>|)>>>|<row|<cell|S<rsub|n>>|<cell|=>|<cell|<around*|(|V<rsup|sig><rsub|0>,\<ldots\>,V<rsup|sig><rsub|n>|)>>>>>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|R,B<rsub|n>,id<rsub|\<bbb-V\>>|)>>>>>
     </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|R> is the MMR root of all the block header hashes leading
+      up to the latest, finalized block.
+
+      <item><math|B<rsub|n>> is the block number this commitment is for.
+      Namely the latest, finalized block.
+
+      <item><math|id<rsub|\<bbb-V\>>> is the current authority set Id as
+      defined in Definition <reference|defn-authority-set-id>.
+    </itemize-dot>
   </definition>
 
-  where
+  <\definition>
+    <label|defn-grandpa-beefy-signed-commitment>A signed commitment,
+    <math|M<rsub|bfy>>, is a datastructure of the following format:
 
-  <\itemize-dot>
-    <item><math|M<rsub|mr>> is the MMR root of all the block header hashes
-    leading up to the latest, finalized block.
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M<rsub|bfy>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,S<rsub|n>|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|R,B<rsub|n>,id<rsub|\<bbb-V\>>|)>>>|<row|<cell|S<rsub|n>>|<cell|=>|<cell|<around*|(|V<rsup|sig><rsub|0>,\<ldots\>,V<rsup|sig><rsub|n>|)>>>>>
+    </eqnarray*>
 
-    <item><math|B<rsub|n>> is the block number this commitment is for, namely
-    the latest, finalized block.
+    where
 
-    <item><math|id<rsub|\<bbb-V\>>> is the current authority set Id as
-    defined in Definition <reference|defn-authority-set-id>.
+    <\itemize-dot>
+      <item><math|C> is the commitment as defined in Definition
+      <reference|defn-grandpa-beefy-commitment>.
 
-    <item><math|S<rsub|n>> is an array where its exact size matches the
-    number of validators in the current authority set as specified in
-    <math|id<rsub|\<bbb-V\>>>. Individual items are of the type
-    <verbatim|Option> as defined in Definition <todo|TODO> which can contain
-    a signature of the same statement of a validator which is active in the
-    current authority set. It's critical that the signatures are sorted based
-    on their corresponding public key entry in the authority set.
+      <item><math|S<rsub|n>> is an array where its exact size matches the
+      number of validators in the current authority set as specified in
+      <math|id<rsub|\<bbb-V\>>>. Individual items are of the type
+      <verbatim|Option> as defined in Definition <todo|TODO> which can
+      contain a signature of a validator which signed the same statement and
+      is active in the current authority set. It's critical that the
+      signatures are sorted based on their corresponding public key entry in
+      the authority set.
 
-    See Section <todo|TODO> which explains this behavior in more detail.
-  </itemize-dot>
+      For example, the signature of the validator at index 3 in the authority
+      set must be placed at index 3 in <math|S<rsub|n>>. If not signature is
+      available for that validator, then the <verbatim|Option> variant
+      <verbatim|None> is inserted. This sorting allows clients to map public
+      keys to their corresponding signatures.
+
+      See Section <todo|TODO> which explains this behavior in more detail.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    A signed commitment witness, <math|M<rsup|w><rsub|bfy>>, is a light
+    version of the signed commitment as defined in Definition
+    <reference|defn-grandpa-beefy-signed-commitment>. Instead of containing
+    the entire list of signatures, it only claims which validator signed the
+    statement.
+
+    The message is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M<rsup|w><rsub|bfy>>|<cell|=>|<cell|<around*|(|C,V<rsub|n>,R|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|C> is the commitment as defined in Definition
+      <reference|defn-grandpa-beefy-commitment>.
+    </itemize-dot>
+  </definition>
 
   <\with|par-mode|right>
     <qed>
