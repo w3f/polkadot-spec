@@ -2039,6 +2039,62 @@
     <qed>
   </with>
 
+  <section|Bridge design (BEEFY)>
+
+  The BEEFY (Bridge Effiency Enabling Finality Yielder) is a secondary
+  protocol to GRANDPA to support efficient bridging between the Polkadot
+  network (relay chain) and remote, segregated blockchains, such as Ethereum,
+  which were not built with the Polkadot interchain operability in mind. The
+  protocol allows participants of the remote network to verify finality
+  proofs created by the Polkadot relay chain validators by reading on chain
+  data and vice versa. In other words: clients in the Ethereum network should
+  able to verify that the Polkadot network is at a specific state, and the
+  other way around.
+
+  \;
+
+  Storing all the information necessary to verify the state of the remote
+  chain, such as the block headers, is too expensive. BEEFY only stores the
+  merkle proofs of the block header hashes.
+
+  \;
+
+  <subsubsection|Preliminaries>
+
+  <\definition>
+    The statement, <text|<math|<text|<strong|S>>>>, is the same piece of
+    information which every relay chain validator is voting on. Namely, the
+    MMR of all the block header hashes leading up to the latest, finalized
+    block. The Polkadot Host uses ECDSA for signing the statement, since
+    Ethereum has easier compatibility for it. <todo|how does one map the
+    validator set keys to the corresponding ECDSA keys?>
+  </definition>
+
+  <\definition>
+    A light client, <text|<math|<text|<strong|L<rsub|c>><strong|>>>>, is an
+    abstract entity in a remote network such as Ethereum. It can be a node or
+    a smart contract with the intent of requesting finality proofs from the
+    Polkadot network.
+  </definition>
+
+  <\definition>
+    A relayer (or \Pprover\Q), <text-dots>, is an abstract entity which takes
+    finality proofs from the Polkadot network and makes those available to
+    the light clients and vice versa. Inherently, the relayer tries to
+    convince the light clients that the finality proofs have been voted for
+    by the Polkadot relay chain validators. The relayer operates offchain and
+    can for example be a node or a collection of nodes.
+
+    \;
+
+    How the finality proofs are forwarded to light clients depends on the
+    nature of the bridge. On Ethereum, for example, the relayer could call a
+    smart contract which saves the data on-chain and light clients can fetch
+    this data. A critical requirement is that the light clients can verify
+    the validity of the finality proofs themselves without having to trust
+    the relayer. The relayer essentially just moves information around.
+  </definition>
+
   \;
 
 </body>
