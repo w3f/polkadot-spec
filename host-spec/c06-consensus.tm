@@ -2051,9 +2051,7 @@
   chain, such as the block headers, is too expensive. BEEFY only stores the
   merkle proofs of the block header hashes.
 
-  \;
-
-  <subsubsection|Preliminaries>
+  <subsection|Preliminaries>
 
   <\definition>
     The statement, <text|<math|<text|<strong|S>>>>, is the same piece of
@@ -2073,9 +2071,9 @@
   </definition>
 
   <\definition>
-    A relayer (or \Pprover\Q), <text-dots>, is an abstract entity which takes
-    finality proofs from the Polkadot network and makes those available to
-    the light clients and vice versa. Inherently, the relayer tries to
+    A relayer (or \Pprover\Q), <math|R<rsub|>>, is an abstract entity which
+    takes finality proofs from the Polkadot network and makes those available
+    to the light clients and vice versa. Inherently, the relayer tries to
     convince the light clients that the finality proofs have been voted for
     by the Polkadot relay chain validators. The relayer operates offchain and
     can for example be a node or a collection of nodes.
@@ -2083,12 +2081,18 @@
     \;
 
     How the finality proofs are forwarded to light clients depends on the
-    nature of the bridge. On Ethereum, for example, the relayer could call a
-    smart contract which saves the data on-chain and light clients can fetch
-    this data. A critical requirement is that the light clients can verify
-    the validity of the finality proofs themselves without having to trust
-    the relayer. The relayer essentially just moves information around.
+    bridge. On Ethereum, for example, the relayer could call a smart contract
+    which saves the data on-chain and light clients can fetch this data. A
+    critical requirement is that the light clients can verify the validity of
+    the finality proofs themselves without having to trust the relayer. The
+    relayer essentially just moves information around.
   </definition>
+
+  <subsection|Signing statements>
+
+  The Polkadot Host must create a signed statement as defined in Definition X
+  for every new, finalized block it's aware of. Once the Host decides to
+  start creating a new statement, it must collect all signatures\ 
 
   \;
 

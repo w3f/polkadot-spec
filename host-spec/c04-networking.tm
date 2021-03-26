@@ -743,14 +743,14 @@
     C is a datastructe of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|R,B<rsub|n>,id<rsub|\<bbb-V\>>|)>>>>>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|R<rsub|h>,B<rsub|n>,id<rsub|\<bbb-V\>>|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|R> is the MMR root of all the block header hashes leading
-      up to the latest, finalized block.
+      <item><math|R<rsub|h>> is the MMR root of all the block header hashes
+      leading up to the latest, finalized block.
 
       <item><math|B<rsub|n>> is the block number this commitment is for.
       Namely the latest, finalized block.
@@ -761,11 +761,35 @@
   </definition>
 
   <\definition>
-    <label|defn-grandpa-beefy-signed-commitment>A signed commitment,
-    <math|M<rsub|bfy>>, is a datastructure of the following format:
+    A vote message, <math|M<rsub|v>>, is direct vote created by the Polkadot
+    Host on every BEEFY round and is gossiped to its peers. The message is a
+    datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsub|bfy>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,S<rsub|n>|)>>>|<row|<cell|S<rsub|n>>|<cell|=>|<cell|<around*|(|V<rsup|sig><rsub|0>,\<ldots\>,V<rsup|sig><rsub|n>|)>>>>>
+      <tformat|<table|<row|<cell|M<rsub|v>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,A<rsup|bfy><rsub|id>,A<rsub|sig><rsub|>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item>C is the commitment as defined in Definition
+      <reference|defn-grandpa-beefy-commitment>.
+
+      <item><math|A<rsup|bfy><rsub|id>> is the ECDSA public key of the
+      Polkadot Host.
+
+      <item><math|A<rsub|sig>> is the signature created with
+      <math|A<rsup|bfy><rsub|id>> by signing the statement <math|R<rsub|h>>
+      in <math|C>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|defn-grandpa-beefy-signed-commitment>A signed commitment,
+    <math|M<rsub|sc>>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M<rsub|sc>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,S<rsub|n>|)>>>|<row|<cell|S<rsub|n>>|<cell|=>|<cell|<around*|(|A<rsup|sig><rsub|0>,\<ldots\>,A<rsup|sig><rsub|n>|)>>>>>
     </eqnarray*>
 
     where
@@ -778,10 +802,10 @@
       number of validators in the current authority set as specified by
       <math|id<rsub|\<bbb-V\>>> in <math|C>. Individual items are of the type
       <verbatim|Option> as defined in Definition <todo|TODO> which can
-      contain a signature of a validator which signed the same statement and
-      is active in the current authority set. It's critical that the
-      signatures are sorted based on their corresponding public key entry in
-      the authority set.
+      contain a signature of a validator which signed the same statement
+      (<math|R<rsub|h>> in <math|C>) and is active in the current authority
+      set. It's critical that the signatures are sorted based on their
+      corresponding public key entry in the authority set.
 
       For example, the signature of the validator at index 3 in the authority
       set must be placed at index 3 in <math|S<rsub|n>>. If not signature is
@@ -792,7 +816,7 @@
   </definition>
 
   <\definition>
-    A signed commitment witness, <math|M<rsup|w><rsub|bfy>>, is a light
+    A signed commitment witness, <math|M<rsup|w><rsub|sc>>, is a light
     version of the signed commitment as defined in Definition
     <reference|defn-grandpa-beefy-signed-commitment>. Instead of containing
     the entire list of signatures, it only claims which validator signed the
@@ -801,7 +825,7 @@
     The message is a datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsup|w><rsub|bfy>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,V<rsub|n>,R|)>>>>>
+      <tformat|<table|<row|<cell|M<rsup|w><rsub|sc>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,V<rsub|n>,R<rsub|sig>|)>>>>>
     </eqnarray*>
 
     where
@@ -822,17 +846,20 @@
       sorting allows clients to map public keys to their corresponding
       boolean indicators.
 
-      <item><math|R> is the MMR of the signatures in the original signed
-      commitment as defined in Definition
+      <item><math|R<rsub|sig>> is the MMR root of the signatures in the
+      original signed commitment as defined in Definition
       <reference|defn-grandpa-beefy-signed-commitment>.
     </itemize-dot>
   </definition>
+
+  \;
 
   <\with|par-mode|right>
     <qed>
   </with>
 
   \;
+
 </body>
 
 <\initial>
