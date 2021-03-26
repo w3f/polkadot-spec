@@ -765,7 +765,7 @@
     <math|M<rsub|bfy>>, is a datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsub|bfy>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,S<rsub|n>|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|R,B<rsub|n>,id<rsub|\<bbb-V\>>|)>>>|<row|<cell|S<rsub|n>>|<cell|=>|<cell|<around*|(|V<rsup|sig><rsub|0>,\<ldots\>,V<rsup|sig><rsub|n>|)>>>>>
+      <tformat|<table|<row|<cell|M<rsub|bfy>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,S<rsub|n>|)>>>|<row|<cell|S<rsub|n>>|<cell|=>|<cell|<around*|(|V<rsup|sig><rsub|0>,\<ldots\>,V<rsup|sig><rsub|n>|)>>>>>
     </eqnarray*>
 
     where
@@ -775,8 +775,8 @@
       <reference|defn-grandpa-beefy-commitment>.
 
       <item><math|S<rsub|n>> is an array where its exact size matches the
-      number of validators in the current authority set as specified in
-      <math|id<rsub|\<bbb-V\>>>. Individual items are of the type
+      number of validators in the current authority set as specified by
+      <math|id<rsub|\<bbb-V\>>> in <math|C>. Individual items are of the type
       <verbatim|Option> as defined in Definition <todo|TODO> which can
       contain a signature of a validator which signed the same statement and
       is active in the current authority set. It's critical that the
@@ -788,8 +788,6 @@
       available for that validator, then the <verbatim|Option> variant
       <verbatim|None> is inserted. This sorting allows clients to map public
       keys to their corresponding signatures.
-
-      See Section <todo|TODO> which explains this behavior in more detail.
     </itemize-dot>
   </definition>
 
@@ -803,7 +801,7 @@
     The message is a datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsup|w><rsub|bfy>>|<cell|=>|<cell|<around*|(|C,V<rsub|n>,R|)>>>>>
+      <tformat|<table|<row|<cell|M<rsup|w><rsub|bfy>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,V<rsub|n>,R|)>>>>>
     </eqnarray*>
 
     where
@@ -811,6 +809,18 @@
     <\itemize-dot>
       <item><math|C> is the commitment as defined in Definition
       <reference|defn-grandpa-beefy-commitment>.
+
+      <item><math|V<rsub|n>> is an array where its exact size matches the
+      number of validators in the current authority set as specified by
+      <math|id<rsub|\<bbb-V\>>> in <math|C>. Individual items are booleans
+      which indicate whether the validator has signed the statement (true) or
+      not (false). It's critical that the boolean indicators are sorted based
+      on their corresponding public key entry in the authority set.
+
+      For example, the boolean indicator of the validator at index 3 in the
+      authority set must be placed at index 3 in <math|V<rsub|n>>. This
+      sorting allows clients to map public keys to their corresponding
+      boolean indicators.
     </itemize-dot>
   </definition>
 
