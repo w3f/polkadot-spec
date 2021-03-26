@@ -821,6 +821,10 @@
       authority set must be placed at index 3 in <math|V<rsub|n>>. This
       sorting allows clients to map public keys to their corresponding
       boolean indicators.
+
+      <item><math|R> is the MMR of the signatures in the original signed
+      commitment as defined in Definition
+      <reference|defn-grandpa-beefy-signed-commitment>.
     </itemize-dot>
   </definition>
 
