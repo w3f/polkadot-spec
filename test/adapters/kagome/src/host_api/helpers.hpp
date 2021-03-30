@@ -38,8 +38,8 @@ namespace helpers {
   using kagome::common::Buffer;
   using MaybeBuffer = boost::optional<Buffer>;
 
-  using kagome::runtime::binaryen::RuntimeManager;
   using kagome::runtime::binaryen::RuntimeApi;
+  using kagome::runtime::binaryen::RuntimeEnvironmentFactory;
 
   using kagome::blockchain::KeyValueBlockHeaderRepository;
 
@@ -53,7 +53,9 @@ namespace helpers {
       template <typename R, typename... Args>
       R execute(std::string_view name, Args &&... args) {
         auto result = runtime_->execute<R>(
-          name, RuntimeApi::CallPersistency::PERSISTENT, std::forward<Args>(args)...
+          name,
+          RuntimeApi::CallConfig{.persistency = RuntimeApi::CallPersistency::PERSISTENT},
+          std::forward<Args>(args)...
         );
 
         BOOST_ASSERT_MSG(result, result.error().message().data());
@@ -61,14 +63,7 @@ namespace helpers {
         return result.value();
       }
 
-      std::shared_ptr<kagome::runtime::binaryen::RuntimeManager> getRuntimeManager();
-
     private:
-      std::shared_ptr<KeyValueBlockHeaderRepository> repo_;
-
-      // Runtime environment manager
-      std::shared_ptr<RuntimeManager> runtime_manager_;
-
       // Overwrite to get access to protected function
       struct RawRuntimeApi : public RuntimeApi {
         using RuntimeApi::RuntimeApi;

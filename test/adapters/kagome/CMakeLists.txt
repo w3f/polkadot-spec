@@ -73,6 +73,7 @@ target_link_libraries(kagome-adapter
   Boost::program_options
   yaml-cpp
   ${kagome_LIBRARIES}
+  kagome::binaryen_wasm_memory_factory
 )
 
 
