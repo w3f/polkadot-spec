@@ -2041,58 +2041,91 @@
   which were not built with the Polkadot interchain operability in mind. The
   protocol allows participants of the remote network to verify finality
   proofs created by the Polkadot relay chain validators by reading on chain
-  data and vice versa. In other words: clients in the Ethereum network should
-  able to verify that the Polkadot network is at a specific state, and the
-  other way around.
+  data. In other words: clients in the Ethereum network should able to verify
+  that the Polkadot network is at a specific state.
 
   \;
 
   Storing all the information necessary to verify the state of the remote
-  chain, such as the block headers, is too expensive. BEEFY only stores the
-  merkle proofs of the block header hashes.
+  chain, such as the block headers, is too expensive. BEEFY stores the
+  information in a space-efficient way and clients can request additional
+  information over the protocol.
 
   <subsection|Preliminaries>
 
   <\definition>
-    The statement, <text|<math|<text|<strong|S>>>>, is the same piece of
-    information which every relay chain validator is voting on. Namely, the
-    MMR root of all the block header hashes leading up to the latest,
-    finalized block. The validator sends this signed statement to the relayer
-    on every new, finalized block. The Polkadot Host uses ECDSA for signing
-    the statement, since Ethereum has easier compatibility for it. <todo|how
-    does one map the validator set keys to the corresponding ECDSA keys?>
+    Merkle Mountain Ranges, MMR, as defined in Definition <todo|TODO> are
+    used as an efficient way to communicate block headers and signatures to
+    light clients.
+  </definition>
+
+  <\definition>
+    <label|defn-beefy-statement>The statement,
+    <text|<math|<text|<strong|S>>>>, is the same piece of information which
+    every relay chain validator is voting on. Namely, the MMR root of all the
+    block header hashes leading up to the latest, finalized block.
+  </definition>
+
+  <\definition>
+    <label|defn-beefy-witness-data>Witness data,
+    <math|<text|<strong|W<rsub|d>>>>, contains the statement, <math|S>, an
+    array indicating which validator of the Polkadot network voted for the
+    statement (but not the signatures themselves) and an MMR root of the
+    signatures. The network message is defined in Definition
+    <reference|defn-grandpa-beefy-signed-commitment-witness> and the relayer
+    saves it on the chain of the remote network.
   </definition>
 
   <\definition>
     A light client, <text|<math|<text|<strong|L<rsub|c>><strong|>>>>, is an
     abstract entity in a remote network such as Ethereum. It can be a node or
     a smart contract with the intent of requesting finality proofs from the
-    Polkadot network.
-  </definition>
-
-  <\definition>
-    A relayer (or \Pprover\Q), <math|R<rsub|>>, is an abstract entity which
-    takes finality proofs from the Polkadot network and makes those available
-    to the light clients and vice versa. Inherently, the relayer tries to
-    convince the light clients that the finality proofs have been voted for
-    by the Polkadot relay chain validators. The relayer operates offchain and
-    can for example be a node or a collection of nodes.
+    Polkadot network. A light client reads the witness data <math|W<rsub|d>>
+    from the chain, then requests the signatures directly from the relayer in
+    order to verify those.
 
     \;
 
-    How the finality proofs are forwarded to light clients depends on the
-    bridge. On Ethereum, for example, the relayer could call a smart contract
-    which saves the data on-chain and light clients can fetch this data. A
-    critical requirement is that the light clients can verify the validity of
-    the finality proofs themselves without having to trust the relayer. The
-    relayer essentially just moves information around.
+    The light client is expected to know who the validators are and has
+    access to their public keys.
   </definition>
 
-  <subsection|Signing statements>
+  <\definition>
+    <label|defn-beefy-relayer>A relayer (or \Pprover\Q), <math|R<rsub|>>, is
+    an abstract entity which takes finality proofs from the Polkadot network
+    and makes those available to the light clients. Inherently, the relayer
+    tries to convince the light clients that the finality proofs have been
+    voted for by the Polkadot relay chain validators. The relayer operates
+    offchain and can for example be a node or a collection of nodes.
+  </definition>
 
-  The Polkadot Host must create a signed statement as defined in Definition X
-  for every new, finalized block it's aware of. Once the Host decides to
-  start creating a new statement, it must collect all signatures\ 
+  <subsection|Voting on Statements>
+
+  The Polkadot Host signs a statement as defined in Definition
+  <reference|defn-beefy-statement> and gossips it as part of a vote as
+  defined in Definition <reference|defn-msg-beefy-gossip> to its peers on
+  every new, finalized block. The Polkadot Host uses ECDSA for signing the
+  statement, since Ethereum has easier compatibility for it. <todo|how does
+  one map the validator set keys to the corresponding ECDSA keys?>
+
+  <subsection|Committing Witnesses>
+
+  The relayer as defined in Definition <reference|defn-beefy-relayer>
+  participats in the Polkadot network by collecting the gossiped votes as
+  defined in Definition <reference|defn-msg-beefy-gossip>. Those votes are
+  converted into the witness data structure as defined in Definition
+  <reference|defn-beefy-witness-data>. and saved on the chain of the remote
+  network. The occurrence of saving witnesses on remote networks is
+  undefined.
+
+  \;
+
+  How the finality proofs are forwarded to light clients depends on the
+  bridge. On Ethereum, for example, the relayer could call a smart contract
+  which saves the witness data on-chain and light clients can fetch this
+  data. A critical requirement is that the light clients can verify the
+  validity of the finality proofs themselves without having to trust the
+  relayer. The relayer essentially just moves information around.
 
   \;
 
