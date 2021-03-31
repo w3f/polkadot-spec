@@ -701,16 +701,8 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>An array of variying size containg tuple pairs of the following
-    format:
-
-    <\equation*>
-      <around*|(|A<rsub|id>,w|)>
-    </equation*>
-
-    where <math|A<rsub|id>> is the 256-bit public key of an authority and
-    <math|w> is a unsigned 64-bit integer representing the weight of an
-    authority. <todo|what does this weight indicate?>
+    <item>An authority list as defined in Definition
+    <reference|defn-authority-list>.
   </itemize-dot>
 
   <subsubsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>
@@ -910,16 +902,8 @@
       <item><math|d> is a unsigned 64-bit integer representing the duration
       of the epoch.
 
-      <item><math|A> is an array of varying size containing tuple pairs of
-      the following format:
-
-      <\equation*>
-        <around*|(|A<rsub|id>,w|)>
-      </equation*>
-
-      where <math|A<rsub|id>> is the 256-bit public key of an authority and
-      <math|w> is a unsigned 64-bit integer representing the weight of an
-      authority. <todo|what does this weight indicate?>
+      <item><math|A> is an authority list as defined in Definition
+      <reference|defn-authority-list>.
 
       <item><math|r> is an 256-bit array containing the randomness for the
       epoch as defined in Definition <reference|defn-epoch-randomness>.
