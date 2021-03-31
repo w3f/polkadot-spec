@@ -289,8 +289,7 @@
     allows the Polkadot Host to perform information about blocks. This is a
     <em|Request-Response substream>.
 
-    The messages are specified in Section
-    <reference|sect-msg-block-request>.
+    The messages are specified in Section <reference|sect-msg-block-request>.
 
     <item><verbatim|/dot/transactions/1> - a substream/notification protocol
     which sends transactions to connected peers. This is a <em|Notification
@@ -513,6 +512,41 @@
     Transactions are sent over the <verbatim|/dot/transactions/1> substream.
   </definition>
 
+  <subsubsection|BABE Equivocation Proof><label|sect-babe-equivocation-proof>
+
+  A BABE equivocation occurs when a validator produces more than one block at
+  the same slot. The proof of equivocation are the given distinct headers
+  that were signed by the validator and which include the slot number. The
+  Polkadot Host is expected to identify equivocators and report those to the
+  Runtime as described in Section <reference|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>.
+
+  A BABE equivocation proof is datastructure of the following format:
+
+  <\eqnarray*>
+    <tformat|<table|<row|<cell|B<rsub|Ep>>|<cell|=>|<cell|<around*|(|A<rsub|id>,s,h<rsub|1>,h<rsub|2>|)>>>>>
+  </eqnarray*>
+
+  where
+
+  <\itemize-dot>
+    <item><math|A<rsub|id>> is the public key of the equivocator.
+
+    <item><math|s> is the slot as described in Section <reference|sect-babe>
+    at which the equivocation occurred.
+
+    <item><math|h<rsub|1>> is the block header of the first block produced by
+    the equivocator.
+
+    <item><math|h<rsub|2>> is the block header of the second block produced
+    by the equivocator.
+  </itemize-dot>
+
+  If there are more than two blocks which cause an equivocation, the
+  equivocation only needs to be reported once i.e. no additional
+  equivocations must be reported for the same slot. Unlike during block
+  execution, the Seal in both block headers is not removed before submission.
+  The block headers are submitted in its full form.
+
   <subsubsection|GRANDPA Votes><label|sect-msg-grandpa>
 
   The exchange of GRANDPA messages is conducted on the
@@ -565,41 +599,6 @@
     <item><math|A<rsup|2><rsub|sig>> is the equivocators signature of the
     second vote.
   </itemize-dot>
-
-  <subsubsection|BABE Equivocation Proof><label|sect-babe-equivocation-proof>
-
-  A BABE equivocation occurs when a validator produces more than one block at
-  the same slot. The proof of equivocation are the given distinct headers
-  that were signed by the validator and which include the slot number. The
-  Polkadot Host is expected to identify equivocators and report those to the
-  Runtime as described in Section <reference|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>.
-
-  A BABE equivocation proof is datastructure of the following format:
-
-  <\eqnarray*>
-    <tformat|<table|<row|<cell|B<rsub|Ep>>|<cell|=>|<cell|<around*|(|A<rsub|id>,s,h<rsub|1>,h<rsub|2>|)>>>>>
-  </eqnarray*>
-
-  where
-
-  <\itemize-dot>
-    <item><math|A<rsub|id>> is the public key of the equivocator.
-
-    <item><math|s> is the slot as described in Section <reference|sect-babe>
-    at which the equivocation occurred.
-
-    <item><math|h<rsub|1>> is the block header of the first block produced by
-    the equivocator.
-
-    <item><math|h<rsub|2>> is the block header of the second block produced
-    by the equivocator.
-  </itemize-dot>
-
-  If there are more than two blocks which cause an equivocation, the
-  equivocation only needs to be reported once i.e. no additional
-  equivocations must be reported for the same slot. Unlike during block
-  execution, the Seal in both block headers is not removed before submission.
-  The block headers are submitted in its full form.
 
   \;
 
