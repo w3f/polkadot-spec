@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|1.99.19>
 
 <project|host-spec.tm>
 
@@ -8,26 +8,26 @@
   <chapter|Consensus><label|chap-consensu>
 
   Consensus in the Polkadot Host is achieved during the execution of two
-  different procedures. The first procedure is block production and the
-  second is finality. The Polkadot Host must run these procedures, if and
-  only if it is running on a validator node.
+  different procedures. The first procedure is the block-production and the
+  second is finality. The Polkadot Host must run these procedures if (and
+  only if) it is running on a validator node.
 
   <section|Common Consensus Structures>
 
   <subsection|Consensus Authority Set><label|sect-authority-set>
 
-  Because Polkadot is a proof-of-stake protocol, each of its consensus engines
-  has its own set of nodes, represented by known public keys which have the
-  authority to influence the protocol in pre-defined ways explained in this
-  section. In order to verifiy the validity of each block, Polkadot node must
-  track the current list of authorities for that block as formalised in
+  Because Polkadot is a proof-of-stake protocol, each of its consensus
+  engines has its own set of nodes represented by known public keys, which
+  have the authority to influence the protocol in pre-defined ways explained
+  in this Section. To verify the validity of each block, the Polkadot node
+  must track the current list of authorities for that block as formalized in
   Definition <reference|defn-authority-list>
 
   <\definition>
     <label|defn-authority-list>The <strong|authority list> of block
     <math|<math-it|B>> for consensus engine <math|C> noted as
-    <strong|<math|Auth<rsub|C><around*|(|B|)>>> is an array which contains
-    the following pair of types for each of it authorities
+    <strong|<math|Auth<rsub|C><around*|(|B|)>>> is an array that contains the
+    following pair of types for each of its authorities
     <math|A\<in\>Auth<rsub|C><around*|(|B|)> >:
 
     <\equation*>
@@ -40,7 +40,7 @@
     <math|Auth<rsub|C><around*|(|B|)>> is part of the Polkadot state. The
     value for <math|Auth<rsub|C><around*|(|B<rsub|0>|)>> is set in the
     genesis state (see Section <reference|sect-genesis-block>) and can be
-    retrieved using a runtime entery corresponding to consensus engine
+    retrieved using a runtime entry corresponding to consensus engine
     <math|C>.
   </definition>
 
@@ -58,15 +58,15 @@
   of the Polkadot state and the Runtime has the authority to update this list
   in the course of any state transitions. The Runtime informs the
   corresponding consensus engine about the changes in the authority set by
-  adding the appropiate consensus message as defined in Definition
-  <reference|defn-consensus-message-digest>, in form of a digest item to the
-  block header of the block <math|B> which caused the transition in the
+  adding the appropriate consensus message as defined in Definition
+  <reference|defn-consensus-message-digest>, in the form of a digest item to
+  the block header of block <math|B> which caused the transition in the
   authority set.\ 
 
   <\definition>
-    <label|defn-consensus-message-digest> Consensus Message is digest item of
-    type 4 as defined in Definition <reference|defn-digest> and consists of
-    the pair:
+    <label|defn-consensus-message-digest> Consensus Message is a digest item
+    of type 4 as defined in Definition <reference|defn-digest> and consists
+    of the pair:
 
     <\equation*>
       <around*|(|E<rsub|id>,CM|)>
@@ -79,13 +79,13 @@
 
     <\equation*>
       E<rsub|id>\<assign\><around*|{|<tabular*|<tformat|<table|<row|<cell|<rprime|''>BABE<rprime|''>>|<cell|>|<cell|For
-      messages related to BABE protocol refered to as
+      messages related to BABE protocol referred to as
       E<rsub|id><around*|(|BABE|)>>>|<row|<cell|<rprime|''>FRNK<rprime|''>>|<cell|>|<cell|For
       messages related to GRANDPA protocol referred to as
       E<rsub|id><around*|(|FRNK|)>>>>>>|\<nobracket\>>
     </equation*>
 
-    and CM is of varying data type which can hold one of the type described
+    and CM is of varying data type which can hold one of the types described
     in Table <reference|tabl-consensus-messages-babe> or
     <reference|tabl-consensus-messages-grandpa>:
 
@@ -114,12 +114,12 @@
 
       <item><math|c> is the probability that a slot will not be empty, as
       defined in definition <reference|defn-babe-constant>. It is encoded as
-      a tuple of two unsigned 64 bit integers
+      a tuple of two unsigned 64-bit integers
       <math|<around*|(|c<rsub|nominator>,c<rsub|denominator>|)>> which are
       used to compute the rational <math|c=<frac|c<rsub|nominator>|c<rsub|denominator>>>.
 
-      <item><math|s<rsub|2nd>> is the the second slot configuration encoded
-      as a 8-bit enum.\ 
+      <item><math|s<rsub|2nd>> is the second slot configuration encoded as an
+      8-bit enum.\ 
     </itemize-minus>
 
     <\center>
@@ -146,7 +146,7 @@
       a path graph. The last block in that subchain, <math|B<rprime|'>>,
       depending on the message type, is either finalized or imported (and
       therefore validated by the block production consensus engine according
-      to Algorithm <reference|algo-import-and-validate-block>. see below for
+      to Algorithm <reference|algo-import-and-validate-block>. See below for
       details).
 
       <item><math|Auth<rsub|ID>> is an unsigned 64-bit integer pointing to an
@@ -155,23 +155,23 @@
   </definition>
 
   The Polkadot Host should inspect the digest header of each block and
-  delegate consesus messages to their consensus engines.
+  delegate consensus messages to their consensus engines.
 
   The BABE consensus engine should react based on the type of consensus
   messages it receives as follows:
 
   <\itemize-minus>
-    <item><with|font-series|bold|Next Epoch Data:> The runtime issues this
+    <item><with|font-series|bold|Next Epoch Data:> The Runtime issues this
     message on every first block of an epoch <math|\<cal-E\><rsub|n>>. The
-    supplied authority set and randomness is intended to be used in next
+    supplied authority set and randomness are intended to be used in the next
     epoch <math|\<cal-E\><rsub|n+1>>. \ 
 
     <item><strong|On Disabled>: An index to the individual authority in the
     current authority list that should be immediately disabled until the next
-    authority set change. When an authority gets disabled, the node should
+    authority set changes. When an authority gets disabled, the node should
     stop performing any authority functionality for that authority, including
     authoring blocks. Similarly, other nodes should ignore all messages from
-    the indicated authority which pretain to their authority role.\ 
+    the indicated authority which pertain to their authority role.\ 
 
     <item><with|font-series|bold|Next Config Data:> These messages are only
     issued on configuration change and in the first block of an epoch. The
@@ -188,28 +188,29 @@
     where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is a
     block <em|finalized> by the finality consensus engine. The earliest
     digest of this type in a single block will be respected. No change should
-    be scheduled if one is already and the delay has not passed completely.
-    If such an inconsitency occures, the scheduled change should be ignored.
+    be scheduled if one is already finalized and the delay has not passed
+    completely. If such an inconsistency occurs, the scheduled change should
+    be ignored.
 
     <item><strong|Forced Change>: Force an authority set change after the
     given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
     where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is an
-    <em|imported> block which has been validated by the block production
-    conensus engine. Hence, the authority change set is valid for every
-    subchain which contains <em|B> and where the delay has been exceeded. If
-    one or more blocks gets finalized before the change takes effect, the
+    <em|imported> block that has been validated by the block production
+    consensus engine. Hence, the authority changeset is valid for every
+    subchain containing <em|B> and where the delay has been exceeded. If one
+    or more blocks gets finalized before the change takes effect, the
     authority set change should be disregarded. The earliest digest of this
     type in a single block will be respected. No change should be scheduled
-    if one is already and the delay has not passed completely. If such an
-    inconsitency occures, the scheduled change should be ignored.
+    if one is already finalized and the delay has not passed completely. If
+    such an inconsistency occurs, the scheduled change should be ignored.
 
     <item><strong|On Disabled>: An index to the individual authority in the
     current authority list that should be immediately disabled until the next
-    authority set change. When an authority gets disabled, the node should
+    authority set changes. When an authority gets disabled, the node should
     stop performing any authority functionality from that authority,
     including authoring blocks and casting GRANDPA votes for finalization.
     Similarly, other nodes should ignore all messages from the indicated
-    authority which pretain to their authority role.\ 
+    authority which pertain to their authority role.\ 
 
     <item><strong|Pause>: A signal to pause the current authority set after
     the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
@@ -221,13 +222,13 @@
     the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
     where <math|B<rprime|'>> in the definition of <math|N<rsub|delay>>, is an
     <em|imported> block and validated by the block production consensus
-    engine. After authoring the block <math|B<rprime|'>>, the authorities
-    should resume voting.
+    engine. After authoring block <math|B<rprime|'>>, the authorities should
+    resume voting.
   </itemize-minus>
 
-  The active GRANDPA authorities can only vote for blocks that occured after
+  The active GRANDPA authorities can only vote for blocks that occurred after
   the finalized block in which they were selected. Any votes for blocks
-  before the <verbatim|Scheduled Change> came into effect get rejected.
+  before the <verbatim|Scheduled Change> came into effect would get rejected.
 
   <section|Block Production><label|sect-babe><label|sect-block-production>
 
@@ -242,7 +243,7 @@
   other block producers. In turn, the block producer node should keep a copy
   of the block tree and grow it as it receives valid blocks from other block
   producers. A block producer prunes the tree in parallel by eliminating
-  branches which do not include the most recent finalized blocks according to
+  branches that do not include the most recent finalized blocks according to
   Definition <reference|defn-pruned-tree>.
 
   <subsection|Preliminaries>
@@ -250,7 +251,7 @@
   <\definition>
     A <strong|block producer>, noted by <math|\<cal-P\><rsub|j>>, is a node
     running the Polkadot Host which is authorized to keep a transaction queue
-    and which gets a turn in producing blocks.
+    and which it gets a turn in producing blocks.
   </definition>
 
   <\definition>
@@ -264,21 +265,21 @@
 
   <\definition>
     <label|defn-epoch-slot>A block production <strong|epoch>, formally
-    referred to as <math|\<cal-E\>>, is a period with pre-known starting time
-    and fixed length during which the set of block producers stays constant.
-    Epochs are indexed sequentially, and we refer to the <math|n<rsup|th>>
-    epoch since genesis by <math|\<cal-E\><rsub|n>>. Each epoch is divided
-    into <math|>equal length periods known as block production
-    <strong|slots>, sequentially indexed in each epoch. The index of each
-    slot is called <strong|slot number>. The equal length duration of each
-    slot is called the <strong|slot duration> and indicated by
+    referred to as <math|\<cal-E\>>, is a period with a pre-known starting
+    time and fixed-length during which the set of block producers stays
+    constant. Epochs are indexed sequentially, and we refer to the
+    <math|n<rsup|th>> epoch since genesis by <math|\<cal-E\><rsub|n>>. Each
+    epoch is divided into <math|>equal-length periods known as block
+    production <strong|slots>, sequentially indexed in each epoch. The index
+    of each slot is called a <strong|slot number>. The equal length duration
+    of each slot is called the <strong|slot duration> and indicated by
     <math|\<cal-T\>>. Each slot is awarded to a subset of block producers
     during which they are allowed to generate a block.
   </definition>
 
   <\remark>
-    Substrate refers to an epoch as \Psession\Q in some places, however epoch
-    should be the prefered and official name for these periods.
+    Substrate refers to an epoch as \Psession\Q in some places, however,
+    epoch should be the preferred and official name for these periods.
   </remark>
 
   <\notation>
@@ -299,9 +300,9 @@
   <\definition>
     <label|defn-epoch-subchain> By <name|SubChain(<math|\<cal-E\><rsub|n>>)>
     for epoch <math|\<cal-E\><rsub|n>>, we refer to the path graph of
-    <math|BT> which contains all the blocks generated during the slots of
-    epoch <math|\<cal-E\><rsub|n>>. When there is more than one block
-    generated at a slot, we choose the one which is also on
+    <math|BT> containing all the blocks generated during the slots of epoch
+    <math|\<cal-E\><rsub|n>>. When there is more than one block generated at
+    a slot, we choose the one which is also on
     <name|Longest-Chain(<math|BT>)>.
   </definition>
 
@@ -331,15 +332,15 @@
   The babe constant (Definition <reference|defn-babe-constant>) is
   initialized at genesis to the value returned by calling
   <verbatim|BabeApi_configuration> (see <reference|sect-rte-babeapi-epoch>).
-  For efficiency reasons it is generally updated by the runtime through the
+  For efficiency reasons, it is generally updated by the Runtime through the
   \PNext Config Data\Q consensus message (see Definition
   <reference|defn-consensus-message-digest>) in the digest of the first block
   of an epoch for the next epoch.\ 
 
   <\definition>
-    <label|defn-winning-threshold><strong|Winning threshold> denoted by
+    <label|defn-winning-threshold>The <strong|Winning threshold> denoted by
     <strong|<math|\<tau\><rsub|\<varepsilon\><rsub|n>>>> is the threshold
-    which is used alongside with the result of Algorirthm
+    that is used alongside the result of Algorithm
     <reference|algo-block-production-lottery> to decide if a block producer
     is the winner of a specific slot. <math|\<tau\><rsub|\<varepsilon\><rsub|n>>>
     is calculated \ as follows:
@@ -348,7 +349,7 @@
       \<tau\><rsub|\<varepsilon\><rsub|n>>\<assign\>1-<around*|(|1-c|)><rsup|<frac|1|<around*|\||AuthorityDirectory<rsup|\<cal-E\><rsub|n>>|\|>>>
     </equation*>
 
-    where <math|AuthorityDirectory<rsup|\<cal-E\><rsub|n>>> is the set of
+    where the <math|AuthorityDirectory<rsup|\<cal-E\><rsub|n>>> is the set of
     BABE authorities for epoch <math|\<varepsilon\><rsub|n>> and
     <math|c\<in\><around*|(|0,1|)>> is the BABE constant as defined in
     definition <reference|defn-babe-constant>.
@@ -359,14 +360,14 @@
   <reference|algo-block-production-lottery> to identify the slots it is
   awarded. These are the slots during which the block producer is allowed to
   build a block. The <math|sk> is the block producer lottery secret key and
-  <math|n> is the index of epoch for whose slots the block producer is
+  <math|n> is the index of the epoch for whose slots the block producer is
   running the lottery.
 
   <\algorithm>
-    <label|algo-block-production-lottery><name|Block-production-lottery>(<math|sk:>session
-    secret key of the producer,
+    <label|algo-block-production-lottery><name|Block-production-lottery>(<math|sk:>
+    the session secret key of the producer,
 
-    <math|n:>epoch index)
+    <math|n:> the epoch index)
   <|algorithm>
     <\algorithmic>
       <\state>
@@ -407,20 +408,21 @@
     <math|\<cal-E\><rsub|l>>. By <with|font-series|bold|<name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|j>|)>>>
     we refer to the function whose value is equal to the number of slots
     between <math|s<rsub|i>> and <math|s<rsub|j>> (counting <math|s<rsub|j>>)
-    on time continuum. As such, we have <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|i>|)>=0>.
+    on the time continuum. As such, we have
+    <name|Slot-Offset><math|<around*|(|s<rsub|i>,s<rsub|i>|)>=0>.
   </definition>
 
   It is imperative for the security of the network that each block producer
-  correctly determine the current slots number at a given time by regularly
+  correctly determines the current slot numbers at a given time by regularly
   estimating the local clock offset in relation to the network (Definition
   <reference|defn-relative-syncronization>).\ 
 
   <\definition>
     <label|defn-relative-syncronization>The <with|font-series|bold|relative
-    time syncronization> is a tuple of a slot number and local clock
+    time synchronization> is a tuple of a slot number and a local clock
     timestamp <math|<around*|(|s<rsub|sync>, t<rsub|sync>|)>> describing the
-    last point at which slot numbers have been syncronized with the local
-    clock.
+    last point at which the slot numbers have been synchronized with the
+    local clock.
   </definition>
 
   <\algorithm>
@@ -439,43 +441,43 @@
 
   <\note>
     <with|font-series|bold|The calculation described in this section is still
-    to be implemented and deployed.> For now each block producer is required
-    to syncronize its local clock using NTP instead. The current slot
+    to be implemented and deployed.> For now, each block producer is required
+    to synchronize its local clock using NTP instead. The current slot
     <math|s> is then calculated by <math|s<rsub|>=t<rsub|unix>/\<cal-T\>>
-    where <math|t<rsub|unix>> is the current unix time in seconds since
+    where <math|t<rsub|unix>> is the current UNIX time in seconds since
     1970-01-01 00:00:00 UTC. That also entails that slot numbers are
     currently not reset at the beginning of each epoch.\ 
   </note>
 
-  Polkadot does this syncronization without relying on any external clock
+  Polkadot does this synchronization without relying on any external clock
   source (e.g. through the <with|font-shape|italic|Network Time Protocol> or
   the <with|font-shape|italic|Global Positioning System>). To stay in
-  synchronization each producer is therefore required to periodically
+  synchronization, each producer is therefore required to periodically
   estimate its local clock offset in relation to the rest of the network.\ 
 
   This estimation depends on the two fixed parameters
   <with|font-series|bold|<math|k>> (Definition <reference|defn-prunned-best>)
   and <math|<with|font-series|bold|s<rsub|cq>>> (Definition
-  <reference|defn-chain-quality>). These are choosen based on the results of
+  <reference|defn-chain-quality>). These are chosen based on the results of a
   formal security analysis, currently assuming a <math|1 s \ >clock drift per
   day and targeting a probability lower than <math|0.5%> for an adversary to
-  break BABE in 3 years with a resistance against network delay up to
+  break BABE in 3 years with resistance against a network delay up to
   <math|<frac*|1|3>> of the slot time and a Babe constant
-  (Definit<line-break>wion <reference|defn-babe-constant>) of <math|c=0.38>.
+  (Definit<line-break>ion <reference|defn-babe-constant>) of <math|c=0.38>.
 
   <\definition>
-    <label|defn-prunned-best>The <with|font-series|bold|prunned best chain>
+    <label|defn-prunned-best>The <with|font-series|bold|pruned best chain>
     <math|<with|font-series|bold|C<rsup|\<#250C\>k>>> is the longest chain
     selected according to Definition <reference|defn-longest-chain> with the
-    last k Blocks prunned. We choose <math|k=140>. The
+    last k Blocks pruned. We chose <math|k=140>. The
     <with|font-series|bold|last (probabilistically) finalized block>
-    describes the last block in this prunned best chain.
+    describes the last block in this pruned best chain.
   </definition>
 
   <\definition>
     <label|defn-chain-quality>The <with|font-series|bold|chain quality>
     <math|<with|font-series|bold|s<rsub|cq>>> represents the number of slots
-    that are used to estimate the local clock offset. Currently it is set to
+    that are used to estimate the local clock offset. Currently, it is set to
     <math|s<rsub|cq>=3000>.
   </definition>
 
@@ -488,7 +490,7 @@
     <label|defn-block-time>The <strong|block arrival time> of block <math|B>
     for node <math|j> formally represented by
     <strong|<math|T<rsup|j><rsub|B>>> is the local time of<verbatim|> node
-    <math|j> when node <math|j> has received the block <math|B> for the first
+    <math|j> when node <math|j> has received block <math|B> for the first
     time. If the node <math|j> itself is the producer of <math|B>,
     <math|T<rsub|B><rsup|j>> is set equal to the time that the block is
     produced. The index <math|j> in <math|T<rsup|j><rsub|B>> notation may be
@@ -496,23 +498,23 @@
     there is no ambiguity about the underlying node.
   </definition>
 
-  <todo|Currently still lacks a clean definition of when block arrival times
-  are considered valid and how to differentiated imported block on intial
+  <todo|Currently still lacks a clear definition of when block arrival times
+  are considered valid and how to differentiated imported block on initial
   sync from \Pfresh\Q blocks that were just produced.>
 
   <\definition>
-    <label|defn-sync-period>A <with|font-series|bold|sync period> is the
+    <label|defn-sync-period>A <with|font-series|bold|sync period> is an
     interval at which each validator (re-)evaluates its local clock offsets.
     The first sync period <math|\<frak-E\><rsub|1>> starts just after the
-    genesis block is released. Consequently each sync period
+    genesis block is released. Consequently, each sync period
     <math|\<frak-E\><rsub|i>> starts after <math|\<frak-E\><rsub|i-1>>. The
-    length of sync period is equal to <math|s<rsub|qc>> as defined in
-    Definition <reference|defn-chain-quality> and expressed in number of
+    length of the sync period is equal to <math|s<rsub|qc>> as defined in
+    Definition <reference|defn-chain-quality> and expressed in the number of
     slots.
   </definition>
 
   All validators are then required to run Algorithm
-  <reference|algo-slot-time> at beginning of each sync period (Definition
+  <reference|algo-slot-time> at the beginning of each sync period (Definition
   <reference|defn-sync-period>) to update their synchronization using all
   block arrival times of the previous period. The algorithm should only be
   run once all the blocks in this period have been finalized, even if only
@@ -522,7 +524,7 @@
 
   <\algorithm>
     <label|algo-slot-time><name|Median-Algorithm>(<math|\<frak-E\><rsub|j>>:
-    sync period used for estimate, <math|s<rsub|sync>:> slot time to
+    sync period used for the estimate, <math|s<rsub|sync>:> slot time to
     estimate)
   <|algorithm>
     <\algorithmic>
@@ -554,7 +556,7 @@
   <reference|defn-epoch-slot>.
 
   <\big-figure|<image|figures/c06-babe_time_sync.eps|1par|||>>
-    Examplary result of Median Algorithm in first sync epoch with
+    An exemplary result of Median Algorithm in first sync epoch with
     <math|s<rsub|cq>=9> and <math|k=1>.
   </big-figure>
 
@@ -562,14 +564,14 @@
 
   Throughout each epoch, each block producer should run Algorithm
   <reference|algo-block-production> to produce blocks during the slots it has
-  been awarded during that epoch. The produced block needs to carry <em|BABE
-  header> as well as the <em|block signature> as Pre-Runtime and Seal digest
-  items defined in Definition <reference|defn-babe-header> and
+  been awarded during that epoch. The produced block needs to carry the
+  <em|BABE header> as well as the <em|block signature> as Pre-Runtime and
+  Seal digest items defined in Definition <reference|defn-babe-header> and
   <reference|defn-block-signature> respectively.
 
   <\definition>
     <label|defn-babe-header>The <strong|BABE Header> of block B, referred to
-    formally by <strong|<math|H<rsub|BABE><around*|(|B|)>>> is a tuple that
+    formally by <strong|<math|H<rsub|BABE><around*|(|B|)>>> is a tuple and
     consists of the following components:
 
     <\equation*>
@@ -581,9 +583,9 @@
     <\with|par-mode|center>
       <tabular|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|3|3|1|1|cell-halign|r>|<table|<row|<cell|<math|\<pi\>,d>:>|<cell|are
       the results of the block lottery for slot s.
-      >>|<row|<cell|<math|j>:>|<cell|is index of the block producer producing
-      block in the current authority directory of current epoch.
-      >>|<row|<cell|s:>|<cell|is the slot at which the block is
+      >>|<row|<cell|<math|j>:>|<cell|is the index of the block producer
+      producing block in the current authority directory of the current
+      epoch. >>|<row|<cell|s:>|<cell|is the slot at which the block is
       produced.>>>>>
 
       \;
@@ -616,10 +618,10 @@
     in which, <math|E<rsub|id><around*|(|BABE|)>> is the BABE consensus
     engine unique identifier defined in Definition
     <reference|defn-consensus-message-digest>. The Seal digest item is
-    referred to as <strong|BABE Seal>.
-
-    \;
+    referred to as the <strong|BABE Seal>.
   </definition>
+
+  \;
 
   <\algorithm|<label|algo-block-production><verbatim|><name|Invoke-Block-Authoring>(<math|sk>,
   pk, <math|n>, <math|BT:Current Block Tree>)>
@@ -678,18 +680,18 @@
   <subsection|Epoch Randomness><label|sect-epoch-randomness>
 
   <\definition>
-    <label|defn-epoch-randomness>For epoch <math|\<cal-E\>> there is a
+    <label|defn-epoch-randomness>For epoch <math|\<cal-E\>>, there is a
     32-byte <with|font-series|bold|randomness seed>
     <math|\<cal-R\><rsub|\<cal-E\>>> computed based on the previous epochs
     VRF outputs. For <math|\<cal-E\><rsub|0>> and <math|\<cal-E\><rsub|1>>,
     the randomness seed is provided in the genesis state.
   </definition>
 
-  In the beginning of each epoch <math|\<cal-E\><rsub|n>> the host will
+  At the beginning of each epoch, <math|\<cal-E\><rsub|n>> the host will
   receive the randomness seed <math|\<cal-R\><rsub|\<cal-E\><rsub|n+1>>>(Definition
   <reference|defn-epoch-randomness>) necessary to participate in the block
   production lottery in the next epoch <math|\<cal-E\><rsub|n+1>> from the
-  runtime, through the <with|font-shape|italic|Next Epoch Data> consesus
+  Runtime, through the <with|font-shape|italic|Next Epoch Data> consensus
   message (Definition <reference|defn-consensus-message-digest>) in the
   digest of the first block.
 
@@ -792,7 +794,7 @@
     </algorithmic>
   </algorithm>
 
-  Algorithm <reference|algo-verify-slot-winner> is run as a part of the
+  Algorithm <reference|algo-verify-slot-winner> runs as a part of the
   verification process, when a node is importing a block, in which:
 
   <\itemize-minus>
@@ -856,7 +858,7 @@
 
   <\algorithm>
     <label|algo-build-block><name|Build-Block>(<math|C<rsub|Best>>: The chain
-    where at its head, the block to be constructed,
+    is where at its head, the block to be constructed, is
 
     s: Slot number)
   <|algorithm>
@@ -944,7 +946,7 @@
     <item><name|Next-Ready-Extrinsic> indicates picking an extrinsic from the
     extrinsics queue (Definition <reference|defn-transaction-queue>).
 
-    <item><name|Block-Is-Full> indicates that the maximum block size as been
+    <item><name|Block-Is-Full> indicates that the maximum block size is being
     used.
 
     <item><name|Should-Drop> determines based on the result <em|R> whether
@@ -965,28 +967,29 @@
 
   The Polkadot Host uses GRANDPA Finality protocol
   <cite|stewart_grandpa:_2019> to finalize blocks. Finality is obtained by
-  consecutive rounds of voting by validator nodes. Validators execute GRANDPA
-  finality process in parallel to Block Production as an independent service.
-  In this section, we describe the different functions that GRANDPA service
-  performs to successfully participate in the block-finalization process.
+  consecutive rounds of voting by the validator nodes. Validators execute
+  GRANDPA finality process in parallel to Block Production as an independent
+  service. In this section, we describe the different functions that GRANDPA
+  service performs to successfully participate in the block-finalization
+  process.
 
   <subsection|Preliminaries>
 
   <\definition>
-    <label|defn-grandpa-voter>A <strong|GRANDPA Voter>, <math|v>, is
-    represented by a key pair <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>>
-    where <math|k<rsub|v><rsup|pr>> represents its private key which is an
-    <math|ED25519> private key, is a node running GRANDPA protocol and
-    broadcasts votes to finalize blocks in a Polkadot Host-based chain. The
-    <strong|set of all GRANDPA voters> for a given block B is indicated by
-    <math|\<bbb-V\><rsub|B>>. In that regard, we have <todo|change function
-    name, only call at genesis, adjust V_B over the sections>
+    <label|defn-grandpa-voter>A <strong|GRANDPA Voter>, <math|v>, represented
+    by a key pair <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
+    <math|k<rsub|v><rsup|pr>> represents an <math|ED25519> private key, is a
+    node running a GRANDPA protocol and broadcasting votes to finalize blocks
+    in a Polkadot Host-based chain. The <strong|set of all GRANDPA voters>
+    for a given block B is indicated by <math|\<bbb-V\><rsub|B>>. In that
+    regard, we have <todo|change function name, only call at genesis, adjust
+    V_B over the sections>
 
     <\equation*>
       \<bbb-V\><rsub|B>=<text|<verbatim|grandpa_authorities>><around*|(|B|)>
     </equation*>
 
-    where <math|<math-tt|grandpa_authorities>> is the entry into Runtime
+    where <math|<math-tt|grandpa_authorities>> is the entry into the Runtime
     described in Section <reference|sect-rte-grandpa-auth>. We refer to
     <math|\<bbb-V\><rsub|B> > as <math|\<bbb-V\>> when there is no chance of
     ambiguity.
@@ -999,11 +1002,11 @@
   <\definition>
     <label|defn-authority-set-id>The <strong|authority set Id>
     (<math|id<rsub|\<bbb-V\>>>) is an incremental counter which tracks the
-    amount of authority list (Definition <reference|defn-consensus-message-digest>)
-    changes that occurred. Starting with the value of zero at genesis, the
-    Polkadot Host increments this value by one every time a <strong|Scheduled
-    Change> or a <strong|Forced Change> occurs. The authority set Id is an
-    unsigned 64bit integer.
+    amount of authority list changes that occurred (Definition
+    <reference|defn-consensus-message-digest>). Starting with the value of
+    zero at genesis, the Polkadot Host increments this value by one every
+    time a <strong|Scheduled Change> or a <strong|Forced Change> occurs. The
+    authority set Id is an unsigned 64-bit integer.
   </definition>
 
   <\definition>
@@ -1025,7 +1028,7 @@
   </definition>
 
   Following, we need to define how the Polkadot Host counts the number of
-  votes for block <math|B>. First a vote is defined as:
+  votes for block <math|B>. First, a vote is defined as:
 
   <\definition>
     <label|defn-vote>A <strong|GRANDPA vote >or simply a vote for block
@@ -1149,7 +1152,7 @@
   <\definition>
     <label|defn-total-potential-votes>Let
     <math|V<rsup|r,stage><rsub|unobs<around*|(|v|)>>> be the set of voters
-    whose vote in the given stage has not been received.We define the
+    whose vote in the given stage has not been received. We define the
     <strong|total number of potential votes for Block <math|B> in round
     <math|r>> to be:\ 
 
@@ -1170,7 +1173,7 @@
 
   Finally, we define when a voter <math|v> sees a round as completable, that
   is when they are confident that <math|B<rsub|v><rsup|r,pv>> is an upper
-  bound for what is going to be finalised in this round.
+  bound for what is going to be finalized in this round.
 
   <\definition>
     <label|defn-grandpa-completable>We say that round <math|r> is
@@ -1203,7 +1206,7 @@
     <math|r<rsub|last>>: <math|>last round number (See the following),
 
     ,<math|B<rsub|last>>: the last block which has been finalized on the
-    chain (see Definitin <reference|defn-finalized-block>)
+    chain (see Definition <reference|defn-finalized-block>)
 
     )
   <|algorithm>
@@ -1247,11 +1250,11 @@
 
   <subsubsection|Voter Set Changes>
 
-  Voter set changes are signaled by Runtime via a consensus engine message as
-  described in Section <reference|sect-consensus-message-digest>. When
-  Authorities process such messages they must not vote on any block with
+  Voter set changes are signalled by Runtime via a consensus engine message
+  as described in Section <reference|sect-consensus-message-digest>. When
+  Authorities process such messages they must not vote on any block with a
   higher number than the block at which the change is supposed to happen. The
-  new authority set should reinitiate GRANDPA protocol by exectutig Algorithm
+  new authority set should reinitiate GRANDPA protocol by executing Algorithm
   <reference|algo-initiate-grandpa>.
 
   <subsection|Voting Process in Round <math|r>>
@@ -1339,7 +1342,7 @@
   Where:
 
   <\itemize-minus>
-    <item><math|T> is sampled from a log normal distribution whose mean and
+    <item><math|T> is sampled from a log-normal distribution whose mean and
     standard deviation are equal to the average network delay for a message
     to be sent and received from one validator to another.
 
@@ -1651,14 +1654,14 @@
   <\example>
     <label|exmp-candid-unfinalized>Let us assume that we have 100 voters and
     there are two blocks in the chain (<math|B<rsub|1>\<less\>B<rsub|2>>). At
-    round 1, we get 67 prevotes for <math|B<rsub|2>> and at least one prevote
-    for <math|B<rsub|1>> which means that <name|GRANDPA-GHOST(1) =
+    round 1, we get 67 pre-votes for <math|B<rsub|2>> and at least one
+    pre-vote for <math|B<rsub|1>> which means that <name|GRANDPA-GHOST(1) =
     <math|B<rsub|2>>>.\ 
 
-    Subsequently potentially honest voters who could claim not seeing all the
-    prevotes for <math|B<rsub|2>> but receiving the prevotes for
-    <math|B<rsub|1>> would precommit to <math|B<rsub|1>>. In this way, we
-    receive 66 precommits for <math|B<rsub|1>> and 1 precommit for
+    Subsequently, potentially honest voters who could claim not seeing all
+    the pre-votes for <math|B<rsub|2>> but receiving the pre-votes for
+    <math|B<rsub|1>> would pre-commit to <math|B<rsub|1>>. In this way, we
+    receive 66 pre-commits for <math|B<rsub|1>> and 1 pre-commit for
     <math|B<rsub|2>>. Henceforth, we finalize <math|B<rsub|1>> since we have
     a threshold commit (67 votes) for <math|B<rsub|1>>.
 
@@ -1684,10 +1687,9 @@
 
       <item>We receive an extra pre-commit vote for <math|B<rsub|1>> in round
       1. This will make it impossible to finalize <math|B<rsub|2>> in round
-      1, no matter to whom the remaining precommits are going to be casted
-      for (even with considering the possibility of 1/3 of voter
-      equivocating) and therefore we have
-      <name|Best-Final-Candidate>(<math|r>)<math|=B<rsub|1>>.
+      1, no matter to whom the remaining pre-commits are going to be cast for
+      (even with considering the possibility of 1/3 of voter equivocating)
+      and therefore we have <name|Best-Final-Candidate>(<math|r>)<math|=B<rsub|1>>.
     </itemize-minus>
 
     Both scenarios unblock the Algorithm <reference|algo-grandpa-round>:14
@@ -1702,7 +1704,7 @@
   <\definition>
     <label|defn-finalized-block>A Polkadot relay chain node <math|n> should
     consider block <math|B> as <strong|finalized> if any of the following
-    criteria holds for <math|B<rprime|'>\<geqslant\>B>:\ 
+    criteria hold for <math|B<rprime|'>\<geqslant\>B>:\ 
 
     <\itemize>
       <item><math|V<rsup|r,pc><rsub|obs<around|(|n|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|B<rprime|'>|)>\<gtr\>2/3<around|\||\<bbb-V\><rsub|B<rprime|'>>|\|>>.
@@ -1725,33 +1727,32 @@
     <item>any round <math|r> if the node <math|n> is <em|not> a GRANDPA
     voter.\ 
 
-    <item>only for rounds <math|r> for which the the node <math|n> has
-    invoked Algorithm <reference|algo-grandpa-round> if <math|n> is a GRANDPA
-    voter.
+    <item>only for rounds <math|r> for which the node <math|n> has invoked
+    Algorithm <reference|algo-grandpa-round> if <math|n> is a GRANDPA voter.
   </itemize-dot>
 
-  Note that all Polkadot relay chain nodes are supposed to listen to
-  \ GRANDPA finalizing messages and process them regardless if they are
-  GRANDPA voters.
+  Note that all Polkadot relay chain nodes are supposed to listen to the
+  GRANDPA finalizing messages and process them regardless if they are GRANDPA
+  voters.
 
   <subsection|Catching up><label|sect-grandpa-catchup>
 
   When a Polkadot node (re)joins the network during the process described in
   Chapter <reference|chap-bootstrapping>, it requests the history of state
-  transition which it is missing in form of blocks. Each finalized block
+  transition in the form of blocks, which it is missing. Each finalized block
   comes with the Justification of its finalization as defined in Definition
   <reference|defn-grandpa-justification>. Through this process, they can
   synchronize the authority list currently performing the finalization
   process.
 
-  <subsubsection|Sending catch-up requests><verbatim|><label|sect-sending-catchup-request>
+  <subsubsection|Sending the catch-up requests><verbatim|><label|sect-sending-catchup-request>
 
   When a Polkadot node has the same authority list as a peer node who is
   reporting a higher number for the \Pfinalized round\Q field, it should send
-  a catch-up request message as specified in Definition
-  <reference|defn-grandpa-catchup-request-msg> to the reporting peer in order
-  to catch-up to the more advanced finalized round, provided that the
-  following criteria holds:
+  a catch-up request message, as specified in Definition
+  <reference|defn-grandpa-catchup-request-msg>, to the reporting peer in
+  order to catch-up to the more advanced finalized round, provided that the
+  following criteria hold:
 
   <\itemize-minus>
     <item>the peer node is a GRANDPA voter, and
@@ -1760,7 +1761,7 @@
     rounds behind the finalized round for the peer.\ 
   </itemize-minus>
 
-  \ <subsubsection|Processing catch-up requests>
+  \ <subsubsection|Processing the catch-up requests>
 
   Only GRANDPA voter nodes are required to respond to the catch-up responses.
   When a GRANDPA voter node receives a catch-up request message it needs to
@@ -1821,8 +1822,8 @@
   In which:
 
   <\itemize-minus>
-    <item><math|id<rsub|\<bbb-V\>>> is the voter set id which the serving
-    node is operating
+    <item><math|id<rsub|\<bbb-V\>>> is the voter set id with which the
+    serving node is operating
 
     <item><math|r> is the round number for which the catch-up is requested
     for.
@@ -1843,7 +1844,7 @@
   node to update their view on the active rounds which are being voted on by
   GRANDPA voters. As such, the requester node should verify the content of
   the catch-up response message and subsequently updates its view of the
-  state of finality of the Relay chain according to Algorithm
+  state of the finality of the Relay chain according to Algorithm
   <reference|algo-process-catchup-response>.
 
   <\algorithm>
