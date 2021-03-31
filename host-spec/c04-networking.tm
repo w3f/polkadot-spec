@@ -25,7 +25,7 @@
   of the used <verbatim|libp2p> protocols are specified in external sources
   as described in Section <reference|sect-networking-external-docs>.
 
-  <subsection|External Documentation><label|sect-networking-external-docs>
+  <section|External Documentation><label|sect-networking-external-docs>
 
   The completeness of implementing the Polkadot networking protocol requires
   the usage of external documentation.
@@ -73,7 +73,7 @@
     Section <reference|sect-network-messages>.
   </itemize>
 
-  <subsection|Node Identities>
+  <section|Node Identities>
 
   Each Polkadot Host node maintains a ED25519 key pair which is used to
   identify the node. The public key is shared with the rest of the network
@@ -95,7 +95,7 @@
     (<slink|https://docs.libp2p.io/concepts/peer-id/>).
   </definition>
 
-  <subsection|Discovery mechanism><label|sect-discovery-mechanism>
+  <section|Discovery mechanism><label|sect-discovery-mechanism>
 
   The Polkadot Host uses various mechanisms to find peers within the network,
   to establish and maintain a list of peers and to share that list with other
@@ -119,7 +119,7 @@
     Section <reference|sect-protocols-substreams>.
   </itemize>
 
-  <subsection|Connection establishment><label|sect-connection-establishment>
+  <section|Connection establishment><label|sect-connection-establishment>
 
   Polkadot nodes connect to peers by establishing a TCP connection. Once
   established, the node initiates a handshake with the remote peer's on the
@@ -194,7 +194,7 @@
   the Noise protocol to establish the encryption layer as described in
   Section <reference|sect-encryption-layer>.
 
-  <subsection|Encryption Layer><label|sect-encryption-layer>
+  <section|Encryption Layer><label|sect-encryption-layer>
 
   Polkadot protocol uses the <samp|<verbatim|libp2p>> Noise framework to
   build an encryption protocol. The Noise protocol is a framework for bulding
@@ -231,7 +231,7 @@
   shared secret using the static and session-defined Noise keys, which are
   used to encrypt all further communication.
 
-  <subsection|Protocols and Substreams><label|sect-protocols-substreams>
+  <section|Protocols and Substreams><label|sect-protocols-substreams>
 
   After the node establishes a connection with a peer, the use of
   multiplexing allows the Polkadot Host to open substreams. <verbatim|libp2p>
@@ -316,7 +316,7 @@
   <verbatim|/dot/> is used exclusively for Polkadot. Kusama, for example,
   uses the <verbatim|/ksmcc3/> protocol identifier.
 
-  <subsection|Network Messages><label|sect-network-messages>
+  <section|Network Messages><label|sect-network-messages>
 
   The Polkadot Host must actively communicate with the network in order to
   participate in the validation process or act as a full node.
@@ -327,7 +327,7 @@
   corresponding definition. Encoding and message formats are subject to
   change.
 
-  <subsubsection|Announcing blocks><label|sect-msg-block-announce>
+  <subsection|Announcing blocks><label|sect-msg-block-announce>
 
   When the node creates or receives a new block, it must be announced to the
   network. Other nodes within the network will track this announcement and
@@ -387,7 +387,7 @@
     </eqnarray*>
   </definition>
 
-  <subsubsection|Requesting blocks><label|sect-msg-block-request>
+  <subsection|Requesting blocks><label|sect-msg-block-request>
 
   Block requests can be used to retrieve a range of blocks from peers. Those
   messages are sent over the <verbatim|/dot/sync/2> substream.
@@ -477,7 +477,7 @@
     </big-table>
   </definition>
 
-  <subsubsection|Transactions><label|sect-msg-transactions>
+  <subsection|Transactions><label|sect-msg-transactions>
 
   Transactions as defined and described in Section
   <reference|sect-extrinsics> are sent directly to peers with which the
@@ -512,7 +512,9 @@
     Transactions are sent over the <verbatim|/dot/transactions/1> substream.
   </definition>
 
-  <subsubsection|BABE Equivocation Proof><label|sect-babe-equivocation-proof>
+  <subsection|BABE Messages Specification><label|sect-msg-babe>
+
+  <subsubsection|Equivocation Proof><label|sect-babe-equivocation-proof>
 
   A BABE equivocation occurs when a validator produces more than one block at
   the same slot. The proof of equivocation are the given distinct headers
