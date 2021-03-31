@@ -7,37 +7,39 @@
 <\body>
   <chapter|State Transition><label|chap-state-transit>
 
-  Like any transaction-based transition system, Polkadot state changes via
-  executing an ordered set of instructions. These instructions are known as
-  <em|extrinsics>. In Polkadot, the execution logic of the state-transition
-  function is encapsulated in Runtime as defined in Definition
-  <reference|defn-state-machine>. Runtime is presented as a Wasm blob in
-  order to be easily upgradable. Nonetheless, the Polkadot Host needs to be
-  in constant interaction with Runtime. The detail of such interaction is
-  further described in Section <reference|sect-entries-into-runtime>.
+  Like any transaction-based transition system, Polkadot's state is changed
+  by executing an ordered set of instructions. These instructions are known
+  as <em|extrinsics>. In Polkadot, the execution logic of the
+  state-transition function is encapsulated in a Runtime as defined in
+  Definition <reference|defn-state-machine>. For easy upgradability this
+  Runtime is presented as a Wasm blob. Nonetheless, the Polkadot Host needs
+  to be in constant interaction with the Runtime. The detail of such
+  interaction is further described in Section
+  <reference|sect-entries-into-runtime>.
 
   In Section <reference|sect-extrinsics>, we specify the procedure of the
   process where the extrinsics are submitted, pre-processed and validated by
   Runtime and queued to be applied to the current state.
 
-  Polkadot, as with most prominent distributed ledger systems that make state
-  replication feasible, journals and batches a series of extrinsics together
-  in a structure known as a <em|block> before propagating to the other nodes.
-  The specification of the Polkadot block as well as the process of verifying
-  its validity are both explained in Section
+  \ To make state replication feasible, Polkadot journals and batches series
+  of its extrinsics together into a structure known as a <em|block>, before
+  propagating them to other nodes, similar to most other prominent
+  distributed ledger systems. The specification of the Polkadot block as well
+  as the process of verifying its validity are both explained in Section
   <reference|sect-state-replication>.
 
-  <section|Interactions with Runtime><label|sect-entries-into-runtime>
+  <section|Interacting with the Runtime><label|sect-entries-into-runtime>
 
-  Runtime as defined in Definition <reference|defn-runtime> is the code
+  The Runtime as defined in Definition <reference|defn-runtime> is the code
   implementing the logic of the chain. This code is decoupled from the
-  Polkadot Host to make the Runtime easily upgradable without the need to
-  upgrade the Polkadot Host itself. The general procedure to interact with
-  Runtime is described in Algorithm <reference|algo-runtime-interaction>.
+  Polkadot Host to make the the logic of the chain easily upgradable without
+  the need to upgrade the Polkadot Host itself. The general procedure to
+  interact with the Runtime is described in Algorithm
+  <reference|algo-runtime-interaction>.
 
   <\algorithm>
     <label|algo-runtime-interaction><name|Interact-With-Runtime>(<math|F>:
-    the runtime entry,\ 
+    runtime entry to call,\ 
 
     <math|H<rsub|b><around*|(|B|)>>: Block hash indicating the state at the
     end of <math|B>,\ 
@@ -81,37 +83,32 @@
     b\<assign\><text|3A,63,6F,64,65>
   </equation*>
 
-  which is the byte array of ASCII representation of string \P:code\Q (see
-  Section <reference|sect-genesis-block>). For any call to the Runtime, the
-  Polkadot Host makes sure that it has the Runtime corresponding to the state
-  in which the entry has been called. This is, in part, because the calls to
-  Runtime have potentially the ability to change the Runtime code and hence
-  Runtime code is state sensitive. Accordingly, we introduce the following
-  notation to refer to the Runtime code at a specific state:
+  which is the ASCII byte representation of the string \P<verbatim|:code>\Q
+  (see Section <reference|sect-genesis-block>). As a result of storing the
+  Runtime as part of the state, the Runtime code itself becomes state
+  sensitive and calls to Runtime can change the Runtime code itself.
+  Therefore the Polkadot Host needs to always make sure to provide the
+  Runtime corresponding to the state in which the entry has been called.
+  Accordingly, we introduce the following notation to refer to the Runtime
+  code at a specific state:
 
   <\notation>
     <label|nota-runtime-code-at-state>By <math|R<rsub|B>>, we refer to the
-    Runtime code stored in the state storage whose state is set at the end of
-    the execution of block <math|B>.
+    Runtime code stored in the state storage at the end of the execution of
+    block <math|B>.
   </notation>
 
-  The initial runtime code of the chain is embedded as an extrinsics into the
-  chain initialization JSON file (representing the genesis state) and is
-  submitted to the Polkadot Host (see Section
-  <reference|sect-genesis-block>).
-
-  Subsequent calls to the runtime have the ability to, in turn, call the
-  storage API (see Section <reference|sect-host-api>) to insert a new Wasm
-  blob
-
-  into runtime storage slot to upgrade the runtime.
+  The initial runtime code of the chain is provided as part of the genesis
+  state (see Section <reference|sect-genesis-block>) and subsequent calls to
+  the Runtime have the ability to, in turn, call the storage API (see Section
+  <reference|sect-host-api>) to insert new Wasm blobs into runtime storage to
+  upgrade the Runtime.
 
   <subsection|Code Executor><label|sect-code-executor>
 
-  The Polkadot Host provides a Wasm Virtual Machine (VM) to run the Runtime.
-  The Wasm VM exposes the Polkadot Host API to the Runtime, which, on its
-  turn, executes a call to the Runtime entries stored in the Wasm module.
-  This part of the Polkadot Host is referred to as the
+  The Polkadot Host executes the calls of Runtime entries inside a Wasm
+  Virtual Machine (VM), which in turn provides the Runtime with access to the
+  Polkadot Host API. This part of the Polkadot Host is referred to as the
   <em|<strong|Executor>.>
 
   Definition <reference|nota-call-into-runtime> introduces the notation for
@@ -137,17 +134,9 @@
 
   \;
 
-  In this section, we specify the general setup for an Executor call into the
-  Runtime. In Section <reference|sect-runtime-entries> we specify the
-  parameters and the return values of each Runtime entry separately.
-
-  <subsubsection|Access to Runtime API>
-
-  When the Polkadot Host calls a Runtime entry it should make sure Runtime
-  has access to the all Polkadot Runtime API functions described in Appendix
-  <reference|sect-runtime-entries>. This can be done for example by loading
-  another Wasm module alongside the runtime which imports these functions
-  from the Polkadot Host as host functions.
+  In this section, we specify the general setup for an Executor that calls
+  into the Runtime. In Section <reference|sect-runtime-entries> we specify
+  the parameters and return values for each Runtime entry separately.
 
   <subsubsection|Memory Management><label|sect-memory-management>
 
@@ -157,18 +146,18 @@
   same allocator should be used for any other heap allocation to be used by
   the Polkadot Runtime.
 
-  The size of the provided WASM memory should be based on the
-  <verbatim|:heappages> storage key, where each page has the size of 64KB.
-  This memory shoule be made available to the Polkadot runtime for import
-  under the symbol name <verbatim|memory>.
+  The size of the provided WASM memory should be based on the value of the
+  <verbatim|:heappages> storage key (an unsigned 64-bit integer), where each
+  page has the size of 64KB. This memory shoule be made available to the
+  Polkadot runtime for import under the symbol name <verbatim|memory>.
 
-  <subsubsection|Sending Arguments to Runtime
+  <subsubsection|Sending Data to a Runtime Entry
   ><label|sect-runtime-send-args-to-runtime-enteries>
 
   In general, all data exchanged between the Polkadot Host and the Runtime is
   encoded using SCALE codec described in Section
-  <reference|sect-scale-codec>. As a Wasm function, all runtime entries have
-  the following identical signatures:
+  <reference|sect-scale-codec>. Therefore all runtime entries have the
+  following identical Wasm function signatures:
 
   \;
 
@@ -178,21 +167,18 @@
   \;
 
   In each invocation of a Runtime entry, the argument(s) which are supposed
-  to be sent to the entry, need to be encoded using SCALE codec into a byte
-  array <math|B> using the procedure defined in Definition
-  <reference|sect-scale-codec>.
+  to be sent to the entry, need to be SCALE encoded into a byte array
+  <math|B> (see Definition <reference|sect-scale-codec>) and copied into a
+  section of Wasm shared memory managed by the shared allocator described in
+  Section <reference|sect-memory-management>.\ 
 
-  The Executor then needs to retrieve the Wasm memory buffer of the Runtime
-  Wasm module and extend it to fit the size of the byte array. Afterwards, it
-  needs to copy the byte array <math|B> value in the correct offset of the
-  extended buffer. Finally, when the Wasm method <verbatim|runtime_entry>,
-  corresponding to the entry is invoked, two UINT32 integers are sent to the
-  method as arguments. The first argument <verbatim|data> is set to the
-  offset where the byte array <math|B> is stored in the Wasm extended shared
-  memory buffer. The second argument <verbatim|len> sets the length of the
-  data stored in <math|B>.
+  When the Wasm method <verbatim|runtime_entry>, corresponding to the entry,
+  is invoked, two <verbatim|i32> integers are passed as arguments. The first
+  argument <verbatim|data> is set to the memory adress of the byte array
+  <math|B> in Wasm memory. The second argument <verbatim|len> sets the length
+  of the encoded data stored in <math|B>.
 
-  <subsubsection|The Return Value from a Runtime
+  <subsubsection|Receiving Data from a Runtime
   Entry><label|sect-runtime-return-value>
 
   The value which is returned from the invocation is an <verbatim|i64>
@@ -212,7 +198,7 @@
   <verbatim|TaggedTransactionQueue_validate_transaction> entry (see Section
   <reference|sect-rte-validate-transaction>), it needs to sandbox the changes
   to the state just for that Runtime call and prevent the global state of the
-  system from being influence by the call to such a Runtime entery. This
+  system from being influence by the call to such a Runtime entry. This
   includes reverting the state of function calls which return errors or
   panic.
 
@@ -232,13 +218,13 @@
   <section|Extrinsics><label|sect-extrinsics>
 
   The block body consists of an array of extrinsics. In a broad sense,
-  extrinsics are data from outside of the state which can trigger the state
-  transition. This section describes the specifications of the extrinsics and
-  their inclusion in the blocks.
+  extrinsics are data from outside of the state which can trigger state
+  transitions. This section describes extrinsics and their inclusion into
+  blocks.
 
   <subsection|Preliminaries>
 
-  The extrinsics are divided in two main categories and defined as follows:
+  The extrinsics are divided into two main categories defined as follows:
 
   <\definition>
     <strong|Transaction extrinsics> are extrinsics which are signed using
@@ -258,34 +244,31 @@
 
   <subsection|Transactions>
 
-  <subsubsection|Transaction Submission>
+  Transaction are submitted and exchanged through <em|Transactions> network
+  messages (see Section <reference|sect-msg-transactions>). Upon receiving a
+  Transactions message, the Polkadot Host decodes the SCALE-encoded blob and
+  splits it into individually SCALE-encoded transactions.
 
-  Transaction submission is made by sending a <em|Transactions> network
-  message. The structure of this message is specified in Section
-  <reference|sect-msg-transactions>. Upon receiving a Transactions message,
-  the Polkadot Host decodes the SCALE-encoded blob and decouples the
-  transactions into individually SCALE-encoded transactions. Afterward, it
-  should call <verbatim|validate_trasaction> Runtime entry on each individual
-  transaction, defined in Section <reference|sect-rte-validate-transaction>,
-  to check the validity of the received transaction. If
-  <verbatim|validate_transaction> considers the submitted transaction as a
-  valid one, the Polkadot Host makes the transaction available for the
-  consensus engine for inclusion in future blocks.
+  Alternative transaction can be submitted to the host by offchain worker
+  through the <verbatim|ext_offchain_submit_transaction> Host API, defined in
+  Section <reference|sect-ext-offchain-submit-transaction>.\ 
 
-  <subsection|Transaction Queue>
+  Any new transaction should be submitted to the
+  <verbatim|validate_transaction> Runtime function, defined in Section
+  <reference|sect-rte-validate-transaction>. This will allow the Polkadot
+  Host to check the validity of the received transaction against the current
+  state as well as determine how the transaction depends on other extrinsics
+  and if it should be gossiped to other peers. If
+  <verbatim|validate_transaction> considers the submitted transaction as
+  valid, the Polkadot Host should store it for inclusion in future blocks.
+  The whole process of handeling new transactions is described in more detail
+  by Algorithm <reference|algo-validate-transactions>.
 
-  A Block producer node should listen to all transaction
-  messages<em|<index|Transaction Message>>. The transactions are submitted to
-  the node through the <em|transactions> network message specified in Section
-  <reference|sect-msg-transactions>. Upon receiving a transactions message,
-  the Polkadot Host separates the submitted transactions in the transactions
-  message into individual transactions and passes them to the Runtime by
-  executing Algorithm <reference|algo-validate-transactions> to validate and
-  store them for inclusion into future blocks. Valid transactions are
-  propagated to connected peers of the Polkadot Host. Additionally, the
+  Additionally valid transactions that are supposed to be gossiped are
+  propagated to connected peers of the Polkadot Host. While doing so the
   Polkadot Host should keep track of peers already aware of each transaction.
   This includes peers which have already gossiped the transaction to the node
-  as well as \ those to whom the transaction has already been sent. This
+  as well as those to whom the transaction has already been sent. This
   behavior is mandated to avoid resending duplicates and unnecessarily
   overloading the network. To that aim, the Polkadot Host should keep a
   <em|transaction pool<index|transaction pool>> and a <em|transaction
@@ -309,7 +292,8 @@
   Message)>
     <\algorithmic>
       <\state>
-        <math|L\<leftarrow\>Dec<rsub|SC><around*|(|M<rsub|T>|)>>
+        <math|L\<leftarrow\>Dec<rsub|SC><around*|(|M<rsub|T>|)>><todo|not all
+        tx are received via <math|M<rsub|T>>>
       </state>
 
       <\state>
@@ -422,7 +406,7 @@
     </algorithmic>
   </algorithm>
 
-  <subsubsection|Inherents><label|sect-inherents>
+  <subsection|Inherents><label|sect-inherents>
 
   Inherents are unsigned extrinsic inserted into a block by the block author
   and as a result are not stored in the transaction pool or gossiped across
@@ -459,24 +443,26 @@
   are batched and synced at the time. The structure in which the transactions
   are journaled and propagated is known as a block (of extrinsics) which is
   specified in Section <reference|sect-block-format>. Like any other
-  replicated state machines, state inconsistency happens across Polkadot
+  replicated state machines, state inconsistency can occure between Polkadot
   replicas. Section <reference|sect-managing-multiple-states> is giving an
   overview of how a Polkadot Host node manages multiple variants of the
   state.
 
   <subsection|Block Format><label|sect-block-format>
 
-  In the Polkadot Host, a block is made of two main parts, namely the
-  <with|font-shape|italic|block header> and the <with|font-shape|italic|list
-  of extrinsics>. <em|The Extrinsics> represent the generalization of the
-  concept of <em|transaction>, containing any set of data that is external to
-  the system, and which the underlying chain wishes to validate and keep
-  track of.
+  A Polkadot block consists a <with|font-shape|italic|block header> (Section
+  <reference|sect-block-header>) and a <with|font-shape|italic|block body>
+  (Section <reference|sect-block-body>). The <with|font-shape|italic|block
+  body> in turn is made up out of a <with|font-shape|right|list of
+  <with|font-shape|italic|extrinsics>>, which represent the generalization of
+  the concept of <em|transactions>. <with|font-shape|italic|Extrinsics> can
+  contain any set of external data the underlying chain wishes to validate
+  and track.
 
-  <subsubsection|Block Header><label|block>
+  <subsubsection|Block Header><label|sect-block-header>
 
-  The block header is designed to be minimalistic in order to boost the
-  efficiency of the light clients. It is defined formally as follows:
+  The block header is designed to be minimalistic in order to allow
+  efficienct handeling by light clients. It is defined formally as follows:
 
   <\definition>
     <label|defn-block-header>The <strong|header of block B>,
@@ -485,17 +471,17 @@
 
     <\itemize>
       <item><with|font-series|bold|<samp|parent_hash:>> formally indicated as
-      <math|<strong|<text|H<rsub|p>>>> is the 32-byte Blake2b hash (Section
+      <math|<strong|<text|H<rsub|p>>>>, is the 32-byte Blake2b hash (Section
       <reference|sect-blake2>) of the SCALE encoded parent block header as
       defined in Definition <reference|defn-block-header-hash>.
 
       <item><strong|<samp|number:>> formally indicated as
-      <strong|<math|H<rsub|i>>> is an integer, which represents the index of
+      <strong|<math|H<rsub|i>>>, is an integer, which represents the index of
       the current block in the chain. It is equal to the number of the
       ancestor blocks. The genesis state has number 0.
 
       <item><strong|<samp|state_root:>> formally indicated as
-      <strong|<math|H<rsub|r>>> is the root of the Merkle trie, whose leaves
+      <strong|<math|H<rsub|r>>>, is the root of the Merkle trie, whose leaves
       implement the storage for the system.
 
       <item><strong|<samp|extrinsics_root:>> is the field which is reserved
@@ -558,11 +544,12 @@
       <reference|sect-changes-trie><math|>. Note that this is future-reserved
       and currently <strong|not> used in Polkadot.
 
-      <item><strong|Pre-runtime> digest item represents messages produced by
-      a consensus engine to the Runtime.
+      <item><strong|Pre-runtime> digest items represent messages from a
+      consensus engine to the Runtime (e.g. see Definition
+      <reference|defn-babe-header>).
 
-      <item><strong|Consensus> <with|font-series|bold|Message> digest item
-      represents a message from the Runtime to the consensus engine (see
+      <item><strong|Consensus> <with|font-series|bold|Message> digest items
+      represent messages from the Runtime to the consensus engine (see
       Section <reference|sect-consensus-message-digest>).
 
       <item><strong|Seal> is the data produced by the consensus engine and
@@ -608,10 +595,10 @@
 
   <subsubsection|Block Body><label|sect-block-body>
 
-  The Block Body consists of array extrinsics each encoded as a byte array.
-  The internal of extrinsics is completely opaque to the Polkadot Host. As
-  such, from the point of the Polkadot Host, and is simply a SCALE encoded
-  array of byte arrays. Formally:
+  The Block Body consists of an sequence of extrinsics, each encoded as a
+  byte array. The content of an extrinsic is completely opaque to the
+  Polkadot Host. As such, from the point of the Polkadot Host, and is simply
+  a SCALE encoded array of byte arrays. Formally:
 
   <\definition>
     <label|defn-block-body>The <strong|body of Block> <math|B> represented as
@@ -626,26 +613,26 @@
 
   <subsection|Importing and Validating Block><label|sect-block-validation><label|sect-block-submission>
 
-  Block validation is the process by which the client asserts that a block is
-  fit to be added to the blockchain. This means that the block is consistent
-  with the world state and transitions from the state of the system to a new
-  valid state.
+  Block validation is the process by which a node asserts that a block is fit
+  to be added to the blockchain. This means that the block is consistent with
+  the world state and transitions from the current state of the system to a
+  new valid state.
 
   \;
 
-  Blocks can be handed to the Polkadot Host both from the network stack for
-  example by means of Block response network message (see Section
-  <reference|sect-msg-block-request> ) and from the consensus engine. Both the
-  Runtime and the Polkadot Host need to work together to assure block
-  validity. A block is deemed valid if the block author had the authorship
-  right for the slot during which the slot was built as well as if the
-  transactions in the block constitute a valid transition of states. The
-  former criterion is validated by the Polkadot Host according to the block
-  production consensus protocol. The latter can be verified by the Polkadot
-  Host invoking <verbatim|Core_execute_block> entry into the Runtime as
-  defined in section <reference|sect-rte-core-execute-block> as a part of the
-  validation process. Any state changes created by this function on
-  successful execution are persisted.
+  New blocks can be received by the Polkadot Host via other peers (see
+  Section <reference|sect-msg-block-request>) or from the Host's own
+  consensus engine (see Section <reference|sect-block-production>). Both the
+  Runtime and the Polkadot Host then need to work together to assure block
+  validity. A block is deemed valid if the block author had authorship rights
+  for the slot in which the block was produce as well as if the transactions
+  in the block constitute a valid transition of states. The former criterion
+  is validated by the Polkadot Host according to the block production
+  consensus protocol. The latter can be verified by the Polkadot Host
+  invoking <verbatim|Core_execute_block> entry into the Runtime as defined in
+  section <reference|sect-rte-core-execute-block> as a part of the validation
+  process. Any state changes created by this function on successful execution
+  are persisted.
 
   \;
 
@@ -729,15 +716,18 @@
 
     <item><name|Persist-State> implies the persistence of any state changes
     created by <verbatim|Core_execute_block> on successful execution.
+
+    <item><math|>PBT is the pruned block tree defined in Definition
+    <reference|defn-block-tree>.
+
+    <item><name|Verify-Authorship-Right> is part of the block production
+    consensus protocol and is described in Algorithm
+    <reference|algo-verify-authorship-right>.
+
+    <item><with|font-shape|italic|Finalized block> and
+    <with|font-shape|italic|finality> is defined in Section
+    <reference|sect-finality>.
   </itemize-minus>
-
-  \;
-
-  For the definition of the finality and the finalized block see Section
-  <reference|sect-finality>. <math|PBT> is the pruned block tree defined in
-  Definition <reference|defn-block-tree>. <name|Verify-Authorship-Right> is
-  part of the block production consensus protocol and is described in
-  Algorithm <reference|algo-verify-authorship-right>.
 
   <subsection|Managaing Multiple Variants of
   State><label|sect-managing-multiple-states>
@@ -773,12 +763,6 @@
   For the definition of the state storage see Section
   <reference|sect-state-storage>.
 
-  \;
-
-  <\with|par-mode|right>
-    <qed>
-  </with>
-
   <subsection|Changes Trie><label|sect-changes-trie>
 
   <todo|NOTE: Changes Tries are still work-in-progress and are currently
@@ -788,11 +772,11 @@
   \;
 
   Polkadot focuses on light client friendliness and therefore implements
-  functionalities which allows identifying changes in the blockchain without
-  requiring to search through the entire chain. The <strong|Changes Trie> is
-  a radix-16 tree data structure as defined in Definition
-  <reference|defn-radix-tree> and maintained by the Polkadot Host. It stores
-  different types of storage changes made by each individual block
+  functionalities that allows identifying changes in the state of the
+  blockchain without the requirement to search through the entire chain. The
+  <strong|Changes Trie> is a radix-16 tree data structure as defined in
+  Definition <reference|defn-radix-tree> and maintained by the Polkadot Host.
+  It stores different types of storage changes made by each individual block
   separately.
 
   \;
@@ -831,9 +815,9 @@
     V<rsub|C>=Enc<rsub|SC><around*|(|C<rsub|value>|)>
   </equation*>
 
-  is SCALE encoded byte array.
+  is a SCALE encoded byte array.
 
-  where <math|K> is the changed storage key,
+  Furthermore <math|K> represents the changed storage key,
   <math|H<rsub|i><around*|(|B<rsub|i>|)>> refers to the block number at which
   this key is inserted into the Changes Trie (See Definition
   <reference|defn-block-header>) and <math|Type<rsub|V<rsub|C>>> is an index
