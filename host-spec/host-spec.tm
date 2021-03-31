@@ -13,8 +13,8 @@
     <new-theorem|notation|Notation>
   </hide-preamble>
 
-  <doc-data|<doc-title|The Polkadot Host<next-line><with|font-size|1.41|Protocol
-  Specification>>|<doc-date|<date|>>>
+  <doc-data|<doc-title|The Polkadot Host>|<doc-subtitle|Protocol
+  Specification>|<doc-date|<date|>>>
 
   <table-of-contents|toc|>
 
