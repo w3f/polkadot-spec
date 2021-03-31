@@ -311,7 +311,7 @@
     <reference|sect-grandpa-beefy>, to connected peers. This is a
     <em|Notification> substream.
 
-    The messages are specified in Section <todo|TODO>
+    The messages are specified in Section <reference|sect-msg-grandpa-beefy>.
   </itemize>
 
   <strong|Note>: the <verbatim|/dot/> prefixes on those substreams are known
@@ -731,14 +731,14 @@
 
   <subsubsection|GRANDPA BEEFY><label|sect-msg-grandpa-beefy>
 
-  <\todo>
-    TODO
-  </todo>
+  This section defines the messages required for the GRANDPA BEEFY protocol
+  as described in Section <reference|sect-grandpa-beefy>. Those messages are
+  sent over the <verbatim|/paritytech/beefy/1> substream.
 
   <\definition>
     <label|defn-grandpa-beefy-commitment>A commitment, <math|C>, contains the
     information extracted from the finalized block at height <math|B<rsub|n>>
-    as specified in the message body. <todo|explain some more>
+    as specified in the message body.
 
     C is a datastructe of the following format:
 
@@ -801,11 +801,11 @@
       <item><math|S<rsub|n>> is an array where its exact size matches the
       number of validators in the current authority set as specified by
       <math|id<rsub|\<bbb-V\>>> in <math|C>. Individual items are of the type
-      <verbatim|Option> as defined in Definition <todo|TODO> which can
-      contain a signature of a validator which signed the same statement
-      (<math|R<rsub|h>> in <math|C>) and is active in the current authority
-      set. It's critical that the signatures are sorted based on their
-      corresponding public key entry in the authority set.
+      <verbatim|Option> as defined in Definition <reference|defn-option-type>
+      which can contain a signature of a validator which signed the same
+      statement (<math|R<rsub|h>> in <math|C>) and is active in the current
+      authority set. It's critical that the signatures are sorted based on
+      their corresponding public key entry in the authority set.
 
       For example, the signature of the validator at index 3 in the authority
       set must be placed at index 3 in <math|S<rsub|n>>. If not signature is
