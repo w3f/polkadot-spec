@@ -303,9 +303,6 @@
 
     The messages are specified in Section <reference|sect-msg-grandpa-vote>.
 
-    <todo|Grandpa messages and Babe equivocations will be moved here. See
-    <hlink|#369|https://github.com/w3f/polkadot-spec/issues/369>>
-
     <todo|This substream will change in the future. See <hlink|issue
     #7252|https://github.com/paritytech/substrate/issues/7252>.>
   </itemize>
@@ -512,44 +509,7 @@
     Transactions are sent over the <verbatim|/dot/transactions/1> substream.
   </definition>
 
-  <subsection|BABE Messages Specification><label|sect-msg-babe>
-
-  <subsubsection|BABE Equivocation Proof><label|sect-babe-equivocation-proof>
-
-  A BABE equivocation occurs when a validator produces more than one block at
-  the same slot. The proof of equivocation are the given distinct headers
-  that were signed by the validator and which include the slot number. The
-  Polkadot Host is expected to identify equivocators and report those to the
-  Runtime as described in Section <reference|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>.
-
-  A BABE equivocation proof is datastructure of the following format:
-
-  <\eqnarray*>
-    <tformat|<table|<row|<cell|B<rsub|Ep>>|<cell|=>|<cell|<around*|(|A<rsub|id>,s,h<rsub|1>,h<rsub|2>|)>>>>>
-  </eqnarray*>
-
-  where
-
-  <\itemize-dot>
-    <item><math|A<rsub|id>> is the public key of the equivocator.
-
-    <item><math|s> is the slot as described in Section <reference|sect-babe>
-    at which the equivocation occurred.
-
-    <item><math|h<rsub|1>> is the block header of the first block produced by
-    the equivocator.
-
-    <item><math|h<rsub|2>> is the block header of the second block produced
-    by the equivocator.
-  </itemize-dot>
-
-  If there are more than two blocks which cause an equivocation, the
-  equivocation only needs to be reported once i.e. no additional
-  equivocations must be reported for the same slot. Unlike during block
-  execution, the Seal in both block headers is not removed before submission.
-  The block headers are submitted in its full form.
-
-  <subsection|GRANDPA Messages Specification><label|sect-msg-grandpa>
+  <subsection|GRANDPA Messages><label|sect-msg-grandpa>
 
   <\definition>
     <label|defn-gossip-message><strong|GRANDPA Gossip> is a variant, as
@@ -557,12 +517,12 @@
     identifies the message type that is casted by a voter. This type,
     followed by the sub-component, is sent to other validators.
 
-    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Grandpa
-    message (vote)>>|<row|<cell|1>|<cell|Grandpa
-    pre-commit>>|<row|<cell|2>|<cell|Grandpa neighbor
-    packet>>|<row|3|<cell|Grandpa catch up request
-    message>>|<row|<cell|4>|<cell|Grandpa catch up message>>>>>>
-      \;
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|2|-1|1|-1|cell-hyphen|n>|<cwith|2|-1|1|-1|cell-tborder|1ln>|<cwith|2|-1|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|cell-lborder|0ln>|<cwith|2|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|GRANDPA
+    message (vote)>>|<row|<cell|1>|<cell|GRANDPA
+    pre-commit>>|<row|<cell|2>|<cell|GRANDPA neighbor
+    packet>>|<row|3|<cell|GRANDPA catch up request
+    message>>|<row|<cell|4>|<cell|GRANDPA catch up message>>>>>>
+      GRANDPA gossip message types
     </big-table>
   </definition>
 
@@ -574,7 +534,6 @@
   The exchange of GRANDPA messages is conducted on the
   <verbatim|/paritytech/grandpa/1> substream. The process for the creation of
   such votes is described in Section <reference|sect-finality>.
-
 
   Voting is done by means of broadcasting voting messages to the network.
   Validators inform their peers about the block finalized in round <math|r>
@@ -701,12 +660,12 @@
 
   Whenever a Polkadot node detects that it is lagging behind the finality
   procedure, it needs to initiate a <em|catch-up> procedure. Neighbor packet
-  network message (see Section <reference|sect-msg-grandpa>) reveals
-  the round number for the last finalized GRANDPA round which the sending
-  peer has observed. This provides a means to identify a discrepancy in the
-  latest finalized round number observed among the peers. If such a
-  discrepancy is observed, the node needs to initiate the catch-up procedure
-  explained in Section <reference|sect-grandpa-catchup>.
+  network message (see Section <reference|sect-msg-grandpa>) reveals the
+  round number for the last finalized GRANDPA round which the sending peer
+  has observed. This provides a means to identify a discrepancy in the latest
+  finalized round number observed among the peers. If such a discrepancy is
+  observed, the node needs to initiate the catch-up procedure explained in
+  Section <reference|sect-grandpa-catchup>.
 
   In particular, this procedure involves sending <em|catch-up request> and
   processing <em|catch-up response> messages specified here:
@@ -748,53 +707,6 @@
     Gossip as defined in Definition <reference|defn-gossip-message> of type
     Id 4.
   </definition>
-
-  <subsubsection|GRANDPA Equivocation Proof><label|sect-grandpa-equivocation-proof>
-
-  A GRANDPA equivocation occurs when a validator votes for multiple blocks
-  during one voting subround, as described further in Section
-  <reference|defn-equivocation>. The Polkadot Host is expected to identify
-  equivocators and report those to the Runtime as described in Section
-  <reference|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>.
-
-  A GRANDPA equivocation proof is a datastructure of the following format:
-
-  <\eqnarray*>
-    <tformat|<table|<row|<cell|G<rsub|Ep>>|<cell|=>|<cell|<around*|(|id<rsub|\<bbb-V\>>,e,r,A<rsub|id>,B<rsup|1><rsub|h>,B<rsup|1><rsub|n>A<rsup|1><rsub|sig>,B<rsup|2><rsub|h>,B<rsup|2><rsub|n>,A<rsup|2><rsub|sig>|)>>>|<row|<cell|e>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><text|<em|Equivocation
-    at prevote stage.>>>>|<row|<cell|<text|1<space|1em><em|Equivocation at
-    precommit stage>>>>>>>>>>>
-  </eqnarray*>
-
-  where
-
-  <\itemize-dot>
-    <item><math|id<rsub|\<bbb-V\>>> is the authority set as defined in
-    Section <reference|defn-authority-set-id>.
-
-    <item><math|e> indicates the stage at which the equivocation occurred.
-
-    <item><math|r> is the round number the equivocation occurred.
-
-    <item><math|A<rsub|id>> is the public key of the equivocator.
-
-    <item><math|B<rsup|1><rsub|h>> is the block hash of the first block the
-    equivocator voted for.
-
-    <item><math|B<rsup|1><rsub|n>> is the block number of the first block the
-    equivocator voted for.
-
-    <item><math|A<rsup|1><rsub|sig>> is the equivocators signature of the
-    first vote.
-
-    <item><math|B<rsup|2><rsub|h>> is the block hash of the second block the
-    equivocator voted for.
-
-    <item><math|B<rsup|2><rsub|n>> is the block number of the second block
-    the equivocator voted for.
-
-    <item><math|A<rsup|2><rsub|sig>> is the equivocators signature of the
-    second vote.
-  </itemize-dot>
 
   \;
 
