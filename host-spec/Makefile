@@ -46,7 +46,7 @@ $(REVDIR):
 	# Will require next release: make -C $(REVDIR) temp
 
 polkadot-host-spec.diff.pdf: $(SOURCES) $(REVDIR) host-spec.scm
-	xvfb-run texmacs -b host-spec.scm  -x "(compare-versions-expanded \"$(REVDIR)/host-spec.tm\" \"$$PWD/host-spec.tm\") (export-buffer \"$$PWD/$@\")" -q
+	xvfb-run texmacs -b host-spec.scm  -x "(compare-versions-updated-expanded \"$(REVDIR)/host-spec.tm\" \"$$PWD/host-spec.tm\" \"$(TMPDIR)\") (export-buffer \"$$PWD/$@\")" -q
 
 
 update: $(SOURCES) host-spec.scm
