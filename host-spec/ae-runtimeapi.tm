@@ -715,15 +715,54 @@
 
   <subsubsection|<verbatim|GrandpaApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>
 
-  Submits a report about an observed equivocation as defined in Definition
-  <reference|defn-equivocation>.
+  A GRANDPA equivocation occurs when a validator votes for multiple blocks
+  during one voting subround, as described further in Section
+  <reference|defn-equivocation>. The Polkadot Host is expected to identify
+  equivocators and report those to the Runtime by calling this function.
 
   \;
 
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>The equivocation proof. <todo|reference that type>
+    <item>The equivocation proof of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|G<rsub|Ep>>|<cell|=>|<cell|<around*|(|id<rsub|\<bbb-V\>>,e,r,A<rsub|id>,B<rsup|1><rsub|h>,B<rsup|1><rsub|n>A<rsup|1><rsub|sig>,B<rsup|2><rsub|h>,B<rsup|2><rsub|n>,A<rsup|2><rsub|sig>|)>>>|<row|<cell|e>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><text|<em|Equivocation
+      at prevote stage.>>>>|<row|<cell|<text|1<space|1em><em|Equivocation at
+      precommit stage>>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|id<rsub|\<bbb-V\>>> is the authority set as defined in
+      Section <reference|defn-authority-set-id>.
+
+      <item><math|e> indicates the stage at which the equivocation occurred.
+
+      <item><math|r> is the round number the equivocation occurred.
+
+      <item><math|A<rsub|id>> is the public key of the equivocator.
+
+      <item><math|B<rsup|1><rsub|h>> is the block hash of the first block the
+      equivocator voted for.
+
+      <item><math|B<rsup|1><rsub|n>> is the block number of the first block
+      the equivocator voted for.
+
+      <item><math|A<rsup|1><rsub|sig>> is the equivocators signature of the
+      first vote.
+
+      <item><math|B<rsup|2><rsub|h>> is the block hash of the second block
+      the equivocator voted for.
+
+      <item><math|B<rsup|2><rsub|n>> is the block number of the second block
+      the equivocator voted for.
+
+      <item><math|A<rsup|2><rsub|sig>> is the equivocators signature of the
+      second vote.
+    </itemize-dot>
 
     <item>An proof of the key owner in an opaque form as described in Section
     <reference|sect-grandpaapi_generate_key_ownership_proof>.
@@ -935,15 +974,45 @@
 
   <subsubsection|<verbatim|BabeApi_submit_report_equivocation_unsigned_extrinsic>><label|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>
 
-  Submits a report about an observed equivocation as described in Section
-  <reference|sect-babe-equivocation-proof>.
+  A BABE equivocation occurs when a validator produces more than one block at
+  the same slot. The proof of equivocation are the given distinct headers
+  that were signed by the validator and which include the slot number. The
+  Polkadot Host is expected to identify equivocators and report those to the
+  Runtime using this function.
 
-  \;
+  <\note>
+    If there are more than two blocks which cause an equivocation, the
+    equivocation only needs to be reported once i.e. no additional
+    equivocations must be reported for the same slot.\ 
+  </note>
 
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>The equivocation proof.
+    <item>The equivocation proof of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|B<rsub|Ep>>|<cell|=>|<cell|<around*|(|A<rsub|id>,s,h<rsub|1>,h<rsub|2>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|A<rsub|id>> is the public key of the equivocator.
+
+      <item><math|s> is the slot as described in Section
+      <reference|sect-babe> at which the equivocation occurred.
+
+      <item><math|h<rsub|1>> is the block header of the first block produced
+      by the equivocator.
+
+      <item><math|h<rsub|2>> is the block header of the second block produced
+      by the equivocator.
+    </itemize-dot>
+
+    Unlike during block execution, the Seal in both block headers is not
+    removed before submission. The block headers are submitted in its full
+    form.
 
     <item>An proof of the key owner in an opaque form as described in Section
     <reference|sect-babeapi_generate_key_ownership_proof>.

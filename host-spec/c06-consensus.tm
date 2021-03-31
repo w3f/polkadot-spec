@@ -315,7 +315,7 @@
 
     The Polkadot Host must detect equivocations committed by other validators
     and submit those to the Runtime as described in Section
-    <reference|sect-babe-equivocation-proof>.
+    <reference|sect-babeapi_submit_report_equivocation_unsigned_extrinsic>.
   </definition>
 
   <subsection|Block Production Lottery>
@@ -1079,10 +1079,11 @@
 
     The Polkadot Host must detect equivocations committed by other validators
     and submit those to the Runtime as described in Section
-    <reference|sect-grandpa-equivocation-proof>.
+    <reference|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>.
 
-    \ 
   </definition>
+
+  \;
 
   <\definition>
     A vote <math|V<rsub|v><rsup|r,stage>=V<around|(|B|)>> is <strong|invalid>
