@@ -14,7 +14,7 @@
   </hide-preamble>
 
   <doc-data|<doc-title|The Polkadot Host>|<doc-subtitle|Protocol
-  Specification>|<doc-date|<date|>>>
+  Specification>|<doc-author|Fabio Lama>|<doc-author|Florian Franzen>|<doc-author|Syed Hosseini>|<doc-date|<date|>>>
 
   <table-of-contents|toc|>
 
