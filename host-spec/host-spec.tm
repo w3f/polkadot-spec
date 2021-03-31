@@ -599,21 +599,11 @@
 
   <include|c03-transition.tm>
 
-  \;
-
   <include|c04-networking.tm>
-
-  <include|c04a-networking.tm>
-
-  \;
 
   <include|c05-bootstrapping.tm>
 
-  \;
-
   <include|c06-consensus.tm>
-
-  \;
 
   <include|c07-anv.tm>
 
@@ -627,13 +617,9 @@
 
   <include|ac-genesis.tm>
 
-  <include|ad-netmessages.tm>
+  <include|ad-hostapi.tm>
 
-  <include|ae-hostapi.tm>
-
-  <include|af-legacyhostapi.tm>
-
-  <include|ag-runtimeentries.tm>
+  <include|ae-runtimeapi.tm>
 
   \;
 
