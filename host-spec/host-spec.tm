@@ -4,35 +4,13 @@
 
 <\body>
   <\hide-preamble>
-    <assign|cdummy|<macro|\<cdot\>>>
-
     <assign|nobracket|<macro|>>
 
     <assign|nosymbol|<macro|>>
 
-    <assign|tmem|<macro|1|<with|font-shape|italic|<arg|1>>>>
-
-    <assign|tmname|<macro|1|<with|font-shape|small-caps|<arg|1>>>>
-
-    <assign|tmop|<macro|1|<math|<with|math-font-family|rm|<arg|1>>>>>
-
-    <assign|tmrsub|<macro|1|<rsub|<math|<with|math-font-family|rm|<arg|1>>>>>>
-
-    <assign|tmsamp|<macro|1|<with|font-family|ss|<arg|1>>>>
-
-    <assign|tmstrong|<macro|1|<with|font-series|bold|<arg|1>>>>
-
-    <assign|tmtextbf|<macro|1|<with|font-series|bold|<arg|1>>>>
-
-    <assign|tmtextit|<macro|1|<with|font-shape|italic|<arg|1>>>>
-
-    <assign|tmverbatim|<macro|1|<with|font-family|tt|<arg|1>>>>
-
     <new-theorem|definition|Definition>
 
     <new-theorem|notation|Notation>
-
-    \;
   </hide-preamble>
 
   <doc-data|<doc-title|The Polkadot Host<next-line><with|font-size|1.41|Protocol
