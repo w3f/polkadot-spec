@@ -514,12 +514,15 @@
 
   <subsubsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
-  This entry is invoked against extrinsics submitted through the transaction
-  network message <reference|sect-msg-transactions> and indicates if the
-  submitted blob represents a valid extrinsics applied to the specified
-  block. This function gets called internally when executing blocks with the
-  <verbatim|Core_execute_block> runtime function as described in section
-  <reference|sect-rte-core-execute-block>.
+  This entry should be invoked with all extrinsics submitted through a
+  transaction network message <reference|sect-msg-transactions> or by an
+  offchain worker through the <verbatim|ext_offchain_submit_transaction> Host
+  API (Section <reference|sect-ext-offchain-submit-transaction>). It will
+  indicates if the submitted blob represents a valid extrinsics applied to
+  the specified block, how it depends on other extrinsics and if it should be
+  gossiped to other peers. Furthermore this function gets called internally
+  when executing blocks with the <verbatim|Core_execute_block> runtime
+  function as described in section <reference|sect-rte-core-execute-block>.
 
   \;
 
@@ -550,7 +553,7 @@
     </big-table>
   </definition>
 
-  <strong|Return>:This function returns a <verbatim|Result> as defined in
+  <strong|Return>: This function returns a <verbatim|Result> as defined in
   Definition <reference|defn-result-type> which contains the type
   <em|<verbatim|ValidTransaction>> as defined in Definition
   <reference|defn-valid-transaction> on success and the type
@@ -577,7 +580,7 @@
     the validity to be correct>|<cell|>>|<row|<cell|Longevity>|<cell|After
     this period, the transaction should be removed from the >|<cell|Unsigned
     64bit>>|<row|<cell|>|<cell|pool or revalidated.>|<cell|integer>>|<row|<cell|Propagate>|<cell|A
-    flag indicating if the transaction should be propagated to
+    flag indicating if the transaction should be gossiped to
     >|<cell|Boolean>>|<row|<cell|>|<cell|other peers.>|<cell|>>>>>>
       The tuple provided by <verbatim|TaggedTransactionQueue_transaction_validity>
 
@@ -587,7 +590,7 @@
 
   <strong|Note>: If <em|Propagate> is set to <verbatim|false> the transaction
   will still be considered for including in blocks that are authored on the
-  current node, but will never be sent to other peers.
+  current node, but should not be gossiped to other peers.
 
   \;
 
