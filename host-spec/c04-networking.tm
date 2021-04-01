@@ -29,8 +29,8 @@
 
   <section|External Documentation><label|sect-networking-external-docs>
 
-  Complete specification of \ the Polkadot networking protocol relies on
-  \ the following external protocols:
+  Complete specification of the Polkadot networking protocol relies on the
+  following external protocols:
 
   <\itemize>
     <item><hlink|libp2p|https://github.com/libp2p/specs> - <verbatim|libp2p>
