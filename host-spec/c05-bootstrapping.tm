@@ -16,8 +16,7 @@
 
   <\enumerate>
     <item>The node needs to populate the state storage with the official
-    Genesis state which can be obtained from
-    <cite|paritytech_genesis_state>.
+    Genesis state which can be obtained from <cite|paritytech_genesis_state>.
 
     <item>The node should maintains a set of around 50 active peers at any
     time. New peers can be found using the <verbatim|libp2p> discovery
@@ -31,7 +30,8 @@
     <reference|sect-msg-block-request>) to these peers to receive all blocks
     in the chain and execute each of them.
 
-    <item>Exchange neighbor packets (Section <reference|sect-msg-grandpa>)
+    <item>Exchange neighbor packets (Section
+    <reference|sect-grandpa-neighbor-msg>)
 
     \;
   </enumerate>
@@ -39,8 +39,8 @@
   Validator nodes should take the following, additional steps.\ 
 
   <\enumerate>
-    <item>Verify that the Host's session key is included in the current Epoch's
-    authority set (Section <reference|sect-authority-set>).
+    <item>Verify that the Host's session key is included in the current
+    Epoch's authority set (Section <reference|sect-authority-set>).
 
     <item>Run the BABE lottery (Section <reference|sect-block-production>)
     and wait for the next assigned slot in order to produce a block.\ 
@@ -48,11 +48,12 @@
     <item>Gossip any produced blocks to all connected peers (Section
     <reference|sect-msg-block-announce>).
 
-    <item>Run the catch up protocol (Section <reference|sect-msg-grandpa>)
-    to make sure that the node is participating in the current round and not a past
-    round.
+    <item>Run the catch-up protocol (Section
+    <reference|sect-grandpa-catchup>) to make sure that the node is
+    participating in the current round and not a past round.
 
-    <item>Run the GRANDPA rounds protocol (Section <reference|sect-finality>).
+    <item>Run the GRANDPA rounds protocol (Section
+    <reference|sect-finality>).
   </enumerate>
 
   \;
