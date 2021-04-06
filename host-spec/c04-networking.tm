@@ -301,7 +301,7 @@
     protocol that sends GRANDPA votes to connected peers. This is a
     <em|Notification substream>.
 
-    The messages are specified in Section <reference|sect-msg-grandpa-vote>.
+    The messages are specified in Section <reference|sect-msg-grandpa>.
 
     <todo|This substream will change in the future. See <hlink|issue
     #7252|https://github.com/paritytech/substrate/issues/7252>.>
@@ -511,169 +511,180 @@
 
   <subsection|GRANDPA Messages><label|sect-msg-grandpa>
 
-  <\definition>
-    <label|defn-gossip-message><strong|GRANDPA Gossip> is a variant, as
-    defined in Definition <reference|defn-varrying-data-type>, which
-    identifies the message type that is cast by a voter. This type, followed
-    by the sub-component, is sent to other validators.
+  The exchange of GRANDPA messages is conducted on the
+  <verbatim|/paritytech/grandpa/1> substream. The process for the creation
+  and distributing these messages is described in Section
+  <reference|sect-finality>. The underlying messages are specified in this
+  section.
 
-    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|2|-1|1|-1|cell-hyphen|n>|<cwith|2|-1|1|-1|cell-tborder|1ln>|<cwith|2|-1|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|cell-lborder|0ln>|<cwith|2|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|GRANDPA
-    message (vote)>>|<row|<cell|1>|<cell|GRANDPA
-    pre-commit>>|<row|<cell|2>|<cell|GRANDPA neighbor
-    packet>>|<row|3|<cell|GRANDPA catch up request
-    message>>|<row|<cell|4>|<cell|GRANDPA catch up message>>>>>>
+  <\definition>
+    <label|defn-gossip-message>A <strong|GRANDPA gossip message> is a
+    variant, as defined in Definition <reference|defn-varrying-data-type>,
+    which identifies the message type that is cast by a voter. This type,
+    followed by the sub-component, is sent to other validators.
+
+    <\big-table|<tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|2|2|cell-rborder|0ln>|<cwith|2|-1|1|-1|cell-hyphen|n>|<cwith|2|-1|1|-1|cell-tborder|1ln>|<cwith|2|-1|1|-1|cell-bborder|1ln>|<cwith|2|-1|1|-1|cell-lborder|0ln>|<cwith|2|-1|1|-1|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|1|1|4|4|cell-tborder|0ln>|<cwith|2|6|4|4|cell-hyphen|n>|<cwith|2|6|4|4|cell-tborder|1ln>|<cwith|2|6|4|4|cell-bborder|1ln>|<cwith|2|6|4|4|cell-lborder|0ln>|<cwith|2|6|4|4|cell-rborder|0ln>|<cwith|1|1|4|4|cell-bborder|1ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Type>>|<cell|<with|font-series|bold|Definiton>>|<cell|<with|font-series|bold|Repropagated>>>|<row|<cell|0>|<cell|GRANDPA
+    vote message>|<cell|<reference|defn-grandpa-vote-msg>>|<cell|yes>>|<row|<cell|1>|<cell|GRANDPA
+    commit message>|<cell|<reference|defn-grandpa-commit-msg>>|<cell|yes>>|<row|<cell|2>|<cell|GRANDPA
+    neighbor message>|<cell|<reference|defn-grandpa-neighbor-msg>>|<cell|no>>|<row|3|<cell|GRANDPA
+    catch-up request message>|<cell|<reference|defn-grandpa-catchup-request-msg>>|<cell|no>>|<row|<cell|4>|<cell|GRANDPA
+    catch-up message>|<cell|<reference|defn-grandpa-catchup-response-msg>>|<cell|no>>>>>>
       GRANDPA gossip message types
     </big-table>
   </definition>
 
-  The sub-components are the individual message types described in this
-  section.
-
   <subsubsection|GRANDPA Vote Messages><label|sect-msg-grandpa-vote>
 
-  The exchange of GRANDPA messages is conducted on the
-  <verbatim|/paritytech/grandpa/1> substream. The process for the creation of
-  such votes is described in Section <reference|sect-finality>.
-
-  Voting is done by means of broadcasting voting messages to the network.
-  Validators inform their peers about the block finalized in round <math|r>
-  by broadcasting a finalization message (see Algorithm
-  <reference|algo-grandpa-round> for more details). These messages are
-  specified in this section.
-
   <\definition>
-    <label|defn-sign-round-vote><strong|<math|Sign<rsup|r,stage><rsub|v<rsub|i>>>>
-    refers to the signature of a voter for a specific message in a round and
-    is formally defined as:
-
-    <\equation*>
-      Sign<rsup|r,stage><rsub|v<rsub|i>>:=Sig<rsub|ED25519><around*|(|msg,r,id<rsub|\<bbb-V\>>|)>
-    </equation*>
-
-    Where:
-
-    <\big-table|<tabular|<tformat|<cwith|2|3|1|1|cell-halign|r>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|2|2|cell-halign|l>|<cwith|2|3|3|3|cell-halign|l>|<cwith|2|3|3|3|cell-rborder|0ln>|<cwith|2|3|1|3|cell-valign|c>|<table|<row|<cell|msg>|<cell|the
-    message to be signed>|<cell|arbitrary>>|<row|<cell|r:>|<cell|round
-    number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
-    set Id (Definition <reference|defn-authority-set-id>) of
-    v>|<cell|unsigned 64-bit integer>>>>>>
-      Signature for a message in a round.
-    </big-table>
-
-    \;
-  </definition>
-
-  <\definition>
-    A vote casted by voter <math|v> should be broadcasted as a
-    <strong|message <math|M<rsup|r,stage><rsub|v>>> to the network by voter
-    <math|v> with the following structure:
+    <label|defn-grandpa-vote-msg>A <strong|GRANDPA vote message> by voter
+    <math|v>, <with|font-series|bold|<math|M<rsup|r,stage><rsub|v>>>, is
+    gossip to the network by voter <math|v> with the following structure:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsup|r,stage><rsub|v>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>,<math-it|SigMsg>|)>>>|<row|<cell|<math-it|SigMsg>>|<cell|\<assign\>>|<cell|<math-it|msg>,Sig<rsup|r,stage><rsub|v<rsub|i>>,v<rsub|id>>>|<row|<cell|<math-it|msg>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|stage,V<rsup|r,stage><rsub|v>|)>>>>>
+      <tformat|<table|<row|<cell|M<rsup|r,stage><rsub|v><around*|(|B|)>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>,<math-it|SigMsg>|)>>>|<row|<cell|<math-it|SigMsg>>|<cell|\<assign\>>|<cell|<around*|(|<math-it|msg>,Sig<rsup|r,stage><rsub|v<rsub|i>>,v<rsub|id>|)>>>|<row|<cell|<math-it|msg>>|<cell|\<assign\>>|<cell|Enc<rsub|SC><around*|(|stage,V<rsup|r,stage><rsub|v><around*|(|B|)>|)>>>>>
     </eqnarray*>
 
     Where:
 
     <\center>
-      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|r:>|<cell|round
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|r>|<cell|round
       number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
       set Id (Definition <reference|defn-authority-set-id>)>|<cell|unsigned
       64-bit integer>>|<row|<cell|<math|Sig<rsup|r,stage><rsub|v<rsub|i>>>>|<cell|signature
       (Definition <reference|defn-sign-round-vote>)>|<cell|512-bit
-      array>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>:>|<cell|Ed25519
+      array>>|<row|<cell|<right-aligned|<math|v<rsub|id>>>>|<cell|Ed25519
       public key of <math|v>>|<cell|256-bit
-      array>>|<row|<cell|<right-aligned|><math|stage>:>|<cell|0 if it's a
+      array>>|<row|<cell|<right-aligned|><math|stage>>|<cell|0 if it's a
       pre-vote sub-round>|<cell|8-bit integer>>|<row|<cell|>|<cell|1 if it's
       a pre-commit sub-round>|<cell|8-bit integer>>|<row|<cell|>|<cell|2 if
-      it's a primary proposal message>|<cell|8-bit integer>>>>>
+      it's a primary proposal message>|<cell|8-bit
+      integer>>|<row|<cell|<math|V<rsup|r,stage><rsub|v><around*|(|B|)>>>|<cell|GRANDPA
+      vote for block <math|B> (Definition
+      <reference|defn-vote>)>|<cell|256-bit array, 32-bit integer>>>>>
     </center>
 
     \;
 
-    This message is the sub-component of the GRANDPA Gossip as defined in
-    Definition <reference|defn-gossip-message> of type Id 0 and 1.
+    This message is the sub-component of the GRANDPA gossip message as
+    defined in Definition <reference|defn-gossip-message> of type Id 0.
+  </definition>
+
+  <subsubsection|GRANDPA Commit Message>
+
+  <\definition>
+    <label|defn-grandpa-justifications-compact>The
+    <with|font-series|bold|GRANDPA compact justification format> is an
+    optimized data structure to store a collection of pre-commits and their
+    signatures to be submitted as part of a commit message. Instead of
+    storing an array of justifications, it uses the following format:
+
+    <\equation*>
+      J<rsup|r,comp><rsub|v<rsub|0\<ldots\>n>>:=<around*|(|<around*|{|V<rsup|r,pc><rsub|v<rsub|0>>,\<ldots\>,V<rsup|r,pc><rsub|v<rsub|n>>|}>,<around*|{|**<around*|(|Sig<rsup|r,pc><rsub|v<rsub|0>>,v<rsub|id<rsub|0>>|)>,\<ldots\>,<around*|(|Sig<rsub|v<rsub|n>><rsup|r,pc>,v<rsub|id<rsub|n>>|)>|}>|)>
+    </equation*>
+
+    Where:
+
+    <\center>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<cwith|2|3|1|1|cell-halign|r>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|2|2|cell-halign|l>|<cwith|2|3|3|3|cell-halign|l>|<cwith|2|3|3|3|cell-rborder|0ln>|<cwith|2|3|1|3|cell-valign|c>|<table|<row|<cell|<math|V<rsup|r,pc><rsub|v<rsub|i>>>>|<cell|pre-commit
+      vote of authority <math|v<rsub|i>> (Definition
+      <reference|defn-vote>)>|<cell|256-bit array, 32-bit
+      integer>>|<row|<cell|<math|Sig<rsup|r,pc><rsub|v<rsub|i>>>>|<cell|pre-commit
+      signature of authority <math|v<rsub|i>> (Definition
+      <reference|defn-sign-round-vote>)>|<cell|512-bit
+      array>>|<row|<cell|<right-aligned|<math|v<rsub|id<rsub|i>>>>>|<cell|public
+      key of authority <math|v<rsub|i>>>|<cell|256-bit array>>>>>
+    </center>
+  </definition>
+
+  <\definition>
+    <label|defn-grandpa-commit-msg>A <strong|<math|<with|font-series|bold|>GRANDPA>
+    commit message> for block <math|B> in round <math|r>
+    <strong|<math|M<rsub|v><rsup|r,Fin>>(B)> is a message broadcasted by
+    voter <math|v> to the network indicating that voter <math|v> has
+    finalized block <math|B> in round <math|r>. It has the following
+    structure:
+
+    <\equation*>
+      M<rsup|r,Fin><rsub|v><around*|(|B|)>\<assign\>Enc<rsub|SC><around|(|r,id<rsub|\<bbb-V\>>,V<rsub|v><rsup|r><around*|(|B|)>,J<rsub|<wide|v|~><rsub|0\<ldots\>n>><rsup|r,comp>|)>
+    </equation*>
+
+    Where:
+
+    <\center>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|r>>|<cell|round
+      number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
+      set Id (Definition <reference|defn-authority-set-id>)>|<cell|unsigned
+      64-bit integer>>|<row|<cell|<math|V<rsub|v><rsup|r><around*|(|B|)>>>|<cell|GRANDPA
+      vote for block <math|B> (Definition
+      <reference|defn-vote>)>|<cell|256-bit array, 32-bit
+      integer>>|<row|<cell|<math|J<rsub|<wide|v|~><rsub|0\<ldots\>n>><rsup|r,comp>>>|<cell|compacted
+      GRANDPA justifications (Definition <reference|defn-grandpa-justifications-compact>)
+      \ >|<cell|variable size>>|<row|<cell|>|<cell|containing observed
+      pre-commits of authorities <math|<wide|v|~><rsub|0>> to
+      <math|<wide|v|~><rsub|n>>>|<cell|>>>>>
+    </center>
 
     \;
 
+    This message is the sub-component of the GRANDPA gossip message as
+    defined in Definition <reference|defn-gossip-message> of type Id 1.
   </definition>
 
-  <subsubsection|GRANDPA Finalizing Message>
+  <subsubsection|GRANDPA Neighbor Message>
+
+  Neighbor messages are sent to all connected peers but they are not
+  repropagated on reception. A message should be send whenever the messages
+  values change and at least every 5 minutes. The sender should take the
+  recipients state into account and avoid sending messages to peers that are
+  using a different voter sets or are in a different round. Messages received
+  from a future voter set or round can be dropped and ignored.
 
   <\definition>
-    <label|defn-grandpa-justification>The <strong|justification for block B
-    in round <math|r>> of GRANDPA protocol defined
-    <math|J<rsup|r,stage><around*|(|B|)>> is a vector of pairs of the type:
+    <label|defn-grandpa-neighbor-msg>A <with|font-series|bold|GRANDPA
+    neighbor message> is defined as
+
+    \ 
 
     <\equation*>
-      <around*|(|V<around*|(|B<rprime|'>|)>,<around*|(|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>|)>
+      M<rsup|neigh>:=Enc<rsub|SC><around*|(|version,r,id<rsub|\<bbb-V\>>,H<rsub|h><around|(|B<rsub|last>|)>|)>
     </equation*>
 
-    in which either
+    Where:
 
-    <\equation*>
-      B<rprime|'>\<geqslant\>B
-    </equation*>
+    <\center>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<cwith|2|2|1|1|cell-halign|r>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|2|2|cell-halign|l>|<cwith|2|2|3|3|cell-halign|l>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|2|2|1|3|cell-valign|c>|<table|<row|<cell|<math|version>>|<cell|version
+      of neighbor message, currently <verbatim|1>>|<cell|unsignes 8-bit
+      integer>>|<row|<cell|r>|<cell|round number>|<cell|unsigned 64-bit
+      integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority set Id
+      (Definition <reference|defn-authority-set-id>)>|<cell|unsigned 64-bit
+      integer>>|<row|<cell|<math|H<rsub|h><around*|(|B<rsub|last>|)>>>|<cell|block
+      hash of last finialized block <math|B<rsub|last>>>|<cell|256-bit
+      array>>>>>
+    </center>
 
-    or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
-    equivocatory vote.
+    \ \ \ \ 
 
-    In all cases, <math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>,
-    as defined in Definition <reference|defn-sign-round-vote>, is the
-    signature of voter <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>> broadcasted
-    during either the pre-vote (stage = pv) or the pre-commit (stage = pc)
-    sub-round of round r. A <strong|valid justification> must only contain
-    up-to-one valid vote from each voter and must not contain more than two
-    equivocatory votes from each voter.
-  </definition>
-
-  <\definition>
-    <label|defn-finalizing-justification>We say
-    <math|J<rsup|r,pc><around*|(|B|)>> <strong|justifies the finalization> of
-    <math|B<rprime|'>\<geqslant\>B> <strong|for a non-voter node <math|n>> if
-    the number of valid signatures in <math|J<rsup|r,pc><around*|(|B|)>> for
-    <math|B<rprime|'>> is greater than <math|<frac|2|3><around|\||\<bbb-V\><rsub|B>|\|>>.
-  </definition>
-
-  Note that <math|J<rsup|r,pc><around*|(|B|)>> can only be used by a
-  non-voter node to finalize a block. In contrast, a voter node can only be
-  assured of the finality of block <math|B> by actively participating in the
-  voting process. That is by invoking Algorithm
-  <reference|algo-grandpa-round>. See Definition
-  <reference|defn-finalized-block> for more details.
-
-  <\definition>
-    <strong|<math|GRANDPA> finalizing message for block <math|B> in round
-    <math|r>> represented as <strong|<math|M<rsub|v><rsup|r,Fin>>(B)> is a
-    message broadcasted by voter <math|v> to the network indicating that
-    voter <math|v> has finalized block <math|B> in round <math|r>. It has the
-    following structure:
-
-    <\equation*>
-      M<rsup|r,Fin><rsub|v><around*|(|B|)>\<assign\>Enc<rsub|SC><around|(|r,V<around*|(|B|)>,J<rsup|r,pc><around*|(|B|)>|)>
-    </equation*>
-
-    in which <math|J<rsup|r><around*|(|B|)>> in the justification defined in
-    Definition <reference|defn-grandpa-justification>.
+    This message is the sub-component of the GRANDPA gossip message as
+    defined in Definition <reference|defn-gossip-message> of type Id 2.
   </definition>
 
   <subsubsection|GRANDPA Catch-up Messages><label|sect-grandpa-catchup-messages>
 
   Whenever a Polkadot node detects that it is lagging behind the finality
-  procedure, it needs to initiate a <em|catch-up> procedure. Neighbour packet
-  network message (see Section <reference|sect-msg-grandpa>) reveals the
-  round number for the last finalized GRANDPA round which the sending peer
-  has observed. This provides a means to identify a discrepancy in the latest
-  finalized round number observed among the peers. If such a discrepancy is
-  observed, the node needs to initiate the catch-up procedure explained in
-  Section <reference|sect-grandpa-catchup>.
+  procedure, it needs to initiate a <em|catch-up> procedure. GRANDPA Neighbor
+  messages (see Section <reference|defn-grandpa-neighbor-msg>) reveal the
+  round number for the last finalized GRANDPA round which the node's peers
+  have observed. This provides the means to identify a discrepancy in the
+  latest finalized round number observed among the peers. If such a
+  discrepancy is observed, the node needs to initiate the catch-up procedure
+  explained in Section <reference|sect-grandpa-catchup>.
 
   In particular, this procedure involves sending a <em|catch-up request> and
   processing <em|catch-up response> messages specified here:
 
   <\definition>
     A <label|defn-grandpa-catchup-request-msg><strong|GRANDPA catch-up
-    request message for round r> represented as
-    <strong|<math|M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>>>
+    request message> for round r, <strong|<math|M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>>>,
     is a message sent from node <math|i> to its voting peer node <math|v>
     requesting the latest status of a GRANDPA round
     <math|r<rprime|'>\<gtr\>r> of the authority set <math|\<bbb-V\><rsub|id>>
@@ -681,32 +692,34 @@
     structure:
 
     <\equation*>
-      M<rsub|i,v><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r|)>\<assign\>Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>|)>
+      M<rsub|i,v><rsup|r,Cat-q>\<assign\>Enc<rsub|SC><around*|(|r,id<rsub|\<bbb-V\>>|)>
     </equation*>
 
-    This message is the sub-component of the GRANDPA Gossip as defined in
-    Definition <reference|defn-gossip-message> of type Id 3.
+    This message is the sub-component of the GRANDPA Gossip message as
+    defined in Definition <reference|defn-gossip-message> of type Id 3.
   </definition>
 
   <\definition>
     <label|defn-grandpa-catchup-response-msg><strong|GRANDPA catch-up
-    response message for round r> formally denoted as
-    \ <strong|<math|M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>>>
-    is a message sent by a node <math|v> to node i in response to a catch-up
+    response message> for round, <strong|<math|M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>>>,
+    is a message sent by a node <math|v> to node i in response of a catch-up
     request <math|M<rsub|v,i><rsup|Cat-q><around*|(|id<rsub|\<bbb-V\>>,r<rprime|'>|)>>
-    in which <math|r\<geqslant\>r<rprime|'>> is the latest GRNADPA round
-    which v has to prove of its finalization and has the following structure:
+    in which <math|r\<geqslant\>r<rprime|'>> is the latest GRANDPA round
+    which v has prove of its finalization and has the following structure:
 
     <\equation*>
-      M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>\<assign\>Enc<rsub|SC><around*|(|id<rsub|\<bbb-V\>>,r,J<rsup|r,pv><around*|(|B|)>,J<rsup|r,pc><around*|(|B|)>,H<rsub|h><around*|(|B<rprime|'>|)>,H<rsub|i><around*|(|B<rprime|'>|)>|)>
+      M<rsub|v,i><rsup|r,Cat-s>\<assign\>Enc<rsub|SC><around*|(|id<rsub|\<bbb-V\>>,r,J<rsub|0\<ldots\>n><rsup|r,pv><around*|(|B|)>,J<rsub|0\<ldots\>m><rsup|r,pc><around*|(|B|)>,H<rsub|h><around*|(|B<rprime|'>|)>,H<rsub|i><around*|(|B<rprime|'>|)>|)>
     </equation*>
 
     Where B is the highest block which <math|v> believes to be finalized in
     round <math|r>. <math|B<rprime|'>> is the highest ancestor of all blocks
-    voted on in <math|J<rsup|r,pc><around*|(|B|)>> with the exception of the
-    equivocationary votes. This message is the sub-component of the GRANDPA
-    Gossip as defined in Definition <reference|defn-gossip-message> of type
-    Id 4.
+    voted on in the arrays of justifications
+    <math|J<rsup|r,pv><rsub|0\<ldots\>n><around*|(|B|)>> and
+    <math|J<rsub|0\<ldots\>m><rsup|r,pc><around*|(|B|)>> with the exception
+    of the equivocationary votes.\ 
+
+    This message is the sub-component of the GRANDPA Gossip message as
+    defined in Definition <reference|defn-gossip-message> of type Id 4.
   </definition>
 
   \;

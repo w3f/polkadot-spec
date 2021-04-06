@@ -1054,6 +1054,78 @@
     the pre-commit sub-round respectively.
   </definition>
 
+  Voting is done by means of broadcasting voting messages to the network. The
+  structure of these messages is described in Section
+  <reference|sect-msg-grandpa>. Validators inform their peers about the block
+  finalized in round <math|r> by broadcasting a commit message (see Algorithm
+  <reference|algo-grandpa-round> for more details).\ 
+
+  <\definition>
+    <label|defn-sign-round-vote><strong|<math|Sign<rsup|r,stage><rsub|v<rsub|i>>>>
+    refers to the signature of a voter for a specific message in a round and
+    is formally defined as:
+
+    <\equation*>
+      Sign<rsup|r,stage><rsub|v<rsub|i>>:=Sig<rsub|ED25519><around*|(|msg,r,id<rsub|\<bbb-V\>>|)>
+    </equation*>
+
+    Where:
+
+    <center|<tabular|<tformat|<cwith|2|3|1|1|cell-halign|r>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|2|2|cell-halign|l>|<cwith|2|3|3|3|cell-halign|l>|<cwith|2|3|3|3|cell-rborder|0ln>|<cwith|2|3|1|3|cell-valign|c>|<table|<row|<cell|msg>|<cell|the
+    message to be signed>|<cell|arbitrary>>|<row|<cell|r:>|<cell|round
+    number>|<cell|unsigned 64-bit integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority
+    set Id (Definition <reference|defn-authority-set-id>) of
+    v>|<cell|unsigned 64-bit integer>>>>>>
+
+    \;
+  </definition>
+
+  <\definition>
+    <label|defn-grandpa-justification>The <strong|justification> for block B
+    in round <math|r>, <math|<with|font-series|bold|J<rsup|r,stage><around*|(|B|)>>>,
+    is a vector of pairs of the type:
+
+    <\equation*>
+      <around*|(|V<around*|(|B<rprime|'>|)>,Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>
+    </equation*>
+
+    in which either
+
+    <\equation*>
+      B<rprime|'>\<geqslant\>B
+    </equation*>
+
+    or <math|V<rsup|r,pc><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>> is an
+    equivocatory vote.
+
+    \;
+
+    In all cases, <math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>,
+    as defined in Definition <reference|defn-sign-round-vote>, is the
+    signature of voter <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>> broadcasted
+    during either the pre-vote (stage = pv) or the pre-commit (stage = pc)
+    sub-round of round r. A <strong|valid justification> must only contain
+    up-to-one valid vote from each voter and must not contain more than two
+    equivocatory votes from each voter.
+  </definition>
+
+  <\definition>
+    <label|defn-finalizing-justification>We say
+    <math|J<rsup|r,pc><around*|(|B|)>> <strong|justifies the finalization> of
+    <math|B<rprime|'>\<geqslant\>B> <strong|for a non-voter node <math|n>> if
+    the number of valid signatures in <math|J<rsup|r,pc><around*|(|B|)>> for
+    <math|B<rprime|'>> is greater than <math|<frac|2|3><around|\||\<bbb-V\><rsub|B>|\|>>.
+  </definition>
+
+  Note that <math|J<rsup|r,pc><around*|(|B|)>> can only be used by a
+  non-voter node to finalize a block. In contrast, a voter node can only be
+  assured of the finality of block <math|B> by actively participating in the
+  voting process. That is by invoking Algorithm
+  <reference|algo-grandpa-round>. See Definition
+  <reference|defn-finalized-block> for more details.
+
+  \;
+
   The GRANDPA protocol dictates how an honest voter should vote in each
   sub-round, which is described in Algorithm <reference|algo-grandpa-round>.
   After defining what constitutes a vote in GRANDPA, we define how GRANDPA
@@ -1082,10 +1154,7 @@
     The Polkadot Host must detect equivocations committed by other validators
     and submit those to the Runtime as described in Section
     <reference|sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>.
-
   </definition>
-
-  \;
 
   <\definition>
     A vote <math|V<rsub|v><rsup|r,stage>=V<around|(|B|)>> is <strong|invalid>
@@ -1730,9 +1799,8 @@
     Algorithm <reference|algo-grandpa-round> if <math|n> is a GRANDPA voter.
   </itemize-dot>
 
-  Note that all Polkadot relay chain nodes are supposed to listen to the
-  GRANDPA finalizing messages and process them regardless if they are GRANDPA
-  voters.
+  Note that all Polkadot relay chain nodes are supposed to process GRANDPA
+  commit messages regardless of their GRANDPA voter status.
 
   <subsection|Catching up><label|sect-grandpa-catchup>
 
