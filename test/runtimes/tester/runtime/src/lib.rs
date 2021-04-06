@@ -192,6 +192,8 @@ impl system::Config for Runtime {
 	type SystemWeightInfo = ();
 	/// This is used as an identifier of the chain. 42 is the generic substrate prefix.
 	type SS58Prefix = SS58Prefix;
+	/// What to do on code update 
+	type OnSetCode = ();
 }
 
 parameter_types! {
