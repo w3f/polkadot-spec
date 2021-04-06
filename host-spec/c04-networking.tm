@@ -630,7 +630,7 @@
     defined in Definition <reference|defn-gossip-message> of type Id 1.
   </definition>
 
-  <subsubsection|GRANDPA Neighbor Message>
+  <subsubsection|GRANDPA Neighbor Message><label|sect-grandpa-neighbor-msg>
 
   Neighbor messages are sent to all connected peers but they are not
   repropagated on reception. A message should be send whenever the messages
