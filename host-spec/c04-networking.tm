@@ -662,7 +662,7 @@
       array>>>>>
     </center>
 
-    \ \ \ \ 
+    \;
 
     This message is the sub-component of the GRANDPA gossip message as
     defined in Definition <reference|defn-gossip-message> of type Id 2.
