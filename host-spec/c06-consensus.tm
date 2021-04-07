@@ -581,12 +581,11 @@
     in which:
 
     <\with|par-mode|center>
-      <tabular|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|3|3|1|1|cell-halign|r>|<table|<row|<cell|<math|\<pi\>,d>:>|<cell|are
-      the results of the block lottery for slot s.
-      >>|<row|<cell|<math|j>:>|<cell|is the index of the block producer
-      producing block in the current authority directory of the current
-      epoch. >>|<row|<cell|s:>|<cell|is the slot at which the block is
-      produced.>>>>>
+      <tabular|<tformat|<cwith|1|-1|1|1|cell-halign|r>|<cwith|3|3|1|1|cell-halign|r>|<cwith|1|-1|1|-1|cell-hyphen|n>|<table|<row|<cell|<math|\<pi\>,d>:>|<cell|the
+      results of the block lottery for slot s.
+      >>|<row|<cell|<math|j>:>|<cell|the index of the block producer in the
+      authority directory of the current epoch>>|<row|<cell|s:>|<cell|the
+      slot at which the block is produced.>>>>>
 
       \;
     </with>
