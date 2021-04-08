@@ -2,7 +2,7 @@
 
 <project|host-spec.tm>
 
-<style|<tuple|book|old-dots|old-lengths>>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <appendix|Polkadot Runtime API><label|sect-runtime-entries>

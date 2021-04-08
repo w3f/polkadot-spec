@@ -1,8 +1,8 @@
-<TeXmacs|1.99.11>
+<TeXmacs|1.99.18>
 
 <project|host-spec.tm>
 
-<style|<tuple|generic|std-latex>>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <assign|blobB|<macro|<math|<wide|B|\<bar\>>>>><assign|PoVB|<macro|<math|PoV<rsub|B>>>><assign|paraValidSet|<macro|<math|\<cal-V\><rsub|\<rho\>>>>>

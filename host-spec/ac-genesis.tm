@@ -1,8 +1,8 @@
-<TeXmacs|1.99.16>
+<TeXmacs|1.99.18>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|old-lengths>>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <appendix|Genesis State Specification><label|sect-genesis-block>

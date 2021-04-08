@@ -1,8 +1,8 @@
-<TeXmacs|1.99.19>
+<TeXmacs|1.99.18>
 
 <project|host-spec.tm>
 
-<style|<tuple|generic|std-latex|old-dots|old-lengths>>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <chapter|Networking><label|sect-networking>
