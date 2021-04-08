@@ -2,7 +2,7 @@
 
 <project|host-spec.tm>
 
-<style|<tuple|book|algorithmacs-style|old-dots|old-lengths>>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <chapter|State Transition><label|chap-state-transit>

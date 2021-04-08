@@ -1,8 +1,8 @@
-<TeXmacs|1.99.17>
+<TeXmacs|1.99.18>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|old-dots|old-lengths>>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <appendix|Polkadot Host API><label|sect-host-api>

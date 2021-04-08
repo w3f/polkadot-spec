@@ -1,8 +1,8 @@
-<TeXmacs|1.99.12>
+<TeXmacs|1.99.18>
 
 <project|host-spec.tm>
 
-<style|book>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <appendix|Cryptographic Algorithms>

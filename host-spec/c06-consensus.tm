@@ -1,8 +1,8 @@
-<TeXmacs|1.99.19>
+<TeXmacs|1.99.18>
 
 <project|host-spec.tm>
 
-<style|<tuple|book|old-dots|old-lengths|algorithmacs-style>>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <chapter|Consensus><label|chap-consensu>
