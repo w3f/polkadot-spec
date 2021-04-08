@@ -63,6 +63,13 @@
 
 <\initial>
   <\collection>
+    <associate|save-aux|false>
     <associate|preamble|false>
   </collection>
 </initial>
+
+<references|<\collection>
+</collection>>
+
+<auxiliary|<\collection>
+</collection>>

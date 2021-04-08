@@ -729,5 +729,17 @@
   </with>
 
   \;
-
 </body>
+
+<\initial>
+  <\collection>
+    <associate|chapter-nr|3>
+    <associate|save-aux|false>
+  </collection>
+</initial>
+
+<references|<\collection>
+</collection>>
+
+<auxiliary|<\collection>
+</collection>>
