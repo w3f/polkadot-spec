@@ -9,7 +9,7 @@ GENERATED  := figures/c07-overview.eps
 SOURCES    := host-spec.tm $(CHAPTERS) $(APPENDICES) $(FIGURES) $(GENERATED)
 
 
-.PHONY: build pdf tex diff temp update clean
+.PHONY: build pdf tex diff temp update deaux clean
 
 build: pdf
 
@@ -51,6 +51,20 @@ polkadot-host-spec.diff.pdf: $(SOURCES) $(REVDIR) host-spec.scm
 
 update: $(SOURCES) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm -x "(update-all \"$$PWD/$<\" \"$(TMPDIR)\")" --quit
+
+
+define DEAUX_SED_REGEXP
+	s@<\\$1|\([^>]*\)>.*</$1>@<$1|\1|>@g
+endef
+
+DETOC := $(call DEAUX_SED_REGEXP,table-of-contents)
+DEGLY := $(call DEAUX_SED_REGEXP,the-glossary)
+DEBIB := $(call DEAUX_SED_REGEXP,bibliography)
+DEIDX := $(call DEAUX_SED_REGEXP,the-index)
+
+deaux:
+	sed -e '1h;2,$$H;$$!d;g' -e '$(DETOC)' -e '$(DEGLY)' -e '$(DEBIB)' -e '$(DEIDX)' -i host-spec.tm
+
 
 clean:
 	rm -rf $(REVDIR) $(GENERATED) polkadot-host-spec.pdf polkadot-host-spec.tex polkadot-host-spec.diff.pdf
