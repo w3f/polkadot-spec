@@ -144,3 +144,16 @@
   \;
 
 </body>
+
+<\initial>
+  <\collection>
+    <associate|appendix-nr|0>
+    <associate|save-aux|false>
+  </collection>
+</initial>
+
+<references|<\collection>
+</collection>>
+
+<auxiliary|<\collection>
+</collection>>
