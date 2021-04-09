@@ -862,7 +862,7 @@
   <\verbatim>
     (func $ext_crypto_sr25519_public_keys_version_1
 
-    (param $key_type_id i64) (return i64))
+    (param $key_type_id i32) (return i64))
   </verbatim>
 
   \;
