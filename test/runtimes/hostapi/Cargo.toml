@@ -6,7 +6,7 @@ build = "build.rs"
 
 [dependencies]
 sp-core            = { version = "3.0", default-features = false, optional = true }
-parity-scale-codec = { version = "2.0", default-features = false, optional = true }
+parity-scale-codec = { version = "2.1", default-features = false, optional = true }
 
 [build-dependencies]
 substrate-wasm-builder = "3.0"
