@@ -1,4 +1,4 @@
-# Polkadot Protocol Specification and Conformance Tests
+# Polkadot Protocol Specification
 
 [![Specification Publication](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Specification+Publication%22)
 
