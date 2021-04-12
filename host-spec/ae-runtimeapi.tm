@@ -517,12 +517,13 @@
   This entry should be invoked with all extrinsics submitted through a
   transaction network message <reference|sect-msg-transactions> or by an
   offchain worker through the <verbatim|ext_offchain_submit_transaction> Host
-  API (Section <reference|sect-ext-offchain-submit-transaction>). It will
+  API (Section <reference|sect-ext-offchain-submit-transaction>). It
   indicates if the submitted blob represents a valid extrinsics applied to
-  the specified block, how it depends on other extrinsics and if it should be
-  gossiped to other peers. Furthermore this function gets called internally
-  when executing blocks with the <verbatim|Core_execute_block> runtime
-  function as described in section <reference|sect-rte-core-execute-block>.
+  the specified block, in which order it should be applied and if it should
+  be gossiped to other peers. Furthermore this function gets called
+  internally when executing blocks with the <verbatim|Core_execute_block>
+  runtime function as described in section
+  <reference|sect-rte-core-execute-block>.
 
   \;
 
@@ -589,7 +590,7 @@
   </definition>
 
   <strong|Note>: If <em|Propagate> is set to <verbatim|false> the transaction
-  will still be considered for including in blocks that are authored on the
+  will still be considered for inclusion in blocks that are authored on the
   current node, but should not be gossiped to other peers.
 
   \;

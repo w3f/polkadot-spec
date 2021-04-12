@@ -98,11 +98,11 @@
     block <math|B>.
   </notation>
 
-  The initial runtime code of the chain is provided as part of the genesis
+  The initial Runtime code of the chain is provided as part of the genesis
   state (see Section <reference|sect-genesis-block>) and subsequent calls to
-  the Runtime have the ability to, in turn, call the storage API (see Section
-  <reference|sect-host-api>) to insert new Wasm blobs into runtime storage to
-  upgrade the Runtime.
+  the Runtime have the ability to, in turn, upgrade the Runtime by replacing
+  this Wasm blob with the help of the storage API (see Section
+  <reference|sect-host-api>).
 
   <subsection|Code Executor><label|sect-code-executor>
 
@@ -149,7 +149,7 @@
   The size of the provided WASM memory should be based on the value of the
   <verbatim|:heappages> storage key (an unsigned 64-bit integer), where each
   page has the size of 64KB. This memory shoule be made available to the
-  Polkadot runtime for import under the symbol name <verbatim|memory>.
+  Polkadot Runtime for import under the symbol name <verbatim|memory>.
 
   <subsubsection|Sending Data to a Runtime Entry
   ><label|sect-runtime-send-args-to-runtime-enteries>
@@ -257,8 +257,7 @@
   <verbatim|validate_transaction> Runtime function, defined in Section
   <reference|sect-rte-validate-transaction>. This will allow the Polkadot
   Host to check the validity of the received transaction against the current
-  state as well as determine how the transaction depends on other extrinsics
-  and if it should be gossiped to other peers. If
+  stat and if it should be gossiped to other peers. If
   <verbatim|validate_transaction> considers the submitted transaction as
   valid, the Polkadot Host should store it for inclusion in future blocks.
   The whole process of handeling new transactions is described in more detail
@@ -615,8 +614,7 @@
 
   Block validation is the process by which a node asserts that a block is fit
   to be added to the blockchain. This means that the block is consistent with
-  the world state and transitions from the current state of the system to a
-  new valid state.
+  the current state of the system and transitions to a new valid state.
 
   \;
 
@@ -817,7 +815,7 @@
 
   is a SCALE encoded byte array.
 
-  Furthermore <math|K> represents the changed storage key,
+  Furthermore, <math|K> represents the changed storage key,
   <math|H<rsub|i><around*|(|B<rsub|i>|)>> refers to the block number at which
   this key is inserted into the Changes Trie (See Definition
   <reference|defn-block-header>) and <math|Type<rsub|V<rsub|C>>> is an index
