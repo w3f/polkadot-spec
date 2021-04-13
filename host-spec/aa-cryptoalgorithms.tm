@@ -130,15 +130,16 @@
 
   <subsection|Certifying keys><label|sect-certifying-keys>
 
-  Session keys should be changed regularly. As such, new session keys need to
-  be certified by a controller key before putting in use. The controller only
-  needs to create a certificate by signing a session public key and
-  broadcastg this certificate via an extrinsic. <todo|spec the detail of the
-  data structure of the certificate etc.>
+  Due to security considerations and Runtime upgrades, the session keys are
+  supposed to \ be changed regularly. As such, the new session keys need to
+  be certified by a controller key before putting them in use. The controller
+  only needs to create a certificate by signing a session public key and
+  broadcasting this certificate via an extrinsic. <todo|spec the detail of
+  the data structure of the certificate etc.>
 
- \;
- 
- <\with|par-mode|right>
+  \;
+
+  <\with|par-mode|right>
     <qed>
   </with>
 
