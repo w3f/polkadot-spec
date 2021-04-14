@@ -125,11 +125,11 @@
 
   <subsubsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
 
-  This feature executes a full block by executing all exctrinsics included in
-  it and update the state accordingly. Additionally, some integrity checks
-  are executed such as validating if the parent hash is correct and that the
-  transaction root represents the transactions. Internally, this function
-  performs an operation similar to the process described in Algorithm
+  This function executes a full block and all its exctrinsics and updates the
+  state accordingly. Additionally, some integrity checks are executed such as
+  validating if the parent hash is correct and that the transaction root
+  represents the transactions. Internally, this function performs an
+  operation similar to the process described in Algorithm
   <reference|algo-build-block>, by calling <verbatim|Core_initialize_block>,
   <verbatim|BlockBuilder_apply_extrinsics> and
   <verbatim|BlockBuilder_finalize_block>.
