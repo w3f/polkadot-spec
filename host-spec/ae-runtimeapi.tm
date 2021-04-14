@@ -257,19 +257,6 @@
     structures, indicating either module dispatch outcomes or transaction
     invalidity errors.
 
-    \;
-
-    <strong|NOTE>: When applying an extrinsics return a
-    <verbatim|DispatchOutcome> (<reference|defn-rte-dispatch-outcome>), the
-    extrinsic is always included in the block, even if the outcome is a
-    dispatch error. Dispatch errors do not invalidate the block and all state
-    changes are persisted. When applying an extrinsics return
-    <verbatim|TransactionValidityError> (<reference|defn-rte-transaction-validity-error>),
-    certain error types indicate whether an extrinsic should be outright
-    rejected or requested for a later block. This behaviour is clarified
-    further in Definition <reference|defn-rte-invalid-transaction>
-    respectively Definition <reference|defn-rte-unknown-transaction>.
-
     <\big-table|<tabular|<tformat|<cwith|2|2|1|-1|cell-bborder|1ln>|<cwith|3|3|1|-1|cell-tborder|1ln>|<cwith|2|2|1|1|cell-lborder|0ln>|<cwith|2|2|3|3|cell-rborder|0ln>|<cwith|1|1|1|-1|cell-tborder|0ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|2|2|1|-1|cell-tborder|1ln>|<cwith|1|1|1|1|cell-lborder|0ln>|<cwith|1|1|3|3|cell-rborder|0ln>|<cwith|4|4|1|-1|cell-tborder|0ln>|<cwith|3|3|1|-1|cell-bborder|0ln>|<cwith|4|4|1|-1|cell-bborder|1ln>|<cwith|4|4|1|1|cell-lborder|0ln>|<cwith|4|4|3|3|cell-rborder|0ln>|<table|<row|<cell|<strong|Id>>|<cell|<strong|Description>>|<cell|<strong|Type>>>|<row|<cell|0>|<cell|Outcome
     of dispatching the extrinsic.>|<cell|DispatchOutcome
     (<reference|defn-rte-dispatch-outcome>)>>|<row|<cell|1>|<cell|Possible
@@ -279,6 +266,14 @@
       Possible values of varying data type <strong|ApplyExtrinsicResult>.
     </big-table>
   </definition>
+
+  <\note>
+    As long as a <verbatim|DispatchOutcome>
+    (<reference|defn-rte-dispatch-outcome>) is returned, the extrinsic is
+    always included in the block, even if the outcome is a dispatch error.
+    Dispatch errors do not invalidate the block and all state changes are
+    persisted.
+  </note>
 
   <\definition>
     <label|defn-rte-dispatch-outcome><strong|DispatchOutcome> is the varying
@@ -326,6 +321,15 @@
       Possible values of varying data type <strong|CustomModuleError>.
     </big-table>
   </definition>
+
+  <\note>
+    Whenever <verbatim|TransactionValidityError>
+    (<reference|defn-rte-transaction-validity-error>) is returned, the
+    contained error type will indicate whether an extrinsic should be
+    outright rejected or requested for a later block. This behaviour is
+    clarified further in Definition <reference|defn-rte-invalid-transaction>
+    respectively Definition <reference|defn-rte-unknown-transaction>.
+  </note>
 
   <\definition>
     <label|defn-rte-transaction-validity-error><strong|TransactionValidityError>
