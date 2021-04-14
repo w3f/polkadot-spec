@@ -25,15 +25,10 @@
   directly accessed by the Polkadot Host (in contrast to Polkadot runtime).
 
   <\definition>
-    <label|defn-stored-value>The <glossary-explain|StoredValue|the function
-    retrieves the value stored under a specific key in the state storage and
-    is formally defined as <math|<tabular|<tformat|<table|<row|<cell|\<cal-K\>\<rightarrow\>\<cal-V\>>>|<row|<cell|k\<mapsto\><around*|{|<tabular*|<tformat|<table|<row|<cell|v>|<cell|<text|if
-    (k,v) exists in state storage>>>|<row|<cell|\<phi\>>|<cell|otherwise>>>>>|\<nobracket\>>>>>>>>.
-    Here <math|\<cal-K\>\<subset\>\<bbb-B\>> and
-    <math|\<cal-V\>\<subset\>\<bbb-B\>> are respectively the set of all keys
-    and values stored in the state storage.><strong|StoredValue> function
-    retrieves the value stored under a specific key in the state storage and
-    is formally defined as :
+    <label|defn-stored-value>The <glossary-explain|<math|StoredValue<around*|(|k|)>>|The
+    function to retrieve the value stored under a specific key in the state
+    storage.><strong|StoredValue> function retrieves the value stored under a
+    specific key in the state storage and is formally defined as :
 
     <\equation*>
       <tabular*|<tformat|<table|<row|<cell|StoredValue:>|<cell|\<cal-K\>\<rightarrow\>\<cal-V\>>>|<row|<cell|>|<cell|k\<mapsto\><around*|{|<tabular*|<tformat|<table|<row|<cell|v>|<cell|<text|if
@@ -47,14 +42,15 @@
     \;
   </definition>
 
-  <subsection|The General Tree Structure>
+  <subsection|The General Tree Structure><label|sect-trie-structure>
 
   In order to ensure the integrity of the state of the system, the stored
-  data needs to be re-arranged and hashed in a <em|modified Merkle Patricia
-  Tree>, which hereafter we refer to as the <em|<strong|Trie>>. This
-  rearrangment is necessary to be able to compute the Merkle hash of the
-  whole or part of the state storage, consistently and efficiently at any
-  given time.
+  data needs to be re-arranged and hashed in a <em|Merkle radix-16 Tree>,
+  which hereafter we refer to as the <em|<strong|State Trie>> or simply as
+  the <em|<strong|Trie>><glossary-explain|State Trie, Trie|<em|The Merkle
+  radix-16 Tree which stores hashes of storage enteries>.>. This rearrangment
+  is necessary to be able to compute the Merkle hash of the whole or part of
+  the state storage, consistently and efficiently at any given time.
 
   The Trie is used to compute the <em|state root>, <math|H<rsub|r>>, (see
   Definition <reference|defn-block-header>), whose purpose is to authenticate
@@ -79,11 +75,14 @@
   sequence of 4-bit nibbles:
 
   <\definition>
-    For the purpose of labeling the branches of the Trie, the key <math|k> is
-    encoded to <math|k<rsub|enc>> using KeyEncode functions:
+    <math|<label|defn-key-encode-in-trie>>For the purpose of labeling the
+    branches of the state trie, the key <math|k> is encoded to
+    <math|k<rsub|enc>> using KeyEncode functions, formally referred to by
+    KeyEncode(k)<glossary-explain|<math|KeyEncode<around|(|k|)>>|The function
+    to encode keys for labeling branaches of the Trie.>:
 
     <\equation>
-      k<rsub|enc>\<assign\><around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|2*n>>|)>\<assign\>KeyEncode<around|(|k|)><label|key-encode-in-trie>
+      k<rsub|enc>\<assign\><around|(|k<rsub|enc<rsub|1>>,\<ldots\>,k<rsub|enc<rsub|2*n>>|)>\<assign\>KeyEncode<around|(|k|)>
     </equation>
 
     such that:
@@ -113,18 +112,21 @@
   well as the Trie structure:
 
   <\notation>
-    We refer to the <strong|set of the nodes of Polkadot state trie> by
-    <math|\<cal-N\>.> By <math|N\<in\>\<cal-N\>> to refer to an individual
-    node in the trie.
+    By \<cal-N\><glossary-explain|\<cal-N\>|The set of all nodes in the
+    Polkadot state trie>, we refer to the <strong|set of the nodes of
+    Polkadot state trie>. By <math|><glossary-explain|<math|N>|An individual
+    node in the Trie><math|N\<in\>\<cal-N\>>, we refer to an individual node
+    in the trie.
   </notation>
 
   <\definition>
-    <label|defn-nodetype>The State Trie is a radix-16 tree. Each Node in the
-    Trie is identified with a unique key <math|k<rsub|N>> such that:
+    <label|defn-nodetype>The State Trie<glossary-dup|State Trie, Trie> is
+    <verbatim|>a radix-16 tree. Each node, <math|N>, in the Trie is
+    identified with a unique key <math|k<rsub|N>> such that:
 
     <\itemize-minus>
       <item><math|k<rsub|N>> is the shared prefix of the key of all the
-      descendants of <math|N> in the Trie.
+      descendants of N in the Trie.
     </itemize-minus>
 
     \ and, at least one of the following statements holds:
@@ -142,9 +144,12 @@
   </definition>
 
   <\notation>
-    A <strong|branch> node is a node which has one child or more. A branch
-    node can have at most 16 children. A <strong|leaf> node is a childless
-    node. Accordingly:
+    A <strong|branch> node, formally referred to by
+    \<cal-N\><rsub|b><glossary-explain|\<cal-N\><rsub|b>|A branch node of the
+    Trie which has at least one and at most 16 children>, is a node which has
+    one child or more. A branch node can have at most 16 children. A
+    <strong|leaf> node, referred to by <math|\<cal-N\><rsub|l>><glossary-explain|<math|\<cal-N\><rsub|l>>|A
+    childless leaf node of the Trie>, is a childless node. Accordingly:
 
     <\equation*>
       <tabular*|<tformat|<table|<row|<cell|\<cal-N\><rsub|b>\<assign\><around*|{|N\<in\>\<cal-N\>\|N
@@ -160,10 +165,13 @@
   <\definition>
     <label|defn-node-key>For any <math|N\<in\>\<cal-N\>>, its key
     <math|k<rsub|N>> is divided into an <strong|aggregated prefix key>,
-    <strong|<math|pk<rsub|N><rsup|Agr>>>, aggregated by Algorithm
+    <strong|<math|pk<rsub|N><rsup|Agr>>><inactive|<glossary-explain|<math|pk<rsub|N><rsup|Agr>>|The
+    aggregated prefix key of node N>>, aggregated by Algorithm
     <reference|algo-aggregate-key> and a <strong|partial key>,
-    <strong|<math|pk<rsub|N>>> of length <math|0\<leqslant\>l<rsub|pk<rsub|N>>\<leqslant\>65535>
-    in nibbles such that:
+    <strong|<math|pk<rsub|N>>><glossary-explain|<math|pk<rsub|N>>|The
+    (suffix) partial key of node N> of length
+    <math|0\<leqslant\>l<rsub|pk<rsub|N>>\<leqslant\>65535> in nibbles such
+    that:
 
     <\equation*>
       pk<rsub|N>\<assign\><around|(|k<rsub|enc<rsub|i>>,\<ldots\>,k<rsub|enc<rsub|i+l<rsub|pk<rsub|N>>>>|)>
@@ -186,8 +194,11 @@
 
   <\definition>
     <label|defn-index-function>For <math|N\<in\>\<cal-N\><rsub|b>> and
-    <math|N<rsub|c>> child of N, we define <strong|<math|Index<rsub|N>>>
-    function as:
+    <math|N<rsub|c>> child of N, we define
+    <strong|<math|Index<rsub|N>>><glossary-explain|<math|Index<rsub|N>>|A
+    function returning an integer in range of {0,<text-dots>,15} represeting
+    the index of a child node of node <math|N> among the children of
+    <math|N>> function as:
 
     <\equation*>
       <tabular*|<tformat|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|Index<rsub|N>:>|<cell|<around*|{|N<rsub|c>\<in\>\<cal-N\>\|N<rsub|c>
@@ -251,15 +262,17 @@
 
   <\definition>
     <label|defn-node-value>A node <math|N\<in\>\<cal-N\>> stores the
-    <strong|node value>, <strong|<math|v<rsub|N>>>, which consists of the
-    following concatenated data:
+    <strong|node value>, <strong|<math|v<rsub|N>>><glossary-explain|<math|v<rsub|N>>|Node
+    value containing the header of node <math|N>, its partial key and the
+    digest of its childern values>, consisting of the following concatenated
+    data:
 
     <\equation*>
       <tabular|<tformat|<cwith|1|1|1|-1|cell-tborder|1ln>|<cwith|1|1|1|-1|cell-bborder|1ln>|<cwith|1|1|1|-1|cell-lborder|1ln>|<cwith|1|1|1|-1|cell-rborder|1ln>|<table|<row|<cell|Node
       Header>|<cell|Partial key>|<cell|Node Subvalue>>>>>
     </equation*>
 
-    Formally noted as:
+    Formally noted as follows:
 
     <\equation*>
       v<rsub|N>\<assign\>Head<rsub|N><around*|\|||\|>Enc<rsub|HE><around*|(|pk<rsub|N>|)><around*|\|||\|>sv<rsub|N>
@@ -274,7 +287,9 @@
 
   <\definition>
     <label|defn-node-header>The <strong|node header> of node <math|N>,
-    <math|Head<rsub|N>>, consists of <math|l+1\<geqslant\>1> bytes
+    <math|Head<rsub|N>><glossary-explain|<math|Head<rsub|N>>|The node header
+    of Trie node <math|N> storing information about the node's type and kay>,
+    consists of <math|l+1\<geqslant\>1> bytes
     <math|Head<rsub|N,1>,\<ldots\>,Head<rsub|N,l+1>> such that:
 
     \;
@@ -409,12 +424,38 @@
   The Merkle value of each node should depend on the Merkle value of all its
   children as well as on its corresponding data in the state storage. This
   recursive dependancy is encompassed into the subvalue part of the node
-  value which recursively depends on the Merkle value of its children.
-  Additionally, as Section <reference|sect-child-trie-structure> clarifies,
-  the Merkle proof of each <strong|child trie> must be updated first before
-  the final Polkadot state root can be calculated.
+  value which recursively depends on the Merkle value of its children and
+  <em|children tries>. As Section <reference|sect-child-trie-structure>
+  clarifies, the Merkle value of each <strong|child trie> must be updated
+  first before the final Polkadot state root can be calculated.
 
-  We use the auxilary function introduced in Definition
+  \;
+
+  As mentioned in Section <reference|sect-trie-structure>, the Trie is a
+  Merkle tree. The hash function used for its Merkle structure is a variant
+  of <math|Blake2b> hash function defined in Section <reference|sect-blake2>
+  . Specifically, the node value, <math|v<rsub|N>> (see Definition
+  <reference|defn-node-value>) itself is presented as instead of its
+  <math|Blake2b> hash when it occupies less space than the latter as it is
+  defined in the following:
+
+  <\definition>
+    <label|defn-merkle-value>For a given node <math|N>, the <strong|Merkle
+    value> of <math|N>, denoted by <math|H<around|(|N|)>><glossary-explain|<math|H<around|(|N|)>>|<math|>The
+    Merkle value of node <math|N>.> is defined as follows:
+
+    <\equation*>
+      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<cup\><rsub|i\<rightarrow\>0><rsup|32>\<bbb-B\><rsub|32>>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|2|3|3|cell-halign|l>|<table|<row|<cell|v<rsub|N>>|<cell|>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<less\>32<infix-and>N\<neq\>R>>|<row|<cell|Blake2b<around|(|v<rsub|N>|)>>|<cell|>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<geqslant\>32<infix-or>N=R>>>>>|\<nobracket\>>>>>>>
+    </equation*>
+
+    Where <math|v<rsub|N>> is the node value of <math|N> defined in
+    Definition <reference|defn-node-value> and <math|R> is the root of the
+    Trie. The <strong|Merkle hash> of the Trie is defined to be
+    <math|H<around*|(|R|)>>.
+  </definition>
+
+  The node value <math|v<rsub|N>> depends on node subvalue <math|sv<rsub|N>>
+  which uses the auxilary function introduced in Definition
   <reference|defn-children-bitmap> to encode and decode information stored in
   a branch node.
 
@@ -422,8 +463,9 @@
     <label|defn-children-bitmap>Suppose <math|N<rsub|b>,N<rsub|c>\<in\>\<cal-N\>>
     and <math|N<rsub|c>> is a child of <math|N<rsub|b>>. We define<math|>
     where bit <math|b<rsub|i>:=1> if <math|N> has a child with partial key
-    <math|i>, therefore we define <strong|ChildrenBitmap> functions as
-    follows:
+    <math|i>. Therefore, we define <strong|ChildrenBitmap><glossary-explain|<math|ChildrenBitmap>|The
+    binary function indicating which child of a given node is present in the
+    Trie.> functions as follows:
 
     <\equation*>
       <tabular*|<tformat|<cwith|1|1|2|2|cell-halign|l>|<table|<row|<cell|ChildrenBitmap:>|<cell|\<cal-N\><rsub|b>\<rightarrow\>\<bbb-B\><rsub|2>>>|<row|<cell|>|<cell|N\<mapsto\><around*|(|b<rsub|15>,\<ldots\>,b<rsub|8>,b<rsub|7>,\<ldots\>b<rsub|0>|)><rsub|2>>>>>>
@@ -436,60 +478,42 @@
     </equation*>
   </definition>
 
-  <verbatim|>
+  <verbatim|>Having defined functions <math|H> and <math|ChildrenBitmap>, we
+  are able to define the <math|subvalue<below||>> of a node as follows:
 
   <\definition>
     <label|defn-node-subvalue>For a given node <math|N>, the
-    <strong|subvalue> of <math|N>, formally referred to as <math|sv<rsub|N>>,
-    is determined as follows:
+    <strong|subvalue> of <math|N>, formally referred to as
+    <math|sv<rsub|N>><glossary-explain|<math|sv<rsub|N>>|The subvalue of a
+    Trie node <math|N>.>, is determined as follows:
 
     <\itemize>
       <\equation*>
         <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<table|<row|<cell|sv<rsub|N>\<assign\>>>|<row|<cell|<around*|{|<tabular*|<tformat|<cwith|2|3|1|1|cell-halign|l>|<cwith|2|3|1|1|cell-lborder|0ln>|<cwith|2|3|1|1|cell-rborder|0ln>|<cwith|1|1|1|1|cell-halign|l>|<table|<row|<cell|StoredValue<rsub|SC>>>|<row|<cell|\<nobracket\>*Enc<rsup|><rsub|SC><around*|(|ChildrenBitmap<around*|(|N|)>|)>\<\|\|\>StoredValue<rsub|SC><around*|\<\|\|\>||\<nobracket\>>Enc<rsub|SC><around*|(|H<around|(|N<rsub|C<rsub|1>>|)>|)>*\<ldots\>*Enc<rsub|SC><around*|(|H<around*|(|N<rsub|C<rsub|n>>|)>|)>*>>>>>|\<nobracket\>>>>|<row|<cell|>>|<row|<cell|<text|where
         the first variant is a leaf node and the second variant is a branch
-        node.>>>|<row|<cell|>>|<row|<cell|StoredValue<rsub|SC>\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|-1|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around*|(|StoredValue<around*|(|k<rsub|N>|)>|)>>|<cell|>|<cell|<text|if
-        StoredValue(k_N)=v>>>|<row|<cell|\<b-phi\>>|<cell|>|<cell|<text|if
-        StoredValue(k_N)=\<b-phi\>>>>>>>|\<nobracket\>>>>>>>
+        node.>>>|<row|<cell|>>|<row|<cell|StoredValue<rsub|SC>\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|-1|cell-halign|l>|<table|<row|<cell|Enc<rsub|SC><around*|(|StoredValue<around*|(|k<rsub|N>|)>|)>>|<cell|>|<cell|<with|font-family|rm|if<space|1em>>StoredValue<around*|(|k<rsub|N>|)>=v>>|<row|<cell|\<b-phi\>>|<cell|>|<cell|<with|font-family|rm|if<space|1em>>StoredValue<around*|(|k<rsub|N>|)>=\<phi\>>>>>>|\<nobracket\>>>>>>>
       </equation*>
     </itemize>
   </definition>
 
   <math|N<rsub|C<rsub|1>>*\<ldots\>*N<rsub|C<rsub|n>>> with
   <math|n\<leqslant\>16> are the children nodes of the branch node <math|N>
-  and Enc<rsub|SC>, <math|StoredValue>, <math|H>, and
+  and Enc<rsub|SC> is the SCALE encoding defined in Definition
+  <reference|sect-scale-codec>. Stored<math|Value> is defned in Definition
+  <reference|defn-stored-value>. <math|H> and
   <math|*ChildrenBitmap<around|(|N|)>> are defined in Definitions
-  <reference|sect-scale-codec>,<reference|defn-stored-value>,
   <reference|defn-merkle-value> and <reference|defn-children-bitmap>
   respectively.
-
-  \;
-
-  The Trie deviates from a traditional Merkle tree where node value,
-  <math|v<rsub|N>> (see Definition <reference|defn-node-value>) is presented
-  instead of its hash if it occupies less space than its hash.
-
-  <\definition>
-    <label|defn-merkle-value>For a given node <math|N>, the <strong|Merkle
-    value> of <math|N>, denoted by <math|H<around|(|N|)>> is defined as
-    follows:
-
-    <\equation*>
-      <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<table|<row|<cell|>|<cell|H:\<bbb-B\>\<rightarrow\>\<cup\><rsub|i\<rightarrow\>0><rsup|32>\<bbb-B\><rsub|32>>>|<row|<cell|>|<cell|H<around|(|N|)>:<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<cwith|1|2|3|3|cell-halign|l>|<table|<row|<cell|v<rsub|N>>|<cell|>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<less\>32<infix-and>N\<neq\>R>>|<row|<cell|Blake2b<around|(|v<rsub|N>|)>>|<cell|>|<cell|<around|\<\|\|\>|v<rsub|N>|\<\|\|\>>\<geqslant\>32<infix-or>N=R>>>>>|\<nobracket\>>>>>>>
-    </equation*>
-
-    Where <math|v<rsub|N>> is the node value of <math|N> defined in
-    Definition <reference|defn-node-value> and <math|R> is the root of the
-    Trie. The <strong|Merkle hash> of the Trie is defined to be
-    <math|H<around*|(|R|)>>.
-  </definition>
 
   <section|Child Storage><label|sect-child-storages>
 
   As clarified in Section <reference|sect-state-storage>, the Polkadot state
   storage implements a hash table for inserting and reading key-value
-  entries. The child storage works the same way but is stored in a separate
-  and isolated environment. Entries in the child storage are not directly
-  accessible via querying the main state storage.
+  entries. The child storage<glossary-explain|Child storage|A sub storage of
+  the state storage which has the same structure although being stored
+  seperately> works the same way but is stored in a separate and isolated
+  environment. Entries in the child storage are not directly accessible via
+  querying the main state storage.
 
   \;
 
@@ -513,14 +537,15 @@
 
   <subsection|Child Tries><label|sect-child-trie-structure>
 
-  The child trie specification is the same as the one described in Section
+  The child trie<glossary-explain|Child Trie|State trie of a child storage>
+  specification is the same as the one described in Section
   <reference|sect-state-storage-trie-structure>. Child tries have their own
-  isolated environment. Nonetheless, the main Polkadot state trie depends on
-  them by storing a node (<math|K<rsub|N>,V<rsub|N>>) which corresponds to an
-  individual child trie. Here, <math|K<rsub|N>> is the child storage key
-  associated to the child trie, and <math|V<rsub|N>> is the Merkle value of
-  its corresponding child trie computed according to the procedure described
-  in Section <reference|sect-merkl-proof>
+  isol<verbatim|>ated environment. Nonetheless, the main Polkadot state trie
+  depends on them by storing a node (<math|K<rsub|N>,V<rsub|N>>) which
+  corresponds to an individual child trie. Here, <math|K<rsub|N>> is the
+  child storage key associated to the child trie, and <math|V<rsub|N>> is the
+  Merkle value of its corresponding child trie computed according to the
+  procedure described in Section <reference|sect-merkl-proof>
 
   \;
 
