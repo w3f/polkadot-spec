@@ -448,9 +448,8 @@
   <subsubsection|<verbatim|BlockBuilder_check_inherents>>
 
   Checks whether the provided inherent is valid. This function can be used by
-  the Polkadot Host implementation when it verifies if the validity of an
-  inherent when such a verification is deemed to be appropriate, for example,
-  during a block-building process.
+  the Polkadot Host when deemed appropriate, e.g. during the block-building
+  process.
 
   \;
 
