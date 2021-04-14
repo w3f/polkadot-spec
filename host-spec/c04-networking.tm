@@ -657,9 +657,9 @@
       integer>>|<row|<cell|r>|<cell|round number>|<cell|unsigned 64-bit
       integer>>|<row|<cell|<math|id<rsub|\<bbb-V\>>>>|<cell|authority set Id
       (Definition <reference|defn-authority-set-id>)>|<cell|unsigned 64-bit
-      integer>>|<row|<cell|<math|H<rsub|h><around*|(|B<rsub|last>|)>>>|<cell|block
-      hash of last finialized block <math|B<rsub|last>>>|<cell|256-bit
-      array>>>>>
+      integer>>|<row|<cell|<math|H<rsub|i><around*|(|B<rsub|last>|)>>>|<cell|block
+      number of last finialized block <math|B<rsub|last>>>|<cell|unsigned
+      32-bit integer>>>>>
     </center>
 
     \;
