@@ -808,12 +808,14 @@
 
       <item><math|S<rsub|n>> is an array where its exact size matches the
       number of validators in the current authority set as specified by
-      <math|id<rsub|\<bbb-V\>>> in <math|C>. Individual items are of the type
-      <verbatim|Option> as defined in Definition <reference|defn-option-type>
-      which can contain a signature of a validator which signed the same
-      statement (<math|R<rsub|h>> in <math|C>) and is active in the current
-      authority set. It's critical that the signatures are sorted based on
-      their corresponding public key entry in the authority set.
+      <math|id<rsub|\<bbb-V\>>> (Definition
+      <reference|defn-authority-set-id>) in C. Individual items are of the
+      type <verbatim|Option> as defined in Definition
+      <reference|defn-option-type> which can contain a signature of a
+      validator which signed the same statement (<math|R<rsub|h>> in
+      <math|C>) and is active in the current authority set. It's critical
+      that the signatures are sorted based on their corresponding public key
+      entry in the authority set.
 
       \;
 
