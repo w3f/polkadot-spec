@@ -832,10 +832,12 @@
     Instead of containing the entire list of signatures, it only claims which
     validator signed the statement.
 
+    \;
+
     The message is a datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M<rsup|w><rsub|sc>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,V<rsub|n>,R<rsub|sig>|)>>>>>
+      <tformat|<table|<row|<cell|M<rsup|w><rsub|sc>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,V<rsub|0\<ldots\>n>,R<rsub|sig>|)>>>>>
     </eqnarray*>
 
     where
@@ -844,12 +846,13 @@
       <item><math|C> is the commitment as defined in Definition
       <reference|defn-grandpa-beefy-commitment>.
 
-      <item><math|V<rsub|n>> is an array where its exact size matches the
-      number of validators in the current authority set as specified by
-      <math|id<rsub|\<bbb-V\>>> in <math|C>. Individual items are booleans
-      which indicate whether the validator has signed the statement (true) or
-      not (false). It's critical that the boolean indicators are sorted based
-      on their corresponding public key entry in the authority set.
+      <item><math|V<rsub|0\<ldots\>n>> is an array where its exact size
+      matches the number of validators in the current authority set as
+      specified by <math|id<rsub|\<bbb-V\>>> in <math|C>. Individual items
+      are booleans which indicate whether the validator has signed the
+      statement (true) or not (false). It's critical that the boolean
+      indicators are sorted based on their corresponding public key entry in
+      the authority set.
 
       \;
 
