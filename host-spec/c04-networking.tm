@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -305,6 +305,13 @@
 
     <todo|This substream will change in the future. See <hlink|issue
     #7252|https://github.com/paritytech/substrate/issues/7252>.>
+
+    <item><verbatim|/paritytech/beefy/1> - a substream/notification protocol
+    which sends signed BEEFY statements, as described in Section
+    <reference|sect-grandpa-beefy>, to connected peers. This is a
+    <em|Notification> substream.
+
+    The messages are specified in Section <reference|sect-msg-grandpa-beefy>.
   </itemize>
 
   <strong|Note>: the <verbatim|/dot/> prefixes on those substreams are known
@@ -722,6 +729,146 @@
     defined in Definition <reference|defn-gossip-message> of type Id 4.
   </definition>
 
+  <subsubsection|GRANDPA BEEFY><label|sect-msg-grandpa-beefy>
+
+  <todo|NOTE: The BEEFY protocol is currently in early development and
+  subject to change>
+
+  \;
+
+  This section defines the messages required for the GRANDPA BEEFY protocol
+  as described in Section <reference|sect-grandpa-beefy>. Those messages are
+  sent over the <verbatim|/paritytech/beefy/1> substream.
+
+  <\definition>
+    <label|defn-grandpa-beefy-commitment>A commitment, <math|C>, contains the
+    information extracted from the finalized block at height
+    <math|H<rsub|i><around*|(|B<rsub|last>|)>> as specified in the message
+    body.
+
+    \;
+
+    C is a datastructe of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|R<rsub|h>,H<rsub|i><around*|(|B<rsub|last>|)>,id<rsub|\<bbb-V\>>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|R<rsub|h>> is the MMR root of all the block header hashes
+      leading up to the latest, finalized block.
+
+      <item><math|H<rsub|i><around*|(|B<rsub|last>|)>> is the block number
+      this commitment is for. Namely the latest, finalized block.
+
+      <item><math|id<rsub|\<bbb-V\>>> is the current authority set Id as
+      defined in Definition <reference|defn-authority-set-id>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|defn-msg-beefy-gossip>A vote message, <math|M<rsub|v>>, is direct
+    vote created by the Polkadot Host on every BEEFY round and is gossiped to
+    its peers. The message is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M<rsub|v>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,A<rsup|bfy><rsub|id>,A<rsub|sig><rsub|>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item>C is the commitment as defined in Definition
+      <reference|defn-grandpa-beefy-commitment>.
+
+      <item><math|A<rsup|bfy><rsub|id>> is the ECDSA public key of the
+      Polkadot Host.
+
+      <item><math|A<rsub|sig>> is the signature created with
+      <math|A<rsup|bfy><rsub|id>> by signing the statement <math|R<rsub|h>>
+      in <math|C>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|defn-grandpa-beefy-signed-commitment>A signed commitment,
+    <math|M<rsub|sc>>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M<rsub|sc>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,S<rsub|n>|)>>>|<row|<cell|S<rsub|n>>|<cell|=>|<cell|<around*|(|A<rsup|sig><rsub|0>,\<ldots\>,A<rsup|sig><rsub|n>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|C> is the commitment as defined in Definition
+      <reference|defn-grandpa-beefy-commitment>.
+
+      <item><math|S<rsub|n>> is an array where its exact size matches the
+      number of validators in the current authority set as specified by
+      <math|id<rsub|\<bbb-V\>>> (Definition
+      <reference|defn-authority-set-id>) in C. Individual items are of the
+      type <verbatim|Option> as defined in Definition
+      <reference|defn-option-type> which can contain a signature of a
+      validator which signed the same statement (<math|R<rsub|h>> in
+      <math|C>) and is active in the current authority set. It's critical
+      that the signatures are sorted based on their corresponding public key
+      entry in the authority set.
+
+      \;
+
+      For example, the signature of the validator at index 3 in the authority
+      set must be placed at index 3 in <math|S<rsub|n>>. If not signature is
+      available for that validator, then the <verbatim|Option> variant
+      <verbatim|None> is inserted. This sorting allows clients to map public
+      keys to their corresponding signatures.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|defn-grandpa-beefy-signed-commitment-witness>A signed commitment
+    witness, <math|M<rsup|w><rsub|sc>>, is a light version of the signed
+    commitment as defined in Definition <reference|defn-grandpa-beefy-signed-commitment>.
+    Instead of containing the entire list of signatures, it only claims which
+    validator signed the statement.
+
+    \;
+
+    The message is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M<rsup|w><rsub|sc>>|<cell|=>|<cell|Enc<rsub|SC><around*|(|C,V<rsub|0\<ldots\>n>,R<rsub|sig>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|C> is the commitment as defined in Definition
+      <reference|defn-grandpa-beefy-commitment>.
+
+      <item><math|V<rsub|0\<ldots\>n>> is an array where its exact size
+      matches the number of validators in the current authority set as
+      specified by <math|id<rsub|\<bbb-V\>>> in <math|C>. Individual items
+      are booleans which indicate whether the validator has signed the
+      statement (true) or not (false). It's critical that the boolean
+      indicators are sorted based on their corresponding public key entry in
+      the authority set.
+
+      \;
+
+      For example, the boolean indicator of the validator at index 3 in the
+      authority set must be placed at index 3 in <math|V<rsub|n>>. This
+      sorting allows clients to map public keys to their corresponding
+      boolean indicators.
+
+      <item><math|R<rsub|sig>> is the MMR root of the signatures in the
+      original signed commitment as defined in Definition
+      <reference|defn-grandpa-beefy-signed-commitment>.
+    </itemize-dot>
+  </definition>
+
   \;
 
   <\with|par-mode|right>
@@ -737,9 +884,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
