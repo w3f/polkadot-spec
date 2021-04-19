@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -2035,6 +2035,13 @@
 
   <section|Bridge design (BEEFY)><label|sect-grandpa-beefy>
 
+  <\todo>
+    NOTE: The BEEFY protocol is currently in early development and subject to
+    change
+  </todo>
+
+  \;
+
   The BEEFY (Bridge Effiency Enabling Finality Yielder) is a secondary
   protocol to GRANDPA to support efficient bridging between the Polkadot
   network (relay chain) and remote, segregated blockchains, such as Ethereum,
@@ -2155,7 +2162,6 @@
   </with>
 
   \;
-
 </body>
 
 <\initial>
@@ -2164,9 +2170,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
