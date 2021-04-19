@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -731,19 +731,27 @@
 
   <subsubsection|GRANDPA BEEFY><label|sect-msg-grandpa-beefy>
 
+  <todo|NOTE: The BEEFY protocol is currently in early development and
+  subject to change>
+
+  \;
+
   This section defines the messages required for the GRANDPA BEEFY protocol
   as described in Section <reference|sect-grandpa-beefy>. Those messages are
   sent over the <verbatim|/paritytech/beefy/1> substream.
 
   <\definition>
     <label|defn-grandpa-beefy-commitment>A commitment, <math|C>, contains the
-    information extracted from the finalized block at height <math|B<rsub|n>>
-    as specified in the message body.
+    information extracted from the finalized block at height
+    <math|H<rsub|i><around*|(|B<rsub|last>|)>> as specified in the message
+    body.
+
+    \;
 
     C is a datastructe of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|R<rsub|h>,B<rsub|n>,id<rsub|\<bbb-V\>>|)>>>>>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|R<rsub|h>,H<rsub|i><around*|(|B<rsub|last>|)>,id<rsub|\<bbb-V\>>|)>>>>>
     </eqnarray*>
 
     where
@@ -752,8 +760,8 @@
       <item><math|R<rsub|h>> is the MMR root of all the block header hashes
       leading up to the latest, finalized block.
 
-      <item><math|B<rsub|n>> is the block number this commitment is for.
-      Namely the latest, finalized block.
+      <item><math|H<rsub|i><around*|(|B<rsub|last>|)>> is the block number
+      this commitment is for. Namely the latest, finalized block.
 
       <item><math|id<rsub|\<bbb-V\>>> is the current authority set Id as
       defined in Definition <reference|defn-authority-set-id>.
@@ -807,6 +815,8 @@
       authority set. It's critical that the signatures are sorted based on
       their corresponding public key entry in the authority set.
 
+      \;
+
       For example, the signature of the validator at index 3 in the authority
       set must be placed at index 3 in <math|S<rsub|n>>. If not signature is
       available for that validator, then the <verbatim|Option> variant
@@ -841,6 +851,8 @@
       not (false). It's critical that the boolean indicators are sorted based
       on their corresponding public key entry in the authority set.
 
+      \;
+
       For example, the boolean indicator of the validator at index 3 in the
       authority set must be placed at index 3 in <math|V<rsub|n>>. This
       sorting allows clients to map public keys to their corresponding
@@ -859,7 +871,6 @@
   </with>
 
   \;
-
 </body>
 
 <\initial>
@@ -868,9 +879,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
