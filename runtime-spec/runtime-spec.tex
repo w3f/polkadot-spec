@@ -80,6 +80,7 @@
 \renewcommand{\algorithmicensure}{\textbf{Output:}}
 %%%%%%%%%% End TeXmacs macros
 
+%% TeXmacs shorthands
 \providecommand{\cdummy}{{\cdot}}
 \providecommand{\nobracket}{}
 \providecommand{\nosymbol}{}
@@ -94,6 +95,10 @@
 \providecommand{\tmverbatim}[1]{\tmtexttt{#1}}
 
 \newcommand{\figuretext}{Snippet}
+
+%% Fix theorem numbering
+\numberwithin{definition}{chapter}
+\numberwithin{notation}{chapter}
 
 %%Review commands
 \newcommand{\syed}[2]{{\underline{#1}}\textcolor{orange}{(#2)}}
