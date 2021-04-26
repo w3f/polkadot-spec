@@ -20,6 +20,8 @@
                   else if self ? lastModifiedDate then self.lastModifiedDate
                   else "dirty";
 
+        algorithmacs = pkgs.callPackage ./.nix/algorithmacs.nix {};
+
         texlive-spec = pkgs.callPackage ./.nix/texlive.nix {
           extraTexPackages = {
             inherit (pkgs.texlive) latexmk algorithms algorithmicx luacode;
