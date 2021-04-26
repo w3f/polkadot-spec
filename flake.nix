@@ -29,7 +29,7 @@
         };
       in {
         packages = {
-          polkadot-host-spec    = pkgs.callPackage ./.nix/host-spec.nix { inherit src version; };
+          polkadot-host-spec    = pkgs.callPackage ./.nix/host-spec.nix { inherit src version algorithmacs; };
           polkadot-runtime-spec = pkgs.callPackage ./.nix/runtime-spec.nix { inherit src version texlive-spec; };
         };
 
