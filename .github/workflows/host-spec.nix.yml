@@ -1,0 +1,20 @@
+name: Check host specification (Nix)
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    paths:
+    - '.github/workflows/host-spec.nix.yml'
+    - 'host-spec/**'
+
+jobs:
+  nix-build:
+    name: Compile host specification
+    runs-on: ubuntu-20.04
+    container: nixpkgs/nix-flakes:nixos-20.09
+    steps:
+    - name: Build runtime specification
+      run: nix build github:${{ github.repository }}/${{ github.sha }}#polkadot-host-spec
+
