@@ -1,4 +1,4 @@
-{ src, version, stdenv, texmacs, xvfb_run }:
+{ src, version, stdenv, texmacs, plantuml, xvfb_run, algorithmacs }:
 
 stdenv.mkDerivation {
   name = "polkadot-host-spec-${version}.pdf";
@@ -9,13 +9,18 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     texmacs
+    plantuml
     xvfb_run
   ];
 
-  phases = [ "unpackPhase" "convertPhase" ];
+  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
-  convertPhase = ''
+  preBuild = ''
     export HOME=$(mktemp -d)
-    xvfb-run texmacs -b host-spec.scm -x '(convert-updated "$PWD/host-spec.tm" "$out")' --quit
+    install -Dt $HOME/.TeXmacs/packages ${algorithmacs}
+  '';
+
+  installPhase = ''
+    cp polkadot-host-spec.pdf $out
   '';
 }
