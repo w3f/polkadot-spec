@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -13,59 +13,57 @@
 
   Validators are responsible for guaranteeing the validity and availability
   of PoV blocks. There are two phases of validation that takes place in the
-  AnV protocol.
-
-  The primary validation check is carried out by parachain validators who are
-  assigned to the parachain which has produced the PoV block as described in
-  Section <reference|sect-primary-validation>. Once parachain validators have
+  AnV protocol. The primary validation check is carried out by collators who
+  are assigned to the parachain which has produced the PoV block as described
+  in Section <reference|sect-primary-validation>. Once collators have
   validated a parachain's PoV block successfully, they have to announce that
   according to the procedure described in Section
   <reference|sect-primary-validaty-announcement> where they generate a
   statement that includes the parachain header with the new state root and
-  the XCMP message root. This candidate receipt and attestations, which
-  carries signatures from other parachain validators is put on the relay
-  chain.
-
-  As soon as the proposal of a PoV block is on-chain, the parachain
-  validators break the PoV block into erasure-coded chunks as described in
-  Section <reference|defn-erasure-coded-chunks> and distribute them among all
+  the XCMP message root. This candidate receipt and attestations, which carry
+  signatures from other collators, is put on the relay chain. As soon as the
+  proposal of a PoV block is on-chain, the relay chain validators break the
+  PoV block into erasure-coded chunks as described in Section
+  <reference|defn-erasure-coded-chunks> and distribute them among all
   validators. See Section <reference|sect-distribute-chunks> for details on
   how this distribution takes place.
 
-  Once validators have received erasure-coded chunks for several PoV blocks
-  for the current relay chain block (that might have been proposed a couple
-  of blocks earlier on the relay chain), they announce that they have
-  received the erasure coded chunks on the relay chain by voting on the
-  received chunks, see Section <reference|sect-voting-on-availability> for
-  more details.
+  \;
 
-  As soon as <math|\<gtr\>2/3> of validators have made this announcement for
-  any parachain block we <em|act on> the parachain block. Acting on parachain
-  blocks means we update the relay chain state based on the candidate receipt
-  and considered the parachain block to have happened on this relay chain
-  fork.
+  Once the relay chain validators have received erasure-coded chunks for
+  several PoV blocks for the current relay chain block (that might have been
+  proposed a couple of blocks earlier on the relay chain), they announce that
+  they have received the erasure coded chunks on the relay chain by voting on
+  the received chunks, see Section <reference|sect-voting-on-availability>
+  for more details As soon as <math|\<gtr\>2/3> of validators have made this
+  announcement for any parachain block, the relay chain validators <em|act
+  on> the parachain block. Acting on parachain blocks means the relay chain
+  validators update the relay chain state based on the candidate receipt and
+  considered the parachain block to have happened on this relay chain fork.
 
-  After a certain time, if we did not collect enough signatures approving the
-  availability of the parachain data associated with a certain candidate
-  receipt we decide this parachain block is unavailable and allow alternative
-  blocks to be built on its parent parachain block, see
-  <reference|sect-processing-availability>.
+  \;
 
-  The secondary check described in Section
-  <reference|sect-approval-checking>, is done by one or more randomly
-  assigned validators to make sure colluding parachain validators may not get
-  away with validating a PoV block that is invalid and not keeping it
-  available to avoid the possibility of being punished for the attack.
+  After a certain time, if the relay chain validators did not collect enough
+  signatures approving the availability of the parachain data associated with
+  a certain candidate receipt, the validators then decide that this parachain
+  block is unavailable and allow alternative blocks to be built on its parent
+  parachain block, see Section <reference|sect-processing-availability>. The
+  secondary check described in Section <reference|sect-approval-checking>, is
+  done by one or more randomly assigned validators to make sure colluding
+  collators may not get away with validating a PoV block that is invalid and
+  not keeping it available to avoid the possibility of being punished for the
+  attack.
+
+  \;
 
   During any of the phases, if any validator announces that a parachain block
   is invalid then all validators obtain the parachain block and check its
-  validity, see Section <reference|sect-escalation> for more details.
-
-  All validity and invalidity attestations go onto the relay chain, see
-  Section <reference|sect-publishing-attestations> for details. If a
-  parachain block has been checked at least by certain number of validators,
-  the rest of the validators continue with voting on that relay chain block
-  in the GRANDPA protocol. Note that the block might be challenged later.
+  validity, see Section <reference|sect-escalation> for more details. All
+  validity and invalidity attestations go onto the relay chain, see Section
+  <reference|sect-publishing-attestations> for details. If a parachain block
+  has been checked at least by certain number of validators, the rest of the
+  validators continue with voting on that relay chain block in the GRANDPA
+  protocol. Note that the block might be challenged later.
 
   <section|Preliminaries>
 
@@ -987,10 +985,10 @@
 
     <item>The relay chain acts on available candidates and discards
     unavailable ones, and then clears the record, setting the availability
-    status to \Pno candidate\Q. Then the relay chain accepts new
-    candidate receipts for parachains that have \Pno candidate\Q status
-    and once any such new candidate receipts is included on the relay chain
-    it sets their availability status as \Pto be determined\Q.
+    status to \Pno candidate\Q. Then the relay chain accepts new candidate
+    receipts for parachains that have \Pno candidate\Q status and once any
+    such new candidate receipts is included on the relay chain it sets their
+    availability status as \Pto be determined\Q.
   </enumerate-numeric>
 
   <\algorithm|<label|algo-signature-processing>Relay chain's signature
@@ -1350,7 +1348,6 @@
   </with>
 
   \;
-
 </body>
 
 <\initial>
@@ -1359,9 +1356,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
