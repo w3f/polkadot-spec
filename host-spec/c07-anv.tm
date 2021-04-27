@@ -298,11 +298,14 @@
 
   <section|Overal process>
 
-  The Figure <reference|diag-anv-overall> demonstrates the overall process of
-  assuring availability and validity in Polkadot <todo|complete the Diagram>.
+  The Figures <reference|diag-anv-overall-0>, <reference|diag-anv-overall-1> and <reference|diag-anv-overall-3> demonstrates the overall process of
+  assuring availability and validity in Polkadot.
 
-  <big-figure|<with|par-mode|center|<label|diag-anv-overall><image|figures/c07-overview.eps|1par|1pag||>
-  >|Overall process to acheive availability and validity in Polkadot>
+  <big-figure|<image|figures/c07-overview-0.eps|1par|||>|<label|diag-anv-overall-0>First part of the overall process to achieve availability and validity in Polkadot>
+
+  <big-figure|<image|figures/c07-overview-1.eps|1par|||>|<label|diag-anv-overall-1>Second part of the overall process to achieve availability and validity in Polkadot>
+
+  <big-figure|<image|figures/c07-overview-2.eps|1par|||>|<label|diag-anv-overall-2>Third part of the overall process to achieve availability and validity in Polkadot>
 
   <section|Candidate Selection><label|sect-primary-validation>
 

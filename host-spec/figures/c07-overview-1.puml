@@ -1,0 +1,23 @@
+@startuml
+start
+
+while (Do 2/3 say on the relay chain that the erasure coded pieces are available?) is (no)
+  if (Has the block timed out after several blocks or a validator set change?) then (yes)
+    :Throw away this candidate receipt and start accepting alternative ones;
+    stop
+  else (no)
+  endif
+endwhile (yes);
+
+:The relay chain acts on the candidate receipt.
+The parachain block happens on this fork;
+
+while ()
+  :Every V decides whether to check this block;
+  :The validator acquires the block;
+  :The validator validates the block and produces an attestation;
+  :Attestations and reports are gossiped and go onto the relay chain;
+endwhile
+
+stop
+@enduml

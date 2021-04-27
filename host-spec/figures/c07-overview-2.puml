@@ -1,0 +1,33 @@
+@startuml
+start
+
+:Full nodes of the parachain execute the block if they have it.
+If it is invalid or unavailable this fishermen or collators report it;
+
+while (Attestations and reports are gossiped and go onto the relay chain)
+  if (Did any validator say
+  the block is invalid?) then (yes)
+    :Every validator acquires and checks the block;
+    if (Do we decide that the block
+    is invalid or valid?) then (invalid)
+      :Block is invalid.
+      Abandon the fork;
+      stop
+    else (valid)
+      :We think the block is correct and
+      can continue with GRANDPA;
+      stop
+    endif
+  else (no)
+    if (Do enough validators say that
+    the parachain block is valid?) then (yes)
+      :We think the block is correct and
+      can continue with GRANDPA;
+      stop
+    else (no)
+    endif
+  endif
+endwhile
+
+end
+@enduml

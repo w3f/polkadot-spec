@@ -4,7 +4,7 @@ APPENDICES := $(wildcard a?-*.tm)
 
 FIGURES    := $(wildcard figures/*.eps) $(wildcard figures/*.puml) $(wildcard figures/*.pdf)
 
-GENERATED  := figures/c07-overview.eps
+GENERATED  := figures/c07-overview-0.eps figures/c07-overview-1.eps figures/c07-overview-2.eps
 
 SOURCES    := host-spec.tm $(CHAPTERS) $(APPENDICES) $(FIGURES) $(GENERATED)
 
@@ -23,7 +23,13 @@ diff: polkadot-host-spec.diff.pdf
 temp: $(GENERATED)
 
 
-figures/c07-overview.eps: figures/c07-overview.puml
+figures/c07-overview-0.eps: figures/c07-overview-0.puml
+	plantuml -teps $<
+
+figures/c07-overview-1.eps: figures/c07-overview-1.puml
+	plantuml -teps $<
+
+figures/c07-overview-2.eps: figures/c07-overview-2.puml
 	plantuml -teps $<
 
 
