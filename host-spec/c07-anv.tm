@@ -77,8 +77,8 @@
   </definition>
 
   <\definition>
-    A parachain block, <math|B<rsub|p>>, is a datastructure of the following
-    format:
+    A <strong|parachain block>, <math|B<rsub|p>>, is a datastructure of the
+    following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,E,H<rsub|r>|)>>>|<row|<cell|E>|<cell|=>|<cell|<around*|(|e<rsub|0>,\<ldots\>e<rsub|n>|)>>>>>
@@ -93,7 +93,8 @@
       <item><math|E> is an array of zero or more extrinsics, which are SCALE
       encoded byte arrays and its structure is opaque to the Polkadot Host.
 
-      <item><math|H<rsub|r>> is the Merkle root of the state at this block.
+      <item><math|H<rsub|r>> is the Merkle root of the parachain state at
+      this block.
     </itemize-dot>
   </definition>
 
@@ -151,6 +152,33 @@
   the candidate receipt as defined in Definition
   <reference|defn-candidate-receipt> was included on the relay chain the
   needed relay chain state may have changed.
+
+  <\definition>
+    The <strong|parachain inherent data>, <math|I<rsub|p>>, is passed by the
+    collator to the parachain runtime. It's a datastructure of the following
+    format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|I<rsub|p>>|<cell|=>|<cell|<around*|(|d<rsub|v>,H<rsub|r>,M<rsub|d>,M<rsub|h>|)>>>|<row|<cell|M<rsub|d>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|d<rsub|v>> is the persisted validation data as defined in
+      Definition <todo|@fabio>.
+
+      <item><math|H<rsub|r>> the storage proof of a predefined set of keys
+      from the relay chain <todo|@fabio>.
+
+      <item><math|M<rsub|d>> are downward messages as defined in Definition
+      <todo|@fabio> in the order they were sent.
+
+      <item><math|M<rsub|h>> are the horizontal messages grouped by channels.
+      The message in the inner array must be in order they were sent.
+      <todo|@fabio>
+    </itemize-dot>
+  </definition>
 
   <\definition>
     <label|defn-upgrade-indicator><math|R<rsup|up><rsub|\<rho\>>> is an
@@ -281,6 +309,8 @@
 
       <todo|@fabio: define the concept of \Porigin\Q>
 
+      \;
+
       The following SCALE encoded array, <math|Enc<rsub|SC><around|(|b<rsub|0>,..b<rsub|n>|)>>,
       contains the raw bytes of the message which varies in size.
 
@@ -333,11 +363,11 @@
   The validator must keep track of which candidates were submitted by
   collators, including which validators back those candidates in order to
   penalize bad behavior. This is described in more detail in section
-  <reference|sect-primary-validaty-announcement>
+  <reference|sect-primary-validaty-announcement>.
 
   <\definition>
     <label|defn-candidate>A <with|font-series|bold|candidate>,
-    <math|C<rsub|coll><around|(|PoV<rsub|B>|)>>, is issues by collators and
+    <math|C<rsub|coll><around|(|PoV<rsub|B>|)>>, is issued by collators and
     contains the PoV block and enough data in order for any validator to
     verify its validity. A candidate is a tuple of the following format:
 
