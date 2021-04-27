@@ -142,6 +142,8 @@
   those and to vote on their availability. Depending on the context,
   different types of information must be used.
 
+  \;
+
   Parachain validators get this extra validation data from the current relay
   chain state. Note that a PoV block can be paired with different extra
   validation data depending on when and which relay chain fork it is included
@@ -315,14 +317,6 @@
 
   Note that in the code the blob is referred to as \PAvailableData\Q.
 
-  <section|Overal process>
-
-  The Figure <reference|diag-anv-overall> demonstrates the overall process of
-  assuring availability and validity in Polkadot <todo|complete the Diagram>.
-
-  <big-figure|<with|par-mode|center|<label|diag-anv-overall><image|figures/c07-overview.eps|1par|1pag||>
-  >|Overall process to acheive availability and validity in Polkadot>
-
   <section|Candidate Selection><label|sect-primary-validation>
 
   Collators produce candidates (Definition <reference|defn-candidate>) and
@@ -333,6 +327,8 @@
   The validator ensures the that every candidate considered for inclusion has
   at least one other validator backing it. Candidates without backing are
   discarded.
+
+  \;
 
   The validator must keep track of which candidates were submitted by
   collators, including which validators back those candidates in order to
@@ -346,7 +342,7 @@
     verify its validity. A candidate is a tuple of the following format:
 
     <\equation*>
-      C<rsub|coll><around|(|PoV<rsub|B>|)>\<assign\><around|(|id<rsub|p>,h<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>,id<rsub|C>,Sig<rsup|Collator><rsub|SR25519>,head<around|(|B|)>,h<rsub|b><around|(|PoV<rsub|B>|)>|)>
+      C<rsub|coll><around|(|PoV<rsub|B>|)>\<assign\><around|(|id<rsub|p>,H<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>,id<rsub|C>,Sig<rsup|Collator><rsub|SR25519>,head<around|(|B|)>,h<rsub|b><around|(|PoV<rsub|B>|)>|)>
     </equation*>
 
     where each value represents:
@@ -354,11 +350,11 @@
     <\itemize>
       <item><math|id<rsub|p>>: the Parachain Id this candidate is for.
 
-      <item><math|h<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>>:
+      <item><math|H<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>>:
       the hash of the relay chain block that this candidate should be
       executed in the context of.
 
-      <item><math|id<rsub|C>>: the Collator relay-chain account ID as defined
+      <item><math|id<rsub|C>>: the collator relay-chain account ID as defined
       in Definition <todo|@fabio>.
 
       <item><math|Sig<rsup|Collator><rsub|SR25519>>: the signature on the
@@ -438,11 +434,15 @@
   receives a statement from another validator, the candidate is confirmed
   based on algorithm <reference|algo-endorse-candidate-receipt>.
 
+  \;
+
   As algorithm <reference|algo-primary-validation-announcement> and
   <reference|algo-endorse-candidate-receipt> clarifies, the validator should
   blacklist collators which send invalid candidates and announce this
   misbehavior. If another validator claims that an invalid candidates is
   actually valid, that misbehavior must be announced, too. <todo|@fabio>
+
+  \;
 
   The validator tries to back as many candidates as it can, but does not
   attempt to prioritize specific candidates. Each validator decides on its
@@ -457,6 +457,8 @@
     PoV block. The candidate receipt is communicated to other validators by
     issuing a statement as defined in Definition
     <reference|defn-gossip-statement>.
+
+    \;
 
     This type is a tuple of the following format:
 
@@ -556,11 +558,11 @@
 
     where <math|Sig<rsup|Validator><rsub|SR25519>> is the signature of the
     validator and <math|id<rsub|\<bbb-V\>>> refers to the index of validator
-    according to the authority set. <todo|@fabio: define authority set
-    (specified in the Host spec)>. <math|Stmt> refers to a statement the
-    validator wants to make about a certain candidate. <math|Stmt> is a
-    varying data type (Definition <reference|defn-scale-codec>) and can be
-    one of the following values:
+    according to the authority set as described in Section
+    <reference|sect-authority-set<strong|>>. <math|Stmt> refers to a
+    statement the validator wants to make about a certain candidate.
+    <math|Stmt> is a varying data type (Definition
+    <reference|defn-scale-codec>) and can be one of the following values:
 
     <\equation*>
       Stmt=<choice|<tformat|<table|<row|<cell|0,>|<cell|<text|Seconded,
