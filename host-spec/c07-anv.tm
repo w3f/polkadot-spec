@@ -77,8 +77,29 @@
   </definition>
 
   <\definition>
-    In the remainder of this chapter we assume that <math|\<rho\>> is a
-    Polkadot Parachain and <math|B> is a block which has been produced by
+    A parachain block, <math|B<rsub|p>>, is a datastructure of the following
+    format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,E,H<rsub|r>|)>>>|<row|<cell|E>|<cell|=>|<cell|<around*|(|e<rsub|0>,\<ldots\>e<rsub|n>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|H<around*|(|B|)>> is the header of the block as described
+      in Definition <reference|defn-block-header>.
+
+      <item><math|E> is an array of zero or more extrinsics, which are SCALE
+      encoded byte arrays and its structure is opaque to the Polkadot Host.
+
+      <item><math|H<rsub|r>> is the Merkle root of the state at this block.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    In the remainder of this chapter we assume that <math|<text|\<rho\>>> is
+    a Polkadot Parachain and <math|B> is a block which has been produced by
     <math|\<rho\>> and is supposed to be approved to be <math|\<rho\>>'s next
     block. By <math|R<rsub|\<rho\>>> we refer to the
     <with|font-series|bold|validation code> of parachain <math|\<rho\>> as a
@@ -96,9 +117,9 @@
   </definition>
 
   This witness proof consists of light client proofs of state data that are
-  generally Merkle proofs for the parachain state trie. We need this because
-  validators do not have access to the parachain state, but only have the
-  state root of it.
+  generally Merkle proofs for the parachain state trie. This is required
+  because validators do not have access to the parachain state, but only have
+  the state root of it.
 
   <\definition>
     <label|defn-pov-block>Accordingly we define the
