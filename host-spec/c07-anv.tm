@@ -202,17 +202,24 @@
   </definition>
 
   <\definition>
-    The <strong|persisted validation data>, <math|D<rsub|pv>>. provides
-    information about how to create the iputs for validation of a candidate.
-    This information is derived from the parachain state and will vary from
-    parachain to parachain, although some of the fields may be the same for
-    every parachain. This validation data acts as a way to authorize the
-    additional data (such as messages) the collator needs to pass to the
-    validation function.
+    The <strong|parchain head data> is a SCALE encoded byte array containing
+    the full block header as defined in Definition
+    <reference|defn-block-header> of a parachain block.
+  </definition>
+
+  <\definition>
+    The <strong|persisted validation data> provides information about how to
+    create the iputs for validation of a candidate. This information is
+    derived from the parachain state and will vary from parachain to
+    parachain, although some of the fields may be the same for every
+    parachain. This validation data acts as a way to authorize the additional
+    data (such as messages) the collator needs to pass to the validation
+    function.
 
     \;
 
-    The persisted validation data is a datastructure of the following format:
+    The persisted validation data, <math|D<rsub|pv>>, is a datastructure of
+    the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|D<rsub|pv>>|<cell|=>|<cell|<around*|(|P<rsub|h>,H<rsub|i>,H<rsub|r>,m<rsub|b>|)>>>>>
