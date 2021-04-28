@@ -159,13 +159,13 @@
     format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|I<rsub|p>>|<cell|=>|<cell|<around*|(|d<rsub|v>,H<rsub|r>,M<rsub|d>,M<rsub|h>|)>>>|<row|<cell|M<rsub|d>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>>>
+      <tformat|<table|<row|<cell|I<rsub|p>>|<cell|=>|<cell|<around*|(|D<rsub|pv>,H<rsub|r>,M<rsub|d>,M<rsub|h>|)>>>|<row|<cell|M<rsub|d>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|d<rsub|v>> is the persisted validation data as defined in
+      <item><math|D<rsub|pv>> is the persisted validation data as defined in
       Definition <todo|@fabio>.
 
       <item><math|H<rsub|r>> the storage proof of a predefined set of keys
@@ -183,7 +183,7 @@
   <\definition>
     <label|defn-upgrade-indicator><math|R<rsup|up><rsub|\<rho\>>> is an
     varying data type (Definition <reference|defn-scale-codec>) which implies
-    whether the parachain is allowed to upgrade its validation code.
+    whether the parachain is allowed to upgrade its validation code. \ 
 
     <\equation*>
       R<rsup|up><rsub|\<rho\>>\<assign\>Option<around|(|H<rsub|i><around|(|B<rsup|relay><rsub|chain>|)>+n|)>
@@ -199,6 +199,42 @@
     height. This may be equal to the current perceived relay-chain block
     height, in which case the code upgrade should be applied at the end of
     the signaling block.
+  </definition>
+
+  <\definition>
+    The <strong|persisted validation data>, <math|D<rsub|pv>>. provides
+    information about how to create the iputs for validation of a candidate.
+    This information is derived from the parachain state and will vary from
+    parachain to parachain, although some of the fields may be the same for
+    every parachain. This validation data acts as a way to authorize the
+    additional data (such as messages) the collator needs to pass to the
+    validation function.
+
+    \;
+
+    The persisted validation data is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|D<rsub|pv>>|<cell|=>|<cell|<around*|(|P<rsub|h>,H<rsub|i>,H<rsub|r>,m<rsub|b>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|P<rsub|h>> is the parent head data as defined in Definition
+      <todo|@fabio>.
+
+      <item><math|H<rsub|i>> is the relay chain block number this is in the
+      context of.
+
+      <item><math|H<rsub|r>> is the relay chain storage root this is in the
+      context of.
+
+      <item><math|m<rsub|b>> is the maximum legal size of the PoV block, in
+      bytes.
+    </itemize-dot>
+
+    \;
   </definition>
 
   <\definition>
