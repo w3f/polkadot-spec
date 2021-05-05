@@ -496,7 +496,7 @@
 
   <\definition>
     <label|defn-transactions-message>The <strong|transactions
-    message><glossary-dup|transaction message> is the structure of how the
+    message><glossary-dup|Transaction Message> is the structure of how the
     transactions are sent over the network. It is represented by
     <math|M<rsub|T>> and is defined as follows:
 
