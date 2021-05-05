@@ -1083,7 +1083,7 @@
   <\definition>
     <label|defn-grandpa-justification>The <strong|justification> for block B
     in round <math|r>, <math|<with|font-series|bold|J<rsup|r,stage><around*|(|B|)>>>
-    <glossary-explain|The justification for pre-commiting or comming to block
+    <glossary-explain|<math|J<rsup|r,stage><around*|(|B|)>>|The justification for pre-commiting or comming to block
     <math|B> in round <math|r> of finality protocol|>, is a vector of pairs of
     the type:
 
