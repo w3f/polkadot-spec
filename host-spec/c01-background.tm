@@ -116,7 +116,7 @@
 
   <\definition>
     By a <strong|sequences of bytes> or a <strong|byte array>,
-    <math|b><glossary-explain|<math|b\<assign\><around|(|b<rsub|0>,b<rsub|1>,...,b<rsub|n-1>|)>>|A
+    <math|b><glossary-explain|<math|<around|(|b<rsub|0>,b<rsub|1>,...,b<rsub|n-1>|)>>|A
     sequence of bytes or byte array of length <math|n>> , of length <math|n>,
     we refer to
 
