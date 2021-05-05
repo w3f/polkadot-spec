@@ -495,9 +495,10 @@
   <reference|sect-extrinsics>.
 
   <\definition>
-    <label|defn-transactions-message>The <strong|transactions message> is the
-    structure of how the transactions are sent over the network. It is
-    represented by <math|M<rsub|T>> and is defined as follows:
+    <label|defn-transactions-message>The <strong|transactions
+    message><glossary-dup|transaction message> is the structure of how the
+    transactions are sent over the network. It is represented by
+    <math|M<rsub|T>> and is defined as follows:
 
     <\equation*>
       M<rsub|T>\<assign\>Enc<rsub|SC><around*|(|C<rsub|1>,\<ldots\>,C<rsub|n>|)>
@@ -544,7 +545,9 @@
 
   <\definition>
     <label|defn-grandpa-vote-msg>A <strong|GRANDPA vote message> by voter
-    <math|v>, <with|font-series|bold|<math|M<rsup|r,stage><rsub|v>>>, is
+    <math|v>, <with|font-series|bold|<math|M<rsup|r,stage><rsub|v>>>
+    <glossary-explain|<math|M<rsup|r,stage><rsub|v>>|Vote message broadcasted
+    by the voter v as part of the finality protocol>, is
     gossip to the network by voter <math|v> with the following structure:
 
     <\eqnarray*>
@@ -606,7 +609,9 @@
   <\definition>
     <label|defn-grandpa-commit-msg>A <strong|<math|<with|font-series|bold|>GRANDPA>
     commit message> for block <math|B> in round <math|r>
-    <strong|<math|M<rsub|v><rsup|r,Fin>>(B)> is a message broadcasted by
+    <strong|<math|M<rsub|v><rsup|r,Fin>>(B)><glossary-explain|<math|M<rsub|v><rsup|r,Fin><around*|(|B|)>>|The
+    commit message broadcasted by voter <math|v> indicating that they have
+    finalized bock <math|B> in round <math|r>> is a message broadcasted by
     voter <math|v> to the network indicating that voter <math|v> has
     finalized block <math|B> in round <math|r>. It has the following
     structure:
