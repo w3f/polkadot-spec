@@ -975,14 +975,20 @@
   <subsection|Preliminaries>
 
   <\definition>
-    <label|defn-grandpa-voter>A <strong|GRANDPA Voter>, <math|v>, represented
-    by a key pair <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
-    <math|k<rsub|v><rsup|pr>> represents an <math|ED25519> private key, is a
-    node running a GRANDPA protocol and broadcasting votes to finalize blocks
-    in a Polkadot Host-based chain. The <strong|set of all GRANDPA voters>
-    for a given block B is indicated by <math|\<bbb-V\><rsub|B>>. In that
-    regard, we have <todo|change function name, only call at genesis, adjust
-    V_B over the sections>
+    <label|defn-grandpa-voter>A <strong|GRANDPA Voter>,
+    <math|v><glossary-explain|<math|v>|GRANDPA voter node which casts vote in
+    the finality protocol>, represented by a key pair
+    <math|<around|(|k<rsup|pr><rsub|v>,v<rsub|id>|)>> where
+    <math|k<rsub|v><rsup|pr>><glossary-explain|<math|k<rsub|v><rsup|pr>>|The
+    private key of voter <math|v>> represents an <math|ED25519> private key,
+    and <math|v<rsub|id>><glossary-explain|<math|v<rsub|id>>|The public key
+    of voter <math|v>> represents the public key of <math|v>. It is a node
+    running a GRANDPA protocol and broadcasting votes to finalize blocks in a
+    Polkadot Host-based chain. The <strong|set of all GRANDPA voters> for a
+    given block B is indicated by <math|\<bbb-V\><rsub|B>><glossary-explain|<math|\<bbb-V\><rsub|B>,\<bbb-V\>>|The
+    set of all GRANDPA voters for at block <math|B>>. In that regard, we have
+    <todo|change function name, only call at genesis, adjust V_B over the
+    sections>
 
     <\equation*>
       \<bbb-V\><rsub|B>=<text|<verbatim|grandpa_authorities>><around*|(|B|)>
@@ -990,10 +996,10 @@
 
     where <math|<math-tt|grandpa_authorities>> is the entry into the Runtime
     described in Section <reference|sect-rte-grandpa-auth>. We refer to
-    <math|\<bbb-V\><rsub|B> > as <math|\<bbb-V\>> when there is no chance of
-    ambiguity.
+    <math|\<bbb-V\><rsub|B> > as <math|\<bbb-V\>><glossary-dup|<math|\<bbb-V\><rsub|B>,\<bbb-V\>>|>
+    when there is no chance of ambiguity.
 
-    Analogously we say that a Polkadot node is a <strong|non-voter node >for
+    Analogously, we say that a Polkadot node is a <strong|non-voter node> for
     block <math|B>, if it does not own any of the key pairs in
     <math|\<bbb-V\><rsub|B>>.
   </definition>
@@ -1009,8 +1015,10 @@
   </definition>
 
   <\definition>
-    <strong|GRANDPA state>, <math|GS>, is defined as <todo|verify V_id and
-    id_V usage, unify>
+    <strong|GRANDPA state>, <math|GS><glossary-explain|<math|GS>|GRANDPA
+    protocol state consisting of the set of voters, number of times voters
+    set has changed and the current round number.>, is defined as
+    <todo|verify V_id and id_V usage, unify>
 
     <\equation*>
       GS\<assign\><around|{|\<bbb-V\>,id<rsub|\<bbb-V\>>,r|}>
@@ -1023,14 +1031,17 @@
     <math|<math-bf|id<rsub|\<bbb-V\>>>>: is the authority set ID as defined
     in Definition <reference|defn-authority-set-id>.
 
-    <strong|r>: is the votin<verbatim|>g round number.
+    <strong|r><glossary-explain|<math|r>|The voting round counter in the
+    finality protocol>: is the votin<verbatim|>g round number.
   </definition>
 
   Following, we need to define how the Polkadot Host counts the number of
   votes for block <math|B>. First, a vote is defined as:
 
   <\definition>
-    <label|defn-vote>A <strong|GRANDPA vote> or simply a vote for block
+    <label|defn-vote>A <strong|GRANDPA vote> or
+    <math|V<rsub|\<nosymbol\>><around|(|B|)>><glossary-explain|<math|V<rsub|\<nosymbol\>><around|(|B|)>>|A
+    GRANDPA vote casted in favor of block B>, represents a vote for block
     <math|B> is an ordered pair defined as
 
     <\equation*>
@@ -1048,10 +1059,13 @@
     <math|r>. The first sub-round is called <strong|pre-vote> and<verbatim|>
     the second sub-round is called <strong|pre-commit>.
 
-    By <strong|<math|V<rsub|v><rsup|r,pv>>> and
-    <strong|<math|V<rsub|v><rsup|r,pc>>> we refer to the vote cast by voter
-    <math|v> in round <math|r> (for block <math|B>) during the pre-vote and
-    the pre-commit sub-round respectively.
+    By <strong|<math|V<rsub|v><rsup|r,pv>>><glossary-explain|<math|V<rsub|v><rsup|r,pv>>|A
+    GRANDPA vote casted by voter <math|v> during the pre-vote stage of round
+    <math|r>> and <strong|<math|V<rsub|v><rsup|r,pc>>><glossary-explain|<math|V<rsub|v><rsup|r,pc>>|A
+    GRANDPA vote casted by voter <math|v> during the pre-commit stage of
+    round <math|r>>, we refer to the vote cast by voter <math|v> in round
+    <math|r> (for block <math|B>) during the pre-vote and the pre-commit
+    sub-round respectively.
   </definition>
 
   Voting is done by means of broadcasting voting messages to the network. The
@@ -1147,10 +1161,14 @@
       \<cal-E\><rsup|r,stage>
     </equation*>
 
-    represents the set of all equivocators voters in sub-round
-    \P<math|stage>\Q of round <math|r>. When we want to refer to the number
-    of<verbatim|> equivocators whose equivocation has been observed by voter
-    <math|v> we refer to it by:
+    represents the set of all equivocator voters in sub-round
+    \P<math|stage>\Q of round <math|r><glossary-explain|<math|\<cal-E\><rsup|r,stage>>|The
+    set of all equivocator voters in sub-round ``stage'' of round <math|r>>.
+    When we want to refer to the number of<verbatim|> equivocators whose
+    equivocation has been observed by voter <math|v> we refer to it
+    by<glossary-explain|<math|\<cal-E\><rsup|r,stage><rsub|obs<around*|(|v|)>>>|The
+    set of all equivocator voters in sub-round ``stage'' of round <math|r>
+    observed by voter <math|v>>:
 
     <\equation*>
       \<cal-E\><rsup|r,stage><rsub|obs<around*|(|v|)>>
@@ -1185,8 +1203,9 @@
   <\definition>
     For validator v, <strong|the set of observed direct votes for Block
     <math|B> in round <math|r>>, formally denoted by
-    <math|VD<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|B|)>>
-    is equal to the union of:
+    <math|VD<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|B|)>><glossary-explain|<math|VD<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>><around|(|B|)>>|The
+    set of observed direct votes for block B in round <math|r>> is equal to
+    the union of:
 
     <\itemize-dot>
       <item>set of <underline|valid> votes
@@ -1198,13 +1217,17 @@
   <\definition>
     <label|defn-observed-votes>We refer to <strong|the set of total votes
     observed by voter <math|v> in sub-round \P<math|stage>\Q of round
-    <math|r>> by <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>>.
+    <math|r>> by <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>><glossary-explain|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>>|The
+    set of total votes observed by voter v in sub-round ``stage'' of round
+    r>.
 
     The <strong|set of all observed votes by <math|v> in the sub-round stage
     of round <math|r> for block <math|B>>,
-    <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>>> is
-    equal to all of the observed direct votes cast for block <math|B> and all
-    of the <math|B>'s descendants defined formally as:
+    <strong|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>>><glossary-explain|<math|V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>>|The
+    set of all observed votes by <math|v> in the sub-round \Pstage\Q of round
+    <math|r> (directly or indirectly) for block <math|B>> is equal to all of
+    the observed direct votes cast for block <math|B> and all of the
+    <math|B>'s descendants defined formally as:
 
     <\equation*>
       V<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B|)>\<assign\><big|cup><rsub|v<rsub|i>\<in\>\<bbb-V\>,B\<geqslant\>B<rprime|'>>VD<rsup|r,stage><rsub|obs<around|(|v|)>><around|(|B<rprime|'>|)><rsub|\<nosymbol\>><rsup|\<nosymbol\>><rsub|\<nosymbol\>>
@@ -1235,8 +1258,9 @@
   </definition>
 
   <\definition>
-    The current <strong|pre-voted> block <strong|<math|B<rsup|r,pv><rsub|v>>>also
-    know as GRANDPA GHOST is the block chosen by Algorithm
+    The current <strong|pre-voted> block <strong|<math|B<rsup|r,pv><rsub|v>>><glossary-explain|<math|B<rsup|r,pv><rsub|v>>|The
+    currently pre-voted block in round <math|r>. The GRANDPA GHOST of round
+    <math|r>>, also know as GRANDPA GHOST is the block chosen by Algorithm
     <reference|algo-grandpa-ghost>:
 
     <\equation*>
