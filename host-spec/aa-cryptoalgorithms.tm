@@ -34,8 +34,10 @@
 
   <\definition>
     <label|defn-account-key><strong|Account key
-    <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>> is a key pair of type of
-    either of the schemes listed in Table
+    <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>><glossary-explain|Account key,
+    <math|<around*|(|sk<rsup|a>,pk<rsup|a>|)>>|A key pair of types accepted
+    by the Polkadot protocol which can be used to sign transactions> is a key
+    pair of type of either of schemes listed in Table
     <reference|tabl-account-key-schemes>:
 
     <\center>
