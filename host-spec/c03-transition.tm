@@ -244,8 +244,9 @@
 
   <subsection|Transactions>
 
-  Transaction are submitted and exchanged through <em|Transactions> network
-  messages (see Section <reference|sect-msg-transactions>). Upon receiving a
+  Transaction are submitted and exchanged through <em|transaction
+  messages<glossary|Transaction Message>> (see Section
+  <reference|sect-msg-transactions>). Upon receiving a
   Transactions message, the Polkadot Host decodes the SCALE-encoded blob and
   splits it into individually SCALE-encoded transactions.
 
@@ -270,8 +271,8 @@
   as well as those to whom the transaction has already been sent. This
   behavior is mandated to avoid resending duplicates and unnecessarily
   overloading the network. To that aim, the Polkadot Host should keep a
-  <em|transaction pool<index|transaction pool>> and a <em|transaction
-  queue><index|transaction queue> defined as follows:
+  <em|transaction pool<glossary|Transaction Pool>> and a <em|transaction
+  queue><glossary|Transaction Queue> defined as follows:
 
   <\definition>
     <label|defn-transaction-queue>The <strong|Transaction Queue> of a block
