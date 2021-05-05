@@ -17,14 +17,16 @@
 
   <\definition>
     <label|defn-scale-byte-array>The <strong|SCALE codec> for <strong|Byte
-    array> <math|A> such that
+    array> <math|A><glossary-dup|<math|<around|(|b<rsub|0>,b<rsub|1>,...,b<rsub|n-1>|)>>|>
+    such that
 
     <\equation*>
-      A\<assign\>b<rsub|1>*b<rsub|2>*\<ldots\>*b<rsub|n>
+      A\<assign\><around|(|b<rsub|0>,b<rsub|1>,...,b<rsub|n-1>|)>
     </equation*>
 
     such that <math|n\<less\>2<rsup|536>> is a byte array refered to
-    <math|Enc<rsub|SC><around|(|A|)>> and defined as:
+    <math|Enc<rsub|SC><around|(|A|)>><glossary-explain|<math|Enc<rsub|SC><around|(|A|)>>|SCALE
+    encoding of value <math|A>> and defined as:
 
     <\equation*>
       Enc<rsub|SC><around|(|A|)>\<assign\>Enc<rsup|Len><rsub|SC><around*|(|<around*|\<\|\|\>|A|\<\|\|\>>|)><around*|\|||\|>A
@@ -36,14 +38,16 @@
 
   <\definition>
     <label|defn-scale-tuple>The <strong|SCALE codec> for <strong|Tuple>
-    <math|T> such that:
+    <math|T><glossary-explain|<math|T\<assign\><around|(|A<rsub|1>,\<ldots\>,A<rsub|n>|)>>|A
+    tuple of values <math|A<rsub|i>>'s each of different type> such that:
 
     <\equation*>
       T\<assign\><around|(|A<rsub|1>,\<ldots\>,A<rsub|n>|)>
     </equation*>
 
-    Where <math|A<rsub|i>>'s are values of <strong|different types>, is
-    defined as:
+    Where <math|A<rsub|i>>'s are values of <strong|different types>. It is
+    formally referred to as <math|Enc<rsub|SC><around|(|T|)>><glossary-dup|<math|Enc<rsub|SC><around|(|A|)>>|>
+    and defined as:
 
     <\equation*>
       Enc<rsub|SC><around|(|T|)>\<assign\>Enc<rsub|SC><around|(|A<rsub|1>|)><around*|\|||\|>Enc<rsub|SC><around|(|A<rsub|2>|)><around*|\|||\|>\<ldots\><around*|\|||\|>*Enc<rsub|SC><around|(|A<rsub|n>|)>
@@ -63,8 +67,12 @@
   </definition>
 
   <\definition>
-    <label|defn-varrying-data-type>We define a <strong|varying data> type to
-    be an ordered set of data types\ 
+    <label|defn-varrying-data-type>We define <strong|varying data> types,
+    referred to formally as <math|\<cal-T\>><glossary-explain|Varying Data
+    Types <math|\<cal-T\>=<around*|{|T<rsub|1>,\<ldots\>,T<rsub|n>|}>>|A data
+    type representing any of varying types
+    <math|T<rsub|1>,\<ldots\>,T<rsub|n>>.>, to be an ordered set of data
+    types\ 
 
     <\equation*>
       \<cal-T\>=<around*|{|T<rsub|1>,\<ldots\>,T<rsub|n>|}>
@@ -106,7 +114,9 @@
   <\definition>
     <label|defn-scale-variable-type>Scale coded for value
     <strong|<math|A=<around*|(|A<rsub|Type>,A<rsub|Value>|)>> of varying data
-    type> <math|\<cal-T\>=<around*|{|T<rsub|1>,\<ldots\>,T<rsub|n>|}>>
+    type> <math|\<cal-T\>=<around*|{|T<rsub|1>,\<ldots\>,T<rsub|n>|}>>,
+    formally referred to as <math|Enc<rsub|SC><around*|(|A|)>><glossary-dup|<math|Enc<rsub|SC><around*|(|A|)>>|>
+    is defined as follows:
 
     <\equation*>
       Enc<rsub|SC><around*|(|A|)>\<assign\>Enc<rsub|SC><around*|(|Idx<around*|(|A<rsub|Type>|)>|)><around*|\|||\|>Enc<rsub|SC><around*|(|A<rsub|Value>|)>
@@ -130,15 +140,17 @@
 
   <\definition>
     <label|defn-scale-list>The <strong|SCALE codec> for <strong|sequence>
-    <math|S> such that:
+    <math|S><glossary-explain|<math|S\<assign\>A<rsub|1>,\<ldots\>,A<rsub|n>>|Sequence
+    of values <math|A<rsub|i>> of the same type> such that:
 
     <\equation*>
       S\<assign\>A<rsub|1>,\<ldots\>,A<rsub|n>
     </equation*>
 
     where <math|A<rsub|i>>'s are values of <strong|the same type> (and the
-    decoder is unable to infer value of <math|n> from the context) is defined
-    as:
+    decoder is unable to infer value of <math|n> from the context) is
+    formally referred to as <math|Enc<rsub|SC><around|(|S|)>><glossary-dup|<math|Enc<rsub|SC><around|(|A|)>>|>
+    and defined as:
 
     <\equation*>
       Enc<rsub|SC><around|(|S|)>\<assign\>Enc<rsup|Len><rsub|SC><around*|(|<around*|\<\|\|\>|S|\<\|\|\>>|)><mid|\|>Enc<rsub|SC><around|(|A<rsub|1>|)>\|Enc<rsub|SC><around|(|A<rsub|2>|)><around|\||\<ldots\>|\|>*Enc<rsub|SC><around|(|A<rsub|n>|)>
@@ -197,8 +209,10 @@
 
   <\definition>
     <label|defn-sc-len-encoding><strong|SCALE Length Encoding,
-    <math|Enc<rsup|Len><rsub|SC>>> also known as compact encoding of a
-    non-negative integer number <math|n> is defined as follows:
+    <math|Enc<rsup|Len><rsub|SC>>><glossary-explain|<math|Enc<rsup|Len><rsub|SC><around*|(|n|)>>|SCALE
+    length encoding aka. compact encoding of non-negative interger <math|n>
+    of arbitrary size.> also known as compact encoding of a non-negative
+    integer number <math|n> is defined as follows:
 
     <\equation*>
       <tabular|<tformat|<table|<row|<cell|Enc<rsup|Len><rsub|SC>:>|<cell|\<bbb-N\>\<rightarrow\>\<bbb-B\>>>|<row|<cell|>|<cell|n\<rightarrow\>b\<assign\><around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|l<rsup|\<nosymbol\>><rsub|1>>|<cell|>|<cell|0\<leqslant\>n\<less\>2<rsup|6>>>|<row|<cell|i<rsup|\<nosymbol\>><rsub|1>*i<rsup|\<nosymbol\>><rsub|2>>|<cell|>|<cell|2<rsup|6>\<leqslant\>n\<less\>2<rsup|14>>>|<row|<cell|j<rsup|\<nosymbol\>><rsub|1>*j<rsup|\<nosymbol\>><rsub|2>*j<rsub|3>>|<cell|>|<cell|2<rsup|14>\<leqslant\>n\<less\>2<rsup|30>>>|<row|<cell|k<rsub|1><rsup|\<nosymbol\>>*k<rsub|2><rsup|\<nosymbol\>>*\<ldots\>*k<rsub|m><rsup|\<nosymbol\>>*>|<cell|>|<cell|2<rsup|30>\<leqslant\>n>>>>>|\<nobracket\>>>>>>>
@@ -230,12 +244,14 @@
   Practically, it is more convenient and efficient to store and process data
   which is stored in a byte array. On the other hand, the Trie keys are
   broken into 4-bits nibbles. Accordingly, we need a method to encode
-  sequences of 4-bits nibbles into byte arrays canonically:
+  sequences of 4-bits nibbles into byte arrays canonically. To this aim, we
+  define <em|hex encoding> function <math|Enc<rsub|HE><around|(|PK|)>><glossary-explain|<math|Enc<rsub|HE><around|(|PK|)>>|Hex
+  encoding> as follows:
 
   <\definition>
     <label|defn-hex-encoding>Suppose that
     <math|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>> is a sequence of
-    nibbles, then
+    nibbles, then the <strong|hex encoding> of <math|PK> is defined as:
 
     <tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<cwith|1|-1|1|-1|cell-valign|c>|<table|<row|<cell|<math|Enc<rsub|HE><around|(|PK|)>\<assign\>>>>|<row|<cell|<math|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|3|3|cell-halign|l>|<cwith|1|-1|3|3|cell-rborder|0ln>|<table|<row|<cell|Nibbles<rsub|4>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\>>>|<row|<cell|PK=<around|(|k<rsub|1>,\<ldots\>,k<rsub|n>|)>>|<cell|\<mapsto\>>|<cell|<around*|{|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|1|1|cell-rborder|0ln>|<table|<row|<cell|<tabular*|<tformat|<cwith|1|-1|1|1|cell-halign|l>|<cwith|1|-1|1|1|cell-lborder|0ln>|<cwith|1|-1|2|2|cell-halign|l>|<cwith|1|-1|2|2|cell-rborder|0ln>|<table|<row|<cell|<around|(|16k<rsub|1>+*k<rsub|2>,\<ldots\>,16k<rsub|2*i-1>+*k<rsub|2*i>|)>>|<cell|n=2*i>>|<row|<cell|<around|(|k<rsub|1>,16k<rsub|2>+*k<rsub|3>,\<ldots\>,16k<rsub|2*i>+*k<rsub|2*i+1>|)>>|<cell|n=2*i+1>>>>>>>>>>|\<nobracket\>>>>>>>|\<nobracket\>>>>>>>>
   </definition>
