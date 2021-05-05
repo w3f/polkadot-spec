@@ -1030,7 +1030,7 @@
   votes for block <math|B>. First, a vote is defined as:
 
   <\definition>
-    <label|defn-vote>A <strong|GRANDPA vote >or simply a vote for block
+    <label|defn-vote>A <strong|GRANDPA vote> or simply a vote for block
     <math|B> is an ordered pair defined as
 
     <\equation*>
@@ -1082,8 +1082,10 @@
 
   <\definition>
     <label|defn-grandpa-justification>The <strong|justification> for block B
-    in round <math|r>, <math|<with|font-series|bold|J<rsup|r,stage><around*|(|B|)>>>,
-    is a vector of pairs of the type:
+    in round <math|r>, <math|<with|font-series|bold|J<rsup|r,stage><around*|(|B|)>>>
+    <glossary-explain|The justification for pre-commiting or comming to block
+    <math|B> in round <math|r> of finality protocol|>, is a vector of pairs of
+    the type:
 
     <\equation*>
       <around*|(|V<around*|(|B<rprime|'>|)>,Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>
@@ -1100,10 +1102,13 @@
 
     \;
 
-    In all cases, <math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>,
-    as defined in Definition <reference|defn-sign-round-vote>, is the
-    signature of voter <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>> broadcasted
-    during either the pre-vote (stage = pv) or the pre-commit (stage = pc)
+    In all cases, <math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
+    <glossary-explain|<math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B|)>>|The
+    signature of voter <math|v> on their voteto block B, broadcasted during
+    the specified stage of finality round <math|r>>, as defined in Definition 
+    <reference|defn-sign-round-vote>, is the signature of voter
+    <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>> broadcasted during either the
+    pre-vote (stage = pv) or the pre-commit (stage = pc)
     sub-round of round r. A <strong|valid justification> must only contain
     up-to-one valid vote from each voter and must not contain more than two
     equivocatory votes from each voter.

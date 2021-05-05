@@ -165,8 +165,8 @@
   <\definition>
     <label|defn-node-key>For any <math|N\<in\>\<cal-N\>>, its key
     <math|k<rsub|N>> is divided into an <strong|aggregated prefix key>,
-    <strong|<math|pk<rsub|N><rsup|Agr>>><inactive|<glossary-explain|<math|pk<rsub|N><rsup|Agr>>|The
-    aggregated prefix key of node N>>, aggregated by Algorithm
+    <strong|<math|pk<rsub|N><rsup|Agr>>><glossary-explain|<math|pk<rsub|N><rsup|Agr>>|The
+    aggregated prefix key of node N>, aggregated by Algorithm
     <reference|algo-aggregate-key> and a <strong|partial key>,
     <strong|<math|pk<rsub|N>>><glossary-explain|<math|pk<rsub|N>>|The
     (suffix) partial key of node N> of length
