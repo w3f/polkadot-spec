@@ -470,18 +470,24 @@
 
     <\itemize>
       <item><with|font-series|bold|<samp|parent_hash:>> formally indicated as
-      <math|<strong|<text|H<rsub|p>>>>, is the 32-byte Blake2b hash (Section
-      <reference|sect-blake2>) of the SCALE encoded parent block header as
-      defined in Definition <reference|defn-block-header-hash>.
+      <math|<strong|<text|H<rsub|p>>>><glossary-explain|H<rsub|p>|The 32-byte
+      Blake2b hash of the header of the parent of the block.>, is the 32-byte
+      Blake2b hash (Section <reference|sect-blake2>) of the SCALE encoded
+      parent block header as defined in Definition
+      <reference|defn-block-header-hash>.
 
       <item><strong|<samp|number:>> formally indicated as
-      <strong|<math|H<rsub|i>>>, is an integer, which represents the index of
-      the current block in the chain. It is equal to the number of the
-      ancestor blocks. The genesis state has number 0.
+      <strong|<math|H<rsub|i>>><glossary-explain|<math|H<rsub|i>,H<rsub|i><around*|(|B|)>>|Block
+      number, the incremental interger index of the current block in the
+      chain.>, is an integer, which represents the index of the current block
+      in the chain. It is equal to the number of the ancestor blocks. The
+      genesis state has number 0.
 
       <item><strong|<samp|state_root:>> formally indicated as
-      <strong|<math|H<rsub|r>>>, is the root of the Merkle trie, whose leaves
-      implement the storage for the system.
+      <strong|<math|<math|H<rsub|r>>>><glossary-explain|<math|H<rsub|r>>|The
+      hash of the root of the Merkle trie of the state storage at a given
+      block>, is the root of the Merkle trie, whose leaves implement the
+      storage for the system.
 
       <item><strong|<samp|extrinsics_root:>> is the field which is reserved
       for the Runtime to validate the integrity of the extrinsics composing
@@ -489,23 +495,27 @@
       trie which stores an ordered list of the extrinsics being validated in
       this block. The <samp|extrinsics_root> is set by the runtime and its
       value is opaque to the Polkadot Host. This element is formally referred
-      to as <strong|<math|H<rsub|e>>>.
+      to as <strong|<math|H<rsub|e>><glossary-explain|<math|H<rsub|e>>|<with|font-series|medium|An
+      auxuliray field in block header used by Runtime to validate the
+      integrity of the extrinsics composing the block body>>>.
 
       <item><strong|<samp|digest:>> this field is used to store any
       chain-specific auxiliary data, which could help the light clients
       interact with the block without the need of accessing the full storage
       as well as consensus-related data including the block signature. This
-      field is indicated as <strong|<math|H<rsub|d>>> and its detailed format
-      is defined in Definition <reference|defn-digest>
+      field is indicated as <strong|<math|H<rsub|d>>><glossary-explain|<math|H<rsub|d>>,
+      <math|H<rsub|d><around*|(|B|)>>|A block header used to store any
+      chain-specific auxiliary data.> and its detailed format is defined in
+      Definition <reference|defn-digest>
     </itemize>
   </definition>
 
   <\definition>
     <label|defn-digest>The header <strong|digest> of block <math|B> formally
-    referred to by <strong|<math|H<rsub|d><around*|(|B|)>>> is an array of
-    <strong|digest items> <math|H<rsup|i><rsub|d>>'s , known as digest items
-    of varying data type (see Definition <reference|defn-varrying-data-type>)
-    such that
+    referred to by <strong|<math|H<rsub|d><around*|(|B|)>>><glossary-dup|<math|H<rsub|d>>,
+    <math|H<rsub|d><around*|(|B|)>>> is an array of <strong|digest items>
+    <math|H<rsup|i><rsub|d>>'s , known as digest items of varying data type
+    (see Definition <reference|defn-varrying-data-type>) such that
 
     <\equation*>
       H<rsub|d><around*|(|B|)>:=H<rsup|1><rsub|d>,\<ldots\>,H<rsup|n><rsub|d>
@@ -563,8 +573,9 @@
 
   <\definition>
     <label|defn-block-header-hash>The <strong|block header hash of block
-    <math|B>>, <strong|<math|H<rsub|h><around|(|B|)>>>, is the hash of the
-    header of block <math|B> encoded by simple codec:
+    <math|B>>, <strong|<math|H<rsub|h><around|(|B|)>>><glossary-explain|<math|H<rsub|h><around|(|B|)>>|The
+    hash of the header of block <math|B>>, is the hash of the header of block
+    <math|B> encoded by SCALE codec:
 
     <\equation*>
       H<rsub|h><around|(|B|)>\<assign\>Blake2b<around|(|Enc<rsub|SC><around|(|Head<around|(|B|)>|)>|)>
@@ -601,7 +612,9 @@
 
   <\definition>
     <label|defn-block-body>The <strong|body of Block> <math|B> represented as
-    <strong|<math|Body<around*|(|B|)>>> is defined to be
+    <strong|<math|Body<around*|(|B|)>>><glossary-explain|<math|Body<around*|(|B|)>>|The
+    body of block <math|B> consisting of a set of extrinsics> is defined to
+    be
 
     <\equation*>
       Body<around*|(|B|)>\<assign\>Enc<rsub|SC><around*|(|E<rsub|1>,\<ldots\>,E<rsub|n>|)>
@@ -816,10 +829,11 @@
   is a SCALE encoded byte array.
 
   Furthermore, <math|K> represents the changed storage key,
-  <math|H<rsub|i><around*|(|B<rsub|i>|)>> refers to the block number at which
-  this key is inserted into the Changes Trie (See Definition
-  <reference|defn-block-header>) and <math|Type<rsub|V<rsub|C>>> is an index
-  defining the type \ <math|C<rsub|Value>> according to Table
+  <math|H<rsub|i><around*|(|B<rsub|i>|)>><glossary-dup|<math|H<rsub|i>,H<rsub|i><around*|(|B|)>>|>
+  refers to the block number at which this key is inserted into the Changes
+  Trie (See Definition <reference|defn-block-header>) and
+  <math|Type<rsub|V<rsub|C>>> is an index defining the type
+  \ <math|C<rsub|Value>> according to Table
   <reference|table-changes-trie-key-types>.<htab|5mm>
 
   <\big-table>
