@@ -60,8 +60,6 @@
   <bibliography|bib|tm-alpha|host-spec|>
 
   \;
-
-  <the-index|idx|>
 </body>
 
 <\initial>
