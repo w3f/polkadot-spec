@@ -90,8 +90,9 @@
       <item><math|H<around*|(|B|)>> is the header of the block as described
       in Definition <reference|defn-block-header>.
 
-      <item><math|E> is an array of zero or more extrinsics, which are SCALE
-      encoded byte arrays and its structure is opaque to the Polkadot Host.
+      <item><math|E> is an array of zero or more extrinsics,
+      <math|e<rsub|n>>, which are SCALE encoded byte arrays and its structure
+      is opaque to the Polkadot Host.
 
       <item><math|H<rsub|r>> is the Merkle root of the parachain state at
       this block.
@@ -202,9 +203,9 @@
   </definition>
 
   <\definition>
-    The <strong|parchain head data> is a SCALE encoded byte array containing
-    the full block header as defined in Definition
-    <reference|defn-block-header> of a parachain block.
+    <label|defn-para-head-data>The <strong|parchain head data> is a SCALE
+    encoded byte array containing the full block header as defined in
+    Definition <reference|defn-block-header> of a parachain block.
   </definition>
 
   <\definition>
@@ -229,7 +230,7 @@
 
     <\itemize-dot>
       <item><math|P<rsub|h>> is the parent head data as defined in Definition
-      <todo|@fabio>.
+      <reference|defn-para-head-data>.
 
       <item><math|H<rsub|i>> is the relay chain block number this is in the
       context of.
@@ -272,8 +273,8 @@
   </definition>
 
   <\definition>
-    <label|defn-global-validation-parameters>The
-    <with|font-series|bold|global validation parameters>,
+    <label|defn-global-validation-parameters><todo|@fabio: still relevant?>
+    The <with|font-series|bold|global validation parameters>,
     <math|v<rsup|GVP><rsub|B>>, defines global data that apply to all
     candidates in a block.
 
@@ -296,10 +297,10 @@
   </definition>
 
   <\definition>
-    <label|defn-local-validation-parameters>The <with|font-series|bold|local
-    validation parameters>, <math|v<rsup|LVP><rsub|B>>, defines
-    parachain-specific data required to fully validate a block. It is a tuple
-    of the following format:
+    <label|defn-local-validation-parameters><todo|@fabio: still relevant?>
+    The <with|font-series|bold|local validation parameters>,
+    <math|v<rsup|LVP><rsub|B>>, defines parachain-specific data required to
+    fully validate a block. It is a tuple of the following format:
 
     <\equation*>
       v<rsup|LVP><rsub|B>\<assign\><around|(|head<around|(|B<rsub|p>|)>,UINT128,Blake2b<around|(|R<rsub|\<rho\>>|)>,R<rsup|up><rsub|\<rho\>>|)>
@@ -569,40 +570,17 @@
 
   <\definition>
     <label|defn-candidate-commitments><with|font-series|bold|Candidate
-    commitments>, <math|CC<around|(|PoV<rsub|B>|)>>, are results of the
-    execution and validation of parachain (or parathread) candidates whose
-    produced values must be committed to the relay chain. A candidate
-    commitments is represented as a tuple of the following format:
+    commitments>, <math|C<rsub|c>>, are results of the execution and
+    validation of parachain (or parathread) candidates whose produced values
+    must be committed to the relay chain. A candidate commitments is
+    represented as a tuple of the following format:
 
-    <alignat*|2|<tformat|<table|<row|<cell|CC<around|(|PoV<rsub|B>|)>>|<cell|\<assign\><around|(|\<bbb-F\>,Enc<rsub|SC><around|(|Msg<rsub|0>,..,Msg<rsub|n>|)>,H<rsub|r><around|(|B|)>,Option<around|(|R<rsub|\<rho\>>|)>|)>>>|<row|<cell|Msg>|<cell|\<assign\><around|(|\<bbb-O\>,Enc<rsub|SC><around|(|b<rsub|0>,..
-    b<rsub|n>|)>|)>>>>>>
+    <alignat*|2|<tformat|<table|<row|<cell|C<rsub|c>>|<cell|\<assign\><around*|(|M<rsub|u>,M<rsub|h>,R<rsub|v>,P<rsub|h>|)>>>>>>
 
     where each value represents:
 
     <\itemize>
-      <item><math|\<bbb-F\>>: fees paid from the chain to the relay chain
-      validators.
-
-      <item><math|Msg>: parachain messages to the relay chain.
-      <math|\<bbb-O\>> identifies the origin of the messages and is a varying
-      data type (Definition <reference|defn-scale-codec>) and can be one of
-      the following values:
-
-      <\equation*>
-        \<bbb-O\>=<choice|<tformat|<table|<row|<cell|0,>|<cell|<text|Signed>>>|<row|<cell|1,>|<cell|<text|Parachain>>>|<row|<cell|2,>|<cell|<text|Root>>>>>>
-      </equation*>
-
-      <todo|@fabio: define the concept of \Porigin\Q>
-
-      The following SCALE encoded array, <math|Enc<rsub|SC><around|(|b<rsub|0>,..b<rsub|n>|)>>,
-      contains the raw bytes of the message which varies in size.
-
-      <item><math|H<rsub|r><around|(|B|)>>: the root of a block's erasure
-      encoding Merkle tree <todo|@fabio: use different symbol for this?>.
-
-      <item><math|Option<around|(|R<rsub|\<rho\>>|)>>: A varying datatype
-      (Definition <reference|defn-scale-codec>) containing the new runtime
-      code for the parachain. <todo|@fabio: clarify further>
+      <item><math|>
     </itemize>
   </definition>
 
