@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -561,6 +561,35 @@
     Definition <reference|defn-runtime-pointer-size> indicating the child
     storage key as defined in Definition <reference|defn-child-storage-type>.
   </itemize>
+
+  <subsubsection|Version 2>
+
+  <\verbatim>
+    (func $ext_default_child_storage_storage_kill_version_2
+
+    (param $child_storage_key i64) (param $limit u32) (return i32)
+  </verbatim>
+
+  \;
+
+  Arguments
+
+  <\itemize-dot>
+    <item><verbatim|child_storage_key>: a pointer-size as defined in
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
+
+    <item><verbatim|limit>: a SCALE encoded <verbatim|Option> as defined in
+    Definition <reference|defn-option-type> containing the <verbatim|u32>
+    intiger indicationg the limit of child storage entries to delete. This
+    function call wipes all pending (non-finalized) changes which should be
+    committed to the specified child storage keys, including deleting up to
+    <verbatim|limit> number of database entries in lexicographic order.
+
+    <item>result: a SCALE encoded boolean which returns <verbatim|false> if
+    there are some keys remaining in the child trie or <verbatim|true> if
+    otherwise.
+  </itemize-dot>
 
   <subsection|<verbatim|ext_default_child_storage_exists>>
 
@@ -2438,7 +2467,6 @@
   </with>
 
   \;
-
 </body>
 
 <\initial>
@@ -2447,9 +2475,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
