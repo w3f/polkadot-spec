@@ -572,7 +572,7 @@
 
   \;
 
-  Arguments
+  <strong|Arguments>
 
   <\itemize-dot>
     <item><verbatim|child_storage_key>: a pointer-size as defined in
@@ -582,13 +582,57 @@
     <item><verbatim|limit>: a SCALE encoded <verbatim|Option> as defined in
     Definition <reference|defn-option-type> containing the <verbatim|u32>
     intiger indicationg the limit of child storage entries to delete. This
-    function call wipes all pending (non-finalized) changes which should be
-    committed to the specified child storage keys, including deleting up to
-    <verbatim|limit> number of database entries in lexicographic order.
+    function call wipes <strong|all> pending (non-finalized) changes which
+    should be committed to the specified child storage keys, including
+    deleting up to <verbatim|limit> number of database entries in
+    lexicographic order. No limit is applied when this value is
+    <verbatim|None>.
 
-    <item>result: a SCALE encoded boolean which returns <verbatim|false> if
-    there are some keys remaining in the child trie or <verbatim|true> if
-    otherwise.
+    <item><verbatim|result>: a SCALE encoded boolean which returns
+    <verbatim|false> if there are some keys remaining in the child trie or
+    <verbatim|true> if otherwise.
+  </itemize-dot>
+
+  <subsubsection|Version 3>
+
+  <\verbatim>
+    (func $ext_default_child_storage_storage_kill_version3
+
+    (param $child_storage_key i64) (param $limit u32) (return i32)
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item><verbatim|child_storage_key>: a pointer-size as defined in
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
+
+    <item><verbatim|limit>: a SCALE encoded <verbatim|Option> as defined in
+    Definition <reference|defn-option-type> containing the <verbatim|u32>
+    intiger indicationg the limit of child storage entries to delete. This
+    function call wipes <strong|all> pending (non-finalized) changes which
+    should be committed to the specified child storage keys, including
+    deleting up to <verbatim|limit> number of database entries in
+    lexicographic order. No limit is applied when this value is
+    <verbatim|None>.
+
+    <item><verbatim|result>: a pointer to the following SCALE encoded varying
+    type:
+
+    <\equation*>
+      <choice|<tformat|<table|<row|<cell|0<space|1em>No keys remain \ in the
+      child trie. Followed by u32.>>|<row|<cell|1<space|1em>At least one key
+      still resides. Followed by u32.>>>>>
+    </equation*>
+
+    The additional, following integer indicates the number of entries that
+    were deleted by the function call. This must consider the specificed
+    <verbatim|limit>.
+
+    \;
   </itemize-dot>
 
   <subsection|<verbatim|ext_default_child_storage_exists>>
