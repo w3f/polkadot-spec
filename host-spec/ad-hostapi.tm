@@ -588,7 +588,7 @@
     lexicographic order. No limit is applied when this value is
     <verbatim|None>.
 
-    <item><verbatim|result>: a SCALE encoded boolean which returns
+    <item><verbatim|result>: a SCALE encoded boolean equal to
     <verbatim|false> if there are some keys remaining in the child trie or
     <verbatim|true> if otherwise.
   </itemize-dot>
@@ -883,19 +883,7 @@
 
   <subsection|<verbatim|ext_crypto_ed25519_verify>><label|sect-ext-crypto-ed25519-verify>
 
-  Verifies an <verbatim|ed25519> signature. Returns <verbatim|true> when the
-  verification is either successful or batched. If no batching verification
-  extension is registered, this function will fully verify the signature and
-  return the result. If batching verification is registered, this function
-  will push the data to the batch and return immediately. The caller can then
-  get the result by calling <verbatim|ext_crypto_finish_batch_verify>
-  (<reference|sect-ext-crypto-finish-batch-verify>).
-
-  \;
-
-  The verification extension is explained more in detail in
-  <verbatim|ext_crypto_start_batch_verify>
-  (<reference|sect-ext-crypto-start-batch-verify>).
+  Verifies a <verbatim|ed25519> signature.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -920,10 +908,47 @@
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
-    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
-    signature is valid or batched or a value equal to <verbatim|0> if
-    otherwise.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is valid or <verbatim|false> if otherwise.
   </itemize>
+
+  <subsection|<strong|<verbatim|ext_crypto_ed25519_batch_verify>>>
+
+  Registers a <verbatim|ed25519> sigatnure for batch verification. Batch
+  verification must be enabled by calling
+  <verbatim|ext_crypto_start_batch_verify> as described in Section
+  <reference|sect-ext-crypto-start-batch-verify>. If batch verification is
+  not enabled, then the signature is verified immediately. To get the result
+  of the verification batch, <verbatim|ext_crypto_finish_batch_verify> as
+  described in Section <reference|sect-ext-crypto-finish-batch-verify> must
+  be called.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_ed25519_batch_verify_version_1
+
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
+    the 64-byte signature.
+
+    <item><verbatim|msg>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
+
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
+    256-bit public key.
+
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is batched or valid, <verbatim|false> if otherwise.
+  </itemize-dot>
 
   <subsection|<verbatim|ext_crypto_sr25519_public_keys>>
 
