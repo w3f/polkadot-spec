@@ -1070,6 +1070,33 @@
   <verbatim|ext_crypto_start_batch_verify>
   (<reference|sect-ext-crypto-start-batch-verify>).
 
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_sr25519_verify_version_1
+
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
+    the 64-byte signature.
+
+    <item><verbatim|msg>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
+
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
+    256-bit public key.
+
+    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
+    signature is valid or a value equal to <verbatim|0> if otherwise.
+  </itemize>
+
   <subsubsection|Version 2 - Prototype>
 
   <\verbatim>
@@ -1097,10 +1124,21 @@
     signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
+  <subsection|<strong|<verbatim|ext_crypto_sr25519_batch_verify>>>
+
+  Registers a <verbatim|sr25519> sigatnure for batch verification. Batch
+  verification must be enabled by calling
+  <verbatim|ext_crypto_start_batch_verify> as described in Section
+  <reference|sect-ext-crypto-start-batch-verify>. If batch verification is
+  not enabled, then the signature is verified immediately. To get the result
+  of the verification batch, <verbatim|ext_crypto_finish_batch_verify> as
+  described in Section <reference|sect-ext-crypto-finish-batch-verify> must
+  be called.
+
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_crypto_sr25519_verify_version_1
+    (func $ext_crypto_sr25519_batch_verify_version_1
 
     \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
   </verbatim>
@@ -1120,8 +1158,8 @@
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
-    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
-    signature is valid or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is batched or valid, <verbatim|false> if otherwise.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_ecdsa_public_keys>>
