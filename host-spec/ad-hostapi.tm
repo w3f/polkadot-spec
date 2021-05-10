@@ -2303,6 +2303,27 @@
     <reference|defn-runtime-pointer-size> indicating the value.\ 
   </itemize-dot>
 
+  <subsection|<verbatim|<strong|ext_offchain_index_clear>>>
+
+  Remove a key and its associated value from the offchain database.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_offchain_index_clear_version_1
+
+    \ \ (param $key i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item><verbatim|key>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the key.
+  </itemize-dot>
+
   <section|Trie>
 
   Interface that provides trie related functionality.
