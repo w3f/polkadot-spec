@@ -252,14 +252,14 @@
     witness data for the host configuration, relay queue sizes, list of
     inbound/outbound HRMP channels and the metadata for the HRMP channels.
     Specifically, the proof is the merkle root of the following lists
-    <todo|@fabio: based on the current code base, those don't seem to be
-    fully implemented yet>:
+    <todo|based on the current code base, those don't seem to be fully
+    implemented yet>:
 
     <\itemize-dot>
-      <item>The hash of the current Host configuration.
+      <item>The hash of the current Host configuration <todo|clarify>.
 
-      <item>The MQC head <todo|@fabio, spec MQC> for the downward message
-      queue of the given parachain.
+      <item>The MQC head <todo|spec MQC> for the downward message queue of
+      the given parachain.
 
       <item>The upward message queue for the given parachain Id. The storage
       entry consists of a tuple of the number of messages currently in the
@@ -269,17 +269,20 @@
 
       <item>The list of outbound channels of the parachain Id.
 
-      <item>The list of abridged HRMP channels as defined in Definition
-      <todo|@fabio> for each HRMP channel of the parachain Id.
+      <item>The list of each inbound, abridged HRMP channels as defined in
+      Definition <reference|defn-abridged-hrmp-channel> of the parachain Id.
+
+      <item>The list of each outbound, abridged HRMP channels as defined in
+      Definition <reference|defn-abridged-hrmp-channel> of the parachain Id.
 
       \;
     </itemize-dot>
   </definition>
 
   <\definition>
-    The <strong|abridged HRMP channel> datastructure contains metadata about
-    a specific HRMP channel. The datastructure consists of the following
-    format:
+    <label|defn-abridged-hrmp-channel>The <strong|abridged HRMP channel>
+    datastructure contains metadata about a specific HRMP channel. The
+    datastructure consists of the following format:
 
     <\equation*>
       <around*|(|M<rsub|cp>,M<rsub|ts>,M<rsub|ms>,M<rsub|ct>,T<rsub|s>,M<rsub|h>|)>
