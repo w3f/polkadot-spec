@@ -1435,9 +1435,11 @@
 
   <subsection|<verbatim|ext_crypto_finish_batch_verify>><label|sect-ext-crypto-finish-batch-verify>
 
-  Finish verifying the batch of signatures since the last call to this
-  function. Blocks until all the signatures are verified. If the batch is
-  empty, this function just returns <verbatim|true>.
+  Finish verifying the batch of signatures since calling
+  <verbatim|ext_crypto_start_batch_verify>
+  (<reference|sect-ext-crypto-start-batch-verify>). Blocks until all the
+  signatures are verified. If the batch is empty, this function just returns
+  <verbatim|true>.
 
   \;
 
