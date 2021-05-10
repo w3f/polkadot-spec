@@ -14,7 +14,10 @@
   </hide-preamble>
 
   <doc-data|<doc-title|The Polkadot Host>|<doc-subtitle|Protocol
-  Specification>|<doc-author|Fabio Lama>|<doc-author|Florian Franzen>|<doc-author|Syed Hosseini>|<doc-date|<date|>>>
+  Specification>|<doc-author|<author-data|<author-name|Fabio
+  Lama>|<author-affiliation|Web3 Foundation>>>|<doc-author|<author-data|<author-name|Florian
+  Franzen>|<author-affiliation|Web3 Foundation>>>|<doc-author|<author-data|<author-name|Syed
+  Hosseini>|<author-affiliation|Web3 Foundation>>>|<doc-date|<date|>>>
 
   <table-of-contents|toc|>
 
