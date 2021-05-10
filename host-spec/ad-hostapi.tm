@@ -914,7 +914,7 @@
 
   <subsection|<strong|<verbatim|ext_crypto_ed25519_batch_verify>>>
 
-  Registers a <verbatim|ed25519> sigatnure for batch verification. Batch
+  Registers a <verbatim|ed25519> signature for batch verification. Batch
   verification must be enabled by calling
   <verbatim|ext_crypto_start_batch_verify> as described in Section
   <reference|sect-ext-crypto-start-batch-verify>. If batch verification is
@@ -1126,7 +1126,7 @@
 
   <subsection|<strong|<verbatim|ext_crypto_sr25519_batch_verify>>>
 
-  Registers a <verbatim|sr25519> sigatnure for batch verification. Batch
+  Registers a <verbatim|sr25519> signature for batch verification. Batch
   verification must be enabled by calling
   <verbatim|ext_crypto_start_batch_verify> as described in Section
   <reference|sect-ext-crypto-start-batch-verify>. If batch verification is
@@ -1308,7 +1308,7 @@
 
   <subsection|<strong|<verbatim|ext_ecdsa_batch_verify>>>
 
-  Registers a <verbatim|ecdsa> sigatnure for batch verification. Batch
+  Registers a <verbatim|ecdsa> signature for batch verification. Batch
   verification must be enabled by calling
   <verbatim|ext_crypto_start_batch_verify> as described in Section
   <reference|sect-ext-crypto-start-batch-verify>. If batch verification is
