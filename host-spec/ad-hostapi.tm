@@ -1436,10 +1436,8 @@
   <subsection|<verbatim|ext_crypto_finish_batch_verify>><label|sect-ext-crypto-finish-batch-verify>
 
   Finish verifying the batch of signatures since the last call to this
-  function. Blocks until all the signatures are verified. Panics if the
-  verification extension was not registered
-  <verbatim|(ext_crypto_start_batch_verify>
-  (<reference|sect-ext-crypto-start-batch-verify>) was not called).
+  function. Blocks until all the signatures are verified. If the batch is
+  empty. this functions just returns <verbatim|true>.
 
   \;
 
@@ -1460,9 +1458,9 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
-    all the signatures are valid or a value equal to <verbatim|0> if one or
-    more of the signatures are invalid.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if all
+    signatures are valid or the batch is empty, <verbatim|false> if
+    otherwise.
   </itemize-dot>
 
   <section|Hashing>
