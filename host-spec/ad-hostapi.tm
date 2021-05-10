@@ -1437,7 +1437,7 @@
 
   Finish verifying the batch of signatures since the last call to this
   function. Blocks until all the signatures are verified. If the batch is
-  empty. this functions just returns <verbatim|true>.
+  empty, this function just returns <verbatim|true>.
 
   \;
 
