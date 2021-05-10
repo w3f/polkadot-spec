@@ -167,10 +167,11 @@
 
     <\itemize-dot>
       <item><math|D<rsub|pv>> is the persisted validation data as defined in
-      Definition <todo|@fabio>.
+      Definition <reference|defn-persisted-validation-data>.
 
-      <item><math|H<rsub|r>> the storage proof of a predefined set of keys
-      from the relay chain <todo|@fabio>.
+      <item><math|H<rsub|r>> the relay chain storage proof of a predefined
+      set of keys from the relay chain as defined in Definition
+      <reference|defn-relay-chain-proof>.
 
       <item><math|M<rsub|d>> are downward messages as defined in Definition
       <todo|@fabio> in the order they were sent.
@@ -209,8 +210,9 @@
   </definition>
 
   <\definition>
-    The <strong|persisted validation data> provides information about how to
-    create the iputs for validation of a candidate. This information is
+    <label|defn-persisted-validation-data>The <strong|persisted validation
+    data> provides information about how to create the inputs for the
+    validation of a candidate by calling the Runtime. This information is
     derived from the parachain state and will vary from parachain to
     parachain, although some of the fields may be the same for every
     parachain. This validation data acts as a way to authorize the additional
@@ -243,6 +245,35 @@
     </itemize-dot>
 
     \;
+  </definition>
+
+  <\definition>
+    <label|defn-relay-chain-proof>The <strong|relay chain proof> contains
+    witness data for the host configuration, relay queue sizes, list of
+    inbound/outbound HRMP channels and the metadata for the HRMP channels.
+    Specifically, the proof is the merkle root of the following lists
+    <todo|@fabio: based on the current code base, those don't seem to be
+    fully implemented yet>:
+
+    <\itemize-dot>
+      <item>The hash of the current Host configuration.
+
+      <item>The MQC head <todo|@fabio, spec MQC> for the downward message
+      queue of the given parachain.
+
+      <item>The upward message queue for the given parachain Id. The storage
+      entry consists of a tuple of the number of messages currently in the
+      queue and the total size of all messages in the queue.
+
+      <item>The list of inbound channels of the parachain Id.
+
+      <item>The list of outbound channels of the parachain Id.
+
+      <item>The list of abridged HRMP channels as defined in Definition
+      <todo|@fabio> for each HRMP channel of the parachain Id.
+
+      \;
+    </itemize-dot>
   </definition>
 
   <\definition>
