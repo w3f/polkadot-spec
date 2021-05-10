@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -562,6 +562,79 @@
     storage key as defined in Definition <reference|defn-child-storage-type>.
   </itemize>
 
+  <subsubsection|Version 2>
+
+  <\verbatim>
+    (func $ext_default_child_storage_storage_kill_version_2
+
+    (param $child_storage_key i64) (param $limit u32) (return i32)
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item><verbatim|child_storage_key>: a pointer-size as defined in
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
+
+    <item><verbatim|limit>: a SCALE encoded <verbatim|Option> as defined in
+    Definition <reference|defn-option-type> containing the <verbatim|u32>
+    intiger indicationg the limit of child storage entries to delete. This
+    function call wipes <strong|all> pending (non-finalized) changes which
+    should be committed to the specified child storage keys, including
+    deleting up to <verbatim|limit> number of database entries in
+    lexicographic order. No limit is applied when this value is
+    <verbatim|None>.
+
+    <item><verbatim|result>: a SCALE encoded boolean equal to
+    <verbatim|false> if there are some keys remaining in the child trie or
+    <verbatim|true> if otherwise.
+  </itemize-dot>
+
+  <subsubsection|Version 3>
+
+  <\verbatim>
+    (func $ext_default_child_storage_storage_kill_version3
+
+    (param $child_storage_key i64) (param $limit u32) (return i32)
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item><verbatim|child_storage_key>: a pointer-size as defined in
+    Definition <reference|defn-runtime-pointer-size> indicating the child
+    storage key as defined in Definition <reference|defn-child-storage-type>.
+
+    <item><verbatim|limit>: a SCALE encoded <verbatim|Option> as defined in
+    Definition <reference|defn-option-type> containing the <verbatim|u32>
+    intiger indicationg the limit of child storage entries to delete. This
+    function call wipes <strong|all> pending (non-finalized) changes which
+    should be committed to the specified child storage keys, including
+    deleting up to <verbatim|limit> number of database entries in
+    lexicographic order. No limit is applied when this value is
+    <verbatim|None>.
+
+    <item><verbatim|result>: a pointer to the following SCALE encoded varying
+    type:
+
+    <\equation*>
+      <choice|<tformat|<table|<row|<cell|0<space|1em>No keys remain \ in the
+      child trie. Followed by u32.>>|<row|<cell|1<space|1em>At least one key
+      still resides. Followed by u32.>>>>>
+    </equation*>
+
+    The additional, following integer indicates the number of entries that
+    were deleted by the function call. This must consider the specificed
+    <verbatim|limit>.
+
+    \;
+  </itemize-dot>
+
   <subsection|<verbatim|ext_default_child_storage_exists>>
 
   Checks whether the given key exists in the child storage.
@@ -810,19 +883,7 @@
 
   <subsection|<verbatim|ext_crypto_ed25519_verify>><label|sect-ext-crypto-ed25519-verify>
 
-  Verifies an <verbatim|ed25519> signature. Returns <verbatim|true> when the
-  verification is either successful or batched. If no batching verification
-  extension is registered, this function will fully verify the signature and
-  return the result. If batching verification is registered, this function
-  will push the data to the batch and return immediately. The caller can then
-  get the result by calling <verbatim|ext_crypto_finish_batch_verify>
-  (<reference|sect-ext-crypto-finish-batch-verify>).
-
-  \;
-
-  The verification extension is explained more in detail in
-  <verbatim|ext_crypto_start_batch_verify>
-  (<reference|sect-ext-crypto-start-batch-verify>).
+  Verifies a <verbatim|ed25519> signature.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -847,10 +908,47 @@
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
-    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
-    signature is valid or batched or a value equal to <verbatim|0> if
-    otherwise.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is valid or <verbatim|false> if otherwise.
   </itemize>
+
+  <subsection|<strong|<verbatim|ext_crypto_ed25519_batch_verify>>>
+
+  Registers a <verbatim|ed25519> signature for batch verification. Batch
+  verification must be enabled by calling
+  <verbatim|ext_crypto_start_batch_verify> as described in Section
+  <reference|sect-ext-crypto-start-batch-verify>. If batch verification is
+  not enabled, then the signature is verified immediately. To get the result
+  of the verification batch, <verbatim|ext_crypto_finish_batch_verify> as
+  described in Section <reference|sect-ext-crypto-finish-batch-verify> must
+  be called.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_ed25519_batch_verify_version_1
+
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
+    the 64-byte signature.
+
+    <item><verbatim|msg>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
+
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
+    256-bit public key.
+
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is batched or valid, <verbatim|false> if otherwise.
+  </itemize-dot>
 
   <subsection|<verbatim|ext_crypto_sr25519_public_keys>>
 
@@ -972,6 +1070,33 @@
   <verbatim|ext_crypto_start_batch_verify>
   (<reference|sect-ext-crypto-start-batch-verify>).
 
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_sr25519_verify_version_1
+
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
+    the 64-byte signature.
+
+    <item><verbatim|msg>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
+
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
+    256-bit public key.
+
+    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
+    signature is valid or a value equal to <verbatim|0> if otherwise.
+  </itemize>
+
   <subsubsection|Version 2 - Prototype>
 
   <\verbatim>
@@ -999,10 +1124,21 @@
     signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
+  <subsection|<strong|<verbatim|ext_crypto_sr25519_batch_verify>>>
+
+  Registers a <verbatim|sr25519> signature for batch verification. Batch
+  verification must be enabled by calling
+  <verbatim|ext_crypto_start_batch_verify> as described in Section
+  <reference|sect-ext-crypto-start-batch-verify>. If batch verification is
+  not enabled, then the signature is verified immediately. To get the result
+  of the verification batch, <verbatim|ext_crypto_finish_batch_verify> as
+  described in Section <reference|sect-ext-crypto-finish-batch-verify> must
+  be called.
+
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_crypto_sr25519_verify_version_1
+    (func $ext_crypto_sr25519_batch_verify_version_1
 
     \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
   </verbatim>
@@ -1022,8 +1158,8 @@
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
-    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
-    signature is valid or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is batched or valid, <verbatim|false> if otherwise.
   </itemize>
 
   <subsection|<verbatim|ext_crypto_ecdsa_public_keys>>
@@ -1170,6 +1306,44 @@
     signature is valid or a value equal to <verbatim|0> if otherwise.
   </itemize>
 
+  <subsection|<strong|<verbatim|ext_ecdsa_batch_verify>>>
+
+  Registers a <verbatim|ecdsa> signature for batch verification. Batch
+  verification must be enabled by calling
+  <verbatim|ext_crypto_start_batch_verify> as described in Section
+  <reference|sect-ext-crypto-start-batch-verify>. If batch verification is
+  not enabled, then the signature is verified immediately. To get the result
+  of the verification batch, <verbatim|ext_crypto_finish_batch_verify> as
+  described in Section <reference|sect-ext-crypto-finish-batch-verify> must
+  be called.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_crypto_ecdsa_batch_verify_version_1
+
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize>
+    <item><strong|><verbatim|sig>: a 32-bit pointer to the buffer containing
+    the 64-byte signature.
+
+    <item><verbatim|msg>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the message that is to
+    be verified.
+
+    <item><verbatim|key>: a 32-bit pointer to the buffer containing the
+    256-bit public key.
+
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is batched or valid, <verbatim|false> if otherwise.
+  </itemize>
+
   <subsection|<verbatim|ext_crypto_secp256k1_ecdsa_recover>>
 
   Verify and recover a <verbatim|secp256k1> ECDSA signature.
@@ -1261,11 +1435,11 @@
 
   <subsection|<verbatim|ext_crypto_finish_batch_verify>><label|sect-ext-crypto-finish-batch-verify>
 
-  Finish verifying the batch of signatures since the last call to this
-  function. Blocks until all the signatures are verified. Panics if the
-  verification extension was not registered
-  <verbatim|(ext_crypto_start_batch_verify>
-  (<reference|sect-ext-crypto-start-batch-verify>) was not called).
+  Finish verifying the batch of signatures since calling
+  <verbatim|ext_crypto_start_batch_verify>
+  (<reference|sect-ext-crypto-start-batch-verify>). Blocks until all the
+  signatures are verified. If the batch is empty, this function just returns
+  <verbatim|true>.
 
   \;
 
@@ -1286,9 +1460,9 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
-    all the signatures are valid or a value equal to <verbatim|0> if one or
-    more of the signatures are invalid.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if all
+    signatures are valid or the batch is empty, <verbatim|false> if
+    otherwise.
   </itemize-dot>
 
   <section|Hashing>
@@ -1489,20 +1663,20 @@
 
   <section|Offchain>
 
-  The Offchain Workers allow the execution of long-running and possibly
+  The offchain workers allow the execution of long-running and possibly
   non-deterministic tasks (e.g. web requests, encryption/decryption and
   signing of data, random number generation, CPU-intensive computations,
   enumeration/aggregation of on-chain data, etc.) which could otherwise
-  require longer than the block execution time. Offchain Workers have their
+  require longer than the block execution time. Offchain workers have their
   own execution environment. This separation of concerns is to make sure that
   the block production is not impacted by the long-running tasks.
 
   \;
 
-  All data and results generated by Offchain workers are unique per node and
+  All data and results generated by offchain workers are unique per node and
   nondeterministic. Information can be propagated to other nodes by
   submitting a transaction that should be included in the next block. As
-  Offchain workers runs on their own execution environment they have access
+  offchain workers runs on their own execution environment they have access
   to their own separate storage. There are two different types of storage
   available which are defined in Definitions F.1 and F.2.
 
@@ -2073,9 +2247,9 @@
   <subsection|<verbatim|ext_offchain_set_authorized_nodes>>
 
   Set the authorized nodes which are allowed to connect to the local node.
-  This function is primarily used for private blockchains <todo|shouldn't we
-  give a context of what private blockchain means> and is not necessarily
-  required for the public and open Polkadot protocol.
+  This function is offered by the Substrate codebase and is primarily used
+  for custom, non-Polkadot/Kusama chains. It is not required for the public
+  and open Polkadot protocol.
 
   <subsubsection|Version 1 - Prototype>
 
@@ -2099,6 +2273,55 @@
     authorized nodes are allowed to connect to the local node (whitelist).
     All other nodes are rejected. If set to <verbatim|0>, then no such
     restriction is placed.
+  </itemize-dot>
+
+  <section|Offchain Index>
+
+  Interface that provides functions to access the Offchain database.
+
+  <subsection|<verbatim|<strong|ext_offchain_index_set<strong|>>>>
+
+  Write a key value pair to the offchain database in a buffered fashion.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_offchain_index_set_version_1
+
+    \ \ (param $key i64) (param $value i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item><verbatim|key>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the key.
+
+    <item><verbatim|value>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the value.\ 
+  </itemize-dot>
+
+  <subsection|<verbatim|<strong|ext_offchain_index_clear>>>
+
+  Remove a key and its associated value from the offchain database.
+
+  <subsubsection|Version 1 - Prototype>
+
+  <\verbatim>
+    (func $ext_offchain_index_clear_version_1
+
+    \ \ (param $key i64))
+  </verbatim>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item><verbatim|key>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> indicating the key.
   </itemize-dot>
 
   <section|Trie>
@@ -2438,7 +2661,6 @@
   </with>
 
   \;
-
 </body>
 
 <\initial>
@@ -2447,9 +2669,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
