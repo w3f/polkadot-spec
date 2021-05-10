@@ -277,6 +277,38 @@
   </definition>
 
   <\definition>
+    The <strong|abridged HRMP channel> datastructure contains metadata about
+    a specific HRMP channel. The datastructure consists of the following
+    format:
+
+    <\equation*>
+      <around*|(|M<rsub|cp>,M<rsub|ts>,M<rsub|ms>,M<rsub|ct>,T<rsub|s>,M<rsub|h>|)>
+    </equation*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M<rsub|cp>> is the maximum number of messages that can be
+      pending int he channel at once.
+
+      <item><math|M<rsub|ts>> is the maximum total size in bytes of the
+      messages that can be pending in the channel at once.
+
+      <item><math|M<rsub|ms>> is the maximum message size that could be put
+      into the channel.
+
+      <item><math|M<rsub|ct>> is the current number of messages pending in
+      the channel. It must be less or equal to <math|M<rsub|cp>>.
+
+      <item><math|T<rsub|s>> is the total size in bytes of all message
+      payloads in the channel. It must be less or equal to <math|M<rsub|ts>>.
+
+      <item><math|M<rsub|h>> is the head of the MQC as defined in Definition
+      <todo|@fabio>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
     <label|defn-extra-validation-data>The <with|font-series|bold|validation
     parameters>, <math|v<rsup|VP><rsub|B>>, is an extra input to the
     validation function, i.e. additional data from the relay chain state that
