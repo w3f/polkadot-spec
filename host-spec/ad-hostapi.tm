@@ -131,7 +131,7 @@
     value will be written to. This function will never write more then the
     length of the buffer, even if the value's length is bigger.
 
-    <item><verbatim|offset>: an u32 integer containing the offset beyond the
+    <item><verbatim|offset>: an i32 integer containing the offset beyond the
     value should be read from.
 
     <item><verbatim|result>: a pointer-size (Definition
@@ -172,7 +172,7 @@
   <\verbatim>
     (func $ext_storage_exists_version_1
 
-    (param $key_data i64) (return i32))
+    (param $key_data i64) (return i8))
   </verbatim>
 
   \;
@@ -183,8 +183,8 @@
     <item><verbatim|key>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer-size> containing the key.
 
-    <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
-    the key exists or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|return>:a boolean equal to <verbatim|true> if the key
+    does exist, <verbatim|false> if otherwise.
   </itemize>
 
   <subsection|<verbatim|ext_storage_clear_prefix>>
@@ -505,7 +505,7 @@
     value will be written to. This function will never write more then the
     length of the buffer, even if the value's length is bigger.
 
-    <item><verbatim|offset>: an u32 integer containing the offset beyond the
+    <item><verbatim|offset>: an i32 integer containing the offset beyond the
     value should be read from.
 
     <item><verbatim|result>: a pointer-size as defined in Definition
@@ -567,7 +567,7 @@
   <\verbatim>
     (func $ext_default_child_storage_storage_kill_version_2
 
-    (param $child_storage_key i64) (param $limit u32) (return i32)
+    (param $child_storage_key i64) (param $limit u32) (return i8)
   </verbatim>
 
   \;
@@ -644,7 +644,7 @@
   <\verbatim>
     (func $ext_default_child_storage_exists_version_1
 
-    \ \ (param $child_storage_key i64) (param $key i64) (return i32))
+    \ \ (param $child_storage_key i64) (param $key i64) (return i8))
   </verbatim>
 
   \;
@@ -659,8 +659,8 @@
     <item><verbatim|key>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer-size> indicating the key.
 
-    <item><verbatim|return>: an i32 integer value equal to <verbatim|1> if
-    the key exists or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the key
+    does exist, <verbatim|false> if otherwise..
   </itemize>
 
   <subsection|<verbatim|ext_default_child_storage_clear_prefix>>
@@ -890,7 +890,7 @@
   <\verbatim>
     (func $ext_crypto_ed25519_verify_version_1
 
-    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i8))
   </verbatim>
 
   \;
@@ -928,7 +928,7 @@
   <\verbatim>
     (func $ext_crypto_ed25519_batch_verify_version_1
 
-    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i8))
   </verbatim>
 
   \;
@@ -1075,7 +1075,7 @@
   <\verbatim>
     (func $ext_crypto_sr25519_verify_version_1
 
-    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i8))
   </verbatim>
 
   \;
@@ -1093,8 +1093,8 @@
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
-    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
-    signature is valid or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is valid, <verbatim|false> if otherwise.
   </itemize>
 
   <subsubsection|Version 2 - Prototype>
@@ -1102,7 +1102,7 @@
   <\verbatim>
     (func $ext_crypto_sr25519_verify_version_2
 
-    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i8))
   </verbatim>
 
   \;
@@ -1120,8 +1120,8 @@
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     256-bit public key.
 
-    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
-    signature is valid or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is valid, <verbatim|false> if otherwise.
   </itemize>
 
   <subsection|<strong|<verbatim|ext_crypto_sr25519_batch_verify>>>
@@ -1140,7 +1140,7 @@
   <\verbatim>
     (func $ext_crypto_sr25519_batch_verify_version_1
 
-    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i8))
   </verbatim>
 
   \;
@@ -1282,7 +1282,7 @@
   <\verbatim>
     (func $ext_crypto_ecdsa_verify_version_1
 
-    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i8))
   </verbatim>
 
   \;
@@ -1302,8 +1302,8 @@
     <item><verbatim|key>: a 32-bit pointer to the buffer containing the
     33-byte compressed public key.
 
-    <item><verbatim|return>: a i32 integer value equal to <verbatim|1> if the
-    signature is valid or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the
+    signature is valid, <verbatim|false> if otherwise.
   </itemize>
 
   <subsection|<strong|<verbatim|ext_ecdsa_batch_verify>>>
@@ -1322,7 +1322,7 @@
   <\verbatim>
     (func $ext_crypto_ecdsa_batch_verify_version_1
 
-    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i32))
+    \ \ (param $sig i32) (param $msg i64) (param $key i32) (return i8))
   </verbatim>
 
   \;
@@ -1452,7 +1452,7 @@
   <\verbatim>
     (func $ext_crypto_finish_batch_verify_version_1
 
-    (return i32))
+    (return i8))
   </verbatim>
 
   \;
@@ -1746,7 +1746,7 @@
   <subsubsection|Version 1 - Prototype>
 
   <\verbatim>
-    (func $ext_offchain_is_validator_version_1 (return i32))
+    (func $ext_offchain_is_validator_version_1 (return i8))
   </verbatim>
 
   \;
@@ -1754,9 +1754,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|return>: a i32 integer which is equal to <verbatim|1> if
-    the local node is a potential validator or a integer equal to
-    <verbatim|0> if it is not.
+    <item><verbatim|return>: a boolean equal to <verbatim|true> if the node
+    is a validator, <verbatim|false> if otherwise.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_submit_transaction>><label|sect-ext-offchain-submit-transaction>
@@ -1962,10 +1961,11 @@
   <\verbatim>
     (func $ext_offchain_local_storage_compare_and_set_version_1
 
-    \ \ (param $kind i32) (param $key i64) (param $old_value i64) (param
-    $new_value i64)
+    \ \ (param $kind i32) (param $key i64)
 
-    \ \ (result i32))
+    \ \ (param $old_value i64) (param $new_value i64)
+
+    \ \ (result i8))
   </verbatim>
 
   \ 
@@ -1990,8 +1990,8 @@
     <item><verbatim|new_value>: a pointer-size as defined in Definition
     <reference|defn-runtime-pointer-size> indicating the new value.
 
-    <item><verbatim|result>: an i32 integer equal to <verbatim|1> if the new
-    value has been set or a value equal to <verbatim|0> if otherwise.
+    <item><verbatim|result>: a boolean equal to <verbatim|true> if the new
+    value has been set, <verbatim|false> if otherwise.
   </itemize>
 
   <subsection|<verbatim|ext_offchain_local_storage_get>>
