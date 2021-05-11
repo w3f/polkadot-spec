@@ -256,24 +256,144 @@
     implemented yet>:
 
     <\itemize-dot>
-      <item>The hash of the current Host configuration <todo|clarify>.
+      <item>The merkle proof of the current Host configuration. The
+      configuration is fetched from storage by calling the following key:
+
+      <verbatim|06de3d8a54d27e44a9d5ce189618f22db4b49d95320d9021994c850f25b8e385>
 
       <item>The MQC head <todo|spec MQC> for the downward message queue of
-      the given parachain.
+      the given parachain. This is fetched from storage by calling the
+      following key:
 
-      <item>The upward message queue for the given parachain Id. The storage
-      entry consists of a tuple of the number of messages currently in the
-      queue and the total size of all messages in the queue.
+      <\equation*>
+        <around*|(|p,h<around*|(|P<rsub|id>|)>,P<rsub|id>|)>
+      </equation*>
 
-      <item>The list of inbound channels of the parachain Id.
+      where
 
-      <item>The list of outbound channels of the parachain Id.
+      <\itemize-dot>
+        <item><math|p> is the following prefix:
 
-      <item>The list of each inbound, abridged HRMP channels as defined in
-      Definition <reference|defn-abridged-hrmp-channel> of the parachain Id.
+        \ <verbatim|63f78c98723ddc9073523ef3beefda0c4d7fefc408aac59dbfe80a72ac8e3ce5>
 
-      <item>The list of each outbound, abridged HRMP channels as defined in
-      Definition <reference|defn-abridged-hrmp-channel> of the parachain Id.
+        <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
+        hash the parachain Id as defined in Definition <todo|todo>.
+
+        <item><math|P<rsub|id>> is the parachain Id as defined in Definition
+        <todo|todo>.
+      </itemize-dot>
+
+      \ <item>The merklel proof of the upward message queue for the given
+      parachain Id. The queue is fetched from storage by looking up the
+      following key:
+
+      <\equation*>
+        <around*|(|p,h<around*|(|P<rsub|id>|)>P<rsub|id>|)>
+      </equation*>
+
+      where
+
+      <\itemize-dot>
+        <item><math|p> is the following prefix:
+
+        \ <verbatim|f5207f03cfdce586301014700e2c2593fad157e461d71fd4c1f936839a5f1f3e>
+
+        <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
+        hash the parachain Id as defined in Definition <todo|todo>.
+
+        <item><math|P<rsub|id>> is the parachain Id as defined in Definition
+        <todo|todo>.
+      </itemize-dot>
+
+      <item>The merkle proof of inbound channels of the parachain Id. The
+      channels are fetched from storage by looking up the following key:
+
+      <\equation*>
+        <around*|(|p,h<around*|(|P<rsub|id>|)>P<rsub|id>|)>
+      </equation*>
+
+      where
+
+      <\itemize-dot>
+        <item><math|p> is the following prefix:
+
+        \ <verbatim|6a0da05ca59913bc38a8630590f2627c1d3719f5b0b12c7105c073c507445948>
+
+        <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
+        hash the parachain Id as defined in Definition <todo|todo>.
+
+        <item><math|P<rsub|id>> is the parachain Id as defined in Definition
+        <todo|todo>.
+      </itemize-dot>
+
+      <item>The merkle proof of outbound channels of the parachain Id. The
+      channels are fetched from storage by looking up the following key:
+
+      <\equation*>
+        <around*|(|p,h<around*|(|P<rsub|id>|)>P<rsub|id>|)>
+      </equation*>
+
+      where
+
+      <\itemize-dot>
+        <item><math|p> is the following prefix:
+
+        \ <verbatim|6a0da05ca59913bc38a8630590f2627cf12b746dcf32e843354583c9702cc020>
+
+        <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
+        hash the parachain Id as defined in Definition <todo|todo>.
+
+        <item><math|P<rsub|id>> is the parachain Id as defined in Definition
+        <todo|todo>.
+      </itemize-dot>
+
+      <item>The merkle proof of the inbound HRMP channels of the parachain
+      Id. The channels are fetched from storage by looking up the following
+      key:
+
+      <\equation*>
+        <around*|(|p,h<around*|(|C<rsub|id>|)>C<rsub|id>|)>
+      </equation*>
+
+      where
+
+      <\itemize-dot>
+        <item><math|p> is the following prefix:
+
+        \ <verbatim|6a0da05ca59913bc38a8630590f2627cb6604cff828a6e3f579ca6c59ace013d>
+
+        <item><math|h<around*|(|C<rsub|id>|)>> is the 64-bit <verbatim|twox>
+        hash the channel Id as defined in Definition <todo|todo>. Note that
+        the <strong|recipient> must be the corresponding parachain Id.
+
+        <item><math|C<rsub|id>> is the parachain Id as defined in Definition
+        <todo|todo>. Note that the <strong|recipient> must be the
+        corresponding parachain Id.
+      </itemize-dot>
+
+      <item>The merkle proof of the outbound HRMP channels of the parachain
+      Id. The channeles are fetched from storage by looking up the following
+      key:
+
+      <\equation*>
+        <around*|(|p,h<around*|(|C<rsub|id>|)>C<rsub|id>|)>
+      </equation*>
+
+      where
+
+      <\itemize-dot>
+        <item><math|p> is the following prefix:
+
+        \ <verbatim|6a0da05ca59913bc38a8630590f2627cb6604cff828a6e3f579ca6c59ace013d>
+
+        <item><math|h<around*|(|C<rsub|id>|)>> is the 64-bit <verbatim|twox>
+        hash the channel Id as defined in Definition <todo|todo>. Note that
+        the <strong|sender> must be the corresponding parachain Id.
+
+        <item><math|C<rsub|id>> is the parachain Id as defined in Definition
+        <todo|todo>. Note that the <strong|sender> must be the corresponding
+        parachain Id.
+      </itemize-dot>
 
       \;
     </itemize-dot>
