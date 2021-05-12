@@ -204,13 +204,13 @@
     if one is already finalized and the delay has not passed completely. If
     such an inconsistency occurs, the scheduled change should be ignored.
 
-    <item><strong|On Disabled>: An index to the individual authority in the
-    current authority list that should be immediately disabled until the next
-    authority set changes. When an authority gets disabled, the node should
-    stop performing any authority functionality from that authority,
-    including authoring blocks and casting GRANDPA votes for finalization.
-    Similarly, other nodes should ignore all messages from the indicated
-    authority which pertain to their authority role.\ 
+    <item><strong|On Disabled>: <with|font-series|bold|<underline|This
+    message is currently ignored by the Polkadot Host and will be for the
+    forseeable future.> >An index to the individual authority in the current
+    authority list that should be immediately disabled until the next
+    authority set changes. \ This message initial intension was to cause an
+    imediatly suspension of all authority functionality with the specified
+    authority.
 
     <item><strong|Pause>: A signal to pause the current authority set after
     the given delay of <math|N<rsub|delay>\<assign\><around*|\|||\<nobracket\>>><name|SubChain><math|<around*|(|B,B<rprime|'>|)><around*|\|||\<nobracket\>>>
