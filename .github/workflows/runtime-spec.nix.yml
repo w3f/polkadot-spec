@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-20.04
     container: nixpkgs/nix-flakes:nixos-20.09
     steps:
+    - uses: cachix/cachix-action@v10
+      with:
+        name: polkadot-spec
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: Build runtime specification
       run: nix build github:${{ github.repository }}/${{ github.sha }}#polkadot-runtime-spec
 
