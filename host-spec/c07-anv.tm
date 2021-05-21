@@ -155,6 +155,12 @@
   needed relay chain state may have changed.
 
   <\definition>
+    <label|defn-para-id>The <strong|Parachain Id> is an unsigned 32-bit
+    integer which serves as an identifier of a parachain. <todo|How are those
+    indexes assigned?>
+  </definition>
+
+  <\definition>
     The <strong|parachain inherent data>, <math|I<rsub|p>>, is passed by the
     collator to the parachain runtime. It's a datastructure of the following
     format:
@@ -174,7 +180,8 @@
       <reference|defn-relay-chain-proof>.
 
       <item><math|M<rsub|d>> are inbound downward messages as defined in
-      Definition <todo|@fabio> in the order they were sent.
+      Definition <reference|defn-inbound-messages> in the order they were
+      sent.
 
       <item><math|M<rsub|h>> are the horizontal messages grouped by the
       parachain Id (<reference|defn-para-id>) inside a map <todo|@fabio>. The
@@ -183,16 +190,10 @@
   </definition>
 
   <\definition>
-    <label|defn-para-id>The <strong|Parachain Id> is an unsigned 32-bit
-    integer which serves as an identifier of a parachain. <todo|How are those
-    indexes assigned?>
-  </definition>
-
-  <\definition>
-    An <strong|inbound downward message> or <strong|inbound HRMP message>,
-    <math|M>, is a message that is sent from the Polkadot relay chain down to
-    a parachain. Both message types share the same datastructure of the
-    following type:
+    <label|defn-inbound-messages>An <strong|inbound downward message> or
+    <strong|inbound HRMP message>, <math|M>, is a message that is sent from
+    the Polkadot relay chain down to a parachain. Both message types share
+    the same datastructure of the following type:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i><around*|(|B|)>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
@@ -426,9 +427,10 @@
   </definition>
 
   <\definition>
-    <label|defn-abridged-hrmp-channel>The <strong|abridged HRMP channel>
-    datastructure contains metadata about a specific HRMP channel. The
-    datastructure consists of the following format:
+    <label|defn-abridged-hrmp-channel><todo|@fabio: still relevant?>The
+    <strong|abridged HRMP channel> datastructure contains metadata about a
+    specific HRMP channel. The datastructure consists of the following
+    format:
 
     <\equation*>
       <around*|(|M<rsub|cp>,M<rsub|ts>,M<rsub|ms>,M<rsub|ct>,T<rsub|s>,M<rsub|h>|)>
@@ -537,9 +539,10 @@
   </definition>
 
   <\definition>
-    The <with|font-series|bold|validation result>, <math|r<rsub|B>>, is
-    returned by the validation code <math|R<rsub|\<rho\>>> if the provided
-    candidate is is valid. It is a tuple of the following format:
+    <todo|@fabio: still relevant>The <with|font-series|bold|validation
+    result>, <math|r<rsub|B>>, is returned by the validation code
+    <math|R<rsub|\<rho\>>> if the provided candidate is is valid. It is a
+    tuple of the following format:
 
     <alignat*|2|<tformat|<table|<row|<cell|r<rsub|B>>|<cell|\<assign\><around|(|head<around|(|B|)>,Option<around|(|P<rsup|B><rsub|\<rho\>>|)>,<around|(|Msg<rsub|0>,...,Msg<rsub|n>|)>,UINT32|)>>>|<row|<cell|Msg>|<cell|\<assign\><around|(|\<bbb-O\>,Enc<rsub|SC><around|(|b<rsub|0>,..
     b<rsub|n>|)>|)>>>>>>
@@ -621,11 +624,64 @@
   penalize bad behavior. This is described in more detail in section
   <reference|sect-primary-validaty-announcement>.
 
+  <subsection|Producing a Candidate>
+
+  <subsubsection|Building a Collation>
+
+  The collator fetches the required collation info (<todo|@fabio>) by calling
+  the <verbatim|collect_collation_info> Runtime function as described in
+  Section <todo|@fabio>. Based on the collation info, a collation is created
+  as described in Definition <todo|todo>.
+
   <\definition>
-    <label|defn-candidate>A <with|font-series|bold|candidate>,
-    <math|C<rsub|coll><around|(|PoV<rsub|B>|)>>, is issued by collators and
-    contains the PoV block and enough data in order for any validator to
-    verify its validity. A candidate is a tuple of the following format:
+    A <strong|collation> is the output of a collator and differs from a
+    candidate commitment (<todo|todo>) as it does not contain the erasure
+    root (<todo|todo>), which is computed at the Polkadot relay chain level,
+    and contains the PoV block. <todo|When is this used?>. A collation,
+    <math|C>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M<rsub|u>,M<rsub|h>,R<rsub|p>,h<rsub|d>,P<rsub|ov>,N<rsub|q>,N<rsub|m>|)>>>|<row|<cell|M<rsub|u>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>>>
+    </eqnarray*>
+
+    The necessary information to construct a collation can be fetched by the
+    collator by calling a Runtime function as described in Section
+    <todo|todo>. <math|h<rsub|d>> and <math|P<rsub|ov>> are selected and
+    provided by the collator:
+
+    <\itemize-dot>
+      <item><math|M<rsub|u>> is a sequence of upward messages as defined in
+      Definition <todo|todo> to be interpreted by the Polkadot relay chain
+      itself.
+
+      <item><math|M<rsub|h>> is a sequence of horizontal messages as defined
+      in Definition <todo|todo> sent by the parachain.
+
+      <item><math|R<rsub|p>> is the varying type Option as defined in
+      Definition <todo|todo> which can contain a new Runtime for the
+      parachain, represented as a byte array.
+
+      <item><math|h<rsub|d>> is the byte array containg the parachain block
+      header.
+
+      <item><math|P<rsub|ov>> is the PoV block.
+
+      <item><math|N<rsub|q>> is the number of messages processed from the
+      DMQ.
+
+      <item><math|N<rsub|m>> is the watermark indicated as a block number up
+      to which all i nbound HRMP messages are processed.
+    </itemize-dot>
+  </definition>
+
+  \;
+
+  <\definition>
+    <label|defn-candidate><todo|DEPRECATE> A
+    <with|font-series|bold|candidate>, <math|C<rsub|coll><around|(|PoV<rsub|B>|)>>,
+    is issued by collators and contains the PoV block and enough data in
+    order for any validator to verify its validity. A candidate is a tuple of
+    the following format:
 
     <\equation*>
       C<rsub|coll><around|(|PoV<rsub|B>|)>\<assign\><around|(|id<rsub|p>,H<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>,id<rsub|C>,Sig<rsup|Collator><rsub|SR25519>,head<around|(|B|)>,h<rsub|b><around|(|PoV<rsub|B>|)>|)>
