@@ -160,7 +160,7 @@
     format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|I<rsub|p>>|<cell|=>|<cell|<around*|(|D<rsub|pv>,H<rsub|r>,M<rsub|d>,M<rsub|h>|)>>>|<row|<cell|M<rsub|d>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>>>
+      <tformat|<table|<row|<cell|I<rsub|p>>|<cell|=>|<cell|<around*|(|D<rsub|pv>,H<rsub|r>,M<rsub|d>,M<rsub|h>|)>>>|<row|<cell|M<rsub|d>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|{|<rsub|><around*|(|P<rsub|id>,<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>|)>|}>>>>>
     </eqnarray*>
 
     where
@@ -176,10 +176,16 @@
       <item><math|M<rsub|d>> are downward messages as defined in Definition
       <todo|@fabio> in the order they were sent.
 
-      <item><math|M<rsub|h>> are the horizontal messages grouped by channels.
-      The message in the inner array must be in order they were sent.
-      <todo|@fabio>
+      <item><math|M<rsub|h>> are the horizontal messages grouped by the
+      parachain Id (<reference|defn-para-id>) inside a map <todo|@fabio>. The
+      messages in the inner sequence must be in the order they were sent.
     </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|defn-para-id>The <strong|Parachain Id> is an unsigned 32-bit
+    integer which serves as an identifier of a parachain. <todo|How are those
+    indexes assigned?>
   </definition>
 
   <\definition>
@@ -251,9 +257,7 @@
     <label|defn-relay-chain-proof>The <strong|relay chain proof> contains
     witness data for the host configuration, relay queue sizes, list of
     inbound/outbound HRMP channels and the metadata for the HRMP channels.
-    Specifically, the proof is the merkle root of the following lists
-    <todo|based on the current code base, those don't seem to be fully
-    implemented yet>:
+    Specifically, the proof is the merkle root of the following information.
 
     <\itemize-dot>
       <item>The merkle proof of the current Host configuration. The
