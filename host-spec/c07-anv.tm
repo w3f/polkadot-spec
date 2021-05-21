@@ -173,8 +173,8 @@
       set of keys from the relay chain as defined in Definition
       <reference|defn-relay-chain-proof>.
 
-      <item><math|M<rsub|d>> are downward messages as defined in Definition
-      <todo|@fabio> in the order they were sent.
+      <item><math|M<rsub|d>> are inbound downward messages as defined in
+      Definition <todo|@fabio> in the order they were sent.
 
       <item><math|M<rsub|h>> are the horizontal messages grouped by the
       parachain Id (<reference|defn-para-id>) inside a map <todo|@fabio>. The
@@ -186,6 +186,28 @@
     <label|defn-para-id>The <strong|Parachain Id> is an unsigned 32-bit
     integer which serves as an identifier of a parachain. <todo|How are those
     indexes assigned?>
+  </definition>
+
+  <\definition>
+    An <strong|inbound downward message> or <strong|inbound HRMP message>,
+    <math|M>, is a message that is sent from the Polkadot relay chain down to
+    a parachain. Both message types share the same datastructure of the
+    following type:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i><around*|(|B|)>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|H<rsub|i><around*|(|B|)>> is the relay chain block number
+      at which the message was sent (either placed in the downward message
+      queue or respectively enacted by the candidate in case of HRMP).
+
+      <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
+      array containing the message itself. <todo|define max length>
+    </itemize-dot>
   </definition>
 
   <\definition>
