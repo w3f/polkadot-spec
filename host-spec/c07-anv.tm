@@ -626,6 +626,44 @@
 
   <subsection|Producing a Candidate>
 
+  Collators produce a candidate for their corresponding parachains and submit
+  those to the parachain validators which are part of the Polkadot relay
+  chain.
+
+  <subsubsection|Building a Proposal>
+
+  <\algorithm|Producing a parachain candidate>
+    <\algorithmic>
+      <\state>
+        <math|r<rsub|p>> \<leftarrow\> <name|RelayParent>
+      </state>
+
+      <\state>
+        <math|v<rsub|d>> \<leftarrow\> <name|ValidationData>
+      </state>
+
+      <\state>
+        <math|h<rsub|d>> \<leftarrow\> <name|PrevHead(<math|v<rsub|d>>)>
+      </state>
+
+      <\state>
+        <math|D<rsub|p>\<leftarrow\>><name|ProduceCandidate(<math|h<rsub|d>>,<math|r<rsub|p>>,<math|v<rsub|d>>)>
+      </state>
+
+      <\state>
+        <math|B<rsub|p>> \<leftarrow\> <name|CreateParaBlocK(<math|C>)>
+      </state>
+
+      <\state>
+        <math|C<rsub|p>> \<leftarrow\> <name|BuildCollation>(<math|B<rsub|p>>)
+      </state>
+
+      <\state>
+        <name|Announce>(<math|C<rsub|p>>)
+      </state>
+    </algorithmic>
+  </algorithm>
+
   <subsubsection|Building a Collation>
 
   The collator fetches the required collation info (<todo|@fabio>) by calling
@@ -657,8 +695,8 @@
       <item><math|M<rsub|h>> is a sequence of horizontal messages as defined
       in Definition <todo|todo> sent by the parachain.
 
-      <item><math|R<rsub|p>> is the varying type Option as defined in
-      Definition <todo|todo> which can contain a new Runtime for the
+      <item><math|R<rsub|p>> is the varying type <verbatim|Option> as defined
+      in Definition <todo|todo> which can contain a new Runtime for the
       parachain, represented as a byte array.
 
       <item><math|h<rsub|d>> is the byte array containg the parachain block
@@ -673,8 +711,6 @@
       to which all i nbound HRMP messages are processed.
     </itemize-dot>
   </definition>
-
-  \;
 
   <\definition>
     <label|defn-candidate><todo|DEPRECATE> A
