@@ -190,10 +190,9 @@
   </definition>
 
   <\definition>
-    <label|defn-inbound-messages>An <strong|inbound downward message> or
-    <strong|inbound HRMP message>, <math|M>, is a message that is sent from
-    the Polkadot relay chain down to a parachain. Both message types share
-    the same datastructure of the following type:
+    <label|defn-inbound-downward-msg>An <strong|inbound downward message> is
+    a message that is sent from the Polkadot relay chain down to a parachain.
+    Both message types share the same datastructure of the following type:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i><around*|(|B|)>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
@@ -203,11 +202,52 @@
 
     <\itemize-dot>
       <item><math|H<rsub|i><around*|(|B|)>> is the relay chain block number
-      at which the message was sent (either placed in the downward message
-      queue or respectively enacted by the candidate in case of HRMP).
+      at which the message was put into the downward queue <todo|clarify>.
 
       <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
-      array containing the message itself. <todo|define max length>
+      array containing the message itself.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|defn-inbound-hrmp-msg>An <strong|inbound HRMP message> is a
+    message that is sent from a remote parachain to the local parachain, from
+    the perspective of the recipient. The message, <math|M>, is a
+    datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i><around*|(|B|)>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|H<rsub|i><around*|(|B|)>> is the relay chain block number
+      at which the message was sent. Specifically, at which the candidate
+      that sent this message was enacted.
+
+      <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
+      array containing the message itself.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|defn-outbound-hrmp-msg>An <strong|outbound HRMP message> is a
+    message sent to a remote parachain, from the perspective of a sender. The
+    message, <math|M>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|P<rsub|id>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|P<rsub|id>> is the parachain Id as defined in Definition
+      <reference|defn-para-id> this message should be delivered to.
+
+      <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
+      array containing the message itself.
     </itemize-dot>
   </definition>
 
@@ -230,12 +270,6 @@
     height. This may be equal to the current perceived relay-chain block
     height, in which case the code upgrade should be applied at the end of
     the signaling block.
-  </definition>
-
-  <\definition>
-    <label|defn-para-head-data>The <strong|parchain head data> is a SCALE
-    encoded byte array containing the full block header as defined in
-    Definition <reference|defn-block-header> of a parachain block.
   </definition>
 
   <\definition>
@@ -304,10 +338,10 @@
         \ <verbatim|63f78c98723ddc9073523ef3beefda0c4d7fefc408aac59dbfe80a72ac8e3ce5>
 
         <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash the parachain Id as defined in Definition <todo|todo>.
+        hash of <math|P<rsub|id>>.
 
         <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-        <todo|todo>.
+        <reference|defn-para-id>.
       </itemize-dot>
 
       \ <item>The merklel proof of the upward message queue for the given
@@ -326,10 +360,10 @@
         \ <verbatim|f5207f03cfdce586301014700e2c2593fad157e461d71fd4c1f936839a5f1f3e>
 
         <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash the parachain Id as defined in Definition <todo|todo>.
+        hash of <math|P<rsub|id>>.
 
         <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-        <todo|todo>.
+        <reference|defn-para-id>.
       </itemize-dot>
 
       <item>The merkle proof of inbound channels of the parachain Id. The
@@ -347,10 +381,10 @@
         \ <verbatim|6a0da05ca59913bc38a8630590f2627c1d3719f5b0b12c7105c073c507445948>
 
         <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash the parachain Id as defined in Definition <todo|todo>.
+        hash of <math|P<rsub|id>>.
 
         <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-        <todo|todo>.
+        <reference|defn-para-id>.
       </itemize-dot>
 
       <item>The merkle proof of outbound channels of the parachain Id. The
@@ -368,10 +402,10 @@
         \ <verbatim|6a0da05ca59913bc38a8630590f2627cf12b746dcf32e843354583c9702cc020>
 
         <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash the parachain Id as defined in Definition <todo|todo>.
+        hash of <math|P<rsub|id>>.
 
         <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-        <todo|todo>.
+        <reference|defn-para-id>.
       </itemize-dot>
 
       <item>The merkle proof of the inbound HRMP channels of the parachain
@@ -390,8 +424,8 @@
         \ <verbatim|6a0da05ca59913bc38a8630590f2627cb6604cff828a6e3f579ca6c59ace013d>
 
         <item><math|h<around*|(|C<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash the channel Id as defined in Definition <todo|todo>. Note that
-        the <strong|recipient> must be the corresponding parachain Id.
+        hash of <math|C<rsub|id>>. Note that the <strong|recipient> must be
+        the corresponding parachain Id.
 
         <item><math|C<rsub|id>> is the parachain Id as defined in Definition
         <todo|todo>. Note that the <strong|recipient> must be the
@@ -414,8 +448,8 @@
         \ <verbatim|6a0da05ca59913bc38a8630590f2627cb6604cff828a6e3f579ca6c59ace013d>
 
         <item><math|h<around*|(|C<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash the channel Id as defined in Definition <todo|todo>. Note that
-        the <strong|sender> must be the corresponding parachain Id.
+        hash of <math|C<rsub|id>>. Note that the <strong|sender> must be the
+        corresponding parachain Id.
 
         <item><math|C<rsub|id>> is the parachain Id as defined in Definition
         <todo|todo>. Note that the <strong|sender> must be the corresponding
@@ -460,25 +494,26 @@
   </definition>
 
   <\definition>
-    <label|defn-extra-validation-data>The <with|font-series|bold|validation
-    parameters>, <math|v<rsup|VP><rsub|B>>, is an extra input to the
-    validation function, i.e. additional data from the relay chain state that
-    is needed. It's a tuple of the following format:
+    <label|defn-extra-validation-data><todo|@fabio: still relevant?>The
+    <with|font-series|bold|validation parameters>, <math|v<rsup|VP><rsub|B>>,
+    is an extra input to the validation function, i.e. additional data from
+    the relay chain state that is needed. It's a tuple of the following
+    format:
 
     <\equation*>
-      vp<rsub|B>\<assign\><around|(|B,head<around|(|B<rsub|p>|)>,v<rsup|GVS><rsub|B>,R<rsup|up><rsub|\<rho\>>|)>
+      vp<rsub|B>\<assign\><around|(|B<rsub|p>,h<rsub|p>,v<rsup|GVS><rsub|B>,R<rsup|up><rsub|\<rho\>>|)>
     </equation*>
 
     where each value represents:
 
     <\itemize>
-      <item><math|B>: the parachain block itself.
+      <item><math|B<rsub|p>>: the parachain block itself.
 
-      <item><math|head<around|(|B<rsub|p>|)>>: the parent head data
-      (Definition <reference|defn-head-data>) of block <math|B>.
+      <item><math|h<rsub|p>>: the parent block header as defined in
+      Definition <reference|defn-block-header>.
 
-      <item><math|v<rsup|GVP><rsub|B>>: the global validation parameters
-      (<reference|defn-global-validation-parameters>).
+      <item><math|v<rsub|p>>: the global validation parameters as defined in
+      Definition <reference|defn-global-validation-parameters>.
 
       <item><math|R<rsup|up><rsub|\<rho\>>>: implies whether the parachain is
       allowed to upgrade its validation code (Definition
@@ -632,7 +667,7 @@
 
   <subsubsection|Building a parachain block>
 
-  <\algorithm|Producing a parachain candidate>
+  <\algorithm|<label|algo-build-parablock>Producing a parachain candidate>
     <\algorithmic>
       <\state>
         <math|r<rsub|p>> \<leftarrow\> <name|RelayParent>
@@ -716,28 +751,28 @@
     A collation, <math|C>, is a datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M<rsub|u>,M<rsub|h>,R<rsub|p>,h<rsub|d>,B<rsub|p>,N<rsub|q>,N<rsub|m>|)>>>|<row|<cell|M<rsub|u>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>>>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M<rsub|u>,M<rsub|h>,R<rsub|p>,h<rsub|d>,B<rsub|p>,N<rsub|q>,N<rsub|m>|)>>>|<row|<cell|M<rsub|u>>|<cell|=>|<cell|<around*|(|u<rsub|0>,\<ldots\>u<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|(|o<rsub|0>,\<ldots\>o<rsub|n>|)>>>>>
     </eqnarray*>
 
     The necessary information to construct a collation can be fetched by the
-    collator by calling a Runtime function as described in Section
-    <todo|todo>. <math|h<rsub|d>> and <math|P<rsub|ov>> are selected and
-    provided by the collator:
+    collator by calling the <verbatim|collect_collation_info> Runtime
+    function as described in Section <todo|todo>. <math|h<rsub|d>> and
+    <math|B<rsub|p>> are selected and provided by the collator individually
+    as described in Algorithm <reference|algo-build-parablock>:
 
     <\itemize-dot>
-      <item><math|M<rsub|u>> is a sequence of upward messages as defined in
-      Definition <todo|todo> to be interpreted by the Polkadot relay chain
-      itself.
+      <item><math|M<rsub|u>> is a sequence of upward messages, represented as
+      byte arrays, to be interpreted by the Polkadot relay chain itself.
 
-      <item><math|M<rsub|h>> is a sequence of horizontal messages as defined
-      in Definition <todo|todo> sent by the parachain.
+      <item><math|M<rsub|h>> is a sequence of outbound HRMP messages as
+      defined in Definition <todo|todo> sent by the parachain.
 
       <item><math|R<rsub|p>> is the varying type <verbatim|Option> as defined
-      in Definition <todo|todo> which can contain a new Runtime for the
-      parachain, represented as a byte array.
+      in Definition <reference|defn-option-type> which can contain a new
+      Runtime for the parachain, represented as a byte array.
 
-      <item><math|h<rsub|d>> is the byte array containg the parachain block
-      header.
+      <item><math|h<rsub|d>> is the parachain block header as defined in
+      Definition <reference|defn-block-header>.
 
       <item><math|B<rsub|p>> is the parachain block as defined in Definition
       <reference|defn-parablock>.
@@ -749,60 +784,6 @@
       to which all i nbound HRMP messages are processed.
     </itemize-dot>
   </definition>
-
-  <\definition>
-    <label|defn-head-data>The <with|font-series|bold|head data>,
-    <math|head<around|(|B|)>>, of a parachain block is a tuple of the
-    following format:
-
-    <\equation*>
-      head<around|(|B|)>\<assign\><around|(|H<rsub|i><around|(|B|)>,H<rsub|p><around|(|B|)>,H<rsub|r><around|(|B|)>|)>
-    </equation*>
-
-    Where <math|H<rsub|i><around|(|B|)>> is the block number of parachain
-    block <math|B>, <math|H<rsub|p><around|(|B|)>> is the 32-byte Blake2 hash
-    of the parent block header and <math|H<rsub|r><around|(|B|)>> represents
-    the root of the post-execution state. <todo|@fabio: clarify if
-    <math|H<rsub|p>> is the hash of the header or full block> <todo|@fabio:
-    maybe define those symbols at the start (already defined in the Host
-    spec)?>
-  </definition>
-
-  <\algorithm|<label|algo-primary-validation><name|PrimaryValidation>(<math|B>,
-  <math|\<pi\><rsub|B>>, relay chain parent block
-  <math|B<rsup|relay><rsub|parent>>)>
-    <\algorithmic>
-      <\state>
-        Retrieve <math|v<rsub|B>> from the relay chain state at
-        <math|B<rsup|relay><rsub|parent>>
-      </state>
-
-      <\state>
-        Run Algorithm <reference|algo-validate-block> using
-        <math|B,\<pi\><rsub|B>,v<rsub|B>>
-      </state>
-    </algorithmic>
-  </algorithm>
-
-  <\algorithm|<label|algo-validate-block><name|ValidateBlock>(<math|B,\<pi\><rsub|B>,v<rsub|B>>)>
-    <\algorithmic>
-      <state|retrieve the runtime code <math|R<rsub|\<rho\>>> that is
-      specified by <math|v<rsub|B>> from the relay chain state.>
-
-      <state|check that the initial state root in <math|\<pi\><rsub|B>> is
-      the one claimed in <math|v<rsub|B>>>
-
-      <state|Execute <math|R<rsub|\<rho\>>> on <math|B> using
-      <math|\<pi\><rsub|B>> to simulate the state.>
-
-      <state|If the execution fails, return fail.>
-
-      <state|Else return success, the new header data <math|h<rsub|B>> and
-      the outgoing messages <math|M>.>
-
-      <todo|@fabio: same as head data?>
-    </algorithmic>
-  </algorithm>
 
   <section|Candidate Backing><label|sect-primary-validaty-announcement>
 
