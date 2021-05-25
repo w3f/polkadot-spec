@@ -77,8 +77,8 @@
   </definition>
 
   <\definition>
-    A <strong|parachain block>, <math|B<rsub|p>>, is a datastructure of the
-    following format:
+    <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, is a
+    datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,E,H<rsub|r>|)>>>|<row|<cell|E>|<cell|=>|<cell|<around*|(|e<rsub|0>,\<ldots\>e<rsub|n>|)>>>>>
@@ -624,13 +624,13 @@
   penalize bad behavior. This is described in more detail in section
   <reference|sect-primary-validaty-announcement>.
 
-  <subsection|Producing a Candidate>
+  <subsection|Parachain Block Production>
 
   Collators produce a candidate for their corresponding parachains and submit
   those to the parachain validators which are part of the Polkadot relay
   chain.
 
-  <subsubsection|Building a Proposal>
+  <subsubsection|Building a parachain block>
 
   <\algorithm|Producing a parachain candidate>
     <\algorithmic>
@@ -643,15 +643,15 @@
       </state>
 
       <\state>
-        <math|h<rsub|d>> \<leftarrow\> <name|PrevHead(<math|v<rsub|d>>)>
+        <math|h<rsub|d>> \<leftarrow\> <name|ParentHead(<math|v<rsub|d>>)>
       </state>
 
       <\state>
-        <math|D<rsub|p>\<leftarrow\>><name|ProduceCandidate(<math|h<rsub|d>>,<math|r<rsub|p>>,<math|v<rsub|d>>)>
+        <math|D<rsub|p>\<leftarrow\>><name|ProduceCandidate(<math|><math|r<rsub|p>>,<math|v<rsub|d>>,<math|h<rsub|d>>)>
       </state>
 
       <\state>
-        <math|B<rsub|p>> \<leftarrow\> <name|CreateParaBlocK(<math|C>)>
+        <math|B<rsub|p>> \<leftarrow\> <name|CreateParaBlocK(<math|D<rsub|p>>)>
       </state>
 
       <\state>
@@ -664,22 +664,59 @@
     </algorithmic>
   </algorithm>
 
-  <subsubsection|Building a Collation>
+  <\itemize-dot>
+    <item><name|RelayParent> - Fetches the parent block hash of the relay
+    chain.
 
-  The collator fetches the required collation info (<todo|@fabio>) by calling
-  the <verbatim|collect_collation_info> Runtime function as described in
-  Section <todo|@fabio>. Based on the collation info, a collation is created
-  as described in Definition <todo|todo>.
+    <item><name|ValidationData> - Fetches the persistent validation data as
+    defined in Definition <reference|defn-persisted-validation-data>.
+
+    <item><name|PrevHead> - Derives the parachain parent header from
+    validation data <math|v<rsub|d>>.
+
+    <item><name|ProduceCandidate> - Produces a candidate as defined in
+    Definition <reference|defn-candidate> from the values <math|r<rsub|p>>,
+    <math|v<rsub|d>> and <math|h<rsub|d>>.
+
+    <item><name|CreateParaBlock> - Creates a parachain block as defined in
+    Definition <reference|defn-parablock> from the produced candidate
+    <math|D<rsub|p>>.
+
+    <item><name|BuildCollation> - Builds the final collation as defined in
+    Definition <reference|defn-collation> from the created parachain block
+    <math|B<rsub|p>>.
+
+    <item><name|Announce> - Sends the collation to relay chain validators.
+  </itemize-dot>
 
   <\definition>
-    A <strong|collation> is the output of a collator and differs from a
-    candidate commitment (<todo|todo>) as it does not contain the erasure
-    root (<todo|todo>), which is computed at the Polkadot relay chain level,
-    and contains the PoV block. <todo|When is this used?>. A collation,
-    <math|C>, is a datastructure of the following format:
+    <label|defn-candidate>A <strong|candidate> is a datastructure of the
+    following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M<rsub|u>,M<rsub|h>,R<rsub|p>,h<rsub|d>,P<rsub|ov>,N<rsub|q>,N<rsub|m>|)>>>|<row|<cell|M<rsub|u>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>>>
+      <tformat|<table|<row|<cell|D<rsub|p>>|<cell|=>|<cell|<around*|(|B<rsub|p>,H<rsub|r>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|B<rsub|p>> is the parachain block as defined in Definition
+      <reference|defn-parablock>.
+
+      <item><math|H<rsub|r>> is the storage merkle root <todo|why is this
+      required if the root is already in <math|B<rsub|p>?>>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|defn-collation>A <strong|collation> is the output of a collator
+    and differs from a candidate commitment (<todo|todo>) as it does not
+    contain the erasure root (<todo|todo>), which is computed at the Polkadot
+    relay chain level, and contains the PoV block. <todo|When is this used?>.
+    A collation, <math|C>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M<rsub|u>,M<rsub|h>,R<rsub|p>,h<rsub|d>,B<rsub|p>,N<rsub|q>,N<rsub|m>|)>>>|<row|<cell|M<rsub|u>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>>>
     </eqnarray*>
 
     The necessary information to construct a collation can be fetched by the
@@ -702,48 +739,15 @@
       <item><math|h<rsub|d>> is the byte array containg the parachain block
       header.
 
-      <item><math|P<rsub|ov>> is the PoV block.
+      <item><math|B<rsub|p>> is the parachain block as defined in Definition
+      <reference|defn-parablock>.
 
-      <item><math|N<rsub|q>> is the number of messages processed from the
-      DMQ.
+      <item><math|N<rsub|q>> is the number of messages processed from the DMQ
+      <todo|todo>.
 
       <item><math|N<rsub|m>> is the watermark indicated as a block number up
       to which all i nbound HRMP messages are processed.
     </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|defn-candidate><todo|DEPRECATE> A
-    <with|font-series|bold|candidate>, <math|C<rsub|coll><around|(|PoV<rsub|B>|)>>,
-    is issued by collators and contains the PoV block and enough data in
-    order for any validator to verify its validity. A candidate is a tuple of
-    the following format:
-
-    <\equation*>
-      C<rsub|coll><around|(|PoV<rsub|B>|)>\<assign\><around|(|id<rsub|p>,H<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>,id<rsub|C>,Sig<rsup|Collator><rsub|SR25519>,head<around|(|B|)>,h<rsub|b><around|(|PoV<rsub|B>|)>|)>
-    </equation*>
-
-    where each value represents:
-
-    <\itemize>
-      <item><math|id<rsub|p>>: the Parachain Id this candidate is for.
-
-      <item><math|H<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>>:
-      the hash of the relay chain block that this candidate should be
-      executed in the context of.
-
-      <item><math|id<rsub|C>>: the collator relay-chain account ID as defined
-      in Definition <todo|@fabio>.
-
-      <item><math|Sig<rsup|Collator><rsub|SR25519>>: the signature on the
-      256-bit Blake2 hash of the block data by the collator.
-
-      <item><math|head<around|(|B|)>>: the head data (Definition
-      <reference|defn-head-data>) of block <math|B>.
-
-      <item><math|h<rsub|b><around|(|PoV<rsub|B>|)>>: the 32-byte Blake2 hash
-      of the PoV block.
-    </itemize>
   </definition>
 
   <\definition>
