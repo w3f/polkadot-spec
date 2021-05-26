@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -45,9 +45,10 @@
   with each being versioned independently.
 
   <\definition>
-    The <with|font-series|bold|Runtime API Call Convention> describes that
-    all functions receive and return SCALE-encoded data and as a result have
-    the following prototype signature:
+    <label|defn-runtime-api-convention>The <with|font-series|bold|Runtime API
+    Call Convention> describes that all functions receive and return
+    SCALE-encoded data and as a result have the following prototype
+    signature:
 
     \;
 
@@ -92,7 +93,7 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>A data structure of the following format:
+    <item>A datastructure of the following format:
 
     \;
 
@@ -518,14 +519,14 @@
 
   <subsubsection|<verbatim|TaggedTransactionQueue_validate_transaction>><label|sect-rte-validate-transaction>
 
-  This entry is invoked against extrinsics submitted through a
-  transaction network message <reference|sect-msg-transactions> or by an
-  offchain worker through the <verbatim|ext_offchain_submit_transaction> Host
-  API (Section <reference|sect-ext-offchain-submit-transaction>). It
-  indicates if the submitted blob represents a valid extrinsics, the order in
-  which it should be applied and if it should be gossiped to other peers.
-  Furthermore this function gets called internally when executing blocks with
-  the <verbatim|Core_execute_block> runtime function as described in Section
+  This entry is invoked against extrinsics submitted through a transaction
+  network message <reference|sect-msg-transactions> or by an offchain worker
+  through the <verbatim|ext_offchain_submit_transaction> Host API (Section
+  <reference|sect-ext-offchain-submit-transaction>). It indicates if the
+  submitted blob represents a valid extrinsics, the order in which it should
+  be applied and if it should be gossiped to other peers. Furthermore this
+  function gets called internally when executing blocks with the
+  <verbatim|Core_execute_block> runtime function as described in Section
   <reference|sect-rte-core-execute-block>.
 
   \;
@@ -1251,7 +1252,6 @@
   </with>
 
   \;
-
 </body>
 
 <\initial>
@@ -1260,9 +1260,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>

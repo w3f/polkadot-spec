@@ -785,6 +785,23 @@
     </itemize-dot>
   </definition>
 
+  <section|Consensus>
+
+  Collators follow the relay chain to act as consensus for the parachain.
+
+  <subsection|Following the best Head>
+
+  The collator must follow the best head (latest block) of the relay chain.
+  This can be achieved in two ways:
+
+  <\itemize-dot>
+    <item>Fetch the best head from the persisted validation data as described
+    in Section <todo|todo>.
+
+    <item>Listen to incoming blocks received from peers. If it contains a
+    newer head,\ 
+  </itemize-dot>
+
   <section|Candidate Backing><label|sect-primary-validaty-announcement>
 
   Validators back the validity respectively the invalidity of candidates by
@@ -1710,7 +1727,88 @@
     <qed>
   </with>
 
+  <section|Parachain Runtime Entries>
+
+  The parachain Runtime exposes a couple of functions to the parachain Host
+  implementation. It should be noted that the API can change through
+  parachain Runtime updates. Therefore, a host should check the API versions
+  of each module returned in the <verbatim|api> field by
+  <verbatim|Core_version> (Section <reference|defn-rt-core-version>) after
+  every Runtime upgrade and warn if an updated API is encountered and that
+  this might require an update of the host. The Runtime call convention is
+  the same as for the relay chain Runtime, as defined in Defintion
+  <reference|defn-runtime-api-convention>.
+
+  <subsection|Core module>
+
+  <subsubsection|Core_version>
+
+  Return the current Runtime version.
+
   \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Returns>:
+
+  <\itemize-dot>
+    <item>The same datastructure as the <verbatim|Core_version> for the
+    Polkadot relay chain, as described in Section
+    <reference|defn-rt-core-version>.
+  </itemize-dot>
+
+  <subsubsection|Core_execute_block>
+
+  Executes a full block and all its extrinsics and updates the state
+  accordingly. The behavior is identical to <verbatim|Core_execute_block> of
+  the Polkadot relay chain as described in Section
+  <reference|sect-rte-core-execute-block>.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>A block represtend as a tuple consisting of a block header and the
+    block body as defined in Definition <reference|defn-parablock> (not
+    including the merkle root).
+  </itemize-dot>
+
+  \;
+
+  <strong|Returns>:
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  <subsubsection|Core_initialize_block>
+
+  Sets up the environment required for building a new block.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>The header for the new block as defined in Definition
+    <reference|defn-block-header>. The values <math|H<rsub|r>>,
+    <math|H<rsub|e>> and <math|H<rsub|d>> are left empty.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
 </body>
 
 <\initial>
