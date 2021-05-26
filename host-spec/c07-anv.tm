@@ -659,7 +659,7 @@
   penalize bad behavior. This is described in more detail in section
   <reference|sect-primary-validaty-announcement>.
 
-  <subsection|Parachain Block Production>
+  <subsection|Parachain Block Production><label|sect-parachain-block-production>
 
   Collators produce a candidate for their corresponding parachains and submit
   those to the parachain validators which are part of the Polkadot relay
@@ -756,9 +756,10 @@
 
     The necessary information to construct a collation can be fetched by the
     collator by calling the <verbatim|collect_collation_info> Runtime
-    function as described in Section <todo|todo>. <math|h<rsub|d>> and
-    <math|B<rsub|p>> are selected and provided by the collator individually
-    as described in Algorithm <reference|algo-build-parablock>:
+    function as described in Section <reference|sect-runtime-collect-collation-info>.
+    <math|h<rsub|d>> and <math|B<rsub|p>> are selected and provided by the
+    collator individually as described in Algorithm
+    <reference|algo-build-parablock>:
 
     <\itemize-dot>
       <item><math|M<rsub|u>> is a sequence of upward messages, represented as
@@ -1733,13 +1734,13 @@
   implementation. It should be noted that the API can change through
   parachain Runtime updates. Therefore, a host should check the API versions
   of each module returned in the <verbatim|api> field by
-  <verbatim|Core_version> (Section <reference|defn-rt-core-version>) after
-  every Runtime upgrade and warn if an updated API is encountered and that
-  this might require an update of the host. The Runtime call convention is
-  the same as for the relay chain Runtime, as defined in Defintion
+  <verbatim|Core_version> (Section <reference|sect-runtime-core-module>)
+  after every Runtime upgrade and warn if an updated API is encountered and
+  that this might require an update of the host. The Runtime call convention
+  is the same as for the relay chain Runtime, as defined in Defintion
   <reference|defn-runtime-api-convention>.
 
-  <subsection|Core Module>
+  <subsection|Core Module><label|sect-runtime-core-module>
 
   The Core module of the parachain Runtime is identical to the Core module of
   the Polkadot relay chain as described in Section
@@ -1778,6 +1779,54 @@
   <subsection|AuraApi Module>
 
   <todo|is this required?>
+
+  <subsection|CollectCollationInfo Module>
+
+  <subsubsection|CollectCollationInfo_collect_collation_info><label|sect-runtime-collect-collation-info>
+
+  Returns the collation info, which is required for creating new collations
+  as described in Section <reference|sect-parachain-block-production>.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>Returns the collation info, which is a datastructure of the
+    following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<cell|<around*|\<nobracket\>|<around*|(|M<rsub|u>,M<rsub|h>,R<rsub|p>,N<rsub|q>,N<rsub|m>|\<nobracket\>>|)>>|<cell|>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M<rsub|u>> is a sequence of upward messages, represented as
+      byte arrays, to be interpreted by the Polkadot relay chain itself.
+
+      <item><math|M<rsub|h>> is a sequence of outbound HRMP messages as
+      defined in Definition <todo|todo> sent by the parachain.
+
+      <item><math|R<rsub|p>> is the varying type <verbatim|Option> as defined
+      in Definition <reference|defn-option-type> which can contain a new
+      Runtime for the parachain, represented as a byte array.
+
+      <item><math|N<rsub|q>> is the number of messages processed from the DMQ
+      <todo|todo>.
+
+      <item><math|N<rsub|m>> is the watermark indicated as a block number up
+      to which all i nbound HRMP messages are processed.
+    </itemize-dot>
+  </itemize-dot>
 </body>
 
 <\initial>
