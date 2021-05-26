@@ -1739,102 +1739,45 @@
   the same as for the relay chain Runtime, as defined in Defintion
   <reference|defn-runtime-api-convention>.
 
-  <subsection|Core module>
+  <subsection|Core Module>
 
-  <subsubsection|Core_version>
-
-  Return the current Runtime version.
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item>None.
-  </itemize-dot>
-
-  \;
-
-  <strong|Returns>:
-
-  <\itemize-dot>
-    <item>The same datastructure as the <verbatim|Core_version> for the
-    Polkadot relay chain, as described in Section
-    <reference|defn-rt-core-version>.
-  </itemize-dot>
-
-  <subsubsection|Core_execute_block>
-
-  Executes a full block and all its extrinsics and updates the state
-  accordingly. The behavior is identical to <verbatim|Core_execute_block> of
+  The Core module of the parachain Runtime is identical to the Core module of
   the Polkadot relay chain as described in Section
-  <reference|sect-rte-core-execute-block>.
+  <reference|sect-runtime-core-module>.
 
-  \;
+  <subsection|Metadata Module>
 
-  <strong|Arguments>:
+  The Metadata module of the parachain Runtime is identical to the Metadata
+  module of the Polkadot relay chain as described in Section
+  <reference|sect-runtime-metadata-module>.
 
-  <\itemize-dot>
-    <item>A block represtend as a tuple consisting of a block header and the
-    block body as defined in Definition <reference|defn-parablock> (not
-    including the merkle root).
-  </itemize-dot>
+  <subsection|BlockBuilder Module>
 
-  \;
+  The BlockBuilder module of the parachain Runtime is identical to the
+  BlockBuilder module of the Polkadot relay chain as described in Section
+  <reference|sect-runtime-blockbuilder-module>.
 
-  <strong|Returns>:
+  <subsection|TaggedTransactionQueue Module>
 
-  <\itemize-dot>
-    <item>None.
-  </itemize-dot>
+  The TaggedTransactionQueue module of the parachain Runtime is identical to
+  the TaggedTransactionQueue module of the Polkadot relay chain as described
+  in Section <reference|sect-runtime-txqueue-module>.
 
-  <subsubsection|Core_initialize_block>
+  <subsection|OffchainWorkerApi Module>
 
-  Sets up the environment required for building a new block.
+  The OffchainWorkerApi module of the parachain Runtime is identical to the
+  OffchainWorkerApi module of the Polkadot relay chain as described in
+  Section <reference|sect-runtime-offchainapi-module>.
 
-  \;
+  <subsection|SessionKeys Module>
 
-  <strong|Arguments>:
+  The SessionKeys module of the parachain Runtime is identical to the
+  SessionKeys module of the Polkadot relay chain as described in Section
+  <reference|sect-runtime-sessionkeys-module>.
 
-  <\itemize-dot>
-    <item>The header for the new block as defined in Definition
-    <reference|defn-block-header>. The values <math|H<rsub|r>>,
-    <math|H<rsub|e>> and <math|H<rsub|d>> are left empty.
-  </itemize-dot>
+  <subsection|AuraApi Module>
 
-  \;
-
-  <strong|Return>:
-
-  <\itemize-dot>
-    <item>None.
-  </itemize-dot>
-
-  <subsection|Metadata module>
-
-  <subsubsection|Metadata_metadata>
-
-  Returns native Runtime metadata in an opaque from and contains all the
-  information necessary to build valid transactions.
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item>None.
-  </itemize-dot>
-
-  \;
-
-  <strong|Return>:
-
-  <\itemize-dot>
-    <item>A byte array of varying size containing the metadata in an opaque
-    form.
-  </itemize-dot>
-
-  \;
+  <todo|is this required?>
 </body>
 
 <\initial>
