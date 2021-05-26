@@ -72,7 +72,7 @@
   after the call is ended. See Section <reference|sect-handling-runtime-state-update>
   for more information.
 
-  <subsection|Core Module (Version 3)>
+  <subsection|Core Module (Version 3)><label|sect-runtime-core-module>
 
   <subsubsection|<verbatim|Core_version>><label|defn-rt-core-version>
 
@@ -189,7 +189,7 @@
     <item>None.
   </itemize-dot>
 
-  <subsection|Metadata Module (Version 1)>
+  <subsection|Metadata Module (Version 1)><label|sect-runtime-metadata-module>
 
   <subsubsection|<verbatim|Metadata_metadata>>
 
@@ -215,7 +215,8 @@
     form.
   </itemize-dot>
 
-  <subsection|BlockBuilder Module (Version 4)>
+  <subsection|BlockBuilder Module (Version
+  4)><label|sect-runtime-blockbuilder-module>
 
   All calls in this module require <verbatim|Core_intialize_block> (Section
   <reference|sect-rte-core-initialize-block>) to be called beforehand.
@@ -232,7 +233,7 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item>A byte array of varying size containing the extrinsic.
+    <item>A byte array of varying size containing the opaque extrinsic.
   </itemize>
 
   \;
@@ -242,7 +243,7 @@
   <\itemize-dot>
     <item>Returns the varying datatype <verbatim|ApplyExtrinsicResult> as
     defined in Definition <reference|defn-rte-apply-extrinsic-result>. This
-    structure lets the block-builder know whether an extrinsic should be
+    structure lets the block builder know whether an extrinsic should be
     included into the block or rejected.
 
     \;
@@ -488,28 +489,8 @@
     </itemize-dot>
   </itemize-dot>
 
-  <subsubsection|<verbatim|BlockBuilder_random_seed>>
-
-  Generates a random seed. <todo|there is currently no requirement for having
-  to call this function.>
-
-  \;
-
-  <strong|Arguments>:
-
-  <\itemize-dot>
-    <item>None.
-  </itemize-dot>
-
-  \;
-
-  <strong|Return>:
-
-  <\itemize-dot>
-    <item>A 32-byte array containing the random seed.
-  </itemize-dot>
-
-  <subsection|TaggedTransactionQueue (Version 2)>
+  <subsection|TaggedTransactionQueue (Version
+  2)><label|sect-runtime-txqueue-module>
 
   All calls in this module require <verbatim|Core_intialize_block> (Section
   <reference|sect-rte-core-initialize-block>) to be called beforehand.
@@ -600,7 +581,8 @@
   to validate a transaction received from peers, the Polkadot Host disregards
   and rewinds state changes resulting in such a call.
 
-  <subsection|OffchainWorkerApi Module (Version 2)>
+  <subsection|OffchainWorkerApi Module (Version
+  2)><label|sect-runtime-offchainapi-module>
 
   Does not require <verbatim|Core_intialize_block> (Section
   <reference|sect-rte-core-initialize-block>) to be called beforehand.
@@ -1042,7 +1024,8 @@
     authorities.
   </itemize-dot>
 
-  <subsection|SessionKeys Module (Version 1)>
+  <subsection|SessionKeys Module (Version
+  1)><label|sect-runtime-sessionkeys-module>
 
   All calls in this module require <verbatim|Core_intialize_block> (Section
   <reference|sect-rte-core-initialize-block>) to be called beforehand.
