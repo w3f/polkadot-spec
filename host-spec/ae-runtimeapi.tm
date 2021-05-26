@@ -126,7 +126,7 @@
 
   <subsubsection|<verbatim|Core_execute_block>><label|sect-rte-core-execute-block>
 
-  This function executes a full block and all its exctrinsics and updates the
+  This function executes a full block and all its extrinsics and updates the
   state accordingly. Additionally, some integrity checks are executed such as
   validating if the parent hash is correct and that the transaction root
   represents the transactions. Internally, this function performs an
@@ -190,9 +190,6 @@
   </itemize-dot>
 
   <subsection|Metadata Module (Version 1)>
-
-  All calls in this module require <verbatim|Core_intialize_block> (Section
-  <reference|sect-rte-core-initialize-block>) to be called first.
 
   <subsubsection|<verbatim|Metadata_metadata>>
 
