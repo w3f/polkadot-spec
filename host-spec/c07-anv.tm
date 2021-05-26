@@ -1750,7 +1750,7 @@
   <strong|Arguments>:
 
   <\itemize-dot>
-    <item>None
+    <item>None.
   </itemize-dot>
 
   \;
@@ -1785,7 +1785,7 @@
   <strong|Returns>:
 
   <\itemize-dot>
-    <item>None
+    <item>None.
   </itemize-dot>
 
   <subsubsection|Core_initialize_block>
@@ -1807,8 +1807,34 @@
   <strong|Return>:
 
   <\itemize-dot>
-    <item>None
+    <item>None.
   </itemize-dot>
+
+  <subsection|Metadata module>
+
+  <subsubsection|Metadata_metadata>
+
+  Returns native Runtime metadata in an opaque from and contains all the
+  information necessary to build valid transactions.
+
+  \;
+
+  <strong|Arguments>:
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>:
+
+  <\itemize-dot>
+    <item>A byte array of varying size containing the metadata in an opaque
+    form.
+  </itemize-dot>
+
+  \;
 </body>
 
 <\initial>
