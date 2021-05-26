@@ -1097,9 +1097,9 @@
   <\definition>
     <label|defn-grandpa-justification>The <strong|justification> for block B
     in round <math|r>, <math|<with|font-series|bold|J<rsup|r,stage><around*|(|B|)>>>
-    <glossary-explain|<math|J<rsup|r,stage><around*|(|B|)>>|The justification for pre-commiting or comming to block
-    <math|B> in round <math|r> of finality protocol|>, is a vector of pairs of
-    the type:
+    <glossary-explain|<math|J<rsup|r,stage><around*|(|B|)>>|The justification
+    for pre-commiting or comming to block <math|B> in round <math|r> of
+    finality protocol|>, is a vector of pairs of the type:
 
     <\equation*>
       <around*|(|V<around*|(|B<rprime|'>|)>,Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>,v<rsub|id>|)>
@@ -1119,13 +1119,13 @@
     In all cases, <math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B<rprime|'>|)>>
     <glossary-explain|<math|Sign<rsup|r,stage><rsub|v<rsub|i>><around*|(|B|)>>|The
     signature of voter <math|v> on their voteto block B, broadcasted during
-    the specified stage of finality round <math|r>>, as defined in Definition 
+    the specified stage of finality round <math|r>>, as defined in Definition
     <reference|defn-sign-round-vote>, is the signature of voter
     <math|v<rsub|i>\<in\>\<bbb-V\><rsub|B>> broadcasted during either the
-    pre-vote (stage = pv) or the pre-commit (stage = pc)
-    sub-round of round r. A <strong|valid justification> must only contain
-    up-to-one valid vote from each voter and must not contain more than two
-    equivocatory votes from each voter.
+    pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of round
+    r. A <strong|valid justification> must only contain up-to-one valid vote
+    from each voter and must not contain more than two equivocatory votes
+    from each voter.
   </definition>
 
   <\definition>
@@ -1313,6 +1313,10 @@
       </state>
 
       <\state>
+        <name|Last-Completed-Round><math|\<leftarrow\>0>
+      </state>
+
+      <\state>
         <\IF>
           <math|r<rsub|last>=0>
         </IF>
@@ -1428,6 +1432,10 @@
         completable <strong|and> <name|Finalizable>(<math|r-1>)
 
         <space|2em><strong|and> \ <name|Last-Finalized-Block><math|\<geqslant\>><name|Best-Final-Candidate>(<math|r>-1))
+      </state>
+
+      <\state>
+        <name|Last-Completed-Round><math|\<leftarrow\>r>
       </state>
 
       <\state>
@@ -1926,8 +1934,9 @@
 
     <item><math|\<bbb-P\>> is the set of immediate peers of node <math|v>.
 
-    <item><name|Last-Completed-Round> is <todo|define:
-    https://github.com/w3f/polkadot-spec/issues/161>
+    <item><name|Last-Completed-Round> is initiated in Algorithm
+    <reference|algo-initiate-grandpa> and gets updated in Algorithm
+    <reference|algo-grandpa-round> respectively.
 
     <item><math|M<rsub|v,i><rsup|Cat-s><around*|(|id<rsub|\<bbb-V\>>,r|)>> is
     the catch-up response defined in Definition
