@@ -162,8 +162,8 @@
 
   <\definition>
     The <strong|parachain inherent data>, <math|I<rsub|p>>, is passed by the
-    collator to the parachain runtime. It's a datastructure of the following
-    format:
+    collator to the parachain runtime <todo|when is it passed?>. It's a
+    datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|I<rsub|p>>|<cell|=>|<cell|<around*|(|D<rsub|pv>,H<rsub|r>,M<rsub|d>,M<rsub|h>|)>>>|<row|<cell|M<rsub|d>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|{|<rsub|><around*|(|P<rsub|id>,<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>|)>|}>>>>>
@@ -195,14 +195,14 @@
     Both message types share the same datastructure of the following type:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i><around*|(|B|)>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|H<rsub|i><around*|(|B|)>> is the relay chain block number
-      at which the message was put into the downward queue <todo|clarify>.
+      <item><math|H<rsub|i>> is the relay chain block number at which the
+      message was put into the downward queue <todo|clarify>.
 
       <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
       array containing the message itself.
@@ -216,15 +216,15 @@
     datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i><around*|(|B|)>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|H<rsub|i><around*|(|B|)>> is the relay chain block number
-      at which the message was sent. Specifically, at which the candidate
-      that sent this message was enacted.
+      <item><math|H<rsub|i>> is the relay chain block number at which the
+      message was sent. Specifically, at which the candidate that sent this
+      message was enacted.
 
       <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
       array containing the message itself.
@@ -729,7 +729,7 @@
     following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|D<rsub|p>>|<cell|=>|<cell|<around*|(|B<rsub|p>,H<rsub|r>|)>>>>>
+      <tformat|<table|<row|<cell|>|<cell|<around*|(|B<rsub|p>,H<rsub|r>|)>>|<cell|>>>>
     </eqnarray*>
 
     where
@@ -747,8 +747,8 @@
     <label|defn-collation>A <strong|collation> is the output of a collator
     and differs from a candidate commitment (<todo|todo>) as it does not
     contain the erasure root (<todo|todo>), which is computed at the Polkadot
-    relay chain level, and contains the PoV block. <todo|When is this used?>.
-    A collation, <math|C>, is a datastructure of the following format:
+    relay chain level, and contains the PoV block. A collation, <math|C>, is
+    a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M<rsub|u>,M<rsub|h>,R<rsub|p>,h<rsub|d>,B<rsub|p>,N<rsub|q>,N<rsub|m>|)>>>|<row|<cell|M<rsub|u>>|<cell|=>|<cell|<around*|(|u<rsub|0>,\<ldots\>u<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|(|o<rsub|0>,\<ldots\>o<rsub|n>|)>>>>>
@@ -805,15 +805,87 @@
 
   <section|Candidate Backing><label|sect-primary-validaty-announcement>
 
+  <subsection|Block Announcement>
+
+  Since collators rely on the relay chain provided consensus and the
+  parachain itself does not have any authorities to limit block producers, a
+  mechanism must be provided in order to limit the import of blocks submitted
+  by collators, which could be in the millions. To solve this, collators send
+  their candidates to relay chain validators and wait for a
+  <verbatim|Seconded> statement as described in Section <todo|todo>.
+  Receiving this message implies that the proposed candidate is likely to be
+  inlcuded in the relay chain, making the candidate suitable to be announced
+  to peers as described in Definition <todo|todo>. If no Seconded statement
+  is received, no such announcement should take place <todo| how is bad
+  behavior prevented here?>.
+
+  <\definition>
+    A block announcement message is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<cell|<around*|(|C<rsub|r>,P,V<rsub|id>,S,P<rsub|r>|)>>|<cell|>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|C<rsub|r>> is the candidate receipt\ 
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    A <strong|candidate receipt> is included in block announcements. It's a
+    datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<around*|(|P<rsub|id>,H<rsub|h>,C<rsub|id>,V<rsub|h>,B<rsub|h>,E<rsub|r>,S,h<rsub|h>,R<rsub|h>,C<rsub|h>|)>|<cell|>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|P<rsub|id>> is the ID of the parachain this candidate is
+      for <todo|define>.
+
+      <item><math|H<rsub|h>> is the hash of the realy chain block this is
+      announcement is in the context of.
+
+      <item><math|C<rsub|id>> is the collators sr25519 public key.
+
+      <item><math|V<rsub|h>> is the hash of the persisted validation data
+      <todo| define>.
+
+      <item><math|B<rsub|h>> is the hash of the parachain block this
+      announcement is for.
+
+      <item><math|E<rsub|r>> is the root of the blocks erasure endoding
+      Merkle tree <todo|define>.
+
+      <item><math|S> is the signature of the concatenated components
+      <math|P<rsub|id>>, <math|H<rsub|h>>, <math|V<rsub|h>> and
+      <math|B<rsub|h>>.
+
+      <item><math|h<rsub|h>> is the hash of the parachains header this
+      announcement is in the context of.
+
+      <item><math|R<rsub|h>> is the hash of the parachain Runtime.
+
+      <item><math|C<rsub|h>> is the hash of the encoded commitments made as a
+      result of candidate execution <todo|clarify>.
+    </itemize-dot>
+  </definition>
+
+  \;
+
   Validators back the validity respectively the invalidity of candidates by
   extending those into candidate receipts as defined in Definition
   <reference|defn-candidate-receipt> and communicate those receipts by
   issuing statements as defined in Definition
-  <reference|defn-gossip-statement>. Validator <math|v> needs to perform
-  Algorithm <reference|algo-primary-validation-announcement> to announce the
-  statement of primary validation to the Polkadot network. If the validator
-  receives a statement from another validator, the candidate is confirmed
-  based on algorithm <reference|algo-endorse-candidate-receipt>.
+  <reference|defn-gossip-statement>. A validator needs to perform Algorithm
+  <reference|algo-primary-validation-announcement> to announce the statement
+  of primary validation to the Polkadot network. If the validator receives a
+  statement from another validator, the candidate is confirmed based on
+  algorithm <reference|algo-endorse-candidate-receipt>.
 
   \;
 
