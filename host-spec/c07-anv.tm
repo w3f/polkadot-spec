@@ -820,22 +820,36 @@
   behavior prevented here?>.
 
   <\definition>
-    A block announcement message is a datastructure of the following format:
+    A <strong|block announcement> message is a datastructure of the following
+    format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|>|<cell|<around*|(|C<rsub|r>,P,V<rsub|id>,S,P<rsub|r>|)>>|<cell|>>>>
+      <tformat|<table|<row|<cell|>|<cell|<around*|(|C<rsub|r>,C<rsub|s>,C<rsub|h>,V<rsub|id>,S,P<rsub|r>|)>>|<cell|>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|C<rsub|r>> is the candidate receipt\ 
+      <item><math|C<rsub|r>> is the candidate receipt as defined in
+      Definition <reference|defn-candidate-receipt>.
+
+      <item><math|C<rsub|s>> is the statement given by a relay chain
+      validator about the candidate as defined in Definition <todo|todo>.
+
+      <item><math|C<rsub|h>> is the hash of the candidate as defined in
+      Definition <reference|defn-candidate>.
+
+      <item><math|V<rsub|id>> is the index of the validator in the authority
+      set as described in Section <reference|sect-authority-set>.
+
+      <item><math|S> is the signature of the valdator <math|V<rsub|id>> who
+      signed statement <math|C<rsub|s>>.
     </itemize-dot>
   </definition>
 
   <\definition>
-    A <strong|candidate receipt> is included in block announcements. It's a
-    datastructure of the following format:
+    <label|defn-candidate-receipt>A <strong|candidate receipt> is included in
+    block announcements. It's a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|>|<around*|(|P<rsub|id>,H<rsub|h>,C<rsub|id>,V<rsub|h>,B<rsub|h>,E<rsub|r>,S,h<rsub|h>,R<rsub|h>,C<rsub|h>|)>|<cell|>>>>
@@ -901,51 +915,6 @@
   attempt to prioritize specific candidates. Each validator decides on its
   own - on whatever metric - which candidate will ultimately get included in
   the block.
-
-  <\definition>
-    <label|defn-candidate-receipt>A <with|font-series|bold|candidate
-    receipt>, <math|C<rsub|receipt><around|(|PoV<rsub|B>|)>>, is an extension
-    of a candidate as defined in Definition <reference|defn-candidate> which
-    includes additional information about the validator which verified the
-    PoV block. The candidate receipt is communicated to other validators by
-    issuing a statement as defined in Definition
-    <reference|defn-gossip-statement>.
-
-    \;
-
-    This type is a tuple of the following format:
-
-    <\equation*>
-      C<rsub|receipt><around|(|PoV<rsub|B>|)>\<assign\><around|(|id<rsub|p>,h<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>,head<around|(|B|)>,id<rsub|C>,Sig<rsup|Collator><rsub|SR25519>,h<rsub|b><around|(|PoV<rsub|B>|)>,Blake2b<around|(|CC<around|(|PoV<rsub|B>|)>|)>|)>
-    </equation*>
-
-    where each value represents:
-
-    <\itemize>
-      <item><math|id<rsub|p>>: the Parachain Id this candidate is for.
-
-      <item><math|h<rsub|b><around|(|B<rsub|<rsup|relay><rsub|parent>>|)>>:
-      the hash of the relay chain block that this candidate should be
-      executed in the context of.
-
-      <item><math|head<around|(|B|)>>: the head data (Definition
-      <reference|defn-head-data>) of block <math|B>. <todo|@fabio (collator
-      module relevant?)>.
-
-      <item><math|id<rsub|C>>: the collator relay-chain account ID as defined
-      in Definition <todo|@fabio>.
-
-      <item><math|Sig<rsup|Collator><rsub|SR25519>>: the signature on the
-      256-bit Blake2 hash of the block data by the collator.
-
-      <item><math|h<rsub|b><around|(|PoV<rsub|B>|)>>: the hash of the PoV
-      block.
-
-      <item><math|Blake2b<around|(|CC<around|(|PoV<rsub|B>|)>|)>>: The hash
-      of the commitments made as a result of validation, as defined in
-      Definition <reference|defn-candidate-commitments>.
-    </itemize>
-  </definition>
 
   <\definition>
     <label|defn-candidate-commitments><with|font-series|bold|Candidate
