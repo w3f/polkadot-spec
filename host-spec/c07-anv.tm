@@ -815,16 +815,16 @@
   <verbatim|Seconded> statement as described in Section <todo|todo>.
   Receiving this message implies that the proposed candidate is likely to be
   inlcuded in the relay chain, making the candidate suitable to be announced
-  to peers as described in Definition <todo|todo>. If no Seconded statement
-  is received, no such announcement should take place <todo| how is bad
-  behavior prevented here?>.
+  to peers as described in Definition <reference|defn-block-announcement>. If
+  no Seconded statement is received, no such announcement should take place
+  <todo| how is bad behavior prevented here?>.
 
   <\definition>
-    A <strong|block announcement> message is a datastructure of the following
-    format:
+    <label|defn-block-announcement>A <strong|block announcement> message is a
+    datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|>|<cell|<around*|(|C<rsub|r>,C<rsub|s>,C<rsub|h>,V<rsub|id>,S,P<rsub|r>|)>>|<cell|>>>>
+      <tformat|<table|<row|<cell|>|<cell|<around*|(|C<rsub|r>,C<rsub|s>,C<rsub|h>,V<rsub|id>,S|)>>|<cell|>>>>
     </eqnarray*>
 
     where
@@ -917,6 +917,22 @@
   the block.
 
   <\definition>
+    A <strong|candidate statement> is a message created by the relay chain
+    validator on whether a produced candidate which was submitted by a
+    collator is valid or is likely to be included in a relay chain block.
+    It's a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><rprime|''>Seconded<rprime|''>
+      - proposal for inclusion>>|<row|<cell|1<space|1em><rprime|''>Valid<rprime|''>
+      - the parachain candidate is valid>>>>>>|<cell|>>>>
+    </eqnarray*>
+
+    Which variant is constructed depends on the current stage of the
+    validation process. This is described further in Section <todo|todo>.
+  </definition>
+
+  <\definition>
     <label|defn-candidate-commitments><with|font-series|bold|Candidate
     commitments>, <math|C<rsub|c>>, are results of the execution and
     validation of parachain (or parathread) candidates whose produced values
@@ -944,41 +960,6 @@
     the block hash of the relay chain being referred to and
     <math|h<rsub|b><around|(|C<rsub|coll><around|(|PoV<rsub|B>|)>|)>> is the
     hash of some candidate localized to the same Relay chain block.
-  </definition>
-
-  <\definition>
-    <label|defn-gossip-statement>A <with|font-series|bold|statement> notifies
-    other validators about the validity of a PoV block. This type is a tuple
-    of the following format:
-
-    <\equation*>
-      <around|(|Stmt,id<rsub|\<bbb-V\>>,Sig<rsup|Valdator><rsub|SR25519>|)>
-    </equation*>
-
-    where <math|Sig<rsup|Validator><rsub|SR25519>> is the signature of the
-    validator and <math|id<rsub|\<bbb-V\>>> refers to the index of validator
-    according to the authority set as described in Section
-    <reference|sect-authority-set<strong|>>. <math|Stmt> refers to a
-    statement the validator wants to make about a certain candidate.
-    <math|Stmt> is a varying data type (Definition
-    <reference|defn-scale-codec>) and can be one of the following values:
-
-    <\equation*>
-      Stmt=<choice|<tformat|<table|<row|<cell|0,>|<cell|<text|Seconded,
-      followed by: >C<rsub|receipt><around|(|PoV<rsub|B>|)>>>|<row|<cell|1,>|<cell|<text|Validity,
-      followed by: >Blake2<around|(|C<rsub|coll><around|(|PoV<rsub|B>|)>|)>>>|<row|<cell|2,>|<cell|<text|Invalidity,
-      followed by: >Blake2<around|(|C<rsub|coll><around|(|PoV<rsub|B>|)>|)>>>>>>
-    </equation*>
-
-    The main semantic difference between `Seconded` and `Valid` comes from
-    the fact that every validator may second only one candidate per relay
-    chain block; this places an upper bound on the total number of candidates
-    whose validity needs to be checked. A validator who seconds more than one
-    parachain candidate per relay chain block is subject to slashing.
-
-    Validation does not directly create a seconded statement, but is rather
-    upgraded by the validator when it choses to back a valid candidate as
-    described in Algorithm <reference|algo-primary-validation-announcement>.
   </definition>
 
   <\algorithm|<label|algo-primary-validation-announcement><name|PrimaryValidationAnnouncement>(<math|PoV<rsub|B>>)>
