@@ -790,20 +790,30 @@
 
   Collators follow the relay chain to act as consensus for the parachain.
 
-  <subsection|Following the best Head>
+  <subsection|Collators>
 
   The collator must follow the best head (latest block) of the relay chain.
   This can be achieved in two ways:
 
   <\itemize-dot>
-    <item>Fetch the best head from the persisted validation data as described
-    in Section <todo|todo>.
+    <item>Fetch the best head currently known by the collator.
 
-    <item>Listen to incoming blocks received from peers. If it contains a
-    newer head,\ 
+    <item>Listen to incoming block announcements from peers as defined in
+    Definition <reference|defn-block-announcement>. If it contains a newer
+    relay chain block, the collator must keep track of it.
   </itemize-dot>
 
+  <subsection|Relay Chain Validator>
+
+  \;
+
+  \;
+
   <section|Candidate Backing><label|sect-primary-validaty-announcement>
+
+  <subsection|Parachain Block Verification>
+
+  \;
 
   <subsection|Block Announcement>
 
@@ -812,12 +822,13 @@
   mechanism must be provided in order to limit the import of blocks submitted
   by collators, which could be in the millions. To solve this, collators send
   their candidates to relay chain validators and wait for a
-  <verbatim|Seconded> statement as described in Section <todo|todo>.
-  Receiving this message implies that the proposed candidate is likely to be
-  inlcuded in the relay chain, making the candidate suitable to be announced
-  to peers as described in Definition <reference|defn-block-announcement>. If
-  no Seconded statement is received, no such announcement should take place
-  <todo| how is bad behavior prevented here?>.
+  <verbatim|Seconded> statement as described in Section
+  <reference|defn-candidate-statement>. Receiving this message implies that
+  the proposed candidate is likely to be inlcuded in the relay chain, making
+  the candidate suitable to be announced to peers as described in Definition
+  <reference|defn-block-announcement>. If no <verbatim|Seconded> statement is
+  received, no such announcement should take place <todo|how is bad behavior
+  prevented here?>.
 
   <\definition>
     <label|defn-block-announcement>A <strong|block announcement> message is a
@@ -845,6 +856,10 @@
       <item><math|S> is the signature of the valdator <math|V<rsub|id>> who
       signed statement <math|C<rsub|s>>.
     </itemize-dot>
+
+    Collators that receive this announcement should check whether the
+    signature of the validator is valid <todo|how do collators know about the
+    current authority set?>.
   </definition>
 
   <\definition>
@@ -889,38 +904,12 @@
     </itemize-dot>
   </definition>
 
-  \;
-
-  Validators back the validity respectively the invalidity of candidates by
-  extending those into candidate receipts as defined in Definition
-  <reference|defn-candidate-receipt> and communicate those receipts by
-  issuing statements as defined in Definition
-  <reference|defn-gossip-statement>. A validator needs to perform Algorithm
-  <reference|algo-primary-validation-announcement> to announce the statement
-  of primary validation to the Polkadot network. If the validator receives a
-  statement from another validator, the candidate is confirmed based on
-  algorithm <reference|algo-endorse-candidate-receipt>.
-
-  \;
-
-  As algorithm <reference|algo-primary-validation-announcement> and
-  <reference|algo-endorse-candidate-receipt> clarifies, the validator should
-  blacklist collators which send invalid candidates and announce this
-  misbehavior. If another validator claims that an invalid candidates is
-  actually valid, that misbehavior must be announced, too. <todo|@fabio>
-
-  \;
-
-  The validator tries to back as many candidates as it can, but does not
-  attempt to prioritize specific candidates. Each validator decides on its
-  own - on whatever metric - which candidate will ultimately get included in
-  the block.
-
   <\definition>
-    A <strong|candidate statement> is a message created by the relay chain
-    validator on whether a produced candidate which was submitted by a
-    collator is valid or is likely to be included in a relay chain block.
-    It's a varying datatype of the following format:
+    <label|defn-candidate-statement>A <strong|candidate statement> is a
+    message created by the relay chain validator on whether a produced
+    candidate which was submitted by a collator is valid or is likely to be
+    included in a relay chain block. It's a varying datatype of the following
+    format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><rprime|''>Seconded<rprime|''>
