@@ -1,8 +1,8 @@
-<TeXmacs|1.99.16>
+<TeXmacs|1.99.21>
 
 <project|host-spec.tm>
 
-<style|<tuple|tmbook|algorithmacs-style>>
+<style|<tuple|tmbook|/home/anon/.TeXmacs/packages/algorithmacs-style.ts>>
 
 <\body>
   <assign|blobB|<macro|<math|<wide|B|\<bar\>>>>><assign|PoVB|<macro|<math|PoV<rsub|B>>>><assign|paraValidSet|<macro|<math|\<cal-V\><rsub|\<rho\>>>>>
@@ -68,17 +68,8 @@
   <section|Preliminaries>
 
   <\definition>
-    <label|defn-scale-codec>The Polkadot project uses the
-    <with|font-series|bold|SCALE codec> to encode common data types such as
-    integers, byte arrays, varying data types as well as other data
-    structure. The SCALE codec is defined in a separate document known as
-    \PThe Polkadot Host - Protocol Specification\Q. <todo|@fabio: link to
-    document>
-  </definition>
-
-  <\definition>
-    <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, is a
-    datastructure of the following format:
+    <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, or
+    <strong|PoV> block, is a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,E,H<rsub|r>|)>>>|<row|<cell|E>|<cell|=>|<cell|<around*|(|e<rsub|0>,\<ldots\>e<rsub|n>|)>>>>>
@@ -701,12 +692,12 @@
 
   <\itemize-dot>
     <item><name|RelayParent> - Fetches the parent block hash of the relay
-    chain.
+    chain as described in Section <reference|sect-collator-consensus>.
 
     <item><name|ValidationData> - Fetches the persistent validation data as
     defined in Definition <reference|defn-persisted-validation-data>.
 
-    <item><name|PrevHead> - Derives the parachain parent header from
+    <item><name|ParentHead> - Derives the parachain parent header from
     validation data <math|v<rsub|d>>.
 
     <item><name|ProduceCandidate> - Produces a candidate as defined in
@@ -786,14 +777,11 @@
     </itemize-dot>
   </definition>
 
-  <section|Consensus>
+  <section|Consensus><label|sect-collator-consensus>
 
-  Collators follow the relay chain to act as consensus for the parachain.
-
-  <subsection|Collators>
-
-  The collator must follow the best head (latest block) of the relay chain.
-  This can be achieved in two ways:
+  Collators follow the relay chain to act as consensus for the parachain. The
+  collator must follow the best head (latest block) of the relay chain. This
+  can be achieved in two ways:
 
   <\itemize-dot>
     <item>Fetch the best head currently known by the collator.
@@ -803,17 +791,14 @@
     relay chain block, the collator must keep track of it.
   </itemize-dot>
 
-  <subsection|Relay Chain Validator>
+  The relay chain head is used for parachain block production as described in
+  Section <reference|sect-parachain-block-production>.
 
   \;
 
-  \;
+  <todo|spec networking>
 
   <section|Candidate Backing><label|sect-primary-validaty-announcement>
-
-  <subsection|Parachain Block Verification>
-
-  \;
 
   <subsection|Block Announcement>
 
@@ -827,7 +812,7 @@
   the proposed candidate is likely to be inlcuded in the relay chain, making
   the candidate suitable to be announced to peers as described in Definition
   <reference|defn-block-announcement>. If no <verbatim|Seconded> statement is
-  received, no such announcement should take place <todo|how is bad behavior
+  received, no such announcement takes place <todo|how is bad behavior
   prevented here?>.
 
   <\definition>
@@ -845,7 +830,8 @@
       Definition <reference|defn-candidate-receipt>.
 
       <item><math|C<rsub|s>> is the statement given by a relay chain
-      validator about the candidate as defined in Definition <todo|todo>.
+      validator about the candidate as defined in Definition
+      <reference|defn-candidate-statement>.
 
       <item><math|C<rsub|h>> is the hash of the candidate as defined in
       Definition <reference|defn-candidate>.
@@ -858,8 +844,9 @@
     </itemize-dot>
 
     Collators that receive this announcement should check whether the
-    signature of the validator is valid <todo|how do collators know about the
-    current authority set?>.
+    candidate statement <math|C<rsub|s>> is <verbatim|Seconded> and whether
+    the signature of the validator is valid <todo|how do collators know about
+    the current authority set?>.
   </definition>
 
   <\definition>
@@ -1052,47 +1039,9 @@
     connected peers.
   </itemize>
 
-  <subsection|Inclusion of candidate receipt on the relay
-  chain><label|sect-inclusion-of-candidate-receipt>
+  <section|PoV Recovery>
 
-  <todo|@fabio: should this be a subsection?>
-
-  <\definition>
-    <label|defn-para-proposal><with|font-series|bold|Parachain Block
-    Proposal>, noted by <math|P<rsup|B><rsub|\<rho\>>>is a candidate receipt
-    for a parachain block <math|B> for a parachain <math|\<rho\>> along with
-    signatures for at least 2/3 of <math|\<cal-V\><rsub|\<rho\>>>.
-  </definition>
-
-  A block producer which observe a Parachain Block Proposal as defined in
-  definition <reference|defn-para-proposal> <syed|may/should|?> include the
-  proposal in the block they are producing according to Algorithm
-  <reference|algo-include-parachain-proposal> during block production
-  procedure.
-
-  <\algorithm|<label|algo-include-parachain-proposal><name|IncludeParachainProposal>(<math|P<rsup|B><rsub|\<rho\>>>)>
-    <\algorithmic>
-      <state|TBS>
-    </algorithmic>
-  </algorithm>
-
-  <section|PoV Distribution>
-
-  <todo|@fabio>
-
-  <subsection|Primary Validation Disagreement><label|sect-primary-validation-disagreemnt>
-
-  <syed|Parachain|verify> validators need to keep track of candidate receipts
-  (see Definition <reference|defn-candidate-receipt>) and validation failure
-  messages of their peers. In case, there is a disagreement among the
-  parachain validators about <math|<wide|B|\<bar\>>>, all parachain
-  validators must invoke Algorithm <reference|algo-primary-validation-disagreemnt>
-
-  <\algorithm|<label|algo-primary-validation-disagreemnt><name|PrimaryValidationDisagreement>>
-    <\algorithmic>
-      <state|TBS>
-    </algorithmic>
-  </algorithm>
+  <todo|todo>
 
   <section|Availability>
 
