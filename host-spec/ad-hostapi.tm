@@ -912,7 +912,7 @@
     signature is valid or <verbatim|false> if otherwise.
   </itemize>
 
-  <subsection|<strong|<verbatim|ext_crypto_ed25519_batch_verify>>>
+  <subsection|<verbatim|ext_crypto_ed25519_batch_verify>>
 
   Registers a <verbatim|ed25519> signature for batch verification. Batch
   verification must be enabled by calling
@@ -1124,7 +1124,7 @@
     signature is valid, <verbatim|false> if otherwise.
   </itemize>
 
-  <subsection|<strong|<verbatim|ext_crypto_sr25519_batch_verify>>>
+  <subsection|<verbatim|ext_crypto_sr25519_batch_verify>>
 
   Registers a <verbatim|sr25519> signature for batch verification. Batch
   verification must be enabled by calling
@@ -1306,7 +1306,7 @@
     signature is valid, <verbatim|false> if otherwise.
   </itemize>
 
-  <subsection|<strong|<verbatim|ext_ecdsa_batch_verify>>>
+  <subsection|<verbatim|ext_ecdsa_batch_verify>>
 
   Registers a <verbatim|ecdsa> signature for batch verification. Batch
   verification must be enabled by calling
@@ -2279,7 +2279,7 @@
 
   Interface that provides functions to access the Offchain database.
 
-  <subsection|<verbatim|<strong|ext_offchain_index_set<strong|>>>>
+  <subsection|<verbatim|ext_offchain_index_set>>
 
   Write a key value pair to the offchain database in a buffered fashion.
 
@@ -2303,7 +2303,7 @@
     <reference|defn-runtime-pointer-size> indicating the value.\ 
   </itemize-dot>
 
-  <subsection|<verbatim|<strong|ext_offchain_index_clear>>>
+  <subsection|<verbatim|ext_offchain_index_clear>>
 
   Remove a key and its associated value from the offchain database.
 
