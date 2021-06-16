@@ -1296,18 +1296,18 @@
   equal to the voting round <math|r<rsub|n>> currently undergoing in the
   network.
 
-  The process of joining a new voter set verses rejoining the current voter
-  set after possible event of network disconnect are different from each
-  other as being explained in this chapter.
+  The process of joining a new voter set is different from the one of
+  rejoining the current voter set after a network disconnect. The details of
+  this distinction are described further in this section.
 
   <subsubsection|Voter Set Changes>
 
-  A GRANDPA voter node which is initiating GRANDPA protocol as part of
+  A GRANDPA voter node that is initiating the GRANDPA protocol as part of
   joining a new authority set is required to execute Algorithm
   <reference|algo-initiate-grandpa>. Algorithm
   <reference|algo-initiate-grandpa> mandates the initialization procedure for
-  GRANDPA protocol. Note that GRANDPA round number reset to 0 for every
-  authority set change.
+  the GRANDPA protocol. Note that the GRANDPA round number resets to 0 for
+  every authority set change.
 
   <\algorithm>
     <label|algo-initiate-grandpa><name|Initiate-Grandpa>(
@@ -1353,14 +1353,15 @@
 
   <subsubsection|Rejoining the Same Voter Set>
 
-  When a voter node rejoins the network after a possible disconnect from the
-  reset of the voter set and there has been no change to the voter set, they
-  must continue performing GRANDPA protocol at their latest state they have
-  last observed before getting disconnected from the network, essentially
-  ignoring any possible progress in GRANDPA finalization. It is through the
-  process described in Section <reference|sect-grandpa-catchup> which they
-  eventually gets updated about the current GRANDPA round and are able to
-  synchronize their state with the rest of the voting set.
+  When a voter node rejoins the network after a disconnect from the voter set
+  and with the condition that there has been no change to the voter set at
+  the time of the disconnect, the node must continue performing the GRANDPA
+  protocol at the same state as before getting disconnected from the network,
+  ignoring any possible progress in GRANDPA finalization. Following
+  reconnection, the node eventually gets updated to the current GRANDPA round
+  and synchronizes its state with the rest of the voting set through the
+  process called Catchup, described in Section
+  <reference|sect-grandpa-catchup>.\ 
 
   <subsection|Voting Process in Round <math|r>>
 
