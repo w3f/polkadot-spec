@@ -1294,16 +1294,26 @@
   each round of voting is assigned a unique sequential round number
   <math|r<rsub|v>>, it needs to determine and set its round counter <math|r>
   equal to the voting round <math|r<rsub|n>> currently undergoing in the
-  network. Algorithm <reference|algo-initiate-grandpa> mandates the
-  initialization procedure for GRANDPA protocol for a joining validator.
+  network.
+
+  The process of joining a new voter set verses rejoining the current voter
+  set after possible event of network disconnect are different from each
+  other as being explained in this chapter.
+
+  <subsubsection|Voter Set Changes>
+
+  A GRANDPA voter node which is initiating GRANDPA protocol as part of
+  joining a new authority set is required to execute Algorithm
+  <reference|algo-initiate-grandpa>. Algorithm
+  <reference|algo-initiate-grandpa> mandates the initialization procedure for
+  GRANDPA protocol. Note that GRANDPA round number reset to 0 for every
+  authority set change.
 
   <\algorithm>
     <label|algo-initiate-grandpa><name|Initiate-Grandpa>(
 
-    <math|r<rsub|last>>: <math|>last round number (See the following),
-
-    ,<math|B<rsub|last>>: the last block which has been finalized on the
-    chain (see Definition <reference|defn-finalized-block>)
+    <math|B<rsub|last>>: the last block which has been finalized on the chain
+    (see Definition <reference|defn-finalized-block>)
 
     )
   <|algorithm>
@@ -1313,25 +1323,19 @@
       </state>
 
       <\state>
-        <name|Last-Completed-Round><math|\<leftarrow\>0>
-      </state>
-
-      <\state>
-        <\IF>
-          <math|r<rsub|last>=0>
-        </IF>
-      </state>
-
-      <\state>
         <name|Best-Final-Candidate(0)><math|\<leftarrow\>B<rsub|last>>
       </state>
 
       <\state>
-        <name|GRANDPA-GHOST>(<math|0>)<math|\<leftarrow\>B<rsub|last>><END>
+        <name|GRANDPA-GHOST>(<math|0>)<math|\<leftarrow\>B<rsub|last>>
       </state>
 
       <\state>
-        <math|r<rsub|n>\<leftarrow\>r<rsub|last+1>>
+        <name|Last-Completed-Round><math|\<leftarrow\>0>
+      </state>
+
+      <\state>
+        <math|r<rsub|n>\<leftarrow\>1>
       </state>
 
       <\state>
@@ -1340,23 +1344,23 @@
     </algorithmic>
   </algorithm>
 
-  <math|r<rsub|last>> is equal to the latest round the voter has observed
-  that other voters are voting on. The voter obtains this information through
-  various gossiped messages including those mentioned in Definition
-  <reference|defn-finalized-block>.
-
-  <math|r<rsub|last>> is set to 0 if the GRANDPA node is initiating the
-  GRANDPA voting process as a part of a new authority set. This is because
-  the GRANDPA round number reset to 0 for every authority set change.
-
-  <subsubsection|Voter Set Changes>
-
   Voter set changes are signalled by Runtime via a consensus engine message
   as described in Section <reference|sect-consensus-message-digest>. When
   Authorities process such messages they must not vote on any block with a
   higher number than the block at which the change is supposed to happen. The
   new authority set should reinitiate GRANDPA protocol by executing Algorithm
   <reference|algo-initiate-grandpa>.
+
+  <subsubsection|Rejoining the Same Voter Set>
+
+  When a voter node rejoins the network after a possible disconnect from the
+  reset of the voter set and there has been no change to the voter set, they
+  must continue performing GRANDPA protocol at their latest state they have
+  last observed before getting disconnected from the network, essentially
+  ignoring any possible progress in GRANDPA finalization. It is through the
+  process described in Section <reference|sect-grandpa-catchup> which they
+  eventually gets updated about the current GRANDPA round and are able to
+  synchronize their state with the rest of the voting set.
 
   <subsection|Voting Process in Round <math|r>>
 
