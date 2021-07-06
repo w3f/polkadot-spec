@@ -20,6 +20,8 @@ tex: polkadot-host-spec.tex
 
 diff: polkadot-host-spec.diff.pdf
 
+html: html/index.html
+
 temp: $(GENERATED)
 
 
@@ -32,6 +34,11 @@ polkadot-host-spec.pdf: $(SOURCES) host-spec.scm
 
 polkadot-host-spec.tex: $(SOURCES) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm -x "(convert-expanded \"$$PWD/$<\" \"$$PWD/$@\")" --quit
+
+
+html/index.html: $(SOURCES) host-spec.scm
+	mkdir -p html
+	xvfb-run texmacs -b host-spec.scm -x "(convert-updated-expanded \"$$PWD/$<\" \"$$PWD/$@\" \"$(TMPDIR)\")" --quit
 
 
 REV     ?= HEAD
@@ -67,5 +74,5 @@ deaux:
 
 
 clean:
-	rm -rf $(REVDIR) $(GENERATED) polkadot-host-spec.pdf polkadot-host-spec.tex polkadot-host-spec.diff.pdf
+	rm -rf $(REVDIR) $(GENERATED) html polkadot-host-spec.pdf polkadot-host-spec.tex polkadot-host-spec.diff.pdf
 

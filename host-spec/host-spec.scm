@@ -9,6 +9,14 @@
   (buffer-export (current-buffer) (string-append tmpdir "/load-updated.export.tmp") "pdf")
   (generate-all-aux) (inclusions-gc) (update-current-buffer))
 
+;; This function updates/rebuilds the toc, bibliography, index and glossar
+;; of the document specified and save the result in place. Requires a tempdir
+;; to which it triggers a export.
+(tm-define (update-all input tmpdir)
+  (load-updated input tmpdir)
+  (buffer-save (current-buffer)))
+
+
 ;; This is a custom compare function with the major difference
 ;; being that it updates all indices before the comparision
 ;; and also highlights differences in included files.
@@ -26,6 +34,7 @@
            (rt (stree->tree mv)))
       (tree-set (buffer-tree) rt))))
 
+
 ;; This is a custom convert function that expands all includes
 ;; before conversion.
 (tm-define (convert-expanded input output)
@@ -41,9 +50,9 @@
   (generate-all-aux) (inclusions-gc) (update-current-buffer)
   (export-buffer output))
 
-;; This function updates/rebuilds the toc, bibliography, index and glossar
-;; of the document specified and save the result in place. Requires a tempdir
-;; to which it triggers a export.
-(tm-define (update-all input tmpdir)
+;; This is a custom convert function that expands all includes and  updates 
+;; the toc, bibliography, index and glossar before conversion.
+(tm-define (convert-updated-expanded input output tmpdir)
   (load-updated input tmpdir)
-  (buffer-save (current-buffer)))
+  (buffer-expand-includes)
+  (export-buffer output))
