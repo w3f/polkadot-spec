@@ -1045,12 +1045,16 @@
 
   <section|Availability>
 
-  Backed candidates must be widely available for the entire, elected
-  validators set without requiring each of those to maintain a full copy. PoV
-  blocks get broken up into erasure-encoded chunks and each validators keep
-  track of how those chunks are distributed among the validator set. When a
-  validator has to verify a PoV block, it can request the chunk for one of
-  its peers.
+  In order for the Polkadot protocol to ensure the security of validatod
+  parachain blocks, it must be able to reproduce those blocks in case of
+  future dispute. To this aim, \ backed candidates must be available for the
+  entire, elected validators set. However it is impractical to require each
+  of those validator to maintain a full copy of all PoV blocks. A practical
+  solution to this problem is to employ erasure codes: PoV blocks are encoded
+  using Reed-Solomon erasure codes and and \ erasure-encoded chunks are
+  distributed among the validators. Each validator keeps track of how those
+  chunks are distributed among the validator set. When a validator has to
+  verify a PoV block, it can request the relevant chunks from its peers.
 
   <\definition>
     <label|defn-erasure-encoder-decoder>The <with|font-series|bold|erasure
