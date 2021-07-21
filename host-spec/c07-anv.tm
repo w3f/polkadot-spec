@@ -1068,22 +1068,68 @@
   section.<verbatim|>
 
   <\definition>
+    For validator set of size <math|n>, The <strong|encoding parameters> for
+    Polkadot Reed-Solomon code is set as follow:
+
+    <\itemize>
+      <item><strong|<math|k>,the number of message symbols> is set to be
+      <math|<frac|n|4>>.
+
+      <item><math|><strong|n, the number of code symbols> is set to be
+      <math|n>.
+    </itemize>
+  </definition>
+
+  <\definition>
     <label|defn-erasure-encoder-decoder>The <with|font-series|bold|erasure
     encoder>, <with|font-series|bold|<math|encode<rsub|k,n>> >is defined to
-    be the Reed-Solomon encoder for a message of length k symbols which
+    be the Reed-Solomon encoder of a message of length k symbols which
     encodes it into <math|n> symbles as follows:
 
     <\equation*>
-      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|\<bbb-B\><rsub|m>>|<cell|\<rightarrow\>>|<cell|S<rsub|n>>>|<row|<cell|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>>|<cell|\<rightarrow\>>|<cell|<around*|[|B<rsub|1>,B<rsub|2>,\<ldots\>,B<rsub|n>|]>>>>>>|\<nobracket\>>
+      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|\<bbb-B\><rsub|m>>|<cell|\<rightarrow\>>|<cell|S<rsub|n>>>|<row|<cell|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>>|<cell|\<rightarrow\>>|<cell|<around*|[|S<rsub|1>,S<rsub|2>,\<ldots\>,S<rsub|n>|]>>>>>>|\<nobracket\>>
     </equation*>
 
-    \ where <todo|define shards and the how bytes are distributed>defined in
-    <cite|??>.
+    \ where <math|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>> is a
+    <math|S<rsub|i>> defined in <reference|defn-erasure-shard>.
+  </definition>
+
+  <\definition>
+    <label|defn-erasure-shard> For a validator node <math|i>, and byte array
+    blob <math|B=<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>\<in\>\<bbb-B\><rsub|M>>
+    we define <strong|<math|S<rsub|i>>> as the <strong|<math|i>'th erasure
+    coded Shard> which is a byte array of length
+    <math|<around*|\<lceil\>|m/2k|\<rceil\>>>. <todo|define how bytes are
+    distributed before encoding? First k Shards are containing pure data?>
   </definition>
 
   <\definition>
     The <math|><with|font-series|bold|erasure decoder
-    <math|decoder<rsub|k,n>>> <math|>
+    <math|decoder<rsub|k,n>>> is defined to be the Reed-Solomon decoder of a
+    code word of n symboles into a message of k symbols as follows:
+
+    <\equation*>
+      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|O
+      S<rsub|n>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\><rsub|m>>>|<row|<cell|<around*|[|O
+      S<rsub|1>,O S<rsub|2>,\<ldots\>,O S<rsub|n>|]>>|<cell|\<rightarrow\>>|<cell|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>>>>>>|\<nobracket\>>
+    </equation*>
+
+    Where <math|OS<rsub|n>> is the set of sequence of length n of optional
+    shards as defined in Definition <reference|defn-erasure-optional-shard>
+    and <math|\<bbb-B\><rsub|m>> is the set of byte arrays of length m
+    representing the decoded blob of data.
+  </definition>
+
+  <\definition>
+    For a validator node <math|i>, we define <strong|O<math|S<rsub|i>>> as
+    the <strong|<math|i>'th Optional Shard> which is a of varying type:
+
+    <\equation*>
+      <tabular|<tformat|<table|<row|<cell|idx>|<cell|>|<cell|>>|<row|<cell|0>|<cell|None>|<cell|When
+      S<rsub|i> \ is not received by the constructing node
+      >>|<row|<cell|1>|<cell|S<rsub|i>>|<cell|When S<rsub|i> shard is
+      received.>>>>>
+    </equation*>
   </definition>
 
   <\algorithm|<label|algo-erasure-encode><name|Erasure-Encode>(<math|<wide|B|\<bar\>>>:
