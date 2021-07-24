@@ -260,7 +260,7 @@
   <\verbatim>
     (func $ext_storage_root_version_1
 
-    (return i32))
+    (return i64))
   </verbatim>
 
   \;
@@ -268,7 +268,8 @@
   <strong|Arguments>:
 
   <\itemize>
-    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
+    <item><verbatim|return>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> to the buffer containing the
     256-bit Blake2 storage root.
   </itemize>
 
@@ -283,7 +284,7 @@
   <\verbatim>
     (func $ext_storage_changes_root_version_1
 
-    (param $parent_hash i64) (return i32))
+    (param $parent_hash i64) (return i64))
   </verbatim>
 
   \;
@@ -295,7 +296,8 @@
     Definition <reference|defn-runtime-pointer-size> indicating the SCALE
     encoded block hash.
 
-    <item><verbatim|return>: a 32-bit pointer to the buffer containing the
+    <item><verbatim|return>: a pointer-size as defined in Definition
+    <reference|defn-runtime-pointer-size> to the buffer containing an optional
     256-bit Blake2 changes root.
   </itemize>
 
