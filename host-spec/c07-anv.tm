@@ -1087,7 +1087,7 @@
     encodes it into <math|n> symbles as follows:
 
     <\equation*>
-      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|\<bbb-B\><rsub|m>>|<cell|\<rightarrow\>>|<cell|S<rsub|n>>>|<row|<cell|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>>|<cell|\<rightarrow\>>|<cell|<around*|[|S<rsub|1>,S<rsub|2>,\<ldots\>,S<rsub|n>|]>>>>>>|\<nobracket\>>
+      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|\<bbb-B\><rsub|m>>|<cell|\<rightarrow\>>|<cell|S<rsub|n>>>|<row|<cell|<around*|(|b<rsub|1>,\<ldots\>,b<rsub|m>|)>>|<cell|\<rightarrow\>>|<cell|<around*|(|\<bbb-S\><rsub|1>,\<bbb-S\><rsub|2>,\<ldots\>,\<bbb-S\><rsub|n>|)>>>>>>|\<nobracket\>>
     </equation*>
 
     \ where <math|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>> is a
@@ -1096,7 +1096,7 @@
 
   <\definition>
     <label|defn-erasure-shard> For a validator node <math|i>, and byte array
-    blob <math|B=<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>\<in\>\<bbb-B\><rsub|M>>
+    blob <math|B=<around*|(|b<rsub|1>,\<ldots\>,b<rsub|m>|)>\<in\>\<bbb-B\><rsub|M>>
     we define <strong|<math|S<rsub|i>>> as the <strong|<math|i>'th erasure
     coded Shard> which is a byte array of length
     <math|<around*|\<lceil\>|m/2k|\<rceil\>>>. <todo|define how bytes are
@@ -1109,9 +1109,9 @@
     code word of n symboles into a message of k symbols as follows:
 
     <\equation*>
-      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|O
-      S<rsub|n>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\><rsub|m>>>|<row|<cell|<around*|[|O
-      S<rsub|1>,O S<rsub|2>,\<ldots\>,O S<rsub|n>|]>>|<cell|\<rightarrow\>>|<cell|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>>>>>>|\<nobracket\>>
+      decode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|O
+      S<rsub|n>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\><rsub|m>>>|<row|<cell|<around*|(|O
+      S<rsub|1>,O S<rsub|2>,\<ldots\>,O S<rsub|n>|)>>|<cell|\<rightarrow\>>|<cell|<around*|(|b<rsub|1>,\<ldots\>,b<rsub|m>|)>>>>>>|\<nobracket\>>
     </equation*>
 
     Where <math|OS<rsub|n>> is the set of sequence of length n of optional
@@ -1135,52 +1135,47 @@
   <\algorithm|<label|algo-erasure-encode><name|Erasure-Encode>(<math|<wide|B|\<bar\>>>:
   the available PoV blob defined in Definition <reference|defn-blob>)>
     <\algorithmic>
-      <state|TBS>
-
-      <state|<with|font-series|bold|Init> <math|Shards\<leftarrow\>>
+      <state|<with|font-series|bold|><math|Shards\<leftarrow\>>
       <with|font-shape|small-caps|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
 
-      <statex|// Create a trie from the shards in order generate the trie
-      nodes>
+      <\state>
+        Trie <math|\<leftarrow\>><name|Generate-Availability-Merkle-Tree>(Shards)
+      </state>
 
-      <statex|// which are required to verify each chunk with a Merkle root>
-
-      <state|<with|font-series|bold|Init> <math|Trie>>
-
-      <state|<with|font-series|bold|Init> <math|index=0>>
-
-      <\algo-for|<math|shard\<in\>Shards>>
-        <state|<with|font-shape|small-caps|Insert>(<math|Trie,index>,
-        <with|font-shape|small-caps|Blake2>(<math|shard>))>
-
-        <state|<math|index=index+1>>
-      </algo-for>
-
-      <statex|// Insert individual chunks into collection (Definition
-      <reference|defn-erasure-coded-chunks>).>
-
-      <state|<with|font-series|bold|Init> <math|Er<rsub|B>>>
+      <state|<math|Er<rsub|B >\<leftarrow\>\<phi\>>>
 
       <state|<with|font-series|bold|Init> <math|index=0>>
 
-      <\algo-for|<math|shard\<in\>Shards>>
-        <state|<with|font-series|bold|Init> <math|nodes\<leftarrow\>>
-        <with|font-shape|small-caps|Get-Nodes>(<math|Trie,index>)>
+      <\state>
+        \ <FOR-IN|shard\<in\>Shards|>
+      </state>
 
-        <state|<with|font-shape|small-caps|Add>(<math|Er<rsub|B>,<around|(|shard,index,nodes|)>>)>
+      <\state>
+        <math|nodes\<leftarrow\>> <with|font-shape|small-caps|Get-Nodes>(<math|Trie,index>)
+      </state>
 
-        <state|<math|index=index+1>>
-      </algo-for>
+      <\state>
+        <with|font-shape|small-caps|Add>(<math|Er<rsub|B>,<around|(|shard,index,nodes|)>>)
+      </state>
 
-      <algo-return|<math|Er<rsub|B>>>
+      <\state>
+        <math|index\<leftarrow\>index+1><END>
+      </state>
+
+      <\state>
+        <algo-return|<math|Er<rsub|B>>>
+      </state>
     </algorithmic>
   </algorithm>
 
   <\itemize>
     <item><with|font-shape|small-caps|Make-Shards(..)>: return shards for
-    each validator as described in algorithm <reference|algo-make-shards>.
+    each validator as described in Algorithm <reference|algo-make-shards>.
     Return value is defined as <math|<around|(|\<bbb-S\><rsub|0>,...,\<bbb-S\><rsub|n>|)>>
     where <math|\<bbb-S\>\<assign\><around|(|b<rsub|0>,...,b<rsub|n>|)>>
+
+    <item><name|Generate-Availability-Merkle-Tree> is described in Algorithm
+    <reference|algo-gen-availblity-tree>.
 
     <item><with|font-shape|small-caps|Insert(<math|trie,key,val>)>: insert
     the given <math|key> and <math|value> into the <math|trie>.
@@ -1193,6 +1188,9 @@
 
     <item><with|font-shape|small-caps|Add(<math|sequence,item>)>: add the
     given <math|item> to the <math|sequence>.
+
+    <item><math|ER<rsub|B>> is the collection of erasure coded chunk as
+    defined in Definition <reference|defn-erasure-coded-chunks>.
   </itemize>
 
   <\algorithm|<label|algo-make-shards><name|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
@@ -1259,6 +1257,48 @@
     <item><with|font-shape|small-caps|Copy-From(<math|source,len>)>: return
     <math|len> amount of bytes from <math|source>.
   </itemize>
+
+  Algorithm <reference|algo-gen-availblity-tree> creates a Merkle tree from
+  the shards produced by Algorithm <reference|algo-make-shards>. The Merkle
+  tree is to produce the Merkle proofs to verify each chunk.\ 
+
+  <\algorithm>
+    <label|algo-gen-availblity-tree><name|Generate-Availability-Merkle-Tree>(S:
+    Sequence of Shards generated
+
+    by Algorithm <reference|algo-make-shards> )
+  <|algorithm>
+    <\algorithmic>
+      <state|<with|font-series|bold|><math|Trie\<leftarrow\>>> Empty Merkle
+      Tree
+
+      <state|<with|font-series|bold|><math|index\<leftarrow\>0>>
+
+      <\state>
+        <FOR-IN|shard|>S
+      </state>
+
+      <state|<with|font-shape|small-caps|Insert>(<math|Trie,index>,
+      <with|font-shape|small-caps|Blake2>(<math|shard>))>
+
+      <\state>
+        <math|index=index+1><END>
+      </state>
+
+      <\state>
+        <\RETURN>
+          Trie
+        </RETURN>
+      </state>
+    </algorithmic>
+  </algorithm>
+
+  <\todo>
+    \ Either we should spec the trie completly as we did with Storage Trie or
+    we should\ 
+
+    refer to Storage trie spec.
+  </todo>
 
   <\definition>
     <label|defn-erasure-coded-chunks>The <with|font-series|bold|collection of
