@@ -607,8 +607,8 @@
 
   <\definition>
     <label|defn-blob>Accordingly we define the
-    <with|font-series|bold|erasure-encoded blob> or
-    <with|font-series|bold|blob> in short,
+    <with|font-series|bold|Available PoV Blob> or the
+    <with|font-series|bold|Blob> in short,
     <with|font-series|bold|mode|math|<wide|B|\<bar\>>>, to be the tuple:
 
     <\equation*>
@@ -881,8 +881,9 @@
       <math|P<rsub|id>>, <math|H<rsub|h>>, <math|V<rsub|h>> and
       <math|B<rsub|h>>.
 
-      <item><math|h<rsub|h>> is the hash of the parachains header this
-      announcement is in the context of.
+      <item><math|H<rsub|r><around|(|B|)>>: the root of a block's erasure
+      encoding Merkle tree <todo|@fabio: use different symbol for
+      this?>.<verbatim|>
 
       <item><math|R<rsub|h>> is the hash of the parachain Runtime.
 
@@ -1050,20 +1051,43 @@
   future dispute. To this aim, \ backed candidates must be available for the
   entire, elected validators set. However it is impractical to require each
   of those validator to maintain a full copy of all PoV blocks. A practical
-  solution to this problem is to employ erasure codes: PoV blocks are encoded
-  using Reed-Solomon erasure codes and and \ erasure-encoded chunks are
-  distributed among the validators. Each validator keeps track of how those
-  chunks are distributed among the validator set. When a validator has to
-  verify a PoV block, it can request the relevant chunks from its peers.
+  solution to this problem is to employ erasure codes: PoV blocks are broken
+  into chunks and the chunks are encoded using Reed-Solomon erasure codes.
+  Erasure-encoded chunks are arranged into a Merkle tree to ensure their
+  integrity. Subsequently, the encoded chunks are distributed among the
+  validators each along side its Merkle proof of integrity. Each validator
+  keeps track of how those chunks are distributed among the validator set.
+  When a validator has to verify a PoV block, it can request the relevant
+  chunks from its peers, verify its integrity and reconstruct the originally
+  validated PoV block.
+
+  This Section specifies the interaction of a validator node with the erasure
+  code library to obtain the encoded chunk and to reconstructing the original
+  PoV when enough encode chunks are available. However, the specification of
+  the Reed-Solomon encoding/decoding Algorithm is beyond the scope of this
+  section.<verbatim|>
 
   <\definition>
     <label|defn-erasure-encoder-decoder>The <with|font-series|bold|erasure
-    encoder/decoder> <with|font-series|bold|<math|encode<rsub|k,n>/decoder<rsub|k,n>>
-    >is defined to be the Reed-Solomon encoder defined in <cite|??>.
+    encoder>, <with|font-series|bold|<math|encode<rsub|k,n>> >is defined to
+    be the Reed-Solomon encoder for a message of length k symbols which
+    encodes it into <math|n> symbles as follows:
+
+    <\equation*>
+      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|\<bbb-B\><rsub|m>>|<cell|\<rightarrow\>>|<cell|S<rsub|n>>>|<row|<cell|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>>|<cell|\<rightarrow\>>|<cell|<around*|[|B<rsub|1>,B<rsub|2>,\<ldots\>,B<rsub|n>|]>>>>>>|\<nobracket\>>
+    </equation*>
+
+    \ where <todo|define shards and the how bytes are distributed>defined in
+    <cite|??>.
+  </definition>
+
+  <\definition>
+    The <math|><with|font-series|bold|erasure decoder
+    <math|decoder<rsub|k,n>>> <math|>
   </definition>
 
   <\algorithm|<label|algo-erasure-encode><name|Erasure-Encode>(<math|<wide|B|\<bar\>>>:
-  blob defined in Definition <reference|defn-blob>)>
+  the available PoV blob defined in Definition <reference|defn-blob>)>
     <\algorithmic>
       <state|TBS>
 
