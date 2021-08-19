@@ -638,7 +638,7 @@
 
   <\definition>
     <label|net-msg-pov-fetching-request>The <strong|PoV fetching request> is
-    sent by clients who want to request a PoV block from a node. The request
+    sent by clients who want to retrieve a PoV block from a node. The request
     is a datastructure of the following format:
 
     <\equation*>
@@ -663,6 +663,41 @@
 
     where <math|0> is followed by the PoV block and <math|1> indicates that
     the PoV block was not found.
+  </definition>
+
+  <subsection|Availability Chunks>
+
+  <\definition>
+    <label|net-msg-chunk-fetching-request>The <strong|chunk fetching request>
+    is sent by clients wo want to retrieve chunks of a parachain candidate.
+    The request is a datastructure of the following format:
+
+    <\equation*>
+      <around*|(|C<rsub|h>,i|)>
+    </equation*>
+
+    where <math|C<rsub|h>> is the 256-bit hash of the parachain candiate and
+    <math|i> is a 32-bit unsigned integer indicating the index of the chunk
+    to fetch <todo|clarify>. The response message is defined in Definition
+    <reference|net-msg-chunk-fetching-response>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-chunk-fetching-response>The <strong|chunk fetching
+    response> is sent by nodes to the clients who issued a chunk fetching
+    request as defined in Definition <reference|net-msg-chunk-fetching-request>.
+    The reponse, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>C<rsub|r>>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|C<rsub|r>>|<cell|=>|<cell|<around*|(|c,c<rsub|p>|)>>>>>
+    </eqnarray*>
+
+    where 0 is followed by the chunk response, <math|C<rsub|r>> and 1
+    indicates that the requested chunk was not found. <math|C<rsub|r>>
+    contains the erasure-encoded chunk of data belonging to the candidate
+    block, <math|c>, and <math|c<rsub|i>> is that chunks proof in the Merkle
+    tree. Both <math|c> and <math|c<rsub|i>> are byte arrays for type
+    <math|*<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>.
   </definition>
 
   <section|Candidate Selection><label|sect-primary-validation>
