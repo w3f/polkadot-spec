@@ -1,4 +1,4 @@
-<TeXmacs|2.1>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -631,6 +631,39 @@
   </definition>
 
   Note that in the code the blob is referred to as \PAvailableData\Q.
+
+  <section|Network Messages>
+
+  <subsection|PoV Requests and Responses>
+
+  <\definition>
+    <label|net-msg-pov-fetching-request>The <strong|PoV fetching request> is
+    sent by clients who want to request a PoV block from a node. The request
+    is a datastructure of the following format:
+
+    <\equation*>
+      <around*|(|B<rsub|h>|)>
+    </equation*>
+
+    where <math|B<rsub|h>> is the 256-bit hash of the PoV block. The reponse
+    message is defined in Definition <reference|net-msg-pov-fetching-response>.
+
+    \;
+  </definition>
+
+  <\definition>
+    <label|net-msg-pov-fetching-response>The <strong|PoV fetching response>
+    is sent by nodes to the clients who issued a PoV fetching request as
+    defined in Definition <reference|net-msg-pov-fetching-request>. The
+    response, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|=|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>B>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|0> is followed by the PoV block and <math|1> indicates that
+    the PoV block was not found.
+  </definition>
 
   <section|Candidate Selection><label|sect-primary-validation>
 
