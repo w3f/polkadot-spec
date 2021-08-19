@@ -1,8 +1,8 @@
-<TeXmacs|1.99.21>
+<TeXmacs|2.1>
 
 <project|host-spec.tm>
 
-<style|<tuple|tmbook|/home/anon/.TeXmacs/packages/algorithmacs-style.ts>>
+<style|<tuple|tmbook|algorithmacs-style>>
 
 <\body>
   <assign|blobB|<macro|<math|<wide|B|\<bar\>>>>><assign|PoVB|<macro|<math|PoV<rsub|B>>>><assign|paraValidSet|<macro|<math|\<cal-V\><rsub|\<rho\>>>>>
@@ -1072,8 +1072,8 @@
     Polkadot Reed-Solomon code is set as follow:
 
     <\itemize>
-      <item><strong|<math|k>,the number of message symbols> is set to be
-      <math|<frac|n|4>>.
+      <item><strong|<math|k>, the number of message symbols> is set to be
+      <math|<around*|\<lfloor\>|<frac|n-1|3>|\<rfloor\>>+1>.
 
       <item><math|><strong|n, the number of code symbols> is set to be
       <math|n>.
@@ -1087,11 +1087,12 @@
     encodes it into <math|n> symbles as follows:
 
     <\equation*>
-      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|\<bbb-B\><rsub|m>>|<cell|\<rightarrow\>>|<cell|S<rsub|n>>>|<row|<cell|<around*|(|b<rsub|1>,\<ldots\>,b<rsub|m>|)>>|<cell|\<rightarrow\>>|<cell|<around*|(|\<bbb-S\><rsub|1>,\<bbb-S\><rsub|2>,\<ldots\>,\<bbb-S\><rsub|n>|)>>>>>>|\<nobracket\>>
+      encode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|\<bbb-B\><rsub|m>>|<cell|\<rightarrow\>>|<cell|\<bbb-S\><rsub|n>>>|<row|<cell|<around*|(|b<rsub|1>,\<ldots\>,b<rsub|m>|)>>|<cell|\<rightarrow\>>|<cell|<around*|(|S<rsub|1>,S<rsub|2>,\<ldots\>,S<rsub|n>|)>>>>>>|\<nobracket\>>
     </equation*>
 
-    \ where <math|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>> is a
-    <math|S<rsub|i>> defined in <reference|defn-erasure-shard>.
+    \ where <math|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>> is a byte
+    array of arbitrary size <math|m> and <math|S<rsub|n>> is a sequence
+    defined in <reference|defn-erasure-shard>.
   </definition>
 
   <\definition>
