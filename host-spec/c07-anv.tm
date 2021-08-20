@@ -68,8 +68,8 @@
   <section|Preliminaries>
 
   <\definition>
-    <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, or
-    <strong|PoV> block, is a datastructure of the following format:
+    <label|defn-parablock>A <strong|parachain block> or <strong|PoV> block,
+    <math|B<rsub|p>>, is a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,E,H<rsub|r>|)>>>|<row|<cell|E>|<cell|=>|<cell|<around*|(|e<rsub|0>,\<ldots\>e<rsub|n>|)>>>>>
@@ -669,7 +669,7 @@
 
   <\definition>
     <label|net-msg-chunk-fetching-request>The <strong|chunk fetching request>
-    is sent by clients wo want to retrieve chunks of a parachain candidate.
+    is sent by clients who want to retrieve chunks of a parachain candidate.
     The request is a datastructure of the following format:
 
     <\equation*>
@@ -698,6 +698,39 @@
     block, <math|c>, and <math|c<rsub|i>> is that chunks proof in the Merkle
     tree. Both <math|c> and <math|c<rsub|i>> are byte arrays for type
     <math|*<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>.
+  </definition>
+
+  <subsection|Advertised Collation>
+
+  <\definition>
+    <label|net-msg-collation-fetching-request>The <strong|collation fetching
+    request> is sent by clients who want to retrieve the advertised collation
+    at the specified relay chain block. The request is a datastructure of the
+    following format:
+
+    <\equation*>
+      <around*|(|B<rsup|p><rsub|h>,P<rsub|id>|)>
+    </equation*>
+
+    where <math|B<rsup|p><rsub|h>> is the 256-bit hash of the relay chain
+    block and <math|P<rsub|id>> is the parachain Id as defined in Definition
+    <reference|defn-para-id>. The reponse message is defined in Definition
+    <reference|net-msg-collation-fetching-response>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-collation-fetching-response>The <strong|collation fetching
+    response> is sent by nodes to the clients who issued a collation fetching
+    request as defined in Definition <reference|net-msg-collation-fetching-request>.
+    The response, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|r>,B|)>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|0> is followed by the candidate receipt, <math|C<rsub|r>>, as
+    defined in Definition <reference|defn-candidate-receipt> and the PoV
+    block, <math|B>. <todo|is it possible that a candidate cannot be found?>
   </definition>
 
   <section|Candidate Selection><label|sect-primary-validation>
