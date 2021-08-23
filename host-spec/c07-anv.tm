@@ -761,15 +761,16 @@
 
     where <math|0> is followed by the candidate receipt, <math|C<rsub|r>>, as
     defined in Definition <reference|defn-candidate-receipt> and the PoV
-    block, <math|B>. <todo|is it possible that a candidate cannot be found?>
+    block, <math|B>. This type does not notify the client about a statement
+    that was not found.
   </definition>
 
   <subsection|Statements>
 
   <\definition>
-    The <strong|statement fetching request> is sent by clients who want to
-    retrieve statements about a given candidate. The request is a
-    datastructure of the following format:
+    <label|net-msg-statement-fetching-request>The <strong|statement fetching
+    request> is sent by clients who want to retrieve statements about a given
+    candidate. The request is a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|>|<cell|<around*|(|B<rsub|h>,C<rsub|h>|)>>|<cell|>>>>
@@ -778,6 +779,21 @@
     where <math|B<rsub|h>> is the 256-bit hash of the relay chain parent and
     <math|C<rsub|h>> is the 256-bit candidate hash that was used to create
     the committed candidate recept as defined in Definition <todo|todo>.
+  </definition>
+
+  <\definition>
+    The <strong|statement fetching response> is sent by nodes to the clients
+    who issued a collation fetching request as defined in Definition
+    <reference|net-msg-statement-fetching-request>. The reponse, <math|R>, is
+    a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>C<rsub|r>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|C<rsub|r>> is the committed candidate receipt as defined in
+    Definition <todo|todo>. This type does not notify the client about a
+    statement that was not found.
   </definition>
 
   <section|Candidate Selection><label|sect-primary-validation>
