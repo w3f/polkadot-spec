@@ -745,7 +745,7 @@
 
     where <math|B<rsup|p><rsub|h>> is the 256-bit hash of the relay chain
     block and <math|P<rsub|id>> is the parachain Id as defined in Definition
-    <reference|defn-para-id>. The reponse message is defined in Definition
+    <reference|defn-para-id>. The response message is defined in Definition
     <reference|net-msg-collation-fetching-response>.
   </definition>
 
@@ -778,14 +778,16 @@
 
     where <math|B<rsub|h>> is the 256-bit hash of the relay chain parent and
     <math|C<rsub|h>> is the 256-bit candidate hash that was used to create
-    the committed candidate recept as defined in Definition <todo|todo>.
+    the committed candidate recept as defined in Definition <todo|todo>. The
+    response message is defined in Definition
+    <reference|net-msg-statement-fetching-response>.
   </definition>
 
   <\definition>
-    The <strong|statement fetching response> is sent by nodes to the clients
-    who issued a collation fetching request as defined in Definition
-    <reference|net-msg-statement-fetching-request>. The reponse, <math|R>, is
-    a varying datatype of the following format:
+    <label|net-msg-statement-fetching-response>The <strong|statement fetching
+    response> is sent by nodes to the clients who issued a collation fetching
+    request as defined in Definition <reference|net-msg-statement-fetching-request>.
+    The reponse, <math|R>, is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>C<rsub|r>>>>>>>>>>
@@ -799,9 +801,9 @@
   <subsection|Disputes>
 
   <\definition>
-    The <strong|dispute request> is sent by clients who want to issue a
-    dispute about a candidate. The request, <math|D<rsub|r>>, is a
-    datastructure of the following format:
+    <label|net-msg-dispute-request>The <strong|dispute request> is sent by
+    clients who want to issue a dispute about a candidate. The request,
+    <math|D<rsub|r>>, is a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|D<rsub|r>>|<cell|=>|<cell|<around*|(|C<rsub|r>,S<rsub|i>,I<rsub|v>,V<rsub|v>|)>>>|<row|<cell|I<rsub|v>>|<cell|=>|<cell|<around*|(|A<rsub|i>,A<rsub|s>,k<rsub|i>|)>>>|<row|<cell|V<rsub|v>>|<cell|=>|<cell|<around*|(|A<rsub|i>,A<rsub|s>,k<rsub|v>|)>>>|<row|<cell|k<rsub|i>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|k<rsub|v>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>|<row|<cell|1\<rightarrow\>C<rsub|h>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>|<row|<cell|3\<rightarrow\>\<b-phi\>>>>>>>>>>
@@ -849,6 +851,22 @@
         phase.
       </itemize-dot>
     </itemize-dot>
+
+    The response message is defined in Definition
+    <reference|net-msg-dispute-response>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-dispute-response>The <strong|dispute response> is sent by
+    nodes to the clients who who issued a dispute request as defined in
+    Definition <reference|net-msg-dispute-request>. The response, <math|R>,
+    is a varying type of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|0> indicates that the dispute was successfully processed.
   </definition>
 
   <section|Candidate Selection><label|sect-primary-validation>
