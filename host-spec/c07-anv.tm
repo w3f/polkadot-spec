@@ -796,6 +796,61 @@
     statement that was not found.
   </definition>
 
+  <subsection|Disputes>
+
+  <\definition>
+    The <strong|dispute request> is sent by clients who want to issue a
+    dispute about a candidate. The request, <math|D<rsub|r>>, is a
+    datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|D<rsub|r>>|<cell|=>|<cell|<around*|(|C<rsub|r>,S<rsub|i>,I<rsub|v>,V<rsub|v>|)>>>|<row|<cell|I<rsub|v>>|<cell|=>|<cell|<around*|(|A<rsub|i>,A<rsub|s>,k<rsub|i>|)>>>|<row|<cell|V<rsub|v>>|<cell|=>|<cell|<around*|(|A<rsub|i>,A<rsub|s>,k<rsub|v>|)>>>|<row|<cell|k<rsub|i>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|k<rsub|v>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>|<row|<cell|1\<rightarrow\>C<rsub|h>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>|<row|<cell|3\<rightarrow\>\<b-phi\>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|C<rsub|r>> is the candidate that is being disputed. The
+      structure is a candidate receipt as defined in Definition
+      <reference|defn-candidate-receipt>.
+
+      <item><math|S<rsub|i>> is an unsigned 32-bit integer indicating the
+      session index the candidate appears in. <todo|clarify>
+
+      <item><math|I<rsub|v>> is the invalid vote that makes up the request.\ 
+
+      <item><math|V<rsub|v>> is the valid vote that makes this disput request
+      valid.
+
+      <item><math|A<rsub|i>> is an unsigned 32-bit integer indicating the
+      validator index of the current authority set as defined in Definition
+      <todo|todo>.
+
+      <item><math|A<rsub|s>> is the signature of the validator.
+
+      <item><math|k<rsub|i>> is a varying datatype and implies the dispute
+      statement. <math|0> indicates an explicit statemet.
+
+      <item><math|k<rsub|v>> is a varying datatype and implies the dispute
+      statement.
+
+      <\itemize-dot>
+        <item><math|0> indicates an explicit statement.
+
+        <item><math|1> indicates a seconded statement on a candidate,
+        <math|C<rsub|h>>, from the backing phase. <math|C<rsub|h>> is the
+        hash of the candidate.
+
+        <item><math|2> indicates a valid statement on a candidate,
+        <math|C<rsub|h>>, from the backing phase. <math|C<rsub|h>> is the
+        hash of the candidate.
+
+        <item><math|3> indicates an approval vote from the approval checking
+        phase.
+      </itemize-dot>
+    </itemize-dot>
+  </definition>
+
   <section|Candidate Selection><label|sect-primary-validation>
 
   Collators produce candidates (Definition <reference|defn-candidate>) and
