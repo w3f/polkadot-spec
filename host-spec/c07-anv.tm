@@ -641,10 +641,10 @@
     is a datastructure of the following format:
 
     <\equation*>
-      <around*|(|B<rsub|h>|)>
+      <around*|(|C<rsub|h>|)>
     </equation*>
 
-    where <math|B<rsub|h>> is the 256-bit hash of the PoV block. The reponse
+    where <math|C<rsub|h>> is the 256-bit hash of the PoV block. The reponse
     message is defined in Definition <reference|net-msg-pov-fetching-response>.
 
     \;
@@ -705,11 +705,11 @@
     candidate. The request is a datastructure of the following format:
 
     <\equation*>
-      <around*|(|B<rsub|h>|)>
+      <around*|(|C<rsub|h>|)>
     </equation*>
 
-    where <math|B<rsub|h>> is the candidate hash to get the available data
-    for. The reponse message is defined in Definition
+    where <math|C<rsub|h>> is the 256-bit candidate hash to get the available
+    data for. The reponse message is defined in Definition
     <reference|net-msg-available-data-reponse>.
   </definition>
 
@@ -762,6 +762,22 @@
     where <math|0> is followed by the candidate receipt, <math|C<rsub|r>>, as
     defined in Definition <reference|defn-candidate-receipt> and the PoV
     block, <math|B>. <todo|is it possible that a candidate cannot be found?>
+  </definition>
+
+  <subsection|Statements>
+
+  <\definition>
+    The <strong|statement fetching request> is sent by clients who want to
+    retrieve statements about a given candidate. The request is a
+    datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<cell|<around*|(|B<rsub|h>,C<rsub|h>|)>>|<cell|>>>>
+    </eqnarray*>
+
+    where <math|B<rsub|h>> is the 256-bit hash of the relay chain parent and
+    <math|C<rsub|h>> is the 256-bit candidate hash that was used to create
+    the committed candidate recept as defined in Definition <todo|todo>.
   </definition>
 
   <section|Candidate Selection><label|sect-primary-validation>
