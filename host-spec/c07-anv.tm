@@ -631,7 +631,67 @@
 
   Note that in the code the blob is referred to as \PAvailableData\Q.
 
-  <section|Network Messages>
+  <section|Protocol Types>
+
+  <\definition>
+    <label|net-msg-bitfield-dist-msg>The <strong|bitfield distribution
+    message>, <math|D>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|D>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,P|)>>>>>>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|B<rsub|h>> is the hash of the relay chain parent,
+      indicating the state this message is for.
+
+      <item><math|d> is the bitfield as described in Definition <todo|todo>.
+
+      <item><math|A<rsub|i>> is the validator index in the authority set that
+      signed this message.
+
+      <item><math|A<rsub|s>> is the signature of the validator.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    The <strong|statement distribution message>, <math|D>, is a datastructure
+    of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|D>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>|<row|<cell|d>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>C<rsub|r>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|D> is a vayring datatype where <math|0 >indicates a signed
+      statement and <math|1> contains metadata about a seconded statement
+      with a larger payload, such as a runtime upgrade. The candidate itself
+      can be fetched via the request/response message as defined in
+      Definition <reference|net-msg-statement-fetching-request>.
+
+      <item><math|B<rsub|h>> is the hash of the relay chain parent,
+      indicating the state this message is for.
+
+      <item><math|d> is a varying datatype where <math|1> indicates that the
+      validator seconds a candidate, followed by the committed candidate
+      receipt, <math|C<rsub|r>>, as defined in Definition <todo|todo>.
+      <math|2> indicates that the validator has deemed the candidate valid,
+      followed by the candidate hash.
+
+      <item><math|C<rsub|h>> is the candidate hash.
+
+      <item><math|A<rsub|i>> is the validator index in the authority set that
+      signed this message.
+
+      <item><math|A<rsub|s>> is the signature of the validator.\ 
+    </itemize-dot>
+  </definition>
+
+  <section|Request & Response Network Messages>
 
   <subsection|PoV Blocks>
 
@@ -740,11 +800,11 @@
     following format:
 
     <\equation*>
-      <around*|(|B<rsup|p><rsub|h>,P<rsub|id>|)>
+      <around*|(|B<rsup|><rsub|h>,P<rsub|id>|)>
     </equation*>
 
-    where <math|B<rsup|p><rsub|h>> is the 256-bit hash of the relay chain
-    block and <math|P<rsub|id>> is the parachain Id as defined in Definition
+    where <math|B<rsup|><rsub|h>> is the hash of the relay chain block and
+    <math|P<rsub|id>> is the parachain Id as defined in Definition
     <reference|defn-para-id>. The response message is defined in Definition
     <reference|net-msg-collation-fetching-response>.
   </definition>
@@ -776,9 +836,9 @@
       <tformat|<table|<row|<cell|>|<cell|<around*|(|B<rsub|h>,C<rsub|h>|)>>|<cell|>>>>
     </eqnarray*>
 
-    where <math|B<rsub|h>> is the 256-bit hash of the relay chain parent and
-    <math|C<rsub|h>> is the 256-bit candidate hash that was used to create
-    the committed candidate recept as defined in Definition <todo|todo>. The
+    where <math|B<rsub|h>> is the hash of the relay chain parent and
+    <math|C<rsub|h>> is the candidate hash that was used to create the
+    committed candidate recept as defined in Definition <todo|todo>. The
     response message is defined in Definition
     <reference|net-msg-statement-fetching-response>.
   </definition>
@@ -825,7 +885,7 @@
       valid.
 
       <item><math|A<rsub|i>> is an unsigned 32-bit integer indicating the
-      validator index of the current authority set as defined in Definition
+      validator index in the authority set as defined in Definition
       <todo|todo>.
 
       <item><math|A<rsub|s>> is the signature of the validator.
