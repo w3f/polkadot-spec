@@ -68,8 +68,8 @@
   <section|Preliminaries>
 
   <\definition>
-    <label|defn-parablock>A <strong|parachain block> or <strong|PoV> block,
-    <math|B<rsub|p>>, is a datastructure of the following format:
+    <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, is a
+    datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,E,H<rsub|r>|)>>>|<row|<cell|E>|<cell|=>|<cell|<around*|(|e<rsub|0>,\<ldots\>e<rsub|n>|)>>>>>
@@ -117,8 +117,7 @@
   <\definition>
     <label|defn-pov-block>Accordingly we define the
     <with|font-series|bold|proof of validity block> or
-    <with|font-series|bold|PoV> block in short,
-    <with|font-series|bold|mode|math|<PoVB>>, to be the tuple:
+    <with|font-series|bold|PoV> block in short to be the tuple:
 
     <\equation*>
       <around|(|B,\<pi\><rsub|B>|)>
@@ -634,7 +633,7 @@
 
   <section|Network Messages>
 
-  <subsection|PoV Requests and Responses>
+  <subsection|PoV Blocks>
 
   <\definition>
     <label|net-msg-pov-fetching-request>The <strong|PoV fetching request> is
@@ -665,7 +664,7 @@
     the PoV block was not found.
   </definition>
 
-  <subsection|Availability Chunks>
+  <subsection|Chunks>
 
   <\definition>
     <label|net-msg-chunk-fetching-request>The <strong|chunk fetching request>
@@ -698,6 +697,38 @@
     block, <math|c>, and <math|c<rsub|i>> is that chunks proof in the Merkle
     tree. Both <math|c> and <math|c<rsub|i>> are byte arrays for type
     <math|*<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-available-data-request>The <strong|available data request>
+    is sent by clients who want to retrieve the PoV block of a parachain
+    candidate. The request is a datastructure of the following format:
+
+    <\equation*>
+      <around*|(|B<rsub|h>|)>
+    </equation*>
+
+    where <math|B<rsub|h>> is the candidate hash to get the available data
+    for. The reponse message is defined in Definition
+    <reference|net-msg-available-data-reponse>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-available-data-reponse>The <strong|available data
+    response> is sent by nodes to the clients who issued a available data
+    request as defined in Definition <reference|net-msg-available-data-request>.
+    The reponse, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>A>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|P<rsub|ov>,D<rsub|pv>|)>>>>>
+    </eqnarray*>
+
+    where <math|0> is followed by the available data, <math|A>, and <math|1>
+    indicates the the requested candidate hash was not found.
+    <math|P<rsub|ov>> is the PoV block as defined in Definition
+    <reference|defn-pov-block> and <math|D<rsub|pv>> is the persisted
+    validation data as defined in Definition
+    <reference|defn-persisted-validation-data>.
   </definition>
 
   <subsection|Advertised Collation>
