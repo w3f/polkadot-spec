@@ -635,10 +635,10 @@
 
   <\definition>
     <label|net-msg-bitfield-dist-msg>The <strong|bitfield distribution
-    message>, <math|D>, is a datastructure of the following format:
+    message>, <math|M>, is a datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|D>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,P|)>>>>>>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>>>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,P|)>>>>>>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>>>
     </eqnarray*>
 
     where
@@ -657,17 +657,17 @@
   </definition>
 
   <\definition>
-    The <strong|statement distribution message>, <math|D>, is a datastructure
+    The <strong|statement distribution message>, <math|M>, is a datastructure
     of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|D>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>|<row|<cell|d>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>C<rsub|r>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>|<row|<cell|d>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>C<rsub|r>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|D> is a vayring datatype where <math|0 >indicates a signed
+      <item><math|M> is a vayring datatype where <math|0 >indicates a signed
       statement and <math|1> contains metadata about a seconded statement
       with a larger payload, such as a runtime upgrade. The candidate itself
       can be fetched via the request/response message as defined in
@@ -688,6 +688,45 @@
       signed this message.
 
       <item><math|A<rsub|s>> is the signature of the validator.\ 
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    The <strong|approval distribution message>, <math|M>, is a varying
+    datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|<around*|(|C<rsub|>,I<rsub|>|)><rsub|0>\<ldots\><around*|(|C,I|)><rsub|n>|)>>>|<row|<cell|1\<rightarrow\><around*|(|V<rsub|0>,\<ldots\>V<rsub|n>|)>>>>>>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|B<rsub|h>,A<rsub|i>,c<rsub|a>|)>>>|<row|<cell|c<rsub|a>>|<cell|=>|<cell|<around*|(|c<rsub|k>,P<rsub|o>,P<rsub|p>|)>>>|<row|<cell|c<rsub|k>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>s>>|<row|<cell|1\<rightarrow\>i>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M> is a varying datatype where <math|0> indicates
+      assignments for candidates in recent, unfinalized blocks and <math|1>
+      indicates approvals for candidates in some recent, unfinalized block.
+
+      <item><math|C> is an assignment criterion which refers to the candidate
+      under which the assignment is relevant by the block hash.
+
+      <item><math|B<rsub|h>> is the block hash where the candidate appears.
+      <todo|para- or relay block?>
+
+      <item><math|A<rsub|i>> is the validator index in the authority set that
+      created this message. <todo|refer authority set>
+
+      <item><math|c<rsub|a>> is the certification of the assignment.
+
+      <item><math|c<rsub|k>> is a varying datatype where <math|0> indicates
+      an assignment story based on the VRF that authorized the relay chain
+      block where the candidate was included, followed by a sample number,
+      <math|s.> <math|1> indicates an assignment story based on the VRF that
+      authorized the relay chain block where the candidate was included
+      combined with the index of a particular core. <todo|clarify all of
+      this>.
+
+      <item><math|P<rsub|o>> is a VRF output and <math|P<rsub|p>> its
+      corresponding proof. <todo|refer>
     </itemize-dot>
   </definition>
 
