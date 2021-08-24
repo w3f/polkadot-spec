@@ -657,11 +657,37 @@
   </definition>
 
   <\definition>
+    <label|net-msg-full-statement>A <strong|full statement>, <math|S>, is a
+    datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|S>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>|<row|<cell|d>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>C<rsub|r>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|d> is a varying datatype where <math|1> indicates that the
+      validator seconds a candidate, followed by the committed candidate
+      receipt, <math|C<rsub|r>>, as defined in Definition <todo|todo>.
+      <math|2> indicates that the validator has deemed the candidate valid,
+      followed by the candidate hash.
+
+      <item><math|C<rsub|h>> is the candidate hash.
+
+      <item><math|A<rsub|i>> is the validator index in the authority set that
+      signed this statement.
+
+      <item><math|A<rsub|s>> is the signature of the validator.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
     The <strong|statement distribution message>, <math|M>, is a datastructure
     of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>|<row|<cell|d>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>C<rsub|r>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
     </eqnarray*>
 
     where
@@ -676,13 +702,8 @@
       <item><math|B<rsub|h>> is the hash of the relay chain parent,
       indicating the state this message is for.
 
-      <item><math|d> is a varying datatype where <math|1> indicates that the
-      validator seconds a candidate, followed by the committed candidate
-      receipt, <math|C<rsub|r>>, as defined in Definition <todo|todo>.
-      <math|2> indicates that the validator has deemed the candidate valid,
-      followed by the candidate hash.
-
-      <item><math|C<rsub|h>> is the candidate hash.
+      <item><math|S> is a full statement as defined in Definition
+      <reference|net-msg-full-statement>.
 
       <item><math|A<rsub|i>> is the validator index in the authority set that
       signed this message.
@@ -727,6 +748,37 @@
 
       <item><math|P<rsub|o>> is a VRF output and <math|P<rsub|p>> its
       corresponding proof. <todo|refer>
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    The <strong|collator protocol message>, <math|M>, is a varying datatype
+    of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|i>,P<rsub|i>,C<rsub|s>|)>>>|<row|<cell|1\<rightarrow\>H>>|<row|<cell|4\<rightarrow\><around*|(|B<rsub|h>,S|)>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M> is a varying datatype where <math|0> indicates the
+      intent to advertise a collation and <math|1> indicates the advertisment
+      of a collation to a validator. <math|4> indicates that a collation sent
+      to a validator was seconded. <todo|clarify all of this.>
+
+      <item><math|C<rsub|i>> is the public key of the collator.
+
+      <item><math|P<rsub|i>> is the parachain Id as defined in Definition
+      <reference|defn-para-id>.
+
+      <item><math|C<rsub|s>> is the signature of the collator using the
+      <verbatim|PeerId> of the collators node. <todo|why?>
+
+      <item><math|H> is the hash of the collation <todo|clarify>.
+
+      <item><math|S> is a full statement as defined in Definition
+      <reference|net-msg-full-statement>.
     </itemize-dot>
   </definition>
 
