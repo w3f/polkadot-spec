@@ -683,8 +683,8 @@
   </definition>
 
   <\definition>
-    The <strong|statement distribution message>, <math|M>, is a datastructure
-    of the following format:
+    <label|net-msg-statement-distribution>The <strong|statement distribution
+    message>, <math|M>, is a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
@@ -713,8 +713,8 @@
   </definition>
 
   <\definition>
-    The <strong|approval distribution message>, <math|M>, is a varying
-    datatype of the following format:
+    <label|net-msg-approval-distribution>The <strong|approval distribution
+    message>, <math|M>, is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|<around*|(|C<rsub|>,I<rsub|>|)><rsub|0>\<ldots\><around*|(|C,I|)><rsub|n>|)>>>|<row|<cell|1\<rightarrow\><around*|(|V<rsub|0>,\<ldots\>V<rsub|n>|)>>>>>>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|B<rsub|h>,A<rsub|i>,c<rsub|a>|)>>>|<row|<cell|c<rsub|a>>|<cell|=>|<cell|<around*|(|c<rsub|k>,P<rsub|o>,P<rsub|p>|)>>>|<row|<cell|c<rsub|k>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>s>>|<row|<cell|1\<rightarrow\>i>>>>>>>>>
@@ -779,6 +779,28 @@
 
       <item><math|S> is a full statement as defined in Definition
       <reference|net-msg-full-statement>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    The <strong|validator protocol message>, <math|M>, is a varying datatype
+    of the following format: <todo|when is this used?>
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M<rsub|f>> is a bitfield distribution message as defined in
+      Definition <reference|net-msg-bitfield-dist-msg>.
+
+      <item><math|M<rsub|s>> is a statement distribution message as defined
+      in Definition <reference|net-msg-statement-distribution>.
+
+      <item><math|M<rsub|a>> is a approval distribution message as defined in
+      Definition <reference|net-msg-approval-distribution>.
     </itemize-dot>
   </definition>
 
