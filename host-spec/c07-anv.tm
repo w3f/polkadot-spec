@@ -752,8 +752,8 @@
   </definition>
 
   <\definition>
-    The <strong|collator protocol message>, <math|M>, is a varying datatype
-    of the following format:
+    <label|net-msg-collator-protocol>The <strong|collator protocol message>,
+    <math|M>, is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|i>,P<rsub|i>,C<rsub|s>|)>>>|<row|<cell|1\<rightarrow\>H>>|<row|<cell|4\<rightarrow\><around*|(|B<rsub|h>,S|)>>>>>>>>>>
@@ -802,6 +802,18 @@
       <item><math|M<rsub|a>> is a approval distribution message as defined in
       Definition <reference|net-msg-approval-distribution>.
     </itemize-dot>
+  </definition>
+
+  <\definition>
+    The <strong|collator protocol message>, <math|M>, is a varying datatype
+    of the following format: <todo|when is this used?>
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|M<rsub|c>> is the collator protocol message as defined in
+    Definition <reference|net-msg-collator-protocol>.
   </definition>
 
   <section|Request & Response Network Messages>
