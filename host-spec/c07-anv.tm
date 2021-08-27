@@ -1054,6 +1054,56 @@
     where <math|0> indicates that the dispute was successfully processed.
   </definition>
 
+  <section|Candidate Validation>
+
+  <subsection|Exhaustive Check>
+
+  This step is initialized by the approval voting process.
+
+  - Check whether the candidate does not exceed the max size as specified in
+  the persisted validation data.
+
+  - Check collator signature.
+
+  - Eventually decompress parachain Runtime.
+
+  - Validate the candidate by executing the parachain Runtime.
+
+  - Based ont he resulting value, check whether the parent head is valid.
+
+  - Create candidate commitments.
+
+  - =\<gtr\> Notify approval voting process.
+
+  <subsection|Non-exhaustive Check>
+
+  This step is initialized by the backing process.
+
+  - Check whether the candidate does not exceed the max size as specified in
+  the persisted validation data.
+
+  - Check collator signature.
+
+  - Fetch the persisted validation data from the relay chain by calling the
+  Runtime API.
+
+  - Fetch the parachain Runtime from the relay chain by calling the Runtime
+  API.
+
+  - Eventually decompress parachain Runtime.
+
+  - Validate the candidate by executing the parachain Runtime.
+
+  - Based ont he resulting value, check whether the parent head is valid.
+
+  - Create candidate commitments.
+
+  - Check validation outputs by calling the Runtime API.
+
+  - =\<gtr\> Notify the backing process.
+
+  \;
+
   <section|Candidate Selection><label|sect-primary-validation>
 
   Collators produce candidates (Definition <reference|defn-candidate>) and
