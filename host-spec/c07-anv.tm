@@ -1725,17 +1725,19 @@
     </equation*>
 
     \ where <math|<around*|[|b<rsub|1>,\<ldots\>,b<rsub|m>|]>> is a byte
-    array of arbitrary size <math|m> and <math|S<rsub|n>> is a sequence
-    defined in <reference|defn-erasure-shard>.
+    array of arbitrary size <math|m> and <math|<around*|(|S<rsub|1>,S<rsub|2>,\<ldots\>,S<rsub|n>|)>><math|>
+    is a sequence of shards defined in <reference|defn-erasure-shard>.
   </definition>
 
   <\definition>
-    <label|defn-erasure-shard> For a validator node <math|i>, and byte array
+    <label|defn-erasure-shard>For a validator node <math|i>, and byte array
     blob <math|B=<around*|(|b<rsub|1>,\<ldots\>,b<rsub|m>|)>\<in\>\<bbb-B\><rsub|M>>
     we define <strong|<math|S<rsub|i>>> as the <strong|<math|i>'th erasure
-    coded Shard> which is a byte array of length
-    <math|<around*|\<lceil\>|m/2k|\<rceil\>>>. <todo|define how bytes are
-    distributed before encoding? First k Shards are containing pure data?>
+    coded Shard> \ which is a byte array of length
+    <math|<around*|\<lceil\>|m/2k|\<rceil\>>>. It is indexed as <math|i>
+    because it is out to be handed over to and kept by validator <math|i>
+    <todo|define how bytes are distributed before encoding? First k Shards
+    are containing pure data?>
   </definition>
 
   <\definition>
@@ -1746,7 +1748,7 @@
     <\equation*>
       decode<rsub|k,n>:<around*|{|<tabular*|<tformat|<table|<row|<cell|O
       S<rsub|n>>|<cell|\<rightarrow\>>|<cell|\<bbb-B\><rsub|m>>>|<row|<cell|<around*|(|O
-      S<rsub|1>,O S<rsub|2>,\<ldots\>,O S<rsub|n>|)>>|<cell|\<rightarrow\>>|<cell|<around*|(|b<rsub|1>,\<ldots\>,b<rsub|m>|)>>>>>>|\<nobracket\>>
+      S<rsub|1>,O S<rsub|2>,\<ldots\>,O S<rsub|n>|)>>|<cell|\<rightarrow\>>|<cell|<around*|(|b<rsub|1>,\<ldots\>,b<rsub|m>|)>>>|<row|<cell|>|<cell|>|<cell|>>>>>|\<nobracket\>>
     </equation*>
 
     Where <math|OS<rsub|n>> is the set of sequence of length n of optional
@@ -1756,8 +1758,9 @@
   </definition>
 
   <\definition>
-    For a validator node <math|i>, we define <strong|O<math|S<rsub|i>>> as
-    the <strong|<math|i>'th Optional Shard> which is a of varying type:
+    <label|defn-erasure-optional-shard>For a validator node <math|i>, we
+    define <strong|O<math|S<rsub|i>>> as the <strong|<math|i>'th Optional
+    Shard> which is a of varying type:
 
     <\equation*>
       <tabular|<tformat|<table|<row|<cell|idx>|<cell|>|<cell|>>|<row|<cell|0>|<cell|None>|<cell|When
@@ -1767,8 +1770,12 @@
     </equation*>
   </definition>
 
-  <\algorithm|<label|algo-erasure-encode><name|Erasure-Encode>(<math|<wide|B|\<bar\>>>:
-  the available PoV blob defined in Definition <reference|defn-blob>)>
+  <\algorithm>
+    <label|algo-erasure-encode><name|Erasure-Encode>(<math|<wide|B|\<bar\>>>:
+    the available PoV blob defined in Definition <reference|defn-blob>,\ 
+
+    <math|v<rsub|B>>: number of validator in the active set)
+  <|algorithm>
     <\algorithmic>
       <state|<with|font-series|bold|><math|Shards\<leftarrow\>>
       <with|font-shape|small-caps|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
@@ -1782,7 +1789,7 @@
       <state|<with|font-series|bold|Init> <math|index=0>>
 
       <\state>
-        \ <FOR-IN|shard\<in\>Shards|>
+        <FOR-IN|shard\<in\>Shards|>
       </state>
 
       <\state>
@@ -1828,69 +1835,41 @@
     defined in Definition <reference|defn-erasure-coded-chunks>.
   </itemize>
 
-  <\algorithm|<label|algo-make-shards><name|Make-Shards>(<math|<paraValidSet>,v<rsub|B>>)>
+  <\algorithm>
+    <label|algo-make-shards><name|Make-Shards>(<math|D>: The data to be
+    erasure coded and sharded,
+
+    <math|v<rsub|B>>: Number of required resulting shards (equal to the
+    number of validators))
+  <|algorithm>
     <\algorithmic>
-      <statex| // Calculate the required values for Reed-Solomon.>
+      <state|<math|k\<leftarrow\><rsub|>2<rsup|<around*|\<lfloor\>|log<rsub|2><around*|(|<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>+1|)>|\<rfloor\>>>>>
 
-      <statex| // Calculate the required lengths.>
-
-      <state|<with|font-series|bold|Init>
-      <math|Shard<rsub|data>=<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>+1>>
-
-      <state|<with|font-series|bold|Init>
-      <math|Shard<rsub|parity>=<around|\||<paraValidSet>|\|>-<frac|<around|(|<around|\||<paraValidSet>|\|>-1|)>|3>-1>>
+      <state|<math|l\<leftarrow\>2<rsup|<around*|\<lceil\>|log<rsub|2><around*|(|v<rsub|B>|)>|\<rceil\>>>>>
 
       <\state>
-        <\math>
-          <with|font-series|bold|Init>base<rsub|len> =
-          <choice|<tformat|<table|<row|<cell|0>|<cell|if<around|\||<paraValidSet>|\|><bmod>Shard<rsub|data>=0>>|<row|<cell|1>|<cell|if<around|\||<paraValidSet>|\|><bmod>Shard<rsub|data>\<neq\>0>>>>>
-        </math>
+        <math|C\<leftarrow\><around*|(|l,k,n|)>>
       </state>
 
-      <state|<with|font-series|bold|Init> <math|Shard<rsub|len> =
-      base<rsub|len> + <around|(|base<rsub|len><bmod>2|)>>>
+      <\state>
+        <math|encode<rsub|k,n>\<leftarrow\>><name|Make-Encoder(C)>
+      </state>
 
-      <statex|// Prepare shards, each padded with zeroes.>
+      <\state>
+        <math|<around*|(|S<rsub|1>,\<ldots\>,S<rsub|n>|)>\<leftarrow\>><math|encode<rsub|k,n><around*|(|Enc<rsub|SC><around*|(|D|)>|)>>
+      </state>
 
-      <statex|// <math|Shards\<assign\><around|(|\<bbb-S\><rsub|0>,...,\<bbb-S\><rsub|n>|)>>
-      where <math|\<bbb-S\>\<assign\><around|(|b<rsub|0>,...,b<rsub|n>|)>>>
-
-      <state|<with|font-series|bold|Init> <math|Shards>>
-
-      <\algo-for|<math|n\<in\><around|(|Shard<rsub|data>+Shard<rsub|partiy>|)>>>
-        <state|<with|font-shape|small-caps|Add>(<math|Shards,<around|(|0<rsub|0>,..
-        0<rsub|Shard<rsub|len>>|)>>)>
-      </algo-for>
-
-      <statex|// Copy shards of <math|v<rsub|b>> into each shard.>
-
-      <\algo-for|<math|<around|(|chunk, shard|)>\<in\>>(<with|font-shape|small-caps|Take><math|<around|(|Enc<rsub|SC><around|(|v<rsub|B>|)>,Shard<rsub|len>|)>,Shards>)>
-        <state|<with|font-series|bold|Init>
-        <math|len\<leftarrow\>><with|font-shape|small-caps|Min>(<math|Shard<rsub|len>,<around|\||chunk|\|>>)>
-
-        <state|<math|shard\<leftarrow\>> <with|font-shape|small-caps|Copy-From>(<math|chunk,len>)>
-      </algo-for>
-
-      <statex|// <math|Shards> contains split shards of <math|v<rsub|B>>.>
-
-      <algo-return|<math|Shards>>
+      <\state>
+        <\RETURN>
+          <math|<around*|(|S<rsub|1>,\<ldots\>,S<rsub|n>|)>>
+        </RETURN>
+      </state>
     </algorithmic>
   </algorithm>
 
   <\itemize>
-    <item><with|font-shape|small-caps|Add(<math|sequence,item>)>: add the
-    given <math|item> to the <math|sequence>.
-
-    <item><with|font-shape|small-caps|Take(<math|sequence,len>)>: iterate
-    over <math|len> amount of bytes from <math|sequence> on each iteration.
-    If the <math|sequence> does not provide <math|len> number of bytes, then
-    it simply uses what's available.
-
-    <item><with|font-shape|small-caps|Min(<math|num1,num2>)>: return the
-    minimum value of <math|num1> or <math|num2>.
-
-    <item><with|font-shape|small-caps|Copy-From(<math|source,len>)>: return
-    <math|len> amount of bytes from <math|source>.
+    <item><name|Make-Encoder(C)> is the API function provided by
+    <cite|w3f_rs-ec-perf_2021>.
   </itemize>
 
   Algorithm <reference|algo-gen-availblity-tree> creates a Merkle tree from
