@@ -1104,6 +1104,73 @@
 
   <section|Approval Voting>
 
+  The approval voting process ensures that only valid parachain blocks are
+  finalized on the relay chain. Validators verify submitted parachain
+  candidates received from collators and issue approvals for valid
+  candidates, respectively disputes for invalid blocks.
+
+  \;
+
+  Since it cannot be expected that each validators verifies every single
+  parachain candidate, this mechanism ensures that enough honest validators
+  are selected to verify parachain candidates and to prevent the finalization
+  of invalid blocks. If an honest validator detects a invalid block which was
+  approved by one or more validators, the honest validator must issue a
+  dispute which wil cause an escalation, resulting in consequences for all
+  malicious parties, i.e. slashing. This mechanism is described more in
+  Section <todo|todo>.
+
+  \;
+
+  The assignment function selects the validators responsible for verifying
+  submitted parachain candidates, as defined in <todo|todo>. Assigned
+  validators broadcast their assignment to indicate their intent to check a
+  candidate. After verifying a parachain candidate, assigned validators issue
+  their approval vote to their peers. If no following approval vote is sent,
+  then that behavior is declared as \Pno-show', meaning that the
+  corresponding validator failed to recover or verify the PoV block. This
+  results in more validators having to verify the PoV block. That behavior is
+  described more closely in Section <todo|todo>.
+
+  \;
+
+  <\todo>
+    When we trigger our own assignment, we broadcast it via Approval
+    Distribution, begin\ 
+
+    fetching the data from Availability Recovery, and then pass it through to
+    the\ 
+
+    Candidate Validation.
+  </todo>
+
+  <subsection|Assignments>
+
+  Assigned validators broadcast their assignment by issuing an approval
+  distribution message as defined in Definition
+  <reference|net-msg-approval-distribution>. Other assigned validators that
+  receive that network message must keep track of if, expecting an approval
+  vote following shortly after.
+
+  \;
+
+  Verifying candidate <todo|todo>
+
+  Issuing approvals <todo|todo>
+
+  \;
+
+  <subsection|\PNo-show\Q Occurence>
+
+  The Polkadot validator observes a \Pno-show\Q occurence when another
+  assigned validator broadcasted an assignment, indicating the intent to
+  verify a parachain candidate, but did not follow up with an approval vote
+  within a certain duration.
+
+  \;
+
+  <todo|todo>
+
   <subsection|Check and import assignment>
 
   Check if the assignment is valid and can be accepted.
@@ -1164,6 +1231,10 @@
   <todo|todo>
 
   <section|Approval Distribution>
+
+  \;
+
+  <section|Availability Distribution>
 
   The Polkadot validators must receive and distribute availability data to
   peers. It's primarily responsible for responding to requests and requesting
