@@ -1102,7 +1102,94 @@
 
   - =\<gtr\> Notify the backing process.
 
+  <section|Approval Voting>
+
+  <subsection|Check and import assignment>
+
+  Check if the assignment is valid and can be accepted.
+
+  =\<gtr\> initiated by the approval distribution
+
   \;
+
+  Load block entry from storage
+
+  Get the session info
+
+  Get the claimed core index
+
+  Load the candidate entry from storage
+
+  Get the approval entry
+
+  Check the assignment cert
+
+  Determine tranche
+
+  Check for duplicates
+
+  Trigger action
+
+  Write the candidate entry to storage
+
+  \;
+
+  <subsection|Check and import approval>
+
+  Check if the pproval vote is valid and can be accepted.
+
+  \;
+
+  Load block entry from storage
+
+  Get the session info
+
+  Transform the approval vote into the wrapper used to import statements into
+  disputes.
+
+  Verify signature
+
+  Load candidate entry
+
+  Don't accept approvals until assignment.
+
+  Inform the dispute coordinator about disputes if appropriate
+
+  Import approval vote and update block entry and candidate entry
+
+  Trigger actions
+
+  <subsection|Approved Ancestor>
+
+  <todo|todo>
+
+  <section|Approval Distribution>
+
+  The Polkadot validators must receive and distribute availability data to
+  peers. It's primarily responsible for responding to requests and requesting
+  availability data from other validators, but must keep multiple concurrent
+  processes in constant execution in order to provide reliably behavior. The
+  required processes are defined in the following subsections.
+
+  <subsection|PoV Requests>
+
+  When a peer requests a PoV block from the Polkadot validator, it should
+  first check it's local database and send the PoV block back to the
+  requester. If the PoV block is not available in the local database, the
+  Polkadot validator issues requests to other validators in order to retrieve
+  the PoV block. The validator determines whether the received PoV bock is
+  valid by checking the hash, but will not do any further validation. If the
+  received PoV block is valid, the validator will send it back to the
+  original requester.
+
+  <subsection|Chunk Requests>
+
+  Once a parachain candidate has been backed as described in Definition
+  <todo|todo>, this process must request the necessary chunks to keep the
+  candidate available, ensuring that <math|2/3> of all the validators can
+  deliver the candidate to peers that issue requests. This process keep track
+  of backed candidates for each parachain by checking occupied cores as
+  defined in Definiton <todo|todo>.
 
   <section|Candidate Selection><label|sect-primary-validation>
 
