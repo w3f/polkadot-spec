@@ -1102,7 +1102,7 @@
 
   - =\<gtr\> Notify the backing process.
 
-  <section|Approval Voting>
+  <section|Approval Voting & Distribution>
 
   The approval voting process ensures that only valid parachain blocks are
   finalized on the relay chain. Validators verify submitted parachain
@@ -1157,8 +1157,6 @@
   Verifying candidate <todo|todo>
 
   Issuing approvals <todo|todo>
-
-  \;
 
   <subsection|\PNo-show\Q Occurence>
 
@@ -1230,17 +1228,12 @@
 
   <todo|todo>
 
-  <section|Approval Distribution>
-
-  \;
-
   <section|Availability Distribution>
 
   The Polkadot validators must receive and distribute availability data to
   peers. It's primarily responsible for responding to requests and requesting
-  availability data from other validators, but must keep multiple concurrent
-  processes in constant execution in order to provide reliably behavior. The
-  required processes are defined in the following subsections.
+  availability data to and from other validators. The required processes are
+  defined in the following subsections.
 
   <subsection|PoV Requests>
 
@@ -1261,6 +1254,17 @@
   deliver the candidate to peers that issue requests. This process keep track
   of backed candidates for each parachain by checking occupied cores as
   defined in Definiton <todo|todo>.
+
+  <section|Availability Recovery>
+
+  The availability distribution of the Polkadot validator must be able to
+  send availability data to peers that issue requests. Therefore, the
+  Polkadot validator must recover enough availability chunks from other peers
+  in order to send an response to those requests.
+
+  \;
+
+  <todo|todo>
 
   <section|Candidate Selection><label|sect-primary-validation>
 
