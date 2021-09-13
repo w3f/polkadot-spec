@@ -633,6 +633,10 @@
 
   <section|Protocol Types>
 
+  <\todo>
+    mention SCALE encoding
+  </todo>
+
   <\definition>
     <label|net-msg-bitfield-dist-msg>The <strong|bitfield distribution
     message>, <math|M>, is a datastructure of the following format:
@@ -647,7 +651,8 @@
       <item><math|B<rsub|h>> is the hash of the relay chain parent,
       indicating the state this message is for.
 
-      <item><math|d> is the bitfield as described in Definition <todo|todo>.
+      <item><math|d> is the bitfield array as described in Definition
+      <reference|defn-bitfield-array>.
 
       <item><math|A<rsub|i>> is the validator index in the authority set that
       signed this message.
@@ -1060,10 +1065,10 @@
 
   <section|Candidate Backing>
 
-  The Polkadot validator receives an arbitrary number of parachain blocks
+  The Polkadot validator receives an arbitrary number of parachain candidates
   with associated proofs from untrusted collators. The validator must verify
-  and select a specific quantity of the proposed parachain blocks and issue
-  those as backable candidates to its peers. A candidate is considered
+  and select a specific quantity of the proposed candidates and issue those
+  as <em|backable> candidates to its peers. A candidate is considered
   <em|backable> when at least <math|2/3> of all assigned validators have
   issued a <verbatim|Valid> statement about that candidate, as described in
   Section <reference|sect-candidate-backing-statements>. <todo|reference
@@ -1174,13 +1179,13 @@
   \;
 
   <\todo>
-    When we trigger our own assignment, we broadcast it via Approval
+    \PWhen we trigger our own assignment, we broadcast it via Approval
     Distribution, begin\ 
 
     fetching the data from Availability Recovery, and then pass it through to
     the\ 
 
-    Candidate Validation.
+    Candidate Validation.\Q
   </todo>
 
   <subsection|Assignments>
@@ -1315,6 +1320,24 @@
   \;
 
   <todo|todo>
+
+  \;
+
+  The validator broadcasts the bitfield array as defined in Definition
+  <reference|defn-bitfield-array> in a signed network message as defined in
+  Definition <reference|net-msg-bitfield-dist-msg>.
+
+  <\definition>
+    <label|defn-bitfield-array>A <strong|bitfield array> contains single-bit
+    values which indidate whether a candidate is available. The number of
+    items is equal of to the number of availability cores as defined in
+    Definition <todo|todo> and each bit represents a vote on the
+    corresponding core in the given order. Respectively, if the single bit
+    equals <verbatim|1>, then the Polkadot validator claims that the
+    availability core is occupied, there exists a committed candidate receipt
+    as defined in Definition <todo|todo> and that the validator has a stored
+    chunk of the parachain block as defined in Definition <todo|todo>.
+  </definition>
 
   <section|<todo|todo>><label|sect-primary-validation>
 
@@ -1460,21 +1483,6 @@
       to which all i nbound HRMP messages are processed.
     </itemize-dot>
   </definition>
-
-  <subsection|Block Announcement>
-
-  Since collators rely on the relay chain provided consensus and the
-  parachain itself does not have any authorities to limit block producers, a
-  mechanism must be provided in order to limit the import of blocks submitted
-  by collators, which could be in the millions. To solve this, collators send
-  their candidates to relay chain validators and wait for a
-  <verbatim|Seconded> statement as described in Section
-  <reference|defn-candidate-statement>. Receiving this message implies that
-  the proposed candidate is likely to be inlcuded in the relay chain, making
-  the candidate suitable to be announced to peers as described in Definition
-  <reference|defn-block-announcement>. If no <verbatim|Seconded> statement is
-  received, no such announcement takes place <todo|how is bad behavior
-  prevented here?>.
 
   <\definition>
     <label|defn-block-announcement>A <strong|block announcement> message is a
