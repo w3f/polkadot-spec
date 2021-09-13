@@ -1063,29 +1063,38 @@
   The Polkadot validator receives an arbitrary number of parachain blocks
   with associated proofs from untrusted collators. The validator must verify
   and select a specific quantity of the proposed parachain blocks and issue
-  those as backable candidates to its peers. <todo|how is the quantity
-  determined?>
+  those as backable candidates to its peers. A candidate is considered
+  <em|backable> when at least <math|2/3> of all assigned validators have
+  issued a <verbatim|Valid> statement about that candidate, as described in
+  Section <reference|sect-candidate-backing-statements>. <todo|reference
+  assigned validators>
 
-  <subsection|Statements>
+  <subsection|Statements><label|sect-candidate-backing-statements>
 
   The Polkadot validator checks the validity of the proposed parachains
   blocks as described in Section <todo|todo> and issues <verbatim|Valid>
   statements as defined in Definition <reference|defn-candidate-statement> to
   its peers if the verification succeeded <todo|what if it failed?>.
   Broadcasting failed verification as <verbatim|Valid> statements is a
-  slashable offense. The validator must only issue <strong|one>
-  <verbatim|Seconded> statement, based on an arbitrary metric, which implies
-  an explicit vote for a candidate to be included in the relay chain. This
-  protocol attempts to produce as many backable candidates as possible, but
-  does not attemp to determine a final candidate for inclusion. The Polkadot
-  validator choses the backable candidate for the relay chain, based on
-  whatever metric appropriate.
+  slashable offense. The validator must only issue one <verbatim|Seconded>
+  statement, based on an arbitrary metric, which implies an explicit vote for
+  a candidate to be included in the relay chain. This protocol attempts to
+  produce as many backable candidates as possible, but does not attemp to
+  determine a final candidate for inclusion. The Polkadot validators chose
+  themselves a backable candidate for the relay chain, based on whatever
+  metric appropriate.
+
+  \;
+
+  <todo|how are the statements gossiped?>
+
+  <todo|how are collators that broadcast invalid candidates punished?>
 
   \;
 
   Once a parachain candidate has been seconded by at least one other
   validator and enough <verbatim|Valid> statements have been issued about
-  taht candidate to meet the <math|2/3> quorum, the candidate is ready to be
+  that candidate to meet the <math|2/3> quorum, the candidate is ready to be
   inlcuded in the relay chain as described in Section <todo|todo>.
 
   <\definition>
@@ -1105,55 +1114,32 @@
     validation process.
   </definition>
 
-  <subsection|Backing>
+  <subsection|Inclusion>
+
+  <todo|todo>
 
   <section|Candidate Validation>
 
-  <subsection|Exhaustive Check>
+  Received candidates submitted by collators must have its validity verified
+  by the assigned Polkadot validators. For each candidate to be valid, the
+  validator must successfully verify the following condidations in the
+  following order:
 
-  This step is initialized by the approval voting process.
+  <\enumerate-numeric>
+    <item>The candidate does not exceed any parameters in the persisted
+    validation data as defined in Definition <todo|todo>.
 
-  - Check whether the candidate does not exceed the max size as specified in
-  the persisted validation data.
+    <item>The signature of the collator is valid, as defined in Definition
+    <todo|todo>.
 
-  - Check collator signature.
+    <item>Validate the candidate by executing the parachain Runtime as
+    defined in Definition <todo|todo>.
+  </enumerate-numeric>
 
-  - Eventually decompress parachain Runtime.
-
-  - Validate the candidate by executing the parachain Runtime.
-
-  - Based ont he resulting value, check whether the parent head is valid.
-
-  - Create candidate commitments.
-
-  - =\<gtr\> Notify approval voting process.
-
-  <subsection|Non-exhaustive Check>
-
-  This step is initialized by the backing process.
-
-  - Check whether the candidate does not exceed the max size as specified in
-  the persisted validation data.
-
-  - Check collator signature.
-
-  - Fetch the persisted validation data from the relay chain by calling the
-  Runtime API.
-
-  - Fetch the parachain Runtime from the relay chain by calling the Runtime
-  API.
-
-  - Eventually decompress parachain Runtime.
-
-  - Validate the candidate by executing the parachain Runtime.
-
-  - Based ont he resulting value, check whether the parent head is valid.
-
-  - Create candidate commitments.
-
-  - Check validation outputs by calling the Runtime API.
-
-  - =\<gtr\> Notify the backing process.
+  If all steps are valid, the Polkadot validator must create the necessary
+  candidate commitments as defined in Definition <todo|todo> <todo|(and what
+  to do with those?)> and submit the appropriate statement for each candidate
+  as described in Section <reference|sect-candidate-backing-statements>.
 
   <section|Approval Voting & Distribution>
 
