@@ -1060,7 +1060,52 @@
 
   <section|Candidate Backing>
 
+  The Polkadot validator receives an arbitrary number of parachain blocks
+  with associated proofs from untrusted collators. The validator must verify
+  and select a specific quantity of the proposed parachain blocks and issue
+  those as backable candidates to its peers. <todo|how is the quantity
+  determined?>
+
+  <subsection|Statements>
+
+  The Polkadot validator checks the validity of the proposed parachains
+  blocks as described in Section <todo|todo> and issues <verbatim|Valid>
+  statements as defined in Definition <reference|defn-candidate-statement> to
+  its peers if the verification succeeded <todo|what if it failed?>.
+  Broadcasting failed verification as <verbatim|Valid> statements is a
+  slashable offense. The validator must only issue <strong|one>
+  <verbatim|Seconded> statement, based on an arbitrary metric, which implies
+  an explicit vote for a candidate to be included in the relay chain. This
+  protocol attempts to produce as many backable candidates as possible, but
+  does not attemp to determine a final candidate for inclusion. The Polkadot
+  validator choses the backable candidate for the relay chain, based on
+  whatever metric appropriate.
+
   \;
+
+  Once a parachain candidate has been seconded by at least one other
+  validator and enough <verbatim|Valid> statements have been issued about
+  taht candidate to meet the <math|2/3> quorum, the candidate is ready to be
+  inlcuded in the relay chain as described in Section <todo|todo>.
+
+  <\definition>
+    <label|defn-candidate-statement>A <strong|candidate statement> is a
+    message created by the relay chain validator on whether a produced
+    candidate which was submitted by a collator is valid or is likely to be
+    included in a relay chain block. It's a varying datatype of the following
+    format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><rprime|''>Seconded<rprime|''>
+      - proposal for inclusion>>|<row|<cell|1<space|1em><rprime|''>Valid<rprime|''>
+      - the parachain candidate is valid>>>>>>|<cell|>>>>
+    </eqnarray*>
+
+    Which variant is constructed depends on the current stage of the
+    validation process.
+  </definition>
+
+  <subsection|Backing>
 
   <section|Candidate Validation>
 
