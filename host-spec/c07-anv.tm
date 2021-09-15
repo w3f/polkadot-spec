@@ -1402,6 +1402,72 @@
     </itemize-dot>
   </itemize-dot>
 
+  <subsection|availability_cores>
+
+  Returns information on all availability cores. <todo|clarify>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An array of core states, <math|S>, of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|S>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>C<rsub|o>>>|<row|<cell|1\<rightarrow\>C<rsub|s>>>|<row|<cell|2\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|C<rsub|o>>|<cell|=>|<cell|<around*|(|n<rsub|u>,B<rsub|o>,B<rsub|t>,n<rsub|t>,b,G<rsub|i>,C<rsub|h>,C<rsub|d>|)>>>|<row|<cell|C<rsub|s>>|<cell|=>|<cell|<around*|(|P<rsub|id>,C<rsub|i>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|S> specifies the core state. <math|0> indicates that the
+      core is occupied, <math|1> implies it's currently free but scheduled
+      and given the opportunity to occupy and <math|2> implies it's free and
+      there's nothing scheduled.
+
+      <item><math|n<rsub|u>> is an <verbatim|Option> as described in
+      Definition <todo|todo> which can contain a <math|C<rsub|s>> value if
+      the core is freed by availabiltiy <todo|clarify> and indicates the
+      assignment that is next scheduled on this core. An empty value
+      indicates there is nothing scheduled.
+
+      <item><math|B<rsub|o>> indicates the relay chain block number at which
+      the core got occupied.
+
+      <item><math|B<rsub|t>> indicates the relay chain block number the core
+      will time-out at, if any.
+
+      <item><math|n<rsub|t>> is an <verbatim|Option> as described in
+      Definition <todo|todo> which can contain a <math|C<rsub|s>> value if
+      the core is freed by a time-out and indicates the assignment that is
+      next scheduled on this core. An empty value indicates there is nothing
+      scheduled.
+
+      <item><math|b> is a bitfield array as defined in Definition
+      <reference|defn-bitfield-array>. A <math|\<gtr\>2/3> majority of
+      assigned validators voting with <math|1> values means that the core is
+      available.
+
+      <item><math|G<rsub|i>> indicates the assigned validator group index as
+      defined in Definition <todo|todo> is to distribute availability pieces
+      of this candidate.
+
+      <item><math|C<rsub|h>> indicates the hash of the candidate occypying
+      the core.
+
+      <item><math|C<rsub|d>> is the candidate descriptor as defined in
+      Definition <todo|todo>.
+    </itemize-dot>
+  </itemize-dot>
+
   <section|<todo|todo>><label|sect-primary-validation>
 
   Collators produce candidates (Definition <reference|defn-candidate>) and
