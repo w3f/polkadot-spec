@@ -1339,6 +1339,69 @@
     chunk of the parachain block as defined in Definition <todo|todo>.
   </definition>
 
+  <section|Runtime Api>
+
+  <subsection|validators>
+
+  Returns the validator set at the current state. The specified validators
+  are responsible for backing parachains for the current state.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>None.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An array of public keys representing the validators.
+  </itemize-dot>
+
+  <subsection|validator_groups>
+
+  Returns the validator groups used during the current session. The
+  validators in the groups are referred to by the validator set Id as defined
+  in Definition <todo|todo>. <todo|clarify validator groups>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An array of tuples, <math|T>, of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|I,G|)>>>|<row|<cell|I>|<cell|=>|<cell|<around*|(|v<rsub|0>,\<ldots\>v<rsub|n>|)>>>|<row|<cell|G>|<cell|=>|<cell|<around*|(|B<rsub|s>,f,B<rsub|c>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|I> is an array the validator set Ids as defined in
+      Definition <todo|todo>.
+
+      <item><math|B<rsub|s>> indicates the block number where the session
+      started.
+
+      <item><math|f> indicates how often groups rotate. <math|0> means never.
+
+      <item><math|B<rsub|c>> indicates the current block number.\ 
+    </itemize-dot>
+  </itemize-dot>
+
   <section|<todo|todo>><label|sect-primary-validation>
 
   Collators produce candidates (Definition <reference|defn-candidate>) and
