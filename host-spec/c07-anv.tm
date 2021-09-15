@@ -263,44 +263,6 @@
   </definition>
 
   <\definition>
-    <label|defn-persisted-validation-data>The <strong|persisted validation
-    data> provides information about how to create the inputs for the
-    validation of a candidate by calling the Runtime. This information is
-    derived from the parachain state and will vary from parachain to
-    parachain, although some of the fields may be the same for every
-    parachain. This validation data acts as a way to authorize the additional
-    data (such as messages) the collator needs to pass to the validation
-    function.
-
-    \;
-
-    The persisted validation data, <math|D<rsub|pv>>, is a datastructure of
-    the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|D<rsub|pv>>|<cell|=>|<cell|<around*|(|P<rsub|h>,H<rsub|i>,H<rsub|r>,m<rsub|b>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|P<rsub|h>> is the parent head data as defined in Definition
-      <reference|defn-para-head-data>.
-
-      <item><math|H<rsub|i>> is the relay chain block number this is in the
-      context of.
-
-      <item><math|H<rsub|r>> is the relay chain storage root this is in the
-      context of.
-
-      <item><math|m<rsub|b>> is the maximum legal size of the PoV block, in
-      bytes.
-    </itemize-dot>
-
-    \;
-  </definition>
-
-  <\definition>
     <label|defn-relay-chain-proof>The <strong|relay chain proof> contains
     witness data for the host configuration, relay queue sizes, list of
     inbound/outbound HRMP channels and the metadata for the HRMP channels.
@@ -1467,6 +1429,80 @@
       Definition <todo|todo>.
     </itemize-dot>
   </itemize-dot>
+
+  <subsection|persisted_validation_data>
+
+  Returns the persistend validation data for the given parachain Id and a
+  given occupied core assumption.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>The parachain Id as defined in Definition <todo|todo>.
+
+    <item>An occupied core assumption, <math|A>, of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|A>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>|<row|<cell|2\<rightarrow\>\<b-phi\>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|0> indicates that the candidate occupying the core was made
+    available and included to free the core, <math|1> indicates that it
+    timed-out and freed the core without advancing the parachain and <math|2>
+    indicates that the core was not occuped to begin with.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An <verbatim|Option> as described in Definition <todo|todo> which
+    can contain the persisted validation data as defined in Definition
+    <reference|defn-persisted-validation-data>. The value is empty if the
+    parachain Id is not registered or the core assumption is of index
+    <math|2>, meaning that the core was freed.
+  </itemize-dot>
+
+  <\definition>
+    <label|defn-persisted-validation-data>The <strong|persisted validation
+    data> provides information about how to create the inputs for the
+    validation of a candidate by calling the Runtime. This information is
+    derived from the parachain state and will vary from parachain to
+    parachain, although some of the fields may be the same for every
+    parachain. This validation data acts as a way to authorize the additional
+    data (such as messages) the collator needs to pass to the validation
+    function.
+
+    \;
+
+    The persisted validation data, <math|D<rsub|pv>>, is a datastructure of
+    the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|D<rsub|pv>>|<cell|=>|<cell|<around*|(|P<rsub|h>,H<rsub|i>,H<rsub|r>,m<rsub|b>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|P<rsub|h>> is the parent head data as defined in Definition
+      <reference|defn-para-head-data>.
+
+      <item><math|H<rsub|i>> is the relay chain block number this is in the
+      context of.
+
+      <item><math|H<rsub|r>> is the relay chain storage root this is in the
+      context of.
+
+      <item><math|m<rsub|b>> is the maximum legal size of the PoV block, in
+      bytes.
+    </itemize-dot>
+
+    \;
+  </definition>
 
   <section|<todo|todo>><label|sect-primary-validation>
 
