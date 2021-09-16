@@ -1442,16 +1442,8 @@
   <\itemize-dot>
     <item>The parachain Id as defined in Definition <todo|todo>.
 
-    <item>An occupied core assumption, <math|A>, of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|A>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>|<row|<cell|2\<rightarrow\>\<b-phi\>>>>>>>>>>
-    </eqnarray*>
-
-    where <math|0> indicates that the candidate occupying the core was made
-    available and included to free the core, <math|1> indicates that it
-    timed-out and freed the core without advancing the parachain and <math|2>
-    indicates that the core was not occuped to begin with.
+    <item>An occupied core assumption as defined in Definition
+    <reference|defn-occupied-core-assumption>.
   </itemize-dot>
 
   \;
@@ -1465,6 +1457,23 @@
     parachain Id is not registered or the core assumption is of index
     <math|2>, meaning that the core was freed.
   </itemize-dot>
+
+  <\definition>
+    <label|defn-occupied-core-assumption>A o<strong|ccupied core assumption>
+    is used for fetching certain pieces of information about a parachain by
+    using the relay chain API. The assumption indicates how the Runtime API
+    should compute the result. <todo|how does the node make assumptions?> The
+    assumptions, <math|A>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|A>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>|<row|<cell|2\<rightarrow\>\<b-phi\>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|0> indicates that the candidate occupying the core was made
+    available and included to free the core, <math|1> indicates that it
+    timed-out and freed the core without advancing the parachain and <math|2>
+    indicates that the core was not occuped to begin with.
+  </definition>
 
   <\definition>
     <label|defn-persisted-validation-data>The <strong|persisted validation
@@ -1503,6 +1512,74 @@
 
     \;
   </definition>
+
+  <subsection|sesssion_index_for_child>
+
+  Returns the session index that is expected at the child of a block.
+  <todo|what is a \Pchild\Q?> <todo|clarify session index>
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>A unsigned 32-bit integer representing the session index.
+  </itemize-dot>
+
+  <subsection|validation_code>
+
+  Fetches the validation code (Runtime) of a parachain by parachain Id.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>The parachain Id as defined in Definition <reference|defn-para-id>.
+
+    <item>The occupied core assumption as defined in Definition
+    <reference|defn-occupied-core-assumption>.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An <verbatim|Option> value as defined in Definition <todo|todo>
+    containing the full validation code in an byte array. This value is empty
+    if the parachain Id cannot be found or the assumption is wrong.
+  </itemize-dot>
+
+  <subsection|validation_code_by_hash>
+
+  Returns the validation code (Runtime) of a parachain by its hash.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>The hash value of the validation code.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An <verbatim|Option> value as defined in Definition <todo|todo>
+    containing the full validation code in an byte array. This value is empty
+    if the parachain Id cannot be found or the assumption is wrong.
+  </itemize-dot>
 
   <section|<todo|todo>><label|sect-primary-validation>
 
