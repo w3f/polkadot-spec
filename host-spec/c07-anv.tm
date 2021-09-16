@@ -1581,6 +1581,30 @@
     if the parachain Id cannot be found or the assumption is wrong.
   </itemize-dot>
 
+  <subsection|candidate_pending_availability>
+
+  Returns the receipt of a candidate pending availability for any parachain
+  assigned to an occupied availabilty core.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>The parachain Id as defined in Definition <reference|defn-para-id>.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An <verbatim|Option> value as defined in Definition <todo|todo>
+    containing the committed candidate receipt as defined in Definition
+    <todo|todo>. This value is empty if the given parachain Id is not
+    assigned to an occupied availability core.
+  </itemize-dot>
+
   <section|<todo|todo>><label|sect-primary-validation>
 
   Collators produce candidates (Definition <reference|defn-candidate>) and
