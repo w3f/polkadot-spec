@@ -1602,7 +1602,103 @@
     <item>An <verbatim|Option> value as defined in Definition <todo|todo>
     containing the committed candidate receipt as defined in Definition
     <todo|todo>. This value is empty if the given parachain Id is not
-    assigned to an occupied availability core.
+    assigned to an occupied availability cores.
+  </itemize-dot>
+
+  <subsection|candidate_events>
+
+  Returns an array of candidate events that occured within the lastest state.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An array of single candidate events, <math|E>, of the following
+    format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|E>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>d>>|<row|<cell|1\<rightarrow\>d>>|<row|<cell|2\<rightarrow\><around*|(|C<rsub|r>,h,I<rsub|c>|)>>>>>>>>|<row|<cell|d>|<cell|=>|<cell|<around*|(|C<rsub|r>,h,I<rsub|c>,G<rsub|i>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|E> specifies the the event type of the candidate. <math|0>
+      indicates that the candidate receipt was backed in the latest relay
+      chain block, <math|1> indicates that it was included and became a
+      parachain block at the latest relay chain block and <math|2> indicates
+      that the candidate receipt was not made available and timed-out.
+
+      <item><math|C<rsub|r>> is the candidate receipt as defined in
+      Definition <todo|todo>.
+
+      <item><math|h> is the head data as defined in Definition <todo|todo>.
+
+      <item><math|I<rsub|c>> is the core index as defined in Definition
+      <todo|todo> that the candidate is occupying. If <math|E> is of variant
+      <math|2>, then this indicates the core index the candidate <em|was>
+      occupying.
+
+      <item><math|G<rsub|i>> is the group index as defined in Definition
+      <todo|todo> that is responsible of backing the candidate.
+    </itemize-dot>
+  </itemize-dot>
+
+  <subsection|disputes_info>
+
+  Returns information about all disputes known by the Runtime, including
+  which validators the Runtime will accept disputes from.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>None
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>A dispute information structure, <math|I>, of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|I>|<cell|=>|<cell|<around*|(|<around*|(|D<rsub|0>,\<ldots\>D<rsub|n>|)>,T|)>>>|<row|<cell|D>|<cell|=>|<cell|<around*|(|i,C<rsub|h>,S,l|)>>>|<row|<cell|T>|<cell|=>|<cell|<around*|(|m,<around*|(|p<rsub|0>,\<ldots\>p<rsub|n>|)>|)>>>|<row|<cell|p>|<cell|=>|<cell|<around*|(|i,<around*|(|s<rsub|0>,\<ldots\>s<rsub|n>|)>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|D> represents a dispute.
+
+      <item><math|T> represents information about spam slots <todo|clarify>
+
+      <item><math|i> is the session index as defined in Definition
+      <todo|todo>.
+
+      <item><math|C<rsub|h>> is the candidate hash <todo|receipt?>.
+
+      <item><math|S> is the dispute state as defined in Definition
+      <todo|todo>.
+
+      <item><math|l> is a boolean indacting <text-dots> <todo|?>.
+
+      <item><math|m> is a unsigned 32-bit integer indicating the maximum spam
+      slots <todo|clarify>.
+
+      <item><math|s> is a unsigned 32-bit integer indicating the spam slot.
+    </itemize-dot>
   </itemize-dot>
 
   <section|<todo|todo>><label|sect-primary-validation>
