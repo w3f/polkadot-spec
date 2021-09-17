@@ -1109,21 +1109,30 @@
   to do with those?)> and submit the appropriate statement for each candidate
   as described in Section <reference|sect-candidate-backing-statements>.
 
-  <subsection|Parachain Runtimes>
+  <subsection|Parachain Runtime>
 
   Parachain Runtimes are stored in the relay chain state, and can either be
   fetched by parachain Id or the Runtime hash via the relay chain Runtime API
   as described in Section <reference|sect-rt-api-validation-code> and
   <reference|sect-rt-api-validation-code-by-hash> respectively. The retrieved
   parachain Runtime might have to be decompressed based on the magic
-  identifier as described in Section <todo|todo>. Once parachain Runtime is
-  ready to be execute, the Polkadot validator must prepare the validation
-  parameters as defined in Definition <todo|todo>.
+  identifier as described in Section <todo|todo>.
+
+  \;
+
+  In order to validate a parachain block, the Polkadot validator must prepare
+  the validation parameters as defined in Definition
+  <reference|defn-validation-parameters>, then use its local Wasm execution
+  environment as described in Section <todo|todo> to execute the
+  <verbatim|validate_block> parachain Runtime API by passing on the
+  validation parameters as an argument. The parachain Runtime function
+  returns the validation result as defined in Definition
+  <reference|defn-validation-result>.
 
   <\definition>
-    The <strong|validation parameters> structure, <math|P>, is required to
-    validate a candidate against a parachain Runtime. It's a datastructure of
-    the following format:
+    <label|defn-validation-parameters>The <strong|validation parameters>
+    structure, <math|P>, is required to validate a candidate against a
+    parachain Runtime. It's a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|P>|<cell|=>|<cell|<around*|(|h,b,B<rsub|i>,S<rsub|r>|)>>>>>
@@ -1144,7 +1153,46 @@
     </itemize-dot>
   </definition>
 
-  \;
+  <\definition>
+    <label|defn-validation-result>The <strong|validation result> is returned
+    by the <verbatim|validate_block> parachain Runtime API after attempting
+    to validate a parachain block. Those results should <todo|must?> be
+    included in the relay chain state as described in Section <todo|todo>.
+    The validation result, V, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|V|<cell|=>|<cell|<around*|(|h,R,M<rsub|u>,M<rsub|h>,p<rsub|>,w|)>>>|<row|<cell|M<rsub|u>>|<cell|=>|<cell|<around*|(|m<rsub|0>,\<ldots\>m<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|(|t<rsub|0>,\<ldots\>t<rsub|n>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|h> is the head data of the parachain as described in
+      definition <todo|todo>.
+
+      <item><math|R> is an <verbatim|Option> value as described in Section
+      <todo|todo> that can contain a new parachain Runtime in case of an
+      update.
+
+      <item><math|M<rsub|u>> is an array of upward messages sent by the
+      parachain. Each individual message, <math|m>, is an array of bytes.
+
+      <item><math|M<rsub|h>> is an array of outbound horizontal messages sent
+      by the parachain. Each individual message, <math|t>, is a datastructure
+      as defined in Definition <todo|todo>.
+
+      <item><math|p> is a unsigned 32-bit integer indicating the number of
+      downward messages that were processed by the parachain. It is expected
+      that the parachain processes the messages from first to last <todo|can
+      this be enforced?>.
+
+      <item><math|w> is a unsigned 32-bit integer indicating the watermark
+      which specifies the relay chain block number up to which all inbound
+      horizontal messages have been processed.
+    </itemize-dot>
+  </definition>
+
+  <todo|clarify message passing types>
 
   <section|Approval Voting & Distribution>
 
