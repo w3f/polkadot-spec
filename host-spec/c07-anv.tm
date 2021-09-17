@@ -1701,6 +1701,36 @@
     </itemize-dot>
   </itemize-dot>
 
+  <subsection|candidates_included>
+
+  Checks with candidates have been included within the included within the
+  local chain.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>An array for pairs, <math|p>, of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|p>|<cell|=>|<cell|<around*|(|i,C<rsub|h>|)>>>>>
+    </eqnarray*>
+
+    where <math|i> is the session index as defined in Definition <todo|todo>
+    and <math|C<rsub|h>> is the candidate hash.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An array of booleans which indicate whether the a candidate is
+    included (<em|true>) or not (<em|false>). The order of booleans
+    corresponds to the order of the passed on pairs <math|p>.
+  </itemize-dot>
+
   <section|<todo|todo>><label|sect-primary-validation>
 
   Collators produce candidates (Definition <reference|defn-candidate>) and
