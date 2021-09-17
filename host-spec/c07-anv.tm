@@ -1703,8 +1703,7 @@
 
   <subsection|candidates_included>
 
-  Checks with candidates have been included within the included within the
-  local chain.
+  Checks which candidates have been included within the local chain.
 
   \;
 
