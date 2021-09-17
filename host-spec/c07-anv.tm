@@ -1094,7 +1094,8 @@
 
   <\enumerate-numeric>
     <item>The candidate does not exceed any parameters in the persisted
-    validation data as defined in Definition <todo|todo>.
+    validation data as defined in Definition
+    <reference|defn-persisted-validation-data>.
 
     <item>The signature of the collator is valid, as defined in Definition
     <todo|todo>.
@@ -1107,6 +1108,43 @@
   candidate commitments as defined in Definition <todo|todo> <todo|(and what
   to do with those?)> and submit the appropriate statement for each candidate
   as described in Section <reference|sect-candidate-backing-statements>.
+
+  <subsection|Parachain Runtimes>
+
+  Parachain Runtimes are stored in the relay chain state, and can either be
+  fetched by parachain Id or the Runtime hash via the relay chain Runtime API
+  as described in Section <reference|sect-rt-api-validation-code> and
+  <reference|sect-rt-api-validation-code-by-hash> respectively. The retrieved
+  parachain Runtime might have to be decompressed based on the magic
+  identifier as described in Section <todo|todo>. Once parachain Runtime is
+  ready to be execute, the Polkadot validator must prepare the validation
+  parameters as defined in Definition <todo|todo>.
+
+  <\definition>
+    The <strong|validation parameters> structure, <math|P>, is required to
+    validate a candidate against a parachain Runtime. It's a datastructure of
+    the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|P>|<cell|=>|<cell|<around*|(|h,b,B<rsub|i>,S<rsub|r>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|h> is the head data as defined in Definition <todo|todo> of
+      the parachain block parent.
+
+      <item><math|b> is the block body as defined in Definition <todo|todo>.
+
+      <item><math|B<rsub|i>> is the latest relay chain block number.
+
+      <item><math|S<rsub|r>> is the relay chain block storage root as defined
+      in Definition <todo|todo>
+    </itemize-dot>
+  </definition>
+
+  \;
 
   <section|Approval Voting & Distribution>
 
@@ -1430,7 +1468,7 @@
     </itemize-dot>
   </itemize-dot>
 
-  <subsection|persisted_validation_data>
+  <subsection|persisted_validation_data><label|sect-rt-api-persisted-validation-data>
 
   Returns the persistend validation data for the given parachain Id and a
   given occupied core assumption.
@@ -1510,6 +1548,9 @@
       bytes.
     </itemize-dot>
 
+    The persisted validation data is fetched via the Runtime API as described
+    in Section <reference|sect-rt-api-persisted-validation-data>.
+
     \;
   </definition>
 
@@ -1534,7 +1575,7 @@
     <item>A unsigned 32-bit integer representing the session index.
   </itemize-dot>
 
-  <subsection|validation_code>
+  <subsection|validation_code><label|sect-rt-api-validation-code>
 
   Fetches the validation code (Runtime) of a parachain by parachain Id.
 
@@ -1559,7 +1600,7 @@
     if the parachain Id cannot be found or the assumption is wrong.
   </itemize-dot>
 
-  <subsection|validation_code_by_hash>
+  <subsection|validation_code_by_hash><label|sect-rt-api-validation-code-by-hash>
 
   Returns the validation code (Runtime) of a parachain by its hash.
 
