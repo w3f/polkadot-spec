@@ -1039,17 +1039,17 @@
   <subsection|Statements><label|sect-candidate-backing-statements>
 
   The Polkadot validator checks the validity of the proposed parachains
-  blocks as described in Section <todo|todo> and issues <verbatim|Valid>
-  statements as defined in Definition <reference|defn-candidate-statement> to
-  its peers if the verification succeeded <todo|what if it failed?>.
-  Broadcasting failed verification as <verbatim|Valid> statements is a
-  slashable offense. The validator must only issue one <verbatim|Seconded>
-  statement, based on an arbitrary metric, which implies an explicit vote for
-  a candidate to be included in the relay chain. This protocol attempts to
-  produce as many backable candidates as possible, but does not attemp to
-  determine a final candidate for inclusion. The Polkadot validators chose
-  themselves a backable candidate for the relay chain, based on whatever
-  metric appropriate.
+  blocks as described in Section <reference|sect-candidate-validation> and
+  issue <verbatim|Valid> statements as defined in Definition
+  <reference|defn-candidate-statement> to its peers if the verification
+  succeeded <todo|what if it failed?>. Broadcasting failed verification as
+  <verbatim|Valid> statements is a slashable offense. The validator must only
+  issue one <verbatim|Seconded> statement, based on an arbitrary metric,
+  which implies an explicit vote for a candidate to be included in the relay
+  chain. This protocol attempts to produce as many backable candidates as
+  possible, but does not attemp to determine a final candidate for inclusion.
+  The Polkadot validators chose themselves a backable candidate for the relay
+  chain, based on whatever metric appropriate.
 
   \;
 
@@ -1083,14 +1083,57 @@
 
   <subsection|Inclusion>
 
+  \;
+
   <todo|todo>
 
-  <section|Candidate Validation>
+  <\definition>
+    A <label|defn-candidate-commitments><with|font-series|bold|candidate
+    commitment>, <math|C>, is the result of the execution and validation of a
+    parachain (or parathread) candidate whose produced values must be
+    committed to the relay chain. Those values are retrieved from the
+    validation result as defined in Definition
+    <reference|defn-validation-result>. A candidate commitment is a
+    datastructure of the following format:
 
-  Received candidates submitted by collators must have its validity verified
-  by the assigned Polkadot validators. For each candidate to be valid, the
-  validator must successfully verify the following condidations in the
-  following order:
+    <alignat*|2|<tformat|<table|<row|<cell|C>|<cell|=<around*|(|M<rsub|u>,M<rsub|h>,R,h,p,w|)>>>>>>
+
+    where:
+
+    <\itemize>
+      <item><math|M<rsub|u>> is an array of upward messages sent by the
+      parachain. Each individual message, <math|m>, is an array of bytes.
+
+      <item><math|M<rsub|h>> is an array of outbound horizontal messages sent
+      by the parachain. Each individual messages, <math|t>, is a
+      datastructure as defined in Definition <todo|todo>.
+
+      <item><math|R> is an Option value as described in Section <todo|todo>
+      that can contain a new parachain Runtime in case of an update.
+
+      <item><math|h> is the head data of the parachain block as described in
+      Definition <todo|todo>.
+
+      <item><math|p> is a unsigned 32-bit intiger indicating the number of
+      downward messages that were processed by the parachain. It is expected
+      that the parachain processes the messages from frist to last.
+
+      <item><math|w> is a unsigned 32-bit integer indicating the watermark
+      which specifies the relay chain block number up to which all inbound
+      horizontal messages have been processed.
+    </itemize>
+
+    \;
+
+    <todo|clarify messages passing types>
+  </definition>
+
+  <section|Candidate Validation><label|sect-candidate-validation>
+
+  Received candidates submitted <todo|how are those received> by collators
+  must have its validity verified by the assigned Polkadot validators. For
+  each candidate to be valid, the validator must successfully verify the
+  following condidations in the following order:
 
   <\enumerate-numeric>
     <item>The candidate does not exceed any parameters in the persisted
@@ -1101,7 +1144,7 @@
     <todo|todo>.
 
     <item>Validate the candidate by executing the parachain Runtime as
-    defined in Definition <todo|todo>.
+    defined in Definition <reference|sect-parachain-runtime>.
   </enumerate-numeric>
 
   If all steps are valid, the Polkadot validator must create the necessary
@@ -1109,13 +1152,13 @@
   to do with those?)> and submit the appropriate statement for each candidate
   as described in Section <reference|sect-candidate-backing-statements>.
 
-  <subsection|Parachain Runtime>
+  <subsection|Parachain Runtime><label|sect-parachain-runtime>
 
   Parachain Runtimes are stored in the relay chain state, and can either be
-  fetched by parachain Id or the Runtime hash via the relay chain Runtime API
-  as described in Section <reference|sect-rt-api-validation-code> and
+  fetched by the parachain Id or the Runtime hash via the relay chain Runtime
+  API as described in Section <reference|sect-rt-api-validation-code> and
   <reference|sect-rt-api-validation-code-by-hash> respectively. The retrieved
-  parachain Runtime might have to be decompressed based on the magic
+  parachain Runtime might need to be decompressed based on the magic
   identifier as described in Section <todo|todo>.
 
   \;
@@ -2039,39 +2082,6 @@
       <item><math|C<rsub|h>> is the hash of the encoded commitments made as a
       result of candidate execution <todo|clarify>.
     </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|defn-candidate-statement>A <strong|candidate statement> is a
-    message created by the relay chain validator on whether a produced
-    candidate which was submitted by a collator is valid or is likely to be
-    included in a relay chain block. It's a varying datatype of the following
-    format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><rprime|''>Seconded<rprime|''>
-      - proposal for inclusion>>|<row|<cell|1<space|1em><rprime|''>Valid<rprime|''>
-      - the parachain candidate is valid>>>>>>|<cell|>>>>
-    </eqnarray*>
-
-    Which variant is constructed depends on the current stage of the
-    validation process. This is described further in Section <todo|todo>.
-  </definition>
-
-  <\definition>
-    <label|defn-candidate-commitments><with|font-series|bold|Candidate
-    commitments>, <math|C<rsub|c>>, are results of the execution and
-    validation of parachain (or parathread) candidates whose produced values
-    must be committed to the relay chain. A candidate commitments is
-    represented as a tuple of the following format:
-
-    <alignat*|2|<tformat|<table|<row|<cell|C<rsub|c>>|<cell|\<assign\><around*|(|M<rsub|u>,M<rsub|h>,R<rsub|v>,P<rsub|h>|)>>>>>>
-
-    where each value represents:
-
-    <\itemize>
-      <item><math|>
-    </itemize>
   </definition>
 
   <\definition>
