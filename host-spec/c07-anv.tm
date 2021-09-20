@@ -1093,19 +1093,24 @@
     is of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|I>|<cell|=>|<cell|<around*|(|b,T,D,P<rsub|h>|)>>>|<row|<cell|T>|<cell|=>|<cell|<around*|(|C<rsub|0>,\<ldots\>C<rsub|n>|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|R,A,i|)>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|a<rsub|n>,\<ldots\>a<rsub|m>|)>>>|<row|<cell|a>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>s>>|<row|<cell|2\<rightarrow\>s>>>>>>>|<row|<cell|D>|<cell|=>|<cell|<around*|(|*d<rsub|n>,\<ldots\>d<rsub|m>|)>>>>>
+      <tformat|<table|<row|<cell|I>|<cell|=>|<cell|<around*|(|A,T,D,P<rsub|h>|)>>>|<row|<cell|T>|<cell|=>|<cell|<around*|(|C<rsub|0>,\<ldots\>C<rsub|n>|)>>>|<row|<cell|D>|<cell|=>|<cell|<around*|(|*d<rsub|n>,\<ldots\>d<rsub|m>|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|R,V,i|)>>>|<row|<cell|V>|<cell|=>|<cell|<around*|(|a<rsub|n>,\<ldots\>a<rsub|m>|)>>>|<row|<cell|a>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>s>>|<row|<cell|2\<rightarrow\>s>>>>>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|*L<rsub|n>,\<ldots\>L<rsub|m>|)>>>|<row|<cell|L>|<cell|=>|<cell|<around*|(|b,v<rsub|i>,s|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|b> the signed bitfields by validators claiming the
-      candidate is available as defined in Definition <todo|todo>.
+      <item><math|A> is an array of signed bitfields by validators claiming
+      the candidate is available (or not). The array must be sorted by
+      validator index, corresponding to the authority set as described in
+      Section <todo|todo>.
 
       <item><math|T> is an array of backed candidates for inclusing in the
       current block.
 
       <item><math|D> is an array of disputes.
+
+      <item><math|P<rsub|h>> is the parent block header of the parachain.
+      <todo|clarify>
 
       <item><math|d> is a dispute statement as described in Section
       <todo|todo>.
@@ -1113,7 +1118,7 @@
       <item><math|R> is a committed candidate receipt as defined in
       Definition <todo|todo>.
 
-      <item><math|A> is an array of validity votes themselves, expressed as
+      <item><math|V> is an array of validity votes themselves, expressed as
       signatures.
 
       <item><math|i> is a bitfield of indices of the validators within the
@@ -1126,8 +1131,13 @@
       correspondence of a <verbatim|Valid> statement). Both variants are
       followed by the signature of the validator. <todo|link statements>
 
-      <item><math|P<rsub|h>> is the parent block header of the parachain.
-      <todo|clarify>
+      <item><math|s> is the signature of the validator.
+
+      <item><math|b> the availability bitfield as described in Definition
+      <todo|todo>.
+
+      <item><math|v<rsub|i>> is the validator index of the authority set as
+      defined in Definition <todo|todo>.
     </itemize-dot>
 
     <todo|clarify how this is constructed>
