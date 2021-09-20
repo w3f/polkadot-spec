@@ -1083,9 +1083,55 @@
 
   <subsection|Inclusion>
 
-  \;
+  The Polkadot validator includes the backed candidates as inherent data into
+  a block as described in Section <todo|inherent section>. The parachain
+  inherent data is defined in Definition <todo|todo>.
 
-  <todo|todo>
+  <\definition>
+    The <strong|parachain inherent data> contains backed candidates and is
+    included when authoring a relay chain block. The datastructure, <math|I>,
+    is of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|I>|<cell|=>|<cell|<around*|(|b,T,D,P<rsub|h>|)>>>|<row|<cell|T>|<cell|=>|<cell|<around*|(|C<rsub|0>,\<ldots\>C<rsub|n>|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|R,A,i|)>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|a<rsub|n>,\<ldots\>a<rsub|m>|)>>>|<row|<cell|a>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>s>>|<row|<cell|2\<rightarrow\>s>>>>>>>|<row|<cell|D>|<cell|=>|<cell|<around*|(|*d<rsub|n>,\<ldots\>d<rsub|m>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|b> the signed bitfields by validators claiming the
+      candidate is available as defined in Definition <todo|todo>.
+
+      <item><math|T> is an array of backed candidates for inclusing in the
+      current block.
+
+      <item><math|D> is an array of disputes.
+
+      <item><math|d> is a dispute statement as described in Section
+      <todo|todo>.
+
+      <item><math|R> is a committed candidate receipt as defined in
+      Definition <todo|todo>.
+
+      <item><math|A> is an array of validity votes themselves, expressed as
+      signatures.
+
+      <item><math|i> is a bitfield of indices of the validators within the
+      validator group <todo|clarify>.
+
+      <item><math|a> is either an implicit or explicit attestation of the
+      validity of a parachain candidate, where <math|1> implies an implicit
+      vote (in correspondence of a <verbatim|Candidate> statement <todo|where
+      is this?>) and <math|2> implies an explicit attestation (in
+      correspondence of a <verbatim|Valid> statement). Both variants are
+      followed by the signature of the validator. <todo|link statements>
+
+      <item><math|P<rsub|h>> is the parent block header of the parachain.
+      <todo|clarify>
+    </itemize-dot>
+
+    <todo|clarify how this is constructed>
+  </definition>
 
   <\definition>
     A <label|defn-candidate-commitments><with|font-series|bold|candidate
