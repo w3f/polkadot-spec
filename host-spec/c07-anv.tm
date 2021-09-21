@@ -870,24 +870,22 @@
     <label|defn-candidate-statement>A <strong|candidate statement> is a
     message created by the relay chain validator on whether a produced
     candidate which was submitted by a collator is valid or is likely to be
-    included in a relay chain block. It's a varying datatype of the following
-    format:
+    included in a relay chain block. The candidate statemet, <math|S>, is a
+    varying datatype of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|>|<cell|<choice|<tformat|<table|<row|<cell|0<space|1em><rprime|''>Seconded<rprime|''>
-      - proposal for inclusion>>|<row|<cell|1<space|1em><rprime|''>Valid<rprime|''>
-      - the parachain candidate is valid>>>>>>|<cell|>>>>
+      <tformat|<table|<row|<cell|S>|<cell|=<choice|<tformat|<table|<row|<cell|0>>|<row|<cell|1>>>>>>|<cell|>>>>
     </eqnarray*>
 
-    Which variant is constructed depends on the current stage of the
-    validation process.
+    where <math|0> implies the candidate has been \Pseconded\Q (should be
+    included in the relay chain) and <math|1> implies the candidate is valid.
   </definition>
 
   <subsection|Inclusion>
 
-  The Polkadot validator includes the backed candidates as inherent data into
-  a block as described in Section <todo|inherent section>. The parachain
-  inherent data is defined in Definition <reference|defn-parachain-inherent-data>.
+  The Polkadot validator includes the backed candidates as inherent data as
+  defined in Definition <reference|defn-parachain-inherent-data> into a block
+  as described in Section <todo|inherent section>.
 
   <\definition>
     <label|defn-parachain-inherent-data>The <strong|parachain inherent data>
