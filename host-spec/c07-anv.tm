@@ -151,35 +151,6 @@
   </definition>
 
   <\definition>
-    The <strong|parachain inherent data>, <math|I<rsub|p>>, is passed by the
-    collator to the parachain runtime <todo|when is it passed?>. It's a
-    datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|I<rsub|p>>|<cell|=>|<cell|<around*|(|D<rsub|pv>,H<rsub|r>,M<rsub|d>,M<rsub|h>|)>>>|<row|<cell|M<rsub|d>>|<cell|=>|<cell|<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>>>|<row|<cell|M<rsub|h>>|<cell|=>|<cell|<around*|{|<rsub|><around*|(|P<rsub|id>,<around*|(|M<rsub|0>,\<ldots\>M<rsub|n>|)>|)>|}>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|D<rsub|pv>> is the persisted validation data as defined in
-      Definition <reference|defn-persisted-validation-data>.
-
-      <item><math|H<rsub|r>> the relay chain storage proof of a predefined
-      set of keys from the relay chain as defined in Definition
-      <reference|defn-relay-chain-proof>.
-
-      <item><math|M<rsub|d>> are inbound downward messages as defined in
-      Definition <reference|defn-inbound-messages> in the order they were
-      sent.
-
-      <item><math|M<rsub|h>> are the horizontal messages grouped by the
-      parachain Id (<reference|defn-para-id>) inside a map <todo|@fabio>. The
-      messages in the inner sequence must be in the order they were sent.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
     <label|defn-inbound-downward-msg>An <strong|inbound downward message> is
     a message that is sent from the Polkadot relay chain down to a parachain.
     Both message types share the same datastructure of the following type:
@@ -239,27 +210,6 @@
       <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
       array containing the message itself.
     </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|defn-upgrade-indicator><math|R<rsup|up><rsub|\<rho\>>> is an
-    varying data type (Definition <reference|defn-scale-codec>) which implies
-    whether the parachain is allowed to upgrade its validation code. \ 
-
-    <\equation*>
-      R<rsup|up><rsub|\<rho\>>\<assign\>Option<around|(|H<rsub|i><around|(|B<rsup|relay><rsub|chain>|)>+n|)>
-    </equation*>
-
-    <todo|@fabio: adjust formula?>
-
-    If this is <math|Some>, it contains the number of the minimum relay chain
-    height at which the upgrade will be applied, assuming an upgrade is
-    currently signaled <todo|@fabio: where is this signaled?>. A parachain
-    should enact its side of the upgrade at the end of the first parachain
-    block executing in the context of a relay-chain block with at least this
-    height. This may be equal to the current perceived relay-chain block
-    height, in which case the code upgrade should be applied at the end of
-    the signaling block.
   </definition>
 
   <\definition>
@@ -444,154 +394,6 @@
       <todo|@fabio>.
     </itemize-dot>
   </definition>
-
-  <\definition>
-    <label|defn-extra-validation-data><todo|@fabio: still relevant?>The
-    <with|font-series|bold|validation parameters>, <math|v<rsup|VP><rsub|B>>,
-    is an extra input to the validation function, i.e. additional data from
-    the relay chain state that is needed. It's a tuple of the following
-    format:
-
-    <\equation*>
-      vp<rsub|B>\<assign\><around|(|B<rsub|p>,h<rsub|p>,v<rsup|GVS><rsub|B>,R<rsup|up><rsub|\<rho\>>|)>
-    </equation*>
-
-    where each value represents:
-
-    <\itemize>
-      <item><math|B<rsub|p>>: the parachain block itself.
-
-      <item><math|h<rsub|p>>: the parent block header as defined in
-      Definition <reference|defn-block-header>.
-
-      <item><math|v<rsub|p>>: the global validation parameters as defined in
-      Definition <reference|defn-global-validation-parameters>.
-
-      <item><math|R<rsup|up><rsub|\<rho\>>>: implies whether the parachain is
-      allowed to upgrade its validation code (Definition
-      <reference|defn-upgrade-indicator>).
-    </itemize>
-  </definition>
-
-  <\definition>
-    <label|defn-global-validation-parameters><todo|@fabio: still relevant?>
-    The <with|font-series|bold|global validation parameters>,
-    <math|v<rsup|GVP><rsub|B>>, defines global data that apply to all
-    candidates in a block.
-
-    <\equation*>
-      v<rsup|GVS><rsub|B>\<assign\><around|(|Max<rsup|R><rsub|size>,Max<rsup|head><rsub|size>,H<rsub|i><around|(|B<rsup|relay><rsub|chain>|)>|)>
-    </equation*>
-
-    where each value represents:
-
-    <\itemize>
-      <item><math|Max<rsup|R><rsub|size>>: the maximum amount of bytes of the
-      parachain Wasm code permitted.
-
-      <item><math|Max<rsup|head><rsub|size>>: the maximum amount of bytes of
-      the head data (Definition <reference|defn-head-data>) permitted.
-
-      <item><math|H<rsub|i><around|(|B<rsup|relay><rsub|chain>|)>>: the relay
-      chain block number this is in the context of.
-    </itemize>
-  </definition>
-
-  <\definition>
-    <label|defn-local-validation-parameters><todo|@fabio: still relevant?>
-    The <with|font-series|bold|local validation parameters>,
-    <math|v<rsup|LVP><rsub|B>>, defines parachain-specific data required to
-    fully validate a block. It is a tuple of the following format:
-
-    <\equation*>
-      v<rsup|LVP><rsub|B>\<assign\><around|(|head<around|(|B<rsub|p>|)>,UINT128,Blake2b<around|(|R<rsub|\<rho\>>|)>,R<rsup|up><rsub|\<rho\>>|)>
-    </equation*>
-
-    where each value represents:
-
-    <\itemize>
-      <item><math|head<around|(|B<rsub|p>|)>>: the parent head data
-      (Definition <reference|defn-head-data>) of block <math|B>.
-
-      <item><math|UINT128>: the balance of the parachain at the moment of
-      validation.
-
-      <item><math|Blake2b<around|(|R<rsub|\<rho\>>|)>>: the Blake2b hash of
-      the validation code used to execute the candidate.
-
-      <item><math|R<rsup|up><rsub|\<rho\>>>: implies whether the parachain is
-      allowed to upgrade its validation code (Definition
-      <reference|defn-upgrade-indicator>).
-    </itemize>
-  </definition>
-
-  <\definition>
-    <todo|@fabio: still relevant>The <with|font-series|bold|validation
-    result>, <math|r<rsub|B>>, is returned by the validation code
-    <math|R<rsub|\<rho\>>> if the provided candidate is is valid. It is a
-    tuple of the following format:
-
-    <alignat*|2|<tformat|<table|<row|<cell|r<rsub|B>>|<cell|\<assign\><around|(|head<around|(|B|)>,Option<around|(|P<rsup|B><rsub|\<rho\>>|)>,<around|(|Msg<rsub|0>,...,Msg<rsub|n>|)>,UINT32|)>>>|<row|<cell|Msg>|<cell|\<assign\><around|(|\<bbb-O\>,Enc<rsub|SC><around|(|b<rsub|0>,..
-    b<rsub|n>|)>|)>>>>>>
-
-    where each value represents:
-
-    <\itemize>
-      <item><math|head<around|(|B|)>>: the new head data (Definition
-      <reference|defn-head-data>) of block <math|B>.
-
-      <item><math|Option<around|(|P<rsup|B><rsub|\<rho\>>|)>>: a varying data
-      (Definition <reference|defn-scale-codec>) containing an update to the
-      validation code that should be scheduled in the relay chain.
-
-      <item><math|Msg>: parachain \Pupward messages\Q to the relay chain.
-      <math|\<bbb-O\>> identifies the origin of the messages and is a varying
-      data type (Definition <reference|defn-scale-codec>) and can be one of
-      the following values:
-
-      <\equation*>
-        \<bbb-O\>=<choice|<tformat|<table|<row|<cell|0,>|<cell|<text|Signed>>>|<row|<cell|1,>|<cell|<text|Parachain>>>|<row|<cell|2,>|<cell|<text|Root>>>>>>
-      </equation*>
-
-      <todo|@fabio: define the concept of \Porigin\Q>
-
-      \;
-
-      The following SCALE encoded array, <math|Enc<rsub|SC><around|(|b<rsub|0>,..b<rsub|n>|)>>,
-      contains the raw bytes of the message which varies in size.
-
-      <item><math|UINT32>: number of downward messages that were processed by
-      the Parachain. It is expected that the Parachain processes them from
-      first to last.
-    </itemize>
-  </definition>
-
-  <\definition>
-    <label|defn-blob>Accordingly we define the
-    <with|font-series|bold|Available PoV Blob> or the
-    <with|font-series|bold|Blob> in short,
-    <with|font-series|bold|mode|math|<wide|B|\<bar\>>>, to be the tuple:
-
-    <\equation*>
-      <around|(|B,\<pi\><rsub|B>,v<rsup|GVP><rsub|B>,v<rsup|LVP><rsub|B>|)>
-    </equation*>
-
-    where each value represents:
-
-    <\itemize>
-      <item><math|B>: the parachain block.
-
-      <item><math|\<pi\><rsub|B>>: the witness data.
-
-      <item><math|v<rsup|GVP><rsub|B>>: the global validation parameters
-      (Definition <reference|defn-global-validation-parameters>).
-
-      <item><math|v<rsup|LVP><rsub|B>>: the local validation parameters
-      (Definition <reference|defn-local-validation-parameters>).
-    </itemize>
-  </definition>
-
-  Note that in the code the blob is referred to as \PAvailableData\Q.
 
   <section|Protocol Types>
 
@@ -1144,8 +946,24 @@
   </definition>
 
   <\definition>
-    A <strong|candidate descriptor>, <math|D>, is a unique descriptor of a
-    candidate receipt. It's a datastructure of the following format:
+    The <strong|committed candidate receipt>, <math|R>, is contains
+    information about the candidate and the the result of its execution and
+    is included in the relay chain. It's a datastructure of the following
+    format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<around*|(|D,C|)>>>>>
+    </eqnarray*>
+
+    where <math|D> is the candidate descriptor as defined in Definition
+    <reference|defn-candidate-descriptor> and C is the candidate commitments
+    as defined in Definition <reference|defn-candidate-commitments>.
+  </definition>
+
+  <\definition>
+    <label|defn-candidate-descriptor>The <strong|candidate descriptor>,
+    <math|D>, is a unique descriptor of a candidate receipt. It's a
+    datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|D>|<cell|=>|<cell|<around*|(|p,H,C<rsub|i>,V,B,r,s,p<rsub|h>,R<rsub|h>|)>>>>>
@@ -1180,9 +998,9 @@
   </definition>
 
   <\definition>
-    A <label|defn-candidate-commitments><with|font-series|bold|candidate
-    commitment>, <math|C>, is the result of the execution and validation of a
-    parachain (or parathread) candidate whose produced values must be
+    The <label|defn-candidate-commitments><with|font-series|bold|candidate
+    commitments>, <math|C>, is the result of the execution and validation of
+    a parachain (or parathread) candidate whose produced values must be
     committed to the relay chain. Those values are retrieved from the
     validation result as defined in Definition
     <reference|defn-validation-result>. A candidate commitment is a
