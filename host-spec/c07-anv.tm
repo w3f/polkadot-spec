@@ -1085,12 +1085,12 @@
 
   The Polkadot validator includes the backed candidates as inherent data into
   a block as described in Section <todo|inherent section>. The parachain
-  inherent data is defined in Definition <todo|todo>.
+  inherent data is defined in Definition <reference|defn-parachain-inherent-data>.
 
   <\definition>
-    The <strong|parachain inherent data> contains backed candidates and is
-    included when authoring a relay chain block. The datastructure, <math|I>,
-    is of the following format:
+    <label|defn-parachain-inherent-data>The <strong|parachain inherent data>
+    contains backed candidates and is included when authoring a relay chain
+    block. The datastructure, <math|I>, is of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|I>|<cell|=>|<cell|<around*|(|A,T,D,P<rsub|h>|)>>>|<row|<cell|T>|<cell|=>|<cell|<around*|(|C<rsub|0>,\<ldots\>C<rsub|n>|)>>>|<row|<cell|D>|<cell|=>|<cell|<around*|(|*d<rsub|n>,\<ldots\>d<rsub|m>|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|R,V,i|)>>>|<row|<cell|V>|<cell|=>|<cell|<around*|(|a<rsub|n>,\<ldots\>a<rsub|m>|)>>>|<row|<cell|a>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>s>>|<row|<cell|2\<rightarrow\>s>>>>>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|*L<rsub|n>,\<ldots\>L<rsub|m>|)>>>|<row|<cell|L>|<cell|=>|<cell|<around*|(|b,v<rsub|i>,s|)>>>>>
@@ -1141,6 +1141,42 @@
     </itemize-dot>
 
     <todo|clarify how this is constructed>
+  </definition>
+
+  <\definition>
+    A <strong|candidate descriptor>, <math|D>, is a unique descriptor of a
+    candidate receipt. It's a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|D>|<cell|=>|<cell|<around*|(|p,H,C<rsub|i>,V,B,r,s,p<rsub|h>,R<rsub|h>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|p> is the parachain Id as defined in Definition
+      <todo|todo>.
+
+      <item><math|H> is the hash of the relay chain block the candidate is
+      executed in the context of.
+
+      <item><math|C<rsub|i>> is the collators public key <todo|todo>.
+
+      <item><math|V> is the hash of the persisted validation data. as defined
+      in Definition <todo|todo>.
+
+      <item><math|B> is the hash of the PoV block.
+
+      <item><math|r> is the root of the block's erasure encoding Merkle tree.
+
+      <item><math|s> the collator signature of the concatenated components
+      <math|p>, <math|H>, <math|R<rsub|h>> and <math|B>.
+
+      <item><math|p<rsub|h>> is the hash of the parachain header of this
+      candidate.
+
+      <item><math|R<rsub|h>> is the hash of the parachain Runtime.
+    </itemize-dot>
   </definition>
 
   <\definition>
