@@ -426,7 +426,7 @@
   </definition>
 
   <\definition>
-    <label|net-msg-full-statement>A <strong|full statement>, <math|S>, is a
+    <label|net-msg-full-statement>A <strong|statement>, <math|S>, is a
     datastructure of the following format:
 
     <\eqnarray*>
@@ -437,10 +437,12 @@
 
     <\itemize-dot>
       <item><math|d> is a varying datatype where <math|1> indicates that the
-      validator seconds a candidate, followed by the committed candidate
-      receipt, <math|C<rsub|r>>, as defined in Definition <todo|todo>.
-      <math|2> indicates that the validator has deemed the candidate valid,
-      followed by the candidate hash.
+      validator \Pseconds\Q a candidate, meaning that the candidate should be
+      included in the relay chain, followed by the committed candidate
+      receipt, <math|C<rsub|r>>, as defined in Definition
+      <reference|defn-committed-candidate-receipt>. <math|2> indicates that
+      the validator has deemed the candidate valid, followed by the candidate
+      hash.
 
       <item><math|C<rsub|h>> is the candidate hash.
 
@@ -843,19 +845,23 @@
   The Polkadot validator checks the validity of the proposed parachains
   blocks as described in Section <reference|sect-candidate-validation> and
   issue <verbatim|Valid> statements as defined in Definition
-  <reference|defn-candidate-statement> to its peers if the verification
+  <reference|net-msg-full-statement> to its peers if the verification
   succeeded <todo|what if it failed?>. Broadcasting failed verification as
   <verbatim|Valid> statements is a slashable offense. The validator must only
   issue one <verbatim|Seconded> statement, based on an arbitrary metric,
   which implies an explicit vote for a candidate to be included in the relay
-  chain. This protocol attempts to produce as many backable candidates as
-  possible, but does not attemp to determine a final candidate for inclusion.
-  The Polkadot validators chose themselves a backable candidate for the relay
-  chain, based on whatever metric appropriate.
+  chain. The statements are gossiped to its peers with the statement
+  distribution protocol message as defined in Definition
+  <reference|defn-committed-candidate-receipt>.\ 
 
   \;
 
-  <todo|how are the statements gossiped?>
+  This protocol attempts to produce as many backable candidates as possible,
+  but does not attemp to determine a final candidate for inclusion. The
+  Polkadot validators chose themselves a backable candidate for the relay
+  chain, based on whatever metric appropriate.
+
+  \;
 
   <todo|how are collators that broadcast invalid candidates punished?>
 
@@ -865,21 +871,6 @@
   validator and enough <verbatim|Valid> statements have been issued about
   that candidate to meet the <math|2/3> quorum, the candidate is ready to be
   inlcuded in the relay chain as described in Section <todo|todo>.
-
-  <\definition>
-    <label|defn-candidate-statement>A <strong|candidate statement> is a
-    message created by the relay chain validator on whether a produced
-    candidate which was submitted by a collator is valid or is likely to be
-    included in a relay chain block. The candidate statemet, <math|S>, is a
-    varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|S>|<cell|=<choice|<tformat|<table|<row|<cell|0>>|<row|<cell|1>>>>>>|<cell|>>>>
-    </eqnarray*>
-
-    where <math|0> implies the candidate has been \Pseconded\Q (should be
-    included in the relay chain) and <math|1> implies the candidate is valid.
-  </definition>
 
   <subsection|Inclusion>
 
@@ -944,10 +935,10 @@
   </definition>
 
   <\definition>
-    The <strong|committed candidate receipt>, <math|R>, is contains
-    information about the candidate and the the result of its execution and
-    is included in the relay chain. It's a datastructure of the following
-    format:
+    <label|defn-committed-candidate-receipt>The <strong|committed candidate
+    receipt>, <math|R>, is contains information about the candidate and the
+    the result of its execution and is included in the relay chain. It's a
+    datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<around*|(|D,C|)>>>>>
