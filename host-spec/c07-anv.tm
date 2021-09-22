@@ -733,10 +733,10 @@
     </eqnarray*>
 
     where <math|B<rsub|h>> is the hash of the relay chain parent and
-    <math|C<rsub|h>> is the candidate hash that was used to create the
-    committed candidate recept as defined in Definition <todo|todo>. The
-    response message is defined in Definition
-    <reference|net-msg-statement-fetching-response>.
+    <math|C<rsub|h>> is the candidate hash that was used to create a
+    committed candidate recept as defined in Definition
+    <reference|defn-committed-candidate-receipt>. The response message is
+    defined in Definition <reference|net-msg-statement-fetching-response>.
   </definition>
 
   <\definition>
@@ -750,8 +750,8 @@
     </eqnarray*>
 
     where <math|C<rsub|r>> is the committed candidate receipt as defined in
-    Definition <todo|todo>. This type does not notify the client about a
-    statement that was not found.
+    Definition <reference|defn-committed-candidate-receipt>. This type does
+    not notify the client about a statement that was not found.
   </definition>
 
   <subsection|Disputes>
@@ -829,7 +829,7 @@
 
   <todo|todo>
 
-  <section|Candidate Backing>
+  <section|Candidate Backing><label|sect-candidate-backing>
 
   The Polkadot validator receives an arbitrary number of parachain candidates
   with associated proofs from untrusted collators. The validator must verify
@@ -837,8 +837,10 @@
   as <em|backable> candidates to its peers. A candidate is considered
   <em|backable> when at least <math|2/3> of all assigned validators have
   issued a <verbatim|Valid> statement about that candidate, as described in
-  Section <reference|sect-candidate-backing-statements>. <todo|reference
-  assigned validators>
+  Section <reference|sect-candidate-backing-statements>. Validators can
+  retrieve information about assignments via the Runtime API
+  <reference|sect-rt-api-validator-groups> respectively
+  <reference|sect-rt-api-availability-cores>.
 
   <subsection|Statements><label|sect-candidate-backing-statements>
 
@@ -852,7 +854,7 @@
   which implies an explicit vote for a candidate to be included in the relay
   chain. The statements are gossiped to its peers with the statement
   distribution protocol message as defined in Definition
-  <reference|defn-committed-candidate-receipt>.\ 
+  <reference|defn-committed-candidate-receipt>.
 
   \;
 
@@ -870,9 +872,10 @@
   Once a parachain candidate has been seconded by at least one other
   validator and enough <verbatim|Valid> statements have been issued about
   that candidate to meet the <math|2/3> quorum, the candidate is ready to be
-  inlcuded in the relay chain as described in Section <todo|todo>.
+  inlcuded in the relay chain as described in Section
+  <reference|sect-candidate-inclusion>.
 
-  <subsection|Inclusion>
+  <subsection|Inclusion><label|sect-candidate-inclusion>
 
   The Polkadot validator includes the backed candidates as inherent data as
   defined in Definition <reference|defn-parachain-inherent-data> into a block
@@ -924,7 +927,7 @@
 
       <item><math|s> is the signature of the validator.
 
-      <item><math|b> the availability bitfield as described in Definition
+      <item><math|b> the availability bitfields as described in Definition
       <todo|todo>.
 
       <item><math|v<rsub|i>> is the validator index of the authority set as
@@ -936,8 +939,8 @@
 
   <\definition>
     <label|defn-committed-candidate-receipt>The <strong|committed candidate
-    receipt>, <math|R>, is contains information about the candidate and the
-    the result of its execution and is included in the relay chain. It's a
+    receipt>, <math|R>, contains information about the candidate and the the
+    result of its execution that is included in the relay chain. It's a
     datastructure of the following format:
 
     <\eqnarray*>
@@ -1141,58 +1144,59 @@
   The approval voting process ensures that only valid parachain blocks are
   finalized on the relay chain. Validators verify submitted parachain
   candidates received from collators and issue approvals for valid
-  candidates, respectively disputes for invalid blocks.
+  candidates, respectively disputes for invalid blocks. Since it cannot be
+  expected that each validators verifies every single parachain candidate,
+  this mechanism ensures that enough honest validators are selected to verify
+  parachain candidates and to prevent the finalization of invalid blocks. If
+  an honest validator detects an invalid block which was approved by one or
+  more validators, the honest validator must issue a disputes which wil cause
+  escalations, resulting in consequences for all malicious parties, i.e.
+  slashing. This mechanism is described more in Section <todo|todo>.
 
   \;
 
-  Since it cannot be expected that each validators verifies every single
-  parachain candidate, this mechanism ensures that enough honest validators
-  are selected to verify parachain candidates and to prevent the finalization
-  of invalid blocks. If an honest validator detects a invalid block which was
-  approved by one or more validators, the honest validator must issue a
-  dispute which wil cause an escalation, resulting in consequences for all
-  malicious parties, i.e. slashing. This mechanism is described more in
-  Section <todo|todo>.
+  A VRF mechanism assigns the validators responsible for approving submitted
+  parachain candidates, unlike the assignment mechanism during the backing
+  phase, where assignments are all public and retrievable via the Runtime
+  API, as described in Section <reference|sect-candidate-backing>. When
+  ready, an assigned validator broadcasts their assignment to indicate their
+  intent to check a candidate. After verifying a parachain candidate, the
+  validator issues their approval vote to connected peers. If no following
+  approval vote is sent, then that behavior is implied as \Pno-show', meaning
+  that more validators need to be assigned to verify the candidate. No-show
+  occurrences are explained further in Section
+  <reference|sect-rt-api-validator-groups>.
+
+  <subsection|Assignment Criteria>
+
+  Validators determine their assignment based on a VRF mechanism, similiar to
+  BABE, as described in Section <todo|todo>.\ 
 
   \;
 
-  The assignment function selects the validators responsible for verifying
-  submitted parachain candidates, as defined in <todo|todo>. Assigned
-  validators broadcast their assignment to indicate their intent to check a
-  candidate. After verifying a parachain candidate, assigned validators issue
-  their approval vote to their peers. If no following approval vote is sent,
-  then that behavior is declared as \Pno-show', meaning that the
-  corresponding validator failed to recover or verify the PoV block. This
-  results in more validators having to verify the PoV block. That behavior is
-  described more closely in Section <todo|todo>.
+  <todo|todo>
 
   \;
 
-  <\todo>
-    \PWhen we trigger our own assignment, we broadcast it via Approval
-    Distribution, begin\ 
-
-    fetching the data from Availability Recovery, and then pass it through to
-    the\ 
-
-    Candidate Validation.\Q
-  </todo>
-
-  <subsection|Assignments>
-
-  Assigned validators broadcast their assignment by issuing an approval
-  distribution message as defined in Definition
-  <reference|net-msg-approval-distribution>. Other assigned validators that
-  receive that network message must keep track of if, expecting an approval
-  vote following shortly after.
+  An assigned validator never broadcasts their assignment until relevant.
+  Once the assigned validator is ready to check a candidate, the validator
+  broadcasts their assignment by issuing an approval distribution message as
+  defined in Definition <reference|net-msg-approval-distribution>. Other
+  assigned validators that receive that network message must keep track of
+  if, expecting an approval vote following shortly after.
 
   \;
 
-  Verifying candidate <todo|todo>
+  <todo|todo>
 
-  Issuing approvals <todo|todo>
+  \;
 
-  <subsection|\PNo-show\Q Occurence>
+  \ After issuing an assignment, the validator must retrieve the candidate by
+  using the availability recovery as described in Section
+  <reference|sect-availability-recovery> and then validate the candidate as
+  described in Section <reference|sect-candidate-validation>.
+
+  <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
 
   The Polkadot validator observes a \Pno-show\Q occurence when another
   assigned validator broadcasted an assignment, indicating the intent to
@@ -1200,65 +1204,6 @@
   within a certain duration.
 
   \;
-
-  <todo|todo>
-
-  <subsection|Check and import assignment>
-
-  Check if the assignment is valid and can be accepted.
-
-  =\<gtr\> initiated by the approval distribution
-
-  \;
-
-  Load block entry from storage
-
-  Get the session info
-
-  Get the claimed core index
-
-  Load the candidate entry from storage
-
-  Get the approval entry
-
-  Check the assignment cert
-
-  Determine tranche
-
-  Check for duplicates
-
-  Trigger action
-
-  Write the candidate entry to storage
-
-  \;
-
-  <subsection|Check and import approval>
-
-  Check if the pproval vote is valid and can be accepted.
-
-  \;
-
-  Load block entry from storage
-
-  Get the session info
-
-  Transform the approval vote into the wrapper used to import statements into
-  disputes.
-
-  Verify signature
-
-  Load candidate entry
-
-  Don't accept approvals until assignment.
-
-  Inform the dispute coordinator about disputes if appropriate
-
-  Import approval vote and update block entry and candidate entry
-
-  Trigger actions
-
-  <subsection|Approved Ancestor>
 
   <todo|todo>
 
@@ -1289,7 +1234,7 @@
   of backed candidates for each parachain by checking occupied cores as
   defined in Definiton <todo|todo>.
 
-  <section|Availability Recovery>
+  <section|Availability Recovery><label|sect-availability-recovery>
 
   The availability distribution of the Polkadot validator must be able to
   send availability data to peers that issue requests. Therefore, the
@@ -1352,7 +1297,7 @@
     <item>An array of public keys representing the validators.
   </itemize-dot>
 
-  <subsection|validator_groups>
+  <subsection|validator_groups><label|sect-rt-api-validator-groups>
 
   Returns the validator groups used during the current session. The
   validators in the groups are referred to by the validator set Id as defined
@@ -1374,7 +1319,7 @@
     <item>An array of tuples, <math|T>, of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|I,G|)>>>|<row|<cell|I>|<cell|=>|<cell|<around*|(|v<rsub|0>,\<ldots\>v<rsub|n>|)>>>|<row|<cell|G>|<cell|=>|<cell|<around*|(|B<rsub|s>,f,B<rsub|c>|)>>>>>
+      <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|I,G|)>>>|<row|<cell|I>|<cell|=>|<cell|<around*|(|v<rsub|n>,\<ldots\>v<rsub|m>|)>>>|<row|<cell|G>|<cell|=>|<cell|<around*|(|B<rsub|s>,f,B<rsub|c>|)>>>>>
     </eqnarray*>
 
     where
@@ -1392,7 +1337,7 @@
     </itemize-dot>
   </itemize-dot>
 
-  <subsection|availability_cores>
+  <subsection|availability_cores><label|sect-rt-api-availability-cores>
 
   Returns information on all availability cores. <todo|clarify>
 
@@ -1455,6 +1400,10 @@
 
       <item><math|C<rsub|d>> is the candidate descriptor as defined in
       Definition <todo|todo>.
+
+      <item><math|C<rsub|i>> is an <verbatim|Option> as described in
+      Definition <todo|todo> which can contain the collator Id as defined in
+      Definition <todo|todo> indicating who should author the block.
     </itemize-dot>
   </itemize-dot>
 
@@ -1544,7 +1493,7 @@
     \;
   </definition>
 
-  <subsection|sesssion_index_for_child>
+  <subsection|session_index_for_child>
 
   Returns the session index that is expected at the child of a block.
   <todo|what is a \Pchild\Q?> <todo|clarify session index>
