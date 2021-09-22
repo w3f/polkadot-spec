@@ -427,34 +427,6 @@
   </definition>
 
   <\definition>
-    <label|net-msg-full-statement>A <strong|statement>, <math|S>, is a
-    datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|S>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>|<row|<cell|d>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>C<rsub|r>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>>>>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|d> is a varying datatype where <math|1> indicates that the
-      validator \Pseconds\Q a candidate, meaning that the candidate should be
-      included in the relay chain, followed by the committed candidate
-      receipt, <math|C<rsub|r>>, as defined in Definition
-      <reference|defn-committed-candidate-receipt>. <math|2> indicates that
-      the validator has deemed the candidate valid, followed by the candidate
-      hash.
-
-      <item><math|C<rsub|h>> is the candidate hash.
-
-      <item><math|A<rsub|i>> is the validator index in the authority set that
-      signed this statement.
-
-      <item><math|A<rsub|s>> is the signature of the validator.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
     <label|net-msg-statement-distribution>The <strong|statement distribution
     message>, <math|M>, is a datastructure of the following format:
 
@@ -759,8 +731,8 @@
     </eqnarray*>
 
     where <math|C<rsub|r>> is the committed candidate receipt as defined in
-    Definition <reference|defn-committed-candidate-receipt>. This type does
-    not notify the client about a statement that was not found.
+    Definition <reference|defn-committed-candidate-receipt>. No response is
+    returned if no statement is found.
   </definition>
 
   <subsection|Disputes>
@@ -878,6 +850,34 @@
   meet the <math|2/3> quorum, the candidate is ready to be inlcuded in the
   relay chain as described in Section <reference|sect-candidate-inclusion>.
 
+  <\definition>
+    <label|net-msg-full-statement>A <strong|statement>, <math|S>, is a
+    datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|S>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>|<row|<cell|d>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>C<rsub|r>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|d> is a varying datatype where <math|1> indicates that the
+      validator \Pseconds\Q a candidate, meaning that the candidate should be
+      included in the relay chain, followed by the committed candidate
+      receipt, <math|C<rsub|r>>, as defined in Definition
+      <reference|defn-committed-candidate-receipt>. <math|2> indicates that
+      the validator has deemed the candidate valid, followed by the candidate
+      hash.
+
+      <item><math|C<rsub|h>> is the candidate hash.
+
+      <item><math|A<rsub|i>> is the validator index in the authority set that
+      signed this statement.
+
+      <item><math|A<rsub|s>> is the signature of the validator.
+    </itemize-dot>
+  </definition>
+
   <subsection|Inclusion><label|sect-candidate-inclusion>
 
   The Polkadot validator includes the backed candidates as inherent data as
@@ -929,10 +929,10 @@
 
       <item><math|a> is either an implicit or explicit attestation of the
       validity of a parachain candidate, where <math|1> implies an implicit
-      vote (in correspondence of a <verbatim|Candidate> statement <todo|where
-      is this?>) and <math|2> implies an explicit attestation (in
-      correspondence of a <verbatim|Valid> statement). Both variants are
-      followed by the signature of the validator. <todo|link statements>
+      vote (in correspondence of a <verbatim|Seconded> statement) and
+      <math|2> implies an explicit attestation (in correspondence of a
+      <verbatim|Valid> statement). Both variants are followed by the
+      signature of the validator.
 
       <item><math|s> is the signature of the validator.
 
@@ -940,7 +940,7 @@
       <reference|defn-bitfield-array>.
 
       <item><math|v<rsub|i>> is the validator index of the authority set as
-      defined in Definition <todo|todo>.
+      defined in Definition <reference|defn-authority-list>.
     </itemize-dot>
 
     <todo|clarify how this is constructed>
@@ -1146,8 +1146,8 @@
       definition <todo|todo>.
 
       <item><math|R> is an <verbatim|Option> value as described in Section
-      <todo|todo> that can contain a new parachain Runtime in case of an
-      update.
+      <reference|defn-option-type> that can contain a new parachain Runtime
+      in case of an update.
 
       <item><math|M<rsub|u>> is an array of upward messages sent by the
       parachain. Each individual message, <math|m>, is an array of bytes.
@@ -1331,7 +1331,8 @@
 
   Returns the validator groups used during the current session. The
   validators in the groups are referred to by the validator set Id as defined
-  in Definition <todo|todo>. <todo|clarify validator groups>
+  in Definition <reference|defn-authority-list>. <todo|clarify validator
+  groups>
 
   \;
 
@@ -1356,7 +1357,7 @@
 
     <\itemize-dot>
       <item><math|I> is an array the validator set Ids as defined in
-      Definition <todo|todo>.
+      Definition <reference|defn-authority-list>.
 
       <item><math|B<rsub|s>> indicates the block number where the session
       started.
@@ -1399,10 +1400,10 @@
       there's nothing scheduled.
 
       <item><math|n<rsub|u>> is an <verbatim|Option> as described in
-      Definition <todo|todo> which can contain a <math|C<rsub|s>> value if
-      the core is freed by availabiltiy <todo|clarify> and indicates the
-      assignment that is next scheduled on this core. An empty value
-      indicates there is nothing scheduled.
+      Definition <reference|defn-option-type> which can contain a
+      <math|C<rsub|s>> value if the core is freed by availabiltiy
+      <todo|clarify> and indicates the assignment that is next scheduled on
+      this core. An empty value indicates there is nothing scheduled.
 
       <item><math|B<rsub|o>> indicates the relay chain block number at which
       the core got occupied.
@@ -1411,10 +1412,10 @@
       will time-out at, if any.
 
       <item><math|n<rsub|t>> is an <verbatim|Option> as described in
-      Definition <todo|todo> which can contain a <math|C<rsub|s>> value if
-      the core is freed by a time-out and indicates the assignment that is
-      next scheduled on this core. An empty value indicates there is nothing
-      scheduled.
+      Definition <reference|defn-option-type> which can contain a
+      <math|C<rsub|s>> value if the core is freed by a time-out and indicates
+      the assignment that is next scheduled on this core. An empty value
+      indicates there is nothing scheduled.
 
       <item><math|b> is a bitfield array as defined in Definition
       <reference|defn-bitfield-array>. A <math|\<gtr\>2/3> majority of
@@ -1429,11 +1430,11 @@
       the core.
 
       <item><math|C<rsub|d>> is the candidate descriptor as defined in
-      Definition <todo|todo>.
+      Definition <reference|defn-candidate-descriptor>.
 
       <item><math|C<rsub|i>> is an <verbatim|Option> as described in
-      Definition <todo|todo> which can contain the collator Id as defined in
-      Definition <todo|todo> indicating who should author the block.
+      Definition <reference|defn-option-type> which can contain the collators
+      public key indicating who should author the block. <todo|clarify>
     </itemize-dot>
   </itemize-dot>
 
@@ -1447,7 +1448,7 @@
   <strong|Arguments>
 
   <\itemize-dot>
-    <item>The parachain Id as defined in Definition <todo|todo>.
+    <item>The parachain Id as defined in Definition <reference|defn-para-id>.
 
     <item>An occupied core assumption as defined in Definition
     <reference|defn-occupied-core-assumption>.
@@ -1586,9 +1587,10 @@
   <strong|Return>
 
   <\itemize-dot>
-    <item>An <verbatim|Option> value as defined in Definition <todo|todo>
-    containing the full validation code in an byte array. This value is empty
-    if the parachain Id cannot be found or the assumption is wrong.
+    <item>An <verbatim|Option> value as defined in Definition
+    <inactive|<hybrid|>> containing the full validation code in an byte
+    array. This value is empty if the parachain Id cannot be found or the
+    assumption is wrong.
   </itemize-dot>
 
   <subsection|candidate_pending_availability>
@@ -1609,10 +1611,11 @@
   <strong|Return>
 
   <\itemize-dot>
-    <item>An <verbatim|Option> value as defined in Definition <todo|todo>
-    containing the committed candidate receipt as defined in Definition
-    <todo|todo>. This value is empty if the given parachain Id is not
-    assigned to an occupied availability cores.
+    <item>An <verbatim|Option> value as defined in Definition
+    <reference|defn-option-type> containing the committed candidate receipt
+    as defined in Definition <reference|defn-candidate-receipt>. This value
+    is empty if the given parachain Id is not assigned to an occupied
+    availability cores.
   </itemize-dot>
 
   <subsection|candidate_events>
@@ -1649,7 +1652,7 @@
       that the candidate receipt was not made available and timed-out.
 
       <item><math|C<rsub|r>> is the candidate receipt as defined in
-      Definition <todo|todo>.
+      Definition <reference|defn-candidate-receipt>.
 
       <item><math|h> is the head data as defined in Definition <todo|todo>.
 
