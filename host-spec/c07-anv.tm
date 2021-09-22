@@ -658,9 +658,9 @@
     where 0 is followed by the chunk response, <math|C<rsub|r>> and 1
     indicates that the requested chunk was not found. <math|C<rsub|r>>
     contains the erasure-encoded chunk of data belonging to the candidate
-    block, <math|c>, and <math|c<rsub|i>> is that chunks proof in the Merkle
-    tree. Both <math|c> and <math|c<rsub|i>> are byte arrays for type
-    <math|*<around*|(|b<rsub|0>\<ldots\>b<rsub|n>|)>>.
+    block, <math|c>, and <math|c<rsub|p>> is that chunks proof in the Merkle
+    tree. Both <math|c> and <math|c<rsub|p>> are byte arrays of type
+    <math|*<around*|(|b<rsub|n>\<ldots\>b<rsub|m>|)>>.
   </definition>
 
   <\definition>
@@ -669,7 +669,7 @@
     candidate. The request is a datastructure of the following format:
 
     <\equation*>
-      <around*|(|C<rsub|h>|)>
+      C<rsub|h>
     </equation*>
 
     where <math|C<rsub|h>> is the 256-bit candidate hash to get the available
@@ -912,19 +912,18 @@
       <item><math|D> is an array of disputes.
 
       <item><math|P<rsub|h>> is the parent block header of the parachain.
-      <todo|clarify>
 
       <item><math|d> is a dispute statement as described in Section
       <todo|todo>.
 
       <item><math|R> is a committed candidate receipt as defined in
-      Definition <todo|todo>.
+      Definition <reference|defn-committed-candidate-receipt>.
 
       <item><math|V> is an array of validity votes themselves, expressed as
       signatures.
 
       <item><math|i> is a bitfield of indices of the validators within the
-      validator group <todo|clarify>.
+      validator group.
 
       <item><math|a> is either an implicit or explicit attestation of the
       validity of a parachain candidate, where <math|1> implies an implicit
@@ -936,7 +935,7 @@
       <item><math|s> is the signature of the validator.
 
       <item><math|b> the availability bitfields as described in Definition
-      <todo|todo>.
+      <reference|defn-bitfield-array>.
 
       <item><math|v<rsub|i>> is the validator index of the authority set as
       defined in Definition <todo|todo>.
@@ -946,10 +945,28 @@
   </definition>
 
   <\definition>
+    <label|defn-candidate-receipt>A <strong|candidate receipt>, R, contains
+    information about the candidate and a proof of the results of its
+    execution. It's a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<around*|(|D,C<rsub|h>|)>>>>>
+    </eqnarray*>
+
+    where <math|D> is the candidate descriptor as defined in Definition
+    <reference|defn-candidate-descriptor> and <math|C<rsub|h>> is the hash of
+    candidate commitments as defined in Definition
+    <reference|defn-candidate-commitments>.
+  </definition>
+
+  <\definition>
     <label|defn-committed-candidate-receipt>The <strong|committed candidate
     receipt>, <math|R>, contains information about the candidate and the the
-    result of its execution that is included in the relay chain. It's a
-    datastructure of the following format:
+    result of its execution that is included in the relay chain. This type is
+    similiar to the candidate receipt as defined in Definition
+    <reference|defn-candidate-receipt>, but actually contains the execution
+    results rather than just a hash of it. It's a datastructure of the
+    following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<around*|(|D,C|)>>>>>
@@ -1018,8 +1035,9 @@
       by the parachain. Each individual messages, <math|t>, is a
       datastructure as defined in Definition <todo|todo>.
 
-      <item><math|R> is an Option value as described in Section <todo|todo>
-      that can contain a new parachain Runtime in case of an update.
+      <item><math|R> is an <verbatim|Option> value as described in Section
+      <todo|todo> that can contain a new parachain Runtime in case of an
+      update.
 
       <item><math|h> is the head data of the parachain block as described in
       Definition <todo|todo>.
@@ -1178,24 +1196,13 @@
   <subsection|Assignment Criteria>
 
   Validators determine their assignment based on a VRF mechanism, similiar to
-  BABE, as described in Section <todo|todo>.\ 
-
-  \;
-
-  <todo|todo>
-
-  \;
-
-  An assigned validator never broadcasts their assignment until relevant.
-  Once the assigned validator is ready to check a candidate, the validator
-  broadcasts their assignment by issuing an approval distribution message as
-  defined in Definition <reference|net-msg-approval-distribution>. Other
-  assigned validators that receive that network message must keep track of
-  if, expecting an approval vote following shortly after.
-
-  \;
-
-  <todo|todo>
+  BABE, as described in Section An assigned validator never broadcasts their
+  assignment until relevant. Once the assigned validator is ready to check a
+  candidate, the validator broadcasts their assignment by issuing an approval
+  distribution message as defined in Definition
+  <reference|net-msg-approval-distribution>, where <math|M> is of variant
+  <math|0>. Other assigned validators that receive that network message must
+  keep track of if, expecting an approval vote following shortly after.
 
   \;
 
@@ -1204,7 +1211,8 @@
   <reference|sect-availability-recovery> and then validate the candidate as
   described in Section <reference|sect-candidate-validation>. If the
   candidate is valid, the validator must send their approval to the network
-  as defined in Definition <reference|net-msg-approval-distribution>.\ 
+  as defined in Definition <reference|net-msg-approval-distribution>, where
+  <math|M> is of variant <math|1>.
 
   <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
 
@@ -1247,9 +1255,17 @@
   <section|Availability Recovery><label|sect-availability-recovery>
 
   The availability distribution of the Polkadot validator must be able to
-  send availability data to peers that issue requests. Therefore, the
-  Polkadot validator must recover enough availability chunks from other peers
-  in order to send an response to those requests.
+  recover parachain candidates that the validator is assigned to, in order to
+  determine whether the candidate should be backed as described in Section
+  <todo|todo> repsectively whether the candidate should be approved as
+  described in Section <todo|todo>. Additionally, peers can send availability
+  requests as defined in Definition <reference|net-msg-chunk-fetching-request>
+  and Definition <reference|net-msg-available-data-request> to the validator,
+  which the validator should be able to respond to.
+
+  \;
+
+  \;
 
   \;
 
