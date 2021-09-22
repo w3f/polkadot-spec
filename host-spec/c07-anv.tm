@@ -992,15 +992,15 @@
 
     <\itemize-dot>
       <item><math|p> is the parachain Id as defined in Definition
-      <todo|todo>.
+      <reference|defn-para-id>.
 
       <item><math|H> is the hash of the relay chain block the candidate is
       executed in the context of.
 
-      <item><math|C<rsub|i>> is the collators public key <todo|todo>.
+      <item><math|C<rsub|i>> is the collators public key.
 
-      <item><math|V> is the hash of the persisted validation data. as defined
-      in Definition <todo|todo>.
+      <item><math|V> is the hash of the persisted validation data as defined
+      in Definition <reference|defn-persisted-validation-data>.
 
       <item><math|B> is the hash of the PoV block.
 
@@ -1096,9 +1096,9 @@
   In order to validate a parachain block, the Polkadot validator must prepare
   the validation parameters as defined in Definition
   <reference|defn-validation-parameters>, then use its local Wasm execution
-  environment as described in Section <todo|todo> to execute the
-  <verbatim|validate_block> parachain Runtime API by passing on the
-  validation parameters as an argument. The parachain Runtime function
+  environment as described in Section <reference|sect-code-executor> to
+  execute the <verbatim|validate_block> parachain Runtime API by passing on
+  the validation parameters as an argument. The parachain Runtime function
   returns the validation result as defined in Definition
   <reference|defn-validation-result>.
 
@@ -1122,15 +1122,17 @@
       <item><math|B<rsub|i>> is the latest relay chain block number.
 
       <item><math|S<rsub|r>> is the relay chain block storage root as defined
-      in Definition <todo|todo>
+      in Definition <reference|sect-merkl-proof>.
     </itemize-dot>
   </definition>
 
   <\definition>
     <label|defn-validation-result>The <strong|validation result> is returned
     by the <verbatim|validate_block> parachain Runtime API after attempting
-    to validate a parachain block. Those results should <todo|must?> be
-    included in the relay chain state as described in Section <todo|todo>.
+    to validate a parachain block. Those results are then used in candidate
+    commitments as defined in Definition <reference|sect-merkl-proof>., which
+    then will be inserted into the relay chain via the parachain inherent
+    data as described in Definition <reference|defn-parachain-inherent-data>.
     The validation result, V, is a datastructure of the following format:
 
     <\eqnarray*>
@@ -1464,7 +1466,7 @@
   </itemize-dot>
 
   <\definition>
-    <label|defn-occupied-core-assumption>A o<strong|ccupied core assumption>
+    <label|defn-occupied-core-assumption>A <strong|occupied core assumption>
     is used for fetching certain pieces of information about a parachain by
     using the relay chain API. The assumption indicates how the Runtime API
     should compute the result. <todo|how does the node make assumptions?> The
