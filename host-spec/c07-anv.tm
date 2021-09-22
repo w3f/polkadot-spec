@@ -488,7 +488,7 @@
     message>, <math|M>, is a varying datatype of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|<around*|(|C<rsub|>,I<rsub|>|)><rsub|0>\<ldots\><around*|(|C,I|)><rsub|n>|)>>>|<row|<cell|1\<rightarrow\><around*|(|V<rsub|0>,\<ldots\>V<rsub|n>|)>>>>>>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|B<rsub|h>,A<rsub|i>,c<rsub|a>|)>>>|<row|<cell|c<rsub|a>>|<cell|=>|<cell|<around*|(|c<rsub|k>,P<rsub|o>,P<rsub|p>|)>>>|<row|<cell|c<rsub|k>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>s>>|<row|<cell|1\<rightarrow\>i>>>>>>>>>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|<around*|(|C<rsub|>,I<rsub|>|)><rsub|0>\<ldots\><around*|(|C,I|)><rsub|n>|)>>>|<row|<cell|1\<rightarrow\><around*|(|V<rsub|0>,\<ldots\>V<rsub|n>|)>>>>>>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|B<rsub|h>,A<rsub|i>,c<rsub|a>|)>>>|<row|<cell|c<rsub|a>>|<cell|=>|<cell|<around*|(|c<rsub|k>,P<rsub|o>,P<rsub|p>|)>>>|<row|<cell|c<rsub|k>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>s>>|<row|<cell|1\<rightarrow\>i>>>>>>>|<row|<cell|V>|<cell|=>|<cell|<around*|(|B<rsub|h>,I,A<rsub|i>,A<rsub|s>|)>>>>>
     </eqnarray*>
 
     where
@@ -501,11 +501,19 @@
       <item><math|C> is an assignment criterion which refers to the candidate
       under which the assignment is relevant by the block hash.
 
-      <item><math|B<rsub|h>> is the block hash where the candidate appears.
-      <todo|para- or relay block?>
+      <item><math|I> is the candidate index as defined in Definition
+      <todo|todo> which the approval refers to.
+
+      <item><math|V> is <text-dots>
+
+      <item><math|B<rsub|h>> is the relay chain block hash \ where the
+      candidate appears.
 
       <item><math|A<rsub|i>> is the validator index in the authority set that
       created this message. <todo|refer authority set>
+
+      <item><math|A<rsub|s>> is the signature of the validator issuing this
+      message.
 
       <item><math|c<rsub|a>> is the certification of the assignment.
 
@@ -1194,7 +1202,9 @@
   \ After issuing an assignment, the validator must retrieve the candidate by
   using the availability recovery as described in Section
   <reference|sect-availability-recovery> and then validate the candidate as
-  described in Section <reference|sect-candidate-validation>.
+  described in Section <reference|sect-candidate-validation>. If the
+  candidate is valid, the validator must send their approval to the network
+  as defined in Definition <reference|net-msg-approval-distribution>.\ 
 
   <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
 
