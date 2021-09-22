@@ -418,8 +418,9 @@
       <item><math|d> is the bitfield array as described in Definition
       <reference|defn-bitfield-array>.
 
-      <item><math|A<rsub|i>> is the validator index in the authority set that
-      signed this message.
+      <item><math|A<rsub|i>> is the validator index in the authority set as
+      defined in Definition <reference|defn-authority-list> that signed this
+      message.
 
       <item><math|A<rsub|s>> is the signature of the validator.
     </itemize-dot>
@@ -852,9 +853,9 @@
 
   <subsection|Statements><label|sect-candidate-backing-statements>
 
-  The Polkadot validator checks the validity of the proposed parachains
+  The assigned validator checks the validity of the proposed parachains
   blocks as described in Section <reference|sect-candidate-validation> and
-  issue <verbatim|Valid> statements as defined in Definition
+  issues <verbatim|Valid> statements as defined in Definition
   <reference|net-msg-full-statement> to its peers if the verification
   succeeded <todo|what if it failed?>. Broadcasting failed verification as
   <verbatim|Valid> statements is a slashable offense. The validator must only
@@ -866,28 +867,29 @@
 
   \;
 
-  This protocol attempts to produce as many backable candidates as possible,
-  but does not attemp to determine a final candidate for inclusion. The
-  Polkadot validators chose themselves a backable candidate for the relay
-  chain, based on whatever metric appropriate.
-
-  \;
-
   <todo|how are collators that broadcast invalid candidates punished?>
 
   \;
 
-  Once a parachain candidate has been seconded by at least one other
-  validator and enough <verbatim|Valid> statements have been issued about
-  that candidate to meet the <math|2/3> quorum, the candidate is ready to be
-  inlcuded in the relay chain as described in Section
-  <reference|sect-candidate-inclusion>.
+  This protocol attempts to produce as many backable candidates as possible,
+  but does not attempt to determine a final candidate for inclusion. Once a
+  parachain candidate has been seconded by at least one other validator and
+  enough <verbatim|Valid> statements have been issued about that candidate to
+  meet the <math|2/3> quorum, the candidate is ready to be inlcuded in the
+  relay chain as described in Section <reference|sect-candidate-inclusion>.
 
   <subsection|Inclusion><label|sect-candidate-inclusion>
 
   The Polkadot validator includes the backed candidates as inherent data as
   defined in Definition <reference|defn-parachain-inherent-data> into a block
-  as described in Section <todo|inherent section>.
+  as described in Section <reference|sect-inherents>. The relay chain block
+  author decides on whatever metric which candidate should be selected for
+  inclusion, as long as that candidate is valid and meets the 2/3+ quorum as
+  described in Section <reference|sect-candidate-backing-statements>. The
+  candidate approval process as described in Section
+  <reference|sect-approval-voting> will then make sure that only relay chain
+  blocks are finalized where each candidate for each availability core meets
+  the requirement of 2/3+ availability votes.
 
   <\definition>
     <label|defn-parachain-inherent-data>The <strong|parachain inherent data>
@@ -903,8 +905,8 @@
     <\itemize-dot>
       <item><math|A> is an array of signed bitfields by validators claiming
       the candidate is available (or not). The array must be sorted by
-      validator index, corresponding to the authority set as described in
-      Section <todo|todo>.
+      validator index corresponding to the authority set as described in
+      Section <reference|defn-authority-list>.
 
       <item><math|T> is an array of backed candidates for inclusing in the
       current block.
@@ -1165,7 +1167,7 @@
 
   <todo|clarify message passing types>
 
-  <section|Approval Voting & Distribution>
+  <section|Approval Voting><label|sect-approval-voting>
 
   The approval voting process ensures that only valid parachain blocks are
   finalized on the relay chain. Validators verify submitted parachain
