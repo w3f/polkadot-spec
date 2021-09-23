@@ -72,7 +72,7 @@
     datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,E,H<rsub|r>|)>>>|<row|<cell|E>|<cell|=>|<cell|<around*|(|e<rsub|0>,\<ldots\>e<rsub|n>|)>>>>>
+      <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,B,H<rsub|r>|)>>>|<row|<cell|B>|<cell|=>|<cell|<around*|(|e<rsub|n>,\<ldots\>e<rsub|m>|)>>>>>
     </eqnarray*>
 
     where
@@ -81,46 +81,21 @@
       <item><math|H<around*|(|B|)>> is the header of the block as described
       in Definition <reference|defn-block-header>.
 
-      <item><math|E> is an array of zero or more extrinsics,
-      <math|e<rsub|n>>, which are SCALE encoded byte arrays and its structure
-      is opaque to the Polkadot Host.
+      <item><math|B> is the body of the block, expressed as an array of zero
+      or more extrinsics, <math|e<rsub|n>>, which are SCALE encoded byte
+      arrays and its structure is opaque to the Polkadot Host.
 
       <item><math|H<rsub|r>> is the Merkle root of the parachain state at
-      this block.
+      this block as described in Section <reference|sect-merkl-proof>
     </itemize-dot>
   </definition>
 
   <\definition>
-    In the remainder of this chapter we assume that <math|<text|\<rho\>>> is
-    a Polkadot Parachain and <math|B> is a block which has been produced by
-    <math|\<rho\>> and is supposed to be approved to be <math|\<rho\>>'s next
-    block. By <math|R<rsub|\<rho\>>> we refer to the
-    <with|font-series|bold|validation code> of parachain <math|\<rho\>> as a
-    WASM blob, which is responsible for validating the corresponding
-    Parachain's blocks.
-  </definition>
-
-  <\definition>
-    <label|defn-witness-proof>The <with|font-series|bold|witness proof> of
-    block <math|B>, denoted by <with|font-series|bold|mode|math|\<pi\><rsub|B>>,
-    is the set of all the external data which has gathered while the
-    <math|\<rho\>> runtime executes block <math|B>. The data suffices to
-    re-execute <math|R<rsub|\<rho\>>> against <math|B> and achieve the final
-    state indicated in the <math|H<around|(|B|)>>.
-  </definition>
-
-  This witness proof consists of light client proofs of state data that are
-  generally Merkle proofs for the parachain state trie. This is required
-  because validators do not have access to the parachain state, but only have
-  the state root of it.
-
-  <\definition>
-    <label|defn-pov-block>Accordingly we define the
-    <with|font-series|bold|proof of validity block> or
-    <with|font-series|bold|PoV> block in short to be the tuple:
+    <label|defn-pov-block>A <with|font-series|bold|proof of validity block>
+    or <with|font-series|bold|PoV> block contains witness data to\ 
 
     <\equation*>
-      <around|(|B,\<pi\><rsub|B>|)>
+      <around|(|B,w|)>
     </equation*>
 
     A PoV block is an extracted Merkle subtree, attached to the block.
@@ -148,6 +123,28 @@
     <label|defn-para-id>The <strong|Parachain Id> is an unsigned 32-bit
     integer which serves as an identifier of a parachain. <todo|How are those
     indexes assigned?>
+  </definition>
+
+  <\definition>
+    <strong|Availability cores> are a Runtime concept used to process
+    parachains. Each parachain gets assigned to a availability core and
+    validators can fetch information about the cores, such as parachain block
+    candidates, by calling the appropriate Runtime API as described in
+    Section <reference|sect-rt-api-availability-cores>. Validators are not
+    concerned with the internal workings from the Runtimes perspective.
+  </definition>
+
+  <\definition>
+    <strong|Validator groups> are a Runtime concept for how validators are
+    assigned to certain parachains. Those assigned validators are responsible
+    for backing parachain block candidates as explained further in Section
+    <reference|sect-candidate-backing>. Collators can use this information
+    for submitting blocks. Validators can fetch their assignments by calling
+    the appropriate Runtime API as described in Section
+    <reference|sect-rt-api-validator-groups> and are not concerned how the
+    underlying assignment mechanism works. The assigned validators within a
+    group are usually referred to by their authority Id as defined in
+    Definition <reference|defn-authority-list>.
   </definition>
 
   <\definition>
@@ -1005,6 +1002,7 @@
       <item><math|B> is the hash of the PoV block.
 
       <item><math|r> is the root of the block's erasure encoding Merkle tree.
+      <todo|clarify>
 
       <item><math|s> the collator signature of the concatenated components
       <math|p>, <math|H>, <math|R<rsub|h>> and <math|B>.
