@@ -104,8 +104,8 @@
 
   <\definition>
     <label|defn-para-id>The <strong|Parachain Id> is an unsigned 32-bit
-    integer which serves as an identifier of a parachain. <todo|How are those
-    indexes assigned?>
+    integer which serves as an identifier of a parachain, assigned by the
+    Runtime.
   </definition>
 
   <\definition>
@@ -823,7 +823,7 @@
   API as described in Section <reference|sect-rt-api-validation-code> and
   <reference|sect-rt-api-validation-code-by-hash> respectively. The retrieved
   parachain Runtime might need to be decompressed based on the magic
-  identifier as described in Section <todo|todo>.
+  identifier as described in Section <reference|sect-runtime-compression>.
 
   \;
 
@@ -848,10 +848,11 @@
     where
 
     <\itemize-dot>
-      <item><math|h> is the head data as defined in Definition <todo|todo> of
-      the parachain block parent.
+      <item><math|h> is the parachain block header as defined in Definition
+      <reference|defn-parablock>.
 
-      <item><math|b> is the block body as defined in Definition <todo|todo>.
+      <item><math|b> is the block body as defined in Definition
+      <reference|defn-parablock>.
 
       <item><math|B<rsub|i>> is the latest relay chain block number.
 
@@ -876,8 +877,8 @@
     where
 
     <\itemize-dot>
-      <item><math|h> is the head data of the parachain as described in
-      definition <todo|todo>.
+      <item><math|h> is the parachain block header as defined in Definition
+      <reference|defn-parablock>.
 
       <item><math|R> is an <verbatim|Option> value as described in Section
       <reference|defn-option-type> that can contain a new parachain Runtime
@@ -888,12 +889,11 @@
 
       <item><math|M<rsub|h>> is an array of outbound horizontal messages sent
       by the parachain. Each individual message, <math|t>, is a datastructure
-      as defined in Definition <todo|todo>.
+      as defined in Definition <todo|messaging-chapter>.
 
       <item><math|p> is a unsigned 32-bit integer indicating the number of
       downward messages that were processed by the parachain. It is expected
-      that the parachain processes the messages from first to last <todo|can
-      this be enforced?>.
+      that the parachain processes the messages from first to last.
 
       <item><math|w> is a unsigned 32-bit integer indicating the watermark
       which specifies the relay chain block number up to which all inbound
@@ -901,7 +901,11 @@
     </itemize-dot>
   </definition>
 
-  <todo|clarify message passing types>
+  <todo|reference message passing types>
+
+  <subsection|Runtime Compression><label|sect-runtime-compression>
+
+  <todo|todo>
 
   <section|Approval Voting><label|sect-approval-voting>
 
@@ -915,7 +919,8 @@
   an honest validator detects an invalid block which was approved by one or
   more validators, the honest validator must issue a disputes which wil cause
   escalations, resulting in consequences for all malicious parties, i.e.
-  slashing. This mechanism is described more in Section <todo|todo>.
+  slashing. This mechanism is described more in Section
+  <reference|sect-availability-assingment-criteria>.
 
   \;
 
@@ -931,7 +936,7 @@
   occurrences are explained further in Section
   <reference|sect-rt-api-validator-groups>.
 
-  <subsection|Assignment Criteria>
+  <subsection|Assignment Criteria><label|sect-availability-assingment-criteria>
 
   Validators determine their assignment based on a VRF mechanism, similiar to
   BABE, as described in Section An assigned validator never broadcasts their
@@ -999,54 +1004,26 @@
     <label|defn-bitfield-array>A <strong|bitfield array> contains single-bit
     values which indidate whether a candidate is available. The number of
     items is equal of to the number of availability cores as defined in
-    Definition <todo|todo> and each bit represents a vote on the
-    corresponding core in the given order. Respectively, if the single bit
-    equals <verbatim|1>, then the Polkadot validator claims that the
-    availability core is occupied, there exists a committed candidate receipt
-    as defined in Definition <reference|defn-committed-candidate-receipt> and
-    that the validator has a stored chunk of the parachain block as defined
-    in Definition <todo|todo>.
+    Definition <reference|defn-availability-cores> and each bit represents a
+    vote on the corresponding core in the given order. Respectively, if the
+    single bit equals <verbatim|1>, then the Polkadot validator claims that
+    the availability core is occupied, there exists a committed candidate
+    receipt as defined in Definition <reference|defn-committed-candidate-receipt>
+    and that the validator has a stored chunk of the parachain block as
+    defined in Definition <reference|sect-availability-recovery>.
   </definition>
 
-  <section|Availability Distribution>
-
-  The Polkadot validators must receive and distribute availability data to
-  peers. It's primarily responsible for responding to requests and requesting
-  availability data to and from other validators. The required processes are
-  defined in the following subsections.
-
-  <subsection|PoV Requests>
-
-  When a peer requests a PoV block from the Polkadot validator, it should
-  first check it's local database and send the PoV block back to the
-  requester. If the PoV block is not available in the local database, the
-  Polkadot validator issues requests to other validators in order to retrieve
-  the PoV block. The validator determines whether the received PoV bock is
-  valid by checking the hash, but will not do any further validation. If the
-  received PoV block is valid, the validator will send it back to the
-  original requester.
-
-  <subsection|Chunk Requests>
-
-  Once a parachain candidate has been backed as described in Definition
-  <todo|todo>, this process must request the necessary chunks to keep the
-  candidate available, ensuring that <math|2/3> of all the validators can
-  deliver the candidate to peers that issue requests. This process keep track
-  of backed candidates for each parachain by checking occupied cores as
-  defined in Definiton <todo|todo>.
-
-  <section|Availability Recovery><label|sect-availability-recovery>
+  <subsection|Candidate Recovery><label|sect-availability-recovery>
 
   The availability distribution of the Polkadot validator must be able to
   recover parachain candidates that the validator is assigned to, in order to
   determine whether the candidate should be backed as described in Section
-  <todo|todo> repsectively whether the candidate should be approved as
-  described in Section <todo|todo>. Additionally, peers can send availability
+  <reference|sect-candidate-backing> repsectively whether the candidate
+  should be approved as described in Section
+  <reference|sect-approval-voting>. Additionally, peers can send availability
   requests as defined in Definition <reference|net-msg-chunk-fetching-request>
   and Definition <reference|net-msg-available-data-request> to the validator,
   which the validator should be able to respond to.
-
-  \;
 
   <section|Runtime Api>
 
@@ -1073,10 +1050,10 @@
 
   <subsection|validator_groups><label|sect-rt-api-validator-groups>
 
-  Returns the validator groups used during the current session. The
+  Returns the validator groups as defined in Definition
+  <reference|defn-validator-groups> used during the current session. The
   validators in the groups are referred to by the validator set Id as defined
-  in Definition <reference|defn-authority-list>. <todo|clarify validator
-  groups>
+  in Definition <reference|defn-authority-list>.
 
   \;
 
@@ -1271,7 +1248,7 @@
   <subsection|session_index_for_child>
 
   Returns the session index that is expected at the child of a block.
-  <todo|what is a \Pchild\Q?> <todo|clarify session index>
+  <todo|clarify session index>
 
   \;
 
@@ -1398,15 +1375,17 @@
       <item><math|C<rsub|r>> is the candidate receipt as defined in
       Definition <reference|defn-candidate-receipt>.
 
-      <item><math|h> is the head data as defined in Definition <todo|todo>.
+      <item><math|h> is the parachain block header as defined in Definition
+      <reference|defn-parablock>.
 
-      <item><math|I<rsub|c>> is the core index as defined in Definition
-      <todo|todo> that the candidate is occupying. If <math|E> is of variant
-      <math|2>, then this indicates the core index the candidate <em|was>
-      occupying.
+      <item><math|I<rsub|c>> is the index of the availabilty core as can be
+      retrieved in Section <reference|sect-rt-api-availability-cores> that
+      the candidate is occupying. If <math|E> is of variant <math|2>, then
+      this indicates the core index the candidate <em|was> occupying.
 
       <item><math|G<rsub|i>> is the group index as defined in Definition
-      <todo|todo> that is responsible of backing the candidate.
+      <reference|defn-validator-groups> that is responsible of backing the
+      candidate.
     </itemize-dot>
   </itemize-dot>
 
@@ -1487,7 +1466,7 @@
     corresponds to the order of the passed on pairs <math|p>.
   </itemize-dot>
 
-  <section|<todo|todo>><label|sect-primary-validation>
+  <section|<todo|todo - Outdated section>><label|sect-primary-validation>
 
   Collators produce candidates (Definition <reference|defn-candidate>) and
   send those to validators. Validators verify the validity of the received
