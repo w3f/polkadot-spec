@@ -102,23 +102,6 @@
     <todo|@fabio: clarif this>
   </definition>
 
-  <subsection|Extra Validation Data>
-
-  Validators must submit extra validation data to Runtime
-  <math|R<rsub|\<rho\>>> in order to build candidates, to fully validate
-  those and to vote on their availability. Depending on the context,
-  different types of information must be used.
-
-  \;
-
-  Parachain validators get this extra validation data from the current relay
-  chain state. Note that a PoV block can be paired with different extra
-  validation data depending on when and which relay chain fork it is included
-  in. Future validators would need this extra validation data because since
-  the candidate receipt as defined in Definition
-  <reference|defn-candidate-receipt> was included on the relay chain the
-  needed relay chain state may have changed.
-
   <\definition>
     <label|defn-para-id>The <strong|Parachain Id> is an unsigned 32-bit
     integer which serves as an identifier of a parachain. <todo|How are those
@@ -126,18 +109,20 @@
   </definition>
 
   <\definition>
-    <strong|Availability cores> are a Runtime concept used to process
-    parachains. Each parachain gets assigned to a availability core and
-    validators can fetch information about the cores, such as parachain block
-    candidates, by calling the appropriate Runtime API as described in
-    Section <reference|sect-rt-api-availability-cores>. Validators are not
-    concerned with the internal workings from the Runtimes perspective.
+    <strong|<label|defn-availability-cores>Availability cores> are a Runtime
+    concept used to process parachains.\<#2018\>a Each parachain gets
+    assigned to a availability core and validators can fetch information
+    about the cores, such as parachain block candidates, by calling the
+    appropriate Runtime API as described in Section
+    <reference|sect-rt-api-availability-cores>. Validators are not concerned
+    with the internal workings from the Runtimes perspective.
   </definition>
 
   <\definition>
-    <strong|Validator groups> are a Runtime concept for how validators are
-    assigned to certain parachains. Those assigned validators are responsible
-    for backing parachain block candidates as explained further in Section
+    <strong|<label|defn-validator-groups>Validator groups> are a Runtime
+    concept for how validators are assigned to certain parachains. Those
+    assigned validators are responsible for backing parachain block
+    candidates as explained further in Section
     <reference|sect-candidate-backing>. Collators can use this information
     for submitting blocks. Validators can fetch their assignments by calling
     the appropriate Runtime API as described in Section
@@ -145,251 +130,6 @@
     underlying assignment mechanism works. The assigned validators within a
     group are usually referred to by their authority Id as defined in
     Definition <reference|defn-authority-list>.
-  </definition>
-
-  <\definition>
-    <label|defn-inbound-downward-msg>An <strong|inbound downward message> is
-    a message that is sent from the Polkadot relay chain down to a parachain.
-    Both message types share the same datastructure of the following type:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|H<rsub|i>> is the relay chain block number at which the
-      message was put into the downward queue <todo|clarify>.
-
-      <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
-      array containing the message itself.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|defn-inbound-hrmp-msg>An <strong|inbound HRMP message> is a
-    message that is sent from a remote parachain to the local parachain, from
-    the perspective of the recipient. The message, <math|M>, is a
-    datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|H<rsub|i>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|H<rsub|i>> is the relay chain block number at which the
-      message was sent. Specifically, at which the candidate that sent this
-      message was enacted.
-
-      <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
-      array containing the message itself.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|defn-outbound-hrmp-msg>An <strong|outbound HRMP message> is a
-    message sent to a remote parachain, from the perspective of a sender. The
-    message, <math|M>, is a datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<around*|(|P<rsub|id>,<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-      <reference|defn-para-id> this message should be delivered to.
-
-      <item><math|<around*|(|b<rsub|0>,\<ldots\>b<rsub|n>|)>> is the byte
-      array containing the message itself.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|defn-relay-chain-proof>The <strong|relay chain proof> contains
-    witness data for the host configuration, relay queue sizes, list of
-    inbound/outbound HRMP channels and the metadata for the HRMP channels.
-    Specifically, the proof is the merkle root of the following information.
-
-    <\itemize-dot>
-      <item>The merkle proof of the current Host configuration. The
-      configuration is fetched from storage by calling the following key:
-
-      <verbatim|06de3d8a54d27e44a9d5ce189618f22db4b49d95320d9021994c850f25b8e385>
-
-      <item>The MQC head <todo|spec MQC> for the downward message queue of
-      the given parachain. This is fetched from storage by calling the
-      following key:
-
-      <\equation*>
-        <around*|(|p,h<around*|(|P<rsub|id>|)>,P<rsub|id>|)>
-      </equation*>
-
-      where
-
-      <\itemize-dot>
-        <item><math|p> is the following prefix:
-
-        \ <verbatim|63f78c98723ddc9073523ef3beefda0c4d7fefc408aac59dbfe80a72ac8e3ce5>
-
-        <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash of <math|P<rsub|id>>.
-
-        <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-        <reference|defn-para-id>.
-      </itemize-dot>
-
-      \ <item>The merklel proof of the upward message queue for the given
-      parachain Id. The queue is fetched from storage by looking up the
-      following key:
-
-      <\equation*>
-        <around*|(|p,h<around*|(|P<rsub|id>|)>P<rsub|id>|)>
-      </equation*>
-
-      where
-
-      <\itemize-dot>
-        <item><math|p> is the following prefix:
-
-        \ <verbatim|f5207f03cfdce586301014700e2c2593fad157e461d71fd4c1f936839a5f1f3e>
-
-        <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash of <math|P<rsub|id>>.
-
-        <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-        <reference|defn-para-id>.
-      </itemize-dot>
-
-      <item>The merkle proof of inbound channels of the parachain Id. The
-      channels are fetched from storage by looking up the following key:
-
-      <\equation*>
-        <around*|(|p,h<around*|(|P<rsub|id>|)>P<rsub|id>|)>
-      </equation*>
-
-      where
-
-      <\itemize-dot>
-        <item><math|p> is the following prefix:
-
-        \ <verbatim|6a0da05ca59913bc38a8630590f2627c1d3719f5b0b12c7105c073c507445948>
-
-        <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash of <math|P<rsub|id>>.
-
-        <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-        <reference|defn-para-id>.
-      </itemize-dot>
-
-      <item>The merkle proof of outbound channels of the parachain Id. The
-      channels are fetched from storage by looking up the following key:
-
-      <\equation*>
-        <around*|(|p,h<around*|(|P<rsub|id>|)>P<rsub|id>|)>
-      </equation*>
-
-      where
-
-      <\itemize-dot>
-        <item><math|p> is the following prefix:
-
-        \ <verbatim|6a0da05ca59913bc38a8630590f2627cf12b746dcf32e843354583c9702cc020>
-
-        <item><math|h<around*|(|P<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash of <math|P<rsub|id>>.
-
-        <item><math|P<rsub|id>> is the parachain Id as defined in Definition
-        <reference|defn-para-id>.
-      </itemize-dot>
-
-      <item>The merkle proof of the inbound HRMP channels of the parachain
-      Id. The channels are fetched from storage by looking up the following
-      key:
-
-      <\equation*>
-        <around*|(|p,h<around*|(|C<rsub|id>|)>C<rsub|id>|)>
-      </equation*>
-
-      where
-
-      <\itemize-dot>
-        <item><math|p> is the following prefix:
-
-        \ <verbatim|6a0da05ca59913bc38a8630590f2627cb6604cff828a6e3f579ca6c59ace013d>
-
-        <item><math|h<around*|(|C<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash of <math|C<rsub|id>>. Note that the <strong|recipient> must be
-        the corresponding parachain Id.
-
-        <item><math|C<rsub|id>> is the parachain Id as defined in Definition
-        <todo|todo>. Note that the <strong|recipient> must be the
-        corresponding parachain Id.
-      </itemize-dot>
-
-      <item>The merkle proof of the outbound HRMP channels of the parachain
-      Id. The channeles are fetched from storage by looking up the following
-      key:
-
-      <\equation*>
-        <around*|(|p,h<around*|(|C<rsub|id>|)>C<rsub|id>|)>
-      </equation*>
-
-      where
-
-      <\itemize-dot>
-        <item><math|p> is the following prefix:
-
-        \ <verbatim|6a0da05ca59913bc38a8630590f2627cb6604cff828a6e3f579ca6c59ace013d>
-
-        <item><math|h<around*|(|C<rsub|id>|)>> is the 64-bit <verbatim|twox>
-        hash of <math|C<rsub|id>>. Note that the <strong|sender> must be the
-        corresponding parachain Id.
-
-        <item><math|C<rsub|id>> is the parachain Id as defined in Definition
-        <todo|todo>. Note that the <strong|sender> must be the corresponding
-        parachain Id.
-      </itemize-dot>
-
-      \;
-    </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|defn-abridged-hrmp-channel><todo|@fabio: still relevant?>The
-    <strong|abridged HRMP channel> datastructure contains metadata about a
-    specific HRMP channel. The datastructure consists of the following
-    format:
-
-    <\equation*>
-      <around*|(|M<rsub|cp>,M<rsub|ts>,M<rsub|ms>,M<rsub|ct>,T<rsub|s>,M<rsub|h>|)>
-    </equation*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|M<rsub|cp>> is the maximum number of messages that can be
-      pending int he channel at once.
-
-      <item><math|M<rsub|ts>> is the maximum total size in bytes of the
-      messages that can be pending in the channel at once.
-
-      <item><math|M<rsub|ms>> is the maximum message size that could be put
-      into the channel.
-
-      <item><math|M<rsub|ct>> is the current number of messages pending in
-      the channel. It must be less or equal to <math|M<rsub|cp>>.
-
-      <item><math|T<rsub|s>> is the total size in bytes of all message
-      payloads in the channel. It must be less or equal to <math|M<rsub|ts>>.
-
-      <item><math|M<rsub|h>> is the head of the MQC as defined in Definition
-      <todo|@fabio>.
-    </itemize-dot>
   </definition>
 
   <section|Protocol Types>
@@ -471,16 +211,16 @@
       <item><math|C> is an assignment criterion which refers to the candidate
       under which the assignment is relevant by the block hash.
 
-      <item><math|I> is the candidate index as defined in Definition
-      <todo|todo> which the approval refers to.
-
-      <item><math|V> is <text-dots>
+      <item><math|I> is an unsigned 32-bit integer indicating the index of
+      the candidate, corresponding the the order of the availability cores as
+      described in Section <reference|sect-rt-api-availability-cores>.
 
       <item><math|B<rsub|h>> is the relay chain block hash \ where the
       candidate appears.
 
-      <item><math|A<rsub|i>> is the validator index in the authority set that
-      created this message. <todo|refer authority set>
+      <item><math|A<rsub|i>> is the authority set Id of the validator as
+      defined in Definition <reference|defn-authority-list> that created this
+      message.
 
       <item><math|A<rsub|s>> is the signature of the validator issuing this
       message.
@@ -488,15 +228,15 @@
       <item><math|c<rsub|a>> is the certification of the assignment.
 
       <item><math|c<rsub|k>> is a varying datatype where <math|0> indicates
-      an assignment story based on the VRF that authorized the relay chain
-      block where the candidate was included, followed by a sample number,
+      an assignment based on the VRF that authorized the relay chain block
+      where the candidate was included, followed by a sample number,
       <math|s.> <math|1> indicates an assignment story based on the VRF that
       authorized the relay chain block where the candidate was included
-      combined with the index of a particular core. <todo|clarify all of
-      this>.
+      combined with the index of a particular core. This is described further
+      in Section <reference|sect-approval-voting>.
 
       <item><math|P<rsub|o>> is a VRF output and <math|P<rsub|p>> its
-      corresponding proof. <todo|refer>
+      corresponding proof.
     </itemize-dot>
   </definition>
 
@@ -514,7 +254,7 @@
       <item><math|M> is a varying datatype where <math|0> indicates the
       intent to advertise a collation and <math|1> indicates the advertisment
       of a collation to a validator. <math|4> indicates that a collation sent
-      to a validator was seconded. <todo|clarify all of this.>
+      to a validator was seconded.
 
       <item><math|C<rsub|i>> is the public key of the collator.
 
@@ -533,7 +273,7 @@
 
   <\definition>
     The <strong|validator protocol message>, <math|M>, is a varying datatype
-    of the following format: <todo|when is this used?>
+    of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
@@ -555,7 +295,7 @@
 
   <\definition>
     The <strong|collator protocol message>, <math|M>, is a varying datatype
-    of the following format: <todo|when is this used?>
+    of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
@@ -611,7 +351,7 @@
 
     where <math|C<rsub|h>> is the 256-bit hash of the parachain candiate and
     <math|i> is a 32-bit unsigned integer indicating the index of the chunk
-    to fetch <todo|clarify>. The response message is defined in Definition
+    to fetch. The response message is defined in Definition
     <reference|net-msg-chunk-fetching-response>.
   </definition>
 
@@ -751,7 +491,7 @@
       <reference|defn-candidate-receipt>.
 
       <item><math|S<rsub|i>> is an unsigned 32-bit integer indicating the
-      session index the candidate appears in. <todo|clarify>
+      session index the candidate appears in.
 
       <item><math|I<rsub|v>> is the invalid vote that makes up the request.\ 
 
@@ -760,7 +500,7 @@
 
       <item><math|A<rsub|i>> is an unsigned 32-bit integer indicating the
       validator index in the authority set as defined in Definition
-      <todo|todo>.
+      <reference|defn-authority-list>.
 
       <item><math|A<rsub|s>> is the signature of the validator.
 
@@ -1033,14 +773,14 @@
 
       <item><math|M<rsub|h>> is an array of outbound horizontal messages sent
       by the parachain. Each individual messages, <math|t>, is a
-      datastructure as defined in Definition <todo|todo>.
+      datastructure as defined in Definition <todo|messaging-chapter>.
 
       <item><math|R> is an <verbatim|Option> value as described in Section
-      <todo|todo> that can contain a new parachain Runtime in case of an
-      update.
+      <reference|defn-option-type> that can contain a new parachain Runtime
+      in case of an update.
 
-      <item><math|h> is the head data of the parachain block as described in
-      Definition <todo|todo>.
+      <item><math|h> is the parachain block header as described in Definition
+      <reference|defn-parablock>.
 
       <item><math|p> is a unsigned 32-bit intiger indicating the number of
       downward messages that were processed by the parachain. It is expected
@@ -1050,35 +790,31 @@
       which specifies the relay chain block number up to which all inbound
       horizontal messages have been processed.
     </itemize>
-
-    \;
-
-    <todo|clarify messages passing types>
   </definition>
 
   <section|Candidate Validation><label|sect-candidate-validation>
 
-  Received candidates submitted <todo|how are those received> by collators
-  must have its validity verified by the assigned Polkadot validators. For
-  each candidate to be valid, the validator must successfully verify the
-  following condidations in the following order:
+  Received candidates submitted by collators and must have its validity
+  verified by the assigned Polkadot validators. For each candidate to be
+  valid, the validator must successfully verify the following condidations in
+  the following order:
 
   <\enumerate-numeric>
     <item>The candidate does not exceed any parameters in the persisted
     validation data as defined in Definition
     <reference|defn-persisted-validation-data>.
 
-    <item>The signature of the collator is valid, as defined in Definition
-    <todo|todo>.
+    <item>The signature of the collator is valid.
 
     <item>Validate the candidate by executing the parachain Runtime as
     defined in Definition <reference|sect-parachain-runtime>.
   </enumerate-numeric>
 
   If all steps are valid, the Polkadot validator must create the necessary
-  candidate commitments as defined in Definition <todo|todo> <todo|(and what
-  to do with those?)> and submit the appropriate statement for each candidate
-  as described in Section <reference|sect-candidate-backing-statements>.
+  candidate commitments as defined in Definition
+  <reference|defn-candidate-commitments> and submit the appropriate statement
+  for each candidate as described in Section
+  <reference|sect-candidate-backing-statements>.
 
   <subsection|Parachain Runtime><label|sect-parachain-runtime>
 
