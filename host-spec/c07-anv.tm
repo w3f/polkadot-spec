@@ -884,12 +884,12 @@
   defined in Definition <reference|defn-parachain-inherent-data> into a block
   as described in Section <reference|sect-inherents>. The relay chain block
   author decides on whatever metric which candidate should be selected for
-  inclusion, as long as that candidate is valid and meets the 2/3+ quorum as
-  described in Section <reference|sect-candidate-backing-statements>. The
-  candidate approval process as described in Section
-  <reference|sect-approval-voting> will then make sure that only relay chain
-  blocks are finalized where each candidate for each availability core meets
-  the requirement of 2/3+ availability votes.
+  inclusion, as long as that candidate is valid and meets the validity quorum
+  of <math|2/3+> as described in Section <reference|sect-candidate-backing-statements>.
+  The candidate approval process as described in Section
+  <reference|sect-approval-voting> ensures that only relay chain blocks are
+  finalized where each candidate for each availability core meets the
+  requirement of 2/3+ availability votes.
 
   <\definition>
     <label|defn-parachain-inherent-data>The <strong|parachain inherent data>
@@ -925,7 +925,7 @@
       signatures.
 
       <item><math|i> is a bitfield of indices of the validators within the
-      validator group.
+      validator group. <todo|clarify>
 
       <item><math|a> is either an implicit or explicit attestation of the
       validity of a parachain candidate, where <math|1> implies an implicit
@@ -936,8 +936,8 @@
 
       <item><math|s> is the signature of the validator.
 
-      <item><math|b> the availability bitfields as described in Definition
-      <reference|defn-bitfield-array>.
+      <item><math|b> the availability bitfield as described in Section
+      <reference|sect-availability-votes>.
 
       <item><math|v<rsub|i>> is the validator index of the authority set as
       defined in Definition <reference|defn-authority-list>.
@@ -1229,6 +1229,51 @@
 
   <todo|todo>
 
+  \;
+
+  <subsection|Availability Votes><label|sect-availability-votes>
+
+  The Polkadot validator must issue a bitfield as defined in Definition
+  <reference|defn-bitfield-array> which indicates votes for the availabilty
+  of candidates. Issued bitfields can be used by the validator and other
+  peers to determine which backed candidates meet the <math|2/3+>
+  availability quorum.
+
+  \;
+
+  Candidates are inserted into the relay chain in form of inherent data by a
+  block author, as described in Section <reference|sect-candidate-inclusion>.
+  A validator can retrieve that data by calling the appropriate Runtime API
+  entry as described in Section <reference|sect-rt-api-availability-cores>,
+  then create a bitfield indicating for which candidate the validator has
+  availability data stored and broadcast it to the network as defined in
+  Definition <reference|net-msg-bitfield-dist-msg>. When sending the bitfield
+  distrubtion message, the validator must ensure <math|B<rsub|h>> is set
+  approriately, therefore clarifying to which state the bitfield is referring
+  to, given that candidates can vary based on the chain fork.
+
+  \;
+
+  Missing availability data of candidates must be recovered by the validator
+  as described in Section <reference|sect-availability-recovery>. If
+  previously issued bitfields are no longer accurate, i.e. the availability
+  data has been recovered or the candidate of an availablity core has
+  changed, the validator must create a new bitfield and boradcast it to the
+  network.
+
+  <\definition>
+    <label|defn-bitfield-array>A <strong|bitfield array> contains single-bit
+    values which indidate whether a candidate is available. The number of
+    items is equal of to the number of availability cores as defined in
+    Definition <todo|todo> and each bit represents a vote on the
+    corresponding core in the given order. Respectively, if the single bit
+    equals <verbatim|1>, then the Polkadot validator claims that the
+    availability core is occupied, there exists a committed candidate receipt
+    as defined in Definition <reference|defn-committed-candidate-receipt> and
+    that the validator has a stored chunk of the parachain block as defined
+    in Definition <todo|todo>.
+  </definition>
+
   <section|Availability Distribution>
 
   The Polkadot validators must receive and distribute availability data to
@@ -1268,41 +1313,6 @@
   which the validator should be able to respond to.
 
   \;
-
-  \;
-
-  \;
-
-  <todo|todo>
-
-  <section|Bitfield Distribution>
-
-  The Polkadot validator must issue signed bitfields which indicate a vote
-  for a candidates availability. Issued bitfields can be used by the
-  validator and other peers to determine which backed candidates meet the
-  <math|2/3> quorum.
-
-  \;
-
-  <todo|todo>
-
-  \;
-
-  The validator broadcasts the bitfield array as defined in Definition
-  <reference|defn-bitfield-array> in a signed network message as defined in
-  Definition <reference|net-msg-bitfield-dist-msg>.
-
-  <\definition>
-    <label|defn-bitfield-array>A <strong|bitfield array> contains single-bit
-    values which indidate whether a candidate is available. The number of
-    items is equal of to the number of availability cores as defined in
-    Definition <todo|todo> and each bit represents a vote on the
-    corresponding core in the given order. Respectively, if the single bit
-    equals <verbatim|1>, then the Polkadot validator claims that the
-    availability core is occupied, there exists a committed candidate receipt
-    as defined in Definition <todo|todo> and that the validator has a stored
-    chunk of the parachain block as defined in Definition <todo|todo>.
-  </definition>
 
   <section|Runtime Api>
 
