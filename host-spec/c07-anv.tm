@@ -11,59 +11,36 @@
 
   <section|Introduction>
 
-  Validators are responsible for guaranteeing the validity and availability
-  of PoV blocks. There are two phases of validation that takes place in the
-  AnV protocol. The primary validation check is carried out by collators who
-  are assigned to the parachain which has produced the PoV block as described
-  in Section <reference|sect-primary-validation>. Once collators have
-  validated a parachain's PoV block successfully, they have to announce that
-  according to the procedure described in Section
-  <reference|sect-primary-validaty-announcement> where they generate a
-  statement that includes the parachain header with the new state root and
-  the XCMP message root. This candidate receipt and attestations, which carry
-  signatures from other collators, is put on the relay chain. As soon as the
-  proposal of a PoV block is on-chain, the relay chain validators break the
-  PoV block into erasure-coded chunks as described in Section
-  <reference|defn-erasure-coded-chunks> and distribute them among all
-  validators. See Section <reference|sect-distribute-chunks> for details on
-  how this distribution takes place.
+  The Polkadot relay chain validators are responsible for guaranteeing the
+  validity and availability of both relay chain and parachain blocks. The
+  Availability & Validity (AnV) protocol consists of multiple steps for
+  successfully upholding those responsibilities.
 
   \;
 
-  Once the relay chain validators have received erasure-coded chunks for
-  several PoV blocks for the current relay chain block (that might have been
-  proposed a couple of blocks earlier on the relay chain), they announce that
-  they have received the erasure coded chunks on the relay chain by voting on
-  the received chunks, see Section <reference|sect-voting-on-availability>
-  for more details As soon as <math|\<gtr\>2/3> of validators have made this
-  announcement for any parachain block, the relay chain validators <em|act
-  on> the parachain block. Acting on parachain blocks means the relay chain
-  validators update the relay chain state based on the candidate receipt and
-  considered the parachain block to have happened on this relay chain fork.
+  Parachain blocks themselves are created by collators as described in
+  Section <todo|todo>, whereas the relay chain validators only verify it's
+  validity. Collators of parachains will (most likely) create multiple
+  parachain block candidates and send those the the relay chain validators,
+  who are then required to check the validity of the candidates as described
+  in Section <todo|todo> and issue and collect statements about those to
+  other validators as described in Section <todo|todo>. This process is known
+  as <em|candidate backing>. Once a candidate meets a specific criteria for
+  inclusion, the selectec relay chain author then choses a candidate and
+  includes those into the relay chain block as described in Section
+  <todo|todo>.
 
   \;
 
-  After a certain time, if the relay chain validators did not collect enough
-  signatures approving the availability of the parachain data associated with
-  a certain candidate receipt, the validators then decide that this parachain
-  block is unavailable and allow alternative blocks to be built on its parent
-  parachain block, see Section <reference|sect-processing-availability>. The
-  secondary check described in Section <reference|sect-approval-checking>, is
-  done by one or more randomly assigned validators to make sure colluding
-  collators may not get away with validating a PoV block that is invalid and
-  not keeping it available to avoid the possibility of being punished for the
-  attack.
-
-  \;
-
-  During any of the phases, if any validator announces that a parachain block
-  is invalid then all validators obtain the parachain block and check its
-  validity, see Section <reference|sect-escalation> for more details. All
-  validity and invalidity attestations go onto the relay chain, see Section
-  <reference|sect-publishing-attestations> for details. If a parachain block
-  has been checked at least by certain number of validators, the rest of the
-  validators continue with voting on that relay chain block in the GRANDPA
-  protocol. Note that the block might be challenged later.
+  Parachain candidates contained in <em|non-finalized> relay chain blocks
+  must then be retrieved by other relay chain validators who are then
+  required to vote on the availability of those candidates as described in
+  Section <todo|todo>. This process is known as approval voting. If a
+  validator does not contain the candidate data, it must recover the
+  candidate data as described in Section <todo|todo>. Availability votes are
+  issued and collected by the validators and additionally included in the
+  relay chain state. This process ensures that only relay chain blocks get
+  finalized where each candidate is available on enough validators.
 
   <section|Preliminaries>
 
