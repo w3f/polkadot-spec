@@ -19,28 +19,33 @@
   \;
 
   Parachain blocks themselves are created by collators as described in
-  Section <todo|todo>, whereas the relay chain validators only verify it's
-  validity. Collators of parachains will (most likely) create multiple
-  parachain block candidates and send those the the relay chain validators,
-  who are then required to check the validity of the candidates as described
-  in Section <todo|todo> and issue and collect statements about those to
-  other validators as described in Section <todo|todo>. This process is known
-  as <em|candidate backing>. Once a candidate meets a specific criteria for
-  inclusion, the selectec relay chain author then choses a candidate and
-  includes those into the relay chain block as described in Section
-  <todo|todo>.
+  Section <reference|sect-collations>, whereas the relay chain validators
+  only verify it's validity (and later, it's availability). Collators of
+  parachains will (most likely) create multiple parachain block candidates
+  and send those the the relay chain validators who are assigned to specific
+  parachain as determined by the Runtime. Those are then required to check
+  the validity of submitted candidates as described in Section
+  <reference|sect-candidate-validation>, then issue and collect statements
+  about those to other validators as described in Section
+  <reference|sect-candidate-backing>. This process is known as <em|candidate
+  backing>. Once a candidate meets a specific criteria for inclusion, the
+  selected relay chain block author then choses a candidate for each assigned
+  parachain and includes those into the relay chain block as described in
+  Section <reference|sect-candidate-inclusion>.
 
   \;
 
   Parachain candidates contained in <em|non-finalized> relay chain blocks
-  must then be retrieved by other relay chain validators who are then
-  required to vote on the availability of those candidates as described in
-  Section <todo|todo>. This process is known as approval voting. If a
-  validator does not contain the candidate data, it must recover the
-  candidate data as described in Section <todo|todo>. Availability votes are
-  issued and collected by the validators and additionally included in the
-  relay chain state. This process ensures that only relay chain blocks get
-  finalized where each candidate is available on enough validators.
+  must then be retrieved by other relay chain validators, who are assigned to
+  specific parachains based on a VRF lottery, and are then required to vote
+  on the availability of those candidates as described in Section
+  <reference|sect-approval-voting>. This process is known as <em|approval
+  voting>. If a validator does not contain the candidate data, it must
+  recover the candidate data as described in Section
+  <reference|sect-availability-recovery>. Availability votes are issued and
+  collected by other validators and additionally included in the relay chain
+  state. This process ensures that only relay chain blocks get finalized
+  where each candidate is available on enough nodes of validators.
 
   <section|Preliminaries>
 
@@ -520,7 +525,7 @@
     where <math|0> indicates that the dispute was successfully processed.
   </definition>
 
-  <section|Collations>
+  <section|Collations><label|sect-collations>
 
   <todo|todo>
 
