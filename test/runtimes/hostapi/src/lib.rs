@@ -21,6 +21,10 @@ extern "C" {
     fn ext_storage_root_version_1() -> u64;
     fn ext_storage_next_key_version_1(key: u64) -> u64;
 
+    // OffChain API
+    fn ext_offchain_timestamp_version_1() -> u64;
+    fn ext_offchain_sleep_until_version_1(key: u64);
+
     // Default child stoage API
     fn ext_default_child_storage_set_version_1(child: u64, key: u64, value: u64);
     fn ext_default_child_storage_get_version_1(child: u64, key: u64) -> u64;
@@ -167,6 +171,20 @@ sp_core::wasm_export_functions! {
             let value = ext_storage_next_key_version_1(key.as_re_ptr());
 
             Decode::decode(&mut from_mem(value).as_slice()).unwrap()
+        }
+    }
+
+    // OffChain API
+    fn rtm_ext_offchain_timestamp_version_1() -> Vec<u8> {
+        unsafe {
+            let value = ext_offchain_timestamp_version_1();
+            from_mem(value)
+        }
+    }
+
+    fn rtm_ext_offchain_sleep_until_version_1(key: Vec<u8>) {
+        unsafe {
+            let _ = ext_offchain_sleep_until_version_1(key.as_re_ptr());      
         }
     }
 
