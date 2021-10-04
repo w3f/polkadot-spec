@@ -125,36 +125,6 @@
   </todo>
 
   <\definition>
-    <label|net-msg-bitfield-dist-msg>The <strong|bitfield distribution
-    message> indicates the availability vote of a validator for a given
-    candidate, described further in Section
-    <reference|sect-availability-votes>. This message is sent in form of a
-    validator protocol message as defined in Definition
-    <reference|net-msg-validator-protocol-message>. The bitfield distribution
-    message, <math|M>, is a datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,P|)>>>>>>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|B<rsub|h>> is the hash of the relay chain parent,
-      indicating the state this message is for.
-
-      <item><math|d> is the bitfield array as described in Definition
-      <reference|defn-bitfield-array>.
-
-      <item><math|A<rsub|i>> is the validator index in the authority set as
-      defined in Definition <reference|defn-authority-list> that signed this
-      message.
-
-      <item><math|A<rsub|s>> is the signature of the validator.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
     <label|net-msg-statement-distribution>The <strong|statement distribution
     message> indicates the validity vote of a validator for a given
     candidate, described further in Section
@@ -187,6 +157,36 @@
       signed this message.
 
       <item><math|A<rsub|s>> is the signature of the validator.\ 
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|net-msg-bitfield-dist-msg>The <strong|bitfield distribution
+    message> indicates the availability vote of a validator for a given
+    candidate, described further in Section
+    <reference|sect-availability-votes>. This message is sent in form of a
+    validator protocol message as defined in Definition
+    <reference|net-msg-validator-protocol-message>. The bitfield distribution
+    message, <math|M>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,P|)>>>>>>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|B<rsub|h>> is the hash of the relay chain parent,
+      indicating the state this message is for.
+
+      <item><math|d> is the bitfield array as described in Definition
+      <reference|defn-bitfield-array>.
+
+      <item><math|A<rsub|i>> is the validator index in the authority set as
+      defined in Definition <reference|defn-authority-list> that signed this
+      message.
+
+      <item><math|A<rsub|s>> is the signature of the validator.
     </itemize-dot>
   </definition>
 
@@ -243,6 +243,33 @@
   </definition>
 
   <\definition>
+    <label|net-msg-validator-protocol-message>The <strong|validator protocol
+    message> is a varying datatype used by validators to broadcast relevant
+    information about certain steps in the A&V process. Specifically, this
+    includes the backing process as described in Section
+    <reference|sect-candidate-backing> and the approval process as described
+    in Section <reference|sect-approval-voting>. The validator protocol
+    message, <math|M>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M<rsub|f>> is a bitfield distribution message as defined in
+      Definition <reference|net-msg-bitfield-dist-msg>.
+
+      <item><math|M<rsub|s>> is a statement distribution message as defined
+      in Definition <reference|net-msg-statement-distribution>.
+
+      <item><math|M<rsub|a>> is a approval distribution message as defined in
+      Definition <reference|net-msg-approval-distribution>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
     <label|net-msg-collator-protocol>The <strong|collator message>, <math|M>,
     is a varying datatype of the following format:
 
@@ -270,33 +297,6 @@
 
       <item><math|S> is a full statement as defined in Definition
       <reference|net-msg-full-statement>.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|net-msg-validator-protocol-message>The <strong|validator protocol
-    message> is a varying datatype used by validators to issue relevant
-    information about certain steps in the A&V process. Specifically, this
-    includes the backing process as described in Section
-    <reference|sect-candidate-backing> and the approval process as described
-    in Section <reference|sect-approval-voting>. The validator protocol
-    message, <math|M>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|M<rsub|f>> is a bitfield distribution message as defined in
-      Definition <reference|net-msg-bitfield-dist-msg>.
-
-      <item><math|M<rsub|s>> is a statement distribution message as defined
-      in Definition <reference|net-msg-statement-distribution>.
-
-      <item><math|M<rsub|a>> is a approval distribution message as defined in
-      Definition <reference|net-msg-approval-distribution>.
     </itemize-dot>
   </definition>
 
