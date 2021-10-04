@@ -227,8 +227,8 @@
   </definition>
 
   <\definition>
-    <label|net-msg-collator-protocol>The <strong|collator protocol message>,
-    <math|M>, is a varying datatype of the following format:
+    <label|net-msg-collator-protocol>The <strong|collator message>, <math|M>,
+    is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|i>,P<rsub|i>,C<rsub|s>|)>>>|<row|<cell|1\<rightarrow\>H>>|<row|<cell|4\<rightarrow\><around*|(|B<rsub|h>,S|)>>>>>>>>>>
@@ -280,15 +280,15 @@
   </definition>
 
   <\definition>
-    The <strong|collator protocol message>, <math|M>, is a varying datatype
-    of the following format:
+    <label|net-msg-collator-protocol-message>The <strong|collator protocol
+    message>, <math|M>, is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
     </eqnarray*>
 
-    where <math|M<rsub|c>> is the collator protocol message as defined in
-    Definition <reference|net-msg-collator-protocol>.
+    where <math|M<rsub|c>> is the collator message as defined in Definition
+    <reference|net-msg-collator-protocol>.
   </definition>
 
   <section|Request & Response Network Messages>
@@ -556,9 +556,7 @@
   <verbatim|Valid> statements is a slashable offense. The validator must only
   issue one <verbatim|Seconded> statement, based on an arbitrary metric,
   which implies an explicit vote for a candidate to be included in the relay
-  chain. The statements are gossiped to its peers with the statement
-  distribution protocol message as defined in Definition
-  <reference|defn-committed-candidate-receipt>.
+  chain.
 
   \;
 
@@ -572,6 +570,12 @@
   enough <verbatim|Valid> statements have been issued about that candidate to
   meet the <math|2/3> quorum, the candidate is ready to be inlcuded in the
   relay chain as described in Section <reference|sect-candidate-inclusion>.
+
+  \;
+
+  The validator issues validity statements votes in form of a validator
+  protocol message as defined in Definition
+  <reference|net-msg-collator-protocol-message>.
 
   <\definition>
     <label|net-msg-full-statement>A <strong|statement>, <math|S>, is a
@@ -630,6 +634,11 @@
   data has been recovered or the candidate of an availablity core has
   changed, the validator must create a new bitfield and boradcast it to the
   network.
+
+  \;
+
+  The validator issues availability votes in form of a validator protocol
+  message as defined in Definition <reference|net-msg-collator-protocol-message>.
 
   <\definition>
     <label|defn-bitfield-array>A <strong|bitfield array> contains single-bit
@@ -985,9 +994,12 @@
   using the availability recovery as described in Section
   <reference|sect-availability-recovery> and then validate the candidate as
   described in Section <reference|sect-candidate-validation>. If the
-  candidate is valid, the validator must send their approval to the network
-  as defined in Definition <reference|net-msg-approval-distribution>, where
-  <math|M> is of variant <math|1>.
+  candidate is valid, the validator must send their approval to the network.
+
+  \;
+
+  The validator issues approval votes in form of a validator protocol message
+  as defined in Definition <reference|net-msg-collator-protocol-message>.
 
   <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
 
