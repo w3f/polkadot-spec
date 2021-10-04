@@ -41,11 +41,11 @@
 
   Parachain candidates contained in <em|non-finalized> relay chain blocks
   must then be retrieved by other relay chain validators, who are assigned to
-  determine the availability of specific parachains based on a VRF lottery,
-  and are then required to vote on the availability of those candidates as
-  described in Section <reference|sect-approval-voting>. This process is
-  known as <em|approval voting>. If a validator does not contain the
-  candidate data, it must recover the candidate data as described in Section
+  determine the validity of specific parachains based on a VRF lottery, and
+  are then required to vote on the validity of those candidates as described
+  in Section <reference|sect-approval-voting>. This process is known as
+  <em|approval voting>. If a validator does not contain the candidate data,
+  it must recover the candidate data as described in Section
   <reference|sect-availability-recovery>. Availability votes are issued and
   collected by other validators and additionally included in the relay chain
   state. This process ensures that only relay chain blocks get finalized
@@ -896,10 +896,13 @@
   <section|Approval Voting><label|sect-approval-voting>
 
   The approval voting process ensures that only valid parachain blocks are
-  finalized on the relay chain. Validators verify submitted parachain
-  candidates received from collators and issue approvals for valid
-  candidates, respectively disputes for invalid blocks. Since it cannot be
-  expected that each validators verifies every single parachain candidate,
+  finalized on the relay chain. Validators verify parachain candidates that
+  were submitted to the relay chain, as described in Section
+  <reference|sect-candidate-inclusion>, which can be retrieved by the Runtime
+  API as described in Section <reference|sect-rt-api-availability-cores>.
+  Then, for each parachain the VRF-assigned validators issue approvals for
+  valid candidates, respectively disputes for invalid blocks. Since it cannot
+  be expected that each validator verifies every single parachain candidate,
   this mechanism ensures that enough honest validators are selected to verify
   parachain candidates and to prevent the finalization of invalid blocks. If
   an honest validator detects an invalid block which was approved by one or
@@ -910,16 +913,16 @@
 
   \;
 
-  A VRF mechanism assigns the validators responsible for approving submitted
-  parachain candidates, unlike the assignment mechanism during the backing
-  phase, where assignments are all public and retrievable via the Runtime
-  API, as described in Section <reference|sect-candidate-backing>. When
-  ready, an assigned validator broadcasts their assignment to indicate their
-  intent to check a candidate. After verifying a parachain candidate, the
-  validator issues their approval vote to connected peers. If no following
-  approval vote is sent, then that behavior is implied as \Pno-show', meaning
-  that more validators need to be assigned to verify the candidate. No-show
-  occurrences are explained further in Section
+  The VRF mechanism assigns the validators responsible for approving
+  submitted parachain candidates, unlike the assignment mechanism during the
+  backing phase, where assignments are all public and retrievable via the
+  Runtime API, as described in Section <reference|sect-candidate-backing>.
+  When ready, an assigned validator broadcasts their assignment to indicate
+  their intent to check a candidate. After verifying a parachain candidate,
+  the validator issues their approval vote to connected peers. If no
+  following approval vote is sent, then that behavior is implied as
+  \Pno-show', meaning that more validators need to be assigned to verify the
+  candidate. No-show occurrences are explained further in Section
   <reference|sect-rt-api-validator-groups>.
 
   <subsection|Assignment Criteria><label|sect-availability-assingment-criteria>
