@@ -126,7 +126,12 @@
 
   <\definition>
     <label|net-msg-bitfield-dist-msg>The <strong|bitfield distribution
-    message>, <math|M>, is a datastructure of the following format:
+    message> indicates the availability vote of a validator for a given
+    candidate, described further in Section
+    <reference|sect-availability-votes>. This message is sent in form of a
+    validator protocol message as defined in Definition
+    <reference|net-msg-validator-protocol-message>. The bitfield distribution
+    message, <math|M>, is a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,P|)>>>>>>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>>>
@@ -151,7 +156,13 @@
 
   <\definition>
     <label|net-msg-statement-distribution>The <strong|statement distribution
-    message>, <math|M>, is a datastructure of the following format:
+    message> indicates the validity vote of a validator for a given
+    candidate, described further in Section
+    <reference|sect-candidate-backing-statements>. This message is sent in
+    form of a validator protocol message as defined in Definition
+    <reference|net-msg-validator-protocol-message>. The statement
+    distribution message, <math|M>, is a datastructure of the following
+    format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
@@ -181,7 +192,12 @@
 
   <\definition>
     <label|net-msg-approval-distribution>The <strong|approval distribution
-    message>, <math|M>, is a varying datatype of the following format:
+    message> indicates the approval vote of a validator for a given
+    candidate, described further in Section
+    <reference|sect-availability-assingment-criteria>. This message is sent
+    in form of a validator protocol message as defined in Definition
+    <reference|net-msg-validator-protocol-message>. The approval distribution
+    message, <math|M>, is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|<around*|(|C<rsub|>,I<rsub|>|)><rsub|0>\<ldots\><around*|(|C,I|)><rsub|n>|)>>>|<row|<cell|1\<rightarrow\><around*|(|V<rsub|0>,\<ldots\>V<rsub|n>|)>>>>>>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|B<rsub|h>,A<rsub|i>,c<rsub|a>|)>>>|<row|<cell|c<rsub|a>>|<cell|=>|<cell|<around*|(|c<rsub|k>,P<rsub|o>,P<rsub|p>|)>>>|<row|<cell|c<rsub|k>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>s>>|<row|<cell|1\<rightarrow\>i>>>>>>>|<row|<cell|V>|<cell|=>|<cell|<around*|(|B<rsub|h>,I,A<rsub|i>,A<rsub|s>|)>>>>>
@@ -258,8 +274,13 @@
   </definition>
 
   <\definition>
-    The <strong|validator protocol message>, <math|M>, is a varying datatype
-    of the following format:
+    <label|net-msg-validator-protocol-message>The <strong|validator protocol
+    message> is a varying datatype used by validators to issue relevant
+    information about certain steps in the A&V process. Specifically, this
+    includes the backing process as described in Section
+    <reference|sect-candidate-backing> and the approval process as described
+    in Section <reference|sect-approval-voting>. The validator protocol
+    message, <math|M>, is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
@@ -280,8 +301,8 @@
   </definition>
 
   <\definition>
-    <label|net-msg-collator-protocol-message>The <strong|collator protocol
-    message>, <math|M>, is a varying datatype of the following format:
+    <label|>The <strong|collator protocol message>, <math|M>, is a varying
+    datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
