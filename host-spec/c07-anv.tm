@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|2.1>
 
 <project|host-spec.tm>
 
@@ -217,7 +217,7 @@
       the candidate, corresponding the the order of the availability cores as
       described in Section <reference|sect-rt-api-availability-cores>.
 
-      <item><math|B<rsub|h>> is the relay chain block hash \ where the
+      <item><math|B<rsub|h>> is the relay chain block hash where the
       candidate appears.
 
       <item><math|A<rsub|i>> is the authority set Id of the validator as
@@ -1001,10 +1001,10 @@
   <subsection|Assignment Criteria><label|sect-availability-assingment-criteria>
 
   Validators determine their assignment based on a VRF mechanism, similiar to
-  BABE, as described in Section <todo|todo>. An assigned validator never
-  broadcasts their assignment until relevant. Once the assigned validator is
-  ready to check a candidate, the validator broadcasts their assignment by
-  issuing an approval distribution message as defined in Definition
+  the BABE consensus mechanism. An assigned validator never broadcasts their
+  assignment until relevant. Once the assigned validator is ready to check a
+  candidate, the validator broadcasts their assignment by issuing an approval
+  distribution message as defined in Definition
   <reference|net-msg-approval-distribution>, where <math|M> is of variant
   <math|0>. Other assigned validators that receive that network message must
   keep track of if, expecting an approval vote following shortly after.
