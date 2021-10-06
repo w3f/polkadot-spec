@@ -11,45 +11,58 @@
 
   <section|Introduction>
 
-  The Polkadot relay chain validators are responsible for guaranteeing the
-  validity of both relay chain and parachain blocks. Additionally, the
-  validators are required to keep enough Parachain blocks available in order
-  for remote peers, who lack the information, to reliably confirm the issued
-  validity statements about parachain blocks. The Availability & Validity
-  (AnV) protocol consists of multiple steps for successfully upholding those
-  responsibilities.
+  The Polkadot relay chain <todo|syed: have we defined relay chain?>
+  validators are responsible for guaranteeing the validity of both relay
+  chain and parachain <todo|have we defined parachain?> blocks. Additionally,
+  the validators are required to keep enough Parachain blocks available
+  <todo|syed: keep block available needs to be defined, it is not a term that
+  everyone understand.> in order for remote <todo|what is the difference
+  between remote and non-remote peers> peers, who lack the information, to
+  reliably confirm the issued validity statements about parachain blocks. The
+  Availability & Validity (AnV) protocol consists of multiple steps for
+  successfully upholding those responsibilities.
 
   \;
 
-  Parachain blocks themselves are created by collators as described in
+  Parachain blocks themselves are produced by collators as described in
   Section <reference|sect-collations>, whereas the relay chain validators
-  only verify it's validity (and later, it's availability). Collators of
-  parachains will (most likely) create multiple parachain block candidates
-  and send those the the relay chain validators who are assigned to specific
-  parachain as determined by the Runtime, as described in Section
-  <reference|sect-candidate-backing>. Those validators are then required to
-  check the validity of submitted candidates as described in Section
-  <reference|sect-candidate-validation>, then issue and collect statements
-  about the validity of candidates to other validators as described in
-  Section <reference|sect-candidate-backing>. This process is known as
-  <em|candidate backing>. Once a candidate meets a specific criteria for
-  inclusion, the selected relay chain block author then choses a candidate
+  only verify their validity (and later, their availability). It is possible
+  that the collators of a parachain \ produces multiple parachain block
+  candidates for a child of a specific block. Subsequently, they send the
+  block candadiates to the the relay chain validators who are assigned to the
+  specific parachain. The assignment is determined by the Runtime as
+  described in Section <reference|sect-candidate-backing>. Those validators
+  are then required to check the validity of submitted candidates as
+  described in Section <reference|sect-candidate-validation>, then issue and
+  collect statements about the validity of candidates to other validators as
+  described in Section <reference|sect-candidate-backing>. This process is
+  known as <em|candidate backing>. Once a candidate meets a specific
+  <todo|\Pa specific\Q is confusing it means there are multiple way that a
+  candidate can be considered valid and it only needs to satisfies one of
+  those, it should be \Pthe specified\Q IMHO> criteria for inclusion, the
+  selected relay chain block author then choses any of the backed candidate
   for each parachain and includes those into the relay chain block as
   described in Section <reference|sect-candidate-inclusion>.
 
   \;
 
-  Parachain candidates contained in <em|non-finalized> relay chain blocks
-  must then be retrieved by other relay chain validators, who are assigned to
+  Parachain candidates contained in <em|non-finalized> <todo|Reference to the
+  definition of finalized> relay chain blocks must then be retrieved by other
+  <todo|\Psecondary set of\Q? to be clear that they are doing exactly what
+  the primary validator did but are chosen randomly, otherwise it is
+  confusing as what is the difference between what thay do and what the
+  previous check> relay chain validators, who are randomly assigned to
   determine the validity of specific parachains based on a VRF lottery, and
   are then required to vote on the validity of those candidates as described
   in Section <reference|sect-approval-voting>. This process is known as
-  <em|approval voting>. If a validator does not contain the candidate data,
-  it must recover the candidate data as described in Section
-  <reference|sect-availability-recovery>. Availability votes are issued and
-  collected by other validators and additionally included in the relay chain
-  state. This process ensures that only relay chain blocks get finalized
-  where each candidate is available on enough nodes of validators.
+  <em|approval voting>. If a validator does not contain <todo|contain? you
+  mean \Phave\Q> the candidate data, it must recover the candidate data as
+  described in Section <reference|sect-availability-recovery>. Availability
+  votes <todo|this is out of no-where, what is availability vote? doesn't
+  availability deserve a paragraph here. > are issued and collected by other
+  validators and additionally included in the relay chain state. This process
+  ensures that only relay chain blocks get finalized where each candidate is
+  available on enough nodes of validators.
 
   <section|Preliminaries>
 
