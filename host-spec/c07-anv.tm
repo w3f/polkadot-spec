@@ -1,4 +1,4 @@
-<TeXmacs|2.1>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -1021,6 +1021,35 @@
 
   The validator issues approval votes in form of a validator protocol message
   as defined in Definition <reference|net-msg-collator-protocol-message>.
+
+  <\definition>
+    The <strong|relay VRF story> is an array of random bytes derived from the
+    VRF submitted within the block by the block author. The relay VRF story,
+    <math|T>, is used as input to determine approval voting criteria and
+    generated the following way:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<text|<name|Transcript<name|>>><around*|(|b<rsub|r>,b<rsub|s>,e<rsub|i>,A|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><name|Transcript> constructs a VRF transcript as defined in
+      Definition <todo|todo>.
+
+      <item><math|b<rsub|r>> is the BABE randomness of the current epoch as
+      defined in Definition <todo|todo>.
+
+      <item><math|b<rsub|s>> is the current BABE slot as defined in
+      Definition <todo|todo>.
+
+      <item><math|e<rsub|i>> is the current BABE epoch index as defined in
+      Definition <todo|todo>.
+
+      <item>A is the public key of the authority.
+    </itemize-dot>
+  </definition>
 
   <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
 
