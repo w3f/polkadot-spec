@@ -1051,6 +1051,40 @@
     </itemize-dot>
   </definition>
 
+  <\definition>
+    Availability core VRV assignments are based on the number of samples a
+    validator should do, as defined by the session info retried by the
+    Runtime API as described in Section <todo|todo>. For each sample,
+    <math|C<rsub|s>>, <todo|scale encoded>, the validator calculates a VRF
+    modulo transcript, <math|T<rsub|m>>, the following way:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|t<rsub|0>>|<cell|=>|<cell|<text|<name|Transcript>><around*|(|<rprime|''>A&V
+      MOD<rprime|''>|)>>>|<row|<cell|t<rsub|1>>|<cell|=>|<cell|<text|<name|Meta-Add>><around*|(|t<rsub|0>,<rprime|''>RC-VRF<rprime|''>,R<rsub|r>|)>>>|<row|<cell|T<rsub|m>>|<cell|=>|<cell|<text|<name|Meta-Add>><around*|(|t<rsub|1>,<rprime|''>sample<rprime|''>,s|)>>>>>
+    </eqnarray*>
+
+    additionally
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|b>|<cell|=>|<cell|<text|<name|VRF>><around*|(|T<rsub|m>,<rprime|''>A&V
+      CORE<rprime|''>|)><around*|[|0\<ldots\>4|]>>>|<row|<cell|C<rsub|i>>|<cell|=>|<cell|<text|<name|LE>>**<around*|(|b|)>
+      <bmod>C<rsub|n>>>>>
+    </eqnarray*>
+
+    additionally
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|t<rsub|>>|<cell|=>|<cell|<text|<name|Transcript>><around*|(|<rprime|''>A&V
+      ASSIGNED<rprime|''>|)>>>|<row|<cell|x>|<cell|=>|<cell|<text|<name|Meta-Add>><around*|(|t<rsub|>,<rprime|''>core<rprime|''>,C<rsub|i>|)>>>>>
+    </eqnarray*>
+
+    additionally
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|<around*|(|v,p|)>>|<cell|=>|<cell|Check-VRF<around*|(|T<rsub|m>,|)>>>>>
+    </eqnarray*>
+  </definition>
+
   <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
 
   The Polkadot validator observes a \Pno-show\Q occurence when another
