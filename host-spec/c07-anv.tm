@@ -1072,6 +1072,12 @@
     modulo transcript, <math|T<rsub|m>>, the following way:
 
     <\eqnarray*>
+      <tformat|<table|<row|<cell|x>|<cell|=>|<cell|Evaluate-VRF<around*|(||)>>>>>
+    </eqnarray*>
+
+    as
+
+    <\eqnarray*>
       <tformat|<table|<row|<cell|t<rsub|0>>|<cell|=>|<cell|<text|<name|Transcript>><around*|(|<rprime|''>A&V
       MOD<rprime|''>|)>>>|<row|<cell|t<rsub|1>>|<cell|=>|<cell|<text|<name|Meta-Add>><around*|(|t<rsub|0>,<rprime|''>RC-VRF<rprime|''>,R<rsub|r>|)>>>|<row|<cell|T<rsub|m>>|<cell|=>|<cell|<text|<name|Meta-Add>><around*|(|t<rsub|1>,<rprime|''>sample<rprime|''>,s|)>>>>>
     </eqnarray*>
@@ -1096,6 +1102,46 @@
     <\eqnarray*>
       <tformat|<table|<row|<cell|<around*|(|v,p|)>>|<cell|=>|<cell|Check-VRF<around*|(|T<rsub|m>,|)>>>>>
     </eqnarray*>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-pair>The <strong|VRF-Pair> is a datastructure that
+    contains both the VRV input and its corresponding output.
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-proof>The <strong|VRF proof> and <strong|VRF batchable
+    proof> <text-dots> <todo|todo>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-transcript>The <strong|transcript> <text-dots>
+    <todo|todo>
+  </definition>
+
+  <\definition>
+    The <name|Evaluate-VRF> function takes a transcript, <math|t>, as defined
+    in Definition <reference|defn-vrf-transcript> and procudes a VRF-Pair,
+    <math|p>, as defined in Definition <reference|defn-vrf-pair>.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|t|)>>>>>
+    </eqnarray*>
+
+    The functions executes the following steps: <todo|todo>
+  </definition>
+
+  <\definition>
+    The <name|DLEQ-Proove> function takes a transcript, <math|t>, as defined
+    in Definition <reference|defn-vrf-transcript> and produces a VRF proof
+    and a VRF batchable proof, <math|p> respectively <math|p<rsub|b>>, as
+    defined in Definition <reference|defn-vrf-proof>.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|<around*|(|*p,p<rsub|b>|)>>|<cell|\<leftarrow\>>|<cell|<text|<name|DLEQ-Proove>><around*|(|t|)>>>>>
+    </eqnarray*>
+
+    The functions executed the following steps: <todo|todo>
   </definition>
 
   <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
