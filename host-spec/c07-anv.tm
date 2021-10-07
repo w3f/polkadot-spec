@@ -1067,14 +1067,15 @@
   <\definition>
     <strong|Availability core VRV assignments> are computed by each relay
     chain validators to determine which availability cores as defined in
-    Definition <todo|todo> a validator is assigned to. The amount of
-    assignments a validator should do are dictated by the Runtime, specified
-    in the session info retried by the Runtime API as described in Section
-    <todo|todo>. The number for the amount of assignments is referred to as
-    \Psamples\Q. For each sample, the validator calculates an individual VRF
-    modulo transcript, <math|T>, where the little-endian encoded sample
-    number, <math|S>, is incremented by one for each iteration. At the
-    beginning of the iteration, <math|S> starts at value <math|0>.
+    Definition <reference|defn-availability-cores> a validator is assigned
+    to. The amount of assignments a validator should do are dictated by the
+    Runtime, specified in the session info retried by the Runtime API as
+    described in Section <todo|todo>. The number for the amount of
+    assignments is referred to as \Psamples\Q. For each sample, the validator
+    calculates an individual VRF modulo transcript, <math|T>, where the
+    little-endian encoded sample number, <math|S>, is incremented by one for
+    each iteration. At the beginning of the iteration, <math|S> starts at
+    value <math|0>.
 
     \;
 
@@ -1082,9 +1083,9 @@
     core index:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>A&V
-      MOD<rprime|''>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>RC-VRF<rprime|''>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Meta-Ad>><around*|(|t,<rprime|''>sample<rprime|''>,S|)>>>|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>|<row|<cell|c<rsub|i>>|<cell|\<leftarrow\>>|<cell|<text|<name|LE>><around*|(|<text|<name|Make-Bytes>><around*|(|p,4,<rprime|''>A&V
-      CORE<rprime|''>|)>|)> mod \ a<rsub|c>>>>>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
+      MOD<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>RC-VRF<rprime|''>>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Meta-Ad>><around*|(|t<text|,<rprime|''>sample<rprime|''>>,S|)>>>|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>|<row|<cell|c<rsub|i>>|<cell|\<leftarrow\>>|<cell|<text|<name|LE>><around*|(|<text|<name|Make-Bytes>><around*|(|p,4<text|,<rprime|''>A&V
+      CORE<rprime|''>>|)>|)> mod \ a<rsub|c>>>>>
     </eqnarray*>
 
     where
@@ -1121,7 +1122,8 @@
     validators continues with the following steps:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(||)>>>|<row|<cell|T>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>core<rprime|''>,c<rsub|i>|)>>>>>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
+      ASSIGNED<rprime|''>>|)>>>|<row|<cell|T>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>core<rprime|''>>,c<rsub|i>|)>>>>>
     </eqnarray*>
 
     T is the final VRF module transcript. Hence, the full available core VRF
