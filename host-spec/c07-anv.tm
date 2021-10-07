@@ -1065,16 +1065,24 @@
   </definition>
 
   <\definition>
-    <strong|Availability core VRV assignments> are computed by each relay
-    chain validators to determine which availability cores as defined in
+    An <strong|availability core VRF assignment>, <math|T>, is computed by a
+    relay chain validator to determine which availability core as defined in
     Definition <reference|defn-availability-cores> a validator is assigned
-    to. The amount of assignments a validator should do are dictated by the
-    Runtime, specified in the session info retried by the Runtime API as
-    described in Section <todo|todo>. The number for the amount of
-    assignments is referred to as \Psamples\Q. For each sample, the validator
-    calculates an individual VRF modulo transcript, <math|T>, where the
-    little-endian encoded sample number, <math|S>, is incremented by one for
-    each iteration. At the beginning of the iteration, <math|S> starts at
+    to. The assignment consits of a VRF pair, <math|v>, as defined in
+    Definition <reference|defn-vrf-pair> and a VRF proof, <math|p>, as
+    defined in Definition <reference|defn-vrf-proof>:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|v,p|)>>>>>
+    </eqnarray*>
+
+    \ The Runtime dictates how many assignments should be conducted by a
+    validator, as specified in the session index which can be retrieved via
+    the Runtime API as described in Section <todo|todo>. The amount of
+    assignments is referred to as \Psamples\Q. For each iteration of the
+    number of samples, the validator calculates an individual assignment,
+    <math|T>, where the little-endian encoded sample number, <math|S>, is
+    incremented by one. At the beginning of the iteration, <math|S> starts at
     value <math|0>.
 
     \;
@@ -1084,7 +1092,7 @@
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
-      MOD<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>RC-VRF<rprime|''>>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Meta-Ad>><around*|(|t<text|,<rprime|''>sample<rprime|''>>,S|)>>>|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>|<row|<cell|c<rsub|i>>|<cell|\<leftarrow\>>|<cell|<text|<name|LE>><around*|(|<text|<name|Make-Bytes>><around*|(|p,4<text|,<rprime|''>A&V
+      MOD<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>RC-VRF<rprime|''>>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Meta-Ad>><around*|(|t<text|,<rprime|''>sample<rprime|''>>,S|)>>>|<row|<cell|e>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>|<row|<cell|c<rsub|i>>|<cell|\<leftarrow\>>|<cell|<text|<name|LE>><around*|(|<text|<name|Make-Bytes>><around*|(|e,4<text|,<rprime|''>A&V
       CORE<rprime|''>>|)>|)> mod \ a<rsub|c>>>>>
     </eqnarray*>
 
@@ -1117,25 +1125,28 @@
 
     \;
 
-    If the resulting core index, <math|c<rsub|i>>, doesn't exit, the
-    validator continues with the next iteration. If it does exist, the
-    validators continues with the following steps:
+    The resulting integer, <math|c<rsub|i>>, indicates the core index. If the
+    index doesn't exist, as can be retrieved via the Runtime API as described
+    in Section <todo|todo>, the validator continues with the next iteration.
+    If the core index does exist, the validators continues with the following
+    steps:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
-      ASSIGNED<rprime|''>>|)>>>|<row|<cell|T>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>core<rprime|''>>,c<rsub|i>|)>>>>>
+      ASSIGNED<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>core<rprime|''>>,c<rsub|i>|)>>>|<row|<cell|<around*|(|p,\<b-phi\>|)>>|<cell|\<leftarrow\>>|<cell|<name|<text|DLEQ-Proove>><around*|(|t|)>>>|<row|<cell|T>|<cell|=>|<cell|<around*|(|e,p|)>>>>>
     </eqnarray*>
 
-    T is the final VRF module transcript. Hence, the full available core VRF
-    assignments are represtend as:
+    where<name| DLEQ-Proove> is a function defined in Definition
+    <reference|defn-vrf-dleq-proove>. Hence, the full list of available core
+    VRF assignments is represtend as:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|>|<cell|<around*|{|T<rsub|n>,\<ldots\>,T<rsub|m>|}>>|<cell|>>>>
     </eqnarray*>
 
-    where each <math|T<rsub|x>> corresponds to a sample index. The amount of
-    individual assignments, <math|T>, must not exceed the the number of
-    samples as dictated by the Runtime.
+    where each <math|T<rsub|x>> corresponds to a sample number. The amount of
+    individual assignments does not necessarily equal the number of samples,
+    but the amount must not exceed the number of samples.
   </definition>
 
   <\definition>
@@ -1145,7 +1156,8 @@
 
   <\definition>
     <label|defn-vrf-proof>The <strong|VRF proof> and <strong|VRF batchable
-    proof> <text-dots> <todo|todo>
+    proof> <text-dots> <todo|todo> <todo|does batchable proof need to be
+    specced?>
   </definition>
 
   <\definition>
