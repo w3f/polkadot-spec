@@ -1036,10 +1036,10 @@
   as defined in Definition <reference|net-msg-collator-protocol-message>.
 
   <\definition>
-    The <strong|relay VRF story> is an array of random bytes derived from the
-    VRF submitted within the block by the block author. The relay VRF story,
-    <math|T>, is used as input to determine approval voting criteria and
-    generated the following way:
+    <label|defn-relay-vrf-story>The <strong|relay VRF story> is an array of
+    random bytes derived from the VRF submitted within the block by the block
+    author. The relay VRF story, <math|T>, is used as input to determine
+    approval voting criteria and generated the following way:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<text|<name|Transcript<name|>>><around*|(|b<rsub|r>,b<rsub|s>,e<rsub|i>,A|)>>>>>
@@ -1065,47 +1065,79 @@
   </definition>
 
   <\definition>
-    Availability core VRV assignments are based on the number of samples a
-    validator should do, as defined by the session info retried by the
-    Runtime API as described in Section <todo|todo>. For each sample,
-    <math|C<rsub|s>>, <todo|scale encoded>, the validator calculates a VRF
-    modulo transcript, <math|T<rsub|m>>, the following way:
+    <strong|Availability core VRV assignments> are computed by each relay
+    chain validators to determine which availability cores as defined in
+    Definition <todo|todo> a validator is assigned to. The amount of
+    assignments a validator should do are dictated by the Runtime, specified
+    in the session info retried by the Runtime API as described in Section
+    <todo|todo>. The number for the amount of assignments is referred to as
+    \Psamples\Q. For each sample, the validator calculates an individual VRF
+    modulo transcript, <math|T>, where the little-endian encoded sample
+    number, <math|S>, is incremented by one for each iteration. At the
+    beginning of the iteration, <math|S> starts at value <math|0>.
+
+    \;
+
+    The validator executes the following steps to retrieve a (possibly valid)
+    core index:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|x>|<cell|=>|<cell|Evaluate-VRF<around*|(||)>>>>>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>A&V
+      MOD<rprime|''>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>RC-VRF<rprime|''>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Meta-Ad>><around*|(|t,<rprime|''>sample<rprime|''>,S|)>>>|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>|<row|<cell|c<rsub|i>>|<cell|\<leftarrow\>>|<cell|<text|<name|LE>><around*|(|<text|<name|Make-Bytes>><around*|(|p,4,<rprime|''>A&V
+      CORE<rprime|''>|)>|)> mod \ a<rsub|c>>>>>
     </eqnarray*>
 
-    as
+    where
+
+    <\itemize-dot>
+      <item><name|Create-Transcript> is a function defined in Definition
+      <reference|defn-vrf-create-transcript>.\ 
+
+      <item><name|Meta-Ad> is a function defined in Definition <todo|todo>.
+
+      <item><name|Evaluate-VRF> is a function defined in Definition
+      <reference|defn-vrf-evaluate-vrf>.
+
+      <item><name|LE> implies that the 4-byte input is converted to a
+      little-endian encoded 32-bit interger.
+
+      <item><name|Make-Bytes> is a function defined in Definition
+      <reference|defn-vrf-make-bytes>.
+
+      <item><math|R<rsub|s>> is the relay VRF story as defined in Definition
+      <reference|defn-relay-vrf-story>.
+
+      <item><math|k> is the public key of the local node.
+
+      <item><math|a<rsub|c>> is the number of availablity cores used during
+      the active session, as defined in the session info retrieved by the
+      Runtime API as defined in Definition <todo|todo>.
+    </itemize-dot>
+
+    \;
+
+    If the resulting core index, <math|c<rsub|i>>, doesn't exit, the
+    validator continues with the next iteration. If it does exist, the
+    validators continues with the following steps:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|t<rsub|0>>|<cell|=>|<cell|<text|<name|Transcript>><around*|(|<rprime|''>A&V
-      MOD<rprime|''>|)>>>|<row|<cell|t<rsub|1>>|<cell|=>|<cell|<text|<name|Meta-Add>><around*|(|t<rsub|0>,<rprime|''>RC-VRF<rprime|''>,R<rsub|r>|)>>>|<row|<cell|T<rsub|m>>|<cell|=>|<cell|<text|<name|Meta-Add>><around*|(|t<rsub|1>,<rprime|''>sample<rprime|''>,s|)>>>>>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(||)>>>|<row|<cell|T>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>core<rprime|''>,c<rsub|i>|)>>>>>
     </eqnarray*>
 
-    additionally
+    T is the final VRF module transcript. Hence, the full available core VRF
+    assignments are represtend as:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|b>|<cell|=>|<cell|<text|<name|VRF>><around*|(|T<rsub|m>,<rprime|''>A&V
-      CORE<rprime|''>|)><around*|[|0\<ldots\>4|]>>>|<row|<cell|C<rsub|i>>|<cell|=>|<cell|<text|<name|LE>>**<around*|(|b|)>
-      <bmod>C<rsub|n>>>>>
+      <tformat|<table|<row|<cell|>|<cell|<around*|{|T<rsub|n>,\<ldots\>,T<rsub|m>|}>>|<cell|>>>>
     </eqnarray*>
 
-    additionally
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|t<rsub|>>|<cell|=>|<cell|<text|<name|Transcript>><around*|(|<rprime|''>A&V
-      ASSIGNED<rprime|''>|)>>>|<row|<cell|x>|<cell|=>|<cell|<text|<name|Meta-Add>><around*|(|t<rsub|>,<rprime|''>core<rprime|''>,C<rsub|i>|)>>>>>
-    </eqnarray*>
-
-    additionally
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|<around*|(|v,p|)>>|<cell|=>|<cell|Check-VRF<around*|(|T<rsub|m>,|)>>>>>
-    </eqnarray*>
+    where each <math|T<rsub|x>> corresponds to a sample index. The amount of
+    individual assignments, <math|T>, must not exceed the the number of
+    samples as dictated by the Runtime.
   </definition>
 
   <\definition>
-    <label|defn-vrf-pair>The <strong|VRF-Pair> is a datastructure that
+    <label|defn-vrf-pair>The <strong|VRF Pair> is a datastructure that
     contains both the VRV input and its corresponding output.
   </definition>
 
@@ -1120,28 +1152,55 @@
   </definition>
 
   <\definition>
-    The <name|Evaluate-VRF> function takes a transcript, <math|t>, as defined
-    in Definition <reference|defn-vrf-transcript> and procudes a VRF-Pair,
-    <math|p>, as defined in Definition <reference|defn-vrf-pair>.
+    <label|defn-vrf-evaluate-vrf>The <name|Evaluate-VRF> function takes a
+    public key, <math|k>, a transcript, <math|t>, as defined in Definition
+    <reference|defn-vrf-transcript> and procudes a VRF-Pair, <math|p>, as
+    defined in Definition <reference|defn-vrf-pair>.
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|t|)>>>>>
+      <tformat|<table|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>>>
     </eqnarray*>
 
     The functions executes the following steps: <todo|todo>
   </definition>
 
   <\definition>
-    The <name|DLEQ-Proove> function takes a transcript, <math|t>, as defined
-    in Definition <reference|defn-vrf-transcript> and produces a VRF proof
-    and a VRF batchable proof, <math|p> respectively <math|p<rsub|b>>, as
-    defined in Definition <reference|defn-vrf-proof>.
+    <label|defn-vrf-dleq-proove>The <name|DLEQ-Proove> function takes a
+    transcript, <math|t>, as defined in Definition
+    <reference|defn-vrf-transcript> and produces a VRF proof and a VRF
+    batchable proof, <math|p> respectively <math|p<rsub|b>>, as defined in
+    Definition <reference|defn-vrf-proof>.
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|<around*|(|*p,p<rsub|b>|)>>|<cell|\<leftarrow\>>|<cell|<text|<name|DLEQ-Proove>><around*|(|t|)>>>>>
     </eqnarray*>
 
     The functions executed the following steps: <todo|todo>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-create-transcript>The <name|Create-Transcript> function
+    takes a context, <math|c>, represented as a UTF-8 encoded string and
+    produces a transcript, <math|t>, as defined in Definition
+    <reference|defn-vrf-transcript>.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|c|)>>>>>
+    </eqnarray*>
+
+    The function executes the following steps: <todo|todo>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-make-bytes>The <name|Make-Bytes> function takes a VRF
+    Pair, <math|p>, as defined in Definition <reference|defn-vrf-pair>, the
+    size of the buffer in bytes, <math|s>, and a context, <math|c>,
+    represtended as a UTF-8 encoded string and produces the raw byte output
+    of the VRF.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Make-Bytes>><around*|(|p,s,c|)>>>>>
+    </eqnarray*>
   </definition>
 
   <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
