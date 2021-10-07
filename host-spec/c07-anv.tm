@@ -1195,8 +1195,8 @@
       Section <todo|todo>.
     </itemize-dot>
 
-    If the resulting tranche, <math|d>, is less than <math|0>, then
-    <math|d=0>.
+    The resulting tranche, <math|n>, cannot be less than <math|0>. If the
+    tranche is less than <math|0>, then <math|d=0>.
   </definition>
 
   <\definition>
