@@ -1066,11 +1066,12 @@
 
   <\definition>
     An <strong|availability core VRF assignment>, <math|T>, is computed by a
-    relay chain validator to determine which availability core as defined in
-    Definition <reference|defn-availability-cores> a validator is assigned
-    to. The assignment consits of a VRF pair, <math|v>, as defined in
-    Definition <reference|defn-vrf-pair> and a VRF proof, <math|p>, as
-    defined in Definition <reference|defn-vrf-proof>:
+    relay chain validator to determine (and later proove) which availability
+    core as defined in Definition <reference|defn-availability-cores> a
+    validator is assigned to and should vote for approvals. The assignment
+    consits of a VRF pair, <math|v>, as defined in Definition
+    <reference|defn-vrf-pair> and a VRF proof, <math|p>, as defined in
+    Definition <reference|defn-vrf-proof>:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|v,p|)>>>>>
@@ -1092,8 +1093,9 @@
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
-      MOD<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>RC-VRF<rprime|''>>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Meta-Ad>><around*|(|t<text|,<rprime|''>sample<rprime|''>>,S|)>>>|<row|<cell|e>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>|<row|<cell|c<rsub|i>>|<cell|\<leftarrow\>>|<cell|<text|<name|LE>><around*|(|<text|<name|Make-Bytes>><around*|(|e,4<text|,<rprime|''>A&V
-      CORE<rprime|''>>|)>|)> mod \ a<rsub|c>>>>>
+      MOD<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>RC-VRF<rprime|''>>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Meta-Ad>><around*|(|t<text|,<rprime|''>sample<rprime|''>>,S|)>>>|<row|<cell|e>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|s<rsub|k>,t|)>>>|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Make-Bytes>><around*|(|e,4<text|,<rprime|''>A&V
+      CORE<rprime|''>>|)>>>|<row|<cell|c<rsub|i>>|<cell|\<leftarrow\>>|<cell|<text|<name|LE>><around*|(|b|)>
+      mod \ a<rsub|c>>>>>
     </eqnarray*>
 
     where
@@ -1116,7 +1118,7 @@
       <item><math|R<rsub|s>> is the relay VRF story as defined in Definition
       <reference|defn-relay-vrf-story>.
 
-      <item><math|k> is the public key of the local node.
+      <item><math|s<rsub|k>> is the secret key of the validator.
 
       <item><math|a<rsub|c>> is the number of availablity cores used during
       the active session, as defined in the session info retrieved by the
@@ -1127,13 +1129,13 @@
 
     The resulting integer, <math|c<rsub|i>>, indicates the core index. If the
     index doesn't exist, as can be retrieved via the Runtime API as described
-    in Section <todo|todo>, the validator continues with the next iteration.
-    If the core index does exist, the validators continues with the following
-    steps:
+    in Section <todo|todo>, the validator discards that value and continues
+    with the next iteration. If the core index does exist, the validators
+    continues with the following steps:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
-      ASSIGNED<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>core<rprime|''>>,c<rsub|i>|)>>>|<row|<cell|<around*|(|p,\<b-phi\>|)>>|<cell|\<leftarrow\>>|<cell|<name|<text|DLEQ-Proove>><around*|(|t|)>>>|<row|<cell|T>|<cell|=>|<cell|<around*|(|e,p|)>>>>>
+      ASSIGNED<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t<text|,<rprime|''>core<rprime|''>>,c<rsub|i>|)>>>|<row|<cell|<around*|(|p,\<b-phi\>|)>>|<cell|\<leftarrow\>>|<cell|<name|<text|DLEQ-Proove>><around*|(|s<rsub|k>,t,e|)>>>|<row|<cell|T>|<cell|=>|<cell|<around*|(|e,p|)>>>>>
     </eqnarray*>
 
     where<name| DLEQ-Proove> is a function defined in Definition
@@ -1147,6 +1149,54 @@
     where each <math|T<rsub|x>> corresponds to a sample number. The amount of
     individual assignments does not necessarily equal the number of samples,
     but the amount must not exceed the number of samples.
+  </definition>
+
+  <\definition>
+    The <strong|delayed availability core VRF assignments> are <text-dots>
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
+      DELAY<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>RC-VRF<rprime|''>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>core<rprime|''>,c<rsub|i>|)>>>|<row|<cell|e>|<cell|\<leftarrow\>>|<cell|<text|<name|Evaluate-VRF>><around*|(|s<rsub|k>,t<rsub|>|)>>>|<row|<cell|t<rsub|>>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>VRF<rprime|''>|)>>>|<row|<cell|<around*|(|p,x|)>>|<cell|\<leftarrow\>>|<cell|<text|<name|DLEQ-Proove>><around*|(|s<rsub|k>,t,e|)>>>|<row|<cell|temp>|<cell|=>|<cell|<around*|(|e,p,\<b-phi\>|)>>>>>
+    </eqnarray*>
+
+    The resulting values <math|e> and <math|p> are the VRF pair as defined in
+    Definition <reference|defn-vrf-pair> respectively the VRF proof as
+    defined in Definition <reference|defn-vrf-proof>.
+
+    \;
+
+    <todo|explain \Ptranche\Q>
+
+    \;
+
+    The <strong|tranche>, <math|d>, is determined as:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|b>|<cell|=>|<cell|<text|<name|Make-Bytes>><around*|(|e,4,<rprime|''><text|A&V
+      TRANCHE><rprime|''>|)>>>|<row|<cell|d>|<cell|=>|<cell|LE<around*|(|b|)>
+      mod <around*|(|d<rsub|c>+d<rsub|z>|)> - d<rsub|z>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><name|Make-Bytes> is a function defined in Definition
+      <reference|defn-vrf-make-bytes>.
+
+      <item><name|LE> implies that the 4-byte input is converted to a
+      little-endian encoded 32-bit interger.
+
+      <item><math|d<rsub|c>> is the number of delayed tranches by total as
+      specified by the session info, retrieved via the Runtime API as
+      described in Section <todo|todo>.
+
+      <item><math|d<rsub|z>> is the zeroth delay tranche width as specified
+      by the session info, retrieved via the Runtime API as described in
+      Section <todo|todo>.
+    </itemize-dot>
+
+    If the resulting tranche, <math|d>, is less than <math|0>, then
+    <math|d=0>.
   </definition>
 
   <\definition>
@@ -1180,13 +1230,14 @@
 
   <\definition>
     <label|defn-vrf-dleq-proove>The <name|DLEQ-Proove> function takes a
-    transcript, <math|t>, as defined in Definition
-    <reference|defn-vrf-transcript> and produces a VRF proof and a VRF
-    batchable proof, <math|p> respectively <math|p<rsub|b>>, as defined in
-    Definition <reference|defn-vrf-proof>.
+    private key, <math|s<rsub|k>>, and a transcript, <math|t>, as defined in
+    Definition <reference|defn-vrf-transcript> and a VRF pair, <math|v>, as
+    defined in Definition <reference|defn-vrf-pair> and produces a VRF proof
+    and a VRF batchable proof, <math|p> respectively <math|p<rsub|b>>, as
+    defined in Definition <reference|defn-vrf-proof>.
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|<around*|(|*p,p<rsub|b>|)>>|<cell|\<leftarrow\>>|<cell|<text|<name|DLEQ-Proove>><around*|(|t|)>>>>>
+      <tformat|<table|<row|<cell|<around*|(|*p,p<rsub|b>|)>>|<cell|\<leftarrow\>>|<cell|<text|<name|DLEQ-Proove>><around*|(|s<rsub|k>,t,v|)>>>>>
     </eqnarray*>
 
     The functions executed the following steps: <todo|todo>
