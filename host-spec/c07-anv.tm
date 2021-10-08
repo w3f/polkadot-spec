@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|2.1>
 
 <project|host-spec.tm>
 
@@ -982,20 +982,20 @@
   <section|Approval Voting><label|sect-approval-voting>
 
   The approval voting process ensures that only valid parachain blocks are
-  finalized on the relay chain. Validators verify parachain candidates that
-  were submitted to the relay chain, as described in Section
+  finalized on the relay chain. After <em|backable> parachain candidates were
+  submitted to the relay chain, as described in Section
   <reference|sect-candidate-inclusion>, which can be retrieved by the Runtime
-  API as described in Section <reference|sect-rt-api-availability-cores>.
-  Then, for each parachain the VRF-assigned validators issue approvals for
-  valid candidates, respectively disputes for invalid blocks. Since it cannot
-  be expected that each validator verifies every single parachain candidate,
-  this mechanism ensures that enough honest validators are selected to verify
-  parachain candidates and to prevent the finalization of invalid blocks. If
-  an honest validator detects an invalid block which was approved by one or
-  more validators, the honest validator must issue a disputes which wil cause
-  escalations, resulting in consequences for all malicious parties, i.e.
-  slashing. This mechanism is described more in Section
-  <reference|sect-availability-assingment-criteria>.
+  API as described in Section <reference|sect-rt-api-availability-cores>,
+  validators need to determine their assignments for each parachain and issue
+  approvals for valid candidates, respectively disputes for invalid
+  candidates. Since it cannot be expected that each validator verifies every
+  single parachain candidate, this mechanism ensures that enough honest
+  validators are selected to verify parachain candidates in order prevent the
+  finalization of invalid blocks. If an honest validator detects an invalid
+  block which was approved by one or more validators, the honest validator
+  must issue a disputes which wil cause escalations, resulting in
+  consequences for all malicious parties, i.e. slashing. This mechanism is
+  described more in Section <reference|sect-availability-assingment-criteria>.
 
   \;
 
@@ -1034,6 +1034,37 @@
 
   The validator issues approval votes in form of a validator protocol message
   as defined in Definition <reference|net-msg-collator-protocol-message>.
+
+  <subsection|Tranches>
+
+  Validators use a subjective, tick-based system to determine when approval
+  assignments should be broadcasted and whether additional validators should
+  be assigned to a parachain. A validator starts the tick-based system when a
+  new relay chain block is received and increments the tick every 500
+  Milliseconds. Each tick/increment is referred to as a \Ptranche\Q,
+  represented as an integer, starting at <math|0>.
+
+  \;
+
+  As described in Section <reference|sect-availability-assingment-criteria>,
+  the validator first executes the VRF mechanism to determine which
+  parachains (availability cores) the validator is assigned to, then an
+  additional VRF mechanism for each parachain to determine the <em|delayed
+  assignment>. The delayed assignment indicites the tranche at which the
+  validator should broadcast an assignment, then follow up with a
+  approval/dispute of the candidate. A tranche of value 0 implies that the
+  assignment should be started immediately, while later assignees of later
+  tranches wait for the approvals of earlier assignees.
+
+  \;
+
+  Validators are required to track broadcasted assignments by other
+  validators assigned to the same parachain, including verifying the VRF
+  output. Once a valid assignment from a peer was received, the the validator
+  must await a following approval vote within a certain period. If the
+  waiting time exceeds the specified period, the validator interprets this
+  behavior as a \Pno-show\Q, indicating that more validator should be
+  assigned to check the candidate until the required threshold is reached.
 
   <\definition>
     <label|defn-relay-vrf-story>The <strong|relay VRF story> is an array of
