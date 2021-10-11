@@ -1625,10 +1625,6 @@
 
   <subsection|validation_code_by_hash><label|sect-rt-api-validation-code-by-hash>
 
-  <todo|looks like this was removed?>
-
-  \;
-
   Returns the validation code (Runtime) of a parachain by its hash.
 
   \;
@@ -1802,7 +1798,7 @@
   <subsection|dmq_contents>
 
   Returns all the pending inbound messages in the downward message queue for
-  a parachain.
+  a given parachain.
 
   \;
 
@@ -1817,7 +1813,29 @@
   <strong|Return>
 
   <\itemize-dot>
-    <item>An array of Inbound downward messages as defined in <todo|reference
+    <item>An array of inbound downward messages as defined in <todo|reference
+    messaging chapter>
+  </itemize-dot>
+
+  <subsection|inbound_hrmp_channels_contents>
+
+  Returns the contents of all channels addresssed to the given recipient.
+  Channels that have no messages in them are also included.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>The parachain Id as defined in Definition <reference|defn-para-id>.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An array of inbound HRMP messages as defined in <todo|reference
     messaging chapter>
   </itemize-dot>
 
