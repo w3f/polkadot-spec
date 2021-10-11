@@ -171,6 +171,10 @@
 
       <item><math|A<rsub|s>> is the signature of the validator.\ 
     </itemize-dot>
+
+    This message is not sent directly but is sent as part of the collator
+    protocol message as defined in Section
+    <reference|net-msg-validator-protocol-message>.
   </definition>
 
   <\definition>
@@ -201,6 +205,10 @@
 
       <item><math|A<rsub|s>> is the signature of the validator.
     </itemize-dot>
+
+    This message is not sent directly but is sent as part of the collator
+    protocol message as defined in Section
+    <reference|net-msg-validator-protocol-message>.
   </definition>
 
   <\definition>
@@ -253,6 +261,10 @@
       <item><math|P<rsub|o>> is a VRF output and <math|P<rsub|p>> its
       corresponding proof.
     </itemize-dot>
+
+    This message is not sent directly but is sent as part of the collator
+    protocol message as defined in Section
+    <reference|net-msg-validator-protocol-message>.
   </definition>
 
   <\definition>
@@ -311,6 +323,10 @@
       <item><math|S> is a full statement as defined in Definition
       <reference|net-msg-full-statement>.
     </itemize-dot>
+
+    This message is not sent directly but is sent as part of the collator
+    protocol message as defined in Section
+    <reference|net-msg-collator-protocol-message>.
   </definition>
 
   <\definition>
