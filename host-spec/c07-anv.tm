@@ -1013,30 +1013,27 @@
   consequences for all malicious parties, i.e. slashing. This mechanism is
   described more in Section <reference|sect-availability-assingment-criteria>.
 
-  \;
-
-  As described in Section <reference|sect-availability-assingment-criteria>,
-  the VRF mechanism assigns the validators responsible for approving
-  submitted parachain candidates, unlike the assignment mechanism during the
-  backing phase, where assignments are all public and retrievable via the
-  Runtime API. Once validators have determined their assignment based on the
-  VRF, the validators then need to determine their round, referred to as a
-  \Ptranche\Q, which indicates <em|when> each validator should start with the
-  approval process. This is described further in Section
-  <reference|defn-tranches>.
-
   <subsection|Assignment Criteria><label|sect-availability-assingment-criteria>
 
   Validators determine their assignment based on a VRF mechanism, similiar to
-  the BABE consensus mechanism. An assigned validator never broadcasts their
-  assignment until relevant. Once the assigned validator is ready to check a
-  candidate, the validator broadcasts their assignment by issuing an approval
-  distribution message as defined in Definition
-  <reference|net-msg-approval-distribution>, where <math|M> is of variant
-  <math|0>. Other assigned validators that receive that network message must
-  keep track of if, expecting an approval vote following shortly after. After
-  issuing an assignment, the validator can retrieve the candidate by using
-  the availability recovery as described in Section
+  the BABE consensus mechanism. First, validators generate an availability
+  core VRF assignment as defined in Definition
+  <reference|defn-aval-core-vrf-assignment>, which indicates which
+  availability core a validator is assigned to. Then a <em|delayed>
+  availability core VRF assignment is generated which indicates at what point
+  a validator should start the approval process. The delays are based on
+  \Ptranches\Q, as described in Section <reference|defn-tranches>.
+
+  \;
+
+  An assigned validator never broadcasts their assignment until relevant.
+  Once the assigned validator is ready to check a candidate, the validator
+  broadcasts their assignment by issuing an approval distribution message as
+  defined in Definition <reference|net-msg-approval-distribution>, where
+  <math|M> is of variant <math|0>. Other assigned validators that receive
+  that network message must keep track of if, expecting an approval vote
+  following shortly after. Assigned validators can retrieve the candidate by
+  using the availability recovery as described in Section
   <reference|sect-availability-recovery> and then validate the candidate as
   described in Section <reference|sect-candidate-validation>.
 
@@ -1120,13 +1117,13 @@
   </definition>
 
   <\definition>
-    An <strong|availability core VRF assignment>, <math|T>, is computed by a
-    relay chain validator to determine (and later proove) which availability
-    core as defined in Definition <reference|defn-availability-cores> a
-    validator is assigned to and should vote for approvals. The assignment
-    consits of a VRF pair, <math|v>, as defined in Definition
-    <reference|defn-vrf-pair> and a VRF proof, <math|p>, as defined in
-    Definition <reference|defn-vrf-proof>:
+    <label|defn-aval-core-vrf-assignment>An <strong|availability core VRF
+    assignment>, <math|T>, is computed by a relay chain validator to
+    determine which availability core as defined in Definition
+    <reference|defn-availability-cores> a validator is assigned to and should
+    vote for approvals. The assignment consits of a VRF pair, <math|v>, as
+    defined in Definition <reference|defn-vrf-pair> and a VRF proof,
+    <math|p>, as defined in Definition <reference|defn-vrf-proof>:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|v,p|)>>>>>
@@ -1134,12 +1131,12 @@
 
     \ The Runtime dictates how many assignments should be conducted by a
     validator, as specified in the session index which can be retrieved via
-    the Runtime API as described in Section <todo|todo>. The amount of
-    assignments is referred to as \Psamples\Q. For each iteration of the
-    number of samples, the validator calculates an individual assignment,
-    <math|T>, where the little-endian encoded sample number, <math|S>, is
-    incremented by one. At the beginning of the iteration, <math|S> starts at
-    value <math|0>.
+    the Runtime API as described in Section
+    <reference|sect-rt-api-session-info>. The amount of assignments is
+    referred to as \Psamples\Q. For each iteration of the number of samples,
+    the validator calculates an individual assignment, <math|T>, where the
+    little-endian encoded sample number, <math|S>, is incremented by one. At
+    the beginning of the iteration, <math|S> starts at value <math|0>.
 
     \;
 
@@ -1177,16 +1174,18 @@
 
       <item><math|a<rsub|c>> is the number of availablity cores used during
       the active session, as defined in the session info retrieved by the
-      Runtime API as defined in Definition <todo|todo>.
+      Runtime API as defined in Definition
+      <reference|sect-rt-api-session-info>.
     </itemize-dot>
 
     \;
 
-    The resulting integer, <math|c<rsub|i>>, indicates the core index. If the
-    index doesn't exist, as can be retrieved via the Runtime API as described
-    in Section <todo|todo>, the validator discards that value and continues
-    with the next iteration. If the core index does exist, the validators
-    continues with the following steps:
+    The resulting integer, <math|c<rsub|i>>, indicates the parachain Id as
+    defined in Definition <reference|defn-para-id>. If the Id doesn't exist,
+    as can be retrieved by the Runtime API as described in Section
+    <reference|sect-rt-api-availability-cores>, the validator discards that
+    value and continues with the next iteration. If the Id does exist, the
+    validators continues with the following steps:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
@@ -1207,20 +1206,19 @@
   </definition>
 
   <\definition>
-    The <strong|delayed availability core VRF assignments> are <text-dots>
+    <label|defn-delayed-aval-core-vrf-assignment>The <strong|delayed
+    availability core VRF assignments> determined at what point a validator
+    should start the approval process as described in Section
+    <reference|defn-tranches>. The validator executes the following steps:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<text|<rprime|''>A&V
-      DELAY<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>RC-VRF<rprime|''>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>core<rprime|''>,c<rsub|i>|)>>>|<row|<cell|e>|<cell|\<leftarrow\>>|<cell|<text|<name|Evaluate-VRF>><around*|(|s<rsub|k>,t<rsub|>|)>>>|<row|<cell|t<rsub|>>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>VRF<rprime|''>|)>>>|<row|<cell|<around*|(|p,x|)>>|<cell|\<leftarrow\>>|<cell|<text|<name|DLEQ-Proove>><around*|(|s<rsub|k>,t,e|)>>>|<row|<cell|temp>|<cell|=>|<cell|<around*|(|e,p,\<b-phi\>|)>>>>>
+      DELAY<rprime|''>>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>RC-VRF<rprime|''>,R<rsub|s>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,<rprime|''>core<rprime|''>,c<rsub|i>|)>>>|<row|<cell|e>|<cell|\<leftarrow\>>|<cell|<text|<name|Evaluate-VRF>><around*|(|s<rsub|k>,t<rsub|>|)>>>|<row|<cell|t<rsub|>>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>VRF<rprime|''>|)>>>|<row|<cell|<around*|(|p,x|)>>|<cell|\<leftarrow\>>|<cell|<text|<name|DLEQ-Proove>><around*|(|s<rsub|k>,t,e|)>>>>>
     </eqnarray*>
 
     The resulting values <math|e> and <math|p> are the VRF pair as defined in
     Definition <reference|defn-vrf-pair> respectively the VRF proof as
     defined in Definition <reference|defn-vrf-proof>.
-
-    \;
-
-    <todo|explain \Ptranche\Q>
 
     \;
 
@@ -1243,11 +1241,11 @@
 
       <item><math|d<rsub|c>> is the number of delayed tranches by total as
       specified by the session info, retrieved via the Runtime API as
-      described in Section <todo|todo>.
+      described in Section <reference|sect-rt-api-session-info>.
 
       <item><math|d<rsub|z>> is the zeroth delay tranche width as specified
       by the session info, retrieved via the Runtime API as described in
-      Section <todo|todo>.
+      Section <reference|sect-rt-api-session-info>.
     </itemize-dot>
 
     The resulting tranche, <math|n>, cannot be less than <math|0>. If the
