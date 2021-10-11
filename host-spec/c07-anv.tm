@@ -314,8 +314,8 @@
   </definition>
 
   <\definition>
-    <label|>The <strong|collator protocol message>, <math|M>, is a varying
-    datatype of the following format:
+    <label|net-msg-collator-protocol-message>The <strong|collator protocol
+    message>, <math|M>, is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
@@ -1018,29 +1018,27 @@
   distribution message as defined in Definition
   <reference|net-msg-approval-distribution>, where <math|M> is of variant
   <math|0>. Other assigned validators that receive that network message must
-  keep track of if, expecting an approval vote following shortly after.
-
-  \;
-
-  \ After issuing an assignment, the validator can retrieve the candidate by
-  using the availability recovery as described in Section
+  keep track of if, expecting an approval vote following shortly after. After
+  issuing an assignment, the validator can retrieve the candidate by using
+  the availability recovery as described in Section
   <reference|sect-availability-recovery> and then validate the candidate as
-  described in Section <reference|sect-candidate-validation>. If the
-  candidate is valid, the validator must send their approval to the network.
+  described in Section <reference|sect-candidate-validation>.
 
   \;
 
   The validator issues approval votes in form of a validator protocol message
-  as defined in Definition <reference|net-msg-collator-protocol-message>.
+  as defined in Definition <reference|net-msg-validator-protocol-message> and
+  disputes in <todo|todo>.
 
   <subsection|Tranches><label|defn-tranches>
 
   Validators use a subjective, tick-based system to determine when the
   approval process should start. A validator starts the tick-based system
   when a new availability core candidates have been proposed, which can be
-  retrieved via the Runtime API as described in Section <todo|todo>, and
-  increments the tick every 500 Milliseconds. Each tick/increment is referred
-  to as a \Ptranche\Q, represented as an integer, starting at <math|0>.
+  retrieved via the Runtime API as described in Section
+  <reference|sect-rt-api-availability-cores>, and increments the tick every
+  500 Milliseconds. Each tick/increment is referred to as a \Ptranche\Q,
+  represented as an integer, starting at <math|0>.
 
   \;
 
@@ -1060,20 +1058,21 @@
   validators assigned to the same parachain, including verifying the VRF
   output. Once a valid assignment from a peer was received, the validator
   must wait for the following approval vote within a certain period as
-  defined in <todo|todo> by orienting itself on its local, tick-based system.
-  If the waiting time after a broadcasted assignment exceeds the specified
-  period, the validator interprets this behavior as a \Pno-show\Q, indicating
-  that more validators should commit on their tranche until enough approval
-  votes have been collected.
+  described in Section <reference|sect-rt-api-session-info> by orienting
+  itself on its local, tick-based system. If the waiting time after a
+  broadcasted assignment exceeds the specified period, the validator
+  interprets this behavior as a \Pno-show\Q, indicating that more validators
+  should commit on their tranche until enough approval votes have been
+  collected.
 
   \;
 
-  If enough approval votes have been collected as specified in Definition
-  <todo|todo>, then assignees of later tranches do not have to start the
-  approval process. Therefore, this tranche system serves as a mechanism to
-  ensure that enough candidate approvals from a <em|random> set of validators
-  are created without requiring all assigned validators to check the
-  candidate.
+  If enough approval votes have been collected as described in Section
+  <reference|sect-rt-api-session-info>, then assignees of later tranches do
+  not have to start the approval process. Therefore, this tranche system
+  serves as a mechanism to ensure that enough candidate approvals from a
+  <em|random> set of validators are created without requiring all assigned
+  validators to check the candidate.
 
   <\definition>
     <label|defn-relay-vrf-story>The <strong|relay VRF story> is an array of
