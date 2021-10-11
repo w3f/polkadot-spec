@@ -1333,7 +1333,7 @@
 
   <section|Runtime Api>
 
-  <subsection|validators>
+  <subsection|validators><label|sect-rt-api-validators>
 
   Returns the validator set at the current state. The specified validators
   are responsible for backing parachains for the current state.
@@ -1621,6 +1621,10 @@
 
   <subsection|validation_code_by_hash><label|sect-rt-api-validation-code-by-hash>
 
+  <todo|looks like this was removed?>
+
+  \;
+
   Returns the validation code (Runtime) of a parachain by its hash.
 
   \;
@@ -1636,10 +1640,9 @@
   <strong|Return>
 
   <\itemize-dot>
-    <item>An <verbatim|Option> value as defined in Definition
-    <inactive|<hybrid|>> containing the full validation code in an byte
-    array. This value is empty if the parachain Id cannot be found or the
-    assumption is wrong.
+    <item>An <verbatim|Option> value as defined in Definition <todo|todo>
+    containing the full validation code in an byte array. This value is empty
+    if the parachain Id cannot be found or the assumption is wrong.
   </itemize-dot>
 
   <subsection|candidate_pending_availability>
@@ -1717,7 +1720,86 @@
     </itemize-dot>
   </itemize-dot>
 
+  <subsection|session_info><label|sect-rt-api-session-info>
+
+  Get the session info of the given session, if available.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>The unsigned 32-bit integer indicating the session index.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An <verbatim|Option> type as defined in Definition <todo|todo>
+    which can contain the session info structure, <math|S>, of the following
+    format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|S>|<cell|=>|<cell|<around*|(|A,D,K,G,c,z,s,d,x,a|)>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|v<rsub|n>,\<ldots\>v<rsub|m>|)>>>|<row|<cell|D>|<cell|=>|<cell|<around*|(|v<rsub|<rsub|n>>,\<ldots\>v<rsub|m>|)>>>|<row|<cell|K>|<cell|=>|<cell|<around*|(|v<rsub|n>,\<ldots\>v<rsub|m>|)>>>|<row|<cell|G>|<cell|=>|<cell|<around*|(|g<rsub|n>,\<ldots\>g<rsub|m>|)>>>|<row|<cell|g>|<cell|=>|<cell|<around*|(|A<rsub|n>,\<ldots\>A<rsub|m>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|A> indicates the validators of the current session, in
+      canonical order. There might be more validators in the current session
+      than validators participating in parachain consensus, as returned by
+      the Runtime API as defined in Section
+      <reference|sect-rt-api-validators>.
+
+      <item><math|D> indicates the validator authority discovery keys for the
+      given session in canonical order. The first couple of validators are
+      equal to the corresponding validators participating in the parachain
+      consensus, as returned by the Runtime API as defined in Section
+      <reference|sect-rt-api-validators>. The remaining authorities are not
+      participating in the parachain consensus.
+
+      <item><math|K> indicates the assignment keys for validators. There
+      might be more authorities in the session that validators participating
+      in parachain consensus, as returned by the Runtime API as defined in
+      Section <reference|sect-rt-api-validators>.
+
+      <item><math|G> indicates the validator groups in shuffled order.
+      <todo|what's the purpose of this?>
+
+      <item><math|v<rsub|n>> is public key of the authority.
+
+      <item><math|A<rsub|n>> is the authority set Id as defined in Definition
+      <todo|todo>.
+
+      <item><math|c> is an unsigned 32-bit integer indicating the number of
+      availability cores used by the protocol during the given session.
+
+      <item><math|z> is an unsigned 32-bit integer indicating the zeroth
+      delay tranche width.
+
+      <item><math|s> is an unsigned 32-bit integer indicating the number of
+      samples an assigned validator should do for approval voting.
+
+      <item><math|d> is an unsigned 32-bit integer indicating the number of
+      delay tranches in total.
+
+      <item><math|x> is an unsigned 32-bit integer indicating how many BABE
+      <todo|?> slots must pass before an assignment is considered a
+      \Pno-show\Q.
+
+      <item><math|a> is an unsigned 32-bit integer indicating the number of
+      validators needed to approve a block.
+    </itemize-dot>
+  </itemize-dot>
+
   <subsection|disputes_info>
+
+  <todo|looks like this was removed?>
+
+  \;
 
   Returns information about all disputes known by the Runtime, including
   which validators the Runtime will accept disputes from.
