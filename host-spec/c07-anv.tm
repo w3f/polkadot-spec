@@ -1841,7 +1841,7 @@
 
   <subsection|disputes_info>
 
-  <todo|looks like this was removed?>
+  <todo|looks like this was renamed (and modified) into on_chain_votes?>
 
   \;
 
