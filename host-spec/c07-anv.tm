@@ -1323,17 +1323,6 @@
     </eqnarray*>
   </definition>
 
-  <subsection|\PNo-show\Q Occurence><label|sect-no-show-occurence>
-
-  The Polkadot validator observes a \Pno-show\Q occurence when another
-  assigned validator broadcasted an assignment, indicating the intent to
-  verify a parachain candidate, but did not follow up with an approval vote
-  within a certain duration.
-
-  \;
-
-  <todo|todo>
-
   <subsection|Candidate Recovery><label|sect-availability-recovery>
 
   The availability distribution of the Polkadot validator must be able to
@@ -1810,6 +1799,28 @@
     </itemize-dot>
   </itemize-dot>
 
+  <subsection|dmq_contents>
+
+  Returns all the pending inbound messages in the downward message queue for
+  a parachain.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>The parachain Id as defined in Definition <reference|defn-para-id>.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>An array of Inbound downward messages as defined in <todo|reference
+    messaging chapter>
+  </itemize-dot>
+
   <subsection|disputes_info>
 
   <todo|looks like this was removed?>
@@ -1863,6 +1874,10 @@
   </itemize-dot>
 
   <subsection|candidates_included>
+
+  <todo|looks like this was removed?>
+
+  \;
 
   Checks which candidates have been included within the local chain.
 
