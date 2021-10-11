@@ -1,4 +1,4 @@
-<TeXmacs|2.1>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -999,17 +999,15 @@
 
   \;
 
-  The VRF mechanism assigns the validators responsible for approving
+  As described in Section <reference|sect-availability-assingment-criteria>,
+  the VRF mechanism assigns the validators responsible for approving
   submitted parachain candidates, unlike the assignment mechanism during the
   backing phase, where assignments are all public and retrievable via the
-  Runtime API, as described in Section <reference|sect-candidate-backing>.
-  When ready, an assigned validator broadcasts their assignment to indicate
-  their intent to check a candidate. After verifying a parachain candidate,
-  the validator issues their approval vote to connected peers. If no
-  following approval vote is sent, then that behavior is implied as
-  \Pno-show', meaning that more validators need to be assigned to verify the
-  candidate. No-show occurrences are explained further in Section
-  <reference|sect-rt-api-validator-groups>.
+  Runtime API. Once validators have determined their assignment based on the
+  VRF, the validators then need to determine their round, referred to as a
+  \Ptranche\Q, which indicates <em|when> each validator should start with the
+  approval process. This is described further in Section
+  <reference|defn-tranches>.
 
   <subsection|Assignment Criteria><label|sect-availability-assingment-criteria>
 
@@ -1035,36 +1033,47 @@
   The validator issues approval votes in form of a validator protocol message
   as defined in Definition <reference|net-msg-collator-protocol-message>.
 
-  <subsection|Tranches>
+  <subsection|Tranches><label|defn-tranches>
 
-  Validators use a subjective, tick-based system to determine when approval
-  assignments should be broadcasted and whether additional validators should
-  be assigned to a parachain. A validator starts the tick-based system when a
-  new relay chain block is received and increments the tick every 500
-  Milliseconds. Each tick/increment is referred to as a \Ptranche\Q,
-  represented as an integer, starting at <math|0>.
+  Validators use a subjective, tick-based system to determine when the
+  approval process should start. A validator starts the tick-based system
+  when a new availability core candidates have been proposed, which can be
+  retrieved via the Runtime API as described in Section <todo|todo>, and
+  increments the tick every 500 Milliseconds. Each tick/increment is referred
+  to as a \Ptranche\Q, represented as an integer, starting at <math|0>.
 
   \;
 
   As described in Section <reference|sect-availability-assingment-criteria>,
   the validator first executes the VRF mechanism to determine which
   parachains (availability cores) the validator is assigned to, then an
-  additional VRF mechanism for each parachain to determine the <em|delayed
-  assignment>. The delayed assignment indicites the tranche at which the
-  validator should broadcast an assignment, then follow up with a
-  approval/dispute of the candidate. A tranche of value 0 implies that the
-  assignment should be started immediately, while later assignees of later
-  tranches wait for the approvals of earlier assignees.
+  additional VRF mechanism for each assigned parachain to determine the
+  <em|delayed assignment>. The delayed assignment indicites the tranche at
+  which the validator should start the approval process. A tranche of value 0
+  implies that the assignment should be started immediately, while later
+  assignees of later tranches wait until it's their term to issue
+  assignments, determined by their subjective, tick-based system.
 
   \;
 
   Validators are required to track broadcasted assignments by other
   validators assigned to the same parachain, including verifying the VRF
-  output. Once a valid assignment from a peer was received, the the validator
-  must await a following approval vote within a certain period. If the
-  waiting time exceeds the specified period, the validator interprets this
-  behavior as a \Pno-show\Q, indicating that more validator should be
-  assigned to check the candidate until the required threshold is reached.
+  output. Once a valid assignment from a peer was received, the validator
+  must wait for the following approval vote within a certain period as
+  defined in <todo|todo> by orienting itself on its local, tick-based system.
+  If the waiting time after a broadcasted assignment exceeds the specified
+  period, the validator interprets this behavior as a \Pno-show\Q, indicating
+  that more validators should commit on their tranche until enough approval
+  votes have been collected.
+
+  \;
+
+  If enough approval votes have been collected as specified in Definition
+  <todo|todo>, then assignees of later tranches do not have to start the
+  approval process. Therefore, this tranche system serves as a mechanism to
+  ensure that enough candidate approvals from a <em|random> set of validators
+  are created without requiring all assigned validators to check the
+  candidate.
 
   <\definition>
     <label|defn-relay-vrf-story>The <strong|relay VRF story> is an array of
@@ -1538,9 +1547,31 @@
 
     The persisted validation data is fetched via the Runtime API as described
     in Section <reference|sect-rt-api-persisted-validation-data>.
-
-    \;
   </definition>
+
+  <subsection|check_validation_outputs>
+
+  Checks if the given validation outputs pass the acceptence criteria.
+
+  \;
+
+  <strong|Arguments>
+
+  <\itemize-dot>
+    <item>The parachain Id as defined in Definition <reference|defn-para-id>.
+
+    <item>The candidate commitments as defined in Definition
+    <reference|defn-candidate-commitments>.
+  </itemize-dot>
+
+  \;
+
+  <strong|Return>
+
+  <\itemize-dot>
+    <item>A boolean indicating whether the candidate commitments pass the
+    acceptence criteria.
+  </itemize-dot>
 
   <subsection|session_index_for_child>
 
