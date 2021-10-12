@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|2.1>
 
 <project|host-spec.tm>
 
@@ -7,10 +7,9 @@
 <\body>
   <chapter|Message Passing>
 
-  <\quote-env>
-    Disclaimer: this document is work-in-progress and will change a lot until
-    finalization.
-  </quote-env>
+  <todo|DISCLAIMER: this document is currently outdated. The messaging
+  protocol for Parachains is heavily work-in-progress and will change a lot
+  until finalization.>
 
   <section|Overview>
 
@@ -30,7 +29,8 @@
     whether the recipient has read those messages.
   </itemize>
 
-  <big-figure|<image|figures/c08-overview.pdf|1par|||>|Parachain Message Passing Overview>
+  <big-figure|<image|figures/c08-overview.pdf|1par|||>|Parachain Message
+  Passing Overview>
 
   <section|Message Queue Chain (MQC)>
 
@@ -47,7 +47,8 @@
   - <with|font-family|tt|number>: The relay block number at which the message
   was sent.
 
-  <big-figure|<image|figures/c08-message_queue_chain.pdf|1par|||>|Message Queue Chain Overview>
+  <big-figure|<image|figures/c08-message_queue_chain.pdf|1par|||>|Message
+  Queue Chain Overview>
 
   A MQC is always specific to one channel. Additional channels require its
   own, individual MQC. The MQC itself is not saved anywhere, but only
@@ -433,7 +434,8 @@
   possible in regards to messaging and only contains the required information
   for the validity of message processing.
 
-  <big-figure|<image|figures/c08-xcmp_overview.pdf|1par|||>|Parachain XCMP Overview>
+  <big-figure|<image|figures/c08-xcmp_overview.pdf|1par|||>|Parachain XCMP
+  Overview>
 
   The entire XCMP process requires a couple of steps:
 
@@ -546,7 +548,6 @@
   </with>
 
   \;
-
 </body>
 
 <\initial>
@@ -555,9 +556,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
