@@ -581,7 +581,43 @@
 
   <section|Collations><label|sect-collations>
 
-  <todo|todo>
+  Collations are proposed candidates to the Polkadot relay chain validators.
+  The generation of candidates is very parachain specific. Relay chain
+  validators do not interpret the candidate itself, but rather rely on the
+  parachain Runtime to validate the candidate, as described in Section
+  <reference|sect-candidate-validation>. Collators, which are parachain nodes
+  that send candidate proposals to the relay chain validator, must prepare
+  specific pieces of data in order to correctly comply with the requirements
+  of the parachain protocol.
+
+  <\definition>
+    A <strong|collation> is a datastructure which contains the proposed
+    parachain candidate, including an optional validation parachain Runtime
+    update and upward messages. The collation datastructure, <math|C>, is a
+    datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M,H,R,h,P,p,w|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M> is an array of upward messages interpreted by the relay
+      chain itself, as described in Section <todo|todo>.
+
+      <item><math|H> is an array of horizontal messages interpreted by other
+      parachain, as decribed in Section <todo|todo>.
+
+      <item><math|R> is an <verbatim|Option> type as defined in Definition
+      <todo|todo> which can contain a parachain Runtime update.
+
+      <item><math|H> is the head data produced as a result of execution
+      <todo|clarify>.
+
+      <item><math|P> is the PoV block as defined in Definition <todo|todo>.
+    </itemize-dot>
+  </definition>
 
   <section|Candidate Backing><label|sect-candidate-backing>
 
