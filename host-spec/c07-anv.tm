@@ -173,15 +173,107 @@
     mention SCALE encoding
   </todo>
 
+  <todo|@syed: What we going to talk in this section?>
+
+  \;
+
+  <todo|@syed I brought <strong|validator/collator protocol message> earlier
+  in the chapter as they are more general concepts than those coming after.>
+
+  \;
+
+  <todo|@syed this section seems to me that should come later after you
+  defined concepts like statement, validity vote etc.>
+
+  \;
+
+  <\definition>
+    <label|net-msg-validator-protocol-message>The <strong|validator protocol
+    message> is a varying datatype used by validators to broadcast relevant
+    information about certain steps in the A&V process. Specifically, this
+    includes the backing process as described in Section
+    <reference|sect-candidate-backing> and the approval process as described
+    in Section <reference|sect-approval-voting>. The validator protocol
+    message, <math|M>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M<rsub|f>> is a bitfield distribution message as defined in
+      Definition <reference|net-msg-bitfield-dist-msg>.
+
+      <item><math|M<rsub|s>> is a statement distribution message as defined
+      in Definition <reference|net-msg-statement-distribution>.
+
+      <item><math|M<rsub|a>> is a approval distribution message as defined in
+      Definition <reference|net-msg-approval-distribution>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|net-msg-collator-protocol>The <strong|collator <todo|@syed: define
+    collator in preliminary> message>, <math|M>, is a varying datatype of the
+    following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|i>,P<rsub|i>,C<rsub|s>|)>>>|<row|<cell|1\<rightarrow\>H>>|<row|<cell|4\<rightarrow\><around*|(|B<rsub|h>,S|)>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M> is a varying datatype where <math|0> indicates the
+      intent to advertise a collation and <math|1> indicates the advertisment
+      of a collation to a validator. <math|4> indicates that a collation sent
+      to a validator was seconded.
+
+      <item><math|C<rsub|i>> is the public key of the collator.
+
+      <item><math|P<rsub|i>> is the parachain Id as defined in Definition
+      <reference|defn-para-id>.
+
+      <item><math|C<rsub|s>> is the signature of the collator using the
+      <verbatim|PeerId> of the collators node. <todo|why?>
+
+      <item><math|H> is the hash of the collation <todo|clarify>.
+
+      <item><math|S> is a full statement as defined in Definition
+      <reference|net-msg-full-statement>.
+    </itemize-dot>
+
+    This message is not sent directly but is sent as part of the collator
+    protocol message as defined in Section
+    <reference|net-msg-collator-protocol-message>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-collator-protocol-message>The <strong|collator protocol
+    message>, <math|M>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|M<rsub|c>> is the collator message as defined in Definition
+    <reference|net-msg-collator-protocol>.
+  </definition>
+
   <\definition>
     <label|net-msg-statement-distribution>The <strong|statement distribution
-    message> indicates the validity vote of a validator for a given
-    candidate, described further in Section
-    <reference|sect-candidate-backing-statements>. This message is sent in
-    form of a validator protocol message as defined in Definition
-    <reference|net-msg-validator-protocol-message>. The statement
-    distribution message, <math|M>, is a datastructure of the following
-    format:
+    message> <todo|@syed: is a validator protocol message as Defined i
+    blah?>, indicates the validity vote <todo|@syed: what is a validity vote>
+    of a validator for a given candidate <todo|@syed while we talked about a
+    candidate in the intro we have not defined it formally>, described
+    further in Section <reference|sect-candidate-backing-statements>
+    <todo|@syed: why can't it be defined earlier than protocol type?>.
+    <deleted|This message is sent in form of a validator protocol message as
+    defined in Definition <reference|net-msg-validator-protocol-message>>.
+    \ The statement distribution message, <math|M>, is of varibale type of
+    the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
@@ -191,10 +283,10 @@
 
     <\itemize-dot>
       <item><math|M> is a vayring datatype where <math|0 >indicates a signed
-      statement and <math|1> contains metadata about a seconded statement
-      with a larger payload, such as a runtime upgrade. The candidate itself
-      can be fetched via the request/response message as defined in
-      Definition <reference|net-msg-statement-fetching-request>.
+      statement <verbatim|>and <math|1> contains metadata about a seconded
+      statement with a larger payload, such as a runtime upgrade. The
+      candidate itself can be fetched via the request/response message as
+      defined in Definition <reference|net-msg-statement-fetching-request>.
 
       <item><math|B<rsub|h>> is the hash of the relay chain parent,
       indicating the state this message is for.
@@ -303,79 +395,7 @@
     <reference|net-msg-validator-protocol-message>.
   </definition>
 
-  <\definition>
-    <label|net-msg-validator-protocol-message>The <strong|validator protocol
-    message> is a varying datatype used by validators to broadcast relevant
-    information about certain steps in the A&V process. Specifically, this
-    includes the backing process as described in Section
-    <reference|sect-candidate-backing> and the approval process as described
-    in Section <reference|sect-approval-voting>. The validator protocol
-    message, <math|M>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|M<rsub|f>> is a bitfield distribution message as defined in
-      Definition <reference|net-msg-bitfield-dist-msg>.
-
-      <item><math|M<rsub|s>> is a statement distribution message as defined
-      in Definition <reference|net-msg-statement-distribution>.
-
-      <item><math|M<rsub|a>> is a approval distribution message as defined in
-      Definition <reference|net-msg-approval-distribution>.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|net-msg-collator-protocol>The <strong|collator message>, <math|M>,
-    is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|i>,P<rsub|i>,C<rsub|s>|)>>>|<row|<cell|1\<rightarrow\>H>>|<row|<cell|4\<rightarrow\><around*|(|B<rsub|h>,S|)>>>>>>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|M> is a varying datatype where <math|0> indicates the
-      intent to advertise a collation and <math|1> indicates the advertisment
-      of a collation to a validator. <math|4> indicates that a collation sent
-      to a validator was seconded.
-
-      <item><math|C<rsub|i>> is the public key of the collator.
-
-      <item><math|P<rsub|i>> is the parachain Id as defined in Definition
-      <reference|defn-para-id>.
-
-      <item><math|C<rsub|s>> is the signature of the collator using the
-      <verbatim|PeerId> of the collators node. <todo|why?>
-
-      <item><math|H> is the hash of the collation <todo|clarify>.
-
-      <item><math|S> is a full statement as defined in Definition
-      <reference|net-msg-full-statement>.
-    </itemize-dot>
-
-    This message is not sent directly but is sent as part of the collator
-    protocol message as defined in Section
-    <reference|net-msg-collator-protocol-message>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-collator-protocol-message>The <strong|collator protocol
-    message>, <math|M>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
-    </eqnarray*>
-
-    where <math|M<rsub|c>> is the collator message as defined in Definition
-    <reference|net-msg-collator-protocol>.
-  </definition>
+  <verbatim|>
 
   <section|Request & Response Network Messages>
 
