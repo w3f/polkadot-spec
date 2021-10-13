@@ -66,6 +66,11 @@
 
   <section|Preliminaries>
 
+  <todo|@syed: I think we should talk about parachains and their purpose at
+  some point early in this chapter. And what we are trying to acheive (shared
+  validitiy). It is obvious for us but a general reader doesn't know and
+  makes the read frusterating.>
+
   <\definition>
     <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, is a
     datastructure of the following format:
@@ -87,49 +92,80 @@
       <item><math|H<rsub|r>> is the Merkle root of the parachain state at
       this block as described in Section <reference|sect-merkl-proof>
     </itemize-dot>
+
+    <todo|@syed:I'm confused, isn't <math|H<rsub|r>> part of H(B) why do we
+    need to recopy it at the end? and if so, it means a parachain block
+    exactly has the same structure as a Polkadot Block so we don' need to
+    redefine it right, we can say it is basically the same as defined in the
+    other chapter.>\ 
+  </definition>
+
+  <todo|@syed: so we are mandating the storage and trie for parachain to have
+  the same structure as the one defined in the other chapter. we should make
+  it clear that we are talking about the same type of radix-16 merkle tree.>
+
+  <\definition>
+    <label|defn-witness-data>Witness data pretains to parachain block
+    <math|B> denoted by <math|w<rsub|B>> (or <math|w> when the associated
+    block is clear from the context) is an extracted Merkle subtree.\ 
+  </definition>
+
+  <\definition>
+    <strong|Merkle subtree> <todo|shouldn't this goes to the prelimanry
+    chapter rather than here? it is a pure math concept><todo|@fabio: clarify
+    this>
   </definition>
 
   <\definition>
     <label|defn-pov-block>A <with|font-series|bold|proof of validity block>
-    or <with|font-series|bold|PoV> block contains witness data to\ 
+    or <with|font-series|bold|PoV> block of block B is the pair:
 
     <\equation*>
-      <around|(|B,w|)>
+      <around|(|B,w<rsub|B>|)>
     </equation*>
 
-    A PoV block is an extracted Merkle subtree, attached to the block.
-    <todo|@fabio: clarif this>
+    containing witness data in addition to the parachain block B.
   </definition>
 
   <\definition>
-    <label|defn-para-id>The <strong|Parachain Id> is an unsigned 32-bit
-    integer which serves as an identifier of a parachain, assigned by the
-    Runtime.
+    <label|defn-para-id>The <strong|Parachain Id> is <todo|a unique?> an
+    unsigned 32-bit integer which serves as an identifier of a parachain,
+    assigned by the Runtime.
   </definition>
 
   <\definition>
     <strong|<label|defn-availability-cores>Availability cores> are a Runtime
-    concept used to process parachains.\<#2018\>a Each parachain gets
-    assigned to a availability core and validators can fetch information
-    about the cores, such as parachain block candidates, by calling the
-    appropriate Runtime API as described in Section
-    <reference|sect-rt-api-availability-cores>. Validators are not concerned
+    concept <todo|what is a \Pconcept\Q?> used to process parachains. Each
+    parachain gets assigned to a availability core and validators can fetch
+    information about the cores, such as parachain block candidates, by
+    calling the appropriate Runtime API as described in Section
+    <reference|sect-rt-api-availability-cores>. <todo|@syed:I don't think an
+    external reader understand what is it a concept. This need to be
+    clarified to the level of implementablity >Validators are not concerned
     with the internal workings from the Runtimes perspective.
   </definition>
 
   <\definition>
-    <strong|<label|defn-validator-groups>Validator groups> are a Runtime
-    concept for how validators are assigned to certain parachains. Those
-    assigned validators are responsible for backing parachain block
+    <strong|<label|defn-validator-groups>Validator groups> nare a Runtime
+    concept<todo|@syed: what is a concept? this is a set right? its
+    membership is retrieved from Runtime but this is not part of its
+    definition. I'd go with Validator group of parachain <math|P>,
+    <math|\<cal-V\><rsub|P>> is a set of validating node
+    <math|<around*|{|V<rsub|1>,\<ldots\>,V<rsub|n>|}>> which are responsible
+    <text-dots> > for how validators are assigned to certain parachains.
+    Those assigned validators are responsible for backing parachain block
     candidates as explained further in Section
     <reference|sect-candidate-backing>. Collators can use this information
-    for submitting blocks. Validators can fetch their assignments by calling
-    the appropriate Runtime API as described in Section
-    <reference|sect-rt-api-validator-groups> and are not concerned how the
-    underlying assignment mechanism works. The assigned validators within a
-    group are usually referred to by their authority Id as defined in
-    Definition <reference|defn-authority-list>.
+    for submitting blocks.
   </definition>
+
+  <todo|@syed: I took this out of the definition it is not part of the
+  definition but is on how to retriev assignment>Validators can fetch their
+  assignments to Validator groups by calling the appropriate Runtime API as
+  described in Section <reference|sect-rt-api-validator-groups> and are not
+  concerned how the underlying assignment mechanism works. The assigned
+  validators within a group are usually referred to by their authority Id as
+  defined in Definition <reference|defn-authority-list>.
 
   <section|Protocol Types>
 
