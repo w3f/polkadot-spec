@@ -616,6 +616,13 @@
       <todo|clarify>.
 
       <item><math|P> is the PoV block as defined in Definition <todo|todo>.
+
+      <item><math|p> is an unsigned 32-bit integer indicating the messages
+      processed from the doward message queue as defined in Definition
+      <todo|todo>.
+
+      <item><math|w> is an unsigned 32-bit integer indicating the mark up to
+      which all inbound HRMP messages are processed by the parachain.
     </itemize-dot>
   </definition>
 
