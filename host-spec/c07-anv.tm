@@ -597,32 +597,34 @@
     datastructure of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M,H,R,h,P,p,w|)>>>>>
+      <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M,H,R,h,P,p,w|)>>>|<row|<cell|M>|<cell|=>|<cell|<around*|(|u<rsub|n>,\<ldots\>u<rsub|m>|)>>>|<row|<cell|H>|<cell|=>|<cell|<around*|(|z<rsub|n>,\<ldots\>z<rsub|m>|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|M> is an array of upward messages interpreted by the relay
-      chain itself, as described in Section <todo|todo>.
+      <item><math|M> is an array of upward messages, <math|u>, interpreted by
+      the relay chain itself, as defined in Definition <todo|todo>.
 
-      <item><math|H> is an array of horizontal messages interpreted by other
-      parachain, as decribed in Section <todo|todo>.
+      <item><math|H> is an array of horizontal messages, <math|z>,
+      interpreted by other parachains, as defined in Definition <todo|todo>.
 
       <item><math|R> is an <verbatim|Option> type as defined in Definition
-      <todo|todo> which can contain a parachain Runtime update.
+      <todo|todo> which can contain a parachain Runtime update. The new
+      Runtime code is an array of bytes.
 
-      <item><math|H> is the head data produced as a result of execution
+      <item><math|H> is the block header produced as a result of execution
       <todo|clarify>.
 
-      <item><math|P> is the PoV block as defined in Definition <todo|todo>.
+      <item><math|P> is the PoV block as defined in Definition
+      <reference|defn-pov-block>.
 
       <item><math|p> is an unsigned 32-bit integer indicating the messages
       processed from the doward message queue as defined in Definition
       <todo|todo>.
 
       <item><math|w> is an unsigned 32-bit integer indicating the mark up to
-      which all inbound HRMP messages are processed by the parachain.
+      which all inbound HRMP messages have been processed by the parachain.
     </itemize-dot>
   </definition>
 
