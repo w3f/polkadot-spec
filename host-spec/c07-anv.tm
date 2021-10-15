@@ -782,7 +782,13 @@
   previously issued bitfields are no longer accurate, i.e. the availability
   data has been recovered or the candidate of an availablity core has
   changed, the validator must create a new bitfield and boradcast it to the
-  network.
+  network. Candidates must be kept available by validators for a specific
+  amount of time. If a candidate does not receive any backing, validators
+  should keep it available for about one hour, in case the state of backing
+  does change. Backed and even approved candidates (described in Section
+  <reference|sect-approval-voting>) must be kept by validators for about 25
+  hours, since disputes (described in Section <todo|todo>) can occure and the
+  candidate needs to be checked again.
 
   \;
 
@@ -1435,9 +1441,9 @@
   \;
 
   Candidates are recovered by sending requests for specific indices of
-  erasure encoded chunks, as described in Section <todo|todo>. Ideally, a
-  validator should request chunks by picking peers randomly and recover at
-  least <math|f+1> chunks, where <math|n=3f+k> and
+  erasure encoded chunks. Erasure encoding is described in Section
+  <todo|todo>. A validator should request chunks by picking peers randomly
+  and must recover at least <math|f+1> chunks, where <math|n=3f+k> and
   <math|k\<in\><around*|{|1,2,3|}>>. <math|n> is the number of validators as
   specified in the session info, which can be fetched by the Runtime API as
   described in Section <reference|sect-rt-api-session-info>.
