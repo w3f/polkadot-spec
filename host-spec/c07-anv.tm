@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|2.1>
 
 <project|host-spec.tm>
 
@@ -394,8 +394,6 @@
     protocol message as defined in Section
     <reference|net-msg-validator-protocol-message>.
   </definition>
-
-  <verbatim|>
 
   <section|Request & Response Network Messages>
 
@@ -1433,6 +1431,16 @@
   requests as defined in Definition <reference|net-msg-chunk-fetching-request>
   and Definition <reference|net-msg-available-data-request> to the validator,
   which the validator should be able to respond to.
+
+  \;
+
+  Candidates are recovered by sending requests for specific indices of
+  erasure encoded chunks, as described in Section <todo|todo>. Ideally, a
+  validator should request chunks by picking peers randomly and recover at
+  least <math|f+1> chunks, where <math|n=3f+k> and
+  <math|k\<in\><around*|{|1,2,3|}>>. <math|n> is the number of validators as
+  specified in the session info, which can be fetched by the Runtime API as
+  described in Section <reference|sect-rt-api-session-info>.
 
   <section|Runtime Api>
 
