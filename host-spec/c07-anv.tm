@@ -11,10 +11,20 @@
 
   <section|Introduction>
 
-  The Polkadot relay chain <todo|syed: have we defined relay chain?>
-  validators are responsible for guaranteeing the validity of both relay
-  chain and parachain <todo|have we defined parachain?> blocks. Additionally,
-  the validators are required to keep enough parachain blocks that should be
+  As clarified in Chapter 1, Polkadot serves as a replicated shared-state
+  machine designed to resolve scalability issues and interoperability among
+  blockchains. The validators of Polkadot execute transactions and
+  participate in the consensus of Polkadots primary chain, the so called
+  <em|relay chain>. <em|Parachains> are independent networks that maintain
+  their own state and are connected to the relay chain. Those parachains can
+  take advantage of the relay chain consensus mechanism, including sending
+  and receiving messages to and from other parachains.\ 
+
+  \;
+
+  The Polkadot relay chain validators are responsible for guaranteeing the
+  validity of both relay chain and parachain blocks. Additionally, the
+  validators are required to keep enough parachain blocks that should be
   included in the relay chain available in their local storage in order to
   make those retrievable by peers, who lack the information, to reliably
   confirm the issued validity statements about parachain blocks. The
