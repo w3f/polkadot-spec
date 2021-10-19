@@ -18,7 +18,9 @@
   <em|relay chain>. <em|Parachains> are independent networks that maintain
   their own state and are connected to the relay chain. Those parachains can
   take advantage of the relay chain consensus mechanism, including sending
-  and receiving messages to and from other parachains.\ 
+  and receiving messages to and from other parachains. Parachain nodes that
+  send parachain blocks, known as <em|candidates>, to the validators in order
+  to be inlcuded in relay chain are referred to as <em|collators>.
 
   \;
 
@@ -78,6 +80,20 @@
   <section|Preliminaries>
 
   <\definition>
+    A <strong|collator> is a parachain node that sends parachain blocks,
+    known as candidates as defined in Definition <reference|defn-candidate>,
+    to the relay chain validators. The relay chain validators are not
+    concerned how the collator works or how it creates candidates.
+  </definition>
+
+  <\definition>
+    <label|defn-candidate>A <strong|candidate> is a submitted parachain block
+    as defined in Definition <reference|defn-parablock> to the relay chain
+    validators. A parachain block stops being referred to as a candidate as
+    soon it has been finalized.
+  </definition>
+
+  <\definition>
     <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, is a
     datastructure of the following format:
 
@@ -111,9 +127,10 @@
   it clear that we are talking about the same type of radix-16 merkle tree.>
 
   <\definition>
-    <label|defn-witness-data>Witness data pretains to parachain block
-    <math|B> denoted by <math|w<rsub|B>> (or <math|w> when the associated
-    block is clear from the context) is an extracted Merkle subtree.\ 
+    <label|defn-witness-data><strong|Witness data> pretains to parachain
+    block <math|B> denoted by <math|w<rsub|B>> (or <math|w> when the
+    associated block is clear from the context) is an extracted Merkle
+    subtree.\ 
   </definition>
 
   <\definition>
@@ -206,6 +223,18 @@
   </definition>
 
   <\definition>
+    <label|net-msg-collator-protocol-message>The <strong|collator protocol
+    message>, <math|M>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|M<rsub|c>> is the collator message as defined in Definition
+    <reference|net-msg-collator-protocol>.
+  </definition>
+
+  <\definition>
     <label|net-msg-collator-protocol>The <strong|collator <todo|@syed: define
     collator in preliminary> message>, <math|M>, is a varying datatype of the
     following format:
@@ -242,29 +271,13 @@
   </definition>
 
   <\definition>
-    <label|net-msg-collator-protocol-message>The <strong|collator protocol
-    message>, <math|M>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
-    </eqnarray*>
-
-    where <math|M<rsub|c>> is the collator message as defined in Definition
-    <reference|net-msg-collator-protocol>.
-  </definition>
-
-  <\definition>
     <label|net-msg-statement-distribution>The <strong|statement distribution
-    message> <todo|@syed: is a validator protocol message as Defined i
-    blah?>, indicates the validity vote <todo|@syed: what is a validity vote>
-    of a validator for a given candidate <todo|@syed while we talked about a
-    candidate in the intro we have not defined it formally>, described
-    further in Section <reference|sect-candidate-backing-statements>
-    <todo|@syed: why can't it be defined earlier than protocol type?>.
-    <deleted|This message is sent in form of a validator protocol message as
-    defined in Definition <reference|net-msg-validator-protocol-message>>.
-    \ The statement distribution message, <math|M>, is of varibale type of
-    the following format:
+    message> is sent as part of the validator protocol message as defined in
+    Section <reference|net-msg-validator-protocol-message>, indicates the
+    validity vote of a validator for a given candidate, described further in
+    Section <reference|sect-candidate-backing-statements>. The statement
+    distribution message, <math|M>, is of varibale type of the following
+    format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
@@ -290,10 +303,6 @@
 
       <item><math|A<rsub|s>> is the signature of the validator.\ 
     </itemize-dot>
-
-    This message is not sent directly but is sent as part of the collator
-    protocol message as defined in Section
-    <reference|net-msg-validator-protocol-message>.
   </definition>
 
   <\definition>
