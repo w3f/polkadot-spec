@@ -77,11 +77,6 @@
 
   <section|Preliminaries>
 
-  <todo|@syed: I think we should talk about parachains and their purpose at
-  some point early in this chapter. And what we are trying to acheive (shared
-  validitiy). It is obvious for us but a general reader doesn't know and
-  makes the read frusterating.>
-
   <\definition>
     <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, is a
     datastructure of the following format:
@@ -139,44 +134,29 @@
   </definition>
 
   <\definition>
-    <label|defn-para-id>The <strong|Parachain Id> is <todo|a unique?> an
-    unsigned 32-bit integer which serves as an identifier of a parachain,
-    assigned by the Runtime.
+    <label|defn-para-id>The <strong|Parachain Id> is a unique, unsigned
+    32-bit integer which serves as an identifier of a parachain, assigned by
+    the Runtime.\ 
   </definition>
 
   <\definition>
-    <strong|<label|defn-availability-cores>Availability cores> are a Runtime
-    concept <todo|what is a \Pconcept\Q?> used to process parachains. Each
-    parachain gets assigned to a availability core and validators can fetch
-    information about the cores, such as parachain block candidates, by
-    calling the appropriate Runtime API as described in Section
-    <reference|sect-rt-api-availability-cores>. <todo|@syed:I don't think an
-    external reader understand what is it a concept. This need to be
-    clarified to the level of implementablity >Validators are not concerned
-    with the internal workings from the Runtimes perspective.
+    <strong|<label|defn-availability-cores>Availability cores> are slots used
+    to process parachains. The Runtime assigns each parachain to a
+    availability core and validators can fetch information about the cores,
+    such as parachain block candidates, by calling the appropriate Runtime
+    API as described in Section <reference|sect-rt-api-availability-cores>.
+    Validators are not concerned with the internal workings from the Runtimes
+    perspective.
   </definition>
 
   <\definition>
-    <strong|<label|defn-validator-groups>Validator groups> nare a Runtime
-    concept<todo|@syed: what is a concept? this is a set right? its
-    membership is retrieved from Runtime but this is not part of its
-    definition. I'd go with Validator group of parachain <math|P>,
-    <math|\<cal-V\><rsub|P>> is a set of validating node
-    <math|<around*|{|V<rsub|1>,\<ldots\>,V<rsub|n>|}>> which are responsible
-    <text-dots> > for how validators are assigned to certain parachains.
-    Those assigned validators are responsible for backing parachain block
-    candidates as explained further in Section
-    <reference|sect-candidate-backing>. Collators can use this information
-    for submitting blocks.
+    <strong|<label|defn-validator-groups>Validator groups> indicate which
+    validators are responsible for creating backable candidates for certain
+    parachains, as described in Section <reference|sect-candidate-backing>,
+    and are assigned by the Runtime. Validators are not concerned with the
+    internal workings from the Runtimes perspective. Collators can use this
+    information for submitting blocks.
   </definition>
-
-  <todo|@syed: I took this out of the definition it is not part of the
-  definition but is on how to retriev assignment>Validators can fetch their
-  assignments to Validator groups by calling the appropriate Runtime API as
-  described in Section <reference|sect-rt-api-validator-groups> and are not
-  concerned how the underlying assignment mechanism works. The assigned
-  validators within a group are usually referred to by their authority Id as
-  defined in Definition <reference|defn-authority-list>.
 
   <section|Protocol Types>
 
