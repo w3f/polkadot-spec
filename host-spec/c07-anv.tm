@@ -211,7 +211,7 @@
   </definition>
 
   <\definition>
-    <label|net-msg-collator-protocol-message>The <strong|collator protocol
+    <label|net-msg-collator-protocol-message>The <strong|collation protocol
     message>, <math|M>, is a varying datatype of the following format:
 
     <\eqnarray*>
