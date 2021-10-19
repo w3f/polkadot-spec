@@ -175,457 +175,6 @@
     information for submitting blocks.
   </definition>
 
-  <section|Protocol Types>
-
-  The protocol types are network messages exchanged between validators,
-  including messages sent by collators to validators. The protocol messages
-  are exchanged based on a streaming notification substream as described in
-  Section <reference|sect-connection-establishment>. The messages are SCALE
-  encoded as described in Section <reference|sect-scale-codec>.
-
-  <\definition>
-    <label|net-msg-validator-protocol-message>The <strong|validator protocol
-    message> is a varying datatype used by validators to broadcast relevant
-    information about certain steps in the A&V process. Specifically, this
-    includes the backing process as described in Section
-    <reference|sect-candidate-backing> and the approval process as described
-    in Section <reference|sect-approval-voting>. The validator protocol
-    message, <math|M>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|M<rsub|f>> is a bitfield distribution message as defined in
-      Definition <reference|net-msg-bitfield-dist-msg>.
-
-      <item><math|M<rsub|s>> is a statement distribution message as defined
-      in Definition <reference|net-msg-statement-distribution>.
-
-      <item><math|M<rsub|a>> is a approval distribution message as defined in
-      Definition <reference|net-msg-approval-distribution>.
-    </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|net-msg-collator-protocol-message>The <strong|collation protocol
-    message>, <math|M>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
-    </eqnarray*>
-
-    where <math|M<rsub|c>> is the collator message as defined in Definition
-    <reference|net-msg-collator-protocol>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-collator-protocol>The <strong|collator message>, <math|M>,
-    is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|i>,P<rsub|i>,C<rsub|s>|)>>>|<row|<cell|1\<rightarrow\>H>>|<row|<cell|4\<rightarrow\><around*|(|B<rsub|h>,S|)>>>>>>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|M> is a varying datatype where <math|0> indicates the
-      intent to advertise a collation and <math|1> indicates the advertisment
-      of a collation to a validator. <math|4> indicates that a collation sent
-      to a validator was seconded.
-
-      <item><math|C<rsub|i>> is the public key of the collator.
-
-      <item><math|P<rsub|i>> is the parachain Id as defined in Definition
-      <reference|defn-para-id>.
-
-      <item><math|C<rsub|s>> is the signature of the collator using the
-      <verbatim|PeerId> of the collators node. <todo|why?>
-
-      <item><math|H> is the hash of the collation <todo|clarify>.
-
-      <item><math|S> is a full statement as defined in Definition
-      <reference|net-msg-full-statement>.
-    </itemize-dot>
-
-    This message is not sent directly but is sent as part of the collator
-    protocol message as defined in Section
-    <reference|net-msg-collator-protocol-message>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-statement-distribution>The <strong|statement distribution
-    message> is sent as part of the validator protocol message as defined in
-    Section <reference|net-msg-validator-protocol-message>, indicates the
-    validity vote of a validator for a given candidate, described further in
-    Section <reference|sect-candidate-backing-statements>. The statement
-    distribution message, <math|M>, is of varibale type of the following
-    format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|M> is a vayring datatype where <math|0 >indicates a signed
-      statement <verbatim|>and <math|1> contains metadata about a seconded
-      statement with a larger payload, such as a runtime upgrade. The
-      candidate itself can be fetched via the request/response message as
-      defined in Definition <reference|net-msg-statement-fetching-request>.
-
-      <item><math|B<rsub|h>> is the hash of the relay chain parent,
-      indicating the state this message is for.
-
-      <item><math|S> is a full statement as defined in Definition
-      <reference|net-msg-full-statement>.
-
-      <item><math|A<rsub|i>> is the validator index in the authority set that
-      signed this message.
-
-      <item><math|A<rsub|s>> is the signature of the validator.\ 
-    </itemize-dot>
-  </definition>
-
-  <\definition>
-    <label|net-msg-bitfield-dist-msg>The <strong|bitfield distribution
-    message> indicates the availability vote of a validator for a given
-    candidate, described further in Section
-    <reference|sect-availability-votes>. This message is sent in form of a
-    validator protocol message as defined in Definition
-    <reference|net-msg-validator-protocol-message>. The bitfield distribution
-    message, <math|M>, is a datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,P|)>>>>>>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|B<rsub|h>> is the hash of the relay chain parent,
-      indicating the state this message is for.
-
-      <item><math|d> is the bitfield array as described in Definition
-      <reference|defn-bitfield-array>.
-
-      <item><math|A<rsub|i>> is the validator index in the authority set as
-      defined in Definition <reference|defn-authority-list> that signed this
-      message.
-
-      <item><math|A<rsub|s>> is the signature of the validator.
-    </itemize-dot>
-
-    This message is not sent directly but is sent as part of the collator
-    protocol message as defined in Section
-    <reference|net-msg-validator-protocol-message>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-approval-distribution>The <strong|approval distribution
-    message> indicates the approval vote of a validator for a given
-    candidate, described further in Section
-    <reference|sect-availability-assingment-criteria>. This message is sent
-    in form of a validator protocol message as defined in Definition
-    <reference|net-msg-validator-protocol-message>. The approval distribution
-    message, <math|M>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|<around*|(|C<rsub|>,I<rsub|>|)><rsub|0>\<ldots\><around*|(|C,I|)><rsub|n>|)>>>|<row|<cell|1\<rightarrow\><around*|(|V<rsub|0>,\<ldots\>V<rsub|n>|)>>>>>>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|B<rsub|h>,A<rsub|i>,c<rsub|a>|)>>>|<row|<cell|c<rsub|a>>|<cell|=>|<cell|<around*|(|c<rsub|k>,P<rsub|o>,P<rsub|p>|)>>>|<row|<cell|c<rsub|k>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>s>>|<row|<cell|1\<rightarrow\>i>>>>>>>|<row|<cell|V>|<cell|=>|<cell|<around*|(|B<rsub|h>,I,A<rsub|i>,A<rsub|s>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|M> is a varying datatype where <math|0> indicates
-      assignments for candidates in recent, unfinalized blocks and <math|1>
-      indicates approvals for candidates in some recent, unfinalized block.
-
-      <item><math|C> is an assignment criterion which refers to the candidate
-      under which the assignment is relevant by the block hash.
-
-      <item><math|I> is an unsigned 32-bit integer indicating the index of
-      the candidate, corresponding the the order of the availability cores as
-      described in Section <reference|sect-rt-api-availability-cores>.
-
-      <item><math|B<rsub|h>> is the relay chain block hash where the
-      candidate appears.
-
-      <item><math|A<rsub|i>> is the authority set Id of the validator as
-      defined in Definition <reference|defn-authority-list> that created this
-      message.
-
-      <item><math|A<rsub|s>> is the signature of the validator issuing this
-      message.
-
-      <item><math|c<rsub|a>> is the certification of the assignment.
-
-      <item><math|c<rsub|k>> is a varying datatype where <math|0> indicates
-      an assignment based on the VRF that authorized the relay chain block
-      where the candidate was included, followed by a sample number,
-      <math|s.> <math|1> indicates an assignment story based on the VRF that
-      authorized the relay chain block where the candidate was included
-      combined with the index of a particular core. This is described further
-      in Section <reference|sect-approval-voting>.
-
-      <item><math|P<rsub|o>> is a VRF output and <math|P<rsub|p>> its
-      corresponding proof.
-    </itemize-dot>
-
-    This message is not sent directly but is sent as part of the collator
-    protocol message as defined in Section
-    <reference|net-msg-validator-protocol-message>.
-  </definition>
-
-  <section|Request & Response Network Messages>
-
-  The request & response network messages are sent and received between peers
-  in the Polkadot network, including collators and non-validator nodes. Those
-  messages are conducted on the request-response substreams are described in
-  Section <reference|sect-connection-establishment>. The network messages are
-  SCALE encoded as described in Section <reference|sect-scale-codec>.
-
-  <subsection|PoV Blocks>
-
-  <\definition>
-    <label|net-msg-pov-fetching-request>The <strong|PoV fetching request> is
-    sent by clients who want to retrieve a PoV block from a node. The request
-    is a datastructure of the following format:
-
-    <\equation*>
-      <around*|(|C<rsub|h>|)>
-    </equation*>
-
-    where <math|C<rsub|h>> is the 256-bit hash of the PoV block. The reponse
-    message is defined in Definition <reference|net-msg-pov-fetching-response>.
-
-    \;
-  </definition>
-
-  <\definition>
-    <label|net-msg-pov-fetching-response>The <strong|PoV fetching response>
-    is sent by nodes to the clients who issued a PoV fetching request as
-    defined in Definition <reference|net-msg-pov-fetching-request>. The
-    response, <math|R>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|R>|=|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>B>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>>>
-    </eqnarray*>
-
-    where <math|0> is followed by the PoV block and <math|1> indicates that
-    the PoV block was not found.
-  </definition>
-
-  <subsection|Chunks>
-
-  <\definition>
-    <label|net-msg-chunk-fetching-request>The <strong|chunk fetching request>
-    is sent by clients who want to retrieve chunks of a parachain candidate.
-    The request is a datastructure of the following format:
-
-    <\equation*>
-      <around*|(|C<rsub|h>,i|)>
-    </equation*>
-
-    where <math|C<rsub|h>> is the 256-bit hash of the parachain candiate and
-    <math|i> is a 32-bit unsigned integer indicating the index of the chunk
-    to fetch. The response message is defined in Definition
-    <reference|net-msg-chunk-fetching-response>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-chunk-fetching-response>The <strong|chunk fetching
-    response> is sent by nodes to the clients who issued a chunk fetching
-    request as defined in Definition <reference|net-msg-chunk-fetching-request>.
-    The reponse, <math|R>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>C<rsub|r>>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|C<rsub|r>>|<cell|=>|<cell|<around*|(|c,c<rsub|p>|)>>>>>
-    </eqnarray*>
-
-    where 0 is followed by the chunk response, <math|C<rsub|r>> and 1
-    indicates that the requested chunk was not found. <math|C<rsub|r>>
-    contains the erasure-encoded chunk of data belonging to the candidate
-    block, <math|c>, and <math|c<rsub|p>> is that chunks proof in the Merkle
-    tree. Both <math|c> and <math|c<rsub|p>> are byte arrays of type
-    <math|*<around*|(|b<rsub|n>\<ldots\>b<rsub|m>|)>>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-available-data-request>The <strong|available data request>
-    is sent by clients who want to retrieve the PoV block of a parachain
-    candidate. The request is a datastructure of the following format:
-
-    <\equation*>
-      C<rsub|h>
-    </equation*>
-
-    where <math|C<rsub|h>> is the 256-bit candidate hash to get the available
-    data for. The reponse message is defined in Definition
-    <reference|net-msg-available-data-reponse>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-available-data-reponse>The <strong|available data
-    response> is sent by nodes to the clients who issued a available data
-    request as defined in Definition <reference|net-msg-available-data-request>.
-    The reponse, <math|R>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>A>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|P<rsub|ov>,D<rsub|pv>|)>>>>>
-    </eqnarray*>
-
-    where <math|0> is followed by the available data, <math|A>, and <math|1>
-    indicates the the requested candidate hash was not found.
-    <math|P<rsub|ov>> is the PoV block as defined in Definition
-    <reference|defn-pov-block> and <math|D<rsub|pv>> is the persisted
-    validation data as defined in Definition
-    <reference|defn-persisted-validation-data>.
-  </definition>
-
-  <subsection|Advertised Collation>
-
-  <\definition>
-    <label|net-msg-collation-fetching-request>The <strong|collation fetching
-    request> is sent by clients who want to retrieve the advertised collation
-    at the specified relay chain block. The request is a datastructure of the
-    following format:
-
-    <\equation*>
-      <around*|(|B<rsup|><rsub|h>,P<rsub|id>|)>
-    </equation*>
-
-    where <math|B<rsup|><rsub|h>> is the hash of the relay chain block and
-    <math|P<rsub|id>> is the parachain Id as defined in Definition
-    <reference|defn-para-id>. The response message is defined in Definition
-    <reference|net-msg-collation-fetching-response>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-collation-fetching-response>The <strong|collation fetching
-    response> is sent by nodes to the clients who issued a collation fetching
-    request as defined in Definition <reference|net-msg-collation-fetching-request>.
-    The response, <math|R>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|r>,B|)>>>>>>>>>>
-    </eqnarray*>
-
-    where <math|0> is followed by the candidate receipt, <math|C<rsub|r>>, as
-    defined in Definition <reference|defn-candidate-receipt> and the PoV
-    block, <math|B>. This type does not notify the client about a statement
-    that was not found.
-  </definition>
-
-  <subsection|Statements>
-
-  <\definition>
-    <label|net-msg-statement-fetching-request>The <strong|statement fetching
-    request> is sent by clients who want to retrieve statements about a given
-    candidate. The request is a datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|>|<cell|<around*|(|B<rsub|h>,C<rsub|h>|)>>|<cell|>>>>
-    </eqnarray*>
-
-    where <math|B<rsub|h>> is the hash of the relay chain parent and
-    <math|C<rsub|h>> is the candidate hash that was used to create a
-    committed candidate recept as defined in Definition
-    <reference|defn-committed-candidate-receipt>. The response message is
-    defined in Definition <reference|net-msg-statement-fetching-response>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-statement-fetching-response>The <strong|statement fetching
-    response> is sent by nodes to the clients who issued a collation fetching
-    request as defined in Definition <reference|net-msg-statement-fetching-request>.
-    The reponse, <math|R>, is a varying datatype of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>C<rsub|r>>>>>>>>>>
-    </eqnarray*>
-
-    where <math|C<rsub|r>> is the committed candidate receipt as defined in
-    Definition <reference|defn-committed-candidate-receipt>. No response is
-    returned if no statement is found.
-  </definition>
-
-  <subsection|Disputes>
-
-  <\definition>
-    <label|net-msg-dispute-request>The <strong|dispute request> is sent by
-    clients who want to issue a dispute about a candidate. The request,
-    <math|D<rsub|r>>, is a datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|D<rsub|r>>|<cell|=>|<cell|<around*|(|C<rsub|r>,S<rsub|i>,I<rsub|v>,V<rsub|v>|)>>>|<row|<cell|I<rsub|v>>|<cell|=>|<cell|<around*|(|A<rsub|i>,A<rsub|s>,k<rsub|i>|)>>>|<row|<cell|V<rsub|v>>|<cell|=>|<cell|<around*|(|A<rsub|i>,A<rsub|s>,k<rsub|v>|)>>>|<row|<cell|k<rsub|i>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|k<rsub|v>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>|<row|<cell|1\<rightarrow\>C<rsub|h>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>|<row|<cell|3\<rightarrow\>\<b-phi\>>>>>>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|C<rsub|r>> is the candidate that is being disputed. The
-      structure is a candidate receipt as defined in Definition
-      <reference|defn-candidate-receipt>.
-
-      <item><math|S<rsub|i>> is an unsigned 32-bit integer indicating the
-      session index the candidate appears in.
-
-      <item><math|I<rsub|v>> is the invalid vote that makes up the request.\ 
-
-      <item><math|V<rsub|v>> is the valid vote that makes this disput request
-      valid.
-
-      <item><math|A<rsub|i>> is an unsigned 32-bit integer indicating the
-      validator index in the authority set as defined in Definition
-      <reference|defn-authority-list>.
-
-      <item><math|A<rsub|s>> is the signature of the validator.
-
-      <item><math|k<rsub|i>> is a varying datatype and implies the dispute
-      statement. <math|0> indicates an explicit statemet.
-
-      <item><math|k<rsub|v>> is a varying datatype and implies the dispute
-      statement.
-
-      <\itemize-dot>
-        <item><math|0> indicates an explicit statement.
-
-        <item><math|1> indicates a seconded statement on a candidate,
-        <math|C<rsub|h>>, from the backing phase. <math|C<rsub|h>> is the
-        hash of the candidate.
-
-        <item><math|2> indicates a valid statement on a candidate,
-        <math|C<rsub|h>>, from the backing phase. <math|C<rsub|h>> is the
-        hash of the candidate.
-
-        <item><math|3> indicates an approval vote from the approval checking
-        phase.
-      </itemize-dot>
-    </itemize-dot>
-
-    The response message is defined in Definition
-    <reference|net-msg-dispute-response>.
-  </definition>
-
-  <\definition>
-    <label|net-msg-dispute-response>The <strong|dispute response> is sent by
-    nodes to the clients who who issued a dispute request as defined in
-    Definition <reference|net-msg-dispute-request>. The response, <math|R>,
-    is a varying type of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>>>>>>>>
-    </eqnarray*>
-
-    where <math|0> indicates that the dispute was successfully processed.
-  </definition>
-
   <section|Collations><label|sect-collations>
 
   Collations are proposed candidates to the Polkadot relay chain validators.
@@ -2031,6 +1580,452 @@
     included (<em|true>) or not (<em|false>). The order of booleans
     corresponds to the order of the passed on pairs <math|p>.
   </itemize-dot>
+
+  <section|Network messages>
+
+  The availability and validity process requires certain network messages to
+  be exchanged between validators and collators.
+
+  <subsection|Notification Messages>
+
+  The notification messages are exchanged between validators, including
+  messages sent by collators to validators. The protocol messages are
+  exchanged based on a streaming notification substream as described in
+  Section <reference|sect-connection-establishment>. The messages are SCALE
+  encoded as described in Section <reference|sect-scale-codec>.
+
+  <\definition>
+    <label|net-msg-validator-protocol-message>The <strong|validator protocol
+    message> is a varying datatype used by validators to broadcast relevant
+    information about certain steps in the A&V process. Specifically, this
+    includes the backing process as described in Section
+    <reference|sect-candidate-backing> and the approval process as described
+    in Section <reference|sect-approval-voting>. The validator protocol
+    message, <math|M>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|1\<rightarrow\>M<rsub|f>>>|<row|<cell|3\<rightarrow\>M<rsub|s>>>|<row|<cell|4\<rightarrow\>M<rsub|a>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M<rsub|f>> is a bitfield distribution message as defined in
+      Definition <reference|net-msg-bitfield-dist-msg>.
+
+      <item><math|M<rsub|s>> is a statement distribution message as defined
+      in Definition <reference|net-msg-statement-distribution>.
+
+      <item><math|M<rsub|a>> is a approval distribution message as defined in
+      Definition <reference|net-msg-approval-distribution>.
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|net-msg-collator-protocol-message>The <strong|collation protocol
+    message>, <math|M>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>M<rsub|c>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|M<rsub|c>> is the collator message as defined in Definition
+    <reference|net-msg-collator-protocol>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-collator-protocol>The <strong|collator message>, <math|M>,
+    is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|i>,P<rsub|i>,C<rsub|s>|)>>>|<row|<cell|1\<rightarrow\>H>>|<row|<cell|4\<rightarrow\><around*|(|B<rsub|h>,S|)>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M> is a varying datatype where <math|0> indicates the
+      intent to advertise a collation and <math|1> indicates the advertisment
+      of a collation to a validator. <math|4> indicates that a collation sent
+      to a validator was seconded.
+
+      <item><math|C<rsub|i>> is the public key of the collator.
+
+      <item><math|P<rsub|i>> is the parachain Id as defined in Definition
+      <reference|defn-para-id>.
+
+      <item><math|C<rsub|s>> is the signature of the collator using the
+      <verbatim|PeerId> of the collators node. <todo|why?>
+
+      <item><math|H> is the hash of the collation <todo|clarify>.
+
+      <item><math|S> is a full statement as defined in Definition
+      <reference|net-msg-full-statement>.
+    </itemize-dot>
+
+    This message is not sent directly but is sent as part of the collator
+    protocol message as defined in Section
+    <reference|net-msg-collator-protocol-message>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-statement-distribution>The <strong|statement distribution
+    message> is sent as part of the validator protocol message as defined in
+    Section <reference|net-msg-validator-protocol-message>, indicates the
+    validity vote of a validator for a given candidate, described further in
+    Section <reference|sect-candidate-backing-statements>. The statement
+    distribution message, <math|M>, is of varibale type of the following
+    format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,S|)>>>|<row|<cell|1\<rightarrow\>S<rsub|m>>>>>>>>|<row|<cell|S<rsub|m>>|<cell|=>|<cell|<around*|(|B<rsub|h>,C<rsub|h>,A<rsub|i>,A<rsub|s>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M> is a vayring datatype where <math|0 >indicates a signed
+      statement <verbatim|>and <math|1> contains metadata about a seconded
+      statement with a larger payload, such as a runtime upgrade. The
+      candidate itself can be fetched via the request/response message as
+      defined in Definition <reference|net-msg-statement-fetching-request>.
+
+      <item><math|B<rsub|h>> is the hash of the relay chain parent,
+      indicating the state this message is for.
+
+      <item><math|S> is a full statement as defined in Definition
+      <reference|net-msg-full-statement>.
+
+      <item><math|A<rsub|i>> is the validator index in the authority set that
+      signed this message.
+
+      <item><math|A<rsub|s>> is the signature of the validator.\ 
+    </itemize-dot>
+  </definition>
+
+  <\definition>
+    <label|net-msg-bitfield-dist-msg>The <strong|bitfield distribution
+    message> indicates the availability vote of a validator for a given
+    candidate, described further in Section
+    <reference|sect-availability-votes>. This message is sent in form of a
+    validator protocol message as defined in Definition
+    <reference|net-msg-validator-protocol-message>. The bitfield distribution
+    message, <math|M>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|B<rsub|h>,P|)>>>>>>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|d,A<rsub|i>,A<rsub|s>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|B<rsub|h>> is the hash of the relay chain parent,
+      indicating the state this message is for.
+
+      <item><math|d> is the bitfield array as described in Definition
+      <reference|defn-bitfield-array>.
+
+      <item><math|A<rsub|i>> is the validator index in the authority set as
+      defined in Definition <reference|defn-authority-list> that signed this
+      message.
+
+      <item><math|A<rsub|s>> is the signature of the validator.
+    </itemize-dot>
+
+    This message is not sent directly but is sent as part of the collator
+    protocol message as defined in Section
+    <reference|net-msg-validator-protocol-message>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-approval-distribution>The <strong|approval distribution
+    message> indicates the approval vote of a validator for a given
+    candidate, described further in Section
+    <reference|sect-availability-assingment-criteria>. This message is sent
+    in form of a validator protocol message as defined in Definition
+    <reference|net-msg-validator-protocol-message>. The approval distribution
+    message, <math|M>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|<around*|(|C<rsub|>,I<rsub|>|)><rsub|0>\<ldots\><around*|(|C,I|)><rsub|n>|)>>>|<row|<cell|1\<rightarrow\><around*|(|V<rsub|0>,\<ldots\>V<rsub|n>|)>>>>>>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|B<rsub|h>,A<rsub|i>,c<rsub|a>|)>>>|<row|<cell|c<rsub|a>>|<cell|=>|<cell|<around*|(|c<rsub|k>,P<rsub|o>,P<rsub|p>|)>>>|<row|<cell|c<rsub|k>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>s>>|<row|<cell|1\<rightarrow\>i>>>>>>>|<row|<cell|V>|<cell|=>|<cell|<around*|(|B<rsub|h>,I,A<rsub|i>,A<rsub|s>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|M> is a varying datatype where <math|0> indicates
+      assignments for candidates in recent, unfinalized blocks and <math|1>
+      indicates approvals for candidates in some recent, unfinalized block.
+
+      <item><math|C> is an assignment criterion which refers to the candidate
+      under which the assignment is relevant by the block hash.
+
+      <item><math|I> is an unsigned 32-bit integer indicating the index of
+      the candidate, corresponding the the order of the availability cores as
+      described in Section <reference|sect-rt-api-availability-cores>.
+
+      <item><math|B<rsub|h>> is the relay chain block hash where the
+      candidate appears.
+
+      <item><math|A<rsub|i>> is the authority set Id of the validator as
+      defined in Definition <reference|defn-authority-list> that created this
+      message.
+
+      <item><math|A<rsub|s>> is the signature of the validator issuing this
+      message.
+
+      <item><math|c<rsub|a>> is the certification of the assignment.
+
+      <item><math|c<rsub|k>> is a varying datatype where <math|0> indicates
+      an assignment based on the VRF that authorized the relay chain block
+      where the candidate was included, followed by a sample number,
+      <math|s.> <math|1> indicates an assignment story based on the VRF that
+      authorized the relay chain block where the candidate was included
+      combined with the index of a particular core. This is described further
+      in Section <reference|sect-approval-voting>.
+
+      <item><math|P<rsub|o>> is a VRF output and <math|P<rsub|p>> its
+      corresponding proof.
+    </itemize-dot>
+
+    This message is not sent directly but is sent as part of the collator
+    protocol message as defined in Section
+    <reference|net-msg-validator-protocol-message>.
+  </definition>
+
+  <section|Request & Response>
+
+  The request & response network messages are sent and received between peers
+  in the Polkadot network, including collators and non-validator nodes. Those
+  messages are conducted on the request-response substreams are described in
+  Section <reference|sect-connection-establishment>. The network messages are
+  SCALE encoded as described in Section <reference|sect-scale-codec>.
+
+  <\definition>
+    <label|net-msg-pov-fetching-request>The <strong|PoV fetching request> is
+    sent by clients who want to retrieve a PoV block from a node. The request
+    is a datastructure of the following format:
+
+    <\equation*>
+      <around*|(|C<rsub|h>|)>
+    </equation*>
+
+    where <math|C<rsub|h>> is the 256-bit hash of the PoV block. The reponse
+    message is defined in Definition <reference|net-msg-pov-fetching-response>.
+
+    \;
+  </definition>
+
+  <\definition>
+    <label|net-msg-pov-fetching-response>The <strong|PoV fetching response>
+    is sent by nodes to the clients who issued a PoV fetching request as
+    defined in Definition <reference|net-msg-pov-fetching-request>. The
+    response, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|=|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>B>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|0> is followed by the PoV block and <math|1> indicates that
+    the PoV block was not found.
+  </definition>
+
+  <\definition>
+    <label|net-msg-chunk-fetching-request>The <strong|chunk fetching request>
+    is sent by clients who want to retrieve chunks of a parachain candidate.
+    The request is a datastructure of the following format:
+
+    <\equation*>
+      <around*|(|C<rsub|h>,i|)>
+    </equation*>
+
+    where <math|C<rsub|h>> is the 256-bit hash of the parachain candiate and
+    <math|i> is a 32-bit unsigned integer indicating the index of the chunk
+    to fetch. The response message is defined in Definition
+    <reference|net-msg-chunk-fetching-response>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-chunk-fetching-response>The <strong|chunk fetching
+    response> is sent by nodes to the clients who issued a chunk fetching
+    request as defined in Definition <reference|net-msg-chunk-fetching-request>.
+    The reponse, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>C<rsub|r>>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|C<rsub|r>>|<cell|=>|<cell|<around*|(|c,c<rsub|p>|)>>>>>
+    </eqnarray*>
+
+    where 0 is followed by the chunk response, <math|C<rsub|r>> and 1
+    indicates that the requested chunk was not found. <math|C<rsub|r>>
+    contains the erasure-encoded chunk of data belonging to the candidate
+    block, <math|c>, and <math|c<rsub|p>> is that chunks proof in the Merkle
+    tree. Both <math|c> and <math|c<rsub|p>> are byte arrays of type
+    <math|*<around*|(|b<rsub|n>\<ldots\>b<rsub|m>|)>>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-available-data-request>The <strong|available data request>
+    is sent by clients who want to retrieve the PoV block of a parachain
+    candidate. The request is a datastructure of the following format:
+
+    <\equation*>
+      C<rsub|h>
+    </equation*>
+
+    where <math|C<rsub|h>> is the 256-bit candidate hash to get the available
+    data for. The reponse message is defined in Definition
+    <reference|net-msg-available-data-reponse>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-available-data-reponse>The <strong|available data
+    response> is sent by nodes to the clients who issued a available data
+    request as defined in Definition <reference|net-msg-available-data-request>.
+    The reponse, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>A>>|<row|<cell|1\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|P<rsub|ov>,D<rsub|pv>|)>>>>>
+    </eqnarray*>
+
+    where <math|0> is followed by the available data, <math|A>, and <math|1>
+    indicates the the requested candidate hash was not found.
+    <math|P<rsub|ov>> is the PoV block as defined in Definition
+    <reference|defn-pov-block> and <math|D<rsub|pv>> is the persisted
+    validation data as defined in Definition
+    <reference|defn-persisted-validation-data>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-collation-fetching-request>The <strong|collation fetching
+    request> is sent by clients who want to retrieve the advertised collation
+    at the specified relay chain block. The request is a datastructure of the
+    following format:
+
+    <\equation*>
+      <around*|(|B<rsup|><rsub|h>,P<rsub|id>|)>
+    </equation*>
+
+    where <math|B<rsup|><rsub|h>> is the hash of the relay chain block and
+    <math|P<rsub|id>> is the parachain Id as defined in Definition
+    <reference|defn-para-id>. The response message is defined in Definition
+    <reference|net-msg-collation-fetching-response>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-collation-fetching-response>The <strong|collation fetching
+    response> is sent by nodes to the clients who issued a collation fetching
+    request as defined in Definition <reference|net-msg-collation-fetching-request>.
+    The response, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|r>,B|)>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|0> is followed by the candidate receipt, <math|C<rsub|r>>, as
+    defined in Definition <reference|defn-candidate-receipt> and the PoV
+    block, <math|B>. This type does not notify the client about a statement
+    that was not found.
+  </definition>
+
+  <\definition>
+    <label|net-msg-statement-fetching-request>The <strong|statement fetching
+    request> is sent by clients who want to retrieve statements about a given
+    candidate. The request is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<cell|<around*|(|B<rsub|h>,C<rsub|h>|)>>|<cell|>>>>
+    </eqnarray*>
+
+    where <math|B<rsub|h>> is the hash of the relay chain parent and
+    <math|C<rsub|h>> is the candidate hash that was used to create a
+    committed candidate recept as defined in Definition
+    <reference|defn-committed-candidate-receipt>. The response message is
+    defined in Definition <reference|net-msg-statement-fetching-response>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-statement-fetching-response>The <strong|statement fetching
+    response> is sent by nodes to the clients who issued a collation fetching
+    request as defined in Definition <reference|net-msg-statement-fetching-request>.
+    The reponse, <math|R>, is a varying datatype of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>C<rsub|r>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|C<rsub|r>> is the committed candidate receipt as defined in
+    Definition <reference|defn-committed-candidate-receipt>. No response is
+    returned if no statement is found.
+  </definition>
+
+  <\definition>
+    <label|net-msg-dispute-request>The <strong|dispute request> is sent by
+    clients who want to issue a dispute about a candidate. The request,
+    <math|D<rsub|r>>, is a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|D<rsub|r>>|<cell|=>|<cell|<around*|(|C<rsub|r>,S<rsub|i>,I<rsub|v>,V<rsub|v>|)>>>|<row|<cell|I<rsub|v>>|<cell|=>|<cell|<around*|(|A<rsub|i>,A<rsub|s>,k<rsub|i>|)>>>|<row|<cell|V<rsub|v>>|<cell|=>|<cell|<around*|(|A<rsub|i>,A<rsub|s>,k<rsub|v>|)>>>|<row|<cell|k<rsub|i>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>>>>>>|<row|<cell|k<rsub|v>>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>|<row|<cell|1\<rightarrow\>C<rsub|h>>>|<row|<cell|2\<rightarrow\>C<rsub|h>>>|<row|<cell|3\<rightarrow\>\<b-phi\>>>>>>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|C<rsub|r>> is the candidate that is being disputed. The
+      structure is a candidate receipt as defined in Definition
+      <reference|defn-candidate-receipt>.
+
+      <item><math|S<rsub|i>> is an unsigned 32-bit integer indicating the
+      session index the candidate appears in.
+
+      <item><math|I<rsub|v>> is the invalid vote that makes up the request.\ 
+
+      <item><math|V<rsub|v>> is the valid vote that makes this disput request
+      valid.
+
+      <item><math|A<rsub|i>> is an unsigned 32-bit integer indicating the
+      validator index in the authority set as defined in Definition
+      <reference|defn-authority-list>.
+
+      <item><math|A<rsub|s>> is the signature of the validator.
+
+      <item><math|k<rsub|i>> is a varying datatype and implies the dispute
+      statement. <math|0> indicates an explicit statemet.
+
+      <item><math|k<rsub|v>> is a varying datatype and implies the dispute
+      statement.
+
+      <\itemize-dot>
+        <item><math|0> indicates an explicit statement.
+
+        <item><math|1> indicates a seconded statement on a candidate,
+        <math|C<rsub|h>>, from the backing phase. <math|C<rsub|h>> is the
+        hash of the candidate.
+
+        <item><math|2> indicates a valid statement on a candidate,
+        <math|C<rsub|h>>, from the backing phase. <math|C<rsub|h>> is the
+        hash of the candidate.
+
+        <item><math|3> indicates an approval vote from the approval checking
+        phase.
+      </itemize-dot>
+    </itemize-dot>
+
+    The response message is defined in Definition
+    <reference|net-msg-dispute-response>.
+  </definition>
+
+  <\definition>
+    <label|net-msg-dispute-response>The <strong|dispute response> is sent by
+    nodes to the clients who who issued a dispute request as defined in
+    Definition <reference|net-msg-dispute-request>. The response, <math|R>,
+    is a varying type of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|R>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\>\<b-phi\>>>>>>>>>>
+    </eqnarray*>
+
+    where <math|0> indicates that the dispute was successfully processed.
+  </definition>
 
   <section|<todo|todo - Outdated section>><label|sect-primary-validation>
 
