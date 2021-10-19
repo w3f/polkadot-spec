@@ -69,6 +69,9 @@ extern "C" {
     // Trie API
     fn ext_trie_blake2_256_root_version_1(data: u64) -> u32;
     fn ext_trie_blake2_256_ordered_root_version_1(data: u64) -> u32;
+
+    // Offchain
+    fn ext_offchain_local_storage_clear_version_1(kind: u32, key: u64);
 }
 
 #[cfg(feature = "runtime-wasm")]
@@ -523,6 +526,13 @@ sp_core::wasm_export_functions! {
                 data.as_re_ptr()
             );
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
+        }
+    }
+    fn rtm_ext_offchain_local_storage_clear_version_1(kind: [u8; 4], key: Vec<u8>) {
+        unsafe {
+            let _ = ext_offchain_local_storage_clear_version_1(
+                kind.as_ptr() as u32,
+                key.as_re_ptr());
         }
     }
 }
