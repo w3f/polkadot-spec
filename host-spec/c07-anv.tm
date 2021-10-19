@@ -177,23 +177,11 @@
 
   <section|Protocol Types>
 
-  <\todo>
-    mention SCALE encoding
-  </todo>
-
-  <todo|@syed: What we going to talk in this section?>
-
-  \;
-
-  <todo|@syed I brought <strong|validator/collator protocol message> earlier
-  in the chapter as they are more general concepts than those coming after.>
-
-  \;
-
-  <todo|@syed this section seems to me that should come later after you
-  defined concepts like statement, validity vote etc.>
-
-  \;
+  The protocol types are network messages exchanged between validators,
+  including messages sent by collators to validators. The protocol messages
+  are exchanged based on a streaming notification substream as described in
+  Section <reference|>. The messages are SCALE encoded as described in
+  Section <reference|sect-scale-codec>.
 
   <\definition>
     <label|net-msg-validator-protocol-message>The <strong|validator protocol
@@ -235,9 +223,8 @@
   </definition>
 
   <\definition>
-    <label|net-msg-collator-protocol>The <strong|collator <todo|@syed: define
-    collator in preliminary> message>, <math|M>, is a varying datatype of the
-    following format:
+    <label|net-msg-collator-protocol>The <strong|collator message>, <math|M>,
+    is a varying datatype of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|M>|<cell|=>|<cell|<choice|<tformat|<table|<row|<cell|0\<rightarrow\><around*|(|C<rsub|i>,P<rsub|i>,C<rsub|s>|)>>>|<row|<cell|1\<rightarrow\>H>>|<row|<cell|4\<rightarrow\><around*|(|B<rsub|h>,S|)>>>>>>>>>>
