@@ -14,11 +14,10 @@
   The Polkadot relay chain <todo|syed: have we defined relay chain?>
   validators are responsible for guaranteeing the validity of both relay
   chain and parachain <todo|have we defined parachain?> blocks. Additionally,
-  the validators are required to keep enough Parachain blocks available
-  <todo|syed: keep block available needs to be defined, it is not a term that
-  everyone understand.> in order for remote <todo|what is the difference
-  between remote and non-remote peers> peers, who lack the information, to
-  reliably confirm the issued validity statements about parachain blocks. The
+  the validators are required to keep enough parachain blocks that should be
+  included in the relay chain available in their local storage in order to
+  make those retrievable by peers, who lack the information, to reliably
+  confirm the issued validity statements about parachain blocks. The
   Availability & Validity (AnV) protocol consists of multiple steps for
   successfully upholding those responsibilities.
 
@@ -35,34 +34,36 @@
   are then required to check the validity of submitted candidates as
   described in Section <reference|sect-candidate-validation>, then issue and
   collect statements about the validity of candidates to other validators as
-  described in Section <reference|sect-candidate-backing>. This process is
-  known as <em|candidate backing>. Once a candidate meets a specific
-  <todo|\Pa specific\Q is confusing it means there are multiple way that a
-  candidate can be considered valid and it only needs to satisfies one of
-  those, it should be \Pthe specified\Q IMHO> criteria for inclusion, the
-  selected relay chain block author then choses any of the backed candidate
-  for each parachain and includes those into the relay chain block as
-  described in Section <reference|sect-candidate-inclusion>.
+  described in Section <reference|sect-candidate-backing-statements>. This
+  process is known as <em|candidate backing>. Once a candidate meets a
+  specified criteria for inclusion, the selected relay chain block author
+  then choses any of the backed candidate for each parachain and includes
+  those into the relay chain block as described in Section
+  <reference|sect-candidate-inclusion>.
 
   \;
 
-  Parachain candidates contained in <em|non-finalized> <todo|Reference to the
-  definition of finalized> relay chain blocks must then be retrieved by other
-  <todo|\Psecondary set of\Q? to be clear that they are doing exactly what
-  the primary validator did but are chosen randomly, otherwise it is
-  confusing as what is the difference between what thay do and what the
-  previous check> relay chain validators, who are randomly assigned to
-  determine the validity of specific parachains based on a VRF lottery, and
-  are then required to vote on the validity of those candidates as described
-  in Section <reference|sect-approval-voting>. This process is known as
-  <em|approval voting>. If a validator does not contain <todo|contain? you
-  mean \Phave\Q> the candidate data, it must recover the candidate data as
-  described in Section <reference|sect-availability-recovery>. Availability
-  votes <todo|this is out of no-where, what is availability vote? doesn't
-  availability deserve a paragraph here. > are issued and collected by other
-  validators and additionally included in the relay chain state. This process
-  ensures that only relay chain blocks get finalized where each candidate is
-  available on enough nodes of validators.
+  Every relay chain validator must fetch the proposed candidates and issue
+  votes on whether they have the candidate saved in their local storage, so
+  called <em|availability votes> as described in Section
+  <reference|sect-availability-votes>, then also collect the votes sent by
+  other validators and include them in the relay chain state, as described in
+  Section <reference|sect-candidate-inclusion>. This process ensures that
+  only relay chain blocks get finalized where each candidate is available on
+  enough nodes of validators.
+
+  \;
+
+  Parachain candidates contained in <em|non-finalized> (Section
+  <reference|sect-finality>) relay chain blocks must then be retrieved by a
+  secondary set of relay chain validators, unrelated from the candidate
+  backing process, who are randomly assigned to determine the validity of
+  specific parachains based on a VRF lottery and are then required to vote on
+  the validity of those candidates as described in Section
+  <reference|sect-approval-voting>. This process is known as <em|approval
+  voting>. If a validator does not have the candidate data, it must recover
+  the candidate data as described in Section
+  <reference|sect-availability-recovery>.
 
   <section|Preliminaries>
 
@@ -754,47 +755,6 @@
     </itemize-dot>
   </definition>
 
-  <subsection|Availability Votes><label|sect-availability-votes>
-
-  The Polkadot validator must issue a bitfield as defined in Definition
-  <reference|defn-bitfield-array> which indicates votes for the availabilty
-  of candidates. Issued bitfields can be used by the validator and other
-  peers to determine which backed candidates meet the <math|2/3+>
-  availability quorum.
-
-  \;
-
-  Candidates are inserted into the relay chain in form of inherent data by a
-  block author, as described in Section <reference|sect-candidate-inclusion>.
-  A validator can retrieve that data by calling the appropriate Runtime API
-  entry as described in Section <reference|sect-rt-api-availability-cores>,
-  then create a bitfield indicating for which candidate the validator has
-  availability data stored and broadcast it to the network as defined in
-  Definition <reference|net-msg-bitfield-dist-msg>. When sending the bitfield
-  distrubtion message, the validator must ensure <math|B<rsub|h>> is set
-  approriately, therefore clarifying to which state the bitfield is referring
-  to, given that candidates can vary based on the chain fork.
-
-  \;
-
-  Missing availability data of candidates must be recovered by the validator
-  as described in Section <reference|sect-availability-recovery>. If
-  previously issued bitfields are no longer accurate, i.e. the availability
-  data has been recovered or the candidate of an availablity core has
-  changed, the validator must create a new bitfield and boradcast it to the
-  network. Candidates must be kept available by validators for a specific
-  amount of time. If a candidate does not receive any backing, validators
-  should keep it available for about one hour, in case the state of backing
-  does change. Backed and even approved candidates (described in Section
-  <reference|sect-approval-voting>) must be kept by validators for about 25
-  hours, since disputes (described in Section <todo|todo>) can occure and the
-  candidate needs to be checked again.
-
-  \;
-
-  The validator issues availability votes in form of a validator protocol
-  message as defined in Definition <reference|net-msg-collator-protocol-message>.
-
   <\definition>
     <label|defn-bitfield-array>A <strong|bitfield array> contains single-bit
     values which indidate whether a candidate is available. The number of
@@ -1099,6 +1059,71 @@
   <subsection|Runtime Compression><label|sect-runtime-compression>
 
   <todo|todo>
+
+  <section|Availability>
+
+  <subsection|Availability Votes><label|sect-availability-votes>
+
+  The Polkadot validator must issue a bitfield as defined in Definition
+  <reference|defn-bitfield-array> which indicates votes for the availabilty
+  of candidates. Issued bitfields can be used by the validator and other
+  peers to determine which backed candidates meet the <math|2/3+>
+  availability quorum.
+
+  \;
+
+  Candidates are inserted into the relay chain in form of inherent data by a
+  block author, as described in Section <reference|sect-candidate-inclusion>.
+  A validator can retrieve that data by calling the appropriate Runtime API
+  entry as described in Section <reference|sect-rt-api-availability-cores>,
+  then create a bitfield indicating for which candidate the validator has
+  availability data stored and broadcast it to the network as defined in
+  Definition <reference|net-msg-bitfield-dist-msg>. When sending the bitfield
+  distrubtion message, the validator must ensure <math|B<rsub|h>> is set
+  approriately, therefore clarifying to which state the bitfield is referring
+  to, given that candidates can vary based on the chain fork.
+
+  \;
+
+  Missing availability data of candidates must be recovered by the validator
+  as described in Section <reference|sect-availability-recovery>. If
+  previously issued bitfields are no longer accurate, i.e. the availability
+  data has been recovered or the candidate of an availablity core has
+  changed, the validator must create a new bitfield and boradcast it to the
+  network. Candidates must be kept available by validators for a specific
+  amount of time. If a candidate does not receive any backing, validators
+  should keep it available for about one hour, in case the state of backing
+  does change. Backed and even approved candidates (described in Section
+  <reference|sect-approval-voting>) must be kept by validators for about 25
+  hours, since disputes (described in Section <todo|todo>) can occure and the
+  candidate needs to be checked again.
+
+  \;
+
+  The validator issues availability votes in form of a validator protocol
+  message as defined in Definition <reference|net-msg-collator-protocol-message>.
+
+  <subsection|Candidate Recovery><label|sect-availability-recovery>
+
+  The availability distribution of the Polkadot validator must be able to
+  recover parachain candidates that the validator is assigned to, in order to
+  determine whether the candidate should be backed as described in Section
+  <reference|sect-candidate-backing> repsectively whether the candidate
+  should be approved as described in Section
+  <reference|sect-approval-voting>. Additionally, peers can send availability
+  requests as defined in Definition <reference|net-msg-chunk-fetching-request>
+  and Definition <reference|net-msg-available-data-request> to the validator,
+  which the validator should be able to respond to.
+
+  \;
+
+  Candidates are recovered by sending requests for specific indices of
+  erasure encoded chunks. Erasure encoding is described in Section
+  <todo|todo>. A validator should request chunks by picking peers randomly
+  and must recover at least <math|f+1> chunks, where <math|n=3f+k> and
+  <math|k\<in\><around*|{|1,2,3|}>>. <math|n> is the number of validators as
+  specified in the session info, which can be fetched by the Runtime API as
+  described in Section <reference|sect-rt-api-session-info>.
 
   <section|Approval Voting><label|sect-approval-voting>
 
@@ -1425,28 +1450,6 @@
       <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Make-Bytes>><around*|(|p,s,c|)>>>>>
     </eqnarray*>
   </definition>
-
-  <subsection|Candidate Recovery><label|sect-availability-recovery>
-
-  The availability distribution of the Polkadot validator must be able to
-  recover parachain candidates that the validator is assigned to, in order to
-  determine whether the candidate should be backed as described in Section
-  <reference|sect-candidate-backing> repsectively whether the candidate
-  should be approved as described in Section
-  <reference|sect-approval-voting>. Additionally, peers can send availability
-  requests as defined in Definition <reference|net-msg-chunk-fetching-request>
-  and Definition <reference|net-msg-available-data-request> to the validator,
-  which the validator should be able to respond to.
-
-  \;
-
-  Candidates are recovered by sending requests for specific indices of
-  erasure encoded chunks. Erasure encoding is described in Section
-  <todo|todo>. A validator should request chunks by picking peers randomly
-  and must recover at least <math|f+1> chunks, where <math|n=3f+k> and
-  <math|k\<in\><around*|{|1,2,3|}>>. <math|n> is the number of validators as
-  specified in the session info, which can be fetched by the Runtime API as
-  described in Section <reference|sect-rt-api-session-info>.
 
   <section|Runtime Api>
 
