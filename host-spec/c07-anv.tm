@@ -180,8 +180,8 @@
   The protocol types are network messages exchanged between validators,
   including messages sent by collators to validators. The protocol messages
   are exchanged based on a streaming notification substream as described in
-  Section <reference|>. The messages are SCALE encoded as described in
-  Section <reference|sect-scale-codec>.
+  Section <reference|sect-connection-establishment>. The messages are SCALE
+  encoded as described in Section <reference|sect-scale-codec>.
 
   <\definition>
     <label|net-msg-validator-protocol-message>The <strong|validator protocol
@@ -383,6 +383,12 @@
   </definition>
 
   <section|Request & Response Network Messages>
+
+  The request & response network messages are sent and received between peers
+  in the Polkadot network, including collators and non-validator nodes. Those
+  messages are conducted on the request-response substreams are described in
+  Section <reference|sect-connection-establishment>. The network messages are
+  SCALE encoded as described in Section <reference|sect-scale-codec>.
 
   <subsection|PoV Blocks>
 
