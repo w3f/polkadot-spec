@@ -758,6 +758,10 @@
   <em|random> set of validators are created without requiring all assigned
   validators to check the candidate.
 
+  \;
+
+  <todo|TODO: Move all VRF related definitions to the VRF sections>
+
   <\definition>
     <label|defn-relay-vrf-story>The <strong|relay VRF story> is an array of
     random bytes derived from the VRF submitted within the block by the block
@@ -991,6 +995,10 @@
       <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Make-Bytes>><around*|(|p,s,c|)>>>>>
     </eqnarray*>
   </definition>
+
+  <subsection|Disputes>
+
+  <todo|TODO>
 
   <section|Runtime Api>
 
