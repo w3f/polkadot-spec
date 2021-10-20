@@ -1,4 +1,4 @@
-<TeXmacs|2.1>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -134,6 +134,46 @@
     information for submitting blocks.
   </definition>
 
+  <\definition>
+    <label|defn-upward-message>An <strong|upward message> is an opaque byte
+    array sent from a parachain to a relay chain.
+  </definition>
+
+  <\definition>
+    <label|defn-downward-message>A <strong|downward message> is an opaque
+    byte array received by the parachain from the relay chain.
+  </definition>
+
+  <\definition>
+    <label|defn-outbound-hrmp-message>An <strong|outbound HRMP message>
+    (Horizontal Relay-routed Message Passing) is sent from the perspective of
+    a sender of a parachain to an other parachain by passing it through the
+    relay chain. It's a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<cell|<around*|(|I,M|)>>|<cell|>>>>
+    </eqnarray*>
+
+    where <math|I> is the recipient Id as defined in Definition
+    <reference|defn-para-id> and <math|M> is an upward message as defined in
+    Definition <reference|defn-upward-message>.\ 
+  </definition>
+
+  <\definition>
+    <label|defn-inbound-hrmp-message>An <strong|inbound HRML message>
+    (Horizontal Relay-routed Message Passing) is seen from the perspective of
+    a recipient parachain sent from an other parachain by passing it through
+    the relay chain. It's a datastructure of the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|>|<cell|<around*|(|N,M|)>>|<cell|>>>>
+    </eqnarray*>
+
+    where <math|N> is the relay chain block number at which the message was
+    passed down to the recipient parachain and <math|M> is a downward message
+    as defined in Definition <reference|defn-downward-message>.
+  </definition>
+
   <section|Collations><label|sect-collations>
 
   Collations are proposed candidates (see Definition
@@ -164,14 +204,16 @@
 
     <\itemize-dot>
       <item><math|M> is an array of upward messages, <math|u>, interpreted by
-      the relay chain itself, as defined in Definition <todo|todo>.
+      the relay chain itself, as defined in Definition
+      <reference|defn-upward-message>.
 
-      <item><math|H> is an array of horizontal messages, <math|z>,
-      interpreted by other parachains, as defined in Definition <todo|todo>.
+      <item><math|H> is an array of outbound horizontal messages, <math|z>,
+      interpreted by other parachains, as defined in Definition
+      <reference|defn-outbound-hrmp-message>
 
       <item><math|R> is an <verbatim|Option> type as defined in Definition
-      <todo|todo> which can contain a parachain Runtime update. The new
-      Runtime code is an array of bytes.
+      <reference|defn-option-type> which can contain a parachain Runtime
+      update. The new Runtime code is an array of bytes.
 
       <item><math|H> is the head data as defined in Definition
       <reference|defn-para-head-data> produced as a result of execution of
@@ -181,7 +223,8 @@
       <reference|defn-pov-block>.
 
       <item><math|p> is an unsigned 32-bit integer indicating the number of
-      downward messages processed as defined in Definition <todo|todo>.
+      downward messages processed as defined in Definition
+      <reference|defn-downward-message>.
 
       <item><math|w> is an unsigned 32-bit integer indicating the mark up to
       which all inbound HRMP messages have been processed by the parachain.
@@ -431,7 +474,8 @@
 
       <item><math|M<rsub|h>> is an array of outbound horizontal messages sent
       by the parachain. Each individual messages, <math|t>, is a
-      datastructure as defined in Definition <todo|messaging-chapter>.
+      datastructure as defined in Definition
+      <reference|defn-outbound-hrmp-message>.
 
       <item><math|R> is an <verbatim|Option> value as described in Section
       <reference|defn-option-type> that can contain a new parachain Runtime
@@ -547,7 +591,7 @@
 
       <item><math|M<rsub|h>> is an array of outbound horizontal messages sent
       by the parachain. Each individual message, <math|t>, is a datastructure
-      as defined in Definition <todo|messaging-chapter>.
+      as defined in Definition <reference|defn-outbound-hrmp-message>.
 
       <item><math|p> is a unsigned 32-bit integer indicating the number of
       downward messages that were processed by the parachain. It is expected
