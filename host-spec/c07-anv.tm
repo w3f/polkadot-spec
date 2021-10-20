@@ -1,4 +1,4 @@
-<TeXmacs|1.99.16>
+<TeXmacs|2.1>
 
 <project|host-spec.tm>
 
@@ -136,20 +136,25 @@
 
   <section|Collations><label|sect-collations>
 
-  Collations are proposed candidates to the Polkadot relay chain validators.
-  The generation of candidates is very parachain specific. Relay chain
-  validators do not interpret the candidate itself, but rather rely on the
+  Collations are proposed candidates (see Definition
+  <reference|defn-candidate>) to the Polkadot relay chain validators. The
+  Polkodat network protocol is agnostic on what candidate productionis
+  mechanism each parachain uses and does not specify or mandate any of such
+  production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the relay
+  chain validator host implementation itself does not directly interpret or
+  process teh internal transactions of the candidate, but rather rely on the
   parachain Runtime to validate the candidate, as described in Section
   <reference|sect-candidate-validation>. Collators, which are parachain nodes
-  that send candidate proposals to the relay chain validator, must prepare
-  specific pieces of data in order to correctly comply with the requirements
-  of the parachain protocol.
+  which produce candidate proposals and send them to the relay chain
+  validator, must prepare pieces of data specified in Definition
+  <reference|defn-collation> in order to correctly comply with the
+  requirements of the parachain protocol.
 
   <\definition>
-    A <strong|collation> is a datastructure which contains the proposed
-    parachain candidate, including an optional validation parachain Runtime
-    update and upward messages. The collation datastructure, <math|C>, is a
-    datastructure of the following format:
+    <label|defn-collation>A <strong|collation> is a datastructure which
+    contains the proposed parachain candidate, including an optional
+    validation parachain Runtime update and upward messages. The collation
+    datastructure, <math|C>, is a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|C>|<cell|=>|<cell|<around*|(|M,H,R,h,P,p,w|)>>>|<row|<cell|M>|<cell|=>|<cell|<around*|(|u<rsub|n>,\<ldots\>u<rsub|m>|)>>>|<row|<cell|H>|<cell|=>|<cell|<around*|(|z<rsub|n>,\<ldots\>z<rsub|m>|)>>>>>
