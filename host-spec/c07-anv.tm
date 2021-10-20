@@ -175,9 +175,8 @@
       <item><math|P> is the PoV block as defined in Definition
       <reference|defn-pov-block>.
 
-      <item><math|p> is an unsigned 32-bit integer indicating the messages
-      processed from the doward message queue as defined in Definition
-      <todo|todo>.
+      <item><math|p> is an unsigned 32-bit integer indicating the number of
+      downward messages processed as defined in Definition <todo|todo>.
 
       <item><math|w> is an unsigned 32-bit integer indicating the mark up to
       which all inbound HRMP messages have been processed by the parachain.
@@ -203,15 +202,14 @@
   blocks as described in Section <reference|sect-candidate-validation> and
   issues <verbatim|Valid> statements as defined in Definition
   <reference|net-msg-full-statement> to its peers if the verification
-  succeeded <todo|what if it failed?>. Broadcasting failed verification as
-  <verbatim|Valid> statements is a slashable offense. The validator must only
-  issue one <verbatim|Seconded> statement, based on an arbitrary metric,
-  which implies an explicit vote for a candidate to be included in the relay
-  chain.
+  succeeded. Broadcasting failed verification as <verbatim|Valid> statements
+  is a slashable offense. The validator must only issue one
+  <verbatim|Seconded> statement, based on an arbitrary metric, which implies
+  an explicit vote for a candidate to be included in the relay chain.
 
   \;
 
-  <todo|how are collators that broadcast invalid candidates punished?>
+  <todo|reference disputes>
 
   \;
 
@@ -308,7 +306,7 @@
       Definition <reference|defn-para-head-data>.
 
       <item><math|d> is a dispute statement as described in Section
-      <todo|todo>.
+      <reference|sect-anv-disputes>.
 
       <item><math|R> is a committed candidate receipt as defined in
       Definition <reference|defn-committed-candidate-receipt>.
@@ -556,8 +554,6 @@
     </itemize-dot>
   </definition>
 
-  <todo|reference message passing types>
-
   <subsection|Runtime Compression><label|sect-runtime-compression>
 
   <todo|todo>
@@ -673,7 +669,7 @@
 
   The validator issues approval votes in form of a validator protocol message
   as defined in Definition <reference|net-msg-validator-protocol-message> and
-  disputes in <todo|todo>.
+  disputes as described in Section <reference|sect-anv-disputes>.
 
   <subsection|Tranches><label|defn-tranches>
 
@@ -957,7 +953,7 @@
     </eqnarray*>
   </definition>
 
-  <subsection|Disputes>
+  <subsection|Disputes><label|sect-anv-disputes>
 
   <todo|TODO>
 
@@ -1027,7 +1023,8 @@
 
   <subsection|availability_cores><label|sect-rt-api-availability-cores>
 
-  Returns information on all availability cores. <todo|clarify>
+  Returns information on all availability cores as defined in Definition
+  <reference|defn-availability-cores>.
 
   \;
 
@@ -1058,9 +1055,9 @@
 
       <item><math|n<rsub|u>> is an <verbatim|Option> as described in
       Definition <reference|defn-option-type> which can contain a
-      <math|C<rsub|s>> value if the core is freed by availabiltiy
-      <todo|clarify> and indicates the assignment that is next scheduled on
-      this core. An empty value indicates there is nothing scheduled.
+      <math|C<rsub|s>> value if the core was freed by the Runtime and
+      indicates the assignment that is next scheduled on this core. An empty
+      value indicates there is nothing scheduled.
 
       <item><math|B<rsub|o>> indicates the relay chain block number at which
       the core got occupied.
@@ -1080,8 +1077,8 @@
       available.
 
       <item><math|G<rsub|i>> indicates the assigned validator group index as
-      defined in Definition <todo|todo> is to distribute availability pieces
-      of this candidate.
+      defined in Definition <reference|defn-validator-groups> is to
+      distribute availability pieces of this candidate.
 
       <item><math|C<rsub|h>> indicates the hash of the candidate occypying
       the core.
@@ -1091,7 +1088,7 @@
 
       <item><math|C<rsub|i>> is an <verbatim|Option> as described in
       Definition <reference|defn-option-type> which can contain the collators
-      public key indicating who should author the block. <todo|clarify>
+      public key indicating who should author the block.
     </itemize-dot>
   </itemize-dot>
 
@@ -1116,11 +1113,11 @@
   <strong|Return>
 
   <\itemize-dot>
-    <item>An <verbatim|Option> as described in Definition <todo|todo> which
-    can contain the persisted validation data as defined in Definition
-    <reference|defn-persisted-validation-data>. The value is empty if the
-    parachain Id is not registered or the core assumption is of index
-    <math|2>, meaning that the core was freed.
+    <item>An <verbatim|Option> as described in Definition
+    <reference|defn-option-type> which can contain the persisted validation
+    data as defined in Definition <reference|defn-persisted-validation-data>.
+    The value is empty if the parachain Id is not registered or the core
+    assumption is of index <math|2>, meaning that the core was freed.
   </itemize-dot>
 
   <\definition>
@@ -1244,9 +1241,10 @@
   <strong|Return>
 
   <\itemize-dot>
-    <item>An <verbatim|Option> value as defined in Definition <todo|todo>
-    containing the full validation code in an byte array. This value is empty
-    if the parachain Id cannot be found or the assumption is wrong.
+    <item>An <verbatim|Option> value as defined in Definition
+    <reference|defn-option-type> containing the full validation code in an
+    byte array. This value is empty if the parachain Id cannot be found or
+    the assumption is wrong.
   </itemize-dot>
 
   <subsection|validation_code_by_hash><label|sect-rt-api-validation-code-by-hash>
@@ -1266,9 +1264,10 @@
   <strong|Return>
 
   <\itemize-dot>
-    <item>An <verbatim|Option> value as defined in Definition <todo|todo>
-    containing the full validation code in an byte array. This value is empty
-    if the parachain Id cannot be found or the assumption is wrong.
+    <item>An <verbatim|Option> value as defined in Definition
+    <reference|defn-option-type> containing the full validation code in an
+    byte array. This value is empty if the parachain Id cannot be found or
+    the assumption is wrong.
   </itemize-dot>
 
   <subsection|candidate_pending_availability>
@@ -1363,9 +1362,9 @@
   <strong|Return>
 
   <\itemize-dot>
-    <item>An <verbatim|Option> type as defined in Definition <todo|todo>
-    which can contain the session info structure, <math|S>, of the following
-    format:
+    <item>An <verbatim|Option> type as defined in Definition
+    <reference|defn-option-type> which can contain the session info
+    structure, <math|S>, of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|S>|<cell|=>|<cell|<around*|(|A,D,K,G,c,z,s,d,x,a|)>>>|<row|<cell|A>|<cell|=>|<cell|<around*|(|v<rsub|n>,\<ldots\>v<rsub|m>|)>>>|<row|<cell|D>|<cell|=>|<cell|<around*|(|v<rsub|<rsub|n>>,\<ldots\>v<rsub|m>|)>>>|<row|<cell|K>|<cell|=>|<cell|<around*|(|v<rsub|n>,\<ldots\>v<rsub|m>|)>>>|<row|<cell|G>|<cell|=>|<cell|<around*|(|g<rsub|n>,\<ldots\>g<rsub|m>|)>>>|<row|<cell|g>|<cell|=>|<cell|<around*|(|A<rsub|n>,\<ldots\>A<rsub|m>|)>>>>>
@@ -1413,8 +1412,8 @@
       delay tranches in total.
 
       <item><math|x> is an unsigned 32-bit integer indicating how many BABE
-      <todo|?> slots must pass before an assignment is considered a
-      \Pno-show\Q.
+      slots must pass before an assignment is considered a \Pno-show\Q.
+      <todo|clarify how to convert between BABE slots and \Pticks\Q>
 
       <item><math|a> is an unsigned 32-bit integer indicating the number of
       validators needed to approve a block.
@@ -1624,9 +1623,10 @@
       <reference|defn-para-id>.
 
       <item><math|C<rsub|s>> is the signature of the collator using the
-      <verbatim|PeerId> of the collators node. <todo|why?>
+      <verbatim|PeerId> of the collators node.
 
-      <item><math|H> is the hash of the collation <todo|clarify>.
+      <item><math|H> is the hash of the parachain block as defined in
+      Definition <reference|defn-parablock>.
 
       <item><math|S> is a full statement as defined in Definition
       <reference|net-msg-full-statement>.
