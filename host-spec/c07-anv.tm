@@ -167,8 +167,9 @@
       <todo|todo> which can contain a parachain Runtime update. The new
       Runtime code is an array of bytes.
 
-      <item><math|H> is the block header produced as a result of execution
-      <todo|clarify>.
+      <item><math|H> is the head data as defined in Definition
+      <reference|defn-para-head-data> produced as a result of execution of
+      the parachain specific logic.
 
       <item><math|P> is the PoV block as defined in Definition
       <reference|defn-pov-block>.
@@ -302,7 +303,8 @@
 
       <item><math|D> is an array of disputes.
 
-      <item><math|P<rsub|h>> is the parent block header of the parachain.
+      <item><math|P<rsub|h>> is the parachain parent head data as defined in
+      Definition <reference|defn-para-head-data>.
 
       <item><math|d> is a dispute statement as described in Section
       <todo|todo>.
@@ -314,7 +316,8 @@
       signatures.
 
       <item><math|i> is a bitfield of indices of the validators within the
-      validator group. <todo|clarify>
+      validator group as defined in Definition
+      <reference|defn-validator-groups>.
 
       <item><math|a> is either an implicit or explicit attestation of the
       validity of a parachain candidate, where <math|1> implies an implicit
@@ -331,8 +334,6 @@
       <item><math|v<rsub|i>> is the validator index of the authority set as
       defined in Definition <reference|defn-authority-list>.
     </itemize-dot>
-
-    <todo|clarify how this is constructed>
   </definition>
 
   <\definition>
@@ -399,7 +400,8 @@
       <item><math|s> the collator signature of the concatenated components
       <math|p>, <math|H>, <math|R<rsub|h>> and <math|B>.
 
-      <item><math|p<rsub|h>> is the hash of the parachain header of this
+      <item><math|p<rsub|h>> is the hash of the parachain head data as
+      described in Definition <reference|defn-para-head-data> of this
       candidate.
 
       <item><math|R<rsub|h>> is the hash of the parachain Runtime.
@@ -431,8 +433,8 @@
       <reference|defn-option-type> that can contain a new parachain Runtime
       in case of an update.
 
-      <item><math|h> is the parachain block header as described in Definition
-      <reference|defn-parablock>.
+      <item><math|h> is the parachain head data as described in Definition
+      <reference|defn-para-head-data>.
 
       <item><math|p> is a unsigned 32-bit intiger indicating the number of
       downward messages that were processed by the parachain. It is expected
@@ -500,8 +502,8 @@
     where
 
     <\itemize-dot>
-      <item><math|h> is the parachain block header as defined in Definition
-      <reference|defn-parablock>.
+      <item><math|h> is the parachain head data as defined in Definition
+      <reference|defn-para-head-data>.
 
       <item><math|b> is the block body as defined in Definition
       <reference|defn-parablock>.
@@ -529,8 +531,8 @@
     where
 
     <\itemize-dot>
-      <item><math|h> is the parachain block header as defined in Definition
-      <reference|defn-parablock>.
+      <item><math|h> is the parachain head data as defined in Definition
+      <reference|defn-para-head-data>.
 
       <item><math|R> is an <verbatim|Option> value as described in Section
       <reference|defn-option-type> that can contain a new parachain Runtime
@@ -1329,8 +1331,8 @@
       <item><math|C<rsub|r>> is the candidate receipt as defined in
       Definition <reference|defn-candidate-receipt>.
 
-      <item><math|h> is the parachain block header as defined in Definition
-      <reference|defn-parablock>.
+      <item><math|h> is the parachain head data as defined in Definition
+      <reference|defn-para-head-data>.
 
       <item><math|I<rsub|c>> is the index of the availabilty core as can be
       retrieved in Section <reference|sect-rt-api-availability-cores> that
