@@ -104,8 +104,9 @@
   <\definition>
     <label|defn-para-head-data>The <strong|head data> is contains information
     about a parachain block as defined in Definition
-    <reference|defn-parablock>. Relay chain validators are not concerned with
-    the inner structure of the head data and treat it as a byte arrays.\ 
+    <reference|defn-parablock>. The head data is returned by executing the
+    parachain Runtime and relay chain validators are not concerned with its
+    inner structure and treat it as a byte arrays.\ 
   </definition>
 
   <\definition>
