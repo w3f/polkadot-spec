@@ -50,6 +50,7 @@ extern "C" {
     fn ext_crypto_sr25519_verify_version_1(sig: u32, msg: u64, pubkey: u32) -> i32;
 
     fn ext_crypto_secp256k1_ecdsa_recover_version_1(sig: u32, msg: u32) -> u64;
+    fn ext_crypto_ecdsa_verify_version_2(sig: u32, msg: u64, pubkey: u32) -> i32;
 
     // Hashing API
     fn ext_hashing_keccak_256_version_1(data: u64) -> i32;
@@ -420,6 +421,15 @@ sp_core::wasm_export_functions! {
                 msg_data.as_ptr() as u32,
             );
             from_mem(value)
+        }
+    }
+    fn rtm_ext_crypto_ecdsa_verify_version_2(sig_data: Vec<u8>, msg_data: Vec<u8>, pubkey_data: Vec<u8>) -> u32 {
+        unsafe {
+            ext_crypto_ecdsa_verify_version_2(
+                sig_data.as_ptr() as u32,
+                msg_data.as_re_ptr(),
+                pubkey_data.as_ptr() as u32
+            ) as u32
         }
     }
 
