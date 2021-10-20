@@ -1,4 +1,4 @@
-<TeXmacs|2.1>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -94,60 +94,18 @@
   </definition>
 
   <\definition>
-    <label|defn-parablock>A <strong|parachain block>, <math|B<rsub|p>>, is a
-    datastructure of the following format:
-
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|B<rsub|b>>|<cell|=>|<cell|<around*|(|H<around*|(|B|)>,B,H<rsub|r>|)>>>|<row|<cell|B>|<cell|=>|<cell|<around*|(|e<rsub|n>,\<ldots\>e<rsub|m>|)>>>>>
-    </eqnarray*>
-
-    where
-
-    <\itemize-dot>
-      <item><math|H<around*|(|B|)>> is the header of the block as described
-      in Definition <reference|defn-block-header>.
-
-      <item><math|B> is the body of the block, expressed as an array of zero
-      or more extrinsics, <math|e<rsub|n>>, which are SCALE encoded byte
-      arrays and its structure is opaque to the Polkadot Host.
-
-      <item><math|H<rsub|r>> is the Merkle root of the parachain state at
-      this block as described in Section <reference|sect-merkl-proof>
-    </itemize-dot>
-
-    <todo|@syed:I'm confused, isn't <math|H<rsub|r>> part of H(B) why do we
-    need to recopy it at the end? and if so, it means a parachain block
-    exactly has the same structure as a Polkadot Block so we don' need to
-    redefine it right, we can say it is basically the same as defined in the
-    other chapter.>\ 
-  </definition>
-
-  <todo|@syed: so we are mandating the storage and trie for parachain to have
-  the same structure as the one defined in the other chapter. we should make
-  it clear that we are talking about the same type of radix-16 merkle tree.>
-
-  <\definition>
-    <label|defn-witness-data><strong|Witness data> pretains to parachain
-    block <math|B> denoted by <math|w<rsub|B>> (or <math|w> when the
-    associated block is clear from the context) is an extracted Merkle
-    subtree.\ 
+    <label|defn-parablock>A <strong|parachain block> or a
+    <strong|Proof-of-Validity block> (PoV block) contains the necessary data
+    to for parachain specific state transition logic. Relay chain validators
+    are not concerned with the inner structure of the block and treat it as a
+    byte array.
   </definition>
 
   <\definition>
-    <strong|Merkle subtree> <todo|shouldn't this goes to the prelimanry
-    chapter rather than here? it is a pure math concept><todo|@fabio: clarify
-    this>
-  </definition>
-
-  <\definition>
-    <label|defn-pov-block>A <with|font-series|bold|proof of validity block>
-    or <with|font-series|bold|PoV> block of block B is the pair:
-
-    <\equation*>
-      <around|(|B,w<rsub|B>|)>
-    </equation*>
-
-    containing witness data in addition to the parachain block B.
+    <label|defn-para-head-data>The <strong|head data> is contains information
+    about a parachain block as defined in Definition
+    <reference|defn-parablock>. Relay chain validators are not concerned with
+    the inner structure of the head data and treat it as a byte arrays.\ 
   </definition>
 
   <\definition>
