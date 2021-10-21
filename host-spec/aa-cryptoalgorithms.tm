@@ -26,8 +26,15 @@
   <section|VRF><label|sect-vrf>
 
   <\definition>
-    <label|defn-vrf-pair>The <strong|VRF Pair> is a datastructure that
-    contains both the VRV input and its corresponding output.
+    <label|defn-vrf-pair>The <strong|VRF Pair>, <math|V>, is a datastructure
+    that contains both the VRV input and its corresponding output:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|V>|<cell|=>|<cell|<around*|(|I,O|)>>>|<row|<cell|I>|<cell|=>|<cell|O>>|<row|<cell|I>|<cell|=>|<cell|<around*|(|C,P|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(||)>>>>>
+    </eqnarray*>
+
+    where <math|I> represents VRF input and <math|O> represents the VRF
+    output. <math|C> is the compresses Ristretto\ 
   </definition>
 
   <\definition>
