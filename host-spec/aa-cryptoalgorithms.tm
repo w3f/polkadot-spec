@@ -1,4 +1,4 @@
-<TeXmacs|1.99.18>
+<TeXmacs|1.99.16>
 
 <project|host-spec.tm>
 
@@ -24,6 +24,75 @@
   <section|Randomness><label|sect-randomness>
 
   <section|VRF><label|sect-vrf>
+
+  <\definition>
+    <label|defn-vrf-pair>The <strong|VRF Pair> is a datastructure that
+    contains both the VRV input and its corresponding output.
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-proof>The <strong|VRF proof> and <strong|VRF batchable
+    proof> <text-dots> <todo|todo> <todo|does batchable proof need to be
+    specced?>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-transcript>The <strong|transcript> <text-dots>
+    <todo|todo>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-evaluate-vrf>The <name|Evaluate-VRF> function takes a
+    public key, <math|k>, a transcript, <math|t>, as defined in Definition
+    <reference|defn-vrf-transcript> and procudes a VRF-Pair, <math|p>, as
+    defined in Definition <reference|defn-vrf-pair>.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>>>
+    </eqnarray*>
+
+    The functions executes the following steps: <todo|todo>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-dleq-proove>The <name|DLEQ-Proove> function takes a
+    private key, <math|s<rsub|k>>, and a transcript, <math|t>, as defined in
+    Definition <reference|defn-vrf-transcript> and a VRF pair, <math|v>, as
+    defined in Definition <reference|defn-vrf-pair> and produces a VRF proof
+    and a VRF batchable proof, <math|p> respectively <math|p<rsub|b>>, as
+    defined in Definition <reference|defn-vrf-proof>.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|<around*|(|*p,p<rsub|b>|)>>|<cell|\<leftarrow\>>|<cell|<text|<name|DLEQ-Proove>><around*|(|s<rsub|k>,t,v|)>>>>>
+    </eqnarray*>
+
+    The functions executed the following steps: <todo|todo>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-create-transcript>The <name|Create-Transcript> function
+    takes a context, <math|c>, represented as a UTF-8 encoded string and
+    produces a transcript, <math|t>, as defined in Definition
+    <reference|defn-vrf-transcript>.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|c|)>>>>>
+    </eqnarray*>
+
+    The function executes the following steps: <todo|todo>
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-make-bytes>The <name|Make-Bytes> function takes a VRF
+    Pair, <math|p>, as defined in Definition <reference|defn-vrf-pair>, the
+    size of the buffer in bytes, <math|s>, and a context, <math|c>,
+    represtended as a UTF-8 encoded string and produces the raw byte output
+    of the VRF.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Make-Bytes>><around*|(|p,s,c|)>>>>>
+    </eqnarray*>
+  </definition>
 
   <section|Cryptographic Keys><label|sect-cryptographic-keys>
 
@@ -144,7 +213,6 @@
   </with>
 
   \;
-
 </body>
 
 <\initial>
@@ -153,9 +221,3 @@
     <associate|save-aux|false>
   </collection>
 </initial>
-
-<references|<\collection>
-</collection>>
-
-<auxiliary|<\collection>
-</collection>>
