@@ -17,6 +17,7 @@ extern "C" {
     fn ext_storage_clear_version_1(key: u64);
     fn ext_storage_exists_version_1(key: u64) -> i32;
     fn ext_storage_clear_prefix_version_1(key: u64);
+    fn ext_storage_clear_prefix_version_2(key: u64, limit: u64) -> u64;
     fn ext_storage_append_version_1(key: u64, value: u64);
     fn ext_storage_root_version_1() -> u64;
     fn ext_storage_next_key_version_1(key: u64) -> u64;
@@ -146,6 +147,20 @@ sp_core::wasm_export_functions! {
     fn rtm_ext_storage_clear_prefix_version_1(key: Vec<u8>) {
         unsafe {
             let _ = ext_storage_clear_prefix_version_1(key.as_re_ptr());
+        }
+    }
+
+    fn rtm_ext_storage_clear_prefix_version_2(
+        key: Vec<u8>,
+        limit: Option<u32>
+    ) -> Vec<u8> {
+        let limit = limit.encode();
+        unsafe {
+            let value = ext_storage_clear_prefix_version_2(
+                key.as_re_ptr(),
+                limit.as_re_ptr(),
+            );
+            from_mem(value)
         }
     }
 
