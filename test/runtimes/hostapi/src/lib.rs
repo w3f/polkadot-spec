@@ -70,7 +70,7 @@ extern "C" {
     // Trie API
     fn ext_trie_blake2_256_root_version_1(data: u64) -> u32;
     fn ext_trie_blake2_256_ordered_root_version_1(data: u64) -> u32;
-    fn ext_trie_blake2_256_verify_proof_version_1(a: u32, b: u64, c: u64, d:u64) -> u32;
+    fn ext_trie_blake2_256_verify_proof_version_1(a: u64, b: u64, c: u64, d:u64) -> u32;
 }
 
 #[cfg(feature = "runtime-wasm")]
@@ -517,13 +517,12 @@ sp_core::wasm_export_functions! {
 
     fn rtm_ext_trie_blake2_256_verify_proof_version_1(root: Vec<u8>, proof: Vec<Vec<u8>>, key: Vec<u8>, v: Vec<u8>) -> u32 {
         let proofEnc = proof.encode();
-
         unsafe {
             ext_trie_blake2_256_verify_proof_version_1(
-                root.as_re_ptr() as u32,
+                root.as_re_ptr(),
                 proofEnc.as_re_ptr(),
                 key.as_re_ptr(),
-                v.as_re_ptr(),
+                v.as_re_ptr``(),
             ) as u32
         }
     }
