@@ -119,6 +119,20 @@
   </definition>
 
   <\definition>
+    The <name|Meta-Ad> function takes a transcript, <math|t>, as defined in
+    Definition <reference|defn-vrf-transcript>, a UTF-8 encoded lablel,
+    <math|l>, and a byte array, <math|b>, and returns an updated transcript.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,l,b|)>>>>>
+    </eqnarray*>
+
+    The <name|Meta-Ad> operation adds the label and the byte array to the
+    passed on transcript as described in the STROBE documentation.
+    <todo|where?>
+  </definition>
+
+  <\definition>
     <label|defn-vrf-evaluate-vrf>The <name|Evaluate-VRF> function takes a
     public key, <math|k>, a transcript, <math|t>, as defined in Definition
     <reference|defn-vrf-transcript> and procudes a VRF-Pair, <math|p>, as
