@@ -26,8 +26,12 @@
   <section|VRF><label|sect-vrf>
 
   <\definition>
-    <label|defn-vrf-pair>The <strong|VRF Pair>, <math|V>, is a datastructure
-    that contains both the VRV input and its corresponding output:
+    <label|defn-vrf-pair>The <strong|VRF Pair> is a datastructure that
+    contains both the VRV input and its corresponding output. The VRF Pair
+    uses the the Ristretto technique for constructing prime order elliptic
+    curve groups as described further in the <hlink|Ristretto
+    documentation|https://ristretto.group/ristretto.html>. The VRF Pair,
+    <math|V>, is a datastructure of the following format:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|V>|<cell|=>|<cell|<around*|(|I,O|)>>>|<row|<cell|>|<cell|>|<cell|I=O>>|<row|<cell|I>|<cell|=>|<cell|<around*|(|C,P|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|x,y,z,t|)>>>|<row|<cell|>|<cell|>|<cell|x=y=z=t>>|<row|<cell|x>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|4>|)>>>>>
@@ -56,8 +60,38 @@
   </definition>
 
   <\definition>
-    <label|defn-vrf-transcript>The <strong|transcript> <text-dots>
-    <todo|todo>
+    <label|defn-vrf-transcript>The <strong|VRF transcript> is a
+    \Ppublic-coin\Q argument containing a mathematical object combined with a
+    context and is more closely described in the <hlink|Merlin
+    documentation|https://merlin.cool/>, which is a
+    <hlink|STROBE|https://strobe.sourceforge.io/>-based transcript
+    construction for zero-knowledge proofs. The transcript, <math|T>, is a
+    STROBE object for the 128-bit security level as defined in the
+    <hlink|STROBE specification|https://strobe.sourceforge.io/specs/> in
+    Section 5:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|s,p,b,f|)>>>|<row|<cell|s>|<cell|=>|<cell|<around*|(|b<rsub|n>,\<ldots\>b<rsub|m>|)>>>>>
+    </eqnarray*>
+
+    where
+
+    <\itemize-dot>
+      <item><math|s> is the duplex state which is an array of arbitrary
+      bytes.
+
+      <item><math|p> is an unsigned 8-bit integer and indicates the position
+      in the duplex state where the next byte will be processed.
+
+      <item><math|b> is an unsigned 8-bit integer and indicates the position
+      in the duplex state which is <math|1> after the beginning of the
+      current operation. <math|b> is equal to <math|0> if no operation began
+      in this block.
+
+      <item><math|f> is an unsigned 8-bit integer and can be <math|0>,
+      <math|1> or <math|None>. It indicates whether the party sends or
+      receives a message on the transport.
+    </itemize-dot>
   </definition>
 
   <\definition>
