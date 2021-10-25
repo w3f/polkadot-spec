@@ -71,14 +71,14 @@
     Section 5:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|s,p,b,f|)>>>|<row|<cell|s>|<cell|=>|<cell|<around*|(|b<rsub|n>,\<ldots\>b<rsub|m>|)>>>>>
+      <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|s,p,b,f|)>>>|<row|<cell|s>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|199>|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|s> is the duplex state which is an array of arbitrary
-      bytes.
+      <item><math|s> is the duplex state consisting of a 200-byte array that
+      is always 8-byte aligned.
 
       <item><math|p> is an unsigned 8-bit integer and indicates the position
       in the duplex state where the next byte will be processed.
