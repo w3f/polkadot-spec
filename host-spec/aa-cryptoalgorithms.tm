@@ -30,11 +30,23 @@
     that contains both the VRV input and its corresponding output:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|V>|<cell|=>|<cell|<around*|(|I,O|)>>>|<row|<cell|I>|<cell|=>|<cell|O>>|<row|<cell|I>|<cell|=>|<cell|<around*|(|C,P|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(||)>>>>>
+      <tformat|<table|<row|<cell|V>|<cell|=>|<cell|<around*|(|I,O|)>>>|<row|<cell|>|<cell|>|<cell|I=O>>|<row|<cell|I>|<cell|=>|<cell|<around*|(|C,P|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|x,y,z,t|)>>>|<row|<cell|>|<cell|>|<cell|x=y=z=t>>|<row|<cell|x>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|4>|)>>>>>
     </eqnarray*>
 
-    where <math|I> represents VRF input and <math|O> represents the VRF
-    output. <math|C> is the compresses Ristretto\ 
+    where
+
+    <\itemize-dot>
+      <item><math|I> represents the VRF input and <math|O> represents the VRF
+      output.
+
+      <item><math|C> is the Ristretto point in compressed wire format,
+      exactly 32 bytes.
+
+      <item><math|P> is the Ristretto point in the Ristretto group for
+      Curve25519.
+
+      <item><math|x> is the element of the field, exactly 5 bytes.
+    </itemize-dot>
   </definition>
 
   <\definition>
