@@ -565,7 +565,7 @@ sp_core::wasm_export_functions! {
                 root.as_re_ptr(),
                 proofEnc.as_re_ptr(),
                 key.as_re_ptr(),
-                v.as_re_ptr``(),
+                v.as_re_ptr(),
             ) as u32
         }
     }
