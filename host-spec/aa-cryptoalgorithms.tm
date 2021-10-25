@@ -54,9 +54,16 @@
   </definition>
 
   <\definition>
-    <label|defn-vrf-proof>The <strong|VRF proof> and <strong|VRF batchable
-    proof> <text-dots> <todo|todo> <todo|does batchable proof need to be
-    specced?>
+    <label|defn-vrf-proof>The <strong|VRF proof> prooves the correctness for
+    an associated VRF output. The VRF proof, <math|P>, is a datastructure of
+    the following format:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|P>|<cell|=>|<cell|<around*|(|C,S|)>>>|<row|<cell|>|<cell|>|<cell|C=S>>|<row|<cell|S>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>>>
+    </eqnarray*>
+
+    where <math|C> is the challenge and <math|S> is the 32-byte Schnorr poof.
+    Both are expressed as Curve25519 scalars.
   </definition>
 
   <\definition>
