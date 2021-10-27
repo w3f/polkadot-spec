@@ -210,12 +210,12 @@
       <reference|defn-vrf-append-message>.
 
       <item><name|Challenge-Bytes> is a function defined in Definition
-      <todo|todo>.
+      <reference|defn-vrf-challenge-bytes>.
     </itemize-dot>
   </definition>
 
   <\definition>
-    <label|defn-vrf-append-message><name|Append-Message> function takes a
+    <label|defn-vrf-append-message>The <name|Append-Message> function takes a
     transcript, <math|t>, as defined in Definition
     <reference|defn-vrf-transcript>, a context, c, represented as a UTF-8
     encoded string and a message, <math|m>, represented as a byte array and
@@ -228,6 +228,22 @@
     This function appends the messages to the transcript as described in the
     <hlink|Merlin documentation|https://merlin.cool/transcript/index.html>,
     respectively section \P3.1.3 Appending Messages\Q.
+  </definition>
+
+  <\definition>
+    <label|defn-vrf-challenge-bytes>The <name|Challenge-Bytes> function takes
+    a transcript, <math|t>, as defined in Definition
+    <reference|defn-vrf-transcript> and an unsigned integer, <math|s>,
+    indicating the size of the resulting challenge.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Challenge-Bytes>><around*|(|t,s|)>>>>>
+    </eqnarray*>
+
+    This function creates the resulting challenge represented as a byte array
+    equal to the size of <math|s> as described in the <hlink|Merlin
+    documentation|https://merlin.cool/transcript/index.html>, respectively
+    section \P3.1.4 Extracting Challenges\Q.
   </definition>
 
   <section|Cryptographic Keys><label|sect-cryptographic-keys>
