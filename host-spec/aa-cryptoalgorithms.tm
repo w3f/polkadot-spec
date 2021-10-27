@@ -142,7 +142,10 @@
       <tformat|<table|<row|<cell|p>|<cell|\<leftarrow\>>|<cell|<name|<text|Evaluate-VRF>><around*|(|k,t|)>>>>>
     </eqnarray*>
 
-    The functions executes the following steps: <todo|todo>
+    The functions converts the public key, <math|k>, into a Ristretto point
+    and a corresponding wire format as defined in Definition
+    <reference|defn-vrf-pair>, respectively the value <math|I> (or <math|O>,
+    which are equal). <todo|todo>
   </definition>
 
   <\definition>
@@ -178,12 +181,35 @@
     Pair, <math|p>, as defined in Definition <reference|defn-vrf-pair>, the
     size of the buffer in bytes, <math|s>, and a context, <math|c>,
     represtended as a UTF-8 encoded string and produces the raw byte output
-    of the VRF.
+    of the VRF.e
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Make-Bytes>><around*|(|p,s,c|)>>>>>
     </eqnarray*>
+
+    The function executes the following steps:
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>VRFResult<rprime|''>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,\<b-phi\>,c|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Append-Message>><around*|(|t,p,<rprime|''>vrf-in<rprime|''>,I|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Append-Message>><around*|(|t,p,<rprime|''>vrf-out<rprime|''>,O|)>>>|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Challenge-Bytes>><around*|(|t,s|)>>>>>
+    </eqnarray*>
+
+    where <math|b> is the returned value by <name|Make-Bytes> and:
+
+    <\itemize-dot>
+      <item><name|Create-Transcript> is a function defined in Definition
+      <reference|defn-vrf-create-transcript>.
+
+      <item><name|Meta-Ad> is a function defined in Definition <todo|todo>.
+
+      <item><name|Append-Message> is a function defined in Definition
+      <todo|todo>.
+
+      <item><name|Challenge-Bytes> is a function defined in Definition
+      <todo|todo>.
+    </itemize-dot>
   </definition>
+
+  \;
 
   <section|Cryptographic Keys><label|sect-cryptographic-keys>
 
