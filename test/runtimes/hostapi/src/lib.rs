@@ -39,6 +39,8 @@ extern "C" {
     fn ext_default_child_storage_root_version_1(child: u64) -> u64;
     fn ext_default_child_storage_next_key_version_1(child: u64, key: u64) -> u64;
 
+    //
+
     // Crypto API
     fn ext_crypto_ed25519_public_keys_version_1(id: u32) -> u64;
     fn ext_crypto_ed25519_generate_version_1(id: u32, seed: u64) -> u32;
@@ -71,6 +73,7 @@ extern "C" {
     // Trie API
     fn ext_trie_blake2_256_root_version_1(data: u64) -> u32;
     fn ext_trie_blake2_256_ordered_root_version_1(data: u64) -> u32;
+    fn ext_trie_blake2_256_verify_proof_version_1(a: u64, b: u64, c: u64, d:u64) -> u32;
 
     // Offchain
     fn ext_offchain_local_storage_clear_version_1(kind: u32, key: u64);
@@ -544,6 +547,7 @@ sp_core::wasm_export_functions! {
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
     }
+
     fn rtm_ext_trie_blake2_256_ordered_root_version_1(data: Vec<Vec<u8>>) -> Vec<u8> {
         let data = data.encode();
         unsafe {
@@ -553,6 +557,19 @@ sp_core::wasm_export_functions! {
             std::slice::from_raw_parts(value as *mut u8, 32).to_vec()
         }
     }
+
+    fn rtm_ext_trie_blake2_256_verify_proof_version_1(root: Vec<u8>, proof: Vec<Vec<u8>>, key: Vec<u8>, v: Vec<u8>) -> u32 {
+        let proofEnc = proof.encode();
+        unsafe {
+            ext_trie_blake2_256_verify_proof_version_1(
+                root.as_re_ptr(),
+                proofEnc.as_re_ptr(),
+                key.as_re_ptr(),
+                v.as_re_ptr(),
+            ) as u32
+        }
+    }
+  
     fn rtm_ext_offchain_local_storage_clear_version_1(kind: [u8; 4], key: Vec<u8>) {
         unsafe {
             let _ = ext_offchain_local_storage_clear_version_1(
