@@ -190,7 +190,9 @@
     The function executes the following steps:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>VRFResult<rprime|''>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,\<b-phi\>,c|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Append-Message>><around*|(|t,p,<rprime|''>vrf-in<rprime|''>,I|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Append-Message>><around*|(|t,p,<rprime|''>vrf-out<rprime|''>,O|)>>>|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Challenge-Bytes>><around*|(|t,s|)>>>>>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>VRFResult<rprime|''>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,\<b-phi\>,c|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Append-Message>><around*|(|t,<rprime|''>vrf-in<rprime|''>,I
+      where I\<in\>p|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Append-Message>><around*|(|t,<rprime|''>vrf-out<rprime|''>,O
+      where O\<in\>p|)>>>|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Challenge-Bytes>><around*|(|t,s|)>>>>>
     </eqnarray*>
 
     where <math|b> is the returned value by <name|Make-Bytes> and:
@@ -202,14 +204,28 @@
       <item><name|Meta-Ad> is a function defined in Definition <todo|todo>.
 
       <item><name|Append-Message> is a function defined in Definition
-      <todo|todo>.
+      <reference|defn-vrf-append-message>.
 
       <item><name|Challenge-Bytes> is a function defined in Definition
       <todo|todo>.
     </itemize-dot>
   </definition>
 
-  \;
+  <\definition>
+    <label|defn-vrf-append-message><name|Append-Message> function takes a
+    transcript, <math|t>, as defined in Definition
+    <reference|defn-vrf-transcript>, a context, c, represented as a UTF-8
+    encoded string and a message, <math|m>, represented as a byte array and
+    returns an updated transcript form the initial transcript <math|t>.
+
+    <\eqnarray*>
+      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Append-Message>><around*|(|t,c,m|)>>>>>
+    </eqnarray*>
+
+    This function appends the messages to the transcript as defined in the
+    <hlink|Merlin documentation|https://merlin.cool/transcript/ops.html#appending-messages>,
+    respectively section \PAppending Messages\Q.
+  </definition>
 
   <section|Cryptographic Keys><label|sect-cryptographic-keys>
 
