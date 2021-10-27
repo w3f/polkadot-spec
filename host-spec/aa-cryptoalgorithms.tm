@@ -173,7 +173,10 @@
       <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|c|)>>>>>
     </eqnarray*>
 
-    The function executes the following steps: <todo|todo>
+    The function initializes a Merlin transcript as described in the
+    <hlink|Merlin documentation|https://merlin.cool/transcript/index.html>,
+    respectively section \P3.1.1 Transcript Objects\Q and section \P3.1.2
+    Initialization\Q.
   </definition>
 
   <\definition>
@@ -222,9 +225,9 @@
       <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Append-Message>><around*|(|t,c,m|)>>>>>
     </eqnarray*>
 
-    This function appends the messages to the transcript as defined in the
-    <hlink|Merlin documentation|https://merlin.cool/transcript/ops.html#appending-messages>,
-    respectively section \PAppending Messages\Q.
+    This function appends the messages to the transcript as described in the
+    <hlink|Merlin documentation|https://merlin.cool/transcript/index.html>,
+    respectively section \P3.1.3 Appending Messages\Q.
   </definition>
 
   <section|Cryptographic Keys><label|sect-cryptographic-keys>
