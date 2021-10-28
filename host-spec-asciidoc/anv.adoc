@@ -103,7 +103,7 @@ where N is the relay chain block number at which the message was passed down to 
 [#sect-collations]
 == Collations
 
-Collations are proposed candidates (see Definition 7.2) to the Polkadot relay chain validators. The Polkodat network protocol is agnostic on what candidate productionis mechanism each parachain uses and does not specify or mandate any of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the relay chain validator host implementation itself does not directly interpret or process teh internal transactions of the candidate, but rather rely on the parachain Runtime to validate the candidate, as described in Section 7.5. Collators, which are parachain nodes which produce candidate proposals and send them to the relay chain validator, must prepare pieces of data specified in Definition 7.12 in order to correctly comply with the requirements of the parachain protocol.
+Collations are proposed <<defn-candidate, candidates>> to the Polkadot relay chain validators. The Polkodat network protocol is agnostic on what candidate productionis mechanism each parachain uses and does not specify or mandate any of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the relay chain validator host implementation itself does not directly interpret or process teh internal transactions of the candidate, but rather rely on the parachain Runtime to validate the candidate, as described in Section 7.5. Collators, which are parachain nodes which produce candidate proposals and send them to the relay chain validator, must prepare pieces of data specified in Definition 7.12 in order to correctly comply with the requirements of the parachain protocol.
 
 [#defn-collation]
 .Collation
