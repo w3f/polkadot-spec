@@ -330,3 +330,21 @@ where
 
 WARNING: TODO
 
+== Availability
+
+=== Availability Votes
+
+The Polkadot validator must issue a bitfield as defined in Definition 7.14 which indicates votes for the availabilty of candidates. Issued bitfields can be used by the validator and other peers to determine which backed candidates meet the 2/3+ availability quorum.
+
+Candidates are inserted into the relay chain in form of inherent data by a block author, as described in Section 7.4.2. A validator can retrieve that data by calling the appropriate Runtime API entry as described in Section 7.8.3, then create a bitfield indicating for which candidate the validator has availability data stored and broadcast it to the network as defined in Definition 7.38. When sending the bitfield distrubtion message, the validator must ensure B_h is set approriately, therefore clarifying to which state the bitfield is referring to, given that candidates can vary based on the chain fork.
+
+Missing availability data of candidates must be recovered by the validator as described in Section 7.6.2. If previously issued bitfields are no longer accurate, i.e. the availability data has been recovered or the candidate of an availablity core has changed, the validator must create a new bitfield and boradcast it to the network. Candidates must be kept available by validators for a specific amount of time. If a candidate does not receive any backing, validators should keep it available for about one hour, in case the state of backing does change. Backed and even approved candidates (described in Section 7.7) must be kept by validators for about 25 hours, since disputes (described in Section [todo]) can occure and the candidate needs to be checked again.
+
+The validator issues availability votes in form of a validator protocol message as defined in Definition 7.35.
+
+=== Candidate Recovery
+
+The availability distribution of the Polkadot validator must be able to recover parachain candidates that the validator is assigned to, in order to determine whether the candidate should be backed as described in Section 7.4 repsectively whether the candidate should be approved as described in Section 7.7. Additionally, peers can send availability requests as defined in Definition 7.42 and Definition 7.44 to the validator, which the validator should be able to respond to.
+
+Candidates are recovered by sending requests for specific indices of erasure encoded chunks. Erasure encoding is described in Section [todo]. A validator should request chunks by picking peers randomly and must recover at least stem:[f+1] chunks, where stem:[n=3f+k] and stem:[k in {1,2,3}]. stem:[n] is the number of validators as specified in the session info, which can be fetched by the Runtime API as described in Section 7.8.11.
+
