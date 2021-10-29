@@ -885,3 +885,159 @@ where
 * stem:[P_o] is a VRF output and stem:[P_p] its corresponding proof.
 This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.34.
 
+=== Request & Response
+
+The request & response network messages are sent and received between peers in the Polkadot network, including collators and non-validator nodes. Those messages are conducted on the request-response substreams are described in Section ?. The network messages are SCALE encoded as described in Section ?.
+
+==== PoV Fetching Request
+
+The PoV fetching request is sent by clients who want to retrieve a PoV block from a node. The request is a datastructure of the following format:
+
+[stem]
+++++
+C_h 
+++++
+
+where stem:[C_h] is the 256-bit hash of the PoV block. The reponse message is defined in Definition 7.41.
+
+==== PoV Fetching Response
+
+The PoV fetching response is sent by nodes to the clients who issued a PoV fetching request as defined in Definition 7.40. The response, stem:[R], is a varying datatype of the following format:
+
+[stem]
+++++
+R = {(0,->,B),(1,->,phi):}
+++++
+
+where stem:[0] is followed by the PoV block and stem:[1] indicates that the PoV block was not found.
+
+==== Chunk Fetching Request
+
+The chunk fetching request is sent by clients who want to retrieve chunks of a parachain candidate. The request is a datastructure of the following format:
+
+[stem]
+++++
+(C_h,i) 
+++++
+
+where stem:[C_h] is the 256-bit hash of the parachain candiate and stem:[i] is a 32-bit unsigned integer indicating the index of the chunk to fetch. The response message is defined in Definition 7.43.
+
+==== Chunck Fetching Response
+
+The chunk fetching response is sent by nodes to the clients who issued a chunk fetching request as defined in Definition 7.42. The reponse, stem:[R], is a varying datatype of the following format:
+
+[stem]
+++++
+R = {(0,->,C_r),(1,->,phi):}\
+C_r = (c,c_p)
+++++
+
+where stem:[0] is followed by the chunk response, stem:[C_r] and stem:[1] indicates that the requested chunk was not found. stem:[C_r] contains the erasure-encoded chunk of data belonging to the candidate block, stem:[c], and stem:[c_p] is that chunks proof in the Merkle tree. Both stem:[c] and stem:[c_p] are byte arrays of type stem:[(b_n…b_m)].
+
+==== Available Data Request
+
+The available data request is sent by clients who want to retrieve the PoV block of a parachain candidate. The request is a datastructure of the following format:
+
+[stem]
+++++
+C_h 
+++++
+
+where stem:[C_h] is the 256-bit candidate hash to get the available data for. The reponse message is defined in Definition 7.45.
+
+==== Available Data Response
+
+The available data response is sent by nodes to the clients who issued a available data request as defined in Definition 7.44. The reponse, stem:[R], is a varying datatype of the following format:
+
+[stem]
+++++
+R = {(0,->,A),(1,->,phi):}\
+A = (P_{ov},D_{pv})
+++++
+
+where stem:[0] is followed by the available data, stem:[A], and stem:[1] indicates the the requested candidate hash was not found. stem:[P_{ov}] is the PoV block as defined in Definition ? and stem:[D_{pv}] is the persisted validation data as defined in Definition 7.33.
+
+==== Collation Fetching Request
+
+The collation fetching request is sent by clients who want to retrieve the advertised collation at the specified relay chain block. The request is a datastructure of the following format:
+
+[stem]
+++++
+(B_h,P_{id}) 
+++++
+
+where stem:[B_h] is the hash of the relay chain block and stem:[P_{id}] is the parachain Id as defined in Definition 7.5. The response message is defined in Definition 7.47.
+
+==== Collation Fetching Response
+
+The collation fetching response is sent by nodes to the clients who issued a collation fetching request as defined in Definition 7.46. The response, stem:[R], is a varying datatype of the following format:
+
+[stem]
+++++
+R = {(0,->,(C_r,B)):}
+++++
+
+where stem:[0] is followed by the candidate receipt, stem:[C_r], as defined in Definition 7.16 and the PoV block, stem:[B]. This type does not notify the client about a statement that was not found.
+
+==== Statement Fetching Request
+
+The statement fetching request is sent by clients who want to retrieve statements about a given candidate. The request is a datastructure of the following format:
+
+[stem]
+++++
+(B_h,C_h) 
+++++
+
+where stem:[B_h] is the hash of the relay chain parent and stem:[C_h] is the candidate hash that was used to create a committed candidate recept as defined in Definition 7.17. The response message is defined in Definition 7.49.
+
+==== Statement Fetching Response
+
+The statement fetching response is sent by nodes to the clients who issued a collation fetching request as defined in Definition 7.48. The reponse, R, is a varying datatype of the following format:
+
+[stem]
+++++
+R = {(0,->,C_r):}
+++++
+
+where stem:[C_r] is the committed candidate receipt as defined in Definition 7.17. No response is returned if no statement is found.
+
+==== Dispute Request
+
+The dispute request is sent by clients who want to issue a dispute about a candidate. The request, D_r, is a datastructure of the following format:
+
+[stem]
+++++
+D_r = (C_r,S_i,I_v,V_v)\
+I_v = (A_i,A_s,k_i)\
+V_v = (A_i,A_s,k_v)\
+k_i = {(0,->,phi):}\
+k_v = {(0,->,phi),(1,->,C_h),(2,->,C_h),(3,->,phi):}
+++++
+
+where
+
+* stem:[C_r] is the candidate that is being disputed. The structure is a candidate receipt as defined in Definition 7.16.
+* stem:[S_i] is an unsigned 32-bit integer indicating the session index the candidate appears in.
+* stem:[I_v] is the invalid vote that makes up the request. 
+* stem:[V_v] is the valid vote that makes this disput request valid.
+* stem:[A_i] is an unsigned 32-bit integer indicating the validator index in the authority set as defined in Definition ?.
+* stem:[A_s] is the signature of the validator.
+* stem:[k_i] is a varying datatype and implies the dispute statement. 0 indicates an explicit statemet.
+* stem:[k_v] is a varying datatype and implies the dispute statement.
+** stem:[0] indicates an explicit statement.
+** stem:[1] indicates a seconded statement on a candidate, stem:[C_h], from the backing phase. stem:[C_h] is the hash of the candidate.
+** stem:[2] indicates a valid statement on a candidate, stem:[C_h], from the backing phase. stem:[C_h] is the hash of the candidate.
+** stem:[3] indicates an approval vote from the approval checking phase.
+
+The response message is defined in Definition 7.51.
+
+==== Dispute Response
+
+The dispute response is sent by nodes to the clients who who issued a dispute request as defined in Definition 7.50. The response, stem:[R], is a varying type of the following format:
+
+[stem]
+++++
+R = {(0,->,phi):}
+++++
+
+where stem:[0] indicates that the dispute was successfully processed.
