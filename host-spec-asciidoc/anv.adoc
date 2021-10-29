@@ -768,3 +768,120 @@ where stem:[i] is the session index as defined in Definition [todo] and stem:[C_
 
 Return::
 * An array of booleans which indicate whether the a candidate is included (_true_) or not (_false_). The order of booleans corresponds to the order of the passed on pairs stem:[p].
+
+== Network Messages
+
+The availability and validity process requires certain network messages to be exchanged between validators and collators.
+
+=== Notification Messges
+
+The notification messages are exchanged between validators, including messages sent by collators to validators. The protocol messages are exchanged based on a streaming notification substream as described in Section ?. The messages are SCALE encoded as described in Section ?.
+
+==== Validator Protocol Message
+
+The validator protocol message is a varying datatype used by validators to broadcast relevant information about certain steps in the A&V process. Specifically, this includes the backing process as described in Section 7.4 and the approval process as described in Section 7.7. The validator protocol message, stem:[M], is a varying datatype of the following format:
+
+[stem]
+++++
+M = {(1,->,M_f),(3,->,M_s),(4,->,M_a):}
+++++
+
+where
+
+* stem:[M_f] is a bitfield distribution message as defined in Definition 7.38.
+* stem:[M_s] is a statement distribution message as defined in Definition 7.37.
+* stem:[M_a] is a approval distribution message as defined in Definition 7.39.
+
+==== Collation Protocol Message
+
+The collation protocol message, M, is a varying datatype of the following format:
+
+[stem]
+++++
+M = {(0,->,M_c):}
+++++
+
+where stem:[M_c] is the collator message as defined in Definition 7.36.
+
+==== Collator Message
+
+The collator message, stem:[M], is a varying datatype of the following format:
+
+[stem]
+++++
+M = {(0,->,(C_i,P_i,C_s)),(1,->,H),(4,->,(B_h,S)):}
+++++
+
+where
+
+* stem:[M] is a varying datatype where 0 indicates the intent to advertise a collation and 1 indicates the advertisment of a collation to a validator. 4 indicates that a collation sent to a validator was seconded.
+* stem:[C_i] is the public key of the collator.
+* stem:[P_i] is the parachain Id as defined in Definition 7.5.
+* stem:[C_s] is the signature of the collator using the PeerId of the collators node.
+* stem:[H] is the hash of the parachain block as defined in Definition 7.3.
+* stem:[S] is a full statement as defined in Definition 7.13.
+
+This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.35.
+
+==== Statement Distribution Message
+
+The statement distribution message is sent as part of the validator protocol message as defined in Section 7.34, indicates the validity vote of a validator for a given candidate, described further in Section 7.4.1. The statement distribution message, stem:[M], is of varibale type of the following format:
+
+[stem]
+++++
+M   = {(0,->,(B_h,S)),(1,->,S_m):}\
+S_m = (B_h,C_h,A_i,A_s)
+++++
+
+where
+
+* stem:[M] is a vayring datatype where 0 indicates a signed statement and 1 contains metadata about a seconded statement with a larger payload, such as a runtime upgrade. The candidate itself can be fetched via the request/response message as defined in Definition 7.48.
+* stem:[B_h] is the hash of the relay chain parent, indicating the state this message is for.
+* stem:[S] is a full statement as defined in Definition 7.13.
+* stem:[A_i] is the validator index in the authority set that signed this message.
+* stem:[A_s] is the signature of the validator. 
+
+==== Bitfield Distribution Message
+
+The bitfield distribution message indicates the availability vote of a validator for a given candidate, described further in Section 7.6.1. This message is sent in form of a validator protocol message as defined in Definition 7.34. The bitfield distribution message, stem:[M], is a datastructure of the following format:
+
+[stem]
+++++
+M = {(0,->,(B_h,P)):}\
+P = (d,A_i,A_s)
+++++
+
+where
+
+* stem:[B_h] is the hash of the relay chain parent, indicating the state this message is for.
+* stem:[d] is the bitfield array as described in Definition 7.14.
+* stem:[A_i] is the validator index in the authority set as defined in Definition ? that signed this message.
+* stem:[A_s] is the signature of the validator.
+This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.34.
+
+==== Approval Distribution Message
+
+The approval distribution message indicates the approval vote of a validator for a given candidate, described further in Section 7.7.1. This message is sent in form of a validator protocol message as defined in Definition 7.34. The approval distribution message, stem:[M], is a varying datatype of the following format:
+
+[stem]
+++++
+M   = {(0,->,((C_,I_)_0…(C,I)_n)),(1,->,(V_0,…V_n)):}\
+C   = (B_h,A_i,c_a)\
+c_a = (c_k,P_o,P_p)\
+c_k = {(0→s),(1→i):}\
+V   = (B_h,I,A_i,A_s)
+++++
+
+where
+
+* stem:[M] is a varying datatype where 0 indicates assignments for candidates in recent, unfinalized blocks and 1 indicates approvals for candidates in some recent, unfinalized block.
+* stem:[C] is an assignment criterion which refers to the candidate under which the assignment is relevant by the block hash.
+* stem:[I] is an unsigned 32-bit integer indicating the index of the candidate, corresponding the the order of the availability cores as described in Section 7.8.3.
+* stem:[B_h] is the relay chain block hash where the candidate appears.
+* stem:[A_i] is the authority set Id of the validator as defined in Definition ? that created this message.
+* stem:[A_s] is the signature of the validator issuing this message.
+* stem:[c_a] is the certification of the assignment.
+* stem:[c_k] is a varying datatype where 0 indicates an assignment based on the VRF that authorized the relay chain block where the candidate was included, followed by a sample number, s. 1 indicates an assignment story based on the VRF that authorized the relay chain block where the candidate was included combined with the index of a particular core. This is described further in Section 7.7.
+* stem:[P_o] is a VRF output and stem:[P_p] its corresponding proof.
+This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.34.
+
