@@ -1,7 +1,7 @@
 [#sect-anv-runtime-api]
-== Runtime API
+=== Runtime API
 
-=== `validators`
+==== `validators`
 
 Returns the validator set at the current state. The specified validators are responsible for backing parachains for the current state.
 
@@ -11,7 +11,7 @@ Arguments::
 Return::
 * An array of public keys representing the validators.
 
-=== `validator_groups`
+==== `validator_groups`
 
 Returns the validator groups as defined in Definition 7.7 used during the current session. The validators in the groups are referred to by the validator set Id as defined in Definition ?.
 
@@ -35,7 +35,7 @@ where
 •  stem:[f] indicates how often groups rotate. 0 means never.
 •  stem:[B_c] indicates the current block number. 
 
-=== `availability_cores`
+==== `availability_cores`
 
 Returns information on all availability cores as defined in Definition 7.6.
 
@@ -65,7 +65,7 @@ where
 • stem:[C_d] is the candidate descriptor as defined in Definition 7.18.
 • stem:[C_i] is an Option as described in Definition ? which can contain the collators public key indicating who should author the block.
 
-=== `persisted_validation_data`
+==== `persisted_validation_data`
 
 Returns the persisted validation data for the given parachain Id and a given occupied core assumption.
 
@@ -109,7 +109,7 @@ where
 The persisted validation data is fetched via the Runtime API as described in Section 7.8.4.
 ****
 
-=== `check_validation_outputs`
+==== `check_validation_outputs`
 
 Checks if the given validation outputs pass the acceptance criteria.
 
@@ -120,7 +120,7 @@ Arguments::
 Return::
 * A boolean indicating whether the candidate commitments pass the acceptance criteria.
 
-=== `session_index_for_child`
+==== `session_index_for_child`
 
 Returns the session index that is expected at the child of a block.
 
@@ -132,7 +132,7 @@ Arguments::
 Return::
 * A unsigned 32-bit integer representing the session index.
 
-=== `validation_code`
+==== `validation_code`
 
 Fetches the validation code (Runtime) of a parachain by parachain Id.
 
@@ -143,7 +143,7 @@ Arguments::
 Return::
 * An _Option_ value as defined in Definition ? containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
 
-=== `validation_code_by_hash`
+==== `validation_code_by_hash`
 
 Returns the validation code (Runtime) of a parachain by its hash.
 
@@ -153,7 +153,7 @@ Arguments::
 Return::
 * An _Option_ value as defined in Definition ? containing the full validation code in an byte array. This value is empty if the parachain Id cannot be found or the assumption is wrong.
 
-=== `candidate_pending_availability`
+==== `candidate_pending_availability`
 
 Returns the receipt of a candidate pending availability for any parachain assigned to an occupied availability core.
 
@@ -163,7 +163,7 @@ Arguments::
 Return::
 * An Option value as defined in Definition ? containing the committed candidate receipt as defined in Definition 7.16. This value is empty if the given parachain Id is not assigned to an occupied availability cores.
 
-=== `candidate_events`
+==== `candidate_events`
 
 Returns an array of candidate events that occurred within the latest state.
 
@@ -187,7 +187,7 @@ where
 * stem:[I_c] is the index of the availability core as can be retrieved in Section 7.8.3 that the candidate is occupying. If stem:[E] is of variant stem:[2], then this indicates the core index the candidate was occupying.
 * stem:[G_i] is the group index as defined in Definition 7.7 that is responsible of backing the candidate.
 
-=== `session_info`
+==== `session_info`
 
 Get the session info of the given session, if available.
 
@@ -222,7 +222,7 @@ where
 •  stem:[x] is an unsigned 32-bit integer indicating how many BABE slots must pass before an assignment is considered a “no-show”. [clarify how to convert between BABE slots and “ticks”]
 •  stem:[a] is an unsigned 32-bit integer indicating the number of validators needed to approve a block.
 
-=== `dmq_contents`
+==== `dmq_contents`
 
 Returns all the pending inbound messages in the downward message queue for a given parachain.
 
@@ -232,7 +232,7 @@ Arguments::
 Return::
 * An array of inbound downward messages as defined in (TODO: reference messaging chapter)
 
-=== `inbound_hrmp_channels_contents`
+==== `inbound_hrmp_channels_contents`
 
 Returns the contents of all channels addressed to the given recipient. Channels that have no messages in them are also included.
 
@@ -242,7 +242,7 @@ Arguments::
 Return::
 * An array of inbound HRMP messages as defined in (TODO: reference messaging chapter)
 
-=== `disputes_info`
+==== `disputes_info`
 
 WARNING: TODO looks like this was renamed (and modified) into on_chain_votes?
 
@@ -273,7 +273,7 @@ where
 •  stem:[m] is a unsigned 32-bit integer indicating the maximum spam slots [clarify].
 •  stem:[s] is a unsigned 32-bit integer indicating the spam slot.
 
-=== `candidates_included`
+==== `candidates_included`
 
 WARNING: TODO looks like this was removed?
 

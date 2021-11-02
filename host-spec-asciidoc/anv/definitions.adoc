@@ -1,44 +1,44 @@
 [#sect-anv-definitions]
-== Definitions
+=== Definitions
 
 [#defn-collator]
-=== Collator
+==== Collator
 A collator is a parachain node that sends parachain blocks, known as candidates as defined in Definition 7.2, to the relay chain validators. The relay chain validators are not concerned how the collator works or how it creates candidates.
 
 [#defn-candidate]
-=== Candidate
+==== Candidate
 A candidate is a submitted parachain block as defined in Definition 7.3 to the relay chain validators. A parachain block stops being referred to as a candidate as soon it has been finalized.
 
 [#defn-para-block]
-=== Parachain Block
+==== Parachain Block
 A parachain block or a Proof-of-Validity block (PoV block) contains the necessary data to for parachain specific state transition logic. Relay chain validators are not concerned with the inner structure of the block and treat it as a byte array.
 
 [#defn-head-data]
-=== Head Data
+==== Head Data
 The head data is contains information about a parachain block as defined in Definition 7.3. The head data is returned by executing the parachain Runtime and relay chain validators are not concerned with its inner structure and treat it as a byte arrays.
 
 [#defn-para-id]
-=== Parachain Id
+==== Parachain Id
 The Parachain Id is a unique, unsigned 32-bit integer which serves as an identifier of a parachain, assigned by the Runtime.
 
 [#defn-availability-core]
-=== Availability Core
+==== Availability Core
 Availability cores are slots used to process parachains. The Runtime assigns each parachain to a availability core and validators can fetch information about the cores, such as parachain block candidates, by calling the appropriate Runtime API as described in Section 7.8.3. Validators are not concerned with the internal workings from the Runtimes perspective.
 
 [#defn-validator-groups]
-=== Validator Groups
+==== Validator Groups
 Validator groups indicate which validators are responsible for creating backable candidates for certain parachains, as described in Section 7.4, and are assigned by the Runtime. Validators are not concerned with the internal workings from the Runtimes perspective. Collators can use this information for submitting blocks.
 
 [#defn-upward-message]
-=== Upward Message
+==== Upward Message
 An upward message is an opaque byte array sent from a parachain to a relay chain.
 
 [#defn-downward-message]
-=== Downward Message
+==== Downward Message
 A downward message is an opaque byte array received by the parachain from the relay chain.
 
 [#defn-outbound-hrmp-message]
-=== Outbound HRMP Message
+==== Outbound HRMP Message
 An outbound HRMP message (Horizontal Relay-routed Message Passing) is sent from the perspective of a sender of a parachain to an other parachain by passing it through the relay chain. It's a datastructure of the following format:
 
 [stem]
@@ -49,7 +49,7 @@ An outbound HRMP message (Horizontal Relay-routed Message Passing) is sent from 
 where I is the recipient Id as defined in Definition 7.5 and M is an upward message as defined in Definition 7.8. 
 
 [#defn-inbound-hrmp-message]
-=== Inbound HRMP Message
+==== Inbound HRMP Message
 An inbound HRMP message (Horizontal Relay-routed Message Passing) is seen from the perspective of a recipient parachain sent from an other parachain by passing it through the relay chain. It's a datastructure of the following format:
 
 [stem]
@@ -61,7 +61,7 @@ where N is the relay chain block number at which the message was passed down to 
 
 [#defn-relay-vrf-story]
 .Relay VRF Story
-=== Relay VRF Story
+==== Relay VRF Story
 The relay VRF story is an array of random bytes derived from the VRF submitted within the block by the block author. The relay VRF story, T, is used as input to determine approval voting criteria and generated the following way:
 
 [stem]
@@ -78,7 +78,7 @@ where
 •  stem:[A] is the public key of the authority.
 
 [#defn-availability-core-vrf-assignment]
-=== Availability Core VRF Assignment
+==== Availability Core VRF Assignment
 An availability core VRF assignment, T, is computed by a relay chain validator to determine which availability core as defined in Definition 7.6 a validator is assigned to and should vote for approvals. The assignment consits of a VRF pair, v, as defined in Definition 7.25 and a VRF proof, p, as defined in Definition 7.26:
 
 [stem]
@@ -131,7 +131,7 @@ where stem:[sf "DLEQ-Proove"] is a function defined in Definition 7.29. Hence, t
 where each stem:[T_x] corresponds to a sample number. The amount of individual assignments does not necessarily equal the number of samples, but the amount must not exceed the number of samples.
 
 [#delayed-availability-core-vrf-assignment]
-=== Delayed Availability Core VRF Assignment
+==== Delayed Availability Core VRF Assignment
 The delayed availability core VRF assignments determined at what point a validator should start the approval process as described in Section 7.7.2. The validator executes the following steps:
 
 [stem]
@@ -164,7 +164,7 @@ where
 The resulting tranche, stem:[n], cannot be less than stem:[0]. If the tranche is less than stem:[0], then stem:[d=0].
 
 [#defn-statement]
-=== Statement
+==== Statement
 A statement, stem:[S], is a datastructure of the following format:
 
 [stem]
@@ -181,11 +181,11 @@ where
 •  stem:[A_s] is the signature of the validator.
 
 [#defn-bitfield-array]
-=== Bitfield Array
+==== Bitfield Array
 A bitfield array contains single-bit values which indidate whether a candidate is available. The number of items is equal of to the number of availability cores as defined in Definition 7.6 and each bit represents a vote on the corresponding core in the given order. Respectively, if the single bit equals 1, then the Polkadot validator claims that the availability core is occupied, there exists a committed candidate receipt as defined in Definition 7.17 and that the validator has a stored chunk of the parachain block as defined in Definition 7.6.2.
 
 [#defn-validation-parameters]
-=== Validation Parameters
+==== Validation Parameters
 The validation parameters structure, stem:[P], is required to validate a candidate against a parachain Runtime. It's a datastructure of the following format:
 
 [stem]
@@ -201,7 +201,7 @@ where
 •  stem:[S_r] is the relay chain block storage root as defined in Definition ?.
 
 [#defn-validation-result]
-=== Validation Result
+==== Validation Result
 The validation result is returned by the validate_block parachain Runtime API after attempting to validate a parachain block. Those results are then used in candidate commitments as defined in Definition ?., which then will be inserted into the relay chain via the parachain inherent data as described in Definition 7.15. The validation result, stem:[V], is a datastructure of the following format:
 
 [stem]
@@ -221,7 +221,7 @@ where
 •  stem:[w] is a unsigned 32-bit integer indicating the watermark which specifies the relay chain block number up to which all inbound horizontal messages have been processed.
 
 [#defn-parachain-inherent-data]
-=== Parachain Inherent Data
+==== Parachain Inherent Data
 The parachain inherent data contains backed candidates and is included when authoring a relay chain block. The datastructure, stem:[I], is of the following format:
 
 [stem]
@@ -252,7 +252,7 @@ where
 •  stem:[v_i] is the validator index of the authority set as defined in Definition ?.
 
 [#defn-candidate-receipt]
-=== Candidate Receipt
+==== Candidate Receipt
 A candidate receipt, stem:[R], contains information about the candidate and a proof of the results of its execution. It's a datastructure of the following format:
 
 [stem]
@@ -262,7 +262,7 @@ R = (D,C_h)
 
 where stem:[D] is the candidate descriptor as defined in Definition 7.18 and stem:[C_h] is the hash of candidate commitments as defined in Definition 7.19.
 
-=== Committed Candidate Receipt
+==== Committed Candidate Receipt
 The committed candidate receipt, stem:[R], contains information about the candidate and the the result of its execution that is included in the relay chain. This type is similiar to the candidate receipt as defined in Definition 7.16, but actually contains the execution results rather than just a hash of it. It's a datastructure of the following format:
 
 [stem]
@@ -272,7 +272,7 @@ R = (D,C)
 
 where stem:[D] is the candidate descriptor as defined in Definition 7.18 and stem:[C] is the candidate commitments as defined in Definition 7.19.
 
-=== Candidate Descriptor
+==== Candidate Descriptor
 The candidate descriptor, stem:[D], is a unique descriptor of a candidate receipt. It's a datastructure of the following format:
 
 [stem]
@@ -292,7 +292,7 @@ where
 •  stem:[p_h] is the hash of the parachain head data as described in Definition 7.4 of this candidate.
 •  stem:[R_h] is the hash of the parachain Runtime.
 
-=== Candidate Commitments
+==== Candidate Commitments
 The candidate commitments, stem:[C], is the result of the execution and validation of a parachain (or parathread) candidate whose produced values must be committed to the relay chain. Those values are retrieved from the validation result as defined in Definition 7.21. A candidate commitment is a datastructure of the following format:
 
 [stem]
@@ -310,7 +310,7 @@ where:
 •  stem:[w] is a unsigned 32-bit integer indicating the watermark which specifies the relay chain block number up to which all inbound horizontal messages have been processed.
 
 [#defn-collation]
-=== Collation
+==== Collation
 A collation is a datastructure which contains the proposed parachain candidate, including an optional validation parachain Runtime update and upward messages. The collation datastructure, C, is a datastructure of the following format:
 
 [stem]

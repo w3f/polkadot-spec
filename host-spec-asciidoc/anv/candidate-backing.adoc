@@ -1,10 +1,10 @@
 [#sect-candidate-backing]
-== Candidate Backing
+=== Candidate Backing
 
 The Polkadot validator receives an arbitrary number of parachain candidates with associated proofs from untrusted collators. The validator must verify and select a specific quantity of the proposed candidates and issue those as backable candidates to its peers. A candidate is considered backable when at least 2/3 of all assigned validators have issued a Valid statement about that candidate, as described in Section 7.4.1. Validators can retrieve information about assignments via the Runtime APIs 7.8.2 respectively 7.8.3.
 
 [#sect-candidate-statements]
-=== Statements
+==== Statements
 
 The assigned validator checks the validity of the proposed parachains blocks as described in Section 7.5 and issues Valid statements as defined in Definition 7.13 to its peers if the verification succeeded. Broadcasting failed verification as Valid statements is a slashable offense. The validator must only issue one Seconded statement, based on an arbitrary metric, which implies an explicit vote for a candidate to be included in the relay chain.
 
@@ -15,6 +15,6 @@ This protocol attempts to produce as many backable candidates as possible, but d
 The validator issues validity statements votes in form of a validator protocol message as defined in Definition 7.35.
 
 [#sect-candidate-inclusion]
-=== Inclusion
+==== Inclusion
 
 The Polkadot validator includes the backed candidates as inherent data as defined in Definition 7.15 into a block as described in Section ?. The relay chain block author decides on whatever metric which candidate should be selected for inclusion, as long as that candidate is valid and meets the validity quorum of 2/3+ as described in Section 7.4.1. The candidate approval process as described in Section 7.7 ensures that only relay chain blocks are finalized where each candidate for each availability core meets the requirement of 2/3+ availability votes.
