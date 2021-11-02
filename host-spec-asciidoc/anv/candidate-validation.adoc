@@ -1,5 +1,5 @@
 [#sect-candidate-validation]
-== Candidate Validation
+=== Candidate Validation
 
 Received candidates submitted by collators and must have its validity verified by the assigned Polkadot validators. For each candidate to be valid, the validator must successfully verify the following conditions in the following order:
 
@@ -9,12 +9,12 @@ Received candidates submitted by collators and must have its validity verified b
 
 If all steps are valid, the Polkadot validator must create the necessary candidate commitments as defined in Definition 7.19 and submit the appropriate statement for each candidate as described in Section 7.4.1.
 
-=== Parachain Runtime
+==== Parachain Runtime
 
 Parachain Runtimes are stored in the relay chain state, and can either be fetched by the parachain Id or the Runtime hash via the relay chain Runtime API as described in Section 7.8.7 and 7.8.8 respectively. The retrieved parachain Runtime might need to be decompressed based on the magic identifier as described in Section 7.5.2.
 
 In order to validate a parachain block, the Polkadot validator must prepare the validation parameters as defined in Definition 7.20, then use its local Wasm execution environment as described in Section ? to execute the validate_block parachain Runtime API by passing on the validation parameters as an argument. The parachain Runtime function returns the validation result as defined in Definition 7.21.
 
-=== Runtime Compression
+==== Runtime Compression
 
 WARNING: TODO

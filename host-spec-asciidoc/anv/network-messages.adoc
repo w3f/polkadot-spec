@@ -1,13 +1,13 @@
 [#sect-anv-network-messages]
-== Network Messages
+=== Network Messages
 
 The availability and validity process requires certain network messages to be exchanged between validators and collators.
 
-=== Notification Messges
+==== Notification Messges
 
 The notification messages are exchanged between validators, including messages sent by collators to validators. The protocol messages are exchanged based on a streaming notification substream as described in Section ?. The messages are SCALE encoded as described in Section ?.
 
-==== Validator Protocol Message
+===== Validator Protocol Message
 
 The validator protocol message is a varying datatype used by validators to broadcast relevant information about certain steps in the A&V process. Specifically, this includes the backing process as described in Section 7.4 and the approval process as described in Section 7.7. The validator protocol message, stem:[M], is a varying datatype of the following format:
 
@@ -22,7 +22,7 @@ where
 * stem:[M_s] is a statement distribution message as defined in Definition 7.37.
 * stem:[M_a] is a approval distribution message as defined in Definition 7.39.
 
-==== Collation Protocol Message
+===== Collation Protocol Message
 
 The collation protocol message, M, is a varying datatype of the following format:
 
@@ -33,7 +33,7 @@ M = {(0,->,M_c):}
 
 where stem:[M_c] is the collator message as defined in Definition 7.36.
 
-==== Collator Message
+===== Collator Message
 
 The collator message, stem:[M], is a varying datatype of the following format:
 
@@ -53,7 +53,7 @@ where
 
 This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.35.
 
-==== Statement Distribution Message
+===== Statement Distribution Message
 
 The statement distribution message is sent as part of the validator protocol message as defined in Section 7.34, indicates the validity vote of a validator for a given candidate, described further in Section 7.4.1. The statement distribution message, stem:[M], is of varibale type of the following format:
 
@@ -71,7 +71,7 @@ where
 * stem:[A_i] is the validator index in the authority set that signed this message.
 * stem:[A_s] is the signature of the validator. 
 
-==== Bitfield Distribution Message
+===== Bitfield Distribution Message
 
 The bitfield distribution message indicates the availability vote of a validator for a given candidate, described further in Section 7.6.1. This message is sent in form of a validator protocol message as defined in Definition 7.34. The bitfield distribution message, stem:[M], is a datastructure of the following format:
 
@@ -89,7 +89,7 @@ where
 * stem:[A_s] is the signature of the validator.
 This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.34.
 
-==== Approval Distribution Message
+===== Approval Distribution Message
 
 The approval distribution message indicates the approval vote of a validator for a given candidate, described further in Section 7.7.1. This message is sent in form of a validator protocol message as defined in Definition 7.34. The approval distribution message, stem:[M], is a varying datatype of the following format:
 
@@ -115,11 +115,11 @@ where
 * stem:[P_o] is a VRF output and stem:[P_p] its corresponding proof.
 This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.34.
 
-=== Request & Response
+==== Request & Response
 
 The request & response network messages are sent and received between peers in the Polkadot network, including collators and non-validator nodes. Those messages are conducted on the request-response substreams are described in Section ?. The network messages are SCALE encoded as described in Section ?.
 
-==== PoV Fetching Request
+===== PoV Fetching Request
 
 The PoV fetching request is sent by clients who want to retrieve a PoV block from a node. The request is a datastructure of the following format:
 
@@ -130,7 +130,7 @@ C_h
 
 where stem:[C_h] is the 256-bit hash of the PoV block. The reponse message is defined in Definition 7.41.
 
-==== PoV Fetching Response
+===== PoV Fetching Response
 
 The PoV fetching response is sent by nodes to the clients who issued a PoV fetching request as defined in Definition 7.40. The response, stem:[R], is a varying datatype of the following format:
 
@@ -141,7 +141,7 @@ R = {(0,->,B),(1,->,phi):}
 
 where stem:[0] is followed by the PoV block and stem:[1] indicates that the PoV block was not found.
 
-==== Chunk Fetching Request
+===== Chunk Fetching Request
 
 The chunk fetching request is sent by clients who want to retrieve chunks of a parachain candidate. The request is a datastructure of the following format:
 
@@ -152,7 +152,7 @@ The chunk fetching request is sent by clients who want to retrieve chunks of a p
 
 where stem:[C_h] is the 256-bit hash of the parachain candiate and stem:[i] is a 32-bit unsigned integer indicating the index of the chunk to fetch. The response message is defined in Definition 7.43.
 
-==== Chunck Fetching Response
+===== Chunck Fetching Response
 
 The chunk fetching response is sent by nodes to the clients who issued a chunk fetching request as defined in Definition 7.42. The reponse, stem:[R], is a varying datatype of the following format:
 
@@ -164,7 +164,7 @@ C_r = (c,c_p)
 
 where stem:[0] is followed by the chunk response, stem:[C_r] and stem:[1] indicates that the requested chunk was not found. stem:[C_r] contains the erasure-encoded chunk of data belonging to the candidate block, stem:[c], and stem:[c_p] is that chunks proof in the Merkle tree. Both stem:[c] and stem:[c_p] are byte arrays of type stem:[(b_n…b_m)].
 
-==== Available Data Request
+===== Available Data Request
 
 The available data request is sent by clients who want to retrieve the PoV block of a parachain candidate. The request is a datastructure of the following format:
 
@@ -175,7 +175,7 @@ C_h
 
 where stem:[C_h] is the 256-bit candidate hash to get the available data for. The reponse message is defined in Definition 7.45.
 
-==== Available Data Response
+===== Available Data Response
 
 The available data response is sent by nodes to the clients who issued a available data request as defined in Definition 7.44. The reponse, stem:[R], is a varying datatype of the following format:
 
@@ -187,7 +187,7 @@ A = (P_{ov},D_{pv})
 
 where stem:[0] is followed by the available data, stem:[A], and stem:[1] indicates the the requested candidate hash was not found. stem:[P_{ov}] is the PoV block as defined in Definition ? and stem:[D_{pv}] is the persisted validation data as defined in Definition 7.33.
 
-==== Collation Fetching Request
+===== Collation Fetching Request
 
 The collation fetching request is sent by clients who want to retrieve the advertised collation at the specified relay chain block. The request is a datastructure of the following format:
 
@@ -198,7 +198,7 @@ The collation fetching request is sent by clients who want to retrieve the adver
 
 where stem:[B_h] is the hash of the relay chain block and stem:[P_{id}] is the parachain Id as defined in Definition 7.5. The response message is defined in Definition 7.47.
 
-==== Collation Fetching Response
+===== Collation Fetching Response
 
 The collation fetching response is sent by nodes to the clients who issued a collation fetching request as defined in Definition 7.46. The response, stem:[R], is a varying datatype of the following format:
 
@@ -209,7 +209,7 @@ R = {(0,->,(C_r,B)):}
 
 where stem:[0] is followed by the candidate receipt, stem:[C_r], as defined in Definition 7.16 and the PoV block, stem:[B]. This type does not notify the client about a statement that was not found.
 
-==== Statement Fetching Request
+===== Statement Fetching Request
 
 The statement fetching request is sent by clients who want to retrieve statements about a given candidate. The request is a datastructure of the following format:
 
@@ -220,7 +220,7 @@ The statement fetching request is sent by clients who want to retrieve statement
 
 where stem:[B_h] is the hash of the relay chain parent and stem:[C_h] is the candidate hash that was used to create a committed candidate recept as defined in Definition 7.17. The response message is defined in Definition 7.49.
 
-==== Statement Fetching Response
+===== Statement Fetching Response
 
 The statement fetching response is sent by nodes to the clients who issued a collation fetching request as defined in Definition 7.48. The reponse, R, is a varying datatype of the following format:
 
@@ -231,7 +231,7 @@ R = {(0,->,C_r):}
 
 where stem:[C_r] is the committed candidate receipt as defined in Definition 7.17. No response is returned if no statement is found.
 
-==== Dispute Request
+===== Dispute Request
 
 The dispute request is sent by clients who want to issue a dispute about a candidate. The request, D_r, is a datastructure of the following format:
 
@@ -261,7 +261,7 @@ where
 
 The response message is defined in Definition 7.51.
 
-==== Dispute Response
+===== Dispute Response
 
 The dispute response is sent by nodes to the clients who who issued a dispute request as defined in Definition 7.50. The response, stem:[R], is a varying type of the following format:
 
