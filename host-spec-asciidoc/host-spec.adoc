@@ -8,7 +8,7 @@
 = Polkadot Host Specification
 
 [#chapter-anv]
-= Availability & Validity
+== Availability & Validity
 
 include::anv/intro.adoc[]
 include::anv/definitions.adoc[]
