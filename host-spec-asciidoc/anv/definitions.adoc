@@ -183,3 +183,39 @@ where
 [#defn-bitfield-array]
 === Bitfield Array
 A bitfield array contains single-bit values which indidate whether a candidate is available. The number of items is equal of to the number of availability cores as defined in Definition 7.6 and each bit represents a vote on the corresponding core in the given order. Respectively, if the single bit equals 1, then the Polkadot validator claims that the availability core is occupied, there exists a committed candidate receipt as defined in Definition 7.17 and that the validator has a stored chunk of the parachain block as defined in Definition 7.6.2.
+
+[#defn-validation-parameters]
+=== Validation Parameters
+The validation parameters structure, stem:[P], is required to validate a candidate against a parachain Runtime. It's a datastructure of the following format:
+
+[stem]
+++++
+P = (h,b,B_i,S_r)
+++++
+
+where
+
+•  stem:[h] is the parachain head data as defined in Definition 7.4.
+•  stem:[b] is the block body as defined in Definition 7.3.
+•  stem:[B_i] is the latest relay chain block number.
+•  stem:[S_r] is the relay chain block storage root as defined in Definition ?.
+
+[#defn-validation-result]
+=== Validation Result
+The validation result is returned by the validate_block parachain Runtime API after attempting to validate a parachain block. Those results are then used in candidate commitments as defined in Definition ?., which then will be inserted into the relay chain via the parachain inherent data as described in Definition 7.15. The validation result, stem:[V], is a datastructure of the following format:
+
+[stem]
+++++
+V   = (h,R,M_u,M_h,p_,w)\
+M_u = (m_0,…m_n)\
+M_h = (t_0,…t_n)
+++++
+
+where
+
+•  stem:[h] is the parachain head data as defined in Definition 7.4.
+•  stem:[R] is an Option value as described in Section ? that can contain a new parachain Runtime in case of an update.
+•  stem:[M_u] is an array of upward messages sent by the parachain. Each individual message, m, is an array of bytes.
+•  stem:[M_h] is an array of outbound horizontal messages sent by the parachain. Each individual message, t, is a datastructure as defined in Definition 7.10.
+•  stem:[p] is a unsigned 32-bit integer indicating the number of downward messages that were processed by the parachain. It is expected that the parachain processes the messages from first to last.
+•  stem:[w] is a unsigned 32-bit integer indicating the watermark which specifies the relay chain block number up to which all inbound horizontal messages have been processed.
