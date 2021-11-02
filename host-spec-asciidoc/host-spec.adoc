@@ -3,6 +3,7 @@
 :toc:
 :stem:
 :sectnums: all
+:section-signifier: Section
 
 = Polkadot Host Specification
 
