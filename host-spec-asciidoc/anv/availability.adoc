@@ -1,8 +1,8 @@
 [#sect-availability]
-== Availability
+=== Availability
 
 [#sect-availability-votes]
-=== Availability Votes
+==== Availability Votes
 
 The Polkadot validator must issue a bitfield as defined in Definition 7.14 which indicates votes for the availabilty of candidates. Issued bitfields can be used by the validator and other peers to determine which backed candidates meet the 2/3+ availability quorum.
 
@@ -13,7 +13,7 @@ Missing availability data of candidates must be recovered by the validator as de
 The validator issues availability votes in form of a validator protocol message as defined in Definition 7.35.
 
 [#sect-candidate-recovery]
-=== Candidate Recovery
+==== Candidate Recovery
 
 The availability distribution of the Polkadot validator must be able to recover parachain candidates that the validator is assigned to, in order to determine whether the candidate should be backed as described in Section 7.4 repsectively whether the candidate should be approved as described in Section 7.7. Additionally, peers can send availability requests as defined in Definition 7.42 and Definition 7.44 to the validator, which the validator should be able to respond to.
 
