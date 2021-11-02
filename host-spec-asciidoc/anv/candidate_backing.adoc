@@ -1,0 +1,40 @@
+[#sect-candidate-backing]
+== Candidate Backing
+
+The Polkadot validator receives an arbitrary number of parachain candidates with associated proofs from untrusted collators. The validator must verify and select a specific quantity of the proposed candidates and issue those as backable candidates to its peers. A candidate is considered backable when at least 2/3 of all assigned validators have issued a Valid statement about that candidate, as described in Section 7.4.1. Validators can retrieve information about assignments via the Runtime APIs 7.8.2 respectively 7.8.3.
+
+[#sect-statements]
+=== Statements
+
+The assigned validator checks the validity of the proposed parachains blocks as described in Section 7.5 and issues Valid statements as defined in Definition 7.13 to its peers if the verification succeeded. Broadcasting failed verification as Valid statements is a slashable offense. The validator must only issue one Seconded statement, based on an arbitrary metric, which implies an explicit vote for a candidate to be included in the relay chain.
+
+WARNING: TODO: reference disputes
+
+This protocol attempts to produce as many backable candidates as possible, but does not attempt to determine a final candidate for inclusion. Once a parachain candidate has been seconded by at least one other validator and enough Valid statements have been issued about that candidate to meet the 2/3 quorum, the candidate is ready to be inlcuded in the relay chain as described in Section 7.4.2.
+
+The validator issues validity statements votes in form of a validator protocol message as defined in Definition 7.35.
+
+[#defn-statement]
+.Statement
+****
+A statement, stem:[S], is a datastructure of the following format:
+
+[stem]
+++++
+S = (d,A_i,A_s)\
+d = {(1,->,C_r),(2,->,C_h):}
+++++
+
+where
+
+•  stem:[d] is a varying datatype where 1 indicates that the validator “seconds” a candidate, meaning that the candidate should be included in the relay chain, followed by the committed candidate receipt, stem:[C_r], as defined in Definition 7.17. 2 indicates that the validator has deemed the candidate valid, followed by the candidate hash.
+•  stem:[C_h] is the candidate hash.
+•  stem:[A_i] is the validator index in the authority set that signed this statement.
+•  stem:[A_s] is the signature of the validator.
+****
+
+[#defn-bitfield-array]
+.Bitfield Array
+****
+A bitfield array contains single-bit values which indidate whether a candidate is available. The number of items is equal of to the number of availability cores as defined in Definition 7.6 and each bit represents a vote on the corresponding core in the given order. Respectively, if the single bit equals 1, then the Polkadot validator claims that the availability core is occupied, there exists a committed candidate receipt as defined in Definition 7.17 and that the validator has a stored chunk of the parachain block as defined in Definition 7.6.2.
+****
