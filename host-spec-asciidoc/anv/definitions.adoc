@@ -308,3 +308,24 @@ where:
 •  stem:[h] is the parachain head data as described in Definition 7.4.
 •  stem:[p] is a unsigned 32-bit intiger indicating the number of downward messages that were processed by the parachain. It is expected that the parachain processes the messages from frist to last.
 •  stem:[w] is a unsigned 32-bit integer indicating the watermark which specifies the relay chain block number up to which all inbound horizontal messages have been processed.
+
+[#defn-collation]
+=== Collation
+A collation is a datastructure which contains the proposed parachain candidate, including an optional validation parachain Runtime update and upward messages. The collation datastructure, C, is a datastructure of the following format:
+
+[stem]
+++++
+C = (M,H,R,h,P,p,w)\
+M = (u_n,…u_m)\
+H = (z_n,…z_m)
+++++
+
+where
+
+• stem:[M] is an array of upward messages, u, interpreted by the relay chain itself, as defined in Definition 7.8.
+• stem:[H] is an array of outbound horizontal messages, z, interpreted by other parachains, as defined in Definition 7.10
+• stem:[R] is an Option type as defined in Definition ? which can contain a parachain Runtime update. The new Runtime code is an array of bytes.
+• stem:[h] is the head data as defined in Definition 7.4 produced as a result of execution of the parachain specific logic.
+• stem:[P] is the PoV block as defined in Definition ?.
+• stem:[p] is an unsigned 32-bit integer indicating the number of downward messages processed as defined in Definition 7.9.
+• stem:[w] is an unsigned 32-bit integer indicating the mark up to which all inbound HRMP messages have been processed by the parachain.
