@@ -1,0 +1,17 @@
+= Availability & Validity
+:description: Availability & Validity
+:doctype: book
+:toc:
+:stem:
+:sectnums: all
+
+include::intro.adoc[]
+include::definitions.adoc[]
+include::collations.adoc[]
+include::candidate_backing.adoc[]
+include::inclusion.adoc[]
+include::candidate_validation.adoc[]
+include::availability.adoc[]
+include::approval_voting.adoc[]
+include::runtime_api.adoc[]
+include::network_messages.adoc[]
