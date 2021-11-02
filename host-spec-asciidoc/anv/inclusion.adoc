@@ -1,4 +1,0 @@
-[#sect-candidate-inclusion]
-== Inclusion
-
-The Polkadot validator includes the backed candidates as inherent data as defined in Definition 7.15 into a block as described in Section ?. The relay chain block author decides on whatever metric which candidate should be selected for inclusion, as long as that candidate is valid and meets the validity quorum of 2/3+ as described in Section 7.4.1. The candidate approval process as described in Section 7.7 ensures that only relay chain blocks are finalized where each candidate for each availability core meets the requirement of 2/3+ availability votes.
