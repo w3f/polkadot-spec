@@ -194,7 +194,7 @@ Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
 . stem:["while" (N_i != N)]
 . stem:["    " pk_N^(Agr) larr pk_N^(Agr)||pk_(N_i)]
 . stem:["    " pk_N^(Agr) larr pk_N^(Agr)||"Index"_(N_i)(N_(i+1))]
-. stem:["    " i larr + 1]
+. stem:["    " i larr i + 1]
 . stem:[pk_N^(Agr) larr pk_N^(Agr)||pk_(N_i)]
 . stem:["return " pk_N^(Agr)]
 ****
@@ -216,11 +216,8 @@ Formally noted as:
 v_N := "Head"_N||"Enc"_("HE")(pk_N)||sv_N
 ++++
 
-where latexmath:[$\ensuremath{\operatorname{Head}}_N$],
-latexmath:[$\ensuremath{\operatorname{pk}}_N$],
-latexmath:[$\ensuremath{\operatorname{Enc}}_{\ensuremath{\operatorname{nibbles}}}$]
-and latexmath:[$\ensuremath{\operatorname{sv}}_N$] are defined in
-Definitions link:#defn-node-header[[defn-node-header]],
+where stem:["Head"_N], stem:[pk_N], stem:["Enc"_("nibbles")] and stem:[sv_N] are
+defined in Definitions link:#defn-node-header[[defn-node-header]],
 link:#defn-node-key[[defn-node-key]],
 link:#defn-hex-encoding[[defn-hex-encoding]] and
 link:#defn-node-subvalue[[defn-node-subvalue]], respectively.
@@ -233,5 +230,26 @@ bytes stem:["Head"_(N,1),...,Head_(N,l+1)] such that:
 [cols="2,2,4,4,.^1,4"]
 |===
 |Node Type |pk length | pk length extra byte 1 |pk key length extra byte 2 1.2+|...| pk length extra byte stem:[l]
-|stem:[Head_(N,1)^(6-7)] | stem:[Head_(N,1)^(0-5)] | stem:[Head_(N,2)] |... | stem:[Head_(N,l+1)]
+|stem:["Head"_(N,1)^(6-7)] | stem:["Head"_(N,1)^(0-5)] | stem:["Head"_(N,2)] |... | stem:["Head"_(N,l+1)]
 |===
+
+In which stem:["Head"_(N,1)^(6-7)"], the two most significant bits of the first
+byte of stem:["Head"_N] are determined as follows:
+
+[stem]
+++++
+"Head"_(N,1)^(6-7) := {(00,"Special case"),(01,"Leaf Node"),(10,"Branch Node with " k_N !in cc "K"),(11,"Branch Node with " k_N in cc "K"):}
+++++
+
+where stem:[cc "K"] is defined in Definition link:#defn-stored-value[[defn-stored-value]].
+
+stem:[Head_(N,1)^(0-5)], the 6 least significant bits of teh first byte of stem:["Head"_N] are defined to be:
+
+[stem]
+++++
+"Head"_(N,1)^(0-5) := {(||pk_N||_(nib),||pk_N||_(nib) < 63),(63,||pk_N||_(nib) >= 63):}
+++++
+
+In which stem:[||pk_N||_(nib)] is the length of stem:[pk_N] in number nibbles.
+stem:["Head"_(N,2),...,"Head"_(N,l+1)] bytes are determined by Algorithm
+link:#algo-pk-length[[algo-pk-length]].
