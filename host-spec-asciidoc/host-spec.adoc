@@ -9,6 +9,7 @@
 == Background
 
 include::background/intro.adoc[]
+include::background/definitions.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
