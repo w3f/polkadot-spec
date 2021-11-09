@@ -1,0 +1,302 @@
+=== Introduction
+
+Formally, Polkadot is a replicated sharded state machine designed to
+resolve the scalability and interoperability among blockchains. In
+Polkadot vocabulary, shards are called _parachains_ and Polkadot _relay
+chain_ is part of the protocol ensuring global consensus among all the
+parachains. The Polkadot relay chain protocol, henceforward called
+_Polkadot protocol_, can itself be considered as a replicated state
+machine on its own. As such, the protocol can be specified by
+identifying the state machine and the replication strategy.
+
+From a more technical point of view, the Polkadot protocol has been
+divided into two parts, the _Runtime_ and the _Host_. The Runtime
+comprises the state transition logic for the Polkadot protocol and is
+designed and be upgradable via the consensus engine without requiring
+hard forks of the blockchain. The Polkadot Host provides the
+functionality for the Runtime to execute its state transition logic,
+such as an execution environment, I/O and consensus, shared mostly among
+peer-to-peer decentralized cryptographically-secured transaction
+systems, i.e. blockchains whose consensus system is based on the
+proof-of-stake. The Polkadot Host is planned to be stable and static for
+the lifetime duration of the Polkadot protocol.
+
+With the current document, we aim to specify the Polkadot Host part of
+the Polkadot protocol as a replicated state machine. After defining the
+basic terms in Chapter 1, we proceed to specify the representation of a
+valid state of the Protocol in Chapter link:#chap-state-spec[2]. In
+Chapter link:#chap-state-transit[3], we identify the protocol states, by
+explaining the Polkadot state transition and discussing the detail based
+on which the Polkadot Host interacts with the state transition function,
+i.e. Runtime. Following, we specify the input messages triggering the
+state transition and the system behaviour. In Chapter
+link:#sect-networking[4], we specify the communication protocols and
+network messages required for the Polkadot Host to communicate with
+other nodes in the network, such as exchanging blocks and consensus
+messages. In Chapter link:#chap-consensu[6], we specify the consensus
+protocol, which is responsible for keeping all the replica in the same
+state. Finally, the initial state of the machine is identified and
+discussed in Appendix link:#sect-genesis-block[11]. A Polkadot Host
+implementation which conforms with this part of the specification should
+successfully be able to sync its states with the Polkadot network.
+
+[#sect-defn-conv]
+=== Definitions and Conventions
+
+[#defn-state-machine]
+==== Discrete State Machine (DSM)
+****
+A *Discrete State Machine(DSM)* is a state transition system whose set of states
+and set of transitions are countable and admits a starting state. Formally, it
+is a tuple of
+
+[stem]
+++++
+(\Sigma, S, s_0, \delta)
+++++
+where
+
+* stem:[\Sigma] is the countable set of all possible transitions.
+* stem:[S] is a countable set of all possible states.
+* stem:[s_0 in S] is the initial state.
+* stem:[\delta] is the state-transition function, known as *Runtime* in the
+Polkadot vocabulary, such that
+
+[stem]
+++++
+\delta : S \times \Sigma \rightarrow S
+++++
+****
+
+[#defn-path-graph]
+==== Path Graph
+****
+A *path graph* or a *path* of stem:[n] nodes formally referred to as *stem:[P_n]*,
+is a tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex
+degree 2. Therefore, stem:[P_n] can be represented by sequences of stem:[(v_1,
+\ldots, v_n)] where stem:[e_i = (v_i, v_{i + 1})] for stem:[1 <= i <= n - 1] is
+the edge which connect stem:[v_i] and stem:[v_{i + 1}].
+****
+
+[#defn-radix-tree]
+==== Radix-r Tree
+****
+A *Radix-r tree* is a variant of  a trie in which:
+
+* Every node has at most stem:[r] children where stem:[r = 2^x] for some
+stem:[x];
+* Each node that is the only child of a parent, which does not
+represent a valid key is merged with its parent.
+
+As a result, in a radix tree, any path whose interior vertices all have only one
+child and does not represent a valid key in the data set, is compressed into a
+single edge. This improves space efficiency when the key space is sparse.
+****
+
+==== Sequence of Bytes
+****
+By a *sequences of bytes* or a *byte array*, stem:[b], of length
+stem:[n], we refer to
+
+[stem]
+++++
+b := (b_0, b_1, ..., b_{n - 1}) " such that " 0 <= b_i <= 255
+++++
+
+We define stem:[bbb "B"_n] to be the
+*set of all byte arrays of length stem:[n]*. Furthermore, we
+define:
+
+[stem]
+++++
+bbb "B" := uuu_(i=0)^infty bbb "B"_i
+++++
+
+We represent the concatenation of byte arrays
+stem:[a :=(a_0, ..., a_n)] and
+stem:[b :=(b_0, ..., b_m)] by:
+
+[stem]
+++++
+a |\| b :=(a_0, ..., a_n, b_0, ..., b_m)
+++++
+****
+
+[#defn-bit-rep]
+==== Bitwise Representation
+****
+For a given byte stem:[b] the *bitwise representation* of stem:[b] is defined as
+
+[stem]
+++++
+b :=b^7 ... b^0
+++++
+
+where
+
+[stem]
+++++
+b = 2^0 b^0 + 2^1 b^1 + ... + 2^7 b^7
+++++
+****
+
+[#defn-little-endian]
+==== Little Endian
+****
+By the *little-endian*
+representation of a non-negative integer, stem:[I],
+represented as
+
+[stem]
+++++
+I = (B_n ... B_0)_256
+++++
+
+in base 256, we refer to a byte array
+stem:[B = (b_0, b_1, ..., b_n)] such that
+
+[stem]
+++++
+b_i :=B_i
+++++
+
+Accordingly, we define the function stem:[Enc_(LE)]:
+
+[stem]
+++++
+Enc_(LE):{(bbb "Z"^+ -> bbb "B"),((B_n ... B_0)_256 -> (B_{0,} B_1, ... , B_n)):}
+++++
+****
+
+==== UINT32
+****
+By ** we refer to a non-negative integer stored in a byte array of
+length stem:[4] using little-endian encoding format.
+****
+
+==== Blockchain 
+
+****
+A *blockchain* stem:[C] is a directed path graph. Each node of the graph is
+called *Block* and indicated by *stem:[B]*. The unique sink of stem:[C] is
+called *Genesis Block*, and the source is called the *Head* of stem:[C]. For any
+vertex stem:[(B_1, B_2)] where stem:[B_1 -> B_2] we say stem:[B_2] is the
+*parent* of stem:[B_1] and we indicate it by
+
+[stem]
+++++
+B_2 := P(B_1)
+++++
+****
+
+[#defn-unix-time]
+==== Unix Time
+****
+By *Unix time*, we refer to the unsigned, little-endian encoded 64-bit integer
+which stores the number of *milliseconds* that have elapsed since the Unix
+epoch, that is the time 00:00:00 UTC on 1 January 1970, minus leap seconds. Leap
+seconds are ignored, and every day is treated as if it contained exactly 86’400
+seconds.
+****
+
+==== Block Tree
+
+In the course of formation of a (distributed) blockchain, it is possible
+that the chain forks into multiple subchains in various block positions.
+We refer to this structure as a _block tree:_
+
+[#defn-block-tree]##[defn-block-tree]##The
+[#autolab11]##[autolab11]##*block tree* of a blockchain, denoted by
+latexmath:[$\ensuremath{\operatorname{BT}}$] is the union of all
+different versions of the blockchain observed by the Polkadot Host such
+that every block is a node in the graph and latexmath:[$B_1$] is
+connected to latexmath:[$B_2$] if latexmath:[$B_1$] is a parent of
+latexmath:[$B_2$].
+
+When a block in the block tree gets finalized, there is an opportunity
+to prune the block tree to free up resources into branches of blocks
+that do not contain all of the finalized blocks or those that can never
+be finalized in the blockchain. For a definition of finality, see
+Section link:#sect-finality[6.3].
+
+[#defn-pruned-tree]##[defn-pruned-tree]##By
+[#autolab12]##[autolab12]##*Pruned Block Tree*, denoted by
+latexmath:[$\ensuremath{\operatorname{PBT}}$], we refer to a subtree of
+the block tree obtained by eliminating all branches which do not contain
+the most recent finalized blocks, as defined in Definition
+link:#defn-finalized-block[[defn-finalized-block]]. By
+[#autolab13]##[autolab13]##*pruning*, we refer to the procedure of
+latexmath:[$\ensuremath{\operatorname{BT}} \leftarrow \ensuremath{\operatorname{PBT}}$].
+When there is no risk of ambiguity and is safe to prune BT, we use
+latexmath:[$\ensuremath{\operatorname{BT}}$] to refer to
+latexmath:[$\ensuremath{\operatorname{PBT}}$].
+
+Definition link:#defn-chain-subchain[[defn-chain-subchain]] gives the
+means to highlight various branches of the block tree.
+
+[#defn-chain-subchain]##[defn-chain-subchain]##Let
+[#autolab14]##[autolab14]##latexmath:[$G$] be the root of the block tree
+and latexmath:[$B$] be one of its nodes. By
+[#autolab15]##[autolab15]##*Chain(latexmath:[$B$])*, we refer to the
+path graph from latexmath:[$G$] to latexmath:[$B$] in
+(P)latexmath:[$\ensuremath{\operatorname{BT}}$]. Conversely, for a chain
+latexmath:[$C$]=Chain(B), we define [#autolab16]##[autolab16]##*the head
+of latexmath:[$C$]* to be latexmath:[$B$], formally noted as
+latexmath:[$B :=$]Head(latexmath:[$C$]). We define
+[#autolab17]##[autolab17]##latexmath:[$| C |$], the length of
+latexmath:[$C$]as a path graph. If latexmath:[$B'$] is another node on
+Chain(latexmath:[$B$]), then by
+[#autolab18]##[autolab18]##SubChain(latexmath:[$B', B$]) we refer to the
+subgraph of Chain(latexmath:[$B$]) path graph which contains both
+latexmath:[$B$] and latexmath:[$B'$] and by
+SubChain(latexmath:[$B', B$]) we refer to its length. Accordingly,
+[#autolab19]##[autolab19]##latexmath:[$\mathbb{C}_{B'} ((P) \ensuremath{\operatorname{BT}})$]
+is the set of all subchains of
+latexmath:[$(P) \ensuremath{\operatorname{BT}}$] rooted at
+latexmath:[$B'$]. The set of all chains of
+latexmath:[$(P) \ensuremath{\operatorname{BT}}$],
+latexmath:[$\mathbb{C}_G ((P) \ensuremath{\operatorname{BT}})$] is
+denoted by latexmath:[$\mathbb{C}$]((P)BT) or simply
+[#autolab20]##[autolab20]##latexmath:[$\mathbb{C}$], for the sake of
+brevity.
+
+[#defn-longest-chain]##[defn-longest-chain]##We define the following
+complete order over latexmath:[$\mathbb{C}$] such that for
+latexmath:[$C_1, C_2 \in \mathbb{C}$] if latexmath:[$| C_1 | \neq | C_2
+  |$] we say latexmath:[$C_1 > C_2$] if and only if
+latexmath:[$| C_1 | > | C_2 |$].
+
+If latexmath:[$| C_1 | = | C_2 |$] we say latexmath:[$C_1 > C_2$] if and
+only if the block arrival time of
+latexmath:[$\ensuremath{\operatorname{Head}} (C_1)$] is less than the
+block arrival time of
+latexmath:[$\ensuremath{\operatorname{Head}} (C_2)$] as defined in
+Definition link:#defn-block-time[[defn-block-time]]. We define the
+[#autolab21]##[autolab21]##*Longest-Chain(latexmath:[$\ensuremath{\operatorname{BT}}$])*
+to be the maximum chain given by this order.
+
+[#autolab22]##[autolab22]##Longest-Path(latexmath:[$\ensuremath{\operatorname{BT}}$])
+returns the path graph of
+latexmath:[$(P) \ensuremath{\operatorname{BT}}$] which is the longest
+among all paths in latexmath:[$(P) \ensuremath{\operatorname{BT}}$] and
+has the earliest block arrival time as defined in Definition
+link:#defn-block-time[[defn-block-time]]. [#autolab23]#[autolab23]#
+Deepest-Leaf(latexmath:[$\ensuremath{\operatorname{BT}}$]) returns the
+head of Longest-Path(latexmath:[$\ensuremath{\operatorname{BT}}$])
+chain.
+
+Because every block in the blockchain contains a reference to its
+parent, it is easy to see that the block tree is de facto a tree. A
+block tree naturally imposes partial order relationships on the blocks
+as follows:
+
+We say *B is descendant of latexmath:[$B'$]*, formally noted as
+*latexmath:[$B
+  > B'$]* if latexmath:[$B$] is a descendant of latexmath:[$B'$] in the
+block tree.
+
+ 
+
+latexmath:[$\Box$]
+
+ 
