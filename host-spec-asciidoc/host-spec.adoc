@@ -1,11 +1,14 @@
-:description: Availability & Validity
+= Polkadot Host Specification
+:description: Polkadot Host Specification
 :doctype: book
 :toc:
 :stem:
 :sectnums: all
 :xrefstyle: full
 
-= Polkadot Host Specification
+== Background
+
+include::background/intro.adoc[]
 
 [#chapter-anv]
 == Availability & Validity

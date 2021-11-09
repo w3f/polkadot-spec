@@ -1,4 +1,10 @@
- 
+= Polkadot Specification
+:description: Polkadot Specification
+:doctype: book
+:toc: left
+:stem:
+:sectnums: all
+:xrefstyle: full
 
 == Background
 
