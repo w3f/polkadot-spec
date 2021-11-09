@@ -1,7 +1,7 @@
 = Polkadot Host Specification
 :description: Polkadot Host Specification
 :doctype: book
-:toc:
+:toc: left
 :stem:
 :sectnums: all
 :xrefstyle: full
@@ -10,6 +10,11 @@
 
 include::background/intro.adoc[]
 include::background/definitions.adoc[]
+
+[#chap-state-spec]
+== State Specification
+
+include::state/state_storage_trie.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
