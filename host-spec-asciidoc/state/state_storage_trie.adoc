@@ -1,0 +1,86 @@
+[#sect-state-storage]
+=== State Storage and Storage Trie
+
+For storing the state of the system, Polkadot Host implements a hash
+table storage where the keys are used to access each data entry. There
+is no assumption either on the size of the key nor on the size of the
+data stored under them, besides the fact that they are byte arrays with
+specific upper limits on their length. The limit is imposed by the
+encoding algorithms to store the key and the value in the storage trie.
+
+==== Accessing System Storage 
+
+The Polkadot Host implements various functions to facilitate access to the
+system storage for the Runtime. See Section link:#sect-entries-into-runtime[3.1]
+for a an explaination of those functions. Here we formalize the access to the
+storage when it is being directly accessed by the Polkadot Host (in contrast to
+Polkadot runtime).
+
+[#defn-stored-value]
+===== Stored Value
+The stem:[sf "StoredValue"] function retrieves the value stored under a specific
+key in the state storage and is formally defined as:
+
+[stem]
+++++
+sf "StoredValue" ": " cc "K" -> cc "V"\
+k -> {(v,"if " (k,v), "exists in state storage"),(phi,,"otherwise"):}
+++++
+
+where stem:[cc "K" sub bbb "B"] and stem:[cc "V" sub bbb "B"] are respectively
+the set of all keys and values stored in the state storage.
+
+==== The General Tree Structure
+
+In order to ensure the integrity of the state of the system, the stored data
+needs to be re-arranged and hashed in a _modified Merkle Patricia Tree_, which
+hereafter we refer to as the _*Trie*_. This rearrangment is necessary to be able
+to compute the Merkle hash of the whole or part of the state storage,
+consistently and efficiently at any given time.
+
+The Trie is used to compute the _state root_, stem:[H_r], (see Definition
+link:#defn-block-header[[defn-block-header]]), whose purpose is to authenticate
+the validity of the state database. Thus, the Polkadot Host follows a rigorous
+encoding algorithm to compute the values stored in the trie nodes to ensure that
+the computed Merkle hash, stem:[H_r], matches across the Polkadot Host
+implementations.
+
+The Trie is a _radix-16_ tree as defined in Definition
+link:#defn-radix-tree[[defn-radix-tree]]. Each key value identifies a unique
+node in the tree. However, a node in a tree might or might not be associated
+with a key in the storage.
+
+When traversing the Trie to a specific node, its key can be reconstructed by
+concatenating the subsequences of the key which are stored either explicitly in
+the nodes on the path or implicitly in their position as a child of their
+parent.
+
+To identify the node corresponding to a key value, stem:[k], first we need to
+encode stem:[k] in a consistent with the Trie structure way. Because each node
+in the trie has at most 16 children, we represent the key as a sequence of 4-bit
+nibbles:
+
+===== Key Encode
+For the purpose of labeling the branches of the Trie, the key stem:[k] is
+encoded to stem:[k_(enc)] using stem:[sf "KeyEncode"] functions:
+
+[stem]
+++++
+k_(enc) := (k_(enc_1), ..., k_(enc_(2n))) := sf "KeyEncode"(k)
+++++
+
+such that:
+
+[stem]
+++++
+sf "KeyEncode"(k): {(bbb "B",->,"Nibbles"^4),(k:=(b_1,...,b_n),->,(b_1^(1),b_1^2,b_2^1,b_2^2,...,b_n^1,b_n^2)),(,,:=(k_(enc_1),...,k_(enc_(2n)))):}
+++++
+
+where stem:["Nibble"^4] is the set of all nibbles of 4-bit arrays and stem:[b_i^1]
+and stem:[b_i^2] are 4-bit nibbles, which are the big endian representations of
+stem:[b_i]:
+
+[stem]
+++++
+(b_i^1,b_i^2) := (b_i -: 16,b_i mod 16)
+++++
