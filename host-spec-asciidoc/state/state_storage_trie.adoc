@@ -61,6 +61,7 @@ in the trie has at most 16 children, we represent the key as a sequence of 4-bit
 nibbles:
 
 ===== Key Encode
+****
 For the purpose of labeling the branches of the Trie, the key stem:[k] is
 encoded to stem:[k_(enc)] using stem:[sf "KeyEncode"] functions:
 
@@ -76,11 +77,161 @@ such that:
 sf "KeyEncode"(k): {(bbb "B",->,"Nibbles"^4),(k:=(b_1,...,b_n),->,(b_1^(1),b_1^2,b_2^1,b_2^2,...,b_n^1,b_n^2)),(,,:=(k_(enc_1),...,k_(enc_(2n)))):}
 ++++
 
-where stem:["Nibble"^4] is the set of all nibbles of 4-bit arrays and stem:[b_i^1]
-and stem:[b_i^2] are 4-bit nibbles, which are the big endian representations of
-stem:[b_i]:
+where stem:["Nibble"^4] is the set of all nibbles of 4-bit arrays and
+stem:[b_i^1] and stem:[b_i^2] are 4-bit nibbles, which are the big endian
+representations of stem:[b_i]:
 
 [stem]
 ++++
 (b_i^1,b_i^2) := (b_i -: 16,b_i mod 16)
 ++++
+
+By looking at stem:[k_(enc)] as a sequence of nibbles, one can walk the radix
+tree to reach the node identifying the storage value of stem:[k].
+****
+
+==== Trie Structure
+
+In this subsection, we specify the structure of the nodes in the Trie as
+well as the Trie structure:
+
+===== Set of Nodes
+****
+We refer to the *set of the nodes of Polkadot state trie* by stem:[cc "N"]. By
+stem:[N in cc "N] to refer to an individual node in the trie.
+****
+
+[#defn-nodetype]
+===== State Trie
+****
+The State Trie is a radix-16 tree. Each Node in the Trie is identified with a
+unique key latexmath:[k_N] such that:
+
+* stem:[k_N] is the shared prefix of the key of all the
+descendants of stem:[N] in the Trie.
+
+and, at least one of the following statements holds:
+
+* stem:[(k_N, v)] corresponds to an existing entry in the State Storage.
+* stem:[N] has more than one child.
+
+Conversely, if stem:[(k, v)] is an entry in the State Trie then there is a node
+stem:[N in cc "N"] such that stem:[k_N = k].
+****
+
+===== Branch
+****
+A *branch* node is a node which has one child or more. A branch node can have at
+most 16 children. A *leaf* node is a childless node. Accordingly:
+
+[stem]
+++++
+cc "N"_b := {N in cc "N" | N " is a branch node"}\
+cc "N"_i := {N in cc "N" | N " is a leaf node"}
+++++
+
+For each node, part of stem:[k_N] is built while the trie is traversed from root
+to stem:[N] part of stem:[k_N] is stored in stem:[N] as formalized in Definition
+link:#defn-node-key[[defn-node-key]].
+****
+
+[#defn-node-key]
+===== Aggregated Prefix Key
+For any stem:[N in cc "N"], its key stem:[k_N] is divided into an *aggregated
+prefix key*, *stem:[pk_N^(Agr)]*, aggregated by Algorithm
+link:#algo-aggregate-key[[algo-aggregate-key]] and a *partial key*,
+*stem:[pk_N]* of length stem:[0 <= l_(pk_N) <= 65535] in nibbles such that:
+
+[stem]
+++++
+pk_N := (k_(enc_i),...,k_(enc_(i+l_(pk_N))))
+++++
+
+where stem:[pk_N^(Agr)] is a suffix subsequence of stem:[k_N]; stem:[i] is the length
+of stem:[pk_N^(Agr)] in nibbles and so we have:
+
+[stem]
+++++
+sf "KeyEncode"(k_N) = pk_N^(Agr) || pk_N = (k_(enc_1), ..., k_(enc_(i-1)),k_(enc_i),k_(enc_(i+l_(pk_N))))"
+++++
+
+Part of stem:[pk_N^(Agr)] is explicitly stored in stem:[N]’s ancestors.
+Additionally, for each ancestor, a single nibble is implicitly derived while
+traversing from the ancestor to its child included in the traversal path using
+the stem:["Index"_N] function defined in Definition
+link:#defn-index-function[[defn-index-function]].
+
+[#defn-index-function]
+===== Index
+For stem:[N in cc "N"_b] and stem:[N_c] child of stem:[N], we define
+stem:[sf "Index"_N] function as:
+
+[stem]
+++++
+sf "Index"_N: {N_C in cc "N" | N_c " is a child of " N} -> "Nibbles"_1^4\
+N_c -> i
+++++
+
+such that
+
+[stem]
+++++
+k_(N_c) = k_N ||i||pk_(N_c)
+++++
+
+Assuming that stem:[P_N] is the path (see Definition
+link:#defn-path-graph[[defn-path-graph]]) from the Trie root to node stem:[N],
+Algorithm link:#algo-aggregate-key[[algo-aggregate-key]] rigorously demonstrates
+how to build stem:[pk_N^(Agr)] while traversing stem:[P_N].
+
+[#algo-aggregate-key]
+===== Aggregate Key
+****
+Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
+
+. stem:[pk_N^(Agr) larr phi]
+. stem:[i larr 1]
+. stem:["while" (N_i != N)]
+. stem:["    " pk_N^(Agr) larr pk_N^(Agr)||pk_(N_i)]
+. stem:["    " pk_N^(Agr) larr pk_N^(Agr)||"Index"_(N_i)(N_(i+1))]
+. stem:["    " i larr + 1]
+. stem:[pk_N^(Agr) larr pk_N^(Agr)||pk_(N_i)]
+. stem:["return " pk_N^(Agr)]
+****
+
+[#defn-node-value]
+===== Node Value
+A node stem:[N in cc "N"] stores the *node value*, stem:[v_N], which consists of
+the following concatenated data:
+
+[stem]
+++++
+"Node Header|Partial Key|Node Subvalue"
+++++
+
+Formally noted as:
+
+[stem]
+++++
+v_N := "Head"_N||"Enc"_("HE")(pk_N)||sv_N
+++++
+
+where latexmath:[$\ensuremath{\operatorname{Head}}_N$],
+latexmath:[$\ensuremath{\operatorname{pk}}_N$],
+latexmath:[$\ensuremath{\operatorname{Enc}}_{\ensuremath{\operatorname{nibbles}}}$]
+and latexmath:[$\ensuremath{\operatorname{sv}}_N$] are defined in
+Definitions link:#defn-node-header[[defn-node-header]],
+link:#defn-node-key[[defn-node-key]],
+link:#defn-hex-encoding[[defn-hex-encoding]] and
+link:#defn-node-subvalue[[defn-node-subvalue]], respectively.
+
+[#defn-node-header]
+===== Node Header
+The *node header* of node stem:[N], stem:["Head"_N], consists of stem:[l + 1 >= 1]
+bytes stem:["Head"_(N,1),...,Head_(N,l+1)] such that:
+
+[cols="2,2,4,4,.^1,4"]
+|===
+|Node Type |pk length | pk length extra byte 1 |pk key length extra byte 2 1.2+|...| pk length extra byte stem:[l]
+|stem:[Head_(N,1)^(6-7)] | stem:[Head_(N,1)^(0-5)] | stem:[Head_(N,2)] |... | stem:[Head_(N,l+1)]
+|===

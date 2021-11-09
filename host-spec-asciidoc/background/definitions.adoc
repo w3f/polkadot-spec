@@ -117,11 +117,11 @@ stem:[B = (b_0, b_1, ..., b_n)] such that
 b_i :=B_i
 ++++
 
-Accordingly, we define the function stem:[Enc_(LE)]:
+Accordingly, we define the function stem:[sf "Enc"_(sf "LE")]:
 
 [stem]
 ++++
-Enc_(LE):{(bbb "Z"^+ -> bbb "B"),((B_n ... B_0)_256 -> (B_{0,} B_1, ... , B_n)):}
+sf "Enc"_(sf "LE"):{(bbb "Z"^+ -> bbb "B"),((B_n ... B_0)_256 -> (B_{0,} B_1, ... , B_n)):}
 ++++
 ****
 
@@ -136,7 +136,7 @@ length stem:[4] using little-endian encoding format.
 ****
 A *blockchain* stem:[C] is a directed path graph. Each node of the graph is
 called *Block* and indicated by *stem:[B]*. The unique sink of stem:[C] is
-called *Genesis Block*, and the source is called the *Head* of stem:[C]. For any
+called *Genesis Block*, and the source is called the stem:[sf "Head"] of stem:[C]. For any
 vertex stem:[(B_1, B_2)] where stem:[B_1 -> B_2] we say stem:[B_2] is the
 *parent* of stem:[B_1] and we indicate it by
 
