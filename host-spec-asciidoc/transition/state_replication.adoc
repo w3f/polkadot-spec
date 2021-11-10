@@ -193,7 +193,7 @@ link:#sect-state-storage[2.1].
 
 IMPORTANT: Changes Tries are still work-in-progress and are currently *not* used
 in Polkadot. Additionally, the implementation of Changes Tries might change
-considerably.]
+considerably.
 
 Polkadot focuses on light client friendliness and therefore implements
 functionalities that allows identifying changes in the state of the blockchain
@@ -213,6 +213,23 @@ Polkadot Host implements a mechanism to keep track of the changes created by
 individual blocks, as mentioned in Sections link:#sect-state-storage[2.1] and
 link:#sect-managing-multiple-states[3.3.3]. The Changes Trie stores three
 different types of changes.
+
+The Changes Trie itself is not part of the block, but a separately maintained
+database by the Polkadot Host. The Merkle proof of the Changes Trie must be
+included in the block digest as described in Definition
+link:#defn-digest[[defn-digest]] and gets calculated as described in section
+link:#sect-merkl-proof[2.1.4]. The root calculation only considers pairs which
+were generated on the individual block and does not consider pairs which were
+generated at previous blocks.
+
+NOTE: This seperately maintained database by the Polkadot Host is
+intended to be used by "proof servers", where its implementation and behavior
+has not been fully defined yet. This is considered future-reserved
+
+As clarified in the individual sections of each type, not all of those types get
+generated on every block. But if conditions apply, all those different types of
+pairs get inserted into the same Changes Trie, therefore only one Changes Trie
+Root gets generated for each block.
 
 ===== Definition: Inserted Key-Value Pairs
 ****
@@ -255,21 +272,98 @@ link:#table-changes-trie-key-types[3.2].
 C_(value) = {(1,(e_i,...,e_k)),(2,(H_i(B_k),...,H_i(B_m))),(3,H_r("Child-Changes-Trie")):}
 ++++
 
-The Changes Trie itself is not part of the block, but a separately maintained
-database by the Polkadot Host. The Merkle proof of the Changes Trie must be
-included in the block digest as described in Definition
-link:#defn-digest[[defn-digest]] and gets calculated as described in section
-link:#sect-merkl-proof[2.1.4]. The root calculation only considers pairs which
-were generated on the individual block and does not consider pairs which were
-generated at previous blocks.
+where:
 
-NOTE: This seperately maintained database by the Polkadot Host is
-intended to be used by "proof servers", where its implementation and behavior
-has not been fully defined yet. This is considered future-reserved
+TODO: Reference
 
-As clarified in the individual sections of each type, not all of those types get
-generated on every block. But if conditions apply, all those different types of
-pairs get inserted into the same Changes Trie, therefore only one Changes Trie
-Root gets generated for each block.
-
+* _1_ is a list of extrinsics indices and stem:[e_n] refers to the index of the extrinsic within the block.
+* _2_ is a list of block numbers.
+* _3_ is the child changes trie.
 ****
+
+[#sect-changes-trie-extrinsics-pairs]
+===== Key to extrinsics pairs
+
+This key-value pair stores changes which occurred in an individual block. Its
+value is a SCALE encoded array containing the indices of the extrinsics that
+caused any changes to the specified key. The key-value pair is defined as
+(clarified in section link:#sect-changes-trie[3.3.4]):
+
+[stem]
+++++
+(1, H_i (B_i), K) -> (e_i, ..., e_k)
+++++
+
+The indices are unsigned 32-bit integers and their values are based on the order
+in which each extrinsics appears in the block (indexing starts at 0). The
+Polkadot Host generates those pairs for every changed key on each and every
+block. Child storages have their own Changes Trie, as described in section
+link:#sect-changes-trie-child-trie-pair[3.3.4.3].
+
+IMPORTANT: TODO - clarify special key value of `0xffffffff`
+
+[#sect-changes-trie-block-pairs]
+===== Key to block pairs
+
+This key-value pair stores changes which occurred in a certain range of blocks.
+Its value is a SCALE encoded array containing block numbers in which extrinsics
+caused any changes to the specified key. The key-value pair is defined as
+(clarified in section link:#sect-changes-trie[3.3.4]):
+
+[stem]
+++++
+(2, H_i (B_i), K) -> (H_i (B_k), ..., H_i (B_m))
+++++
+
+The block numbers are represented as unsigned 32-bit integers. There are
+multiple "levels" of those pairs, and the Polkadot Host does *not* generate
+those pairs on every block. The genesis state contains the key `:changes_trie`
+where its unsigned 64-bit value is a tuple of two 32-bit integers:
+
+* *interval* - The interval (in blocks) at which those pairs should be created.
+If this value is less or equal to 1 it means that those pairs are not created at
+all.
+* *levels* - The maximum number of "levels" in the hierarchy. If this value is
+0 it means that those pairs are not created at all.
+
+For each level from 1 to _levels_, the Polkadot Host creates those pairs on
+every -nth block, formally applied as:
+
+TODO: Spec algorithm
+
+For example, let’s say _interval_ is set at and is set at . This means there are
+now three levels which get generated at three different occurrences:
+
+. *Level 1* - Those pairs are generated at every stem:[4^1]-nth block, where the
+pair value contains the block numbers of every block that changed the specified
+storage key. This level only considers block numbers of the last four
+(stem:[4^1]) blocks.
+** Example: this level occurs at block 4, 8, 12, 16, 32, etc.
+. *Level 2* - Those pairs are generated at every stem:[4^2]-nth block, where the
+pair value contains the block numbers of every block that changed the specified
+storage key. This level only considers block numbers of the last 16
+(stem:[4^2]) blocks.
+** Example: this level occurs at block 16, 32, 64, 128, 256, etc.
+. *Level 3* - Those pairs are generated at every stem:[4^3]-nth block, where the
+pair value contains the block numbers of every block that changed the specified
+storage key. this level only considers block number of the last 64
+(stem:[4^3]) blocks.
+** Example: this level occurs at block 64, 128, 196, 256, 320, etc.
+
+[#sect-changes-trie-child-trie-pair]
+===== Key to Child Changes Trie pairs
+
+The Polkadot Host generates a separate Changes Trie for each child storage,
+using the same behavior and implementation as describe in section
+link:#sect-changes-trie-extrinsics-pairs[3.3.4.1]. Additionally, the changed
+child storage key gets inserted into the primary, non-Child Changes Trie where
+its value is a SCALE encoded byte array containing the Merkle root of the Child
+Changes Trie. The key-value pair is defined as:
+
+[stem]
+++++
+(3,H_i(B_i),K) -> H_r("Child-Changes-Trie")
+++++
+
+The Polkadot Host creates those pairs for every changes child key for each and
+every block.
