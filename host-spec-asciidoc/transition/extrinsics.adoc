@@ -145,12 +145,12 @@ link:#algo-build-block[[algo-build-block]]. [To do: define uncles]
 |===
 |Identifier |Value Type |Description
 
-|timestap0
-|unsigned 64-bit integer
+|timstap0
+|Unsigned 64-bit integer
 |Unix epoch time (TODO: Reference definition)
 
 |uncles00
-|array of block headers
+|Array of block headers
 |Provides a list of potential uncle block headers (<<defn-block-header>>) for a given block
 |===
 
