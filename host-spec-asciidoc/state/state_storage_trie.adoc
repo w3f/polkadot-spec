@@ -300,11 +300,9 @@ information stored in a branch node.
 
 [#defn-children-bitmap]
 ===== Children Bitmap
-Suppose
-stem:[N_b, N_c in cc "N"] and stem:[N_c] is a child
-of stem:[N_b]. We define where bit stem:[b_i : = 1] if
-stem:[N] has a child with partial key stem:[i], therefore
-we define *ChildrenBitmap* functions as follows:
+Suppose stem:[N_b, N_c in cc "N"] and stem:[N_c] is a child of stem:[N_b]. We
+define where bit stem:[b_i : = 1] if stem:[N] has a child with partial key
+stem:[i], therefore we define *ChildrenBitmap* functions as follows:
 
 [stem]
 ++++
@@ -319,3 +317,46 @@ where
 ++++
 b_i := {(1, EE N_c in cc "N": k_(N_c) = k_(N_b)||i||pk_(N_c)),(0, "otherwise"):}
 ++++
+
+[#defn-node-subvalue]
+===== Subvalue
+For a given node stem:[N], the *subvalue* of stem:[N], formally referred to as
+stem:[sv_N], is determined as follows:
+
+[stem]
+++++
+sv_N := {("StoredValue"_(SC)),("Enc"_(SC)("ChildrenBitmap"(N)||"StoredValue"_(SC)||"Enc"_(SC)(H(N_(C_1))),...,"Enc"_(SC)(H(N_(C_n))))):}
+++++
+
+where the first variant is a leaf node and the second variant is a branch node.
+
+[stem]
+++++
+"StoredValue"_(SC) := {("Enc"_(SC)("StoredValue"(k_N)),"if StoredValue"(k_N) = v),(phi,"if StoredValue"(k_N) = phi):}
+++++
+
+stem:[N_(C_1) ... N_(C_n)] with stem:[n <= 16] are the children nodes of the
+branch node stem:[N] and stem:["Enc"_(SC)], stem:["StoredValue"], stem:[H], and
+stem:["ChildrenBitmap"(N)] are defined in Definitions
+link:#sect-scale-codec[10.1], link:#defn-stored-value[[defn-stored-value]],
+link:#defn-merkle-value[[defn-merkle-value]] and
+link:#defn-children-bitmap[[defn-children-bitmap]] respectively.
+
+The Trie deviates from a traditional Merkle tree where node value, stem:[v_N]
+(see Definition link:#defn-node-value[[defn-node-value]]) is presented instead
+of its hash if it occupies less space than its hash.
+
+[#defn-merkle-value]
+===== Merkle Value
+For a given node stem:[N], the *Merkle value* of stem:[N], denoted by
+stem:[H(N)] is defined as follows:
+
+[stem]
+++++
+H: bbb "B" -> U_(i -> 0)^(32) bbb "B"_32\
+H(N): {(v_N,||v_N|| < 32 " and " N != R),("Blake2b"(v_n),||v_N|| >= 32 " or " N + R):}
+++++
+
+Where stem:[v_N] is the node value of stem:[N] defined in Definition
+link:#defn-node-value[[defn-node-value]] and stem:[R] is the root of the Trie.
+The *Merkle hash* of the Trie is defined to be latexmath:[H(R)].
