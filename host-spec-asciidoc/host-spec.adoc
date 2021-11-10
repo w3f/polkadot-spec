@@ -17,6 +17,7 @@ include::background/definitions.adoc[]
 == State Specification
 
 include::state/state_storage_trie.adoc[]
+include::state/child_storage.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
