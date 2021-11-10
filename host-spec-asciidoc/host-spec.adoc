@@ -6,6 +6,7 @@
 :stem:
 :sectnums: all
 :sectnumlevels: 4
+:sectlinks:
 :xrefstyle: full
 
 == Background
@@ -18,6 +19,13 @@ include::background/definitions.adoc[]
 
 include::state/state_storage_trie.adoc[]
 include::state/child_storage.adoc[]
+
+[#chap-state-transit]
+== State Transition
+
+include::transition/runtime_interaction.adoc[]
+include::transition/extrinsics.adoc[]
+include::transition/state_replication.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
