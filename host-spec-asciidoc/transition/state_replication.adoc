@@ -127,3 +127,149 @@ The *body of Block* stem:[B] represented as stem:["Body"(B)] is defined to be:
 
 Where each stem:[E_i in bbb "B"] is a SCALE encoded extrinsic.
 ****
+
+[#sect-block-validation]
+==== Importing and Validating Block
+
+Block validation is the process by which a node asserts that a block is fit to
+be added to the blockchain. This means that the block is consistent with the
+current state of the system and transitions to a new valid state.
+
+New blocks can be received by the Polkadot Host via other peers (see Section
+link:#sect-msg-block-request[4.8.2]) or from the Host’s own consensus engine
+(see Section link:#sect-block-production[[sect-block-production]]). Both the
+Runtime and the Polkadot Host then need to work together to assure block
+validity. A block is deemed valid if the block author had authorship rights for
+the slot in which the block was produce as well as if the transactions in the
+block constitute a valid transition of states. The former criterion is validated
+by the Polkadot Host according to the block production consensus protocol. The
+latter can be verified by the Polkadot Host invoking entry into the Runtime as
+defined in section link:#sect-rte-core-execute-block[13.3.1.2] as a part of the
+validation process. Any state changes created by this function on successful
+execution are persisted.
+
+The Polkadot Host implements the following procedure to assure the
+validity of the block:
+
+TODO: Spec algorithm.
+
+[#sect-managing-multiple-states]
+==== Managaing Multiple Variants of State
+
+Unless a node is committed to only update its state according to the finalized
+block (See Definition link:#defn-finalized-block[[defn-finalized-block]]), it is
+inevitable for the node to store multiple variants of the state (one for each
+block). This is, for example, necessary for nodes participating in the block
+production and finalization.
+
+While the state trie structure described in Section
+link:#sect-state-storage-trie-structure[2.1.3] facilitates and optimizes storing
+and switching between multiple variants of the state storage, the Polkadot Host
+does not specify how a node is required to accomplish this task. Instead, the
+Polkadot Host is required to implement Set-State-At operation which behaves as
+defined in Definition link:#defn-set-state-at[[defn-set-state-at]]:
+
+[#defn-set-state-at]
+===== Definition: Set State At Block
+****
+The function:
+
+[stem]
+++++
+"Set-State-At"(B)
+++++
+
+in which stem:[B] is a block in the block tree (See Definition
+link:#defn-block-tree[[defn-block-tree]]), sets the content of state storage
+equal to the resulting state of executing all extrinsics contained in the branch
+of the block tree from genesis till block B including those recorded in Block stem:[B].
+
+For the definition of the state storage see Section
+link:#sect-state-storage[2.1].
+****
+
+[#sect-changes-trie]
+==== Changes Trie
+
+IMPORTANT: Changes Tries are still work-in-progress and are currently *not* used
+in Polkadot. Additionally, the implementation of Changes Tries might change
+considerably.]
+
+Polkadot focuses on light client friendliness and therefore implements
+functionalities that allows identifying changes in the state of the blockchain
+without the requirement to search through the entire chain. The *Changes Trie*
+is a radix-16 tree data structure as defined in Definition
+link:#defn-radix-tree[[defn-radix-tree]] and maintained by the Polkadot Host. It
+stores different types of storage changes made by each individual block
+separately.
+
+The primary method for generating the Changes Trie is provided to the Runtime
+with the Host API as described in Section
+link:#sect-ext-storage-changes-root[12.1.9]. The Runtime calls that function
+shortly before finalizing the block, the Polkadot Host must then generate the
+Changes Trie based on the storage changes which occured during block production
+or execution. In order to provide this API function, it is imperative that the
+Polkadot Host implements a mechanism to keep track of the changes created by
+individual blocks, as mentioned in Sections link:#sect-state-storage[2.1] and
+link:#sect-managing-multiple-states[3.3.3]. The Changes Trie stores three
+different types of changes.
+
+===== Definition: Inserted Key-Value Pairs
+****
+The *inserted key-value pair stored in the nodes of Changes Trie* is
+formally defined as:
+
+[stem]
+++++
+(K_C, V_C)
+++++
+
+Where stem:[K_C] is a SCALE-encoded tuple:
+
+TODO: Rename Type_V_C and C_(value)
+
+[stem]
+++++
+"Enc"_(SC)("Type"_(V_C), H_i(B_i),K)
+++++
+
+and
+
+[stem]
+++++
+V_C = "Enc"_(SC)(C_(value))
+++++
+
+is a SCALE encoded byte array.
+
+TODO: Reference varying datatype.
+
+Furthermore, stem:[K] represents the changed storage key, stem:[H_i(B_i)] refers
+to the block number at which this key is inserted into the Changes Trie (See
+Definition link:#defn-block-header[[defn-block-header]]) and stem:["Type"_(V_C)]
+is an index defining the type stem:[C_(value)] according to Table
+link:#table-changes-trie-key-types[3.2].
+
+[stem]
+++++
+C_(value) = {(1,(e_i,...,e_k)),(2,(H_i(B_k),...,H_i(B_m))),(3,H_r("Child-Changes-Trie")):}
+++++
+
+The Changes Trie itself is not part of the block, but a separately maintained
+database by the Polkadot Host. The Merkle proof of the Changes Trie must be
+included in the block digest as described in Definition
+link:#defn-digest[[defn-digest]] and gets calculated as described in section
+link:#sect-merkl-proof[2.1.4]. The root calculation only considers pairs which
+were generated on the individual block and does not consider pairs which were
+generated at previous blocks.
+
+NOTE: This seperately maintained database by the Polkadot Host is
+intended to be used by "proof servers", where its implementation and behavior
+has not been fully defined yet. This is considered future-reserved
+
+As clarified in the individual sections of each type, not all of those types get
+generated on every block. But if conditions apply, all those different types of
+pairs get inserted into the same Changes Trie, therefore only one Changes Trie
+Root gets generated for each block.
+
+****
