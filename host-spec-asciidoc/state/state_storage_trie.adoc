@@ -300,7 +300,7 @@ its children as well as on its corresponding data in the state storage.
 This recursive dependancy is encompassed into the subvalue part of the
 node value which recursively depends on the Merkle value of its
 children. Additionally, as Section
-link:#sect-child-trie-structure[2.2.1] clarifies, the Merkle proof of
+link:#sect-child-trie-structure[] clarifies, the Merkle proof of
 each *child trie* must be updated first before the final Polkadot state
 root can be calculated.
 
