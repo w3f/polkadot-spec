@@ -18,6 +18,7 @@ Polkadot runtime).
 
 [#defn-stored-value]
 ===== Stored Value
+****
 The stem:[sf "StoredValue"] function retrieves the value stored under a specific
 key in the state storage and is formally defined as:
 
@@ -29,6 +30,7 @@ k -> {(v,"if " (k,v), "exists in state storage"),(phi,,"otherwise"):}
 
 where stem:[cc "K" sub bbb "B"] and stem:[cc "V" sub bbb "B"] are respectively
 the set of all keys and values stored in the state storage.
+****
 
 ==== The General Tree Structure
 
@@ -85,10 +87,10 @@ representations of stem:[b_i]:
 ++++
 (b_i^1,b_i^2) := (b_i -: 16,b_i mod 16)
 ++++
+****
 
 By looking at stem:[k_(enc)] as a sequence of nibbles, one can walk the radix
 tree to reach the node identifying the storage value of stem:[k].
-****
 
 ==== Trie Structure
 
@@ -129,14 +131,15 @@ most 16 children. A *leaf* node is a childless node. Accordingly:
 cc "N"_b := {N in cc "N" | N " is a branch node"}\
 cc "N"_i := {N in cc "N" | N " is a leaf node"}
 ++++
+****
 
 For each node, part of stem:[k_N] is built while the trie is traversed from root
 to stem:[N] part of stem:[k_N] is stored in stem:[N] as formalized in Definition
 link:#defn-node-key[[defn-node-key]].
-****
 
 [#defn-node-key]
 ===== Aggregated Prefix Key
+****
 For any stem:[N in cc "N"], its key stem:[k_N] is divided into an *aggregated
 prefix key*, *stem:[pk_N^(Agr)]*, aggregated by Algorithm
 link:#algo-aggregate-key[[algo-aggregate-key]] and a *partial key*,
@@ -154,6 +157,7 @@ of stem:[pk_N^(Agr)] in nibbles and so we have:
 ++++
 sf "KeyEncode"(k_N) = pk_N^(Agr) || pk_N = (k_(enc_1), ..., k_(enc_(i-1)),k_(enc_i),k_(enc_(i+l_(pk_N))))"
 ++++
+****
 
 Part of stem:[pk_N^(Agr)] is explicitly stored in stem:[N]’s ancestors.
 Additionally, for each ancestor, a single nibble is implicitly derived while
@@ -163,6 +167,7 @@ link:#defn-index-function[[defn-index-function]].
 
 [#defn-index-function]
 ===== Index
+****
 For stem:[N in cc "N"_b] and stem:[N_c] child of stem:[N], we define
 stem:[sf "Index"_N] function as:
 
@@ -178,6 +183,7 @@ such that
 ++++
 k_(N_c) = k_N ||i||pk_(N_c)
 ++++
+****
 
 Assuming that stem:[P_N] is the path (see Definition
 link:#defn-path-graph[[defn-path-graph]]) from the Trie root to node stem:[N],
@@ -201,6 +207,7 @@ Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
 
 [#defn-node-value]
 ===== Node Value
+****
 A node stem:[N in cc "N"] stores the *node value*, stem:[v_N], which consists of
 the following concatenated data:
 
@@ -221,9 +228,11 @@ defined in Definitions link:#defn-node-header[[defn-node-header]],
 link:#defn-node-key[[defn-node-key]],
 link:#defn-hex-encoding[[defn-hex-encoding]] and
 link:#defn-node-subvalue[[defn-node-subvalue]], respectively.
+****
 
 [#defn-node-header]
 ===== Node Header
+****
 The *node header* of node stem:[N], stem:["Head"_N], consists of stem:[l + 1 >= 1]
 bytes stem:["Head"_(N,1),...,Head_(N,l+1)] such that:
 
@@ -253,6 +262,7 @@ stem:[Head_(N,1)^(0-5)], the 6 least significant bits of teh first byte of stem:
 In which stem:[||pk_N||_(nib)] is the length of stem:[pk_N] in number nibbles.
 stem:["Head"_(N,2),...,"Head"_(N,l+1)] bytes are determined by Algorithm
 link:#algo-pk-length[[algo-pk-length]].
+****
 
 [#algo-pk-length]
 ===== Partial Key Length Encoding
@@ -300,6 +310,7 @@ information stored in a branch node.
 
 [#defn-children-bitmap]
 ===== Children Bitmap
+****
 Suppose stem:[N_b, N_c in cc "N"] and stem:[N_c] is a child of stem:[N_b]. We
 define where bit stem:[b_i : = 1] if stem:[N] has a child with partial key
 stem:[i], therefore we define *ChildrenBitmap* functions as follows:
@@ -317,9 +328,11 @@ where
 ++++
 b_i := {(1, EE N_c in cc "N": k_(N_c) = k_(N_b)||i||pk_(N_c)),(0, "otherwise"):}
 ++++
+****
 
 [#defn-node-subvalue]
 ===== Subvalue
+****
 For a given node stem:[N], the *subvalue* of stem:[N], formally referred to as
 stem:[sv_N], is determined as follows:
 
@@ -334,6 +347,7 @@ where the first variant is a leaf node and the second variant is a branch node.
 ++++
 "StoredValue"_(SC) := {("Enc"_(SC)("StoredValue"(k_N)),"if StoredValue"(k_N) = v),(phi,"if StoredValue"(k_N) = phi):}
 ++++
+****
 
 stem:[N_(C_1) ... N_(C_n)] with stem:[n <= 16] are the children nodes of the
 branch node stem:[N] and stem:["Enc"_(SC)], stem:["StoredValue"], stem:[H], and
@@ -348,6 +362,7 @@ of its hash if it occupies less space than its hash.
 
 [#defn-merkle-value]
 ===== Merkle Value
+****
 For a given node stem:[N], the *Merkle value* of stem:[N], denoted by
 stem:[H(N)] is defined as follows:
 
@@ -360,49 +375,4 @@ H(N): {(v_N,||v_N|| < 32 " and " N != R),("Blake2b"(v_n),||v_N|| >= 32 " or " N 
 Where stem:[v_N] is the node value of stem:[N] defined in Definition
 link:#defn-node-value[[defn-node-value]] and stem:[R] is the root of the Trie.
 The *Merkle hash* of the Trie is defined to be latexmath:[H(R)].
-
-[#sect-child-storages]
-=== Child Storage
-
-As clarified in Section link:#sect-state-storage[2.1], the Polkadot
-state storage implements a hash table for inserting and reading
-key-value entries. The child storage works the same way but is stored in
-a separate and isolated environment. Entries in the child storage are
-not directly accessible via querying the main state storage.
-
-The Polkadot Host supports as many child storages as required by Runtime
-and identifies each separate child storage by its unique identifying
-key. Child storages are usually used in situations where Runtime deals
-with multiple instances of a certain type of objects such as Parachains
-or Smart Contracts. In such cases, the execution of the Runtime entry
-might result in generating repeated keys across multiple instances of
-certain objects. Even with repeated keys, all such instances of
-key-value pairs must be able to be stored within the Polkadot state.
-
-In these situations, the child storage can be used to provide the
-isolation necessary to prevent any undesired interference between the
-state of separated instances. The Polkadot Host makes no assumptions
-about how child storages are used, but provides the functionality for
-it. This is described in more detail in the Host API, as described in
-Section link:#sect-child-storages[2.2].
-
-[#sect-child-trie-structure]
-==== Child Tries
-
-The child trie specification is the same as the one described in Section
-link:#sect-state-storage-trie-structure[2.1.3]. Child tries have their
-own isolated environment. Nonetheless, the main Polkadot state trie
-depends on them by storing a node (stem:[K_N, V_N]) which
-corresponds to an individual child trie. Here, stem:[K_N] is the
-child storage key associated to the child trie, and stem:[V_N] is
-the Merkle value of its corresponding child trie computed according to
-the procedure described in Section link:#sect-merkl-proof[2.1.4]
-
-The Polkadot Host APIs as defined in link:#sect-child-storages[2.2]
-allows the Runtime to provide the key stem:[K_N] in order to
-identify the child trie, followed by a second key in order to identify
-the value within that child trie. Every time a child trie is modified,
-the Merkle proof stem:[V_N] of the child trie stored in the
-Polkadot state must be updated first. After that, the final Merkle proof
-of the Polkadot state can be computed. This mechanism provides a proof
-of the full Polkadot state including all its child states.
+****
