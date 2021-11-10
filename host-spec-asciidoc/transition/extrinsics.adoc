@@ -81,7 +81,7 @@ where
 
 which executes the following steps:
 
-. stem:[L larr "DEC"_SC(M_T)]
+. stem:[L larr "Dec"_SC(M_T)]
 . stem:["for " T " in " L " such that " E !in TQ " and " E !in TP:]
 . stem:["    " B_d larr "Head"("Longest-Chain"(BT))]
 . stem:["    " N larr H_n(B_d)]
@@ -97,7 +97,7 @@ which executes the following steps:
 
 in which
 
-* stem:["DEC"_(SC)] decodes
+* stem:["Dec"_(SC)] decodes
 the SCALE encoded message.
 * stem:["Longest-Chain"] is defined in Definition
 link:#defn-longest-chain[[defn-longest-chain]].

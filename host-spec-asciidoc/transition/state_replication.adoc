@@ -1,0 +1,129 @@
+[#sect-state-replication]
+=== State Replication
+
+Polkadot nodes replicate each other’s state by syncing the history of the
+extrinsics. This, however, is only practical if a large set of transactions are
+batched and synced at the time. The structure in which the transactions are
+journaled and propagated is known as a block (of extrinsics) which is specified
+in Section link:#sect-block-format[3.3.1]. Like any other replicated state
+machines, state inconsistency can occure between Polkadot replicas. Section
+link:#sect-managing-multiple-states[3.3.3] is giving an overview of how a
+Polkadot Host node manages multiple variants of the state.
+
+A Polkadot block consists a _block header_ (Section
+link:#sect-block-header[3.3.1.1]) and a _block body_ (Section
+link:#sect-block-body[3.3.1.3]). The _block body_ in turn is made up out of
+_extrinsics_ , which represent the generalization of the concept of
+_transactions_. _Extrinsics_ can contain any set of external data the underlying
+chain wishes to validate and track.
+
+The Block Body consists of an sequence of extrinsics, each encoded as a
+byte array. The content of an extrinsic is completely opaque to the
+Polkadot Host. As such, from the point of the Polkadot Host, and is
+simply a SCALE encoded array of byte arrays. Formally:
+
+[#defn-block-header]
+===== Definition: Block Header
+****
+The *header of block B*, stem:[H_h(B)], is a 5-tuple containing the following
+elements:
+
+* *parent_hash:* formally indicated as stem:[H_p], is the 32-byte Blake2b hash
+(Section link:#sect-blake2[9.2]) of the SCALE encoded parent block header as
+defined in Definition link:#defn-block-header-hash[[defn-block-header-hash]].
+* *number:* formally indicated as stem:[H_i], is an integer, which represents
+the index of the current block in the chain. It is equal to the number of the
+ancestor blocks. The genesis state has number 0.
+* *state_root:* formally indicated as stem:[H_r], is the root of the Merkle trie,
+whose leaves implement the storage for the system.
+* *extrinsics_root:* is the field which is reserved for the Runtime to validate
+the integrity of the extrinsics composing the block body. For example, it can
+hold the root hash of the Merkle trie which stores an ordered list of the
+extrinsics being validated in this block. The [.sans-serif]#extrinsics_root# is
+set by the runtime and its value is opaque to the Polkadot Host. This element is
+formally referred to as stem:[H_e].
+* *digest:* this field is used to store any chain-specific auxiliary data, which
+could help the light clients interact with the block without the need of
+accessing the full storage as well as consensus-related data including the block
+signature. This field is indicated as stem:[H_d] and its detailed format is
+defined in Definition link:#defn-digest[[defn-digest]]
+****
+
+[#defn-digest]
+===== Definition: Header Digest
+****
+The header *digest* of block stem:[B] formally referred to by stem:[H_d (B)] is
+an array of *digest items* stem:[H_d^i]’s, known as digest items of varying data
+type (see Definition link:#defn-varrying-data-type[[defn-varrying-data-type]])
+such that
+
+[stem]
+++++
+H_d(B) := H_d^1, ..., H_d^n
+++++
+
+where each digest item can hold one of the following type identifiers:
+
+[stem]
+++++
+H_d^n = {(2,bbb "B"_32),(4,(E_(id),bbb "B")),(5,(E_(id),bbb "B")),(6,(E_(id),bbb "B")):}
+++++
+
+Where stem:[E_(id)] is the unique consensus engine identifier defined in Section
+link:#defn-consensus-message-digest[[defn-consensus-message-digest]] and stem:[bbb "B"]:
+
+* Id _2_, the *Changes trie root*, contains the root of the Changes Trie at block stem:[B],
+as described in Section link:#sect-changes-trie[3.3.4]. Note that this is
+future-reserved and currently *not* used in Polkadot.
+* Id _4_, the *Consensus Message*, represents messages from the Runtime to the
+consensus engine (see Section link:#sect-consensus-message-digest[6.1.2]).
+* Id _5_, the *Seal*, is the data produced by the consensus engine and proving the authorship
+of the block producer. In particular, the Seal digest item must be the last item
+in the digest array and must be stripped off by the Polkadot Host before the
+block is submitted to any Runtime function including for validation. The Seal
+must be added back to the digest afterward. The detail of the Seal digest item
+is laid out in Definition link:#defn-babe-seal[[defn-babe-seal]].
+* Id _6_, the *Pre-runtime* digest, represents messages from a consensus engine to the
+Runtime (e.g. see Definition link:#defn-babe-header[[defn-babe-header]]).
+****
+
+[#defn-block-header-hash]
+===== Definition: Header Hash
+****
+The *block header hash of block stem:[B]*, stem:[H_h(B)], is the hash of the
+header of block stem:[$B$] encoded by simple codec:
+
+[stem]
+++++
+H_h(B) := "Blake2b"("Enc"_(SC)("Head"(B)))
+++++
+****
+
+[#sect-justified-block-header]
+===== Justified Block Header
+
+The Justified Block Header is provided by the consensus engine and
+presented to the Polkadot Host, for the block to be appended to the
+blockchain. It contains the following parts:
+
+* *block_header* the complete block header as defined in Section
+link:#block[[block]] and denoted by stem:["Head"(B)].
+* *justification*: as defined by the consensus specification indicated by
+stem:["Just"(B)] as defined in Definition
+link:#defn-grandpa-justification[[defn-grandpa-justification]].
+* *authority Ids*: This is the list of the Ids of authorities, which have voted
+for the block to be stored and is formally referred to as stem:[A(B)]. An
+authority Id is 256-bit.
+
+[#defn-block-body]
+===== Definition: Block Body
+****
+The *body of Block* stem:[B] represented as stem:["Body"(B)] is defined to be:
+
+[stem]
+++++
+"Body"(B) := "Enc"_(SC)(E_1,...,E_n)
+++++
+
+Where each stem:[E_i in bbb "B"] is a SCALE encoded extrinsic.
+****
