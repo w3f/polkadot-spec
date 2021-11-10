@@ -2,8 +2,10 @@
 :description: Polkadot Host Specification
 :doctype: book
 :toc: left
+:toclevels: 4
 :stem:
 :sectnums: all
+:sectnumlevels: 4
 :xrefstyle: full
 
 == Background
