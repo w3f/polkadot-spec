@@ -253,3 +253,69 @@ stem:[Head_(N,1)^(0-5)], the 6 least significant bits of teh first byte of stem:
 In which stem:[||pk_N||_(nib)] is the length of stem:[pk_N] in number nibbles.
 stem:["Head"_(N,2),...,"Head"_(N,l+1)] bytes are determined by Algorithm
 link:#algo-pk-length[[algo-pk-length]].
+
+[#algo-pk-length]
+===== Partial Key Length Encoding
+****
+Algorithm: stem:["Partial-Key-Length-Encoding"("Head"_(N,1)^(6-7),pk_N)]
+
+. stem:["if " ||pk_N||_(nib) >= 2^16]
+. stem:["    " "return Error"]
+. stem:["Head"_(N,1) larr 64 xx "Head"_(N,1)^(6-7)]
+. stem:["if " ||pk_N||_(nib) < 63]
+. stem:["    " "Head"_(N,1) larr "Head"_(N,1) + ||pk_N||_(nib)]
+. stem:["    " "return Head"_N]
+. stem:["Head"_(N,1) larr "Head"_(N,1) + 63]
+. stem:[l larr ||pk_N||_(nib) - 63]
+. stem:[i larr 2]
+. stem:["while " (l > 255)]
+. stem:["    " "Head"_(N,i) larr 255]
+. stem:["    " l larr l - 255]
+. stem:["    " i larr i + 1]
+. stem:["Head"_(N,1) larr l]
+. stem:["return Head"_N]
+****
+
+[#sect-merkl-proof]
+==== Merkle Proof
+
+To prove the consistency of the state storage across the network and its
+modifications both efficiently and effectively, the Trie implements a
+Merkle tree structure. The hash value corresponding to each node needs
+to be computed rigorously to make the inter-implementation data
+integrity possible.
+
+The Merkle value of each node should depend on the Merkle value of all
+its children as well as on its corresponding data in the state storage.
+This recursive dependancy is encompassed into the subvalue part of the
+node value which recursively depends on the Merkle value of its
+children. Additionally, as Section
+link:#sect-child-trie-structure[2.2.1] clarifies, the Merkle proof of
+each *child trie* must be updated first before the final Polkadot state
+root can be calculated.
+
+We use the auxilary function introduced in Definition
+link:#defn-children-bitmap[[defn-children-bitmap]] to encode and decode
+information stored in a branch node.
+
+[#defn-children-bitmap]
+===== Children Bitmap
+Suppose
+stem:[N_b, N_c in cc "N"] and stem:[N_c] is a child
+of stem:[N_b]. We define where bit stem:[b_i : = 1] if
+stem:[N] has a child with partial key stem:[i], therefore
+we define *ChildrenBitmap* functions as follows:
+
+[stem]
+++++
+"ChildrenBitmap:"\
+cc "N"_b -> bbb "B"_2\
+N -> (b_(15), ...,b_8,b_7,...,b_0)_2
+++++
+
+where
+
+[stem]
+++++
+b_i := {(1, EE N_c in cc "N": k_(N_c) = k_(N_b)||i||pk_(N_c)),(0, "otherwise"):}
+++++
