@@ -226,3 +226,43 @@ requested fields (bitmask value). The structure has the following format:
 |
 |===
 ****
+
+[#sect-msg-transactions]
+==== Transactions
+
+Transactions, as defined and described in Section link:#sect-extrinsics[3.2],
+are sent directly to peers with which the Polkadot Host has an open transaction
+substream, as defined in Definition
+link:#defn-transactions-message[[defn-transactions-message]]. Polkadot Host
+implementers should implement a mechanism that only sends a transaction once to
+each peer and avoids sending duplicates. Sending duplicate transactions might
+result in undefined consequences such as being blocked for bad behaviour by
+peers.
+
+The mechanism for managing transactions is further described in Section
+link:#sect-extrinsics[3.2].
+
+[#defn-transactions-message]
+===== Definition: Transaction Message
+****
+The *transactions message* is the structure of how the transactions are sent
+over the network. It is represented by stem:[M_T] and is defined as follows:
+
+[stem]
+++++
+M_T := "Enc"_(SC)(C_1,...,C_n)
+++++
+
+in which:
+
+[stem]
+++++
+C_i := "Enc"_(SC)(E_i)
+++++
+
+Where each stem:[E_i] is a byte array and represents a separate
+extrinsic. The Polkadot Host is agnostic about the content of an
+extrinsic and treats it as a blob of data.
+
+Transactions are sent over the `/dot/transactions/1` substream.
+****
