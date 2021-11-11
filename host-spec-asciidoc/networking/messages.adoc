@@ -69,3 +69,97 @@ where:
 b = {(0,"Is not part of the best chain"),(1,"Is the best block according to the node"):}
 ++++
 ****
+
+[#sect-msg-block-request]
+==== Requesting Blocks
+
+Block requests can be used to retrieve a range of blocks from peers. Those
+messages are sent over the `/dot/sync/2` substream.
+
+===== Definition: Block Request
+The `BlockRequest` message is a Protobuf serialized structure of the following format:
+
+[cols="2,1,4,1"]
+|===
+|Type |Id |Description |Value
+
+|`uint32`
+|1
+|Bits of block data to request
+|stem:[B_f]
+
+|`oneof`
+|
+|Start from this block
+|stem:[B_S]
+
+|`bytes``
+|4
+|End at this block (_optional_)
+|stem:[B_e]
+
+|_Direction_
+|5
+|Sequence direction
+|
+
+|`uint32`
+|6
+|Maximum amount (_optional_)
+|stem:[B_m]
+|===
+
+where:
+
+* stem:[B_f] indicates all the fields that should be included in the request.
+its *big-endian* encoded bitmask that applies to all desired fields with bitwise
+OR operations. For example, the stem:[B_f] value to request _Header_ and
+_Justification_ is _0001 0001_ (17).
++
+|===
+|Field |Value
+
+|Header
+|0000 0001
+
+|Body
+|0000 0010
+
+|Justification
+|0001 0000
+|===
+* stem:[B_s] is a Protobuf structure indicating a varying data
+type of the following values:
++
+[cols="2,2,4"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|The block hash
+
+|`bytes`
+|3
+|The block number
+|===
+* stem:[B_e] is either the block hash or block number depending
+on the value of stem:[B_s]. an implementation-defined maximum is
+used when unspecified.
+* _Direction_ is a Protobuf structure indicating the sequence direction of the
+requested blocks. the structure is a varying data type, as defined in
+definition link:#defn-varrying-data-type[[defn-varrying-data-type]], of
+the following format:
++
+[cols="1,4"]
+|===
+|Id |Description
+
+|0
+|Enumerate in ascending order (from child to parent)
+
+|1
+|Enumerate in descending order (from parent to canonical child)
+|===
+* stem:[B_m] is the number of blocks to be returned. An implementation defined
+maximum is used when unspecified.
