@@ -75,7 +75,7 @@ b = {(0,"Is not part of the best chain"),(1,"Is the best block according to the 
 Block requests can be used to retrieve a range of blocks from peers. Those
 messages are sent over the `/dot/sync/2` substream.
 
-[defn-msg-block-request]
+[#defn-msg-block-request]
 ===== Definition: Block Request
 ****
 The `BlockRequest` message is a Protobuf serialized structure of the following format:
@@ -166,8 +166,9 @@ the following format:
 maximum is used when unspecified.
 ****
 
-[defn-msg-block-response]
+[#defn-msg-block-response]
 ===== Definition: Block Response
+****
 The `BlockResponse` message is received after sending a `BlockRequest` message
 to a peer. The message is a Protobuf serialized structure of the following
 format:
@@ -224,3 +225,4 @@ requested fields (bitmask value). The structure has the following format:
 |Indicates whether the justification is empty (i.e. should be ignored)
 |
 |===
+****
