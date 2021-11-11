@@ -290,3 +290,27 @@ M = {(0,"Vote message", V_m),(1,"Commit message", C_m),(2,"Neighbor message", N_
 ++++
 ****
 
+[#defn-grandpa-vote-msg]
+===== GRANDPA Vote Messages
+A *GRANDPA vote message* by voter stem:[v], stem:[M_v^(r,"stage")], is gossip to
+the network by voter stem:[v] with the following structure:
+
+[stem]
+++++
+M_v^(r,"stage")(B) := "Enc"_(SC)(r,"id"_(bbb "V"),"SigMsg")\
+"SigMsg" := ("msg","Sig"_(v_i)^(r,"stage"),v_("id"))\
+"msg" := "Enc"_(SC)("stage",V_v^(r,"stage")(B))
+++++
+
+where:
+
+TODO: References.
+
+* stem:[r] is an unsigned 64-bit integer indicating the Grandpa round number.
+* stem:["id"_(bbb "V")] is an unsigned 64-bit integer indicating the authority Set Id.
+* stem:["Sig"_(v_i)^(r,"stage")] is a 512-bit byte array containing the signature of the authority.
+* stem:[v_(id)] is a 256-bit byte array containing the _ed25519_ public key of the authority.
+
+This message is the sub-component of the GRANDPA gossip message as
+defined in Definition link:#defn-gossip-message[[defn-gossip-message]]
+of type Id 0.
