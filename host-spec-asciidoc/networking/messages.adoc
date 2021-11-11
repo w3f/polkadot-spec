@@ -266,3 +266,27 @@ extrinsic and treats it as a blob of data.
 
 Transactions are sent over the `/dot/transactions/1` substream.
 ****
+
+[#sect-msg-grandpa]
+==== GRANDPA Messages
+
+The exchange of GRANDPA messages is conducted on the substream. The process for
+the creation and distributing these messages is described in Section
+link:#sect-finality[6.3]. The underlying messages are specified in this section.
+
+[#defn-gossip-message]
+===== Definition: Grandpa Gossip Message
+****
+A *GRANDPA gossip message*, stem:[M], is a varying datatype as defined in
+Definition link:#defn-varrying-data-type[[defn-varrying-data-type]], which
+identifies the message type that is cast by a voter followed by the message itself.
+
+TODO: Clarify propagation.
+TODO: Reference additional message.
+
+[stem]
+++++
+M = {(0,"Vote message", V_m),(1,"Commit message", C_m),(2,"Neighbor message", N_m),(3,"Catch-up request message",R_m),(4,"Catch-up message",U_m):}
+++++
+****
+
