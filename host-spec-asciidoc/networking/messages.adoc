@@ -72,11 +72,12 @@ b = {(0,"Is not part of the best chain"),(1,"Is the best block according to the 
 
 [#sect-msg-block-request]
 ==== Requesting Blocks
-
 Block requests can be used to retrieve a range of blocks from peers. Those
 messages are sent over the `/dot/sync/2` substream.
 
+[defn-msg-block-request]
 ===== Definition: Block Request
+****
 The `BlockRequest` message is a Protobuf serialized structure of the following format:
 
 [cols="2,1,4,1"]
@@ -163,3 +164,63 @@ the following format:
 |===
 * stem:[B_m] is the number of blocks to be returned. An implementation defined
 maximum is used when unspecified.
+****
+
+[defn-msg-block-response]
+===== Definition: Block Response
+The `BlockResponse` message is received after sending a `BlockRequest` message
+to a peer. The message is a Protobuf serialized structure of the following
+format:
+
+[cols="3,1,5"]
+|===
+|Type |Id |Description
+
+|Repeated _BlockData_
+|1
+|Block data for the requested sequence
+|===
+
+where _BlockData_ is a Protobuf structure containing the requested blocks. Do
+note that the optional values are either present or absent depending on the
+requested fields (bitmask value). The structure has the following format:
+
+[cols="2,1,5,3"]
+|===
+|Type |Id |Description |Value
+
+|`bytes`
+|1
+|Block header hash
+|Def. link:#defn-block-header-hash[[defn-block-header-hash]]
+
+|`bytes`
+|2
+|Block header (optional)
+|Def. link:#defn-block-header[[defn-block-header]]
+
+|repeated `bytes`
+|3
+|Block body (optional)
+|Def. link:#defn-block-body[[defn-block-body]]
+
+|`bytes`
+|4
+|Block receipt (optional)
+|
+
+|`bytes`
+|5
+|Block message queue (optional)
+|
+
+|`bytes`
+|6
+|Justification (optional)
+|Def. link:#defn-grandpa-justification[[defn-grandpa-justification]]
+
+|`bool`
+|7
+|Indicates whether the justification is empty (i.e. should be ignored)
+|
+|===
