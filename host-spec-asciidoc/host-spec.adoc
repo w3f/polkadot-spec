@@ -27,6 +27,10 @@ include::transition/runtime_interaction.adoc[]
 include::transition/extrinsics.adoc[]
 include::transition/state_replication.adoc[]
 
+[#chap-networking]
+== Networking
+include::networking/fundamentals.adoc[]
+
 [#chapter-anv]
 == Availability & Validity
 
