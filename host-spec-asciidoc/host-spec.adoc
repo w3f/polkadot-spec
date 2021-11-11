@@ -30,6 +30,7 @@ include::transition/state_replication.adoc[]
 [#chap-networking]
 == Networking
 include::networking/fundamentals.adoc[]
+include::networking/messages.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
