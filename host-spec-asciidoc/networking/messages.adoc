@@ -23,6 +23,7 @@ link:#defn-block-announce-handshake[[defn-block-announce-handshake]].
 
 [#defn-block-announce-handshake]
 ===== Definition: Block Announce Handshake
+****
 The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once
 established, all `BlockAnounce` messages, as defined in Definition
 link:#defn-block-announce[[defn-block-announce]], and created by the node are
@@ -45,3 +46,26 @@ N_B = "Best block number according to the node"\
 h_B = "Best block hash according to the node"\
 h_G = "Genesis block hash according to the node"
 ++++
+****
+
+[#defn-block-announce]
+===== Definition: Block Announce
+****
+The `BlockAnnounce` message is sent to the specified substream and indicates to
+remote peers that the node has either created or received a new block.
+
+The message is a SCALE-encoded structure of the following format:
+
+[stem]
+++++
+BA = "Enc"_(SC)("Head"(B),b)
+++++
+
+where:
+
+[stem]
+++++
+"Head"(B) = "Header of the announced block"\
+b = {(0,"Is not part of the best chain"),(1,"Is the best block according to the node"):}
+++++
+****
