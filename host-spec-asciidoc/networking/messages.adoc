@@ -516,7 +516,8 @@ signing the statement stem:[R_h] in stem:[C].
 
 [#defn-grandpa-beefy-signed-commitment]
 ===== Signed Commitment
-A signed commitment, stem:[M_(sc)], is a datastructure of the following format:
+****
+A *signed commitment*, stem:[M_(sc)], is a datastructure of the following format:
 
 [stem]
 ++++
@@ -541,3 +542,39 @@ For example, the signature of the validator at index 3 in the authority set must
 be placed at index _3_ in stem:[S_n]. If not signature is available for that
 validator, then the _Option_ variant is _None_ inserted (TODO: Def). This sorting
 allows clients to map public keys to their corresponding signatures.
+****
+
+[#defn-grandpa-beefy-signed-commitment-witness]
+===== Signed Commitment Witness
+****
+A *signed commitment witness*, stem:[M_(SC)^w], is a light version of the signed
+commitment as defined in Definition
+link:#defn-grandpa-beefy-signed-commitment[[defn-grandpa-beefy-signed-commitment]].
+Instead of containing the entire list of signatures, it only claims which
+validator signed the statement.
+
+The message is a datastructure of the following format:
+
+[stem]
+++++
+M_(SC)^w = "Enc"_(SC)(C,V_(0,... n), R_("sig"))
+++++
+
+where
+
+* stem:[C] is the commitment as defined in Definition
+link:#defn-grandpa-beefy-commitment[[defn-grandpa-beefy-commitment]].
+* stem:[V_(0,... n)] is an array where its exact size matches the number of
+validators in the current authority set as specified by stem:["id"_(bbb "V)] in
+stem:[C]. Individual items are booleans which indicate whether the validator has
+signed the statement (_true_) or not (_false_). It’s critical that the boolean
+indicators are sorted based on their corresponding public key entry in the
+authority set.
++
+For example, the boolean indicator of the validator at index 3 in the authority
+set must be placed at index _3_ in stem:[V_n]. This sorting allows clients to
+map public keys to their corresponding boolean indicators.
+* stem:[R_("sig")] is the MMR root of the signatures in the original signed
+commitment as defined in Definition
+link:#defn-grandpa-beefy-signed-commitment[[defn-grandpa-beefy-signed-commitment]].
+****
