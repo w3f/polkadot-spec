@@ -37,6 +37,10 @@ include::networking/messages.adoc[]
 == Bootstrapping
 include::bootstrapping.adoc[]
 
+[#chap-consensus]
+== Consensus
+include::consensus/common.adoc[]
+
 [#chapter-anv]
 == Availability & Validity
 
