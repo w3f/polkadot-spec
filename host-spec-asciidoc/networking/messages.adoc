@@ -369,7 +369,7 @@ Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id 1.
 ****
 
 [#sect-grandpa-neighbor-msg]
-==== GRANDPA Neighbor Messages
+===== GRANDPA Neighbor Messages
 
 Neighbor messages are sent to all connected peers but they are not
 repropagated on reception. A message should be send whenever the
@@ -379,8 +379,7 @@ peers that are using a different voter sets or are in a different round.
 Messages received from a future voter set or round can be dropped and
 ignored.
 
-[#defn-grandpa-neighbor-msg]
-===== GRANDPA Neighbor Message
+====== GRANDPA Neighbor Message
 ****
 A *GRANDPA Neighbor Message* is defined as:
 
@@ -401,4 +400,62 @@ where:
 
 This message is the sub-component of the GRANDPA gossip message as defined in
 Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id _2_.
+****
+
+[#sect-grandpa-catchup-messages]
+===== GRANDPA Catch-up Messages
+
+Whenever a Polkadot node detects that it is lagging behind the finality
+procedure, it needs to initiate a _catch-up_ procedure. GRANDPA Neighbor
+messages (see Section
+link:#defn-grandpa-neighbor-msg[[defn-grandpa-neighbor-msg]]) reveal the round
+number for the last finalized GRANDPA round which the node’s peers have
+observed. This provides the means to identify a discrepancy in the latest
+finalized round number observed among the peers. If such a discrepancy is
+observed, the node needs to initiate the catch-up procedure explained in Section
+link:#sect-grandpa-catchup[6.4.1].
+
+In particular, this procedure involves sending a _catch-up request_ and
+processing _catch-up response_ messages.
+
+====== Catch-Up Request Message
+****
+A *GRANDPA catch-up request message* for round stem:[r],
+stem:[M_(i,v)^("Cat"-q)("id"_(bbb "V"),r)], is a message sent from node stem:[i]
+to its voting peer node stem:[v] requesting the latest status of a GRANDPA round
+stem:[r' >r] of the authority set stem:[bbb "V"_("id")] along with the
+justification of the status and has the following structure:
+
+[stem]
+++++
+M_(i,v)^(r,"Cat"-q) := "Enc"_(SC)(r,"id"_(bbb "V"))
+++++
+
+This message is the sub-component of the GRANDPA Gossip message as defined in
+Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id _3_.
+****
+
+====== Catch-Up Response Message
+****
+A *GRANDPA catch-up response message* for round stem:[r],
+stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)], is a message sent by a node stem:[v]
+to node stem:[i] in response of a catch-up request
+stem:[M_(v,i)^("Cat"-q)("id"_(bbb "V"),r')] in which stem:[r >= r'] is the
+latest GRANDPA round which v has prove of its finalization and has the following
+structure:
+
+TODO: Reference
+
+[stem]
+++++
+M_(v,i)^("Cat"-s) := "Enc"_(SC)("id"_(bbb "V"), r, J_(0,...n)^(r,pv)(B), J_(0,...m)^(r,pc)(B),H_h(B'),H_i(B'))
+++++
+
+Where stem:[B] is the highest block which stem:[v] believes to be finalized in
+round stem:[r]. stem:[B'] is the highest ancestor of all blocks voted on in the
+arrays of justifications stem:[J_(0,...n)^(r,pv)(B)] and
+stem:[J_(0,...m)^(r,pc)(B)] with the exception of the equivocationary votes.
+
+This message is the sub-component of the GRANDPA Gossip message as defined in
+Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id _4_.
 ****
