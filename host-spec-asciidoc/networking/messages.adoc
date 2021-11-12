@@ -291,7 +291,8 @@ M = {(0,"Vote message", V_m),(1,"Commit message", C_m),(2,"Neighbor message", N_
 ****
 
 [#defn-grandpa-vote-msg]
-===== GRANDPA Vote Messages
+===== Definition: GRANDPA Vote Messages
+****
 A *GRANDPA vote message* by voter stem:[v], stem:[M_v^(r,"stage")], is gossip to
 the network by voter stem:[v] with the following structure:
 
@@ -315,3 +316,54 @@ TODO: References.
 
 This message is the sub-component of the GRANDPA gossip message as defined in
 Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id 0.
+****
+
+[#defn-grandpa-justifications-compact]
+===== Definition: GRANDPA Compact Justification Format
+****
+The *GRANDPA compact justification format* is an optimized data structure to
+store a collection of pre-commits and their signatures to be submitted as part
+of a commit message. Instead of storing an array of justifications, it uses the
+following format:
+
+TODO: Reference
+TODO: Double check format.
+
+[stem]
+++++
+J_(v_(0,...n))^(r,"comp") := ({V_(v_0)^(r,pc),... V_(v_n)^(r,pc)},{("Sig"_(v_0)^(r,pc),v_("id"_0)), ... ("Sig"_(v_n)^(r,pc),v_("id"_n))})
+++++
+
+where:
+
+* stem:[V_(v_i)^(r,pc)] is a 256-bit byte array (TODO: and 32-bit integer) containing the pre-commit vote of authority stem:[v_i].
+* stem:["Sig"_(v_i)^(r,pc)] is a 512-bit byte array containing the pre-commit signature of authority stem:[v_i].
+* stem:[v_("id"_n)] is a 256-bit byte array containing the public key of authority stem:[v_i].
+****
+
+[#defn-grandpa-commit-msg]
+===== Definition: GRANDPA Commit Message
+****
+A *GRANDPA commit message* for block stem:[B] in round stem:[r],
+stem:[M_v^(r,"Fin")(B)], is a message broadcasted by voter stem:[v] to the
+network indicating that voter stem:[v] has finalized block stem:[B] in round
+stem:[r]. It has the following structure:
+
+[stem]
+++++
+M_v^(r,"Fin")(B) := "Enc"_(SC)(r,"id"_(bbb "V"),V_v^r(B),J_(v_(0,...n))^(r,"comp"))
+++++
+
+where:
+
+TODO: References
+TODO: Check if the GRANDPA vote is correct.
+
+* stem:[r] is an unsigned 64-bit integer indicating the round number.
+* stem:[id_(bbb "V")] is the authority set Id.
+* stem:[V_v^r(B)] is a 256-bit array (TODO: and 32-bit integer?) containing the GRANDPA vote for block stem:[B].
+* stem:[J_(v_(0,...n))^(r,"comp")] (TODO: type?) is the compacted GRANDPA justification containing observed pre-commit of authorities stem:[v_0] to stem:[v_n].
+
+This message is the sub-component of the GRANDPA gossip message as defined in
+Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id 1.
+****
