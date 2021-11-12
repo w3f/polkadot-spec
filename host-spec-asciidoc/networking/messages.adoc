@@ -367,3 +367,38 @@ TODO: Check if the GRANDPA vote is correct.
 This message is the sub-component of the GRANDPA gossip message as defined in
 Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id 1.
 ****
+
+[#sect-grandpa-neighbor-msg]
+==== GRANDPA Neighbor Messages
+
+Neighbor messages are sent to all connected peers but they are not
+repropagated on reception. A message should be send whenever the
+messages values change and at least every 5 minutes. The sender should
+take the recipients state into account and avoid sending messages to
+peers that are using a different voter sets or are in a different round.
+Messages received from a future voter set or round can be dropped and
+ignored.
+
+[#defn-grandpa-neighbor-msg]
+===== GRANDPA Neighbor Message
+****
+A *GRANDPA Neighbor Message* is defined as:
+
+TODO: Consider renaming variables.
+TODO: References.
+
+[stem]
+++++
+M^("neigh") := "Enc"_(SC)("version",r,"id"_(bbb "V"),H_h(B_("last")))
+++++
+
+where:
+
+* stem:["version"] is an unsigned 8-bit integer indicating the version of the neighbor message, currently _1_.
+* stem:[r] is an unsigned 64-bit integer indicating the round number.
+* stem:["id"_(bbb "V")] is an unsigned 64-bit integer indicating the authority Id.
+* stem:[H_i(B_("last"))] is an unsigned 32-bit integer indicating the block number of the last finalized block stem:[B_("last")].
+
+This message is the sub-component of the GRANDPA gossip message as defined in
+Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id _2_.
+****
