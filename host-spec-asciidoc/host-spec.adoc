@@ -5,10 +5,10 @@
 :toclevels: 4
 :stem:
 :sectnums:
-:chapter-signifier: Test
 :sectnumlevels: 4
 :sectlinks:
 :xrefstyle: full
+:chapter-signifier: Chapter
 
 == Background
 
@@ -32,6 +32,10 @@ include::transition/state_replication.adoc[]
 == Networking
 include::networking/fundamentals.adoc[]
 include::networking/messages.adoc[]
+
+[#chapter-anv]
+== Bootstrapping
+include::bootstrapping.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
