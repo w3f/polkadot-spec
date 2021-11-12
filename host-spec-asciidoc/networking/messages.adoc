@@ -459,3 +459,57 @@ stem:[J_(0,...m)^(r,pc)(B)] with the exception of the equivocationary votes.
 This message is the sub-component of the GRANDPA Gossip message as defined in
 Definition link:#defn-gossip-message[[defn-gossip-message]] of type Id _4_.
 ****
+
+[#sect-msg-grandpa-beefy]
+==== GRANDPA BEEFY
+WARNING: The BEEFY protocol is currently in early development and subject to
+change.
+
+This section defines the messages required for the GRANDPA BEEFY protocol as
+described in Section link:#sect-grandpa-beefy[6.5]. Those messages are sent over
+the `/paritytech/beefy/1` substream.
+
+TODO: Define _MMR_.
+
+[#defn-grandpa-beefy-commitment]
+===== Commitment
+****
+A *commitment*, stem:[C], contains the information extracted from the finalized
+block at height stem:[H_i(B_("last"))] as specified in the message body and a
+datastructure of the following format:
+
+[stem]
+++++
+C = (R_h,H_i(B_("last")),"id"_(bbb "V"))
+++++
+
+where
+
+* stem:[R_h] is the MMR root of all the block header hashes leading up to the
+latest, finalized block.
+* stem:[H_i(B_("last"))] is the block number this commitment is for. Namely the
+latest, finalized block.
+* stem:["id"_(bbb "V")] is the current authority set Id as defined in Definition
+link:#defn-authority-set-id[[defn-authority-set-id]].
+****
+
+[#defn-msg-beefy-gossip]
+===== Vote Message
+****
+A *vote message*, stem:[M_v], is direct vote created by the Polkadot Host on every
+BEEFY round and is gossiped to its peers. The message is a datastructure of the
+following format:
+
+[stem]
+++++
+M_v = "Enc"_(SC)(C,A_("id")^("bfy"),A_("sig"))
+++++
+
+where
+
+* stem:[C] is the commitment as defined in Definition
+link:#defn-grandpa-beefy-commitment[[defn-grandpa-beefy-commitment]].
+* stem:[A_("id")^("bfy")] is the ECDSA public key of the Polkadot Host.
+* stem:[A_("sig")] is the signature created with stem:[A_("id")^("bfy")] by
+signing the statement stem:[R_h] in stem:[C].
+****
