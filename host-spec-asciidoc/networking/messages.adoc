@@ -513,3 +513,31 @@ link:#defn-grandpa-beefy-commitment[[defn-grandpa-beefy-commitment]].
 * stem:[A_("sig")] is the signature created with stem:[A_("id")^("bfy")] by
 signing the statement stem:[R_h] in stem:[C].
 ****
+
+[#defn-grandpa-beefy-signed-commitment]
+===== Signed Commitment
+A signed commitment, stem:[M_(sc)], is a datastructure of the following format:
+
+[stem]
+++++
+M_(SC) = "Enc"_(SC)(C,S_n)\
+S_n = (A_0^("sig"),... A_n^(sig))
+++++
+
+where
+
+* stem:[C] is the commitment as defined in Definition
+link:#defn-grandpa-beefy-commitment[[defn-grandpa-beefy-commitment]].
+* stem:[S_n] is an array where its exact size matches the number of validators
+in the current authority set as specified by stem:["id"_(bbb "V")] (Definition
+link:#defn-authority-set-id[[defn-authority-set-id]]) in stem:[C]. Individual
+items are of the type as defined in Definition
+link:#defn-option-type[[defn-option-type]] which can contain a signature of a
+validator which signed the same statement (stem:[R_h] in stem:[C]) and is active
+in the current authority set. It’s critical that the signatures are sorted based
+on their corresponding public key entry in the authority set.
++
+For example, the signature of the validator at index 3 in the authority set must
+be placed at index _3_ in stem:[S_n]. If not signature is available for that
+validator, then the _Option_ variant is _None_ inserted (TODO: Def). This sorting
+allows clients to map public keys to their corresponding signatures.
