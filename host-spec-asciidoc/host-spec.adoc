@@ -4,7 +4,8 @@
 :toc: left
 :toclevels: 4
 :stem:
-:sectnums: all
+:sectnums:
+:chapter-signifier: Test
 :sectnumlevels: 4
 :sectlinks:
 :xrefstyle: full
