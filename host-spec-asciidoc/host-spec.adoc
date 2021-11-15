@@ -33,13 +33,14 @@ include::transition/state_replication.adoc[]
 include::networking/fundamentals.adoc[]
 include::networking/messages.adoc[]
 
-[#chapter-anv]
+[#chapter-bootstrapping]
 == Bootstrapping
 include::bootstrapping.adoc[]
 
 [#chap-consensus]
 == Consensus
 include::consensus/common.adoc[]
+include::consensus/block_production.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
