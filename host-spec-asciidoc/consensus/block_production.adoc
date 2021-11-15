@@ -1,0 +1,74 @@
+[#sect-babe]
+=== Block Production
+
+The Polkadot Host uses BABE protocol for block production. It is designed based
+on Ouroboros praos . BABE execution happens in sequential non-overlapping phases
+known as an *_epoch_*. Each epoch on its turn is divided into a predefined
+number of slots. All slots in each epoch are sequentially indexed starting from
+0. At the beginning of each epoch, the BABE node needs to run Algorithm
+link:#algo-block-production-lottery[[algo-block-production-lottery]] to find out
+in which slots it should produce a block and gossip to the other block
+producers. In turn, the block producer node should keep a copy of the block tree
+and grow it as it receives valid blocks from other block producers. A block
+producer prunes the tree in parallel by eliminating branches that do not include
+the most recent finalized blocks according to Definition
+link:#defn-pruned-tree[[defn-pruned-tree]].
+
+==== Block Producer
+A *block producer*, noted by stem:[cc "P"_j], is a node running the Polkadot
+Host which is authorized to keep a transaction queue and which it gets a turn in
+producing blocks.
+
+==== Block Authoring Session Key Pair
+*Block authoring session key pair* stem:[(sk_j^s,pk_j^s)] is an SR25519 key pair
+which the block producer stem:[cc "P"_j] signs by their account key (see Definition
+link:#defn-account-key[[defn-account-key]]) and is used to sign the produced
+block as well as to compute its lottery values in Algorithm
+link:#algo-block-production-lottery[[algo-block-production-lottery]].
+
+[#defn-epoch-slot]
+==== Epoch
+A block production *epoch*, formally referred to as stem:[cc "E"], is a
+period with a pre-known starting time and fixed-length during which the set of
+block producers stays constant. Epochs are indexed sequentially, and we refer to
+the stem:[n^(th)] epoch since genesis by stem:[cc "E"_n]. Each epoch is divided
+into equal-length periods known as block production *slots*, sequentially
+indexed in each epoch. The index of each slot is called a *slot number*. The
+equal length duration of each slot is called the *slot duration* and indicated
+by stem:[cc "T"]. Each slot is awarded to a subset of block producers during
+which they are allowed to generate a block.
+
+IMPORTANT: Substrate refers to an epoch as ``session'' in some places, however,
+epoch should be the preferred and official name for these periods.
+
+[#note-slot]
+==== Slot duration
+We refer to the number of slots in epoch stem:[cc "E"_n] by stem:[sc_n].
+stem:[sc_n] is set to the `duration` field in the returned data from the call of
+the Runtime entry `BabeApi_configuration` (see
+link:#sect-rte-babeapi-epoch[13.3.8.1]) at genesis. For a given block stem:[B],
+we use the notation *latexmath:[$s_B$]* to refer to the slot during which
+stem:[B] has been produced. Conversely, for slot stem:[s], stem:[cc "B"_c] is
+the set of Blocks generated at slot stem:[s].
+
+Definition link:#defn-epoch-subchain[[defn-epoch-subchain]] provides an
+iterator over the blocks produced during a specific epoch.
+
+[#defn-epoch-subchain]
+==== Epoch Subchain
+By stem:["SubChain"(cc "E"_n]) for epoch stem:[cc "E"_n], we refer to the path
+graph of stem:[BT] containing all the blocks generated during the slots of epoch
+stem:[cc "E"_n]. When there is more than one block generated at a slot, we
+choose the one which is also on stem:["Longest-Chain"(BT)].
+
+==== Equivocation
+A block producer *equivocates* if they produce more than one block at the same
+slot. The proof of equivocation are the given distinct headers that were signed
+by the validator and which include the slot number.
+
+The Polkadot Host must detect equivocations committed by other
+validators and submit those to the Runtime as described in Section
+link:#sect-babeapi_submit_report_equivocation_unsigned_extrinsic[13.3.8.6].
+
+=== Block Production Lottery
+

@@ -110,7 +110,7 @@ configuration data are intended to be used from the next epoch onwards.
 definition link:#defn-authority-list[[defn-authority-list]].
 * stem:[R] is the 32-byte randomness seed for the next epoch, as defined in
 definition link:#defn-epoch-randomness[[defn-epoch-randomness]]
-* stem:["Auth"_("ID")] is an unsigned 64-bit integer pointing to an individual
+* stem:["Auth"_("id")] is an unsigned 64-bit integer pointing to an individual
 authority in the current authority list.
 * stem:[c] is the probability that a slot will not be empty, as defined in
 definition link:#defn-babe-constant[[defn-babe-constant]]. It is encoded as a
@@ -127,6 +127,9 @@ s_("2nd") = {(1,("Auth"_C,N_("delay"))),(2,("Auth"_C,N_("delay"))),(3,"Auth"_("i
 +
 where (TODO: Maybe add some references here?):
 +
+** stem:[Auth_C] is the authority list as defined in Definition (TODO).
+** stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the chain
+the announcing block must be before the change is applied.
 ** _1_ implies *scheduled change*: Schedule an authority set change after the
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
 definition of stem:[N_("delay")], is a block _finalized_ by the finality
