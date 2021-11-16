@@ -255,3 +255,49 @@ carry the _BABE header_ as well as the _block signature_ as Pre-Runtime and Seal
 digest items defined in Definition link:#defn-babe-header[[defn-babe-header]]
 and link:#defn-block-signature[[defn-block-signature]] respectively.
 
+[#defn-babe-header]
+===== BABE Header
+The *BABE Header* of block stem:[B], referred to formally by
+stem:[H_("BABE")(B)] is a tuple and consists of the following components:
+
+[stem]
+++++
+(d,pi,j,s)
+++++
+
+where:
+
+* stem:[pi, d] are the results of the block lottery for slot stem:[s].
+* stem:[j] is the index of the block producer in the authority directory of the
+current epoch.
+* stem:[s] is the slot at which the block is produced.
+
+stem:[H_("BABE")(B)] must be included as a digest item of Pre-Runtime type in
+the header digest stem:[H_d(B)] as defined in Definition
+link:#defn-digest[[defn-digest]].
+
+[#defn-block-signature]
+===== Block Signature
+The *Block Signature* stem:[S_B] is a signature of the block header hash (see
+Definitionlink:#defn-block-header-hash[[defn-block-header-hash]]) and defined as
+
+[stem]
+++++
+"Sig"_("SR25519","sk"_j^s)(H_h(B))
+++++
+
+stem:[S_B] should be included in stem:[H_d(B)] as the Seal digest item according
+to Definition link:#defn-digest[[defn-digest]] of value:
+
+[stem]
+++++
+(E_(id)("BABE"),S_B)
+++++
+
+in which, stem:[E_("id")("BABE")] is the BABE consensus engine unique identifier
+defined in Definition
+link:#defn-consensus-message-digest[[defn-consensus-message-digest]]. The Seal
+digest item is referred to as the *BABE Seal*.
+
+TODO: Algorithm
+
