@@ -72,3 +72,40 @@ link:#sect-babeapi_submit_report_equivocation_unsigned_extrinsic[13.3.8.6].
 
 === Block Production Lottery
 
+The babe constant (Definition link:#defn-babe-constant[[defn-babe-constant]]) is
+initialized at genesis to the value returned by calling `BabeApi_configuration`
+(see link:#sect-rte-babeapi-epoch[13.3.8.1]). For efficiency reasons, it is
+generally updated by the Runtime through the ``Next Config Data'' consensus
+message (see Definition
+link:#defn-consensus-message-digest[[defn-consensus-message-digest]]) in the
+digest of the first block of an epoch for the next epoch.
+
+A block producer aiming to produce a block during stem:[cc "E"_n] should run
+Algorithm link:#algo-block-production-lottery[[algo-block-production-lottery]]
+to identify the slots it is awarded. These are the slots during which the block
+producer is allowed to build a block. The stem:[sk] is the block producer
+lottery secret key and latexmath:[$n$] is the index of the epoch for whose slots
+the block producer is running the lottery.
+
+[#defn-babe-constant]
+The *BABE constant* stem:[c in (0,1)] is the probability that a slot will not be
+empty and used in the winning threshold calculation (see Definition
+link:#defn-winning-threshold[[defn-winning-threshold]]).
+
+[#defn-winning-threshold]
+The *Winning threshold* denoted by stem:[T_(E_n)] is the threshold that is used
+alongside the result of Algorithm
+link:#algo-block-production-lottery[[algo-block-production-lottery]] to decide
+if a block producer is the winner of a specific slot. stem:[T_(E_n)] is
+calculated  as follows:
+
+[stem]
+++++
+T_(E_n) := 1 - (1 - c)^(1/("AuthorityDirectory"^(E_n)))
+++++
+
+where the
+latexmath:[$\ensuremath{\operatorname{AuthorityDirectory}}^{\mathcal{E}_n}$]
+is the set of BABE authorities for epoch latexmath:[$\varepsilon_n$] and
+latexmath:[$c \in (0, 1)$] is the BABE constant as defined in definition
+link:#defn-babe-constant[[defn-babe-constant]].
