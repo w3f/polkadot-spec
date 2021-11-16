@@ -276,8 +276,14 @@ stem:[H_("BABE")(B)] must be included as a digest item of Pre-Runtime type in
 the header digest stem:[H_d(B)] as defined in Definition
 link:#defn-digest[[defn-digest]].
 
+TODO: Algorithm
+
+Add-Digest-Item appends a digest item to the end of the header digest
+stem:[H_d(B)] according to Definition link:#defn-digest[[defn-digest]].
+
 [#defn-block-signature]
 ===== Block Signature
+***
 The *Block Signature* stem:[S_B] is a signature of the block header hash (see
 Definitionlink:#defn-block-header-hash[[defn-block-header-hash]]) and defined as
 
@@ -298,6 +304,24 @@ in which, stem:[E_("id")("BABE")] is the BABE consensus engine unique identifier
 defined in Definition
 link:#defn-consensus-message-digest[[defn-consensus-message-digest]]. The Seal
 digest item is referred to as the *BABE Seal*.
+****
 
-TODO: Algorithm
+[#sect-epoch-randomness]
+==== Epoch Randomness
+****
+At the beginning of each epoch, stem:[cc "E"_n] the host will receive the
+randomness seed stem:[cc "R"_(cc "E"_(n+1))](Definition
+link:#defn-epoch-randomness[[defn-epoch-randomness]]) necessary to participate
+in the block production lottery in the next epoch stem:[cc "E"_(n+1)] from the
+Runtime, through the consensus message (Definition
+link:#defn-consensus-message-digest[[defn-consensus-message-digest]]) in the
+digest of the first block.
+****
 
+[#defn-epoch-randomness]
+===== Randomness Seed
+****
+For epoch stem:[cc "E"], there is a 32-byte stem:[cc "R"_(cc "E")] computed
+based on the previous epochs VRF outputs. For stem:[cc "E"_0] and stem:[cc
+"E"_1], the randomness seed is provided in the genesis state.
+****
