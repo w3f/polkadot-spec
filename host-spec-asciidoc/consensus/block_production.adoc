@@ -14,12 +14,14 @@ producer prunes the tree in parallel by eliminating branches that do not include
 the most recent finalized blocks according to Definition
 link:#defn-pruned-tree[[defn-pruned-tree]].
 
-==== Block Producer
+==== Preliminaries
+
+===== Block Producer
 A *block producer*, noted by stem:[cc "P"_j], is a node running the Polkadot
 Host which is authorized to keep a transaction queue and which it gets a turn in
 producing blocks.
 
-==== Block Authoring Session Key Pair
+===== Block Authoring Session Key Pair
 *Block authoring session key pair* stem:[(sk_j^s,pk_j^s)] is an SR25519 key pair
 which the block producer stem:[cc "P"_j] signs by their account key (see Definition
 link:#defn-account-key[[defn-account-key]]) and is used to sign the produced
@@ -27,7 +29,8 @@ block as well as to compute its lottery values in Algorithm
 link:#algo-block-production-lottery[[algo-block-production-lottery]].
 
 [#defn-epoch-slot]
-==== Epoch
+===== Epoch
+****
 A block production *epoch*, formally referred to as stem:[cc "E"], is a
 period with a pre-known starting time and fixed-length during which the set of
 block producers stays constant. Epochs are indexed sequentially, and we refer to
@@ -40,9 +43,11 @@ which they are allowed to generate a block.
 
 IMPORTANT: Substrate refers to an epoch as ``session'' in some places, however,
 epoch should be the preferred and official name for these periods.
+****
 
 [#note-slot]
-==== Slot duration
+===== Slot duration
+****
 We refer to the number of slots in epoch stem:[cc "E"_n] by stem:[sc_n].
 stem:[sc_n] is set to the `duration` field in the returned data from the call of
 the Runtime entry `BabeApi_configuration` (see
@@ -53,15 +58,19 @@ the set of Blocks generated at slot stem:[s].
 
 Definition link:#defn-epoch-subchain[[defn-epoch-subchain]] provides an
 iterator over the blocks produced during a specific epoch.
+****
 
 [#defn-epoch-subchain]
-==== Epoch Subchain
+===== Epoch Subchain
+****
 By stem:["SubChain"(cc "E"_n]) for epoch stem:[cc "E"_n], we refer to the path
 graph of stem:[BT] containing all the blocks generated during the slots of epoch
 stem:[cc "E"_n]. When there is more than one block generated at a slot, we
 choose the one which is also on stem:["Longest-Chain"(BT)].
+****
 
-==== Equivocation
+===== Equivocation
+****
 A block producer *equivocates* if they produce more than one block at the same
 slot. The proof of equivocation are the given distinct headers that were signed
 by the validator and which include the slot number.
@@ -69,8 +78,9 @@ by the validator and which include the slot number.
 The Polkadot Host must detect equivocations committed by other
 validators and submit those to the Runtime as described in Section
 link:#sect-babeapi_submit_report_equivocation_unsigned_extrinsic[13.3.8.6].
+****
 
-=== Block Production Lottery
+==== Block Production Lottery
 
 The babe constant (Definition link:#defn-babe-constant[[defn-babe-constant]]) is
 initialized at genesis to the value returned by calling `BabeApi_configuration`
@@ -88,13 +98,16 @@ lottery secret key and stem:[n] is the index of the epoch for whose slots
 the block producer is running the lottery.
 
 [#defn-babe-constant]
-==== BABE Constant
+===== BABE Constant
+****
 The *BABE constant* stem:[c in (0,1)] is the probability that a slot will not be
 empty and used in the winning threshold calculation (see Definition
 link:#defn-winning-threshold[[defn-winning-threshold]]).
+****
 
 [#defn-winning-threshold]
-==== Winning Threshold
+===== Winning Threshold
+****
 The *Winning threshold* denoted by stem:[T_(cc "E"_n)] is the threshold that is used
 alongside the result of Algorithm
 link:#algo-block-production-lottery[[algo-block-production-lottery]] to decide
@@ -106,10 +119,11 @@ calculated  as follows:
 T_(E_n) := 1 - (1 - c)^(1/("AuthorityDirectory"^(E_n)))
 ++++
 
-where the stem:["AuthorityDirectory"^(cc "E"_n)}$] is the set of BABE
+where the stem:["AuthorityDirectory"^(cc "E"_n)] is the set of BABE
 authorities for epoch stem:[cc "E"_n] and stem:[c in (0, 1)] is the BABE
 constant as defined in definition
 link:#defn-babe-constant[[defn-babe-constant]].
+****
 
 TODO: Algorithm
 
@@ -118,3 +132,106 @@ is required to produce a block. For the definitions of _Epoch-Randomness_ and
 _VRF_ functions, see Section link:#sect-epoch-randomness[6.2.5] and Section
 link:#sect-vrf[9.4] respectively.
 
+[#sect-slot-number-calculation]
+==== Slot Number Calculation
+
+It is imperative for the security of the network that each block producer
+correctly determines the current slot numbers at a given time by regularly
+estimating the local clock offset in relation to the network (Definition
+link:#defn-relative-syncronization[[defn-relative-syncronization]]).
+
+****
+NOTE: *The calculation described in this section is still to be implemented and
+deployed*: For now, each block producer is required to synchronize its local
+clock using NTP instead. The current slot stem:[s] is then calculated by stem:[s
+= t_("unix")/cc "T"] where stem:[t_("unix")] is the current UNIX time in seconds
+since 1970-01-01 00:00:00 UTC. That also entails that slot numbers are currently
+not reset at the beginning of each epoch.
+
+TODO: What is stem:[cc "T"]?
+****
+
+Polkadot does this synchronization without relying on any external clock source
+(e.g. through the or the ). To stay in synchronization, each producer is
+therefore required to periodically estimate its local clock offset in relation
+to the rest of the network.
+
+This estimation depends on the two fixed parameters stem:[k] (Definition
+link:#defn-prunned-best[[defn-prunned-best]]) and stem:[s_(cq)] (Definition
+link:#defn-chain-quality[[defn-chain-quality]]). These are chosen based on the
+results of a formal security analysis, currently assuming a stem:[1 s]clock
+drift per day and targeting a probability lower than stem:[0.5%] for an
+adversary to break BABE in 3 years with resistance against a network delay up to
+stem:[1 / 3] of the slot time and a Babe constant (Definition
+link:#defn-babe-constant[[defn-babe-constant]]) of stem:[c = 0.38].
+
+[#defn-slot-offset]
+===== Slot Offset
+****
+Let stem:[s_i] and stem:[s_j] be two slots belonging to epochs stem:[cc "E"_k]
+and stem:[cc "E"_l]. By *Slot-Offset*stem:[(s_i,s_j)] we refer to the function
+whose value is equal to the number of slots between stem:[s_i] and stem:[s_j]
+(counting stem:[s_j]) on the time continuum. As such, we have
+*Slot-Offset*stem:[(s_i, s_i) = 0].
+
+It is imperative for the security of the network that each block
+producer correctly determines the current slot numbers at a given time
+by regularly estimating the local clock offset in relation to the
+network (Definition
+link:#defn-relative-syncronization[[defn-relative-syncronization]]).
+****
+
+[#defn-relative-syncronization]
+===== Relative Time Synchronization
+****
+The *relative time synchronization* is a tuple of a slot number and a local
+clock timestamp stem:[(s_("sync"),t_("sync"))] describing the last point at
+which the slot numbers have been synchronized with the local clock.
+
+TODO: Algorithm
+****
+
+[#defn-prunned-best]
+===== Pruned Best Chain
+****
+The *pruned best chain* stem:[C^(r^k)] is the longest chain selected according
+to Definition link:#defn-longest-chain[[defn-longest-chain]] with the last
+stem:[k] Blocks pruned. We chose stem:[k = 140]. The *last (probabilistic)
+finalized block* describes the last block in this pruned best chain.
+****
+
+[#defn-chain-quality]
+===== Chain Quality
+****
+The *chain quality* stem:[s_(cq)] represents the number of slots that are used
+to estimate the local clock offset. Currently, it is set to stem:[s_(cq) =
+3000].
+
+The prerequisite for such a calculation is that each producer stores the arrival
+time of each block (Definition link:#defn-block-time[[defn-block-time]])
+measured by a clock that is otherwise not adjusted by any external protocol.
+****
+
+[#defn-block-time]
+===== Block Arrival Time
+The *block arrival time* of block stem:[B] for node stem:[j] formally
+represented by stem:[T^j_B] is the local time of node stem:[j] when node
+stem:[j] has received block stem:[B] for the first time. If the node stem:[j]
+itself is the producer of stem:[B], stem:[T_B^j] is set equal to the time that
+the block is produced. The index stem:[j] in stem:[T^j_B] notation may be
+dropped and B’s arrival time is referred to by stem:[T_B] when there is no
+ambiguity about the underlying node.
+
+WARNING: Currently still lacks a clear definition of when block arrival times
+are considered valid and how to differentiated imported block on initial sync
+from ``fresh'' blocks that were just produced.
+
+[#defn-sync-period]
+===== Sync Period
+A is an interval at which each validator (re-)evaluates its local clock offsets.
+The first sync period stem:[fr "E"_1] starts just after the genesis block is
+released. Consequently, each sync period stem:[fr "E"_i] starts after stem:[fr
+"E"_(i - 1)]. The length of the sync period is equal to
+latexmath:[$s_{\ensuremath{\operatorname{qc}}}$] as defined in Definition
+link:#defn-chain-quality[[defn-chain-quality]] and expressed in the number of
+slots.
