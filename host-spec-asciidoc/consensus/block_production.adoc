@@ -350,3 +350,8 @@ producers of epoch stem:[cc "E"_c].
 link:#algo-verify-slot-winner[[algo-verify-slot-winner]].
 
 TODO: Algorithms
+
+[#sect-block-building] 
+==== Block Building Process
+
+TODO: Algorithm

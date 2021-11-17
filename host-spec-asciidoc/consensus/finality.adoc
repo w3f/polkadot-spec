@@ -1,0 +1,36 @@
+[#sect-finality]
+=== Finality
+
+The Polkadot Host uses GRANDPA Finality protocol to finalize blocks.
+Finality is obtained by consecutive rounds of voting by the validator
+nodes. Validators execute GRANDPA finality process in parallel to Block
+Production as an independent service. In this section, we describe the
+different functions that GRANDPA service performs to successfully
+participate in the block-finalization process.
+
+[#defn-grandpa-voter]
+==== GRANDPA Voter
+A *GRANDPA Voter*,
+stem:[v], represented by a key pair
+stem:[(K_v^("pr"),v_("id"))]
+where stem:[k_v^("pr")] represents an
+_ed25519_ private key, is a
+node running a GRANDPA protocol and broadcasting votes to finalize
+blocks in a Polkadot Host-based chain. The *set of all GRANDPA voters*
+for a given block B is indicated by stem:[bbb "V"_B]. In that
+regard, we have [To do: change function name, only call at genesis,
+adjust V_B over the sections]
+
+[stem]
+++++
+bbb "V" = "grandpa_authorities"(B)
+++++
+
+where stem:[] is the entry into the
+Runtime described in Section link:#sect-rte-grandpa-auth[13.3.7.1]. We
+refer to latexmath:[$\mathbb{V}_B$] as latexmath:[$\mathbb{V}$] when
+there is no chance of ambiguity.
+
+Analogously we say that a Polkadot node is a *non-voter node* for block
+latexmath:[$B$], if it does not own any of the key pairs in
+latexmath:[$\mathbb{V}_B$].
