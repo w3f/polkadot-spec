@@ -50,6 +50,15 @@
   elliptic curve groups. <todo|instead I'd either reference the privacy pass
   and/or https://eprint.iacr.org/2017/099.pdf here as the general design.>
 
+  \;
+
+  <\definition>
+    <label|defn-vrf-context> <strong|VRF context> (simply referred to as
+    context when there is no ambiguity) represented as
+    <math|c><glossary-explain|<math|c>|VRF context> is a <todo|define context
+    here>
+  </definition>
+
   <\definition>
     <label|defn-vrf-pair>The <strong|VRF Pair> is a datastructure that
     contains both the VRV input and its corresponding output. The VRF Pair
@@ -191,15 +200,21 @@
     Initialization\Q.
   </definition>
 
+  <\algorithm>
+    <name|Make-Bytes>(<math|p:> VRF Pair, <math|p>, as defined in Definition
+    <reference|defn-vrf-pair>,\ 
+
+    <math|c>: VRF context as defined in Definition
+    <reference|defn-vrf-context> )
+  </algorithm|>
+
   <\definition>
-    <label|defn-vrf-make-bytes>The <name|Make-Bytes> function takes a VRF
-    Pair, <math|p>, as defined in Definition <reference|defn-vrf-pair>, the
-    size of the buffer in bytes, <math|s>, and a context, <math|c>,
-    represtended as a UTF-8 encoded string and produces the raw byte output
-    of the VRF.e
+    <label|defn-vrf-make-bytes>The <name|Make-Bytes> function takes a , the
+    size of the buffer in bytes, <math|s>, and a \ and produces the raw byte
+    output of the VRF.
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Make-Bytes>><around*|(|p,s,c|)>>>>>
+      <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|>>>>
     </eqnarray*>
 
     The function executes the following steps:
