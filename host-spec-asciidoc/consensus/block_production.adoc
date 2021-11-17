@@ -283,7 +283,7 @@ stem:[H_d(B)] according to Definition link:#defn-digest[[defn-digest]].
 
 [#defn-block-signature]
 ===== Block Signature
-***
+****
 The *Block Signature* stem:[S_B] is a signature of the block header hash (see
 Definitionlink:#defn-block-header-hash[[defn-block-header-hash]]) and defined as
 
@@ -308,7 +308,6 @@ digest item is referred to as the *BABE Seal*.
 
 [#sect-epoch-randomness]
 ==== Epoch Randomness
-****
 At the beginning of each epoch, stem:[cc "E"_n] the host will receive the
 randomness seed stem:[cc "R"_(cc "E"_(n+1))](Definition
 link:#defn-epoch-randomness[[defn-epoch-randomness]]) necessary to participate
@@ -316,7 +315,6 @@ in the block production lottery in the next epoch stem:[cc "E"_(n+1)] from the
 Runtime, through the consensus message (Definition
 link:#defn-consensus-message-digest[[defn-consensus-message-digest]]) in the
 digest of the first block.
-****
 
 [#defn-epoch-randomness]
 ===== Randomness Seed
@@ -325,3 +323,30 @@ For epoch stem:[cc "E"], there is a 32-byte stem:[cc "R"_(cc "E")] computed
 based on the previous epochs VRF outputs. For stem:[cc "E"_0] and stem:[cc
 "E"_1], the randomness seed is provided in the genesis state.
 ****
+
+[#sect-verifying-authorship]
+==== Verifying Authorship Right
+
+When a Polkadot node receives a produced block, it needs to verify if
+the block producer was entitled to produce the block in the given slot
+by running Algorithm
+link:#algo-verify-authorship-right[[algo-verify-authorship-right]]
+where:
+
+* stem:[T_B] is stem:[B]’s arrival time defined in Definition
+link:#defn-block-time[[defn-block-time]].
+* stem:[H_d(B)] is the digest sub-component of stem:["Head"(B)] defined in
+Definitions link:#defn-block-header[[defn-block-header]] and
+link:#defn-digest[[defn-digest]].
+* The Seal stem:[D_s] is the last element in the digest array stem:[H_d(B)] as
+defined in Definition link:#defn-digest[[defn-digest]].
+* stem:[Seal-Id] is the type index showing that a digest item of variable type
+is of _Seal_ type (See Definitions
+link:#defn-scale-variable-type[[defn-scale-variable-type]] and
+link:#defn-digest[[defn-digest]])
+* stem:["AuthorityDirectory"^(cc "E"_c)] is the set of Authority ID for block
+producers of epoch stem:[cc "E"_c].
+* stem:[Verify-Slot-Winner] is defined in Algorithm
+link:#algo-verify-slot-winner[[algo-verify-slot-winner]].
+
+TODO: Algorithms
