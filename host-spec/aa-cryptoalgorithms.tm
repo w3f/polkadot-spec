@@ -205,41 +205,63 @@
     <reference|defn-vrf-pair>,\ 
 
     <math|c>: VRF context as defined in Definition
-    <reference|defn-vrf-context> )
-  </algorithm|>
+    <reference|defn-vrf-context>\ 
 
-  <\definition>
-    <label|defn-vrf-make-bytes>The <name|Make-Bytes> function takes a , the
-    size of the buffer in bytes, <math|s>, and a \ and produces the raw byte
-    output of the VRF.
+    <math|s>: the size of resulting byte array)
 
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|>>>>
-    </eqnarray*>
+    Output: A byte array of length <math|s>
+  <|algorithm>
+    \;
 
-    The function executes the following steps:
+    <\algorithmic>
+      <\state>
+        <math|t\<leftarrow\><text|<name|Create-Transcript>><around*|(|<rprime|''>VRFResult<rprime|''>|)>>
+      </state>
 
-    <\eqnarray*>
-      <tformat|<table|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Create-Transcript>><around*|(|<rprime|''>VRFResult<rprime|''>|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Meta-Ad>><around*|(|t,\<b-phi\>,c|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<text|<name|Append-Message>><around*|(|t,<rprime|''>vrf-in<rprime|''>,I
-      where I\<in\>p|)>>>|<row|<cell|t>|<cell|\<leftarrow\>>|<cell|<name|<text|Append-Message>><around*|(|t,<rprime|''>vrf-out<rprime|''>,O
-      where O\<in\>p|)>>>|<row|<cell|b>|<cell|\<leftarrow\>>|<cell|<text|<name|Challenge-Bytes>><around*|(|t,s|)>>>>>
-    </eqnarray*>
+      <\state>
+        <math|t\<leftarrow\><text|<name|Meta-Ad>><around*|(|t,\<b-phi\>,c|)>>
+      </state>
 
-    where <math|b> is the returned value by <name|Make-Bytes> and:
+      <\state>
+        <math|t\<leftarrow\><text|<name|Append-Message>><around*|(|t,<rprime|''>vrf-in<rprime|''>,I
+        where I\<in\>p|)>>
+      </state>
 
-    <\itemize-dot>
-      <item><name|Create-Transcript> is a function defined in Definition
-      <reference|defn-vrf-create-transcript>.
+      <\state>
+        <math|t\<leftarrow\><name|<text|Append-Message>><around*|(|t,<rprime|''>vrf-out<rprime|''>,O
+        where O\<in\>p|)>>
+      </state>
 
-      <item><name|Meta-Ad> is a function defined in Definition <todo|todo>.
+      <\state>
+        <\math>
+          t\<leftarrow\><text|<name|Meta-Ad>><around*|(|t,Enc<rsub|LE><around*|(|s,4|)>,c|)>
+        </math>
+      </state>
 
-      <item><name|Append-Message> is a function defined in Definition
-      <reference|defn-vrf-append-message>.
+      <\state>
+        <\RETURN>
+          <name|Strobe-PRF>(<math|t>,s)
+        </RETURN>
+      </state>
+    </algorithmic>
+  </algorithm>
 
-      <item><name|Challenge-Bytes> is a function defined in Definition
-      <reference|defn-vrf-challenge-bytes>.
-    </itemize-dot>
-  </definition>
+  Where\ 
+
+  <\itemize>
+    <item><name|Create-Transcript> is a function defined in Definition
+    <reference|defn-vrf-create-transcript>.
+
+    <item><name|Meta-Ad> is a function defined in Definition <todo|todo>.
+
+    <item><name|Append-Message> is a function defined in Definition
+    <reference|defn-vrf-append-message>.
+
+    <item><name|Strobe-PRF> is STROBE function specified in <cite|stobe??> .
+    It extracts pseudorandom data of given length as deterministic function
+    of the transcript. This data can be treated as a hash of all preceeding
+    operations, messages and keys.
+  </itemize>
 
   <\definition>
     <label|defn-vrf-append-message>The <name|Append-Message> function takes a
