@@ -23,14 +23,68 @@ adjust V_B over the sections]
 
 [stem]
 ++++
-bbb "V" = "grandpa_authorities"(B)
+bbb "V" = tt "grandpa_authorities"(B)
 ++++
 
-where stem:[] is the entry into the
-Runtime described in Section link:#sect-rte-grandpa-auth[13.3.7.1]. We
-refer to latexmath:[$\mathbb{V}_B$] as latexmath:[$\mathbb{V}$] when
-there is no chance of ambiguity.
+where stem:[tt "grandpa_authorities"] is the entry into the Runtime described in
+Section link:#sect-rte-grandpa-auth[13.3.7.1]. We refer to stem:[bbb "V"_B] as
+stem:[bbb "V"] when there is no chance of ambiguity.
 
 Analogously we say that a Polkadot node is a *non-voter node* for block
-latexmath:[$B$], if it does not own any of the key pairs in
-latexmath:[$\mathbb{V}_B$].
+stem:[B], if it does not own any of the key pairs in
+stem:[bbb "V"_B].
+
+[#defn-authority-set-id]
+==== Authority Set Id
+The *authority set Id* (stem:["id"_(bbb "V")]) is an incremental counter which
+tracks the amount of authority list changes that occurred (Definition
+link:#defn-consensus-message-digest[[defn-consensus-message-digest]]). Starting
+with the value of zero at genesis, the Polkadot Host increments this value by
+one every time a *Scheduled Change* or a *Forced Change* occurs. The authority
+set Id is an unsigned 64-bit integer.
+
+==== GRANDPA State
+TODO: verify V_id and id_V usage, unify
+
+The *GRANDPA state*, stem:["GS"], is defined as:
+
+[stem]
+++++
+"GS" := {bbb "V", "id"_(bbb "V"),r}
+++++
+
+where:
+
+* stem:[bbb "V"]: is the set of voters.
+* stem:["id"_(bbb "V")]: is the authority set ID as defined in Definition
+link:#defn-authority-set-id[[defn-authority-set-id]].
+* stem:[r]: is the voting round number.
+
+[#defn-vote]
+==== GRANDPA Vote
+A *GRANDPA vote* or simply a vote for block stem:[B] is an ordered pair defined
+as
+
+[stem]
+++++
+V(B) := (H_h(B),H_i(B))
+++++
+
+where stem:[H_h(B)] and stem:[H_i (B)] are the block hash and the block number
+defined in Definitions link:#defn-block-header[[defn-block-header]] and
+link:#defn-block-header-hash[[defn-block-header-hash]] respectively.
+
+==== Voting Rounds
+Voters engage in a maximum of two sub-rounds of voting for each round stem:[r].
+The first sub-round is called *pre-vote* and the second sub-round is called
+*pre-commit*.
+
+By stem:[V_v^(r,"pv")] and stem:[V_v^(r,"pc")] we refer to the vote cast by
+voter stem:[v] in round stem:[r] (for block stem:[B]) during the pre-vote and
+the pre-commit sub-round respectively.
+
+Voting is done by means of broadcasting voting messages to the network. The
+structure of these messages is described in Section
+link:#sect-msg-grandpa[4.8.4]. Validators inform their peers about the block
+finalized in round stem:[r] by broadcasting a commit message (see Algorithm
+link:#algo-grandpa-round[[algo-grandpa-round]] for more details).
