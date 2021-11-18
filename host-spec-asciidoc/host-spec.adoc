@@ -45,6 +45,10 @@ include::consensus/finality.adoc[]
 include::consensus/block_finalization.adoc[]
 include::consensus/bridge_design.adoc[]
 
+[#chap-host-api]
+== Polkadot Host API
+include::host_api/intro.adoc[]
+
 [#chapter-anv]
 == Availability & Validity
 
