@@ -41,6 +41,7 @@ include::bootstrapping.adoc[]
 == Consensus
 include::consensus/common.adoc[]
 include::consensus/block_production.adoc[]
+include::consensus/finality.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
