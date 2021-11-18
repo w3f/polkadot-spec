@@ -88,3 +88,95 @@ structure of these messages is described in Section
 link:#sect-msg-grandpa[4.8.4]. Validators inform their peers about the block
 finalized in round stem:[r] by broadcasting a commit message (see Algorithm
 link:#algo-grandpa-round[[algo-grandpa-round]] for more details).
+
+[#defn-sign-round-vote]
+==== Vote Signature
+stem:["Sign"_(v_i)^(r,"stage")] refers to the signature of a voter for a specific
+message in a round and is formally defined as:
+
+[stem]
+++++
+"Sign"_(v_i)^(r,"stage") := "Sig"_("ed25519")("msg",r,"id"_(bbb "V"))
+++++
+
+where:
+
+* stem:["msg"]: is an byte array containing the message to be signed (TODO: format of the message?).
+* stem:[r]: is an unsigned 64-bit integer is the round number.
+* stem:["id"_(bbb "V")]: is an unsigned 64-bit integer indicating the authority set Id (TODO: Reference).
+
+[#defn-grandpa-justification]
+==== Justification
+The *justification* for block stem:[B] in round stem:[r],
+stem:[J^(r,"stage")(B)], is a vector of pairs of the type:
+
+[stem]
+++++
+(V(B'),"Sign"_(v_i)^(r,"stage")(B'),v_("id"))
+++++
+
+in which either
+
+[stem]
+++++
+B' >= B
+++++
+
+or stem:[V_(v_i)^(r,"pc")(B')] is an equivocatory vote.
+
+In all cases, stem:["Sign"_(v_i)^(r,"stage")(B')], as defined in Definition
+link:#defn-sign-round-vote[[defn-sign-round-vote]], is the signature of voter
+stem:[v_i in bbb "V"_B] broadcasted during either the pre-vote (stage = pv) or
+the pre-commit (stage = pc) sub-round of round r. A *valid justification* must
+only contain up-to-one valid vote from each voter and must not contain more than
+two equivocatory votes from each voter.
+
+[#defn-finalizing-justification]
+==== Finalizing Justification
+We say stem:[J^(r,"pc")(B)] *justifies the finalization* of stem:[B' >= B] *for
+a non-voter node* stem:[n] if the number of valid signatures in
+stem:[J^(r,"pc")(B)] for stem:[B'] is greater than stem:[2/3|bbb "V"_B|].
+
+Note that stem:[J^(r,"pc")(B)] can only be used by a non-voter node to finalize
+a block. In contrast, a voter node can only be assured of the finality of block
+stem:[B] by actively participating in the voting process. That is by invoking
+Algorithm link:#algo-grandpa-round[[algo-grandpa-round]]. See Definition
+link:#defn-finalized-block[[defn-finalized-block]] for more details.
+
+The GRANDPA protocol dictates how an honest voter should vote in each
+sub-round, which is described in Algorithm
+link:#algo-grandpa-round[[algo-grandpa-round]]. After defining what
+constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
+
+[#defn-equivocation]
+==== Equivocation
+Voter stem:[v] *equivocates* if they broadcast two or more valid votes to blocks
+during one voting sub-round. In such a situation, we say that stem:[v] is an
+*equivocator* and any vote stem:[V_v^(r,"stage")(B)] cast by stem:[v] in that
+sub-round is an *equivocatory vote*, and
+
+[stem]
+++++
+cc "E"^(r,"stage")
+++++
+
+represents the set of all equivocators voters in sub-round "stem:["stage"]" of
+round stem:[r]. When we want to refer to the number of equivocators whose
+equivocation has been observed by voter stem:[v] we refer to it by:
+
+[stem]
+++++
+cc "E"_("obs"(v))^(r,"stage")
+++++
+
+The Polkadot Host must detect equivocations committed by other validators and
+submit those to the Runtime as described in Section
+link:#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic[13.3.7.2].
+
+A vote stem:[V_v^(r,"stage") = V(B)] is *invalid* if
+
+* stem:[H (B)] does not correspond to a valid block.
+* stem:[B] is not an (eventual) descendant of a previously finalized block.
+* stem:[M_v^(r,"stage")] does not bear a valid signature.
+* stem:["id"_(bbb "V")] does no match the current stem:[bbb "V"].
+* stem:[V_v^(r,"stage")] is an equivocatory vote.
