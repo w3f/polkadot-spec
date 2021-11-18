@@ -1,0 +1,50 @@
+The Polkadot Host API is a set of functions that the Polkadot Host
+exposes to Runtime to access external functions needed for various
+reasons, such as the Storage of the content, access and manipulation,
+memory allocation, and also efficiency. The encoding of each data type
+is specified or referenced in this section. If the encoding is not
+mentioned, then the default Wasm encoding is used, such as little-endian
+byte ordering for integers.
+
+=== Preliminaries
+
+[#nota-host-api-at-state]
+==== Exposed Host API
+****
+By stem:[cc "RE"_B] we refer to the API exposed by the Polkadot Host which
+interact, manipulate and response based on the state storage whose state is set
+at the end of the execution of block stem:[B].
+****
+
+[#defn-runtime-pointer]
+==== Runtime Pointer
+****
+The *Runtime pointer* type is an unsigned 32-bit integer representing a pointer
+to data in memory. This pointer is the primary way to exchange data of
+fixed/known size between the Runtime and Polkadot Host.
+****
+
+[#defn-runtime-pointer-size]
+==== Runtime Pointer Size
+****
+The *Runtime pointer-size* type is an unsigned 64-bit integer, representing two
+consecutive integers. The least significant is a pointer to the data in memory.
+The most significant provides the size of the data in bytes. This representation
+is the primary way to exchange data of arbitrary/dynamic sizes between the
+Runtime and the Polkadot Host.
+****
+
+[#defn-lexicographic-ordering]
+==== Lexicographic ordering
+****
+*Lexicographic ordering* refers to the ascending ordering of bytes or byte
+arrays, such as:
+
+[stem]
+++++
+[0,0,2]<[0,1,1]<[1]<[1,1,0]<[2]<[...]
+++++
+
+The functions are specified in each subsequent subsection for each category of
+those functions.
+****
