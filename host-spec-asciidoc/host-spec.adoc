@@ -43,6 +43,7 @@ include::consensus/common.adoc[]
 include::consensus/block_production.adoc[]
 include::consensus/finality.adoc[]
 include::consensus/block_finalization.adoc[]
+include::consensus/bridge_design.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
