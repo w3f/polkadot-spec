@@ -160,7 +160,7 @@ sub-round is an *equivocatory vote*, and
 cc "E"^(r,"stage")
 ++++
 
-represents the set of all equivocators voters in sub-round "stem:["stage"]" of
+represents the set of all equivocators voters in sub-round _stage_ of
 round stem:[r]. When we want to refer to the number of equivocators whose
 equivocation has been observed by voter stem:[v] we refer to it by:
 
@@ -180,3 +180,76 @@ A vote stem:[V_v^(r,"stage") = V(B)] is *invalid* if
 * stem:[M_v^(r,"stage")] does not bear a valid signature.
 * stem:["id"_(bbb "V")] does no match the current stem:[bbb "V"].
 * stem:[V_v^(r,"stage")] is an equivocatory vote.
+
+==== Set of Observed Votes
+For validator stem:[v], *the set of observed direct votes for Block stem:[B] in
+round stem:[r]*, formally denoted by stem:["VD"_("obs"(v))^(r,"stage")(B)] is
+equal to the union of:
+
+* set of _valid_ votes stem:[V_(v_i)^(r,"stage")] cast in round stem:[r] and
+received by stem:[v] such that stem:[V_(v_i)^(r,"stage") = V(B)].
+
+[#defn-observed-votes]
+==== Set of Total Observed Votes
+We refer to *the set of total votes observed by voter stem:[v] in sub-round
+_stage_ of round stem:[r]* by stem:[V_("obs"(v))^(r,"stage")].
+
+The *set of all observed votes by stem:[v] in the sub-round stage of round
+stem:[r] for block stem:[B]*, *stem:[V_("obs"(v))^(r,"stage")]* is equal to all
+of the observed direct votes cast for block stem:[B] and all of the stem:[B]’s
+descendants defined formally as:
+
+[stem]
+++++
+V_("obs"(v))^(r,"stage")(B) := uuu_(v_i in bbb "V", B >= B') "VD"_("obs"(v))^(r,"stage")(B')
+++++
+
+The *total number of observed votes for Block stem:[B] in round stem:[r]* is
+defined to be the size of that set plus the total number of equivocator voters:
+
+[stem]
+++++
+#V_("obs"(v))^(r,"stage")(B) := |V_("obs"(v))^(r,"stage")(B)|+|cc "E"_("obs"(v))^(r,"stage")|
+++++
+
+Note that for genesis state we always have
+stem:[#V_("obs"(v))^(r,"pv")(B) = |bbb "V"|].
+
+[#defn-total-potential-votes]
+==== Set of Total Potential Votes
+Let stem:[V_("unobs"(v))^(r,"stage")] be the set of voters whose vote in the
+given stage has not been received. We define the *total number of potential
+votes for Block stem:[B] in round stem:[r]* to be:
+
+[stem]
+++++
+#V_("obs"(v),"pot")^(r,"stage")(B) := |V_("obs"(v))^(r,"stage")(B)|+|V_("unobs"(v))^(r,"stage")|+"Min"(1/3|bbb "V"|,|bbb "V"|-|V_("obs"(v))^(r,"stage")(B)|-|V_("unobs"(v))^(r,"stage")|)
+++++
+
+==== Current Pre-Voted Block
+The current *pre-voted* block stem:[B_v^(r,"pv")] also know as GRANDPA GHOST is
+the block chosen by Algorithm link:#algo-grandpa-ghost[[algo-grandpa-ghost]]:
+
+[stem]
+++++
+B_v^(r,"pv") := "GRANDPA-GHOST"(r)
+++++
+
+Finally, we define when a voter stem:[v] sees a round as completable, that is
+when they are confident that stem:[B_v^(r,"pv")] is an upper bound for what is
+going to be finalized in this round.
+
+[#defn-grandpa-completable]
+==== Completable Round
+We say that
+round stem:[r] is *completable* if
+stem:[|V_("obs"(v))^(r,"pc")|+ cc "E"_("obs"(v))^(r,"pc") > 2/3 bbb "V"]
+and for all stem:[B' > B_v^(r,"pv")]:
+
+[stem]
+++++
+|V_("obs"(v))^(r,"pc")|- cc "E"_("obs"(v))^(r,"pc") - |V_("obs"(v))^(r,"pc")(B')|> 2/3|bbb "V"|
+++++
+
+Note that in practice we only need to check the inequality for those stem:[B' >
+B_v^(r,"pv")] where stem:[|V_("obs"(v))^(r,"pc")(B')| > 0].
