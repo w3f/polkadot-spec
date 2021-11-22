@@ -49,6 +49,7 @@ include::consensus/bridge_design.adoc[]
 == Polkadot Host API
 include::host_api/intro.adoc[]
 include::host_api/storage.adoc[]
+include::host_api/child_storage.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
