@@ -51,6 +51,7 @@ include::host_api/intro.adoc[]
 include::host_api/storage.adoc[]
 include::host_api/child_storage.adoc[]
 include::host_api/crypto.adoc[]
+include::host_api/hashing.adoc[]
 
 [#chapter-anv]
 == Availability & Validity
