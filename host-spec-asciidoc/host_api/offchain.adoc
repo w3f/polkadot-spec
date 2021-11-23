@@ -64,7 +64,7 @@ E = {(0,"The deadile was reached"),(1,"There was an IO error while processing th
 ==== `ext_offchain_is_validator`
 
 Check whether the local node is a potential validator. Even if this function
-returns 1, it does not mean that any keys are configured or that the validator
+returns _1_, it does not mean that any keys are configured or that the validator
 is registered in the chain.
 
 ===== Version 1 - Prototype
@@ -74,8 +74,8 @@ is registered in the chain.
 
 Arguments::
 
-* `return`: a i32 integer which is equal to 1 if the local node is a potential
-validator or a integer equal to 0 if it is not.
+* `return`: a i32 integer which is equal to _1_ if the local node is a potential
+validator or a integer equal to _0_ if it is not.
 
 ==== `ext_offchain_submit_transaction`
 
@@ -190,7 +190,7 @@ and is persisted between runs.
 
 Arguments::
 
-* `kind`: an i32 integer indicating the storage kind. A value equal to 1 is used
+* `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is used
 for a persistent storage as defined in Definition D.8 and a value equal to 2 for
 local storage as defined in Definition D.9.
 ∗ `key`: a pointer-size as defined in Definition D.3 indicating the key.
@@ -208,7 +208,7 @@ Remove a value from the local storage.
 
 Arguments::
 
-∗ `kind`: an i32 integer indicating the storage kind. A value equal to 1 is used
+∗ `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is used
 for a persistent storage as defined in Definition D.8 and a value equal to 2 for
 local storage as defined in Definition D.9.
 ∗ `key`: a pointer-size as defined in Definition D.3 indicating the key.
@@ -226,14 +226,14 @@ Sets a new value in the local storage if the condition matches the current value
 
 Arguments::
 
-* `kind`: an i32 integer indicating the storage kind. A value equal to 1 is used
+* `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is used
 for a persistent storage as defined in Definition D.8 and a value equal to 2 for
 local storage as defined in Definition D.9.
 ∗ `key`: a pointer-size as defined in Definition D.3 indicating the key.
 ∗ `old_value`: a pointer-size as defined in Definition D.3 indicating the SCALE
 encoded Option as defined in Definition ? containing the old key.
 ∗ `new_value`: a pointer-size as defined in Definition D.3 indicating the new value.
-∗ `result`: an i32 integer equal to 1 if the new value has been set or a value equal to 0 if otherwise.
+∗ `result`: an i32 integer equal to _1_ if the new value has been set or a value equal to _0_ if otherwise.
 
 ==== `ext_offchain_local_storage_get`
 
@@ -247,7 +247,7 @@ Gets a value from the local storage.
 
 Arguments::
 
-* `kind`: an i32 integer indicating the storage kind. A value equal to 1 is used
+* `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is used
 for a persistent storage as defined in Definition D.8 and a value equal to 2 for
 local storage as defined in Definition D.9.
 ∗ `key`: a pointer-size as defined in Definition D.3 indicating the key.
@@ -361,3 +361,48 @@ Arguments::
 
 ∗ `request_id`: an i32 integer indicating the ID of the started request.
 ∗ `result`: a pointer-size as defined in Definition D.3 indicating a SCALE encoded array of key/value pairs.
+
+==== `ext_offchain_http_response_read_body`
+
+Reads a chunk of body response to the given buffer. Returns the number of bytes
+written or an error in case a deadline is reached or the server closed the
+connection. If 0 is returned it means that the response has been fully consumed
+and the request_id is now invalid. This implies that response headers must be
+read before draining the body.
+
+===== Version 1 - Prototype
+----
+(func $ext_offchain_http_response_read_body_version_1
+	(param $request_id i32) (param $buffer i64) (param $deadline i64) (result i64))
+----
+
+Arguments::
+
+∗ `request_id`: an i32 integer indicating the ID of the started request.
+∗ buffer: a pointer-size as defined in Definition D.3 indicating the buffer
+where the body gets written to.
+∗ `deadline`: a pointer-size as defined in Definition D.3 indicating the SCALE
+encoded Option as defined in Definition ? containing the UNIX timestamp as
+defined in Definition ?. Passing None will block indefinitely.
+∗ `result`: a pointer-size as defined in Definition D.3 indicating the SCALE
+encoded Result as defined in Definition ?. On success it contains an i32 integer
+specifying the number of bytes written or a HTTP error type as defined in
+Definition D.11 on faiure.
+
+==== `ext_offchain_set_authorized_nodes`
+
+Set the authorized nodes which are allowed to connect to the local node. This
+function is primarily used for private blockchains [TODO: shouldn't we give a context
+of what private blockchain means] and is not necessarily required for the public
+and open Polkadot protocol.
+
+===== Version 1 - Prototype
+----
+(func $ext_offchain_set_authorized_nodes_version_1
+	(param $nodes i64) (param $authorized_only i32)
+----
+
+Arguments::
+
+∗ `nodes`: a pointer-size as defined in Definition D.3 indicating the buffer of the SCALE encoded array of libp2p PeerId's. Invalid PeerId's are silently ignored.
+∗ `authorized_only`: If set to 1, then only the authorized nodes are allowed to connect to the local node (whitelist). All other nodes are rejected. If set to 0, then no such restriction is placed.
