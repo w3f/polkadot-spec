@@ -39,6 +39,7 @@ described by this Section.
 table:
 
 TODO: References
+
 .List of the public key scheme which can be used for an account key
 |===
 |Key Scheme| Description
@@ -65,6 +66,7 @@ user independent of the Polkadot implementation. The user notifies the network
 about the used keys by submitting a transaction, as defined in
 link:#sect-creating-controller-key[9.5.2] and link:#sect-certifying-keys[9.5.5]
 respectively.
+****
 
 [#defn-stash-key]
 ==== Stash Key

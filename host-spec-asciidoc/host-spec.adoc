@@ -61,7 +61,12 @@ include::anv/definitions.adoc[]
 [#chapter-crypto-algos]
 == Cryptographic Algorithms
 
+include::crypto-algos.adoc[]
 
+[#chapter-encoding]
+== Auxiliary Encodings
+
+include::encoding.adoc[]
 
 [#chap-host-api]
 == Polkadot Host API
