@@ -2,7 +2,7 @@
 :description: Polkadot Host Specification
 :doctype: book
 :toc: left
-:toclevels: 2
+:toclevels: 3
 :stem:
 :sectnums:
 :sectnumlevels: 4
