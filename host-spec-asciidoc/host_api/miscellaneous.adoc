@@ -1,5 +1,5 @@
 [#sect-misc-api]
-=== Trie
+=== Miscellaneous
 
 Interface that provides miscellaneous functions for communicating between the
 runtime and the node.
