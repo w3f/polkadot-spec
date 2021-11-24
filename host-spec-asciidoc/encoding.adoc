@@ -197,9 +197,61 @@ The SCALE codec, stem:["Enc"_("SC")], for an empty type is defined to a byte
 array of zero length and depicted as stem:[phi].
 ****
 
-[#sect-int-encoding]
+[#defn-sc-len-encoding]
 ==== Length and Compact Encoding
+****
+*SCALE Length encoding*, stem:["Enc"_("SC")^("Len")], is used to encode integer
+numbers of varying sizes prominently in an encoding length of arrays. The length encoding, also known as a _compact encoding_, of a non-negative number stem:[n] is defined as follows:
 
-_SCALE Length encoding_ is used to encode integer numbers of varying sizes
-prominently in an encoding length of arrays.
+[stem]
+++++
+"Enc"_("SC")^("Len"): bbb "N" -> bbb "B"\
+n -> b := {(l_1, 0 <= n < 2^6),(i_1 i_2, 2^6 <= n < 2^14),(j_1 j_2 j_3, 2^14 <= n < 2^30),(k_1 k_2 ... k_m, 2^30<=n):}
+++++
 
+in where the least significant bits of the first byte of byte array b
+are defined as follows:
+
+[stem]
+++++
+l_1^1 l_1^0 = 00\
+i_1^1 i_1^0 = 01\
+j_1^1 j_1^0 = 10\
+k_1^1 k_1^0 = 11
+++++
+
+and the rest of the bits of stem:[b] store the value of stem:[n] in
+little-endian format in base-2 as follows:
+
+[stem]
+++++
+n := {
+	(l_1^7 ... l_1^3 l_1^2, n < 2^6),
+	(i_2^7 ... i_2^0 i_1^7 .. i_1^2, 2^6 <= n < 2^14),
+	(j_4^7 ... j_4^0 j_3^7 ... j_1^7 ... j_1^2, 2^14 <= n < 2^30),
+	(k_2 + k_3 2^8 + k_4 2^(2 xx 8)+...+k_m2^((m-2)8),2^30 <= n)
+	:}
+++++
+
+such that:
+
+[stem]
+++++
+k_1^7 ... k_1^3 k_1^2 := m-4
+++++
+****
+
+[#defn-hex-encoding]
+==== Hex Encoding
+****
+Practically, it is more convenient and efficient to store and process data which
+is stored in a byte array. On the other hand, the Trie keys are broken into
+4-bits nibbles. Accordingly, we need a method to encode sequences of 4-bits
+nibbles into byte arrays canonically. Suppose that stem:["PK" = (k_1, ... k_n)]
+is a sequence of nibbles, then:
+
+[stem]
+++++
+"Enc"_("HE")("PK") := {("Nibbles"_4,->, bbb "B"),("PK" = (k_1, ... k_n),->,{((16k_1+k_2,...,16k_(2i-1)+k_(2i)),n=2i),((k_1,16k_2+k_3,...,16k_(2i)+k_(2i+1)),n = 2i+1):}):}
+++++
+****
