@@ -17,7 +17,7 @@ Arguments::
 
 * `result`: the current relay chain identifier.
 
-==== ``ext_misc_print_num
+==== `ext_misc_print_num`
 
 Print a number.
 
