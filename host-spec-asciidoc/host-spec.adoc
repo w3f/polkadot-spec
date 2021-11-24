@@ -2,7 +2,7 @@
 :description: Polkadot Host Specification
 :doctype: book
 :toc: left
-:toclevels: 4
+:toclevels: 2
 :stem:
 :sectnums:
 :sectnumlevels: 4
@@ -45,19 +45,6 @@ include::consensus/finality.adoc[]
 include::consensus/block_finalization.adoc[]
 include::consensus/bridge_design.adoc[]
 
-[#chap-host-api]
-== Polkadot Host API
-include::host_api/intro.adoc[]
-include::host_api/storage.adoc[]
-include::host_api/child_storage.adoc[]
-include::host_api/crypto.adoc[]
-include::host_api/hashing.adoc[]
-include::host_api/offchain.adoc[]
-include::host_api/trie.adoc[]
-include::host_api/misc.adoc[]
-include::host_api/allocator.adoc[]
-include::host_api/logging.adoc[]
-
 [#chapter-anv]
 == Availability & Validity
 
@@ -70,3 +57,21 @@ include::anv/approval-voting.adoc[]
 include::anv/runtime-api.adoc[]
 include::anv/network-messages.adoc[]
 include::anv/definitions.adoc[]
+
+[#chapter-crypto-algos]
+== Cryptographic Algorithms
+
+
+
+[#chap-host-api]
+== Polkadot Host API
+include::host_api/intro.adoc[]
+include::host_api/storage.adoc[]
+include::host_api/child_storage.adoc[]
+include::host_api/crypto.adoc[]
+include::host_api/hashing.adoc[]
+include::host_api/offchain.adoc[]
+include::host_api/trie.adoc[]
+include::host_api/misc.adoc[]
+include::host_api/allocator.adoc[]
+include::host_api/logging.adoc[]

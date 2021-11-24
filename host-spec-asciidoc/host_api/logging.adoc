@@ -25,6 +25,8 @@ target.
 
 ===== Version 1 - Prototype
 ----
+(func $ext_logging_log_version_1
+	(param $level i32) (param $target i64) (param $message i64))
 ----
 
 Arguments::
