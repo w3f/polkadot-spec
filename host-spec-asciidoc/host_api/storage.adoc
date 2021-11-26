@@ -14,9 +14,9 @@ Sets the value under a given key into storage.
 
 Arguments::
 * `key`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
 * `value`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the
 value.
 
 ==== `ext_storage_get`
@@ -30,10 +30,10 @@ Retrieves the value associated with the given key from storage.
 
 Arguments::
 * `key`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
 * `result`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] returning the SCALE
-encoded as defined in Definition link:#defn-option-type[[defn-option-type]]
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] returning the SCALE
+encoded as defined in Definition link_defn-option-type[[defn-option-type]]
 containing the value.
 
 ==== `ext_storage_read`
@@ -50,16 +50,16 @@ offset.
 
 Arguments::
 * `key`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
 * `value_out`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the
 buffer to which the value will be written to. This function will never write
 more then the length of the buffer, even if the value’s length is bigger.
 * `offset`: an u32 integer containing the offset beyond the value should be read
 from.
 * `result`: a pointer-size (Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]]) pointing to a
-SCALE encoded (Definition link:#defn-option-type[[defn-option-type]]) containing
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]]) pointing to a
+SCALE encoded (Definition link_defn-option-type[[defn-option-type]]) containing
 an unsinged 32-bit interger representing the number of bytes left at supplied .
 Returns if the entry does not exists.
 
@@ -75,7 +75,7 @@ Clears the storage of the given key and its value.
 
 Arguments::
 * `key`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
 
 ==== `ext_storage_exists`
 
@@ -89,7 +89,7 @@ Checks whether the given key exists in storage.
 
 Arguments::
 * `key`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
 * `return`: an i32 integer value equal to if the key exists or a value equal to
 if otherwise.
 
@@ -106,13 +106,13 @@ prefix.
 
 Arguments::
 * `prefix`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing
 the prefix.
 
 ==== `ext_storage_append`
 
 Append the SCALE encoded value to a SCALE encoded sequence (Definition
-link:#defn-scale-list[[defn-scale-list]]) at the given key. This function
+link_defn-scale-list[[defn-scale-list]]) at the given key. This function
 assumes that the existing storage item is either empty or a SCALE encoded
 sequence and that the value to append is also SCALE encoded and of the same type
 as the items in the existing sequence.
@@ -133,9 +133,9 @@ array.
 
 Arguments::
 * `key`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the key.
 * `value`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] containing the
 value to be appended.
 
 ==== `ext_storage_root`
@@ -156,7 +156,7 @@ root.
 ==== `ext_storage_changes_root`
 
 Compute the root of the Changes Trie as described in Section
-link:#sect-changes-trie[3.3.4]. The parent hash is a SCALE encoded block hash.
+link_sect-changes-trie[3.3.4]. The parent hash is a SCALE encoded block hash.
 
 ===== Version 1 - Prototype
 ----
@@ -166,7 +166,7 @@ link:#sect-changes-trie[3.3.4]. The parent hash is a SCALE encoded block hash.
 
 Arguments::
 * `parent_hash`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the
 SCALE encoded block hash.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit Blake2 changes
 root.
@@ -174,7 +174,7 @@ root.
 ==== `ext_storage_next_key`
 
 Get the next key in storage after the given one in lexicographic order
-(Definition link:#defn-lexicographic-ordering[[defn-lexicographic-ordering]]).
+(Definition link_defn-lexicographic-ordering[[defn-lexicographic-ordering]]).
 The key provided to this function may or may not exist in storage.
 
 ===== Version 1 - Prototype
@@ -185,11 +185,11 @@ The key provided to this function may or may not exist in storage.
 
 Arguments::
 * `key`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the key.
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the key.
 * `return`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the
 SCALE encoded as defined in Definition
-link:#defn-option-type[[defn-option-type]] containing the next key in
+link_defn-option-type[[defn-option-type]] containing the next key in
 lexicographic order.
 
 [#sect-ext-storage-start-transaction]
@@ -198,11 +198,11 @@ lexicographic order.
 Start a new nested transaction. This allows to either commit or roll back all
 changes that are made after this call. For every transaction there must be a
 matching call to either `ext_storage_rollback_transaction`
-(link:#sect-ext-storage-rollback-transaction[12.1.12]) or
+(link_sect-ext-storage-rollback-transaction[12.1.12]) or
 `ext_storage_commit_transaction`
-(link:#sect-ext-storage-commit-transaction[12.1.13]). This is also effective for
+(link_sect-ext-storage-commit-transaction[12.1.13]). This is also effective for
 all values manipulated using the child storage API
-(link:#sect-child-storage-api[12.2]).
+(link_sect-child-storage-api[12.2]).
 
 WARNING: This is a low level API that is potentially dangerous as it can easily
 result in unbalanced transactions. Runtimes should use high level storage
@@ -220,11 +220,11 @@ Arguments::
 ==== `ext_storage_rollback_transaction`
 
 Rollback the last transaction started by
-(link:#sect-ext-storage-start-transaction[12.1.11]). Any changes made during
+(link_sect-ext-storage-start-transaction[12.1.11]). Any changes made during
 that transaction are discarded.
 
 WARNING: Panics if there is no open transaction (`ext_storage_start_transaction`
-(link:#sect-ext-storage-start-transaction[12.1.11]) was not called)
+(link_sect-ext-storage-start-transaction[12.1.11]) was not called)
 
 ===== Version 1 - Prototype
 ----
@@ -237,11 +237,11 @@ Arguments::
 [#sect-ext-storage-commit-transaction]
 ==== `ext_storage_commit_transaction`
 Commit the last transaction started by `ext_storage_start_transaction`
-(link:#sect-ext-storage-start-transaction[12.1.11]). Any changes made during
+(link_sect-ext-storage-start-transaction[12.1.11]). Any changes made during
 that transaction are committed to the main state.
 
 WARNING: Panics if there is no open transaction (`ext_storage_start_transaction`
-(link:#sect-ext-storage-start-transaction[12.1.11]) was not called)
+(link_sect-ext-storage-start-transaction[12.1.11]) was not called)
 
 ===== Version 1 - Prototype
 ----

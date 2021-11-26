@@ -15,7 +15,7 @@ peer discovery.
 This chapter walks through the behaviour of the networking implementation of the
 Polkadot Host and defines the network messages. The implementation details of
 the _libp2p_ protocols used are specified in external sources as described in
-Section link:#sect-networking-external-docs[4.2].
+Section link_sect-networking-external-docs[4.2].
 
 [#sect-networking-external-docs]
 === External Documentation
@@ -43,13 +43,13 @@ required to communicate with https://github.com/libp2p/js-libp2p[js-lip2p].
 * https://docs.libp2p.io/concepts/stream-multiplexing/#yamux[yamux] - _yamux_ is
 a multiplexing protocol like _mplex_ and developed by HashiCorp. It is the
 de-facto standard for the Polkadot Host. This protocol should be prioritized
-over _mplex_. Section link:#sect-protocols-substreams[4.7] describes the
+over _mplex_. Section link_sect-protocols-substreams[4.7] describes the
 subprotocol in more detail.
 * https://developers.google.com/protocol-buffers/docs/reference/proto3-spec[Protocol
 Buffers] - Protocol Buffers is a language-neutral, platform-neutral mechanism
 for serializing structured data and is developed by Google. The Polkadot Host
 uses Protocol Buffers to serialize specific messages, as clarified in Section
-link:#sect-network-messages[4.8].
+link_sect-network-messages[4.8].
 
 === Node Identities
 
@@ -60,10 +60,10 @@ allowing the nodes to establish secure communication channels.
 Each node must have its own unique ED25519 key pair. When two or more nodes use
 the same key, the network will interpret those nodes as a single node, which
 will result in undefined behaviour and can result in equivocation. Furthermore,
-the node’s _PeerId_ as defined in Definition link:#defn-peer-id[[defn-peer-id]]
-is derived from its public key. _PeerId_ (link:#defn-peer-id[[defn-peer-id]]) is
+the node’s _PeerId_ as defined in Definition link_defn-peer-id[[defn-peer-id]]
+is derived from its public key. _PeerId_ (link_defn-peer-id[[defn-peer-id]]) is
 used to identify each node when they are discovered in the course of the
-discovery mechanism described in Section link:#sect-discovery-mechanism[4.4].
+discovery mechanism described in Section link_sect-discovery-mechanism[4.4].
 
 [#defn-peer-id]
 ==== Definition: PeerId
@@ -80,7 +80,7 @@ list with other peers from the network as follows:
 
 * *Bootstrap nodes* are hard-coded node identities and addresses provided by the
 genesis state specification as described in Appendix
-link:#sect-genesis-block[11].
+link_sect-genesis-block[11].
 * *mDNS* is a protocol that performs a broadcast to the local network. Nodes
 that might be listening can respond to the broadcast.
 https://github.com/libp2p/specs/blob/master/discovery/mdns.md[The libp2p mDNS
@@ -89,7 +89,7 @@ implementation detail for Polkadot Host implementers and is not required to
 participate in the Polkadot network.
 * *Kademlia requests* invoking Kademlia requests, where nodes respond with their
 list of available peers. Kademlia requests are performed on a specific substream
-as described in Section link:#sect-protocols-substreams[4.7].
+as described in Section link_sect-protocols-substreams[4.7].
 
 [#sect-connection-establishment]
 === Connection establishment
@@ -103,7 +103,7 @@ https://docs.libp2p.io/concepts/stream-multiplexing/#yamux[yamux specification],
 either by the local or remote node.
 
 The Polkadot node supports two types of substream protocols. Section
-link:#sect-protocols-substreams[4.7] describes the usage of each type in
+link_sect-protocols-substreams[4.7] describes the usage of each type in
 more detail:
 
 * *Request-Response substreams*: After the protocol is negotiated by the
@@ -130,7 +130,7 @@ established.
 * `/multistream/1.0.0` - a protocol that is announced when negotiating an
 encryption protocol or a substream.
 * `/yamux/1.0.0` - a protocol used during the _mplex_ or _yamux_ negotiation.
-See Section link:#sect-protocols-substreams[4.7] for more information.
+See Section link_sect-protocols-substreams[4.7] for more information.
 
 The Polkadot Host can establish a connection with any peer of which it
 knows the address. The Polkadot Host supports multiple networking
@@ -148,7 +148,7 @@ The addressing system is described in the
 https://docs.libp2p.io/concepts/addressing/[libp2p addressing] specification.
 After a base-layer protocol is established, the Polkadot Host will apply the
 Noise protocol to establish the encryption layer as described in Section
-link:#sect-encryption-layer[4.6].
+link_sect-encryption-layer[4.6].
 
 [#sect-encryption-layer]]
 === Encryption Layer
@@ -194,7 +194,7 @@ protocols_, where each protocol serves a specific utility.
 The Polkadot Host uses multiple substreams whose usage depends on a specific
 purpose. Each substream is either a _Request-Response substream_ or a
 _Notification substream_, as described in Section
-link:#sect-connection-establishment[4.5].
+link_sect-connection-establishment[4.5].
 
 * `/ipfs/ping/` - Open a standardized substream _libp2p_ to a peer and
 initialize a ping to verify if a connection is still alive. If the peer does not
@@ -220,27 +220,27 @@ WARNING: Light client messages are currently not documented.
 * `/dot/block-announces/1` - a substream/notification protocol which sends
 blocks to connected peers. This is a _Notification substream_.
 +
-The messages are specified in Section link:#sect-msg-block-announce[4.8.1].
+The messages are specified in Section link_sect-msg-block-announce[4.8.1].
 * `/dot/sync/2` - a request and response protocol that allows the Polkadot Host
 to perform information about blocks. This is a _Request-Response substream_.
 +
-The messages are specified in Section link:#sect-msg-block-request[4.8.2].
+The messages are specified in Section link_sect-msg-block-request[4.8.2].
 * `/dot/transactions/1` - a substream/notification protocol which sends
 transactions to connected peers. This is a _Notification substream_.
 +
-The messages are specified in Section link:#sect-msg-transactions[4.8.3].
+The messages are specified in Section link_sect-msg-transactions[4.8.3].
 * `/paritytech/grandpa/1` - a substream/notification protocol that sends GRANDPA
 votes to connected peers. This is a _Notification substream_.
 +
-The messages are specified in Section link:#sect-msg-grandpa[4.8.4].
+The messages are specified in Section link_sect-msg-grandpa[4.8.4].
 +
 WARNING: This substream will change in the future. See
 https://github.com/paritytech/substrate/issues/7252[issue #7252].
 * `/paritytech/beefy/1` - a substream/notification protocol which sends signed
-BEEFY statements, as described in Section link:#sect-grandpa-beefy[6.5], to
+BEEFY statements, as described in Section link_sect-grandpa-beefy[6.5], to
 connected peers. This is a _Notification_ substream.
 +
-The messages are specified in Section link:#sect-msg-grandpa-beefy[4.8.4.5].
+The messages are specified in Section link_sect-msg-grandpa-beefy[4.8.4.5].
 
 NOTE: The prefixes on those substreams are known as protocol
 identifiers and are used to segregate communications to specific

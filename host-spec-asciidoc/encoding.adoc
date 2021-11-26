@@ -25,7 +25,7 @@ and defined as:
 ++++
 
 where stem:["Enc"_("SC")^("Len)] is defined in Definition
-link:#defn-sc-len-encoding[[defn-sc-len-encoding]].
+link_defn-sc-len-encoding[[defn-sc-len-encoding]].
 ****
 
 [#defn-scale-tuple]
@@ -84,7 +84,7 @@ stem:[cc "T" = {T_i, ... T_n}].
 
 Where stem:["idx"] is encoded in a fixed length integer determining the type of
 stem:[A]. In particular, for the optional type defined in Definition
-link:#defn-varrying-data-type[[defn-varrying-data-type]], we have:
+link_defn-varrying-data-type[[defn-varrying-data-type]], we have:
 
 [stem]
 ++++
@@ -92,7 +92,7 @@ link:#defn-varrying-data-type[[defn-varrying-data-type]], we have:
 ++++
 
 SCALE codec does not encode the correspondence between the value of stem:[idx]
-defined in Definition link:#defn-scale-variable-type[[defn-scale-variable-type]]
+defined in Definition link_defn-scale-variable-type[[defn-scale-variable-type]]
 and the data type it represents; the decoder needs prior knowledge of such
 correspondence to decode the data.
 
@@ -137,7 +137,7 @@ infer value of stem:[n] from the context) is defined as:
 ++++
 
 where stem:["Enc"_("SC")^("Len")] is defined in Definition
-link:#defn-sc-len-encoding[[defn-sc-len-encoding]].
+link_defn-sc-len-encoding[[defn-sc-len-encoding]].
 ****
 
 ==== Dictionary
@@ -187,7 +187,7 @@ be deserialized into the given type or datastructure.
 ****
 The SCALE codec, stem:["Enc"_("SC")], for other types such as fixed length
 integers not defined here otherwise, is equal to little endian encoding of those
-values defined in Definition link:#defn-little-endian[[defn-little-endian]].
+values defined in Definition link_defn-little-endian[[defn-little-endian]].
 ****
 
 [#defn-scale-empty]

@@ -42,7 +42,7 @@ Print a valid UTF8 encoded buffer.
 *Arguments*:
 
 * : a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating
 the valid buffer to be printed.
 
 ==== `ext_misc_print_hex`
@@ -57,20 +57,20 @@ Print any buffer in hexadecimal representation.
 *Arguments*:
 
 * `data`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating
 the buffer to be printed.
 
 ==== `ext_misc_runtime_version`
 
 Extract the Runtime version of the given Wasm blob by calling as defined in
-Definition link:#defn-rt-core-version[13.3.1.1]. Returns the SCALE encoded
+Definition link_defn-rt-core-version[13.3.1.1]. Returns the SCALE encoded
 runtime version or as defined in Definition
-link:#defn-option-type[[defn-option-type]] if the call fails. This function gets
+link_defn-option-type[[defn-option-type]] if the call fails. This function gets
 primarily used when upgrading Runtimes.
 
 WARNING: Calling this function is very expensive and should only be done very
 occasionally. For getting the runtime version, it requires instantiating the
-Wasm blob as described in Section link:#sect-loading-runtime-code[3.1.1] and
+Wasm blob as described in Section link_sect-loading-runtime-code[3.1.1] and
 calling a function in this blob.
 
 ===== Version 1 - Prototype
@@ -81,10 +81,10 @@ calling a function in this blob.
 Arguments::
 
 * `data`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the Wasm
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the Wasm
 blob.
 * `result`: a pointer-size as defined in Definition
-link:#defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the
+link_defn-runtime-pointer-size[[defn-runtime-pointer-size]] indicating the
 SCALE encoded as defined in Definition
-link:#defn-option-type[[defn-option-type]] containing the Runtime version of the
+link_defn-option-type[[defn-option-type]] containing the Runtime version of the
 given Wasm blob.
