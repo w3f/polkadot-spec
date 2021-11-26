@@ -77,6 +77,7 @@ Arguments::
 * `return`: a i32 integer which is equal to _1_ if the local node is a potential
 validator or a integer equal to _0_ if it is not.
 
+[#sect-ext-offchain-submit-transaction]
 ==== `ext_offchain_submit_transaction`
 
 Given a SCALE encoded extrinsic, this function submits the extrinsic to the
