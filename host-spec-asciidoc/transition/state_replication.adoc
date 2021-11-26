@@ -30,7 +30,7 @@ elements:
 
 * *parent_hash:* formally indicated as stem:[H_p], is the 32-byte Blake2b hash
 (Section link_sect-blake2[9.2]) of the SCALE encoded parent block header as
-defined in Definition link_defn-block-header-hash[[defn-block-header-hash]].
+defined in Definition link_defn-block-header-hash++defn-block-header-hash]].
 * *number:* formally indicated as stem:[H_i], is an integer, which represents
 the index of the current block in the chain. It is equal to the number of the
 ancestor blocks. The genesis state has number 0.
@@ -46,7 +46,7 @@ formally referred to as stem:[H_e].
 could help the light clients interact with the block without the need of
 accessing the full storage as well as consensus-related data including the block
 signature. This field is indicated as stem:[H_d] and its detailed format is
-defined in Definition link_defn-digest[[defn-digest]]
+defined in Definition link_defn-digest++defn-digest]]
 ****
 
 [#defn-digest]
@@ -54,7 +54,7 @@ defined in Definition link_defn-digest[[defn-digest]]
 ****
 The header *digest* of block stem:[B] formally referred to by stem:[H_d (B)] is
 an array of *digest items* stem:[H_d^i]’s, known as digest items of varying data
-type (see Definition link_defn-varrying-data-type[[defn-varrying-data-type]])
+type (see Definition link_defn-varrying-data-type++defn-varrying-data-type]])
 such that
 
 [stem]
@@ -70,7 +70,7 @@ H_d^n = {(2,bbb "B"_32),(4,(E_(id),bbb "B")),(5,(E_(id),bbb "B")),(6,(E_(id),bbb
 ++++
 
 Where stem:[E_(id)] is the unique consensus engine identifier defined in Section
-link_defn-consensus-message-digest[[defn-consensus-message-digest]] and stem:[bbb "B"]:
+link_defn-consensus-message-digest++defn-consensus-message-digest]] and stem:[bbb "B"]:
 
 * Id _2_, the *Changes trie root*, contains the root of the Changes Trie at block stem:[B],
 as described in Section link_sect-changes-trie[3.3.4]. Note that this is
@@ -82,9 +82,9 @@ of the block producer. In particular, the Seal digest item must be the last item
 in the digest array and must be stripped off by the Polkadot Host before the
 block is submitted to any Runtime function including for validation. The Seal
 must be added back to the digest afterward. The detail of the Seal digest item
-is laid out in Definition link_defn-babe-seal[[defn-babe-seal]].
+is laid out in Definition link_defn-babe-seal++defn-babe-seal]].
 * Id _6_, the *Pre-runtime* digest, represents messages from a consensus engine to the
-Runtime (e.g. see Definition link_defn-babe-header[[defn-babe-header]]).
+Runtime (e.g. see Definition link_defn-babe-header++defn-babe-header]]).
 ****
 
 [#defn-block-header-hash]
@@ -107,10 +107,10 @@ presented to the Polkadot Host, for the block to be appended to the
 blockchain. It contains the following parts:
 
 * *block_header* the complete block header as defined in Section
-link_block[[block]] and denoted by stem:["Head"(B)].
+link_block++block]] and denoted by stem:["Head"(B)].
 * *justification*: as defined by the consensus specification indicated by
 stem:["Just"(B)] as defined in Definition
-link_defn-grandpa-justification[[defn-grandpa-justification]].
+link_defn-grandpa-justification++defn-grandpa-justification]].
 * *authority Ids*: This is the list of the Ids of authorities, which have voted
 for the block to be stored and is formally referred to as stem:[A(B)]. An
 authority Id is 256-bit.
@@ -137,7 +137,7 @@ current state of the system and transitions to a new valid state.
 
 New blocks can be received by the Polkadot Host via other peers (see Section
 link_sect-msg-block-request[4.8.2]) or from the Host’s own consensus engine
-(see Section link_sect-block-production[[sect-block-production]]). Both the
+(see Section link_sect-block-production++sect-block-production]]). Both the
 Runtime and the Polkadot Host then need to work together to assure block
 validity. A block is deemed valid if the block author had authorship rights for
 the slot in which the block was produce as well as if the transactions in the
@@ -157,7 +157,7 @@ TODO: Spec algorithm.
 ==== Managaing Multiple Variants of State
 
 Unless a node is committed to only update its state according to the finalized
-block (See Definition link_defn-finalized-block[[defn-finalized-block]]), it is
+block (See Definition link_defn-finalized-block++defn-finalized-block]]), it is
 inevitable for the node to store multiple variants of the state (one for each
 block). This is, for example, necessary for nodes participating in the block
 production and finalization.
@@ -167,7 +167,7 @@ link_sect-state-storage-trie-structure[2.1.3] facilitates and optimizes storing
 and switching between multiple variants of the state storage, the Polkadot Host
 does not specify how a node is required to accomplish this task. Instead, the
 Polkadot Host is required to implement Set-State-At operation which behaves as
-defined in Definition link_defn-set-state-at[[defn-set-state-at]]:
+defined in Definition link_defn-set-state-at++defn-set-state-at]]:
 
 [#defn-set-state-at]
 ===== Definition: Set State At Block
@@ -180,7 +180,7 @@ The function:
 ++++
 
 in which stem:[B] is a block in the block tree (See Definition
-link_defn-block-tree[[defn-block-tree]]), sets the content of state storage
+link_defn-block-tree++defn-block-tree]]), sets the content of state storage
 equal to the resulting state of executing all extrinsics contained in the branch
 of the block tree from genesis till block B including those recorded in Block stem:[B].
 
@@ -199,7 +199,7 @@ Polkadot focuses on light client friendliness and therefore implements
 functionalities that allows identifying changes in the state of the blockchain
 without the requirement to search through the entire chain. The *Changes Trie*
 is a radix-16 tree data structure as defined in Definition
-link_defn-radix-tree[[defn-radix-tree]] and maintained by the Polkadot Host. It
+link_defn-radix-tree++defn-radix-tree]] and maintained by the Polkadot Host. It
 stores different types of storage changes made by each individual block
 separately.
 
@@ -217,7 +217,7 @@ different types of changes.
 The Changes Trie itself is not part of the block, but a separately maintained
 database by the Polkadot Host. The Merkle proof of the Changes Trie must be
 included in the block digest as described in Definition
-link_defn-digest[[defn-digest]] and gets calculated as described in section
+link_defn-digest++defn-digest]] and gets calculated as described in section
 link_sect-merkl-proof[2.1.4]. The root calculation only considers pairs which
 were generated on the individual block and does not consider pairs which were
 generated at previous blocks.
@@ -263,7 +263,7 @@ TODO: Reference varying datatype.
 
 Furthermore, stem:[K] represents the changed storage key, stem:[H_i(B_i)] refers
 to the block number at which this key is inserted into the Changes Trie (See
-Definition link_defn-block-header[[defn-block-header]]) and stem:["Type"_(V_C)]
+Definition link_defn-block-header++defn-block-header]]) and stem:["Type"_(V_C)]
 is an index defining the type stem:[C_(value)] according to Table
 link_table-changes-trie-key-types[3.2].
 
