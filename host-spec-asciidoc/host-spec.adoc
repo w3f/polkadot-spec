@@ -8,7 +8,7 @@
 :sectnums:
 :sectnumlevels: 4
 :sectlinks:
-:xrefstyle: full
+:xrefstyle: short
 :chapter-signifier: Chapter
 
 == Background
