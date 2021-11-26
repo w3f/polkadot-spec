@@ -2,7 +2,7 @@ This chapter in its current form is incomplete and considered work in
 progress. Authors appreciate receiving request for clarification or any
 reports regarding deviation from the current Polkadot network protocol.
 This can be done through filing an issue in Polkadot Specification
-repository .
+repository (TODO: link).
 
 === Introduction
 
