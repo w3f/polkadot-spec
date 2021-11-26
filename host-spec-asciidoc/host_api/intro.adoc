@@ -11,7 +11,7 @@ byte ordering for integers.
 [#nota-host-api-at-state]
 ==== Exposed Host API
 ****
-By stem:[cc "RE"_B] we refer to the API exposed by the Polkadot Host which
+By stem:["RE"_B] we refer to the API exposed by the Polkadot Host which
 interact, manipulate and response based on the state storage whose state is set
 at the end of the execution of block stem:[B].
 ****
