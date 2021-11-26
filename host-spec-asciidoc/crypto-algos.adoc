@@ -59,9 +59,9 @@ balance-related functions.
 
 There are two prominent subcategories of account keys namely "stash keys" and
 "controller keys", each being used for a different function. Keys defined in
-Definitions link_defn-account-key[[defn-account-key]],
-link_defn-stash-key[[defn-stash-key]] and
-link_defn-controller-key[[defn-controller-key]] are created and managed by the
+Definitions link_defn-account-key++defn-account-key]],
+link_defn-stash-key++defn-stash-key]] and
+link_defn-controller-key++defn-controller-key]] are created and managed by the
 user independent of the Polkadot implementation. The user notifies the network
 about the used keys by submitting a transaction, as defined in
 link_sect-creating-controller-key[9.5.2] and link_sect-certifying-keys[9.5.5]
@@ -74,7 +74,7 @@ respectively.
 The *Stash key* is a type of account key that holds funds bonded for staking
 (described in Section link_sect-staking-funds[9.5.1]) to a particular
 controller key (defined in Definition
-link_defn-controller-key[[defn-controller-key]]). As a result, one may actively
+link_defn-controller-key++defn-controller-key]]). As a result, one may actively
 participate with a stash key keeping the stash key offline in a secure location.
 It can also be used to designate a Proxy account to vote in governance
 proposals, as described in link_sect-creating-controller-key[9.5.2]. The Stash

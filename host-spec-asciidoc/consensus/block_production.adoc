@@ -6,13 +6,13 @@ on Ouroboros praos . BABE execution happens in sequential non-overlapping phases
 known as an *_epoch_*. Each epoch on its turn is divided into a predefined
 number of slots. All slots in each epoch are sequentially indexed starting from
 0. At the beginning of each epoch, the BABE node needs to run Algorithm
-link_algo-block-production-lottery[[algo-block-production-lottery]] to find out
+link_algo-block-production-lottery++algo-block-production-lottery]] to find out
 in which slots it should produce a block and gossip to the other block
 producers. In turn, the block producer node should keep a copy of the block tree
 and grow it as it receives valid blocks from other block producers. A block
 producer prunes the tree in parallel by eliminating branches that do not include
 the most recent finalized blocks according to Definition
-link_defn-pruned-tree[[defn-pruned-tree]].
+link_defn-pruned-tree++defn-pruned-tree]].
 
 ==== Preliminaries
 
@@ -24,9 +24,9 @@ producing blocks.
 ===== Block Authoring Session Key Pair
 *Block authoring session key pair* stem:[(sk_j^s,pk_j^s)] is an SR25519 key pair
 which the block producer stem:[cc "P"_j] signs by their account key (see Definition
-link_defn-account-key[[defn-account-key]]) and is used to sign the produced
+link_defn-account-key++defn-account-key]]) and is used to sign the produced
 block as well as to compute its lottery values in Algorithm
-link_algo-block-production-lottery[[algo-block-production-lottery]].
+link_algo-block-production-lottery++algo-block-production-lottery]].
 
 [#defn-epoch-slot]
 ===== Epoch
@@ -56,7 +56,7 @@ we use the notation *latexmath:[$s_B$]* to refer to the slot during which
 stem:[B] has been produced. Conversely, for slot stem:[s], stem:[cc "B"_c] is
 the set of Blocks generated at slot stem:[s].
 
-Definition link_defn-epoch-subchain[[defn-epoch-subchain]] provides an
+Definition link_defn-epoch-subchain++defn-epoch-subchain]] provides an
 iterator over the blocks produced during a specific epoch.
 ****
 
@@ -82,16 +82,16 @@ link_sect-babeapi_submit_report_equivocation_unsigned_extrinsic[13.3.8.6].
 
 ==== Block Production Lottery
 
-The babe constant (Definition link_defn-babe-constant[[defn-babe-constant]]) is
+The babe constant (Definition link_defn-babe-constant++defn-babe-constant]]) is
 initialized at genesis to the value returned by calling `BabeApi_configuration`
 (see link_sect-rte-babeapi-epoch[13.3.8.1]). For efficiency reasons, it is
 generally updated by the Runtime through the "Next Config Data" consensus
 message (see Definition
-link_defn-consensus-message-digest[[defn-consensus-message-digest]]) in the
+link_defn-consensus-message-digest++defn-consensus-message-digest]]) in the
 digest of the first block of an epoch for the next epoch.
 
 A block producer aiming to produce a block during stem:[cc "E"_n] should run
-Algorithm link_algo-block-production-lottery[[algo-block-production-lottery]]
+Algorithm link_algo-block-production-lottery++algo-block-production-lottery]]
 to identify the slots it is awarded. These are the slots during which the block
 producer is allowed to build a block. The stem:[sk] is the block producer
 lottery secret key and stem:[n] is the index of the epoch for whose slots
@@ -102,7 +102,7 @@ the block producer is running the lottery.
 ****
 The *BABE constant* stem:[c in (0,1)] is the probability that a slot will not be
 empty and used in the winning threshold calculation (see Definition
-link_defn-winning-threshold[[defn-winning-threshold]]).
+link_defn-winning-threshold++defn-winning-threshold]]).
 ****
 
 [#defn-winning-threshold]
@@ -110,7 +110,7 @@ link_defn-winning-threshold[[defn-winning-threshold]]).
 ****
 The *Winning threshold* denoted by stem:[T_(cc "E"_n)] is the threshold that is used
 alongside the result of Algorithm
-link_algo-block-production-lottery[[algo-block-production-lottery]] to decide
+link_algo-block-production-lottery++algo-block-production-lottery]] to decide
 if a block producer is the winner of a specific slot. stem:[T_(cc "E"_n)] is
 calculated  as follows:
 
@@ -122,7 +122,7 @@ T_(E_n) := 1 - (1 - c)^(1/("AuthorityDirectory"^(E_n)))
 where the stem:["AuthorityDirectory"^(cc "E"_n)] is the set of BABE
 authorities for epoch stem:[cc "E"_n] and stem:[c in (0, 1)] is the BABE
 constant as defined in definition
-link_defn-babe-constant[[defn-babe-constant]].
+link_defn-babe-constant++defn-babe-constant]].
 ****
 
 TODO: Algorithm
@@ -138,7 +138,7 @@ link_sect-vrf[9.4] respectively.
 It is imperative for the security of the network that each block producer
 correctly determines the current slot numbers at a given time by regularly
 estimating the local clock offset in relation to the network (Definition
-link_defn-relative-syncronization[[defn-relative-syncronization]]).
+link_defn-relative-syncronization++defn-relative-syncronization]]).
 
 ****
 NOTE: *The calculation described in this section is still to be implemented and
@@ -157,21 +157,21 @@ therefore required to periodically estimate its local clock offset in relation
 to the rest of the network.
 
 This estimation depends on the two fixed parameters stem:[k] (Definition
-link_defn-prunned-best[[defn-prunned-best]]) and stem:[s_(cq)] (Definition
-link_defn-chain-quality[[defn-chain-quality]]). These are chosen based on the
+link_defn-prunned-best++defn-prunned-best]]) and stem:[s_(cq)] (Definition
+link_defn-chain-quality++defn-chain-quality]]). These are chosen based on the
 results of a formal security analysis, currently assuming a stem:[1 s]clock
 drift per day and targeting a probability lower than stem:[0.5%] for an
 adversary to break BABE in 3 years with resistance against a network delay up to
 stem:[1 / 3] of the slot time and a Babe constant (Definition
-link_defn-babe-constant[[defn-babe-constant]]) of stem:[c = 0.38].
+link_defn-babe-constant++defn-babe-constant]]) of stem:[c = 0.38].
 
 All validators are then required to run Algorithm
-link_algo-slot-time[[algo-slot-time]] at the beginning of each sync period
-(Definition link_defn-sync-period[[defn-sync-period]]) to update their
+link_algo-slot-time++algo-slot-time]] at the beginning of each sync period
+(Definition link_defn-sync-period++defn-sync-period]]) to update their
 synchronization using all block arrival times of the previous period. The
 algorithm should only be run once all the blocks in this period have been
 finalized, even if only probabilistically (Definition
-link_defn-prunned-best[[defn-prunned-best]]). The target slot to which to
+link_defn-prunned-best++defn-prunned-best]]). The target slot to which to
 synchronize should be the first slot in the new sync period.
 
 TODO: Algorithm
@@ -189,7 +189,7 @@ It is imperative for the security of the network that each block
 producer correctly determines the current slot numbers at a given time
 by regularly estimating the local clock offset in relation to the
 network (Definition
-link_defn-relative-syncronization[[defn-relative-syncronization]]).
+link_defn-relative-syncronization++defn-relative-syncronization]]).
 ****
 
 [#defn-relative-syncronization]
@@ -206,7 +206,7 @@ TODO: Algorithm
 ===== Pruned Best Chain
 ****
 The *pruned best chain* stem:[C^(r^k)] is the longest chain selected according
-to Definition link_defn-longest-chain[[defn-longest-chain]] with the last
+to Definition link_defn-longest-chain++defn-longest-chain]] with the last
 stem:[k] Blocks pruned. We chose stem:[k = 140]. The *last (probabilistic)
 finalized block* describes the last block in this pruned best chain.
 ****
@@ -219,17 +219,17 @@ to estimate the local clock offset. Currently, it is set to stem:[s_(cq) =
 3000].
 
 The prerequisite for such a calculation is that each producer stores the arrival
-time of each block (Definition link_defn-block-time[[defn-block-time]])
+time of each block (Definition link_defn-block-time++defn-block-time]])
 measured by a clock that is otherwise not adjusted by any external protocol.
 ****
 
 [#defn-block-time]
 ===== Block Arrival Time
 The *block arrival time* of block stem:[B] for node stem:[j] formally
-represented by stem:[T^j_B] is the local time of node stem:[j] when node
+represented by stem:[T_B^j] is the local time of node stem:[j] when node
 stem:[j] has received block stem:[B] for the first time. If the node stem:[j]
 itself is the producer of stem:[B], stem:[T_B^j] is set equal to the time that
-the block is produced. The index stem:[j] in stem:[T^j_B] notation may be
+the block is produced. The index stem:[j] in stem:[T_B^j] notation may be
 dropped and B’s arrival time is referred to by stem:[T_B] when there is no
 ambiguity about the underlying node.
 
@@ -243,17 +243,17 @@ A is an interval at which each validator (re-)evaluates its local clock offsets.
 The first sync period stem:[fr "E"_1] starts just after the genesis block is
 released. Consequently, each sync period stem:[fr "E"_i] starts after stem:[fr
 "E"_(i - 1)]. The length of the sync period is equal to stem:[s_(qc)] as defined
-in Definition link_defn-chain-quality[[defn-chain-quality]] and expressed in
+in Definition link_defn-chain-quality++defn-chain-quality]] and expressed in
 the number of slots.
 
 [#block-production]
 ==== Block Production
 Throughout each epoch, each block producer should run Algorithm
-link_algo-block-production[[algo-block-production]] to produce blocks during
+link_algo-block-production++algo-block-production]] to produce blocks during
 the slots it has been awarded during that epoch. The produced block needs to
 carry the _BABE header_ as well as the _block signature_ as Pre-Runtime and Seal
-digest items defined in Definition link_defn-babe-header[[defn-babe-header]]
-and link_defn-block-signature[[defn-block-signature]] respectively.
+digest items defined in Definition link_defn-babe-header++defn-babe-header]]
+and link_defn-block-signature++defn-block-signature]] respectively.
 
 [#defn-babe-header]
 ===== BABE Header
@@ -274,18 +274,18 @@ current epoch.
 
 stem:[H_("BABE")(B)] must be included as a digest item of Pre-Runtime type in
 the header digest stem:[H_d(B)] as defined in Definition
-link_defn-digest[[defn-digest]].
+link_defn-digest++defn-digest]].
 
 TODO: Algorithm
 
 Add-Digest-Item appends a digest item to the end of the header digest
-stem:[H_d(B)] according to Definition link_defn-digest[[defn-digest]].
+stem:[H_d(B)] according to Definition link_defn-digest++defn-digest]].
 
 [#defn-block-signature]
 ===== Block Signature
 ****
 The *Block Signature* stem:[S_B] is a signature of the block header hash (see
-Definitionlink:#defn-block-header-hash[[defn-block-header-hash]]) and defined as
+Definitionlink:#defn-block-header-hash++defn-block-header-hash]]) and defined as
 
 [stem]
 ++++
@@ -293,7 +293,7 @@ Definitionlink:#defn-block-header-hash[[defn-block-header-hash]]) and defined as
 ++++
 
 stem:[S_B] should be included in stem:[H_d(B)] as the Seal digest item according
-to Definition link_defn-digest[[defn-digest]] of value:
+to Definition link_defn-digest++defn-digest]] of value:
 
 [stem]
 ++++
@@ -302,7 +302,7 @@ to Definition link_defn-digest[[defn-digest]] of value:
 
 in which, stem:[E_("id")("BABE")] is the BABE consensus engine unique identifier
 defined in Definition
-link_defn-consensus-message-digest[[defn-consensus-message-digest]]. The Seal
+link_defn-consensus-message-digest++defn-consensus-message-digest]]. The Seal
 digest item is referred to as the *BABE Seal*.
 ****
 
@@ -310,10 +310,10 @@ digest item is referred to as the *BABE Seal*.
 ==== Epoch Randomness
 At the beginning of each epoch, stem:[cc "E"_n] the host will receive the
 randomness seed stem:[cc "R"_(cc "E"_(n+1))](Definition
-link_defn-epoch-randomness[[defn-epoch-randomness]]) necessary to participate
+link_defn-epoch-randomness++defn-epoch-randomness]]) necessary to participate
 in the block production lottery in the next epoch stem:[cc "E"_(n+1)] from the
 Runtime, through the consensus message (Definition
-link_defn-consensus-message-digest[[defn-consensus-message-digest]]) in the
+link_defn-consensus-message-digest++defn-consensus-message-digest]]) in the
 digest of the first block.
 
 [#defn-epoch-randomness]
@@ -330,24 +330,24 @@ based on the previous epochs VRF outputs. For stem:[cc "E"_0] and stem:[cc
 When a Polkadot node receives a produced block, it needs to verify if
 the block producer was entitled to produce the block in the given slot
 by running Algorithm
-link_algo-verify-authorship-right[[algo-verify-authorship-right]]
+link_algo-verify-authorship-right++algo-verify-authorship-right]]
 where:
 
 * stem:[T_B] is stem:[B]’s arrival time defined in Definition
-link_defn-block-time[[defn-block-time]].
+link_defn-block-time++defn-block-time]].
 * stem:[H_d(B)] is the digest sub-component of stem:["Head"(B)] defined in
-Definitions link_defn-block-header[[defn-block-header]] and
-link_defn-digest[[defn-digest]].
+Definitions link_defn-block-header++defn-block-header]] and
+link_defn-digest++defn-digest]].
 * The Seal stem:[D_s] is the last element in the digest array stem:[H_d(B)] as
-defined in Definition link_defn-digest[[defn-digest]].
+defined in Definition link_defn-digest++defn-digest]].
 * stem:[Seal-Id] is the type index showing that a digest item of variable type
 is of _Seal_ type (See Definitions
-link_defn-scale-variable-type[[defn-scale-variable-type]] and
-link_defn-digest[[defn-digest]])
+link_defn-scale-variable-type++defn-scale-variable-type]] and
+link_defn-digest++defn-digest]])
 * stem:["AuthorityDirectory"^(cc "E"_c)] is the set of Authority ID for block
 producers of epoch stem:[cc "E"_c].
 * stem:[Verify-Slot-Winner] is defined in Algorithm
-link_algo-verify-slot-winner[[algo-verify-slot-winner]].
+link_algo-verify-slot-winner++algo-verify-slot-winner]].
 
 TODO: Algorithms
 

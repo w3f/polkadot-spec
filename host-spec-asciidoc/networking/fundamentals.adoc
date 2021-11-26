@@ -60,8 +60,8 @@ allowing the nodes to establish secure communication channels.
 Each node must have its own unique ED25519 key pair. When two or more nodes use
 the same key, the network will interpret those nodes as a single node, which
 will result in undefined behaviour and can result in equivocation. Furthermore,
-the node’s _PeerId_ as defined in Definition link_defn-peer-id[[defn-peer-id]]
-is derived from its public key. _PeerId_ (link_defn-peer-id[[defn-peer-id]]) is
+the node’s _PeerId_ as defined in Definition link_defn-peer-id++defn-peer-id]]
+is derived from its public key. _PeerId_ (link_defn-peer-id++defn-peer-id]]) is
 used to identify each node when they are discovered in the course of the
 discovery mechanism described in Section link_sect-discovery-mechanism[4.4].
 
