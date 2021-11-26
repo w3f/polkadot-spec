@@ -34,6 +34,6 @@ to communicate with other nodes in the network, such as exchanging blocks and
 consensus messages. In <<chap-consensus>>, we specify the consensus protocol,
 which is responsible for keeping all the replica in the same state. Finally, the
 initial state of the machine is identified and discussed in Appendix
-link:#sect-genesis-block[TODO]. A Polkadot Host implementation which conforms
+link_sect-genesis-block[TODO]. A Polkadot Host implementation which conforms
 with this part of the specification should successfully be able to sync its
 states with the Polkadot network.

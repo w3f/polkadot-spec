@@ -1,7 +1,7 @@
 [#sect-child-storages]
 === Child Storage
 
-As clarified in Section link:#sect-state-storage[2.1], the Polkadot
+As clarified in Section link_sect-state-storage[2.1], the Polkadot
 state storage implements a hash table for inserting and reading
 key-value entries. The child storage works the same way but is stored in
 a separate and isolated environment. Entries in the child storage are
@@ -21,21 +21,21 @@ isolation necessary to prevent any undesired interference between the
 state of separated instances. The Polkadot Host makes no assumptions
 about how child storages are used, but provides the functionality for
 it. This is described in more detail in the Host API, as described in
-Section link:#sect-child-storages[2.2].
+Section link_sect-child-storages[2.2].
 
 [#sect-child-trie-structure]
 ==== Child Tries
 
 The child trie specification is the same as the one described in Section
-link:#sect-state-storage-trie-structure[2.1.3]. Child tries have their
+link_sect-state-storage-trie-structure[2.1.3]. Child tries have their
 own isolated environment. Nonetheless, the main Polkadot state trie
 depends on them by storing a node (stem:[K_N, V_N]) which
 corresponds to an individual child trie. Here, stem:[K_N] is the
 child storage key associated to the child trie, and stem:[V_N] is
 the Merkle value of its corresponding child trie computed according to
-the procedure described in Section link:#sect-merkl-proof[2.1.4]
+the procedure described in Section link_sect-merkl-proof[2.1.4]
 
-The Polkadot Host APIs as defined in link:#sect-child-storages[2.2]
+The Polkadot Host APIs as defined in link_sect-child-storages[2.2]
 allows the Runtime to provide the key stem:[K_N] in order to
 identify the child trie, followed by a second key in order to identify
 the value within that child trie. Every time a child trie is modified,

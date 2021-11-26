@@ -13,7 +13,7 @@ its own set of nodes represented by known public keys, which have the authority
 to influence the protocol in pre-defined ways explained in this Section. To
 verify the validity of each block, the Polkadot node must track the current list
 of authorities for that block as formalized in Definition
-link:#defn-authority-list[[defn-authority-list]]
+link_defn-authority-list[[defn-authority-list]]
 
 [#defn-authority-list]
 ===== Authority List
@@ -28,14 +28,14 @@ each of its authorities stem:[A in "Auth"_C(B)]:
 ++++
 
 stem:[pk_A] is the session public key of authority A as defined in Definition
-link:#defn-session-key[[defn-session-key]]. And stem:[w_A] is an unsigned 64-bit
+link_defn-session-key[[defn-session-key]]. And stem:[w_A] is an unsigned 64-bit
 integer indicating the authority weight. The value of stem:["Auth"_C(B)] is part
 of the Polkadot state. The value for stem:["Auth"_C(B_0)] is set in the genesis
-state (see Section link:#sect-genesis-block[11]) and can be retrieved using a
+state (see Section link_sect-genesis-block[11]) and can be retrieved using a
 runtime entry corresponding to consensus engine stem:[C].
 
 In Polkadot, all authorities have the weight stem:[w_A = 1]. The weight
-stem:[w_A] in Definition link:#defn-authority-list[[defn-authority-list]] exists
+stem:[w_A] in Definition link_defn-authority-list[[defn-authority-list]] exists
 for potential improvements in the protocol and could have a use-case in the
 future.
 ****
@@ -44,12 +44,12 @@ future.
 ==== Runtime-to-Consensus Engine Message
 
 The authority list (see Definition
-link:#defn-authority-list[[defn-authority-list]]) is part of the Polkadot state
+link_defn-authority-list[[defn-authority-list]]) is part of the Polkadot state
 and the Runtime has the authority to update this list in the course of any state
 transitions. The Runtime informs the corresponding consensus engine about the
 changes in the authority set by adding the appropriate consensus message as
 defined in Definition
-link:#defn-consensus-message-digest[[defn-consensus-message-digest]], in the
+link_defn-consensus-message-digest[[defn-consensus-message-digest]], in the
 form of a digest item to the block header of block stem:[B] which caused the
 transition in the authority set.
 
@@ -64,7 +64,7 @@ came into effect would get rejected.
 ===== Consensus Message
 ****
 A *consensus message* is a digest item of type 4 as defined in Definition
-link:#defn-digest[[defn-digest]] and consists of the pair:
+link_defn-digest[[defn-digest]] and consists of the pair:
 
 [stem]
 ++++
@@ -107,13 +107,13 @@ authority which pertain to their authority role.
 configuration change and in the first block of an epoch. The supplied
 configuration data are intended to be used from the next epoch onwards.
 * stem:["Auth"_("BABE")] is the authority list for the next epoch, as defined in
-definition link:#defn-authority-list[[defn-authority-list]].
+definition link_defn-authority-list[[defn-authority-list]].
 * stem:[R] is the 32-byte randomness seed for the next epoch, as defined in
-definition link:#defn-epoch-randomness[[defn-epoch-randomness]]
+definition link_defn-epoch-randomness[[defn-epoch-randomness]]
 * stem:["Auth"_("id")] is an unsigned 64-bit integer pointing to an individual
 authority in the current authority list.
 * stem:[c] is the probability that a slot will not be empty, as defined in
-definition link:#defn-babe-constant[[defn-babe-constant]]. It is encoded as a
+definition link_defn-babe-constant[[defn-babe-constant]]. It is encoded as a
 tuple of two unsigned 64-bit integers stem:[(c_("nominator"),c_("denominator"))]
 which are used to compute the rational stem:[c =
 c_("nominator")/c_("denominator")].

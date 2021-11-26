@@ -9,23 +9,23 @@ bootstrapping nodes:
 which can be obtained from .
 . The node should maintains a set of around 50 active peers at any time. New
 peers can be found using the discovery protocols (Section
-link:#sect-discovery-mechanism[4.4])
+link_sect-discovery-mechanism[4.4])
 . The node should open and maintain the various required streams (Section
-link:#sect-protocols-substreams[4.7]) with each of its active peers.
+link_sect-protocols-substreams[4.7]) with each of its active peers.
 . Furthermore, the node should send block requests (Section
-link:#sect-msg-block-request[4.8.2]) to these peers to receive all blocks in the
+link_sect-msg-block-request[4.8.2]) to these peers to receive all blocks in the
 chain and execute each of them.
-. Exchange neighbor packets (Section link:#sect-grandpa-neighbor-msg[4.8.4.3])
+. Exchange neighbor packets (Section link_sect-grandpa-neighbor-msg[4.8.4.3])
 
 Validator nodes should take the following, additional steps.
 
 . Verify that the Host’s session key is included in the current Epoch’s
-authority set (Section link:#sect-authority-set[6.1.1]).
+authority set (Section link_sect-authority-set[6.1.1]).
 . Run the BABE lottery (Section
-link:#sect-block-production[[sect-block-production]]) and wait for the next
+link_sect-block-production[[sect-block-production]]) and wait for the next
 assigned slot in order to produce a block.
 . Gossip any produced blocks to all connected peers (Section
-link:#sect-msg-block-announce[4.8.1]).
-. Run the catch-up protocol (Section link:#sect-grandpa-catchup[6.4.1]) to make
+link_sect-msg-block-announce[4.8.1]).
+. Run the catch-up protocol (Section link_sect-grandpa-catchup[6.4.1]) to make
 sure that the node is participating in the current round and not a past round.
-. Run the GRANDPA rounds protocol (Section link:#sect-finality[6.3]).
+. Run the GRANDPA rounds protocol (Section link_sect-finality[6.3]).
