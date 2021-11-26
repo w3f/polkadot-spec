@@ -2,7 +2,7 @@ Like any transaction-based transition system, Polkadot’s state is
 changed by executing an ordered set of instructions. These instructions
 are known as _extrinsics_. In Polkadot, the execution logic of the
 state-transition function is encapsulated in a Runtime as defined in
-Definition link:#defn-state-machine[[defn-state-machine]]. For easy
+Definition <<defn-state-machine>>. For easy
 upgradability this Runtime is presented as a Wasm blob. Nonetheless, the
 Polkadot Host needs to be in constant interaction with the Runtime. The
 detail of such interaction is further described in Section
