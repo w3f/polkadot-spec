@@ -1,4 +1,4 @@
-[#sect-babe]
+[#sect-block-production]
 === Block Production
 
 The Polkadot Host uses BABE protocol for block production. It is designed based
