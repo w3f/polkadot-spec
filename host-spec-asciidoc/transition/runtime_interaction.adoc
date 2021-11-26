@@ -22,12 +22,12 @@ Section link_sect-state-replication[3.3].
 [#sect-entries-into-runtime]
 === Interacting with the Runtime
 
-The Runtime as defined in Definition link_defn-runtime[[defn-runtime]]
+The Runtime as defined in Definition link_defn-runtime++defn-runtime]]
 is the code implementing the logic of the chain. This code is decoupled
 from the Polkadot Host to make the the logic of the chain easily
 upgradable without the need to upgrade the Polkadot Host itself. The
 general procedure to interact with the Runtime is described in Algorithm
-link_algo-runtime-interaction[[algo-runtime-interaction]].
+link_algo-runtime-interaction++algo-runtime-interaction]].
 
 [#algo-runtime-interaction]
 ==== Algorithm: Interact-With-Runtime
@@ -51,13 +51,13 @@ which executes the following steps:
 In this section, we describe the details upon which the Polkadot Host is
 interacting with the Runtime. In particular, Set-State-At and Call-Runtime-Entry
 procedures called in Algorithm
-link_algo-runtime-interaction[[algo-runtime-interaction]] are explained in
-Notation link_nota-call-into-runtime[[nota-call-into-runtime]] and Definition
-link_defn-set-state-at[[defn-set-state-at]] respectively. stem:[R_B] is the
+link_algo-runtime-interaction++algo-runtime-interaction]] are explained in
+Notation link_nota-call-into-runtime++nota-call-into-runtime]] and Definition
+link_defn-set-state-at++defn-set-state-at]] respectively. stem:[R_B] is the
 Runtime code loaded from stem:[S_B], as described in Notation
-link_nota-runtime-code-at-state[[nota-runtime-code-at-state]], and
+link_nota-runtime-code-at-state++nota-runtime-code-at-state]], and
 stem:[RE_B] is the Polkadot Host API, as described in
-Notation link_nota-host-api-at-state[[nota-host-api-at-state]].
+Notation link_nota-host-api-at-state++nota-host-api-at-state]].
 
 [#sect-loading-runtime-code]
 ==== Loading the Runtime Code
@@ -100,7 +100,7 @@ Virtual Machine (VM), which in turn provides the Runtime with access to
 the Polkadot Host API. This part of the Polkadot Host is referred to as
 the _*Executor*._
 
-Definition link_nota-call-into-runtime[[nota-call-into-runtime]]
+Definition link_nota-call-into-runtime++nota-call-into-runtime]]
 introduces the notation for calling the runtime entry which is used
 whenever an algorithm of the Polkadot Host needs to access the runtime.
 

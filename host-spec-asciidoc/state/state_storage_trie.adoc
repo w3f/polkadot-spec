@@ -41,14 +41,14 @@ to compute the Merkle hash of the whole or part of the state storage,
 consistently and efficiently at any given time.
 
 The Trie is used to compute the _state root_, stem:[H_r], (see Definition
-link_defn-block-header[[defn-block-header]]), whose purpose is to authenticate
+link_defn-block-header++defn-block-header]]), whose purpose is to authenticate
 the validity of the state database. Thus, the Polkadot Host follows a rigorous
 encoding algorithm to compute the values stored in the trie nodes to ensure that
 the computed Merkle hash, stem:[H_r], matches across the Polkadot Host
 implementations.
 
 The Trie is a _radix-16_ tree as defined in Definition
-link_defn-radix-tree[[defn-radix-tree]]. Each key value identifies a unique
+link_defn-radix-tree++defn-radix-tree]]. Each key value identifies a unique
 node in the tree. However, a node in a tree might or might not be associated
 with a key in the storage.
 
@@ -135,14 +135,14 @@ cc "N"_i := {N in cc "N" | N " is a leaf node"}
 
 For each node, part of stem:[k_N] is built while the trie is traversed from root
 to stem:[N] part of stem:[k_N] is stored in stem:[N] as formalized in Definition
-link_defn-node-key[[defn-node-key]].
+link_defn-node-key++defn-node-key]].
 
 [#defn-node-key]
 ===== Aggregated Prefix Key
 ****
 For any stem:[N in cc "N"], its key stem:[k_N] is divided into an *aggregated
 prefix key*, *stem:[pk_N^(Agr)]*, aggregated by Algorithm
-link_algo-aggregate-key[[algo-aggregate-key]] and a *partial key*,
+link_algo-aggregate-key++algo-aggregate-key]] and a *partial key*,
 *stem:[pk_N]* of length stem:[0 <= l_(pk_N) <= 65535] in nibbles such that:
 
 [stem]
@@ -163,7 +163,7 @@ Part of stem:[pk_N^(Agr)] is explicitly stored in stem:[N]’s ancestors.
 Additionally, for each ancestor, a single nibble is implicitly derived while
 traversing from the ancestor to its child included in the traversal path using
 the stem:["Index"_N] function defined in Definition
-link_defn-index-function[[defn-index-function]].
+link_defn-index-function++defn-index-function]].
 
 [#defn-index-function]
 ===== Index
@@ -186,8 +186,8 @@ k_(N_c) = k_N ||i||pk_(N_c)
 ****
 
 Assuming that stem:[P_N] is the path (see Definition
-link_defn-path-graph[[defn-path-graph]]) from the Trie root to node stem:[N],
-Algorithm link_algo-aggregate-key[[algo-aggregate-key]] rigorously demonstrates
+link_defn-path-graph++defn-path-graph]]) from the Trie root to node stem:[N],
+Algorithm link_algo-aggregate-key++algo-aggregate-key]] rigorously demonstrates
 how to build stem:[pk_N^(Agr)] while traversing stem:[P_N].
 
 [#algo-aggregate-key]
@@ -224,10 +224,10 @@ v_N := "Head"_N||"Enc"_("HE")(pk_N)||sv_N
 ++++
 
 where stem:["Head"_N], stem:[pk_N], stem:["Enc"_("nibbles")] and stem:[sv_N] are
-defined in Definitions link_defn-node-header[[defn-node-header]],
-link_defn-node-key[[defn-node-key]],
-link_defn-hex-encoding[[defn-hex-encoding]] and
-link_defn-node-subvalue[[defn-node-subvalue]], respectively.
+defined in Definitions link_defn-node-header++defn-node-header]],
+link_defn-node-key++defn-node-key]],
+link_defn-hex-encoding++defn-hex-encoding]] and
+link_defn-node-subvalue++defn-node-subvalue]], respectively.
 ****
 
 [#defn-node-header]
@@ -250,7 +250,7 @@ byte of stem:["Head"_N] are determined as follows:
 "Head"_(N,1)^(6-7) := {(00,"Special case"),(01,"Leaf Node"),(10,"Branch Node with " k_N !in cc "K"),(11,"Branch Node with " k_N in cc "K"):}
 ++++
 
-where stem:[cc "K"] is defined in Definition link_defn-stored-value[[defn-stored-value]].
+where stem:[cc "K"] is defined in Definition link_defn-stored-value++defn-stored-value]].
 
 stem:[Head_(N,1)^(0-5)], the 6 least significant bits of teh first byte of stem:["Head"_N] are defined to be:
 
@@ -261,7 +261,7 @@ stem:[Head_(N,1)^(0-5)], the 6 least significant bits of teh first byte of stem:
 
 In which stem:[||pk_N||_(nib)] is the length of stem:[pk_N] in number nibbles.
 stem:["Head"_(N,2),...,"Head"_(N,l+1)] bytes are determined by Algorithm
-link_algo-pk-length[[algo-pk-length]].
+link_algo-pk-length++algo-pk-length]].
 ****
 
 [#algo-pk-length]
@@ -305,7 +305,7 @@ each *child trie* must be updated first before the final Polkadot state
 root can be calculated.
 
 We use the auxilary function introduced in Definition
-link_defn-children-bitmap[[defn-children-bitmap]] to encode and decode
+link_defn-children-bitmap++defn-children-bitmap]] to encode and decode
 information stored in a branch node.
 
 [#defn-children-bitmap]
@@ -352,12 +352,12 @@ where the first variant is a leaf node and the second variant is a branch node.
 stem:[N_(C_1) ... N_(C_n)] with stem:[n <= 16] are the children nodes of the
 branch node stem:[N] and stem:["Enc"_(SC)], stem:["StoredValue"], stem:[H], and
 stem:["ChildrenBitmap"(N)] are defined in Definitions
-link_sect-scale-codec[10.1], link_defn-stored-value[[defn-stored-value]],
-link_defn-merkle-value[[defn-merkle-value]] and
-link_defn-children-bitmap[[defn-children-bitmap]] respectively.
+link_sect-scale-codec[10.1], link_defn-stored-value++defn-stored-value]],
+link_defn-merkle-value++defn-merkle-value]] and
+link_defn-children-bitmap++defn-children-bitmap]] respectively.
 
 The Trie deviates from a traditional Merkle tree where node value, stem:[v_N]
-(see Definition link_defn-node-value[[defn-node-value]]) is presented instead
+(see Definition link_defn-node-value++defn-node-value]]) is presented instead
 of its hash if it occupies less space than its hash.
 
 [#defn-merkle-value]
@@ -373,6 +373,6 @@ H(N): {(v_N,||v_N|| < 32 " and " N != R),("Blake2b"(v_n),||v_N|| >= 32 " or " N 
 ++++
 
 Where stem:[v_N] is the node value of stem:[N] defined in Definition
-link_defn-node-value[[defn-node-value]] and stem:[R] is the root of the Trie.
+link_defn-node-value++defn-node-value]] and stem:[R] is the root of the Trie.
 The *Merkle hash* of the Trie is defined to be latexmath:[H(R)].
 ****

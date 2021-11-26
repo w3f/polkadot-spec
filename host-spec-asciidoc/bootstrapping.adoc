@@ -22,7 +22,7 @@ Validator nodes should take the following, additional steps.
 . Verify that the Host’s session key is included in the current Epoch’s
 authority set (Section link_sect-authority-set[6.1.1]).
 . Run the BABE lottery (Section
-link_sect-block-production[[sect-block-production]]) and wait for the next
+link_sect-block-production++sect-block-production]]) and wait for the next
 assigned slot in order to produce a block.
 . Gossip any produced blocks to all connected peers (Section
 link_sect-msg-block-announce[4.8.1]).
