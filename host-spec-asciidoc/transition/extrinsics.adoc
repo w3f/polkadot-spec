@@ -153,5 +153,5 @@ pairs consisting of the inherent 8-byte identifier and its value, representing
 the totality of inherent extrinsics included in each block. The entries of this
 hash table which are listed in <<tabl-inherent-data>> are collected or generated
 by the Polkadot Host and then handed to the Runtime for inclusion
-(<<algo-build-block>>).
+(TODO <<algo-build-block>>).
 
