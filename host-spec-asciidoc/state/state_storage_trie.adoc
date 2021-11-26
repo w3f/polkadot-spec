@@ -89,6 +89,7 @@ representations of stem:[b_i]:
 By looking at stem:[k_(enc)] as a sequence of nibbles, one can walk the radix
 tree to reach the node identifying the storage value of stem:[k].
 
+[#sect-state-storage-trie-structure]
 ==== Trie Structure
 
 In this subsection, we specify the structure of the nodes in the Trie as
