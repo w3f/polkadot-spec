@@ -1,3 +1,4 @@
+[#sect-storage-api]
 === Storage
 
 Interface for accessing the storage from within the runtime.
