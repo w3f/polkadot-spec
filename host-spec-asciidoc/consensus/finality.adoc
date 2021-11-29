@@ -29,8 +29,8 @@ adjust V_B over the sections]
 bbb "V" = tt "grandpa_authorities"(B)
 ++++
 
-where stem:[tt "grandpa_authorities"] is the entry into the Runtime described in
-Section link_sect-rte-grandpa-auth[13.3.7.1]. We refer to stem:[bbb "V"_B] as
+where stem:[tt "grandpa_authorities"] is a function entry of the Runtime
+described in <<sect-rte-grandpa-auth>>. We refer to stem:[bbb "V"_B] as
 stem:[bbb "V"] when there is no chance of ambiguity.
 
 Analogously we say that a Polkadot node is a *non-voter node* for block
@@ -42,11 +42,10 @@ stem:[bbb "V"_B].
 ===== Authority Set Id
 ****
 The *authority set Id* (stem:["id"_(bbb "V")]) is an incremental counter which
-tracks the amount of authority list changes that occurred (Definition
-link_defn-consensus-message-digest++defn-consensus-message-digest]]). Starting
-with the value of zero at genesis, the Polkadot Host increments this value by
-one every time a *Scheduled Change* or a *Forced Change* occurs. The authority
-set Id is an unsigned 64-bit integer.
+tracks the amount of authority list changes that occurred
+(<<defn-consensus-message-digest>>). Starting with the value of zero at genesis,
+the Polkadot Host increments this value by one every time a *Scheduled Change*
+or a *Forced Change* occurs. The authority set Id is an unsigned 64-bit integer.
 ****
 
 ===== GRANDPA State
@@ -63,8 +62,7 @@ The *GRANDPA state*, stem:["GS"], is defined as:
 where:
 
 * stem:[bbb "V"]: is the set of voters.
-* stem:["id"_(bbb "V")]: is the authority set ID as defined in Definition
-link_defn-authority-set-id++defn-authority-set-id]].
+* stem:["id"_(bbb "V")]: is the authority set ID (<<defn-authority-set-id>>).
 * stem:[r]: is the voting round number.
 ****
 
@@ -79,9 +77,8 @@ as
 V(B) := (H_h(B),H_i(B))
 ++++
 
-where stem:[H_h(B)] and stem:[H_i (B)] are the block hash and the block number
-defined in Definitions link_defn-block-header++defn-block-header]] and
-link_defn-block-header-hash++defn-block-header-hash]] respectively.
+where stem:[H_h(B)] and stem:[H_i (B)] are the block hash
+(<<defn-block-header-hash>>) and the block number (<<defn-block-header>>).
 ****
 
 ===== Voting Rounds
@@ -94,11 +91,9 @@ By stem:[V_v^(r,"pv")] and stem:[V_v^(r,"pc")] we refer to the vote cast by
 voter stem:[v] in round stem:[r] (for block stem:[B]) during the pre-vote and
 the pre-commit sub-round respectively.
 
-Voting is done by means of broadcasting voting messages to the network. The
-structure of these messages is described in Section
-link_sect-msg-grandpa[4.8.4]. Validators inform their peers about the block
-finalized in round stem:[r] by broadcasting a commit message (see Algorithm
-link_algo-grandpa-round++algo-grandpa-round]] for more details).
+Voting is done by means of broadcasting voting messages (<<sect-msg-grandpa>>)
+to the network. Validators inform their peers about the block finalized in round
+stem:[r] by broadcasting a commit message (<<algo-grandpa-round>>).
 ****
 
 [#defn-sign-round-vote]
@@ -140,12 +135,12 @@ B' >= B
 
 or stem:[V_(v_i)^(r,"pc")(B')] is an equivocatory vote.
 
-In all cases, stem:["Sign"_(v_i)^(r,"stage")(B')], as defined in Definition
-link_defn-sign-round-vote++defn-sign-round-vote]], is the signature of voter
-stem:[v_i in bbb "V"_B] broadcasted during either the pre-vote (stage = pv) or
-the pre-commit (stage = pc) sub-round of round r. A *valid justification* must
-only contain up-to-one valid vote from each voter and must not contain more than
-two equivocatory votes from each voter.
+In all cases, stem:["Sign"_(v_i)^(r,"stage")(B')] is the signature
+(<<defn-sign-round-vote>>) of voter stem:[v_i in bbb "V"_B] broadcasted during
+either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of
+round r. A *valid justification* must only contain up-to-one valid vote from
+each voter and must not contain more than two equivocatory votes from each
+voter.
 ****
 
 [#defn-finalizing-justification]
@@ -156,15 +151,14 @@ a non-voter node* stem:[n] if the number of valid signatures in
 stem:[J^(r,"pc")(B)] for stem:[B'] is greater than stem:[2/3|bbb "V"_B|].
 
 Note that stem:[J^(r,"pc")(B)] can only be used by a non-voter node to finalize
-a block. In contrast, a voter node can only be assured of the finality of block
-stem:[B] by actively participating in the voting process. That is by invoking
-Algorithm link_algo-grandpa-round++algo-grandpa-round]]. See Definition
-link_defn-finalized-block++defn-finalized-block]] for more details.
+a block. In contrast, a voter node can only be assured of the finality
+(<<defn-finalized-block>>) of block stem:[B] by actively participating in the
+voting process. That is by invoking Algorithm as defined in
+<<algo-grandpa-round>>.
 
-The GRANDPA protocol dictates how an honest voter should vote in each
-sub-round, which is described in Algorithm
-link_algo-grandpa-round++algo-grandpa-round]]. After defining what
-constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
+The GRANDPA protocol dictates how an honest voter should vote in each sub-round,
+which is described by Algorithm as defined in <<algo-grandpa-round>>. After
+defining what constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
 ****
 
 [#defn-equivocation]
@@ -190,8 +184,8 @@ cc "E"_("obs"(v))^(r,"stage")
 ++++
 
 The Polkadot Host must detect equivocations committed by other validators and
-submit those to the Runtime as described in Section
-link_sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic[13.3.7.2].
+submit those to the Runtime as described in 
+TODO <<sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>>.
 
 A vote stem:[V_v^(r,"stage") = V(B)] is *invalid* if
 
@@ -256,7 +250,7 @@ votes for Block stem:[B] in round stem:[r]* to be:
 ===== Current Pre-Voted Block
 ****
 The current *pre-voted* block stem:[B_v^(r,"pv")] also know as GRANDPA GHOST is
-the block chosen by Algorithm link_algo-grandpa-ghost++algo-grandpa-ghost]]:
+the block chosen by Algorithm as described in <<algo-grandpa-ghost>>:
 
 [stem]
 ++++
@@ -291,16 +285,15 @@ initiate its state and sync it with other active validators. In particular,
 considering that voting is happening in different distinct rounds where each
 round of voting is assigned a unique sequential round number stem:[r_v], it
 needs to determine and set its round counter stem:[r] equal to the voting round
-stem:[r_n] currently undergoing in the network. Algorithm
-link_algo-initiate-grandpa++algo-initiate-grandpa]] mandates the initialization
-procedure for GRANDPA protocol for a joining validator.
+stem:[r_n] currently undergoing in the network. Algorithm as defined in
+<<algo-initiate-grandpa>> mandates the initialization procedure for GRANDPA
+protocol for a joining validator.
 
 TODO: Algorithm
 
 stem:[r_("last")] is equal to the latest round the voter has observed that other
 voters are voting on. The voter obtains this information through various
-gossiped messages including those mentioned in Definition
-link_defn-finalized-block++defn-finalized-block]].
+gossiped messages including those mentioned in <<defn-finalized-block>>.
 
 stem:[r_("last")] is set to _0_ if the GRANDPA node is initiating the GRANDPA
 voting process as a part of a new authority set. This is because the GRANDPA
@@ -308,19 +301,17 @@ round number reset to _0_ for every authority set change.
 
 ===== Voter Set Changes
 
-Voter set changes are signalled by Runtime via a consensus engine message as
-described in Section link_sect-consensus-message-digest[6.1.2]. When
-Authorities process such messages they must not vote on any block with a higher
-number than the block at which the change is supposed to happen. The new
-authority set should reinitiate GRANDPA protocol by executing Algorithm
-link_algo-initiate-grandpa++algo-initiate-grandpa]].
+Voter set changes are signalled by Runtime via a consensus engine message
+(<<sect-consensus-message-digest>>). When Authorities process such messages they
+must not vote on any block with a higher number than the block at which the
+change is supposed to happen. The new authority set should reinitiate GRANDPA
+protocol by executing Algorithm as defined in <<algo-initiate-grandpa>>.
 
 TODO: Algorithms...
 
 Note that we might not always succeed in finalizing our best final candidate due
-to the possibility of equivocation. Example
-link_exmp-candid-unfinalized++exmp-candid-unfinalized]] serves to demonstrate
-such a situation:
+to the possibility of equivocation. The example in <<exmp-candid-unfinalized>>
+serves to demonstrate such a situation:
 
 TODO: Number example block
 
@@ -346,12 +337,11 @@ and stem:[2 > 1].
 However, at this point, the round is already completable as we know that we have
 stem:[tt "GRANDPA-GHOST"(1) = B_2] as an upper limit on what we can finalize and
 nothing greater than stem:[B_2] can be finalized at stem:[r = 1]. Therefore, the
-condition of Algorithm link_algo-grandpa-round++algo-grandpa-round]]:14 is
+condition of Algorithm as described in <<algo-grandpa-round>> is
 satisfied and we must proceed to round 2.
 
-Nonetheless, we must continue to attempt to finalize round 1 in the background
-as the condition of link_algo-attempt-tofinalize++algo-attempt-tofinalize]]:3
-has not been fulfilled.
+Nonetheless, we must continue to attempt to finalize round _1_ in the background
+as the condition of the TODO has not been fulfilled.
 
 This prevents us from proceeding to round 3 until either:
 
@@ -362,9 +352,8 @@ pre-commits are going to be cast for (even with considering the possibility of
 1/3 of voter equivocating) and therefore we have stem:[tt
 "Best-Final-Candidate"(r) = B_1].
 
-Both scenarios unblock the Algorithm
-link_algo-grandpa-round++algo-grandpa-round]]:14 stem:[tt
-"Last-Finalized-Block" >= tt "Best-Final-Candidate"(r - 1)] albeit in
+Both scenarios unblock the Algorithm as defined in <<algo-grandpa-round>>,
+stem:[tt "Last-Finalized-Block" >= tt "Best-Final-Candidate"(r - 1)] albeit in
 different ways: the former with increasing the stem:[tt "Last-Finalized-Block"]
 and the latter with decreasing stem:[tt "Best-Final-Candidate"(r - 1)].
 ====
