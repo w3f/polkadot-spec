@@ -9,18 +9,15 @@ A Polkadot relay chain node stem:[n] should consider block stem:[B] as
 
 * stem:[V_("obs"(n))^(r,"pc")(B') > 2/3|bbb "V"_(B')|].
 * It receives a stem:[M_v^(r,"Fin")(B')] message in which stem:[J^r(B)]
-justifies the finalization (according to Definition
-link_defn-grandpa-justification++defn-grandpa-justification]]).
-* It receives a block data message for stem:[B'] with stem:["Just"(B')] defined
-in Section link_sect-justified-block-header[3.3.1.2] which justifies the
-finalization.
+justifies the finalization (<<defn-grandpa-justification>>).
+* It receives a block data message for stem:[B'] with stem:["Just"(B')]
+(<<sect-justified-block-header>>) which justifies the finalization.
 
 for:
 
 * Any round stem:[r] if the node stem:[n] is _not_ a GRANDPA voter.
-* Only for rounds stem:[r] for which the node stem:[n] has invoked Algorithm
-link_algo-grandpa-round++algo-grandpa-round]] if latexmath:[$n$] is a GRANDPA
-voter.
+* Only for rounds stem:[r] for which the node stem:[n] has invoked Algorithm as
+defined in <<algo-grandpa-round>> if latexmath:[$n$] is a GRANDPA voter.
 
 Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit
 messages regardless of their GRANDPA voter status.
@@ -30,21 +27,19 @@ messages regardless of their GRANDPA voter status.
 ==== Catching up
 
 When a Polkadot node (re)joins the network during the process described in
-Chapter link_chap-bootstrapping[5], it requests the history of state transition
-in the form of blocks, which it is missing. Each finalized block comes with the
-Justification of its finalization as defined in Definition
-link_defn-grandpa-justification++defn-grandpa-justification]]. Through this
+<<chapter-bootstrapping>>, it requests the history of state transition in the form
+of blocks, which it is missing. Each finalized block comes with the
+justification (<<defn-grandpa-justification>>) of its finalization. Through this
 process, they can synchronize the authority list currently performing the
 finalization process.
 
 [#sect-sending-catchup-request]
 ===== Sending the catch-up requests
 When a Polkadot node has the same authority list as a peer node who is reporting
-a higher number for the ``finalized round'' field, it should send a catch-up
-request message, as specified in Definition
-link_defn-grandpa-catchup-request-msg++defn-grandpa-catchup-request-msg]], to
-the reporting peer in order to catch-up to the more advanced finalized round,
-provided that the following criteria hold:
+a higher number for the _finalized round_ field, it should send a catch-up
+request message (<<defn-grandpa-catchup-request-msg>>) to the reporting peer in
+order to catch-up to the more advanced finalized round, provided that the
+following criteria hold:
 
 * The peer node is a GRANDPA voter, and:
 * The last known finalized round for the Polkadot node is at least 2 rounds
@@ -53,7 +48,7 @@ behind the finalized round for the peer.
 ===== Processing the catch-up requests
 Only GRANDPA voter nodes are required to respond to the catch-up responses. When
 a GRANDPA voter node receives a catch-up request message it needs to execute
-Algorithm link_algo-process-catchup-request++algo-process-catchup-request]].
+Algorithm as defined in <<algo-process-catchup-request>>.
 
 TODO: algorithm
 
@@ -64,9 +59,8 @@ operating
 * stem:[r] is the round number for which the catch-up is requested for.
 * stem:[bbb "P"] is the set of immediate peers of node stem:[v].
 * stem:[tt "Last-Completed-Round"] is [TODO: Reference].
-* stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)] is the catch-up response defined in
-Definition
-link_defn-grandpa-catchup-response-msg++defn-grandpa-catchup-response-msg]].
+* stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)] is the catch-up response
+(<<defn-grandpa-catchup-response-msg>>).
 
 ===== Processing catch-up responses
 
@@ -74,7 +68,7 @@ A Catch-up response message contains critical information for the requester node
 to update their view on the active rounds which are being voted on by GRANDPA
 voters. As such, the requester node should verify the content of the catch-up
 response message and subsequently updates its view of the state of the finality
-of the Relay chain according to Algorithm
-link_algo-process-catchup-response++algo-process-catchup-response]].
+of the Relay chain according to Algorithm as defined in
+<<algo-process-catchup-response>>.
 
 TODO: Algorithm
