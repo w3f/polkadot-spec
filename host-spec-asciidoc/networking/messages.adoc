@@ -412,6 +412,7 @@ the catch-up procedure explained in <<sect-grandpa-catchup>>).
 In particular, this procedure involves sending a _catch-up request_ and
 processing _catch-up response_ messages.
 
+[#defn-grandpa-catchup-request-msg]
 ====== Catch-Up Request Message
 ****
 A *GRANDPA catch-up request message* for round stem:[r],
@@ -429,6 +430,7 @@ This message is the sub-component of the GRANDPA Gossip message
 (<<defn-gossip-message>>) of type Id _3_.
 ****
 
+[#defn-grandpa-catchup-response-msg]
 ====== Catch-Up Response Message
 ****
 A *GRANDPA catch-up response message* for round stem:[r],
