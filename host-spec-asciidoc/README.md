@@ -19,6 +19,16 @@ sudo gem install asciidoctor-mathematical
 
 ### HTML
 
+#### Multi-Page (recommended)
+
+```bash
+asciidoctor -r asciidoctor-multipage -b multipage_html5 -D out host-spec.adoc
+```
+
+Where the resulting HTML pages can then be found in the `out/` directory.
+
+#### Single-Page
+
 ```bash
 asciidoctor host-spec.adoc
 ```
