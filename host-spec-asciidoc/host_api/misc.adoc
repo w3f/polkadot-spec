@@ -41,8 +41,7 @@ Print a valid UTF8 encoded buffer.
 
 *Arguments*:
 
-* : a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating
+* : a pointer-size (<<defn-runtime-pointer>>) indicating
 the valid buffer to be printed.
 
 ==== `ext_misc_print_hex`
@@ -56,8 +55,7 @@ Print any buffer in hexadecimal representation.
 
 *Arguments*:
 
-* `data`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating
+* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating
 the buffer to be printed.
 
 ==== `ext_misc_runtime_version`
@@ -80,11 +78,9 @@ calling a function in this blob.
 
 Arguments::
 
-* `data`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating the Wasm
+* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating the Wasm
 blob.
-* `result`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating the
+* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 SCALE encoded as defined in Definition
 link_defn-option-type++defn-option-type]] containing the Runtime version of the
 given Wasm blob.

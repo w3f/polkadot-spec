@@ -33,10 +33,8 @@ Arguments::
 
 * `level`: the log level as defined in Definition
 link_defn-logging-log-level++defn-logging-log-level]].
-* `target`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating the
+* `target`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 string which contains the path, module or location from where the log was
 executed.
-* `message`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating the log
+* `message`: a pointer-size (<<defn-runtime-pointer>>) indicating the log
 message.

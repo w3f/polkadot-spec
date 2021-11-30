@@ -14,10 +14,8 @@ Sets the value under a given key into storage.
 ----
 
 Arguments::
-* `key`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the key.
-* `value`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the
+* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `value`: a pointer-size (<<defn-runtime-pointer>>) containing the
 value.
 
 ==== `ext_storage_get`
@@ -30,10 +28,8 @@ Retrieves the value associated with the given key from storage.
 ----
 
 Arguments::
-* `key`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the key.
-* `result`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] returning the SCALE
+* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `result`: a pointer-size (<<defn-runtime-pointer>>) returning the SCALE
 encoded as defined in Definition link_defn-option-type++defn-option-type]]
 containing the value.
 
@@ -50,19 +46,16 @@ offset.
 ----
 
 Arguments::
-* `key`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the key.
-* `value_out`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the
+* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `value_out`: a pointer-size (<<defn-runtime-pointer>>) containing the
 buffer to which the value will be written to. This function will never write
 more then the length of the buffer, even if the value’s length is bigger.
 * `offset`: an u32 integer containing the offset beyond the value should be read
 from.
-* `result`: a pointer-size (Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]]) pointing to a
-SCALE encoded (Definition link_defn-option-type++defn-option-type]]) containing
-an unsinged 32-bit interger representing the number of bytes left at supplied .
-Returns if the entry does not exists.
+* `result`: a pointer-size (<<defn-runtime-pointer>>) pointing to a SCALE
+encoded _Option_ value (<<defn-option-type>>) containing an unsigned 32-bit
+integer representing the number of bytes left at supplied `offset`. Returns
+_None_ if the entry does not exists.
 
 ==== `ext_storage_clear`
 
@@ -75,8 +68,7 @@ Clears the storage of the given key and its value.
 ----
 
 Arguments::
-* `key`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the key.
+* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
 
 ==== `ext_storage_exists`
 
@@ -89,10 +81,9 @@ Checks whether the given key exists in storage.
 ----
 
 Arguments::
-* `key`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the key.
-* `return`: an i32 integer value equal to if the key exists or a value equal to
-if otherwise.
+* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `return`: an i32 integer value equal to _1_ if the key exists or a value equal
+to _0_ if otherwise.
 
 ==== `ext_storage_clear_prefix`
 
@@ -106,8 +97,7 @@ prefix.
 ----
 
 Arguments::
-* `prefix`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing
+* `prefix`: a pointer-size (<<defn-runtime-pointer>>) containing
 the prefix.
 
 ==== `ext_storage_append`
@@ -133,10 +123,8 @@ array.
 ----
 
 Arguments::
-* `key`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the key.
-* `value`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] containing the
+* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `value`: a pointer-size (<<defn-runtime-pointer>>) containing the
 value to be appended.
 
 ==== `ext_storage_root`
@@ -166,8 +154,7 @@ link_sect-changes-trie[3.3.4]. The parent hash is a SCALE encoded block hash.
 ----
 
 Arguments::
-* `parent_hash`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating the
+* `parent_hash`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 SCALE encoded block hash.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit Blake2 changes
 root.
@@ -185,12 +172,9 @@ The key provided to this function may or may not exist in storage.
 ----
 
 Arguments::
-* `key`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating the key.
-* `return`: a pointer-size as defined in Definition
-link_defn-runtime-pointer-size++defn-runtime-pointer-size]] indicating the
-SCALE encoded as defined in Definition
-link_defn-option-type++defn-option-type]] containing the next key in
+* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+encoded _Option_ value (<<defn-option-type>>) containing the next key in
 lexicographic order.
 
 [#sect-ext-storage-start-transaction]
