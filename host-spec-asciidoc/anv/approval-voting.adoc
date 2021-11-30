@@ -1,22 +1,74 @@
 [#sect-approval-voting]
 === Approval Voting
 
-The approval voting process ensures that only valid parachain blocks are finalized on the relay chain. After backable parachain candidates were submitted to the relay chain, as described in Section 7.4.2, which can be retrieved by the Runtime API as described in Section 7.8.3, validators need to determine their assignments for each parachain and issue approvals for valid candidates, respectively disputes for invalid candidates. Since it cannot be expected that each validator verifies every single parachain candidate, this mechanism ensures that enough honest validators are selected to verify parachain candidates in order prevent the finalization of invalid blocks. If an honest validator detects an invalid block which was approved by one or more validators, the honest validator must issue a disputes which wil cause escalations, resulting in consequences for all malicious parties, i.e. slashing. This mechanism is described more in Section 7.7.1.
+The approval voting process ensures that only valid parachain blocks are
+finalized on the relay chain. After _backable_ parachain candidates were
+submitted to the relay chain (<<sect-candidate-inclusion>>), which can be
+retrieved via the Runtime API (<<sect-rt-api-availability-cores>>), validators
+need to determine their assignments for each parachain and issue approvals for
+valid candidates, respectively disputes for invalid candidates. Since it cannot
+be expected that each validator verifies every single parachain candidate, this
+mechanism ensures that enough honest validators are selected to verify parachain
+candidates in order prevent the finalization of invalid blocks. If an honest
+validator detects an invalid block which was approved by one or more validators,
+the honest validator must issue a disputes which wil cause escalations,
+resulting in consequences for all malicious parties, i.e. slashing. This
+mechanism is described more in <<sect-availability-assingment-criteria>>.
 
 ==== Assignment Criteria
 
-Validators determine their assignment based on a VRF mechanism, similiar to the BABE consensus mechanism. First, validators generate an availability core VRF assignment as defined in Definition 7.23, which indicates which availability core a validator is assigned to. Then a delayed availability core VRF assignment is generated which indicates at what point a validator should start the approval process. The delays are based on “tranches”, as described in Section 7.7.2.
+Validators determine their assignment based on a VRF mechanism, similiar to the
+BABE consensus mechanism. First, validators generate an availability core VRF
+assignment (<<defn-aval-core-vrf-assignment>>), which indicates which
+availability core a validator is assigned to. Then a delayed availability core
+VRF assignment is generated which indicates at what point a validator should
+start the approval process. The delays are based on “tranches”
+(<<defn-tranches>>).
 
-An assigned validator never broadcasts their assignment until relevant. Once the assigned validator is ready to check a candidate, the validator broadcasts their assignment by issuing an approval distribution message as defined in Definition 7.39, where M is of variant 0. Other assigned validators that receive that network message must keep track of if, expecting an approval vote following shortly after. Assigned validators can retrieve the candidate by using the availability recovery as described in Section 7.6.2 and then validate the candidate as described in Section 7.5.
+An assigned validator never broadcasts their assignment until relevant. Once the
+assigned validator is ready to check a candidate, the validator broadcasts their
+assignment by issuing an approval distribution message
+(<<net-msg-approval-distribution>>), where stem:[M] is of variant _0_. Other
+assigned validators that receive that network message must keep track of if,
+expecting an approval vote following shortly after. Assigned validators can
+retrieve the candidate by using the availability recovery
+(<<sect-availability-recovery>>) and then validate the candidate
+(<<sect-candidate-validation>>).
 
-The validator issues approval votes in form of a validator protocol message as defined in Definition 7.34 and disputes as described in Section 7.7.3.
+The validator issues approval votes in form of a validator protocol message
+(<<net-msg-validator-protocol-message>>) respectively disputes
+(<<sect-anv-disputes>>).
 
 ==== Tranches
 
-Validators use a subjective, tick-based system to determine when the approval process should start. A validator starts the tick-based system when a new availability core candidates have been proposed, which can be retrieved via the Runtime API as described in Section 7.8.3, and increments the tick every 500 Milliseconds. Each tick/increment is referred to as a “tranche”, represented as an integer, starting at 0.
+Validators use a subjective, tick-based system to determine when the approval
+process should start. A validator starts the tick-based system when a new
+availability core candidates have been proposed, which can be retrieved via the
+Runtime API (<<sect-rt-api-availability-cores>>) , and increments the tick every
+_500 milliseconds_. Each tick/increment is referred to as a “tranche”,
+represented as an integer, starting at _0_.
 
-As described in Section 7.7.1, the validator first executes the VRF mechanism to determine which parachains (availability cores) the validator is assigned to, then an additional VRF mechanism for each assigned parachain to determine the delayed assignment. The delayed assignment indicites the tranche at which the validator should start the approval process. A tranche of value 0 implies that the assignment should be started immediately, while later assignees of later tranches wait until it's their term to issue assignments, determined by their subjective, tick-based system.
+As described in <<sect-availability-assingment-criteria>>, the validator first
+executes the VRF mechanism to determine which parachains (availability cores)
+the validator is assigned to, then an additional VRF mechanism for each assigned
+parachain to determine the _delayed assignment_. The delayed assignment
+indicates the tranche at which the validator should start the approval process.
+A tranche of value _0_ implies that the assignment should be started immediately,
+while later assignees of later tranches wait until it's their term to issue
+assignments, determined by their subjective, tick-based system.
 
-Validators are required to track broadcasted assignments by other validators assigned to the same parachain, including verifying the VRF output. Once a valid assignment from a peer was received, the validator must wait for the following approval vote within a certain period as described in Section 7.8.11 by orienting itself on its local, tick-based system. If the waiting time after a broadcasted assignment exceeds the specified period, the validator interprets this behavior as a “no-show”, indicating that more validators should commit on their tranche until enough approval votes have been collected.
+Validators are required to track broadcasted assignments by other validators
+assigned to the same parachain, including verifying the VRF output. Once a valid
+assignment from a peer was received, the validator must wait for the following
+approval vote within a certain period as described in
+<<sect-rt-api-session-info>> by orienting itself on its local, tick-based
+system. If the waiting time after a broadcasted assignment exceeds the specified
+period, the validator interprets this behavior as a “no-show”, indicating that
+more validators should commit on their tranche until enough approval votes have
+been collected.
 
-If enough approval votes have been collected as described in Section 7.8.11, then assignees of later tranches do not have to start the approval process. Therefore, this tranche system serves as a mechanism to ensure that enough candidate approvals from a random set of validators are created without requiring all assigned validators to check the candidate.
+If enough approval votes have been collected as described in
+<<sect-rt-api-session-info>>, then assignees of later tranches do not have to
+start the approval process. Therefore, this tranche system serves as a mechanism
+to ensure that enough candidate approvals from a random set of validators are
+created without requiring all assigned validators to check the candidate.
