@@ -5,11 +5,18 @@ The availability and validity process requires certain network messages to be ex
 
 ==== Notification Messges
 
-The notification messages are exchanged between validators, including messages sent by collators to validators. The protocol messages are exchanged based on a streaming notification substream as described in Section ?. The messages are SCALE encoded as described in Section ?.
+The notification messages are exchanged between validators, including messages
+sent by collators to validators. The protocol messages are exchanged based on a
+streaming notification substream (<<sect-connection-establishment>>). The
+messages are SCALE encoded (<<sect-scale-codec>>).
 
 ===== Validator Protocol Message
-
-The validator protocol message is a varying datatype used by validators to broadcast relevant information about certain steps in the A&V process. Specifically, this includes the backing process as described in Section 7.4 and the approval process as described in Section 7.7. The validator protocol message, stem:[M], is a varying datatype of the following format:
+****
+The validator protocol message is a varying datatype used by validators to
+broadcast relevant information about certain steps in the A&V process.
+Specifically, this includes the backing process (<<sect-candidate-backing>>) and
+the approval process (<<sect-approval-voting>>). The validator protocol message,
+stem:[M], is a varying datatype of the following format:
 
 [stem]
 ++++
@@ -18,12 +25,13 @@ M = {(1,->,M_f),(3,->,M_s),(4,->,M_a):}
 
 where
 
-* stem:[M_f] is a bitfield distribution message as defined in Definition 7.38.
-* stem:[M_s] is a statement distribution message as defined in Definition 7.37.
-* stem:[M_a] is a approval distribution message as defined in Definition 7.39.
+* stem:[M_f] is a bitfield distribution message (<<net-msg-bitfield-dist-msg>>).
+* stem:[M_s] is a statement distribution message (<<net-msg-statement-distribution>>).
+* stem:[M_a] is a approval distribution message (<<net-msg-approval-distribution>>).
+****
 
 ===== Collation Protocol Message
-
+****
 The collation protocol message, M, is a varying datatype of the following format:
 
 [stem]
@@ -31,11 +39,14 @@ The collation protocol message, M, is a varying datatype of the following format
 M = {(0,->,M_c):}
 ++++
 
-where stem:[M_c] is the collator message as defined in Definition 7.36.
+where stem:[M_c] is the collator message (<<net-msg-collator-protocol>>).
+****
 
 ===== Collator Message
-
-The collator message, stem:[M], is a varying datatype of the following format:
+****
+The collator message is sent as part of the collator protocol message
+(<<net-msg-collator-protocol-message>>). The collator message, stem:[M], is a
+varying datatype of the following format:
 
 [stem]
 ++++
@@ -44,18 +55,23 @@ M = {(0,->,(C_i,P_i,C_s)),(1,->,H),(4,->,(B_h,S)):}
 
 where
 
-* stem:[M] is a varying datatype where 0 indicates the intent to advertise a collation and 1 indicates the advertisment of a collation to a validator. 4 indicates that a collation sent to a validator was seconded.
+* stem:[M] is a varying datatype where _0_ indicates the intent to advertise a
+collation and _1_ indicates the advertisement of a collation to a validator. _4_
+indicates that a collation sent to a validator was seconded.
 * stem:[C_i] is the public key of the collator.
-* stem:[P_i] is the parachain Id as defined in Definition 7.5.
-* stem:[C_s] is the signature of the collator using the PeerId of the collators node.
-* stem:[H] is the hash of the parachain block as defined in Definition 7.3.
-* stem:[S] is a full statement as defined in Definition 7.13.
-
-This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.35.
+* stem:[P_i] is the parachain Id (<<defn-para-id>>).
+* stem:[C_s] is the signature of the collator using the _PeerId_ of the collators node.
+* stem:[H] is the hash of the parachain block (<<defn-parablock>>).
+* stem:[S] is a full statement (<<net-msg-full-statement>>).
+****
 
 ===== Statement Distribution Message
-
-The statement distribution message is sent as part of the validator protocol message as defined in Section 7.34, indicates the validity vote of a validator for a given candidate, described further in Section 7.4.1. The statement distribution message, stem:[M], is of varibale type of the following format:
+****
+The statement distribution message is sent as part of the validator protocol
+message (<<net-msg-collator-protocol-message>>) indicates the validity vote of a
+validator for a given candidate, described further in
+<<sect-candidate-backing-statements>>. The statement distribution message,
+stem:[M], is of varying type of the following format:
 
 [stem]
 ++++
@@ -65,15 +81,25 @@ S_m = (B_h,C_h,A_i,A_s)
 
 where
 
-* stem:[M] is a vayring datatype where 0 indicates a signed statement and 1 contains metadata about a seconded statement with a larger payload, such as a runtime upgrade. The candidate itself can be fetched via the request/response message as defined in Definition 7.48.
+* stem:[M] is a varying datatype where _0_ indicates a signed statement and _1_
+contains metadata about a seconded statement with a larger payload, such as a
+runtime upgrade. The candidate itself can be fetched via the request/response
+message (<<net-msg-statement-fetching-request>>).
 * stem:[B_h] is the hash of the relay chain parent, indicating the state this message is for.
-* stem:[S] is a full statement as defined in Definition 7.13.
-* stem:[A_i] is the validator index in the authority set that signed this message.
+* stem:[S] is a full statement (<<net-msg-full-statement>>).
+* stem:[A_i] is the validator index in the authority set
+(<<defn-authority-list>>) that signed this message.
 * stem:[A_s] is the signature of the validator. 
+****
 
 ===== Bitfield Distribution Message
-
-The bitfield distribution message indicates the availability vote of a validator for a given candidate, described further in Section 7.6.1. This message is sent in form of a validator protocol message as defined in Definition 7.34. The bitfield distribution message, stem:[M], is a datastructure of the following format:
+****
+The bitfield distribution message is sent as part of the validator protocol
+message (<<net-msg-validator-protocol-message>>) and indicates the availability
+vote of a validator for a given candidate, described further in
+<<sect-availability-votes>>. This message is sent in form of a validator
+protocol message (<<net-msg-validator-protocol-message>>). The bitfield
+distribution message, stem:[M], is a datastructure of the following format:
 
 [stem]
 ++++
@@ -84,14 +110,19 @@ P = (d,A_i,A_s)
 where
 
 * stem:[B_h] is the hash of the relay chain parent, indicating the state this message is for.
-* stem:[d] is the bitfield array as described in Definition 7.14.
-* stem:[A_i] is the validator index in the authority set as defined in Definition ? that signed this message.
+* stem:[d] is the bitfield array (<<defn-bitfield-array>>).
+* stem:[A_i] is the validator index in the authority set
+(<<defn-authority-list>>) that signed this message.
 * stem:[A_s] is the signature of the validator.
-This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.34.
+****
 
 ===== Approval Distribution Message
-
-The approval distribution message indicates the approval vote of a validator for a given candidate, described further in Section 7.7.1. This message is sent in form of a validator protocol message as defined in Definition 7.34. The approval distribution message, stem:[M], is a varying datatype of the following format:
+****
+The approval distribution message is sent as part of the validator protocol
+message (<<net-msg-validator-protocol-message>>) and indicates the approval vote
+of a validator for a given candidate, described further in
+<<sect-availability-assingment-criteria>>. The approval distribution message,
+stem:[M], is a varying datatype of the following format:
 
 [stem]
 ++++
@@ -104,57 +135,89 @@ V   = (B_h,I,A_i,A_s)
 
 where
 
-* stem:[M] is a varying datatype where 0 indicates assignments for candidates in recent, unfinalized blocks and 1 indicates approvals for candidates in some recent, unfinalized block.
-* stem:[C] is an assignment criterion which refers to the candidate under which the assignment is relevant by the block hash.
-* stem:[I] is an unsigned 32-bit integer indicating the index of the candidate, corresponding the the order of the availability cores as described in Section 7.8.3.
+* stem:[M] is a varying datatype where _0_ indicates assignments for candidates in
+recent, unfinalized blocks and _1_ indicates approvals for candidates in some
+recent, unfinalized block.
+* stem:[C] is an assignment criterion which refers to the candidate under which
+the assignment is relevant by the block hash.
+* stem:[I] is an unsigned 32-bit integer indicating the index of the candidate,
+corresponding the the order of the availability cores
+(<<sect-rt-api-availability-cores>>).
 * stem:[B_h] is the relay chain block hash where the candidate appears.
-* stem:[A_i] is the authority set Id of the validator as defined in Definition ? that created this message.
+* stem:[A_i] is the authority set Id (<<defn-authority-list>>) of the validator
+that created this message.
 * stem:[A_s] is the signature of the validator issuing this message.
 * stem:[c_a] is the certification of the assignment.
-* stem:[c_k] is a varying datatype where 0 indicates an assignment based on the VRF that authorized the relay chain block where the candidate was included, followed by a sample number, s. 1 indicates an assignment story based on the VRF that authorized the relay chain block where the candidate was included combined with the index of a particular core. This is described further in Section 7.7.
+* stem:[c_k] is a varying datatype where _0_ indicates an assignment based on
+the VRF that authorized the relay chain block where the candidate was included,
+followed by a sample number, stem:[s]. _1_ indicates an assignment story based
+on the VRF that authorized the relay chain block where the candidate was
+included combined with the index of a particular core. This is described further
+in <<sect-approval-voting>>.
 * stem:[P_o] is a VRF output and stem:[P_p] its corresponding proof.
-This message is not sent directly but is sent as part of the collator protocol message as defined in Section 7.34.
+****
 
 ==== Request & Response
 
-The request & response network messages are sent and received between peers in the Polkadot network, including collators and non-validator nodes. Those messages are conducted on the request-response substreams are described in Section ?. The network messages are SCALE encoded as described in Section ?.
+The request & response network messages are sent and received between peers in
+the Polkadot network, including collators and non-validator nodes. Those
+messages are conducted on the request-response substreams
+(<<sect-connection-establishment>>). The network messages are SCALE encoded as
+described in Section ?.
 
+[#net-msg-pov-fetching-request]
 ===== PoV Fetching Request
-
-The PoV fetching request is sent by clients who want to retrieve a PoV block from a node. The request is a datastructure of the following format:
+****
+The PoV fetching request is sent by clients who want to retrieve a PoV block
+from a node. The request is a datastructure of the following format:
 
 [stem]
 ++++
 C_h 
 ++++
 
-where stem:[C_h] is the 256-bit hash of the PoV block. The reponse message is defined in Definition 7.41.
+where stem:[C_h] is the 256-bit hash of the PoV block. The response message is
+defined in <<net-msg-pov-fetching-response>>.
+****
 
+[#net-msg-pov-fetching-response]
 ===== PoV Fetching Response
-
-The PoV fetching response is sent by nodes to the clients who issued a PoV fetching request as defined in Definition 7.40. The response, stem:[R], is a varying datatype of the following format:
+****
+The PoV fetching response is sent by nodes to the clients who issued a PoV
+fetching request (<<net-msg-pov-fetching-request>>). The response, stem:[R], is
+a varying datatype of the following format:
 
 [stem]
 ++++
 R = {(0,->,B),(1,->,phi):}
 ++++
 
-where stem:[0] is followed by the PoV block and stem:[1] indicates that the PoV block was not found.
+where _0_ is followed by the PoV block and _1_ indicates that the PoV block was
+not found.
+****
 
+[#net-msg-chunk-fetching-request]
 ===== Chunk Fetching Request
-
-The chunk fetching request is sent by clients who want to retrieve chunks of a parachain candidate. The request is a datastructure of the following format:
+****
+The chunk fetching request is sent by clients who want to retrieve chunks of a
+parachain candidate. The request is a datastructure of the following format:
 
 [stem]
 ++++
 (C_h,i) 
 ++++
 
-where stem:[C_h] is the 256-bit hash of the parachain candiate and stem:[i] is a 32-bit unsigned integer indicating the index of the chunk to fetch. The response message is defined in Definition 7.43.
+where stem:[C_h] is the 256-bit hash of the parachain candidate and stem:[i] is a
+32-bit unsigned integer indicating the index of the chunk to fetch. The response
+message is defined in <<net-msg-chunk-fetching-response>>.
+****
 
+[#net-msg-chunk-fetching-response]
 ===== Chunck Fetching Response
-
-The chunk fetching response is sent by nodes to the clients who issued a chunk fetching request as defined in Definition 7.42. The reponse, stem:[R], is a varying datatype of the following format:
+****
+The chunk fetching response is sent by nodes to the clients who issued a chunk
+fetching request (<<net-msg-chunk-fetching-request>>). The response, stem:[R], is
+a varying datatype of the following format:
 
 [stem]
 ++++
@@ -162,22 +225,35 @@ R = {(0,->,C_r),(1,->,phi):}\
 C_r = (c,c_p)
 ++++
 
-where stem:[0] is followed by the chunk response, stem:[C_r] and stem:[1] indicates that the requested chunk was not found. stem:[C_r] contains the erasure-encoded chunk of data belonging to the candidate block, stem:[c], and stem:[c_p] is that chunks proof in the Merkle tree. Both stem:[c] and stem:[c_p] are byte arrays of type stem:[(b_n…b_m)].
+where _0_ is followed by the chunk response, stem:[C_r] and __1 indicates that
+the requested chunk was not found. stem:[C_r] contains the erasure-encoded chunk
+of data belonging to the candidate block, stem:[c], and stem:[c_p] is that
+chunks proof in the Merkle tree. Both stem:[c] and stem:[c_p] are byte arrays of
+type stem:[(b_n…b_m)].
+****
 
+[#net-msg-available-data-request]
 ===== Available Data Request
-
-The available data request is sent by clients who want to retrieve the PoV block of a parachain candidate. The request is a datastructure of the following format:
+****
+The available data request is sent by clients who want to retrieve the PoV block
+of a parachain candidate. The request is a datastructure of the following
+format:
 
 [stem]
 ++++
 C_h 
 ++++
 
-where stem:[C_h] is the 256-bit candidate hash to get the available data for. The reponse message is defined in Definition 7.45.
+where stem:[C_h] is the 256-bit candidate hash to get the available data for.
+The response message is defined in <<net-msg-available-data-response>>.
+****
 
+[#net-msg-available-data-response]
 ===== Available Data Response
-
-The available data response is sent by nodes to the clients who issued a available data request as defined in Definition 7.44. The reponse, stem:[R], is a varying datatype of the following format:
+****
+The available data response is sent by nodes to the clients who issued a
+available data request (<<net-msg-available-data-request>>). The response,
+stem:[R], is a varying datatype of the following format:
 
 [stem]
 ++++
@@ -185,55 +261,87 @@ R = {(0,->,A),(1,->,phi):}\
 A = (P_{ov},D_{pv})
 ++++
 
-where stem:[0] is followed by the available data, stem:[A], and stem:[1] indicates the the requested candidate hash was not found. stem:[P_{ov}] is the PoV block as defined in Definition ? and stem:[D_{pv}] is the persisted validation data as defined in Definition 7.33.
+where _0_ is followed by the available data, stem:[A], and _1_ indicates the the
+requested candidate hash was not found. stem:[P_{ov}] is the PoV block
+(<<defn-pov-block>>) and stem:[D_{pv}] is the persisted validation data
+(<<defn-persisted-validation-data>>).
+****
 
+[#net-msg-collation-fetching-request]
 ===== Collation Fetching Request
-
-The collation fetching request is sent by clients who want to retrieve the advertised collation at the specified relay chain block. The request is a datastructure of the following format:
+****
+The collation fetching request is sent by clients who want to retrieve the
+advertised collation at the specified relay chain block. The request is a
+datastructure of the following format:
 
 [stem]
 ++++
 (B_h,P_{id}) 
 ++++
 
-where stem:[B_h] is the hash of the relay chain block and stem:[P_{id}] is the parachain Id as defined in Definition 7.5. The response message is defined in Definition 7.47.
+where stem:[B_h] is the hash of the relay chain block and stem:[P_{id}] is the
+parachain Id (<<defn-para-id>>). The response message is defined in
+<<net-msg-collation-fetching-response>>.
+****
 
+[#net-msg-collation-fetching-response]
 ===== Collation Fetching Response
-
-The collation fetching response is sent by nodes to the clients who issued a collation fetching request as defined in Definition 7.46. The response, stem:[R], is a varying datatype of the following format:
+****
+The collation fetching response is sent by nodes to the clients who issued a
+collation fetching request (<<net-msg-collation-fetching-request>>). The
+response, stem:[R], is a varying datatype of the following format:
 
 [stem]
 ++++
 R = {(0,->,(C_r,B)):}
 ++++
 
-where stem:[0] is followed by the candidate receipt, stem:[C_r], as defined in Definition 7.16 and the PoV block, stem:[B]. This type does not notify the client about a statement that was not found.
+where stem:[0] is followed by the candidate receipt
+(<<defn-candidate-receipt>>), stem:[C_r], as and the PoV block
+(<<defn-pov-block>>), stem:[B]. This type does not notify the client about a
+statement that was not found.
+****
 
+[#net-msg-statement-fetching-request]
 ===== Statement Fetching Request
-
-The statement fetching request is sent by clients who want to retrieve statements about a given candidate. The request is a datastructure of the following format:
+****
+The statement fetching request is sent by clients who want to retrieve
+statements about a given candidate. The request is a datastructure of the
+following format:
 
 [stem]
 ++++
 (B_h,C_h) 
 ++++
 
-where stem:[B_h] is the hash of the relay chain parent and stem:[C_h] is the candidate hash that was used to create a committed candidate recept as defined in Definition 7.17. The response message is defined in Definition 7.49.
+where stem:[B_h] is the hash of the relay chain parent and stem:[C_h] is the
+candidate hash that was used to create a committed candidate receipt
+(<<defn-committed-candidate-receipt>>). The response message is defined in
+<<net-msg-statement-fetching-response>>.
+****
 
+[#net-msg-statement-fetching-response]
 ===== Statement Fetching Response
-
-The statement fetching response is sent by nodes to the clients who issued a collation fetching request as defined in Definition 7.48. The reponse, R, is a varying datatype of the following format:
+****
+The statement fetching response is sent by nodes to the clients who issued a
+collation fetching request (<<net-msg-statement-fetching-request>>). The
+response, stem:[R], is a varying datatype of the following format:
 
 [stem]
 ++++
 R = {(0,->,C_r):}
 ++++
 
-where stem:[C_r] is the committed candidate receipt as defined in Definition 7.17. No response is returned if no statement is found.
+where stem:[C_r] is the committed candidate receipt
+(<<defn-committed-candidate-receipt>>). No response is returned if no statement
+is found.
+****
 
+[#net-msg-dispute-request]
 ===== Dispute Request
 
-The dispute request is sent by clients who want to issue a dispute about a candidate. The request, D_r, is a datastructure of the following format:
+The dispute request is sent by clients who want to issue a dispute about a
+candidate. The request, D_r, is a datastructure of the following format:
 
 [stem]
 ++++
@@ -246,24 +354,32 @@ k_v = {(0,->,phi),(1,->,C_h),(2,->,C_h),(3,->,phi):}
 
 where
 
-* stem:[C_r] is the candidate that is being disputed. The structure is a candidate receipt as defined in Definition 7.16.
+* stem:[C_r] is the candidate that is being disputed. The structure is a
+candidate receipt (<<defn-candidate-receipt>>).
 * stem:[S_i] is an unsigned 32-bit integer indicating the session index the candidate appears in.
 * stem:[I_v] is the invalid vote that makes up the request. 
-* stem:[V_v] is the valid vote that makes this disput request valid.
-* stem:[A_i] is an unsigned 32-bit integer indicating the validator index in the authority set as defined in Definition ?.
+* stem:[V_v] is the valid vote that makes this dispute request valid.
+* stem:[A_i] is an unsigned 32-bit integer indicating the validator index in the
+authority set (<<defn-authority-list>>).
 * stem:[A_s] is the signature of the validator.
-* stem:[k_i] is a varying datatype and implies the dispute statement. 0 indicates an explicit statemet.
+* stem:[k_i] is a varying datatype and implies the dispute statement. _0_
+indicates an explicit statement.
 * stem:[k_v] is a varying datatype and implies the dispute statement.
 ** stem:[0] indicates an explicit statement.
-** stem:[1] indicates a seconded statement on a candidate, stem:[C_h], from the backing phase. stem:[C_h] is the hash of the candidate.
-** stem:[2] indicates a valid statement on a candidate, stem:[C_h], from the backing phase. stem:[C_h] is the hash of the candidate.
+** stem:[1] indicates a seconded statement on a candidate, stem:[C_h], from the
+backing phase. stem:[C_h] is the hash of the candidate.
+** stem:[2] indicates a valid statement on a candidate, stem:[C_h], from the
+backing phase. stem:[C_h] is the hash of the candidate.
 ** stem:[3] indicates an approval vote from the approval checking phase.
 
-The response message is defined in Definition 7.51.
+The response message is defined in <<net-msg-dispute-response>>.
 
+[#net-msg-dispute-response]
 ===== Dispute Response
 
-The dispute response is sent by nodes to the clients who who issued a dispute request as defined in Definition 7.50. The response, stem:[R], is a varying type of the following format:
+The dispute response is sent by nodes to the clients who who issued a dispute
+request (<<net-msg-dispute-request>>). The response, stem:[R], is a varying type
+of the following format:
 
 [stem]
 ++++
