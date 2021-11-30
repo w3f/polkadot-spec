@@ -1,4 +1,37 @@
 [#sect-collations]
 === Collations
 
-Collations are proposed <<defn-candidate, candidates>> to the Polkadot relay chain validators. The Polkodat network protocol is agnostic on what candidate productionis mechanism each parachain uses and does not specify or mandate any of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the relay chain validator host implementation itself does not directly interpret or process teh internal transactions of the candidate, but rather rely on the parachain Runtime to validate the candidate, as described in Section 7.5. Collators, which are parachain nodes which produce candidate proposals and send them to the relay chain validator, must prepare pieces of data specified in Definition 7.12 in order to correctly comply with the requirements of the parachain protocol.
+Collations are proposed candidates <<defn-candidate>> to the Polkadot relay
+chain validators. The Polkodat network protocol is agnostic on what candidate
+productionis mechanism each parachain uses and does not specify or mandate any
+of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the
+relay chain validator host implementation itself does not directly interpret or
+process teh internal transactions of the candidate, but rather rely on the
+parachain Runtime to validate the candidate (<<sect-candidate-validation>>).
+Collators, which are parachain nodes which produce candidate proposals and send
+them to the relay chain validator, must prepare pieces of data
+(<<defn-collation>>) in order to correctly comply with the requirements of the
+parachain protocol.
+
+[#defn-collation]
+==== Collation
+****
+A collation is a datastructure which contains the proposed parachain candidate, including an optional validation parachain Runtime update and upward messages. The collation datastructure, C, is a datastructure of the following format:
+
+[stem]
+++++
+C = (M,H,R,h,P,p,w)\
+M = (u_n,…u_m)\
+H = (z_n,…z_m)
+++++
+
+where
+
+• stem:[M] is an array of upward messages, u, interpreted by the relay chain itself, as defined in Definition 7.8.
+• stem:[H] is an array of outbound horizontal messages, z, interpreted by other parachains, as defined in Definition 7.10
+• stem:[R] is an Option type as defined in Definition ? which can contain a parachain Runtime update. The new Runtime code is an array of bytes.
+• stem:[h] is the head data as defined in Definition 7.4 produced as a result of execution of the parachain specific logic.
+• stem:[P] is the PoV block as defined in Definition ?.
+• stem:[p] is an unsigned 32-bit integer indicating the number of downward messages processed as defined in Definition 7.9.
+• stem:[w] is an unsigned 32-bit integer indicating the mark up to which all inbound HRMP messages have been processed by the parachain.
+****
