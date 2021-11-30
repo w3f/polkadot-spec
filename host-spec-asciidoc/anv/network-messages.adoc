@@ -10,6 +10,7 @@ sent by collators to validators. The protocol messages are exchanged based on a
 streaming notification substream (<<sect-connection-establishment>>). The
 messages are SCALE encoded (<<sect-scale-codec>>).
 
+[#net-msg-validator-protocol-message]
 ===== Validator Protocol Message
 ****
 The validator protocol message is a varying datatype used by validators to
@@ -30,6 +31,7 @@ where
 * stem:[M_a] is a approval distribution message (<<net-msg-approval-distribution>>).
 ****
 
+[#net-msg-collator-protocol-message]
 ===== Collation Protocol Message
 ****
 The collation protocol message, M, is a varying datatype of the following format:
@@ -39,9 +41,10 @@ The collation protocol message, M, is a varying datatype of the following format
 M = {(0,->,M_c):}
 ++++
 
-where stem:[M_c] is the collator message (<<net-msg-collator-protocol>>).
+where stem:[M_c] is the collator message (<<net-msg-collator-message>>).
 ****
 
+[#net-msg-collator-message]
 ===== Collator Message
 ****
 The collator message is sent as part of the collator protocol message
@@ -61,16 +64,17 @@ indicates that a collation sent to a validator was seconded.
 * stem:[C_i] is the public key of the collator.
 * stem:[P_i] is the parachain Id (<<defn-para-id>>).
 * stem:[C_s] is the signature of the collator using the _PeerId_ of the collators node.
-* stem:[H] is the hash of the parachain block (<<defn-parablock>>).
-* stem:[S] is a full statement (<<net-msg-full-statement>>).
+* stem:[H] is the hash of the parachain block (<<defn-para-block>>).
+* stem:[S] is a full statement (<<defn-statement>>).
 ****
 
+[#net-msg-statement-distribution]
 ===== Statement Distribution Message
 ****
 The statement distribution message is sent as part of the validator protocol
 message (<<net-msg-collator-protocol-message>>) indicates the validity vote of a
 validator for a given candidate, described further in
-<<sect-candidate-backing-statements>>. The statement distribution message,
+<<sect-candidate-statements>>. The statement distribution message,
 stem:[M], is of varying type of the following format:
 
 [stem]
@@ -86,12 +90,13 @@ contains metadata about a seconded statement with a larger payload, such as a
 runtime upgrade. The candidate itself can be fetched via the request/response
 message (<<net-msg-statement-fetching-request>>).
 * stem:[B_h] is the hash of the relay chain parent, indicating the state this message is for.
-* stem:[S] is a full statement (<<net-msg-full-statement>>).
+* stem:[S] is a full statement (<<defn-statement>>).
 * stem:[A_i] is the validator index in the authority set
 (<<defn-authority-list>>) that signed this message.
 * stem:[A_s] is the signature of the validator. 
 ****
 
+[#net-msg-bitfield-dist-msg]
 ===== Bitfield Distribution Message
 ****
 The bitfield distribution message is sent as part of the validator protocol
@@ -116,12 +121,13 @@ where
 * stem:[A_s] is the signature of the validator.
 ****
 
+[#net-msg-approval-distribution]
 ===== Approval Distribution Message
 ****
 The approval distribution message is sent as part of the validator protocol
 message (<<net-msg-validator-protocol-message>>) and indicates the approval vote
 of a validator for a given candidate, described further in
-<<sect-availability-assingment-criteria>>. The approval distribution message,
+<<sect-availability-assignment-criteria>>. The approval distribution message,
 stem:[M], is a varying datatype of the following format:
 
 [stem]
@@ -213,7 +219,7 @@ message is defined in <<net-msg-chunk-fetching-response>>.
 ****
 
 [#net-msg-chunk-fetching-response]
-===== Chunck Fetching Response
+===== Chunk Fetching Response
 ****
 The chunk fetching response is sent by nodes to the clients who issued a chunk
 fetching request (<<net-msg-chunk-fetching-request>>). The response, stem:[R], is
@@ -263,7 +269,7 @@ A = (P_{ov},D_{pv})
 
 where _0_ is followed by the available data, stem:[A], and _1_ indicates the the
 requested candidate hash was not found. stem:[P_{ov}] is the PoV block
-(<<defn-pov-block>>) and stem:[D_{pv}] is the persisted validation data
+(<<defn-para-block>>) and stem:[D_{pv}] is the persisted validation data
 (<<defn-persisted-validation-data>>).
 ****
 
@@ -298,7 +304,7 @@ R = {(0,->,(C_r,B)):}
 
 where stem:[0] is followed by the candidate receipt
 (<<defn-candidate-receipt>>), stem:[C_r], as and the PoV block
-(<<defn-pov-block>>), stem:[B]. This type does not notify the client about a
+(<<defn-para-block>>), stem:[B]. This type does not notify the client about a
 statement that was not found.
 ****
 

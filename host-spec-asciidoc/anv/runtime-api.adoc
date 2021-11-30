@@ -1,6 +1,7 @@
 [#sect-anv-runtime-api]
 === Runtime API
 
+[#sect-rt-api-validators]
 ==== `validators`
 
 Returns the validator set at the current state. The specified validators are responsible for backing parachains for the current state.
@@ -11,6 +12,7 @@ Arguments::
 Return::
 * An array of public keys representing the validators.
 
+[#sect-rt-api-validator-groups]
 ==== `validator_groups`
 
 Returns the validator groups (<<defn-validator-groups>>) used during the current
@@ -37,9 +39,10 @@ where
 •  stem:[f] indicates how often groups rotate. 0 means never.
 •  stem:[B_c] indicates the current block number. 
 
+[#sect-rt-api-availability-cores]
 ==== `availability_cores`
 
-Returns information on all availability cores (<<defn-availability-cores>>).
+Returns information on all availability cores (<<defn-availability-core>>).
 
 Arguments::
 * None
@@ -81,6 +84,7 @@ candidate.
 Definition ? which can contain the collators public key indicating who should
 author the block.
 
+[#sect-rt-api-persisted-validation-data]
 ==== `persisted_validation_data`
 
 Returns the persisted validation data for the given parachain Id and a given occupied core assumption.
@@ -133,7 +137,7 @@ D_{pv} = (P_h,H_i,H_r,m_b)
 
 where
 
-• stem:[P_h] is the parent head data (<<defn-para-head-data>>).
+• stem:[P_h] is the parent head data (<<defn-head-data>>).
 • stem:[H_i] is the relay chain block number this is in the context of.
 • stem:[H_r] is the relay chain storage root this is in the context of.
 • stem:[m_b] is the maximum legal size of the PoV block, in bytes.
@@ -165,6 +169,7 @@ Arguments::
 Return::
 * A unsigned 32-bit integer representing the session index.
 
+[#sect-rt-api-validation-code]
 ==== `validation_code`
 
 Fetches the validation code (Runtime) of a parachain by parachain Id.
@@ -178,6 +183,7 @@ Return::
 in an byte array. This value is empty if the parachain Id cannot be found or the
 assumption is wrong.
 
+[#sect-rt-api-validation-code-by-hash]
 ==== `validation_code_by_hash`
 
 Returns the validation code (Runtime) of a parachain by its hash.
@@ -226,7 +232,7 @@ candidate receipt was backed in the latest relay chain block, _1_ indicates that
 it was included and became a parachain block at the latest relay chain block and
 _2_ indicates that the candidate receipt was not made available and timed-out.
 * stem:[C_r] is the candidate receipt (<<defn-candidate-receipt>>).
-* stem:[h] is the parachain head data (<<defn-para-head-data>>).
+* stem:[h] is the parachain head data (<<defn-head-data>>).
 * stem:[I_c] is the index of the availability core as can be retrieved in
 <<sect-rt-api-availability-cores>> that the candidate is occupying. If stem:[E]
 is of variant stem:[2], then this indicates the core index the candidate _was_
@@ -234,6 +240,7 @@ occupying.
 * stem:[G_i] is the group index (<<defn-validator-groups>>) that is responsible
 of backing the candidate.
 
+[#sect-rt-api-session-info]
 ==== `session_info`
 
 Get the session info of the given session, if available.
