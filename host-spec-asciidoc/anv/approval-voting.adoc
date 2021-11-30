@@ -13,17 +13,18 @@ candidates in order prevent the finalization of invalid blocks. If an honest
 validator detects an invalid block which was approved by one or more validators,
 the honest validator must issue a disputes which wil cause escalations,
 resulting in consequences for all malicious parties, i.e. slashing. This
-mechanism is described more in <<sect-availability-assingment-criteria>>.
+mechanism is described more in <<sect-availability-assignment-criteria>>.
 
+[#sect-availability-assignment-criteria]
 ==== Assignment Criteria
 
 Validators determine their assignment based on a VRF mechanism, similiar to the
 BABE consensus mechanism. First, validators generate an availability core VRF
-assignment (<<defn-aval-core-vrf-assignment>>), which indicates which
+assignment (<<defn-availability-core-vrf-assignment>>), which indicates which
 availability core a validator is assigned to. Then a delayed availability core
 VRF assignment is generated which indicates at what point a validator should
 start the approval process. The delays are based on “tranches”
-(<<defn-tranches>>).
+(<<sect-tranches>>).
 
 An assigned validator never broadcasts their assignment until relevant. Once the
 assigned validator is ready to check a candidate, the validator broadcasts their
@@ -32,13 +33,14 @@ assignment by issuing an approval distribution message
 assigned validators that receive that network message must keep track of if,
 expecting an approval vote following shortly after. Assigned validators can
 retrieve the candidate by using the availability recovery
-(<<sect-availability-recovery>>) and then validate the candidate
+(<<sect-candidate-recovery>>) and then validate the candidate
 (<<sect-candidate-validation>>).
 
 The validator issues approval votes in form of a validator protocol message
 (<<net-msg-validator-protocol-message>>) respectively disputes
-(<<sect-anv-disputes>>).
+(TODO <<sect-anv-disputes>>).
 
+[#sect-tranches]
 ==== Tranches
 
 Validators use a subjective, tick-based system to determine when the approval
@@ -48,7 +50,7 @@ Runtime API (<<sect-rt-api-availability-cores>>) , and increments the tick every
 _500 milliseconds_. Each tick/increment is referred to as a “tranche”,
 represented as an integer, starting at _0_.
 
-As described in <<sect-availability-assingment-criteria>>, the validator first
+As described in <<sect-availability-assignment-criteria>>, the validator first
 executes the VRF mechanism to determine which parachains (availability cores)
 the validator is assigned to, then an additional VRF mechanism for each assigned
 parachain to determine the _delayed assignment_. The delayed assignment
@@ -98,7 +100,7 @@ where
 ==== Availability Core VRF Assignment
 ****
 An availability core VRF assignment, T, is computed by a relay chain validator
-to determine which availability core (<<defn-availability-cores>>) a validator
+to determine which availability core (<<defn-availability-core>>) a validator
 is assigned to and should vote for approvals. The assignment consits of a VRF
 pair (<<defn-vrf-pair>>), stem:[v], and a VRF proof (<<defn-vrf-proof>>),
 stem:[p]:
@@ -173,7 +175,7 @@ must not exceed the number of samples.
 ==== Delayed Availability Core VRF Assignment
 ****
 The *delayed availability core VRF assignments* determined at what point a
-validator should start the approval process as described in <<defn-tranches>>.
+validator should start the approval process as described in <<sect-tranches>>.
 The validator executes the following steps:
 
 [stem]
