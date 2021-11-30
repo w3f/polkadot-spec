@@ -6,7 +6,7 @@ associated proofs from untrusted collators. The validator must verify and select
 a specific quantity of the proposed candidates and issue those as backable
 candidates to its peers. A candidate is considered backable when at least 2/3 of
 all assigned validators have issued a _Valid_ statement about that candidate, as
-described in <<sect-candidate-backing-statements>>. Validators can retrieve
+described in <<sect-candidate-statements>>. Validators can retrieve
 information about assignments via the Runtime APIs
 <<sect-rt-api-validator-groups>> respectively
 <<sect-rt-api-availability-cores>>.
@@ -32,7 +32,7 @@ candidate is ready to be included in the relay chain
 (<<sect-candidate-inclusion>>).
 
 The validator issues validity statements votes in form of a validator protocol
-message (<<net-msg-collator-protocol-message>>).
+message (<<net-msg-validator-protocol-message>>).
 
 [#defn-statement]
 ===== Statement
@@ -64,7 +64,7 @@ The Polkadot validator includes the backed candidates as parachain inherent data
 (<<defn-parachain-inherent-data>>) into a block as described <<sect-inherents>>.
 The relay chain block author decides on whatever metric which candidate should
 be selected for inclusion, as long as that candidate is valid and meets the
-validity quorum of 2/3+ as described <<sect-candidate-backing-statements>>. The
+validity quorum of 2/3+ as described <<sect-candidate-statements>>. The
 candidate approval process (<<sect-approval-voting>>) ensures that only relay
 chain blocks are finalized where each candidate for each availability core meets
 the requirement of 2/3+ availability votes.
@@ -95,8 +95,8 @@ is available (or not). The array must be sorted by validator index corresponding
 to the authority set (<<defn-authority-list>>).
 *  stem:[T] is an array of backed candidates for inclusing in the current block.
 *  stem:[D] is an array of disputes.
-*  stem:[P_h] is the parachain parent head data (<<defn-para-head-data>>).
-*  stem:[d] is a dispute statement (<<sect-anv-disputes>>).
+*  stem:[P_h] is the parachain parent head data (<<defn-head-data>>).
+*  stem:[d] is a dispute statement (TODO).
 *  stem:[R] is a committed candidate receipt (<<defn-committed-candidate-receipt>>).
 *  stem:[V] is an array of validity votes themselves, expressed as signatures.
 *  stem:[i] is a bitfield of indices of the validators within the validator
@@ -167,7 +167,7 @@ where
 * stem:[r] is the root of the block's erasure encoding Merkle tree. [TODO: clarify]
 * stem:[s] the collator signature of the concatenated components stem:[p],
 stem:[H], stem:[R_h] and stem:[B].
-* stem:[p_h] is the hash of the parachain head data (<<defn-para-head-data>>) of this candidate.
+* stem:[p_h] is the hash of the parachain head data (<<defn-head-data>>) of this candidate.
 * stem:[R_h] is the hash of the parachain Runtime.
 ****
 
@@ -193,10 +193,10 @@ individual message, m, is an array of bytes.
 (<<defn-outbound-hrmp-message>>) sent by the parachain.
 * stem:[R] is an _Option_ value (<<defn-option-type>>) that can contain a new
 parachain Runtime in case of an update.
-* stem:[h] is the parachain head data (<<defn-para-head-data>>).
+* stem:[h] is the parachain head data (<<defn-head-data>>).
 * stem:[p] is a unsigned 32-bit integer indicating the number of downward
 messages that were processed by the parachain. It is expected that the parachain
-processes the messages from frist to last.
+processes the messages from first to last.
 * stem:[w] is a unsigned 32-bit integer indicating the watermark which specifies
 the relay chain block number up to which all inbound horizontal messages have
 been processed.

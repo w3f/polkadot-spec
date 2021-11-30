@@ -20,7 +20,7 @@ clarifying to which state the bitfield is referring to, given that candidates
 can vary based on the chain fork.
 
 Missing availability data of candidates must be recovered by the validator as
-described in <<sect-availability-recovery>>. If previously issued bitfields are
+described in <<sect-candidate-recovery>>. If previously issued bitfields are
 no longer accurate, i.e. the availability data has been recovered or the
 candidate of an availablity core has changed, the validator must create a new
 bitfield and boradcast it to the network. Candidates must be kept available by
