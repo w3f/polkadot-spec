@@ -36,6 +36,7 @@ message (<<net-msg-collator-protocol-message>>).
 
 [#defn-statement]
 ===== Statement
+****
 A statement, stem:[S], is a datastructure of the following format:
 
 [stem]
@@ -46,15 +47,15 @@ d = {(1,->,C_r),(2,->,C_h):}
 
 where
 
-* stem:[d] is a varying datatype where 1 indicates that the validator “seconds”
-a candidate, meaning that the candidate should be included in the relay chain,
-followed by the committed candidate receipt, stem:[C_r], as defined in
-Definition 7.17. 2 indicates that the validator has deemed the candidate valid,
-followed by the candidate hash.
+* stem:[d] is a varying datatype where _1_ indicates that the validator
+“seconds” a candidate, meaning that the candidate should be included in the
+relay chain, followed by the committed candidate receipt
+(<<defn-committed-candidate-receipt>>), stem:[C_r]. _2_ indicates that the
+validator has deemed the candidate valid, followed by the candidate hash.
 * stem:[C_h] is the candidate hash.
 * stem:[A_i] is the validator index in the authority set that signed this statement.
 * stem:[A_s] is the signature of the validator.
-
+****
 
 [#sect-candidate-inclusion]
 ==== Inclusion
@@ -70,6 +71,7 @@ the requirement of 2/3+ availability votes.
 
 [#defn-parachain-inherent-data]
 ===== Parachain Inherent Data
+****
 The parachain inherent data contains backed candidates and is included when
 authoring a relay chain block. The datastructure, stem:[I], is of the following
 format:
@@ -90,26 +92,28 @@ where
 
 *  stem:[A] is an array of signed bitfields by validators claiming the candidate
 is available (or not). The array must be sorted by validator index corresponding
-to the authority set as described in Section ?.
+to the authority set (<<defn-authority-list>>).
 *  stem:[T] is an array of backed candidates for inclusing in the current block.
 *  stem:[D] is an array of disputes.
-*  stem:[P_h] is the parachain parent head data as defined in Definition 7.4.
-*  stem:[d] is a dispute statement as described in Section 7.7.3.
-*  stem:[R] is a committed candidate receipt as defined in Definition 7.17.
+*  stem:[P_h] is the parachain parent head data (<<defn-para-head-data>>).
+*  stem:[d] is a dispute statement (<<sect-anv-disputes>>).
+*  stem:[R] is a committed candidate receipt (<<defn-committed-candidate-receipt>>).
 *  stem:[V] is an array of validity votes themselves, expressed as signatures.
 *  stem:[i] is a bitfield of indices of the validators within the validator
-group as defined in Definition 7.7.
+group (<<defn-validator-groups>>).
 *  stem:[a] is either an implicit or explicit attestation of the validity of a
-parachain candidate, where 1 implies an implicit vote (in correspondence of a
-Seconded statement) and 2 implies an explicit attestation (in correspondence of
-a Valid statement). Both variants are followed by the signature of the
+parachain candidate, where _1_ implies an implicit vote (in correspondence of a
+_Seconded_ statement) and _2_ implies an explicit attestation (in correspondence
+of a _Valid_ statement). Both variants are followed by the signature of the
 validator.
 *  stem:[s] is the signature of the validator.
-*  stem:[b] the availability bitfield as described in Section 7.6.1.
-*  stem:[v_i] is the validator index of the authority set as defined in Definition ?.
+*  stem:[b] the availability bitfield (<<sect-availability-votes>>).
+*  stem:[v_i] is the validator index of the authority set (<<defn-authority-list>>).
+****
 
 [#defn-candidate-receipt]
 ===== Candidate Receipt
+****
 A candidate receipt, stem:[R], contains information about the candidate and a
 proof of the results of its execution. It's a datastructure of the following
 format:
@@ -119,27 +123,32 @@ format:
 R = (D,C_h)
 ++++
 
-where stem:[D] is the candidate descriptor as defined in Definition 7.18 and
-stem:[C_h] is the hash of candidate commitments as defined in Definition 7.19.
+where stem:[D] is the candidate descriptor (<<defn-candidate-descriptor>>) and
+stem:[C_h] is the hash of candidate commitments
+(<<defn-candidate-commitments>>).
+****
 
 [#defn-committed-candidate-receipt]
 ===== Committed Candidate Receipt
+****
 The committed candidate receipt, stem:[R], contains information about the
 candidate and the the result of its execution that is included in the relay
-chain. This type is similiar to the candidate receipt as defined in Definition
-7.16, but actually contains the execution results rather than just a hash of it.
-It's a datastructure of the following format:
+chain. This type is similar to the candidate receipt
+(<<defn-candidate-receipt>>), but actually contains the execution results rather
+than just a hash of it. It's a datastructure of the following format:
 
 [stem]
 ++++
 R = (D,C)
 ++++
 
-where stem:[D] is the candidate descriptor as defined in Definition 7.18 and
-stem:[C] is the candidate commitments as defined in Definition 7.19.
+where stem:[D] is the candidate descriptor (<<defn-candidate-descriptor>>) and
+stem:[C] is the candidate commitments (<<defn-candidate-commitments>>).
+****
 
 [#defn-candidate-descriptor]
 ===== Candidate Descriptor
+****
 The candidate descriptor, stem:[D], is a unique descriptor of a candidate
 receipt. It's a datastructure of the following format:
 
@@ -150,23 +159,25 @@ D = (p,H,C_i,V,B,r,s,p_h,R_h)
 
 where
 
-* stem:[p] is the parachain Id as defined in Definition 7.5.
+* stem:[p] is the parachain Id (<<defn-para-id>>).
 * stem:[H] is the hash of the relay chain block the candidate is executed in the context of.
 * stem:[C_i] is the collators public key.
-* stem:[V] is the hash of the persisted validation data as defined in Definition 7.33.
+* stem:[V] is the hash of the persisted validation data (<<defn-persisted-validation-data>>).
 * stem:[B] is the hash of the PoV block.
-* stem:[r] is the root of the block's erasure encoding Merkle tree. [clarify]
-* stem:[s] the collator signature of the concatenated components p, H, R_h and B.
-* stem:[p_h] is the hash of the parachain head data as described in Definition
-7.4 of this candidate.
+* stem:[r] is the root of the block's erasure encoding Merkle tree. [TODO: clarify]
+* stem:[s] the collator signature of the concatenated components stem:[p],
+stem:[H], stem:[R_h] and stem:[B].
+* stem:[p_h] is the hash of the parachain head data (<<defn-para-head-data>>) of this candidate.
 * stem:[R_h] is the hash of the parachain Runtime.
+****
 
 [#defn-candidate-commitments]
 ===== Candidate Commitments
+****
 The candidate commitments, stem:[C], is the result of the execution and
 validation of a parachain (or parathread) candidate whose produced values must
 be committed to the relay chain. Those values are retrieved from the validation
-result as defined in Definition 7.21. A candidate commitment is a datastructure
+result (<<defn-validation-result>>). A candidate commitment is a datastructure
 of the following format:
 
 [stem]
@@ -178,15 +189,16 @@ where:
 
 * stem:[M_u] is an array of upward messages sent by the parachain. Each
 individual message, m, is an array of bytes.
-* stem:[M_h] is an array of outbound horizontal messages sent by the parachain.
-Each individual messages, t, is a datastructure as defined in Definition 7.10.
-* stem:[R] is an Option value as described in Section ? that can contain a new
+* stem:[M_h] is an array of individual outbound horizontal messages
+(<<defn-outbound-hrmp-message>>) sent by the parachain.
+* stem:[R] is an _Option_ value (<<defn-option-type>>) that can contain a new
 parachain Runtime in case of an update.
-* stem:[h] is the parachain head data as described in Definition 7.4.
-* stem:[p] is a unsigned 32-bit intiger indicating the number of downward
+* stem:[h] is the parachain head data (<<defn-para-head-data>>).
+* stem:[p] is a unsigned 32-bit integer indicating the number of downward
 messages that were processed by the parachain. It is expected that the parachain
 processes the messages from frist to last.
 * stem:[w] is a unsigned 32-bit integer indicating the watermark which specifies
 the relay chain block number up to which all inbound horizontal messages have
 been processed.
+****
 
