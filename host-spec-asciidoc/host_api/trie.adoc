@@ -32,12 +32,11 @@ Compute a 256-bit Blake2 trie root formed from the enumerated items.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-enumerated items from which the trie root gets formed. The items consist of a
-SCALE encoded array containing only values, where the corresponding key of each
-value is the index of the item in the array, starting at 0. The keys are compact
-encoded integers as described in Definition
-link_defn-sc-len-encoding++defn-sc-len-encoding]].
+* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating the enumerated
+items from which the trie root gets formed. The items consist of a SCALE encoded
+array containing only values, where the corresponding key of each value is the
+index of the item in the array, starting at 0. The keys are compact encoded
+integers (<<defn-sc-len-encoding>>).
 * `result`: a 32-bit pointer to the buffer containing the 256-bit trie root
 result.
 
@@ -70,11 +69,10 @@ Compute a 256-bit Keccak trie root formed from the enumerated items.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-enumerated items from which the trie root gets formed. The items consist of a
-SCALE encoded array containing only values, where the corresponding key of each
-value is the index of the item in the array, starting at 0. The keys are compact
-encoded integers as described in Definition
-link_defn-sc-len-encoding++defn-sc-len-encoding]].
+* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating the enumerated
+items from which the trie root gets formed. The items consist of a SCALE encoded
+array containing only values, where the corresponding key of each value is the
+index of the item in the array, starting at 0. The keys are compact encoded
+integers (<<defn-sc-len-encoding>>).
 * `result`: a 32-bit pointer to the buffer containing the 256-bit trie root
 result.
