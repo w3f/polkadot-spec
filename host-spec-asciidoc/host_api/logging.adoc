@@ -6,10 +6,9 @@ Interface that provides functions for logging from within the runtime.
 [#defn-logging-log-level]
 ==== Log Level
 ****
-The *Log Level*, stem:[L], is a varying data type as defined in Definition
-link_defn-varrying-data-type++defn-varrying-data-type]] and implies the
-emergency of the log. Possible log levels and the corresponding identifier is as
-follows:
+The *Log Level*, stem:[L], is a varying data type (<<defn-varrying-data-type>>)
+and implies the emergency of the log. Possible log levels and the corresponding
+identifier is as follows:
 
 [stem]
 ++++
@@ -31,8 +30,7 @@ target.
 
 Arguments::
 
-* `level`: the log level as defined in Definition
-link_defn-logging-log-level++defn-logging-log-level]].
+* `level`: the log level (<<defn-logging-log-level>>).
 * `target`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 string which contains the path, module or location from where the log was
 executed.
