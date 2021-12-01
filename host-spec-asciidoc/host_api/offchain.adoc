@@ -171,6 +171,9 @@ by the host environment.
 (func $ext_offchain_random_seed_version_1 (result i32))
 ----
 
+Arguments::
+* `result`: a 32-bit integer pointer to the buffer containing the 256-bit seed.
+
 ==== `ext_offchain_local_storage_set`
 
 Sets a value in the local storage. This storage is not part of the consensus,
