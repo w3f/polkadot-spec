@@ -30,8 +30,7 @@ Retrieves the value associated with the given key from storage.
 Arguments::
 * `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
 * `result`: a pointer-size (<<defn-runtime-pointer>>) returning the SCALE
-encoded as defined in Definition link_defn-option-type++defn-option-type]]
-containing the value.
+encoded _Option_ value (<<defn-option-type>>) containing the value.
 
 ==== `ext_storage_read`
 
@@ -102,11 +101,10 @@ the prefix.
 
 ==== `ext_storage_append`
 
-Append the SCALE encoded value to a SCALE encoded sequence (Definition
-link_defn-scale-list++defn-scale-list]]) at the given key. This function
-assumes that the existing storage item is either empty or a SCALE encoded
-sequence and that the value to append is also SCALE encoded and of the same type
-as the items in the existing sequence.
+Append the SCALE encoded value to a SCALE encoded sequence (<<defn-scale-list>>)
+at the given key. This function assumes that the existing storage item is either
+empty or a SCALE encoded sequence and that the value to append is also SCALE
+encoded and of the same type as the items in the existing sequence.
 
 To improve performance, this function is allowed to skip decoding the entire
 SCALE encoded sequence and instead can just append the new item to the end of
@@ -144,8 +142,8 @@ root.
 [#sect-ext-storage-changes-root]
 ==== `ext_storage_changes_root`
 
-Compute the root of the Changes Trie as described in Section
-link_sect-changes-trie[3.3.4]. The parent hash is a SCALE encoded block hash.
+Compute the root of the changes trie (<<sect-changes-trie>>). The parent hash is
+a SCALE encoded block hash.
 
 ===== Version 1 - Prototype
 ----
@@ -162,8 +160,8 @@ root.
 ==== `ext_storage_next_key`
 
 Get the next key in storage after the given one in lexicographic order
-(Definition link_defn-lexicographic-ordering++defn-lexicographic-ordering]]).
-The key provided to this function may or may not exist in storage.
+(<<defn-lexicographic-ordering>>). The key provided to this function may or may
+not exist in storage.
 
 ===== Version 1 - Prototype
 ----
@@ -183,11 +181,9 @@ lexicographic order.
 Start a new nested transaction. This allows to either commit or roll back all
 changes that are made after this call. For every transaction there must be a
 matching call to either `ext_storage_rollback_transaction`
-(link_sect-ext-storage-rollback-transaction[12.1.12]) or
-`ext_storage_commit_transaction`
-(link_sect-ext-storage-commit-transaction[12.1.13]). This is also effective for
-all values manipulated using the child storage API
-(link_sect-child-storage-api[12.2]).
+(<<sect-ext-storage-rollback-transaction>>) or `ext_storage_commit_transaction`
+(<<sect-ext-storage-commit-transaction>>). This is also effective for all values
+manipulated using the child storage API (<<sect-child-storage-api>>).
 
 WARNING: This is a low level API that is potentially dangerous as it can easily
 result in unbalanced transactions. Runtimes should use high level storage
@@ -204,12 +200,12 @@ Arguments::
 [#sect-ext-storage-rollback-transaction]
 ==== `ext_storage_rollback_transaction`
 
-Rollback the last transaction started by
-(link_sect-ext-storage-start-transaction[12.1.11]). Any changes made during
-that transaction are discarded.
+Rollback the last transaction started by `ext_storage_start_transaction`
+(<<sect-ext-storage-start-transaction>>). Any changes made during that
+transaction are discarded.
 
-WARNING: Panics if there is no open transaction (`ext_storage_start_transaction`
-(link_sect-ext-storage-start-transaction[12.1.11]) was not called)
+WARNING: Panics if `ext_storage_start_transaction`
+(<<sect-ext-storage-start-transaction>>) was not called.
 
 ===== Version 1 - Prototype
 ----
@@ -222,11 +218,11 @@ Arguments::
 [#sect-ext-storage-commit-transaction]
 ==== `ext_storage_commit_transaction`
 Commit the last transaction started by `ext_storage_start_transaction`
-(link_sect-ext-storage-start-transaction[12.1.11]). Any changes made during
-that transaction are committed to the main state.
+(<<sect-ext-storage-start-transaction>>). Any changes made during that
+transaction are committed to the main state.
 
-WARNING: Panics if there is no open transaction (`ext_storage_start_transaction`
-(link_sect-ext-storage-start-transaction[12.1.11]) was not called)
+WARNING: Panics if `ext_storage_start_transaction`
+(<<sect-ext-storage-start-transaction>>) was not called.
 
 ===== Version 1 - Prototype
 ----
