@@ -73,7 +73,6 @@ is registered in the chain.
 ----
 
 Arguments::
-
 * `return`: a i32 integer which is equal to _1_ if the local node is a potential
 validator or a integer equal to _0_ if it is not.
 
@@ -91,7 +90,6 @@ critical for issuing the ImOnline message [TODO: refer].
 ----
 
 Arguments::
-
 * `data`: a pointer-size (<<defn-runtime-pointer>>) indicating the byte array
 storing the encoded extrinsic.
 * `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
@@ -106,7 +104,7 @@ Returns the SCALE encoded, opaque information about the local node's network sta
 [#defn-opaque-network-state]
 ===== Opaque Network State
 ****
-The *Opaque network state structure, stem:[S], is a SCALE encoded blob holding
+The *Opaque network state structure*, stem:[S], is a SCALE encoded blob holding
 information about the the _libp2p PeerId_, stem:[P_("id")], of the local node
 and a list of _libp2p Multiaddresses_, stem:[(M_0, ... M_n)], the node knows it
 can be reached at:
@@ -134,7 +132,6 @@ this function.
 ----
 
 Arguments::
-
 * `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
 encoded `Result` value (<<defn-result-type>>). On success it contains the
 _Opaque network state_ structure (<<defn-opaque-network-state>>). On failure, an
@@ -150,7 +147,6 @@ Returns the current timestamp.
 ----
 
 Arguments::
-
 * `result`: an u64 integer indicating the current UNIX timestamp (<<defn-unix-time>>).
 
 ==== `ext_offchain_sleep_until`
@@ -159,11 +155,10 @@ Pause the execution until the `deadline` is reached.
 
 ===== Version 1 - Prototype
 ----
-(func $ext_offchain_sleep_until_version_1)
+(func $ext_offchain_sleep_until_version_1 (param $deadline u64))
 ----
 
 Arguments::
-
 * `deadline`: an u64 integer specifying the UNIX timestamp (<<defn-unix-time>>).
 
 ==== `ext_offchain_random_seed`
@@ -189,7 +184,6 @@ and is persisted between runs.
 ----
 
 Arguments::
-
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
 used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
@@ -207,7 +201,6 @@ Remove a value from the local storage.
 ----
 
 Arguments::
-
 ∗ `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
 used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
@@ -225,7 +218,6 @@ Sets a new value in the local storage if the condition matches the current value
 ----
 
 Arguments::
-
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
 used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
@@ -233,7 +225,8 @@ equal to _2_ for local storage (<<defn-offchain-local-storage>>).
 ∗ `old_value`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the old key.
 ∗ `new_value`: a pointer-size (<<defn-runtime-pointer>>) indicating the new value.
-∗ `result`: an i32 integer equal to _1_ if the new value has been set or a value equal to _0_ if otherwise.
+∗ `result`: an i32 integer equal to _1_ if the new value has been set or a value
+equal to _0_ if otherwise.
 
 ==== `ext_offchain_local_storage_get`
 
@@ -246,7 +239,6 @@ Gets a value from the local storage.
 ----
 
 Arguments::
-
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
 used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
@@ -267,11 +259,11 @@ a newly started request.
 ----
 
 Arguments::
-
 ∗ `method`: a pointer-size (<<defn-runtime-pointer>>) indicating the HTTP
 method. Possible values are “GET” and “POST”.
 ∗ `uri`: a pointer-size (<<defn-runtime-pointer>>) indicating the URI.
-∗ `meta`: a future-reserved field containing additional, SCALE encoded parameters. Currently, an empty array should be passed.
+∗ `meta`: a future-reserved field containing additional, SCALE encoded
+parameters. Currently, an empty array should be passed.
 ∗ `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
 encoded _Result_ value (<<defn-result-type>>) containing the i16 ID of the newly
 started request. On failure no additionally data is provided. The cause of
@@ -291,7 +283,6 @@ remote has closed the connection).
 ----
 
 Arguments::
-
 * `request_id`: an i32 integer indicating the ID of the started request.
 * `name`: a pointer-size (<<defn-runtime-pointer>>) indicating the HTTP header name.
 * `value`: a pointer-size (<<defn-runtime-pointer>>) indicating the HTTP header value.
@@ -312,7 +303,6 @@ deadline is reached or the chunk could not be written.
 ----
 
 Arguments::
-
 ∗ `request_id`: an i32 integer indicating the ID of the started request.
 ∗ `chunk`: a pointer-size (<<defn-runtime-pointer>>) indicating the chunk of
 bytes. Writing an empty chunk finalizes the request.
@@ -336,7 +326,6 @@ unready responses will produce DeadlineReached status.
 ----
 
 Arguments::
-
 ∗ `ids`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
 encoded array of started request IDs.
 ∗ `deadline`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
@@ -357,7 +346,6 @@ headers must be read before the response body.
 ----
 
 Arguments::
-
 ∗ `request_id`: an i32 integer indicating the ID of the started request.
 ∗ `result`: a pointer-size (<<defn-runtime-pointer>>) indicating a SCALE encoded array of key/value pairs.
 
@@ -376,7 +364,6 @@ read before draining the body.
 ----
 
 Arguments::
-
 ∗ `request_id`: an i32 integer indicating the ID of the started request.
 ∗ buffer: a pointer-size (<<defn-runtime-pointer>>) indicating the buffer
 where the body gets written to.
@@ -402,6 +389,9 @@ and open Polkadot protocol.
 ----
 
 Arguments::
-
-∗ `nodes`: a pointer-size (<<defn-runtime-pointer>>) indicating the buffer of the SCALE encoded array of libp2p PeerId's. Invalid PeerId's are silently ignored.
-∗ `authorized_only`: If set to 1, then only the authorized nodes are allowed to connect to the local node (whitelist). All other nodes are rejected. If set to 0, then no such restriction is placed.
+∗ `nodes`: a pointer-size (<<defn-runtime-pointer>>) indicating the buffer of
+the SCALE encoded array of libp2p PeerId's. Invalid PeerId's are silently
+ignored.
+∗ `authorized_only`: If set to 1, then only the authorized nodes are allowed to
+connect to the local node (whitelist). All other nodes are rejected. If set to
+0, then no such restriction is placed.

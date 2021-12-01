@@ -103,6 +103,7 @@ message that is to be signed.
 encoded _Option_ value (<<defn-option-type>>) containing the 64-byte signature.
 This function returns if the public key cannot be found in the key store.
 
+[#sect-ext-crypto-ed25519-verify]
 ==== `ext_crypto_ed25519_verify`
 
 Verifies an _ed25519_ signature. Returns when the verification is either
@@ -191,6 +192,7 @@ message that is to be signed.
 encoded _Option_ value (<<defn-option-type>>) containing the 64-byte signature.
 This function returns _None_ if the public key cannot be found in the key store.
 
+[#sect-ext-crypto-sr25519-verify]
 ==== `ext_crypto_sr25519_verify`
 
 Verifies an _sr25519_ signature. Only version 1 of this function supports
@@ -300,6 +302,7 @@ signature is 65-bytes in size, where the first 512-bits represent the signature
 and the other 8 bits represent the recovery ID. This function returns if the
 public key cannot be found in the key store.
 
+[#sect-ext-crypto-ecdsa-verify]
 ==== `ext_crypto_ecdsa_verify`
 
 Verifies an _ecdsa_ signature. Returns when the verification is either
