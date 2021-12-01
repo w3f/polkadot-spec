@@ -27,9 +27,9 @@ identifier*. The following known types are available:
 [#defn-ecdsa-verify-error]
 ==== ECDSA Verify Error
 ****
-*EcdsaVerifyError* is a varying data type as defined in Definition
-link_defn-varrying-data-type++defn-varrying-data-type]] and specifies the error
-type when using ECDSA recovery functionality. Following values are possible:
+*EcdsaVerifyError* is a varying data type (<<defn-varrying-data-type>>) that
+specifies the error type when using ECDSA recovery functionality. Following
+values are possible:
 
 .Table of error types in ECDSA recovery
 |===
@@ -53,8 +53,8 @@ Returns all _ed25519_ public keys for the given key identifier from the keystore
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier as defined in
-Defintion link_defn-key-type-id++defn-key-type-id]].
+* `key_type_id`: a 32-bit pointer to the key type identifier
+(<<defn-key-type-id>>).
 * `return`: a pointer-size (<<defn-runtime-pointer>>) to an SCALE encoded
 256-bit public keys.
 
@@ -74,12 +74,11 @@ or invalid seed was provided.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier as defined in
-Definition link_defn-key-type-id++defn-key-type-id]].
-* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-SCALE encoded as defined in Definition
-link_defn-option-type++defn-option-type]] containing the BIP-39 seed which must
-be valid UTF8.
+* `key_type_id`: a 32-bit pointer to the key type identifier
+(<<defn-key-type-id>>).
+* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE encoded
+_Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
+valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit public key.
 
 ==== `ext_crypto_ed25519_sign`
@@ -95,14 +94,13 @@ and key type in the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier as defined in
-Definition link_defn-key-type-id++defn-key-type-id]].
+* `key_type_id`: a 32-bit pointer to the key type identifier
+(<<defn-key-type-id>>).
 * `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
 * `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 message that is to be signed.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-SCALE encoded as defined in Definition
-link_defn-option-type++defn-option-type]] containing the 64-byte signature.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+encoded _Option_ value (<<defn-option-type>>) containing the 64-byte signature.
 This function returns if the public key cannot be found in the key store.
 
 ==== `ext_crypto_ed25519_verify`
@@ -113,11 +111,10 @@ function will fully verify the signature and return the result. If batching
 verification is registered, this function will push the data to the batch and
 return immediately. The caller can then get the result by calling
 `ext_crypto_finish_batch_verify`
-(link_sect-ext-crypto-finish-batch-verify[12.3.16]).
+(<<sect-ext-crypto-finish-batch-verify>>).
 
 The verification extension is explained more in detail in
-`ext_crypto_start_batch_verify`
-(link_sect-ext-crypto-start-batch-verify[12.3.15]).
+(<<sect-ext-crypto-start-batch-verify>>).
 
 ===== Version 1 - Prototype
 ----
@@ -146,8 +143,8 @@ Returns all _sr25519_ public keys for the given key id from the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier as defined in
-link_defn-key-type-id++defn-key-type-id]].
+* `key_type_id`: a 32-bit pointer to the key type identifier
+(<<defn-key-type-id>>).
 * `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 SCALE encoded 256-bit public keys.
 
@@ -167,12 +164,10 @@ or invalid seed was provided.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier as defined in Definition
-link_defn-key-type-id++defn-key-type-id]].
-* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-SCALE encoded as defined in Definition
-link_defn-option-type++defn-option-type]] containing the BIP-39 seed which must
-be valid UTF8.
+* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
+* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE encoded
+_Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
+valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit public key.
 
 ==== `ext_crypto_sr25519_sign`
@@ -188,15 +183,13 @@ public key and key type in the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier as defined in Definition
-link_defn-key-type-id++defn-key-type-id]]
+* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
 * `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
 * `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 message that is to be signed.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-SCALE encoded `Option` as defined in Definition
-link_defn-option-type++defn-option-type]] containing the 64-byte signature.
-This function returns `None` if the public key cannot be found in the key store.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+encoded _Option_ value (<<defn-option-type>>) containing the 64-byte signature.
+This function returns _None_ if the public key cannot be found in the key store.
 
 ==== `ext_crypto_sr25519_verify`
 
@@ -209,10 +202,10 @@ verification extension is registered, this function will fully verify the
 signature and return the result. If batching verification is registered, this
 function will push the data to the batch and return immediately. The caller can
 then get the result by calling `ext_crypto_finish_batch_verify`
-(link_sect-ext-crypto-finish-batch-verify[12.3.16]).
+(<<sect-ext-crypto-finish-batch-verify>>).
 
 The verification extension is explained more in detail in
-(link_sect-ext-crypto-start-batch-verify[12.3.15]).
+<<sect-ext-crypto-start-batch-verify>>.
 
 ===== Version 2 - Prototype
 ----
@@ -256,8 +249,7 @@ Returns all _ecdsa_ public keys for the given key id from the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier as defined in
-link_defn-key-type-id++defn-key-type-id]].
+* `key_type_id`: a 32-bit pointer to the key type identifier (<<defn-key-type-id>>).
 * `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 SCALE encoded 33-byte compressed public keys.
 
@@ -277,12 +269,10 @@ or invalid seed was provided.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier as defined in Definition
-link_defn-key-type-id++defn-key-type-id]].
-* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-SCALE encoded as defined in Definition
-link_defn-option-type++defn-option-type]] containing the BIP-39 seed which must
-be valid UTF8.
+* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
+* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE encoded
+_Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
+valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 33-byte compressed
 public key.
 
@@ -299,15 +289,13 @@ public key and key type in the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier as defined in Definition
-link_defn-key-type-id++defn-key-type-id]]
+* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
 * `key`: a 32-bit pointer to the buffer containing the 33-byte compressed public
 key.
 * `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 message that is to be signed.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-SCALE encoded as defined in Definition
-link_defn-option-type++defn-option-type]] containing the signature. The
+* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+encoded _Option_ value (<<defn-option-type>>) containing the signature. The
 signature is 65-bytes in size, where the first 512-bits represent the signature
 and the other 8 bits represent the recovery ID. This function returns if the
 public key cannot be found in the key store.
@@ -319,12 +307,10 @@ successful or batched. If no batching verification extension is registered, this
 function will fully verify the signature and return the result. If batching
 verification is registered, this function will push the data to the batch and
 return immediately. The caller can then get the result by calling
-`ext_crypto_finish_batch_verify`
-(link_sect-ext-crypto-finish-batch-verify[12.3.16]).
+`ext_crypto_finish_batch_verify` (<<sect-ext-crypto-finish-batch-verify>>).
 
 The verification extension is explained more in detail in
-`ext_crypto_start_batch_verify`
-(link_sect-ext-crypto-start-batch-verify[12.3.15]).
+<<sect-ext-crypto-start-batch-verify>>.
 
 ===== Version 1 - Prototype
 ----
@@ -360,11 +346,9 @@ Arguments::
 format. V should be either or .
 * `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
 the message.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-SCALE encoded `Result` as defined in Definition
-link_defn-result-type++defn-result-type]]. On success it contains the 64-byte
-recovered public key or an error type as defined in Definition
-link_defn-ecdsa-verify-error++defn-ecdsa-verify-error]] on failure.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+encoded _Result_ (<<defn-result-type>>). On success it contains the 64-byte
+recovered public key or an error type (<<defn-ecdsa-verify-error>>) on failure.
 
 ==== `ext_crypto_secp256k1_ecdsa_recover_compressed`
 
@@ -382,24 +366,21 @@ Arguments::
 format. V should be either `0/1` or `27/28`.
 * `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
 the message.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-SCALE encoded `Result` as defined in Definiton
-link_defn-result-type++defn-result-type]]. On success it contains the 33-byte
-recovered public key in compressed form on success or an error type as defined
-in Definition link_defn-ecdsa-verify-error++defn-ecdsa-verify-error]] on
-failure.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+encoded `Result` value (<<defn-result-type>>). On success it contains the
+33-byte recovered public key in compressed form on success or an error type
+(<<defn-ecdsa-verify-error>>) on failure.
 
 [#sect-ext-crypto-start-batch-verify]
 ==== `ext_crypto_start_batch_verify`
 
 Starts the verification extension. The extension is a separate background
 process and is used to parallel-verify signatures which are pushed to the batch
-with `ext_crypto_ed25519_verify` (link_sect-ext-crypto-ed25519-verify[12.3.4]),
-`ext_crypto_sr25519_verify` (link_sect-ext-crypto-sr25519-verify[12.3.8]) or
-`ext_crypto_ecdsa_verify` (link_sect-ext-crypto-ecdsa-verify[12.3.12]).
-Verification will start immediately and the Runtime can retrieve the result when
-calling `ext_crypto_finish_batch_verify`
-(link_sect-ext-crypto-finish-batch-verify[12.3.16]).
+with `ext_crypto_ed25519_verify` (<<sect-ext-crypto-ed25519-verify>>),
+`ext_crypto_sr25519_verify` (<<sect-ext-crypto-sr25519-verify>>) or
+`ext_crypto_ecdsa_verify` (<<sect-ext-crypto-ecdsa-verify>>). Verification will
+start immediately and the Runtime can retrieve the result when calling
+`ext_crypto_finish_batch_verify` (<<sect-ext-crypto-finish-batch-verify>>).
 
 ===== Version 1 - Prototype
 ----
@@ -416,9 +397,8 @@ Arguments::
 Finish verifying the batch of signatures since the last call to this function.
 Blocks until all the signatures are verified.
 
-WARNING: Panics if no verification extension is registered
-(`ext_crypto_start_batch_verify`
-link_sect-ext-crypto-start-batch-verify[12.3.15]) was not called.)
+WARNING: Panics if `ext_crypto_start_batch_verify`
+(<<sect-ext-crypto-start-batch-verify>>) was not called.
 
 ===== Version 1 - Prototype
 ----
