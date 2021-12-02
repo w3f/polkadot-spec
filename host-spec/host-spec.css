@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,300;1,700&display=swap');
+@import "https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css";
+
+#toctitle {
+	color: #E6007A;
+	font-style: normal;
+}
+
+#toc, #toc * {
+	background-color: #172026 !important;
+	border: 0px !important;
+}
+
+.toc-current {
+	color: #E6007A;
+}
+
+body > #header > #toc > * a {
+	color: #F2F2F2;
+}
+
+#content > * a {
+	color: #E6007A;
+}
+
+.sidebarblock, .sidebarblock * {
+	background-color: #E2E2E2;
+}
+
+/* MathJax does weird things if you apply `font-family`
+   and/or `font-weight` to everything */
+html > * p,
+html > * a,
+h1, h2, h3, h4, h5, h6, .link {
+	font-family: 'Work Sans' !important;
+	font-weight: 900 !important;
+}
+
+#footer, #footer * {
+	color: #F2F2F2;
+	background-color: #172026;
+}
+
+html * {
+	color: #172126;
+	background-color: #F2F2F2;
+}
