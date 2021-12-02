@@ -1,0 +1,15 @@
+==== AuthorityDiscoveryApi Module (Version 1)
+
+All calls in this module require (Section
+<<sect-rte-core-initialize-block>>) to be called beforehand.
+
+===== `AuthorityDiscoveryApi_authorities`
+
+A function which helps to discover authorities.
+
+Arguments::
+* None.
+
+Return::
+* A byte array of varying size containing 256-bit pulic keys of the
+authorities.
