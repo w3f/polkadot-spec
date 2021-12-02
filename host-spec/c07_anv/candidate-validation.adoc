@@ -1,0 +1,93 @@
+[#sect-candidate-validation]
+=== Candidate Validation
+
+Received candidates submitted by collators and must have its validity verified
+by the assigned Polkadot validators. For each candidate to be valid, the
+validator must successfully verify the following conditions in the following
+order:
+
+. The candidate does not exceed any parameters in the persisted validation data
+(<<defn-persisted-validation-data>>).
+. The signature of the collator is valid.
+. Validate the candidate by executing the parachain Runtime (<<sect-parachain-runtime>>)..
+
+If all steps are valid, the Polkadot validator must create the necessary
+candidate commitments (<<defn-candidate-commitments>>) and submit the
+appropriate statement for each candidate
+(<<sect-candidate-statements>>).
+
+[#sect-parachain-runtime]
+==== Parachain Runtime
+
+Parachain Runtimes are stored in the relay chain state, and can either be
+fetched by the parachain Id or the Runtime hash via the relay chain Runtime API
+as described in <<sect-rt-api-validation-code>> and
+<<sect-rt-api-validation-code-by-hash>> respectively. The retrieved parachain
+Runtime might need to be decompressed based on the magic identifier as described
+in <<sect-runtime-compression>>.
+
+In order to validate a parachain block, the Polkadot validator must prepare the
+validation parameters (<<defn-validation-parameters>>), then use its local Wasm
+execution environment (<<sect-code-executor>>) to execute the validate_block
+parachain Runtime API by passing on the validation parameters as an argument.
+The parachain Runtime function returns the validation result
+(<<defn-validation-result>>).
+
+[#defn-validation-parameters]
+===== Validation Parameters
+****
+The validation parameters structure, stem:[P], is required to validate a
+candidate against a parachain Runtime. It's a datastructure of the following
+format:
+
+[stem]
+++++
+P = (h,b,B_i,S_r)
+++++
+
+where
+
+* stem:[h] is the parachain head data (<<defn-head-data>>).
+* stem:[b] is the block body (<<defn-para-block>>).
+* stem:[B_i] is the latest relay chain block number.
+* stem:[S_r] is the relay chain block storage root (<<sect-merkl-proof>>).
+****
+
+[#defn-validation-result]
+==== Validation Result
+****
+The validation result is returned by the `validate_block` parachain Runtime API
+after attempting to validate a parachain block. Those results are then used in
+candidate commitments (<<defn-candidate-commitments>>), which then will be
+inserted into the relay chain via the parachain inherent data
+(<<defn-parachain-inherent-data>>). The validation result, stem:[V], is a
+datastructure of the following format:
+
+[stem]
+++++
+V   = (h,R,M_u,M_h,p_,w)\
+M_u = (m_0,…m_n)\
+M_h = (t_0,…t_n)
+++++
+
+where
+
+* stem:[h] is the parachain head data (<<defn-head-data>>).
+* stem:[R] is an _Option_ value (<<defn-option-type>>) that can contain a new
+parachain Runtime in case of an update.
+* stem:[M_u] is an array of upward messages sent by the parachain. Each
+individual message, m, is an array of bytes.
+* stem:[M_h] is an array of individual outbound horizontal messages
+(<<defn-outbound-hrmp-message>>) sent by the parachain.
+* stem:[p] is a unsigned 32-bit integer indicating the number of downward
+messages that were processed by the parachain. It is expected that the parachain
+processes the messages from first to last.
+* stem:[w] is a unsigned 32-bit integer indicating the watermark which specifies
+the relay chain block number up to which all inbound horizontal messages have
+been processed.
+****
+
+[#sect-runtime-compression]
+==== Runtime Compression
+
+WARNING: TODO
