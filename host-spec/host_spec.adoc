@@ -88,3 +88,13 @@ include::c08_host_api/trie.adoc[]
 include::c08_host_api/misc.adoc[]
 include::c08_host_api/allocator.adoc[]
 include::c08_host_api/logging.adoc[]
+
+[#chap-runtime-api]
+== Polkadot Runtime API
+:example-caption: Definition
+
+include::c09_runtime-api/intro.adoc[]
+
+include::c09_runtime-api/constants.adoc[]
+
+include::c09_runtime-api/functions.adoc[]
