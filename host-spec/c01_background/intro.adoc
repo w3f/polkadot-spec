@@ -1,5 +1,3 @@
-=== Introduction
-
 Formally, Polkadot is a replicated sharded state machine designed to
 resolve the scalability and interoperability among blockchains. In
 Polkadot vocabulary, shards are called _parachains_ and Polkadot _relay
