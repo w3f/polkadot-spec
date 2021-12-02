@@ -39,10 +39,6 @@ include::c03_transition/state_replication.adoc[]
 include::c04_networking/fundamentals.adoc[]
 include::c04_networking/messages.adoc[]
 
-[#chapter-bootstrapping]
-== Bootstrapping
-include::ac_bootstrapping.adoc[]
-
 [#chap-consensus]
 == Consensus
 include::c06_consensus/common.adoc[]
@@ -73,6 +69,14 @@ include::aa_crypto_algos.adoc[]
 == Auxiliary Encodings
 
 include::ab_encoding.adoc[]
+
+[#chapter-genesis]
+== Genesis State
+include::ac_genesis.adoc[]
+
+[#chapter-bootstrapping]
+== Bootstrapping
+include::ad_bootstrapping.adoc[]
 
 [#chap-host-api]
 == Polkadot Host API
