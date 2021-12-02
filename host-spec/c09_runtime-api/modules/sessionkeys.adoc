@@ -1,0 +1,34 @@
+[#sect-runtime-sessionkeys-module]
+==== SessionKeys Module (Version 1)
+
+All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+
+===== `SessionKeys_generate_session_keys`
+
+Generates a set of session keys with an optional seed. The keys should
+be stored within the keystore exposed by the Host Api. The seed needs to
+be valid and UTF-8 encoded.
+
+Arguments::
+* A SCALE-encoded _Option_ as defined in <<defn-option-type>> containing an array of varying sizes indicating the seed.
+
+Return::
+* A byte array of varying size containg the encoded session keys.
+
+===== `SessionKeys_decode_session_keys`
+
+Decodes the given public session keys. Returns a list of raw public keys including their key type.
+
+Arguments::
+* An array of varying size containing the encoded public session keys.
+
+Return::
+* An array of varying size containing tuple pairs of the following format:
++
+[latexmath]
+++++
+(k, k_{\operatorname{id}})
+++++
+where latexmath:[k] is an array of varying sizes containg the raw
+public key and latexmath:[k_{\operatorname{id}}] is a
+4-byte array indicating the key type.
