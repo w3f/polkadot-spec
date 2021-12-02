@@ -15,9 +15,6 @@ WARNING: The Polkadot specification is currently being converted from TexMacs to
 AsciiDoc. This specification is *Work-In-Progress* and any content, structure ,
 design and/or hyper/anchor-link *is subject to change*.
 
-[#chap-background]
-== Background
-
 include::c01_background/intro.adoc[]
 include::c01_background/definitions.adoc[]
 
