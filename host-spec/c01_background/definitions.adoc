@@ -1,8 +1,8 @@
 [#sect-defn-conv]
-=== Definitions and Conventions
+== Preliminaries
 
 [#defn-state-machine]
-==== Discrete State Machine (DSM)
+=== Discrete State Machine (DSM)
 ****
 A *Discrete State Machine(DSM)* is a state transition system whose set of states
 and set of transitions are countable and admits a starting state. Formally, it
@@ -27,7 +27,7 @@ Polkadot vocabulary, such that
 ****
 
 [#defn-path-graph]
-==== Path Graph
+=== Path Graph
 ****
 A *path graph* or a *path* of stem:[n] nodes formally referred to as *stem:[P_n]*,
 is a tree with two nodes of vertex degree 1 and the other n-2 nodes of vertex
@@ -37,7 +37,7 @@ the edge which connect stem:[v_i] and stem:[v_{i + 1}].
 ****
 
 [#defn-radix-tree]
-==== Radix-r Tree
+=== Radix-r Tree
 ****
 A *Radix-r tree* is a variant of  a trie in which:
 
@@ -51,7 +51,7 @@ child and does not represent a valid key in the data set, is compressed into a
 single edge. This improves space efficiency when the key space is sparse.
 ****
 
-==== Sequence of Bytes
+=== Sequence of Bytes
 ****
 By a *sequences of bytes* or a *byte array*, stem:[b], of length
 stem:[n], we refer to
@@ -81,7 +81,7 @@ a |\| b :=(a_0, ..., a_n, b_0, ..., b_m)
 ****
 
 [#defn-bit-rep]
-==== Bitwise Representation
+=== Bitwise Representation
 ****
 For a given byte stem:[b] the *bitwise representation* of stem:[b] is defined as
 
@@ -99,7 +99,7 @@ b = 2^0 b^0 + 2^1 b^1 + ... + 2^7 b^7
 ****
 
 [#defn-little-endian]
-==== Little Endian
+=== Little Endian
 ****
 By the *little-endian* representation of a non-negative integer, stem:[I],
 represented as
@@ -125,13 +125,13 @@ sf "Enc"_(sf "LE"):{(bbb "Z"^+ -> bbb "B"),((B_n ... B_0)_256 -> (B_{0,} B_1, ..
 ++++
 ****
 
-==== UINT32
+=== UINT32
 ****
 By *UINT32* we refer to a non-negative integer stored in a byte array of
 length stem:[4] using little-endian encoding format.
 ****
 
-==== Blockchain 
+=== Blockchain 
 
 ****
 A *blockchain* stem:[C] is a directed path graph. Each node of the graph is
@@ -147,7 +147,7 @@ B_2 := P(B_1)
 ****
 
 [#defn-unix-time]
-==== Unix Time
+=== Unix Time
 ****
 By *Unix time*, we refer to the unsigned, little-endian encoded 64-bit integer
 which stores the number of *milliseconds* that have elapsed since the Unix
@@ -157,7 +157,7 @@ seconds.
 ****
 
 [#defn-block-tree]
-==== Block 
+=== Block 
 ****
 In the course of formation of a (distributed) blockchain, it is possible
 that the chain forks into multiple subchains in various block positions.
@@ -175,7 +175,7 @@ blockchain (<<sect-finality>>).
 ****
 
 [#defn-pruned-tree]
-==== Pruned Block Tree
+=== Pruned Block Tree
 ****
 By Pruned Block Tree*, denoted by stem:[PBT], we refer to a subtree of the block
 tree obtained by eliminating all branches which do not contain the most recent
@@ -188,7 +188,7 @@ block tree.
 ****
 
 [#defn-chain-subchain]
-==== Subchain
+=== Subchain
 ****
 Let stem:[G] be the root of the block tree and stem:[B] be one of its nodes. By
 stem:["Chain"(B)], we refer to the path graph from stem:[G] to stem:[B] in
@@ -205,7 +205,7 @@ stem:[bbb "C"], for the sake of brevity.
 ****
 
 [#defn-longest-chain]
-==== Longest Chain
+=== Longest Chain
 ****
 We define the following complete order over stem:[bbb "C"] such that for
 stem:[C_1, C_2 in bbb "C"] if stem:[|C_1| != |C_2|] we say stem:[C_1 > C_2] if
@@ -218,7 +218,7 @@ too be the maximum chain given by this order.
 ****
 
 [#defn-longest-path]
-==== Longest Path
+=== Longest Path
 ****
 stem:[sf "Longest-Path"(BT)] returns the path graph of stem:[(P)BT] which is the
 longest among all paths in stem:[(P)BT] and has the earliest block arrival time
@@ -230,7 +230,7 @@ easy to see that the block tree is de facto a tree. A block tree naturally
 imposes partial order relationships on the blocks as follows:
 ****
 
-==== Descendant
+=== Descendant
 ****
 We say *B is descendant of stem:[B']*, formally noted as stem:[B > B'] if
 stem:[B] is a descendant of stem:[B'] in the block tree.

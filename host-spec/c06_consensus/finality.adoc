@@ -313,9 +313,8 @@ Note that we might not always succeed in finalizing our best final candidate due
 to the possibility of equivocation. The example in <<exmp-candid-unfinalized>>
 serves to demonstrate such a situation:
 
-TODO: Number example block
-
 [#exmp-candid-unfinalized]
+.Unfinalized Candidate
 ====
 Let us assume
 that we have 100 voters and there are two blocks in the chain
