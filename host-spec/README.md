@@ -20,11 +20,11 @@ sudo apt-get install ruby-dev
 
 ```bash
 sudo gem install asciidoctor
+# Optional: for multi-page HTML generation (recommended)
+sudo gem install asciidoctor-multipage
 # Optional: for PDF generation
 sudo gem install asciidoctor-pdf
 sudo gem install asciidoctor-mathematical
-# Optional: for multi-page HTML generation (recommended)
-sudo gem install asciidoctor-multipage
 ```
 
 ## Build
