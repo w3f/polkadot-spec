@@ -1,0 +1,47 @@
+=== Runtime Functions
+
+In this section, we describe all Runtime API functions alongside their
+arguments and the return values. The functions are organized into
+modules with each being versioned independently.
+
+.Runtime API Call Convention
+[#defn-runtime-api-convention]
+====
+The *Runtime API Call Convention* describes that all functions receive and return SCALE-encoded data and as a result have the following prototype signature:
+
+[source,wat]
+```
+(func $generic_runtime_entry
+  (param $ptr i32) (parm $len i32) (result i64))
+```
+
+where `ptr` points to the SCALE encoded tuple of the parameters passed to the
+function and `len` is the length of this data, while `result` is a pointer-size
+(Definition <<defn-runtime-pointer-size>>) to the SCALE-encoded return data.
+====
+
+See <<sect-code-executor>> for more information about the behaviour of the Wasm Runtime. Also note that any state changes created by calling any of the Runtime functions are not necessarily to be persisted after the call is ended. See <<sect-handling-runtime-state-update>> for more information.
+
+include::modules/core.adoc[]
+
+include::modules/metadata.adoc[]
+
+include::modules/blockbuilder.adoc[]
+
+include::modules/txqueue.adoc[]
+
+include::modules/offchain.adoc[]
+
+include::modules/parachain.adoc[]
+
+include::modules/grandpa.adoc[]
+
+include::modules/babe.adoc[]
+
+include::modules/discovery.adoc[]
+
+include::modules/sessionkeys.adoc[]
+
+include::modules/accountnonce.adoc[]
+
+include::modules/txpayment.adoc[]

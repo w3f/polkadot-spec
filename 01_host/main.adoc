@@ -1,0 +1,69 @@
+== Preliminaries
+
+include::01_background/intro.adoc[]
+
+include::01_background/bootstrapping.adoc[]
+
+include::01_background/definitions.adoc[]
+
+
+[#chap-state-spec]
+== State Specification
+
+include::02_state/state_storage_trie.adoc[]
+
+include::02_state/child_storage.adoc[]
+
+
+[#chap-state-transit]
+== State Transition
+
+include::03_transition/runtime_interaction.adoc[]
+
+include::03_transition/extrinsics.adoc[]
+
+include::03_transition/state_replication.adoc[]
+
+
+[#chap-networking]
+== Networking
+
+include::04_networking/fundamentals.adoc[]
+
+include::04_networking/messages.adoc[]
+
+
+[#chap-consensus]
+== Consensus
+
+include::05_consensus/common.adoc[]
+
+include::05_consensus/block_production.adoc[]
+
+include::05_consensus/finality.adoc[]
+
+include::05_consensus/block_finalization.adoc[]
+
+include::05_consensus/bridge_design.adoc[]
+
+
+[#chapter-anv]
+== Availability & Validity
+
+include::06_anv/intro.adoc[]
+
+include::06_anv/collations.adoc[]
+
+include::06_anv/candidate-backing.adoc[]
+
+include::06_anv/candidate-validation.adoc[]
+
+include::06_anv/availability.adoc[]
+
+include::06_anv/approval-voting.adoc[]
+
+include::06_anv/runtime-api.adoc[]
+
+include::06_anv/network-messages.adoc[]
+
+include::06_anv/definitions.adoc[]

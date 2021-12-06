@@ -1,0 +1,70 @@
+==== GrandpaApi Module (Version 2)
+
+All calls in this module require `Core_initalize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+
+[#sect-rte-grandpa-auth]
+===== `GrandpaApi_grandpa_authorities`
+
+This entry fetches the list of GRANDPA authorities according to the
+genesis block and is used to initialize an authority list at genesis,
+defined in <<defn-authority-list>>.
+Any future authority changes get tracked via Runtime-to-consensus engine
+messages, as described in <<sect-consensus-message-digest>>.
+
+Arguments::
+* None.
+
+Return::
+* An authority list as defined in <<defn-authority-list>>.
+
+[#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic]
+===== `GrandpaApi_submit_report_equivocation_unsigned_extrinsic`
+
+A GRANDPA equivocation occurs when a validator votes for multiple blocks
+during one voting subround, as described further in <<defn-equivocation>>. The Polkadot Host is expected to identify equivocators and report those to the Runtime by
+calling this function.
+
+Arguments::
+* The equivocation proof of the following format:
++
+[latexmath]
+++++
+\begin{aligned}
+    G_{\operatorname{Ep}} = & (\operatorname{id}_{\mathbb{V}}, e, r, A_{\operatorname{id}}, B^1_h,
+    B^1_n A^1_{\operatorname{sig}}, B^2_h, B^2_n, A^2_{\operatorname{sig}})\\
+    e = & \left\{\begin{array}{l}
+      0 \quad \textrm{Equivocation at prevote stage}\\
+      1 \quad \textrm{Equivocation at precommit stage}
+    \end{array}\right.
+\end{aligned}
+++++
++
+where
+** latexmath:[\operatorname{id}_{\mathbb{V}}] is the authority set as defined in <<defn-authority-set-id>>.
+** latexmath:[e] indicates the stage at which the equivocation occurred.
+** latexmath:[r] is the round number the equivocation occurred.
+** latexmath:[A_{\operatorname{id}}] is the public key of the equivocator.
+** latexmath:[B^1_h] is the block hash of the first block the equivocator voted for.
+** latexmath:[B^1_n] is the block number of the first block the equivocator voted for.
+** latexmath:[A^1_{\operatorname{sig}}] is the equivocators signature of the first vote.
+** latexmath:[B^2_h] is the block hash of the second block the equivocator voted for.
+** latexmath:[B^2_n] is the block number of the second block the equivocator voted for.
+** latexmath:[A^2_{\operatorname{sig}}] is the equivocators signature of the second vote.
+* A proof of the key owner in an opaque form as described in <<sect-grandpaapi_generate_key_ownership_proof>>.
+
+Return::
+* A SCALE encoded _Option_ as defined in <<defn-option-type>> containing an empty value on success.
+
+[#sect-grandpaapi_generate_key_ownership_proof]
+===== `GrandpaApi_generate_key_ownership_proof`
+
+Generates proof of the membership of a key owner in the specified block
+state. The returned value is used to report equivocations as described
+in <<sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>>.
+
+Arguments::
+* The authority set id as defined in <<defn-authority-set-id>>.
+* The 256-bit public key of the authority.
+
+Return::
+* A SCALE encoded _Option_ as defined in <<defn-option-type>> containing the proof in an opaque form.

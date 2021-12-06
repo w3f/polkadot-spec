@@ -1,0 +1,21 @@
+=== BABE digest messages
+
+The Runtime is required to provide the BABE authority list and
+randomness to the host via a consensus message in the header of the
+first block of each epoch.
+
+The digest published in Epoch latexmath:[$\mathcal{E}_n$] is enacted in
+latexmath:[$\mathcal{E}_{n+1}$]. The randomness in this digest is
+computed based on the all the VRF outputs up to including Epoch
+latexmath:[$\mathcal{E}_{n-2}$] while the authority set is based on all
+transaction included up to Epoch latexmath:[$\mathcal{E}_{n-1}$].
+
+The computation of the randomeness seed is described in Algorithm
+link:#algo-epoch-randomness[[algo-epoch-randomness]] which uses the
+concept of epoch subchain as described in host specification and the
+value latexmath:[$d_B$], which is the VRF output computed for slot
+latexmath:[$s_B$].
+
+latexmath:[$\rho \leftarrow \phi$]
+latexmath:[$\rho \leftarrow \rho || d_B$]
+latexmath:[$\textsc{Blake2b}(\textsc{Epoch-Randomness}(n-1)||n||\rho)$]

@@ -1,0 +1,141 @@
+==== BabeApi Module (Version 2)
+
+All calls in this module require `Core_intialized_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+
+[#sect-rte-babeapi-epoch]
+===== `BabeApi_configuration`
+
+This entry is called to obtain the current configuration of the BABE
+consensus protocol.
+
+Arguments::
+* None.
+
+Return::
+* A tuple containing configuration data used by the Babe consensus
+engine.
++
+.The tuple provided by *BabeApi_configuration*.
+[cols="<1,<3,<1",options="header"]
+|===
+|*Name* |*Description* |*Type*
+
+|_SlotDuration_
+|The slot duration in milliseconds. Currently, only the value provided by this
+type at genesis will be used. Dynamic slot duration may be supported in the future.
+|Unsigned 64bit integer
+
+|_EpochLength_
+|The duration of epochs in slots.
+|Unsigned 64bit integer
+
+|_Constant_
+|A constant value that is used in the threshold calculation formula as defined in <<defn-babe-constant>>.
+|Tuple containing two unsigned 64bit integers
+
+|_GenesisAuthorities_
+|The authority list for the genesis epoch as defined in <<defn-authority-list>>.
+|Array of tuples containing a 256-bit byte array and a unsigned 64bit integer
+
+|_Randomness_
+|The randomness for the genesis epoch
+|32-byte array
+
+|_SecondarySlot_
+|Whether this chain should run with secondary slots and wether they are assigned
+in a round-robin manner or via a second VRF.
+| 8bit enum
+|===
+
+===== `BabeApi_current_epoch_start`
+
+Finds the start slot of the current epoch.
+
+Arguments::
+* None.
+
+Return::
+* A unsigned 64-bit integer indicating the slot number.
+
+[#sect-babeapi_current_epoch]
+===== `BabeApi_current_epoch`
+
+Produces information about the current epoch.
+
+Arguments::
+* None.
+
+Return::
+* A data structure of the following format:
++
+[latexmath]
+++++
+(e_i, s_s, d, A, r)
+++++
+where
+
+** latexmath:[e_i] is a unsigned 64-bit integer representing the epoch index.
+** latexmath:[s_s] is a unsigned 64-bit integer representing the starting slot of the epoch.
+** latexmath:[d] is a unsigned 64-bit integer representing the duration of the epoch.
+** latexmath:[A] is an authority list as defined in <<defn-authority-list>>.
+** latexmath:[r] is an 256-bit array containing the randomness for the epoch as defined in <<defn-epoch-randomness>>.
+
+===== BabeApi_next_epoch
+
+Produces information about the next epoch.
+
+Arguments::
+* None.
+
+Return::
+* Returns the same datastructure as described in <<sect-babeapi_current_epoch>>.
+
+[#sect-babeapi_generate_key_ownership_proof]
+===== `BabeApi_generate_key_ownership_proof`
+
+Generates a proof of the membership of a key owner in the specified
+block state. The returned value is used to report equivocations as
+described in <<sect-babeapi_submit_report_equivocation_unsigned_extrinsic>>.
+
+Arguments::
+* The unsigned 64-bit integer indicating the slot number.
+* The 256-bit public key of the authority.
+
+Return::
+* A SCALE encoded _Option_ as defined in Definition <<defn-option-type>> containing the
+proof in an opaque form.
+
+[#sect-babeapi_submit_report_equivocation_unsigned_extrinsic]
+===== `BabeApi_submit_report_equivocation_unsigned_extrinsic`
+
+A BABE equivocation occurs when a validator produces more than one block
+at the same slot. The proof of equivocation are the given distinct
+headers that were signed by the validator and which include the slot
+number. The Polkadot Host is expected to identify equivocators and
+report those to the Runtime using this function.
+
+NOTE: If there are more than two blocks which cause an equivocation, the
+equivocation only needs to be reported once i.e. no additional
+equivocations must be reported for the same slot.
+
+Arguments::
+* The equivocation proof of the following format:
++
+[latexmath]
+++++
+B_{\operatorname{Ep}} = (A_{\operatorname{id}}, s, h_1, h_2)
+++++
+where
+
+** latexmath:[A_{\operatorname{id}}] is the public key of the equivocator.
+** latexmath:[s] is the slot as described in <<sect-babe>> at which the equivocation occurred.
+** latexmath:[h_1] is the block header of the first block produced by the equivocator.
+** latexmath:[h_2] is the block header of the second block produced by the equivocator.
++
+Unlike during block execution, the Seal in both block headers is not removed before
+submission. The block headers are submitted in its full form.
+* An proof of the key owner in an opaque form as described in <<sect-babeapi_generate_key_ownership_proof>>.
+
+Return::
+* A SCALE encoded _Option_ as defined in <<defn-option-type>> containing an empty
+value on success.

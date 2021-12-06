@@ -1,0 +1,14 @@
+[#chapter-crypto-algos]
+=== Cryptographic Algorithms
+
+include::01_crypto-algos.adoc[]
+
+[#chapter-encoding]
+=== Auxiliary Encodings
+
+include::02_encoding.adoc[]
+
+[#chapter-genesis]
+=== Genesis State
+
+include::03_genesis.adoc[]

@@ -1,0 +1,53 @@
+==== ParachainHost Module (Version 1)
+
+===== `ParachainHost_validators`
+
+NOTE: future-reserved
+
+===== `ParachainHost_validator_groups`
+
+NOTE: future-reserved
+
+===== `ParachainHost_availability_cores`
+
+NOTE: future-reserved
+
+===== `ParachainHost_persisted_validation_data`
+
+NOTE: future-reserved
+
+===== `ParachainHost_check_validation_outputs`
+
+NOTE: future-reserved
+
+===== `ParachainHost_session_index_for_child`
+
+NOTE: future-reserved
+
+===== `ParachainHost_session_info`
+
+NOTE: future-reserved
+
+===== `ParachainHost_validation_code`
+
+NOTE: future-reserved
+
+===== `ParachainHost_historical_validation_code`
+
+NOTE: future-reserved
+
+===== `ParachainHost_candidate_pending_availability`
+
+NOTE: future-reserved
+
+===== `ParachainHost_candidate_events`
+
+NOTE: future-reserved
+
+===== `ParachainHost_dmq_contents`
+
+NOTE: future-reserved
+
+===== `ParachainHost_inbound_hrmp_channel_contents`
+
+NOTE: future-reserved

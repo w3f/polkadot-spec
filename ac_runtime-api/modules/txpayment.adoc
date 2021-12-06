@@ -1,0 +1,72 @@
+==== TransactionPaymentApi Module (Version 1)
+
+All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+
+===== `TransactionPaymentApi_query_info`
+
+Returns information of a given extrinsic. This function is not aware of
+the internals of an extrinsic, but only interprets the extrinsic as some
+encoded value and accounts for its weight and length, the Runtime’s
+extrinsic base weight and the current fee multiplier.
+
+This function can be used by the Polkadot Host implementation when it
+seems appropriate, such as for the JSON-RPC API as described in <<sect-json-rpc-api>>.
+
+Arguments::
+* A byte array of varying sizes containing the extrinsic.
+* The length of the extrinsic. [To do: why is this needed?]
+
+Return::
+* A data structure of the following format:
++
+[latexmath]
+++++
+(w, c, f)
+++++
+where
+** latexmath:[w] is the weight of the extrinsic.
+** latexmath:[c] is the "class" of the extrinsic, where class is a  varying data (<<defn-varrying-data-type>>) type defined as:
++
+[latexmath]
+++++
+c = \left\{\begin{array}{l}
+       0 \quad \textrm{Normal extrinsic}\\
+       1 \quad \textrm{Operational extrinsic}\\
+       2 \quad \textrm{Mandatory extrinsic, which is always included}
+     \end{array}\right.
+++++
+** latexmath:[f] is the inclusion fee of the extrinsic. This does not
+include a tip or anything else that depends on the signature.
+
+===== `TransactionPaymentApi_query_fee_details`
+
+Query the detailed fee of a given extrinsic. This function can be used
+by the Polkadot Host implementation when it seems appropriate, such as
+for the JSON-RPC API as described in <<sect-json-rpc-api>>.
+
+Arguments::
+* A byte array of varying sizes containing the extrinsic.
+* The length of the extrinsic.
+
+Return::
+* A data structure of the following format:
++
+[latexmath]
+++++
+(f, t)
+++++
++
+where
+
+** latexmath:[f] is a SCALE encoded as defined in <<defn-option-type>> containing the following data structure:
++
+[latexmath]
+++++
+ f = (f_b, f_l, f_a)
+++++
++
+where
+*** latexmath:[f_b] is the minimum required fee for an extrinsic.
+*** latexmath:[f_l] is the length fee, the amount paid for the encoded length (in bytes) of the extrinsic.
+*** latexmath:[f_a] is the "`adjusted weight fee`", which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.
+** latexmath:[t] is the tip for the block author.
