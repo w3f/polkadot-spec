@@ -19,8 +19,17 @@ body > #header > #toc > * a {
 	color: #F2F2F2;
 }
 
-#content > * a {
+.content > * a {
 	color: #E6007A;
+}
+
+.exampleblock >	.content,
+.exampleblock >	.content * {
+	background-color: #E2E2E2;
+}
+
+.listingblock > .content * {
+	background-color: #F2F2F2 !important;
 }
 
 .sidebarblock, .sidebarblock * {
