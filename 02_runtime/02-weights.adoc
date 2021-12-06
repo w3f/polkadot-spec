@@ -58,11 +58,10 @@ weight system should:
 transaction fee to each extrinsic proportional to their resource
 consumption.
 
-These concepts are formalized in Definitions
-#def:block-length[[def:block-length]] and
-#def:polkadot-block-limits[[def:polkadot-block-limits]]:
+These concepts are formalized in <<def-block-length>> and
+<<def-polkadot-block-limits>>:
 
-[#def:block-length]#[def:block-length]# For a block latexmath:[$B$] with
+[#def-block-length]#[def-block-length]# For a block latexmath:[$B$] with
 latexmath:[$Head(B)$] and latexmath:[$Body(B)$] the ḇlock length of
 latexmath:[$B$], latexmath:[$Len(B)$], is defined as the amount of raw
 bytes of latexmath:[$B$].
@@ -79,7 +78,7 @@ reserved for normal, noted by latexmath:[$R(B)$], is defined as the
 maximum weight of none-operational transactions in the Body of
 latexmath:[$B$] divided by latexmath:[$Len(B)$].
 
-[#def:polkadot-block-limits]#[def:polkadot-block-limits]# P̱olkadot block
+[#def-polkadot-block-limits]#[def-polkadot-block-limits]# P̱olkadot block
 limits as defined here should be respected by each block producer for
 the produced block latexmath:[$B$] to be deemed valid:
 
@@ -145,7 +144,7 @@ priority of latexmath:[$E$] the chain is supposed to endorse.
 ==== Limitations
 
 In this section we discuss how applying the limitation defined in
-Definition #def:polkadot-block-limits[[def:polkadot-block-limits]] can
+Definition #def-polkadot-block-limits[[def-polkadot-block-limits]] can
 be translated to limitation latexmath:[$\TWF$]. In order to be able to
 translate those into concrete numbers, we need to identify an arbitrary
 maximum weight to which we scale all other computations. For that we
@@ -307,7 +306,7 @@ entries in storage, then a certain weight should be applied for each
 for such cases. If it doesn’t, it unconditionally has to and the Runtime
 module must be adjusted. When selecting parameters for benchmarking, the
 benchmarks should range from the minimum value to the maximum value, as
-described in paragraph #para:max-value[[para:max-value]].
+described in <<para-max-value>>.
 * *Input parameters* - Input parameters that users pass on to the
 Runtime function can result in expensive operations. Depending on the
 data type, it can be appropriate to add additional weights based on
@@ -316,14 +315,14 @@ varying sizes. The Runtime must define limits on those properties. If it
 doesn’t, it unconditionally has to and the Runtime module must be
 adjusted. When selecting parameters for benchmarking, the benchmarks
 should range from the minimum values to the maximum value, as described
-in paragraph #para:max-value[[para:max-value]].
+in paragraph <<para-max-value>>.
 
-[#para:max-value]#[para:max-value]# What the maximum value should be
-really depends on the functionality that the Runtime function is trying
-to provide. If the choice for that value is not obvious, then it’s
-advised to run benchmarks on a big range of values and pick a
-conservative value below the `targeted time per block` limit as
-described in section #sec:limitations[1.2.1].
+[#para-max-value]
+What the maximum value should be really depends on the functionality that the
+Runtime function is trying to provide. If the choice for that value is not
+obvious, then it’s advised to run benchmarks on a big range of values and pick a
+conservative value below the `targeted time per block` limit as described in
+section #sec:limitations[1.2.1].
 
 ==== Parameters
 
@@ -718,7 +717,7 @@ execution time. Therefore, this benchmark is configured to first set the
 balance at value 1’000 and then to iterate from 1 to 1’000 for the index
 value. Once the index value reaches 1’000, the balance value will reset
 to 2 and iterate to 1’000 (see algorithm
-#sec:algo-benchmark-transfer[[sec:algo-benchmark-transfer]] for more
+<<sec-algo-benchmark-transfer>> for more
 detail):
 
 * `index`: 1, `balance`: 1000
@@ -734,7 +733,7 @@ detail):
 The parameters itself do not influence or trigger the two worst
 conditions and must be handled by the implemented benchmarking tool. The
 latexmath:[$transfer$] benchmark is implemented as defined in algorithm
-#sec:algo-benchmark-transfer[[sec:algo-benchmark-transfer]].
+<<sec-algo-benchmark-transfer>>.
 
 ===== Benchmarking Framework
 
@@ -742,7 +741,7 @@ The benchmarking implementation for the Polkadot Runtime function
 latexmath:[$transfer$] is defined as follows (starting with the Main
 function):
 
-[#sec:algo-benchmark-transfer]#[sec:algo-benchmark-transfer]#
+[#sec-algo-benchmark-transfer]
 
 latexmath:[$collection$]: a collection of time measurements of all
 benchmark iterations collection = \{} latexmath:[$balance = 1'000$]
@@ -877,7 +876,9 @@ performed in the storage.
 The benchmarking implementation for the Polkadot Runtime function
 `withdraw_unbonded` is defined as follows:
 
-[#sec:algo-benchmark-transfer]#[sec:algo-benchmark-transfer]#
+TODO
+
+[#sec-algo-benchmark-transfer2]
 
 latexmath:[$\TWF$] collection = \{} latexmath:[$stash \leftarrow$]
 Create-Account(_"stash"_, 1) latexmath:[$controller \leftarrow$]
