@@ -39,7 +39,7 @@ Arguments::
 \end{aligned}
 ++++
 +
-where:::
+where
 ** latexmath:[\operatorname{id}_{\mathbb{V}}] is the authority set as defined in <<defn-authority-set-id>>.
 ** latexmath:[e] indicates the stage at which the equivocation occurred.
 ** latexmath:[r] is the round number the equivocation occurred.
