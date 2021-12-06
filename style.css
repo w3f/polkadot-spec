@@ -15,7 +15,8 @@
 	color: #E6007A;
 }
 
-body > #header > #toc > * a {
+body > #header > #toc > * a,
+body > #header > #toc > * a > code {
 	color: #F2F2F2;
 }
 
@@ -50,7 +51,7 @@ h1, h2, h3, h4, h5, h6, .link {
 	background-color: #172026;
 }
 
-html * {
+body {
 	color: #172126;
 	background-color: #F2F2F2;
 }
