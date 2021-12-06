@@ -1,5 +1,3 @@
-== Consensus
-
 === BABE digest messages
 
 The Runtime is required to provide the BABE authority list and
