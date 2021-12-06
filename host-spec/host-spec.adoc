@@ -1,4 +1,5 @@
 = Polkadot Host Specification
+Fabio Lama <fabio@web3.foudation>; Florian Franzen <florian@web3.foundation>; Syed Hosseini <syed@web3.foundation>
 :description: Polkadot Host Specification
 :doctype: book
 :toc: left
