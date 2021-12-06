@@ -9,26 +9,58 @@
 [![Host Spec (Flake)](https://github.com/w3f/polkadot-spec/actions/workflows/host-spec.nix.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/host-spec.nix.yml)
 [![Runtime Spec (Flake)](https://github.com/w3f/polkadot-spec/actions/workflows/runtime-spec.nix.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/runtime-spec.nix.yml)
 
-Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository serves as the point of reference for Polkadot Protocol. In this repo you will find:
-
-- The official [Polkadot Host Specification](./host-spec/)
-- The official [Polkadot Runtime Specification](./runtime-spec/)
-- Various other files used by the Polkadot spec team
-
+Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository contains the official specification for the Polkadot Protocol.
+ 
 ## Polkadot Host and Runtime Specification
 
 The latest releases of the *Polkadot Host and Runtime Specification* can be found on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
 
-Each release also includes a PDF "diff" to the previous versions that highlights the history of changes to the specification.
+## Dependencies
 
-For more details please refer to the respective *README.md* in the [host-spec](./host-spec/README.md) or [runtime-spec](./runtime-spec/README.md) subfolders.
+The Polkadot specification is written in [Asciidoctor](https://asciidoctor.org/).
+A handful of dependencies are required to successfully generate a final release,
+depending on the desired target.
 
-## Polkadot Protocol Conformance Testsuite
+### Ruby
 
-The official [Polkadot Conformance Testsuite](https://github.com/w3f/polkadot-tests) was moved into a seperate repository.
+```bash
+sudo apt-get install rubygems
+sudo apt-get install ruby-dev
+```
 
-## Genesis and Runtime files
+### AsciiDoctor
 
-The latest genesis files can be retrieved from the official polkadot repository [here](https://github.com/paritytech/polkadot/tree/master/node/service/res).
+```bash
+sudo gem install asciidoctor
+# Optional: for multi-page HTML generation (recommended)
+sudo gem install asciidoctor-multipage
+# Optional: for PDF generation
+sudo gem install asciidoctor-pdf
+sudo gem install asciidoctor-mathematical
+```
 
-All runtime releases can be found on the official [Polkadot Releases page](https://github.com/paritytech/polkadot/releases).
+## Build
+
+Generate the final HTML page(s) or PDF file.
+
+### HTML
+
+#### Multi-Page (recommended)
+
+```bash
+asciidoctor -r asciidoctor-multipage -b multipage_html5 -D out main.adoc
+```
+
+Where the resulting HTML pages can then be found in the `out/` directory.
+
+#### Single-Page
+
+```bash
+asciidoctor main.adoc
+```
+
+### PDF (with math formulas enabled)
+
+```bash
+asciidoctor-pdf -r asciidoctor-mathematical -a mathematical-format=svg main.adoc
+````
