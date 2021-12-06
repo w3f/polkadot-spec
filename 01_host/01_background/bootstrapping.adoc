@@ -1,4 +1,6 @@
-This chapter provides an overview over the tasks a Polkadot Host needs to
+=== Bootstrapping
+
+This section provides an overview over the tasks a Polkadot Host needs to
 performs in order to join and participate in the Polkadot network. While this
 chapter does not go into any new specifications of the protocol, it has been
 included to provide implementors with a pointer to what these steps are and
