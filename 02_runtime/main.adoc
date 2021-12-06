@@ -1,0 +1,13 @@
+== Extrinsics
+
+include::01-extrinsics.adoc[]
+
+
+== Weights
+
+include::02-weights.adoc[]
+
+
+== Consensus
+
+include::03-consensus.adoc[]

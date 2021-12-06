@@ -1,5 +1,5 @@
 [#sect-defn-conv]
-== Preliminaries
+=== Definitions
 
 [#defn-state-machine]
 === Discrete State Machine (DSM)
