@@ -23,9 +23,9 @@ Return::
 ++++
 (w, c, f)
 ++++
-where:::
+where
 ** latexmath:[w] is the weight of the extrinsic.
-** latexmath:[c] is the "`class`" of the extrinsic, where class is a  varying data type defined as:
+** latexmath:[c] is the "class" of the extrinsic, where class is a  varying data (<<defn-varrying-data-type>>) type defined as:
 +
 [latexmath]
 ++++
@@ -56,7 +56,8 @@ Return::
 (f, t)
 ++++
 +
-where:::
+where
+
 ** latexmath:[f] is a SCALE encoded as defined in <<defn-option-type>> containing the following data structure:
 +
 [latexmath]
@@ -64,7 +65,7 @@ where:::
  f = (f_b, f_l, f_a)
 ++++
 +
-where::::
+where
 *** latexmath:[f_b] is the minimum required fee for an extrinsic.
 *** latexmath:[f_l] is the length fee, the amount paid for the encoded length (in bytes) of the extrinsic.
 *** latexmath:[f_a] is the "`adjusted weight fee`", which is a multiplication of the fee multiplier and the weight fee. The fee multiplier varies depending on the usage of the network.

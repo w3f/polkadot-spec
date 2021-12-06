@@ -15,7 +15,7 @@ Arguments::
 * A byte array of varying size containing the opaque extrinsic.
 
 Return::
-* Returns the varying datatype _ApplyExtrinsicResult_ as defined in <<defn-rte-apply-extrinsic-result>>
+* Returns the varying datatype _ApplyExtrinsicResult_ as defined in <<defn-rte-apply-extrinsic-result>>.
 This structure lets the block builder know whether an extrinsic should
 be included into the block or rejected.
 
@@ -209,7 +209,7 @@ Return::
 (o, f_e, e)
 ++++
 +
-where:::
+where
 
 ** latexmath:[o] is a boolean indicating whether the check was successful.
 ** latexmath:[f_e] is a boolean indicating whether a fatal error was encountered.
