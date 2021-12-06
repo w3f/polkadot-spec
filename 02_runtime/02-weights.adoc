@@ -1,5 +1,3 @@
-== Weights
-
 === Motivation
 
 The Polkadot network, like any other permissionless system, needs to
