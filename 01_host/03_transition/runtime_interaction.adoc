@@ -63,18 +63,17 @@ stored in the state database under the key represented as a byte array:
 b := "3A,63,6F,64,65"
 ++++
 
-which is the ASCII byte representation of the string "`:code`""
-(TODO <<sect-genesis-block>>). As a result of storing the Runtime as part of the
-state, the Runtime code itself becomes state sensitive and calls to Runtime can
-change the Runtime code itself. Therefore the Polkadot Host needs to always make
-sure to provide the Runtime corresponding to the state in which the entry has
-been called. Accordingly, we define stem:[R_B]
-(<<notat-runtime-code-at-state>>).
+which is the ASCII byte representation of the string `:code`
+(<<chapter-genesis>>). As a result of storing the Runtime as part of the state,
+the Runtime code itself becomes state sensitive and calls to Runtime can change
+the Runtime code itself. Therefore the Polkadot Host needs to always make sure
+to provide the Runtime corresponding to the state in which the entry has been
+called. Accordingly, we define stem:[R_B] (<<notat-runtime-code-at-state>>).
 
 The initial Runtime code of the chain is provided as part of the genesis state
-(TODO <<sect-genesis-block>>) and subsequent calls to the Runtime have the ability
-to, in turn, upgrade the Runtime by replacing this Wasm blob with the help of
-the storage API (<<sect-storage-api>>).
+(<<chapter-genesis>>) and subsequent calls to the Runtime have the ability to,
+in turn, upgrade the Runtime by replacing this Wasm blob with the help of the
+storage API (<<sect-storage-api>>).
 
 [#notat-runtime-code-at-state]
 ===== Notation: Runtime Code at State
@@ -89,7 +88,7 @@ end of the execution of block stem:[B].
 The Polkadot Host executes the calls of Runtime entries inside a Wasm
 Virtual Machine (VM), which in turn provides the Runtime with access to
 the Polkadot Host API. This part of the Polkadot Host is referred to as
-the _*Executor*._
+the _Executor_.
 
 <<notat-call-into-runtime>> introduces the notation for calling the runtime entry
 which is used whenever an algorithm of the Polkadot Host needs to access the
@@ -100,8 +99,8 @@ function in order to indicate an error. The Polkadot Host must be able
 to catch that panic and recover from it.
 
 In this section, we specify the general setup for an Executor that calls into
-the Runtime. In <<TODO sect-runtime-entries>> we specify the parameters and return
-values for each Runtime entry separately.
+the Runtime. In <<chap-runtime-api>> we specify the parameters and return values
+for each Runtime entry separately.
 
 [#notat-call-into-runtime]
 ===== Notation: Call Runtime Entry
@@ -169,16 +168,16 @@ In order for the Runtime to carry on various tasks, it manipulates the current
 state by means of executing calls to various Polkadot Host APIs
 (<<chap-host-api>>). It is the duty of Host APIs to determine the context in
 which these changes should persist. For example, if Polkdot Host needs to
-validate a transaction using entry (TODO <<sect-rte-validate-transaction>>), it
-needs to sandbox the changes to the state just for that Runtime call and prevent
-the global state of the system from being influence by the call to such a
-Runtime entry. This includes reverting the state of function calls which return
-errors or panic.
+validate a transaction using entry (<<sect-rte-validate-transaction>>), it needs
+to sandbox the changes to the state just for that Runtime call and prevent the
+global state of the system from being influence by the call to such a Runtime
+entry. This includes reverting the state of function calls which return errors
+or panic.
 
 As a rule of thumb, any state changes resulting from Runtime enteries are not
 persistant with the exception of state changes resulting from calling
-`Core_execute_block` (TODO <<sect-rte-core-execute-block>>) while Polkadot Host
-is importing a block (TODO <<sect-block-validation>>).
+`Core_execute_block` (<<sect-rte-core-execute-block>>) while Polkadot Host is
+importing a block (<<sect-block-validation>>).
 
 For more information on managing multiple variant of state see
 <<sect-managing-multiple-states>>.
