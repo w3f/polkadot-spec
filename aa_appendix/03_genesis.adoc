@@ -1,14 +1,15 @@
 The genesis state is a set of key-value pairs representing the intial state of
-the Polkadot state storage. It can be retrieved from . While each of those
-key-value pairs offers important identifyable information to the Runtime, to the
-Polkadot Host they are a transparent set of arbitrary chain- and
-network-dependent keys and values. The only exception to this are the `:code`
-(<<sect-loading-runtime-code>>) and `:heappages` (<<sect-memory-management>>)
-keys, which are used by the Polkadot Host to initialize the WASM environment and
-its Runtime. The other keys and values are unspecified and solely depend on the
-chain and respectively its corresponding Runtime. On initialization the data
-should be inserted into the state storage with the Host API
-(<<sect-storage-set>>).
+the Polkadot state storage. It can be retrieved from
+https://github.com/paritytech/polkadot/tree/master/node/service/res[the Polkadot
+repository]. While each of those key-value pairs offers important identifyable
+information to the Runtime, to the Polkadot Host they are a transparent set of
+arbitrary chain- and network-dependent keys and values. The only exception to
+this are the `:code` (<<sect-loading-runtime-code>>) and `:heappages`
+(<<sect-memory-management>>) keys, which are used by the Polkadot Host to
+initialize the WASM environment and its Runtime. The other keys and values are
+unspecified and solely depend on the chain and respectively its corresponding
+Runtime. On initialization the data should be inserted into the state storage
+with the Host API (<<sect-storage-set>>).
 
 As such, Polkadot does not defined a formal genesis block. Nonetheless for the
 compatibility reasons in several algorithms, the Polkadot Host defines the
