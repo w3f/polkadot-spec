@@ -1,17 +1,23 @@
 SOURCES := main.adoc $(wildcard ??_*/**.adoc)
 
-.PHONY: html html5 pdf clean
+
+.PHONY: html pdf clean
 
 
-html: $(SOURCES)
-	asciidoctor main.adoc
+html: polkadot-spec-html/
 
-html5: $(SOURCES)
-	asciidoctor -r asciidoctor-multipage -b multipage_html5 -D html main.adoc
+pdf: polkadot-spec.pdf
 
-pdf: $(SOURCES)
-	asciidoctor-pdf -r asciidoctor-mathematical -a mathematical-format=svg main.adoc
+
+polkadot-spec-html/: index.adoc $(SOURCES)
+	asciidoctor -D $@ -r asciidoctor-multipage -b multipage_html5 $<
+
+polkadot-spec.html: $(SOURCES)
+	asciidoctor -o $@ $<
+
+polkadot-spec.pdf: $(SOURCES)
+	asciidoctor-pdf -o $@ -r asciidoctor-mathematical $<
 
 
 clean:
-	rm -rf html/ main.html main.pdf
+	rm -rf polkadot-spec-html/ polkadot-spec.html polkadot-spec.pdf stem-*.svg
