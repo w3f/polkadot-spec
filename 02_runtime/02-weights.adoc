@@ -20,27 +20,26 @@ The Polkadot weight system introduces a mechanism for block producers to
 measure the cost of running the extrinsics and determine how "heavy" it
 is in terms of execution time. Within this mechanism, block producers
 can select a set of extrinsics and saturate the block to its fullest
-potential without exceeding any limitations (as described in section
-#sec:limitations[1.2.1]). Moreover, the weight system can be used to
+potential without exceeding any limitations (as described in
+<<sect-limitations>>). Moreover, the weight system can be used to
 calculate a fee for executing each extrinsics according to its weight
-(as described in section #sec:fee-calculation[1.6.1]).
+(as described in <<sect-fee-calculation>>).
 
 Additionally, Polkadot introduces a specified block ratio (as defined in
-section #sec:limitations[1.2.1]), ensuring that only a certain portion
-of the total block size gets used for regular extrinsics. The remaining
-space is reserved for critical, operational extrinsics required for the
-functionality by Polkadot itself.
+<<sect-limitations>>), ensuring that only a certain portion of the total block
+size gets used for regular extrinsics. The remaining space is reserved for
+critical, operational extrinsics required for the functionality by Polkadot
+itself.
 
-To begin, we introduce in Section #sec:assumptions[1.2] the assumption
-upon which the Polkadot transaction weight system is designed. In
-Section #sec:limitations[1.2.1], we discuss the limitation Polkadot
-needs to enforce on the block size. In Section
-#sec:runtime-primitives[1.3], we describe in detail the procedure upon
-which the weight of any transaction should be calculated. In Section
-#sec:practical-examples[1.5], we present how we apply this procedure to
-compute the weight of particular runtime functions.
+To begin, we introduce in <<sect-assumptions>> the assumption upon which the
+Polkadot transaction weight system is designed. In <<sect-limitations>>, we
+discuss the limitation Polkadot needs to enforce on the block size. In
+<<sect-runtime-primitives>>, we describe in detail the procedure upon which the
+weight of any transaction should be calculated. In <<sect-practical-examples>>,
+we present how we apply this procedure to compute the weight of particular
+runtime functions.
 
-[[sec:assumptions]]
+[#sect-assumptions]
 === Assumptions
 
 In this section, we define the concept of weight and we discuss the
@@ -58,113 +57,127 @@ weight system should:
 transaction fee to each extrinsic proportional to their resource
 consumption.
 
-These concepts are formalized in <<def-block-length>> and
-<<def-polkadot-block-limits>>:
+These concepts are formalized in <<defn-block-length>> and
+<<defn-polkadot-block-limits>>:
 
-[#def-block-length]#[def-block-length]# For a block latexmath:[$B$] with
-latexmath:[$Head(B)$] and latexmath:[$Body(B)$] the ḇlock length of
-latexmath:[$B$], latexmath:[$Len(B)$], is defined as the amount of raw
-bytes of latexmath:[$B$].
+.Block Length
+[#defn-block-length]
+====
+For a block latexmath:[B] with latexmath:[Head(B)] and latexmath:[Body(B)] the
+block length of latexmath:[B], latexmath:[Len(B)], is defined as the amount of
+raw bytes of latexmath:[B].
+====
 
-[#def:target-time-per-block]#[def:target-time-per-block]# Ṯargeted time
-per block denoted by latexmath:[$T(B)$] implies the amount of seconds
-that a new block should be produced by a validator. The transaction
-weights must consider latexmath:[$T(B)$] in order to set restrictions on
-time intensive transactions in order to saturate the block to its
-fullest potential until latexmath:[$T(B)$] is reached.
+.Target Time per Block
+[#defn-target-time-per-block]
+====
+Ṯargeted time per block denoted by latexmath:[T(B)] implies the amount of
+seconds that a new block should be produced by a validator. The transaction
+weights must consider latexmath:[T(B)] in order to set restrictions on time
+intensive transactions in order to saturate the block to its fullest potential
+until latexmath:[T(B)] is reached.
+====
 
-[#def:block-target-time]#[def:block-target-time]# Available block ration
-reserved for normal, noted by latexmath:[$R(B)$], is defined as the
-maximum weight of none-operational transactions in the Body of
-latexmath:[$B$] divided by latexmath:[$Len(B)$].
+.Block Target Time
+[#def:block-target-time]
+====
+Available block ration reserved for normal, noted by latexmath:[R(B)], is
+defined as the maximum weight of none-operational transactions in the Body of
+latexmath:[B] divided by latexmath:[Len(B)].
+====
 
-[#def-polkadot-block-limits]#[def-polkadot-block-limits]# P̱olkadot block
-limits as defined here should be respected by each block producer for
-the produced block latexmath:[$B$] to be deemed valid:
+.Block Limits
+[#defn-polkadot-block-limits]
+====
+P̱olkadot block limits as defined here should be respected by each block producer
+for the produced block latexmath:[B] to be deemed valid:
 
-. latexmath:[$Len(B) \le 5 \times 1'024 \times 1'024 = 5'242'880$] Bytes
-. latexmath:[$T(B) = 6\ seconds$]
-. latexmath:[$R(B) \le 0.75$]
+* latexmath:[Len(B) \le 5 \times 1'024 \times 1'024 = 5'242'880] Bytes
+* latexmath:[T(B) = 6\ seconds]
+* latexmath:[R(B) \le 0.75]
+====
 
-[#defn:weight-function]#[defn:weight-function]# The P̱olkadot transaction
-weight function denoted by latexmath:[$\mathcal{W}$] as follows:
-
-[latexmath]
-++++
-\[\begin{aligned}
-{2}
-    \mathcal{W} &: \mathcal{E} \rightarrow \mathbb{N} \\
-    \mathcal{W} &: E \mapsto w
-  \end{aligned}\]
-++++
-
-where latexmath:[$w$] is a non-negative integer representing the weight
-of the extrinsic latexmath:[$E$]. We define the weight of all inherent
-extrinsics as defined in the
-https://github.com/w3f/polkadot-spec/tree/master/host-spec[Polkadot Host
-Specification] to be equal to 0. We extend the definition of  function
-to compute the weight of the block as sum of weight of all extrinsics it
-includes:
+.Weight Function
+[#defn:weight-function]
+====
+The P̱olkadot transaction weight function denoted by latexmath:[\mathcal{W}] as follows:
 
 [latexmath]
 ++++
-\[\begin{aligned}
-{2}
-    \mathcal{W} &: \mathcal{B}\rightarrow \mathbb{N} \\
-    \mathcal{W} &: B \mapsto \sum_{E\in B}(W(E))
-  \end{aligned}\]
+\begin{aligned}
+  \mathcal{W} &: \mathcal{E} \rightarrow \mathbb{N} \\
+  \mathcal{W} &: E \mapsto w
+\end{aligned}
 ++++
+
+where latexmath:[w] is a non-negative integer representing the weight of the
+extrinsic latexmath:[E]. We define the weight of all inherent extrinsics as
+defined in the <<sect-inherents>> to be equal to 0. We extend the definition of
+latexmath:[\mathcal{W}] function to compute the weight of the block as sum of
+weight of all extrinsics it includes:
+
+[latexmath]
+++++
+\begin{aligned}
+  \mathcal{W} &: \mathcal{B}\rightarrow \mathbb{N} \\
+  \mathcal{W} &: B \mapsto \sum_{E\in B}(W(E))
+\end{aligned}
+++++
+====
 
 In the remainder of this section, we discuss the requirements to which
 the weight function needs to comply to.
 
-* Computations of function latexmath:[$\mathcal{W}(E)$] must be
-determined before execution of that latexmath:[$E$].
-* Due to the limited time window, computations of latexmath:[$\TWF$]
+* Computations of function latexmath:[\mathcal{W}(E)] must be
+determined before execution of that latexmath:[E].
+* Due to the limited time window, computations of latexmath:[\mathcal{W}]
 must be done quickly and consume few resources themselves.
-* latexmath:[$\TWF$] must be self contained and must not require I/O on
-the chain state. latexmath:[$\TWF(E)$] must depend solely on the Runtime
-function representing latexmath:[$E$] and its parameters.
+* latexmath:[\mathcal{W}] must be self contained and must not require I/O on
+the chain state. latexmath:[\mathcal{W}(E)] must depend solely on the Runtime
+function representing latexmath:[E] and its parameters.
 
 Heuristically, "heaviness" corresponds to the execution time of an
-extrinsic. In that way, the  value for various extrinsics should be
+extrinsic. In that way, the latexmath:[\mathcal{W}] value for various extrinsics should be
 proportional to their execution time. For example, if Extrinsic A takes
 three times longer to execute than Extrinsic B, then Extrinsic A should
 roughly weighs 3 times of Extrinsic B. Or:
 
 [latexmath]
 ++++
-\[\TWF(A)~3\times \TWF(B)\]
+\mathcal{W}(A) \approx 3 \times \mathcal{W}(B)
 ++++
 
-Nonetheless, latexmath:[$\TWF(E)$] can be manipulated depending on the
-priority of latexmath:[$E$] the chain is supposed to endorse.
+Nonetheless, latexmath:[\mathcal{W}(E)] can be manipulated depending on the
+priority of latexmath:[E] the chain is supposed to endorse.
 
-[[sec:limitations]]
+[#sect-limitations]
 ==== Limitations
 
 In this section we discuss how applying the limitation defined in
-Definition #def-polkadot-block-limits[[def-polkadot-block-limits]] can
-be translated to limitation latexmath:[$\TWF$]. In order to be able to
-translate those into concrete numbers, we need to identify an arbitrary
-maximum weight to which we scale all other computations. For that we
-first define the block weight and then assume a maximum on it block
-length in Definition #def:block-weight[[def:block-weight]]:
+<<defn-polkadot-block-limits>> can be translated to limitation latexmath:[\mathcal{W}].
+In order to be able to translate those into concrete numbers, we need to
+identify an arbitrary maximum weight to which we scale all other computations.
+For that we first define the block weight and then assume a maximum on it block
+length in <<defn-block-weight>>:
 
-[#def:block-weight]#[def:block-weight]# We define the ḇlock weight of
-block latexmath:[$B$], formally denoted as latexmath:[$\TWF(B)$], to be:
+.Block Weight
+[#defn-block-weight]
+====
+We define the block weight of block latexmath:[B], formally denoted as
+latexmath:[\mathcal{W}(B)], to be:
 
 [latexmath]
 ++++
-\[\TWF(B) = \sum^{|\mathcal{E}|}_{n = 0} (W(E_n))\]
+\mathcal{W}(B) = \sum^{|\mathcal{E}|}_{n = 0} (W(E_n))
 ++++
 
 We require that:
 
 [latexmath]
 ++++
-\[\TWF(B) < 2'000'000'000'000\]
+\mathcal{W}(B) < 2'000'000'000'000
 ++++
+====
 
 The weights must fulfil the requirements as noted by the fundamentals
 and limitations, and can be assigned as the author sees fit. As a simple
@@ -177,11 +190,11 @@ before reaching the targeted block time. Weights give indicators to
 block producers on which extrinsics to include in order to reach the
 blocks fullest potential.
 
-[[sec:runtime-primitives]]
+[#sect-runtime-primitives]
 === Calculation of the weight function
 
-In order to calculate weight of block latexmath:[$B$],
-latexmath:[$TWF(B)$], one needs to evaluate the weight of each
+In order to calculate weight of block latexmath:[B],
+latexmath:[\mathcal{W}(B)], one needs to evaluate the weight of each
 transaction included in the block. Each transaction causes the execution
 certain Runtime functions. As such, to calculate the weight of a
 transaction, those functions must be analyzed in order to determine
@@ -191,12 +204,12 @@ manipulation. Subsequently the performance and execution time of each
 part will be evaluated based on variety of input parameters. Based on
 those observations, weights are assigned Runtime functions or parameters
 which contribute to long execution times. These sub component of the
-code are discussed in Section #sect:primitive-types[1.4.1].
+code are discussed in <<sect-primitive-types>>.
 
-The general algorithm to calculate latexmath:[$\TWF(E)$] is described in
-the Section #sect:benchmarking[1.4].
+The general algorithm to calculate latexmath:[\mathcal{W}(E)] is described in
+the <<sect-benchmarking>>.
 
-[[sect:benchmarking]]
+[#sect-benchmarking]
 === Benchmarking
 
 Calculating the extrinsic weight solely based on theoretical complexity
@@ -212,22 +225,22 @@ cases and worst case senarios. Instead, we benchmark all available
 Runtime functions which are invoked in the course of execution of
 extrinsics with a large collection of carefully selected input
 parameters and use the result of the benchmarking process to evaluate
-latexmath:[$\TWF(E)$].
+latexmath:[\mathcal{W}(E)].
 
 In order to select useful parameters, the Runtime functions have to be
 analysed to fully understand which behaviors or conditions can result in
-expensive execution times, which is described closer in section
-#sect:primitive-types[1.4.1]. Not every possible benchmarking outcome
-can be invoked by varying input parameters of the Runtime function. In
-some circumstances, preliminary work is required before a specific
-benchmark can be reliably measured, such as creating certain preexisting
-entries in the storage or other changes to the environment.
+expensive execution times, which is described closer in <<sect-primitive-types>>.
+Not every possible benchmarking outcome can be invoked by varying input
+parameters of the Runtime function. In some circumstances, preliminary work
+is required before a specific benchmark can be reliably measured, such as
+creating certain preexisting entries in the storage or other changes to the
+environment.
 
-The Practical Examples Section #sec:practical-examples[1.5] covers the
+The Practical Examples (<<sect-practical-examples>>) covers the
 analysis process and the implementation of preliminary work in more
 detail.
 
-[[sect:primitive-types]]
+[#sect-primitive-types]
 ==== Primitive Types
 
 The Runtime reuses components, known as "primitives", to interact with
@@ -241,16 +254,16 @@ its modules, depending on the context:
 * *Value*: Operations on a single value. The final key-value pair is
 stored under the key:
 +
-....
+----
     hash(module_prefix) + hash(storage_prefix)
-....
+----
 * *Map*: Operations on mulitple values, datasets, where each entry has
 its corresponding, unique key. The final key-value pair is stored under
 the key:
 +
-....
+----
     hash(module_prefix) + hash(storage_prefix) + hash(encode(key))
-....
+----
 * *Double map*: Just like *Map*, but uses two keys instead of one. This
 type is also known as "child storage", where the first key is the
 "parent key" and the second key is the "child key". This is useful in
@@ -259,10 +272,10 @@ order to scope storage entries (child keys) under a certain `context`
 storage entries based on the context. The final key-value pair is stored
 under the key:
 +
-....
+----
     hash(module_prefix) + hash(storage_prefix)
       + hash(encode(key1)) + hash(encode(key2))
-....
+----
 
 It depends on the functionality of the Runtime module (or its
 sub-processes, rather) which storage type to use. In some cases, only a
@@ -275,7 +288,7 @@ its own types that are used as input and output values. The abstractions
 do give indicators on what operations must be closely observed and where
 potential performance penalties and attack vectors are possible.
 
-[[sect:primitive-types-considerations]]
+[#sect-primitive-types-considerations]
 ===== Considerations
 
 The storage layout is mostly the same for every primitive type,
@@ -306,7 +319,7 @@ entries in storage, then a certain weight should be applied for each
 for such cases. If it doesn’t, it unconditionally has to and the Runtime
 module must be adjusted. When selecting parameters for benchmarking, the
 benchmarks should range from the minimum value to the maximum value, as
-described in <<para-max-value>>.
+described in <<defn-max-value>>.
 * *Input parameters* - Input parameters that users pass on to the
 Runtime function can result in expensive operations. Depending on the
 data type, it can be appropriate to add additional weights based on
@@ -315,14 +328,17 @@ varying sizes. The Runtime must define limits on those properties. If it
 doesn’t, it unconditionally has to and the Runtime module must be
 adjusted. When selecting parameters for benchmarking, the benchmarks
 should range from the minimum values to the maximum value, as described
-in paragraph <<para-max-value>>.
+in paragraph <<defn-max-value>>.
 
-[#para-max-value]
+.Maximum Value
+[#defn-max-value]
+====
 What the maximum value should be really depends on the functionality that the
 Runtime function is trying to provide. If the choice for that value is not
 obvious, then it’s advised to run benchmarks on a big range of values and pick a
 conservative value below the `targeted time per block` limit as described in
-section #sec:limitations[1.2.1].
+section <<sect-limitations>>.
+====
 
 ==== Parameters
 
@@ -338,8 +354,8 @@ other outcomes that can impact performance.
 It’s not possible to benchmark every single value. However, one should
 select a range of inputs to benchmark, spanning from the minimum value
 to the maximum value which will most likely exceed the expected usage of
-that function. This is described in more detail in section
-#sect:primitive-types-considerations[1.4.1.1]. The benchmarks should run
+that function. This is described in more detail in
+<<sect-primitive-types-considerations>>. The benchmarks should run
 individual executions/iterations within that range, where the chosen
 parameters should give insight on the execution time. Selecting
 imprecise parameters or too extreme ranges might indicate an inaccurate
@@ -381,12 +397,12 @@ of other processes or software. Additionally, the benchmarks should be
 executed on multiple machines with different system resources, such as
 CPU performance, CPU cores, RAM and storage speed.
 
-[[sec:practical-examples]]
+[#sect-practical-examples]
 === Practical examples
 
 This section walks through Runtime functions available in the Polkadot
-Runtime to demonstrate the analysis process as described in section
-#sect:primitive-types[1.4.1].
+Runtime to demonstrate the analysis process as described in
+<<sect-primitive-types>>.
 
 In order for certain benchmarks to produce conditions where resource
 heavy computation or excessive I/O can be observed, the benchmarks might
@@ -394,7 +410,7 @@ require some preliminary work on the environment, since those conditions
 cannot be created with simply selected parameters. The analysis process
 shows indicators on how the preliminary work should be implemented.
 
-==== Practical Example #1: `r`equest_judgement
+==== Practical Example #1: `request_judgement`
 
 In Polkadot, accounts can save information about themselves on-chain,
 known as the "Identity Info". This includes information such as display
@@ -415,9 +431,9 @@ submission.
 The function `request_judgement` from the `identity` pallet allows users
 to request judgement from a specific registrar.
 
-....
-  (func $request_judgement (param $req_index int) (param $max_fee int))
-....
+----
+(func $request_judgement (param $req_index int) (param $max_fee int))
+----
 
 * `req_index`: the index which is assigned to the registrar.
 * `max_fee`: the maximum fee the requester is willing to pay. The
@@ -431,18 +447,20 @@ performance, as it will be revealed by this analysis.
 First, it fetches a list of current registrars from storage and then
 searches that list for the specified registrar index.
 
-....
+[source,rust]
+----
 let registrars = <Registrars<T>>::get();
 let registrar = registrars.get(reg_index as usize).and_then(Option::as_ref)
   .ok_or(Error::<T>::EmptyIndex)?;
-....
+----
 
 Then, it searches for the Identity Info from storage, based on the
 sender of the transaction.
 
-....
+[source,rust]
+----
 let mut id = <IdentityOf<T>>::get(&sender).ok_or(Error::<T>::NoIdentity)?;
-....
+----
 
 The Identity Info contains all fields that have a data in them, set by
 the corresponding owner of the identity, in an ordered form. It then
@@ -455,7 +473,8 @@ index where a matching element can be inserted while maintaining sorted
 order. This results in memory reallocation, which increases resource
 consumption.
 
-....
+[source,rust]
+----
 match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
   Ok(i) => if id.judgements[i].1.is_sticky() {
     Err(Error::<T>::StickyJudgement)?
@@ -464,7 +483,7 @@ match id.judgements.binary_search_by_key(&reg_index, |x| x.0) {
   },
   Err(i) => id.judgements.insert(i, item),
 }
-....
+----
 
 In the end, the function deposits the specified `max_fee` balance, which
 can later be redeemed by the registrar. Then, an event is created to
@@ -472,13 +491,14 @@ insert the Identity Info into storage. The creation of events is
 lightweight, but its execution is what will actually commit the state
 changes.
 
-....
+[source,rust]
+----
 T::Currency::reserve(&sender, registrar.fee)?;
 <IdentityOf<T>>::insert(&sender, id);
 Self::deposit_event(RawEvent::JudgementRequested(sender, reg_index));
-....
+----
 
-[[considerations]]
+[#sect-considerations]
 ===== Considerations
 
 The following points must be considered:
@@ -502,30 +522,66 @@ prevent the list of registrars of reaching an undesired length. This
 value should have some influence on the benchmarking process.
 
 The benchmarking implementation of for the function
-latexmath:[$request\_judgement$] can be defined as follows:
+latexmath:[request\_judgement] can be defined as follows:
 
-latexmath:[$\TWF$] collection = \{}
-Generate-Registrars(latexmath:[$amount$])
-latexmath:[$caller \leftarrow$] Create-Account("caller",
-latexmath:[$1$]) Set-Balance(latexmath:[$caller$], 100)
-latexmath:[$time \leftarrow$]
-Timer(Request-Judgement(Random(latexmath:[$amount$]), 100))
-Add-To(latexmath:[$collection$], latexmath:[$time$])
-latexmath:[$\TWF \leftarrow$] Compute-Weight(latexmath:[$collection$]);
-latexmath:[$\TWF$]
+.Run multiple benchmark iterations for `request_judgement` Runtime function
+[latexmath]
+++++
+\textbf{Output:}~\mathcal{W} \\
+~\\
+\textbf{init}~collection = \{\} \\
+~\\
+\textbf{for}~amount~\leftarrow 1,MaxRegistrars~\textbf{do} \\
+  \textrm{Generate-Registrars}(amount) \\
+  caller \leftarrow \textrm{Create-Account}(\textrm{``caller''}, 1) \\
+  \textrm{Set-Balance}(caller, 100) \\
+  time \leftarrow \textrm{Timer}(\textrm{Request-Judgement}(\textrm{Random}(amount), 100)) \\
+  \textrm{Add-To}(collection, time) \\
+\textbf{end for} \\
+~\\
+\mathcal{W} \leftarrow \textrm{Compute-Weight}(collection) \\
+\textbf{return}~\mathcal{W}
+++++
 
-* Generate-Registrars(latexmath:[$amount$])
-* Create-Account(latexmath:[$name$], latexmath:[$index$])
-* Set-Balance(latexmath:[$account$], latexmath:[$balance$])
-* Timer(latexmath:[$function$])
-* Request-Judgement(latexmath:[$registrar\_index$],
-latexmath:[$max\_fee$])
-* Random(latexmath:[$num$])
-* Add-To(latexmath:[$collection$], latexmath:[$time$])
-* Compute-Weight(latexmath:[$collection$])
+* Generate-Registrars(latexmath:[amount])
++
+Creates number of registrars and inserts those records into storage.
 
-[[sec:practical-example-payout-stakers]]
-==== Practical Example #2 `p`ayout_stakers
+* Create-Account(latexmath:[name], latexmath:[index])
++
+Creates a Blake2 hash of the concatenated input of name and index represent-
+ing the address of a account. This function only creates an address and does not
+conduct any I/O.
+
+* Set-Balance(latexmath:[account], latexmath:[balance])
++
+Sets a initial balance for the specified account in the storage state.
+
+* Timer(latexmath:[function])
++
+Measures the time from the start of the specified f unction to its completion.
+
+* Request-Judgement(latexmath:[registrar\_index], latexmath:[max\_fee])
++
+Calls the corresponding request_judgement Runtime function and passes on
+the required parameters.
+
+* Random(latexmath:[num])
++
+Picks a random number between 0 and num. This should be used when the
+benchmark should account for unpredictable values.
+
+* Add-To(latexmath:[collection], latexmath:[time])
++
+Adds a returned time measurement (time) to collection.
+
+* Compute-Weight(latexmath:[collection])
++
+Computes the resulting weight based on the time measurements in the collection.
+The worst case scenario should be chosen (the highest value).
+
+[#sect-practical-example-payout-stakers]
+==== Practical Example #2: `payout_stakers`
 
 ===== Analysis
 
@@ -546,60 +602,67 @@ such as actively bonded balance and a list of tracked rewards. The
 function only retains the entries of the history depth, and conducts a
 binary search for the specified era.
 
-....
+[source,rust]
+----
 let era_payout = <ErasValidatorReward<T>>::get(&era)
   .ok_or_else(|| Error::<T>::InvalidEraToReward)?;
 
 let controller = Self::bonded(&validator_stash).ok_or(Error::<T>::NotStash)?;
 let mut ledger = <Ledger<T>>::get(&controller).ok_or_else(|| Error::<T>::NotController)?;
-....
+----
 
-....
+[source,rust]
+----
 ledger.claimed_rewards.retain(|&x| x >= current_era.saturating_sub(history_depth));
 match ledger.claimed_rewards.binary_search(&era) {
   Ok(_) => Err(Error::<T>::AlreadyClaimed)?,
   Err(pos) => ledger.claimed_rewards.insert(pos, era),
 }
-....
+----
 
 The retained claimed rewards are inserted back into storage.
 
-....
+[source,rust]
+----
 <Ledger<T>>::insert(&controller, &ledger);
-....
+----
 
 As an optimization, Runtime only fetches a list of the 64 highest staked
 nominators, although this might be changed in the future. Accordingly,
 any lower staked nominator gets no reward.
 
-....
+[source,rust]
+----
 let exposure = <ErasStakersClipped<T>>::get(&era, &ledger.stash);
-....
+----
 
 Next, the function gets the era reward points from storage.
 
-....
+[source,rust]
+----
 let era_reward_points = <ErasRewardPoints<T>>::get(&era);
-....
+----
 
 After that, the payout is split among the validator and its nominators.
 The validators receives the payment first, creating an insertion into
 storage and sending a deposit event to the scheduler.
 
-....
+[source,rust]
+----
 if let Some(imbalance) = Self::make_payout(
   &ledger.stash,
   validator_staking_payout + validator_commission_payout
 ) {
   Self::deposit_event(RawEvent::Reward(ledger.stash, imbalance.peek()));
 }
-....
+----
 
 Then, the nominators receive their payout rewards. The functions loops
 over the nominator list, conducting an insertion into storage and a
 creation of a deposit event for each of the nominators.
 
-....
+[source,rust]
+----
 for nominator in exposure.others.iter() {
   let nominator_exposure_part = Perbill::from_rational_approximation(
     nominator.value,
@@ -612,7 +675,7 @@ for nominator in exposure.others.iter() {
     Self::deposit_event(RawEvent::Reward(nominator.who.clone(), imbalance.peek()));
   }
 }
-....
+----
 
 [[considerations-1]]
 ===== Considerations
@@ -627,53 +690,98 @@ each increases execution time. The Runtime fetches up to 64 nominators.
 
 ===== Benchmarking Framework
 
-[#defn-history-depth]#[defn-history-depth]# H̱istory Depth indicated as
-`MaxNominatorRewardedPerValidator` is a fixed constant specified by the
-Polkadot Runtime which dictates the number of Eras the Runtime will
-reward nominators and validators for.
+.History Depth
+[#defn-history-depth]
+====
+H̱istory Depth indicated as `MaxNominatorRewardedPerValidator` is a fixed
+constant specified by the Polkadot Runtime which dictates the number of Eras
+the Runtime will reward nominators and validators for.
+====
 
-[#defn-max_nominator_reward_per_validator]#[defn-max_nominator_reward_per_validator]#
+.Maximum Nominator Reward
+[#defn-max_nominator_reward_per_validator]
+====
 M̱aximum Nominator Rewarded Per Validator indicated as
-`M`axNominatorRewardedPerValidator, specifies the maximum amount of the
-highest-staked nominators which will get a reward. Those values should
-have some influence in the benchmarking process.
+`MaxNominatorRewardedPerValidator`, specifies the maximum amount of the
+highest-staked nominators which will get a reward. Those values should have
+some influence in the benchmarking process.
+====
 
 The benchmarking implementation for the function
-latexmath:[$payout\_stakers$] can be defined as follows:
+latexmath:[payout\_stakers] can be defined as follows:
 
-latexmath:[$\TWF$] collection = \{} latexmath:[$validator \leftarrow$]
-Generate-Validator() Validate(latexmath:[$validator$]);
-latexmath:[$nominators \leftarrow$]
-Generate-Nominators(latexmath:[$amount$])
-Nominate(latexmath:[$validator$], latexmath:[$nominator$])
-latexmath:[$era\_index \leftarrow$]
-Create-Rewards(latexmath:[$validator$], latexmath:[$nominators$],
-latexmath:[$era\_depth$]) latexmath:[$time \leftarrow$]
-Timer(Payout-Stakers(latexmath:[$validator$]),
-latexmath:[$era\_index$])) Add-To(latexmath:[$collection$],
-latexmath:[$time$]) latexmath:[$\TWF \leftarrow$]
-Compute-Weight(latexmath:[$collection$]) latexmath:[$\TWF$]
+.Run multiple benchmark iterations for `request_judgement` Runtime function
+[latexmath]
+++++
+\textbf{Output:}~\mathcal{W} \\
+~\\
+\textbf{init}~collection = \{\} \\
+~\\
+\textbf{for}~amount \leftarrow 1,MaxNominatorRewardedPerValidator~\textbf{do} \\
+\textbf{for}~era\_depth \leftarrow 1,HistoryDepth~\textbf{do} \\
+validator \leftarrow \textrm{Generate-Validator}() \\
+\textrm{Validate}(validator) \\
+nominators \leftarrow \textrm{Generate-Nominators}(amount) \\
+~\\
+\textbf{for}~nominator \in nominators~\textbf{do} \\
+\textrm{Nominate}(validator, nominator) \\
+\textbf{end for} \\
+~\\
+era\_index \leftarrow \textrm{Create-Rewards}(validator,nominators, era\_depth) \\
+time \leftarrow \textrm{Timer}(\textrm{Payout-Stakers}(validator), era\_index)) \\
+\textrm{Add-To}(collection, time) \\
+\textbf{end for} \\
+\textbf{end for} \\
+~\\
+\mathcal{W} \leftarrow \textrm{Compute-Weight}(collection) \\
+\textbf{return}~\mathcal{W}
+++++
 
 * Generate-Validator()
-* Validate(latexmath:[$validator$])
-* Generate-Nominators(latexmath:[$amount$])
-* Nominate(latexmath:[$validator$], latexmath:[$nominator$])
-* Create-Rewards(latexmath:[$validator$], latexmath:[$nominators$],
-latexmath:[$era\_depth$])
-* Timer(latexmath:[$function$])
-* Add-To(latexmath:[$collection$], latexmath:[$time$])
-* Compute-Weight(latexmath:[$collection$])
++
+Creates a validators with some unbonded balances.
+
+* Validate(latexmath:[validator])
++
+Bonds balances of validator and bonds balances.
+
+* Generate-Nominators(latexmath:[amount])
++
+Creates the amount of nominators with some unbonded balances.
+
+* Nominate(latexmath:[validator], latexmath:[nominator])
++
+Starts nomination of nominator for validator by bonding balances.
+
+* Create-Rewards(latexmath:[validator], latexmath:[nominators], latexmath:[era\_depth])
++
+Starts an Era and creates pending rewards for validator and nominators.
+
+* Timer(latexmath:[function])
++
+Measures the time from the start of the specified f unction to its completion.
+
+* Add-To(latexmath:[collection], latexmath:[time])
++
+Adds a returned time measurement (time) to collection.
+
+* Compute-Weight(latexmath:[collection])
++
+Computes the resulting weight based on the time measurements in the collection.
+The worst case scenario should be chosen (the highest value).
+
 
 ==== Practical Example #3: `balances`
 
-The latexmath:[$transfer$] function of the `balances` module is designed
+The latexmath:[transfer] function of the `balances` module is designed
 to move the specified balance by the sender to the receiver.
 
 ===== Analysis
 
 The source code of this function is quite short:
 
-....
+[source,rust]
+----
 let transactor = ensure_signed(origin)?;
 let dest = T::Lookup::lookup(dest)?;
 <Self as Currency<_>>::transfer(
@@ -682,7 +790,7 @@ let dest = T::Lookup::lookup(dest)?;
   value,
   ExistenceRequirement::AllowDeath
 )?;
-....
+----
 
 However, one need to pay close attention to the property `AllowDeath`
 and to how the function treat existingand non-existing accounts
@@ -694,7 +802,7 @@ and all associated data from storage.
 * If recipient account has no balance, the transfer also needs to create
 the recipient account.
 
-[[considerations-2]]
+[#considerations-2]
 ===== Considerations
 
 Specific parameters can could have a significant impact for this
@@ -712,7 +820,7 @@ creation
 
 Executing a benchmark for each balance increment within the balance
 range for each index increment within the index range will generate too
-many variants (latexmath:[$1000 \times 999$]) and highly increase
+many variants (latexmath:[1000 \times 999]) and highly increase
 execution time. Therefore, this benchmark is configured to first set the
 balance at value 1’000 and then to iterate from 1 to 1’000 for the index
 value. Once the index value reaches 1’000, the balance value will reset
@@ -732,42 +840,73 @@ detail):
 
 The parameters itself do not influence or trigger the two worst
 conditions and must be handled by the implemented benchmarking tool. The
-latexmath:[$transfer$] benchmark is implemented as defined in algorithm
+latexmath:[transfer] benchmark is implemented as defined in algorithm
 <<sec-algo-benchmark-transfer>>.
 
 ===== Benchmarking Framework
 
 The benchmarking implementation for the Polkadot Runtime function
-latexmath:[$transfer$] is defined as follows (starting with the Main
+latexmath:[transfer] is defined as follows (starting with the Main
 function):
 
-[#sec-algo-benchmark-transfer]
+.Run multiple benchmark iterations for transfer Runtime function.
+[latexmath#sec-algo-benchmark-transfer]
+++++
+\textbf{Output:}~collection : \text{collection of time measurements of all benchmark iterations} \\
+~\\
+\textbf{function}~\textrm{Main}() \\
+  \textbf{init}~collection = \{\} \\
+  \textbf{init}~balance = 1'000 \\
+  ~\\
+  \textbf{for}~index\gets 1,1'000~\textbf{do} \\
+    time \leftarrow \textrm{Run-Benchmark}(index, balance) \\
+    \textrm{Add-To}(collection, time) \\
+  \textbf{end for} \\
+  ~\\
+  \textbf{init}~index = 1'000 \\
+  \textbf{for}~balance \gets 2,1'000~\textbf{do} \\
+    time \leftarrow \textrm{Run-Benchmark}(index, balance) \\
+    \textrm{Add-To}(collection, time) \\
+  \textbf{end for} \\
+  ~\\
+  \mathcal{W} \leftarrow \textrm{Compute-Weight}(collection$) \\
+  \textbf{return}~\mathcal{W} \\
+\textbf{end} \\
+~\\
+\textbf{function}~\textrm{Run-Benchmark}(index, balance) \\
+  sender \leftarrow \textrm{Create-Account}(\textit{"caller"}, index) \\
+  recipient \leftarrow \textrm{Create-Account}(\textit{"recipient"}, index) \\
+  \textrm{Set-Balance}(sender, balance) \\
+  ~\\
+  time \leftarrow \textrm{Timer}(\textrm{Transfer}(sender, recipient, balance)) \\
+  \textbf{return}~time \\
+\textbf{end} \\
+++++
 
-latexmath:[$collection$]: a collection of time measurements of all
-benchmark iterations collection = \{} latexmath:[$balance = 1'000$]
-latexmath:[$time \leftarrow$] Run-Benchmark(latexmath:[$index$],
-latexmath:[$balance$]) Add-To(latexmath:[$collection$],
-latexmath:[$time$]) latexmath:[$index = 1'000$]
-latexmath:[$time \leftarrow$] Run-Benchmark(latexmath:[$index$],
-latexmath:[$balance$]) Add-To(latexmath:[$collection$],
-latexmath:[$time$]) latexmath:[$\TWF \leftarrow$]
-Compute-Weight(latexmath:[$collection$]) latexmath:[$\TWF$]
-latexmath:[$sender \leftarrow$] Create-Account(_"caller"_,
-latexmath:[$index$]) latexmath:[$recipient \leftarrow$]
-Create-Account(_"recipient"_, latexmath:[$index$])
-Set-Balance(latexmath:[$sender$], latexmath:[$balance$])
-latexmath:[$time \leftarrow$]Timer(Transfer(latexmath:[$sender$],
-latexmath:[$recipient$], latexmath:[$balance$])) latexmath:[$time$]
+* Create-Account(latexmath:[name], latexmath:[index])
++
+Creates a Blake2 hash of the concatenated input of name and index representing the address of a account. This function only creates an address and does not conduct any I/O.
+* Set-Balance(latexmath:[account], latexmath:[balance])
++
+Sets a initial balance for the specified account in the storage state.
 
-* Create-Account(latexmath:[$name$], latexmath:[$index$])
-* Set-Balance(latexmath:[$account$], latexmath:[$balance$])
-* Transfer(latexmath:[$sender$], latexmath:[$recipient$],
-latexmath:[$balance$])
-* Add-To(latexmath:[$collection$], latexmath:[$time$])
-* Timer(latexmath:[$function$])
-* Compute-Weight(latexmath:[$collection$])
+* Transfer(latexmath:[sender], latexmath:[recipient], latexmath:[balance])
++
+Transfers the specified balance from sender to recipient by calling the corresponding Runtime function. This represents the target Runtime function to be benchmarked.
 
-==== Practical Example #4
+* Add-To(latexmath:[collection], latexmath:[time])
++
+Adds a returned time measurement (time) to collection.
+
+* Timer(latexmath:[function])
++
+Adds a returned time measurement (time) to collection.
+
+* Compute-Weight(latexmath:[collection])
++
+Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
+
+==== Practical Example #4: `withdraw_unbounded`
 
 The `withdraw_unbonded` function of the `staking` module is designed to
 move any unlocked funds from the staking management system to be ready
@@ -776,22 +915,24 @@ for transfer. It contains some operations which have some I/O overhead.
 ===== Analysis
 
 Similarly to the `payout_stakers` function
-(#sec:practical-example-payout-stakers[1.5.2]), this function fetches
+(<<sect-practical-example-payout-stakers>>), this function fetches
 the Ledger which contains information about the stash, such as bonded
 balance and unlocking balance (balance that will eventually be freed and
 can be withdrawn).
 
-....
+[source,rust]
+----
 if let Some(current_era) = Self::current_era() {
   ledger = ledger.consolidate_unlocked(current_era)
 }
-....
+----
 
 The function `consolidate_unlocked` does some cleaning up on the ledger,
 where it removes outdated entries from the unlocking balance (which
 implies that balance is now free and is no longer awaiting unlock).
 
-....
+[source,rust]
+----
 let mut total = self.total;
 let unlocking = self.unlocking.into_iter()
   .filter(|chunk| if chunk.era > current_era {
@@ -801,14 +942,15 @@ let unlocking = self.unlocking.into_iter()
     false
   })
   .collect();
-....
+----
 
 This function does a check on wether the updated ledger has any balance
 left in regards to staking, both in terms of locked, staking balance and
 unlocking balance. If not amount is left, the all information related to
 the stash will be deleted. This results in multiple I/O calls.
 
-....
+[source,rust]
+----
 if ledger.unlocking.is_empty() && ledger.active.is_zero() {
   // This account must have called `unbond()` with some value that caused the active
   // portion to fall below existential deposit + will have no more unlocking chunks
@@ -818,34 +960,37 @@ if ledger.unlocking.is_empty() && ledger.active.is_zero() {
   T::Currency::remove_lock(STAKING_ID, &stash);
   // This is worst case scenario, so we use the full weight and return None
   None
-....
+----
 
 The resulting call to `Self::kill_stash()` triggers:
 
-....
+[source,rust]
+----
 slashing::clear_stash_metadata::<T>(stash, num_slashing_spans)?;
 <Bonded<T>>::remove(stash);
 <Ledger<T>>::remove(&controller);
 <Payee<T>>::remove(stash);
 <Validators<T>>::remove(stash);
 <Nominators<T>>::remove(stash);
-....
+----
 
 Alternatively, if there’s some balance left, the adjusted ledger simply
 gets updated back into storage.
 
-....
+[source,rust]
+----
 // This was the consequence of a partial unbond. just update the ledger and move on.
 Self::update_ledger(&controller, &ledger);
-....
+----
 
 Finally, it withdraws the unlocked balance, making it ready for
 transfer:
 
-....
+[source,rust]
+----
 let value = old_total - ledger.total;
 Self::deposit_event(RawEvent::Withdrawn(stash, value));
-....
+----
 
 ===== Parameters
 
@@ -876,31 +1021,70 @@ performed in the storage.
 The benchmarking implementation for the Polkadot Runtime function
 `withdraw_unbonded` is defined as follows:
 
-TODO
+.Run multiple benchmark iterations for `withdraw_unbonded` Runtime function
+[latexmath#sec-algo-benchmark-transfer2]
+++++
+\textbf{Output:}~\mathcal{W} \\
+~\\
+\textbf{init}~collection = \{\} \\
+~\\
+\textbf{for}~balance \leftarrow 1, 100~\textbf{do} \\
+stash \leftarrow \textrm{Create-Account}(\textit{"stash"}, 1) \\
+controller \leftarrow \textrm{Create-Account}(\textit{"controller"}, 1) \\
+\textrm{Set-Balance}(stash, 100) \\
+\textrm{Set-Balance}(controller, 1) \\
+\textrm{Bond}(stash, controller, balance) \\
+\textrm{Pass-Era}() \\
+\textrm{UnBond}(controller, balance) \\
+\textrm{Pass-Era}() \\
+time \leftarrow \textrm{Timer}(\textrm{Withdraw-Unbonded}(controller)) \\
+\textrm{Add-To}(collection, time) \\
+\textbf{end for} \\
+~\\
+\mathcal{W} \leftarrow \textrm{Compute-Weight}(collection) \\
+\textbf{return}~\mathcal{W}
+++++
 
-[#sec-algo-benchmark-transfer2]
+* Create-Account(latexmath:[name], latexmath:[index])
++
+Creates a Blake2 hash of the concatenated input of name and index representing
+the address of a account. This function only creates an address and does not
+conduct any I/O.
 
-latexmath:[$\TWF$] collection = \{} latexmath:[$stash \leftarrow$]
-Create-Account(_"stash"_, 1) latexmath:[$controller \leftarrow$]
-Create-Account(_"controller"_, 1) Set-Balance(latexmath:[$stash$], 100)
-Set-Balance(latexmath:[$controller$], 1) Bond(latexmath:[$stash$],
-latexmath:[$controller$], latexmath:[$balance$]) Pass-Era()
-UnBond(latexmath:[$controller$], latexmath:[$balance$]) Pass-Era()
-latexmath:[$time \leftarrow$]Timer(Withdraw-Unbonded(latexmath:[$controller$]))
-Add-To(latexmath:[$collection$], latexmath:[$time$])
-latexmath:[$\TWF \leftarrow$] Compute-Weight(latexmath:[$collection$])
-latexmath:[$\TWF$]
+* Set-Balance(latexmath:[account], latexmath:[balance])
++
+Sets a initial balance for the specified account in the storage state.
 
-* Create-Account(latexmath:[$name$], latexmath:[$index$])
-* Set-Balance(latexmath:[$account$], latexmath:[$balance$])
-* Bond(latexmath:[$stash$], latexmath:[$controller$],
-latexmath:[$amount$])
-* UnBond(latexmath:[$account$], latexmath:[$amount$])
+* Bond(latexmath:[stash], latexmath:[controller], latexmath:[amount])
++
+Bonds the specified amount for the stash and controller pair.
+
+* UnBond(latexmath:[account], latexmath:[amount])
++
+Unbonds the specified amount for the given account.
+
 * Pass-Era()
-* Withdraw-Unbonded(latexmath:[$controller$])
-* Add-To(latexmath:[$collection$], latexmath:[$time$])
-* Timer(latexmath:[$function$])
-* Compute-Weight(latexmath:[$collection$])
++
+Pass one era. Forces the function `withdraw_unbonded` to update the ledger and
+eventually delete information.
+
+* Withdraw-Unbonded(latexmath:[controller])
++
+Withdraws the the full unbonded amount of the specified controller account. This
+represents the target Runtime function to be benchmarked.
+
+* Add-To(latexmath:[collection], latexmath:[time])
++
+Adds a returned time measurement (time) to collection.
+
+* Timer(latexmath:[function])
++
+Measures the time from the start of the specified f unction to its completion.
+
+* Compute-Weight(latexmath:[collection])
++
+Computes the resulting weight based on the time measurements in the collection.
+The worst case scenario should be chosen (the highest value).
 
 === Fees
 
@@ -909,7 +1093,7 @@ That fee must always be covered by the sender of the transaction.
 Polkadot has a flexible mechanism to determine the minimum cost to
 include transactions in a block.
 
-[[sec:fee-calculation]]
+[#sect-fee-calculation]
 ==== Fee Calculation
 
 Polkadot fees consists of three parts:
@@ -926,10 +1110,11 @@ The final fee can be summarized as:
 
 [latexmath]
 ++++
-\[\begin{aligned}
-\lefteqn{fee = base\ fee}\\
-      &&{} + length\ of\ transaction\ in\ bytes \times length\ fee\\
-      &&{} + weight\ to\ fee\\\end{aligned}\]
+\begin{aligned}
+fee &= base\ fee \\
+    &{} + length\ of\ transaction\ in\ bytes \times length\ fee \\
+    &{} + weight\ to\ fee \\
+\end{aligned}
 ++++
 
 ==== Definitions in Polkadot
@@ -942,10 +1127,10 @@ The Polkadot Runtime defines the following values:
 +
 [latexmath]
 ++++
-\[weight\ fee = weight \times (100\ uDOTs \div (10 \times 10'000))\]
+weight\ fee = weight \times (100\ uDOTs \div (10 \times 10'000))
 ++++
 A weight of 10’000 (the smallest non-zero weight) is mapped to
-latexmath:[$\frac{1}{10}$] of 100 uDOT. This fee will never exceed the
+latexmath:[\frac{1}{10}] of 100 uDOT. This fee will never exceed the
 max size of an unsigned 128 bit integer.
 
 ==== Fee Multiplier
@@ -968,7 +1153,7 @@ The final fee is calculated as:
 
 [latexmath]
 ++++
-\[final\ fee = fee \times Fee\ Multiplier\]
+final\ fee = fee \times Fee\ Multiplier
 ++++
 
 ===== Update Multiplier
@@ -979,12 +1164,13 @@ according the following formula:
 
 [latexmath]
 ++++
-\[\begin{aligned}
-diff &=& (target\ weight - previous\ block\ weight)\\
-v &=& 0.00004\\
-next\ weight &=& weight \times (1 + (v \times diff) + (v \times diff)^2 / 2)\\\end{aligned}\]
+\begin{aligned}
+  diff &=& (target\ weight - previous\ block\ weight) \\
+  v &=& 0.00004 \\
+  next\ weight &=& weight \times (1 + (v \times diff) + (v \times diff)^2 / 2) \\
+\end{aligned}
 ++++
 
 Polkadot defines the `target_weight` as 0.25 (25%). More information
-about this algorithm is described in the Web3 Foundation research paper:
-https://research.web3.foundation/en/latest/polkadot/Token%20Economics.html#relay-chain-transaction-fees-and-per-block-transaction-limits.
+about this algorithm is described in the
+https://research.web3.foundation/en/latest/polkadot/Token%20Economics.html#relay-chain-transaction-fees-and-per-block-transaction-limits[Web3 Foundation research paper].
