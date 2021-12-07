@@ -1,0 +1,4 @@
+name: polkadot-spec
+title: Polkadot Specification
+version: 0.2.0
+start_page: polkadot-spec:host-spec.adoc
