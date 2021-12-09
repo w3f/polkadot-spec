@@ -276,13 +276,20 @@ A *GRANDPA gossip message*, stem:[M], is a varying datatype
 (<<defn-varrying-data-type>>) which identifies the message type that is cast by
 a voter followed by the message itself.
 
-TODO: Clarify propagation.
 TODO: Reference additional message.
 
 [stem]
 ++++
 M = {(0,"Vote message", V_m),(1,"Commit message", C_m),(2,"Neighbor message", N_m),(3,"Catch-up request message",R_m),(4,"Catch-up message",U_m):}
 ++++
+
+where:
+
+* stem:[V_m] is defined in <<defn-grandpa-vote-msg>>.
+* stem:[C_m] is defined in <<defn-grandpa-commit-msg>>.
+* stem:[N_m] is defined in <<defn-grandpa-neighbor-msg>>.
+* stem:[R_m] is defined in <<defn-grandpa-catchup-request-msg>>.
+* stem:[U_M] is defined in <<defn-grandpa-catchup-response-msg>>.
 ****
 
 [#defn-grandpa-vote-msg]

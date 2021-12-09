@@ -78,7 +78,7 @@ network, to establish and maintain a list of peers and to share that
 list with other peers from the network as follows:
 
 * *Bootstrap nodes* are hard-coded node identities and addresses provided by the
-genesis state specification as described in TODO <<sect-genesis-block>>.
+genesis state (<<chapter-genesis>>).
 * *mDNS* is a protocol that performs a broadcast to the local network. Nodes
 that might be listening can respond to the broadcast.
 https://github.com/libp2p/specs/blob/master/discovery/mdns.md[The libp2p mDNS
