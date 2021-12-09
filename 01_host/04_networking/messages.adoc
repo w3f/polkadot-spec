@@ -382,19 +382,17 @@ ignored.
 ****
 A *GRANDPA Neighbor Message* is defined as:
 
-TODO: Consider renaming variables.
-TODO: References.
-
 [stem]
 ++++
-M^("neigh") := "Enc"_(SC)("version",r,"id"_(bbb "V"),H_h(B_("last")))
+M^("neigh") := "Enc"_(SC)(v,r,"id"_(bbb "V"),H_h(B_("last")))
 ++++
 
 where:
 
-* stem:["version"] is an unsigned 8-bit integer indicating the version of the neighbor message, currently _1_.
-* stem:[r] is an unsigned 64-bit integer indicating the round number.
-* stem:["id"_(bbb "V")] is an unsigned 64-bit integer indicating the authority Id.
+* stem:["v"] is an unsigned 8-bit integer indicating the version of the neighbor message, currently _1_.
+* stem:[r] is an unsigned 64-bit integer indicating the round number (<<defn-voting-rounds>>).
+* stem:["id"_(bbb "V")] is an unsigned 64-bit integer indicating the authority
+Id (<<defn-authority-list>>).
 * stem:[H_i(B_("last"))] is an unsigned 32-bit integer indicating the block number of the last finalized block stem:[B_("last")].
 
 This message is the sub-component of the GRANDPA gossip message
