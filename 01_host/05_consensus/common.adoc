@@ -29,9 +29,9 @@ each of its authorities stem:[A in "Auth"_C(B)]:
 stem:[pk_A] is the session public key (<<defn-session-key>>) of authority
 stem:[A]. And stem:[w_A] is an unsigned 64-bit integer indicating the authority
 weight. The value of stem:["Auth"_C(B)] is part of the Polkadot state. The value
-for stem:["Auth"_C(B_0)] is set in the genesis state (TODO
-<<sect-genesis-block>>) and can be retrieved using a runtime entry corresponding
-to consensus engine stem:[C].
+for stem:["Auth"_C(B_0)] is set in the genesis state (<<chapter-genesis>>) and
+can be retrieved using a runtime entry corresponding to consensus engine
+stem:[C].
 
 In Polkadot, all authorities have the weight stem:[w_A = 1]. The weight
 stem:[w_A] exists for potential improvements in the protocol and could have a
@@ -118,11 +118,11 @@ the second slot configuration:
 s_("2nd") = {(1,("Auth"_C,N_("delay"))),(2,("Auth"_C,N_("delay"))),(3,"Auth"_("id")),(4,N_("delay")),(5,N_("delay")):}
 ++++
 +
-where (TODO: Maybe add some references here?):
+where:
 +
-** stem:[Auth_C] is the authority list as defined in Definition (TODO).
-** stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the chain
-the announcing block must be before the change is applied.
+** stem:[Auth_C] is the authority list (<<defn-authority-list>>).
+** stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the
+chain the announcing block must be before the change is applied.
 ** _1_ implies *scheduled change*: Schedule an authority set change after the
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
 definition of stem:[N_("delay")], is a block _finalized_ by the finality
