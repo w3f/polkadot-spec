@@ -311,7 +311,28 @@ based on the previous epochs VRF outputs. For stem:[cc "E"_0] and stem:[cc
 
 When a Polkadot node receives a produced block, it needs to verify if the block
 producer was entitled to produce the block in the given slot by running
-Algorithm as defined in <<algo-verify-authorship-right>> where:
+Algorithm as defined in <<algo-verify-authorship-right>>.
+
+[#algo-verify-authorship-right]
+===== Verify Authorship Right
+****
+Algorithm: stem:[tt "Verify-Authorship-Right"("Head"_s(B))]
+
+. stem:[s larr "Slot-Number-At-Given-Time"(T_B)]
+. stem:[cc "E"_c larr "Current-Epoch"()]
+. stem:[(D_1, ..., D_("length"(H_d(B)))) larr H_d(B)]
+. stem:[D_s larr D_("length"(H_d(B)))]
+. stem:[H_d(B) larr (D_1, ..., D_("length"(H_d(B))-1)) " // remove the seal from the digest"]
+. stem:[("id","Sig"_B) larr "Dec"_("SC")(D_s)]
+. stem:["if " "id" != "Seal-Id"]
+. stem:["    " "error 'Seal missing'"]
+. stem:["AuthorId" larr "AuthorityDirectory"^(cc "E"_c)\[H_("BABE")(B)."SignerIndex"\]]
+. stem:["Verify-Signature"("AuthorId", H_h(B), "Sig"_B)]
+. stem:["if " EE B' in "BT": H_h(B) != H_h(B) " and " s_B = s'_B " and " "SignerIndex"_B = "SignerIndex"_(B')]
+. stem:["    " "error 'Block producer is equivocating'"]
+. stem:["Verify-Slot-Winner"((d_B, pi_B),s,"AuthorId")]
+
+where;
 
 * stem:[T_B] is stem:[B]’s arrival time (<<defn-block-time>>).
 * stem:[H_d(B)] is the digest sub-component (<<defn-digest>>) of
@@ -324,8 +345,7 @@ of varying type (<<defn-scale-variable-type>>) is of type _Seal_.
 producers of epoch stem:[cc "E"_c].
 * stem:[Verify-Slot-Winner] is defined in Algorithm as described in
 <<algo-verify-slot-winner>>.
-
-TODO: Algorithms
+****
 
 [#sect-block-building] 
 ==== Block Building Process
