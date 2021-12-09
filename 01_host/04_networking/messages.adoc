@@ -326,9 +326,6 @@ store a collection of pre-commits and their signatures to be submitted as part
 of a commit message. Instead of storing an array of justifications, it uses the
 following format:
 
-TODO: Reference
-TODO: Double check format.
-
 [stem]
 ++++
 J_(v_(0,...n))^(r,"comp") := ({V_(v_0)^(r,pc),... V_(v_n)^(r,pc)},{("Sig"_(v_0)^(r,pc),v_("id"_0)), ... ("Sig"_(v_n)^(r,pc),v_("id"_n))})
@@ -336,8 +333,9 @@ J_(v_(0,...n))^(r,"comp") := ({V_(v_0)^(r,pc),... V_(v_n)^(r,pc)},{("Sig"_(v_0)^
 
 where:
 
-* stem:[V_(v_i)^(r,pc)] is a 256-bit byte array (TODO: and 32-bit integer) containing the pre-commit vote of authority stem:[v_i].
-* stem:["Sig"_(v_i)^(r,pc)] is a 512-bit byte array containing the pre-commit signature of authority stem:[v_i].
+* stem:[V_(v_i)^(r,pc)] is a 256-bit byte array containing the pre-commit vote of authority stem:[v_i] (<<defn-voting-rounds>>).
+* stem:["Sig"_(v_i)^(r,pc)] is a 512-bit byte array containing the pre-commit
+signature of authority stem:[v_i] (<<defn-sign-round-vote>>).
 * stem:[v_("id"_n)] is a 256-bit byte array containing the public key of authority stem:[v_i].
 ****
 
