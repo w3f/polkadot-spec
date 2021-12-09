@@ -2,7 +2,7 @@
 === Bridge design (BEEFY)
 
 WARNING: The BEEFY protocol is currently in early development and subject to
-change.
+change. The specification has not been completed yet.
 
 The BEEFY (Bridge Effiency Enabling Finality Yielder) is a secondary protocol to
 GRANDPA to support efficient bridging between the Polkadot network (relay chain)
@@ -78,8 +78,6 @@ part of a vote (<<defn-msg-beefy-gossip>>) to its peers on every new, finalized
 block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum
 has better compatibility for it compared to SR25519 or ED25519.
 
-TODO: how does one map the validator set keys to the corresponding ECDSA keys?
-
 [#sect-beefy-committing-witnesses]
 ==== Committing Witnesses
 
@@ -88,8 +86,6 @@ collecting the gossiped votes (<<defn-msg-beefy-gossip>>). Those votes are
 converted into the witness data structure (<<defn-beefy-witness-data>>).
 The relayer saves the data on the chain of the remote network. The occurrence of
 saving witnesses on remote networks is undefined.
-
-TODO: Add note about 2/3 majority]
 
 ==== Requesting Signed Commitments
 
@@ -104,6 +100,3 @@ How those signed commitments are requested by the light client and delivered by
 the relayer varies among networks or implementations. On Ethereum, for example,
 the light client can request the signed commitments in form of a transaction,
 which results in a response in form of a transaction.
-
-TODO: If the signed commitments are just transactions, which are stored in the
-blockchain, why bother with witnesses?
