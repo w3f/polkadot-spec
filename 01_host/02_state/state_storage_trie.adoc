@@ -193,10 +193,10 @@ Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
 . stem:[pk_N^(Agr) larr phi]
 . stem:[i larr 1]
 . stem:["while" (N_i != N)]
-. stem:["    " pk_N^(Agr) larr pk_N^(Agr)||pk_(N_i)]
-. stem:["    " pk_N^(Agr) larr pk_N^(Agr)||"Index"_(N_i)(N_(i+1))]
+. stem:["    " pk_N^(Agr) larr pk_N^(Agr)"||"pk_(N_i)]
+. stem:["    " pk_N^(Agr) larr pk_N^(Agr)"||""Index"_(N_i)(N_(i+1))]
 . stem:["    " i larr i + 1]
-. stem:[pk_N^(Agr) larr pk_N^(Agr)||pk_(N_i)]
+. stem:[pk_N^(Agr) larr pk_N^(Agr)"||"pk_(N_i)]
 . stem:["return " pk_N^(Agr)]
 ****
 
