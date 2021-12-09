@@ -441,17 +441,16 @@ stem:[M_(v,i)^("Cat"-q)("id"_(bbb "V"),r')] in which stem:[r >= r'] is the
 latest GRANDPA round which v has prove of its finalization and has the following
 structure:
 
-TODO: Reference
-
 [stem]
 ++++
 M_(v,i)^("Cat"-s) := "Enc"_(SC)("id"_(bbb "V"), r, J_(0,...n)^(r,pv)(B), J_(0,...m)^(r,pc)(B),H_h(B'),H_i(B'))
 ++++
 
 Where stem:[B] is the highest block which stem:[v] believes to be finalized in
-round stem:[r]. stem:[B'] is the highest ancestor of all blocks voted on in the
-arrays of justifications stem:[J_(0,...n)^(r,pv)(B)] and
-stem:[J_(0,...m)^(r,pc)(B)] with the exception of the equivocationary votes.
+round stem:[r] (<<defn-voting-rounds>>). stem:[B'] is the highest ancestor of
+all blocks voted on in the arrays of justifications stem:[J_(0,...n)^(r,pv)(B)]
+and stem:[J_(0,...m)^(r,pc)(B)] (<<defn-grandpa-justification>>) with the
+exception of the equivocatory votes.
 
 This message is the sub-component of the GRANDPA Gossip message
 (<<defn-gossip-message>>) of type Id _4_.
