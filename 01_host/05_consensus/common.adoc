@@ -78,8 +78,8 @@ E_("id") = {("'BABE'"),("'FRNK'"):}
 where stem:["'BABE'"] is for messages related to the BABE protocol, referred to
 as stem:[E_("id")("BABE")] and stem:["'FRNK"] is for messages related to the
 GRANDPA protocol, referred to as stem:[E_("id")("FRNK")]. stem:[CM] is a varying
-datatype (TODO: Reference) which can be one of the following values, appended by
-additional data:
+datatype (<<defn-varrying-data-type>>) which can be one of the following values,
+appended by additional data:
 
 [stem]
 ++++
