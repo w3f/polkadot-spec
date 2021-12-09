@@ -465,8 +465,6 @@ This section defines the messages required for the GRANDPA BEEFY protocol
 (<<sect-grandpa-beefy>>). Those messages are sent over the `/paritytech/beefy/1`
 substream.
 
-TODO: Define _MMR_.
-
 [#defn-grandpa-beefy-commitment]
 ===== Commitment
 ****
@@ -532,8 +530,9 @@ their corresponding public key entry in the authority set.
 +
 For example, the signature of the validator at index 3 in the authority set must
 be placed at index _3_ in stem:[S_n]. If not signature is available for that
-validator, then the _Option_ variant is _None_ inserted (TODO: Def). This sorting
-allows clients to map public keys to their corresponding signatures.
+validator, then the _Option_ variant is _None_ inserted (<<defn-option-type>>).
+This sorting allows clients to map public keys to their corresponding
+signatures.
 ****
 
 [#defn-grandpa-beefy-signed-commitment-witness]

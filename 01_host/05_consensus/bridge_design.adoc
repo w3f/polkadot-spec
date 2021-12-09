@@ -19,10 +19,13 @@ protocol.
 
 ==== Preliminaries
 
+[#defn-mmr]
 ===== Merkle Mountain Ranges
 ****
-Merkle Mountain Ranges, *MMR*, as defined in Definition (TODO) are used
+Merkle Mountain Ranges, *MMR*, are used
 as an efficient way to send block headers and signatures to light clients.
+
+NOTE: MMRs have not been defined yet.
 ****
 
 [#defn-beefy-statement]
