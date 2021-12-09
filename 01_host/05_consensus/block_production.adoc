@@ -330,10 +330,14 @@ TODO: Algorithms
 [#sect-block-building] 
 ==== Block Building Process
 
+The block building process is triggered by the Algorithm as defined in TODO
+<<algo-block-production>> of the consensus engine which runs the Algorithm as
+defined in <<algo-build-block>>
+
 [#algo-build-block]
 ===== Build Block
 ****
-Algorithm: stem:[tt "Build-Block"(C_("Best"))]
+Algorithm: stem:[tt "Build-Block"(C_("Best"), s)]
 
 . stem:[P_B larr "Head"(C_("Best"))]
 . stem:["Head"(B) larr (H_p larr H_h(P_B), H_i larr H_i(P_B)+1,H_r larr phi, H_e larr phi, H_d larr phi)]
@@ -341,7 +345,7 @@ Algorithm: stem:[tt "Build-Block"(C_("Best"))]
 . stem:["I-D" larr "Call-Runtime-Entry"(tt "BlockBuilder_inherent_extrinsic", "Inherent-Data")]
 . stem:["for " E " in " "I-D"]
 . stem:["    " "Call-Runtime-Entry"(tt "BlockBuilder_apply_extrinsics", E)]
-. stem:["while not End-of-Slot"(S)]
+. stem:["while not End-of-Slot"(s)]
 . stem:["    " E larr "Next-Ready-Extrinsic"()]
 . stem:["    " R larr "Call-Runtime-Entry"(tt "BlockBuilder_apply_extrinsics", E)]
 . stem:["    " "if Block-Is-Full"(R)]
@@ -353,6 +357,9 @@ Algorithm: stem:[tt "Build-Block"(C_("Best"))]
 
 where:
 
+* stem:[C_("Best")] is the chain head at which the block should be constructed
+("parent").
+* stem:[s] is the slot number.
 * stem:["Head"(B)] is defined in <<defn-block-header>>.
 * stem:["Call-Runtime-Entry"] is defined in <<notat-call-into-runtime>>.
 * stem:["Inherent-Data"] is defined in <<defn-inherent-data>>.
