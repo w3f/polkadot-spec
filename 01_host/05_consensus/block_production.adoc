@@ -40,7 +40,7 @@ equal length duration of each slot is called the *slot duration* and indicated
 by stem:[cc "T"]. Each slot is awarded to a subset of block producers during
 which they are allowed to generate a block.
 
-IMPORTANT: Substrate refers to an epoch as ``session'' in some places, however,
+IMPORTANT: Substrate refers to an epoch as "session" in some places, however,
 epoch should be the preferred and official name for these periods.
 ****
 
@@ -49,7 +49,7 @@ epoch should be the preferred and official name for these periods.
 ****
 We refer to the number of slots in epoch stem:[cc "E"_n] by stem:[sc_n].
 stem:[sc_n] is set to the `duration` field in the returned data from the call of
-the Runtime entry `BabeApi_configuration` (TODO <<sect-rte-babeapi-epoch>>) at
+the Runtime entry `BabeApi_configuration` (<<sect-rte-babeapi-epoch>>) at
 genesis. For a given block stem:[B], we use the notation *latexmath:[$s_B$]* to
 refer to the slot during which stem:[B] has been produced. Conversely, for slot
 stem:[s], stem:[cc "B"_c] is the set of Blocks generated at slot stem:[s].
@@ -74,18 +74,17 @@ slot. The proof of equivocation are the given distinct headers that were signed
 by the validator and which include the slot number.
 
 The Polkadot Host must detect equivocations committed by other validators and
-submit those to the Runtime as described in TODO
+submit those to the Runtime as described in
 <<sect-babeapi_submit_report_equivocation_unsigned_extrinsic>>.
 ****
 
 ==== Block Production Lottery
 
 The babe constant (<<defn-babe-constant>>) is initialized at genesis to the
-value returned by calling `BabeApi_configuration` (TODO
-<<sect-rte-babeapi-epoch>>). For efficiency reasons, it is generally updated by
-the Runtime through the _next config data_ consensus message
-(<<defn-consensus-message-digest>>) in the digest of the first block of an epoch
-for the next epoch.
+value returned by calling `BabeApi_configuration` (<<sect-rte-babeapi-epoch>>).
+For efficiency reasons, it is generally updated by the Runtime through the _next
+config data_ consensus message (<<defn-consensus-message-digest>>) in the digest
+of the first block of an epoch for the next epoch.
 
 A block producer aiming to produce a block during stem:[cc "E"_n] should run
 Algorithm as defined in TODO <<algo-block-production-lottery>> to identify the slots
@@ -138,11 +137,9 @@ estimating the local clock offset in relation to the network
 NOTE: *The calculation described in this section is still to be implemented and
 deployed*: For now, each block producer is required to synchronize its local
 clock using NTP instead. The current slot stem:[s] is then calculated by stem:[s
-= t_("unix")/cc "T"] where stem:[t_("unix")] is the current UNIX time in seconds
-since 1970-01-01 00:00:00 UTC. That also entails that slot numbers are currently
-not reset at the beginning of each epoch.
-
-TODO: What is stem:[cc "T"]?
+= t_("unix")/cc "T"] where stem:[cc "T"] is defined in <<defn-epoch-slot>> and
+stem:[t_("unix")] is defined in <<defn-unix-time>>. That also entails that slot
+numbers are currently not reset at the beginning of each epoch.
 ****
 
 Polkadot does this synchronization without relying on any external clock source
