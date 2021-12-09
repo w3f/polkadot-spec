@@ -110,10 +110,11 @@ message in a round and is formally defined as:
 
 where:
 
-* stem:["msg"]: is an byte array containing the message to be signed (TODO: format of the message?).
+* stem:["msg"]: is an byte array containing the message to be signed
+(<<defn-vote>>).
 * stem:[r]: is an unsigned 64-bit integer is the round number.
 * stem:["id"_(bbb "V")]: is an unsigned 64-bit integer indicating the authority
-set Id (TODO: Reference).
+set Id (<<defn-authority-list>>).
 ****
 
 [#defn-grandpa-justification]
