@@ -81,6 +81,7 @@ where stem:[H_h(B)] and stem:[H_i (B)] are the block hash
 (<<defn-block-header-hash>>) and the block number (<<defn-block-header>>).
 ****
 
+[#defn-voting-rounds]
 ===== Voting Rounds
 ****
 Voters engage in a maximum of two sub-rounds of voting for each round stem:[r].
