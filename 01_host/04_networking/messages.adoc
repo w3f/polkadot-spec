@@ -354,13 +354,13 @@ M_v^(r,"Fin")(B) := "Enc"_(SC)(r,"id"_(bbb "V"),V_v^r(B),J_(v_(0,...n))^(r,"comp
 
 where:
 
-TODO: References
-TODO: Check if the GRANDPA vote is correct.
-
-* stem:[r] is an unsigned 64-bit integer indicating the round number.
-* stem:[id_(bbb "V")] is the authority set Id.
-* stem:[V_v^r(B)] is a 256-bit array (TODO: and 32-bit integer?) containing the GRANDPA vote for block stem:[B].
-* stem:[J_(v_(0,...n))^(r,"comp")] (TODO: type?) is the compacted GRANDPA justification containing observed pre-commit of authorities stem:[v_0] to stem:[v_n].
+* stem:[r] is an unsigned 64-bit integer indicating the round number (<<defn-voting-rounds>>).
+* stem:[id_(bbb "V")] is the authority set Id (<<defn-authority-list>>).
+* stem:[V_v^r(B)] is a 256-bit array containing the GRANDPA vote for block
+stem:[B] (<<defn-vote>>).
+* stem:[J_(v_(0,...n))^(r,"comp")] is the compacted GRANDPA justification
+containing observed pre-commit of authorities stem:[v_0] to stem:[v_n]
+(<<defn-grandpa-justifications-compact>>).
 
 This message is the sub-component of the GRANDPA gossip message
 (<<defn-gossip-message>>) of type Id _1_.
