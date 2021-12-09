@@ -117,7 +117,7 @@ peers of the Polkadot Host who are not already aware of stem:[T].
 [#algo-maintain-transaction-pool]
 ===== Algorithm: Maintain Transaction Pool
 
-TODO
+NOTE: This has not been defined yet.
 
 [#sect-inherents]
 ==== Inherents
