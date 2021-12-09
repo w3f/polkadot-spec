@@ -119,11 +119,28 @@ for epoch stem:[cc "E"_n] and stem:[c in (0, 1)] is the BABE constant
 (<<defn-babe-constant>>).
 ****
 
-TODO: Algorithm
+[#algo-block-production-lottery]
+===== Block Production Lottery
+****
+A block producer aiming to produce a block during stem:[cc "E"_n] should run
+the Algorithm as defined in <<>> to identify the slots it is awarded. These are
+the slots during which the block producer is allowed to build a block. The
+session secret key, stem:[sk], is the block producer lottery secret key and
+stem:[n] is the index of the epoch for whose slots the block producer is running
+the lottery.
+
+Algorithm: stem:["Block-Production-Lottery"(sk)]
+
+. stem:[r larr "Epoch-Randomness"(n)]
+. stem:["for " i := 1 " to " sc_n]
+. stem:["    " (pi, d) larr "VRF"(r,i,sk)]
+. stem:["    " A\[i\] larr (d, pi)]
+. stem:["return " A]
 
 For any slot stem:[i] in epoch stem:[n] where stem:[d < r], the block producer
 is required to produce a block. For the definitions of _Epoch-Randomness_
-(<<sect-epoch-randomness>>) and _VRF_ functions (<<sect-vrf>>).
+(<<defn-epoch-randomness>>) and _VRF_ functions (<<sect-vrf>>).
+****
 
 [#sect-slot-number-calculation]
 ==== Slot Number Calculation
