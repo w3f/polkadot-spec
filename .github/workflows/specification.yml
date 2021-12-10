@@ -3,175 +3,93 @@ name: Specification Publication
 on:
   push:
     branches:
-    - main
+    - develop
   pull_request:
     paths:
     - '.github/workflows/specification.yml'
-    - '.github/apt-texmacs.asc'
-    - 'host-spec/**'
-    - 'runtime-spec/**'
+    - '**/*.adoc'
+    - 'Makefile'
   release:
     types: [published]
 
 jobs:
-  build-spec-host:
-    name: Compile host specification
+  build-html:
+    name: Compile html specification
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
+    - name: Install deb dependencies
       run: |
-        sudo apt-key add .github/apt-texmacs.asc
-        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
         sudo apt-get update
-        sudo apt-get install -y xvfb texmacs plantuml
-    - name: Install TeXmacs pacakges
-      run: |
-        mkdir -p ~/.TeXmacs/packages
-        cd ~/.TeXmacs/packages
-        curl -OL https://raw.githubusercontent.com/w3f/algorithmacs/master/algorithmacs-style.ts
-    - name: Build host specification
-      run: make -C host-spec
-    - name: Upload host specification
+        sudo apt-get install -y asciidoctor rubygems ruby-rouge
+    - name: Install gem dependencies
+      run: sudo gem install asciidoctor-multipage
+    - name: Build html specification
+      run: make html
+    - name: Upload html specification
       uses: actions/upload-artifact@v2
       with:
-        name: polkadot-host-spec.pdf
-        path: host-spec/polkadot-host-spec.pdf
-    - name: Release host specification
+        name: polkadot-spec-html
+        path: polkadot-spec-html/
+
+  build-html-compact:
+    name: Compile compact html specification
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install deb dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y asciidoctor ruby-rouge
+    - name: Build compact html specification
+      run: make polkadot-spec.html
+    - name: Upload compact html specification
+      uses: actions/upload-artifact@v2
+      with:
+        name: polkadot-spec.html
+        path: polkadot-spec.html
+    - name: Release compact html specification
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: host-spec/polkadot-host-spec.pdf
-        asset_name: polkadot-host-spec_${{ github.event.release.tag_name }}.pdf
-        asset_content_type: application/pdf
+        asset_path: polkadot-spec.html
+        asset_name: polkadot-spec_${{ github.event.release.tag_name }}.html
+        asset_content_type: application/html
       if: github.event_name == 'release'
 
-  build-spec-runtime:
-    name: Compile runtime specification
+  build-pdf:
+    name: Compile pdf specification
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
+    - name: Install deb dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y latexmk texlive texlive-luatex texlive-science texlive-latex-extra
-    - name: Build runtime specification
-      run: make -C runtime-spec
-    - name: Upload runtime specification
+        sudo apt-get install -y asciidoctor rubygems ruby-rouge ruby-asciidoctor-pdf
+    - name: Install gem dependencies
+      run: sudo gem install asciidoctor-mathematical
+    - name: Build pdf specification
+      run: make pdf
+    - name: Upload pdf specification
       uses: actions/upload-artifact@v2
       with:
-        name: polkadot-runtime-spec.pdf
-        path: runtime-spec/polkadot-runtime-spec.pdf
-    - name: Release runtime specification
+        name: polkadot-spec.pdf
+        path: polkadot-spec.pdf
+    - name: Release pdf specification
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: runtime-spec/polkadot-runtime-spec.pdf
-        asset_name: polkadot-runtime-spec_${{ github.event.release.tag_name }}.pdf
+        asset_path: polkadot-spec.pdf
+        asset_name: polkadot-spec_${{ github.event.release.tag_name }}.pdf
         asset_content_type: application/pdf
       if: github.event_name == 'release'
-
-
-  diff-spec-host:
-    name: Compare host specification
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
-      if: github.event_name == 'push'
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-      if: github.event_name == 'pull_request' || github.event_name == 'release'
-    - name: Install dependencies
-      run: |
-        sudo apt-key add .github/apt-texmacs.asc
-        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
-        sudo apt-get update
-        sudo apt-get install -y xvfb texmacs plantuml
-    - name: Install TeXmacs pacakges
-      run: |
-        mkdir -p ~/.TeXmacs/packages
-        cd ~/.TeXmacs/packages
-        curl -OL https://raw.githubusercontent.com/w3f/algorithmacs/master/algorithmacs-style.ts
-    - name: Determine comparison target
-      run: echo "REV=HEAD~1" >> $GITHUB_ENV
-      if: github.event_name == 'push'
-    - name: Determine comparison target
-      run: echo "REV=origin/${GITHUB_BASE_REF}" >> $GITHUB_ENV
-      if: github.event_name == 'pull_request'
-    - name: Determine comparison target
-      run: echo "REV=$(git describe --tags --abbrev=0 HEAD~1)" >> $GITHUB_ENV
-      if: github.event_name == 'release'
-    - name: Compare host specification
-      run: make -C host-spec diff
-    - name: Upload host specification diff
-      uses: actions/upload-artifact@v2
-      with:
-        name: polkadot-host-spec.diff.pdf
-        path: host-spec/polkadot-host-spec.diff.pdf
-    - name: Release host specification diff
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: host-spec/polkadot-host-spec.diff.pdf
-        asset_name: polkadot-host-spec_${{ github.event.release.tag_name }}.diff_${{ env.REV }}.pdf
-        asset_content_type: application/pdf
-      if: github.event_name == 'release'
-
-  diff-spec-runtime:
-    name: Compare runtime specification
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 2
-      if: github.event_name == 'push'
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-      if: github.event_name == 'pull_request' || github.event_name == 'release'
-    - name: Install dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y latexmk texlive texlive-luatex texlive-science texlive-latex-extra latexdiff
-    - name: Determine comparison target
-      run: echo "REV=HEAD~1" >> $GITHUB_ENV
-      if: github.event_name == 'push'
-    - name: Determine comparison target
-      run: echo "REV=origin/${GITHUB_BASE_REF}" >> $GITHUB_ENV
-      if: github.event_name == 'pull_request'
-    - name: Determine comparison target
-      run: echo "REV=$(git describe --tags --abbrev=0 HEAD~1)" >> $GITHUB_ENV
-      if: github.event_name == 'release'
-    - name: Compare runtime specification
-      run: make -C runtime-spec diff
-    - name: Upload runtime specification diff
-      uses: actions/upload-artifact@v2
-      with:
-        name: polkadot-runtime-spec.diff.pdf
-        path: runtime-spec/polkadot-runtime-spec.diff.pdf
-    - name: Release runtime specification diff
-      uses: actions/upload-release-asset@v1
-      env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ github.event.release.upload_url }}
-        asset_path: runtime-spec/polkadot-runtime-spec.diff.pdf
-        asset_name: polkadot-runtime-spec_${{ github.event.release.tag_name }}.diff_${{ env.REV }}.pdf
-        asset_content_type: application/pdf
-      if: github.event_name == 'release'
-
 
   release-pages:
-    needs: [ build-spec-host, build-spec-runtime ]
+    needs: [ build-html, build-pdf ]
     name: Publish release on GitHub Pages
     runs-on: ubuntu-20.04
     if: github.event_name == 'release'
@@ -181,24 +99,18 @@ jobs:
         ref: gh-pages
     - uses: actions/download-artifact@v2
       with:
-        name: polkadot-host-spec.pdf
+        name: polkadot-spec-html
     - uses: actions/download-artifact@v2
       with:
-        name: polkadot-runtime-spec.pdf
+        name: polkadot-spec.pdf
     - name: Replace latest release cache file
       run: |
-        mv polkadot-host-spec.pdf spec/host/latest.pdf
-        mv polkadot-runtime-spec.pdf spec/runtime/latest.pdf
-      if: ${{ ! github.event.release.prerelease }}
-    - name: Replace latest pre-release cache file
-      run: |
-        mv polkadot-host-spec.pdf spec/host/nightly.pdf
-        mv polkadot-runtime-spec.pdf spec/runtime/nightly.pdf
-      if: ${{ github.event.release.prerelease }}
+        mv polkadot-spec.pdf spec/develop.pdf
+        mv polkadot-spec-html develop
     - name: Commit and push updated GitHub Pages branch
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add spec/
-        git commit --amend -m "Update specification cache"
+        git add spec/ develop/
+        git commit --amend -m "Update specification page"
         git push -f
