@@ -140,7 +140,7 @@ author had authorship rights for the slot in which the block was produce as well
 as if the transactions in the block constitute a valid transition of states. The
 former criterion is validated by the Polkadot Host according to the block
 production consensus protocol. The latter can be verified by the Polkadot Host
-invoking entry into the Runtime as (TODO <<sect-rte-core-execute-block>>) as a part
+invoking entry into the Runtime as (<<sect-rte-core-execute-block>>) as a part
 of the validation process. Any state changes created by this function on
 successful execution are persisted.
 
@@ -148,6 +148,40 @@ The Polkadot Host implements the following procedure to assure the
 validity of the block:
 
 TODO: Spec algorithm.
+
+[#algo-import-and-validate-block]
+==== Import and Validate Block
+****
+Algorithm: stem:["Import-And-Validate-Block"(B, "Just"(B))]
+
+. stem:["Set-Storage-State-At"(P(B))]
+. stem:["if Just"(B) != 0]
+. stem:["    " "Verify-Block-Justification"(B, "Just"(B))]
+. stem:["    " "if " B " is Finalized and " P(B) " is not Finalized"]
+. stem:["    " "     " "Mark-As-Final"(P(B))]
+. stem:["if " H_p(B) !in "PBT"]
+. stem:["    " "return"]
+. stem:["Verify-Authorship-Right"("Head"(B))]
+. stem:[B larr "Remove-Seal"(B)]
+. stem:[R larr "Call-Runtime-Entry"(tt "Core_execute_block", B)]
+. stem:[B larr "Add-Seal"(B)]
+. stem:["if " R = "true"]
+. stem:["    " "Persist-State"]
+
+where:
+
+* stem:["Remove-Seal"] removes the Seal digest from the block (<<defn-digest>>)
+before submitting it to the Runtime.
+* stem:["Add-Seal"] adds the Seal digest back to the block (<<defn-digest>>) for
+later propagation.
+* stem:["Persist-State"] implies the persistance of any state changes created by
+stem:[tt "Core_execute_block"] (<<sect-rte-core-execute-block>>) on successful
+execution.
+* stem:["PBT"] is the pruned block tree (<<defn-block-tree>>).
+* stem:["Verify-Authorship-Right"] is part of the block production consensus
+protocol and is described in <<algo-verify-authorship-right>>.
+* _Finalized block_ and _finality_ are defined in <<sect-finality>>.
+****
 
 [#sect-managing-multiple-states]
 ==== Managaing Multiple Variants of State
