@@ -425,6 +425,26 @@ where:
 * stem:[#V_("obs"(v))^(r,pv)(B)] is defined in <<defn-observed-votes>>.
 ****
 
+[#algo-finalizable]
+===== Finalizable
+****
+Algorithm: stem:["Finalizable"(r)]
+
+. stem:["if " r " is not completable"]
+. stem:["    " "return false"]
+. stem:[G larr "GRANDPA-GHOST"(J^(r,pv)(B))]
+. stem:["if " G = phi]
+. stem:["    " "return false"]
+. stem:[E_r larr "Best-Final-Candidate"(r)]
+. stem:["if " E_r != phi " and " E_(r-1) <= E_r <= G]
+. stem:["    " "return true"]
+. stem:["else"]
+. stem:["    " "return false"]
+
+where the condition for _completablitiy_ is defined in
+<<defn-grandpa-completable>>.
+****
+
 Note that we might not always succeed in finalizing our best final candidate due
 to the possibility of equivocation. The example in <<exmp-candid-unfinalized>>
 serves to demonstrate such a situation:
