@@ -144,10 +144,8 @@ invoking entry into the Runtime as (<<sect-rte-core-execute-block>>) as a part
 of the validation process. Any state changes created by this function on
 successful execution are persisted.
 
-The Polkadot Host implements the following procedure to assure the
-validity of the block:
-
-TODO: Spec algorithm.
+The Polkadot Host implements the Algorithm as defined in
+<<algo-import-and-validate-block>> to assure the validity of the block.
 
 [#algo-import-and-validate-block]
 ==== Import and Validate Block
@@ -267,8 +265,6 @@ formally defined as:
 
 Where stem:[K_C] is a SCALE-encoded tuple:
 
-TODO: Rename Type_V_C and C_(value)
-
 [stem]
 ++++
 "Enc"_(SC)("Type"_(V_C), H_i(B_i),K)
@@ -283,8 +279,6 @@ V_C = "Enc"_(SC)(C_(value))
 
 is a SCALE encoded byte array.
 
-TODO: Reference varying datatype.
-
 Furthermore, stem:[K] represents the changed storage key, stem:[H_i(B_i)] refers
 to the block number at which this key is inserted into the Changes Trie
 (<<defn-block-header>>) and stem:["Type"_(V_C)] is an index defining the type
@@ -296,8 +290,6 @@ C_(value) = {(1,(e_i,...,e_k)),(2,(H_i(B_k),...,H_i(B_m))),(3,H_r("Child-Changes
 ++++
 
 where:
-
-TODO: Reference
 
 * _1_ is a list of extrinsics indices and stem:[e_n] refers to the index of the extrinsic within the block.
 * _2_ is a list of block numbers.
@@ -322,8 +314,6 @@ in which each extrinsics appears in the block (indexing starts at 0). The
 Polkadot Host generates those pairs for every changed key on each and every
 block. Child storages have their own Changes Trie
 (<<sect-changes-trie-child-trie-pair>>).
-
-IMPORTANT: TODO - clarify special key value of `0xffffffff`
 
 [#sect-changes-trie-block-pairs]
 ===== Key to block pairs
@@ -350,9 +340,7 @@ all.
 0 it means that those pairs are not created at all.
 
 For each level from 1 to _levels_, the Polkadot Host creates those pairs on
-every -nth block, formally applied as:
-
-TODO: Spec algorithm
+every -nth block.
 
 For example, let’s say _interval_ is set at and is set at . This means there are
 now three levels which get generated at three different occurrences:
