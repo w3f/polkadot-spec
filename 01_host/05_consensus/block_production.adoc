@@ -180,8 +180,6 @@ been finalized, even if only probabilistically (<<defn-prunned-best>>). The
 target slot to which to synchronize should be the first slot in the new sync
 period.
 
-TODO: Algorithm
-
 [#defn-slot-offset]
 ===== Slot Offset
 ****
@@ -205,6 +203,15 @@ clock timestamp stem:[(s_("sync"),t_("sync"))] describing the last point at
 which the slot numbers have been synchronized with the local clock.
 
 TODO: Algorithm
+****
+
+===== Slot Time
+****
+Algorithm: stem:["Slot-Time"(s)]
+
+. stem:["return " t_("sync") + "Slot-Offset"(s_("sync"),s) xx cc "T"]
+
+where stem:[s] is the slot number.
 ****
 
 [#defn-prunned-best]
