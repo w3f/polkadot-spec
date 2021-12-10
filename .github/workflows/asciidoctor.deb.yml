@@ -1,0 +1,116 @@
+name: Specification Publication
+
+on:
+  push:
+    branches:
+    - develop
+  pull_request:
+    paths:
+    - '.github/workflows/asciidoctor.deb.yml'
+    - '**/*.adoc'
+    - 'Makefile'
+  release:
+    types: [published]
+
+jobs:
+  build-html:
+    name: Compile html specification
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install deb dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y asciidoctor rubygems ruby-rouge
+    - name: Install gem dependencies
+      run: sudo gem install asciidoctor-multipage
+    - name: Build html specification
+      run: make html
+    - name: Upload html specification
+      uses: actions/upload-artifact@v2
+      with:
+        name: polkadot-spec-html
+        path: polkadot-spec-html/
+
+  build-html-compact:
+    name: Compile compact html specification
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install deb dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y asciidoctor ruby-rouge
+    - name: Build compact html specification
+      run: make polkadot-spec.html
+    - name: Upload compact html specification
+      uses: actions/upload-artifact@v2
+      with:
+        name: polkadot-spec.html
+        path: polkadot-spec.html
+    - name: Release compact html specification
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: polkadot-spec.html
+        asset_name: polkadot-spec_${{ github.event.release.tag_name }}.html
+        asset_content_type: application/html
+      if: github.event_name == 'release'
+
+  build-pdf:
+    name: Compile pdf specification
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install deb dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y asciidoctor rubygems ruby-rouge ruby-asciidoctor-pdf
+    - name: Install gem dependencies
+      run: sudo gem install asciidoctor-mathematical
+    - name: Build pdf specification
+      run: make pdf
+    - name: Upload pdf specification
+      uses: actions/upload-artifact@v2
+      with:
+        name: polkadot-spec.pdf
+        path: polkadot-spec.pdf
+    - name: Release pdf specification
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: polkadot-spec.pdf
+        asset_name: polkadot-spec_${{ github.event.release.tag_name }}.pdf
+        asset_content_type: application/pdf
+      if: github.event_name == 'release'
+
+  release-pages:
+    needs: [ build-html, build-pdf ]
+    name: Publish release on GitHub Pages
+    runs-on: ubuntu-20.04
+    if: github.event_name == 'release'
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+    - uses: actions/download-artifact@v2
+      with:
+        name: polkadot-spec-html
+    - uses: actions/download-artifact@v2
+      with:
+        name: polkadot-spec.pdf
+    - name: Replace latest release cache file
+      run: |
+        mv polkadot-spec.pdf spec/develop.pdf
+        mv polkadot-spec-html develop
+    - name: Commit and push updated GitHub Pages branch
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add spec/ develop/
+        git commit --amend -m "Update specification page"
+        git push -f
