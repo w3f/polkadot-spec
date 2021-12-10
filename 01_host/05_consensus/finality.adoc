@@ -385,6 +385,29 @@ Algorithm: stem:["Best-Final-Candidate"(r)]
 where stem:[#V_("obv"(v),pot)^(r,pc)]
 ****
 
+[#algo-grandpa-ghost]
+===== Grandpa Ghost
+****
+Algorithm: stem:["GRANDPA-GHOSTS"(r)]
+
+. stem:["if " r = 0]
+. stem:["    " G larr B_("last")]
+. stem:["else"]
+. stem:["    " L larr "Best-Final-Candidate"(r-1)]
+. stem:["    " P larr {AA B > L \|#V_("obs"(v))^(r,pv)(B) >= 2//3 \|bbb "V"\|}]
+. stem:["    " "if P" = phi]
+. stem:["    " "    " G larr L]
+. stem:["    " "else"]
+. stem:["    " "    " G in P: H_n(G) = "Max"(H_n(B)\|AA B in P)]
+. stem:["return G"]
+
+where:
+
+* stem:[B_("last")] is the last block which has been finalized on the chain
+(<<defn-finalized-block>>).
+* stem:[#V_("obs"(v))^(r,pv)(B)] is defined in <<defn-observed-votes>>.
+****
+
 Note that we might not always succeed in finalizing our best final candidate due
 to the possibility of equivocation. The example in <<exmp-candid-unfinalized>>
 serves to demonstrate such a situation:
