@@ -50,10 +50,23 @@ Only GRANDPA voter nodes are required to respond to the catch-up responses. When
 a GRANDPA voter node receives a catch-up request message it needs to execute
 Algorithm as defined in <<algo-process-catchup-request>>.
 
-TODO: algorithm
+[#algo-process-catchup-request]
+====== Process Catchup Request
+****
+Algorithm: stem:["Process-Catchup-Request"(M_(i,v)^("Cat"-q)("id"_(bbb "V"),r))]
 
-In which:
+. stem:["if " M_(i,v)^("Cat"-q)("id"_(bbb "V"),r)."id"_(bbb "V") != "id"_(bbb "V")]
+. stem:["    " "error 'Catching up on the different set'"]
+. stem:["if " i !in bbb "P"]
+. stem:["    " "error 'Requesting catching up from a non-peer'"]
+. stem:["if " r > "Last-Completed-Round"]
+. stem:["    " "error 'Catching up on a round in the future'"]
+. stem:["Send"(i,M_(i,v)^("Cat"-q)("id"_(bbb "V"),r))]
 
+where:
+
+* stem:[M_(i,v)^("Cat"-q)("id"_(bbb "V"),r)] is the catch-up message received
+from peer stem:[i] (<<defn-grandpa-catchup-request-msg>>).
 * stem:["id"_(bbb "V")] is the voter set id with which the serving node is
 operating
 * stem:[r] is the round number for which the catch-up is requested for.
@@ -61,6 +74,7 @@ operating
 * stem:[tt "Last-Completed-Round"] is [TODO: Reference].
 * stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)] is the catch-up response
 (<<defn-grandpa-catchup-response-msg>>).
+****
 
 ===== Processing catch-up responses
 
