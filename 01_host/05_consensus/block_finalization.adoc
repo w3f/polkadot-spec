@@ -85,4 +85,28 @@ response message and subsequently updates its view of the state of the finality
 of the Relay chain according to Algorithm as defined in
 <<algo-process-catchup-response>>.
 
-TODO: Algorithm
+[#algo-process-catchup-response]
+====== Process Catchup Response
+****
+Algorithm: stem:["Process-Catchup-Response"(M_(v,i)^("Cat"-s)("id"_(bbb "V"),r))]
+
+. stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)."id"_(bbb "V"),r,J^(r,pv)(B),J^(r,pc)(B),H_h(B'),H_i(B') larr "Dec"_("SC")(M_(v,i)^("Cat"-s)("id"_(bbb "V"),r))]
+. stem:["if " M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)."id"_(bbb "V") != "id"_(bbb "V")]
+. stem:["    " "error 'Catching up on different set'"]
+. stem:["if " r <= "Leading-Round"]
+. stem:["    " "error 'Catching up in to the past'"]
+. stem:[J^(r,pv)(B) " is not valid"]
+. stem:["    " "error 'Invalid pre-vote justification'"]
+. stem:[J^(r,pc)(B) " is not valid"]
+. stem:["    " "error 'Invalid pre-commit justification'"]
+. stem:[G larr "GRANDPA-GHOST"(J^(r,pv)(B))]
+. stem:["if " G = phi]
+. stem:["    " "error 'GHOST-less catchup'"]
+. stem:["if " r " is not completable"]
+. stem:["    " "error 'Catch-up round is not completable'"]
+. stem:["if " J^(r,pc)(B) " justifies " B' " finalization"]
+. stem:["    " "error 'Unjustified catchup target finalization'"]
+. stem:["Last-Completed-Round" larr r]
+. stem:["if " i in bbb "V"]
+. stem:["    " "Play-Grandpa-Round(r+1)"]
+****
