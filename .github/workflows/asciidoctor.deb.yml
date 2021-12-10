@@ -101,13 +101,11 @@ jobs:
     - uses: actions/download-artifact@v2
       with:
         name: polkadot-spec-html
-    - name: Replace latest release cache file
-      run: |
-        mv polkadot-spec-html develop
+        path: develop
     - name: Commit and push updated GitHub Pages branch
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git add develop/
-        git commit --amend -m "Update specification page"
+        git commit --amend -m "Update develop specification"
         git push -f
