@@ -287,6 +287,7 @@ during that epoch. The produced block needs to carry the _BABE header_
 
 [#defn-babe-header]
 ===== BABE Header
+****
 The *BABE Header* of block stem:[B], referred to formally by
 stem:[H_("BABE")(B)] is a tuple and consists of the following components:
 
@@ -304,11 +305,29 @@ current epoch.
 
 stem:[H_("BABE")(B)] must be included as a digest item of Pre-Runtime type in
 the header digest (<<defn-digest>>) stem:[H_d(B)].
+****
 
-TODO: Algorithm
+[#algo-block-production]
+===== Invoke Block Authoring
+****
+Algorithm: stem:["Invoke-Block-Authoring"(sk, pk, n, "BT")]
 
-stem:["Add-Digest-Item"] appends a digest item to the end of the header digest
-(<<defn-digest>>) stem:[H_d(B)].
+. stem:[A larr "Block-Production-Lottery"(sk, n)]
+. stem:["for " s larr 1 " to " "sc"_n]
+. stem:["    " "Wait"("until Slot-Time"(s))]
+. stem:["    " (d, pi) larr A\[s\]]
+. stem:["    " "if " d < r]
+. stem:["    " "    " C_("Best") larr "Longest-Chain"("BT")]
+. stem:["    " "    " B_s larr "Build-Block"(C_("Best"))]
+. stem:["    " "    " "Add-Digest-Item"(B_s, "Pre-Runtime", E_("id")("BABE"),H_("BABE")(B_s))]
+. stem:["    " "    " "Add-Digest-Item"(B_s, "Seal", S_B)]
+. stem:["    " "    " "Broadcast-Block"(B_s)]
+
+where stem:["BT"] is the current block tree, stem:["Block-Production-Lottery"]
+is defined in <<algo-block-production-lottery>> and stem:["Add-Digest-Item"]
+appends a digest item to the end of the header digest stem:[H_d(B)]
+(<<defn-digest>>).
+****
 
 [#defn-block-signature]
 ===== Block Signature
