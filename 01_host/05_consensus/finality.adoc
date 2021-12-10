@@ -291,7 +291,16 @@ stem:[r_n] currently undergoing in the network. Algorithm as defined in
 <<algo-initiate-grandpa>> mandates the initialization procedure for GRANDPA
 protocol for a joining validator.
 
-TODO: Algorithm
+===== Initiate Grandpa
+****
+Algorithm: stem:["Initiate-Grandpa"(r_("last"), B_("last"))]
+
+. stem:["Last-Finalized-Block" larr B_("last")]
+. stem:["if " r_("last") = 0]
+. stem:["    " "Best-Final-Candidate"(0) larr B_("last")]
+. stem:["    " "GRANDPA-GHOST"(0) larr B_("last")]
+. stem:[r_n larr r_("last"+1)]
+. stem:["Play-Grandpa-Round"(r_n)]
 
 stem:[r_("last")] is equal to the latest round the voter has observed that other
 voters are voting on. The voter obtains this information through various
@@ -300,6 +309,7 @@ gossiped messages including those mentioned in <<defn-finalized-block>>.
 stem:[r_("last")] is set to _0_ if the GRANDPA node is initiating the GRANDPA
 voting process as a part of a new authority set. This is because the GRANDPA
 round number reset to _0_ for every authority set change.
+****
 
 ===== Voter Set Changes
 
