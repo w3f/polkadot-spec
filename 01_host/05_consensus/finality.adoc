@@ -388,7 +388,7 @@ where stem:[#V_("obv"(v),pot)^(r,pc)]
 [#algo-grandpa-ghost]
 ===== Grandpa Ghost
 ****
-Algorithm: stem:["GRANDPA-GHOSTS"(r)]
+Algorithm: stem:["GRANDPA-GHOST"(r)]
 
 . stem:["if " r = 0]
 . stem:["    " G larr B_("last")]
@@ -400,6 +400,23 @@ Algorithm: stem:["GRANDPA-GHOSTS"(r)]
 . stem:["    " "else"]
 . stem:["    " "    " G in P: H_n(G) = "Max"(H_n(B)\|AA B in P)]
 . stem:["return G"]
+
+where:
+
+* stem:[B_("last")] is the last block which has been finalized on the chain
+(<<defn-finalized-block>>).
+* stem:[#V_("obs"(v))^(r,pv)(B)] is defined in <<defn-observed-votes>>.
+****
+
+===== Best PreVote Candidate
+****
+Algorithm: stem:["Best-PreVote-Candidate"(r)]
+
+. stem:[B_v^(r,pv) larr "GRANDPA-GHOST"(r)]
+. stem:["if Received"(M_(v_("primary"))^(r,"prim")(B)) " and " B_v^(r,pv) >= B > L]
+. stem:["    " N larr B]
+. stem:["else"]
+. stem:["    " N larr B_v^(r,pv)]
 
 where:
 
