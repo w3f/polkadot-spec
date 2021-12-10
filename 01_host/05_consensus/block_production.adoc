@@ -205,13 +205,33 @@ which the slot numbers have been synchronized with the local clock.
 TODO: Algorithm
 ****
 
-===== Slot Time
+[#algo-slot-offset]
+===== Slot Offset
 ****
 Algorithm: stem:["Slot-Time"(s)]
 
 . stem:["return " t_("sync") + "Slot-Offset"(s_("sync"),s) xx cc "T"]
 
 where stem:[s] is the slot number.
+****
+
+[#algo-slot-time]
+===== Slot Time Median Algorithm
+****
+Algorithm: stem:["Median-Algorithm"(cc "P", s_("sync"))]
+
+. stem:[T_s larr {}]
+. stem:["for " B_i in cc "P"]
+. stem:["    " t_("est")^B larr T_(B_i) + "Slot-Offset"(S_(B_i), s_("sync")) xx cc "T"]
+. stem:["    " T_s larr T_S	uu t_("est")^(B_i)]
+. stem:["return Median"(T_s)]
+
+where
+
+* stem:[cc "P"] is the sync period used for the estimate.
+* stem:[s_("sync")] is the slot time to estimate.
+* stem:["Slot-Offset"] is defined in <<algo-slot-offset>>.
+* stem:[cc "T"] is the slot duration defined in <<defn-epoch-slot>>.
 ****
 
 [#defn-prunned-best]
