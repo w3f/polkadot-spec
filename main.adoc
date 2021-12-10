@@ -8,6 +8,7 @@ Fabio Lama; Florian Franzen; Syed Hosseini
 :sectlinks:
 :sectnums:
 :sectnumlevels: 4
+:source-highlighter: rouge
 :stem:
 :stylesheet: style.css
 :toc: left
