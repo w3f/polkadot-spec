@@ -109,4 +109,7 @@ Algorithm: stem:["Process-Catchup-Response"(M_(v,i)^("Cat"-s)("id"_(bbb "V"),r))
 . stem:["Last-Completed-Round" larr r]
 . stem:["if " i in bbb "V"]
 . stem:["    " "Play-Grandpa-Round(r+1)"]
+
+where stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)] is the catch-up response
+received from node stem:[v] (<<defn-grandpa-catchup-response-msg>>).
 ****
