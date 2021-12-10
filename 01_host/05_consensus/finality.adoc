@@ -319,7 +319,42 @@ must not vote on any block with a higher number than the block at which the
 change is supposed to happen. The new authority set should reinitiate GRANDPA
 protocol by executing Algorithm as defined in <<algo-initiate-grandpa>>.
 
-TODO: Algorithms...
+==== Voting Process in Round stem:[r]
+For each round stem:[r], an honest voter stem:[v] must participate in the voting
+process by following Algorithm TODO.
+
+===== Play Grandpa Round
+****
+Algorithm: stem:["Play-Grandpa-Round"(r)]
+
+. stem:[t_(r,v) larr "Current local time"]
+. stem:["primary" larr "Derive-Primary"(r)]
+. stem:["if " v = "primary"]
+. stem:["    " "Broadcast"(M_v^(r-1,"Fin")("Best-Final-Candidate"(r-1)))]
+. stem:["    " "if Best-Final-Candidate"(r-1) >= "Last-Finalized-Block"]
+. stem:["    " "    " "Broadcast"(M_v^(r-1,"Prim")("Best-Final-Candidate"(r-1)))]
+. stem:["Receive-Messages"("until Time" >= t_(r,v)+2 xx T " or " r " is completable")]
+. stem:[L larr "Best-Final-Candidate"(r-1)]
+. stem:[N larr "Best-PreVote-Candidate"(r)]
+. stem:["Broadcast"(M_v^(r,pv)(N))]
+. stem:["Receive-Messages"("until " B_v^(r,pv) >= L " and " ("Time" >= t_(r,v)+4 xx T " or " r " is completable"))]
+. stem:["Broadcast"(M_v^(r,pc)(B_v^(r,pv)))]
+. stem:["Attempt-To-Finalize-Round"(r)]
+. stem:["Receive-Messages"("until " r " is completable and Finalizable"(r-1)]
+. stem:["    " "and Last-Finalized-Block" >= "Best-Final-Candidate"(r-1))]
+. stem:["Play-Grandpa-Round"(r+1)]
+
+where:
+
+* stem:[T] is sampled from a log-normal distribution whose mean and standard
+deviation are equal to the average network delay for a message to be sent and
+received from one validator to another.
+* stem:["Derive-Primary"] is described in <<algo-derive-primary>>.
+* The condition of _completablitiy_ is defined in <<defn-grandpa-completable>>.
+* stem:["Best-Final-Candidate"] function is explained in <<algo-grandpa-best-candidate>>.
+* stem:["Attempt-To-Finalize-Round"(r)] is described in <<algo-attempt-to–finalize>>.
+* stem:["Finalizable"] is defined in <<algo-finalizable>>.
+****
 
 Note that we might not always succeed in finalizing our best final candidate due
 to the possibility of equivocation. The example in <<exmp-candid-unfinalized>>
