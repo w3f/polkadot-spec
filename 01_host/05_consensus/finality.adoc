@@ -323,6 +323,7 @@ protocol by executing Algorithm as defined in <<algo-initiate-grandpa>>.
 For each round stem:[r], an honest voter stem:[v] must participate in the voting
 process by following Algorithm TODO.
 
+[#algo-grandpa-round]
 ===== Play Grandpa Round
 ****
 Algorithm: stem:["Play-Grandpa-Round"(r)]
@@ -354,6 +355,34 @@ received from one validator to another.
 * stem:["Best-Final-Candidate"] function is explained in <<algo-grandpa-best-candidate>>.
 * stem:["Attempt-To-Finalize-Round"(r)] is described in <<algo-attempt-to–finalize>>.
 * stem:["Finalizable"] is defined in <<algo-finalizable>>.
+****
+
+[#algo-derive-primary]
+===== Derive Primary
+****
+Algorithm: stem:["Derive-Primary"(r)]
+
+. stem:["return r mod" |bbb "V"|]
+
+where stem:[r] is the GRANDPA round whose primary is to be determined.
+****
+
+[#algo-grandpa-best-candidate]
+===== Best Final Candidate
+****
+Algorithm: stem:["Best-Final-Candidate"(r)]
+
+. stem:[B_v^(r,pv) larr "GRANDPA-GHOST"(r)]
+. stem:["if " r = 0]
+. stem:["    " "return " B_v^(r,pv)]
+. stem:["else"]
+. stem:["    " cc "C" larr {B'|B' <= B_v^(r,pv):#V_("obv"(v),pot)^(r,pc) > 2//3 \|bbb "V"\|}]
+. stem:["    " "if " cc "C" = phi]
+. stem:["    " "    " "return " B_v^(r,pv)]
+. stem:["    " "else"]
+. stem:["    " "    " "return " E in cc "C": H_n(E)="Max"(H_n(B'):B' in cc "C")]
+
+where stem:[#V_("obv"(v),pot)^(r,pc)]
 ****
 
 Note that we might not always succeed in finalizing our best final candidate due
