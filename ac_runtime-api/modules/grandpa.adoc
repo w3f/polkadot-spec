@@ -30,26 +30,26 @@ Arguments::
 [latexmath]
 ++++
 \begin{aligned}
-    G_{\operatorname{Ep}} = & (\operatorname{id}_{\mathbb{V}}, e, r, A_{\operatorname{id}}, B^1_h,
-    B^1_n A^1_{\operatorname{sig}}, B^2_h, B^2_n, A^2_{\operatorname{sig}})\\
-    e = & \left\{\begin{array}{l}
-      0 \quad \textrm{Equivocation at prevote stage}\\
+    G_{\mathrm{Ep}} = & (\mathrm{id}_{\mathbb{V}}, e, r, A_{\mathrm{id}}, B^1_h,
+    B^1_n A^1_{\mathrm{sig}}, B^2_h, B^2_n, A^2_{\mathrm{sig}})\\
+    e = & \left\{\begin{array}
+      0 \quad \textrm{Equivocation at prevote stage} \\
       1 \quad \textrm{Equivocation at precommit stage}
     \end{array}\right.
 \end{aligned}
 ++++
 +
 where
-** latexmath:[\operatorname{id}_{\mathbb{V}}] is the authority set as defined in <<defn-authority-set-id>>.
+** latexmath:[\mathrm{id}_{\mathbb{V}}] is the authority set as defined in <<defn-authority-set-id>>.
 ** latexmath:[e] indicates the stage at which the equivocation occurred.
 ** latexmath:[r] is the round number the equivocation occurred.
-** latexmath:[A_{\operatorname{id}}] is the public key of the equivocator.
+** latexmath:[A_{\mathrm{id}}] is the public key of the equivocator.
 ** latexmath:[B^1_h] is the block hash of the first block the equivocator voted for.
 ** latexmath:[B^1_n] is the block number of the first block the equivocator voted for.
-** latexmath:[A^1_{\operatorname{sig}}] is the equivocators signature of the first vote.
+** latexmath:[A^1_{\mathrm{sig}}] is the equivocators signature of the first vote.
 ** latexmath:[B^2_h] is the block hash of the second block the equivocator voted for.
 ** latexmath:[B^2_n] is the block number of the second block the equivocator voted for.
-** latexmath:[A^2_{\operatorname{sig}}] is the equivocators signature of the second vote.
+** latexmath:[A^2_{\mathrm{sig}}] is the equivocators signature of the second vote.
 * A proof of the key owner in an opaque form as described in <<sect-grandpaapi_generate_key_ownership_proof>>.
 
 Return::

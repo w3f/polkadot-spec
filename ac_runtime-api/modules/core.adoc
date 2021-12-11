@@ -40,8 +40,8 @@ Return::
 [latexmath]
 ++++
 \begin{aligned}
-      \operatorname{ApiVersions} :=& (T_0, \ldots, T_n)\\
-      T :=& ((b_0, \ldots, b_7), \operatorname{UINT32})
+      \mathrm{ApiVersions} :=& (T_0, \ldots, T_n)\\
+      T :=& ((b_0, \ldots, b_7), \mathrm{UINT32})
 \end{aligned}
 ++++
 ====
