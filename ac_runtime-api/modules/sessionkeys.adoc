@@ -27,8 +27,8 @@ Return::
 +
 [latexmath]
 ++++
-(k, k_{\operatorname{id}})
+(k, k_{\mathrm{id}})
 ++++
 where latexmath:[k] is an array of varying sizes containg the raw
-public key and latexmath:[k_{\operatorname{id}}] is a
+public key and latexmath:[k_{\mathrm{id}}] is a
 4-byte array indicating the key type.
