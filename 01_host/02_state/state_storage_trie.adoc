@@ -23,11 +23,11 @@ key in the state storage and is formally defined as:
 
 [stem]
 ++++
-sf "StoredValue" ": " cc "K" -> cc "V"\
+sf "StoredValue" ": " cc K -> cc V\
 k -> {(v,"if " (k,v), "exists in state storage"),(phi,,"otherwise"):}
 ++++
 
-where stem:[cc "K" sub bbb "B"] and stem:[cc "V" sub bbb "B"] are respectively
+where stem:[cc K sub bbb B] and stem:[cc V sub bbb B] are respectively
 the set of all keys and values stored in the state storage.
 ****
 
@@ -62,18 +62,18 @@ nibbles:
 ===== Key Encode
 ****
 For the purpose of labeling the branches of the Trie, the key stem:[k] is
-encoded to stem:[k_(enc)] using stem:[sf "KeyEncode"] functions:
+encoded to stem:[k_("enc")] using stem:[sf "KeyEncode"] functions:
 
 [stem]
 ++++
-k_(enc) := (k_(enc_1), ..., k_(enc_(2n))) := sf "KeyEncode"(k)
+k_("enc") := (k_("enc"_1), ..., k_("enc"_(2n))) := sf "KeyEncode"(k)
 ++++
 
 such that:
 
 [stem]
 ++++
-sf "KeyEncode"(k): {(bbb "B",->,"Nibbles"^4),(k:=(b_1,...,b_n),->,(b_1^(1),b_1^2,b_2^1,b_2^2,...,b_n^1,b_n^2)),(,,:=(k_(enc_1),...,k_(enc_(2n)))):}
+sf "KeyEncode"(k): {(bbb B,->,"Nibbles"^4),(k:=(b_1,...,b_n),->,(b_1^(1),b_1^2,b_2^1,b_2^2,...,b_n^1,b_n^2)),(,,:=(k_("enc"_1),...,k_("enc"_(2n)))):}
 ++++
 
 where stem:["Nibble"^4] is the set of all nibbles of 4-bit arrays and
@@ -86,7 +86,7 @@ representations of stem:[b_i]:
 ++++
 ****
 
-By looking at stem:[k_(enc)] as a sequence of nibbles, one can walk the radix
+By looking at stem:[k_("enc")] as a sequence of nibbles, one can walk the radix
 tree to reach the node identifying the storage value of stem:[k].
 
 [#sect-state-storage-trie-structure]
@@ -97,8 +97,8 @@ well as the Trie structure:
 
 ===== Set of Nodes
 ****
-We refer to the *set of the nodes of Polkadot state trie* by stem:[cc "N"]. By
-stem:[N in cc "N] to refer to an individual node in the trie.
+We refer to the *set of the nodes of Polkadot state trie* by stem:[cc N]. By
+stem:[N in cc N] to refer to an individual node in the trie.
 ****
 
 [#defn-nodetype]
@@ -116,7 +116,7 @@ and, at least one of the following statements holds:
 * stem:[N] has more than one child.
 
 Conversely, if stem:[(k, v)] is an entry in the State Trie then there is a node
-stem:[N in cc "N"] such that stem:[k_N = k].
+stem:[N in cc N] such that stem:[k_N = k].
 ****
 
 ===== Branch
@@ -126,8 +126,8 @@ most 16 children. A *leaf* node is a childless node. Accordingly:
 
 [stem]
 ++++
-cc "N"_b := {N in cc "N" | N " is a branch node"}\
-cc "N"_i := {N in cc "N" | N " is a leaf node"}
+cc N_b := {N in cc N | N " is a branch node"}\
+cc N_i := {N in cc N | N " is a leaf node"}
 ++++
 ****
 
@@ -137,26 +137,26 @@ to stem:[N] part of stem:[k_N] is stored in stem:[N] (<<defn-node-key>>).
 [#defn-node-key]
 ===== Aggregated Prefix Key
 ****
-For any stem:[N in cc "N"], its key stem:[k_N] is divided into an *aggregated
-prefix key, stem:[pk_N^(Agr)]*, aggregated by the algorithm as defined in
-<<algo-aggregate-key>> and a *partial key*, *stem:[pk_N]* of length stem:[0 <=
-l_(pk_N) <= 65535] in nibbles such that:
+For any stem:[N in cc N], its key stem:[k_N] is divided into an *aggregated
+prefix key, stem:["pk"_N^("Agr")]*, aggregated by the algorithm as defined in
+<<algo-aggregate-key>> and a *partial key*, *stem:["pk"_N]* of length
+stem:[0 <= l_("pk"_N) <= 65535] in nibbles such that:
 
 [stem]
 ++++
-pk_N := (k_(enc_i),...,k_(enc_(i+l_(pk_N))))
+"pk"_N := (k_("enc"_i),...,k_("enc"_(i+l_("pk"_N))))
 ++++
 
-where stem:[pk_N^(Agr)] is a suffix subsequence of stem:[k_N]; stem:[i] is the length
-of stem:[pk_N^(Agr)] in nibbles and so we have:
+where stem:["pk"_N^("Agr")] is a suffix subsequence of stem:[k_N]; stem:[i] is the length
+of stem:["pk"_N^("Agr")] in nibbles and so we have:
 
 [stem]
 ++++
-sf "KeyEncode"(k_N) = pk_N^(Agr) || pk_N = (k_(enc_1), ..., k_(enc_(i-1)),k_(enc_i),k_(enc_(i+l_(pk_N))))"
+sf "KeyEncode"(k_N) = "pk"_N^("Agr") || "pk"_N = (k_("enc"_1), ..., k_("enc"_(i-1)),k_("enc"_i),k_("enc"_(i+l_("pk"_N))))
 ++++
 ****
 
-Part of stem:[pk_N^(Agr)] is explicitly stored in stem:[N]’s ancestors.
+Part of stem:["pk"_N^("Agr")] is explicitly stored in stem:[N]’s ancestors.
 Additionally, for each ancestor, a single nibble is implicitly derived while
 traversing from the ancestor to its child included in the traversal path using
 the stem:["Index"_N] function (<<defn-index-function>>).
@@ -164,12 +164,12 @@ the stem:["Index"_N] function (<<defn-index-function>>).
 [#defn-index-function]
 ===== Index
 ****
-For stem:[N in cc "N"_b] and stem:[N_c] child of stem:[N], we define
+For stem:[N in cc N_b] and stem:[N_c] child of stem:[N], we define
 stem:[sf "Index"_N] function as:
 
 [stem]
 ++++
-sf "Index"_N: {N_C in cc "N" | N_c " is a child of " N} -> "Nibbles"_1^4\
+sf "Index"_N: {N_C in cc N | N_c " is a child of " N} -> "Nibbles"_1^4\
 N_c -> i
 ++++
 
@@ -177,20 +177,20 @@ such that
 
 [stem]
 ++++
-k_(N_c) = k_N ||i||pk_(N_c)
+k_(N_c) = k_N || i || "pk"_(N_c)
 ++++
 ****
 
 Assuming that stem:[P_N] is the path (<<defn-path-graph>>) from the Trie root to
 node stem:[N], the algorithm defined in <<algo-aggregate-key>> rigorously
-demonstrates how to build stem:[pk_N^(Agr)] while traversing stem:[P_N].
+demonstrates how to build stem:["pk"_N^("Agr")] while traversing stem:[P_N].
 
 [#algo-aggregate-key]
 ===== Aggregate Key
 ****
 Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
 
-. stem:[pk_N^(Agr) larr phi]
+. stem:["pk"_N^("Agr") larr phi]
 . stem:[i larr 1]
 . stem:["while" (N_i != N)]
 . stem:["    " pk_N^(Agr) larr pk_N^(Agr)"||"pk_(N_i)]
@@ -203,7 +203,7 @@ Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
 [#defn-node-value]
 ===== Node Value
 ****
-A node stem:[N in cc "N"] stores the *node value*, stem:[v_N], which consists of
+A node stem:[N in cc N] stores the *node value*, stem:[v_N], which consists of
 the following concatenated data:
 
 [stem]
@@ -227,7 +227,7 @@ defined in <<defn-node-header>>, <<defn-node-key>>, <<defn-hex-encoding>> and
 ===== Node Header
 ****
 The *node header* of node stem:[N], stem:["Head"_N], consists of stem:[l + 1 >= 1]
-bytes stem:["Head"_(N,1),...,Head_(N,l+1)] such that:
+bytes stem:["Head"_(N,1),...,"Head"_(N,l+1)] such that:
 
 [cols="2,2,4,4,.^1,4"]
 |===
@@ -235,24 +235,24 @@ bytes stem:["Head"_(N,1),...,Head_(N,l+1)] such that:
 |stem:["Head"_(N,1)^(6-7)] | stem:["Head"_(N,1)^(0-5)] | stem:["Head"_(N,2)] |... | stem:["Head"_(N,l+1)]
 |===
 
-In which stem:["Head"_(N,1)^(6-7)"], the two most significant bits of the first
+In which stem:["Head"_(N,1)^(6-7)], the two most significant bits of the first
 byte of stem:["Head"_N] are determined as follows:
 
 [stem]
 ++++
-"Head"_(N,1)^(6-7) := {(00,"Special case"),(01,"Leaf Node"),(10,"Branch Node with " k_N !in cc "K"),(11,"Branch Node with " k_N in cc "K"):}
+"Head"_(N,1)^(6-7) := {(00,"Special case"),(01,"Leaf Node"),(10,"Branch Node with " k_N !in cc K),(11,"Branch Node with " k_N in cc K):}
 ++++
 
-where stem:[cc "K"] is defined <<defn-stored-value>>.
+where stem:[cc K] is defined <<defn-stored-value>>.
 
-stem:[Head_(N,1)^(0-5)], the 6 least significant bits of teh first byte of stem:["Head"_N] are defined to be:
+stem:["Head"_(N,1)^(0-5)], the 6 least significant bits of teh first byte of stem:["Head"_N] are defined to be:
 
 [stem]
 ++++
 "Head"_(N,1)^(0-5) := {(||pk_N||_(nib),||pk_N||_(nib) < 63),(63,||pk_N||_(nib) >= 63):}
 ++++
 
-In which stem:[||pk_N||_(nib)] is the length of stem:[pk_N] in number nibbles.
+In which stem:[||"pk"_N||_(nib)] is the length of stem:["pk"_N] in number nibbles.
 stem:["Head"_(N,2),...,"Head"_(N,l+1)] bytes are determined by the algorithm as
 defined in <<algo-pk-length>>.
 ****
@@ -301,14 +301,14 @@ and decode information stored in a branch node.
 [#defn-children-bitmap]
 ===== Children Bitmap
 ****
-Suppose stem:[N_b, N_c in cc "N"] and stem:[N_c] is a child of stem:[N_b]. We
+Suppose stem:[N_b, N_c in cc N] and stem:[N_c] is a child of stem:[N_b]. We
 define where bit stem:[b_i : = 1] if stem:[N] has a child with partial key
 stem:[i], therefore we define *ChildrenBitmap* functions as follows:
 
 [stem]
 ++++
 "ChildrenBitmap:"\
-cc "N"_b -> bbb "B"_2\
+cc N_b -> bbb B_2\
 N -> (b_(15), ...,b_8,b_7,...,b_0)_2
 ++++
 
@@ -316,7 +316,7 @@ where
 
 [stem]
 ++++
-b_i := {(1, EE N_c in cc "N": k_(N_c) = k_(N_b)||i||pk_(N_c)),(0, "otherwise"):}
+b_i := {(1, EE N_c in cc N: k_(N_c) = k_(N_b)||i||pk_(N_c)),(0, "otherwise"):}
 ++++
 ****
 
@@ -328,19 +328,19 @@ stem:[sv_N], is determined as follows:
 
 [stem]
 ++++
-sv_N := {("StoredValue"_(SC)),("Enc"_(SC)("ChildrenBitmap"(N)||"StoredValue"_(SC)||"Enc"_(SC)(H(N_(C_1))),...,"Enc"_(SC)(H(N_(C_n))))):}
+sv_N := {("StoredValue"_("SC")),("Enc"_("SC")("ChildrenBitmap"(N)||"StoredValue"_("SC")||"Enc"_("SC")(H(N_(C_1))),...,"Enc"_("SC")(H(N_(C_n))))):}
 ++++
 
 where the first variant is a leaf node and the second variant is a branch node.
 
 [stem]
 ++++
-"StoredValue"_(SC) := {("Enc"_(SC)("StoredValue"(k_N)),"if StoredValue"(k_N) = v),(phi,"if StoredValue"(k_N) = phi):}
+"StoredValue"_("SC") := {("Enc"_("SC")("StoredValue"(k_N)),"if StoredValue"(k_N) = v),(phi,"if StoredValue"(k_N) = phi):}
 ++++
 ****
 
 stem:[N_(C_1) ... N_(C_n)] with stem:[n <= 16] are the children nodes of the
-branch node stem:[N] and stem:["Enc"_(SC)], stem:["StoredValue"], stem:[H], and
+branch node stem:[N] and stem:["Enc"_("SC")], stem:["StoredValue"], stem:[H], and
 stem:["ChildrenBitmap"(N)] are defined in <<sect-scale-codec>>,
 <<defn-stored-value>>, <<defn-merkle-value>> and <<defn-children-bitmap>>
 respectively.
@@ -357,7 +357,7 @@ stem:[H(N)] is defined as follows:
 
 [stem]
 ++++
-H: bbb "B" -> U_(i -> 0)^(32) bbb "B"_32\
+H: bbb B -> U_(i -> 0)^(32) bbb B_32\
 H(N): {(v_N,||v_N|| < 32 " and " N != R),("Blake2b"(v_n),||v_N|| >= 32 " or " N + R):}
 ++++
 
