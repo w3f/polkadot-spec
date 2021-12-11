@@ -60,11 +60,11 @@ where each digest item can hold one of the following type identifiers:
 
 [stem]
 ++++
-H_d^n = {(2,bbb "B"_32),(4,(E_(id),bbb "B")),(5,(E_(id),bbb "B")),(6,(E_(id),bbb "B")):}
+H_d^n = {(2,bbb B_32),(4,(E_("id"),bbb B)),(5,(E_("id"),bbb B)),(6,(E_("id"),bbb B)):}
 ++++
 
 Where stem:[E_(id)] is the unique consensus engine identifier
-(<<defn-consensus-message-digest>>) and stem:[bbb "B"]:
+(<<defn-consensus-message-digest>>) and stem:[bbb B]:
 
 * Id _2_, the *Changes trie root*, contains the root of the Changes Trie at
 block stem:[B] (<<sect-changes-trie>>). Note that this is future-reserved and
@@ -122,7 +122,7 @@ defined to be:
 "Body"(B) := "Enc"_(SC)(E_1,...,E_n)
 ++++
 
-Where each stem:[E_i in bbb "B"] is a SCALE encoded extrinsic.
+Where each stem:[E_i in bbb B] is a SCALE encoded extrinsic.
 ****
 
 [#sect-block-validation]
