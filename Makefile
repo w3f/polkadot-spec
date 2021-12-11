@@ -1,4 +1,4 @@
-SOURCES := main.adoc $(wildcard ??_*/**.adoc)
+SOURCES := main.adoc $(wildcard ??_*/*.adoc) $(wildcard ??_*/*/*.adoc)
 
 .PHONY: default html pdf clean
 
