@@ -771,7 +771,7 @@ Computes the resulting weight based on the time measurements in the collection.
 The worst case scenario should be chosen (the highest value).
 
 
-==== Practical Example #3: `balances`
+==== Practical Example #3: `transfer`
 
 The latexmath:[transfer] function of the `balances` module is designed
 to move the specified balance by the sender to the receiver.
@@ -825,7 +825,7 @@ execution time. Therefore, this benchmark is configured to first set the
 balance at value 1’000 and then to iterate from 1 to 1’000 for the index
 value. Once the index value reaches 1’000, the balance value will reset
 to 2 and iterate to 1’000 (see algorithm
-<<sec-algo-benchmark-transfer>> for more
+<<algo-benchmark-transfer>> for more
 detail):
 
 * `index`: 1, `balance`: 1000
@@ -841,7 +841,7 @@ detail):
 The parameters itself do not influence or trigger the two worst
 conditions and must be handled by the implemented benchmarking tool. The
 latexmath:[transfer] benchmark is implemented as defined in algorithm
-<<sec-algo-benchmark-transfer>>.
+<<algo-benchmark-transfer>>.
 
 ===== Benchmarking Framework
 
@@ -850,15 +850,15 @@ latexmath:[transfer] is defined as follows (starting with the Main
 function):
 
 .Run multiple benchmark iterations for transfer Runtime function.
-[latexmath#sec-algo-benchmark-transfer]
+[latexmath#algo-benchmark-transfer]
 ++++
-\textbf{Output:}~collection : \text{collection of time measurements of all benchmark iterations} \\
+\textbf{Output:}~collection : \textrm{collection of time measurements of all benchmark iterations} \\
 ~\\
 \textbf{function}~\textrm{Main}() \\
   \textbf{init}~collection = \{\} \\
   \textbf{init}~balance = 1'000 \\
   ~\\
-  \textbf{for}~index\gets 1,1'000~\textbf{do} \\
+  \textbf{for}~index \gets 1,1'000~\textbf{do} \\
     time \leftarrow \textrm{Run-Benchmark}(index, balance) \\
     \textrm{Add-To}(collection, time) \\
   \textbf{end for} \\
@@ -869,7 +869,7 @@ function):
     \textrm{Add-To}(collection, time) \\
   \textbf{end for} \\
   ~\\
-  \mathcal{W} \leftarrow \textrm{Compute-Weight}(collection$) \\
+  \mathcal{W} \leftarrow \textrm{Compute-Weight}(collection) \\
   \textbf{return}~\mathcal{W} \\
 \textbf{end} \\
 ~\\
@@ -880,7 +880,7 @@ function):
   ~\\
   time \leftarrow \textrm{Timer}(\textrm{Transfer}(sender, recipient, balance)) \\
   \textbf{return}~time \\
-\textbf{end} \\
+\textbf{end}
 ++++
 
 * Create-Account(latexmath:[name], latexmath:[index])
