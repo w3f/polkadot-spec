@@ -20,28 +20,28 @@ where stem:[k_v^("pr")] represents an
 _ed25519_ private key, is a
 node running a GRANDPA protocol and broadcasting votes to finalize
 blocks in a Polkadot Host-based chain. The *set of all GRANDPA voters*
-for a given block B is indicated by stem:[bbb "V"_B]. In that
+for a given block B is indicated by stem:[bbb V_B]. In that
 regard, we have [To do: change function name, only call at genesis,
 adjust V_B over the sections]
 
 [stem]
 ++++
-bbb "V" = tt "grandpa_authorities"(B)
+bbb V = tt "grandpa_authorities"(B)
 ++++
 
 where stem:[tt "grandpa_authorities"] is a function entry of the Runtime
-described in <<sect-rte-grandpa-auth>>. We refer to stem:[bbb "V"_B] as
-stem:[bbb "V"] when there is no chance of ambiguity.
+described in <<sect-rte-grandpa-auth>>. We refer to stem:[bbb V_B] as
+stem:[bbb V] when there is no chance of ambiguity.
 
 Analogously we say that a Polkadot node is a *non-voter node* for block
 stem:[B], if it does not own any of the key pairs in
-stem:[bbb "V"_B].
+stem:[bbb V_B].
 ****
 
 [#defn-authority-set-id]
 ===== Authority Set Id
 ****
-The *authority set Id* (stem:["id"_(bbb "V")]) is an incremental counter which
+The *authority set Id* (stem:["id"_(bbb V)]) is an incremental counter which
 tracks the amount of authority list changes that occurred
 (<<defn-consensus-message-digest>>). Starting with the value of zero at genesis,
 the Polkadot Host increments this value by one every time a *Scheduled Change*
@@ -56,13 +56,13 @@ The *GRANDPA state*, stem:["GS"], is defined as:
 
 [stem]
 ++++
-"GS" := {bbb "V", "id"_(bbb "V"),r}
+"GS" := {bbb V, "id"_(bbb V),r}
 ++++
 
 where:
 
-* stem:[bbb "V"]: is the set of voters.
-* stem:["id"_(bbb "V")]: is the authority set ID (<<defn-authority-set-id>>).
+* stem:[bbb V]: is the set of voters.
+* stem:["id"_(bbb V)]: is the authority set ID (<<defn-authority-set-id>>).
 * stem:[r]: is the voting round number.
 ****
 
@@ -105,7 +105,7 @@ message in a round and is formally defined as:
 
 [stem]
 ++++
-"Sign"_(v_i)^(r,"stage") := "Sig"_("ed25519")("msg",r,"id"_(bbb "V"))
+"Sign"_(v_i)^(r,"stage") := "Sig"_("ed25519")("msg",r,"id"_(bbb V))
 ++++
 
 where:
@@ -113,7 +113,7 @@ where:
 * stem:["msg"]: is an byte array containing the message to be signed
 (<<defn-vote>>).
 * stem:[r]: is an unsigned 64-bit integer is the round number.
-* stem:["id"_(bbb "V")]: is an unsigned 64-bit integer indicating the authority
+* stem:["id"_(bbb V)]: is an unsigned 64-bit integer indicating the authority
 set Id (<<defn-authority-list>>).
 ****
 
@@ -138,7 +138,7 @@ B' >= B
 or stem:[V_(v_i)^(r,"pc")(B')] is an equivocatory vote.
 
 In all cases, stem:["Sign"_(v_i)^(r,"stage")(B')] is the signature
-(<<defn-sign-round-vote>>) of voter stem:[v_i in bbb "V"_B] broadcasted during
+(<<defn-sign-round-vote>>) of voter stem:[v_i in bbb V_B] broadcasted during
 either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of
 round r. A *valid justification* must only contain up-to-one valid vote from
 each voter and must not contain more than two equivocatory votes from each
@@ -150,7 +150,7 @@ voter.
 ****
 We say stem:[J^(r,"pc")(B)] *justifies the finalization* of stem:[B' >= B] *for
 a non-voter node* stem:[n] if the number of valid signatures in
-stem:[J^(r,"pc")(B)] for stem:[B'] is greater than stem:[2/3|bbb "V"_B|].
+stem:[J^(r,"pc")(B)] for stem:[B'] is greater than stem:[2/3|bbb V_B|].
 
 Note that stem:[J^(r,"pc")(B)] can only be used by a non-voter node to finalize
 a block. In contrast, a voter node can only be assured of the finality
@@ -173,7 +173,7 @@ sub-round is an *equivocatory vote*, and
 
 [stem]
 ++++
-cc "E"^(r,"stage")
+cc E^(r,"stage")
 ++++
 
 represents the set of all equivocators voters in sub-round _stage_ of
@@ -182,7 +182,7 @@ equivocation has been observed by voter stem:[v] we refer to it by:
 
 [stem]
 ++++
-cc "E"_("obs"(v))^(r,"stage")
+cc E_("obs"(v))^(r,"stage")
 ++++
 
 The Polkadot Host must detect equivocations committed by other validators and
@@ -194,7 +194,7 @@ A vote stem:[V_v^(r,"stage") = V(B)] is *invalid* if
 * stem:[H (B)] does not correspond to a valid block.
 * stem:[B] is not an (eventual) descendant of a previously finalized block.
 * stem:[M_v^(r,"stage")] does not bear a valid signature.
-* stem:["id"_(bbb "V")] does no match the current stem:[bbb "V"].
+* stem:["id"_(bbb V)] does no match the current stem:[bbb V].
 * stem:[V_v^(r,"stage")] is an equivocatory vote.
 ****
 
@@ -221,7 +221,7 @@ descendants defined formally as:
 
 [stem]
 ++++
-V_("obs"(v))^(r,"stage")(B) := uuu_(v_i in bbb "V", B >= B') "VD"_("obs"(v))^(r,"stage")(B')
+V_("obs"(v))^(r,"stage")(B) := uuu_(v_i in bbb V, B >= B') "VD"_("obs"(v))^(r,"stage")(B')
 ++++
 
 The *total number of observed votes for Block stem:[B] in round stem:[r]* is
@@ -229,11 +229,11 @@ defined to be the size of that set plus the total number of equivocator voters:
 
 [stem]
 ++++
-#V_("obs"(v))^(r,"stage")(B) := |V_("obs"(v))^(r,"stage")(B)|+|cc "E"_("obs"(v))^(r,"stage")|
+#V_("obs"(v))^(r,"stage")(B) := |V_("obs"(v))^(r,"stage")(B)|+|cc E_("obs"(v))^(r,"stage")|
 ++++
 
 Note that for genesis state we always have
-stem:[#V_("obs"(v))^(r,"pv")(B) = |bbb "V"|].
+stem:[#V_("obs"(v))^(r,"pv")(B) = |bbb V|].
 ****
 
 [#defn-total-potential-votes]
@@ -245,7 +245,7 @@ votes for Block stem:[B] in round stem:[r]* to be:
 
 [stem]
 ++++
-#V_("obs"(v),"pot")^(r,"stage")(B) := |V_("obs"(v))^(r,"stage")(B)|+|V_("unobs"(v))^(r,"stage")|+"Min"(1/3|bbb "V"|,|bbb "V"|-|V_("obs"(v))^(r,"stage")(B)|-|V_("unobs"(v))^(r,"stage")|)
+#V_("obs"(v),"pot")^(r,"stage")(B) := |V_("obs"(v))^(r,"stage")(B)|+|V_("unobs"(v))^(r,"stage")|+"Min"(1/3|bbb V|,|bbb V|-|V_("obs"(v))^(r,"stage")(B)|-|V_("unobs"(v))^(r,"stage")|)
 ++++
 ****
 
@@ -269,12 +269,12 @@ going to be finalized in this round.
 ****
 We say that
 round stem:[r] is *completable* if
-stem:[|V_("obs"(v))^(r,"pc")|+ cc "E"_("obs"(v))^(r,"pc") > 2/3 bbb "V"]
+stem:[|V_("obs"(v))^(r,"pc")|+ cc E_("obs"(v))^(r,"pc") > 2/3 bbb V]
 and for all stem:[B' > B_v^(r,"pv")]:
 
 [stem]
 ++++
-|V_("obs"(v))^(r,"pc")|- cc "E"_("obs"(v))^(r,"pc") - |V_("obs"(v))^(r,"pc")(B')|> 2/3|bbb "V"|
+|V_("obs"(v))^(r,"pc")|- cc E_("obs"(v))^(r,"pc") - |V_("obs"(v))^(r,"pc")(B')|> 2/3|bbb V|
 ++++
 
 Note that in practice we only need to check the inequality for those stem:[B' >
@@ -362,7 +362,7 @@ received from one validator to another.
 ****
 Algorithm: stem:["Derive-Primary"(r)]
 
-. stem:["return r mod" |bbb "V"|]
+. stem:["return r mod" |bbb V|]
 
 where stem:[r] is the GRANDPA round whose primary is to be determined.
 ****
@@ -376,11 +376,11 @@ Algorithm: stem:["Best-Final-Candidate"(r)]
 . stem:["if " r = 0]
 . stem:["    " "return " B_v^(r,pv)]
 . stem:["else"]
-. stem:["    " cc "C" larr {B'|B' <= B_v^(r,pv):#V_("obv"(v),pot)^(r,pc) > 2//3 \|bbb "V"\|}]
-. stem:["    " "if " cc "C" = phi]
+. stem:["    " cc C larr {B'|B' <= B_v^(r,pv):#V_("obv"(v),pot)^(r,pc) > 2//3 \|bbb V\|}]
+. stem:["    " "if " cc C = phi]
 . stem:["    " "    " "return " B_v^(r,pv)]
 . stem:["    " "else"]
-. stem:["    " "    " "return " E in cc "C": H_n(E)="Max"(H_n(B'):B' in cc "C")]
+. stem:["    " "    " "return " E in cc C: H_n(E)="Max"(H_n(B'):B' in cc C)]
 
 where stem:[#V_("obv"(v),pot)^(r,pc)]
 ****
@@ -394,7 +394,7 @@ Algorithm: stem:["GRANDPA-GHOST"(r)]
 . stem:["    " G larr B_("last")]
 . stem:["else"]
 . stem:["    " L larr "Best-Final-Candidate"(r-1)]
-. stem:["    " P larr {AA B > L \|#V_("obs"(v))^(r,pv)(B) >= 2//3 \|bbb "V"\|}]
+. stem:["    " P larr {AA B > L \|#V_("obs"(v))^(r,pv)(B) >= 2//3 \|bbb V\|}]
 . stem:["    " "if P" = phi]
 . stem:["    " "    " G larr L]
 . stem:["    " "else"]
