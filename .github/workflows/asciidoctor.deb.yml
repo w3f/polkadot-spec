@@ -21,34 +21,15 @@ jobs:
     - name: Install deb dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y asciidoctor rubygems ruby-rouge
-    - name: Install gem dependencies
-      run: sudo gem install asciidoctor-multipage
+        sudo apt-get install -y asciidoctor ruby-rouge
     - name: Build html specification
       run: make html
     - name: Upload html specification
       uses: actions/upload-artifact@v2
       with:
-        name: polkadot-spec-html
-        path: polkadot-spec-html/
-
-  build-html-compact:
-    name: Compile compact html specification
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v2
-    - name: Install deb dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y asciidoctor ruby-rouge
-    - name: Build compact html specification
-      run: make polkadot-spec.html
-    - name: Upload compact html specification
-      uses: actions/upload-artifact@v2
-      with:
         name: polkadot-spec.html
         path: polkadot-spec.html
-    - name: Release compact html specification
+    - name: Release html specification
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -58,6 +39,25 @@ jobs:
         asset_name: polkadot-spec_${{ github.event.release.tag_name }}.html
         asset_content_type: application/html
       if: github.event_name == 'release'
+
+  build-html-multi:
+    name: Compile multi-html specification
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install deb dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y asciidoctor rubygems ruby-rouge
+    - name: Install gem dependencies
+      run: sudo gem install asciidoctor-multipage
+    - name: Build multi-html specification
+      run: make multi-html
+    - name: Upload multi-html specification
+      uses: actions/upload-artifact@v2
+      with:
+        name: polkadot-spec-html
+        path: polkadot-spec-html/
 
   build-pdf:
     name: Compile pdf specification
@@ -90,7 +90,7 @@ jobs:
       if: github.event_name == 'release'
 
   release-pages:
-    needs: [ build-html ]
+    needs: [ build-html-multi ]
     name: Publish release on GitHub Pages
     runs-on: ubuntu-20.04
     if: github.event_name == 'release'
