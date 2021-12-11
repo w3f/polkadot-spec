@@ -7,7 +7,7 @@
 A Polkadot relay chain node stem:[n] should consider block stem:[B] as
 *finalized* if any of the following criteria hold for stem:[B' >= B]:
 
-* stem:[V_("obs"(n))^(r,"pc")(B') > 2/3|bbb "V"_(B')|].
+* stem:[V_("obs"(n))^(r,"pc")(B') > 2/3|bbb V_(B')|].
 * It receives a stem:[M_v^(r,"Fin")(B')] message in which stem:[J^r(B)]
 justifies the finalization (<<defn-grandpa-justification>>).
 * It receives a block data message for stem:[B'] with stem:["Just"(B')]
@@ -53,26 +53,26 @@ Algorithm as defined in <<algo-process-catchup-request>>.
 [#algo-process-catchup-request]
 ====== Process Catchup Request
 ****
-Algorithm: stem:["Process-Catchup-Request"(M_(i,v)^("Cat"-q)("id"_(bbb "V"),r))]
+Algorithm: stem:["Process-Catchup-Request"(M_(i,v)^("Cat"-q)("id"_(bbb V),r))]
 
-. stem:["if " M_(i,v)^("Cat"-q)("id"_(bbb "V"),r)."id"_(bbb "V") != "id"_(bbb "V")]
+. stem:["if " M_(i,v)^("Cat"-q)("id"_(bbb V),r)."id"_(bbb V) != "id"_(bbb V)]
 . stem:["    " "error 'Catching up on the different set'"]
-. stem:["if " i !in bbb "P"]
+. stem:["if " i !in bbb P]
 . stem:["    " "error 'Requesting catching up from a non-peer'"]
 . stem:["if " r > "Last-Completed-Round"]
 . stem:["    " "error 'Catching up on a round in the future'"]
-. stem:["Send"(i,M_(i,v)^("Cat"-q)("id"_(bbb "V"),r))]
+. stem:["Send"(i,M_(i,v)^("Cat"-q)("id"_(bbb V),r))]
 
 where:
 
-* stem:[M_(i,v)^("Cat"-q)("id"_(bbb "V"),r)] is the catch-up message received
+* stem:[M_(i,v)^("Cat"-q)("id"_(bbb V),r)] is the catch-up message received
 from peer stem:[i] (<<defn-grandpa-catchup-request-msg>>).
-* stem:["id"_(bbb "V")] is the voter set id with which the serving node is
+* stem:["id"_(bbb V)] is the voter set id with which the serving node is
 operating
 * stem:[r] is the round number for which the catch-up is requested for.
-* stem:[bbb "P"] is the set of immediate peers of node stem:[v].
+* stem:[bbb P] is the set of immediate peers of node stem:[v].
 * stem:[tt "Last-Completed-Round"] is [TODO: Reference].
-* stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)] is the catch-up response
+* stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)] is the catch-up response
 (<<defn-grandpa-catchup-response-msg>>).
 ****
 
@@ -88,10 +88,10 @@ of the Relay chain according to Algorithm as defined in
 [#algo-process-catchup-response]
 ====== Process Catchup Response
 ****
-Algorithm: stem:["Process-Catchup-Response"(M_(v,i)^("Cat"-s)("id"_(bbb "V"),r))]
+Algorithm: stem:["Process-Catchup-Response"(M_(v,i)^("Cat"-s)("id"_(bbb V),r))]
 
-. stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)."id"_(bbb "V"),r,J^(r,pv)(B),J^(r,pc)(B),H_h(B'),H_i(B') larr "Dec"_("SC")(M_(v,i)^("Cat"-s)("id"_(bbb "V"),r))]
-. stem:["if " M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)."id"_(bbb "V") != "id"_(bbb "V")]
+. stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)."id"_(bbb V),r,J^(r,pv)(B),J^(r,pc)(B),H_h(B'),H_i(B') larr "Dec"_("SC")(M_(v,i)^("Cat"-s)("id"_(bbb V),r))]
+. stem:["if " M_(v,i)^("Cat"-s)("id"_(bbb V),r)."id"_(bbb V) != "id"_(bbb V)]
 . stem:["    " "error 'Catching up on different set'"]
 . stem:["if " r <= "Leading-Round"]
 . stem:["    " "error 'Catching up in to the past'"]
@@ -107,9 +107,9 @@ Algorithm: stem:["Process-Catchup-Response"(M_(v,i)^("Cat"-s)("id"_(bbb "V"),r))
 . stem:["if " J^(r,pc)(B) " justifies " B' " finalization"]
 . stem:["    " "error 'Unjustified catchup target finalization'"]
 . stem:["Last-Completed-Round" larr r]
-. stem:["if " i in bbb "V"]
+. stem:["if " i in bbb V]
 . stem:["    " "Play-Grandpa-Round(r+1)"]
 
-where stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)] is the catch-up response
+where stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)] is the catch-up response
 received from node stem:[v] (<<defn-grandpa-catchup-response-msg>>).
 ****
