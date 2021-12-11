@@ -157,7 +157,7 @@ SCALE encoded storage root.
 ==== `ext_default_child_storage_next_key`
 
 Gets the next key in storage after the given one in lexicographic order
-(Definition link_defn-lexicographic-ordering++defn-lexicographic-ordering]]).
+(<<defn-lexicographic-ordering>>).
 The key provided to this function may or may not exist in storage.
 
 ===== Version 1 - Prototype
@@ -172,6 +172,6 @@ Arguments::
 child storage key (<<defn-child-storage-type>>).
 * `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key. 
 * `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded as defined in Definition link_defn-option-type++defn-option-type]]
+encoded as defined in <<defn-option-type>>
 containing the next key in lexicographic order. Returns if the entry cannot be
 found.
