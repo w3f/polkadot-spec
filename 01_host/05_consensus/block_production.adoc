@@ -16,13 +16,13 @@ finalized blocks (<<defn-pruned-tree>>).
 ==== Preliminaries
 
 ===== Block Producer
-A *block producer*, noted by stem:[cc "P"_j], is a node running the Polkadot
+A *block producer*, noted by stem:[cc P_j], is a node running the Polkadot
 Host which is authorized to keep a transaction queue and which it gets a turn in
 producing blocks.
 
 ===== Block Authoring Session Key Pair
 *Block authoring session key pair* stem:[(sk_j^s,pk_j^s)] is an SR25519 key pair
-which the block producer stem:[cc "P"_j] signs by their account key
+which the block producer stem:[cc P_j] signs by their account key
 (<<defn-account-key>>) and is used to sign the produced block as well as to
 compute its lottery values in Algorithm as defined in TODO
 <<algo-block-production-lottery>>.
@@ -30,14 +30,14 @@ compute its lottery values in Algorithm as defined in TODO
 [#defn-epoch-slot]
 ===== Epoch
 ****
-A block production *epoch*, formally referred to as stem:[cc "E"], is a
+A block production *epoch*, formally referred to as stem:[cc E], is a
 period with a pre-known starting time and fixed-length during which the set of
 block producers stays constant. Epochs are indexed sequentially, and we refer to
-the stem:[n^(th)] epoch since genesis by stem:[cc "E"_n]. Each epoch is divided
+the stem:[n^(th)] epoch since genesis by stem:[cc E_n]. Each epoch is divided
 into equal-length periods known as block production *slots*, sequentially
 indexed in each epoch. The index of each slot is called a *slot number*. The
 equal length duration of each slot is called the *slot duration* and indicated
-by stem:[cc "T"]. Each slot is awarded to a subset of block producers during
+by stem:[cc T]. Each slot is awarded to a subset of block producers during
 which they are allowed to generate a block.
 
 IMPORTANT: Substrate refers to an epoch as "session" in some places, however,
@@ -47,12 +47,12 @@ epoch should be the preferred and official name for these periods.
 [#note-slot]
 ===== Slot duration
 ****
-We refer to the number of slots in epoch stem:[cc "E"_n] by stem:[sc_n].
+We refer to the number of slots in epoch stem:[cc E_n] by stem:[sc_n].
 stem:[sc_n] is set to the `duration` field in the returned data from the call of
 the Runtime entry `BabeApi_configuration` (<<sect-rte-babeapi-epoch>>) at
 genesis. For a given block stem:[B], we use the notation *latexmath:[$s_B$]* to
 refer to the slot during which stem:[B] has been produced. Conversely, for slot
-stem:[s], stem:[cc "B"_c] is the set of Blocks generated at slot stem:[s].
+stem:[s], stem:[cc B_c] is the set of Blocks generated at slot stem:[s].
 
 <<defn-epoch-subchain>> provides an iterator over the blocks produced during a
 specific epoch.
@@ -61,9 +61,9 @@ specific epoch.
 [#defn-epoch-subchain]
 ===== Epoch Subchain
 ****
-By stem:["SubChain"(cc "E"_n]) for epoch stem:[cc "E"_n], we refer to the path
+By stem:["SubChain"(cc E_n]) for epoch stem:[cc E_n], we refer to the path
 graph of stem:[BT] containing all the blocks generated during the slots of epoch
-stem:[cc "E"_n]. When there is more than one block generated at a slot, we
+stem:[cc E_n]. When there is more than one block generated at a slot, we
 choose the one which is also on stem:["Longest-Chain"(BT)].
 ****
 
@@ -86,7 +86,7 @@ For efficiency reasons, it is generally updated by the Runtime through the _next
 config data_ consensus message (<<defn-consensus-message-digest>>) in the digest
 of the first block of an epoch for the next epoch.
 
-A block producer aiming to produce a block during stem:[cc "E"_n] should run
+A block producer aiming to produce a block during stem:[cc E_n] should run
 Algorithm as defined in TODO <<algo-block-production-lottery>> to identify the slots
 it is awarded. These are the slots during which the block producer is allowed to
 build a block. The stem:[sk] is the block producer lottery secret key and
@@ -104,25 +104,25 @@ empty and used in the winning threshold calculation
 [#defn-winning-threshold]
 ===== Winning Threshold
 ****
-The *Winning threshold* denoted by stem:[T_(cc "E"_n)] is the threshold that is
+The *Winning threshold* denoted by stem:[T_(cc E_n)] is the threshold that is
 used alongside the result of Algorithm as defined in
 <<algo-block-production-lottery>> to decide if a block producer is the winner of
-a specific slot. stem:[T_(cc "E"_n)] is calculated  as follows:
+a specific slot. stem:[T_(cc E_n)] is calculated  as follows:
 
 [stem]
 ++++
 T_(E_n) := 1 - (1 - c)^(1/("AuthorityDirectory"^(E_n)))
 ++++
 
-where the stem:["AuthorityDirectory"^(cc "E"_n)] is the set of BABE authorities
-for epoch stem:[cc "E"_n] and stem:[c in (0, 1)] is the BABE constant
+where the stem:["AuthorityDirectory"^(cc E_n)] is the set of BABE authorities
+for epoch stem:[cc E_n] and stem:[c in (0, 1)] is the BABE constant
 (<<defn-babe-constant>>).
 ****
 
 [#algo-block-production-lottery]
 ===== Block Production Lottery
 ****
-A block producer aiming to produce a block during stem:[cc "E"_n] should run
+A block producer aiming to produce a block during stem:[cc E_n] should run
 the Algorithm as defined in <<>> to identify the slots it is awarded. These are
 the slots during which the block producer is allowed to build a block. The
 session secret key, stem:[sk], is the block producer lottery secret key and
@@ -154,7 +154,7 @@ estimating the local clock offset in relation to the network
 NOTE: *The calculation described in this section is still to be implemented and
 deployed*: For now, each block producer is required to synchronize its local
 clock using NTP instead. The current slot stem:[s] is then calculated by stem:[s
-= t_("unix")/cc "T"] where stem:[cc "T"] is defined in <<defn-epoch-slot>> and
+= t_("unix")/cc T] where stem:[cc T] is defined in <<defn-epoch-slot>> and
 stem:[t_("unix")] is defined in <<defn-unix-time>>. That also entails that slot
 numbers are currently not reset at the beginning of each epoch.
 ****
@@ -183,8 +183,8 @@ period.
 [#defn-slot-offset]
 ===== Slot Offset
 ****
-Let stem:[s_i] and stem:[s_j] be two slots belonging to epochs stem:[cc "E"_k]
-and stem:[cc "E"_l]. By *Slot-Offset*stem:[(s_i,s_j)] we refer to the function
+Let stem:[s_i] and stem:[s_j] be two slots belonging to epochs stem:[cc E_k]
+and stem:[cc E_l]. By *Slot-Offset*stem:[(s_i,s_j)] we refer to the function
 whose value is equal to the number of slots between stem:[s_i] and stem:[s_j]
 (counting stem:[s_j]) on the time continuum. As such, we have
 *Slot-Offset*stem:[(s_i, s_i) = 0].
@@ -210,7 +210,7 @@ TODO: Algorithm
 ****
 Algorithm: stem:["Slot-Time"(s)]
 
-. stem:["return " t_("sync") + "Slot-Offset"(s_("sync"),s) xx cc "T"]
+. stem:["return " t_("sync") + "Slot-Offset"(s_("sync"),s) xx cc T]
 
 where stem:[s] is the slot number.
 ****
@@ -218,20 +218,20 @@ where stem:[s] is the slot number.
 [#algo-slot-time]
 ===== Slot Time Median Algorithm
 ****
-Algorithm: stem:["Median-Algorithm"(cc "P", s_("sync"))]
+Algorithm: stem:["Median-Algorithm"(cc P, s_("sync"))]
 
 . stem:[T_s larr {}]
-. stem:["for " B_i in cc "P"]
-. stem:["    " t_("est")^B larr T_(B_i) + "Slot-Offset"(S_(B_i), s_("sync")) xx cc "T"]
+. stem:["for " B_i in cc P]
+. stem:["    " t_("est")^B larr T_(B_i) + "Slot-Offset"(S_(B_i), s_("sync")) xx cc T]
 . stem:["    " T_s larr T_S	uu t_("est")^(B_i)]
 . stem:["return Median"(T_s)]
 
 where
 
-* stem:[cc "P"] is the sync period used for the estimate.
+* stem:[cc P] is the sync period used for the estimate.
 * stem:[s_("sync")] is the slot time to estimate.
 * stem:["Slot-Offset"] is defined in <<algo-slot-offset>>.
-* stem:[cc "T"] is the slot duration defined in <<defn-epoch-slot>>.
+* stem:[cc T] is the slot duration defined in <<defn-epoch-slot>>.
 ****
 
 [#defn-prunned-best]
@@ -272,9 +272,9 @@ from ``fresh'' blocks that were just produced.
 [#defn-sync-period]
 ===== Sync Period
 A is an interval at which each validator (re-)evaluates its local clock offsets.
-The first sync period stem:[fr "E"_1] starts just after the genesis block is
-released. Consequently, each sync period stem:[fr "E"_i] starts after stem:[fr
-"E"_(i - 1)]. The length of the sync period (<<defn-chain-quality>>) is equal to
+The first sync period stem:[fr E_1] starts just after the genesis block is
+released. Consequently, each sync period stem:[fr E_i] starts after stem:[fr
+E_(i - 1)]. The length of the sync period (<<defn-chain-quality>>) is equal to
 stem:[s_(qc)]and expressed in the number of slots.
 
 [#block-production]
@@ -355,18 +355,18 @@ in which, stem:[E_("id")("BABE")] is the BABE consensus engine unique identifier
 
 [#sect-epoch-randomness]
 ==== Epoch Randomness
-At the beginning of each epoch, stem:[cc "E"_n] the host will receive the
-randomness seed stem:[cc "R"_(cc "E"_(n+1))] (<<defn-epoch-randomness>>)
+At the beginning of each epoch, stem:[cc E_n] the host will receive the
+randomness seed stem:[cc R_(cc E_(n+1))] (<<defn-epoch-randomness>>)
 necessary to participate in the block production lottery in the next epoch
-stem:[cc "E"_(n+1)] from the Runtime, through the consensus message
+stem:[cc E_(n+1)] from the Runtime, through the consensus message
 (<<defn-consensus-message-digest>>) in the digest of the first block.
 
 [#defn-epoch-randomness]
 ===== Randomness Seed
 ****
-For epoch stem:[cc "E"], there is a 32-byte stem:[cc "R"_(cc "E")] computed
-based on the previous epochs VRF outputs. For stem:[cc "E"_0] and stem:[cc
-"E"_1], the randomness seed is provided in the genesis state.
+For epoch stem:[cc E], there is a 32-byte stem:[cc R_(cc E)] computed
+based on the previous epochs VRF outputs. For stem:[cc E_0] and stem:[cc
+E_1], the randomness seed is provided in the genesis state.
 ****
 
 [#sect-verifying-authorship]
@@ -384,14 +384,14 @@ when a node is importing a block.
 Algorithm: stem:[tt "Verify-Authorship-Right"("Head"_s(B))]
 
 . stem:[s larr "Slot-Number-At-Given-Time"(T_B)]
-. stem:[cc "E"_c larr "Current-Epoch"()]
+. stem:[cc E_c larr "Current-Epoch"()]
 . stem:[(D_1, ..., D_("length"(H_d(B)))) larr H_d(B)]
 . stem:[D_s larr D_("length"(H_d(B)))]
 . stem:[H_d(B) larr (D_1, ..., D_("length"(H_d(B))-1)) " // remove the seal from the digest"]
 . stem:[("id","Sig"_B) larr "Dec"_("SC")(D_s)]
 . stem:["if " "id" != "Seal-Id"]
 . stem:["    " "error 'Seal missing'"]
-. stem:["AuthorId" larr "AuthorityDirectory"^(cc "E"_c)\[H_("BABE")(B)."SignerIndex"\]]
+. stem:["AuthorId" larr "AuthorityDirectory"^(cc E_c)\[H_("BABE")(B)."SignerIndex"\]]
 . stem:["Verify-Signature"("AuthorId", H_h(B), "Sig"_B)]
 . stem:["if " EE B' in "BT": H_h(B) != H_h(B) " and " s_B = s'_B " and " "SignerIndex"_B = "SignerIndex"_(B')]
 . stem:["    " "error 'Block producer is equivocating'"]
@@ -407,8 +407,8 @@ stem:["Head"(B)] (<<defn-block-header>>).
 described in <<defn-digest>>.
 * stem:[Seal-Id] is the type index showing that a digest item (<<defn-digest>>)
 of varying type (<<defn-scale-variable-type>>) is of type _Seal_.
-* stem:["AuthorityDirectory"^(cc "E"_c)] is the set of Authority ID for block
-producers of epoch stem:[cc "E"_c].
+* stem:["AuthorityDirectory"^(cc E_c)] is the set of Authority ID for block
+producers of epoch stem:[cc E_c].
 . stem:["AuthorId"] is the public session key of the block producer.
 * stem:[Verify-Slot-Winner] is defined in Algorithm as described in
 <<algo-verify-slot-winner>>.
@@ -419,7 +419,7 @@ producers of epoch stem:[cc "E"_c].
 ****
 Algorithm: stem:[tt "Verify-Slot-Winner"(B)]
 
-. stem:[cc "E"_c larr "Current-Epoch"]
+. stem:[cc E_c larr "Current-Epoch"]
 . stem:[p larr "Epoch-Randomness"(c)]
 . stem:["Verify-VRF"(p, H_("BABE").(pi, d),H_("BABE")(B).s,c)]
 . stem:["if"  d_B >= t]
