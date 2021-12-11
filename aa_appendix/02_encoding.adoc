@@ -27,10 +27,10 @@ and defined as:
 
 [stem]
 ++++
-"Enc"_("SC")(A) := "Enc"_("SC")^("Len")(abs(A))"||"A
+"Enc"_("SC")(A) := "Enc"_("SC")^("Len")(abs(A)) "||" A
 ++++
 
-where stem:["Enc"_("SC")^("Len)] is defined in <<defn-sc-len-encoding>>.
+where stem:["Enc"_("SC")^("Len")] is defined in <<defn-sc-len-encoding>>.
 ====
 
 .Tuple
@@ -47,7 +47,7 @@ Where stem:[A_i]’s are values of *different types*, is defined as:
 
 [stem]
 ++++
-"Enc"_("SC")(T) := "Enc"_("SC")(A_1)"||""Enc"_("SC")(A_2)"||"..."||""Enc"_("SC")(A_n)
+"Enc"_("SC")(T) := "Enc"_("SC")(A_1) "||" "Enc"_("SC")(A_2) "||" ... "||" "Enc"_("SC")(A_n)
 ++++
 ====
 
@@ -62,11 +62,11 @@ We define a *varying data* type to be an ordered set of data types.
 
 [stem]
 ++++
-cc "T" = {T_1, ..., T_n}
+cc T = {T_1, ..., T_n}
 ++++
 
 A value stem:[A] of varying date type is a pair stem:[(A_("Type"),A_("Value"))]
-where stem:[A_("Type") = T_i] for some stem:[T_i in cc "T"] and
+where stem:[A_("Type") = T_i] for some stem:[T_i in cc T] and
 stem:[A_("Value")] is its value of type stem:[T_i], which can be empty. We
 define stem:["idx"(T_i) = i - 1], unless it is explicitly defined as another
 value in the definition of a particular varying data type.
@@ -101,12 +101,12 @@ data or are defined as empty type otherwise.
 [#defn-scale-variable-type]
 ====
 The SCALE codec for value stem:[A = (A_("Type"), A_("Value"))] of varying data
-type stem:[cc "T" = {T_i, ... T_n}], formally referred to as
+type stem:[cc T = {T_i, ... T_n}], formally referred to as
 stem:["Enc" ("SC")(A)} is defined as follows:
 
 [stem]
 ++++
-"Enc"_("SC")(A) := "Enc"_("SC")("idx"(A_("Type"))"||""Enc"_("SC")(A_("Value")))
+"Enc"_("SC")(A) := "Enc"_("SC")("idx"(A_("Type")) "||" "Enc"_("SC")(A_("Value")))
 ++++
 
 Where stem:["idx"] is encoded in a fixed length integer determining the type of
@@ -115,7 +115,7 @@ stem:[A]. In particular, for the optional type defined in
 
 [stem]
 ++++
-"Enc"_("SC")("None", phi) := 0_(bbb "B"_1)
+"Enc"_("SC")("None", phi) := 0_(bbb B_1)
 ++++
 ====
 
@@ -138,7 +138,7 @@ infer value of stem:[n] from the context) is defined as:
 
 [stem]
 ++++
-"Enc"_("SC")(S) := "Enc"_("SC")^("Len")(abs(S))"||""Enc"_("SC")(A_2)"||"..."||""Enc"_("SC")(A_n)
+"Enc"_("SC")(S) := "Enc"_("SC")^("Len")(abs(S)) "||" "Enc"_("SC")(A_2) "||" ... "||" "Enc"_("SC")(A_n)
 ++++
 
 where stem:["Enc"_("SC")^("Len")] is defined in <<defn-sc-len-encoding>>.
@@ -151,7 +151,7 @@ v_i)]s such that:
 
 [stem]
 ++++
-D := {(k_1,v_1), ... (k_n, v_n)}
+D := {(k_1, v_1), ... (k_n, v_n)}
 ++++
 
 is defined the SCALE codec of stem:[D] as a sequence of key value pairs (as
@@ -159,7 +159,7 @@ tuples):
 
 [stem]
 ++++
-"Enc"_("SC")(D) := "Enc"_("SC")^("Size")(abs(D))"||""Enc"_("SC")(k_1, v_1)"||"..."||""Enc"_("SC")(k_n, v_n)
+"Enc"_("SC")(D) := "Enc"_("SC")^("Size")(abs(D)) "||" "Enc"_("SC")(k_1, v_1) "||"..."||" "Enc"_("SC")(k_n, v_n)
 ++++
 
 where stem:["Enc"_("SC")^("Size")] is encoded the same way as
@@ -173,8 +173,8 @@ The *SCALE codec* for *boolean value* stem:[b] defined as a byte as follows:
 
 [stem]
 ++++
-"Enc"_("SC"): {"False","True"} -> bbb "B"_1\
-b -> {(0,b="False"),(1,b="True"):}
+"Enc"_("SC"): {"False", "True"} -> bbb B_1\
+b -> {(0, b="False"),(1, b="True"):}
 ++++
 ====
 
@@ -204,7 +204,7 @@ SCALE Length encoding is used to encode integer numbers of variying sizes promin
 
 [stem]
 ++++
-"Enc"_("SC")^("Len"): bbb "N" -> bbb "B"\
+"Enc"_("SC")^("Len"): bbb N -> bbb B\
 n -> b := {(l_1, 0 <= n < 2^6),(i_1 i_2, 2^6 <= n < 2^14),(j_1 j_2 j_3, 2^14 <= n < 2^30),(k_1 k_2 ... k_m, 2^30<=n):}
 ++++
 
@@ -252,8 +252,9 @@ hex encoding function asciimath:["Enc" ("HE")("PK")] as follows:
 [#defn-hex-encoding]
 ====
 Suppose that stem:["PK" = (k_1, ... k_n)] is a sequence of nibbles, then:
+
 [stem]
 ++++
-"Enc"_("HE")("PK") := {("Nibbles"_4,->, bbb "B"),("PK" = (k_1, ... k_n),->,{((16k_1+k_2,...,16k_(2i-1)+k_(2i)),n=2i),((k_1,16k_2+k_3,...,16k_(2i)+k_(2i+1)),n = 2i+1):}):}
+"Enc"_("HE")("PK") := {("Nibbles"_4,->, bbb B),("PK" = (k_1, ... k_n),->,{((16k_1+k_2,...,16k_(2i-1)+k_(2i)),n=2i),((k_1,16k_2+k_3,...,16k_(2i)+k_(2i+1)),n = 2i+1):}):}
 ++++
 ====
