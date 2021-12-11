@@ -61,13 +61,13 @@ stem:[n], we refer to
 b := (b_0, b_1, ..., b_{n - 1}) " such that " 0 <= b_i <= 255
 ++++
 
-We define stem:[bbb "B"_n] to be the
+We define stem:[bbb B_n] to be the
 *set of all byte arrays of length stem:[n]*. Furthermore, we
 define:
 
 [stem]
 ++++
-bbb "B" := uuu_(i=0)^infty bbb "B"_i
+bbb B := uuu_(i=0)^infty bbb B_i
 ++++
 
 We represent the concatenation of byte arrays
@@ -121,7 +121,7 @@ Accordingly, we define the function stem:[sf "Enc"_(sf "LE")]:
 
 [stem]
 ++++
-sf "Enc"_(sf "LE"):{(bbb "Z"^+ -> bbb "B"),((B_n ... B_0)_256 -> (B_{0,} B_1, ... , B_n)):}
+sf "Enc"_(sf "LE"):{(bbb Z^+ -> bbb B),((B_n ... B_0)_256 -> (B_{0,} B_1, ... , B_n)):}
 ++++
 ****
 
@@ -198,17 +198,17 @@ define stem:[|C|], the length of stem:[C] as a path graph. If stem:[B'] is
 another node on stem:[sf "Chain"(B)], then by stem:[sf "SubChain"(B', B)] we
 refer to the subgraph of stem:[sf "Chain"(B)] path graph which contains both
 stem:[B] and stem:[B'] and by stem:[sf "SubChain"(B', B)] we refer to its
-length. Accordingly, stem:[bbb "C"_(B')((P)BT)] is the set of all subchains of
+length. Accordingly, stem:[bbb C_(B')((P)BT)] is the set of all subchains of
 stem:[(P)BT] rooted at stem:[B']. The set of all chains of stem:[(P)BT],
-stem:[bbb "C"_G((P)BT})] is denoted by stem:[bbb "C"((P)BT)] or simply
-stem:[bbb "C"], for the sake of brevity.
+stem:[bbb C_G((P)BT})] is denoted by stem:[bbb C((P)BT)] or simply
+stem:[bbb C], for the sake of brevity.
 ****
 
 [#defn-longest-chain]
 === Longest Chain
 ****
-We define the following complete order over stem:[bbb "C"] such that for
-stem:[C_1, C_2 in bbb "C"] if stem:[|C_1| != |C_2|] we say stem:[C_1 > C_2] if
+We define the following complete order over stem:[bbb C] such that for
+stem:[C_1, C_2 in bbb C] if stem:[|C_1| != |C_2|] we say stem:[C_1 > C_2] if
 and only if stem:[|C_1| > |C_2|].
 
 If stem:[|C_1| =| C_2|] we say stem:[C_1 > C_2] if and only if the block arrival
