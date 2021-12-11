@@ -138,118 +138,6 @@ including tip.
 ====
 
 
-.Extrinsic Mortality
-[#defn-extrinsic-mortality]
-====
-Extrinsic *mortality* is a mechanism which ensures that an extrinsic is only
-valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can
-also be immortal, as clarified in <<sect-mortality-encoding>>.
-
-The mortality mechanism works with two related values:
-
-* latexmath:[M_{per}]: the period of validity in terms of block
-numbers from the block hash specified as latexmath:[H_h(B)] in the
-payload (<<defn-extrinsic-signature>>). The
-requirement is latexmath:[M_{per} \geq 4] and latexmath:[M_{per}]
-must be the power of two, such as `32`, `64`, `128`, etc.
-* latexmath:[M_{pha}]: the phase in the period that this extrinsic’s
-lifetime begins. This value is calculated with a formula and validators
-can use this value in order to determine which block hash is included in
-the payload. The requirement is latexmath:[M_{pha} < M_{per}].
-
-In order to tie a transaction’s lifetime to a certain block
-(latexmath:[H_i(B)]) after it was issued, without wasting precious
-space for block hashes, block numbers are divided into regular periods
-and the lifetime is instead expressed as a "phase"
-(latexmath:[M_{pha}]) from these regular boundaries:
-
-[latexmath]
-++++
-M_{pha} = H_i(B)\ mod\ M_{per}
-++++
-
-latexmath:[M_{per}] and latexmath:[M_{pha}] are then included in the
-extrinsic, as clarified in <<defn-extra-data>>, in the SCALE encoded form of
-latexmath:[T_{mor}] (<<sect-mortality-encoding>>). Polkadot validators can use
-latexmath:[M_{pha}] to figure out the block hash included in the payload,
-which will therefore result in a valid signature if the extrinsic is within the
-specified period or an invalid signature if the extrinsic "died".
-
-===== Example
-
-The extrinsic author choses latexmath:[M_{per} = 256] at block
-`10'000`, resulting with latexmath:[M_{pha} = 16]. The extrinsic is
-then valid for blocks ranging from `10'000` to `10'256`.
-
-[#sect-mortality-encoding]
-===== Encoding
-
-latexmath:[T_{mor}] refers to the SCALE encoded form of type
-latexmath:[M_{per}] and latexmath:[M_{pha}]. latexmath:[T_{mor}]
-is the size of two bytes if the extrinsic is considered mortal, or
-simply one bytes with the value equal to zero if the extrinsic is
-considered immortal.
-
-[latexmath]
-++++
-T_{mor} := Enc_{SC}(M_{per}, M_{pha})
-++++
-
-The SCALE encoded representation of mortality latexmath:[T_{mor}]
-deviates from most other types, as it’s specialized to be the smallest
-possible value, as described in Algorithm
-<<algo-encode-mortality>> and <<algo-decode-mortality>>.
-
-[latexmath]
-++++
-\text{// If the extrinsic is immortal, specify}
-\text{// a single byte with the valueequal to zero.}
-
-\vcenter{\begin{flalign*}
-  \Return & \begin{cases}
-    0 & if\ extrinsic\ is\ immortal
-  \end{cases}&
-\end{flalign*}}
-
-\textbf{Init} factor = \textsc{Limit}(M_{per} >> 12,\ 1,\ \phi)
-\textbf{Init} left = \textsc{Limit}(\textsc{TZ}(M_{per})-1,\ 1,\ 15)
-\textbf{Init} right = \frac{M_{pha}}{factor} << 4
-
-\text{// Returns a two byte value}
-\Return left|right
-++++
-
-[latexmath]
-++++
-\vcenter{\begin{flalign*}
-  \Return & \begin{cases}
-    \textit{Immortal} & if\ T^{b0}_{mor} = 0
-  \end{cases} &
-\end{flalign*}}
-
-\textbf{Init} enc = T^{b0}_{mor} + (T^{b1}_{mor} << 8)
-\textbf{Init} M_{per} = 2 << (enc\ mod\ (1 << 4))
-\textbf{Init} factor = \textsc{Limit}(M_{per} >> 12,\ 1,\ \phi)
-\textbf{Init} M_{pha} = (enc >> 4) * factor
-\Return (M_{per}, M_{pha})
-++++
-
-* latexmath:[T^{b0}_{mor}]: the first byte of latexmath:[T_{mor}].
-* latexmath:[T^{b1}_{mor}]: the second byte of latexmath:[T_{mor}].
-* Limit(latexmath:[num], latexmath:[min], latexmath:[max]):
-Ensures that latexmath:[num] is between latexmath:[min] and
-latexmath:[max]. If latexmath:[min] or latexmath:[max] is defined
-as latexmath:[\phi], then there is no requirement for the specified
-minimum/maximum.
-* TZ(latexmath:[num]): returns the number of trailing zeros in the
-binary representation of latexmath:[num]. For example, the binary
-representation of `40` is `0010 1000`, which has three trailing zeros.
-* latexmath:[>>]: performs a binary right shift operation.
-* latexmath:[<<]: performs a binary left shift operation.
-* latexmath:[|] : performs a bitwise OR operation.
-====
-
-
 .Module Indicator
 [#defn-module-indicator]
 ====
@@ -301,3 +189,119 @@ Balances_i := \begin{cases}
 \end{cases}
 ++++
 ====
+
+
+==== Mortality
+
+.Extrinsic Mortality
+[#defn-extrinsic-mortality]
+====
+Extrinsic *mortality* is a mechanism which ensures that an extrinsic is only
+valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can
+also be immortal, as clarified in <<sect-mortality-encoding>>.
+
+The mortality mechanism works with two related values:
+
+* latexmath:[M_{per}]: the period of validity in terms of block
+numbers from the block hash specified as latexmath:[H_h(B)] in the
+payload (<<defn-extrinsic-signature>>). The
+requirement is latexmath:[M_{per} \geq 4] and latexmath:[M_{per}]
+must be the power of two, such as `32`, `64`, `128`, etc.
+* latexmath:[M_{pha}]: the phase in the period that this extrinsic’s
+lifetime begins. This value is calculated with a formula and validators
+can use this value in order to determine which block hash is included in
+the payload. The requirement is latexmath:[M_{pha} < M_{per}].
+
+In order to tie a transaction’s lifetime to a certain block
+(latexmath:[H_i(B)]) after it was issued, without wasting precious
+space for block hashes, block numbers are divided into regular periods
+and the lifetime is instead expressed as a "phase"
+(latexmath:[M_{pha}]) from these regular boundaries:
+
+[latexmath]
+++++
+M_{pha} = H_i(B)\ mod\ M_{per}
+++++
+
+latexmath:[M_{per}] and latexmath:[M_{pha}] are then included in the
+extrinsic, as clarified in <<defn-extra-data>>, in the SCALE encoded form of
+latexmath:[T_{mor}] (<<sect-mortality-encoding>>). Polkadot validators can use
+latexmath:[M_{pha}] to figure out the block hash included in the payload,
+which will therefore result in a valid signature if the extrinsic is within the
+specified period or an invalid signature if the extrinsic "died".
+====
+
+
+===== Example
+
+The extrinsic author choses latexmath:[M_{per} = 256] at block
+`10'000`, resulting with latexmath:[M_{pha} = 16]. The extrinsic is
+then valid for blocks ranging from `10'000` to `10'256`.
+
+[#sect-mortality-encoding]
+===== Encoding
+
+latexmath:[T_{mor}] refers to the SCALE encoded form of type
+latexmath:[M_{per}] and latexmath:[M_{pha}]. latexmath:[T_{mor}]
+is the size of two bytes if the extrinsic is considered mortal, or
+simply one bytes with the value equal to zero if the extrinsic is
+considered immortal.
+
+[latexmath]
+++++
+T_{mor} := Enc_{SC}(M_{per}, M_{pha})
+++++
+
+The SCALE encoded representation of mortality latexmath:[T_{mor}]
+deviates from most other types, as it’s specialized to be the smallest
+possible value, as described in Algorithm
+<<algo-mortality-encode>> and <<algo-decode-mortality-decode>>.
+
+If the extrinsic is immortal, specify a single byte with the value equal
+to zero.
+.Encode Mortality
+[latexmath#algo-mortality-encode]
+++++
+\vcenter{\begin{align}
+  \textbf{return}~ & \begin{cases}
+    0 & if\ extrinsic\ is\ immortal
+  \end{cases} &
+\end{align}} \\
+~\\
+\textbf{init}~factor = \textrm{Limit}(M_{per} >> 12,\ 1,\ \phi) \\
+\textbf{init}~left = \textrm{Limit}(\textrm{TZ}(M_{per})-1,\ 1,\ 15) \\
+\textbf{init}~right = \frac{M_{pha}}{factor} << 4 \\
+~\\
+\textrm{// Returns a two byte value} \\
+\textbf{return}~left|right
+++++
+
+.Decode Mortality
+[latexmath#algo-mortality-decode]
+++++
+\vcenter{\begin{align}
+  \textbf{return}~ & \begin{cases}
+    \textit{Immortal} & if\ T^{b0}_{mor} = 0
+  \end{cases} &
+\end{align}} \\
+~\\
+\textbf{init}~enc = T^{b0}_{mor} + (T^{b1}_{mor} << 8) \\
+\textbf{init}~M_{per} = 2 << (enc\ mod\ (1 << 4)) \\
+\textbf{init}~factor = \textrm{Limit}(M_{per} >> 12,\ 1,\ \phi) \\
+\textbf{init}~M_{pha} = (enc >> 4) * factor \\
+\textbf{return}~(M_{per}, M_{pha})
+++++
+
+* latexmath:[T^{b0}_{mor}]: the first byte of latexmath:[T_{mor}].
+* latexmath:[T^{b1}_{mor}]: the second byte of latexmath:[T_{mor}].
+* Limit(latexmath:[num], latexmath:[min], latexmath:[max]):
+Ensures that latexmath:[num] is between latexmath:[min] and
+latexmath:[max]. If latexmath:[min] or latexmath:[max] is defined
+as latexmath:[\phi], then there is no requirement for the specified
+minimum/maximum.
+* TZ(latexmath:[num]): returns the number of trailing zeros in the
+binary representation of latexmath:[num]. For example, the binary
+representation of `40` is `0010 1000`, which has three trailing zeros.
+* latexmath:[>>]: performs a binary right shift operation.
+* latexmath:[<<]: performs a binary left shift operation.
+* latexmath:[|] : performs a bitwise OR operation.
