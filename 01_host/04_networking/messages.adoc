@@ -32,7 +32,7 @@ format:
 
 [stem]
 ++++
-BA_h = "Enc"_(SC)(R,N_B,h_B,h_G)
+BA_h = "Enc"_("SC")(R, N_B, h_B, h_G)
 ++++
 
 where:
@@ -56,7 +56,7 @@ The message is a SCALE-encoded structure of the following format:
 
 [stem]
 ++++
-BA = "Enc"_(SC)("Head"(B),b)
+BA = "Enc"_("SC")("Head"(B),b)
 ++++
 
 where:
@@ -245,14 +245,14 @@ over the network. It is represented by stem:[M_T] and is defined as follows:
 
 [stem]
 ++++
-M_T := "Enc"_(SC)(C_1,...,C_n)
+M_T := "Enc"_("SC")(C_1,...,C_n)
 ++++
 
 in which:
 
 [stem]
 ++++
-C_i := "Enc"_(SC)(E_i)
+C_i := "Enc"_("SC")(E_i)
 ++++
 
 Where each stem:[E_i] is a byte array and represents a separate
@@ -298,16 +298,16 @@ the network by voter stem:[v] with the following structure:
 
 [stem]
 ++++
-M_v^(r,"stage")(B) := "Enc"_(SC)(r,"id"_(bbb "V"),"SigMsg")\
+M_v^(r,"stage")(B) := "Enc"_("SC")(r,"id"_(bbb V),"SigMsg")\
 "SigMsg" := ("msg","Sig"_(v_i)^(r,"stage"),v_("id"))\
-"msg" := "Enc"_(SC)("stage",V_v^(r,"stage")(B))
+"msg" := "Enc"_("SC")("stage",V_v^(r,"stage")(B))
 ++++
 
 where:
 
 * stem:[r] is an unsigned 64-bit integer indicating the Grandpa round number
 (<<defn-voting-rounds>>).
-* stem:["id"_(bbb "V")] is an unsigned 64-bit integer indicating the authority Set Id (<<defn-authority-list>>).
+* stem:["id"_(bbb V)] is an unsigned 64-bit integer indicating the authority Set Id (<<defn-authority-list>>).
 * stem:["Sig"_(v_i)^(r,"stage")] is a 512-bit byte array containing the
 signature of the authority (<<defn-sign-round-vote>>).
 * stem:[v_(id)] is a 256-bit byte array containing the _ed25519_ public key of the authority.
@@ -349,13 +349,13 @@ stem:[r]. It has the following structure:
 
 [stem]
 ++++
-M_v^(r,"Fin")(B) := "Enc"_(SC)(r,"id"_(bbb "V"),V_v^r(B),J_(v_(0,...n))^(r,"comp"))
+M_v^(r,"Fin")(B) := "Enc"_("SC")(r,"id"_(bbb V),V_v^r(B),J_(v_(0,...n))^(r,"comp"))
 ++++
 
 where:
 
 * stem:[r] is an unsigned 64-bit integer indicating the round number (<<defn-voting-rounds>>).
-* stem:[id_(bbb "V")] is the authority set Id (<<defn-authority-list>>).
+* stem:[id_(bbb V)] is the authority set Id (<<defn-authority-list>>).
 * stem:[V_v^r(B)] is a 256-bit array containing the GRANDPA vote for block
 stem:[B] (<<defn-vote>>).
 * stem:[J_(v_(0,...n))^(r,"comp")] is the compacted GRANDPA justification
@@ -384,14 +384,14 @@ A *GRANDPA Neighbor Message* is defined as:
 
 [stem]
 ++++
-M^("neigh") := "Enc"_(SC)(v,r,"id"_(bbb "V"),H_h(B_("last")))
+M^("neigh") := "Enc"_("SC")(v,r,"id"_(bbb V),H_h(B_("last")))
 ++++
 
 where:
 
-* stem:["v"] is an unsigned 8-bit integer indicating the version of the neighbor message, currently _1_.
+* stem:[v] is an unsigned 8-bit integer indicating the version of the neighbor message, currently _1_.
 * stem:[r] is an unsigned 64-bit integer indicating the round number (<<defn-voting-rounds>>).
-* stem:["id"_(bbb "V")] is an unsigned 64-bit integer indicating the authority
+* stem:["id"_(bbb V)] is an unsigned 64-bit integer indicating the authority
 Id (<<defn-authority-list>>).
 * stem:[H_i(B_("last"))] is an unsigned 32-bit integer indicating the block number of the last finalized block stem:[B_("last")].
 
@@ -417,14 +417,14 @@ processing _catch-up response_ messages.
 ====== Catch-Up Request Message
 ****
 A *GRANDPA catch-up request message* for round stem:[r],
-stem:[M_(i,v)^("Cat"-q)("id"_(bbb "V"),r)], is a message sent from node stem:[i]
+stem:[M_(i,v)^("Cat"-q)("id"_(bbb V),r)], is a message sent from node stem:[i]
 to its voting peer node stem:[v] requesting the latest status of a GRANDPA round
-stem:[r' >r] of the authority set stem:[bbb "V"_("id")] along with the
+stem:[r' >r] of the authority set stem:[bbb V_("id")] along with the
 justification of the status and has the following structure:
 
 [stem]
 ++++
-M_(i,v)^(r,"Cat"-q) := "Enc"_(SC)(r,"id"_(bbb "V"))
+M_(i,v)^(r,"Cat"-q) := "Enc"_("SC")(r,"id"_(bbb V))
 ++++
 
 This message is the sub-component of the GRANDPA Gossip message
@@ -435,21 +435,21 @@ This message is the sub-component of the GRANDPA Gossip message
 ====== Catch-Up Response Message
 ****
 A *GRANDPA catch-up response message* for round stem:[r],
-stem:[M_(v,i)^("Cat"-s)("id"_(bbb "V"),r)], is a message sent by a node stem:[v]
+stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)], is a message sent by a node stem:[v]
 to node stem:[i] in response of a catch-up request
-stem:[M_(v,i)^("Cat"-q)("id"_(bbb "V"),r')] in which stem:[r >= r'] is the
+stem:[M_(v,i)^("Cat"-q)("id"_(bbb V),r')] in which stem:[r >= r'] is the
 latest GRANDPA round which v has prove of its finalization and has the following
 structure:
 
 [stem]
 ++++
-M_(v,i)^("Cat"-s) := "Enc"_(SC)("id"_(bbb "V"), r, J_(0,...n)^(r,pv)(B), J_(0,...m)^(r,pc)(B),H_h(B'),H_i(B'))
+M_(v,i)^("Cat"-s) := "Enc"_("SC")("id"_(bbb V), r, J_(0,...n)^(r,"pv")(B), J_(0,...m)^(r,"pc")(B),H_h(B'),H_i(B'))
 ++++
 
 Where stem:[B] is the highest block which stem:[v] believes to be finalized in
 round stem:[r] (<<defn-voting-rounds>>). stem:[B'] is the highest ancestor of
-all blocks voted on in the arrays of justifications stem:[J_(0,...n)^(r,pv)(B)]
-and stem:[J_(0,...m)^(r,pc)(B)] (<<defn-grandpa-justification>>) with the
+all blocks voted on in the arrays of justifications stem:[J_(0,...n)^(r,"pv")(B)]
+and stem:[J_(0,...m)^(r,"pc")(B)] (<<defn-grandpa-justification>>) with the
 exception of the equivocatory votes.
 
 This message is the sub-component of the GRANDPA Gossip message
@@ -474,7 +474,7 @@ datastructure of the following format:
 
 [stem]
 ++++
-C = (R_h,H_i(B_("last")),"id"_(bbb "V"))
+C = (R_h,H_i(B_("last")),"id"_(bbb V))
 ++++
 
 where
@@ -483,7 +483,7 @@ where
 latest, finalized block.
 * stem:[H_i(B_("last"))] is the block number this commitment is for. Namely the
 latest, finalized block.
-* stem:["id"_(bbb "V")] is the current authority set Id (<<defn-authority-set-id>>).
+* stem:["id"_(bbb V)] is the current authority set Id (<<defn-authority-set-id>>).
 ****
 
 [#defn-msg-beefy-gossip]
@@ -495,7 +495,7 @@ following format:
 
 [stem]
 ++++
-M_v = "Enc"_(SC)(C,A_("id")^("bfy"),A_("sig"))
+M_v = "Enc"_("SC")(C,A_("id")^("bfy"),A_("sig"))
 ++++
 
 where
@@ -509,19 +509,19 @@ signing the statement stem:[R_h] in stem:[C].
 [#defn-grandpa-beefy-signed-commitment]
 ===== Signed Commitment
 ****
-A *signed commitment*, stem:[M_(sc)], is a datastructure of the following format:
+A *signed commitment*, stem:[M_("sc")], is a datastructure of the following format:
 
 [stem]
 ++++
-M_(SC) = "Enc"_(SC)(C,S_n)\
-S_n = (A_0^("sig"),... A_n^(sig))
+M_("SC") = "Enc"_("SC")(C,S_n)\
+S_n = (A_0^("sig"),... A_n^("sig"))
 ++++
 
 where
 
 * stem:[C] is the BEEFY commitment (<<defn-grandpa-beefy-commitment>>).
 * stem:[S_n] is an array where its exact size matches the number of validators
-in the current authority set as specified by stem:["id"_(bbb "V")]
+in the current authority set as specified by stem:["id"_(bbb V)]
 (<<defn-authority-set-id>>) in stem:[C]. Individual items are of the type
 _Option_ (<<defn-option-type>>) which can contain a signature of a validator
 which signed the same statement (stem:[R_h] in stem:[C]) and is active in the
@@ -538,7 +538,7 @@ signatures.
 [#defn-grandpa-beefy-signed-commitment-witness]
 ===== Signed Commitment Witness
 ****
-A *signed commitment witness*, stem:[M_(SC)^w], is a light version of the signed
+A *signed commitment witness*, stem:[M_("SC")^w], is a light version of the signed
 BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>). Instead of
 containing the entire list of signatures, it only claims which validator signed
 the statement.
@@ -547,14 +547,14 @@ The message is a datastructure of the following format:
 
 [stem]
 ++++
-M_(SC)^w = "Enc"_(SC)(C,V_(0,... n), R_("sig"))
+M_("SC")^w = "Enc"_("SC")(C,V_(0,... n), R_("sig"))
 ++++
 
 where
 
 * stem:[C] is the BEEFY commitment (<<defn-grandpa-beefy-commitment>>).
 * stem:[V_(0,... n)] is an array where its exact size matches the number of
-validators in the current authority set as specified by stem:["id"_(bbb "V)] in
+validators in the current authority set as specified by stem:["id"_(bbb V)] in
 stem:[C]. Individual items are booleans which indicate whether the validator has
 signed the statement (_true_) or not (_false_). It’s critical that the boolean
 indicators are sorted based on their corresponding public key entry in the
