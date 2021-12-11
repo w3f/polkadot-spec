@@ -67,7 +67,7 @@ consists of the pair:
 (E_("id"), CM)
 ++++
 
-where stem:[E_("id") in bbb "B"_4] is the consensus engine unique identifier
+where stem:[E_("id") in bbb B_4] is the consensus engine unique identifier
 which can hold the following possible values
 
 [stem]
@@ -91,8 +91,8 @@ where
 * stem:[CM]:
 +
 ** _1_ implies *next epoch data*: The Runtime issues this message on every first
-block of an epoch stem:[cc "E"_n]. The supplied authority set and randomness are
-intended to be used in the next epoch stem:[cc "E"_n + 1].  
+block of an epoch stem:[cc E_n]. The supplied authority set and randomness are
+intended to be used in the next epoch stem:[cc E_n + 1].  
 ** _2_ implies *on disabled*: An index to the individual authority in the
 current authority list that should be immediately disabled until the next
 authority set changes. When an authority gets disabled, the node should stop
