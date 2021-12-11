@@ -24,4 +24,4 @@ polkadot-spec.pdf: $(SOURCES)
 
 
 clean:
-	rm -rf polkadot-spec.html polkadot-spec-html/ polkadot-spec.pdf stem-*.svg
+	rm -rf polkadot-spec.html polkadot-spec-html/ polkadot-spec.pdf algo-*.svg stem-*.svg
