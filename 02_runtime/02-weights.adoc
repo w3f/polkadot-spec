@@ -1022,7 +1022,7 @@ The benchmarking implementation for the Polkadot Runtime function
 `withdraw_unbonded` is defined as follows:
 
 .Run multiple benchmark iterations for `withdraw_unbonded` Runtime function
-[latexmath#sec-algo-benchmark-transfer2]
+[latexmath#algo-benchmark-withdraw]
 ++++
 \textbf{Output:}~\mathcal{W} \\
 ~\\
