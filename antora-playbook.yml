@@ -1,5 +1,6 @@
 site:
   title: Polkadot Specification
+  start_page: polkadot-spec:01_host:01_background/intro.adoc
 content:
   sources: 
   - url: ./ 
