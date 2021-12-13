@@ -23,29 +23,29 @@ design and/or hyper/anchor-link *is subject to change*.
 
 = Host Specification
 
-include::01_host/main.adoc[]
+include::modules/01_host/main.adoc[]
 
 
 = Runtime Specification
 
-include::02_runtime/main.adoc[]
+include::modules/02_runtime/main.adoc[]
 
 
 [appendix]
 = Additional information
 
-include::aa_appendix/main.adoc[]
+include::modules/aa_appendix/main.adoc[]
 
 
 [appendix]
 [#chap-host-api]
 = Host API
 
-include::ab_host-api/main.adoc[]
+include::modules/ab_host-api/main.adoc[]
 
 
 [appendix]
 [#chap-runtime-api]
 = Runtime API
 
-include::ac_runtime-api/main.adoc[]
+include::modules/ac_runtime-api/main.adoc[]
