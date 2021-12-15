@@ -3,3 +3,4 @@ title: Polkadot Specification
 version: 0.2.0
 nav:
   - modules/01_host/nav.adoc
+  - modules/aa_appendix/nav.adoc
