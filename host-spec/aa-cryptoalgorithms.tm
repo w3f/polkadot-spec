@@ -40,17 +40,18 @@
   described in Algorithm <reference|algo-block-production-lottery> and the
   parachain approval voting mechanism as described in Section <todo|todo>.\ 
 
-  The VRF mechanism is based on <hlink|Merlin|https://merlin.cool/>
-  <todo|Merlin uses STROBE internally, I wouldn't mention STROBE in the
-  intro> <strike-through|and <hlink|STROBE|https://strobe.sourceforge.io/>>
-  and <todo| I also think this is too much detail for the intro, I'd move it
-  to the spec section, it is SR25519 but you can use any other curve. I'd
-  just mention elliptic curve here and go into the detail later.>uses
-  <hlink|Ristretto|https://ristretto.group/ristretto.html> prime order
-  elliptic curve groups. <todo|instead I'd either reference the privacy pass
-  and/or https://eprint.iacr.org/2017/099.pdf here as the general design.>
+  The VRF uses mechanism similar to algorithms introduced in
+  <cite|papadopoulos2017making>, <cite|davidson_privacy_pass_2017> and
+  <cite|goldberg2018verifiable>. It essentially generates a deterministic
+  elliptic curve based Schnorr signature as a verifiable random value.
+
+  The elliptic curve group used in the VRF function is the
+  <hlink|Ristretto|https://ristretto.group/ristretto.html> group specified in
+  <cite|irtf-cfrg-ristretto255-decaf448-01>.
 
   \;
+
+  <subsection|Definitions>
 
   <\definition>
     <label|defn-vrf-context> <strong|VRF context> (simply referred to as
@@ -60,23 +61,18 @@
   </definition>
 
   <\definition>
-    <label|defn-vrf-pair>The <strong|VRF Pair> is a datastructure that
-    contains both the VRV input and its corresponding output. The VRF Pair
-    uses the the Ristretto technique for constructing prime order elliptic
-    curve groups as described further in the <hlink|Ristretto
-    documentation|https://ristretto.group/ristretto.html>. The VRF Pair,
-    <math|V>, is a datastructure of the following format:
+    <label|defn-vrf-pair>The <strong|VRF Pair <math|V>> is an ordered pair
+    <math|<around*|(|I,O|)>> where <math|I> represents the VRF input and
+    <math|O> represents the VRF output. I is of the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|V>|<cell|=>|<cell|<around*|(|I,O|)>>>|<row|<cell|>|<cell|>|<cell|I=O>>|<row|<cell|I>|<cell|=>|<cell|<around*|(|C,P|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|x,y,z,t|)>>>|<row|<cell|>|<cell|>|<cell|x=y=z=t>>|<row|<cell|x>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|4>|)>>>>>
+      <tformat|<table|<row|<cell|I>|<cell|=>|<cell|<around*|(|C,P|)>>>|<row|<cell|C>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>|<row|<cell|P>|<cell|=>|<cell|<around*|(|x,y,z,t|)>
+      <text|where > x=y=z=t>>|<row|<cell|x>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|4>|)>>>>>
     </eqnarray*>
 
     where
 
     <\itemize-dot>
-      <item><math|I> represents the VRF input and <math|O> represents the VRF
-      output.
-
       <item><math|C> is the Ristretto point in compressed wire format,
       exactly 32 bytes.
 
@@ -87,13 +83,16 @@
     </itemize-dot>
   </definition>
 
+  <todo|we need to specify where does <math|C> and <math|x> is coming from>
+
   <\definition>
-    <label|defn-vrf-proof>The <strong|VRF proof> prooves the correctness for
+    <label|defn-vrf-proof>The <strong|VRF proof> proves the correctness for
     an associated VRF output. The VRF proof, <math|P>, is a datastructure of
     the following format:
 
     <\eqnarray*>
-      <tformat|<table|<row|<cell|P>|<cell|=>|<cell|<around*|(|C,S|)>>>|<row|<cell|>|<cell|>|<cell|C=S>>|<row|<cell|S>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>>>
+      <tformat|<table|<row|<cell|P>|<cell|=>|<cell|<around*|(|C,S|)>>>|<row|<cell|>|<cell|>|<cell|C=S
+      <todo|how could they be equal?>>>|<row|<cell|S>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|31>|)>>>>>
     </eqnarray*>
 
     where <math|C> is the challenge and <math|S> is the 32-byte Schnorr poof.
@@ -106,14 +105,14 @@
     like these in the definition without defining them> containing a
     mathematical object<todo| what is a mathematical object?> combined with a
     context and is more closely described in the <hlink|Merlin
-    documentation|https://merlin.cool/>, which is a
-    <hlink|STROBE|https://strobe.sourceforge.io/>-based transcript <todo|why
-    the fact that marlin strobe based is relevant in the middle of the
-    definition> construction for zero-knowledge proofs <todo|maybe define
-    marlin transcript separately and refer to it.>. The transcript, <math|T>,
-    is a STROBE object for the 128-bit security level as defined in the
-    <hlink|STROBE specification|https://strobe.sourceforge.io/specs/> in
-    Section 5:
+    documentation|https://merlin.cool/> <todo|we agreed to remove merlin and
+    speccing it>, which is a <hlink|STROBE|https://strobe.sourceforge.io/>-based
+    transcript <todo|why the fact that marlin strobe based is relevant in the
+    middle of the definition> construction for zero-knowledge proofs
+    <todo|maybe define marlin transcript separately and refer to it.>. The
+    transcript, <math|T>, is a STROBE object for the 128-bit security level
+    as defined in the <hlink|STROBE specification|https://strobe.sourceforge.io/specs/>
+    in Section 5:
 
     <\eqnarray*>
       <tformat|<table|<row|<cell|T>|<cell|=>|<cell|<around*|(|s,p,b,f|)>>>|<row|<cell|s>|<cell|=>|<cell|<around*|(|b<rsub|0>,\<ldots\>b<rsub|199>|)>>>>>
