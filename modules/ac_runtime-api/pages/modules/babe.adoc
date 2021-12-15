@@ -1,6 +1,6 @@
 ==== BabeApi Module (Version 2)
 
-All calls in this module require `Core_intialized_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+All calls in this module require `Core_intialized_block` (xref:modules/core.adoc#sect-rte-core-initialize-block[Sect.]) to be called beforehand.
 
 [#sect-rte-babeapi-epoch]
 ===== `BabeApi_configuration`
@@ -30,11 +30,11 @@ type at genesis will be used. Dynamic slot duration may be supported in the futu
 |Unsigned 64bit integer
 
 |_Constant_
-|A constant value that is used in the threshold calculation formula as defined in <<defn-babe-constant>>.
+|A constant value that is used in the threshold calculation formula as defined in xref:05_consensus/block_production.adoc#defn-babe-constant[Def.].
 |Tuple containing two unsigned 64bit integers
 
 |_GenesisAuthorities_
-|The authority list for the genesis epoch as defined in <<defn-authority-list>>.
+|The authority list for the genesis epoch as defined in xref:05_consensus/common.adoc#defn-authority-list[Def.].
 |Array of tuples containing a 256-bit byte array and a unsigned 64bit integer
 
 |_Randomness_
@@ -77,8 +77,8 @@ where
 ** latexmath:[e_i] is a unsigned 64-bit integer representing the epoch index.
 ** latexmath:[s_s] is a unsigned 64-bit integer representing the starting slot of the epoch.
 ** latexmath:[d] is a unsigned 64-bit integer representing the duration of the epoch.
-** latexmath:[A] is an authority list as defined in <<defn-authority-list>>.
-** latexmath:[r] is an 256-bit array containing the randomness for the epoch as defined in <<defn-epoch-randomness>>.
+** latexmath:[A] is an authority list as defined in xref:05_consensus/common.adoc#defn-authority-list[Def.].
+** latexmath:[r] is an 256-bit array containing the randomness for the epoch as defined in xref:05_consensus/block_production.adoc#defn-epoch-randomness[Def.].
 
 ===== BabeApi_next_epoch
 
@@ -88,21 +88,21 @@ Arguments::
 * None.
 
 Return::
-* Returns the same datastructure as described in <<sect-babeapi_current_epoch>>.
+* Returns the same datastructure as described in xref:modules/babe.adoc#sect-babeapi_current_epoch[Sect.].
 
 [#sect-babeapi_generate_key_ownership_proof]
 ===== `BabeApi_generate_key_ownership_proof`
 
 Generates a proof of the membership of a key owner in the specified
 block state. The returned value is used to report equivocations as
-described in <<sect-babeapi_submit_report_equivocation_unsigned_extrinsic>>.
+described in xref:modules/babe.adoc#sect-babeapi_submit_report_equivocation_unsigned_extrinsic[Sect.].
 
 Arguments::
 * The unsigned 64-bit integer indicating the slot number.
 * The 256-bit public key of the authority.
 
 Return::
-* A SCALE encoded _Option_ as defined in Definition <<defn-option-type>> containing the
+* A SCALE encoded _Option_ as defined in Definition xref:02_encoding.adoc#defn-option-type[Def.] containing the
 proof in an opaque form.
 
 [#sect-babeapi_submit_report_equivocation_unsigned_extrinsic]
@@ -134,8 +134,8 @@ where
 +
 Unlike during block execution, the Seal in both block headers is not removed before
 submission. The block headers are submitted in its full form.
-* An proof of the key owner in an opaque form as described in <<sect-babeapi_generate_key_ownership_proof>>.
+* An proof of the key owner in an opaque form as described in xref:modules/babe.adoc#sect-babeapi_generate_key_ownership_proof[Sect.].
 
 Return::
-* A SCALE encoded _Option_ as defined in <<defn-option-type>> containing an empty
+* A SCALE encoded _Option_ as defined in xref:02_encoding.adoc#defn-option-type[Def.] containing an empty
 value on success.

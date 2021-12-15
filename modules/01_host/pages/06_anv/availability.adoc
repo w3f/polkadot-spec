@@ -4,15 +4,15 @@
 [#sect-availability-votes]
 ==== Availability Votes
 
-The Polkadot validator must issue a bitfield (<<defn-bitfield-array>>) which
+The Polkadot validator must issue a bitfield (xref:06_anv/definitions.adoc#defn-bitfield-array[Def.]) which
 indicates votes for the availabilty of candidates. Issued bitfields can be used
 by the validator and other peers to determine which backed candidates meet the
 2/3+ availability quorum.
 
 Candidates are inserted into the relay chain in form of parachain inherent data
-(<<sect-candidate-inclusion>>) by a block author. A validator can retrieve that
+(xref:06_anv/candidate-backing.adoc#sect-candidate-inclusion[Sect.]) by a block author. A validator can retrieve that
 data by calling the appropriate Runtime API entry
-(<<sect-rt-api-availability-cores>>), then create a bitfield indicating for
+(xref:06_anv/runtime-api.adoc#sect-rt-api-availability-cores[Sect.]), then create a bitfield indicating for
 which candidate the validator has availability data stored and broadcast it to
 the network as defined in Definition 7.38. When sending the bitfield distrubtion
 message, the validator must ensure stem:[B_h] is set approriately, therefore
@@ -20,28 +20,28 @@ clarifying to which state the bitfield is referring to, given that candidates
 can vary based on the chain fork.
 
 Missing availability data of candidates must be recovered by the validator as
-described in <<sect-candidate-recovery>>. If previously issued bitfields are
+described in xref:06_anv/availability.adoc#sect-candidate-recovery[Sect.]. If previously issued bitfields are
 no longer accurate, i.e. the availability data has been recovered or the
 candidate of an availablity core has changed, the validator must create a new
 bitfield and boradcast it to the network. Candidates must be kept available by
 validators for a specific amount of time. If a candidate does not receive any
 backing, validators should keep it available for about one hour, in case the
 state of backing does change. Backed and even approved candidates
-(<<sect-approval-voting>>) must be kept by validators for about 25 hours, since
+(xref:06_anv/approval-voting.adoc#sect-approval-voting[Sect.]) must be kept by validators for about 25 hours, since
 disputes (TODO) can occur and the candidate needs to be checked again.
 
 The validator issues availability votes in form of a validator protocol message
-(<<net-msg-collator-protocol-message>>).
+(xref:06_anv/network-messages.adoc#net-msg-collator-protocol-message[Decl.]).
 
 [#sect-candidate-recovery]
 ==== Candidate Recovery
 
 The availability distribution of the Polkadot validator must be able to recover
 parachain candidates that the validator is assigned to, in order to determine
-whether the candidate should be backed (<<sect-candidate-backing>>) respectively
-whether the candidate should be approved (<<sect-approval-voting>>).
+whether the candidate should be backed (xref:06_anv/candidate-backing.adoc#sect-candidate-backing[Sect.]) respectively
+whether the candidate should be approved (xref:06_anv/approval-voting.adoc#sect-approval-voting[Sect.]).
 Additionally, peers can send availability requests as defined in
-<<net-msg-chunk-fetching-request>> and <<net-msg-available-data-request>> to the
+xref:06_anv/network-messages.adoc#net-msg-chunk-fetching-request[Decl.] and xref:06_anv/network-messages.adoc#net-msg-available-data-request[Decl.] to the
 validator, which the validator should be able to respond to.
 
 Candidates are recovered by sending requests for specific indices of erasure
@@ -49,4 +49,4 @@ encoded chunks. Erasure encoding is described in Section TODO. A validator
 should request chunks by picking peers randomly and must recover at least
 stem:[f+1] chunks, where stem:[n=3f+k] and stem:[k in {1,2,3}]. stem:[n] is the
 number of validators as specified in the session info, which can be fetched by
-the Runtime API as described in <<sect-rt-api-session-info>>.
+the Runtime API as described in xref:06_anv/runtime-api.adoc#sect-rt-api-session-info[Sect.].

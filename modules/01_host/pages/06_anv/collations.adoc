@@ -1,16 +1,16 @@
 [#sect-collations]
 === Collations
 
-Collations are proposed candidates <<defn-candidate>> to the Polkadot relay
+Collations are proposed candidates xref:06_anv/definitions.adoc#defn-candidate[Def.] to the Polkadot relay
 chain validators. The Polkodat network protocol is agnostic on what candidate
 productionis mechanism each parachain uses and does not specify or mandate any
 of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the
 relay chain validator host implementation itself does not directly interpret or
 process teh internal transactions of the candidate, but rather rely on the
-parachain Runtime to validate the candidate (<<sect-candidate-validation>>).
+parachain Runtime to validate the candidate (xref:06_anv/candidate-validation.adoc#sect-candidate-validation[Sect.]).
 Collators, which are parachain nodes which produce candidate proposals and send
 them to the relay chain validator, must prepare pieces of data
-(<<defn-collation>>) in order to correctly comply with the requirements of the
+(xref:06_anv/collations.adoc#defn-collation[Def.]) in order to correctly comply with the requirements of the
 parachain protocol.
 
 [#defn-collation]
@@ -29,17 +29,17 @@ H = (z_n,…z_m)
 
 where
 
-* stem:[M] is an array of upward messages (<<defn-upward-message>>), stem:[u],
+* stem:[M] is an array of upward messages (xref:06_anv/definitions.adoc#defn-upward-message[Def.]), stem:[u],
 interpreted by the relay chain itself.
 * stem:[H] is an array of outbound horizontal messages
-(<<defn-outbound-hrmp-message>>), stem:[z], interpreted by other parachains.
-* stem:[R] is an _Option_ type (<<defn-option-type>>) which can contain a
+(xref:06_anv/definitions.adoc#defn-outbound-hrmp-message[Def.]), stem:[z], interpreted by other parachains.
+* stem:[R] is an _Option_ type (xref:02_encoding.adoc#defn-option-type[Def.]) which can contain a
 parachain Runtime update. The new Runtime code is an array of bytes.
-* stem:[h] is the head data (<<defn-head-data>>) produced as a result of
+* stem:[h] is the head data (xref:06_anv/definitions.adoc#defn-head-data[Def.]) produced as a result of
 execution of the parachain specific logic.
-* stem:[P] is the PoV block (<<defn-para-block>>).
+* stem:[P] is the PoV block (xref:06_anv/definitions.adoc#defn-para-block[Def.]).
 * stem:[p] is an unsigned 32-bit integer indicating the number of processed
-downward messages (<<defn-downward-message>>).
+downward messages (xref:06_anv/definitions.adoc#defn-downward-message[Def.]).
 * stem:[w] is an unsigned 32-bit integer indicating the mark up to which all
 inbound HRMP messages have been processed by the parachain.
 ****

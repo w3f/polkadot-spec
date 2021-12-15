@@ -7,31 +7,31 @@ validator must successfully verify the following conditions in the following
 order:
 
 . The candidate does not exceed any parameters in the persisted validation data
-(<<defn-persisted-validation-data>>).
+(xref:06_anv/runtime-api.adoc#defn-persisted-validation-data[Def.]).
 . The signature of the collator is valid.
-. Validate the candidate by executing the parachain Runtime (<<sect-parachain-runtime>>)..
+. Validate the candidate by executing the parachain Runtime (xref:06_anv/candidate-validation.adoc#sect-parachain-runtime[Sect.])..
 
 If all steps are valid, the Polkadot validator must create the necessary
-candidate commitments (<<defn-candidate-commitments>>) and submit the
+candidate commitments (xref:06_anv/candidate-backing.adoc#defn-candidate-commitments[Def.]) and submit the
 appropriate statement for each candidate
-(<<sect-candidate-statements>>).
+(xref:06_anv/candidate-backing.adoc#sect-candidate-statements[Sect.]).
 
 [#sect-parachain-runtime]
 ==== Parachain Runtime
 
 Parachain Runtimes are stored in the relay chain state, and can either be
 fetched by the parachain Id or the Runtime hash via the relay chain Runtime API
-as described in <<sect-rt-api-validation-code>> and
-<<sect-rt-api-validation-code-by-hash>> respectively. The retrieved parachain
+as described in xref:06_anv/runtime-api.adoc#sect-rt-api-validation-code[Sect.] and
+xref:06_anv/runtime-api.adoc#sect-rt-api-validation-code-by-hash[Sect.] respectively. The retrieved parachain
 Runtime might need to be decompressed based on the magic identifier as described
-in <<sect-runtime-compression>>.
+in xref:06_anv/candidate-validation.adoc#sect-runtime-compression[Sect.].
 
 In order to validate a parachain block, the Polkadot validator must prepare the
-validation parameters (<<defn-validation-parameters>>), then use its local Wasm
-execution environment (<<sect-code-executor>>) to execute the validate_block
+validation parameters (xref:06_anv/candidate-validation.adoc#defn-validation-parameters[Def.]), then use its local Wasm
+execution environment (xref:03_transition/runtime_interaction.adoc#sect-code-executor[Sect.]) to execute the validate_block
 parachain Runtime API by passing on the validation parameters as an argument.
 The parachain Runtime function returns the validation result
-(<<defn-validation-result>>).
+(xref:06_anv/candidate-validation.adoc#defn-validation-result[Def.]).
 
 [#defn-validation-parameters]
 ===== Validation Parameters
@@ -47,10 +47,10 @@ P = (h,b,B_i,S_r)
 
 where
 
-* stem:[h] is the parachain head data (<<defn-head-data>>).
-* stem:[b] is the block body (<<defn-para-block>>).
+* stem:[h] is the parachain head data (xref:06_anv/definitions.adoc#defn-head-data[Def.]).
+* stem:[b] is the block body (xref:06_anv/definitions.adoc#defn-para-block[Def.]).
 * stem:[B_i] is the latest relay chain block number.
-* stem:[S_r] is the relay chain block storage root (<<sect-merkl-proof>>).
+* stem:[S_r] is the relay chain block storage root (xref:02_state/state_storage_trie.adoc#sect-merkl-proof[Sect.]).
 ****
 
 [#defn-validation-result]
@@ -58,9 +58,9 @@ where
 ****
 The validation result is returned by the `validate_block` parachain Runtime API
 after attempting to validate a parachain block. Those results are then used in
-candidate commitments (<<defn-candidate-commitments>>), which then will be
+candidate commitments (xref:06_anv/candidate-backing.adoc#defn-candidate-commitments[Def.]), which then will be
 inserted into the relay chain via the parachain inherent data
-(<<defn-parachain-inherent-data>>). The validation result, stem:[V], is a
+(xref:06_anv/candidate-backing.adoc#defn-parachain-inherent-data[Def.]). The validation result, stem:[V], is a
 datastructure of the following format:
 
 [stem]
@@ -72,13 +72,13 @@ M_h = (t_0,…t_n)
 
 where
 
-* stem:[h] is the parachain head data (<<defn-head-data>>).
-* stem:[R] is an _Option_ value (<<defn-option-type>>) that can contain a new
+* stem:[h] is the parachain head data (xref:06_anv/definitions.adoc#defn-head-data[Def.]).
+* stem:[R] is an _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) that can contain a new
 parachain Runtime in case of an update.
 * stem:[M_u] is an array of upward messages sent by the parachain. Each
 individual message, m, is an array of bytes.
 * stem:[M_h] is an array of individual outbound horizontal messages
-(<<defn-outbound-hrmp-message>>) sent by the parachain.
+(xref:06_anv/definitions.adoc#defn-outbound-hrmp-message[Def.]) sent by the parachain.
 * stem:[p] is a unsigned 32-bit integer indicating the number of downward
 messages that were processed by the parachain. It is expected that the parachain
 processes the messages from first to last.

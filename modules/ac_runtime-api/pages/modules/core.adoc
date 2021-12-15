@@ -4,7 +4,7 @@
 [#defn-rt-core-version]
 ===== `Core_version`
 
-Returns the version identifiers of the Runtime. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in <<sect-json-rpc-api>>.
+Returns the version identifiers of the Runtime. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in xref:intro.adoc#sect-json-rpc-api[Sect.].
 
 Arguments::
 * None
@@ -27,7 +27,7 @@ Return::
 
 | `impl_version` | Unsigned 32-bit integer | Version of the Runtime implementation
 
-| `apis` | ApiVersions (<<defn-rt-apisvec>>) | List of supported APIs along with their version
+| `apis` | ApiVersions (xref:modules/core.adoc#defn-rt-apisvec[Def.]) | List of supported APIs along with their version
 
 | `transaction_version` | Unsigned 32-bit integer | Version of the transaction format
 |===
@@ -35,7 +35,7 @@ Return::
 .ApiVersions
 [#defn-rt-apisvec]
 ====
-*ApiVersions* is a specialized type for the (<<defn-rt-core-version>>) function entry. It represents an array of tuples, where the first value of the tuple is an array of 8-bytes containing the Blake2b hash of the API name. The second value of the tuple is the version number of the corresponding API.
+*ApiVersions* is a specialized type for the (xref:modules/core.adoc#defn-rt-core-version[Def.]) function entry. It represents an array of tuples, where the first value of the tuple is an array of 8-bytes containing the Blake2b hash of the API name. The second value of the tuple is the version number of the corresponding API.
 
 [latexmath]
 ++++
@@ -51,18 +51,18 @@ Requires `Core_initialize_block` to be called beforehand.
 [#sect-rte-core-execute-block]
 ===== `Core_execute_block`
 
-This function executes a full block and all its extrinsics and updates the state accordingly. Additionally, some integrity checks are executed such as validating if the parent hash is correct and that the transaction root represents the transactions. Internally, this function performs an operation similar to the process described in <<algo-build-block>>, by calling `Core_initialize_block`,`BlockBuilder_apply_extrinsics` and `BlockBuilder_finalize_block`.
+This function executes a full block and all its extrinsics and updates the state accordingly. Additionally, some integrity checks are executed such as validating if the parent hash is correct and that the transaction root represents the transactions. Internally, this function performs an operation similar to the process described in xref:05_consensus/block_production.adoc#algo-build-block[Algo.], by calling `Core_initialize_block`,`BlockBuilder_apply_extrinsics` and `BlockBuilder_finalize_block`.
 
 This function should be called when a fully complete block is available
 that is not actively being built on, such as blocks received from other
 peers. State changes resulted from calling this function are usually
 meant to persist when the block is imported successfully.
 
-Additionally, the seal digest in the block header, as described in  <<defn-digest>>, must be removed by the
+Additionally, the seal digest in the block header, as described in  xref:03_transition/state_replication.adoc#defn-digest[Def.], must be removed by the
 Polkadot host before submitting the block.
 
 Arguments::
-* A block represented as a tuple consisting of a block header, as described in <<defn-block-header>>, and the block body, as described in <<defn-block-body>>.
+* A block represented as a tuple consisting of a block header, as described in xref:03_transition/state_replication.adoc#defn-block-header[Def.], and the block body, as described in xref:03_transition/state_replication.adoc#defn-block-body[Def.].
 
 Return::
 * None.
@@ -70,11 +70,11 @@ Return::
 [#sect-rte-core-initialize-block]
 ===== `Core_initialize_block`
 
-Sets up the environment required for building a new block as described in <<algo-build-block>>.
+Sets up the environment required for building a new block as described in xref:05_consensus/block_production.adoc#algo-build-block[Algo.].
 
 
 Arguments::
-* The header of the new block as defined in <<defn-block-header>>. The values latexmath:[H_r], latexmath:[H_e] and latexmath:[H_d] are left empty.
+* The header of the new block as defined in xref:03_transition/state_replication.adoc#defn-block-header[Def.]. The values latexmath:[H_r], latexmath:[H_e] and latexmath:[H_d] are left empty.
 
 Return::
 * None.

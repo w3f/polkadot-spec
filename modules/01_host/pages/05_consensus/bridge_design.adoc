@@ -39,12 +39,12 @@ leading up to the latest, finalized block.
 [#defn-beefy-witness-data]
 ===== Witness Data
 ****
-*Witness data* contains the statement (<<defn-beefy-statement>>), an array
+*Witness data* contains the statement (xref:05_consensus/bridge_design.adoc#defn-beefy-statement[Def.]), an array
 indicating which validator of the Polkadot network voted for the statement (but
 not the signatures themselves) and a MMR root of the signatures. The indicators
 of which validator voted for the statement are just claims and provide no
 proofs. The network message is defined in
-<<defn-grandpa-beefy-signed-commitment-witness>> and the relayer saves it on the
+xref:04_networking/messages.adoc#defn-grandpa-beefy-signed-commitment-witness[Def.] and the relayer saves it on the
 chain of the remote network.
 ****
 
@@ -54,7 +54,7 @@ chain of the remote network.
 A *light client* is an abstract entity in a remote network such as Ethereum. It
 can be a node or a smart contract with the intent of requesting finality proofs
 from the Polkadot network. A light client reads the witness data
-(<<defn-beefy-witness-data>> from the chain, then requests the signatures
+(xref:05_consensus/bridge_design.adoc#defn-beefy-witness-data[Def.] from the chain, then requests the signatures
 directly from the relayer in order to verify those.
 
 The light client is expected to know who the validators are and has
@@ -73,28 +73,28 @@ offchain and can for example be a node or a collection of nodes.
 
 ==== Voting on Statements
 
-The Polkadot Host signs a statement (<<defn-beefy-statement>>) and gossips it as
-part of a vote (<<defn-msg-beefy-gossip>>) to its peers on every new, finalized
+The Polkadot Host signs a statement (xref:05_consensus/bridge_design.adoc#defn-beefy-statement[Def.]) and gossips it as
+part of a vote (xref:04_networking/messages.adoc#defn-msg-beefy-gossip[Def.]) to its peers on every new, finalized
 block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum
 has better compatibility for it compared to SR25519 or ED25519.
 
 [#sect-beefy-committing-witnesses]
 ==== Committing Witnesses
 
-The relayer (<<defn-beefy-relayer>>) participates in the Polkadot network by
-collecting the gossiped votes (<<defn-msg-beefy-gossip>>). Those votes are
-converted into the witness data structure (<<defn-beefy-witness-data>>).
+The relayer (xref:05_consensus/bridge_design.adoc#defn-beefy-relayer[Def.]) participates in the Polkadot network by
+collecting the gossiped votes (xref:04_networking/messages.adoc#defn-msg-beefy-gossip[Def.]). Those votes are
+converted into the witness data structure (xref:05_consensus/bridge_design.adoc#defn-beefy-witness-data[Def.]).
 The relayer saves the data on the chain of the remote network. The occurrence of
 saving witnesses on remote networks is undefined.
 
 ==== Requesting Signed Commitments
 
-A light client (<<defn-beefy-light-client>>) fetches the witness data
-(<<defn-beefy-witness-data>>) from the chain. Once the light client knows which
+A light client (xref:05_consensus/bridge_design.adoc#defn-beefy-light-client[Def.]) fetches the witness data
+(xref:05_consensus/bridge_design.adoc#defn-beefy-witness-data[Def.]) from the chain. Once the light client knows which
 validators apparently voted for the specified statement, it needs to request the
 signatures from the relayer to verify whether the claims are actually true. This
 is achieved by requesting signed commitments
-(<<defn-grandpa-beefy-signed-commitment>>).
+(xref:04_networking/messages.adoc#defn-grandpa-beefy-signed-commitment[Def.]).
 
 How those signed commitments are requested by the light client and delivered by
 the relayer varies among networks or implementations. On Ethereum, for example,

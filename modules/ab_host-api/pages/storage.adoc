@@ -14,8 +14,8 @@ Sets the value under a given key into storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
-* `value`: a pointer-size (<<defn-runtime-pointer>>) containing the
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the key.
+* `value`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the
 value.
 
 ==== `ext_storage_get`
@@ -28,9 +28,9 @@ Retrieves the value associated with the given key from storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) returning the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the value.
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the key.
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) returning the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the value.
 
 ==== `ext_storage_read`
 
@@ -45,14 +45,14 @@ offset.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
-* `value_out`: a pointer-size (<<defn-runtime-pointer>>) containing the
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the key.
+* `value_out`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the
 buffer to which the value will be written to. This function will never write
 more then the length of the buffer, even if the value’s length is bigger.
 * `offset`: an u32 integer containing the offset beyond the value should be read
 from.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) pointing to a SCALE
-encoded _Option_ value (<<defn-option-type>>) containing an unsigned 32-bit
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) pointing to a SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing an unsigned 32-bit
 integer representing the number of bytes left at supplied `offset`. Returns
 _None_ if the entry does not exists.
 
@@ -67,7 +67,7 @@ Clears the storage of the given key and its value.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the key.
 
 ==== `ext_storage_exists`
 
@@ -80,7 +80,7 @@ Checks whether the given key exists in storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the key.
 * `return`: an i32 integer value equal to _1_ if the key exists or a value equal
 to _0_ if otherwise.
 
@@ -96,12 +96,12 @@ prefix.
 ----
 
 Arguments::
-* `prefix`: a pointer-size (<<defn-runtime-pointer>>) containing
+* `prefix`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing
 the prefix.
 
 ==== `ext_storage_append`
 
-Append the SCALE encoded value to a SCALE encoded sequence (<<defn-scale-list>>)
+Append the SCALE encoded value to a SCALE encoded sequence (xref:02_encoding.adoc#defn-scale-list[Def.])
 at the given key. This function assumes that the existing storage item is either
 empty or a SCALE encoded sequence and that the value to append is also SCALE
 encoded and of the same type as the items in the existing sequence.
@@ -121,8 +121,8 @@ array.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
-* `value`: a pointer-size (<<defn-runtime-pointer>>) containing the
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the key.
+* `value`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) containing the
 value to be appended.
 
 ==== `ext_storage_root`
@@ -142,7 +142,7 @@ root.
 [#sect-ext-storage-changes-root]
 ==== `ext_storage_changes_root`
 
-Compute the root of the changes trie (<<sect-changes-trie>>). The parent hash is
+Compute the root of the changes trie (xref:03_transition/state_replication.adoc#sect-changes-trie[Sect.]). The parent hash is
 a SCALE encoded block hash.
 
 ===== Version 1 - Prototype
@@ -152,7 +152,7 @@ a SCALE encoded block hash.
 ----
 
 Arguments::
-* `parent_hash`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `parent_hash`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 SCALE encoded block hash.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit Blake2 changes
 root.
@@ -160,7 +160,7 @@ root.
 ==== `ext_storage_next_key`
 
 Get the next key in storage after the given one in lexicographic order
-(<<defn-lexicographic-ordering>>). The key provided to this function may or may
+(xref:intro.adoc#defn-lexicographic-ordering[Def.]). The key provided to this function may or may
 not exist in storage.
 
 ===== Version 1 - Prototype
@@ -170,9 +170,9 @@ not exist in storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the next key in
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the next key in
 lexicographic order.
 
 [#sect-ext-storage-start-transaction]
@@ -181,9 +181,9 @@ lexicographic order.
 Start a new nested transaction. This allows to either commit or roll back all
 changes that are made after this call. For every transaction there must be a
 matching call to either `ext_storage_rollback_transaction`
-(<<sect-ext-storage-rollback-transaction>>) or `ext_storage_commit_transaction`
-(<<sect-ext-storage-commit-transaction>>). This is also effective for all values
-manipulated using the child storage API (<<sect-child-storage-api>>).
+(xref:storage.adoc#sect-ext-storage-rollback-transaction[Sect.]) or `ext_storage_commit_transaction`
+(xref:storage.adoc#sect-ext-storage-commit-transaction[Sect.]). This is also effective for all values
+manipulated using the child storage API (xref:child_storage.adoc#sect-child-storage-api[Sect.]).
 
 WARNING: This is a low level API that is potentially dangerous as it can easily
 result in unbalanced transactions. Runtimes should use high level storage
@@ -201,11 +201,11 @@ Arguments::
 ==== `ext_storage_rollback_transaction`
 
 Rollback the last transaction started by `ext_storage_start_transaction`
-(<<sect-ext-storage-start-transaction>>). Any changes made during that
+(xref:storage.adoc#sect-ext-storage-start-transaction[Sect.]). Any changes made during that
 transaction are discarded.
 
 WARNING: Panics if `ext_storage_start_transaction`
-(<<sect-ext-storage-start-transaction>>) was not called.
+(xref:storage.adoc#sect-ext-storage-start-transaction[Sect.]) was not called.
 
 ===== Version 1 - Prototype
 ----
@@ -218,11 +218,11 @@ Arguments::
 [#sect-ext-storage-commit-transaction]
 ==== `ext_storage_commit_transaction`
 Commit the last transaction started by `ext_storage_start_transaction`
-(<<sect-ext-storage-start-transaction>>). Any changes made during that
+(xref:storage.adoc#sect-ext-storage-start-transaction[Sect.]). Any changes made during that
 transaction are committed to the main state.
 
 WARNING: Panics if `ext_storage_start_transaction`
-(<<sect-ext-storage-start-transaction>>) was not called.
+(xref:storage.adoc#sect-ext-storage-start-transaction[Sect.]) was not called.
 
 ===== Version 1 - Prototype
 ----

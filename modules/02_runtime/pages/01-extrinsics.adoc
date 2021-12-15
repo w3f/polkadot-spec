@@ -11,7 +11,7 @@ function to be executed.
 [#defn-extrinsic]
 ====
 An extrinsic , latexmath:[tx], is a tuple consisting of the extrinsic
-version, latexmath:[T_v] (<<defn-extrinsic-version>>), and the body of
+version, latexmath:[T_v] (xref:01-extrinsics.adoc#defn-extrinsic-version[Def.]), and the body of
 the extrinsic, latexmath:[T_b].
 
 [latexmath]
@@ -20,7 +20,7 @@ tx := (T_v, T_b)
 ++++
 
 The value of latexmath:[T_b] varies for each version. The current
-version 4 is described in <<sect-version-four>>.
+version 4 is described in xref:01-extrinsics.adoc#sect-version-four[Sect.].
 ====
 
 .Extrinsic Version
@@ -51,11 +51,11 @@ T_b := (A_i, Sig, E, M_i, F_i(m))
 
 where each values represents:
 
-* latexmath:[A_i]: the 32-byte address of the sender (<<defn-extrinsic-address>>).
-* latexmath:[Sig]: the signature of the sender (<<defn-extrinsic-signature>>).
-* latexmath:[E]: the extra data for the extrinsic (<<defn-extra-data>>).
-* latexmath:[M_i]: the indicator of the Polkadot module (<<defn-module-indicator>>).
-* latexmath:[F_i(m)]: the indicator of the function of the Polkadot module (<<defn-function-indicator>>).
+* latexmath:[A_i]: the 32-byte address of the sender (xref:01-extrinsics.adoc#defn-extrinsic-address[Def.]).
+* latexmath:[Sig]: the signature of the sender (xref:01-extrinsics.adoc#defn-extrinsic-signature[Def.]).
+* latexmath:[E]: the extra data for the extrinsic (xref:01-extrinsics.adoc#defn-extra-data[Def.]).
+* latexmath:[M_i]: the indicator of the Polkadot module (xref:01-extrinsics.adoc#defn-module-indicator[Def.]).
+* latexmath:[F_i(m)]: the indicator of the function of the Polkadot module (xref:01-extrinsics.adoc#defn-function-indicator[Def.]).
 
 
 .Extrinsic Address
@@ -104,14 +104,14 @@ The signature is created by signing payload latexmath:[P].
 
 where each value represents:
 
-* latexmath:[M_i]: the module indicator (<<defn-module-indicator>>).
-* latexmath:[F_i(m)]: the function indicator of the module (<<defn-function-indicator>>).
-* latexmath:[E]: the extra data (<<defn-extra-data>>).
+* latexmath:[M_i]: the module indicator (xref:01-extrinsics.adoc#defn-module-indicator[Def.]).
+* latexmath:[F_i(m)]: the function indicator of the module (xref:01-extrinsics.adoc#defn-function-indicator[Def.]).
+* latexmath:[E]: the extra data (xref:01-extrinsics.adoc#defn-extra-data[Def.]).
 * latexmath:[R_v]: a UINT32 containing the specification version of `14`.
 * latexmath:[F_v]: a UINT32 containing the format version of `2`.
 * latexmath:[H_h(G)]: a 32-byte array containing the genesis hash.
 * latexmath:[H_h(B)]: a 32-byte array containing the hash of the block
-which starts the mortality period, as described in <<defn-extrinsic-mortality>>.
+which starts the mortality period, as described in xref:01-extrinsics.adoc#defn-extrinsic-mortality[Def.].
 ====
 
 
@@ -129,7 +129,7 @@ E := (T_{mor}, N, P_t)
 where each value represents:
 
 * latexmath:[T_{mor}]: contains the SCALE encoded mortality of the
-extrinsic (<<defn-extrinsic-mortality>>).
+extrinsic (xref:01-extrinsics.adoc#defn-extrinsic-mortality[Def.]).
 * latexmath:[N]: a compact integer containing the nonce of the sender.
 The nonce must be incremented by one for each extrinsic created,
 otherwise the Polkadot network will reject the extrinsic.
@@ -198,13 +198,13 @@ Balances_i := \begin{cases}
 ====
 Extrinsic *mortality* is a mechanism which ensures that an extrinsic is only
 valid within a certain period of the ongoing Polkadot lifetime. Extrinsics can
-also be immortal, as clarified in <<sect-mortality-encoding>>.
+also be immortal, as clarified in xref:01-extrinsics.adoc#sect-mortality-encoding[Sect.].
 
 The mortality mechanism works with two related values:
 
 * latexmath:[M_{per}]: the period of validity in terms of block
 numbers from the block hash specified as latexmath:[H_h(B)] in the
-payload (<<defn-extrinsic-signature>>). The
+payload (xref:01-extrinsics.adoc#defn-extrinsic-signature[Def.]). The
 requirement is latexmath:[M_{per} \geq 4] and latexmath:[M_{per}]
 must be the power of two, such as `32`, `64`, `128`, etc.
 * latexmath:[M_{pha}]: the phase in the period that this extrinsic’s
@@ -224,8 +224,8 @@ M_{pha} = H_i(B)\ mod\ M_{per}
 ++++
 
 latexmath:[M_{per}] and latexmath:[M_{pha}] are then included in the
-extrinsic, as clarified in <<defn-extra-data>>, in the SCALE encoded form of
-latexmath:[T_{mor}] (<<sect-mortality-encoding>>). Polkadot validators can use
+extrinsic, as clarified in xref:01-extrinsics.adoc#defn-extra-data[Def.], in the SCALE encoded form of
+latexmath:[T_{mor}] (xref:01-extrinsics.adoc#sect-mortality-encoding[Sect.]). Polkadot validators can use
 latexmath:[M_{pha}] to figure out the block hash included in the payload,
 which will therefore result in a valid signature if the extrinsic is within the
 specified period or an invalid signature if the extrinsic "died".

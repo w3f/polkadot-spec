@@ -1,11 +1,11 @@
 Like any transaction-based transition system, Polkadot’s state is changed by
 executing an ordered set of instructions. These instructions are known as
 _extrinsics_. In Polkadot, the execution logic of the state transition function
-is encapsulated in a Runtime (<<defn-state-machine>>). For easy upgradability
+is encapsulated in a Runtime (xref:01_background/definitions.adoc#defn-state-machine[Def.]). For easy upgradability
 this Runtime is presented as a Wasm blob. Nonetheless, the Polkadot Host needs
-to be in constant interaction with the Runtime (<<sect-entries-into-runtime>>).
+to be in constant interaction with the Runtime (xref:03_transition/runtime_interaction.adoc#sect-entries-into-runtime[Sect.]).
 
-In <<sect-extrinsics>>, we specify the procedure of the process where the
+In xref:03_transition/extrinsics.adoc#sect-extrinsics[Sect.], we specify the procedure of the process where the
 extrinsics are submitted, pre-processed and validated by Runtime and queued to
 be applied to the current state.
 
@@ -13,16 +13,16 @@ To make state replication feasible, Polkadot journals and batches series of its
 extrinsics together into a structure known as a _block_, before propagating them
 to other nodes, similar to most other prominent distributed ledger systems. The
 specification of the Polkadot block as well as the process of verifying its
-validity are both explained in <<sect-state-replication>>.
+validity are both explained in xref:03_transition/state_replication.adoc#sect-state-replication[Sect.].
 
 [#sect-entries-into-runtime]
 === Interacting with the Runtime
 
-The Runtime (<<defn-state-machine>>) is the code implementing the logic of the chain.
+The Runtime (xref:01_background/definitions.adoc#defn-state-machine[Def.]) is the code implementing the logic of the chain.
 This code is decoupled from the Polkadot Host to make the the logic of the chain
 easily upgradable without the need to upgrade the Polkadot Host itself. The
 general procedure to interact with the Runtime is described by the algorithm as
-defined in <<algo-runtime-interaction>>.
+defined in xref:03_transition/runtime_interaction.adoc#algo-runtime-interaction[Algo.].
 
 [#algo-runtime-interaction]
 ==== Algorithm: Interact-With-Runtime
@@ -46,10 +46,10 @@ which executes the following steps:
 In this section, we describe the details upon which the Polkadot Host is
 interacting with the Runtime. In particular, stem:["Set-State-At"] and
 stem:["Call-Runtime-Entry"] procedures called by the algorithm as defined in
-<<algo-runtime-interaction>> are explained in <<notat-call-into-runtime>> and
-<<defn-set-state-at>> respectively. stem:[R_B] is the Runtime code loaded from
-stem:[S_B], as described in <<notat-runtime-code-at-state>>, and stem:[RE_B] is
-the Polkadot Host API, as described in <<nota-host-api-at-state>>.
+xref:03_transition/runtime_interaction.adoc#algo-runtime-interaction[Algo.] are explained in xref:03_transition/runtime_interaction.adoc#notat-call-into-runtime[Decl.] and
+xref:03_transition/state_replication.adoc#defn-set-state-at[Def.] respectively. stem:[R_B] is the Runtime code loaded from
+stem:[S_B], as described in xref:03_transition/runtime_interaction.adoc#notat-runtime-code-at-state[Decl.], and stem:[RE_B] is
+the Polkadot Host API, as described in xref:intro.adoc#nota-host-api-at-state[Decl.].
 
 [#sect-loading-runtime-code]
 ==== Loading the Runtime Code
@@ -68,12 +68,12 @@ which is the ASCII byte representation of the string `:code`
 the Runtime code itself becomes state sensitive and calls to Runtime can change
 the Runtime code itself. Therefore the Polkadot Host needs to always make sure
 to provide the Runtime corresponding to the state in which the entry has been
-called. Accordingly, we define stem:[R_B] (<<notat-runtime-code-at-state>>).
+called. Accordingly, we define stem:[R_B] (xref:03_transition/runtime_interaction.adoc#notat-runtime-code-at-state[Decl.]).
 
 The initial Runtime code of the chain is provided as part of the genesis state
 (<<chapter-genesis>>) and subsequent calls to the Runtime have the ability to,
 in turn, upgrade the Runtime by replacing this Wasm blob with the help of the
-storage API (<<sect-storage-api>>).
+storage API (xref:storage.adoc#sect-storage-api[Sect.]).
 
 [#notat-runtime-code-at-state]
 ===== Notation: Runtime Code at State
@@ -90,7 +90,7 @@ Virtual Machine (VM), which in turn provides the Runtime with access to
 the Polkadot Host API. This part of the Polkadot Host is referred to as
 the _Executor_.
 
-<<notat-call-into-runtime>> introduces the notation for calling the runtime entry
+xref:03_transition/runtime_interaction.adoc#notat-call-into-runtime[Decl.] introduces the notation for calling the runtime entry
 which is used whenever an algorithm of the Polkadot Host needs to access the
 runtime.
 
@@ -114,7 +114,7 @@ By
 
 we refer to the task using the executor to invoke the while passing an
 stem:[A_1, ..., A_n] argument to it and using the encoding described in
-<<sect-runtime-send-args-to-runtime-enteries>>.
+xref:03_transition/runtime_interaction.adoc#sect-runtime-send-args-to-runtime-enteries[Sect.].
 ****
 
 [#sect-memory-management]
@@ -122,7 +122,7 @@ stem:[A_1, ..., A_n] argument to it and using the encoding described in
 
 The Polkadot Host is responsible for managing the WASM heap memory starting at
 the exported symbol as a part of implementing the allocator Host API
-(<<sect-allocator-api>>) and the same allocator should be used for any other
+(xref:allocator.adoc#sect-allocator-api[Sect.]) and the same allocator should be used for any other
 heap allocation to be used by the Polkadot Runtime.
 
 The size of the provided WASM memory should be based on the value of the
@@ -134,7 +134,7 @@ for import under the symbol name `memory`.
 ===== Sending Data to a Runtime Entry
 
 In general, all data exchanged between the Polkadot Host and the Runtime is
-encoded using SCALE codec described in <<sect-scale-codec>>. Therefore all
+encoded using SCALE codec described in xref:02_encoding.adoc#sect-scale-codec[Sect.]. Therefore all
 runtime entries have the following identical Wasm function signatures:
 
 ++++
@@ -143,8 +143,8 @@ runtime entries have the following identical Wasm function signatures:
 
 In each invocation of a Runtime entry, the argument(s) which are supposed to be
 sent to the entry, need to be SCALE encoded into a byte array stem:[B]
-(<<sect-scale-codec>>) and copied into a section of Wasm shared memory managed
-by the shared allocator described in <<sect-memory-management>>.
+(xref:02_encoding.adoc#sect-scale-codec[Sect.]) and copied into a section of Wasm shared memory managed
+by the shared allocator described in xref:03_transition/runtime_interaction.adoc#sect-memory-management[Sect.].
 
 When the Wasm method , corresponding to the entry, is invoked, two
 integers are passed as arguments. The first argument is set to the
@@ -168,7 +168,7 @@ In order for the Runtime to carry on various tasks, it manipulates the current
 state by means of executing calls to various Polkadot Host APIs
 (<<chap-host-api>>). It is the duty of Host APIs to determine the context in
 which these changes should persist. For example, if Polkdot Host needs to
-validate a transaction using entry (<<sect-rte-validate-transaction>>), it needs
+validate a transaction using entry (xref:modules/txqueue.adoc#sect-rte-validate-transaction[Sect.]), it needs
 to sandbox the changes to the state just for that Runtime call and prevent the
 global state of the system from being influence by the call to such a Runtime
 entry. This includes reverting the state of function calls which return errors
@@ -176,8 +176,8 @@ or panic.
 
 As a rule of thumb, any state changes resulting from Runtime enteries are not
 persistant with the exception of state changes resulting from calling
-`Core_execute_block` (<<sect-rte-core-execute-block>>) while Polkadot Host is
-importing a block (<<sect-block-validation>>).
+`Core_execute_block` (xref:modules/core.adoc#sect-rte-core-execute-block[Sect.]) while Polkadot Host is
+importing a block (xref:03_transition/state_replication.adoc#sect-block-validation[Sect.]).
 
 For more information on managing multiple variant of state see
-<<sect-managing-multiple-states>>.
+xref:03_transition/state_replication.adoc#sect-managing-multiple-states[Sect.].

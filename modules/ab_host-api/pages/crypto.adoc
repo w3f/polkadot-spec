@@ -27,7 +27,7 @@ identifier*. The following known types are available:
 [#defn-ecdsa-verify-error]
 ==== ECDSA Verify Error
 ****
-*EcdsaVerifyError* is a varying data type (<<defn-varrying-data-type>>) that
+*EcdsaVerifyError* is a varying data type (xref:02_encoding.adoc#defn-varrying-data-type[Def.]) that
 specifies the error type when using ECDSA recovery functionality. Following
 values are possible:
 
@@ -54,8 +54,8 @@ Returns all _ed25519_ public keys for the given key identifier from the keystore
 Arguments::
 
 * `key_type_id`: a 32-bit pointer to the key type identifier
-(<<defn-key-type-id>>).
-* `return`: a pointer-size (<<defn-runtime-pointer>>) to an SCALE encoded
+(xref:crypto.adoc#defn-key-type-id[Def.]).
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) to an SCALE encoded
 256-bit public keys.
 
 ==== `ext_crypto_ed25519_generate`
@@ -75,9 +75,9 @@ or invalid seed was provided.
 Arguments::
 
 * `key_type_id`: a 32-bit pointer to the key type identifier
-(<<defn-key-type-id>>).
-* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE encoded
-_Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
+(xref:crypto.adoc#defn-key-type-id[Def.]).
+* `seed`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE encoded
+_Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the BIP-39 seed which must be
 valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit public key.
 
@@ -95,12 +95,12 @@ and key type in the keystore.
 Arguments::
 
 * `key_type_id`: a 32-bit pointer to the key type identifier
-(<<defn-key-type-id>>).
+(xref:crypto.adoc#defn-key-type-id[Def.]).
 * `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
-* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `msg`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 message that is to be signed.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the 64-byte signature.
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the 64-byte signature.
 This function returns if the public key cannot be found in the key store.
 
 [#sect-ext-crypto-ed25519-verify]
@@ -112,10 +112,10 @@ function will fully verify the signature and return the result. If batching
 verification is registered, this function will push the data to the batch and
 return immediately. The caller can then get the result by calling
 `ext_crypto_finish_batch_verify`
-(<<sect-ext-crypto-finish-batch-verify>>).
+(xref:crypto.adoc#sect-ext-crypto-finish-batch-verify[Sect.]).
 
 The verification extension is explained more in detail in
-(<<sect-ext-crypto-start-batch-verify>>).
+(xref:crypto.adoc#sect-ext-crypto-start-batch-verify[Sect.]).
 
 ===== Version 1 - Prototype
 ----
@@ -126,7 +126,7 @@ The verification extension is explained more in detail in
 Arguments::
 
 * `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
-* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `msg`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 message that is to be verified.
 * `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to if the signature is valid or batched or
@@ -145,8 +145,8 @@ Returns all _sr25519_ public keys for the given key id from the keystore.
 Arguments::
 
 * `key_type_id`: a 32-bit pointer to the key type identifier
-(<<defn-key-type-id>>).
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+(xref:crypto.adoc#defn-key-type-id[Def.]).
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 SCALE encoded 256-bit public keys.
 
 ==== `ext_crypto_sr25519_generate`
@@ -165,9 +165,9 @@ or invalid seed was provided.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
-* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE encoded
-_Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
+* `key_type_id`: a 32-bit pointer to the key identifier (xref:crypto.adoc#defn-key-type-id[Def.]).
+* `seed`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE encoded
+_Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the BIP-39 seed which must be
 valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit public key.
 
@@ -184,12 +184,12 @@ public key and key type in the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
+* `key_type_id`: a 32-bit pointer to the key identifier (xref:crypto.adoc#defn-key-type-id[Def.]).
 * `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
-* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `msg`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 message that is to be signed.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the 64-byte signature.
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the 64-byte signature.
 This function returns _None_ if the public key cannot be found in the key store.
 
 [#sect-ext-crypto-sr25519-verify]
@@ -204,10 +204,10 @@ verification extension is registered, this function will fully verify the
 signature and return the result. If batching verification is registered, this
 function will push the data to the batch and return immediately. The caller can
 then get the result by calling `ext_crypto_finish_batch_verify`
-(<<sect-ext-crypto-finish-batch-verify>>).
+(xref:crypto.adoc#sect-ext-crypto-finish-batch-verify[Sect.]).
 
 The verification extension is explained more in detail in
-<<sect-ext-crypto-start-batch-verify>>.
+xref:crypto.adoc#sect-ext-crypto-start-batch-verify[Sect.].
 
 ===== Version 2 - Prototype
 ----
@@ -218,7 +218,7 @@ The verification extension is explained more in detail in
 Arguments::
 
 * `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
-* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `msg`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 message that is to be verified.
 * `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
@@ -233,7 +233,7 @@ value equal to _0_ if otherwise.
 Arguments::
 
 * `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
-* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `msg`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 message that is to be verified.
 * `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
@@ -251,8 +251,8 @@ Returns all _ecdsa_ public keys for the given key id from the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier (<<defn-key-type-id>>).
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `key_type_id`: a 32-bit pointer to the key type identifier (xref:crypto.adoc#defn-key-type-id[Def.]).
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 SCALE encoded 33-byte compressed public keys.
 
 ==== `ext_crypto_ecdsa_generate`
@@ -271,9 +271,9 @@ or invalid seed was provided.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
-* `seed`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE encoded
-_Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
+* `key_type_id`: a 32-bit pointer to the key identifier (xref:crypto.adoc#defn-key-type-id[Def.]).
+* `seed`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE encoded
+_Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the BIP-39 seed which must be
 valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 33-byte compressed
 public key.
@@ -291,13 +291,13 @@ public key and key type in the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
+* `key_type_id`: a 32-bit pointer to the key identifier (xref:crypto.adoc#defn-key-type-id[Def.]).
 * `key`: a 32-bit pointer to the buffer containing the 33-byte compressed public
 key.
-* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `msg`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 message that is to be signed.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the signature. The
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the signature. The
 signature is 65-bytes in size, where the first 512-bits represent the signature
 and the other 8 bits represent the recovery ID. This function returns if the
 public key cannot be found in the key store.
@@ -310,10 +310,10 @@ successful or batched. If no batching verification extension is registered, this
 function will fully verify the signature and return the result. If batching
 verification is registered, this function will push the data to the batch and
 return immediately. The caller can then get the result by calling
-`ext_crypto_finish_batch_verify` (<<sect-ext-crypto-finish-batch-verify>>).
+`ext_crypto_finish_batch_verify` (xref:crypto.adoc#sect-ext-crypto-finish-batch-verify[Sect.]).
 
 The verification extension is explained more in detail in
-<<sect-ext-crypto-start-batch-verify>>.
+xref:crypto.adoc#sect-ext-crypto-start-batch-verify[Sect.].
 
 ===== Version 1 - Prototype
 ----
@@ -326,7 +326,7 @@ Arguments::
 * `sig`: a 32-bit pointer to the buffer containing the 65-byte signature. The
 signature is 65-bytes in size, where the first 512-bits represent the signature
 and the other 8 bits represent the recovery ID.
-* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `msg`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 message that is to be verified.
 * `key`: a 32-bit pointer to the buffer containing the 33-byte compressed public
 key.
@@ -349,9 +349,9 @@ Arguments::
 format. V should be either or .
 * `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
 the message.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Result_ (<<defn-result-type>>). On success it contains the 64-byte
-recovered public key or an error type (<<defn-ecdsa-verify-error>>) on failure.
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Result_ (xref:02_encoding.adoc#defn-result-type[Def.]). On success it contains the 64-byte
+recovered public key or an error type (xref:crypto.adoc#defn-ecdsa-verify-error[Def.]) on failure.
 
 ==== `ext_crypto_secp256k1_ecdsa_recover_compressed`
 
@@ -369,21 +369,21 @@ Arguments::
 format. V should be either `0/1` or `27/28`.
 * `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
 the message.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded `Result` value (<<defn-result-type>>). On success it contains the
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded `Result` value (xref:02_encoding.adoc#defn-result-type[Def.]). On success it contains the
 33-byte recovered public key in compressed form on success or an error type
-(<<defn-ecdsa-verify-error>>) on failure.
+(xref:crypto.adoc#defn-ecdsa-verify-error[Def.]) on failure.
 
 [#sect-ext-crypto-start-batch-verify]
 ==== `ext_crypto_start_batch_verify`
 
 Starts the verification extension. The extension is a separate background
 process and is used to parallel-verify signatures which are pushed to the batch
-with `ext_crypto_ed25519_verify` (<<sect-ext-crypto-ed25519-verify>>),
-`ext_crypto_sr25519_verify` (<<sect-ext-crypto-sr25519-verify>>) or
-`ext_crypto_ecdsa_verify` (<<sect-ext-crypto-ecdsa-verify>>). Verification will
+with `ext_crypto_ed25519_verify` (xref:crypto.adoc#sect-ext-crypto-ed25519-verify[Sect.]),
+`ext_crypto_sr25519_verify` (xref:crypto.adoc#sect-ext-crypto-sr25519-verify[Sect.]) or
+`ext_crypto_ecdsa_verify` (xref:crypto.adoc#sect-ext-crypto-ecdsa-verify[Sect.]). Verification will
 start immediately and the Runtime can retrieve the result when calling
-`ext_crypto_finish_batch_verify` (<<sect-ext-crypto-finish-batch-verify>>).
+`ext_crypto_finish_batch_verify` (xref:crypto.adoc#sect-ext-crypto-finish-batch-verify[Sect.]).
 
 ===== Version 1 - Prototype
 ----
@@ -401,7 +401,7 @@ Finish verifying the batch of signatures since the last call to this function.
 Blocks until all the signatures are verified.
 
 WARNING: Panics if `ext_crypto_start_batch_verify`
-(<<sect-ext-crypto-start-batch-verify>>) was not called.
+(xref:crypto.adoc#sect-ext-crypto-start-batch-verify[Sect.]) was not called.
 
 ===== Version 1 - Prototype
 ----

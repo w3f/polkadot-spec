@@ -4,22 +4,22 @@ https://github.com/paritytech/polkadot/tree/master/node/service/res[the Polkadot
 repository]. While each of those key-value pairs offers important identifyable
 information to the Runtime, to the Polkadot Host they are a transparent set of
 arbitrary chain- and network-dependent keys and values. The only exception to
-this are the `:code` (<<sect-loading-runtime-code>>) and `:heappages`
-(<<sect-memory-management>>) keys, which are used by the Polkadot Host to
+this are the `:code` (xref:03_transition/runtime_interaction.adoc#sect-loading-runtime-code[Sect.]) and `:heappages`
+(xref:03_transition/runtime_interaction.adoc#sect-memory-management[Sect.]) keys, which are used by the Polkadot Host to
 initialize the WASM environment and its Runtime. The other keys and values are
 unspecified and solely depend on the chain and respectively its corresponding
 Runtime. On initialization the data should be inserted into the state storage
-with the Host API (<<sect-storage-set>>).
+with the Host API (xref:storage.adoc#sect-storage-set[Sect.]).
 
 As such, Polkadot does not defined a formal genesis block. Nonetheless for the
 compatibility reasons in several algorithms, the Polkadot Host defines the
-_genesis header_ (<<defn-genesis-header>>). By the abuse of terminology,
+_genesis header_ (xref:03_genesis.adoc#defn-genesis-header[Def.]). By the abuse of terminology,
 "genesis block" refers to the hypothetical parent of block number _1_ which
 holds genisis header as its header.
 
 [#defn-genesis-header]
 The Polkadot genesis
-header is a data structure conforming to block header format (<<defn-block-header>>). It contains the following
+header is a data structure conforming to block header format (xref:03_transition/state_replication.adoc#defn-block-header[Def.]). It contains the following
 values:
 
 [cols="1,4"]
@@ -33,7 +33,7 @@ values:
 |_0_
 
 |`state_root`
-|Merkle hash of the state storage trie (<<defn-merkle-value>>) after inserting the genesis state in it.
+|Merkle hash of the state storage trie (xref:02_state/state_storage_trie.adoc#defn-merkle-value[Def.]) after inserting the genesis state in it.
 
 |`extrinsics_root`
 |_0_

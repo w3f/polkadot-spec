@@ -2,7 +2,7 @@
 ==== BlockBuilder Module (Version 4)
 
 All calls in this module require `Core_intialize_block`
-(<<sect-rte-core-initialize-block>>) to be called beforehand.
+(xref:modules/core.adoc#sect-rte-core-initialize-block[Sect.]) to be called beforehand.
 
 [#sect-rte-apply-extrinsic]
 ===== `BlockBuilder_apply_extrinsic`
@@ -15,14 +15,14 @@ Arguments::
 * A byte array of varying size containing the opaque extrinsic.
 
 Return::
-* Returns the varying datatype _ApplyExtrinsicResult_ as defined in <<defn-rte-apply-extrinsic-result>>.
+* Returns the varying datatype _ApplyExtrinsicResult_ as defined in xref:modules/blockbuilder.adoc#defn-rte-apply-extrinsic-result[Def.].
 This structure lets the block builder know whether an extrinsic should
 be included into the block or rejected.
 
 .ApplyExtrinsicResult
 [#defn-rte-apply-extrinsic-result]
 ====
-*ApplyExtrinsicResult* is a varying data type as defined in <<defn-result-type>>.
+*ApplyExtrinsicResult* is a varying data type as defined in xref:02_encoding.adoc#defn-result-type[Def.].
 This structure can contain multiple nested structures, indicating either module
 dispatch outcomes or transaction invalidity errors.
 
@@ -32,14 +32,14 @@ dispatch outcomes or transaction invalidity errors.
 |*Id* |*Description* |*Type*
 
 |0 |Outcome of dispatching the extrinsic.
-|_DispatchOutcome_ (<<defn-rte-dispatch-outcome>>)
+|_DispatchOutcome_ (xref:modules/blockbuilder.adoc#defn-rte-dispatch-outcome[Def.])
 
 |1 |Possible errors while checking the validity of a transaction.
-|_TransactionValidityError_ (<<defn-rte-transaction-validity-error>>)
+|_TransactionValidityError_ (xref:modules/blockbuilder.adoc#defn-rte-transaction-validity-error[Def.])
 |===
 ====
 
-NOTE: As long as a _DispatchOutcome_ (<<defn-rte-dispatch-outcome>>) is returned,
+NOTE: As long as a _DispatchOutcome_ (xref:modules/blockbuilder.adoc#defn-rte-dispatch-outcome[Def.]) is returned,
 the extrinsic is always included in the block, even if the outcome is a dispatch
 error. Dispatch errors do not invalidate the block and all state changes are
 persisted.
@@ -47,7 +47,7 @@ persisted.
 .DispatchOutcome
 [#defn-rte-dispatch-outcome]
 ====
-*DispatchOutcome* is the varying data type as defined in <<defn-result-type>>.
+*DispatchOutcome* is the varying data type as defined in xref:02_encoding.adoc#defn-result-type[Def.].
 
 .Possible values of varying data type _DispatchOutcome_.
 [cols="<1,<6,<3",options="header"]
@@ -58,14 +58,14 @@ persisted.
 | None
 
 |1 |Possible errors while dispatching the extrinsic.
-| _DispatchError_ (<<defn-rte-dispatch-error>>)
+| _DispatchError_ (xref:modules/blockbuilder.adoc#defn-rte-dispatch-error[Def.])
 |===
 ====
 
 .DispatchError
 [#defn-rte-dispatch-error]
 ====
-*DispatchError* is a varying data type as defined in <<defn-varrying-data-type>>.
+*DispatchError* is a varying data type as defined in xref:02_encoding.adoc#defn-varrying-data-type[Def.].
 Indicates various reasons why a dispatch call failed.
 
 .Possible values of varying data type _DispatchError_.
@@ -78,14 +78,14 @@ Indicates various reasons why a dispatch call failed.
 
 |2 |A bad origin. |None
 
-|3 |A custom error in a module. | _CustomModuleError_ (<<defn-rte-custom-module-error>>)
+|3 |A custom error in a module. | _CustomModuleError_ (xref:modules/blockbuilder.adoc#defn-rte-custom-module-error[Def.])
 |===
 ====
 
 .CustomModuleError
 [#defn-rte-custom-module-error]
 ====
-*CustomModuleError* is a tuple appended after a possible error in as defined in <<defn-rte-dispatch-error>>.
+*CustomModuleError* is a tuple appended after a possible error in as defined in xref:modules/blockbuilder.adoc#defn-rte-dispatch-error[Def.].
 
 .Possible values of varying data type _CustomModuleError_.
 [cols="<2,<4,<4",options="header",]
@@ -95,36 +95,36 @@ Indicates various reasons why a dispatch call failed.
 
 |Error |Module specific error value. |Unsigned 8-bit integer
 
-|Message |Optional error message. |Varying data type _Option_ (<<defn-option-type>>).
+|Message |Optional error message. |Varying data type _Option_ (xref:02_encoding.adoc#defn-option-type[Def.]).
 The optional value is a SCALE encoded byte array containing a valid UTF-8 sequence.
 |===
 ====
 
-NOTE: Whenever _TransactionValidityError_ (<<defn-rte-transaction-validity-error>>)
+NOTE: Whenever _TransactionValidityError_ (xref:modules/blockbuilder.adoc#defn-rte-transaction-validity-error[Def.])
 is returned, the contained error type will indicate whether an extrinsic should
 be outright rejected or requested for a later block. This behaviour is clarified
-further in <<defn-rte-invalid-transaction>> and respectively <<defn-rte-unknown-transaction>>.
+further in xref:modules/blockbuilder.adoc#defn-rte-invalid-transaction[Def.] and respectively xref:modules/blockbuilder.adoc#defn-rte-unknown-transaction[Def.].
 
 .TransactionValidityError
 [#defn-rte-transaction-validity-error]
 ====
-*TransactionValidityError* is a varying data type as defined in <<defn-varrying-data-type>>.
+*TransactionValidityError* is a varying data type as defined in xref:02_encoding.adoc#defn-varrying-data-type[Def.].
 It indicates possible errors that can occur while checking the validity of a transaction.
 
 .Possible values of varying data type _TransactionValidityError_.
 [cols="<1,<5,<4",options="header"]
 |===
 |*Id* |*Description* |*Type*
-|0 |Transaction is invalid. |_InvalidTransaction_ (<<defn-rte-invalid-transaction>>)
+|0 |Transaction is invalid. |_InvalidTransaction_ (xref:modules/blockbuilder.adoc#defn-rte-invalid-transaction[Def.])
 
-|1 |Transaction validity can’t be determined. |_UnknownTransaction_ (<<defn-rte-unknown-transaction>>)
+|1 |Transaction validity can’t be determined. |_UnknownTransaction_ (xref:modules/blockbuilder.adoc#defn-rte-unknown-transaction[Def.])
 |===
 ====
 
 .InvalidTransaction
 [#defn-rte-invalid-transaction]
 ====
-*InvalidTransaction* is a varying data type as defined in <<defn-varrying-data-type>>
+*InvalidTransaction* is a varying data type as defined in xref:02_encoding.adoc#defn-varrying-data-type[Def.]
 and specifies the invalidity of the transaction in more detail.
 
 .Possible values of varying data type _InvalidTransaction_.
@@ -147,7 +147,7 @@ and specifies the invalidity of the transaction in more detail.
 .UnknownTransaction
 [#defn-rte-unknown-transaction]
 ====
-*UnknownTransaction* is a varying data type as defined in <<defn-varrying-data-type>>
+*UnknownTransaction* is a varying data type as defined in xref:02_encoding.adoc#defn-varrying-data-type[Def.]
 and specifies the unknown invalidity of the transaction in more detail.
 
 .Possible values of varying data type _UnknownTransaction_.
@@ -172,19 +172,19 @@ Arguments::
 * None.
 
 Return::
-* The header of the new block as defined in <<defn-block-header>>.
+* The header of the new block as defined in xref:03_transition/state_replication.adoc#defn-block-header[Def.].
 
 [#defn-rt-builder-inherent-extrinsics]
 ===== `BlockBuilder_inherent_extrinisics`:
 
 Generates the inherent extrinsics, which are explained in more detail in
-<<sect-inherents>>. This function takes a SCALE-encoded hash table as defined in
-<<defn-scale-list>> and returns an array of extrinsics. The Polkadot Host must
+xref:03_transition/extrinsics.adoc#sect-inherents[Sect.]. This function takes a SCALE-encoded hash table as defined in
+xref:02_encoding.adoc#defn-scale-list[Def.] and returns an array of extrinsics. The Polkadot Host must
 submit each of those to the `BlockBuilder_apply_extrinsic`, described in
-<<sect-rte-apply-extrinsic>>. This procedure is outlined in <<algo-build-block>>.
+xref:modules/blockbuilder.adoc#sect-rte-apply-extrinsic[Sect.]. This procedure is outlined in xref:05_consensus/block_production.adoc#algo-build-block[Algo.].
 
 Arguments::
-* A Inherents-Data structure as defined in <<defn-inherent-data>>.
+* A Inherents-Data structure as defined in xref:03_transition/extrinsics.adoc#defn-inherent-data[Def.].
 
 Return::
 * A byte array of varying size containing extrinisics. Each extrinsic is a byte
@@ -198,8 +198,8 @@ block-building process.
 
 Arguments::
 * A block represented as a tuple consisting of a block header as described in
-<<defn-block-header>> and the block body as described in <<defn-block-body>>.
-* A Inherents-Data structure as defined in <<defn-inherent-data>>.
+xref:03_transition/state_replication.adoc#defn-block-header[Def.] and the block body as described in xref:03_transition/state_replication.adoc#defn-block-body[Def.].
+* A Inherents-Data structure as defined in xref:03_transition/extrinsics.adoc#defn-inherent-data[Def.].
 
 Return::
 * A data structure of the following format:
@@ -213,7 +213,7 @@ where
 
 ** latexmath:[o] is a boolean indicating whether the check was successful.
 ** latexmath:[f_e] is a boolean indicating whether a fatal error was encountered.
-** latexmath:[e] is a Inherents-Data structure as defined in <<defn-inherent-data>>
+** latexmath:[e] is a Inherents-Data structure as defined in xref:03_transition/extrinsics.adoc#defn-inherent-data[Def.]
 containing any errors created by this Runtime function.
 
 ===== `BlockBuilder_random_seed`

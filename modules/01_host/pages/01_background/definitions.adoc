@@ -171,7 +171,7 @@ stem:[B_1] is a parent of stem:[B_2].
 When a block in the block tree gets finalized, there is an opportunity to prune
 the block tree to free up resources into branches of blocks that do not contain
 all of the finalized blocks or those that can never be finalized in the
-blockchain (<<sect-finality>>).
+blockchain (xref:05_consensus/finality.adoc#sect-finality[Sect.]).
 ****
 
 [#defn-pruned-tree]
@@ -179,11 +179,11 @@ blockchain (<<sect-finality>>).
 ****
 By Pruned Block Tree*, denoted by stem:[PBT], we refer to a subtree of the block
 tree obtained by eliminating all branches which do not contain the most recent
-finalized blocks (<<defn-finalized-block>>). By *pruning*, we refer to the
+finalized blocks (xref:05_consensus/block_finalization.adoc#defn-finalized-block[Def.]). By *pruning*, we refer to the
 procedure of stem:[BT larr PBT]. When there is no risk of ambiguity and is safe
 to prune BT, we use stem:[BT] to refer to stem:[PBT].
 
-<<defn-chain-subchain>> gives the means to highlight various branches of the
+xref:01_background/definitions.adoc#defn-chain-subchain[Def.] gives the means to highlight various branches of the
 block tree.
 ****
 
@@ -213,7 +213,7 @@ and only if stem:[|C_1| > |C_2|].
 
 If stem:[|C_1| =| C_2|] we say stem:[C_1 > C_2] if and only if the block arrival
 time of stem:[sf "Head"(C_1)] is less than the block arrival time of stem:[sf
-"Head"(C_2)] (<<defn-block-time>>). We define the stem:[sf "Longest-Chain"(BT)]
+"Head"(C_2)] (xref:05_consensus/block_production.adoc#defn-block-time[Def.]). We define the stem:[sf "Longest-Chain"(BT)]
 too be the maximum chain given by this order.
 ****
 
@@ -222,7 +222,7 @@ too be the maximum chain given by this order.
 ****
 stem:[sf "Longest-Path"(BT)] returns the path graph of stem:[(P)BT] which is the
 longest among all paths in stem:[(P)BT] and has the earliest block arrival time
-(<<defn-block-time>>). stem:[sf "Deepest-Leaf"(BT)] returns the head of stem:[sf
+(xref:05_consensus/block_production.adoc#defn-block-time[Def.]). stem:[sf "Deepest-Leaf"(BT)] returns the head of stem:[sf
 "Longest-Path"(BT)] chain.
 
 Because every block in the blockchain contains a reference to its parent, it is

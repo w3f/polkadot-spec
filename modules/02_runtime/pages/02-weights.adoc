@@ -21,21 +21,21 @@ measure the cost of running the extrinsics and determine how "heavy" it
 is in terms of execution time. Within this mechanism, block producers
 can select a set of extrinsics and saturate the block to its fullest
 potential without exceeding any limitations (as described in
-<<sect-limitations>>). Moreover, the weight system can be used to
+xref:02-weights.adoc#sect-limitations[Sect.]). Moreover, the weight system can be used to
 calculate a fee for executing each extrinsics according to its weight
-(as described in <<sect-fee-calculation>>).
+(as described in xref:02-weights.adoc#sect-fee-calculation[Sect.]).
 
 Additionally, Polkadot introduces a specified block ratio (as defined in
-<<sect-limitations>>), ensuring that only a certain portion of the total block
+xref:02-weights.adoc#sect-limitations[Sect.]), ensuring that only a certain portion of the total block
 size gets used for regular extrinsics. The remaining space is reserved for
 critical, operational extrinsics required for the functionality by Polkadot
 itself.
 
-To begin, we introduce in <<sect-assumptions>> the assumption upon which the
-Polkadot transaction weight system is designed. In <<sect-limitations>>, we
+To begin, we introduce in xref:02-weights.adoc#sect-assumptions[Sect.] the assumption upon which the
+Polkadot transaction weight system is designed. In xref:02-weights.adoc#sect-limitations[Sect.], we
 discuss the limitation Polkadot needs to enforce on the block size. In
-<<sect-runtime-primitives>>, we describe in detail the procedure upon which the
-weight of any transaction should be calculated. In <<sect-practical-examples>>,
+xref:02-weights.adoc#sect-runtime-primitives[Sect.], we describe in detail the procedure upon which the
+weight of any transaction should be calculated. In xref:02-weights.adoc#sect-practical-examples[Sect.],
 we present how we apply this procedure to compute the weight of particular
 runtime functions.
 
@@ -57,8 +57,8 @@ weight system should:
 transaction fee to each extrinsic proportional to their resource
 consumption.
 
-These concepts are formalized in <<defn-block-length>> and
-<<defn-polkadot-block-limits>>:
+These concepts are formalized in xref:02-weights.adoc#defn-block-length[Def.] and
+xref:02-weights.adoc#defn-polkadot-block-limits[Def.]:
 
 .Block Length
 [#defn-block-length]
@@ -112,7 +112,7 @@ The P̱olkadot transaction weight function denoted by latexmath:[\mathcal{W}] as
 
 where latexmath:[w] is a non-negative integer representing the weight of the
 extrinsic latexmath:[E]. We define the weight of all inherent extrinsics as
-defined in the <<sect-inherents>> to be equal to 0. We extend the definition of
+defined in the xref:03_transition/extrinsics.adoc#sect-inherents[Sect.] to be equal to 0. We extend the definition of
 latexmath:[\mathcal{W}] function to compute the weight of the block as sum of
 weight of all extrinsics it includes:
 
@@ -154,11 +154,11 @@ priority of latexmath:[E] the chain is supposed to endorse.
 ==== Limitations
 
 In this section we discuss how applying the limitation defined in
-<<defn-polkadot-block-limits>> can be translated to limitation latexmath:[\mathcal{W}].
+xref:02-weights.adoc#defn-polkadot-block-limits[Def.] can be translated to limitation latexmath:[\mathcal{W}].
 In order to be able to translate those into concrete numbers, we need to
 identify an arbitrary maximum weight to which we scale all other computations.
 For that we first define the block weight and then assume a maximum on it block
-length in <<defn-block-weight>>:
+length in xref:02-weights.adoc#defn-block-weight[Def.]:
 
 .Block Weight
 [#defn-block-weight]
@@ -204,10 +204,10 @@ manipulation. Subsequently the performance and execution time of each
 part will be evaluated based on variety of input parameters. Based on
 those observations, weights are assigned Runtime functions or parameters
 which contribute to long execution times. These sub component of the
-code are discussed in <<sect-primitive-types>>.
+code are discussed in xref:02-weights.adoc#sect-primitive-types[Sect.].
 
 The general algorithm to calculate latexmath:[\mathcal{W}(E)] is described in
-the <<sect-benchmarking>>.
+the xref:02-weights.adoc#sect-benchmarking[Sect.].
 
 [#sect-benchmarking]
 === Benchmarking
@@ -229,14 +229,14 @@ latexmath:[\mathcal{W}(E)].
 
 In order to select useful parameters, the Runtime functions have to be
 analysed to fully understand which behaviors or conditions can result in
-expensive execution times, which is described closer in <<sect-primitive-types>>.
+expensive execution times, which is described closer in xref:02-weights.adoc#sect-primitive-types[Sect.].
 Not every possible benchmarking outcome can be invoked by varying input
 parameters of the Runtime function. In some circumstances, preliminary work
 is required before a specific benchmark can be reliably measured, such as
 creating certain preexisting entries in the storage or other changes to the
 environment.
 
-The Practical Examples (<<sect-practical-examples>>) covers the
+The Practical Examples (xref:02-weights.adoc#sect-practical-examples[Sect.]) covers the
 analysis process and the implementation of preliminary work in more
 detail.
 
@@ -319,7 +319,7 @@ entries in storage, then a certain weight should be applied for each
 for such cases. If it doesn’t, it unconditionally has to and the Runtime
 module must be adjusted. When selecting parameters for benchmarking, the
 benchmarks should range from the minimum value to the maximum value, as
-described in <<defn-max-value>>.
+described in xref:02-weights.adoc#defn-max-value[Def.].
 * *Input parameters* - Input parameters that users pass on to the
 Runtime function can result in expensive operations. Depending on the
 data type, it can be appropriate to add additional weights based on
@@ -328,7 +328,7 @@ varying sizes. The Runtime must define limits on those properties. If it
 doesn’t, it unconditionally has to and the Runtime module must be
 adjusted. When selecting parameters for benchmarking, the benchmarks
 should range from the minimum values to the maximum value, as described
-in paragraph <<defn-max-value>>.
+in paragraph xref:02-weights.adoc#defn-max-value[Def.].
 
 .Maximum Value
 [#defn-max-value]
@@ -337,7 +337,7 @@ What the maximum value should be really depends on the functionality that the
 Runtime function is trying to provide. If the choice for that value is not
 obvious, then it’s advised to run benchmarks on a big range of values and pick a
 conservative value below the `targeted time per block` limit as described in
-section <<sect-limitations>>.
+section xref:02-weights.adoc#sect-limitations[Sect.].
 ====
 
 ==== Parameters
@@ -355,7 +355,7 @@ It’s not possible to benchmark every single value. However, one should
 select a range of inputs to benchmark, spanning from the minimum value
 to the maximum value which will most likely exceed the expected usage of
 that function. This is described in more detail in
-<<sect-primitive-types-considerations>>. The benchmarks should run
+xref:02-weights.adoc#sect-primitive-types-considerations[Sect.]. The benchmarks should run
 individual executions/iterations within that range, where the chosen
 parameters should give insight on the execution time. Selecting
 imprecise parameters or too extreme ranges might indicate an inaccurate
@@ -402,7 +402,7 @@ CPU performance, CPU cores, RAM and storage speed.
 
 This section walks through Runtime functions available in the Polkadot
 Runtime to demonstrate the analysis process as described in
-<<sect-primitive-types>>.
+xref:02-weights.adoc#sect-primitive-types[Sect.].
 
 In order for certain benchmarks to produce conditions where resource
 heavy computation or excessive I/O can be observed, the benchmarks might
@@ -915,7 +915,7 @@ for transfer. It contains some operations which have some I/O overhead.
 ===== Analysis
 
 Similarly to the `payout_stakers` function
-(<<sect-practical-example-payout-stakers>>), this function fetches
+(xref:02-weights.adoc#sect-practical-example-payout-stakers[Sect.]), this function fetches
 the Ledger which contains information about the stash, such as bonded
 balance and unlocking balance (balance that will eventually be freed and
 can be withdrawn).

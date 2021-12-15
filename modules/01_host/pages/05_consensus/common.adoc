@@ -12,7 +12,7 @@ Because Polkadot is a proof-of-stake protocol, each of its consensus engines has
 its own set of nodes represented by known public keys, which have the authority
 to influence the protocol in pre-defined ways explained in this Section. To
 verify the validity of each block, the Polkadot node must track the current list
-of authorities (<<defn-authority-list>>) for that block.
+of authorities (xref:05_consensus/common.adoc#defn-authority-list[Def.]) for that block.
 
 [#defn-authority-list]
 ===== Authority List
@@ -26,7 +26,7 @@ each of its authorities stem:[A in "Auth"_C(B)]:
 (pk_A,w_A)
 ++++
 
-stem:[pk_A] is the session public key (<<defn-session-key>>) of authority
+stem:[pk_A] is the session public key (xref:01_crypto-algos.adoc#defn-session-key[Def.]) of authority
 stem:[A]. And stem:[w_A] is an unsigned 64-bit integer indicating the authority
 weight. The value of stem:["Auth"_C(B)] is part of the Polkadot state. The value
 for stem:["Auth"_C(B_0)] is set in the genesis state (<<chapter-genesis>>) and
@@ -41,12 +41,12 @@ use-case in the future.
 [#sect-consensus-message-digest]
 ==== Runtime-to-Consensus Engine Message
 
-The authority list (<<defn-authority-list>>) is part of the Polkadot state and
+The authority list (xref:05_consensus/common.adoc#defn-authority-list[Def.]) is part of the Polkadot state and
 the Runtime has the authority to update this list in the course of any state
 transitions. The Runtime informs the corresponding consensus engine about the
 changes in the authority set by adding the appropriate consensus message
-(<<defn-consensus-message-digest>>) in the form of a digest item
-(<<defn-digest>>) to the block header of block stem:[B] which caused the
+(xref:05_consensus/common.adoc#defn-consensus-message-digest[Def.]) in the form of a digest item
+(xref:03_transition/state_replication.adoc#defn-digest[Def.]) to the block header of block stem:[B] which caused the
 transition in the authority set.
 
 The Polkadot Host must inspect the digest header of each block and delegate
@@ -59,7 +59,7 @@ came into effect would get rejected.
 [#defn-consensus-message-digest]
 ===== Consensus Message
 ****
-A *consensus message* is a digest item (<<defn-digest>>) of type _4_ and
+A *consensus message* is a digest item (xref:03_transition/state_replication.adoc#defn-digest[Def.]) of type _4_ and
 consists of the pair:
 
 [stem]
@@ -78,7 +78,7 @@ E_("id") = {("'BABE'"),("'FRNK'"):}
 where stem:["'BABE'"] is for messages related to the BABE protocol, referred to
 as stem:[E_("id")("BABE")] and stem:["'FRNK"] is for messages related to the
 GRANDPA protocol, referred to as stem:[E_("id")("FRNK")]. stem:[CM] is a varying
-datatype (<<defn-varrying-data-type>>) which can be one of the following values,
+datatype (xref:02_encoding.adoc#defn-varrying-data-type[Def.]) which can be one of the following values,
 appended by additional data:
 
 [stem]
@@ -102,12 +102,12 @@ authority which pertain to their authority role.
 ** _3_ implies *next config data*: These messages are only issued on
 configuration change and in the first block of an epoch. The supplied
 configuration data are intended to be used from the next epoch onwards.
-* stem:["Auth"_("BABE")] is the authority list (<<defn-authority-list>>) for the next epoch.
-* stem:[R] is the 32-byte randomness seed for the next epoch (<<defn-epoch-randomness>>).
+* stem:["Auth"_("BABE")] is the authority list (xref:05_consensus/common.adoc#defn-authority-list[Def.]) for the next epoch.
+* stem:[R] is the 32-byte randomness seed for the next epoch (xref:05_consensus/block_production.adoc#defn-epoch-randomness[Def.]).
 * stem:["Auth"_("id")] is an unsigned 64-bit integer pointing to an individual
 authority in the current authority list.
 * stem:[c] is the probability that a slot will not be empty
-(<<defn-babe-constant>>). It is encoded as a tuple of two unsigned 64-bit
+(xref:05_consensus/block_production.adoc#defn-babe-constant[Def.]). It is encoded as a tuple of two unsigned 64-bit
 integers stem:[(c_("nominator"),c_("denominator"))] which are used to compute
 the rational stem:[c = c_("nominator")/c_("denominator")].
 * stem:[s_("2nd")] is a varying datatype followed by additional data indicating
@@ -120,7 +120,7 @@ s_("2nd") = {(1,("Auth"_C,N_("delay"))),(2,("Auth"_C,N_("delay"))),(3,"Auth"_("i
 +
 where:
 +
-** stem:[Auth_C] is the authority list (<<defn-authority-list>>).
+** stem:[Auth_C] is the authority list (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 ** stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the
 chain the announcing block must be before the change is applied.
 ** _1_ implies *scheduled change*: Schedule an authority set change after the

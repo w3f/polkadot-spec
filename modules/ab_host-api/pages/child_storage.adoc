@@ -21,10 +21,10 @@ Sets the value under a given key into the child storage.
 
 Arguments::
 
-* `child_storage_key` : a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `value`: a pointer-size (<<defn-runtime-pointer>>) indicating the value.
+* `child_storage_key` : a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
+* `value`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the value.
 
 ==== `ext_default_child_storage_get`
 Retrieves the value associated with the given key from the child storage.
@@ -37,11 +37,11 @@ Retrieves the value associated with the given key from the child storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key. 
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the value.
+* `child_storage_key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key. 
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the value.
 
 ==== `ext_default_child_storage_read`
 
@@ -57,16 +57,16 @@ the number of bytes that the entry in storage has beyond the offset.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `value_out`: a pointer-size (<<defn-runtime-pointer>>) indicating the buffer
+* `child_storage_key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
+* `value_out`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the buffer
 to which the value will be written to. This function will never write more then
 the length of the buffer, even if the value’s length is bigger.
 * `offset`: an u32 integer containing the offset beyond the value should be read
 from.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the number of bytes
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the number of bytes
 written into the *value_out* buffer. Returns if the entry does not exists.
 
 ==== `ext_default_child_storage_clear`
@@ -81,9 +81,9 @@ Clears the storage of the given key and its value from the child storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
+* `child_storage_key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
 
 ==== `ext_default_child_storage_storage_kill`
 
@@ -97,8 +97,8 @@ Clears an entire child storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>)..
+* `child_storage_key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.])..
 
 ==== `ext_default_child_storage_exists`
 
@@ -112,9 +112,9 @@ Checks whether the given key exists in the child storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
+* `child_storage_key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
 * `return`: an i32 integer value equal to _1_ if the key exists or a value equal
 to _0_ if otherwise.
 
@@ -131,9 +131,9 @@ given prefix.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>).
-* `prefix`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.]).
+* `prefix`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 prefix.
 
 ==== `ext_default_child_storage_root`
@@ -149,15 +149,15 @@ root.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>).
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.]).
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
 SCALE encoded storage root.
 
 ==== `ext_default_child_storage_next_key`
 
 Gets the next key in storage after the given one in lexicographic order
-(<<defn-lexicographic-ordering>>).
+(xref:intro.adoc#defn-lexicographic-ordering[Def.]).
 The key provided to this function may or may not exist in storage.
 
 ===== Version 1 - Prototype
@@ -168,10 +168,10 @@ The key provided to this function may or may not exist in storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key. 
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded as defined in <<defn-option-type>>
+* `child_storage_key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the
+child storage key (xref:child_storage.adoc#defn-child-storage-type[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key. 
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded as defined in xref:02_encoding.adoc#defn-option-type[Def.]
 containing the next key in lexicographic order. Returns if the entry cannot be
 found.

@@ -17,25 +17,25 @@ by peers, who lack the information, to reliably confirm the issued validity
 statements about parachain blocks. The Availability & Validity (AnV) protocol
 consists of multiple steps for successfully upholding those responsibilities.
 
-Parachain blocks themselves are produced by collators (<<sect-collations>>),
+Parachain blocks themselves are produced by collators (xref:06_anv/collations.adoc#sect-collations[Sect.]),
 whereas the relay chain validators only verify their validity (and later, their
 availability). It is possible that the collators of a parachain  produces
 multiple parachain block candidates for a child of a specific block.
 Subsequently, they send the block candidates to the the relay chain validators
 who are assigned to the specific parachain. The assignment is determined by the
-Runtime (<<sect-candidate-backing>>). Those validators are then required to
-check the validity of submitted candidates (<<sect-candidate-validation>>), then
-issue and collect statements (<<sect-candidate-statements>>) about the validity
+Runtime (xref:06_anv/candidate-backing.adoc#sect-candidate-backing[Sect.]). Those validators are then required to
+check the validity of submitted candidates (xref:06_anv/candidate-validation.adoc#sect-candidate-validation[Sect.]), then
+issue and collect statements (xref:06_anv/candidate-backing.adoc#sect-candidate-statements[Sect.]) about the validity
 of candidates to other validators. This process is known as candidate backing.
 Once a candidate meets a specified criteria for inclusion, the selected relay
 chain block author then choses any of the backed candidate for each parachain
-and includes those into the relay chain block (<<sect-candidate-inclusion>>).
+and includes those into the relay chain block (xref:06_anv/candidate-backing.adoc#sect-candidate-inclusion[Sect.]).
 
 Every relay chain validator must fetch the proposed candidates and issue votes
 on whether they have the candidate saved in their local storage, so called
-availability votes (<<sect-availability-votes>>), then also collect the votes
+availability votes (xref:06_anv/availability.adoc#sect-availability-votes[Sect.]), then also collect the votes
 sent by other validators and include them in the relay chain state
-(<<sect-candidate-inclusion>>). This process ensures that only relay chain
+(xref:06_anv/candidate-backing.adoc#sect-candidate-inclusion[Sect.]). This process ensures that only relay chain
 blocks get finalized where each candidate is available on enough nodes of
 validators.
 
@@ -44,5 +44,5 @@ must then be retrieved by a secondary set of relay chain validators, unrelated
 from the candidate backing process, who are randomly assigned to determine the
 validity of specific parachains based on a VRF lottery and are then required to
 vote on the validity of those candidates. This process is known as approval
-voting (<<sect-approval-voting>>). If a validator does not have the candidate
-data, it must recover the candidate data (<<sect-candidate-recovery>>).
+voting (xref:06_anv/approval-voting.adoc#sect-approval-voting[Sect.]). If a validator does not have the candidate
+data, it must recover the candidate data (xref:06_anv/availability.adoc#sect-candidate-recovery[Sect.]).

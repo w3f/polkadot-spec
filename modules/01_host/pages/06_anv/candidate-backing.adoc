@@ -6,16 +6,16 @@ associated proofs from untrusted collators. The validator must verify and select
 a specific quantity of the proposed candidates and issue those as backable
 candidates to its peers. A candidate is considered backable when at least 2/3 of
 all assigned validators have issued a _Valid_ statement about that candidate, as
-described in <<sect-candidate-statements>>. Validators can retrieve
+described in xref:06_anv/candidate-backing.adoc#sect-candidate-statements[Sect.]. Validators can retrieve
 information about assignments via the Runtime APIs
-<<sect-rt-api-validator-groups>> respectively
-<<sect-rt-api-availability-cores>>.
+xref:06_anv/runtime-api.adoc#sect-rt-api-validator-groups[Sect.] respectively
+xref:06_anv/runtime-api.adoc#sect-rt-api-availability-cores[Sect.].
 
 [#sect-candidate-statements]
 ==== Statements
 
 The assigned validator checks the validity of the proposed parachains blocks
-(<<sect-candidate-validation>>) and issues _Valid_ statements
+(xref:06_anv/candidate-validation.adoc#sect-candidate-validation[Sect.]) and issues _Valid_ statements
 (<<net-msg-full-statement>>) to its peers if the verification succeeded.
 Broadcasting failed verification as _Valid_ statements is a slashable offense. The
 validator must only issue one _Seconded_ statement, based on an arbitrary metric,
@@ -29,10 +29,10 @@ does not attempt to determine a final candidate for inclusion. Once a parachain
 candidate has been seconded by at least one other validator and enough Valid
 statements have been issued about that candidate to meet the 2/3 quorum, the
 candidate is ready to be included in the relay chain
-(<<sect-candidate-inclusion>>).
+(xref:06_anv/candidate-backing.adoc#sect-candidate-inclusion[Sect.]).
 
 The validator issues validity statements votes in form of a validator protocol
-message (<<net-msg-validator-protocol-message>>).
+message (xref:06_anv/network-messages.adoc#net-msg-validator-protocol-message[Decl.]).
 
 [#defn-statement]
 ===== Statement
@@ -50,7 +50,7 @@ where
 * stem:[d] is a varying datatype where _1_ indicates that the validator
 “seconds” a candidate, meaning that the candidate should be included in the
 relay chain, followed by the committed candidate receipt
-(<<defn-committed-candidate-receipt>>), stem:[C_r]. _2_ indicates that the
+(xref:06_anv/candidate-backing.adoc#defn-committed-candidate-receipt[Def.]), stem:[C_r]. _2_ indicates that the
 validator has deemed the candidate valid, followed by the candidate hash.
 * stem:[C_h] is the candidate hash.
 * stem:[A_i] is the validator index in the authority set that signed this statement.
@@ -61,11 +61,11 @@ validator has deemed the candidate valid, followed by the candidate hash.
 ==== Inclusion
 
 The Polkadot validator includes the backed candidates as parachain inherent data
-(<<defn-parachain-inherent-data>>) into a block as described <<sect-inherents>>.
+(xref:06_anv/candidate-backing.adoc#defn-parachain-inherent-data[Def.]) into a block as described xref:03_transition/extrinsics.adoc#sect-inherents[Sect.].
 The relay chain block author decides on whatever metric which candidate should
 be selected for inclusion, as long as that candidate is valid and meets the
-validity quorum of 2/3+ as described <<sect-candidate-statements>>. The
-candidate approval process (<<sect-approval-voting>>) ensures that only relay
+validity quorum of 2/3+ as described xref:06_anv/candidate-backing.adoc#sect-candidate-statements[Sect.]. The
+candidate approval process (xref:06_anv/approval-voting.adoc#sect-approval-voting[Sect.]) ensures that only relay
 chain blocks are finalized where each candidate for each availability core meets
 the requirement of 2/3+ availability votes.
 
@@ -92,23 +92,23 @@ where
 
 *  stem:[A] is an array of signed bitfields by validators claiming the candidate
 is available (or not). The array must be sorted by validator index corresponding
-to the authority set (<<defn-authority-list>>).
+to the authority set (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 *  stem:[T] is an array of backed candidates for inclusing in the current block.
 *  stem:[D] is an array of disputes.
-*  stem:[P_h] is the parachain parent head data (<<defn-head-data>>).
+*  stem:[P_h] is the parachain parent head data (xref:06_anv/definitions.adoc#defn-head-data[Def.]).
 *  stem:[d] is a dispute statement (TODO).
-*  stem:[R] is a committed candidate receipt (<<defn-committed-candidate-receipt>>).
+*  stem:[R] is a committed candidate receipt (xref:06_anv/candidate-backing.adoc#defn-committed-candidate-receipt[Def.]).
 *  stem:[V] is an array of validity votes themselves, expressed as signatures.
 *  stem:[i] is a bitfield of indices of the validators within the validator
-group (<<defn-validator-groups>>).
+group (xref:06_anv/definitions.adoc#defn-validator-groups[Def.]).
 *  stem:[a] is either an implicit or explicit attestation of the validity of a
 parachain candidate, where _1_ implies an implicit vote (in correspondence of a
 _Seconded_ statement) and _2_ implies an explicit attestation (in correspondence
 of a _Valid_ statement). Both variants are followed by the signature of the
 validator.
 *  stem:[s] is the signature of the validator.
-*  stem:[b] the availability bitfield (<<sect-availability-votes>>).
-*  stem:[v_i] is the validator index of the authority set (<<defn-authority-list>>).
+*  stem:[b] the availability bitfield (xref:06_anv/availability.adoc#sect-availability-votes[Sect.]).
+*  stem:[v_i] is the validator index of the authority set (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 ****
 
 [#defn-candidate-receipt]
@@ -123,9 +123,9 @@ format:
 R = (D,C_h)
 ++++
 
-where stem:[D] is the candidate descriptor (<<defn-candidate-descriptor>>) and
+where stem:[D] is the candidate descriptor (xref:06_anv/candidate-backing.adoc#defn-candidate-descriptor[Def.]) and
 stem:[C_h] is the hash of candidate commitments
-(<<defn-candidate-commitments>>).
+(xref:06_anv/candidate-backing.adoc#defn-candidate-commitments[Def.]).
 ****
 
 [#defn-committed-candidate-receipt]
@@ -134,7 +134,7 @@ stem:[C_h] is the hash of candidate commitments
 The committed candidate receipt, stem:[R], contains information about the
 candidate and the the result of its execution that is included in the relay
 chain. This type is similar to the candidate receipt
-(<<defn-candidate-receipt>>), but actually contains the execution results rather
+(xref:06_anv/candidate-backing.adoc#defn-candidate-receipt[Def.]), but actually contains the execution results rather
 than just a hash of it. It's a datastructure of the following format:
 
 [stem]
@@ -142,8 +142,8 @@ than just a hash of it. It's a datastructure of the following format:
 R = (D,C)
 ++++
 
-where stem:[D] is the candidate descriptor (<<defn-candidate-descriptor>>) and
-stem:[C] is the candidate commitments (<<defn-candidate-commitments>>).
+where stem:[D] is the candidate descriptor (xref:06_anv/candidate-backing.adoc#defn-candidate-descriptor[Def.]) and
+stem:[C] is the candidate commitments (xref:06_anv/candidate-backing.adoc#defn-candidate-commitments[Def.]).
 ****
 
 [#defn-candidate-descriptor]
@@ -159,15 +159,15 @@ D = (p,H,C_i,V,B,r,s,p_h,R_h)
 
 where
 
-* stem:[p] is the parachain Id (<<defn-para-id>>).
+* stem:[p] is the parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]).
 * stem:[H] is the hash of the relay chain block the candidate is executed in the context of.
 * stem:[C_i] is the collators public key.
-* stem:[V] is the hash of the persisted validation data (<<defn-persisted-validation-data>>).
+* stem:[V] is the hash of the persisted validation data (xref:06_anv/runtime-api.adoc#defn-persisted-validation-data[Def.]).
 * stem:[B] is the hash of the PoV block.
 * stem:[r] is the root of the block's erasure encoding Merkle tree. [TODO: clarify]
 * stem:[s] the collator signature of the concatenated components stem:[p],
 stem:[H], stem:[R_h] and stem:[B].
-* stem:[p_h] is the hash of the parachain head data (<<defn-head-data>>) of this candidate.
+* stem:[p_h] is the hash of the parachain head data (xref:06_anv/definitions.adoc#defn-head-data[Def.]) of this candidate.
 * stem:[R_h] is the hash of the parachain Runtime.
 ****
 
@@ -177,7 +177,7 @@ stem:[H], stem:[R_h] and stem:[B].
 The candidate commitments, stem:[C], is the result of the execution and
 validation of a parachain (or parathread) candidate whose produced values must
 be committed to the relay chain. Those values are retrieved from the validation
-result (<<defn-validation-result>>). A candidate commitment is a datastructure
+result (xref:06_anv/candidate-validation.adoc#defn-validation-result[Def.]). A candidate commitment is a datastructure
 of the following format:
 
 [stem]
@@ -190,10 +190,10 @@ where:
 * stem:[M_u] is an array of upward messages sent by the parachain. Each
 individual message, m, is an array of bytes.
 * stem:[M_h] is an array of individual outbound horizontal messages
-(<<defn-outbound-hrmp-message>>) sent by the parachain.
-* stem:[R] is an _Option_ value (<<defn-option-type>>) that can contain a new
+(xref:06_anv/definitions.adoc#defn-outbound-hrmp-message[Def.]) sent by the parachain.
+* stem:[R] is an _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) that can contain a new
 parachain Runtime in case of an update.
-* stem:[h] is the parachain head data (<<defn-head-data>>).
+* stem:[h] is the parachain head data (xref:06_anv/definitions.adoc#defn-head-data[Def.]).
 * stem:[p] is a unsigned 32-bit integer indicating the number of downward
 messages that were processed by the parachain. It is expected that the parachain
 processes the messages from first to last.

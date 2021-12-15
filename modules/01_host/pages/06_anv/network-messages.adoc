@@ -7,16 +7,16 @@ The availability and validity process requires certain network messages to be ex
 
 The notification messages are exchanged between validators, including messages
 sent by collators to validators. The protocol messages are exchanged based on a
-streaming notification substream (<<sect-connection-establishment>>). The
-messages are SCALE encoded (<<sect-scale-codec>>).
+streaming notification substream (xref:04_networking/fundamentals.adoc#sect-connection-establishment[Sect.]). The
+messages are SCALE encoded (xref:02_encoding.adoc#sect-scale-codec[Sect.]).
 
 [#net-msg-validator-protocol-message]
 ===== Validator Protocol Message
 ****
 The validator protocol message is a varying datatype used by validators to
 broadcast relevant information about certain steps in the A&V process.
-Specifically, this includes the backing process (<<sect-candidate-backing>>) and
-the approval process (<<sect-approval-voting>>). The validator protocol message,
+Specifically, this includes the backing process (xref:06_anv/candidate-backing.adoc#sect-candidate-backing[Sect.]) and
+the approval process (xref:06_anv/approval-voting.adoc#sect-approval-voting[Sect.]). The validator protocol message,
 stem:[M], is a varying datatype of the following format:
 
 [stem]
@@ -26,9 +26,9 @@ M = {(1,->,M_f),(3,->,M_s),(4,->,M_a):}
 
 where
 
-* stem:[M_f] is a bitfield distribution message (<<net-msg-bitfield-dist-msg>>).
-* stem:[M_s] is a statement distribution message (<<net-msg-statement-distribution>>).
-* stem:[M_a] is a approval distribution message (<<net-msg-approval-distribution>>).
+* stem:[M_f] is a bitfield distribution message (xref:06_anv/network-messages.adoc#net-msg-bitfield-dist-msg[Decl.]).
+* stem:[M_s] is a statement distribution message (xref:06_anv/network-messages.adoc#net-msg-statement-distribution[Decl.]).
+* stem:[M_a] is a approval distribution message (xref:06_anv/network-messages.adoc#net-msg-approval-distribution[Decl.]).
 ****
 
 [#net-msg-collator-protocol-message]
@@ -41,14 +41,14 @@ The collation protocol message, M, is a varying datatype of the following format
 M = {(0,->,M_c):}
 ++++
 
-where stem:[M_c] is the collator message (<<net-msg-collator-message>>).
+where stem:[M_c] is the collator message (xref:06_anv/network-messages.adoc#net-msg-collator-message[Decl.]).
 ****
 
 [#net-msg-collator-message]
 ===== Collator Message
 ****
 The collator message is sent as part of the collator protocol message
-(<<net-msg-collator-protocol-message>>). The collator message, stem:[M], is a
+(xref:06_anv/network-messages.adoc#net-msg-collator-protocol-message[Decl.]). The collator message, stem:[M], is a
 varying datatype of the following format:
 
 [stem]
@@ -62,19 +62,19 @@ where
 collation and _1_ indicates the advertisement of a collation to a validator. _4_
 indicates that a collation sent to a validator was seconded.
 * stem:[C_i] is the public key of the collator.
-* stem:[P_i] is the parachain Id (<<defn-para-id>>).
+* stem:[P_i] is the parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]).
 * stem:[C_s] is the signature of the collator using the _PeerId_ of the collators node.
-* stem:[H] is the hash of the parachain block (<<defn-para-block>>).
-* stem:[S] is a full statement (<<defn-statement>>).
+* stem:[H] is the hash of the parachain block (xref:06_anv/definitions.adoc#defn-para-block[Def.]).
+* stem:[S] is a full statement (xref:06_anv/candidate-backing.adoc#defn-statement[Def.]).
 ****
 
 [#net-msg-statement-distribution]
 ===== Statement Distribution Message
 ****
 The statement distribution message is sent as part of the validator protocol
-message (<<net-msg-collator-protocol-message>>) indicates the validity vote of a
+message (xref:06_anv/network-messages.adoc#net-msg-collator-protocol-message[Decl.]) indicates the validity vote of a
 validator for a given candidate, described further in
-<<sect-candidate-statements>>. The statement distribution message,
+xref:06_anv/candidate-backing.adoc#sect-candidate-statements[Sect.]. The statement distribution message,
 stem:[M], is of varying type of the following format:
 
 [stem]
@@ -88,11 +88,11 @@ where
 * stem:[M] is a varying datatype where _0_ indicates a signed statement and _1_
 contains metadata about a seconded statement with a larger payload, such as a
 runtime upgrade. The candidate itself can be fetched via the request/response
-message (<<net-msg-statement-fetching-request>>).
+message (xref:06_anv/network-messages.adoc#net-msg-statement-fetching-request[Decl.]).
 * stem:[B_h] is the hash of the relay chain parent, indicating the state this message is for.
-* stem:[S] is a full statement (<<defn-statement>>).
+* stem:[S] is a full statement (xref:06_anv/candidate-backing.adoc#defn-statement[Def.]).
 * stem:[A_i] is the validator index in the authority set
-(<<defn-authority-list>>) that signed this message.
+(xref:05_consensus/common.adoc#defn-authority-list[Def.]) that signed this message.
 * stem:[A_s] is the signature of the validator. 
 ****
 
@@ -100,10 +100,10 @@ message (<<net-msg-statement-fetching-request>>).
 ===== Bitfield Distribution Message
 ****
 The bitfield distribution message is sent as part of the validator protocol
-message (<<net-msg-validator-protocol-message>>) and indicates the availability
+message (xref:06_anv/network-messages.adoc#net-msg-validator-protocol-message[Decl.]) and indicates the availability
 vote of a validator for a given candidate, described further in
-<<sect-availability-votes>>. This message is sent in form of a validator
-protocol message (<<net-msg-validator-protocol-message>>). The bitfield
+xref:06_anv/availability.adoc#sect-availability-votes[Sect.]. This message is sent in form of a validator
+protocol message (xref:06_anv/network-messages.adoc#net-msg-validator-protocol-message[Decl.]). The bitfield
 distribution message, stem:[M], is a datastructure of the following format:
 
 [stem]
@@ -115,9 +115,9 @@ P = (d,A_i,A_s)
 where
 
 * stem:[B_h] is the hash of the relay chain parent, indicating the state this message is for.
-* stem:[d] is the bitfield array (<<defn-bitfield-array>>).
+* stem:[d] is the bitfield array (xref:06_anv/definitions.adoc#defn-bitfield-array[Def.]).
 * stem:[A_i] is the validator index in the authority set
-(<<defn-authority-list>>) that signed this message.
+(xref:05_consensus/common.adoc#defn-authority-list[Def.]) that signed this message.
 * stem:[A_s] is the signature of the validator.
 ****
 
@@ -125,9 +125,9 @@ where
 ===== Approval Distribution Message
 ****
 The approval distribution message is sent as part of the validator protocol
-message (<<net-msg-validator-protocol-message>>) and indicates the approval vote
+message (xref:06_anv/network-messages.adoc#net-msg-validator-protocol-message[Decl.]) and indicates the approval vote
 of a validator for a given candidate, described further in
-<<sect-availability-assignment-criteria>>. The approval distribution message,
+xref:06_anv/approval-voting.adoc#sect-availability-assignment-criteria[Sect.]. The approval distribution message,
 stem:[M], is a varying datatype of the following format:
 
 [stem]
@@ -148,9 +148,9 @@ recent, unfinalized block.
 the assignment is relevant by the block hash.
 * stem:[I] is an unsigned 32-bit integer indicating the index of the candidate,
 corresponding the the order of the availability cores
-(<<sect-rt-api-availability-cores>>).
+(xref:06_anv/runtime-api.adoc#sect-rt-api-availability-cores[Sect.]).
 * stem:[B_h] is the relay chain block hash where the candidate appears.
-* stem:[A_i] is the authority set Id (<<defn-authority-list>>) of the validator
+* stem:[A_i] is the authority set Id (xref:05_consensus/common.adoc#defn-authority-list[Def.]) of the validator
 that created this message.
 * stem:[A_s] is the signature of the validator issuing this message.
 * stem:[c_a] is the certification of the assignment.
@@ -159,7 +159,7 @@ the VRF that authorized the relay chain block where the candidate was included,
 followed by a sample number, stem:[s]. _1_ indicates an assignment story based
 on the VRF that authorized the relay chain block where the candidate was
 included combined with the index of a particular core. This is described further
-in <<sect-approval-voting>>.
+in xref:06_anv/approval-voting.adoc#sect-approval-voting[Sect.].
 * stem:[P_o] is a VRF output and stem:[P_p] its corresponding proof.
 ****
 
@@ -168,7 +168,7 @@ in <<sect-approval-voting>>.
 The request & response network messages are sent and received between peers in
 the Polkadot network, including collators and non-validator nodes. Those
 messages are conducted on the request-response substreams
-(<<sect-connection-establishment>>). The network messages are SCALE encoded as
+(xref:04_networking/fundamentals.adoc#sect-connection-establishment[Sect.]). The network messages are SCALE encoded as
 described in Section ?.
 
 [#net-msg-pov-fetching-request]
@@ -183,14 +183,14 @@ C_h
 ++++
 
 where stem:[C_h] is the 256-bit hash of the PoV block. The response message is
-defined in <<net-msg-pov-fetching-response>>.
+defined in xref:06_anv/network-messages.adoc#net-msg-pov-fetching-response[Decl.].
 ****
 
 [#net-msg-pov-fetching-response]
 ===== PoV Fetching Response
 ****
 The PoV fetching response is sent by nodes to the clients who issued a PoV
-fetching request (<<net-msg-pov-fetching-request>>). The response, stem:[R], is
+fetching request (xref:06_anv/network-messages.adoc#net-msg-pov-fetching-request[Decl.]). The response, stem:[R], is
 a varying datatype of the following format:
 
 [stem]
@@ -215,14 +215,14 @@ parachain candidate. The request is a datastructure of the following format:
 
 where stem:[C_h] is the 256-bit hash of the parachain candidate and stem:[i] is a
 32-bit unsigned integer indicating the index of the chunk to fetch. The response
-message is defined in <<net-msg-chunk-fetching-response>>.
+message is defined in xref:06_anv/network-messages.adoc#net-msg-chunk-fetching-response[Decl.].
 ****
 
 [#net-msg-chunk-fetching-response]
 ===== Chunk Fetching Response
 ****
 The chunk fetching response is sent by nodes to the clients who issued a chunk
-fetching request (<<net-msg-chunk-fetching-request>>). The response, stem:[R], is
+fetching request (xref:06_anv/network-messages.adoc#net-msg-chunk-fetching-request[Decl.]). The response, stem:[R], is
 a varying datatype of the following format:
 
 [stem]
@@ -251,14 +251,14 @@ C_h
 ++++
 
 where stem:[C_h] is the 256-bit candidate hash to get the available data for.
-The response message is defined in <<net-msg-available-data-response>>.
+The response message is defined in xref:06_anv/network-messages.adoc#net-msg-available-data-response[Decl.].
 ****
 
 [#net-msg-available-data-response]
 ===== Available Data Response
 ****
 The available data response is sent by nodes to the clients who issued a
-available data request (<<net-msg-available-data-request>>). The response,
+available data request (xref:06_anv/network-messages.adoc#net-msg-available-data-request[Decl.]). The response,
 stem:[R], is a varying datatype of the following format:
 
 [stem]
@@ -269,8 +269,8 @@ A = (P_{ov},D_{pv})
 
 where _0_ is followed by the available data, stem:[A], and _1_ indicates the the
 requested candidate hash was not found. stem:[P_{ov}] is the PoV block
-(<<defn-para-block>>) and stem:[D_{pv}] is the persisted validation data
-(<<defn-persisted-validation-data>>).
+(xref:06_anv/definitions.adoc#defn-para-block[Def.]) and stem:[D_{pv}] is the persisted validation data
+(xref:06_anv/runtime-api.adoc#defn-persisted-validation-data[Def.]).
 ****
 
 [#net-msg-collation-fetching-request]
@@ -286,15 +286,15 @@ datastructure of the following format:
 ++++
 
 where stem:[B_h] is the hash of the relay chain block and stem:[P_{id}] is the
-parachain Id (<<defn-para-id>>). The response message is defined in
-<<net-msg-collation-fetching-response>>.
+parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]). The response message is defined in
+xref:06_anv/network-messages.adoc#net-msg-collation-fetching-response[Decl.].
 ****
 
 [#net-msg-collation-fetching-response]
 ===== Collation Fetching Response
 ****
 The collation fetching response is sent by nodes to the clients who issued a
-collation fetching request (<<net-msg-collation-fetching-request>>). The
+collation fetching request (xref:06_anv/network-messages.adoc#net-msg-collation-fetching-request[Decl.]). The
 response, stem:[R], is a varying datatype of the following format:
 
 [stem]
@@ -303,8 +303,8 @@ R = {(0,->,(C_r,B)):}
 ++++
 
 where stem:[0] is followed by the candidate receipt
-(<<defn-candidate-receipt>>), stem:[C_r], as and the PoV block
-(<<defn-para-block>>), stem:[B]. This type does not notify the client about a
+(xref:06_anv/candidate-backing.adoc#defn-candidate-receipt[Def.]), stem:[C_r], as and the PoV block
+(xref:06_anv/definitions.adoc#defn-para-block[Def.]), stem:[B]. This type does not notify the client about a
 statement that was not found.
 ****
 
@@ -322,15 +322,15 @@ following format:
 
 where stem:[B_h] is the hash of the relay chain parent and stem:[C_h] is the
 candidate hash that was used to create a committed candidate receipt
-(<<defn-committed-candidate-receipt>>). The response message is defined in
-<<net-msg-statement-fetching-response>>.
+(xref:06_anv/candidate-backing.adoc#defn-committed-candidate-receipt[Def.]). The response message is defined in
+xref:06_anv/network-messages.adoc#net-msg-statement-fetching-response[Decl.].
 ****
 
 [#net-msg-statement-fetching-response]
 ===== Statement Fetching Response
 ****
 The statement fetching response is sent by nodes to the clients who issued a
-collation fetching request (<<net-msg-statement-fetching-request>>). The
+collation fetching request (xref:06_anv/network-messages.adoc#net-msg-statement-fetching-request[Decl.]). The
 response, stem:[R], is a varying datatype of the following format:
 
 [stem]
@@ -339,7 +339,7 @@ R = {(0,->,C_r):}
 ++++
 
 where stem:[C_r] is the committed candidate receipt
-(<<defn-committed-candidate-receipt>>). No response is returned if no statement
+(xref:06_anv/candidate-backing.adoc#defn-committed-candidate-receipt[Def.]). No response is returned if no statement
 is found.
 ****
 
@@ -361,12 +361,12 @@ k_v = {(0,->,phi),(1,->,C_h),(2,->,C_h),(3,->,phi):}
 where
 
 * stem:[C_r] is the candidate that is being disputed. The structure is a
-candidate receipt (<<defn-candidate-receipt>>).
+candidate receipt (xref:06_anv/candidate-backing.adoc#defn-candidate-receipt[Def.]).
 * stem:[S_i] is an unsigned 32-bit integer indicating the session index the candidate appears in.
 * stem:[I_v] is the invalid vote that makes up the request. 
 * stem:[V_v] is the valid vote that makes this dispute request valid.
 * stem:[A_i] is an unsigned 32-bit integer indicating the validator index in the
-authority set (<<defn-authority-list>>).
+authority set (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 * stem:[A_s] is the signature of the validator.
 * stem:[k_i] is a varying datatype and implies the dispute statement. _0_
 indicates an explicit statement.
@@ -378,13 +378,13 @@ backing phase. stem:[C_h] is the hash of the candidate.
 backing phase. stem:[C_h] is the hash of the candidate.
 ** stem:[3] indicates an approval vote from the approval checking phase.
 
-The response message is defined in <<net-msg-dispute-response>>.
+The response message is defined in xref:06_anv/network-messages.adoc#net-msg-dispute-response[Decl.].
 
 [#net-msg-dispute-response]
 ===== Dispute Response
 
 The dispute response is sent by nodes to the clients who who issued a dispute
-request (<<net-msg-dispute-request>>). The response, stem:[R], is a varying type
+request (xref:06_anv/network-messages.adoc#net-msg-dispute-request[Decl.]). The response, stem:[R], is a varying type
 of the following format:
 
 [stem]

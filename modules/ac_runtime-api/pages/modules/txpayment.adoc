@@ -1,6 +1,6 @@
 ==== TransactionPaymentApi Module (Version 1)
 
-All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+All calls in this module require `Core_initialize_block` (xref:modules/core.adoc#sect-rte-core-initialize-block[Sect.]) to be called beforehand.
 
 ===== `TransactionPaymentApi_query_info`
 
@@ -10,7 +10,7 @@ encoded value and accounts for its weight and length, the Runtime’s
 extrinsic base weight and the current fee multiplier.
 
 This function can be used by the Polkadot Host implementation when it
-seems appropriate, such as for the JSON-RPC API as described in <<sect-json-rpc-api>>.
+seems appropriate, such as for the JSON-RPC API as described in xref:intro.adoc#sect-json-rpc-api[Sect.].
 
 Arguments::
 * A byte array of varying sizes containing the extrinsic.
@@ -25,7 +25,7 @@ Return::
 ++++
 where
 ** latexmath:[w] is the weight of the extrinsic.
-** latexmath:[c] is the "class" of the extrinsic, where class is a  varying data (<<defn-varrying-data-type>>) type defined as:
+** latexmath:[c] is the "class" of the extrinsic, where class is a  varying data (xref:02_encoding.adoc#defn-varrying-data-type[Def.]) type defined as:
 +
 [latexmath]
 ++++
@@ -42,7 +42,7 @@ include a tip or anything else that depends on the signature.
 
 Query the detailed fee of a given extrinsic. This function can be used
 by the Polkadot Host implementation when it seems appropriate, such as
-for the JSON-RPC API as described in <<sect-json-rpc-api>>.
+for the JSON-RPC API as described in xref:intro.adoc#sect-json-rpc-api[Sect.].
 
 Arguments::
 * A byte array of varying sizes containing the extrinsic.
@@ -58,7 +58,7 @@ Return::
 +
 where
 
-** latexmath:[f] is a SCALE encoded as defined in <<defn-option-type>> containing the following data structure:
+** latexmath:[f] is a SCALE encoded as defined in xref:02_encoding.adoc#defn-option-type[Def.] containing the following data structure:
 +
 [latexmath]
 ++++

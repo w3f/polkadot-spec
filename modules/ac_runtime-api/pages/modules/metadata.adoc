@@ -3,7 +3,7 @@
 
 ===== `Metadata_metadata`
 
-Returns native Runtime metadata in an opaque form. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in <<sect-json-rpc-api>>. and returns all the information necessary to build valid transactions.
+Returns native Runtime metadata in an opaque form. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in xref:intro.adoc#sect-json-rpc-api[Sect.]. and returns all the information necessary to build valid transactions.
 
 Arguments::
 * None.

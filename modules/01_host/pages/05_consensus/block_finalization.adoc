@@ -9,15 +9,15 @@ A Polkadot relay chain node stem:[n] should consider block stem:[B] as
 
 * stem:[V_("obs"(n))^(r,"pc")(B') > 2/3|bbb V_(B')|].
 * It receives a stem:[M_v^(r,"Fin")(B')] message in which stem:[J^r(B)]
-justifies the finalization (<<defn-grandpa-justification>>).
+justifies the finalization (xref:05_consensus/finality.adoc#defn-grandpa-justification[Def.]).
 * It receives a block data message for stem:[B'] with stem:["Just"(B')]
-(<<sect-justified-block-header>>) which justifies the finalization.
+(xref:03_transition/state_replication.adoc#sect-justified-block-header[Sect.]) which justifies the finalization.
 
 for:
 
 * Any round stem:[r] if the node stem:[n] is _not_ a GRANDPA voter.
 * Only for rounds stem:[r] for which the node stem:[n] has invoked Algorithm as
-defined in <<algo-grandpa-round>> if latexmath:[$n$] is a GRANDPA voter.
+defined in xref:05_consensus/finality.adoc#algo-grandpa-round[Algo.] if latexmath:[$n$] is a GRANDPA voter.
 
 Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit
 messages regardless of their GRANDPA voter status.
@@ -29,7 +29,7 @@ messages regardless of their GRANDPA voter status.
 When a Polkadot node (re)joins the network during the process described in
 <<chapter-bootstrapping>>, it requests the history of state transition in the form
 of blocks, which it is missing. Each finalized block comes with the
-justification (<<defn-grandpa-justification>>) of its finalization. Through this
+justification (xref:05_consensus/finality.adoc#defn-grandpa-justification[Def.]) of its finalization. Through this
 process, they can synchronize the authority list currently performing the
 finalization process.
 
@@ -37,7 +37,7 @@ finalization process.
 ===== Sending the catch-up requests
 When a Polkadot node has the same authority list as a peer node who is reporting
 a higher number for the _finalized round_ field, it should send a catch-up
-request message (<<defn-grandpa-catchup-request-msg>>) to the reporting peer in
+request message (xref:04_networking/messages.adoc#defn-grandpa-catchup-request-msg[Def.]) to the reporting peer in
 order to catch-up to the more advanced finalized round, provided that the
 following criteria hold:
 
@@ -48,7 +48,7 @@ behind the finalized round for the peer.
 ===== Processing the catch-up requests
 Only GRANDPA voter nodes are required to respond to the catch-up responses. When
 a GRANDPA voter node receives a catch-up request message it needs to execute
-Algorithm as defined in <<algo-process-catchup-request>>.
+Algorithm as defined in xref:05_consensus/block_finalization.adoc#algo-process-catchup-request[Algo.].
 
 [#algo-process-catchup-request]
 ====== Process Catchup Request
@@ -66,14 +66,14 @@ Algorithm: stem:["Process-Catchup-Request"(M_(i,v)^("Cat"-q)("id"_(bbb V),r))]
 where:
 
 * stem:[M_(i,v)^("Cat"-q)("id"_(bbb V),r)] is the catch-up message received
-from peer stem:[i] (<<defn-grandpa-catchup-request-msg>>).
+from peer stem:[i] (xref:04_networking/messages.adoc#defn-grandpa-catchup-request-msg[Def.]).
 * stem:["id"_(bbb V)] is the voter set id with which the serving node is
 operating
 * stem:[r] is the round number for which the catch-up is requested for.
 * stem:[bbb P] is the set of immediate peers of node stem:[v].
 * stem:[tt "Last-Completed-Round"] is [TODO: Reference].
 * stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)] is the catch-up response
-(<<defn-grandpa-catchup-response-msg>>).
+(xref:04_networking/messages.adoc#defn-grandpa-catchup-response-msg[Def.]).
 ****
 
 ===== Processing catch-up responses
@@ -83,7 +83,7 @@ to update their view on the active rounds which are being voted on by GRANDPA
 voters. As such, the requester node should verify the content of the catch-up
 response message and subsequently updates its view of the state of the finality
 of the Relay chain according to Algorithm as defined in
-<<algo-process-catchup-response>>.
+xref:05_consensus/block_finalization.adoc#algo-process-catchup-response[Algo.].
 
 [#algo-process-catchup-response]
 ====== Process Catchup Response
@@ -111,5 +111,5 @@ Algorithm: stem:["Process-Catchup-Response"(M_(v,i)^("Cat"-s)("id"_(bbb V),r))]
 . stem:["    " "Play-Grandpa-Round(r+1)"]
 
 where stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)] is the catch-up response
-received from node stem:[v] (<<defn-grandpa-catchup-response-msg>>).
+received from node stem:[v] (xref:04_networking/messages.adoc#defn-grandpa-catchup-response-msg[Def.]).
 ****

@@ -1,7 +1,7 @@
 [#sect-runtime-offchainapi-module]
 ==== OffchainWorkerApi Module (Version 2)
 
-Does not require `Core_intialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+Does not require `Core_intialize_block` (xref:modules/core.adoc#sect-rte-core-initialize-block[Sect.]) to be called beforehand.
 
 ===== `OffchainWorkerApi_offchain_worker`
 
@@ -9,7 +9,7 @@ Starts an off-chain worker and generates extrinsics. [To do: when is
 this called?]
 
 Arguments::
-* The block header as defined in <<defn-block-header>>.
+* The block header as defined in xref:03_transition/state_replication.adoc#defn-block-header[Def.].
 
 Return::
 * None.

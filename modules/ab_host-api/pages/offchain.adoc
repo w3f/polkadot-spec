@@ -14,7 +14,7 @@ nondeterministic. Information can be propagated to other nodes by submitting a
 transaction that should be included in the next block. As Offchain workers runs
 on their own execution environment they have access to their own separate
 storage. There are two different types of storage available which are defined in
-<<defn-offchain-persistent-storage>> and <<defn-offchain-local-storage>>.
+xref:offchain.adoc#defn-offchain-persistent-storage[Def.] and xref:offchain.adoc#defn-offchain-local-storage[Def.].
 
 [#defn-offchain-persistent-storage]
 ==== Persisted Storage
@@ -51,7 +51,7 @@ considered destroyed and must be reconstructed again.
 
 ==== HTTP Error
 ****
-HTTP error, stem:[E], is a varying data type (<<defn-varrying-data-type>>) and
+HTTP error, stem:[E], is a varying data type (xref:02_encoding.adoc#defn-varrying-data-type[Def.]) and
 specifies the error types of certain HTTP functions. Following values are
 possible:
 
@@ -90,10 +90,10 @@ critical for issuing the ImOnline message [TODO: refer].
 ----
 
 Arguments::
-* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating the byte array
+* `data`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the byte array
 storing the encoded extrinsic.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Result_ value (<<defn-result-type>>). Neither on success or failure is
+* `return`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Result_ value (xref:02_encoding.adoc#defn-result-type[Def.]). Neither on success or failure is
 there any additional data provided. The cause of a failure is implementation
 specific.
 
@@ -132,9 +132,9 @@ this function.
 ----
 
 Arguments::
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded `Result` value (<<defn-result-type>>). On success it contains the
-_Opaque network state_ structure (<<defn-opaque-network-state>>). On failure, an
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded `Result` value (xref:02_encoding.adoc#defn-result-type[Def.]). On success it contains the
+_Opaque network state_ structure (xref:offchain.adoc#defn-opaque-network-state[Def.]). On failure, an
 empty value is yielded where its cause is implementation specific.
 
 ==== `ext_offchain_timestamp`
@@ -147,7 +147,7 @@ Returns the current timestamp.
 ----
 
 Arguments::
-* `result`: an u64 integer indicating the current UNIX timestamp (<<defn-unix-time>>).
+* `result`: an u64 integer indicating the current UNIX timestamp (xref:01_background/definitions.adoc#defn-unix-time[Def.]).
 
 ==== `ext_offchain_sleep_until`
 
@@ -159,7 +159,7 @@ Pause the execution until the `deadline` is reached.
 ----
 
 Arguments::
-* `deadline`: an u64 integer specifying the UNIX timestamp (<<defn-unix-time>>).
+* `deadline`: an u64 integer specifying the UNIX timestamp (xref:01_background/definitions.adoc#defn-unix-time[Def.]).
 
 ==== `ext_offchain_random_seed`
 
@@ -188,10 +188,10 @@ and is persisted between runs.
 
 Arguments::
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
-used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
-equal to _2_ for local storage (<<defn-offchain-local-storage>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `value`: a pointer-size (<<defn-runtime-pointer>>) indicating the value.
+used for a persistent storage (xref:offchain.adoc#defn-offchain-persistent-storage[Def.]) and a value
+equal to _2_ for local storage (xref:offchain.adoc#defn-offchain-local-storage[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
+* `value`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the value.
 
 ==== `ext_offchain_local_storage_clear`
 
@@ -205,9 +205,9 @@ Remove a value from the local storage.
 
 Arguments::
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
-used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
-equal to _2_ for local storage (<<defn-offchain-local-storage>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
+used for a persistent storage (xref:offchain.adoc#defn-offchain-persistent-storage[Def.]) and a value
+equal to _2_ for local storage (xref:offchain.adoc#defn-offchain-local-storage[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
 
 ==== `ext_offchain_local_storage_compare_and_set`
 
@@ -222,12 +222,12 @@ Sets a new value in the local storage if the condition matches the current value
 
 Arguments::
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
-used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
-equal to _2_ for local storage (<<defn-offchain-local-storage>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `old_value`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the old key.
-* `new_value`: a pointer-size (<<defn-runtime-pointer>>) indicating the new value.
+used for a persistent storage (xref:offchain.adoc#defn-offchain-persistent-storage[Def.]) and a value
+equal to _2_ for local storage (xref:offchain.adoc#defn-offchain-local-storage[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
+* `old_value`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the old key.
+* `new_value`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the new value.
 * `result`: an i32 integer equal to _1_ if the new value has been set or a value
 equal to _0_ if otherwise.
 
@@ -243,11 +243,11 @@ Gets a value from the local storage.
 
 Arguments::
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
-used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
-equal to _2_ for local storage (<<defn-offchain-local-storage>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the value or the
+used for a persistent storage (xref:offchain.adoc#defn-offchain-persistent-storage[Def.]) and a value
+equal to _2_ for local storage (xref:offchain.adoc#defn-offchain-local-storage[Def.]).
+* `key`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the key.
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the value or the
 corresponding key.
 
 ==== `ext_offchain_http_request_start`
@@ -262,13 +262,13 @@ a newly started request.
 ----
 
 Arguments::
-* `method`: a pointer-size (<<defn-runtime-pointer>>) indicating the HTTP
+* `method`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the HTTP
 method. Possible values are “GET” and “POST”.
-* `uri`: a pointer-size (<<defn-runtime-pointer>>) indicating the URI.
+* `uri`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the URI.
 * `meta`: a future-reserved field containing additional, SCALE encoded
 parameters. Currently, an empty array should be passed.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Result_ value (<<defn-result-type>>) containing the i16 ID of the newly
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Result_ value (xref:02_encoding.adoc#defn-result-type[Def.]) containing the i16 ID of the newly
 started request. On failure no additionally data is provided. The cause of
 failure is implementation specific.
 
@@ -287,10 +287,10 @@ remote has closed the connection).
 
 Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
-* `name`: a pointer-size (<<defn-runtime-pointer>>) indicating the HTTP header name.
-* `value`: a pointer-size (<<defn-runtime-pointer>>) indicating the HTTP header value.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Result_ value (<<defn-result-type>>). Neither on success or failure is
+* `name`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the HTTP header name.
+* `value`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the HTTP header value.
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Result_ value (xref:02_encoding.adoc#defn-result-type[Def.]). Neither on success or failure is
 there any additional data provided. The cause of failure is implementation
 specific.
 
@@ -307,13 +307,13 @@ deadline is reached or the chunk could not be written.
 
 Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
-* `chunk`: a pointer-size (<<defn-runtime-pointer>>) indicating the chunk of
+* `chunk`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the chunk of
 bytes. Writing an empty chunk finalizes the request.
-* `deadline`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
-(<<defn-unix-time>>). Passing _None_ blocks indefinitely.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Result_ value (<<defn-result-type>>). On success, no additional data is
+* `deadline`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the UNIX timestamp
+(xref:01_background/definitions.adoc#defn-unix-time[Def.]). Passing _None_ blocks indefinitely.
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Result_ value (xref:02_encoding.adoc#defn-result-type[Def.]). On success, no additional data is
 provided. On error it contains the HTTP error type (<<defn-http-error>>).
 
 ==== `ext_offchain_http_response_wait`
@@ -329,12 +329,12 @@ unready responses will produce DeadlineReached status.
 ----
 
 Arguments::
-* `ids`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+* `ids`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
 encoded array of started request IDs.
-* `deadline`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
-(<<defn-unix-time>>). Passing None blocks indefinitely.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+* `deadline`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the UNIX timestamp
+(xref:01_background/definitions.adoc#defn-unix-time[Def.]). Passing None blocks indefinitely.
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
 encoded array of request statuses (<<defn-http-status-codes>>).
 
 ==== `ext_offchain_http_response_headers`
@@ -350,7 +350,7 @@ headers must be read before the response body.
 
 Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating a SCALE encoded array of key/value pairs.
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating a SCALE encoded array of key/value pairs.
 
 ==== `ext_offchain_http_response_read_body`
 
@@ -368,13 +368,13 @@ read before draining the body.
 
 Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
-* `buffer`: a pointer-size (<<defn-runtime-pointer>>) indicating the buffer
+* `buffer`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the buffer
 where the body gets written to.
-* `deadline`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
-(<<defn-unix-time>>). Passing _None_ will block indefinitely.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Result_ value (<<defn-result-type>>). On success it contains an i32
+* `deadline`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the UNIX timestamp
+(xref:01_background/definitions.adoc#defn-unix-time[Def.]). Passing _None_ will block indefinitely.
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Result_ value (xref:02_encoding.adoc#defn-result-type[Def.]). On success it contains an i32
 integer specifying the number of bytes written or a HTTP error type
 (<<defn-http-error>>) on failure.
 
@@ -392,7 +392,7 @@ and open Polkadot protocol.
 ----
 
 Arguments::
-* `nodes`: a pointer-size (<<defn-runtime-pointer>>) indicating the buffer of
+* `nodes`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the buffer of
 the SCALE encoded array of libp2p PeerId's. Invalid PeerId's are silently
 ignored.
 * `authorized_only`: If set to 1, then only the authorized nodes are allowed to

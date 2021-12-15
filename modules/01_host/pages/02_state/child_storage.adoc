@@ -1,7 +1,7 @@
 [#sect-child-storages]
 === Child Storage
 
-As clarified in <<sect-state-storage>>, the Polkadot state storage implements a
+As clarified in xref:02_state/state_storage_trie.adoc#sect-state-storage[Sect.], the Polkadot state storage implements a
 hash table for inserting and reading key-value entries. The child storage works
 the same way but is stored in a separate and isolated environment. Entries in
 the child storage are not directly accessible via querying the main state
@@ -20,20 +20,20 @@ In these situations, the child storage can be used to provide the isolation
 necessary to prevent any undesired interference between the state of separated
 instances. The Polkadot Host makes no assumptions about how child storages are
 used, but provides the functionality for it via the Host API
-(<<sect-child-storage-api>>).
+(xref:child_storage.adoc#sect-child-storage-api[Sect.]).
 
 [#sect-child-trie-structure]
 ==== Child Tries
 
 The child trie specification is the same as the one described in
-<<sect-state-storage-trie-structure>>. Child tries have their own isolated
+xref:02_state/state_storage_trie.adoc#sect-state-storage-trie-structure[Sect.]. Child tries have their own isolated
 environment. Nonetheless, the main Polkadot state trie depends on them by
 storing a node (stem:[K_N, V_N]) which corresponds to an individual child trie.
 Here, stem:[K_N] is the child storage key associated to the child trie, and
 stem:[V_N] is the Merkle value of its corresponding child trie computed
-according to the procedure described in <<sect-merkl-proof>>.
+according to the procedure described in xref:02_state/state_storage_trie.adoc#sect-merkl-proof[Sect.].
 
-The Polkadot Host API (<<sect-child-storage-api>>) allows the Runtime to provide
+The Polkadot Host API (xref:child_storage.adoc#sect-child-storage-api[Sect.]) allows the Runtime to provide
 the key stem:[K_N] in order to identify the child trie, followed by a second key
 in order to identify the value within that child trie. Every time a child trie
 is modified, the Merkle proof stem:[V_N] of the child trie stored in the

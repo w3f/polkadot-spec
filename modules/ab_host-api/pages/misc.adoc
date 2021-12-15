@@ -41,7 +41,7 @@ Print a valid UTF8 encoded buffer.
 
 *Arguments*:
 
-* : a pointer-size (<<defn-runtime-pointer>>) indicating
+* : a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating
 the valid buffer to be printed.
 
 ==== `ext_misc_print_hex`
@@ -55,19 +55,19 @@ Print any buffer in hexadecimal representation.
 
 *Arguments*:
 
-* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating
+* `data`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating
 the buffer to be printed.
 
 ==== `ext_misc_runtime_version`
 
 Extract the Runtime version of the given Wasm blob by calling `Core_version`
-(<<defn-rt-core-version>>). Returns the SCALE encoded runtime version or _None_
-(<<defn-option-type>>) if the call fails. This function gets primarily used when
+(xref:modules/core.adoc#defn-rt-core-version[Def.]). Returns the SCALE encoded runtime version or _None_
+(xref:02_encoding.adoc#defn-option-type[Def.]) if the call fails. This function gets primarily used when
 upgrading Runtimes.
 
 WARNING: Calling this function is very expensive and should only be done very
 occasionally. For getting the runtime version, it requires instantiating the
-Wasm blob (<<sect-loading-runtime-code>>) and calling a function in this blob.
+Wasm blob (xref:03_transition/runtime_interaction.adoc#sect-loading-runtime-code[Sect.]) and calling a function in this blob.
 
 ===== Version 1 - Prototype
 ----
@@ -76,8 +76,8 @@ Wasm blob (<<sect-loading-runtime-code>>) and calling a function in this blob.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer>>) indicating the Wasm
+* `data`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the Wasm
 blob.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
-encoded _Option_ value (<<defn-option-type>>) containing the Runtime version of
+* `result`: a pointer-size (xref:intro.adoc#defn-runtime-pointer[Def.]) indicating the SCALE
+encoded _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the Runtime version of
 the given Wasm blob.

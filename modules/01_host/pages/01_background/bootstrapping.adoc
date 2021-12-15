@@ -10,21 +10,21 @@ bootstrapping nodes:
 . The node needs to populate the state storage with the official genesis state,
 clarifier further in <<chapter-genesis>>.
 . The node should maintains a set of around 50 active peers at any time. New
-peers can be found using the discovery protocols (<<sect-discovery-mechanism>>)
+peers can be found using the discovery protocols (xref:04_networking/fundamentals.adoc#sect-discovery-mechanism[Sect.])
 . The node should open and maintain the various required streams
-(<<sect-protocols-substreams>>) with each of its active peers.
-. Furthermore, the node should send block requests (<<sect-msg-block-request>>)
+(xref:04_networking/fundamentals.adoc#sect-protocols-substreams[Sect.]) with each of its active peers.
+. Furthermore, the node should send block requests (xref:04_networking/messages.adoc#sect-msg-block-request[Sect.])
 to these peers to receive all blocks in the chain and execute each of them.
-. Exchange neighbor packets (<<sect-grandpa-neighbor-msg>>).
+. Exchange neighbor packets (xref:04_networking/messages.adoc#sect-grandpa-neighbor-msg[Sect.]).
 
 Validator nodes should take the following, additional steps.
 
 . Verify that the Host’s session key is included in the current Epoch’s
-authority set (<<sect-authority-set>>).
-. Run the BABE lottery (<<sect-block-production>>) and wait for the next
+authority set (xref:05_consensus/common.adoc#sect-authority-set[Sect.]).
+. Run the BABE lottery (xref:05_consensus/block_production.adoc#sect-block-production[Sect.]) and wait for the next
 assigned slot in order to produce a block.
 . Gossip any produced blocks to all connected peers
-(<<sect-msg-block-announce>>).
-. Run the catch-up protocol (<<sect-grandpa-catchup>>) to make sure that the
+(xref:04_networking/messages.adoc#sect-msg-block-announce[Sect.]).
+. Run the catch-up protocol (xref:05_consensus/block_finalization.adoc#sect-grandpa-catchup[Sect.]) to make sure that the
 node is participating in the current round and not a past round.
-. Run the GRANDPA rounds protocol (<<sect-finality>>).
+. Run the GRANDPA rounds protocol (xref:05_consensus/finality.adoc#sect-finality[Sect.]).

@@ -30,7 +30,7 @@ and defined as:
 "Enc"_("SC")(A) := "Enc"_("SC")^("Len")(abs(A)) "||" A
 ++++
 
-where stem:["Enc"_("SC")^("Len")] is defined in <<defn-sc-len-encoding>>.
+where stem:["Enc"_("SC")^("Len")] is defined in xref:02_encoding.adoc#defn-sc-len-encoding[Def.].
 ====
 
 .Tuple
@@ -111,7 +111,7 @@ stem:["Enc" ("SC")(A)} is defined as follows:
 
 Where stem:["idx"] is encoded in a fixed length integer determining the type of
 stem:[A]. In particular, for the optional type defined in
-<<defn-varrying-data-type>>, we have:
+xref:02_encoding.adoc#defn-varrying-data-type[Def.], we have:
 
 [stem]
 ++++
@@ -120,7 +120,7 @@ stem:[A]. In particular, for the optional type defined in
 ====
 
 The SCALE codec does not encode the correspondence between the value of stem:[idx]
-defined in <<defn-scale-variable-type>> and the data type it represents; the
+defined in xref:02_encoding.adoc#defn-scale-variable-type[Def.] and the data type it represents; the
 decoder needs prior knowledge of such correspondence to decode the data.
 
 .Sequence
@@ -141,7 +141,7 @@ infer value of stem:[n] from the context) is defined as:
 "Enc"_("SC")(S) := "Enc"_("SC")^("Len")(abs(S)) "||" "Enc"_("SC")(A_2) "||" ... "||" "Enc"_("SC")(A_n)
 ++++
 
-where stem:["Enc"_("SC")^("Len")] is defined in <<defn-sc-len-encoding>>.
+where stem:["Enc"_("SC")^("Len")] is defined in xref:02_encoding.adoc#defn-sc-len-encoding[Def.].
 ====
 
 .Dictionary
@@ -183,7 +183,7 @@ b -> {(0, b="False"),(1, b="True"):}
 ====
 The SCALE codec, stem:["Enc"_("SC")], for other types such as fixed length
 integers not defined here otherwise, is equal to little endian encoding of those
-values defined in <<defn-little-endian>>.
+values defined in xref:01_background/definitions.adoc#defn-little-endian[Def.].
 ====
 
 .Empty

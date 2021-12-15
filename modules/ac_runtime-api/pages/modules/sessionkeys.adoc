@@ -1,7 +1,7 @@
 [#sect-runtime-sessionkeys-module]
 ==== SessionKeys Module (Version 1)
 
-All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+All calls in this module require `Core_initialize_block` (xref:modules/core.adoc#sect-rte-core-initialize-block[Sect.]) to be called beforehand.
 
 ===== `SessionKeys_generate_session_keys`
 
@@ -10,7 +10,7 @@ be stored within the keystore exposed by the Host Api. The seed needs to
 be valid and UTF-8 encoded.
 
 Arguments::
-* A SCALE-encoded _Option_ as defined in <<defn-option-type>> containing an array of varying sizes indicating the seed.
+* A SCALE-encoded _Option_ as defined in xref:02_encoding.adoc#defn-option-type[Def.] containing an array of varying sizes indicating the seed.
 
 Return::
 * A byte array of varying size containg the encoded session keys.

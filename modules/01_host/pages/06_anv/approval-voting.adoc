@@ -3,8 +3,8 @@
 
 The approval voting process ensures that only valid parachain blocks are
 finalized on the relay chain. After _backable_ parachain candidates were
-submitted to the relay chain (<<sect-candidate-inclusion>>), which can be
-retrieved via the Runtime API (<<sect-rt-api-availability-cores>>), validators
+submitted to the relay chain (xref:06_anv/candidate-backing.adoc#sect-candidate-inclusion[Sect.]), which can be
+retrieved via the Runtime API (xref:06_anv/runtime-api.adoc#sect-rt-api-availability-cores[Sect.]), validators
 need to determine their assignments for each parachain and issue approvals for
 valid candidates, respectively disputes for invalid candidates. Since it cannot
 be expected that each validator verifies every single parachain candidate, this
@@ -13,31 +13,31 @@ candidates in order prevent the finalization of invalid blocks. If an honest
 validator detects an invalid block which was approved by one or more validators,
 the honest validator must issue a disputes which wil cause escalations,
 resulting in consequences for all malicious parties, i.e. slashing. This
-mechanism is described more in <<sect-availability-assignment-criteria>>.
+mechanism is described more in xref:06_anv/approval-voting.adoc#sect-availability-assignment-criteria[Sect.].
 
 [#sect-availability-assignment-criteria]
 ==== Assignment Criteria
 
 Validators determine their assignment based on a VRF mechanism, similiar to the
 BABE consensus mechanism. First, validators generate an availability core VRF
-assignment (<<defn-availability-core-vrf-assignment>>), which indicates which
+assignment (xref:06_anv/approval-voting.adoc#defn-availability-core-vrf-assignment[Def.]), which indicates which
 availability core a validator is assigned to. Then a delayed availability core
 VRF assignment is generated which indicates at what point a validator should
 start the approval process. The delays are based on “tranches”
-(<<sect-tranches>>).
+(xref:06_anv/approval-voting.adoc#sect-tranches[Sect.]).
 
 An assigned validator never broadcasts their assignment until relevant. Once the
 assigned validator is ready to check a candidate, the validator broadcasts their
 assignment by issuing an approval distribution message
-(<<net-msg-approval-distribution>>), where stem:[M] is of variant _0_. Other
+(xref:06_anv/network-messages.adoc#net-msg-approval-distribution[Decl.]), where stem:[M] is of variant _0_. Other
 assigned validators that receive that network message must keep track of if,
 expecting an approval vote following shortly after. Assigned validators can
 retrieve the candidate by using the availability recovery
-(<<sect-candidate-recovery>>) and then validate the candidate
-(<<sect-candidate-validation>>).
+(xref:06_anv/availability.adoc#sect-candidate-recovery[Sect.]) and then validate the candidate
+(xref:06_anv/candidate-validation.adoc#sect-candidate-validation[Sect.]).
 
 The validator issues approval votes in form of a validator protocol message
-(<<net-msg-validator-protocol-message>>) respectively disputes
+(xref:06_anv/network-messages.adoc#net-msg-validator-protocol-message[Decl.]) respectively disputes
 (TODO <<sect-anv-disputes>>).
 
 [#sect-tranches]
@@ -46,11 +46,11 @@ The validator issues approval votes in form of a validator protocol message
 Validators use a subjective, tick-based system to determine when the approval
 process should start. A validator starts the tick-based system when a new
 availability core candidates have been proposed, which can be retrieved via the
-Runtime API (<<sect-rt-api-availability-cores>>) , and increments the tick every
+Runtime API (xref:06_anv/runtime-api.adoc#sect-rt-api-availability-cores[Sect.]) , and increments the tick every
 _500 milliseconds_. Each tick/increment is referred to as a “tranche”,
 represented as an integer, starting at _0_.
 
-As described in <<sect-availability-assignment-criteria>>, the validator first
+As described in xref:06_anv/approval-voting.adoc#sect-availability-assignment-criteria[Sect.], the validator first
 executes the VRF mechanism to determine which parachains (availability cores)
 the validator is assigned to, then an additional VRF mechanism for each assigned
 parachain to determine the _delayed assignment_. The delayed assignment
@@ -63,14 +63,14 @@ Validators are required to track broadcasted assignments by other validators
 assigned to the same parachain, including verifying the VRF output. Once a valid
 assignment from a peer was received, the validator must wait for the following
 approval vote within a certain period as described in
-<<sect-rt-api-session-info>> by orienting itself on its local, tick-based
+xref:06_anv/runtime-api.adoc#sect-rt-api-session-info[Sect.] by orienting itself on its local, tick-based
 system. If the waiting time after a broadcasted assignment exceeds the specified
 period, the validator interprets this behavior as a “no-show”, indicating that
 more validators should commit on their tranche until enough approval votes have
 been collected.
 
 If enough approval votes have been collected as described in
-<<sect-rt-api-session-info>>, then assignees of later tranches do not have to
+xref:06_anv/runtime-api.adoc#sect-rt-api-session-info[Sect.], then assignees of later tranches do not have to
 start the approval process. Therefore, this tranche system serves as a mechanism
 to ensure that enough candidate approvals from a random set of validators are
 created without requiring all assigned validators to check the candidate.
@@ -100,7 +100,7 @@ where
 ==== Availability Core VRF Assignment
 ****
 An availability core VRF assignment, T, is computed by a relay chain validator
-to determine which availability core (<<defn-availability-core>>) a validator
+to determine which availability core (xref:06_anv/definitions.adoc#defn-availability-core[Def.]) a validator
 is assigned to and should vote for approvals. The assignment consits of a VRF
 pair (<<defn-vrf-pair>>), stem:[v], and a VRF proof (<<defn-vrf-proof>>),
 stem:[p]:
@@ -112,7 +112,7 @@ T = (v,p)
 
 The Runtime dictates how many assignments should be conducted by a validator, as
 specified in the session index which can be retrieved via the Runtime API
-(<<sect-rt-api-session-info>>). The amount of assignments is referred to as
+(xref:06_anv/runtime-api.adoc#sect-rt-api-session-info[Sect.]). The amount of assignments is referred to as
 “samples”. For each iteration of the number of samples, the validator calculates
 an individual assignment, stem:[T], where the little-endian encoded sample
 number, stem:[S], is incremented by one. At the beginning of the iteration,
@@ -138,15 +138,15 @@ where
 * stem:[sf "LE"] implies that the 4-byte input is converted to a little-endian
 encoded 32-bit interger.
 * stem:[sf "Make-Bytes"] is a function defined in <<defn-vrf-make-bytes>>.
-* stem:[R_s] is the relay VRF story as defined in Definition <<defn-relay-vrf-story>>.
+* stem:[R_s] is the relay VRF story as defined in Definition xref:06_anv/approval-voting.adoc#defn-relay-vrf-story[Def.].
 * stem:[s_k] is the secret key of the validator.
 * stem:[a_c] is the number of availability cores used during the active session,
 as defined in the session info retrieved by the Runtime API
-(<<sect-rt-api-session-info>>).
+(xref:06_anv/runtime-api.adoc#sect-rt-api-session-info[Sect.]).
 
 The resulting integer, stem:[c_i], indicates the parachain Id
-(<<defn-para-id>>). If the Id doesn't exist, as can be retrieved by the Runtime
-API (<<sect-rt-api-availability-cores>>), the validator discards that value and
+(xref:06_anv/definitions.adoc#defn-para-id[Def.]). If the Id doesn't exist, as can be retrieved by the Runtime
+API (xref:06_anv/runtime-api.adoc#sect-rt-api-availability-cores[Sect.]), the validator discards that value and
 continues with the next iteration. If the Id does exist, the validators
 continues with the following steps:
 
@@ -175,7 +175,7 @@ must not exceed the number of samples.
 ==== Delayed Availability Core VRF Assignment
 ****
 The *delayed availability core VRF assignments* determined at what point a
-validator should start the approval process as described in <<sect-tranches>>.
+validator should start the approval process as described in xref:06_anv/approval-voting.adoc#sect-tranches[Sect.].
 The validator executes the following steps:
 
 [stem]
@@ -205,9 +205,9 @@ where
 * stem:[sf "LE"] implies that the 4-byte input is converted to a little-endian
 encoded 32-bit interger.
 * stem:[d_c] is the number of delayed tranches by total as specified by the
-session info, retrieved via the Runtime API (<<sect-rt-api-session-info>>).
+session info, retrieved via the Runtime API (xref:06_anv/runtime-api.adoc#sect-rt-api-session-info[Sect.]).
 * stem:[d_z] is the zeroth delay tranche width as specified by the session info,
-retrieved via the Runtime API (<<sect-rt-api-session-info>>)..
+retrieved via the Runtime API (xref:06_anv/runtime-api.adoc#sect-rt-api-session-info[Sect.])..
 
 The resulting tranche, stem:[n], cannot be less than stem:[0]. If the tranche is
 less than stem:[0], then stem:[d=0].

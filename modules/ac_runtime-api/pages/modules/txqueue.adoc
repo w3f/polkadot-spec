@@ -1,22 +1,22 @@
 [#sect-runtime-txqueue-module]
 ==== TaggedTransactionQueue (Version 2)
 
-All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+All calls in this module require `Core_initialize_block` (xref:modules/core.adoc#sect-rte-core-initialize-block[Sect.]) to be called beforehand.
 
 [#sect-rte-validate-transaction]
 ===== `TaggedTransactionQueue_validate_transaction`
 
 This entry is invoked against extrinsics submitted through a transaction network
-message (<<sect-msg-transactions>>) or by an offchain worker through the Host API
-(<<sect-ext-offchain-submit-transaction>>).
+message (xref:04_networking/messages.adoc#sect-msg-transactions[Sect.]) or by an offchain worker through the Host API
+(xref:offchain.adoc#sect-ext-offchain-submit-transaction[Sect.]).
 
 It indicates if the submitted blob represents a valid extrinsics, the
 order in which it should be applied and if it should be gossiped to
 other peers. Furthermore this function gets called internally when
-executing blocks with the runtime function as described in <<sect-rte-core-execute-block>>.
+executing blocks with the runtime function as described in xref:modules/core.adoc#sect-rte-core-execute-block[Sect.].
 
 Arguments::
-* The source of the transaction as defined in <<defn-transaction-source>>.
+* The source of the transaction as defined in xref:modules/txqueue.adoc#defn-transaction-source[Def.].
 * A byte array that contains the transaction.
 +
 .TransactionSource
@@ -36,10 +36,10 @@ have one of the following values:
 ====
 
 Return::
-* This function returns a _Result_ as defined in <<defn-result-type>> which contains
-the type _ValidTransaction_  as defined in <<defn-valid-transaction>> on success
+* This function returns a _Result_ as defined in xref:02_encoding.adoc#defn-result-type[Def.] which contains
+the type _ValidTransaction_  as defined in xref:modules/txqueue.adoc#defn-valid-transaction[Def.] on success
 and the type _TransactionValidityError_ as defined in
-<<defn-rte-transaction-validity-error>> on failure.
+xref:modules/blockbuilder.adoc#defn-rte-transaction-validity-error[Def.] on failure.
 +
 .ValidTransaction
 [#defn-valid-transaction]

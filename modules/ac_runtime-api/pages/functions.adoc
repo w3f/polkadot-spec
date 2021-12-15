@@ -17,10 +17,10 @@ The *Runtime API Call Convention* describes that all functions receive and retur
 
 where `ptr` points to the SCALE encoded tuple of the parameters passed to the
 function and `len` is the length of this data, while `result` is a pointer-size
-(Definition <<defn-runtime-pointer-size>>) to the SCALE-encoded return data.
+(Definition xref:intro.adoc#defn-runtime-pointer-size[Def.]) to the SCALE-encoded return data.
 ====
 
-See <<sect-code-executor>> for more information about the behaviour of the Wasm Runtime. Also note that any state changes created by calling any of the Runtime functions are not necessarily to be persisted after the call is ended. See <<sect-handling-runtime-state-update>> for more information.
+See xref:03_transition/runtime_interaction.adoc#sect-code-executor[Sect.] for more information about the behaviour of the Wasm Runtime. Also note that any state changes created by calling any of the Runtime functions are not necessarily to be persisted after the call is ended. See xref:03_transition/runtime_interaction.adoc#sect-handling-runtime-state-update[Sect.] for more information.
 
 include::modules/core.adoc[]
 

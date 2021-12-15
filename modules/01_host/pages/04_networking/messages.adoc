@@ -18,13 +18,13 @@ request information about this block. The mechanism for tracking announcements
 and requesting the required data is implementation-specific.
 
 Block announcements, requests and responses are sent over the substream as
-described in <<defn-block-announce-handshake>>.
+described in xref:04_networking/messages.adoc#defn-block-announce-handshake[Def.].
 
 [#defn-block-announce-handshake]
 ===== Definition: Block Announce Handshake
 ****
 The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once
-established, all `BlockAnounce` messages (<<defn-block-announce>>) created by
+established, all `BlockAnounce` messages (xref:04_networking/messages.adoc#defn-block-announce[Def.]) created by
 the node are sent to the `/dot/block-announces/1` substream.
 
 The `BlockAnnounceHandshake` is a SCALE-encoded structure of the following
@@ -147,7 +147,7 @@ on the value of stem:[B_s]. an implementation-defined maximum is
 used when unspecified.
 * _Direction_ is a Protobuf structure indicating the sequence direction of the
 requested blocks. The structure is a varying data type
-(<<defn-varrying-data-type>>) of the following format:
+(xref:02_encoding.adoc#defn-varrying-data-type[Def.]) of the following format:
 +
 [cols="1,4"]
 |===
@@ -190,17 +190,17 @@ requested fields (bitmask value). The structure has the following format:
 |`bytes`
 |1
 |Block header hash
-|<<defn-block-header-hash>>
+|xref:03_transition/state_replication.adoc#defn-block-header-hash[Def.]
 
 |`bytes`
 |2
 |Block header (optional)
-|<<defn-block-header>>
+|xref:03_transition/state_replication.adoc#defn-block-header[Def.]
 
 |repeated `bytes`
 |3
 |Block body (optional)
-|<<defn-block-body>>
+|xref:03_transition/state_replication.adoc#defn-block-body[Def.]
 
 |`bytes`
 |4
@@ -215,7 +215,7 @@ requested fields (bitmask value). The structure has the following format:
 |`bytes`
 |6
 |Justification (optional)
-|<<defn-grandpa-justification>>
+|xref:05_consensus/finality.adoc#defn-grandpa-justification[Def.]
 
 |`bool`
 |7
@@ -227,15 +227,15 @@ requested fields (bitmask value). The structure has the following format:
 [#sect-msg-transactions]
 ==== Transactions
 
-Transactions (<<sect-extrinsics>>) are sent directly to peers with which the
-Polkadot Host has an open transaction substream (<<defn-transactions-message>>).
+Transactions (xref:03_transition/extrinsics.adoc#sect-extrinsics[Sect.]) are sent directly to peers with which the
+Polkadot Host has an open transaction substream (xref:04_networking/messages.adoc#defn-transactions-message[Def.]).
 Polkadot Host implementers should implement a mechanism that only sends a
 transaction once to each peer and avoids sending duplicates. Sending duplicate
 transactions might result in undefined consequences such as being blocked for
 bad behaviour by peers.
 
 The mechanism for managing transactions is further described in Section
-<<sect-extrinsics>>.
+xref:03_transition/extrinsics.adoc#sect-extrinsics[Sect.].
 
 [#defn-transactions-message]
 ===== Definition: Transaction Message
@@ -266,14 +266,14 @@ Transactions are sent over the `/dot/transactions/1` substream.
 ==== GRANDPA Messages
 
 The exchange of GRANDPA messages is conducted on the substream. The process for
-the creation and distributing these messages is described in <<sect-finality>>.
+the creation and distributing these messages is described in xref:05_consensus/finality.adoc#sect-finality[Sect.].
 The underlying messages are specified in this section.
 
 [#defn-gossip-message]
 ===== Definition: Grandpa Gossip Message
 ****
 A *GRANDPA gossip message*, stem:[M], is a varying datatype
-(<<defn-varrying-data-type>>) which identifies the message type that is cast by
+(xref:02_encoding.adoc#defn-varrying-data-type[Def.]) which identifies the message type that is cast by
 a voter followed by the message itself.
 
 [stem]
@@ -283,11 +283,11 @@ M = {(0,"Vote message", V_m),(1,"Commit message", C_m),(2,"Neighbor message", N_
 
 where:
 
-* stem:[V_m] is defined in <<defn-grandpa-vote-msg>>.
-* stem:[C_m] is defined in <<defn-grandpa-commit-msg>>.
-* stem:[N_m] is defined in <<defn-grandpa-neighbor-msg>>.
-* stem:[R_m] is defined in <<defn-grandpa-catchup-request-msg>>.
-* stem:[U_M] is defined in <<defn-grandpa-catchup-response-msg>>.
+* stem:[V_m] is defined in xref:04_networking/messages.adoc#defn-grandpa-vote-msg[Def.].
+* stem:[C_m] is defined in xref:04_networking/messages.adoc#defn-grandpa-commit-msg[Def.].
+* stem:[N_m] is defined in xref:04_networking/messages.adoc#defn-grandpa-neighbor-msg[Def.].
+* stem:[R_m] is defined in xref:04_networking/messages.adoc#defn-grandpa-catchup-request-msg[Def.].
+* stem:[U_M] is defined in xref:04_networking/messages.adoc#defn-grandpa-catchup-response-msg[Def.].
 ****
 
 [#defn-grandpa-vote-msg]
@@ -306,16 +306,16 @@ M_v^(r,"stage")(B) := "Enc"_("SC")(r,"id"_(bbb V),"SigMsg")\
 where:
 
 * stem:[r] is an unsigned 64-bit integer indicating the Grandpa round number
-(<<defn-voting-rounds>>).
-* stem:["id"_(bbb V)] is an unsigned 64-bit integer indicating the authority Set Id (<<defn-authority-list>>).
+(xref:05_consensus/finality.adoc#defn-voting-rounds[Def.]).
+* stem:["id"_(bbb V)] is an unsigned 64-bit integer indicating the authority Set Id (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 * stem:["Sig"_(v_i)^(r,"stage")] is a 512-bit byte array containing the
-signature of the authority (<<defn-sign-round-vote>>).
+signature of the authority (xref:05_consensus/finality.adoc#defn-sign-round-vote[Def.]).
 * stem:[v_(id)] is a 256-bit byte array containing the _ed25519_ public key of the authority.
 * stem:["stage"] is a 8-bit integer of value _0_ if it's a pre-vote sub-round, _1_ if it's a pre-commit sub-round or _2_ if it's a primary proposal message.
-* stem:[V_v^(r,"stage")(B)] is the GRANDPA vote for block stem:[B] (<<defn-voting-rounds>>).
+* stem:[V_v^(r,"stage")(B)] is the GRANDPA vote for block stem:[B] (xref:05_consensus/finality.adoc#defn-voting-rounds[Def.]).
 
 This message is the sub-component of the GRANDPA gossip message
-(<<defn-gossip-message>>) of type Id 0.
+(xref:04_networking/messages.adoc#defn-gossip-message[Def.]) of type Id 0.
 ****
 
 [#defn-grandpa-justifications-compact]
@@ -333,9 +333,9 @@ J_(v_(0,...n))^(r,"comp") := ({V_(v_0)^(r,pc),... V_(v_n)^(r,pc)},{("Sig"_(v_0)^
 
 where:
 
-* stem:[V_(v_i)^(r,pc)] is a 256-bit byte array containing the pre-commit vote of authority stem:[v_i] (<<defn-voting-rounds>>).
+* stem:[V_(v_i)^(r,pc)] is a 256-bit byte array containing the pre-commit vote of authority stem:[v_i] (xref:05_consensus/finality.adoc#defn-voting-rounds[Def.]).
 * stem:["Sig"_(v_i)^(r,pc)] is a 512-bit byte array containing the pre-commit
-signature of authority stem:[v_i] (<<defn-sign-round-vote>>).
+signature of authority stem:[v_i] (xref:05_consensus/finality.adoc#defn-sign-round-vote[Def.]).
 * stem:[v_("id"_n)] is a 256-bit byte array containing the public key of authority stem:[v_i].
 ****
 
@@ -354,16 +354,16 @@ M_v^(r,"Fin")(B) := "Enc"_("SC")(r,"id"_(bbb V),V_v^r(B),J_(v_(0,...n))^(r,"comp
 
 where:
 
-* stem:[r] is an unsigned 64-bit integer indicating the round number (<<defn-voting-rounds>>).
-* stem:[id_(bbb V)] is the authority set Id (<<defn-authority-list>>).
+* stem:[r] is an unsigned 64-bit integer indicating the round number (xref:05_consensus/finality.adoc#defn-voting-rounds[Def.]).
+* stem:[id_(bbb V)] is the authority set Id (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 * stem:[V_v^r(B)] is a 256-bit array containing the GRANDPA vote for block
-stem:[B] (<<defn-vote>>).
+stem:[B] (xref:05_consensus/finality.adoc#defn-vote[Def.]).
 * stem:[J_(v_(0,...n))^(r,"comp")] is the compacted GRANDPA justification
 containing observed pre-commit of authorities stem:[v_0] to stem:[v_n]
-(<<defn-grandpa-justifications-compact>>).
+(xref:04_networking/messages.adoc#defn-grandpa-justifications-compact[Def.]).
 
 This message is the sub-component of the GRANDPA gossip message
-(<<defn-gossip-message>>) of type Id _1_.
+(xref:04_networking/messages.adoc#defn-gossip-message[Def.]) of type Id _1_.
 ****
 
 [#sect-grandpa-neighbor-msg]
@@ -390,13 +390,13 @@ M^("neigh") := "Enc"_("SC")(v,r,"id"_(bbb V),H_h(B_("last")))
 where:
 
 * stem:[v] is an unsigned 8-bit integer indicating the version of the neighbor message, currently _1_.
-* stem:[r] is an unsigned 64-bit integer indicating the round number (<<defn-voting-rounds>>).
+* stem:[r] is an unsigned 64-bit integer indicating the round number (xref:05_consensus/finality.adoc#defn-voting-rounds[Def.]).
 * stem:["id"_(bbb V)] is an unsigned 64-bit integer indicating the authority
-Id (<<defn-authority-list>>).
+Id (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 * stem:[H_i(B_("last"))] is an unsigned 32-bit integer indicating the block number of the last finalized block stem:[B_("last")].
 
 This message is the sub-component of the GRANDPA gossip message
-(<<defn-gossip-message>>) of type Id _2_.
+(xref:04_networking/messages.adoc#defn-gossip-message[Def.]) of type Id _2_.
 ****
 
 [#sect-grandpa-catchup-messages]
@@ -404,11 +404,11 @@ This message is the sub-component of the GRANDPA gossip message
 
 Whenever a Polkadot node detects that it is lagging behind the finality
 procedure, it needs to initiate a _catch-up_ procedure. GRANDPA Neighbor
-messages (<<defn-grandpa-neighbor-msg>>) reveal the round number for the last
+messages (xref:04_networking/messages.adoc#defn-grandpa-neighbor-msg[Def.]) reveal the round number for the last
 finalized GRANDPA round which the node’s peers have observed. This provides the
 means to identify a discrepancy in the latest finalized round number observed
 among the peers. If such a discrepancy is observed, the node needs to initiate
-the catch-up procedure explained in <<sect-grandpa-catchup>>).
+the catch-up procedure explained in xref:05_consensus/block_finalization.adoc#sect-grandpa-catchup[Sect.]).
 
 In particular, this procedure involves sending a _catch-up request_ and
 processing _catch-up response_ messages.
@@ -428,7 +428,7 @@ M_(i,v)^(r,"Cat"-q) := "Enc"_("SC")(r,"id"_(bbb V))
 ++++
 
 This message is the sub-component of the GRANDPA Gossip message
-(<<defn-gossip-message>>) of type Id _3_.
+(xref:04_networking/messages.adoc#defn-gossip-message[Def.]) of type Id _3_.
 ****
 
 [#defn-grandpa-catchup-response-msg]
@@ -447,13 +447,13 @@ M_(v,i)^("Cat"-s) := "Enc"_("SC")("id"_(bbb V), r, J_(0,...n)^(r,"pv")(B), J_(0,
 ++++
 
 Where stem:[B] is the highest block which stem:[v] believes to be finalized in
-round stem:[r] (<<defn-voting-rounds>>). stem:[B'] is the highest ancestor of
+round stem:[r] (xref:05_consensus/finality.adoc#defn-voting-rounds[Def.]). stem:[B'] is the highest ancestor of
 all blocks voted on in the arrays of justifications stem:[J_(0,...n)^(r,"pv")(B)]
-and stem:[J_(0,...m)^(r,"pc")(B)] (<<defn-grandpa-justification>>) with the
+and stem:[J_(0,...m)^(r,"pc")(B)] (xref:05_consensus/finality.adoc#defn-grandpa-justification[Def.]) with the
 exception of the equivocatory votes.
 
 This message is the sub-component of the GRANDPA Gossip message
-(<<defn-gossip-message>>) of type Id _4_.
+(xref:04_networking/messages.adoc#defn-gossip-message[Def.]) of type Id _4_.
 ****
 
 [#sect-msg-grandpa-beefy]
@@ -462,7 +462,7 @@ WARNING: The BEEFY protocol is currently in early development and subject to
 change.
 
 This section defines the messages required for the GRANDPA BEEFY protocol
-(<<sect-grandpa-beefy>>). Those messages are sent over the `/paritytech/beefy/1`
+(xref:05_consensus/bridge_design.adoc#sect-grandpa-beefy[Sect.]). Those messages are sent over the `/paritytech/beefy/1`
 substream.
 
 [#defn-grandpa-beefy-commitment]
@@ -483,7 +483,7 @@ where
 latest, finalized block.
 * stem:[H_i(B_("last"))] is the block number this commitment is for. Namely the
 latest, finalized block.
-* stem:["id"_(bbb V)] is the current authority set Id (<<defn-authority-set-id>>).
+* stem:["id"_(bbb V)] is the current authority set Id (xref:05_consensus/finality.adoc#defn-authority-set-id[Def.]).
 ****
 
 [#defn-msg-beefy-gossip]
@@ -500,7 +500,7 @@ M_v = "Enc"_("SC")(C,A_("id")^("bfy"),A_("sig"))
 
 where
 
-* stem:[C] is the BEEFY commitment (<<defn-grandpa-beefy-commitment>>).
+* stem:[C] is the BEEFY commitment (xref:04_networking/messages.adoc#defn-grandpa-beefy-commitment[Def.]).
 * stem:[A_("id")^("bfy")] is the ECDSA public key of the Polkadot Host.
 * stem:[A_("sig")] is the signature created with stem:[A_("id")^("bfy")] by
 signing the statement stem:[R_h] in stem:[C].
@@ -519,18 +519,18 @@ S_n = (A_0^("sig"),... A_n^("sig"))
 
 where
 
-* stem:[C] is the BEEFY commitment (<<defn-grandpa-beefy-commitment>>).
+* stem:[C] is the BEEFY commitment (xref:04_networking/messages.adoc#defn-grandpa-beefy-commitment[Def.]).
 * stem:[S_n] is an array where its exact size matches the number of validators
 in the current authority set as specified by stem:["id"_(bbb V)]
-(<<defn-authority-set-id>>) in stem:[C]. Individual items are of the type
-_Option_ (<<defn-option-type>>) which can contain a signature of a validator
+(xref:05_consensus/finality.adoc#defn-authority-set-id[Def.]) in stem:[C]. Individual items are of the type
+_Option_ (xref:02_encoding.adoc#defn-option-type[Def.]) which can contain a signature of a validator
 which signed the same statement (stem:[R_h] in stem:[C]) and is active in the
 current authority set. It’s critical that the signatures are sorted based on
 their corresponding public key entry in the authority set.
 +
 For example, the signature of the validator at index 3 in the authority set must
 be placed at index _3_ in stem:[S_n]. If not signature is available for that
-validator, then the _Option_ variant is _None_ inserted (<<defn-option-type>>).
+validator, then the _Option_ variant is _None_ inserted (xref:02_encoding.adoc#defn-option-type[Def.]).
 This sorting allows clients to map public keys to their corresponding
 signatures.
 ****
@@ -539,7 +539,7 @@ signatures.
 ===== Signed Commitment Witness
 ****
 A *signed commitment witness*, stem:[M_("SC")^w], is a light version of the signed
-BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>). Instead of
+BEEFY commitment (xref:04_networking/messages.adoc#defn-grandpa-beefy-signed-commitment[Def.]). Instead of
 containing the entire list of signatures, it only claims which validator signed
 the statement.
 
@@ -552,7 +552,7 @@ M_("SC")^w = "Enc"_("SC")(C,V_(0,... n), R_("sig"))
 
 where
 
-* stem:[C] is the BEEFY commitment (<<defn-grandpa-beefy-commitment>>).
+* stem:[C] is the BEEFY commitment (xref:04_networking/messages.adoc#defn-grandpa-beefy-commitment[Def.]).
 * stem:[V_(0,... n)] is an array where its exact size matches the number of
 validators in the current authority set as specified by stem:["id"_(bbb V)] in
 stem:[C]. Individual items are booleans which indicate whether the validator has
@@ -564,5 +564,5 @@ For example, the boolean indicator of the validator at index 3 in the authority
 set must be placed at index _3_ in stem:[V_n]. This sorting allows clients to
 map public keys to their corresponding boolean indicators.
 * stem:[R_("sig")] is the MMR root of the signatures in the original signed
-BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>).
+BEEFY commitment (xref:04_networking/messages.adoc#defn-grandpa-beefy-signed-commitment[Def.]).
 ****

@@ -15,9 +15,9 @@ Return::
 [#sect-rt-api-validator-groups]
 ==== `validator_groups`
 
-Returns the validator groups (<<defn-validator-groups>>) used during the current
+Returns the validator groups (xref:06_anv/definitions.adoc#defn-validator-groups[Def.]) used during the current
 session. The validators in the groups are referred to by the validator set Id
-(<<defn-authority-list>>).
+(xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 
 Arguments::
 * None
@@ -34,7 +34,7 @@ G = (B_s,f,B_c)
 
 where
 
-•  stem:[I] is an array the validator set Ids (<<defn-authority-list>>).
+•  stem:[I] is an array the validator set Ids (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 •  stem:[B_s] indicates the block number where the session started.
 •  stem:[f] indicates how often groups rotate. 0 means never.
 •  stem:[B_c] indicates the current block number. 
@@ -42,7 +42,7 @@ where
 [#sect-rt-api-availability-cores]
 ==== `availability_cores`
 
-Returns information on all availability cores (<<defn-availability-core>>).
+Returns information on all availability cores (xref:06_anv/definitions.adoc#defn-availability-core[Def.]).
 
 Arguments::
 * None
@@ -62,25 +62,25 @@ where
 • stem:[S] specifies the core state. _0_ indicates that the core is occupied,
 _1_ implies it's currently free but scheduled and given the opportunity to
 occupy and _2_ implies it's free and there's nothing scheduled.
-• stem:[n_u] is an _Option_ value (<<defn-option-type>>) which can contain a
+• stem:[n_u] is an _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) which can contain a
 stem:[C_s] value if the core was freed by the Runtime and indicates the
 assignment that is next scheduled on this core. An empty value indicates there
 is nothing scheduled.
 • stem:[B_o] indicates the relay chain block number at which the core got occupied.
 • stem:[B_t] indicates the relay chain block number the core will time-out at, if any.
-• stem:[n_t] is an _Option_ value (<<defn-option-type>>) as described in
+• stem:[n_t] is an _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) as described in
 Definition ? which can contain a stem:[C_s] value if the core is freed by a
 time-out and indicates the assignment that is next scheduled on this core. An
 empty value indicates there is nothing scheduled.
-• stem:[b] is a bitfield array (<<defn-bitfield-array>>). A stem:[>2/3] majority
+• stem:[b] is a bitfield array (xref:06_anv/definitions.adoc#defn-bitfield-array[Def.]). A stem:[>2/3] majority
 of assigned validators voting with stem:[1] values means that the core is
 available.
 • stem:[G_i] indicates the assigned validator group index
-(<<defn-validator-groups>>) is to distribute availability pieces of this
+(xref:06_anv/definitions.adoc#defn-validator-groups[Def.]) is to distribute availability pieces of this
 candidate.
 • stem:[C_h] indicates the hash of the candidate occupying the core.
-• stem:[C_d] is the candidate descriptor (<<defn-candidate-descriptor>>).
-• stem:[C_i] is an _Option_ value (<<defn-option-type>>) as described in
+• stem:[C_d] is the candidate descriptor (xref:06_anv/candidate-backing.adoc#defn-candidate-descriptor[Def.]).
+• stem:[C_i] is an _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) as described in
 Definition ? which can contain the collators public key indicating who should
 author the block.
 
@@ -90,12 +90,12 @@ author the block.
 Returns the persisted validation data for the given parachain Id and a given occupied core assumption.
 
 Arguments::
-* The parachain Id (<<defn-para-id>>).
-* An occupied core assumption (<<defn-occupied-core-assumption>>).
+* The parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]).
+* An occupied core assumption (xref:06_anv/runtime-api.adoc#defn-occupied-core-assumption[Def.]).
 
 Return::
-* An _Option_ value (<<defn-option-type>>) which can contain the persisted
-validation data (<<defn-persisted-validation-data>>). The value is empty if the
+* An _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) which can contain the persisted
+validation data (xref:06_anv/runtime-api.adoc#defn-persisted-validation-data[Def.]). The value is empty if the
 parachain Id is not registered or the core assumption is of index stem:[2],
 meaning that the core was freed.
 
@@ -137,13 +137,13 @@ D_{pv} = (P_h,H_i,H_r,m_b)
 
 where
 
-• stem:[P_h] is the parent head data (<<defn-head-data>>).
+• stem:[P_h] is the parent head data (xref:06_anv/definitions.adoc#defn-head-data[Def.]).
 • stem:[H_i] is the relay chain block number this is in the context of.
 • stem:[H_r] is the relay chain storage root this is in the context of.
 • stem:[m_b] is the maximum legal size of the PoV block, in bytes.
 
 The persisted validation data is fetched via the Runtime API
-(<<sect-rt-api-persisted-validation-data>>).
+(xref:06_anv/runtime-api.adoc#sect-rt-api-persisted-validation-data[Sect.]).
 ****
 
 ==== `check_validation_outputs`
@@ -151,8 +151,8 @@ The persisted validation data is fetched via the Runtime API
 Checks if the given validation outputs pass the acceptance criteria.
 
 Arguments::
-* The parachain Id (<<defn-para-id>>).
-* The candidate commitments (<<defn-candidate-commitments>>).
+* The parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]).
+* The candidate commitments (xref:06_anv/candidate-backing.adoc#defn-candidate-commitments[Def.]).
 
 Return::
 * A boolean indicating whether the candidate commitments pass the acceptance criteria.
@@ -175,11 +175,11 @@ Return::
 Fetches the validation code (Runtime) of a parachain by parachain Id.
 
 Arguments::
-* The parachain Id (<<defn-para-id>>).
-* The occupied core assumption (<<defn-occupied-core-assumption>>).
+* The parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]).
+* The occupied core assumption (xref:06_anv/runtime-api.adoc#defn-occupied-core-assumption[Def.]).
 
 Return::
-* An _Option_ value (<<defn-option-type>>) containing the full validation code
+* An _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the full validation code
 in an byte array. This value is empty if the parachain Id cannot be found or the
 assumption is wrong.
 
@@ -192,7 +192,7 @@ Arguments::
 * The hash value of the validation code.
 
 Return::
-* An _Option_ value (<<defn-option-type>>) containing the full validation code
+* An _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the full validation code
 in an byte array. This value is empty if the parachain Id cannot be found or the
 assumption is wrong.
 
@@ -202,11 +202,11 @@ Returns the receipt of a candidate pending availability for any parachain
 assigned to an occupied availability core.
 
 Arguments::
-* The parachain Id (<<defn-para-id>>).
+* The parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]).
 
 Return::
-* An _Option_ value (<<defn-option-type>>) containing the committed candidate
-receipt (<<defn-candidate-receipt>>). This value is empty if the given parachain
+* An _Option_ value (xref:02_encoding.adoc#defn-option-type[Def.]) containing the committed candidate
+receipt (xref:06_anv/candidate-backing.adoc#defn-candidate-receipt[Def.]). This value is empty if the given parachain
 Id is not assigned to an occupied availability cores.
 
 ==== `candidate_events`
@@ -231,13 +231,13 @@ where
 candidate receipt was backed in the latest relay chain block, _1_ indicates that
 it was included and became a parachain block at the latest relay chain block and
 _2_ indicates that the candidate receipt was not made available and timed-out.
-* stem:[C_r] is the candidate receipt (<<defn-candidate-receipt>>).
-* stem:[h] is the parachain head data (<<defn-head-data>>).
+* stem:[C_r] is the candidate receipt (xref:06_anv/candidate-backing.adoc#defn-candidate-receipt[Def.]).
+* stem:[h] is the parachain head data (xref:06_anv/definitions.adoc#defn-head-data[Def.]).
 * stem:[I_c] is the index of the availability core as can be retrieved in
-<<sect-rt-api-availability-cores>> that the candidate is occupying. If stem:[E]
+xref:06_anv/runtime-api.adoc#sect-rt-api-availability-cores[Sect.] that the candidate is occupying. If stem:[E]
 is of variant stem:[2], then this indicates the core index the candidate _was_
 occupying.
-* stem:[G_i] is the group index (<<defn-validator-groups>>) that is responsible
+* stem:[G_i] is the group index (xref:06_anv/definitions.adoc#defn-validator-groups[Def.]) that is responsible
 of backing the candidate.
 
 [#sect-rt-api-session-info]
@@ -249,7 +249,7 @@ Arguments::
 * The unsigned 32-bit integer indicating the session index.
 
 Return::
-* An _Option_ type (<<defn-option-type>>) which can contain the session info
+* An _Option_ type (xref:02_encoding.adoc#defn-option-type[Def.]) which can contain the session info
 structure, stem:[S], of the following format:
 +
 [stem]
@@ -267,18 +267,18 @@ where
 * stem:[A] indicates the validators of the current session, in canonical order.
 There might be more validators in the current session than validators
 participating in parachain consensus, as returned by the Runtime API
-(<<sect-rt-api-validators>>).
+(xref:06_anv/runtime-api.adoc#sect-rt-api-validators[Sect.]).
 * stem:[D] indicates the validator authority discovery keys for the given
 session in canonical order. The first couple of validators are equal to the
 corresponding validators participating in the parachain consensus, as returned
-by the Runtime API (<<sect-rt-api-validators>>). The remaining authorities are
+by the Runtime API (xref:06_anv/runtime-api.adoc#sect-rt-api-validators[Sect.]). The remaining authorities are
 not participating in the parachain consensus.
 * stem:[K] indicates the assignment keys for validators. There might be more
 authorities in the session that validators participating in parachain consensus,
-as returned by the Runtime API (<<sect-rt-api-validators>>).
+as returned by the Runtime API (xref:06_anv/runtime-api.adoc#sect-rt-api-validators[Sect.]).
 * stem:[G] indicates the validator groups in shuffled order. [TODO: what's the purpose of this?]
 * stem:[v_n] is public key of the authority.
-* stem:[A_n] is the authority set Id (<<defn-authority-list>>).
+* stem:[A_n] is the authority set Id (xref:05_consensus/common.adoc#defn-authority-list[Def.]).
 * stem:[c] is an unsigned 32-bit integer indicating the number of availability
 cores used by the protocol during the given session.
 * stem:[z] is an unsigned 32-bit integer indicating the zeroth delay tranche width.
@@ -296,7 +296,7 @@ needed to approve a block.
 Returns all the pending inbound messages in the downward message queue for a given parachain.
 
 Arguments::
-* The parachain Id (<<defn-para-id>>).
+* The parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]).
 
 Return::
 * An array of inbound downward messages as defined in (TODO: reference messaging chapter)
@@ -306,7 +306,7 @@ Return::
 Returns the contents of all channels addressed to the given recipient. Channels that have no messages in them are also included.
 
 Arguments::
-* The parachain Id (<<defn-para-id>>).
+* The parachain Id (xref:06_anv/definitions.adoc#defn-para-id[Def.]).
 
 Return::
 * An array of inbound HRMP messages as defined in (TODO: reference messaging chapter)

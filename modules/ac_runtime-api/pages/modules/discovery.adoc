@@ -1,7 +1,7 @@
 ==== AuthorityDiscoveryApi Module (Version 1)
 
 All calls in this module require (Section
-<<sect-rte-core-initialize-block>>) to be called beforehand.
+xref:modules/core.adoc#sect-rte-core-initialize-block[Sect.]) to be called beforehand.
 
 ===== `AuthorityDiscoveryApi_authorities`
 

@@ -5,7 +5,7 @@ described in this Chapter are implemented in the Runtime Wasm blob.
 
 It should be noted that the API can change through the Runtime updates.
 Therefore, a host should check the API versions of each module returned
-in the `api` field by `Core_version` (<<defn-rt-core-version>>) after
+in the `api` field by `Core_version` (xref:modules/core.adoc#defn-rt-core-version[Def.]) after
 every Runtime upgrade and warn if an updated API is encountered and that
 this might require an update of the host.
 
