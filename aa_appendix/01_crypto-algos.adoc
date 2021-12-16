@@ -138,7 +138,22 @@ p larr "Evaluate-VRF"(k,t)
 
 The functions converts the public key, stem:[k], into a Ristretto point and a
 corresponding wire format as defined in Definition A.2, respectively the value
-stem:[I] (or stem:[O], which are equal). [todo]
+stem:[I] (or stem:[O], which are equal). [TODO]
+****
+
+===== `DLEQ-Prove`
+****
+The stem:["DLEQ-Prove"] function takes a private key, stem:[s_k], and a transcript, stem:[t], as
+defined in Definition A.4 and a VRF pair, stem:[v], as defined in Definition A.2 and
+produces a VRF proof and a VRF batchable proof, stem:[p] respectively stem:[p_b], as defined
+in Definition A.3.
+
+[stem]
+++++
+(p,p_b) ← "DLEQ-Prove"(s_k,t,v)
+++++
+
+The functions executed the following steps: [TODO]
 ****
 
 [#sect-cryptographic-keys]
