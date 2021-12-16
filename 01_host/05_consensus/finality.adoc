@@ -50,8 +50,6 @@ or a *Forced Change* occurs. The authority set Id is an unsigned 64-bit integer.
 
 ===== GRANDPA State
 ****
-TODO: verify V_id and id_V usage, unify
-
 The *GRANDPA state*, stem:["GS"], is defined as:
 
 [stem]
@@ -186,8 +184,8 @@ cc E_("obs"(v))^(r,"stage")
 ++++
 
 The Polkadot Host must detect equivocations committed by other validators and
-submit those to the Runtime as described in 
-TODO <<sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>>.
+submit those to the Runtime as described in
+<<sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic>>.
 
 A vote stem:[V_v^(r,"stage") = V(B)] is *invalid* if
 
@@ -322,7 +320,7 @@ protocol by executing Algorithm as defined in <<algo-initiate-grandpa>>.
 
 ==== Voting Process in Round stem:[r]
 For each round stem:[r], an honest voter stem:[v] must participate in the voting
-process by following Algorithm TODO.
+process by following the Algorithm as defined in <<algo-grandpa-round>>.
 
 [#algo-grandpa-round]
 ===== Play Grandpa Round
@@ -477,7 +475,8 @@ condition of Algorithm as described in <<algo-grandpa-round>> is
 satisfied and we must proceed to round 2.
 
 Nonetheless, we must continue to attempt to finalize round _1_ in the background
-as the condition of the TODO has not been fulfilled.
+as the condition of the Algorithm as defined in <<algo-attempt-to–finalize>> has
+not been fulfilled.
 
 This prevents us from proceeding to round 3 until either:
 
