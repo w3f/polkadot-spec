@@ -12,3 +12,8 @@ include::02_encoding.adoc[]
 === Genesis State
 
 include::03_genesis.adoc[]
+
+[#chapter-erasure-encoding]
+=== Erasure Encoding
+
+include::04_erasure-encoding.adoc[]
