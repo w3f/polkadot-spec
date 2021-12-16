@@ -196,6 +196,22 @@ This data can be treated as a hash of all preceding operations, messages and
 keys.
 ****
 
+===== `Append-Message`
+****
+The stem:["Append-Message"] function takes a transcript, stem:[t], as defined in
+Definition A.4, a context, stem:[c], represented as a UTF-8 encoded string and a
+message, stem:[m], represented as a byte array and returns an updated transcript
+form the initial transcript stem:[t].
+
+[stem]
+++++
+t larr "Append-Message"(t,c,m)
+++++
+
+This function appends the messages to the transcript as described in the Merlin
+documentation, respectively section “3.1.3 Appending Messages”.
+****
+
 [#sect-cryptographic-keys]
 ==== Cryptographic Keys
 
