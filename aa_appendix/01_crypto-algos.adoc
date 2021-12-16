@@ -29,19 +29,29 @@ key and the given input. The proof can be verified by any challenger to ensure
 the random number generation is valid and has not been tampered with (for
 example to the benfit of submitter).
 
-In Polkadot, VRFs are used for the BABE block production lottery as described in
-Algorithm ? and the parachain approval voting mechanism as described in Section
-[todo]. The VRF uses mechanism similar to algorithms introduced in [?], [?] and
-[?]. It essentially generates a deterministic elliptic curve based Schnorr
-signature as a verifiable random value. The elliptic curve group used in the VRF
-function is the Ristretto group specified in [?].
+In Polkadot, VRFs are used for the BABE block production lottery by the
+Algorithm as defined in <<algo-block-production-lottery>>  and the parachain
+approval voting mechanism (TODO). The VRF uses mechanism similar to algorithms
+introduced in the following papers:
 
+* .
+* .
+* .
+
+It essentially generates a deterministic elliptic curve based Schnorr
+signature as a verifiable random value. The elliptic curve group used in the VRF
+function is the Ristretto group specified in:
+
+* .
+
+[#defn-vrf-context]
 ===== VRF Context
 ****
 *VRF context* (simply referred to as context when there is no ambiguity)
 represented as stem:[c] is a [TODO: define context here]
 ****
 
+[#defn-vrf-pair]
 ===== VRF Pair
 ****
 The *VRF Pair* is an ordered pair stem:[(I,O)] where stem:[I] represents the VRF
@@ -61,8 +71,11 @@ where:
 * stem:[C] is the Ristretto point in compressed wire format, exactly 32 bytes.
 * stem:[P] is the Ristretto point in the Ristretto group for Cruve25519.
 * stem:[x] is the element of the field, exactly 5 bytes.
+
+ [TODO: we need to specify where does C and x is coming from]
 ****
 
+[#defn-vrf-proof]
 ===== VRF Proof
 ****
 The *VRF proof* proves the correctness for an associated VRF output. The VRF
@@ -78,6 +91,7 @@ where stem:[C] is the challenge and stem:[S] is the 32-byte Schnorr poof. Both
 are expressed as Curve25519 scalars.
 ****
 
+[#defn-vrf-transcript]
 ===== VRF Transcript
 ****
 The *VRF transcript* is a “public-coin” argument [TODO: I'd not introduced
@@ -110,10 +124,11 @@ equal to _0_ if no operation began in this block.
 indicates whether the party sends or receives a message on the transport.
 ****
 
+[#defn-vrf-meta-ad]
 ===== `Meta-Ad`
 ****
-The stem:["Meta-Ad"] function takes a transcript, stem:[t], as defined in
-Definition A.4, a UTF-8 encoded label, stem:[l], and a byte array, stem:[b], and
+The stem:["Meta-Ad"] function takes a transcript (<<defn-vrf-transcript>>),
+stem:[t], a UTF-8 encoded label, stem:[l], and a byte array, stem:[b], and
 returns an updated transcript.
 
 [stem]
@@ -125,11 +140,12 @@ The stem:["Meta-Ad"] operation adds the label and the byte array to the passed
 on transcript as described in the STROBE documentation. [TODO: where?]
 ****
 
+[#defn-vrf-evaluate-vrf]
 ===== `Evaluate-VRF`
 ****
-The stem:["Evaluate-VRF"] function takes a public key, stem:[k], a transcript,
-stem:[t], as defined in Definition A.4 and produces a VRF-Pair, stem:[p], as
-defined in Definition A.2.
+The stem:["Evaluate-VRF"] function takes a public key, stem:[k], a transcript
+(<<defn-vrf-transcript>>), stem:[t], and produces a VRF-Pair
+(<<defn-vrf-pair>>), stem:[p].
 
 [stem]
 ++++
@@ -137,38 +153,41 @@ p larr "Evaluate-VRF"(k,t)
 ++++
 
 The functions converts the public key, stem:[k], into a Ristretto point and a
-corresponding wire format as defined in Definition A.2, respectively the value
-stem:[I] (or stem:[O], which are equal). [TODO]
+corresponding wire format (<<defn-vrf-pair>>), respectively the value stem:[I]
+(or stem:[O], which are equal). [TODO]
 ****
 
+[#defn-vrf-dleq-proove]
 ===== `DLEQ-Prove`
 ****
-The stem:["DLEQ-Prove"] function takes a private key, stem:[s_k], and a transcript, stem:[t], as
-defined in Definition A.4 and a VRF pair, stem:[v], as defined in Definition A.2 and
-produces a VRF proof and a VRF batchable proof, stem:[p] respectively stem:[p_b], as defined
-in Definition A.3.
+The stem:["DLEQ-Prove"] function takes a private key, stem:[s_k], and a
+transcript (<<defn-vrf-transcript>>), stem:[t], and a VRF pair
+(<<defn-vrf-pair>>), stem:[v], and produces a VRF proof (<<defn-vrf-proof>>),
+stem:[p].
 
 [stem]
 ++++
-(p,p_b) ← "DLEQ-Prove"(s_k,t,v)
+p larr "DLEQ-Prove"(s_k,t,v)
 ++++
 
 The functions executed the following steps: [TODO]
 ****
 
+[#defn-vrf-create-transcript]
 ===== `Create-Transcript`
 ****
-The stem:["Create-Transcript"] function takes a context, stem:[c], represented as a UTF-8
-encoded string and produces a transcript, stem:[t], as defined in Definition A.4.
+The stem:["Create-Transcript"] function takes a context, stem:[c], represented
+as a UTF-8 encoded string and produces a transcript (<<defn-vrf-transcript>>),
+stem:[t].
 
 [stem]
 ++++
 t larr "Create-Transcript"(c)
 ++++
 
-The function initializes a Merlin transcript as described in the Merlin
-documentation, respectively section “3.1.1 Transcript Objects” and section
-“3.1.2 Initialization”.
+The function initializes a Merlin transcript as described in the
+https://merlin.cool/transcript/index.html[Merlin documentation], respectively
+section “3.1.1 Transcript Objects” and section “3.1.2 Initialization”.
 ****
 
 ===== `Make-Challenge-Bytes`
@@ -184,32 +203,35 @@ Algorithm: stem:["Make-Challenge-Bytes"(p,c,s) -> A]
 
 where:
 
-* stem:[p] is the VRF pair (TODO).
-* stem:[c] is the VRF context (TODO).
+* stem:[p] is the VRF pair (<<defn-vrf-pair>>).
+* stem:[c] is the VRF context (<<defn-vrf-context>>).
 * stem:[s] is the size of the resulting byte array.
-* stem:["Create-Transcript"] is a function defined in Definition A.8.
-* stem:["Meta-Ad"] is a function defined in Definition [TODO].
-* stem:["Append-Message"] is a function defined in Definition A.9.
+* stem:["Create-Transcript"] is a function defined in
+<<defn-vrf-create-transcript>>.
+* stem:["Meta-Ad"] is a function defined in <<defn-vrf-meta-ad>>.
+* stem:["Append-Message"] is a function defined in <<defn-vrf-append-message>>.
 * stem:["Strobe-PRF"] is STROBE function specified in [?] . It extracts
 pseudorandom data of given length as deterministic function of the transcript.
 This data can be treated as a hash of all preceding operations, messages and
 keys.
 ****
 
+[#defn-vrf-append-message]
 ===== `Append-Message`
 ****
-The stem:["Append-Message"] function takes a transcript, stem:[t], as defined in
-Definition A.4, a context, stem:[c], represented as a UTF-8 encoded string and a
-message, stem:[m], represented as a byte array and returns an updated transcript
-form the initial transcript stem:[t].
+The stem:["Append-Message"] function takes a transcript
+(<<defn-vrf-transcript>>), stem:[t], a context, stem:[c], represented as a UTF-8
+encoded string and a message, stem:[m], represented as a byte array and returns
+an updated transcript form the initial transcript stem:[t].
 
 [stem]
 ++++
 t larr "Append-Message"(t,c,m)
 ++++
 
-This function appends the messages to the transcript as described in the Merlin
-documentation, respectively section “3.1.3 Appending Messages”.
+This function appends the messages to the transcript as described in the
+https://merlin.cool/transcript/index.html[Merlin documentation], respectively
+section “3.1.3 Appending Messages”.
 ****
 
 [#sect-cryptographic-keys]
