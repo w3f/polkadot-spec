@@ -118,11 +118,27 @@ returns an updated transcript.
 
 [stem]
 ++++
-t ← "Meta-Ad"(t,l,b)
+t larr "Meta-Ad"(t,l,b)
 ++++
 
 The stem:["Meta-Ad"] operation adds the label and the byte array to the passed
 on transcript as described in the STROBE documentation. [TODO: where?]
+****
+
+===== `Evaluate-VRF`
+****
+The stem:["Evaluate-VRF"] function takes a public key, stem:[k], a transcript,
+stem:[t], as defined in Definition A.4 and produces a VRF-Pair, stem:[p], as
+defined in Definition A.2.
+
+[stem]
+++++
+p larr "Evaluate-VRF"(k,t)
+++++
+
+The functions converts the public key, stem:[k], into a Ristretto point and a
+corresponding wire format as defined in Definition A.2, respectively the value
+stem:[I] (or stem:[O], which are equal). [todo]
 ****
 
 [#sect-cryptographic-keys]
