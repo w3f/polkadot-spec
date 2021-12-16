@@ -80,8 +80,7 @@ validator or a integer equal to _0_ if it is not.
 ==== `ext_offchain_submit_transaction`
 
 Given a SCALE encoded extrinsic, this function submits the extrinsic to the
-Host's transaction pool, ready to be propagated to remote peers. This process is
-critical for issuing the ImOnline message [TODO: refer].
+Host's transaction pool, ready to be propagated to remote peers.
 
 ===== Version 1 - Prototype
 ----

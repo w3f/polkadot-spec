@@ -3,7 +3,6 @@
 
 Interface for accessing the child storage from within the runtime.
 
-TODO: Is this correct?
 [#defn-child-storage-type]
 ==== Child Storage
 ****
