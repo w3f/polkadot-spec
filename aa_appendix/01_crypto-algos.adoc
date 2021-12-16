@@ -78,6 +78,38 @@ where stem:[C] is the challenge and stem:[S] is the 32-byte Schnorr poof. Both
 are expressed as Curve25519 scalars.
 ****
 
+===== VRF Transcript
+****
+The *VRF transcript* is a “public-coin” argument [TODO: I'd not introduced
+obsecure scary words like these in the definition without defining them]
+containing a mathematical object [TODO: what is a mathematical object?] combined
+with a context and is more closely described in the Merlin documentation [we
+agreed to remove merlin and speccing it], which is a STROBE-based transcript
+[TODO: why the fact that marlin strobe based is relevant in the middle of the
+definition] construction for zero-knowledge proofs [TODO: maybe define marlin
+transcript separately and refer to it.]. The transcript, stem:[T], is a STROBE
+object for the 128-bit security level as defined in the STROBE specification in
+Section 5:
+
+[stem]
+++++
+T = (s,p,b,f)\
+s = (b_0, ... b_199)
+++++
+
+where:
+
+* stem:[s] is the duplex state consisting of a 200-byte array that is always
+8-byte aligned.
+* stem:[p] is an unsigned 8-bit integer and indicates the position in the duplex
+state where the next byte will be processed.
+* stem:[b] is an unsigned 8-bit integer and indicates the position in the duplex
+state which is _1_ after the beginning of the current operation. stem:[b] is
+equal to _0_ if no operation began in this block.
+* stem:[f] is an unsigned 8-bit integer and can be _0_, _1_ or _None_. It
+indicates whether the party sends or receives a message on the transport.
+****
+
 [#sect-cryptographic-keys]
 ==== Cryptographic Keys
 
