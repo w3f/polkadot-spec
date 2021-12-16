@@ -63,6 +63,21 @@ where:
 * stem:[x] is the element of the field, exactly 5 bytes.
 ****
 
+===== VRF Proof
+****
+The *VRF proof* proves the correctness for an associated VRF output. The VRF
+proof, stem:[P], is a datastructure of the following format:
+
+[stem]
+++++
+P = (C,S)\
+S = (b_0, ... b_31)
+++++
+
+where stem:[C] is the challenge and stem:[S] is the 32-byte Schnorr poof. Both
+are expressed as Curve25519 scalars.
+****
+
 [#sect-cryptographic-keys]
 ==== Cryptographic Keys
 
