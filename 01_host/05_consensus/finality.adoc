@@ -291,6 +291,7 @@ stem:[r_n] currently undergoing in the network. Algorithm as defined in
 <<algo-initiate-grandpa>> mandates the initialization procedure for GRANDPA
 protocol for a joining validator.
 
+[#algo-initiate-grandpa]
 ===== Initiate Grandpa
 ****
 Algorithm: stem:["Initiate-Grandpa"(r_("last"), B_("last"))]
