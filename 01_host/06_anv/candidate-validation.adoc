@@ -90,4 +90,4 @@ been processed.
 [#sect-runtime-compression]
 ==== Runtime Compression
 
-WARNING: TODO
+NOTE: Runtime compression is not documented yet.
