@@ -110,6 +110,21 @@ equal to _0_ if no operation began in this block.
 indicates whether the party sends or receives a message on the transport.
 ****
 
+===== `Meta-Ad`
+****
+The stem:["Meta-Ad"] function takes a transcript, stem:[t], as defined in
+Definition A.4, a UTF-8 encoded label, stem:[l], and a byte array, stem:[b], and
+returns an updated transcript.
+
+[stem]
+++++
+t ← "Meta-Ad"(t,l,b)
+++++
+
+The stem:["Meta-Ad"] operation adds the label and the byte array to the passed
+on transcript as described in the STROBE documentation. [TODO: where?]
+****
+
 [#sect-cryptographic-keys]
 ==== Cryptographic Keys
 
