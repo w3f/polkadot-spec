@@ -1,0 +1,4 @@
+[#sect-erasure-encoding]
+==== Erasure Encoding
+
+NOTE: Erasure Encoding has not been documented yet.
