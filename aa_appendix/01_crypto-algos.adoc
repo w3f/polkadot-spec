@@ -171,6 +171,31 @@ documentation, respectively section “3.1.1 Transcript Objects” and section
 “3.1.2 Initialization”.
 ****
 
+===== `Make-Challenge-Bytes`
+****
+Algorithm: stem:["Make-Challenge-Bytes"(p,c,s) -> A]
+
+. stem:[t larr "Create-Transcript"('"VRFResult"')]
+. stem:[t larr "Meta-Ad"(t,phi,c)]
+. stem:[t larr "Append-Message"(t, '"vrf-in"', I " where " I in p)]
+. stem:[t larr "Append-Message"(t, '"vrf-out"', O " where " O in p)]
+. stem:[t larr "Meta-Ad"(t,"Enc"_("LE")(s,4),c)]
+. stem:["return Strobe-PRF"(r,s)]
+
+where:
+
+* stem:[p] is the VRF pair (TODO).
+* stem:[c] is the VRF context (TODO).
+* stem:[s] is the size of the resulting byte array.
+* stem:["Create-Transcript"] is a function defined in Definition A.8.
+* stem:["Meta-Ad"] is a function defined in Definition [TODO].
+* stem:["Append-Message"] is a function defined in Definition A.9.
+* stem:["Strobe-PRF"] is STROBE function specified in [?] . It extracts
+pseudorandom data of given length as deterministic function of the transcript.
+This data can be treated as a hash of all preceding operations, messages and
+keys.
+****
+
 [#sect-cryptographic-keys]
 ==== Cryptographic Keys
 
