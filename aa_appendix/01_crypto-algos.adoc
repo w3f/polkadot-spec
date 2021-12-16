@@ -156,6 +156,21 @@ in Definition A.3.
 The functions executed the following steps: [TODO]
 ****
 
+===== `Create-Transcript`
+****
+The stem:["Create-Transcript"] function takes a context, stem:[c], represented as a UTF-8
+encoded string and produces a transcript, stem:[t], as defined in Definition A.4.
+
+[stem]
+++++
+t larr "Create-Transcript"(c)
+++++
+
+The function initializes a Merlin transcript as described in the Merlin
+documentation, respectively section “3.1.1 Transcript Objects” and section
+“3.1.2 Initialization”.
+****
+
 [#sect-cryptographic-keys]
 ==== Cryptographic Keys
 
