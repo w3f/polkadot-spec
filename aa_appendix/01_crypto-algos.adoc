@@ -22,7 +22,46 @@ NOTE: TBH
 [#sect-vrf]
 ==== VRF
 
-NOTE: TBH
+A Verifiable Random Function (VRF) is a mathematical operation that takes some
+input and produces a random number using a secret key along with a proof of
+authenticity that this random number was generated using the submitter's secret
+key and the given input. The proof can be verified by any challenger to ensure
+the random number generation is valid and has not been tampered with (for
+example to the benfit of submitter).
+
+In Polkadot, VRFs are used for the BABE block production lottery as described in
+Algorithm ? and the parachain approval voting mechanism as described in Section
+[todo]. The VRF uses mechanism similar to algorithms introduced in [?], [?] and
+[?]. It essentially generates a deterministic elliptic curve based Schnorr
+signature as a verifiable random value. The elliptic curve group used in the VRF
+function is the Ristretto group specified in [?].
+
+===== VRF Context
+****
+*VRF context* (simply referred to as context when there is no ambiguity)
+represented as stem:[c] is a [TODO: define context here]
+****
+
+===== VRF Pair
+****
+The *VRF Pair* is an ordered pair stem:[(I,O)] where stem:[I] represents the VRF
+input and stem:[O] represents the VRF output. stem:[I] is of the following
+format:
+
+[stem]
+++++
+I = (C,P)\
+C = (b_0, ... b_31)\
+P = (x,y,z,t)\
+x = (b_0, ... b_4)
+++++
+
+where:
+
+* stem:[C] is the Ristretto point in compressed wire format, exactly 32 bytes.
+* stem:[P] is the Ristretto point in the Ristretto group for Cruve25519.
+* stem:[x] is the element of the field, exactly 5 bytes.
+****
 
 [#sect-cryptographic-keys]
 ==== Cryptographic Keys
