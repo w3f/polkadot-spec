@@ -6,7 +6,7 @@ on Ouroboros praos . BABE execution happens in sequential non-overlapping phases
 known as an *_epoch_*. Each epoch on its turn is divided into a predefined
 number of slots. All slots in each epoch are sequentially indexed starting from
 0. At the beginning of each epoch, the BABE node needs to run Algorithm as
-defined in TODO <<algo-block-production-lottery>> to find out in which slots it
+defined in <<algo-block-production-lottery>> to find out in which slots it
 should produce a block and gossip to the other block producers. In turn, the
 block producer node should keep a copy of the block tree and grow it as it
 receives valid blocks from other block producers. A block producer prunes the
@@ -24,7 +24,7 @@ producing blocks.
 *Block authoring session key pair* stem:[(sk_j^s,pk_j^s)] is an SR25519 key pair
 which the block producer stem:[cc P_j] signs by their account key
 (<<defn-account-key>>) and is used to sign the produced block as well as to
-compute its lottery values in Algorithm as defined in TODO
+compute its lottery values in Algorithm as defined in
 <<algo-block-production-lottery>>.
 
 [#defn-epoch-slot]
@@ -87,7 +87,7 @@ config data_ consensus message (<<defn-consensus-message-digest>>) in the digest
 of the first block of an epoch for the next epoch.
 
 A block producer aiming to produce a block during stem:[cc E_n] should run
-Algorithm as defined in TODO <<algo-block-production-lottery>> to identify the slots
+Algorithm as defined in <<algo-block-production-lottery>> to identify the slots
 it is awarded. These are the slots during which the block producer is allowed to
 build a block. The stem:[sk] is the block producer lottery secret key and
 stem:[n] is the index of the epoch for whose slots the block producer is running
@@ -201,8 +201,6 @@ estimating the local clock offset in relation to the network
 The *relative time synchronization* is a tuple of a slot number and a local
 clock timestamp stem:[(s_("sync"),t_("sync"))] describing the last point at
 which the slot numbers have been synchronized with the local clock.
-
-TODO: Algorithm
 ****
 
 [#algo-slot-offset]
@@ -430,14 +428,14 @@ where:
 . stem:["Epoch-Randomness"] is defined in <<defn-epoch-randomness>>.
 . stem:[H_("BABE")(B)] is the BABE header defined in <<defn-babe-header>>.
 . stem:[(d_B,pi_B)] is the block lottery result for block stem:[B].
-. stem:["Verify-VRF"] is described in TODO <<sect-vrf>>.
+. stem:["Verify-VRF"] is described in <<sect-vrf>>.
 . stem:[t] is the winning threshold as defined in <<defn-winning-threshold>>.
 ****
 
 [#sect-block-building] 
 ==== Block Building Process
 
-The block building process is triggered by the Algorithm as defined in TODO
+The block building process is triggered by the Algorithm as defined in
 <<algo-block-production>> of the consensus engine which runs the Algorithm as
 defined in <<algo-build-block>>
 
@@ -470,7 +468,7 @@ where:
 * stem:["Head"(B)] is defined in <<defn-block-header>>.
 * stem:["Call-Runtime-Entry"] is defined in <<notat-call-into-runtime>>.
 * stem:["Inherent-Data"] is defined in <<defn-inherent-data>>.
-* stem:["End-Of-Slot"] indicates the end of the BABE slot as defined TODO
+* stem:["End-Of-Slot"] indicates the end of the BABE slot as defined
 <<algo-slot-time>> respectively <<defn-epoch-slot>>.
 * stem:["Next-Ready-Extrinsic"] indicates picking an extrinsic from the
 extrinsics queue (<<defn-transaction-queue>>).
