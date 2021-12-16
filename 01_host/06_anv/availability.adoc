@@ -20,15 +20,16 @@ clarifying to which state the bitfield is referring to, given that candidates
 can vary based on the chain fork.
 
 Missing availability data of candidates must be recovered by the validator as
-described in <<sect-candidate-recovery>>. If previously issued bitfields are
-no longer accurate, i.e. the availability data has been recovered or the
-candidate of an availablity core has changed, the validator must create a new
-bitfield and boradcast it to the network. Candidates must be kept available by
-validators for a specific amount of time. If a candidate does not receive any
-backing, validators should keep it available for about one hour, in case the
-state of backing does change. Backed and even approved candidates
+described in <<sect-candidate-recovery>>. If previously issued bitfields are no
+longer accurate, i.e. the availability data has been recovered or the candidate
+of an availablity core has changed, the validator must create a new bitfield and
+boradcast it to the network. Candidates must be kept available by validators for
+a specific amount of time. If a candidate does not receive any backing,
+validators should keep it available for about one hour, in case the state of
+backing does change. Backed and even approved candidates
 (<<sect-approval-voting>>) must be kept by validators for about 25 hours, since
-disputes (TODO) can occur and the candidate needs to be checked again.
+disputes (<<sect-disputes>>) can occur and the candidate needs to be checked
+again.
 
 The validator issues availability votes in form of a validator protocol message
 (<<net-msg-collator-protocol-message>>).
@@ -45,8 +46,8 @@ Additionally, peers can send availability requests as defined in
 validator, which the validator should be able to respond to.
 
 Candidates are recovered by sending requests for specific indices of erasure
-encoded chunks. Erasure encoding is described in Section TODO. A validator
-should request chunks by picking peers randomly and must recover at least
-stem:[f+1] chunks, where stem:[n=3f+k] and stem:[k in {1,2,3}]. stem:[n] is the
-number of validators as specified in the session info, which can be fetched by
-the Runtime API as described in <<sect-rt-api-session-info>>.
+encoded chunks (<<sect-erasure-encoding>>). A validator should request chunks by
+picking peers randomly and must recover at least stem:[f+1] chunks, where
+stem:[n=3f+k] and stem:[k in {1,2,3}]. stem:[n] is the number of validators as
+specified in the session info, which can be fetched by the Runtime API as
+described in <<sect-rt-api-session-info>>.
