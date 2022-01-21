@@ -1,0 +1,8 @@
++++
+title = "SomeTitle"
+date = "2019-02-28"
+menu = "main"
++++
+= Some Title
+
+Some text

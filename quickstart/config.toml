@@ -2,3 +2,12 @@ baseURL = "http://example.org/"
 languageCode = "en-us"
 title = "My New Hugo Site"
 theme = "antora-default-ui-hugo-theme"
+
+[markup]
+  [markup.asciidocext]
+    [markup.asciidocext.attributes]
+      "icons" = "font"
+      "source-highlighter" = "highlightjs"
+  [markup.highlight]
+    # Disable Goldmark Chroma syntax highlighter
+    codeFences = false
