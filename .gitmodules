@@ -1,0 +1,3 @@
+[submodule "quickstart/themes/antora-default-ui-hugo-theme"]
+	path = quickstart/themes/antora-default-ui-hugo-theme
+	url = https://github.com/basil/antora-default-ui-hugo-theme.git
