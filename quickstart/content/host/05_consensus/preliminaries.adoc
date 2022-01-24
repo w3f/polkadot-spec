@@ -10,10 +10,10 @@ different procedures. The first procedure is the block-production and
 the second is finality. The Polkadot Host must run these procedures if
 (and only if) it is running on a validator node.
 
-== Common Consensus Structures
+= Common Consensus Structures
 
 [#sect-authority-set]
-=== Consensus Authority Set
+== Consensus Authority Set
 
 Because Polkadot is a proof-of-stake protocol, each of its consensus engines has
 its own set of nodes represented by known public keys, which have the authority
@@ -22,7 +22,7 @@ verify the validity of each block, the Polkadot node must track the current list
 of authorities (<<defn-authority-list>>) for that block.
 
 [#defn-authority-list]
-==== Authority List
+=== Authority List
 ****
 The *authority list* of block stem:[B] for consensus engine stem:[C] noted as
 stem:["Auth"_C(B)] is an array that contains the following pair of types for
@@ -46,7 +46,7 @@ use-case in the future.
 ****
 
 [#sect-consensus-message-digest]
-=== Runtime-to-Consensus Engine Message
+== Runtime-to-Consensus Engine Message
 
 The authority list (<<defn-authority-list>>) is part of the Polkadot state and
 the Runtime has the authority to update this list in the course of any state
@@ -64,7 +64,7 @@ finalized block in which they were selected. Any votes for blocks before the
 came into effect would get rejected.
 
 [#defn-consensus-message-digest]
-==== Consensus Message
+=== Consensus Message
 ****
 A *consensus message* is a digest item (<<defn-digest>>) of type _4_ and
 consists of the pair:

@@ -6,10 +6,10 @@ weight = "5"
 +++
 
 [#sect-availability]
-=== Availability
+== Availability
 
 [#sect-availability-votes]
-==== Availability Votes
+=== Availability Votes
 
 The Polkadot validator must issue a bitfield (<<defn-bitfield-array>>) which
 indicates votes for the availabilty of candidates. Issued bitfields can be used
@@ -42,7 +42,7 @@ The validator issues availability votes in form of a validator protocol message
 (<<net-msg-collator-protocol-message>>).
 
 [#sect-candidate-recovery]
-==== Candidate Recovery
+=== Candidate Recovery
 
 The availability distribution of the Polkadot validator must be able to recover
 parachain candidates that the validator is assigned to, in order to determine

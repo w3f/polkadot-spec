@@ -6,7 +6,7 @@ weight = "3"
 +++
 
 [#sect-state-replication]
-=== State Replication
+== State Replication
 
 Polkadot nodes replicate each other’s state by syncing the history of the
 extrinsics. This, however, is only practical if a large set of transactions are
@@ -18,7 +18,7 @@ inconsistency can occure between Polkadot replicas.
 node manages multiple variants of the state.
 
 [#sect-block-format]
-==== Block Format
+=== Block Format
 A Polkadot block consists a _block header_ (<<defn-block-header>>) and a _block
 body_ (<<defn-block-body>>). The _block body_ in turn is made up out of
 _extrinsics_ , which represent the generalization of the concept of
@@ -26,7 +26,7 @@ _transactions_. _Extrinsics_ can contain any set of external data the underlying
 chain wishes to validate and track.
 
 [#defn-block-header]
-===== Definition: Block Header
+==== Definition: Block Header
 ****
 The *header of block B*, stem:[H_h(B)], is a 5-tuple containing the following
 elements:
@@ -52,7 +52,7 @@ signature. This field is indicated as stem:[H_d] (<<defn-digest>>).
 ****
 
 [#defn-digest]
-===== Definition: Header Digest
+==== Definition: Header Digest
 ****
 The header *digest* of block stem:[B] formally referred to by stem:[H_d (B)] is
 an array of *digest items* stem:[H_d^i]’s, known as digest items of varying data
@@ -89,7 +89,7 @@ to the Runtime (e.g. <<defn-babe-header>>).
 ****
 
 [#defn-block-header-hash]
-===== Definition: Header Hash
+==== Definition: Header Hash
 ****
 The *block header hash of block stem:[B]*, stem:[H_h(B)], is the hash of the
 header of block stem:[B] encoded by simple codec:
@@ -101,7 +101,7 @@ H_h(B) := "Blake2b"("Enc"_(SC)("Head"(B)))
 ****
 
 [#sect-justified-block-header]
-===== Justified Block Header
+==== Justified Block Header
 
 The Justified Block Header is provided by the consensus engine and
 presented to the Polkadot Host, for the block to be appended to the
@@ -116,7 +116,7 @@ for the block to be stored and is formally referred to as stem:[A(B)]. An
 authority Id is 256-bit.
 
 [#defn-block-body]
-===== Definition: Block Body
+==== Definition: Block Body
 ****
 The block body consists of an sequence of extrinsics, each encoded as a byte
 array. The content of an extrinsic is completely opaque to the Polkadot Host. As
@@ -133,7 +133,7 @@ Where each stem:[E_i in bbb B] is a SCALE encoded extrinsic.
 ****
 
 [#sect-block-validation]
-==== Importing and Validating Block
+=== Importing and Validating Block
 
 Block validation is the process by which a node asserts that a block is fit to
 be added to the blockchain. This means that the block is consistent with the
@@ -155,7 +155,7 @@ The Polkadot Host implements the Algorithm as defined in
 <<algo-import-and-validate-block>> to assure the validity of the block.
 
 [#algo-import-and-validate-block]
-==== Import and Validate Block
+=== Import and Validate Block
 ****
 Algorithm: stem:["Import-And-Validate-Block"(B, "Just"(B))]
 
@@ -189,7 +189,7 @@ protocol and is described in <<algo-verify-authorship-right>>.
 ****
 
 [#sect-managing-multiple-states]
-==== Managaing Multiple Variants of State
+=== Managaing Multiple Variants of State
 
 Unless a node is committed to only update its state according to the finalized
 block (<<defn-finalized-block>>), it is inevitable for the node to store
@@ -203,7 +203,7 @@ accomplish this task. Instead, the Polkadot Host is required to implement
 stem:["Set-State-At"] (<<defn-set-state-at>>):
 
 [#defn-set-state-at]
-===== Definition: Set State At Block
+==== Definition: Set State At Block
 ****
 The function:
 
@@ -221,7 +221,7 @@ For the definition of the state storage see <<sect-state-storage>>.
 ****
 
 [#sect-changes-trie]
-==== Changes Trie
+=== Changes Trie
 
 IMPORTANT: Changes Tries are still work-in-progress and are currently *not* used
 in Polkadot. Additionally, the implementation of Changes Tries might change
@@ -260,7 +260,7 @@ generated on every block. But if conditions apply, all those different types of
 pairs get inserted into the same Changes Trie, therefore only one Changes Trie
 Root gets generated for each block.
 
-===== Definition: Inserted Key-Value Pairs
+==== Definition: Inserted Key-Value Pairs
 ****
 The *inserted key-value pair stored in the nodes of Changes Trie* is
 formally defined as:
@@ -304,7 +304,7 @@ where:
 ****
 
 [#sect-changes-trie-extrinsics-pairs]
-===== Key to extrinsics pairs
+==== Key to extrinsics pairs
 
 This key-value pair stores changes which occurred in an individual block. Its
 value is a SCALE encoded array containing the indices of the extrinsics that
@@ -323,7 +323,7 @@ block. Child storages have their own Changes Trie
 (<<sect-changes-trie-child-trie-pair>>).
 
 [#sect-changes-trie-block-pairs]
-===== Key to block pairs
+==== Key to block pairs
 
 This key-value pair stores changes which occurred in a certain range of blocks.
 Its value is a SCALE encoded array containing block numbers in which extrinsics
@@ -369,7 +369,7 @@ storage key. this level only considers block number of the last 64
 ** Example: this level occurs at block 64, 128, 196, 256, 320, etc.
 
 [#sect-changes-trie-child-trie-pair]
-===== Key to Child Changes Trie pairs
+==== Key to Child Changes Trie pairs
 
 The Polkadot Host generates a separate Changes Trie for each child storage,
 using the same behavior and implementation as describe in

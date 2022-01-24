@@ -6,7 +6,7 @@ weight = "2"
 +++
 
 [#sect-collations]
-=== Collations
+== Collations
 
 Collations are proposed candidates <<defn-candidate>> to the Polkadot relay
 chain validators. The Polkodat network protocol is agnostic on what candidate
@@ -21,7 +21,7 @@ them to the relay chain validator, must prepare pieces of data
 parachain protocol.
 
 [#defn-collation]
-==== Collation
+=== Collation
 ****
 A collation is a datastructure which contains the proposed parachain candidate,
 including an optional validation parachain Runtime update and upward messages.

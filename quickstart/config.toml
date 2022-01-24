@@ -1,6 +1,6 @@
 baseURL = "http://example.org/"
 languageCode = "en-us"
-title = "My New Hugo Site"
+title = "Polkadot Specification"
 theme = "antora-default-ui-hugo-theme"
 
 [markup]
@@ -8,6 +8,7 @@ theme = "antora-default-ui-hugo-theme"
     [markup.asciidocext.attributes]
       "icons" = "font"
       "source-highlighter" = "highlightjs"
+      "doctype" = "book"
   [markup.highlight]
     # Disable Goldmark Chroma syntax highlighter
     codeFences = false

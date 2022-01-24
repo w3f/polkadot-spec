@@ -6,7 +6,7 @@ weight = "3"
 +++
 
 [#sect-finality]
-=== Finality
+== Finality
 
 The Polkadot Host uses GRANDPA Finality protocol to finalize blocks.
 Finality is obtained by consecutive rounds of voting by the validator
@@ -15,10 +15,10 @@ Production as an independent service. In this section, we describe the
 different functions that GRANDPA service performs to successfully
 participate in the block-finalization process.
 
-==== Preliminaries
+=== Preliminaries
 
 [#defn-grandpa-voter]
-===== GRANDPA Voter
+==== GRANDPA Voter
 ****
 A *GRANDPA Voter*,
 stem:[v], represented by a key pair
@@ -46,7 +46,7 @@ stem:[bbb V_B].
 ****
 
 [#defn-authority-set-id]
-===== Authority Set Id
+==== Authority Set Id
 ****
 The *authority set Id* (stem:["id"_(bbb V)]) is an incremental counter which
 tracks the amount of authority list changes that occurred
@@ -55,7 +55,7 @@ the Polkadot Host increments this value by one every time a *Scheduled Change*
 or a *Forced Change* occurs. The authority set Id is an unsigned 64-bit integer.
 ****
 
-===== GRANDPA State
+==== GRANDPA State
 ****
 The *GRANDPA state*, stem:["GS"], is defined as:
 
@@ -72,7 +72,7 @@ where:
 ****
 
 [#defn-vote]
-===== GRANDPA Vote
+==== GRANDPA Vote
 ****
 A *GRANDPA vote* or simply a vote for block stem:[B] is an ordered pair defined
 as
@@ -87,7 +87,7 @@ where stem:[H_h(B)] and stem:[H_i (B)] are the block hash
 ****
 
 [#defn-voting-rounds]
-===== Voting Rounds
+==== Voting Rounds
 ****
 Voters engage in a maximum of two sub-rounds of voting for each round stem:[r].
 The first sub-round is called *pre-vote* and the second sub-round is called
@@ -103,7 +103,7 @@ stem:[r] by broadcasting a commit message (<<algo-grandpa-round>>).
 ****
 
 [#defn-sign-round-vote]
-===== Vote Signature
+==== Vote Signature
 ****
 stem:["Sign"_(v_i)^(r,"stage")] refers to the signature of a voter for a specific
 message in a round and is formally defined as:
@@ -123,7 +123,7 @@ set Id (<<defn-authority-list>>).
 ****
 
 [#defn-grandpa-justification]
-===== Justification
+==== Justification
 ****
 The *justification* for block stem:[B] in round stem:[r],
 stem:[J^(r,"stage")(B)], is a vector of pairs of the type:
@@ -151,7 +151,7 @@ voter.
 ****
 
 [#defn-finalizing-justification]
-===== Finalizing Justification
+==== Finalizing Justification
 ****
 We say stem:[J^(r,"pc")(B)] *justifies the finalization* of stem:[B' >= B] *for
 a non-voter node* stem:[n] if the number of valid signatures in
@@ -169,7 +169,7 @@ defining what constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
 ****
 
 [#defn-equivocation]
-===== Equivocation
+==== Equivocation
 ****
 Voter stem:[v] *equivocates* if they broadcast two or more valid votes to blocks
 during one voting sub-round. In such a situation, we say that stem:[v] is an
@@ -203,7 +203,7 @@ A vote stem:[V_v^(r,"stage") = V(B)] is *invalid* if
 * stem:[V_v^(r,"stage")] is an equivocatory vote.
 ****
 
-===== Set of Observed Votes
+==== Set of Observed Votes
 ****
 For validator stem:[v], *the set of observed direct votes for Block stem:[B] in
 round stem:[r]*, formally denoted by stem:["VD"_("obs"(v))^(r,"stage")(B)] is
@@ -214,7 +214,7 @@ received by stem:[v] such that stem:[V_(v_i)^(r,"stage") = V(B)].
 ****
 
 [#defn-observed-votes]
-===== Set of Total Observed Votes
+==== Set of Total Observed Votes
 ****
 We refer to *the set of total votes observed by voter stem:[v] in sub-round
 _stage_ of round stem:[r]* by stem:[V_("obs"(v))^(r,"stage")].
@@ -242,7 +242,7 @@ stem:[#V_("obs"(v))^(r,"pv")(B) = |bbb V|].
 ****
 
 [#defn-total-potential-votes]
-===== Set of Total Potential Votes
+==== Set of Total Potential Votes
 ****
 Let stem:[V_("unobs"(v))^(r,"stage")] be the set of voters whose vote in the
 given stage has not been received. We define the *total number of potential
@@ -254,7 +254,7 @@ votes for Block stem:[B] in round stem:[r]* to be:
 ++++
 ****
 
-===== Current Pre-Voted Block
+==== Current Pre-Voted Block
 ****
 The current *pre-voted* block stem:[B_v^(r,"pv")] also know as GRANDPA GHOST is
 the block chosen by Algorithm as described in <<algo-grandpa-ghost>>:
@@ -270,7 +270,7 @@ going to be finalized in this round.
 ****
 
 [#defn-grandpa-completable]
-===== Completable Round
+==== Completable Round
 ****
 We say that
 round stem:[r] is *completable* if
@@ -286,7 +286,7 @@ Note that in practice we only need to check the inequality for those stem:[B' >
 B_v^(r,"pv")] where stem:[|V_("obs"(v))^(r,"pc")(B')| > 0].
 ****
 
-==== Initiating the GRANDPA State
+=== Initiating the GRANDPA State
 In order to participate coherently in the voting process, a validator must
 initiate its state and sync it with other active validators. In particular,
 considering that voting is happening in different distinct rounds where each
@@ -297,7 +297,7 @@ stem:[r_n] currently undergoing in the network. Algorithm as defined in
 protocol for a joining validator.
 
 [#algo-initiate-grandpa]
-===== Initiate Grandpa
+==== Initiate Grandpa
 ****
 Algorithm: stem:["Initiate-Grandpa"(r_("last"), B_("last"))]
 
@@ -317,7 +317,7 @@ voting process as a part of a new authority set. This is because the GRANDPA
 round number reset to _0_ for every authority set change.
 ****
 
-===== Voter Set Changes
+==== Voter Set Changes
 
 Voter set changes are signalled by Runtime via a consensus engine message
 (<<sect-consensus-message-digest>>). When Authorities process such messages they
@@ -325,12 +325,12 @@ must not vote on any block with a higher number than the block at which the
 change is supposed to happen. The new authority set should reinitiate GRANDPA
 protocol by executing Algorithm as defined in <<algo-initiate-grandpa>>.
 
-==== Voting Process in Round stem:[r]
+=== Voting Process in Round stem:[r]
 For each round stem:[r], an honest voter stem:[v] must participate in the voting
 process by following the Algorithm as defined in <<algo-grandpa-round>>.
 
 [#algo-grandpa-round]
-===== Play Grandpa Round
+==== Play Grandpa Round
 ****
 Algorithm: stem:["Play-Grandpa-Round"(r)]
 
@@ -364,7 +364,7 @@ received from one validator to another.
 ****
 
 [#algo-derive-primary]
-===== Derive Primary
+==== Derive Primary
 ****
 Algorithm: stem:["Derive-Primary"(r)]
 
@@ -374,7 +374,7 @@ where stem:[r] is the GRANDPA round whose primary is to be determined.
 ****
 
 [#algo-grandpa-best-candidate]
-===== Best Final Candidate
+==== Best Final Candidate
 ****
 Algorithm: stem:["Best-Final-Candidate"(r)]
 
@@ -392,7 +392,7 @@ where stem:[#V_("obv"(v),pot)^(r,pc)]
 ****
 
 [#algo-grandpa-ghost]
-===== Grandpa Ghost
+==== Grandpa Ghost
 ****
 Algorithm: stem:["GRANDPA-GHOST"(r)]
 
@@ -414,7 +414,7 @@ where:
 * stem:[#V_("obs"(v))^(r,pv)(B)] is defined in <<defn-observed-votes>>.
 ****
 
-===== Best PreVote Candidate
+==== Best PreVote Candidate
 ****
 Algorithm: stem:["Best-PreVote-Candidate"(r)]
 
@@ -432,7 +432,7 @@ where:
 ****
 
 [#algo-finalizable]
-===== Finalizable
+==== Finalizable
 ****
 Algorithm: stem:["Finalizable"(r)]
 

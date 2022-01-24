@@ -6,10 +6,10 @@ weight = "8"
 +++
 
 [#sect-anv-runtime-api]
-=== Runtime API
+== Runtime API
 
 [#sect-rt-api-validators]
-==== `validators`
+=== `validators`
 
 Returns the validator set at the current state. The specified validators are responsible for backing parachains for the current state.
 
@@ -20,7 +20,7 @@ Return::
 * An array of public keys representing the validators.
 
 [#sect-rt-api-validator-groups]
-==== `validator_groups`
+=== `validator_groups`
 
 Returns the validator groups (<<defn-validator-groups>>) used during the current
 session. The validators in the groups are referred to by the validator set Id
@@ -47,7 +47,7 @@ where
 •  stem:[B_c] indicates the current block number. 
 
 [#sect-rt-api-availability-cores]
-==== `availability_cores`
+=== `availability_cores`
 
 Returns information on all availability cores (<<defn-availability-core>>).
 
@@ -92,7 +92,7 @@ Definition ? which can contain the collators public key indicating who should
 author the block.
 
 [#sect-rt-api-persisted-validation-data]
-==== `persisted_validation_data`
+=== `persisted_validation_data`
 
 Returns the persisted validation data for the given parachain Id and a given occupied core assumption.
 
@@ -107,7 +107,7 @@ parachain Id is not registered or the core assumption is of index stem:[2],
 meaning that the core was freed.
 
 [#defn-occupied-core-assumption]
-===== Occupied Core Assumption
+==== Occupied Core Assumption
 ****
 A occupied core assumption is used for fetching certain pieces of information
 about a parachain by using the relay chain API. The assumption indicates how the
@@ -126,7 +126,7 @@ to begin with.
 ****
 
 [#defn-persisted-validation-data]
-===== Persisted Validation Data
+==== Persisted Validation Data
 ****
 The persisted validation data provides information about how to create the
 inputs for the validation of a candidate by calling the Runtime. This
@@ -153,7 +153,7 @@ The persisted validation data is fetched via the Runtime API
 (<<sect-rt-api-persisted-validation-data>>).
 ****
 
-==== `check_validation_outputs`
+=== `check_validation_outputs`
 
 Checks if the given validation outputs pass the acceptance criteria.
 
@@ -164,7 +164,7 @@ Arguments::
 Return::
 * A boolean indicating whether the candidate commitments pass the acceptance criteria.
 
-==== `session_index_for_child`
+=== `session_index_for_child`
 
 Returns the session index that is expected at the child of a block.
 
@@ -177,7 +177,7 @@ Return::
 * A unsigned 32-bit integer representing the session index.
 
 [#sect-rt-api-validation-code]
-==== `validation_code`
+=== `validation_code`
 
 Fetches the validation code (Runtime) of a parachain by parachain Id.
 
@@ -191,7 +191,7 @@ in an byte array. This value is empty if the parachain Id cannot be found or the
 assumption is wrong.
 
 [#sect-rt-api-validation-code-by-hash]
-==== `validation_code_by_hash`
+=== `validation_code_by_hash`
 
 Returns the validation code (Runtime) of a parachain by its hash.
 
@@ -203,7 +203,7 @@ Return::
 in an byte array. This value is empty if the parachain Id cannot be found or the
 assumption is wrong.
 
-==== `candidate_pending_availability`
+=== `candidate_pending_availability`
 
 Returns the receipt of a candidate pending availability for any parachain
 assigned to an occupied availability core.
@@ -216,7 +216,7 @@ Return::
 receipt (<<defn-candidate-receipt>>). This value is empty if the given parachain
 Id is not assigned to an occupied availability cores.
 
-==== `candidate_events`
+=== `candidate_events`
 
 Returns an array of candidate events that occurred within the latest state.
 
@@ -248,7 +248,7 @@ occupying.
 of backing the candidate.
 
 [#sect-rt-api-session-info]
-==== `session_info`
+=== `session_info`
 
 Get the session info of the given session, if available.
 
@@ -298,7 +298,7 @@ convert between BABE slots and “ticks”]
 * stem:[a] is an unsigned 32-bit integer indicating the number of validators
 needed to approve a block.
 
-==== `dmq_contents`
+=== `dmq_contents`
 
 Returns all the pending inbound messages in the downward message queue for a given parachain.
 
@@ -308,7 +308,7 @@ Arguments::
 Return::
 * An array of inbound downward messages as defined in (TODO: reference messaging chapter)
 
-==== `inbound_hrmp_channels_contents`
+=== `inbound_hrmp_channels_contents`
 
 Returns the contents of all channels addressed to the given recipient. Channels that have no messages in them are also included.
 

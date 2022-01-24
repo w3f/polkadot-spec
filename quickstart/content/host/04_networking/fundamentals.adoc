@@ -11,7 +11,7 @@ deviation from the current Polkadot network protocol. This can be done through
 filing an issue in https://github.com/w3f/polkadot-spec[Polkadot Specification
 repository].
 
-== Introduction
+= Introduction
 
 The Polkadot network is decentralized and does not rely on any central authority
 or entity for achieving its fullest potential of provided functionality. The
@@ -25,7 +25,7 @@ the _libp2p_ protocols used are specified in external sources as described in
 <<sect-networking-external-docs>>
 
 [#sect-networking-external-docs]
-== External Documentation
+= External Documentation
 
 Complete specification of the Polkadot networking protocol relies on the
 following external protocols:
@@ -58,7 +58,7 @@ for serializing structured data and is developed by Google. The Polkadot Host
 uses Protocol Buffers to serialize specific messages, as clarified in
 <<sect-network-messages>>.
 
-== Node Identities
+= Node Identities
 
 Each Polkadot Host node maintains an ED25519 key pair which is used to
 identify the node. The public key is shared with the rest of the network
@@ -72,13 +72,13 @@ key. _PeerId_ is used to identify each node when they are discovered in the
 course of the discovery mechanism described in <<sect-discovery-mechanism>>.
 
 [#defn-peer-id]
-=== Definition: PeerId
+== Definition: PeerId
 The Polkadot node’s _PeerId_, formally referred to as stem:[P_(id)], is derived
 from the ED25519 public key and is structured as defined in the
 https://docs.libp2p.io/concepts/peer-id/[libp2p specification].
 
 [#sect-discovery-mechanism]
-== Discovery mechanism
+= Discovery mechanism
 
 The Polkadot Host uses various mechanisms to find peers within the
 network, to establish and maintain a list of peers and to share that
@@ -97,7 +97,7 @@ list of available peers. Kademlia requests are performed on a specific substream
 as described in <<sect-protocols-substreams>>.
 
 [#sect-connection-establishment]
-== Connection establishment
+= Connection establishment
 
 Polkadot nodes connect to peers by establishing a TCP connection. Once
 established, the node initiates a handshake with the remote peers on the
@@ -155,7 +155,7 @@ Noise protocol to establish the encryption layer as described in
 <<sect-encryption-layer>>.
 
 [#sect-encryption-layer]
-== Encryption Layer
+= Encryption Layer
 
 Polkadot protocol uses the _libp2p_ Noise framework to build an encryption
 protocol. The Noise protocol is a framework for building encryption protocols.
@@ -186,7 +186,7 @@ secret using the static and session-defined Noise keys, which are used to
 encrypt all further communication.
 
 [#sect-protocols-substreams]
-== Protocols and Substreams
+= Protocols and Substreams
 
 After the node establishes a connection with a peer, the use of multiplexing
 allows the Polkadot Host to open substreams. _libp2p_ uses the

@@ -6,7 +6,7 @@ weight = "5"
 +++
 
 [#sect-grandpa-beefy]
-=== Bridge design (BEEFY)
+== Bridge design (BEEFY)
 
 WARNING: The BEEFY protocol is currently in early development and subject to
 change. The specification has not been completed yet.
@@ -24,10 +24,10 @@ such as the block headers, is too expensive. BEEFY stores the information in a
 space-efficient way and clients can request additional information over the
 protocol.
 
-==== Preliminaries
+=== Preliminaries
 
 [#defn-mmr]
-===== Merkle Mountain Ranges
+==== Merkle Mountain Ranges
 ****
 Merkle Mountain Ranges, *MMR*, are used
 as an efficient way to send block headers and signatures to light clients.
@@ -36,7 +36,7 @@ NOTE: MMRs have not been defined yet.
 ****
 
 [#defn-beefy-statement]
-===== Statement
+==== Statement
 ****
 The *statement* is the same piece of information which every relay chain
 validator is voting on. Namely, the MMR root of all the block header hashes
@@ -44,7 +44,7 @@ leading up to the latest, finalized block.
 ****
 
 [#defn-beefy-witness-data]
-===== Witness Data
+==== Witness Data
 ****
 *Witness data* contains the statement (<<defn-beefy-statement>>), an array
 indicating which validator of the Polkadot network voted for the statement (but
@@ -56,7 +56,7 @@ chain of the remote network.
 ****
 
 [#defn-beefy-light-client]
-===== Light Client
+==== Light Client
 ****
 A *light client* is an abstract entity in a remote network such as Ethereum. It
 can be a node or a smart contract with the intent of requesting finality proofs
@@ -69,7 +69,7 @@ access to their public keys.
 ****
 
 [#defn-beefy-relayer]
-===== Relayer
+==== Relayer
 ****
 A *relayer* (or "prover") is an abstract entity which takes finality proofs from
 the Polkadot network and makes those available to the light clients. Inherently,
@@ -78,7 +78,7 @@ been voted for by the Polkadot relay chain validators. The relayer operates
 offchain and can for example be a node or a collection of nodes.
 ****
 
-==== Voting on Statements
+=== Voting on Statements
 
 The Polkadot Host signs a statement (<<defn-beefy-statement>>) and gossips it as
 part of a vote (<<defn-msg-beefy-gossip>>) to its peers on every new, finalized
@@ -86,7 +86,7 @@ block. The Polkadot Host uses ECDSA for signing the statement, since Ethereum
 has better compatibility for it compared to SR25519 or ED25519.
 
 [#sect-beefy-committing-witnesses]
-==== Committing Witnesses
+=== Committing Witnesses
 
 The relayer (<<defn-beefy-relayer>>) participates in the Polkadot network by
 collecting the gossiped votes (<<defn-msg-beefy-gossip>>). Those votes are
@@ -94,7 +94,7 @@ converted into the witness data structure (<<defn-beefy-witness-data>>).
 The relayer saves the data on the chain of the remote network. The occurrence of
 saving witnesses on remote networks is undefined.
 
-==== Requesting Signed Commitments
+=== Requesting Signed Commitments
 
 A light client (<<defn-beefy-light-client>>) fetches the witness data
 (<<defn-beefy-witness-data>>) from the chain. Once the light client knows which

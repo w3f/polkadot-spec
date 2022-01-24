@@ -6,7 +6,7 @@ weight = "3"
 +++
 
 [#sect-candidate-backing]
-=== Candidate Backing
+== Candidate Backing
 
 The Polkadot validator receives an arbitrary number of parachain candidates with
 associated proofs from untrusted collators. The validator must verify and select
@@ -19,7 +19,7 @@ information about assignments via the Runtime APIs
 <<sect-rt-api-availability-cores>>.
 
 [#sect-candidate-statements]
-==== Statements
+=== Statements
 
 The assigned validator checks the validity of the proposed parachains blocks
 (<<sect-candidate-validation>>) and issues _Valid_ statements
@@ -40,7 +40,7 @@ The validator issues validity statements votes in form of a validator protocol
 message (<<net-msg-validator-protocol-message>>).
 
 [#defn-statement]
-===== Statement
+==== Statement
 ****
 A statement, stem:[S], is a datastructure of the following format:
 
@@ -63,7 +63,7 @@ validator has deemed the candidate valid, followed by the candidate hash.
 ****
 
 [#sect-candidate-inclusion]
-==== Inclusion
+=== Inclusion
 
 The Polkadot validator includes the backed candidates as parachain inherent data
 (<<defn-parachain-inherent-data>>) into a block as described <<sect-inherents>>.
@@ -75,7 +75,7 @@ chain blocks are finalized where each candidate for each availability core meets
 the requirement of 2/3+ availability votes.
 
 [#defn-parachain-inherent-data]
-===== Parachain Inherent Data
+==== Parachain Inherent Data
 ****
 The parachain inherent data contains backed candidates and is included when
 authoring a relay chain block. The datastructure, stem:[I], is of the following
@@ -117,7 +117,7 @@ validator.
 ****
 
 [#defn-candidate-receipt]
-===== Candidate Receipt
+==== Candidate Receipt
 ****
 A candidate receipt, stem:[R], contains information about the candidate and a
 proof of the results of its execution. It's a datastructure of the following
@@ -134,7 +134,7 @@ stem:[C_h] is the hash of candidate commitments
 ****
 
 [#defn-committed-candidate-receipt]
-===== Committed Candidate Receipt
+==== Committed Candidate Receipt
 ****
 The committed candidate receipt, stem:[R], contains information about the
 candidate and the the result of its execution that is included in the relay
@@ -152,7 +152,7 @@ stem:[C] is the candidate commitments (<<defn-candidate-commitments>>).
 ****
 
 [#defn-candidate-descriptor]
-===== Candidate Descriptor
+==== Candidate Descriptor
 ****
 The candidate descriptor, stem:[D], is a unique descriptor of a candidate
 receipt. It's a datastructure of the following format:
@@ -177,7 +177,7 @@ stem:[H], stem:[R_h] and stem:[B].
 ****
 
 [#defn-candidate-commitments]
-===== Candidate Commitments
+==== Candidate Commitments
 ****
 The candidate commitments, stem:[C], is the result of the execution and
 validation of a parachain (or parathread) candidate whose produced values must

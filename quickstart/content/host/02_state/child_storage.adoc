@@ -6,7 +6,7 @@ weight = "2"
 +++
 
 [#sect-child-storages]
-=== Child Storage
+== Child Storage
 
 As clarified in <<sect-state-storage>>, the Polkadot state storage implements a
 hash table for inserting and reading key-value entries. The child storage works
@@ -30,7 +30,7 @@ used, but provides the functionality for it via the Host API
 (<<sect-child-storage-api>>).
 
 [#sect-child-trie-structure]
-==== Child Tries
+=== Child Tries
 
 The child trie specification is the same as the one described in
 <<sect-state-storage-trie-structure>>. Child tries have their own isolated

@@ -5,7 +5,7 @@ menu = "main"
 weight = "2"
 +++
 
-=== Bootstrapping
+== Bootstrapping
 
 This section provides an overview over the tasks a Polkadot Host needs to
 performs in order to join and participate in the Polkadot network. While this

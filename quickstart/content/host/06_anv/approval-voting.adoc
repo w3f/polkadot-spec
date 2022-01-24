@@ -6,7 +6,7 @@ weight = "6"
 +++
 
 [#sect-approval-voting]
-=== Approval Voting
+== Approval Voting
 
 The approval voting process ensures that only valid parachain blocks are
 finalized on the relay chain. After _backable_ parachain candidates were
@@ -23,7 +23,7 @@ resulting in consequences for all malicious parties, i.e. slashing. This
 mechanism is described more in <<sect-availability-assignment-criteria>>.
 
 [#sect-availability-assignment-criteria]
-==== Assignment Criteria
+=== Assignment Criteria
 
 Validators determine their assignment based on a VRF mechanism, similiar to the
 BABE consensus mechanism. First, validators generate an availability core VRF
@@ -48,7 +48,7 @@ The validator issues approval votes in form of a validator protocol message
 (TODO <<sect-anv-disputes>>).
 
 [#sect-tranches]
-==== Tranches
+=== Tranches
 
 Validators use a subjective, tick-based system to determine when the approval
 process should start. A validator starts the tick-based system when a new
@@ -83,7 +83,7 @@ to ensure that enough candidate approvals from a random set of validators are
 created without requiring all assigned validators to check the candidate.
 
 [#defn-relay-vrf-story]
-==== Relay VRF Story
+=== Relay VRF Story
 ****
 The relay VRF story is an array of random bytes derived from the VRF submitted
 within the block by the block author. The relay VRF story, T, is used as input
@@ -104,7 +104,7 @@ where
 ****
 
 [#defn-availability-core-vrf-assignment]
-==== Availability Core VRF Assignment
+=== Availability Core VRF Assignment
 ****
 An availability core VRF assignment, T, is computed by a relay chain validator
 to determine which availability core (<<defn-availability-core>>) a validator
@@ -179,7 +179,7 @@ must not exceed the number of samples.
 ****
 
 [#delayed-availability-core-vrf-assignment]
-==== Delayed Availability Core VRF Assignment
+=== Delayed Availability Core VRF Assignment
 ****
 The *delayed availability core VRF assignments* determined at what point a
 validator should start the approval process as described in <<sect-tranches>>.

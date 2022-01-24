@@ -6,7 +6,7 @@ weight = "4"
 +++
 
 [#sect-candidate-validation]
-=== Candidate Validation
+== Candidate Validation
 
 Received candidates submitted by collators and must have its validity verified
 by the assigned Polkadot validators. For each candidate to be valid, the
@@ -24,7 +24,7 @@ appropriate statement for each candidate
 (<<sect-candidate-statements>>).
 
 [#sect-parachain-runtime]
-==== Parachain Runtime
+=== Parachain Runtime
 
 Parachain Runtimes are stored in the relay chain state, and can either be
 fetched by the parachain Id or the Runtime hash via the relay chain Runtime API
@@ -41,7 +41,7 @@ The parachain Runtime function returns the validation result
 (<<defn-validation-result>>).
 
 [#defn-validation-parameters]
-===== Validation Parameters
+==== Validation Parameters
 ****
 The validation parameters structure, stem:[P], is required to validate a
 candidate against a parachain Runtime. It's a datastructure of the following
@@ -61,7 +61,7 @@ where
 ****
 
 [#defn-validation-result]
-==== Validation Result
+=== Validation Result
 ****
 The validation result is returned by the `validate_block` parachain Runtime API
 after attempting to validate a parachain block. Those results are then used in
@@ -95,6 +95,6 @@ been processed.
 ****
 
 [#sect-runtime-compression]
-==== Runtime Compression
+=== Runtime Compression
 
 NOTE: Runtime compression is not documented yet.

@@ -6,7 +6,7 @@ weight = "1"
 +++
 
 [#sect-state-storage]
-=== State Storage and Storage Trie
+== State Storage and Storage Trie
 
 For storing the state of the system, Polkadot Host implements a hash
 table storage where the keys are used to access each data entry. There
@@ -15,7 +15,7 @@ data stored under them, besides the fact that they are byte arrays with
 specific upper limits on their length. The limit is imposed by the
 encoding algorithms to store the key and the value in the storage trie.
 
-==== Accessing System Storage 
+=== Accessing System Storage 
 
 The Polkadot Host implements various functions to facilitate access to the
 system storage for the Runtime (<<sect-entries-into-runtime>>). Here we
@@ -23,7 +23,7 @@ formalize the access to the storage when it is being directly accessed by the
 Polkadot Host (in contrast to Polkadot runtime).
 
 [#defn-stored-value]
-===== Stored Value
+==== Stored Value
 ****
 The stem:[sf "StoredValue"] function retrieves the value stored under a specific
 key in the state storage and is formally defined as:
@@ -38,7 +38,7 @@ where stem:[cc K sub bbb B] and stem:[cc V sub bbb B] are respectively
 the set of all keys and values stored in the state storage.
 ****
 
-==== The General Tree Structure
+=== The General Tree Structure
 
 In order to ensure the integrity of the state of the system, the stored data
 needs to be re-arranged and hashed in a _modified Merkle Patricia Tree_, which
@@ -66,7 +66,7 @@ encode stem:[k] in a consistent with the Trie structure way. Because each node
 in the trie has at most 16 children, we represent the key as a sequence of 4-bit
 nibbles:
 
-===== Key Encode
+==== Key Encode
 ****
 For the purpose of labeling the branches of the Trie, the key stem:[k] is
 encoded to stem:[k_("enc")] using stem:[sf "KeyEncode"] functions:
@@ -97,19 +97,19 @@ By looking at stem:[k_("enc")] as a sequence of nibbles, one can walk the radix
 tree to reach the node identifying the storage value of stem:[k].
 
 [#sect-state-storage-trie-structure]
-==== Trie Structure
+=== Trie Structure
 
 In this subsection, we specify the structure of the nodes in the Trie as
 well as the Trie structure:
 
-===== Set of Nodes
+==== Set of Nodes
 ****
 We refer to the *set of the nodes of Polkadot state trie* by stem:[cc N]. By
 stem:[N in cc N] to refer to an individual node in the trie.
 ****
 
 [#defn-nodetype]
-===== State Trie
+==== State Trie
 ****
 The State Trie is a radix-16 tree. Each Node in the Trie is identified with a
 unique key latexmath:[k_N] such that:
@@ -126,7 +126,7 @@ Conversely, if stem:[(k, v)] is an entry in the State Trie then there is a node
 stem:[N in cc N] such that stem:[k_N = k].
 ****
 
-===== Branch
+==== Branch
 ****
 A *branch* node is a node which has one child or more. A branch node can have at
 most 16 children. A *leaf* node is a childless node. Accordingly:
@@ -142,7 +142,7 @@ For each node, part of stem:[k_N] is built while the trie is traversed from root
 to stem:[N] part of stem:[k_N] is stored in stem:[N] (<<defn-node-key>>).
 
 [#defn-node-key]
-===== Aggregated Prefix Key
+==== Aggregated Prefix Key
 ****
 For any stem:[N in cc N], its key stem:[k_N] is divided into an *aggregated
 prefix key, stem:["pk"_N^("Agr")]*, aggregated by the algorithm as defined in
@@ -169,7 +169,7 @@ traversing from the ancestor to its child included in the traversal path using
 the stem:["Index"_N] function (<<defn-index-function>>).
 
 [#defn-index-function]
-===== Index
+==== Index
 ****
 For stem:[N in cc N_b] and stem:[N_c] child of stem:[N], we define
 stem:[sf "Index"_N] function as:
@@ -193,7 +193,7 @@ node stem:[N], the algorithm defined in <<algo-aggregate-key>> rigorously
 demonstrates how to build stem:["pk"_N^("Agr")] while traversing stem:[P_N].
 
 [#algo-aggregate-key]
-===== Aggregate Key
+==== Aggregate Key
 ****
 Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
 
@@ -208,7 +208,7 @@ Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
 ****
 
 [#defn-node-value]
-===== Node Value
+==== Node Value
 ****
 A node stem:[N in cc N] stores the *node value*, stem:[v_N], which consists of
 the following concatenated data:
@@ -231,7 +231,7 @@ defined in <<defn-node-header>>, <<defn-node-key>>, <<defn-hex-encoding>> and
 ****
 
 [#defn-node-header]
-===== Node Header
+==== Node Header
 ****
 The *node header* of node stem:[N], stem:["Head"_N], consists of stem:[l + 1 >= 1]
 bytes stem:["Head"_(N,1),...,"Head"_(N,l+1)] such that:
@@ -265,7 +265,7 @@ defined in <<algo-pk-length>>.
 ****
 
 [#algo-pk-length]
-===== Partial Key Length Encoding
+==== Partial Key Length Encoding
 ****
 Algorithm: stem:["Partial-Key-Length-Encoding"("Head"_(N,1)^(6-7),pk_N)]
 
@@ -287,7 +287,7 @@ Algorithm: stem:["Partial-Key-Length-Encoding"("Head"_(N,1)^(6-7),pk_N)]
 ****
 
 [#sect-merkl-proof]
-==== Merkle Proof
+=== Merkle Proof
 
 To prove the consistency of the state storage across the network and its
 modifications both efficiently and effectively, the Trie implements a
@@ -306,7 +306,7 @@ We use the auxilary function introduced in <<defn-children-bitmap>> to encode
 and decode information stored in a branch node.
 
 [#defn-children-bitmap]
-===== Children Bitmap
+==== Children Bitmap
 ****
 Suppose stem:[N_b, N_c in cc N] and stem:[N_c] is a child of stem:[N_b]. We
 define where bit stem:[b_i : = 1] if stem:[N] has a child with partial key
@@ -328,7 +328,7 @@ b_i := {(1, EE N_c in cc N: k_(N_c) = k_(N_b)||i||pk_(N_c)),(0, "otherwise"):}
 ****
 
 [#defn-node-subvalue]
-===== Subvalue
+==== Subvalue
 ****
 For a given node stem:[N], the *subvalue* of stem:[N], formally referred to as
 stem:[sv_N], is determined as follows:
@@ -357,7 +357,7 @@ The Trie deviates from a traditional Merkle tree where node value
 occupies less space than its hash.
 
 [#defn-merkle-value]
-===== Merkle Value
+==== Merkle Value
 ****
 For a given node stem:[N], the *Merkle value* of stem:[N], denoted by
 stem:[H(N)] is defined as follows:

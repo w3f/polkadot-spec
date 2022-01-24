@@ -1,16 +1,16 @@
 +++
-title = "SomeTitle"
+title = "Network Messages"
 date = "2019-02-28"
 menu = "main"
 weight = "9"
 +++
 
 [#sect-anv-network-messages]
-=== Network Messages
+== Network Messages
 
 The availability and validity process requires certain network messages to be exchanged between validators and collators.
 
-==== Notification Messges
+=== Notification Messges
 
 The notification messages are exchanged between validators, including messages
 sent by collators to validators. The protocol messages are exchanged based on a
@@ -18,7 +18,7 @@ streaming notification substream (<<sect-connection-establishment>>). The
 messages are SCALE encoded (<<sect-scale-codec>>).
 
 [#net-msg-validator-protocol-message]
-===== Validator Protocol Message
+==== Validator Protocol Message
 ****
 The validator protocol message is a varying datatype used by validators to
 broadcast relevant information about certain steps in the A&V process.
@@ -39,7 +39,7 @@ where
 ****
 
 [#net-msg-collator-protocol-message]
-===== Collation Protocol Message
+==== Collation Protocol Message
 ****
 The collation protocol message, M, is a varying datatype of the following format:
 
@@ -52,7 +52,7 @@ where stem:[M_c] is the collator message (<<net-msg-collator-message>>).
 ****
 
 [#net-msg-collator-message]
-===== Collator Message
+==== Collator Message
 ****
 The collator message is sent as part of the collator protocol message
 (<<net-msg-collator-protocol-message>>). The collator message, stem:[M], is a
@@ -76,7 +76,7 @@ indicates that a collation sent to a validator was seconded.
 ****
 
 [#net-msg-statement-distribution]
-===== Statement Distribution Message
+==== Statement Distribution Message
 ****
 The statement distribution message is sent as part of the validator protocol
 message (<<net-msg-collator-protocol-message>>) indicates the validity vote of a
@@ -104,7 +104,7 @@ message (<<net-msg-statement-fetching-request>>).
 ****
 
 [#net-msg-bitfield-dist-msg]
-===== Bitfield Distribution Message
+==== Bitfield Distribution Message
 ****
 The bitfield distribution message is sent as part of the validator protocol
 message (<<net-msg-validator-protocol-message>>) and indicates the availability
@@ -129,7 +129,7 @@ where
 ****
 
 [#net-msg-approval-distribution]
-===== Approval Distribution Message
+==== Approval Distribution Message
 ****
 The approval distribution message is sent as part of the validator protocol
 message (<<net-msg-validator-protocol-message>>) and indicates the approval vote
@@ -170,7 +170,7 @@ in <<sect-approval-voting>>.
 * stem:[P_o] is a VRF output and stem:[P_p] its corresponding proof.
 ****
 
-==== Request & Response
+=== Request & Response
 
 The request & response network messages are sent and received between peers in
 the Polkadot network, including collators and non-validator nodes. Those
@@ -179,7 +179,7 @@ messages are conducted on the request-response substreams
 described in Section ?.
 
 [#net-msg-pov-fetching-request]
-===== PoV Fetching Request
+==== PoV Fetching Request
 ****
 The PoV fetching request is sent by clients who want to retrieve a PoV block
 from a node. The request is a datastructure of the following format:
@@ -194,7 +194,7 @@ defined in <<net-msg-pov-fetching-response>>.
 ****
 
 [#net-msg-pov-fetching-response]
-===== PoV Fetching Response
+==== PoV Fetching Response
 ****
 The PoV fetching response is sent by nodes to the clients who issued a PoV
 fetching request (<<net-msg-pov-fetching-request>>). The response, stem:[R], is
@@ -210,7 +210,7 @@ not found.
 ****
 
 [#net-msg-chunk-fetching-request]
-===== Chunk Fetching Request
+==== Chunk Fetching Request
 ****
 The chunk fetching request is sent by clients who want to retrieve chunks of a
 parachain candidate. The request is a datastructure of the following format:
@@ -226,7 +226,7 @@ message is defined in <<net-msg-chunk-fetching-response>>.
 ****
 
 [#net-msg-chunk-fetching-response]
-===== Chunk Fetching Response
+==== Chunk Fetching Response
 ****
 The chunk fetching response is sent by nodes to the clients who issued a chunk
 fetching request (<<net-msg-chunk-fetching-request>>). The response, stem:[R], is
@@ -246,7 +246,7 @@ type stem:[(b_n…b_m)].
 ****
 
 [#net-msg-available-data-request]
-===== Available Data Request
+==== Available Data Request
 ****
 The available data request is sent by clients who want to retrieve the PoV block
 of a parachain candidate. The request is a datastructure of the following
@@ -262,7 +262,7 @@ The response message is defined in <<net-msg-available-data-response>>.
 ****
 
 [#net-msg-available-data-response]
-===== Available Data Response
+==== Available Data Response
 ****
 The available data response is sent by nodes to the clients who issued a
 available data request (<<net-msg-available-data-request>>). The response,
@@ -281,7 +281,7 @@ requested candidate hash was not found. stem:[P_{ov}] is the PoV block
 ****
 
 [#net-msg-collation-fetching-request]
-===== Collation Fetching Request
+==== Collation Fetching Request
 ****
 The collation fetching request is sent by clients who want to retrieve the
 advertised collation at the specified relay chain block. The request is a
@@ -298,7 +298,7 @@ parachain Id (<<defn-para-id>>). The response message is defined in
 ****
 
 [#net-msg-collation-fetching-response]
-===== Collation Fetching Response
+==== Collation Fetching Response
 ****
 The collation fetching response is sent by nodes to the clients who issued a
 collation fetching request (<<net-msg-collation-fetching-request>>). The
@@ -316,7 +316,7 @@ statement that was not found.
 ****
 
 [#net-msg-statement-fetching-request]
-===== Statement Fetching Request
+==== Statement Fetching Request
 ****
 The statement fetching request is sent by clients who want to retrieve
 statements about a given candidate. The request is a datastructure of the
@@ -334,7 +334,7 @@ candidate hash that was used to create a committed candidate receipt
 ****
 
 [#net-msg-statement-fetching-response]
-===== Statement Fetching Response
+==== Statement Fetching Response
 ****
 The statement fetching response is sent by nodes to the clients who issued a
 collation fetching request (<<net-msg-statement-fetching-request>>). The
@@ -351,7 +351,7 @@ is found.
 ****
 
 [#net-msg-dispute-request]
-===== Dispute Request
+==== Dispute Request
 
 The dispute request is sent by clients who want to issue a dispute about a
 candidate. The request, D_r, is a datastructure of the following format:
@@ -388,7 +388,7 @@ backing phase. stem:[C_h] is the hash of the candidate.
 The response message is defined in <<net-msg-dispute-response>>.
 
 [#net-msg-dispute-response]
-===== Dispute Response
+==== Dispute Response
 
 The dispute response is sent by nodes to the clients who who issued a dispute
 request (<<net-msg-dispute-request>>). The response, stem:[R], is a varying type

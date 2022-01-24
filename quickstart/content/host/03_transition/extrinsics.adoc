@@ -6,14 +6,14 @@ weight = "2"
 +++
 
 [#sect-extrinsics]
-=== Extrinsics
+== Extrinsics
 
 The block body consists of an array of extrinsics. In a broad sense,
 extrinsics are data from outside of the state which can trigger state
 transitions. This section describes extrinsics and their inclusion into
 blocks.
 
-==== Preliminaries
+=== Preliminaries
 
 The extrinsics are divided into two main categories defined as follows:
 
@@ -28,7 +28,7 @@ those are defined and dealt with by the Runtime (<<defn-state-machine>>). From t
 Polkadot Host point of view, each extrinsics is simply a SCALE-encoded blob
 (<<sect-scale-codec>>).
 
-==== Transactions
+=== Transactions
 
 Transaction are submitted and exchanged through _Transactions_ network messages
 (<<sect-msg-transactions>>). Upon receiving a Transactions message, the Polkadot
@@ -57,7 +57,7 @@ Polkadot Host should keep a _transaction pool_ and a _transaction queue_
 defined as follows:
 
 [#defn-transaction-queue]
-===== Definition: Transaction Queue
+==== Definition: Transaction Queue
 ****
 The *Transaction Queue* of a block producer node, formally referred to as
 stem:[TQ] is a data structure which stores the transactions ready to be included
@@ -71,7 +71,7 @@ transaction pool and the transaction queue according to the received message:
 ****
 
 [#algo-validate-transactions]
-===== Algorithm: Validate Transactions and Store
+==== Algorithm: Validate Transactions and Store
 ****
 Algorithm: stem:["Validate-Transactions-And-Store"(M_T)]
 
@@ -122,12 +122,12 @@ peers of the Polkadot Host who are not already aware of stem:[T].
 ****
 
 [#algo-maintain-transaction-pool]
-===== Algorithm: Maintain Transaction Pool
+==== Algorithm: Maintain Transaction Pool
 
 NOTE: This has not been defined yet.
 
 [#sect-inherents]
-==== Inherents
+=== Inherents
 
 Inherents are unsigned extrinsic inserted into a block by the block author and
 as a result are not stored in the transaction pool or gossiped across the
@@ -153,7 +153,7 @@ be included in the current block as explained in <<algo-build-block>>.
 |===
 
 [#defn-inherent-data]
-===== Definition: Inherent Data
+==== Definition: Inherent Data
 `Inherent-Data` is a hashtable (<<defn-scale-list>>), an array of key-value
 pairs consisting of the inherent 8-byte identifier and its value, representing
 the totality of inherent extrinsics included in each block. The entries of this

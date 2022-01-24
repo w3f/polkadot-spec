@@ -6,6 +6,6 @@ weight = "7"
 +++
 
 [#sect-disputes]
-=== Disputes
+== Disputes
 
 NOTE: Disputes are not documented yet.

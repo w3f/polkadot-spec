@@ -6,10 +6,10 @@ weight = "4"
 +++
 
 [#sect-block-finalization]
-=== Block Finalization
+== Block Finalization
 
 [#defn-finalized-block]
-==== Finalized
+=== Finalized
 ****
 A Polkadot relay chain node stem:[n] should consider block stem:[B] as
 *finalized* if any of the following criteria hold for stem:[B' >= B]:
@@ -31,7 +31,7 @@ messages regardless of their GRANDPA voter status.
 ****
 
 [#sect-grandpa-catchup]
-==== Catching up
+=== Catching up
 
 When a Polkadot node (re)joins the network during the process described in
 <<chapter-bootstrapping>>, it requests the history of state transition in the form
@@ -41,7 +41,7 @@ process, they can synchronize the authority list currently performing the
 finalization process.
 
 [#sect-sending-catchup-request]
-===== Sending the catch-up requests
+==== Sending the catch-up requests
 When a Polkadot node has the same authority list as a peer node who is reporting
 a higher number for the _finalized round_ field, it should send a catch-up
 request message (<<defn-grandpa-catchup-request-msg>>) to the reporting peer in
@@ -52,13 +52,13 @@ following criteria hold:
 * The last known finalized round for the Polkadot node is at least 2 rounds
 behind the finalized round for the peer.
 
-===== Processing the catch-up requests
+==== Processing the catch-up requests
 Only GRANDPA voter nodes are required to respond to the catch-up responses. When
 a GRANDPA voter node receives a catch-up request message it needs to execute
 Algorithm as defined in <<algo-process-catchup-request>>.
 
 [#algo-process-catchup-request]
-====== Process Catchup Request
+===== Process Catchup Request
 ****
 Algorithm: stem:["Process-Catchup-Request"(M_(i,v)^("Cat"-q)("id"_(bbb V),r))]
 
@@ -85,7 +85,7 @@ operating
 (<<defn-grandpa-catchup-response-msg>>).
 ****
 
-===== Processing catch-up responses
+==== Processing catch-up responses
 
 A Catch-up response message contains critical information for the requester node
 to update their view on the active rounds which are being voted on by GRANDPA
@@ -95,7 +95,7 @@ of the Relay chain according to Algorithm as defined in
 <<algo-process-catchup-response>>.
 
 [#algo-process-catchup-response]
-====== Process Catchup Response
+===== Process Catchup Response
 ****
 Algorithm: stem:["Process-Catchup-Response"(M_(v,i)^("Cat"-s)("id"_(bbb V),r))]
 
