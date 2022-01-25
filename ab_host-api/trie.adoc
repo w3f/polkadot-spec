@@ -3,7 +3,9 @@
 
 Interface that provides trie related functionality.
 
-==== `ext_trie_blake2_256_root`
+==== Functions
+
+===== `ext_trie_blake2_256_root`
 
 Compute a 256-bit Blake2 trie root formed from the iterated items.
 
@@ -20,7 +22,7 @@ iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs.
 * `result`: a 32-bit pointer to the buffer containing the 256-bit trie root.
 
-==== `ext_trie_blake2_256_ordered_root`
+===== `ext_trie_blake2_256_ordered_root`
 
 Compute a 256-bit Blake2 trie root formed from the enumerated items.
 
@@ -40,7 +42,7 @@ integers (<<defn-sc-len-encoding>>).
 * `result`: a 32-bit pointer to the buffer containing the 256-bit trie root
 result.
 
-==== `ext_trie_keccak_256_root`
+===== `ext_trie_keccak_256_root`
 
 Compute a 256-bit Keccak trie root formed from the iterated items.
 
@@ -57,7 +59,7 @@ iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs.
 * `result`: a 32-bit pointer to the buffer containing the 256-bit trie root.
 
-==== `ext_trie_keccak_256_ordered_root`
+===== `ext_trie_keccak_256_ordered_root`
 
 Compute a 256-bit Keccak trie root formed from the enumerated items.
 
