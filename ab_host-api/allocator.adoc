@@ -9,7 +9,9 @@ The same allocator made accessible by this Host API should be used for any other
 WASM memory allocations and deallocations outside the runtime e.g. when passing
 the SCALE-encoded parameters to Runtime API calls.
 
-==== `ext_allocator_malloc`
+==== Functions
+
+===== `ext_allocator_malloc`
 
 Allocates the given number of bytes and returns the pointer to that memory
 location.
@@ -24,7 +26,7 @@ Arguments::
 * `size`: the size of the buffer to be allocated.
 * `result`: a 32-bit pointer to the allocated buffer.
 
-==== `ext_allocator_free`
+===== `ext_allocator_free`
 
 Free the given pointer.
 

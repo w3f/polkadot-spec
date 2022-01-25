@@ -4,7 +4,9 @@
 Interface that provides miscellaneous functions for communicating between the
 runtime and the node.
 
-==== `ext_misc_chain_id`
+==== Functions
+
+===== `ext_misc_chain_id`
 
 Returns the current relay chain identifier.
 
@@ -17,7 +19,7 @@ Arguments::
 
 * `result`: the current relay chain identifier.
 
-==== `ext_misc_print_num`
+===== `ext_misc_print_num`
 
 Print a number.
 
@@ -30,7 +32,7 @@ Arguments::
 
 * `value`: the number to be printed.
 
-==== `ext_misc_print_utf8`
+===== `ext_misc_print_utf8`
 
 Print a valid UTF8 encoded buffer.
 
@@ -44,7 +46,7 @@ Print a valid UTF8 encoded buffer.
 * : a pointer-size (<<defn-runtime-pointer>>) indicating
 the valid buffer to be printed.
 
-==== `ext_misc_print_hex`
+===== `ext_misc_print_hex`
 
 Print any buffer in hexadecimal representation.
 
@@ -58,7 +60,7 @@ Print any buffer in hexadecimal representation.
 * `data`: a pointer-size (<<defn-runtime-pointer>>) indicating
 the buffer to be printed.
 
-==== `ext_misc_runtime_version`
+===== `ext_misc_runtime_version`
 
 Extract the Runtime version of the given Wasm blob by calling `Core_version`
 (<<defn-rt-core-version>>). Returns the SCALE encoded runtime version or _None_

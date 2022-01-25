@@ -41,7 +41,9 @@ values are possible:
 |===
 ****
 
-==== `ext_crypto_ed25519_public_keys`
+==== Functions
+
+===== `ext_crypto_ed25519_public_keys`
 
 Returns all _ed25519_ public keys for the given key identifier from the keystore.
 
@@ -58,7 +60,7 @@ Arguments::
 * `return`: a pointer-size (<<defn-runtime-pointer>>) to an SCALE encoded
 256-bit public keys.
 
-==== `ext_crypto_ed25519_generate`
+===== `ext_crypto_ed25519_generate`
 
 Generates an _ed25519_ key for the given key type using an optional BIP-39 seed and stores
 it in the keystore.
@@ -81,7 +83,7 @@ _Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
 valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit public key.
 
-==== `ext_crypto_ed25519_sign`
+===== `ext_crypto_ed25519_sign`
 
 Signs the given message with the `ed25519` key that corresponds to the given public key
 and key type in the keystore.
@@ -104,7 +106,7 @@ encoded _Option_ value (<<defn-option-type>>) containing the 64-byte signature.
 This function returns if the public key cannot be found in the key store.
 
 [#sect-ext-crypto-ed25519-verify]
-==== `ext_crypto_ed25519_verify`
+===== `ext_crypto_ed25519_verify`
 
 Verifies an _ed25519_ signature. Returns when the verification is either
 successful or batched. If no batching verification extension is registered, this
@@ -132,7 +134,7 @@ message that is to be verified.
 * `return`: a i32 integer value equal to if the signature is valid or batched or
 a value equal to if otherwise.
 
-==== `ext_crypto_sr25519_public_keys`
+===== `ext_crypto_sr25519_public_keys`
 
 Returns all _sr25519_ public keys for the given key id from the keystore.
 
@@ -149,7 +151,7 @@ Arguments::
 * `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 SCALE encoded 256-bit public keys.
 
-==== `ext_crypto_sr25519_generate`
+===== `ext_crypto_sr25519_generate`
 
 Generates an _sr25519_ key for the given key type using an optional BIP-39 seed
 and stores it in the keystore.
@@ -171,7 +173,7 @@ _Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
 valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit public key.
 
-==== `ext_crypto_sr25519_sign`
+===== `ext_crypto_sr25519_sign`
 
 Signs the given message with the _sr25519_ key that corresponds to the given
 public key and key type in the keystore.
@@ -193,7 +195,7 @@ encoded _Option_ value (<<defn-option-type>>) containing the 64-byte signature.
 This function returns _None_ if the public key cannot be found in the key store.
 
 [#sect-ext-crypto-sr25519-verify]
-==== `ext_crypto_sr25519_verify`
+===== `ext_crypto_sr25519_verify`
 
 Verifies an _sr25519_ signature. Only version 1 of this function supports
 deprecated Schnorr signatures introduced by the _schnorrkel_ Rust library
@@ -239,7 +241,7 @@ message that is to be verified.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
 value equal to _0_ if otherwise.
 
-==== `ext_crypto_ecdsa_public_keys`
+===== `ext_crypto_ecdsa_public_keys`
 
 Returns all _ecdsa_ public keys for the given key id from the keystore.
 
@@ -255,7 +257,7 @@ Arguments::
 * `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 SCALE encoded 33-byte compressed public keys.
 
-==== `ext_crypto_ecdsa_generate`
+===== `ext_crypto_ecdsa_generate`
 
 Generates an _ecdsa_ key for the given key type using an optional BIP-39 seed
 and stores it in the keystore.
@@ -278,7 +280,7 @@ valid UTF8.
 * `return`: a 32-bit pointer to the buffer containing the 33-byte compressed
 public key.
 
-==== `ext_crypto_ecdsa_sign`
+===== `ext_crypto_ecdsa_sign`
 
 Signs the given message with the _ecdsa_ key that corresponds to the given
 public key and key type in the keystore.
@@ -303,7 +305,7 @@ and the other 8 bits represent the recovery ID. This function returns if the
 public key cannot be found in the key store.
 
 [#sect-ext-crypto-ecdsa-verify]
-==== `ext_crypto_ecdsa_verify`
+===== `ext_crypto_ecdsa_verify`
 
 Verifies an _ecdsa_ signature. Returns when the verification is either
 successful or batched. If no batching verification extension is registered, this
@@ -333,7 +335,7 @@ key.
 * `return`: a i32 integer value equal _1_ to if the signature is valid or a
 value equal to _0_ if otherwise.
 
-==== `ext_crypto_secp256k1_ecdsa_recover`
+===== `ext_crypto_secp256k1_ecdsa_recover`
 
 Verify and recover a _secp256k1_ ECDSA signature.
 
@@ -353,7 +355,7 @@ the message.
 encoded _Result_ (<<defn-result-type>>). On success it contains the 64-byte
 recovered public key or an error type (<<defn-ecdsa-verify-error>>) on failure.
 
-==== `ext_crypto_secp256k1_ecdsa_recover_compressed`
+===== `ext_crypto_secp256k1_ecdsa_recover_compressed`
 
 Verify and recover a _secp256k1_ ECDSA signature.
 
@@ -375,7 +377,7 @@ encoded `Result` value (<<defn-result-type>>). On success it contains the
 (<<defn-ecdsa-verify-error>>) on failure.
 
 [#sect-ext-crypto-start-batch-verify]
-==== `ext_crypto_start_batch_verify`
+===== `ext_crypto_start_batch_verify`
 
 Starts the verification extension. The extension is a separate background
 process and is used to parallel-verify signatures which are pushed to the batch
@@ -395,7 +397,7 @@ Arguments::
 * None.
 
 [#sect-ext-crypto-finish-batch-verify]
-==== `ext_crypto_finish_batch_verify`
+===== `ext_crypto_finish_batch_verify`
 
 Finish verifying the batch of signatures since the last call to this function.
 Blocks until all the signatures are verified.
