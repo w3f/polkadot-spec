@@ -16,7 +16,9 @@ L = {(0,"Error = 1"),(1,"Warn = 2"),(2,"Info = 3"),(3, "Debug = 4"),(4,"Trace = 
 ++++
 ****
 
-==== `ext_logging_log`
+==== Functions
+
+===== `ext_logging_log`
 
 Request to print a log message on the host. Note that this will be only
 displayed if the host is enabled to display log messages with given level and

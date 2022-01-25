@@ -3,8 +3,10 @@
 
 Interface for accessing the storage from within the runtime.
 
+==== Functions
+
 [#sect-storage-set]
-==== `ext_storage_set`
+===== `ext_storage_set`
 Sets the value under a given key into storage.
 
 ===== Version 1 - Prototype
@@ -18,7 +20,7 @@ Arguments::
 * `value`: a pointer-size (<<defn-runtime-pointer>>) containing the
 value.
 
-==== `ext_storage_get`
+===== `ext_storage_get`
 Retrieves the value associated with the given key from storage.
 
 ===== Version 1 - Prototype
@@ -32,7 +34,7 @@ Arguments::
 * `result`: a pointer-size (<<defn-runtime-pointer>>) returning the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the value.
 
-==== `ext_storage_read`
+===== `ext_storage_read`
 
 Gets the given key from storage, placing the value into a buffer and
 returning the number of bytes that the entry in storage has beyond the
@@ -56,7 +58,7 @@ encoded _Option_ value (<<defn-option-type>>) containing an unsigned 32-bit
 integer representing the number of bytes left at supplied `offset`. Returns
 _None_ if the entry does not exists.
 
-==== `ext_storage_clear`
+===== `ext_storage_clear`
 
 Clears the storage of the given key and its value.
 
@@ -69,7 +71,7 @@ Clears the storage of the given key and its value.
 Arguments::
 * `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
 
-==== `ext_storage_exists`
+===== `ext_storage_exists`
 
 Checks whether the given key exists in storage.
 
@@ -84,7 +86,7 @@ Arguments::
 * `return`: an i32 integer value equal to _1_ if the key exists or a value equal
 to _0_ if otherwise.
 
-==== `ext_storage_clear_prefix`
+===== `ext_storage_clear_prefix`
 
 Clear the storage of each key/value pair where the key starts with the given
 prefix.
@@ -99,7 +101,7 @@ Arguments::
 * `prefix`: a pointer-size (<<defn-runtime-pointer>>) containing
 the prefix.
 
-==== `ext_storage_append`
+===== `ext_storage_append`
 
 Append the SCALE encoded value to a SCALE encoded sequence (<<defn-scale-list>>)
 at the given key. This function assumes that the existing storage item is either
@@ -125,7 +127,7 @@ Arguments::
 * `value`: a pointer-size (<<defn-runtime-pointer>>) containing the
 value to be appended.
 
-==== `ext_storage_root`
+===== `ext_storage_root`
 
 Compute the storage root.
 
@@ -140,7 +142,7 @@ Arguments::
 root.
 
 [#sect-ext-storage-changes-root]
-==== `ext_storage_changes_root`
+===== `ext_storage_changes_root`
 
 Compute the root of the changes trie (<<sect-changes-trie>>). The parent hash is
 a SCALE encoded block hash.
@@ -157,7 +159,7 @@ SCALE encoded block hash.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit Blake2 changes
 root.
 
-==== `ext_storage_next_key`
+===== `ext_storage_next_key`
 
 Get the next key in storage after the given one in lexicographic order
 (<<defn-lexicographic-ordering>>). The key provided to this function may or may
@@ -176,7 +178,7 @@ encoded _Option_ value (<<defn-option-type>>) containing the next key in
 lexicographic order.
 
 [#sect-ext-storage-start-transaction]
-==== `ext_storage_start_transaction`
+===== `ext_storage_start_transaction`
 
 Start a new nested transaction. This allows to either commit or roll back all
 changes that are made after this call. For every transaction there must be a
@@ -198,7 +200,7 @@ Arguments::
 * None.
 
 [#sect-ext-storage-rollback-transaction]
-==== `ext_storage_rollback_transaction`
+===== `ext_storage_rollback_transaction`
 
 Rollback the last transaction started by `ext_storage_start_transaction`
 (<<sect-ext-storage-start-transaction>>). Any changes made during that
@@ -216,7 +218,7 @@ Arguments::
 * None.
 
 [#sect-ext-storage-commit-transaction]
-==== `ext_storage_commit_transaction`
+===== `ext_storage_commit_transaction`
 Commit the last transaction started by `ext_storage_start_transaction`
 (<<sect-ext-storage-start-transaction>>). Any changes made during that
 transaction are committed to the main state.

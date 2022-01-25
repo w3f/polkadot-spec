@@ -3,7 +3,9 @@
 
 Interface that provides functions for hashing with different algorithms.
 
-==== `ext_hashing_keccak_256`
+==== Functions
+
+===== `ext_hashing_keccak_256`
 
 Conducts a 256-bit Keccak hash.
 
@@ -19,7 +21,7 @@ Arguments::
 to be hashed.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit hash result.
 
-==== `ext_hashing_keccak_512`
+===== `ext_hashing_keccak_512`
 
 Conducts a 512-bit Keccak hash.
 
@@ -35,7 +37,7 @@ Arguments::
 to be hashed.
 * `return`: a 32-bit pointer to the buffer containing the 512-bit hash result.
 
-==== `ext_hashing_sha2_256`
+===== `ext_hashing_sha2_256`
 
 Conducts a 256-bit Sha2 hash.
 
@@ -51,7 +53,7 @@ Arguments::
 to be hashed.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit hash result.
 
-==== `ext_hashing_blake2_128`
+===== `ext_hashing_blake2_128`
 
 Conducts a 128-bit Blake2 hash.
 
@@ -67,7 +69,7 @@ Arguments::
 to be hashed.
 * `return`: a 32-bit pointer to the buffer containing the 128-bit hash result.
 
-==== `ext_hashing_blake2_256`
+===== `ext_hashing_blake2_256`
 
 Conducts a 256-bit Blake2 hash.
 
@@ -83,7 +85,7 @@ Arguments::
 to be hashed.
 * `return`: a 32-bit pointer to the buffer containing the 256-bit hash result.
 
-==== `ext_hashing_twox_64`
+===== `ext_hashing_twox_64`
 
 Conducts a 64-bit xxHash hash.
 
@@ -99,7 +101,7 @@ Arguments::
 to be hashed.
 * `return`: a 32-bit pointer to the buffer containing the 64-bit hash result.
 
-==== `ext_hashing_twox_128`
+===== `ext_hashing_twox_128`
 
 Conducts a 128-bit xxHash hash.
 
@@ -115,7 +117,7 @@ Arguments::
 to be hashed.
 * `return`: a 32-bit pointer to the buffer containing the 128-bit hash result.
 
-==== `ext_hashing_twox_256`
+===== `ext_hashing_twox_256`
 
 Conducts a 256-bit xxHash hash.
 

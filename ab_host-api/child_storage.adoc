@@ -9,7 +9,9 @@ Interface for accessing the child storage from within the runtime.
 *Child storage* key is a unprefixed location of the child trie in the main trie.
 ****
 
-==== `ext_default_child_storage_set`
+==== Functions
+
+===== `ext_default_child_storage_set`
 Sets the value under a given key into the child storage.
 
 ===== Version 1 - Prototype
@@ -25,7 +27,7 @@ child storage key (<<defn-child-storage-type>>).
 * `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
 * `value`: a pointer-size (<<defn-runtime-pointer>>) indicating the value.
 
-==== `ext_default_child_storage_get`
+===== `ext_default_child_storage_get`
 Retrieves the value associated with the given key from the child storage.
 
 ===== Version 1 - Prototype
@@ -42,7 +44,7 @@ child storage key (<<defn-child-storage-type>>).
 * `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the value.
 
-==== `ext_default_child_storage_read`
+===== `ext_default_child_storage_read`
 
 Gets the given key from storage, placing the value into a buffer and returning
 the number of bytes that the entry in storage has beyond the offset.
@@ -68,7 +70,7 @@ from.
 encoded _Option_ value (<<defn-option-type>>) containing the number of bytes
 written into the *value_out* buffer. Returns if the entry does not exists.
 
-==== `ext_default_child_storage_clear`
+===== `ext_default_child_storage_clear`
 
 Clears the storage of the given key and its value from the child storage.
 
@@ -84,7 +86,7 @@ Arguments::
 child storage key (<<defn-child-storage-type>>).
 * `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
 
-==== `ext_default_child_storage_storage_kill`
+===== `ext_default_child_storage_storage_kill`
 
 Clears an entire child storage.
 
@@ -99,7 +101,7 @@ Arguments::
 * `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 child storage key (<<defn-child-storage-type>>)..
 
-==== `ext_default_child_storage_exists`
+===== `ext_default_child_storage_exists`
 
 Checks whether the given key exists in the child storage.
 
@@ -117,7 +119,7 @@ child storage key (<<defn-child-storage-type>>).
 * `return`: an i32 integer value equal to _1_ if the key exists or a value equal
 to _0_ if otherwise.
 
-==== `ext_default_child_storage_clear_prefix`
+===== `ext_default_child_storage_clear_prefix`
 
 Clears the child storage of each key/value pair where the key starts with the
 given prefix.
@@ -135,7 +137,7 @@ child storage key (<<defn-child-storage-type>>).
 * `prefix`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 prefix.
 
-==== `ext_default_child_storage_root`
+===== `ext_default_child_storage_root`
 
 Commits all existing operations and computes the resulting child storage
 root.
@@ -153,7 +155,7 @@ child storage key (<<defn-child-storage-type>>).
 * `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 SCALE encoded storage root.
 
-==== `ext_default_child_storage_next_key`
+===== `ext_default_child_storage_next_key`
 
 Gets the next key in storage after the given one in lexicographic order
 (<<defn-lexicographic-ordering>>).
