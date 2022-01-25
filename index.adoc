@@ -1,1 +1,51 @@
-main.adoc
+= Polkadot Specification
+Fabio Lama; Florian Franzen; Syed Hosseini
+v0.2.0
+:description: Official Polkadot Protocol Specification
+:doctype: book
+:example-caption: Definition
+:mathematical-format: svg
+:multipage-level: 2
+:sectlinks:
+:sectnums:
+:sectnumlevels: 4
+:source-highlighter: rouge
+:stem:
+:stylesheet: style.css
+:toc: left
+:toclevels: 3
+:xrefstyle: short
+
+WARNING: The Polkadot specification is currently being converted from TexMacs to
+AsciiDoc. This specification is *Work-In-Progress* and any content, structure ,
+design and/or hyper/anchor-link *is subject to change*.
+
+
+= Host Specification
+
+include::01_host/main.adoc[]
+
+
+= Runtime Specification
+
+include::02_runtime/main.adoc[]
+
+
+[appendix]
+= Additional information
+
+include::aa_appendix/main.adoc[]
+
+
+[appendix]
+[#chap-host-api]
+= Host API
+
+include::ab_host-api/main.adoc[]
+
+
+[appendix]
+[#chap-runtime-api]
+= Runtime API
+
+include::ac_runtime-api/main.adoc[]
