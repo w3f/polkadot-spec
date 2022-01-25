@@ -11,9 +11,8 @@ v0.2.0
 :sectnumlevels: 4
 :source-highlighter: rouge
 :stem:
-:stylesheet: style.css
 :toc: left
-:toclevels: 3
+:toclevels: 2
 :xrefstyle: short
 
 WARNING: The Polkadot specification is currently being converted from TexMacs to
