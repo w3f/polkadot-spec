@@ -64,8 +64,6 @@ include::06_anv/approval-voting.adoc[]
 
 include::06_anv/disputes.adoc[]
 
-include::06_anv/runtime-api.adoc[]
-
 include::06_anv/network-messages.adoc[]
 
 include::06_anv/definitions.adoc[]

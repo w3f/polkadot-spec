@@ -1,53 +1,312 @@
+[#sect-anv-runtime-api]
 ==== ParachainHost Module (Version 1)
 
+[#sect-rt-api-validators]
 ===== `ParachainHost_validators`
 
-NOTE: future-reserved
+Returns the validator set at the current state. The specified validators are responsible for backing parachains for the current state.
 
+Arguments::
+* None.
+
+Return::
+* An array of public keys representing the validators.
+
+[#sect-rt-api-validator-groups]
 ===== `ParachainHost_validator_groups`
 
-NOTE: future-reserved
+Returns the validator groups (<<defn-validator-groups>>) used during the current
+session. The validators in the groups are referred to by the validator set Id
+(<<defn-authority-list>>).
 
+Arguments::
+* None
+
+Return::
+* An array of tuples, stem:[T], of the following format:
+
+[stem]
+++++
+T == (I,G)\
+I == (v_n,…v_m)\
+G == (B_s,f,B_c)
+++++
+
+where
+
+•  stem:[I] is an array the validator set Ids (<<defn-authority-list>>).
+•  stem:[B_s] indicates the block number where the session started.
+•  stem:[f] indicates how often groups rotate. 0 means never.
+•  stem:[B_c] indicates the current block number. 
+
+[#sect-rt-api-availability-cores]
 ===== `ParachainHost_availability_cores`
 
-NOTE: future-reserved
+Returns information on all availability cores (<<defn-availability-core>>).
 
+Arguments::
+* None
+
+Return::
+* An array of core states, S, of the following format:
+
+[stem]
+++++
+S == {(0,->,C_o),(1,->,C_s),(2,->,phi):}\
+C_o == (n_u,B_o,B_t,n_t,b,G_i,C_h,C_d)\
+C_s == (P_id,C_i)
+++++
+
+where
+
+• stem:[S] specifies the core state. _0_ indicates that the core is occupied,
+_1_ implies it's currently free but scheduled and given the opportunity to
+occupy and _2_ implies it's free and there's nothing scheduled.
+• stem:[n_u] is an _Option_ value (<<defn-option-type>>) which can contain a
+stem:[C_s] value if the core was freed by the Runtime and indicates the
+assignment that is next scheduled on this core. An empty value indicates there
+is nothing scheduled.
+• stem:[B_o] indicates the relay chain block number at which the core got occupied.
+• stem:[B_t] indicates the relay chain block number the core will time-out at, if any.
+• stem:[n_t] is an _Option_ value (<<defn-option-type>>) as described in
+Definition ? which can contain a stem:[C_s] value if the core is freed by a
+time-out and indicates the assignment that is next scheduled on this core. An
+empty value indicates there is nothing scheduled.
+• stem:[b] is a bitfield array (<<defn-bitfield-array>>). A stem:[>2/3] majority
+of assigned validators voting with stem:[1] values means that the core is
+available.
+• stem:[G_i] indicates the assigned validator group index
+(<<defn-validator-groups>>) is to distribute availability pieces of this
+candidate.
+• stem:[C_h] indicates the hash of the candidate occupying the core.
+• stem:[C_d] is the candidate descriptor (<<defn-candidate-descriptor>>).
+• stem:[C_i] is an _Option_ value (<<defn-option-type>>) as described in
+Definition ? which can contain the collators public key indicating who should
+author the block.
+
+[#sect-rt-api-persisted-validation-data]
 ===== `ParachainHost_persisted_validation_data`
 
-NOTE: future-reserved
+Returns the persisted validation data for the given parachain Id and a given occupied core assumption.
+
+Arguments::
+* The parachain Id (<<defn-para-id>>).
+* An occupied core assumption (<<defn-occupied-core-assumption>>).
+
+Return::
+* An _Option_ value (<<defn-option-type>>) which can contain the persisted
+validation data (<<defn-persisted-validation-data>>). The value is empty if the
+parachain Id is not registered or the core assumption is of index stem:[2],
+meaning that the core was freed.
+
+[#defn-occupied-core-assumption]
+====== Occupied Core Assumption
+****
+A occupied core assumption is used for fetching certain pieces of information
+about a parachain by using the relay chain API. The assumption indicates how the
+Runtime API should compute the result. [TODO: how does the node make
+assumptions?] The assumptions, A, is a varying datatype of the following format:
+
+[stem]
+++++
+A == {(0,->,phi),(1,->,phi),(2,->,phi):}
+++++
+
+where _0_ indicates that the candidate occupying the core was made available and
+included to free the core, _1_ indicates that it timed-out and freed the core
+without advancing the parachain and _2_ indicates that the core was not occupied
+to begin with.
+****
+
+[#defn-persisted-validation-data]
+====== Persisted Validation Data
+****
+The persisted validation data provides information about how to create the
+inputs for the validation of a candidate by calling the Runtime. This
+information is derived from the parachain state and will vary from parachain to
+parachain, although some of the fields may be the same for every parachain. This
+validation data acts as a way to authorize the additional data (such as
+messages) the collator needs to pass to the validation function.
+
+The persisted validation data, stem:[D_{pv}], is a datastructure of the following format:
+
+[stem]
+++++
+D_{pv} == (P_h,H_i,H_r,m_b)
+++++
+
+where
+
+• stem:[P_h] is the parent head data (<<defn-head-data>>).
+• stem:[H_i] is the relay chain block number this is in the context of.
+• stem:[H_r] is the relay chain storage root this is in the context of.
+• stem:[m_b] is the maximum legal size of the PoV block, in bytes.
+
+The persisted validation data is fetched via the Runtime API
+(<<sect-rt-api-persisted-validation-data>>).
+****
 
 ===== `ParachainHost_check_validation_outputs`
 
-NOTE: future-reserved
+Checks if the given validation outputs pass the acceptance criteria.
+
+Arguments::
+* The parachain Id (<<defn-para-id>>).
+* The candidate commitments (<<defn-candidate-commitments>>).
+
+Return::
+* A boolean indicating whether the candidate commitments pass the acceptance criteria.
 
 ===== `ParachainHost_session_index_for_child`
 
-NOTE: future-reserved
+Returns the session index that is expected at the child of a block.
 
-===== `ParachainHost_session_info`
+WARNING: TODO clarify session index
 
-NOTE: future-reserved
+Arguments::
+* None
 
+Return::
+* A unsigned 32-bit integer representing the session index.
+
+[#sect-rt-api-validation-code]
 ===== `ParachainHost_validation_code`
 
-NOTE: future-reserved
+Fetches the validation code (Runtime) of a parachain by parachain Id.
 
-===== `ParachainHost_historical_validation_code`
+Arguments::
+* The parachain Id (<<defn-para-id>>).
+* The occupied core assumption (<<defn-occupied-core-assumption>>).
 
-NOTE: future-reserved
+Return::
+* An _Option_ value (<<defn-option-type>>) containing the full validation code
+in an byte array. This value is empty if the parachain Id cannot be found or the
+assumption is wrong.
+
+[#sect-rt-api-validation-code-by-hash]
+===== `ParachainHost_validation_code_by_hash`
+
+Returns the validation code (Runtime) of a parachain by its hash.
+
+Arguments::
+* The hash value of the validation code.
+
+Return::
+* An _Option_ value (<<defn-option-type>>) containing the full validation code
+in an byte array. This value is empty if the parachain Id cannot be found or the
+assumption is wrong.
 
 ===== `ParachainHost_candidate_pending_availability`
 
-NOTE: future-reserved
+Returns the receipt of a candidate pending availability for any parachain
+assigned to an occupied availability core.
+
+Arguments::
+* The parachain Id (<<defn-para-id>>).
+
+Return::
+* An _Option_ value (<<defn-option-type>>) containing the committed candidate
+receipt (<<defn-candidate-receipt>>). This value is empty if the given parachain
+Id is not assigned to an occupied availability cores.
 
 ===== `ParachainHost_candidate_events`
 
-NOTE: future-reserved
+Returns an array of candidate events that occurred within the latest state.
+
+Arguments::
+* None
+
+Return::
+* An array of single candidate events, E, of the following format:
++
+[stem]
+++++
+E == {(0,->,d),(1,->,d),(2,->,(C_r,h,I_c)):}\
+d == (C_r,h,I_c,G_i)
+++++
++
+where
++
+* stem:[E] specifies the the event type of the candidate. _0_ indicates that the
+candidate receipt was backed in the latest relay chain block, _1_ indicates that
+it was included and became a parachain block at the latest relay chain block and
+_2_ indicates that the candidate receipt was not made available and timed-out.
+* stem:[C_r] is the candidate receipt (<<defn-candidate-receipt>>).
+* stem:[h] is the parachain head data (<<defn-head-data>>).
+* stem:[I_c] is the index of the availability core as can be retrieved in
+<<sect-rt-api-availability-cores>> that the candidate is occupying. If stem:[E]
+is of variant stem:[2], then this indicates the core index the candidate _was_
+occupying.
+* stem:[G_i] is the group index (<<defn-validator-groups>>) that is responsible
+of backing the candidate.
+
+[#sect-rt-api-session-info]
+===== `ParachainHost_session_info`
+
+Get the session info of the given session, if available.
+
+Arguments::
+* The unsigned 32-bit integer indicating the session index.
+
+Return::
+* An _Option_ type (<<defn-option-type>>) which can contain the session info
+structure, stem:[S], of the following format:
++
+[stem]
+++++
+S == (A,D,K,G,c,z,s,d,x,a)\
+A == (v_n,…v_m)\
+D == (v_(_n),…v_m)\
+K == (v_n,…v_m)\
+G == (g_n,…g_m)\
+g == (A_n,…A_m)
+++++
++
+where
++
+* stem:[A] indicates the validators of the current session, in canonical order.
+There might be more validators in the current session than validators
+participating in parachain consensus, as returned by the Runtime API
+(<<sect-rt-api-validators>>).
+* stem:[D] indicates the validator authority discovery keys for the given
+session in canonical order. The first couple of validators are equal to the
+corresponding validators participating in the parachain consensus, as returned
+by the Runtime API (<<sect-rt-api-validators>>). The remaining authorities are
+not participating in the parachain consensus.
+* stem:[K] indicates the assignment keys for validators. There might be more
+authorities in the session that validators participating in parachain consensus,
+as returned by the Runtime API (<<sect-rt-api-validators>>).
+* stem:[G] indicates the validator groups in shuffled order. [TODO: what's the purpose of this?]
+* stem:[v_n] is public key of the authority.
+* stem:[A_n] is the authority set Id (<<defn-authority-list>>).
+* stem:[c] is an unsigned 32-bit integer indicating the number of availability
+cores used by the protocol during the given session.
+* stem:[z] is an unsigned 32-bit integer indicating the zeroth delay tranche width.
+* stem:[s] is an unsigned 32-bit integer indicating the number of samples an
+assigned validator should do for approval voting.
+* stem:[d] is an unsigned 32-bit integer indicating the number of delay tranches in total.
+* stem:[x] is an unsigned 32-bit integer indicating how many BABE slots must
+pass before an assignment is considered a “no-show”. [TODO: clarify how to
+convert between BABE slots and “ticks”]
+* stem:[a] is an unsigned 32-bit integer indicating the number of validators
+needed to approve a block.
 
 ===== `ParachainHost_dmq_contents`
 
-NOTE: future-reserved
+Returns all the pending inbound messages in the downward message queue for a given parachain.
 
-===== `ParachainHost_inbound_hrmp_channel_contents`
+Arguments::
+* The parachain Id (<<defn-para-id>>).
 
-NOTE: future-reserved
+Return::
+* An array of inbound downward messages as defined in (TODO: reference messaging chapter)
+
+===== `ParachainHost_inbound_hrmp_channels_contents`
+
+Returns the contents of all channels addressed to the given recipient. Channels that have no messages in them are also included.
+
+Arguments::
+* The parachain Id (<<defn-para-id>>).
+
+Return::
+* An array of inbound HRMP messages as defined in (TODO: reference messaging chapter)
