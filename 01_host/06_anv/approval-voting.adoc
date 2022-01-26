@@ -38,7 +38,7 @@ retrieve the candidate by using the availability recovery
 
 The validator issues approval votes in form of a validator protocol message
 (<<net-msg-validator-protocol-message>>) respectively disputes
-(TODO <<sect-anv-disputes>>).
+(<<sect-disputes>>).
 
 [#sect-tranches]
 ==== Tranches
@@ -89,10 +89,10 @@ T = sf "Transcript"(b_r,b_s,e_i,A)
 
 where
 
-* stem:[sf "Transcript"] constructs a VRF transcript as defined in Definition [todo].
-* stem:[b_r] is the BABE randomness of the current epoch as defined in Definition [todo].
-* stem:[b_s] is the current BABE slot as defined in Definition [todo].
-* stem:[e_i] is the current BABE epoch index as defined in Definition [todo].
+* stem:[sf "Transcript"] constructs a VRF transcript (<<defn-vrf-transcript>>).
+* stem:[b_r] is the BABE randomness of the current epoch (<<defn-epoch-randomness>>).
+* stem:[b_s] is the current BABE slot (<<defn-epoch-slot>>).
+* stem:[e_i] is the current BABE epoch index (<<defn-epoch-slot>>).
 * stem:[A] is the public key of the authority.
 ****
 
@@ -133,7 +133,7 @@ c_i larr sf "LE"(b) mod  a_c
 where
 
 * stem:[sf "Create-Transcript"] is a function defined in <<defn-vrf-create-transcript>>. 
-* stem:[sf "Meta-Ad"] is a function defined in Definition TODO.
+* stem:[sf "Meta-Ad"] is a function defined in <<defn-vrf-meta-ad>>.
 * stem:[sf "Evaluate-VRF"] is a function defined in Definition <<defn-vrf-evaluate-vrf>>.
 * stem:[sf "LE"] implies that the 4-byte input is converted to a little-endian
 encoded 32-bit interger.
