@@ -104,8 +104,8 @@ meaning that the core was freed.
 ****
 A occupied core assumption is used for fetching certain pieces of information
 about a parachain by using the relay chain API. The assumption indicates how the
-Runtime API should compute the result. [TODO: how does the node make
-assumptions?] The assumptions, A, is a varying datatype of the following format:
+Runtime API should compute the result. The assumptions, A, is a varying datatype
+of the following format:
 
 [stem]
 ++++
@@ -276,7 +276,7 @@ not participating in the parachain consensus.
 * stem:[K] indicates the assignment keys for validators. There might be more
 authorities in the session that validators participating in parachain consensus,
 as returned by the Runtime API (<<sect-rt-api-validators>>).
-* stem:[G] indicates the validator groups in shuffled order. [TODO: what's the purpose of this?]
+* stem:[G] indicates the validator groups in shuffled order.
 * stem:[v_n] is public key of the authority.
 * stem:[A_n] is the authority set Id (<<defn-authority-list>>).
 * stem:[c] is an unsigned 32-bit integer indicating the number of availability
@@ -286,8 +286,7 @@ cores used by the protocol during the given session.
 assigned validator should do for approval voting.
 * stem:[d] is an unsigned 32-bit integer indicating the number of delay tranches in total.
 * stem:[x] is an unsigned 32-bit integer indicating how many BABE slots must
-pass before an assignment is considered a “no-show”. [TODO: clarify how to
-convert between BABE slots and “ticks”]
+pass before an assignment is considered a “no-show”.
 * stem:[a] is an unsigned 32-bit integer indicating the number of validators
 needed to approve a block.
 
@@ -299,7 +298,7 @@ Arguments::
 * The parachain Id (<<defn-para-id>>).
 
 Return::
-* An array of inbound downward messages as defined in (TODO: reference messaging chapter)
+* An array of inbound downward messages (<<defn-downward-message>>).
 
 ===== `ParachainHost_inbound_hrmp_channels_contents`
 
@@ -309,4 +308,4 @@ Arguments::
 * The parachain Id (<<defn-para-id>>).
 
 Return::
-* An array of inbound HRMP messages as defined in (TODO: reference messaging chapter)
+* An array of inbound HRMP messages (<<defn-inbound-hrmp-message>>).
