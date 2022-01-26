@@ -30,20 +30,17 @@ include::01_host/main.adoc[]
 include::02_runtime/main.adoc[]
 
 
-[appendix]
 = Additional information
 
 include::aa_appendix/main.adoc[]
 
 
-[appendix]
 [#chap-host-api]
 = Host API
 
 include::ab_host-api/main.adoc[]
 
 
-[appendix]
 [#chap-runtime-api]
 = Runtime API
 

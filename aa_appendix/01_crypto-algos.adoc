@@ -1,8 +1,8 @@
 [#sect-hash-functions]
-==== Hash Functions
+=== Hash Functions
 
 [#sect-blake2]
-==== BLAKE2
+=== BLAKE2
 
 BLAKE2 is a collection of cryptographic hash functions known for their high
 speed. Their design closely resembles BLAKE which has been a finalist in the
@@ -12,15 +12,15 @@ Polkadot is using the Blake2b variant which is optimized for 64-bit platforms.
 Unless otherwise specified, the Blake2b hash function with a 256-bit output is
 used whenever Blake2b is invoked in this document. The detailed specification
 and sample implementations of all variants of Blake2 hash functions can be found
-in RFC 7693 .
+in RFC 7693.
 
 [#sect-randomness]
-==== Randomness
+=== Randomness
 
 NOTE: TBH
 
 [#sect-vrf]
-==== VRF
+=== VRF
 
 A Verifiable Random Function (VRF) is a mathematical operation that takes some
 input and produces a random number using a secret key along with a proof of
@@ -31,8 +31,8 @@ example to the benfit of submitter).
 
 In Polkadot, VRFs are used for the BABE block production lottery by the
 Algorithm as defined in <<algo-block-production-lottery>>  and the parachain
-approval voting mechanism (TODO). The VRF uses mechanism similar to algorithms
-introduced in the following papers:
+approval voting mechanism (<<sect-approval-voting>>). The VRF uses mechanism
+similar to algorithms introduced in the following papers:
 
 * https://eprint.iacr.org/2017/099.pdf[Making NSEC5 Practical for DNSSEC].
 * https://blog.cloudflare.com/privacy-pass-the-math/#dleqproofs[DLEQ Proofs].
@@ -45,14 +45,14 @@ function is the Ristretto group specified in:
 * https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01[The Ristretto255 and Decaf448 Groups].
 
 [#defn-vrf-context]
-===== VRF Context
+==== VRF Context
 ****
 *VRF context* (simply referred to as context when there is no ambiguity)
 represented as stem:[c] is a [TODO: define context here]
 ****
 
 [#defn-vrf-pair]
-===== VRF Pair
+==== VRF Pair
 ****
 The *VRF Pair* is an ordered pair stem:[(I,O)] where stem:[I] represents the VRF
 input and stem:[O] represents the VRF output. stem:[I] is of the following
@@ -76,7 +76,7 @@ where:
 ****
 
 [#defn-vrf-proof]
-===== VRF Proof
+==== VRF Proof
 ****
 The *VRF proof* proves the correctness for an associated VRF output. The VRF
 proof, stem:[P], is a datastructure of the following format:
@@ -92,7 +92,7 @@ are expressed as Curve25519 scalars.
 ****
 
 [#defn-vrf-transcript]
-===== VRF Transcript
+==== VRF Transcript
 ****
 The *VRF transcript* is a “public-coin” argument [TODO: I'd not introduced
 obsecure scary words like these in the definition without defining them]
@@ -125,7 +125,7 @@ indicates whether the party sends or receives a message on the transport.
 ****
 
 [#defn-vrf-meta-ad]
-===== `Meta-Ad`
+==== `Meta-Ad`
 ****
 The stem:["Meta-Ad"] function takes a transcript (<<defn-vrf-transcript>>),
 stem:[t], a UTF-8 encoded label, stem:[l], and a byte array, stem:[b], and
@@ -141,7 +141,7 @@ on transcript as described in the STROBE documentation. [TODO: where?]
 ****
 
 [#defn-vrf-evaluate-vrf]
-===== `Evaluate-VRF`
+==== `Evaluate-VRF`
 ****
 The stem:["Evaluate-VRF"] function takes a public key, stem:[k], a transcript
 (<<defn-vrf-transcript>>), stem:[t], and produces a VRF-Pair
@@ -158,7 +158,7 @@ corresponding wire format (<<defn-vrf-pair>>), respectively the value stem:[I]
 ****
 
 [#defn-vrf-dleq-proove]
-===== `DLEQ-Prove`
+==== `DLEQ-Prove`
 ****
 The stem:["DLEQ-Prove"] function takes a private key, stem:[s_k], and a
 transcript (<<defn-vrf-transcript>>), stem:[t], and a VRF pair
@@ -174,7 +174,7 @@ The functions executed the following steps: [TODO]
 ****
 
 [#defn-vrf-create-transcript]
-===== `Create-Transcript`
+==== `Create-Transcript`
 ****
 The stem:["Create-Transcript"] function takes a context, stem:[c], represented
 as a UTF-8 encoded string and produces a transcript (<<defn-vrf-transcript>>),
@@ -190,7 +190,7 @@ https://merlin.cool/transcript/index.html[Merlin documentation], respectively
 section “3.1.1 Transcript Objects” and section “3.1.2 Initialization”.
 ****
 
-===== `Make-Challenge-Bytes`
+==== `Make-Challenge-Bytes`
 ****
 Algorithm: stem:["Make-Challenge-Bytes"(p,c,s) -> A]
 
@@ -217,7 +217,7 @@ keys.
 ****
 
 [#defn-vrf-append-message]
-===== `Append-Message`
+==== `Append-Message`
 ****
 The stem:["Append-Message"] function takes a transcript
 (<<defn-vrf-transcript>>), stem:[t], a context, stem:[c], represented as a UTF-8
@@ -235,7 +235,7 @@ section “3.1.3 Appending Messages”.
 ****
 
 [#sect-cryptographic-keys]
-==== Cryptographic Keys
+=== Cryptographic Keys
 
 Various types of keys are used in Polkadot to prove the identity of the actors
 involved in the Polkadot Protocols. To improve the security of the users, each
@@ -243,12 +243,10 @@ key type has its own unique function and must be treated differently, as
 described by this Section.
 
 [#defn-account-key]
-===== Account Key
+==== Account Key
 ****
 *Account key stem:[(sk^a,pk^a)]* is a key pair of type of either of the schemes in the following
 table:
-
-TODO: References
 
 .List of the public key scheme which can be used for an account key
 |===
@@ -265,21 +263,18 @@ TODO: References
 |===
 
 An account key can be used to sign transactions among other accounts and
-balance-related functions.
-
-There are two prominent subcategories of account keys namely "stash keys" and
-"controller keys", each being used for a different function. Keys defined in
-Definitions <<defn-account-key>>,
-<<defn-stash-key>> and
-<<defn-controller-key>> are created and managed by the
-user independent of the Polkadot implementation. The user notifies the network
-about the used keys by submitting a transaction, as defined in
+balance-related functions. There are two prominent subcategories of account keys
+namely "stash keys" and "controller keys", each being used for a different
+function. Keys defined in Definitions <<defn-account-key>>, <<defn-stash-key>>
+and <<defn-controller-key>> are created and managed by the user independent of
+the Polkadot implementation. The user notifies the network about the used keys
+by submitting a transaction, as defined in
 link_sect-creating-controller-key[9.5.2] and link_sect-certifying-keys[9.5.5]
 respectively.
 ****
 
 [#defn-stash-key]
-===== Stash Key
+==== Stash Key
 ****
 The *Stash key* is a type of account key that holds funds bonded for staking
 (described in Section link_sect-staking-funds[9.5.1]) to a particular
@@ -293,7 +288,7 @@ anyone, saved on an online device, nor used to submit extrinsics.
 ****
 
 [#defn-controller-key]
-===== Controller Key
+==== Controller Key
 ****
 The *Controller key* is a type of account key that acts on behalf of the Stash
 account. It signs transactions that make decisions regarding the nomination and
@@ -307,7 +302,7 @@ defined].
 ****
 
 [#defn-session-key]
-===== Session Keys
+==== Session Keys
 ****
 *Session keys* are short-lived keys that are used to authenticate validator
 operations. Session keys are generated by the Polkadot Host and should be
@@ -332,27 +327,27 @@ majority of the users’ funds and should only be used for their intended purpos
 ****
 
 [#sect-staking-funds]
-===== Holding and staking funds
+==== Holding and staking funds
 
 NOTE: TBH
 
 [#sect-creating-controller-key]
-===== Creating a Controller key
+==== Creating a Controller key
 
 NOTE: TBH
 
 [#sect-designating-proxy]
-===== Designating a proxy for voting
+==== Designating a proxy for voting
 
 NOTE: TBH
 
 [#sect-controller-settings]
-===== Controller settings
+==== Controller settings
 
 NOTE: TBH
 
 [#sect-certifying-keys]
-===== Certifying keys
+==== Certifying keys
 
 Due to security considerations and Runtime upgrades, the session keys are
 supposed to  be changed regularly. As such, the new session keys need to be
