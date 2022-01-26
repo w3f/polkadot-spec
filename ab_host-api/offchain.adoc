@@ -1,5 +1,5 @@
 [#sect-offchain-api]
-=== Offchain
+== Offchain
 
 The Offchain Workers allow the execution of long-running and possibly
 non-deterministic tasks (e.g. web requests, encryption/decryption and signing of
@@ -17,7 +17,7 @@ storage. There are two different types of storage available which are defined in
 <<defn-offchain-persistent-storage>> and <<defn-offchain-local-storage>>.
 
 [#defn-offchain-persistent-storage]
-==== Persisted Storage
+=== Persisted Storage
 ****
 *Persistent storage* is non-revertible and not fork-aware. It means that any value
 set by the offchain worker is persisted even if that block (at which the worker
@@ -29,7 +29,7 @@ running on different forks.
 ****
 
 [#defn-offchain-local-storage]
-==== Local Storage
+=== Local Storage
 ****
 *Local storage* is revertible and fork-aware. It means that any value set by the
 offchain worker triggered at a certain block is reverted if that block is
@@ -37,7 +37,7 @@ reverted as non-canonical. The value is NOT available for the worker that is
 re-run at the next or any future blocks.
 ****
 
-==== HTTP Status Code
+=== HTTP Status Code
 ****
 *HTTP status codes* that can get returned by certain Offchain HTTP functions.
 
@@ -49,7 +49,7 @@ considered destroyed and must be reconstructed again.
 * `100`-`999`: the request has finished with the given HTTP status code.
 ****
 
-==== HTTP Error
+=== HTTP Error
 ****
 HTTP error, stem:[E], is a varying data type (<<defn-varrying-data-type>>) and
 specifies the error types of certain HTTP functions. Following values are
@@ -61,9 +61,9 @@ E = {(0,"The deadile was reached"),(1,"There was an IO error while processing th
 ++++
 ****
 
-==== Functions
+=== Functions
 
-===== `ext_offchain_is_validator`
+==== `ext_offchain_is_validator`
 
 Check whether the local node is a potential validator. Even if this function
 returns _1_, it does not mean that any keys are configured or that the validator
@@ -79,7 +79,7 @@ Arguments::
 validator or a integer equal to _0_ if it is not.
 
 [#sect-ext-offchain-submit-transaction]
-===== `ext_offchain_submit_transaction`
+==== `ext_offchain_submit_transaction`
 
 Given a SCALE encoded extrinsic, this function submits the extrinsic to the
 Host's transaction pool, ready to be propagated to remote peers.
@@ -98,12 +98,12 @@ encoded _Result_ value (<<defn-result-type>>). Neither on success or failure is
 there any additional data provided. The cause of a failure is implementation
 specific.
 
-===== `ext_offchain_network_state`
+==== `ext_offchain_network_state`
 
 Returns the SCALE encoded, opaque information about the local node's network state.
 
 [#defn-opaque-network-state]
-===== Opaque Network State
+==== Opaque Network State
 ****
 The *Opaque network state structure*, stem:[S], is a SCALE encoded blob holding
 information about the the _libp2p PeerId_, stem:[P_("id")], of the local node
@@ -138,7 +138,7 @@ encoded `Result` value (<<defn-result-type>>). On success it contains the
 _Opaque network state_ structure (<<defn-opaque-network-state>>). On failure, an
 empty value is yielded where its cause is implementation specific.
 
-===== `ext_offchain_timestamp`
+==== `ext_offchain_timestamp`
 
 Returns the current timestamp.
 
@@ -150,7 +150,7 @@ Returns the current timestamp.
 Arguments::
 * `result`: an u64 integer indicating the current UNIX timestamp (<<defn-unix-time>>).
 
-===== `ext_offchain_sleep_until`
+==== `ext_offchain_sleep_until`
 
 Pause the execution until the `deadline` is reached.
 
@@ -162,7 +162,7 @@ Pause the execution until the `deadline` is reached.
 Arguments::
 * `deadline`: an u64 integer specifying the UNIX timestamp (<<defn-unix-time>>).
 
-===== `ext_offchain_random_seed`
+==== `ext_offchain_random_seed`
 
 Generates a random seed. This is a truly random non deterministic seed generated
 by the host environment.
@@ -175,7 +175,7 @@ by the host environment.
 Arguments::
 * `result`: a 32-bit integer pointer to the buffer containing the 256-bit seed.
 
-===== `ext_offchain_local_storage_set`
+==== `ext_offchain_local_storage_set`
 
 Sets a value in the local storage. This storage is not part of the consensus,
 it's only accessible by the offchain worker tasks running on the same machine
@@ -194,7 +194,7 @@ equal to _2_ for local storage (<<defn-offchain-local-storage>>).
 * `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
 * `value`: a pointer-size (<<defn-runtime-pointer>>) indicating the value.
 
-===== `ext_offchain_local_storage_clear`
+==== `ext_offchain_local_storage_clear`
 
 Remove a value from the local storage.
 
@@ -210,7 +210,7 @@ used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
 * `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
 
-===== `ext_offchain_local_storage_compare_and_set`
+==== `ext_offchain_local_storage_compare_and_set`
 
 Sets a new value in the local storage if the condition matches the current value.
 
@@ -232,7 +232,7 @@ encoded _Option_ value (<<defn-option-type>>) containing the old key.
 * `result`: an i32 integer equal to _1_ if the new value has been set or a value
 equal to _0_ if otherwise.
 
-===== `ext_offchain_local_storage_get`
+==== `ext_offchain_local_storage_get`
 
 Gets a value from the local storage.
 
@@ -251,7 +251,7 @@ equal to _2_ for local storage (<<defn-offchain-local-storage>>).
 encoded _Option_ value (<<defn-option-type>>) containing the value or the
 corresponding key.
 
-===== `ext_offchain_http_request_start`
+==== `ext_offchain_http_request_start`
 
 Initiates a HTTP request given by the HTTP method and the URL. Returns the Id of
 a newly started request.
@@ -273,7 +273,7 @@ encoded _Result_ value (<<defn-result-type>>) containing the i16 ID of the newly
 started request. On failure no additionally data is provided. The cause of
 failure is implementation specific.
 
-===== `ext_offchain_http_request_add_header`
+==== `ext_offchain_http_request_add_header`
 
 Append header to the request. Returns an error if the request identifier is
 invalid, `http_response_wait` has already been called on the specified request
@@ -295,7 +295,7 @@ encoded _Result_ value (<<defn-result-type>>). Neither on success or failure is
 there any additional data provided. The cause of failure is implementation
 specific.
 
-===== `ext_offchain_http_request_write_body`
+==== `ext_offchain_http_request_write_body`
 
 Writes a chunk of the request body. Returns a non-zero value in case the
 deadline is reached or the chunk could not be written.
@@ -317,7 +317,7 @@ encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
 encoded _Result_ value (<<defn-result-type>>). On success, no additional data is
 provided. On error it contains the HTTP error type (<<defn-http-error>>).
 
-===== `ext_offchain_http_response_wait`
+==== `ext_offchain_http_response_wait`
 
 Returns an array of request statuses (the length is the same as IDs). Note that
 if deadline is not provided the method will block indefinitely, otherwise
@@ -338,7 +338,7 @@ encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
 * `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
 encoded array of request statuses (<<defn-http-status-codes>>).
 
-===== `ext_offchain_http_response_headers`
+==== `ext_offchain_http_response_headers`
 
 Read all HTTP response headers. Returns an array of key/value pairs. Response
 headers must be read before the response body.
@@ -353,7 +353,7 @@ Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
 * `result`: a pointer-size (<<defn-runtime-pointer>>) indicating a SCALE encoded array of key/value pairs.
 
-===== `ext_offchain_http_response_read_body`
+==== `ext_offchain_http_response_read_body`
 
 Reads a chunk of body response to the given buffer. Returns the number of bytes
 written or an error in case a deadline is reached or the server closed the
@@ -379,7 +379,7 @@ encoded _Result_ value (<<defn-result-type>>). On success it contains an i32
 integer specifying the number of bytes written or a HTTP error type
 (<<defn-http-error>>) on failure.
 
-===== `ext_offchain_set_authorized_nodes`
+==== `ext_offchain_set_authorized_nodes`
 
 Set the authorized nodes which are allowed to connect to the local node. This
 function is primarily used for private blockchains [TODO: shouldn't we give a context
