@@ -5,15 +5,16 @@ v0.2.0
 :doctype: book
 :example-caption: Definition
 :mathematical-format: svg
-:multipage-level: 2
+:multipage-level: 3
 :sectlinks:
 :sectnums:
 :sectnumlevels: 4
 :source-highlighter: rouge
 :stem:
 :toc: left
-:toclevels: 2
+:toclevels: 3
 :xrefstyle: short
+:stylesheet: theme.css
 
 WARNING: The Polkadot specification is currently being converted from TexMacs to
 AsciiDoc. This specification is *Work-In-Progress* and any content, structure ,
