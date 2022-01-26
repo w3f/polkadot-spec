@@ -56,7 +56,7 @@ Where the resulting HTML pages can then be found in the `out/` directory.
 #### Single-Page
 
 ```bash
-asciidoctor index.adoc
+asciidoctor -a toc=left -a docinfo=shared index.adoc
 ```
 
 ### PDF (with math formulas enabled)
