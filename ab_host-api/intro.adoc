@@ -6,10 +6,10 @@ is specified or referenced in this section. If the encoding is not
 mentioned, then the default Wasm encoding is used, such as little-endian
 byte ordering for integers.
 
-=== Preliminaries
+== Preliminaries
 
 [#nota-host-api-at-state]
-==== Exposed Host API
+=== Exposed Host API
 ****
 By stem:["RE"_B] we refer to the API exposed by the Polkadot Host which
 interact, manipulate and response based on the state storage whose state is set
@@ -17,7 +17,7 @@ at the end of the execution of block stem:[B].
 ****
 
 [#defn-runtime-pointer]
-==== Runtime Pointer
+=== Runtime Pointer
 ****
 The *Runtime pointer* type is an unsigned 32-bit integer representing a pointer
 to data in memory. This pointer is the primary way to exchange data of
@@ -25,7 +25,7 @@ fixed/known size between the Runtime and Polkadot Host.
 ****
 
 [#defn-runtime-pointer-size]
-==== Runtime Pointer Size
+=== Runtime Pointer Size
 ****
 The *Runtime pointer-size* type is an unsigned 64-bit integer, representing two
 consecutive integers. The least significant is a pointer to the data in memory.
@@ -35,7 +35,7 @@ Runtime and the Polkadot Host.
 ****
 
 [#defn-lexicographic-ordering]
-==== Lexicographic ordering
+=== Lexicographic ordering
 ****
 *Lexicographic ordering* refers to the ascending ordering of bytes or byte
 arrays, such as:
