@@ -14,7 +14,6 @@ v0.2.0
 :toc: left
 :toclevels: 3
 :xrefstyle: short
-:stylesheet: theme.css
 
 WARNING: The Polkadot specification is currently being converted from TexMacs to
 AsciiDoc. This specification is *Work-In-Progress* and any content, structure ,
