@@ -378,24 +378,3 @@ encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
 encoded _Result_ value (<<defn-result-type>>). On success it contains an i32
 integer specifying the number of bytes written or a HTTP error type
 (<<defn-http-error>>) on failure.
-
-==== `ext_offchain_set_authorized_nodes`
-
-Set the authorized nodes which are allowed to connect to the local node. This
-function is primarily used for private blockchains [TODO: shouldn't we give a context
-of what private blockchain means] and is not necessarily required for the public
-and open Polkadot protocol.
-
-===== Version 1 - Prototype
-----
-(func $ext_offchain_set_authorized_nodes_version_1
-	(param $nodes i64) (param $authorized_only i32)
-----
-
-Arguments::
-* `nodes`: a pointer-size (<<defn-runtime-pointer>>) indicating the buffer of
-the SCALE encoded array of libp2p PeerId's. Invalid PeerId's are silently
-ignored.
-* `authorized_only`: If set to 1, then only the authorized nodes are allowed to
-connect to the local node (whitelist). All other nodes are rejected. If set to
-0, then no such restriction is placed.
