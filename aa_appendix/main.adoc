@@ -1,19 +1,19 @@
 [#chapter-crypto-algos]
-=== Cryptographic Algorithms
+== Cryptographic Algorithms
 
 include::01_crypto-algos.adoc[]
 
 [#chapter-encoding]
-=== Auxiliary Encodings
+== Auxiliary Encodings
 
 include::02_encoding.adoc[]
 
 [#chapter-genesis]
-=== Genesis State
+== Genesis State
 
 include::03_genesis.adoc[]
 
 [#chapter-erasure-encoding]
-=== Erasure Encoding
+== Erasure Encoding
 
 include::04_erasure-encoding.adoc[]
