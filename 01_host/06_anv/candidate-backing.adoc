@@ -94,7 +94,7 @@ to the authority set (<<defn-authority-list>>).
 *  stem:[T] is an array of backed candidates for inclusing in the current block.
 *  stem:[D] is an array of disputes.
 *  stem:[P_h] is the parachain parent head data (<<defn-head-data>>).
-*  stem:[d] is a dispute statement (TODO).
+*  stem:[d] is a dispute statement (<<net-msg-dispute-request>>).
 *  stem:[R] is a committed candidate receipt (<<defn-committed-candidate-receipt>>).
 *  stem:[V] is an array of validity votes themselves, expressed as signatures.
 *  stem:[i] is a bitfield of indices of the validators within the validator

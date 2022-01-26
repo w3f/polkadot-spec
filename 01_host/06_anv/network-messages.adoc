@@ -347,7 +347,7 @@ is found.
 ===== Dispute Request
 
 The dispute request is sent by clients who want to issue a dispute about a
-candidate. The request, D_r, is a datastructure of the following format:
+candidate. The request, stem:[D_r], is a datastructure of the following format:
 
 [stem]
 ++++
