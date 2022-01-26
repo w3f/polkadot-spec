@@ -1,10 +1,10 @@
 [#sect-logging-api]
-=== Logging
+== Logging
 
 Interface that provides functions for logging from within the runtime.
 
 [#defn-logging-log-level]
-==== Log Level
+=== Log Level
 ****
 The *Log Level*, stem:[L], is a varying data type (<<defn-varrying-data-type>>)
 and implies the emergency of the log. Possible log levels and the corresponding
@@ -16,9 +16,9 @@ L = {(0,"Error = 1"),(1,"Warn = 2"),(2,"Info = 3"),(3, "Debug = 4"),(4,"Trace = 
 ++++
 ****
 
-==== Functions
+=== Functions
 
-===== `ext_logging_log`
+==== `ext_logging_log`
 
 Request to print a log message on the host. Note that this will be only
 displayed if the host is enabled to display log messages with given level and
