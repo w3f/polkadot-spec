@@ -21,8 +21,8 @@ Block announcements, requests and responses are sent over the substream as
 described in <<defn-block-announce-handshake>>.
 
 [#defn-block-announce-handshake]
-===== Definition: Block Announce Handshake
-****
+.<<defn-block-announce-handshake,Block Announce Handshake>>
+====
 The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once
 established, all `BlockAnounce` messages (<<defn-block-announce>>) created by
 the node are sent to the `/dot/block-announces/1` substream.
@@ -44,11 +44,11 @@ N_B = "Best block number according to the node"\
 h_B = "Best block hash according to the node"\
 h_G = "Genesis block hash according to the node"
 ++++
-****
+====
 
 [#defn-block-announce]
-===== Definition: Block Announce
-****
+.<<defn-block-announce,Block Announce>>
+====
 The `BlockAnnounce` message is sent to the specified substream and indicates to
 remote peers that the node has either created or received a new block.
 
@@ -66,7 +66,7 @@ where:
 "Head"(B) = "Header of the announced block"\
 b = {(0,"Is not part of the best chain"),(1,"Is the best block according to the node"):}
 ++++
-****
+====
 
 [#sect-msg-block-request]
 ==== Requesting Blocks
@@ -74,8 +74,8 @@ Block requests can be used to retrieve a range of blocks from peers. Those
 messages are sent over the `/dot/sync/2` substream.
 
 [#defn-msg-block-request]
-===== Definition: Block Request
-****
+.<<defn-msg-block-request,Block Request>>
+====
 The `BlockRequest` message is a Protobuf serialized structure of the following format:
 
 [cols="2,1,4,1"]
@@ -161,11 +161,11 @@ requested blocks. The structure is a varying data type
 |===
 * stem:[B_m] is the number of blocks to be returned. An implementation defined
 maximum is used when unspecified.
-****
+====
 
 [#defn-msg-block-response]
-===== Definition: Block Response
-****
+.<<defn-msg-block-response,Block Response>>
+====
 The `BlockResponse` message is received after sending a `BlockRequest` message
 to a peer. The message is a Protobuf serialized structure of the following
 format:
@@ -222,7 +222,7 @@ requested fields (bitmask value). The structure has the following format:
 |Indicates whether the justification is empty (i.e. should be ignored)
 |
 |===
-****
+====
 
 [#sect-msg-transactions]
 ==== Transactions
@@ -238,8 +238,8 @@ The mechanism for managing transactions is further described in Section
 <<sect-extrinsics>>.
 
 [#defn-transactions-message]
-===== Definition: Transaction Message
-****
+.<<defn-transactions-message,Transaction Message>>
+====
 The *transactions message* is the structure of how the transactions are sent
 over the network. It is represented by stem:[M_T] and is defined as follows:
 
@@ -260,7 +260,7 @@ extrinsic. The Polkadot Host is agnostic about the content of an
 extrinsic and treats it as a blob of data.
 
 Transactions are sent over the `/dot/transactions/1` substream.
-****
+====
 
 [#sect-msg-grandpa]
 ==== GRANDPA Messages
@@ -270,8 +270,8 @@ the creation and distributing these messages is described in <<sect-finality>>.
 The underlying messages are specified in this section.
 
 [#defn-gossip-message]
-===== Definition: Grandpa Gossip Message
-****
+.<<defn-gossip-message,Grandpa Gossip Message>>
+====
 A *GRANDPA gossip message*, stem:[M], is a varying datatype
 (<<defn-varrying-data-type>>) which identifies the message type that is cast by
 a voter followed by the message itself.
@@ -288,11 +288,11 @@ where:
 * stem:[N_m] is defined in <<defn-grandpa-neighbor-msg>>.
 * stem:[R_m] is defined in <<defn-grandpa-catchup-request-msg>>.
 * stem:[U_M] is defined in <<defn-grandpa-catchup-response-msg>>.
-****
+====
 
 [#defn-grandpa-vote-msg]
-===== Definition: GRANDPA Vote Messages
-****
+.<<defn-grandpa-vote-msg,GRANDPA Vote Messages>>
+====
 A *GRANDPA vote message* by voter stem:[v], stem:[M_v^(r,"stage")], is gossip to
 the network by voter stem:[v] with the following structure:
 
@@ -316,11 +316,11 @@ signature of the authority (<<defn-sign-round-vote>>).
 
 This message is the sub-component of the GRANDPA gossip message
 (<<defn-gossip-message>>) of type Id 0.
-****
+====
 
 [#defn-grandpa-justifications-compact]
-===== Definition: GRANDPA Compact Justification Format
-****
+.<<defn-grandpa-justifications-compact,GRANDPA Compact Justification Format>>
+====
 The *GRANDPA compact justification format* is an optimized data structure to
 store a collection of pre-commits and their signatures to be submitted as part
 of a commit message. Instead of storing an array of justifications, it uses the
@@ -337,11 +337,11 @@ where:
 * stem:["Sig"_(v_i)^(r,pc)] is a 512-bit byte array containing the pre-commit
 signature of authority stem:[v_i] (<<defn-sign-round-vote>>).
 * stem:[v_("id"_n)] is a 256-bit byte array containing the public key of authority stem:[v_i].
-****
+====
 
 [#defn-grandpa-commit-msg]
-===== Definition: GRANDPA Commit Message
-****
+.<<defn-grandpa-commit-msg,GRANDPA Commit Message>>
+====
 A *GRANDPA commit message* for block stem:[B] in round stem:[r],
 stem:[M_v^(r,"Fin")(B)], is a message broadcasted by voter stem:[v] to the
 network indicating that voter stem:[v] has finalized block stem:[B] in round
@@ -364,7 +364,7 @@ containing observed pre-commit of authorities stem:[v_0] to stem:[v_n]
 
 This message is the sub-component of the GRANDPA gossip message
 (<<defn-gossip-message>>) of type Id _1_.
-****
+====
 
 [#sect-grandpa-neighbor-msg]
 ===== GRANDPA Neighbor Messages
