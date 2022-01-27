@@ -50,8 +50,8 @@ Polkadot Host should keep a _transaction pool_ and a _transaction queue_
 defined as follows:
 
 [#defn-transaction-queue]
-===== Definition: Transaction Queue
-****
+.<<defn-transaction-queue,Transaction Queue>>
+====
 The *Transaction Queue* of a block producer node, formally referred to as
 stem:[TQ] is a data structure which stores the transactions ready to be included
 in a block sorted according to their priorities (<<sect-msg-transactions>>). The
@@ -61,7 +61,7 @@ transaction queue.
 
 The algorithm as defined in <<algo-validate-transactions>> updates the
 transaction pool and the transaction queue according to the received message:
-****
+====
 
 [#algo-validate-transactions]
 ===== Algorithm: Validate Transactions and Store
