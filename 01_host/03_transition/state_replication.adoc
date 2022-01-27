@@ -19,8 +19,8 @@ _transactions_. _Extrinsics_ can contain any set of external data the underlying
 chain wishes to validate and track.
 
 [#defn-block-header]
-===== Definition: Block Header
-****
+.<<defn-block-header,Block Header>>
+====
 The *header of block B*, stem:[H_h(B)], is a 5-tuple containing the following
 elements:
 
@@ -42,11 +42,11 @@ formally referred to as stem:[H_e].
 could help the light clients interact with the block without the need of
 accessing the full storage as well as consensus-related data including the block
 signature. This field is indicated as stem:[H_d] (<<defn-digest>>).
-****
+====
 
 [#defn-digest]
-===== Definition: Header Digest
-****
+.<<defn-digest,Header Digest>>
+====
 The header *digest* of block stem:[B] formally referred to by stem:[H_d (B)] is
 an array of *digest items* stem:[H_d^i]’s, known as digest items of varying data
 type (<<defn-varrying-data-type>>) such that:
@@ -79,11 +79,11 @@ validation. The Seal (defn-babe-seal) must be added back to the digest
 afterward.
 * Id _6_, the *Pre-runtime* digest, represents messages from a consensus engine
 to the Runtime (e.g. <<defn-babe-header>>).
-****
+====
 
 [#defn-block-header-hash]
-===== Definition: Header Hash
-****
+.<<defn-block-header-hash,Header Hash>>
+====
 The *block header hash of block stem:[B]*, stem:[H_h(B)], is the hash of the
 header of block stem:[B] encoded by simple codec:
 
@@ -91,7 +91,7 @@ header of block stem:[B] encoded by simple codec:
 ++++
 H_h(B) := "Blake2b"("Enc"_(SC)("Head"(B)))
 ++++
-****
+====
 
 [#sect-justified-block-header]
 ===== Justified Block Header
@@ -109,8 +109,8 @@ for the block to be stored and is formally referred to as stem:[A(B)]. An
 authority Id is 256-bit.
 
 [#defn-block-body]
-===== Definition: Block Body
-****
+.<<defn-block-body,Block Body>>
+====
 The block body consists of an sequence of extrinsics, each encoded as a byte
 array. The content of an extrinsic is completely opaque to the Polkadot Host. As
 such, from the point of the Polkadot Host, and is simply a SCALE encoded array
@@ -123,7 +123,7 @@ defined to be:
 ++++
 
 Where each stem:[E_i in bbb B] is a SCALE encoded extrinsic.
-****
+====
 
 [#sect-block-validation]
 ==== Importing and Validating Block
@@ -196,8 +196,8 @@ accomplish this task. Instead, the Polkadot Host is required to implement
 stem:["Set-State-At"] (<<defn-set-state-at>>):
 
 [#defn-set-state-at]
-===== Definition: Set State At Block
-****
+.<<defn-set-state-at,Set State At Block>>
+====
 The function:
 
 [stem]
@@ -211,7 +211,7 @@ extrinsics contained in the branch of the block tree from genesis till block B
 including those recorded in Block stem:[B].
 
 For the definition of the state storage see <<sect-state-storage>>.
-****
+====
 
 [#sect-changes-trie]
 ==== Changes Trie
