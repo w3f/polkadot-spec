@@ -46,9 +46,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install gem dependencies
-      run: |
-        sudo gem update --system 
-        sudo gem install asciidoctor-multipage rouge
+      run: sudo gem install asciidoctor-multipage rouge
     - name: Build multi-html specification
       run: make multi-html
     - name: Upload multi-html specification
