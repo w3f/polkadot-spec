@@ -253,8 +253,9 @@ generated on every block. But if conditions apply, all those different types of
 pairs get inserted into the same Changes Trie, therefore only one Changes Trie
 Root gets generated for each block.
 
-===== Definition: Inserted Key-Value Pairs
-****
+[#defn-change-trie-insert]
+.<<defn-change-trie-insert, Inserted Key-Value Pairs>>
+====
 The *inserted key-value pair stored in the nodes of Changes Trie* is
 formally defined as:
 
@@ -294,7 +295,7 @@ where:
 * _1_ is a list of extrinsics indices and stem:[e_n] refers to the index of the extrinsic within the block.
 * _2_ is a list of block numbers.
 * _3_ is the child changes trie.
-****
+====
 
 [#sect-changes-trie-extrinsics-pairs]
 ===== Key to extrinsics pairs

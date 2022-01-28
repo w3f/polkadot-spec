@@ -51,8 +51,9 @@ child and does not represent a valid key in the data set, is compressed into a
 single edge. This improves space efficiency when the key space is sparse.
 ====
 
-==== Sequence of Bytes
-****
+[#defn-byte-sequence]
+.<<defn-byte-sequence, Sequence of Bytes>>
+====
 By a *sequences of bytes* or a *byte array*, stem:[b], of length
 stem:[n], we refer to
 
@@ -78,7 +79,7 @@ stem:[b :=(b_0, ..., b_m)] by:
 ++++
 a |\| b :=(a_0, ..., a_n, b_0, ..., b_m)
 ++++
-****
+====
 
 [#defn-bit-rep]
 .<<defn-bit-rep, Bitwise Representation>>
@@ -125,11 +126,12 @@ sf "Enc"_(sf "LE"):{(bbb Z^+ -> bbb B),((B_n ... B_0)_256 -> (B_{0,} B_1, ... , 
 ++++
 ====
 
-==== UINT32
-****
+[#defn-uint32]
+.<<defn-uint32, UINT32>>
+====
 By *UINT32* we refer to a non-negative integer stored in a byte array of
 length stem:[4] using little-endian encoding format.
-****
+====
 
 ==== Blockchain 
 
@@ -230,8 +232,9 @@ easy to see that the block tree is de facto a tree. A block tree naturally
 imposes partial order relationships on the blocks as follows:
 ====
 
-==== Descendant
-****
+[#defn-descendant]
+.<<defn-descendant, Descendant>>
+====
 We say *B is descendant of stem:[B']*, formally noted as stem:[B > B'] if
 stem:[B] is a descendant of stem:[B'] in the block tree.
-****
+====

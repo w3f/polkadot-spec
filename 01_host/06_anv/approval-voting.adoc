@@ -172,8 +172,8 @@ must not exceed the number of samples.
 ====
 
 [#delayed-availability-core-vrf-assignment]
-==== Delayed Availability Core VRF Assignment
-****
+.<<delayed-availability-core-vrf-assignment, Delayed Availability Core VRF Assignment>>
+====
 The *delayed availability core VRF assignments* determined at what point a
 validator should start the approval process as described in <<sect-tranches>>.
 The validator executes the following steps:
@@ -211,4 +211,4 @@ retrieved via the Runtime API (<<sect-rt-api-session-info>>)..
 
 The resulting tranche, stem:[n], cannot be less than stem:[0]. If the tranche is
 less than stem:[0], then stem:[d=0].
-****
+====
