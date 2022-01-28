@@ -256,5 +256,9 @@ TSWLatexianTemp*
 # direnv
 .envrc
 
+# asciidoc
+stem-*.svg
+algo-*.svg
+
 # nix shell files
 shell.nix
