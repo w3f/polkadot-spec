@@ -28,7 +28,7 @@ compute its lottery values in Algorithm as defined in
 <<algo-block-production-lottery>>.
 
 [#defn-epoch-slot]
-.<<defn-epoch-slot, Epoch>>
+.<<defn-epoch-slot, Epoch and Slot>>
 ====
 A block production *epoch*, formally referred to as stem:[cc E], is a
 period with a pre-known starting time and fixed-length during which the set of
@@ -40,13 +40,13 @@ equal length duration of each slot is called the *slot duration* and indicated
 by stem:[cc T]. Each slot is awarded to a subset of block producers during
 which they are allowed to generate a block.
 
-IMPORTANT: Substrate refers to an epoch as "session" in some places, however,
+NOTE: Substrate refers to an epoch as "session" in some places, however,
 epoch should be the preferred and official name for these periods.
 ====
 
-[#note-slot]
-===== Slot duration
-****
+[#defn-epoch-duration]
+.<<defn-epoch-duration, Epoch and Slot Duration>>
+====
 We refer to the number of slots in epoch stem:[cc E_n] by stem:[sc_n].
 stem:[sc_n] is set to the `duration` field in the returned data from the call of
 the Runtime entry `BabeApi_configuration` (<<sect-rte-babeapi-epoch>>) at
@@ -56,7 +56,7 @@ stem:[s], stem:[cc B_c] is the set of Blocks generated at slot stem:[s].
 
 <<defn-epoch-subchain>> provides an iterator over the blocks produced during a
 specific epoch.
-****
+====
 
 [#defn-epoch-subchain]
 .<<defn-epoch-subchain, Epoch Subchain>>
@@ -67,8 +67,9 @@ stem:[cc E_n]. When there is more than one block generated at a slot, we
 choose the one which is also on stem:["Longest-Chain"(BT)].
 ====
 
-===== Equivocation
-****
+[#defn-equivovation]
+.<<defn-equivocation, Equivocation>>
+====
 A block producer *equivocates* if they produce more than one block at the same
 slot. The proof of equivocation are the given distinct headers that were signed
 by the validator and which include the slot number.
@@ -76,7 +77,7 @@ by the validator and which include the slot number.
 The Polkadot Host must detect equivocations committed by other validators and
 submit those to the Runtime as described in
 <<sect-babeapi_submit_report_equivocation_unsigned_extrinsic>>.
-****
+====
 
 ==== Block Production Lottery
 
@@ -466,7 +467,7 @@ where:
 ("parent").
 * stem:[s] is the slot number.
 * stem:["Head"(B)] is defined in <<defn-block-header>>.
-* stem:["Call-Runtime-Entry"] is defined in <<notat-call-into-runtime>>.
+* stem:["Call-Runtime-Entry"] is defined in <<defn-call-into-runtime>>.
 * stem:["Inherent-Data"] is defined in <<defn-inherent-data>>.
 * stem:["End-Of-Slot"] indicates the end of the BABE slot as defined
 <<algo-slot-time>> respectively <<defn-epoch-slot>>.
