@@ -14,8 +14,8 @@ them to the relay chain validator, must prepare pieces of data
 parachain protocol.
 
 [#defn-collation]
-==== Collation
-****
+.<<defn-collation, Collation>>
+====
 A collation is a datastructure which contains the proposed parachain candidate,
 including an optional validation parachain Runtime update and upward messages.
 The collation datastructure, C, is a datastructure of the following format:
@@ -42,4 +42,4 @@ execution of the parachain specific logic.
 downward messages (<<defn-downward-message>>).
 * stem:[w] is an unsigned 32-bit integer indicating the mark up to which all
 inbound HRMP messages have been processed by the parachain.
-****
+====
