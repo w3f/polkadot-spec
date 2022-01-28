@@ -17,7 +17,7 @@ polkadot-spec.html: $(SOURCES) docinfo.html
 	asciidoctor -a docinfo=shared -o $@ $<
 
 polkadot-spec-html/: $(SOURCES)
-	asciidoctor-multipage -a docinfo=shared-header -D $@ $<
+	asciidoctor -a docinfo=shared-header -r asciidoctor-multipage -b multipage_html5 -D $@ $<
 
 polkadot-spec.pdf: $(SOURCES)
 	asciidoctor-pdf -o $@ -r asciidoctor-mathematical $<
