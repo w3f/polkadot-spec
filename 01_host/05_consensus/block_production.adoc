@@ -28,8 +28,8 @@ compute its lottery values in Algorithm as defined in
 <<algo-block-production-lottery>>.
 
 [#defn-epoch-slot]
-===== Epoch
-****
+.<<defn-epoch-slot, Epoch>>
+====
 A block production *epoch*, formally referred to as stem:[cc E], is a
 period with a pre-known starting time and fixed-length during which the set of
 block producers stays constant. Epochs are indexed sequentially, and we refer to
@@ -42,7 +42,7 @@ which they are allowed to generate a block.
 
 IMPORTANT: Substrate refers to an epoch as "session" in some places, however,
 epoch should be the preferred and official name for these periods.
-****
+====
 
 [#note-slot]
 ===== Slot duration
@@ -59,13 +59,13 @@ specific epoch.
 ****
 
 [#defn-epoch-subchain]
-===== Epoch Subchain
-****
+.<<defn-epoch-subchain, Epoch Subchain>>
+====
 By stem:["SubChain"(cc E_n]) for epoch stem:[cc E_n], we refer to the path
 graph of stem:[BT] containing all the blocks generated during the slots of epoch
 stem:[cc E_n]. When there is more than one block generated at a slot, we
 choose the one which is also on stem:["Longest-Chain"(BT)].
-****
+====
 
 ===== Equivocation
 ****
@@ -94,16 +94,16 @@ stem:[n] is the index of the epoch for whose slots the block producer is running
 the lottery.
 
 [#defn-babe-constant]
-===== BABE Constant
-****
+.<<defn-babe-constant, BABE Constant>>
+====
 The *BABE constant* stem:[c in (0,1)] is the probability that a slot will not be
 empty and used in the winning threshold calculation
 (<<defn-winning-threshold>>).
-****
+====
 
 [#defn-winning-threshold]
-===== Winning Threshold
-****
+.<<defn-winning-threshold, Winning Threshold>>
+====
 The *Winning threshold* denoted by stem:[T_(cc E_n)] is the threshold that is
 used alongside the result of Algorithm as defined in
 <<algo-block-production-lottery>> to decide if a block producer is the winner of
@@ -117,7 +117,7 @@ T_(E_n) := 1 - (1 - c)^(1/("AuthorityDirectory"^(E_n)))
 where the stem:["AuthorityDirectory"^(cc E_n)] is the set of BABE authorities
 for epoch stem:[cc E_n] and stem:[c in (0, 1)] is the BABE constant
 (<<defn-babe-constant>>).
-****
+====
 
 [#algo-block-production-lottery]
 ===== Block Production Lottery
@@ -181,8 +181,8 @@ target slot to which to synchronize should be the first slot in the new sync
 period.
 
 [#defn-slot-offset]
-===== Slot Offset
-****
+.<<defn-slot-offset, Slot Offset>>
+====
 Let stem:[s_i] and stem:[s_j] be two slots belonging to epochs stem:[cc E_k]
 and stem:[cc E_l]. By *Slot-Offset*stem:[(s_i,s_j)] we refer to the function
 whose value is equal to the number of slots between stem:[s_i] and stem:[s_j]
@@ -193,15 +193,15 @@ It is imperative for the security of the network that each block producer
 correctly determines the current slot numbers at a given time by regularly
 estimating the local clock offset in relation to the network
 (<<defn-relative-syncronization>>).
-****
+====
 
 [#defn-relative-syncronization]
-===== Relative Time Synchronization
-****
+.<<defn-relative-syncronization, Relative Time Synchronization>>
+====
 The *relative time synchronization* is a tuple of a slot number and a local
 clock timestamp stem:[(s_("sync"),t_("sync"))] describing the last point at
 which the slot numbers have been synchronized with the local clock.
-****
+====
 
 [#algo-slot-offset]
 ===== Slot Offset
@@ -233,17 +233,17 @@ where
 ****
 
 [#defn-prunned-best]
-===== Pruned Best Chain
-****
+.<<defn-prunned-best, Pruned Best Chain>>
+====
 The *pruned best chain* stem:[C^(r^k)] is the longest selected chain
 (<<defn-longest-chain>>) with the last stem:[k] Blocks pruned. We chose stem:[k
 = 140]. The *last (probabilistic) finalized block* describes the last block in
 this pruned best chain.
-****
+====
 
 [#defn-chain-quality]
-===== Chain Quality
-****
+.<<defn-chain-quality, Chain Quality>>
+====
 The *chain quality* stem:[s_(cq)] represents the number of slots that are used
 to estimate the local clock offset. Currently, it is set to stem:[s_(cq) =
 3000].
@@ -251,7 +251,7 @@ to estimate the local clock offset. Currently, it is set to stem:[s_(cq) =
 The prerequisite for such a calculation is that each producer stores the arrival
 time of each block (<<defn-block-time>>) measured by a clock that is otherwise
 not adjusted by any external protocol.
-****
+====
 
 [#defn-block-time]
 ===== Block Arrival Time
@@ -284,8 +284,8 @@ during that epoch. The produced block needs to carry the _BABE header_
 (<<defn-block-signature>>) as Pre-Runtime and Seal digest items.
 
 [#defn-babe-header]
-===== BABE Header
-****
+.<<defn-babe-header, BABE Header>>
+====
 The *BABE Header* of block stem:[B], referred to formally by
 stem:[H_("BABE")(B)] is a tuple and consists of the following components:
 
@@ -303,7 +303,7 @@ current epoch.
 
 stem:[H_("BABE")(B)] must be included as a digest item of Pre-Runtime type in
 the header digest (<<defn-digest>>) stem:[H_d(B)].
-****
+====
 
 [#algo-block-production]
 ===== Invoke Block Authoring
@@ -328,8 +328,8 @@ appends a digest item to the end of the header digest stem:[H_d(B)]
 ****
 
 [#defn-block-signature]
-===== Block Signature
-****
+.<<defn-block-signature, Block Signature>>
+====
 The *Block Signature* stem:[S_B] is a signature of the block header hash
 (<<defn-block-header-hash>>) and defined as
 
@@ -349,7 +349,7 @@ stem:[S_B] should be included in stem:[H_d(B)] as the Seal digest item
 in which, stem:[E_("id")("BABE")] is the BABE consensus engine unique identifier
 (<<defn-consensus-message-digest>>). The Seal digest item is referred to as the
 *BABE Seal*.
-****
+====
 
 [#sect-epoch-randomness]
 ==== Epoch Randomness
@@ -360,12 +360,12 @@ stem:[cc E_(n+1)] from the Runtime, through the consensus message
 (<<defn-consensus-message-digest>>) in the digest of the first block.
 
 [#defn-epoch-randomness]
-===== Randomness Seed
-****
+.<<defn-epoch-randomness, Randomness Seed>>
+====
 For epoch stem:[cc E], there is a 32-byte stem:[cc R_(cc E)] computed
 based on the previous epochs VRF outputs. For stem:[cc E_0] and stem:[cc
 E_1], the randomness seed is provided in the genesis state.
-****
+====
 
 [#sect-verifying-authorship]
 ==== Verifying Authorship Right

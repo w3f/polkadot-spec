@@ -65,10 +65,12 @@ key. _PeerId_ is used to identify each node when they are discovered in the
 course of the discovery mechanism described in <<sect-discovery-mechanism>>.
 
 [#defn-peer-id]
-==== Definition: PeerId
+.<<defn-peer-id,PeerId>>
+====
 The Polkadot node’s _PeerId_, formally referred to as stem:[P_(id)], is derived
 from the ED25519 public key and is structured as defined in the
 https://docs.libp2p.io/concepts/peer-id/[libp2p specification].
+====
 
 [#sect-discovery-mechanism]
 === Discovery mechanism

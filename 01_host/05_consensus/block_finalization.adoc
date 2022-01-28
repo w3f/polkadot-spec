@@ -2,8 +2,8 @@
 === Block Finalization
 
 [#defn-finalized-block]
-==== Finalized
-****
+.<<defn-finalized-block, Finalized>>
+====
 A Polkadot relay chain node stem:[n] should consider block stem:[B] as
 *finalized* if any of the following criteria hold for stem:[B' >= B]:
 
@@ -21,7 +21,7 @@ defined in <<algo-grandpa-round>> if latexmath:[$n$] is a GRANDPA voter.
 
 Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit
 messages regardless of their GRANDPA voter status.
-****
+====
 
 [#sect-grandpa-catchup]
 ==== Catching up

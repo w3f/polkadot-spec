@@ -17,26 +17,26 @@ at the end of the execution of block stem:[B].
 ****
 
 [#defn-runtime-pointer]
-=== Runtime Pointer
-****
+.<<defn-runtime-pointer, Runtime Pointer>>
+====
 The *Runtime pointer* type is an unsigned 32-bit integer representing a pointer
 to data in memory. This pointer is the primary way to exchange data of
 fixed/known size between the Runtime and Polkadot Host.
-****
+====
 
 [#defn-runtime-pointer-size]
-=== Runtime Pointer Size
-****
+.<<defn-runtime-pointer-size, Runtime Pointer Size>>
+====
 The *Runtime pointer-size* type is an unsigned 64-bit integer, representing two
 consecutive integers. The least significant is a pointer to the data in memory.
 The most significant provides the size of the data in bytes. This representation
 is the primary way to exchange data of arbitrary/dynamic sizes between the
 Runtime and the Polkadot Host.
-****
+====
 
 [#defn-lexicographic-ordering]
-=== Lexicographic ordering
-****
+.<<defn-lexicographic-ordering, Lexicographic ordering>>
+====
 *Lexicographic ordering* refers to the ascending ordering of bytes or byte
 arrays, such as:
 
@@ -47,4 +47,4 @@ arrays, such as:
 
 The functions are specified in each subsequent subsection for each category of
 those functions.
-****
+====
