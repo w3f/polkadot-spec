@@ -1,9 +1,9 @@
 [#sect-runtime-offchainapi-module]
-==== OffchainWorkerApi Module (Version 2)
+=== OffchainWorkerApi Module (Version 2)
 
 Does not require `Core_intialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 
-===== `OffchainWorkerApi_offchain_worker`
+==== `OffchainWorkerApi_offchain_worker`
 
 Starts an off-chain worker and generates extrinsics. [To do: when is
 this called?]

@@ -1,8 +1,8 @@
 [#sect-runtime-core-module]
-==== Core Module (Version 3)
+=== Core Module (Version 3)
 
 [#defn-rt-core-version]
-===== `Core_version`
+==== `Core_version`
 
 Returns the version identifiers of the Runtime. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in <<sect-json-rpc-api>>.
 
@@ -49,7 +49,7 @@ Return::
 Requires `Core_initialize_block` to be called beforehand.
 
 [#sect-rte-core-execute-block]
-===== `Core_execute_block`
+==== `Core_execute_block`
 
 This function executes a full block and all its extrinsics and updates the state accordingly. Additionally, some integrity checks are executed such as validating if the parent hash is correct and that the transaction root represents the transactions. Internally, this function performs an operation similar to the process described in <<algo-build-block>>, by calling `Core_initialize_block`,`BlockBuilder_apply_extrinsics` and `BlockBuilder_finalize_block`.
 
@@ -68,7 +68,7 @@ Return::
 * None.
 
 [#sect-rte-core-initialize-block]
-===== `Core_initialize_block`
+==== `Core_initialize_block`
 
 Sets up the environment required for building a new block as described in <<algo-build-block>>.
 
