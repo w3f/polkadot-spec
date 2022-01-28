@@ -59,8 +59,9 @@ encode stem:[k] in a consistent with the Trie structure way. Because each node
 in the trie has at most 16 children, we represent the key as a sequence of 4-bit
 nibbles:
 
-===== Key Encode
-****
+[#defn-trie-key-encode]
+.<<defn-trie-key-encode, Key Encode>>
+====
 For the purpose of labeling the branches of the Trie, the key stem:[k] is
 encoded to stem:[k_("enc")] using stem:[sf "KeyEncode"] functions:
 
@@ -84,7 +85,7 @@ representations of stem:[b_i]:
 ++++
 (b_i^1,b_i^2) := (b_i -: 16,b_i mod 16)
 ++++
-****
+====
 
 By looking at stem:[k_("enc")] as a sequence of nibbles, one can walk the radix
 tree to reach the node identifying the storage value of stem:[k].
@@ -95,11 +96,12 @@ tree to reach the node identifying the storage value of stem:[k].
 In this subsection, we specify the structure of the nodes in the Trie as
 well as the Trie structure:
 
-===== Set of Nodes
-****
+[#defn-trie-nodeset]
+.<<defn-trie-nodeset, Set of Nodes>>
+====
 We refer to the *set of the nodes of Polkadot state trie* by stem:[cc N]. By
 stem:[N in cc N] to refer to an individual node in the trie.
-****
+====
 
 [#defn-nodetype]
 .<<defn-nodetype, State Trie>>
@@ -119,8 +121,9 @@ Conversely, if stem:[(k, v)] is an entry in the State Trie then there is a node
 stem:[N in cc N] such that stem:[k_N = k].
 ====
 
-===== Branch
-****
+[#defn-trie-branch]
+.<<defn-trie-branch, Branch>>
+====
 A *branch* node is a node which has one child or more. A branch node can have at
 most 16 children. A *leaf* node is a childless node. Accordingly:
 
@@ -129,7 +132,7 @@ most 16 children. A *leaf* node is a childless node. Accordingly:
 cc N_b := {N in cc N | N " is a branch node"}\
 cc N_i := {N in cc N | N " is a leaf node"}
 ++++
-****
+====
 
 For each node, part of stem:[k_N] is built while the trie is traversed from root
 to stem:[N] part of stem:[k_N] is stored in stem:[N] (<<defn-node-key>>).

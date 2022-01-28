@@ -37,8 +37,9 @@ reverted as non-canonical. The value is NOT available for the worker that is
 re-run at the next or any future blocks.
 ====
 
-=== HTTP Status Code
-****
+[#defn-http-status-code]
+.<<defn-http-status-code, HTTP Status Code>>
+====
 *HTTP status codes* that can get returned by certain Offchain HTTP functions.
 
 * `0`: the specified request identifier is invalid.
@@ -47,10 +48,11 @@ re-run at the next or any future blocks.
 server has closed the connection. On returning this error code, the request is
 considered destroyed and must be reconstructed again.
 * `100`-`999`: the request has finished with the given HTTP status code.
-****
+====
 
-=== HTTP Error
-****
+[#defn-http-error]
+.<<defn-http-error, HTTP Error>>
+====
 HTTP error, stem:[E], is a varying data type (<<defn-varrying-data-type>>) and
 specifies the error types of certain HTTP functions. Following values are
 possible:
@@ -59,7 +61,7 @@ possible:
 ++++
 E = {(0,"The deadile was reached"),(1,"There was an IO error while processing the request"),(2,"The Id of the request is invalid"):}
 ++++
-****
+====
 
 === Functions
 

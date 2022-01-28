@@ -46,10 +46,10 @@ which executes the following steps:
 In this section, we describe the details upon which the Polkadot Host is
 interacting with the Runtime. In particular, stem:["Set-State-At"] and
 stem:["Call-Runtime-Entry"] procedures called by the algorithm as defined in
-<<algo-runtime-interaction>> are explained in <<notat-call-into-runtime>> and
+<<algo-runtime-interaction>> are explained in <<defn-call-into-runtime>> and
 <<defn-set-state-at>> respectively. stem:[R_B] is the Runtime code loaded from
-stem:[S_B], as described in <<notat-runtime-code-at-state>>, and stem:[RE_B] is
-the Polkadot Host API, as described in <<nota-host-api-at-state>>.
+stem:[S_B], as described in <<defn-runtime-code-at-state>>, and stem:[RE_B] is
+the Polkadot Host API, as described in <<defn-host-api-at-state>>.
 
 [#sect-loading-runtime-code]
 ==== Loading the Runtime Code
@@ -68,19 +68,19 @@ which is the ASCII byte representation of the string `:code`
 the Runtime code itself becomes state sensitive and calls to Runtime can change
 the Runtime code itself. Therefore the Polkadot Host needs to always make sure
 to provide the Runtime corresponding to the state in which the entry has been
-called. Accordingly, we define stem:[R_B] (<<notat-runtime-code-at-state>>).
+called. Accordingly, we define stem:[R_B] (<<defn-runtime-code-at-state>>).
 
 The initial Runtime code of the chain is provided as part of the genesis state
 (<<chapter-genesis>>) and subsequent calls to the Runtime have the ability to,
 in turn, upgrade the Runtime by replacing this Wasm blob with the help of the
 storage API (<<sect-storage-api>>).
 
-[#notat-runtime-code-at-state]
-===== Notation: Runtime Code at State
-****
+[#defn-runtime-code-at-state]
+.<<defn-runtime-code-at-state, Runtime Code at State>>
+====
 By stem:[R_B], we refer to the Runtime code stored in the state storage at the
 end of the execution of block stem:[B].
-****
+====
 
 [#sect-code-executor]
 ==== Code Executor
@@ -90,7 +90,7 @@ Virtual Machine (VM), which in turn provides the Runtime with access to
 the Polkadot Host API. This part of the Polkadot Host is referred to as
 the _Executor_.
 
-<<notat-call-into-runtime>> introduces the notation for calling the runtime entry
+<<defn-call-into-runtime>> introduces the notation for calling the runtime entry
 which is used whenever an algorithm of the Polkadot Host needs to access the
 runtime.
 
@@ -102,9 +102,9 @@ In this section, we specify the general setup for an Executor that calls into
 the Runtime. In <<chap-runtime-api>> we specify the parameters and return values
 for each Runtime entry separately.
 
-[#notat-call-into-runtime]
-===== Notation: Call Runtime Entry
-****
+[#defn-call-into-runtime]
+.<<defn-call-into-runtime, Call Runtime Entry>>
+====
 By
 
 [stem]
@@ -115,7 +115,7 @@ By
 we refer to the task using the executor to invoke the while passing an
 stem:[A_1, ..., A_n] argument to it and using the encoding described in
 <<sect-runtime-send-args-to-runtime-enteries>>.
-****
+====
 
 [#sect-memory-management]
 ===== Memory Management
