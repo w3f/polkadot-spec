@@ -1,9 +1,9 @@
-==== GrandpaApi Module (Version 2)
+=== GrandpaApi Module (Version 2)
 
 All calls in this module require `Core_initalize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 
 [#sect-rte-grandpa-auth]
-===== `GrandpaApi_grandpa_authorities`
+==== `GrandpaApi_grandpa_authorities`
 
 This entry fetches the list of GRANDPA authorities according to the
 genesis block and is used to initialize an authority list at genesis,
@@ -18,7 +18,7 @@ Return::
 * An authority list as defined in <<defn-authority-list>>.
 
 [#sect-grandpaapi_submit_report_equivocation_unsigned_extrinsic]
-===== `GrandpaApi_submit_report_equivocation_unsigned_extrinsic`
+==== `GrandpaApi_submit_report_equivocation_unsigned_extrinsic`
 
 A GRANDPA equivocation occurs when a validator votes for multiple blocks
 during one voting subround, as described further in <<defn-equivocation>>. The Polkadot Host is expected to identify equivocators and report those to the Runtime by
@@ -56,7 +56,7 @@ Return::
 * A SCALE encoded _Option_ as defined in <<defn-option-type>> containing an empty value on success.
 
 [#sect-grandpaapi_generate_key_ownership_proof]
-===== `GrandpaApi_generate_key_ownership_proof`
+==== `GrandpaApi_generate_key_ownership_proof`
 
 Generates proof of the membership of a key owner in the specified block
 state. The returned value is used to report equivocations as described

@@ -1,4 +1,4 @@
-=== Runtime Functions
+== Runtime Functions
 
 In this section, we describe all Runtime API functions alongside their
 arguments and the return values. The functions are organized into
