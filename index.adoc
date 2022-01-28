@@ -1,5 +1,5 @@
 = Polkadot Specification
-Fabio Lama; Florian Franzen; Syed Hosseini
+Web 3.0 Technologies Foundation; Fabio Lama; Florian Franzen; Syed Hosseini
 v0.2.0
 :description: Official Polkadot Protocol Specification
 :doctype: book
