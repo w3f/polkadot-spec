@@ -68,9 +68,7 @@ jobs:
 =======
 >>>>>>> 7a5d71c2 (ci: fix multipage builds):.github/workflows/specification.yml
     - name: Install gem dependencies
-      run: |
-        sudo gem update --system 
-        sudo gem install asciidoctor-multipage rouge
+      run: sudo gem install asciidoctor-multipage rouge
     - name: Build multi-html specification
       run: make multi-html
 >>>>>>> 5550882f (ci: clean up build targets):.github/workflows/specification.yml
