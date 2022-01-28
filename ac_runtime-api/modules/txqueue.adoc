@@ -1,10 +1,10 @@
 [#sect-runtime-txqueue-module]
-==== TaggedTransactionQueue (Version 2)
+=== TaggedTransactionQueue (Version 2)
 
 All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 
 [#sect-rte-validate-transaction]
-===== `TaggedTransactionQueue_validate_transaction`
+==== `TaggedTransactionQueue_validate_transaction`
 
 This entry is invoked against extrinsics submitted through a transaction network
 message (<<sect-msg-transactions>>) or by an offchain worker through the Host API
