@@ -1,8 +1,8 @@
 [#sect-anv-runtime-api]
-==== ParachainHost Module (Version 1)
+=== ParachainHost Module (Version 1)
 
 [#sect-rt-api-validators]
-===== `ParachainHost_validators`
+==== `ParachainHost_validators`
 
 Returns the validator set at the current state. The specified validators are responsible for backing parachains for the current state.
 
@@ -13,7 +13,7 @@ Return::
 * An array of public keys representing the validators.
 
 [#sect-rt-api-validator-groups]
-===== `ParachainHost_validator_groups`
+==== `ParachainHost_validator_groups`
 
 Returns the validator groups (<<defn-validator-groups>>) used during the current
 session. The validators in the groups are referred to by the validator set Id
@@ -40,7 +40,7 @@ where
 •  stem:[B_c] indicates the current block number. 
 
 [#sect-rt-api-availability-cores]
-===== `ParachainHost_availability_cores`
+==== `ParachainHost_availability_cores`
 
 Returns information on all availability cores (<<defn-availability-core>>).
 
@@ -85,7 +85,7 @@ Definition ? which can contain the collators public key indicating who should
 author the block.
 
 [#sect-rt-api-persisted-validation-data]
-===== `ParachainHost_persisted_validation_data`
+==== `ParachainHost_persisted_validation_data`
 
 Returns the persisted validation data for the given parachain Id and a given occupied core assumption.
 
@@ -146,7 +146,7 @@ The persisted validation data is fetched via the Runtime API
 (<<sect-rt-api-persisted-validation-data>>).
 ====
 
-===== `ParachainHost_check_validation_outputs`
+==== `ParachainHost_check_validation_outputs`
 
 Checks if the given validation outputs pass the acceptance criteria.
 
@@ -157,7 +157,7 @@ Arguments::
 Return::
 * A boolean indicating whether the candidate commitments pass the acceptance criteria.
 
-===== `ParachainHost_session_index_for_child`
+==== `ParachainHost_session_index_for_child`
 
 Returns the session index that is expected at the child of a block.
 
@@ -170,7 +170,7 @@ Return::
 * A unsigned 32-bit integer representing the session index.
 
 [#sect-rt-api-validation-code]
-===== `ParachainHost_validation_code`
+==== `ParachainHost_validation_code`
 
 Fetches the validation code (Runtime) of a parachain by parachain Id.
 
@@ -184,7 +184,7 @@ in an byte array. This value is empty if the parachain Id cannot be found or the
 assumption is wrong.
 
 [#sect-rt-api-validation-code-by-hash]
-===== `ParachainHost_validation_code_by_hash`
+==== `ParachainHost_validation_code_by_hash`
 
 Returns the validation code (Runtime) of a parachain by its hash.
 
@@ -196,7 +196,7 @@ Return::
 in an byte array. This value is empty if the parachain Id cannot be found or the
 assumption is wrong.
 
-===== `ParachainHost_candidate_pending_availability`
+==== `ParachainHost_candidate_pending_availability`
 
 Returns the receipt of a candidate pending availability for any parachain
 assigned to an occupied availability core.
@@ -209,7 +209,7 @@ Return::
 receipt (<<defn-candidate-receipt>>). This value is empty if the given parachain
 Id is not assigned to an occupied availability cores.
 
-===== `ParachainHost_candidate_events`
+==== `ParachainHost_candidate_events`
 
 Returns an array of candidate events that occurred within the latest state.
 
@@ -241,7 +241,7 @@ occupying.
 of backing the candidate.
 
 [#sect-rt-api-session-info]
-===== `ParachainHost_session_info`
+==== `ParachainHost_session_info`
 
 Get the session info of the given session, if available.
 
@@ -290,7 +290,7 @@ pass before an assignment is considered a “no-show”.
 * stem:[a] is an unsigned 32-bit integer indicating the number of validators
 needed to approve a block.
 
-===== `ParachainHost_dmq_contents`
+==== `ParachainHost_dmq_contents`
 
 Returns all the pending inbound messages in the downward message queue for a given parachain.
 
@@ -300,7 +300,7 @@ Arguments::
 Return::
 * An array of inbound downward messages (<<defn-downward-message>>).
 
-===== `ParachainHost_inbound_hrmp_channels_contents`
+==== `ParachainHost_inbound_hrmp_channels_contents`
 
 Returns the contents of all channels addressed to the given recipient. Channels that have no messages in them are also included.
 

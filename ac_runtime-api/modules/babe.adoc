@@ -1,9 +1,9 @@
-==== BabeApi Module (Version 2)
+=== BabeApi Module (Version 2)
 
 All calls in this module require `Core_intialized_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 
 [#sect-rte-babeapi-epoch]
-===== `BabeApi_configuration`
+==== `BabeApi_configuration`
 
 This entry is called to obtain the current configuration of the BABE
 consensus protocol.
@@ -47,7 +47,7 @@ in a round-robin manner or via a second VRF.
 | 8bit enum
 |===
 
-===== `BabeApi_current_epoch_start`
+==== `BabeApi_current_epoch_start`
 
 Finds the start slot of the current epoch.
 
@@ -58,7 +58,7 @@ Return::
 * A unsigned 64-bit integer indicating the slot number.
 
 [#sect-babeapi_current_epoch]
-===== `BabeApi_current_epoch`
+==== `BabeApi_current_epoch`
 
 Produces information about the current epoch.
 
@@ -80,7 +80,7 @@ where
 ** latexmath:[A] is an authority list as defined in <<defn-authority-list>>.
 ** latexmath:[r] is an 256-bit array containing the randomness for the epoch as defined in <<defn-epoch-randomness>>.
 
-===== BabeApi_next_epoch
+==== `BabeApi_next_epoch`
 
 Produces information about the next epoch.
 
@@ -91,7 +91,7 @@ Return::
 * Returns the same datastructure as described in <<sect-babeapi_current_epoch>>.
 
 [#sect-babeapi_generate_key_ownership_proof]
-===== `BabeApi_generate_key_ownership_proof`
+==== `BabeApi_generate_key_ownership_proof`
 
 Generates a proof of the membership of a key owner in the specified
 block state. The returned value is used to report equivocations as
@@ -106,7 +106,7 @@ Return::
 proof in an opaque form.
 
 [#sect-babeapi_submit_report_equivocation_unsigned_extrinsic]
-===== `BabeApi_submit_report_equivocation_unsigned_extrinsic`
+==== `BabeApi_submit_report_equivocation_unsigned_extrinsic`
 
 A BABE equivocation occurs when a validator produces more than one block
 at the same slot. The proof of equivocation are the given distinct

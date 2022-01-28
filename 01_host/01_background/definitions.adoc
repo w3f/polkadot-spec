@@ -133,9 +133,9 @@ By *UINT32* we refer to a non-negative integer stored in a byte array of
 length stem:[4] using little-endian encoding format.
 ====
 
-==== Blockchain 
-
-****
+[#defn-blockchain]
+.<<defn-blockchain, Blockchain>>
+====
 A *blockchain* stem:[C] is a directed path graph. Each node of the graph is
 called *Block* and indicated by *stem:[B]*. The unique sink of stem:[C] is
 called *Genesis Block*, and the source is called the stem:[sf "Head"] of stem:[C]. For any
@@ -146,7 +146,7 @@ vertex stem:[(B_1, B_2)] where stem:[B_1 -> B_2] we say stem:[B_2] is the
 ++++
 B_2 := P(B_1)
 ++++
-****
+====
 
 [#defn-unix-time]
 .<<defn-unix-time, Unix Time>>
