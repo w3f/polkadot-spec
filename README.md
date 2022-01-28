@@ -43,7 +43,7 @@ Generate the final HTML page(s) or PDF file.
 #### Multi-Page (recommended)
 
 ```bash
-asciidoctor -r asciidoctor-multipage -b multipage_html5 -D out index.adoc
+asciidoctor-multipage -a docinfo=shared-header -D out index.adoc
 ```
 
 Where the resulting HTML pages can then be found in the `out/` directory.
@@ -51,7 +51,7 @@ Where the resulting HTML pages can then be found in the `out/` directory.
 #### Single-Page
 
 ```bash
-asciidoctor -a toc=left -a docinfo=shared index.adoc
+asciidoctor -a docinfo=shared index.adoc
 ```
 
 ### PDF (with math formulas enabled)
