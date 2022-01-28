@@ -17,8 +17,8 @@ storage. There are two different types of storage available which are defined in
 <<defn-offchain-persistent-storage>> and <<defn-offchain-local-storage>>.
 
 [#defn-offchain-persistent-storage]
-=== Persisted Storage
-****
+.<<defn-offchain-persistent-storage, Persisted Storage>>
+====
 *Persistent storage* is non-revertible and not fork-aware. It means that any value
 set by the offchain worker is persisted even if that block (at which the worker
 is called) is reverted as non-canonical (meaning that the block was surpassed by
@@ -26,16 +26,16 @@ a longer chain). The value is available for the worker that is re-run at the new
 (different block with the same block number) and future blocks. This storage can
 be used by offchain workers to handle forks and coordinate offchain workers
 running on different forks.
-****
+====
 
 [#defn-offchain-local-storage]
-=== Local Storage
-****
+.<<defn-offchain-local-storage, Local Storage>>
+====
 *Local storage* is revertible and fork-aware. It means that any value set by the
 offchain worker triggered at a certain block is reverted if that block is
 reverted as non-canonical. The value is NOT available for the worker that is
 re-run at the next or any future blocks.
-****
+====
 
 === HTTP Status Code
 ****
@@ -103,8 +103,8 @@ specific.
 Returns the SCALE encoded, opaque information about the local node's network state.
 
 [#defn-opaque-network-state]
-==== Opaque Network State
-****
+.<<defn-opaque-network-state, Opaque Network State>>
+====
 The *Opaque network state structure*, stem:[S], is a SCALE encoded blob holding
 information about the the _libp2p PeerId_, stem:[P_("id")], of the local node
 and a list of _libp2p Multiaddresses_, stem:[(M_0, ... M_n)], the node knows it
@@ -125,7 +125,7 @@ M = (b_0, ... b_n)
 
 The information contained in this structure is naturally opaque to the caller of
 this function.
-****
+====
 
 ===== Version 1 - Prototype
 ----

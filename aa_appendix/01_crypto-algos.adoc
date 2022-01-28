@@ -45,15 +45,15 @@ function is the Ristretto group specified in:
 * https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01[The Ristretto255 and Decaf448 Groups].
 
 [#defn-vrf-context]
-==== VRF Context
-****
+.<<defn-vrf-context, VRF Context>>
+====
 *VRF context* (simply referred to as context when there is no ambiguity)
 represented as stem:[c] is a [TODO: define context here]
-****
+====
 
 [#defn-vrf-pair]
-==== VRF Pair
-****
+.<<defn-vrf-pair, VRF Pair>>
+====
 The *VRF Pair* is an ordered pair stem:[(I,O)] where stem:[I] represents the VRF
 input and stem:[O] represents the VRF output. stem:[I] is of the following
 format:
@@ -73,11 +73,11 @@ where:
 * stem:[x] is the element of the field, exactly 5 bytes.
 
  [TODO: we need to specify where does C and x is coming from]
-****
+====
 
 [#defn-vrf-proof]
-==== VRF Proof
-****
+.<<defn-vrf-proof, VRF Proof>>
+====
 The *VRF proof* proves the correctness for an associated VRF output. The VRF
 proof, stem:[P], is a datastructure of the following format:
 
@@ -89,11 +89,11 @@ S = (b_0, ... b_31)
 
 where stem:[C] is the challenge and stem:[S] is the 32-byte Schnorr poof. Both
 are expressed as Curve25519 scalars.
-****
+====
 
 [#defn-vrf-transcript]
-==== VRF Transcript
-****
+.<<defn-vrf-transcript, VRF Transcript>>
+====
 The *VRF transcript* is a “public-coin” argument [TODO: I'd not introduced
 obsecure scary words like these in the definition without defining them]
 containing a mathematical object [TODO: what is a mathematical object?] combined
@@ -122,11 +122,11 @@ state which is _1_ after the beginning of the current operation. stem:[b] is
 equal to _0_ if no operation began in this block.
 * stem:[f] is an unsigned 8-bit integer and can be _0_, _1_ or _None_. It
 indicates whether the party sends or receives a message on the transport.
-****
+====
 
 [#defn-vrf-meta-ad]
-==== `Meta-Ad`
-****
+.<<defn-vrf-meta-ad, `Meta-Ad`>>
+====
 The stem:["Meta-Ad"] function takes a transcript (<<defn-vrf-transcript>>),
 stem:[t], a UTF-8 encoded label, stem:[l], and a byte array, stem:[b], and
 returns an updated transcript.
@@ -138,11 +138,11 @@ t larr "Meta-Ad"(t,l,b)
 
 The stem:["Meta-Ad"] operation adds the label and the byte array to the passed
 on transcript as described in the STROBE documentation. [TODO: where?]
-****
+====
 
 [#defn-vrf-evaluate-vrf]
-==== `Evaluate-VRF`
-****
+.<<defn-vrf-evaluate-vrf, `Evaluate-VRF`>>
+====
 The stem:["Evaluate-VRF"] function takes a public key, stem:[k], a transcript
 (<<defn-vrf-transcript>>), stem:[t], and produces a VRF-Pair
 (<<defn-vrf-pair>>), stem:[p].
@@ -155,11 +155,11 @@ p larr "Evaluate-VRF"(k,t)
 The functions converts the public key, stem:[k], into a Ristretto point and a
 corresponding wire format (<<defn-vrf-pair>>), respectively the value stem:[I]
 (or stem:[O], which are equal). [TODO]
-****
+====
 
 [#defn-vrf-dleq-proove]
-==== `DLEQ-Prove`
-****
+.<<defn-vrf-dleq-proove, `DLEQ-Prove`>>
+====
 The stem:["DLEQ-Prove"] function takes a private key, stem:[s_k], and a
 transcript (<<defn-vrf-transcript>>), stem:[t], and a VRF pair
 (<<defn-vrf-pair>>), stem:[v], and produces a VRF proof (<<defn-vrf-proof>>),
@@ -171,11 +171,11 @@ p larr "DLEQ-Prove"(s_k,t,v)
 ++++
 
 The functions executed the following steps: [TODO]
-****
+====
 
 [#defn-vrf-create-transcript]
-==== `Create-Transcript`
-****
+.<<defn-vrf-create-transcript, `Create-Transcript`>>
+====
 The stem:["Create-Transcript"] function takes a context, stem:[c], represented
 as a UTF-8 encoded string and produces a transcript (<<defn-vrf-transcript>>),
 stem:[t].
@@ -188,7 +188,7 @@ t larr "Create-Transcript"(c)
 The function initializes a Merlin transcript as described in the
 https://merlin.cool/transcript/index.html[Merlin documentation], respectively
 section “3.1.1 Transcript Objects” and section “3.1.2 Initialization”.
-****
+====
 
 ==== `Make-Challenge-Bytes`
 ****
@@ -217,8 +217,8 @@ keys.
 ****
 
 [#defn-vrf-append-message]
-==== `Append-Message`
-****
+.<<defn-vrf-append-message, `Append-Message`>>
+====
 The stem:["Append-Message"] function takes a transcript
 (<<defn-vrf-transcript>>), stem:[t], a context, stem:[c], represented as a UTF-8
 encoded string and a message, stem:[m], represented as a byte array and returns
@@ -232,7 +232,7 @@ t larr "Append-Message"(t,c,m)
 This function appends the messages to the transcript as described in the
 https://merlin.cool/transcript/index.html[Merlin documentation], respectively
 section “3.1.3 Appending Messages”.
-****
+====
 
 [#sect-cryptographic-keys]
 === Cryptographic Keys
@@ -243,8 +243,8 @@ key type has its own unique function and must be treated differently, as
 described by this Section.
 
 [#defn-account-key]
-==== Account Key
-****
+.<<defn-account-key, Account Key>>
+====
 *Account key stem:[(sk^a,pk^a)]* is a key pair of type of either of the schemes in the following
 table:
 
@@ -271,11 +271,11 @@ the Polkadot implementation. The user notifies the network about the used keys
 by submitting a transaction, as defined in
 link_sect-creating-controller-key[9.5.2] and link_sect-certifying-keys[9.5.5]
 respectively.
-****
+====
 
 [#defn-stash-key]
-==== Stash Key
-****
+.<<defn-stash-key, Stash Key>>
+====
 The *Stash key* is a type of account key that holds funds bonded for staking
 (described in Section link_sect-staking-funds[9.5.1]) to a particular
 controller key (defined in Definition
@@ -285,11 +285,11 @@ It can also be used to designate a Proxy account to vote in governance
 proposals, as described in link_sect-creating-controller-key[9.5.2]. The Stash
 key holds the majority of the users’ funds and should neither be shared with
 anyone, saved on an online device, nor used to submit extrinsics.
-****
+====
 
 [#defn-controller-key]
-==== Controller Key
-****
+.<<defn-controller-key, Controller Key>>
+====
 The *Controller key* is a type of account key that acts on behalf of the Stash
 account. It signs transactions that make decisions regarding the nomination and
 the validation of the other keys. It is a key that will be in direct control of
@@ -299,11 +299,11 @@ link_sect-controller-settings[9.5.4]. If used for a validator, it certifies the
 session keys, as described in link_sect-certifying-keys[9.5.5]. It only needs
 the required funds to pay transaction fees [TODO: key needing fund needs to be
 defined].
-****
+====
 
 [#defn-session-key]
-==== Session Keys
-****
+.<<defn-session-key, Session Keys>>
+====
 *Session keys* are short-lived keys that are used to authenticate validator
 operations. Session keys are generated by the Polkadot Host and should be
 changed regularly due to security reasons. Nonetheless, no validity period is
@@ -324,7 +324,7 @@ Session keys must be accessible by certain Polkadot Host APIs defined in
 Appendix link_sect-host-api[12]. Session keys are _not_ meant to control the
 majority of the users’ funds and should only be used for their intended purpose.
 [TODO: key managing fund need to be defined]
-****
+====
 
 [#sect-staking-funds]
 ==== Holding and staking funds

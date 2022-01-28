@@ -4,8 +4,8 @@
 Interface that provides functions for logging from within the runtime.
 
 [#defn-logging-log-level]
-=== Log Level
-****
+.<<defn-logging-log-level, Log Level>>
+====
 The *Log Level*, stem:[L], is a varying data type (<<defn-varrying-data-type>>)
 and implies the emergency of the log. Possible log levels and the corresponding
 identifier is as follows:
@@ -14,7 +14,7 @@ identifier is as follows:
 ++++
 L = {(0,"Error = 1"),(1,"Warn = 2"),(2,"Info = 3"),(3, "Debug = 4"),(4,"Trace = 5"):}
 ++++
-****
+====
 
 === Functions
 

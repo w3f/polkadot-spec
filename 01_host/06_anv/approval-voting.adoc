@@ -76,8 +76,8 @@ to ensure that enough candidate approvals from a random set of validators are
 created without requiring all assigned validators to check the candidate.
 
 [#defn-relay-vrf-story]
-==== Relay VRF Story
-****
+.<<defn-relay-vrf-story, Relay VRF Story>>
+====
 The relay VRF story is an array of random bytes derived from the VRF submitted
 within the block by the block author. The relay VRF story, T, is used as input
 to determine approval voting criteria and generated the following way:
@@ -94,11 +94,11 @@ where
 * stem:[b_s] is the current BABE slot (<<defn-epoch-slot>>).
 * stem:[e_i] is the current BABE epoch index (<<defn-epoch-slot>>).
 * stem:[A] is the public key of the authority.
-****
+====
 
 [#defn-availability-core-vrf-assignment]
-==== Availability Core VRF Assignment
-****
+.<<defn-availability-core-vrf-assignment, Availability Core VRF Assignment>>
+====
 An availability core VRF assignment, T, is computed by a relay chain validator
 to determine which availability core (<<defn-availability-core>>) a validator
 is assigned to and should vote for approvals. The assignment consits of a VRF
@@ -169,7 +169,7 @@ Hence, the full list of available core VRF assignments is represtend as:
 where each stem:[T_x] corresponds to a sample number. The amount of individual
 assignments does not necessarily equal the number of samples, but the amount
 must not exceed the number of samples.
-****
+====
 
 [#delayed-availability-core-vrf-assignment]
 ==== Delayed Availability Core VRF Assignment

@@ -100,8 +100,8 @@ parachain Id is not registered or the core assumption is of index stem:[2],
 meaning that the core was freed.
 
 [#defn-occupied-core-assumption]
-====== Occupied Core Assumption
-****
+.<<defn-occupied-core-assumption, Occupied Core Assumption>>
+====
 A occupied core assumption is used for fetching certain pieces of information
 about a parachain by using the relay chain API. The assumption indicates how the
 Runtime API should compute the result. The assumptions, A, is a varying datatype
@@ -116,11 +116,11 @@ where _0_ indicates that the candidate occupying the core was made available and
 included to free the core, _1_ indicates that it timed-out and freed the core
 without advancing the parachain and _2_ indicates that the core was not occupied
 to begin with.
-****
+====
 
 [#defn-persisted-validation-data]
-====== Persisted Validation Data
-****
+.<<defn-persisted-validation-data, Persisted Validation Data>>
+====
 The persisted validation data provides information about how to create the
 inputs for the validation of a candidate by calling the Runtime. This
 information is derived from the parachain state and will vary from parachain to
@@ -144,7 +144,7 @@ where
 
 The persisted validation data is fetched via the Runtime API
 (<<sect-rt-api-persisted-validation-data>>).
-****
+====
 
 ===== `ParachainHost_check_validation_outputs`
 

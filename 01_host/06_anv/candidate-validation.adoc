@@ -34,8 +34,8 @@ The parachain Runtime function returns the validation result
 (<<defn-validation-result>>).
 
 [#defn-validation-parameters]
-===== Validation Parameters
-****
+.<<defn-validation-parameters, Validation Parameters>>
+====
 The validation parameters structure, stem:[P], is required to validate a
 candidate against a parachain Runtime. It's a datastructure of the following
 format:
@@ -51,11 +51,11 @@ where
 * stem:[b] is the block body (<<defn-para-block>>).
 * stem:[B_i] is the latest relay chain block number.
 * stem:[S_r] is the relay chain block storage root (<<sect-merkl-proof>>).
-****
+====
 
 [#defn-validation-result]
-==== Validation Result
-****
+.<<defn-validation-result, Validation Result>>
+====
 The validation result is returned by the `validate_block` parachain Runtime API
 after attempting to validate a parachain block. Those results are then used in
 candidate commitments (<<defn-candidate-commitments>>), which then will be
@@ -85,7 +85,7 @@ processes the messages from first to last.
 * stem:[w] is a unsigned 32-bit integer indicating the watermark which specifies
 the relay chain block number up to which all inbound horizontal messages have
 been processed.
-****
+====
 
 [#sect-runtime-compression]
 ==== Runtime Compression
