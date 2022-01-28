@@ -48,8 +48,9 @@ the Polkadot Host increments this value by one every time a *Scheduled Change*
 or a *Forced Change* occurs. The authority set Id is an unsigned 64-bit integer.
 ====
 
-===== GRANDPA State
-****
+[#defn-grandpa-state]
+.<<defn-grandpa-state, GRANDPA State>>
+====
 The *GRANDPA state*, stem:["GS"], is defined as:
 
 [stem]
@@ -62,7 +63,7 @@ where:
 * stem:[bbb V]: is the set of voters.
 * stem:["id"_(bbb V)]: is the authority set ID (<<defn-authority-set-id>>).
 * stem:[r]: is the voting round number.
-****
+====
 
 [#defn-vote]
 .<<defn-vote, GRANDPA Vote>>
@@ -196,15 +197,16 @@ A vote stem:[V_v^(r,"stage") = V(B)] is *invalid* if
 * stem:[V_v^(r,"stage")] is an equivocatory vote.
 ====
 
-===== Set of Observed Votes
-****
+[#defn-observed-direct-votes]
+.<<defn-observed-direct-votes, Set of Observed Direct Votes>>
+====
 For validator stem:[v], *the set of observed direct votes for Block stem:[B] in
 round stem:[r]*, formally denoted by stem:["VD"_("obs"(v))^(r,"stage")(B)] is
 equal to the union of:
 
 * set of _valid_ votes stem:[V_(v_i)^(r,"stage")] cast in round stem:[r] and
 received by stem:[v] such that stem:[V_(v_i)^(r,"stage") = V(B)].
-****
+====
 
 [#defn-observed-votes]
 .<<defn-observed-votes, Set of Total Observed Votes>>
@@ -247,8 +249,9 @@ votes for Block stem:[B] in round stem:[r]* to be:
 ++++
 ====
 
-===== Current Pre-Voted Block
-****
+[#defn-grandpa-ghost]
+.<<defn-grandpa-ghost, Current Pre-Voted Block>>
+====
 The current *pre-voted* block stem:[B_v^(r,"pv")] also know as GRANDPA GHOST is
 the block chosen by Algorithm as described in <<algo-grandpa-ghost>>:
 
@@ -260,7 +263,7 @@ B_v^(r,"pv") := "GRANDPA-GHOST"(r)
 Finally, we define when a voter stem:[v] sees a round as completable, that is
 when they are confident that stem:[B_v^(r,"pv")] is an upper bound for what is
 going to be finalized in this round.
-****
+====
 
 [#defn-grandpa-completable]
 .<<defn-grandpa-completable, Completable Round>>
