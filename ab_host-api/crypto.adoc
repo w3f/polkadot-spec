@@ -4,8 +4,8 @@
 Interfaces for working with crypto related types from within the runtime.
 
 [#defn-key-type-id]
-=== Key Type Identifier
-****
+.<<defn-key-type-id, Key Type Identifier>>
+====
 Cryptographic keys are stored in separate key stores based on their intended use
 case. The separate key stores are identified by a 4-byte ASCII *key type
 identifier*. The following known types are available:
@@ -22,11 +22,11 @@ identifier*. The following known types are available:
 |para |Key type for the Parachain Validator Key
 |asgn |Key type for the Parachain Assignment Key
 |===
-****
+====
 
 [#defn-ecdsa-verify-error]
-=== ECDSA Verify Error
-****
+.<<defn-ecdsa-verify-error, ECDSA Verify Error>>
+====
 *EcdsaVerifyError* is a varying data type (<<defn-varrying-data-type>>) that
 specifies the error type when using ECDSA recovery functionality. Following
 values are possible:
@@ -39,7 +39,7 @@ values are possible:
 |1 |Incorrect value of V
 |2 |Invalid signature
 |===
-****
+====
 
 === Functions
 

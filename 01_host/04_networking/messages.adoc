@@ -378,8 +378,8 @@ Messages received from a future voter set or round can be dropped and
 ignored.
 
 [#defn-grandpa-neighbor-msg]
-====== GRANDPA Neighbor Message
-****
+.<<defn-grandpa-neighbor-msg, GRANDPA Neighbor Message>>
+====
 A *GRANDPA Neighbor Message* is defined as:
 
 [stem]
@@ -397,7 +397,7 @@ Id (<<defn-authority-list>>).
 
 This message is the sub-component of the GRANDPA gossip message
 (<<defn-gossip-message>>) of type Id _2_.
-****
+====
 
 [#sect-grandpa-catchup-messages]
 ===== GRANDPA Catch-up Messages
@@ -414,8 +414,8 @@ In particular, this procedure involves sending a _catch-up request_ and
 processing _catch-up response_ messages.
 
 [#defn-grandpa-catchup-request-msg]
-====== Catch-Up Request Message
-****
+.<<defn-grandpa-catchup-request-msg, Catch-Up Request Message>>
+====
 A *GRANDPA catch-up request message* for round stem:[r],
 stem:[M_(i,v)^("Cat"-q)("id"_(bbb V),r)], is a message sent from node stem:[i]
 to its voting peer node stem:[v] requesting the latest status of a GRANDPA round
@@ -429,11 +429,11 @@ M_(i,v)^(r,"Cat"-q) := "Enc"_("SC")(r,"id"_(bbb V))
 
 This message is the sub-component of the GRANDPA Gossip message
 (<<defn-gossip-message>>) of type Id _3_.
-****
+====
 
 [#defn-grandpa-catchup-response-msg]
-====== Catch-Up Response Message
-****
+.<<defn-grandpa-catchup-response-msg, Catch-Up Response Message>>
+====
 A *GRANDPA catch-up response message* for round stem:[r],
 stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)], is a message sent by a node stem:[v]
 to node stem:[i] in response of a catch-up request
@@ -454,7 +454,7 @@ exception of the equivocatory votes.
 
 This message is the sub-component of the GRANDPA Gossip message
 (<<defn-gossip-message>>) of type Id _4_.
-****
+====
 
 [#sect-msg-grandpa-beefy]
 ==== GRANDPA BEEFY
@@ -466,8 +466,8 @@ This section defines the messages required for the GRANDPA BEEFY protocol
 substream.
 
 [#defn-grandpa-beefy-commitment]
-===== Commitment
-****
+.<<defn-grandpa-beefy-commitment, Commitment>>
+====
 A *commitment*, stem:[C], contains the information extracted from the finalized
 block at height stem:[H_i(B_("last"))] as specified in the message body and a
 datastructure of the following format:
@@ -484,11 +484,11 @@ latest, finalized block.
 * stem:[H_i(B_("last"))] is the block number this commitment is for. Namely the
 latest, finalized block.
 * stem:["id"_(bbb V)] is the current authority set Id (<<defn-authority-set-id>>).
-****
+====
 
 [#defn-msg-beefy-gossip]
-===== Vote Message
-****
+.<<defn-msg-beefy-gossip, Vote Message>>
+====
 A *vote message*, stem:[M_v], is direct vote created by the Polkadot Host on every
 BEEFY round and is gossiped to its peers. The message is a datastructure of the
 following format:
@@ -504,11 +504,11 @@ where
 * stem:[A_("id")^("bfy")] is the ECDSA public key of the Polkadot Host.
 * stem:[A_("sig")] is the signature created with stem:[A_("id")^("bfy")] by
 signing the statement stem:[R_h] in stem:[C].
-****
+====
 
 [#defn-grandpa-beefy-signed-commitment]
-===== Signed Commitment
-****
+.<<defn-grandpa-beefy-signed-commitment, Signed Commitment>>
+====
 A *signed commitment*, stem:[M_("sc")], is a datastructure of the following format:
 
 [stem]
@@ -533,11 +533,11 @@ be placed at index _3_ in stem:[S_n]. If not signature is available for that
 validator, then the _Option_ variant is _None_ inserted (<<defn-option-type>>).
 This sorting allows clients to map public keys to their corresponding
 signatures.
-****
+====
 
 [#defn-grandpa-beefy-signed-commitment-witness]
-===== Signed Commitment Witness
-****
+.<<defn-grandpa-beefy-signed-commitment-witness, Signed Commitment Witness>>
+====
 A *signed commitment witness*, stem:[M_("SC")^w], is a light version of the signed
 BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>). Instead of
 containing the entire list of signatures, it only claims which validator signed
@@ -565,4 +565,4 @@ set must be placed at index _3_ in stem:[V_n]. This sorting allows clients to
 map public keys to their corresponding boolean indicators.
 * stem:[R_("sig")] is the MMR root of the signatures in the original signed
 BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>).
-****
+====

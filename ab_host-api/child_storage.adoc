@@ -4,10 +4,10 @@
 Interface for accessing the child storage from within the runtime.
 
 [#defn-child-storage-type]
-=== Child Storage
-****
+.<<defn-child-storage-type, Child Storage>>
+====
 *Child storage* key is a unprefixed location of the child trie in the main trie.
-****
+====
 
 === Functions
 

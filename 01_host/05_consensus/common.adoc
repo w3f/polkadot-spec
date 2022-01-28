@@ -15,8 +15,8 @@ verify the validity of each block, the Polkadot node must track the current list
 of authorities (<<defn-authority-list>>) for that block.
 
 [#defn-authority-list]
-===== Authority List
-****
+.<<defn-authority-list, Authority List>>
+====
 The *authority list* of block stem:[B] for consensus engine stem:[C] noted as
 stem:["Auth"_C(B)] is an array that contains the following pair of types for
 each of its authorities stem:[A in "Auth"_C(B)]:
@@ -36,7 +36,7 @@ stem:[C].
 In Polkadot, all authorities have the weight stem:[w_A = 1]. The weight
 stem:[w_A] exists for potential improvements in the protocol and could have a
 use-case in the future.
-****
+====
 
 [#sect-consensus-message-digest]
 ==== Runtime-to-Consensus Engine Message
@@ -57,8 +57,8 @@ finalized block in which they were selected. Any votes for blocks before the
 came into effect would get rejected.
 
 [#defn-consensus-message-digest]
-===== Consensus Message
-****
+.<<defn-consensus-message-digest, Consensus Message>>
+====
 A *consensus message* is a digest item (<<defn-digest>>) of type _4_ and
 consists of the pair:
 
@@ -157,4 +157,4 @@ given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
 definition of stem:[N_("delay")], is an _imported_ block and validated by the
 block production consensus engine. After authoring block stem:[B'], the
 authorities should resume voting.
-****
+====

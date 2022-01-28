@@ -20,25 +20,25 @@ protocol.
 ==== Preliminaries
 
 [#defn-mmr]
-===== Merkle Mountain Ranges
-****
+.<<defn-mmr, Merkle Mountain Ranges>>
+====
 Merkle Mountain Ranges, *MMR*, are used
 as an efficient way to send block headers and signatures to light clients.
 
 NOTE: MMRs have not been defined yet.
-****
+====
 
 [#defn-beefy-statement]
-===== Statement
-****
+.<<defn-beefy-statement, Statement>>
+====
 The *statement* is the same piece of information which every relay chain
 validator is voting on. Namely, the MMR root of all the block header hashes
 leading up to the latest, finalized block.
-****
+====
 
 [#defn-beefy-witness-data]
-===== Witness Data
-****
+.<<defn-beefy-witness-data, Witness Data>>
+====
 *Witness data* contains the statement (<<defn-beefy-statement>>), an array
 indicating which validator of the Polkadot network voted for the statement (but
 not the signatures themselves) and a MMR root of the signatures. The indicators
@@ -46,11 +46,11 @@ of which validator voted for the statement are just claims and provide no
 proofs. The network message is defined in
 <<defn-grandpa-beefy-signed-commitment-witness>> and the relayer saves it on the
 chain of the remote network.
-****
+====
 
 [#defn-beefy-light-client]
-===== Light Client
-****
+.<<defn-beefy-light-client, Light Client>>
+====
 A *light client* is an abstract entity in a remote network such as Ethereum. It
 can be a node or a smart contract with the intent of requesting finality proofs
 from the Polkadot network. A light client reads the witness data
@@ -59,17 +59,17 @@ directly from the relayer in order to verify those.
 
 The light client is expected to know who the validators are and has
 access to their public keys.
-****
+====
 
 [#defn-beefy-relayer]
-===== Relayer
-****
+.<<defn-beefy-relayer, Relayer>>
+====
 A *relayer* (or "prover") is an abstract entity which takes finality proofs from
 the Polkadot network and makes those available to the light clients. Inherently,
 the relayer tries to convince the light clients that the finality proofs have
 been voted for by the Polkadot relay chain validators. The relayer operates
 offchain and can for example be a node or a collection of nodes.
-****
+====
 
 ==== Voting on Statements
 
