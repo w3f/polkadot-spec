@@ -1,11 +1,11 @@
 = Polkadot Specification
 Web 3.0 Technologies Foundation; Fabio Lama; Florian Franzen; Syed Hosseini
 v0.2.0
-:description: Official Polkadot Protocol Specification
+:description: The Official Polkadot Protocol Specification
 :doctype: book
 :example-caption: Definition
 :mathematical-format: svg
-:multipage-level: 3
+:multipage-level: 2
 :sectlinks:
 :sectnums:
 :sectnumlevels: 4
@@ -14,35 +14,40 @@ v0.2.0
 :stylesheet: style.css
 :toc: left
 :toclevels: 2
+:webfonts: Work+Sans:ital,wght@0,300;1,700
 :xrefstyle: short
 
-WARNING: The Polkadot specification is currently being converted from TexMacs to
-AsciiDoc. This specification is *Work-In-Progress* and any content, structure ,
+WARNING: This specification is *Work-In-Progress* and any content, structure,
 design and/or hyper/anchor-link *is subject to change*.
 
 
 = Host Specification
+Description of the Host-side of the Polkadot Protocol
 
 include::01_host/main.adoc[]
 
 
 = Runtime Specification
+Description of various useful Runtime internals
 
 include::02_runtime/main.adoc[]
 
 
 = Additional information
+Appendix chapter containing various protocol details
 
 include::aa_appendix/main.adoc[]
 
 
 [#chap-host-api]
 = Host API
+Description of the expected environment available for import by the Polkadot Runtime
 
 include::ab_host-api/main.adoc[]
 
 
 [#chap-runtime-api]
 = Runtime API
+Description of how to interact with the Runtime through its exported functions
 
 include::ac_runtime-api/main.adoc[]
