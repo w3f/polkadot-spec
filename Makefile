@@ -18,6 +18,7 @@ polkadot-spec.html: $(SOURCES) docinfo.html
 
 polkadot-spec-html/: $(SOURCES)
 	asciidoctor -a docinfo=shared-header -r asciidoctor-multipage -b multipage_html5 -D $@ $<
+	cp favicon.png $@
 
 polkadot-spec.pdf: $(SOURCES)
 	asciidoctor-pdf -o $@ -r asciidoctor-mathematical $<
