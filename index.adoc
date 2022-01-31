@@ -11,6 +11,7 @@ v0.2.0
 :sectnumlevels: 4
 :source-highlighter: rouge
 :stem:
+:stylesheet: style.css
 :toc: left
 :toclevels: 2
 :xrefstyle: short
