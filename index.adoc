@@ -4,6 +4,7 @@ v0.2.0
 :description: The Official Polkadot Protocol Specification
 :doctype: book
 :example-caption: Definition
+:favicon: ./favicon.png
 :mathematical-format: svg
 :multipage-level: 2
 :sectlinks:
