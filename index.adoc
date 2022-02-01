@@ -5,6 +5,7 @@ v0.2.0
 :doctype: book
 :example-caption: Definition
 :favicon: ./favicon.png
+:icons: font
 :mathematical-format: svg
 :multipage-level: 2
 :sectlinks:
