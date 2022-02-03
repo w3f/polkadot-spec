@@ -114,7 +114,8 @@ jobs:
     - uses: actions/download-artifact@v2
       with:
         name: polkadot-spec.pdf
-        path: spec/develop.pdf
+        path: spec/
+    - run: mv spec/polkadot-spec.pdf spec/develop.pdf
     - name: Commit and push updated GitHub Pages branch
       run: |
         git config user.name github-actions
