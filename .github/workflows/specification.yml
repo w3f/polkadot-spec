@@ -99,7 +99,7 @@ jobs:
       if: github.event_name == 'release'
 
   release-pages:
-    needs: [ build-html-multi ]
+    needs: [ build-html-multi, build-pdf ]
     name: Publish release on GitHub Pages
     runs-on: ubuntu-20.04
     if: github.event_name == 'release'
@@ -111,10 +111,14 @@ jobs:
       with:
         name: polkadot-spec-html
         path: develop
+    - uses: actions/download-artifact@v2
+      with:
+        name: polkadot-spec.pdf
+        path: spec/develop.pdf
     - name: Commit and push updated GitHub Pages branch
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add develop/
+        git add develop/ spec/develop.pdf
         git commit --amend -m "Update develop specification"
         git push -f
