@@ -11,6 +11,7 @@
 	--white: #FFFFFF;
 
 	--dark-blue: #172026;
+	--grey: #efefef;
 
 	--pink: #E6007A;
 	--purple: #670d35;
@@ -159,6 +160,12 @@ h6 > a.link:hover,
 #toc a .toc-current,
 #toc .tocify-focus a {
 	color: var(--pink);
+}
+
+/* Style boxes */
+.exampleblock > .content, 
+.sidebarblock {
+	background: var(--grey);
 }
 
 /* Style footer */
