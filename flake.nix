@@ -8,46 +8,60 @@
   };
 
   inputs = {
-    # Nix base libraries
     utils.url = "github:numtide/flake-utils";
-
-    # Basis for included packages
     nixpkgs.url = "github:nixos/nixpkgs/release-21.11";
   };
 
-  outputs = { self, utils, nixpkgs } :
-    utils.lib.eachSystem [ "aarch64-linux" "x86_64-linux" ] (system:
-      let
-        pkgs = nixpkgs.legacyPackages."${system}";
+  outputs = { self, utils, nixpkgs }: utils.lib.eachDefaultSystem (system:
+  let
+    pkgs = nixpkgs.legacyPackages.${system};
 
-        src = self;
+    ruby = pkgs.ruby_3_0;
+    gemConfig = pkgs.defaultGemConfig.override { inherit ruby; };
+  
+    gems = extraGroup: pkgs.bundlerEnv {
+      name = "polkadot-spec-gems";
+      inherit ruby gemConfig;
+      gemdir  = ./.;
+      groups = [ "default" ] ++ nixpkgs.lib.optional (extraGroup != "") extraGroup; 
+    };
 
-        version = if self ? rev then (builtins.substring 0 7 self.rev)
-                  else if self ? lastModifiedDate then self.lastModifiedDate
-                  else "dirty";
+    bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
+  in {
+    packages = {
+      html = pkgs.runCommand "polkadot-spec.html" { BUNDLE_WITHOUT = "multihtml"; } ''
+        ${bundleExec ""} asciidoctor -a docinfo=shared -o $out ${self}/index.adoc
+      '';
+      
+      multi-html = pkgs.runCommand "polkadot-spec-html" {} ''
+        ${bundleExec "multihtml"} asciidoctor-multipage -D $out ${self}/index.adoc
+        cp ${./favicon.png} $out/favicon.png
+      '';
+      
+      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; BUNDLE_WITHOUT = "multihtml"; } ''
+        ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -o $out ${self}/index.adoc
+      ''; 
+    };
 
-        algorithmacs = pkgs.callPackage ./.nix/algorithmacs.nix {};
+    devShell = pkgs.mkShell {
+      buildInputs = [
+        ruby.devEnv
+      ] ++ (with pkgs; [
+        cmake
+        pkg-config
+    
+        bison
+        cairo
+        flex
+        gdk-pixbuf 
+        gnome.gobject-introspection
+        libxml2
+        pango
+      ]);
+    };
 
-        host-spec-pkgs = pkgs.callPackage ./.nix/host-spec.nix { inherit src version algorithmacs; };
-
-        texlive-spec = pkgs.callPackage ./.nix/texlive.nix {
-          extraTexPackages = {
-            inherit (pkgs.texlive) latexmk algorithms algorithmicx luacode;
-          };
-        };
-      in {
-        packages = host-spec-pkgs // {
-          runtime-spec = pkgs.callPackage ./.nix/runtime-spec.nix { inherit src version texlive-spec; };
-        };
-
-        devShell = pkgs.mkShell {
-          pname = "polkadot-spec-env";
-          inherit version;
-
-          inputsFrom = builtins.attrValues self.packages."${system}";
-          buildInputs = [ pkgs.gnumake ];
-        };
-      }) // {
-        checks = self.packages;
-      };
+    defaultPackage = self.packages.${system}.multi-html;
+  }) // {
+    checks = self.packages;
+  };
 }
