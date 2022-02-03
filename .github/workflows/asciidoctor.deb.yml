@@ -52,26 +52,18 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
-<<<<<<< HEAD:.github/workflows/asciidoctor.deb.yml
-<<<<<<< HEAD:.github/workflows/asciidoctor.deb.yml
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:
         bundler-cache: true
     - name: Build multi-html specification
       run: bundle exec make multi-html
-=======
-    - name: Install deb dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y asciidoctor rubygems ruby-rouge
-=======
->>>>>>> 7a5d71c2 (ci: fix multipage builds):.github/workflows/specification.yml
     - name: Install gem dependencies
       run: sudo gem install asciidoctor-multipage rouge
     - name: Build multi-html specification
       run: make multi-html
->>>>>>> 5550882f (ci: clean up build targets):.github/workflows/specification.yml
+    - name: Build multi-html specification
+      run: bundle exec make multi-html
     - name: Upload multi-html specification
       uses: actions/upload-artifact@v2
       with:
