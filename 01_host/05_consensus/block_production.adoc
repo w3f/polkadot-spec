@@ -266,7 +266,7 @@ ambiguity about the underlying node.
 
 WARNING: Currently it still lacks a clear definition of when block arrival times
 are considered valid and how to differentiated imported block on initial sync
-from ``fresh'' blocks that were just produced.
+from "`fresh`" blocks that were just produced.
 
 [#defn-sync-period]
 ===== Sync Period
