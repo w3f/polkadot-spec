@@ -259,6 +259,3 @@ TSWLatexianTemp*
 # asciidoc
 stem-*.svg
 algo-*.svg
-
-# nix shell files
-shell.nix
