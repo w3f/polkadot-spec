@@ -44,13 +44,6 @@ function is the Ristretto group specified in:
 
 * https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01[The Ristretto255 and Decaf448 Groups].
 
-[#defn-vrf-context]
-.<<defn-vrf-context, VRF Context>>
-====
-*VRF context* (simply referred to as context when there is no ambiguity)
-represented as stem:[c] is a [TODO: define context here]
-====
-
 [#defn-vrf-pair]
 .<<defn-vrf-pair, VRF Pair>>
 ====
@@ -91,19 +84,25 @@ where stem:[C] is the challenge and stem:[S] is the 32-byte Schnorr poof. Both
 are expressed as Curve25519 scalars.
 ====
 
+[#defn-vrf-context]
+.<<defn-vrf-context, VRF Context>>
+====
+A *context*, or VRF context, refers to the input value of a VRF transcript
+(<<defn-vrf-transcript>>). The value and usage of the context is implementation
+specific, described further in the VRF transcript definition
+(<<defn-vrf-transcript>>).
+====
+
 [#defn-vrf-transcript]
 .<<defn-vrf-transcript, VRF Transcript>>
 ====
-The *VRF transcript* is a “public-coin” argument [TODO: I'd not introduced
-obsecure scary words like these in the definition without defining them]
-containing a mathematical object [TODO: what is a mathematical object?] combined
-with a context and is more closely described in the Merlin documentation [we
-agreed to remove merlin and speccing it], which is a STROBE-based transcript
-[TODO: why the fact that marlin strobe based is relevant in the middle of the
-definition] construction for zero-knowledge proofs [TODO: maybe define marlin
-transcript separately and refer to it.]. The transcript, stem:[T], is a STROBE
-object for the 128-bit security level as defined in the STROBE specification in
-Section 5:
+A *transcript*, or VRF transcript, serves as a domain-specific separator of
+cryptographic protocols and is represented as a mathematical object, as defined
+by Merlin, which defines how that object is generated and encoded. The usage of
+the transcript is implementation specific, such as for certain mechanisms in the
+Availability & Validity chapter (<<chapter-anv>>), and is therefore described in
+more detail in those protocols. The input value used to generate the
+transactions is referred to as a _context_ (<<defn-vrf-context>>).
 
 [stem]
 ++++
