@@ -22,9 +22,10 @@ jobs:
       run: |
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
-        sudo apt-get update
-        sudo apt-get install -y xvfb texmacs plantuml
-    - name: Install TeXmacs pacakges
+    - uses: awalsh128/cache-apt-pkgs-action@v1
+      with:
+        packages: xvfb texmacs plantuml
+    - name: Install TeXmacs packages
       run: |
         mkdir -p ~/.TeXmacs/packages
         cd ~/.TeXmacs/packages
@@ -63,9 +64,10 @@ jobs:
       run: |
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
-        sudo apt-get update
-        sudo apt-get install -y xvfb texmacs plantuml
-    - name: Install TeXmacs pacakges
+    - uses: awalsh128/cache-apt-pkgs-action@v1
+      with:
+        packages: xvfb texmacs plantuml
+    - name: Install TeXmacs packages
       run: |
         mkdir -p ~/.TeXmacs/packages
         cd ~/.TeXmacs/packages
