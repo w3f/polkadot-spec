@@ -11,7 +11,7 @@ on:
 
 jobs:
   build:
-    name: Compile host specification
+    name: nix-build-spec-host
     runs-on: ubuntu-20.04
     steps:
     - uses: cachix/install-nix-action@v15

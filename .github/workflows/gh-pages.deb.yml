@@ -1,12 +1,12 @@
-name: ubuntu-release
+name: deb-release
 
 on:
   release:
     types: [published]
 
 jobs:
-  release-pages:
-    name: Publish release on GitHub Pages
+  pages:
+    name: deb-release-pages
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -15,27 +15,27 @@ jobs:
     - name: Wait for host spec
       uses: lewagon/wait-on-check-action@v1.1.1
       with:
-        ref: ${{ github.ref }}
-        check-name: build-spec-host
+        ref: ${{ github.sha }}
+        check-name: deb-build-spec-host
         repo-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Download host spec
       uses: marcofaggian/action-download-multiple-artifacts@v3.0.8
       with:
         names: polkadot-host-spec.pdf
-        workflow: ubtunu-spec-host
+        workflow: deb-spec-host
         commit: ${{ github.sha }}
         event: ${{ github.event_name }}
     - name: Wait for runtime spec
       uses: lewagon/wait-on-check-action@v1.1.1
       with:
-        ref: ${{ github.ref }}
-        check-name: build-spec-runtime
+        ref: ${{ github.sha }}
+        check-name: deb-build-spec-runtime
         repo-token: ${{ secrets.GITHUB_TOKEN }}
     - name: Download runtime spec
       uses: marcofaggian/action-download-multiple-artifacts@v3.0.8
       with:
         names: polkadot-runtime-spec.pdf
-        workflow: ubtunu-spec-runtime
+        workflow: deb-spec-runtime
         commit: ${{ github.sha }}
         event: ${{ github.event_name }}
     - name: Replace latest release cache file
