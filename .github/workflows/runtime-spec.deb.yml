@@ -1,4 +1,4 @@
-name: ubuntu-spec-host
+name: deb-spec-host
 
 on:
   push:
@@ -6,14 +6,14 @@ on:
     - main
   pull_request:
     paths:
-    - '.github/workflows/runtime-spec.ubuntu.yml'
+    - '.github/workflows/runtime-spec.deb.yml'
     - 'runtime-spec/**'
   release:
     types: [published]
 
 jobs:
-  build-spec-runtime:
-    name: Compile runtime specification
+  build:
+    name: deb-build-spec-runtime
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
@@ -39,8 +39,8 @@ jobs:
         asset_content_type: application/pdf
       if: github.event_name == 'release'
 
-  diff-spec-runtime:
-    name: Compare runtime specification
+  diff:
+    name: deb-diff-spec-runtime
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
