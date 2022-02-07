@@ -14,7 +14,7 @@ jobs:
       with:
         ref: gh-pages
     - name: Wait for specs to be build
-      use: emilgoldsmith/wait-for-workflows-to-succeed@v1.7
+      uses: emilgoldsmith/wait-for-workflows-to-succeed@v1.7
       with:
         wait-interval-seconds: 30
         wait-max-seconds: 1200
