@@ -1,4 +1,4 @@
-name: deb-spec-host
+name: deb-spec-runtime
 
 on:
   push:
