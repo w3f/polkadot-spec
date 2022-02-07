@@ -260,7 +260,7 @@ T = ("st","pos","pos"_("begin"),I_0)
 * The duplex state, stem:["st"], is a 200-byte array created by the
 https://keccak.team/keccak_specs_summary.html[keccak-f1600 sponge function] on
 the initial STROBE state as described in the STROBE documentation.
-Specifically, the `R` value is of value `166` and `X.Y.Z` is `1.0.2`
+Specifically, `R` is of value `166` and `X.Y.Z` is of value `1.0.2`
 * stem:["pos"] has the initial value of `0`.
 * stem:["pos"_("begin")] has the initial value of `0`.
 * stem:[I_0] has the initial value of `0`.
