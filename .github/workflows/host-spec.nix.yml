@@ -13,8 +13,8 @@ jobs:
   build:
     name: Compile host specification
     runs-on: ubuntu-20.04
-    container: nixpkgs/nix-flakes:nixos-21.11
     steps:
+    - uses: cachix/install-nix-action@v15
     - uses: cachix/cachix-action@v10
       with:
         name: polkadot-spec

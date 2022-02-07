@@ -13,7 +13,7 @@ jobs:
   nix-build:
     name: Compile runtime specification
     runs-on: ubuntu-20.04
-    container: nixpkgs/nix-flakes:nixos-21.11
+    container: niteo/nixpkgs-nixos-21.11
     steps:
     - uses: cachix/cachix-action@v10
       with:
