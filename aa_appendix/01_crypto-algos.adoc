@@ -248,23 +248,55 @@ transactions is referred to as a _context_ (<<defn-vrf-context>>).
 [#defn-vrf-transcript]
 .<<defn-vrf-transcript, VRF Transcript>>
 ====
-A *transcript*, or VRF transcript, is a STROBE object as defined in the STROBE
-documentation, respectively section
+A *transcript*, or VRF transcript, is a STROBE object, stem:["obj"], as defined
+in the STROBE documentation, respectively section
 https://strobe.sourceforge.io/specs/#object["5. State of a STROBE object"].
 
 [stem]
 ++++
-T = ("st","pos","pos"_("begin"),I_0)
+"obj" = ("st","pos","pos"_("begin"),I_0)
 ++++
 
 * The duplex state, stem:["st"], is a 200-byte array created by the
 https://keccak.team/keccak_specs_summary.html[keccak-f1600 sponge function] on
-the initial STROBE state as described in the STROBE documentation.
-Specifically, `R` is of value `166` and `X.Y.Z` is of value `1.0.2`
+the initial STROBE state as described in the STROBE documentation. Specifically,
+`R` is of value `166` and `X.Y.Z` is of value `1.0.2`.
 * stem:["pos"] has the initial value of `0`.
 * stem:["pos"_("begin")] has the initial value of `0`.
 * stem:[I_0] has the initial value of `0`.
+
+Then, the `meta-AD` operator (<<defn-strobe-operators>>) (where `more=False`) is
+used to add the protocol label `Merlin v1.0` to stem:["obj"] followed by
+_appending_ (<<defn-append-message>>) the label `dom-step`, resutling in the
+final transcript. stem:[T].
+
+[stem]
+++++
+t = "meta-AD"(obj, "'Merlin v1.0'", "false")\
+T = "append"(t, "'dom-step'")
+++++
+
 ====
+
+===== Appending Messages
+
+Appending messages, or "data", to the transcript (<<defn-vrf-transcript>>) requires ...
+
+[stem]
+++++
+
+++++
+
+        let data_len = encode_usize_as_u32(message.len());
+        self.strobe.meta_ad(label, false);
+        self.strobe.meta_ad(&data_len, true);
+        self.strobe.ad(message, false);
+
+[#defn-strobe-operators]
+.<<defn-vrf-transcript, VRF Transcript>>
+====
+====
+
 
 [#sect-cryptographic-keys]
 === Cryptographic Keys
