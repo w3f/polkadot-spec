@@ -29,8 +29,8 @@
         };
       in {
         packages = {
-          polkadot-host-spec    = pkgs.callPackage ./.nix/host-spec.nix { inherit src version algorithmacs; };
-          polkadot-runtime-spec = pkgs.callPackage ./.nix/runtime-spec.nix { inherit src version texlive-spec; };
+          host-spec    = pkgs.callPackage ./.nix/host-spec.nix { inherit src version algorithmacs; };
+          runtime-spec = pkgs.callPackage ./.nix/runtime-spec.nix { inherit src version texlive-spec; };
         };
 
         devShell = pkgs.mkShell {
