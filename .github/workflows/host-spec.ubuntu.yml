@@ -1,0 +1,98 @@
+name: ubuntu-spec-host
+
+on:
+  push:
+    branches:
+    - main
+  pull_request:
+    paths:
+    - '.github/workflows/host-spec.ubuntu.yml'
+    - '.github/apt-texmacs.asc'
+    - 'host-spec/**'
+  release:
+    types: [published]
+
+jobs:
+  build-spec-host:
+    name: Compile host specification
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install dependencies
+      run: |
+        sudo apt-key add .github/apt-texmacs.asc
+        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
+        sudo apt-get update
+        sudo apt-get install -y xvfb texmacs plantuml
+    - name: Install TeXmacs pacakges
+      run: |
+        mkdir -p ~/.TeXmacs/packages
+        cd ~/.TeXmacs/packages
+        curl -OL https://raw.githubusercontent.com/w3f/algorithmacs/master/algorithmacs-style.ts
+    - name: Build host specification
+      run: make -C host-spec
+    - name: Upload host specification
+      uses: actions/upload-artifact@v2
+      with:
+        name: polkadot-host-spec.pdf
+        path: host-spec/polkadot-host-spec.pdf
+    - name: Release host specification
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: host-spec/polkadot-host-spec.pdf
+        asset_name: polkadot-host-spec_${{ github.event.release.tag_name }}.pdf
+        asset_content_type: application/pdf
+      if: github.event_name == 'release'
+
+  diff-spec-host:
+    name: Compare host specification
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 2
+      if: github.event_name == 'push'
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+      if: github.event_name == 'pull_request' || github.event_name == 'release'
+    - name: Install dependencies
+      run: |
+        sudo apt-key add .github/apt-texmacs.asc
+        sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
+        sudo apt-get update
+        sudo apt-get install -y xvfb texmacs plantuml
+    - name: Install TeXmacs pacakges
+      run: |
+        mkdir -p ~/.TeXmacs/packages
+        cd ~/.TeXmacs/packages
+        curl -OL https://raw.githubusercontent.com/w3f/algorithmacs/master/algorithmacs-style.ts
+    - name: Determine comparison target
+      run: echo "REV=HEAD~1" >> $GITHUB_ENV
+      if: github.event_name == 'push'
+    - name: Determine comparison target
+      run: echo "REV=origin/${GITHUB_BASE_REF}" >> $GITHUB_ENV
+      if: github.event_name == 'pull_request'
+    - name: Determine comparison target
+      run: echo "REV=$(git describe --tags --abbrev=0 HEAD~1)" >> $GITHUB_ENV
+      if: github.event_name == 'release'
+    - name: Compare host specification
+      run: make -C host-spec diff
+    - name: Upload host specification diff
+      uses: actions/upload-artifact@v2
+      with:
+        name: polkadot-host-spec.diff.pdf
+        path: host-spec/polkadot-host-spec.diff.pdf
+    - name: Release host specification diff
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: host-spec/polkadot-host-spec.diff.pdf
+        asset_name: polkadot-host-spec_${{ github.event.release.tag_name }}.diff_${{ env.REV }}.pdf
+        asset_content_type: application/pdf
+      if: github.event_name == 'release'
