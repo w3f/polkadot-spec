@@ -6,7 +6,6 @@ on:
 
 jobs:
   release-pages:
-    needs: [ build-spec-host, build-spec-runtime ]
     name: Publish release on GitHub Pages
     runs-on: ubuntu-20.04
     steps:
