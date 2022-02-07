@@ -259,8 +259,8 @@ https://strobe.sourceforge.io/specs/#object["5. State of a STROBE object"].
 
 * The duplex state, stem:["st"], is a 200-byte array created by the
 https://keccak.team/keccak_specs_summary.html[keccak-f1600 sponge function] on
-the initial STROBE state as described in the STROBE documentation. Specifically,
-`R` is of value `166` and `X.Y.Z` is of value `1.0.2`.
+the https://strobe.sourceforge.io/specs/#object.initial[initial STROBE state].
+Specifically, `R` is of value `166` and `X.Y.Z` is of value `1.0.2`.
 * stem:["pos"] has the initial value of `0`.
 * stem:["pos"_("begin")] has the initial value of `0`.
 * stem:[I_0] has the initial value of `0`.
@@ -275,7 +275,6 @@ final transcript. stem:[T].
 t = "meta-AD"(obj, "'Merlin v1.0'", "false")\
 T = "append"(t, "'dom-step'")
 ++++
-
 ====
 
 ===== Appending Messages
