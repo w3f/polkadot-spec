@@ -275,6 +275,10 @@ final transcript. stem:[T].
 t = "meta-AD"(obj, "'Merlin v1.0'", "false")\
 T = "append"(t, "'dom-step'")
 ++++
+
+This transcript is treated just like a STROBE object, wherein any operations
+(<<defn-strobe-operators>>) on it modify the values such as stem:["pos"] and
+stem:["pos"_("begin")].
 ====
 
 ===== Appending Messages
