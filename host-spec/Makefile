@@ -9,7 +9,7 @@ GENERATED  := figures/c07-overview.eps
 SOURCES    := host-spec.tm $(CHAPTERS) $(APPENDICES) $(FIGURES) $(GENERATED)
 
 
-.PHONY: build pdf tex diff temp update deaux clean
+.PHONY: build pdf tex html html.tar.gz diff temp update deaux clean
 
 build: pdf
 
@@ -18,9 +18,11 @@ pdf: polkadot-host-spec.pdf
 
 tex: polkadot-host-spec.tex
 
-diff: polkadot-host-spec.diff.pdf
-
 html: html/index.html
+
+html.tar.gz: polkadot-host-spec.html.tar.gz
+
+diff: polkadot-host-spec.diff.pdf
 
 temp: $(GENERATED)
 
@@ -35,6 +37,9 @@ polkadot-host-spec.pdf: $(SOURCES) host-spec.scm
 polkadot-host-spec.tex: $(SOURCES) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm -x "(convert-expanded \"$$PWD/$<\" \"$$PWD/$@\")" --quit
 
+
+polkadot-host-spec.html.tar.gz: html/index.html
+	tar -cvf $@ html/
 
 html/index.html: $(SOURCES) host-spec.scm
 	mkdir -p html
