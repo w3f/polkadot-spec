@@ -14,15 +14,27 @@ on:
 
 jobs:
   build:
-    name: deb-build-spec-host
+    name: deb-build-spec-${{ matrix.format }}
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        include:
+        - format: html.tar.gz
+          mime: application/gzip
+        - format: pdf
+          mime: application/pdf
+        - format: tex
+          mime: application/x-latex
+        - format: tmml
+          mime: application/xml
     steps:
     - uses: actions/checkout@v2
-    - name: Install dependencies
+    - name: Setup additional apt repos
       run: |
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
-    - uses: awalsh128/cache-apt-pkgs-action@v1
+    - name: Install deb dependencies
+      uses: awalsh128/cache-apt-pkgs-action@v1
       with:
         packages: xvfb texmacs plantuml
     - name: Install TeXmacs packages
@@ -30,22 +42,22 @@ jobs:
         mkdir -p ~/.TeXmacs/packages
         cd ~/.TeXmacs/packages
         curl -OL https://raw.githubusercontent.com/w3f/algorithmacs/master/algorithmacs-style.ts
-    - name: Build host specification
-      run: make -C host-spec
-    - name: Upload host specification
+    - name: Build ${{ matrix.format }} host specification
+      run: make -C host-spec ${{ matrix.format }}
+    - name: Upload ${{ matrix.format }} host specification
       uses: actions/upload-artifact@v2
       with:
-        name: polkadot-host-spec.pdf
-        path: host-spec/polkadot-host-spec.pdf
+        name: polkadot-host-spec.${{ matrix.format }}
+        path: host-spec/polkadot-host-spec.${{ matrix.format }}
     - name: Release host specification
       uses: actions/upload-release-asset@v1
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ github.event.release.upload_url }}
-        asset_path: host-spec/polkadot-host-spec.pdf
-        asset_name: polkadot-host-spec_${{ github.event.release.tag_name }}.pdf
-        asset_content_type: application/pdf
+        asset_path: host-spec/polkadot-host-spec.${{ matrix.format }}
+        asset_name: polkadot-host-spec_${{ github.event.release.tag_name }}.${{ matrix.format }}
+        asset_content_type: ${{ matrix.mime }}
       if: github.event_name == 'release'
 
   diff:
