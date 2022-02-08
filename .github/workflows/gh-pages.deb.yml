@@ -4,6 +4,8 @@ on:
   release:
     types: [published]
 
+concurrency: gh-pages
+
 jobs:
   pages:
     name: deb-release-pages
