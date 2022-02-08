@@ -84,62 +84,6 @@ where stem:[C] is the challenge and stem:[S] is the 32-byte Schnorr poof. Both
 are expressed as Curve25519 scalars.
 ====
 
-[#defn-vrf-context]
-.<<defn-vrf-context, VRF Context>>
-====
-A *context*, or VRF context, refers to the input value of a VRF transcript
-(<<defn-vrf-transcript>>). The value and usage of the context is implementation
-specific, described further in the VRF transcript definition
-(<<defn-vrf-transcript>>).
-====
-
-[#defn-vrf-transcript]
-.<<defn-vrf-transcript, VRF Transcript>>
-====
-A *transcript*, or VRF transcript, serves as a domain-specific separator of
-cryptographic protocols and is represented as a mathematical object, as defined
-by Merlin, which defines how that object is generated and encoded. The usage of
-the transcript is implementation specific, such as for certain mechanisms in the
-Availability & Validity chapter (<<chapter-anv>>), and is therefore described in
-more detail in those protocols. The input value used to generate the
-transactions is referred to as a _context_ (<<defn-vrf-context>>).
-
-[stem]
-++++
-T = (s,p,b,f)\
-s = (b_0, ... b_199)
-++++
-
-where:
-
-* stem:[s] is the duplex state consisting of a 200-byte array that is always
-8-byte aligned.
-* stem:[p] is an unsigned 8-bit integer and indicates the position in the duplex
-state where the next byte will be processed.
-* stem:[b] is an unsigned 8-bit integer and indicates the position in the duplex
-state which is _1_ after the beginning of the current operation. stem:[b] is
-equal to _0_ if no operation began in this block.
-* stem:[f] is an unsigned 8-bit integer and can be _0_, _1_ or _None_. It
-indicates whether the party sends or receives a message on the transport.
-====
-
-[#defn-vrf-meta-ad]
-.<<defn-vrf-meta-ad, `Meta-Ad`>>
-====
-The stem:["Meta-Ad"] function takes a transcript (<<defn-vrf-transcript>>),
-stem:[t], a UTF-8 encoded label, stem:[l], and a byte array, stem:[b], and
-returns an updated transcript.
-
-[stem]
-++++
-t larr "Meta-Ad"(t,l,b)
-++++
-
-The stem:["Meta-Ad"] operation adds the label and the byte array to the passed
-on transcript as described in the STROBE documenation, respectively the
-https://strobe.sourceforge.io/specs/#ops.bare.ad["AD: Provide associated data" section].
-====
-
 [#defn-vrf-evaluate-vrf]
 .<<defn-vrf-evaluate-vrf, `Evaluate-VRF`>>
 ====
@@ -173,23 +117,6 @@ p larr "DLEQ-Prove"(s_k,t,v)
 The functions executed the following steps: [TODO]
 ====
 
-[#defn-vrf-create-transcript]
-.<<defn-vrf-create-transcript, `Create-Transcript`>>
-====
-The stem:["Create-Transcript"] function takes a context, stem:[c], represented
-as a UTF-8 encoded string and produces a transcript (<<defn-vrf-transcript>>),
-stem:[t].
-
-[stem]
-++++
-t larr "Create-Transcript"(c)
-++++
-
-The function initializes a Merlin transcript as described in the
-https://merlin.cool/transcript/index.html[Merlin documentation], respectively
-section “3.1.1 Transcript Objects” and section “3.1.2 Initialization”.
-====
-
 [#algo-make-challenge-bytes]
 .<<algo-make-challenge-bytes, `Make-Challenge-Bytes`>>
 ====
@@ -215,24 +142,6 @@ where:
 pseudorandom data of given length as deterministic function of the transcript.
 This data can be treated as a hash of all preceding operations, messages and
 keys.
-====
-
-[#defn-vrf-append-message]
-.<<defn-vrf-append-message, `Append-Message`>>
-====
-The stem:["Append-Message"] function takes a transcript
-(<<defn-vrf-transcript>>), stem:[t], a context, stem:[c], represented as a UTF-8
-encoded string and a message, stem:[m], represented as a byte array and returns
-an updated transcript form the initial transcript stem:[t].
-
-[stem]
-++++
-t larr "Append-Message"(t,c,m)
-++++
-
-This function appends the messages to the transcript as described in the
-https://merlin.cool/transcript/index.html[Merlin documentation], respectively
-section “3.1.3 Appending Messages”.
 ====
 
 ==== Transcript
