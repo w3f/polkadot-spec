@@ -22,14 +22,15 @@
 
         algorithmacs = pkgs.callPackage ./.nix/algorithmacs.nix {};
 
+        host-spec-pkgs = pkgs.callPackage ./.nix/host-spec.nix { inherit src version algorithmacs; };
+
         texlive-spec = pkgs.callPackage ./.nix/texlive.nix {
           extraTexPackages = {
             inherit (pkgs.texlive) latexmk algorithms algorithmicx luacode;
           };
         };
       in {
-        packages = {
-          host-spec    = pkgs.callPackage ./.nix/host-spec.nix { inherit src version algorithmacs; };
+        packages = host-spec-pkgs // {
           runtime-spec = pkgs.callPackage ./.nix/runtime-spec.nix { inherit src version texlive-spec; };
         };
 
