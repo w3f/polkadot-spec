@@ -37,7 +37,7 @@ polkadot-host-spec.pdf: $(SOURCES) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm -x "(convert-updated \"$$PWD/$<\" \"$$PWD/$@\")" --quit
 
 polkadot-host-spec.tex: $(SOURCES) host-spec.scm
-	xvfb-run texmacs -b host-spec.scm -x "(convert-expanded \"$$PWD/$<\" \"$$PWD/$@\")" --quit
+	xvfb-run texmacs -b host-spec.scm -x "(convert-updated-expanded \"$$PWD/$<\" \"$$PWD/$@\" \"$(TMPDIR)\")" --quit
 
 
 polkadot-host-spec.html.tar.gz: html/index.html
