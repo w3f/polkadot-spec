@@ -1,26 +1,38 @@
 { src, version, stdenv, texmacs, plantuml, xvfb_run, algorithmacs }:
 
-stdenv.mkDerivation {
-  name = "polkadot-host-spec-${version}.pdf";
+let
+  mkHostSpec = format: stdenv.mkDerivation {
+    name = "polkadot-host-spec-${version}.${format}";
 
-  inherit src version;
+    inherit src version;
 
-  sourceRoot = "source/host-spec";
+    sourceRoot = "source/host-spec";
 
-  nativeBuildInputs = [
-    texmacs
-    plantuml
-    xvfb_run
-  ];
+    nativeBuildInputs = [
+      texmacs
+      plantuml
+      xvfb_run
+    ];
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
+    phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
-  preBuild = ''
-    export HOME=$(mktemp -d)
-    install -Dt $HOME/.TeXmacs/packages ${algorithmacs}
-  '';
+    buildFlags = [ format ];
 
-  installPhase = ''
-    cp polkadot-host-spec.pdf $out
-  '';
-}
+    preBuild = ''
+      export HOME=$(mktemp -d)
+      install -Dt $HOME/.TeXmacs/packages ${algorithmacs}
+    '';
+
+    installPhase = "cp polkadot-host-spec.${format} $out";
+  };
+
+  mkNamedDrvPair = format: let
+    escaped = builtins.replaceStrings ["."] ["-"] format;
+  in { 
+    name = "host-spec-${escaped}"; 
+    value = mkHostSpec format; 
+  };
+
+  formats = [ "pdf" "tex" "html.tar.gz" "tmml" ];
+in
+  builtins.listToAttrs (map mkNamedDrvPair formats)
