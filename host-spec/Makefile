@@ -61,7 +61,7 @@ REVDIR := $(TMPDIR)/host-spec-$(GITHASH)
 $(REVDIR):
 	mkdir -p $@
 	git archive --format=tar $(GITHASH) | (cd $@ && tar xf -)
-	# Will require next release: make -C $(REVDIR) temp
+	make -C $(REVDIR) temp || true
 
 polkadot-host-spec.diff.pdf: $(SOURCES) $(REVDIR) host-spec.scm
 	xvfb-run texmacs -b host-spec.scm  -x "(compare-versions-updated-expanded \"$(REVDIR)/host-spec.tm\" \"$$PWD/host-spec.tm\" \"$(TMPDIR)\") (export-buffer \"$$PWD/$@\")" -q
