@@ -1,0 +1,44 @@
+name: Nix Integration
+
+on:
+  push:
+    branches:
+    - main
+    - develop
+  pull_request:
+    paths:
+    - '.github/workflows/asciidoctor.nix.yml'
+    - '**/*.adoc'
+    - 'docinfo.html'
+    - 'Gemfile'
+    - 'Gemfile.lock'
+    - 'gemset.nix'
+    - 'style.css'
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        package: [ "html", "multi-html", "pdf" ]
+    name: nix-build-${{ matrix.package }}
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: cachix/install-nix-action@v15
+    - uses: cachix/cachix-action@v10
+      with:
+        name: polkadot-spec
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: Build ${{ matrix.package }} specification
+      run: nix build github:${{ github.repository }}/${{ github.sha }}#${{ matrix.package }}
+
+  check:
+    name: nix-check-flake
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: cachix/install-nix-action@v15
+    - uses: cachix/cachix-action@v10
+      with:
+        name: polkadot-spec
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: Run flake check
+      run: nix flake check github:${{ github.repository }}/${{ github.sha }}
