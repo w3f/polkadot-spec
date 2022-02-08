@@ -290,28 +290,21 @@ Formally, when creating a transcript we refer to it as stem:["Transcript"(ctx)].
 
 Appending messages, or "data", to the transcript (<<defn-vrf-transcript>>) first
 requires `meta-AD` operations for a given label of the messages, including the
-size of the message, followed by an `AD` operation itself. The size of the
-message is a 4-byte, little-endian encoded integer.
+size of the message, followed by an `AD` operation on the message itself. The
+size of the message is a 4-byte, little-endian encoded integer.
 
 [stem]
 ++++
 T_0 = "meta-AD"(T, l, "False")\
-T_1 = "meta-AD"(T_0, "msg"_l, "True")\
-T_2 = "AD"(T_1, msg, "False")
+T_1 = "meta-AD"(T_0, m_l, "True")\
+T_2 = "AD"(T_1, m, "False")
 ++++
 
 where stem:[T] is the transcript (<<defn-vrf-transcript>>), stem:[l] is the
-given label and stem:["msg"] the message, respectively stem:["msg"_l]
-representing its size. stem:[T_2] is the resulting transcript with the appended
-data.
+given label and stem:[m] the message, respectively stem:[m_l] representing its
+size. stem:[T_2] is the resulting transcript with the appended data.
 
-Formally, when 
-
-[#defn-strobe-operators]
-.<<defn-vrf-transcript, VRF Transcript>>
-====
-====
-
+Formally, when appending a message we refer to it as stem:["append"(T, l, m)].
 
 [#sect-cryptographic-keys]
 === Cryptographic Keys
