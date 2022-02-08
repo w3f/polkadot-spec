@@ -257,6 +257,8 @@ https://strobe.sourceforge.io/specs/#object["5. State of a STROBE object"].
 "obj" = ("st","pos","pos"_("begin"),I_0)
 ++++
 
+where:
+
 * The duplex state, stem:["st"], is a 200-byte array created by the
 https://keccak.team/keccak_specs_summary.html[keccak-f1600 sponge function] on
 the https://strobe.sourceforge.io/specs/#object.initial[initial STROBE state].
@@ -267,33 +269,43 @@ Specifically, `R` is of value `166` and `X.Y.Z` is of value `1.0.2`.
 
 Then, the `meta-AD` operator (<<defn-strobe-operators>>) (where `more=False`) is
 used to add the protocol label `Merlin v1.0` to stem:["obj"] followed by
-_appending_ (<<defn-append-message>>) the label `dom-step`, resutling in the
-final transcript. stem:[T].
+_appending_ (<<defn-append-message>>) label `dom-step` and its corresponding
+context, stem:[ctx], resulting in the final transcript, stem:[T].
 
 [stem]
 ++++
-t = "meta-AD"(obj, "'Merlin v1.0'", "false")\
-T = "append"(t, "'dom-step'")
+t = "meta-AD"(obj, "'Merlin v1.0'", "False")\
+T = "append"(t, "'dom-step'", "ctx")
 ++++
 
-This transcript is treated just like a STROBE object, wherein any operations
-(<<defn-strobe-operators>>) on it modify the values such as stem:["pos"] and
-stem:["pos"_("begin")].
+stem:["ctx"] serves as an arbitrary identifier/separator and its value is
+defined by the protocol specification individually. This transcript is treated
+just like a STROBE object, wherein any operations (<<defn-strobe-operators>>) on
+it modify the values such as stem:["pos"] and stem:["pos"_("begin")].
+
+Formally, when creating a transcript we refer to it as stem:["Transcript"(ctx)].
 ====
 
 ===== Appending Messages
 
-Appending messages, or "data", to the transcript (<<defn-vrf-transcript>>) requires ...
+Appending messages, or "data", to the transcript (<<defn-vrf-transcript>>) first
+requires `meta-AD` operations for a given label of the messages, including the
+size of the message, followed by an `AD` operation itself. The size of the
+message is a 4-byte, little-endian encoded integer.
 
 [stem]
 ++++
-
+T_0 = "meta-AD"(T, l, "False")\
+T_1 = "meta-AD"(T_0, "msg"_l, "True")\
+T_2 = "AD"(T_1, msg, "False")
 ++++
 
-        let data_len = encode_usize_as_u32(message.len());
-        self.strobe.meta_ad(label, false);
-        self.strobe.meta_ad(&data_len, true);
-        self.strobe.ad(message, false);
+where stem:[T] is the transcript (<<defn-vrf-transcript>>), stem:[l] is the
+given label and stem:["msg"] the message, respectively stem:["msg"_l]
+representing its size. stem:[T_2] is the resulting transcript with the appended
+data.
+
+Formally, when 
 
 [#defn-strobe-operators]
 .<<defn-vrf-transcript, VRF Transcript>>
