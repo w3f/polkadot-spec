@@ -2,7 +2,12 @@
 
 [![License](https://img.shields.io/github/license/w3f/polkadot-spec.svg)](https://github.com/w3f/polkadot-spec/blob/main/LICENSE)
 [![Latest Release](https://img.shields.io/github/release/w3f/polkadot-spec.svg)](https://github.com/w3f/polkadot-spec/releases/latest)
-[![Continues Integration](https://github.com/w3f/polkadot-spec/workflows/Specification%20Publication/badge.svg)](https://github.com/w3f/polkadot-spec/actions?query=workflow%3A%22Specification+Publication%22)
+[![Host Spec (Ubuntu)](https://github.com/w3f/polkadot-spec/actions/workflows/host-spec.deb.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/host-spec.deb.yml)
+[![Runtime Spec (Ubuntu)](https://github.com/w3f/polkadot-spec/actions/workflows/runtime-spec.deb.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/runtime-spec.deb.yml)
+
+[![Cachix Cache](https://img.shields.io/badge/cachix-w3fpkgs-blue.svg)](https://w3fpkgs.cachix.org)
+[![Host Spec (Flake)](https://github.com/w3f/polkadot-spec/actions/workflows/host-spec.nix.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/host-spec.nix.yml)
+[![Runtime Spec (Flake)](https://github.com/w3f/polkadot-spec/actions/workflows/runtime-spec.nix.yml/badge.svg)](https://github.com/w3f/polkadot-spec/actions/workflows/runtime-spec.nix.yml)
 
 Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository serves as the point of reference for Polkadot Protocol. In this repo you will find:
 
