@@ -176,10 +176,10 @@ Specifically, `R` is of value `166` and `X.Y.Z` is of value `1.0.2`.
 * stem:["pos"_("begin")] has the initial value of `0`.
 * stem:[I_0] has the initial value of `0`.
 
-Then, the `meta-AD` operator (<<defn-strobe-operators>>) (where `more=False`) is
+Then, the `meta-AD` operation (<<defn-strobe-operations>>) (where `more=False`) is
 used to add the protocol label `Merlin v1.0` to stem:["obj"] followed by
-_appending_ (<<defn-append-message>>) label `dom-step` and its corresponding
-context, stem:[ctx], resulting in the final transcript, stem:[T].
+_appending_ (<<sect-vrf-appending-messages>>) label `dom-step` and its
+corresponding context, stem:[ctx], resulting in the final transcript, stem:[T].
 
 [stem]
 ++++
@@ -189,12 +189,25 @@ T = "append"(t, "'dom-step'", "ctx")
 
 stem:["ctx"] serves as an arbitrary identifier/separator and its value is
 defined by the protocol specification individually. This transcript is treated
-just like a STROBE object, wherein any operations (<<defn-strobe-operators>>) on
-it modify the values such as stem:["pos"] and stem:["pos"_("begin")].
+just like a STROBE object, wherein any operations (<<defn-strobe-operations>>)
+on it modify the values such as stem:["pos"] and stem:["pos"_("begin")].
 
 Formally, when creating a transcript we refer to it as stem:["Transcript"(ctx)].
 ====
 
+[#defn-strobe-operations]
+.<<defn-strobe-operations, STROBE Operations>>
+====
+STROBE operations are described in the
+https://strobe.sourceforge.io/specs/[STROBE specification], respectively section
+https://strobe.sourceforge.io/specs/#ops["6. Strobe operations"]. Operations are
+indicated by their corresponding bitfield, as described in section
+https://strobe.sourceforge.io/specs/#ops.flags["6.2. Operations and flags"] and
+implemented as described in section
+https://strobe.sourceforge.io/specs/#ops.impl["7. Implementation of operations"]
+====
+
+[#sect-vrf-appending-messages]
 ===== Appending Messages
 
 Appending messages, or "data", to the transcript (<<defn-vrf-transcript>>) first
