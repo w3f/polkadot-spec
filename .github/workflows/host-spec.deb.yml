@@ -29,15 +29,12 @@ jobs:
           mime: application/xml
     steps:
     - uses: actions/checkout@v2
-    - name: Setup additional apt repos
+    - name: Install dependencies
       run: |
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
-    - name: Install deb dependencies
-      uses: FlorianFranzen/cache-apt-pkgs-action@v1.1
-      with:
-        packages: xvfb texmacs plantuml
-        version: "v1.1"
+        sudo apt-get update
+        sudo apt-get install -y xvfb texmacs plantuml
     - name: Install TeXmacs packages
       run: |
         mkdir -p ~/.TeXmacs/packages
@@ -77,9 +74,8 @@ jobs:
       run: |
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
-    - uses: awalsh128/cache-apt-pkgs-action@v1
-      with:
-        packages: xvfb texmacs plantuml
+        sudo apt-get update
+        sudo apt-get install -y xvfb texmacs plantuml
     - name: Install TeXmacs packages
       run: |
         mkdir -p ~/.TeXmacs/packages
