@@ -34,9 +34,10 @@ jobs:
         sudo apt-key add .github/apt-texmacs.asc
         sudo add-apt-repository "deb http://ftp.texmacs.org/TeXmacs/tmftp/repos/apt/ focal universe"
     - name: Install deb dependencies
-      uses: awalsh128/cache-apt-pkgs-action@v1
+      uses: FlorianFranzen/cache-apt-pkgs-action@v1.1
       with:
         packages: xvfb texmacs plantuml
+        version: "v1.1"
     - name: Install TeXmacs packages
       run: |
         mkdir -p ~/.TeXmacs/packages
