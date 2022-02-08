@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         package: [ "html", "multi-html", "pdf" ]
-    name: nix-build-${{ matrix.package }}
+    name: Compile ${{ matrix.package }} specification
     runs-on: ubuntu-20.04
     steps:
     - uses: cachix/install-nix-action@v15
@@ -31,7 +31,7 @@ jobs:
       run: nix build github:${{ github.repository }}/${{ github.sha }}#${{ matrix.package }}
 
   check:
-    name: nix-check-flake
+    name: Check nix flake outputs
     runs-on: ubuntu-20.04
     steps:
     - uses: cachix/install-nix-action@v15
@@ -41,3 +41,15 @@ jobs:
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: Run flake check
       run: nix flake check github:${{ github.repository }}/${{ github.sha }}
+
+  shell:
+    name: Run nix dev shell
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: cachix/install-nix-action@v15
+    - uses: cachix/cachix-action@v10
+      with:
+        name: polkadot-spec
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+    - name: Run nix dev shell
+      run: nix develop github:${{ github.repository }}/${{ github.sha }}
