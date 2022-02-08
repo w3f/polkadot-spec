@@ -1,6 +1,12 @@
 {
   description = "Polkadot Protocol Specification";
 
+  nixConfig = {
+    extra-experimental-features = "nix-command flakes";
+    extra-substituters = "https://polkadot-spec.cachix.org";
+    extra-trusted-public-keys = "polkadot-spec.cachix.org-1:tQiTEmNIdQ+aEV0zrfdrCn8bQZo/spEMAFGH8YEidQU=";
+  };
+
   inputs = {
     # Nix base libraries
     utils.url = "github:numtide/flake-utils";
