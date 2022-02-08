@@ -53,7 +53,7 @@ polkadot-host-spec.tmml: $(SOURCES) host-spec.scm
 
 
 REV     ?= HEAD
-GITHASH := $(shell git rev-parse $(REV))
+GITHASH := $(shell git rev-parse $(REV) 2> /dev/null)
 
 TMPDIR ?= /tmp
 REVDIR := $(TMPDIR)/host-spec-$(GITHASH)
