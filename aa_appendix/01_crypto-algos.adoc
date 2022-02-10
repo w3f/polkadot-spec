@@ -122,7 +122,7 @@ where
 +
 [stem]
 ++++
-L_1 = "meta-AD"(T_1, "'prooving\00'", "more=False")\
+L_1 = "meta-AD"(T_1, "'proving\00'", "more=False")\
 L_2 = "meta-AD"(L_1, w_l, "more=True")\
 L_3 = "KEY"(L_2, w, "more=False")\
 L_4 = "meta-AD"(L_3, "'rng'", "more=False")\
