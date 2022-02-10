@@ -106,10 +106,21 @@ corresponding wire format (<<defn-vrf-pair>>), respectively the value stem:[I]
 ====
 [stem]
 ++++
-T_0 = "append"(T, "'proto-name'", "'DLEQProof'")
-T_1 = "append"(T_0, "'vrf:h'", I)
-T_2 = ""
+T_0 = "append"(T, "'proto-name'", "'DLEQProof'")\
+T_1 = "append"(T_0, "'vrf:h'", I)\
 ++++
+
+[stem]
+++++
+T_2 = "meta-AD"(T_1, "'prooving\00'", "more=False")\
+T_3 = "meta-AD"(T_2, w_l, "more=True")\
+T_4 = "KEY"(T_3, w, "more=False")\
+T_5 = "meta-AD"(T_4, "'rng'", "more=False")\
+T_6 = "KEY"(T_5, r, "more=False")\
+++++
+
+where stem:[w_l] is length of the witness, encoded as a 32-bit little-endian
+integer.
 ====
 
 [#algo-make-challenge-bytes]
