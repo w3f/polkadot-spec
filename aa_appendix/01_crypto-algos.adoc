@@ -48,8 +48,8 @@ function is the Ristretto group specified in:
 .<<defn-vrf-pair, VRF Pair>>
 ====
 The *VRF Pair* is an ordered pair stem:[(I,O)] where stem:[I] represents the VRF
-input and stem:[O] represents the VRF output. stem:[I] is of the following
-format:
+input and stem:[O] represents the VRF output. stem:[I] and stem:[O] are of the
+same structure. stem:[I] is of the following format:
 
 [stem]
 ++++
@@ -64,6 +64,7 @@ where:
 * stem:[C] is the Ristretto point in compressed wire format, exactly 32 bytes.
 * stem:[P] is the Ristretto point in the Ristretto group for Cruve25519.
 * stem:[x] is the element of the field, exactly 5 bytes.
+* stem:[x, y, z, t] are of the same type.
 
  [TODO: we need to specify where does C and x is coming from]
 ====
@@ -82,28 +83,28 @@ S = (b_0, ... b_31)
 
 where stem:[C] is the challenge and stem:[S] is the 32-byte Schnorr poof. Both
 are expressed as Curve25519 scalars as defined in Definition
-<<defn-vrf-dleq-proove>>.
+<<defn-vrf-dleq-proof>>.
 ====
 
 [#defn-vrf-evaluate-vrf]
 .<<defn-vrf-evaluate-vrf, `Evaluate-VRF`>>
 ====
 The stem:["Evaluate-VRF"] function takes a public key, stem:[k], a transcript
-(<<defn-vrf-transcript>>), stem:[t], and produces a VRF-Pair
-(<<defn-vrf-pair>>), stem:[p].
+(<<defn-vrf-transcript>>), stem:[T], and produces a VRF Pair
+(<<defn-vrf-pair>>), stem:[P].
 
 [stem]
 ++++
-p larr "Evaluate-VRF"(k,t)
+P larr "Evaluate-VRF"(k,T)
 ++++
 
 The functions converts the public key, stem:[k], into a Ristretto point and a
 corresponding wire format (<<defn-vrf-pair>>), respectively the value stem:[I]
-(or stem:[O], which are equal). [TODO]
+or stem:[O].
 ====
 
-[#defn-vrf-dleq-proove]
-.<<defn-vrf-dleq-proove, `DLEQ-Proove`>>
+[#defn-vrf-dleq-proof]
+.<<defn-vrf-dleq-proof, `DLEQ Proof`>>
 ====
 [stem]
 ++++
@@ -256,7 +257,8 @@ T_2 = "AD"(T_1, m, "False")
 
 where stem:[T] is the transcript (<<defn-vrf-transcript>>), stem:[l] is the
 given label and stem:[m] the message, respectively stem:[m_l] representing its
-size. stem:[T_2] is the resulting transcript with the appended data.
+size. stem:[T_2] is the resulting transcript with the appended data. STROBE
+operations are described in <<defn-strobe-operations>>.
 
 Formally, when appending a message we refer to it as stem:["append"(T, l, m)].
 
