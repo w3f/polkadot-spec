@@ -193,33 +193,6 @@ C = "PRF"(T_3, "more=False")
 TODO
 ====
 
-[#algo-make-challenge-bytes]
-.<<algo-make-challenge-bytes, `Make-Challenge-Bytes`>>
-====
-Algorithm: stem:["Make-Challenge-Bytes"(p,c,s) -> A]
-
-. stem:[t larr "Create-Transcript"('"VRFResult"')]
-. stem:[t larr "Meta-Ad"(t,phi,c)]
-. stem:[t larr "Append-Message"(t, '"vrf-in"', I " where " I in p)]
-. stem:[t larr "Append-Message"(t, '"vrf-out"', O " where " O in p)]
-. stem:[t larr "Meta-Ad"(t,"Enc"_("LE")(s,4),c)]
-. stem:["return Strobe-PRF"(r,s)]
-
-where:
-
-* stem:[p] is the VRF pair (<<defn-vrf-pair>>).
-* stem:[c] is the VRF context (<<defn-vrf-context>>).
-* stem:[s] is the size of the resulting byte array.
-* stem:["Create-Transcript"] is a function defined in
-<<defn-vrf-create-transcript>>.
-* stem:["Meta-Ad"] is a function defined in <<defn-vrf-meta-ad>>.
-* stem:["Append-Message"] is a function defined in <<defn-vrf-append-message>>.
-* stem:["Strobe-PRF"] is STROBE function specified in [?] . It extracts
-pseudorandom data of given length as deterministic function of the transcript.
-This data can be treated as a hash of all preceding operations, messages and
-keys.
-====
-
 ==== Transcript
 
 A VRF transcript serves as a domain-specific separator of cryptographic
