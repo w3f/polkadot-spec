@@ -47,6 +47,7 @@ function is the Ristretto group specified in:
 [#defn-vrf-pair]
 .<<defn-vrf-pair, VRF Pair>>
 ====
+Is this redundent?
 The *VRF Pair* is an ordered pair stem:[(I,O)] where stem:[I] represents the VRF
 input and stem:[O] represents the VRF output. stem:[I] and stem:[O] are of the
 same structure. stem:[I] is of the following format:
@@ -69,6 +70,7 @@ where:
  [TODO: we need to specify where does C and x is coming from]
 ====
 
+what do you do with a proof?
 [#defn-vrf-proof]
 .<<defn-vrf-proof, VRF Proof>>
 ====
@@ -128,7 +130,6 @@ T_2 = "append"(T_1, "'vrf:R=g^r'", s_w)\
 T_4 = "append"(T_3, "'vrf:h^r'", s_i)\
 T_3 = "append"(T_2, "'vrf:pk'", s_p)\
 T_4 = "append"(T_3, "'vrf:h^sk'", "vrf"_o)\
-S = s_w - (C * p)
 ++++
 
 where
@@ -156,6 +157,11 @@ integer. stem:[r] is a 32-byte array containing the secret witness scalar.
 T_1 = "meta-AD"(T, "'prove'", "more=False")\
 T_3 = "meta-AD"(T, e_(64), "more=True")\
 C = "PRF"(T_3, "more=False")
+S = s_w - (C * p)    S*G = (s_w - (C * p))*G =
+
+S*G + (C * p*G) = s_w*G
+s_w*G
+return (C,S)
 ++++
 * stem:[p] is the secret key.
     
