@@ -73,6 +73,7 @@ where:
 * stem:[x] is the element of the field, exactly 5 bytes.
 
  [TODO: we need to specify where does C and x is coming from]
+ [TODO: Spec also need to say something about why do we need VRF pair]
 ****
 
 [#defn-vrf-proof]
