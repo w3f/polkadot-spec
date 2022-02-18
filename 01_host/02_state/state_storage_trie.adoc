@@ -211,7 +211,7 @@ the following concatenated data:
 
 [stem]
 ++++
-"Node Header|Partial Key|Node Subvalue"
+"Node Header"||"Partial Key"||"Node Subvalue"
 ++++
 
 Formally noted as:
@@ -229,6 +229,35 @@ defined in <<defn-node-header>>, <<defn-node-key>>, <<defn-hex-encoding>> and
 [#defn-node-header]
 .<<defn-node-header, Node Header>>
 ====
+The *node header* specifies the node variant and the size of the partial key in
+nibbles. Both pieces of information are indicated in bits, where the amount of
+bits varies depending on the variant. The node header, stem:[h], is formally
+defined as:
+
+[stem]
+++++
+h = v_(N,1)^(0..x)||l_(N,1)^(x+1..7)||l_(N,2)^(0..7)||l_(N,3)^(0..7)||...
+++++
+
+where stem:[v] is the node variant indicator defined as:
+
+[stem]
+++++
+h = {
+    (01,"Leaf"),
+    (10,"Branch without value"),
+    (11, "Branch with value"),
+    (001,"Leaf containing hash"),
+    (0001,"Branch containing hash"),
+    (0000 0000,"Empty"),
+    (0001 0000,"Reserver for compact encoding")
+    :}
+++++
+
+
+**
+
+
 The *node header* of node stem:[N], stem:["Head"_N], consists of stem:[l + 1 >= 1]
 bytes stem:["Head"_(N,1),...,"Head"_(N,l+1)] such that:
 
@@ -248,7 +277,7 @@ byte of stem:["Head"_N] are determined as follows:
 
 where stem:[cc K] is defined <<defn-stored-value>>.
 
-stem:["Head"_(N,1)^(0-5)], the 6 least significant bits of teh first byte of stem:["Head"_N] are defined to be:
+stem:["Head"_(N,1)^(0-5)], the 6 least significant bits of the first byte of stem:["Head"_N] are defined to be:
 
 [stem]
 ++++
