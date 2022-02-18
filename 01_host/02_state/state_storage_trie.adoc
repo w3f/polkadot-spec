@@ -229,31 +229,42 @@ defined in <<defn-node-header>>, <<defn-node-key>>, <<defn-hex-encoding>> and
 [#defn-node-header]
 .<<defn-node-header, Node Header>>
 ====
-The *node header* specifies the node variant and the size of the partial key in
-nibbles. Both pieces of information are indicated in bits, where the amount of
-bits varies depending on the variant. The node header, stem:[h], is formally
-defined as:
+The *node header*, consisting of stem:[>= 1] bytes, specifies the node variant
+and the size of the partial key in nibbles. Both pieces of information are
+represented in bits, where the amount of bits to be interpreted varies for both
+indicators depend on the indicator of the variant. The node header, stem:[h],
+is formally defined as:
 
 [stem]
 ++++
-h = v_(N,1)^(0..x)||l_(N,1)^(x+1..7)||l_(N,2)^(0..7)||l_(N,3)^(0..7)||...
+h = v_(N_1)^(0..x)||l_(N_1)^((x+1)..7)||l_(N_2)^(0..7)||l_(N_3)^(0..7)||...
 ++++
 
-where stem:[v] is the node variant indicator defined as:
+where stem:[v] is the node variant indicator, defined as:
 
 [stem]
 ++++
-h = {
+v = {
     (01,"Leaf"),
     (10,"Branch without value"),
     (11, "Branch with value"),
     (001,"Leaf containing hash"),
     (0001,"Branch containing hash"),
     (0000 0000,"Empty"),
-    (0001 0000,"Reserver for compact encoding")
+    (0001 0000,"Reserved for compact encoding")
     :}
 ++++
 
+For any non-empty, not-reserved variant, the remaining stem:[y] bits (y = 7-x+1)
+of stem:[N_1] are interpreted as the size, stem:[l], of the partial key. If the
+remaining bits are equal to the maximum possible value the stem:[y] bits can
+represent, respectively stem:[l = 2^y-1], the value of the next 8 bits of
+stem:[N_2] are added to the length, which can equal zero. If the value of those
+bits equals stem:[2^8-1], the value of the next 8 bits of stem:[N_3] are added
+to the length stem:[l]. This process is repeated for every sequence of 8 bits
+where its value equals stem:[2^8-1]. The first stem:[< 2^8-1] value implies that
+the remaining bytes are not to be interpreted as a addition to the partial key
+length.
 
 **
 
