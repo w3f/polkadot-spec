@@ -274,7 +274,7 @@ as:
 l = N_1^(2..7) + N_2^(0..7) + ... + N_n^(0..7)
 ++++
 
-as long as stem:[N_(n-1)^(a..b) = 2^(b+1)-1] and stem:[N_n^(a..b) < 2^(b+1)-1].
+as long as stem:[N_(n-1-c)^(a..b) = 2^(b+1)-1] and stem:[N_n^(a..b) < 2^(b+1)-1].
 ====
 
 [#sect-merkl-proof]
