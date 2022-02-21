@@ -266,7 +266,7 @@ sequence of 8 bits (stem:[N_n...N_(n+m)]) where its value equals stem:[2^8-1].
 The first stem:[< 2^8-1] value implies that the remaining bytes are not to be
 interpreted as a addition to the partial key length.
 
-Formally, if stem:[v_(N_1)^(0..1) = 11], then the partial length is calculated
+Formally, if stem:[N_1^(0..1) = 11], then the partial length is calculated
 as:
 
 [stem]
@@ -274,7 +274,7 @@ as:
 l = N_1^(2..7) + N_2^(0..7) + ... + N_n^(0..7)
 ++++
 
-as long as stem:[N_(n-1-c)^(a..b) = 2^(b+1)-1] and stem:[N_n^(a..b) < 2^(b+1)-1].
+as long as stem:[N_(n-1-c)^(a..b) = 2^(b+1)-1] and/or stem:[N_n^(a..b) < 2^(b+1)-1].
 ====
 
 [#sect-merkl-proof]
