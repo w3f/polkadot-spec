@@ -277,28 +277,6 @@ l = N_1^(2..7) + N_2^(0..7) + N_3^(0..7) + ...
 as long as stem:[N_n^(a..b) < 2^(b+1)-1].
 ====
 
-[#algo-pk-length]
-===== Partial Key Length Encoding
-****
-Algorithm: stem:["Partial-Key-Length-Encoding"("Head"_(N,1)^(6-7),pk_N)]
-
-. stem:["if " ||pk_N||_(nib) >= 2^16]
-. stem:["    " "return Error"]
-. stem:["Head"_(N,1) larr 64 xx "Head"_(N,1)^(6-7)]
-. stem:["if " ||pk_N||_(nib) < 63]
-. stem:["    " "Head"_(N,1) larr "Head"_(N,1) + ||pk_N||_(nib)]
-. stem:["    " "return Head"_N]
-. stem:["Head"_(N,1) larr "Head"_(N,1) + 63]
-. stem:[l larr ||pk_N||_(nib) - 63]
-. stem:[i larr 2]
-. stem:["while " (l > 255)]
-. stem:["    " "Head"_(N,i) larr 255]
-. stem:["    " l larr l - 255]
-. stem:["    " i larr i + 1]
-. stem:["Head"_(N,1) larr l]
-. stem:["return Head"_N]
-****
-
 [#sect-merkl-proof]
 ==== Merkle Proof
 
