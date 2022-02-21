@@ -18,18 +18,13 @@ Return::
 |Name |Type |Description
 
 | `spec_name` | String | Runtime identifier
-
 | `impl_name` | String | Name of the implementation (e.g. C++)
-
 | `authoring_version` | Unsigned 32-bit integer | Version of the authorship interface
-
 | `spec_version` | Unsigned 32-bit integer | Version of the Runtime specification
-
 | `impl_version` | Unsigned 32-bit integer | Version of the Runtime implementation
-
 | `apis` | ApiVersions (<<defn-rt-apisvec>>) | List of supported APIs along with their version
-
 | `transaction_version` | Unsigned 32-bit integer | Version of the transaction format
+| `state_version` | Unsigned 32-bit integer | Version of the trie format
 |===
 
 .ApiVersions
