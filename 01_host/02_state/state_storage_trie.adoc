@@ -229,22 +229,22 @@ defined in <<defn-node-header>>, <<defn-node-key>>, <<defn-hex-encoding>> and
 [#defn-node-header]
 .<<defn-node-header, Node Header>>
 ====
-The *node header*, consisting of stem:[>= 1] bytes, specifies the node variant
-and the size of the partial key in nibbles. Both pieces of information are
-represented in bits, where the amount of bits to be interpreted varies for both
-indicators depend on the indicator of the variant. The node header, stem:[h],
-is formally defined as:
+The *node header*, consisting of stem:[>= 1] bytes, stem:[N_1...N_n], specifies
+the node variant and the size of the partial key in 4-bit nibbles. Both pieces
+of information are represented in bits, where the amount of bits to be
+interpreted varies for both indicators depend on the indicator of the variant.
+The node header, stem:[h], is formally defined as:
 
 [stem]
 ++++
-h = v_(N_1)^(0..x)||l_(N_1)^((x+1)..7)||l_(N_2)^(0..7)||l_(N_3)^(0..7)||...
+h = N_1^(0..x)||N_1^((x+1)..7)||N_2^(0..7)||N_3^(0..7)||...
 ++++
 
-where stem:[v] is the node variant indicator, defined as:
+where the first few bits indicate the node variant, defined as:
 
 [stem]
 ++++
-v = {
+N_1^(0..x) = {
     (01,"Leaf"),
     (10,"Branch without value"),
     (11, "Branch with value"),
@@ -255,16 +255,26 @@ v = {
     :}
 ++++
 
-For any non-empty, not-reserved variant, the remaining stem:[y] bits (y = 7-x+1)
-of stem:[N_1] are interpreted as the size, stem:[l], of the partial key. If the
-remaining bits are equal to the maximum possible value the stem:[y] bits can
-represent, respectively stem:[l = 2^y-1], the value of the next 8 bits of
-stem:[N_2] are added to the length, which can equal zero. If the value of those
-bits equals stem:[2^8-1], the value of the next 8 bits of stem:[N_3] are added
-to the length stem:[l]. This process is repeated for every sequence of 8 bits
-where its value equals stem:[2^8-1]. The first stem:[< 2^8-1] value implies that
-the remaining bytes are not to be interpreted as a addition to the partial key
-length.
+For any non-empty, not-reserved variant, the remaining stem:[y] bits of
+stem:[N_1] (stem:[y = 7-x+1]) are interpreted as the size, stem:[l], of the
+partial key. If the remaining bits are equal to the maximum possible value the
+stem:[y] bits can represent, respectively stem:[l = 2^y-1], the value of the
+next 8 bits of stem:[N_2] are added to the length, which can equal zero. If the
+value of those bits equals stem:[2^8-1], the value of the next 8 bits of
+stem:[N_3] are added to the length stem:[l]. This process is repeated for every
+sequence of 8 bits (stem:[N_n...N_(n+m)]) where its value equals stem:[2^8-1].
+The first stem:[< 2^8-1] value implies that the remaining bytes are not to be
+interpreted as a addition to the partial key length.
+
+Formally, if stem:[v_(N_1)^(0..1) = 11], then the partial length is calculated
+as:
+
+[stem]
+++++
+l = N_1^(2..7) + N_2^(0..7) + N_3^(0..7) + ...
+++++
+
+as long as stem:[N_n^(a..b) < 2^(b+1)-1].
 ====
 
 [#algo-pk-length]
