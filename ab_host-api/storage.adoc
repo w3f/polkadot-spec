@@ -157,6 +157,27 @@ value to be appended.
 
 Compute the storage root.
 
+[#sect-ext-storage-root-version-2]
+===== Version 2 - Prototype
+----
+(func $ext_storage_root_version_2
+	(param $version i32) (return i32))
+----
+
+Arguments::
+* `version`: a 32-bit pointer to the state version of the following format:
++
+[stem]
+++++
+v = {(0, "state version 1"),(1, "node hashes"):}
+++++
+where stem:[0] behaves like version 1 (<<sect-ext-storage-root-version-1>>) of
+this function and stem:[1] makes use of "node hashes" when calculating the
+merkle proof (<<defn-node-hashes>>).
+* `return`: a 32-bit pointer to the buffer containing the 256-bit Blake2 storage
+root.
+
+[#sect-ext-storage-root-version-1]
 ===== Version 1 - Prototype
 ----
 (func $ext_storage_root_version_1
