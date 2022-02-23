@@ -122,43 +122,49 @@ The validator executes the following steps to retrieve a (possibly valid) core i
 
 [stem]
 ++++
-t larr sf "Create-Transcript"(''A&V MOD'')\
-t larr sf "Meta-Ad"(t,''RC-VRF'',R_s)\
-t larr sf "Meta-Ad"(t,''sample'',S)\
-e larr sf "Evaluate-VRF"(s_k,t)\
-b larr sf "Make-Bytes"(e,4,''A&V CORE'')\
-c_i larr sf "LE"(b) mod  a_c
+t_1 larr "Transcript"("'A&V MOD'")\
+t_2 larr "append"(t_1, "'RC-VRF'", R_s)\
+t_3 larr "append"(t_2, "'sample'", S)\
+h larr "vrf_create_hash"(t_3)
 ++++
+// h = VRFInOut
 
-where
-
-* stem:[sf "Create-Transcript"] is a function defined in <<defn-vrf-create-transcript>>. 
-* stem:[sf "Meta-Ad"] is a function defined in <<defn-vrf-meta-ad>>.
-* stem:[sf "Evaluate-VRF"] is a function defined in Definition <<defn-vrf-evaluate-vrf>>.
-* stem:[sf "LE"] implies that the 4-byte input is converted to a little-endian
-encoded 32-bit interger.
-* stem:[sf "Make-Bytes"] is a function defined in <<defn-vrf-make-bytes>>.
-* stem:[R_s] is the relay VRF story as defined in Definition <<defn-relay-vrf-story>>.
-* stem:[s_k] is the secret key of the validator.
-* stem:[a_c] is the number of availability cores used during the active session,
-as defined in the session info retrieved by the Runtime API
-(<<sect-rt-api-session-info>>).
-
-The resulting integer, stem:[c_i], indicates the parachain Id
-(<<defn-para-id>>). If the Id doesn't exist, as can be retrieved by the Runtime
-API (<<sect-rt-api-availability-cores>>), the validator discards that value and
-continues with the next iteration. If the Id does exist, the validators
-continues with the following steps:
+where stem:[R_s] is the relay VRF story as defined in Definition
+<<defn-relay-vrf-story>>.
 
 [stem]
 ++++
-t larr sf "Create-Transcript"(''A&V ASSIGNED'')\
-t larr sf "Meta-Ad"(t,''core'',c_i)\
-(p,phi) larr sf "DLEQ-Proove"(s_k,t,e)\
-T = (e,p)
+t_1 larr "Transcript"("'VRFResult'")\
+t_2 larr "append"(t_1, "''", "'A&V CORE'")\
+t_3 larr "append"(t_2, "'vrf-in'", i in h)\
+t_4 larr "append"(t_3, "'vrf-out'", o in h)\
+c larr "challenge_bytes"(t_4, "''", t_2)
+r_c = c mod a_c
+++++
+// c = [u8; 4]
+// i = VRFInOut.input.as_compressed()
+// o = VRFInOut.output.as_compressed()
+
+where stem:[c] challenge interpreted as a little endian encoded interger and
+stem:[a_c] is the number of availability cores used during the active session,
+as defined in the session info retrieved by the Runtime API
+(<<sect-rt-api-session-info>>). The resulting integer, stem:[c_i], indicates the
+parachain Id (<<defn-para-id>>). If the Id doesn't exist, as can be retrieved by
+the Runtime API (<<sect-rt-api-availability-cores>>), the validator discards
+that value and continues with the next iteration. If the Id does exist, the
+validators continues with the following steps:
+
+[stem]
+++++
+t_1 larr "Transcript"("'A&V ASSIGNED'")\
+T larr "append"(t_1, "''core", r_c)\
+P larr "DLEQ_prove(s_k, T, h, "True")"
 ++++
 
-where stem:[sf "DLEQ-Proove"] is a function defined in <<defn-vrf-dleq-proove>>.
+where stem:[s_k] is the secret key of the validator.
+
+TODO: Clarify usage of "AssignmentCert"
+
 Hence, the full list of available core VRF assignments is represtend as:
 
 [stem]
