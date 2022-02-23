@@ -89,20 +89,6 @@ where:
 * stem:[x, y, z, t] are the coordinates of the point, each being 40 bytes in size.
 ====
 
-[#defn-vrf-dleq-proof]
-.<<defn-vrf-dleq-proof, `DLEQ Proof`>>
-====
-A *DLEQ Proof*, stem:[p], proves the correctness of a VRF output:
-
-[stem]
-++++
-p = (c, z)
-++++
-
-where stem:[c] is the challenge and stem:[z] is the Schnorr proof. Both stem:[c]
-and stem:[z] are scalars represented as 32-byte, little-endian encoded integers.
-====
-
 [#defn-vrf-dleq-prove]
 .<<defn-vrf-dleq-prove, `DLEQ Prove`>>
 ====
