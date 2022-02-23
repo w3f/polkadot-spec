@@ -230,51 +230,44 @@ defined in <<defn-node-header>>, <<defn-node-key>>, <<defn-hex-encoding>> and
 .<<defn-node-header, Node Header>>
 ====
 The *node header*, consisting of stem:[>= 1] bytes, stem:[N_1...N_n], specifies
-the node variant and the size of the partial key in 4-bit nibbles. Both pieces
-of information are represented in bits, where the amount of bits to be
-interpreted varies for both indicators depend on the indicator of the variant.
-The node header, stem:[h], is formally defined as:
+the node variant and the length of the partial key length (<<defn-node-key>>) in
+4-bit nibbles. Both pieces of information can be represented in bits within a
+single byte, stem:[N_1], where the amount of bits of the variant, stem:[v], and
+the bits of the partial key length, stem:[p_l] varies.
 
 [stem]
 ++++
-h = N_1^(0..x)||N_1^((x+1)..7)||N_2^(0..7)||N_3^(0..7)||...
-++++
-
-where the first few bits indicate the node variant, defined as:
-
-[stem]
-++++
-N_1^(0..x) = {
-    (01,"Leaf"),
-    (10,"Branch Node with" k_N !in cc "K"),
-    (11, "Branch Node with" k_N in cc "K"),
-    (001,"Leaf containing hashes"),
-    (0001,"Branch containing hashes"),
-    (0000 0000,"Empty"),
-    (0001 0000,"Reserved for compact encoding")
+v = {
+    (01,"Leaf",p_l = 2^6),
+    (10,"Branch Node with" k_N !in cc "K", p_l = 2^6),
+    (11, "Branch Node with" k_N in cc "K", p_l = 2^6),
+    (001,"Leaf containing hashes", p_l = 2^5),
+    (0001,"Branch containing hashes", p_l = 2^4),
+    (0000 0000,"Empty",),
+    (0001 0000,"Reserved for compact encoding",)
     :}
 ++++
 
-For any non-empty, not-reserved variant, the remaining stem:[y] bits of
-stem:[N_1] (stem:[y = 7-x+1]) are interpreted as the size, stem:[l], of the
-partial key. If the remaining bits are equal to the maximum possible value the
-stem:[y] bits can represent, respectively stem:[l = 2^y-1], the value of the
-next 8 bits of stem:[N_2] are added to the length, which can equal zero. If the
-value of those bits equals stem:[2^8-1], the value of the next 8 bits of
-stem:[N_3] are added to the length stem:[l]. This process is repeated for every
-sequence of 8 bits (stem:[N_n...N_(n+m)]) where its value equals stem:[2^8-1].
-The first stem:[< 2^8-1] value implies that the remaining bytes are not to be
-interpreted as a addition to the partial key length.
+If the value of stem:[p_l] is equal to the maximum possible value the bits can
+hold, such as 63 (stem:[2^6-1]) in case of the stem:[01] variant, then the value
+of the next 8 bits (stem:[N_2]) are added the the length. This process is
+repeated for every stem:[N_n] where stem:[N_n = 2^8-1]. Any value smaller than
+the maximum possible value of stem:[N_n] implies that the next value of
+stem:[N_(n+1)] should not be added to the length.
 
-Formally, if stem:[N_1^(0..1) = 11], then the partial length is calculated
-as:
+The variant stem:[0001] can be distinguished from stem:[0001 0000] due to the
+fact that the following 4 bits of the first variant never equal zero.
+
+Formally, the lenght of the parital key, stem:["pk"_N^l], is defined as:
 
 [stem]
 ++++
-l = N_1^(2..7) + N_2^(0..7) + ... + N_n^(0..7)
+"pk"_N^l = p_l + N_n + N_(n+x) + ... + N_(n+x+y)
 ++++
 
-as long as stem:[N_(n-1-c)^(a..b) = 2^(b+1)-1] and/or stem:[N_n^(a..b) < 2^(b+1)-1].
+as long as stem:[p_l = m], stem:[N_(n+x) = 2^8-1] and
+stem:[N_(n+x+y) < 2^8-1], where stem:[m] is the maximum possible value
+that stem:[p_l] can hold.
 ====
 
 [#sect-merkl-proof]
