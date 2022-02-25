@@ -92,47 +92,65 @@ where:
 [#defn-vrf-dleq-prove]
 .<<defn-vrf-dleq-prove, `DLEQ Prove`>>
 ====
+The stem:["dleq_prove"(t, i)] function creates a proof for a given input, stem:[i],
+based on the provided transcript, stem:[T].
+
+First:
+
 [stem]
 ++++
-T_0 = "append"(T, "'proto-name'", "'DLEQProof'")\
-T_1 = "append"(T_0, "'vrf:h'", "vrf"_i)\
-T_2 = "append"(T_1, "'vrf:R=g^r'", s_w)\
-T_4 = "append"(T_3, "'vrf:h^r'", s_i)\
-T_3 = "append"(T_2, "'vrf:pk'", s_p)\
-T_4 = "append"(T_3, "'vrf:h^sk'", "vrf"_o)\
-S = s_w - (C * p)
+t_1 = "append"(t, "'proto-name'", "'DLEQProof'")\
+t_2 = "append"(t_1, "'vrf:h'", i)
+++++
+
+Then the witness scalar is calculated, stem:[s_w], where stem:[w] is the
+32-byte secret seed used for nonce generation in the context of sr25519.
+
+[stem]
+++++
+t_3 = "meta-AD"(t_2, "'proving\00'", "more=False")\
+t_4 = "meta-AD"(t_3, w_l, "more=True")\
+t_5 = "KEY"(t_4, w, "more=False")\
+t_6 = "meta-AD"(t_5, "'rng'", "more=False")\
+t_7 = "KEY"(t_6, r, "more=False")\
+t_8 = "meta-AD"(t_7, e_(64), "more=False")\
+(phi, s_w) = "PRF"(t_8, "more=False")
+++++
+
+where stem:[w_l] is length of the witness, encoded as a 32-bit little-endian
+integer. stem:[r] is a 32-byte array containing the secret witness scalar.
+
+[stem]
+++++
+l_1 = "append"(t_2, "'vrf:R=g^r'", s_w)\
+l_2 = "append"(l_1, "'vrf:h^r'", s_i)\
+l_3 = "append"(l_2, "'vrf:pk'", s_p)\
+l_4 = "append"(l_3, "'vrf:h^sk'", "vrf"_o)
 ++++
 
 where
 
-* stem:[s_i] is the compressed Ristretto point of the input.
+* stem:[s_i] is the compressed Ristretto point of the scalar input.
 * stem:[s_p] is the compressed Ristretto point of the public key.
 * stem:[s_w] is the compressed Ristretto point of the wittness:
-+
+
+For the 64-byte challange:
+
 [stem]
 ++++
-L_1 = "meta-AD"(T_1, "'proving\00'", "more=False")\
-L_2 = "meta-AD"(L_1, w_l, "more=True")\
-L_3 = "KEY"(L_2, w, "more=False")\
-L_4 = "meta-AD"(L_3, "'rng'", "more=False")\
-L_5 = "KEY"(L_4, r, "more=False")\
-L_6 = "meta-AD"(L_5, e_(64), "more=False")\
-s_w = "PRF"(L_6, "more=False")
+l_5 = "meta-AD"(l_4, "'prove'", "more=False")\
+l_6 = "meta-AD"(l_5, e_(64), "more=True")\
+C = "PRF"(l_6, "more=False")
 ++++
-+
-where stem:[w_l] is length of the witness, encoded as a 32-bit little-endian
-integer. stem:[r] is a 32-byte array containing the secret witness scalar.
-+
+
+And the Schnorr proof:
+
 [stem]
 ++++
-T_1 = "meta-AD"(T, "'prove'", "more=False")\
-T_3 = "meta-AD"(T, e_(64), "more=True")\
-C = "PRF"(T_3, "more=False")
+S = s_w - (C * p)
 ++++
-* stem:[p] is the secret key.
-    
-stem:[C] is the challenge and stem:[S] is the resulting Schnorr poof
-(<<defn-vrf-dleq-proof>>).
+
+where stem:[p] is the secret key.
 ====
 
 [#defn-vrf-dleq-verify]
