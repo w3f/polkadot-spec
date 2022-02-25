@@ -168,8 +168,7 @@ T_6 = "append"(T_5, "'vrf:h^sk'", o)
 
 where
 
-* stem:[R] is calculated as stem:[(s_p * p) + (s_c * B)], where stem:[B] is the
-Ristretto base table.
+* stem:[R] is calculated as stem:[(s_p * p) + s_c].
 * stem:[H] is calculated as stem:[(s_p * o) + (s_c, * i)].
 * stem:[c_s] is the challenge scalar:
 +
