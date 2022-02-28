@@ -61,34 +61,6 @@ are expressed as Curve25519 scalars as defined in Definition
 <<defn-vrf-dleq-prove>>.
 ====
 
-[#defn-vrf-evaluate-vrf]
-.<<defn-vrf-evaluate-vrf, `Evaluate-VRF`>>
-====
-The stem:["Evaluate-VRF"] function takes a public key, stem:[k], a transcript
-(<<defn-vrf-transcript>>), stem:[T], and produces an ouput, stem:[o].
-
-[stem]
-++++
-o larr "Evaluate-VRF"(k,T)
-++++
-
-The functions converts the public key, stem:[k], into a Ristretto point and the
-corresponding wire format:
-
-[stem]
-++++
-o = (C,P)\
-C = (b_0, ... b_31)\
-P = (x,y,z,t)
-++++
-
-where:
-
-* stem:[C] is the Ristretto point in compressed wire format, exactly 32 bytes.
-* stem:[P] is the Ristretto point in the Ristretto group for Cruve25519.
-* stem:[x, y, z, t] are the coordinates of the point, each being 40 bytes in size.
-====
-
 [#defn-vrf-dleq-prove]
 .<<defn-vrf-dleq-prove, `DLEQ Prove`>>
 ====
@@ -156,30 +128,45 @@ where stem:[p] is the secret key.
 [#defn-vrf-dleq-verify]
 .<<defn-vrf-dleq-verify, `DLEQ Verify`>>
 ====
+The stem:["dleq_verify"(i, o, P, p_k)] function verifiers the VRF input,
+stem:[i] against the output, stem:[o], with the associated proof
+(<<defn-vrf-proof>>) and public key, stem:[p_k].
+
 [stem]
 ++++
-T_1 = "append"(T, "'proto-name'", "'DLEQProof'")\
-T_2 = "append"(T_1, "'vrf:h'", s_i)\
-T_3 = "append"(T_2, "'vrf:R=g^r'", R)\
-T_4 = "append"(T_3, "'vrf:h^r'", H)\
-T_5 = "append"(T_4, "'vrf:pk'", p)\
-T_6 = "append"(T_5, "'vrf:h^sk'", o)
+t_1 = "append"(t, "'proto-name'", "'DLEQProof'")\
+t_2 = "append"(t_1, "'vrf:h'", s_i)\
+t_3 = "append"(t_2, "'vrf:R=g^r'", R)\
+t_4 = "append"(t_3, "'vrf:h^r'", H)\
+t_5 = "append"(t_4, "'vrf:pk'", p_k)\
+t_6 = "append"(t_5, "'vrf:h^sk'", o)
 ++++
 
 where
 
-* stem:[R] is calculated as stem:[(s_p * p) + s_c].
-* stem:[H] is calculated as stem:[(s_p * o) + (s_c, * i)].
-* stem:[c_s] is the challenge scalar:
+* stem:[R] is calculated as:
 +
 [stem]
 ++++
-T_1 = "meta-AD"(T, "'prove'", "more=False")\
-T_3 = "meta-AD"(T, e_(64), "more=True")\
-C = "PRF"(T_3, "more=False")
+R = C in P xx p_k + S in P + B
+++++
++
+where stem:[B] is the Ristretto basepoint.
+* stem:[H] is calculated as:
++
+[stem]
+++++
+H = C in P xx o + S in P xx i
 ++++
 
-TODO
+The challange is valid if stem:[C in P] equals stem:[y]:
+
+[stem]
+++++
+t_7 = "meta-AD"(t_6, "'prove'", "more=False")\
+t_8 = "meta-AD"(t_7, e_(64), "more=True")\
+y = "PRF"(t_8, "more=False")
+++++
 ====
 
 ==== Transcript
