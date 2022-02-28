@@ -58,12 +58,6 @@ jobs:
         bundler-cache: true
     - name: Build multi-html specification
       run: bundle exec make multi-html
-    - name: Install gem dependencies
-      run: sudo gem install asciidoctor-multipage rouge
-    - name: Build multi-html specification
-      run: make multi-html
-    - name: Build multi-html specification
-      run: bundle exec make multi-html
     - name: Upload multi-html specification
       uses: actions/upload-artifact@v2
       with:
