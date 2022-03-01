@@ -123,29 +123,25 @@ t_3 larr "append"(t_2, "'sample'", S)\
 t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\
 t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\
 t_6 larr "meta-ad"(t_5, 64_("le"), "True")\
-h larr "prf"(t_6, "False")
+i larr "prf"(t_6, "False")\
+o = s_k * i
 ++++
-// h = VRFInOut
 
-where stem:[p_k] is the public key, stem:[64_("le")] is the integer _64_ encoded
-as little endian, stem:[h] is the constructed VRF input/output pair, derived
-from Ristretto points. stem:[R_s] is the relay VRF story as defined in
-Definition <<defn-relay-vrf-story>>.
+where stem:[s_k] is the secret key, stem:[p_k] is the public key and
+stem:[64_("le")] is the integer _64_ encoded as little endian. stem:[R_s] is the
+relay VRF story as defined in <<defn-relay-vrf-story>>. Following:
 
 [stem]
 ++++
 t_1 larr "Transcript"("'VRFResult'")\
 t_2 larr "append"(t_1, "''", "'A&V CORE'")\
-t_3 larr "append"(t_2, "'vrf-in'", i in h)\
-t_4 larr "append"(t_3, "'vrf-out'", o in h)\
+t_3 larr "append"(t_2, "'vrf-in'", i)\
+t_4 larr "append"(t_3, "'vrf-out'", o)\
 t_5 larr "meta-ad"(t_4, "''", "False")\
 t_6 larr "meta-ad"(t_5, 4_("le"), "True")\
 c larr "prf"(t_6, "False")\
 r_c = c mod a_c
 ++++
-// c = [u8; 4]
-// i = VRFInOut.input.as_compressed()
-// o = VRFInOut.output.as_compressed()
 
 where stem:[4_("le")] is the integer _4_ encoded as little endian, stem:[c] is the
 4-byte challenge interpreted as a little endian encoded interger and stem:[a_c]
@@ -160,24 +156,13 @@ continues with the following steps:
 [stem]
 ++++
 t_1 larr "Transcript"("'A&V ASSIGNED'")\
-T larr "append"(t_1, "''core", r_c)\
-P larr "DLEQ_prove(s_k, T, h, "True")"
+t_2 larr "append"(t_1, "'core'", r_c)\
+p larr "dleq_prove"(t_2, i)"
 ++++
 
-where stem:[s_k] is the secret key of the validator.
+where stem:["dleq_prove"] is described in <<defn-vrf-dleq-prove>>.
 
-TODO: Clarify usage of "AssignmentCert"
-
-Hence, the full list of available core VRF assignments is represtend as:
-
-[stem]
-++++
-{T_n,…,T_m}
-++++
-
-where each stem:[T_x] corresponds to a sample number. The amount of individual
-assignments does not necessarily equal the number of samples, but the amount
-must not exceed the number of samples.
+TODO: Clarify usage of "AssignmentCert", deprecate the following:
 ====
 
 [#delayed-availability-core-vrf-assignment]
@@ -185,34 +170,44 @@ must not exceed the number of samples.
 ====
 The *delayed availability core VRF assignments* determined at what point a
 validator should start the approval process as described in <<sect-tranches>>.
+Computing this assignement relies on the VRF mechanism, transcripts and STROBE
+operations described further in <<sect-vrf>>.
+
 The validator executes the following steps:
 
 [stem]
 ++++
-t larr sf "Transcript"("'A&V DELAY'")\
-t larr sf "append"(t,"'RC-VRF'",R_s)\
-t larr sf "append"(t, "'core'",c_i)\
-e larr sf "Evaluate-VRF"(s_k,t_)\
-t larr sf "Create-Transcript"("'VRF'")\
-(p,x) larr sf "DLEQ-Proove"(s_k,t,e)
+t_1 larr sf "Transcript"("'A&V DELAY'")\
+t_2 larr sf "append"(t_1,"'RC-VRF'",R_s)\
+t_3 larr sf "append"(t_2, "'core'",c_i)\
+t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\
+t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\
+t_6 larr "meta-ad"(t_5, 64_("le"), "True")\
+i larr larr "prf"(t_6, "False")\
+o = s_k * i\
+(p,x) larr sf "dleq_prove"(t_6, i)
 ++++
 
-The resulting values stem:[e] and stem:[p] are the VRF pair (<<defn-vrf-pair>>)
-respectively the VRF proof (<<defn-vrf-proof>>).
+The resulting values stem:[h] and stem:[p] are the VRF input/output pair
+respectively the VRF proof (<<defn-vrf-proof>>). stem:["dleq_prove"] is
+described in <<defn-vrf-dleq-prove>>.
 
 The tranche, stem:[d], is determined as:
 
 [stem]
 ++++
-b = sf "Make-Bytes"(e,4,''A&V TRANCHE'')\
-d = sf "LE"(b) mod (d_c+d_z) - d_z
+t_1 larr "Transcript"("'VRFResult'")\
+t_2 larr "append"(t_1, "''", "'A&V TRANCHE'")\
+t_3 larr "append"(t_2, "'vrf-in'", i)\
+t_4 larr "append"(t_3, "'vrf-out'", o)\
+t_5 larr "meta-ad"(t_4, "''", "False")\
+t_6 larr "meta-ad"(t_5, 4_("le"), "True")\
+c larr "prf"(t_6, "False")\
+d = sf d mod (d_c+d_z) - d_z
 ++++
 
 where
 
-* stem:[sf "Make-Bytes"] is a function defined in <<defn-vrf-make-bytes>>.
-* stem:[sf "LE"] implies that the 4-byte input is converted to a little-endian
-encoded 32-bit interger.
 * stem:[d_c] is the number of delayed tranches by total as specified by the
 session info, retrieved via the Runtime API (<<sect-rt-api-session-info>>).
 * stem:[d_z] is the zeroth delay tranche width as specified by the session info,
