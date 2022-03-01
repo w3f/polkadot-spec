@@ -120,12 +120,17 @@ The validator executes the following steps to retrieve a (possibly valid) core i
 t_1 larr "Transcript"("'A&V MOD'")\
 t_2 larr "append"(t_1, "'RC-VRF'", R_s)\
 t_3 larr "append"(t_2, "'sample'", S)\
-h larr "vrf_create_hash"(t_3)
+t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\
+t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\
+t_6 larr "meta-ad"(t_5, 64_("le"), "True")\
+h larr "prf"(t_6, "False")
 ++++
 // h = VRFInOut
 
-where stem:[R_s] is the relay VRF story as defined in Definition
-<<defn-relay-vrf-story>>.
+where stem:[p_k] is the public key, stem:[64_("le")] is the integer _64_ encoded
+as little endian, stem:[h] is the constructed VRF input/output pair, derived
+from Ristretto points. stem:[R_s] is the relay VRF story as defined in
+Definition <<defn-relay-vrf-story>>.
 
 [stem]
 ++++
@@ -134,7 +139,7 @@ t_2 larr "append"(t_1, "''", "'A&V CORE'")\
 t_3 larr "append"(t_2, "'vrf-in'", i in h)\
 t_4 larr "append"(t_3, "'vrf-out'", o in h)\
 t_5 larr "meta-ad"(t_4, "''", "False")\
-t_6 larr "meta-ad"(t_5, 4_(le), "True")\
+t_6 larr "meta-ad"(t_5, 4_("le"), "True")\
 c larr "prf"(t_6, "False")\
 r_c = c mod a_c
 ++++
@@ -142,7 +147,7 @@ r_c = c mod a_c
 // i = VRFInOut.input.as_compressed()
 // o = VRFInOut.output.as_compressed()
 
-where stem:[4_(le)] is the integer _4_ encoded as little endian, stem:[c] is the
+where stem:[4_("le")] is the integer _4_ encoded as little endian, stem:[c] is the
 4-byte challenge interpreted as a little endian encoded interger and stem:[a_c]
 is the number of availability cores used during the active session, as defined
 in the session info retrieved by the Runtime API (<<sect-rt-api-session-info>>).
@@ -184,11 +189,11 @@ The validator executes the following steps:
 
 [stem]
 ++++
-t larr sf "Create-Transcript"(''A&V DELAY'')\
-t larr sf "Meta-Ad"(t,''RC-VRF'',R_s)\
-t larr sf "Meta-Ad"(t,''core'',c_i)\
+t larr sf "Transcript"("'A&V DELAY'")\
+t larr sf "append"(t,"'RC-VRF'",R_s)\
+t larr sf "append"(t, "'core'",c_i)\
 e larr sf "Evaluate-VRF"(s_k,t_)\
-t larr sf "Create-Transcript"(''VRF'')\
+t larr sf "Create-Transcript"("'VRF'")\
 (p,x) larr sf "DLEQ-Proove"(s_k,t,e)
 ++++
 
