@@ -99,16 +99,11 @@ where
 [#defn-availability-core-vrf-assignment]
 .<<defn-availability-core-vrf-assignment, Availability Core VRF Assignment>>
 ====
-An availability core VRF assignment, T, is computed by a relay chain validator
-to determine which availability core (<<defn-availability-core>>) a validator
-is assigned to and should vote for approvals. The assignment consits of a VRF
-pair (<<defn-vrf-pair>>), stem:[v], and a VRF proof (<<defn-vrf-proof>>),
-stem:[p]:
-
-[stem]
-++++
-T = (v,p)
-++++
+An availability core VRF assignment is computed by a relay chain validator to
+determine which availability core (<<defn-availability-core>>) a validator is
+assigned to and should vote for approvals. Computing this assignement relies on
+the VRF mechanism, transcripts and STROBE operations described further in
+<<sect-vrf>>.
 
 The Runtime dictates how many assignments should be conducted by a validator, as
 specified in the session index which can be retrieved via the Runtime API
@@ -138,21 +133,24 @@ t_1 larr "Transcript"("'VRFResult'")\
 t_2 larr "append"(t_1, "''", "'A&V CORE'")\
 t_3 larr "append"(t_2, "'vrf-in'", i in h)\
 t_4 larr "append"(t_3, "'vrf-out'", o in h)\
-c larr "challenge_bytes"(t_4, "''", t_2)
+t_5 larr "meta-ad"(t_4, "''", "False")\
+t_6 larr "meta-ad"(t_5, 4_(le), "True")\
+c larr "prf"(t_6, "False")\
 r_c = c mod a_c
 ++++
 // c = [u8; 4]
 // i = VRFInOut.input.as_compressed()
 // o = VRFInOut.output.as_compressed()
 
-where stem:[c] challenge interpreted as a little endian encoded interger and
-stem:[a_c] is the number of availability cores used during the active session,
-as defined in the session info retrieved by the Runtime API
-(<<sect-rt-api-session-info>>). The resulting integer, stem:[c_i], indicates the
-parachain Id (<<defn-para-id>>). If the Id doesn't exist, as can be retrieved by
-the Runtime API (<<sect-rt-api-availability-cores>>), the validator discards
-that value and continues with the next iteration. If the Id does exist, the
-validators continues with the following steps:
+where stem:[4_(le)] is the integer _4_ encoded as little endian, stem:[c] is the
+4-byte challenge interpreted as a little endian encoded interger and stem:[a_c]
+is the number of availability cores used during the active session, as defined
+in the session info retrieved by the Runtime API (<<sect-rt-api-session-info>>).
+The resulting integer, stem:[c_i], indicates the parachain Id
+(<<defn-para-id>>). If the parachain Id doesn't exist, as can be retrieved by the Runtime
+API (<<sect-rt-api-availability-cores>>), the validator discards that value and
+continues with the next iteration. If the Id does exist, the validators
+continues with the following steps:
 
 [stem]
 ++++
