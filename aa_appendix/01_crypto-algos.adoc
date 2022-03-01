@@ -42,7 +42,7 @@ It essentially generates a deterministic elliptic curve based Schnorr
 signature as a verifiable random value. The elliptic curve group used in the VRF
 function is the Ristretto group specified in:
 
-* https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-ristretto255-decaf448-01[The Ristretto255 and Decaf448 Groups].
+* https://ristretto.group/
 
 [#defn-vrf-proof]
 .<<defn-vrf-proof, VRF Proof>>
