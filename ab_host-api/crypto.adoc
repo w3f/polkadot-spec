@@ -319,7 +319,7 @@ The verification extension is explained more in detail in
 
 ===== Version 1 - Prototype
 
-This function allows the verification of overflowing ECDSA signatures, an
+This function allows the verification of non-standard, overflowing ECDSA signatures, an
 implemenation specific mechanism of the Rust
 https://github.com/paritytech/libsecp256k1[`libsecp256k1` library], specifically
 the
@@ -345,7 +345,7 @@ value equal to _0_ if otherwise.
 
 ===== Version 2 - Prototype
 
-Does not allow the verification of overflowing ECDSA signatures.
+Does not allow the verification of non-standard, overflowing ECDSA signatures.
 
 ----
 (func $ext_crypto_ecdsa_verify_version_2
@@ -370,7 +370,7 @@ Verify and recover a _secp256k1_ ECDSA signature.
 
 ===== Version 1 - Prototype
 
-This function can handle overflowing ECDSA signatures, an
+This function can handle non-standard, overflowing ECDSA signatures, an
 implemenation specific mechanism of the Rust
 https://github.com/paritytech/libsecp256k1[`libsecp256k1` library], specifically
 the
@@ -394,7 +394,7 @@ recovered public key or an error type (<<defn-ecdsa-verify-error>>) on failure.
 
 ===== Version 2 - Prototype
 
-Does not handle overflowing ECDSA signatures.
+Does not handle non-standard, overflowing ECDSA signatures.
 
 ----
 (func $ext_crypto_secp256k1_ecdsa_recover_version_2
@@ -416,8 +416,36 @@ recovered public key or an error type (<<defn-ecdsa-verify-error>>) on failure.
 Verify and recover a _secp256k1_ ECDSA signature.
 
 ===== Version 1 - Prototype
+
+This function can handle non-standard, overflowing ECDSA signatures, an
+implemenation specific mechanism of the Rust
+https://github.com/paritytech/libsecp256k1[`libsecp256k1` library], specifically
+the
+https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing[`parse_overflowing`]
+function.
+
 ----
 (func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_1
+	(param $sig i32) (param $msg i32) (return i64))
+----
+
+Arguments::
+
+* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature in RSV
+format. V should be either `0/1` or `27/28`.
+* `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
+the message.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+encoded `Result` value (<<defn-result-type>>). On success it contains the
+33-byte recovered public key in compressed form on success or an error type
+(<<defn-ecdsa-verify-error>>) on failure.
+
+===== Version 2 - Prototype
+
+Does not handle non-standard, overflowing ECDSA signatures.
+
+----
+(func $ext_crypto_secp256k1_ecdsa_recover_compressed_version_2
 	(param $sig i32) (param $msg i32) (return i64))
 ----
 
