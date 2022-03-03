@@ -184,6 +184,35 @@ child storage key (<<defn-child-storage-type>>).
 * `prefix`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 prefix.
 
+===== Version 2 - Prototype
+----
+(func $ext_default_child_storage_clear_prefix_version_2
+	(param $child_storage_key i64) (param $prefix i64)
+	(param $limit i64) (return i64))
+----
+
+Arguments::
+
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+child storage key (<<defn-child-storage-type>>).
+* `prefix`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+prefix.
+* `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+(<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is _None_.
+Any keys created during the current block execution do not count towards the
+limit.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) to the following variant, stem:[k]:
++
+[stem]
+++++
+k = {(0,-> c),(1,-> c):}
+++++
++
+where _0_ indicates that all keys of the child storage have been removed,
+followed by the number of removed keys, stem:[c]. The variant _1_ indicates that
+there are remaining keys, followed by the number of removed keys.
+
 ==== `ext_default_child_storage_root`
 
 Commits all existing operations and computes the resulting child storage
