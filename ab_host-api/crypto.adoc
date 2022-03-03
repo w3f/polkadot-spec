@@ -369,8 +369,35 @@ value equal to _0_ if otherwise.
 Verify and recover a _secp256k1_ ECDSA signature.
 
 ===== Version 1 - Prototype
+
+This function can handle overflowing ECDSA signatures, an
+implemenation specific mechanism of the Rust
+https://github.com/paritytech/libsecp256k1[`libsecp256k1` library], specifically
+the
+https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing[`parse_overflowing`]
+function.
+
 ----
 (func $ext_crypto_secp256k1_ecdsa_recover_version_1
+	(param $sig i32) (param $msg i32) (return i64))
+----
+
+Arguments::
+
+* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature in RSV
+format. V should be either or .
+* `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
+the message.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+encoded _Result_ (<<defn-result-type>>). On success it contains the 64-byte
+recovered public key or an error type (<<defn-ecdsa-verify-error>>) on failure.
+
+===== Version 2 - Prototype
+
+Does not handle overflowing ECDSA signatures.
+
+----
+(func $ext_crypto_secp256k1_ecdsa_recover_version_2
 	(param $sig i32) (param $msg i32) (return i64))
 ----
 
