@@ -125,6 +125,7 @@ message that is to be verified.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
 value equal to _0_ if otherwise.
 
+[#sect-ext-crypto-ed25519-batch-verify]
 ==== `ext_crypto_ed25519_batch_verify`
 
 Registers a ed25519 signature for batch verification. Batch verification is
@@ -244,6 +245,7 @@ message that is to be verified.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
 value equal to _0_ if otherwise.
 
+[#sect-ext-crypto-sr25519-batch-verify]
 ==== `ext_crypto_sr25519_batch_verify`
 
 Registers a sr25519 signature for batch verification. Batch verification is
@@ -383,6 +385,7 @@ key.
 * `return`: a i32 integer value equal _1_ to if the signature is valid or a
 value equal to _0_ if otherwise.
 
+[#sect-ext-crypto-ecdsa-batch-verify]
 ==== `ext_crypto_ecdsa_batch_verify`
 
 Registers a ECDSA signature for batch verification. Batch verification is
@@ -508,11 +511,13 @@ encoded `Result` value (<<defn-result-type>>). On success it contains the
 
 Starts the verification extension. The extension is a separate background
 process and is used to parallel-verify signatures which are pushed to the batch
-with `ext_crypto_ed25519_verify` (<<sect-ext-crypto-ed25519-verify>>),
-`ext_crypto_sr25519_verify` (<<sect-ext-crypto-sr25519-verify>>) or
-`ext_crypto_ecdsa_verify` (<<sect-ext-crypto-ecdsa-verify>>). Verification will
-start immediately and the Runtime can retrieve the result when calling
-`ext_crypto_finish_batch_verify` (<<sect-ext-crypto-finish-batch-verify>>).
+with
+`ext_crypto_ed25519_batch_verify`(<<sect-ext-crypto-ed25519-batch-verify>>),
+`ext_crypto_sr25519_batch_verify` (<<sect-ext-crypto-sr25519-batch-verify>>) or
+`ext_crypto_ecdsa_batch_verify` (<<sect-ext-crypto-ecdsa-batch-verify>>).
+Verification will start immediately and the Runtime can retrieve the result when
+calling `ext_crypto_finish_batch_verify`
+(<<sect-ext-crypto-finish-batch-verify>>).
 
 ===== Version 1 - Prototype
 ----
