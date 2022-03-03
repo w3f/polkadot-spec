@@ -101,6 +101,32 @@ Arguments::
 * `prefix`: a pointer-size (<<defn-runtime-pointer>>) containing
 the prefix.
 
+===== Version 2 - Prototype
+----
+(func $ext_storage_clear_prefix_version_2
+	(param $prefix i64) (param $limit i64)
+	(return i64))
+----
+
+Arguments::
+* `prefix`: a pointer-size (<<defn-runtime-pointer>>) containing
+the prefix.
+* `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+(<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is _None_.
+Any keys created during the current block execution do not count towards the
+limit.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) to the following variant, stem:[k]:
++
+[stem]
+++++
+k = {(0,-> c),(1,-> c):}
+++++
++
+where _0_ indicates that all keys of the child storage have been removed,
+followed by the number of removed keys, stem:[c]. The variant _1_ indicates that
+there are remaining keys, followed by the number of removed keys.
+
 ==== `ext_storage_append`
 
 Append the SCALE encoded value to a SCALE encoded sequence (<<defn-scale-list>>)
