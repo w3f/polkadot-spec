@@ -170,20 +170,19 @@ root.
 [#sect-ext-storage-changes-root]
 ==== `ext_storage_changes_root`
 
-Compute the root of the changes trie (<<sect-changes-trie>>). The parent hash is
-a SCALE encoded block hash.
+NOTE: This function is not longer used and only exists for compatibiltiy reasons.
 
 ===== Version 1 - Prototype
 ----
 (func $ext_storage_changes_root_version_1
-	(param $parent_hash i64) (return i32))
+	(param $parent_hash i64) (return i64))
 ----
 
 Arguments::
 * `parent_hash`: a pointer-size (<<defn-runtime-pointer>>) indicating the
 SCALE encoded block hash.
-* `return`: a 32-bit pointer to the buffer containing the 256-bit Blake2 changes
-root.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+(<<defn-option-type>>) that's always _None_.
 
 ==== `ext_storage_next_key`
 
