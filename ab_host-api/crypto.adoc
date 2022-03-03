@@ -211,9 +211,9 @@ then get the result by calling `ext_crypto_finish_batch_verify`
 The verification extension is explained more in detail in
 <<sect-ext-crypto-start-batch-verify>>.
 
-===== Version 2 - Prototype
+===== Version 1 - Prototype
 ----
-(func $ext_crypto_sr25519_verify_version_2
+(func $ext_crypto_sr25519_verify_version_1
 	(param $sig i32) (param $msg i64) (param $key i32) (return i32))
 ----
 
@@ -226,9 +226,9 @@ message that is to be verified.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
 value equal to _0_ if otherwise.
 
-===== Version 1 - Prototype
+===== Version 2 - Prototype
 ----
-(func $ext_crypto_sr25519_verify_version_1
+(func $ext_crypto_sr25519_verify_version_2
 	(param $sig i32) (param $msg i64) (param $key i32) (return i32))
 ----
 
@@ -247,7 +247,7 @@ Returns all _ecdsa_ public keys for the given key id from the keystore.
 
 ===== Version 1 - Prototype
 ----
-(func $ext_crypto_ecdsa_verify_version_1
+(func $ext_crypto_ecdsa_public_key_version_1
 	(param $key_type_id i64) (return i64))
 ----
 
@@ -318,8 +318,37 @@ The verification extension is explained more in detail in
 <<sect-ext-crypto-start-batch-verify>>.
 
 ===== Version 1 - Prototype
+
+This function allows the verification of overflowing ECDSA signatures, an
+implemenation specific mechanism of the Rust
+https://github.com/paritytech/libsecp256k1[`libsecp256k1` library], specifically
+the
+https://docs.rs/libsecp256k1/0.7.0/libsecp256k1/struct.Signature.html#method.parse_overflowing[`parse_overflowing`]
+function.
+
 ----
 (func $ext_crypto_ecdsa_verify_version_1
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))
+----
+
+Arguments::
+
+* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature. The
+signature is 65-bytes in size, where the first 512-bits represent the signature
+and the other 8 bits represent the recovery ID.
+* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+message that is to be verified.
+* `key`: a 32-bit pointer to the buffer containing the 33-byte compressed public
+key.
+* `return`: a i32 integer value equal _1_ to if the signature is valid or a
+value equal to _0_ if otherwise.
+
+===== Version 2 - Prototype
+
+Does not allow the verification of overflowing ECDSA signatures.
+
+----
+(func $ext_crypto_ecdsa_verify_version_2
 	(param $sig i32) (param $msg i64) (param $key i32) (return i32))
 ----
 
