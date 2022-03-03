@@ -334,15 +334,7 @@ public key cannot be found in the key store.
 [#sect-ext-crypto-ecdsa-verify]
 ==== `ext_crypto_ecdsa_verify`
 
-Verifies an _ecdsa_ signature. Returns when the verification is either
-successful or batched. If no batching verification extension is registered, this
-function will fully verify the signature and return the result. If batching
-verification is registered, this function will push the data to the batch and
-return immediately. The caller can then get the result by calling
-`ext_crypto_finish_batch_verify` (<<sect-ext-crypto-finish-batch-verify>>).
-
-The verification extension is explained more in detail in
-<<sect-ext-crypto-start-batch-verify>>.
+Verifies an ECDSA signature.
 
 ===== Version 1 - Prototype
 
@@ -390,6 +382,30 @@ message that is to be verified.
 key.
 * `return`: a i32 integer value equal _1_ to if the signature is valid or a
 value equal to _0_ if otherwise.
+
+==== `ext_crypto_ecdsa_batch_verify`
+
+Registers a ECDSA signature for batch verification. Batch verification is
+enabled by calling `ext_crypto_start_batch_verify`
+(<<sect-ext-crypto-start-batch-verify>>). The result of the verification is
+returned by `ext_crypto_finish_batch_verify`
+(<<sect-ext-crypto-finish-batch-verify>>). If batch verification is not enabled,
+the signature is verified immediately.
+
+===== Version 1
+----
+(func $ext_crypto_ecdsa_batch_verify_version_1
+	(param $sig i32) (param $msg i64) (param $key i32) (return i32))
+----
+
+Arguments::
+
+* `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
+* `msg`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+message that is to be verified.
+* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `return`: a i32 integer value equal to _1_ if the signature is valid or
+batched or a value equal _0_ to if otherwise.
 
 ==== `ext_crypto_secp256k1_ecdsa_recover`
 
