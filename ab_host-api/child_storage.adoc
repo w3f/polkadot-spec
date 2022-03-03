@@ -116,6 +116,8 @@ child storage key (<<defn-child-storage-type>>).
 * `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
 (<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
 limit on how many keys should be deleted. No limit is applied if this is _None_.
+Any keys created during the current block execution do not count towards the
+limit.
 * `return`: a value equal to _1_ if all the keys of the child storage have been
 deleted or a value equal to _0_ if there are remaining keys.
 
@@ -133,6 +135,8 @@ child storage key (<<defn-child-storage-type>>).
 * `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
 (<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
 limit on how many keys should be deleted. No limit is applied if this is _None_.
+Any keys created during the current block execution do not count towards the
+limit.
 * `return`: a pointer-size (<<defn-runtime-pointer>>) to the following variant, stem:[k]:
 +
 [stem]
