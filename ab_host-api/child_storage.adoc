@@ -99,7 +99,50 @@ Clears an entire child storage.
 Arguments::
 
 * `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
-child storage key (<<defn-child-storage-type>>)..
+child storage key (<<defn-child-storage-type>>).
+
+===== Version 2 - Prototype
+
+----
+(func $ext_default_child_storage_storage_kill_version_2
+	(param $child_storage_key i64) (param $limit i64)
+	(return i32))
+----
+
+Arguments::
+
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+child storage key (<<defn-child-storage-type>>).
+* `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+(<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is _None_.
+* `return`: a value equal to _1_ if all the keys of the child storage have been
+deleted or a value equal to _0_ if there are remaining keys.
+
+===== Version 3 - Prototype
+----
+(func $ext_default_child_storage_storage_kill_version_3
+	(param $child_storage_key i64) (param $limit i64)
+	(return i64))
+----
+
+Arguments::
+
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+child storage key (<<defn-child-storage-type>>).
+* `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+(<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
+limit on how many keys should be deleted. No limit is applied if this is _None_.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) to the following variant, stem:[k]:
++
+[stem]
+++++
+k = {(0,-> c),(1,-> c):}
+++++
++
+where _0_ indicates that all keys of the child storage have been removed,
+followed by the number of removed keys, stem:[c]. The variant _1_ indicates that
+there are remaining keys, followed by the number of removed keys.
 
 ==== `ext_default_child_storage_exists`
 
