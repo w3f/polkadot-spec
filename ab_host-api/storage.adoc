@@ -181,12 +181,12 @@ root.
 ===== Version 1 - Prototype
 ----
 (func $ext_storage_root_version_1
-	(return i32))
+	(return i64))
 ----
 
 Arguments::
-* `return`: a 32-bit pointer to the buffer containing the 256-bit Blake2 storage
-root.
+* `return`: a pointer-size (<<defn-runtime-pointer>>) to a buffer containing 
+the 256-bit Blake2 storage root.
 
 [#sect-ext-storage-changes-root]
 ==== `ext_storage_changes_root`
