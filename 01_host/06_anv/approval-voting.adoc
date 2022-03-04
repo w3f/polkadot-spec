@@ -157,7 +157,7 @@ continues with the following steps:
 ++++
 t_1 larr "Transcript"("'A&V ASSIGNED'")\
 t_2 larr "append"(t_1, "'core'", r_c)\
-p larr "dleq_prove"(t_2, i)"
+p larr "dleq_prove"(t_2, i)
 ++++
 
 where stem:["dleq_prove"] is described in <<defn-vrf-dleq-prove>>.
