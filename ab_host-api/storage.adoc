@@ -16,8 +16,8 @@ Sets the value under a given key into storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
-* `value`: a pointer-size (<<defn-runtime-pointer>>) containing the
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) containing the key.
+* `value`: a pointer-size (<<defn-runtime-pointer-size>>) containing the
 value.
 
 ==== `ext_storage_get`
@@ -30,8 +30,8 @@ Retrieves the value associated with the given key from storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) returning the SCALE
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) containing the key.
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) returning the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the value.
 
 ==== `ext_storage_read`
@@ -47,13 +47,13 @@ offset.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
-* `value_out`: a pointer-size (<<defn-runtime-pointer>>) containing the
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) containing the key.
+* `value_out`: a pointer-size (<<defn-runtime-pointer-size>>) containing the
 buffer to which the value will be written to. This function will never write
 more then the length of the buffer, even if the value’s length is bigger.
 * `offset`: an u32 integer containing the offset beyond the value should be read
 from.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) pointing to a SCALE
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) pointing to a SCALE
 encoded _Option_ value (<<defn-option-type>>) containing an unsigned 32-bit
 integer representing the number of bytes left at supplied `offset`. Returns
 _None_ if the entry does not exists.
@@ -69,7 +69,7 @@ Clears the storage of the given key and its value.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) containing the key.
 
 ==== `ext_storage_exists`
 
@@ -82,7 +82,7 @@ Checks whether the given key exists in storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) containing the key.
 * `return`: an i32 integer value equal to _1_ if the key exists or a value equal
 to _0_ if otherwise.
 
@@ -98,7 +98,7 @@ prefix.
 ----
 
 Arguments::
-* `prefix`: a pointer-size (<<defn-runtime-pointer>>) containing
+* `prefix`: a pointer-size (<<defn-runtime-pointer-size>>) containing
 the prefix.
 
 ===== Version 2 - Prototype
@@ -109,14 +109,14 @@ the prefix.
 ----
 
 Arguments::
-* `prefix`: a pointer-size (<<defn-runtime-pointer>>) containing
+* `prefix`: a pointer-size (<<defn-runtime-pointer-size>>) containing
 the prefix.
-* `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+* `limit`: a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
 (<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
 limit on how many keys should be deleted. No limit is applied if this is _None_.
 Any keys created during the current block execution do not count towards the
 limit.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) to the following variant, stem:[k]:
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to the following variant, stem:[k]:
 +
 [stem]
 ++++
@@ -149,8 +149,8 @@ array.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) containing the key.
-* `value`: a pointer-size (<<defn-runtime-pointer>>) containing the
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) containing the key.
+* `value`: a pointer-size (<<defn-runtime-pointer-size>>) containing the
 value to be appended.
 
 ==== `ext_storage_root`
@@ -185,7 +185,7 @@ root.
 ----
 
 Arguments::
-* `return`: a pointer-size (<<defn-runtime-pointer>>) to a buffer containing 
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to a buffer containing 
 the 256-bit Blake2 storage root.
 
 [#sect-ext-storage-changes-root]
@@ -200,9 +200,9 @@ NOTE: This function is not longer used and only exists for compatibiltiy reasons
 ----
 
 Arguments::
-* `parent_hash`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `parent_hash`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 SCALE encoded block hash.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
 (<<defn-option-type>>) that's always _None_.
 
 ==== `ext_storage_next_key`
@@ -218,8 +218,8 @@ not exist in storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the next key in
 lexicographic order.
 
