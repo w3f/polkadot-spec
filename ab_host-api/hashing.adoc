@@ -19,7 +19,7 @@ Arguments::
 
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
 to be hashed.
-* `return`: a 32-bit pointer to the buffer containing the 256-bit hash result.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit hash result.
 
 ==== `ext_hashing_keccak_512`
 
@@ -35,7 +35,7 @@ Arguments::
 
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
 to be hashed.
-* `return`: a 32-bit pointer to the buffer containing the 512-bit hash result.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 512-bit hash result.
 
 ==== `ext_hashing_sha2_256`
 
@@ -51,7 +51,7 @@ Arguments::
 
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
 to be hashed.
-* `return`: a 32-bit pointer to the buffer containing the 256-bit hash result.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit hash result.
 
 ==== `ext_hashing_blake2_128`
 
@@ -67,7 +67,7 @@ Arguments::
 
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
 to be hashed.
-* `return`: a 32-bit pointer to the buffer containing the 128-bit hash result.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 128-bit hash result.
 
 ==== `ext_hashing_blake2_256`
 
@@ -83,7 +83,7 @@ Arguments::
 
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
 to be hashed.
-* `return`: a 32-bit pointer to the buffer containing the 256-bit hash result.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit hash result.
 
 ==== `ext_hashing_twox_64`
 
@@ -99,7 +99,7 @@ Arguments::
 
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
 to be hashed.
-* `return`: a 32-bit pointer to the buffer containing the 64-bit hash result.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 64-bit hash result.
 
 ==== `ext_hashing_twox_128`
 
@@ -115,7 +115,7 @@ Arguments::
 
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
 to be hashed.
-* `return`: a 32-bit pointer to the buffer containing the 128-bit hash result.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 128-bit hash result.
 
 ==== `ext_hashing_twox_256`
 
@@ -131,4 +131,4 @@ Arguments::
 
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
 to be hashed.
-* `return`: a 32-bit pointer to the buffer containing the 256-bit hash result.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit hash result.

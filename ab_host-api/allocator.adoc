@@ -24,7 +24,7 @@ location.
 Arguments::
 
 * `size`: the size of the buffer to be allocated.
-* `result`: a 32-bit pointer to the allocated buffer.
+* `result`: a pointer (<<defn-runtime-pointer>>) to the allocated buffer.
 
 ==== `ext_allocator_free`
 
@@ -37,4 +37,4 @@ Free the given pointer.
 
 Arguments::
 
-* `ptr`: a 32-bit pointer to the memory buffer to be freed.
+* `ptr`: a pointer (<<defn-runtime-pointer>>) to the memory buffer to be freed.
