@@ -28,7 +28,7 @@ fixed/known size between the Runtime and Polkadot Host.
 .<<defn-runtime-pointer-size, Runtime Pointer Size>>
 ====
 The *Runtime pointer-size* type is an unsigned 64-bit integer, representing two
-consecutive integers. The least significant is a pointer to the data in memory.
+consecutive integers. The least significant is *Runtime pointer* (<<defn-runtime-pointer>>).
 The most significant provides the size of the data in bytes. This representation
 is the primary way to exchange data of arbitrary/dynamic sizes between the
 Runtime and the Polkadot Host.

@@ -20,7 +20,7 @@ Arguments::
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs.
-* `result`: a 32-bit pointer to the buffer containing the 256-bit trie root.
+* `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root.
 
 ==== `ext_trie_blake2_256_ordered_root`
 
@@ -39,7 +39,7 @@ items from which the trie root gets formed. The items consist of a SCALE encoded
 array containing only values, where the corresponding key of each value is the
 index of the item in the array, starting at 0. The keys are compact encoded
 integers (<<defn-sc-len-encoding>>).
-* `result`: a 32-bit pointer to the buffer containing the 256-bit trie root
+* `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root
 result.
 
 ==== `ext_trie_keccak_256_root`
@@ -57,7 +57,7 @@ Arguments::
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs.
-* `result`: a 32-bit pointer to the buffer containing the 256-bit trie root.
+* `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root.
 
 ==== `ext_trie_keccak_256_ordered_root`
 
@@ -76,5 +76,5 @@ items from which the trie root gets formed. The items consist of a SCALE encoded
 array containing only values, where the corresponding key of each value is the
 index of the item in the array, starting at 0. The keys are compact encoded
 integers (<<defn-sc-len-encoding>>).
-* `result`: a 32-bit pointer to the buffer containing the 256-bit trie root
+* `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root
 result.

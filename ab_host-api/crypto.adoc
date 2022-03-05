@@ -55,7 +55,7 @@ Returns all _ed25519_ public keys for the given key identifier from the keystore
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key type identifier
 (<<defn-key-type-id>>).
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) to an SCALE encoded
 256-bit public keys.
@@ -76,12 +76,12 @@ or invalid seed was provided.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key type identifier
 (<<defn-key-type-id>>).
 * `seed`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE encoded
 _Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
 valid UTF8.
-* `return`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 
 ==== `ext_crypto_ed25519_sign`
 
@@ -96,9 +96,9 @@ and key type in the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key type identifier
 (<<defn-key-type-id>>).
-* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be signed.
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
@@ -118,10 +118,10 @@ Verifies an _ed25519_ signature.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 64-byte signature.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be verified.
-* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
 value equal to _0_ if otherwise.
 
@@ -143,10 +143,10 @@ the signature is verified immediately.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 64-byte signature.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be verified.
-* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or
 batched or a value equal _0_ to if otherwise.
 
@@ -162,7 +162,7 @@ Returns all _sr25519_ public keys for the given key id from the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key type identifier
 (<<defn-key-type-id>>).
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 SCALE encoded 256-bit public keys.
@@ -183,11 +183,11 @@ or invalid seed was provided.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key identifier (<<defn-key-type-id>>).
 * `seed`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE encoded
 _Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
 valid UTF8.
-* `return`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 
 ==== `ext_crypto_sr25519_sign`
 
@@ -202,8 +202,8 @@ public key and key type in the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
-* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key identifier (<<defn-key-type-id>>).
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be signed.
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
@@ -223,10 +223,10 @@ Verifies an sr25519 signature.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 64-byte signature.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be verified.
-* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
 value equal to _0_ if otherwise.
 
@@ -238,10 +238,10 @@ value equal to _0_ if otherwise.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 64-byte signature.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be verified.
-* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or a
 value equal to _0_ if otherwise.
 
@@ -263,10 +263,10 @@ the signature is verified immediately.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 64-byte signature.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be verified.
-* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or
 batched or a value equal _0_ to if otherwise.
 
@@ -282,7 +282,7 @@ Returns all _ecdsa_ public keys for the given key id from the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key type identifier (<<defn-key-type-id>>).
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key type identifier (<<defn-key-type-id>>).
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 SCALE encoded 33-byte compressed public keys.
 
@@ -302,11 +302,11 @@ or invalid seed was provided.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key identifier (<<defn-key-type-id>>).
 * `seed`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE encoded
 _Option_ value (<<defn-option-type>>) containing the BIP-39 seed which must be
 valid UTF8.
-* `return`: a 32-bit pointer to the buffer containing the 33-byte compressed
+* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 33-byte compressed
 public key.
 
 ==== `ext_crypto_ecdsa_sign`
@@ -322,8 +322,8 @@ public key and key type in the keystore.
 
 Arguments::
 
-* `key_type_id`: a 32-bit pointer to the key identifier (<<defn-key-type-id>>).
-* `key`: a 32-bit pointer to the buffer containing the 33-byte compressed public
+* `key_type_id`: a pointer (<<defn-runtime-pointer>>) to the key identifier (<<defn-key-type-id>>).
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 33-byte compressed public
 key.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be signed.
@@ -354,12 +354,12 @@ function.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature. The
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 65-byte signature. The
 signature is 65-bytes in size, where the first 512-bits represent the signature
 and the other 8 bits represent the recovery ID.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be verified.
-* `key`: a 32-bit pointer to the buffer containing the 33-byte compressed public
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 33-byte compressed public
 key.
 * `return`: a i32 integer value equal _1_ to if the signature is valid or a
 value equal to _0_ if otherwise.
@@ -375,12 +375,12 @@ Does not allow the verification of non-standard, overflowing ECDSA signatures.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature. The
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 65-byte signature. The
 signature is 65-bytes in size, where the first 512-bits represent the signature
 and the other 8 bits represent the recovery ID.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be verified.
-* `key`: a 32-bit pointer to the buffer containing the 33-byte compressed public
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 33-byte compressed public
 key.
 * `return`: a i32 integer value equal _1_ to if the signature is valid or a
 value equal to _0_ if otherwise.
@@ -403,10 +403,10 @@ the signature is verified immediately.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 64-byte signature.
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 64-byte signature.
 * `msg`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 message that is to be verified.
-* `key`: a 32-bit pointer to the buffer containing the 256-bit public key.
+* `key`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit public key.
 * `return`: a i32 integer value equal to _1_ if the signature is valid or
 batched or a value equal _0_ to if otherwise.
 
@@ -430,9 +430,9 @@ function.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature in RSV
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 65-byte signature in RSV
 format. V should be either or .
-* `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
+* `msg`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit Blake2 hash of
 the message.
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded _Result_ (<<defn-result-type>>). On success it contains the 64-byte
@@ -449,9 +449,9 @@ Does not handle non-standard, overflowing ECDSA signatures.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature in RSV
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 65-byte signature in RSV
 format. V should be either or .
-* `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
+* `msg`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit Blake2 hash of
 the message.
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded _Result_ (<<defn-result-type>>). On success it contains the 64-byte
@@ -477,9 +477,9 @@ function.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature in RSV
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 65-byte signature in RSV
 format. V should be either `0/1` or `27/28`.
-* `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
+* `msg`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit Blake2 hash of
 the message.
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded `Result` value (<<defn-result-type>>). On success it contains the
@@ -497,9 +497,9 @@ Does not handle non-standard, overflowing ECDSA signatures.
 
 Arguments::
 
-* `sig`: a 32-bit pointer to the buffer containing the 65-byte signature in RSV
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 65-byte signature in RSV
 format. V should be either `0/1` or `27/28`.
-* `msg`: a 32-bit pointer to the buffer containing the 256-bit Blake2 hash of
+* `msg`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit Blake2 hash of
 the message.
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded `Result` value (<<defn-result-type>>). On success it contains the

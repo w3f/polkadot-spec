@@ -175,7 +175,7 @@ by the host environment.
 ----
 
 Arguments::
-* `result`: a 32-bit integer pointer to the buffer containing the 256-bit seed.
+* `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit seed.
 
 ==== `ext_offchain_local_storage_set`
 
