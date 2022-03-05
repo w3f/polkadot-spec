@@ -22,10 +22,10 @@ Sets the value under a given key into the child storage.
 
 Arguments::
 
-* `child_storage_key` : a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key` : a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `value`: a pointer-size (<<defn-runtime-pointer>>) indicating the value.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
+* `value`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the value.
 
 ==== `ext_default_child_storage_get`
 Retrieves the value associated with the given key from the child storage.
@@ -38,10 +38,10 @@ Retrieves the value associated with the given key from the child storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key. 
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key. 
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the value.
 
 ==== `ext_default_child_storage_read`
@@ -58,15 +58,15 @@ the number of bytes that the entry in storage has beyond the offset.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
-* `value_out`: a pointer-size (<<defn-runtime-pointer>>) indicating the buffer
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
+* `value_out`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the buffer
 to which the value will be written to. This function will never write more then
 the length of the buffer, even if the value’s length is bigger.
 * `offset`: an u32 integer containing the offset beyond the value should be read
 from.
-* `result`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the number of bytes
 written into the *value_out* buffer. Returns if the entry does not exists.
 
@@ -82,9 +82,9 @@ Clears the storage of the given key and its value from the child storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
 
 ==== `ext_default_child_storage_storage_kill`
 
@@ -98,7 +98,7 @@ Clears an entire child storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
 
 ===== Version 2 - Prototype
@@ -111,9 +111,9 @@ child storage key (<<defn-child-storage-type>>).
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+* `limit`: a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
 (<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
 limit on how many keys should be deleted. No limit is applied if this is _None_.
 Any keys created during the current block execution do not count towards the
@@ -130,14 +130,14 @@ deleted or a value equal to _0_ if there are remaining keys.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+* `limit`: a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
 (<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
 limit on how many keys should be deleted. No limit is applied if this is _None_.
 Any keys created during the current block execution do not count towards the
 limit.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) to the following variant, stem:[k]:
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to the following variant, stem:[k]:
 +
 [stem]
 ++++
@@ -160,9 +160,9 @@ Checks whether the given key exists in the child storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
 * `return`: an i32 integer value equal to _1_ if the key exists or a value equal
 to _0_ if otherwise.
 
@@ -179,9 +179,9 @@ given prefix.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `prefix`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `prefix`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 prefix.
 
 ===== Version 2 - Prototype
@@ -193,16 +193,16 @@ prefix.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `prefix`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `prefix`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 prefix.
-* `limit`: a pointer-size (<<defn-runtime-pointer>>) to an _Option_ type
+* `limit`: a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
 (<<defn-option-type>>) containing an unsigned 32-bit integer indicating the
 limit on how many keys should be deleted. No limit is applied if this is _None_.
 Any keys created during the current block execution do not count towards the
 limit.
-* `return`: a pointer-size (<<defn-runtime-pointer>>) to the following variant, stem:[k]:
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to the following variant, stem:[k]:
 +
 [stem]
 ++++
@@ -226,9 +226,9 @@ root.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 SCALE encoded storage root.
 
 ==== `ext_default_child_storage_next_key`
@@ -245,10 +245,10 @@ The key provided to this function may or may not exist in storage.
 
 Arguments::
 
-* `child_storage_key`: a pointer-size (<<defn-runtime-pointer>>) indicating the
+* `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
 child storage key (<<defn-child-storage-type>>).
-* `key`: a pointer-size (<<defn-runtime-pointer>>) indicating the key. 
-* `return`: a pointer-size (<<defn-runtime-pointer>>) indicating the SCALE
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key. 
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded as defined in <<defn-option-type>>
 containing the next key in lexicographic order. Returns if the entry cannot be
 found.
