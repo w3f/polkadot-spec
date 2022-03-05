@@ -93,12 +93,12 @@ where
 ** _1_ implies *next epoch data*: The Runtime issues this message on every first
 block of an epoch stem:[cc E_n]. The supplied authority set and randomness are
 intended to be used in the next epoch stem:[cc E_n + 1].  
-** _2_ implies *on disabled*: An index to the individual authority in the
-current authority list that should be immediately disabled until the next
-authority set changes. When an authority gets disabled, the node should stop
-performing any authority functionality for that authority, including authoring
-blocks. Similarly, other nodes should ignore all messages from the indicated
-authority which pertain to their authority role.
+** _2_ implies *on disabled*: 
+*This message is currently ignored by the Polkadot Host and will be for the forseeable future.* 
+An index to the individual authority in the current authority list that should
+be immediately disabled until the next authority set changes. This message 
+initial intension was to cause an imediatly suspension of all authority 
+functionality with the specified  authority.
 ** _3_ implies *next config data*: These messages are only issued on
 configuration change and in the first block of an epoch. The supplied
 configuration data are intended to be used from the next epoch onwards.
