@@ -17,7 +17,7 @@ Compute a 256-bit Blake2 trie root formed from the iterated items.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs (tuples).
 * `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root.
@@ -31,7 +31,7 @@ SCALE encoded array containing arbitrary key/value pairs (tuples).
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs (tuples).
 * `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
@@ -49,7 +49,7 @@ Compute a 256-bit Blake2 trie root formed from the enumerated items.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the enumerated
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the enumerated
 items from which the trie root gets formed. The items consist of a SCALE encoded
 array containing only values, where the corresponding key of each value is the
 index of the item in the array, starting at 0. The keys are compact encoded
@@ -66,7 +66,7 @@ result.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the enumerated
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the enumerated
 items from which the trie root gets formed. The items consist of a SCALE encoded
 array containing only values, where the corresponding key of each value is the
 index of the item in the array, starting at 0. The keys are compact encoded
@@ -87,7 +87,7 @@ Compute a 256-bit Keccak trie root formed from the iterated items.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs.
 * `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root.
@@ -101,7 +101,7 @@ SCALE encoded array containing arbitrary key/value pairs.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs.
 * `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
@@ -119,7 +119,7 @@ Compute a 256-bit Keccak trie root formed from the enumerated items.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the enumerated
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the enumerated
 items from which the trie root gets formed. The items consist of a SCALE encoded
 array containing only values, where the corresponding key of each value is the
 index of the item in the array, starting at 0. The keys are compact encoded
@@ -136,7 +136,7 @@ result.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the enumerated
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the enumerated
 items from which the trie root gets formed. The items consist of a SCALE encoded
 array containing only values, where the corresponding key of each value is the
 index of the item in the array, starting at 0. The keys are compact encoded
