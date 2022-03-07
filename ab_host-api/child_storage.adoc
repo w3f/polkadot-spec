@@ -218,7 +218,6 @@ there are remaining keys, followed by the number of removed keys.
 Commits all existing operations and computes the resulting child storage
 root.
 
-[#sect-ext-default-child-storage-root-version-1]
 ===== Version 1 - Prototype
 ----
 (func $ext_default_child_storage_root_version_1
