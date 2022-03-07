@@ -360,7 +360,7 @@ public key cannot be found in the key store.
 [#sect-ext-crypto-ecdsa-verify]
 ==== `ext_crypto_ecdsa_verify`
 
-Verifies an ECDSA signature.
+Verifies the hash of the given message against a ECDSA signature.
 
 ===== Version 1 - Prototype
 
@@ -406,6 +406,27 @@ and the other 8 bits represent the recovery ID.
 message that is to be verified.
 * `key`: a pointer to the buffer containing the 33-byte compressed public
 key.
+* `return`: a i32 integer value equal _1_ to if the signature is valid or a
+value equal to _0_ if otherwise.
+
+==== `ext_crypto_ecdsa_verify_prehashed`
+
+Verifies the prehashed message against a ECDSA signature.
+
+===== Version 1 - Prototype
+
+----
+(func $ext_crypto_ecdsa_verify_prehashed_version_1
+	(param $sig i32) (param $msg i32) (param $key i32) (return i32))
+----
+
+Arguments::
+
+* `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 65-byte signature. The
+signature is 65-bytes in size, where the first 512-bits represent the signature
+and the other 8 bits represent the recovery ID.
+* `msg`: a pointer to the 32-bit prehashed message to be verified.
+* `key`: a pointer to the 33-byte compressed public key.
 * `return`: a i32 integer value equal _1_ to if the signature is valid or a
 value equal to _0_ if otherwise.
 
