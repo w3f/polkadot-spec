@@ -30,7 +30,7 @@ Print a valid UTF8 encoded buffer.
 
 *Arguments*:
 
-* : a pointer-size (<<defn-runtime-pointer-size>>) indicating
+* : a pointer-size (<<defn-runtime-pointer-size>>) to
 the valid buffer to be printed.
 
 ==== `ext_misc_print_hex`
@@ -44,7 +44,7 @@ Print any buffer in hexadecimal representation.
 
 *Arguments*:
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to
 the buffer to be printed.
 
 ==== `ext_misc_runtime_version`
@@ -65,8 +65,8 @@ Wasm blob (<<sect-loading-runtime-code>>) and calling a function in this blob.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the Wasm
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the Wasm
 blob.
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the Runtime version of
 the given Wasm blob which is encoded as a byte array.

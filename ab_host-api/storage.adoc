@@ -192,7 +192,7 @@ NOTE: This function is not longer used and only exists for compatibiltiy reasons
 ----
 
 Arguments::
-* `parent_hash`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the
+* `parent_hash`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 SCALE encoded block hash.
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) to an _Option_ type
 (<<defn-option-type>>) that's always _None_.
@@ -210,8 +210,8 @@ not exist in storage.
 ----
 
 Arguments::
-* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
-* `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the next key in
 lexicographic order.
 
