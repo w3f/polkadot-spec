@@ -2,7 +2,7 @@
 .<<defn-state-version, State Version>>
 ====
 The state version, stem:[v], dictates how a merkle root should be constructed.
-The datastructure is of the following format:
+The datastructure is a varying type of the following format:
 
 [stem]
 ++++
