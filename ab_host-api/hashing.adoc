@@ -17,7 +17,7 @@ Conducts a 256-bit Keccak hash.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the data
 to be hashed.
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit hash result.
 
@@ -33,7 +33,7 @@ Conducts a 512-bit Keccak hash.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the data
 to be hashed.
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 512-bit hash result.
 
@@ -49,7 +49,7 @@ Conducts a 256-bit Sha2 hash.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the data
 to be hashed.
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit hash result.
 
@@ -65,7 +65,7 @@ Conducts a 128-bit Blake2 hash.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the data
 to be hashed.
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 128-bit hash result.
 
@@ -81,7 +81,7 @@ Conducts a 256-bit Blake2 hash.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the data
 to be hashed.
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit hash result.
 
@@ -97,7 +97,7 @@ Conducts a 64-bit xxHash hash.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the data
 to be hashed.
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 64-bit hash result.
 
@@ -113,7 +113,7 @@ Conducts a 128-bit xxHash hash.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the data
 to be hashed.
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 128-bit hash result.
 
@@ -129,6 +129,6 @@ Conducts a 256-bit xxHash hash.
 
 Arguments::
 
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the data
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the data
 to be hashed.
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit hash result.

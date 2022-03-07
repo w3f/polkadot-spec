@@ -93,9 +93,9 @@ Host's transaction pool, ready to be propagated to remote peers.
 ----
 
 Arguments::
-* `data`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the byte array
+* `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the byte array
 storing the encoded extrinsic.
-* `return`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Result_ value (<<defn-result-type>>). Neither on success or failure is
 there any additional data provided. The cause of a failure is implementation
 specific.
@@ -135,7 +135,7 @@ this function.
 ----
 
 Arguments::
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded `Result` value (<<defn-result-type>>). On success it contains the
 _Opaque network state_ structure (<<defn-opaque-network-state>>). On failure, an
 empty value is yielded where its cause is implementation specific.
@@ -193,8 +193,8 @@ Arguments::
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
 used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
-* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
-* `value`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the value.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
+* `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
 
 ==== `ext_offchain_local_storage_clear`
 
@@ -210,7 +210,7 @@ Arguments::
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
 used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
-* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
 
 ==== `ext_offchain_local_storage_compare_and_set`
 
@@ -227,10 +227,10 @@ Arguments::
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
 used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
-* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
-* `old_value`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
+* `old_value`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the old key.
-* `new_value`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the new value.
+* `new_value`: a pointer-size (<<defn-runtime-pointer-size>>) to the new value.
 * `result`: an i32 integer equal to _1_ if the new value has been set or a value
 equal to _0_ if otherwise.
 
@@ -248,8 +248,8 @@ Arguments::
 * `kind`: an i32 integer indicating the storage kind. A value equal to _1_ is
 used for a persistent storage (<<defn-offchain-persistent-storage>>) and a value
 equal to _2_ for local storage (<<defn-offchain-local-storage>>).
-* `key`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the key.
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the value or the
 corresponding key.
 
@@ -265,12 +265,12 @@ a newly started request.
 ----
 
 Arguments::
-* `method`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the HTTP
+* `method`: a pointer-size (<<defn-runtime-pointer-size>>) to the HTTP
 method. Possible values are “GET” and “POST”.
-* `uri`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the URI.
+* `uri`: a pointer-size (<<defn-runtime-pointer-size>>) to the URI.
 * `meta`: a future-reserved field containing additional, SCALE encoded
 parameters. Currently, an empty array should be passed.
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Result_ value (<<defn-result-type>>) containing the i16 ID of the newly
 started request. On failure no additionally data is provided. The cause of
 failure is implementation specific.
@@ -290,9 +290,9 @@ remote has closed the connection).
 
 Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
-* `name`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the HTTP header name.
-* `value`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the HTTP header value.
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `name`: a pointer-size (<<defn-runtime-pointer-size>>) to the HTTP header name.
+* `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the HTTP header value.
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Result_ value (<<defn-result-type>>). Neither on success or failure is
 there any additional data provided. The cause of failure is implementation
 specific.
@@ -310,12 +310,12 @@ deadline is reached or the chunk could not be written.
 
 Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
-* `chunk`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the chunk of
+* `chunk`: a pointer-size (<<defn-runtime-pointer-size>>) to the chunk of
 bytes. Writing an empty chunk finalizes the request.
-* `deadline`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `deadline`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
 (<<defn-unix-time>>). Passing _None_ blocks indefinitely.
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Result_ value (<<defn-result-type>>). On success, no additional data is
 provided. On error it contains the HTTP error type (<<defn-http-error>>).
 
@@ -332,12 +332,12 @@ unready responses will produce DeadlineReached status.
 ----
 
 Arguments::
-* `ids`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `ids`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded array of started request IDs.
-* `deadline`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `deadline`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
 (<<defn-unix-time>>). Passing None blocks indefinitely.
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded array of request statuses (<<defn-http-status-codes>>).
 
 ==== `ext_offchain_http_response_headers`
@@ -353,7 +353,7 @@ headers must be read before the response body.
 
 Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating a SCALE encoded array of key/value pairs.
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to a SCALE encoded array of key/value pairs.
 
 ==== `ext_offchain_http_response_read_body`
 
@@ -371,12 +371,12 @@ read before draining the body.
 
 Arguments::
 * `request_id`: an i32 integer indicating the ID of the started request.
-* `buffer`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the buffer
+* `buffer`: a pointer-size (<<defn-runtime-pointer-size>>) to the buffer
 where the body gets written to.
-* `deadline`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `deadline`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
 (<<defn-unix-time>>). Passing _None_ will block indefinitely.
-* `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
+* `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Result_ value (<<defn-result-type>>). On success it contains an i32
 integer specifying the number of bytes written or a HTTP error type
 (<<defn-http-error>>) on failure.
