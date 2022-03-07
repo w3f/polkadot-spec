@@ -1,3 +1,19 @@
+[#defn-state-version]
+.<<defn-state-version, State Version>>
+====
+The state version, stem:[v], dictates how a merkle root should be constructed.
+The datastructure is of the following format:
+
+[stem]
+++++
+v = {(0, "full values"),(1, "node hashes"):}
+++++
+
+where stem:[0] indicates that the values of the keys should be inserted into the
+trie directly and stem:[1] makes use of "node hashes" when calculating the
+merkle proof (<<defn-node-hashes>>).
+====
+
 include::intro.adoc[]
 
 include::storage.adoc[]
