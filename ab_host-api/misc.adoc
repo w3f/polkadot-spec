@@ -6,19 +6,6 @@ runtime and the node.
 
 === Functions
 
-==== `ext_misc_chain_id`
-
-Returns the current relay chain identifier.
-
-===== Version 1 - Prototype
-----
-(func $ext_misc_chain_id_version_1 (result i64))
-----
-
-Arguments::
-
-* `result`: the current relay chain identifier.
-
 ==== `ext_misc_print_num`
 
 Print a number.
@@ -82,4 +69,4 @@ Arguments::
 blob.
 * `result`: a pointer-size (<<defn-runtime-pointer-size>>) indicating the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the Runtime version of
-the given Wasm blob.
+the given Wasm blob which is encoded as a byte array.
