@@ -183,3 +183,42 @@ the node proofs.
 * `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
 * `return`: a value equal to _1_ if the proof could be succesfully verified or a
 value equal to _0_ if otherwise.
+
+==== `ext_trie_keccak_256_verify_proof`
+
+Verifies a key/value pair against a Keccak 256-bit merkle root.
+
+===== Version 1 - Prototype
+----
+(func $ext_trie_keccak_256_verify_proof_version_1
+	(param $root i32) (param $proof i64)
+	(param $key i64) (param $value i64)
+	(result i32))
+----
+
+Arguments::
+* `root`: a pointer to the 256-bit merkle root.
+* `proof`: a pointer-size (<<defn-runtime-pointer-size>>) to an array containing
+the node proofs.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
+* `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
+* `return`: a value equal to _1_ if the proof could be succesfully verified or a
+value equal to _0_ if otherwise.
+
+===== Version 2 - Prototype
+----
+(func $ext_trie_keccak_256_verify_proof_version_2
+	(param $root i32) (param $proof i64)
+	(param $key i64) (param $value i64)
+	(param $version i32) (result i32))
+----
+
+Arguments::
+* `root`: a pointer to the 256-bit merkle root.
+* `proof`: a pointer-size (<<defn-runtime-pointer-size>>) to an array containing
+the node proofs.
+* `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
+* `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
+* `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
+* `return`: a value equal to _1_ if the proof could be succesfully verified or a
+value equal to _0_ if otherwise.
