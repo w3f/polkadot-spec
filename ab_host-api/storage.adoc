@@ -157,6 +157,17 @@ value to be appended.
 
 Compute the storage root.
 
+[#sect-ext-storage-root-version-1]
+===== Version 1 - Prototype
+----
+(func $ext_storage_root_version_1
+	(return i64))
+----
+
+Arguments::
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to a buffer containing
+the 256-bit Blake2 storage root.
+
 [#sect-ext-storage-root-version-2]
 ===== Version 2 - Prototype
 ----
@@ -176,17 +187,6 @@ this function and stem:[1] makes use of "node hashes" when calculating the
 merkle proof (<<defn-node-hashes>>).
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit Blake2 storage
 root.
-
-[#sect-ext-storage-root-version-1]
-===== Version 1 - Prototype
-----
-(func $ext_storage_root_version_1
-	(return i64))
-----
-
-Arguments::
-* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to a buffer containing 
-the 256-bit Blake2 storage root.
 
 [#sect-ext-storage-changes-root]
 ==== `ext_storage_changes_root`
