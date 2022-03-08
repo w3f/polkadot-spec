@@ -296,6 +296,20 @@ The process of joining a new voter set is different from the one of rejoining
 the current voter set after a network disconnect. The details of this
 distinction are described further in this section.
 
+===== Voter Set Changes
+
+A GRANDPA voter node which is initiating GRANDPA protocol as part of joining a
+new authority set is required to execute the Algorithm as described in
+<<algo-initiate-grandpa>>. The algorithm mandates the initialization procedure
+for GRANDPA protocol. Note that GRANDPA round number reset to 0 for every
+authority set change.
+
+Voter set changes are signalled by Runtime via a consensus engine message
+(<<sect-consensus-message-digest>>). When Authorities process such messages they
+must not vote on any block with a higher number than the block at which the
+change is supposed to happen. The new authority set should reinitiate GRANDPA
+protocol by executing Algorithm as defined in <<algo-initiate-grandpa>>.
+
 [#algo-initiate-grandpa]
 ===== Initiate Grandpa
 ****
@@ -316,14 +330,6 @@ stem:[r_("last")] is set to _0_ if the GRANDPA node is initiating the GRANDPA
 voting process as a part of a new authority set. This is because the GRANDPA
 round number reset to _0_ for every authority set change.
 ****
-
-===== Voter Set Changes
-
-Voter set changes are signalled by Runtime via a consensus engine message
-(<<sect-consensus-message-digest>>). When Authorities process such messages they
-must not vote on any block with a higher number than the block at which the
-change is supposed to happen. The new authority set should reinitiate GRANDPA
-protocol by executing Algorithm as defined in <<algo-initiate-grandpa>>.
 
 ==== Rejoining the Same Voter Set
 
