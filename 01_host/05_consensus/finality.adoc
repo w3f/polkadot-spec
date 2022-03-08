@@ -292,6 +292,10 @@ stem:[r_n] currently undergoing in the network. Algorithm as defined in
 <<algo-initiate-grandpa>> mandates the initialization procedure for GRANDPA
 protocol for a joining validator.
 
+The process of joining a new voter set is different from the one of rejoining
+the current voter set after a network disconnect. The details of this
+distinction are described further in this section.
+
 [#algo-initiate-grandpa]
 ===== Initiate Grandpa
 ****
