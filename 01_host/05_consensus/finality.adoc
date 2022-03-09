@@ -346,37 +346,50 @@ with the rest of the voting set through the process called Catchup
 For each round stem:[r], an honest voter stem:[v] must participate in the voting
 process by following the Algorithm as defined in <<algo-grandpa-round>>.
 
-[#algo-grandpa-round]
-===== Play Grandpa Round
 ****
-Algorithm: stem:["Play-Grandpa-Round"(r)]
+.Play-Grandpa-Round(r)
+[pseudocode#algo-grandpa-round]
+++++
+\STATE $t_{r, v} \leftarrow$ Current local time
+\STATE $\textrm{primary} \leftarrow$ \textsc{Derive-Primary}($r$)
+\IF{$v = \textrm{primary}$}
+  \STATE \textsc{Broadcast}$(M_{v}^{r - 1, \textrm{Fin}}$({\textsc{Best-Final-Candidate}}($r$-1))
+  \IF{\textsc{Best-Final-Candidate}$(r - 1)$ $\geqslant$ \textsc{Last-Finalized-Block}}
+    \STATE \textsc{Broadcast(}$M_{v}^{r - 1, \textrm{Prim}}$({\textsc{Best-Final-Candidate}}($r$-1)))
+  \ENDIF
+\ENDIF
+\STATE {\textsc{Receive-Messages}}({\textbf{until}} Time $\geqslant t_{r_,v} + 2 \times T$ {\textbf{or}} $r$ {\textbf{is}} completable)
+\STATE $L \leftarrow$ \textsc{Best-Final-Candidate}($r$-1)
+\STATE $N \leftarrow$ \textsc{Best-PreVote-Candidate}($r$)
+\STATE \textsc{Broadcast}($M_v^{r, \textrm{pv}} (N)$)
+\STATE{{\textsc{Receive-Messages}}({\textbf{until}} $B^{r,\textrm{pv}}_v \geqslant L$ {\textbf{and}} (Time $\geqslant t_{r_,v} + 4 \times T${\textbf{ or }}$r$ {\textbf{is}} completable))}
+\STATE{{\textsc{Broadcast($M_v^{r, \textrm{pc}}$($B_v^{r, \textrm{pv}}$))}}}
 
-. stem:[t_(r,v) larr "Current local time"]
-. stem:["primary" larr "Derive-Primary"(r)]
-. stem:["if " v = "primary"]
-. stem:["    " "Broadcast"(M_v^(r-1,"Fin")("Best-Final-Candidate"(r-1)))]
-. stem:["    " "if Best-Final-Candidate"(r-1) >= "Last-Finalized-Block"]
-. stem:["    " "    " "Broadcast"(M_v^(r-1,"Prim")("Best-Final-Candidate"(r-1)))]
-. stem:["Receive-Messages"("until Time" >= t_(r,v)+2 xx T " or " r " is completable")]
-. stem:[L larr "Best-Final-Candidate"(r-1)]
-. stem:[N larr "Best-PreVote-Candidate"(r)]
-. stem:["Broadcast"(M_v^(r,pv)(N))]
-. stem:["Receive-Messages"("until " B_v^(r,pv) >= L " and " ("Time" >= t_(r,v)+4 xx T " or " r " is completable"))]
-. stem:["Broadcast"(M_v^(r,pc)(B_v^(r,pv)))]
-. stem:["Attempt-To-Finalize-Round"(r)]
-. stem:["Receive-Messages"("until " r " is completable and Finalizable"(r-1)]
-. stem:["    " "and Last-Finalized-Block" >= "Best-Final-Candidate"(r-1))]
-. stem:["Play-Grandpa-Round"(r+1)]
+\REPEAT
+  \STATE \textsc{Receive-Messages}
+  \STATE \textsc{Attempt-To-Finalize-At-Round}($r$)
+\UNTIL{$r$ \textbf{is} completable \textbf{and} \textsc{Finalizable}($r$) \textbf{and} \textsc{Last-Finalized-Block} $\geqslant$ \textsc{Best-Final-Candidate}($r - 1$)}
 
-where:
+\STATE \textsc{Play-Grandpa-round}($r + 1$)
 
+\REPEAT
+  \STATE \textsc{Receive-Messages}
+  \STATE \textsc{Attempt-To-Finalize-At-Round}($r$)
+\UNTIL{\textsc{Last-Finalized-Block} $\geqslant$ \textsc{Best-Final-Candidate}($r$)}
+
+\IF{\textsc{Last-Completed-Round} $ < r $}
+  \STATE \textsc{Last-Completed-Round} $\leftarrow r$
+\ENDIF
+++++
+
+where::
 * stem:[T] is sampled from a log-normal distribution whose mean and standard
 deviation are equal to the average network delay for a message to be sent and
 received from one validator to another.
 * stem:["Derive-Primary"] is described in <<algo-derive-primary>>.
 * The condition of _completablitiy_ is defined in <<defn-grandpa-completable>>.
 * stem:["Best-Final-Candidate"] function is explained in <<algo-grandpa-best-candidate>>.
-* stem:["Attempt-To-Finalize-Round"(r)] is described in <<algo-attempt-to–finalize>>.
+* stem:["Attempt-To-Finalize-At-Round"(r)] is described in <<algo-attempt-to–finalize>>.
 * stem:["Finalizable"] is defined in <<algo-finalizable>>.
 ****
 
@@ -448,29 +461,47 @@ where:
 * stem:[#V_("obs"(v))^(r,pv)(B)] is defined in <<defn-observed-votes>>.
 ****
 
-[#algo-finalizable]
-===== Finalizable
 ****
-Algorithm: stem:["Finalizable"(r)]
+.Attempt-To-Finalize-At-Round(r)
+[pseudocode#algo-attempt-to–finalize]
+++++
+\STATE $L \leftarrow$ {\textsc{Last-Finalized-Block}}
+\STATE{$E \leftarrow${\textsc{Best-Final-Candidate}}($r$)}
+\IF{$E \geqslant L$ {\textbf{and}} ${V^{r, \textrm{pc}}_{\textrm{obs}(v)}}(E) > 2 / 3 |\mathbb{V}|$}
+  \STATE{{\textsc{Last-Finalized-Block}}$\leftarrow E$}
+  \IF{$M_v^{r, \textrm{Fin}} (E) \notin${\textsc{Received-Messages}}}
+    \STATE{{\textsc{Broadcast}}($M_v^{r, \textrm{Fin}} (E)$)}
+    \RETURN
+  \ENDIF
+\ENDIF
+++++
+****
 
-. stem:["if " r " is not completable"]
-. stem:["    " "return false"]
-. stem:[G larr "GRANDPA-GHOST"(J^(r,pv)(B))]
-. stem:["if " G = phi]
-. stem:["    " "return false"]
-. stem:[E_r larr "Best-Final-Candidate"(r)]
-. stem:["if " E_r != phi " and " E_(r-1) <= E_r <= G]
-. stem:["    " "return true"]
-. stem:["else"]
-. stem:["    " "return false"]
+****
+.Finalizable(r)
+[pseudocode#algo-finalizable]
+++++
+\IF{$r$ \textbf{is not} Completable}
+  \RETURN \textbf{False}
+\ENDIF
+\STATE $G \leftarrow${\textsc{GRANDPA-GHOST}}($J^{r, pv} (B)$)
+\IF{$G = \phi$}
+  \RETURN \textbf{False}
+\ENDIF
+\STATE $E_r \leftarrow$ \textsc{Best-Final-Candidate}($r$)
+\IF{$E_r \neq \phi$ \textbf{and} \textsc{Best-Final-Candidate}($r - 1$) $\leqslant E_r \leqslant G$}
+  \RETURN \textbf{True}
+\ELSE
+  \RETURN \textbf{False}
+\ENDIF
+++++
 
-where the condition for _completablitiy_ is defined in
-<<defn-grandpa-completable>>.
+where the condition for _completability_ is defined in <<defn-grandpa-completable>>.
 ****
 
 Note that we might not always succeed in finalizing our best final candidate due
-to the possibility of equivocation. The example in <<exmp-candid-unfinalized>>
-serves to demonstrate such a situation:
+to the possibility of equivocation. We might even not finalize anything in a round (although Algorithm <<algo-grandpa-round>> prevent us from moving to round stem:[r+1]  before finalizing the best final cadidate of round stem:[r-1]) The example in <<exmp-candid-unfinalized>>
+serves to demonstrate a situation where best final candidate of a round can not be finalized during the its own round:
 
 [#exmp-candid-unfinalized]
 .Unfinalized Candidate
