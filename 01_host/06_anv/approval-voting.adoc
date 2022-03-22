@@ -183,14 +183,13 @@ t_3 larr sf "append"(t_2, "'core'",c_i)\
 t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\
 t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\
 t_6 larr "meta-ad"(t_5, 64_("le"), "True")\
-i larr larr "prf"(t_6, "False")\
+i "prf"(t_6, "False")\
 o = s_k * i\
-(p,x) larr sf "dleq_prove"(t_6, i)
+p larr sf "dleq_prove"(t_6, i)
 ++++
 
-The resulting values stem:[h] and stem:[p] are the VRF input/output pair
-respectively the VRF proof (<<defn-vrf-proof>>). stem:["dleq_prove"] is
-described in <<defn-vrf-dleq-prove>>.
+The resulting value stem:[p] is the VRF proof (<<defn-vrf-proof>>).
+stem:["dleq_prove"] is described in <<defn-vrf-dleq-prove>>.
 
 The tranche, stem:[d], is determined as:
 

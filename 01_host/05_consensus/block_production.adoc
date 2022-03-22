@@ -170,6 +170,25 @@ where:
 * stem:[h(...)] creates a 256-bit Blake2 hash from its inner value.
 * stem:[A_l] is the lengths of the authority list (<<defn-authority-list>>).
 
+Then a transcript...
+
+[stem]
+++++
+t_1 larr "Transcript"("'BABE'")\
+t_2 larr "append"(t_1, "'slot number'", s)\
+t_3 larr "append"(t_2, "'current epoch'", e_i)\
+t_4 larr "append"(t_3, "'chain randomness'", r)\
+t_5 larr "append"(t_4, "'vrf-nm-pk'", p_k)\
+t_6 larr "meta-ad"(t_5, "'VRFHash'", "False")\
+t_7 larr "meta-ad"(t_6, 64_("le"), "True")\
+i larr "prf"(t_7, "False")\
+o = s_k * i\
+p larr sf "dleq_prove"(t_6, i)
+++++
+
+The resulting value stem:[p] is the VRF proof (<<defn-vrf-proof>>).
+stem:["dleq_prove"] is described in <<defn-vrf-dleq-prove>>.
+
 ****
 
 [#sect-slot-number-calculation]
