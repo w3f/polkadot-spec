@@ -144,6 +144,34 @@ is required to produce a block. For the definitions of _Epoch-Randomness_
 (<<defn-epoch-randomness>>) and _VRF_ functions (<<sect-vrf>>).
 ****
 
+[#algo-block-production-secondary-slots]
+===== Secondary Slots
+****
+In order to ensure consistent block production, BABE uses secondary slots in
+case no authority won the (primary) block production lottery. Unlike the
+lottery, secondary slot assignees are know upfront publically.
+
+The assignee is determined by calculating a specific value, stem:[x], which
+indicates the index in the authority set. The corresponding authority,
+represented by its public key, stem:[a_("id")], has the right to produce a block
+for that slot.
+
+[stem]
+++++
+p larr h("Enc"_("SC")(r,s))\
+x larr p mod A_l
+++++
+
+where:
+
+* stem:[r] is the Epoch randomness (<<defn-epoch-randomness>>).
+* stem:[s] is the slot number (<<defn-epoch-slot>>).
+* stem:["Enc"_("SC")(...)] encodes its inner value to the corresponding SCALE value.
+* stem:[h(...)] creates a 256-bit Blake2 hash from its inner value.
+* stem:[A_l] is the lengths of the authority list (<<defn-authority-list>>).
+
+****
+
 [#sect-slot-number-calculation]
 ==== Slot Number Calculation
 
