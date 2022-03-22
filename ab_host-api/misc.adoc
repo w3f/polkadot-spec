@@ -56,7 +56,8 @@ upgrading Runtimes.
 
 WARNING: Calling this function is very expensive and should only be done very
 occasionally. For getting the runtime version, it requires instantiating the
-Wasm blob (<<sect-loading-runtime-code>>) and calling a function in this blob.
+Wasm blob (<<sect-loading-runtime-code>>) and calling the `Core_version`
+function (<<defn-rt-core-version>>) in this blob.
 
 ===== Version 1 - Prototype
 ----
