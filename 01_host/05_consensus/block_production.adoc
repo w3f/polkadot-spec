@@ -334,22 +334,22 @@ during that epoch. The produced block needs to carry the _BABE header_
 (<<defn-block-signature>>) as Pre-Runtime and Seal digest items.
 
 [#defn-babe-header]
-.<<defn-babe-header, BABE Header>>
+.<<defn-babe-header, Pre-Digest>>
 ====
-The *BABE Header* of block stem:[B], referred to formally by
-stem:[H_("BABE")(B)] is a tuple and consists of the following components:
+The *Pre-Digest*, or BABE header, of, stem:["P"], is a varying datatype of the
+following format:
 
 [stem]
 ++++
-(d,pi,j,s)
+P = {(1,->,(a_("id"),s,o,p)),(2,->,(a_("id"),s)),(3,->,(a_("id"),s,o,p)):}
 ++++
 
 where:
 
-* stem:[pi, d] are the results of the block lottery for slot stem:[s].
-* stem:[j] is the index of the block producer in the authority directory of the
-current epoch.
-* stem:[s] is the slot at which the block is produced.
+* stem:[a_("id")] is the unsigned 32
+* stem:[s] is ...
+* stem:[o] is ...
+* stem:[p] is ...
 
 stem:[H_("BABE")(B)] must be included as a digest item of Pre-Runtime type in
 the header digest (<<defn-digest>>) stem:[H_d(B)].
