@@ -79,6 +79,7 @@ submit those to the Runtime as described in
 <<sect-babeapi_submit_report_equivocation_unsigned_extrinsic>>.
 ====
 
+[#sect-block-production-lottery]
 ==== Block Production Lottery
 
 The babe constant (<<defn-babe-constant>>) is initialized at genesis to the
@@ -93,6 +94,11 @@ it is awarded. These are the slots during which the block producer is allowed to
 build a block. The stem:[sk] is the block producer lottery secret key and
 stem:[n] is the index of the epoch for whose slots the block producer is running
 the lottery.
+
+In order to ensure consistent block production, BABE uses secondary slots in
+case no authority won the (primary) block production lottery. Unlike the
+lottery, secondary slot assignees are know upfront publically
+(<<block-production-secondary-slots>>).
 
 [#defn-babe-constant]
 .<<defn-babe-constant, BABE Constant>>
@@ -147,19 +153,17 @@ is required to produce a block. For the definitions of _Epoch-Randomness_
 [#block-production-secondary-slots]
 ===== Secondary Slots
 ****
-In order to ensure consistent block production, BABE uses secondary slots in
-case no authority won the (primary) block production lottery. Unlike the
-lottery, secondary slot assignees are know upfront publically.
-
-The assignee is determined by calculating a specific value, stem:[x], which
-indicates the index in the authority set. The corresponding authority,
+**Secondary slots** work along side primary slot to ensure consistent block
+production, as described in <<sect-block-production-lottery>>. The secondary
+assignee of a block is determined by calculating a specific value, stem:[i_d],
+which indicates the index in the authority set. The corresponding authority,
 represented by its public key, stem:[a_("id")], has the right to produce a block
 for that slot.
 
 [stem]
 ++++
 p larr h("Enc"_("SC")(r,s))\
-x larr p mod A_l
+i_d larr p mod A_l
 ++++
 
 where:
@@ -347,7 +351,8 @@ P = {(1,->,(a_("id"),s,o,p)),(2,->,(a_("id"),s)),(3,->,(a_("id"),s,o,p)):}
 where:
 
 * _1_ indicates a primary slot with VRF outputs, _2_ a secondary slot with plain
-outputs and _3_ a secondary slot with VRF output.
+outputs and _3_ a secondary slot with VRF output
+(<<sect-block-production-lottery>>).
 * stem:[a_("id")] is the unsigned 32-bit integer indicating the index of the
 authority in the authority set (<<<<sect-authority-set>>>>) who authored the
 block.
