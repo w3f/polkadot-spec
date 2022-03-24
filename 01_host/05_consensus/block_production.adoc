@@ -98,7 +98,8 @@ the lottery.
 In order to ensure consistent block production, BABE uses secondary slots in
 case no authority won the (primary) block production lottery. Unlike the
 lottery, secondary slot assignees are know upfront publically
-(<<block-production-secondary-slots>>).
+(<<block-production-secondary-slots>>). The Runtime dictates what types of
+rounds to execute (<<sect-rte-babeapi-epoch>>).
 
 [#defn-babe-constant]
 .<<defn-babe-constant, BABE Constant>>
