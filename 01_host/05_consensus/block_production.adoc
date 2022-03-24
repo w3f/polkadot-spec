@@ -353,8 +353,10 @@ P = {(1,->,(a_("id"),s,o,p)),(2,->,(a_("id"),s)),(3,->,(a_("id"),s,o,p)):}
 where:
 
 * _1_ indicates a primary slot with VRF outputs, _2_ a secondary slot with plain
-outputs and _3_ a secondary slot with VRF output
-(<<sect-block-production-lottery>>).
+outputs and _3_ a secondary slot with VRF outputs
+(<<sect-block-production-lottery>>). Plain outputs are no longer actively used
+and only exist for backwards compatibility reasons, respectively to sync old
+blocks.
 * stem:[a_("id")] is the unsigned 32-bit integer indicating the index of the
 authority in the authority set (<<<<sect-authority-set>>>>) who authored the
 block.
