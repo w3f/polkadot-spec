@@ -156,9 +156,8 @@ is required to produce a block. For the definitions of _Epoch-Randomness_
 **Secondary slots** work along side primary slot to ensure consistent block
 production, as described in <<sect-block-production-lottery>>. The secondary
 assignee of a block is determined by calculating a specific value, stem:[i_d],
-which indicates the index in the authority set. The corresponding authority,
-represented by its public key, stem:[a_("id")], has the right to produce a block
-for that slot.
+which indicates the index in the authority set (<<defn-authority-list>>). The
+corresponding authority in that set has the right to author a secondary block.
 
 [stem]
 ++++
@@ -174,7 +173,7 @@ where:
 * stem:[h(...)] creates a 256-bit Blake2 hash from its inner value.
 * stem:[A_l] is the lengths of the authority list (<<defn-authority-list>>).
 
-Then a transcript...
+To create the necessary VRF outputs, a transcript is construced (<<sect-vrf>>).
 
 [stem]
 ++++
@@ -190,9 +189,12 @@ o = s_k * i\
 p larr sf "dleq_prove"(t_6, i)
 ++++
 
-The resulting value stem:[p] is the VRF proof (<<defn-vrf-proof>>).
-stem:["dleq_prove"] is described in <<defn-vrf-dleq-prove>>.
-
+stem:[e_i] is the epoch index (<<defn-epoch-slot>>), stem:[s_k] is the private
+key and stem:[p_k] is the public key of the authority. stem:["dleq_prove"] is
+described in <<defn-vrf-dleq-prove>>. Values stem:[o] and stem:[p] are then used
+in the Pre-Digest item (<<defn-babe-header>>). In case of secondary slots with
+plain outputs, respectively the Pre-Digest being of value _2_, the transcript is
+skipped.
 ****
 
 [#sect-slot-number-calculation]
