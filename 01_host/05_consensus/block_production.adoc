@@ -144,7 +144,7 @@ is required to produce a block. For the definitions of _Epoch-Randomness_
 (<<defn-epoch-randomness>>) and _VRF_ functions (<<sect-vrf>>).
 ****
 
-[#algo-block-production-secondary-slots]
+[#block-production-secondary-slots]
 ===== Secondary Slots
 ****
 In order to ensure consistent block production, BABE uses secondary slots in
@@ -329,7 +329,7 @@ stem:[s_(qc)]and expressed in the number of slots.
 ==== Block Production
 Throughout each epoch, each block producer should run Algorithm as defined in
 <<algo-block-production>> to produce blocks during the slots it has been awarded
-during that epoch. The produced block needs to carry the _BABE header_
+during that epoch. The produced block needs to carry the _Pre-Digest_
 (<<defn-babe-header>>) as well as the _block signature_
 (<<defn-block-signature>>) as Pre-Runtime and Seal digest items.
 
@@ -346,13 +346,19 @@ P = {(1,->,(a_("id"),s,o,p)),(2,->,(a_("id"),s)),(3,->,(a_("id"),s,o,p)):}
 
 where:
 
-* stem:[a_("id")] is the unsigned 32
-* stem:[s] is ...
-* stem:[o] is ...
-* stem:[p] is ...
+* _1_ indicates a primary slot with VRF outputs, _2_ a secondary slot with plain
+outputs and _3_ a secondary slot with VRF output.
+* stem:[a_("id")] is the unsigned 32-bit integer indicating the index of the
+authority in the authority set (<<<<sect-authority-set>>>>) who authored the
+block.
+* stem:[s] is the slot number (<<defn-epoch-slot>>).
+* stem:[o] is VRF output (<<algo-block-production-lottery>> respectively
+<<block-production-secondary-slots>>).
+* stem:[p] is VRF proof (<<algo-block-production-lottery>> respectively
+<<block-production-secondary-slots>>).
 
-stem:[H_("BABE")(B)] must be included as a digest item of Pre-Runtime type in
-the header digest (<<defn-digest>>) stem:[H_d(B)].
+The Pre-Digest must be included as a digest item of Pre-Runtime type in the
+header digest (<<defn-digest>>) stem:[H_d(B)].
 ====
 
 [#algo-block-production]
