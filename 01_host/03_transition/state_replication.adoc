@@ -152,7 +152,7 @@ The Polkadot Host implements the Algorithm as defined in
 ****
 Algorithm: stem:["Import-And-Validate-Block"(B, "Just"(B))]
 
-. stem:["Set-Storage-State-At"(P(B))]
+. stem:["Set-State-At"(P(B))]
 . stem:["if Just"(B) != 0]
 . stem:["    " "Verify-Block-Justification"(B, "Just"(B))]
 . stem:["    " "if " B " is Finalized and " P(B) " is not Finalized"]
