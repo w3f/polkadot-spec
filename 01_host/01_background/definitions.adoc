@@ -88,14 +88,14 @@ For a given byte stem:[b] the *bitwise representation* of stem:[b] is defined as
 
 [stem]
 ++++
-b :=b^7 ... b^0
+b :=b_7 ... b_0
 ++++
 
 where
 
 [stem]
 ++++
-b = 2^0 b^0 + 2^1 b^1 + ... + 2^7 b^7
+b = 2_0 b_0 + 2_1 b_1 + ... + 2_7 b_7
 ++++
 ====
 
