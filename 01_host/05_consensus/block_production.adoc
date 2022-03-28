@@ -97,9 +97,10 @@ the lottery.
 [#defn-babe-constant]
 .<<defn-babe-constant, BABE Constant>>
 ====
-The *BABE constant* stem:[c in (0,1)] is the probability that a slot will not be
-empty and used in the winning threshold calculation
-(<<defn-winning-threshold>>).
+The *BABE constant* is the probability that a slot will not be empty and used in
+the winning threshold calculation (<<defn-winning-threshold>>). It's expressed
+as a rational, stem:[(x, y)], where stem:[x] is the numerator and stem:[y] is
+the denominator.
 ====
 
 [#defn-winning-threshold]
