@@ -168,11 +168,12 @@ to the rest of the network.
 
 This estimation depends on the two fixed parameters stem:[k]
 (<<defn-prunned-best>>) and stem:[s_(cq)] (<<defn-chain-quality>>). These are
-chosen based on the results of a formal security analysis, currently assuming a
-stem:[1 s]clock drift per day and targeting a probability lower than stem:[0.5%]
-for an adversary to break BABE in 3 years with resistance against a network
-delay up to stem:[1 / 3] of the slot time and a Babe constant
-(<<defn-babe-constant>>) of stem:[c = 0.38].
+chosen based on the results of a
+https://research.web3.foundation/en/latest/polkadot/block-production/Babe.html#-5.-security-analysis[formal
+security analysis], currently assuming a stem:[1 s] clock drift per day and
+targeting a probability lower than stem:[0.5%] for an adversary to break BABE in
+3 years with resistance against a network delay up to stem:[1 / 3] of the slot
+time and a Babe constant (<<defn-babe-constant>>) of stem:[c = 0.38].
 
 All validators are then required to run Algorithm as defined in
 <<algo-slot-time>> at the beginning of each sync period (<<defn-sync-period>>)
