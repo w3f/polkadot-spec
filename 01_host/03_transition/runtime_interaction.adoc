@@ -174,7 +174,7 @@ global state of the system from being influence by the call to such a Runtime
 entry. This includes reverting the state of function calls which return errors
 or panic.
 
-As a rule of thumb, any state changes resulting from Runtime enteries are not
+As a rule of thumb, any state changes resulting from Runtime entries are not
 persistant with the exception of state changes resulting from calling
 `Core_execute_block` (<<sect-rte-core-execute-block>>) while Polkadot Host is
 importing a block (<<sect-block-validation>>).
