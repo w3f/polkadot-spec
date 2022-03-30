@@ -141,14 +141,18 @@ the lottery.
 Algorithm: stem:["Block-Production-Lottery"(sk)]
 
 . stem:[r larr "Epoch-Randomness"(n)]
-. stem:["for " i := 1 " to " sc_n]
-. stem:["    " (pi, d) larr "VRF"(r,i,sk)]
-. stem:["    " A\[i\] larr (d, pi)]
+. stem:["for " s := 1 " to " sc_n]
+. stem:["    " (o, p) larr "VRF"(r,s,e_i,s_k, p_k)]
+. stem:["    " A\[i\] larr (o, p)]
 . stem:["return " A]
 
-For any slot stem:[i] in epoch stem:[n] where stem:[d < r], the block producer
-is required to produce a block. For the definitions of _Epoch-Randomness_
-(<<defn-epoch-randomness>>) and _VRF_ functions (<<sect-vrf>>).
+where stem:["Epoch-Randomness"] is defined in (<<defn-epoch-randomness>>),
+stem:[sc_n] is defined in <<defn-epoch-duration>> , stem:["VRF"] creates the
+BABE VRF transcript (<<defn-babe-vrf-transcript>>) and stem:[e_i] is the epoch
+index, retrieved from the Runtime (<<sect-rte-babeapi-epoch>>). stem:[s_k] and
+stem:[p_k] is the secret key respectively the public key of the authority. For
+any slot stem:[s] in epoch stem:[n] where stem:[d < r], the block producer is
+required to produce a block.
 
 Note that the secondary slots (<<block-production-secondary-slots>>) are running
 along side the primary block production lottery.
@@ -201,6 +205,32 @@ described in <<defn-vrf-dleq-prove>>. Values stem:[o] and stem:[p] are then used
 in the Pre-Digest item (<<defn-babe-header>>). In case of secondary slots with
 plain outputs, respectively the Pre-Digest being of value _2_, the transcript is
 skipped.
+****
+
+[#defn-babe-vrf-transcript]
+===== BABE Slot VRF transcript
+****
+The BABE block production lottery requires a specific transcript structure
+(<<defn-vrf-transcript>>). That structure is used by both primary slots
+(<<algo-block-production-lottery>>) and secondary slots
+(<<block-production-secondary-slots>>).
+
+[stem]
+++++
+t_1 larr "Transcript"("'BABE'")\
+t_2 larr "append"(t_1, "'slot number'", s)\
+t_3 larr "append"(t_2, "'current epoch'", e_i)\
+t_4 larr "append"(t_3, "'chain randomness'", r)\
+t_5 larr "append"(t_4, "'vrf-nm-pk'", p_k)\
+t_6 larr "meta-ad"(t_5, "'VRFHash'", "False")\
+t_7 larr "meta-ad"(t_6, 64_("le"), "True")\
+h larr "prf"(t_7, "False")\
+o = s_k * h\
+p larr "dleq_prove"(t_6, h)
+++++
+
+The operators are defined in <<defn-strobe-operations>>, stem:["dleq_prove"] in
+<<defn-vrf-dleq-prove>>.
 ****
 
 [#sect-slot-number-calculation]
