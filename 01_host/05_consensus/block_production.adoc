@@ -129,12 +129,12 @@ for epoch stem:[cc E_n] and stem:[c in (0, 1)] is the BABE constant
 ====
 
 [#algo-block-production-lottery]
-===== Block Production Lottery
+===== Primary Block Production Lottery
 ****
-A block producer aiming to produce a block during stem:[cc E_n] should run
-the Algorithm as defined in <<>> to identify the slots it is awarded. These are
-the slots during which the block producer is allowed to build a block. The
-session secret key, stem:[sk], is the block producer lottery secret key and
+A block producer aiming to produce a block during stem:[cc E_n] should run the
+stem:["Block-Production-Lottery"] algorithm to identify the slots it is awarded.
+These are the slots during which the block producer is allowed to build a block.
+The session secret key, stem:[sk], is the block producer lottery secret key and
 stem:[n] is the index of the epoch for whose slots the block producer is running
 the lottery.
 
@@ -149,6 +149,9 @@ Algorithm: stem:["Block-Production-Lottery"(sk)]
 For any slot stem:[i] in epoch stem:[n] where stem:[d < r], the block producer
 is required to produce a block. For the definitions of _Epoch-Randomness_
 (<<defn-epoch-randomness>>) and _VRF_ functions (<<sect-vrf>>).
+
+Note that the secondary slots (<<block-production-secondary-slots>>) are running
+along side the primary block production lottery.
 ****
 
 [#block-production-secondary-slots]
@@ -185,8 +188,8 @@ t_4 larr "append"(t_3, "'chain randomness'", r)\
 t_5 larr "append"(t_4, "'vrf-nm-pk'", p_k)\
 t_6 larr "meta-ad"(t_5, "'VRFHash'", "False")\
 t_7 larr "meta-ad"(t_6, 64_("le"), "True")\
-i larr "prf"(t_7, "False")\
-o = s_k * i\
+h larr "prf"(t_7, "False")\
+o = s_k * h\
 p larr sf "dleq_prove"(t_6, i)
 ++++
 
