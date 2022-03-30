@@ -177,7 +177,9 @@ where:
 * stem:[h(...)] creates a 256-bit Blake2 hash from its inner value.
 * stem:[A_l] is the lengths of the authority list (<<defn-authority-list>>).
 
-To create the necessary VRF outputs, a transcript is construced (<<sect-vrf>>).
+If stem:[i_d] points to the authority, that authority must claim the secondary
+slot by calculataing the necessary outputs for block production. To create the
+VRF outputs, a transcript is construced (<<sect-vrf>>).
 
 [stem]
 ++++
