@@ -213,7 +213,8 @@ p larr "dleq_prove"(t_6, h)
 ++++
 
 The operators are defined in <<defn-strobe-operations>>, stem:["dleq_prove"] in
-<<defn-vrf-dleq-prove>>.
+<<defn-vrf-dleq-prove>>. The computed outputs, stem:[o] and stem:[p], are
+included in the block Pre-Digest (<<defn-babe-header>>).
 ****
 
 [#sect-slot-number-calculation]
