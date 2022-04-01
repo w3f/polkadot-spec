@@ -21,7 +21,7 @@ polkadot-spec-html/: $(SOURCES) style.css favicon.png
 	cp favicon.png $@
 
 polkadot-spec.pdf: $(SOURCES)
-	asciidoctor-pdf -o $@ -r asciidoctor-mathematical $<
+	asciidoctor-pdf -r asciidoctor-mathematical -o $@ $<
 
 
 clean:
