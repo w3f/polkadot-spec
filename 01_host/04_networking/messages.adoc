@@ -581,7 +581,54 @@ sync should start.
 ====
 
 [#defn-wrap-sync-response]
-.<<defn-wrap-sync-response, Warp Sync Response>>
+.<<defn-wrap-sync-response, State Response>>
 ====
-...
+The state response contains a list of key/value entries with an associated proof.
+
+[cols="2,1,4"]
+|===
+|Type |Id |Description
+
+|`repeated KeyValueStateEntry`
+|1
+|State entries
+
+|`bytes`
+|2
+|State proof
+|===
+
+where _KeyValuesStateEntry_ is of the following format:
+
+[cols="2,1,4"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|1
+|Root of the entry
+
+|`repeated StateEntry`
+|2
+|Collection of key/values
+
+|`bool`
+|3
+|Equal 'true' if there are no more keys to return.
+|===
+
+and _StateEntry_:
+
+[cols="2,1,4"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|1
+|The key of the entry
+
+|`bytes`
+|2
+|The value of the entry
+|===
 ====
