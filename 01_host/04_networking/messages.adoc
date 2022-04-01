@@ -6,8 +6,8 @@ participate in the validation process or act as a full node.
 
 NOTE: The Polkadot network originally only used SCALE encoding for all message
 formats. Meanwhile, Protobuf has been adopted for certain messages. The encoding
-of each message is explicitly mentioned in their corresponding definition.
-Encoding and message formats are subject to change.
+of each listed message is always SCALE encoded unless Protobuf is explicitly
+mentioned. Encoding and message formats are subject to change.
 
 [#sect-msg-block-announce]
 ==== Announcing blocks
@@ -27,7 +27,7 @@ The `BlockAnnounceHandshake` initializes a substream to a remote peer. Once
 established, all `BlockAnounce` messages (<<defn-block-announce>>) created by
 the node are sent to the `/dot/block-announces/1` substream.
 
-The `BlockAnnounceHandshake` is a SCALE-encoded structure of the following
+The `BlockAnnounceHandshake` is a structure of the following
 format:
 
 [stem]
@@ -52,7 +52,7 @@ h_G = "Genesis block hash according to the node"
 The `BlockAnnounce` message is sent to the specified substream and indicates to
 remote peers that the node has either created or received a new block.
 
-The message is a SCALE-encoded structure of the following format:
+The message is a structure of the following format:
 
 [stem]
 ++++
@@ -565,4 +565,25 @@ set must be placed at index _3_ in stem:[V_n]. This sorting allows clients to
 map public keys to their corresponding boolean indicators.
 * stem:[R_("sig")] is the MMR root of the signatures in the original signed
 BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>).
+====
+
+[#sect-msg-warp-sync]
+==== Warp  Sync
+
+Messages used in the warp sync protocol (<<sect-warp-sync>>).
+
+[#defn-wrap-sync-request]
+.<<defn-wrap-sync-request, Warp Sync Request>>
+====
+A **warp sync request** is sent to a node to request authority set changes. The
+message is a single hash which indicates the block from which the sync should
+start:
+
+[stem]
+++++
+B_h
+++++
+
+where stem:[B_h] is a 32-byte Blake2 hash.
+
 ====
