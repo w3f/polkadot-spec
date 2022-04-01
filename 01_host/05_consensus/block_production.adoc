@@ -156,7 +156,8 @@ any slot stem:[s] in epoch stem:[n] where stem:[d < r], the block producer is
 required to produce a block.
 
 Note that the secondary slots (<<block-production-secondary-slots>>) are running
-along side the primary block production lottery.
+along side the primary block production lottery and mainly serve as a fallback
+to in case no authority was selected in the primary lottery.
 ****
 
 [#block-production-secondary-slots]
