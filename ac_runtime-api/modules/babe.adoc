@@ -45,7 +45,7 @@ type at genesis will be used. Dynamic slot duration may be supported in the futu
 |Whether this chain should run with secondary slots and wether they are assigned
 in a round-robin manner or via a second VRF (<<sect-block-production-lottery>>).
 |A varying datatype of the following format:
-stem:[{(0,->,"primary slots"),(1,->,"primary & secondary with plain outputs"),(2,->,"primary & secondary with VRF outputs"):}]
+stem:[{(0,->,phi),(1,->,"secondary with plain outputs"),(2,->,"secondary with VRF outputs"):}]
 |===
 
 ==== `BabeApi_current_epoch_start`
