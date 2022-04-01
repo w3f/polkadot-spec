@@ -576,14 +576,12 @@ Messages used in the warp sync protocol (<<sect-warp-sync>>).
 .<<defn-wrap-sync-request, Warp Sync Request>>
 ====
 A **warp sync request** is sent to a node to request authority set changes. The
-message is a single hash which indicates the block from which the sync should
-start:
+message is a single 32-byte Blake2 hash which indicates the block from which the
+sync should start.
+====
 
-[stem]
-++++
-B_h
-++++
-
-where stem:[B_h] is a 32-byte Blake2 hash.
-
+[#defn-wrap-sync-response]
+.<<defn-wrap-sync-response, Warp Sync Response>>
+====
+...
 ====
