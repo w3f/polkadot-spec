@@ -3,3 +3,7 @@
 
 Warp sync allows the Polkadot Host to catch up with the latest state by only
 downloading the finalized authority set changes.
+
+==== Importing State
+
+

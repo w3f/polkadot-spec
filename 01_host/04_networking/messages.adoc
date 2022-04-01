@@ -598,7 +598,7 @@ The state response contains a list of key/value entries with an associated proof
 |State proof
 |===
 
-where _KeyValuesStateEntry_ is of the following format:
+where _KeyValueStateEntry_ is of the following format:
 
 [cols="2,1,4"]
 |===
