@@ -1,11 +1,13 @@
-= Polkadot Specification
+= Polkadot Protocol Specification
 Web 3.0 Technologies Foundation; Fabio Lama; Florian Franzen; Syed Hosseini
 v0.2.0
-:description: The Official Polkadot Protocol Specification
+:description: The Official Polkadot and Kusama Protocol Specification
+:docinfo: shared-header
 :doctype: book
 :example-caption: Definition
 :favicon: ./favicon.png
 :icons: font
+:keywords: babe, blockchain, consensus, finality, grandpa, kusama, parachain, polkadot, relay-chain, runtime, spec, web3, w3f
 :mathematical-format: svg
 :multipage-level: 2
 :sectlinks:
