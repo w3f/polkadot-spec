@@ -41,11 +41,11 @@ type at genesis will be used. Dynamic slot duration may be supported in the futu
 |The randomness for the genesis epoch
 |32-byte array
 
-|_AllowedSlots_
-|Whether this chain should run with secondary slots and wether they are assigned
-in a round-robin manner or via a second VRF (<<sect-block-production-lottery>>).
+|_SecondarySlot_
+|Whether this chain should run with round-robin-style secondary slot and if this secondary slot
+requires the inclusion of an auxilary VRF output (<<sect-block-production-lottery>>).
 |A varying datatype of the following format:
-stem:[{(0,->,phi),(1,->,"secondary with plain outputs"),(2,->,"secondary with VRF outputs"):}]
+stem:[{(0,->,phi),(1,->,"plain secondary slot"),(2,->,"secondary slot with VRF output"):}]
 |===
 
 ==== `BabeApi_current_epoch_start`
