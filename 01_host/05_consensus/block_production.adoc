@@ -362,7 +362,7 @@ during that epoch. The produced block needs to carry the _Pre-Digest_
 [#defn-babe-header]
 .<<defn-babe-header, Pre-Digest>>
 ====
-The *Pre-Digest*, or BABE header, of, stem:["P"], is a varying datatype of the
+The *Pre-Digest*, or BABE header, of, stem:[P], is a varying datatype of the
 following format:
 
 [stem]
