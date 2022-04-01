@@ -99,7 +99,8 @@ In order to ensure consistent block production, BABE uses secondary slots in
 case no authority won the (primary) block production lottery. Unlike the
 lottery, secondary slot assignees are know upfront publically
 (<<block-production-secondary-slots>>). The Runtime dictates what types of
-rounds to execute (<<sect-rte-babeapi-epoch>>).
+secondary slots to execute (<<sect-rte-babeapi-epoch>>), explained further in
+<<block-production-secondary-slots>>.
 
 [#defn-babe-constant]
 .<<defn-babe-constant, BABE Constant>>
@@ -187,7 +188,8 @@ If stem:[i_d] points to the authority, that authority must claim the secondary
 slot by creating a BABE VRF transcript (<<defn-babe-vrf-transcript>>). The
 resulting values stem:[o] and stem:[p] are then used in the Pre-Digest item
 (<<defn-babe-header>>). In case of secondary slots with plain outputs,
-respectively the Pre-Digest being of value _2_, the transcript is skipped.
+respectively the Pre-Digest being of value _2_, the transcript respectively the
+VRF is skipped.
 ****
 
 [#defn-babe-vrf-transcript]
