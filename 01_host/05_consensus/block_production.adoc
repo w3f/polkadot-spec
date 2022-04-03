@@ -381,7 +381,7 @@ outputs and _3_ a secondary slot with VRF outputs
 and only exist for backwards compatibility reasons, respectively to sync old
 blocks.
 * stem:[a_("id")] is the unsigned 32-bit integer indicating the index of the
-authority in the authority set (<<<<sect-authority-set>>>>) who authored the
+authority in the authority set (<<sect-authority-set>>) who authored the
 block.
 * stem:[s] is the slot number (<<defn-epoch-slot>>).
 * stem:[o] is VRF output (<<algo-block-production-lottery>> respectively
