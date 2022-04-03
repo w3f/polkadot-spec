@@ -44,9 +44,26 @@ type at genesis will be used. Dynamic slot duration may be supported in the futu
 |_SecondarySlot_
 |Whether this chain should run with round-robin-style secondary slot and if this secondary slot
 requires the inclusion of an auxilary VRF output (<<sect-block-production-lottery>>).
-|A varying datatype of the following format:
-stem:[{(0,->,phi),(1,->,"plain secondary slot"),(2,->,"secondary slot with VRF output"):}]
+|A one-byte enum as defined in <<defn-babe-secondary-enum>>. 
 |===
+
+.Secondary Slot Enum
+[#defn-babe-secondary-enum]
+====
+
+The *BABE Secondary Slot enum* describes what secondary slot, if any, is to be used. 
+It is encoded as one-byte varying datatype:
+
+[asciimath]
+++++
+s_"2nd" = {
+	(0,->,"no secondary slot"),
+	(1,->,"plain secondary slot"),
+	(2,->,"secondary slot with VRF output")
+:}
+++++
+
+====
 
 ==== `BabeApi_current_epoch_start`
 
