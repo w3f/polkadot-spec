@@ -370,7 +370,7 @@ following format:
 
 [stem]
 ++++
-P = {(1,->,(a_("id"),s,o,p)),(2,->,(a_("id"),s)),(3,->,(a_("id"),s,o,p)):}
+P = {(1,->,(a_"id",s,o,p)),(2,->,(a_"id",s)),(3,->,(a_"id",s,o,p)):}
 ++++
 
 where:
@@ -380,7 +380,7 @@ outputs and _3_ a secondary slot with VRF outputs
 (<<sect-block-production-lottery>>). Plain outputs are no longer actively used
 and only exist for backwards compatibility reasons, respectively to sync old
 blocks.
-* stem:[a_("id")] is the unsigned 32-bit integer indicating the index of the
+* stem:[a_"id"] is the unsigned 32-bit integer indicating the index of the
 authority in the authority set (<<sect-authority-set>>) who authored the
 block.
 * stem:[s] is the slot number (<<defn-epoch-slot>>).
@@ -405,7 +405,7 @@ Algorithm: stem:["Invoke-Block-Authoring"(sk, pk, n, "BT")]
 . stem:["    " "if " d < r]
 . stem:["    " "    " C_("Best") larr "Longest-Chain"("BT")]
 . stem:["    " "    " B_s larr "Build-Block"(C_("Best"))]
-. stem:["    " "    " "Add-Digest-Item"(B_s, "Pre-Runtime", E_("id")("BABE"),H_("BABE")(B_s))]
+. stem:["    " "    " "Add-Digest-Item"(B_s, "Pre-Runtime", E_"id"("BABE"),H_("BABE")(B_s))]
 . stem:["    " "    " "Add-Digest-Item"(B_s, "Seal", S_B)]
 . stem:["    " "    " "Broadcast-Block"(B_s)]
 
@@ -434,7 +434,7 @@ stem:[S_B] should be included in stem:[H_d(B)] as the Seal digest item
 (E_(id)("BABE"),S_B)
 ++++
 
-in which, stem:[E_("id")("BABE")] is the BABE consensus engine unique identifier
+in which, stem:[E_"id"("BABE")] is the BABE consensus engine unique identifier
 (<<defn-consensus-message-digest>>). The Seal digest item is referred to as the
 *BABE Seal*.
 ====
