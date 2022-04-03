@@ -238,13 +238,13 @@ the bits of the partial key length, stem:[p_l] varies.
 [stem]
 ++++
 v = {
-    (01,"Leaf",p_l = 2^6),
-    (10,"Branch Node with" k_N !in cc "K", p_l = 2^6),
-    (11, "Branch Node with" k_N in cc "K", p_l = 2^6),
-    (001,"Leaf containing hashes", p_l = 2^5),
-    (0001,"Branch containing hashes", p_l = 2^4),
-    (0000 0000,"Empty",),
-    (0001 0000,"Reserved for compact encoding",)
+    (01, "Leaf", p_l = 2^6),
+    (10, "Branch Node with" k_N !in cc K, p_l = 2^6),
+    (11, "Branch Node with" k_N in cc K, p_l = 2^6),
+    (001, "Leaf containing hashes", p_l = 2^5),
+    (0001, "Branch containing hashes", p_l = 2^4),
+    (0000 0000, "Empty", p_l = 0),
+    (0001 0000, "Reserved for compact encoding",)
     :}
 ++++
 
