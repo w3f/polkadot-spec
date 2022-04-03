@@ -138,7 +138,7 @@ t_2 larr "append"(t_1, "''", "'A&V CORE'")\
 t_3 larr "append"(t_2, "'vrf-in'", i)\
 t_4 larr "append"(t_3, "'vrf-out'", o)\
 t_5 larr "meta-ad"(t_4, "''", "False")\
-t_6 larr "meta-ad"(t_5, 4_("le"), "True")\
+t_6 larr "meta-ad"(t_5, 4_"le", "True")\
 c larr "prf"(t_6, "False")\
 r_c = c mod a_c
 ++++
@@ -183,7 +183,7 @@ t_3 larr sf "append"(t_2, "'core'",c_i)\
 t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\
 t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\
 t_6 larr "meta-ad"(t_5, 64_("le"), "True")\
-i "prf"(t_6, "False")\
+i larr "prf"(t_6, "False")\
 o = s_k * i\
 p larr sf "dleq_prove"(t_6, i)
 ++++

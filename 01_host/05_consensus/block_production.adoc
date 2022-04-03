@@ -173,7 +173,7 @@ This calculation is done for every slot in the epoch, stem:[s in sc_n]
 
 [stem]
 ++++
-p larr h("Enc"_("SC")(r,s))\
+p larr h("Enc"_"SC"(r,s))\
 i_d larr p mod A_l
 ++++
 
@@ -181,7 +181,7 @@ where:
 
 * stem:[r] is the Epoch randomness (<<defn-epoch-randomness>>).
 * stem:[s] is the slot number (<<defn-epoch-slot>>).
-* stem:["Enc"_("SC")(...)] encodes its inner value to the corresponding SCALE value.
+* stem:["Enc"_"SC"(...)] encodes its inner value to the corresponding SCALE value.
 * stem:[h(...)] creates a 256-bit Blake2 hash from its inner value.
 * stem:[A_l] is the lengths of the authority list (<<defn-authority-list>>).
 
@@ -209,10 +209,10 @@ t_3 larr "append"(t_2, "'current epoch'", e_i)\
 t_4 larr "append"(t_3, "'chain randomness'", r)\
 t_5 larr "append"(t_4, "'vrf-nm-pk'", p_k)\
 t_6 larr "meta-ad"(t_5, "'VRFHash'", "False")\
-t_7 larr "meta-ad"(t_6, 64_("le"), "True")\
+t_7 larr "meta-ad"(t_6, 64_"le", "True")\
 h larr "prf"(t_7, "False")\
 o = s_k * h\
-p larr "dleq_prove"(t_6, h)
+p larr "dleq_prove"(t_7, h)
 ++++
 
 The operators are defined in <<defn-strobe-operations>>, stem:["dleq_prove"] in
@@ -232,8 +232,8 @@ estimating the local clock offset in relation to the network
 NOTE: *The calculation described in this section is still to be implemented and
 deployed*: For now, each block producer is required to synchronize its local
 clock using NTP instead. The current slot stem:[s] is then calculated by stem:[s
-= t_("unix")/cc T] where stem:[cc T] is defined in <<defn-epoch-slot>> and
-stem:[t_("unix")] is defined in <<defn-unix-time>>. That also entails that slot
+= t_"unix"/cc T] where stem:[cc T] is defined in <<defn-epoch-slot>> and
+stem:[t_"unix"] is defined in <<defn-unix-time>>. That also entails that slot
 numbers are currently not reset at the beginning of each epoch.
 ****
 
@@ -278,7 +278,7 @@ estimating the local clock offset in relation to the network
 .<<defn-relative-syncronization, Relative Time Synchronization>>
 ====
 The *relative time synchronization* is a tuple of a slot number and a local
-clock timestamp stem:[(s_("sync"),t_("sync"))] describing the last point at
+clock timestamp stem:[(s_"sync",t_"sync")] describing the last point at
 which the slot numbers have been synchronized with the local clock.
 ====
 
@@ -287,7 +287,7 @@ which the slot numbers have been synchronized with the local clock.
 ****
 Algorithm: stem:["Slot-Time"(s)]
 
-. stem:["return " t_("sync") + "Slot-Offset"(s_("sync"),s) xx cc T]
+. stem:["return " t_"sync" + "Slot-Offset"(s_"sync",s) xx cc T]
 
 where stem:[s] is the slot number.
 ****
@@ -295,18 +295,18 @@ where stem:[s] is the slot number.
 [#algo-slot-time]
 ===== Slot Time Median Algorithm
 ****
-Algorithm: stem:["Median-Algorithm"(cc P, s_("sync"))]
+Algorithm: stem:["Median-Algorithm"(cc P, s_"sync")]
 
 . stem:[T_s larr {}]
 . stem:["for " B_i in cc P]
-. stem:["    " t_("est")^B larr T_(B_i) + "Slot-Offset"(S_(B_i), s_("sync")) xx cc T]
-. stem:["    " T_s larr T_S	uu t_("est")^(B_i)]
+. stem:["    " t_"est"^B larr T_(B_i) + "Slot-Offset"(S_(B_i), s_"sync") xx cc T]
+. stem:["    " T_s larr T_S	uu t_"est"^(B_i)]
 . stem:["return Median"(T_s)]
 
 where
 
 * stem:[cc P] is the sync period used for the estimate.
-* stem:[s_("sync")] is the slot time to estimate.
+* stem:[s_"sync"] is the slot time to estimate.
 * stem:["Slot-Offset"] is defined in <<algo-slot-offset>>.
 * stem:[cc T] is the slot duration defined in <<defn-epoch-slot>>.
 ****
@@ -403,9 +403,9 @@ Algorithm: stem:["Invoke-Block-Authoring"(sk, pk, n, "BT")]
 . stem:["    " "Wait"("until Slot-Time"(s))]
 . stem:["    " (d, pi) larr A\[s\]]
 . stem:["    " "if " d < r]
-. stem:["    " "    " C_("Best") larr "Longest-Chain"("BT")]
-. stem:["    " "    " B_s larr "Build-Block"(C_("Best"))]
-. stem:["    " "    " "Add-Digest-Item"(B_s, "Pre-Runtime", E_"id"("BABE"),H_("BABE")(B_s))]
+. stem:["    " "    " C_"Best" larr "Longest-Chain"("BT")]
+. stem:["    " "    " B_s larr "Build-Block"(C_"Best")]
+. stem:["    " "    " "Add-Digest-Item"(B_s, "Pre-Runtime", E_"id"("BABE"),H_"BABE"(B_s))]
 . stem:["    " "    " "Add-Digest-Item"(B_s, "Seal", S_B)]
 . stem:["    " "    " "Broadcast-Block"(B_s)]
 
@@ -431,7 +431,7 @@ stem:[S_B] should be included in stem:[H_d(B)] as the Seal digest item
 
 [stem]
 ++++
-(E_(id)("BABE"),S_B)
+(E_"id"("BABE"),S_B)
 ++++
 
 in which, stem:[E_"id"("BABE")] is the BABE consensus engine unique identifier
@@ -507,14 +507,14 @@ Algorithm: stem:[tt "Verify-Slot-Winner"(B)]
 
 . stem:[cc E_c larr "Current-Epoch"]
 . stem:[p larr "Epoch-Randomness"(c)]
-. stem:["Verify-VRF"(p, H_("BABE").(pi, d),H_("BABE")(B).s,c)]
+. stem:["Verify-VRF"(p, H_"BABE".(pi, d),H_"BABE"(B).s,c)]
 . stem:["if"  d_B >= t]
 . stem:["    " "error 'Block producer is not a winner of the slot'"]
 
 where:
 
 . stem:["Epoch-Randomness"] is defined in <<defn-epoch-randomness>>.
-. stem:[H_("BABE")(B)] is the BABE header defined in <<defn-babe-header>>.
+. stem:[H_"BABE"(B)] is the BABE header defined in <<defn-babe-header>>.
 . stem:[(d_B,pi_B)] is the block lottery result for block stem:[B].
 . stem:["Verify-VRF"] is described in <<sect-vrf>>.
 . stem:[t] is the winning threshold as defined in <<defn-winning-threshold>>.
@@ -530,9 +530,9 @@ defined in <<algo-build-block>>
 [#algo-build-block]
 ===== Build Block
 ****
-Algorithm: stem:[tt "Build-Block"(C_("Best"), s)]
+Algorithm: stem:[tt "Build-Block"(C_"Best", s)]
 
-. stem:[P_B larr "Head"(C_("Best"))]
+. stem:[P_B larr "Head"(C_"Best")]
 . stem:["Head"(B) larr (H_p larr H_h(P_B), H_i larr H_i(P_B)+1,H_r larr phi, H_e larr phi, H_d larr phi)]
 . stem:["Call-Runtime-Entry"(tt "Core_initialize_block", "Head"(B))]
 . stem:["I-D" larr "Call-Runtime-Entry"(tt "BlockBuilder_inherent_extrinsic", "Inherent-Data")]
@@ -550,7 +550,7 @@ Algorithm: stem:[tt "Build-Block"(C_("Best"), s)]
 
 where:
 
-* stem:[C_("Best")] is the chain head at which the block should be constructed
+* stem:[C_"Best"] is the chain head at which the block should be constructed
 ("parent").
 * stem:[s] is the slot number.
 * stem:["Head"(B)] is defined in <<defn-block-header>>.
