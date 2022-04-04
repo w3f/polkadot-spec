@@ -224,6 +224,87 @@ requested fields (bitmask value). The structure has the following format:
 |===
 ====
 
+[#sect-msg-state-request]
+==== Requesting States
+
+The Polkadot Host can request the state in form of a key/value list at a
+specified block.
+
+When receiving state entries from the state response messages
+(<<defn-msg-state-response>>), the node can verify the entries with the entry
+proof (id _1_ in _KeyValueStorage_) against the merkle root in the block header
+(of the block specified in <<defn-msg-state-request>>). Once the state response
+message claims that all entries have been sent (id _3_ in _KeyValueStorage_),
+the node can use all collected entry proofs and validate it against the merkel
+root to confirm that claim.
+
+[#defn-msg-state-request]
+.<<defn-msg-state-request, State Request>>
+====
+A **state request** is sent to a peer to request the state at a specified block.
+The message is a single 32-byte Blake2 hash which indicates the block from which
+the sync should start.
+
+The remote peer sends back a state response (<<defn-msg-state-response>>).
+====
+
+[#defn-msg-state-response]
+.<<defn-msg-state-response, State Response>>
+====
+The **state response** is sent to the peer that initialized the state request
+(<<defn-msg-state-request>>) and contains a list of key/value entries with an
+associated proof. This response is sent continuously until all key/value pairs
+have been submitted.
+
+[cols="2,1,4"]
+|===
+|Type |Id |Description
+
+|`repeated KeyValueStateEntry`
+|1
+|State entries
+
+|`bytes`
+|2
+|State proof
+|===
+
+where _KeyValueStateEntry_ is of the following format:
+
+[cols="2,1,4"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|1
+|Root of the entry, empty if top level
+
+|`repeated StateEntry`
+|2
+|Collection of key/values
+
+|`bool`
+|3
+|Equal 'true' if there are no more keys to return.
+|===
+
+and _StateEntry_:
+
+[cols="2,1,4"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|1
+|The key of the entry
+
+|`bytes`
+|2
+|The value of the entry
+|===
+====
+
+
 [#sect-msg-transactions]
 ==== Transactions
 
@@ -571,64 +652,3 @@ BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>).
 ==== Warp  Sync
 
 Messages used in the warp sync protocol (<<sect-warp-sync>>).
-
-[#defn-wrap-sync-request]
-.<<defn-wrap-sync-request, Warp Sync Request>>
-====
-A **warp sync request** is sent to a node to request authority set changes. The
-message is a single 32-byte Blake2 hash which indicates the block from which the
-sync should start.
-====
-
-[#defn-wrap-sync-response]
-.<<defn-wrap-sync-response, State Response>>
-====
-The state response contains a list of key/value entries with an associated proof.
-
-[cols="2,1,4"]
-|===
-|Type |Id |Description
-
-|`repeated KeyValueStateEntry`
-|1
-|State entries
-
-|`bytes`
-|2
-|State proof
-|===
-
-where _KeyValueStateEntry_ is of the following format:
-
-[cols="2,1,4"]
-|===
-|Type |Id |Description
-
-|`bytes`
-|1
-|Root of the entry, empty if top level
-
-|`repeated StateEntry`
-|2
-|Collection of key/values
-
-|`bool`
-|3
-|Equal 'true' if there are no more keys to return.
-|===
-
-and _StateEntry_:
-
-[cols="2,1,4"]
-|===
-|Type |Id |Description
-
-|`bytes`
-|1
-|The key of the entry
-
-|`bytes`
-|2
-|The value of the entry
-|===
-====
