@@ -309,6 +309,10 @@ and _StateEntry_:
 [#sect-warp-sync]
 ==== Warp Sync
 
+The warp sync protocols allows nodes to retrieve blocks from remote peers where
+authority set changes occured. This can be used to speed up synchronization to
+the latest state.
+
 [#defn-warp-sync-proof]
 .<<defn-warp-sync-proof,Warp Sync Proof>>
 ====
