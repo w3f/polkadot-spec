@@ -224,6 +224,11 @@ The messages are specified in <<sect-msg-block-announce>>.
 to request information about blocks. This is a _Request-Response substream_.
 +
 The messages are specified in <<sect-msg-block-request>>.
++
+* `/dot/sync/warp` - a request and response protocol that allows the Polkadot Host
+to perform a warp sync request. This is a _Request-Response substream_.
++
+The messages are specified in <<sect-warp-sync>>.
 * `/dot/transactions/1` - a substream/notification protocol which sends
 transactions to connected peers. This is a _Notification substream_.
 +
