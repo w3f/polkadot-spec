@@ -606,7 +606,7 @@ where _KeyValueStateEntry_ is of the following format:
 
 |`bytes`
 |1
-|Root of the entry
+|Root of the entry, empty if top level
 
 |`repeated StateEntry`
 |2
