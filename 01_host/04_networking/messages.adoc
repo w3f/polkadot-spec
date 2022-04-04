@@ -246,7 +246,8 @@ The message is a single 32-byte Blake2 hash which indicates the block from which
 the sync should start.
 
 Depending on what substream is used, he remote peer either sends back a state
-response (<<defn-msg-state-response>>) or a warp sync response (<<>>).
+response (<<defn-msg-state-response>>) on the `/dot/sync/2` substream or a warp
+sync proof (<<defn-warp-sync-proof>>) on the `/dot/sync/warp`.
 ====
 
 [#defn-msg-state-response]
@@ -312,8 +313,8 @@ and _StateEntry_:
 .<<defn-warp-sync-proof,Warp Sync Proof>>
 ====
 The **warp sync proof** message, stem:[P], is sent to the peer that initialized
-the state request (<<defn-msg-state-request>>) on the `x` substream and contains
-accumulated proof of multiple authority set changes
+the state request (<<defn-msg-state-request>>) on the `/dot/sync/warp` substream
+and contains accumulated proof of multiple authority set changes
 (<<sect-consensus-message-digest>>). It's a datastructure of the following
 format:
 
@@ -333,7 +334,7 @@ where stem:[B_h] is the last block header containing a digest item
 (<<defn-digest>>) signaling an authority set change from which the next
 authority set change can be fetched from. stem:[J^(r,"stage")(B)] is the GRANDPA
 justification (<<defn-grandpa-justification>>) and stem:[c] is a boolean that
-indicates that the warp sync has been completed.
+indicates whether the warp sync has been completed.
 ====
 
 [#sect-msg-transactions]
