@@ -1,4 +1,3 @@
-[#sect-warp-sync]
 === Synchronization
 
 NOTE: Synchronization is mostly application specific and the protocol does not
@@ -40,7 +39,6 @@ auhtority set changes (<<sect-authority-set>>) in order to arrive at a specific
 verified, the state can be downloaded and imported. Once this process has been
 completed, the node can proceed with a full sync.
 
-[#sect-warp-sync]
 ==== Warp Sync
 
 Warp sync only downloads the block headers where authority set changes occured
