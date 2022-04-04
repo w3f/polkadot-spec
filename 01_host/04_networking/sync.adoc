@@ -13,6 +13,12 @@ are available, respectivel Full, Fast and Warp sync suited for different needs.
 
 ==== Full Sync
 
+The full sync protocols is the "default" protocol that's suited for many types
+of implementations, such as archive nodes (nodes that store everything),
+validators that participate in Polkadots consensus and light clients that only
+verify claims about the the state of the network. Full sync works by listening
+to announced blocks (<<>>) and requesting the blocks from the announcing peers
+(<<>>), or just the block headers in case of light clients (<<>>).
 
 ==== Fast Sync
 
