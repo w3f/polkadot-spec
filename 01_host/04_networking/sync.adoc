@@ -7,21 +7,31 @@ utility, this includes validators that interact with Polkadot's consensus and
 need access to the full state, either from the past or just the most up-to-date
 state, or light clients that are only interest in the minimum information
 required in order to verify some claims about the state of the network, such as
-the balance of a specific account. In order allow implemenations to quickly
-retrieve the required information, different types of synchronization protocols
-are available, respectivel Full, Fast and Warp sync suited for different needs.
+the balance of a specific account. To allow implemenations to quickly retrieve
+the required information, different types of synchronization protocols are
+available, respectivel Full, Fast and Warp sync suited for different needs.
 
 ==== Full Sync
 
 The full sync protocols is the "default" protocol that's suited for many types
 of implementations, such as archive nodes (nodes that store everything),
 validators that participate in Polkadots consensus and light clients that only
-verify claims about the the state of the network. Full sync works by listening
+verify claims about the state of the network. Full sync works by listening
 to announced blocks (<<>>) and requesting the blocks from the announcing peers
 (<<>>), or just the block headers in case of light clients (<<>>).
 
+The full sync protocol usually downloads the entire chain, but no such
+requirements must be met. If an implemenation only wants the latest, finalized
+state, it can combine it with protocols such as fast sync (<<>>) and/or warp
+sync (<<>>) to make synchronization as fast as possible.
+
 ==== Fast Sync
 
+Fast sync works by downloading the block header history and validating the
+auhtority set changes (<<>>) in order to arrive at a specific (usually the most
+recent) header. After the desired header has been reached and verified, the
+state snapshot (<<>>) can be downloaded and imported (<<>>). Once this process
+has been completed, the node can proceed with a full sync.
 
 ==== Warp Sync
 
