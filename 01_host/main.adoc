@@ -32,7 +32,7 @@ include::04_networking/fundamentals.adoc[]
 
 include::04_networking/messages.adoc[]
 
-include::04_networking/warp_sync.adoc[]
+include::04_networking/sync.adoc[]
 
 
 [#chap-consensus]
