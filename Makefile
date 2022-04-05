@@ -1,28 +1,28 @@
 SOURCES := index.adoc $(wildcard ??_*/*.adoc) $(wildcard ??_*/*/*.adoc)
 
-.PHONY: default html pdf clean
+.PHONY: default html pdf tex clean
 
 
-default: multi-html
+default: html
 
 
 html: polkadot-spec.html
 
-multi-html: polkadot-spec-html/
-
 pdf: polkadot-spec.pdf
 
+tex: polkadot-spec.tex
 
-polkadot-spec.html: $(SOURCES) docinfo-header.html style.css
-	asciidoctor -o $@ $<
+# TODO: Use attribute-missing=warn --failure-level=WARN
 
-polkadot-spec-html/: $(SOURCES) style.css favicon.png
-	asciidoctor -r asciidoctor-multipage -b multipage_html5 -D $@ $<
-	cp favicon.png $@
+polkadot-spec.html: $(SOURCES) docinfo-header.html style.css asciidoctor-pseudocode.rb
+	asciidoctor -r ./asciidoctor-pseudocode.rb -o $@ $<
 
 polkadot-spec.pdf: $(SOURCES)
 	asciidoctor-pdf -r asciidoctor-mathematical -o $@ $<
 
+polkadot-spec.tex: $(SOURCES)
+	asciidoctor-latex -o $@ $<
+
 
 clean:
-	rm -rf polkadot-spec.html polkadot-spec-html/ polkadot-spec.pdf algo-*.svg stem-*.svg
+	rm -rf polkadot-spec.html polkadot-spec.pdf algo-*.svg stem-*.svg
