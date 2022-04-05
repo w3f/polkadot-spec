@@ -26,18 +26,16 @@ messages regardless of their GRANDPA voter status.
 ==== Catching up
 
 When a Polkadot node (re)joins the network during the process described in
-<<chapter-bootstrapping>>, it requests the history of state transition in the form
-of blocks, which it is missing.
+<<chapter-bootstrapping>>, it requests the history of state transitions in the form of blocks, which it is missing.
 
-Nonetheless, the process is different for a GRANDPA voter node. When a voter node joins the network it needs to gather the 
-justification (<<defn-grandpa-justification>>) of the rounds it has missed. Through this process, they can safely join the voting process for the current round where on which the voting is taken place.
+Nonetheless, the process is different for a GRANDPA voter node. When a voter node joins the network, it needs to gather the justification (<<defn-grandpa-justification>>) of the rounds it has missed. Through this process, they can safely join the voting process of the current round, on which the voting is taking place.
 
 [#sect-sending-catchup-request]
 ===== Sending the catch-up requests
 When a Polkadot voter node has the same authority list as a peer voter node who is reporting
 a higher number for the _finalized round_ field, it should send a catch-up
-request message (<<defn-grandpa-catchup-request-msg>>) to the reporting peer in
-order to catch-up to the more advanced finalized round, provided that the
+request message (<<defn-grandpa-catchup-request-msg>>) to the reporting peer. This will allow the node to
+to catch up to the more advanced finalized round, provided that the
 following criteria hold:
 
 * The peer node is a GRANDPA voter, and:
@@ -45,9 +43,7 @@ following criteria hold:
 behind the finalized round for the peer.
 
 ===== Processing the catch-up requests
-Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore catch-up requests from non-voter nodes, When
-a GRANDPA voter node receives a catch-up request message it needs to execute
-Algorithm as defined in <<algo-process-catchup-request>>. Note a voter node should not responds to catch up requests for rounds which are actively being voted on, those are rounds for which Algorithm <<algo-grandpa-round>> is not conculded. 
+Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute the algorithm as defined in <<algo-process-catchup-request>>. Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which Algorithm <<algo-grandpa-round>> is not concluded.
 
 [#algo-process-catchup-request]
 ====== Process Catchup Request
@@ -83,8 +79,7 @@ A Catch-up response message contains critical information for the requester node
 to update their view on the active rounds which are being voted on by GRANDPA
 voters. As such, the requester node should verify the content of the catch-up
 response message and subsequently updates its view of the state of the finality
-of the Relay chain according to Algorithm as defined in
-<<algo-process-catchup-response>>.
+of the Relay chain according to Algorithm <<algo-process-catchup-response>>.
 
 [#algo-process-catchup-response]
 ====== Process Catchup Response
