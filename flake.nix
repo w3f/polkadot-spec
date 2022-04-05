@@ -18,7 +18,7 @@
 
     ruby = pkgs.ruby_3_0;
     gemConfig = pkgs.defaultGemConfig.override { inherit ruby; };
-  
+    
     gems = extraGroup: pkgs.bundlerEnv {
       name = "polkadot-spec-gems";
       inherit ruby gemConfig;
@@ -29,16 +29,11 @@
     bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
   in {
     packages = {
-      html = pkgs.runCommand "polkadot-spec.html" { BUNDLE_WITHOUT = "multihtml"; } ''
-        ${bundleExec ""} asciidoctor -a docinfo=shared -o $out ${self}/index.adoc
+      html = pkgs.runCommand "polkadot-spec.html" {} ''
+        ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -o $out ${self}/index.adoc
       '';
       
-      multi-html = pkgs.runCommand "polkadot-spec-html" {} ''
-        ${bundleExec "multihtml"} asciidoctor-multipage -D $out ${self}/index.adoc
-        cp ${./favicon.png} $out/favicon.png
-      '';
-      
-      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; BUNDLE_WITHOUT = "multihtml"; } ''
+      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; } ''
         ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -o $out ${self}/index.adoc
       ''; 
     };
@@ -60,7 +55,7 @@
       ]);
     };
 
-    defaultPackage = self.packages.${system}.multi-html;
+    defaultPackage = self.packages.${system}.html;
   }) // {
     checks = self.packages;
   };

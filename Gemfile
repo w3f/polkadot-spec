@@ -1,11 +1,14 @@
 source "https://rubygems.org"
 
-ruby "3.0.3"
+gem 'asciidoctor'
+gem 'rouge'
 
-gem "asciidoctor"
-gem "rouge"
-
-gem "asciidoctor-multipage", group: :multihtml
+group :html do
+  gem 'asciimath'
+  gem 'katex', '~> 0.8.0'
+  gem 'pseudocode', '~> 0.1.1'
+  gem 'mini_racer'
+end
 
 group :pdf, optional: true do
   gem "asciidoctor-mathematical"

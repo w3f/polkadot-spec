@@ -10,8 +10,6 @@ GEM
       asciidoctor (~> 2.0)
       asciimath (~> 2.0)
       mathematical (~> 1.6.0)
-    asciidoctor-multipage (0.0.15)
-      asciidoctor (>= 2.0.11, < 2.1)
     asciidoctor-pdf (1.6.2)
       asciidoctor (~> 2.0)
       concurrent-ruby (~> 1.1)
@@ -23,16 +21,22 @@ GEM
       safe_yaml (~> 1.0.0)
       treetop (~> 1.6.0)
     asciimath (2.0.3)
-    concurrent-ruby (1.1.9)
+    concurrent-ruby (1.1.10)
     css_parser (1.11.0)
       addressable
+    execjs (2.8.1)
     hashery (2.1.2)
-    i18n (1.9.1)
+    i18n (1.10.0)
       concurrent-ruby (~> 1.0)
+    katex (0.8.0)
+      execjs (~> 2.7)
+    libv8-node (16.10.0.0-x86_64-linux)
     mathematical (1.6.14)
       ruby-enum (~> 0.4)
+    mini_racer (0.6.2)
+      libv8-node (~> 16.10.0.0)
     pdf-core (0.9.0)
-    pdf-reader (2.9.0)
+    pdf-reader (2.9.2)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
       hashery (~> 2.0)
@@ -53,9 +57,12 @@ GEM
     prawn-templates (0.1.2)
       pdf-reader (~> 2.0)
       prawn (~> 2.2)
+    pseudocode (0.1.1)
+      execjs (~> 2.8)
+      katex (~> 0.8)
     public_suffix (4.0.6)
     rexml (3.2.5)
-    rouge (3.27.0)
+    rouge (3.28.0)
     ruby-enum (0.9.0)
       i18n
     ruby-rc4 (0.1.5)
@@ -65,14 +72,16 @@ GEM
     ttfunk (1.7.0)
 
 PLATFORMS
-  ruby
   x86_64-linux
 
 DEPENDENCIES
   asciidoctor
   asciidoctor-mathematical
-  asciidoctor-multipage
   asciidoctor-pdf
+  asciimath
+  katex (~> 0.8.0)
+  mini_racer
+  pseudocode (~> 0.1.1)
   rouge
 
 BUNDLED WITH

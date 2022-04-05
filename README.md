@@ -8,56 +8,42 @@
 
 Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository contains the official specification for the Polkadot Protocol.
  
-## Polkadot Host and Runtime Specification
+The latest releases of the *Polkadot Protocol Specification* can be found on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
 
-The latest releases of the *Polkadot Host and Runtime Specification* can be found on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
+The Polkadot specification is written in [AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest) and currently compiled with [Asciidoctor](https://asciidoctor.org/).
 
 ## Dependencies
 
-The Polkadot specification is written in [Asciidoctor](https://asciidoctor.org/).
-A handful of dependencies are required to successfully generate a final release,
-depending on the desired target.
+A handful of dependencies are required to successfully convert the spec into a publishable document. We provide a `Gemfile` that provides all dependecies.
 
-### Ruby
+You will have to install `bundler` to use the `Gemfile`. On a Debian based system, it can be installed with:
 
 ```bash
-sudo apt-get install rubygems
 sudo apt-get install ruby-dev
 ```
 
-### AsciiDoctor
+Once `bundler` is available, you can install any missing dependencies for a html build via `bundle install`:
 
 ```bash
-sudo gem install asciidoctor
-# Optional: for multi-page HTML generation (recommended)
-sudo gem install asciidoctor-multipage
-# Optional: for PDF generation
-sudo gem install asciidoctor-pdf
-sudo gem install asciidoctor-mathematical
+bundle install
+```
+
+To also install the dependencies needed for a pdf build, add the `--with pdf` flag: 
+
+```bash
+bundle install --with pdf
+```
+
+In theory the html dependencies can also be ignored, if you only want to build the pdf version:
+
+```bash
+bundle install --with pdf --without html
 ```
 
 ## Build
 
-Generate the final HTML page(s) or PDF file.
+To build the html version of the spec, just run `bundle exec make html`. This create will create a `polkadot-spec.html` in the same folder.
 
-### HTML
+To build the pdf version of the spec, just run `bundle exec make pdf`, which will create a `polkadot-spec.pdf` in the same folder.
 
-#### Multi-Page (recommended)
-
-```bash
-asciidoctor-multipage -a docinfo=shared-header -D out index.adoc
-```
-
-Where the resulting HTML pages can then be found in the `out/` directory.
-
-#### Single-Page
-
-```bash
-asciidoctor -a docinfo=shared index.adoc
-```
-
-### PDF (with math formulas enabled)
-
-```bash
-asciidoctor-pdf -r asciidoctor-mathematical -a mathematical-format=svg index.adoc
-````
+We also provide full nix flake integration, e.g. you can run `nix build github:w3f/polkadot-spec` to build the latest html release.
