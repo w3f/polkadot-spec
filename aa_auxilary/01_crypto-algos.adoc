@@ -80,7 +80,7 @@ Then the witness scalar is calculated, stem:[s_w], where stem:[w] is the
 
 [stem]
 ++++
-t_3 = "meta-AD"(t_2, "'proving\00'", "more=False")\
+t_3 = "meta-AD"(t_2, "'proving\\00'", "more=False")\
 t_4 = "meta-AD"(t_3, w_l, "more=True")\
 t_5 = "KEY"(t_4, w, "more=False")\
 t_6 = "meta-AD"(t_5, "'rng'", "more=False")\
