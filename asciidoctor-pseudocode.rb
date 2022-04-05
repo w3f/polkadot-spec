@@ -38,12 +38,17 @@ Asciidoctor::Extensions.register do
 
       # Add id and class to result
       id = attrs['id'] || "algo-#{counter}"
+      title = "Algorithm #{counter}"
+
       content = %(
-        <div id="#{id}" class="pseudocode">#{rendered}</div>
+        <div id="#{id}" class="stemblock">
+          <div class="title">#{title}. <a href="#{'#' + id}">#{caption}</a></div>
+          <div class="content">#{rendered}</div>
+        </div>
       )
 
       # Clean up reference data
-      attrs['title'] = "Algorithm #{counter}"
+      attrs['title'] = title
       attrs['id'] = id
 
       # Return result embedded in pass block
