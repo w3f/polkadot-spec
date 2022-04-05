@@ -40,7 +40,7 @@ include::02_runtime/main.adoc[]
 = Additional information
 Appendix chapter containing various protocol details
 
-include::aa_appendix/main.adoc[]
+include::aa_auxilary/main.adoc[]
 
 
 [#chap-host-api]
@@ -55,3 +55,9 @@ include::ab_host-api/main.adoc[]
 Description of how to interact with the Runtime through its exported functions
 
 include::ac_runtime-api/main.adoc[]
+
+
+[glossary]
+= Glossary
+
+include::ad_appendix/glossary.adoc[]
