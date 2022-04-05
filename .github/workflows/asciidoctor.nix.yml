@@ -8,7 +8,8 @@ on:
     paths:
     - '.github/workflows/asciidoctor.nix.yml'
     - '**/*.adoc'
-    - 'docinfo.html'
+    - 'asciidoctor-pseudocode.rb'
+    - 'docinfo-header.html'
     - 'Gemfile'
     - 'Gemfile.lock'
     - 'gemset.nix'
@@ -18,7 +19,7 @@ jobs:
   build:
     strategy:
       matrix:
-        package: [ "html", "multi-html", "pdf" ]
+        package: [ "html", "pdf" ]
     name: Compile ${{ matrix.package }} specification
     runs-on: ubuntu-20.04
     steps:

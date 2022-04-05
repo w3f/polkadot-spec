@@ -8,7 +8,8 @@ on:
     paths:
     - '.github/workflows/asciidoctor.deb.yml'
     - '**/*.adoc'
-    - 'docinfo.html'
+    - 'asciidoctor-pseudocode.rb'
+    - 'docinfo-header.html'
     - 'Gemfile'
     - 'Gemfile.lock'
     - 'Makefile'
@@ -47,23 +48,6 @@ jobs:
         asset_content_type: application/html
       if: github.event_name == 'release'
 
-  build-html-multi:
-    name: Compile multi-html specification
-    runs-on: ubuntu-20.04
-    steps:
-    - uses: actions/checkout@v2
-    - name: Setup ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        bundler-cache: true
-    - name: Build multi-html specification
-      run: bundle exec make multi-html
-    - name: Upload multi-html specification
-      uses: actions/upload-artifact@v2
-      with:
-        name: polkadot-spec-html
-        path: polkadot-spec-html/
-
   build-pdf:
     name: Compile pdf specification
     runs-on: ubuntu-20.04
@@ -99,7 +83,7 @@ jobs:
       if: github.event_name == 'release'
 
   release-pages:
-    needs: [ build-html-multi, build-pdf ]
+    needs: [ build-html, build-pdf ]
     name: Publish release on GitHub Pages
     runs-on: ubuntu-20.04
     if: github.event_name == 'release'
@@ -107,19 +91,22 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: gh-pages
+    - run: rm -rf develop/
     - uses: actions/download-artifact@v2
       with:
-        name: polkadot-spec-html
-        path: develop
+        name: polkadot-spec.html
+        path: develop/
     - uses: actions/download-artifact@v2
       with:
         name: polkadot-spec.pdf
         path: spec/
-    - run: mv spec/polkadot-spec.pdf spec/develop.pdf
+    - run: |
+        mv develop/polkadot-spec.html develop/index.html
+        mv spec/polkadot-spec.pdf spec/develop.pdf
     - name: Commit and push updated GitHub Pages branch
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add develop/ spec/develop.pdf
+        git add develop/index.html spec/develop.pdf
         git commit --amend -m "Update develop specification"
         git push -f
