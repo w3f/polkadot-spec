@@ -238,6 +238,8 @@ message claims that all entries have been sent (id _3_ in _KeyValueStorage_),
 the node can use all collected entry proofs and validate it against the merkel
 root to confirm that claim.
 
+See the the synchronization section for more information (<<sect-network-sync>>).
+
 [#defn-msg-state-request]
 .<<defn-msg-state-request, State Request>>
 ====
@@ -306,12 +308,14 @@ and _StateEntry_:
 |===
 ====
 
-[#sect-warp-sync]
+[#sect-msg-warp-sync]
 ==== Warp Sync
 
 The warp sync protocols allows nodes to retrieve blocks from remote peers where
 authority set changes occured. This can be used to speed up synchronization to
 the latest state.
+
+See the the synchronization section for more information (<<sect-network-sync>>).
 
 [#defn-warp-sync-proof]
 .<<defn-warp-sync-proof,Warp Sync Proof>>
@@ -683,3 +687,54 @@ map public keys to their corresponding boolean indicators.
 * stem:[R_("sig")] is the MMR root of the signatures in the original signed
 BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>).
 ====
+
+[#sect-network-sync]
+=== Synchronization
+
+NOTE: Synchronization is mostly application specific and the protocol does not
+mandate how synchronization must be conducted. The network messages are
+specified in <<sect-network-messages>>. This section makes some recommendations
+how a synchronization mechanism can be constructed.
+
+Many applications that interact with the Polkadot network to some extent must be
+able to retrieve certain information about the network. Depending on the
+utility, this includes validators that interact with Polkadot's consensus and
+need access to the full state, either from the past or just the most up-to-date
+state, or light clients that are only interest in the minimum information
+required in order to verify some claims about the state of the network, such as
+the balance of a specific account. To allow implemenations to quickly retrieve
+the required information, different types of synchronization protocols are
+available, respectivel Full, Fast and Warp sync suited for different needs.
+
+==== Full Sync
+
+The full sync protocols is the "default" protocol that's suited for many types
+of implementations, such as archive nodes (nodes that store everything),
+validators that participate in Polkadots consensus and light clients that only
+verify claims about the state of the network. Full sync works by listening to
+announced blocks (<<sect-msg-block-announce>>) and requesting the blocks from
+the announcing peers , or just the block headers in case of light clients.
+
+The full sync protocol usually downloads the entire chain, but no such
+requirements must be met. If an implemenation only wants the latest, finalized
+state, it can combine it with protocols such as fast sync (<<sect-fast-sync>>)
+and/or warp sync (<<sect-warp-sync>>) to make synchronization as fast as
+possible.
+
+[#sect-fast-sync]
+==== Fast Sync
+
+Fast sync works by downloading the block header history and validating the
+auhtority set changes (<<sect-authority-set>>) in order to arrive at a specific
+(usually the most recent) header. After the desired header has been reached and
+verified, the state can be downloaded and imported (<<sect-msg-state-request>>).
+Once this process has been completed, the node can proceed with a full sync.
+
+[#sect-warp-sync]
+==== Warp Sync
+
+Warp sync (<<sect-msg-warp-sync>>) only downloads the block headers where
+authority set changes occured, so called fragments (<<defn-warp-sync-proof>>),
+and by verifying the GRANDPA justifications (<<defn-grandpa-justification>>).
+This protocols allows nodes to arrive at the desired state much faster than fast
+sync.
