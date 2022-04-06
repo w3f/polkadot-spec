@@ -16,7 +16,7 @@ justifies the finalization (<<defn-grandpa-justification>>).
 for:
 
 * Any round stem:[r] if the node stem:[n] is _not_ a GRANDPA voter.
-* Only for round stem:[r] for which the node stem:[n] has invoked Algorithm <<algo-grandpa-round>> and round stem:[r+1] if latexmath:[$n$] is a GRANDPA voter and has already caught up to its peers according to the process described in Section <<sect-grandpa-catchup>>.
+* Only for round stem:[r] for which the node stem:[n] has invoked Algorithm <<algo-grandpa-round>> and round stem:[r+1] if stem:[n] is a GRANDPA voter and has already caught up to its peers according to the process described in Section <<sect-grandpa-catchup>>.
 
 Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit
 messages regardless of their GRANDPA voter status.
