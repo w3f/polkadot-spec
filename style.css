@@ -208,10 +208,8 @@ h6 > a.link:hover,
 }
 
 /* MathJax v3 */
-.stemblock > .content {
-  text-align: center;
-}
 .stemblock mjx-container {
+  text-align: center;
   display: block;
   width: 100%;
   margin: 1em 0em;
