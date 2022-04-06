@@ -691,7 +691,7 @@ BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>).
 [#sect-network-sync]
 === Synchronization
 
-NOTE: Synchronization is mostly application specific and the protocol does not
+IMPORTANT: Synchronization is mostly application specific and the protocol does not
 mandate how synchronization must be conducted. The network messages are
 specified in <<sect-network-messages>>. This section makes some recommendations
 how a synchronization mechanism can be constructed.
