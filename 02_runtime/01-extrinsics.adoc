@@ -260,37 +260,28 @@ possible value, as described in Algorithm
 If the extrinsic is immortal, specify a single byte with the value equal
 to zero.
 
+****
 .Encode Mortality
-[latexmath#algo-mortality-encode]
+[pseudocode#algo-mortality-encode]
 ++++
-\vcenter{\begin{align}
-  \textbf{return}~ & \begin{cases}
-    0 & if\ extrinsic\ is\ immortal
-  \end{cases} &
-\end{align}} \\
-~\\
-\textbf{init}~factor = \textrm{Limit}(M_{per} >> 12,\ 1,\ \phi) \\
-\textbf{init}~left = \textrm{Limit}(\textrm{TZ}(M_{per})-1,\ 1,\ 15) \\
-\textbf{init}~right = \frac{M_{pha}}{factor} << 4 \\
-~\\
-\textrm{// Returns a two byte value} \\
-\textbf{return}~left|right
+\Require{$M_{per}, M_{pha}$}
+\Return $0 \enspace \textbf{if} \enspace \textit{extrinsic is immortal}$
+\State \textbf{init} $factor = $\textsc{Limit}$(M_{per} >> 12,\ 1,\ \phi)$
+\State \textbf{init} $left = $\textsc{Limit}$($\textsc{TZ}$(M_{per})-1,\ 1,\ 15)$
+\State \textbf{init} $right = \frac{M_{pha}}{factor} << 4$
+\Return $left|right$
 ++++
 
 .Decode Mortality
-[latexmath#algo-mortality-decode]
+[pseudocode#algo-mortality-decode]
 ++++
-\vcenter{\begin{align}
-  \textbf{return}~ & \begin{cases}
-    \textit{Immortal} & if\ T^{b0}_{mor} = 0
-  \end{cases} &
-\end{align}} \\
-~\\
-\textbf{init}~enc = T^{b0}_{mor} + (T^{b1}_{mor} << 8) \\
-\textbf{init}~M_{per} = 2 << (enc\ mod\ (1 << 4)) \\
-\textbf{init}~factor = \textrm{Limit}(M_{per} >> 12,\ 1,\ \phi) \\
-\textbf{init}~M_{pha} = (enc >> 4) * factor \\
-\textbf{return}~(M_{per}, M_{pha})
+\Require{$T_{mor}$}
+\Return $\textit{Immortal} \enspace \textbf{if} \enspace T^{b0}_{mor} = 0$
+\State \textbf{init} $enc = T^{b0}_{mor} + (T^{b1}_{mor} << 8)$
+\State \textbf{init} $M_{per} = 2 << (enc\ mod\ (1 << 4))$
+\State \textbf{init} $factor = $\textsc{Limit}$(M_{per} >> 12, 1, \phi)$
+\State \textbf{init} $M_{pha} = (enc >> 4) * factor$
+\Return $(M_{per}, M_{pha})$
 ++++
 
 * latexmath:[T^{b0}_{mor}]: the first byte of latexmath:[T_{mor}].
@@ -306,3 +297,4 @@ representation of `40` is `0010 1000`, which has three trailing zeros.
 * latexmath:[>>]: performs a binary right shift operation.
 * latexmath:[<<]: performs a binary left shift operation.
 * latexmath:[|] : performs a bitwise OR operation.
+****
