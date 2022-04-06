@@ -683,8 +683,3 @@ map public keys to their corresponding boolean indicators.
 * stem:[R_("sig")] is the MMR root of the signatures in the original signed
 BEEFY commitment (<<defn-grandpa-beefy-signed-commitment>>).
 ====
-
-[#sect-msg-warp-sync]
-==== Warp  Sync
-
-Messages used in the warp sync protocol (<<sect-warp-sync>>).
