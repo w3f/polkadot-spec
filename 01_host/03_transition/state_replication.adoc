@@ -60,25 +60,33 @@ where each digest item can hold one of the following type identifiers:
 
 [stem]
 ++++
-H_d^n = {(2,bbb B_32),(4,(E_("id"),bbb B)),(5,(E_("id"),bbb B)),(6,(E_("id"),bbb B)):}
+H_d^n = {
+	(0,m),
+	(4,(E_("id"),"CM")),
+	(5,(E_("id"),S)),
+	(6,(E_("id"),P)),
+	(8,phi)
+	:}
 ++++
 
 Where stem:[E_(id)] is the unique consensus engine identifier
 (<<defn-consensus-message-digest>>) and stem:[bbb B]:
 
-* Id _2_, the *Changes trie root*, contains the root of the Changes Trie at
-block stem:[B] (<<sect-changes-trie>>). Note that this is future-reserved and
-currently *not* used in Polkadot.
-* Id _4_, the *Consensus Message*, represents messages from the Runtime to the
+* Id _0_, the *non-system item*, which is opaque to the native code. stem:[m] is
+an opaque byte array.
+* Id _4_, the *Consensus Message*, contains messages from the Runtime to the
 consensus engine (<<sect-consensus-message-digest>>).
 * Id _5_, the *Seal*, is the data produced by the consensus engine and proving
-the authorship of the block producer. In particular, the Seal digest item must
-be the last item in the digest array and must be stripped off by the Polkadot
-Host before the block is submitted to any Runtime function including for
-validation. The Seal (defn-babe-seal) must be added back to the digest
-afterward.
-* Id _6_, the *Pre-runtime* digest, represents messages from a consensus engine
-to the Runtime (e.g. <<defn-babe-header>>).
+the authorship of the block producer, where stem:[S] is the signature
+(<<defn-block-signature>>) of the block author. In particular, the Seal digest
+item must be the last item in the digest array and must be stripped off by the
+Polkadot Host before the block is submitted to any Runtime function including
+for validation. The Seal must be added back to the digest afterward.
+* Id _6_, the *Pre-Runtime* digest, contains the BABE Pre-Digest item
+(<<defn-babe-header>>).
+* Id _8_, the *Runtime Environment Updated* digest, indicates that changes
+regarding the Runtime code or heap pages (<<sect-memory-management>>) occured.
+No additional data is provided.
 ====
 
 [#defn-block-header-hash]
