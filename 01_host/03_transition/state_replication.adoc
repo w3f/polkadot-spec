@@ -63,7 +63,7 @@ where each digest item can hold one of the following type identifiers:
 H_d^n = {
 	(0,m),
 	(4,(E_("id"),"CM")),
-	(5,(E_("id"),S)),
+	(5,(E_("id"),S_B)),
 	(6,(E_("id"),P)),
 	(8,phi)
 	:}
@@ -77,8 +77,8 @@ an opaque byte array.
 * Id _4_, the *Consensus Message*, contains messages from the Runtime to the
 consensus engine (<<sect-consensus-message-digest>>).
 * Id _5_, the *Seal*, is the data produced by the consensus engine and proving
-the authorship of the block producer, where stem:[S] is the signature
-(<<defn-block-signature>>) of the block author. In particular, the Seal digest
+the authorship of the block producer. Respectively, stem:[S_B] is the signature
+(<<defn-block-signature>>) of the block producer. In particular, the Seal digest
 item must be the last item in the digest array and must be stripped off by the
 Polkadot Host before the block is submitted to any Runtime function including
 for validation. The Seal must be added back to the digest afterward.
