@@ -118,12 +118,11 @@ stem:["CM"_g], the consensus message for GRANDPA, is of the following format:
 
 [stem]
 ++++
-"CM"_g = {(1,("Auth"_C,N_("delay"))),(2,("Auth"_C,N_("delay"))),(3,"Auth"_("id")),(4,N_("delay")),(5,N_("delay")):}
+"CM"_g = {(1,("Auth"_C,N_("delay"))),(2,(m,"Auth"_C,N_("delay"))),(3,"A"_i),(4,N_("delay")),(5,N_("delay")):}
 ++++
 
 where:
 
-* stem:[Auth_C] is the authority list (<<defn-authority-list>>).
 * stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the
 chain the announcing block must be before the change is applied.
 * _1_ implies *scheduled change*: Schedule an authority set change after the
@@ -143,6 +142,8 @@ authority set change should be disregarded. The earliest digest of this type in
 a single block will be respected. No change should be scheduled if one is
 already finalized and the delay has not passed completely. If such an
 inconsistency occurs, the scheduled change should be ignored.
++
+NOTE: stem:[m], which indicates the block finalization median, is to-be-defined.
 * _3_ implies *on disabled*: An index to the individual authority in the
 current authority list that should be immediately disabled until the next
 authority set changes. When an authority gets disabled, the node should stop
@@ -160,4 +161,24 @@ given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
 definition of stem:[N_("delay")], is an _imported_ block and validated by the
 block production consensus engine. After authoring block stem:[B'], the
 authorities should resume voting.
+
+IMPORTANT: The BEEFY protocol is still under construction. The following part will be
+updated in the future and certain information will be clarified.
+
+stem:["CM"_y], the consensus message for BEEFY (<<sect-grandpa-beefy>>), is of
+the following format:
+
+[stem]
+++++
+"CM"_y = {(1,(V_B,V_i)),(2,A_i),(3,R):}
+++++
+
+where:
+
+* _1_ implies that the remote **authorities have changed**. stem:[V_B] is the
+array of the new BEEFY authorities's public keys and stem:[V_i] is the
+identifier of the remote validator set.
+* _2_ implies **on disabled**: an index to the individual authorty in stem:[V_B]
+that should be immediatly disabled until the next authority change.
+* _3_ implies **MMR root**: a 32-byte array containing the MMR root.
 ====
