@@ -68,7 +68,7 @@ string which serves as an identifier.
 "CM" = {(,("'BABE'", "CM"_b)),(,("'FRNK'", "CM"_g)),(,("'BEEF'", "CM"_y)):}
 ++++
 
-stem:["CM"_b], the consensus message for GRANDPA, is of the following format:
+stem:["CM"_b], the consensus message for BABE, is of the following format:
 
 [stem]
 ++++
