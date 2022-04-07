@@ -72,7 +72,7 @@ H_d^n = {
 Where stem:[E_(id)] is the unique consensus engine identifier
 (<<defn-consensus-message-digest>>) and stem:[bbb B]:
 
-* Id _0_, the *non-system item*, which is opaque to the native code. stem:[m] is
+* Id _0_, the *Non-System* digest, which is opaque to the native code. stem:[m] is
 an opaque byte array.
 * Id _4_, the *Consensus Message*, contains messages from the Runtime to the
 consensus engine (<<sect-consensus-message-digest>>).
