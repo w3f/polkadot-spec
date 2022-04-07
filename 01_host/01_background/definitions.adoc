@@ -179,11 +179,11 @@ blockchain (<<sect-finality>>).
 [#defn-pruned-tree]
 .<<defn-pruned-tree, Pruned Block Tree>>
 ====
-By Pruned Block Tree*, denoted by stem:[PBT], we refer to a subtree of the block
+By *Pruned Block Tree*, denoted by stem:["PBT"], we refer to a subtree of the block
 tree obtained by eliminating all branches which do not contain the most recent
 finalized blocks (<<defn-finalized-block>>). By *pruning*, we refer to the
-procedure of stem:[BT larr PBT]. When there is no risk of ambiguity and is safe
-to prune BT, we use stem:[BT] to refer to stem:[PBT].
+procedure of stem:[BT larr "PBT"]. When there is no risk of ambiguity and is safe
+to prune BT, we use stem:["BT"] to refer to stem:["PBT"].
 
 <<defn-chain-subchain>> gives the means to highlight various branches of the
 block tree.
@@ -194,15 +194,15 @@ block tree.
 ====
 Let stem:[G] be the root of the block tree and stem:[B] be one of its nodes. By
 stem:["Chain"(B)], we refer to the path graph from stem:[G] to stem:[B] in
-stem:[P(BT)]. Conversely, for a chain stem:[C = sf "Chain"(b)], we define *the
-head of stem:[C]* to be stem:[B], formally noted as stem:[B := bar C]. We
-define stem:[|C|], the length of stem:[C] as a path graph. If stem:[B'] is
-another node on stem:[sf "Chain"(B)], then by stem:[sf "SubChain"(B', B)] we
-refer to the subgraph of stem:[sf "Chain"(B)] path graph which contains both
-stem:[B] and stem:[B'] and by stem:[sf "SubChain"(B', B)] we refer to its
-length. Accordingly, stem:[bbb C_(B')((P)BT)] is the set of all subchains of
-stem:[(P)BT] rooted at stem:[B']. The set of all chains of stem:[(P)BT],
-stem:[bbb C_G((P)BT})] is denoted by stem:[bbb C((P)BT)] or simply
+stem:["BT"] or stem:["PBT"]. Conversely, for a chain stem:[C = sf "Chain"(b)],
+we define *the head of stem:[C]* to be stem:[B], formally noted as stem:[B :=
+bar C]. We define stem:[|C|], the length of stem:[C] as a path graph. If
+stem:[B'] is another node on stem:[sf "Chain"(B)], then by stem:[sf
+"SubChain"(B', B)] we refer to the subgraph of stem:[sf "Chain"(B)] path graph
+which contains both stem:[B] and stem:[B'] and by stem:[sf "SubChain"(B', B)] we
+refer to its length. Accordingly, stem:[bbb C_(B')((P)BT)] is the set of all
+subchains of stem:[(P)BT] rooted at stem:[B']. The set of all chains of
+stem:[(P)BT], stem:[bbb C_G((P)BT})] is denoted by stem:[bbb C((P)BT)] or simply
 stem:[bbb C], for the sake of brevity.
 ====
 
