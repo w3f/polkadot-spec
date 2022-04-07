@@ -524,25 +524,24 @@ value should have some influence on the benchmarking process.
 The benchmarking implementation of for the function
 latexmath:[request\_judgement] can be defined as follows:
 
-.Run multiple benchmark iterations for `request_judgement` Runtime function
-[latexmath]
+****
+."request\_judgement"` Runtime function benchmark
+[pseudocode]
 ++++
-\textbf{Output:}~\mathcal{W} \\
-~\\
-\textbf{init}~collection = \{\} \\
-~\\
-\textbf{for}~amount~\leftarrow 1,MaxRegistrars~\textbf{do} \\
-  \textrm{Generate-Registrars}(amount) \\
-  caller \leftarrow \textrm{Create-Account}(\textrm{``caller''}, 1) \\
-  \textrm{Set-Balance}(caller, 100) \\
-  time \leftarrow \textrm{Timer}(\textrm{Request-Judgement}(\textrm{Random}(amount), 100)) \\
-  \textrm{Add-To}(collection, time) \\
-\textbf{end for} \\
-~\\
-\mathcal{W} \leftarrow \textrm{Compute-Weight}(collection) \\
-\textbf{return}~\mathcal{W}
+\Ensure $\mathcal{W}$
+\State \textbf{init} $collection = \{\}$
+\For{$amount \leftarrow 1,MaxRegistrars$}
+  \State \textsc{Generate-Registrars}$(amount)$
+  \State $caller \leftarrow$ \textsc{Create-Account}$("caller", 1)$
+  \State \textsc{Set-Balance}$(caller, 100)$
+  \State $time \leftarrow$ \textsc{Timer}$($\textsc{Request-Judgement}$($\textsc{Random}$(amount), 100))$
+  \State \textsc{Add-To}$(collection, time)$
+\EndFor
+\State $\mathcal{W} \leftarrow$ \textsc{Compute-Weight}$(collection)$
+\Return $\mathcal{W}$
 ++++
 
+where::
 * Generate-Registrars(latexmath:[amount])
 +
 Creates number of registrars and inserts those records into storage.
@@ -579,6 +578,7 @@ Adds a returned time measurement (time) to collection.
 +
 Computes the resulting weight based on the time measurements in the collection.
 The worst case scenario should be chosen (the highest value).
+****
 
 [#sect-practical-example-payout-stakers]
 ==== Practical Example #2: `payout_stakers`
@@ -710,33 +710,30 @@ some influence in the benchmarking process.
 The benchmarking implementation for the function
 latexmath:[payout\_stakers] can be defined as follows:
 
-.Run multiple benchmark iterations for `request_judgement` Runtime function
-[latexmath]
+****
+."payout\_stakers" Runtime function benchmark
+[pseudocode]
 ++++
-\textbf{Output:}~\mathcal{W} \\
-~\\
-\textbf{init}~collection = \{\} \\
-~\\
-\textbf{for}~amount \leftarrow 1,MaxNominatorRewardedPerValidator~\textbf{do} \\
-\textbf{for}~era\_depth \leftarrow 1,HistoryDepth~\textbf{do} \\
-validator \leftarrow \textrm{Generate-Validator}() \\
-\textrm{Validate}(validator) \\
-nominators \leftarrow \textrm{Generate-Nominators}(amount) \\
-~\\
-\textbf{for}~nominator \in nominators~\textbf{do} \\
-\textrm{Nominate}(validator, nominator) \\
-\textbf{end for} \\
-~\\
-era\_index \leftarrow \textrm{Create-Rewards}(validator,nominators, era\_depth) \\
-time \leftarrow \textrm{Timer}(\textrm{Payout-Stakers}(validator), era\_index)) \\
-\textrm{Add-To}(collection, time) \\
-\textbf{end for} \\
-\textbf{end for} \\
-~\\
-\mathcal{W} \leftarrow \textrm{Compute-Weight}(collection) \\
-\textbf{return}~\mathcal{W}
+\Ensure $\mathcal{W}$
+\State \textbf{init} $collection = \{\}$
+\For{$amount \leftarrow 1,MaxNominatorRewardedPerValidator$}
+  \For{$era\_depth \leftarrow 1,HistoryDepth$}
+    \State $validator \leftarrow$ \textsc{Generate-Validator}$()$
+    \State \textsc{Validate}$(validator)$
+    \State $nominators \leftarrow$ \textsc{Generate-Nominators}$(amount)$
+    \For{$nominator \in nominators$}
+      \State \textsc{Nominate}$(validator, nominator)$
+    \EndFor
+    \State $era\_index \leftarrow$ \textsc{Create-Rewards}$(validator, nominators, era\_depth)$
+    \State $time \leftarrow$ \textsc{Timer}$($\textsc{Payout-Stakers}$(validator), era\_index)$
+    \State \textsc{Add-To($collection$, $time$)}
+  \EndFor
+\EndFor
+\State $\mathcal{W} \leftarrow$ \textsc{Compute-Weight}$(collection)$
+\Return $\mathcal{W}$
 ++++
 
+where::
 * Generate-Validator()
 +
 Creates a validators with some unbonded balances.
@@ -769,7 +766,7 @@ Adds a returned time measurement (time) to collection.
 +
 Computes the resulting weight based on the time measurements in the collection.
 The worst case scenario should be chosen (the highest value).
-
+****
 
 ==== Practical Example #3: `transfer`
 
@@ -849,40 +846,36 @@ The benchmarking implementation for the Polkadot Runtime function
 latexmath:[transfer] is defined as follows (starting with the Main
 function):
 
-.Run multiple benchmark iterations for transfer Runtime function.
-[latexmath#algo-benchmark-transfer]
+****
+."transfer" Runtime function benchmark
+[pseudocode#algo-benchmark-transfer]
 ++++
-\textbf{Output:}~collection : \textrm{collection of time measurements of all benchmark iterations} \\
-~\\
-\textbf{function}~\textrm{Main}() \\
-  \textbf{init}~collection = \{\} \\
-  \textbf{init}~balance = 1'000 \\
-  ~\\
-  \textbf{for}~index \gets 1,1'000~\textbf{do} \\
-    time \leftarrow \textrm{Run-Benchmark}(index, balance) \\
-    \textrm{Add-To}(collection, time) \\
-  \textbf{end for} \\
-  ~\\
-  \textbf{init}~index = 1'000 \\
-  \textbf{for}~balance \gets 2,1'000~\textbf{do} \\
-    time \leftarrow \textrm{Run-Benchmark}(index, balance) \\
-    \textrm{Add-To}(collection, time) \\
-  \textbf{end for} \\
-  ~\\
-  \mathcal{W} \leftarrow \textrm{Compute-Weight}(collection) \\
-  \textbf{return}~\mathcal{W} \\
-\textbf{end} \\
-~\\
-\textbf{function}~\textrm{Run-Benchmark}(index, balance) \\
-  sender \leftarrow \textrm{Create-Account}(\textit{"caller"}, index) \\
-  recipient \leftarrow \textrm{Create-Account}(\textit{"recipient"}, index) \\
-  \textrm{Set-Balance}(sender, balance) \\
-  ~\\
-  time \leftarrow \textrm{Timer}(\textrm{Transfer}(sender, recipient, balance)) \\
-  \textbf{return}~time \\
-\textbf{end}
+\Ensure{$collection$: a collection of time measurements of all benchmark iterations}
+\Function{Main}{}
+  \State \textbf{init} $collection = \{ \}$
+  \State \textbf{init} $balance = 1'000$
+  \For{$index \gets 1,1'000$}
+    \State $time \leftarrow$ \textsc{Run-Benchmark}$(index, balance)$
+    \State \textsc{Add-To}$(collection, time)$
+  \EndFor
+  \State \textbf{init} $index = 1'000$
+  \For{$balance \gets 2,1'000$}
+    \State $time \leftarrow$ \textsc{Run-Benchmark}$(index, balance)$
+    \State \textsc{Add-To}$(collection, time)$
+  \EndFor
+  \State $\mathcal{W} \leftarrow$ \textsc{Compute-Weight}$(collection)$
+  \Return $\mathcal{W}$
+\EndFunction
+\Function{Run-Benchmark}{$index$, $balance$}
+  \State $sender \leftarrow$ \textsc{Create-Account}$(\textit{"caller"}, index)$
+  \State $recipient \leftarrow$ \textsc{Create-Accouny}$(\textit{"recipient"}, index)$
+  \State \textsc{Set-Balance}$(sender, balance)$
+  \State $time \leftarrow$ \textsc{Timer}$($\textsc{Transfer}$(sender, recipient, balance))$
+  \Return $time$ 
+\EndFunction
 ++++
 
+where::
 * Create-Account(latexmath:[name], latexmath:[index])
 +
 Creates a Blake2 hash of the concatenated input of name and index representing the address of a account. This function only creates an address and does not conduct any I/O.
@@ -905,6 +898,8 @@ Adds a returned time measurement (time) to collection.
 * Compute-Weight(latexmath:[collection])
 +
 Computes the resulting weight based on the time measurements in the collection. The worst case scenario should be chosen (the highest value).
+****
+
 
 ==== Practical Example #4: `withdraw_unbounded`
 
@@ -1018,33 +1013,35 @@ performed in the storage.
 
 ===== Benchmarking Framework
 
+
 The benchmarking implementation for the Polkadot Runtime function
 `withdraw_unbonded` is defined as follows:
 
-.Run multiple benchmark iterations for `withdraw_unbonded` Runtime function
-[latexmath#algo-benchmark-withdraw]
+****
+."withdraw\_unbonded" Runtime function benchmark
+[pseudocode#algo-benchmark-withdraw]
 ++++
-\textbf{Output:}~\mathcal{W} \\
-~\\
-\textbf{init}~collection = \{\} \\
-~\\
-\textbf{for}~balance \leftarrow 1, 100~\textbf{do} \\
-stash \leftarrow \textrm{Create-Account}(\textit{"stash"}, 1) \\
-controller \leftarrow \textrm{Create-Account}(\textit{"controller"}, 1) \\
-\textrm{Set-Balance}(stash, 100) \\
-\textrm{Set-Balance}(controller, 1) \\
-\textrm{Bond}(stash, controller, balance) \\
-\textrm{Pass-Era}() \\
-\textrm{UnBond}(controller, balance) \\
-\textrm{Pass-Era}() \\
-time \leftarrow \textrm{Timer}(\textrm{Withdraw-Unbonded}(controller)) \\
-\textrm{Add-To}(collection, time) \\
-\textbf{end for} \\
-~\\
-\mathcal{W} \leftarrow \textrm{Compute-Weight}(collection) \\
-\textbf{return}~\mathcal{W}
+\Ensure $\mathcal{W}$
+\Function{Main}{}
+\State \textbf{init} $collection = \{\}$
+  \For{$balance \gets 1,100$}
+    \State $stash \leftarrow$ \textsc{Create-Account}$(\textit{"stash"}, 1)$
+    \State $controller \leftarrow$ \textsc{Create-Account}$(\textit{"controller"}, 1)$
+    \State \textsc{Set-Balance}$(stash, 100)$
+    \State \textsc{Set-Balance}$(controller, 1)$
+    \State \textsc{Bond}$(stash, controller, balance)$
+    \State \textsc{Pass-Era}()
+    \State \textsc{UnBond}$(controller, balance)$
+    \State \textsc{Pass-Era}()
+    \State $time \leftarrow$ \textsc{Timer}$($\textsc{Withdraw-Unbonded}$(controller))$
+    \State \textsc{Add-To}$(collection, time)$
+  \EndFor
+  \State $\mathcal{W} \leftarrow$ \textsc{Compute-Weight}$(collection)$
+  \Return $\mathcal{W}$
+\EndFunction
 ++++
 
+where::
 * Create-Account(latexmath:[name], latexmath:[index])
 +
 Creates a Blake2 hash of the concatenated input of name and index representing
@@ -1085,6 +1082,7 @@ Measures the time from the start of the specified f unction to its completion.
 +
 Computes the resulting weight based on the time measurements in the collection.
 The worst case scenario should be chosen (the highest value).
+****
 
 === Fees
 
