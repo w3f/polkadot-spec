@@ -98,9 +98,9 @@ the lottery.
 In order to ensure consistent block production, BABE uses secondary slots in
 case no authority won the (primary) block production lottery. Unlike the
 lottery, secondary slot assignees are know upfront publically
-(<<block-production-secondary-slots>>). The Runtime provides information on how
+(<<defn-babe-secondary-slots>>). The Runtime provides information on how
 or if secondary slots are executed (<<sect-rte-babeapi-epoch>>), explained
-further in <<block-production-secondary-slots>>.
+further in <<defn-babe-secondary-slots>>.
 
 [#defn-babe-constant]
 .<<defn-babe-constant, BABE Constant>>
@@ -155,12 +155,12 @@ stem:[p_k] is the secret key respectively the public key of the authority. For
 any slot stem:[s] in epoch stem:[n] where stem:[d < r], the block producer is
 required to produce a block.
 
-Note that the secondary slots (<<block-production-secondary-slots>>) are running
+Note that the secondary slots (<<defn-babe-secondary-slots>>) are running
 along side the primary block production lottery and mainly serve as a fallback
 to in case no authority was selected in the primary lottery.
 ****
 
-[#block-production-secondary-slots]
+[#defn-babe-secondary-slots]
 ===== Secondary Slots
 ****
 **Secondary slots** work along side primary slot to ensure consistent block
@@ -199,7 +199,7 @@ VRF is skipped.
 The BABE block production lottery requires a specific transcript structure
 (<<defn-vrf-transcript>>). That structure is used by both primary slots
 (<<algo-block-production-lottery>>) and secondary slots
-(<<block-production-secondary-slots>>).
+(<<defn-babe-secondary-slots>>).
 
 [stem]
 ++++
@@ -385,9 +385,9 @@ authority in the authority set (<<sect-authority-set>>) who authored the
 block.
 * stem:[s] is the slot number (<<defn-epoch-slot>>).
 * stem:[o] is VRF output (<<algo-block-production-lottery>> respectively
-<<block-production-secondary-slots>>).
+<<defn-babe-secondary-slots>>).
 * stem:[p] is VRF proof (<<algo-block-production-lottery>> respectively
-<<block-production-secondary-slots>>).
+<<defn-babe-secondary-slots>>).
 
 The Pre-Digest must be included as a digest item of Pre-Runtime type in the
 header digest (<<defn-digest>>) stem:[H_d(B)].
@@ -450,9 +450,11 @@ stem:[cc E_(n+1)] from the Runtime, through the consensus message
 [#defn-epoch-randomness]
 .<<defn-epoch-randomness, Randomness Seed>>
 ====
-For epoch stem:[cc E], there is a 32-byte stem:[cc R_(cc E)] computed
-based on the previous epochs VRF outputs. For stem:[cc E_0] and stem:[cc
-E_1], the randomness seed is provided in the genesis state.
+For epoch stem:[cc E], there is a 32-byte stem:[cc R_(cc E)] computed based on
+the previous epochs VRF outputs. For stem:[cc E_0] and stem:[cc E_1], the
+randomness seed is provided in the genesis state (<<sect-rte-babeapi-epoch>>).
+For any further epochs, the randomness is retrieved from the consensus message
+(<<defn-consensus-message-digest>>).
 ====
 
 [#sect-verifying-authorship]
