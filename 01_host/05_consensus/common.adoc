@@ -59,78 +59,81 @@ came into effect would get rejected.
 [#defn-consensus-message-digest]
 .<<defn-consensus-message-digest, Consensus Message>>
 ====
-A *consensus message* is a digest item (<<defn-digest>>) of type _4_ and
-consists of the pair:
+A *consensus message*, stem:["CM"], is a digest item (<<defn-digest>>) of type
+_4_ and consists one of the following tuple pairs, where the first item is a
+string which serves as an identifier.
 
 [stem]
 ++++
-(E_("id"), CM)
+"CM" = {(,("'BABE'", "CM"_b)),(,("'FRNK'", "CM"_g)),(,("'BEEF'", "CM"_y)):}
 ++++
 
-where stem:[E_("id") in bbb B_4] is the consensus engine unique identifier
-which can hold the following possible values
-
-[stem]
-++++
-E_("id") = {("'BABE'"),("'FRNK'"):}
-++++
-
-where stem:["'BABE'"] is for messages related to the BABE protocol, referred to
-as stem:[E_("id")("BABE")] and stem:["'FRNK"] is for messages related to the
-GRANDPA protocol, referred to as stem:[E_("id")("FRNK")]. stem:[CM] is a varying
-datatype (<<defn-varrying-data-type>>) which can be one of the following values,
-appended by additional data:
+stem:["CM"_b], the consensus message for GRANDPA, is of the following format:
 
 [stem]
 ++++
-CM = {(1, ("Auth"_("BABE"),R)),(2,"Auth"_("id")),(3,(c,s_("2nd"))):}
+"CM"_b = {(1,("Auth"_C, r)),(2,A_i),(3,D):}
 ++++
 
 where
 
-* stem:[CM]:
-+
-** _1_ implies *next epoch data*: The Runtime issues this message on every first
-block of an epoch stem:[cc E_n]. The supplied authority set and randomness are
-intended to be used in the next epoch stem:[cc E_n + 1].  
-** _2_ implies *on disabled*: 
-*This message is currently ignored by the Polkadot Host and will be for the forseeable future.* 
-An index to the individual authority in the current authority list that should
-be immediately disabled until the next authority set changes. This message 
-initial intension was to cause an imediatly suspension of all authority 
-functionality with the specified  authority.
-** _3_ implies *next config data*: These messages are only issued on
+* _1_ implies *next epoch data*: The Runtime issues this message on every first
+block of an epoch. The supplied authority set (<<defn-authority-list>>),
+stem:["Auth"_C], and randomness (<<defn-epoch-randomness>>), stem:[r], are used
+in the next epoch stem:[cc E_n + 1].
+* _2_ implies *on disabled*: A 32-bit integer, stem:[A_i], indicating the
+individual authority in the current authority list that should be immediately
+disabled until the next authority set changes. This message initial intension
+was to cause an imediatly suspension of all authority functionality with the
+specified authority.
+* _3_ implies *next epoch descriptor*: These messages are only issued on
 configuration change and in the first block of an epoch. The supplied
 configuration data are intended to be used from the next epoch onwards.
-* stem:["Auth"_("BABE")] is the authority list (<<defn-authority-list>>) for the next epoch.
-* stem:[R] is the 32-byte randomness seed for the next epoch (<<defn-epoch-randomness>>).
-* stem:["Auth"_("id")] is an unsigned 64-bit integer pointing to an individual
-authority in the current authority list.
-* stem:[c] is the probability that a slot will not be empty
-(<<defn-babe-constant>>). It is encoded as a tuple of two unsigned 64-bit
-integers stem:[(c_("nominator"),c_("denominator"))] which are used to compute
-the rational stem:[c = c_("nominator")/c_("denominator")].
-* stem:[s_("2nd")] is a varying datatype followed by additional data indicating
-the second slot configuration:
++
+stem:[D] is a varying datatype of the following format:
 +
 [stem]
 ++++
-s_("2nd") = {(1,("Auth"_C,N_("delay"))),(2,("Auth"_C,N_("delay"))),(3,"Auth"_("id")),(4,N_("delay")),(5,N_("delay")):}
+D = {(1, (c,2_("nd"))):}
 ++++
 +
-where:
+where stem:[c] is the probability that a slot will not be empty
+(<<defn-babe-constant>>). It is encoded as a tuple of two unsigned 64-bit
+integers stem:[(c_("nominator"),c_("denominator"))] which are used to compute
+the rational stem:[c = c_("nominator")/c_("denominator")].
 +
-** stem:[Auth_C] is the authority list (<<defn-authority-list>>).
-** stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the
+stem:[2_("nd")] describes what secondary slot (<<defn-babe-secondary-slots>>),
+if any, is to be used. It is encoded as one-byte varying datatype:
++
+[stem]
+++++
+s_"2nd" = {
+	(0,->,"no secondary slot"),
+	(1,->,"plain secondary slot"),
+	(2,->,"secondary slot with VRF output")
+:}
+++++
+
+stem:["CM"_g], the consensus message for GRANDPA, is of the following format:
+
+[stem]
+++++
+"CM"_g = {(1,("Auth"_C,N_("delay"))),(2,("Auth"_C,N_("delay"))),(3,"Auth"_("id")),(4,N_("delay")),(5,N_("delay")):}
+++++
+
+where:
+
+* stem:[Auth_C] is the authority list (<<defn-authority-list>>).
+* stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the
 chain the announcing block must be before the change is applied.
-** _1_ implies *scheduled change*: Schedule an authority set change after the
+* _1_ implies *scheduled change*: Schedule an authority set change after the
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
 definition of stem:[N_("delay")], is a block _finalized_ by the finality
 consensus engine. The earliest digest of this type in a single block will be
 respected. No change should be scheduled if one is already finalized and the
 delay has not passed completely. If such an inconsistency occurs, the scheduled
 change should be ignored.
-** _2_ implies *forced change*: Force an authority set change after the given
+* _2_ implies *forced change*: Force an authority set change after the given
 delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
 definition of stem:[N_("delay")], is an _imported_ block that has been validated
 by the block production consensus engine. Hence, the authority changeset is
@@ -140,19 +143,19 @@ authority set change should be disregarded. The earliest digest of this type in
 a single block will be respected. No change should be scheduled if one is
 already finalized and the delay has not passed completely. If such an
 inconsistency occurs, the scheduled change should be ignored.
-** _3_ implies *on disabled*: An index to the individual authority in the
+* _3_ implies *on disabled*: An index to the individual authority in the
 current authority list that should be immediately disabled until the next
 authority set changes. When an authority gets disabled, the node should stop
 performing any authority functionality from that authority, including authoring
 blocks and casting GRANDPA votes for finalization. Similarly, other nodes should
 ignore all messages from the indicated authority which pertain to their
 authority role.
-** _4_ implies *pause*: A signal to pause the current authority set after the
+* _4_ implies *pause*: A signal to pause the current authority set after the
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
 definition of stem:[N_("delay")], is a block _finalized_ by the finality
 consensus engine. After finalizing block stem:[B'], the authorities should stop
 voting.
-** _5_ implies *resume*: A signal to resume the current authority set after the
+* _5_ implies *resume*: A signal to resume the current authority set after the
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
 definition of stem:[N_("delay")], is an _imported_ block and validated by the
 block production consensus engine. After authoring block stem:[B'], the
