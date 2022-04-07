@@ -195,7 +195,7 @@ block tree.
 Let stem:[G] be the root of the block tree and stem:[B] be one of its nodes. By
 stem:["Chain"(B)], we refer to the path graph from stem:[G] to stem:[B] in
 stem:[P(BT)]. Conversely, for a chain stem:[C = sf "Chain"(b)], we define *the
-head of stem:[C]* to be stem:[B], formally noted as stem:[B := sf "Head"(C)]. We
+head of stem:[C]* to be stem:[B], formally noted as stem:[B := bar C]. We
 define stem:[|C|], the length of stem:[C] as a path graph. If stem:[B'] is
 another node on stem:[sf "Chain"(B)], then by stem:[sf "SubChain"(B', B)] we
 refer to the subgraph of stem:[sf "Chain"(B)] path graph which contains both
@@ -214,9 +214,9 @@ stem:[C_1, C_2 in bbb C] if stem:[|C_1| != |C_2|] we say stem:[C_1 > C_2] if
 and only if stem:[|C_1| > |C_2|].
 
 If stem:[|C_1| =| C_2|] we say stem:[C_1 > C_2] if and only if the block arrival
-time of stem:[sf "Head"(C_1)] is less than the block arrival time of stem:[sf
-"Head"(C_2)] (<<defn-block-time>>). We define the stem:[sf "Longest-Chain"(BT)]
-too be the maximum chain given by this order.
+time of stem:[bar C_1] is less than the block arrival time of stem:[bar C_2]
+(<<defn-block-time>>). We define the stem:[sf "Longest-Chain"(BT)] too be the
+maximum chain given by this order.
 ====
 
 [#defn-longest-path]
