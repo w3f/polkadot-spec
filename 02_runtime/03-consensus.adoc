@@ -10,18 +10,20 @@ computed based on the all the VRF outputs up to including Epoch
 latexmath:[\mathcal{E}_{n-2}] while the authority set is based on all
 transaction included up to Epoch latexmath:[\mathcal{E}_{n-1}].
 
+****
 The computation of the randomeness seed is described in Algorithm
 <<algo-epoch-randomness>> which uses the
 concept of epoch subchain as described in host specification and the
 value latexmath:[d_B], which is the VRF output computed for slot
 latexmath:[s_B].
 
-.Epoch-Randomness(latexmath:[n>2]: epoch index)
-[latexmath#algo-epoch-randomness]
+.Epoch-Randomness(n>2: epoch index)
+[pseudocode#algo-epoch-randomness]
 ++++
-\textbf{init}~\rho \leftarrow \phi \\
-\textbf{for}~B~\textbf{in}~\textrm{SubChain}(\mathcal{E}_{n-2})~\textbf{do} \\
-  \rho \leftarrow \rho || d_B \\
-\textbf{end for} \\
-\textbf{return}~\textrm{Blake2b}(\textrm{Epoch-Randomness}(n-1)||n||\rho)
+\State \textbf{init} $\rho \leftarrow \phi$
+\For{$B$ in \textsc{SubChain}($\mathcal{E}_{n-2}$)}
+  \State $\rho \leftarrow \rho || d_B$
+\EndFor
+\Return \textsc{Blake2b}$($\textsc{Epoch-Randomness}$(n-1)||n||\rho)$
 ++++
+****
