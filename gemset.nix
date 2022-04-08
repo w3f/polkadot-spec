@@ -136,7 +136,7 @@
     version = "0.8.0";
   };
   libv8-node = {
-    groups = ["default" "html"];
+    groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
@@ -345,5 +345,15 @@
       type = "gem";
     };
     version = "1.7.0";
+  };
+  wkhtml = {
+    groups = ["pdf"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "162p82yvg42qzzwggyiynl7r5ph2yvhbaljipqwz3c6bacy4qfiv";
+      type = "gem";
+    };
+    version = "0.0.1";
   };
 }

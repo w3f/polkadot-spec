@@ -17,24 +17,30 @@
     pkgs = nixpkgs.legacyPackages.${system};
 
     ruby = pkgs.ruby_3_0;
-    gemConfig = pkgs.defaultGemConfig.override { inherit ruby; };
-    
+    gemConfig = pkgs.defaultGemConfig.override { inherit ruby; } // {
+      wkhtml = attrs: {
+        buildInputs = [ pkgs.wkhtmltopdf ];
+      };
+    };
+
     gems = extraGroup: pkgs.bundlerEnv {
       name = "polkadot-spec-gems";
       inherit ruby gemConfig;
       gemdir  = ./.;
-      groups = [ "default" ] ++ nixpkgs.lib.optional (extraGroup != "") extraGroup; 
+      groups = [ "default" ] ++ nixpkgs.lib.optional (extraGroup != "") extraGroup;
     };
 
     bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
+
+    QT_PLUGIN_PATH = with pkgs.qt514.qtbase; "${bin}/${qtPluginPrefix}";
   in {
     packages = {
-      html = pkgs.runCommand "polkadot-spec.html" {} ''
-        ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -o $out ${self}/index.adoc
+      html = pkgs.runCommand "polkadot-spec.html" { } ''
+        ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-mathjax3.rb -o $out ${self}/index.adoc
       '';
-      
-      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; } ''
-        ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -o $out ${self}/index.adoc
+
+      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit QT_PLUGIN_PATH; } ''
+        ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -r ${self}/asciidoctor-pseudocode.rb -o $out ${self}/index.adoc
       ''; 
     };
 
@@ -44,7 +50,7 @@
       ] ++ (with pkgs; [
         cmake
         pkg-config
-    
+
         bison
         cairo
         flex
@@ -52,7 +58,10 @@
         gnome.gobject-introspection
         libxml2
         pango
+        wkhtmltopdf
       ]);
+
+      inherit QT_PLUGIN_PATH;
     };
 
     defaultPackage = self.packages.${system}.html;
