@@ -79,8 +79,6 @@ DEPENDENCIES
   asciidoctor
   asciidoctor-mathematical
   asciidoctor-pdf
-  asciimath
-  katex (~> 0.8.0)
   mini_racer
   pseudocode (~> 0.1.1)
   rouge
