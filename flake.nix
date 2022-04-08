@@ -15,6 +15,7 @@
   outputs = { self, utils, nixpkgs }: utils.lib.eachDefaultSystem (system:
   let
     pkgs = nixpkgs.legacyPackages.${system};
+    lib = nixpkgs.lib;
 
     ruby = pkgs.ruby_3_0;
     gemConfig = pkgs.defaultGemConfig.override { inherit ruby; } // {
@@ -27,24 +28,27 @@
       name = "polkadot-spec-gems";
       inherit ruby gemConfig;
       gemdir  = ./.;
-      groups = [ "default" ] ++ nixpkgs.lib.optional (extraGroup != "") extraGroup;
+      groups = [ "default" ] ++ lib.optional (extraGroup != "") extraGroup;
     };
 
     bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
 
+    hasWkHtml = builtins.elem system pkgs.wkhtmltopdf.meta.platforms;
     QT_PLUGIN_PATH = with pkgs.qt514.qtbase; "${bin}/${qtPluginPrefix}";
   in {
-    packages = {
+    packages = rec {
+      default = html;
+
       html = pkgs.runCommand "polkadot-spec.html" { } ''
         ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-mathjax3.rb -o $out ${self}/index.adoc
       '';
-
+    } // lib.optionalAttrs hasWkHtml {
       pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit QT_PLUGIN_PATH; } ''
         ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -r ${self}/asciidoctor-pseudocode.rb -o $out ${self}/index.adoc
       ''; 
     };
 
-    devShell = pkgs.mkShell {
+    devShells.default = pkgs.mkShell {
       buildInputs = [
         ruby.devEnv
       ] ++ (with pkgs; [
@@ -58,13 +62,10 @@
         gnome.gobject-introspection
         libxml2
         pango
-        wkhtmltopdf
-      ]);
+      ] ++ lib.optional hasWkHtml wkhtmltopdf);
 
       inherit QT_PLUGIN_PATH;
     };
-
-    defaultPackage = self.packages.${system}.html;
   }) // {
     checks = self.packages;
   };
