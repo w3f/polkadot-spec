@@ -70,6 +70,7 @@ GEM
     treetop (1.6.11)
       polyglot (~> 0.3)
     ttfunk (1.7.0)
+    wkhtml (0.0.1)
 
 PLATFORMS
   x86_64-linux
@@ -83,6 +84,7 @@ DEPENDENCIES
   mini_racer
   pseudocode (~> 0.1.1)
   rouge
+  wkhtml
 
 BUNDLED WITH
    2.2.33
