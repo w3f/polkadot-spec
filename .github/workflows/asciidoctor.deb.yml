@@ -8,6 +8,7 @@ on:
     paths:
     - '.github/workflows/asciidoctor.deb.yml'
     - '**/*.adoc'
+    - 'asciidoctor-mathjax3.rb'
     - 'asciidoctor-pseudocode.rb'
     - 'docinfo-header.html'
     - 'Gemfile'
@@ -21,8 +22,6 @@ jobs:
   build-html:
     name: Compile html specification
     runs-on: ubuntu-20.04
-    env:
-      BUNDLE_WITHOUT: multihtml
     steps:
     - uses: actions/checkout@v2
     - name: Setup ruby
@@ -58,7 +57,7 @@ jobs:
     - name: Install deb dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y bison flex libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx cmake
+        sudo apt-get install -y bison flex libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx cmake wkhtmltopdf
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:

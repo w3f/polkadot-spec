@@ -8,6 +8,7 @@ on:
     paths:
     - '.github/workflows/asciidoctor.nix.yml'
     - '**/*.adoc'
+    - 'asciidoctor-mathjax3.rb'
     - 'asciidoctor-pseudocode.rb'
     - 'docinfo-header.html'
     - 'Gemfile'
