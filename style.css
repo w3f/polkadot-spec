@@ -148,6 +148,12 @@ h6 > a.link:hover,
 	border: none;
 }
 
+#toc ul.sectlevel0 > li > a {
+  font-weight: bold;
+  font-style: normal;
+  text-decoration: underline;
+}
+
 #toc a {
 	color: var(--white);
 }
