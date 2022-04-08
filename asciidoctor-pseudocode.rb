@@ -49,9 +49,9 @@ Asciidoctor::Extensions.register do
       when :html5
         # Embed html in container with title
         content = %(
-          <div id="#{id}" class="stemblock">
-            <div class="title">#{title}. <a href="#{'#' + id}">#{caption}</a></div>
+          <div id="#{id}" class="imageblock">
             <div class="content">#{rendered}</div>
+            <div class="title">#{title}. <a href="#{'#' + id}">#{caption}</a></div>
           </div>
         )
 
