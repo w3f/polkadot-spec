@@ -13,4 +13,5 @@ end
 group :pdf, optional: true do
   gem "asciidoctor-mathematical"
   gem "asciidoctor-pdf"
+  gem 'wkhtml'
 end
