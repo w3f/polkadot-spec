@@ -20,6 +20,8 @@ You will have to install `bundler` to use the `Gemfile`. On a Debian based syste
 
 ```bash
 sudo apt-get install ruby-dev
+# On some systems this might be required
+gem install bundler
 ```
 
 Once `bundler` is available, you can install any missing dependencies for a html build via `bundle install`:
@@ -32,12 +34,6 @@ To also install the dependencies needed for a pdf build, add the `--with pdf` fl
 
 ```bash
 bundle install --with pdf
-```
-
-In theory the html dependencies can also be ignored, if you only want to build the pdf version:
-
-```bash
-bundle install --with pdf --without html
 ```
 
 ## Build
