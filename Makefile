@@ -14,20 +14,22 @@ pdf: polkadot-spec.pdf
 
 tex: polkadot-spec.tex
 
+
 $(CACHEDIR):
 	mkdir -p $@
 
-# TODO: Use attribute-missing=warn --failure-level=WARN
+
+SHARED_FLAGS := -r ./asciidoctor-pseudocode.rb -r asciidoctor-bibtex -a attribute-missing=warn --failure-level=WARN
 
 polkadot-spec.html: $(SOURCES) docinfo-header.html style.css asciidoctor-pseudocode.rb asciidoctor-mathjax3.rb
-	asciidoctor -r ./asciidoctor-pseudocode.rb -r ./asciidoctor-mathjax3.rb -o $@ $<
+	asciidoctor $(SHARED_FLAGS) -r ./asciidoctor-mathjax3.rb -o $@ $<
 
 polkadot-spec.pdf: $(SOURCES) $(CACHEDIR) asciidoctor-pseudocode.rb
-	asciidoctor-pdf -a imagesoutdir=$(CACHEDIR) -r asciidoctor-mathematical -r ./asciidoctor-pseudocode.rb -o $@ $<
+	asciidoctor-pdf -a imagesoutdir=$(CACHEDIR) -r asciidoctor-mathematical $(SHARED_FLAGS) -o $@ $<
 
 polkadot-spec.tex: $(SOURCES)
-	asciidoctor-latex -o $@ $<
+	asciidoctor-latex $(SHARED_FLAGS) -o $@ $<
 
 
 clean:
-	rm -rf $(CACHEDIR) polkadot-spec.html polkadot-spec.pdf
+	rm -rf $(CACHEDIR) polkadot-spec.html polkadot-spec.pdf polkadot-spec.tex
