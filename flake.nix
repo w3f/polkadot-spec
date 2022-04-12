@@ -44,7 +44,7 @@
       '';
     } // lib.optionalAttrs hasWkHtml {
       pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit QT_PLUGIN_PATH; } ''
-        ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -r ${self}/asciidoctor-pseudocode.rb -o $out ${self}/index.adoc
+        ${bundleExec "pdf"} asciidoctor-pdf -r asciidoctor-mathematical -r ${self}/asciidoctor-pseudocode.rb -o $out ${self}/index.adoc
       ''; 
     };
 
