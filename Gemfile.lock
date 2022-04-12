@@ -6,6 +6,12 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     afm (0.2.2)
     asciidoctor (2.0.17)
+    asciidoctor-bibtex (0.8.0)
+      asciidoctor (~> 2.0)
+      bibtex-ruby (~> 5.1)
+      citeproc-ruby (~> 1)
+      csl-styles (~> 1)
+      latex-decode (~> 0.2)
     asciidoctor-mathematical (0.3.5)
       asciidoctor (~> 2.0)
       asciimath (~> 2.0)
@@ -21,7 +27,19 @@ GEM
       safe_yaml (~> 1.0.0)
       treetop (~> 1.6.0)
     asciimath (2.0.3)
+    bibtex-ruby (5.1.6)
+      latex-decode (~> 0.0)
+    citeproc (1.0.10)
+      namae (~> 1.0)
+    citeproc-ruby (1.1.14)
+      citeproc (~> 1.0, >= 1.0.9)
+      csl (~> 1.6)
     concurrent-ruby (1.1.10)
+    csl (1.6.0)
+      namae (~> 1.0)
+      rexml
+    csl-styles (1.0.1.11)
+      csl (~> 1.0)
     css_parser (1.11.0)
       addressable
     execjs (2.8.1)
@@ -30,11 +48,13 @@ GEM
       concurrent-ruby (~> 1.0)
     katex (0.8.0)
       execjs (~> 2.7)
+    latex-decode (0.3.2)
     libv8-node (16.10.0.0-x86_64-linux)
     mathematical (1.6.14)
       ruby-enum (~> 0.4)
     mini_racer (0.6.2)
       libv8-node (~> 16.10.0.0)
+    namae (1.1.1)
     pdf-core (0.9.0)
     pdf-reader (2.9.2)
       Ascii85 (~> 1.0)
@@ -77,6 +97,7 @@ PLATFORMS
 
 DEPENDENCIES
   asciidoctor
+  asciidoctor-bibtex
   asciidoctor-mathematical
   asciidoctor-pdf
   mini_racer

@@ -12,7 +12,7 @@ Polkadot is using the Blake2b variant which is optimized for 64-bit platforms.
 Unless otherwise specified, the Blake2b hash function with a 256-bit output is
 used whenever Blake2b is invoked in this document. The detailed specification
 and sample implementations of all variants of Blake2 hash functions can be found
-in RFC 7693.
+in RFC 7693 cite:[saarinen_blake2_2015].
 
 [#sect-randomness]
 === Randomness
