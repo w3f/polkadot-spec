@@ -115,9 +115,9 @@ latexmath:[r]::
   The voting round counter in the finality protocol
 latexmath:[V_(B)]::
   A GRANDPA vote casted in favor of block B
-latexmath:[V_v^{r,pv}]::
+stem:[V_v^(r,pv)]::
   A GRANDPA vote casted by voter latexmath:[v] during the pre-vote stage of round latexmath:[r]
-latexmath:[V_v^{r,pc}]::
+stem:[V_v^(r,pc)]::
   A GRANDPA vote casted by voter latexmath:[v] during the pre-commit stage of round latexmath:[r]
 latexmath:[J^{r,stage}(B)]::
   The justification for pre-commiting or comming to block latexmath:[B] in round latexmath:[r] of finality protocol
