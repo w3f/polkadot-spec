@@ -370,6 +370,16 @@
     };
     version = "3.2.5";
   };
+  rghost = {
+    groups = ["pdf"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1gqnzyk4lcgb5w86s65n4xwyhhi3igk17bfhdxb2i1yszhkww4m3";
+      type = "gem";
+    };
+    version = "0.9.7";
+  };
   rouge = {
     groups = ["default"];
     platforms = [];
