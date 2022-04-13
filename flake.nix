@@ -29,8 +29,6 @@
       inherit ruby gemConfig;
       gemdir  = ./.;
       groups = [ "default" ] ++ lib.optional (extraGroup != "") extraGroup;
-
-      buildInputs = [ pkgs.ghostscript ];
     };
 
     bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
@@ -47,6 +45,8 @@
     } // lib.optionalAttrs hasWkHtml {
       pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit QT_PLUGIN_PATH; GS = "${pkgs.ghostscript}/bin/gs"; } ''
         export HOME=$(mktemp -d)
+        mkdir -p $HOME/.local
+        ln -s ${pkgs.bakoma_ttf}/share $HOME/.local/
         ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -r ${self}/asciidoctor-pseudocode.rb -o $out ${self}/index.adoc
       ''; 
     };
@@ -58,6 +58,7 @@
         cmake
         pkg-config
 
+        bakoma_ttf
         bison
         cairo
         flex
