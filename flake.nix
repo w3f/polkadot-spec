@@ -29,6 +29,8 @@
       inherit ruby gemConfig;
       gemdir  = ./.;
       groups = [ "default" ] ++ lib.optional (extraGroup != "") extraGroup;
+
+      buildInputs = [ pkgs.ghostscript ];
     };
 
     bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
@@ -60,6 +62,7 @@
         cairo
         flex
         gdk-pixbuf 
+        ghostscript
         gnome.gobject-introspection
         libxml2
         pango
