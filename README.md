@@ -36,6 +36,8 @@ To also install the dependencies needed for a pdf build, add the `--with pdf` fl
 bundle install --with pdf
 ```
 
+The pdf build requires various native dependencies to convert math to images with  `asciidoctor-mathematical`, please check the [offical documentation](https://github.com/asciidoctor/asciidoctor-mathematical#installation=) for further details. Furthermore, the PDF is cleanup and compressed with `ghostscript`, so this will need to be installed as well.
+
 ## Build
 
 To build the html version of the spec, just run `bundle exec make html`. This create will create a `polkadot-spec.html` in the same folder.
