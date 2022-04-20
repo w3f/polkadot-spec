@@ -84,18 +84,18 @@ a |\| b :=(a_0, ..., a_n, b_0, ..., b_m)
 [#defn-bit-rep]
 .<<defn-bit-rep, Bitwise Representation>>
 ====
-For a given byte stem:[b] the *bitwise representation* of stem:[b] is defined as
+For a given byte stem:[0 <= b <= 255] the *bitwise representation* in bits stem:[b_i in {0, 1}] is defined as:
 
 [stem]
 ++++
-b :=b_7 ... b_0
+b := b_7 ... b_0
 ++++
 
 where
 
 [stem]
 ++++
-b = 2_0 b_0 + 2_1 b_1 + ... + 2_7 b_7
+b = 2^7 b_7 + 2^6 b_6 + ... + 2^0 b_0
 ++++
 ====
 
@@ -122,7 +122,7 @@ Accordingly, we define the function stem:[sf "Enc"_(sf "LE")]:
 
 [stem]
 ++++
-sf "Enc"_(sf "LE"):{(bbb Z^+ -> bbb B),((B_n ... B_0)_256 -> (B_{0,} B_1, ... , B_n)):}
+sf "Enc"_(sf "LE"): bbb Z^+ -> bbb B; (B_n ... B_0)_256 |-> (B_{0,} B_1, ... , B_n)
 ++++
 ====
 
