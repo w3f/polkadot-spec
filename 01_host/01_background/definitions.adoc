@@ -39,7 +39,7 @@ the edge which connect stem:[v_i] and stem:[v_{i + 1}].
 [#defn-radix-tree]
 .<<defn-radix-tree, Radix-r Tree>>
 ====
-A *Radix-r tree* is a variant of  a trie in which:
+A *Radix-r tree* is a variant of a trie in which:
 
 * Every node has at most stem:[r] children where stem:[r = 2^x] for some
 stem:[x];
@@ -76,23 +76,25 @@ seconds are ignored, and every day is treated as if it contained exactly 86’40
 seconds.
 ====
 
+==== Block Tree
+
+In the course of formation of a (distributed) blockchain, it is possible
+that the chain forks into multiple subchains in various block positions.
+We refer to this structure as a _block tree_:
+
 [#defn-block-tree]
 .<<defn-block-tree, Block >>
 ====
-In the course of formation of a (distributed) blockchain, it is possible
-that the chain forks into multiple subchains in various block positions.
-We refer to this structure as a _block tree_.
-
 The *block tree* of a blockchain, denoted by stem:[BT] is the union of all
 different versions of the blockchain observed by the Polkadot Host such that
 every block is a node in the graph and stem:[B_1] is connected to stem:[B_2] if
 stem:[B_1] is a parent of stem:[B_2].
+====
 
 When a block in the block tree gets finalized, there is an opportunity to prune
 the block tree to free up resources into branches of blocks that do not contain
 all of the finalized blocks or those that can never be finalized in the
 blockchain (<<sect-finality>>).
-====
 
 [#defn-pruned-tree]
 .<<defn-pruned-tree, Pruned Block Tree>>
@@ -102,26 +104,22 @@ tree obtained by eliminating all branches which do not contain the most recent
 finalized blocks (<<defn-finalized-block>>). By *pruning*, we refer to the
 procedure of stem:[BT larr "PBT"]. When there is no risk of ambiguity and is safe
 to prune BT, we use stem:["BT"] to refer to stem:["PBT"].
+====
 
 <<defn-chain-subchain>> gives the means to highlight various branches of the
 block tree.
-====
 
 [#defn-chain-subchain]
 .<<defn-chain-subchain, Subchain>>
 ====
-Let stem:[G] be the root of the block tree and stem:[B] be one of its nodes. By
-stem:["Chain"(B)], we refer to the path graph from stem:[G] to stem:[B] in
-stem:["BT"] or stem:["PBT"]. Conversely, for a chain stem:[C = sf "Chain"(b)],
-we define *the head of stem:[C]* to be stem:[B], formally noted as stem:[B :=
-bar C]. We define stem:[|C|], the length of stem:[C] as a path graph. If
-stem:[B'] is another node on stem:[sf "Chain"(B)], then by stem:[sf
-"SubChain"(B', B)] we refer to the subgraph of stem:[sf "Chain"(B)] path graph
-which contains both stem:[B] and stem:[B'] and by stem:[sf "SubChain"(B', B)] we
-refer to its length. Accordingly, stem:[bbb C_(B')((P)BT)] is the set of all
-subchains of stem:[(P)BT] rooted at stem:[B']. The set of all chains of
-stem:[(P)BT], stem:[bbb C_G((P)BT})] is denoted by stem:[bbb C((P)BT)] or simply
-stem:[bbb C], for the sake of brevity.
+Let stem:[G] be the root of the block tree and stem:[B] be one of its nodes. By stem:["Chain"(B)], we refer to the path graph from stem:[G] to stem:[B] in stem:["BT"].
+
+Conversely, for a chain stem:[C = sf "Chain"(b)], we define *the head of stem:[C]* to be stem:[B], formally noted as stem:[B := bar C]. We define stem:[|C|], the length of stem:[C] as a path graph.
+
+If stem:[B'] is another node on stem:[sf "Chain"(B)], then by stem:[sf "SubChain"(B', B)] we refer to the subgraph of stem:[sf "Chain"(B)] path graph
+which contains both stem:[B] and stem:[B'] and by stem:[sf "SubChain"(B', B)] we refer to its length.
+
+Accordingly, stem:[bbb C_(B')(BT)] is the set of all subchains of stem:[BT] rooted at stem:[B']. The set of all chains of stem:[BT], stem:[bbb C_G(BT})] is denoted by stem:[bbb C(BT)] or simply   stem:[bbb C], for the sake of brevity.
 ====
 
 [#defn-longest-chain]
@@ -140,19 +138,17 @@ maximum chain given by this order.
 [#defn-longest-path]
 .<<defn-longest-path, Longest Path>>
 ====
-stem:[sf "Longest-Path"(BT)] returns the path graph of stem:[(P)BT] which is the
-longest among all paths in stem:[(P)BT] and has the earliest block arrival time
-(<<defn-block-time>>). stem:[sf "Deepest-Leaf"(BT)] returns the head of stem:[sf
-"Longest-Path"(BT)] chain.
+stem:[sf "Longest-Path"(BT)] returns the path graph of stem:[BT] which is the
+longest among all paths in stem:[BT] and has the earliest block arrival time
+(<<defn-block-time>>). stem:[sf "Deepest-Leaf"(BT)] returns the head of stem:[sf "Longest-Path"(BT)] chain.
+====
 
 Because every block in the blockchain contains a reference to its parent, it is
 easy to see that the block tree is de facto a tree. A block tree naturally
 imposes partial order relationships on the blocks as follows:
-====
 
 [#defn-descendant]
 .<<defn-descendant, Descendant>>
 ====
-We say *B is descendant of stem:[B']*, formally noted as stem:[B > B'] if
-stem:[B] is a descendant of stem:[B'] in the block tree.
+We say *B is descendant of stem:[B']*, formally noted as stem:[B > B'] if stem:[B] is a descendant of stem:[B'] in the block tree.
 ====
