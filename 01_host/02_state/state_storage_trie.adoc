@@ -35,7 +35,7 @@ the set of all keys and values stored in the state storage.
 
 In order to ensure the integrity of the state of the system, the stored data
 needs to be re-arranged and hashed in a _modified Merkle Patricia Tree_, which
-hereafter we refer to as the _*Trie*_. This rearrangment is necessary to be able
+hereafter we refer to as the *_State Trie_* or just *_Trie_*. This rearrangment is necessary to be able
 to compute the Merkle hash of the whole or part of the state storage,
 consistently and efficiently at any given time.
 
@@ -89,7 +89,9 @@ such that:
 
 [stem]
 ++++
-sf "KeyEncode"(k): {(bbb B,->,"Nibbles"^4),(k:=(b_1,...,b_n),->,(b_1^(1),b_1^2,b_2^1,b_2^2,...,b_n^1,b_n^2)),(,,:=(k_("enc"_1),...,k_("enc"_(2n)))):}
+sf "KeyEncode": bbb B -> "Nibbles"^4 \
+k |-> (k_("enc"_1),...,k_("enc"_(2n))) \
+(b_1,...,b_n) |-> (b_1^(1),b_1^2,b_2^1,b_2^2,...,b_n^1,b_n^2    )
 ++++
 
 where stem:["Nibble"^4] is the set of all nibbles of 4-bit arrays and
@@ -98,8 +100,10 @@ representations of stem:[b_i]:
 
 [stem]
 ++++
-(b_i^1,b_i^2) := (b_i -: 16,b_i mod 16)
+k_("enc"_i) := (b_i^1,b_i^2) := (b_i -: 16,b_i mod 16)
 ++++
+
+where stem:[mod] is the remainder and stem:[-:] is the integer division operators.
 ====
 
 By looking at stem:[k_("enc")] as a sequence of nibbles, one can walk the radix
@@ -121,7 +125,7 @@ stem:[N in cc N] to refer to an individual node in the trie.
 [#defn-nodetype]
 .<<defn-nodetype, State Trie>>
 ====
-The State Trie is a radix-16 tree. Each Node in the Trie is identified with a
+The State Trie is a radix-16 tree (<<defn-radix-tree>>). Each Node in the Trie is identified with a
 unique key latexmath:[k_N] such that:
 
 * stem:[k_N] is the shared prefix of the key of all the
@@ -139,13 +143,13 @@ stem:[N in cc N] such that stem:[k_N = k].
 [#defn-trie-branch]
 .<<defn-trie-branch, Branch>>
 ====
-A *branch* node is a node which has one child or more. A branch node can have at
-most 16 children. A *leaf* node is a childless node. Accordingly:
+A *branch* node stem:[N_b in cc N_b] is a node which has one child or more. A branch node can have at
+most 16 children. A *leaf* node stem:[N_l in cc N_l] is a childless node. Accordingly:
 
 [stem]
 ++++
-cc N_b := {N in cc N | N " is a branch node"}\
-cc N_i := {N in cc N | N " is a leaf node"}
+cc N_b := {N_b in cc N | N_b " is a branch node"}\
+cc N_l := {N_l in cc N | N_l " is a leaf node"}
 ++++
 ====
 
@@ -233,12 +237,14 @@ Formally noted as:
 
 [stem]
 ++++
-v_N := "Head"_N||"Enc"_("HE")(pk_N)||sv_N
+v_N := "Head"_N||"Enc"_"HE"(pk_N)||sv_N
 ++++
 
-where stem:["Head"_N], stem:[pk_N], stem:["Enc"_("nibbles")] and stem:[sv_N] are
-defined in <<defn-node-header>>, <<defn-node-key>>, <<defn-hex-encoding>> and
-<<defn-node-subvalue>>, respectively.
+where::
+* stem:["Head"_N] is the node header from <<defn-node-header>>
+* stem:[pk_N] is the partial key from <<defn-node-key>>
+* stem:["Enc"_"HE"] is hex encoding (<<defn-hex-encoding>>)
+* stem:[sv_N] is the node subvalue from <<defn-node-subvalue>>
 ====
 
 [#defn-node-header]
