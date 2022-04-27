@@ -203,23 +203,30 @@ k_(N_c) = k_N || i || "pk"_(N_c)
 ++++
 ====
 
+****
+.Aggregate-Key
+[pseudocode#algo-aggregate-key]
+++++
+\require{$P_N \coloneqq ($\textsc{TrieRoot}$ = N_1, \dots, N_j = N)$}
+
+\state $pk^{Agr}_N \leftarrow \phi$
+
+\state $i \leftarrow 1$
+
+\forall{$N_i \in P_N$}
+
+  \state $pk^{Agr}_N \leftarrow pk^{Agr}_N || pk_{N_i} || \textrm{Index}_{N_i}(N_{i + 1})$
+
+\endfor
+
+\state $pk^{Agr}_N \leftarrow pk^{Agr}_N || pk_{N_i}$
+
+\return $pk^{Agr}_N$
+++++
+
 Assuming that stem:[P_N] is the path (<<defn-path-graph>>) from the Trie root to
 node stem:[N], the algorithm defined in <<algo-aggregate-key>> rigorously
 demonstrates how to build stem:["pk"_N^("Agr")] while traversing stem:[P_N].
-
-[#algo-aggregate-key]
-===== Aggregate Key
-****
-Algorithm: stem:[sf "Aggregate-Key"(P_N := ("TrieRoot" = N_1,...,N_j = N))]
-
-. stem:["pk"_N^("Agr") larr phi]
-. stem:[i larr 1]
-. stem:["while" (N_i != N)]
-. stem:["    " pk_N^(Agr) larr pk_N^(Agr)"||"pk_(N_i)]
-. stem:["    " pk_N^(Agr) larr pk_N^(Agr)"||""Index"_(N_i)(N_(i+1))]
-. stem:["    " i larr i + 1]
-. stem:[pk_N^(Agr) larr pk_N^(Agr)"||"pk_(N_i)]
-. stem:["return " pk_N^(Agr)]
 ****
 
 [#defn-node-value]
