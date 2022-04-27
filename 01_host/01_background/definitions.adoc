@@ -36,21 +36,6 @@ degree 2. Therefore, stem:[P_n] can be represented by sequences of stem:[(v_1,
 the edge which connect stem:[v_i] and stem:[v_{i + 1}].
 ====
 
-[#defn-radix-tree]
-.<<defn-radix-tree, Radix-r Tree>>
-====
-A *Radix-r tree* is a variant of a trie in which:
-
-* Every node has at most stem:[r] children where stem:[r = 2^x] for some
-stem:[x];
-* Each node that is the only child of a parent, which does not
-represent a valid key is merged with its parent.
-
-As a result, in a radix tree, any path whose interior vertices all have only one
-child and does not represent a valid key in the data set, is compressed into a
-single edge. This improves space efficiency when the key space is sparse.
-====
-
 [#defn-blockchain]
 .<<defn-blockchain, Blockchain>>
 ====
