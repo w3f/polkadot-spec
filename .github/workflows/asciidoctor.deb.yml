@@ -92,22 +92,19 @@ jobs:
     - uses: actions/checkout@v2
       with:
         ref: gh-pages
-    - run: rm -rf develop/
     - uses: actions/download-artifact@v2
       with:
         name: polkadot-spec.html
-        path: develop/
     - uses: actions/download-artifact@v2
       with:
         name: polkadot-spec.pdf
-        path: spec/
     - run: |
-        mv develop/polkadot-spec.html develop/index.html
-        mv spec/polkadot-spec.pdf spec/develop.pdf
+        mv polkadot-spec.html index.html
+        mv polkadot-spec.pdf latest.pdf
     - name: Commit and push updated GitHub Pages branch
       run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
-        git add develop/index.html spec/develop.pdf
-        git commit --amend -m "Update develop specification"
+        git add index.html latest.pdf
+        git commit -m "Release {{ github.event.release.tag_name }}"
         git push -f
