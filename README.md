@@ -12,6 +12,10 @@ The latest releases of the *Polkadot Protocol Specification* can be found on our
 
 The Polkadot specification is written in [AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest) and currently compiled with [Asciidoctor](https://asciidoctor.org/).
 
+## Contributing
+
+Contributions are always welcome. For a quick primer on the AsciiDoc format, we recommend the [AsciiDoc Writers Guide](https://asciidoctor.org/docs/asciidoc-writers-guide).
+
 ## Dependencies
 
 A handful of dependencies are required to successfully convert the spec into a publishable document. We provide a `Gemfile` that provides all dependecies.
