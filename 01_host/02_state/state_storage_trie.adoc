@@ -358,10 +358,12 @@ where the first variant is a leaf node and the second variant is a branch node.
 ++++
 
 stem:[N_(C_1) ... N_(C_n)] with stem:[n <= 16] are the children nodes of the
-branch node stem:[N] and stem:["Enc"_("SC")], stem:["StoredValue"], stem:[H], and
-stem:["ChildrenBitmap"(N)] are defined in <<sect-scale-codec>>,
-<<defn-stored-value>>, <<defn-merkle-value>> and <<defn-children-bitmap>>
-respectively.
+branch node stem:[N].
+
+* stem:["Enc"_("SC")] is defined in <<sect-scale-codec>>.
+* stem:["StoredValue"] is defined in <<defn-stored-value>>.
+* stem:[H] is defined in <<defn-merkle-value>>.
+* stem:["ChildrenBitmap"(N)] is defined in <<defn-children-bitmap>>.
 
 The Trie deviates from a traditional Merkle tree where node value
 (<<defn-node-value>>), stem:[v_N], is presented instead of its hash if it
