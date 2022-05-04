@@ -23,12 +23,12 @@ key in the state storage and is formally defined as:
 
 [stem]
 ++++
-sf "StoredValue" ": " cc K -> cc V\
+sf "StoredValue" ": " k -> v\
 k -> {(v,"if " (k,v), "exists in state storage"),(phi,,"otherwise"):}
 ++++
 
-where stem:[cc K sub bbb B] and stem:[cc V sub bbb B] are respectively
-the set of all keys and values stored in the state storage.
+where stem:[k sub bbb B] and stem:[v sub bbb B] are respectively the set of all
+keys and values stored in the state storage. stem:[v] can be an empty value.
 ====
 
 ==== The General Tree Structure
@@ -361,7 +361,7 @@ stem:[N_(C_1) ... N_(C_n)] with stem:[n <= 16] are the children nodes of the
 branch node stem:[N].
 
 * stem:["Enc"_("SC")] is defined in <<sect-scale-codec>>.
-* stem:["StoredValue"] is defined in <<defn-stored-value>>.
+* stem:["StoredValue"], where stem:[v] can be empty, is defined in <<defn-stored-value>>.
 * stem:[H] is defined in <<defn-merkle-value>>.
 * stem:["ChildrenBitmap"(N)] is defined in <<defn-children-bitmap>>.
 
