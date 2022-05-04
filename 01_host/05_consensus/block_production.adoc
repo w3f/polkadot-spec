@@ -493,12 +493,12 @@ where:
 stem:["Head"(B)] (<<defn-block-header>>).
 * The Seal stem:[D_s] is the last element in the digest array stem:[H_d(B)] as
 described in <<defn-digest>>.
-* stem:[Seal-Id] is the type index showing that a digest item (<<defn-digest>>)
+* stem:["Seal-Id"] is the type index showing that a digest item (<<defn-digest>>)
 of varying type (<<defn-scale-variable-type>>) is of type _Seal_.
 * stem:["AuthorityDirectory"^(cc E_c)] is the set of Authority ID for block
 producers of epoch stem:[cc E_c].
 . stem:["AuthorId"] is the public session key of the block producer.
-* stem:[Verify-Slot-Winner] is defined in Algorithm as described in
+* stem:["Verify-Slot-Winner"] is defined in Algorithm as described in
 <<algo-verify-slot-winner>>.
 ****
 
@@ -510,7 +510,7 @@ Algorithm: stem:[tt "Verify-Slot-Winner"(B)]
 . stem:[cc E_c larr "Current-Epoch"]
 . stem:[p larr "Epoch-Randomness"(c)]
 . stem:["Verify-VRF"(p, H_"BABE".(pi, d),H_"BABE"(B).s,c)]
-. stem:["if"  d_B >= t]
+. stem:["if "  d_B >= t]
 . stem:["    " "error 'Block producer is not a winner of the slot'"]
 
 where:
