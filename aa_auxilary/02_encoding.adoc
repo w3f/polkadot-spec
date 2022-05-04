@@ -94,6 +94,10 @@ implementation, including the Merkle hash proof for the State Storage.
 stem:["Dec"_("SC")(d)] refers to the decoding of a blob of data. Since the SCALE codec is not
 self-describing, it’s up to the decoder to validate whether the blob of data can
 be deserialized into the given type or data structure.
+
+It's accepted behavior for the decoder to partially decode the blob of data.
+Meaning, any additional data that does not fit into a datastructure can be
+ignored.
 ====
 
 .Byte Array
