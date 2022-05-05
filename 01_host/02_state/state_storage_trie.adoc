@@ -24,11 +24,11 @@ key in the state storage and is formally defined as:
 
 [stem]
 ++++
-sf "StoredValue" ": " k -> v\
+sf "StoredValue" ": "cc k -> cc V\
 k -> {(v,"if " (k,v), "exists in state storage"),(phi,,"otherwise"):}
 ++++
 
-where stem:[k sub bbb B] and stem:[v sub bbb B] are respectively the set of all
+where stem:[cc K sub bbb B] and stem:[cc V sub bbb B] are respectively the set of all
 keys and values stored in the state storage. stem:[v] can be an empty value.
 ====
 
