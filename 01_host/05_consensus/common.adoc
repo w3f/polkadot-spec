@@ -33,9 +33,8 @@ for stem:["Auth"_C(B_0)] is set in the genesis state (<<chapter-genesis>>) and
 can be retrieved using a runtime entry corresponding to consensus engine
 stem:[C].
 
-In Polkadot, all authorities have the weight stem:[w_A = 1]. The weight
-stem:[w_A] exists for potential improvements in the protocol and could have a
-use-case in the future.
+The authorities and their corresponding weights can be retrieved from the
+Runtime (<<sect-rte-grandpa-auth>>).
 ====
 
 [#sect-consensus-message-digest]
