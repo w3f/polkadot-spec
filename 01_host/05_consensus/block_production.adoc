@@ -125,7 +125,7 @@ A_w =sum_(n=1)^(|"Auth"_C(B)|)(w_A in "Auth"_C(B)_n) \
 T_(E_n) := 1 - (1 - c)^(w_a/A_w)
 ++++
 
-where stem:[A_w] is the totaly sum of all authority weights in the authority set
+where stem:[A_w] is the total sum of all authority weights in the authority set
 (<<defn-authority-list>>) for epoch stem:[cc E_n], stem:[w_a] is the weight of
 the block author and stem:[c in (0, 1)] is the BABE constant
 (<<defn-babe-constant>>).
