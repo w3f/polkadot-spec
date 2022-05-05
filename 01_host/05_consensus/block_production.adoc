@@ -154,7 +154,7 @@ stem:[sc_n] is defined in <<defn-epoch-duration>> , stem:["VRF"] creates the
 BABE VRF transcript (<<defn-babe-vrf-transcript>>) and stem:[e_i] is the epoch
 index, retrieved from the Runtime (<<sect-rte-babeapi-epoch>>). stem:[s_k] and
 stem:[p_k] is the secret key respectively the public key of the authority. For
-any slot stem:[s] in epoch stem:[n] where stem:[d < r], the block producer is
+any slot stem:[s] in epoch stem:[n] where stem:[o < r], the block producer is
 required to produce a block.
 
 Note that the secondary slots (<<defn-babe-secondary-slots>>) are running
@@ -512,16 +512,18 @@ Algorithm: stem:[tt "Verify-Slot-Winner"(B)]
 . stem:[cc E_c larr "Current-Epoch"]
 . stem:[p larr "Epoch-Randomness"(c)]
 . stem:["Verify-VRF"(p, H_"BABE".(pi, d),H_"BABE"(B).s,c)]
-. stem:["if "  d_B >= t]
+. stem:["if "  o >= T_(E_n)]
 . stem:["    " "error 'Block producer is not a winner of the slot'"]
 
 where:
 
 . stem:["Epoch-Randomness"] is defined in <<defn-epoch-randomness>>.
 . stem:[H_"BABE"(B)] is the BABE header defined in <<defn-babe-header>>.
-. stem:[(d_B,pi_B)] is the block lottery result for block stem:[B].
+. stem:[(o,p)] is the block lottery result for block stem:[B]
+(<<algo-block-production-lottery>>), respectively the VRF output
+(<<defn-babe-vrf-transcript>>).
 . stem:["Verify-VRF"] is described in <<sect-vrf>>.
-. stem:[t] is the winning threshold as defined in <<defn-winning-threshold>>.
+. stem:[T_(E_n)] is the winning threshold as defined in <<defn-winning-threshold>>.
 ****
 
 [#sect-block-building] 
