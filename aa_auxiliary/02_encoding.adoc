@@ -89,7 +89,8 @@ codec_ to encode byte arrays as well as other data structures. SCALE provides a
 canonical encoding to produce consistent hash values across their
 implementation, including the Merkle hash proof for the State Storage.
 
-.Decoding
+[#defn-scale-decoding]
+.<<defn-scale-decoding, Decoding>>
 ====
 stem:["Dec"_("SC")(d)] refers to the decoding of a blob of data. Since the SCALE codec is not
 self-describing, it’s up to the decoder to validate whether the blob of data can
@@ -100,8 +101,8 @@ Meaning, any additional data that does not fit into a datastructure can be
 ignored.
 ====
 
-.Byte Array
 [#defn-scale-byte-array]
+.<<defn-scale-byte-array, Byte Array>>
 ====
 The *SCALE codec* for *Byte array*, stem:[A], such that:
 
@@ -121,8 +122,8 @@ and defined as:
 where stem:["Enc"_("SC")^("Len")] is defined in <<defn-sc-len-encoding>>.
 ====
 
-.Tuple
 [#defn-scale-tuple]
+.<<defn-scale-tuple, Tuple>>
 ====
 The *SCALE codec* for *Tuple*, stem:[T], such that:
 
@@ -143,8 +144,8 @@ In case of a tuple (or a structure), the knowledge of the shape of data is not
 encoded even though it is necessary for decoding. The decoder needs to derive
 that information from the context where the encoding/decoding is happening.
 
-.Varying Data Type
 [#defn-varrying-data-type]
+.<<defn-varrying-data-type, Varying Data Type>>
 ====
 We define a *varying data* type to be an ordered set of data types.
 
@@ -163,8 +164,8 @@ value in the definition of a particular varying data type.
 In particular, we define two specific varying data which are frequently used in
 various part of Polkadot Protocol:
 
-.Option Type
 [#defn-option-type]
+.<<defn-option-type, Option Type>>
 ====
 The *Option* type is a varying data type of stem:[{"None",T_2}] which indicates if
 data of stem:[T_2] type is available (referred to as _some_ state) or not
@@ -175,8 +176,8 @@ the presence of type stem:[T_2] indicated by stem:["idx"(T_2) = 1] implies that
 the data is available.
 ====
 
-.Result Type
 [#defn-result-type]
+.<<defn-result-type, Result Type>>
 ====
 The *Result* type is a varying data type of stem:[{T_1, T_2}] which is used to
 indicate if a certain operation or function was executed successfully (referred
@@ -185,8 +186,8 @@ success, stem:[T_2] implies failure. Both types can either contain additional
 data or are defined as empty type otherwise.
 ====
 
-.Encoding of Varying Data Type
 [#defn-scale-variable-type]
+.<<defn-scale-variable-type, Encoding of Varying Data Type>>
 ====
 The SCALE codec for value stem:[A = (A_("Type"), A_("Value"))] of varying data
 type stem:[cc T = {T_i, ... T_n}], formally referred to as
@@ -211,8 +212,8 @@ The SCALE codec does not encode the correspondence between the value of stem:[id
 defined in <<defn-scale-variable-type>> and the data type it represents; the
 decoder needs prior knowledge of such correspondence to decode the data.
 
-.Sequence
 [#defn-scale-list]
+.<<defn-scale-list, Sequence>>
 ====
 The *SCALE codec* for *sequence* stem:[S] such that:
 
@@ -232,7 +233,8 @@ infer value of stem:[n] from the context) is defined as:
 where stem:["Enc"_("SC")^("Len")] is defined in <<defn-sc-len-encoding>>.
 ====
 
-.Dictionary
+[#defn-scale-dictionary]
+.<<defn-scale-dictionary, Dictionary>>
 ====
 SCALE codec for *dictionary* or *hashtable* D with key-value pairs stem:[(k_i,
 v_i)]s such that:
@@ -255,7 +257,8 @@ stem:["Enc"_("SC")^("Len")] but argument stem:["Size"] refers to the number of
 key-value pairs rather than the length.
 ====
 
-.Boolean
+[#defn-scale-boolean]
+.<<defn-scale-boolean, Boolean>>
 ====
 The *SCALE codec* for *boolean value* stem:[b] defined as a byte as follows:
 
@@ -266,16 +269,16 @@ b -> {(0, b="False"),(1, b="True"):}
 ++++
 ====
 
-.Fixed Length
 [#defn-scale-fixed-length]
+.<<defn-scale-fixed-length, Fixed Length>>
 ====
 The SCALE codec, stem:["Enc"_("SC")], for other types such as fixed length
 integers not defined here otherwise, is equal to little endian encoding of those
 values defined in <<defn-little-endian>>.
 ====
 
-.Empty
 [#defn-scale-empty]
+.<<defn-scale-empty, Empty>>
 ====
 The SCALE codec, stem:["Enc"_("SC")], for an empty type is defined to a byte
 array of zero length and depicted as stem:[phi].
@@ -286,8 +289,8 @@ array of zero length and depicted as stem:[phi].
 
 SCALE Length encoding is used to encode integer numbers of variying sizes prominently in an encoding length of arrays:
 
-.Length Encoding
 [#defn-sc-len-encoding]
+.<<defn-sc-len-encoding, Length Encoding>>
 ====
 *SCALE Length encoding*, stem:["Enc"_("SC")^("Len")], also known as a _compact encoding_, of a non-negative number stem:[n] is defined as follows:
 
@@ -337,8 +340,8 @@ is stored in a byte array. On the other hand, the Trie keys are broken into
 nibbles into byte arrays canonically. To this aim, we define
 hex encoding function asciimath:["Enc" ("HE")("PK")] as follows:
 
-.Hex Encoding
 [#defn-hex-encoding]
+.<<defn-hex-encoding, Hex Encoding>>
 ====
 Suppose that stem:["PK" = (k_1, ... k_n)] is a sequence of nibbles, then:
 
