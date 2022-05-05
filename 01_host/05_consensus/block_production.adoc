@@ -121,12 +121,13 @@ a specific slot. stem:[T_(cc E_n)] is calculated  as follows:
 
 [stem]
 ++++
-T_(E_n) := 1 - (1 - c)^(1/("AuthorityDirectory"^(E_n)))
+A_w =sum_(n=1)^(|"Auth"_C(B)|)(w_A in "Auth"_C(B)_n) \
+T_(E_n) := 1 - (1 - c)^(w_a/A_w)
 ++++
 
-where the stem:["AuthorityDirectory"^(cc E_n)] is the set of BABE authorities
-for epoch stem:[cc E_n] and stem:[c in (0, 1)] is the BABE constant
-(<<defn-babe-constant>>).
+where stem:[A_w] is the totaly sum of all authority weights in the authority set
+(<<defn-authority-list>>) for epoch stem:[cc E_n] and stem:[c in (0, 1)] is the
+BABE constant (<<defn-babe-constant>>).
 ====
 
 [#algo-block-production-lottery]
