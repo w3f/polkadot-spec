@@ -24,12 +24,12 @@ key in the state storage and is formally defined as:
 
 [stem]
 ++++
-sf "StoredValue" ": "cc k -> cc V\
+sf "StoredValue" ": "cc K -> cc V\
 k -> {(v,"if " (k,v), "exists in state storage"),(phi,,"otherwise"):}
 ++++
 
 where stem:[cc K sub bbb B] and stem:[cc V sub bbb B] are respectively the set of all
-keys and values stored in the state storage. stem:[v] can be an empty value.
+keys and values stored in the state storage. stem:[cc V] can be an empty value.
 ====
 
 ==== The General Tree Structure
