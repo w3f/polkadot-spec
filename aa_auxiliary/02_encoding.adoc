@@ -190,7 +190,7 @@ data or are defined as empty type otherwise.
 ====
 The SCALE codec for value stem:[A = (A_("Type"), A_("Value"))] of varying data
 type stem:[cc T = {T_i, ... T_n}], formally referred to as
-stem:["Enc" ("SC")(A)} is defined as follows:
+stem:["Enc" ("SC")(A)] is defined as follows:
 
 [stem]
 ++++
@@ -281,6 +281,7 @@ The SCALE codec, stem:["Enc"_("SC")], for an empty type is defined to a byte
 array of zero length and depicted as stem:[phi].
 ====
 
+[#sect-sc-length-and-compact-encoding]
 ==== Length and Compact Encoding
 
 SCALE Length encoding is used to encode integer numbers of variying sizes prominently in an encoding length of arrays:
