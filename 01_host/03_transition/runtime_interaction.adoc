@@ -137,9 +137,10 @@ In general, all data exchanged between the Polkadot Host and the Runtime is
 encoded using SCALE codec described in <<sect-scale-codec>>. Therefore all
 runtime entries have the following identical Wasm function signatures:
 
-++++
+[source,wat]
+----
 (func $runtime_entry (param $data i32) (param $len i32) (result i64))
-++++
+----
 
 In each invocation of a Runtime entry, the argument(s) which are supposed to be
 sent to the entry, need to be SCALE encoded into a byte array stem:[B]
