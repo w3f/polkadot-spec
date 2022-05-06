@@ -547,7 +547,7 @@ and the latter with decreasing stem:[tt "Best-Final-Candidate"(r - 1)].
 ====
 
 [#sect-finality-forced-changes]
-==== Forced Changes
+==== Forced Authority Set Changes
 
 In a case of emergency where the Polkadot network is unable to finalize blocks,
 the Polkadot governance mechanism must enact a forced change, which the Host
