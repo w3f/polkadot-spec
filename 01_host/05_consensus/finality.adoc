@@ -553,7 +553,7 @@ In a case of emergency where the Polkadot network is unable to finalize blocks,
 the Polkadot governance mechanism must enact a forced change, which the Host
 must handle in a specific manner. Given that in such a case finality cannot be
 relied on, the Host must detect the forced change
-(<<defn-consensus-message-digest>>) of a (valid) block and apply it to all
+(<<defn-consensus-message-digest>>) in a (valid) block and apply it to all
 forks. 
 
 The stem:[m in CM_g], which is specified by the governance mechanism, defines
