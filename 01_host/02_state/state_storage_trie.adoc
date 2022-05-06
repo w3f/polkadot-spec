@@ -258,8 +258,8 @@ where::
 .<<defn-node-header, Node Header>>
 ====
 The *node header*, consisting of stem:[>= 1] bytes, stem:[N_1...N_n], specifies
-the node variant and the length of the partial key length (<<defn-node-key>>) in
-4-bit nibbles. Both pieces of information can be represented in bits within a
+the node variant and the partial key length (<<defn-node-key>>).
+Both pieces of information can be represented in bits within a
 single byte, stem:[N_1], where the amount of bits of the variant, stem:[v], and
 the bits of the partial key length, stem:[p_l] varies.
 
