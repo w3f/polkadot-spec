@@ -7,7 +7,7 @@ included to provide implementors with a pointer to what these steps are and
 where they are defined. In short, the following steps should be taken by all
 bootstrapping nodes:
 
-. The node needs to populate the state storage with the official genesis state,
+. The node must to populate the state storage with the official genesis state,
 clarifier further in <<chapter-genesis>>.
 . The node should maintain a set of around 50 active peers at any time. New
 peers can be found using the discovery protocols (<<sect-discovery-mechanism>>)
@@ -15,7 +15,7 @@ peers can be found using the discovery protocols (<<sect-discovery-mechanism>>)
 (<<sect-protocols-substreams>>) with each of its active peers.
 . Furthermore, the node should send block requests (<<sect-msg-block-request>>)
 to these peers to receive all blocks in the chain and execute each of them.
-. Exchange neighbor packets (<<sect-grandpa-neighbor-msg>>).
+. The node should exchange neighbor packets (<<sect-grandpa-neighbor-msg>>).
 
 Validator nodes should take the following, additional steps.
 
