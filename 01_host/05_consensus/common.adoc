@@ -131,8 +131,8 @@ block where the change is applied. The earliest digest of this type in a
 single block will be respected, unless a force change is present, in which case
 the force change takes precedence.
 * _2_ implies *forced change*: Schedule a forced authority set change after the
-given delay of stem:[N_("delay") := m + |"SubChain"(B,B')|] where stem:[B'] is
-the block after stem:[m] where the change is applied. The earliest digest
+given delay of stem:[N_("delay") := |"SubChain"(B,m + B')|] where stem:[B'] is
+the block where the change is applied. The earliest digest
 of this type in a block will be respected.
 +
 Forced changes are explained further in <<sect-finality-forced-changes>>.

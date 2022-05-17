@@ -561,3 +561,9 @@ the starting block at which stem:[N_("delay")] is applied. This provides some
 degree of probabilistic consensus to the network with the assumption that the
 forced change was received by most participants and that finality can be
 continued.
+
+.Applying a scheduled change
+image::01_host/05_consensus/assets/authority_set_scheduled_change_chart.png[]
+
+.Applying a forced change
+image::01_host/05_consensus/assets/authority_set_forced_change_chart.png[]
