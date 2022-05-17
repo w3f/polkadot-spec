@@ -39,16 +39,25 @@ the edge which connect stem:[v_i] and stem:[v_{i + 1}].
 [#defn-blockchain]
 .<<defn-blockchain, Blockchain>>
 ====
-A *blockchain* stem:[C] is a directed path graph. Each node of the graph is
+A *blockchain* stem:[C] is a [directed path
+graph](https://en.wikipedia.org/wiki/Directed_graph). Each node of the graph is
 called *Block* and indicated by *stem:[B]*. The unique sink of stem:[C] is
-called *Genesis Block*, and the source is called the stem:[sf "Head"] of stem:[C]. For any
-vertex stem:[(B_1, B_2)] where stem:[B_1 -> B_2] we say stem:[B_2] is the
-*parent* of stem:[B_1] and we indicate it by
+called *Genesis Block*, and the source is called the stem:[sf "Head"] of
+stem:[C]. For any vertex stem:[(B_1, B_2)] where stem:[B_1 -> B_2] we say
+stem:[B_2] is the *parent* of stem:[B_1], which is the *child* of stem:[B_2],
+respectively. We indicate that by:
 
 [stem]
 ++++
 B_2 := P(B_1)
 ++++
+
+The parent refers to the child by its hash value (<<defn-block-header>>), making
+the path graph tamper proof since any modifications to the child would result in
+its hash value being changed.
+
+NOTE: The term "blockchain" can also be used as a way to refer to the network or
+system that interacts or maintains the directed path graph.
 ====
 
 [#defn-unix-time]
