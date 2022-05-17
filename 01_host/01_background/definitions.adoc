@@ -4,9 +4,9 @@
 [#defn-state-machine]
 .<<defn-state-machine, Discrete State Machine (DSM)>>
 ====
-A *Discrete State Machine(DSM)* is a state transition system whose set of states
-and set of transitions are countable and admits a starting state. Formally, it
-is a tuple of
+A *Discrete State Machine (DSM)* is a state transition system that admits a
+starting state and whose set of states and set of transitions are countable.
+Formally, it is a tuple of
 
 [stem]
 ++++
