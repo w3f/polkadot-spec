@@ -39,11 +39,11 @@ the edge which connect stem:[v_i] and stem:[v_{i + 1}].
 [#defn-blockchain]
 .<<defn-blockchain, Blockchain>>
 ====
-A *blockchain* stem:[C] is a [directed path
-graph](https://en.wikipedia.org/wiki/Directed_graph). Each node of the graph is
-called *Block* and indicated by *stem:[B]*. The unique sink of stem:[C] is
-called *Genesis Block*, and the source is called the stem:[sf "Head"] of
-stem:[C]. For any vertex stem:[(B_1, B_2)] where stem:[B_1 -> B_2] we say
+A *blockchain* stem:[C] is a
+https://en.wikipedia.org/wiki/Directed_graph[directed path graph]. Each node of
+the graph is called *Block* and indicated by *stem:[B]*. The unique sink of
+stem:[C] is called *Genesis Block*, and the source is called the stem:["Head"]
+of stem:[C]. For any vertex stem:[(B_1, B_2)] where stem:[B_1 -> B_2] we say
 stem:[B_2] is the *parent* of stem:[B_1], which is the *child* of stem:[B_2],
 respectively. We indicate that by:
 
@@ -106,14 +106,20 @@ block tree.
 [#defn-chain-subchain]
 .<<defn-chain-subchain, Subchain>>
 ====
-Let stem:[G] be the root of the block tree and stem:[B] be one of its nodes. By stem:["Chain"(B)], we refer to the path graph from stem:[G] to stem:[B] in stem:["BT"].
+Let stem:[G] be the root of the block tree and stem:[B] be one of its nodes. By
+stem:["Chain"(B)], we refer to the path graph from stem:[G] to stem:[B] in
+stem:["BT"]. Conversely, for a chain stem:[C = "Chain"(B)], we define *the
+head of stem:[C]* to be stem:[B], formally noted as stem:[B := bar C]. We define
+stem:[|C|], the length of stem:[C] as a path graph.
 
-Conversely, for a chain stem:[C = sf "Chain"(b)], we define *the head of stem:[C]* to be stem:[B], formally noted as stem:[B := bar C]. We define stem:[|C|], the length of stem:[C] as a path graph.
+If stem:[B'] is another node on stem:["Chain"(B)], then by stem:["SubChain"(B',
+B)] we refer to the subgraph of stem:["Chain"(B)] path graph which contains
+stem:[B] and ends at stem:[B'] and by stem:[|"SubChain"(B', B)|] we refer to its
+length.
 
-If stem:[B'] is another node on stem:[sf "Chain"(B)], then by stem:[sf "SubChain"(B', B)] we refer to the subgraph of stem:[sf "Chain"(B)] path graph
-which contains both stem:[B] and stem:[B'] and by stem:[sf "SubChain"(B', B)] we refer to its length.
-
-Accordingly, stem:[bbb C_(B')(BT)] is the set of all subchains of stem:[BT] rooted at stem:[B']. The set of all chains of stem:[BT], stem:[bbb C_G(BT})] is denoted by stem:[bbb C(BT)] or simply   stem:[bbb C], for the sake of brevity.
+Accordingly, stem:[bbb C_(B')(BT)] is the set of all subchains of stem:[BT]
+rooted at stem:[B']. The set of all chains of stem:[BT], stem:[bbb C_G(BT))] is
+denoted by stem:[bbb C(BT)] or simply stem:[bbb C], for the sake of brevity.
 ====
 
 [#defn-longest-chain]
@@ -125,16 +131,16 @@ and only if stem:[|C_1| > |C_2|].
 
 If stem:[|C_1| =| C_2|] we say stem:[C_1 > C_2] if and only if the block arrival
 time of stem:[bar C_1] is less than the block arrival time of stem:[bar C_2]
-(<<defn-block-time>>). We define the stem:[sf "Longest-Chain"(BT)] too be the
+(<<defn-block-time>>). We define the stem:["Longest-Chain"(BT)] too be the
 maximum chain given by this order.
 ====
 
 [#defn-longest-path]
 .<<defn-longest-path, Longest Path>>
 ====
-stem:[sf "Longest-Path"(BT)] returns the path graph of stem:[BT] which is the
+stem:["Longest-Path"(BT)] returns the path graph of stem:[BT] which is the
 longest among all paths in stem:[BT] and has the earliest block arrival time
-(<<defn-block-time>>). stem:[sf "Deepest-Leaf"(BT)] returns the head of stem:[sf "Longest-Path"(BT)] chain.
+(<<defn-block-time>>). stem:["Deepest-Leaf"(BT)] returns the head of stem:["Longest-Path"(BT)] chain.
 ====
 
 Because every block in the blockchain contains a reference to its parent, it is
