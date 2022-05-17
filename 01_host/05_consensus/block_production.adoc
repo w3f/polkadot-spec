@@ -122,7 +122,7 @@ a specific slot. stem:[T_(cc E_n)] is calculated  as follows:
 [stem]
 ++++
 A_w =sum_(n=1)^(|"Auth"_C(B)|)(w_A in "Auth"_C(B)_n) \
-T_(E_n) := 1 - (1 - c)^(w_a/A_w)
+T_(cc E_n) := 1 - (1 - c)^(w_a/A_w)
 ++++
 
 where stem:[A_w] is the total sum of all authority weights in the authority set
@@ -154,8 +154,8 @@ stem:[sc_n] is defined in <<defn-epoch-duration>> , stem:["VRF"] creates the
 BABE VRF transcript (<<defn-babe-vrf-transcript>>) and stem:[e_i] is the epoch
 index, retrieved from the Runtime (<<sect-rte-babeapi-epoch>>). stem:[s_k] and
 stem:[p_k] is the secret key respectively the public key of the authority. For
-any slot stem:[s] in epoch stem:[n] where stem:[o < r], the block producer is
-required to produce a block.
+any slot stem:[s] in epoch stem:[n] where stem:[o < T_(cc E_n)]
+(<<defn-winning-threshold>>), the block producer is required to produce a block.
 
 Note that the secondary slots (<<defn-babe-secondary-slots>>) are running
 along side the primary block production lottery and mainly serve as a fallback
