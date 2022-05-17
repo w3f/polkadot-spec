@@ -344,10 +344,6 @@ the block is produced. The index stem:[j] in stem:[T_B^j] notation may be
 dropped and B’s arrival time is referred to by stem:[T_B] when there is no
 ambiguity about the underlying node.
 
-WARNING: Currently it still lacks a clear definition of when block arrival times
-are considered valid and how to differentiated imported block on initial sync
-from "`fresh`" blocks that were just produced.
-
 [#defn-sync-period]
 ===== Sync Period
 A is an interval at which each validator (re-)evaluates its local clock offsets.
