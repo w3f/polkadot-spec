@@ -7,17 +7,17 @@ _Polkadot protocol_, can itself be considered as a replicated state
 machine on its own. As such, the protocol can be specified by
 identifying the state machine and the replication strategy.
 
-From a more technical point of view, the Polkadot protocol has been
-divided into two parts, the _Runtime_ and the _Host_. The Runtime
-comprises the state transition logic for the Polkadot protocol and is
-designed and be upgradable via the consensus engine without requiring
-hard forks of the blockchain. The Polkadot Host provides the
-functionality for the Runtime to execute its state transition logic,
-such as an execution environment, I/O and consensus, shared mostly among
-peer-to-peer decentralized cryptographically-secured transaction
-systems, i.e. blockchains whose consensus system is based on the
-proof-of-stake. The Polkadot Host is planned to be stable and static for
-the lifetime duration of the Polkadot protocol.
+From a more technical point of view, the Polkadot protocol has been divided into
+two parts, the _Runtime_ and the _Host_. The Runtime comprises the state
+transition logic for the Polkadot protocol and is designed and be upgradable via
+the consensus engine without requiring hard forks of the blockchain. The
+Polkadot Host provides the necessary functionality for the Runtime to execute
+its state transition logic, such as an execution environment, I/O, consensus and
+network interoperability between parachains. The Polkadot Host is planned to be
+stable and mostly static for the lifetime duration of the Polkadot protocol, the
+goal being that most changes to the protocol are primarily conducted by applying
+Runtime updates and not having to coordinate with network participants on manual
+software updates.
 
 With the current document, we aim to specify the Polkadot Host part of the
 Polkadot protocol as a replicated state machine. After defining the basic terms
