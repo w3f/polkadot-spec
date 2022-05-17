@@ -479,7 +479,7 @@ Algorithm: stem:[tt "Verify-Authorship-Right"("Head"_s(B))]
 . stem:["    " "error 'Seal missing'"]
 . stem:["AuthorId" larr "AuthorityDirectory"^(cc E_c)\[H_("BABE")(B)."SignerIndex"\]]
 . stem:["Verify-Signature"("AuthorId", H_h(B), "Sig"_B)]
-. stem:["if " EE B' in "BT": H_h(B) != H_h(B) " and " s_B = s'_B " and " "SignerIndex"_B = "SignerIndex"_(B')]
+. stem:["if " EE B' in "BT": H_h(B) != H_h(B) " and " s = s' " and " "SignerIndex"_B = "SignerIndex"_(B')]
 . stem:["    " "error 'Block producer is equivocating'"]
 . stem:["Verify-Slot-Winner"((d_B, pi_B),s,"AuthorId")]
 
@@ -496,6 +496,7 @@ of varying type (<<defn-scale-variable-type>>) is of type _Seal_.
 * stem:["AuthorityDirectory"^(cc E_c)] is the set of Authority ID for block
 producers of epoch stem:[cc E_c].
 . stem:["AuthorId"] is the public session key of the block producer.
+* stem:["BT"] is the pruned block tree (<<defn-pruned-tree>>).
 * stem:["Verify-Slot-Winner"] is defined in Algorithm as described in
 <<algo-verify-slot-winner>>.
 ****
@@ -508,7 +509,7 @@ Algorithm: stem:[tt "Verify-Slot-Winner"(B)]
 . stem:[cc E_c larr "Current-Epoch"]
 . stem:[p larr "Epoch-Randomness"(c)]
 . stem:["Verify-VRF"(p, H_"BABE".(pi, d),H_"BABE"(B).s,c)]
-. stem:["if "  o >= T_(E_n)]
+. stem:["if "  o >= T_(cc E_n)]
 . stem:["    " "error 'Block producer is not a winner of the slot'"]
 
 where:
@@ -519,7 +520,7 @@ where:
 (<<algo-block-production-lottery>>), respectively the VRF output
 (<<defn-babe-vrf-transcript>>).
 . stem:["Verify-VRF"] is described in <<sect-vrf>>.
-. stem:[T_(E_n)] is the winning threshold as defined in <<defn-winning-threshold>>.
+. stem:[T_(cc E_n)] is the winning threshold as defined in <<defn-winning-threshold>>.
 ****
 
 [#sect-block-building] 
