@@ -147,8 +147,11 @@ Because every block in the blockchain contains a reference to its parent, it is
 easy to see that the block tree is de facto a tree. A block tree naturally
 imposes partial order relationships on the blocks as follows:
 
-[#defn-descendant]
-.<<defn-descendant, Descendant>>
+[#defn-descendant-ancestor]
+.<<defn-descendant, Descendant and Ancestor>>
 ====
-We say *B is descendant of stem:[B']*, formally noted as stem:[B > B'] if stem:[B] is a descendant of stem:[B'] in the block tree.
+We say stem:[B] is *descendant* of stem:[B'], formally noted as stem:[B > B'],
+if stem:[(|B| > |B'|) in C]. Respectively, we say that stem:[B'] is an
+*ancestor* of stem:[B], formally noted as stem:[B < B'], if stem:[(|B| < |B'|)
+in C].
 ====
