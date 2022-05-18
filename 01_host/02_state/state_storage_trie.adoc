@@ -35,15 +35,16 @@ the set of all keys and values stored in the state storage.
 
 In order to ensure the integrity of the state of the system, the stored data
 needs to be re-arranged and hashed in a _modified Merkle Patricia Tree_, which
-hereafter we refer to as the *_State Trie_* or just *_Trie_*. This rearrangment is necessary to be able
-to compute the Merkle hash of the whole or part of the state storage,
-consistently and efficiently at any given time.
+hereafter we refer to as the *_State Trie_* or just *_Trie_*. This rearrangment
+is necessary to be able to compute the Merkle hash of the whole or part of the
+state storage, consistently and efficiently at any given time.
 
-The Trie is used to compute the _state root_, stem:[H_r],
-(<<defn-block-header>>), whose purpose is to authenticate the validity of the
-state database. Thus, the Polkadot Host follows a rigorous encoding algorithm to
-compute the values stored in the trie nodes to ensure that the computed Merkle
-hash, stem:[H_r], matches across the Polkadot Host implementations.
+The Trie is used to compute the _merkle root_ (<<sect-merkl-proof>>) of the
+state, stem:[H_r] (<<defn-block-header>>), whose purpose is to authenticate the
+validity of the state database. Thus, the Polkadot Host follows a rigorous
+encoding algorithm to compute the values stored in the trie nodes to ensure that
+the computed Merkle hash, stem:[H_r], matches across the Polkadot Host
+implementations.
 
 The Trie is a _radix-16_ tree (<<defn-radix-tree>>). Each key value identifies a
 unique node in the tree. However, a node in a tree might or might not be
