@@ -72,7 +72,7 @@ the nodes on the path or implicitly in their position as a child of their
 parent.
 
 To identify the node corresponding to a key value, stem:[k], first we need to
-encode stem:[k] to be consistent with the Trie structure way. Because each node
+encode stem:[k] in a way consistent with the Trie structure. Because each node
 in the trie has at most 16 children, we represent the key as a sequence of 4-bit
 nibbles:
 
