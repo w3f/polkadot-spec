@@ -154,8 +154,8 @@ cc N_l := {N_l in cc N | N_l " is a leaf node"}
 ++++
 ====
 
-For each node, part of stem:[k_N] is built while the trie is traversed from root
-to stem:[N] part of stem:[k_N] is stored in stem:[N] (<<defn-node-key>>).
+For each node, part of stem:[k_N] is built while the trie is traversed from the root
+to stem:[N] and another part of stem:[k_N] is stored in stem:[N] (<<defn-node-key>>).
 
 [#defn-node-key]
 .<<defn-node-key, Aggregated Prefix Key>>
