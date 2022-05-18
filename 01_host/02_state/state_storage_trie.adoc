@@ -39,14 +39,14 @@ hereafter we refer to as the *_State Trie_* or just *_Trie_*. This rearrangment
 is necessary to be able to compute the Merkle hash of the whole or part of the
 state storage, consistently and efficiently at any given time.
 
-The Trie is used to compute the _merkle root_ (<<sect-merkl-proof>>) of the
+The trie is used to compute the _merkle root_ (<<sect-merkl-proof>>) of the
 state, stem:[H_r] (<<defn-block-header>>), whose purpose is to authenticate the
 validity of the state database. Thus, the Polkadot Host follows a rigorous
 encoding algorithm to compute the values stored in the trie nodes to ensure that
 the computed Merkle hash, stem:[H_r], matches across the Polkadot Host
 implementations.
 
-The Trie is a _radix-16_ tree (<<defn-radix-tree>>). Each key value identifies a
+The trie is a _radix-16_ tree (<<defn-radix-tree>>). Each key value identifies a
 unique node in the tree. However, a node in a tree might or might not be
 associated with a key in the storage.
 
@@ -65,20 +65,20 @@ child and does not represent a valid key in the data set, is compressed into a
 single edge. This improves space efficiency when the key space is sparse.
 ====
 
-When traversing the Trie to a specific node, its key can be reconstructed by
+When traversing the trie to a specific node, its key can be reconstructed by
 concatenating the subsequences of the keys which are stored either explicitly in
 the nodes on the path or implicitly in their position as a child of their
 parent.
 
 To identify the node corresponding to a key value, stem:[k], first we need to
-encode stem:[k] in a way consistent with the Trie structure. Because each node
+encode stem:[k] in a way consistent with the trie structure. Because each node
 in the trie has at most 16 children, we represent the key as a sequence of 4-bit
 nibbles:
 
 [#defn-trie-key-encode]
 .<<defn-trie-key-encode, Key Encode>>
 ====
-For the purpose of labeling the branches of the Trie, the key stem:[k] is
+For the purpose of labeling the branches of the trie, the key stem:[k] is
 encoded to stem:[k_("enc")] using stem:[sf "KeyEncode"] functions:
 
 [stem]
@@ -113,8 +113,8 @@ tree to reach the node identifying the storage value of stem:[k].
 [#sect-state-storage-trie-structure]
 ==== Trie Structure
 
-In this subsection, we specify the structure of the nodes in the Trie as
-well as the Trie structure:
+In this subsection, we specify the structure of the nodes in the trie as
+well as the trie structure:
 
 [#defn-trie-nodeset]
 .<<defn-trie-nodeset, Set of Nodes>>
@@ -126,18 +126,18 @@ stem:[N in cc N] to refer to an individual node in the trie.
 [#defn-nodetype]
 .<<defn-nodetype, State Trie>>
 ====
-The State Trie is a radix-16 tree (<<defn-radix-tree>>). Each Node in the Trie is identified with a
+The state trie is a radix-16 tree (<<defn-radix-tree>>). Each node in the trie is identified with a
 unique key latexmath:[k_N] such that:
 
 * stem:[k_N] is the shared prefix of the key of all the
-descendants of stem:[N] in the Trie.
+descendants of stem:[N] in the trie.
 
 and, at least one of the following statements holds:
 
 * stem:[(k_N, v)] corresponds to an existing entry in the State Storage.
 * stem:[N] has more than one child.
 
-Conversely, if stem:[(k, v)] is an entry in the State Trie then there is a node
+Conversely, if stem:[(k, v)] is an entry in the state trie then there is a node
 stem:[N in cc N] such that stem:[k_N = k].
 ====
 
@@ -225,7 +225,7 @@ k_(N_c) = k_N || i || "pk"_(N_c)
 \return $pk^{Agr}_N$
 ++++
 
-Assuming that stem:[P_N] is the path (<<defn-path-graph>>) from the Trie root to
+Assuming that stem:[P_N] is the path (<<defn-path-graph>>) from the trie root to
 node stem:[N], the algorithm defined in <<algo-aggregate-key>> rigorously
 demonstrates how to build stem:["pk"_N^("Agr")] while traversing stem:[P_N].
 ****
@@ -303,7 +303,7 @@ that stem:[p_l] can hold.
 ==== Merkle Proof
 
 To prove the consistency of the state storage across the network and its
-modifications both efficiently and effectively, the Trie implements a
+modifications both efficiently and effectively, the trie implements a
 Merkle tree structure. The hash value corresponding to each node needs
 to be computed rigorously to make the inter-implementation data
 integrity possible.
@@ -364,7 +364,7 @@ stem:["ChildrenBitmap"(N)] are defined in <<sect-scale-codec>>,
 <<defn-stored-value>>, <<defn-merkle-value>> and <<defn-children-bitmap>>
 respectively.
 
-The Trie deviates from a traditional Merkle tree where node value
+The trie deviates from a traditional Merkle tree where node value
 (<<defn-node-value>>), stem:[v_N], is presented instead of its hash if it
 occupies less space than its hash.
 ====
@@ -396,6 +396,6 @@ H(N): {(v_N,||v_N|| < 32 " and " N != R),("Blake2b"(v_n),||v_N|| >= 32 " or " N 
 ++++
 
 Where stem:[v_N] is the node value of stem:[N] (<<defn-node-value>>) and
-stem:[R] is the root of the Trie. The *Merkle hash* of the Trie is defined to be
+stem:[R] is the root of the trie. The *Merkle hash* of the trie is defined to be
 latexmath:[H(R)].
 ====
