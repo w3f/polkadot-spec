@@ -364,7 +364,7 @@ stem:["ChildrenBitmap"(N)] are defined in <<sect-scale-codec>>,
 <<defn-stored-value>>, <<defn-merkle-value>> and <<defn-children-bitmap>>
 respectively.
 
-The trie deviates from a traditional Merkle tree where node value
+The trie deviates from a traditional Merkle tree in that the node value
 (<<defn-node-value>>), stem:[v_N], is presented instead of its hash if it
 occupies less space than its hash.
 ====
