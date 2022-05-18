@@ -66,7 +66,7 @@ single edge. This improves space efficiency when the key space is sparse.
 ====
 
 When traversing the Trie to a specific node, its key can be reconstructed by
-concatenating the subsequences of the key which are stored either explicitly in
+concatenating the subsequences of the keys which are stored either explicitly in
 the nodes on the path or implicitly in their position as a child of their
 parent.
 
