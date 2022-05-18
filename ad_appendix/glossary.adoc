@@ -49,18 +49,18 @@ latexmath:[B > B']::
   latexmath:[B] is a descendant of latexmath:[B'] in the block tree
 latexmath:[\textrm{StoredValue}(k)]::
   The function to retrieve the value stored under a specific key in the state storage.
-State Trie, Trie::
+State trie, trie::
   The Merkle radix-16 Tree which stores hashes of storage enteries.
 latexmath:[\textrm{KeyEncode}(k)]::
-  The function to encode keys for labeling branaches of the Trie.
+  The function to encode keys for labeling branaches of the trie.
 latexmath:[𝒩]::
   The set of all nodes in the Polkadot state trie.
 latexmath:[N]::
-  An individual node in the Trie.
+  An individual node in the trie.
 latexmath:[𝒩_b]::
-  A branch node of the Trie which has at least one and at most 16 children
+  A branch node of the trie which has at least one and at most 16 children
 latexmath:[𝒩_l]::
-  A childless leaf node of the Trie
+  A childless leaf node of the trie
 latexmath:[pk_N^{Agr}]::
   The aggregated prefix key of node N
 latexmath:[pk_N]::
@@ -70,16 +70,16 @@ latexmath:[\textrm{Index}_N]::
 latexmath:[v_N]::
   Node value containing the header of node latexmath:[N], its partial key and the digest of its childern values
 latexmath:[\textrm{Head}_N]::
-  The node header of Trie node latexmath:[N] storing information about the node's type and kay
+  The node header of trie node latexmath:[N] storing information about the node's type and kay
 latexmath:[H(N)]::
   The Merkle value of node latexmath:[N].
 latexmath:[\textrm{ChildrenBitmap}]::
-  The binary function indicating which child of a given node is present in the Trie.
+  The binary function indicating which child of a given node is present in the trie.
 latexmath:[sv_N]::
-  The subvalue of a Trie node latexmath:[N].
+  The subvalue of a trie node latexmath:[N].
 Child storage::
   A sub storage of the state storage which has the same structure although being stored separately
-Child Trie::
+Child trie::
   State trie of a child storage
 Transaction Queue::
   See <<defn-transaction-queue>>.

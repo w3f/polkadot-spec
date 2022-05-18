@@ -230,23 +230,23 @@ considerably.
 
 Polkadot focuses on light client friendliness and therefore implements
 functionalities that allows identifying changes in the state of the blockchain
-without the requirement to search through the entire chain. The *Changes Trie*
+without the requirement to search through the entire chain. The *changes trie*
 is a radix-16 tree data structure (<<defn-radix-tree>>) and maintained by the
 Polkadot Host. It stores different types of storage changes made by each
 individual block separately.
 
-The primary method for generating the Changes Trie is provided to the Runtime
+The primary method for generating the changes trie is provided to the Runtime
 with the Host API (<<sect-ext-storage-changes-root>>). The Runtime calls that
 function shortly before finalizing the block, the Polkadot Host must then
-generate the Changes Trie based on the storage changes which occurred during
+generate the changes trie based on the storage changes which occurred during
 block production or execution. In order to provide this API function, it is
 imperative that the Polkadot Host implements a mechanism to keep track of the
 changes created by individual blocks, as mentioned in <<sect-state-storage>> and
-<<sect-managing-multiple-states>>. The Changes Trie stores three different types
+<<sect-managing-multiple-states>>. The changes trie stores three different types
 of changes.
 
-The Changes Trie itself is not part of the block, but a separately maintained
-database by the Polkadot Host. The Merkle proof of the Changes Trie must be
+The changes trie itself is not part of the block, but a separately maintained
+database by the Polkadot Host. The Merkle proof of the changes trie must be
 included in the block digest (<<defn-digest>>) and gets calculated as described
 in <<sect-merkl-proof>>. The root calculation only considers pairs which were
 generated on the individual block and does not consider pairs which were
@@ -258,13 +258,13 @@ has not been fully defined yet. This is considered future-reserved
 
 As clarified in the individual sections of each type, not all of those types get
 generated on every block. But if conditions apply, all those different types of
-pairs get inserted into the same Changes Trie, therefore only one Changes Trie
+pairs get inserted into the same changes trie, therefore only one changes trie
 Root gets generated for each block.
 
 [#defn-change-trie-insert]
 .<<defn-change-trie-insert, Inserted Key-Value Pairs>>
 ====
-The *inserted key-value pair stored in the nodes of Changes Trie* is
+The *inserted key-value pair stored in the nodes of changes trie* is
 formally defined as:
 
 [stem]
@@ -289,7 +289,7 @@ V_C = "Enc"_(SC)(C_(value))
 is a SCALE encoded byte array.
 
 Furthermore, stem:[K] represents the changed storage key, stem:[H_i(B_i)] refers
-to the block number at which this key is inserted into the Changes Trie
+to the block number at which this key is inserted into the changes trie
 (<<defn-block-header>>) and stem:["Type"_(V_C)] is an index defining the type
 stem:[C_(value)] according to:
 
@@ -321,7 +321,7 @@ caused any changes to the specified key. The key-value pair is defined as
 The indices are unsigned 32-bit integers and their values are based on the order
 in which each extrinsics appears in the block (indexing starts at 0). The
 Polkadot Host generates those pairs for every changed key on each and every
-block. Child storages have their own Changes Trie
+block. Child storages have their own changes trie
 (<<sect-changes-trie-child-trie-pair>>).
 
 [#sect-changes-trie-block-pairs]
@@ -373,11 +373,11 @@ storage key. this level only considers block number of the last 64
 [#sect-changes-trie-child-trie-pair]
 ===== Key to Child Changes Trie pairs
 
-The Polkadot Host generates a separate Changes Trie for each child storage,
+The Polkadot Host generates a separate changes trie for each child storage,
 using the same behavior and implementation as describe in
 <<sect-changes-trie-extrinsics-pairs>>. Additionally, the changed child storage
-key gets inserted into the primary, non-Child Changes Trie where its value is a
-SCALE encoded byte array containing the Merkle root of the Child Changes Trie.
+key gets inserted into the primary, non-Child changes trie where its value is a
+SCALE encoded byte array containing the Merkle root of the Child changes trie.
 The key-value pair is defined as:
 
 [stem]

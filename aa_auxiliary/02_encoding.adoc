@@ -327,7 +327,7 @@ k_1^7 ... k_1^3 k_1^2 := m-4
 === Hex Encoding
 
 Practically, it is more convenient and efficient to store and process data which
-is stored in a byte array. On the other hand, the Trie keys are broken into
+is stored in a byte array. On the other hand, the trie keys are broken into
 4-bits nibbles. Accordingly, we need a method to encode sequences of 4-bits
 nibbles into byte arrays canonically. To this aim, we define
 hex encoding function asciimath:["Enc" ("HE")("PK")] as follows:
