@@ -367,7 +367,7 @@ branch node stem:[N].
 * stem:[H] is defined in <<defn-merkle-value>>.
 * stem:["ChildrenBitmap"(N)] is defined in <<defn-children-bitmap>>.
 
-The trie deviates from a traditional Merkle tree where node value
+The trie deviates from a traditional Merkle tree in that the node value
 (<<defn-node-value>>), stem:[v_N], is presented instead of its hash if it
 occupies less space than its hash.
 ====
