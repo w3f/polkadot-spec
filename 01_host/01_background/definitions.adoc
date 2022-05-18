@@ -125,14 +125,14 @@ denoted by stem:[bbb C(BT)] or simply stem:[bbb C], for the sake of brevity.
 [#defn-longest-chain]
 .<<defn-longest-chain, Longest Chain>>
 ====
-We define the following complete order over stem:[bbb C] such that for
-stem:[C_1, C_2 in bbb C] if stem:[|C_1| != |C_2|] we say stem:[C_1 > C_2] if
-and only if stem:[|C_1| > |C_2|].
+We define the following complete order over stem:[bbb C] as follows. For chains
+stem:[C_1, C_2 in bbb C] we have that stem:[C_1 > C_2] if either stem:[|C_1| >
+|C_2|] or stem:[|C_1| = |C_2|].
 
 If stem:[|C_1| =| C_2|] we say stem:[C_1 > C_2] if and only if the block arrival
-time of stem:[bar C_1] is less than the block arrival time of stem:[bar C_2]
-(<<defn-block-time>>). We define the stem:["Longest-Chain"(BT)] too be the
-maximum chain given by this order.
+time (<<defn-block-time>>) of stem:[bar C_1] is less than the block arrival time
+of stem:[bar C_2], from the _subjective perspective_ of the Host. We define the
+stem:["Longest-Chain"(BT)] to be the maximum chain given by this order.
 ====
 
 [#defn-longest-path]
