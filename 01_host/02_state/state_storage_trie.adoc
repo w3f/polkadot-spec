@@ -389,7 +389,7 @@ stem:[H(N)] is defined as follows:
 [stem]
 ++++
 H: bbb B -> U_(i -> 0)^(32) bbb B_32\
-H(N): {(v_N,||v_N|| < 32 " and " N != R),("Blake2b"(v_n),||v_N|| >= 32 " or " N + R):}
+H(N): {(v_N,||v_N|| < 32 " and " N != R),("Blake2b"(v_n),||v_N|| >= 32 " or " N = R):}
 ++++
 
 Where stem:[v_N] is the node value of stem:[N] (<<defn-node-value>>) and
