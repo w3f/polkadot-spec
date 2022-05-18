@@ -171,7 +171,7 @@ stem:[0 <= l_("pk"_N) <= 65535] in nibbles such that:
 "pk"_N := (k_("enc"_i),...,k_("enc"_(i+l_("pk"_N))))
 ++++
 
-where stem:["pk"_N^("Agr")] is a suffix subsequence of stem:[k_N]; stem:[i] is the length
+where stem:["pk"_N^("Agr")] is a prefix subsequence of stem:[k_N]; stem:[i] is the length
 of stem:["pk"_N^("Agr")] in nibbles and so we have:
 
 [stem]
