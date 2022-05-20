@@ -312,7 +312,7 @@ and _StateEntry_:
 ==== Warp Sync
 
 The warp sync protocols allows nodes to retrieve blocks from remote peers where
-authority set changes occured. This can be used to speed up synchronization to
+authority set changes occurred. This can be used to speed up synchronization to
 the latest state.
 
 See the the synchronization section for more information (<<sect-network-sync>>).
@@ -353,7 +353,7 @@ Polkadot Host has an open transaction substream (<<defn-transactions-message>>).
 Polkadot Host implementers should implement a mechanism that only sends a
 transaction once to each peer and avoids sending duplicates. Sending duplicate
 transactions might result in undefined consequences such as being blocked for
-bad behaviour by peers.
+bad behavior by peers.
 
 The mechanism for managing transactions is further described in Section
 <<sect-extrinsics>>.
@@ -734,7 +734,7 @@ Once this process has been completed, the node can proceed with a full sync.
 ==== Warp Sync
 
 Warp sync (<<sect-msg-warp-sync>>) only downloads the block headers where
-authority set changes occured, so called fragments (<<defn-warp-sync-proof>>),
+authority set changes occurred, so called fragments (<<defn-warp-sync-proof>>),
 and by verifying the GRANDPA justifications (<<defn-grandpa-justification>>).
 This protocols allows nodes to arrive at the desired state much faster than fast
 sync.

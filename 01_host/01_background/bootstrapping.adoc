@@ -1,7 +1,7 @@
 === Bootstrapping
 
 This section provides an overview over the tasks a Polkadot Host needs to
-performs in order to join and participate in the Polkadot network. While this
+perform in order to join and participate in the Polkadot network. While this
 chapter does not go into any new specifications of the protocol, it has been
 included to provide implementors with a pointer to what these steps are and
 where they are defined. In short, the following steps should be taken by all
@@ -9,7 +9,7 @@ bootstrapping nodes:
 
 . The node needs to populate the state storage with the official genesis state,
 clarifier further in <<chapter-genesis>>.
-. The node should maintains a set of around 50 active peers at any time. New
+. The node should maintain a set of around 50 active peers at any time. New
 peers can be found using the discovery protocols (<<sect-discovery-mechanism>>)
 . The node should open and maintain the various required streams
 (<<sect-protocols-substreams>>) with each of its active peers.

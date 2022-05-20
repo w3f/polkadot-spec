@@ -228,7 +228,7 @@ parameters and use the result of the benchmarking process to evaluate
 latexmath:[\mathcal{W}(E)].
 
 In order to select useful parameters, the Runtime functions have to be
-analysed to fully understand which behaviors or conditions can result in
+analyzed to fully understand which behaviors or conditions can result in
 expensive execution times, which is described closer in <<sect-primitive-types>>.
 Not every possible benchmarking outcome can be invoked by varying input
 parameters of the Runtime function. In some circumstances, preliminary work
@@ -347,7 +347,7 @@ must therefore be carefully selected. The benchmarks should use input
 parameters which will most likely be used in regular cases, as intended
 by the authors, but must also consider worst case scenarios and inputs
 which might decelerate or heavily impact performance of the function.
-The input parameters should be randomised in order to cause various
+The input parameters should be randomized in order to cause various
 effects in behaviors on certain values, such as memory relocations and
 other outcomes that can impact performance.
 

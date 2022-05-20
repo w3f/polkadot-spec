@@ -12,7 +12,7 @@ networking protocol is based on a family of open protocols, including protocol
 implemented _libp2p_ e.g. the distributed Kademlia hash table which is used for
 peer discovery.
 
-This chapter walks through the behaviour of the networking implementation of the
+This chapter walks through the behavior of the networking implementation of the
 Polkadot Host and defines the network messages. The implementation details of
 the _libp2p_ protocols used are specified in external sources as described in
 <<sect-networking-external-docs>>
@@ -59,7 +59,7 @@ allowing the nodes to establish secure communication channels.
 
 Each node must have its own unique ED25519 key pair. When two or more nodes use
 the same key, the network will interpret those nodes as a single node, which
-will result in undefined behaviour and can result in equivocation. Furthermore,
+will result in undefined behavior and can result in equivocation. Furthermore,
 the node’s _PeerId_ as defined in <<defn-peer-id>> is derived from its public
 key. _PeerId_ is used to identify each node when they are discovered in the
 course of the discovery mechanism described in <<sect-discovery-mechanism>>.
