@@ -6,7 +6,7 @@ chain validators. The Polkodat network protocol is agnostic on what candidate
 productionis mechanism each parachain uses and does not specify or mandate any
 of such production methods (e.g. BABE-GRANDPA, Aura, etc). Furthermore, the
 relay chain validator host implementation itself does not directly interpret or
-process teh internal transactions of the candidate, but rather rely on the
+process the internal transactions of the candidate, but rather rely on the
 parachain Runtime to validate the candidate (<<sect-candidate-validation>>).
 Collators, which are parachain nodes which produce candidate proposals and send
 them to the relay chain validator, must prepare pieces of data

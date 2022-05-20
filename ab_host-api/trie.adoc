@@ -163,7 +163,7 @@ Arguments::
 the node proofs.
 * `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
 * `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
-* `return`: a value equal to _1_ if the proof could be succesfully verified or a
+* `return`: a value equal to _1_ if the proof could be successfully verified or a
 value equal to _0_ if otherwise.
 
 ===== Version 2 - Prototype
@@ -181,7 +181,7 @@ the node proofs.
 * `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
 * `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
 * `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
-* `return`: a value equal to _1_ if the proof could be succesfully verified or a
+* `return`: a value equal to _1_ if the proof could be successfully verified or a
 value equal to _0_ if otherwise.
 
 ==== `ext_trie_keccak_256_verify_proof`
@@ -202,7 +202,7 @@ Arguments::
 the node proofs.
 * `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
 * `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
-* `return`: a value equal to _1_ if the proof could be succesfully verified or a
+* `return`: a value equal to _1_ if the proof could be successfully verified or a
 value equal to _0_ if otherwise.
 
 ===== Version 2 - Prototype
@@ -220,5 +220,5 @@ the node proofs.
 * `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
 * `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
 * `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
-* `return`: a value equal to _1_ if the proof could be succesfully verified or a
+* `return`: a value equal to _1_ if the proof could be successfully verified or a
 value equal to _0_ if otherwise.

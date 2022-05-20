@@ -78,7 +78,7 @@ latexmath:[\textrm{ChildrenBitmap}]::
 latexmath:[sv_N]::
   The subvalue of a Trie node latexmath:[N].
 Child storage::
-  A sub storage of the state storage which has the same structure although being stored seperately
+  A sub storage of the state storage which has the same structure although being stored separately
 Child Trie::
   State trie of a child storage
 Transaction Queue::
@@ -120,7 +120,7 @@ stem:[V_v^(r,pv)]::
 stem:[V_v^(r,pc)]::
   A GRANDPA vote casted by voter latexmath:[v] during the pre-commit stage of round latexmath:[r]
 latexmath:[J^{r,stage}(B)]::
-  The justification for pre-commiting or comming to block latexmath:[B] in round latexmath:[r] of finality protocol
+  The justification for pre-committing or committing to block latexmath:[B] in round latexmath:[r] of finality protocol
 latexmath:[Sign^{r,stage}_{v_i}(B)]::
   The signature of voter latexmath:[v] on their voteto block B, broadcasted during the specified stage of finality round latexmath:[r]
 latexmath:[ℰ^{r,stage}]::

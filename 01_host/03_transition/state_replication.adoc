@@ -180,7 +180,7 @@ where:
 before submitting it to the Runtime.
 * stem:["Add-Seal"] adds the Seal digest back to the block (<<defn-digest>>) for
 later propagation.
-* stem:["Persist-State"] implies the persistance of any state changes created by
+* stem:["Persist-State"] implies the persistence of any state changes created by
 stem:[tt "Core_execute_block"] (<<sect-rte-core-execute-block>>) on successful
 execution.
 * stem:["PBT"] is the pruned block tree (<<defn-block-tree>>).
@@ -252,7 +252,7 @@ in <<sect-merkl-proof>>. The root calculation only considers pairs which were
 generated on the individual block and does not consider pairs which were
 generated at previous blocks.
 
-NOTE: This seperately maintained database by the Polkadot Host is
+NOTE: This separately maintained database by the Polkadot Host is
 intended to be used by "proof servers", where its implementation and behavior
 has not been fully defined yet. This is considered future-reserved
 

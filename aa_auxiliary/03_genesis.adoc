@@ -1,7 +1,7 @@
-The genesis state is a set of key-value pairs representing the intial state of
+The genesis state is a set of key-value pairs representing the initial state of
 the Polkadot state storage. It can be retrieved from
 https://github.com/paritytech/polkadot/tree/master/node/service/res[the Polkadot
-repository]. While each of those key-value pairs offers important identifyable
+repository]. While each of those key-value pairs offers important identifiable
 information to the Runtime, to the Polkadot Host they are a transparent set of
 arbitrary chain- and network-dependent keys and values. The only exception to
 this are the `:code` (<<sect-loading-runtime-code>>) and `:heappages`
