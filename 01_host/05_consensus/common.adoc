@@ -169,6 +169,6 @@ where:
 array of the new BEEFY authorities's public keys and stem:[V_i] is the
 identifier of the remote validator set.
 * _2_ implies **on disabled**: an index to the individual authorty in stem:[V_B]
-that should be immediatly disabled until the next authority change.
+that should be immediately disabled until the next authority change.
 * _3_ implies **MMR root**: a 32-byte array containing the MMR root.
 ====

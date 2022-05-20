@@ -41,7 +41,7 @@ include::02_runtime/main.adoc[]
 = Additional information
 Appendix chapter containing various protocol details
 
-include::aa_auxilary/main.adoc[]
+include::aa_auxiliary/main.adoc[]
 
 
 [#chap-host-api]

@@ -1,7 +1,7 @@
 [#sect-runtime-blockbuilder-module]
 === BlockBuilder Module (Version 4)
 
-All calls in this module require `Core_intialize_block`
+All calls in this module require `Core_initialize_block`
 (<<sect-rte-core-initialize-block>>) to be called beforehand.
 
 [#sect-rte-apply-extrinsic]

@@ -18,7 +18,7 @@ mechanism is described more in <<sect-availability-assignment-criteria>>.
 [#sect-availability-assignment-criteria]
 ==== Assignment Criteria
 
-Validators determine their assignment based on a VRF mechanism, similiar to the
+Validators determine their assignment based on a VRF mechanism, similar to the
 BABE consensus mechanism. First, validators generate an availability core VRF
 assignment (<<defn-availability-core-vrf-assignment>>), which indicates which
 availability core a validator is assigned to. Then a delayed availability core

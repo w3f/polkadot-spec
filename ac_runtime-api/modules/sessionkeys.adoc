@@ -13,7 +13,7 @@ Arguments::
 * A SCALE-encoded _Option_ as defined in <<defn-option-type>> containing an array of varying sizes indicating the seed.
 
 Return::
-* A byte array of varying size containg the encoded session keys.
+* A byte array of varying size containing the encoded session keys.
 
 ===== `SessionKeys_decode_session_keys`
 
@@ -29,6 +29,6 @@ Return::
 ++++
 (k, k_{\mathrm{id}})
 ++++
-where latexmath:[k] is an array of varying sizes containg the raw
+where latexmath:[k] is an array of varying sizes containing the raw
 public key and latexmath:[k_{\mathrm{id}}] is a
 4-byte array indicating the key type.

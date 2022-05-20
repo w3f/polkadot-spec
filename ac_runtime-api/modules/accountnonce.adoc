@@ -1,6 +1,6 @@
 === AccountNonceApi Module (Version 1)
 
-All calls in this module require `Core_intialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 
 [#sect-accountnonceapi-account-nonce]
 ==== `AccountNonceApi_account_nonce`

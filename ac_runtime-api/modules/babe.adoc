@@ -1,6 +1,6 @@
 === BabeApi Module (Version 2)
 
-All calls in this module require `Core_intialized_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
+All calls in this module require `Core_initialized_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 
 [#sect-rte-babeapi-epoch]
 ==== `BabeApi_configuration`
@@ -43,7 +43,7 @@ type at genesis will be used. Dynamic slot duration may be supported in the futu
 
 |_SecondarySlot_
 |Whether this chain should run with round-robin-style secondary slot and if this secondary slot
-requires the inclusion of an auxilary VRF output (<<sect-block-production-lottery>>).
+requires the inclusion of an auxiliary VRF output (<<sect-block-production-lottery>>).
 |A one-byte enum as defined in <<defn-consensus-message-digest>> as stem:[2_("nd")]. 
 |===
 
