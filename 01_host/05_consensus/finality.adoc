@@ -304,7 +304,7 @@ new authority set is required to execute the Algorithm as described in
 for GRANDPA protocol. Note that GRANDPA round number reset to 0 for every
 authority set change.
 
-Voter set changes are signalled by Runtime via a consensus engine message
+Voter set changes are signaled by Runtime via a consensus engine message
 (<<sect-consensus-message-digest>>). When Authorities process such messages they
 must not vote on any block with a higher number than the block at which the
 change is supposed to happen. The new authority set should reinitiate GRANDPA

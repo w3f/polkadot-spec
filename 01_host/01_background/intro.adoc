@@ -26,7 +26,7 @@ Protocol in <<chap-state-spec>>. In <<chap-state-transit>>, we identify the
 protocol states, by explaining the Polkadot state transition and discussing the
 detail based on which the Polkadot Host interacts with the state transition
 function, i.e. Runtime. Following, we specify the input messages triggering the
-state transition and the system behaviour. In <<chap-networking>>, we specify
+state transition and the system behavior. In <<chap-networking>>, we specify
 the communication protocols and network messages required for the Polkadot Host
 to communicate with other nodes in the network, such as exchanging blocks and
 consensus messages. In <<chap-consensus>>, we specify the consensus protocol,

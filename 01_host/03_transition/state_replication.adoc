@@ -85,7 +85,7 @@ for validation. The Seal must be added back to the digest afterward.
 * Id _6_, the *Pre-Runtime* digest, contains the BABE Pre-Digest item
 (<<defn-babe-header>>).
 * Id _8_, the *Runtime Environment Updated* digest, indicates that changes
-regarding the Runtime code or heap pages (<<sect-memory-management>>) occured.
+regarding the Runtime code or heap pages (<<sect-memory-management>>) occurred.
 No additional data is provided.
 ====
 
@@ -238,7 +238,7 @@ individual block separately.
 The primary method for generating the Changes Trie is provided to the Runtime
 with the Host API (<<sect-ext-storage-changes-root>>). The Runtime calls that
 function shortly before finalizing the block, the Polkadot Host must then
-generate the Changes Trie based on the storage changes which occured during
+generate the Changes Trie based on the storage changes which occurred during
 block production or execution. In order to provide this API function, it is
 imperative that the Polkadot Host implements a mechanism to keep track of the
 changes created by individual blocks, as mentioned in <<sect-state-storage>> and

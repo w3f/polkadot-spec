@@ -102,7 +102,7 @@ The optional value is a SCALE encoded byte array containing a valid UTF-8 sequen
 
 NOTE: Whenever _TransactionValidityError_ (<<defn-rte-transaction-validity-error>>)
 is returned, the contained error type will indicate whether an extrinsic should
-be outright rejected or requested for a later block. This behaviour is clarified
+be outright rejected or requested for a later block. This behavior is clarified
 further in <<defn-rte-invalid-transaction>> and respectively <<defn-rte-unknown-transaction>>.
 
 .TransactionValidityError
@@ -138,7 +138,7 @@ and specifies the invalidity of the transaction in more detail.
 |4 |General error to do with the transactions’ proof (e.g. signature) |None |Yes
 |5 |The transaction birth block is ancient. |None |Yes
 |6 |The transaction would exhaust the resources of the current block. |None |No
-|7 |Some unknown error occured. |Unsigned 8-bit integer |Yes
+|7 |Some unknown error occurred. |Unsigned 8-bit integer |Yes
 |8 |An extrinsic with mandatory dispatch resulted in an error. |None |Yes
 |9 |A transaction with a mandatory dispatch (only inherents are allowed to have mandatory dispatch). |None |Yes
 |===
