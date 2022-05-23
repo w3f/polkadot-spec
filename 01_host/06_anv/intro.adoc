@@ -39,10 +39,10 @@ sent by other validators and include them in the relay chain state
 blocks get finalized where each candidate is available on enough nodes of
 validators.
 
-Parachain candidates contained in non-finalized (Section ?) relay chain blocks
-must then be retrieved by a secondary set of relay chain validators, unrelated
-from the candidate backing process, who are randomly assigned to determine the
-validity of specific parachains based on a VRF lottery and are then required to
-vote on the validity of those candidates. This process is known as approval
-voting (<<sect-approval-voting>>). If a validator does not have the candidate
-data, it must recover the candidate data (<<sect-candidate-recovery>>).
+Parachain candidates contained in non-finalized relay chain blocks must then be
+retrieved by a secondary set of relay chain validators, unrelated from the
+candidate backing process, who are randomly assigned to determine the validity
+of specific parachains based on a VRF lottery and are then required to vote on
+the validity of those candidates. This process is known as approval voting
+(<<sect-approval-voting>>). If a validator does not have the candidate data, it
+must recover the candidate data (<<sect-candidate-recovery>>).

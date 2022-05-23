@@ -16,7 +16,7 @@ information about assignments via the Runtime APIs
 
 The assigned validator checks the validity of the proposed parachains blocks
 (<<sect-candidate-validation>>) and issues _Valid_ statements
-(<<net-msg-full-statement>>) to its peers if the verification succeeded.
+(<<defn-statement>>) to its peers if the verification succeeded.
 Broadcasting failed verification as _Valid_ statements is a slashable offense. The
 validator must only issue one _Seconded_ statement, based on an arbitrary metric,
 which implies an explicit vote for a candidate to be included in the relay

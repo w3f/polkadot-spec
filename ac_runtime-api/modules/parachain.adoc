@@ -52,9 +52,9 @@ Return::
 
 [stem]
 ++++
-S == {(0,->,C_o),(1,->,C_s),(2,->,phi):}\
-C_o == (n_u,B_o,B_t,n_t,b,G_i,C_h,C_d)\
-C_s == (P_id,C_i)
+S = {(0,->,C_o),(1,->,C_s),(2,->,phi):}\
+C_o = (n_u,B_o,B_t,n_t,b,G_i,C_h,C_d)\
+C_s = (P_id,C_i)
 ++++
 
 where
