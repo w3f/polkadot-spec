@@ -84,12 +84,12 @@ to determine approval voting criteria and generated the following way:
 
 [stem]
 ++++
-T = sf "Transcript"(b_r,b_s,e_i,A)
+T = "Transcript"(b_r,b_s,e_i,A)
 ++++
 
 where
 
-* stem:[sf "Transcript"] constructs a VRF transcript (<<defn-vrf-transcript>>).
+* stem:["Transcript"] constructs a VRF transcript (<<defn-vrf-transcript>>).
 * stem:[b_r] is the BABE randomness of the current epoch (<<defn-epoch-randomness>>).
 * stem:[b_s] is the current BABE slot (<<defn-epoch-slot>>).
 * stem:[e_i] is the current BABE epoch index (<<defn-epoch-slot>>).
@@ -177,15 +177,15 @@ The validator executes the following steps:
 
 [stem]
 ++++
-t_1 larr sf "Transcript"("'A&V DELAY'")\
-t_2 larr sf "append"(t_1,"'RC-VRF'",R_s)\
-t_3 larr sf "append"(t_2, "'core'",c_i)\
+t_1 larr "Transcript"("'A&V DELAY'")\
+t_2 larr "append"(t_1,"'RC-VRF'",R_s)\
+t_3 larr "append"(t_2, "'core'",c_i)\
 t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\
 t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\
 t_6 larr "meta-ad"(t_5, 64_("le"), "True")\
 i larr "prf"(t_6, "False")\
 o = s_k * i\
-p larr sf "dleq_prove"(t_6, i)
+p larr "dleq_prove"(t_6, i)
 ++++
 
 The resulting value stem:[p] is the VRF proof (<<defn-vrf-proof>>).
@@ -202,7 +202,7 @@ t_4 larr "append"(t_3, "'vrf-out'", o)\
 t_5 larr "meta-ad"(t_4, "''", "False")\
 t_6 larr "meta-ad"(t_5, 4_("le"), "True")\
 c larr "prf"(t_6, "False")\
-d = sf d mod (d_c+d_z) - d_z
+d = d mod (d_c+d_z) - d_z
 ++++
 
 where
