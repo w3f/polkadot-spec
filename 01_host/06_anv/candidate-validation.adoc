@@ -9,7 +9,7 @@ order:
 . The candidate does not exceed any parameters in the persisted validation data
 (<<defn-persisted-validation-data>>).
 . The signature of the collator is valid.
-. Validate the candidate by executing the parachain Runtime (<<sect-parachain-runtime>>)..
+. Validate the candidate by executing the parachain Runtime (<<sect-parachain-runtime>>).
 
 If all steps are valid, the Polkadot validator must create the necessary
 candidate commitments (<<defn-candidate-commitments>>) and submit the
