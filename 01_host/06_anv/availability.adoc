@@ -14,10 +14,10 @@ Candidates are inserted into the relay chain in form of parachain inherent data
 data by calling the appropriate Runtime API entry
 (<<sect-rt-api-availability-cores>>), then create a bitfield indicating for
 which candidate the validator has availability data stored and broadcast it to
-the network as defined in Definition 7.38. When sending the bitfield distrubtion
-message, the validator must ensure stem:[B_h] is set approriately, therefore
-clarifying to which state the bitfield is referring to, given that candidates
-can vary based on the chain fork.
+the network (<<net-msg-bitfield-dist-msg>>). When sending the bitfield
+distrubtion message, the validator must ensure stem:[B_h] is set approriately,
+therefore clarifying to which state the bitfield is referring to, given that
+candidates can vary based on the chain fork.
 
 Missing availability data of candidates must be recovered by the validator as
 described in <<sect-candidate-recovery>>. If previously issued bitfields are no

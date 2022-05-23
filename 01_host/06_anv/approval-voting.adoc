@@ -228,13 +228,14 @@ following format:
 [stem]
 ++++
 (k, o, p)\
-k = {(0,s),(1,i):}
+k = {(0,s),(1,I_c):}
 ++++
 
-where stem:[k] indicates the kind of the certificate, respectively the value
-_0_ proves the availability core assignment
+where stem:[k] indicates the kind of the certificate, respectively the value _0_
+proves the availability core assignment
 (<<defn-availability-core-vrf-assignment>>), followed by the sample number
 stem:[s], and the value _1_ proves the delayed availability core assignment
 (<<delayed-availability-core-vrf-assignment>>), followed by the core index
-stem:[i]. stem:[o] is the VRF output and stem:[p] is the VRF proof.
+stem:[I_c] (<<sect-rt-api-availability-cores>>). stem:[o] is the VRF output and
+stem:[p] is the VRF proof.
 ====

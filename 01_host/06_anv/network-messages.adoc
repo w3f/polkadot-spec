@@ -231,7 +231,7 @@ R = {(0,->,C_r),(1,->,phi):}\
 C_r = (c,c_p)
 ++++
 
-where _0_ is followed by the chunk response, stem:[C_r] and __1 indicates that
+where _0_ is followed by the chunk response, stem:[C_r] and _1_ indicates that
 the requested chunk was not found. stem:[C_r] contains the erasure-encoded chunk
 of data belonging to the candidate block, stem:[c], and stem:[c_p] is that
 chunks proof in the Merkle tree. Both stem:[c] and stem:[c_p] are byte arrays of
