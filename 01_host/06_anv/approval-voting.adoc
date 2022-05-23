@@ -139,11 +139,11 @@ t_3 larr "append"(t_2, "'vrf-in'", i)\
 t_4 larr "append"(t_3, "'vrf-out'", o)\
 t_5 larr "meta-ad"(t_4, "''", "False")\
 t_6 larr "meta-ad"(t_5, 4_"le", "True")\
-c larr "prf"(t_6, "False")\
-r_c = c mod a_c
+r larr "prf"(t_6, "False")\
+c_i = r mod a_c
 ++++
 
-where stem:[4_("le")] is the integer _4_ encoded as little endian, stem:[c] is the
+where stem:[4_("le")] is the integer _4_ encoded as little endian, stem:[r] is the
 4-byte challenge interpreted as a little endian encoded interger and stem:[a_c]
 is the number of availability cores used during the active session, as defined
 in the session info retrieved by the Runtime API (<<sect-rt-api-session-info>>).
@@ -156,13 +156,13 @@ continues with the following steps:
 [stem]
 ++++
 t_1 larr "Transcript"("'A&V ASSIGNED'")\
-t_2 larr "append"(t_1, "'core'", r_c)\
+t_2 larr "append"(t_1, "'core'", c_i)\
 p larr "dleq_prove"(t_2, i)
 ++++
 
-where stem:["dleq_prove"] is described in <<defn-vrf-dleq-prove>>.
-
-TODO: Clarify usage of "AssignmentCert", deprecate the following:
+where stem:["dleq_prove"] is described in <<defn-vrf-dleq-prove>>. The resulting
+values of stem:[o], stem:[p] and stem:[s] are used to construct an assignment
+certificate (<<defn-assignment-cert>>) of kind _0_.
 ====
 
 [#delayed-availability-core-vrf-assignment]
@@ -213,7 +213,9 @@ session info, retrieved via the Runtime API (<<sect-rt-api-session-info>>).
 retrieved via the Runtime API (<<sect-rt-api-session-info>>)..
 
 The resulting tranche, stem:[n], cannot be less than stem:[0]. If the tranche is
-less than stem:[0], then stem:[d=0].
+less than stem:[0], then stem:[d=0]. The resulting values stem:[o], stem:[p] and
+stem:[c_i] are used to construct an assignment certificate
+(<<<defn-assignment-cert>>) of kind _1_.
 ====
 
 [#defn-assignment-cert]
@@ -228,7 +230,7 @@ following format:
 [stem]
 ++++
 (k, o, p)\
-k = {(0,s),(1,I_c):}
+k = {(0,->,s),(1,->,c_i):}
 ++++
 
 where stem:[k] indicates the kind of the certificate, respectively the value _0_
@@ -236,6 +238,6 @@ proves the availability core assignment
 (<<defn-availability-core-vrf-assignment>>), followed by the sample number
 stem:[s], and the value _1_ proves the delayed availability core assignment
 (<<delayed-availability-core-vrf-assignment>>), followed by the core index
-stem:[I_c] (<<sect-rt-api-availability-cores>>). stem:[o] is the VRF output and
+stem:[c_i] (<<sect-rt-api-availability-cores>>). stem:[o] is the VRF output and
 stem:[p] is the VRF proof.
 ====
