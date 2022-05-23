@@ -110,7 +110,7 @@ specified in the session index which can be retrieved via the Runtime API
 (<<sect-rt-api-session-info>>). The amount of assignments is referred to as
 “samples”. For each iteration of the number of samples, the validator calculates
 an individual assignment, stem:[T], where the little-endian encoded sample
-number, stem:[S], is incremented by one. At the beginning of the iteration,
+number, stem:[s], is incremented by one. At the beginning of the iteration,
 stem:[S] starts at value _0_.
 
 The validator executes the following steps to retrieve a (possibly valid) core index:
@@ -119,7 +119,7 @@ The validator executes the following steps to retrieve a (possibly valid) core i
 ++++
 t_1 larr "Transcript"("'A&V MOD'")\
 t_2 larr "append"(t_1, "'RC-VRF'", R_s)\
-t_3 larr "append"(t_2, "'sample'", S)\
+t_3 larr "append"(t_2, "'sample'", s)\
 t_4 larr "append"(t_3, "'vrf-nm-pk'", p_k)\
 t_5 larr "meta-ad"(t_4, "'VRFHash'", "False")\
 t_6 larr "meta-ad"(t_5, 64_("le"), "True")\
@@ -214,4 +214,27 @@ retrieved via the Runtime API (<<sect-rt-api-session-info>>)..
 
 The resulting tranche, stem:[n], cannot be less than stem:[0]. If the tranche is
 less than stem:[0], then stem:[d=0].
+====
+
+[#defn-assignment-cert]
+.<<defn-assignment-cert, Assignment Certificate>>
+====
+The *Assignment Certificate* proves to the network that a Polkadot validator is
+assigned to an availability core and is therefore qualified for the approval of
+candidates, as clarified in <<defn-availability-core-vrf-assignment>>. This
+certificate contains the computed VRF output and is a datastructure of the
+following format:
+
+[stem]
+++++
+(k, o, p)\
+k = {(0,s),(1,i):}
+++++
+
+where stem:[k] indicates the kind of the certificate, respectively the value of
+_0_ proves the availability core assignment
+(<<defn-availability-core-vrf-assignment>>), followed by the sample number
+stem:[s], and the value of _1_ proves the delayed availability core assignment
+(<<delayed-availability-core-vrf-assignment>>), followed by the core index
+stem:[i].
 ====
