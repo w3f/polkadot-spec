@@ -226,7 +226,7 @@ included in the block Pre-Digest (<<defn-babe-header>>).
 It is imperative for the security of the network that each block producer
 correctly determines the current slot numbers at a given time by regularly
 estimating the local clock offset in relation to the network
-(<<defn-relative-syncronization>>).
+(<<defn-relative-synchronization>>).
 
 ****
 NOTE: *The calculation described in this section is still to be implemented and
@@ -271,11 +271,11 @@ whose value is equal to the number of slots between stem:[s_i] and stem:[s_j]
 It is imperative for the security of the network that each block producer
 correctly determines the current slot numbers at a given time by regularly
 estimating the local clock offset in relation to the network
-(<<defn-relative-syncronization>>).
+(<<defn-relative-synchronization>>).
 ====
 
-[#defn-relative-syncronization]
-.<<defn-relative-syncronization, Relative Time Synchronization>>
+[#defn-relative-synchronization]
+.<<defn-relative-synchronization, Relative Time Synchronization>>
 ====
 The *relative time synchronization* is a tuple of a slot number and a local
 clock timestamp stem:[(s_"sync",t_"sync")] describing the last point at

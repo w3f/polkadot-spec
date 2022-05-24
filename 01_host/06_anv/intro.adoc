@@ -7,7 +7,7 @@ that maintain their own state and are connected to the relay chain. Those
 parachains can take advantage of the relay chain consensus mechanism, including
 sending and receiving messages to and from other parachains. Parachain nodes
 that send parachain blocks, known as candidates, to the validators in order to
-be inlcuded in relay chain are referred to as collators.
+be included in relay chain are referred to as collators.
 
 The Polkadot relay chain validators are responsible for guaranteeing the
 validity of both relay chain and parachain blocks. Additionally, the validators

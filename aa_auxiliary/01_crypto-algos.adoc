@@ -106,7 +106,7 @@ where
 * stem:[s_p] is the compressed Ristretto point of the public key.
 * stem:[s_w] is the compressed Ristretto point of the wittness:
 
-For the 64-byte challange:
+For the 64-byte challenge:
 
 [stem]
 ++++
@@ -159,7 +159,7 @@ where stem:[B] is the Ristretto basepoint.
 H = C in P xx o + S in P xx i
 ++++
 
-The challange is valid if stem:[C in P] equals stem:[y]:
+The challenge is valid if stem:[C in P] equals stem:[y]:
 
 [stem]
 ++++

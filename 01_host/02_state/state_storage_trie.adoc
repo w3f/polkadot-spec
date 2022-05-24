@@ -286,7 +286,7 @@ stem:[N_(n+1)] should not be added to the length.
 The variant stem:[0001] can be distinguished from stem:[0001 0000] due to the
 fact that the following 4 bits of the first variant never equal zero.
 
-Formally, the lenght of the parital key, stem:["pk"_N^l], is defined as:
+Formally, the length of the partial key, stem:["pk"_N^l], is defined as:
 
 [stem]
 ++++
@@ -309,12 +309,12 @@ integrity possible.
 
 The Merkle value of each node should depend on the Merkle value of all its
 children as well as on its corresponding data in the state storage. This
-recursive dependancy is encompassed into the subvalue part of the node value
+recursive dependency is encompassed into the subvalue part of the node value
 which recursively depends on the Merkle value of its children. Additionally, as
 <<sect-child-trie-structure>> clarifies, the Merkle proof of each *child trie*
 must be updated first before the final Polkadot state root can be calculated.
 
-We use the auxilary function introduced in <<defn-children-bitmap>> to encode
+We use the auxiliary function introduced in <<defn-children-bitmap>> to encode
 and decode information stored in a branch node.
 
 [#defn-children-bitmap]

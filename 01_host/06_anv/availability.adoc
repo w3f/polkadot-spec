@@ -5,7 +5,7 @@
 ==== Availability Votes
 
 The Polkadot validator must issue a bitfield (<<defn-bitfield-array>>) which
-indicates votes for the availabilty of candidates. Issued bitfields can be used
+indicates votes for the availability of candidates. Issued bitfields can be used
 by the validator and other peers to determine which backed candidates meet the
 2/3+ availability quorum.
 
@@ -22,8 +22,8 @@ can vary based on the chain fork.
 Missing availability data of candidates must be recovered by the validator as
 described in <<sect-candidate-recovery>>. If previously issued bitfields are no
 longer accurate, i.e. the availability data has been recovered or the candidate
-of an availablity core has changed, the validator must create a new bitfield and
-boradcast it to the network. Candidates must be kept available by validators for
+of an availability core has changed, the validator must create a new bitfield and
+broadcast it to the network. Candidates must be kept available by validators for
 a specific amount of time. If a candidate does not receive any backing,
 validators should keep it available for about one hour, in case the state of
 backing does change. Backed and even approved candidates

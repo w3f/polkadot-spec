@@ -148,7 +148,7 @@ by the shared allocator described in <<sect-memory-management>>.
 
 When the Wasm method , corresponding to the entry, is invoked, two
 integers are passed as arguments. The first argument is set to the
-memory adress of the byte array stem:[B] in Wasm memory. The
+memory address of the byte array stem:[B] in Wasm memory. The
 second argument sets the length of the encoded data stored in
 stem:[B].
 
@@ -175,7 +175,7 @@ entry. This includes reverting the state of function calls which return errors
 or panic.
 
 As a rule of thumb, any state changes resulting from Runtime entries are not
-persistant with the exception of state changes resulting from calling
+persistent with the exception of state changes resulting from calling
 `Core_execute_block` (<<sect-rte-core-execute-block>>) while Polkadot Host is
 importing a block (<<sect-block-validation>>).
 

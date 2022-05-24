@@ -183,7 +183,7 @@ root.
 [#sect-ext-storage-changes-root]
 ==== `ext_storage_changes_root`
 
-NOTE: This function is not longer used and only exists for compatibiltiy reasons.
+NOTE: This function is not longer used and only exists for compatibility reasons.
 
 ===== Version 1 - Prototype
 ----

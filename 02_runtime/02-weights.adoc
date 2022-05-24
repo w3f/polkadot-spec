@@ -179,7 +179,7 @@ We require that:
 ++++
 ====
 
-The weights must fulfil the requirements as noted by the fundamentals
+The weights must fulfill the requirements as noted by the fundamentals
 and limitations, and can be assigned as the author sees fit. As a simple
 example, consider a maximum block weight of 1’000’000’000, an available
 ratio of 75% and a targeted transaction throughput of 500 transactions,
@@ -221,14 +221,14 @@ practically meaningless.
 
 On the other hand, benchmarking an extrinsics in a black-box fashion
 could (using random parameters) most centainly results in missing corner
-cases and worst case senarios. Instead, we benchmark all available
+cases and worst case scenarios. Instead, we benchmark all available
 Runtime functions which are invoked in the course of execution of
 extrinsics with a large collection of carefully selected input
 parameters and use the result of the benchmarking process to evaluate
 latexmath:[\mathcal{W}(E)].
 
 In order to select useful parameters, the Runtime functions have to be
-analysed to fully understand which behaviors or conditions can result in
+analyzed to fully understand which behaviors or conditions can result in
 expensive execution times, which is described closer in <<sect-primitive-types>>.
 Not every possible benchmarking outcome can be invoked by varying input
 parameters of the Runtime function. In some circumstances, preliminary work
@@ -257,7 +257,7 @@ stored under the key:
 ----
     hash(module_prefix) + hash(storage_prefix)
 ----
-* *Map*: Operations on mulitple values, datasets, where each entry has
+* *Map*: Operations on multiple values, datasets, where each entry has
 its corresponding, unique key. The final key-value pair is stored under
 the key:
 +
@@ -347,7 +347,7 @@ must therefore be carefully selected. The benchmarks should use input
 parameters which will most likely be used in regular cases, as intended
 by the authors, but must also consider worst case scenarios and inputs
 which might decelerate or heavily impact performance of the function.
-The input parameters should be randomised in order to cause various
+The input parameters should be randomized in order to cause various
 effects in behaviors on certain values, such as memory relocations and
 other outcomes that can impact performance.
 
