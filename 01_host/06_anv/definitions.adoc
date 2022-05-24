@@ -37,13 +37,13 @@ identifier of a parachain, assigned by the Runtime.
 Availability cores are slots used to process parachains. The Runtime assigns
 each parachain to a availability core and validators can fetch information about
 the cores, such as parachain block candidates, by calling the appropriate
-Runtime API (<<sect-rt-api-validator-groups>>). Validators are not concerned
+Runtime API (<<sect-rt-api-availability-cores>>). Validators are not concerned
 with the internal workings from the Runtimes perspective.
 
 [#defn-validator-groups]
 ==== Validator Groups
 Validator groups indicate which validators are responsible for creating backable
-candidates for certain parachains (<<sect-candidate-backing>>), and are assigned
+candidates for parachains (<<sect-candidate-backing>>), and are assigned
 by the Runtime. Validators are not concerned with the internal workings from the
 Runtimes perspective. Collators can use this information for submitting blocks.
 
