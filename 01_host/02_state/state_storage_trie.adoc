@@ -286,7 +286,7 @@ stem:[N_(n+1)] should not be added to the length.
 The variant stem:[0001] can be distinguished from stem:[0001 0000] due to the
 fact that the following 4 bits of the first variant never equal zero.
 
-Formally, the length of the parital key, stem:["pk"_N^l], is defined as:
+Formally, the length of the partial key, stem:["pk"_N^l], is defined as:
 
 [stem]
 ++++
