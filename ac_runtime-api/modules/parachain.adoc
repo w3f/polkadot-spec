@@ -68,10 +68,10 @@ assignment that is next scheduled on this core. An empty value indicates there
 is nothing scheduled.
 • stem:[B_o] indicates the relay chain block number at which the core got occupied.
 • stem:[B_t] indicates the relay chain block number the core will time-out at, if any.
-• stem:[n_t] is an _Option_ value (<<defn-option-type>>) as described in
-Definition ? which can contain a stem:[C_s] value if the core is freed by a
-time-out and indicates the assignment that is next scheduled on this core. An
-empty value indicates there is nothing scheduled.
+• stem:[n_t] is an _Option_ value (<<defn-option-type>>) which can contain a
+stem:[C_s] value if the core is freed by a time-out and indicates the assignment
+that is next scheduled on this core. An empty value indicates there is nothing
+scheduled.
 • stem:[b] is a bitfield array (<<defn-bitfield-array>>). A stem:[>2/3] majority
 of assigned validators voting with stem:[1] values means that the core is
 available.
@@ -80,9 +80,8 @@ available.
 candidate.
 • stem:[C_h] indicates the hash of the candidate occupying the core.
 • stem:[C_d] is the candidate descriptor (<<defn-candidate-descriptor>>).
-• stem:[C_i] is an _Option_ value (<<defn-option-type>>) as described in
-Definition ? which can contain the collators public key indicating who should
-author the block.
+• stem:[C_i] is an _Option_ value (<<defn-option-type>>) which can contain the
+collators public key indicating who should author the block.
 
 [#sect-rt-api-persisted-validation-data]
 ==== `ParachainHost_persisted_validation_data`

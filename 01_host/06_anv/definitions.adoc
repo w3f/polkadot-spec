@@ -43,9 +43,10 @@ with the internal workings from the Runtimes perspective.
 [#defn-validator-groups]
 ==== Validator Groups
 Validator groups indicate which validators are responsible for creating backable
-candidates for parachains (<<sect-candidate-backing>>), and are assigned
-by the Runtime. Validators are not concerned with the internal workings from the
-Runtimes perspective. Collators can use this information for submitting blocks.
+candidates for parachains (<<sect-candidate-backing>>), and are assigned by the
+Runtime (<<sect-rt-api-validator-groups>>). Validators are not concerned with
+the internal workings from the Runtimes perspective. Collators can use this
+information for submitting blocks.
 
 [#defn-upward-message]
 ==== Upward Message
