@@ -2,13 +2,13 @@
 === Candidate Backing
 
 The Polkadot validator receives an arbitrary number of parachain candidates with
-associated proofs from untrusted collators. The validator must verify and select
-a specific quantity of the proposed candidates and issue those as backable
-candidates to its peers. A candidate is considered backable when at least 2/3 of
-all assigned validators have issued a _Valid_ statement about that candidate, as
-described in <<sect-candidate-statements>>. Validators can retrieve
-information about assignments via the Runtime APIs
-<<sect-rt-api-validator-groups>> respectively
+associated proofs from untrusted collators. The assigned validators
+(<<defn-validator-groups>>) must verify and select a specific quantity of
+the proposed candidates and issue those as backable candidates to its peers. A
+candidate is considered backable when at least 2/3 of all assigned validators
+have issued a _Valid_ statement about that candidate, as described in
+<<sect-candidate-statements>>. Validators can retrieve information about
+assignments via the Runtime APIs <<sect-rt-api-validator-groups>> respectively
 <<sect-rt-api-availability-cores>>.
 
 [#sect-candidate-statements]
