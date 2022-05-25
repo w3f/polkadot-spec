@@ -140,31 +140,10 @@ where stem:[A_("Type") = T_i] for some stem:[T_i in cc T] and
 stem:[A_("Value")] is its value of type stem:[T_i], which can be empty. We
 define stem:["idx"(T_i) = i - 1], unless it is explicitly defined as another
 value in the definition of a particular varying data type.
-====
 
 In particular, we define two specific varying data which are frequently used in
-various part of Polkadot Protocol:
-
-[#defn-option-type]
-.<<defn-option-type, Option Type>>
-====
-The *Option* type is a varying data type of stem:[{"None",T_2}] which indicates if
-data of stem:[T_2] type is available (referred to as _some_ state) or not
-(referred to as _empty_, _none_ or _null_ state). The presence of type _none_,
-indicated by stem:["idx"(T_("None")) = 0], implies that the data corresponding
-to stem:[T_2] type is not available and contains no additional data. Where as
-the presence of type stem:[T_2] indicated by stem:["idx"(T_2) = 1] implies that
-the data is available.
-====
-
-[#defn-result-type]
-.<<defn-result-type, Result Type>>
-====
-The *Result* type is a varying data type of stem:[{T_1, T_2}] which is used to
-indicate if a certain operation or function was executed successfully (referred
-to as "ok" state) or not (referred to as "error" state). stem:[T_1] implies
-success, stem:[T_2] implies failure. Both types can either contain additional
-data or are defined as empty type otherwise.
+various part of Polkadot protocol: _Option_ (<<defn-option-type>>) and _Result_
+(<<defn-result-type>>).
 ====
 
 [#defn-scale-variable-type]
@@ -187,11 +166,33 @@ stem:[A]. In particular, for the optional type defined in
 ++++
 "Enc"_("SC")("None", phi) := 0_(bbb B_1)
 ++++
+
+The SCALE codec does not encode the correspondence between the value and the
+data type it represents; the decoder needs prior knowledge of such
+correspondence to decode the data.
 ====
 
-The SCALE codec does not encode the correspondence between the value of stem:[idx]
-defined in <<defn-scale-variable-type>> and the data type it represents; the
-decoder needs prior knowledge of such correspondence to decode the data.
+[#defn-option-type]
+.<<defn-option-type, Option Type>>
+====
+The *Option* type is a varying data type of stem:[{"None",T_2}] which indicates if
+data of stem:[T_2] type is available (referred to as _some_ state) or not
+(referred to as _empty_, _none_ or _null_ state). The presence of type _none_,
+indicated by stem:["idx"(T_("None")) = 0], implies that the data corresponding
+to stem:[T_2] type is not available and contains no additional data. Where as
+the presence of type stem:[T_2] indicated by stem:["idx"(T_2) = 1] implies that
+the data is available.
+====
+
+[#defn-result-type]
+.<<defn-result-type, Result Type>>
+====
+The *Result* type is a varying data type of stem:[{T_1, T_2}] which is used to
+indicate if a certain operation or function was executed successfully (referred
+to as "ok" state) or not (referred to as "error" state). stem:[T_1] implies
+success, stem:[T_2] implies failure. Both types can either contain additional
+data or are defined as empty type otherwise.
+====
 
 [#defn-scale-list]
 .<<defn-scale-list, Sequence>>
