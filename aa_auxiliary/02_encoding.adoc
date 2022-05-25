@@ -98,7 +98,9 @@ be deserialized into the given type or data structure.
 
 It's accepted behavior for the decoder to partially decode the blob of data.
 Meaning, any additional data that does not fit into a datastructure can be
-ignored.
+ignored. Considering that the decoded data is never larger than the encoded
+message, this information can serve as a way to validate values that can vary in
+sizes, such as sequences (<<defn-scale-list>>).
 ====
 
 [#defn-scale-byte-array]
@@ -191,7 +193,7 @@ data or are defined as empty type otherwise.
 ====
 The SCALE codec for value stem:[A = (A_("Type"), A_("Value"))] of varying data
 type stem:[cc T = {T_i, ... T_n}], formally referred to as
-stem:["Enc" ("SC")(A)] is defined as follows:
+stem:["Enc"_("SC")(A)] is defined as follows:
 
 [stem]
 ++++
