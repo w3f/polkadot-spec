@@ -73,6 +73,7 @@ written into the *value_out* buffer. Returns if the entry does not exists.
 ==== `ext_default_child_storage_clear`
 
 Clears the storage of the given key and its value from the child storage.
+Nonexistent entries are silently ignored.
 
 ===== Version 1 - Prototype
 ----
