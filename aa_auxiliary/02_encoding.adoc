@@ -103,27 +103,6 @@ message, this information can serve as a way to validate values that can vary in
 sizes, such as sequences (<<defn-scale-list>>).
 ====
 
-[#defn-scale-byte-array]
-.<<defn-scale-byte-array, Byte Array>>
-====
-The *SCALE codec* for *Byte array*, stem:[A], such that:
-
-[stem]
-++++
-A := (b_1, b_2, ... b_n)
-++++
-
-such that stem:[n < 2^(536)] is a byte array referred to stem:["Enc"_("SC")(A)]
-and defined as:
-
-[stem]
-++++
-"Enc"_("SC")(A) := "Enc"_("SC")^("Len")(abs(A)) "||" A
-++++
-
-where stem:["Enc"_("SC")^("Len")] is defined in <<defn-sc-len-encoding>>.
-====
-
 [#defn-scale-tuple]
 .<<defn-scale-tuple, Tuple>>
 ====
