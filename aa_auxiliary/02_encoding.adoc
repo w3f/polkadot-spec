@@ -213,6 +213,10 @@ infer value of stem:[n] from the context) is defined as:
 ++++
 
 where stem:["Enc"_("SC")^("Len")] is defined in <<defn-sc-len-encoding>>.
+
+In some cases, the length indicator stem:["Enc"_("SC")^("Len")(abs(S))] is omitted
+if the length of the sequence is fixed and known by the decoder upfront. Such
+cases are explicitly stated by the definition of the corresponding type.
 ====
 
 [#defn-scale-dictionary]
