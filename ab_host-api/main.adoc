@@ -11,7 +11,7 @@ v = {(0, "full values"),(1, "node hashes"):}
 
 where stem:[0] indicates that the values of the keys should be inserted into the
 trie directly and stem:[1] makes use of "node hashes" when calculating the
-merkle proof (<<defn-node-hashes>>).
+merkle proof (<<defn-hashed-subvalue>>).
 ====
 
 include::intro.adoc[]
