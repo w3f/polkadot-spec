@@ -231,3 +231,28 @@ requested
 |7
 |Storage key which changes are requested
 |===
+
+==== Remote Changes Response
+
+Remote changes response.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Proof has been generated using block with this number as a max block. Should be less than or equal to the RemoteChangesRequest::max block number
+
+|`repeated bytes`
+|3
+|Changes proof
+
+|`repeated Pair`
+|4
+|Changes tries roots missing ont he reqeuster node
+
+|`bytes`
+|5
+|Missing changes tries roots proof.
+|===
