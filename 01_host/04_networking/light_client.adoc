@@ -69,19 +69,19 @@ Where the `response` can be one of the following fields:
 
 |`RemoteCallResponse`
 |1
-|
+|A remote call response (<<sect-light-remote-call-response>>)
 
 |`RemoteReadResponse`
 |2
-|
+|A remote read response (<<sect-light-remote-read-response>>)
 
 |`RemoteHeaderResponse`
 |3
-|
+|A remote header response (<<sect-light-remote-header-response>>)
 
 |`RemoteChangesResponse`
 |4
-|
+|A remote changes response (<<sect-light-remote-changes-response>>)
 |===
 
 [#sect-light-remote-call-request]
@@ -240,6 +240,7 @@ requested
 |Storage key which changes are requested
 |===
 
+[#sect-light-remote-changes-response]
 ==== Remote Changes Response
 
 Remote changes response.
