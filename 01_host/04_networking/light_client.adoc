@@ -1,0 +1,11 @@
+=== Light Client
+
+Light clients are applications that fetch the required data that they need from
+a Polkadot node with an associated proof to validate the data. This makes it
+possible to interact with the Polkadot network without requiring to run a full
+node or having to trust the remote peers. The light client messages make this
+functionality possible.
+
+==== Messages
+
+===== Announcing blocks
