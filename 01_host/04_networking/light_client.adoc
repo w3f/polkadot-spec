@@ -8,7 +8,7 @@ functionality possible.
 
 === Messages
 
-All light client messages a protobuf messages.
+All light client messages are protobuf encoded.
 
 ==== Request
 
@@ -135,4 +135,65 @@ Remote read request.
 |`repeated bytes`
 |3
 |Storage keys
+|===
+
+==== Remote Read Response
+
+Remote read response.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Read proof
+|===
+
+==== Remote Read Child Request
+
+Remote read child request.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Block at which to perform call
+
+|`bytes`
+|3
+|Child storage key, this is relative to the child type storage location.
+
+|`bytes`
+|6
+|Storage keys
+|===
+
+==== Remote Header Request
+
+Remote header request.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Block number to request header for
+|===
+
+==== Remote Header Response
+
+Remote header response.
+
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|The header. Is _None_ if proof generation has failed (e.g. header is unknown)
 |===
