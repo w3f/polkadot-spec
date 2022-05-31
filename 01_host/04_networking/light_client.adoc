@@ -11,7 +11,8 @@ All light client messages are protobuf encoded.
 
 ==== Request
 
-A message with all possible request messages.
+A message with all possible request messages. All message are sent as part of
+this message.
 
 [cols="2,1,5"]
 |===
@@ -51,7 +52,8 @@ Where the `request` can be one of the following fields:
 
 ==== Response
 
-A message with all possible response messages.
+A message with all possible response messages. All message are sent as part of
+this message.
 
 [cols="2,1,5"]
 |===
@@ -85,9 +87,13 @@ Where the `response` can be one of the following fields:
 |A remote changes response (<<sect-light-remote-changes-response>>)
 |===
 
-[#sect-light-remote-call-request]
-==== Remote Call Request
+==== Remote Call Messages
 
+Remote call messages.
+
+[#sect-light-remote-call-request]
+.<<sect-light-remote-call-request,Remote Call Request>>
+====
 Remote call request.
 
 [cols="1,1,5"]
@@ -106,10 +112,11 @@ Remote call request.
 |4
 |Call data
 |===
+====
 
 [#sect-light-remote-call-response]
-==== Remote Call Response
-
+.<<sect-light-remote-call-response,Remote Call Response>>
+====
 Remote call response.
 
 [cols="1,1,5"]
@@ -120,10 +127,13 @@ Remote call response.
 |2
 |Execution proof
 |===
+====
+
+==== Remote Read Messages
 
 [#sect-light-remote-read-request]
-==== Remote Read Request
-
+.<<sect-light-remote-read-request,Remote Read Request>>
+====
 Remote read request.
 
 [cols="1,1,5"]
@@ -138,11 +148,11 @@ Remote read request.
 |3
 |Storage keys
 |===
-
+====
 
 [#sect-light-remote-read-response]
-==== Remote Read Response
-
+.<<sect-light-remote-read-response,Remote Read Response>>
+====
 Remote read response.
 
 [cols="1,1,5"]
@@ -153,10 +163,13 @@ Remote read response.
 |2
 |Read proof
 |===
+====
+
+==== Remote Read Child Messages
 
 [#sect-light-remote-read-child-request]
-==== Remote Read Child Request
-
+.<<sect-light-remote-read-child-request,Remote Read Child Request>>
+====
 Remote read child request.
 
 [cols="1,1,5"]
@@ -175,10 +188,13 @@ Remote read child request.
 |6
 |Storage keys
 |===
+====
+
+==== Remote Header Messages
 
 [#sect-light-remote-header-request]
-==== Remote Header Request
-
+.<<sect-light-remote-header-request, Remote Header Request>>
+====
 Remote header request.
 
 [cols="1,1,5"]
@@ -189,10 +205,11 @@ Remote header request.
 |2
 |Block number to request header for
 |===
+====
 
 [#sect-light-remote-header-response]
-==== Remote Header Response
-
+.<<sect-light-remote-header-response, Remote Header Response>>
+====
 Remote header response.
 
 [cols="1,1,5"]
@@ -203,10 +220,13 @@ Remote header response.
 |2
 |The header. Is _None_ (<<defn-option-type>>) if proof generation has failed (e.g. header is unknown)
 |===
+====
+
+==== Remote Changes Message
 
 [#sect-light-remote-changes-request]
-==== Remote Changes Request
-
+.<<sect-light-remote-changes-request, Remote Changes Request>>
+====
 Remote changes request.
 
 [cols="1,1,5"]
@@ -240,9 +260,11 @@ requested
 |7
 |Storage key which changes are requested
 |===
+====
 
 [#sect-light-remote-changes-response]
-==== Remote Changes Response
+.<<sect-light-remote-changes-response, Remote Changes Response>>
+====
 
 Remote changes response.
 
@@ -281,3 +303,4 @@ Where `Pair` is a protobuf datastructure of the following format:
 |2
 |The second element of the pair
 |===
+====
