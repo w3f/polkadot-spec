@@ -8,4 +8,42 @@ functionality possible.
 
 ==== Messages
 
-===== Announcing blocks
+All light client messages a protobuf messages.
+
+===== Request
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`oneof` (`request`)
+|
+|The request type
+|===
+
+Where the `request` can be one of the following fields:
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`RemoteCallRequest`
+|1
+|
+
+|`RemoteReadRequest`
+|2
+|
+
+|`RemoteHeaderRequest`
+|3
+|
+
+|`RemoteReadChildRequest`
+|4
+|
+
+|`RemoteChangesRequest`
+|5
+|
+|===

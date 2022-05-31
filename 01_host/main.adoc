@@ -32,6 +32,8 @@ include::04_networking/fundamentals.adoc[]
 
 include::04_networking/messages.adoc[]
 
+include::04_networking/light_client.adoc[]
+
 
 [#chap-consensus]
 == Consensus
