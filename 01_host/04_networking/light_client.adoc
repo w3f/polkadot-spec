@@ -107,3 +107,32 @@ Remote call request.
 |Call data
 |===
 
+==== Remote Call Response
+
+Remote call response.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Execution proof
+|===
+
+==== Remote Read Request
+
+Remote read request.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Block at which to perform call
+
+|`repeated bytes`
+|3
+|Storage keys
+|===
