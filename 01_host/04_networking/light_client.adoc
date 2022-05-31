@@ -1,12 +1,10 @@
-== Light Client
+=== Light Client Messages
 
 Light clients are applications that fetch the required data that they need from
 a Polkadot node with an associated proof to validate the data. This makes it
 possible to interact with the Polkadot network without requiring to run a full
 node or having to trust the remote peers. The light client messages make this
 functionality possible.
-
-=== Messages
 
 All light client messages are protobuf encoded.
 
@@ -31,23 +29,23 @@ Where the `request` can be one of the following fields:
 
 |`RemoteCallRequest`
 |1
-|
+|A remote call request (<<sect-light-remote-call-request>>)
 
 |`RemoteReadRequest`
 |2
-|
+|A remote read request (<<sect-light-remote-read-request>>)
 
 |`RemoteHeaderRequest`
 |3
-|
+|A remote header request (<<sect-light-remote-header-request>>)
 
 |`RemoteReadChildRequest`
 |4
-|
+|A remote read child request (<<sect-light-remote-read-child-request>>)
 
 |`RemoteChangesRequest`
 |5
-|
+|A remote changes request (<<sect-light-remote-changes-request>>)
 |===
 
 ==== Response
@@ -86,11 +84,12 @@ Where the `response` can be one of the following fields:
 |
 |===
 
+[#sect-light-remote-call-request]
 ==== Remote Call Request
 
 Remote call request.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
@@ -107,11 +106,12 @@ Remote call request.
 |Call data
 |===
 
+[#sect-light-remote-call-response]
 ==== Remote Call Response
 
 Remote call response.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
@@ -120,11 +120,12 @@ Remote call response.
 |Execution proof
 |===
 
+[#sect-light-remote-read-request]
 ==== Remote Read Request
 
 Remote read request.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
@@ -137,11 +138,13 @@ Remote read request.
 |Storage keys
 |===
 
+
+[#sect-light-remote-read-response]
 ==== Remote Read Response
 
 Remote read response.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
@@ -150,11 +153,12 @@ Remote read response.
 |Read proof
 |===
 
+[#sect-light-remote-read-child-request]
 ==== Remote Read Child Request
 
 Remote read child request.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
@@ -171,11 +175,12 @@ Remote read child request.
 |Storage keys
 |===
 
+[#sect-light-remote-header-request]
 ==== Remote Header Request
 
 Remote header request.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
@@ -184,24 +189,26 @@ Remote header request.
 |Block number to request header for
 |===
 
+[#sect-light-remote-header-response]
 ==== Remote Header Response
 
 Remote header response.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
 |`bytes`
 |2
-|The header. Is _None_ if proof generation has failed (e.g. header is unknown)
+|The header. Is _None_ (<<defn-option-type>>) if proof generation has failed (e.g. header is unknown)
 |===
 
+[#sect-light-remote-changes-request]
 ==== Remote Changes Request
 
 Remote changes request.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
@@ -226,6 +233,7 @@ requested
 |`bytes`
 |6
 |(Optional) storage child node key which changes are requested
+(<<defn-option-type>>)
 
 |`bytes`
 |7
@@ -236,7 +244,7 @@ requested
 
 Remote changes response.
 
-[cols="2,1,5"]
+[cols="1,1,5"]
 |===
 |Type |Id |Description
 
@@ -255,4 +263,19 @@ Remote changes response.
 |`bytes`
 |5
 |Missing changes tries roots proof.
+|===
+
+Where `Pair` is a protobuf datastructure of the following format:
+
+[cols="1,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|1
+|The first element of the pair
+
+|`bytes`
+|2
+|The second element of the pair
 |===
