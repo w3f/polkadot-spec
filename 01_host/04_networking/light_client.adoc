@@ -1,4 +1,4 @@
-=== Light Client
+== Light Client
 
 Light clients are applications that fetch the required data that they need from
 a Polkadot node with an associated proof to validate the data. This makes it
@@ -6,11 +6,11 @@ possible to interact with the Polkadot network without requiring to run a full
 node or having to trust the remote peers. The light client messages make this
 functionality possible.
 
-==== Messages
+=== Messages
 
 All light client messages a protobuf messages.
 
-===== Request
+==== Request
 
 A message with all possible request messages.
 
@@ -50,7 +50,7 @@ Where the `request` can be one of the following fields:
 |
 |===
 
-===== Response
+==== Response
 
 A message with all possible response messages.
 
@@ -85,3 +85,25 @@ Where the `response` can be one of the following fields:
 |4
 |
 |===
+
+==== Remote Call Request
+
+Remote call request.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Block at which to perform call
+
+|`string`
+|3
+|Method name
+
+|`bytes`
+|4
+|Call data
+|===
+
