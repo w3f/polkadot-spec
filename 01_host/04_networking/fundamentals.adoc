@@ -195,6 +195,11 @@ purpose. Each substream is either a _Request-Response substream_ or a
 _Notification substream_, as described in
 <<sect-connection-establishment>>.
 
+NOTE: The prefixes on those substreams are known as protocol identifiers and are
+used to segregate communications to specific networks. This prevents any
+interference with other networks. `dot` is used exclusively for Polkadot.
+Kusama, for example, uses the protocol identifier `ksmcc3`.
+
 * `/ipfs/ping/` - Open a standardized substream _libp2p_ to a peer and
 initialize a ping to verify if a connection is still alive. If the peer does not
 respond, the connection is dropped. This is a _Request-Response substream_.
@@ -215,7 +220,7 @@ https://github.com/libp2p/go-libp2p-kad-dht[golang Github repository].
 * `/dot/light/2` - a request and response protocol that allows a light client to
 request information about the state. This is a _Request-Response substream_.
 +
-WARNING: Light client messages are currently not documented.
+The messages are specified in <<sect-light-msg>>.
 * `/dot/block-announces/1` - a substream/notification protocol which sends
 blocks to connected peers. This is a _Notification substream_.
 +
@@ -233,21 +238,16 @@ The messages are specified in <<sect-warp-sync>>.
 transactions to connected peers. This is a _Notification substream_.
 +
 The messages are specified in <<sect-msg-transactions>>.
-* `/paritytech/grandpa/1` - a substream/notification protocol that sends GRANDPA
+* `/dot/grandpa/1` - a substream/notification protocol that sends GRANDPA
 votes to connected peers. This is a _Notification substream_.
 +
 The messages are specified in <<sect-msg-grandpa>>.
 +
-WARNING: This substream will change in the future. See
-https://github.com/paritytech/substrate/issues/7252[issue #7252]. *
-`/paritytech/beefy/1` - a substream/notification protocol which sends signed
+NOTE: For backwards compatibility reasons, `/paritytech/grandpa/1` is also a valid substream for those messages.
+* `/dot/beefy/1` - a substream/notification protocol which sends signed
 BEEFY statements, as described in <<sect-grandpa-beefy>>, to connected peers.
 This is a _Notification_ substream.
 +
 The messages are specified in <<sect-msg-grandpa-beefy>>.
-
-NOTE: The prefixes on those substreams are known as protocol
-identifiers and are used to segregate communications to specific
-networks. This prevents any interference with other networks. is used
-exclusively for Polkadot. Kusama, for example, uses the protocol
-identifier.
++
+NOTE: For backwards compatibility reasons, `/paritytech/beefy/1` is also a valid substream for those messages.
