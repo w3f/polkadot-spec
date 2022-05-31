@@ -12,6 +12,8 @@ All light client messages a protobuf messages.
 
 ===== Request
 
+A message with all possible request messages.
+
 [cols="2,1,5"]
 |===
 |Type |Id |Description
@@ -45,5 +47,41 @@ Where the `request` can be one of the following fields:
 
 |`RemoteChangesRequest`
 |5
+|
+|===
+
+===== Response
+
+A message with all possible response messages.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`oneof` (`response`)
+|
+|The response type
+|===
+
+Where the `response` can be one of the following fields:
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`RemoteCallResponse`
+|1
+|
+
+|`RemoteReadResponse`
+|2
+|
+
+|`RemoteHeaderResponse`
+|3
+|
+
+|`RemoteChangesResponse`
+|4
 |
 |===
