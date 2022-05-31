@@ -188,7 +188,6 @@ Remote header request.
 
 Remote header response.
 
-
 [cols="2,1,5"]
 |===
 |Type |Id |Description
@@ -196,4 +195,39 @@ Remote header response.
 |`bytes`
 |2
 |The header. Is _None_ if proof generation has failed (e.g. header is unknown)
+|===
+
+==== Remote Changes Request
+
+Remote changes request.
+
+[cols="2,1,5"]
+|===
+|Type |Id |Description
+
+|`bytes`
+|2
+|Hash of the first block of the range (including first) where changes are
+requested
+
+|`bytes`
+|3
+|Hash of the last block of the range (including last) where changes are
+requested
+
+|`bytes`
+|4
+|Affected roots must be proved
+
+|`bytes`
+|5
+|Hash of the last block that we can use when querying changes
+
+|`bytes`
+|6
+|(Optional) storage child node key which changes are requested
+
+|`bytes`
+|7
+|Storage key which changes are requested
 |===
