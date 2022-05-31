@@ -7,7 +7,8 @@ possible to interact with the Polkadot network without requiring to run a full
 node or having to trust the remote peers. The light client messages make this
 functionality possible.
 
-All light client messages are protobuf encoded.
+All light client messages are protobuf encoded and are sent over the
+`/dot/light/2` substream.
 
 ==== Request
 
@@ -89,7 +90,7 @@ Where the `response` can be one of the following fields:
 
 ==== Remote Call Messages
 
-Remote call messages.
+Execute a call to a contract at the given block.
 
 [#sect-light-remote-call-request]
 .<<sect-light-remote-call-request,Remote Call Request>>
@@ -131,6 +132,8 @@ Remote call response.
 
 ==== Remote Read Messages
 
+Read a storage value at the given block.
+
 [#sect-light-remote-read-request]
 .<<sect-light-remote-read-request,Remote Read Request>>
 ====
@@ -167,6 +170,8 @@ Remote read response.
 
 ==== Remote Read Child Messages
 
+Read a child storage value at the given block.
+
 [#sect-light-remote-read-child-request]
 .<<sect-light-remote-read-child-request,Remote Read Child Request>>
 ====
@@ -191,6 +196,8 @@ Remote read child request.
 ====
 
 ==== Remote Header Messages
+
+Request a block header at the given block.
 
 [#sect-light-remote-header-request]
 .<<sect-light-remote-header-request, Remote Header Request>>
@@ -223,6 +230,8 @@ Remote header response.
 ====
 
 ==== Remote Changes Message
+
+Remote changes messages.
 
 [#sect-light-remote-changes-request]
 .<<sect-light-remote-changes-request, Remote Changes Request>>
@@ -282,7 +291,7 @@ Remote changes response.
 
 |`repeated Pair`
 |4
-|Changes tries roots missing ont he reqeuster node
+|Changes tries roots missing on the requester node
 
 |`bytes`
 |5
