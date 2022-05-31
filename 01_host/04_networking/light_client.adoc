@@ -1,3 +1,4 @@
+[#sect-light-msg]
 === Light Client Messages
 
 Light clients are applications that fetch the required data that they need from
