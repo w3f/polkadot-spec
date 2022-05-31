@@ -168,7 +168,7 @@ Remote read child request.
 
 |`bytes`
 |3
-|Child storage key, this is relative to the child type storage location.
+|Child storage key, this is relative to the child type storage location
 
 |`bytes`
 |6
