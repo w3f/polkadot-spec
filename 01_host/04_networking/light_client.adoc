@@ -283,7 +283,7 @@ Remote changes response.
 
 |`bytes`
 |2
-|Proof has been generated using block with this number as a max block. Should be less than or equal to the RemoteChangesRequest::max block number
+|Proof has been generated using block with this number as a max block.
 
 |`repeated bytes`
 |3
