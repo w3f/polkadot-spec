@@ -545,3 +545,25 @@ stem:[tt "Last-Finalized-Block" >= tt "Best-Final-Candidate"(r - 1)] albeit in
 different ways: the former with increasing the stem:[tt "Last-Finalized-Block"]
 and the latter with decreasing stem:[tt "Best-Final-Candidate"(r - 1)].
 ====
+
+[#sect-finality-forced-changes]
+==== Forced Authority Set Changes
+
+In a case of emergency where the Polkadot network is unable to finalize blocks,
+such as in an event of mass validator outage, the Polkadot governance mechanism
+must enact a forced change, which the Host must handle in a specific manner.
+Given that in such a case finality cannot be relied on, the Host must detect the
+forced change (<<defn-consensus-message-digest>>) in a (valid) block and apply
+it to all forks.
+
+The stem:[m in CM_g], which is specified by the governance mechanism, defines
+the starting block at which stem:[N_("delay")] is applied. This provides some
+degree of probabilistic consensus to the network with the assumption that the
+forced change was received by most participants and that finality can be
+continued.
+
+.Applying a scheduled change
+image::01_host/05_consensus/assets/authority_set_scheduled_change_chart.svg["Scheduled Change Chart"]
+
+.Applying a forced change
+image::01_host/05_consensus/assets/authority_set_forced_change_chart.svg["Forced Change Chart"]

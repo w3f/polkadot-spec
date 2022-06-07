@@ -126,41 +126,31 @@ where:
 * stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the
 chain the announcing block must be before the change is applied.
 * _1_ implies *scheduled change*: Schedule an authority set change after the
-given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
-definition of stem:[N_("delay")], is a block _finalized_ by the finality
-consensus engine. The earliest digest of this type in a single block will be
-respected. No change should be scheduled if one is already finalized and the
-delay has not passed completely. If such an inconsistency occurs, the scheduled
-change should be ignored.
-* _2_ implies *forced change*: Force an authority set change after the given
-delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
-definition of stem:[N_("delay")], is an _imported_ block that has been validated
-by the block production consensus engine. Hence, the authority changeset is
-valid for every subchain containing _B_ and where the delay has been exceeded.
-If one or more blocks gets finalized before the change takes effect, the
-authority set change should be disregarded. The earliest digest of this type in
-a single block will be respected. No change should be scheduled if one is
-already finalized and the delay has not passed completely. If such an
-inconsistency occurs, the scheduled change should be ignored.
+given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] is the
+block where the change is applied. The earliest digest of this type in a
+single block will be respected, unless a force change is present, in which case
+the force change takes precedence.
+* _2_ implies *forced change*: Schedule a forced authority set change after the
+given delay of stem:[N_("delay") := |"SubChain"(B,m + B')|] where stem:[B'] is
+the block where the change is applied. The earliest digest
+of this type in a block will be respected.
 +
-NOTE: stem:[m], which indicates the block finalization median, is to-be-defined.
-* _3_ implies *on disabled*: An index to the individual authority in the
-current authority list that should be immediately disabled until the next
-authority set changes. When an authority gets disabled, the node should stop
-performing any authority functionality from that authority, including authoring
-blocks and casting GRANDPA votes for finalization. Similarly, other nodes should
-ignore all messages from the indicated authority which pertain to their
-authority role.
+Forced changes are explained further in <<sect-finality-forced-changes>>.
+* _3_ implies *on disabled*: An index to the individual authority in the current
+authority list (<<defn-authority-list>>) that should be immediately disabled
+until the next authority set changes. When an authority gets disabled, the node
+should stop performing any authority functionality from that authority,
+including authoring blocks and casting GRANDPA votes for finalization.
+Similarly, other nodes should ignore all messages from the indicated authority
+which pertain to their authority role.
 * _4_ implies *pause*: A signal to pause the current authority set after the
-given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
-definition of stem:[N_("delay")], is a block _finalized_ by the finality
-consensus engine. After finalizing block stem:[B'], the authorities should stop
+given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] is a
+block where the change is applied. Once applied, the authorities should stop
 voting.
 * _5_ implies *resume*: A signal to resume the current authority set after the
-given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] in the
-definition of stem:[N_("delay")], is an _imported_ block and validated by the
-block production consensus engine. After authoring block stem:[B'], the
-authorities should resume voting.
+given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] is the
+block where the change is applied. Once applied, the authorities should resume
+voting.
 
 IMPORTANT: The BEEFY protocol is still under construction. The following part will be
 updated in the future and certain information will be clarified.
