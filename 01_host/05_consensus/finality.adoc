@@ -563,7 +563,7 @@ forced change was received by most participants and that finality can be
 continued.
 
 .Applying a scheduled change
-image::01_host/05_consensus/assets/authority_set_scheduled_change_chart.png["Scheduled Change Chart"]
+image::01_host/05_consensus/assets/authority_set_scheduled_change_chart.svg["Scheduled Change Chart"]
 
 .Applying a forced change
-image::01_host/05_consensus/assets/authority_set_forced_change_chart.png["Forced Change Chart"]
+image::01_host/05_consensus/assets/authority_set_forced_change_chart.svg["Forced Change Chart"]
