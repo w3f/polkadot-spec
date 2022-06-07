@@ -137,7 +137,7 @@ B' >= B
 or stem:[V_(v_i)^(r,"pc")(B')] is an equivocatory vote.
 
 In all cases, stem:["Sign"_(v_i)^(r,"stage")(B')] is the signature
-(<<defn-sign-round-vote>>) of voter stem:[v_i in bbb V_B] broadcasted during
+(<<defn-sign-round-vote>>) of voter stem:[v_("id") in bbb V_B] broadcasted during
 either the pre-vote (stage = pv) or the pre-commit (stage = pc) sub-round of
 round r. A *valid justification* must only contain up-to-one valid vote from
 each voter and must not contain more than two equivocatory votes from each

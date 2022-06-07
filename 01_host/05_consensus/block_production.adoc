@@ -121,11 +121,13 @@ a specific slot. stem:[T_(cc E_n)] is calculated  as follows:
 
 [stem]
 ++++
-T_(E_n) := 1 - (1 - c)^(1/("AuthorityDirectory"^(E_n)))
+A_w =sum_(n=1)^(|"Auth"_C(B)|)(w_A in "Auth"_C(B)_n) \
+T_(cc E_n) := 1 - (1 - c)^(w_a/A_w)
 ++++
 
-where the stem:["AuthorityDirectory"^(cc E_n)] is the set of BABE authorities
-for epoch stem:[cc E_n] and stem:[c in (0, 1)] is the BABE constant
+where stem:[A_w] is the total sum of all authority weights in the authority set
+(<<defn-authority-list>>) for epoch stem:[cc E_n], stem:[w_a] is the weight of
+the block author and stem:[c in (0, 1)] is the BABE constant
 (<<defn-babe-constant>>).
 ====
 
@@ -152,8 +154,8 @@ stem:[sc_n] is defined in <<defn-epoch-duration>> , stem:["VRF"] creates the
 BABE VRF transcript (<<defn-babe-vrf-transcript>>) and stem:[e_i] is the epoch
 index, retrieved from the Runtime (<<sect-rte-babeapi-epoch>>). stem:[s_k] and
 stem:[p_k] is the secret key respectively the public key of the authority. For
-any slot stem:[s] in epoch stem:[n] where stem:[d < r], the block producer is
-required to produce a block.
+any slot stem:[s] in epoch stem:[n] where stem:[o < T_(cc E_n)]
+(<<defn-winning-threshold>>), the block producer is required to produce a block.
 
 Note that the secondary slots (<<defn-babe-secondary-slots>>) are running
 along side the primary block production lottery and mainly serve as a fallback
@@ -342,10 +344,6 @@ the block is produced. The index stem:[j] in stem:[T_B^j] notation may be
 dropped and B’s arrival time is referred to by stem:[T_B] when there is no
 ambiguity about the underlying node.
 
-WARNING: Currently it still lacks a clear definition of when block arrival times
-are considered valid and how to differentiated imported block on initial sync
-from "`fresh`" blocks that were just produced.
-
 [#defn-sync-period]
 ===== Sync Period
 A is an interval at which each validator (re-)evaluates its local clock offsets.
@@ -404,7 +402,7 @@ Algorithm: stem:["Invoke-Block-Authoring"(sk, pk, n, "BT")]
 . stem:["    " (d, pi) larr A\[s\]]
 . stem:["    " "if " d < r]
 . stem:["    " "    " C_"Best" larr "Longest-Chain"("BT")]
-. stem:["    " "    " B_s larr "Build-Block"(C_"Best")]
+. stem:["    " "    " B_s larr "Build-Block"(C_"Best", s)]
 . stem:["    " "    " "Add-Digest-Item"(B_s, "Pre-Runtime", E_"id"("BABE"),H_"BABE"(B_s))]
 . stem:["    " "    " "Add-Digest-Item"(B_s, "Seal", S_B)]
 . stem:["    " "    " "Broadcast-Block"(B_s)]
@@ -481,7 +479,7 @@ Algorithm: stem:[tt "Verify-Authorship-Right"("Head"_s(B))]
 . stem:["    " "error 'Seal missing'"]
 . stem:["AuthorId" larr "AuthorityDirectory"^(cc E_c)\[H_("BABE")(B)."SignerIndex"\]]
 . stem:["Verify-Signature"("AuthorId", H_h(B), "Sig"_B)]
-. stem:["if " EE B' in "BT": H_h(B) != H_h(B) " and " s_B = s'_B " and " "SignerIndex"_B = "SignerIndex"_(B')]
+. stem:["if " EE B' in "BT": H_h(B) != H_h(B') " and " s = s' " and " "SignerIndex"_B = "SignerIndex"_(B')]
 . stem:["    " "error 'Block producer is equivocating'"]
 . stem:["Verify-Slot-Winner"((d_B, pi_B),s,"AuthorId")]
 
@@ -493,12 +491,13 @@ where:
 stem:["Head"(B)] (<<defn-block-header>>).
 * The Seal stem:[D_s] is the last element in the digest array stem:[H_d(B)] as
 described in <<defn-digest>>.
-* stem:[Seal-Id] is the type index showing that a digest item (<<defn-digest>>)
+* stem:["Seal-Id"] is the type index showing that a digest item (<<defn-digest>>)
 of varying type (<<defn-scale-variable-type>>) is of type _Seal_.
 * stem:["AuthorityDirectory"^(cc E_c)] is the set of Authority ID for block
 producers of epoch stem:[cc E_c].
 . stem:["AuthorId"] is the public session key of the block producer.
-* stem:[Verify-Slot-Winner] is defined in Algorithm as described in
+* stem:["BT"] is the pruned block tree (<<defn-pruned-tree>>).
+* stem:["Verify-Slot-Winner"] is defined in Algorithm as described in
 <<algo-verify-slot-winner>>.
 ****
 
@@ -510,16 +509,18 @@ Algorithm: stem:[tt "Verify-Slot-Winner"(B)]
 . stem:[cc E_c larr "Current-Epoch"]
 . stem:[p larr "Epoch-Randomness"(c)]
 . stem:["Verify-VRF"(p, H_"BABE".(pi, d),H_"BABE"(B).s,c)]
-. stem:["if"  d_B >= t]
+. stem:["if "  o >= T_(cc E_n)]
 . stem:["    " "error 'Block producer is not a winner of the slot'"]
 
 where:
 
 . stem:["Epoch-Randomness"] is defined in <<defn-epoch-randomness>>.
 . stem:[H_"BABE"(B)] is the BABE header defined in <<defn-babe-header>>.
-. stem:[(d_B,pi_B)] is the block lottery result for block stem:[B].
+. stem:[(o,p)] is the block lottery result for block stem:[B]
+(<<algo-block-production-lottery>>), respectively the VRF output
+(<<defn-babe-vrf-transcript>>).
 . stem:["Verify-VRF"] is described in <<sect-vrf>>.
-. stem:[t] is the winning threshold as defined in <<defn-winning-threshold>>.
+. stem:[T_(cc E_n)] is the winning threshold as defined in <<defn-winning-threshold>>.
 ****
 
 [#sect-block-building] 
