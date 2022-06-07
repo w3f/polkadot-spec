@@ -98,9 +98,13 @@ be deserialized into the given type or data structure.
 
 It's accepted behavior for the decoder to partially decode the blob of data.
 Meaning, any additional data that does not fit into a datastructure can be
-ignored. Considering that the decoded data is never larger than the encoded
+ignored.
+
+WARNING: Considering that the decoded data is never larger than the encoded
 message, this information can serve as a way to validate values that can vary in
-sizes, such as sequences (<<defn-scale-list>>).
+sizes, such as sequences (<<defn-scale-list>>). The decoder should strictly use
+the size of the encoded data as an upper bound when decoding in order to prevent
+denial of service attacks.
 ====
 
 [#defn-scale-tuple]
