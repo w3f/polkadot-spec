@@ -63,35 +63,48 @@ The algorithm as defined in <<algo-validate-transactions>> updates the
 transaction pool and the transaction queue according to the received message:
 ====
 
-[#algo-validate-transactions]
-===== Algorithm: Validate Transactions and Store
 ****
-Algorithm: stem:["Validate-Transactions-And-Store"(M_T)]
+.Validate-Transactions-and-Store
+[pseudocode#algo-validate-transactions]
+++++
+\state $L \leftarrow Dec_{SC}(M_T)$
 
-where
+\forall{$\{T \in L \mid T \notin TQ \mid T \notin TP\}$}
 
-* stem:[M_T] is the transaction message.
+    \state $B_d \leftarrow$ \textsc{Head}$($\textsc{Longest-Chain}$(BT))$
 
-which executes the following steps:
+    \state $N \leftarrow H_n(B_d)$
 
-. stem:[L larr "Dec"_SC(M_T)]
-. stem:["for " T " in " L " such that " E !in TQ " and " E !in TP:]
-. stem:["    " B_d larr "Head"("Longest-Chain"(BT))]
-. stem:["    " N larr H_n(B_d)]
-. stem:["    " R larr "Call-Runtime-Entry"(tt "TaggedTransactionQueue_validate_transaction", N, T)]
-. stem:["    " "if " R " indicates " E " is Valid:"]
-. stem:["    " "    " "if Requires"(R) sub uuu_(AAT in "TQ") "Provided-Tags"(T) uu uuu_(i<d,AAT,T in B_i) "Provided-Tags"(T):]
-. stem:["    " "    " "    " "Insert-At"(TQ,T,"Requires"(R),"Priority"(R))]
-. stem:["    " "    " "else"]
-. stem:["    " "    " "    " "Add-To"(TP,T)]
-. stem:["    " "    " "Maintain-Transaction-Pool"]
-. stem:["    " "    " "if Should-Propagate"(R)]
-. stem:["    " "    " "    " "Propagate"(T)]
+    \state $R \leftarrow$ \textsc{Call-Runtime-Entry}$\left(\texttt{TaggedTransactionQueue\_validate\_transaction}, N, T\right)$
 
-in which
+    \if{\textsc{Valid}$(R)$}
 
-* stem:["Dec"_(SC)] decodes
-the SCALE encoded message.
+        \if{\textsc{Requires}$(R) \subset \bigcup_{\forall T \in (TQ~\cup~B_i \mid \exists i < d)}$ \textsc{Provided-Tags}$(T)$}
+
+            \state \textsc{Insert-At}$(TQ, T,$ \textsc{Requires}$(R),$ \textsc{Priority}$(R))$
+
+        \else
+
+            \state \textsc{Add-To}$(TP,T)$
+
+        \endif
+
+        \state \textsc{Maintain-Transaction-Pool}$()$
+
+        \if{\textsc{ShouldPropagate}$(R)$}
+
+            \state \textsc{Propagate}$(T)$
+
+        \endif
+
+    \endif
+
+\endfor
+++++
+
+where::
+* stem:[M_T] is the transaction message (offchain transactions?)
+* stem:["Dec"_(SC)] decodes the SCALE encoded message.
 * stem:["Longest-Chain"] is defined in <<defn-longest-chain>>.
 * stem:[tt "TaggedTransactionQueue_validate_transaction"] is a Runtime entry
 specified in <<sect-rte-validate-transaction>> and stem:[Requires(R)],
@@ -114,10 +127,18 @@ based on the `Propagate` field in the `ValidTransaction`` type as defined in
 peers of the Polkadot Host who are not already aware of stem:[T].
 ****
 
-[#algo-maintain-transaction-pool]
-===== Algorithm: Maintain Transaction Pool
+****
+[pseudocode#algo-maintain-transaction-pool]
+
+.Maintain-Transaction-Pool
+++++
+\state Scan the pool for ready transactions
+\state Move them to the transaction queue
+\state Drop invalid transactions
+++++
 
 NOTE: This has not been defined yet.
+****
 
 [#sect-inherents]
 ==== Inherents

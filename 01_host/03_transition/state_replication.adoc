@@ -155,27 +155,48 @@ successful execution are persisted.
 The Polkadot Host implements the Algorithm as defined in
 <<algo-import-and-validate-block>> to assure the validity of the block.
 
-[#algo-import-and-validate-block]
-==== Import and Validate Block
 ****
-Algorithm: stem:["Import-And-Validate-Block"(B, "Just"(B))]
+.Import-and-Validate-Block
+[pseudocode#algo-import-and-validate-block]
+++++
+\require $B, \text{Just}(B)$
 
-. stem:["Set-State-At"(P(B))]
-. stem:["if Just"(B) != 0]
-. stem:["    " "Verify-Block-Justification"(B, "Just"(B))]
-. stem:["    " "if " B " is Finalized and " P(B) " is not Finalized"]
-. stem:["    " "     " "Mark-As-Final"(P(B))]
-. stem:["if " H_p(B) !in "PBT"]
-. stem:["    " "return"]
-. stem:["Verify-Authorship-Right"("Head"(B))]
-. stem:[B larr "Remove-Seal"(B)]
-. stem:[R larr "Call-Runtime-Entry"(tt "Core_execute_block", B)]
-. stem:[B larr "Add-Seal"(B)]
-. stem:["if " R = "true"]
-. stem:["    " "Persist-State"]
+\state \textsc{Set-Storage-State-At}$(P(B))$
 
-where:
+\if{$\text{Just}(B) \neq \emptyset$}
 
+    \state \textsc{Verify-Block-Justification}$(B, Just(B))$
+
+    \if{$B~\textbf{is}~\text{Finalized}~\textbf{and}~P(B)~\textbf{is not}~\text{Finalized}$}
+
+        \state \textsc{Mark-as-Final}$(P(B))$
+
+     \endif
+
+\endif
+
+\if{$H_p(B) \notin PBT$}
+
+    \return
+
+\endif
+
+\state \textsc{Verify-Authorship-Right}$(Head(B))$
+
+\state $B \leftarrow$ \textsc{Remove-Seal}$(B)$
+
+\state $R \leftarrow$ \textsc{Call-Runtime-Entry}$\left(\texttt{Core\_execute\_block}, B \right)$
+
+\state $B \leftarrow$ \textsc{Add-Seal}$(B)$
+
+\if{$R =$ \textsc{True}}
+
+    \state \textsc{Persist-State}$()$
+
+\endif
+++++
+
+where::
 * stem:["Remove-Seal"] removes the Seal digest from the block (<<defn-digest>>)
 before submitting it to the Runtime.
 * stem:["Add-Seal"] adds the Seal digest back to the block (<<defn-digest>>) for
