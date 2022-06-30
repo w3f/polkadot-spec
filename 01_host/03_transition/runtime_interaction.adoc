@@ -24,23 +24,24 @@ easily upgradable without the need to upgrade the Polkadot Host itself. The
 general procedure to interact with the Runtime is described by the algorithm as
 defined in <<algo-runtime-interaction>>.
 
-[#algo-runtime-interaction]
-==== Algorithm: Interact-With-Runtime
 ****
-Algorithm: stem:["Interact-With-Runtime"(F, H_b(B),(A_1,...,A_n))]
+[pseudocode#algo-runtime-interaction]
+.Interact-With-Runtime
+[pseudocode#algo-runtime-interaction]
+++++
+\require $F, H_b(B),(A_1,\ldots,A_n)$
 
-where
+\state $\mathcal{S}_B \leftarrow$ \textsc{Set-State-At}$(H_b(B))$
 
+\state $A \leftarrow Enc_{SC}((A_1, \ldots, A_n))$
+
+\state \textsc{Call-Runtime-Entry}$(R_B, \mathcal{RE}_B, F, A, A_{len})$
+++++
+
+where::
 * stem:[F] is the runtime entry call.
 * stem:[H_b(B)] is the block hash indicating the state at the end of stem:[B].
 * stem:[A_1,...,A_n] are arguments to be passed to the runtime entry.
-
-which executes the following steps:
-
-. stem:[S_b larr "Set-State-At"(H_b(B))]
-. stem:[A larr "Enc"_(SC)(A_1,...,A_n)]
-. stem:["Call-Runtime-Entry"(R_B,RE_B,F,A,A_(len))]
-
 ****
 
 In this section, we describe the details upon which the Polkadot Host is
