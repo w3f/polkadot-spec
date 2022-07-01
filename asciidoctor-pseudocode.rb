@@ -26,7 +26,7 @@ Asciidoctor::Extensions.register do
       caption = attrs['title'] || ''
       algorithm = %(
         \\begin{algorithm}
-        \\caption{#{caption}}
+        \\caption{\\textsc{#{caption}}}
         \\begin{algorithmic}
         #{reader.read}
         \\end{algorithmic}
