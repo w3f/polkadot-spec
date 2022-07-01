@@ -17,13 +17,15 @@ concept of epoch subchain as described in host specification and the
 value latexmath:[d_B], which is the VRF output computed for slot
 latexmath:[s_B].
 
-.Epoch-Randomness(n>2: epoch index)
+.Epoch-Randomness
 [pseudocode#algo-epoch-randomness]
 ++++
+\Require $n > 2$
 \State \textbf{init} $\rho \leftarrow \phi$
 \For{$B$ in \textsc{SubChain}($\mathcal{E}_{n-2}$)}
   \State $\rho \leftarrow \rho || d_B$
 \EndFor
 \Return \textsc{Blake2b}$($\textsc{Epoch-Randomness}$(n-1)||n||\rho)$
 ++++
+where tem:[n] is the epoch index.
 ****

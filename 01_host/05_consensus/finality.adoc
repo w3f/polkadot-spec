@@ -355,9 +355,10 @@ For each round stem:[r], an honest voter stem:[v] must participate in the voting
 process by following the Algorithm as defined in <<algo-grandpa-round>>.
 
 ****
-.Play-Grandpa-Round(r)
+.Play-Grandpa-Round
 [pseudocode#algo-grandpa-round]
 ++++
+\REQUIRE($r$)
 \STATE $t_{r, v} \leftarrow$ Current local time
 \STATE $\textrm{primary} \leftarrow$ \textsc{Derive-Primary}($r$)
 \IF{$v = \textrm{primary}$}
@@ -503,9 +504,10 @@ where::
 ****
 
 ****
-.Attempt-To-Finalize-At-Round(r)
+.Attempt-To-Finalize-At-Round
 [pseudocode#algo-attempt-to–finalize]
 ++++
+\REQUIRE($r$)
 \STATE $L \leftarrow$ {\textsc{Last-Finalized-Block}}
 \STATE{$E \leftarrow${\textsc{Best-Final-Candidate}}($r$)}
 \IF{$E \geqslant L$ {\textbf{and}} ${V^{r, \textrm{pc}}_{\textrm{obs}(v)}}(E) > 2 / 3 |\mathbb{V}|$}
@@ -519,9 +521,10 @@ where::
 ****
 
 ****
-.Finalizable(r)
+.Finalizable
 [pseudocode#algo-finalizable]
 ++++
+\REQUIRE($r$)
 \IF{$r$ \textbf{is not} Completable}
   \RETURN \textbf{False}
 \ENDIF
