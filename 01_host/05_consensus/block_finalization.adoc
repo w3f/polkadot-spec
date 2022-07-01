@@ -45,21 +45,34 @@ behind the finalized round for the peer.
 ===== Processing the catch-up requests
 Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute the algorithm as defined in <<algo-process-catchup-request>>. Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which Algorithm <<algo-grandpa-round>> is not concluded.
 
-[#algo-process-catchup-request]
-====== Process Catchup Request
 ****
-Algorithm: stem:["Process-Catchup-Request"(M_(i,v)^("Cat"-q)("id"_(bbb V),r))]
+.Process-Catchup-Request
+[pseudocode#algo-process-catchup-request]
+++++
+\input $M_{i, v}^\text{Cat-q}(\text{id}_\mathbb{V}, r)$
 
-. stem:["if " M_(i,v)^("Cat"-q)("id"_(bbb V),r)."id"_(bbb V) != "id"_(bbb V)]
-. stem:["    " "error 'Catching up on the different set'"]
-. stem:["if " i !in bbb P]
-. stem:["    " "error 'Requesting catching up from a non-peer'"]
-. stem:["if " r > "Last-Completed-Round"]
-. stem:["    " "error 'Catching up on a round in the future'"]
-. stem:["Send"(i,M_(i,v)^("Cat"-q)("id"_(bbb V),r))]
+\if{$M_{i, v}^\text{Cat-q}(\text{id}_\mathbb{V}, r).\text{id}_\mathbb{V} \neq \text{id}_\mathbb{V}$}
 
-where:
+    \state \textbf{error} ``Catching up on different set''
 
+\endif
+
+\if{$i \notin \mathbb{P}$}
+
+    \state \textbf{error} ``Requesting catching up from a non-peer''
+
+\endif
+
+\if{$r >$ \textsc{Last-Completed-Round}}
+
+    \state \textbf{error} ``Catching up on a round in the future''
+
+\endif
+
+\state \textsc{Send}$\left(i, M_{v, i}^\text{Cat-s}(\text{id}_\mathbb{V}, r)\right)$
+++++
+
+where::
 * stem:[M_(i,v)^("Cat"-q)("id"_(bbb V),r)] is the catch-up message received
 from peer stem:[i] (<<defn-grandpa-catchup-request-msg>>).
 * stem:["id"_(bbb V)] is the voter set id with which the serving node is
@@ -81,30 +94,66 @@ voters. As such, the requester node should verify the content of the catch-up
 response message and subsequently updates its view of the state of the finality
 of the Relay chain according to Algorithm <<algo-process-catchup-response>>.
 
-[#algo-process-catchup-response]
-====== Process Catchup Response
 ****
-Algorithm: stem:["Process-Catchup-Response"(M_(v,i)^("Cat"-s)("id"_(bbb V),r))]
+.Process-Catchup-Response
+[pseudocode#algo-process-catchup-response]
+++++
+\input $M_{v,i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r)$
 
-. stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)."id"_(bbb V),r,J^(r,pv)(B),J^(r,pc)(B),H_h(B'),H_i(B') larr "Dec"_("SC")(M_(v,i)^("Cat"-s)("id"_(bbb V),r))]
-. stem:["if " M_(v,i)^("Cat"-s)("id"_(bbb V),r)."id"_(bbb V) != "id"_(bbb V)]
-. stem:["    " "error 'Catching up on different set'"]
-. stem:["if " r <= "Leading-Round"]
-. stem:["    " "error 'Catching up in to the past'"]
-. stem:[J^(r,pv)(B) " is not valid"]
-. stem:["    " "error 'Invalid pre-vote justification'"]
-. stem:[J^(r,pc)(B) " is not valid"]
-. stem:["    " "error 'Invalid pre-commit justification'"]
-. stem:[G larr "GRANDPA-GHOST"(J^(r,pv)(B))]
-. stem:["if " G = phi]
-. stem:["    " "error 'GHOST-less catchup'"]
-. stem:["if " r " is not completable"]
-. stem:["    " "error 'Catch-up round is not completable'"]
-. stem:["if " J^(r,pc)(B) " justifies " B' " finalization"]
-. stem:["    " "error 'Unjustified catchup target finalization'"]
-. stem:["Last-Completed-Round" larr r]
-. stem:["if " i in bbb V]
-. stem:["    " "Play-Grandpa-Round(r+1)"]
+\state $M_{v,i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r).\text{id}_{\mathbb{V}}, r, J^{r, pv}(B), J^{r, pc}(B), H_h(B'), H_i(B') \leftarrow \text{Dec}_{SC}(M_{v, i}^{Cat-s}(\text{id}_{\mathbb{V}}, r)$
+
+\if{$M_{v, i}^\text{Cat-s}(\text{id}_{\mathbb{V}}, r).\text{id}_{\mathbb{V}} \neq \text{id}_{\mathbb{V}}$}
+
+    \state \textbf{error} ``Catching up on different set''
+
+\endif
+
+\if{$r \leqslant$ \textsc{Leading-Round}}
+
+    \state \textbf{error} ``Catching up in to the past''
+
+\endif
+
+\if{$J^{r, pv}(B)$ \textbf{is not} valid}
+
+    \state \textbf{error} ``Invalid pre-vote justification''
+
+\endif
+
+\if{$J^{r, pc}(B)$ \textbf{is not} valid}
+
+    \state \textbf{error} ``Invalid pre-commit justification''
+
+\endif
+
+\state $G \leftarrow$ \textsc{GRANDPA-GHOST}$(J^{r, pv}(B))$
+
+\if{$G = \phi$}
+
+    \state \textbf{error} ``GHOST-less Catch-up''
+
+\endif
+
+\if{$r$ \textbf{is not} completable}
+
+    \state \textbf{error} ``Catch-up round is not completable''
+
+\endif
+
+\if{$J^{r, pc}(B)$ justifies $B'$ finalization}
+
+    \state \textbf{error} ``Unjustified Catch-up target finalization''
+
+\endif
+
+\state \textsc{Last-Completed-Round} $\leftarrow r$
+
+\if{$i \in \mathbb{V}$}
+
+    \state \textsc{Play-Grandpa-round}$(r + 1)$
+
+\endif
+++++
 
 where stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)] is the catch-up response
 received from node stem:[v] (<<defn-grandpa-catchup-response-msg>>).

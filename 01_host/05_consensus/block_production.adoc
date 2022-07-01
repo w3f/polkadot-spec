@@ -131,9 +131,8 @@ the block author and stem:[c in (0, 1)] is the BABE constant
 (<<defn-babe-constant>>).
 ====
 
-[#algo-block-production-lottery]
 ===== Primary Block Production Lottery
-****
+
 A block producer aiming to produce a block during stem:[cc E_n] should run the
 stem:["Block-Production-Lottery"] algorithm to identify the slots it is awarded.
 These are the slots during which the block producer is allowed to build a block.
@@ -141,13 +140,24 @@ The session secret key, stem:[sk], is the block producer lottery secret key and
 stem:[n] is the index of the epoch for whose slots the block producer is running
 the lottery.
 
-Algorithm: stem:["Block-Production-Lottery"(sk)]
+****
+.Block-Production-Lottery
+[pseudocode#algo-block-production-lottery]
+++++
+\require sk
 
-. stem:[r larr "Epoch-Randomness"(n)]
-. stem:["for " s := 1 " to " sc_n]
-. stem:["    " (o, p) larr "VRF"(r,s,e_i,s_k, p_k)]
-. stem:["    " A\[i\] larr (o, p)]
-. stem:["return " A]
+\state $r \leftarrow$ \textsc{Epoch-Randomness}$(n)$
+
+\for{$i := 1 ~\textbf{to}~ sc_n$}
+
+    \state $(\pi, d) \leftarrow$ \textsc{VRF}$(r, i, sk)$
+
+    \state $A[i] \leftarrow (d, \pi)$
+
+\endfor
+
+\return{A}
+++++
 
 where stem:["Epoch-Randomness"] is defined in (<<defn-epoch-randomness>>),
 stem:[sc_n] is defined in <<defn-epoch-duration>> , stem:["VRF"] creates the
@@ -156,11 +166,11 @@ index, retrieved from the Runtime (<<sect-rte-babeapi-epoch>>). stem:[s_k] and
 stem:[p_k] is the secret key respectively the public key of the authority. For
 any slot stem:[s] in epoch stem:[n] where stem:[o < T_(cc E_n)]
 (<<defn-winning-threshold>>), the block producer is required to produce a block.
+****
 
-Note that the secondary slots (<<defn-babe-secondary-slots>>) are running
+NOTE: the secondary slots (<<defn-babe-secondary-slots>>) are running
 along side the primary block production lottery and mainly serve as a fallback
 to in case no authority was selected in the primary lottery.
-****
 
 [#defn-babe-secondary-slots]
 ===== Secondary Slots
@@ -269,12 +279,12 @@ and stem:[cc E_l]. By *Slot-Offset*stem:[(s_i,s_j)] we refer to the function
 whose value is equal to the number of slots between stem:[s_i] and stem:[s_j]
 (counting stem:[s_j]) on the time continuum. As such, we have
 *Slot-Offset*stem:[(s_i, s_i) = 0].
+====
 
 It is imperative for the security of the network that each block producer
 correctly determines the current slot numbers at a given time by regularly
 estimating the local clock offset in relation to the network
 (<<defn-relative-synchronization>>).
-====
 
 [#defn-relative-synchronization]
 .<<defn-relative-synchronization, Relative Time Synchronization>>
@@ -284,33 +294,42 @@ clock timestamp stem:[(s_"sync",t_"sync")] describing the last point at
 which the slot numbers have been synchronized with the local clock.
 ====
 
-[#algo-slot-offset]
-===== Slot Offset
-****
-Algorithm: stem:["Slot-Time"(s)]
 
-. stem:["return " t_"sync" + "Slot-Offset"(s_"sync",s) xx cc T]
+****
+.Slot-Time
+[pseudocode#algo-slot-offset]
+++++
+\require $s$
+\return{$t_\text{sync} +$ \textsc{Slot-Offset}$(s_{sync}, s) \times \mathcal{T}$}
+++++
 
 where stem:[s] is the slot number.
 ****
 
-[#algo-slot-time]
-===== Slot Time Median Algorithm
 ****
-Algorithm: stem:["Median-Algorithm"(cc P, s_"sync")]
+.Median-Algorithm
+[pseudocode#algo-slot-time]
+++++
+\require $\mathfrak{E}, s_{sync}$
 
-. stem:[T_s larr {}]
-. stem:["for " B_i in cc P]
-. stem:["    " t_"est"^B larr T_(B_i) + "Slot-Offset"(S_(B_i), s_"sync") xx cc T]
-. stem:["    " T_s larr T_S	uu t_"est"^(B_i)]
-. stem:["return Median"(T_s)]
+\state $T_s \leftarrow \{ \}$
 
-where
+\for{$B ~\textbf{in}~ \mathfrak{E}_j$}
 
-* stem:[cc P] is the sync period used for the estimate.
+    \state $t_{est}^{B} \leftarrow T_B +$ \textsc{Slot-Offset}$(s_B, s_{sync}) \times \mathcal{T}$
+
+    \state $T_s \leftarrow T_s \cup t_{est}^{B}$
+
+\endfor
+
+\return \textsc{Median}$(T_s)$
+++++
+
+where::
+* latexmath:[\mathfrak{E}] is the sync period used for the estimate.
 * stem:[s_"sync"] is the slot time to estimate.
 * stem:["Slot-Offset"] is defined in <<algo-slot-offset>>.
-* stem:[cc T] is the slot duration defined in <<defn-epoch-slot>>.
+* latexmath:[\mathcal{T}] is the slot duration defined in <<defn-epoch-slot>>.
 ****
 
 [#defn-prunned-best]
@@ -391,21 +410,36 @@ The Pre-Digest must be included as a digest item of Pre-Runtime type in the
 header digest (<<defn-digest>>) stem:[H_d(B)].
 ====
 
-[#algo-block-production]
-===== Invoke Block Authoring
 ****
-Algorithm: stem:["Invoke-Block-Authoring"(sk, pk, n, "BT")]
+[pseudocode#algo-block-production]
+.Invoke-Block-Authoring
+++++
+\require $sk, pk, n, BT$
 
-. stem:[A larr "Block-Production-Lottery"(sk, n)]
-. stem:["for " s larr 1 " to " "sc"_n]
-. stem:["    " "Wait"("until Slot-Time"(s))]
-. stem:["    " (d, pi) larr A\[s\]]
-. stem:["    " "if " d < r]
-. stem:["    " "    " C_"Best" larr "Longest-Chain"("BT")]
-. stem:["    " "    " B_s larr "Build-Block"(C_"Best", s)]
-. stem:["    " "    " "Add-Digest-Item"(B_s, "Pre-Runtime", E_"id"("BABE"),H_"BABE"(B_s))]
-. stem:["    " "    " "Add-Digest-Item"(B_s, "Seal", S_B)]
-. stem:["    " "    " "Broadcast-Block"(B_s)]
+\state $A \leftarrow$ \textsc{Block-production-lottery}$(sk, n)$
+
+\for{$s \leftarrow 1 ~\textbf{to}~ sc_n$}
+
+    \state \textsc{Wait-Until}$($\textsc{Slot-Time}$(s))$
+
+    \state $(d, \pi) \leftarrow A[s]$
+
+    \if{$d < \tau$}
+
+       \state $C_{Best} \leftarrow$ \textsc{Longest-Chain}$(BT)$
+
+       \state $B_s \leftarrow$ \textsc{Build-Block}$(C_{Best})$
+
+       \state \textsc{Add-Digest-Item}$(B_s,\text{Pre-Runtime}, E_{id}(\text{BABE}), H_\text{BABE}(B_s))$
+
+       \state \textsc{Add-Digest-Item}$(B_s, \text{Seal}, S_B)$
+
+       \state \textsc{Broadcast-Block}$(B_s)$
+
+    \endif
+
+\endfor
+++++
 
 where stem:["BT"] is the current block tree, stem:["Block-Production-Lottery"]
 is defined in <<algo-block-production-lottery>> and stem:["Add-Digest-Item"]
@@ -464,27 +498,45 @@ Algorithm as defined in <<algo-verify-authorship-right>>. The Algorithm as
 defined in <<algo-verify-slot-winner>> runs as part of the verification process,
 when a node is importing a block.
 
-[#algo-verify-authorship-right]
-===== Verify Authorship Right
 ****
-Algorithm: stem:[tt "Verify-Authorship-Right"("Head"_s(B))]
+.Verify-Authorship-Right
+[pseudocode#algo-verify-authorship-right]
+++++
+\require $\text{Head}_{s(B)}$
 
-. stem:[s larr "Slot-Number-At-Given-Time"(T_B)]
-. stem:[cc E_c larr "Current-Epoch"()]
-. stem:[(D_1, ..., D_("length"(H_d(B)))) larr H_d(B)]
-. stem:[D_s larr D_("length"(H_d(B)))]
-. stem:[H_d(B) larr (D_1, ..., D_("length"(H_d(B))-1)) " // remove the seal from the digest"]
-. stem:[("id","Sig"_B) larr "Dec"_("SC")(D_s)]
-. stem:["if " "id" != "Seal-Id"]
-. stem:["    " "error 'Seal missing'"]
-. stem:["AuthorId" larr "AuthorityDirectory"^(cc E_c)\[H_("BABE")(B)."SignerIndex"\]]
-. stem:["Verify-Signature"("AuthorId", H_h(B), "Sig"_B)]
-. stem:["if " EE B' in "BT": H_h(B) != H_h(B') " and " s = s' " and " "SignerIndex"_B = "SignerIndex"_(B')]
-. stem:["    " "error 'Block producer is equivocating'"]
-. stem:["Verify-Slot-Winner"((d_B, pi_B),s,"AuthorId")]
+\state $s \leftarrow$ \textsc{Slot-Number-At-Given-Time}$(T_B)$
 
-where:
+\state $\mathcal{E}_c \leftarrow$ \textsc{Current-Epoch}$()$
 
+\state $(D_1, \ldots, D_{|H_d(B)|}) \leftarrow H_d(B)$
+
+\state $D_s \leftarrow D_{|H_d(B)|}$
+
+\state $H_d(B) \leftarrow \left(D_1, \ldots, D_{|H_d(B)| - 1}\right)$
+    \comment{remove the seal from the digest}
+
+\state $(id, \text{Sig}_B)\leftarrow \text{Dec}_{SC}(D_s)$
+
+\if{$id \neq$ \textsc{Seal-Id}}
+
+    \state \textbf{error} ``Seal missing''
+
+\endif
+
+\state $\text{AuthorID} \leftarrow \text{AuthorityDirectory}^{\mathcal{E}_c}[H_{BABE}(B).\text{SingerIndex}]$
+
+\state \textsc{Verify-Signature}$(\text{AuthorID}, H_h (B),\text{Sig}_B)$
+
+\if{$\exists B' \in BT : H_h(B) \neq H_h (B)$ \and $s_B = s_B'$ \and $\text{SignerIndex}_B = \text{SignerIndex}_{B'}$}
+
+    \state \textbf{error} ``Block producer is equivocating''
+
+\endif
+
+\state \textsc{Verify-Slot-Winner}$\left((d_B, \pi_B), s_B, \text{AuthorID}\right)$
+++++
+
+where::
 * stem:["Head"_s(B)] is the header of the block that's being verified.
 * stem:[T_B] is stem:[B]’s arrival time (<<defn-block-time>>).
 * stem:[H_d(B)] is the digest sub-component (<<defn-digest>>) of
@@ -501,19 +553,26 @@ producers of epoch stem:[cc E_c].
 <<algo-verify-slot-winner>>.
 ****
 
-[#algo-verify-slot-winner]
-===== Verify Slot Winner
 ****
-Algorithm: stem:[tt "Verify-Slot-Winner"(B)]
+.Verify-Slot-Winner
+[pseudocode#algo-verify-slot-winner]
+++++
+\require $B$
 
-. stem:[cc E_c larr "Current-Epoch"]
-. stem:[p larr "Epoch-Randomness"(c)]
-. stem:["Verify-VRF"(p, H_"BABE".(pi, d),H_"BABE"(B).s,c)]
-. stem:["if "  o >= T_(cc E_n)]
-. stem:["    " "error 'Block producer is not a winner of the slot'"]
+\state $\mathcal{E}_c \leftarrow$ \textsc{Current-Epoch}
 
-where:
+\state $\rho \leftarrow$ \textsc{Epoch-Randomness}$(c)$
 
+\state \textsc{Verify-VRF}$(\rho, H_{BABE}(B).(d_B, \pi_B), H_{BABE}(B).s, c)$
+
+\if{$d_B \geqslant \tau$}
+
+    \state \textbf{error} ``Block producer is not a winner of the slot''
+
+\endif
+++++
+
+where::
 . stem:["Epoch-Randomness"] is defined in <<defn-epoch-randomness>>.
 . stem:[H_"BABE"(B)] is the BABE header defined in <<defn-babe-header>>.
 . stem:[(o,p)] is the block lottery result for block stem:[B]
@@ -530,29 +589,51 @@ The block building process is triggered by the Algorithm as defined in
 <<algo-block-production>> of the consensus engine which runs the Algorithm as
 defined in <<algo-build-block>>
 
-[#algo-build-block]
-===== Build Block
 ****
-Algorithm: stem:[tt "Build-Block"(C_"Best", s)]
+.Build-Block
+[pseudocode#algo-build-block]
+++++
 
-. stem:[P_B larr "Head"(C_"Best")]
-. stem:["Head"(B) larr (H_p larr H_h(P_B), H_i larr H_i(P_B)+1,H_r larr phi, H_e larr phi, H_d larr phi)]
-. stem:["Call-Runtime-Entry"(tt "Core_initialize_block", "Head"(B))]
-. stem:["I-D" larr "Call-Runtime-Entry"(tt "BlockBuilder_inherent_extrinsic", "Inherent-Data")]
-. stem:["for " E " in " "I-D"]
-. stem:["    " "Call-Runtime-Entry"(tt "BlockBuilder_apply_extrinsics", E)]
-. stem:["while not End-of-Slot"(s)]
-. stem:["    " E larr "Next-Ready-Extrinsic"()]
-. stem:["    " R larr "Call-Runtime-Entry"(tt "BlockBuilder_apply_extrinsics", E)]
-. stem:["    " "if Block-Is-Full"(R)]
-. stem:["    " "    " "break"]
-. stem:["    " "if Should-Drop"(R)]
-. stem:["    " "    " "Drop"(E)]
-. stem:["Head"(B) larr "Call-Runtime-Entry"(tt "BlockBuilder_finalize_block", B)]
-. stem:[B larr "Add-Seal"(B)]
+\state $P_B \leftarrow$ \textsc{Head}$(C_{Best})$
 
-where:
+\state $\text{Head}(B) \leftarrow \left(H_p \leftarrow H_h(P_B), H_i \leftarrow H_i(P_B) + 1, H_r \leftarrow \phi, H_e \leftarrow \phi, H_d \leftarrow \phi \right)$
 
+\state \textsc{Call-Runtime-Entry}$\left(\texttt{Core\_initialize\_block}, \text{Head}(B)\right)$
+
+\state \textsc{I-D} $\leftarrow$ \textsc{Call-Runtime-Entry}$(\texttt{BlockBuilder\_inherent\_extrinsics},$ \textsc{Inherent-Data}$)$
+
+\for{$E~\textbf{in}$ \textsc{I-D}}
+
+    \state \textsc{Call-Runtime-Entry}$(\texttt{BlockBuilder\_apply\_extrinsics}, E)$
+
+\endfor
+
+\while{\not \textsc{End-Of-Slot}$(s)$}
+
+    \state $E \leftarrow$ \textsc{Next-Ready-Extrinsic}$()$
+
+    \state $R \leftarrow$ \textsc{Call-Runtime-Entry}$(\texttt{BlockBuilder\_apply\_extrinsics}, E)$
+
+    \if{\textsc{Block-Is-Full}$(R)$}
+
+        \break
+
+    \endif
+
+    \if{\textsc{Should-Drop}$(R)$}
+
+        \state \textsc{Drop}$(E)$
+
+    \endif
+
+    \state $\text{Head}(B) \leftarrow$ \textsc{Call-Runtime-Entry}$(\texttt{BlockBuilder\_finalize\_block}, B)$
+
+    \state $B \leftarrow$ \textsc{Add-Seal}$(B)$
+
+\endwhile
+++++
+
+where::
 * stem:[C_"Best"] is the chain head at which the block should be constructed
 ("parent").
 * stem:[s] is the slot number.
