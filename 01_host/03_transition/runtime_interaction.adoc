@@ -25,7 +25,6 @@ general procedure to interact with the Runtime is described by the algorithm as
 defined in <<algo-runtime-interaction>>.
 
 ****
-[pseudocode#algo-runtime-interaction]
 .Interact-With-Runtime
 [pseudocode#algo-runtime-interaction]
 ++++

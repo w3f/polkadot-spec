@@ -354,7 +354,8 @@ not adjusted by any external protocol.
 ====
 
 [#defn-block-time]
-===== Block Arrival Time
+.<<defn-block-time>, Block Arrival Time>>
+====
 The *block arrival time* of block stem:[B] for node stem:[j] formally
 represented by stem:[T_B^j] is the local time of node stem:[j] when node
 stem:[j] has received block stem:[B] for the first time. If the node stem:[j]
@@ -362,14 +363,18 @@ itself is the producer of stem:[B], stem:[T_B^j] is set equal to the time that
 the block is produced. The index stem:[j] in stem:[T_B^j] notation may be
 dropped and B’s arrival time is referred to by stem:[T_B] when there is no
 ambiguity about the underlying node.
+====
 
 [#defn-sync-period]
-===== Sync Period
+.<<defn-sync-period, Sync Period>>
+====
 A is an interval at which each validator (re-)evaluates its local clock offsets.
 The first sync period stem:[fr E_1] starts just after the genesis block is
 released. Consequently, each sync period stem:[fr E_i] starts after stem:[fr
 E_(i - 1)]. The length of the sync period (<<defn-chain-quality>>) is equal to
 stem:[s_(qc)]and expressed in the number of slots.
+====
+
 
 [#block-production]
 ==== Block Production

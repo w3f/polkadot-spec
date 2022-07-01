@@ -128,9 +128,8 @@ peers of the Polkadot Host who are not already aware of stem:[T].
 ****
 
 ****
-[pseudocode#algo-maintain-transaction-pool]
-
 .Maintain-Transaction-Pool
+[pseudocode#algo-maintain-transaction-pool]
 ++++
 \state Scan the pool for ready transactions
 \state Move them to the transaction queue
