@@ -254,8 +254,7 @@ T_{mor} := Enc_{SC}(M_{per}, M_{pha})
 
 The SCALE encoded representation of mortality latexmath:[T_{mor}]
 deviates from most other types, as it’s specialized to be the smallest
-possible value, as described in Algorithm
-<<algo-mortality-encode>> and <<algo-mortality-decode>>.
+possible value, as described in <<algo-mortality-encode>> and <<algo-mortality-decode>>.
 
 If the extrinsic is immortal, specify a single byte with the value equal
 to zero.

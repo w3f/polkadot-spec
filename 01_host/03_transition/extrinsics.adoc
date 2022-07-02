@@ -36,8 +36,8 @@ Any new transaction should be submitted to the Runtime
 the validity of the received transaction against the current stat and if it
 should be gossiped to other peers. If considers the submitted transaction as
 valid, the Polkadot Host should store it for inclusion in future blocks. The
-whole process of handeling new transactions is described in more detail by the
-algorithm as defined in <<algo-validate-transactions>>.
+whole process of handeling new transactions is described in more detail by
+<<algo-validate-transactions>>.
 
 Additionally valid transactions that are supposed to be gossiped are
 propagated to connected peers of the Polkadot Host. While doing so the

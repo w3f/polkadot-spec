@@ -543,7 +543,7 @@ where::
 where the condition for _completability_ is defined in <<defn-grandpa-completable>>.
 ****
 
-Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although Algorithm <<algo-grandpa-round>> prevents us from moving to the round stem:[r+1] before finalizing the best final candidate of round stem:[r-1]) The example in <<exmp-candid-unfinalized>> serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
+Note that we might not always succeed in finalizing our best final candidate due to the possibility of equivocation. We might even not finalize anything in a round (although <<algo-grandpa-round>> prevents us from moving to the round stem:[r+1] before finalizing the best final candidate of round stem:[r-1]) The example in <<exmp-candid-unfinalized>> serves to demonstrate a situation where the best final candidate of a round cannot be finalized during its own round:
 
 [#exmp-candid-unfinalized]
 .Unfinalized Candidate

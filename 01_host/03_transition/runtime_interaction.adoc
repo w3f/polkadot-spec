@@ -21,8 +21,7 @@ validity are both explained in <<sect-state-replication>>.
 The Runtime (<<defn-state-machine>>) is the code implementing the logic of the chain.
 This code is decoupled from the Polkadot Host to make the the logic of the chain
 easily upgradable without the need to upgrade the Polkadot Host itself. The
-general procedure to interact with the Runtime is described by the algorithm as
-defined in <<algo-runtime-interaction>>.
+general procedure to interact with the Runtime is described by <<algo-runtime-interaction>>.
 
 ****
 .Interact-With-Runtime
@@ -45,8 +44,8 @@ where::
 
 In this section, we describe the details upon which the Polkadot Host is
 interacting with the Runtime. In particular, stem:["Set-State-At"] and
-stem:["Call-Runtime-Entry"] procedures called by the algorithm as defined in
-<<algo-runtime-interaction>> are explained in <<defn-call-into-runtime>> and
+stem:["Call-Runtime-Entry"] procedures called by <<algo-runtime-interaction>>
+are explained in <<defn-call-into-runtime>> and
 <<defn-set-state-at>> respectively. stem:[R_B] is the Runtime code loaded from
 stem:[S_B], as described in <<defn-runtime-code-at-state>>, and stem:[RE_B] is
 the Polkadot Host API, as described in <<defn-host-api-at-state>>.
