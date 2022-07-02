@@ -16,7 +16,7 @@ justifies the finalization (<<defn-grandpa-justification>>).
 for:
 
 * Any round stem:[r] if the node stem:[n] is _not_ a GRANDPA voter.
-* Only for round stem:[r] for which the node stem:[n] has invoked Algorithm <<algo-grandpa-round>> and round stem:[r+1] if stem:[n] is a GRANDPA voter and has already caught up to its peers according to the process described in Section <<sect-grandpa-catchup>>.
+* Only for round stem:[r] for which the node stem:[n] has invoked <<algo-grandpa-round>> and round stem:[r+1] if stem:[n] is a GRANDPA voter and has already caught up to its peers according to the process described in Section <<sect-grandpa-catchup>>.
 
 Note that all Polkadot relay chain nodes are supposed to process GRANDPA commit
 messages regardless of their GRANDPA voter status.
@@ -43,7 +43,7 @@ following criteria hold:
 behind the finalized round for the peer.
 
 ===== Processing the catch-up requests
-Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute the algorithm as defined in <<algo-process-catchup-request>>. Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which Algorithm <<algo-grandpa-round>> is not concluded.
+Only GRANDPA voter nodes are required to respond to the catch-up requests. Additionally, it is only GRANDPA voters who are supposed to send catch-up requests. As such GRANDPA voters could safely ignore the catch-up requests from non-voter nodes. When a GRANDPA voter node receives a catch-up request message, it needs to execute <<algo-process-catchup-request>>. Note: a voter node should not respond to catch-up requests for rounds that are actively being voted on, those are the rounds for which <<algo-grandpa-round>> is not concluded.
 
 ****
 .Process-Catchup-Request
@@ -92,7 +92,7 @@ A Catch-up response message contains critical information for the requester node
 to update their view on the active rounds which are being voted on by GRANDPA
 voters. As such, the requester node should verify the content of the catch-up
 response message and subsequently updates its view of the state of the finality
-of the Relay chain according to Algorithm <<algo-process-catchup-response>>.
+of the Relay chain according to <<algo-process-catchup-response>>.
 
 ****
 .Process-Catchup-Response
