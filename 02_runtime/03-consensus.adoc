@@ -11,7 +11,7 @@ latexmath:[\mathcal{E}_{n-2}] while the authority set is based on all
 transaction included up to Epoch latexmath:[\mathcal{E}_{n-1}].
 
 ****
-The computation of the randomeness seed is described in Algorithm
+The computation of the randomeness seed is described in
 <<algo-epoch-randomness>> which uses the
 concept of epoch subchain as described in host specification and the
 value latexmath:[d_B], which is the VRF output computed for slot

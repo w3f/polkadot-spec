@@ -29,10 +29,10 @@ key and the given input. The proof can be verified by any challenger to ensure
 the random number generation is valid and has not been tampered with (for
 example to the benfit of submitter).
 
-In Polkadot, VRFs are used for the BABE block production lottery by the
-Algorithm as defined in <<algo-block-production-lottery>>  and the parachain
-approval voting mechanism (<<sect-approval-voting>>). The VRF uses mechanism
-similar to algorithms introduced in the following papers:
+In Polkadot, VRFs are used for the BABE block production lottery by
+<<algo-block-production-lottery>>  and the parachain approval voting mechanism
+(<<sect-approval-voting>>). The VRF uses mechanism similar to algorithms introduced
+in the following papers:
 
 * https://eprint.iacr.org/2017/099.pdf[Making NSEC5 Practical for DNSSEC].
 * https://blog.cloudflare.com/privacy-pass-the-math/#dleqproofs[DLEQ Proofs].

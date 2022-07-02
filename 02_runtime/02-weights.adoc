@@ -821,8 +821,7 @@ many variants (latexmath:[1000 \times 999]) and highly increase
 execution time. Therefore, this benchmark is configured to first set the
 balance at value 1’000 and then to iterate from 1 to 1’000 for the index
 value. Once the index value reaches 1’000, the balance value will reset
-to 2 and iterate to 1’000 (see algorithm
-<<algo-benchmark-transfer>> for more
+to 2 and iterate to 1’000 (see <<algo-benchmark-transfer>> for more
 detail):
 
 * `index`: 1, `balance`: 1000
@@ -837,7 +836,7 @@ detail):
 
 The parameters itself do not influence or trigger the two worst
 conditions and must be handled by the implemented benchmarking tool. The
-latexmath:[transfer] benchmark is implemented as defined in algorithm
+latexmath:[transfer] benchmark is implemented as defined in
 <<algo-benchmark-transfer>>.
 
 ===== Benchmarking Framework

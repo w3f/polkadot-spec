@@ -152,8 +152,8 @@ invoking entry into the Runtime as (<<sect-rte-core-execute-block>>) as a part
 of the validation process. Any state changes created by this function on
 successful execution are persisted.
 
-The Polkadot Host implements the Algorithm as defined in
-<<algo-import-and-validate-block>> to assure the validity of the block.
+The Polkadot Host implements <<algo-import-and-validate-block>> to assure the
+validity of the block.
 
 ****
 .Import-and-Validate-Block
