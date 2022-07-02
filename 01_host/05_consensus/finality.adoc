@@ -580,7 +580,7 @@ pre-commits are going to be cast for (even with considering the possibility of
 1/3 of voter equivocating) and therefore we have stem:[tt
 "Best-Final-Candidate"(r) = B_1].
 
-Both scenarios unblock the Algorithm as defined in <<algo-grandpa-round>>,
+Both scenarios unblock <<algo-grandpa-round>>,
 stem:[tt "Last-Finalized-Block" >= tt "Best-Final-Candidate"(r - 1)] albeit in
 different ways: the former with increasing the stem:[tt "Last-Finalized-Block"]
 and the latter with decreasing stem:[tt "Best-Final-Candidate"(r - 1)].
