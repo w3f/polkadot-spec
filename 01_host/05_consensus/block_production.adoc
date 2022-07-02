@@ -5,8 +5,8 @@ The Polkadot Host uses BABE protocol for block production. It is designed based
 on Ouroboros praos . BABE execution happens in sequential non-overlapping phases
 known as an *_epoch_*. Each epoch on its turn is divided into a predefined
 number of slots. All slots in each epoch are sequentially indexed starting from
-0. At the beginning of each epoch, the BABE node needs to run Algorithm as
-defined in <<algo-block-production-lottery>> to find out in which slots it
+0. At the beginning of each epoch, the BABE node needs to run
+<<algo-block-production-lottery>> to find out in which slots it
 should produce a block and gossip to the other block producers. In turn, the
 block producer node should keep a copy of the block tree and grow it as it
 receives valid blocks from other block producers. A block producer prunes the
@@ -24,8 +24,7 @@ producing blocks.
 *Block authoring session key pair* stem:[(sk_j^s,pk_j^s)] is an SR25519 key pair
 which the block producer stem:[cc P_j] signs by their account key
 (<<defn-account-key>>) and is used to sign the produced block as well as to
-compute its lottery values in Algorithm as defined in
-<<algo-block-production-lottery>>.
+compute its lottery values in <<algo-block-production-lottery>>.
 
 [#defn-epoch-slot]
 .<<defn-epoch-slot, Epoch and Slot>>
@@ -89,11 +88,10 @@ config data_ consensus message (<<defn-consensus-message-digest>>) in the digest
 of the first block of an epoch for the next epoch.
 
 A block producer aiming to produce a block during stem:[cc E_n] should run
-Algorithm as defined in <<algo-block-production-lottery>> to identify the slots
-it is awarded. These are the slots during which the block producer is allowed to
-build a block. The stem:[sk] is the block producer lottery secret key and
-stem:[n] is the index of the epoch for whose slots the block producer is running
-the lottery.
+<algo-block-production-lottery>> to identify the slots it is awarded. These
+are the slots during which the block producer is allowed to build a block. The
+stem:[sk] is the block producer lottery secret key and stem:[n] is the index of
+the epoch for whose slots the block producer is running the lottery.
 
 In order to ensure consistent block production, BABE uses secondary slots in
 case no authority won the (primary) block production lottery. Unlike the
@@ -115,9 +113,9 @@ the denominator.
 .<<defn-winning-threshold, Winning Threshold>>
 ====
 The *Winning threshold* denoted by stem:[T_(cc E_n)] is the threshold that is
-used alongside the result of Algorithm as defined in
-<<algo-block-production-lottery>> to decide if a block producer is the winner of
-a specific slot. stem:[T_(cc E_n)] is calculated  as follows:
+used alongside the result of <<algo-block-production-lottery>> to decide if a
+block producer is the winner of a specific slot. stem:[T_(cc E_n)] is calculated
+as follows:
 
 [stem]
 ++++
@@ -263,13 +261,12 @@ targeting a probability lower than stem:[0.5%] for an adversary to break BABE in
 3 years with resistance against a network delay up to stem:[1 / 3] of the slot
 time and a Babe constant (<<defn-babe-constant>>) of stem:[c = 0.38].
 
-All validators are then required to run Algorithm as defined in
-<<algo-slot-time>> at the beginning of each sync period (<<defn-sync-period>>)
-to update their synchronization using all block arrival times of the previous
-period. The algorithm should only be run once all the blocks in this period have
-been finalized, even if only probabilistically (<<defn-prunned-best>>). The
-target slot to which to synchronize should be the first slot in the new sync
-period.
+All validators are then required to run <<algo-slot-time>> at the beginning of
+each sync period (<<defn-sync-period>>) to update their synchronization using
+all block arrival times of the previous period. The algorithm should only be
+run once all the blocks in this period have been finalized, even if only
+probabilistically (<<defn-prunned-best>>). The target slot to which to
+synchronize should be the first slot in the new sync period.
 
 [#defn-slot-offset]
 .<<defn-slot-offset, Slot Offset>>
@@ -378,11 +375,11 @@ stem:[s_(qc)]and expressed in the number of slots.
 
 [#block-production]
 ==== Block Production
-Throughout each epoch, each block producer should run Algorithm as defined in
-<<algo-block-production>> to produce blocks during the slots it has been awarded
-during that epoch. The produced block needs to carry the _Pre-Digest_
-(<<defn-babe-header>>) as well as the _block signature_
-(<<defn-block-signature>>) as Pre-Runtime and Seal digest items.
+Throughout each epoch, each block producer should run <<algo-block-production>>
+to produce blocks during the slots it has been awarded during that epoch. The
+produced block needs to carry the _Pre-Digest_ (<<defn-babe-header>>) as well
+as the _block signature_ (<<defn-block-signature>>) as Pre-Runtime and Seal
+digest items.
 
 [#defn-babe-header]
 .<<defn-babe-header, Pre-Digest>>
@@ -499,8 +496,7 @@ For any further epochs, the randomness is retrieved from the consensus message
 
 When a Polkadot node receives a produced block, it needs to verify if the block
 producer was entitled to produce the block in the given slot by running
-Algorithm as defined in <<algo-verify-authorship-right>>. The Algorithm as
-defined in <<algo-verify-slot-winner>> runs as part of the verification process,
+<<algo-verify-authorship-right>>. <<algo-verify-slot-winner>> runs as part of the verification process,
 when a node is importing a block.
 
 ****
@@ -554,8 +550,7 @@ of varying type (<<defn-scale-variable-type>>) is of type _Seal_.
 producers of epoch stem:[cc E_c].
 . stem:["AuthorId"] is the public session key of the block producer.
 * stem:["BT"] is the pruned block tree (<<defn-pruned-tree>>).
-* stem:["Verify-Slot-Winner"] is defined in Algorithm as described in
-<<algo-verify-slot-winner>>.
+* stem:["Verify-Slot-Winner"] is defined in <<algo-verify-slot-winner>>.
 ****
 
 ****
@@ -590,9 +585,8 @@ where::
 [#sect-block-building] 
 ==== Block Building Process
 
-The block building process is triggered by the Algorithm as defined in
-<<algo-block-production>> of the consensus engine which runs the Algorithm as
-defined in <<algo-build-block>>
+The block building process is triggered by <<algo-block-production>> of the
+consensus engine which in turn runs <<algo-build-block>>.
 
 ****
 .Build-Block

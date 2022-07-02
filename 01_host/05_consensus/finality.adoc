@@ -154,11 +154,10 @@ stem:[J^(r,"pc")(B)] for stem:[B'] is greater than stem:[2/3|bbb V_B|].
 Note that stem:[J^(r,"pc")(B)] can only be used by a non-voter node to finalize
 a block. In contrast, a voter node can only be assured of the finality
 (<<defn-finalized-block>>) of block stem:[B] by actively participating in the
-voting process. That is by invoking Algorithm as defined in
-<<algo-grandpa-round>>.
+voting process. That is by invoking <<algo-grandpa-round>>.
 
 The GRANDPA protocol dictates how an honest voter should vote in each sub-round,
-which is described by Algorithm as defined in <<algo-grandpa-round>>. After
+which is described by <<algo-grandpa-round>>. After
 defining what constitutes a vote in GRANDPA, we define how GRANDPA counts votes.
 ====
 
@@ -253,7 +252,7 @@ votes for Block stem:[B] in round stem:[r]* to be:
 .<<defn-grandpa-ghost, Current Pre-Voted Block>>
 ====
 The current *pre-voted* block stem:[B_v^(r,"pv")] also know as GRANDPA GHOST is
-the block chosen by Algorithm as described in <<algo-grandpa-ghost>>:
+the block chosen by <<algo-grandpa-ghost>>:
 
 [stem]
 ++++
@@ -288,9 +287,9 @@ initiate its state and sync it with other active validators. In particular,
 considering that voting is happening in different distinct rounds where each
 round of voting is assigned a unique sequential round number stem:[r_v], it
 needs to determine and set its round counter stem:[r] equal to the voting round
-stem:[r_n] currently undergoing in the network. Algorithm as defined in
-<<algo-initiate-grandpa>> mandates the initialization procedure for GRANDPA
-protocol for a joining validator.
+stem:[r_n] currently undergoing in the network. The mandated initialization
+procedure for the GRANDPA protocol for a joining validator is described in
+detail in <<algo-initiate-grandpa>>.
 
 The process of joining a new voter set is different from the one of rejoining
 the current voter set after a network disconnect. The details of this
@@ -299,17 +298,16 @@ distinction are described further in this section.
 ===== Voter Set Changes
 
 A GRANDPA voter node which is initiating GRANDPA protocol as part of joining a
-new authority set is required to execute the Algorithm as described in
-<<algo-initiate-grandpa>>. The algorithm mandates the initialization procedure
-for GRANDPA protocol. Note that GRANDPA round number reset to 0 for every
-authority set change.
+new authority set is required to execute <<algo-initiate-grandpa>>. The
+algorithm mandates the initialization procedure for GRANDPA protocol.
+
+NOTE: The GRANDPA round number reset to 0 for every authority set change.
 
 Voter set changes are signaled by Runtime via a consensus engine message
 (<<sect-consensus-message-digest>>). When Authorities process such messages they
 must not vote on any block with a higher number than the block at which the
 change is supposed to happen. The new authority set should reinitiate GRANDPA
-protocol by executing Algorithm as defined in <<algo-initiate-grandpa>>.
-
+protocol by executing <<algo-initiate-grandpa>>.
 
 ****
 .Initiate-Grandpa
@@ -352,7 +350,7 @@ with the rest of the voting set through the process called Catchup
 
 ==== Voting Process in Round stem:[r]
 For each round stem:[r], an honest voter stem:[v] must participate in the voting
-process by following the Algorithm as defined in <<algo-grandpa-round>>.
+process by following <<algo-grandpa-round>>.
 
 ****
 .Play-Grandpa-Round
@@ -568,12 +566,10 @@ and stem:[2 > 1].
 However, at this point, the round is already completable as we know that we have
 stem:[tt "GRANDPA-GHOST"(1) = B_2] as an upper limit on what we can finalize and
 nothing greater than stem:[B_2] can be finalized at stem:[r = 1]. Therefore, the
-condition of Algorithm as described in <<algo-grandpa-round>> is
-satisfied and we must proceed to round 2.
+condition of <<algo-grandpa-round>> is satisfied and we must proceed to round 2.
 
 Nonetheless, we must continue to attempt to finalize round _1_ in the background
-as the condition of the Algorithm as defined in <<algo-attempt-to–finalize>> has
-not been fulfilled.
+as the condition of <<algo-attempt-to–finalize>> has not been fulfilled.
 
 This prevents us from proceeding to round 3 until either:
 

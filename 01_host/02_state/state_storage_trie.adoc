@@ -227,8 +227,8 @@ k_(N_c) = k_N || i || "pk"_(N_c)
 ++++
 
 Assuming that stem:[P_N] is the path (<<defn-path-graph>>) from the trie root to
-node stem:[N], the algorithm defined in <<algo-aggregate-key>> rigorously
-demonstrates how to build stem:["pk"_N^("Agr")] while traversing stem:[P_N].
+node stem:[N], <<algo-aggregate-key>> rigorously demonstrates how to build
+stem:["pk"_N^("Agr")] while traversing stem:[P_N].
 ****
 
 [#defn-node-value]

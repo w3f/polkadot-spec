@@ -79,9 +79,7 @@ from peer stem:[i] (<<defn-grandpa-catchup-request-msg>>).
 operating
 * stem:[r] is the round number for which the catch-up is requested for.
 * stem:[bbb P] is the set of immediate peers of node stem:[v].
-* stem:[tt "Last-Completed-Round"] is initiated in the Algorithm as defined in
-<<algo-initiate-grandpa>> and gets updated by the Algorithm as defined in
-<<algo-grandpa-round>>.
+* stem:[tt "Last-Completed-Round"] is initiated in <<algo-initiate-grandpa>> and gets updated by <<algo-grandpa-round>>.
 * stem:[M_(v,i)^("Cat"-s)("id"_(bbb V),r)] is the catch-up response
 (<<defn-grandpa-catchup-response-msg>>).
 ****

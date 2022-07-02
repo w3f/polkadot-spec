@@ -58,10 +58,10 @@ in a block sorted according to their priorities (<<sect-msg-transactions>>). The
 *Transaction Pool*, formally referred to as stem:[TP], is a hash table in which
 the Polkadot Host keeps the list of all valid transactions not in the
 transaction queue.
-
-The algorithm as defined in <<algo-validate-transactions>> updates the
-transaction pool and the transaction queue according to the received message:
 ====
+
+Furthermore <<algo-validate-transactions>> updates the transaction pool and
+the transaction queue according to the received message:
 
 ****
 .Validate-Transactions-and-Store
