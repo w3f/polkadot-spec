@@ -1,9 +1,3 @@
-This chapter in its current form is incomplete and considered work in progress.
-Authors appreciate receiving request for clarification or any reports regarding
-deviation from the current Polkadot network protocol. This can be done through
-filing an issue in https://github.com/w3f/polkadot-spec[Polkadot Specification
-repository].
-
 === Introduction
 
 The Polkadot network is decentralized and does not rely on any central authority

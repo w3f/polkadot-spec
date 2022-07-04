@@ -26,12 +26,7 @@ v0.2.0
 WARNING: This specification is *Work-In-Progress* and any content, structure,
 design and/or hyper/anchor-link *is subject to change*.
 
-
-= Host Specification
-Description of the Host-side of the Polkadot Protocol
-
-include::01_host/main.adoc[]
-
+include::01_host/_part.adoc[]
 
 = Runtime Specification
 Description of various useful Runtime internals
