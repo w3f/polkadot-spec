@@ -1,0 +1,6 @@
+[#chap-state-spec]
+== State Specification
+
+include::01_state-storage-trie.adoc[]
+
+include::02_child-storage.adoc[]

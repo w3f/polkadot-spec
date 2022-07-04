@@ -1,0 +1,8 @@
+[#chap-state-transit]
+== State Transition
+
+include::01_runtime-interaction.adoc[]
+
+include::02_extrinsics.adoc[]
+
+include::03_state-replication.adoc[]
