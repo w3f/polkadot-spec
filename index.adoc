@@ -46,12 +46,7 @@ Description of how to interact with the Runtime through its exported functions
 
 include::ac_runtime-api/main.adoc[]
 
-[appendix]
-= Bibliography
 
-include::ad_appendix/bibliography.adoc[]
+include::ad_bibliography.adoc[]
 
-[glossary]
-= Glossary
-
-include::ad_appendix/glossary.adoc[]
+include::ae_glossary.adoc[]
