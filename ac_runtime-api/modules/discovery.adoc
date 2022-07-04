@@ -1,4 +1,6 @@
-==== AuthorityDiscoveryApi Module (Version 1)
+==== Module AuthorityDiscoveryApi
+
+IMPORTANT: This section describes *Version 1* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
 All calls in this module require (Section
 <<sect-rte-core-initialize-block>>) to be called beforehand.

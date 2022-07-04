@@ -1,5 +1,7 @@
 [#sect-runtime-core-module]
-=== Core Module (Version 3)
+=== Module Core
+
+IMPORTANT: This section describes *Version 3* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
 [#defn-rt-core-version]
 ==== `Core_version`
