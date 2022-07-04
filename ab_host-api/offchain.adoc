@@ -336,7 +336,7 @@ encoded array of started request IDs.
 encoded _Option_ value (<<defn-option-type>>) containing the UNIX timestamp
 (<<defn-unix-time>>). Passing None blocks indefinitely.
 * `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
-encoded array of request statuses (<<defn-http-status-codes>>).
+encoded array of request statuses (<<defn-http-status-code>>).
 
 ==== `ext_offchain_http_response_headers`
 
