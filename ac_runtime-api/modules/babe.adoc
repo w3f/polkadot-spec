@@ -128,7 +128,7 @@ B_{\mathrm{Ep}} = (A_{\mathrm{id}}, s, h_1, h_2)
 where
 
 ** latexmath:[A_{\mathrm{id}}] is the public key of the equivocator.
-** latexmath:[s] is the slot as described in <<sect-babe>> at which the equivocation occurred.
+** latexmath:[s] is the slot as described in <<defn-epoch-slot>> at which the equivocation occurred.
 ** latexmath:[h_1] is the block header of the first block produced by the equivocator.
 ** latexmath:[h_2] is the block header of the second block produced by the equivocator.
 +

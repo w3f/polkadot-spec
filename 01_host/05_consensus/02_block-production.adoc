@@ -351,7 +351,7 @@ not adjusted by any external protocol.
 ====
 
 [#defn-block-time]
-.<<defn-block-time>, Block Arrival Time>>
+.<<defn-block-time, Block Arrival Time>>
 ====
 The *block arrival time* of block stem:[B] for node stem:[j] formally
 represented by stem:[T_B^j] is the local time of node stem:[j] when node

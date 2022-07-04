@@ -1,3 +1,4 @@
+[#chapter-bootstrapping]
 === Bootstrapping
 
 This section provides an overview over the tasks a Polkadot Host needs to

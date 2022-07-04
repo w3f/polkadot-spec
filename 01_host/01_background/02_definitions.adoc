@@ -148,7 +148,7 @@ easy to see that the block tree is de facto a tree. A block tree naturally
 imposes partial order relationships on the blocks as follows:
 
 [#defn-descendant-ancestor]
-.<<defn-descendant, Descendant and Ancestor>>
+.<<defn-descendant-ancestor, Descendant and Ancestor>>
 ====
 We say stem:[B] is *descendant* of stem:[B'], formally noted as stem:[B > B'],
 if stem:[(|B| > |B'|) in C]. Respectively, we say that stem:[B'] is an
