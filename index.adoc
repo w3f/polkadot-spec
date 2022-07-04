@@ -28,10 +28,7 @@ design and/or hyper/anchor-link *is subject to change*.
 
 include::01_host/_part.adoc[]
 
-= Runtime Specification
-Description of various useful Runtime internals
-
-include::02_runtime/main.adoc[]
+include::02_runtime/_part.adoc[]
 
 
 = Additional information
