@@ -1,5 +1,7 @@
 [#sect-runtime-txqueue-module]
-=== TaggedTransactionQueue (Version 2)
+=== Module TaggedTransactionQueue
+
+IMPORTANT: This section describes *Version 2* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
 All calls in this module require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 

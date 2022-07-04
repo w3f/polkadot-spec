@@ -1,5 +1,7 @@
 [#sect-runtime-offchainapi-module]
-=== OffchainWorkerApi Module (Version 2)
+=== Module OffchainWorkerApi
+
+IMPORTANT: This section describes *Version 2* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
 Does not require `Core_initialize_block` (<<sect-rte-core-initialize-block>>) to be called beforehand.
 

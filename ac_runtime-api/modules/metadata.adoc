@@ -1,5 +1,7 @@
 [#sect-runtime-metadata-module]
-=== Metadata Module (Version 1)
+=== Module Metadata
+
+IMPORTANT: This section describes *Version 1* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
 ==== `Metadata_metadata`
 

@@ -1,5 +1,7 @@
 [#sect-anv-runtime-api]
-=== ParachainHost Module (Version 1)
+=== Module ParachainHost
+
+IMPORTANT: This section describes *Version 1* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
 [#sect-rt-api-validators]
 ==== `ParachainHost_validators`
