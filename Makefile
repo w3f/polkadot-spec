@@ -19,7 +19,7 @@ $(CACHEDIR):
 	mkdir -p $@
 
 
-SHARED_FLAGS := -r ./asciidoctor-pseudocode.rb -r asciidoctor-bibtex -a attribute-missing=warn --failure-level=WARN
+SHARED_FLAGS := -r ./asciidoctor-pseudocode.rb -r asciidoctor-bibtex -a attribute-missing=warn --failure-level=WARN --verbose
 
 polkadot-spec.html: $(SOURCES) docinfo-header.html style.css asciidoctor-pseudocode.rb asciidoctor-mathjax3.rb
 	asciidoctor $(SHARED_FLAGS) -r ./asciidoctor-mathjax3.rb -o $@ $<
