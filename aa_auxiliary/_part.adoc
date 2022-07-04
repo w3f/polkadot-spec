@@ -1,0 +1,11 @@
+[appendix]
+= Additional information
+Appendix chapter containing various protocol details
+
+include::01_crypto-algos.adoc[]
+
+include::02_encoding.adoc[]
+
+include::03_genesis.adoc[]
+
+include::04_erasure-encoding.adoc[]

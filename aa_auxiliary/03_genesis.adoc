@@ -1,3 +1,6 @@
+[#chapter-genesis]
+=== Genesis State
+
 The genesis state is a set of key-value pairs representing the initial state of
 the Polkadot state storage. It can be retrieved from
 https://github.com/paritytech/polkadot/tree/master/node/service/res[the Polkadot
