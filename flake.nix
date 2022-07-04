@@ -34,7 +34,13 @@
     bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
 
     hasWkHtml = builtins.elem system pkgs.wkhtmltopdf.meta.platforms;
+
+    # Needed by wkhtml to us QT offscreen render
     QT_PLUGIN_PATH = with pkgs.qt514.qtbase; "${bin}/${qtPluginPrefix}";
+    QT_QPA_PLATFORM = "offscreen";
+
+    # Ruby Ghostscript detection is unreliable
+    GS = "${pkgs.ghostscript}/bin/gs";
   in {
     packages = rec {
       default = html;
@@ -43,7 +49,7 @@
         ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-mathjax3.rb -o $out ${self}/index.adoc
       '';
     } // lib.optionalAttrs hasWkHtml {
-      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit QT_PLUGIN_PATH; GS = "${pkgs.ghostscript}/bin/gs"; } ''
+      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit QT_PLUGIN_PATH QT_QPA_PLATFORM GS; } ''
         export HOME=$(mktemp -d)
         mkdir -p $HOME/.local
         ln -s ${pkgs.bakoma_ttf}/share $HOME/.local/
@@ -69,7 +75,7 @@
         pango
       ] ++ lib.optional hasWkHtml wkhtmltopdf);
 
-      inherit QT_PLUGIN_PATH;
+      inherit QT_PLUGIN_PATH QT_QPA_PLATFORM GS;
     };
   }) // {
     checks = self.packages;
