@@ -1,0 +1,59 @@
+The runtime metadata structure contains all the information necessary on how to
+interact with the Polkadot runtime. Considering that Polkadot runtimes are
+upgradable and therefor any interfaces are subject to change, the metadata
+allows developers to structure any extrinsics or storage entries accordingly.
+
+=== Structure
+
+The Runtime Metadata is a datastructure of the following format:
+
+[stem]
+++++
+(T, P, E, Y)\
+T = (r_n, ...r_(n+m))
+++++
+
+where
+
+==== PortableType
+
+[stem]
+++++
+r = (i_c, y)
+++++
+
+where
+
+* stem:[i_c] is a compact integer.
+* stem:[y] is a **Type**.
+
+==== Type:
+
+[stem]
+++++
+(p,t,d,c)
+++++
+
+where
+
+* stem:[p] is the unique path to the type, which might be empty. It consists of:
++
+[stem]
+++++
+(s_n, ..., s_(n+m))
+++++
++
+where stem:[s_n] is a UTF-8 encoded string.
+* stem:[t] is the generic type parameters of the type in use. It's empty for
+non-generic types. It consists of:
++
+[stem]
+++++
+(t_n, ...,t_(n+m))\
+t_n = (n, y)
+++++
++
+where stem:[n] is a UTF-8 encoded string representing the name of the generic
+type parameter and stem:[y] is a _Option_ type containing 32-bit unsigned integer
+representing the index to the type in the internen table (TODO: Clarify).
+* stem:[d]
