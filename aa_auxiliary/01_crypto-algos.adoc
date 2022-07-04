@@ -1,8 +1,11 @@
+[#chapter-crypto-algos]
+=== Cryptographic Algorithms
+
 [#sect-hash-functions]
-=== Hash Functions
+==== Hash Functions
 
 [#sect-blake2]
-=== BLAKE2
+==== BLAKE2
 
 BLAKE2 is a collection of cryptographic hash functions known for their high
 speed. Their design closely resembles BLAKE which has been a finalist in the
@@ -15,12 +18,12 @@ and sample implementations of all variants of Blake2 hash functions can be found
 in RFC 7693 cite:[saarinen_blake2_2015].
 
 [#sect-randomness]
-=== Randomness
+==== Randomness
 
 NOTE: TBH
 
 [#sect-vrf]
-=== VRF
+==== VRF
 
 A Verifiable Random Function (VRF) is a mathematical operation that takes some
 input and produces a random number using a secret key along with a proof of
@@ -169,7 +172,7 @@ y = "PRF"(t_8, "more=False")
 ++++
 ====
 
-==== Transcript
+===== Transcript
 
 A VRF transcript serves as a domain-specific separator of cryptographic
 protocols and is represented as a mathematical object, as defined by Merlin,
@@ -233,7 +236,7 @@ https://strobe.sourceforge.io/specs/#ops.impl["7. Implementation of operations"]
 ====
 
 [#sect-vrf-appending-messages]
-===== Appending Messages
+====== Appending Messages
 
 Appending messages, or "data", to the transcript (<<defn-vrf-transcript>>) first
 requires `meta-AD` operations for a given label of the messages, including the
@@ -255,7 +258,7 @@ operations are described in <<defn-strobe-operations>>.
 Formally, when appending a message we refer to it as stem:["append"(T, l, m)].
 
 [#sect-cryptographic-keys]
-=== Cryptographic Keys
+==== Cryptographic Keys
 
 Various types of keys are used in Polkadot to prove the identity of the actors
 involved in the Polkadot Protocols. To improve the security of the users, each
@@ -347,27 +350,27 @@ majority of the users’ funds and should only be used for their intended purpos
 ====
 
 [#sect-staking-funds]
-==== Holding and staking funds
+===== Holding and staking funds
 
 NOTE: TBH
 
 [#sect-creating-controller-key]
-==== Creating a Controller key
+===== Creating a Controller key
 
 NOTE: TBH
 
 [#sect-designating-proxy]
-==== Designating a proxy for voting
+===== Designating a proxy for voting
 
 NOTE: TBH
 
 [#sect-controller-settings]
-==== Controller settings
+===== Controller settings
 
 NOTE: TBH
 
 [#sect-certifying-keys]
-==== Certifying keys
+===== Certifying keys
 
 Due to security considerations and Runtime upgrades, the session keys are
 supposed to  be changed regularly. As such, the new session keys need to be

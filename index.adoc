@@ -30,11 +30,7 @@ include::01_host/_part.adoc[]
 
 include::02_runtime/_part.adoc[]
 
-
-= Additional information
-Appendix chapter containing various protocol details
-
-include::aa_auxiliary/main.adoc[]
+include::aa_auxiliary/_part.adoc[]
 
 
 [#chap-host-api]

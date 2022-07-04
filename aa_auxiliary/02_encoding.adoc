@@ -1,4 +1,7 @@
-=== Binary Enconding
+[#chapter-encoding]
+=== Auxiliary Encodings
+
+==== Binary Enconding
 
 [#defn-byte-sequence]
 .<<defn-byte-sequence, Sequence of Bytes>>
@@ -83,7 +86,7 @@ length stem:[4] using little-endian encoding format.
 ====
 
 [#sect-scale-codec]
-=== SCALE Codec
+==== SCALE Codec
 The Polkadot Host uses _Simple Concatenated Aggregate Little-Endian” (SCALE)
 codec_ to encode byte arrays as well as other data structures. SCALE provides a
 canonical encoding to produce consistent hash values across their
@@ -275,7 +278,7 @@ array of zero length and depicted as stem:[phi].
 ====
 
 [#sect-sc-length-and-compact-encoding]
-==== Length and Compact Encoding
+===== Length and Compact Encoding
 
 SCALE Length encoding is used to encode integer numbers of variying sizes prominently in an encoding length of arrays:
 
@@ -322,7 +325,7 @@ k_1^7 ... k_1^3 k_1^2 := m-4
 ++++
 ====
 
-=== Hex Encoding
+==== Hex Encoding
 
 Practically, it is more convenient and efficient to store and process data which
 is stored in a byte array. On the other hand, the trie keys are broken into
