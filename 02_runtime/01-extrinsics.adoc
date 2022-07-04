@@ -1,3 +1,5 @@
+== Extrinsics
+
 === Introduction
 
 An extrinsic is a SCALE encoded array consisting of a version number,
