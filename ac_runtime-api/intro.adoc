@@ -1,4 +1,4 @@
-== General Information
+=== General Information
 
 The Polkadot Host assumes that at least the constants and functions
 described in this Chapter are implemented in the Runtime Wasm blob.
@@ -10,7 +10,7 @@ every Runtime upgrade and warn if an updated API is encountered and that
 this might require an update of the host.
 
 [#sect-json-rpc-api]
-=== JSON-RPC API for external services
+==== JSON-RPC API for external services
 
 Polkadot Host implementers are encouraged to implement an API in order
 for external, third-party services to interact with the node. The

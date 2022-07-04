@@ -32,12 +32,7 @@ include::02_runtime/_part.adoc[]
 
 include::aa_auxiliary/_part.adoc[]
 
-
-[#chap-host-api]
-= Host API
-Description of the expected environment available for import by the Polkadot Runtime
-
-include::ab_host-api/main.adoc[]
+include::ab_host-api/_part.adoc[]
 
 
 [#chap-runtime-api]
@@ -45,7 +40,6 @@ include::ab_host-api/main.adoc[]
 Description of how to interact with the Runtime through its exported functions
 
 include::ac_runtime-api/main.adoc[]
-
 
 include::ad_bibliography.adoc[]
 

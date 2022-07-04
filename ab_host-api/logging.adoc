@@ -1,5 +1,5 @@
 [#sect-logging-api]
-== Logging
+=== Logging
 
 Interface that provides functions for logging from within the runtime.
 
@@ -15,8 +15,6 @@ identifier is as follows:
 L = {(0,"Error = 1"),(1,"Warn = 2"),(2,"Info = 3"),(3, "Debug = 4"),(4,"Trace = 5"):}
 ++++
 ====
-
-=== Functions
 
 ==== `ext_logging_log`
 
