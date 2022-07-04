@@ -54,9 +54,13 @@ t_n = (n, y)
 ++++
 +
 where stem:[n] is a UTF-8 encoded string representing the name of the generic
-type parameter and stem:[y] is a _Option_ type containing 32-bit unsigned integer
-representing the index to the type in the internen table (TODO: Clarify).
+type parameter and stem:[y] is a _Option_ type containing a **Type**.
 * stem:[d] is the actual **TypeDefinition**.
+
+==== Type
+
+32-bit unsigned integer representing the index to the type in the interner table
+(TODO: Clarify)
 
 ==== TypeDefinition
 
@@ -85,15 +89,30 @@ stem:[a] is:
 (f_n, ..., f_(n+m))\
 ++++
 
-where stem:[f] is a **Field**
+where stem:[f] is a **Field**.
 
 stem:[b] is:
 
 [stem]
 ++++
-(v_n, ..., f_(n+m))\
-v = ()
+(v_n, ..., f_(n+m))
 ++++
+
+where stem:[v] is a **Variant**.
+
+stem:[c] is a **Type**.
+
+stem:[c] is:
+
+[stem]
+++++
+(l, y)
+++++
+
+where stem:[l] is a unsigned 32-bit integer indicating the length and stem:[y]
+is a **Type**.
+
+stem:[d] is an array of varying length containing **Type** elements.
 
 ==== Field
 
@@ -105,8 +124,7 @@ v = ()
 where
 
  * stem:[n] is a string representing the field name.
- * stem:[y] is a 32-bit unsigned integer representing the index to the type in
-the internen table (TODO: Clarify)
+ * stem:[y] is a **Type**.
  * stem:[y_n] is a _Option_ type containg a string that indicates the name of the
 type as it appears in the source code.
  * stem:[c] is an array of varying length containing strings of documentation.
