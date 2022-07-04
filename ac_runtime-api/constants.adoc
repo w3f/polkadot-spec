@@ -1,7 +1,7 @@
 
-== Runtime Constants
+=== Runtime Constants
 
-=== `__heap_base`
+==== `__heap_base`
 
 This constant indicates the beginning of the heap in memory. The space
 below is reserved for the stack and the data section. For more details
