@@ -56,4 +56,70 @@ t_n = (n, y)
 where stem:[n] is a UTF-8 encoded string representing the name of the generic
 type parameter and stem:[y] is a _Option_ type containing 32-bit unsigned integer
 representing the index to the type in the internen table (TODO: Clarify).
-* stem:[d]
+* stem:[d] is the actual **TypeDefinition**.
+
+==== TypeDefinition
+
+The type definition indicates all the possible types of encodable values a type can have.
+
+[stem]
+++++
+x = {
+	(0,->,a,"composite type (e.g. structure or tuple)"),
+	(1,->,b,"variant type"),
+	(2,->,c,"sequence type varying length"),
+	(3,->,d,"sequence with fixed length"),
+	(4,->,e,"tuple type"),
+	(5,->,f,"primitive type"),
+	(6,->,g,"compact encoded type"),
+	(7,->,h,"sequence of bits")
+	:}
+++++
+
+where
+
+stem:[a] is:
+
+[stem]
+++++
+(f_n, ..., f_(n+m))\
+++++
+
+where stem:[f] is a **Field**
+
+stem:[b] is:
+
+[stem]
+++++
+(v_n, ..., f_(n+m))\
+v = ()
+++++
+
+==== Field
+
+[stem]
+++++
+(n, y, y_n, c)
+++++
+
+where
+
+ * stem:[n] is a string representing the field name.
+ * stem:[y] is a 32-bit unsigned integer representing the index to the type in
+the internen table (TODO: Clarify)
+ * stem:[y_n] is a _Option_ type containg a string that indicates the name of the
+type as it appears in the source code.
+ * stem:[c] is an array of varying length containing strings of documentation.
+
+=== Variant
+
+[stem]
+++++
+(n,F,i,c))
+++++
+
+where
+
+* stem:[n] is a string representing the name of the variant.
+* stem:[F] is a possible empty array of varying length containing **Field** elements.
+* stem:[i] is an unsigned 8-bit integer indicating the index of the variant (TODO: Clarify).
