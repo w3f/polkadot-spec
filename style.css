@@ -168,6 +168,11 @@ h6 > a.link:hover,
 	color: var(--pink);
 }
 
+/* Tame SVG images */
+.imageblock .content svg {
+  max-width: 100%;
+}
+
 /* Style boxes */
 .exampleblock > .content, 
 .sidebarblock {
