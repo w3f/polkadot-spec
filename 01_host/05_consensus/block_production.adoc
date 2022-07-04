@@ -333,8 +333,8 @@ where::
 .<<defn-prunned-best, Pruned Best Chain>>
 ====
 The *pruned best chain* stem:[C^(r^k)] is the longest selected chain
-(<<defn-longest-chain>>) with the last stem:[k] Blocks pruned. We chose stem:[k
-= 140]. The *last (probabilistic) finalized block* describes the last block in
+(<<defn-longest-chain>>) with the last stem:[k] Blocks pruned. We chose
+stem:[k= 140]. The *last (probabilistic) finalized block* describes the last block in
 this pruned best chain.
 ====
 
@@ -371,6 +371,9 @@ released. Consequently, each sync period stem:[fr E_i] starts after stem:[fr
 E_(i - 1)]. The length of the sync period (<<defn-chain-quality>>) is equal to
 stem:[s_(qc)]and expressed in the number of slots.
 ====
+
+.An exemplary result of Median Algorithm in first sync epoch with stem:[s_"cq" = 9] and stem:[k = 1].
+image::c01-s05_babe-time-sync.svg["Median Algorithm Example"]
 
 
 [#block-production]
