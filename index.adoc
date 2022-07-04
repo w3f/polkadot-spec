@@ -26,21 +26,20 @@ v0.2.0
 WARNING: This specification is *Work-In-Progress* and any content, structure,
 design and/or hyper/anchor-link *is subject to change*.
 
+// Main parts of the spec
 include::01_host/_part.adoc[]
 
 include::02_runtime/_part.adoc[]
 
+// Appendix for various details
 include::aa_auxiliary/_part.adoc[]
 
+// API chapters for reference
 include::ab_host-api/_part.adoc[]
 
+include::ac_runtime-api/_part.adoc[]
 
-[#chap-runtime-api]
-= Runtime API
-Description of how to interact with the Runtime through its exported functions
-
-include::ac_runtime-api/main.adoc[]
-
+// Bibliography, Glossary
 include::ad_bibliography.adoc[]
 
 include::ae_glossary.adoc[]
