@@ -1,5 +1,5 @@
 [#sect-crypto-api]
-== Crypto
+=== Crypto
 
 Interfaces for working with crypto related types from within the runtime.
 
@@ -40,8 +40,6 @@ values are possible:
 |2 |Invalid signature
 |===
 ====
-
-=== Functions
 
 ==== `ext_crypto_ed25519_public_keys`
 

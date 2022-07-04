@@ -1,4 +1,4 @@
-== Preliminaries
+=== Preliminaries
 
 The Polkadot Host API is a set of functions that the Polkadot Host
 exposes to Runtime to access external functions needed for various

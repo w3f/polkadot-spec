@@ -1,9 +1,7 @@
 [#sect-hashing-api]
-== Hashing
+=== Hashing
 
 Interface that provides functions for hashing with different algorithms.
-
-=== Functions
 
 ==== `ext_hashing_keccak_256`
 

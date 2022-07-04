@@ -1,5 +1,5 @@
 [#sect-offchain-api]
-== Offchain
+=== Offchain
 
 The Offchain Workers allow the execution of long-running and possibly
 non-deterministic tasks (e.g. web requests, encryption/decryption and signing of
@@ -62,8 +62,6 @@ possible:
 E = {(0,"The deadile was reached"),(1,"There was an IO error while processing the request"),(2,"The Id of the request is invalid"):}
 ++++
 ====
-
-=== Functions
 
 ==== `ext_offchain_is_validator`
 

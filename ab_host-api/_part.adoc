@@ -1,0 +1,23 @@
+[appendix#chap-host-api]
+= Host API
+Description of the expected environment available for import by the Polkadot Runtime
+
+include::intro.adoc[]
+
+include::storage.adoc[]
+
+include::child_storage.adoc[]
+
+include::crypto.adoc[]
+
+include::hashing.adoc[]
+
+include::offchain.adoc[]
+
+include::trie.adoc[]
+
+include::misc.adoc[]
+
+include::allocator.adoc[]
+
+include::logging.adoc[]

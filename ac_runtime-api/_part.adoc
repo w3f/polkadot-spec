@@ -1,0 +1,9 @@
+[appendix#chap-runtime-api]
+= Runtime API
+Description of how to interact with the Runtime through its exported functions
+
+include::intro.adoc[]
+
+include::constants.adoc[]
+
+include::functions.adoc[]

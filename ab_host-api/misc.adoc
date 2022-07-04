@@ -1,10 +1,8 @@
 [#sect-misc-api]
-== Miscellaneous
+=== Miscellaneous
 
 Interface that provides miscellaneous functions for communicating between the
 runtime and the node.
-
-=== Functions
 
 ==== `ext_misc_print_num`
 
