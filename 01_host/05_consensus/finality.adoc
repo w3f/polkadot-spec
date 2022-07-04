@@ -603,7 +603,7 @@ forced change was received by most participants and that finality can be
 continued.
 
 .Applying a scheduled change
-image::c01-s05_scheduled-change.svg["Scheduled Change Chart"]
+image::c01-s05_scheduled-change.svg["Scheduled Change Chart", opts=inline]
 
 .Applying a forced change
-image::c01-s05_forced-change.svg["Forced Change Chart"]
+image::c01-s05_forced-change.svg["Forced Change Chart", opts=inline]
