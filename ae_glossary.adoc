@@ -1,4 +1,7 @@
 [glossary]
+= Glossary
+
+[glossary]
 latexmath:[P_n]::
   A path graph or a path of latexmath:[n] nodes.
 latexmath:[(b_0,b_1,...,b_{n-1})]::
