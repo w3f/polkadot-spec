@@ -10,10 +10,14 @@ The Runtime Metadata is a datastructure of the following format:
 [stem]
 ++++
 (T, P, E, Y)\
-T = (r_n, ...r_(n+m))
+T = (r_n, ...,r_(n+m))\
+P = (p_n, ...,p_(n+m))
 ++++
 
 where
+
+* stem:[r] is a **PortableType**.
+* stem:[p] is a **PalletMetadata**.
 
 ==== PortableType
 
@@ -56,6 +60,7 @@ t_n = (n, y)
 where stem:[n] is a UTF-8 encoded string representing the name of the generic
 type parameter and stem:[y] is a _Option_ type containing a **Type**.
 * stem:[d] is the actual **TypeDefinition**.
+* stem:[c] is an array of varying length containing strings of documentation.
 
 ==== Type
 
@@ -168,3 +173,21 @@ where
 * stem:[n] is a string representing the name of the variant.
 * stem:[F] is a possible empty array of varying length containing **Field** elements.
 * stem:[i] is an unsigned 8-bit integer indicating the index of the variant (TODO: Clarify).
+
+=== Pallet Metadata
+
+[stem]
+++++
+(n, s, a, e, c, e, i)
+++++
+
+where
+
+* stem:[n] is a string representing the pallet name.
+* stem:[s] is an _Option_ type containing the pallet storage metadata (TODO).
+* stem:[a] is an _Option_ type containing the calls metadata (TODO).
+* stem:[e] is an _Option_ type containing the event metadata (TODO).
+* stem:[c] is an array of varying length containing the constant metadata (TODO).
+* stem:[e] is an _Option_ type containing the error metadata (TODO).
+* stem:[i] is an unsigned 8-bit integers indicating the index of the pallet,
+which is used for encoding pallet events and calls.
