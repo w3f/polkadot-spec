@@ -1,8 +1,8 @@
 = Runtime Specification
 Description of various useful Runtime internals
 
-include::01-extrinsics.adoc[]
+include::07-extrinsics.adoc[]
 
-include::02-weights.adoc[]
+include::08-weights.adoc[]
 
-include::03-consensus.adoc[]
+include::09-consensus.adoc[]
