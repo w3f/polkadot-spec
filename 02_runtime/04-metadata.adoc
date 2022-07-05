@@ -211,7 +211,7 @@ where
 pallet call type.
 * stem:[e] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>) to the event type.
 * stem:[c] is an array of varying length containing pallet constant metadata (<<>>).
-* stem:[e] is an _Option_ type containing the **Type** error metadata.
+* stem:[e] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>) to the error type.
 * stem:[i] is an unsigned 8-bit integers indicating the index of the pallet,
 which is used for encoding pallet events and calls.
 
@@ -231,7 +231,9 @@ where
 **StorageEntryMetadata**.
 ====
 
-==== StorageEntryMetadata
+.Storage Entry Metadata
+[#defn-rtm-storage-entry-metadata]
+====
 
 [stem]
 ++++
@@ -241,12 +243,17 @@ where
 where
 
 * stem:[n] is the string representing the variable name of the storage entry.
-* stem:[m] is an _Option_ type containing the modifier of that storage entry (**StorageEntryModifier**).
-* stem:[y] is the type of the value stored in the entry (**StorageEntryType**).
+* stem:[m] is an _Option_ type containing the storage entry modifier
+(<<defn-rtm-storage-entry-modifier>>).
+* stem:[y] is the type of the value stored in the entry
+(<<defn-rtm-storage-entry-type>>).
 * stem:[D] is an byte array containing the default value.
 * stem:[C] is an array of varying length of strings containing the documentation.
+====
 
-==== StorageEntryModifier
+.Storage Entry Modifier
+[#defn-rtm-storage-entry-modifier]
+====
 
 [stem]
 ++++
@@ -259,9 +266,10 @@ where
 where _0_ indicates that the entry returns an _Option_ type and _1_ indicates
 that the entry returns the type stem:[y] with value stem:[D] of
 **StorageEntryModifier**.
+====
 
-.Storage Entry Metadata
-[#defn-rtm-storage-entry-metadata]
+.Storage Entry Type
+[#defn-rtm-storage-entry-type]
 ====
 
 [stem]
