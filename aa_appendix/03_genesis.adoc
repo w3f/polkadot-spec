@@ -20,10 +20,11 @@ _genesis header_ (<<defn-genesis-header>>). By the abuse of terminology,
 "genesis block" refers to the hypothetical parent of block number _1_ which
 holds genesis header as its header.
 
+.<<defn-genesis-header, Genesis Header>>
 [#defn-genesis-header]
-The Polkadot genesis
-header is a data structure conforming to block header format (<<defn-block-header>>). It contains the following
-values:
+====
+The Polkadot genesis header is a data structure conforming to block header
+format (<<defn-block-header>>). It contains the following values:
 
 [cols="1,4"]
 |===
@@ -44,3 +45,4 @@ values:
 |`digest`
 |_0_
 |===
+====
