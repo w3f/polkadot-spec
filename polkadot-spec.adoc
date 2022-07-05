@@ -1,6 +1,6 @@
 = Polkadot Protocol Specification
 Web 3.0 Technologies Foundation; Fabio Lama; Florian Franzen; Syed Hosseini
-v0.2.0
+v0.2.1
 :compress:
 :description: The Official Polkadot and Kusama Protocol Specification
 :docinfo: shared-header
