@@ -29,5 +29,5 @@ latexmath:[s_B].
 \EndFor
 \Return \textsc{Blake2b}$($\textsc{Epoch-Randomness}$(n-1)||n||\rho)$
 ++++
-where tem:[n] is the epoch index.
+where stem:[n] is the epoch index.
 ****
