@@ -1,11 +1,10 @@
 # Build outputs
-polkadot-spec-html/
 polkadot-spec.html
 polkadot-spec.pdf
+polkadot-spec.tex
 
 # asciidoctor-mathmatical
-stem-*.svg
-algo-*.svg
+cache/
 
 # direnv
 .envrc
