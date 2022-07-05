@@ -9,15 +9,19 @@ The Runtime Metadata is a datastructure of the following format:
 
 [stem]
 ++++
-(T, P, E, Y)\
+(T, P, E, y)\
 T = (r_n, ...,r_(n+m))\
-P = (p_n, ...,p_(n+m))
+P = (p_n, ...,p_(n+m))\
+E = (e_n, ...,e_(n+m))\
+y
 ++++
 
 where
 
 * stem:[r] is a **PortableType**.
 * stem:[p] is a **PalletMetadata**.
+* stem:[e] is a **ExtrinsicMetadata**.
+* stem:[y] is the **Type** of the runtime.
 
 ==== PortableType
 
