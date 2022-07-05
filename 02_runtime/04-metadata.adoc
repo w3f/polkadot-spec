@@ -19,9 +19,9 @@ where
 
 * stem:[r] is a registry containing all type definitions
 (<<defn-rtm-registry-entry>>).
-* stem:[p] is a **PalletMetadata**.
-* stem:[e] is a **ExtrinsicMetadata**.
-* stem:[y] is the **Type** of the runtime.
+* stem:[p] is a pallet metadata (<<sect-rtm-pallet-metadata>>).
+* stem:[e] is an extrinsic metadata (<<sect-rtm-extrinsic-metadata>>).
+* stem:[y] is the type Id (<<defn-rtm-type-id>>) of the runtime.
 
 .Registry Entry
 [#defn-rtm-registry-entry]
@@ -115,7 +115,7 @@ where
 (f_n, ..., f_(n+m))\
 ++++
 +
-where stem:[f] is a **Field**.
+where stem:[f] is a field (<<defn-rtm-field>>).
 * stem:[b] is of the following format:
 +
 [stem]
@@ -123,7 +123,7 @@ where stem:[f] is a **Field**.
 (v_n, ..., v_(n+m))
 ++++
 +
-where stem:[v] is a **Variant**.
+where stem:[v] is a variant (<<defn-rtm-variant>>).
 * stem:[c] is a type Id (<<defn-rtm-type-id>>).
 * stem:[d] is of the following format:
 +
@@ -173,7 +173,7 @@ is a type Id (<<defn-rtm-type-id>>).
 where
 
  * stem:[n] is a string representing the field name.
- * stem:[y] is a **Type**.
+ * stem:[y] is a type Id (<<defn-rtm-type-id>>).
  * stem:[y_n] is a _Option_ type containg a string that indicates the name of the
 type as it appears in the source code.
  * stem:[c] is an array of varying length containing strings of documentation.
@@ -191,10 +191,12 @@ type as it appears in the source code.
 where
 
 * stem:[n] is a string representing the name of the variant.
-* stem:[F] is a possible empty array of varying length containing **Field** elements.
+* stem:[F] is a possible empty array of varying length containing field
+(<<defn-rtm-field>>) elements.
 * stem:[i] is an unsigned 8-bit integer indicating the index of the variant (TODO: Clarify).
 ====
 
+[#sect-rtm-pallet-metadata]
 ==== Pallet Metadata
 
 [stem]
@@ -227,8 +229,8 @@ which is used for encoding pallet events and calls.
 where
 
 * stem:[p] is the string representing the common prefix used by all storage entries.
-* stem:[E] is an array of varying length containing elements of
-**StorageEntryMetadata**.
+* stem:[E] is an array of varying length containing elements of storage entries
+(<<defn-rtm-storage-entry-metadata>>).
 ====
 
 .Storage Entry Metadata
@@ -264,8 +266,8 @@ where
 ++++
 
 where _0_ indicates that the entry returns an _Option_ type and _1_ indicates
-that the entry returns the type stem:[y] with value stem:[D] of
-**StorageEntryModifier**.
+that the entry returns the type stem:[y] with value stem:[D] of the storage
+entry metadata (<<defn-rtm-storge-entry-metadata>>).
 ====
 
 .Storage Entry Type
@@ -315,11 +317,12 @@ storage hasher (<<defn-rtm-storage-hasher>>).
 where
 
 * stem:[n] is a string representing the name of the pallet constant.
-* stem:[y] is the **Type** of the pallet constant.
+* stem:[y] is the type Id (<<defn-rtm-type-id>>) of the pallet constant.
 * stem:[V] is a byte array containing the value of the constant.
 * stem:[C] is an array of varying length containg string with the documentation.
 ====
 
+[#sect-rtm-extrinsic-metadata]
 === Extrinsic Metadata
 
 [stem]
@@ -329,9 +332,10 @@ where
 
 where
 
-* stem:[y] is a **Type** of the extrinsic.
+* stem:[y] is a type Id (<<defn-rtm-type-id>>) of the extrinsic.
 * stem:[v] is a unsigned 8-bit integer indicating the extrinsic version.
-* stem:[S] is an array of varying length containing the **SignedExtensionMetadata**.
+* stem:[S] is an array of varying length containing the signed extension
+metadata (<<defn-rtm-signed-extension-metadata>>).
 
 .Signed Extension Metadata
 [#defn-rtm-signed-extension-metadata]
@@ -346,8 +350,8 @@ where
 
 * stem:[i] is a string representing the unique signed extension identifier,
 which may be different from the type name.
-* stem:[y] is a **Type** of the signed extension, with the data to be included
-in the extrinsic.
-* stem:[a] is a **Type** of the additional signed data, with the data to be
-included in the signed payload.
+* stem:[y] is a type Id (<<defn-rtm-type-id>>) of the signed extension, with the
+data to be included in the extrinsic.
+* stem:[a] is the type Id (<<defn-rtm-type-id>>) of the additional signed data,
+with the data to be included in the signed payload.
 ====
