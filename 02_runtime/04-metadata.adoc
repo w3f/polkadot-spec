@@ -17,7 +17,8 @@ E = (e_n, ...,e_(n+m))
 
 where
 
-* stem:[r] is registry containing all types used in the metadata **PortableType**.
+* stem:[r] is a registry containing all type definitions
+(<<defn-rtm-registry-entry>>).
 * stem:[p] is a **PalletMetadata**.
 * stem:[e] is a **ExtrinsicMetadata**.
 * stem:[y] is the **Type** of the runtime.
@@ -42,7 +43,8 @@ where
 .Runtime Type Definition
 [#defn-rtm-type]
 ====
-The runtime type conta
+The runtime type definition contains information about a type. It's a structure
+of the following format:
 
 [stem]
 ++++
@@ -159,7 +161,9 @@ is a type Id (<<defn-rtm-type-id>>).
 * stem:[h] TODO...
 ====
 
-==== Field
+.Field
+[#defn-rtm-field]
+====
 
 [stem]
 ++++
@@ -173,8 +177,11 @@ where
  * stem:[y_n] is a _Option_ type containg a string that indicates the name of the
 type as it appears in the source code.
  * stem:[c] is an array of varying length containing strings of documentation.
+====
 
-=== Variant
+.Variant
+[#defn-rtm-variant]
+====
 
 [stem]
 ++++
@@ -186,8 +193,9 @@ where
 * stem:[n] is a string representing the name of the variant.
 * stem:[F] is a possible empty array of varying length containing **Field** elements.
 * stem:[i] is an unsigned 8-bit integer indicating the index of the variant (TODO: Clarify).
+====
 
-=== Pallet Metadata
+==== Pallet Metadata
 
 [stem]
 ++++
@@ -197,15 +205,19 @@ where
 where
 
 * stem:[n] is a string representing the pallet name.
-* stem:[s] is an _Option_ type containing the **PalletStorageMetadata**.
-* stem:[a] is an _Option_ type containing the **Type** to the pallet call.
-* stem:[e] is an _Option_ type containing the **Type** to the event metadata.
-* stem:[c] is an array of varying length containing the **PalletConstantMetadata**.
+* stem:[s] is an _Option_ type containing the pallet storage metadata
+(<<defn-rtm-pallet-storage-metadata>>).
+* stem:[a] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>)
+pallet call type.
+* stem:[e] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>) to the event type.
+* stem:[c] is an array of varying length containing pallet constant metadata (<<>>).
 * stem:[e] is an _Option_ type containing the **Type** error metadata.
 * stem:[i] is an unsigned 8-bit integers indicating the index of the pallet,
 which is used for encoding pallet events and calls.
 
-==== PalletStorageMetadata
+.Pallet Storage Metadata
+[#defn-rtm-pallet-storage-metadata]
+====
 
 [stem]
 ++++
@@ -215,7 +227,9 @@ which is used for encoding pallet events and calls.
 where
 
 * stem:[p] is the string representing the common prefix used by all storage entries.
-* stem:[E] is an array of varying length containing elements of **StorageEntryMetadata**.
+* stem:[E] is an array of varying length containing elements of
+**StorageEntryMetadata**.
+====
 
 ==== StorageEntryMetadata
 
@@ -246,7 +260,9 @@ where _0_ indicates that the entry returns an _Option_ type and _1_ indicates
 that the entry returns the type stem:[y] with value stem:[D] of
 **StorageEntryModifier**.
 
-==== StorageEntryMetadata
+.Storage Entry Metadata
+[#defn-rtm-storage-entry-metadata]
+====
 
 [stem]
 ++++
@@ -256,10 +272,14 @@ that the entry returns the type stem:[y] with value stem:[D] of
 :}
 ++++
 
-where stem:[t], stem:[k] and stem:[v] are all **Type**. stem:[H] is an array of
-varying length containg the **StorageHasher**.
+where stem:[t], stem:[k] (key) and stem:[v] (value) are all of type Ids
+(<<defn-rtm-type-id>>). stem:[H] is an array of varying length containg the
+storage hasher (<<defn-rtm-storage-hasher>>).
+====
 
-==== StorageHasher
+.Storage Hasher
+[#defn-rtm-storage-hasher]
+====
 
 [stem]
 ++++
@@ -273,8 +293,11 @@ varying length containg the **StorageHasher**.
 	(6,"Identity hashing")
 :}
 ++++
+====
 
-==== PalletConstantMetadata
+.Pallet Constants
+[#defn-rtm-pallet-constants]
+====
 
 [stem]
 ++++
@@ -287,6 +310,7 @@ where
 * stem:[y] is the **Type** of the pallet constant.
 * stem:[V] is a byte array containing the value of the constant.
 * stem:[C] is an array of varying length containg string with the documentation.
+====
 
 === Extrinsic Metadata
 
@@ -301,7 +325,9 @@ where
 * stem:[v] is a unsigned 8-bit integer indicating the extrinsic version.
 * stem:[S] is an array of varying length containing the **SignedExtensionMetadata**.
 
-==== SignedExtensionMetadata
+.Signed Extension Metadata
+[#defn-rtm-signed-extension-metadata]
+====
 
 [stem]
 ++++
@@ -316,3 +342,4 @@ which may be different from the type name.
 in the extrinsic.
 * stem:[a] is a **Type** of the additional signed data, with the data to be
 included in the signed payload.
+====
