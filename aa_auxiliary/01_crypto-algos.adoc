@@ -5,7 +5,7 @@
 ==== Hash Functions
 
 [#sect-blake2]
-==== BLAKE2
+===== BLAKE2
 
 BLAKE2 is a collection of cryptographic hash functions known for their high
 speed. Their design closely resembles BLAKE which has been a finalist in the
