@@ -1,4 +1,5 @@
-SOURCES := index.adoc $(wildcard ??_*/*.adoc) $(wildcard ??_*/*/*.adoc)
+TARGET := polkadot-spec
+SOURCES := $(TARGET).adoc $(wildcard ??_*.adoc) $(wildcard ??_*/*.adoc) $(wildcard ??_*/*/*.adoc)
 
 CACHEDIR := cache/
 
@@ -7,12 +8,8 @@ CACHEDIR := cache/
 
 default: html
 
-
-html: polkadot-spec.html
-
-pdf: polkadot-spec.pdf
-
-tex: polkadot-spec.tex
+.SECONDEXPANSION:
+html pdf tex: $(TARGET).$$@
 
 
 $(CACHEDIR):
@@ -21,15 +18,16 @@ $(CACHEDIR):
 
 SHARED_FLAGS := -r ./asciidoctor-pseudocode.rb -r asciidoctor-bibtex -a attribute-missing=warn --failure-level=WARN --verbose
 
-polkadot-spec.html: $(SOURCES) docinfo-header.html style.css asciidoctor-pseudocode.rb asciidoctor-mathjax3.rb
+$(TARGET).html: $(SOURCES) docinfo-header.html style.css asciidoctor-pseudocode.rb asciidoctor-mathjax3.rb
 	asciidoctor $(SHARED_FLAGS) -r ./asciidoctor-mathjax3.rb -o $@ $<
 
-polkadot-spec.pdf: $(SOURCES) $(CACHEDIR) asciidoctor-pseudocode.rb
+$(TARGET).pdf: $(SOURCES) $(CACHEDIR) asciidoctor-pseudocode.rb
 	asciidoctor-pdf -a imagesoutdir=$(CACHEDIR) -r asciidoctor-mathematical $(SHARED_FLAGS) -o $@ $<
 
-polkadot-spec.tex: $(SOURCES)
+$(TARGET).tex: $(SOURCES)
 	asciidoctor-latex $(SHARED_FLAGS) -o $@ $<
 
 
 clean:
-	rm -rf $(CACHEDIR) polkadot-spec.html polkadot-spec.pdf polkadot-spec.tex
+	rm -rf $(CACHEDIR) $(TARGET).{html,pdf,tex}
+
