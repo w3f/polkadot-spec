@@ -67,6 +67,16 @@ string which serves as an identifier.
 "CM" = {(,("'BABE'", "CM"_b)),(,("'FRNK'", "CM"_g)),(,("'BEEF'", "CM"_y)):}
 ++++
 
+where::
+[horizontal]
+asciimath:["CM"_b]:: is a consensus message for BABE defined in <<defn-consensus-message-babe>>.
+asciimath:["CM"_g]:: is a consensus message for GRANDPA defined in <<defn-consensus-message-grandpa>>.
+asciimath:["CM"_y]:: is a consensus message for BEEFY defined in <<defn-consensus-message-beefy>>.
+====
+
+[#defn-consensus-message-babe]
+.<<defn-consensus-message-babe, BABE Consensus Message>>
+====
 stem:["CM"_b], the consensus message for BABE, is of the following format:
 
 [stem]
@@ -112,7 +122,11 @@ s_"2nd" = {
 	(2,->,"secondary slot with VRF output")
 :}
 ++++
+====
 
+[#defn-consensus-message-grandpa]
+.<<defn-consensus-message-babe, GRANDPA Consensus Message>>
+====
 stem:["CM"_g], the consensus message for GRANDPA, is of the following format:
 
 [stem]
@@ -150,7 +164,11 @@ voting.
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] is the
 block where the change is applied. Once applied, the authorities should resume
 voting.
+====
 
+[#defn-consensus-message-beefy]
+.<<defn-consensus-message-beefy, BEEFY Consensus Message>>
+====
 IMPORTANT: The BEEFY protocol is still under construction. The following part will be
 updated in the future and certain information will be clarified.
 
