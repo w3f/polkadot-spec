@@ -37,9 +37,9 @@ In Polkadot, VRFs are used for the BABE block production lottery by
 (<<sect-approval-voting>>). The VRF uses mechanism similar to algorithms introduced
 in the following papers:
 
-* https://eprint.iacr.org/2017/099.pdf[Making NSEC5 Practical for DNSSEC].
-* https://blog.cloudflare.com/privacy-pass-the-math/#dleqproofs[DLEQ Proofs].
-* https://tools.ietf.org/id/draft-goldbe-vrf-01.html[Verifiable Random Functions (VRFs)].
+* https://eprint.iacr.org/2017/099.pdf[Making NSEC5 Practical for DNSSEC] cite:[papadopoulos17]
+* https://blog.cloudflare.com/privacy-pass-the-math/#dleqproofs[DLEQ Proofs]
+* https://tools.ietf.org/id/draft-goldbe-vrf-01.html[Verifiable Random Functions (VRFs)] cite:[goldberg17]
 
 It essentially generates a deterministic elliptic curve based Schnorr
 signature as a verifiable random value. The elliptic curve group used in the VRF
