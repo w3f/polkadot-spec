@@ -32,7 +32,7 @@ include::01_host/_part.adoc[]
 include::02_runtime/_part.adoc[]
 
 // Appendix for various details
-include::aa_auxiliary/_part.adoc[]
+include::aa_appendix/_part.adoc[]
 
 // API chapters for reference
 include::ab_host-api/_part.adoc[]
