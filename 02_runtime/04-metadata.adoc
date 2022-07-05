@@ -184,10 +184,93 @@ where
 where
 
 * stem:[n] is a string representing the pallet name.
-* stem:[s] is an _Option_ type containing the pallet storage metadata (TODO).
-* stem:[a] is an _Option_ type containing the calls metadata (TODO).
-* stem:[e] is an _Option_ type containing the event metadata (TODO).
-* stem:[c] is an array of varying length containing the constant metadata (TODO).
-* stem:[e] is an _Option_ type containing the error metadata (TODO).
+* stem:[s] is an _Option_ type containing the **PalletStorageMetadata**.
+* stem:[a] is an _Option_ type containing the **Type** to the pallet call.
+* stem:[e] is an _Option_ type containing the **Type** to the event metadata.
+* stem:[c] is an array of varying length containing the **PalletConstantMetadata**.
+* stem:[e] is an _Option_ type containing the **Type** error metadata.
 * stem:[i] is an unsigned 8-bit integers indicating the index of the pallet,
 which is used for encoding pallet events and calls.
+
+==== PalletStorageMetadata
+
+[stem]
+++++
+(p,E)
+++++
+
+where
+
+* stem:[p] is the string representing the common prefix used by all storage entries.
+* stem:[E] is an array of varying length containing elements of **StorageEntryMetadata**.
+
+==== StorageEntryMetadata
+
+[stem]
+++++
+(n, m, y, D, C)
+++++
+
+where
+
+* stem:[n] is the string representing the variable name of the storage entry.
+* stem:[m] is an _Option_ type containing the modifier of that storage entry (**StorageEntryModifier**).
+* stem:[y] is the type of the value stored in the entry (**StorageEntryType**).
+* stem:[D] is an byte array containing the default value.
+* stem:[C] is an array of varying length of strings containing the documentation.
+
+==== StorageEntryModifier
+
+[stem]
+++++
+{
+	(0,"optional"),
+	(1,"default")
+:}
+++++
+
+where _0_ indicates that the entry returns an _Option_ type and _1_ indicates
+that the entry returns the type stem:[y] with value stem:[D] of
+**StorageEntryModifier**.
+
+==== StorageEntryMetadata
+
+[stem]
+++++
+{
+	(0,->,t,"plain type"),
+	(1,->,(H, k, v),"storage map")
+:}
+++++
+
+where stem:[t], stem:[k] and stem:[v] are all **Type**. stem:[H] is an array of
+varying length containg the **StorageHasher**.
+
+==== StorageHasher
+
+[stem]
+++++
+{
+	(0,"128-bit Blake2 hash"),
+	(1,"256-bit Blake2 hash"),
+	(2,"Multiple 128-bit Blake2 hashes concatenated"),
+	(3,"128-bit XX hash"),
+	(4,"256-bit XX hash"),
+	(5,"Multiple 64-bit XX hashes concatenated"),
+	(6,"Identity hashing")
+:}
+++++
+
+==== PalletConstantMetadata
+
+[stem]
+++++
+(n, y, V, C)
+++++
+
+where
+
+* stem:[n] is a string representing the name of the pallet constant.
+* stem:[y] is the **Type** of the pallet constant.
+* stem:[V] is a byte array containing the value of the constant.
+* stem:[C] is an array of varying length containg string with the documentation.
