@@ -274,3 +274,32 @@ where
 * stem:[y] is the **Type** of the pallet constant.
 * stem:[V] is a byte array containing the value of the constant.
 * stem:[C] is an array of varying length containg string with the documentation.
+
+=== Extrinsic Metadata
+
+[stem]
+++++
+(y, v, S)
+++++
+
+where
+
+* stem:[y] is a **Type** of the extrinsic.
+* stem:[v] is a unsigned 8-bit integer indicating the extrinsic version.
+* stem:[S] is an array of varying length containing the **SignedExtensionMetadata**.
+
+==== SignedExtensionMetadata
+
+[stem]
+++++
+(i, y, a)
+++++
+
+where
+
+* stem:[i] is a string representing the unique signed extension identifier,
+which may be different from the type name.
+* stem:[y] is a **Type** of the signed extension, with the data to be included
+in the extrinsic.
+* stem:[a] is a **Type** of the additional signed data, with the data to be
+included in the signed payload.
