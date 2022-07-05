@@ -26,20 +26,19 @@ Arguments::
 
 Return::
 * An array of tuples, stem:[T], of the following format:
-
++
 [stem]
 ++++
-T == (I,G)\
-I == (v_n,…v_m)\
-G == (B_s,f,B_c)
+T = (I,G)\
+I = (v_n,…v_m)\
+G = (B_s,f,B_c)
 ++++
-
-where
-
-•  stem:[I] is an array the validator set Ids (<<defn-authority-list>>).
-•  stem:[B_s] indicates the block number where the session started.
-•  stem:[f] indicates how often groups rotate. 0 means never.
-•  stem:[B_c] indicates the current block number. 
++
+where:::
+** stem:[I] is an array the validator set Ids (<<defn-authority-list>>).
+** stem:[B_s] indicates the block number where the session started.
+** stem:[f] indicates how often groups rotate. 0 means never.
+** stem:[B_c] indicates the current block number.
 
 [#sect-rt-api-availability-cores]
 ==== `ParachainHost_availability_cores`
@@ -51,38 +50,37 @@ Arguments::
 
 Return::
 * An array of core states, S, of the following format:
-
++
 [stem]
 ++++
 S = {(0,->,C_o),(1,->,C_s),(2,->,phi):}\
 C_o = (n_u,B_o,B_t,n_t,b,G_i,C_h,C_d)\
 C_s = (P_id,C_i)
 ++++
-
-where
-
-• stem:[S] specifies the core state. _0_ indicates that the core is occupied,
++
+where:::
+** stem:[S] specifies the core state. _0_ indicates that the core is occupied,
 _1_ implies it's currently free but scheduled and given the opportunity to
 occupy and _2_ implies it's free and there's nothing scheduled.
-• stem:[n_u] is an _Option_ value (<<defn-option-type>>) which can contain a
+** stem:[n_u] is an _Option_ value (<<defn-option-type>>) which can contain a
 stem:[C_s] value if the core was freed by the Runtime and indicates the
 assignment that is next scheduled on this core. An empty value indicates there
 is nothing scheduled.
-• stem:[B_o] indicates the relay chain block number at which the core got occupied.
-• stem:[B_t] indicates the relay chain block number the core will time-out at, if any.
-• stem:[n_t] is an _Option_ value (<<defn-option-type>>) which can contain a
+** stem:[B_o] indicates the relay chain block number at which the core got occupied.
+** stem:[B_t] indicates the relay chain block number the core will time-out at, if any.
+** stem:[n_t] is an _Option_ value (<<defn-option-type>>) which can contain a
 stem:[C_s] value if the core is freed by a time-out and indicates the assignment
 that is next scheduled on this core. An empty value indicates there is nothing
 scheduled.
-• stem:[b] is a bitfield array (<<defn-bitfield-array>>). A stem:[>2/3] majority
+** stem:[b] is a bitfield array (<<defn-bitfield-array>>). A stem:[>2/3] majority
 of assigned validators voting with stem:[1] values means that the core is
 available.
-• stem:[G_i] indicates the assigned validator group index
+** stem:[G_i] indicates the assigned validator group index
 (<<defn-validator-groups>>) is to distribute availability pieces of this
 candidate.
-• stem:[C_h] indicates the hash of the candidate occupying the core.
-• stem:[C_d] is the candidate descriptor (<<defn-candidate-descriptor>>).
-• stem:[C_i] is an _Option_ value (<<defn-option-type>>) which can contain the
+** stem:[C_h] indicates the hash of the candidate occupying the core.
+** stem:[C_d] is the candidate descriptor (<<defn-candidate-descriptor>>).
+** stem:[C_i] is an _Option_ value (<<defn-option-type>>) which can contain the
 collators public key indicating who should author the block.
 
 [#sect-rt-api-persisted-validation-data]
@@ -110,7 +108,7 @@ of the following format:
 
 [stem]
 ++++
-A == {(0,->,phi),(1,->,phi),(2,->,phi):}
+A = {(0,->,phi),(1,->,phi),(2,->,phi):}
 ++++
 
 where _0_ indicates that the candidate occupying the core was made available and
@@ -133,15 +131,14 @@ The persisted validation data, stem:[D_{pv}], is a datastructure of the followin
 
 [stem]
 ++++
-D_{pv} == (P_h,H_i,H_r,m_b)
+D_{pv} = (P_h,H_i,H_r,m_b)
 ++++
 
-where
-
-• stem:[P_h] is the parent head data (<<defn-head-data>>).
-• stem:[H_i] is the relay chain block number this is in the context of.
-• stem:[H_r] is the relay chain storage root this is in the context of.
-• stem:[m_b] is the maximum legal size of the PoV block, in bytes.
+where::
+* stem:[P_h] is the parent head data (<<defn-head-data>>).
+* stem:[H_i] is the relay chain block number this is in the context of.
+* stem:[H_r] is the relay chain storage root this is in the context of.
+* stem:[m_b] is the maximum legal size of the PoV block, in bytes.
 
 The persisted validation data is fetched via the Runtime API
 (<<sect-rt-api-persisted-validation-data>>).
@@ -222,23 +219,22 @@ Return::
 +
 [stem]
 ++++
-E == {(0,->,d),(1,->,d),(2,->,(C_r,h,I_c)):}\
-d == (C_r,h,I_c,G_i)
+E = {(0,->,d),(1,->,d),(2,->,(C_r,h,I_c)):}\
+d = (C_r,h,I_c,G_i)
 ++++
 +
-where
-+
-* stem:[E] specifies the the event type of the candidate. _0_ indicates that the
+where:::
+** stem:[E] specifies the the event type of the candidate. _0_ indicates that the
 candidate receipt was backed in the latest relay chain block, _1_ indicates that
 it was included and became a parachain block at the latest relay chain block and
 _2_ indicates that the candidate receipt was not made available and timed-out.
-* stem:[C_r] is the candidate receipt (<<defn-candidate-receipt>>).
-* stem:[h] is the parachain head data (<<defn-head-data>>).
-* stem:[I_c] is the index of the availability core as can be retrieved in
+** stem:[C_r] is the candidate receipt (<<defn-candidate-receipt>>).
+** stem:[h] is the parachain head data (<<defn-head-data>>).
+** stem:[I_c] is the index of the availability core as can be retrieved in
 <<sect-rt-api-availability-cores>> that the candidate is occupying. If stem:[E]
 is of variant stem:[2], then this indicates the core index the candidate _was_
 occupying.
-* stem:[G_i] is the group index (<<defn-validator-groups>>) that is responsible
+** stem:[G_i] is the group index (<<defn-validator-groups>>) that is responsible
 of backing the candidate.
 
 [#sect-rt-api-session-info]
@@ -255,40 +251,39 @@ structure, stem:[S], of the following format:
 +
 [stem]
 ++++
-S == (A,D,K,G,c,z,s,d,x,a)\
-A == (v_n,…v_m)\
-D == (v_(_n),…v_m)\
-K == (v_n,…v_m)\
-G == (g_n,…g_m)\
-g == (A_n,…A_m)
+S = (A,D,K,G,c,z,s,d,x,a)\
+A = (v_n,…v_m)\
+D = (v_(_n),…v_m)\
+K = (v_n,…v_m)\
+G = (g_n,…g_m)\
+g = (A_n,…A_m)
 ++++
 +
-where
-+
-* stem:[A] indicates the validators of the current session, in canonical order.
+where:::
+** stem:[A] indicates the validators of the current session, in canonical order.
 There might be more validators in the current session than validators
 participating in parachain consensus, as returned by the Runtime API
 (<<sect-rt-api-validators>>).
-* stem:[D] indicates the validator authority discovery keys for the given
+** stem:[D] indicates the validator authority discovery keys for the given
 session in canonical order. The first couple of validators are equal to the
 corresponding validators participating in the parachain consensus, as returned
 by the Runtime API (<<sect-rt-api-validators>>). The remaining authorities are
 not participating in the parachain consensus.
-* stem:[K] indicates the assignment keys for validators. There might be more
+** stem:[K] indicates the assignment keys for validators. There might be more
 authorities in the session that validators participating in parachain consensus,
 as returned by the Runtime API (<<sect-rt-api-validators>>).
-* stem:[G] indicates the validator groups in shuffled order.
-* stem:[v_n] is public key of the authority.
-* stem:[A_n] is the authority set Id (<<defn-authority-list>>).
-* stem:[c] is an unsigned 32-bit integer indicating the number of availability
+** stem:[G] indicates the validator groups in shuffled order.
+** stem:[v_n] is public key of the authority.
+** stem:[A_n] is the authority set Id (<<defn-authority-list>>).
+** stem:[c] is an unsigned 32-bit integer indicating the number of availability
 cores used by the protocol during the given session.
-* stem:[z] is an unsigned 32-bit integer indicating the zeroth delay tranche width.
-* stem:[s] is an unsigned 32-bit integer indicating the number of samples an
+** stem:[z] is an unsigned 32-bit integer indicating the zeroth delay tranche width.
+** stem:[s] is an unsigned 32-bit integer indicating the number of samples an
 assigned validator should do for approval voting.
-* stem:[d] is an unsigned 32-bit integer indicating the number of delay tranches in total.
-* stem:[x] is an unsigned 32-bit integer indicating how many BABE slots must
+** stem:[d] is an unsigned 32-bit integer indicating the number of delay tranches in total.
+** stem:[x] is an unsigned 32-bit integer indicating how many BABE slots must
 pass before an assignment is considered a “no-show”.
-* stem:[a] is an unsigned 32-bit integer indicating the number of validators
+** stem:[a] is an unsigned 32-bit integer indicating the number of validators
 needed to approve a block.
 
 ==== `ParachainHost_dmq_contents`

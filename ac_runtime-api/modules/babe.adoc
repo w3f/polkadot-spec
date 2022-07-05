@@ -74,8 +74,7 @@ Return::
 ++++
 (e_i, s_s, d, A, r)
 ++++
-where
-
+where:::
 ** latexmath:[e_i] is a unsigned 64-bit integer representing the epoch index.
 ** latexmath:[s_s] is a unsigned 64-bit integer representing the starting slot of the epoch.
 ** latexmath:[d] is a unsigned 64-bit integer representing the duration of the epoch.
@@ -127,8 +126,7 @@ Arguments::
 ++++
 B_{\mathrm{Ep}} = (A_{\mathrm{id}}, s, h_1, h_2)
 ++++
-where
-
+where:::
 ** latexmath:[A_{\mathrm{id}}] is the public key of the equivocator.
 ** latexmath:[s] is the slot as described in <<defn-epoch-slot>> at which the equivocation occurred.
 ** latexmath:[h_1] is the block header of the first block produced by the equivocator.
