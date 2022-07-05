@@ -80,7 +80,6 @@ type parameter and stem:[y] is a _Option_ type containing a type Id
 .Runtime Type Id
 [#defn-rtm-type-id]
 ====
-
 The runtime type Id is a 32-bit unsigned integer representing the index to the
 type in the type registry (<<defn-rtm-registry-entry>>).
 
@@ -89,7 +88,6 @@ type in the type registry (<<defn-rtm-registry-entry>>).
 .Type Variant
 [#defn-rtm-type-variant]
 ====
-
 The type definition indicates all the possible types of encodable values a type can have.
 
 [stem]
@@ -164,6 +162,7 @@ is a type Id (<<defn-rtm-type-id>>).
 .Field
 [#defn-rtm-field]
 ====
+A field of a datastructure of the following format:
 
 [stem]
 ++++
@@ -182,6 +181,7 @@ type as it appears in the source code.
 .Variant
 [#defn-rtm-variant]
 ====
+A struct variant of the following format:
 
 [stem]
 ++++
@@ -198,6 +198,7 @@ where
 
 [#sect-rtm-pallet-metadata]
 ==== Pallet Metadata
+All the metadata about a pallet of the following format:
 
 [stem]
 ++++
@@ -220,6 +221,7 @@ which is used for encoding pallet events and calls.
 .Pallet Storage Metadata
 [#defn-rtm-pallet-storage-metadata]
 ====
+The metadata about a pallets storage.
 
 [stem]
 ++++
@@ -236,6 +238,7 @@ where
 .Storage Entry Metadata
 [#defn-rtm-storage-entry-metadata]
 ====
+The metadata about a pallets storage entry.
 
 [stem]
 ++++
@@ -256,6 +259,8 @@ where
 .Storage Entry Modifier
 [#defn-rtm-storage-entry-modifier]
 ====
+The storage entry modifier indicates how the storage entry is returned and how
+it behaves if the entry is not present.
 
 [stem]
 ++++
@@ -265,14 +270,16 @@ where
 :}
 ++++
 
-where _0_ indicates that the entry returns an _Option_ type and _1_ indicates
-that the entry returns the type stem:[y] with value stem:[D] of the storage
-entry metadata (<<defn-rtm-storge-entry-metadata>>).
+where _0_ indicates that the entry returns an _Option_ type and therefore _None_
+if the storage entry is not present. _1_ indicates that the entry returns the
+type stem:[y] with default value stem:[D] (in
+<<defn-rtm-storge-entry-metadata>>) if the entry is not present.
 ====
 
 .Storage Entry Type
 [#defn-rtm-storage-entry-type]
 ====
+The type of the storage value that indicates how the entry is stored.
 
 [stem]
 ++++
@@ -290,6 +297,7 @@ storage hasher (<<defn-rtm-storage-hasher>>).
 .Storage Hasher
 [#defn-rtm-storage-hasher]
 ====
+The hashing algorithm used by storage maps.
 
 [stem]
 ++++
@@ -308,6 +316,7 @@ storage hasher (<<defn-rtm-storage-hasher>>).
 .Pallet Constants
 [#defn-rtm-pallet-constants]
 ====
+The metadata about the pallets constants.
 
 [stem]
 ++++
@@ -324,6 +333,7 @@ where
 
 [#sect-rtm-extrinsic-metadata]
 === Extrinsic Metadata
+The metadata about a pallets extrinsics.
 
 [stem]
 ++++
@@ -340,6 +350,7 @@ metadata (<<defn-rtm-signed-extension-metadata>>).
 .Signed Extension Metadata
 [#defn-rtm-signed-extension-metadata]
 ====
+The metadata about the additional, signed data required to execute an extrinsic.
 
 [stem]
 ++++
