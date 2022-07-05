@@ -74,22 +74,22 @@ stem:["CM"_b], the consensus message for BABE, is of the following format:
 "CM"_b = {(1,("Auth"_C, r)),(2,A_i),(3,D):}
 ++++
 
-where
-
-* _1_ implies *next epoch data*: The Runtime issues this message on every first
+where::
+[horizontal]
+1:: implies *next epoch data*: The Runtime issues this message on every first
 block of an epoch. The supplied authority set (<<defn-authority-list>>),
 stem:["Auth"_C], and randomness (<<defn-epoch-randomness>>), stem:[r], are used
 in the next epoch stem:[cc E_n + 1].
-* _2_ implies *on disabled*: A 32-bit integer, stem:[A_i], indicating the
+2:: implies *on disabled*: A 32-bit integer, stem:[A_i], indicating the
 individual authority in the current authority list that should be immediately
 disabled until the next authority set changes. This message initial intension
 was to cause an imediatly suspension of all authority functionality with the
 specified authority.
-* _3_ implies *next epoch descriptor*: These messages are only issued on
+3:: implies *next epoch descriptor*: These messages are only issued on
 configuration change and in the first block of an epoch. The supplied
 configuration data are intended to be used from the next epoch onwards.
 +
-stem:[D] is a varying datatype of the following format:
+* stem:[D] is a varying datatype of the following format:
 +
 [stem]
 ++++
@@ -100,8 +100,8 @@ where stem:[c] is the probability that a slot will not be empty
 (<<defn-babe-constant>>). It is encoded as a tuple of two unsigned 64-bit
 integers stem:[(c_("nominator"),c_("denominator"))] which are used to compute
 the rational stem:[c = c_("nominator")/c_("denominator")].
-+
-stem:[2_("nd")] describes what secondary slot (<<defn-babe-secondary-slots>>),
+
+* stem:[2_("nd")] describes what secondary slot (<<defn-babe-secondary-slots>>),
 if any, is to be used. It is encoded as one-byte varying datatype:
 +
 [stem]
@@ -120,33 +120,33 @@ stem:["CM"_g], the consensus message for GRANDPA, is of the following format:
 "CM"_g = {(1,("Auth"_C,N_("delay"))),(2,(m,"Auth"_C,N_("delay"))),(3,"A"_i),(4,N_("delay")),(5,N_("delay")):}
 ++++
 
-where:
-
-* stem:[N_("delay")] is an unsigned 32-bit integer indicating how deep in the
+where::
+[horizontal]
+asciimath:[N_"delay"]:: is an unsigned 32-bit integer indicating how deep in the
 chain the announcing block must be before the change is applied.
-* _1_ implies *scheduled change*: Schedule an authority set change after the
+1:: implies *scheduled change*: Schedule an authority set change after the
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] is the
 block where the change is applied. The earliest digest of this type in a
 single block will be respected, unless a force change is present, in which case
 the force change takes precedence.
-* _2_ implies *forced change*: Schedule a forced authority set change after the
+2:: implies *forced change*: Schedule a forced authority set change after the
 given delay of stem:[N_("delay") := |"SubChain"(B,m + B')|] where stem:[B'] is
 the block where the change is applied. The earliest digest
 of this type in a block will be respected.
 +
 Forced changes are explained further in <<sect-finality-forced-changes>>.
-* _3_ implies *on disabled*: An index to the individual authority in the current
+3:: implies *on disabled*: An index to the individual authority in the current
 authority list (<<defn-authority-list>>) that should be immediately disabled
 until the next authority set changes. When an authority gets disabled, the node
 should stop performing any authority functionality from that authority,
 including authoring blocks and casting GRANDPA votes for finalization.
 Similarly, other nodes should ignore all messages from the indicated authority
 which pertain to their authority role.
-* _4_ implies *pause*: A signal to pause the current authority set after the
+4:: implies *pause*: A signal to pause the current authority set after the
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] is a
 block where the change is applied. Once applied, the authorities should stop
 voting.
-* _5_ implies *resume*: A signal to resume the current authority set after the
+5:: implies *resume*: A signal to resume the current authority set after the
 given delay of stem:[N_("delay") := |"SubChain"(B,B')|] where stem:[B'] is the
 block where the change is applied. Once applied, the authorities should resume
 voting.
@@ -162,12 +162,12 @@ the following format:
 "CM"_y = {(1,(V_B,V_i)),(2,A_i),(3,R):}
 ++++
 
-where:
-
-* _1_ implies that the remote **authorities have changed**. stem:[V_B] is the
+where::
+[horizontal]
+1:: implies that the remote **authorities have changed**. stem:[V_B] is the
 array of the new BEEFY authorities's public keys and stem:[V_i] is the
 identifier of the remote validator set.
-* _2_ implies **on disabled**: an index to the individual authorty in stem:[V_B]
+2:: implies **on disabled**: an index to the individual authorty in stem:[V_B]
 that should be immediately disabled until the next authority change.
-* _3_ implies **MMR root**: a 32-byte array containing the MMR root.
+3:: implies **MMR root**: a 32-byte array containing the MMR root.
 ====

@@ -24,8 +24,7 @@ stem:[M], is a varying datatype of the following format:
 M = {(1,->,M_f),(3,->,M_s),(4,->,M_a):}
 ++++
 
-where
-
+where::
 * stem:[M_f] is a bitfield distribution message (<<net-msg-bitfield-dist-msg>>).
 * stem:[M_s] is a statement distribution message (<<net-msg-statement-distribution>>).
 * stem:[M_a] is a approval distribution message (<<net-msg-approval-distribution>>).
@@ -56,8 +55,7 @@ varying datatype of the following format:
 M = {(0,->,(C_i,P_i,C_s)),(1,->,H),(4,->,(B_h,S)):}
 ++++
 
-where
-
+where::
 * stem:[M] is a varying datatype where _0_ indicates the intent to advertise a
 collation and _1_ indicates the advertisement of a collation to a validator. _4_
 indicates that a collation sent to a validator was seconded.
@@ -83,8 +81,7 @@ M   = {(0,->,(B_h,S)),(1,->,S_m):}\
 S_m = (B_h,C_h,A_i,A_s)
 ++++
 
-where
-
+where::
 * stem:[M] is a varying datatype where _0_ indicates a signed statement and _1_
 contains metadata about a seconded statement with a larger payload, such as a
 runtime upgrade. The candidate itself can be fetched via the request/response
@@ -112,8 +109,7 @@ M = {(0,->,(B_h,P)):}\
 P = (d,A_i,A_s)
 ++++
 
-where
-
+where::
 * stem:[B_h] is the hash of the relay chain parent, indicating the state this message is for.
 * stem:[d] is the bitfield array (<<defn-bitfield-array>>).
 * stem:[A_i] is the validator index in the authority set
@@ -139,8 +135,7 @@ c_k = {(0→s),(1→i):}\
 V   = (B_h,I,A_i,A_s)
 ++++
 
-where
-
+where::
 * stem:[M] is a varying datatype where _0_ indicates assignments for candidates in
 recent, unfinalized blocks and _1_ indicates approvals for candidates in some
 recent, unfinalized block.
@@ -358,8 +353,7 @@ k_i = {(0,->,phi):}\
 k_v = {(0,->,phi),(1,->,C_h),(2,->,C_h),(3,->,phi):}
 ++++
 
-where
-
+where::
 * stem:[C_r] is the candidate that is being disputed. The structure is a
 candidate receipt (<<defn-candidate-receipt>>).
 * stem:[S_i] is an unsigned 32-bit integer indicating the session index the candidate appears in.

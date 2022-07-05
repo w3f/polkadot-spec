@@ -43,8 +43,7 @@ S = (d,A_i,A_s)\
 d = {(1,->,C_r),(2,->,C_h):}
 ++++
 
-where
-
+where::
 * stem:[d] is a varying datatype where _1_ indicates that the validator
 “seconds” a candidate, meaning that the candidate should be included in the
 relay chain, followed by the committed candidate receipt
@@ -86,8 +85,7 @@ A = (L_n,…L_m)\
 L = (b,v_i,s)
 ++++
 
-where
-
+where::
 *  stem:[A] is an array of signed bitfields by validators claiming the candidate
 is available (or not). The array must be sorted by validator index corresponding
 to the authority set (<<defn-authority-list>>).
@@ -155,8 +153,7 @@ receipt. It's a datastructure of the following format:
 D = (p,H,C_i,V,B,r,s,p_h,R_h)
 ++++
 
-where
-
+where::
 * stem:[p] is the parachain Id (<<defn-para-id>>).
 * stem:[H] is the hash of the relay chain block the candidate is executed in the context of.
 * stem:[C_i] is the collators public key.
@@ -183,8 +180,7 @@ of the following format:
 C =(M_u,M_h,R,h,p,w)
 ++++
 
-where:
-
+where::
 * stem:[M_u] is an array of upward messages sent by the parachain. Each
 individual message, m, is an array of bytes.
 * stem:[M_h] is an array of individual outbound horizontal messages

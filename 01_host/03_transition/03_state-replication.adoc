@@ -319,8 +319,7 @@ stem:[C_(value)] according to:
 C_(value) = {(1,(e_i,...,e_k)),(2,(H_i(B_k),...,H_i(B_m))),(3,H_r("Child-Changes-Trie")):}
 ++++
 
-where:
-
+where::
 * _1_ is a list of extrinsics indices and stem:[e_n] refers to the index of the extrinsic within the block.
 * _2_ is a list of block numbers.
 * _3_ is the child changes trie.
@@ -363,10 +362,11 @@ multiple "levels" of those pairs, and the Polkadot Host does *not* generate
 those pairs on every block. The genesis state contains the key `:changes_trie`
 where its unsigned 64-bit value is a tuple of two 32-bit integers:
 
-* *interval* - The interval (in blocks) at which those pairs should be created.
+[horizontal]
+interval:: The interval (in blocks) at which those pairs should be created.
 If this value is less or equal to 1 it means that those pairs are not created at
 all.
-* *levels* - The maximum number of "levels" in the hierarchy. If this value is
+levels:: The maximum number of "levels" in the hierarchy. If this value is
 0 it means that those pairs are not created at all.
 
 For each level from 1 to _levels_, the Polkadot Host creates those pairs on
@@ -375,17 +375,18 @@ every -nth block.
 For example, let’s say _interval_ is set at and is set at . This means there are
 now three levels which get generated at three different occurrences:
 
-. *Level 1* - Those pairs are generated at every stem:[4^1]-nth block, where the
+[horizontal]
+Level 1:: Those pairs are generated at every stem:[4^1]-nth block, where the
 pair value contains the block numbers of every block that changed the specified
 storage key. This level only considers block numbers of the last four
 (stem:[4^1]) blocks.
 ** Example: this level occurs at block 4, 8, 12, 16, 32, etc.
-. *Level 2* - Those pairs are generated at every stem:[4^2]-nth block, where the
+Level 2:: Those pairs are generated at every stem:[4^2]-nth block, where the
 pair value contains the block numbers of every block that changed the specified
 storage key. This level only considers block numbers of the last 16
 (stem:[4^2]) blocks.
 ** Example: this level occurs at block 16, 32, 64, 128, 256, etc.
-. *Level 3* - Those pairs are generated at every stem:[4^3]-nth block, where the
+Level 3:: Those pairs are generated at every stem:[4^3]-nth block, where the
 pair value contains the block numbers of every block that changed the specified
 storage key. this level only considers block number of the last 64
 (stem:[4^3]) blocks.

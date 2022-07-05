@@ -108,8 +108,7 @@ The `BlockRequest` message is a Protobuf serialized structure of the following f
 |stem:[B_m]
 |===
 
-where:
-
+where::
 * stem:[B_f] indicates all the fields that should be included in the request.
 its *big-endian* encoded bitmask that applies to all desired fields with bitwise
 OR operations. For example, the stem:[B_f] value to request _Header_ and
@@ -402,8 +401,7 @@ a voter followed by the message itself.
 M = {(0,"Vote message", V_m),(1,"Commit message", C_m),(2,"Neighbor message", N_m),(3,"Catch-up request message",R_m),(4,"Catch-up message",U_m):}
 ++++
 
-where:
-
+where::
 * stem:[V_m] is defined in <<defn-grandpa-vote-msg>>.
 * stem:[C_m] is defined in <<defn-grandpa-commit-msg>>.
 * stem:[N_m] is defined in <<defn-grandpa-neighbor-msg>>.
@@ -424,8 +422,7 @@ M_v^(r,"stage")(B) := "Enc"_("SC")(r,"id"_(bbb V),"SigMsg")\
 "msg" := "Enc"_("SC")("stage",V_v^(r,"stage")(B))
 ++++
 
-where:
-
+where::
 * stem:[r] is an unsigned 64-bit integer indicating the Grandpa round number
 (<<defn-voting-rounds>>).
 * stem:["id"_(bbb V)] is an unsigned 64-bit integer indicating the authority Set Id (<<defn-authority-list>>).
@@ -452,8 +449,7 @@ following format:
 J_(v_(0,...n))^(r,"comp") := ({V_(v_0)^(r,pc),... V_(v_n)^(r,pc)},{("Sig"_(v_0)^(r,pc),v_("id"_0)), ... ("Sig"_(v_n)^(r,pc),v_("id"_n))})
 ++++
 
-where:
-
+where::
 * stem:[V_(v_i)^(r,pc)] is a 256-bit byte array containing the pre-commit vote of authority stem:[v_i] (<<defn-voting-rounds>>).
 * stem:["Sig"_(v_i)^(r,pc)] is a 512-bit byte array containing the pre-commit
 signature of authority stem:[v_i] (<<defn-sign-round-vote>>).
@@ -473,8 +469,7 @@ stem:[r]. It has the following structure:
 M_v^(r,"Fin")(B) := "Enc"_("SC")(r,"id"_(bbb V),V_v^r(B),J_(v_(0,...n))^(r,"comp"))
 ++++
 
-where:
-
+where::
 * stem:[r] is an unsigned 64-bit integer indicating the round number (<<defn-voting-rounds>>).
 * stem:[id_(bbb V)] is the authority set Id (<<defn-authority-list>>).
 * stem:[V_v^r(B)] is a 256-bit array containing the GRANDPA vote for block
@@ -505,11 +500,10 @@ A *GRANDPA Neighbor Message* is defined as:
 
 [stem]
 ++++
-M^("neigh") := "Enc"_("SC")(v,r,"id"_(bbb V),H_h(B_("last")))
+M^("neigh") := "Enc"_("SC")(v,r,"id"_(bbb V),H_i(B_("last")))
 ++++
 
-where:
-
+where::
 * stem:[v] is an unsigned 8-bit integer indicating the version of the neighbor message, currently _1_.
 * stem:[r] is an unsigned 64-bit integer indicating the round number (<<defn-voting-rounds>>).
 * stem:["id"_(bbb V)] is an unsigned 64-bit integer indicating the authority
@@ -598,8 +592,7 @@ datastructure of the following format:
 C = (R_h,H_i(B_("last")),"id"_(bbb V))
 ++++
 
-where
-
+where::
 * stem:[R_h] is the MMR root of all the block header hashes leading up to the
 latest, finalized block.
 * stem:[H_i(B_("last"))] is the block number this commitment is for. Namely the
@@ -619,8 +612,7 @@ following format:
 M_v = "Enc"_("SC")(C,A_("id")^("bfy"),A_("sig"))
 ++++
 
-where
-
+where::
 * stem:[C] is the BEEFY commitment (<<defn-grandpa-beefy-commitment>>).
 * stem:[A_("id")^("bfy")] is the ECDSA public key of the Polkadot Host.
 * stem:[A_("sig")] is the signature created with stem:[A_("id")^("bfy")] by
@@ -638,8 +630,7 @@ M_("SC") = "Enc"_("SC")(C,S_n)\
 S_n = (A_0^("sig"),... A_n^("sig"))
 ++++
 
-where
-
+where::
 * stem:[C] is the BEEFY commitment (<<defn-grandpa-beefy-commitment>>).
 * stem:[S_n] is an array where its exact size matches the number of validators
 in the current authority set as specified by stem:["id"_(bbb V)]
@@ -671,8 +662,7 @@ The message is a datastructure of the following format:
 M_("SC")^w = "Enc"_("SC")(C,V_(0,... n), R_("sig"))
 ++++
 
-where
-
+where::
 * stem:[C] is the BEEFY commitment (<<defn-grandpa-beefy-commitment>>).
 * stem:[V_(0,... n)] is an array where its exact size matches the number of
 validators in the current authority set as specified by stem:["id"_(bbb V)] in

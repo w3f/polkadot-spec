@@ -58,8 +58,7 @@ The *GRANDPA state*, stem:["GS"], is defined as:
 "GS" := {bbb V, "id"_(bbb V),r}
 ++++
 
-where:
-
+where::
 * stem:[bbb V]: is the set of voters.
 * stem:["id"_(bbb V)]: is the authority set ID (<<defn-authority-set-id>>).
 * stem:[r]: is the voting round number.
@@ -107,8 +106,7 @@ message in a round and is formally defined as:
 "Sign"_(v_i)^(r,"stage") := "Sig"_("ed25519")("msg",r,"id"_(bbb V))
 ++++
 
-where:
-
+where::
 * stem:["msg"]: is an byte array containing the message to be signed
 (<<defn-vote>>).
 * stem:[r]: is an unsigned 64-bit integer is the round number.
