@@ -12,30 +12,37 @@ The Runtime Metadata is a datastructure of the following format:
 (T, P, E, y)\
 T = (r_n, ...,r_(n+m))\
 P = (p_n, ...,p_(n+m))\
-E = (e_n, ...,e_(n+m))\
-y
+E = (e_n, ...,e_(n+m))
 ++++
 
 where
 
-* stem:[r] is a **PortableType**.
+* stem:[r] is registry containing all types used in the metadata **PortableType**.
 * stem:[p] is a **PalletMetadata**.
 * stem:[e] is a **ExtrinsicMetadata**.
 * stem:[y] is the **Type** of the runtime.
 
-==== PortableType
+.Registry Entry
+[#defn-rtm-registry-entry]
+====
+A registry entry contains information about a type in its portable form for
+serialization. The entry is a datastructure of the following format:
 
 [stem]
 ++++
-r = (i_c, y)
+(i_c, y)
 ++++
 
 where
 
-* stem:[i_c] is a compact integer.
-* stem:[y] is a **Type**.
+* stem:[i_c] is a compact integer indicating the identifier of the type.
+* stem:[y] is a runtime type (<<defn-rtm-type>>).
+====
 
-==== Type:
+.Runtime Type Definition
+[#defn-rtm-type]
+====
+The runtime type conta
 
 [stem]
 ++++
@@ -62,16 +69,24 @@ t_n = (n, y)
 ++++
 +
 where stem:[n] is a UTF-8 encoded string representing the name of the generic
-type parameter and stem:[y] is a _Option_ type containing a **Type**.
-* stem:[d] is the actual **TypeDefinition**.
+type parameter and stem:[y] is a _Option_ type containing a type Id
+(<<defn-rtm-type-id>>).
+* stem:[d] is the type variant (<<defn-rtm-type-variant>>).
 * stem:[c] is an array of varying length containing strings of documentation.
+====
 
-==== Type
+.Runtime Type Id
+[#defn-rtm-type-id]
+====
 
-32-bit unsigned integer representing the index to the type in the interner table
-(TODO: Clarify)
+The runtime type Id is a 32-bit unsigned integer representing the index to the
+type in the type registry (<<defn-rtm-registry-entry>>).
 
-==== TypeDefinition
+====
+
+.Type Variant
+[#defn-rtm-type-variant]
+====
 
 The type definition indicates all the possible types of encodable values a type can have.
 
@@ -91,40 +106,35 @@ x = {
 
 where
 
-stem:[a] is:
-
+* stem:[a] is of the following format:
++
 [stem]
 ++++
 (f_n, ..., f_(n+m))\
 ++++
-
++
 where stem:[f] is a **Field**.
-
-stem:[b] is:
-
+* stem:[b] is of the following format:
++
 [stem]
 ++++
-(v_n, ..., f_(n+m))
+(v_n, ..., v_(n+m))
 ++++
-
++
 where stem:[v] is a **Variant**.
-
-stem:[c] is a **Type**.
-
-stem:[d] is:
-
+* stem:[c] is a type Id (<<defn-rtm-type-id>>).
+* stem:[d] is of the following format:
++
 [stem]
 ++++
 (l, y)
 ++++
-
++
 where stem:[l] is a unsigned 32-bit integer indicating the length and stem:[y]
-is a **Type**.
-
-stem:[e] is an array of varying length containing **Type** elements.
-
-stem:[f] is a varying datatype of the following structure:
-
+is a type Id (<<defn-rtm-type-id>>).
+* stem:[e] is an array of varying length containing elements of type Ids (<<defn-rtm-type-id>>).
+* stem:[f] is a varying datatype of the following structure:
++
 [stem]
 ++++
 {
@@ -145,10 +155,9 @@ stem:[f] is a varying datatype of the following structure:
 	(14,"signed 256-bit integer")
 :}
 ++++
-
-stem:[g] is a **Type**.
-
-stem:[h] TODO
+* stem:[g] is a type Id (<<defn-rtm-type-id>>).
+* stem:[h] TODO...
+====
 
 ==== Field
 
