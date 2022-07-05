@@ -45,8 +45,7 @@ format:
 P = (h,b,B_i,S_r)
 ++++
 
-where
-
+where::
 * stem:[h] is the parachain head data (<<defn-head-data>>).
 * stem:[b] is the block body (<<defn-para-block>>).
 * stem:[B_i] is the latest relay chain block number.
@@ -70,8 +69,7 @@ M_u = (m_0,…m_n)\
 M_h = (t_0,…t_n)
 ++++
 
-where
-
+where::
 * stem:[h] is the parachain head data (<<defn-head-data>>).
 * stem:[R] is an _Option_ value (<<defn-option-type>>) that can contain a new
 parachain Runtime in case of an update.

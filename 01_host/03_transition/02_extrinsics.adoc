@@ -165,12 +165,13 @@ be included in the current block as explained in <<algo-build-block>>.
 |Provides a list of potential uncle block headers (<<defn-block-header>>) for a given block
 |===
 
+.<<defn-inherent-data, Inherent Data>>
 [#defn-inherent-data]
-===== Definition: Inherent Data
+====
 `Inherent-Data` is a hashtable (<<defn-scale-list>>), an array of key-value
 pairs consisting of the inherent 8-byte identifier and its value, representing
 the totality of inherent extrinsics included in each block. The entries of this
 hash table which are listed in <<tabl-inherent-data>> are collected or generated
 by the Polkadot Host and then handed to the Runtime for inclusion
 (<<algo-build-block>>).
-
+====

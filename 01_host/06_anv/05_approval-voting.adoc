@@ -87,8 +87,7 @@ to determine approval voting criteria and generated the following way:
 T = "Transcript"(b_r,b_s,e_i,A)
 ++++
 
-where
-
+where::
 * stem:["Transcript"] constructs a VRF transcript (<<defn-vrf-transcript>>).
 * stem:[b_r] is the BABE randomness of the current epoch (<<defn-epoch-randomness>>).
 * stem:[b_s] is the current BABE slot (<<defn-epoch-slot>>).
@@ -205,8 +204,7 @@ c larr "prf"(t_6, "False")\
 d = d mod (d_c+d_z) - d_z
 ++++
 
-where
-
+where::
 * stem:[d_c] is the number of delayed tranches by total as specified by the
 session info, retrieved via the Runtime API (<<sect-rt-api-session-info>>).
 * stem:[d_z] is the zeroth delay tranche width as specified by the session info,

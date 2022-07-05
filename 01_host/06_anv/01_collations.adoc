@@ -27,8 +27,7 @@ M = (u_n,…u_m)\
 H = (z_n,…z_m)
 ++++
 
-where
-
+where::
 * stem:[M] is an array of upward messages (<<defn-upward-message>>), stem:[u],
 interpreted by the relay chain itself.
 * stem:[H] is an array of outbound horizontal messages

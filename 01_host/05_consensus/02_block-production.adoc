@@ -170,9 +170,9 @@ NOTE: the secondary slots (<<defn-babe-secondary-slots>>) are running
 along side the primary block production lottery and mainly serve as a fallback
 to in case no authority was selected in the primary lottery.
 
+.<<defn-babe-secondary-slots, Secondary Slots>>
 [#defn-babe-secondary-slots]
-===== Secondary Slots
-****
+====
 **Secondary slots** work along side primary slot to ensure consistent block
 production, as described in <<sect-block-production-lottery>>. The secondary
 assignee of a block is determined by calculating a specific value, stem:[i_d],
@@ -187,8 +187,7 @@ p larr h("Enc"_"SC"(r,s))\
 i_d larr p mod A_l
 ++++
 
-where:
-
+where::
 * stem:[r] is the Epoch randomness (<<defn-epoch-randomness>>).
 * stem:[s] is the slot number (<<defn-epoch-slot>>).
 * stem:["Enc"_"SC"(...)] encodes its inner value to the corresponding SCALE value.
@@ -201,11 +200,11 @@ resulting values stem:[o] and stem:[p] are then used in the Pre-Digest item
 (<<defn-babe-header>>). In case of secondary slots with plain outputs,
 respectively the Pre-Digest being of value _2_, the transcript respectively the
 VRF is skipped.
-****
+====
 
+.<<defn-babe-vrf-transcript, BABE Slot VRF transcript>>
 [#defn-babe-vrf-transcript]
-===== BABE Slot VRF transcript
-****
+====
 The BABE block production lottery requires a specific transcript structure
 (<<defn-vrf-transcript>>). That structure is used by both primary slots
 (<<algo-block-production-lottery>>) and secondary slots
@@ -228,7 +227,7 @@ p larr "dleq_prove"(t_7, h)
 The operators are defined in <<defn-strobe-operations>>, stem:["dleq_prove"] in
 <<defn-vrf-dleq-prove>>. The computed outputs, stem:[o] and stem:[p], are
 included in the block Pre-Digest (<<defn-babe-header>>).
-****
+====
 
 [#sect-slot-number-calculation]
 ==== Slot Number Calculation
@@ -239,7 +238,7 @@ estimating the local clock offset in relation to the network
 (<<defn-relative-synchronization>>).
 
 ****
-NOTE: *The calculation described in this section is still to be implemented and
+IMPORTANT: *The calculation described in this section is still to be implemented and
 deployed*: For now, each block producer is required to synchronize its local
 clock using NTP instead. The current slot stem:[s] is then calculated by stem:[s
 = t_"unix"/cc T] where stem:[cc T] is defined in <<defn-epoch-slot>> and
@@ -395,8 +394,7 @@ following format:
 P = {(1,->,(a_"id",s,o,p)),(2,->,(a_"id",s)),(3,->,(a_"id",s,o,p)):}
 ++++
 
-where:
-
+where::
 * _1_ indicates a primary slot with VRF outputs, _2_ a secondary slot with plain
 outputs and _3_ a secondary slot with VRF outputs
 (<<sect-block-production-lottery>>). Plain outputs are no longer actively used
