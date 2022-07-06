@@ -6,3 +6,5 @@ include::07-extrinsics.adoc[]
 include::08-weights.adoc[]
 
 include::09-consensus.adoc[]
+
+include::10-metadata.adoc[]
