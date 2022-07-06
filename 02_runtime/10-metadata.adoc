@@ -2,7 +2,7 @@
 
 The runtime metadata structure contains all the information necessary on how to
 interact with the Polkadot runtime. Considering that Polkadot runtimes are
-upgradable and therefor any interfaces are subject to change, the metadata
+upgradable and therefore any interfaces are subject to change, the metadata
 allows developers to structure any extrinsics or storage entries accordingly.
 
 [#sect-rtm-structure]
@@ -22,8 +22,8 @@ where
 
 * stem:[r] is a registry containing all type definitions
 (<<defn-rtm-registry-entry>>).
-* stem:[p] is a pallet metadata (<<sect-rtm-pallet-metadata>>).
-* stem:[e] is an extrinsic metadata (<<sect-rtm-extrinsic-metadata>>).
+* stem:[p] is a pallet metadata structure (<<sect-rtm-pallet-metadata>>).
+* stem:[e] is an extrinsic metadata structure (<<sect-rtm-extrinsic-metadata>>).
 * stem:[y] is the type Id (<<defn-rtm-type-id>>) of the runtime.
 
 .Registry Entry
@@ -46,25 +46,19 @@ where
 .Runtime Type Definition
 [#defn-rtm-type]
 ====
-The runtime type definition contains information about a type. It's a structure
+The runtime type definition contains information about a type. It's a datastructure
 of the following format:
 
 [stem]
 ++++
-(p,t,d,c)
+(P,T,d,C)
 ++++
 
 where
 
-* stem:[p] is the unique path to the type, which might be empty. It consists of:
-+
-[stem]
-++++
-(s_n, ..., s_(n+m))
-++++
-+
-where stem:[s_n] is a UTF-8 encoded string.
-* stem:[t] is the generic type parameters of the type in use. It's empty for
+* stem:[P] is the unique path to the type as according to the source code, which
+might be empty. It's an array of varying length containing strings.
+* stem:[T] is the generic type parameters of the type in use. It's empty for
 non-generic types. It consists of:
 +
 [stem]
@@ -73,11 +67,11 @@ non-generic types. It consists of:
 t_n = (n, y)
 ++++
 +
-where stem:[n] is a UTF-8 encoded string representing the name of the generic
+where stem:[n] is a string representing the name of the generic
 type parameter and stem:[y] is a _Option_ type containing a type Id
 (<<defn-rtm-type-id>>).
 * stem:[d] is the type variant (<<defn-rtm-type-variant>>).
-* stem:[c] is an array of varying length containing strings of documentation.
+* stem:[C] is an array of varying length containing strings of documentation.
 ====
 
 .Runtime Type Id
