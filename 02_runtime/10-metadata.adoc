@@ -5,6 +5,7 @@ interact with the Polkadot runtime. Considering that Polkadot runtimes are
 upgradable and therefor any interfaces are subject to change, the metadata
 allows developers to structure any extrinsics or storage entries accordingly.
 
+[#sect-rtm-structure]
 === Structure
 
 The Runtime Metadata is a datastructure of the following format:
@@ -200,7 +201,8 @@ where
 
 [#sect-rtm-pallet-metadata]
 === Pallet Metadata
-All the metadata about a pallet of the following format:
+All the metadata about a pallet, part of the main structure
+(<<sect-rtm-structure>>) and of the following format:
 
 [stem]
 ++++
@@ -335,7 +337,8 @@ where
 
 [#sect-rtm-extrinsic-metadata]
 === Extrinsic Metadata
-The metadata about a pallets extrinsics.
+The metadata about a pallets extrinsics, part of the main structure
+(<<sect-rtm-structure>>) and of the following format:
 
 [stem]
 ++++
