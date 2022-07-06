@@ -28,6 +28,9 @@ $(TARGET).tex: $(SOURCES)
 	asciidoctor-latex $(SHARED_FLAGS) -o $@ $<
 
 
+check: 
+	misspell -locale=US $(SOURCES)
+
 clean:
 	rm -rf $(CACHEDIR) $(TARGET).{html,pdf,tex}
 

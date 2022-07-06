@@ -19,6 +19,4 @@ jobs:
           pattern: |
             *.adoc
             *.md
-          exclude: |
-            ./.git/*
           filter_mode: nofilter
