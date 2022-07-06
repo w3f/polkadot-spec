@@ -154,7 +154,18 @@ P = {
 :}
 ++++
 * stem:[e] is a type Id (<<defn-rtm-type-id>>).
-* stem:[B] TODO...
+* stem:[B] is a datastructure of the following format:
++
+[stem]
+++++
+(s, o)
+++++
++
+where stem:[s] is a type Id (<<defn-rtm-type-id>>) representing the bit store
+type (https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore.html[external
+reference]) and stem:[o] is a type Id (<<defn-rtm-type-id>>) the bit order type
+(https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder.html[external
+reference]).
 ====
 
 .Field
