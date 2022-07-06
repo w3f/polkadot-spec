@@ -223,7 +223,8 @@ where
 * stem:[a] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>)
 pallet call type.
 * stem:[e] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>) to the event type.
-* stem:[c] is an array of varying length containing pallet constant metadata (<<>>).
+* stem:[c] is an array of varying length containing pallet constant metadata
+(<<defn-rtm-pallet-constants>>).
 * stem:[e] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>) to the error type.
 * stem:[i] is an unsigned 8-bit integers indicating the index of the pallet,
 which is used for encoding pallet events and calls.
@@ -283,7 +284,7 @@ it behaves if the entry is not present.
 where _0_ indicates that the entry returns an _Option_ type and therefore _None_
 if the storage entry is not present. _1_ indicates that the entry returns the
 type stem:[y] with default value stem:[D] (in
-<<defn-rtm-storge-entry-metadata>>) if the entry is not present.
+<<defn-rtm-storage-entry-metadata>>) if the entry is not present.
 ====
 
 .Storage Entry Type
