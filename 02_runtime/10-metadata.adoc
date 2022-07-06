@@ -1,3 +1,5 @@
+== Metadata
+
 The runtime metadata structure contains all the information necessary on how to
 interact with the Polkadot runtime. Considering that Polkadot runtimes are
 upgradable and therefor any interfaces are subject to change, the metadata
@@ -197,7 +199,7 @@ where
 ====
 
 [#sect-rtm-pallet-metadata]
-==== Pallet Metadata
+=== Pallet Metadata
 All the metadata about a pallet of the following format:
 
 [stem]
