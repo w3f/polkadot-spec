@@ -85,25 +85,26 @@ type in the type registry (<<defn-rtm-registry-entry>>).
 .Type Variant
 [#defn-rtm-type-variant]
 ====
-The type definition indicates all the possible types of encodable values a type can have.
+The type definition stem:[D] indicates all the possible types of encodable
+values a type can have.
 
 [stem]
 ++++
-x = {
-	(0,->,a,"composite type (e.g. structure or tuple)"),
-	(1,->,b,"variant type"),
-	(2,->,c,"sequence type varying length"),
-	(3,->,d,"sequence with fixed length"),
-	(4,->,e,"tuple type"),
-	(5,->,f,"primitive type"),
-	(6,->,g,"compact encoded type"),
-	(7,->,h,"sequence of bits")
+D = {
+	(0,->,C,"composite type (e.g. structure or tuple)"),
+	(1,->,V,"variant type"),
+	(2,->,s_v,"sequence type varying length"),
+	(3,->,S,"sequence with fixed length"),
+	(4,->,T,"tuple type"),
+	(5,->,P,"primitive type"),
+	(6,->,e,"compact encoded type"),
+	(7,->,B,"sequence of bits")
 :}
 ++++
 
 where
 
-* stem:[a] is of the following format:
+* stem:[C] is of the following format:
 +
 [stem]
 ++++
@@ -111,7 +112,7 @@ where
 ++++
 +
 where stem:[f] is a field (<<defn-rtm-field>>).
-* stem:[b] is of the following format:
+* stem:[V] is of the following format:
 +
 [stem]
 ++++
@@ -119,8 +120,8 @@ where stem:[f] is a field (<<defn-rtm-field>>).
 ++++
 +
 where stem:[v] is a variant (<<defn-rtm-variant>>).
-* stem:[c] is a type Id (<<defn-rtm-type-id>>).
-* stem:[d] is of the following format:
+* stem:[s_v] is a type Id (<<defn-rtm-type-id>>).
+* stem:[S] is of the following format:
 +
 [stem]
 ++++
@@ -129,12 +130,12 @@ where stem:[v] is a variant (<<defn-rtm-variant>>).
 +
 where stem:[l] is a unsigned 32-bit integer indicating the length and stem:[y]
 is a type Id (<<defn-rtm-type-id>>).
-* stem:[e] is an array of varying length containing elements of type Ids (<<defn-rtm-type-id>>).
-* stem:[f] is a varying datatype of the following structure:
+* stem:[T] is an array of varying length containing elements of type Ids (<<defn-rtm-type-id>>).
+* stem:[P] is a varying datatype of the following structure:
 +
 [stem]
 ++++
-{
+P = {
 	(0,"boolean"),
 	(1,"char"),
 	(2,"string"),
@@ -152,8 +153,8 @@ is a type Id (<<defn-rtm-type-id>>).
 	(14,"signed 256-bit integer")
 :}
 ++++
-* stem:[g] is a type Id (<<defn-rtm-type-id>>).
-* stem:[h] TODO...
+* stem:[e] is a type Id (<<defn-rtm-type-id>>).
+* stem:[B] TODO...
 ====
 
 .Field
