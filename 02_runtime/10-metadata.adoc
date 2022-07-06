@@ -173,7 +173,7 @@ where
 
  * stem:[n] is a string representing the field name.
  * stem:[y] is a type Id (<<defn-rtm-type-id>>).
- * stem:[y_n] is a _Option_ type containg a string that indicates the name of the
+ * stem:[y_n] is a _Option_ type containing a string that indicates the name of the
 type as it appears in the source code.
  * stem:[c] is an array of varying length containing strings of documentation.
 ====
@@ -290,7 +290,7 @@ The type of the storage value that indicates how the entry is stored.
 ++++
 
 where stem:[t], stem:[k] (key) and stem:[v] (value) are all of type Ids
-(<<defn-rtm-type-id>>). stem:[H] is an array of varying length containg the
+(<<defn-rtm-type-id>>). stem:[H] is an array of varying length containing the
 storage hasher (<<defn-rtm-storage-hasher>>).
 ====
 
@@ -328,7 +328,7 @@ where
 * stem:[n] is a string representing the name of the pallet constant.
 * stem:[y] is the type Id (<<defn-rtm-type-id>>) of the pallet constant.
 * stem:[V] is a byte array containing the value of the constant.
-* stem:[C] is an array of varying length containg string with the documentation.
+* stem:[C] is an array of varying length containing string with the documentation.
 ====
 
 [#sect-rtm-extrinsic-metadata]
