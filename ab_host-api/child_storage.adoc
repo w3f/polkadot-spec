@@ -241,7 +241,7 @@ Arguments::
 
 * `child_storage_key`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 child storage key (<<defn-child-storage-type>>).
-* `version`: a pointer (<<defn-runtime-pointer>>) to the state version (<<defn-state-version>>).
+* `version`: the state version (<<defn-state-version>>).
 * `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit Blake2 storage
 root.
 
