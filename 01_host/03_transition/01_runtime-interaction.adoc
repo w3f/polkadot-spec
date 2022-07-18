@@ -126,7 +126,7 @@ heap allocation to be used by the Polkadot Runtime.
 
 The size of the provided WASM memory should be based on the value of the
 storage key (an unsigned 64-bit integer), where each page has the size
-of 64KB. This memory shoule be made available to the Polkadot Runtime
+of 64KB. This memory should be made available to the Polkadot Runtime
 for import under the symbol name `memory`.
 
 [#sect-runtime-send-args-to-runtime-enteries]
