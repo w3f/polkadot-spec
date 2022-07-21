@@ -32,7 +32,7 @@ Arguments::
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs (tuples).
-* `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
+* `version`: the state version (<<defn-state-version>>).
 * `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root.
 
 ==== `ext_trie_blake2_256_ordered_root`
@@ -69,7 +69,7 @@ items from which the trie root gets formed. The items consist of a SCALE encoded
 array containing only values, where the corresponding key of each value is the
 index of the item in the array, starting at 0. The keys are compact encoded
 integers (<<defn-sc-len-encoding>>).
-* `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
+* `version`: the state version (<<defn-state-version>>).
 * `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root
 result.
 
@@ -102,7 +102,7 @@ Arguments::
 * `data`: a pointer-size (<<defn-runtime-pointer-size>>) to the
 iterated items from which the trie root gets formed. The items consist of a
 SCALE encoded array containing arbitrary key/value pairs.
-* `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
+* `version`: the state version (<<defn-state-version>>).
 * `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root.
 
 ==== `ext_trie_keccak_256_ordered_root`
@@ -139,7 +139,7 @@ items from which the trie root gets formed. The items consist of a SCALE encoded
 array containing only values, where the corresponding key of each value is the
 index of the item in the array, starting at 0. The keys are compact encoded
 integers (<<defn-sc-len-encoding>>).
-* `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
+* `version`: the state version (<<defn-state-version>>).
 * `result`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit trie root
 result.
 
@@ -178,7 +178,7 @@ Arguments::
 the node proofs.
 * `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
 * `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
-* `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
+* `version`: the state version (<<defn-state-version>>).
 * `return`: a value equal to _1_ if the proof could be successfully verified or a
 value equal to _0_ if otherwise.
 
@@ -217,6 +217,6 @@ Arguments::
 the node proofs.
 * `key`: a pointer-size (<<defn-runtime-pointer-size>>) to the key.
 * `value`: a pointer-size (<<defn-runtime-pointer-size>>) to the value.
-* `version`: a pointer-size (<<defn-runtime-pointer>>) to the state version <<defn-state-version>>.
+* `version`: the state version (<<defn-state-version>>).
 * `return`: a value equal to _1_ if the proof could be successfully verified or a
 value equal to _0_ if otherwise.
