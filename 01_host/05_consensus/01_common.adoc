@@ -93,7 +93,7 @@ in the next epoch stem:[cc E_n + 1].
 2:: implies *on disabled*: A 32-bit integer, stem:[A_i], indicating the
 individual authority in the current authority list that should be immediately
 disabled until the next authority set changes. This message initial intension
-was to cause an imediatly suspension of all authority functionality with the
+was to cause an immediate suspension of all authority functionality with the
 specified authority.
 3:: implies *next epoch descriptor*: These messages are only issued on
 configuration change and in the first block of an epoch. The supplied
