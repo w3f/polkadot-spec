@@ -1,4 +1,5 @@
 == Metadata
+:kaitai-imports: scale
 
 The runtime metadata structure contains all the information necessary on how to
 interact with the Polkadot runtime. Considering that Polkadot runtimes are
@@ -26,6 +27,44 @@ where
 * stem:[e] is an extrinsic metadata structure (<<sect-rtm-extrinsic-metadata>>).
 * stem:[y] is the type Id (<<defn-rtm-type-id>>) of the runtime.
 
+.Polkadot Runtime Metadata
+[kaitai#metadata,kaitai-dependencies="lookup,pallet,extrinsic",kaitai-export=true]
+++++
+seq:
+  - id: magic
+    contents: meta
+  - id: metadata_version
+    type: u1
+
+  - id: num_types
+    type: scale::compact_int
+  - id: lookup
+    type: lookup
+    repeat: expr
+    repeat-expr: num_types.value
+
+  - id: num_pallets
+    type: scale::compact_int
+  - id: pallets
+    type: pallet
+    repeat: expr
+    repeat-expr: num_pallets.value
+
+  - id: extrinsic_type
+    type: scale::compact_int
+  - id: extrinsic_version
+    type: u1
+  - id: num_extrinsics
+    type: scale::compact_int
+  - id: extrinsics
+    type: extrinsic
+    repeat: expr
+    repeat-expr: num_extrinsics.value
+
+  - id: runtime_type
+    type: scale::compact_int
+++++
+
 .Registry Entry
 [#defn-rtm-registry-entry]
 ====
@@ -42,6 +81,156 @@ where
 * stem:[i_c] is a compact integer indicating the identifier of the type.
 * stem:[y] is a runtime type (<<defn-rtm-type>>).
 ====
+
+
+.Runtime Registry Type Entry
+[kaitai#lookup]
+++++
+seq:
+  - id: id
+    type: scale::compact_int
+
+  - id: path
+    type: scale::string_list
+
+  - id: num_params
+    type: scale::compact_int
+  - id: params
+    repeat: expr
+    repeat-expr: num_params.value
+    type: param
+
+  - id: type
+    type: u1
+    enum: type
+  - id: details
+    type:
+      switch-on: type
+      cases:
+        "type::composite": fields
+        "type::variant": variants
+        "type::sequence": sequence
+        "type::array": array
+        "type::tuple": tuple
+        "type::primitive": primitive
+        "type::compact": compact
+        "type::bits": bits
+
+  - id: docs
+    type: scale::string_list
+enums:
+  type:
+    0: composite
+    1: variant
+    2: sequence
+    3: array
+    4: tuple
+    5: primitive
+    6: compact
+    7: bits
+types:
+  param:
+    seq:
+      - id: name
+        type: scale::string
+      - id: type
+        type: scale::maybe_compact_int
+
+  fields:
+    seq:
+      - id: num_fields
+        type: scale::compact_int
+      - id: fields
+        type: field
+        repeat: expr
+        repeat-expr: num_fields.value
+  field:
+    seq:
+      - id: name
+        type: scale::maybe_string
+      - id: type
+        type: scale::compact_int
+      - id: typename
+        type: scale::maybe_string
+      - id: docs
+        type: scale::string_list
+
+  variants:
+    seq:
+      - id: num_variants
+        type: scale::compact_int
+      - id: variants
+        type: variant
+        repeat: expr
+        repeat-expr: num_variants.value
+  variant:
+    seq:
+      - id: name
+        type: scale::string
+      - id: fields
+        type: fields
+      - id: index
+        type: u1
+      - id: docs
+        type: scale::string_list
+
+  sequence:
+    seq:
+      - id: type
+        type: scale::compact_int
+
+  array:
+    seq:
+      - id: length
+        type: u4
+      - id: type
+        type: scale::compact_int
+
+  tuple:
+    seq:
+      - id: num_types
+        type: scale::compact_int
+      - id: types
+        type: scale::compact_int
+        repeat: expr
+        repeat-expr: num_types.value
+
+  primitive:
+    seq:
+      - id: id
+        type: u1
+        enum: pid
+    enums:
+      pid:
+        0: bool
+        1: char
+        2: str
+        3: uint8
+        4: uint16
+        5: uint32
+        6: uint64
+        7: uint128
+        8: uint256
+        9: int8
+        10: int16
+        11: int32
+        12: int64
+        13: int128
+        14: int256
+
+  compact:
+    seq:
+      - id: type
+        type: scale::compact_int
+
+  bits:
+      seq:
+        - id: type
+          type: scale::compact_int
+        - id: order
+          type: scale::compact_int
+++++
+
 
 .Runtime Type Definition
 [#defn-rtm-type]
@@ -229,6 +418,74 @@ pallet call type.
 * stem:[i] is an unsigned 8-bit integers indicating the index of the pallet,
 which is used for encoding pallet events and calls.
 
+.Pallet Metadata
+[kaitai#pallet,kaitai-dependencies=storage]
+++++
+seq:
+  - id: name
+    type: scale::string
+
+  - id: has_storage
+    type: u1
+  - id: storage
+    type: storage
+    if: has_storage != 0
+
+  - id: has_calls
+    type: u1
+  - id: calls
+    type: calls
+    if: has_calls != 0
+
+  - id: has_events
+    type: u1
+  - id: events
+    type: events
+    if: has_events != 0
+
+  - id: num_constants
+    type: scale::compact_int
+  - id: constants
+    type: constant
+    repeat: expr
+    repeat-expr: num_constants.value
+
+  - id: has_errors
+    type: u1
+  - id: errors
+    type: errors
+    if: has_errors != 0
+
+  - id: index
+    type: u1
+types:
+  calls:
+    seq:
+      - id: type
+        type: scale::compact_int
+
+  events:
+    seq:
+      - id: type
+        type: scale::compact_int
+
+  errors:
+    seq:
+      - id: type
+        type: scale::compact_int
+
+  constant:
+    seq:
+      - id: name
+        type: scale::string
+      - id: type
+        type: scale::compact_int
+      - id: value
+        type: scale::bytes
+      - id: docs
+        type: scale::string_list
+++++
+
 .Pallet Storage Metadata
 [#defn-rtm-pallet-storage-metadata]
 ====
@@ -324,6 +581,81 @@ The hashing algorithm used by storage maps.
 ++++
 ====
 
+.Pallet Storage Metadata
+[kaitai#storage]
+++++
+seq:
+  - id: prefix
+    type: scale::string
+
+  - id: num_items
+    type: scale::compact_int
+  - id: items
+    type: item
+    repeat: expr
+    repeat-expr: num_items.value
+types:
+  item:
+    seq:
+      - id: name
+        type: scale::string
+
+      - id: modifier
+        type: u1
+        enum: storage_modifier
+
+      - id: type
+        type: u1
+        enum: storage_type
+      - id: details
+        type:
+          switch-on: type
+          cases:
+            'storage_type::plain': plain
+            'storage_type::map': map
+
+      - id: fallback
+        type: scale::bytes
+
+      - id: docs
+        type: scale::string_list
+    enums:
+      storage_modifier:
+        0: optional
+        1: default
+      storage_type:
+        0: plain
+        1: map
+
+  plain:
+    seq:
+      - id: type
+        type: scale::compact_int
+  map:
+    seq:
+      - id: num_hasher
+        type: scale::compact_int
+      - id: hasher
+        type: u1
+        enum: hasher_type
+        repeat: expr
+        repeat-expr: num_hasher.value
+
+      - id: key
+        type: scale::compact_int
+      - id: value
+        type: scale::compact_int
+    enums:
+      hasher_type:
+        0: blake2_128
+        1: blake2_256
+        2: blake2_128_128
+        3: xxhash_128
+        4: xxhash_256
+        5: xxhahs_64_64
+        6: idhash
+++++
+
 .Pallet Constants
 [#defn-rtm-pallet-constants]
 ====
@@ -377,4 +709,16 @@ which may be different from the type name.
 data to be included in the extrinsic.
 * stem:[a] is the type Id (<<defn-rtm-type-id>>) of the additional signed data,
 with the data to be included in the signed payload.
+
+.Extrinsic Metadata
+[kaitai#extrinsic]
+++++
+seq:
+  - id: name
+    type: scale::string
+  - id: type
+    type: scale::compact_int
+  - id: additional
+    type: scale::compact_int
+++++
 ====
