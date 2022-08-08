@@ -9,7 +9,7 @@
 
   inputs = {
     utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:nixos/nixpkgs/release-21.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
 
   outputs = { self, utils, nixpkgs }: utils.lib.eachDefaultSystem (system:
@@ -33,6 +33,8 @@
 
     bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
 
+    buildInputs = with pkgs; [ kaitai-struct-compiler graphviz ];
+
     hasWkHtml = builtins.elem system pkgs.wkhtmltopdf.meta.platforms;
 
     # Needed by wkhtml to us QT offscreen render
@@ -45,11 +47,11 @@
     packages = rec {
       default = html;
 
-      html = pkgs.runCommand "polkadot-spec.html" { } ''
+      html = pkgs.runCommand "polkadot-spec.html" { inherit buildInputs; } ''
         ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-kaitai.rb -r ${self}/asciidoctor-mathjax3.rb -o $out ${self}/polkadot-spec.adoc
       '';
     } // lib.optionalAttrs hasWkHtml {
-      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit QT_PLUGIN_PATH QT_QPA_PLATFORM GS; } ''
+      pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit buildInputs QT_PLUGIN_PATH QT_QPA_PLATFORM GS; } ''
         export HOME=$(mktemp -d)
         mkdir -p $HOME/.local
         ln -s ${pkgs.bakoma_ttf}/share $HOME/.local/
@@ -70,10 +72,10 @@
         flex
         gdk-pixbuf 
         ghostscript
-        gnome.gobject-introspection
+        gobject-introspection
         libxml2
         pango
-      ] ++ lib.optional hasWkHtml wkhtmltopdf);
+      ] ++ buildInputs ++ lib.optional hasWkHtml wkhtmltopdf);
 
       inherit QT_PLUGIN_PATH QT_QPA_PLATFORM GS;
     };
