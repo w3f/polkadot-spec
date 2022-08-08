@@ -63,25 +63,25 @@
     version = "0.3.5";
   };
   asciidoctor-pdf = {
-    dependencies = ["asciidoctor" "concurrent-ruby" "prawn" "prawn-icon" "prawn-svg" "prawn-table" "prawn-templates" "safe_yaml" "treetop"];
+    dependencies = ["asciidoctor" "concurrent-ruby" "matrix" "prawn" "prawn-icon" "prawn-svg" "prawn-table" "prawn-templates" "treetop"];
     groups = ["pdf"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1inl7cykm542jb7a6kraxkgfqn4y3185wrabh5pd5m68rdv56f04";
+      sha256 = "14x5v6s4gwykrlv3gbrjsq07pkprrqk8s72m2j2jg9hhjbpblba9";
       type = "gem";
     };
-    version = "1.6.2";
+    version = "2.2.0";
   };
   asciimath = {
     groups = ["default" "pdf"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0h4fz93pf96y5syxwpv0vibjf7lidv2718ikpvyd2vy8c1am8zyn";
+      sha256 = "1fy2jrn3gr7cl33qydp3pwyfilcmb4m4z6hfhnvydzg8r3srp36j";
       type = "gem";
     };
-    version = "2.0.3";
+    version = "2.0.4";
   };
   bibtex-ruby = {
     dependencies = ["latex-decode"];
@@ -185,10 +185,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0b2qyvnk4yynlg17ymkq4g5xgr275637fhl1mjh0valw3cb1fhhg";
+      sha256 = "1vdcchz7jli1p0gnc669a7bj3q1fv09y9ppf0y3k0vb1jwdwrqwi";
       type = "gem";
     };
-    version = "1.10.0";
+    version = "1.12.0";
   };
   katex = {
     dependencies = ["execjs"];
@@ -196,20 +196,20 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0w85n3mfrdidlqzqz7clnmdsclhqsc9ibn3p06irwqf4yb9q1s00";
+      sha256 = "1bl5hgvsapkn4qk3ibz365x3q7qrypdb3dxn54q3p2cm10683z8w";
       type = "gem";
     };
-    version = "0.8.0";
+    version = "0.9.0";
   };
   latex-decode = {
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1wnxg82lfkb8bl5la9nmg1434rpkcygygm0ckixjn6ah2dy6i53m";
+      sha256 = "1y5xn3zwghpqr6lvs4s0mn5knms8zw3zk7jb58zkkiagb386nq72";
       type = "gem";
     };
-    version = "0.3.2";
+    version = "0.4.0";
   };
   libv8-node = {
     groups = ["default"];
@@ -231,6 +231,16 @@
       type = "gem";
     };
     version = "1.6.14";
+  };
+  matrix = {
+    groups = ["default" "pdf"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "1h2cgkpzkh3dd0flnnwfq6f3nl2b1zff9lvqz8xs853ssv5kq23i";
+      type = "gem";
+    };
+    version = "0.4.2";
   };
   mini_racer = {
     dependencies = ["libv8-node"];
@@ -269,10 +279,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1pmb0lhbch06i8br2nkcq3flbfx1s2wqi3vkndqr4vnx3azvyjf6";
+      sha256 = "07chhyxf3qlr65jngns3z5187ibfibf5h2q59505vx45dfr3lvwz";
       type = "gem";
     };
-    version = "2.9.2";
+    version = "2.10.0";
   };
   polyglot = {
     groups = ["default" "pdf"];
@@ -355,10 +365,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1xqcgkl7bwws1qrlnmxgh8g4g9m10vg60bhlw40fplninb3ng6d9";
+      sha256 = "1f3knlwfwm05sfbaihrxm4g772b79032q14c16q4b38z8bi63qcb";
       type = "gem";
     };
-    version = "4.0.6";
+    version = "4.0.7";
   };
   rexml = {
     groups = ["default" "pdf"];
@@ -385,10 +395,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "080fswzii68wnbsg7pgq55ba7p289sqjlxwp4vch0h32qy1f8v8d";
+      sha256 = "1dnfkrk8xx2m8r3r9m2p5xcq57viznyc09k7r3i4jbm758i57lx3";
       type = "gem";
     };
-    version = "3.28.0";
+    version = "3.30.0";
   };
   ruby-enum = {
     dependencies = ["i18n"];
@@ -410,16 +420,6 @@
       type = "gem";
     };
     version = "0.1.5";
-  };
-  safe_yaml = {
-    groups = ["default" "pdf"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "0j7qv63p0vqcd838i2iy2f76c3dgwzkiz1d1xkg7n0pbnxj2vb56";
-      type = "gem";
-    };
-    version = "1.0.5";
   };
   treetop = {
     dependencies = ["polyglot"];
