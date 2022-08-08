@@ -46,14 +46,14 @@
       default = html;
 
       html = pkgs.runCommand "polkadot-spec.html" { } ''
-        ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-mathjax3.rb -o $out ${self}/polkadot-spec.adoc
+        ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-kaitai.rb -r ${self}/asciidoctor-mathjax3.rb -o $out ${self}/polkadot-spec.adoc
       '';
     } // lib.optionalAttrs hasWkHtml {
       pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit QT_PLUGIN_PATH QT_QPA_PLATFORM GS; } ''
         export HOME=$(mktemp -d)
         mkdir -p $HOME/.local
         ln -s ${pkgs.bakoma_ttf}/share $HOME/.local/
-        ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -r ${self}/asciidoctor-pseudocode.rb -o $out ${self}/polkadot-spec.adoc
+        ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-kaitai.rb -o $out ${self}/polkadot-spec.adoc
       ''; 
     };
 
