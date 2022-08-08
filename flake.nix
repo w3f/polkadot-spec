@@ -17,7 +17,7 @@
     pkgs = nixpkgs.legacyPackages.${system};
     lib = nixpkgs.lib;
 
-    ruby = pkgs.ruby_3_0;
+    ruby = pkgs.ruby_3_1;
     gemConfig = pkgs.defaultGemConfig.override { inherit ruby; } // {
       wkhtml = attrs: {
         buildInputs = [ pkgs.wkhtmltopdf ];
@@ -41,6 +41,9 @@
     QT_PLUGIN_PATH = with pkgs.qt514.qtbase; "${bin}/${qtPluginPrefix}";
     QT_QPA_PLATFORM = "offscreen";
 
+    # Shared command line args
+    sharedArgs = "-r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-kaitai.rb -o $out --trace ${self}/polkadot-spec.adoc";
+
     # Ruby Ghostscript detection is unreliable
     GS = "${pkgs.ghostscript}/bin/gs";
   in {
@@ -48,14 +51,14 @@
       default = html;
 
       html = pkgs.runCommand "polkadot-spec.html" { inherit buildInputs; } ''
-        ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-kaitai.rb -r ${self}/asciidoctor-mathjax3.rb -o $out ${self}/polkadot-spec.adoc
+        ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-mathjax3.rb ${sharedArgs}
       '';
     } // lib.optionalAttrs hasWkHtml {
       pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit buildInputs QT_PLUGIN_PATH QT_QPA_PLATFORM GS; } ''
         export HOME=$(mktemp -d)
         mkdir -p $HOME/.local
         ln -s ${pkgs.bakoma_ttf}/share $HOME/.local/
-        ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical -r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-kaitai.rb -o $out ${self}/polkadot-spec.adoc
+        ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical ${sharedArgs}
       ''; 
     };
 
