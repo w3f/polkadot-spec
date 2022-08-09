@@ -7,6 +7,24 @@ require 'yaml'
 require 'tempfile'
 require 'fileutils'
 
+module Asciidoctor
+  # Fixes to block that probably should be upstreamed
+  class PatchedBlock < Block
+
+    Base64DataURIRx = %r{data:(?<mimetype>\w[\w-]*/\w[\w+-]*);base64,(?<base64>[\w+/]+=*)}
+
+    # Fixes read_contents to support data uris
+    def read_contents(target, opts = {})
+      if (uri = Base64DataURIRx.match target)
+        # TODO: What to do with uri[:mimetype] ?
+        return Base64.strict_decode64(uri[:base64]).force_encoding('UTF-8')
+      end
+
+      super target, opts
+    end
+  end
+end
+
 # Simple index that allows blocks to resolve each others definition
 module Kaitai
   class Registry
@@ -53,7 +71,7 @@ module Kaitai
   end
 
   # Wrapper around block to allow out of order resolution of includes
-  class Block < Asciidoctor::Block
+  class Block < Asciidoctor::PatchedBlock
 
     CAPTION_PREFIX = 'Binary Format'
 
@@ -78,7 +96,6 @@ module Kaitai
         @caption = "Binary Format #{@numeral}. "
       end
 
-      @attributes['inline-option'] = ''
     end
 
     def generate
@@ -223,6 +240,8 @@ module Kaitai
       raise 'Failed to run graphviz' if target_base64.empty?
 
       @attributes['target'] = "data:image/svg+xml;base64,#{target_base64}"
+      @attributes['format'] = 'svg'
+      set_option 'interactive'
     end
   end
 
