@@ -24,6 +24,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
     - uses: actions/checkout@v2
+    - name: Install deb dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y graphviz
+        curl -LO https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
+        sudo apt-get install -y ./kaitai-struct-compiler_0.10_all.deb
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:
@@ -57,9 +63,10 @@ jobs:
     - name: Install deb dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y bison flex libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx cmake ghostscript
+        sudo apt-get install -y bison flex graphviz libffi-dev libxml2-dev libgdk-pixbuf2.0-dev libcairo2-dev libpango1.0-dev fonts-lyx cmake ghostscript
+        curl -LO https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
         curl -LO https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.focal_amd64.deb
-        sudo dpkg -i wkhtmltox_0.12.6-1.focal_amd64.deb || sudo apt-get -f install
+        sudo apt-get install -y ./kaitai-struct-compiler_0.10_all.deb ./wkhtmltox_0.12.6-1.focal_amd64.deb 
     - name: Setup ruby
       uses: ruby/setup-ruby@v1
       with:
