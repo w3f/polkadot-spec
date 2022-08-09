@@ -43,21 +43,23 @@ module Kaitai
 
         if @missing[id].empty?
           # Update missing dependencies ...
-          completed = @missing.filter { |_, deps| (deps.delete id) && deps.empty? }.keys
+          completed = self.fullfill id
+
+          # ... recursivly ...
+          additional = completed
+          until (additional = additional.map { |dep| self.fullfill dep }.flatten).empty?
+            completed += additional
+          end
+
+          logger.info "registration of #{id}': completed = #{completed}"
 
           # ... and process now completed blocks
           completed.each { |other| @blocks[other].generate }
-
-          logger.info "registration of #{id}': completed = #{completed}"
         else
           logger.info "registration of #{id}': missing = #{@missing[id]}"
         end
 
         @missing[id].empty?
-      end
-
-      def defined?(id)
-        @missing[id] && @missing[id].empty?
       end
 
       def subtype(id)
@@ -66,6 +68,18 @@ module Kaitai
 
       def definition(id)
         @blocks[id].definition true
+      end
+
+      private
+
+      # Determine if all depency of block are defined
+      def defined?(id)
+        @missing[id] && @missing[id].empty?
+      end
+
+      # Fullfill dependency and return completed blocks
+      def fullfill(id)
+        @missing.filter { |_, deps| (deps.delete id) && deps.empty? }.keys
       end
     end
   end
@@ -95,7 +109,6 @@ module Kaitai
         @numeral = @document.increment_and_store_counter 'kaitai-number', self
         @caption = "Binary Format #{@numeral}. "
       end
-
     end
 
     def generate
