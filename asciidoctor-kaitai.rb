@@ -226,7 +226,7 @@ module Kaitai
     def render(path, output)
       # Extract graphviz nodes from inputs
       excludes = output.dig(:graphviz, :deps).map { |name|
-        File.readlines(File.join(path, name))
+        File.readlines(File.join(path, name), encoding: 'UTF-8')
             .map { |line| line.match(GRAPHVIZ_NODE_ID).to_a[1] }
             .reject &:nil?
       }.flatten
@@ -241,7 +241,7 @@ module Kaitai
 
         output = File.new(output_path, 'w')
 
-        File.readlines(backup_path).reject { |line|
+        File.readlines(backup_path, encoding: 'UTF-8').reject { |line|
           excludes.any? { |ex| line.match? /#{ex}/ }
         }.each { |line| output.puts line }
 
