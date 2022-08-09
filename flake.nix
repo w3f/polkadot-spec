@@ -12,7 +12,7 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
   };
 
-  outputs = { self, utils, nixpkgs }: utils.lib.eachDefaultSystem (system:
+  outputs = { self, utils, nixpkgs }: utils.lib.eachSystem [ "aarch64-linux" "i686-linux" "x86_64-linux"] (system:
   let
     pkgs = nixpkgs.legacyPackages.${system};
     lib = nixpkgs.lib;
@@ -35,8 +35,6 @@
 
     buildInputs = with pkgs; [ kaitai-struct-compiler graphviz ];
 
-    hasWkHtml = builtins.elem system pkgs.wkhtmltopdf.meta.platforms;
-
     # Needed by wkhtml to us QT offscreen render
     QT_PLUGIN_PATH = with pkgs.qt514.qtbase; "${bin}/${qtPluginPrefix}";
     QT_QPA_PLATFORM = "offscreen";
@@ -53,13 +51,13 @@
       html = pkgs.runCommand "polkadot-spec.html" { inherit buildInputs; } ''
         ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-mathjax3.rb ${sharedArgs}
       '';
-    } // lib.optionalAttrs hasWkHtml {
+
       pdf = pkgs.runCommand "polkadot-spec.pdf" { BUNDLE_WITH = "pdf"; inherit buildInputs QT_PLUGIN_PATH QT_QPA_PLATFORM GS; } ''
         export HOME=$(mktemp -d)
         mkdir -p $HOME/.local
         ln -s ${pkgs.bakoma_ttf}/share $HOME/.local/
         ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical ${sharedArgs}
-      ''; 
+      '';
     };
 
     devShells.default = pkgs.mkShell {
@@ -78,7 +76,9 @@
         gobject-introspection
         libxml2
         pango
-      ] ++ buildInputs ++ lib.optional hasWkHtml wkhtmltopdf);
+
+        wkhtmltopdf
+      ]) ++ buildInputs;
 
       inherit QT_PLUGIN_PATH QT_QPA_PLATFORM GS;
     };
