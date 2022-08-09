@@ -16,10 +16,10 @@ $(CACHEDIR):
 	mkdir -p $@
 
 SHARED_MODULES := asciidoctor-pseudocode.rb asciidoctor-kaitai.rb
-SHARED_FLAGS := -r ./asciidoctor-pseudocode.rb -r ./asciidoctor-kaitai.rb -r asciidoctor-bibtex -a attribute-missing=warn --failure-level=WARN --verbose
+SHARED_FLAGS := -r ./asciidoctor-pseudocode.rb -r ./asciidoctor-kaitai.rb -r asciidoctor-bibtex -a attribute-missing=warn --verbose
 
 $(TARGET).html: $(SOURCES) $(SHARED_MODULES) asciidoctor-mathjax3.rb docinfo-header.html style.css
-	asciidoctor $(SHARED_FLAGS) -r ./asciidoctor-mathjax3.rb -o $@ $<
+	asciidoctor $(SHARED_FLAGS) -r ./asciidoctor-mathjax3.rb -o $@ $< --failure-level=WARN
 
 $(TARGET).pdf: $(SOURCES) $(SHARED_MODULES) $(CACHEDIR)
 	asciidoctor-pdf -a imagesoutdir=$(CACHEDIR) -r asciidoctor-mathematical $(SHARED_FLAGS) -o $@ $<
