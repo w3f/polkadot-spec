@@ -13,19 +13,20 @@ The Runtime Metadata is a datastructure of the following format:
 
 [stem]
 ++++
-(T, P, E, y)\
+(m,v, T, P, E, y)\
 T = (r_n, ...,r_(n+m))\
 P = (p_n, ...,p_(n+m))\
 E = (e_n, ...,e_(n+m))
 ++++
 
-where
-
-* stem:[r] is a registry containing all type definitions
-(<<defn-rtm-registry-entry>>).
-* stem:[p] is a pallet metadata structure (<<sect-rtm-pallet-metadata>>).
-* stem:[e] is an extrinsic metadata structure (<<sect-rtm-extrinsic-metadata>>).
-* stem:[y] is the type Id (<<defn-rtm-type-id>>) of the runtime.
+where::
+ * stem:[m] are the first four bytes spelling "meta"
+ * stem:[v] is the format version of the metadata (currently `14`)
+ * stem:[r] is a registry containing all type definitions
+ (<<defn-rtm-registry-entry>>).
+ * stem:[p] is a pallet metadata structure (<<sect-rtm-pallet-metadata>>).
+ * stem:[e] is an extrinsic metadata structure (<<sect-rtm-extrinsic-metadata>>).
+ * stem:[y] is the type Id (<<defn-rtm-type-id>>) of the runtime.
 
 .Polkadot Runtime Metadata
 [kaitai#metadata,kaitai-dependencies="lookup,pallet,extrinsic",kaitai-export=true]
@@ -65,23 +66,36 @@ seq:
     type: scale::compact_int
 ++++
 
-.Registry Entry
+.Runtime Registry Type Entry
 [#defn-rtm-registry-entry]
 ====
+
 A registry entry contains information about a type in its portable form for
 serialization. The entry is a datastructure of the following format:
 
 [stem]
 ++++
-(i_c, y)
+(i_c,P,T,d,C)
 ++++
 
-where
-
+where::
 * stem:[i_c] is a compact integer indicating the identifier of the type.
-* stem:[y] is a runtime type (<<defn-rtm-type>>).
-====
-
+* stem:[P] is the unique path to the type as according to the source code, which
+might be empty. It's an array of varying length containing strings.
+* stem:[T] is the generic type parameters of the type in use. It's empty for
+non-generic types. It consists of:
++
+[stem]
+++++
+(t_n, ...,t_(n+m))\
+t_n = (n, y)
+++++
++
+where stem:[n] is a string representing the name of the generic
+type parameter and stem:[y] is a _Option_ type containing a type Id
+(<<defn-rtm-type-id>>).
+* stem:[d] is the type variant (<<defn-rtm-type-variant>>).
+* stem:[C] is an array of varying length containing strings of documentation.
 
 .Runtime Registry Type Entry
 [kaitai#lookup]
@@ -230,43 +244,12 @@ types:
         - id: order
           type: scale::compact_int
 ++++
-
-
-.Runtime Type Definition
-[#defn-rtm-type]
-====
-The runtime type definition contains information about a type. It's a datastructure
-of the following format:
-
-[stem]
-++++
-(P,T,d,C)
-++++
-
-where
-
-* stem:[P] is the unique path to the type as according to the source code, which
-might be empty. It's an array of varying length containing strings.
-* stem:[T] is the generic type parameters of the type in use. It's empty for
-non-generic types. It consists of:
-+
-[stem]
-++++
-(t_n, ...,t_(n+m))\
-t_n = (n, y)
-++++
-+
-where stem:[n] is a string representing the name of the generic
-type parameter and stem:[y] is a _Option_ type containing a type Id
-(<<defn-rtm-type-id>>).
-* stem:[d] is the type variant (<<defn-rtm-type-variant>>).
-* stem:[C] is an array of varying length containing strings of documentation.
 ====
 
 .Runtime Type Id
 [#defn-rtm-type-id]
 ====
-The runtime type Id is a 32-bit unsigned integer representing the index to the
+The runtime type Id is a compact integer representing the index to the
 type in the type registry (<<defn-rtm-registry-entry>>).
 
 ====
