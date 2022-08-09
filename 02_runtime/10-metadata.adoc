@@ -29,7 +29,7 @@ where::
  * stem:[y] is the type Id (<<defn-rtm-type-id>>) of the runtime.
 
 .Polkadot Runtime Metadata
-[kaitai#metadata,kaitai-dependencies="lookup,pallet,extrinsic",kaitai-export=true]
+[kaitai#metadata,kaitai-dependencies="lookup,pallet,extrinsic"]
 ++++
 seq:
   - id: magic
