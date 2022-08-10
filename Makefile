@@ -3,7 +3,7 @@ SOURCES := $(TARGET).adoc $(wildcard ??_*.adoc) $(wildcard ??_*/*.adoc) $(wildca
 
 CACHEDIR := cache/
 
-.PHONY: default html pdf tex kaitai clean
+.PHONY: default html pdf tex kaitai test test-metadata clean
 
 
 default: html
@@ -34,6 +34,19 @@ kaitai: metadata.ksy
 	asciidoctor -r ./asciidoctor-kaitai.rb -b kaitai -o $@ $< --failure-level=WARN
 
 
-clean:
-	rm -rf $(CACHEDIR) $(TARGET).{html,pdf,tex} metadata.ksy
+test/metadata.rb: metadata.ksy
+	ksc --target ruby --outdir ./test/ $<
 
+
+test/metadata.bin:
+	curl -X POST -H 'Content-Type: application/json' -d '{"id":"1", "jsonrpc":"2.0", "method":"state_getMetadata"}' 'https://rpc.polkadot.io' | jq .result | xxd -r -p > $@
+
+
+test: test-metadata
+
+test-metadata: test/scale.fixed.rb test/metadata.rb test/metadata.bin
+	ruby ./test/test_metadata.rb
+
+
+clean:
+	rm -rf $(CACHEDIR) $(TARGET).{html,pdf,tex} metadata.ksy test/{scale,metadata}.rb test/metadata.bin
