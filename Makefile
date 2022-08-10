@@ -3,7 +3,7 @@ SOURCES := $(TARGET).adoc $(wildcard ??_*.adoc) $(wildcard ??_*/*.adoc) $(wildca
 
 CACHEDIR := cache/
 
-.PHONY: default html pdf tex clean
+.PHONY: default html pdf tex kaitai clean
 
 
 default: html
@@ -28,6 +28,12 @@ $(TARGET).tex: $(SOURCES)
 	asciidoctor-latex $(SHARED_FLAGS) -o $@ $<
 
 
+kaitai: metadata.ksy
+
+%.ksy: $(SOURCES) asciidoctor-kaitai.rb
+	asciidoctor -r ./asciidoctor-kaitai.rb -b kaitai -o $@ $< --failure-level=WARN
+
+
 clean:
-	rm -rf $(CACHEDIR) $(TARGET).{html,pdf,tex}
+	rm -rf $(CACHEDIR) $(TARGET).{html,pdf,tex} metadata.ksy
 
