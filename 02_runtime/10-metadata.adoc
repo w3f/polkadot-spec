@@ -181,7 +181,7 @@ types:
     seq:
       - id: name
         type: scale::string
-      - id: fields
+      - id: composite
         type: fields
       - id: index
         type: u1
