@@ -190,6 +190,16 @@
     };
     version = "1.12.0";
   };
+  kaitai-struct = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0zq02am2r3w1l71jm7x65hvdlny4q4v2wwsa49m4jvyb7i4ji8ps";
+      type = "gem";
+    };
+    version = "0.10";
+  };
   katex = {
     dependencies = ["execjs"];
     groups = ["default"];
