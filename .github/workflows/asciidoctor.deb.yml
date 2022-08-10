@@ -90,6 +90,41 @@ jobs:
         asset_content_type: application/pdf
       if: github.event_name == 'release'
 
+  build-kaitai:
+    name: Compile kaitai specification
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install deb dependencies
+      run: |
+        sudo apt-get update
+        curl -LO https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
+        sudo apt-get install -y ./kaitai-struct-compiler_0.10_all.deb
+    - name: Setup ruby
+      uses: ruby/setup-ruby@v1
+      with:
+        bundler-cache: true
+        cache-version: kaitai
+    - name: Build kaitai specification
+      run: bundle exec make kaitai
+    - name: Test kaitai specification
+      run: bundle exec make test
+    - name: Upload kaitai specification
+      uses: actions/upload-artifact@v2
+      with:
+        name: metadata.ksy
+        path: metadata.ksy
+    - name: Release kaitai specification
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: metadata.ksy
+        asset_name: metadata_${{ github.event.release.tag_name }}.ksy
+        asset_content_type: text/yaml
+      if: github.event_name == 'release'
+
   release-pages:
     needs: [ build-html, build-pdf ]
     name: Publish release on GitHub Pages
