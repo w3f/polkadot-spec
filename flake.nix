@@ -40,7 +40,7 @@
     QT_QPA_PLATFORM = "offscreen";
 
     # Shared command line args
-    sharedArgs = "-r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-kaitai.rb -o $out --trace ${self}/polkadot-spec.adoc";
+    sharedArgs = "-r ${self}/asciidoctor-pseudocode.rb -r ${self}/asciidoctor-kaitai.rb -o $out --verbose ${self}/polkadot-spec.adoc";
 
     # Ruby Ghostscript detection is unreliable
     GS = "${pkgs.ghostscript}/bin/gs";
@@ -57,6 +57,10 @@
         mkdir -p $HOME/.local
         ln -s ${pkgs.bakoma_ttf}/share $HOME/.local/
         ${bundleExec "pdf"} asciidoctor-pdf -a imagesoutdir=$(mktemp -d) -r asciidoctor-mathematical ${sharedArgs}
+      '';
+
+      kaitai = pkgs.runCommand "polkadot-kaitai" {} ''
+        ${bundleExec ""} asciidoctor -r ${self}/asciidoctor-kaitai.rb -b kaitai -o $out/metadata.ksy ${self}/polkadot-spec.adoc
       '';
     };
 

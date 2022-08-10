@@ -91,6 +91,8 @@ module Kaitai
 
     GRAPHVIZ_NODE_ID = Regexp.new '([a-z_]+) \[label=<<TABLE'
 
+    attr_reader :dependencies
+
     def initialize(parent, body, attrs)
       @body = body
 
@@ -104,6 +106,15 @@ module Kaitai
 
       super parent, :image, { source: nil, attributes: attrs, content_model: :empty }
 
+      # Cache document tree based attributes
+      @dependencies = attr('kaitai-dependencies', '', true).split(',')
+      @imports = attr('kaitai-imports', '', true).split(',')
+
+      @import_dir = attr 'docdir', nil, true
+
+      # Skip render step if we are just exporting
+      @skip = parent.document.backend == 'kaitai'
+
       if title
         @title = title
         @numeral = @document.increment_and_store_counter 'kaitai-number', self
@@ -111,7 +122,10 @@ module Kaitai
       end
     end
 
+    # Generate any outputs included in the document
     def generate
+      return if @skip
+
       Dir.mktmpdir('asciidoctor-kaitai-') do |tmpdir|
         export tmpdir, false
         output = compile tmpdir, false
@@ -119,34 +133,23 @@ module Kaitai
 
         logger.info "generated '#{output.dig :graphviz, :main}': imports = #{output.dig :graphviz, :deps}"
       end
-
-      if @attributes.key? 'kaitai-export'
-        outdir = attr 'docdir', nil, true
-        output = export outdir, true
-
-        logger.info "exported '#{output.dig :kaitai, :main}': imports = #{output.dig :kaitai, :deps}"
-      end
     end
 
+    # Return full definition, header and body
     def definition(combined = false)
       (head combined).merge(body combined)
     end
 
+    # Return only body, to be used as subtype
     def as_subtype
       body true
-    end
-
-    def dependencies
-      attr('kaitai-dependencies', '', true).split(',')
     end
 
     private
 
     # Return imports in definition
     def imports(combined = false)
-      result = attr('kaitai-imports', '', true).split(',')
-      combined || result += dependencies
-      result
+      combined ? @imports : @imports + @dependencies
     end
 
     # Return head of definition
@@ -194,8 +197,7 @@ module Kaitai
     # Compile exported definitions at specified path
     def compile(path, combined)
       # Copy any imports (NOT dependencies)
-      docdir = attr 'docdir', nil, true
-      (imports true).each { |name| FileUtils.cp(File.join(docdir, "#{name}.ksy"), path) }
+      @imports.each { |name| FileUtils.cp(File.join(@import_dir, "#{name}.ksy"), path) }
 
       id = @attributes['id']
       input_path = File.join(path, "#{id}.ksy")
@@ -258,6 +260,26 @@ module Kaitai
     end
   end
 
+  # Simple converter that extract kaitai definition based on file name of output
+  class Converter < Asciidoctor::Converter::Base
+    register_for 'kaitai'
+
+    # Use basename of output file to determine target definition
+    def initialize(_, opts = {})
+      @target = Asciidoctor::Helpers.basename opts[:document].options[:to_file], true
+    end
+
+    # Find target kaitai block in document and return its definition
+    def convert(document, transform = nil, _ = nil)
+      if transform == 'document'
+        document.find_by(context: :image).each do |node|
+          return node.definition(true).to_yaml if node.class == Block && node.attr('id') == @target
+        end
+        raise "Failed to locate katai definition for '#{@target}'"
+      end
+      ''
+    end
+  end
 end
 
 Asciidoctor::Extensions.register do
