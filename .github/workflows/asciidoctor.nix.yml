@@ -20,7 +20,7 @@ jobs:
   build:
     strategy:
       matrix:
-        package: [ "html", "pdf" ]
+        package: [ "html", "pdf", "kaitai" ]
     name: Compile ${{ matrix.package }} specification
     runs-on: ubuntu-20.04
     steps:
