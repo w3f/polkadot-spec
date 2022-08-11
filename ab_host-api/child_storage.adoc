@@ -62,7 +62,7 @@ child storage key (<<defn-child-storage-type>>).
 * `value_out`: a pointer-size (<<defn-runtime-pointer-size>>) to the buffer
 to which the value will be written to. This function will never write more then
 the length of the buffer, even if the value’s length is bigger.
-* `offset`: an i32 integer containing the offset beyond the value should be read
+* `offset`: an u32 integer (typed as i32 due to wasm types) containing the offset beyond the value should be read
 from.
 * `result`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
 encoded _Option_ value (<<defn-option-type>>) containing the number of bytes
