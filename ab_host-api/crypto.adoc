@@ -474,7 +474,7 @@ function.
 Arguments::
 
 * `sig`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 65-byte signature in RSV
-format. V should be either or .
+format. V should be either `0/1` or `27/28`.
 * `msg`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit Blake2 hash of
 the message.
 * `return`: a pointer-size (<<defn-runtime-pointer-size>>) to the SCALE
