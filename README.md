@@ -8,7 +8,7 @@
 
 Polkadot is a replicated sharded state machine designed to resolve the scalability and interoperability among blockchains. This repository contains the official specification for the Polkadot Protocol.
  
-The latest releases of the *Polkadot Protocol Specification* can be found on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
+The latest releases of the *Polkadot Protocol Specification* can be found on [spec.polkadot.network](https://spec.polkadot.network) or on our [GitHub Releases page](https://github.com/w3f/polkadot-spec/releases).
 
 The Polkadot specification is written in [AsciiDoc](https://docs.asciidoctor.org/asciidoc/latest) and currently compiled with [Asciidoctor](https://asciidoctor.org/).
 
@@ -18,7 +18,7 @@ Contributions are always welcome. For a quick primer on the AsciiDoc format, we 
 
 ## Dependencies
 
-A handful of dependencies are required to successfully convert the spec into a publishable document. We provide a `Gemfile` that provides all dependecies.
+A handful of dependencies are required to successfully convert the spec into a publishable document. We provide a `Gemfile` that provides most dependecies. 
 
 You will have to install `bundler` to use the `Gemfile`. On a Debian based system, it can be installed with:
 
@@ -27,6 +27,8 @@ sudo apt-get install ruby-dev
 # On some systems this might be required
 gem install bundler
 ```
+
+Furthermore you will also need to have `graphviz` and the `kaitai-struct-compiler` installed.
 
 Once `bundler` is available, you can install any missing dependencies for a html build via `bundle install`:
 
@@ -48,4 +50,12 @@ To build the html version of the spec, just run `bundle exec make html`. This cr
 
 To build the pdf version of the spec, just run `bundle exec make pdf`, which will create a `polkadot-spec.pdf` in the same folder.
 
+To export the Kaitai Struct definitions contained in the spec, just run `bundle exec make kaitai`, which will create the `.ksy` file(s) in the same folder.
+
 We also provide full nix flake integration, e.g. you can run `nix build github:w3f/polkadot-spec` to build the latest html release.
+
+## Test
+
+To test some of the machine readable definition in the spec, just run `bundle exec make test`.
+
+The test requires `curl`, `jq` and `xxd` to download required data via JSON RPC.
