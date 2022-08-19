@@ -129,13 +129,13 @@ The Polkadot Host can establish a connection with any peer of which it
 knows the address. The Polkadot Host supports multiple networking
 protocols:
 
-* *TCP/IP* with addresses in the form of `/ip4/1.2.3.4/tcp/` to establish a TCP
+* *TCP/IP* with addresses in the form of `/ip4/1.2.3.4/tcp/30333` to establish a TCP
 connection and negotiate encryption and a multiplexing layer.
-* *Websockets* with addresses in the form of `/ip4/1.2.3.4/ws/` to establish a
-TCP connection and negotiate the Websocket protocol within the connection.
+* *WebSocket* with addresses in the form of `/ip4/1.2.3.4/tcp/30333/ws` to establish a
+TCP connection and negotiate the WebSocket protocol within the connection.
 Additionally, encryption and multiplexing layer is negotiated within the
 WebSocket connection.
-* *DNS* addresses in form of `/dns/example.com/tcp/` and `/dns/example.com/ws/`.
+* *DNS* addresses in form of `/dns/example.com/tcp/30333` and `/dns/example.com/tcp/30333/ws`.
 
 The addressing system is described in the
 https://docs.libp2p.io/concepts/addressing/[libp2p addressing] specification.
