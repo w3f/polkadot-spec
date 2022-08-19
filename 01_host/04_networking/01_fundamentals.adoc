@@ -194,7 +194,7 @@ used to segregate communications to specific networks. This prevents any
 interference with other networks. `dot` is used exclusively for Polkadot.
 Kusama, for example, uses the protocol identifier `ksmcc3`.
 
-* `/ipfs/ping/` - Open a standardized substream _libp2p_ to a peer and
+* `/ipfs/ping/1.0.0` - Open a standardized substream _libp2p_ to a peer and
 initialize a ping to verify if a connection is still alive. If the peer does not
 respond, the connection is dropped. This is a _Request-Response substream_.
 +
@@ -211,34 +211,44 @@ This is a _Request-Response substream_, as defined by the _libp2p_ standard.
 Further specification and reference implementation are available on
 https://en.wikipedia.org/wiki/Kademlia[Wikipedia] respectively the
 https://github.com/libp2p/go-libp2p-kad-dht[golang Github repository].
-* `/dot/light/2` - a request and response protocol that allows a light client to
+* `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/light/2` - a request and response protocol that allows a light client to
 request information about the state. This is a _Request-Response substream_.
 +
 The messages are specified in <<sect-light-msg>>.
-* `/dot/block-announces/1` - a substream/notification protocol which sends
++
+NOTE: For backwards compatibility reasons, `/dot/light/2` is also a valid substream for those messages.
+* `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/block-announces/1` - a substream/notification protocol which sends
 blocks to connected peers. This is a _Notification substream_.
 +
 The messages are specified in <<sect-msg-block-announce>>.
-* `/dot/sync/2` - a request and response protocol that allows the Polkadot Host
++
+NOTE: For backwards compatibility reasons, `/dot/block-announces/1` is also a valid substream for those messages.
+* `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/sync/2` - a request and response protocol that allows the Polkadot Host
 to request information about blocks. This is a _Request-Response substream_.
 +
 The messages are specified in <<sect-msg-block-request>>.
 +
-* `/dot/sync/warp` - a request and response protocol that allows the Polkadot Host
+NOTE: For backwards compatibility reasons, `/dot/sync/2` is also a valid substream for those messages.
++
+* `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/sync/warp` - a request and response protocol that allows the Polkadot Host
 to perform a warp sync request. This is a _Request-Response substream_.
 +
 The messages are specified in <<sect-warp-sync>>.
-* `/dot/transactions/1` - a substream/notification protocol which sends
++
+NOTE: For backwards compatibility reasons, `/dot/sync/warp` is also a valid substream for those messages.
+* `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/transactions/1` - a substream/notification protocol which sends
 transactions to connected peers. This is a _Notification substream_.
 +
 The messages are specified in <<sect-msg-transactions>>.
-* `/dot/grandpa/1` - a substream/notification protocol that sends GRANDPA
++
+NOTE: For backwards compatibility reasons, `/dot/transactions/1` is also a valid substream for those messages.
+* `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/grandpa/1` - a substream/notification protocol that sends GRANDPA
 votes to connected peers. This is a _Notification substream_.
 +
 The messages are specified in <<sect-msg-grandpa>>.
 +
 NOTE: For backwards compatibility reasons, `/paritytech/grandpa/1` is also a valid substream for those messages.
-* `/dot/beefy/1` - a substream/notification protocol which sends signed
+* `/91b171bb158e2d3848fa23a9f1c25182fb8e20313b2c1eb49219da7a70ce90c3/beefy/1` - a substream/notification protocol which sends signed
 BEEFY statements, as described in <<sect-grandpa-beefy>>, to connected peers.
 This is a _Notification_ substream.
 +
