@@ -72,7 +72,10 @@ called. Accordingly, we define stem:[R_B] (<<defn-runtime-code-at-state>>).
 The initial Runtime code of the chain is provided as part of the genesis state
 (<<chapter-genesis>>) and subsequent calls to the Runtime have the ability to,
 in turn, upgrade the Runtime by replacing this Wasm blob with the help of the
-storage API (<<sect-storage-api>>).
+storage API (<<sect-storage-api>>). Therefore, the executor **must always** load
+the latest Runtime from storage - or preferably detect Runtime upgrades
+(<<defn-digest>>) - either based on the parent block when importing blocks or
+the best/highest block when creating new blocks.
 
 [#defn-runtime-code-at-state]
 .<<defn-runtime-code-at-state, Runtime Code at State>>
