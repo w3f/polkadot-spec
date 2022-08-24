@@ -3,7 +3,9 @@
 .Runtime API Call Convention
 [#defn-runtime-api-convention]
 ====
-The *Runtime API Call Convention* describes that all functions receive and return SCALE-encoded data and as a result have the following prototype signature:
+The *Runtime API Call Convention* describes that all functions receive and
+return SCALE-encoded data and as a result have the following prototype
+signature:
 
 [source,wat]
 ----
@@ -16,4 +18,6 @@ function and `len` is the length of this data, while `result` is a pointer-size
 (Definition <<defn-runtime-pointer-size>>) to the SCALE-encoded return data.
 ====
 
-See <<sect-code-executor>> for more information about the behavior of the Wasm Runtime. Also note that any state changes created by calling any of the Runtime functions are not necessarily to be persisted after the call is ended. See <<sect-handling-runtime-state-update>> for more information.
+See <<sect-code-executor>> for more information about the behavior of the Wasm
+Runtime. Also note that any storage changes must be fork-aware
+(<<sect-managing-multiple-states>>).
