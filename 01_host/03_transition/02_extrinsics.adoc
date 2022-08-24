@@ -106,10 +106,10 @@ where::
 * stem:[M_T] is the transaction message (offchain transactions?)
 * stem:["Dec"_(SC)] decodes the SCALE encoded message.
 * stem:["Longest-Chain"] is defined in <<defn-longest-chain>>.
-* stem:[tt "TaggedTransactionQueue_validate_transaction"] is a Runtime entry
+* stem:[tt "TaggedTransactionQueue_validate_transaction"] is a Runtime entrypoint
 specified in <<sect-rte-validate-transaction>> and stem:[Requires(R)],
 stem:[Priority(R)] and stem:[Propagate(R)] refer to the corresponding fields in
-the tuple returned by the entry when it deems that stem:[T] is valid.
+the tuple returned by the entrypoint when it deems that stem:[T] is valid.
 * stem:["Provided-Tags"(T)] is the list of tags that transaction stem:[T]
 provides. The Polkadot Host needs to keep track of tags that transaction
 stem:[T] provides as well as requires after validating it.

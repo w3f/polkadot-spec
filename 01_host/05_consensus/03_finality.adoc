@@ -29,7 +29,7 @@ adjust V_B over the sections]
 bbb V = tt "grandpa_authorities"(B)
 ++++
 
-where stem:[tt "grandpa_authorities"] is a function entry of the Runtime
+where stem:[tt "grandpa_authorities"] is a function entrypoint of the Runtime
 described in <<sect-rte-grandpa-auth>>. We refer to stem:[bbb V_B] as
 stem:[bbb V] when there is no chance of ambiguity.
 

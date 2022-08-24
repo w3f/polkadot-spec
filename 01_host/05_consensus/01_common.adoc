@@ -30,7 +30,7 @@ stem:[pk_A] is the session public key (<<defn-session-key>>) of authority
 stem:[A]. And stem:[w_A] is an unsigned 64-bit integer indicating the authority
 weight. The value of stem:["Auth"_C(B)] is part of the Polkadot state. The value
 for stem:["Auth"_C(B_0)] is set in the genesis state (<<chapter-genesis>>) and
-can be retrieved using a runtime entry corresponding to consensus engine
+can be retrieved using a runtime entrypoint corresponding to consensus engine
 stem:[C].
 
 The authorities and their corresponding weights can be retrieved from the

@@ -11,7 +11,7 @@ The Polkadot Host supports as many child storages as required by Runtime
 and identifies each separate child storage by its unique identifying
 key. Child storages are usually used in situations where Runtime deals
 with multiple instances of a certain type of objects such as Parachains
-or Smart Contracts. In such cases, the execution of the Runtime entry
+or Smart Contracts. In such cases, the execution of the Runtime entrypoint
 might result in generating repeated keys across multiple instances of
 certain objects. Even with repeated keys, all such instances of
 key-value pairs must be able to be stored within the Polkadot state.
