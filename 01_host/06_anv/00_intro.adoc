@@ -1,4 +1,3 @@
-[preface]
 Polkadot serves as a replicated shared-state machine designed to resolve
 scalability issues and interoperability among blockchains. The validators of
 Polkadot execute transactions and participate in the consensus of Polkadots

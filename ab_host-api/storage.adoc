@@ -74,7 +74,7 @@ _None_ if the entry does not exists.
 
 ==== `ext_storage_clear`
 
-Clears the storage of the given key and its value. Nonexistent entries are
+Clears the storage of the given key and its value. Non-existent entries are
 silently ignored.
 
 ===== Version 1 - Prototype
