@@ -231,7 +231,9 @@ respond, the connection is dropped. This is a _Request-Response substream_.
 Further specification and reference implementation are available in the
 https://docs.libp2p.io/concepts/protocols/#ping[libp2p documentation].
 * `/ipfs/id/1.0.0` - Open a standardized _libp2p_ substream to a peer to ask for
-information about that peer. This is a _Request-Response substream_.
+information about that peer. This is a _Request-Response substream_, but the
+initiator does **not** send any message to the responder and only waits for the
+response.
 +
 Further specification and reference implementation are available in the
 https://docs.libp2p.io/concepts/protocols/#identify[libp2p documentation].
