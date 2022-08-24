@@ -161,7 +161,7 @@ be included in the current block as explained in <<algo-build-block>>.
 |Unix epoch time (<<defn-unix-time>>)
 
 |uncles00
-|Array of block headers
+|Array of block headers (auxiliary information)
 |Provides a list of potential uncle block headers (<<defn-block-header>>) for a given block, if any.
 |===
 
