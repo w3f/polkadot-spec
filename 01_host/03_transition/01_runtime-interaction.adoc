@@ -161,6 +161,16 @@ indicates the pointer to the offset of the result returned by the entrypoint
 encoded in SCALE codec in the memory buffer. The most significant one
 provides the size of the blob.
 
+[#sect-runtime-version-custom-section]
+===== Runtime Version Custom Section
+
+For newer Runtimes, the Runtime version (<<defn-rt-core-version>>) can be read
+directly from the Wasm custom section with the name `runtime_version`. The
+content is a SCALE encoded structure as described in <<defn-rt-core-version>>.
+
+Retrieving the Runtime version this way is preferred over calling the
+`Core_version` entrypoint since it involves significantly less overhead.
+
 [#sect-handling-runtime-state-update]
 ===== Handling Runtimes update to the State
 
