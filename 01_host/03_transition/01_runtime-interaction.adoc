@@ -170,25 +170,3 @@ content is a SCALE encoded structure as described in <<defn-rt-core-version>>.
 
 Retrieving the Runtime version this way is preferred over calling the
 `Core_version` entrypoint since it involves significantly less overhead.
-
-[#sect-handling-runtime-state-update]
-===== Handling Runtimes update to the State
-
-In order for the Runtime to carry on various tasks, it manipulates the current
-state by means of executing calls to various Polkadot Host APIs
-(<<chap-host-api>>). It is the duty of Host APIs to determine the context in
-which these changes should persist. For example, if Polkdot Host needs to
-validate a transaction using entrypoint
-`TaggedTransactionQueue_validate_transaction`
-(<<sect-rte-validate-transaction>>), it needs to sandbox the changes to the
-state just for that Runtime call and prevent the global state of the system from
-being influence by the call to such a Runtime entrypoint. This includes reverting the
-state of function calls which return errors or panic.
-
-As a rule of thumb, any state changes resulting from Runtime entrypoints are not
-persistent with the exception of state changes resulting from calling
-`Core_execute_block` (<<sect-rte-core-execute-block>>) while Polkadot Host is
-importing a block (<<sect-block-validation>>).
-
-For more information on managing multiple variant of state see
-<<sect-managing-multiple-states>>.
