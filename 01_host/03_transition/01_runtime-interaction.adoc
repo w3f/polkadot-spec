@@ -3,7 +3,7 @@ executing an ordered set of instructions. These instructions are known as
 _extrinsics_. In Polkadot, the execution logic of the state transition function
 is encapsulated in a Runtime (<<defn-state-machine>>). For easy upgradability
 this Runtime is presented as a Wasm blob. Nonetheless, the Polkadot Host needs
-to be in constant interaction with the Runtime (<<sect-entries-into-runtime>>).
+to be in constant interaction with the Runtime (<<sect-entrypoints-into-runtime>>).
 
 In <<sect-extrinsics>>, we specify the procedure of the process where the
 extrinsics are submitted, pre-processed and validated by Runtime and queued to
@@ -15,7 +15,7 @@ to other nodes, similar to most other prominent distributed ledger systems. The
 specification of the Polkadot block as well as the process of verifying its
 validity are both explained in <<sect-state-replication>>.
 
-[#sect-entries-into-runtime]
+[#sect-entrypoints-into-runtime]
 === Interacting with the Runtime
 
 The Runtime (<<defn-state-machine>>) is the code implementing the logic of the chain.
@@ -84,7 +84,7 @@ end of the execution of block stem:[B].
 [#sect-code-executor]
 ==== Code Executor
 
-The Polkadot Host executes the calls of Runtime entries inside a Wasm
+The Polkadot Host executes the calls of Runtime entrypoints inside a Wasm
 Virtual Machine (VM), which in turn provides the Runtime with access to
 the Polkadot Host API. This part of the Polkadot Host is referred to as
 the _Executor_.
@@ -134,7 +134,7 @@ for import under the symbol name `memory`.
 
 In general, all data exchanged between the Polkadot Host and the Runtime is
 encoded using SCALE codec described in <<sect-scale-codec>>. Therefore all
-runtime entries have the following identical Wasm function signatures:
+runtime entrypoints have the following identical Wasm function signatures:
 
 [source,wat]
 ----
@@ -174,7 +174,7 @@ global state of the system from being influence by the call to such a Runtime
 entry. This includes reverting the state of function calls which return errors
 or panic.
 
-As a rule of thumb, any state changes resulting from Runtime entries are not
+As a rule of thumb, any state changes resulting from Runtime entrypoints are not
 persistent with the exception of state changes resulting from calling
 `Core_execute_block` (<<sect-rte-core-execute-block>>) while Polkadot Host is
 importing a block (<<sect-block-validation>>).

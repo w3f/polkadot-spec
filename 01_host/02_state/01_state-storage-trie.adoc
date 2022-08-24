@@ -12,7 +12,7 @@ the key and the value in the storage trie
 ==== Accessing System Storage 
 
 The Polkadot Host implements various functions to facilitate access to the
-system storage for the Runtime (<<sect-entries-into-runtime>>). Here we
+system storage for the Runtime (<<sect-entrypoints-into-runtime>>). Here we
 formalize the access to the storage when it is being directly accessed by the
 Polkadot Host (in contrast to Polkadot runtime).
 
