@@ -127,6 +127,8 @@ where stem:[A_w] is the total sum of all authority weights in the authority set
 (<<defn-authority-list>>) for epoch stem:[cc E_n], stem:[w_a] is the weight of
 the block author and stem:[c in (0, 1)] is the BABE constant
 (<<defn-babe-constant>>).
+
+The numbers should be treated as 64-bit rational numbers.
 ====
 
 ===== Primary Block Production Lottery
