@@ -159,10 +159,6 @@ be included in the current block as explained in <<algo-build-block>>.
 |timstap0
 |Unsigned 64-bit integer
 |Unix epoch time (<<defn-unix-time>>)
-
-|uncles00
-|Array of block headers (auxiliary information)
-|Provides a list of potential uncle block headers (<<defn-block-header>>) for a given block, if any.
 |===
 
 .<<defn-inherent-data, Inherent Data>>
