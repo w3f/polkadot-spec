@@ -44,6 +44,22 @@ accessing the full storage as well as consensus-related data including the block
 signature. This field is indicated as stem:[H_d] (<<defn-digest>>).
 ====
 
+.Block Header
+[kaitai#block_header]
+++++
+seq:
+  - id: parent_hash
+    size: 32
+  - id: number
+    type: b32
+  - id: state_root
+    size: 32
+  - id: extrinsic_root
+    size: 32
+  - id: digest
+    size: 32
+++++
+
 [#defn-digest]
 .<<defn-digest,Header Digest>>
 ====
