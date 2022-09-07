@@ -23,7 +23,10 @@ A handful of dependencies are required to successfully convert the spec into a p
 You will have to install `bundler` to use the `Gemfile`. On a Debian based system, it can be installed with:
 
 ```bash
-sudo apt-get install ruby-dev
+sudo apt-get install ruby-dev python3-pydot graphviz
+# Install Kaitai
+curl -LO https://github.com/kaitai-io/kaitai_struct_compiler/releases/download/0.10/kaitai-struct-compiler_0.10_all.deb
+sudo apt-get install ./kaitai-struct-compiler_0.10_all.deb
 # On some systems this might be required
 gem install bundler
 ```
