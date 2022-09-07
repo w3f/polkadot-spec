@@ -190,11 +190,15 @@ types:
           switch-on: enum_id
           cases:
             'babe_consensus_enum::next_epoch_data': next_epoch_data
-            'babe_consensus_enum::on_disabled': u1
-            'babe_consensus_enum::next_epoch_descriptor': u1
+            'babe_consensus_enum::on_disabled': u4
+            'babe_consensus_enum::next_epoch_descriptor': next_epoch_descriptor
     enums:
       next_epoch_descriptor_enum:
         1: default
+      secondary_slot_enum:
+        0: no_secondary_slot
+        1: plain_secondary_slot
+        2: secondary_slot_with_vrf_output
     types:
       next_epoch_data:
         seq:
@@ -222,6 +226,20 @@ types:
             type: u1
           - id: denominator
             type: u1
+          - id: enum_id
+            type: u1
+            enum: secondary_slot_enum
+          - id: enum_content
+            type:
+              switch-on: enum_id
+              cases:
+                'secondary_slot_enum::no_secondary_slot': empty
+                'secondary_slot_enum::no_secondary_slot': empty
+                'secondary_slot_enum::no_secondary_slot': empty
+      empty:
+        seq:
+          - id: empty
+            size: 0
 ++++
 
 [#defn-block-header-hash]
