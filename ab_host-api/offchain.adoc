@@ -144,11 +144,12 @@ Returns the current timestamp.
 
 ===== Version 1 - Prototype
 ----
-(func $ext_offchain_timestamp_version_1 (result u64))
+(func $ext_offchain_timestamp_version_1 (result i64))
 ----
 
 Arguments::
-* `result`: an u64 integer indicating the current UNIX timestamp (<<defn-unix-time>>).
+* `result`: an u64 integer (typed as i64 due to wasm types) indicating the
+current UNIX timestamp (<<defn-unix-time>>).
 
 ==== `ext_offchain_sleep_until`
 
@@ -156,11 +157,12 @@ Pause the execution until the `deadline` is reached.
 
 ===== Version 1 - Prototype
 ----
-(func $ext_offchain_sleep_until_version_1 (param $deadline u64))
+(func $ext_offchain_sleep_until_version_1 (param $deadline i64))
 ----
 
 Arguments::
-* `deadline`: an u64 integer specifying the UNIX timestamp (<<defn-unix-time>>).
+* `deadline`: an u64 integer (typed as i64 due to wasm types) specifying the
+UNIX timestamp (<<defn-unix-time>>).
 
 ==== `ext_offchain_random_seed`
 
