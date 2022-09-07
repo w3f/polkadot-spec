@@ -101,6 +101,31 @@ changes regarding the Runtime code or heap pages (<<sect-memory-management>>)
 occurred. No additional data is provided.
 ====
 
+.Block Header
+[kaitai#digest]
+++++
+seq:
+  - id: digest_ty_id
+    type: u1
+    enum: digest_ty
+  - id: digest_item
+    type:
+      switch-on: digest_ty_id
+      cases:
+        'digest_ty::non_system': u1
+        'digest_ty::consensus_message': u1
+        'digest_ty::seal': u1
+        'digest_ty::pre_runtime': u1
+        'digest_ty::runtime_env_updated': u1
+enums:
+    digest_ty:
+        0: non_system
+        4: consensus_message
+        5: seal
+        6: pre_runtime
+        8: runtime_env_updated
+++++
+
 [#defn-block-header-hash]
 .<<defn-block-header-hash,Header Hash>>
 ====
