@@ -1,5 +1,6 @@
 [#sect-state-replication]
 === State Replication
+:kaitai-imports: scale
 
 Polkadot nodes replicate each other’s state by syncing the history of the
 extrinsics. This, however, is only practical if a large set of transactions are
@@ -163,6 +164,64 @@ types:
       - id: payload
         type: scale::bytes
   empty: {}
+++++
+
+TODO: Move to proper section
+++++
+enums:
+  babe_consensus_enum:
+    1: next_epoch_data
+    2: on_disabled
+    3: next_epoch_descriptor
+types:
+  consensus_message:
+    seq:
+      - id: id
+        contents: ["BABE", "FRNK", "BEEF"]
+      - id: content
+        type: scale::bytes
+  babe_consensus_message:
+    seq:
+      - id: enum_id
+        type: u1
+        enum: babe_consensus_enum
+      - id: message 
+        type:
+          switch-on: enum_id
+          cases:
+            'babe_consensus_enum::next_epoch_data': next_epoch_data
+            'babe_consensus_enum::on_disabled': u1
+            'babe_consensus_enum::next_epoch_descriptor': u1
+    enums:
+      next_epoch_descriptor_enum:
+        1: default
+    types:
+      next_epoch_data:
+        seq:
+          - id: authority_set
+            type: u1
+          - id: randomness
+            type: u1
+      on_disabled:
+        seq:
+          - id: authority_id
+            type: u4
+      next_epoch_descriptor:
+        seq:
+          - id: enum_id
+            type: u1
+            enum: next_epoch_descriptor_enum
+          - id: content
+            type:
+              switch-on: enum_id
+              cases:
+                'next_epoch_descriptor_enum::default': babe_slot_descriptor
+      babe_slot_descriptor:
+        seq:
+          - id: nominator
+            type: u1
+          - id: denominator
+            type: u1
 ++++
 
 [#defn-block-header-hash]
