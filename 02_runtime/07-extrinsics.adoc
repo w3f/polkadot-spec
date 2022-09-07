@@ -32,7 +32,7 @@ latexmath:[T_v] is a 8-bit bitfield and defines the extrinsic version. The
 required format of an extrinsic body, latexmath:[T_b], is dictated by the
 Runtime. Older or unsupported version are rejected.
 
-The first bit of latexmath:[T_v] indicates whether the transaction is
+The most significant bit of latexmath:[T_v] indicates whether the transaction is
 *signed* (latexmath:[1]) or *unsigned* (latexmath:[0]). The
 remaining 7-bits represent the version number. As an example, for
 extrinsic format version 4, an signed extrinsic represents
