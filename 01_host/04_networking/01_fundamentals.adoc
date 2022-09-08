@@ -62,7 +62,7 @@ course of the discovery mechanism described in <<sect-discovery-mechanism>>.
 .<<defn-peer-id,PeerId>>
 ====
 The Polkadot node’s PeerId, formally referred to as stem:[P_(id)], is derived
-from the ED25519 public key and is stuctured based on the
+from the ED25519 public key and is structured based on the
 https://docs.libp2p.io/concepts/peer-id/[libp2p specification], but does not
 fully conform to the specification. Specifically, it does not support
 https://github.com/multiformats/cid[CID] and the only supported key type is
