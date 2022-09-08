@@ -93,7 +93,7 @@ the used key type] (field stem:[1] of value stem:[1] implies _ED25519_).
 * stem:[b_4], stem:[b_5] and stem:[b_(6..37)] are a protobuf encoded field-value
 pair where stem:[b_5] indicates the length of the public key followed by the the
 raw ED25519 public key itself, which varies for each Polkadot Host and is always
-32 bytes (field stem:[2] is of value stem:[32] + public key).
+32 bytes (field stem:[2] contains the public key, which has a field value length prefix).
 ====
 
 [#sect-discovery-mechanism]
