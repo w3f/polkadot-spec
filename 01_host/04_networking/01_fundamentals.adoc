@@ -61,9 +61,39 @@ course of the discovery mechanism described in <<sect-discovery-mechanism>>.
 [#defn-peer-id]
 .<<defn-peer-id,PeerId>>
 ====
-The Polkadot node’s _PeerId_, formally referred to as stem:[P_(id)], is derived
-from the ED25519 public key and is structured as defined in the
-https://docs.libp2p.io/concepts/peer-id/[libp2p specification].
+The Polkadot node’s PeerId, formally referred to as stem:[P_(id)], is derived
+from the ED25519 public key and is stuctured based on the
+https://docs.libp2p.io/concepts/peer-id/[libp2p specification], but does not
+fully conform to the specification. Specifically, it does not support
+https://github.com/multiformats/cid[CID] and the only supported key type is
+ED25519.
+
+The byte representation of the PeerId is always of the following bytes in this
+exact order:
+
+[stem]
+++++
+b_0 = 0\
+b_1 = 36\
+b_2 = 8\
+b_3 = 1\
+b_4 = 18\
+b_5 = 32\
+b_(6..37) = ...
+++++
+
+where
+
+* stem:[b_0] is the https://github.com/multiformats/multihash#multihash[multihash prefix]
+of value stem:[0] (implying no hashing is used).
+* stem:[b_1] the length of the PeerId (remaining bytes).
+* stem:[b_2] and stem:[b_3] are a single protobuf encoded field-value pair
+https://github.com/libp2p/specs/blob/master/peer-ids/peer-ids.md#keys[indicating
+the used key type] (field stem:[1] of value stem:[1] implies _ED25519_).
+* stem:[b_4] and stem:[b_5] are a single protobuf encoded field-value pair
+indicating the length of the public key (field stem:[2] is of value stem:[32]).
+* stem:[b_(6..37)] is the raw ED25519 public key, which varies for each Polkadot
+Host and is always 32 bytes.
 ====
 
 [#sect-discovery-mechanism]
