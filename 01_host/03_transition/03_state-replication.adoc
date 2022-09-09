@@ -176,7 +176,7 @@ enums:
 types:
   consensus_message:
     seq:
-      - id: consensus_message_enum
+      - id: enum_id 
         size: 4
       - id: content
         type: scale::bytes
@@ -193,9 +193,9 @@ types:
             'babe_consensus_enum::on_disabled': u4
             'babe_consensus_enum::next_epoch_descriptor': next_epoch_descriptor
     enums:
-      next_epoch_descriptor_enum:
+      next_epoch_descriptor_type:
         1: default
-      secondary_slot_enum:
+      secondary_slot_type:
         0: no_secondary_slot
         1: plain_secondary_slot
         2: secondary_slot_with_vrf_output
@@ -205,7 +205,7 @@ types:
           - id: authority_set
             type: u1
           - id: randomness
-            type: u1
+            size: 32
       on_disabled:
         seq:
           - id: authority_id
@@ -214,12 +214,12 @@ types:
         seq:
           - id: enum_id
             type: u1
-            enum: next_epoch_descriptor_enum
+            enum: next_epoch_descriptor_type
           - id: content
             type:
               switch-on: enum_id
               cases:
-                'next_epoch_descriptor_enum::default': babe_slot_descriptor
+                'next_epoch_descriptor_type::default': babe_slot_descriptor
       babe_slot_descriptor:
         seq:
           - id: nominator
@@ -228,14 +228,14 @@ types:
             type: u1
           - id: enum_id
             type: u1
-            enum: secondary_slot_enum
+            enum: secondary_slot_type
           - id: enum_content
             type:
               switch-on: enum_id
               cases:
-                'secondary_slot_enum::no_secondary_slot': empty
-                'secondary_slot_enum::no_secondary_slot': empty
-                'secondary_slot_enum::no_secondary_slot': empty
+                'secondary_slot_type::no_secondary_slot': empty
+                'secondary_slot_type::no_secondary_slot': empty
+                'secondary_slot_type::no_secondary_slot': empty
       empty:
         seq:
           - id: empty
