@@ -270,10 +270,6 @@ types:
                 'secondary_slot_type::no_secondary_slot': empty
                 'secondary_slot_type::no_secondary_slot': empty
                 'secondary_slot_type::no_secondary_slot': empty
-      empty:
-        seq:
-          - id: empty
-            size: 0
   grandpa_consensus_message:
     seq:
       - id: enum_id
@@ -354,6 +350,10 @@ types:
         seq:
           - id: root
             size: 32
+  empty:
+    seq:
+      - id: empty
+        size: 0
 ++++
 
 [#defn-block-header-hash]
