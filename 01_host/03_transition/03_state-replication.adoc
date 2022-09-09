@@ -180,6 +180,38 @@ types:
         size: 4
       - id: content
         type: scale::bytes
+  beefy_consensus_message:
+    seq:
+      - id: enum_id
+        type: u1
+        enum: beefy_consensus_type
+      - id: message
+        type:
+          switch-on: enum_id
+          cases:
+            'beefy_consensus_type::authority_change': authority_change
+            'beefy_consensus_type::on_disabled': on_disabled
+            'beefy_consensus_type::mmr_root': mmr_root
+    enums:
+      beefy_consensus_type:
+        1: authority_change
+        2: on_disabled
+        3: mmr_root
+    types:
+      authority_change:
+        seq:
+          - id: authorities
+            type: scale::bytes
+          - id: set_id
+            type: u4
+      on_disabled:
+        seq:
+          - id: authority_id
+            type: u4
+      mmr_root:
+        seq:
+          - id: root
+            size: 32
   grandpa_consensus_message:
     seq:
       - id: enum_id
