@@ -125,7 +125,7 @@ s_"2nd" = {
 ====
 
 [#defn-consensus-message-grandpa]
-.<<defn-consensus-message-babe, GRANDPA Consensus Message>>
+.<<defn-consensus-message-grandpa, GRANDPA Consensus Message>>
 ====
 stem:["CM"_g], the consensus message for GRANDPA, is of the following format:
 
@@ -133,6 +133,11 @@ stem:["CM"_g], the consensus message for GRANDPA, is of the following format:
 ++++
 "CM"_g = {(1,("Auth"_C,N_("delay"))),(2,(m,"Auth"_C,N_("delay"))),(3,"A"_i),(4,N_("delay")),(5,N_("delay")):}
 ++++
+
+TODO:
+* Define stem:["Auth_C"].
+* Define stem:[m].
+* All variants need explicit type definition.
 
 where::
 [horizontal]

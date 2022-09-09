@@ -185,13 +185,49 @@ types:
       - id: enum_id
         type: u1
         enum: grandpa_consensus_type
+      - id: message
+        type:
+          switch-on: enum_id
+          cases:
+            'grandpa_consensus_type::scheduled_change': scheduled_change
+            'grandpa_consensus_type::forced_change': forced_change
+            'grandpa_consensus_type::on_disabled': on_disabled
+            'grandpa_consensus_type::pause': pause
+            'grandpa_consensus_type::resume': resume
     enums:
       grandpa_consensus_type:
         1: scheduled_change
-        2: forded_change
+        2: forced_change
         3: on_disabled
         4: pause
         5: resume
+    types:
+      scheduled_change:
+        seq:
+          - id: authority_list
+            type: scale::bytes
+          - id: delay_of
+            type: u4
+      forced_change:
+        seq:
+          - id: starting_at
+            type: u4
+          - id: authority_list
+            type: scale::bytes
+          - id: delay
+            type: u4
+      on_disabled:
+        seq:
+          - id: to_disable
+            type: u4
+      pause:
+        seq:
+          - id: delay_of
+            type: u4
+      resume:
+        seq:
+          - id: delay_of
+            type: u4
   babe_consensus_message:
     seq:
       - id: enum_id
