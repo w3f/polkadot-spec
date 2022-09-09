@@ -176,10 +176,22 @@ enums:
 types:
   consensus_message:
     seq:
-      - id: id
-        contents: ["BABE", "FRNK", "BEEF"]
+      - id: consensus_message_enum
+        size: 4
       - id: content
         type: scale::bytes
+  grandpa_consensus_message:
+    seq:
+      - id: enum_id
+        type: u1
+        enum: grandpa_consensus_type
+    enums:
+      grandpa_consensus_type:
+        1: scheduled_change
+        2: forded_change
+        3: on_disabled
+        4: pause
+        5: resume
   babe_consensus_message:
     seq:
       - id: enum_id
