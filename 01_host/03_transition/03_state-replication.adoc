@@ -180,6 +180,40 @@ types:
         size: 4
       - id: content
         type: scale::bytes
+  pre_runtime_digest:
+    seq:
+      - id: enum_id
+        type: u1
+        enum: pre_runtime_digest_type
+      - id: digest
+        type:
+          switch-on: enum_id
+          cases:
+            'pre_runtime_digest_type::primary_vrf': vrf_digest
+            'pre_runtime_digest_type::primary_plain': plain_digest
+            'pre_runtime_digest_type::secondary_vrf': vrf_digest
+    enums:
+      pre_runtime_digest_type:
+        1: primary_vrf
+        2: primary_plain
+        3: secondary_vrf
+    types:
+      vrf_digest:
+        seq:
+          - id: authority_id
+            type: u1
+          - id: slot_number
+            type: u1
+          - id: vrf_out
+            size: 32
+          - id: vrf_proof
+            size: 64
+      plain_digest:
+        seq:
+          - id: authority_id
+            type: u1
+          - id: slot_number
+            type: u1
   babe_consensus_message:
     seq:
       - id: enum_id

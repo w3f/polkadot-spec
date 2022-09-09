@@ -407,9 +407,9 @@ authority in the authority set (<<sect-authority-set>>) who authored the
 block.
 * stem:[s] is the slot number (<<defn-epoch-slot>>).
 * stem:[o] is VRF output (<<algo-block-production-lottery>> respectively
-<<defn-babe-secondary-slots>>).
+<<defn-babe-vrf-transcript>>).
 * stem:[p] is VRF proof (<<algo-block-production-lottery>> respectively
-<<defn-babe-secondary-slots>>).
+<<defn-babe-vrf-transcript>>).
 
 The Pre-Digest must be included as a digest item of Pre-Runtime type in the
 header digest (<<defn-digest>>) stem:[H_d(B)].
