@@ -187,12 +187,12 @@ the 256-bit Blake2 storage root.
 ===== Version 2 - Prototype
 ----
 (func $ext_storage_root_version_2
-	(param $version i32) (return i32))
+	(param $version i32) (return i64))
 ----
 
 Arguments::
 * `version`: the state version (<<defn-state-version>>).
-* `return`: a pointer (<<defn-runtime-pointer>>) to the buffer containing the 256-bit Blake2 storage
+* `return`: a pointer-size (<<defn-runtime-pointer-size>>) to the buffer containing the 256-bit Blake2 storage
 root.
 
 [#sect-ext-storage-changes-root]
