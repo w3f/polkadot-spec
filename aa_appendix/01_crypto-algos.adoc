@@ -285,7 +285,7 @@ table:
 |Schnorr signature on Ristretto compressed ed25519 points as implemented in TODO
 
 |ed25519
-|The standard ed25519 signature complying with TODO
+|The ed25519 signature complies with cite:[josefsson_edwards-curve_2017] except for the verification process which adhere to Ed25519 Zebra variant specified in cite:[devalence-ed25519zebra_20]. In short, the signature point is not assumed to be on in the prime ordered subgroup group. As such, the verifier must explicitly clear the cofactor during the course of verifying the signature equation.
 
 |secp256k1
 |Only for outgoing transfer transactions.
