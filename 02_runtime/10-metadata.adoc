@@ -1,3 +1,4 @@
+[#sect-metadata]
 == Metadata
 :kaitai-imports: scale
 
@@ -6,6 +7,10 @@ interact with the Polkadot runtime. Considering that Polkadot runtimes are
 upgradable and therefore any interfaces are subject to change, the metadata
 allows developers to structure any extrinsics or storage entries accordingly.
 
+The metadata of a runtime is provided by a call to `Metadata_metadata` (<<sect-rte-metadata-metadata>>)
+and is returned as a scale encoded (<<sect-scale-codec>>) binary blob. How to interpret and decode this
+data is described in this chapter.
+
 [#sect-rtm-structure]
 === Structure
 
@@ -13,23 +18,28 @@ The Runtime Metadata is a datastructure of the following format:
 
 [stem]
 ++++
-(m,v, T, P, E, y)\
-T = (r_n, ...,r_(n+m))\
-P = (p_n, ...,p_(n+m))\
-E = (e_n, ...,e_(n+m))
+(M, v_m, R, P, t_e, v_e, E, t_r) \
+M = ("m", "e", "t", "a") \
+R = (r_0, ...,r_n) \
+P = (p_0, ...,p_n) \
+E = (e_0, ...,e_n)
 ++++
 
 where::
- * stem:[m] are the first four bytes spelling "meta"
- * stem:[v] is the format version of the metadata (currently `14`)
- * stem:[r] is a registry containing all type definitions
- (<<defn-rtm-registry-entry>>).
- * stem:[p] is a pallet metadata structure (<<sect-rtm-pallet-metadata>>).
- * stem:[e] is an extrinsic metadata structure (<<sect-rtm-extrinsic-metadata>>).
- * stem:[y] is the type Id (<<defn-rtm-type-id>>) of the runtime.
+ * stem:[M] are the first four constant bytes, spelling "meta" in ASCII
+ * stem:[v_m] is the format version of the metadata (one unsigned byte, currently `14`)
+
+ * stem:[R] is a sequence (<<defn-scale-list>>) of type definitions stem:[r_i] (<<defn-rtm-registry-entry>>).
+
+ * stem:[P] is a sequence (<<defn-scale-list>>) of pallet metadata stem:[p_i] (<<sect-rtm-pallet-metadata>>).
+
+ * stem:[t_e] is the type Id (<<defn-rtm-type-id>>) of the extrinsics.
+ * stem:[v_e] is the format version of the extrinsics
+ * stem:[E] is a sequence (<<defn-scale-list>>) of extrinsics metadata stem:[e_i] (<<defn-rtm-signed-extension-metadata>>).
+ * stem:[t_r] is the type Id (<<defn-rtm-type-id>>) of the runtime.
 
 .Polkadot Runtime Metadata
-[kaitai#metadata,kaitai-dependencies="lookup,pallet,extrinsic"]
+[kaitai#metadata,kaitai-dependencies="metadata_type,metadata_pallet,metadata_extrinsic"]
 ++++
 seq:
   - id: magic
@@ -39,15 +49,15 @@ seq:
 
   - id: num_types
     type: scale::compact_int
-  - id: lookup
-    type: lookup
+  - id: types
+    type: metadata_type
     repeat: expr
     repeat-expr: num_types.value
 
   - id: num_pallets
     type: scale::compact_int
   - id: pallets
-    type: pallet
+    type: metadata_pallet
     repeat: expr
     repeat-expr: num_pallets.value
 
@@ -58,7 +68,7 @@ seq:
   - id: num_extrinsics
     type: scale::compact_int
   - id: extrinsics
-    type: extrinsic
+    type: metadata_extrinsic
     repeat: expr
     repeat-expr: num_extrinsics.value
 
@@ -75,30 +85,22 @@ serialization. The entry is a datastructure of the following format:
 
 [stem]
 ++++
-(i_c,P,T,d,C)
+r_i = (i_t,p,T,D,c) \
+T = (t_0, ...,t_n) \
+t_i = (n, y)
 ++++
 
 where::
-* stem:[i_c] is a compact integer indicating the identifier of the type.
-* stem:[P] is the unique path to the type as according to the source code, which
-might be empty. It's an array of varying length containing strings.
-* stem:[T] is the generic type parameters of the type in use. It's empty for
-non-generic types. It consists of:
-+
-[stem]
-++++
-(t_n, ...,t_(n+m))\
-t_n = (n, y)
-++++
-+
-where stem:[n] is a string representing the name of the generic
-type parameter and stem:[y] is a _Option_ type containing a type Id
-(<<defn-rtm-type-id>>).
-* stem:[d] is the type variant (<<defn-rtm-type-variant>>).
-* stem:[C] is an array of varying length containing strings of documentation.
+* stem:[i_t] is a compact integer indicating the identifier of the type.
+* stem:[p] is the path of the type, optional and based on source file location. Encoded a sequence (<<defn-scale-list>>) of strings.
+* stem:[T] is a sequence (<<defn-scale-list>>) of generic parameters (empty for non-generic types).
+** stem:[n] is the name string of the generic type parameter
+** stem:[y] is a _Option_ type containing a type Id (<<defn-rtm-type-id>>).
+* stem:[D] is the type definition (<<defn-rtm-type-definition>>).
+* stem:[c] is the documentation as sequence (<<defn-scale-list>>) of strings.
 
-.Runtime Registry Type Entry
-[kaitai#lookup]
+.Runtime Metadata Type
+[kaitai#metadata_type,kaitai-dependencies="metadata_type_definition"]
 ++++
 seq:
   - id: id
@@ -114,6 +116,117 @@ seq:
     repeat-expr: num_params.value
     type: param
 
+  - id: definition
+    type: metadata_type_definition
+
+  - id: docs
+    type: scale::string_list
+types:
+  param:
+    seq:
+      - id: name
+        type: scale::string
+      - id: type
+        type: scale::maybe_compact_int
+++++
+====
+
+.Runtime Type Id
+[#defn-rtm-type-id]
+====
+The runtime type Id is a compact integer representing the index to the
+type in the type registry (<<defn-rtm-registry-entry>>).
+
+====
+
+.Type Variant
+[#defn-rtm-type-definition]
+====
+The type definition stem:[D] indicates all the possible types of encodable
+values a type can have.
+
+[stem]
+++++
+D = {
+	(0,->,C,"composite type (e.g. structure or tuple)"),
+	(1,->,V,"variant type"),
+	(2,->,s_v,"sequence type varying length"),
+	(3,->,S,"sequence with fixed length"),
+	(4,->,T,"tuple type"),
+	(5,->,P,"primitive type"),
+	(6,->,e,"compact encoded type"),
+	(7,->,B,"sequence of bits")
+:}
+++++
+
+where::
+* stem:[C] is of the following format:
++
+[stem]
+++++
+C = (f_0, ..., f_n)
+++++
++
+** stem:[f_i] is a field (<<defn-rtm-field>>).
+* stem:[V] is of the following format:
++
+[stem]
+++++
+V = (v_0, ..., v_n)
+++++
++
+** stem:[v_i] is a variant (<<defn-rtm-variant>>).
+* stem:[s_v] is a type Id (<<defn-rtm-type-id>>).
+* stem:[S] is of the following format:
++
+[stem]
+++++
+S = (l, y)
+++++
+** stem:[l] is a unsigned 32-bit integer indicating the length
+** stem:[y] is a type Id (<<defn-rtm-type-id>>).
+* stem:[T] is a sequence (<<defn-scale-list>>) of type Ids (<<defn-rtm-type-id>>).
+* stem:[P] is a varying datatype of the following structure:
++
+[stem]
+++++
+P = {
+	(0,"boolean"),
+	(1,"char"),
+	(2,"string"),
+	(3,"unsigned 8-bit integer"),
+	(4,"unsigned 16-bit integer"),
+	(5,"unsigned 32-bit integer"),
+	(6,"unsigned 64-bit integer"),
+	(7,"unsigned 128-bit integer"),
+	(8,"unsigned 256-bit integer"),
+	(9,"signed 8-bit integer"),
+	(10,"signed 16-bit integer"),
+	(11,"signed 32-bit integer"),
+	(12,"signed 64-bit integer"),
+	(13,"signed 128-bit integer"),
+	(14,"signed 256-bit integer")
+:}
+++++
+* stem:[e] is a type Id (<<defn-rtm-type-id>>).
+* stem:[B] is a datastructure of the following format:
++
+[stem]
+++++
+B = (s, o)
+++++
++
+** stem:[s] is a type Id (<<defn-rtm-type-id>>) representing the bit store
+type (https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore.html[external
+reference])
+** stem:[o] is a type Id (<<defn-rtm-type-id>>) the bit order type
+(https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder.html[external
+reference]).
+
+.Runtime Metadata Type Definition
+[kaitai#metadata_type_definition,kaitai-dependencies="metadata_type_fields,metadata_type_variants"]
+++++
+seq:
   - id: type
     type: u1
     enum: type
@@ -121,17 +234,14 @@ seq:
     type:
       switch-on: type
       cases:
-        "type::composite": fields
-        "type::variant": variants
+        "type::composite": metadata_type_fields
+        "type::variant": metadata_type_variants
         "type::sequence": sequence
         "type::array": array
         "type::tuple": tuple
         "type::primitive": primitive
         "type::compact": compact
         "type::bits": bits
-
-  - id: docs
-    type: scale::string_list
 enums:
   type:
     0: composite
@@ -143,51 +253,6 @@ enums:
     6: compact
     7: bits
 types:
-  param:
-    seq:
-      - id: name
-        type: scale::string
-      - id: type
-        type: scale::maybe_compact_int
-
-  fields:
-    seq:
-      - id: num_fields
-        type: scale::compact_int
-      - id: fields
-        type: field
-        repeat: expr
-        repeat-expr: num_fields.value
-  field:
-    seq:
-      - id: name
-        type: scale::maybe_string
-      - id: type
-        type: scale::compact_int
-      - id: typename
-        type: scale::maybe_string
-      - id: docs
-        type: scale::string_list
-
-  variants:
-    seq:
-      - id: num_variants
-        type: scale::compact_int
-      - id: variants
-        type: variant
-        repeat: expr
-        repeat-expr: num_variants.value
-  variant:
-    seq:
-      - id: name
-        type: scale::string
-      - id: composite
-        type: fields
-      - id: index
-        type: u1
-      - id: docs
-        type: scale::string_list
-
   sequence:
     seq:
       - id: type
@@ -238,106 +303,12 @@ types:
         type: scale::compact_int
 
   bits:
-      seq:
-        - id: type
-          type: scale::compact_int
-        - id: order
-          type: scale::compact_int
+    seq:
+      - id: type
+        type: scale::compact_int
+      - id: order
+        type: scale::compact_int
 ++++
-====
-
-.Runtime Type Id
-[#defn-rtm-type-id]
-====
-The runtime type Id is a compact integer representing the index to the
-type in the type registry (<<defn-rtm-registry-entry>>).
-
-====
-
-.Type Variant
-[#defn-rtm-type-variant]
-====
-The type definition stem:[D] indicates all the possible types of encodable
-values a type can have.
-
-[stem]
-++++
-D = {
-	(0,->,C,"composite type (e.g. structure or tuple)"),
-	(1,->,V,"variant type"),
-	(2,->,s_v,"sequence type varying length"),
-	(3,->,S,"sequence with fixed length"),
-	(4,->,T,"tuple type"),
-	(5,->,P,"primitive type"),
-	(6,->,e,"compact encoded type"),
-	(7,->,B,"sequence of bits")
-:}
-++++
-
-where
-
-* stem:[C] is of the following format:
-+
-[stem]
-++++
-(f_n, ..., f_(n+m))\
-++++
-+
-where stem:[f] is a field (<<defn-rtm-field>>).
-* stem:[V] is of the following format:
-+
-[stem]
-++++
-(v_n, ..., v_(n+m))
-++++
-+
-where stem:[v] is a variant (<<defn-rtm-variant>>).
-* stem:[s_v] is a type Id (<<defn-rtm-type-id>>).
-* stem:[S] is of the following format:
-+
-[stem]
-++++
-(l, y)
-++++
-+
-where stem:[l] is a unsigned 32-bit integer indicating the length and stem:[y]
-is a type Id (<<defn-rtm-type-id>>).
-* stem:[T] is an array of varying length containing elements of type Ids (<<defn-rtm-type-id>>).
-* stem:[P] is a varying datatype of the following structure:
-+
-[stem]
-++++
-P = {
-	(0,"boolean"),
-	(1,"char"),
-	(2,"string"),
-	(3,"unsigned 8-bit integer"),
-	(4,"unsigned 16-bit integer"),
-	(5,"unsigned 32-bit integer"),
-	(6,"unsigned 64-bit integer"),
-	(7,"unsigned 128-bit integer"),
-	(8,"unsigned 256-bit integer"),
-	(9,"signed 8-bit integer"),
-	(10,"signed 16-bit integer"),
-	(11,"signed 32-bit integer"),
-	(12,"signed 64-bit integer"),
-	(13,"signed 128-bit integer"),
-	(14,"signed 256-bit integer")
-:}
-++++
-* stem:[e] is a type Id (<<defn-rtm-type-id>>).
-* stem:[B] is a datastructure of the following format:
-+
-[stem]
-++++
-(s, o)
-++++
-+
-where stem:[s] is a type Id (<<defn-rtm-type-id>>) representing the bit store
-type (https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore.html[external
-reference]) and stem:[o] is a type Id (<<defn-rtm-type-id>>) the bit order type
-(https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder.html[external
-reference]).
 ====
 
 .Field
@@ -347,7 +318,7 @@ A field of a datastructure of the following format:
 
 [stem]
 ++++
-(n, y, y_n, c)
+f_i = (n, y, y_n, c)
 ++++
 
 where
@@ -357,6 +328,29 @@ where
  * stem:[y_n] is a _Option_ type containing a string that indicates the name of the
 type as it appears in the source code.
  * stem:[c] is an array of varying length containing strings of documentation.
+
+.Runtime Metadata Fields Type
+[kaitai#metadata_type_fields]
+++++
+seq:
+  - id: num_fields
+    type: scale::compact_int
+  - id: fields
+    type: field
+    repeat: expr
+    repeat-expr: num_fields.value
+types:
+  field:
+    seq:
+      - id: name
+        type: scale::maybe_string
+      - id: type
+        type: scale::compact_int
+      - id: typename
+        type: scale::maybe_string
+      - id: docs
+        type: scale::string_list
+++++
 ====
 
 .Variant
@@ -366,7 +360,7 @@ A struct variant of the following format:
 
 [stem]
 ++++
-(n,F,i,c))
+v_i = (n,F,k,c)
 ++++
 
 where
@@ -374,7 +368,30 @@ where
 * stem:[n] is a string representing the name of the variant.
 * stem:[F] is a possible empty array of varying length containing field
 (<<defn-rtm-field>>) elements.
-* stem:[i] is an unsigned 8-bit integer indicating the index of the variant (TODO: Clarify).
+* stem:[k] is an unsigned 8-bit integer indicating the index of the variant (TODO: Clarify).
+
+.Runtime Metadata Variants Type
+[kaitai#metadata_type_variants,kaitai-dependencies="metadata_type_fields"]
+++++
+seq:
+  - id: num_variants
+    type: scale::compact_int
+  - id: variants
+    type: variant
+    repeat: expr
+    repeat-expr: num_variants.value
+types:
+  variant:
+    seq:
+      - id: name
+        type: scale::string
+      - id: composite
+        type: metadata_type_fields
+      - id: index
+        type: u1
+      - id: docs
+        type: scale::string_list
+++++
 ====
 
 [#sect-rtm-pallet-metadata]
@@ -384,25 +401,23 @@ All the metadata about a pallet, part of the main structure
 
 [stem]
 ++++
-(n, s, a, e, c, e, i)
+p_i = (n, S, a, e, C, e, i)
 ++++
 
 where
 
 * stem:[n] is a string representing the pallet name.
-* stem:[s] is an _Option_ type containing the pallet storage metadata
+* stem:[S] is an _Option_ type containing the pallet storage metadata
 (<<defn-rtm-pallet-storage-metadata>>).
-* stem:[a] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>)
-pallet call type.
-* stem:[e] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>) to the event type.
-* stem:[c] is an array of varying length containing pallet constant metadata
+* stem:[a] is an _Option_ type (<<defn-option-type>>) containing the type Id (<<defn-rtm-type-id>>) of pallet calls.
+* stem:[e] is an _Option_ type (<<defn-option-type>>) containing the type Id (<<defn-rtm-type-id>>) of pallet events.
+* stem:[C] is an _Sequence_ (<<defn-scale-list>>) of all pallet constant metadata
 (<<defn-rtm-pallet-constants>>).
-* stem:[e] is an _Option_ type containing the type Id (<<defn-rtm-type-id>>) to the error type.
-* stem:[i] is an unsigned 8-bit integers indicating the index of the pallet,
-which is used for encoding pallet events and calls.
+* stem:[e] is an _Option_ type (<<defn-option-type>>) containing the type Id (<<defn-rtm-type-id>>) of the pallet error.
+* stem:[i] is an unsigned 8-bit integers indicating the index of the pallet, which is used for encoding pallet events and calls.
 
 .Pallet Metadata
-[kaitai#pallet,kaitai-dependencies=storage]
+[kaitai#metadata_pallet,kaitai-dependencies="pallet_storage,pallet_constant"]
 ++++
 seq:
   - id: name
@@ -411,7 +426,7 @@ seq:
   - id: has_storage
     type: u1
   - id: storage
-    type: storage
+    type: pallet_storage
     if: has_storage != 0
 
   - id: has_calls
@@ -429,7 +444,7 @@ seq:
   - id: num_constants
     type: scale::compact_int
   - id: constants
-    type: constant
+    type: pallet_constant
     repeat: expr
     repeat-expr: num_constants.value
 
@@ -456,17 +471,6 @@ types:
     seq:
       - id: type
         type: scale::compact_int
-
-  constant:
-    seq:
-      - id: name
-        type: scale::string
-      - id: type
-        type: scale::compact_int
-      - id: value
-        type: scale::bytes
-      - id: docs
-        type: scale::string_list
 ++++
 
 .Pallet Storage Metadata
@@ -476,7 +480,8 @@ The metadata about a pallets storage.
 
 [stem]
 ++++
-(p,E)
+S = (p, E) \
+E = ( e_0, ... , e_n )
 ++++
 
 where
@@ -493,18 +498,56 @@ The metadata about a pallets storage entry.
 
 [stem]
 ++++
-(n, m, y, D, C)
+e_i = (n, m, y, d, C) \
+C = ( c_0, ... , c_n )
 ++++
 
 where
 
 * stem:[n] is the string representing the variable name of the storage entry.
-* stem:[m] is an _Option_ type containing the storage entry modifier
+* stem:[m] is an enum type determining the storage entry modifier
 (<<defn-rtm-storage-entry-modifier>>).
 * stem:[y] is the type of the value stored in the entry
 (<<defn-rtm-storage-entry-type>>).
-* stem:[D] is an byte array containing the default value.
+* stem:[d] is an byte array containing the default value.
 * stem:[C] is an array of varying length of strings containing the documentation.
+
+.Pallet Storage Metadata
+[kaitai#pallet_storage,kaitai-dependencies="storage_definition"]
+++++
+seq:
+  - id: prefix
+    type: scale::string
+
+  - id: num_items
+    type: scale::compact_int
+  - id: items
+    type: item
+    repeat: expr
+    repeat-expr: num_items.value
+types:
+  item:
+    seq:
+      - id: name
+        type: scale::string
+
+      - id: modifier
+        type: u1
+        enum: storage_modifier
+
+      - id: definition
+        type: storage_definition
+
+      - id: fallback
+        type: scale::bytes
+
+      - id: docs
+        type: scale::string_list
+    enums:
+      storage_modifier:
+        0: optional
+        1: default
+++++
 ====
 
 .Storage Entry Modifier
@@ -543,73 +586,26 @@ The type of the storage value that indicates how the entry is stored.
 where stem:[t], stem:[k] (key) and stem:[v] (value) are all of type Ids
 (<<defn-rtm-type-id>>). stem:[H] is an array of varying length containing the
 storage hasher (<<defn-rtm-storage-hasher>>).
-====
 
-.Storage Hasher
-[#defn-rtm-storage-hasher]
-====
-The hashing algorithm used by storage maps.
 
-[stem]
-++++
-{
-	(0,"128-bit Blake2 hash"),
-	(1,"256-bit Blake2 hash"),
-	(2,"Multiple 128-bit Blake2 hashes concatenated"),
-	(3,"128-bit XX hash"),
-	(4,"256-bit XX hash"),
-	(5,"Multiple 64-bit XX hashes concatenated"),
-	(6,"Identity hashing")
-:}
-++++
-====
-
-.Pallet Storage Metadata
-[kaitai#storage]
+.Runtime Pallet Storage Definition
+[kaitai#storage_definition]
 ++++
 seq:
-  - id: prefix
-    type: scale::string
-
-  - id: num_items
-    type: scale::compact_int
-  - id: items
-    type: item
-    repeat: expr
-    repeat-expr: num_items.value
+  - id: type
+    type: u1
+    enum: storage_type
+  - id: details
+    type:
+      switch-on: type
+      cases:
+        'storage_type::plain': plain
+        'storage_type::map': map
+enums:
+  storage_type:
+    0: plain
+    1: map
 types:
-  item:
-    seq:
-      - id: name
-        type: scale::string
-
-      - id: modifier
-        type: u1
-        enum: storage_modifier
-
-      - id: type
-        type: u1
-        enum: storage_type
-      - id: details
-        type:
-          switch-on: type
-          cases:
-            'storage_type::plain': plain
-            'storage_type::map': map
-
-      - id: fallback
-        type: scale::bytes
-
-      - id: docs
-        type: scale::string_list
-    enums:
-      storage_modifier:
-        0: optional
-        1: default
-      storage_type:
-        0: plain
-        1: map
-
   plain:
     seq:
       - id: type
@@ -638,6 +634,26 @@ types:
         5: xxhahs_64_64
         6: idhash
 ++++
+====
+
+.Storage Hasher
+[#defn-rtm-storage-hasher]
+====
+The hashing algorithm used by storage maps.
+
+[stem]
+++++
+{
+	(0,"128-bit Blake2 hash"),
+	(1,"256-bit Blake2 hash"),
+	(2,"Multiple 128-bit Blake2 hashes concatenated"),
+	(3,"128-bit XX hash"),
+	(4,"256-bit XX hash"),
+	(5,"Multiple 64-bit XX hashes concatenated"),
+	(6,"Identity hashing")
+:}
+++++
+====
 
 .Pallet Constants
 [#defn-rtm-pallet-constants]
@@ -646,33 +662,35 @@ The metadata about the pallets constants.
 
 [stem]
 ++++
-(n, y, V, C)
+c_i = (n, y, v, C)
 ++++
 
-where
-
+where::
 * stem:[n] is a string representing the name of the pallet constant.
 * stem:[y] is the type Id (<<defn-rtm-type-id>>) of the pallet constant.
-* stem:[V] is a byte array containing the value of the constant.
+* stem:[v] is a byte array containing the value of the constant.
 * stem:[C] is an array of varying length containing string with the documentation.
+
+.Pallet Constant Metadata
+[kaitai#pallet_constant]
+++++
+seq:
+  - id: name
+    type: scale::string
+  - id: type
+    type: scale::compact_int
+  - id: value
+    type: scale::bytes
+  - id: docs
+    type: scale::string_list
+++++
+
 ====
 
 [#sect-rtm-extrinsic-metadata]
 === Extrinsic Metadata
 The metadata about a pallets extrinsics, part of the main structure
 (<<sect-rtm-structure>>) and of the following format:
-
-[stem]
-++++
-(y, v, S)
-++++
-
-where
-
-* stem:[y] is a type Id (<<defn-rtm-type-id>>) of the extrinsic.
-* stem:[v] is a unsigned 8-bit integer indicating the extrinsic version.
-* stem:[S] is an array of varying length containing the signed extension
-metadata (<<defn-rtm-signed-extension-metadata>>).
 
 .Signed Extension Metadata
 [#defn-rtm-signed-extension-metadata]
@@ -681,20 +699,19 @@ The metadata about the additional, signed data required to execute an extrinsic.
 
 [stem]
 ++++
-(i, y, a)
+e_i = (n, y, a)
 ++++
 
-where
-
-* stem:[i] is a string representing the unique signed extension identifier,
+where::
+* stem:[n] is a string representing the unique signed extension identifier,
 which may be different from the type name.
 * stem:[y] is a type Id (<<defn-rtm-type-id>>) of the signed extension, with the
 data to be included in the extrinsic.
 * stem:[a] is the type Id (<<defn-rtm-type-id>>) of the additional signed data,
 with the data to be included in the signed payload.
 
-.Extrinsic Metadata
-[kaitai#extrinsic]
+.Runtime Extrinsic Metadata
+[kaitai#metadata_extrinsic]
 ++++
 seq:
   - id: name
