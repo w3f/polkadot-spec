@@ -67,7 +67,21 @@ module Kaitai
       end
 
       def definition(id)
-        @blocks[id].definition true
+        @blocks[id].definition :standalone
+      end
+
+      def paths(ids)
+        result = {}
+        remaining = [ [[], ids] ]
+        while ((path, children) = remaining.pop)
+          for child in children
+            if !result.include? child
+              result[child] = path + [ child ]
+              remaining.push [result[child], @blocks[child].dependencies]
+            end
+          end
+        end
+        result
       end
 
       private
@@ -86,6 +100,8 @@ module Kaitai
 
   # Wrapper around block to allow out of order resolution of includes
   class Block < Asciidoctor::PatchedBlock
+
+    VALID_MODES = [ 'individual', 'standalone', 'hierachical' ].freeze
 
     CAPTION_PREFIX = 'Binary Format'
 
@@ -110,6 +126,10 @@ module Kaitai
       @dependencies = attr('kaitai-dependencies', '', true).split(',')
       @imports = attr('kaitai-imports', '', true).split(',')
 
+      mode = attr 'kaitai-mode', 'individual', true
+      raise "Unknown mode '#{mode}', expected on of #{VALID_MODES}" unless VALID_MODES.include? mode
+      @mode = mode.to_sym
+
       @import_dir = attr 'docdir', nil, true
 
       # Skip render step if we are just exporting
@@ -127,8 +147,8 @@ module Kaitai
       return if @skip
 
       Dir.mktmpdir('asciidoctor-kaitai-') do |tmpdir|
-        export tmpdir, false
-        output = compile tmpdir, false
+        export tmpdir
+        output = compile tmpdir
         render tmpdir, output
 
         logger.info "generated '#{output.dig :graphviz, :main}': imports = #{output.dig :graphviz, :deps}"
@@ -136,76 +156,56 @@ module Kaitai
     end
 
     # Return full definition, header and body
-    def definition(combined = false)
-      (head combined).merge(body combined)
+    def definition(mode)
+      (head mode).merge(body mode)
     end
 
     # Return only body, to be used as subtype
     def as_subtype
-      body true
+      body :standalone
     end
 
     private
 
     # Return imports in definition
-    def imports(combined = false)
-      combined ? @imports : @imports + @dependencies
+    def imports(mode)
+      case mode
+      when :individual
+        @imports + @dependencies
+      when :standalone
+        @imports
+      when :hierachical
+        @imports + (@dependencies.any? ? ['dependencies'] : [])
+      end
     end
 
     # Return head of definition
-    def head(combined)
+    def head(mode)
       { 'meta' => {
           'id' => @attributes['id'],
           'title' => @title,
           'endian' => "le",
-          'imports' => (imports combined)
+          'imports' => (imports mode)
       } }
     end
 
     # Return body of definition
-    def body(combined)
+    def body(mode)
       doc = @body
-      if combined && dependencies
+      if mode == :standalone and @dependencies.any?
         doc['types'] ||= {}
-        dependencies.each { |inc| doc['types'][inc] = Registry.subtype inc }
+        @dependencies.each { |inc| doc['types'][inc] = Registry.subtype inc }
       end
       doc
     end
 
-    # Write definitions of block and its dependencies to path
-    def export(path, combined)
-      # Export main file
-      output_name = "#{@attributes['id']}.ksy"
-      File.open(File.join(path, output_name), 'w') do |fs|
-        fs.write (definition combined).to_yaml
-      end
-
-      # Write dependencies if not combined
-      if !combined
-        dependencies.each do |dep|
-          File.open(File.join(path, "#{dep}.ksy"), 'w') do |fs|
-            fs.write Registry.definition(dep).to_yaml
-          end
-        end
-      end
-
-      import_names = combined ? [] : dependencies.map { |dep| "#{dep}.ksy" }
-
-      { kaitai: { main: output_name, deps: import_names } }
-    end
-
-    # Compile exported definitions at specified path
-    def compile(path, combined)
-      # Copy any imports (NOT dependencies)
-      @imports.each { |name| FileUtils.cp(File.join(@import_dir, "#{name}.ksy"), path) }
-
-      id = @attributes['id']
-      input_path = File.join(path, "#{id}.ksy")
-
+    # Run kaitai struct compiler and parse result
+    def run(path, file, target)
       # Compile graphviz graph
-      result_raw = `ksc --target graphviz --ksc-json-output --outdir #{path} #{input_path}`
+      input = File.join(path, file)
+      result_raw = `ksc --target #{target} --ksc-json-output --outdir #{path} #{input}`
 
-      result = JSON.parse(result_raw).dig(input_path)
+      result = JSON.parse(result_raw).dig(input)
       raise "Failed to parse ksc json output: #{result_raw}" if result.nil?
 
       # Raise any errors provided by kaitai
@@ -215,12 +215,96 @@ module Kaitai
         raise "kaitai error at #{id}#{where}: #{msg}"
       end
 
-      # Determine graphviz outputs
-      result_graphviz = result.dig('output', 'graphviz')
-      raise "Failed to parse graphviz output: #{result}" if result_graphviz.nil?
+      result_target = result.dig('output', target)
+      raise "Failed to parse graphviz output: #{result}" if result_target.nil?
+      result_target
+    end
 
-      output_name = result_graphviz.dig(id, 'files', 0, 'fileName')
-      import_names = (imports combined).map { |name| result_graphviz.dig(name, 'files', 0, 'fileName') }
+    # Write definitions of block and its dependencies to path
+    def export(path)
+      # Export main file
+      output_name = "#{@attributes['id']}.ksy"
+      File.open(File.join(path, output_name), 'w') do |fs|
+        fs.write (definition @mode).to_yaml
+      end
+
+      # Write dependencies if not standalone
+      import_names = []
+
+      case @mode
+      when :individual
+        @dependencies.each do |dep|
+          File.open(File.join(path, "#{dep}.ksy"), 'w') do |fs|
+            fs.write Registry.definition(dep).to_yaml
+          end
+        end
+
+        import_names = @dependencies.map { |dep| "#{dep}.ksy" }
+      when :hierachical
+        doc = {
+          'meta' => {
+            'id' => @attributes['id'],
+            'title' => 'Autogenerated dependencies',
+            'endian' => "le",
+            'imports' => @imports
+          },
+          'types' => {}
+        }
+
+        Registry.paths(@dependencies).each do |dep, path|
+          final = path.delete_at(-1)
+          current = doc['types']
+
+          for p in path
+            if !current.include? p
+              current[p] = { 'types' => {} }
+            end
+
+            current = current[p]['types']
+          end
+
+          current[final] = Registry.subtype(dep)
+        end
+
+        if @dependencies.any?
+          File.open(File.join(path, "dependencies.ksy"), 'w') do |fs|
+            fs.write doc.to_yaml
+          end
+
+          import_names = [ "dependencies.ksy" ]
+        end
+      end
+
+      { kaitai: { main: output_name, deps: import_names } }
+    end
+
+    # Compile exported definitions at specified path
+    def compile(path)
+      # Copy any imports (NOT dependencies)
+      @imports.each { |name| FileUtils.cp(File.join(@import_dir, "#{name}.ksy"), path) }
+
+      id = @attributes['id']
+
+      # Compile dependecies first to determine graphviz node names
+      if @mode == :hierachical and @dependencies.any?
+        result = run path, "dependencies.ksy", 'graphviz'
+
+        deps = result.dig(id, 'files', 0, 'fileName')
+        raise "Failed to parse graphviz output: #{result}" if deps.nil?
+
+        FileUtils.cp(File.join(path, deps), File.join(path, 'dependencies.dot'))
+      end
+
+      # Compile graphviz graph and determine output files
+      result = run path, "#{id}.ksy", 'graphviz'
+
+      if @mode == :hierachical and @dependencies.any?
+        # Ugly head to work around the fact that outputs are based on meta.id
+        result['dependencies'] = { 'files' => [{ 'fileName' => 'dependencies.dot' }] }
+      end
+
+      output_name = result.dig(id, 'files', 0, 'fileName')
+      import_names = (imports @mode).map { |name| result.dig(name, 'files', 0, 'fileName') }
 
       { graphviz: { main: output_name, deps: import_names } }
     end
@@ -244,7 +328,7 @@ module Kaitai
         output = File.new(output_path, 'w')
 
         File.readlines(backup_path, encoding: 'UTF-8').reject { |line|
-          excludes.any? { |ex| line.match? /#{ex}/ }
+          excludes.any? { |ex| line.match? (/-> #{ex}/) or line.match? (/#{ex}:.* ->/) }
         }.each { |line| output.puts line }
 
         output.close
@@ -273,7 +357,7 @@ module Kaitai
     def convert(document, transform = nil, _ = nil)
       if transform == 'document'
         document.find_by(context: :image).each do |node|
-          return node.definition(true).to_yaml if node.class == Block && node.attr('id') == @target
+          return node.definition(:standalone).to_yaml if node.class == Block && node.attr('id') == @target
         end
         raise "Failed to locate katai definition for '#{@target}'"
       end
