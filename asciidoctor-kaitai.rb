@@ -11,11 +11,11 @@ module Asciidoctor
   # Fixes to block that probably should be upstreamed
   class PatchedBlock < Block
 
-    Base64DataURIRx = %r{data:(?<mimetype>\w[\w-]*/\w[\w+-]*);base64,(?<base64>[\w+/]+=*)}
+    Base64DataUriRx = %r{data:(?<mimetype>\w[\w-]*/\w[\w+-]*);base64,(?<base64>[\w+/]+=*)}
 
     # Fixes read_contents to support data uris
     def read_contents(target, opts = {})
-      if (uri = Base64DataURIRx.match target)
+      if (uri = Base64DataUriRx.match target)
         # TODO: What to do with uri[:mimetype] ?
         return Base64.strict_decode64(uri[:base64]).force_encoding('UTF-8')
       end
@@ -51,12 +51,12 @@ module Kaitai
             completed += additional
           end
 
-          logger.info "registration of #{id}': completed = #{completed}"
+          logger.info "registration of '#{id}': completed = #{completed}"
 
           # ... and process now completed blocks
           completed.each { |other| @blocks[other].generate }
         else
-          logger.info "registration of #{id}': missing = #{@missing[id]}"
+          logger.info "registration of '#{id}': missing = #{@missing[id]}"
         end
 
         @missing[id].empty?
