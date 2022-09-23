@@ -373,7 +373,12 @@ Asciidoctor::Extensions.register do
     content_model :raw
 
     process do |parent, reader, attrs|
-      body = YAML.safe_load reader.read
+      body = nil
+      begin
+        body = YAML.safe_load reader.read
+      rescue Exception => e
+        raise "Failed to parse kaitai yaml of '#{attrs['id']}': #{e.message}"
+      end
       block = Kaitai::Block.new parent, body, attrs
       block.generate if Kaitai::Registry.register attrs['id'], block
       block
