@@ -169,7 +169,7 @@ types:
 TODO: Move to proper section
 ++++
 enums:
-  babe_consensus_enum:
+  babe_consensus_ty:
     1: next_epoch_data
     2: on_disabled
     3: next_epoch_descriptor
@@ -180,26 +180,26 @@ types:
         size: 64
   consensus_message:
     seq:
-      - id: enum_id 
+      - id: consensus_engine
         size: 4
       - id: content
         type: scale::bytes
   babe_consensus_message:
     seq:
-      - id: enum_id
+      - id: babe_consensus_ty_id
         type: u1
-        enum: babe_consensus_enum
+        enum: babe_consensus_ty
       - id: message
         type:
-          switch-on: enum_id
+          switch-on: babe_consensus_ty_id
           cases:
-            'babe_consensus_enum::next_epoch_data': next_epoch_data
-            'babe_consensus_enum::on_disabled': u4
-            'babe_consensus_enum::next_epoch_descriptor': next_epoch_descriptor
+            'babe_consensus_ty::next_epoch_data': next_epoch_data
+            'babe_consensus_ty::on_disabled': u4
+            'babe_consensus_ty::next_epoch_descriptor': next_epoch_descriptor
     enums:
-      next_epoch_descriptor_type:
+      next_epoch_descriptor_ty:
         1: default
-      secondary_slot_type:
+      secondary_slot_ty:
         0: no_secondary_slot
         1: plain_secondary_slot
         2: secondary_slot_with_vrf_output
@@ -216,46 +216,46 @@ types:
             type: u4
       next_epoch_descriptor:
         seq:
-          - id: enum_id
+          - id: next_epoch_descriptor_ty_id
             type: u1
-            enum: next_epoch_descriptor_type
+            enum: next_epoch_descriptor_ty
           - id: content
             type:
-              switch-on: enum_id
+              switch-on: next_epoch_descriptor_ty_id
               cases:
-                'next_epoch_descriptor_type::default': babe_slot_descriptor
+                'next_epoch_descriptor_ty::default': babe_slot_descriptor
       babe_slot_descriptor:
         seq:
           - id: nominator
             type: u1
           - id: denominator
             type: u1
-          - id: enum_id
+          - id: secondary_slot_ty_id
             type: u1
-            enum: secondary_slot_type
+            enum: secondary_slot_ty
           - id: enum_content
             type:
-              switch-on: enum_id
+              switch-on: secondary_slot_ty_id
               cases:
-                'secondary_slot_type::no_secondary_slot': empty
-                'secondary_slot_type::no_secondary_slot': empty
-                'secondary_slot_type::no_secondary_slot': empty
+                'secondary_slot_ty::no_secondary_slot': empty
+                'secondary_slot_ty::no_secondary_slot': empty
+                'secondary_slot_ty::no_secondary_slot': empty
   grandpa_consensus_message:
     seq:
-      - id: enum_id
+      - id: grandpa_consensus_ty_id
         type: u1
-        enum: grandpa_consensus_type
+        enum: grandpa_consensus_ty
       - id: message
         type:
-          switch-on: enum_id
+          switch-on: grandpa_consensus_ty_id
           cases:
-            'grandpa_consensus_type::scheduled_change': scheduled_change
-            'grandpa_consensus_type::forced_change': forced_change
-            'grandpa_consensus_type::on_disabled': on_disabled
-            'grandpa_consensus_type::pause': pause
-            'grandpa_consensus_type::resume': resume
+            'grandpa_consensus_ty::scheduled_change': scheduled_change
+            'grandpa_consensus_ty::forced_change': forced_change
+            'grandpa_consensus_ty::on_disabled': on_disabled
+            'grandpa_consensus_ty::pause': pause
+            'grandpa_consensus_ty::resume': resume
     enums:
-      grandpa_consensus_type:
+      grandpa_consensus_ty:
         1: scheduled_change
         2: forced_change
         3: on_disabled
@@ -290,18 +290,18 @@ types:
             type: u4
   beefy_consensus_message:
     seq:
-      - id: enum_id
+      - id: beefy_consensus_ty_id
         type: u1
-        enum: beefy_consensus_type
+        enum: beefy_consensus_ty
       - id: message
         type:
-          switch-on: enum_id
+          switch-on: beefy_consensus_ty_id
           cases:
-            'beefy_consensus_type::authority_change': authority_change
-            'beefy_consensus_type::on_disabled': on_disabled
-            'beefy_consensus_type::mmr_root': mmr_root
+            'beefy_consensus_ty::authority_change': authority_change
+            'beefy_consensus_ty::on_disabled': on_disabled
+            'beefy_consensus_ty::mmr_root': mmr_root
     enums:
-      beefy_consensus_type:
+      beefy_consensus_ty:
         1: authority_change
         2: on_disabled
         3: mmr_root
@@ -322,18 +322,18 @@ types:
             size: 32
   pre_runtime_digest:
     seq:
-      - id: enum_id
+      - id: pre_runtime_digest_ty_id
         type: u1
-        enum: pre_runtime_digest_type
+        enum: pre_runtime_digest_ty
       - id: digest
         type:
-          switch-on: enum_id
+          switch-on: pre_runtime_digest_ty_id
           cases:
-            'pre_runtime_digest_type::primary_vrf': vrf_digest
-            'pre_runtime_digest_type::primary_plain': plain_digest
-            'pre_runtime_digest_type::secondary_vrf': vrf_digest
+            'pre_runtime_digest_ty::primary_vrf': vrf_digest
+            'pre_runtime_digest_ty::primary_plain': plain_digest
+            'pre_runtime_digest_ty::secondary_vrf': vrf_digest
     enums:
-      pre_runtime_digest_type:
+      pre_runtime_digest_ty:
         1: primary_vrf
         2: primary_plain
         3: secondary_vrf
