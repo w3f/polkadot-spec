@@ -11,7 +11,7 @@ stream.close
 
 # Helper function to resolve included types
 def resolve_type(type)
-  PARSED_METADATA.lookup.each do |entry|
+  PARSED_METADATA.types.each do |entry|
     return entry if entry.id.value == type.value
   end
   raise "Unknown type id '#{type.value}'"
@@ -20,13 +20,13 @@ end
 # Check version
 raise "Unknown metadata version #{PARSED_METADATA.metadata_version}" unless PARSED_METADATA.metadata_version == 14
 
-# Check nested lookup types
-PARSED_METADATA.lookup.each do |entry|
+# Check nested types
+PARSED_METADATA.types.each do |entry|
   entry.params.each do |param|
     resolve_type(param.type.value) if param.type.has_value != 0
   end
 
-  case entry.type
+  case entry.definition
   when :type_composite
     entry.details.fields.each { |field| resolve_type(field.type) }
   when :type_bits
@@ -50,7 +50,7 @@ end
 PARSED_METADATA.pallets.each do |pallet|
   if pallet.has_storage != 0
     pallet.storage.items.each do |item|
-      case item.type
+      case item.definition
       when :storage_type_plain
         resolve_type(item.details.type)
       when :storage_type_map
