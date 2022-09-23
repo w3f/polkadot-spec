@@ -3,6 +3,7 @@
 
 IMPORTANT: This section describes *Version 1* of this API. Please check `Core_version` (<<defn-rt-core-version>>) to ensure compatibility.
 
+[#sect-rte-metadata-metadata]
 ==== `Metadata_metadata`
 
 Returns native Runtime metadata in an opaque form. This function can be used by the Polkadot Host implementation when it seems appropriate, such as for the JSON-RPC API as described in <<sect-json-rpc-api>>. and returns all the information necessary to build valid transactions.
@@ -11,4 +12,4 @@ Arguments::
 * None.
 
 Return::
-* A byte array of varying size containing the metadata in an opaque form.
+* The scale-encoded (<<sect-scale-codec>>) runtime metadata as described in <<sect-metadata>>.
