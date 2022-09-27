@@ -163,7 +163,7 @@ to stem:[N] and another part of stem:[k_N] is stored in stem:[N] (<<defn-node-ke
 ====
 For any stem:[N in cc N], its key stem:[k_N] is divided into an *aggregated
 prefix key, stem:["pk"_N^("Agr")]*, aggregated by <<algo-aggregate-key>> and
-a *partial key*, *stem:["pk"_N]* of length stem:[0 <= l_("pk"_N) <= 65535]
+a *partial key*, *stem:["pk"_N]* of length stem:[0 <= l_("pk"_N) < 2^(16)]
 in nibbles such that:
 
 [stem]
