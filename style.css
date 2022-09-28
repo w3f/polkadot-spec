@@ -230,3 +230,9 @@ h6 > a.link:hover,
 .ps-root {
   font-size: 1.2em !important;
 }
+
+/* Fix inline svg with fixed width or height. */
+.imageblock .content svg {
+  widht: auto;
+  height: auto;
+}
