@@ -7,6 +7,19 @@ require 'yaml'
 require 'tempfile'
 require 'fileutils'
 
+class Hash
+  # Deep copy support for nested yaml hashmaps
+  def deep_clone
+    dup.transform_values do |val|
+      case val.class
+        when Hash  then val.deep_clone
+        when Array then val.map(&:clone)
+        else val.clone
+      end
+    end
+  end
+end
+
 module Asciidoctor
   # Fixes to block that probably should be upstreamed
   class PatchedBlock < Block
@@ -191,7 +204,7 @@ module Kaitai
 
     # Return body of definition
     def body(mode)
-      doc = @body
+      doc = @body.deep_clone
       if mode == :standalone and @dependencies.any?
         doc['types'] ||= {}
         @dependencies.each { |inc| doc['types'][inc] = Registry.subtype inc }
