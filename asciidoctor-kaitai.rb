@@ -353,7 +353,7 @@ module Kaitai
 
       @attributes['target'] = "data:image/svg+xml;base64,#{target_base64}"
       @attributes['format'] = 'svg'
-      set_option 'interactive'
+      set_option 'inline'
     end
   end
 
