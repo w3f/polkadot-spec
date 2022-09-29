@@ -37,6 +37,11 @@ kaitai: metadata.ksy
 test/metadata.rb: metadata.ksy
 	ksc --target ruby --outdir ./test/ $<
 
+test/block_header.rb: block_header.ksy
+	ksc --target ruby --outdir ./test/ $<
+
+test/blockheader.bin:
+	curl -X POST -H 'Content-Type: application/json' -d '{"id":"1", "jsonrpc":"2.0", "method":"chain_getHeader"}' 'https://rpc.polkadot.io' | jq .result | xxd -r -p > $@
 
 test/metadata.bin:
 	curl -X POST -H 'Content-Type: application/json' -d '{"id":"1", "jsonrpc":"2.0", "method":"state_getMetadata"}' 'https://rpc.polkadot.io' | jq .result | xxd -r -p > $@
