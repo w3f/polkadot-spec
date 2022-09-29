@@ -3,6 +3,16 @@ polkadot-spec.html
 polkadot-spec.pdf
 polkadot-spec.tex
 
+# Export outputs
+metadata.ksy
+
+# Test inputs
+test/metadata.bin
+
+# Test outputs
+test/scale.rb
+test/metadata.rb
+
 # asciidoctor-mathmatical
 cache/
 
