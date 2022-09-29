@@ -224,7 +224,7 @@ reference])
 reference]).
 
 .Runtime Metadata Type Definition
-[kaitai#metadata_type_definition,kaitai-dependencies="metadata_type_fields,metadata_type_variants"]
+[kaitai#metadata_type_definition,kaitai-dependencies="metadata_type_variants,metadata_type_fields"]
 ++++
 seq:
   - id: type
