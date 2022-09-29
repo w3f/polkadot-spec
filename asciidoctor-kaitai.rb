@@ -42,47 +42,54 @@ end
 module Kaitai
   class Registry
 
-    include Asciidoctor::Logging
-
     @blocks = {}
     @missing = {}
 
     class << self
 
-      def register(id, block)
-        # Register new block
-        @blocks[id] = block
-        @missing[id] = block.dependencies.reject { |dep| self.defined? dep }
-
-        if @missing[id].empty?
-          # Update missing dependencies ...
-          completed = self.fullfill id
-
-          # ... recursivly ...
-          additional = completed
-          until (additional = additional.map { |dep| self.fullfill dep }.flatten).empty?
-            completed += additional
-          end
-
-          logger.info "registration of '#{id}': completed = #{completed}"
-
-          # ... and process now completed blocks
-          completed.each { |other| @blocks[other].generate }
-        else
-          logger.info "registration of '#{id}': missing = #{@missing[id]}"
-        end
-
-        @missing[id].empty?
+      # Create and register new block
+      def new_block(parent, body, attrs)
+        block = Block.new parent, body, attrs
+        register(attrs['id'], block)
+        block
       end
 
+      # Register new kaitai definiton, will generate any completed definitions
+      def register(id, block)
+        # Register new block and any missing dependencies
+        @blocks[id] = block
+        @missing[id] = (block.dependencies :individual).reject { |dep| self.defined? dep }
+
+        # Nothing more to do if new block has missing dependencies ...
+        return unless @missing[id].empty?
+
+        # ...otherwise generate the block and update possible dependants
+        block.generate if @missing[id].empty?
+
+        # - Update missing dependencies ...
+        completed = self.fulfill id
+
+        # - ... recursivly ...
+        additional = completed
+        until (additional = additional.map { |dep| self.fulfill dep }.flatten).empty?
+          completed += additional
+        end
+
+        # - ... and process now completed blocks
+        completed.each { |other| @blocks[other].generate }
+      end
+
+      # Return subtype definition by id from registry
       def subtype(id)
         @blocks[id].as_subtype
       end
 
+      # Return full definition by id from registry
       def definition(id)
         @blocks[id].definition :standalone
       end
 
+      # Determine dependency tree paths for list of ids
       def paths(ids)
         result = {}
         remaining = [ [[], ids] ]
@@ -104,8 +111,8 @@ module Kaitai
         @missing[id] && @missing[id].empty?
       end
 
-      # Fullfill dependency and return completed blocks
-      def fullfill(id)
+      # Fulfill dependency and return completed blocks
+      def fulfill(id)
         @missing.filter { |_, deps| (deps.delete id) && deps.empty? }.keys
       end
     end
@@ -119,20 +126,21 @@ module Kaitai
     CAPTION_PREFIX = 'Binary Format'
 
     GRAPHVIZ_NODE_ID = Regexp.new '([a-z_]+) \[label=<<TABLE'
+    GRAPHVIZ_LABEL = /label="(.*)";/
 
-    attr_reader :dependencies
-
+    # Initialize new block, mostly just wraps an image block
     def initialize(parent, body, attrs)
       @body = body
 
-      # Check id and title
+      # Check if id is compatible with kaitai
       id = attrs['id']
-      title = attrs.key?('title') ? attrs.delete('title') : nil
-
       raise "Invalid kaitai identifier: #{id}" unless id.match?(/^[a-z][a-z0-9_]*$/)
 
+      # Asciidoctor integration for title and alt text
+      title = attrs.key?('title') ? attrs.delete('title') : nil
       attrs['alt'] ||= (attrs['default-alt'] = title || "Kaitai Struct generated graph")
 
+      # Initialize the block as an image without content (yet)
       super parent, :image, { source: nil, attributes: attrs, content_model: :empty }
 
       # Cache document tree based attributes
@@ -148,9 +156,13 @@ module Kaitai
       # Skip render step if we are just exporting
       @skip = parent.document.backend == 'kaitai'
 
+      # More asciidoctor integration
       if title
+        # Emulate the way titles are set through high level api
         @title = title
+        # - Use a separate counter for kaitai graphs
         @numeral = @document.increment_and_store_counter 'kaitai-number', self
+        # - Use a custom caption
         @caption = "Binary Format #{@numeral}. "
       end
     end
@@ -159,12 +171,21 @@ module Kaitai
     def generate
       return if @skip
 
+      logger.info "generating kaitai graph '#{@attributes['id']}': imports = #{@imports} dependencies = #{dependencies @mode}"
+
       Dir.mktmpdir('asciidoctor-kaitai-') do |tmpdir|
         export tmpdir
         output = compile tmpdir
         render tmpdir, output
+      end
+    end
 
-        logger.info "generated '#{output.dig :graphviz, :main}': imports = #{output.dig :graphviz, :deps}"
+    # Return dependencies (part of imports) in definition
+    def dependencies(mode)
+      case mode
+        when :individual  then @dependencies
+        when :hierachical then @dependencies.any? ? ['dependencies'] : []
+        else []
       end
     end
 
@@ -180,35 +201,26 @@ module Kaitai
 
     private
 
-    # Return imports in definition
-    def imports(mode)
-      case mode
-      when :individual
-        @imports + @dependencies
-      when :standalone
-        @imports
-      when :hierachical
-        @imports + (@dependencies.any? ? ['dependencies'] : [])
-      end
-    end
-
     # Return head of definition
     def head(mode)
       { 'meta' => {
           'id' => @attributes['id'],
           'title' => @title,
           'endian' => "le",
-          'imports' => (imports mode)
+          'imports' => @imports + (dependencies mode)
       } }
     end
 
     # Return body of definition
     def body(mode)
       doc = @body.deep_clone
+
+      # If standalone, add dependencies as substypes
       if mode == :standalone and @dependencies.any?
         doc['types'] ||= {}
         @dependencies.each { |inc| doc['types'][inc] = Registry.subtype inc }
       end
+
       doc
     end
 
@@ -228,6 +240,7 @@ module Kaitai
         raise "kaitai error at #{id}#{where}: #{msg}"
       end
 
+      # Return result for specified target
       result_target = result.dig('output', target)
       raise "Failed to parse graphviz output: #{result}" if result_target.nil?
       result_target
@@ -241,64 +254,61 @@ module Kaitai
         fs.write (definition @mode).to_yaml
       end
 
-      # Write dependencies if not standalone
-      import_names = []
-
-      case @mode
-      when :individual
-        @dependencies.each do |dep|
-          File.open(File.join(path, "#{dep}.ksy"), 'w') do |fs|
-            fs.write Registry.definition(dep).to_yaml
+      # Write any dependencies ...
+      if @dependencies.any?
+        # ...based on mode (and not standalone)
+        case @mode
+        when :individual
+          # Individual means each dependency in a separate file
+          @dependencies.each do |dep|
+            File.open(File.join(path, "#{dep}.ksy"), 'w') do |fs|
+              fs.write Registry.definition(dep).to_yaml
+            end
           end
-        end
+        when :hierachical
+          # Hierachical attempts to keep one hierachical namespace
+          doc = {
+            'meta' => {
+              'id' => @attributes['id'],
+              'title' => 'Autogenerated dependencies',
+              'endian' => "le",
+              'imports' => @imports
+            },
+            'types' => {}
+          }
 
-        import_names = @dependencies.map { |dep| "#{dep}.ksy" }
-      when :hierachical
-        doc = {
-          'meta' => {
-            'id' => @attributes['id'],
-            'title' => 'Autogenerated dependencies',
-            'endian' => "le",
-            'imports' => @imports
-          },
-          'types' => {}
-        }
+          # Determine hierachical paths and buils type tree from it
+          Registry.paths(@dependencies).each do |dep, path|
+            final = path.delete_at(-1)
+            current = doc['types']
 
-        Registry.paths(@dependencies).each do |dep, path|
-          final = path.delete_at(-1)
-          current = doc['types']
+            for p in path
+              if !current.include? p
+                current[p] = { 'types' => {} }
+              end
 
-          for p in path
-            if !current.include? p
-              current[p] = { 'types' => {} }
+              current = current[p]['types']
             end
 
-            current = current[p]['types']
+            current[final] = Registry.subtype(dep)
           end
 
-          current[final] = Registry.subtype(dep)
-        end
-
-        if @dependencies.any?
+          # Write all dependency into one file
           File.open(File.join(path, "dependencies.ksy"), 'w') do |fs|
             fs.write doc.to_yaml
           end
-
-          import_names = [ "dependencies.ksy" ]
         end
       end
-
-      { kaitai: { main: output_name, deps: import_names } }
     end
 
     # Compile exported definitions at specified path
     def compile(path)
-      # Copy any imports (NOT dependencies)
+      # Copy any external imports
       @imports.each { |name| FileUtils.cp(File.join(@import_dir, "#{name}.ksy"), path) }
 
       id = @attributes['id']
 
-      # Compile dependecies first to determine graphviz node names
+      # HACK: Compile dependecies first to determine graphviz node names
       if @mode == :hierachical and @dependencies.any?
         result = run path, "dependencies.ksy", 'graphviz'
 
@@ -308,43 +318,73 @@ module Kaitai
         FileUtils.cp(File.join(path, deps), File.join(path, 'dependencies.dot'))
       end
 
-      # Compile graphviz graph and determine output files
+      # Compile graphviz graph ...
       result = run path, "#{id}.ksy", 'graphviz'
 
+      # HACK: Work around the fact that ksc output file names are based on meta.id
       if @mode == :hierachical and @dependencies.any?
-        # Ugly head to work around the fact that outputs are based on meta.id
         result['dependencies'] = { 'files' => [{ 'fileName' => 'dependencies.dot' }] }
       end
 
-      output_name = result.dig(id, 'files', 0, 'fileName')
-      import_names = (imports @mode).map { |name| result.dig(name, 'files', 0, 'fileName') }
-
-      { graphviz: { main: output_name, deps: import_names } }
+      # ... and determine output files
+      { graphviz: {
+          main: result.dig(id, 'files', 0, 'fileName'),
+          imports: @imports.map { |import| result.dig(import, 'files', 0, 'fileName') },
+          dependencies: (dependencies @mode).map { |dep| result.dig(dep, 'files', 0, 'fileName') },
+        }
+      }
     end
 
+    # Cleanup, render and embed kaitai graphviz output
     def render(path, output)
-      # Extract graphviz nodes from inputs
-      excludes = output.dig(:graphviz, :deps).map { |name|
+      # Extract graphviz node ids from imports to exclude undefined edges
+      excludes = output.dig(:graphviz, :imports).map { |name|
         File.readlines(File.join(path, name), encoding: 'UTF-8')
             .map { |line| line.match(GRAPHVIZ_NODE_ID).to_a[1] }
             .reject &:nil?
       }.flatten
 
+      # Extract graphviz metadata for all dependencies
+      references = output.dig(:graphviz, :dependencies).map { |name|
+        id = name.delete_suffix('.dot')
+        latest_label = ""
+        File.readlines(File.join(path, name), encoding: 'UTF-8')
+            .map { |line|
+              # Track last label to determine display name
+              label = line.match(GRAPHVIZ_LABEL).to_a[1]
+              latest_label = label unless label.nil?
+
+              # If line contains node identifier ...
+              node = line.match(GRAPHVIZ_NODE_ID).to_a[1]
+              # ... link node id to display name and kaitai id
+              node.nil? ? nil : [node, {name: latest_label, href: id }]
+            }.reject(&:nil?)
+            .to_h
+      }.reduce Hash::new, &:merge # FIXME: Merge should be by label path length
+
+      # Determine file to render
       output_name = output.dig(:graphviz, :main)
       output_path = File.join(path, output_name)
 
-      # Remove all imported graphviz nodes
-      if excludes
+      # Cleanup dot edges exported by kaitai
+      if excludes.any? or references.any?
         backup_path = File.join(path, "#{output_name}.bak")
         FileUtils.cp(output_path, backup_path)
 
-        output = File.new(output_path, 'w')
+        File.open(output_path, 'w') do |fs|
+          for line in File.readlines(backup_path, encoding: 'UTF-8')
+            # Ignore edges to or from nodes on exclude list
+            next if excludes.any? { |ex| line.match? (/-> #{ex}/) or line.match? (/#{ex}:.* ->/) }
 
-        File.readlines(backup_path, encoding: 'UTF-8').reject { |line|
-          excludes.any? { |ex| line.match? (/-> #{ex}/) or line.match? (/#{ex}:.* ->/) }
-        }.each { |line| output.puts line }
+            # Add node linking to dependency, if edge to dependecy exists
+            for id, info in references
+              fs.write "#{id} [label=\"#{info[:name]}\" href=\"##{info[:href]}\"];\n" if line.match? (/-> #{id}/)
+            end
 
-        output.close
+            # Print line itself
+            fs.write line
+          end
+        end
       end
 
       # Convert and embed graphviz graph as inline svg
@@ -392,9 +432,7 @@ Asciidoctor::Extensions.register do
       rescue Exception => e
         raise "Failed to parse kaitai yaml of '#{attrs['id']}': #{e.message}"
       end
-      block = Kaitai::Block.new parent, body, attrs
-      block.generate if Kaitai::Registry.register attrs['id'], block
-      block
+      Kaitai::Registry.new_block parent, body, attrs
     end
   end
 end
