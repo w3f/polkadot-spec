@@ -553,6 +553,9 @@ types:
 .Storage Entry Modifier
 [#defn-rtm-storage-entry-modifier]
 ====
+
+NOTE: This might be incorrect and has to be reviewed.
+
 The storage entry modifier indicates how the storage entry is returned and how
 it behaves if the entry is not present.
 
