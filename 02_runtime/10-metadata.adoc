@@ -19,7 +19,6 @@ The Runtime Metadata is a datastructure of the following format:
 [stem]
 ++++
 (M, v_m, R, P, t_e, v_e, E, t_r) \
-M = ("m", "e", "t", "a") \
 R = (r_0, ...,r_n) \
 P = (p_0, ...,p_n) \
 E = (e_0, ...,e_n)
