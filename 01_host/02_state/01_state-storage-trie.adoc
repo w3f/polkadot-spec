@@ -274,7 +274,7 @@ v = {
     (001, "Leaf containing a hashed subvalue", p_l = 2^5),
     (0001, "Branch containing a hashed subvalue", p_l = 2^4),
     (0000 0000, "Empty", p_l = 0),
-    (0001 0000, "Reserved for compact encoding",)
+    (0000 0001, "Reserved for compact encoding",)
     :}
 ++++
 
