@@ -368,7 +368,7 @@ where
 * stem:[n] is a string representing the name of the variant.
 * stem:[F] is a possible empty array of varying length containing field
 (<<defn-rtm-field>>) elements.
-* stem:[k] is an unsigned 8-bit integer indicating the index of the variant (TODO: Clarify).
+* stem:[k] is an unsigned 8-bit integer indicating the index of the variant.
 
 .Runtime Metadata Variants Type
 [kaitai#metadata_type_variants,kaitai-dependencies="metadata_type_fields"]
