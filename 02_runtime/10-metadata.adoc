@@ -360,7 +360,7 @@ A struct variant of the following format:
 
 [stem]
 ++++
-v_i = (n,F,k,c)
+v_i = (n,F,k,D)
 ++++
 
 where
@@ -369,6 +369,7 @@ where
 * stem:[F] is a possible empty array of varying length containing field
 (<<defn-rtm-field>>) elements.
 * stem:[k] is an unsigned 8-bit integer indicating the index of the variant.
+* stem:[D] is a sequences of strings containing the documentation.
 
 .Runtime Metadata Variants Type
 [kaitai#metadata_type_variants,kaitai-dependencies="metadata_type_fields"]
