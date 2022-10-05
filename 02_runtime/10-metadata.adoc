@@ -129,11 +129,12 @@ types:
 ++++
 ====
 
-.Runtime Type Id
 [#defn-rtm-type-id]
+.<<defn-rtm-type-id,Runtime Type Id>>
 ====
-The runtime type Id is a compact integer representing the index to the
-type in the type registry (<<defn-rtm-registry-entry>>).
+The **runtime type Id** is a compact integer representing the index of the type
+registry entry (<<defn-rtm-registry-entry>>) in stem:[R] of the runtime metadata
+structure (<<sect-rtm-structure>>), starting at stem:[0].
 
 ====
 
