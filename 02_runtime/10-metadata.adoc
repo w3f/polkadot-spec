@@ -26,15 +26,15 @@ E = (e_0, ...,e_n)
 ++++
 
 where::
-  * stem:[M] are the first four constant bytes, spelling "meta" in ASCII.
-  * stem:[v_m] is an unsigned 8-bit integer indicating the format version of the
-  metadata structure (currently the value of`14`).
-  * stem:[R] is a sequence (<<defn-scale-list>>) of type definitions stem:[r_i] (<<defn-rtm-registry-entry>>).
-  * stem:[P] is a sequence (<<defn-scale-list>>) of pallet metadata stem:[p_i] (<<sect-rtm-pallet-metadata>>).
-  * stem:[t_e] is the type Id (<<defn-rtm-type-id>>) of the extrinsics.
-  * stem:[v_e] is an unsigned 8-bit integer indicating the format version of the extrinsics.
-  * stem:[E] is a sequence (<<defn-scale-list>>) of extrinsics metadata stem:[e_i] (<<defn-rtm-signed-extension-metadata>>).
-  * stem:[t_r] is the type Id (<<defn-rtm-type-id>>) of the runtime.
+* stem:[M] are the first four constant bytes, spelling "meta" in ASCII.
+* stem:[v_m] is an unsigned 8-bit integer indicating the format version of the
+metadata structure (currently the value of`14`).
+* stem:[R] is a sequence (<<defn-scale-list>>) of type definitions stem:[r_i] (<<defn-rtm-registry-entry>>).
+* stem:[P] is a sequence (<<defn-scale-list>>) of pallet metadata stem:[p_i] (<<sect-rtm-pallet-metadata>>).
+* stem:[t_e] is the type Id (<<defn-rtm-type-id>>) of the extrinsics.
+* stem:[v_e] is an unsigned 8-bit integer indicating the format version of the extrinsics.
+* stem:[E] is a sequence (<<defn-scale-list>>) of extrinsics metadata stem:[e_i] (<<defn-rtm-signed-extension-metadata>>).
+* stem:[t_r] is the type Id (<<defn-rtm-type-id>>) of the runtime.
 
 .Polkadot Runtime Metadata
 [kaitai#metadata,kaitai-dependencies="metadata_type,metadata_pallet,metadata_extrinsic"]
@@ -74,8 +74,8 @@ seq:
     type: scale::compact_int
 ++++
 
-.Runtime Registry Type Entry
 [#defn-rtm-registry-entry]
+.<<defn-rtm-registry-entry,Runtime Registry Type Entry>>
 ====
 
 A registry entry contains information about a type in its portable form for
@@ -83,13 +83,13 @@ serialization. The entry is a datastructure of the following format:
 
 [stem]
 ++++
-r_i = (i_t,p,T,D,c) \
+r_i = ("id"_t,p,T,D,c) \
 T = (t_0, ...,t_n) \
 t_i = (n, y)
 ++++
 
 where::
-* stem:[i_t] is a compact integer indicating the identifier of the type.
+* stem:["id"_t] is a compact integer indicating the identifier of the type.
 * stem:[p] is the path of the type, optional and based on source file location. Encoded a sequence (<<defn-scale-list>>) of strings.
 * stem:[T] is a sequence (<<defn-scale-list>>) of generic parameters (empty for non-generic types).
 ** stem:[n] is the name string of the generic type parameter
