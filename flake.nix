@@ -33,7 +33,7 @@
 
     bundleExec = extraGroup: "${(gems extraGroup)}/bin/bundle exec";
 
-    buildInputs = with pkgs; [ kaitai-struct-compiler graphviz ];
+    buildInputs = with pkgs; [ kaitai-struct-compiler graphviz polkadot ];
 
     # Needed by wkhtml to us QT offscreen render
     QT_PLUGIN_PATH = with pkgs.qt514.qtbase; "${bin}/${qtPluginPrefix}";
@@ -80,6 +80,8 @@
         gobject-introspection
         libxml2
         pango
+
+        polkadot
 
         wkhtmltopdf
       ]) ++ buildInputs;

@@ -13,3 +13,7 @@ group :pdf, optional: true do
   gem "rghost"
   gem 'wkhtml'
 end
+
+group :test, optional: true do
+  gem "blake2b", "~> 0.10.0"
+end

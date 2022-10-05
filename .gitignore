@@ -1,17 +1,23 @@
+# Ruby bundle config
+.bundle/
+
 # Build outputs
 polkadot-spec.html
 polkadot-spec.pdf
 polkadot-spec.tex
 
 # Export outputs
+block.ksy
 metadata.ksy
 
 # Test inputs
+test/blocks.bin
 test/metadata.bin
 
 # Test outputs
-test/scale.rb
+test/block.rb
 test/metadata.rb
+test/scale.rb
 
 # asciidoctor-mathmatical
 cache/
