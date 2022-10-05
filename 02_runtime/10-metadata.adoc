@@ -90,7 +90,7 @@ t_i = (n, y)
 
 where::
 * stem:["id"_t] is a compact integer indicating the identifier of the type.
-* stem:[p] is the path of the type, optional and based on source file location. Encoded a sequence (<<defn-scale-list>>) of strings.
+* stem:[p] is the path of the type, optional and based on source file location. Encoded as a sequence (<<defn-scale-list>>) of strings.
 * stem:[T] is a sequence (<<defn-scale-list>>) of generic parameters (empty for non-generic types).
 ** stem:[n] is the name string of the generic type parameter
 ** stem:[y] is a _Option_ type containing a type Id (<<defn-rtm-type-id>>).
