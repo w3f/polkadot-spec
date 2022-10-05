@@ -321,7 +321,7 @@ A field of a datastructure of the following format:
 
 [stem]
 ++++
-f_i = (n, y, y_n, c)
+f_i = (n, y, y_n, C)
 ++++
 
 where
@@ -330,7 +330,7 @@ where
  * stem:[y] is a type Id (<<defn-rtm-type-id>>).
  * stem:[y_n] is a _Option_ type containing a string that indicates the name of the
 type as it appears in the source code.
- * stem:[c] is an array of varying length containing strings of documentation.
+ * stem:[C] is a sequence of varying length containing strings of documentation.
 
 .Runtime Metadata Fields Type
 [kaitai#metadata_type_fields]
@@ -363,7 +363,7 @@ A struct variant of the following format:
 
 [stem]
 ++++
-v_i = (n,F,k,D)
+v_i = (n,F,k,C)
 ++++
 
 where
@@ -372,7 +372,7 @@ where
 * stem:[F] is a possible empty array of varying length containing field
 (<<defn-rtm-field>>) elements.
 * stem:[k] is an unsigned 8-bit integer indicating the index of the variant.
-* stem:[D] is a sequences of strings containing the documentation.
+* stem:[C] is a sequence of strings containing the documentation.
 
 .Runtime Metadata Variants Type
 [kaitai#metadata_type_variants,kaitai-dependencies="metadata_type_fields"]
