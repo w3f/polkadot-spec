@@ -1,14 +1,14 @@
 TARGET := polkadot-spec
 SOURCES := $(TARGET).adoc $(wildcard ??_*.adoc) $(wildcard ??_*/*.adoc) $(wildcard ??_*/*/*.adoc)
 
-KAITAI_EXPORTS := block_header metadata
+KAITAI_EXPORTS := block metadata
 
 YAML_EXPORTS := $(patsubst %,%.ksy,$(KAITAI_EXPORTS))
 RUBY_EXPORTS := $(patsubst %,test/%.rb,$(KAITAI_EXPORTS))
 
 CACHEDIR := cache/
 
-.PHONY: default html pdf tex kaitai test test-metadata clean
+.PHONY: default html pdf tex kaitai test test-block_header test-metadata check clean
 
 
 default: html
@@ -42,20 +42,21 @@ $(YAML_EXPORTS): %.ksy: $(SOURCES) asciidoctor-kaitai.rb
 $(RUBY_EXPORTS): test/%.rb: %.ksy
 	ksc --target ruby --outdir ./test/ $<
 
-test/block_header.rb: block_header.ksy
-	ksc --target ruby --outdir ./test/ $<
 
 test/blocks.bin:
-	polkadot export-blocks --to 10 --binary $@
+	polkadot export-blocks --to 10 --pruning archive --binary $@
 
 test/metadata.bin:
 	curl -X POST -H 'Content-Type: application/json' -d '{"id":"1", "jsonrpc":"2.0", "method":"state_getMetadata"}' 'https://rpc.polkadot.io' | jq .result | xxd -r -p > $@
 
 
-test: test-metadata
+test: test-blocks test-metadata
 
-test-metadata: test/scale.fixed.rb test/metadata.rb test/metadata.bin
-	ruby ./test/test_metadata.rb
+test-blocks: test/test-blocks.rb test/block.rb test/scale.fixed.rb test/blocks.bin
+	ruby ./test/test-blocks.rb
+
+test-metadata: test/test-metadata.rb test/metadata.rb test/scale.fixed.rb  test/metadata.bin
+	ruby ./test/test-metadata.rb
 
 
 check: 

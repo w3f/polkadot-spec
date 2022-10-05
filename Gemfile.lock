@@ -29,6 +29,7 @@ GEM
     asciimath (2.0.4)
     bibtex-ruby (5.1.6)
       latex-decode (~> 0.0)
+    blake2b (0.10.0)
     citeproc (1.0.10)
       namae (~> 1.0)
     citeproc-ruby (1.1.14)
@@ -102,6 +103,7 @@ DEPENDENCIES
   asciidoctor-bibtex
   asciidoctor-mathematical
   asciidoctor-pdf
+  blake2b (~> 0.10.0)
   kaitai-struct
   mini_racer
   pseudocode (~> 0.1.1)
