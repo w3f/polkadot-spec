@@ -283,12 +283,8 @@ hold, such as 63 (stem:[2^6-1]) in case of the stem:[01] variant, then the value
 of the next 8 bits (stem:[N_2]) are added the the length. This process is
 repeated for every stem:[N_n] where stem:[N_n = 2^8-1]. Any value smaller than
 the maximum possible value of stem:[N_n] implies that the next value of
-stem:[N_(n+1)] should not be added to the length.
-
-The hashed subvalue for variants stem:[001] and stem:[0001] is described in
-<<defn-hashed-subvalue>>. The variant stem:[0001] can be distinguished from
-stem:[0001 0000] due to the fact that the following 4 bits of the first variant
-never equal zero.
+stem:[N_(n+1)] should not be added to the length. The hashed subvalue for
+variants stem:[001] and stem:[0001] is described in <<defn-hashed-subvalue>>.
 
 Formally, the length of the partial key, stem:["pk"_N^l], is defined as:
 
