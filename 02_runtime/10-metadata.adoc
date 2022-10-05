@@ -326,9 +326,9 @@ f_i = (n, y, y_n, C)
 
 where
 
- * stem:[n] is a string representing the field name.
+ * stem:[n] is an _Option_ type containing the string that indicates the field name.
  * stem:[y] is a type Id (<<defn-rtm-type-id>>).
- * stem:[y_n] is a _Option_ type containing a string that indicates the name of the
+ * stem:[y_n] is an _Option_ type containing a string that indicates the name of the
 type as it appears in the source code.
  * stem:[C] is a sequence of varying length containing strings of documentation.
 
