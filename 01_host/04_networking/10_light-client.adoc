@@ -195,6 +195,9 @@ Remote read child request.
 |===
 ====
 
+The response is the same as for the _Remote Read Request_ message, respectively
+<<sect-light-remote-read-response>>.
+
 ==== Remote Header Messages
 
 Request a block header at the given block.
