@@ -138,8 +138,8 @@ structure (<<sect-rtm-structure>>), depending on context (starting at stem:[0]).
 
 ====
 
-.Type Variant
 [#defn-rtm-type-definition]
+.<<defn-rtm-type-definition,Type Variant>>
 ====
 The type definition stem:[D] is a varying datatype (<<defn-varrying-data-type>>)
 and indicates all the possible types of encodable values a type can have.
@@ -311,8 +311,8 @@ types:
 ++++
 ====
 
-.Field
 [#defn-rtm-field]
+.<<defn-rtm-field,Field>>
 ====
 A field of a datastructure of the following format:
 
@@ -353,8 +353,8 @@ types:
 ++++
 ====
 
-.Variant
 [#defn-rtm-variant]
+.<<defn-rtm-variant,Variant>>
 ====
 A struct variant of the following format:
 
@@ -474,8 +474,8 @@ types:
         type: scale::compact_int
 ++++
 
-.Pallet Storage Metadata
 [#defn-rtm-pallet-storage-metadata]
+.<<defn-rtm-pallet-storage-metadata,Pallet Storage Metadata>>
 ====
 The metadata about a pallets storage.
 
@@ -492,8 +492,8 @@ where
 (<<defn-rtm-storage-entry-metadata>>).
 ====
 
-.Storage Entry Metadata
 [#defn-rtm-storage-entry-metadata]
+.<<defn-rtm-storage-entry-metadata,Storage Entry Metadata>>
 ====
 The metadata about a pallets storage entry.
 
@@ -551,8 +551,8 @@ types:
 ++++
 ====
 
-.Storage Entry Modifier
 [#defn-rtm-storage-entry-modifier]
+.<<defn-rtm-storage-entry-modifier,Storage Entry Modifier>>
 ====
 
 NOTE: This might be incorrect and has to be reviewed.
@@ -574,8 +574,8 @@ type stem:[y] with default value stem:[D] (in
 <<defn-rtm-storage-entry-metadata>>) if the entry is not present.
 ====
 
-.Storage Entry Type
 [#defn-rtm-storage-entry-type]
+.<<defn-rtm-storage-entry-type,Storage Entry Type>>
 ====
 The type of the storage value that indicates how the entry is stored.
 
@@ -640,8 +640,8 @@ types:
 ++++
 ====
 
-.Storage Hasher
 [#defn-rtm-storage-hasher]
+.<<defn-rtm-storage-hasher,Storage Hasher>>
 ====
 The hashing algorithm used by storage maps.
 
@@ -659,8 +659,8 @@ The hashing algorithm used by storage maps.
 ++++
 ====
 
-.Pallet Constants
 [#defn-rtm-pallet-constants]
+.<<defn-rtm-pallet-constants,Pallet Constants>>
 ====
 The metadata about the pallets constants.
 
@@ -696,8 +696,8 @@ seq:
 The metadata about a pallets extrinsics, part of the main structure
 (<<sect-rtm-structure>>) and of the following format:
 
-.Signed Extension Metadata
 [#defn-rtm-signed-extension-metadata]
+.<<defn-rtm-signed-extension-metadata,Signed Extension Metadata>>
 ====
 The metadata about the additional, signed data required to execute an extrinsic.
 
