@@ -165,9 +165,9 @@ stem:["Enc"_("SC")(A)] is defined as follows:
 "Enc"_("SC")(A) := "Enc"_("SC")("idx"(A_("Type")) "||" "Enc"_("SC")(A_("Value")))
 ++++
 
-Where stem:["idx"] is encoded in a fixed length integer determining the type of
-stem:[A]. In particular, for the optional type defined in
-<<defn-varrying-data-type>>, we have:
+Where stem:["idx"] is a 8-bit integer determining the type of stem:[A]. In
+particular, for the optional type defined in <<defn-varrying-data-type>>, we
+have:
 
 [stem]
 ++++
