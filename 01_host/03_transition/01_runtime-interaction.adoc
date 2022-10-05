@@ -168,8 +168,10 @@ provides the size of the blob.
 ===== Runtime Version Custom Section
 
 For newer Runtimes, the Runtime version (<<defn-rt-core-version>>) can be read
-directly from the Wasm custom section with the name `runtime_version`. The
-content is a SCALE encoded structure as described in <<defn-rt-core-version>>.
+directly from the
+https://webassembly.github.io/spec/core/appendix/custom.html[Wasm custom
+section] with the name `runtime_version`. The content is a SCALE encoded
+structure as described in <<defn-rt-core-version>>.
 
 Retrieving the Runtime version this way is preferred over calling the
 `Core_version` entrypoint since it involves significantly less overhead.
