@@ -141,8 +141,8 @@ structure (<<sect-rtm-structure>>), depending on context (starting at stem:[0]).
 .Type Variant
 [#defn-rtm-type-definition]
 ====
-The type definition stem:[D] indicates all the possible types of encodable
-values a type can have.
+The type definition stem:[D] is a varying datatype (<<defn-varrying-data-type>>)
+and indicates all the possible types of encodable values a type can have.
 
 [stem]
 ++++
