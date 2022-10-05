@@ -253,13 +253,20 @@ key-value pairs rather than the length.
 [#defn-scale-boolean]
 .<<defn-scale-boolean, Boolean>>
 ====
-The *SCALE codec* for *boolean value* stem:[b] defined as a byte as follows:
+The SCALE codec for a *boolean value* stem:[b] defined as a byte as follows:
 
 [stem]
 ++++
 "Enc"_("SC"): {"False", "True"} -> bbb B_1\
 b -> {(0, b="False"),(1, b="True"):}
 ++++
+====
+
+[#defn-scale-string]
+.<<defn-scale-string, String>>
+====
+The SCALE codec for a *string value* is an encoded sequence
+(<<defn-scale-list>>) consisting of UTF-8 encoded bytes.
 ====
 
 [#defn-scale-fixed-length]
