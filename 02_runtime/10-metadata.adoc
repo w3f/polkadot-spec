@@ -28,11 +28,15 @@ where::
 * stem:[M] are the first four constant bytes, spelling "meta" in ASCII.
 * stem:[v_m] is an unsigned 8-bit integer indicating the format version of the
 metadata structure (currently the value of `14`).
-* stem:[R] is a sequence (<<defn-scale-list>>) of type definitions stem:[r_i] (<<defn-rtm-registry-entry>>).
-* stem:[P] is a sequence (<<defn-scale-list>>) of pallet metadata stem:[p_i] (<<sect-rtm-pallet-metadata>>).
+* stem:[R] is a sequence (<<defn-scale-list>>) of type definitions stem:[r_i]
+(<<defn-rtm-registry-entry>>).
+* stem:[P] is a sequence (<<defn-scale-list>>) of pallet metadata stem:[p_i]
+(<<sect-rtm-pallet-metadata>>).
 * stem:[t_e] is the type Id (<<defn-rtm-type-id>>) of the extrinsics.
-* stem:[v_e] is an unsigned 8-bit integer indicating the format version of the extrinsics.
-* stem:[E] is a sequence (<<defn-scale-list>>) of extrinsics metadata stem:[e_i] (<<defn-rtm-signed-extension-metadata>>).
+* stem:[v_e] is an unsigned 8-bit integer indicating the format version of the
+extrinsics (implying a possible breaking change).
+* stem:[E] is a sequence (<<defn-scale-list>>) of extrinsics metadata stem:[e_i]
+(<<defn-rtm-signed-extension-metadata>>).
 * stem:[t_r] is the type Id (<<defn-rtm-type-id>>) of the runtime.
 
 .Polkadot Runtime Metadata
