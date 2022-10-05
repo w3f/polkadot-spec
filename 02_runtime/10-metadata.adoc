@@ -162,7 +162,7 @@ D = {
 ++++
 
 where::
-* stem:[C] is of the following format:
+* stem:[C] is a sequence of the following format:
 +
 [stem]
 ++++
@@ -170,7 +170,7 @@ C = (f_0, ..., f_n)
 ++++
 +
 ** stem:[f_i] is a field (<<defn-rtm-field>>).
-* stem:[V] is of the following format:
+* stem:[V] is a sequence of the following format:
 +
 [stem]
 ++++
