@@ -185,7 +185,8 @@ S = (l, y)
 ** stem:[l] is a unsigned 32-bit integer indicating the length
 ** stem:[y] is a type Id (<<defn-rtm-type-id>>).
 * stem:[T] is a sequence (<<defn-scale-list>>) of type Ids (<<defn-rtm-type-id>>).
-* stem:[P] is a varying datatype of the following structure:
+* stem:[P] is a varying datatype (<<defn-varrying-data-type>>) of the following
+structure:
 +
 [stem]
 ++++
@@ -216,7 +217,7 @@ B = (s, o)
 ++++
 +
 ** stem:[s] is a type Id (<<defn-rtm-type-id>>) representing the bit store
-type (https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore.html[external
+order (https://docs.rs/bitvec/latest/bitvec/store/trait.BitStore.html[external
 reference])
 ** stem:[o] is a type Id (<<defn-rtm-type-id>>) the bit order type
 (https://docs.rs/bitvec/latest/bitvec/order/trait.BitOrder.html[external
