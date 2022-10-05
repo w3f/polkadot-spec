@@ -126,7 +126,7 @@ Remote call response.
 
 |`bytes`
 |2
-|Execution proof
+|An _Option_ type (<<defn-option-type>>) containing the call proof or _None_ if proof generation failed.
 |===
 ====
 
@@ -164,7 +164,7 @@ Remote read response.
 
 |`bytes`
 |2
-|Read proof
+|An _Option_ type (<<defn-option-type>>) containing the read proof or _None_ if proof generation failed.
 |===
 ====
 
@@ -228,7 +228,7 @@ Remote header response.
 
 |`bytes`
 |2
-|The header. Is _None_ (<<defn-option-type>>) if proof generation has failed (e.g. header is unknown)
+|An _Option_ type (<<defn-option-type>>) containing the header or _None_ if the header is not available.
 |===
 ====
 
